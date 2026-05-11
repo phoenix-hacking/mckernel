@@ -4,6 +4,11 @@
 #include <pwd.h>
 #include <arch-ldump2mcdump.h>
 
+#define mc_bfd_set_section_size(abfd, scn, size) \
+	bfd_set_section_size((scn), (size))
+#define mc_bfd_set_section_flags(abfd, scn, flags) \
+	bfd_set_section_flags((scn), (flags))
+
 void ldump2mcdump_init(void);    /* constructor function */
 void ldump2mcdump_fini(void);    /* destructor function (optional) */
 
@@ -279,13 +284,13 @@ void cmd_ldump2mcdump(void)
 			return;
 		}
 
-		ok = bfd_set_section_size(abfd, scn, cpsize);
+		ok = mc_bfd_set_section_size(abfd, scn, cpsize);
 		if (!ok) {
 			bfd_perror("bfd_set_section_size");
 			return;
 		}
 
-		ok = bfd_set_section_flags(abfd, scn, SEC_HAS_CONTENTS);
+		ok = mc_bfd_set_section_flags(abfd, scn, SEC_HAS_CONTENTS);
 		if (!ok) {
 			bfd_perror("bfd_set_setction_flags");
 			return;
@@ -300,13 +305,13 @@ void cmd_ldump2mcdump(void)
 			return;
 		}
 
-		ok = bfd_set_section_size(abfd, scn, cpsize);
+		ok = mc_bfd_set_section_size(abfd, scn, cpsize);
 		if (!ok) {
 			bfd_perror("bfd_set_section_size");
 			return;
 		}
 
-		ok = bfd_set_section_flags(abfd, scn, SEC_HAS_CONTENTS);
+		ok = mc_bfd_set_section_flags(abfd, scn, SEC_HAS_CONTENTS);
 		if (!ok) {
 			bfd_perror("bfd_set_setction_flags");
 			return;
@@ -321,13 +326,13 @@ void cmd_ldump2mcdump(void)
 			return;
 		}
 
-		ok = bfd_set_section_size(abfd, scn, cpsize);
+		ok = mc_bfd_set_section_size(abfd, scn, cpsize);
 		if (!ok) {
 			bfd_perror("bfd_set_section_size");
 			return;
 		}
 
-		ok = bfd_set_section_flags(abfd, scn, SEC_HAS_CONTENTS);
+		ok = mc_bfd_set_section_flags(abfd, scn, SEC_HAS_CONTENTS);
 		if (!ok) {
 			bfd_perror("bfd_set_setction_flags");
 			return;
@@ -341,13 +346,13 @@ void cmd_ldump2mcdump(void)
 		return;
 	}
 
-	ok = bfd_set_section_size(abfd, scn, mem_size);
+	ok = mc_bfd_set_section_size(abfd, scn, mem_size);
 	if (!ok) {
 		bfd_perror("bfd_set_section_size");
 		return;
 	}
 
-	ok = bfd_set_section_flags(abfd, scn, SEC_ALLOC|SEC_HAS_CONTENTS);
+	ok = mc_bfd_set_section_flags(abfd, scn, SEC_ALLOC|SEC_HAS_CONTENTS);
 	if (!ok) {
 		bfd_perror("bfd_set_setction_flags");
 		return;
@@ -366,14 +371,14 @@ void cmd_ldump2mcdump(void)
 			return;
 		}
 
-		ok = bfd_set_section_size(abfd, scn, mem_chunks->chunks[i].size);
+		ok = mc_bfd_set_section_size(abfd, scn, mem_chunks->chunks[i].size);
 
 		if (!ok) {
 			bfd_perror("bfd_set_section_size");
 			return;
 		}
 
-		ok = bfd_set_section_flags(abfd, scn, SEC_ALLOC|SEC_HAS_CONTENTS);
+		ok = mc_bfd_set_section_flags(abfd, scn, SEC_ALLOC|SEC_HAS_CONTENTS);
 		if (!ok) {
 			bfd_perror("bfd_set_setction_flags");
 			return;
@@ -480,5 +485,4 @@ char *help_ldump2mcdump[] = {
         "    crash>ldump2mcdump 0 -o /tmp/mcdump",
         NULL
 };
-
 

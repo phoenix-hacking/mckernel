@@ -22,6 +22,9 @@
  * hex_to_bin() converts one hex digit to its actual value or -1 in case of bad
  * input.
  */
+#ifdef MCKERNEL_RUST_BITMAP_CORE
+extern int hex_to_bin(char ch);
+#else
 int hex_to_bin(char ch)
 {
 	if ((ch >= '0') && (ch <= '9'))
@@ -32,6 +35,9 @@ int hex_to_bin(char ch)
 	return -1;
 }
 EXPORT_SYMBOL(hex_to_bin);
+#endif
+
+#ifndef MCKERNEL_RUST_BITMAP_CORE
 
 /*
  * bitmaps provide an array of bits, implemented using an an
@@ -333,6 +339,8 @@ void bitmap_clear(unsigned long *map, int start, int nr)
 	}
 }
 EXPORT_SYMBOL(bitmap_clear);
+
+#endif /* MCKERNEL_RUST_BITMAP_CORE */
 
 /*
  * bitmap_find_next_zero_area - find a contiguous aligned zero area
@@ -1176,4 +1184,3 @@ int bitmap_allocate_region(unsigned long *bitmap, int pos, int order)
 	return 0;
 }
 EXPORT_SYMBOL(bitmap_allocate_region);
-

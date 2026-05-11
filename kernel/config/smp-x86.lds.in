@@ -9,7 +9,7 @@ SECTIONS
 	_head = .;
 
 	.text : {
-		*(.text);
+		*(.text .text.* .ltext .ltext.*);
 	} : text
 
 	. = ALIGN(4096);

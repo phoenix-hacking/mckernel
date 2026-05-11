@@ -48,12 +48,15 @@
 #include <linux/proc_fs.h>
 #include <linux/rbtree.h>
 #include <linux/llist.h>
+#include <linux/version.h>
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0)
+#include <linux/mmap_lock.h>
+#endif
 #include <asm/uaccess.h>
 #include <asm/delay.h>
 #include <asm/io.h>
 #include "config.h"
 #include "mcctrl.h"
-#include <linux/version.h>
 #include <archdeps.h>
 #include <asm/pgtable.h>
 
@@ -65,6 +68,33 @@
 #define	dprintk(...)	printk(__VA_ARGS__)
 #else
 #define	dprintk(...)
+#endif
+
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0)
+#define MCCTRL_MMAP_READ_LOCK(mm) mmap_read_lock(mm)
+#define MCCTRL_MMAP_READ_UNLOCK(mm) mmap_read_unlock(mm)
+#define MCCTRL_MMAP_WRITE_LOCK(mm) mmap_write_lock(mm)
+#define MCCTRL_MMAP_WRITE_UNLOCK(mm) mmap_write_unlock(mm)
+#else
+#define MCCTRL_MMAP_READ_LOCK(mm) down_read(&(mm)->mmap_sem)
+#define MCCTRL_MMAP_READ_UNLOCK(mm) up_read(&(mm)->mmap_sem)
+#define MCCTRL_MMAP_WRITE_LOCK(mm) down_write(&(mm)->mmap_sem)
+#define MCCTRL_MMAP_WRITE_UNLOCK(mm) up_write(&(mm)->mmap_sem)
+#endif
+
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 3, 0)
+#define MCCTRL_VM_FLAGS_SET(vma, flags) vm_flags_set((vma), (flags))
+#else
+#define MCCTRL_VM_FLAGS_SET(vma, flags) ((vma)->vm_flags |= (flags))
+#endif
+
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 5, 0)
+#define MCCTRL_HANDLE_MM_FAULT(vma, addr, flags) handle_mm_fault((vma), (addr), (flags), NULL)
+#elif LINUX_VERSION_CODE >= KERNEL_VERSION(4, 8, 0) || \
+	(defined(RHEL_RELEASE_CODE) && RHEL_RELEASE_CODE >= RHEL_RELEASE_VERSION(7, 5))
+#define MCCTRL_HANDLE_MM_FAULT(vma, addr, flags) handle_mm_fault((vma), (addr), (flags))
+#else
+#define MCCTRL_HANDLE_MM_FAULT(vma, addr, flags) handle_mm_fault(current->mm, (vma), (addr), (flags))
 #endif
 
 //#define DEBUG_PTD
@@ -532,7 +562,8 @@ int remote_page_fault(struct mcctrl_usrdata *usrdata, void *fault_addr,
 #define	USE_VM_INSERT_PFN	1
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 11, 0)
-#if defined(RHEL_RELEASE_CODE) && RHEL_RELEASE_CODE >= RHEL_RELEASE_VERSION(8, 2)
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 17, 0) || \
+	(defined(RHEL_RELEASE_CODE) && RHEL_RELEASE_CODE >= RHEL_RELEASE_VERSION(8, 2))
 static vm_fault_t rus_vm_fault(struct vm_fault *vmf)
 #else
 static int rus_vm_fault(struct vm_fault *vmf)
@@ -733,7 +764,7 @@ static struct vm_operations_struct rus_vmops = {
 
 static int rus_mmap(struct file *file, struct vm_area_struct *vma)
 {
-	vma->vm_flags |= arch_rus_vm_flags;
+	MCCTRL_VM_FLAGS_SET(vma, arch_rus_vm_flags);
 	vma->vm_ops = &rus_vmops;
 	return 0;
 }
@@ -776,10 +807,10 @@ reserve_user_space_common(struct mcctrl_usrdata *usrdata, unsigned long start, u
 #if 0
 	{ /* debug */
         struct vm_area_struct *vma;
-		down_write(&current->mm->mmap_sem);
+		MCCTRL_MMAP_WRITE_LOCK(current->mm);
 		vma = find_vma(current->mm, start);
-		vma->vm_flags |= VM_DONTCOPY;
-		up_write(&current->mm->mmap_sem);
+		MCCTRL_VM_FLAGS_SET(vma, VM_DONTCOPY);
+		MCCTRL_MMAP_WRITE_UNLOCK(current->mm);
 	}
 #endif
 	revert_creds(original);
@@ -1463,12 +1494,12 @@ static int pager_req_map(ihk_os_t os, int fd, size_t len, off_t off,
 	}
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3,5,0)
-	down_write(&current->mm->mmap_sem);
+	MCCTRL_MMAP_WRITE_LOCK(current->mm);
 
 	va = do_mmap_pgoff(file, ANY_WHERE, len, maxprot, 
 			prot_and_flags, pgoff);
 
-	up_write(&current->mm->mmap_sem);
+	MCCTRL_MMAP_WRITE_UNLOCK(current->mm);
 #else
 	va = vm_mmap(file, ANY_WHERE, len, maxprot,
 			prot_and_flags, pgoff << PAGE_SHIFT);
@@ -1571,7 +1602,7 @@ static int pager_req_pfn(ihk_os_t os, uintptr_t handle, off_t off, uintptr_t ppf
 #define	PFN_VALID	((uintptr_t)1 << 63)
 	pfn = PFN_VALID;	/* Use "not present" as the default setting */
 
-	down_read(&current->mm->mmap_sem);
+	MCCTRL_MMAP_READ_LOCK(current->mm);
 retry:	
 	pgd = pgd_offset(current->mm, va);
 	if (!pgd_none(*pgd) && !pgd_bad(*pgd) && pgd_present(*pgd)) {
@@ -1623,12 +1654,7 @@ retry:
 			goto out_release;
 		}
 
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 8, 0) || \
-	(defined(RHEL_RELEASE_CODE) && RHEL_RELEASE_CODE >= RHEL_RELEASE_VERSION(7, 5))
-		fault = handle_mm_fault(vma, va, flags);
-#else
-		fault = handle_mm_fault(current->mm, vma, va, flags);
-#endif
+		fault = MCCTRL_HANDLE_MM_FAULT(vma, va, flags);
 #ifdef SC_DEBUG
 		if (fault != 0) {
 			char *pathbuf = NULL;
@@ -1656,7 +1682,7 @@ retry:
 	}
 
 out_release:
-	up_read(&current->mm->mmap_sem);
+	MCCTRL_MMAP_READ_UNLOCK(current->mm);
 
 	phys = ihk_device_map_memory(dev, ppfn_rpa, sizeof(*ppfn));
 	ppfn = ihk_device_map_virtual(dev, phys, sizeof(*ppfn), NULL, 0);
@@ -1682,9 +1708,9 @@ static int __pager_unmap(struct pager *pager)
 	int error;
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3,5,0)
-	down_write(&current->mm->mmap_sem);
+	MCCTRL_MMAP_WRITE_LOCK(current->mm);
 	error = do_munmap(current->mm, pager->map_uaddr, pager->map_len);
-	up_write(&current->mm->mmap_sem);
+	MCCTRL_MMAP_WRITE_UNLOCK(current->mm);
 #else
 	error = vm_munmap(pager->map_uaddr, pager->map_len);
 #endif
@@ -1747,10 +1773,17 @@ static long pager_req_mlock_list(ihk_os_t os, unsigned long start,
 	int			cnt = 0;
 	struct mm_struct	*mm = current->mm;
 	struct vm_area_struct	*vma;
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0)
+	VMA_ITERATOR(vmi, mm, 0);
+#endif
 
 	kprintf("pager_req_mlock_list: addr(%p)\n", addr);
 	vma = find_vma(current->mm, 0x7010a0);
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0)
+	for_each_vma(vmi, vma) {
+#else
 	for (vma = mm->mmap; vma != NULL; vma = vma->vm_next) {
+#endif
 		if (vma->vm_start < start || vma->vm_start > end) continue;
 		kprintf("\t%p: %p -- %p\t%lx\n", vma,
 			(void*)vma->vm_start, (void*)vma->vm_end,
@@ -2129,14 +2162,14 @@ static int remap_user_space(uintptr_t rva, size_t len, int prot)
 	uintptr_t map;
 
 	dprintk("remap_user_space(%lx,%lx,%x)\n", rva, len, prot);
-	down_write(&mm->mmap_sem);
+	MCCTRL_MMAP_WRITE_LOCK(mm);
 	vma = find_vma(mm, rva);
 	if (!vma || (rva < vma->vm_start)) {
 		printk("remap_user_space(%lx,%lx,%x):find_vma failed. %p %lx %lx\n",
 				rva, len, prot, vma,
 				(vma)? vma->vm_start: -1,
 				(vma)? vma->vm_end: 0);
-		up_write(&mm->mmap_sem);
+		MCCTRL_MMAP_WRITE_UNLOCK(mm);
 		map = -ENOMEM;
 		goto out;
 	}
@@ -2150,7 +2183,7 @@ static int remap_user_space(uintptr_t rva, size_t len, int prot)
 			prot, MAP_FIXED|MAP_SHARED, pgoff);
 #endif
 
-	up_write(&mm->mmap_sem);
+	MCCTRL_MMAP_WRITE_UNLOCK(mm);
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,5,0)
 	map = vm_mmap(file, start, len,
@@ -2175,7 +2208,7 @@ int mcctrl_clear_pte_range(uintptr_t start, uintptr_t len)
 	int ret;
 
 	ret = 0;
-	down_read(&mm->mmap_sem);
+	MCCTRL_MMAP_READ_LOCK(mm);
 	addr = start;
 	while (addr < (start + len)) {
 		vma = find_vma(mm, addr);
@@ -2193,7 +2226,7 @@ int mcctrl_clear_pte_range(uintptr_t start, uintptr_t len)
 		if (addr < end) {
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 18, 0)
 			/* Revert permission */
-			vma->vm_flags |= VM_READ | VM_WRITE | VM_EXEC;
+			MCCTRL_VM_FLAGS_SET(vma, VM_READ | VM_WRITE | VM_EXEC);
 			error = zap_vma_ptes(vma, addr, end-addr);
 			if (error) {
 				mcctrl_zap_page_range(vma, addr, end-addr,
@@ -2212,14 +2245,14 @@ int mcctrl_clear_pte_range(uintptr_t start, uintptr_t len)
 			}
 			else {
 				/* Revert permission */
-				vma->vm_flags |= VM_READ | VM_WRITE | VM_EXEC;
+				MCCTRL_VM_FLAGS_SET(vma, VM_READ | VM_WRITE | VM_EXEC);
 				zap_vma_ptes(vma, addr, end-addr);
 			}
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(4, 18, 0) */
 		}
 		addr = end;
 	}
-	up_read(&mm->mmap_sem);
+	MCCTRL_MMAP_READ_UNLOCK(mm);
 	return ret;
 }
 

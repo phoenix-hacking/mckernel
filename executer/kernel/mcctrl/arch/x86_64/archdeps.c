@@ -2,12 +2,27 @@
 #include <linux/version.h>
 #include <linux/kallsyms.h>
 #include <linux/uaccess.h>
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0)
+#include <linux/mmap_lock.h>
+#endif
 #include <asm/vsyscall.h>
 #include <asm/vgtod.h>
 #include "config.h"
 #include "../../mcctrl.h"
 
-#define gtod (&VVAR(vsyscall_gtod_data))
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 3, 0)
+#define MCCTRL_VGTOD_VIRT ((void *)&VVAR(vsyscall_gtod_data))
+#else
+#define MCCTRL_VGTOD_VIRT NULL
+#endif
+
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0)
+#define MCCTRL_MMAP_WRITE_LOCK(mm) mmap_write_lock(mm)
+#define MCCTRL_MMAP_WRITE_UNLOCK(mm) mmap_write_unlock(mm)
+#else
+#define MCCTRL_MMAP_WRITE_LOCK(mm) down_write(&(mm)->mmap_sem)
+#define MCCTRL_MMAP_WRITE_UNLOCK(mm) up_write(&(mm)->mmap_sem)
+#endif
 
 //#define SC_DEBUG
 
@@ -24,7 +39,7 @@ static void *vdso_start;
 static void *vdso_end;
 static struct page **vdso_pages;
 #endif
-static void *__vvar_page;
+static void *mcctrl_vvar_page;
 static long *hpet_address;
 static void **hv_clock;
 
@@ -48,8 +63,8 @@ int arch_symbols_init(void)
 		return -EFAULT;
 #endif
 
-	__vvar_page = (void *) kallsyms_lookup_name("__vvar_page");
-	if (WARN_ON(!__vvar_page))
+	mcctrl_vvar_page = (void *) kallsyms_lookup_name("__vvar_page");
+	if (WARN_ON(!mcctrl_vvar_page))
 		return -EFAULT;
 
 	hpet_address = (void *) kallsyms_lookup_name("hpet_address");
@@ -93,18 +108,18 @@ reserve_user_space(struct mcctrl_usrdata *usrdata, unsigned long *startp, unsign
 #define	DESIRED_USER_END	0x800000000000
 #define	GAP_FOR_MCEXEC		0x008000000000UL
 	end = DESIRED_USER_END;
-	down_write(&current->mm->mmap_sem);
+	MCCTRL_MMAP_WRITE_LOCK(current->mm);
 	vma = find_vma(current->mm, 0);
 	if (vma) {
 		end = (vma->vm_start - GAP_FOR_MCEXEC) & ~(GAP_FOR_MCEXEC - 1);
 	}
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,5,0)
-	up_write(&current->mm->mmap_sem);
+	MCCTRL_MMAP_WRITE_UNLOCK(current->mm);
 #endif
 	start = reserve_user_space_common(usrdata, start, end);
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3,5,0)
-	up_write(&current->mm->mmap_sem);
+	MCCTRL_MMAP_WRITE_UNLOCK(current->mm);
 #endif
 
 	mutex_unlock(&usrdata->reserve_lock);
@@ -161,19 +176,19 @@ void get_vdso_info(ihk_os_t os, long vdso_rpa)
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4,5,0)
 	vdso->vvar_is_global = 0;
 	vdso->vvar_virt = (void *)(-3 * PAGE_SIZE);
-	vdso->vvar_phys = virt_to_phys(__vvar_page);
+	vdso->vvar_phys = virt_to_phys(mcctrl_vvar_page);
 #elif LINUX_VERSION_CODE >= KERNEL_VERSION(3,17,0)
 	vdso->vvar_is_global = 0;
 	vdso->vvar_virt = (void *)(-2 * PAGE_SIZE);
-	vdso->vvar_phys = virt_to_phys(__vvar_page);
+	vdso->vvar_phys = virt_to_phys(mcctrl_vvar_page);
 #elif LINUX_VERSION_CODE >= KERNEL_VERSION(3,16,0)
 	vdso->vvar_is_global = 0;
 	vdso->vvar_virt = (void *)(vdso->vdso_npages * PAGE_SIZE);
-	vdso->vvar_phys = virt_to_phys(__vvar_page);
+	vdso->vvar_phys = virt_to_phys(mcctrl_vvar_page);
 #elif LINUX_VERSION_CODE >= KERNEL_VERSION(3,1,0)
 	vdso->vvar_is_global = 1;
 	vdso->vvar_virt = (void *)fix_to_virt(VVAR_PAGE);
-	vdso->vvar_phys = virt_to_phys(__vvar_page);
+	vdso->vvar_phys = virt_to_phys(mcctrl_vvar_page);
 #endif
 
 	/* HPET page */
@@ -210,7 +225,7 @@ void get_vdso_info(ihk_os_t os, long vdso_rpa)
 #endif
 	}
 
-	vdso->vgtod_virt = (void *)gtod;
+	vdso->vgtod_virt = MCCTRL_VGTOD_VIRT;
 out:
 	wmb();
 	vdso->busy = 0;

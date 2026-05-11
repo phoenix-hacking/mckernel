@@ -1,0 +1,884 @@
+# McKernel Rust Migration Log
+
+Date: 2026-05-11
+Workspace: /home/hgordon/projects/mckernel
+Primary target: smp-x86 / x86_64
+
+## Operating Rules
+
+- Keep the mixed C/Rust kernel bootable after each merge-sized step.
+- Preserve C headers, exported symbol names, syscall numbers, ioctl values,
+  packet formats, and linker-visible entry points.
+- Introduce Rust behind the existing C ABI first; do not redesign public
+  kernel interfaces during the migration.
+- Prefer small primitive ports before memory management, scheduler, process,
+  or syscall code.
+- Record every meaningful adjustment and its justification here.
+
+## Initial Environment Findings
+
+- The repository starts on the `development` branch with an x86_64-first plan.
+- Rust is available in WSL:
+  - `rustc 1.95.0-nightly (c04308580 2026-02-18)`
+  - `cargo 1.95.0-nightly (ce69df6f7 2026-02-12)`
+- Installed Rust targets are currently:
+  - `x86_64-unknown-linux-gnu`
+  - `x86_64-pc-windows-msvc`
+  - `i686-pc-windows-msvc`
+- `x86_64-unknown-none` is not installed. A `rustup target add
+  x86_64-unknown-none` attempt hung for more than the allowed tool window and
+  was killed so no background installer was left running.
+- Submodules are not initialized:
+  - `ihk`
+  - `executer/user/lib/libdwarf/libdwarf`
+  - `executer/user/lib/syscall_intercept`
+  - `executer/user/lib/uti`
+- A submodule initialization attempt hung while cloning a user-space library
+  submodule, so it was stopped. This blocks full C/CMake validation until the
+  submodules are available.
+- Full CMake configure for `BUILD_TARGET=smp-x86` is blocked before the new
+  Rust path is reached because this WSL image is missing:
+  - `/lib/modules/6.6.87.2-microsoft-standard-WSL2/build`
+  - `rpm`
+  - `libnuma`
+
+## Completed Adjustment: Rust Kernel Build Wedge
+
+Files:
+- `kernel/CMakeLists.txt`
+- `kernel/config/smp-x86.lds.in`
+- `kernel/rust/lib.rs`
+- `kernel/rust/abi.rs`
+- `kernel/rust/abi_checks.c`
+- `kernel/rust/rbtree.rs`
+
+Changes:
+- Added `ENABLE_RUST_KERNEL`, defaulting to `ON`.
+- Scoped Rust enablement to x86_64 only.
+- Added a CMake custom command that compiles `kernel/rust/lib.rs` into a
+  generated object and links that object into `mckernel.img`.
+- Added an explicit nightly `rustc` version check.
+- Used `#![no_std]`, a kernel panic handler, `panic=abort`, no red zone,
+  large code model, static relocation model, forced frame pointers, disabled
+  overflow checks, disabled unwind tables, and disabled LLVM loop/SLP
+  vectorization.
+- Added `mckernel_rust_probe()` as the initial C-callable smoke symbol.
+- Updated the x86_64 linker script to collect Rust `.text.*` and `.ltext.*`
+  sections.
+
+Justification:
+- A generated object is the smallest useful Rust insertion point for this
+  codebase because it does not require replacing the final kernel link flow.
+- x86_64-only gating keeps arm64 stable while the Rust ABI layer is still
+  settling.
+- The nightly check is intentional because the kernel Rust path depends on
+  low-level codegen assumptions and should fail clearly on unsupported Rust
+  toolchains.
+- LLVM vectorization is disabled for the Rust object because the C kernel build
+  uses `-mno-sse`; this avoids generating XMM/SIMD instructions in kernel Rust
+  while the local toolchain is still using the native Linux Rust target.
+- The custom object is compiled without a freestanding target for now because
+  `x86_64-unknown-none` is not installed locally and `rustup target add`
+  stalled. The Rust code itself is still `no_std`; the build target can be
+  tightened once the freestanding Rust target or `build-std` workflow is
+  available.
+
+Verification:
+- `rustfmt kernel/rust/lib.rs kernel/rust/abi.rs kernel/rust/rbtree.rs`
+  completed successfully.
+- `git diff --check` completed successfully.
+
+## Completed Adjustment: No-SIMD Rust Codegen Hardening
+
+Files:
+- `kernel/CMakeLists.txt`
+- `kernel/rust/rbtree.rs`
+
+Changes:
+- Added `-C no-vectorize-loops` and `-C no-vectorize-slp` to the Rust object
+  build.
+- Replaced the aggregate struct copy in `rb_replace_node` with explicit field
+  assignments.
+
+Justification:
+- Inspection of the Rust object showed XMM/SSE instructions after the bitmap
+  port, while the C kernel build uses `-mno-sse`.
+- Disabling `sse2` directly on the native `x86_64-unknown-linux-gnu` target
+  works today but emits a Rust warning saying that this may become a hard error
+  for the target ABI.
+- Avoiding vectorization and aggregate copies removes the observed XMM/SSE
+  instructions without relying on that future-incompatible target-feature
+  warning.
+
+Verification:
+- Direct Rust object compilation completed successfully with the no-vectorize
+  flags.
+- `objdump` search for XMM/YMM/MMX/SSE-like instructions in the Rust object
+  returned no matches.
+- `nm -u /tmp/mck-rust-check/mckernel_rust.o` still reports only:
+  - `ihk_mc_chk_page_address`
+  - `virt_to_phys`
+- Bitmap split object compilation, `ld -r` combination, and the bitmap smoke
+  harness still pass after this hardening.
+- Direct Rust object compilation completed successfully.
+- `nm -u /tmp/mck-rust-check/mckernel_rust.o` reports only:
+  - `ihk_mc_chk_page_address`
+  - `virt_to_phys`
+
+## Completed Adjustment: Shared ABI Foundation
+
+Files:
+- `kernel/rust/abi.rs`
+- `kernel/rust/abi_checks.c`
+
+Changes:
+- Added Rust `#[repr(C)]` definitions for shared kernel/user protocol types:
+  - `program_image_section`
+  - `program_load_desc`
+  - `syscall_request`
+  - `syscall_response`
+  - `ihk_ikc_packet_header`
+  - `ikc_scd_packet`
+  - x86_64 user context/register structs
+- Added Rust compile-time size and offset assertions.
+- Added C `_Static_assert` layout checks for the same ABI surfaces.
+
+Justification:
+- These layout checks create a guardrail before Rust starts consuming or
+  producing protocol structs that cross the kernel/executer/IKC boundary.
+- Flexible array and union-heavy C interfaces are represented conservatively
+  with raw pointers and `#[repr(C)]` unions rather than higher-level Rust types.
+
+## Completed Adjustment: `rbtree.c` Port
+
+Files:
+- `kernel/rust/rbtree.rs`
+- `kernel/CMakeLists.txt`
+
+Changes:
+- Replaced the x86_64 linked implementation of `kernel/rbtree.c` with Rust
+  while preserving the exported C ABI names:
+  - `__rb_erase_color`
+  - `rb_insert_color`
+  - `rb_erase`
+  - `__rb_insert_augmented`
+  - `rb_first`
+  - `rb_preorder_dfs_search`
+  - `rb_first_safe`
+  - `rb_last`
+  - `rb_next`
+  - `rb_next_safe`
+  - `rb_prev`
+  - `rb_replace_node`
+  - `rb_next_postorder`
+  - `rb_first_postorder`
+- Kept the public C headers unchanged.
+- Kept the C implementation available for non-Rust or non-x86_64 builds.
+
+Justification:
+- `rbtree.c` is a shared primitive with a stable C ABI and low dependency
+  surface, making it a good first real Rust replacement.
+- Keeping the headers unchanged avoids breaking macro-heavy call sites during
+  the migration.
+
+## Discovery Notes: `llist.c` Port
+
+Files under inspection:
+- `kernel/llist.c`
+- `kernel/include/llist.h`
+- `arch/x86_64/kernel/include/arch/cpu.h`
+- `arch/x86_64/kernel/include/ihk/atomic.h`
+- `kernel/include/lwk/compiler.h`
+
+Observed surface:
+- `llist.c` has three out-of-line C ABI functions:
+  - `llist_add_batch`
+  - `llist_del_first`
+  - `llist_reverse_order`
+- The public header also contains inline helpers and traversal macros that
+  should remain in C for now.
+- The C implementation depends on pointer-width `cmpxchg`, `ACCESS_ONCE`,
+  `READ_ONCE`, and `smp_load_acquire`.
+
+Planned adjustment:
+- Add `kernel/rust/llist.rs`.
+- Export the same three C ABI symbols from Rust.
+- Use Rust atomics on the `llist_head.first` pointer slot to preserve the
+  lock-free compare/exchange behavior for x86_64.
+- Remove `llist.c` from the Rust-enabled x86_64 source list and keep it for
+  fallback/non-x86_64 builds.
+
+Justification:
+- `llist` is the next planned shared primitive after `rbtree`.
+- Its out-of-line surface is small enough to port and verify locally.
+- Keeping inline C helpers in the header avoids changing public include style
+  while still replacing the linked implementation.
+
+## Completed Adjustment: `llist.c` Port
+
+Files:
+- `kernel/rust/llist.rs`
+- `kernel/rust/lib.rs`
+- `kernel/rust/abi_checks.c`
+- `kernel/CMakeLists.txt`
+
+Changes:
+- Added `kernel/rust/llist.rs`.
+- Exported the same C ABI symbols as `kernel/llist.c`:
+  - `llist_add_batch`
+  - `llist_del_first`
+  - `llist_reverse_order`
+- Added Rust layout assertions for `llist_head` and `llist_node`.
+- Added C `_Static_assert` checks for `llist_head` and `llist_node`.
+- Removed `llist.c` from the Rust-enabled x86_64 kernel source list.
+- Kept `llist.c` in the fallback list for non-Rust or non-x86_64 builds.
+
+Justification:
+- `llist` is a shared primitive with only three out-of-line routines.
+- The public `llist.h` macros and inline helpers remain untouched, preserving
+  the existing include style.
+- Rust uses `AtomicPtr` on the `llist_head.first` storage slot to preserve the
+  pointer-width compare/exchange behavior.
+- The compare/exchange operations use `SeqCst` ordering to express the same
+  conservative ordering intent as the x86_64 `lock; cmpxchg` C macro.
+
+Verification:
+- `rustfmt` completed successfully.
+- Direct Rust object compilation completed successfully.
+- `nm -g /tmp/mck-rust-check/mckernel_rust.o` shows the three `llist_*`
+  symbols exported.
+- Disassembly of `llist_add_batch` and `llist_del_first` shows
+  `lock cmpxchgq`.
+- `git diff --check` completed successfully.
+
+## Completed Adjustment: Selected `bitmap.c` Core Port
+
+Files:
+- `kernel/rust/bitmap.rs`
+- `kernel/rust/lib.rs`
+- `kernel/CMakeLists.txt`
+- `lib/bitmap.c`
+
+Changes:
+- Added `kernel/rust/bitmap.rs`.
+- Exported Rust implementations for the selected non-macro bitmap core:
+  - `hex_to_bin`
+  - `__bitmap_empty`
+  - `__bitmap_full`
+  - `__bitmap_equal`
+  - `__bitmap_complement`
+  - `__bitmap_shift_right`
+  - `__bitmap_shift_left`
+  - `__bitmap_and`
+  - `__bitmap_or`
+  - `__bitmap_xor`
+  - `__bitmap_andnot`
+  - `__bitmap_intersects`
+  - `__bitmap_subset`
+  - `__bitmap_weight`
+  - `bitmap_set`
+  - `bitmap_clear`
+- Added `MCKERNEL_RUST_BITMAP_CORE` handling in `lib/bitmap.c` so those C
+  definitions are omitted when Rust is enabled.
+- Left parsing, formatting, remapping, region allocation, and find-next-zero-area
+  code in C.
+- Added `kernel/rust/bitmap.rs` to the Rust source dependency list.
+- Added a per-source CMake compile definition for `lib/bitmap.c` when the Rust
+  kernel path is enabled.
+
+Justification:
+- This is the planned third shared-primitive step after `rbtree` and `llist`.
+- The selected bitmap routines have simple pointer/word arithmetic and stable C
+  ABI symbols, making them a good Rust slice.
+- The string parsing and formatting half of `bitmap.c` is intentionally left in
+  C because it depends on `scnprintf`, ctype/string helpers, and broader kernel
+  conventions that should be moved later as a separate slice.
+- Shift operations explicitly handle `rem == 0` because Rust correctly rejects
+  word-sized shifts; this avoids relying on C's undefined edge behavior.
+- `hex_to_bin` was also moved after adding an explicit C prototype for the
+  remaining parser code; this keeps the small ASCII conversion with the bitmap
+  core while avoiding an implicit C declaration.
+- The first zeroing implementation used `core::ptr::write_bytes`, which caused
+  LLVM to emit a `memset` reference. That was replaced with explicit
+  word-zeroing so the Rust object does not gain a new unresolved dependency.
+
+Verification:
+- `rustfmt` completed successfully.
+- Direct Rust object compilation completed successfully.
+- `nm -u /tmp/mck-rust-check/mckernel_rust.o` again reports only:
+  - `ihk_mc_chk_page_address`
+  - `virt_to_phys`
+- `nm -g /tmp/mck-rust-check/mckernel_rust.o` shows the selected bitmap core
+  symbols exported from Rust.
+- `lib/bitmap.c` compiled successfully as a standalone object with
+  `-DMCKERNEL_RUST_BITMAP_CORE`; that object no longer defines the symbols now
+  provided by Rust.
+- `ld -r` successfully combined the split C bitmap object with the Rust object,
+  confirming there are no duplicate definitions in that slice.
+- A temporary Linux smoke harness linked against the Rust object passed checks
+  for bitmap empty/full/equal, set/clear, boolean operations, complement,
+  weight, and cross-word shifts.
+- `git diff --check` completed successfully.
+
+## Current Build Blockers
+
+Last configure command attempted:
+
+```
+cmake -S /home/hgordon/projects/mckernel \
+      -B /tmp/mckernel-rust-config3 \
+      -DBUILD_TARGET=smp-x86 \
+      -DENABLE_RUST_KERNEL=ON
+```
+
+Result:
+- CMake still fails before exercising the kernel Rust target.
+- The top-level build tries to compile a temporary Linux module to resolve
+  `MODULES_END`, but `/lib/modules/6.6.87.2-microsoft-standard-WSL2/build` is
+  missing.
+- `rpm` is missing, so version-probing shell commands print errors.
+- `libnuma` is missing, causing the fatal configure error.
+
+Justification for not changing this in the migration patch:
+- These are host dependency problems, not Rust migration code problems.
+- The repository does not expose an existing option to skip the top-level
+  kernel-module probe.
+- Adding a new skip mode would be a separate build-system compatibility change
+  and could hide real configure requirements for normal McKernel builds.
+
+Current local validation strategy until host dependencies are installed:
+- Compile the Rust object directly with the same codegen flags used by CMake.
+- Compile modified C source slices independently when possible.
+- Check exported and unresolved symbols with `nm`.
+- Inspect critical generated instructions with `objdump`.
+- Use temporary host smoke harnesses for pure data-structure routines.
+
+## Verification Pass: C/Rust Equivalence
+
+Date: 2026-05-11
+
+User request:
+- Prove that the migration changes did not break the C fallback or the Rust
+  replacements.
+- Verify C and Rust implementations behave equivalently.
+- Resolve or precisely identify the full CMake configure blocker.
+
+Submodule status:
+- Initialized `ihk`.
+- Initialized `executer/user/lib/syscall_intercept`.
+- Initialized nested `executer/user/lib/syscall_intercept/capstone`.
+- Initialized `executer/user/lib/uti`.
+- Initialized `executer/user/lib/libdwarf/libdwarf`.
+- `git submodule status --recursive` now shows all submodules checked out
+  without leading `-` markers.
+
+Host dependency status:
+- The WSL user is non-root.
+- `sudo -n true` fails with `sudo: a password is required`.
+- Therefore system packages cannot be installed non-interactively from this
+  session.
+- `apt-cache policy` shows install candidates exist for:
+  - `libnuma-dev`
+  - `rpm`
+  - `linux-headers-generic`
+- The exact running WSL kernel header package is not installed, and
+  `/lib/modules/6.6.87.2-microsoft-standard-WSL2/build` is absent.
+- `/lib/modules/6.6.87.2-microsoft-standard-WSL2/` contains module metadata and
+  a `kernel/` directory, but not a usable Kbuild tree.
+
+Full configure retest:
+
+```
+cmake -S /home/hgordon/projects/mckernel \
+      -B /tmp/mckernel-rust-config4 \
+      -DBUILD_TARGET=smp-x86 \
+      -DENABLE_RUST_KERNEL=ON
+```
+
+Result:
+- Still fails before the kernel Rust target is reached.
+- Remaining blockers are host/environment blockers:
+  - missing `/lib/modules/6.6.87.2-microsoft-standard-WSL2/build`
+  - missing `rpm`
+  - missing `libnuma`
+- Submodules are no longer one of the blockers.
+
+Equivalence harnesses created outside the repository:
+- `/tmp/mckernel_rbtree_equiv.c`
+- `/tmp/mckernel_llist_equiv.c`
+- `/tmp/mckernel_bitmap_equiv.c`
+- `/tmp/mckernel_build_equiv.sh`
+
+Harness method:
+- Compile original C implementation objects:
+  - `kernel/rbtree.c`
+  - `kernel/llist.c`
+  - `lib/bitmap.c`
+  - `lib/bitops.c`
+- Compile the Rust object with the same codegen flags used by CMake, including
+  `no_std`, `panic=abort`, no red zone, large code model, disabled unwind
+  tables, and disabled vectorization.
+- Link and run each harness once against the original C implementation and once
+  against the Rust object.
+- Diff the C and Rust outputs.
+
+`rbtree` equivalence coverage:
+- Insert multiple keys through `rb_link_node` + `rb_insert_color`.
+- Verify sorted forward traversal through `rb_first` + `rb_next`.
+- Verify safe traversal through `rb_first_safe` + `rb_next_safe`.
+- Verify reverse traversal through `rb_last` + `rb_prev`.
+- Verify `rb_preorder_dfs_search`.
+- Verify `rb_replace_node`.
+- Verify postorder traversal through `rb_first_postorder` +
+  `rb_next_postorder`.
+- Verify erase/rebalance through `rb_erase`.
+
+`rbtree` result:
+- C output: `rbtree ok count=11 first=5 last=80 post=12`
+- Rust output: `rbtree ok count=11 first=5 last=80 post=12`
+- Diff result: no differences.
+
+`llist` equivalence coverage:
+- Verify `llist_add_batch` return value on an empty list.
+- Verify `llist_add_batch` return value on a non-empty list.
+- Verify `llist_del_first` removes the newest entry and advances to the next
+  batched node.
+- Verify `llist_reverse_order` reverses the remaining chain.
+
+`llist` result:
+- C output: `llist ok sum=3216 first=3`
+- Rust output: `llist ok sum=3216 first=3`
+- Diff result: no differences.
+
+Bitmap equivalence coverage:
+- `hex_to_bin` over all 256 byte values.
+- `__bitmap_empty`
+- `__bitmap_full`
+- `__bitmap_equal`
+- `__bitmap_complement`
+- `__bitmap_shift_right`
+- `__bitmap_shift_left`
+- `__bitmap_and`
+- `__bitmap_or`
+- `__bitmap_xor`
+- `__bitmap_andnot`
+- `__bitmap_intersects`
+- `__bitmap_subset`
+- `__bitmap_weight`
+- `bitmap_set`
+- `bitmap_clear`
+- Bit sizes tested include sub-word, word-boundary, cross-word, and partial
+  tail-word cases.
+- Shift sizes tested include zero, sub-word, exact-word, cross-word, and
+  oversize shifts.
+
+Bitmap result:
+- C output: `bitmap ok digest=ade7440f00538ce8`
+- Rust output: `bitmap ok digest=ade7440f00538ce8`
+- Diff result: no differences.
+
+Symbol/codegen retest:
+- Direct Rust object compilation passed.
+- `nm -u /tmp/mck-rust-check/mckernel_rust.o` reports only:
+  - `ihk_mc_chk_page_address`
+  - `virt_to_phys`
+- `objdump` search for XMM/YMM/MMX/SSE-like instructions returns zero matches.
+- `git diff --check` passes.
+
+Conclusion:
+- The C fallback implementations still compile independently.
+- The Rust replacements compile independently.
+- Focused equivalence tests show matching C and Rust behavior for every symbol
+  ported so far.
+- Full repository configure/build cannot be proven in this WSL environment
+  until host dependencies are installed or `KERNEL_DIR` is pointed at a valid
+  prepared kernel build tree.
+
+## Completed Adjustment: Reusable Equivalence Test Script
+
+Files:
+- `kernel/rust/tests/run_equivalence.sh`
+
+Changes:
+- Added a repo-local equivalence script that regenerates temporary C harnesses
+  for the migrated primitives.
+- The script compiles original C objects for:
+  - `kernel/rbtree.c`
+  - `kernel/llist.c`
+  - `lib/bitmap.c`
+  - `lib/bitops.c`
+- The script compiles the Rust object with the same kernel Rust codegen flags
+  used by CMake.
+- The script links and runs C and Rust variants for:
+  - `rbtree`
+  - `llist`
+  - selected bitmap core
+- The script diffs C and Rust outputs.
+- The script checks Rust unresolved symbols and fails unless only these remain:
+  - `ihk_mc_chk_page_address`
+  - `virt_to_phys`
+- The script checks the Rust object for XMM/YMM/MMX/SSE-like instructions and
+  fails if any are found.
+
+Justification:
+- The migration now has a repeatable proof harness for the primitives already
+  ported.
+- This lets future ports be checked locally even while the full WSL CMake build
+  is blocked by host dependencies.
+- The script intentionally keeps harness sources temporary so the repository
+  does not gain standalone test binaries or generated C files.
+
+Verification:
+- Ran `kernel/rust/tests/run_equivalence.sh`.
+- Output:
+  - `rbtree ok count=11 first=5 last=80 post=12`
+  - `llist ok sum=3216 first=3`
+  - `bitmap ok digest=ade7440f00538ce8`
+  - `rust object unresolved symbols and SIMD checks ok`
+- The normal Linux PIE linker emits text relocation warnings when linking the
+  kernel-style Rust object into host test binaries. These warnings are expected
+  for the test harness because the Rust object uses the kernel large/static code
+  model; they are not treated as kernel link failures.
+
+## Host Blocker Follow-up and Full Build Push
+
+Date: 2026-05-11
+
+User request:
+- Re-check whether the original configure blockers were actually fixed.
+- If not fixed, help fix or work around them.
+- Prove that the Rust-enabled and C-fallback kernel paths still work.
+- Continue fixing newly exposed build failures and record every adjustment.
+
+Final host dependency status:
+- Running kernel: `6.6.87.2-microsoft-standard-WSL2`.
+- `/lib/modules/6.6.87.2-microsoft-standard-WSL2/build` is still missing.
+- `rpm` is installed:
+  - `RPM version 4.18.2`
+- `libnuma-dev` and `libnuma1` are installed:
+  - `libnuma-dev 2.0.18-1ubuntu0.24.04.1`
+  - `libnuma1 2.0.18-1ubuntu0.24.04.1`
+- Passwordless sudo is still unavailable:
+  - `sudo -n true` reports `sudo_passwordless=no`
+- A matching WSL kernel source tree was prepared under:
+  - `/home/hgordon/.cache/mckernel/WSL2-Linux-Kernel-6.6.87.2`
+- That prepared source tree has a usable `Makefile`, but no `Module.symvers`.
+
+Interpretation:
+- The original `rpm` and `libnuma-dev` blockers are fixed on the host.
+- The exact `/lib/modules/.../build` blocker is not fixed system-wide.
+- Because sudo is unavailable, the workaround is to pass:
+  - `-DKERNEL_DIR=/home/hgordon/.cache/mckernel/WSL2-Linux-Kernel-6.6.87.2`
+  - `-DKBUILD_MAKE_FLAGS=KBUILD_MODPOST_WARN=1`
+- `KBUILD_MODPOST_WARN=1` is only needed because `modules_prepare` does not
+  generate `Module.symvers`. It allows validation `.ko` files to be produced,
+  but leaves unresolved-symbol modpost warnings that a full kernel build or
+  installed kernel headers would normally resolve.
+
+Local sysroot additions:
+- Created and used a non-root local sysroot under:
+  - `/home/hgordon/.cache/mckernel/sysroot`
+- Downloaded/extracted development/runtime packages there for configure/build
+  validation without modifying system packages:
+  - `binutils-dev`
+  - `libiberty-dev`
+  - `libudev-dev`
+  - `libudev1`
+  - `binutils-x86-64-linux-gnu`
+  - `libbinutils`
+- Justification:
+  - Full configure/build needed `bfd.h`, `libbfd`, `libiberty`, `libudev.so`,
+    and the real `libbfd-2.42-system.so`.
+  - `binutils-dev` provided the `libbfd.so` symlink, but the symlink was broken
+    until `libbinutils` supplied the matching runtime object.
+
+Configure command that now succeeds:
+
+```
+cmake -S /home/hgordon/projects/mckernel \
+      -B /tmp/mckernel-rust-config9 \
+      -DBUILD_TARGET=smp-x86 \
+      -DENABLE_RUST_KERNEL=ON \
+      -DKERNEL_DIR=/home/hgordon/.cache/mckernel/WSL2-Linux-Kernel-6.6.87.2 \
+      -DKBUILD_MAKE_FLAGS=KBUILD_MODPOST_WARN=1 \
+      -DCMAKE_LIBRARY_PATH=/home/hgordon/.cache/mckernel/sysroot/usr/lib/x86_64-linux-gnu \
+      -DCMAKE_INCLUDE_PATH=/home/hgordon/.cache/mckernel/sysroot/usr/include \
+      -DLIBBFD:FILEPATH=/home/hgordon/.cache/mckernel/sysroot/usr/lib/x86_64-linux-gnu/libbfd.so
+```
+
+Validation build environment for user-space tools:
+
+```
+C_INCLUDE_PATH=/home/hgordon/.cache/mckernel/sysroot/usr/include
+LIBRARY_PATH=/home/hgordon/.cache/mckernel/sysroot/usr/lib/x86_64-linux-gnu
+LD_LIBRARY_PATH=/home/hgordon/.cache/mckernel/sysroot/usr/lib/x86_64-linux-gnu
+```
+
+Reason:
+- `CMAKE_INCLUDE_PATH` helps discovery but is not automatically added to every
+  compiler invocation, so `C_INCLUDE_PATH` was used for `bfd.h`.
+- `LD_LIBRARY_PATH` lets the validation link/run steps resolve the local
+  `libbfd.so` dependency without installing packages system-wide.
+
+## Completed Adjustment: Top-level CMake WSL Compatibility
+
+Files:
+- `CMakeLists.txt`
+
+Changes:
+- Added `MODULE_LICENSE("GPL")` to the temporary module used to resolve
+  `MAP_KERNEL_START`.
+- Replaced the old Linux version regex/list split with direct parsing of the
+  first three numeric version components.
+
+Justification:
+- Linux 6.6 modpost rejects or warns harder for modules without a license.
+- WSL reports `UNAME_R` as `6.6.87.2-microsoft-standard-WSL2`; the previous
+  regex/list logic did not parse the extra numeric component robustly.
+
+Result:
+- CMake configure now reaches and completes generation with the prepared
+  `KERNEL_DIR`.
+- `MAP_KERNEL_START` resolves to `0xfffffffffe800000` in this environment.
+
+## Completed Adjustment: Kernel C Integration Fixes
+
+Files:
+- `kernel/rust/abi_checks.c`
+- `arch/x86_64/kernel/include/arch-memory.h`
+
+Changes:
+- Removed host `<stddef.h>` from `abi_checks.c`.
+- Added kernel-local `types.h` and `affinity.h` before `syscall.h`.
+- Switched layout assertions to `__builtin_offsetof`.
+- Changed x86_64 `attr_mask` in `arch-memory.h` from a tentative definition to
+  an `extern` declaration. The real definition remains in
+  `arch/x86_64/kernel/memory.c`.
+
+Justification:
+- Host `<stddef.h>` collided with McKernel's own `size_t` and `ptrdiff_t`
+  typedefs.
+- `syscall.h` exposes a `cpu_set_t` prototype and needs the local affinity
+  typedef before that section.
+- Modern GCC/linker behavior rejects the header-level `attr_mask` tentative
+  definition as multiple definitions; arm64 already uses the safer `extern`
+  pattern.
+
+Result:
+- Rust-enabled `mckernel.img` links.
+- C-fallback `mckernel.img` also links.
+
+## Completed Adjustment: Linux 6.6 Host Module Compatibility
+
+Files:
+- `ihk/linux/core/host_driver.c`
+- `executer/kernel/mcctrl/control.c`
+- `executer/kernel/mcctrl/syscall.c`
+- `executer/kernel/mcctrl/procfs.c`
+- `executer/kernel/mcctrl/binfmt_mcexec.c`
+- `executer/kernel/mcctrl/futex.c`
+- `executer/kernel/mcctrl/arch/x86_64/archdeps.c`
+
+Changes:
+- Added compatibility wrappers for Linux 6.4+ `DEFINE_SEMAPHORE`.
+- Added compatibility wrapper for Linux 6.4+ `class_create`.
+- Replaced removed `__GFP_ATOMIC` usage with a versioned allocation flag
+  wrapper.
+- Included `linux/panic_notifier.h` where `panic_notifier_list` is referenced.
+- Replaced removed `for_each_cpu_not` usage with `for_each_possible_cpu` plus
+  explicit used-mask filtering.
+- Added a fallback `cpumask_complement` macro using `cpumask_andnot`.
+- Added wrappers for `mmap_read_lock`, `mmap_write_lock`, and unlock variants
+  in code that formerly accessed `mm->mmap_sem`.
+- Added a wrapper for read-only modern `vm_flags` updates through
+  `vm_flags_set`.
+- Added a wrapper for the newer `handle_mm_fault(..., regs)` signature.
+- Switched VMA list iteration to `VMA_ITERATOR`/`for_each_vma` on kernels that
+  use maple-tree VMA storage.
+- Added procfs compatibility for `struct proc_ops` and `pde_data`.
+- Converted zero-length procfs buffer fields to C99 flexible arrays to satisfy
+  modern fortify checks.
+- Updated `binfmt_mcexec` for the newer binfmt interpreter restart model:
+  set `bprm->interpreter` and return `0` instead of calling static
+  `prepare_binprm`/`search_binary_handler`.
+- Updated `get_user_pages_remote` use for the modern signature.
+- Moved futex timeout handling to `timespec64` on modern kernels.
+- Renamed the local `__vvar_page` pointer to avoid colliding with the kernel's
+  own `__vvar_page` symbol.
+- Set `vgtod_virt` to `NULL` on modern kernels where the old
+  `vsyscall_gtod_data` symbol is no longer exposed.
+
+Justification:
+- These were all build failures exposed after the original configure blockers
+  were cleared.
+- The compatibility wrappers keep older code paths intact where practical and
+  minimize behavioral change for the current Rust migration.
+- The `vgtod_virt = NULL` fallback is intentionally conservative; it compiles
+  against Linux 6.6 without inventing an address for removed vvar internals.
+
+Result:
+- `ihk.ko` builds.
+- `mcctrl.ko` builds.
+- Because the prepared kernel tree lacks `Module.symvers` and `vmlinux`, Kbuild
+  still prints unresolved-symbol and BTF warnings. Those warnings are expected
+  for this non-installed-header workaround and are recorded as residual
+  environment limitations, not Rust migration regressions.
+
+## Completed Adjustment: User-space Tool Compatibility
+
+Files:
+- `executer/include/defs.h`
+- `ihk/linux/user/ihklib.c`
+- `executer/user/ldump2mcdump.c`
+
+Changes:
+- Made the local `strlcpy` declaration const-correct:
+  - `size_t strlcpy(char *, const char *, size_t);`
+- Added local wrappers around `bfd_set_section_size` and
+  `bfd_set_section_flags` for libbfd 2.42's two-argument API.
+- Updated `ihklib.c` and `ldump2mcdump.c` call sites to use those wrappers.
+
+Justification:
+- Current glibc already declares `strlcpy` with a `const char *` source.
+- Modern libbfd removed the leading `bfd *` argument from section size/flag
+  setters.
+
+Result:
+- `mcexec` links.
+- `mcstat` links.
+
+## Verification Pass: Rust-enabled Build
+
+Command:
+
+```
+C_INCLUDE_PATH=/home/hgordon/.cache/mckernel/sysroot/usr/include \
+LIBRARY_PATH=/home/hgordon/.cache/mckernel/sysroot/usr/lib/x86_64-linux-gnu \
+LD_LIBRARY_PATH=/home/hgordon/.cache/mckernel/sysroot/usr/lib/x86_64-linux-gnu \
+cmake --build /tmp/mckernel-rust-config9 \
+      --target mckernel.img mcctrl_ko mcexec mcstat -j4
+```
+
+Result:
+- Built target `mckernel.img`.
+- Built target `mcctrl_ko`.
+- Built target `mcexec`.
+- Built target `mcstat`.
+
+Produced artifacts:
+- `/tmp/mckernel-rust-config9/kernel/mckernel.img`
+- `/tmp/mckernel-rust-config9/executer/kernel/mcctrl/mcctrl.ko`
+- `/tmp/mckernel-rust-config9/executer/user/mcexec`
+- `/tmp/mckernel-rust-config9/tools/mcstat/mcstat`
+
+Residual warnings:
+- Kbuild warns that `Module.symvers` is missing.
+- Kbuild reports unresolved module symbols for `ihk.ko` and `mcctrl.ko`.
+- BTF generation is skipped because `vmlinux` is unavailable.
+
+Interpretation:
+- The Rust-enabled build path now compiles and links the requested artifacts in
+  this workspace.
+- The unresolved module-symbol warnings are a limitation of using
+  `modules_prepare` instead of installed/full kernel headers.
+
+## Verification Pass: C-fallback Build
+
+Command:
+
+```
+cmake -S /home/hgordon/projects/mckernel \
+      -B /tmp/mckernel-c-config1 \
+      -DBUILD_TARGET=smp-x86 \
+      -DENABLE_RUST_KERNEL=OFF \
+      -DKERNEL_DIR=/home/hgordon/.cache/mckernel/WSL2-Linux-Kernel-6.6.87.2 \
+      -DKBUILD_MAKE_FLAGS=KBUILD_MODPOST_WARN=1 \
+      -DCMAKE_LIBRARY_PATH=/home/hgordon/.cache/mckernel/sysroot/usr/lib/x86_64-linux-gnu \
+      -DCMAKE_INCLUDE_PATH=/home/hgordon/.cache/mckernel/sysroot/usr/include \
+      -DLIBBFD:FILEPATH=/home/hgordon/.cache/mckernel/sysroot/usr/lib/x86_64-linux-gnu/libbfd.so
+
+cmake --build /tmp/mckernel-c-config1 --target mckernel.img -j4
+```
+
+Result:
+- CMake configure succeeds with Rust disabled.
+- The pure-C `mckernel.img` target links.
+- Produced artifact:
+  - `/tmp/mckernel-c-config1/kernel/mckernel.img`
+
+Interpretation:
+- The C fallback path for `rbtree.c`, `llist.c`, and full C `bitmap.c` still
+  functions after the Rust migration wiring.
+
+## Verification Pass: C/Rust Primitive Equivalence
+
+Command:
+
+```
+kernel/rust/tests/run_equivalence.sh
+```
+
+Result:
+- Rust unresolved symbols are still only:
+  - `ihk_mc_chk_page_address`
+  - `virt_to_phys`
+- `rbtree` output matches C:
+  - `rbtree ok count=11 first=5 last=80 post=12`
+- `llist` output matches C:
+  - `llist ok sum=3216 first=3`
+- `bitmap` output matches C:
+  - `bitmap ok digest=ade7440f00538ce8`
+- Rust object SIMD check passes.
+
+Interpretation:
+- The C and Rust implementations of every ported primitive still behave
+  equivalently under the local harness.
+
+## Final Verification Hygiene
+
+Commands:
+
+```
+git diff --check
+git -C ihk diff --check
+```
+
+Result:
+- Both whitespace checks pass.
+
+Current residual limitations:
+- I did not boot McKernel or run `mcexec /bin/true` because this session still
+  lacks passwordless sudo and the modules are built against a prepared source
+  tree without `Module.symvers`.
+- For a real load/boot validation, install or provide a full matching WSL
+  kernel build tree with `Module.symvers` and `vmlinux`, or run the validation
+  on a host with matching kernel headers and module-load permissions.
+
+## Final Host Blocker Recheck
+
+Commands:
+
+```
+uname -r
+test -e /lib/modules/6.6.87.2-microsoft-standard-WSL2/build
+rpm --version
+dpkg-query -W libnuma-dev libnuma1
+sudo -n true
+```
+
+Result:
+- Running kernel: `6.6.87.2-microsoft-standard-WSL2`.
+- `/lib/modules/6.6.87.2-microsoft-standard-WSL2/build` is still missing.
+- `rpm` is installed: `RPM version 4.18.2`.
+- `libnuma-dev` and `libnuma1` are installed:
+  `2.0.18-1ubuntu0.24.04.1`.
+- Passwordless sudo is still unavailable.
+
+Adjustment:
+- Continue using the prepared matching WSL source tree at
+  `/home/hgordon/.cache/mckernel/WSL2-Linux-Kernel-6.6.87.2` for configure and
+  build validation.
+- Keep `KBUILD_MODPOST_WARN=1` for this local validation path because the
+  prepared source tree lacks `Module.symvers`; this converts the expected
+  modpost unresolved-symbol failures into warnings while still compiling the
+  kernel image, host modules, and user tools.

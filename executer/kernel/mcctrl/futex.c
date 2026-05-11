@@ -11,6 +11,7 @@
 #include <linux/interrupt.h>
 #include <linux/cpumask.h>
 #include <linux/rbtree.h>
+#include <linux/timekeeping.h>
 #include <asm/uaccess.h>
 #include <asm/delay.h>
 #include <asm/io.h>
@@ -39,6 +40,18 @@
 
 #define NS_PER_SEC  1000000000UL
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 6, 0)
+typedef struct timespec64 mcctrl_timespec_t;
+#define MCCTRL_TIMESPEC_VALID(ts) timespec64_valid(ts)
+#define MCCTRL_GET_REALTIME(ts) ktime_get_real_ts64(ts)
+#define MCCTRL_GET_MONOTONIC(ts) ktime_get_ts64(ts)
+#else
+typedef struct timespec mcctrl_timespec_t;
+#define MCCTRL_TIMESPEC_VALID(ts) timespec_valid(ts)
+#define MCCTRL_GET_REALTIME(ts) getnstimeofday64(ts)
+#define MCCTRL_GET_MONOTONIC(ts) ktime_get_ts64(ts)
+#endif
+
 static long uti_wait_event(void *_resp, unsigned long nsec_timeout)
 {
 	struct uti_futex_resp *resp = _resp;
@@ -51,7 +64,7 @@ static long uti_wait_event(void *_resp, unsigned long nsec_timeout)
 	}
 }
 
-static int uti_clock_gettime(clockid_t clk_id, struct timespec *tp)
+static int uti_clock_gettime(clockid_t clk_id, mcctrl_timespec_t *tp)
 {
 	int ret = 0;
 	struct timespec64 ts64;
@@ -60,7 +73,7 @@ static int uti_clock_gettime(clockid_t clk_id, struct timespec *tp)
 			clk_id, CLOCK_REALTIME, CLOCK_MONOTONIC);
 	switch (clk_id) {
 	case CLOCK_REALTIME:
-		getnstimeofday64(&ts64);
+		MCCTRL_GET_REALTIME(&ts64);
 		tp->tv_sec = ts64.tv_sec;
 		tp->tv_nsec = ts64.tv_nsec;
 		dprintk("%s: CLOCK_REALTIME,%ld.%09ld\n", __func__,
@@ -68,7 +81,7 @@ static int uti_clock_gettime(clockid_t clk_id, struct timespec *tp)
 		break;
 	case CLOCK_MONOTONIC:
 		/* Do not use getrawmonotonic() because it returns different value than clock_gettime() */
-		ktime_get_ts64(&ts64);
+		MCCTRL_GET_MONOTONIC(&ts64);
 		tp->tv_sec = ts64.tv_sec;
 		tp->tv_nsec = ts64.tv_nsec;
 		dprintk("%s: CLOCK_MONOTONIC,%ld.%09ld\n", __func__,
@@ -1126,8 +1139,8 @@ long do_futex(int n, unsigned long arg0, unsigned long arg1,
 	uint32_t *uaddr = (uint32_t *)arg0;
 	int op = (int)arg1;
 	uint32_t val = (uint32_t)arg2;
-	struct timespec *utime = (struct timespec *)arg3;
-	struct timespec ts;
+	mcctrl_timespec_t *utime = (mcctrl_timespec_t *)arg3;
+	mcctrl_timespec_t ts;
 	uint32_t *uaddr2 = (uint32_t *)arg4;
 	uint32_t val3 = (uint32_t)arg5;
 	int flags = op;
@@ -1158,12 +1171,12 @@ long do_futex(int n, unsigned long arg0, unsigned long arg1,
 		}
 
 		dprintk("%s: utime=%ld.%09ld\n", __func__, ts.tv_sec, ts.tv_nsec);
-		if (!timespec_valid(&ts)) {
+		if (!MCCTRL_TIMESPEC_VALID(&ts)) {
 			return -EINVAL;
 		}
 
-		if (op == FUTEX_WAIT_BITSET) { /* User passed absolute time */
-			struct timespec ats;
+	if (op == FUTEX_WAIT_BITSET) { /* User passed absolute time */
+		mcctrl_timespec_t ats;
 
 			ret = uti_clock_gettime((flags & FUTEX_CLOCK_REALTIME) ?
 					CLOCK_REALTIME : CLOCK_MONOTONIC, &ats);

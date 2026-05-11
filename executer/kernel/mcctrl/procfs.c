@@ -26,6 +26,18 @@
 
 //#define PROCFS_DEBUG
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 4, 0)
+#define MCCTRL_DEFINE_SEMAPHORE(name) DEFINE_SEMAPHORE(name, 1)
+#else
+#define MCCTRL_DEFINE_SEMAPHORE(name) DEFINE_SEMAPHORE(name)
+#endif
+
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 17, 0)
+#define MCCTRL_PDE_DATA(inode) pde_data(inode)
+#else
+#define MCCTRL_PDE_DATA(inode) PDE_DATA(inode)
+#endif
+
 #ifdef PROCFS_DEBUG
 #define	dprintk(...)	printk(__VA_ARGS__)
 #else
@@ -40,7 +52,11 @@ typedef gid_t kgid_t;
 struct procfs_entry {
 	char *name;
 	mode_t mode;
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 6, 0)
+	const struct proc_ops *fops;
+#else
 	const struct file_operations *fops;
+#endif
 };
 
 #define NOD(NAME, MODE, FOP) {				\
@@ -58,8 +74,13 @@ struct procfs_entry {
 static const struct procfs_entry tid_entry_stuff[];
 static const struct procfs_entry pid_entry_stuff[];
 static const struct procfs_entry base_entry_stuff[];
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 6, 0)
+static const struct proc_ops mckernel_forward_ro;
+static const struct proc_ops mckernel_forward;
+#else
 static const struct file_operations mckernel_forward_ro;
 static const struct file_operations mckernel_forward;
+#endif
 
 static ssize_t mckernel_procfs_read(struct file *file, char __user *buf, 
 		size_t nbytes, loff_t *ppos);
@@ -74,7 +95,7 @@ struct procfs_list_entry {
 	struct list_head children;
 	int osnum;
 	char *data;
-	char name[0];
+	char name[];
 };
 
 /*
@@ -84,7 +105,7 @@ struct procfs_list_entry {
  * file.
  */
 LIST_HEAD(procfs_file_list);
-DEFINE_SEMAPHORE(procfs_file_list_lock);
+MCCTRL_DEFINE_SEMAPHORE(procfs_file_list_lock);
 
 static char *
 getpath(struct procfs_list_entry *e, char *buf, int bufsize)
@@ -183,10 +204,14 @@ add_procfs_entry(struct procfs_list_entry *parent, const char *name, int mode,
 		pde = proc_symlink(name, parent_pde, (char *)opaque);
 	}
 	else {
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 6, 0)
+		const struct proc_ops *fop;
+#else
 		const struct file_operations *fop;
+#endif
 
 		if(opaque)
-			fop = (const struct file_operations *)opaque;
+			fop = (typeof(fop))opaque;
 		else if(mode & S_IWUSR)
 			fop = &mckernel_forward;
 		else
@@ -509,7 +534,7 @@ static ssize_t __mckernel_procfs_read_write(
 	struct proc_dir_entry *dp = PDE(inode);
 	struct procfs_list_entry *e = dp->data;
 #else
-	struct procfs_list_entry *e = PDE_DATA(inode);
+	struct procfs_list_entry *e = MCCTRL_PDE_DATA(inode);
 #endif
 	loff_t offset = *ppos;
 	char pathbuf[PROCFS_NAME_MAX];
@@ -770,6 +795,19 @@ int procfsm_packet_handler(void *os, int msg, int pid, unsigned long arg,
 	return 0;
 }
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 6, 0)
+static const struct proc_ops mckernel_forward_ro = {
+	.proc_lseek	= mckernel_procfs_lseek,
+	.proc_read	= mckernel_procfs_read,
+	.proc_write	= NULL,
+};
+
+static const struct proc_ops mckernel_forward = {
+	.proc_lseek	= mckernel_procfs_lseek,
+	.proc_read	= mckernel_procfs_read,
+	.proc_write	= mckernel_procfs_write,
+};
+#else
 static const struct file_operations mckernel_forward_ro = {
 	.llseek		= mckernel_procfs_lseek,
 	.read		= mckernel_procfs_read,
@@ -781,6 +819,7 @@ static const struct file_operations mckernel_forward = {
 	.read		= mckernel_procfs_read,
 	.write		= mckernel_procfs_write,
 };
+#endif
 
 #define PA_NULL (-1L)
 
@@ -789,14 +828,14 @@ struct mckernel_procfs_buffer_info {
 	unsigned long cur_pa;
 	ihk_os_t os;
 	int pid;
-	char path[0];
+	char path[];
 };
 
 struct mckernel_procfs_buffer {
 	unsigned long next_pa;
 	unsigned long pos;
 	unsigned long size;
-	char buf[0];
+	char buf[];
 };
 
 static int mckernel_procfs_buff_open(struct inode *inode, struct file *file)
@@ -812,7 +851,7 @@ static int mckernel_procfs_buff_open(struct inode *inode, struct file *file)
 	struct proc_dir_entry *dp = PDE(inode);
 	struct procfs_list_entry *e = dp->data;
 #else
-	struct procfs_list_entry *e = PDE_DATA(inode);
+	struct procfs_list_entry *e = MCCTRL_PDE_DATA(inode);
 #endif
 
 	os = osnum_to_os(e->osnum);
@@ -1071,6 +1110,15 @@ rep:
 	return l;
 }
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 6, 0)
+static const struct proc_ops mckernel_buff_io = {
+	.proc_lseek	= mckernel_procfs_lseek,
+	.proc_read	= mckernel_procfs_buff_read,
+	.proc_write	= NULL,
+	.proc_open	= mckernel_procfs_buff_open,
+	.proc_release	= mckernel_procfs_buff_release,
+};
+#else
 static const struct file_operations mckernel_buff_io = {
 	.llseek		= mckernel_procfs_lseek,
 	.read		= mckernel_procfs_buff_read,
@@ -1078,6 +1126,7 @@ static const struct file_operations mckernel_buff_io = {
 	.open		= mckernel_procfs_buff_open,
 	.release	= mckernel_procfs_buff_release,
 };
+#endif
 
 static const struct procfs_entry tid_entry_stuff[] = {
 //	PROC_REG("auxv",       S_IRUSR, NULL),

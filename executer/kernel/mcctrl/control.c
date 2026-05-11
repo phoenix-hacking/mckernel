@@ -55,6 +55,16 @@
 
 //#define DEBUG
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 4, 0)
+#define MCCTRL_DEFINE_SEMAPHORE(name) DEFINE_SEMAPHORE(name, 1)
+#else
+#define MCCTRL_DEFINE_SEMAPHORE(name) DEFINE_SEMAPHORE(name)
+#endif
+
+#ifndef cpumask_complement
+#define cpumask_complement(dst, src) cpumask_andnot((dst), cpu_possible_mask, (src))
+#endif
+
 #ifdef DEBUG
 #define dprintk printk
 #else
@@ -978,7 +988,16 @@ static long mcexec_get_cpuset(ihk_os_t os, unsigned long arg)
 		node = linux_numa_2_mckernel_numa(udp,
 				cpu_to_node(mckernel_cpu_2_linux_cpu(udp, cpu_prev)));
 
-		for_each_cpu_not(cpu, cpus_used) {
+		for_each_possible_cpu(cpu) {
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,1,0)
+			if (cpumask_test_cpu(cpu, cpus_used)) {
+				continue;
+			}
+#else
+			if (cpu_isset(cpu, *cpus_used)) {
+				continue;
+			}
+#endif
 			/* Invalid CPU? */
 			if (cpu >= udp->cpu_info->n_cpus)
 				break;
@@ -1797,7 +1816,7 @@ out:
 }
 
 LIST_HEAD(mckernel_exec_files);
-DEFINE_SEMAPHORE(mckernel_exec_file_lock);
+MCCTRL_DEFINE_SEMAPHORE(mckernel_exec_file_lock);
  
 
 struct mckernel_exec_file {
@@ -3670,4 +3689,3 @@ int mcctrl_os_write_cpu_register(ihk_os_t os, int cpu,
 	return __mcctrl_os_read_write_cpu_register(os, cpu,
 			desc, MCCTRL_OS_CPU_WRITE_REGISTER);
 }
-

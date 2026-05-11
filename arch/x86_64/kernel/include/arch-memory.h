@@ -183,7 +183,7 @@ enum ihk_mc_pt_attribute {
 	PTATTR_WRITE_COMBINED = 0x40000,
 };
 
-enum ihk_mc_pt_attribute attr_mask;
+extern enum ihk_mc_pt_attribute attr_mask;
 
 static inline int pfn_is_write_combined(uintptr_t pfn)
 {

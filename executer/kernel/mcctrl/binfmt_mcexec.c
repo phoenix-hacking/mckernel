@@ -11,7 +11,14 @@
 #include <linux/slab.h>
 #include <linux/highmem.h>
 #include <linux/version.h>
+#include <linux/mm.h>
 #include "mcctrl.h"
+
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 19, 0)
+#define MCCTRL_COPY_STRING_KERNEL(arg, bprm) copy_string_kernel((arg), (bprm))
+#else
+#define MCCTRL_COPY_STRING_KERNEL(arg, bprm) copy_strings_kernel(1, &(arg), (bprm))
+#endif
 
 static int pathcheck(const char *file, const char *list)
 {
@@ -125,7 +132,10 @@ static int load_elf(struct linux_binprm *bprm
 		for(i = 0, st = 0; mode != 2;){
 			if(st == 0){
 				off = p & ~PAGE_MASK;
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,10,0)
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 5, 0)
+				rc = get_user_pages_remote(bprm->mm, bprm->p, 1,
+						FOLL_FORCE, &page, NULL);
+#elif LINUX_VERSION_CODE >= KERNEL_VERSION(4,10,0)
 				rc = get_user_pages_remote(current, bprm->mm,
 				                        bprm->p, 1, FOLL_FORCE, &page, NULL, NULL);
 #elif LINUX_VERSION_CODE >= KERNEL_VERSION(4,9,0)
@@ -234,7 +244,7 @@ static int load_elf(struct linux_binprm *bprm
 		kfree(pbuf);
 		return rc;
 	}
-	rc = copy_strings_kernel(1, &bprm->interp, bprm);
+	rc = MCCTRL_COPY_STRING_KERNEL(bprm->interp, bprm);
 	if (rc < 0){
 		fput(file);
 		kfree(pbuf);
@@ -242,7 +252,7 @@ static int load_elf(struct linux_binprm *bprm
 	}
 	bprm->argc++;
 	wp = MCEXEC_PATH;
-	rc = copy_strings_kernel(1, &wp, bprm);
+	rc = MCCTRL_COPY_STRING_KERNEL(wp, bprm);
 	if (rc){
 		fput(file);
 		kfree(pbuf);
@@ -256,6 +266,11 @@ static int load_elf(struct linux_binprm *bprm
 		return rc;
 	}
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 19, 0)
+	bprm->interpreter = file;
+	kfree(pbuf);
+	return 0;
+#else
 	allow_write_access(bprm->file);
 	fput(bprm->file);
 	bprm->file = file;
@@ -272,7 +287,8 @@ static int load_elf(struct linux_binprm *bprm
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3,8,0)
 	                             , regs
 #endif
-);
+	);
+#endif
 }
 
 static struct linux_binfmt mcexec_format = {

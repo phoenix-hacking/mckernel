@@ -29,11 +29,69 @@ if (${ARCH} STREQUAL "arm64")
 	add_compile_options(-mgeneral-regs-only)
 endif()
 
+option(ENABLE_RUST_KERNEL "Enable Rust code in the McKernel image" ON)
+set(RUST_KERNEL_ENABLED OFF)
+if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
+	find_program(RUSTC rustc)
+	if (NOT RUSTC)
+		message(FATAL_ERROR "ENABLE_RUST_KERNEL requires rustc")
+	endif()
+	execute_process(
+		COMMAND ${RUSTC} --version
+		OUTPUT_VARIABLE RUSTC_VERSION
+		OUTPUT_STRIP_TRAILING_WHITESPACE
+	)
+	if (NOT RUSTC_VERSION MATCHES "nightly")
+		message(FATAL_ERROR "ENABLE_RUST_KERNEL requires nightly rustc; found ${RUSTC_VERSION}")
+	endif()
+	set(RUST_KERNEL_OBJ "${CMAKE_CURRENT_BINARY_DIR}/rust/mckernel_rust.o")
+	set(RUST_KERNEL_SRCS
+		"${CMAKE_CURRENT_SOURCE_DIR}/rust/lib.rs"
+		"${CMAKE_CURRENT_SOURCE_DIR}/rust/abi.rs"
+		"${CMAKE_CURRENT_SOURCE_DIR}/rust/bitmap.rs"
+		"${CMAKE_CURRENT_SOURCE_DIR}/rust/llist.rs"
+		"${CMAKE_CURRENT_SOURCE_DIR}/rust/rbtree.rs"
+	)
+	set(RUST_KERNEL_CFG)
+	if (ENABLE_TOFU)
+		list(APPEND RUST_KERNEL_CFG "--cfg" "enable_tofu")
+	endif()
+	add_custom_command(
+		OUTPUT "${RUST_KERNEL_OBJ}"
+		COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/rust"
+		COMMAND ${RUSTC}
+			--crate-name mckernel_rust
+			--crate-type lib
+			--edition=2021
+			-C panic=abort
+			-C opt-level=2
+			-C debuginfo=2
+			-C code-model=large
+			-C relocation-model=static
+			-C no-redzone=yes
+			-C force-frame-pointers=yes
+			-C overflow-checks=off
+			-C force-unwind-tables=no
+			-C no-vectorize-loops
+			-C no-vectorize-slp
+			${RUST_KERNEL_CFG}
+			--emit=obj=${RUST_KERNEL_OBJ}
+			"${CMAKE_CURRENT_SOURCE_DIR}/rust/lib.rs"
+		DEPENDS ${RUST_KERNEL_SRCS}
+		COMMENT "Building Rust kernel object"
+		VERBATIM
+	)
+	add_custom_target(mckernel_rust_obj DEPENDS "${RUST_KERNEL_OBJ}")
+	set_source_files_properties("${RUST_KERNEL_OBJ}"
+		PROPERTIES EXTERNAL_OBJECT TRUE GENERATED TRUE)
+	set(RUST_KERNEL_ENABLED ON)
+endif()
+
 set(MCKERNEL_SRCS
 	init.c mem.c debug.c mikc.c listeners.c ap.c syscall.c cls.c host.c process.c
 	copy.c waitq.c futex.c timer.c plist.c fileobj.c shmobj.c zeroobj.c
-	procfs.c devobj.c sysfs.c xpmem.c profile.c freeze.c rbtree.c pager.c
-	gencore.c hugefileobj.c llist.c
+	procfs.c devobj.c sysfs.c xpmem.c profile.c freeze.c pager.c
+	gencore.c hugefileobj.c
 
 	${IHK_FULL_SOURCE_DIR}/ikc/manycore.c
 	${IHK_FULL_SOURCE_DIR}/ikc/master.c
@@ -50,6 +108,17 @@ set(MCKERNEL_SRCS
 	${IHK_FULL_SOURCE_DIR}/cokernel/smp/${ARCH}/dma.c
 	${IHK_FULL_SOURCE_DIR}/cokernel/smp/${ARCH}/setup.c
 )
+
+if (RUST_KERNEL_ENABLED)
+	list(APPEND MCKERNEL_SRCS
+		"${RUST_KERNEL_OBJ}"
+		rust/abi_checks.c
+	)
+	set_source_files_properties("${PROJECT_SOURCE_DIR}/lib/bitmap.c"
+		PROPERTIES COMPILE_DEFINITIONS MCKERNEL_RUST_BITMAP_CORE)
+else()
+	list(APPEND MCKERNEL_SRCS rbtree.c llist.c)
+endif()
 
 if (ENABLE_TOFU)
 	list(APPEND MCKERNEL_SRCS
@@ -177,6 +246,9 @@ configure_file(
   )
 
 add_executable(mckernel.img ${MCKERNEL_SRCS})
+if (RUST_KERNEL_ENABLED)
+	add_dependencies(mckernel.img mckernel_rust_obj)
+endif()
 
 set_target_properties(mckernel.img PROPERTIES INSTALL_RPATH "")
 set_target_properties(mckernel.img PROPERTIES LINK_FLAGS
