@@ -1,0 +1,184 @@
+diff --git a/linux/core/host_driver.c b/linux/core/host_driver.c
+index 102345b..6fdf2ef 100644
+--- a/linux/core/host_driver.c
++++ b/linux/core/host_driver.c
+@@ -34,6 +34,8 @@
+ #include <linux/version.h>
+ #include <linux/cred.h>
+ #include <linux/mutex.h>
++#include <linux/semaphore.h>
++#include <linux/panic_notifier.h>
+ #include <ihk/ihk_host_user.h>
+ #include <ihk/ihk_host_driver.h>
+ #include <asm/spinlock.h>
+@@ -58,6 +60,20 @@
+ #define DEV_DEV_NAME "mcd"
+ #define OS_DEV_NAME  "mcos"
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 4, 0)
++#define IHK_DEFINE_SEMAPHORE(name) DEFINE_SEMAPHORE(name, 1)
++#define IHK_CLASS_CREATE(name) class_create(name)
++#define IHK_GFP_ATOMIC GFP_ATOMIC
++#elif LINUX_VERSION_CODE >= KERNEL_VERSION(4, 4, 0)
++#define IHK_DEFINE_SEMAPHORE(name) DEFINE_SEMAPHORE(name)
++#define IHK_CLASS_CREATE(name) class_create(THIS_MODULE, name)
++#define IHK_GFP_ATOMIC __GFP_ATOMIC
++#else
++#define IHK_DEFINE_SEMAPHORE(name) DEFINE_SEMAPHORE(name)
++#define IHK_CLASS_CREATE(name) class_create(THIS_MODULE, name)
++#define IHK_GFP_ATOMIC GFP_KERNEL
++#endif
++
+ #define OS_DATA_INVALID ((void *)-1)
+ #define DEV_DATA_INVALID ((void *)-1)
+ 
+@@ -74,7 +90,7 @@ static struct ihk_host_linux_os_data *os_data[OS_MAX_MINOR];
+ static int os_max_minor = 0;
+ 
+ static struct list_head ihk_os_notifiers;
+-DEFINE_SEMAPHORE(ihk_os_notifiers_lock);
++IHK_DEFINE_SEMAPHORE(ihk_os_notifiers_lock);
+ 
+ static struct list_head ihk_kmsg_bufs;
+ static spinlock_t ihk_kmsg_bufs_lock;
+@@ -1650,11 +1666,7 @@ static int __ihk_device_create_os(struct ihk_host_linux_device_data *data,
+ 		++kmsg_buf_order;
+ 
+ 	kmsg_buf_pages = alloc_pages_node(NUMA_NO_NODE,
+-#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 4, 0)
+-					  __GFP_ATOMIC |
+-#else
+-					  GFP_KERNEL |
+-#endif
++					  IHK_GFP_ATOMIC |
+ 					  __GFP_HIGH |
+ 					  __GFP_COMP | __GFP_NORETRY |
+ 					  __GFP_NOWARN | __GFP_ZERO,
+@@ -2205,7 +2217,7 @@ static int __init ihk_host_driver_init(void)
+ 		goto ERR;
+ 	}
+ 	
+-	mcd_class = class_create(THIS_MODULE, DEV_DEV_NAME);
++	mcd_class = IHK_CLASS_CREATE(DEV_DEV_NAME);
+ 	if (!mcd_class) {
+ 		printk(KERN_INFO "IHK: Cannot create mcd.\n");
+ 		goto ERR;
+@@ -2216,7 +2228,7 @@ static int __init ihk_host_driver_init(void)
+ 		printk(KERN_INFO "IHK: Cannot allocate char device number.\n");
+ 		goto ERR;
+ 	}
+-	mcos_class = class_create(THIS_MODULE, OS_DEV_NAME);
++	mcos_class = IHK_CLASS_CREATE(OS_DEV_NAME);
+ 	if (!mcos_class) {
+ 		printk(KERN_INFO "IHK: Cannot create mcos.\n");
+ 		goto ERR;
+diff --git a/linux/user/ihklib.c b/linux/user/ihklib.c
+index 3d99534..7ce501f 100644
+--- a/linux/user/ihklib.c
++++ b/linux/user/ihklib.c
+@@ -31,6 +31,11 @@
+ #include <ihk/ihklib.h>
+ #include <ihk/ihklib_private.h>
+ 
++#define mc_bfd_set_section_size(abfd, scn, size) \
++	bfd_set_section_size((scn), (size))
++#define mc_bfd_set_section_flags(abfd, scn, flags) \
++	bfd_set_section_flags((scn), (flags))
++
+ //#define DEBUG
+ 
+ int __argc;
+@@ -3936,7 +3941,7 @@ int ihk_os_makedumpfile(int index, char *dump_file, int dump_level, int interact
+ 			goto out;
+ 		}
+ 
+-		ok = bfd_set_section_size(abfd, scn, cpsize);
++		ok = mc_bfd_set_section_size(abfd, scn, cpsize);
+ 		if (!ok) {
+ 			ret = -EINVAL;
+ 			dprintf("%s: error: "
+@@ -3945,7 +3950,7 @@ int ihk_os_makedumpfile(int index, char *dump_file, int dump_level, int interact
+ 			goto out;
+ 		}
+ 
+-		ok = bfd_set_section_flags(abfd, scn, SEC_HAS_CONTENTS);
++		ok = mc_bfd_set_section_flags(abfd, scn, SEC_HAS_CONTENTS);
+ 		if (!ok) {
+ 			ret = -EINVAL;
+ 			dprintf("%s: error: "
+@@ -3966,7 +3971,7 @@ int ihk_os_makedumpfile(int index, char *dump_file, int dump_level, int interact
+ 			goto out;
+ 		}
+ 
+-		ok = bfd_set_section_size(abfd, scn, cpsize);
++		ok = mc_bfd_set_section_size(abfd, scn, cpsize);
+ 		if (!ok) {
+ 			ret = -EINVAL;
+ 			dprintf("%s: error: "
+@@ -3975,7 +3980,7 @@ int ihk_os_makedumpfile(int index, char *dump_file, int dump_level, int interact
+ 			goto out;
+ 		}
+ 
+-		ok = bfd_set_section_flags(abfd, scn, SEC_HAS_CONTENTS);
++		ok = mc_bfd_set_section_flags(abfd, scn, SEC_HAS_CONTENTS);
+ 		if (!ok) {
+ 			ret = -EINVAL;
+ 			dprintf("%s: error: "
+@@ -3996,7 +4001,7 @@ int ihk_os_makedumpfile(int index, char *dump_file, int dump_level, int interact
+ 			goto out;
+ 		}
+ 
+-		ok = bfd_set_section_size(abfd, scn, cpsize);
++		ok = mc_bfd_set_section_size(abfd, scn, cpsize);
+ 		if (!ok) {
+ 			ret = -EINVAL;
+ 			dprintf("%s: error: "
+@@ -4005,7 +4010,7 @@ int ihk_os_makedumpfile(int index, char *dump_file, int dump_level, int interact
+ 			goto out;
+ 		}
+ 
+-		ok = bfd_set_section_flags(abfd, scn, SEC_HAS_CONTENTS);
++		ok = mc_bfd_set_section_flags(abfd, scn, SEC_HAS_CONTENTS);
+ 		if (!ok) {
+ 			ret = -EINVAL;
+ 			dprintf("%s: error: "
+@@ -4025,7 +4030,7 @@ int ihk_os_makedumpfile(int index, char *dump_file, int dump_level, int interact
+ 		goto out;
+ 	}
+ 
+-	ok = bfd_set_section_size(abfd, scn, mem_size);
++	ok = mc_bfd_set_section_size(abfd, scn, mem_size);
+ 	if (!ok) {
+ 		ret = -EINVAL;
+ 		dprintf("%s: error: "
+@@ -4034,7 +4039,7 @@ int ihk_os_makedumpfile(int index, char *dump_file, int dump_level, int interact
+ 		goto out;
+ 	}
+ 
+-	ok = bfd_set_section_flags(abfd, scn, SEC_ALLOC|SEC_HAS_CONTENTS);
++	ok = mc_bfd_set_section_flags(abfd, scn, SEC_ALLOC|SEC_HAS_CONTENTS);
+ 	if (!ok) {
+ 		ret = -EINVAL;
+ 		dprintf("%s: error: "
+@@ -4060,10 +4065,10 @@ int ihk_os_makedumpfile(int index, char *dump_file, int dump_level, int interact
+ 		}
+ 
+ 		if (interactive) {
+-			ok = bfd_set_section_size(abfd, scn, PAGE_SIZE);
++			ok = mc_bfd_set_section_size(abfd, scn, PAGE_SIZE);
+ 		}
+ 		else {
+-			ok = bfd_set_section_size(abfd, scn, mem_chunks->chunks[i].size);
++			ok = mc_bfd_set_section_size(abfd, scn, mem_chunks->chunks[i].size);
+ 		}
+ 		if (!ok) {
+ 			ret = -EINVAL;
+@@ -4073,7 +4078,7 @@ int ihk_os_makedumpfile(int index, char *dump_file, int dump_level, int interact
+ 			goto out;
+ 		}
+ 
+-		ok = bfd_set_section_flags(abfd, scn, SEC_ALLOC|SEC_HAS_CONTENTS);
++		ok = mc_bfd_set_section_flags(abfd, scn, SEC_ALLOC|SEC_HAS_CONTENTS);
+ 		if (!ok) {
+ 			ret = -EINVAL;
+ 			dprintf("%s: error: "
