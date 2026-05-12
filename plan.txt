@@ -1,0 +1,602 @@
+McKernel Rust Port Plan With Controlled Verification
+Updated: 2026-05-12
+
+Purpose
+------------------------------------------------------------
+
+This document records the Rust migration work completed so far and defines the
+full granular plan for porting McKernel-owned implementation code to Rust. The
+verification strategy is intentionally staged: each checkpoint tests one layer,
+has a clear success result, and stops before later layers make debugging noisy.
+
+Definition of "fully ported"
+------------------------------------------------------------
+
+The target end state is:
+
+- McKernel-owned non-assembly implementation logic is Rust-owned.
+- Existing public C headers remain as compatibility surfaces while external
+  users still depend on them.
+- Rust replacement functions use the existing C ABI and exported symbol names.
+- Architecture entry, interrupt, trampoline, and context-switch assembly remain
+  assembly unless a later phase explicitly replaces them.
+- Linux kernel internals and third-party code are not rewritten.
+- Host/user components are ported where technically supportable by the target
+  kernel and toolchain. If external Rust Linux modules are not supported, keep a
+  small C module shim and move pure logic behind C-callable Rust interfaces.
+
+Completed migration work
+------------------------------------------------------------
+
+Rust kernel build foundation
+----------------------------
+
+- Added a freestanding Rust kernel crate under kernel/rust/.
+- Added no_std Rust code with panic abort behavior and no allocator dependency.
+- Wired the Rust object into the x86_64 mckernel.img link when
+  ENABLE_RUST_KERNEL is enabled.
+- Preserved a C fallback path when ENABLE_RUST_KERNEL is disabled.
+- Restricted Rust enablement to the current x86_64 migration target.
+- Configured the Rust build for kernel-style code generation:
+  no red zone, large code model, static relocation model, frame pointers, no
+  vectorization, no unwinding, and no allocator.
+- Updated the x86_64 linker script to include large-model Rust text sections.
+
+ABI and layout foundation
+-------------------------
+
+- Added Rust ABI definitions in kernel/rust/abi.rs.
+- Added C-side ABI/layout checks in kernel/rust/abi_checks.c.
+- Covered the first shared syscall/protocol structures needed by the migration.
+- Preserved public C headers, symbol names, syscall numbers, ioctl values, IKC
+  packet formats, and linker-visible entry points.
+
+First Rust primitive replacements
+---------------------------------
+
+- Ported the kernel red-black tree implementation behind the existing rb_* C
+  ABI.
+- Ported linked-list helper routines behind the existing C ABI.
+- Ported selected bitmap primitives behind the existing C ABI.
+- Kept macro-heavy C headers in place so existing C call sites do not need a
+  public include-style migration yet.
+- Guarded selected C bitmap implementations so Rust can replace them without
+  duplicate symbols.
+
+Equivalence and build checks already established
+------------------------------------------------
+
+- Added kernel/rust/tests/run_equivalence.sh.
+- Verified Rust/C behavior for the first rbtree, llist, and bitmap ports.
+- Checked the Rust object for expected unresolved kernel symbols only.
+- Checked that Rust output does not introduce unwanted SIMD/vector usage.
+
+Host and compatibility work already completed
+---------------------------------------------
+
+- Fixed top-level CMake module probe behavior for newer host environments.
+- Fixed WSL kernel version parsing for 6.6.87.2-microsoft-standard-WSL2 style
+  version strings.
+- Fixed an x86_64 memory header tentative definition issue by making attr_mask
+  an extern declaration.
+- Fixed const-correctness around strlcpy declarations.
+- Added newer libbfd section API compatibility wrappers for dump helpers.
+- Added Linux 6.6 compatibility adjustments for mcctrl procfs, syscall, futex,
+  binfmt, and x86_64 arch dependency code.
+- Captured local IHK compatibility edits as scripts/patches/ihk-linux-compat.patch
+  so a Rocky VM can reproduce them without requiring a separate IHK submodule
+  branch.
+- Added scripts/rocky-rust-validation.sh on the Rocky validation branch to
+  install dependencies, initialize submodules, apply the IHK patch, build,
+  install, and optionally run boot smoke tests.
+
+Known current validation state
+------------------------------------------------------------
+
+- WSL is useful for development and partial builds, but not the preferred
+  runtime boot environment.
+- Full WSL module/runtime validation remains blocked by host kernel/module
+  compatibility problems, especially the ihk-smp-x86_64 driver against Linux
+  6.6 APIs.
+- Rocky Linux VM validation is the preferred runtime path.
+- Current Rust migration is healthy through the Rust primitive equivalence
+  layer and mckernel.img build layer, but real boot/runtime smoke testing still
+  needs to be completed on a suitable VM.
+
+Public interface rules
+------------------------------------------------------------
+
+- Preserve syscall numbers.
+- Preserve ioctl values.
+- Preserve IKC packet formats.
+- Preserve exported symbol names.
+- Preserve public C headers during the migration.
+- Use extern "C" for Rust functions replacing C implementations.
+- Use #[repr(C)] for all shared ABI structs.
+- Keep union-heavy and flexible-array-heavy interfaces pointer/raw-layout based
+  until each call site is deliberately migrated.
+- Do not make behavior-breaking ABI changes without a separate approved plan.
+
+Controlled verification ladder
+------------------------------------------------------------
+
+Run the steps in order. Stop on the first failure. Do not proceed to runtime
+checks until all earlier build and equivalence checks pass.
+
+V0: Documentation integrity
+---------------------------
+
+Purpose:
+- Confirm this documentation update is structurally clean.
+
+Commands:
+- test -f plan.txt
+- test -f overview.txt
+- test -f kernel.log
+- git diff --check
+
+Success:
+- All three files exist.
+- git diff --check reports no whitespace or patch-format problems.
+
+Stop condition:
+- If a file is missing or diff hygiene fails, fix documentation before testing
+  code.
+
+V1: Source inventory
+--------------------
+
+Purpose:
+- Confirm the repo still contains both Rust and C migration paths.
+
+Commands:
+- find kernel/rust -maxdepth 2 -type f | sort
+- grep or rg for ENABLE_RUST_KERNEL in kernel/CMakeLists.txt
+- confirm kernel/rbtree.c, kernel/llist.c, and lib/bitmap.c still exist
+- confirm kernel/rust/lib.rs, abi.rs, rbtree.rs, llist.rs, bitmap.rs, and
+  abi_checks.c still exist
+
+Success:
+- Rust files are present.
+- C fallback files are present.
+- ENABLE_RUST_KERNEL is still available.
+
+Stop condition:
+- If either Rust or C fallback inventory is missing, fix source layout before
+  building.
+
+V2: Rust object only
+--------------------
+
+Purpose:
+- Compile Rust before touching the full kernel link.
+
+Command:
+- cmake --build <build-dir> --target mckernel_rust_obj -j2
+
+Additional checks:
+- Confirm no allocator dependency.
+- Confirm no unwinding dependency.
+- Confirm no red-zone usage.
+- Confirm no unexpected SIMD/vector instructions.
+
+Success:
+- The Rust object target builds cleanly.
+
+Stop condition:
+- If this fails, debug Rust flags, nightly availability, or no_std code before
+  trying mckernel.img.
+
+V3: Rust primitive equivalence
+------------------------------
+
+Purpose:
+- Confirm Rust replacements match the C behavior already being replaced.
+
+Command:
+- kernel/rust/tests/run_equivalence.sh
+
+Success:
+- rbtree equivalence passes.
+- llist equivalence passes.
+- bitmap equivalence passes.
+- unresolved-symbol checks pass.
+- codegen checks pass.
+
+Stop condition:
+- If this fails, fix the relevant primitive before attempting a kernel image
+  build.
+
+V4: Rust-enabled kernel image
+-----------------------------
+
+Purpose:
+- Confirm Rust links into mckernel.img.
+
+Configure:
+- cmake -S . -B <rust-build-dir> -DBUILD_TARGET=smp-x86 -DENABLE_RUST_KERNEL=ON
+
+Build:
+- cmake --build <rust-build-dir> --target mckernel.img -j2
+
+Success:
+- mckernel.img links with the Rust object included.
+
+Stop condition:
+- If this fails, debug link script, duplicate symbols, Rust object generation,
+  or missing kernel symbols.
+
+V5: C fallback kernel image
+---------------------------
+
+Purpose:
+- Confirm the old C path remains usable.
+
+Configure:
+- cmake -S . -B <c-build-dir> -DBUILD_TARGET=smp-x86 -DENABLE_RUST_KERNEL=OFF
+
+Build:
+- cmake --build <c-build-dir> --target mckernel.img -j2
+
+Success:
+- mckernel.img links without Rust replacements.
+
+Stop condition:
+- If this fails, fix fallback source selection before porting more code.
+
+V6: User-space tools
+--------------------
+
+Purpose:
+- Confirm user-space tools still compile before module or runtime work.
+
+Build:
+- cmake --build <build-dir> --target mcexec mcstat -j2
+
+Success:
+- mcexec and mcstat build.
+
+Stop condition:
+- If this fails, debug host/user library or libbfd/libelf dependencies before
+  module loading.
+
+V7: Host modules compile
+------------------------
+
+Purpose:
+- Confirm host modules are buildable on the selected runtime host.
+
+Build:
+- cmake --build <build-dir> --target ihk_ko ihk-smp-x86_64_ko mcctrl_ko -j2
+
+Preferred environment:
+- Rocky Linux VM or another compatible full Linux kernel development
+  environment.
+
+Success:
+- ihk.ko, ihk-smp-x86_64.ko, and mcctrl.ko build.
+
+Stop condition:
+- If this fails, do not attempt runtime boot. Fix Linux kernel API/module
+  compatibility first.
+
+V8: Module load only
+--------------------
+
+Purpose:
+- Confirm Linux accepts the modules before booting McKernel.
+
+Action:
+- Load the required modules.
+- Do not boot McKernel yet.
+
+Success:
+- Required modules load without unresolved symbols, taint surprises that block
+  operation, or immediate kernel errors.
+
+Stop condition:
+- If module load fails, debug module dependencies and dmesg before boot.
+
+V9: McKernel boot only
+----------------------
+
+Purpose:
+- Confirm host modules and mckernel.img cooperate at boot.
+
+Action:
+- Boot with minimal CPU and memory allocation.
+- Do not run user workloads yet.
+
+Success:
+- Kernel message output confirms McKernel booted.
+
+Stop condition:
+- If boot fails, inspect host dmesg and McKernel kmsg before testing mcexec.
+
+V10: Minimal user workloads
+---------------------------
+
+Purpose:
+- Confirm basic process launch and reporting.
+
+Commands:
+- mcexec /bin/true
+- mcexec hostname
+- mcstat
+
+Success:
+- Commands complete successfully.
+
+Stop condition:
+- If any command fails, debug process/syscall/host communication paths before
+  broad regression tests.
+
+V11: Focused regression tests
+-----------------------------
+
+Purpose:
+- Exercise high-risk functionality touched by the migration.
+
+Suites:
+- user_space/futex
+- large_page/x86_64
+- xpmem
+- strace
+- mcexec_options
+- syscall delegation tests
+
+Success:
+- Targeted suites pass.
+
+Stop condition:
+- If a suite fails, stop at that subsystem and add a phase-specific repro.
+
+V12: Phase-specific stress
+--------------------------
+
+Purpose:
+- Keep future verification narrow and debuggable.
+
+Rule:
+- Each Rust port phase gets tests specific to the code just moved.
+
+Examples:
+- Allocator phase: allocation/free/coalescing stress before syscall tests.
+- Page-table phase: mapping/unmapping/attribute tests before process tests.
+- Futex phase: futex stress before file-object tests.
+
+Success:
+- The new Rust phase passes its specific stress tests, then passes V4 through
+  V11.
+
+Stop condition:
+- If stress fails, do not port the next subsystem.
+
+Granular migration phases
+------------------------------------------------------------
+
+Phase 0: Documentation and Baseline
+-----------------------------------
+
+Scope:
+- Create plan.txt and overview.txt.
+- Update kernel.log with this documentation change.
+- Confirm current branch, build status, known blockers, and Rocky VM validation
+  path.
+- Record that verification is now staged by V0 through V12.
+
+Exit criteria:
+- Docs accurately describe completed work and current limitations.
+- V0 passes.
+- V1 passes if source inventory is checked during the same work session.
+
+Phase 1: Rust build foundation hardening
+----------------------------------------
+
+Scope:
+- Improve CMake diagnostics for missing nightly rustc.
+- Make the Rust target name and output path obvious.
+- Ensure Rust build flags remain centralized and auditable.
+- Keep ENABLE_RUST_KERNEL=ON and ENABLE_RUST_KERNEL=OFF equally supported.
+
+Exit criteria:
+- V1 through V5 pass.
+
+Phase 2: ABI foundation expansion
+---------------------------------
+
+Scope:
+- Expand Rust #[repr(C)] mirrors for syscall, IKC, process, memory, and x86_64
+  context structures.
+- Add C layout assertions for every mirrored type.
+- Add offset and size checks where padding is security- or ABI-sensitive.
+
+Exit criteria:
+- ABI checks fail on intentional layout drift.
+- V2 through V5 pass.
+
+Phase 3: Shared primitive completion
+------------------------------------
+
+Scope:
+- Finish bitmap migration.
+- Port additional leaf primitives only where the C ABI is stable.
+- Keep C macro headers intact.
+- Avoid introducing allocator-backed Rust data structures.
+
+Exit criteria:
+- V3 through V5 pass.
+- C fallback still builds.
+
+Phase 4: Page allocator
+-----------------------
+
+Scope:
+- Port allocator internals from lib/page_alloc.c.
+- Preserve exported allocator symbols.
+- Keep physical page accounting behavior identical.
+- Add stress for allocate, free, split, merge, reserve, and exhaustion paths.
+
+Exit criteria:
+- Allocator V12 stress passes.
+- V4 through V11 pass on the runtime platform.
+
+Phase 5: x86_64 memory core
+---------------------------
+
+Scope:
+- Port PTE constants and helpers first.
+- Port page-table walking.
+- Port map, unmap, clear, and attribute-change paths.
+- Port init page-table setup only after runtime mapping tests are stable.
+- Leave assembly entry, interrupt, context-switch, and trampoline code as
+  assembly.
+
+Exit criteria:
+- large_page/x86_64 tests pass.
+- Mapping and attribute tests pass.
+- V4 through V11 pass.
+
+Phase 6: Process VM
+-------------------
+
+Scope:
+- Port vm_range and process_vm operations.
+- Port range-tree ownership and lookup logic.
+- Port refcount helpers once layout and lifetime rules are tested.
+- Keep external process lifecycle symbols stable.
+
+Exit criteria:
+- mcexec /bin/true passes.
+- mcexec hostname passes.
+- VM teardown and process cleanup tests pass.
+- V4 through V11 pass.
+
+Phase 7: Syscall core
+---------------------
+
+Scope:
+- Port generic syscall dispatch.
+- Port syscall families in this order:
+  memory, process lifecycle, signal/wait, futex, file/object, remaining leaf
+  handlers.
+- Keep x86_64 syscall entry glue in C/assembly until generic handling is
+  stable.
+
+Exit criteria:
+- syscall delegation tests pass.
+- strace-focused tests pass.
+- V4 through V11 pass.
+
+Phase 8: Scheduler, wait, timer, and futex
+------------------------------------------
+
+Scope:
+- Port scheduling policy logic.
+- Port wait queues and wakeups.
+- Port timer coordination.
+- Port futex logic after syscall and process dependencies are stable.
+- Keep low-level context-switch assembly.
+
+Exit criteria:
+- Futex tests pass repeatedly.
+- Scheduler stress passes.
+- V4 through V11 pass.
+
+Phase 9: Kernel objects and filesystems
+---------------------------------------
+
+Scope:
+- Port file objects, shared memory objects, zero objects, dev objects, hugefile
+  objects, pager, freeze, procfs, sysfs, gencore, and xpmem.
+- Preserve procfs/sysfs text formats unless a separate compatibility-breaking
+  plan approves changes.
+
+Exit criteria:
+- mcstat passes.
+- procfs/sysfs reads pass.
+- xpmem tests pass.
+- dump and object lifecycle tests pass.
+- V4 through V11 pass.
+
+Phase 10: IKC and host communication
+------------------------------------
+
+Scope:
+- Port McKernel-side IKC packet handling.
+- Port host communication state machines.
+- Preserve all packet layouts and protocol constants.
+
+Exit criteria:
+- Boot passes.
+- Shutdown passes.
+- syscall delegation passes.
+- Host communication tests pass.
+- V4 through V11 pass.
+
+Phase 11: Host Linux modules
+----------------------------
+
+Scope:
+- Port mcctrl logic first where feasible.
+- For ihk and ihk-smp, use Rust external-module support only on kernels that
+  support it.
+- Where external Rust modules are not practical, keep minimal C module shims and
+  move pure policy logic into Rust behind C ABI.
+
+Exit criteria:
+- Rocky VM builds ihk_ko, ihk-smp-x86_64_ko, and mcctrl_ko.
+- Modules load.
+- McKernel boots.
+- V7 through V11 pass.
+
+Phase 12: User tools
+--------------------
+
+Scope:
+- Port mcexec, mcstat, crash helpers, dump helpers, and smaller utilities.
+- Preserve command-line flags, output formats, exit codes, and protocol
+  behavior.
+
+Exit criteria:
+- Existing scripts work unchanged.
+- Tool output diffs are empty or explicitly approved.
+
+Phase 13: arm64
+---------------
+
+Scope:
+- Bring arm64 onto the stabilized Rust abstractions after x86_64 stops
+  changing rapidly.
+- Keep arm64 assembly where required.
+- Add architecture-specific ABI/layout checks.
+
+Exit criteria:
+- arm64 build passes.
+- arm64 smoke tests pass on suitable hardware or emulator support.
+
+Phase 14: Final C retirement
+----------------------------
+
+Scope:
+- Remove replaced C implementations after Rust equivalence and runtime
+  validation.
+- Keep compatibility headers where external callers depend on them.
+- Remove C fallback only after a separate compatibility-breaking approval.
+- Audit remaining unsafe Rust blocks and C shims.
+
+Exit criteria:
+- McKernel-owned non-assembly implementation logic is Rust-owned.
+- Remaining C is limited to compatibility shims, unavoidable module glue,
+  generated bindings, or assembly-adjacent code.
+
+Operating rules for every phase
+------------------------------------------------------------
+
+- One subsystem moves at a time.
+- Each phase must add or update its own narrow verification.
+- C and Rust behavior must be proven equivalent before removing C code.
+- Runtime smoke testing must happen before broad regression testing.
+- If a verification step fails, stop at that step and log the exact failure in
+  kernel.log.
+- Keep the system bootable after every merge.

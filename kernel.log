@@ -882,3 +882,267 @@ Adjustment:
   prepared source tree lacks `Module.symvers`; this converts the expected
   modpost unresolved-symbol failures into warnings while still compiling the
   kernel image, host modules, and user tools.
+
+## WSL Runtime-Smoke Safety Follow-up
+
+User reported a Windows Terminal message:
+
+```
+[process exited with code 1 (0x00000001)]
+You can now close this terminal with Ctrl+D, or press Enter to restart.
+```
+
+Checks performed from a fresh WSL command:
+- Ubuntu WSL still starts and reports kernel
+  `6.6.87.2-microsoft-standard-WSL2`.
+- The WSL uptime was under one minute at the time of the check, which means the
+  distro session had likely just restarted or had not been running.
+- No `ihk`, `ihk_smp_*`, or `mcctrl` modules were listed in `/proc/modules`.
+- No `/dev/mcd*` or `/dev/mcos*` device nodes were present.
+- No `mcexec` process was running.
+
+Interpretation:
+- The Windows computer did not shut down.
+- There is no remaining loaded McKernel/IHK runtime state visible after the
+  reported terminal exit.
+- Treat WSL runtime boot testing as unsafe for the main development distro; keep
+  WSL for build/equivalence validation and use a disposable VM or bare-metal
+  Linux host for the real boot test.
+
+## Runtime Build Retry: Root Rust Toolchain Failure
+
+User retried configure/build from a `root` shell with:
+
+```
+cmake -S . -B /tmp/mckernel-runtime-rust \
+      -DBUILD_TARGET=smp-x86 \
+      -DENABLE_RUST_KERNEL=ON \
+      -DKERNEL_DIR=/home/hgordon/.cache/mckernel/WSL2-Linux-Kernel-6.6.87.2
+```
+
+Result:
+- CMake reached the Rust kernel detection gate.
+- The temporary kbuild module completed far enough to show that
+  `Module.symvers` is now usable.
+- BTF was skipped for the temporary module because `vmlinux` is still
+  unavailable; this is expected for the current WSL kernel source tree state.
+- Configure failed with:
+
+```
+error: rustup could not choose a version of rustc to run, because one wasn't specified explicitly, and no default is configured.
+ENABLE_RUST_KERNEL requires nightly rustc; found
+```
+
+Interpretation:
+- This is not a McKernel C or Rust source failure.
+- The build was run as `root`, and root's `rustup` installation has no default
+  toolchain configured.
+- The preferred adjustment is to run configure/build as the normal `hgordon`
+  user, where the Rust nightly toolchain was used successfully during earlier
+  validation.
+- Keep `sudo` only for symlinking `/lib/modules/.../build`, installing files,
+  loading modules, and boot/runtime commands.
+
+## Runtime Build Retry: IHK-SMP Linux 6.6 API Breakage
+
+User reran configure/build as `hgordon`.
+
+Result:
+- CMake configure completed successfully.
+- The temporary kbuild module linked and skipped BTF because `vmlinux` is not
+  available; this is expected and non-fatal.
+- Rust kernel object built.
+- `mckernel.img` linked successfully.
+- `ihk.ko` built successfully.
+- The build failed at `ihk-smp-x86_64.ko`.
+
+Important non-fatal warnings:
+- Rust reported a GNU make jobserver warning; the Rust object still built.
+- C compiler warnings in `kernel/procfs.c`, `arch/x86_64/kernel/cpu.c`, and
+  `ihk/linux/core/host_driver.c` did not stop the build.
+- Linker warnings about `.note.GNU-stack` and RWX load segments are existing
+  kernel-image hygiene issues, not the current build blocker.
+
+Actual blocker:
+- `ihk/linux/driver/smp` has not yet been updated for Linux 6.6 / current WSL
+  kernel APIs.
+
+Representative failures:
+- `#include <asm/ipi.h>` fails because that header is no longer present in the
+  Linux 6.6 x86 include tree.
+- `struct timespec`, `getnstimeofday()`, and `get_seconds()` are obsolete for
+  current kernels and need `timespec64` / `ktime_get_real_ts64()` /
+  `ktime_get_real_seconds()` style wrappers.
+- `list_sort()` now expects comparator arguments as
+  `const struct list_head *`.
+- Direct inclusion of `linux/slab_def.h` is wrong for this WSL kernel, which is
+  configured for SLUB, not the deprecated SLAB allocator.
+- `__alloc_pages_nodemask()` and `__GFP_ATOMIC` are no longer available to this
+  external module path; this code needs current allocation wrappers such as
+  `alloc_pages_node()` and `GFP_ATOMIC`.
+
+Interpretation:
+- The Rust migration path itself is still healthy through `mckernel.img`.
+- Host module compatibility has advanced from `ihk.ko`/`mcctrl.ko` fixes to the
+  next layer: the x86_64 IHK-SMP partitioning driver.
+- This is the next required patch set before a real boot attempt can be
+  meaningfully retried on this Linux 6.6 WSL kernel.
+
+## Rocky VM Validation Runbook
+
+Goal:
+- Validate the Rust-enabled mixed C/Rust kernel path on a RHEL-compatible VM
+  instead of WSL.
+- Avoid the Linux 6.6 WSL-only compatibility wall in `ihk-smp-x86_64.ko`.
+
+Recommended VM baseline:
+- Rocky Linux 8.x x86_64.
+- At least 2 vCPUs, preferably 4.
+- At least 8 GiB RAM.
+- Secure Boot disabled.
+- VirtualBox I/O APIC enabled.
+
+Validation sequence:
+1. Install host build dependencies with `dnf`.
+2. Install Rust nightly for the normal VM user, not root.
+3. Build with `-DENABLE_RUST_KERNEL=ON` and
+   `-DKERNEL_DIR=/lib/modules/$(uname -r)/build`.
+4. Build targets:
+   - `mckernel.img`
+   - `ihk_ko`
+   - `ihk-smp-x86_64_ko`
+   - `mcctrl_ko`
+   - `mcexec`
+   - `mcstat`
+   - `ihkconfig`
+   - `ihkosctl`
+5. Install into `/opt/mckernel-rust`.
+6. Boot using `/opt/mckernel-rust/sbin/mcreboot.sh -c 1 -m 512M@0`.
+7. Confirm `ihkosctl 0 kmsg` contains `IHK/McKernel booted`.
+8. Run smoke commands:
+   - `mcexec /bin/true`
+   - `mcexec hostname`
+   - `mcstat`
+9. Always shut down with `/opt/mckernel-rust/sbin/mcstop+release.sh`.
+
+Important adjustment:
+- Build as the normal user so Rust nightly is visible.
+- Use `sudo` only for dependency install, `cmake --install`, module load/boot,
+  and shutdown.
+
+## Added Rocky VM Validation Script
+
+Added:
+- `scripts/rocky-rust-validation.sh`
+- `scripts/patches/ihk-linux-compat.patch`
+
+Purpose:
+- Give the Rocky VM a single entry point for dependency installation, Rust
+  nightly setup, submodule initialization, Rust-enabled configure/build, install,
+  and optional McKernel boot smoke testing.
+- Carry the local IHK host-driver/libbfd compatibility edits as a parent-repo
+  patch so the VM can reproduce them without needing a separate pushed IHK
+  submodule branch.
+
+Safety choices:
+- The script refuses to run as root so Rust uses the normal user's toolchain.
+- It uses `sudo` only for package install, install into `/opt/mckernel-rust`,
+  and optional boot/runtime commands.
+- It defaults to build/install validation only.
+- Runtime boot testing requires `--boot-smoke`; without `--yes`, it prompts
+  the user to confirm after taking a VirtualBox snapshot.
+
+Validation:
+- `bash -n scripts/rocky-rust-validation.sh` passes.
+- `scripts/rocky-rust-validation.sh --help` prints the intended usage text.
+- `git -C ihk apply --reverse --check ../scripts/patches/ihk-linux-compat.patch`
+  passes against the currently patched local IHK submodule.
+
+## Rust Port Planning Docs and Controlled Verification Ladder
+
+Added:
+- `plan.txt`
+- `overview.txt`
+
+Purpose:
+- Record the Rust migration work already completed.
+- Define the full path to port McKernel-owned non-assembly implementation logic
+  to Rust.
+- Replace broad, hard-to-debug validation attempts with a controlled
+  verification ladder.
+
+Verification adjustment:
+- Validation is now staged as V0 through V12.
+- Each step has one purpose, one expected success condition, and a stop
+  condition.
+- Runtime checks are intentionally delayed until documentation, source
+  inventory, Rust object, primitive equivalence, kernel image, user-space tool,
+  and host module checks have passed.
+
+Justification:
+- Previous attempts showed that WSL can build useful pieces of the Rust-enabled
+  tree, but host-module and runtime testing failures can obscure whether a
+  problem is in Rust, C fallback, Linux module compatibility, or McKernel boot.
+- A staged ladder lets the Rocky VM validation stop at the first failing layer
+  and produce a smaller, more useful debug target.
+
+Expected effect:
+- Documentation only.
+- No C behavior change.
+- No Rust behavior change.
+- No ABI behavior change.
+- No build-system behavior change.
+
+Publish hygiene adjustment:
+- Replaced plain-text `=` heading underlines in `plan.txt` and `overview.txt`
+  with dash underlines so Git does not classify documentation headings as
+  conflict markers during `git diff --check`.
+- Added `.gitattributes` for `scripts/patches/*.patch` so stored patch
+  artifacts preserve diff text without being linted as ordinary source
+  whitespace.
+
+Initial verification target for this documentation update:
+- V0: confirm `plan.txt`, `overview.txt`, and `kernel.log` exist and pass
+  `git diff --check`.
+- V1: confirm Rust source files, C fallback files, and `ENABLE_RUST_KERNEL`
+  inventory remain present.
+
+Documentation verification result:
+- V0 passed: `plan.txt`, `overview.txt`, and `kernel.log` exist.
+- V0 passed: `git diff --check` reported no whitespace or patch-format issues.
+- V0 passed: direct trailing-whitespace scan over `plan.txt`, `overview.txt`,
+  and `kernel.log` reported no issues.
+- V1 passed: Rust migration files under `kernel/rust/` are present.
+- V1 passed: C fallback files `kernel/rbtree.c`, `kernel/llist.c`, and
+  `lib/bitmap.c` are present.
+- V1 passed: `kernel/CMakeLists.txt` still exposes `ENABLE_RUST_KERNEL` and the
+  `mckernel_rust_obj` target.
+
+Next controlled verification step:
+- V2: build only the Rust kernel object before attempting full kernel image or
+  runtime checks.
+
+## Progress Baseline Wording Adjustment
+
+Adjusted:
+- `overview.txt`
+- `plan.txt`
+
+Purpose:
+- Preserve the exact "Current Progress Baseline" dashboard wording in
+  `overview.txt` so progress can be tracked consistently over time.
+- Rename Phase 0 to "Documentation and Baseline" in `plan.txt`.
+- Add the Phase 0 requirement to confirm current branch, build status, known
+  blockers, and the Rocky VM validation path.
+
+Justification:
+- The previous overview had the same intent, but several labels differed from
+  the desired tracking baseline. Keeping the exact labels makes future progress
+  updates easier to compare without mental translation.
+
+Expected effect:
+- Documentation only.
+- No C behavior change.
+- No Rust behavior change.
+- No ABI behavior change.
+- No build-system behavior change.

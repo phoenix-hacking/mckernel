@@ -1,0 +1,104 @@
+McKernel Rust Migration Overview
+Updated: 2026-05-12
+
+Overall Rust ownership estimate: 2%
+
+How to read this number
+------------------------------------------------------------
+
+This is a functional-area estimate, not a strict line-count. The Rust build
+foundation and first shared primitives are in place, but most high-risk kernel
+subsystems remain C. A later tracking phase can add an automated line-count and
+symbol ownership report.
+
+Current Progress Baseline
+------------------------------------------------------------
+
+Use this initial dashboard to track the migration:
+
+Area                                      Rust %   Status
+----                                      ------   ------
+Rust build/link foundation                   90   Rust object builds and links into mckernel.img; runtime smoke still pending
+ABI/layout foundation                        10   Initial shared structs covered; many kernel structs still need assertions
+Shared primitives                            35   rbtree, llist, selected bitmap routines ported
+x86_64 memory management                      0   Still C
+Page allocator                                0   Still C
+Process/VM management                         0   Still C
+Syscall core                                  0   Still C
+Scheduler/timers/wait/futex                   0   Still C
+procfs/sysfs/xpmem/file objects               0   Still C
+host/IKC/mcctrl/IHK modules              0 Rust   Compatibility patches only
+User tools                                    0   Still C
+arm64                                         0   Deferred until x86_64 stabilizes
+
+Overall estimate: 2% Rust-owned.
+
+This percentage should be treated as a functional-area estimate, not a strict
+line-count. A later phase can add an automated LOC counter.
+
+Current completed Rust-owned behavior
+------------------------------------------------------------
+
+- Freestanding no_std Rust kernel crate exists under kernel/rust/.
+- Rust can be linked into the x86_64 mckernel.img path.
+- C fallback builds remain part of the migration contract.
+- Rust exports C ABI replacements for the first rbtree, llist, and bitmap
+  routines.
+- Initial ABI/layout checks exist for shared structures.
+- Primitive equivalence testing exists in kernel/rust/tests/run_equivalence.sh.
+
+Current validation status
+------------------------------------------------------------
+
+Last completed controlled verification step:
+- V1 Source inventory, completed on 2026-05-12 for this documentation update.
+- V0 Documentation integrity also passed in the same check.
+
+Next verification step:
+- V2 Rust object only.
+
+Known failing or blocked step:
+- Full runtime validation is not complete yet.
+- WSL remains blocked for real boot/runtime smoke testing by host module and
+  kernel development tree limitations.
+- ihk-smp-x86_64 compatibility against Linux 6.6 needs more work before WSL can
+  be considered a runtime validation host.
+
+Recommended runtime platform:
+- Rocky Linux VM.
+
+Recommended verification style
+------------------------------------------------------------
+
+Run the ladder from plan.txt in order:
+
+V0: Documentation integrity
+V1: Source inventory
+V2: Rust object only
+V3: Rust primitive equivalence
+V4: Rust-enabled kernel image
+V5: C fallback kernel image
+V6: User-space tools
+V7: Host modules compile
+V8: Module load only
+V9: McKernel boot only
+V10: Minimal user workloads
+V11: Focused regression tests
+V12: Phase-specific stress
+
+Stop on the first failing step. Record the failing command, environment, and
+error summary in kernel.log before making more changes.
+
+Next migration target
+------------------------------------------------------------
+
+Recommended next code phase:
+- Phase 1: harden the Rust build foundation and make the Rust/C fallback checks
+  easier to run repeatedly.
+
+Recommended next risky code phase after that:
+- Phase 2: expand ABI/layout coverage before porting memory management.
+
+Reason:
+- Memory, process, and syscall ports depend on exact layout stability. Expanding
+  layout checks first reduces the chance of subtle C/Rust ABI drift.
