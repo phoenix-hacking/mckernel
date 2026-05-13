@@ -22,12 +22,14 @@ Options:
   --jobs N              Parallel build jobs. Default: 2
   --boot-cpus LIST      CPU list passed to mcreboot.sh -c. Default: 1
   --boot-mem SPEC       Memory passed to mcreboot.sh -m. Default: 512M@0
+  --trampoline-phys PA  Pass PA as IHK_TRAMPOLINE_PHYS to mcreboot.sh.
   -h, --help            Show this help.
 
 Examples:
   scripts/rocky-rust-validation.sh
   scripts/rocky-rust-validation.sh --build-only
   scripts/rocky-rust-validation.sh --boot-smoke --yes
+  scripts/rocky-rust-validation.sh --boot-smoke --yes --trampoline-phys 0x80000
 USAGE
 }
 
@@ -36,6 +38,7 @@ BUILD_DIR=/tmp/mckernel-rocky-rust
 JOBS=2
 BOOT_CPUS=1
 BOOT_MEM=512M@0
+TRAMPOLINE_PHYS="${IHK_TRAMPOLINE_PHYS:-}"
 INSTALL_DEPS=1
 INSTALL_RUST=1
 DO_INSTALL=1
@@ -82,6 +85,10 @@ while [ "$#" -gt 0 ]; do
 			;;
 		--boot-mem)
 			BOOT_MEM="${2:?missing value for --boot-mem}"
+			shift 2
+			;;
+		--trampoline-phys)
+			TRAMPOLINE_PHYS="${2:?missing value for --trampoline-phys}"
 			shift 2
 			;;
 		-h|--help)
@@ -260,7 +267,13 @@ boot_smoke() {
 	confirm_boot_smoke
 
 	say "Booting McKernel"
-	sudo "$PREFIX/sbin/mcreboot.sh" -c "$BOOT_CPUS" -m "$BOOT_MEM"
+	if [ "$TRAMPOLINE_PHYS" != "" ]; then
+		say "Using reserved IHK trampoline page at $TRAMPOLINE_PHYS"
+		sudo IHK_TRAMPOLINE_PHYS="$TRAMPOLINE_PHYS" \
+			"$PREFIX/sbin/mcreboot.sh" -c "$BOOT_CPUS" -m "$BOOT_MEM"
+	else
+		sudo "$PREFIX/sbin/mcreboot.sh" -c "$BOOT_CPUS" -m "$BOOT_MEM"
+	fi
 
 	shutdown_needed=1
 	cleanup() {

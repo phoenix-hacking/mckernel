@@ -1155,6 +1155,53 @@ Required Rocky VM verification:
   dmesg so the next adjustment can decide whether to reserve a low trampoline
   page explicitly through the existing `ihk_trampoline` module parameter.
 
+## Rocky VM Reserved Trampoline Path
+
+Observed after one-page allocation fix:
+- The Rocky VM rebuilt `ihk-smp-x86_64_ko` successfully.
+- V8 module-load-only validation still passed:
+  - `ihk=0`
+  - `ihk_smp=0`
+  - `mcctrl=0`
+- The trampoline warning remained:
+  `IHK-SMP: warning: allocating trampoline_page failed, using Linux'`
+- `/proc/iomem` shows low physical System RAM at `0x1000-0x9ffff`, but that
+  memory is not being returned by the external-module `alloc_pages(GFP_DMA, 0)`
+  path under this Rocky/VirtualBox environment.
+
+Change:
+- Added `IHK_TRAMPOLINE_PHYS` support to `scripts/mcreboot-smp.sh.in`.
+- When set, `mcreboot.sh` passes `ihk_trampoline=<phys>` while loading
+  `ihk-smp-x86_64.ko`.
+- Added `--trampoline-phys <phys>` to `scripts/rocky-rust-validation.sh` so the
+  controlled Rocky validation path can use the same reserved trampoline page
+  during boot smoke testing.
+
+Justification:
+- The IHK-SMP driver already has a first-class `ihk_trampoline` module
+  parameter for a preallocated physical trampoline page.
+- On this VM the buddy allocator does not provide suitable low real-mode memory,
+  so the deterministic fix is to reserve one low page at Linux boot and pass
+  that physical address to the IHK-SMP module.
+- This keeps the fallback to Linux's trampoline available, but makes the private
+  trampoline path reproducible for V8 and V9.
+
+Required Rocky VM setup:
+- Reserve a page below 1 MiB, for example:
+  `sudo grubby --update-kernel=ALL --args='memmap=4K$0x80000'`
+- Reboot the Rocky VM.
+- Confirm the kernel command line contains `memmap=4K$0x80000`.
+- Load IHK-SMP manually with `ihk_trampoline=0x80000` for V8, or pass
+  `--trampoline-phys 0x80000` to the Rocky validation script for V9 and later
+  boot-smoke work.
+
+Expected effect:
+- V8 should still load all three modules.
+- dmesg should report `IHK-SMP: preallocated trampoline phys: 0x80000`.
+- dmesg should no longer report `allocating trampoline_page failed`.
+- No Rust behavior change.
+- No public ABI behavior change.
+
 ## Rocky VM V7 Host Compile Checkpoint Passed
 
 Observed:

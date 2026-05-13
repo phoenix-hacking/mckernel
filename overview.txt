@@ -65,8 +65,10 @@ Next verification step:
 Known failing or blocked step:
 - Full runtime validation is not complete yet.
 - There is no current Rocky VM build or module-load blocker after V8.
-- The V8 trampoline warning is being rechecked after reducing the x86_64
-  private trampoline allocation from two low-DMA pages to one low-DMA page.
+- The V8 trampoline warning remained after reducing the x86_64 private
+  trampoline allocation to one low-DMA page. Rocky/VirtualBox now needs a
+  reserved low page, passed as `ihk_trampoline`, to avoid the Linux-trampoline
+  fallback.
 - V9 McKernel boot-only validation is pending.
 - WSL remains blocked for real boot/runtime smoke testing by host module and
   kernel development tree limitations.
