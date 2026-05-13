@@ -1093,6 +1093,68 @@ Expected effect:
 - No ABI behavior change.
 - No build-system behavior change.
 
+## Rocky VM IHK-SMP Trampoline Allocation Fix
+
+Adjusted:
+- `ihk/linux/driver/smp/arch/x86_64/smp-arch-driver.c`
+- `scripts/patches/ihk-linux-compat.patch`
+- `overview.txt`
+
+Observed during V8:
+- Rocky VM module-load-only validation passed, but dmesg reported:
+  `IHK-SMP: warning: allocating trampoline_page failed, using Linux'`
+- dmesg then reported `IHK-SMP: trampoline_page phys: 0x0`.
+
+Change:
+- Added `IHK_SMP_TRAMPOLINE_ORDER` for the x86_64 trampoline allocation.
+- Changed the private trampoline allocation from an order-1 DMA request to an
+  order-0 DMA request.
+- Added `ihk_smp_trampoline_page_usable()` so the low-memory requirement is
+  checked against the actual rounded trampoline size and the 1 MiB real-mode
+  limit.
+- Set `trampoline_page = NULL` before falling back to Linux's trampoline when
+  all private allocation attempts fail.
+- Updated both trampoline cleanup paths to free the same allocation order that
+  was requested.
+- Regenerated the stored IHK compatibility patch so clean Rocky VM checkouts
+  receive the trampoline allocation fix with the rest of the compatibility
+  edits.
+
+Justification:
+- The x86_64 trampoline blob is exactly one page, and the backup buffer and
+  ioremap path are also page-sized.
+- Requesting two contiguous low-DMA pages makes allocation much more fragile on
+  Rocky/VirtualBox while providing no benefit for the current trampoline code.
+- The old fallback path could leave `trampoline_page` pointing at a failed page
+  candidate that had already been freed, which made later cleanup ambiguous.
+- Keeping Linux's trampoline fallback is still useful as a last resort, but V8
+  and V9 should prefer a private IHK trampoline when the host can provide one.
+
+Expected effect:
+- `ihk-smp-x86_64.ko` should be more likely to allocate its own trampoline page
+  on Rocky VM.
+- The V8 module-load dmesg warning should disappear if a one-page low-DMA
+  allocation is available.
+- If low real-mode memory is still unavailable, the module should still fall
+  back to Linux's trampoline without treating a freed failed candidate as an
+  owned page.
+- No McKernel Rust behavior change.
+- No public ABI behavior change.
+
+Verification performed locally:
+- `git -C ihk diff --check` passed.
+- `git diff --check` passed before documentation edits.
+
+Required Rocky VM verification:
+- Reapply the refreshed `scripts/patches/ihk-linux-compat.patch`.
+- Rebuild `ihk-smp-x86_64_ko`.
+- Rerun V8 module-load-only validation.
+- Expected V8 result: all three modules load with return code 0 and dmesg no
+  longer contains `allocating trampoline_page failed`.
+- If the warning remains, capture `/proc/iomem`, `/proc/meminfo`, and the V8
+  dmesg so the next adjustment can decide whether to reserve a low trampoline
+  page explicitly through the existing `ihk_trampoline` module parameter.
+
 ## Rocky VM V7 Host Compile Checkpoint Passed
 
 Observed:

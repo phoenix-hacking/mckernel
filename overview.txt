@@ -1,5 +1,5 @@
 McKernel Rust Migration Overview
-Updated: 2026-05-12
+Updated: 2026-05-13
 
 Overall Rust ownership estimate: 2%
 
@@ -65,6 +65,8 @@ Next verification step:
 Known failing or blocked step:
 - Full runtime validation is not complete yet.
 - There is no current Rocky VM build or module-load blocker after V8.
+- The V8 trampoline warning is being rechecked after reducing the x86_64
+  private trampoline allocation from two low-DMA pages to one low-DMA page.
 - V9 McKernel boot-only validation is pending.
 - WSL remains blocked for real boot/runtime smoke testing by host module and
   kernel development tree limitations.

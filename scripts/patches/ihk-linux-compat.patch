@@ -77,10 +77,19 @@ index 102345b..feebcb6 100644
  		printk(KERN_INFO "IHK: Cannot create mcos.\n");
  		goto ERR;
 diff --git a/linux/driver/smp/arch/x86_64/smp-arch-driver.c b/linux/driver/smp/arch/x86_64/smp-arch-driver.c
-index 8c9c996..c796517 100644
+index 8c9c996..64852bc 100644
 --- a/linux/driver/smp/arch/x86_64/smp-arch-driver.c
 +++ b/linux/driver/smp/arch/x86_64/smp-arch-driver.c
-@@ -130,6 +130,16 @@ static pgd_t *_init_level4_pgt;
+@@ -83,6 +83,8 @@ static int ihk_smp_irq_apicid = 0;
+ extern const char ihk_smp_trampoline_end[], ihk_smp_trampoline_data[];
+ #define IHK_SMP_TRAMPOLINE_SIZE \
+         roundup(ihk_smp_trampoline_end - ihk_smp_trampoline_data, PAGE_SIZE)
++#define IHK_SMP_TRAMPOLINE_ORDER 0
++#define IHK_SMP_TRAMPOLINE_LIMIT 0x100000UL
+ 
+ /* ----------------------------------------------- */
+ 
+@@ -130,6 +132,27 @@ static pgd_t *_init_level4_pgt;
  
  static unsigned long *_used_vectors;
  
@@ -94,10 +103,21 @@ index 8c9c996..c796517 100644
 +#endif
 +}
 +
++static int ihk_smp_trampoline_page_usable(struct page *page)
++{
++	unsigned long phys;
++
++	if (!page)
++		return 0;
++
++	phys = page_to_phys(page);
++	return phys + IHK_SMP_TRAMPOLINE_SIZE <= IHK_SMP_TRAMPOLINE_LIMIT;
++}
++
  int ihk_smp_arch_symbols_init(void)
  {
  	_real_mode_header = (void *) kallsyms_lookup_name("real_mode_header");
-@@ -322,7 +332,7 @@ int smp_wakeup_secondary_cpu(int apicid, unsigned long start_eip)
+@@ -322,7 +345,7 @@ int smp_wakeup_secondary_cpu(int apicid, unsigned long start_eip)
  	atomic_set(_init_deasserted, 0);
  #endif
  
@@ -106,6 +126,63 @@ index 8c9c996..c796517 100644
  		pr_debug("Setting warm reset code and vector.\n");
  
  		smpboot_setup_warm_reset_vector(start_eip);
+@@ -1218,15 +1241,16 @@ int smp_ihk_arch_init(void)
+ 
+ 		memset(bad_pages, 0, TRAMP_ATTEMPTS * sizeof(struct page *));
+ 
+-		/* Try to allocate trampoline page, it has to be under 1M so we can
+-		 * execute real-mode AP code. If allocation fails more than
+-		 * TRAMP_ATTEMPTS times, we will use Linux's one.
++		/* Try to allocate a trampoline page below 1M so we can execute
++		 * real-mode AP code. If allocation fails more than TRAMP_ATTEMPTS
++		 * times, we will use Linux's one.
+ 		 * NOTE: using Linux trampoline could potentially cause race
+ 		 * conditions with concurrent CPU onlining requests */
+ retry_trampoline:
+-		trampoline_page = alloc_pages(GFP_DMA | GFP_KERNEL, 1);
++		trampoline_page = alloc_pages(GFP_DMA | GFP_KERNEL,
++					      IHK_SMP_TRAMPOLINE_ORDER);
+ 		
+-		if (!trampoline_page || page_to_phys(trampoline_page) > 0xFF000) {
++		if (!ihk_smp_trampoline_page_usable(trampoline_page)) {
+ 			bad_pages[attempts] = trampoline_page;
+ 
+ 			if (++attempts < TRAMP_ATTEMPTS) {
+@@ -1240,11 +1264,13 @@ retry_trampoline:
+ 				continue;
+ 			}
+ 
+-			free_pages((unsigned long)pfn_to_kaddr(page_to_pfn(bad_pages[attempts])), 1);
++			free_pages((unsigned long)pfn_to_kaddr(page_to_pfn(bad_pages[attempts])),
++				   IHK_SMP_TRAMPOLINE_ORDER);
+ 		}
+ 
+ 		/* Couldn't allocate trampoline page, use Linux' one from real_header */
+-		if (!trampoline_page || page_to_phys(trampoline_page) > 0xFF000) {
++		if (!ihk_smp_trampoline_page_usable(trampoline_page)) {
++			trampoline_page = NULL;
+ 			using_linux_trampoline = 1;
+ 			printk("IHK-SMP: warning: allocating trampoline_page failed, using Linux'\n");
+ 			trampoline_phys = _real_mode_header->trampoline_start;
+@@ -1398,7 +1424,8 @@ error_free_irq:
+ 
+ error_free_trampoline:
+ 	if (trampoline_page) {
+-		free_pages((unsigned long)pfn_to_kaddr(page_to_pfn(trampoline_page)), 1);
++		free_pages((unsigned long)pfn_to_kaddr(page_to_pfn(trampoline_page)),
++			   IHK_SMP_TRAMPOLINE_ORDER);
+ 	}
+ 	else {
+ 		if (!using_linux_trampoline)
+@@ -1786,7 +1813,7 @@ void smp_ihk_arch_exit(void)
+ #endif // !IHK_IKC_USE_LINUX_WORK_IRQ
+ 	if (trampoline_page) {
+ 		free_pages((unsigned long)pfn_to_kaddr(page_to_pfn(trampoline_page)),
+-		           1);
++		           IHK_SMP_TRAMPOLINE_ORDER);
+ 	}
+ 	else {
+ 		if (!using_linux_trampoline)
 diff --git a/linux/driver/smp/smp-driver.c b/linux/driver/smp/smp-driver.c
 index 409d6b3..c422756 100644
 --- a/linux/driver/smp/smp-driver.c
