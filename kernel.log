@@ -1093,6 +1093,64 @@ Expected effect:
 - No ABI behavior change.
 - No build-system behavior change.
 
+## Rocky VM IHK libbfd Compatibility Fix
+
+Observed:
+- Rocky VM V7 full checkpoint now builds the kernel-module targets:
+  - `ihk-smp-x86_64_ko`
+  - `ihk_ko`
+  - `mcctrl_ko`
+- `mcexec` also builds.
+- The checkpoint then fails while building `mcstat`, through
+  `ihk/linux/user/ihklib.c`.
+- Rocky's `bfd.h` declares:
+  `bfd_set_section_size(bfd *abfd, asection *sec, bfd_size_type val)`
+  and
+  `bfd_set_section_flags(bfd *abfd, asection *sec, flagword flags)`.
+- The existing local IHK compatibility patch selected the newer two-argument
+  libbfd API, which is correct for newer binutils but wrong for Rocky 8.10's
+  packaged libbfd.
+
+Adjusted:
+- `ihk/linux/user/CMakeLists.txt`
+- `ihk/linux/user/ihklib.c`
+- `scripts/patches/ihk-linux-compat.patch`
+
+Change:
+- Add a CMake compile probe for the three-argument libbfd section setter API.
+- Define `IHK_BFD_SET_SECTION_NEEDS_BFD` only when the target libbfd requires
+  the `bfd *abfd` argument.
+- Make `mc_bfd_set_section_size()` and `mc_bfd_set_section_flags()` dispatch to
+  the three-argument or two-argument libbfd API based on that probe.
+- Regenerate the stored IHK compatibility patch so the Rocky validation script
+  can apply the same fix to a clean IHK submodule.
+
+Justification:
+- libbfd changed this API across binutils releases. Rocky 8.10 has the older
+  three-argument form while newer development environments can expose the
+  two-argument form.
+- A configure-time compile check is safer than guessing from distro, kernel, or
+  binutils package names.
+- Keeping this in the IHK compatibility patch avoids changing McKernel Rust or
+  kernel behavior while unblocking V7 user-tool compilation.
+
+Expected effect:
+- `mcstat`/`ihklib` build compatibility fix for Rocky 8.10.
+- No Rust behavior change.
+- No McKernel image behavior change.
+- No public syscall, ioctl, or IKC ABI change.
+
+Verification:
+- `git -C ihk diff --check` passes.
+- `git -C ihk apply --reverse --check ../scripts/patches/ihk-linux-compat.patch`
+  passes against the locally patched submodule.
+- `git diff --check` passes locally.
+
+Next verification:
+- On the Rocky VM, rerun CMake generation or let CMake regenerate, then rebuild
+  `mcstat`.
+- If `mcstat` succeeds, rerun the full V7 checkpoint.
+
 ## Rocky VM mcctrl x86_64 VVAR Compatibility Fix
 
 Observed:
