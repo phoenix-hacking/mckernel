@@ -1134,6 +1134,44 @@ Expected effect:
 - No Rust behavior change.
 - No ABI behavior change.
 
+## Rocky VM V8 Module Load Checkpoint Passed
+
+Observed:
+- V8 module-load-only check passed on Rocky VM.
+- Load commands returned:
+  - `ihk=0`
+  - `ihk_smp=0`
+  - `mcctrl=0`
+- `lsmod` showed:
+  - `mcctrl`
+  - `ihk_smp_x86_64`
+  - `ihk`
+- `dmesg` showed successful initialization:
+  - `IHK Initialized`
+  - `IHK-SMP: initializing...`
+  - `IHK: Device SMP registered. /dev/mcd0 created.`
+  - `mcctrl: initialized successfully.`
+
+Noted non-fatal dmesg line:
+- `IHK-SMP: warning: allocating trampoline_page failed, using Linux'`
+- The module continued initialization and registered `/dev/mcd0`, so this is
+  tracked as a runtime note rather than a V8 failure.
+
+Validation status update:
+- V8 is now complete on the Rocky VM.
+- The next controlled verification step is V9: McKernel boot only.
+
+Justification:
+- V8's purpose is only to prove Linux accepts the built modules and they remain
+  loaded. That boundary is now satisfied.
+- Workload execution remains intentionally out of scope until V10.
+
+Expected effect:
+- Documentation/status tracking only.
+- No C behavior change.
+- No Rust behavior change.
+- No ABI behavior change.
+
 ## Rocky VM IHK-SMP free_vmap_area_noflush Fallback
 
 Observed:

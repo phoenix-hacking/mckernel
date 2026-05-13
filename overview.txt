@@ -51,24 +51,21 @@ Current validation status
 ------------------------------------------------------------
 
 Last completed controlled verification step:
-- V7 Host modules compile, completed on Rocky VM on 2026-05-12.
+- V8 Module load only, completed on Rocky VM on 2026-05-12.
+- `ihk`, `ihk_smp_x86_64`, and `mcctrl` loaded with return code 0 and appeared
+  in `lsmod`.
+- V7 Host modules compile also passed on Rocky VM.
 - The passing V7 command built `ihk_ko`, `ihk-smp-x86_64_ko`, `mcctrl_ko`,
   `mcexec`, `mcstat`, `ihkconfig`, and `ihkosctl`.
 - Earlier V0 through V6 checks are satisfied for this Rocky validation path.
 
 Next verification step:
-- V8 Module load only.
+- V9 McKernel boot only.
 
 Known failing or blocked step:
 - Full runtime validation is not complete yet.
-- Rocky VM V8 module-load validation is blocked at `ihk_smp_x86_64`.
-- `ihk` and `mcctrl` load, but `ihk_smp_x86_64` does not remain present in
-  `lsmod`.
-- `dmesg` reports a warning in `smp_module_init()` at
-  `ihk/linux/driver/smp/smp-driver.c:5415`, which maps to missing
-  `kallsyms_lookup_name("free_vmap_area")`.
-- Rocky exposes `free_vmap_area_noflush`, and a compatibility fallback has been
-  added for the next V8 retry.
+- There is no current Rocky VM build or module-load blocker after V8.
+- V9 McKernel boot-only validation is pending.
 - WSL remains blocked for real boot/runtime smoke testing by host module and
   kernel development tree limitations.
 - ihk-smp-x86_64 compatibility against Linux 6.6 needs more work before WSL can
