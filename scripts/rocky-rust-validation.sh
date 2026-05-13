@@ -7,9 +7,9 @@ Usage:
   scripts/rocky-rust-validation.sh [options]
 
 Default action:
-  Install Rocky/RHEL-family build dependencies, ensure Rust nightly, initialize
-  submodules, build the Rust-enabled x86_64 McKernel targets, and install them
-  under /opt/mckernel-rust.
+  Install Rocky/RHEL-family build dependencies for the running kernel, ensure
+  Rust nightly, initialize submodules, build the Rust-enabled x86_64 McKernel
+  targets, and install them under /opt/mckernel-rust.
 
 Options:
   --build-only          Configure/build only; skip install.
@@ -122,7 +122,7 @@ need_cmd() {
 }
 
 install_deps() {
-	say "Installing Rocky/RHEL-family dependencies"
+	say "Installing Rocky/RHEL-family dependencies for the running kernel"
 	sudo dnf install -y dnf-plugins-core
 	sudo dnf config-manager --set-enabled powertools >/dev/null 2>&1 || \
 		sudo dnf config-manager --set-enabled crb >/dev/null 2>&1 || true
@@ -138,7 +138,9 @@ ensure_kernel_headers() {
 	say "Checking matching kernel build directory"
 	if [ ! -d "$KERNEL_DIR" ]; then
 		echo "error: missing $KERNEL_DIR" >&2
-		echo "Install kernel-devel-$(uname -r), or reboot into the installed kernel and retry." >&2
+		echo "Install the exact matching package for this running kernel:" >&2
+		echo "  sudo dnf install -y kernel-devel-$(uname -r) kernel-headers-$(uname -r)" >&2
+		echo "This validation path is meant to adapt McKernel to the current Rocky kernel, not require a kernel upgrade." >&2
 		exit 1
 	fi
 	if [ ! -f "$KERNEL_DIR/Makefile" ]; then
