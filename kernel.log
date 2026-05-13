@@ -1124,6 +1124,45 @@ Expected effect:
 - No kernel Rust behavior change.
 - No ABI behavior change.
 
+## Rocky VM IHK panic notifier Header Fix
+
+Observed failure:
+- Rocky VM Rust-enabled build completed `mckernel.img`.
+- The next controlled step, `ihk_ko`, failed while compiling
+  `ihk/linux/core/host_driver.c`:
+  - `fatal error: linux/panic_notifier.h: No such file or directory`
+
+Adjusted:
+- `ihk/linux/core/host_driver.c`
+- `scripts/patches/ihk-linux-compat.patch`
+
+Change:
+- Made the `linux/panic_notifier.h` include conditional with `__has_include`.
+- Kept the include active on newer kernels that provide the split
+  `panic_notifier.h` header.
+- Let Rocky 8 / Linux 4.18 continue using the older header layout where
+  `panic_notifier_list` is already visible without that header.
+
+Justification:
+- The previous compatibility patch was aimed at Linux 6.x and included
+  `linux/panic_notifier.h` unconditionally.
+- Rocky 8's 4.18 kernel headers do not ship that split header, so the module
+  build failed before reaching the code that needed compatibility wrappers.
+- Testing the header with `__has_include` keeps the same patch usable on both
+  Rocky 8 and newer WSL/Linux 6.x kernel trees.
+
+Verification:
+- `git -C ihk apply --reverse --check ../scripts/patches/ihk-linux-compat.patch`
+  passes against the locally patched submodule.
+- `git -C ihk diff --check` passes.
+- `git diff --check` passes.
+- `bash -n scripts/rocky-rust-validation.sh` passes.
+
+Expected effect:
+- Host-module compatibility patch only.
+- No McKernel Rust behavior change.
+- No McKernel ABI behavior change.
+
 Publish hygiene adjustment:
 - Replaced plain-text `=` heading underlines in `plan.txt` and `overview.txt`
   with dash underlines so Git does not classify documentation headings as

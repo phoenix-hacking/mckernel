@@ -1,13 +1,17 @@
 diff --git a/linux/core/host_driver.c b/linux/core/host_driver.c
-index 102345b..6fdf2ef 100644
+index 102345b..c7c4b00 100644
 --- a/linux/core/host_driver.c
 +++ b/linux/core/host_driver.c
-@@ -34,6 +34,8 @@
+@@ -34,6 +34,12 @@
  #include <linux/version.h>
  #include <linux/cred.h>
  #include <linux/mutex.h>
 +#include <linux/semaphore.h>
-+#include <linux/panic_notifier.h>
++#if defined(__has_include)
++# if __has_include(<linux/panic_notifier.h>)
++#  include <linux/panic_notifier.h>
++# endif
++#endif
  #include <ihk/ihk_host_user.h>
  #include <ihk/ihk_host_driver.h>
  #include <asm/spinlock.h>
