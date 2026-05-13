@@ -1134,6 +1134,49 @@ Expected effect:
 - No Rust behavior change.
 - No ABI behavior change.
 
+## Rocky VM V8 Module Load Checkpoint Blocked
+
+Observed:
+- V8 module-load-only check was run on the Rocky VM after V7 passed.
+- `lsmod` showed:
+  - `mcctrl`
+  - `ihk`
+- `lsmod` did not show `ihk_smp_x86_64`.
+- `dmesg` showed `IHK-SMP: initializing...`, then a warning from:
+  `ihk/linux/driver/smp/smp-driver.c:5415`
+- `mcctrl` initialized successfully afterward.
+
+Mapped warning:
+- `smp-driver.c:5415` is:
+  `if (WARN_ON(!ihk__free_vmap_area))`
+- That means `kallsyms_lookup_name("free_vmap_area")` returned null during
+  `ihk_smp_symbols_init()`.
+- `smp_module_init()` returns that error, so the SMP driver does not remain
+  loaded even though the warning is not a host kernel panic.
+
+Validation status update:
+- V8 is not complete.
+- Do not proceed to V9 McKernel boot until `ihk_smp_x86_64` remains loaded.
+
+Next diagnostic:
+- On the Rocky VM, unload the modules, clear dmesg, rerun the three `insmod`
+  commands one by one, and capture each return code.
+- Query `/proc/kallsyms` for the vmalloc/vmap-area symbols:
+  `free_vmap_area`, `alloc_vmap_area`, `__free_vmap_area`,
+  `__alloc_vmap_area`, and `free_vmap_area_noflush`.
+
+Justification:
+- The failing symbol is another host-kernel private-symbol compatibility
+  boundary, not a Rust migration behavior change.
+- The next patch should be based on the exact vmap-area symbols Rocky exposes
+  rather than guessing which backported vmalloc helper is available.
+
+Expected effect:
+- Documentation/status tracking only.
+- No C behavior change.
+- No Rust behavior change.
+- No ABI behavior change.
+
 ## Rocky VM IHK libbfd Compatibility Fix
 
 Observed:

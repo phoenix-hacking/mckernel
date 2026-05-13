@@ -61,8 +61,12 @@ Next verification step:
 
 Known failing or blocked step:
 - Full runtime validation is not complete yet.
-- There is no current Rocky VM build blocker after V7.
-- V8 module-load validation is pending.
+- Rocky VM V8 module-load validation is blocked at `ihk_smp_x86_64`.
+- `ihk` and `mcctrl` load, but `ihk_smp_x86_64` does not remain present in
+  `lsmod`.
+- `dmesg` reports a warning in `smp_module_init()` at
+  `ihk/linux/driver/smp/smp-driver.c:5415`, which maps to missing
+  `kallsyms_lookup_name("free_vmap_area")`.
 - WSL remains blocked for real boot/runtime smoke testing by host module and
   kernel development tree limitations.
 - ihk-smp-x86_64 compatibility against Linux 6.6 needs more work before WSL can
