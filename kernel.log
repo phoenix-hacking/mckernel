@@ -1190,6 +1190,48 @@ Expected effect:
 - No kernel Rust behavior change.
 - No ABI behavior change.
 
+## Rocky VM IHK-SMP UV APIC Compatibility Fix
+
+Observed failure:
+- Rocky VM build completed:
+  - `mckernel.img`
+  - `ihk_ko`
+- The next controlled step, `ihk-smp-x86_64_ko`, failed while compiling
+  `ihk/linux/driver/smp/arch/x86_64/smp-arch-driver.c`:
+  - `error: 'UV_NON_UNIQUE_APIC' undeclared`
+
+Adjusted:
+- `ihk/linux/driver/smp/arch/x86_64/smp-arch-driver.c`
+- `scripts/patches/ihk-linux-compat.patch`
+
+Change:
+- Added `ihk_uv_uses_non_unique_apic()`.
+- Compile the old `UV_NON_UNIQUE_APIC` comparison only for kernel/RHEL lines
+  that still expose the legacy UV1 enum value.
+- Treat the legacy non-unique APIC path as unavailable on Rocky 8.4+ and newer
+  upstream kernels where UV1/non-unique APIC support was removed.
+
+Justification:
+- Rocky 8.10 keeps a 4.18 kernel version number but includes enterprise
+  backports that remove older UV1 APIC definitions.
+- The IHK SMP driver was carrying an older Linux SMP boot compatibility check
+  that referenced `UV_NON_UNIQUE_APIC` directly.
+- VirtualBox/Rocky validation does not use SGI UV1 non-unique APIC hardware, so
+  the correct compatibility behavior for this target is to take the normal warm
+  reset vector path.
+
+Verification:
+- `git -C ihk apply --reverse --check ../scripts/patches/ihk-linux-compat.patch`
+  passes against the locally patched submodule.
+- `git -C ihk diff --check` passes.
+- `git diff --check` passes.
+- `bash -n scripts/rocky-rust-validation.sh` passes.
+
+Expected effect:
+- IHK-SMP host-module compatibility patch only.
+- No McKernel Rust behavior change.
+- No McKernel ABI behavior change.
+
 Publish hygiene adjustment:
 - Replaced plain-text `=` heading underlines in `plan.txt` and `overview.txt`
   with dash underlines so Git does not classify documentation headings as

@@ -76,6 +76,36 @@ index 102345b..c7c4b00 100644
  	if (!mcos_class) {
  		printk(KERN_INFO "IHK: Cannot create mcos.\n");
  		goto ERR;
+diff --git a/linux/driver/smp/arch/x86_64/smp-arch-driver.c b/linux/driver/smp/arch/x86_64/smp-arch-driver.c
+index 8c9c996..c796517 100644
+--- a/linux/driver/smp/arch/x86_64/smp-arch-driver.c
++++ b/linux/driver/smp/arch/x86_64/smp-arch-driver.c
+@@ -130,6 +130,16 @@ static pgd_t *_init_level4_pgt;
+ 
+ static unsigned long *_used_vectors;
+ 
++static int ihk_uv_uses_non_unique_apic(void)
++{
++#if (!defined(RHEL_RELEASE_CODE) && LINUX_VERSION_CODE < KERNEL_VERSION(5, 9, 0)) || \
++	(defined(RHEL_RELEASE_CODE) && RHEL_RELEASE_CODE < RHEL_RELEASE_VERSION(8, 4))
++	return _get_uv_system_type() == UV_NON_UNIQUE_APIC;
++#else
++	return 0;
++#endif
++}
++
+ int ihk_smp_arch_symbols_init(void)
+ {
+ 	_real_mode_header = (void *) kallsyms_lookup_name("real_mode_header");
+@@ -322,7 +332,7 @@ int smp_wakeup_secondary_cpu(int apicid, unsigned long start_eip)
+ 	atomic_set(_init_deasserted, 0);
+ #endif
+ 
+-	if (_get_uv_system_type() != UV_NON_UNIQUE_APIC) {
++	if (!ihk_uv_uses_non_unique_apic()) {
+ 		pr_debug("Setting warm reset code and vector.\n");
+ 
+ 		smpboot_setup_warm_reset_vector(start_eip);
 diff --git a/linux/user/ihklib.c b/linux/user/ihklib.c
 index 3d99534..7ce501f 100644
 --- a/linux/user/ihklib.c
