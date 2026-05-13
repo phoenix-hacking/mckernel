@@ -1093,6 +1093,37 @@ Expected effect:
 - No ABI behavior change.
 - No build-system behavior change.
 
+## Rocky VM libudev Dependency Fix
+
+Observed failure:
+- Rocky VM CMake configure reached generation, then failed with:
+  - `LIBUDEV` set to `NOTFOUND`
+  - `LIBUDEV` linked by target `ihkmond` in `ihk/linux/user`
+
+Adjusted:
+- `scripts/rocky-rust-validation.sh`
+
+Change:
+- Added `systemd-devel` to the Rocky/RHEL dependency install list.
+- Added an explicit `ensure_libuedev` preflight check for:
+  - `/usr/include/libudev.h`
+  - an unversioned `libudev.so` development symlink in the normal system
+    library directories.
+
+Justification:
+- The IHK user-space monitor `ihkmond` includes `libudev.h` and links against
+  `-ludev`.
+- On Rocky/RHEL, the libudev development header and unversioned linker symlink
+  are provided by the `systemd-devel` package.
+- Checking this before CMake generation turns a late `LIBUDEV-NOTFOUND` error
+  into a focused package fix.
+
+Expected effect:
+- Build-script dependency coverage only.
+- No kernel C behavior change.
+- No kernel Rust behavior change.
+- No ABI behavior change.
+
 Publish hygiene adjustment:
 - Replaced plain-text `=` heading underlines in `plan.txt` and `overview.txt`
   with dash underlines so Git does not classify documentation headings as

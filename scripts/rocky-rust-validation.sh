@@ -130,7 +130,7 @@ install_deps() {
 	sudo dnf install -y \
 		gcc gcc-c++ make cmake git tar patch diffutils which curl \
 		"kernel-devel-$(uname -r)" "kernel-headers-$(uname -r)" \
-		elfutils-libelf-devel numactl-devel rpm-build binutils-devel \
+		elfutils-libelf-devel numactl-devel rpm-build binutils-devel systemd-devel \
 		zlib-devel openssl-devel bc bison flex perl dwarves
 }
 
@@ -143,6 +143,29 @@ ensure_kernel_headers() {
 	fi
 	if [ ! -f "$KERNEL_DIR/Makefile" ]; then
 		echo "error: $KERNEL_DIR does not look like a kernel build tree." >&2
+		exit 1
+	fi
+}
+
+ensure_libuedev() {
+	say "Checking libudev development files"
+	if [ ! -e /usr/include/libudev.h ]; then
+		echo "error: missing /usr/include/libudev.h" >&2
+		echo "Install the Rocky/RHEL systemd-devel package and retry." >&2
+		exit 1
+	fi
+
+	local found=0
+	local libdir
+	for libdir in /usr/lib64 /usr/lib /lib64 /lib; do
+		if [ -e "$libdir/libudev.so" ]; then
+			found=1
+			break
+		fi
+	done
+	if [ "$found" -ne 1 ]; then
+		echo "error: missing unversioned libudev.so development symlink" >&2
+		echo "Install the Rocky/RHEL systemd-devel package and retry." >&2
 		exit 1
 	fi
 }
@@ -269,6 +292,7 @@ if [ "$INSTALL_DEPS" -eq 1 ]; then
 fi
 
 ensure_kernel_headers
+ensure_libuedev
 
 if [ "$INSTALL_RUST" -eq 1 ]; then
 	ensure_rust
