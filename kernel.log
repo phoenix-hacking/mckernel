@@ -1093,6 +1093,47 @@ Expected effect:
 - No ABI behavior change.
 - No build-system behavior change.
 
+## Rocky VM V7 Host Compile Checkpoint Passed
+
+Observed:
+- The Rocky VM full V7 checkpoint command completed successfully:
+  `cmake --build /tmp/mckernel-rocky-rust --target ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko mcexec mcstat ihkconfig ihkosctl -j2`
+
+Passing targets:
+- `ihk_ko`
+- `ihk-smp-x86_64_ko`
+- `mcctrl_ko`
+- `mcexec`
+- `mcstat`
+- `ihkconfig`
+- `ihkosctl`
+
+Validation status update:
+- V7 is now complete on the Rocky VM.
+- The earlier Rocky compile blockers have been cleared for this validation
+  path:
+  - IHK panic notifier header compatibility.
+  - IHK-SMP UV APIC compatibility.
+  - `mcctrl` `handle_mm_fault()` compatibility.
+  - `mcctrl` `prepare_binprm()` compatibility.
+  - `mcctrl` x86_64 VVAR compatibility.
+  - IHK/libbfd section setter compatibility.
+- The next controlled verification step is V8: module load only.
+
+Justification:
+- This is the first full compile checkpoint where the Rust-enabled kernel
+  image, host modules, and required user tools all build on the intended Rocky
+  runtime platform.
+- Runtime behavior is not validated yet, so the migration should not jump
+  directly to boot/workload testing. Module load is the next narrow boundary.
+
+Expected effect:
+- Documentation/status tracking only.
+- No C behavior change.
+- No Rust behavior change.
+- No ABI behavior change.
+
 ## Rocky VM IHK libbfd Compatibility Fix
 
 Observed:

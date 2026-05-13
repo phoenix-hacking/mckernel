@@ -51,19 +51,18 @@ Current validation status
 ------------------------------------------------------------
 
 Last completed controlled verification step:
-- V1 Source inventory, completed on 2026-05-12 for this documentation update.
-- V0 Documentation integrity also passed in the same check.
+- V7 Host modules compile, completed on Rocky VM on 2026-05-12.
+- The passing V7 command built `ihk_ko`, `ihk-smp-x86_64_ko`, `mcctrl_ko`,
+  `mcexec`, `mcstat`, `ihkconfig`, and `ihkosctl`.
+- Earlier V0 through V6 checks are satisfied for this Rocky validation path.
 
 Next verification step:
-- V2 Rust object only.
+- V8 Module load only.
 
 Known failing or blocked step:
 - Full runtime validation is not complete yet.
-- Rocky VM V7 host-module compile is active. The latest observed blocker is
-  now `mcstat`/`ihklib` on Rocky 8.10 because its libbfd uses the older
-  three-argument section setter API. The kernel-module targets and `mcexec`
-  build, and a source compatibility fix has been added for the user-tool
-  failure.
+- There is no current Rocky VM build blocker after V7.
+- V8 module-load validation is pending.
 - WSL remains blocked for real boot/runtime smoke testing by host module and
   kernel development tree limitations.
 - ihk-smp-x86_64 compatibility against Linux 6.6 needs more work before WSL can
