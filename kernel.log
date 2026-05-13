@@ -1093,6 +1093,50 @@ Expected effect:
 - No ABI behavior change.
 - No build-system behavior change.
 
+## Rocky VM mcctrl x86_64 VVAR Compatibility Fix
+
+Observed:
+- After the Rocky 8.10 `prepare_binprm()` fix, the `mcctrl_ko` build moved
+  forward and failed in `executer/kernel/mcctrl/arch/x86_64/archdeps.c`.
+- The failure was:
+  `error: 'vvar_vsyscall_gtod_data' undeclared`
+- Rocky's headers suggested the newer VVAR symbol:
+  `vvar__vdso_data`.
+
+Adjusted:
+- `executer/kernel/mcctrl/arch/x86_64/archdeps.c`
+
+Change:
+- Include `linux/rhelversion.h` when the target headers provide it.
+- Add a local `MCCTRL_RHEL_RELEASE_AT_LEAST()` helper for guarded RHEL/Rocky
+  release checks.
+- Keep the old `VVAR(vsyscall_gtod_data)` path only for upstream kernels before
+  Linux 5.3 and before Rocky/RHEL 8.10.
+- Use the existing conservative `MCCTRL_VGTOD_VIRT NULL` fallback for
+  Rocky/RHEL 8.10, matching the previously documented modern-kernel behavior.
+
+Justification:
+- Rocky 8.10 keeps a 4.18 kernel version number but backports the newer VDSO
+  data layout where the old `vsyscall_gtod_data` VVAR is not declared.
+- This is the same class of enterprise-backport mismatch as the earlier
+  `handle_mm_fault()` and `prepare_binprm()` blockers.
+- The null fallback avoids inventing a pointer to renamed internal VVAR data
+  before runtime smoke testing proves the newer layout can safely support the
+  old McKernel local-time fast path.
+
+Expected effect:
+- Host `mcctrl.ko` module compile compatibility fix for Rocky 8.10.
+- No Rust behavior change.
+- No McKernel image behavior change.
+- No public syscall, ioctl, or IKC ABI change.
+
+Verification:
+- `git diff --check` passes locally.
+
+Next verification:
+- Rebuild `mcctrl_ko` on the Rocky VM.
+- If `mcctrl_ko` succeeds, rerun the full V7 host-module compile checkpoint.
+
 ## Rocky VM mcctrl prepare_binprm Compatibility Fix
 
 Observed:
