@@ -49,6 +49,11 @@
 #include <linux/rbtree.h>
 #include <linux/llist.h>
 #include <linux/version.h>
+#if defined(__has_include)
+# if __has_include(<linux/rhelversion.h>)
+#  include <linux/rhelversion.h>
+# endif
+#endif
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0)
 #include <linux/mmap_lock.h>
 #endif
@@ -88,7 +93,10 @@
 #define MCCTRL_VM_FLAGS_SET(vma, flags) ((vma)->vm_flags |= (flags))
 #endif
 
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 5, 0)
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 5, 0) || \
+	(defined(RHEL_RELEASE_CODE) && \
+	 RHEL_RELEASE_CODE >= RHEL_RELEASE_VERSION(8, 10) && \
+	 RHEL_RELEASE_CODE < RHEL_RELEASE_VERSION(9, 0))
 #define MCCTRL_HANDLE_MM_FAULT(vma, addr, flags) handle_mm_fault((vma), (addr), (flags), NULL)
 #elif LINUX_VERSION_CODE >= KERNEL_VERSION(4, 8, 0) || \
 	(defined(RHEL_RELEASE_CODE) && RHEL_RELEASE_CODE >= RHEL_RELEASE_VERSION(7, 5))

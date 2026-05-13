@@ -1093,6 +1093,48 @@ Expected effect:
 - No ABI behavior change.
 - No build-system behavior change.
 
+## Rocky VM mcctrl handle_mm_fault Compatibility Fix
+
+Observed:
+- Rocky VM build now reaches `mcctrl_ko` after `mckernel.img`, `ihk_ko`, and
+  `ihk-smp-x86_64_ko` build far enough to pass their prior blockers.
+- `executer/kernel/mcctrl/syscall.c` failed in `pager_req_pfn()` because
+  Rocky 8.10's 4.18-based kernel headers expose a four-argument
+  `handle_mm_fault()` while the compatibility macro selected the older
+  three-argument call.
+
+Adjusted:
+- `executer/kernel/mcctrl/syscall.c`
+
+Change:
+- Include `linux/rhelversion.h` when the target kernel headers provide it.
+- Extend `MCCTRL_HANDLE_MM_FAULT()` so RHEL/Rocky 8.10 kernels use:
+  `handle_mm_fault(vma, addr, flags, NULL)`.
+- Keep non-RHEL upstream behavior unchanged:
+  - Linux 6.5+ uses the four-argument form.
+  - Linux 4.8+ and older RHEL compatibility paths keep the three-argument
+    form unless the explicit Rocky 8.10 backport case applies.
+
+Justification:
+- Rocky 8.10 keeps `LINUX_VERSION_CODE` at 4.18 while backporting newer MM API
+  signatures.
+- Version checks based only on upstream Linux version cannot distinguish this
+  enterprise backport, so the compatibility layer must check the RHEL release
+  metadata when available.
+- Passing `NULL` for the new register argument matches the existing upstream
+  Linux 6.5+ compatibility path already used by this file.
+
+Expected effect:
+- Host `mcctrl.ko` module compile compatibility fix for Rocky 8.10.
+- No Rust behavior change.
+- No McKernel image behavior change.
+- No public syscall, ioctl, or IKC ABI change.
+
+Next verification:
+- Rebuild `mcctrl_ko` on the Rocky VM.
+- If `mcctrl_ko` succeeds, continue V7 by confirming all host modules compile
+  together before moving to module-load testing.
+
 ## Rocky VM libudev Dependency Fix
 
 Observed failure:
