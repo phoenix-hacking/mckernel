@@ -12,12 +12,47 @@
 #include <linux/highmem.h>
 #include <linux/version.h>
 #include <linux/mm.h>
+#if defined(__has_include)
+# if __has_include(<linux/rhelversion.h>)
+#  include <linux/rhelversion.h>
+# endif
+#endif
 #include "mcctrl.h"
+
+#if defined(RHEL_RELEASE_CODE) && defined(RHEL_RELEASE_VERSION)
+#define MCCTRL_RHEL_RELEASE_AT_LEAST(major, minor) \
+	(RHEL_RELEASE_CODE >= RHEL_RELEASE_VERSION(major, minor))
+#else
+#define MCCTRL_RHEL_RELEASE_AT_LEAST(major, minor) 0
+#endif
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 19, 0)
 #define MCCTRL_COPY_STRING_KERNEL(arg, bprm) copy_string_kernel((arg), (bprm))
 #else
 #define MCCTRL_COPY_STRING_KERNEL(arg, bprm) copy_strings_kernel(1, &(arg), (bprm))
+#endif
+
+#if MCCTRL_RHEL_RELEASE_AT_LEAST(8, 10) && \
+	LINUX_VERSION_CODE < KERNEL_VERSION(5, 19, 0)
+/*
+ * Rocky/RHEL 8.10 hides prepare_binprm() from external modules. This loader
+ * has already entered exec's binfmt path, so after swapping bprm->file to
+ * mcexec we only need to refresh the probe buffer for search_binary_handler().
+ */
+static int mcctrl_prepare_binprm(struct linux_binprm *bprm)
+{
+	loff_t pos = 0;
+
+	memset(bprm->buf, 0, BINPRM_BUF_SIZE);
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
+	return kernel_read(bprm->file, bprm->buf, BINPRM_BUF_SIZE, &pos);
+#else
+	return kernel_read(bprm->file, pos, bprm->buf, BINPRM_BUF_SIZE);
+#endif
+}
+#define MCCTRL_PREPARE_BINPRM(bprm) mcctrl_prepare_binprm(bprm)
+#else
+#define MCCTRL_PREPARE_BINPRM(bprm) prepare_binprm(bprm)
 #endif
 
 static int pathcheck(const char *file, const char *list)
@@ -275,7 +310,7 @@ static int load_elf(struct linux_binprm *bprm
 	fput(bprm->file);
 	bprm->file = file;
 
-	rc = prepare_binprm(bprm);
+	rc = MCCTRL_PREPARE_BINPRM(bprm);
 	if (rc < 0){
 		kfree(pbuf);
 		return rc;

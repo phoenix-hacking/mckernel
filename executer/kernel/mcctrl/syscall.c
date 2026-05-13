@@ -54,6 +54,15 @@
 #  include <linux/rhelversion.h>
 # endif
 #endif
+#if defined(RHEL_RELEASE_CODE) && defined(RHEL_RELEASE_VERSION)
+#define MCCTRL_RHEL_RELEASE_AT_LEAST(major, minor) \
+	(RHEL_RELEASE_CODE >= RHEL_RELEASE_VERSION(major, minor))
+#define MCCTRL_RHEL_RELEASE_BEFORE(major, minor) \
+	(RHEL_RELEASE_CODE < RHEL_RELEASE_VERSION(major, minor))
+#else
+#define MCCTRL_RHEL_RELEASE_AT_LEAST(major, minor) 0
+#define MCCTRL_RHEL_RELEASE_BEFORE(major, minor) 0
+#endif
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0)
 #include <linux/mmap_lock.h>
 #endif
@@ -94,12 +103,11 @@
 #endif
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 5, 0) || \
-	(defined(RHEL_RELEASE_CODE) && \
-	 RHEL_RELEASE_CODE >= RHEL_RELEASE_VERSION(8, 10) && \
-	 RHEL_RELEASE_CODE < RHEL_RELEASE_VERSION(9, 0))
+	(MCCTRL_RHEL_RELEASE_AT_LEAST(8, 10) && \
+	 MCCTRL_RHEL_RELEASE_BEFORE(9, 0))
 #define MCCTRL_HANDLE_MM_FAULT(vma, addr, flags) handle_mm_fault((vma), (addr), (flags), NULL)
 #elif LINUX_VERSION_CODE >= KERNEL_VERSION(4, 8, 0) || \
-	(defined(RHEL_RELEASE_CODE) && RHEL_RELEASE_CODE >= RHEL_RELEASE_VERSION(7, 5))
+	MCCTRL_RHEL_RELEASE_AT_LEAST(7, 5)
 #define MCCTRL_HANDLE_MM_FAULT(vma, addr, flags) handle_mm_fault((vma), (addr), (flags))
 #else
 #define MCCTRL_HANDLE_MM_FAULT(vma, addr, flags) handle_mm_fault(current->mm, (vma), (addr), (flags))
@@ -571,7 +579,7 @@ int remote_page_fault(struct mcctrl_usrdata *usrdata, void *fault_addr,
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 11, 0)
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 17, 0) || \
-	(defined(RHEL_RELEASE_CODE) && RHEL_RELEASE_CODE >= RHEL_RELEASE_VERSION(8, 2))
+	MCCTRL_RHEL_RELEASE_AT_LEAST(8, 2)
 static vm_fault_t rus_vm_fault(struct vm_fault *vmf)
 #else
 static int rus_vm_fault(struct vm_fault *vmf)

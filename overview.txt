@@ -59,10 +59,10 @@ Next verification step:
 
 Known failing or blocked step:
 - Full runtime validation is not complete yet.
-- Rocky VM V7 host-module compile is active. The latest observed blocker was
-  `mcctrl_ko` on Rocky 8.10 because `handle_mm_fault()` is backported with a
-  four-argument signature on the 4.18 kernel line. A source compatibility fix
-  has been added and needs a Rocky VM rebuild.
+- Rocky VM V7 host-module compile is active. The latest observed blocker is
+  `mcctrl_ko` on Rocky 8.10 because `prepare_binprm()` is not exposed to the
+  external module build. A source compatibility fix has been added and needs a
+  Rocky VM rebuild.
 - WSL remains blocked for real boot/runtime smoke testing by host module and
   kernel development tree limitations.
 - ihk-smp-x86_64 compatibility against Linux 6.6 needs more work before WSL can

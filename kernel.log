@@ -1093,6 +1093,57 @@ Expected effect:
 - No ABI behavior change.
 - No build-system behavior change.
 
+## Rocky VM mcctrl prepare_binprm Compatibility Fix
+
+Observed:
+- After the Rocky 8.10 `handle_mm_fault()` fix, the `mcctrl_ko` build moved
+  forward and failed in `executer/kernel/mcctrl/binfmt_mcexec.c`.
+- The failure was:
+  `implicit declaration of function 'prepare_binprm'`.
+
+Adjusted:
+- `executer/kernel/mcctrl/binfmt_mcexec.c`
+- `executer/kernel/mcctrl/syscall.c`
+
+Change:
+- Include `linux/rhelversion.h` when present in `binfmt_mcexec.c`.
+- Add safe local `MCCTRL_RHEL_RELEASE_AT_LEAST()` checks so function-like
+  `RHEL_RELEASE_VERSION()` is only used when the kernel headers define it.
+- Add `MCCTRL_PREPARE_BINPRM()` for Rocky/RHEL 8.10+ kernels before the 5.19
+  binfmt API path.
+- For that Rocky/RHEL path, avoid the hidden external `prepare_binprm()` helper
+  and refresh `bprm->buf` from the replacement `mcexec` file with
+  `kernel_read()` before calling `search_binary_handler()`.
+- Tighten the previous `MCCTRL_HANDLE_MM_FAULT()` RHEL release checks to use
+  the same safe macro style.
+
+Justification:
+- Rocky 8.10 exposes a 4.18 kernel version but carries enterprise backports
+  that hide or stop declaring some exec helpers from external module builds.
+- This binfmt handler is already executing inside the kernel exec/binfmt path.
+  After it swaps `bprm->file` to `mcexec`, the immediate requirement before
+  `search_binary_handler()` is that `bprm->buf` contain the new file header.
+- Using `kernel_read()` for the probe buffer keeps the compatibility change
+  local to the Rocky/RHEL external-module build and avoids depending on a
+  non-public helper declaration.
+
+Expected effect:
+- Host `mcctrl.ko` module compile compatibility fix for Rocky 8.10.
+- No Rust behavior change.
+- No McKernel image behavior change.
+- No public syscall, ioctl, or IKC ABI change.
+
+Verification:
+- `git diff --check` passes locally.
+- Preprocessor smoke snippets confirmed that the safe RHEL helper macros do not
+  expand undefined function-like macros on non-RHEL headers.
+
+Next verification:
+- Rebuild `mcctrl_ko` on the Rocky VM.
+- If `mcctrl_ko` succeeds, rerun the full V7 host-module compile checkpoint:
+  `ihk_ko`, `ihk-smp-x86_64_ko`, `mcctrl_ko`, `mcexec`, `mcstat`,
+  `ihkconfig`, and `ihkosctl`.
+
 ## Rocky VM mcctrl handle_mm_fault Compatibility Fix
 
 Observed:
