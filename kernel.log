@@ -1134,6 +1134,55 @@ Expected effect:
 - No Rust behavior change.
 - No ABI behavior change.
 
+## Rocky VM IHK-SMP free_vmap_area_noflush Fallback
+
+Observed:
+- V8 diagnostics on Rocky VM showed `ihk_smp_x86_64` fails to load with
+  `insmod: Bad address`, which corresponds to the `-EFAULT` return from
+  `ihk_smp_symbols_init()`.
+- `/proc/kallsyms` exposes:
+  - `free_vmap_area_noflush`
+  - `remove_vm_area`
+  - `alloc_vmap_area`
+  - `get_vm_area_caller`
+- `/proc/kallsyms` does not expose `free_vmap_area`.
+
+Adjusted:
+- `ihk/linux/driver/smp/smp-driver.c`
+- `scripts/patches/ihk-linux-compat.patch`
+
+Change:
+- Keep the existing `kallsyms_lookup_name("free_vmap_area")` lookup.
+- If it fails, fall back to:
+  `kallsyms_lookup_name("free_vmap_area_noflush")`.
+- Regenerate the stored IHK compatibility patch so clean Rocky VM checkouts can
+  apply the same fallback.
+
+Justification:
+- Rocky 8.10 exposes `alloc_vmap_area` but not the matching `free_vmap_area`
+  symbol name expected by the IHK-SMP compatibility path.
+- IHK unmaps the LWK range itself with `unmap_kernel_range_noflush()` before
+  freeing the reserved vmap area, so the available noflush free helper is the
+  closest matching private-symbol fallback for this code path.
+- This keeps the patch narrow and avoids changing the vmap allocation strategy
+  before module load succeeds.
+
+Expected effect:
+- `ihk_smp_x86_64` should get past the missing `free_vmap_area` init failure
+  on Rocky 8.10.
+- No Rust behavior change.
+- No McKernel image behavior change.
+- No public syscall, ioctl, or IKC ABI change.
+
+Verification:
+- `git -C ihk diff --check` passes.
+- `git -C ihk apply --reverse --check ../scripts/patches/ihk-linux-compat.patch`
+  passes against the locally patched submodule.
+
+Next verification:
+- On the Rocky VM, reset/reapply the updated IHK compatibility patch, rebuild
+  `ihk-smp-x86_64_ko`, and retry V8 module load only.
+
 ## Rocky VM V8 Module Load Checkpoint Blocked
 
 Observed:

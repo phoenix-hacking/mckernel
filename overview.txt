@@ -67,6 +67,8 @@ Known failing or blocked step:
 - `dmesg` reports a warning in `smp_module_init()` at
   `ihk/linux/driver/smp/smp-driver.c:5415`, which maps to missing
   `kallsyms_lookup_name("free_vmap_area")`.
+- Rocky exposes `free_vmap_area_noflush`, and a compatibility fallback has been
+  added for the next V8 retry.
 - WSL remains blocked for real boot/runtime smoke testing by host module and
   kernel development tree limitations.
 - ihk-smp-x86_64 compatibility against Linux 6.6 needs more work before WSL can

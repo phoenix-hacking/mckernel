@@ -106,6 +106,20 @@ index 8c9c996..c796517 100644
  		pr_debug("Setting warm reset code and vector.\n");
  
  		smpboot_setup_warm_reset_vector(start_eip);
+diff --git a/linux/driver/smp/smp-driver.c b/linux/driver/smp/smp-driver.c
+index 409d6b3..c422756 100644
+--- a/linux/driver/smp/smp-driver.c
++++ b/linux/driver/smp/smp-driver.c
+@@ -5412,6 +5412,9 @@ static int ihk_smp_symbols_init(void)
+ 		goto err;
+ 
+ 	ihk__free_vmap_area = (void *)kallsyms_lookup_name("free_vmap_area");
++	if (!ihk__free_vmap_area)
++		ihk__free_vmap_area =
++			(void *)kallsyms_lookup_name("free_vmap_area_noflush");
+ 	if (WARN_ON(!ihk__free_vmap_area))
+ 		goto err;
+ #endif
 diff --git a/linux/user/CMakeLists.txt b/linux/user/CMakeLists.txt
 index 817b5c1..4329a7e 100644
 --- a/linux/user/CMakeLists.txt
