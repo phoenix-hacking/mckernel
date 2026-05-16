@@ -24,7 +24,7 @@ Options:
   --boot-cpus LIST      CPU list passed to mcreboot.sh -c. Default: 1
   --boot-mem SPEC       Memory passed to mcreboot.sh -m. Default: 512M@0
   --trampoline-phys PA  Expert-only: pass pre-reserved PA to mcreboot.sh.
-  --smoke-timeout SEC   Timeout for each V10 smoke command. Default: 30
+  --smoke-timeout SEC   Watchdog for each V10 smoke command. Default: 8
   --trace-smoke         Run V10 smoke commands under strace when available.
   -h, --help            Show this help.
 
@@ -42,7 +42,7 @@ JOBS=2
 BOOT_CPUS=1
 BOOT_MEM=512M@0
 TRAMPOLINE_PHYS="${IHK_TRAMPOLINE_PHYS:-}"
-SMOKE_TIMEOUT=30
+SMOKE_TIMEOUT=8
 TRACE_SMOKE=0
 INSTALL_DEPS=1
 INSTALL_RUST=1
@@ -318,7 +318,7 @@ boot_smoke() {
 		echo "error: boot smoke needs at least 2 vCPUs; CPU 0 stays with Linux and CPU $BOOT_CPUS goes to McKernel." >&2
 		exit 1
 	fi
-	need_cmd timeout
+	need_cmd setsid
 	if [ "$TRACE_SMOKE" -eq 1 ]; then
 		need_cmd strace
 	fi
@@ -372,6 +372,8 @@ run_smoke_cmd() {
 	local log="/tmp/mckernel-${label}.out"
 	local trace_prefix="/tmp/mckernel-${label}.strace"
 	local rc=0
+	local pid
+	local elapsed=0
 	local cmd=("$@")
 
 	rm -f "$trace_prefix" "$trace_prefix".*
@@ -379,8 +381,32 @@ run_smoke_cmd() {
 		cmd=(strace -ff -tt -s 200 -o "$trace_prefix" "$@")
 	fi
 
-	say "Running ${label} with ${SMOKE_TIMEOUT}s timeout"
-	timeout --foreground "${SMOKE_TIMEOUT}s" "${cmd[@]}" >"$log" 2>&1 || rc=$?
+	say "Running ${label} with ${SMOKE_TIMEOUT}s watchdog"
+	setsid "${cmd[@]}" >"$log" 2>&1 &
+	pid=$!
+
+	while kill -0 "-$pid" 2>/dev/null; do
+		if [ "$elapsed" -ge "$SMOKE_TIMEOUT" ]; then
+			echo "error: ${label} exceeded the ${SMOKE_TIMEOUT}s watchdog." >&2
+			echo "Captured output from ${label}:" >&2
+			cat "$log" >&2 || true
+			if [ "$TRACE_SMOKE" -eq 1 ]; then
+				echo "Recent strace output for ${label}:" >&2
+				tail -n 80 "$trace_prefix"* >&2 || true
+			fi
+			dump_smoke_failure_state "$label"
+			echo "Attempting to terminate ${label} process group ${pid}." >&2
+			kill -TERM "-$pid" 2>/dev/null || true
+			sleep 2
+			kill -KILL "-$pid" 2>/dev/null || true
+			disown "$pid" 2>/dev/null || true
+			return 124
+		fi
+		sleep 1
+		elapsed=$((elapsed + 1))
+	done
+
+	wait "$pid" || rc=$?
 
 	if [ "$rc" -eq 0 ]; then
 		cat "$log"
@@ -389,9 +415,6 @@ run_smoke_cmd() {
 	fi
 
 	echo "error: ${label} failed or timed out with status ${rc}." >&2
-	if [ "$rc" -eq 124 ]; then
-		echo "error: ${label} exceeded the ${SMOKE_TIMEOUT}s timeout." >&2
-	fi
 	echo "Captured output from ${label}:" >&2
 	cat "$log" >&2 || true
 	if [ "$TRACE_SMOKE" -eq 1 ]; then

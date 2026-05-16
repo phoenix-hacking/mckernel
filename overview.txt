@@ -91,6 +91,9 @@ Known failing or blocked step:
 - V10 smoke now runs `mcexec` with `--debug-mcexec`, can optionally run under
   `strace` with `--trace-smoke`, and dumps Linux process state, Linux dmesg,
   and recent McKernel kmsg on failure.
+- The smoke watchdog default is now 8 seconds. The script uses an explicit
+  `setsid`-based watchdog instead of relying on GNU `timeout`, because a stuck
+  kernel ioctl can prevent `timeout` from returning cleanly.
 - There is no current Rocky VM build or module-load blocker after V8.
 - The V8 trampoline warning remained after reducing the x86_64 private
   trampoline allocation to one low-DMA page. The persistent GRUB `memmap`

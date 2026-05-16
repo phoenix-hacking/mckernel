@@ -1337,6 +1337,48 @@ Expected effect:
 - No ABI behavior change.
 - V10 failures should now include enough context to choose the next real fix.
 
+## Rocky V10 Explicit Watchdog
+
+Observed validation output:
+- The Rocky VM again reached V10 after `IHK/McKernel booted.`
+- The script printed `Running mcexec-true with 20s timeout` and then appeared
+  stuck without returning after the expected timeout window.
+
+Analysis:
+- GNU `timeout` can fail to make progress when the child command is stuck in an
+  uninterruptible kernel wait, especially around kernel-module ioctls.
+- The V10 failure is therefore likely deeper than a normal user-space hang:
+  `mcexec` may be blocked inside the mcctrl/McKernel launch path.
+
+Adjusted:
+- `scripts/rocky-rust-validation.sh`
+- `overview.txt`
+- `kernel.log`
+
+Change:
+- Reduced the default smoke watchdog from 30 seconds to 8 seconds.
+- Replaced the GNU `timeout` wrapper with an explicit `setsid`-based watchdog.
+- Run each smoke command in its own process group.
+- Poll the process group for up to the configured watchdog duration.
+- If it is still alive, dump captured output, optional strace tail, Linux
+  process state, Linux dmesg, and McKernel kmsg while the stuck process still
+  exists.
+- Attempt SIGTERM and then SIGKILL on the process group, then return status
+  124 without depending on `timeout` to reap the stuck child.
+
+Justification:
+- V10 needs to fail fast and leave evidence even when `mcexec` is trapped in a
+  kernel wait that normal signal delivery cannot resolve immediately.
+- An 8-second watchdog is enough to distinguish `/bin/true` from a broken launch
+  path and keeps VM debugging loops shorter.
+
+Expected effect:
+- No kernel C behavior change.
+- No kernel Rust behavior change.
+- No ABI behavior change.
+- The Rocky validation runner should now stop at `mcexec-true` with diagnostics
+  rather than hanging indefinitely.
+
 ## Rocky VM IHK-SMP Trampoline Allocation Fix
 
 Adjusted:
