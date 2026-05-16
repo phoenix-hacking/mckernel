@@ -414,6 +414,18 @@ int prepare_process_ranges_args_envs(struct thread *thread,
 		env[i] = addr + envs_offset + env[i];
 	}
 
+	kprintf("mcexec_v10: argenv pid=%d argc=%d argv0=0x%lx argv0_str=\"%s\" args_len=%lu envc=%d env0=0x%lx envs_len=%lu envs_offset=0x%lx argenv_base=0x%lx\n",
+		proc ? proc->pid : -1,
+		argc,
+		argc > 0 ? (unsigned long)argv[0] : 0UL,
+		(argc > 0 && proc->saved_cmdline) ? proc->saved_cmdline : "",
+		p->args_len,
+		envc,
+		envc > 0 ? (unsigned long)env[0] : 0UL,
+		p->envs_len,
+		envs_offset,
+		addr);
+
 	dkprintf("env OK\n");
 
 	if (pn->enable_vdso) {

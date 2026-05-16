@@ -395,7 +395,11 @@ run_hostname_smoke() {
 	local rc=0
 
 	if run_smoke_cmd "mcexec-hostname" "$PREFIX/bin/mcexec" --debug-mcexec hostname; then
-		return 0
+		if run_smoke_cmd "mcexec-hostname-absolute" "$PREFIX/bin/mcexec" --debug-mcexec /usr/bin/hostname; then
+			return 0
+		else
+			rc=$?
+		fi
 	else
 		rc=$?
 	fi
@@ -409,6 +413,11 @@ run_hostname_smoke() {
 		echo "diagnosis: mcexec-hostname passes with --disable-vdso; the VDSO-enabled runtime path is failing." >&2
 	else
 		echo "diagnosis: mcexec-hostname also fails with --disable-vdso; the failure is not isolated to VDSO." >&2
+	fi
+	if run_smoke_cmd "mcexec-hostname-absolute-novdso" "$PREFIX/bin/mcexec" --debug-mcexec --disable-vdso /usr/bin/hostname; then
+		echo "diagnosis: absolute-path hostname also passes with --disable-vdso." >&2
+	else
+		echo "diagnosis: absolute-path hostname still fails with --disable-vdso." >&2
 	fi
 
 	return "$rc"

@@ -1545,6 +1545,8 @@ out_linux:
 			reason, error);
 		if (reason & PF_USER) {
 			ihk_mc_user_context_t *uctx = regs;
+			unsigned long stack_words[8];
+			int stack_rc = -EINVAL;
 
 			kprintf("mcexec_v10: fatal_page_fault cpu=%d pid=%d tid=%d addr=0x%lx reason=0x%lx fault_error=%d rip=0x%lx sp=0x%lx rax=0x%lx rdi=0x%lx rsi=0x%lx rdx=0x%lx r10=0x%lx\n",
 				ihk_mc_get_processor_id(),
@@ -1558,6 +1560,24 @@ out_linux:
 				uctx ? uctx->gpr.rsi : 0UL,
 				uctx ? uctx->gpr.rdx : 0UL,
 				uctx ? uctx->gpr.r10 : 0UL);
+			if (uctx && uctx->gpr.rsp >= PAGE_SIZE &&
+			    uctx->gpr.rsp < MAP_KERNEL_START) {
+				stack_rc = copy_from_user(stack_words,
+							  (void *)uctx->gpr.rsp,
+							  sizeof(stack_words));
+				if (!stack_rc) {
+					kprintf("mcexec_v10: fatal_stack sp=0x%lx q0=0x%lx q1=0x%lx q2=0x%lx q3=0x%lx q4=0x%lx q5=0x%lx q6=0x%lx q7=0x%lx\n",
+						uctx->gpr.rsp,
+						stack_words[0], stack_words[1],
+						stack_words[2], stack_words[3],
+						stack_words[4], stack_words[5],
+						stack_words[6], stack_words[7]);
+				}
+				else {
+					kprintf("mcexec_v10: fatal_stack sp=0x%lx copy_failed=%d\n",
+						uctx->gpr.rsp, stack_rc);
+				}
+			}
 		}
 		unhandled_page_fault(thread, fault_addr, reason, regs);
 		--cpu_local_var(in_page_fault);
