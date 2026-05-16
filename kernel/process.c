@@ -3727,6 +3727,7 @@ void schedule(void)
 	struct thread *last;
 	int prevpid;
 	unsigned long irqstate = 0;
+	static int mcexec_v10_scheduler_logs;
 
 	if (ihk_atomic_read(&cpu_local_var(no_preempt))) {
 		kprintf("%s: WARNING can't schedule() while no preemption, cnt: %d\n",
@@ -3808,6 +3809,17 @@ void schedule(void)
 				__func__,
 				prev ? prev->tid : 0, next ? next->tid : 0,
 				cpu_local_var(nr_ctx_switches));
+		if (next && next != &cpu_local_var(idle) &&
+		    mcexec_v10_scheduler_logs < 32) {
+			kprintf("mcexec_v10: scheduler switch cpu=%d %d=>%d pid=%d rip=0x%lx sp=0x%lx status=%d runq_len=%d\n",
+				ihk_mc_get_processor_id(),
+				prev ? prev->tid : -1, next->tid,
+				next->proc ? next->proc->pid : -1,
+				next->uctx ? ihk_mc_syscall_pc(next->uctx) : 0UL,
+				next->uctx ? ihk_mc_syscall_sp(next->uctx) : 0UL,
+				next->status, v->runq_len);
+			mcexec_v10_scheduler_logs++;
+		}
 
 		if (prev && prev->ptrace_debugreg) {
 			save_debugreg(prev->ptrace_debugreg);

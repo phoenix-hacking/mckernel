@@ -340,6 +340,8 @@ Commands:
 - mcexec /bin/true
 - mcexec hostname
 - mcstat
+- When debugging the current Rocky V10 boundary, run the validation script with
+  `--trace-smoke` and inspect McKernel kmsg lines prefixed with `mcexec_v10:`.
 
 Success:
 - Commands complete successfully.
@@ -347,6 +349,10 @@ Success:
 Stop condition:
 - If any command fails, debug process/syscall/host communication paths before
   broad regression tests.
+- For the current `mcexec /bin/true` timeout, stop after the first failure and
+  classify the handoff by the last marker reached:
+  prepared process, schedule message received, queued on run queue, scheduler
+  switch, or first delegated syscall sent.
 
 V11: Focused regression tests
 -----------------------------

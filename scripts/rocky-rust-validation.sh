@@ -446,6 +446,8 @@ dump_smoke_failure_state() {
 	sudo dmesg --ctime | tail -n 120 >&2 || true
 	echo "Recent McKernel kmsg:" >&2
 	sudo "$PREFIX/sbin/ihkosctl" 0 kmsg | tail -n 80 >&2 || true
+	echo "McKernel V10 handoff markers:" >&2
+	sudo "$PREFIX/sbin/ihkosctl" 0 kmsg | grep 'mcexec_v10' | tail -n 80 >&2 || true
 }
 
 need_cmd sudo

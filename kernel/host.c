@@ -436,6 +436,10 @@ int prepare_process_ranges_args_envs(struct thread *thread,
 		goto err;
 	}
 
+	kprintf("mcexec_v10: prepared pid=%d thread=%p entry=0x%lx sp=0x%lx sections=%d\n",
+		proc->pid, thread, p->entry,
+		thread->uctx ? ihk_mc_syscall_sp(thread->uctx) : 0UL, n);
+
 	return 0;
 
 err:
@@ -757,8 +761,19 @@ static int syscall_packet_handler(struct ihk_ikc_channel_desc *c,
 
 	case SCD_MSG_SCHEDULE_PROCESS:
 		thread = (struct thread *)packet->arg;
+		if (!thread || !thread->proc) {
+			kprintf("mcexec_v10: schedule_process invalid thread=%p\n",
+				thread);
+			ret = -EINVAL;
+			break;
+		}
 
 		cpuid = ihk_mc_get_processor_id();
+		kprintf("mcexec_v10: schedule_process received thread=%p pid=%d entry=0x%lx sp=0x%lx current_cpu=%d\n",
+			thread, thread->proc->pid,
+			thread->uctx ? ihk_mc_syscall_pc(thread->uctx) : 0UL,
+			thread->uctx ? ihk_mc_syscall_sp(thread->uctx) : 0UL,
+			cpuid);
 		if (!CPU_ISSET(cpuid, &thread->cpu_set)) {
 			cpuid = obtain_clone_cpuid(&thread->cpu_set, 0);
 			if (cpuid == -1) {
@@ -776,6 +791,8 @@ static int syscall_packet_handler(struct ihk_ikc_channel_desc *c,
 		chain_thread(thread);
 		chain_process(proc);
 		runq_add_thread(thread, cpuid);
+		kprintf("mcexec_v10: schedule_process queued pid=%d tid=%d cpu=%d status=%d\n",
+			proc->pid, thread->tid, cpuid, thread->status);
 
 		ret = 0;
 		break;
@@ -1054,4 +1071,3 @@ void init_host_ikc2mckernel(void)
 
 	ihk_ikc_set_regular_channel(NULL, param.channel, ihk_ikc_get_processor_id());
 }
-

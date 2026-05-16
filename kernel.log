@@ -1093,6 +1093,60 @@ Expected effect:
 - No ABI behavior change.
 - No build-system behavior change.
 
+## Rocky V10 mcexec Handoff Diagnostics
+
+Observed failure:
+- Rocky VM V9 boot-only continues to pass.
+- V10 reaches `mcexec /bin/true`.
+- The traced `mcexec-true` run successfully loads ELF sections and the
+  interpreter, transfers the image, and returns success from
+  `MCEXEC_UP_START_IMAGE`.
+- Both mcexec worker threads then block in `MCEXEC_UP_WAIT_SYSCALL`.
+- On forced abort, Linux dmesg reports IKC timeout symptoms:
+  `mcexec_send_signal: mcctrl_ikc_send ret=-62` and
+  `release_handler: WARNING: failed to send IKC msg: -62`.
+- McKernel kmsg still shows the boot-only notes `Trampoline area: 0x0` and
+  `error: allocating fp_regs pages`, but no later evidence yet that the first
+  user process reached a delegated syscall or exit path.
+
+Adjusted:
+- `kernel/host.c`
+- `kernel/process.c`
+- `kernel/syscall.c`
+- `scripts/rocky-rust-validation.sh`
+- `overview.txt`
+- `plan.txt`
+
+Change:
+- Added short, bounded McKernel kmsg markers prefixed with `mcexec_v10:`.
+- The new markers record:
+  - process descriptor preparation,
+  - `SCD_MSG_SCHEDULE_PROCESS` receipt,
+  - run-queue insertion,
+  - scheduler context switches into non-idle threads, and
+  - the first delegated syscall packets sent back to Linux.
+- Updated the Rocky validation script to print the `mcexec_v10:` marker subset
+  on V10 smoke failure.
+- Updated progress tracking docs to classify V10 as failing after
+  `MCEXEC_UP_START_IMAGE` while waiting for syscall/exit events.
+
+Justification:
+- The failure is now past build, module-load, and boot-only validation. The next
+  unknown is the handoff from Linux `mcctrl` to McKernel scheduling and then
+  back through IKC syscall delegation.
+- These markers create a controlled yes/no ladder without broad tracing:
+  if the schedule marker is absent, debug IKC delivery; if schedule is present
+  but scheduler switch is absent, debug run queue or CPU status; if the switch
+  is present but syscall-send is absent, debug first user-mode entry, exceptions,
+  page faults, or FP/context setup; if syscall-send is present, debug Linux
+  `mcctrl` wait/wakeup handling.
+
+Expected effect:
+- Diagnostic logging only for the current V10 runtime boundary.
+- No Rust primitive behavior change.
+- No public ABI change.
+- No C fallback removal.
+
 ## Rocky V9 Boot Baseline and Bitmap Zero-Area Rust Port
 
 Recorded Rocky validation result:

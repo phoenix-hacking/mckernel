@@ -144,6 +144,7 @@ static void send_syscall(struct syscall_request *req, int cpu,
 	struct ikc_scd_packet packet IHK_DMA_ALIGN;
 	struct ihk_ikc_channel_desc *syscall_channel = get_cpu_local_var(cpu)->ikc2linux;
 	int ret;
+	static int mcexec_v10_send_syscall_logs;
 
 	res->status = 0;
 	req->valid = 0;
@@ -159,6 +160,16 @@ static void send_syscall(struct syscall_request *req, int cpu,
 	packet.pid = cpu_local_var(current)->proc->pid;
 	packet.resp_pa = virt_to_phys(res);
 	dkprintf("send syscall, nr: %d, pid: %d\n", req->number, packet.pid);
+	if (mcexec_v10_send_syscall_logs < 16) {
+		struct thread *thread = cpu_local_var(current);
+
+		kprintf("mcexec_v10: send_syscall cpu=%d pid=%d tid=%d nr=%d rip=0x%lx sp=0x%lx\n",
+			cpu, packet.pid, thread ? thread->tid : -1,
+			req->number,
+			thread && thread->uctx ? ihk_mc_syscall_pc(thread->uctx) : 0UL,
+			thread && thread->uctx ? ihk_mc_syscall_sp(thread->uctx) : 0UL);
+		mcexec_v10_send_syscall_logs++;
+	}
 
 	ret = ihk_ikc_send(syscall_channel, &packet, 0);
 	if (ret < 0) {
@@ -11453,4 +11464,3 @@ check_signal_irq_disabled(unsigned long rc, void *regs0, int num)
 {
 	__check_signal(rc, regs0, num, 1);
 }
-

@@ -79,8 +79,16 @@ Next verification step:
 
 Known failing or blocked step:
 - Full workload/runtime validation is not complete yet.
-- V10 reached `Running mcexec smoke commands` after a successful McKernel boot
-  and appeared to hang before completing the workload smoke commands.
+- V10 reaches `Running mcexec smoke commands` after a successful McKernel boot,
+  but `mcexec /bin/true` times out.
+- The latest traced failure shows `MCEXEC_UP_START_IMAGE` returning success.
+  Both mcexec worker threads then block inside `MCEXEC_UP_WAIT_SYSCALL`, waiting
+  for McKernel to report a syscall or process-exit event.
+- The next diagnostic boundary is the McKernel-side handoff from
+  `SCD_MSG_SCHEDULE_PROCESS` to the scheduler and then to the first delegated
+  syscall. Kernel markers prefixed with `mcexec_v10:` now record process
+  preparation, schedule-message receipt, run-queue insertion, scheduler switch,
+  and first syscall-send attempts.
 - The Rocky validation script now wraps each V10 smoke command in a timeout so
   future runs stop at the first failing command and print command output plus
   recent McKernel kmsg.
@@ -90,7 +98,7 @@ Known failing or blocked step:
   stops at the first failing smoke command.
 - V10 smoke now runs `mcexec` with `--debug-mcexec`, can optionally run under
   `strace` with `--trace-smoke`, and dumps Linux process state, Linux dmesg,
-  and recent McKernel kmsg on failure.
+  recent McKernel kmsg, and `mcexec_v10:` handoff markers on failure.
 - The smoke watchdog default is now 8 seconds. The script uses an explicit
   `setsid`-based watchdog instead of relying on GNU `timeout`, because a stuck
   kernel ioctl can prevent `timeout` from returning cleanly.
