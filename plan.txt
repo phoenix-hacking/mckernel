@@ -62,6 +62,9 @@ First Rust primitive replacements
 - Ported the bitmap region helper cluster behind the existing C ABI:
   bitmap_find_free_region(), bitmap_allocate_region(), and
   bitmap_release_region().
+- Ported the bitmap remap helper cluster behind the existing C ABI:
+  bitmap_ord_to_pos(), bitmap_remap(), bitmap_bitremap(), bitmap_onto(),
+  and bitmap_fold().
 - Kept macro-heavy C headers in place so existing C call sites do not need a
   public include-style migration yet.
 - Guarded selected C bitmap implementations so Rust can replace them without
@@ -72,6 +75,7 @@ Equivalence and build checks already established
 
 - Added kernel/rust/tests/run_equivalence.sh.
 - Verified Rust/C behavior for the first rbtree, llist, and bitmap ports.
+- Extended bitmap equivalence coverage through the remap helper cluster.
 - Checked the Rust object for expected unresolved kernel symbols only.
 - Checked that Rust output does not introduce unwanted SIMD/vector usage.
 
@@ -108,11 +112,13 @@ Known current validation state
   and Rocky VM boot-only layer.
 - V9 McKernel boot-only validation passed on Rocky VM.
 - V10 now reaches final user mode and `mcexec /bin/true` passes.
-- The current V10 boundary is `mcexec /usr/bin/hostname`: it reaches dynamic
-  loader/libc setup and then the target process takes SIGSEGV after an
-  instruction fetch at `RIP=0x1000`.
-- The active diagnostic pass should classify whether the low `0x1000` program
-  counter comes from signal delivery, VDSO/auxv setup, or a syscall return path.
+- The current V10 boundary is VDSO-sensitive hostname execution. Recent Rocky
+  runs show `mcexec hostname` can pass, `mcexec /usr/bin/hostname` can still
+  take SIGSEGV after an instruction fetch at `RIP=0x1000`, and
+  `--disable-vdso` makes the hostname smoke pass.
+- The active diagnostic pass should keep classifying whether the low `0x1000`
+  program counter comes from signal delivery, VDSO/auxv setup, argv/env stack
+  setup, or a syscall return path.
 - The persistent GRUB memmap trampoline experiment is unsafe on the current
   Rocky/VirtualBox setup. Do not use persistent memmap changes as the default
   validation path.

@@ -734,6 +734,18 @@ int bitmap_parselist_user(const char __user *ubuf,
 EXPORT_SYMBOL(bitmap_parselist_user);
 
 
+#ifdef MCKERNEL_RUST_BITMAP_CORE
+extern int bitmap_ord_to_pos(const unsigned long *buf, int ord, int bits);
+extern void bitmap_remap(unsigned long *dst, const unsigned long *src,
+			const unsigned long *old, const unsigned long *new,
+			int bits);
+extern int bitmap_bitremap(int oldbit, const unsigned long *old,
+			const unsigned long *new, int bits);
+extern void bitmap_onto(unsigned long *dst, const unsigned long *orig,
+			const unsigned long *relmap, int bits);
+extern void bitmap_fold(unsigned long *dst, const unsigned long *orig,
+			int sz, int bits);
+#else
 /**
  * bitmap_pos_to_ord - find ordinal of set bit at given position in bitmap
  *	@buf: pointer to a bitmap
@@ -1051,6 +1063,7 @@ void bitmap_fold(unsigned long *dst, const unsigned long *orig,
 		set_bit(oldbit % sz, dst);
 }
 EXPORT_SYMBOL(bitmap_fold);
+#endif
 
 /*
  * Common code for bitmap_*_region() routines.

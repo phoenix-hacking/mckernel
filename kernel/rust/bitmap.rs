@@ -73,9 +73,36 @@ fn align_mask(value: CULong, mask: CULong) -> CULong {
 }
 
 #[inline(always)]
+fn modulo_nonzero(mut value: CULong, divisor: CULong) -> CULong {
+    let mut shifted = divisor;
+
+    while shifted <= (value >> 1) && shifted <= (u64::MAX >> 1) {
+        shifted <<= 1;
+    }
+
+    loop {
+        if value >= shifted {
+            value -= shifted;
+        }
+        if shifted == divisor {
+            break;
+        }
+        shifted >>= 1;
+    }
+
+    value
+}
+
+#[inline(always)]
 unsafe fn test_bit(map: *const CULong, bit: CULong) -> bool {
     let bit = bit as usize;
     ((*map.add(bit / BITS_PER_LONG) >> (bit % BITS_PER_LONG)) & 1) != 0
+}
+
+#[inline(always)]
+unsafe fn set_bit(map: *mut CULong, bit: CULong) {
+    let bit = bit as usize;
+    *map.add(bit / BITS_PER_LONG) |= 1u64 << (bit % BITS_PER_LONG);
 }
 
 #[inline(always)]
@@ -104,6 +131,24 @@ unsafe fn find_next_zero_bit(map: *const CULong, size: CULong, offset: CULong) -
     }
 
     size
+}
+
+#[inline(always)]
+unsafe fn bitmap_pos_to_ord(buf: *const CULong, pos: CInt, bits: CInt) -> CInt {
+    if pos < 0 || pos >= bits || !test_bit(buf, pos as CULong) {
+        return -1;
+    }
+
+    let size = bits as CULong;
+    let mut bit = find_next_bit(buf, size, 0) as CInt;
+    let mut ord = 0;
+
+    while bit < pos {
+        bit = find_next_bit(buf, size, (bit + 1) as CULong) as CInt;
+        ord += 1;
+    }
+
+    ord
 }
 
 #[inline(always)]
@@ -463,6 +508,122 @@ pub unsafe extern "C" fn __bitmap_weight(bitmap: *const CULong, bits: CInt) -> C
     }
 
     weight
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bitmap_ord_to_pos(buf: *const CULong, mut ord: CInt, bits: CInt) -> CInt {
+    let mut pos = 0;
+
+    if ord >= 0 && ord < bits {
+        let size = bits as CULong;
+        let mut bit = find_next_bit(buf, size, 0) as CInt;
+
+        while bit < bits && ord > 0 {
+            bit = find_next_bit(buf, size, (bit + 1) as CULong) as CInt;
+            ord -= 1;
+        }
+
+        if bit < bits && ord == 0 {
+            pos = bit;
+        }
+    }
+
+    pos
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bitmap_remap(
+    dst: *mut CULong,
+    src: *const CULong,
+    old: *const CULong,
+    new: *const CULong,
+    bits: CInt,
+) {
+    if (dst as *const CULong) == src {
+        return;
+    }
+
+    zero_words(dst, bits_to_longs(bits));
+
+    let size = bits as CULong;
+    let weight = __bitmap_weight(new, bits);
+    let mut oldbit = find_next_bit(src, size, 0);
+
+    while oldbit < size {
+        let ord = bitmap_pos_to_ord(old, oldbit as CInt, bits);
+        let newbit = if ord < 0 || weight == 0 {
+            oldbit
+        } else {
+            bitmap_ord_to_pos(new, ord % weight, bits) as CULong
+        };
+
+        set_bit(dst, newbit);
+        oldbit = find_next_bit(src, size, oldbit + 1);
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bitmap_bitremap(
+    oldbit: CInt,
+    old: *const CULong,
+    new: *const CULong,
+    bits: CInt,
+) -> CInt {
+    let weight = __bitmap_weight(new, bits);
+    let ord = bitmap_pos_to_ord(old, oldbit, bits);
+
+    if ord < 0 || weight == 0 {
+        oldbit
+    } else {
+        bitmap_ord_to_pos(new, ord % weight, bits)
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bitmap_onto(
+    dst: *mut CULong,
+    orig: *const CULong,
+    relmap: *const CULong,
+    bits: CInt,
+) {
+    if (dst as *const CULong) == orig {
+        return;
+    }
+
+    zero_words(dst, bits_to_longs(bits));
+
+    let size = bits as CULong;
+    let mut relbit = find_next_bit(relmap, size, 0);
+    let mut ord = 0;
+
+    while relbit < size {
+        if test_bit(orig, ord) {
+            set_bit(dst, relbit);
+        }
+        ord += 1;
+        relbit = find_next_bit(relmap, size, relbit + 1);
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bitmap_fold(dst: *mut CULong, orig: *const CULong, sz: CInt, bits: CInt) {
+    if (dst as *const CULong) == orig {
+        return;
+    }
+    if sz <= 0 {
+        return;
+    }
+
+    zero_words(dst, bits_to_longs(bits));
+
+    let size = bits as CULong;
+    let mut oldbit = find_next_bit(orig, size, 0);
+    let fold_size = sz as CULong;
+
+    while oldbit < size {
+        set_bit(dst, modulo_nonzero(oldbit, fold_size));
+        oldbit = find_next_bit(orig, size, oldbit + 1);
+    }
 }
 
 #[no_mangle]

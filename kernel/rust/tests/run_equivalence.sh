@@ -232,6 +232,14 @@ extern unsigned long bitmap_find_next_zero_area(unsigned long *, unsigned long,
 extern int bitmap_find_free_region(unsigned long *, int, int);
 extern void bitmap_release_region(unsigned long *, int, int);
 extern int bitmap_allocate_region(unsigned long *, int, int);
+extern int bitmap_ord_to_pos(const unsigned long *, int, int);
+extern void bitmap_remap(unsigned long *, const unsigned long *,
+			 const unsigned long *, const unsigned long *, int);
+extern int bitmap_bitremap(int, const unsigned long *,
+			   const unsigned long *, int);
+extern void bitmap_onto(unsigned long *, const unsigned long *,
+			const unsigned long *, int);
+extern void bitmap_fold(unsigned long *, const unsigned long *, int, int);
 
 static unsigned long rng_state = 0x123456789abcdef0UL;
 
@@ -305,6 +313,21 @@ int main(void)
 				bitmap_clear(c, start + 1, nr - 2);
 		}
 		digest ^= digest_words(c, words);
+		{
+			int ords[] = { -1, 0, 1, 2, 7, bits / 2, bits - 1, bits, bits + 3 };
+			int oldbits[] = { -1, 0, 1, bits / 2, bits - 1, bits, bits + 9 };
+			int fold_sizes[] = { 1, 2, 3, 7, bits > 1 ? bits / 2 : 1, bits };
+			for (unsigned int oi = 0; oi < sizeof(ords) / sizeof(ords[0]); oi++)
+				mix_value(&digest, (unsigned long)(long)bitmap_ord_to_pos(a, ords[oi], bits));
+			for (unsigned int oi = 0; oi < sizeof(oldbits) / sizeof(oldbits[0]); oi++)
+				mix_value(&digest, (unsigned long)(long)bitmap_bitremap(oldbits[oi], a, b, bits));
+			memset(c, 0x5a, sizeof(c)); bitmap_remap(c, a, b, a, bits); digest ^= digest_words(c, words);
+			memset(c, 0x5a, sizeof(c)); bitmap_remap(c, a, a, b, bits); digest ^= digest_words(c, words);
+			memset(c, 0x5a, sizeof(c)); bitmap_onto(c, a, b, bits); digest ^= digest_words(c, words);
+			for (unsigned int fi = 0; fi < sizeof(fold_sizes) / sizeof(fold_sizes[0]); fi++) {
+				memset(c, 0x5a, sizeof(c)); bitmap_fold(c, a, fold_sizes[fi], bits); digest ^= digest_words(c, words);
+			}
+		}
 		for (unsigned int ai = 0; ai < sizeof(aligns) / sizeof(aligns[0]); ai++) {
 			for (unsigned int zi = 0; zi < sizeof(zero_area_sizes) / sizeof(zero_area_sizes[0]); zi++) {
 				for (unsigned long start = 0; start <= (unsigned long)bits + 5; start += 13) {
@@ -342,6 +365,18 @@ unsigned long virt_to_phys(void *v) { return (unsigned long)v; }
 EOF_STUBS
 
 cat > "${tmpdir}/ctype_stub.c" <<'EOF_CTYPE'
+int kprintf(const char *format, ...)
+{
+	(void)format;
+	return 0;
+}
+
+void panic(const char *message)
+{
+	(void)message;
+	__builtin_abort();
+}
+
 unsigned char _ctype[256] = {
 	['A' ... 'F'] = 0x01 | 0x40,
 	['G' ... 'Z'] = 0x01,
