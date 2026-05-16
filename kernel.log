@@ -2399,6 +2399,65 @@ Local verification:
 - The builds still emit the pre-existing packed-member and executable-stack/RWX
   linker warnings; no new compile or link failure was introduced.
 
+## Rocky V10 Hostname SIGSEGV Boundary
+
+Observed failure:
+- After the FP default-state restore fix, `mcexec /bin/true` now completes and
+  the validation script reports `mcexec-true: OK`.
+- The next smoke command, `mcexec /usr/bin/hostname`, starts successfully,
+  loads the executable and interpreter, handles loader/libc file syscalls, and
+  services `getrandom`.
+- The target then exits via `exit_group` with status `4294967307`, which is
+  `0x100000000 | SIGSEGV`.
+- Host-side `mcexec` exits with status 139 because the user-space bridge maps
+  the target signal to itself.
+- McKernel reports a fatal instruction-fetch page fault at `RIP=0x1000`,
+  `addr=0x1000`, `reason=0x14`.
+
+Interpretation:
+- The old pre-user-entry watchdog hang is fixed for `/bin/true`.
+- The current failure is a target-process SIGSEGV, not a random host-side
+  mcexec crash.
+- `0x1000` is suspicious because it is a low unmapped page and also the page
+  size value. The next split is whether it was loaded as a signal handler,
+  VDSO/auxv-derived pointer, or syscall-return-dependent function pointer.
+
+Adjusted:
+- `arch/x86_64/kernel/syscall.c`
+- `kernel/mem.c`
+- `kernel/process.c`
+- `kernel/syscall.c`
+- `overview.txt`
+- `plan.txt`
+- `kernel.log`
+
+Change:
+- Reset bounded `mcexec_v10:` syscall, offload, and page-fault counters per
+  process so `/bin/true` no longer consumes the diagnostic budget before
+  `hostname`.
+- Increased per-process syscall and page-fault marker budgets for V10.
+- Added syscall-return and offload-return markers.
+- Added fatal page-fault register markers.
+- Added VDSO mapping and auxv setup markers.
+- Added signal handler/default termination markers.
+
+Expected next Rocky result:
+- Re-run V10 with `--trace-smoke`.
+- If `mcexec_v10: signal_handler` reports `handler=0x1000`, focus on signal
+  action state/reset.
+- If `mcexec_v10: auxv` or `vdso_map` exposes a bad low address, focus on auxv
+  or VDSO setup.
+- Otherwise, use the full per-PID syscall return trace immediately before the
+  fatal page fault to identify which runtime path created the bad branch target.
+
+Local verification:
+- `git diff --check` passed.
+- `bash -n scripts/rocky-rust-validation.sh` passed.
+- Rust-enabled `/tmp/mckernel-wsl-rust-zeroarea` built target `mckernel.img`.
+- C-fallback `/tmp/mckernel-wsl-c-zeroarea` built target `mckernel.img`.
+- The builds still emit the pre-existing executable-stack/RWX linker warnings;
+  no new compile or link failure was introduced.
+
 ## Rocky V10 Floating-Point Default-State Restore Fix
 
 Observed failure:

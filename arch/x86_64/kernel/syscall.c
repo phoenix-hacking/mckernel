@@ -706,10 +706,20 @@ do_signal(unsigned long rc, void *regs0, struct thread *thread, struct sig_pendi
 	struct mcs_rwlock_node_irqsave mcs_rw_node;
 	int restart = 0;
 	int ret;
+	static int mcexec_v10_signal_logs;
+	static int mcexec_v10_signal_pid = -1;
+	int pid;
+	unsigned long si_addr;
 
 	for(w = pending->sigmask.__val[0], sig = 0; w; sig++, w >>= 1);
 	dkprintf("do_signal(): tid=%d, pid=%d, sig=%d\n", thread->tid, proc->pid, sig);
 	orgsig = sig;
+	si_addr = (unsigned long)pending->info._sifields._sigfault.si_addr;
+	pid = proc ? proc->pid : -1;
+	if (pid != mcexec_v10_signal_pid) {
+		mcexec_v10_signal_pid = pid;
+		mcexec_v10_signal_logs = 0;
+	}
 
 	if ((thread->ptrace & PT_TRACED) &&
 	    pending->ptracecont == 0 &&
@@ -826,6 +836,17 @@ do_signal(unsigned long rc, void *regs0, struct thread *thread, struct sig_pendi
 		usp = (unsigned long *)sigsp;
 		usp--;
 		*usp = (unsigned long)k->sa.sa_restorer;
+		if (mcexec_v10_signal_logs < 64) {
+			kprintf("mcexec_v10: signal_handler pid=%d tid=%d sig=%d handler=0x%lx restorer=0x%lx old_rip=0x%lx old_sp=0x%lx new_sp=0x%lx si_addr=0x%lx\n",
+				pid, thread ? thread->tid : -1, sig,
+				(unsigned long)k->sa.sa_handler,
+				(unsigned long)k->sa.sa_restorer,
+				regs->gpr.rip,
+				regs->gpr.rsp,
+				(unsigned long)usp,
+				si_addr);
+			mcexec_v10_signal_logs++;
+		}
 
 		regs->gpr.rdi = (unsigned long)sig;
 		regs->gpr.rsi = (unsigned long)&sigsp->info;
@@ -962,6 +983,14 @@ do_signal(unsigned long rc, void *regs0, struct thread *thread, struct sig_pendi
 		case SIGXCPU:
 		case SIGXFSZ:
 		core:
+			if (mcexec_v10_signal_logs < 64) {
+				kprintf("mcexec_v10: signal_default pid=%d tid=%d sig=%d rip=0x%lx sp=0x%lx si_addr=0x%lx\n",
+					pid, thread ? thread->tid : -1, sig,
+					regs->gpr.rip,
+					regs->gpr.rsp,
+					si_addr);
+				mcexec_v10_signal_logs++;
+			}
 			thread->coredump_regs =
 				kmalloc(sizeof(struct x86_user_context),
 					IHK_MC_AP_NOWAIT);
@@ -1847,6 +1876,14 @@ int arch_map_vdso(struct process_vm *vm)
 		goto out;
 	}
 	vm->vdso_addr = s;
+	kprintf("mcexec_v10: vdso_map pid=%d container=0x%lx vdso=0x%lx vdso_end=0x%lx offset=0x%lx size=0x%lx pages=%d\n",
+		vm && vm->proc ? vm->proc->pid : -1,
+		(unsigned long)container,
+		(unsigned long)vm->vdso_addr,
+		(unsigned long)e,
+		(unsigned long)vdso_offset,
+		(unsigned long)container_size,
+		vdso.vdso_npages);
 
 	attr = PTATTR_ACTIVE | PTATTR_USER;
 	for (i = 0; i < vdso.vdso_npages; ++i) {

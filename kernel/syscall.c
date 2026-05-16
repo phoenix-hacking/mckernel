@@ -145,6 +145,9 @@ static void send_syscall(struct syscall_request *req, int cpu,
 	struct ihk_ikc_channel_desc *syscall_channel = get_cpu_local_var(cpu)->ikc2linux;
 	int ret;
 	static int mcexec_v10_send_syscall_logs;
+	static int mcexec_v10_send_syscall_pid = -1;
+	struct thread *thread = cpu_local_var(current);
+	int pid = thread && thread->proc ? thread->proc->pid : -1;
 
 	res->status = 0;
 	req->valid = 0;
@@ -160,9 +163,11 @@ static void send_syscall(struct syscall_request *req, int cpu,
 	packet.pid = cpu_local_var(current)->proc->pid;
 	packet.resp_pa = virt_to_phys(res);
 	dkprintf("send syscall, nr: %d, pid: %d\n", req->number, packet.pid);
-	if (mcexec_v10_send_syscall_logs < 16) {
-		struct thread *thread = cpu_local_var(current);
-
+	if (pid != mcexec_v10_send_syscall_pid) {
+		mcexec_v10_send_syscall_pid = pid;
+		mcexec_v10_send_syscall_logs = 0;
+	}
+	if (mcexec_v10_send_syscall_logs < 64) {
 		kprintf("mcexec_v10: send_syscall cpu=%d pid=%d tid=%d nr=%d rip=0x%lx sp=0x%lx\n",
 			cpu, packet.pid, thread ? thread->tid : -1,
 			req->number,
@@ -185,6 +190,9 @@ long do_syscall(struct syscall_request *req, int cpu)
 	struct thread *thread = cpu_local_var(current);
 	struct ihk_os_cpu_monitor *monitor = cpu_local_var(monitor);
 	int mstatus = 0;
+	static int mcexec_v10_offload_return_logs;
+	static int mcexec_v10_offload_return_pid = -1;
+	int pid = thread && thread->proc ? thread->proc->pid : -1;
 
 #ifdef PROFILE_ENABLE
 	/* We cannot use thread->profile_start_ts here because the
@@ -416,6 +424,16 @@ schedule:
 		__FUNCTION__, req->number, res.ret);
 
 	rc = res.ret;
+	if (pid != mcexec_v10_offload_return_pid) {
+		mcexec_v10_offload_return_pid = pid;
+		mcexec_v10_offload_return_logs = 0;
+	}
+	if (mcexec_v10_offload_return_logs < 64) {
+		kprintf("mcexec_v10: offload_return cpu=%d pid=%d tid=%d nr=%d ret=0x%lx ret_signed=%ld\n",
+			cpu, pid, thread ? thread->tid : -1,
+			req->number, rc, rc);
+		mcexec_v10_offload_return_logs++;
+	}
 
 #ifdef ENABLE_TOFU
 	if ((req->number == __NR_ioctl && rc == 0) ||
@@ -11069,16 +11087,24 @@ long syscall(int num, ihk_mc_user_context_t *ctx)
 	struct cpu_local_var *v = get_this_cpu_local_var();
 	struct thread *thread = v->current;
 	static int mcexec_v10_syscall_entry_logs;
+	static int mcexec_v10_syscall_entry_pid = -1;
+	static int mcexec_v10_syscall_return_logs;
+	static int mcexec_v10_syscall_return_pid = -1;
+	int pid = thread && thread->proc ? thread->proc->pid : -1;
 
 #ifdef DISABLE_SCHED_YIELD
 	if (num != __NR_sched_yield)
 #endif // DISABLE_SCHED_YIELD
 		set_cputime(CPUTIME_MODE_U2K);
 
-	if (mcexec_v10_syscall_entry_logs < 32) {
+	if (pid != mcexec_v10_syscall_entry_pid) {
+		mcexec_v10_syscall_entry_pid = pid;
+		mcexec_v10_syscall_entry_logs = 0;
+	}
+	if (mcexec_v10_syscall_entry_logs < 128) {
 		kprintf("mcexec_v10: syscall entry cpu=%d pid=%d tid=%d nr=%d rip=0x%lx sp=0x%lx status=%d\n",
 			ihk_mc_get_processor_id(),
-			thread && thread->proc ? thread->proc->pid : -1,
+			pid,
 			thread ? thread->tid : -1,
 			num,
 			ctx ? ihk_mc_syscall_pc(ctx) : 0UL,
@@ -11163,6 +11189,21 @@ long syscall(int num, ihk_mc_user_context_t *ctx)
 		        ihk_mc_syscall_arg4(ctx), ihk_mc_syscall_pc(ctx),
 		        ihk_mc_syscall_sp(ctx));
 		l = syscall_generic_forwarding(num, ctx);
+	}
+
+	if (pid != mcexec_v10_syscall_return_pid) {
+		mcexec_v10_syscall_return_pid = pid;
+		mcexec_v10_syscall_return_logs = 0;
+	}
+	if (mcexec_v10_syscall_return_logs < 128) {
+		kprintf("mcexec_v10: syscall return cpu=%d pid=%d tid=%d nr=%d ret=0x%lx ret_signed=%ld rip=0x%lx sp=0x%lx\n",
+			ihk_mc_get_processor_id(),
+			pid,
+			thread ? thread->tid : -1,
+			num, l, l,
+			ctx ? ihk_mc_syscall_pc(ctx) : 0UL,
+			ctx ? ihk_mc_syscall_sp(ctx) : 0UL);
+		mcexec_v10_syscall_return_logs++;
 	}
 
 	/* Store return value so that PTRACE_GETREGSET will see it */

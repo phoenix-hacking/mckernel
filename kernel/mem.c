@@ -1430,10 +1430,12 @@ static void page_fault_handler(void *fault_addr, uint64_t reason, void *regs)
 {
 	struct thread *thread = cpu_local_var(current);
 	static int mcexec_v10_page_fault_logs;
+	static int mcexec_v10_page_fault_pid = -1;
 #ifdef ENABLE_TOFU
 	unsigned long addr = (unsigned long)fault_addr;
 #endif
 	int error;
+	int pid = thread && thread->proc ? thread->proc->pid : -1;
 #ifdef PROFILE_ENABLE
 	uint64_t t_s = 0;
 	if (thread && thread->profile)
@@ -1445,12 +1447,16 @@ static void page_fault_handler(void *fault_addr, uint64_t reason, void *regs)
 	dkprintf("%s: addr: %p, reason: %lx, regs: %p\n",
 			__FUNCTION__, fault_addr, reason, regs);
 
-	if ((reason & PF_USER) && mcexec_v10_page_fault_logs < 32) {
+	if (pid != mcexec_v10_page_fault_pid) {
+		mcexec_v10_page_fault_pid = pid;
+		mcexec_v10_page_fault_logs = 0;
+	}
+	if ((reason & PF_USER) && mcexec_v10_page_fault_logs < 128) {
 		ihk_mc_user_context_t *uctx = regs;
 
 		kprintf("mcexec_v10: page_fault cpu=%d pid=%d tid=%d addr=0x%lx reason=0x%lx rip=0x%lx sp=0x%lx error=0x%lx\n",
 			ihk_mc_get_processor_id(),
-			thread && thread->proc ? thread->proc->pid : -1,
+			pid,
 			thread ? thread->tid : -1,
 			(unsigned long)fault_addr, reason,
 			uctx ? uctx->gpr.rip : 0UL,
@@ -1537,6 +1543,22 @@ out_linux:
 		kprintf("%s fault VM failed for TID: %d, addr: 0x%lx, reason: %d, error: %d\n",
 			__func__, thread ? thread->tid : -1, fault_addr,
 			reason, error);
+		if (reason & PF_USER) {
+			ihk_mc_user_context_t *uctx = regs;
+
+			kprintf("mcexec_v10: fatal_page_fault cpu=%d pid=%d tid=%d addr=0x%lx reason=0x%lx fault_error=%d rip=0x%lx sp=0x%lx rax=0x%lx rdi=0x%lx rsi=0x%lx rdx=0x%lx r10=0x%lx\n",
+				ihk_mc_get_processor_id(),
+				pid,
+				thread ? thread->tid : -1,
+				(unsigned long)fault_addr, reason, error,
+				uctx ? uctx->gpr.rip : 0UL,
+				uctx ? uctx->gpr.rsp : 0UL,
+				uctx ? uctx->gpr.rax : 0UL,
+				uctx ? uctx->gpr.rdi : 0UL,
+				uctx ? uctx->gpr.rsi : 0UL,
+				uctx ? uctx->gpr.rdx : 0UL,
+				uctx ? uctx->gpr.r10 : 0UL);
+		}
 		unhandled_page_fault(thread, fault_addr, reason, regs);
 		--cpu_local_var(in_page_fault);
 		preempt_enable();

@@ -79,25 +79,17 @@ Next verification step:
 
 Known failing or blocked step:
 - Full workload/runtime validation is not complete yet.
-- V10 reaches `Running mcexec smoke commands` after a successful McKernel boot,
-  but `mcexec /bin/true` times out.
-- The latest traced failure shows `MCEXEC_UP_START_IMAGE` returning success.
-  Both mcexec worker threads then block inside `MCEXEC_UP_WAIT_SYSCALL`, waiting
-  for McKernel to report a syscall or process-exit event.
-- The next diagnostic boundary is the McKernel-side handoff from
-  `SCD_MSG_SCHEDULE_PROCESS` to the scheduler and then to the first delegated
-  syscall. Kernel markers prefixed with `mcexec_v10:` now record process
-  preparation, schedule-message receipt, run-queue insertion, scheduler switch,
-  and first syscall-send attempts.
-- The latest Rocky trace reached `mcexec_v10: scheduler switch` for
-  `mcexec /bin/true` but did not reach `mcexec_v10: send_syscall`. The next
-  diagnostic markers now cover the final user-mode entry path, first McKernel
-  syscall entry, user page faults, and user exceptions so the V10 stall can be
-  classified without guessing.
-- The follow-up trace still did not reach `mcexec_v10: enter_user`, narrowing
-  the stall to the scheduler-to-context-switch path. The active fix removes an
-  infinite fallback recursion in floating-point state restore when both the new
-  thread and idle thread lack allocated XSAVE storage.
+- V10 now reaches final user mode and `mcexec /bin/true` passes after the
+  floating-point default-state restore fix.
+- The current Rocky failure is the next smoke command,
+  `mcexec /usr/bin/hostname`. The target process reaches dynamic loader and
+  libc setup, then dies with SIGSEGV after an instruction fetch at `RIP=0x1000`.
+  Host-side `mcexec` exits with status 139 because it mirrors the target signal.
+- The active diagnostic pass resets bounded `mcexec_v10:` counters per process
+  and records syscall returns, offload returns, VDSO/auxv setup, signal
+  delivery/default termination, and fatal page-fault registers. This should show
+  whether `0x1000` came from a bad signal handler, VDSO/auxv value, or syscall
+  return path.
 - The Rocky validation script now wraps each V10 smoke command in a timeout so
   future runs stop at the first failing command and print command output plus
   recent McKernel kmsg.
