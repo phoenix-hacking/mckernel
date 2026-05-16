@@ -88,6 +88,9 @@ Known failing or blocked step:
   `mcexec-true` failed or timed out, it printed status `0` and continued to
   `mcexec-hostname`. The wrapper now preserves the actual `timeout` status and
   stops at the first failing smoke command.
+- V10 smoke now runs `mcexec` with `--debug-mcexec`, can optionally run under
+  `strace` with `--trace-smoke`, and dumps Linux process state, Linux dmesg,
+  and recent McKernel kmsg on failure.
 - There is no current Rocky VM build or module-load blocker after V8.
 - The V8 trampoline warning remained after reducing the x86_64 private
   trampoline allocation to one low-DMA page. The persistent GRUB `memmap`

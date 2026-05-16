@@ -1299,6 +1299,44 @@ Expected effect:
 - V10 validation now accurately reports whether `mcexec-true` exits, fails, or
   times out.
 
+## Rocky V10 mcexec Diagnostics
+
+Analysis:
+- V9 boot is passing; `IHK/McKernel booted.` appears reliably.
+- The current failure boundary is V10, starting with `mcexec /bin/true`.
+- The McKernel boot kmsg alone does not show where `mcexec` stalls, because the
+  hang occurs after boot during the user-space launch path.
+- `mcexec` has a built-in `--debug-mcexec` option that prints progress through
+  ELF loading, image preparation, worker-thread startup, syscall forwarding,
+  and exit handling.
+
+Adjusted:
+- `scripts/rocky-rust-validation.sh`
+- `overview.txt`
+- `kernel.log`
+
+Change:
+- Run V10 `mcexec` smoke commands with `--debug-mcexec`.
+- Added `--trace-smoke` to optionally run smoke commands under `strace`.
+- On smoke failure, dump matching Linux process state with `ps`.
+- For leftover `mcexec` processes, dump `/proc/<pid>/status`,
+  `/proc/<pid>/wchan`, and `/proc/<pid>/stack`.
+- Print recent Linux `dmesg` and recent McKernel kmsg on failure.
+
+Justification:
+- The next question is whether `mcexec` hangs before image preparation, inside
+  an ioctl such as `MCEXEC_UP_START_IMAGE`, while worker threads wait for
+  syscall packets, or during shutdown/exit handling.
+- User-space debug output, optional syscall tracing, and Linux task wait
+  channels should identify the exact blocked layer without requiring another
+  kernel code change first.
+
+Expected effect:
+- No kernel C behavior change.
+- No kernel Rust behavior change.
+- No ABI behavior change.
+- V10 failures should now include enough context to choose the next real fix.
+
 ## Rocky VM IHK-SMP Trampoline Allocation Fix
 
 Adjusted:

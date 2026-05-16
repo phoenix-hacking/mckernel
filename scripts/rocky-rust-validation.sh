@@ -25,6 +25,7 @@ Options:
   --boot-mem SPEC       Memory passed to mcreboot.sh -m. Default: 512M@0
   --trampoline-phys PA  Expert-only: pass pre-reserved PA to mcreboot.sh.
   --smoke-timeout SEC   Timeout for each V10 smoke command. Default: 30
+  --trace-smoke         Run V10 smoke commands under strace when available.
   -h, --help            Show this help.
 
 Examples:
@@ -42,6 +43,7 @@ BOOT_CPUS=1
 BOOT_MEM=512M@0
 TRAMPOLINE_PHYS="${IHK_TRAMPOLINE_PHYS:-}"
 SMOKE_TIMEOUT=30
+TRACE_SMOKE=0
 INSTALL_DEPS=1
 INSTALL_RUST=1
 DO_INSTALL=1
@@ -103,6 +105,10 @@ while [ "$#" -gt 0 ]; do
 		--smoke-timeout)
 			SMOKE_TIMEOUT="${2:?missing value for --smoke-timeout}"
 			shift 2
+			;;
+		--trace-smoke)
+			TRACE_SMOKE=1
+			shift
 			;;
 		-h|--help)
 			usage
@@ -313,6 +319,9 @@ boot_smoke() {
 		exit 1
 	fi
 	need_cmd timeout
+	if [ "$TRACE_SMOKE" -eq 1 ]; then
+		need_cmd strace
+	fi
 
 	confirm_boot_smoke
 	ensure_selinux_permissive_for_boot
@@ -347,8 +356,8 @@ boot_smoke() {
 	fi
 
 	say "Running mcexec smoke commands"
-	run_smoke_cmd "mcexec-true" "$PREFIX/bin/mcexec" /bin/true
-	run_smoke_cmd "mcexec-hostname" "$PREFIX/bin/mcexec" hostname
+	run_smoke_cmd "mcexec-true" "$PREFIX/bin/mcexec" --debug-mcexec /bin/true
+	run_smoke_cmd "mcexec-hostname" "$PREFIX/bin/mcexec" --debug-mcexec hostname
 	run_smoke_cmd "mcstat" "$PREFIX/bin/mcstat"
 
 	say "Shutting down McKernel"
@@ -361,10 +370,17 @@ run_smoke_cmd() {
 	local label="$1"
 	shift
 	local log="/tmp/mckernel-${label}.out"
+	local trace_prefix="/tmp/mckernel-${label}.strace"
 	local rc=0
+	local cmd=("$@")
+
+	rm -f "$trace_prefix" "$trace_prefix".*
+	if [ "$TRACE_SMOKE" -eq 1 ]; then
+		cmd=(strace -ff -tt -s 200 -o "$trace_prefix" "$@")
+	fi
 
 	say "Running ${label} with ${SMOKE_TIMEOUT}s timeout"
-	timeout --foreground "${SMOKE_TIMEOUT}s" "$@" >"$log" 2>&1 || rc=$?
+	timeout --foreground "${SMOKE_TIMEOUT}s" "${cmd[@]}" >"$log" 2>&1 || rc=$?
 
 	if [ "$rc" -eq 0 ]; then
 		cat "$log"
@@ -378,9 +394,35 @@ run_smoke_cmd() {
 	fi
 	echo "Captured output from ${label}:" >&2
 	cat "$log" >&2 || true
+	if [ "$TRACE_SMOKE" -eq 1 ]; then
+		echo "Recent strace output for ${label}:" >&2
+		tail -n 80 "$trace_prefix"* >&2 || true
+	fi
+	dump_smoke_failure_state "$label"
+	return "$rc"
+}
+
+dump_smoke_failure_state() {
+	local label="$1"
+
+	echo "Linux process state after ${label} failure:" >&2
+	ps -eo pid,ppid,stat,wchan:32,comm,args | grep -E 'mcexec|mcstat|timeout|strace' | grep -v grep >&2 || true
+
+	local pids
+	pids="$(pgrep -x mcexec 2>/dev/null || true)"
+	for pid in $pids; do
+		echo "--- /proc/${pid}/status ---" >&2
+		sed -n '1,80p' "/proc/${pid}/status" >&2 || true
+		echo "--- /proc/${pid}/wchan ---" >&2
+		cat "/proc/${pid}/wchan" >&2 || true
+		echo "--- /proc/${pid}/stack ---" >&2
+		sudo cat "/proc/${pid}/stack" >&2 || true
+	done
+
+	echo "Recent Linux dmesg:" >&2
+	sudo dmesg --ctime | tail -n 120 >&2 || true
 	echo "Recent McKernel kmsg:" >&2
 	sudo "$PREFIX/sbin/ihkosctl" 0 kmsg | tail -n 80 >&2 || true
-	return "$rc"
 }
 
 need_cmd sudo
