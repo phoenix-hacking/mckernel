@@ -2398,3 +2398,53 @@ Local verification:
 - C-fallback `/tmp/mckernel-wsl-c-zeroarea` built target `mckernel.img`.
 - The builds still emit the pre-existing packed-member and executable-stack/RWX
   linker warnings; no new compile or link failure was introduced.
+
+## Rocky V10 Floating-Point Default-State Restore Fix
+
+Observed failure:
+- The next Rocky V10 trace again reached `mcexec_v10: scheduler switch` for
+  `mcexec /bin/true`.
+- It still did not reach `mcexec_v10: enter_user`, `syscall entry`,
+  `page_fault`, `exception`, or `send_syscall`.
+- The boot log continues to print `error: allocating fp_regs pages`.
+
+Interpretation:
+- The stall is after scheduler selection and before the `enter_user_mode`
+  marker.
+- In that window, `schedule()` calls `restore_fp_regs(next)` before the
+  low-level context switch.
+- When `next->fp_regs` is missing, `restore_fp_regs()` called
+  `clear_fp_regs()`, which called `restore_fp_regs(&idle)`.
+- Because idle FP-state allocation also failed, idle had no `fp_regs` either,
+  causing recursive `restore_fp_regs()`/`clear_fp_regs()` fallback before the
+  context switch could reach `enter_user_mode`.
+
+Adjusted:
+- `arch/x86_64/kernel/cpu.c`
+- `overview.txt`
+- `plan.txt`
+- `kernel.log`
+
+Change:
+- Captured an initial XSAVE image during FPU initialization when XSAVE is
+  available and fits in the static fallback area.
+- Made `check_and_allocate_fp_regs()` a no-op when XSAVE is unavailable or has
+  no usable size.
+- Replaced recursive missing-`fp_regs` fallback with direct default-state
+  restore.
+- Added bounded `mcexec_v10: fp_default` markers so the Rocky run can confirm
+  the fallback path is reached and returns.
+
+Expected next Rocky result:
+- Re-run V10 with `--trace-smoke`.
+- If the recursion was the blocker, the marker sequence should advance past
+  `scheduler switch` to `fp_default`, then `enter_user`, and then either a
+  syscall, user page fault, user exception, or delegated syscall send.
+
+Local verification:
+- `git diff --check` passed.
+- `bash -n scripts/rocky-rust-validation.sh` passed.
+- Rust-enabled `/tmp/mckernel-wsl-rust-zeroarea` built target `mckernel.img`.
+- C-fallback `/tmp/mckernel-wsl-c-zeroarea` built target `mckernel.img`.
+- The builds still emit the pre-existing packed-member and executable-stack/RWX
+  linker warnings; no new compile or link failure was introduced.

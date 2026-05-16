@@ -94,6 +94,10 @@ Known failing or blocked step:
   diagnostic markers now cover the final user-mode entry path, first McKernel
   syscall entry, user page faults, and user exceptions so the V10 stall can be
   classified without guessing.
+- The follow-up trace still did not reach `mcexec_v10: enter_user`, narrowing
+  the stall to the scheduler-to-context-switch path. The active fix removes an
+  infinite fallback recursion in floating-point state restore when both the new
+  thread and idle thread lack allocated XSAVE storage.
 - The Rocky validation script now wraps each V10 smoke command in a timeout so
   future runs stop at the first failing command and print command output plus
   recent McKernel kmsg.

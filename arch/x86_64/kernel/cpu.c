@@ -189,6 +189,8 @@ static void init_idt(void)
 static int xsave_available = 0;
 static int xsave_size = 0;
 static uint64_t xsave_mask = 0x0;
+static unsigned char initial_fp_regs[PAGE_SIZE] __attribute__((aligned(64)));
+static int initial_fp_regs_available;
 
 void init_fpu(void)
 {
@@ -259,6 +261,16 @@ void init_fpu(void)
 #endif
 
 	asm volatile("finit");
+
+	if (xsave_available && xsave_size <= sizeof(initial_fp_regs)) {
+		unsigned int low = (unsigned int)xsave_mask;
+		unsigned int high = (unsigned int)(xsave_mask >> 32);
+
+		memset(initial_fp_regs, 0, sizeof(initial_fp_regs));
+		asm volatile("xsave %0" : "=m" (*(fp_regs_struct *)initial_fp_regs)
+				: "a" (low), "d" (high) : "memory");
+		initial_fp_regs_available = 1;
+	}
 }
 
 int
@@ -1834,6 +1846,10 @@ check_and_allocate_fp_regs(struct thread *thread)
 	int pages;
 	int result = 0;
 
+	if (!xsave_available || xsave_size <= 0) {
+		return 0;
+	}
+
 	if (!thread->fp_regs) {
 		pages = (xsave_size + (PAGE_SIZE - 1)) >> PAGE_SHIFT;
 		dkprintf("save_fp_regs: pages=%d\n", pages);
@@ -1895,6 +1911,36 @@ int copy_fp_regs(struct thread *from, struct thread *to)
 	return ret;
 }
 
+static void restore_default_fp_regs(struct thread *thread)
+{
+	static int mcexec_v10_fp_default_logs;
+
+	if (mcexec_v10_fp_default_logs < 16) {
+		kprintf("mcexec_v10: fp_default cpu=%d pid=%d tid=%d xsave=%d initial=%d\n",
+			ihk_mc_get_processor_id(),
+			thread && thread->proc ? thread->proc->pid : -1,
+			thread ? thread->tid : -1,
+			xsave_available, initial_fp_regs_available);
+		mcexec_v10_fp_default_logs++;
+	}
+
+	if (xsave_available && initial_fp_regs_available) {
+		unsigned int low = (unsigned int)xsave_mask;
+		unsigned int high = (unsigned int)(xsave_mask >> 32);
+
+		asm volatile("xrstor %0" : : "m" (*(fp_regs_struct *)initial_fp_regs),
+				"a" (low), "d" (high) : "memory");
+	}
+	else {
+		unsigned int default_mxcsr = 0x1f80;
+
+		asm volatile("finit" ::: "memory");
+#ifdef ENABLE_SSE
+		asm volatile("ldmxcsr %0" : : "m" (default_mxcsr) : "memory");
+#endif
+	}
+}
+
 /*@
   @ requires \valid(thread);
   @ assigns thread->fp_regs;
@@ -1902,9 +1948,8 @@ int copy_fp_regs(struct thread *from, struct thread *to)
 void
 restore_fp_regs(struct thread *thread)
 {
-	if (!thread->fp_regs) {
-		// only clear fpregs.
-		clear_fp_regs();
+	if (!thread || !thread->fp_regs) {
+		restore_default_fp_regs(thread);
 		return;
 	}
 
@@ -1929,7 +1974,12 @@ void clear_fp_regs(void)
 {
 	struct cpu_local_var *v = get_this_cpu_local_var();
 
-	restore_fp_regs(&v->idle);
+	if (v->idle.fp_regs) {
+		restore_fp_regs(&v->idle);
+	}
+	else {
+		restore_default_fp_regs(&v->idle);
+	}
 }
 
 ihk_mc_user_context_t *lookup_user_context(struct thread *thread)

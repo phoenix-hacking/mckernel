@@ -112,6 +112,10 @@ Known current validation state
   but does not yet reach first delegated syscall send. The active diagnostic
   pass should classify whether the process reaches final user entry, syscall
   entry, a user page fault, or another user exception.
+- The latest classification is more specific: V10 reaches scheduler switch but
+  not final user entry. The current fix targets the floating-point restore path
+  before low-level context switch, where missing idle XSAVE storage could cause
+  recursive default-state restore.
 - The persistent GRUB memmap trampoline experiment is unsafe on the current
   Rocky/VirtualBox setup. Do not use persistent memmap changes as the default
   validation path.
@@ -361,6 +365,9 @@ Stop condition:
   prepared process, schedule message received, queued on run queue, scheduler
   switch, final user entry, syscall entry, user page fault, user exception, or
   first delegated syscall sent.
+- If the last marker remains `scheduler switch`, inspect `mcexec_v10:
+  fp_default` markers next. They confirm the missing-XSAVE fallback path was
+  reached without recurring forever.
 - After a V10 watchdog failure, use kill-in-use cleanup before retrying so the
   next run does not fail at V9 cleanup because a stale `mcexec` still has
   `/dev/mcos0` open.
