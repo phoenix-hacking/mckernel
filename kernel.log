@@ -1147,6 +1147,45 @@ Expected effect:
 - No public ABI change.
 - No C fallback removal.
 
+## Rocky Boot-Smoke Stale Instance Cleanup
+
+Observed failure:
+- After a previous V10 `mcexec` hang, the next validation run rebuilt and
+  installed successfully but failed before booting a fresh McKernel:
+  - `error: destroying OS instance 0`
+  - `error: destroying LWK instance 0 failed`
+  - `warning: failed to remove ihk`
+
+Adjusted:
+- `scripts/rocky-rust-validation.sh`
+- `overview.txt`
+- `plan.txt`
+
+Change:
+- Added `lsof` to the Rocky dependency list so `mcstop+release.sh -k` can find
+  processes holding McKernel device nodes.
+- Before boot-smoke, run `mcstop+release.sh -k` to kill stale users of
+  `/dev/mcos*`, destroy old OS instances, release resources, and unload modules.
+- During smoke watchdog cleanup, run `mcstop+release.sh -k` after terminating
+  the stuck process group.
+- If `mcreboot.sh` fails, print a boot-failure snapshot with matching processes,
+  loaded IHK/McKernel modules, device nodes, and recent Linux dmesg.
+
+Justification:
+- The previous V10 failure can leave a userspace process blocked in a kernel
+  ioctl with `/dev/mcos0` still open. A plain boot retry then fails before the
+  new diagnostic markers can run because the old OS instance cannot be
+  destroyed.
+- The validation ladder needs to recover to a clean V9 baseline before each V10
+  retry; otherwise a stale runtime instance is confused with the actual
+  workload failure.
+
+Expected effect:
+- Validation harness behavior only.
+- No McKernel runtime behavior change.
+- No Rust primitive behavior change.
+- No public ABI change.
+
 ## Rocky V9 Boot Baseline and Bitmap Zero-Area Rust Port
 
 Recorded Rocky validation result:

@@ -329,6 +329,9 @@ Success:
 
 Stop condition:
 - If boot fails, inspect host dmesg and McKernel kmsg before testing mcexec.
+- If boot fails while destroying OS instance 0, first clean stale state with
+  `mcstop+release.sh -k`; if the stale instance still cannot be destroyed,
+  reboot the Rocky VM before retrying.
 
 V10: Minimal user workloads
 ---------------------------
@@ -353,6 +356,9 @@ Stop condition:
   classify the handoff by the last marker reached:
   prepared process, schedule message received, queued on run queue, scheduler
   switch, or first delegated syscall sent.
+- After a V10 watchdog failure, use kill-in-use cleanup before retrying so the
+  next run does not fail at V9 cleanup because a stale `mcexec` still has
+  `/dev/mcos0` open.
 
 V11: Focused regression tests
 -----------------------------

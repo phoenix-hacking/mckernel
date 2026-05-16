@@ -153,11 +153,11 @@ install_deps() {
 	sudo dnf config-manager --set-enabled powertools >/dev/null 2>&1 || \
 		sudo dnf config-manager --set-enabled crb >/dev/null 2>&1 || true
 
-	sudo dnf install -y \
-		gcc gcc-c++ make cmake git tar patch diffutils which curl \
-		"kernel-devel-$(uname -r)" "kernel-headers-$(uname -r)" \
-		elfutils-libelf-devel numactl-devel rpm-build binutils-devel systemd-devel \
-		zlib-devel openssl-devel bc bison flex perl dwarves
+		sudo dnf install -y \
+			gcc gcc-c++ make cmake git tar patch diffutils which curl \
+			"kernel-devel-$(uname -r)" "kernel-headers-$(uname -r)" \
+			elfutils-libelf-devel numactl-devel rpm-build binutils-devel systemd-devel \
+			zlib-devel openssl-devel bc bison flex perl dwarves lsof
 }
 
 ensure_kernel_headers() {
@@ -327,18 +327,33 @@ boot_smoke() {
 	ensure_selinux_permissive_for_boot
 
 	say "Booting McKernel"
+	say "Cleaning stale McKernel state before boot"
+	if ! sudo "$PREFIX/sbin/mcstop+release.sh" -k; then
+		echo "error: stale McKernel state could not be cleaned before boot." >&2
+		echo "A previous V10 hang may still have an OS instance or module reference open." >&2
+		echo "Safest recovery in the Rocky VM is a reboot, then rerun this script." >&2
+		dump_boot_failure_state
+		exit 1
+	fi
+
 	if [ "$TRAMPOLINE_PHYS" != "" ]; then
 		say "Using reserved IHK trampoline page at $TRAMPOLINE_PHYS"
-		sudo IHK_TRAMPOLINE_PHYS="$TRAMPOLINE_PHYS" \
-			"$PREFIX/sbin/mcreboot.sh" -c "$BOOT_CPUS" -m "$BOOT_MEM"
+		if ! sudo IHK_TRAMPOLINE_PHYS="$TRAMPOLINE_PHYS" \
+			"$PREFIX/sbin/mcreboot.sh" -c "$BOOT_CPUS" -m "$BOOT_MEM"; then
+			dump_boot_failure_state
+			exit 1
+		fi
 	else
-		sudo "$PREFIX/sbin/mcreboot.sh" -c "$BOOT_CPUS" -m "$BOOT_MEM"
+		if ! sudo "$PREFIX/sbin/mcreboot.sh" -c "$BOOT_CPUS" -m "$BOOT_MEM"; then
+			dump_boot_failure_state
+			exit 1
+		fi
 	fi
 
 	shutdown_needed=1
 	cleanup() {
 		if [ "${shutdown_needed:-0}" -eq 1 ]; then
-			sudo "$PREFIX/sbin/mcstop+release.sh" || true
+			sudo "$PREFIX/sbin/mcstop+release.sh" -k || true
 		fi
 	}
 	trap cleanup EXIT
@@ -399,9 +414,10 @@ run_smoke_cmd() {
 			kill -TERM "-$pid" 2>/dev/null || true
 			sleep 2
 			kill -KILL "-$pid" 2>/dev/null || true
-			disown "$pid" 2>/dev/null || true
-			return 124
-		fi
+				disown "$pid" 2>/dev/null || true
+				sudo "$PREFIX/sbin/mcstop+release.sh" -k 2>/dev/null || true
+				return 124
+			fi
 		sleep 1
 		elapsed=$((elapsed + 1))
 	done
@@ -423,6 +439,17 @@ run_smoke_cmd() {
 	fi
 	dump_smoke_failure_state "$label"
 	return "$rc"
+}
+
+dump_boot_failure_state() {
+	echo "Linux process state after boot failure:" >&2
+	ps -eo pid,ppid,stat,wchan:32,comm,args | grep -E 'mcexec|mcstat|strace|ihkmond' | grep -v grep >&2 || true
+	echo "Loaded McKernel/IHK modules:" >&2
+	lsmod | grep -E '^(ihk|ihk_smp_x86_64|mcctrl)\b' >&2 || true
+	echo "McKernel device nodes:" >&2
+	ls -l /dev/mcd* /dev/mcos* 2>/dev/null >&2 || true
+	echo "Recent Linux dmesg:" >&2
+	sudo dmesg --ctime | tail -n 80 >&2 || true
 }
 
 dump_smoke_failure_state() {
