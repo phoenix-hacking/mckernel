@@ -361,16 +361,21 @@ run_smoke_cmd() {
 	local label="$1"
 	shift
 	local log="/tmp/mckernel-${label}.out"
+	local rc=0
 
 	say "Running ${label} with ${SMOKE_TIMEOUT}s timeout"
-	if timeout --foreground "${SMOKE_TIMEOUT}s" "$@" >"$log" 2>&1; then
+	timeout --foreground "${SMOKE_TIMEOUT}s" "$@" >"$log" 2>&1 || rc=$?
+
+	if [ "$rc" -eq 0 ]; then
 		cat "$log"
 		echo "${label}: OK"
 		return 0
 	fi
 
-	local rc=$?
 	echo "error: ${label} failed or timed out with status ${rc}." >&2
+	if [ "$rc" -eq 124 ]; then
+		echo "error: ${label} exceeded the ${SMOKE_TIMEOUT}s timeout." >&2
+	fi
 	echo "Captured output from ${label}:" >&2
 	cat "$log" >&2 || true
 	echo "Recent McKernel kmsg:" >&2

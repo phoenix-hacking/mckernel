@@ -1262,6 +1262,43 @@ Expected effect:
 - Rocky validation now fails fast and produces logs if `mcexec` or `mcstat`
   hangs.
 
+## Rocky V10 Smoke Timeout Status Fix
+
+Observed validation output:
+- The Rocky VM reached V10 and started `mcexec-true` with a 20-second timeout.
+- The script printed `error: mcexec-true failed or timed out with status 0`.
+- It then continued to `mcexec-hostname`, which means the wrapper did not stop
+  at the first failed smoke command.
+
+Root cause:
+- `run_smoke_cmd()` read `$?` after an `if timeout ...; then ... fi` block.
+- In Bash, an `if` statement with no executed branch can itself leave status 0,
+  so the original timeout failure status was lost.
+
+Adjusted:
+- `scripts/rocky-rust-validation.sh`
+- `overview.txt`
+- `kernel.log`
+
+Change:
+- Capture the `timeout` command status immediately with `|| rc=$?`.
+- Treat `rc == 0` as success.
+- Return the preserved nonzero status for failures.
+- Print an explicit timeout message when the status is 124.
+
+Justification:
+- V10 must stop on the first failing workload command so the next debugging
+  step is clear.
+- The script bug made a real `mcexec-true` failure look like status 0 and
+  allowed later commands to obscure the first failing boundary.
+
+Expected effect:
+- No kernel C behavior change.
+- No kernel Rust behavior change.
+- No ABI behavior change.
+- V10 validation now accurately reports whether `mcexec-true` exits, fails, or
+  times out.
+
 ## Rocky VM IHK-SMP Trampoline Allocation Fix
 
 Adjusted:
