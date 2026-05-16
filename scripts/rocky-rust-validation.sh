@@ -24,6 +24,7 @@ Options:
   --boot-cpus LIST      CPU list passed to mcreboot.sh -c. Default: 1
   --boot-mem SPEC       Memory passed to mcreboot.sh -m. Default: 512M@0
   --trampoline-phys PA  Expert-only: pass pre-reserved PA to mcreboot.sh.
+  --smoke-timeout SEC   Timeout for each V10 smoke command. Default: 30
   -h, --help            Show this help.
 
 Examples:
@@ -40,6 +41,7 @@ JOBS=2
 BOOT_CPUS=1
 BOOT_MEM=512M@0
 TRAMPOLINE_PHYS="${IHK_TRAMPOLINE_PHYS:-}"
+SMOKE_TIMEOUT=30
 INSTALL_DEPS=1
 INSTALL_RUST=1
 DO_INSTALL=1
@@ -96,6 +98,10 @@ while [ "$#" -gt 0 ]; do
 			;;
 		--trampoline-phys)
 			TRAMPOLINE_PHYS="${2:?missing value for --trampoline-phys}"
+			shift 2
+			;;
+		--smoke-timeout)
+			SMOKE_TIMEOUT="${2:?missing value for --smoke-timeout}"
 			shift 2
 			;;
 		-h|--help)
@@ -306,6 +312,7 @@ boot_smoke() {
 		echo "error: boot smoke needs at least 2 vCPUs; CPU 0 stays with Linux and CPU $BOOT_CPUS goes to McKernel." >&2
 		exit 1
 	fi
+	need_cmd timeout
 
 	confirm_boot_smoke
 	ensure_selinux_permissive_for_boot
@@ -340,15 +347,35 @@ boot_smoke() {
 	fi
 
 	say "Running mcexec smoke commands"
-	"$PREFIX/bin/mcexec" /bin/true
-	echo "mcexec /bin/true: OK"
-	"$PREFIX/bin/mcexec" hostname
-	"$PREFIX/bin/mcstat"
+	run_smoke_cmd "mcexec-true" "$PREFIX/bin/mcexec" /bin/true
+	run_smoke_cmd "mcexec-hostname" "$PREFIX/bin/mcexec" hostname
+	run_smoke_cmd "mcstat" "$PREFIX/bin/mcstat"
 
 	say "Shutting down McKernel"
 	sudo "$PREFIX/sbin/mcstop+release.sh"
 	shutdown_needed=0
 	trap - EXIT
+}
+
+run_smoke_cmd() {
+	local label="$1"
+	shift
+	local log="/tmp/mckernel-${label}.out"
+
+	say "Running ${label} with ${SMOKE_TIMEOUT}s timeout"
+	if timeout --foreground "${SMOKE_TIMEOUT}s" "$@" >"$log" 2>&1; then
+		cat "$log"
+		echo "${label}: OK"
+		return 0
+	fi
+
+	local rc=$?
+	echo "error: ${label} failed or timed out with status ${rc}." >&2
+	echo "Captured output from ${label}:" >&2
+	cat "$log" >&2 || true
+	echo "Recent McKernel kmsg:" >&2
+	sudo "$PREFIX/sbin/ihkosctl" 0 kmsg | tail -n 80 >&2 || true
+	return "$rc"
 }
 
 need_cmd sudo

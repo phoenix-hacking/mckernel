@@ -75,10 +75,15 @@ Latest local source verification after the bitmap region-helper Rust port:
   `/tmp/mckernel-wsl-c-zeroarea`.
 
 Next verification step:
-- V10 minimal user workloads.
+- V10 minimal user workloads with bounded smoke-command timeouts.
 
 Known failing or blocked step:
 - Full workload/runtime validation is not complete yet.
+- V10 reached `Running mcexec smoke commands` after a successful McKernel boot
+  and appeared to hang before completing the workload smoke commands.
+- The Rocky validation script now wraps each V10 smoke command in a timeout so
+  future runs stop at the first failing command and print command output plus
+  recent McKernel kmsg.
 - There is no current Rocky VM build or module-load blocker after V8.
 - The V8 trampoline warning remained after reducing the x86_64 private
   trampoline allocation to one low-DMA page. The persistent GRUB `memmap`

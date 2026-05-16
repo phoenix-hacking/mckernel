@@ -1226,6 +1226,42 @@ Expected effect:
 - No direct page allocator, syscall, process, ioctl, IKC, or runtime boot
   behavior is intentionally changed.
 
+## Rocky V10 Smoke Timeout Hardening
+
+Observed runtime result:
+- Rocky VM reached V10 after a successful McKernel boot.
+- The boot log printed `IHK/McKernel booted.`
+- Validation then appeared to hang at `Running mcexec smoke commands`, before
+  the script printed a result for `/bin/true`, `hostname`, or `mcstat`.
+
+Adjusted:
+- `scripts/rocky-rust-validation.sh`
+- `overview.txt`
+- `kernel.log`
+
+Change:
+- Added `--smoke-timeout SEC` with a default of 30 seconds.
+- Added a `run_smoke_cmd()` helper for V10 commands.
+- Wrapped each V10 smoke command with `timeout --foreground`.
+- Captured each command's output under `/tmp/mckernel-<label>.out`.
+- On failure or timeout, print captured command output and recent McKernel kmsg.
+- Left the existing cleanup trap in place so McKernel is stopped and released
+  after a V10 failure.
+
+Justification:
+- V10 is the first workload boundary after boot-only success, so hangs must be
+  isolated to a specific command instead of leaving the validation session
+  indefinitely blocked.
+- Bounded smoke commands keep the controlled verification ladder debuggable:
+  boot success remains separate from user workload execution.
+
+Expected effect:
+- No kernel C behavior change.
+- No kernel Rust behavior change.
+- No ABI behavior change.
+- Rocky validation now fails fast and produces logs if `mcexec` or `mcstat`
+  hangs.
+
 ## Rocky VM IHK-SMP Trampoline Allocation Fix
 
 Adjusted:
