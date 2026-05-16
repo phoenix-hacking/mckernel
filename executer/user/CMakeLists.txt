@@ -7,6 +7,21 @@ include_directories(
 	"${CMAKE_CURRENT_SOURCE_DIR}/arch/${ARCH}"
 	"${PROJECT_BINARY_DIR}/ihk/linux/include"
 )
+include(CheckCSourceCompiles)
+
+set(_executer_saved_required_libraries "${CMAKE_REQUIRED_LIBRARIES}")
+set(CMAKE_REQUIRED_LIBRARIES ${LIBBFD} ${CMAKE_REQUIRED_LIBRARIES})
+check_c_source_compiles("
+#include <bfd.h>
+int main(void)
+{
+	bfd *abfd = 0;
+	asection *scn = 0;
+
+	return bfd_set_section_size(abfd, scn, 0) ? 0 : 1;
+}
+" EXECUTER_BFD_SET_SECTION_NEEDS_BFD)
+set(CMAKE_REQUIRED_LIBRARIES "${_executer_saved_required_libraries}")
 
 add_subdirectory(lib)
 add_library(libmcexec STATIC arch/${ARCH}/archdep.S)
@@ -91,6 +106,9 @@ if (ENABLE_UTI)
 endif()
 
 add_library(ldump2mcdump SHARED ldump2mcdump.c)
+if(EXECUTER_BFD_SET_SECTION_NEEDS_BFD)
+	target_compile_definitions(ldump2mcdump PRIVATE -DEXECUTER_BFD_SET_SECTION_NEEDS_BFD)
+endif()
 
 configure_file(vmcore2mckdump.in vmcore2mckdump @ONLY)
 

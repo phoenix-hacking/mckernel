@@ -1312,6 +1312,37 @@ Expected effect:
 - No Rust behavior change.
 - No public ABI behavior change.
 
+## Rocky VM ldump2mcdump libbfd Compatibility Fix
+
+Observed:
+- After the Rocky validation script started building all executer install
+  targets, `sched_yield` built successfully.
+- The build then failed at `ldump2mcdump` with libbfd signature errors:
+  - `bfd_set_section_size` expected `bfd *`, `asection *`, and size.
+  - `bfd_set_section_flags` expected `bfd *`, `asection *`, and flags.
+- `ldump2mcdump.c` still used wrappers for the older two-argument libbfd API.
+
+Change:
+- Added a configure-time libbfd signature probe to `executer/user/CMakeLists.txt`.
+- Defined `EXECUTER_BFD_SET_SECTION_NEEDS_BFD` for `ldump2mcdump` when the
+  target libbfd requires the newer three-argument API.
+- Updated `ldump2mcdump.c` wrappers so they dispatch to either:
+  - `bfd_set_section_size(abfd, scn, size)` and
+    `bfd_set_section_flags(abfd, scn, flags)`, or
+  - the older two-argument form, depending on the configure result.
+
+Justification:
+- This mirrors the compatibility approach already used for `ihklib`.
+- Rocky 8.10's binutils/libbfd headers expose the newer three-argument API.
+- Keeping configure-time detection avoids hard-coding distro/version assumptions
+  into the dump conversion helper.
+
+Expected effect:
+- `ldump2mcdump` should compile on Rocky 8.10.
+- Older libbfd environments should keep using the two-argument wrappers.
+- No Rust behavior change.
+- No public ABI behavior change.
+
 ## Rocky VM V7 Host Compile Checkpoint Passed
 
 Observed:

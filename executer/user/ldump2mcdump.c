@@ -4,10 +4,17 @@
 #include <pwd.h>
 #include <arch-ldump2mcdump.h>
 
+#ifdef EXECUTER_BFD_SET_SECTION_NEEDS_BFD
+#define mc_bfd_set_section_size(abfd, scn, size) \
+	bfd_set_section_size((abfd), (scn), (size))
+#define mc_bfd_set_section_flags(abfd, scn, flags) \
+	bfd_set_section_flags((abfd), (scn), (flags))
+#else
 #define mc_bfd_set_section_size(abfd, scn, size) \
 	bfd_set_section_size((scn), (size))
 #define mc_bfd_set_section_flags(abfd, scn, flags) \
 	bfd_set_section_flags((scn), (flags))
+#endif
 
 void ldump2mcdump_init(void);    /* constructor function */
 void ldump2mcdump_fini(void);    /* destructor function (optional) */
@@ -485,4 +492,3 @@ char *help_ldump2mcdump[] = {
         "    crash>ldump2mcdump 0 -o /tmp/mcdump",
         NULL
 };
-
