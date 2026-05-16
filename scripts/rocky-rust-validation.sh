@@ -249,11 +249,34 @@ install_artifacts() {
 	sudo cmake --install "$BUILD_DIR"
 }
 
+ensure_selinux_permissive_for_boot() {
+	if ! command -v getenforce >/dev/null 2>&1; then
+		return
+	fi
+
+	local mode
+	mode="$(getenforce | tr '[:upper:]' '[:lower:]')"
+	if [ "$mode" != "enforcing" ]; then
+		return
+	fi
+
+	if ! command -v setenforce >/dev/null 2>&1; then
+		echo "error: SELinux is enforcing and setenforce is unavailable." >&2
+		echo "Temporarily set SELinux permissive before boot validation." >&2
+		exit 1
+	fi
+
+	say "Temporarily setting SELinux permissive for McKernel boot validation"
+	sudo setenforce 0
+}
+
 confirm_boot_smoke() {
 	cat <<EOF
 
 About to load kernel modules, reserve CPU/memory, and boot McKernel inside this VM.
 Take a VirtualBox snapshot first. If the VM hangs, power it off and restore the snapshot.
+If SELinux is enforcing, this script will temporarily run 'setenforce 0' for
+this boot only. It does not permanently edit /etc/selinux/config.
 
 EOF
 	if [ "$TRAMPOLINE_PHYS" != "" ]; then
@@ -285,6 +308,7 @@ boot_smoke() {
 	fi
 
 	confirm_boot_smoke
+	ensure_selinux_permissive_for_boot
 
 	say "Booting McKernel"
 	if [ "$TRAMPOLINE_PHYS" != "" ]; then

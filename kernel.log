@@ -1343,6 +1343,37 @@ Expected effect:
 - No Rust behavior change.
 - No public ABI behavior change.
 
+## Rocky VM SELinux Runtime Validation Fix
+
+Observed:
+- Rocky validation finally built and installed the Rust-enabled McKernel image,
+  host modules, and required user tools into `/opt/mckernel-rust`.
+- V9 then stopped before boot with:
+  `error: SELinux must not be enabled when running McKernel (update
+  /etc/selinux/config or see setenforce)`.
+
+Change:
+- Added `ensure_selinux_permissive_for_boot()` to
+  `scripts/rocky-rust-validation.sh`.
+- If `getenforce` reports `Enforcing`, the script runs `sudo setenforce 0`
+  before invoking `mcreboot.sh`.
+- The boot warning text now states that SELinux may be made permissive for the
+  current boot only and that the script does not edit `/etc/selinux/config`.
+
+Justification:
+- McKernel's boot script already refuses to run under enforcing SELinux.
+- For validation, a temporary `setenforce 0` is safer and more reversible than
+  changing persistent SELinux configuration.
+- This matches the controlled-verification policy after the unsafe persistent
+  GRUB `memmap` experiment: avoid persistent host changes unless they are
+  explicitly required and recoverable.
+
+Expected effect:
+- The next V9 boot-only run should get past the SELinux preflight blocker.
+- The VM's persistent SELinux configuration is unchanged.
+- No Rust behavior change.
+- No public ABI behavior change.
+
 ## Rocky VM V7 Host Compile Checkpoint Passed
 
 Observed:
