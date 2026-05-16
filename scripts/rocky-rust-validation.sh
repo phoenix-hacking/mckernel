@@ -370,15 +370,25 @@ boot_smoke() {
 		return
 	fi
 
+	local smoke_rc=0
+
 	say "Running mcexec smoke commands"
 	run_smoke_cmd "mcexec-true" "$PREFIX/bin/mcexec" --debug-mcexec /bin/true
-	run_hostname_smoke
+	run_hostname_smoke || smoke_rc=$?
+	if [ "$smoke_rc" -eq 124 ]; then
+		return "$smoke_rc"
+	fi
 	run_smoke_cmd "mcstat" "$PREFIX/bin/mcstat"
 
 	say "Shutting down McKernel"
 	sudo "$PREFIX/sbin/mcstop+release.sh"
 	shutdown_needed=0
 	trap - EXIT
+
+	if [ "$smoke_rc" -ne 0 ]; then
+		echo "error: V10 smoke completed with diagnostics, but the VDSO-enabled hostname check failed with status ${smoke_rc}." >&2
+		return "$smoke_rc"
+	fi
 }
 
 run_hostname_smoke() {
@@ -386,8 +396,9 @@ run_hostname_smoke() {
 
 	if run_smoke_cmd "mcexec-hostname" "$PREFIX/bin/mcexec" --debug-mcexec hostname; then
 		return 0
+	else
+		rc=$?
 	fi
-	rc=$?
 
 	if [ "$rc" -eq 124 ]; then
 		return "$rc"
