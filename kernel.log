@@ -1186,6 +1186,42 @@ Expected effect:
 - No Rust primitive behavior change.
 - No public ABI change.
 
+## Rocky V10 Watchdog Simplification
+
+Observed failure:
+- The Rocky VM again reached V10 and printed:
+  `Running mcexec-true with 8s watchdog`.
+- No timeout diagnostics were printed afterward, so the harness did not provide
+  the intended failure snapshot.
+
+Adjusted:
+- `scripts/rocky-rust-validation.sh`
+- `overview.txt`
+- `plan.txt`
+
+Change:
+- Replaced the `setsid` process-group watcher with a direct background-PID
+  watcher.
+- Print the watched PID and log path immediately after launching each smoke
+  command.
+- On timeout, terminate the watched PID and direct children instead of relying
+  on process-group signaling.
+- Bound potentially blocking diagnostic reads with short `timeout` wrappers:
+  `/proc/<pid>/stack` uses 2 seconds, and `ihkosctl 0 kmsg` reads use 5 seconds.
+
+Justification:
+- The previous process-group watchdog was meant to handle stuck kernel ioctls,
+  but the newest run shows the harness itself did not emit the timeout snapshot.
+- A direct PID watcher is simpler and gives an immediate marker showing whether
+  the watchdog loop has started.
+- Diagnostics must not become the new source of an apparent hang.
+
+Expected effect:
+- Validation harness behavior only.
+- No McKernel runtime behavior change.
+- No Rust primitive behavior change.
+- No public ABI change.
+
 ## Rocky V9 Boot Baseline and Bitmap Zero-Area Rust Port
 
 Recorded Rocky validation result:

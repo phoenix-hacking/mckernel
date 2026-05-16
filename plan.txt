@@ -359,6 +359,10 @@ Stop condition:
 - After a V10 watchdog failure, use kill-in-use cleanup before retrying so the
   next run does not fail at V9 cleanup because a stale `mcexec` still has
   `/dev/mcos0` open.
+- The harness should print the watched smoke PID immediately. If that line does
+  not appear, debug the harness launch path; if it appears and no timeout
+  follows, collect state from a second terminal and treat the watchdog itself as
+  blocked.
 
 V11: Focused regression tests
 -----------------------------

@@ -397,10 +397,11 @@ run_smoke_cmd() {
 	fi
 
 	say "Running ${label} with ${SMOKE_TIMEOUT}s watchdog"
-	setsid "${cmd[@]}" >"$log" 2>&1 &
+	"${cmd[@]}" >"$log" 2>&1 &
 	pid=$!
+	echo "watchdog: ${label} started as pid ${pid}; log=${log}" >&2
 
-	while kill -0 "-$pid" 2>/dev/null; do
+	while kill -0 "$pid" 2>/dev/null; do
 		if [ "$elapsed" -ge "$SMOKE_TIMEOUT" ]; then
 			echo "error: ${label} exceeded the ${SMOKE_TIMEOUT}s watchdog." >&2
 			echo "Captured output from ${label}:" >&2
@@ -410,14 +411,16 @@ run_smoke_cmd() {
 				tail -n 80 "$trace_prefix"* >&2 || true
 			fi
 			dump_smoke_failure_state "$label"
-			echo "Attempting to terminate ${label} process group ${pid}." >&2
-			kill -TERM "-$pid" 2>/dev/null || true
+			echo "Attempting to terminate ${label} pid ${pid} and direct children." >&2
+			pkill -TERM -P "$pid" 2>/dev/null || true
+			kill -TERM "$pid" 2>/dev/null || true
 			sleep 2
-			kill -KILL "-$pid" 2>/dev/null || true
-				disown "$pid" 2>/dev/null || true
-				sudo "$PREFIX/sbin/mcstop+release.sh" -k 2>/dev/null || true
-				return 124
-			fi
+			pkill -KILL -P "$pid" 2>/dev/null || true
+			kill -KILL "$pid" 2>/dev/null || true
+			disown "$pid" 2>/dev/null || true
+			sudo "$PREFIX/sbin/mcstop+release.sh" -k 2>/dev/null || true
+			return 124
+		fi
 		sleep 1
 		elapsed=$((elapsed + 1))
 	done
@@ -466,15 +469,27 @@ dump_smoke_failure_state() {
 		echo "--- /proc/${pid}/wchan ---" >&2
 		cat "/proc/${pid}/wchan" >&2 || true
 		echo "--- /proc/${pid}/stack ---" >&2
-		sudo cat "/proc/${pid}/stack" >&2 || true
+		if command -v timeout >/dev/null 2>&1; then
+			timeout 2s sudo cat "/proc/${pid}/stack" >&2 || true
+		else
+			sudo cat "/proc/${pid}/stack" >&2 || true
+		fi
 	done
 
 	echo "Recent Linux dmesg:" >&2
 	sudo dmesg --ctime | tail -n 120 >&2 || true
 	echo "Recent McKernel kmsg:" >&2
-	sudo "$PREFIX/sbin/ihkosctl" 0 kmsg | tail -n 80 >&2 || true
+	if command -v timeout >/dev/null 2>&1; then
+		timeout 5s sudo "$PREFIX/sbin/ihkosctl" 0 kmsg | tail -n 80 >&2 || true
+	else
+		sudo "$PREFIX/sbin/ihkosctl" 0 kmsg | tail -n 80 >&2 || true
+	fi
 	echo "McKernel V10 handoff markers:" >&2
-	sudo "$PREFIX/sbin/ihkosctl" 0 kmsg | grep 'mcexec_v10' | tail -n 80 >&2 || true
+	if command -v timeout >/dev/null 2>&1; then
+		timeout 5s sudo "$PREFIX/sbin/ihkosctl" 0 kmsg | grep 'mcexec_v10' | tail -n 80 >&2 || true
+	else
+		sudo "$PREFIX/sbin/ihkosctl" 0 kmsg | grep 'mcexec_v10' | tail -n 80 >&2 || true
+	fi
 }
 
 need_cmd sudo

@@ -106,6 +106,9 @@ Known failing or blocked step:
   previous `/dev/mcos0` OS instance. The validation script now runs
   `mcstop+release.sh -k` before boot-smoke and during watchdog cleanup so stale
   `mcexec` holders are killed before a fresh boot is attempted.
+- The V10 watchdog now tracks the direct smoke-command PID instead of a
+  `setsid` process group and prints the watched PID immediately. Failure
+  diagnostics that can themselves block are bounded with short timeouts.
 - There is no current Rocky VM build or module-load blocker after V8.
 - The V8 trampoline warning remained after reducing the x86_64 private
   trampoline allocation to one low-DMA page. The persistent GRUB `memmap`
