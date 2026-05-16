@@ -2398,7 +2398,6 @@ Local verification:
 - C-fallback `/tmp/mckernel-wsl-c-zeroarea` built target `mckernel.img`.
 - The builds still emit the pre-existing packed-member and executable-stack/RWX
   linker warnings; no new compile or link failure was introduced.
-
 ## Rocky V10 Hostname SIGSEGV Boundary
 
 Observed failure:
@@ -2507,3 +2506,56 @@ Local verification:
 - C-fallback `/tmp/mckernel-wsl-c-zeroarea` built target `mckernel.img`.
 - The builds still emit the pre-existing packed-member and executable-stack/RWX
   linker warnings; no new compile or link failure was introduced.
+
+## Rocky V10 Hostname Path-Sensitivity Diagnostics
+
+Observed failure:
+- Rocky V10 now keeps `mcexec /bin/true` and `mcstat` healthy.
+- Relative `mcexec hostname` still fails with status 139 when VDSO is enabled.
+- Relative `mcexec --disable-vdso hostname` passes and prints the hostname.
+- Absolute `mcexec --disable-vdso /usr/bin/hostname` still fails with status
+  139 after an instruction fetch at `RIP=0x1000`.
+
+Interpretation:
+- The hostname boundary is no longer explained by VDSO alone.
+- The passing relative no-VDSO case and failing absolute no-VDSO case make the
+  argv0/path shape part of the reproducer.
+- The fatal qword stack dump is useful but not yet enough to distinguish code
+  pointers, argv/env strings, VDSO/loader data, and ordinary mapped bytes.
+
+Adjusted:
+- `kernel/mem.c`
+- `kernel/process.c`
+- `scripts/rocky-rust-validation.sh`
+- `overview.txt`
+- `plan.txt`
+- `kernel.log`
+
+Change:
+- Added `mcexec_v10: initial_stack` markers that record the initial user stack
+  slots for argc, argv0, env0, the env terminator, and the first auxv pair.
+- Added `mcexec_v10: fatal_regs2` markers for the remaining high-signal
+  general-purpose registers at fatal user page faults.
+- Added bounded `mcexec_v10: fatal_user_bytes` dumps for user-range register
+  and fatal-stack qword targets, including raw bytes and printable ascii.
+- Updated the Rocky smoke diagnosis text so the script reports the absolute
+  no-VDSO failure as argv0/path-sensitive rather than only VDSO-sensitive.
+
+Expected next Rocky result:
+- Re-run V10 with `--trace-smoke`.
+- Compare `mcexec_v10: initial_stack` between relative
+  `mcexec --disable-vdso hostname` and absolute
+  `mcexec --disable-vdso /usr/bin/hostname`.
+- Use the `fatal_user_bytes` lines to classify each fatal stack qword as code,
+  string, auxv/VDSO data, loader state, or an unmapped/stale pointer.
+
+Local verification:
+- `git diff --check` passed.
+- `bash -n scripts/rocky-rust-validation.sh` passed.
+- `kernel/rust/tests/run_equivalence.sh` passed.
+- Rust-enabled `/tmp/mckernel-wsl-rust-zeroarea` rebuilt target
+  `mckernel.img`.
+- C-fallback `/tmp/mckernel-wsl-c-zeroarea` rebuilt target `mckernel.img`.
+- `scripts/rocky-rust-validation.sh --build-only --skip-deps --skip-rust
+  --jobs 2` is still blocked on WSL by the missing running-kernel build tree:
+  `/lib/modules/6.6.87.2-microsoft-standard-WSL2/build`.

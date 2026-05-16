@@ -2610,6 +2610,11 @@ int init_process_stack(struct thread *thread, struct program_load_desc *pn,
 	struct vm_range *range;
 	int stack_populated_size = 0;
 	int stack_align_padding = 0;
+	unsigned long user_sp;
+	int argv_null_i;
+	int env0_i;
+	int env_null_i;
+	int aux0_i;
 
 	/* Create stack range */
 	end = STACK_TOP(&thread->vm->region) & USER_STACK_PAGE_MASK;
@@ -2781,8 +2786,25 @@ int init_process_stack(struct thread *thread, struct program_load_desc *pn,
 		kprintf("%s: WARNING: stack alignment mismatch\n", __FUNCTION__);
 	}
 
+	user_sp = end + sizeof(unsigned long) * s_ind;
+	argv_null_i = s_ind + argc + 1;
+	env0_i = argv_null_i + 1;
+	env_null_i = env0_i + envc;
+	aux0_i = env_null_i + 1;
+	kprintf("mcexec_v10: initial_stack pid=%d tid=%d sp=0x%lx argc_slot=%lu argv0_slot=0x%lx argv_null=0x%lx env0_slot=0x%lx env_null=0x%lx aux0_tag=0x%lx aux0_val=0x%lx\n",
+		proc ? proc->pid : -1,
+		thread ? thread->tid : -1,
+		user_sp,
+		p[s_ind],
+		argc > 0 ? p[s_ind + 1] : 0UL,
+		p[argv_null_i],
+		envc > 0 ? p[env0_i] : 0UL,
+		p[env_null_i],
+		p[aux0_i],
+		p[aux0_i + 1]);
+
 	ihk_mc_modify_user_context(thread->uctx, IHK_UCR_STACK_POINTER,
-	                           end + sizeof(unsigned long) * s_ind);
+	                           user_sp);
 	thread->vm->region.stack_end = end;
 	thread->vm->region.stack_start = (end - size) & USER_STACK_PAGE_MASK;
 

@@ -1426,6 +1426,41 @@ static void unhandled_page_fault(struct thread *thread, void *fault_addr,
 }
 
 
+static void mcexec_v10_dump_user_bytes(const char *name, unsigned long addr)
+{
+	unsigned char bytes[16];
+	char ascii[17];
+	int rc;
+	int i;
+
+	if (addr < PAGE_SIZE || addr >= MAP_KERNEL_START) {
+		return;
+	}
+
+	rc = copy_from_user(bytes, (void *)addr, sizeof(bytes));
+	if (rc) {
+		kprintf("mcexec_v10: fatal_user_bytes %s=0x%lx copy_failed=%d\n",
+			name, addr, rc);
+		return;
+	}
+
+	for (i = 0; i < (int)sizeof(bytes); i++) {
+		ascii[i] = (bytes[i] >= 0x20 && bytes[i] <= 0x7e) ?
+			bytes[i] : '.';
+	}
+	ascii[sizeof(bytes)] = '\0';
+
+	kprintf("mcexec_v10: fatal_user_bytes %s=0x%lx "
+		"b=%02x %02x %02x %02x %02x %02x %02x %02x "
+		"%02x %02x %02x %02x %02x %02x %02x %02x ascii=\"%s\"\n",
+		name, addr,
+		bytes[0], bytes[1], bytes[2], bytes[3],
+		bytes[4], bytes[5], bytes[6], bytes[7],
+		bytes[8], bytes[9], bytes[10], bytes[11],
+		bytes[12], bytes[13], bytes[14], bytes[15],
+		ascii);
+}
+
 static void page_fault_handler(void *fault_addr, uint64_t reason, void *regs)
 {
 	struct thread *thread = cpu_local_var(current);
@@ -1547,6 +1582,11 @@ out_linux:
 			ihk_mc_user_context_t *uctx = regs;
 			unsigned long stack_words[8];
 			int stack_rc = -EINVAL;
+			static const char *stack_labels[8] = {
+				"q0", "q1", "q2", "q3",
+				"q4", "q5", "q6", "q7",
+			};
+			int i;
 
 			kprintf("mcexec_v10: fatal_page_fault cpu=%d pid=%d tid=%d addr=0x%lx reason=0x%lx fault_error=%d rip=0x%lx sp=0x%lx rax=0x%lx rdi=0x%lx rsi=0x%lx rdx=0x%lx r10=0x%lx\n",
 				ihk_mc_get_processor_id(),
@@ -1560,6 +1600,25 @@ out_linux:
 				uctx ? uctx->gpr.rsi : 0UL,
 				uctx ? uctx->gpr.rdx : 0UL,
 				uctx ? uctx->gpr.r10 : 0UL);
+			if (uctx) {
+				kprintf("mcexec_v10: fatal_regs2 cpu=%d pid=%d tid=%d rbx=0x%lx rcx=0x%lx r8=0x%lx r9=0x%lx r11=0x%lx r12=0x%lx r13=0x%lx r14=0x%lx r15=0x%lx\n",
+					ihk_mc_get_processor_id(),
+					pid,
+					thread ? thread->tid : -1,
+					uctx->gpr.rbx,
+					uctx->gpr.rcx,
+					uctx->gpr.r8,
+					uctx->gpr.r9,
+					uctx->gpr.r11,
+					uctx->gpr.r12,
+					uctx->gpr.r13,
+					uctx->gpr.r14,
+					uctx->gpr.r15);
+				mcexec_v10_dump_user_bytes("rsi", uctx->gpr.rsi);
+				mcexec_v10_dump_user_bytes("rdx", uctx->gpr.rdx);
+				mcexec_v10_dump_user_bytes("r10", uctx->gpr.r10);
+				mcexec_v10_dump_user_bytes("r11", uctx->gpr.r11);
+			}
 			if (uctx && uctx->gpr.rsp >= PAGE_SIZE &&
 			    uctx->gpr.rsp < MAP_KERNEL_START) {
 				stack_rc = copy_from_user(stack_words,
@@ -1572,6 +1631,11 @@ out_linux:
 						stack_words[2], stack_words[3],
 						stack_words[4], stack_words[5],
 						stack_words[6], stack_words[7]);
+					for (i = 0; i < 8; i++) {
+						mcexec_v10_dump_user_bytes(
+							stack_labels[i],
+							stack_words[i]);
+					}
 				}
 				else {
 					kprintf("mcexec_v10: fatal_stack sp=0x%lx copy_failed=%d\n",

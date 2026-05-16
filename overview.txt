@@ -66,13 +66,16 @@ Last completed controlled verification step:
   `mcexec`, `mcstat`, `ihkconfig`, and `ihkosctl`.
 - Earlier V0 through V6 checks are satisfied for this Rocky validation path.
 
-Latest local source verification after the bitmap region-helper Rust port:
+Latest local source verification after the V10 hostname diagnostic expansion:
 - V2 passed: `mckernel_rust_obj` built in `/tmp/mckernel-wsl-rust-zeroarea`.
 - V3 passed: `kernel/rust/tests/run_equivalence.sh`.
 - V4 passed: Rust-enabled `mckernel.img` built in
   `/tmp/mckernel-wsl-rust-zeroarea`.
 - V5 passed: C-fallback `mckernel.img` built in
   `/tmp/mckernel-wsl-c-zeroarea`.
+- The Rocky wrapper build-only path remains blocked on WSL by the missing
+  running-kernel build tree:
+  `/lib/modules/6.6.87.2-microsoft-standard-WSL2/build`.
 
 Next verification step:
 - V10 minimal user workloads with bounded smoke-command timeouts.
@@ -81,15 +84,23 @@ Known failing or blocked step:
 - Full workload/runtime validation is not complete yet.
 - V10 now reaches final user mode and `mcexec /bin/true` passes after the
   floating-point default-state restore fix.
-- The current Rocky failure is the next smoke command,
-  `mcexec /usr/bin/hostname`. The target process reaches dynamic loader and
-  libc setup, then dies with SIGSEGV after an instruction fetch at `RIP=0x1000`.
-  Host-side `mcexec` exits with status 139 because it mirrors the target signal.
+- The current Rocky failure is the next smoke command, hostname execution. The
+  target process reaches dynamic loader and libc setup, then dies with SIGSEGV
+  after an instruction fetch at `RIP=0x1000`. Host-side `mcexec` exits with
+  status 139 because it mirrors the target signal.
+- The latest V10 matrix shows the failure is path-sensitive as well as
+  VDSO-sensitive: relative `mcexec --disable-vdso hostname` passes, but
+  absolute `mcexec --disable-vdso /usr/bin/hostname` still reaches `RIP=0x1000`.
+  That points the next diagnostic pass at initial stack, argv/env layout,
+  auxv/VDSO selection, and dynamic-loader return targets rather than treating
+  VDSO as the only variable.
 - The active diagnostic pass resets bounded `mcexec_v10:` counters per process
   and records syscall returns, offload returns, VDSO/auxv setup, signal
-  delivery/default termination, and fatal page-fault registers. This should show
-  whether `0x1000` came from a bad signal handler, VDSO/auxv value, or syscall
-  return path.
+  delivery/default termination, fatal page-fault registers, initial stack
+  markers, and byte/ascii dumps for user-range pointers found in the fatal
+  register/stack state. This should show whether `0x1000` came from a bad
+  signal handler, VDSO/auxv value, argv/env stack setup, dynamic loader state,
+  or syscall return path.
 - The Rocky validation script now wraps each V10 smoke command in a timeout so
   future runs stop at the first failing command and print command output plus
   recent McKernel kmsg.
