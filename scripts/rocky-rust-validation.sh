@@ -372,13 +372,35 @@ boot_smoke() {
 
 	say "Running mcexec smoke commands"
 	run_smoke_cmd "mcexec-true" "$PREFIX/bin/mcexec" --debug-mcexec /bin/true
-	run_smoke_cmd "mcexec-hostname" "$PREFIX/bin/mcexec" --debug-mcexec hostname
+	run_hostname_smoke
 	run_smoke_cmd "mcstat" "$PREFIX/bin/mcstat"
 
 	say "Shutting down McKernel"
 	sudo "$PREFIX/sbin/mcstop+release.sh"
 	shutdown_needed=0
 	trap - EXIT
+}
+
+run_hostname_smoke() {
+	local rc=0
+
+	if run_smoke_cmd "mcexec-hostname" "$PREFIX/bin/mcexec" --debug-mcexec hostname; then
+		return 0
+	fi
+	rc=$?
+
+	if [ "$rc" -eq 124 ]; then
+		return "$rc"
+	fi
+
+	say "Retrying mcexec-hostname with VDSO disabled"
+	if run_smoke_cmd "mcexec-hostname-novdso" "$PREFIX/bin/mcexec" --debug-mcexec --disable-vdso hostname; then
+		echo "diagnosis: mcexec-hostname passes with --disable-vdso; the VDSO-enabled runtime path is failing." >&2
+	else
+		echo "diagnosis: mcexec-hostname also fails with --disable-vdso; the failure is not isolated to VDSO." >&2
+	fi
+
+	return "$rc"
 }
 
 run_smoke_cmd() {
