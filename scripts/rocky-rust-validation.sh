@@ -15,21 +15,22 @@ Options:
   --build-only          Configure/build only; skip install.
   --skip-deps           Do not install OS packages.
   --skip-rust           Do not install or switch Rust nightly.
+  --boot-only           After install, boot McKernel and check kmsg; skip workloads.
   --boot-smoke          After install, boot McKernel and run mcexec smoke tests.
-  --yes                 Allow --boot-smoke without an interactive confirmation.
+  --yes                 Allow boot validation without an interactive confirmation.
   --prefix PATH         Install prefix. Default: /opt/mckernel-rust
   --build-dir PATH      CMake build directory. Default: /tmp/mckernel-rocky-rust
   --jobs N              Parallel build jobs. Default: 2
   --boot-cpus LIST      CPU list passed to mcreboot.sh -c. Default: 1
   --boot-mem SPEC       Memory passed to mcreboot.sh -m. Default: 512M@0
-  --trampoline-phys PA  Pass PA as IHK_TRAMPOLINE_PHYS to mcreboot.sh.
+  --trampoline-phys PA  Expert-only: pass pre-reserved PA to mcreboot.sh.
   -h, --help            Show this help.
 
 Examples:
   scripts/rocky-rust-validation.sh
   scripts/rocky-rust-validation.sh --build-only
+  scripts/rocky-rust-validation.sh --boot-only --yes
   scripts/rocky-rust-validation.sh --boot-smoke --yes
-  scripts/rocky-rust-validation.sh --boot-smoke --yes --trampoline-phys 0x80000
 USAGE
 }
 
@@ -42,6 +43,7 @@ TRAMPOLINE_PHYS="${IHK_TRAMPOLINE_PHYS:-}"
 INSTALL_DEPS=1
 INSTALL_RUST=1
 DO_INSTALL=1
+BOOT_ONLY=0
 BOOT_SMOKE=0
 ASSUME_YES=0
 
@@ -57,6 +59,11 @@ while [ "$#" -gt 0 ]; do
 			;;
 		--skip-rust)
 			INSTALL_RUST=0
+			shift
+			;;
+		--boot-only)
+			BOOT_ONLY=1
+			BOOT_SMOKE=1
 			shift
 			;;
 		--boot-smoke)
@@ -110,7 +117,7 @@ if [ "$(id -u)" -eq 0 ]; then
 fi
 
 if [ "$DO_INSTALL" -eq 0 ] && [ "$BOOT_SMOKE" -eq 1 ]; then
-	echo "error: --boot-smoke requires install; remove --build-only." >&2
+	echo "error: boot validation requires install; remove --build-only." >&2
 	exit 1
 fi
 
@@ -240,15 +247,25 @@ install_artifacts() {
 }
 
 confirm_boot_smoke() {
-	if [ "$ASSUME_YES" -eq 1 ]; then
-		return
-	fi
-
 	cat <<EOF
 
 About to load kernel modules, reserve CPU/memory, and boot McKernel inside this VM.
 Take a VirtualBox snapshot first. If the VM hangs, power it off and restore the snapshot.
 
+EOF
+	if [ "$TRAMPOLINE_PHYS" != "" ]; then
+		cat <<EOF
+WARNING: --trampoline-phys assumes $TRAMPOLINE_PHYS was safely pre-reserved before boot.
+Do not create that reservation with persistent grubby --update-kernel=ALL memmap arguments
+on a validation VM. A bad low-memory reservation can stop the VM from booting.
+
+EOF
+	fi
+	if [ "$ASSUME_YES" -eq 1 ]; then
+		return
+	fi
+
+	cat <<EOF
 Type 'yes' to continue:
 EOF
 	read -r answer
@@ -286,6 +303,14 @@ boot_smoke() {
 	say "Checking McKernel boot log"
 	sudo "$PREFIX/sbin/ihkosctl" 0 kmsg | tee /tmp/mckernel.kmsg
 	grep "IHK/McKernel booted" /tmp/mckernel.kmsg
+
+	if [ "$BOOT_ONLY" -eq 1 ]; then
+		say "Boot-only check requested; skipping mcexec workloads"
+		sudo "$PREFIX/sbin/mcstop+release.sh"
+		shutdown_needed=0
+		trap - EXIT
+		return
+	fi
 
 	say "Running mcexec smoke commands"
 	"$PREFIX/bin/mcexec" /bin/true

@@ -1186,21 +1186,66 @@ Justification:
 - This keeps the fallback to Linux's trampoline available, but makes the private
   trampoline path reproducible for V8 and V9.
 
-Required Rocky VM setup:
-- Reserve a page below 1 MiB, for example:
-  `sudo grubby --update-kernel=ALL --args='memmap=4K$0x80000'`
-- Reboot the Rocky VM.
-- Confirm the kernel command line contains `memmap=4K$0x80000`.
-- Load IHK-SMP manually with `ihk_trampoline=0x80000` for V8, or pass
-  `--trampoline-phys 0x80000` to the Rocky validation script for V9 and later
-  boot-smoke work.
+Superseded unsafe setup:
+- Do not reserve low memory with a persistent command such as
+  `sudo grubby --update-kernel=ALL --args='memmap=4K$0x80000'`.
+- On the Rocky/VirtualBox validation VM this made every saved kernel entry boot
+  with the low-memory reservation and caused the VM to hang during boot.
+- The recovery was to edit the GRUB entry once, remove the `memmap` argument,
+  boot, and then run `sudo grubby --update-kernel=ALL --remove-args=memmap`.
+- Treat this path as deprecated for the migration runbook.
+
+Current safe Rocky VM setup:
+- Keep the default Linux-trampoline fallback for V9 unless it causes a boot
+  failure.
+- Do not mutate persistent GRUB/kernel command-line state for trampoline
+  testing.
+- Use `--trampoline-phys` only if the physical page was reserved by a separate,
+  known-safe one-boot experiment or by platform firmware, and only after taking
+  a VM snapshot.
 
 Expected effect:
 - V8 should still load all three modules.
-- dmesg should report `IHK-SMP: preallocated trampoline phys: 0x80000`.
-- dmesg should no longer report `allocating trampoline_page failed`.
+- Without a safely pre-reserved page, dmesg may still report
+  `allocating trampoline_page failed`; this is now treated as a Rocky/VirtualBox
+  validation note, not a V8 failure.
 - No Rust behavior change.
 - No public ABI behavior change.
+
+## Rocky VM Trampoline Safety Plan
+
+Observed:
+- The persistent `memmap=4K$0x80000` GRUB change caused the Rocky VM to get
+  stuck during boot.
+- The VM was recovered by entering GRUB/UEFI boot flow, removing the `memmap`
+  argument for a one-time boot, then clearing saved entries with:
+  `sudo grubby --update-kernel=ALL --remove-args=memmap`.
+
+Safety policy:
+- Do not use `grubby --update-kernel=ALL --args=memmap...` for trampoline
+  experiments.
+- Do not require a reserved trampoline page to pass V8 or attempt V9 on the
+  Rocky/VirtualBox validation path.
+- Keep the Linux-trampoline fallback as the default for this VM because module
+  load succeeds and the warning is understood.
+- Any future reserved-low-page experiment must be one-boot-only, start from a
+  VirtualBox snapshot, and include recovery instructions before the experiment
+  begins.
+
+Implementation changes:
+- `scripts/rocky-rust-validation.sh` now has `--boot-only --yes` for V9 so the
+  script can boot McKernel, inspect kmsg, and stop before running workloads.
+- The validation script still supports `--trampoline-phys`, but describes it as
+  expert-only and warns against persistent GRUB `memmap` reservations.
+- The `--trampoline-phys 0x80000` example was removed from the script help.
+
+Recommended next step:
+- Rebuild/install the updated scripts.
+- Run V9 with no `--trampoline-phys` option:
+  `scripts/rocky-rust-validation.sh --skip-deps --skip-rust --boot-only --yes`
+- If V9 passes with the fallback warning, log it and move to V10.
+- If V9 fails because of trampoline behavior, pause and design a disposable
+  one-boot experiment instead of changing persistent boot entries.
 
 ## Rocky VM V7 Host Compile Checkpoint Passed
 

@@ -1,5 +1,5 @@
 McKernel Rust Migration Overview
-Updated: 2026-05-13
+Updated: 2026-05-16
 
 Overall Rust ownership estimate: 2%
 
@@ -66,9 +66,10 @@ Known failing or blocked step:
 - Full runtime validation is not complete yet.
 - There is no current Rocky VM build or module-load blocker after V8.
 - The V8 trampoline warning remained after reducing the x86_64 private
-  trampoline allocation to one low-DMA page. Rocky/VirtualBox now needs a
-  reserved low page, passed as `ihk_trampoline`, to avoid the Linux-trampoline
-  fallback.
+  trampoline allocation to one low-DMA page. The persistent GRUB `memmap`
+  reservation experiment was unsafe on Rocky/VirtualBox, so the safe default is
+  to continue V9 with the Linux-trampoline fallback and no persistent boot-arg
+  changes.
 - V9 McKernel boot-only validation is pending.
 - WSL remains blocked for real boot/runtime smoke testing by host module and
   kernel development tree limitations.

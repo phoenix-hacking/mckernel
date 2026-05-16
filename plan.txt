@@ -296,6 +296,11 @@ Success:
 
 Stop condition:
 - If module load fails, debug module dependencies and dmesg before boot.
+- A dmesg warning that IHK-SMP fell back to Linux's trampoline on the
+  Rocky/VirtualBox VM is not a V8 failure if all modules load and remain
+  healthy.
+- Do not add persistent GRUB/kernel command-line `memmap` reservations to clear
+  this warning.
 
 V9: McKernel boot only
 ----------------------
@@ -306,6 +311,9 @@ Purpose:
 Action:
 - Boot with minimal CPU and memory allocation.
 - Do not run user workloads yet.
+- Use the default Linux-trampoline fallback on Rocky/VirtualBox unless it causes
+  a boot failure.
+- Do not mutate persistent boot arguments for trampoline experiments during V9.
 
 Success:
 - Kernel message output confirms McKernel booted.
