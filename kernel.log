@@ -1168,6 +1168,64 @@ Expected effect:
 - No syscall, ioctl, IKC packet, process, or memory-management behavior is
   intentionally changed.
 
+## Bitmap Region Helper Rust Port
+
+Adjusted:
+- `kernel/rust/bitmap.rs`
+- `lib/bitmap.c`
+- `kernel/rust/tests/run_equivalence.sh`
+- `overview.txt`
+- `plan.txt`
+- `kernel.log`
+
+Rust migration change:
+- Ported `bitmap_find_free_region()` to Rust behind the existing C ABI.
+- Ported `bitmap_allocate_region()` to Rust behind the existing C ABI.
+- Ported `bitmap_release_region()` to Rust behind the existing C ABI.
+- Mirrored the private C `__reg_op()` region logic in Rust as
+  `bitmap_region_op()`.
+- Kept the original C region implementations available for
+  `ENABLE_RUST_KERNEL=OFF`.
+
+Justification:
+- This is still Phase 3 shared-primitives work, not page allocator ownership.
+- The region helpers are allocator-adjacent, so porting them now gives the
+  migration allocation-style coverage before touching `lib/page_alloc.c`.
+- The public function signatures and exported symbol names stay unchanged.
+- The C fallback path remains intact, preserving rollback/debuggability.
+
+Adjustment during implementation:
+- The first equivalence run hit a Rust type inference issue in
+  `bitmap_find_free_region()` and nightly Rust also ICE'd while rendering the
+  diagnostic.
+- Made the loop position explicitly `CInt` and removed the generated
+  `rustc-ice-*.txt` report from the workspace.
+- Re-ran the equivalence harness after the fix.
+
+Verification:
+- `rustfmt kernel/rust/bitmap.rs` passed.
+- `bash kernel/rust/tests/run_equivalence.sh` passed.
+- The equivalence run covered rbtree, llist, bitmap core, zero-area search,
+  region allocation, region release, unresolved Rust symbols, and the SIMD
+  codegen check.
+- The bitmap equivalence digest after adding region-helper coverage was
+  `378483b9f7d54ff1`.
+- `git diff --check` passed.
+- `cmake --build /tmp/mckernel-wsl-rust-zeroarea --target mckernel_rust_obj -j2`
+  passed.
+- `cmake --build /tmp/mckernel-wsl-rust-zeroarea --target mckernel.img -j2`
+  passed for the Rust-enabled kernel image.
+- `cmake --build /tmp/mckernel-wsl-c-zeroarea --target mckernel.img -j2`
+  passed for the C-fallback kernel image.
+
+Expected effect:
+- Rust-enabled kernel builds now use Rust for three more bitmap region
+  primitives.
+- C-fallback kernel builds continue using the original C implementations.
+- No public ABI change.
+- No direct page allocator, syscall, process, ioctl, IKC, or runtime boot
+  behavior is intentionally changed.
+
 ## Rocky VM IHK-SMP Trampoline Allocation Fix
 
 Adjusted:

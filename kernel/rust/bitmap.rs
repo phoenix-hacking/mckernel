@@ -5,8 +5,13 @@ type CChar = i8;
 type CUInt = u32;
 type CULong = u64;
 
+const ENOMEM: CInt = 12;
+const EBUSY: CInt = 16;
 const BITS_PER_LONG: usize = 64;
 const BITS_PER_LONG_I32: CInt = 64;
+const REG_OP_ISFREE: CInt = 0;
+const REG_OP_ALLOC: CInt = 1;
+const REG_OP_RELEASE: CInt = 2;
 
 #[inline(always)]
 fn bits_to_longs(bits: CInt) -> usize {
@@ -99,6 +104,46 @@ unsafe fn find_next_zero_bit(map: *const CULong, size: CULong, offset: CULong) -
     }
 
     size
+}
+
+#[inline(always)]
+unsafe fn bitmap_region_op(bitmap: *mut CULong, pos: CInt, order: CInt, reg_op: CInt) -> CInt {
+    let nbits_reg = 1i32.wrapping_shl(order as u32);
+    let index = pos / BITS_PER_LONG_I32;
+    let offset = pos - (index * BITS_PER_LONG_I32);
+    let nlongs_reg = bits_to_longs(nbits_reg);
+    let nbitsinlong = if nbits_reg < BITS_PER_LONG_I32 {
+        nbits_reg
+    } else {
+        BITS_PER_LONG_I32
+    };
+    let mut mask = 1u64 << ((nbitsinlong - 1) as usize);
+    mask += mask - 1;
+    mask <<= offset as usize;
+
+    match reg_op {
+        REG_OP_ISFREE => {
+            for i in 0..nlongs_reg {
+                if (*bitmap.add(index as usize + i) & mask) != 0 {
+                    return 0;
+                }
+            }
+            1
+        }
+        REG_OP_ALLOC => {
+            for i in 0..nlongs_reg {
+                *bitmap.add(index as usize + i) |= mask;
+            }
+            0
+        }
+        REG_OP_RELEASE => {
+            for i in 0..nlongs_reg {
+                *bitmap.add(index as usize + i) &= !mask;
+            }
+            0
+        }
+        _ => 0,
+    }
 }
 
 #[no_mangle]
@@ -492,4 +537,49 @@ pub unsafe extern "C" fn bitmap_find_next_zero_area(
 
         return index;
     }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bitmap_find_free_region(
+    bitmap: *mut CULong,
+    bits: CInt,
+    order: CInt,
+) -> CInt {
+    let region_bits = 1i32.wrapping_shl(order as u32);
+    let mut pos: CInt = 0;
+
+    loop {
+        let end = pos.wrapping_add(region_bits);
+        if end > bits {
+            break;
+        }
+
+        if bitmap_region_op(bitmap, pos, order, REG_OP_ISFREE) != 0 {
+            bitmap_region_op(bitmap, pos, order, REG_OP_ALLOC);
+            return pos;
+        }
+
+        pos = end;
+    }
+
+    -ENOMEM
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bitmap_release_region(bitmap: *mut CULong, pos: CInt, order: CInt) {
+    bitmap_region_op(bitmap, pos, order, REG_OP_RELEASE);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bitmap_allocate_region(
+    bitmap: *mut CULong,
+    pos: CInt,
+    order: CInt,
+) -> CInt {
+    if bitmap_region_op(bitmap, pos, order, REG_OP_ISFREE) == 0 {
+        return -EBUSY;
+    }
+
+    bitmap_region_op(bitmap, pos, order, REG_OP_ALLOC);
+    0
 }

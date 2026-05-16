@@ -20,7 +20,7 @@ Area                                      Rust %   Status
 ----                                      ------   ------
 Rust build/link foundation                   90   Rust object builds and links into mckernel.img; boot-only smoke passed, workloads pending
 ABI/layout foundation                        10   Initial shared structs covered; many kernel structs still need assertions
-Shared primitives                            38   rbtree, llist, selected bitmap routines and zero-area search ported
+Shared primitives                            42   rbtree, llist, bitmap core, zero-area search, and region helpers ported
 x86_64 memory management                      0   Still C
 Page allocator                                0   Still C
 Process/VM management                         0   Still C
@@ -44,8 +44,10 @@ Current completed Rust-owned behavior
 - C fallback builds remain part of the migration contract.
 - Rust exports C ABI replacements for the first rbtree, llist, and bitmap
   routines.
-- Rust now owns bitmap_find_next_zero_area() when ENABLE_RUST_KERNEL is on,
-  while the C implementation remains available for fallback builds.
+- Rust now owns bitmap_find_next_zero_area(), bitmap_find_free_region(),
+  bitmap_allocate_region(), and bitmap_release_region() when
+  ENABLE_RUST_KERNEL is on, while the C implementations remain available for
+  fallback builds.
 - Initial ABI/layout checks exist for shared structures.
 - Primitive equivalence testing exists in kernel/rust/tests/run_equivalence.sh.
 
@@ -64,7 +66,7 @@ Last completed controlled verification step:
   `mcexec`, `mcstat`, `ihkconfig`, and `ihkosctl`.
 - Earlier V0 through V6 checks are satisfied for this Rocky validation path.
 
-Latest local source verification after the bitmap zero-area Rust port:
+Latest local source verification after the bitmap region-helper Rust port:
 - V2 passed: `mckernel_rust_obj` built in `/tmp/mckernel-wsl-rust-zeroarea`.
 - V3 passed: `kernel/rust/tests/run_equivalence.sh`.
 - V4 passed: Rust-enabled `mckernel.img` built in

@@ -59,6 +59,9 @@ First Rust primitive replacements
 - Ported linked-list helper routines behind the existing C ABI.
 - Ported selected bitmap primitives behind the existing C ABI.
 - Ported bitmap_find_next_zero_area() behind the existing C ABI.
+- Ported the bitmap region helper cluster behind the existing C ABI:
+  bitmap_find_free_region(), bitmap_allocate_region(), and
+  bitmap_release_region().
 - Kept macro-heavy C headers in place so existing C call sites do not need a
   public include-style migration yet.
 - Guarded selected C bitmap implementations so Rust can replace them without

@@ -229,6 +229,9 @@ extern void bitmap_clear(unsigned long *, int, int);
 extern unsigned long bitmap_find_next_zero_area(unsigned long *, unsigned long,
 						unsigned long, unsigned int,
 						unsigned long);
+extern int bitmap_find_free_region(unsigned long *, int, int);
+extern void bitmap_release_region(unsigned long *, int, int);
+extern int bitmap_allocate_region(unsigned long *, int, int);
 
 static unsigned long rng_state = 0x123456789abcdef0UL;
 
@@ -254,6 +257,11 @@ static unsigned long digest_words(const unsigned long *src, int words)
 	return d;
 }
 
+static void mix_value(unsigned long *digest, unsigned long value)
+{
+	*digest ^= value + 0x9e3779b97f4a7c15UL + (*digest << 6) + (*digest >> 2);
+}
+
 int main(void)
 {
 	unsigned long a[5], b[5], c[5];
@@ -262,6 +270,7 @@ int main(void)
 	int shifts[] = { 0, 1, 7, 31, 32, 63, 64, 65, 129, 255, 300 };
 	unsigned long aligns[] = { 0, 1, 3, 7, 15, 31, 63 };
 	unsigned int zero_area_sizes[] = { 0, 1, 2, 5, 17, 64, 130 };
+	int region_orders[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
 
 	for (int h = 0; h < 256; h++)
 		digest = digest * 131 + (unsigned long)(hex_to_bin((char)h) + 2);
@@ -301,9 +310,25 @@ int main(void)
 				for (unsigned long start = 0; start <= (unsigned long)bits + 5; start += 13) {
 					unsigned long area = bitmap_find_next_zero_area(c, bits, start,
 						zero_area_sizes[zi], aligns[ai]);
-					digest ^= area + 0x9e3779b97f4a7c15UL + (digest << 6) + (digest >> 2);
+					mix_value(&digest, area);
 				}
 			}
+		}
+		for (unsigned int oi = 0; oi < sizeof(region_orders) / sizeof(region_orders[0]); oi++) {
+			int order = region_orders[oi];
+			int region_bits = 1 << order;
+			memset(c, 0, sizeof(c));
+			mix_value(&digest, (unsigned long)bitmap_find_free_region(c, bits, order));
+			digest ^= digest_words(c, words);
+			for (int pos = 0; pos + region_bits <= bits; pos += region_bits * 3) {
+				mix_value(&digest, (unsigned long)bitmap_allocate_region(c, pos, order));
+				digest ^= digest_words(c, words);
+				mix_value(&digest, (unsigned long)bitmap_allocate_region(c, pos, order));
+				bitmap_release_region(c, pos, order);
+				digest ^= digest_words(c, words);
+				mix_value(&digest, (unsigned long)bitmap_allocate_region(c, pos, order));
+			}
+			digest ^= digest_words(c, words);
 		}
 	}
 	printf("bitmap ok digest=%016lx\n", digest);

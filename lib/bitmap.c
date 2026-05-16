@@ -1069,6 +1069,11 @@ EXPORT_SYMBOL(bitmap_fold);
  * Returns 1 if REG_OP_ISFREE succeeds (region is all zero bits).
  * Returns 0 in all other cases and reg_ops.
  */
+#ifdef MCKERNEL_RUST_BITMAP_CORE
+extern int bitmap_find_free_region(unsigned long *bitmap, int bits, int order);
+extern void bitmap_release_region(unsigned long *bitmap, int pos, int order);
+extern int bitmap_allocate_region(unsigned long *bitmap, int pos, int order);
+#else
 
 enum {
 	REG_OP_ISFREE,		/* true if region is all zero bits */
@@ -1191,4 +1196,9 @@ int bitmap_allocate_region(unsigned long *bitmap, int pos, int order)
 	__reg_op(bitmap, pos, order, REG_OP_ALLOC);
 	return 0;
 }
+#endif
+#ifdef MCKERNEL_RUST_BITMAP_CORE
+EXPORT_SYMBOL(bitmap_find_free_region);
+EXPORT_SYMBOL(bitmap_release_region);
+#endif
 EXPORT_SYMBOL(bitmap_allocate_region);
