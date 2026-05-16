@@ -213,11 +213,12 @@ update_submodules() {
 	local ihk_patch="$ROOT_DIR/scripts/patches/ihk-linux-compat.patch"
 	if [ -f "$ihk_patch" ]; then
 		say "Applying local IHK compatibility patch"
-		if git -C "$ROOT_DIR/ihk" apply --check "$ihk_patch"; then
+		if git -C "$ROOT_DIR/ihk" apply --check "$ihk_patch" >/dev/null 2>&1; then
 			git -C "$ROOT_DIR/ihk" apply "$ihk_patch"
-		elif git -C "$ROOT_DIR/ihk" apply --reverse --check "$ihk_patch"; then
+		elif git -C "$ROOT_DIR/ihk" apply --reverse --check "$ihk_patch" >/dev/null 2>&1; then
 			echo "IHK compatibility patch already applied."
 		else
+			git -C "$ROOT_DIR/ihk" apply --check "$ihk_patch" || true
 			echo "error: unable to apply $ihk_patch to ihk submodule." >&2
 			echo "Check for unexpected local changes in $ROOT_DIR/ihk." >&2
 			exit 1
@@ -237,7 +238,7 @@ configure_and_build() {
 
 	say "Building McKernel, host modules, and smoke-test user tools"
 	cmake --build "$BUILD_DIR" \
-		--target mckernel.img ihk_ko ihk-smp-x86_64_ko mcctrl_ko mcexec mcstat ihkconfig ihkosctl \
+		--target mckernel.img ihk_ko ihk-smp-x86_64_ko mcctrl_ko mcexec mcstat ihkconfig ihkosctl ihkmond \
 		-j"$JOBS"
 }
 

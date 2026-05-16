@@ -1247,6 +1247,40 @@ Recommended next step:
 - If V9 fails because of trampoline behavior, pause and design a disposable
   one-boot experiment instead of changing persistent boot entries.
 
+## Rocky VM Validation Script Install Target Fix
+
+Observed:
+- `scripts/rocky-rust-validation.sh --skip-deps --skip-rust --boot-only --yes`
+  built `mckernel.img`, host modules, `mcexec`, `mcstat`, `ihkconfig`, and
+  `ihkosctl`.
+- The install step then failed with:
+  `file INSTALL cannot find "/tmp/mckernel-rocky-rust/ihk/linux/user/ihkmond"`.
+- The script also printed noisy patch failures before correctly reporting:
+  `IHK compatibility patch already applied.`
+
+Change:
+- Added `ihkmond` to the Rocky validation script's explicit build target list.
+- Silenced the expected `git apply --check` failure path when the IHK
+  compatibility patch is already applied.
+- Kept full patch error output for the genuinely broken case where the patch is
+  neither applicable nor already applied.
+
+Justification:
+- `ihk/linux/user/CMakeLists.txt` installs `ihkmond` alongside `ihkconfig`,
+  `ihkosctl`, and `ihklib`.
+- CMake install did not implicitly build `ihkmond` in this validation flow, so
+  the script must build it explicitly before `cmake --install`.
+- The patch-already-applied path was functionally correct but looked like a
+  failure in terminal output, which makes controlled validation harder to read.
+
+Expected effect:
+- The next Rocky validation run should get past install.
+- If the IHK patch is already applied, the script should print only
+  `IHK compatibility patch already applied.` rather than a screen of expected
+  patch failures.
+- No Rust behavior change.
+- No public ABI behavior change.
+
 ## Rocky VM V7 Host Compile Checkpoint Passed
 
 Observed:
