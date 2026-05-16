@@ -238,7 +238,9 @@ configure_and_build() {
 
 	say "Building McKernel, host modules, and smoke-test user tools"
 	cmake --build "$BUILD_DIR" \
-		--target mckernel.img ihk_ko ihk-smp-x86_64_ko mcctrl_ko mcexec mcstat ihkconfig ihkosctl ihkmond \
+		--target mckernel.img ihk_ko ihk-smp-x86_64_ko mcctrl_ko \
+		mcexec eclair mcinspect sched_yield ldump2mcdump mcstat \
+		ihkconfig ihkosctl ihkmond \
 		-j"$JOBS"
 }
 

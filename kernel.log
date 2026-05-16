@@ -1281,6 +1281,37 @@ Expected effect:
 - No Rust behavior change.
 - No public ABI behavior change.
 
+## Rocky VM Validation Script Executer Install Target Fix
+
+Observed:
+- After adding `ihkmond`, the Rocky validation run progressed further through
+  install.
+- The next install failure was:
+  `file INSTALL cannot find "/tmp/mckernel-rocky-rust/executer/user/eclair"`.
+
+Change:
+- Added the remaining `executer/user` install targets to the Rocky validation
+  build list:
+  - `eclair`
+  - `mcinspect`
+  - `sched_yield`
+  - `ldump2mcdump`
+
+Justification:
+- `executer/user/CMakeLists.txt` installs `mcexec`, `eclair`, `mcinspect`,
+  `sched_yield`, and `ldump2mcdump`.
+- The validation script called `cmake --install`, so it must explicitly build
+  every executable/shared-library target that the install rules expect.
+- Adding the whole install-required executer surface avoids fixing one missing
+  file per validation run.
+
+Expected effect:
+- The next Rocky validation run should get past the missing `eclair` install
+  failure and avoid equivalent failures for `mcinspect`, `sched_yield`, and
+  `ldump2mcdump`.
+- No Rust behavior change.
+- No public ABI behavior change.
+
 ## Rocky VM V7 Host Compile Checkpoint Passed
 
 Observed:
