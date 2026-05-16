@@ -18,9 +18,9 @@ Use this initial dashboard to track the migration:
 
 Area                                      Rust %   Status
 ----                                      ------   ------
-Rust build/link foundation                   90   Rust object builds and links into mckernel.img; runtime smoke still pending
+Rust build/link foundation                   90   Rust object builds and links into mckernel.img; boot-only smoke passed, workloads pending
 ABI/layout foundation                        10   Initial shared structs covered; many kernel structs still need assertions
-Shared primitives                            35   rbtree, llist, selected bitmap routines ported
+Shared primitives                            38   rbtree, llist, selected bitmap routines and zero-area search ported
 x86_64 memory management                      0   Still C
 Page allocator                                0   Still C
 Process/VM management                         0   Still C
@@ -44,6 +44,8 @@ Current completed Rust-owned behavior
 - C fallback builds remain part of the migration contract.
 - Rust exports C ABI replacements for the first rbtree, llist, and bitmap
   routines.
+- Rust now owns bitmap_find_next_zero_area() when ENABLE_RUST_KERNEL is on,
+  while the C implementation remains available for fallback builds.
 - Initial ABI/layout checks exist for shared structures.
 - Primitive equivalence testing exists in kernel/rust/tests/run_equivalence.sh.
 
@@ -51,26 +53,40 @@ Current validation status
 ------------------------------------------------------------
 
 Last completed controlled verification step:
-- V8 Module load only, completed on Rocky VM on 2026-05-12.
+- V9 McKernel boot only, completed on Rocky VM on 2026-05-13.
+- The boot-only validation printed `IHK/McKernel started.` and
+  `IHK/McKernel booted.`
+- V8 Module load only also passed on Rocky VM.
 - `ihk`, `ihk_smp_x86_64`, and `mcctrl` loaded with return code 0 and appeared
-  in `lsmod`.
+  in `lsmod` before boot validation.
 - V7 Host modules compile also passed on Rocky VM.
 - The passing V7 command built `ihk_ko`, `ihk-smp-x86_64_ko`, `mcctrl_ko`,
   `mcexec`, `mcstat`, `ihkconfig`, and `ihkosctl`.
 - Earlier V0 through V6 checks are satisfied for this Rocky validation path.
 
+Latest local source verification after the bitmap zero-area Rust port:
+- V2 passed: `mckernel_rust_obj` built in `/tmp/mckernel-wsl-rust-zeroarea`.
+- V3 passed: `kernel/rust/tests/run_equivalence.sh`.
+- V4 passed: Rust-enabled `mckernel.img` built in
+  `/tmp/mckernel-wsl-rust-zeroarea`.
+- V5 passed: C-fallback `mckernel.img` built in
+  `/tmp/mckernel-wsl-c-zeroarea`.
+
 Next verification step:
-- V9 McKernel boot only.
+- V10 minimal user workloads.
 
 Known failing or blocked step:
-- Full runtime validation is not complete yet.
+- Full workload/runtime validation is not complete yet.
 - There is no current Rocky VM build or module-load blocker after V8.
 - The V8 trampoline warning remained after reducing the x86_64 private
   trampoline allocation to one low-DMA page. The persistent GRUB `memmap`
   reservation experiment was unsafe on Rocky/VirtualBox, so the safe default is
   to continue V9 with the Linux-trampoline fallback and no persistent boot-arg
   changes.
-- V9 McKernel boot-only validation is pending.
+- V9 boot-only passed with the Linux-trampoline fallback. The boot log still
+  reported `Trampoline area: 0x0` and `error: allocating fp_regs pages`, so V10
+  should be treated as the next runtime boundary rather than assuming workloads
+  are already validated.
 - WSL remains blocked for real boot/runtime smoke testing by host module and
   kernel development tree limitations.
 - ihk-smp-x86_64 compatibility against Linux 6.6 needs more work before WSL can

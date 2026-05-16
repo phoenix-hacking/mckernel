@@ -2,6 +2,7 @@ use core::ptr::write_volatile;
 
 type CInt = i32;
 type CChar = i8;
+type CUInt = u32;
 type CULong = u64;
 
 const BITS_PER_LONG: usize = 64;
@@ -59,6 +60,45 @@ unsafe fn zero_words(dst: *mut CULong, words: usize) {
     for k in 0..words {
         write_volatile(dst.add(k), 0);
     }
+}
+
+#[inline(always)]
+fn align_mask(value: CULong, mask: CULong) -> CULong {
+    value.wrapping_add(mask) & !mask
+}
+
+#[inline(always)]
+unsafe fn test_bit(map: *const CULong, bit: CULong) -> bool {
+    let bit = bit as usize;
+    ((*map.add(bit / BITS_PER_LONG) >> (bit % BITS_PER_LONG)) & 1) != 0
+}
+
+#[inline(always)]
+unsafe fn find_next_bit(map: *const CULong, size: CULong, offset: CULong) -> CULong {
+    let mut bit = offset;
+
+    while bit < size {
+        if test_bit(map, bit) {
+            return bit;
+        }
+        bit = bit.wrapping_add(1);
+    }
+
+    size
+}
+
+#[inline(always)]
+unsafe fn find_next_zero_bit(map: *const CULong, size: CULong, offset: CULong) -> CULong {
+    let mut bit = offset;
+
+    while bit < size {
+        if !test_bit(map, bit) {
+            return bit;
+        }
+        bit = bit.wrapping_add(1);
+    }
+
+    size
 }
 
 #[no_mangle]
@@ -421,5 +461,35 @@ pub unsafe extern "C" fn bitmap_clear(map: *mut CULong, start: CInt, nr: CInt) {
     if remaining != 0 {
         mask_to_clear &= bitmap_last_word_mask(size);
         *p &= !mask_to_clear;
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bitmap_find_next_zero_area(
+    map: *mut CULong,
+    size: CULong,
+    start: CULong,
+    nr: CUInt,
+    align_mask_arg: CULong,
+) -> CULong {
+    let map = map as *const CULong;
+    let mut search_start = start;
+
+    loop {
+        let mut index = find_next_zero_bit(map, size, search_start);
+        index = align_mask(index, align_mask_arg);
+
+        let end = index.wrapping_add(nr as CULong);
+        if end > size {
+            return end;
+        }
+
+        let next_set = find_next_bit(map, end, index);
+        if next_set < end {
+            search_start = next_set.wrapping_add(1);
+            continue;
+        }
+
+        return index;
     }
 }

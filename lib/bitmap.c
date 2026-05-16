@@ -354,6 +354,13 @@ EXPORT_SYMBOL(bitmap_clear);
  * the bit offset of all zero areas this function finds is multiples of that
  * power of 2. A @align_mask of 0 means no alignment is required.
  */
+#ifdef MCKERNEL_RUST_BITMAP_CORE
+extern unsigned long bitmap_find_next_zero_area(unsigned long *map,
+						unsigned long size,
+						unsigned long start,
+						unsigned int nr,
+						unsigned long align_mask);
+#else
 unsigned long bitmap_find_next_zero_area(unsigned long *map,
 					 unsigned long size,
 					 unsigned long start,
@@ -377,6 +384,7 @@ again:
 	}
 	return index;
 }
+#endif
 EXPORT_SYMBOL(bitmap_find_next_zero_area);
 
 /*

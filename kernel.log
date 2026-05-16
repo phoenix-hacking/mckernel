@@ -1093,6 +1093,81 @@ Expected effect:
 - No ABI behavior change.
 - No build-system behavior change.
 
+## Rocky V9 Boot Baseline and Bitmap Zero-Area Rust Port
+
+Recorded Rocky validation result:
+- V9 McKernel boot-only validation passed on the Rocky VM on 2026-05-13.
+- The installed validation flow temporarily set SELinux permissive for that boot
+  validation only and did not permanently edit `/etc/selinux/config`.
+- The McKernel boot log printed `IHK/McKernel started.` and
+  `IHK/McKernel booted.`
+- The terminal remained a Rocky Linux shell; McKernel was running as a co-kernel
+  and future workloads must be launched through `mcexec`.
+- V10 minimal workload validation remains pending.
+
+Known V9 observations:
+- The safe Rocky/VirtualBox path is to avoid persistent GRUB `memmap` changes.
+- The old persistent `memmap=4K$0x80000` experiment caused a VM boot hang and is
+  intentionally not part of the recommended path.
+- The V9 boot log still showed `Trampoline area: 0x0` and
+  `error: allocating fp_regs pages`; because boot completed, these are tracked
+  as runtime boundary observations for V10 rather than blockers for V9.
+
+Adjusted:
+- `kernel/rust/bitmap.rs`
+- `lib/bitmap.c`
+- `kernel/rust/tests/run_equivalence.sh`
+- `plan.txt`
+- `overview.txt`
+- `kernel.log`
+
+Rust migration change:
+- Ported `bitmap_find_next_zero_area()` to Rust behind the existing C ABI.
+- Added small Rust bitmap scan helpers used only by the zero-area search path.
+- Kept the C implementation compiled for fallback builds.
+- When `MCKERNEL_RUST_BITMAP_CORE` is set, `lib/bitmap.c` now declares the
+  Rust-owned symbol and keeps exporting the same public symbol name.
+
+Justification:
+- This is a narrow Phase 3 shared-primitive conversion with a stable function
+  signature and low runtime blast radius.
+- It exercises a real allocator-adjacent bitmap helper before moving into the
+  page allocator, but it does not yet change allocator ownership.
+- Preserving the same exported symbol and C signature keeps existing callers,
+  headers, and fallback builds intact.
+
+Verification:
+- `rustfmt kernel/rust/bitmap.rs` passed.
+- `bash kernel/rust/tests/run_equivalence.sh` passed.
+- The equivalence run covered rbtree, llist, bitmap core, the new
+  `bitmap_find_next_zero_area()` cases, unresolved Rust symbols, and the SIMD
+  codegen check.
+- The bitmap equivalence digest after adding zero-area coverage was
+  `3398d2af697c71d9`.
+- `git diff --check` passed.
+- A first WSL CMake configure attempt passed `KERNEL_DIR` through the
+  Windows-side shell incorrectly and CMake saw `/home/hgordon/`; this was a
+  command quoting issue, not a project failure.
+- Re-running configure through Bash with
+  `-DKERNEL_DIR=$HOME/.cache/mckernel/WSL2-Linux-Kernel-6.6.87.2` passed.
+- `cmake --build /tmp/mckernel-wsl-rust-zeroarea --target mckernel_rust_obj -j2`
+  passed.
+- The Rust object build still prints the known rustc jobserver warning from the
+  inherited Make jobserver file descriptors; the target completes successfully.
+- `cmake --build /tmp/mckernel-wsl-rust-zeroarea --target mckernel.img -j2`
+  passed for the Rust-enabled kernel image.
+- A separate C-fallback configure with `ENABLE_RUST_KERNEL=OFF` passed in
+  `/tmp/mckernel-wsl-c-zeroarea`.
+- `cmake --build /tmp/mckernel-wsl-c-zeroarea --target mckernel.img -j2`
+  passed for the C-fallback kernel image.
+
+Expected effect:
+- Rust-enabled kernel builds now use Rust for one more bitmap primitive.
+- C-fallback kernel builds continue using the original C implementation.
+- No public ABI change.
+- No syscall, ioctl, IKC packet, process, or memory-management behavior is
+  intentionally changed.
+
 ## Rocky VM IHK-SMP Trampoline Allocation Fix
 
 Adjusted:

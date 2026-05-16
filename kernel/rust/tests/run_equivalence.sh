@@ -226,6 +226,9 @@ extern int __bitmap_subset(const unsigned long *, const unsigned long *, int);
 extern int __bitmap_weight(const unsigned long *, int);
 extern void bitmap_set(unsigned long *, int, int);
 extern void bitmap_clear(unsigned long *, int, int);
+extern unsigned long bitmap_find_next_zero_area(unsigned long *, unsigned long,
+						unsigned long, unsigned int,
+						unsigned long);
 
 static unsigned long rng_state = 0x123456789abcdef0UL;
 
@@ -257,6 +260,8 @@ int main(void)
 	unsigned long digest = 0;
 	int bit_sizes[] = { 1, 2, 7, 31, 32, 63, 64, 65, 95, 127, 128, 129, 191, 255, 256, 257 };
 	int shifts[] = { 0, 1, 7, 31, 32, 63, 64, 65, 129, 255, 300 };
+	unsigned long aligns[] = { 0, 1, 3, 7, 15, 31, 63 };
+	unsigned int zero_area_sizes[] = { 0, 1, 2, 5, 17, 64, 130 };
 
 	for (int h = 0; h < 256; h++)
 		digest = digest * 131 + (unsigned long)(hex_to_bin((char)h) + 2);
@@ -291,6 +296,15 @@ int main(void)
 				bitmap_clear(c, start + 1, nr - 2);
 		}
 		digest ^= digest_words(c, words);
+		for (unsigned int ai = 0; ai < sizeof(aligns) / sizeof(aligns[0]); ai++) {
+			for (unsigned int zi = 0; zi < sizeof(zero_area_sizes) / sizeof(zero_area_sizes[0]); zi++) {
+				for (unsigned long start = 0; start <= (unsigned long)bits + 5; start += 13) {
+					unsigned long area = bitmap_find_next_zero_area(c, bits, start,
+						zero_area_sizes[zi], aligns[ai]);
+					digest ^= area + 0x9e3779b97f4a7c15UL + (digest << 6) + (digest >> 2);
+				}
+			}
+		}
 	}
 	printf("bitmap ok digest=%016lx\n", digest);
 	return 0;
