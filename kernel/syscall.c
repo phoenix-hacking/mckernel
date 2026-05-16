@@ -11068,11 +11068,24 @@ long syscall(int num, ihk_mc_user_context_t *ctx)
 	long l;
 	struct cpu_local_var *v = get_this_cpu_local_var();
 	struct thread *thread = v->current;
+	static int mcexec_v10_syscall_entry_logs;
 
 #ifdef DISABLE_SCHED_YIELD
 	if (num != __NR_sched_yield)
 #endif // DISABLE_SCHED_YIELD
 		set_cputime(CPUTIME_MODE_U2K);
+
+	if (mcexec_v10_syscall_entry_logs < 32) {
+		kprintf("mcexec_v10: syscall entry cpu=%d pid=%d tid=%d nr=%d rip=0x%lx sp=0x%lx status=%d\n",
+			ihk_mc_get_processor_id(),
+			thread && thread->proc ? thread->proc->pid : -1,
+			thread ? thread->tid : -1,
+			num,
+			ctx ? ihk_mc_syscall_pc(ctx) : 0UL,
+			ctx ? ihk_mc_syscall_sp(ctx) : 0UL,
+			thread ? thread->status : -1);
+		mcexec_v10_syscall_entry_logs++;
+	}
 
 //kprintf("syscall=%d\n", num);
 #ifdef PROFILE_ENABLE

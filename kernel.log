@@ -2347,3 +2347,54 @@ Expected effect:
 - No Rust behavior change.
 - No ABI behavior change.
 - No build-system behavior change.
+
+## Rocky V10 User-Entry Diagnostic Markers
+
+Observed failure:
+- Rocky VM V10 still times out in `mcexec /bin/true` with the 8 second
+  watchdog.
+- The direct watchdog now works and reports the watched process immediately.
+- `MCEXEC_UP_START_IMAGE` succeeds.
+- The McKernel kmsg handoff reaches:
+  - `mcexec_v10: prepared`
+  - `mcexec_v10: schedule_process received`
+  - `mcexec_v10: schedule_process queued`
+  - `mcexec_v10: scheduler switch`
+- The trace does not reach `mcexec_v10: send_syscall`.
+- Host-side `mcexec` worker threads remain blocked in `MCEXEC_UP_WAIT_SYSCALL`.
+
+Interpretation:
+- The V10 failure boundary is after scheduler selection of the new process and
+  before the first observed delegated syscall reaches the host bridge.
+- The next useful split is whether execution reaches final user-mode entry,
+  immediately faults or traps, enters McKernel syscall dispatch, or never gets
+  past the `iretq` path.
+
+Adjusted:
+- `arch/x86_64/kernel/interrupt.S`
+- `arch/x86_64/kernel/cpu.c`
+- `kernel/mem.c`
+- `kernel/syscall.c`
+- `overview.txt`
+- `plan.txt`
+
+Change:
+- Added bounded `mcexec_v10:` markers immediately before returning to user
+  mode, at generic user exception handling, at user page-fault handling, and at
+  McKernel syscall dispatch entry.
+
+Expected next Rocky result:
+- Re-run V10 with `--trace-smoke`.
+- If `enter_user` appears but no syscall or fault follows, focus on the final
+  user-mode return path and CPU state.
+- If `page_fault` or `exception` appears, focus on the reported RIP/SP/reason.
+- If `syscall entry` appears but `send_syscall` does not, focus inside
+  McKernel-local syscall dispatch before host offload.
+
+Local verification:
+- `git diff --check` passed.
+- `bash -n scripts/rocky-rust-validation.sh` passed.
+- Rust-enabled `/tmp/mckernel-wsl-rust-zeroarea` built target `mckernel.img`.
+- C-fallback `/tmp/mckernel-wsl-c-zeroarea` built target `mckernel.img`.
+- The builds still emit the pre-existing packed-member and executable-stack/RWX
+  linker warnings; no new compile or link failure was introduced.

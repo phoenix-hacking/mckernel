@@ -89,6 +89,11 @@ Known failing or blocked step:
   syscall. Kernel markers prefixed with `mcexec_v10:` now record process
   preparation, schedule-message receipt, run-queue insertion, scheduler switch,
   and first syscall-send attempts.
+- The latest Rocky trace reached `mcexec_v10: scheduler switch` for
+  `mcexec /bin/true` but did not reach `mcexec_v10: send_syscall`. The next
+  diagnostic markers now cover the final user-mode entry path, first McKernel
+  syscall entry, user page faults, and user exceptions so the V10 stall can be
+  classified without guessing.
 - The Rocky validation script now wraps each V10 smoke command in a timeout so
   future runs stop at the first failing command and print command output plus
   recent McKernel kmsg.

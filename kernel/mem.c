@@ -1429,6 +1429,7 @@ static void unhandled_page_fault(struct thread *thread, void *fault_addr,
 static void page_fault_handler(void *fault_addr, uint64_t reason, void *regs)
 {
 	struct thread *thread = cpu_local_var(current);
+	static int mcexec_v10_page_fault_logs;
 #ifdef ENABLE_TOFU
 	unsigned long addr = (unsigned long)fault_addr;
 #endif
@@ -1443,6 +1444,20 @@ static void page_fault_handler(void *fault_addr, uint64_t reason, void *regs)
 		CPUTIME_MODE_U2K : CPUTIME_MODE_K2K_IN);
 	dkprintf("%s: addr: %p, reason: %lx, regs: %p\n",
 			__FUNCTION__, fault_addr, reason, regs);
+
+	if ((reason & PF_USER) && mcexec_v10_page_fault_logs < 32) {
+		ihk_mc_user_context_t *uctx = regs;
+
+		kprintf("mcexec_v10: page_fault cpu=%d pid=%d tid=%d addr=0x%lx reason=0x%lx rip=0x%lx sp=0x%lx error=0x%lx\n",
+			ihk_mc_get_processor_id(),
+			thread && thread->proc ? thread->proc->pid : -1,
+			thread ? thread->tid : -1,
+			(unsigned long)fault_addr, reason,
+			uctx ? uctx->gpr.rip : 0UL,
+			uctx ? uctx->gpr.rsp : 0UL,
+			uctx ? uctx->gpr.error : 0UL);
+		mcexec_v10_page_fault_logs++;
+	}
 
 	preempt_disable();
 	++cpu_local_var(in_page_fault);

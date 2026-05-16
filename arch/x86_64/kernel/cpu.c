@@ -930,6 +930,7 @@ void handle_interrupt(int vector, struct x86_user_context *regs)
 	struct ihk_mc_interrupt_handler *h;
 	struct cpu_local_var *v = get_this_cpu_local_var();
 	int from_user = interrupt_from_user(regs);
+	static int mcexec_v10_exception_logs;
 
 	lapic_ack();
 	++v->in_interrupt;
@@ -945,6 +946,19 @@ void handle_interrupt(int vector, struct x86_user_context *regs)
 	} 
 	else if (vector < 32) {
 		struct siginfo info;
+
+		if (from_user && mcexec_v10_exception_logs < 32) {
+			struct thread *thread = cpu_local_var(current);
+
+			kprintf("mcexec_v10: exception cpu=%d vector=%d pid=%d tid=%d rip=0x%lx sp=0x%lx error=0x%lx rflags=0x%lx\n",
+				ihk_mc_get_processor_id(), vector,
+				thread && thread->proc ? thread->proc->pid : -1,
+				thread ? thread->tid : -1,
+				regs->gpr.rip, regs->gpr.rsp,
+				regs->gpr.error, regs->gpr.rflags);
+			mcexec_v10_exception_logs++;
+		}
+
 		switch(vector){
 		    case 0:
 			memset(&info, '\0', sizeof info);
@@ -1391,6 +1405,28 @@ void ihk_mc_init_context(ihk_mc_kernel_context_t *new_ctx,
 }
 
 extern char enter_user_mode[];
+
+void mcexec_v10_trace_enter_user(struct x86_user_context *regs)
+{
+	static int mcexec_v10_enter_user_logs;
+	struct thread *thread = cpu_local_var(current);
+
+	if (mcexec_v10_enter_user_logs >= 32) {
+		return;
+	}
+
+	kprintf("mcexec_v10: enter_user cpu=%d pid=%d tid=%d rip=0x%lx sp=0x%lx cs=0x%lx ss=0x%lx rflags=0x%lx status=%d\n",
+		ihk_mc_get_processor_id(),
+		thread && thread->proc ? thread->proc->pid : -1,
+		thread ? thread->tid : -1,
+		regs ? regs->gpr.rip : 0UL,
+		regs ? regs->gpr.rsp : 0UL,
+		regs ? regs->gpr.cs : 0UL,
+		regs ? regs->gpr.ss : 0UL,
+		regs ? regs->gpr.rflags : 0UL,
+		thread ? thread->status : -1);
+	mcexec_v10_enter_user_logs++;
+}
 
 /* 
  * Release runq_lock before entering user space.
