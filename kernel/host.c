@@ -91,6 +91,7 @@ int prepare_process_ranges_args_envs(struct thread *thread,
 	struct process_vm *vm = proc->vm;
 	struct address_space *as = vm->address_space;
 	long aout_base;
+	unsigned long at_base = 0;
 	int error;
 	struct vm_range *range;
 	unsigned long ap_flags;
@@ -196,6 +197,7 @@ int prepare_process_ranges_args_envs(struct thread *thread,
 	}
 
 	if (interp_nbase != (uintptr_t)-1) {
+		at_base = interp_nbase - interp_obase;
 		pn->entry -= interp_obase;
 		pn->entry += interp_nbase;
 		p->entry = pn->entry;
@@ -442,7 +444,7 @@ int prepare_process_ranges_args_envs(struct thread *thread,
 	p->rprocess = (unsigned long)thread;
 	p->rpgtable = virt_to_phys(as->page_table);
 
-	if ((error = init_process_stack(thread, pn, argc, argv, envc, env)) != 0) {
+	if ((error = init_process_stack(thread, pn, at_base, argc, argv, envc, env)) != 0) {
 		kprintf("%s: error: init_process_stack failed with %d\n",
 			__func__, error);
 		goto err;

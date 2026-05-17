@@ -385,7 +385,7 @@ struct user
 	unsigned long int  u_debugreg [8];
 };
 
-#define	AUXV_LEN	20
+#define	AUXV_LEN	22
 
 struct vm_range {
 	struct rb_node vm_rb_node;
@@ -886,7 +886,7 @@ int remove_process_region(struct process_vm *vm,
                           unsigned long start, unsigned long end);
 struct program_load_desc;
 int init_process_stack(struct thread *thread, struct program_load_desc *pn,
-                        int argc, char **argv, 
+                        unsigned long at_base, int argc, char **argv,
                         int envc, char **env);
 unsigned long extend_process_region(struct process_vm *vm,
 		unsigned long end_allocated,

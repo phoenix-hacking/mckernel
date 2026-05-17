@@ -2588,7 +2588,7 @@ int page_fault_process_vm(struct process_vm *fault_vm, void *fault_addr, uint64_
 }
 
 int init_process_stack(struct thread *thread, struct program_load_desc *pn,
-                        int argc, char **argv,
+                        unsigned long at_base, int argc, char **argv,
                         int envc, char **env)
 {
 	int s_ind = 0;
@@ -2726,6 +2726,8 @@ int init_process_stack(struct thread *thread, struct program_load_desc *pn,
 	p[s_ind--] = ap_hwcap ? AT_HWCAP : AT_IGNORE;
 	p[s_ind--] = pn->at_entry; /* AT_ENTRY */
 	p[s_ind--] = AT_ENTRY;
+	p[s_ind--] = at_base; /* AT_BASE */
+	p[s_ind--] = AT_BASE;
 	p[s_ind--] = pn->at_phnum; /* AT_PHNUM */
 	p[s_ind--] = AT_PHNUM;
 	p[s_ind--] = pn->at_phent;  /* AT_PHENT */
@@ -2743,10 +2745,11 @@ int init_process_stack(struct thread *thread, struct program_load_desc *pn,
 #endif
 	p[s_ind--] = (long)(thread->vm->vdso_addr);
 	p[s_ind--] = (thread->vm->vdso_addr)? AT_SYSINFO_EHDR: AT_IGNORE;
-	kprintf("mcexec_v10: auxv pid=%d tid=%d entry=0x%lx phdr=0x%lx vdso=0x%lx pagesz=%lu at_random=0x%lx stack_top=0x%lx argc=%d envc=%d\n",
+	kprintf("mcexec_v10: auxv pid=%d tid=%d entry=0x%lx base=0x%lx phdr=0x%lx vdso=0x%lx pagesz=%lu at_random=0x%lx stack_top=0x%lx argc=%d envc=%d\n",
 		proc ? proc->pid : -1,
 		thread ? thread->tid : -1,
 		pn->at_entry,
+		at_base,
 		pn->at_phdr,
 		(unsigned long)thread->vm->vdso_addr,
 		(unsigned long)PAGE_SIZE,
