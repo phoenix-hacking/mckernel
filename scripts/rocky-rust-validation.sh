@@ -26,6 +26,7 @@ Options:
   --trampoline-phys PA  Expert-only: pass pre-reserved PA to mcreboot.sh.
   --smoke-timeout SEC   Watchdog for each V10 smoke command. Default: 8
   --trace-smoke         Run V10 smoke commands under strace when available.
+  --verbose-smoke       Enable mcexec debug output and full smoke logs.
   -h, --help            Show this help.
 
 Examples:
@@ -44,6 +45,12 @@ BOOT_MEM=512M@0
 TRAMPOLINE_PHYS="${IHK_TRAMPOLINE_PHYS:-}"
 SMOKE_TIMEOUT=8
 TRACE_SMOKE=0
+VERBOSE_SMOKE=0
+SMOKE_LOG_TAIL_LINES="${SMOKE_LOG_TAIL_LINES:-80}"
+STRACE_TAIL_LINES="${STRACE_TAIL_LINES:-40}"
+DMESG_TAIL_LINES="${DMESG_TAIL_LINES:-60}"
+KMSG_TAIL_LINES="${KMSG_TAIL_LINES:-60}"
+V10_TAIL_LINES="${V10_TAIL_LINES:-40}"
 INSTALL_DEPS=1
 INSTALL_RUST=1
 DO_INSTALL=1
@@ -108,6 +115,10 @@ while [ "$#" -gt 0 ]; do
 			;;
 		--trace-smoke)
 			TRACE_SMOKE=1
+			shift
+			;;
+		--verbose-smoke)
+			VERBOSE_SMOKE=1
 			shift
 			;;
 		-h|--help)
@@ -359,7 +370,7 @@ boot_smoke() {
 	trap cleanup EXIT
 
 	say "Checking McKernel boot log"
-	sudo "$PREFIX/sbin/ihkosctl" 0 kmsg | tee /tmp/mckernel.kmsg
+	sudo "$PREFIX/sbin/ihkosctl" 0 kmsg >/tmp/mckernel.kmsg
 	grep "IHK/McKernel booted" /tmp/mckernel.kmsg
 
 	if [ "$BOOT_ONLY" -eq 1 ]; then
@@ -373,7 +384,7 @@ boot_smoke() {
 	local smoke_rc=0
 
 	say "Running mcexec smoke commands"
-	run_smoke_cmd "mcexec-true" "$PREFIX/bin/mcexec" --debug-mcexec /bin/true
+	run_smoke_cmd "mcexec-true" "$PREFIX/bin/mcexec" /bin/true
 	run_hostname_smoke || smoke_rc=$?
 	if [ "$smoke_rc" -eq 124 ]; then
 		return "$smoke_rc"
@@ -394,8 +405,8 @@ boot_smoke() {
 run_hostname_smoke() {
 	local rc=0
 
-	if run_smoke_cmd "mcexec-hostname" "$PREFIX/bin/mcexec" --debug-mcexec hostname; then
-		if run_smoke_cmd "mcexec-hostname-absolute" "$PREFIX/bin/mcexec" --debug-mcexec /usr/bin/hostname; then
+	if run_smoke_cmd "mcexec-hostname" "$PREFIX/bin/mcexec" hostname; then
+		if run_smoke_cmd "mcexec-hostname-absolute" "$PREFIX/bin/mcexec" /usr/bin/hostname; then
 			return 0
 		else
 			rc=$?
@@ -409,18 +420,28 @@ run_hostname_smoke() {
 	fi
 
 	say "Retrying mcexec-hostname with VDSO disabled"
-	if run_smoke_cmd "mcexec-hostname-novdso" "$PREFIX/bin/mcexec" --debug-mcexec --disable-vdso hostname; then
+	if run_smoke_cmd "mcexec-hostname-novdso" "$PREFIX/bin/mcexec" --disable-vdso hostname; then
 		echo "diagnosis: relative hostname passes with --disable-vdso; VDSO remains implicated for argv0=hostname." >&2
 	else
 		echo "diagnosis: relative hostname also fails with --disable-vdso; the failure is not isolated to VDSO." >&2
 	fi
-	if run_smoke_cmd "mcexec-hostname-absolute-novdso" "$PREFIX/bin/mcexec" --debug-mcexec --disable-vdso /usr/bin/hostname; then
+	if run_smoke_cmd "mcexec-hostname-absolute-novdso" "$PREFIX/bin/mcexec" --disable-vdso /usr/bin/hostname; then
 		echo "diagnosis: absolute-path hostname also passes with --disable-vdso." >&2
 	else
 		echo "diagnosis: absolute-path hostname still fails with --disable-vdso; argv0/path-sensitive loader or stack setup is also implicated." >&2
 	fi
 
 	return "$rc"
+}
+
+print_smoke_log() {
+	local log="$1"
+
+	if [ "$VERBOSE_SMOKE" -eq 1 ]; then
+		cat "$log"
+	else
+		tail -n "$SMOKE_LOG_TAIL_LINES" "$log"
+	fi
 }
 
 run_smoke_cmd() {
@@ -433,9 +454,17 @@ run_smoke_cmd() {
 	local elapsed=0
 	local cmd=("$@")
 
+	if [ "$VERBOSE_SMOKE" -eq 1 ]; then
+		case "${cmd[0]}" in
+			*/mcexec|mcexec)
+				cmd=("${cmd[0]}" --debug-mcexec "${cmd[@]:1}")
+				;;
+		esac
+	fi
+
 	rm -f "$trace_prefix" "$trace_prefix".*
 	if [ "$TRACE_SMOKE" -eq 1 ]; then
-		cmd=(strace -ff -tt -s 200 -o "$trace_prefix" "$@")
+		cmd=(strace -ff -tt -s 200 -o "$trace_prefix" "${cmd[@]}")
 	fi
 
 	say "Running ${label} with ${SMOKE_TIMEOUT}s watchdog"
@@ -447,10 +476,10 @@ run_smoke_cmd() {
 		if [ "$elapsed" -ge "$SMOKE_TIMEOUT" ]; then
 			echo "error: ${label} exceeded the ${SMOKE_TIMEOUT}s watchdog." >&2
 			echo "Captured output from ${label}:" >&2
-			cat "$log" >&2 || true
+			print_smoke_log "$log" >&2 || true
 			if [ "$TRACE_SMOKE" -eq 1 ]; then
 				echo "Recent strace output for ${label}:" >&2
-				tail -n 80 "$trace_prefix"* >&2 || true
+				tail -n "$STRACE_TAIL_LINES" "$trace_prefix"* >&2 || true
 			fi
 			dump_smoke_failure_state "$label"
 			echo "Attempting to terminate ${label} pid ${pid} and direct children." >&2
@@ -470,17 +499,19 @@ run_smoke_cmd() {
 	wait "$pid" || rc=$?
 
 	if [ "$rc" -eq 0 ]; then
-		cat "$log"
+		if [ -s "$log" ]; then
+			cat "$log"
+		fi
 		echo "${label}: OK"
 		return 0
 	fi
 
 	echo "error: ${label} failed or timed out with status ${rc}." >&2
 	echo "Captured output from ${label}:" >&2
-	cat "$log" >&2 || true
+	print_smoke_log "$log" >&2 || true
 	if [ "$TRACE_SMOKE" -eq 1 ]; then
 		echo "Recent strace output for ${label}:" >&2
-		tail -n 80 "$trace_prefix"* >&2 || true
+		tail -n "$STRACE_TAIL_LINES" "$trace_prefix"* >&2 || true
 	fi
 	dump_smoke_failure_state "$label"
 	return "$rc"
@@ -494,7 +525,7 @@ dump_boot_failure_state() {
 	echo "McKernel device nodes:" >&2
 	ls -l /dev/mcd* /dev/mcos* 2>/dev/null >&2 || true
 	echo "Recent Linux dmesg:" >&2
-	sudo dmesg --ctime | tail -n 80 >&2 || true
+	sudo dmesg --ctime | tail -n "$DMESG_TAIL_LINES" >&2 || true
 }
 
 dump_smoke_failure_state() {
@@ -519,18 +550,18 @@ dump_smoke_failure_state() {
 	done
 
 	echo "Recent Linux dmesg:" >&2
-	sudo dmesg --ctime | tail -n 120 >&2 || true
+	sudo dmesg --ctime | tail -n "$DMESG_TAIL_LINES" >&2 || true
 	echo "Recent McKernel kmsg:" >&2
 	if command -v timeout >/dev/null 2>&1; then
-		timeout 5s sudo "$PREFIX/sbin/ihkosctl" 0 kmsg | tail -n 80 >&2 || true
+		timeout 5s sudo "$PREFIX/sbin/ihkosctl" 0 kmsg | tail -n "$KMSG_TAIL_LINES" >&2 || true
 	else
-		sudo "$PREFIX/sbin/ihkosctl" 0 kmsg | tail -n 80 >&2 || true
+		sudo "$PREFIX/sbin/ihkosctl" 0 kmsg | tail -n "$KMSG_TAIL_LINES" >&2 || true
 	fi
 	echo "McKernel V10 handoff markers:" >&2
 	if command -v timeout >/dev/null 2>&1; then
-		timeout 5s sudo "$PREFIX/sbin/ihkosctl" 0 kmsg | grep 'mcexec_v10' | tail -n 80 >&2 || true
+		timeout 5s sudo "$PREFIX/sbin/ihkosctl" 0 kmsg | grep 'mcexec_v10' | tail -n "$V10_TAIL_LINES" >&2 || true
 	else
-		sudo "$PREFIX/sbin/ihkosctl" 0 kmsg | grep 'mcexec_v10' | tail -n 80 >&2 || true
+		sudo "$PREFIX/sbin/ihkosctl" 0 kmsg | grep 'mcexec_v10' | tail -n "$V10_TAIL_LINES" >&2 || true
 	fi
 }
 
