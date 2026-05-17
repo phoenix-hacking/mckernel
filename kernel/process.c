@@ -2721,11 +2721,27 @@ int init_process_stack(struct thread *thread, struct program_load_desc *pn,
 	   AUXV_LEN in include/process.h. */
 	p[s_ind--] = 0;     /* AT_NULL */
 	p[s_ind--] = 0;
+	p[s_ind--] = (argc > 0) ? (unsigned long)argv[0] : 0UL; /* AT_EXECFN */
+	p[s_ind--] = (argc > 0) ? AT_EXECFN : AT_IGNORE;
+	p[s_ind--] = 0; /* AT_HWCAP2 */
+	p[s_ind--] = AT_HWCAP2;
 	ap_hwcap = arch_get_hwcap();
 	p[s_ind--] = ap_hwcap; /* AT_HWCAP */
 	p[s_ind--] = ap_hwcap ? AT_HWCAP : AT_IGNORE;
+	p[s_ind--] = 0; /* AT_SECURE */
+	p[s_ind--] = AT_SECURE;
+	p[s_ind--] = proc->egid; /* AT_EGID */
+	p[s_ind--] = AT_EGID;
+	p[s_ind--] = proc->rgid; /* AT_GID */
+	p[s_ind--] = AT_GID;
+	p[s_ind--] = proc->euid; /* AT_EUID */
+	p[s_ind--] = AT_EUID;
+	p[s_ind--] = proc->ruid; /* AT_UID */
+	p[s_ind--] = AT_UID;
 	p[s_ind--] = pn->at_entry; /* AT_ENTRY */
 	p[s_ind--] = AT_ENTRY;
+	p[s_ind--] = 0; /* AT_FLAGS */
+	p[s_ind--] = AT_FLAGS;
 	p[s_ind--] = at_base; /* AT_BASE */
 	p[s_ind--] = AT_BASE;
 	p[s_ind--] = pn->at_phnum; /* AT_PHNUM */

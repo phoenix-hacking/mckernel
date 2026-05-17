@@ -385,7 +385,7 @@ struct user
 	unsigned long int  u_debugreg [8];
 };
 
-#define	AUXV_LEN	22
+#define	AUXV_LEN	38
 
 struct vm_range {
 	struct rb_node vm_rb_node;

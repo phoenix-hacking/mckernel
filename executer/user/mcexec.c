@@ -249,6 +249,8 @@ struct program_load_desc *load_elf(FILE *fp, char **interp_pathp)
 	struct program_load_desc *desc;
 	unsigned long load_addr = 0;
 	int load_addr_set = 0;
+	unsigned long at_phdr = 0;
+	int at_phdr_set = 0;
 	static char interp_path[PATH_MAX];
 	ssize_t ss;
 
@@ -301,6 +303,10 @@ struct program_load_desc *load_elf(FILE *fp, char **interp_pathp)
 			interp_path[ss] = '\0';
 			*interp_pathp = interp_path;
 		}
+		if (phdr.p_type == PT_PHDR) {
+			at_phdr = phdr.p_vaddr;
+			at_phdr_set = 1;
+		}
 		if (phdr.p_type == PT_LOAD) {
 			desc->sections[j].vaddr = phdr.p_vaddr;
 			desc->sections[j].filesz = phdr.p_filesz;
@@ -341,7 +347,7 @@ struct program_load_desc *load_elf(FILE *fp, char **interp_pathp)
 		desc->reloc = hdr.e_type == ET_DYN;
 	desc->entry = hdr.e_entry;
 	ioctl(fd, MCEXEC_UP_GET_CREDV, desc->cred);
-	desc->at_phdr = load_addr + hdr.e_phoff;
+	desc->at_phdr = at_phdr_set ? at_phdr : load_addr + hdr.e_phoff;
 	desc->at_phent = sizeof(phdr);
 	desc->at_phnum = hdr.e_phnum;
 	desc->at_entry = hdr.e_entry;

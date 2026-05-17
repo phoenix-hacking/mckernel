@@ -48,9 +48,9 @@ TRACE_SMOKE=0
 VERBOSE_SMOKE=0
 SMOKE_LOG_TAIL_LINES="${SMOKE_LOG_TAIL_LINES:-80}"
 STRACE_TAIL_LINES="${STRACE_TAIL_LINES:-40}"
-DMESG_TAIL_LINES="${DMESG_TAIL_LINES:-60}"
-KMSG_TAIL_LINES="${KMSG_TAIL_LINES:-60}"
-V10_TAIL_LINES="${V10_TAIL_LINES:-40}"
+DMESG_TAIL_LINES="${DMESG_TAIL_LINES:-40}"
+KMSG_TAIL_LINES="${KMSG_TAIL_LINES:-40}"
+V10_TAIL_LINES="${V10_TAIL_LINES:-30}"
 INSTALL_DEPS=1
 INSTALL_RUST=1
 DO_INSTALL=1
@@ -530,6 +530,7 @@ dump_boot_failure_state() {
 
 dump_smoke_failure_state() {
 	local label="$1"
+	local dump_count="${SMOKE_FAILURE_DUMP_COUNT:-0}"
 
 	echo "Linux process state after ${label} failure:" >&2
 	ps -eo pid,ppid,stat,wchan:32,comm,args | grep -E 'mcexec|mcstat|timeout|strace' | grep -v grep >&2 || true
@@ -549,20 +550,25 @@ dump_smoke_failure_state() {
 		fi
 	done
 
-	echo "Recent Linux dmesg:" >&2
-	sudo dmesg --ctime | tail -n "$DMESG_TAIL_LINES" >&2 || true
-	echo "Recent McKernel kmsg:" >&2
-	if command -v timeout >/dev/null 2>&1; then
-		timeout 5s sudo "$PREFIX/sbin/ihkosctl" 0 kmsg | tail -n "$KMSG_TAIL_LINES" >&2 || true
+	if [ "$dump_count" -eq 0 ]; then
+		echo "Recent Linux dmesg:" >&2
+		sudo dmesg --ctime | tail -n "$DMESG_TAIL_LINES" >&2 || true
+		echo "Recent McKernel kmsg:" >&2
+		if command -v timeout >/dev/null 2>&1; then
+			timeout 5s sudo "$PREFIX/sbin/ihkosctl" 0 kmsg | tail -n "$KMSG_TAIL_LINES" >&2 || true
+		else
+			sudo "$PREFIX/sbin/ihkosctl" 0 kmsg | tail -n "$KMSG_TAIL_LINES" >&2 || true
+		fi
 	else
-		sudo "$PREFIX/sbin/ihkosctl" 0 kmsg | tail -n "$KMSG_TAIL_LINES" >&2 || true
+		echo "Skipping repeated Linux dmesg and McKernel kmsg dump for ${label}; see the first smoke failure above." >&2
 	fi
 	echo "McKernel V10 handoff markers:" >&2
 	if command -v timeout >/dev/null 2>&1; then
-		timeout 5s sudo "$PREFIX/sbin/ihkosctl" 0 kmsg | grep 'mcexec_v10' | tail -n "$V10_TAIL_LINES" >&2 || true
+		timeout 5s sudo "$PREFIX/sbin/ihkosctl" 0 kmsg | grep 'mcexec_v10: \(argenv\|auxv\|initial_stack\|prepared\|fatal\|signal_default\)' | tail -n "$V10_TAIL_LINES" >&2 || true
 	else
-		sudo "$PREFIX/sbin/ihkosctl" 0 kmsg | grep 'mcexec_v10' | tail -n "$V10_TAIL_LINES" >&2 || true
+		sudo "$PREFIX/sbin/ihkosctl" 0 kmsg | grep 'mcexec_v10: \(argenv\|auxv\|initial_stack\|prepared\|fatal\|signal_default\)' | tail -n "$V10_TAIL_LINES" >&2 || true
 	fi
+	SMOKE_FAILURE_DUMP_COUNT=$((dump_count + 1))
 }
 
 need_cmd sudo
