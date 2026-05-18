@@ -4,9 +4,16 @@ use core::panic::PanicInfo;
 
 pub mod abi;
 mod bitmap;
+mod bitops;
 mod llist;
+mod mem_helpers;
+mod numparse;
 mod page_alloc;
+mod page_helpers;
+mod plist;
 mod rbtree;
+mod string;
+mod waitq;
 
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {

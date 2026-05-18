@@ -15,6 +15,13 @@
 #include <process.h>
 #include <cls.h>
 
+#ifdef MCKERNEL_RUST_WAITQ_CORE
+extern void waitq_init(waitq_t *waitq);
+extern void waitq_add_entry_locked(waitq_t *waitq, waitq_entry_t *entry);
+extern void waitq_remove_entry_locked(waitq_t *waitq, waitq_entry_t *entry);
+extern int waitq_wake_nr_locked(waitq_t *waitq, int nr);
+#endif
+
 int
 default_wake_function(waitq_entry_t *entry, unsigned mode,
 					  int flags, void *key)
@@ -29,12 +36,16 @@ locked_wake_function(waitq_entry_t *entry, unsigned mode,
 	return sched_wakeup_thread_locked(entry->private, PS_NORMAL);
 }
 
+#ifdef MCKERNEL_RUST_WAITQ_CORE
+/* Rust-owned core waitq list helpers. */
+#else
 void
 waitq_init(waitq_t *waitq)
 {
 	ihk_mc_spinlock_init(&waitq->lock);
 	INIT_LIST_HEAD(&waitq->waitq);
 }
+#endif
 
 void
 waitq_init_entry(waitq_entry_t *entry, struct thread *proc)
@@ -65,12 +76,14 @@ waitq_add_entry(waitq_t *waitq, waitq_entry_t *entry)
 }
 
 
+#ifndef MCKERNEL_RUST_WAITQ_CORE
 void
 waitq_add_entry_locked(waitq_t *waitq, waitq_entry_t *entry)
 {
 	//BUG_ON(!list_empty(&entry->link));
 	list_add_tail(&entry->link, &waitq->waitq);
 }
+#endif
 
 
 void
@@ -82,12 +95,14 @@ waitq_remove_entry(waitq_t *waitq, waitq_entry_t *entry)
 }
 
 
+#ifndef MCKERNEL_RUST_WAITQ_CORE
 void
 waitq_remove_entry_locked(waitq_t *waitq, waitq_entry_t *entry)
 {
 	//BUG_ON(list_empty(&entry->link));
 	list_del_init(&entry->link);
 }
+#endif
 
 
 void
@@ -136,6 +151,7 @@ waitq_wake_nr(waitq_t * waitq, int nr)
 }
 
 
+#ifndef MCKERNEL_RUST_WAITQ_CORE
 int
 waitq_wake_nr_locked( waitq_t * waitq, int nr )
 {
@@ -151,4 +167,4 @@ waitq_wake_nr_locked( waitq_t * waitq, int nr )
 
 	return count - 1;
 }
-
+#endif

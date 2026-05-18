@@ -121,6 +121,9 @@ static void dma_test(void)
 
 extern char *ihk_get_kargs(void);
 
+#ifdef MCKERNEL_RUST_INIT_HELPERS
+extern char *find_command_line(char *name);
+#else
 char *find_command_line(char *name)
 {
 	char *cmdline = ihk_get_kargs();
@@ -130,6 +133,7 @@ char *find_command_line(char *name)
 	}
 	return strstr(cmdline, name);
 }
+#endif
 
 static void parse_kargs(void)
 {

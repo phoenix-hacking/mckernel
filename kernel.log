@@ -3447,3 +3447,413 @@ Update 2026-05-18 01:34 EDT:
   - Keep full exported `ihk_numa_free_pages()` orchestration and IKC/Linux
     zero-request handling in C until V12 stress covers deferred frees across
     CPUs and zero-at-free transitions.
+
+Update 2026-05-18 01:52 EDT:
+- Continued the allocator Rust conversion with another bounded free-path slice,
+  while keeping the public C/Rust dual-build contract intact.
+- Implementation:
+  - Added Rust `__ihk_numa_free_pages_to_tree_nolock()` for direct free-to-tree
+    insertion and `nr_free_pages` accounting under the existing C lock wrapper.
+  - Added Rust `__ihk_numa_defer_zero_free_pages()` for deferred-free chunk
+    initialization, `nr_to_zero_pages` accounting, memory barrier, and
+    `to_zero_list` enqueue.
+  - Kept exported C `ihk_numa_free_pages()` responsible for CPU-local-cache
+    precheck, min/max bounds, zero-now policy, lock/log wrapper behavior, and
+    the IKC/Linux zero request path.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct free,
+    immediate zero-and-free, deferred enqueue, deferred zero, and reallocation
+    coverage. Latest allocator digest:
+    `page_alloc_bitmap ok digest=bd2801aa531703bf`.
+- Local validation:
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `page_alloc ok digest=bbeef5e7f59e821f` and `page_alloc_bitmap ok
+    digest=bd2801aa531703bf`.
+  - `git diff --check` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh scripts/rocky-rust-validation.sh scripts/rocky-v11-focused.sh`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - Rust object exports now include `__ihk_numa_free_pages_to_tree_nolock` and
+    `__ihk_numa_defer_zero_free_pages` in addition to the earlier allocator
+    helpers. Unresolved Rust object symbols remain only
+    `ihk_mc_chk_page_address`, `phys_to_virt`, `virt_to_phys`, and
+    `zero_at_free`, and the SIMD scan stayed clean.
+- Runtime validation:
+  - V10 smoke passed with log `/tmp/mckernel-v10-20260518-014825.log`.
+  - A non-interactive V11 invocation at
+    `/tmp/mckernel-v11-20260518-015012.log` stopped before boot because sudo
+    credentials were unavailable in that shell.
+  - Required focused V11 then passed against the installed image without
+    rebuilding McKernel, with log directory
+    `/tmp/mckernel-v11-focused-20260518-015058` and tee log
+    `/tmp/mckernel-v11-20260518-015058.log`.
+  - The passing V11 run covered the accepted strace issue/bundle tests, local
+    issue probes, required LTP futex/process/time/fork tests, and XPMEM
+    `XTP_001` through `XTP_007` plus `XTP_901` through `XTP_905`.
+    `C1324T01` remains a classified small-VM `fork()` `ENOMEM` case before
+    ptrace.
+- Validation cadence update:
+  - Use the equivalence harness, diff hygiene, shell syntax, Rust symbol, and
+    SIMD checks after each small Rust helper batch.
+  - Reserve full Rust/C image builds plus V10/V11 runtime gates for larger
+    accumulated conversion batches or high-risk behavior changes.
+- Path forward:
+  - Next work should first widen allocator V12 stress around direct free,
+    deferred free, zero-list movement, zero-at-free transitions, and
+    accounting invariants.
+  - Keep full exported `ihk_numa_free_pages()` orchestration and IKC/Linux
+    zero-request handling in C until that stress is broader.
+
+Update 2026-05-18 02:05 EDT:
+- Added another larger Rust conversion batch while keeping the build cadence
+  bounded to cheap checks plus image-link validation.
+- Implementation:
+  - Added `kernel/rust/bitops.rs` and Rust-owned C ABI exports for
+    `find_next_bit()`, `find_next_zero_bit()`, `find_first_bit()`,
+    `find_first_zero_bit()`, `__sw_hweight8()`, `__sw_hweight16()`,
+    `__sw_hweight32()`, and `__sw_hweight64()`.
+  - Guarded `lib/bitops.c` with `MCKERNEL_RUST_BITOPS` and wired the Rust
+    bitops replacement through the existing Rust object when
+    `ENABLE_RUST_KERNEL` is on. The C fallback build still compiles the
+    original C bitops implementation.
+  - Added Rust `__ihk_numa_free_pages_prepare()` to own
+    `ihk_numa_free_pages()` preflight behavior: null/zero-page ignore,
+    min/max bounds ignore, zero-now clearing, and direct-vs-deferred action
+    selection.
+  - Updated the C free wrapper so the Rust path calls the prepare helper first,
+    then keeps CPU-local cache, MCS lock/unlock, kprintf/dkprintf behavior, and
+    IKC/Linux zero-request handling in C.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct bitops
+    coverage plus out-of-range and zero-page free ignored-path coverage.
+- Local validation:
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `bitops ok digest=de062950e3e23679`,
+    `page_alloc ok digest=bbeef5e7f59e821f`, and
+    `page_alloc_bitmap ok digest=d9f2d2b25941c9c8`.
+  - `git diff --check` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh scripts/rocky-rust-validation.sh scripts/rocky-v11-focused.sh`
+    passed.
+  - The Rust object symbol/SIMD checks inside the equivalence harness passed:
+    unresolved symbols remain only `ihk_mc_chk_page_address`, `phys_to_virt`,
+    `virt_to_phys`, and `zero_at_free`, and no SIMD/vector instructions were
+    found.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+- Runtime validation:
+  - Did not rerun V10/V11 for this batch to avoid excessive full runtime loops.
+  - Current runtime baseline remains the clean V10 log
+    `/tmp/mckernel-v10-20260518-014825.log` and required focused V11 log
+    directory `/tmp/mckernel-v11-focused-20260518-015058`.
+- Path forward:
+  - Continue using cheap equivalence/symbol/build gates for small Rust helper
+    batches.
+  - Run full V10/V11 again after the next larger allocator or memory-management
+    batch, especially before moving C-owned lock/log/IKC pieces.
+
+Update 2026-05-18 02:26 EDT:
+- Added a broader shared-primitive Rust conversion slice while preserving the
+  C fallback and avoiding another long runtime loop.
+- Implementation:
+  - Added `kernel/rust/string.rs` and Rust-owned C ABI exports for
+    `strlen()`, `strnlen()`, `strcpy()`, `strncpy()`, `strcmp()`,
+    `strncmp()`, `strchr()`, `strrchr()`, `strpbrk()`, `strstr()`,
+    `memcpy()`, `memcpy_long()`, `memset()`, and `memcmp()`.
+  - Guarded the corresponding leaf implementations in `lib/string.c` with
+    `MCKERNEL_RUST_STRING_CORE` and wired that guard through
+    `kernel/CMakeLists.txt` when `ENABLE_RUST_KERNEL` is on.
+  - Kept `flatten_strings_from_user()` in C because it depends on `kmalloc`
+    and user-copy helpers. The x86 fast inline `memset` path remains available
+    to C call sites through `arch-string.h`.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct string/memory
+    C-vs-Rust digest coverage, including `strncpy()` padding/truncation,
+    signed-char comparisons, pointer-return helpers, `strstr()` empty-needle
+    behavior as implemented by the current C code, `memcpy()`,
+    `memcpy_long()`, and `memcmp()` edge behavior.
+- Local validation:
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `string ok digest=d06a5f4ebf80f798`, `bitops ok
+    digest=de062950e3e23679`, `page_alloc ok digest=bbeef5e7f59e821f`, and
+    `page_alloc_bitmap ok digest=d9f2d2b25941c9c8`.
+  - `git diff --check` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh scripts/rocky-rust-validation.sh scripts/rocky-v11-focused.sh`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - The rebuilt Rust object exports the new string/memory symbols plus the
+    existing bitops and allocator helpers. Unresolved Rust object symbols
+    remain only `ihk_mc_chk_page_address`, `phys_to_virt`, `virt_to_phys`, and
+    `zero_at_free`, and the SIMD scan stayed clean.
+- Runtime validation:
+  - Did not rerun V10/V11 for this batch by design. The changed code is covered
+    by direct C/Rust equivalence and Rust/C image links; runtime baseline
+    remains the clean V10 log `/tmp/mckernel-v10-20260518-014825.log` and
+    focused V11 directory `/tmp/mckernel-v11-focused-20260518-015058`.
+- Path forward:
+  - For more Rust percentage per batch without excessive full builds, continue
+    selecting leaf-helper clusters with direct equivalence coverage, or widen
+    allocator V12 stress before moving additional public allocator
+    orchestration.
+
+Update 2026-05-18 02:34 EDT:
+- Added one more focused Rust conversion slice in the same fast batch.
+- Implementation:
+  - Added `kernel/rust/plist.rs` and Rust-owned C ABI exports for
+    `plist_add()` and `plist_del()`.
+  - Guarded `kernel/plist.c` with `MCKERNEL_RUST_PLIST_CORE` when
+    `ENABLE_RUST_KERNEL` is on; the Rust-disabled C fallback still builds the
+    original plist implementation.
+  - Kept futex queue wakeup, locking, and scheduler behavior in C. This slice
+    only moves the priority-list add/delete data-structure logic.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with plist coverage for
+    sorted priority insertion, FIFO order within equal priorities, deletion of
+    priority representatives, deletion of non-representatives, and empty-list
+    cleanup.
+- Local validation:
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `plist ok digest=5e849f2117bdcb48`, `string ok
+    digest=d06a5f4ebf80f798`, `bitops ok digest=de062950e3e23679`,
+    `page_alloc ok digest=bbeef5e7f59e821f`, and `page_alloc_bitmap ok
+    digest=d9f2d2b25941c9c8`.
+  - `git diff --check` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh scripts/rocky-rust-validation.sh scripts/rocky-v11-focused.sh`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed after fixing the plist C guard to cover both exported functions.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - The rebuilt Rust object exports `plist_add()` and `plist_del()` in addition
+    to the string/memory, bitops, bitmap, rbtree/list, and allocator helpers.
+    Unresolved Rust object symbols remain only `ihk_mc_chk_page_address`,
+    `phys_to_virt`, `virt_to_phys`, and `zero_at_free`, and the SIMD scan
+    stayed clean.
+- Runtime validation:
+  - Did not rerun V10/V11 for this plist slice by design. Current runtime
+    baseline remains the clean V10 log `/tmp/mckernel-v10-20260518-014825.log`
+    and focused V11 directory `/tmp/mckernel-v11-focused-20260518-015058`.
+- Path forward:
+  - The next high-value Rust work should either broaden V12 allocator stress
+    before moving more allocator orchestration, or target another small
+    data-structure/leaf-helper cluster with direct equivalence and low runtime
+    blast radius.
+
+Update 2026-05-18 02:56 EDT:
+- Continued the fast Rust conversion batch with two more shared leaf-helper
+  clusters and kept validation strategic.
+- Implementation:
+  - Added `kernel/rust/numparse.rs` and Rust-owned C ABI exports for
+    `simple_strtoul()`, `simple_strtol()`, `simple_strtoull()`,
+    `simple_strtoll()`, `strict_strtoul()`, `strict_strtol()`,
+    `strict_strtoull()`, `strict_strtoll()`, and `strtol()`.
+  - Guarded the corresponding numeric parser implementations in
+    `lib/vsprintf.c` with `MCKERNEL_RUST_NUMPARSE` when
+    `ENABLE_RUST_KERNEL` is on. Varargs formatting/scanning remains C-owned.
+  - Added Rust-owned bitmap parser exports in `kernel/rust/bitmap.rs`:
+    `__bitmap_parse()`, `bitmap_parse_user()`, `bitmap_parselist()`, and
+    `bitmap_parselist_user()`.
+  - Guarded the corresponding parser implementations in `lib/bitmap.c` with
+    `MCKERNEL_RUST_BITMAP_PARSE`. Bitmap print helpers remain C-owned because
+    they depend on `scnprintf()`.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct C/Rust
+    numparse coverage and bitmap hex/list parser coverage, including invalid
+    input, overflow, whitespace, no-NUL buffer lengths, user wrappers, and mask
+    width cases.
+- Local validation:
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `numparse ok digest=c67e393e673a778f`,
+    `bitmap_parse ok digest=c28c0afd247a3cb9`, plus the prior rbtree, llist,
+    plist, bitops, string, bitmap, page_alloc, and page_alloc_bitmap digests.
+  - `git diff --check` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh scripts/rocky-rust-validation.sh scripts/rocky-v11-focused.sh`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - The rebuilt Rust object exports the new numeric parser and bitmap parser
+    symbols. Unresolved Rust object symbols remain only
+    `ihk_mc_chk_page_address`, `phys_to_virt`, `virt_to_phys`, and
+    `zero_at_free`, and the SIMD scan stayed clean.
+- Runtime validation:
+  - Did not rerun V10/V11 for this leaf-helper batch by design to avoid
+    excessive full runtime loops. Current runtime baseline remains the clean
+    V10 log `/tmp/mckernel-v10-20260518-014825.log` and focused V11 directory
+    `/tmp/mckernel-v11-focused-20260518-015058`.
+- Path forward:
+  - Keep converting leaf-helper clusters with direct equivalence coverage while
+    the runtime baseline is stable.
+  - Before moving more public allocator orchestration, widen V12 allocator
+    stress around free-list movement, zero-list transitions, direct-vs-deferred
+    free policy, and accounting invariants.
+
+Update 2026-05-18 03:12 EDT:
+- Continued conversion with a waitqueue-core Rust slice while keeping scheduler
+  and futex behavior out of this batch.
+- Implementation:
+  - Added `kernel/rust/waitq.rs` with Rust-owned C ABI exports for
+    `waitq_init()`, `waitq_add_entry_locked()`,
+    `waitq_remove_entry_locked()`, and `waitq_wake_nr_locked()`.
+  - Guarded the corresponding implementations in `kernel/waitq.c` with
+    `MCKERNEL_RUST_WAITQ_CORE` when `ENABLE_RUST_KERNEL` is on. The Rust
+    disabled C fallback still builds the original waitqueue core.
+  - Kept `default_wake_function()`, `locked_wake_function()`, spinlock
+    wrappers, `waitq_prepare_to_wait()`, `waitq_finish_wait()`,
+    `waitq_wakeup()`, `waitq_wake_nr()`, scheduler callbacks, current-thread
+    state changes, timers, and futex logic in C.
+  - Added ABI/layout assertions for `ihk_spinlock_t`, `waitq_t`, and
+    `waitq_entry_t`.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct waitqueue-core
+    C/Rust digest coverage for initialization, locked insertion/removal, wake
+    limits, empty wake behavior, callback ordering, and preserved entry flags.
+- Local validation:
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `waitq ok digest=8312cb826f153763` plus the prior rbtree, llist, plist,
+    bitops, string, numparse, bitmap, bitmap_parse, page_alloc, and
+    page_alloc_bitmap digests.
+  - `git diff --check` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh scripts/rocky-rust-validation.sh scripts/rocky-v11-focused.sh`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - The rebuilt Rust object exports the new waitqueue symbols. Unresolved Rust
+    object symbols remain only `ihk_mc_chk_page_address`, `phys_to_virt`,
+    `virt_to_phys`, and `zero_at_free`, and the SIMD scan stayed clean.
+- Runtime validation:
+  - Did not rerun V10/V11 for this waitqueue-core leaf batch by design. Current
+    runtime baseline remains the clean V10 log
+    `/tmp/mckernel-v10-20260518-014825.log` and focused V11 directory
+    `/tmp/mckernel-v11-focused-20260518-015058`.
+- Path forward:
+  - The next high-value batch should either continue scheduler-adjacent leaf
+    helpers with locked/unit equivalence, or widen allocator V12 stress before
+    moving more exported allocator orchestration.
+
+Update 2026-05-18 03:25 EDT:
+- Continued conversion with a small init/memory query-helper Rust slice. This
+  is a bounded memory-adjacent batch, not a page-table or mapping-path port.
+- Implementation:
+  - Added `kernel/rust/mem_helpers.rs` with Rust-owned C ABI exports for
+    `find_command_line()`, `is_mckernel_memory()`, and `phys_to_nid()`.
+  - Wired `mem_helpers.rs` into `kernel/rust/lib.rs` and the Rust CMake source
+    list.
+  - Guarded `kernel/init.c` with `MCKERNEL_RUST_INIT_HELPERS` so Rust owns
+    `find_command_line()` when `ENABLE_RUST_KERNEL` is on.
+  - Guarded `kernel/mem.c` with `MCKERNEL_RUST_MEM_HELPERS` so Rust owns
+    `is_mckernel_memory()` and `phys_to_nid()` when `ENABLE_RUST_KERNEL` is
+    on.
+  - Left `ihk_mc_chk_page_address()`, page-table walking, mapping/unmapping,
+    address-space changes, and high-risk memory-management behavior in C.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct C/Rust digest
+    coverage for memory chunk containment, chunk-boundary NUMA-ID lookup,
+    no-chunk fallbacks, null kernel arguments, and `find_command_line()`
+    substring offsets.
+- Local validation:
+  - `rustfmt kernel/rust/lib.rs kernel/rust/mem_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `mem_init_helpers ok digest=435709f3a5bc062f`, `waitq ok
+    digest=8312cb826f153763`, `plist ok digest=5e849f2117bdcb48`,
+    `bitops ok digest=de062950e3e23679`, `string ok
+    digest=d06a5f4ebf80f798`, `numparse ok digest=c67e393e673a778f`,
+    `bitmap ok digest=c0c668c4fe66d1e6`, `bitmap_parse ok
+    digest=c28c0afd247a3cb9`, `page_alloc ok digest=bbeef5e7f59e821f`, and
+    `page_alloc_bitmap ok digest=d9f2d2b25941c9c8`.
+  - `git diff --check` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh scripts/rocky-rust-validation.sh scripts/rocky-v11-focused.sh`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - The rebuilt Rust object exports `find_command_line()`,
+    `is_mckernel_memory()`, `phys_to_nid()`, and the earlier waitqueue symbols.
+    The Rust object unresolved-provider list is expected and limited to
+    `ihk_get_kargs`, `ihk_mc_chk_page_address`,
+    `ihk_mc_get_memory_chunk`, `ihk_mc_get_nr_memory_chunks`,
+    `phys_to_virt`, `virt_to_phys`, and `zero_at_free`; the SIMD scan stayed
+    clean.
+- Dynamic validation:
+  - Attempted V10 boot smoke with
+    `scripts/rocky-rust-validation.sh --skip-deps --skip-rust --boot-smoke --trace-smoke --yes --jobs 2`
+    because this batch touches `kernel/init.c` and `kernel/mem.c`.
+  - The script completed configure/build/module/tool work, then stopped before
+    install and before booting McKernel because sudo required an interactive
+    password prompt in that non-interactive run.
+  - No runtime failure was observed, but this batch does not have a completed
+    V10 runtime pass yet. Runtime baseline remains the clean V10 log
+    `/tmp/mckernel-v10-20260518-014825.log` and focused V11 directory
+    `/tmp/mckernel-v11-focused-20260518-015058`.
+- Path forward:
+  - Next safe code targets are additional small helper clusters with direct
+    equivalence or a V12 allocator-stress expansion before moving more public
+    allocator orchestration.
+  - For a completed dynamic gate on this memory-adjacent batch, rerun V10 with
+    an interactive sudo path or an approved non-interactive install path, then
+    repeat focused V11 only after a larger memory/allocator/syscall batch.
+
+Update 2026-05-18 03:34 EDT:
+- Added one more bounded memory-adjacent Rust conversion and validated the
+  build path before stopping.
+- Implementation:
+  - Added `kernel/rust/page_helpers.rs` with Rust-owned C ABI exports for
+    `page_to_phys()` and `is_splitable()`.
+  - Wired `page_helpers.rs` into `kernel/rust/lib.rs` and the Rust CMake source
+    list.
+  - Guarded the matching `kernel/mem.c` implementations with
+    `MCKERNEL_RUST_PAGE_HELPERS`, while keeping the C fallback path intact.
+  - Added `struct page` ABI/layout assertions in `kernel/rust/abi_checks.c`
+    for size and key offsets used by the Rust helper.
+  - Left page hash lookup, page-table walking, mapping/unmapping,
+    memory-object operations, and address validation in C.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct C/Rust digest
+    coverage for null pages, physical-address extraction, page mode
+    classification, multi-map counts, and shared-memory splitability override
+    behavior.
+- Local validation:
+  - `rustfmt kernel/rust/lib.rs kernel/rust/page_helpers.rs kernel/rust/mem_helpers.rs`
+    passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh scripts/rocky-rust-validation.sh scripts/rocky-v11-focused.sh`
+    passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `page_helpers ok digest=b7d1e5ed6a71e5f9`,
+    `mem_init_helpers ok digest=435709f3a5bc062f`, `waitq ok
+    digest=8312cb826f153763`, `plist ok digest=5e849f2117bdcb48`,
+    `bitops ok digest=de062950e3e23679`, `string ok
+    digest=d06a5f4ebf80f798`, `numparse ok digest=c67e393e673a778f`,
+    `bitmap ok digest=c0c668c4fe66d1e6`, `bitmap_parse ok
+    digest=c28c0afd247a3cb9`, `page_alloc ok digest=bbeef5e7f59e821f`, and
+    `page_alloc_bitmap ok digest=d9f2d2b25941c9c8`.
+  - `git diff --check` passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - The rebuilt Rust object exports `page_to_phys()`, `is_splitable()`,
+    `find_command_line()`, `is_mckernel_memory()`, `phys_to_nid()`, and
+    `waitq_init()`.
+  - The Rust object unresolved-provider list remains expected and limited to
+    `ihk_get_kargs`, `ihk_mc_chk_page_address`,
+    `ihk_mc_get_memory_chunk`, `ihk_mc_get_nr_memory_chunks`,
+    `phys_to_virt`, `virt_to_phys`, and `zero_at_free`; the actual build
+    object SIMD scan stayed clean.
+- Runtime validation:
+  - Did not attempt another V10 install/boot in this final page-helper slice
+    because the preceding V10 attempt already showed the current blocker is
+    non-interactive sudo at install time, before McKernel boot.
+  - Runtime baseline remains the clean V10 log
+    `/tmp/mckernel-v10-20260518-014825.log` and focused V11 directory
+    `/tmp/mckernel-v11-focused-20260518-015058`.
+- Path forward:
+  - Next conversion can continue with leaf helpers that have isolated
+    equivalence coverage.
+  - Before moving more memory/page-table or allocator orchestration, unblock a
+    completed V10 runtime run through an interactive or otherwise approved
+    sudo install path, then run focused V11 after the next larger behavior
+    batch.

@@ -1,6 +1,8 @@
 /* bitops.c COPYRIGHT FUJITSU LIMITED 2015-2016 */
 #include <bitops.h>
 
+#ifndef MCKERNEL_RUST_BITOPS
+
 #define BITOP_WORD(nr)		((nr) / BITS_PER_LONG)
 
 /*
@@ -195,3 +197,4 @@ unsigned long __sw_hweight64(uint64_t w)
 #endif
 }
 
+#endif /* MCKERNEL_RUST_BITOPS */

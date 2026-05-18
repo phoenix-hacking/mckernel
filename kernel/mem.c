@@ -2031,10 +2031,14 @@ struct page *phys_to_page(uintptr_t phys)
 	return page;
 }
 
+#ifdef MCKERNEL_RUST_PAGE_HELPERS
+extern uintptr_t page_to_phys(struct page *page);
+#else
 uintptr_t page_to_phys(struct page *page)
 {
 	return page ? page->phys : 0;
 }
+#endif /* MCKERNEL_RUST_PAGE_HELPERS */
 
 /*
  * Allocate page and add to hash if it doesn't exist yet.
@@ -2778,6 +2782,9 @@ void ___kmalloc_print_free_list(struct list_head *list)
 	kprintf_unlock(irqflags);
 }
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern int is_mckernel_memory(unsigned long start, unsigned long end);
+#else
 #ifdef IHK_RBTREE_ALLOCATOR
 int is_mckernel_memory(unsigned long start, unsigned long end)
 {
@@ -2816,6 +2823,7 @@ int is_mckernel_memory(unsigned long start, unsigned long end)
 	return 0;
 }
 #endif /* IHK_RBTREE_ALLOCATOR */
+#endif /* MCKERNEL_RUST_MEM_HELPERS */
 
 void ihk_mc_query_mem_areas(void){
 
@@ -3059,6 +3067,9 @@ retry:
 	return ptep;
 }
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern int phys_to_nid(unsigned long p);
+#else
 int phys_to_nid(unsigned long p)
 {
    int i, numa_id = -1, _numa_id;
@@ -3076,6 +3087,7 @@ int phys_to_nid(unsigned long p)
 out:
    return numa_id;
 }
+#endif /* MCKERNEL_RUST_MEM_HELPERS */
 
 int lookup_node(struct process_vm *vm, void *addr)
 {
@@ -3100,6 +3112,9 @@ out:
 	return node;
 }
 
+#ifdef MCKERNEL_RUST_PAGE_HELPERS
+extern int is_splitable(struct page *page, uint32_t memobj_flags);
+#else
 int is_splitable(struct page *page, uint32_t memobj_flags)
 {
 	int ret = 1;
@@ -3114,3 +3129,4 @@ int is_splitable(struct page *page, uint32_t memobj_flags)
 out:
 	return ret;
 }
+#endif /* MCKERNEL_RUST_PAGE_HELPERS */

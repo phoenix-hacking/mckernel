@@ -6,6 +6,8 @@
 #include <ihk/lock.h>
 #include <ihk/page_alloc.h>
 #include <ihk/context.h>
+#include <waitq.h>
+#include <page.h>
 
 #define ABI_ASSERT(cond, msg) _Static_assert(cond, msg)
 #define ABI_OFFSET(type, member) __builtin_offsetof(type, member)
@@ -67,6 +69,40 @@ ABI_ASSERT(sizeof(struct list_head) == 16,
 	   "Rust/C list_head size mismatch");
 ABI_ASSERT(ABI_OFFSET(struct list_head, prev) == 8,
 	   "Rust/C list_head prev offset mismatch");
+ABI_ASSERT(sizeof(ihk_spinlock_t) == 4,
+	   "Rust/C ihk_spinlock_t size mismatch");
+ABI_ASSERT(ABI_OFFSET(ihk_spinlock_t, head_tail) == 0,
+	   "Rust/C ihk_spinlock_t head_tail offset mismatch");
+ABI_ASSERT(sizeof(waitq_t) == 24,
+	   "Rust/C waitq_t size mismatch");
+ABI_ASSERT(ABI_OFFSET(waitq_t, waitq) == 8,
+	   "Rust/C waitq_t waitq offset mismatch");
+ABI_ASSERT(sizeof(waitq_entry_t) == 40,
+	   "Rust/C waitq_entry_t size mismatch");
+ABI_ASSERT(ABI_OFFSET(waitq_entry_t, private) == 16,
+	   "Rust/C waitq_entry_t private offset mismatch");
+ABI_ASSERT(ABI_OFFSET(waitq_entry_t, flags) == 24,
+	   "Rust/C waitq_entry_t flags offset mismatch");
+ABI_ASSERT(ABI_OFFSET(waitq_entry_t, func) == 32,
+	   "Rust/C waitq_entry_t func offset mismatch");
+ABI_ASSERT(sizeof(struct page) == 80,
+	   "Rust/C page size mismatch");
+ABI_ASSERT(ABI_OFFSET(struct page, list) == 0,
+	   "Rust/C page list offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct page, hash) == 16,
+	   "Rust/C page hash offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct page, mode) == 32,
+	   "Rust/C page mode offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct page, phys) == 40,
+	   "Rust/C page phys offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct page, count) == 48,
+	   "Rust/C page count offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct page, mapped) == 56,
+	   "Rust/C page mapped offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct page, offset) == 64,
+	   "Rust/C page offset offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct page, pgshift) == 72,
+	   "Rust/C page pgshift offset mismatch");
 ABI_ASSERT(sizeof(mcs_lock_node_t) == 64,
 	   "Rust/C mcs_lock_node_t size mismatch");
 ABI_ASSERT(ABI_OFFSET(mcs_lock_node_t, locked) == 0,

@@ -7,8 +7,12 @@ type CULong = u64;
 
 const ENOMEM: CInt = 12;
 const EBUSY: CInt = 16;
+const EINVAL: CInt = 22;
+const ERANGE: CInt = 34;
+const EOVERFLOW: CInt = 75;
 const BITS_PER_LONG: usize = 64;
 const BITS_PER_LONG_I32: CInt = 64;
+const CHUNKSZ: CInt = 32;
 const REG_OP_ISFREE: CInt = 0;
 const REG_OP_ALLOC: CInt = 1;
 const REG_OP_RELEASE: CInt = 2;
@@ -103,6 +107,51 @@ unsafe fn test_bit(map: *const CULong, bit: CULong) -> bool {
 unsafe fn set_bit(map: *mut CULong, bit: CULong) {
     let bit = bit as usize;
     *map.add(bit / BITS_PER_LONG) |= 1u64 << (bit % BITS_PER_LONG);
+}
+
+#[inline(always)]
+fn is_space(ch: u8) -> bool {
+    matches!(ch, b'\t' | b'\n' | 0x0b | 0x0c | b'\r' | b' ' | 0xa0)
+}
+
+#[inline(always)]
+fn is_digit(ch: u8) -> bool {
+    ch.is_ascii_digit()
+}
+
+#[inline(always)]
+fn is_xdigit(ch: u8) -> bool {
+    ch.is_ascii_digit() || (b'a'..=b'f').contains(&ch) || (b'A'..=b'F').contains(&ch)
+}
+
+#[inline(always)]
+fn fls32(mut value: u32) -> CInt {
+    let mut result = 32;
+
+    if value == 0 {
+        return 0;
+    }
+    if (value & 0xffff_0000) == 0 {
+        value <<= 16;
+        result -= 16;
+    }
+    if (value & 0xff00_0000) == 0 {
+        value <<= 8;
+        result -= 8;
+    }
+    if (value & 0xf000_0000) == 0 {
+        value <<= 4;
+        result -= 4;
+    }
+    if (value & 0xc000_0000) == 0 {
+        value <<= 2;
+        result -= 2;
+    }
+    if (value & 0x8000_0000) == 0 {
+        result -= 1;
+    }
+
+    result
 }
 
 #[inline(always)]
@@ -668,6 +717,185 @@ pub unsafe extern "C" fn bitmap_clear(map: *mut CULong, start: CInt, nr: CInt) {
         mask_to_clear &= bitmap_last_word_mask(size);
         *p &= !mask_to_clear;
     }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn __bitmap_parse(
+    mut buf: *const CChar,
+    mut buflen: CUInt,
+    _is_user: CInt,
+    maskp: *mut CULong,
+    nmaskbits: CInt,
+) -> CInt {
+    let mut c: u8 = 0;
+    let mut totaldigits: CInt = 0;
+    let mut nchunks: CInt = 0;
+    let mut nbits: CInt = 0;
+
+    zero_words(maskp, bits_to_longs(nmaskbits));
+
+    loop {
+        let mut chunk: u32 = 0;
+        let mut ndigits: CInt = 0;
+
+        while buflen != 0 {
+            let old_c = c;
+            c = *(buf as *const u8);
+            buf = buf.add(1);
+            buflen -= 1;
+
+            if is_space(c) {
+                continue;
+            }
+            if totaldigits != 0 && c != 0 && is_space(old_c) {
+                return -EINVAL;
+            }
+            if c == 0 || c == b',' {
+                break;
+            }
+            if !is_xdigit(c) {
+                return -EINVAL;
+            }
+            if (chunk & !((1u32 << (CHUNKSZ - 4)) - 1)) != 0 {
+                return -EOVERFLOW;
+            }
+
+            chunk = (chunk << 4) | hex_to_bin(c as CChar) as u32;
+            ndigits += 1;
+            totaldigits += 1;
+        }
+
+        if ndigits == 0 {
+            return -EINVAL;
+        }
+        if nchunks == 0 && chunk == 0 {
+            if !(buflen != 0 && c == b',') {
+                break;
+            }
+            continue;
+        }
+
+        __bitmap_shift_left(maskp, maskp, CHUNKSZ, nmaskbits);
+        *maskp |= chunk as CULong;
+        nchunks += 1;
+        nbits += if nchunks == 1 { fls32(chunk) } else { CHUNKSZ };
+        if nbits > nmaskbits {
+            return -EOVERFLOW;
+        }
+
+        if !(buflen != 0 && c == b',') {
+            break;
+        }
+    }
+
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bitmap_parse_user(
+    ubuf: *const CChar,
+    ulen: CUInt,
+    maskp: *mut CULong,
+    nmaskbits: CInt,
+) -> CInt {
+    __bitmap_parse(ubuf, ulen, 1, maskp, nmaskbits)
+}
+
+unsafe fn __bitmap_parselist(
+    mut buf: *const CChar,
+    mut buflen: CUInt,
+    maskp: *mut CULong,
+    nmaskbits: CInt,
+) -> CInt {
+    let mut c: u8 = 0;
+    let mut totaldigits: CInt = 0;
+
+    zero_words(maskp, bits_to_longs(nmaskbits));
+
+    loop {
+        let mut exp_digit = true;
+        let mut in_range = false;
+        let mut a: CUInt = 0;
+        let mut b: CUInt = 0;
+
+        while buflen != 0 {
+            let old_c = c;
+            c = *(buf as *const u8);
+            buf = buf.add(1);
+            buflen -= 1;
+
+            if is_space(c) {
+                continue;
+            }
+            if totaldigits != 0 && c != 0 && is_space(old_c) {
+                return -EINVAL;
+            }
+            if c == 0 || c == b',' {
+                break;
+            }
+            if c == b'-' {
+                if exp_digit || in_range {
+                    return -EINVAL;
+                }
+                b = 0;
+                in_range = true;
+                exp_digit = true;
+                continue;
+            }
+            if !is_digit(c) {
+                return -EINVAL;
+            }
+
+            b = b.wrapping_mul(10).wrapping_add((c - b'0') as CUInt);
+            if !in_range {
+                a = b;
+            }
+            exp_digit = false;
+            totaldigits += 1;
+        }
+
+        if a > b {
+            return -EINVAL;
+        }
+        if b >= nmaskbits as CUInt {
+            return -ERANGE;
+        }
+        while a <= b {
+            set_bit(maskp, a as CULong);
+            a += 1;
+        }
+
+        if !(buflen != 0 && c == b',') {
+            break;
+        }
+    }
+
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bitmap_parselist(
+    bp: *const CChar,
+    maskp: *mut CULong,
+    nmaskbits: CInt,
+) -> CInt {
+    let mut len: CUInt = 0;
+
+    while *bp.add(len as usize) != 0 && *bp.add(len as usize) != b'\n' as CChar {
+        len += 1;
+    }
+
+    __bitmap_parselist(bp, len, maskp, nmaskbits)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bitmap_parselist_user(
+    ubuf: *const CChar,
+    ulen: CUInt,
+    maskp: *mut CULong,
+    nmaskbits: CInt,
+) -> CInt {
+    __bitmap_parselist(ubuf, ulen, maskp, nmaskbits)
 }
 
 #[no_mangle]

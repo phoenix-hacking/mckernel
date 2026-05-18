@@ -26,6 +26,7 @@
 #include <plist.h>
 #include <ihk/lock.h>
 
+#ifndef MCKERNEL_RUST_PLIST_CORE
 #ifdef CONFIG_DEBUG_PI_LIST
 
 static void plist_check_prev_next(struct list_head *t, struct list_head *p,
@@ -121,3 +122,4 @@ void plist_del(struct plist_node *node, struct plist_head *head)
 
 	plist_check_head(head);
 }
+#endif /* MCKERNEL_RUST_PLIST_CORE */

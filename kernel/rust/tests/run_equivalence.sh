@@ -208,6 +208,620 @@ int main(void)
 }
 EOF_LLIST
 
+cat > "${tmpdir}/waitq_equiv.c" <<'EOF_WAITQ'
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+struct thread;
+struct waitq_entry;
+
+typedef int (*waitq_func_t)(struct waitq_entry *, unsigned, int, void *);
+
+typedef struct ihk_spinlock {
+	union {
+		unsigned int head_tail;
+		struct {
+			unsigned short head;
+			unsigned short tail;
+		} tickets;
+	};
+} ihk_spinlock_t;
+
+struct list_head {
+	struct list_head *next;
+	struct list_head *prev;
+};
+
+typedef struct waitq {
+	ihk_spinlock_t lock;
+	struct list_head waitq;
+} waitq_t;
+
+typedef struct waitq_entry {
+	struct list_head link;
+	void *private;
+	unsigned int flags;
+	waitq_func_t func;
+} waitq_entry_t;
+
+struct item {
+	int id;
+	int wakes;
+	waitq_entry_t entry;
+};
+
+extern void waitq_init(waitq_t *);
+extern void waitq_init_entry(waitq_entry_t *, struct thread *);
+extern void waitq_add_entry_locked(waitq_t *, waitq_entry_t *);
+extern void waitq_remove_entry_locked(waitq_t *, waitq_entry_t *);
+extern int waitq_wake_nr_locked(waitq_t *, int);
+
+int sched_wakeup_thread(struct thread *thread, int state)
+{
+	return ((uintptr_t)thread ^ (unsigned int)state) & 0x7fffffff;
+}
+
+int sched_wakeup_thread_locked(struct thread *thread, int state)
+{
+	return (((uintptr_t)thread << 1) ^ (unsigned int)state) & 0x7fffffff;
+}
+
+void schedule(void) {}
+void preempt_disable(void) {}
+void preempt_enable(void) {}
+
+static void mix(unsigned long *digest, unsigned long value)
+{
+	*digest ^= value + 0x9e3779b97f4a7c15UL + (*digest << 6) + (*digest >> 2);
+}
+
+static void require(int condition)
+{
+	if (!condition)
+		exit(21);
+}
+
+static struct item *item_from_entry(waitq_entry_t *entry)
+{
+	return (struct item *)((char *)entry - offsetof(struct item, entry));
+}
+
+static struct item *item_from_link(struct list_head *link)
+{
+	return item_from_entry((waitq_entry_t *)((char *)link -
+		offsetof(waitq_entry_t, link)));
+}
+
+static int record_wake(waitq_entry_t *entry, unsigned mode, int flags, void *key)
+{
+	struct item *item = item_from_entry(entry);
+
+	item->wakes += 1 + (int)mode + flags + (key != NULL);
+	return item->id;
+}
+
+static void digest_waitq(unsigned long *digest, waitq_t *waitq)
+{
+	struct list_head *head = &waitq->waitq;
+	struct list_head *pos = head->next;
+	int count = 0;
+
+	require(head->prev->next == head);
+	require(head->next->prev == head);
+	mix(digest, waitq->lock.head_tail);
+	while (pos != head) {
+		struct item *item = item_from_link(pos);
+
+		require(pos->next->prev == pos);
+		require(pos->prev->next == pos);
+		mix(digest, ((unsigned long)(unsigned int)item->id << 32) |
+			    (unsigned int)item->wakes);
+		pos = pos->next;
+		require(++count < 32);
+	}
+	mix(digest, (unsigned long)count);
+}
+
+int main(void)
+{
+	waitq_t waitq;
+	struct item items[5];
+	unsigned long digest = 0x0bad5eed7157cafeUL;
+	int ret;
+
+	for (int i = 0; i < 5; i++) {
+		items[i].id = i + 10;
+		items[i].wakes = 0;
+		items[i].entry.flags = 0xf00d0000U + i;
+		waitq_init_entry(&items[i].entry,
+				 (struct thread *)(uintptr_t)(0x1000 + i * 0x40));
+		items[i].entry.func = record_wake;
+		require(items[i].entry.private ==
+			(void *)(uintptr_t)(0x1000 + i * 0x40));
+		require(items[i].entry.flags == 0xf00d0000U + i);
+	}
+
+	waitq.lock.head_tail = 0xffffffffU;
+	waitq_init(&waitq);
+	require(waitq.lock.head_tail == 0);
+	digest_waitq(&digest, &waitq);
+
+	waitq_add_entry_locked(&waitq, &items[0].entry);
+	waitq_add_entry_locked(&waitq, &items[1].entry);
+	waitq_add_entry_locked(&waitq, &items[2].entry);
+	digest_waitq(&digest, &waitq);
+
+	ret = waitq_wake_nr_locked(&waitq, 0);
+	require(ret == 0);
+	require(items[0].wakes == 0 && items[1].wakes == 0 && items[2].wakes == 0);
+	mix(&digest, (unsigned long)(int)ret);
+
+	ret = waitq_wake_nr_locked(&waitq, 2);
+	require(ret == 2);
+	require(items[0].wakes == 1 && items[1].wakes == 1 && items[2].wakes == 0);
+	mix(&digest, (unsigned long)(int)ret);
+	digest_waitq(&digest, &waitq);
+
+	waitq_remove_entry_locked(&waitq, &items[1].entry);
+	require(items[1].entry.link.next == &items[1].entry.link);
+	require(items[1].entry.link.prev == &items[1].entry.link);
+	digest_waitq(&digest, &waitq);
+
+	waitq_add_entry_locked(&waitq, &items[3].entry);
+	waitq_add_entry_locked(&waitq, &items[1].entry);
+	digest_waitq(&digest, &waitq);
+
+	ret = waitq_wake_nr_locked(&waitq, 10);
+	require(ret == 3);
+	require(items[0].wakes == 2 && items[2].wakes == 1 &&
+		items[3].wakes == 1 && items[1].wakes == 2);
+	mix(&digest, (unsigned long)(int)ret);
+	digest_waitq(&digest, &waitq);
+
+	waitq_remove_entry_locked(&waitq, &items[0].entry);
+	waitq_remove_entry_locked(&waitq, &items[2].entry);
+	waitq_remove_entry_locked(&waitq, &items[3].entry);
+	waitq_remove_entry_locked(&waitq, &items[1].entry);
+	digest_waitq(&digest, &waitq);
+
+	ret = waitq_wake_nr_locked(&waitq, 1);
+	require(ret == -1);
+	mix(&digest, (unsigned long)(int)ret);
+
+	printf("waitq ok digest=%016lx\n", digest);
+	return 0;
+}
+EOF_WAITQ
+
+cat > "${tmpdir}/mem_init_helpers_equiv.c" <<'EOF_MEM_INIT'
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+extern int is_mckernel_memory(unsigned long, unsigned long);
+extern int phys_to_nid(unsigned long);
+extern char *find_command_line(char *);
+
+struct mem_chunk {
+	unsigned long start;
+	unsigned long end;
+	int nid;
+};
+
+static struct mem_chunk chunks[8];
+static int nr_chunks;
+static char *current_kargs;
+
+int ihk_mc_get_nr_memory_chunks(void)
+{
+	return nr_chunks;
+}
+
+int ihk_mc_get_memory_chunk(int id, unsigned long *start,
+			    unsigned long *end, int *numa_id)
+{
+	if (id < 0 || id >= nr_chunks)
+		return -1;
+	if (start)
+		*start = chunks[id].start;
+	if (end)
+		*end = chunks[id].end;
+	if (numa_id)
+		*numa_id = chunks[id].nid;
+	return 0;
+}
+
+char *ihk_get_kargs(void)
+{
+	return current_kargs;
+}
+
+static void mix(unsigned long *digest, unsigned long value)
+{
+	*digest ^= value + 0x9e3779b97f4a7c15UL + (*digest << 6) + (*digest >> 2);
+}
+
+static void mix_signed(unsigned long *digest, long value)
+{
+	mix(digest, (unsigned long)value);
+}
+
+static long ptr_offset(const char *base, const char *ptr)
+{
+	if (!base || !ptr)
+		return -1;
+	return ptr - base;
+}
+
+static void set_chunks(const struct mem_chunk *src, int count)
+{
+	nr_chunks = count;
+	for (int i = 0; i < count; i++)
+		chunks[i] = src[i];
+}
+
+int main(void)
+{
+	static struct mem_chunk layout1[] = {
+		{ 0x1000, 0x9000, 0 },
+		{ 0x10000, 0x18000, 2 },
+		{ 0x40000, 0x48000, 7 },
+	};
+	static struct mem_chunk layout2[] = {
+		{ 0x0, 0x1000, 3 },
+		{ 0x1000, 0x2000, 4 },
+	};
+	static const unsigned long ranges[][2] = {
+		{ 0x1000, 0x1000 },
+		{ 0x1000, 0x8fff },
+		{ 0x1000, 0x9000 },
+		{ 0x0fff, 0x1000 },
+		{ 0x8800, 0x9800 },
+		{ 0x10000, 0x17fff },
+		{ 0x10000, 0x18000 },
+		{ 0x18000, 0x18000 },
+		{ 0x40000, 0x47fff },
+		{ 0x44000, 0x48000 },
+	};
+	static const unsigned long addrs[] = {
+		0, 0xfff, 0x1000, 0x8fff, 0x9000, 0x10000, 0x17fff,
+		0x18000, 0x40000, 0x47fff, 0x48000,
+	};
+	char cmdline1[] = "root=/dev/test dump_level=24 idle_halt time_sharing";
+	char cmdline2[] = "allow_oversubscribe foo=bar dump_level=7";
+	char needle_missing[] = "not_present";
+	unsigned long digest = 0xadd45fed31415926UL;
+
+	set_chunks(layout1, sizeof(layout1) / sizeof(layout1[0]));
+	for (unsigned int i = 0; i < sizeof(ranges) / sizeof(ranges[0]); i++) {
+		mix_signed(&digest, is_mckernel_memory(ranges[i][0], ranges[i][1]));
+	}
+	for (unsigned int i = 0; i < sizeof(addrs) / sizeof(addrs[0]); i++) {
+		mix_signed(&digest, phys_to_nid(addrs[i]));
+	}
+
+	set_chunks(layout2, sizeof(layout2) / sizeof(layout2[0]));
+	for (unsigned int i = 0; i < sizeof(ranges) / sizeof(ranges[0]); i++) {
+		mix_signed(&digest, is_mckernel_memory(ranges[i][0], ranges[i][1]));
+	}
+	for (unsigned int i = 0; i < sizeof(addrs) / sizeof(addrs[0]); i++) {
+		mix_signed(&digest, phys_to_nid(addrs[i]));
+	}
+
+	set_chunks(NULL, 0);
+	mix_signed(&digest, is_mckernel_memory(0x1000, 0x1000));
+	mix_signed(&digest, phys_to_nid(0x1000));
+
+	current_kargs = NULL;
+	mix_signed(&digest, ptr_offset(NULL, find_command_line("dump_level=")));
+	current_kargs = cmdline1;
+	mix_signed(&digest, ptr_offset(cmdline1, find_command_line("dump_level=")));
+	mix_signed(&digest, ptr_offset(cmdline1, find_command_line("idle_halt")));
+	mix_signed(&digest, ptr_offset(cmdline1, find_command_line("time_sharing")));
+	mix_signed(&digest, ptr_offset(cmdline1, find_command_line(needle_missing)));
+	current_kargs = cmdline2;
+	mix_signed(&digest, ptr_offset(cmdline2, find_command_line("allow_oversubscribe")));
+	mix_signed(&digest, ptr_offset(cmdline2, find_command_line("dump_level=")));
+	mix_signed(&digest, ptr_offset(cmdline2, find_command_line("bar")));
+	mix_signed(&digest, ptr_offset(cmdline2, find_command_line(needle_missing)));
+
+	printf("mem_init_helpers ok digest=%016lx\n", digest);
+	return 0;
+}
+EOF_MEM_INIT
+
+cat > "${tmpdir}/page_helpers_equiv.c" <<'EOF_PAGE_HELPERS'
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+struct list_head {
+	struct list_head *next;
+	struct list_head *prev;
+};
+
+typedef struct {
+	int counter;
+} ihk_atomic_t;
+
+typedef struct {
+	long counter64;
+} ihk_atomic64_t;
+
+struct page {
+	struct list_head list;
+	struct list_head hash;
+	uint8_t mode;
+	uint64_t phys;
+	ihk_atomic_t count;
+	ihk_atomic64_t mapped;
+	int64_t offset;
+	int pgshift;
+};
+
+enum {
+	PM_NONE = 0x00,
+	PM_PENDING_FREE = 0x01,
+	PM_WILL_PAGEIO = 0x02,
+	PM_PAGEIO = 0x03,
+	PM_DONE_PAGEIO = 0x04,
+	PM_PAGEIO_EOF = 0x05,
+	PM_PAGEIO_ERROR = 0x06,
+	PM_MAPPED = 0x07,
+	MF_REG_FILE = 0x1000,
+	MF_SHM = 0x40000,
+};
+
+extern uintptr_t page_to_phys(struct page *);
+extern int is_splitable(struct page *, uint32_t);
+
+static void mix(unsigned long *digest, unsigned long value)
+{
+	*digest ^= value + 0x9e3779b97f4a7c15UL + (*digest << 6) + (*digest >> 2);
+}
+
+static void mix_signed(unsigned long *digest, long value)
+{
+	mix(digest, (unsigned long)value);
+}
+
+static struct page make_page(uint8_t mode, int count, uint64_t phys)
+{
+	struct page page = {
+		.mode = mode,
+		.phys = phys,
+		.count = { .counter = count },
+		.mapped = { .counter64 = 0x1234 },
+		.offset = 0x5678,
+		.pgshift = 12,
+	};
+
+	page.list.next = &page.list;
+	page.list.prev = &page.list;
+	page.hash.next = &page.hash;
+	page.hash.prev = &page.hash;
+	return page;
+}
+
+int main(void)
+{
+	static const uint8_t modes[] = {
+		PM_NONE, PM_PENDING_FREE, PM_WILL_PAGEIO, PM_PAGEIO,
+		PM_DONE_PAGEIO, PM_PAGEIO_EOF, PM_PAGEIO_ERROR, PM_MAPPED,
+		0xff,
+	};
+	static const int counts[] = { 0, 1, 2, 7 };
+	static const uint32_t flags[] = { 0, MF_REG_FILE, MF_SHM,
+					  MF_REG_FILE | MF_SHM };
+	unsigned long digest = 0x9a17c0de51ab1e5UL;
+
+	if (sizeof(struct page) != 80 ||
+	    offsetof(struct page, mode) != 32 ||
+	    offsetof(struct page, phys) != 40 ||
+	    offsetof(struct page, count) != 48 ||
+	    offsetof(struct page, mapped) != 56 ||
+	    offsetof(struct page, pgshift) != 72)
+		exit(2);
+
+	mix(&digest, page_to_phys(NULL));
+	mix_signed(&digest, is_splitable(NULL, 0));
+	mix_signed(&digest, is_splitable(NULL, MF_SHM));
+
+	for (unsigned int i = 0; i < sizeof(modes) / sizeof(modes[0]); i++) {
+		for (unsigned int j = 0; j < sizeof(counts) / sizeof(counts[0]); j++) {
+			struct page page = make_page(modes[i], counts[j],
+				0xabc000UL + (i << 12) + (j << 5));
+
+			mix(&digest, page_to_phys(&page));
+			for (unsigned int k = 0; k < sizeof(flags) / sizeof(flags[0]); k++) {
+				mix_signed(&digest, is_splitable(&page, flags[k]));
+			}
+		}
+	}
+
+	printf("page_helpers ok digest=%016lx\n", digest);
+	return 0;
+}
+EOF_PAGE_HELPERS
+
+cat > "${tmpdir}/plist_equiv.c" <<'EOF_PLIST'
+#include <stddef.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+struct list_head {
+	struct list_head *next;
+	struct list_head *prev;
+};
+
+struct plist_head {
+	struct list_head prio_list;
+	struct list_head node_list;
+};
+
+struct plist_node {
+	int prio;
+	struct plist_head plist;
+};
+
+struct item {
+	int id;
+	struct plist_node node;
+};
+
+extern void plist_add(struct plist_node *, struct plist_head *);
+extern void plist_del(struct plist_node *, struct plist_head *);
+
+#define container_of(ptr, type, member) \
+	((type *)((char *)(ptr) - offsetof(type, member)))
+#define item_from_node(ptr) container_of(ptr, struct item, node)
+#define plist_from_node(ptr) container_of(ptr, struct plist_node, plist.node_list)
+#define plist_from_prio(ptr) container_of(ptr, struct plist_node, plist.prio_list)
+
+static void init_list_head(struct list_head *list)
+{
+	list->next = list;
+	list->prev = list;
+}
+
+static void plist_head_init(struct plist_head *head)
+{
+	init_list_head(&head->prio_list);
+	init_list_head(&head->node_list);
+}
+
+static void plist_node_init(struct plist_node *node, int prio)
+{
+	node->prio = prio;
+	plist_head_init(&node->plist);
+}
+
+static int plist_node_empty(const struct plist_node *node)
+{
+	return node->plist.node_list.next == &node->plist.node_list;
+}
+
+static void require(int condition)
+{
+	if (!condition)
+		exit(12);
+}
+
+static void mix(unsigned long *digest, unsigned long value)
+{
+	*digest ^= value + 0x9e3779b97f4a7c15UL + (*digest << 6) + (*digest >> 2);
+}
+
+static void check_links(struct list_head *head)
+{
+	struct list_head *pos = head;
+	int count = 0;
+
+	do {
+		require(pos->next->prev == pos);
+		require(pos->prev->next == pos);
+		pos = pos->next;
+		require(++count < 64);
+	} while (pos != head);
+}
+
+static unsigned long digest_state(struct plist_head *head)
+{
+	unsigned long digest = 0x706c697374UL;
+	struct list_head *pos;
+	int last_prio = -2147483647 - 1;
+	int count = 0;
+
+	check_links(&head->node_list);
+	check_links(&head->prio_list);
+
+	for (pos = head->node_list.next; pos != &head->node_list; pos = pos->next) {
+		struct plist_node *node = plist_from_node(pos);
+		struct item *item = item_from_node(node);
+
+		require(node->prio >= last_prio);
+		last_prio = node->prio;
+		mix(&digest, ((unsigned long)(unsigned int)node->prio << 32) |
+			     (unsigned long)(unsigned int)item->id);
+		count++;
+	}
+	mix(&digest, (unsigned long)count);
+
+	count = 0;
+	for (pos = head->prio_list.next; pos != &head->prio_list; pos = pos->next) {
+		struct plist_node *node = plist_from_prio(pos);
+		struct item *item = item_from_node(node);
+
+		require(!plist_node_empty(node));
+		mix(&digest, 0x8000000000000000UL |
+			     ((unsigned long)(unsigned int)node->prio << 32) |
+			     (unsigned long)(unsigned int)item->id);
+		count++;
+	}
+	mix(&digest, (unsigned long)count << 16);
+	return digest;
+}
+
+int main(void)
+{
+	struct plist_head head;
+	struct item items[8];
+	int prios[] = { 20, 5, 10, 5, 15, 10, 0, 15 };
+	unsigned long digest = 0;
+
+	plist_head_init(&head);
+	for (int i = 0; i < 8; i++) {
+		items[i].id = i;
+		plist_node_init(&items[i].node, prios[i]);
+	}
+
+	plist_add(&items[0].node, &head);
+	plist_add(&items[1].node, &head);
+	plist_add(&items[2].node, &head);
+	plist_add(&items[3].node, &head);
+	plist_add(&items[4].node, &head);
+	plist_add(&items[5].node, &head);
+	mix(&digest, digest_state(&head));
+
+	plist_del(&items[1].node, &head);
+	require(plist_node_empty(&items[1].node));
+	mix(&digest, digest_state(&head));
+
+	plist_del(&items[5].node, &head);
+	require(plist_node_empty(&items[5].node));
+	mix(&digest, digest_state(&head));
+
+	plist_add(&items[6].node, &head);
+	mix(&digest, digest_state(&head));
+
+	plist_del(&items[2].node, &head);
+	require(plist_node_empty(&items[2].node));
+	mix(&digest, digest_state(&head));
+
+	plist_add(&items[7].node, &head);
+	mix(&digest, digest_state(&head));
+
+	plist_del(&items[4].node, &head);
+	require(plist_node_empty(&items[4].node));
+	mix(&digest, digest_state(&head));
+
+	plist_del(&items[6].node, &head);
+	plist_del(&items[3].node, &head);
+	plist_del(&items[7].node, &head);
+	plist_del(&items[0].node, &head);
+	require(head.node_list.next == &head.node_list);
+	require(head.prio_list.next == &head.prio_list);
+	mix(&digest, digest_state(&head));
+
+	printf("plist ok digest=%016lx\n", digest);
+	return 0;
+}
+EOF_PLIST
+
 cat > "${tmpdir}/bitmap_equiv.c" <<'EOF_BITMAP'
 #include <stdio.h>
 #include <string.h>
@@ -363,6 +977,455 @@ int main(void)
 	return 0;
 }
 EOF_BITMAP
+
+cat > "${tmpdir}/bitmap_parse_equiv.c" <<'EOF_BITMAP_PARSE'
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+
+extern int __bitmap_parse(const char *, unsigned int, int, unsigned long *, int);
+extern int bitmap_parse_user(const char *, unsigned int, unsigned long *, int);
+extern int bitmap_parselist(const char *, unsigned long *, int);
+extern int bitmap_parselist_user(const char *, unsigned int, unsigned long *, int);
+
+static void mix(unsigned long *digest, unsigned long value)
+{
+	*digest ^= value + 0x9e3779b97f4a7c15UL + (*digest << 6) + (*digest >> 2);
+}
+
+static void mix_signed(unsigned long *digest, long value)
+{
+	mix(digest, (unsigned long)value);
+}
+
+static size_t local_len(const char *s)
+{
+	size_t len = 0;
+
+	while (s[len])
+		len++;
+	return len;
+}
+
+static void reset_words(unsigned long *words, unsigned long seed)
+{
+	for (unsigned int i = 0; i < 4; i++)
+		words[i] = seed ^ (0x0101010101010101UL * i);
+}
+
+static void mix_words(unsigned long *digest, const unsigned long *words)
+{
+	for (unsigned int i = 0; i < 4; i++)
+		mix(digest, words[i]);
+}
+
+static void run_hex_parse(unsigned long *digest, const char *input,
+			  unsigned int len, int nbits, int user)
+{
+	unsigned long mask[4];
+	int ret;
+
+	reset_words(mask, 0xa5a55a5adead0000UL);
+	if (user)
+		ret = bitmap_parse_user(input, len, mask, nbits);
+	else
+		ret = __bitmap_parse(input, len, 0, mask, nbits);
+	mix_signed(digest, ret);
+	mix_signed(digest, nbits);
+	mix_signed(digest, user);
+	mix_words(digest, mask);
+}
+
+static void run_list_parse(unsigned long *digest, const char *input,
+			   unsigned int len, int nbits, int user)
+{
+	unsigned long mask[4];
+	int ret;
+
+	reset_words(mask, 0x5a5aa5a512340000UL);
+	if (user)
+		ret = bitmap_parselist_user(input, len, mask, nbits);
+	else
+		ret = bitmap_parselist(input, mask, nbits);
+	mix_signed(digest, ret);
+	mix_signed(digest, nbits);
+	mix_signed(digest, user);
+	mix_words(digest, mask);
+}
+
+int main(void)
+{
+	const char *hex_inputs[] = {
+		"", "0", "00", "1", "f", "deadBEEF", "000000001",
+		"00000000,00000001", "1,0", "0,1", "ffffffff,ffffffff",
+		"100000000", "1,,5", ",44", ",", " 1", "1 ", "1 2",
+		" 0000000f,\n00000001", "0x1", "g", "00000000,00000000,1",
+	};
+	const char *list_inputs[] = {
+		"", "0", "0-3,8,10-12", "1,2\nignored", "1, 2", "1 2",
+		"3-1", "999", ",", "5-", "-5", " 4 ", "0,64", "63",
+		"31-33", "0-0,2-2,4", "0007", "7,7",
+	};
+	int nbits[] = { 0, 1, 4, 8, 31, 32, 33, 64, 65, 96, 128 };
+	unsigned long digest = 0xb17a95eUL;
+
+	for (unsigned int i = 0; i < sizeof(hex_inputs) / sizeof(hex_inputs[0]); i++) {
+		for (unsigned int n = 0; n < sizeof(nbits) / sizeof(nbits[0]); n++) {
+			run_hex_parse(&digest, hex_inputs[i],
+				      (unsigned int)(local_len(hex_inputs[i]) + 1),
+				      nbits[n], 0);
+			run_hex_parse(&digest, hex_inputs[i],
+				      (unsigned int)local_len(hex_inputs[i]),
+				      nbits[n], 0);
+			run_hex_parse(&digest, hex_inputs[i],
+				      (unsigned int)local_len(hex_inputs[i]),
+				      nbits[n], 1);
+		}
+	}
+
+	for (unsigned int i = 0; i < sizeof(list_inputs) / sizeof(list_inputs[0]); i++) {
+		for (unsigned int n = 0; n < sizeof(nbits) / sizeof(nbits[0]); n++) {
+			run_list_parse(&digest, list_inputs[i],
+				       (unsigned int)(local_len(list_inputs[i]) + 1),
+				       nbits[n], 0);
+			run_list_parse(&digest, list_inputs[i],
+				       (unsigned int)local_len(list_inputs[i]),
+				       nbits[n], 1);
+		}
+	}
+
+	printf("bitmap_parse ok digest=%016lx\n", digest);
+	return 0;
+}
+EOF_BITMAP_PARSE
+
+cat > "${tmpdir}/bitops_equiv.c" <<'EOF_BITOPS'
+#include <stdint.h>
+#include <stdio.h>
+
+extern unsigned long find_next_bit(const unsigned long *, unsigned long,
+				   unsigned long);
+extern unsigned long find_next_zero_bit(const unsigned long *, unsigned long,
+					unsigned long);
+extern unsigned long find_first_bit(const unsigned long *, unsigned long);
+extern unsigned long find_first_zero_bit(const unsigned long *, unsigned long);
+extern unsigned int __sw_hweight32(unsigned int);
+extern unsigned int __sw_hweight16(unsigned int);
+extern unsigned int __sw_hweight8(unsigned int);
+extern unsigned long __sw_hweight64(uint64_t);
+
+static unsigned long rng_state = 0xfedcba9876543210UL;
+
+static unsigned long rnd(void)
+{
+	rng_state = rng_state * 2862933555777941757UL + 3037000493UL;
+	return rng_state;
+}
+
+static void mix(unsigned long *digest, unsigned long value)
+{
+	*digest ^= value + 0x9e3779b97f4a7c15UL + (*digest << 6) + (*digest >> 2);
+}
+
+int main(void)
+{
+	unsigned long words[5];
+	unsigned long sizes[] = { 0, 1, 2, 7, 31, 32, 63, 64, 65, 95, 127,
+		128, 129, 191, 255, 256, 257, 319 };
+	unsigned long offsets[] = { 0, 1, 2, 5, 31, 32, 33, 63, 64, 65, 95,
+		127, 128, 129, 191, 255, 256, 300, 320 };
+	unsigned long digest = 0x6eed0e9da4d94a4fUL;
+
+	for (unsigned int pattern = 0; pattern < 80; pattern++) {
+		for (unsigned int i = 0; i < 5; i++)
+			words[i] = rnd();
+
+		if ((pattern & 7) == 0) {
+			for (unsigned int i = 0; i < 5; i++)
+				words[i] = 0;
+		} else if ((pattern & 7) == 1) {
+			for (unsigned int i = 0; i < 5; i++)
+				words[i] = ~0UL;
+		} else if ((pattern & 7) == 2) {
+			for (unsigned int i = 0; i < 5; i++)
+				words[i] = 1UL << ((pattern + i * 13) & 63);
+		}
+
+		for (unsigned int si = 0; si < sizeof(sizes) / sizeof(sizes[0]); si++) {
+			unsigned long size = sizes[si];
+
+			mix(&digest, find_first_bit(words, size));
+			mix(&digest, find_first_zero_bit(words, size));
+
+			for (unsigned int oi = 0; oi < sizeof(offsets) / sizeof(offsets[0]); oi++) {
+				mix(&digest, find_next_bit(words, size, offsets[oi]));
+				mix(&digest, find_next_zero_bit(words, size, offsets[oi]));
+			}
+		}
+
+		for (unsigned int i = 0; i < 5; i++) {
+			mix(&digest, __sw_hweight8((unsigned int)words[i]));
+			mix(&digest, __sw_hweight16((unsigned int)words[i]));
+			mix(&digest, __sw_hweight32((unsigned int)words[i]));
+			mix(&digest, __sw_hweight64((uint64_t)words[i]));
+		}
+	}
+
+	printf("bitops ok digest=%016lx\n", digest);
+	return 0;
+}
+EOF_BITOPS
+
+cat > "${tmpdir}/string_equiv.c" <<'EOF_STRING'
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+
+extern size_t strlen(const char *);
+extern size_t strnlen(const char *, size_t);
+extern char *strcpy(char *, const char *);
+extern char *strncpy(char *, const char *, size_t);
+extern int strcmp(const char *, const char *);
+extern int strncmp(const char *, const char *, size_t);
+extern char *strchr(const char *, int);
+extern char *strrchr(const char *, int);
+extern char *strpbrk(const char *, const char *);
+extern char *strstr(const char *, const char *);
+extern void *memcpy(void *, const void *, size_t);
+extern void *memcpy_long(void *, const void *, size_t);
+extern int memcmp(const void *, const void *, size_t);
+
+static void mix(unsigned long *digest, unsigned long value)
+{
+	*digest ^= value + 0x9e3779b97f4a7c15UL + (*digest << 6) + (*digest >> 2);
+}
+
+static void mix_signed(unsigned long *digest, long value)
+{
+	mix(digest, (unsigned long)value);
+}
+
+static void fill_bytes(unsigned char *dst, size_t len, unsigned char seed)
+{
+	for (size_t i = 0; i < len; i++)
+		dst[i] = (unsigned char)(seed + i * 17);
+}
+
+static void mix_bytes(unsigned long *digest, const unsigned char *src, size_t len)
+{
+	for (size_t i = 0; i < len; i++)
+		mix(digest, ((unsigned long)i << 8) | src[i]);
+}
+
+static long ptr_offset(const char *base, const char *ptr)
+{
+	if (!ptr)
+		return -1;
+	return ptr - base;
+}
+
+int main(void)
+{
+	const char *strings[] = {
+		"",
+		"a",
+		"abcdef",
+		"abcabc",
+		"prefix-suffix",
+	};
+	const char high[] = { 'A', (char)0xff, 'B', (char)0x80, '\0' };
+	const char embedded[] = { 'a', 'b', 'c', '\0', 't', 'a', 'i', 'l', '\0' };
+	unsigned char src[96], dst[96], dst2[96];
+	unsigned long lsrc[8], ldst[8];
+	unsigned long digest = 0x51f15eada5c0deUL;
+
+	for (size_t i = 0; i < sizeof(strings) / sizeof(strings[0]); i++) {
+		mix(&digest, strlen(strings[i]));
+		for (size_t max = 0; max < 12; max++)
+			mix(&digest, strnlen(strings[i], max));
+	}
+	mix(&digest, strlen(embedded));
+	mix(&digest, strnlen(embedded, sizeof(embedded)));
+	mix(&digest, strlen(high));
+
+	for (size_t i = 0; i < sizeof(strings) / sizeof(strings[0]); i++) {
+		for (size_t j = 0; j < sizeof(strings) / sizeof(strings[0]); j++) {
+			mix_signed(&digest, strcmp(strings[i], strings[j]));
+			for (size_t n = 0; n < 10; n++)
+				mix_signed(&digest, strncmp(strings[i], strings[j], n));
+		}
+	}
+	mix_signed(&digest, strcmp(high, "A"));
+	mix_signed(&digest, strncmp(high, "A", 2));
+	mix_signed(&digest, memcmp(high, "A", 2));
+
+	fill_bytes(dst, sizeof(dst), 0xa0);
+	if (strcpy((char *)dst, "copy-source") != (char *)dst)
+		return 2;
+	mix_bytes(&digest, dst, 24);
+
+	fill_bytes(dst, sizeof(dst), 0xb0);
+	if (strncpy((char *)dst, "xy", 8) != (char *)dst)
+		return 3;
+	mix_bytes(&digest, dst, 16);
+
+	fill_bytes(dst, sizeof(dst), 0xc0);
+	strncpy((char *)dst, "abcdef", 3);
+	mix_bytes(&digest, dst, 12);
+
+	fill_bytes(dst, sizeof(dst), 0xd0);
+	strncpy((char *)dst, "", 4);
+	mix_bytes(&digest, dst, 12);
+
+	fill_bytes(dst, sizeof(dst), 0xe0);
+	strncpy((char *)dst, "unchanged", 0);
+	mix_bytes(&digest, dst, 12);
+
+	for (int ch = -2; ch <= 260; ch += 17) {
+		mix_signed(&digest, ptr_offset(strings[3], strchr(strings[3], ch)));
+		mix_signed(&digest, ptr_offset(strings[3], strrchr(strings[3], ch)));
+		mix_signed(&digest, ptr_offset(high, strchr(high, ch)));
+		mix_signed(&digest, ptr_offset(high, strrchr(high, ch)));
+	}
+	mix_signed(&digest, ptr_offset(strings[3], strchr(strings[3], '\0')));
+	mix_signed(&digest, ptr_offset(strings[3], strrchr(strings[3], '\0')));
+	mix_signed(&digest, ptr_offset(strings[4], strpbrk(strings[4], "xyz-f")));
+	mix_signed(&digest, ptr_offset(strings[4], strpbrk(strings[4], "")));
+	mix_signed(&digest, ptr_offset("", strpbrk("", "abc")));
+	mix_signed(&digest, ptr_offset(strings[3], strstr(strings[3], "abc")));
+	mix_signed(&digest, ptr_offset(strings[3], strstr(strings[3], "cab")));
+	mix_signed(&digest, ptr_offset(strings[3], strstr(strings[3], "")));
+	mix_signed(&digest, ptr_offset("", strstr("", "")));
+
+	fill_bytes(src, sizeof(src), 0x11);
+	fill_bytes(dst, sizeof(dst), 0x77);
+	if (memcpy(dst + 7, src + 3, 41) != dst + 7)
+		return 4;
+	mix_bytes(&digest, dst, sizeof(dst));
+
+	for (size_t i = 0; i < sizeof(lsrc) / sizeof(lsrc[0]); i++) {
+		lsrc[i] = 0x1122334455667788UL ^ (0x0101010101010101UL * i);
+		ldst[i] = 0xfeedfacecafebeefUL;
+	}
+	if (memcpy_long(ldst + 1, lsrc + 2, sizeof(unsigned long) * 3 + 5) != ldst + 1)
+		return 5;
+	mix_bytes(&digest, (const unsigned char *)ldst, sizeof(ldst));
+
+	fill_bytes(dst, sizeof(dst), 0x21);
+	fill_bytes(dst2, sizeof(dst2), 0x21);
+	dst2[0] = 0x22;
+	dst2[10] = 0x7f;
+	dst2[11] = 0x80;
+	for (size_t n = 0; n < 24; n++) {
+		mix_signed(&digest, memcmp(dst, dst2, n));
+		mix_signed(&digest, memcmp(dst2, dst, n));
+	}
+
+	printf("string ok digest=%016lx\n", digest);
+	return 0;
+}
+EOF_STRING
+
+cat > "${tmpdir}/numparse_equiv.c" <<'EOF_NUMPARSE'
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+
+extern unsigned long simple_strtoul(const char *, char **, unsigned int);
+extern long simple_strtol(const char *, char **, unsigned int);
+extern unsigned long long simple_strtoull(const char *, char **, unsigned int);
+extern long long simple_strtoll(const char *, char **, unsigned int);
+extern int strict_strtoul(const char *, unsigned int, unsigned long *);
+extern int strict_strtol(const char *, unsigned int, long *);
+extern int strict_strtoull(const char *, unsigned int, unsigned long long *);
+extern int strict_strtoll(const char *, unsigned int, long long *);
+extern unsigned long strtol(const char *, char **, unsigned int);
+
+static void mix(unsigned long *digest, unsigned long value)
+{
+	*digest ^= value + 0x9e3779b97f4a7c15UL + (*digest << 6) + (*digest >> 2);
+}
+
+static void mix_signed(unsigned long *digest, long value)
+{
+	mix(digest, (unsigned long)value);
+}
+
+static long ptr_offset(const char *base, const char *ptr)
+{
+	if (!ptr)
+		return -1;
+	return ptr - base;
+}
+
+int main(void)
+{
+	const char *inputs[] = {
+		"", "0", "00", "01", "077", "0x", "0x0", "0x10",
+		"0XfFz", "123abc", "-123abc", "-0x10", "+17",
+		"18446744073709551616", "deadBEEF", "101010", "9", "2",
+		"12\n", "12x", " 12", "-\n", "-0", "-9223372036854775808",
+	};
+	unsigned int bases[] = { 0, 1, 2, 8, 10, 16, 17, 36 };
+	unsigned long digest = 0x51a1f1ed12345678UL;
+
+	for (unsigned int i = 0; i < sizeof(inputs) / sizeof(inputs[0]); i++) {
+		for (unsigned int b = 0; b < sizeof(bases) / sizeof(bases[0]); b++) {
+			char *end = (char *)0x1;
+			unsigned long ul = simple_strtoul(inputs[i], &end, bases[b]);
+			mix(&digest, ul);
+			mix_signed(&digest, ptr_offset(inputs[i], end));
+
+			end = (char *)0x1;
+			mix_signed(&digest, simple_strtol(inputs[i], &end, bases[b]));
+			mix_signed(&digest, ptr_offset(inputs[i], end));
+
+			end = (char *)0x1;
+			mix(&digest, (unsigned long)simple_strtoull(inputs[i], &end, bases[b]));
+			mix_signed(&digest, ptr_offset(inputs[i], end));
+
+			end = (char *)0x1;
+			mix_signed(&digest, (long)simple_strtoll(inputs[i], &end, bases[b]));
+			mix_signed(&digest, ptr_offset(inputs[i], end));
+
+			end = (char *)0x1;
+			mix(&digest, strtol(inputs[i], &end, bases[b]));
+			mix_signed(&digest, ptr_offset(inputs[i], end));
+		}
+	}
+
+	for (unsigned int i = 0; i < sizeof(inputs) / sizeof(inputs[0]); i++) {
+		unsigned long ul = 0xfeedfacecafebeefUL;
+		unsigned long long ull = 0x1122334455667788ULL;
+		long sl = 0x12345678L;
+		long long sll = 0x123456789abcdefLL;
+		int ret;
+
+		ret = strict_strtoul(inputs[i], 0, &ul);
+		mix_signed(&digest, ret);
+		mix(&digest, ul);
+		ret = strict_strtol(inputs[i], 0, &sl);
+		mix_signed(&digest, ret);
+		mix_signed(&digest, sl);
+		ret = strict_strtoull(inputs[i], 0, &ull);
+		mix_signed(&digest, ret);
+		mix(&digest, (unsigned long)ull);
+		ret = strict_strtoll(inputs[i], 0, &sll);
+		mix_signed(&digest, ret);
+		mix_signed(&digest, (long)sll);
+
+		ret = strict_strtoul(inputs[i], 16, &ul);
+		mix_signed(&digest, ret);
+		mix(&digest, ul);
+		ret = strict_strtol(inputs[i], 10, &sl);
+		mix_signed(&digest, ret);
+		mix_signed(&digest, sl);
+	}
+
+	printf("numparse ok digest=%016lx\n", digest);
+	return 0;
+}
+EOF_NUMPARSE
 
 cat > "${tmpdir}/page_alloc_equiv.c" <<'EOF_PAGE_ALLOC'
 extern int printf(const char *, ...);
@@ -1009,6 +2072,22 @@ int main(void)
 			require(numa.zeroed_list.first == NULL);
 			mix(&digest, c);
 			mix(&digest, numa.nr_free_pages);
+
+			fill_page_arena(0x66);
+			zero_at_free = 1;
+			deferred_zero_at_free = 0;
+			ihk_numa_free_pages(&numa,
+					big_addr + 4 * LOCAL_PAGE_SIZE, 1);
+			require(numa.nr_free_pages == 0);
+			require(numa.free_chunks.rb_node == NULL);
+			require_page_bytes(228, 0, 0x66);
+			mix(&digest, numa.nr_free_pages);
+
+			ihk_numa_free_pages(&numa, big_addr, 0);
+			require(numa.nr_free_pages == 0);
+			require(numa.free_chunks.rb_node == NULL);
+			require_page_bytes(224, 0, 0x66);
+			mix(&digest, numa.nr_free_pages);
 		}
 	}
 
@@ -1021,6 +2100,20 @@ cat > "${tmpdir}/rust_stubs.c" <<'EOF_STUBS'
 int ihk_mc_chk_page_address(unsigned long mem_addr) { (void)mem_addr; return 0; }
 unsigned long virt_to_phys(void *v) { return (unsigned long)v; }
 void *phys_to_virt(unsigned long p) { return (void *)p; }
+__attribute__((weak)) int ihk_mc_get_nr_memory_chunks(void) { return 1; }
+__attribute__((weak)) int ihk_mc_get_memory_chunk(int id, unsigned long *start,
+		unsigned long *end, int *numa_id)
+{
+	(void)id;
+	if (start)
+		*start = 0;
+	if (end)
+		*end = ~0UL;
+	if (numa_id)
+		*numa_id = 0;
+	return 0;
+}
+__attribute__((weak)) char *ihk_get_kargs(void) { return 0; }
 int zero_at_free = 1;
 EOF_STUBS
 
@@ -1063,17 +2156,36 @@ inc=(
 	-Ikernel/include
 	-Iarch/x86_64/kernel/include
 	-Iarch/x86_64/kernel/include/ihk
+	-Iihk/cokernel/smp/x86_64
 	-Iihk/cokernel/smp/x86_64/include
 	-Iihk/ikc/include
 	-Iihk/linux/include
 )
 sys=(-isystem "$(cc -print-file-name=include)")
-kflags=(-ffreestanding -nostdinc "${sys[@]}" -D__KERNEL__ -DIHK_OS_MANYCORE "${inc[@]}")
+kflags=(-ffreestanding -nostdinc "${sys[@]}" -D__KERNEL__ -DIHK_OS_MANYCORE \
+	-DMAP_KERNEL_START=0xfffffffffe800000UL \
+	-DKERNEL_RAM_VADDR=0xfffffffffe800000UL "${inc[@]}")
 
 cc "${kflags[@]}" -c kernel/rbtree.c -o "${tmpdir}/out/rbtree_c.o"
 cc "${kflags[@]}" -c kernel/llist.c -o "${tmpdir}/out/llist_c.o"
+cc "${kflags[@]}" -I"${tmpdir}" -ffunction-sections -fdata-sections \
+	-c kernel/waitq.c -o "${tmpdir}/out/waitq_c.o"
+cc "${kflags[@]}" -I"${tmpdir}" -ffunction-sections -fdata-sections \
+	-DMCKERNEL_RUST_WAITQ_CORE -c kernel/waitq.c \
+	-o "${tmpdir}/out/waitq_dispatch_c.o"
+cc "${kflags[@]}" -I"${tmpdir}" -ffunction-sections -fdata-sections \
+	-c kernel/mem.c -o "${tmpdir}/out/mem_c.o"
+cc "${kflags[@]}" -I"${tmpdir}" -ffunction-sections -fdata-sections \
+	-Dmain=mckernel_init_main -c kernel/init.c \
+	-o "${tmpdir}/out/init_c.o"
+cc "${kflags[@]}" -I"${tmpdir}" -ffunction-sections -fdata-sections \
+	-c kernel/plist.c -o "${tmpdir}/out/plist_c.o"
 cc "${kflags[@]}" -ffunction-sections -fdata-sections -c lib/bitmap.c -o "${tmpdir}/out/bitmap_c.o"
 cc "${kflags[@]}" -ffunction-sections -fdata-sections -c lib/bitops.c -o "${tmpdir}/out/bitops_c.o"
+cc "${kflags[@]}" -I"${tmpdir}" -ffunction-sections -fdata-sections -fno-builtin \
+	-c lib/string.c -o "${tmpdir}/out/string_c.o"
+cc "${kflags[@]}" -I"${tmpdir}" -ffunction-sections -fdata-sections -fno-builtin \
+	-c lib/vsprintf.c -o "${tmpdir}/out/vsprintf_c.o"
 
 rustc --crate-name mckernel_rust \
 	--crate-type lib \
@@ -1093,17 +2205,55 @@ rustc --crate-name mckernel_rust \
 	kernel/rust/lib.rs
 
 cc "${tmpdir}/rbtree_equiv.c" "${tmpdir}/out/rbtree_c.o" -o "${tmpdir}/out/rbtree_c"
-cc "${tmpdir}/rbtree_equiv.c" "${tmpdir}/out/mckernel_rust.o" -o "${tmpdir}/out/rbtree_rust"
+cc -Wl,--gc-sections "${tmpdir}/rbtree_equiv.c" \
+	"${tmpdir}/out/mckernel_rust.o" -o "${tmpdir}/out/rbtree_rust"
 cc "${tmpdir}/llist_equiv.c" "${tmpdir}/out/llist_c.o" -o "${tmpdir}/out/llist_c"
 cc "${tmpdir}/llist_equiv.c" "${tmpdir}/rust_stubs.c" "${tmpdir}/out/mckernel_rust.o" -o "${tmpdir}/out/llist_rust"
+cc -Wl,--gc-sections "${tmpdir}/waitq_equiv.c" "${tmpdir}/out/waitq_c.o" \
+	-o "${tmpdir}/out/waitq_c"
+cc -Wl,--gc-sections "${tmpdir}/waitq_equiv.c" "${tmpdir}/rust_stubs.c" \
+	"${tmpdir}/out/waitq_dispatch_c.o" "${tmpdir}/out/mckernel_rust.o" \
+	-o "${tmpdir}/out/waitq_rust"
+cc -fno-builtin -Wl,--gc-sections "${tmpdir}/mem_init_helpers_equiv.c" \
+	"${tmpdir}/out/mem_c.o" "${tmpdir}/out/init_c.o" \
+	"${tmpdir}/out/string_c.o" -o "${tmpdir}/out/mem_init_helpers_c"
+cc -fno-builtin -Wl,--gc-sections "${tmpdir}/mem_init_helpers_equiv.c" \
+	"${tmpdir}/rust_stubs.c" "${tmpdir}/out/mckernel_rust.o" \
+	-o "${tmpdir}/out/mem_init_helpers_rust"
+cc -Wl,--gc-sections "${tmpdir}/page_helpers_equiv.c" \
+	"${tmpdir}/out/mem_c.o" -o "${tmpdir}/out/page_helpers_c"
+cc -Wl,--gc-sections "${tmpdir}/page_helpers_equiv.c" \
+	"${tmpdir}/rust_stubs.c" "${tmpdir}/out/mckernel_rust.o" \
+	-o "${tmpdir}/out/page_helpers_rust"
+cc -Wl,--gc-sections "${tmpdir}/plist_equiv.c" "${tmpdir}/out/plist_c.o" \
+	-o "${tmpdir}/out/plist_c"
+cc "${tmpdir}/plist_equiv.c" "${tmpdir}/rust_stubs.c" \
+	"${tmpdir}/out/mckernel_rust.o" -o "${tmpdir}/out/plist_rust"
+cc "${tmpdir}/bitops_equiv.c" "${tmpdir}/out/bitops_c.o" -o "${tmpdir}/out/bitops_c"
+cc "${tmpdir}/bitops_equiv.c" "${tmpdir}/rust_stubs.c" \
+	"${tmpdir}/out/mckernel_rust.o" -o "${tmpdir}/out/bitops_rust"
+cc -fno-builtin -Wl,--gc-sections "${tmpdir}/string_equiv.c" \
+	"${tmpdir}/out/string_c.o" -o "${tmpdir}/out/string_c"
+cc -fno-builtin "${tmpdir}/string_equiv.c" "${tmpdir}/rust_stubs.c" \
+	"${tmpdir}/out/mckernel_rust.o" -o "${tmpdir}/out/string_rust"
+cc -fno-builtin -Wl,--gc-sections "${tmpdir}/numparse_equiv.c" \
+	"${tmpdir}/out/vsprintf_c.o" "${tmpdir}/out/string_c.o" \
+	-o "${tmpdir}/out/numparse_c"
+cc -fno-builtin "${tmpdir}/numparse_equiv.c" "${tmpdir}/rust_stubs.c" \
+	"${tmpdir}/out/mckernel_rust.o" -o "${tmpdir}/out/numparse_rust"
 cc -Wl,--gc-sections "${tmpdir}/bitmap_equiv.c" "${tmpdir}/ctype_stub.c" \
 	"${tmpdir}/out/bitmap_c.o" "${tmpdir}/out/bitops_c.o" -o "${tmpdir}/out/bitmap_c"
 cc "${tmpdir}/bitmap_equiv.c" "${tmpdir}/rust_stubs.c" \
 	"${tmpdir}/out/mckernel_rust.o" -o "${tmpdir}/out/bitmap_rust"
+cc -Wl,--gc-sections "${tmpdir}/bitmap_parse_equiv.c" "${tmpdir}/ctype_stub.c" \
+	"${tmpdir}/out/bitmap_c.o" "${tmpdir}/out/bitops_c.o" \
+	"${tmpdir}/out/string_c.o" -o "${tmpdir}/out/bitmap_parse_c"
+cc "${tmpdir}/bitmap_parse_equiv.c" "${tmpdir}/rust_stubs.c" \
+	"${tmpdir}/out/mckernel_rust.o" -o "${tmpdir}/out/bitmap_parse_rust"
 cc "${kflags[@]}" -I"${tmpdir}" -I. -ffunction-sections -fdata-sections -DPAGE_ALLOC_USE_C \
 	"${tmpdir}/page_alloc_equiv.c" "${tmpdir}/out/rbtree_c.o" \
 	-Wl,--gc-sections -o "${tmpdir}/out/page_alloc_c"
-cc "${tmpdir}/page_alloc_equiv.c" "${tmpdir}/out/mckernel_rust.o" \
+cc -Wl,--gc-sections "${tmpdir}/page_alloc_equiv.c" "${tmpdir}/out/mckernel_rust.o" \
 	-o "${tmpdir}/out/page_alloc_rust"
 cc "${kflags[@]}" -I"${tmpdir}" -I. -ffunction-sections -fdata-sections \
 	"${tmpdir}/page_alloc_bitmap_equiv.c" "${tmpdir}/out/rbtree_c.o" \
@@ -1118,8 +2268,24 @@ cc "${kflags[@]}" -I"${tmpdir}" -I. -ffunction-sections -fdata-sections \
 "${tmpdir}/out/rbtree_rust" > "${tmpdir}/out/rbtree_rust.out"
 "${tmpdir}/out/llist_c" > "${tmpdir}/out/llist_c.out"
 "${tmpdir}/out/llist_rust" > "${tmpdir}/out/llist_rust.out"
+"${tmpdir}/out/waitq_c" > "${tmpdir}/out/waitq_c.out"
+"${tmpdir}/out/waitq_rust" > "${tmpdir}/out/waitq_rust.out"
+"${tmpdir}/out/mem_init_helpers_c" > "${tmpdir}/out/mem_init_helpers_c.out"
+"${tmpdir}/out/mem_init_helpers_rust" > "${tmpdir}/out/mem_init_helpers_rust.out"
+"${tmpdir}/out/page_helpers_c" > "${tmpdir}/out/page_helpers_c.out"
+"${tmpdir}/out/page_helpers_rust" > "${tmpdir}/out/page_helpers_rust.out"
+"${tmpdir}/out/plist_c" > "${tmpdir}/out/plist_c.out"
+"${tmpdir}/out/plist_rust" > "${tmpdir}/out/plist_rust.out"
+"${tmpdir}/out/bitops_c" > "${tmpdir}/out/bitops_c.out"
+"${tmpdir}/out/bitops_rust" > "${tmpdir}/out/bitops_rust.out"
+"${tmpdir}/out/string_c" > "${tmpdir}/out/string_c.out"
+"${tmpdir}/out/string_rust" > "${tmpdir}/out/string_rust.out"
+"${tmpdir}/out/numparse_c" > "${tmpdir}/out/numparse_c.out"
+"${tmpdir}/out/numparse_rust" > "${tmpdir}/out/numparse_rust.out"
 "${tmpdir}/out/bitmap_c" > "${tmpdir}/out/bitmap_c.out"
 "${tmpdir}/out/bitmap_rust" > "${tmpdir}/out/bitmap_rust.out"
+"${tmpdir}/out/bitmap_parse_c" > "${tmpdir}/out/bitmap_parse_c.out"
+"${tmpdir}/out/bitmap_parse_rust" > "${tmpdir}/out/bitmap_parse_rust.out"
 "${tmpdir}/out/page_alloc_c" > "${tmpdir}/out/page_alloc_c.out"
 "${tmpdir}/out/page_alloc_rust" > "${tmpdir}/out/page_alloc_rust.out"
 "${tmpdir}/out/page_alloc_bitmap_c" > "${tmpdir}/out/page_alloc_bitmap_c.out" || {
@@ -1133,16 +2299,27 @@ cc "${kflags[@]}" -I"${tmpdir}" -I. -ffunction-sections -fdata-sections \
 
 diff -u "${tmpdir}/out/rbtree_c.out" "${tmpdir}/out/rbtree_rust.out"
 diff -u "${tmpdir}/out/llist_c.out" "${tmpdir}/out/llist_rust.out"
+diff -u "${tmpdir}/out/waitq_c.out" "${tmpdir}/out/waitq_rust.out"
+diff -u "${tmpdir}/out/mem_init_helpers_c.out" "${tmpdir}/out/mem_init_helpers_rust.out"
+diff -u "${tmpdir}/out/page_helpers_c.out" "${tmpdir}/out/page_helpers_rust.out"
+diff -u "${tmpdir}/out/plist_c.out" "${tmpdir}/out/plist_rust.out"
+diff -u "${tmpdir}/out/bitops_c.out" "${tmpdir}/out/bitops_rust.out"
+diff -u "${tmpdir}/out/string_c.out" "${tmpdir}/out/string_rust.out"
+diff -u "${tmpdir}/out/numparse_c.out" "${tmpdir}/out/numparse_rust.out"
 diff -u "${tmpdir}/out/bitmap_c.out" "${tmpdir}/out/bitmap_rust.out"
+diff -u "${tmpdir}/out/bitmap_parse_c.out" "${tmpdir}/out/bitmap_parse_rust.out"
 diff -u "${tmpdir}/out/page_alloc_c.out" "${tmpdir}/out/page_alloc_rust.out"
 diff -u "${tmpdir}/out/page_alloc_bitmap_c.out" "${tmpdir}/out/page_alloc_bitmap_rust.out"
 
 nm -u "${tmpdir}/out/mckernel_rust.o" | tee "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_chk_page_address' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U ihk_get_kargs' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U ihk_mc_get_memory_chunk' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U ihk_mc_get_nr_memory_chunks' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U phys_to_virt' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U virt_to_phys' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U zero_at_free' "${tmpdir}/out/rust.undefined"
-test "$(grep -c ' U ' "${tmpdir}/out/rust.undefined")" -eq 4
+test "$(grep -c ' U ' "${tmpdir}/out/rust.undefined")" -eq 7
 
 simd_count="$(objdump -d "${tmpdir}/out/mckernel_rust.o" |
 	grep -Eic 'xmm|ymm|mmx|movdqa|movdqu|movups|pshuf|padd|pand|pxor|popcnt' || true)"
@@ -1150,7 +2327,15 @@ test "${simd_count}" -eq 0
 
 cat "${tmpdir}/out/rbtree_c.out"
 cat "${tmpdir}/out/llist_c.out"
+cat "${tmpdir}/out/waitq_c.out"
+cat "${tmpdir}/out/mem_init_helpers_c.out"
+cat "${tmpdir}/out/page_helpers_c.out"
+cat "${tmpdir}/out/plist_c.out"
+cat "${tmpdir}/out/bitops_c.out"
+cat "${tmpdir}/out/string_c.out"
+cat "${tmpdir}/out/numparse_c.out"
 cat "${tmpdir}/out/bitmap_c.out"
+cat "${tmpdir}/out/bitmap_parse_c.out"
 cat "${tmpdir}/out/page_alloc_c.out"
 cat "${tmpdir}/out/page_alloc_bitmap_c.out"
 echo "rust object unresolved symbols and SIMD checks ok"

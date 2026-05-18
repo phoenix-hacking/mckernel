@@ -458,6 +458,14 @@ EXPORT_SYMBOL(bitmap_scnprintf);
  * characters and for grouping errors such as "1,,5", ",44", "," and "".
  * Leading and trailing whitespace accepted, but not embedded whitespace.
  */
+#ifdef MCKERNEL_RUST_BITMAP_PARSE
+extern int __bitmap_parse(const char *buf, unsigned int buflen,
+		int is_user, unsigned long *maskp,
+		int nmaskbits);
+extern int bitmap_parse_user(const char __user *ubuf,
+			unsigned int ulen, unsigned long *maskp,
+			int nmaskbits);
+#else
 int __bitmap_parse(const char *buf, unsigned int buflen,
 		int is_user, unsigned long *maskp,
 		int nmaskbits)
@@ -520,7 +528,6 @@ int __bitmap_parse(const char *buf, unsigned int buflen,
 
 	return 0;
 }
-EXPORT_SYMBOL(__bitmap_parse);
 
 /**
  * bitmap_parse_user - convert an ASCII hex string in a user buffer into a bitmap
@@ -545,6 +552,8 @@ int bitmap_parse_user(const char __user *ubuf,
 				ulen, 1, maskp, nmaskbits);
 
 }
+#endif /* MCKERNEL_RUST_BITMAP_PARSE */
+EXPORT_SYMBOL(__bitmap_parse);
 EXPORT_SYMBOL(bitmap_parse_user);
 
 /*
@@ -629,6 +638,13 @@ EXPORT_SYMBOL(bitmap_scnlistprintf);
  *    %-EINVAL: invalid character in string
  *    %-ERANGE: bit number specified too large for mask
  */
+#ifdef MCKERNEL_RUST_BITMAP_PARSE
+extern int bitmap_parselist(const char *bp, unsigned long *maskp,
+			int nmaskbits);
+extern int bitmap_parselist_user(const char __user *ubuf,
+			unsigned int ulen, unsigned long *maskp,
+			int nmaskbits);
+#else
 static int __bitmap_parselist(const char *buf, unsigned int buflen,
 		int is_user, unsigned long *maskp,
 		int nmaskbits)
@@ -706,7 +722,6 @@ int bitmap_parselist(const char *bp, unsigned long *maskp, int nmaskbits)
 
 	return __bitmap_parselist(bp, len, 0, maskp, nmaskbits);
 }
-EXPORT_SYMBOL(bitmap_parselist);
 
 
 /**
@@ -731,6 +746,8 @@ int bitmap_parselist_user(const char __user *ubuf,
 	return __bitmap_parselist((const char __force *)ubuf,
 					ulen, 1, maskp, nmaskbits);
 }
+#endif /* MCKERNEL_RUST_BITMAP_PARSE */
+EXPORT_SYMBOL(bitmap_parselist);
 EXPORT_SYMBOL(bitmap_parselist_user);
 
 

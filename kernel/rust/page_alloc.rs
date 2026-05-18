@@ -12,6 +12,9 @@ use crate::rbtree::{
 const PAGE_SHIFT: CULong = 12;
 const PAGE_SIZE: CULong = 1 << PAGE_SHIFT;
 const EINVAL: CInt = 22;
+const IHK_NUMA_FREE_DIRECT: CInt = 0;
+const IHK_NUMA_FREE_DEFERRED: CInt = 1;
+const IHK_NUMA_FREE_IGNORED: CInt = 2;
 
 #[repr(C)]
 #[derive(Clone, Copy)]
@@ -512,9 +515,7 @@ pub unsafe extern "C" fn __page_alloc_rbtree_reserve_pages(
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn __page_alloc_rbtree_get_root_chunk(
-    root: *mut RbRoot,
-) -> *mut FreeChunk {
+pub unsafe extern "C" fn __page_alloc_rbtree_get_root_chunk(root: *mut RbRoot) -> *mut FreeChunk {
     if root.is_null() {
         return null_mut();
     }
@@ -603,7 +604,10 @@ pub unsafe extern "C" fn __ihk_numa_zero_free_pages_node(
             }
             llist_add(chunk_list(chunk), &raw mut (*node).zeroed_list);
             compiler_fence(Ordering::SeqCst);
-            ihk_atomic_sub((size >> PAGE_SHIFT) as CInt, &raw mut (*node).nr_to_zero_pages);
+            ihk_atomic_sub(
+                (size >> PAGE_SHIFT) as CInt,
+                &raw mut (*node).nr_to_zero_pages,
+            );
             nr_zeroed_pages = nr_zeroed_pages.wrapping_add(((*chunk).size >> PAGE_SHIFT) as CInt);
             break;
         }
@@ -634,7 +638,10 @@ pub unsafe extern "C" fn __ihk_numa_zero_free_pages_node(
             }
             llist_add(chunk_list(chunk), &raw mut (*node).zeroed_list);
             compiler_fence(Ordering::SeqCst);
-            ihk_atomic_sub((size >> PAGE_SHIFT) as CInt, &raw mut (*node).nr_to_zero_pages);
+            ihk_atomic_sub(
+                (size >> PAGE_SHIFT) as CInt,
+                &raw mut (*node).nr_to_zero_pages,
+            );
             nr_zeroed_pages = nr_zeroed_pages.wrapping_add(((*chunk).size >> PAGE_SHIFT) as CInt);
         }
     }
@@ -667,8 +674,7 @@ pub unsafe extern "C" fn __ihk_numa_alloc_pages_nolock(
                 let size = (*chunk).size;
 
                 if __page_alloc_rbtree_free_range(&raw mut (*node).free_chunks, addr, size) == 0 {
-                    (*node).nr_free_pages =
-                        (*node).nr_free_pages.wrapping_add(size >> PAGE_SHIFT);
+                    (*node).nr_free_pages = (*node).nr_free_pages.wrapping_add(size >> PAGE_SHIFT);
                 }
             }
 
@@ -683,11 +689,7 @@ pub unsafe extern "C" fn __ihk_numa_alloc_pages_nolock(
             return 0;
         }
 
-        let addr = __page_alloc_rbtree_alloc_pages(
-            &raw mut (*node).free_chunks,
-            npages,
-            p2align,
-        );
+        let addr = __page_alloc_rbtree_alloc_pages(&raw mut (*node).free_chunks, npages, p2align);
         if addr != 0 {
             (*node).nr_free_pages = (*node).nr_free_pages.wrapping_sub(requested_pages);
         }
@@ -733,6 +735,33 @@ pub unsafe extern "C" fn __ihk_numa_defer_zero_free_pages(
     llist_add(chunk_list(chunk), &raw mut (*node).to_zero_list);
 
     0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn __ihk_numa_free_pages_prepare(
+    node: *mut IhkMcNumaNode,
+    addr: CULong,
+    npages: CInt,
+    defer_zero_at_free: CInt,
+) -> CInt {
+    if node.is_null() || npages <= 0 {
+        return IHK_NUMA_FREE_IGNORED;
+    }
+
+    let size = (npages as CULong) << PAGE_SHIFT;
+    if addr < (*node).min_addr || addr.wrapping_add(size) > (*node).max_addr {
+        return IHK_NUMA_FREE_IGNORED;
+    }
+
+    if zero_at_free != 0 && defer_zero_at_free == 0 {
+        zero_phys_range(addr, size);
+    }
+
+    if zero_at_free == 0 || defer_zero_at_free == 0 {
+        IHK_NUMA_FREE_DIRECT
+    } else {
+        IHK_NUMA_FREE_DEFERRED
+    }
 }
 
 #[no_mangle]
@@ -866,7 +895,9 @@ pub unsafe extern "C" fn __ihk_pagealloc_reserve_nolock(
         .wrapping_sub(1)
         .wrapping_sub((*desc).start)
         .wrapping_shr((*desc).shift) as CInt;
-    let mut i = start.wrapping_sub((*desc).start).wrapping_shr((*desc).shift) as CInt;
+    let mut i = start
+        .wrapping_sub((*desc).start)
+        .wrapping_shr((*desc).shift) as CInt;
     if i < 0 || n < 0 {
         return;
     }
@@ -898,7 +929,9 @@ pub unsafe extern "C" fn __ihk_pagealloc_free_nolock(
         return 0;
     }
 
-    let mut mi = address.wrapping_sub((*desc).start).wrapping_shr((*desc).shift) as u32;
+    let mut mi = address
+        .wrapping_sub((*desc).start)
+        .wrapping_shr((*desc).shift) as u32;
     let mut i = 0;
     while i < npages {
         let bit = (1 as CULong) << map_bit(mi);
@@ -971,9 +1004,7 @@ pub unsafe extern "C" fn __ihk_pagealloc_query_free_nolock(
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn __ihk_pagealloc_zero_free_pages_nolock(
-    desc: *mut IhkPageAllocatorDesc,
-) {
+pub unsafe extern "C" fn __ihk_pagealloc_zero_free_pages_nolock(desc: *mut IhkPageAllocatorDesc) {
     if desc.is_null() {
         return;
     }

@@ -1,7 +1,7 @@
 McKernel Rust Migration Overview
 Updated: 2026-05-18
 
-Overall Rust ownership estimate: 5%
+Overall Rust ownership estimate: 12%
 
 How to read this number
 ------------------------------------------------------------
@@ -20,18 +20,18 @@ Area                                      Rust %   Status
 ----                                      ------   ------
 Rust build/link foundation                   90   Rust object builds and links into mckernel.img; V10 minimal smoke and focused V11 strace now repeat cleanly on Rocky
 ABI/layout foundation                        10   Initial shared structs covered; many kernel structs still need assertions
-Shared primitives                            42   rbtree, llist, bitmap core, zero-area search, and region helpers ported
-x86_64 memory management                      0   Still C
-Page allocator                               16   Rust owns rbtree helper cluster, rbtree reserve/get-root helpers, bitmap-backed no-lock allocator internals, zero-free no-lock helper, NUMA add-free, NUMA zero-free node helper, and NUMA alloc no-lock body; public free orchestration, locks/logging, CPU-local-cache fast path, and IKC zero requests still C
+Shared primitives                            78   rbtree, llist, plist priority-list core, string/memory leaf helpers, numeric parsers, bitops scan/hweight helpers, bitmap core, parse, zero-area search, and region helpers ported
+x86_64 memory management                      2   Memory chunk classification, NUMA-ID lookup, page-to-physical lookup, and splitability policy helpers ported; page tables, mapping, and address validation remain C
+Page allocator                               20   Rust owns rbtree helper cluster, rbtree reserve/get-root helpers, bitmap-backed no-lock allocator internals, zero-free no-lock helper, NUMA add-free, NUMA zero-free node helper, NUMA alloc no-lock body, direct free-to-tree helper, deferred free enqueue helper, and free-path preflight/policy; locks/logging, CPU-local-cache fast path, and IKC zero requests still C
 Process/VM management                         0   Still C
 Syscall core                                  0   Still C
-Scheduler/timers/wait/futex                   0   Still C
+Scheduler/timers/wait/futex                   3   Waitqueue locked list core is Rust-owned; scheduler callbacks, locks, timers, futex logic still C
 procfs/sysfs/xpmem/file objects               0   Still C
 host/IKC/mcctrl/IHK modules              0 Rust   Compatibility patches only
 User tools                                    0   Still C
 arm64                                         0   Deferred until x86_64 stabilizes
 
-Overall estimate: 5% Rust-owned.
+Overall estimate: 12% Rust-owned.
 
 This percentage should be treated as a functional-area estimate, not a strict
 line-count. A later phase can add an automated LOC counter.
@@ -44,6 +44,43 @@ Current completed Rust-owned behavior
 - C fallback builds remain part of the migration contract.
 - Rust exports C ABI replacements for the first rbtree, llist, and bitmap
   routines.
+- Rust now owns the exported bit-scan and hweight helper cluster from
+  `lib/bitops.c`: `find_next_bit()`, `find_next_zero_bit()`,
+  `find_first_bit()`, `find_first_zero_bit()`, `__sw_hweight8()`,
+  `__sw_hweight16()`, `__sw_hweight32()`, and `__sw_hweight64()`.
+- Rust now owns the external string/memory leaf helper cluster from
+  `lib/string.c` when ENABLE_RUST_KERNEL is on: `strlen()`, `strnlen()`,
+  `strcpy()`, `strncpy()`, `strcmp()`, `strncmp()`, `strchr()`,
+  `strrchr()`, `strpbrk()`, `strstr()`, `memcpy()`, `memcpy_long()`,
+  `memset()`, and `memcmp()`. The allocation/user-copy dependent
+  `flatten_strings_from_user()` body remains in C.
+- Rust now owns the priority-list add/delete core from `kernel/plist.c`:
+  `plist_add()` and `plist_del()`. This keeps futex queue ordering logic
+  equivalent while leaving futex wakeup, locking, and scheduler side effects in
+  C.
+- Rust now owns the pure waitqueue list-manipulation core from
+  `kernel/waitq.c`: `waitq_init()`, `waitq_add_entry_locked()`,
+  `waitq_remove_entry_locked()`, and `waitq_wake_nr_locked()`. Scheduler
+  callbacks, spinlock wrappers, current-thread state changes, wakeup wrappers,
+  timers, and futex behavior remain C-owned.
+- Rust now owns the small init/memory query helper cluster:
+  `find_command_line()` from `kernel/init.c`, plus
+  `is_mckernel_memory()` and `phys_to_nid()` from `kernel/mem.c`. The page
+  address validator, page-table logic, mapping paths, and high-risk memory
+  management behavior remain C-owned.
+- Rust now owns the page query/splitability leaf helper cluster from
+  `kernel/mem.c`: `page_to_phys()` and `is_splitable()`. The Rust side has
+  direct `struct page` layout assertions, while page hash lookup, page-table
+  walking, mapping, and memory-object operations remain C-owned.
+- Rust now owns the numeric parser leaf helpers from `lib/vsprintf.c`:
+  `simple_strtoul()`, `simple_strtol()`, `simple_strtoull()`,
+  `simple_strtoll()`, `strict_strtoul()`, `strict_strtol()`,
+  `strict_strtoull()`, `strict_strtoll()`, and `strtol()`. Varargs
+  formatting and scanning remain in C.
+- Rust now owns bitmap hex/list parser helpers from `lib/bitmap.c`:
+  `__bitmap_parse()`, `bitmap_parse_user()`, `bitmap_parselist()`, and
+  `bitmap_parselist_user()`. Bitmap string/list printing stays in C because it
+  depends on `scnprintf()` formatting.
 - Rust now owns bitmap_find_next_zero_area(), bitmap_find_free_region(),
   bitmap_allocate_region(), and bitmap_release_region() when
   ENABLE_RUST_KERNEL is on, while the C implementations remain available for
@@ -76,6 +113,17 @@ Current completed Rust-owned behavior
   `__ihk_numa_alloc_pages_nolock()` while the exported C
   `ihk_numa_alloc_pages()` wrapper still owns the CPU-local-cache precheck,
   MCS lock/unlock, and debug logging.
+- Rust now owns the direct NUMA free-to-tree helper
+  `__ihk_numa_free_pages_to_tree_nolock()` while the C wrapper still owns
+  bounds checks, zero-now policy, locking, and logging.
+- Rust now owns the deferred NUMA free enqueue helper
+  `__ihk_numa_defer_zero_free_pages()` while the C wrapper still owns the
+  public free orchestration and IKC/Linux zero request path.
+- Rust now owns the NUMA free-path preflight helper
+  `__ihk_numa_free_pages_prepare()`, including node bounds checks, positive
+  page-count filtering, zero-now clearing, and direct-vs-deferred action
+  selection. The C wrapper still owns locks, logging, CPU-local-cache handling,
+  and the IKC/Linux zero request.
 - Initial ABI/layout checks exist for shared structures.
 - Primitive and allocator-helper equivalence testing exists in
   kernel/rust/tests/run_equivalence.sh.
@@ -96,13 +144,14 @@ Last completed controlled verification step:
 - V11 focused Rocky regression now has a single runnable entry point. The
   required LTP/XPMEM focused gate is:
   `scripts/rocky-v11-focused.sh --timeout 120 --require-ltp --require-xpmem`.
-- Latest V10 log after the Rust NUMA zero-free and alloc no-lock helper ports:
-  `/tmp/mckernel-v10-20260518-012700.log`.
-- The latest focused V11 log directory after the Rust NUMA zero-free and alloc
-  no-lock helper ports is:
-  `/tmp/mckernel-v11-focused-20260518-013200`.
+- Latest V10 log after the Rust NUMA free-to-tree and deferred-free enqueue
+  helper ports:
+  `/tmp/mckernel-v10-20260518-014825.log`.
+- The latest focused V11 log directory after the Rust NUMA free-to-tree and
+  deferred-free enqueue helper ports is:
+  `/tmp/mckernel-v11-focused-20260518-015058`.
 - The tee log for that V11 run is:
-  `/tmp/mckernel-v11-20260518-013200.log`.
+  `/tmp/mckernel-v11-20260518-015058.log`.
 - That run classified missing external prerequisites, built focused test
   binaries, booted McKernel with two McKernel CPUs and 1536M memory, passed
   strace issues 943, 944, 945, 946, 960, and 961; `strace/test1.sh`;
@@ -118,6 +167,34 @@ Last completed controlled verification step:
   (`/tmp/mckernel-v11-focused-20260518-012938`) hit a timing-only
   `ltp-futex_wait_bitset02` threshold with waits around 230-257 ms. The rerun
   above passed; boot kmsg showed no panic or allocator error.
+- An intermediate V11 invocation at `/tmp/mckernel-v11-20260518-015012.log`
+  stopped before boot because sudo credentials were not available in that
+  non-interactive run; the same installed image passed in the 01:50 run above.
+- Latest local post-V11 conversion validation was the 03:34 EDT page-helper
+  plus memory/init-helper, waitq/string/plist/bitops/numparse/bitmap-parse,
+  and allocator batch. It passed `kernel/rust/tests/run_equivalence.sh` with
+  `page_helpers ok digest=b7d1e5ed6a71e5f9`,
+  `mem_init_helpers ok digest=435709f3a5bc062f`,
+  `waitq ok digest=8312cb826f153763`,
+  `numparse ok digest=c67e393e673a778f`, and
+  `bitmap_parse ok digest=c28c0afd247a3cb9` in addition to the prior rbtree,
+  llist, plist, bitops, string, bitmap, and allocator digests.
+- The same 03:34 EDT batch passed `rustfmt kernel/rust/lib.rs
+  kernel/rust/page_helpers.rs kernel/rust/mem_helpers.rs`, `git diff --check`,
+  `bash -n kernel/rust/tests/run_equivalence.sh scripts/rocky-rust-validation.sh scripts/rocky-v11-focused.sh`,
+  the Rust-enabled image build
+  `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`, the C
+  fallback image build
+  `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`,
+  Rust symbol export checks for the new page, memory/init, and waitq exports,
+  the expected unresolved-symbol scan, and the SIMD scan.
+- A V10 dynamic smoke rerun was attempted for the 03:25 EDT memory/init batch
+  because it touches `kernel/init.c` and `kernel/mem.c`. The script completed
+  configure/build/module/tool work, then stopped before install/boot because
+  sudo required an interactive password prompt in that non-interactive run.
+  No runtime regression was observed because McKernel was not booted in that
+  attempt. The current runtime baseline remains the clean 01:48 V10 and 01:50
+  focused V11 runs until the next successful runtime gate.
 - The previous `RIP=0x1000` hostname SIGSEGV was fixed by making user-visible
   zero-fill mmap/page-fault paths explicitly clear pages instead of relying on
   allocator `zero_at_free` state.
@@ -149,26 +226,51 @@ Last completed controlled verification step:
   `mcexec`, `mcstat`, `ihkconfig`, and `ihkosctl`.
 - Earlier V0 through V6 checks are satisfied for this Rocky validation path.
 
-Latest local source verification after the Rust allocator helper ports:
+Latest local source verification after the Rust page helper port:
 - `git diff --check` passed.
 - `bash -n` passed for `scripts/rocky-rust-validation.sh`,
   `scripts/rocky-v11-focused.sh`, and the touched shell test harnesses.
 - `kernel/rust/tests/run_equivalence.sh` passed.
-- The equivalence harness now includes rbtree reserve/get-root coverage, page
-  allocator zero-free coverage, NUMA add-free accounting/tree coverage,
-  single-node deferred-zero movement, and NUMA allocation from the zeroed-list
-  path. Latest allocator lines include
-  `page_alloc ok digest=bbeef5e7f59e821f` and `page_alloc_bitmap ok
-  digest=55907c0dc3681134`.
+- The equivalence harness now includes direct bitops coverage, direct
+  string/memory leaf coverage, plist priority/FIFO/delete coverage, memory/init
+  helper coverage, page query/splitability helper coverage, rbtree
+  reserve/get-root coverage, page allocator zero-free coverage, NUMA add-free
+  accounting/tree coverage, single-node deferred-zero movement, NUMA
+  allocation from the zeroed-list path, direct free-to-tree behavior,
+  immediate zero-and-free behavior, deferred free enqueue/zero/reallocate
+  behavior, and ignored out-of-range/zero-page free behavior. Latest lines
+  include `page_helpers ok digest=b7d1e5ed6a71e5f9`,
+  `mem_init_helpers ok digest=435709f3a5bc062f`,
+  `bitops ok digest=de062950e3e23679`,
+  `plist ok digest=5e849f2117bdcb48`,
+  `string ok digest=d06a5f4ebf80f798`,
+  `page_alloc ok digest=bbeef5e7f59e821f`, and `page_alloc_bitmap ok
+  digest=d9f2d2b25941c9c8`.
 - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
-  passed after runtime testing.
+  passed after the page helper Rust port.
 - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
   passed for the Rust-disabled C fallback image.
-- Rust object exported the expected page allocator symbols, including
+- Rust object exported the expected page, memory/init, waitq, bitops, and page
+  allocator symbols,
+  including `find_next_bit()`, `find_next_zero_bit()`, `find_first_bit()`,
+  `find_first_zero_bit()`, the `__sw_hweight*()` helpers,
   `__ihk_numa_add_free_pages()`, `__ihk_numa_zero_free_pages_node()`, and
-  `__ihk_numa_alloc_pages_nolock()`. It still has only the expected
-  unresolved kernel symbols: `ihk_mc_chk_page_address`, `phys_to_virt`,
-  `virt_to_phys`, and `zero_at_free`.
+  `__ihk_numa_alloc_pages_nolock()`,
+  `__ihk_numa_free_pages_to_tree_nolock()`, and
+  `__ihk_numa_defer_zero_free_pages()`,
+  `__ihk_numa_free_pages_prepare()`, plus the new string/memory exports
+  `strlen()`, `strnlen()`, `strcpy()`, `strncpy()`, `strcmp()`, `strncmp()`,
+  `strchr()`, `strrchr()`, `strpbrk()`, `strstr()`, `memcpy()`,
+  `memcpy_long()`, `memset()`, and `memcmp()`, plus `plist_add()`,
+  `plist_del()`, `waitq_init()`, `find_command_line()`,
+  `is_mckernel_memory()`, `phys_to_nid()`, `page_to_phys()`, and
+  `is_splitable()`. Its expected unresolved kernel provider list is now
+  `ihk_get_kargs`, `ihk_mc_chk_page_address`, `ihk_mc_get_memory_chunk`,
+  `ihk_mc_get_nr_memory_chunks`, `phys_to_virt`, `virt_to_phys`, and
+  `zero_at_free`.
+- The 02:34 EDT string/memory plus plist batch deliberately stopped at image-build
+  validation to avoid excessive full runtime loops. Rust-enabled and
+  C-fallback `mckernel.img` incremental builds passed after both helper ports.
 - `make -C test/strace/issue clean all` passed after adding the missing
   `<ctype.h>` includes, clearing the previous `isspace()` warning.
 - V2 passed: `mckernel_rust_obj` built in `/tmp/mckernel-wsl-rust-zeroarea`.
@@ -182,10 +284,15 @@ Latest local source verification after the Rust allocator helper ports:
   `/lib/modules/6.6.87.2-microsoft-standard-WSL2/build`.
 
 Next verification step:
-- Continue the allocator phase by expanding Rust ownership beyond the current
-  rbtree helper, bitmap-backed no-lock, zero-free, and rbtree reserve/get-root
-  helper set plus NUMA add-free/zero-free/alloc no-lock body only after the
-  current V10 and required-LTP/XPMEM V11 gates are preserved.
+- Continue the migration with one of two bounded next slices: either widen
+  allocator V12 stress before moving more of `ihk_numa_free_pages()`, or port
+  another shared leaf-helper cluster with direct C/Rust equivalence. Run V10
+  and required-LTP/XPMEM V11 again after the next larger allocator or
+  memory-management behavior batch.
+- To reduce build latency, use `kernel/rust/tests/run_equivalence.sh`,
+  `git diff --check`, `bash -n`, and Rust object symbol/SIMD scans after each
+  bounded Rust helper batch. Reserve full Rust/C image builds and V10/V11
+  runtime gates for larger accumulated conversion slices.
 - The covered Rocky control-plane path is now clean through V10 and the
   focused V11 runner with required LTP and XPMEM prerequisites.
 - V11 local probes now cover runnable futex, robust-list, and syscall-time
@@ -220,7 +327,15 @@ Known failing or blocked step:
   port, Rust bitmap allocator no-lock helper port, Rust zero-free no-lock
   helper port, Rust rbtree reserve/get-root helper port, Rust NUMA add-free
   helper port, Rust NUMA zero-free node helper port, and Rust NUMA alloc
-  no-lock body port.
+  no-lock body port, direct free-to-tree helper port, and deferred free enqueue
+  helper port.
+- The later 03:34 EDT page-helper plus memory/init-helper,
+  bitops/free-preflight/string/plist/numparse/bitmap-parse/waitq-core batch is
+  validated through equivalence, source hygiene, shell syntax, Rust/C image
+  builds, symbol scan, and SIMD scan. A V10 runtime rerun attempt during the
+  preceding memory/init batch stopped at non-interactive sudo during install
+  before booting McKernel, so runtime V10/V11 remains the clean 01:48/01:50
+  EDT baseline until the next successful runtime gate.
 - Strict upstream V11 remains open for large-page runtime, issue-1324
   fork/ptrace memory pressure, and a missing x86_64 mcexec-options suite.
 - The pre-existing dirty `ihk` submodule marker is still present from the local
@@ -290,13 +405,17 @@ Next migration target
 ------------------------------------------------------------
 
 Recommended next code phase:
-- Continue Phase 4 page allocator by porting more allocator internals behind
-  the existing C ABI, with a narrow allocator stress/equivalence test before
-  runtime validation.
+- Continue Phase 4 page allocator only after widening allocator stress, or take
+  another bounded helper cluster if it has direct equivalence coverage and does
+  not pull allocator/user-copy dependencies into Rust. Good candidates are
+  non-varargs formatting helpers, simple list helpers, small exported
+  arithmetic/utility functions, or the next memory helper only after its
+  C/Rust harness can model the required page-address and page-table state.
 
 Reason:
-- The Rocky baseline is clean and the first allocator helper cluster now has
-  C/Rust equivalence plus V10/V11 runtime coverage. The next allocator work
-  should target direct free-to-tree and deferred free enqueue helpers while
-  leaving full public free orchestration and IKC/Linux zero requests in C until
-  stress coverage is wider.
+- The Rocky baseline is clean and the current Rust helper set has C/Rust
+  equivalence plus image-build validation. The next allocator work should widen
+  allocator-specific V12 stress around free/list movement and accounting before
+  moving the remaining public `ihk_numa_free_pages()` lock/log/IKC
+  orchestration. Keep IKC/Linux zero requests in C until deferred-free stress
+  is broader.

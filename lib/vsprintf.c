@@ -67,6 +67,21 @@ unsigned char _ctype[] = {
 /* Works only for digits and letters, but small and fast */
 #define TOLOWER(x) ((x) | 0x20)
 
+#ifdef MCKERNEL_RUST_NUMPARSE
+extern unsigned long simple_strtoul(const char *cp, char **endp,
+				    unsigned int base);
+extern long simple_strtol(const char *cp, char **endp, unsigned int base);
+extern unsigned long long simple_strtoull(const char *cp, char **endp,
+					  unsigned int base);
+extern long long simple_strtoll(const char *cp, char **endp,
+				unsigned int base);
+extern int strict_strtoul(const char *cp, unsigned int base,
+			  unsigned long *res);
+extern int strict_strtol(const char *cp, unsigned int base, long *res);
+extern int strict_strtoull(const char *cp, unsigned int base,
+			   unsigned long long *res);
+extern int strict_strtoll(const char *cp, unsigned int base, long long *res);
+#else
 static unsigned int simple_guess_base(const char *cp)
 {
 	if (cp[0] == '0') {
@@ -315,6 +330,7 @@ int strict_strtoll(const char *cp, unsigned int base, long long *res)
 	return ret;
 }
 EXPORT_SYMBOL(strict_strtoll);
+#endif /* MCKERNEL_RUST_NUMPARSE */
 
 static int skip_atoi(const char **s)
 {
@@ -1436,7 +1452,9 @@ int sscanf(const char * buf, const char * fmt, ...)
 }
 EXPORT_SYMBOL(sscanf);
 
+#ifndef MCKERNEL_RUST_NUMPARSE
 unsigned long strtol(const char *cp, char **endp, unsigned int base)
 {
 	return simple_strtol(cp, endp, base);
 }
+#endif

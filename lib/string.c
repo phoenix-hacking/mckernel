@@ -15,6 +15,7 @@
 #include <memory.h>
 #include <arch-string.h>
 
+#ifndef MCKERNEL_RUST_STRING_CORE
 size_t strlen(const char *p)
 {
 	const char *head = p;
@@ -216,6 +217,7 @@ int memcmp(const void *s1, const void *s2, size_t n)
 	}
 	return *p1 - *p2;
 }
+#endif /* MCKERNEL_RUST_STRING_CORE */
 
 /* 
  * Flatten out a (char **) string array into the following format:

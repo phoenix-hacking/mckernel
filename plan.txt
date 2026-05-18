@@ -62,7 +62,41 @@ First Rust primitive replacements
 - Ported the kernel red-black tree implementation behind the existing rb_* C
   ABI.
 - Ported linked-list helper routines behind the existing C ABI.
+- Ported priority-list add/delete helpers behind the existing C ABI:
+  `plist_add()` and `plist_del()`.
+- Ported the pure waitqueue locked list core behind the existing C ABI:
+  `waitq_init()`, `waitq_add_entry_locked()`,
+  `waitq_remove_entry_locked()`, and `waitq_wake_nr_locked()`. Scheduler
+  callbacks, spinlock wrappers, current-thread state transitions, wakeup
+  wrappers, timers, and futex logic remain C-owned.
+- Ported the small init/memory query helper cluster behind the existing C ABI:
+  `find_command_line()` from `kernel/init.c`, plus
+  `is_mckernel_memory()` and `phys_to_nid()` from `kernel/mem.c`. The page
+  address validator, page-table/mapping code, and high-risk memory management
+  behavior remain C-owned.
+- Ported the page query/splitability helper cluster behind the existing C ABI:
+  `page_to_phys()` and `is_splitable()` from `kernel/mem.c`. Page hash lookup,
+  page-table walking, mapping/unmapping, and memory-object operations remain
+  C-owned.
+- Ported the exported bitops scan/hweight helper cluster behind the existing C
+  ABI: `find_next_bit()`, `find_next_zero_bit()`, `find_first_bit()`,
+  `find_first_zero_bit()`, and the `__sw_hweight*()` helpers.
+- Ported the external string/memory leaf helper cluster behind the existing C
+  ABI: `strlen()`, `strnlen()`, `strcpy()`, `strncpy()`, `strcmp()`,
+  `strncmp()`, `strchr()`, `strrchr()`, `strpbrk()`, `strstr()`, `memcpy()`,
+  `memcpy_long()`, `memset()`, and `memcmp()`. Left
+  `flatten_strings_from_user()` in C because it depends on allocation and
+  user-copy helpers.
+- Ported the numeric parser leaf helper cluster behind the existing C ABI:
+  `simple_strtoul()`, `simple_strtol()`, `simple_strtoull()`,
+  `simple_strtoll()`, `strict_strtoul()`, `strict_strtol()`,
+  `strict_strtoull()`, `strict_strtoll()`, and `strtol()`. Left varargs
+  formatting and scanning in C.
 - Ported selected bitmap primitives behind the existing C ABI.
+- Ported bitmap hex/list parser helpers behind the existing C ABI:
+  `__bitmap_parse()`, `bitmap_parse_user()`, `bitmap_parselist()`, and
+  `bitmap_parselist_user()`. Left bitmap string/list printing in C because it
+  depends on `scnprintf()`.
 - Ported bitmap_find_next_zero_area() behind the existing C ABI.
 - Ported the bitmap region helper cluster behind the existing C ABI:
   bitmap_find_free_region(), bitmap_allocate_region(), and
@@ -92,12 +126,33 @@ First Rust primitive replacements
   all-node wrapper: `__ihk_numa_zero_free_pages_node()`.
 - Moved the under-lock NUMA allocation body to Rust behind the exported C
   CPU-local-cache/lock/log wrapper: `__ihk_numa_alloc_pages_nolock()`.
+- Moved the direct NUMA free-to-tree helper to Rust behind the exported C
+  bounds/lock/log wrapper: `__ihk_numa_free_pages_to_tree_nolock()`.
+- Moved the deferred NUMA free enqueue helper to Rust while keeping the
+  exported C wrapper responsible for public orchestration and IKC/Linux zero
+  requests: `__ihk_numa_defer_zero_free_pages()`.
+- Moved NUMA free-path preflight and action selection to Rust:
+  `__ihk_numa_free_pages_prepare()` now owns bounds checking, positive page
+  filtering, zero-now clearing, and direct-vs-deferred action selection.
 - Kept macro-heavy C headers in place so existing C call sites do not need a
   public include-style migration yet.
 - Guarded selected C bitmap implementations so Rust can replace them without
   duplicate symbols.
 - Guarded selected C page-allocator helper implementations so Rust can replace
   them without duplicate symbols while the C fallback build remains available.
+- Guarded selected C string/memory leaf implementations so Rust can replace
+  them without duplicate symbols while the C fallback build remains available.
+- Guarded selected C priority-list implementations so Rust can replace them
+  without duplicate symbols while the C fallback build remains available.
+- Guarded selected C numeric parser and bitmap parser implementations so Rust
+  can replace them without duplicate symbols while the C fallback build remains
+  available.
+- Guarded selected C waitqueue core implementations so Rust can replace them
+  without duplicate symbols while the C fallback build remains available.
+- Guarded selected C init/memory query helpers so Rust can replace them without
+  duplicate symbols while the C fallback build remains available.
+- Guarded selected C page query/splitability helpers so Rust can replace them
+  without duplicate symbols while the C fallback build remains available.
 
 Equivalence and build checks already established
 ------------------------------------------------
@@ -109,6 +164,28 @@ Equivalence and build checks already established
   allocation, exact allocation, overlap rejection, and exhaustion behavior.
 - Added bitmap page allocator wrapper equivalence coverage comparing the pure C
   fallback path to the Rust-dispatched no-lock helper path.
+- Added direct bitops equivalence coverage for bit-scan and hweight helpers.
+- Added direct string/memory equivalence coverage for the Rust-owned
+  `lib/string.c` leaf helper cluster, including current edge behavior for
+  zero-length `strncmp()` and `memcmp()`.
+- Added direct numeric parser equivalence coverage for simple, strict, signed,
+  unsigned, base-detected, and invalid-tail cases.
+- Added direct plist equivalence coverage for priority ordering, FIFO ordering
+  within equal priorities, delete-time priority representative replacement, and
+  empty-list cleanup.
+- Added direct waitqueue-core equivalence coverage for initialization, locked
+  tail insertion, locked removal/reinitialization, locked wake limits, empty
+  wake return behavior, callback ordering, and C-compatible preserved entry
+  flags.
+- Added direct init/memory helper equivalence coverage for memory-chunk
+  containment, chunk-boundary NUMA-ID lookup, no-chunk fallbacks, null kernel
+  argument handling, and `find_command_line()` substring offsets.
+- Added direct page query/splitability equivalence coverage for null pages,
+  physical-address extraction, page mode classification, multi-map counts, and
+  shared-memory splitability override behavior.
+- Added direct bitmap parse equivalence coverage for hex chunks, comma
+  grouping, whitespace handling, overflow/invalid input, list ranges, user
+  wrapper lengths, and mask-width error behavior.
 - Checked the Rust object for expected unresolved kernel symbols only.
 - Checked that Rust output does not introduce unwanted SIMD/vector usage.
 
@@ -146,13 +223,14 @@ Known current validation state
   workload layer, and focused V11 Rocky gate with required LTP/XPMEM.
 - V9 McKernel boot-only validation passed on Rocky VM.
 - V10 is stable at the current minimal workload level. The latest completed
-  rerun after the Rust NUMA zero-free and alloc no-lock helper ports was the
-  direct TTY Rocky command on 2026-05-18:
+  rerun after the Rust NUMA free-to-tree and deferred-free enqueue helper ports
+  was the direct TTY Rocky command on 2026-05-18:
   `scripts/rocky-rust-validation.sh --skip-deps --skip-rust --boot-smoke --trace-smoke --yes --jobs 2`.
   It passed `mcexec /bin/true`, relative `mcexec hostname`, absolute
   `mcexec /usr/bin/hostname`, and `mcstat`, then shut down cleanly.
-- Latest V10 log after the Rust NUMA zero-free and alloc no-lock helper ports:
-  `/tmp/mckernel-v10-20260518-012700.log`.
+- Latest V10 log after the Rust NUMA free-to-tree and deferred-free enqueue
+  helper ports:
+  `/tmp/mckernel-v10-20260518-014825.log`.
 - The previous hostname SIGSEGV at `RIP=0x1000` is fixed by explicit zero-fill
   in user-visible mmap/page-fault paths.
 - Preserve this exact V10 rerun command for future baseline checks:
@@ -162,9 +240,10 @@ Known current validation state
 - V11 focused regressions now have a Rocky entry point. The accepted full
   focused gate requires LTP and XPMEM:
   `scripts/rocky-v11-focused.sh --timeout 120 --require-ltp --require-xpmem`.
-- The latest focused V11 run after the Rust NUMA zero-free and alloc no-lock
-  helper ports is clean at `/tmp/mckernel-v11-focused-20260518-013200`.
-- The tee log for that V11 run is `/tmp/mckernel-v11-20260518-013200.log`.
+- The latest focused V11 run after the Rust NUMA free-to-tree and
+  deferred-free enqueue helper ports is clean at
+  `/tmp/mckernel-v11-focused-20260518-015058`.
+- The tee log for that V11 run is `/tmp/mckernel-v11-20260518-015058.log`.
 - That run covered issue tests 943, 944, 945, 946, 960, and 961;
   `strace/test1.sh`; `strace/test2.sh`; bundle tests `ptrace_setoptions`,
   `qual_syscall`, `stat`, and `strace-f`; locally runnable futex,
@@ -175,6 +254,18 @@ Known current validation state
   (`/tmp/mckernel-v11-focused-20260518-012938`) failed only the
   `ltp-futex_wait_bitset02` timing threshold. The rerun above passed and boot
   kmsg had no panic or allocator error.
+- An intermediate V11 invocation at `/tmp/mckernel-v11-20260518-015012.log`
+  stopped before boot because sudo credentials were unavailable in that
+  non-interactive run; the same installed image passed in the 01:50 EDT run.
+- The 03:34 EDT page-helper plus memory/init-helper,
+  bitops/free-preflight/string/plist/numparse/bitmap-parse/waitq-core batch
+  passed equivalence, source hygiene, shell syntax, Rust/C image builds, symbol
+  export checks for the new page, memory/init, and waitq exports, expected
+  unresolved-symbol checks, and SIMD scan. A V10 runtime rerun attempt during
+  the preceding memory-touching batch completed configure/build/module/tool
+  work, then stopped before install/boot because sudo required an interactive
+  password prompt in that non-interactive run; use the 01:48/01:50 EDT runtime
+  logs as the current runtime baseline until the next successful runtime gate.
 - Direct strace is no longer the active V11 blocker. Direct forms including
   `mcexec strace -o ... /bin/true` now complete successfully.
 - The Rocky `stat`/`strace-f` panic was fixed by avoiding the missing
@@ -252,8 +343,9 @@ Commands:
 - find kernel/rust -maxdepth 2 -type f | sort
 - grep or rg for ENABLE_RUST_KERNEL in kernel/CMakeLists.txt
 - confirm kernel/rbtree.c, kernel/llist.c, and lib/bitmap.c still exist
-- confirm kernel/rust/lib.rs, abi.rs, rbtree.rs, llist.rs, bitmap.rs, and
-  abi_checks.c still exist
+- confirm kernel/rust/lib.rs, abi.rs, rbtree.rs, llist.rs, waitq.rs,
+  plist.rs, bitops.rs, string.rs, numparse.rs, bitmap.rs, page_alloc.rs,
+  mem_helpers.rs, and abi_checks.c still exist
 
 Success:
 - Rust files are present.
@@ -298,7 +390,16 @@ Command:
 Success:
 - rbtree equivalence passes.
 - llist equivalence passes.
+- waitq-core equivalence passes.
+- memory/init helper equivalence passes.
+- page query/splitability helper equivalence passes.
+- plist equivalence passes.
+- bitops equivalence passes.
+- string/memory equivalence passes.
+- numeric parser equivalence passes.
 - bitmap equivalence passes.
+- bitmap parser equivalence passes.
+- page allocator helper equivalence passes.
 - unresolved-symbol checks pass.
 - codegen checks pass.
 
@@ -607,6 +708,20 @@ Scope:
 - Port additional leaf primitives only where the C ABI is stable.
 - Keep C macro headers intact.
 - Avoid introducing allocator-backed Rust data structures.
+- Current completed slices:
+  - rbtree and llist helpers are Rust-owned.
+  - plist add/delete helpers are Rust-owned.
+  - waitqueue locked list core helpers are Rust-owned.
+  - bitops scan/hweight helpers are Rust-owned.
+  - numeric parser leaf helpers are Rust-owned.
+  - bitmap core, zero-area, region, and remap helper clusters are Rust-owned.
+  - bitmap parse helpers are Rust-owned.
+  - string/memory leaf helpers from `lib/string.c` are Rust-owned, while
+    `flatten_strings_from_user()` remains C-owned.
+  - small init/memory query helpers are Rust-owned:
+    `find_command_line()`, `is_mckernel_memory()`, and `phys_to_nid()`.
+  - page query/splitability helpers are Rust-owned:
+    `page_to_phys()` and `is_splitable()`.
 
 Exit criteria:
 - V3 through V5 pass.
@@ -633,13 +748,24 @@ Scope:
     wrapper still owns all-node traversal and the `zero_at_free` policy check.
   - NUMA allocation no-lock body is Rust-owned while the exported C wrapper
     still owns CPU-local-cache precheck, MCS lock/unlock, and debug logging.
+  - NUMA direct free-to-tree helper is Rust-owned while the exported C wrapper
+    still owns bounds checks, zero-now policy, locking, and logging.
+  - NUMA deferred-free enqueue helper is Rust-owned while the exported C
+    wrapper still owns public orchestration and IKC/Linux zero requests.
+  - NUMA free-path preflight is Rust-owned while the exported C wrapper still
+    owns CPU-local-cache handling, MCS lock/unlock, logging, and IKC/Linux
+    zero requests.
 - Next safe slices:
-  - Add direct free-to-rbtree and deferred free enqueue helpers in Rust behind
-    C wrappers, then widen V12 stress around free/list movement and accounting
-    invariants.
+  - Widen V12 allocator stress around direct free, deferred free, zero-list
+    movement, zero-at-free transitions, and accounting invariants.
   - Keep the IKC/Linux zero-request path and full exported
-    `ihk_numa_free_pages()` orchestration in C until stress coverage covers
-    deferred frees across CPUs and zero-at-free transitions.
+    `ihk_numa_free_pages()` lock/log orchestration in C until stress coverage
+    covers deferred frees across CPUs and zero-at-free transitions.
+- Build cadence:
+  - Prefer equivalence, diff hygiene, shell syntax, Rust symbol, and SIMD
+    checks after each small Rust helper batch.
+  - Run full Rust/C image builds and V10/V11 runtime gates only after a larger
+    conversion batch or a high-risk allocator behavior change.
 
 Exit criteria:
 - Allocator V12 stress passes.

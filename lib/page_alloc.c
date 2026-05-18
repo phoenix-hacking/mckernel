@@ -448,6 +448,9 @@ int __ihk_numa_free_pages_to_tree_nolock(
 		struct ihk_mc_numa_node *node, unsigned long addr, int npages);
 int __ihk_numa_defer_zero_free_pages(
 		struct ihk_mc_numa_node *node, unsigned long addr, int npages);
+int __ihk_numa_free_pages_prepare(
+		struct ihk_mc_numa_node *node, unsigned long addr, int npages,
+		int defer_zero_at_free);
 #else
 
 #ifdef ENABLE_FUGAKU_HACKS
@@ -1054,6 +1057,9 @@ void ihk_numa_free_pages(struct ihk_mc_numa_node *node,
 {
 	mcs_lock_node_t mcs_node;
 	int defer_zero_at_free = deferred_zero_at_free;
+#ifdef MCKERNEL_RUST_PAGE_ALLOC_RBTREE
+	int free_action;
+#endif
 
 #ifdef ENABLE_PER_CPU_ALLOC_CACHE
 	/* CPU local cache */
@@ -1076,6 +1082,80 @@ void ihk_numa_free_pages(struct ihk_mc_numa_node *node,
 	}
 #endif
 
+#ifdef MCKERNEL_RUST_PAGE_ALLOC_RBTREE
+	free_action = __ihk_numa_free_pages_prepare(node, addr, npages,
+			defer_zero_at_free);
+	if (free_action == 2) {
+		return;
+	}
+
+	if (free_action == 0) {
+		mcs_lock_lock(&node->lock, &mcs_node);
+		if (__ihk_numa_free_pages_to_tree_nolock(node, addr, npages)) {
+			kprintf("%s: ERROR: freeing 0x%lx:%lu\n",
+					__FUNCTION__, addr, npages << PAGE_SHIFT);
+		}
+		else {
+			dkprintf("%s: freed%s chunk 0x%lx:%lu\n",
+					__FUNCTION__,
+					zero_at_free ? " and zeroed" : "",
+					addr, npages << PAGE_SHIFT);
+		}
+		mcs_lock_unlock(&node->lock, &mcs_node);
+		return;
+	}
+
+	if (free_action == 1) {
+		if (__ihk_numa_defer_zero_free_pages(node, addr, npages)) {
+			kprintf("%s: ERROR: deferring free 0x%lx:%lu\n",
+					__FUNCTION__, addr, npages << PAGE_SHIFT);
+			return;
+		}
+
+		/* Ask Linux to clear memory */
+		if (cpu_local_var_initialized &&
+				cpu_local_var(current) &&
+				cpu_local_var(current) != &cpu_local_var(idle) &&
+				!cpu_local_var(current)->proc->nohost) {
+			struct ihk_ikc_channel_desc *syscall_channel =
+				cpu_local_var(ikc2linux);
+			struct ikc_scd_packet packet IHK_DMA_ALIGN;
+
+			if (ihk_atomic_read(&node->zeroing_workers) > 0) {
+				dkprintf("%s: skipping Linux zero request..\n", __func__);
+				return;
+			}
+
+			ihk_atomic_inc(&node->zeroing_workers);
+
+			memset(&packet, 0, sizeof(packet));
+			packet.req.number = __NR_move_pages;
+			packet.req.args[0] = (unsigned long)node;
+
+			barrier();
+			smp_store_release(&packet.req.valid, 1);
+			packet.msg = SCD_MSG_SYSCALL_ONESIDE;
+			packet.ref = ihk_mc_get_processor_id();
+			packet.pid = cpu_local_var(current)->proc->pid;
+			packet.resp_pa = 0;
+
+			if (ihk_ikc_send(syscall_channel, &packet, 0) < 0) {
+				kprintf("%s: WARNING: failed to send memory clear"
+						" send IKC req..\n", __func__);
+			}
+			else {
+				dkprintf("%s: clear mem req for NUMA %d sent in req"
+						" for addr: 0x%lx\n",
+						__func__, node->id, addr);
+			}
+		}
+		return;
+	}
+
+	kprintf("%s: ERROR: unexpected Rust free action %d for 0x%lx:%lu\n",
+			__FUNCTION__, free_action, addr, npages << PAGE_SHIFT);
+	return;
+#else
 	if (addr < node->min_addr ||
 			(addr + (npages << PAGE_SHIFT)) > node->max_addr) {
 		return;
@@ -1205,6 +1285,7 @@ void ihk_numa_free_pages(struct ihk_mc_numa_node *node,
 			}
 		}
 	}
+#endif
 }
 
 #endif // IHK_RBTREE_ALLOCATOR
