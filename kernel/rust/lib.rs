@@ -12,6 +12,8 @@ mod page_alloc;
 mod page_helpers;
 mod plist;
 mod rbtree;
+mod sched_helpers;
+mod shmid_helpers;
 mod string;
 mod waitq;
 

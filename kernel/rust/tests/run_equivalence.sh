@@ -648,6 +648,250 @@ int main(void)
 }
 EOF_PAGE_HELPERS
 
+cat > "${tmpdir}/shmid_helpers_equiv.c" <<'EOF_SHMID_HELPERS'
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+extern unsigned long shmid_index[512];
+extern int get_shmid_max_index(void);
+extern int get_shmid_index(void);
+extern int shmid_to_index(int);
+extern int shmid_to_seq(int);
+extern int make_shmid(void *);
+extern int shmget_existing_access_result(unsigned int, unsigned int, int,
+					 unsigned int, unsigned int,
+					 unsigned int, unsigned int,
+					 uint16_t);
+extern int shmat_access_result(unsigned int, unsigned int, int,
+			       unsigned int, unsigned int,
+			       unsigned int, unsigned int, uint16_t);
+extern int shmctl_ipc_stat_access_result(unsigned int, unsigned int,
+					 unsigned int, unsigned int,
+					 unsigned int, unsigned int,
+					 uint16_t);
+extern int shm_owner_result(unsigned int, unsigned int, unsigned int);
+extern int shm_owner_or_cap_result(int, unsigned int, unsigned int,
+				   unsigned int);
+extern int shmlock_rlimit_result(int, unsigned long, unsigned long,
+				 unsigned long);
+
+struct shmobj_fixture {
+	uint8_t pad_to_index[56];
+	int index;
+	uint8_t pad_to_seq[44];
+	uint16_t seq;
+	uint8_t rest[126];
+} __attribute__((aligned(8)));
+
+struct perm_case {
+	unsigned int euid;
+	unsigned int egid;
+	unsigned int uid;
+	unsigned int cuid;
+	unsigned int gid;
+	unsigned int cgid;
+	uint16_t mode;
+	int shmflg;
+};
+
+struct rlimit_case {
+	int has_cap;
+	unsigned long rlim_cur;
+	unsigned long user_locked;
+	unsigned long size;
+};
+
+static void mix(unsigned long *digest, unsigned long value)
+{
+	*digest ^= value + 0x9e3779b97f4a7c15UL + (*digest << 6) + (*digest >> 2);
+}
+
+static void mix_signed(unsigned long *digest, long value)
+{
+	mix(digest, (unsigned long)value);
+}
+
+static void require(int condition)
+{
+	if (!condition)
+		exit(23);
+}
+
+static void clear_index(void)
+{
+	for (int i = 0; i < 512; i++)
+		shmid_index[i] = 0;
+}
+
+static void set_index_bit(int index)
+{
+	shmid_index[index / 64] |= 1UL << (index % 64);
+}
+
+static int test_index_bit(int index)
+{
+	return (shmid_index[index / 64] & (1UL << (index % 64))) != 0;
+}
+
+static void digest_words(unsigned long *digest, int first, int last)
+{
+	for (int i = first; i <= last; i++)
+		mix(digest, shmid_index[i]);
+}
+
+int main(void)
+{
+	static const int preset_bits[] = {
+		0, 1, 7, 63, 64, 65, 127, 128, 255, 4095,
+		4096, 8191, 12345, 32766, 32767,
+	};
+	static const int holes[] = {
+		0, 1, 2, 63, 64, 65, 130, 4096, 12000,
+	};
+	static const int shmids[] = {
+		0, 1, 0xffff, 0x10000, 0x12345678, 0x7fffffff,
+		-1, -2, -65536, -65535,
+	};
+	static const struct perm_case perms[] = {
+		{ 0, 0, 10, 20, 30, 40, 0000, 0 },
+		{ 10, 30, 10, 20, 30, 40, 0600, 0 },
+		{ 20, 99, 10, 20, 30, 40, 0400, 010000 },
+		{ 90, 30, 10, 20, 30, 40, 0060, 0 },
+		{ 90, 40, 10, 20, 30, 40, 0040, 010000 },
+		{ 90, 99, 10, 20, 30, 40, 0006, 0 },
+		{ 90, 99, 10, 20, 30, 40, 0004, 010000 },
+		{ 90, 99, 10, 20, 30, 40, 0000, 0 },
+		{ 10, 99, 10, 20, 30, 40, 0777, 02000 },
+		{ 11, 31, 10, 20, 30, 40, 0644, 01000 | 02000 },
+	};
+	static const struct rlimit_case rlimits[] = {
+		{ 0, 0, 0, 0 },
+		{ 1, 0, 0, 4096 },
+		{ 0, 4096, 0, 4096 },
+		{ 0, 4096, 4096, 1 },
+		{ 0, 8192, 2048, 4096 },
+		{ 0, 8192, 4096, 4097 },
+		{ 0, ~0UL, ~0UL - 10, 4096 },
+	};
+	unsigned long digest = 0x514d4944c0ffeeUL;
+	struct shmobj_fixture obj;
+
+	clear_index();
+	mix_signed(&digest, get_shmid_max_index());
+
+	for (unsigned int i = 0; i < sizeof(preset_bits) / sizeof(preset_bits[0]); i++) {
+		clear_index();
+		for (unsigned int j = 0; j <= i; j++)
+			set_index_bit(preset_bits[j]);
+		mix_signed(&digest, get_shmid_max_index());
+		digest_words(&digest, 0, 4);
+		digest_words(&digest, 508, 511);
+	}
+
+	for (unsigned int h = 0; h < sizeof(holes) / sizeof(holes[0]); h++) {
+		int hole = holes[h];
+
+		clear_index();
+		for (int bit = 0; bit < hole; bit++)
+			set_index_bit(bit);
+		for (int extra = hole + 1; extra < hole + 7 && extra < 32768; extra += 2)
+			set_index_bit(extra);
+
+		mix_signed(&digest, get_shmid_max_index());
+		int allocated = get_shmid_index();
+		require(allocated == hole);
+		require(test_index_bit(hole));
+		mix_signed(&digest, allocated);
+		mix_signed(&digest, get_shmid_max_index());
+		digest_words(&digest, hole / 64, hole / 64);
+	}
+
+	clear_index();
+	for (int i = 0; i < 130; i++) {
+		int allocated = get_shmid_index();
+		require(allocated == i);
+		mix_signed(&digest, allocated);
+	}
+	require(get_shmid_max_index() == 129);
+	digest_words(&digest, 0, 3);
+
+	for (unsigned int i = 0; i < sizeof(shmids) / sizeof(shmids[0]); i++) {
+		mix_signed(&digest, shmid_to_index(shmids[i]));
+		mix_signed(&digest, shmid_to_seq(shmids[i]));
+	}
+
+	for (int i = 0; i < 10; i++) {
+		obj.index = i * 17;
+		obj.seq = (uint16_t)(0x1234 + i * 31);
+		mix_signed(&digest, make_shmid(&obj));
+	}
+
+	for (unsigned int i = 0; i < sizeof(perms) / sizeof(perms[0]); i++) {
+		const struct perm_case *p = &perms[i];
+
+		mix_signed(&digest, shmget_existing_access_result(p->euid,
+			p->egid, p->shmflg, p->uid, p->cuid, p->gid,
+			p->cgid, p->mode));
+		mix_signed(&digest, shmat_access_result(p->euid, p->egid,
+			p->shmflg, p->uid, p->cuid, p->gid, p->cgid,
+			p->mode));
+		mix_signed(&digest, shmctl_ipc_stat_access_result(p->euid,
+			p->egid, p->uid, p->cuid, p->gid, p->cgid,
+			p->mode));
+		mix_signed(&digest, shm_owner_result(p->euid, p->uid,
+			p->cuid));
+		mix_signed(&digest, shm_owner_or_cap_result(i & 1, p->euid,
+			p->uid, p->cuid));
+	}
+
+	for (unsigned int i = 0; i < sizeof(rlimits) / sizeof(rlimits[0]); i++) {
+		const struct rlimit_case *r = &rlimits[i];
+
+		mix_signed(&digest, shmlock_rlimit_result(r->has_cap,
+			r->rlim_cur, r->user_locked, r->size));
+	}
+
+	printf("shmid_helpers ok digest=%016lx\n", digest);
+	return 0;
+}
+EOF_SHMID_HELPERS
+
+cat > "${tmpdir}/sched_helpers_equiv.c" <<'EOF_SCHED_HELPERS'
+#include <stdio.h>
+#include <stdlib.h>
+
+extern int sched_get_priority_max_value(int);
+extern int sched_get_priority_min_value(int);
+
+static void mix(unsigned long *digest, unsigned long value)
+{
+	*digest ^= value + 0x9e3779b97f4a7c15UL + (*digest << 6) + (*digest >> 2);
+}
+
+static void mix_signed(unsigned long *digest, long value)
+{
+	mix(digest, (unsigned long)value);
+}
+
+int main(void)
+{
+	static const int policies[] = {
+		-100, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 99,
+	};
+	unsigned long digest = 0x5c7ed123456789abUL;
+
+	for (unsigned int i = 0; i < sizeof(policies) / sizeof(policies[0]); i++) {
+		mix_signed(&digest, sched_get_priority_max_value(policies[i]));
+		mix_signed(&digest, sched_get_priority_min_value(policies[i]));
+	}
+
+	printf("sched_helpers ok digest=%016lx\n", digest);
+	return 0;
+}
+EOF_SCHED_HELPERS
+
 cat > "${tmpdir}/plist_equiv.c" <<'EOF_PLIST'
 #include <stddef.h>
 #include <stdio.h>
@@ -2114,6 +2358,7 @@ __attribute__((weak)) int ihk_mc_get_memory_chunk(int id, unsigned long *start,
 	return 0;
 }
 __attribute__((weak)) char *ihk_get_kargs(void) { return 0; }
+unsigned long shmid_index[512];
 int zero_at_free = 1;
 EOF_STUBS
 
@@ -2179,6 +2424,11 @@ cc "${kflags[@]}" -I"${tmpdir}" -ffunction-sections -fdata-sections \
 	-Dmain=mckernel_init_main -c kernel/init.c \
 	-o "${tmpdir}/out/init_c.o"
 cc "${kflags[@]}" -I"${tmpdir}" -ffunction-sections -fdata-sections \
+	-DMCKERNEL_SHMID_HELPERS_TEST_EXPORT \
+	-DMCKERNEL_SHM_PERM_HELPERS_TEST_EXPORT \
+	-DMCKERNEL_SCHED_PRIO_HELPERS_TEST_EXPORT -c kernel/syscall.c \
+	-o "${tmpdir}/out/syscall_shmid_c.o"
+cc "${kflags[@]}" -I"${tmpdir}" -ffunction-sections -fdata-sections \
 	-c kernel/plist.c -o "${tmpdir}/out/plist_c.o"
 cc "${kflags[@]}" -ffunction-sections -fdata-sections -c lib/bitmap.c -o "${tmpdir}/out/bitmap_c.o"
 cc "${kflags[@]}" -ffunction-sections -fdata-sections -c lib/bitops.c -o "${tmpdir}/out/bitops_c.o"
@@ -2225,6 +2475,18 @@ cc -Wl,--gc-sections "${tmpdir}/page_helpers_equiv.c" \
 cc -Wl,--gc-sections "${tmpdir}/page_helpers_equiv.c" \
 	"${tmpdir}/rust_stubs.c" "${tmpdir}/out/mckernel_rust.o" \
 	-o "${tmpdir}/out/page_helpers_rust"
+cc -Wl,--gc-sections -Wl,--unresolved-symbols=ignore-all \
+	-Wl,--noinhibit-exec "${tmpdir}/shmid_helpers_equiv.c" \
+	"${tmpdir}/out/syscall_shmid_c.o" -o "${tmpdir}/out/shmid_helpers_c"
+cc -Wl,--gc-sections "${tmpdir}/shmid_helpers_equiv.c" \
+	"${tmpdir}/rust_stubs.c" "${tmpdir}/out/mckernel_rust.o" \
+	-o "${tmpdir}/out/shmid_helpers_rust"
+cc -Wl,--gc-sections -Wl,--unresolved-symbols=ignore-all \
+	-Wl,--noinhibit-exec "${tmpdir}/sched_helpers_equiv.c" \
+	"${tmpdir}/out/syscall_shmid_c.o" -o "${tmpdir}/out/sched_helpers_c"
+cc -Wl,--gc-sections "${tmpdir}/sched_helpers_equiv.c" \
+	"${tmpdir}/rust_stubs.c" "${tmpdir}/out/mckernel_rust.o" \
+	-o "${tmpdir}/out/sched_helpers_rust"
 cc -Wl,--gc-sections "${tmpdir}/plist_equiv.c" "${tmpdir}/out/plist_c.o" \
 	-o "${tmpdir}/out/plist_c"
 cc "${tmpdir}/plist_equiv.c" "${tmpdir}/rust_stubs.c" \
@@ -2274,6 +2536,10 @@ cc "${kflags[@]}" -I"${tmpdir}" -I. -ffunction-sections -fdata-sections \
 "${tmpdir}/out/mem_init_helpers_rust" > "${tmpdir}/out/mem_init_helpers_rust.out"
 "${tmpdir}/out/page_helpers_c" > "${tmpdir}/out/page_helpers_c.out"
 "${tmpdir}/out/page_helpers_rust" > "${tmpdir}/out/page_helpers_rust.out"
+"${tmpdir}/out/shmid_helpers_c" > "${tmpdir}/out/shmid_helpers_c.out"
+"${tmpdir}/out/shmid_helpers_rust" > "${tmpdir}/out/shmid_helpers_rust.out"
+"${tmpdir}/out/sched_helpers_c" > "${tmpdir}/out/sched_helpers_c.out"
+"${tmpdir}/out/sched_helpers_rust" > "${tmpdir}/out/sched_helpers_rust.out"
 "${tmpdir}/out/plist_c" > "${tmpdir}/out/plist_c.out"
 "${tmpdir}/out/plist_rust" > "${tmpdir}/out/plist_rust.out"
 "${tmpdir}/out/bitops_c" > "${tmpdir}/out/bitops_c.out"
@@ -2302,6 +2568,8 @@ diff -u "${tmpdir}/out/llist_c.out" "${tmpdir}/out/llist_rust.out"
 diff -u "${tmpdir}/out/waitq_c.out" "${tmpdir}/out/waitq_rust.out"
 diff -u "${tmpdir}/out/mem_init_helpers_c.out" "${tmpdir}/out/mem_init_helpers_rust.out"
 diff -u "${tmpdir}/out/page_helpers_c.out" "${tmpdir}/out/page_helpers_rust.out"
+diff -u "${tmpdir}/out/shmid_helpers_c.out" "${tmpdir}/out/shmid_helpers_rust.out"
+diff -u "${tmpdir}/out/sched_helpers_c.out" "${tmpdir}/out/sched_helpers_rust.out"
 diff -u "${tmpdir}/out/plist_c.out" "${tmpdir}/out/plist_rust.out"
 diff -u "${tmpdir}/out/bitops_c.out" "${tmpdir}/out/bitops_rust.out"
 diff -u "${tmpdir}/out/string_c.out" "${tmpdir}/out/string_rust.out"
@@ -2317,9 +2585,10 @@ grep -Eq 'U ihk_get_kargs' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_get_memory_chunk' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_get_nr_memory_chunks' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U phys_to_virt' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U shmid_index' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U virt_to_phys' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U zero_at_free' "${tmpdir}/out/rust.undefined"
-test "$(grep -c ' U ' "${tmpdir}/out/rust.undefined")" -eq 7
+test "$(grep -c ' U ' "${tmpdir}/out/rust.undefined")" -eq 8
 
 simd_count="$(objdump -d "${tmpdir}/out/mckernel_rust.o" |
 	grep -Eic 'xmm|ymm|mmx|movdqa|movdqu|movups|pshuf|padd|pand|pxor|popcnt' || true)"
@@ -2330,6 +2599,8 @@ cat "${tmpdir}/out/llist_c.out"
 cat "${tmpdir}/out/waitq_c.out"
 cat "${tmpdir}/out/mem_init_helpers_c.out"
 cat "${tmpdir}/out/page_helpers_c.out"
+cat "${tmpdir}/out/shmid_helpers_c.out"
+cat "${tmpdir}/out/sched_helpers_c.out"
 cat "${tmpdir}/out/plist_c.out"
 cat "${tmpdir}/out/bitops_c.out"
 cat "${tmpdir}/out/string_c.out"

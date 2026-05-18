@@ -8,6 +8,7 @@
 #include <ihk/context.h>
 #include <waitq.h>
 #include <page.h>
+#include <shm.h>
 
 #define ABI_ASSERT(cond, msg) _Static_assert(cond, msg)
 #define ABI_OFFSET(type, member) __builtin_offsetof(type, member)
@@ -167,3 +168,29 @@ ABI_ASSERT(ABI_OFFSET(struct ihk_mc_numa_node, min_addr) == 208,
 	   "Rust/C ihk_mc_numa_node min_addr offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct ihk_mc_numa_node, max_addr) == 216,
 	   "Rust/C ihk_mc_numa_node max_addr offset mismatch");
+ABI_ASSERT(sizeof(struct memobj) == 56,
+	   "Rust/C memobj size mismatch");
+ABI_ASSERT(ABI_OFFSET(struct memobj, flags) == 8,
+	   "Rust/C memobj flags offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct memobj, refcnt) == 24,
+	   "Rust/C memobj refcnt offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct memobj, pages) == 32,
+	   "Rust/C memobj pages offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct memobj, path) == 48,
+	   "Rust/C memobj path offset mismatch");
+ABI_ASSERT(sizeof(struct ipc_perm) == 48,
+	   "Rust/C ipc_perm size mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ipc_perm, seq) == 24,
+	   "Rust/C ipc_perm seq offset mismatch");
+ABI_ASSERT(sizeof(struct shmid_ds) == 112,
+	   "Rust/C shmid_ds size mismatch");
+ABI_ASSERT(ABI_OFFSET(struct shmid_ds, init_pgshift) == 108,
+	   "Rust/C shmid_ds init_pgshift offset mismatch");
+ABI_ASSERT(sizeof(struct shmobj) == 232,
+	   "Rust/C shmobj size mismatch");
+ABI_ASSERT(ABI_OFFSET(struct shmobj, index) == 56,
+	   "Rust/C shmobj index offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct shmobj, ds) == 80,
+	   "Rust/C shmobj ds offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct shmobj, chain) == 216,
+	   "Rust/C shmobj chain offset mismatch");

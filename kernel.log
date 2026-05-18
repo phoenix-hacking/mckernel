@@ -3857,3 +3857,138 @@ Update 2026-05-18 03:34 EDT:
     completed V10 runtime run through an interactive or otherwise approved
     sudo install path, then run focused V11 after the next larger behavior
     batch.
+
+Update 2026-05-18 04:01 EDT:
+- Added two syscall-adjacent Rust conversion slices and validated the kernel
+  link again before documenting the batch.
+- Implementation:
+  - Added `kernel/rust/shmid_helpers.rs` with Rust-owned C ABI exports for
+    `get_shmid_max_index()`, `get_shmid_index()`, `shmid_to_index()`, and
+    `shmid_to_seq()`.
+  - Added `kernel/rust/sched_helpers.rs` with Rust-owned C ABI exports for
+    `sched_get_priority_max_value()` and
+    `sched_get_priority_min_value()`.
+  - Wired both files into `kernel/rust/lib.rs` and the Rust CMake source list.
+  - Guarded the corresponding `kernel/syscall.c` helper implementations with
+    `MCKERNEL_RUST_SHMID_HELPERS` and
+    `MCKERNEL_RUST_SCHED_PRIO_HELPERS`, while keeping the C fallback build
+    available.
+  - Kept syscall dispatch, syscall wrappers, shared-memory object lookup,
+    locking/reference handling, scheduler/thread lookup, and copy_to_user paths
+    in C.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct C/Rust digest
+    coverage for shmid index allocation/max-index discovery, shmid index/seq
+    extraction, and scheduler priority min/max policy results.
+  - The shmid/scheduler C baseline is compiled from `kernel/syscall.c` with
+    test-only export macros. The harness uses linker garbage collection plus
+    ignored unrelated unresolved syscall references for that one baseline
+    executable, then directly executes the helper functions being compared.
+- Local validation:
+  - `rustfmt kernel/rust/lib.rs kernel/rust/shmid_helpers.rs kernel/rust/sched_helpers.rs`
+    passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh scripts/rocky-rust-validation.sh scripts/rocky-v11-focused.sh`
+    passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `shmid_helpers ok digest=83c515b2752ee36b`, `sched_helpers ok
+    digest=1402920486e5ac84`, `page_helpers ok digest=b7d1e5ed6a71e5f9`,
+    `mem_init_helpers ok digest=435709f3a5bc062f`, `waitq ok
+    digest=8312cb826f153763`, `plist ok digest=5e849f2117bdcb48`,
+    `bitops ok digest=de062950e3e23679`, `string ok
+    digest=d06a5f4ebf80f798`, `numparse ok digest=c67e393e673a778f`,
+    `bitmap ok digest=c0c668c4fe66d1e6`, `bitmap_parse ok
+    digest=c28c0afd247a3cb9`, `page_alloc ok digest=bbeef5e7f59e821f`, and
+    `page_alloc_bitmap ok digest=d9f2d2b25941c9c8`.
+  - `git diff --check` passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - The rebuilt Rust object exports `get_shmid_max_index()`,
+    `get_shmid_index()`, `shmid_to_index()`, `shmid_to_seq()`,
+    `sched_get_priority_max_value()`, and
+    `sched_get_priority_min_value()`.
+  - The Rust object unresolved-provider list is expected and limited to
+    `ihk_get_kargs`, `ihk_mc_chk_page_address`,
+    `ihk_mc_get_memory_chunk`, `ihk_mc_get_nr_memory_chunks`,
+    `phys_to_virt`, `shmid_index`, `virt_to_phys`, and `zero_at_free`; the
+    actual build object SIMD scan stayed clean.
+- Runtime validation:
+  - Did not rerun V10 boot smoke for this syscall-helper batch. Source
+    equivalence and both image builds passed.
+  - The sandboxed `sudo` binary is not usable in this environment because its
+    ownership/setuid checks fail. Outside the sandbox, `sudo -n true` still
+    reports that a password is required, so no noninteractive runtime smoke was
+    started in this batch.
+  - Runtime baseline remains the clean V10 log
+    `/tmp/mckernel-v10-20260518-014825.log` and focused V11 directory
+    `/tmp/mckernel-v11-focused-20260518-015058`.
+- Path forward:
+  - Continue converting syscall-adjacent helper clusters with direct
+    equivalence before touching dispatch or syscall families with
+    copy_to_user/process lifetime behavior.
+  - A completed V10 runtime rerun still needs a sudo path that does not expose
+    credentials in commands or project logs.
+
+Update 2026-05-18 04:20 EDT:
+- Added a larger SysV shared-memory Rust conversion slice and validated it
+  through local equivalence, Rust/C image builds, V10 boot smoke, and a
+  targeted runtime shared-memory smoke.
+- Implementation:
+  - Extended `kernel/rust/shmid_helpers.rs` with Rust-owned C ABI exports for
+    `make_shmid()`, `shmget_existing_access_result()`,
+    `shmat_access_result()`, `shmctl_ipc_stat_access_result()`,
+    `shm_owner_result()`, `shm_owner_or_cap_result()`, and
+    `shmlock_rlimit_result()`.
+  - Added Rust layout mirrors and compile-time Rust assertions for `memobj`,
+    `ipc_perm`, `shmid_ds`, and `shmobj`; added matching C ABI assertions in
+    `kernel/rust/abi_checks.c`.
+  - Guarded the corresponding C helpers in `kernel/syscall.c` with
+    `MCKERNEL_RUST_SHMID_HELPERS` and `MCKERNEL_RUST_SHM_PERM_HELPERS`, while
+    keeping C fallback and test-export paths intact.
+  - Wired the C syscall bodies to the new helpers in `do_shmget()`, `shmat()`,
+    and `shmctl()`. Object lookup, locks, reference handling, user-copy,
+    mapping, attach/detach orchestration, and dispatch remain C-owned.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct C/Rust digest
+    coverage for shmid construction, shmget/shmat/IPC_STAT permission policy,
+    owner/capability checks, and memory-lock rlimit behavior.
+- Local validation:
+  - `rustfmt kernel/rust/shmid_helpers.rs kernel/rust/lib.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh scripts/rocky-rust-validation.sh scripts/rocky-v11-focused.sh`
+    passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `shmid_helpers ok digest=106bd71cde5652d2`, `sched_helpers ok
+    digest=1402920486e5ac84`, `page_helpers ok digest=b7d1e5ed6a71e5f9`,
+    `mem_init_helpers ok digest=435709f3a5bc062f`, `waitq ok
+    digest=8312cb826f153763`, `plist ok digest=5e849f2117bdcb48`,
+    `bitops ok digest=de062950e3e23679`, `string ok
+    digest=d06a5f4ebf80f798`, `numparse ok digest=c67e393e673a778f`,
+    `bitmap ok digest=c0c668c4fe66d1e6`, `bitmap_parse ok
+    digest=c28c0afd247a3cb9`, `page_alloc ok digest=bbeef5e7f59e821f`, and
+    `page_alloc_bitmap ok digest=d9f2d2b25941c9c8`.
+  - `git diff --check` passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - The rebuilt Rust object exports all new shared-memory helper symbols plus
+    the prior scheduler priority exports. The expected unresolved-provider
+    list remains `ihk_get_kargs`, `ihk_mc_chk_page_address`,
+    `ihk_mc_get_memory_chunk`, `ihk_mc_get_nr_memory_chunks`,
+    `phys_to_virt`, `shmid_index`, `virt_to_phys`, and `zero_at_free`; the
+    actual build object SIMD scan stayed clean.
+- Runtime validation:
+  - Used a sudo-authenticated non-root shell for runtime validation without
+    recording credentials in project files.
+  - `scripts/rocky-rust-validation.sh --skip-deps --skip-rust --boot-smoke --trace-smoke --yes --jobs 2`
+    configured, built, installed, booted McKernel, passed `mcexec /bin/true`,
+    relative `mcexec hostname`, absolute `mcexec /usr/bin/hostname`, and
+    `mcstat`, then shut down cleanly.
+  - A targeted SysV shared-memory smoke under McKernel passed create,
+    existing-key lookup, `IPC_STAT`, read/write attach, read-only attach,
+    detach, and `IPC_RMID`.
+- Path forward:
+  - Continue syscall-adjacent Rust conversion with direct helper equivalence
+    while leaving user-copy, object lifetime, locking, and mmap orchestration
+    in C until broader syscall-family tests exist.
+  - Next good targets are additional pure syscall policy helpers or a V12
+    allocator stress expansion before moving more allocator orchestration.

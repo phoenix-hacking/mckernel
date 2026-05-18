@@ -1,7 +1,7 @@
 McKernel Rust Migration Overview
 Updated: 2026-05-18
 
-Overall Rust ownership estimate: 12%
+Overall Rust ownership estimate: 14%
 
 How to read this number
 ------------------------------------------------------------
@@ -19,19 +19,19 @@ Use this initial dashboard to track the migration:
 Area                                      Rust %   Status
 ----                                      ------   ------
 Rust build/link foundation                   90   Rust object builds and links into mckernel.img; V10 minimal smoke and focused V11 strace now repeat cleanly on Rocky
-ABI/layout foundation                        10   Initial shared structs covered; many kernel structs still need assertions
+ABI/layout foundation                        12   Initial shared structs plus page, memobj, ipc_perm, shmid_ds, and shmobj layouts covered; many kernel structs still need assertions
 Shared primitives                            78   rbtree, llist, plist priority-list core, string/memory leaf helpers, numeric parsers, bitops scan/hweight helpers, bitmap core, parse, zero-area search, and region helpers ported
 x86_64 memory management                      2   Memory chunk classification, NUMA-ID lookup, page-to-physical lookup, and splitability policy helpers ported; page tables, mapping, and address validation remain C
 Page allocator                               20   Rust owns rbtree helper cluster, rbtree reserve/get-root helpers, bitmap-backed no-lock allocator internals, zero-free no-lock helper, NUMA add-free, NUMA zero-free node helper, NUMA alloc no-lock body, direct free-to-tree helper, deferred free enqueue helper, and free-path preflight/policy; locks/logging, CPU-local-cache fast path, and IKC zero requests still C
 Process/VM management                         0   Still C
-Syscall core                                  0   Still C
+Syscall core                                  2   SysV shared-memory ID, shmid construction, shm permission/rlimit policy, and scheduler priority min/max helpers ported; syscall dispatch and high-risk handlers remain C
 Scheduler/timers/wait/futex                   3   Waitqueue locked list core is Rust-owned; scheduler callbacks, locks, timers, futex logic still C
 procfs/sysfs/xpmem/file objects               0   Still C
 host/IKC/mcctrl/IHK modules              0 Rust   Compatibility patches only
 User tools                                    0   Still C
 arm64                                         0   Deferred until x86_64 stabilizes
 
-Overall estimate: 12% Rust-owned.
+Overall estimate: 14% Rust-owned.
 
 This percentage should be treated as a functional-area estimate, not a strict
 line-count. A later phase can add an automated LOC counter.
@@ -72,6 +72,20 @@ Current completed Rust-owned behavior
   `kernel/mem.c`: `page_to_phys()` and `is_splitable()`. The Rust side has
   direct `struct page` layout assertions, while page hash lookup, page-table
   walking, mapping, and memory-object operations remain C-owned.
+- Rust now owns the SysV shared-memory ID helper cluster from
+  `kernel/syscall.c`: `get_shmid_max_index()`, `get_shmid_index()`,
+  `make_shmid()`, `shmid_to_index()`, and `shmid_to_seq()`.
+- Rust now owns the SysV shared-memory permission and lock-limit policy helper
+  cluster from `kernel/syscall.c`: `shmget_existing_access_result()`,
+  `shmat_access_result()`, `shmctl_ipc_stat_access_result()`,
+  `shm_owner_result()`, `shm_owner_or_cap_result()`, and
+  `shmlock_rlimit_result()`. Object lookup, reference handling, locking,
+  user-copy, memory mapping, and the remaining shm syscall orchestration remain
+  C-owned.
+- Rust now owns the scheduler priority policy leaf helpers from
+  `kernel/syscall.c`: `sched_get_priority_max_value()` and
+  `sched_get_priority_min_value()`. The syscall wrappers still extract
+  arguments in C, and scheduler/thread lookup behavior remains C-owned.
 - Rust now owns the numeric parser leaf helpers from `lib/vsprintf.c`:
   `simple_strtoul()`, `simple_strtol()`, `simple_strtoull()`,
   `simple_strtoll()`, `strict_strtoul()`, `strict_strtol()`,
@@ -124,7 +138,8 @@ Current completed Rust-owned behavior
   page-count filtering, zero-now clearing, and direct-vs-deferred action
   selection. The C wrapper still owns locks, logging, CPU-local-cache handling,
   and the IKC/Linux zero request.
-- Initial ABI/layout checks exist for shared structures.
+- Initial ABI/layout checks exist for shared structures, including the current
+  page and SysV shared-memory layouts used by Rust helpers.
 - Primitive and allocator-helper equivalence testing exists in
   kernel/rust/tests/run_equivalence.sh.
 
@@ -134,7 +149,8 @@ Current validation status
 Last completed controlled verification step:
 - V10 minimal workloads still repeat cleanly on the Rocky VM after the V11
   ptrace, gettime, VDSO, strace-suite, and Rocky harness fixes. Latest
-  completed rerun was the direct TTY Rocky command on 2026-05-18:
+  completed rerun was the sudo-authenticated non-root Rocky command on
+  2026-05-18 at 04:20 EDT:
   `scripts/rocky-rust-validation.sh --skip-deps --skip-rust --boot-smoke --trace-smoke --yes --jobs 2`.
 - The preserved command was:
   `scripts/rocky-rust-validation.sh --skip-deps --skip-rust --boot-smoke --trace-smoke --yes --jobs 2`
@@ -170,31 +186,36 @@ Last completed controlled verification step:
 - An intermediate V11 invocation at `/tmp/mckernel-v11-20260518-015012.log`
   stopped before boot because sudo credentials were not available in that
   non-interactive run; the same installed image passed in the 01:50 run above.
-- Latest local post-V11 conversion validation was the 03:34 EDT page-helper
-  plus memory/init-helper, waitq/string/plist/bitops/numparse/bitmap-parse,
-  and allocator batch. It passed `kernel/rust/tests/run_equivalence.sh` with
+- Latest local post-V11 conversion validation was the 04:20 EDT SysV
+  shared-memory permission/helper batch plus page/memory/init-helper,
+  waitq/string/plist/bitops/numparse/bitmap-parse, scheduler-helper, and
+  allocator batch. It passed
+  `kernel/rust/tests/run_equivalence.sh` with
+  `shmid_helpers ok digest=106bd71cde5652d2`,
+  `sched_helpers ok digest=1402920486e5ac84`,
   `page_helpers ok digest=b7d1e5ed6a71e5f9`,
   `mem_init_helpers ok digest=435709f3a5bc062f`,
   `waitq ok digest=8312cb826f153763`,
   `numparse ok digest=c67e393e673a778f`, and
   `bitmap_parse ok digest=c28c0afd247a3cb9` in addition to the prior rbtree,
   llist, plist, bitops, string, bitmap, and allocator digests.
-- The same 03:34 EDT batch passed `rustfmt kernel/rust/lib.rs
-  kernel/rust/page_helpers.rs kernel/rust/mem_helpers.rs`, `git diff --check`,
+- The same 04:20 EDT batch passed `rustfmt kernel/rust/lib.rs
+  kernel/rust/shmid_helpers.rs kernel/rust/sched_helpers.rs`, `git diff --check`,
   `bash -n kernel/rust/tests/run_equivalence.sh scripts/rocky-rust-validation.sh scripts/rocky-v11-focused.sh`,
   the Rust-enabled image build
   `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`, the C
   fallback image build
   `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`,
-  Rust symbol export checks for the new page, memory/init, and waitq exports,
-  the expected unresolved-symbol scan, and the SIMD scan.
-- A V10 dynamic smoke rerun was attempted for the 03:25 EDT memory/init batch
-  because it touches `kernel/init.c` and `kernel/mem.c`. The script completed
-  configure/build/module/tool work, then stopped before install/boot because
-  sudo required an interactive password prompt in that non-interactive run.
-  No runtime regression was observed because McKernel was not booted in that
-  attempt. The current runtime baseline remains the clean 01:48 V10 and 01:50
-  focused V11 runs until the next successful runtime gate.
+  Rust symbol export checks for the new syscall helper exports, the expected
+  unresolved-symbol scan, and the SIMD scan.
+- The same 04:20 EDT batch completed V10 runtime validation through
+  `scripts/rocky-rust-validation.sh --skip-deps --skip-rust --boot-smoke --trace-smoke --yes --jobs 2`.
+  It configured, built, installed, booted McKernel, passed
+  `mcexec /bin/true`, relative and absolute hostname, and `mcstat`, then shut
+  down cleanly.
+- A targeted SysV shared-memory runtime smoke also passed under McKernel at
+  04:20 EDT. It exercised `shmget()` create, existing-key lookup, `IPC_STAT`,
+  read/write `shmat()`, read-only `shmat()`, `shmdt()`, and `IPC_RMID`.
 - The previous `RIP=0x1000` hostname SIGSEGV was fixed by making user-visible
   zero-fill mmap/page-fault paths explicitly clear pages instead of relying on
   allocator `zero_at_free` state.
@@ -226,20 +247,24 @@ Last completed controlled verification step:
   `mcexec`, `mcstat`, `ihkconfig`, and `ihkosctl`.
 - Earlier V0 through V6 checks are satisfied for this Rocky validation path.
 
-Latest local source verification after the Rust page helper port:
+Latest local source verification after the Rust shm permission/helper port:
 - `git diff --check` passed.
 - `bash -n` passed for `scripts/rocky-rust-validation.sh`,
   `scripts/rocky-v11-focused.sh`, and the touched shell test harnesses.
 - `kernel/rust/tests/run_equivalence.sh` passed.
 - The equivalence harness now includes direct bitops coverage, direct
   string/memory leaf coverage, plist priority/FIFO/delete coverage, memory/init
-  helper coverage, page query/splitability helper coverage, rbtree
+  helper coverage, page query/splitability helper coverage, SysV shmid,
+  shmid construction, shared-memory permission, and shmlock rlimit helper
+  coverage, scheduler priority helper coverage, rbtree
   reserve/get-root coverage, page allocator zero-free coverage, NUMA add-free
   accounting/tree coverage, single-node deferred-zero movement, NUMA
   allocation from the zeroed-list path, direct free-to-tree behavior,
   immediate zero-and-free behavior, deferred free enqueue/zero/reallocate
   behavior, and ignored out-of-range/zero-page free behavior. Latest lines
-  include `page_helpers ok digest=b7d1e5ed6a71e5f9`,
+  include `shmid_helpers ok digest=106bd71cde5652d2`,
+  `sched_helpers ok digest=1402920486e5ac84`,
+  `page_helpers ok digest=b7d1e5ed6a71e5f9`,
   `mem_init_helpers ok digest=435709f3a5bc062f`,
   `bitops ok digest=de062950e3e23679`,
   `plist ok digest=5e849f2117bdcb48`,
@@ -247,11 +272,11 @@ Latest local source verification after the Rust page helper port:
   `page_alloc ok digest=bbeef5e7f59e821f`, and `page_alloc_bitmap ok
   digest=d9f2d2b25941c9c8`.
 - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
-  passed after the page helper Rust port.
+  passed after the syscall helper Rust port.
 - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
   passed for the Rust-disabled C fallback image.
-- Rust object exported the expected page, memory/init, waitq, bitops, and page
-  allocator symbols,
+- Rust object exported the expected syscall helper, page, memory/init, waitq,
+  bitops, and page allocator symbols,
   including `find_next_bit()`, `find_next_zero_bit()`, `find_first_bit()`,
   `find_first_zero_bit()`, the `__sw_hweight*()` helpers,
   `__ihk_numa_add_free_pages()`, `__ihk_numa_zero_free_pages_node()`, and
@@ -264,10 +289,17 @@ Latest local source verification after the Rust page helper port:
   `memcpy_long()`, `memset()`, and `memcmp()`, plus `plist_add()`,
   `plist_del()`, `waitq_init()`, `find_command_line()`,
   `is_mckernel_memory()`, `phys_to_nid()`, `page_to_phys()`, and
-  `is_splitable()`. Its expected unresolved kernel provider list is now
+  `is_splitable()`, plus `get_shmid_max_index()`, `get_shmid_index()`,
+  `make_shmid()`, `shmid_to_index()`, `shmid_to_seq()`,
+  `shmget_existing_access_result()`, `shmat_access_result()`,
+  `shmctl_ipc_stat_access_result()`, `shm_owner_result()`,
+  `shm_owner_or_cap_result()`, `shmlock_rlimit_result()`,
+  `sched_get_priority_max_value()`, and
+  `sched_get_priority_min_value()`. Its expected unresolved kernel provider
+  list is now
   `ihk_get_kargs`, `ihk_mc_chk_page_address`, `ihk_mc_get_memory_chunk`,
-  `ihk_mc_get_nr_memory_chunks`, `phys_to_virt`, `virt_to_phys`, and
-  `zero_at_free`.
+  `ihk_mc_get_nr_memory_chunks`, `phys_to_virt`, `shmid_index`,
+  `virt_to_phys`, and `zero_at_free`.
 - The 02:34 EDT string/memory plus plist batch deliberately stopped at image-build
   validation to avoid excessive full runtime loops. Rust-enabled and
   C-fallback `mckernel.img` incremental builds passed after both helper ports.
@@ -329,13 +361,11 @@ Known failing or blocked step:
   helper port, Rust NUMA zero-free node helper port, and Rust NUMA alloc
   no-lock body port, direct free-to-tree helper port, and deferred free enqueue
   helper port.
-- The later 03:34 EDT page-helper plus memory/init-helper,
-  bitops/free-preflight/string/plist/numparse/bitmap-parse/waitq-core batch is
-  validated through equivalence, source hygiene, shell syntax, Rust/C image
-  builds, symbol scan, and SIMD scan. A V10 runtime rerun attempt during the
-  preceding memory/init batch stopped at non-interactive sudo during install
-  before booting McKernel, so runtime V10/V11 remains the clean 01:48/01:50
-  EDT baseline until the next successful runtime gate.
+- The later 04:20 EDT SysV shared-memory permission/helper batch plus
+  page/memory/init-helper, bitops/free-preflight/string/plist/numparse/
+  bitmap-parse/waitq-core batch is validated through equivalence, source
+  hygiene, shell syntax, Rust/C image builds, symbol scan, SIMD scan, V10 boot
+  smoke, and a targeted SysV shared-memory runtime smoke.
 - Strict upstream V11 remains open for large-page runtime, issue-1324
   fork/ptrace memory pressure, and a missing x86_64 mcexec-options suite.
 - The pre-existing dirty `ihk` submodule marker is still present from the local

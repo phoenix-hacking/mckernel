@@ -6274,7 +6274,17 @@ struct kshmid_ds {
 
 unsigned long shmid_index[512];
 
-static int get_shmid_max_index(void)
+#if defined(MCKERNEL_RUST_SHMID_HELPERS) || \
+	defined(MCKERNEL_SHMID_HELPERS_TEST_EXPORT)
+#define SHMID_HELPER_SCOPE
+#else
+#define SHMID_HELPER_SCOPE static
+#endif
+
+#ifdef MCKERNEL_RUST_SHMID_HELPERS
+extern int get_shmid_max_index(void);
+#else
+SHMID_HELPER_SCOPE int get_shmid_max_index(void)
 {
 	int i;
 	int index = -1;
@@ -6287,8 +6297,12 @@ static int get_shmid_max_index(void)
 	}
 	return index;
 }
+#endif /* MCKERNEL_RUST_SHMID_HELPERS */
 
-static int get_shmid_index(void)
+#ifdef MCKERNEL_RUST_SHMID_HELPERS
+extern int get_shmid_index(void);
+#else
+SHMID_HELPER_SCOPE int get_shmid_index(void)
 {
 	int index = get_shmid_max_index();
 	int i;
@@ -6304,6 +6318,7 @@ static int get_shmid_index(void)
 	}
 	return index;
 }
+#endif /* MCKERNEL_RUST_SHMID_HELPERS */
 
 LIST_HEAD(kds_list);
 struct shminfo the_shminfo = {
@@ -6314,20 +6329,170 @@ struct shminfo the_shminfo = {
 };
 struct shm_info the_shm_info = { 0, };
 
-static int make_shmid(struct shmobj *obj)
+#ifdef MCKERNEL_RUST_SHMID_HELPERS
+extern int make_shmid(struct shmobj *obj);
+#else
+SHMID_HELPER_SCOPE int make_shmid(struct shmobj *obj)
 {
 	return ((int)obj->index << 16) | obj->ds.shm_perm.seq;
 } /* make_shmid() */
+#endif /* MCKERNEL_RUST_SHMID_HELPERS */
 
-static int shmid_to_index(int shmid)
+#ifdef MCKERNEL_RUST_SHMID_HELPERS
+extern int shmid_to_index(int shmid);
+#else
+SHMID_HELPER_SCOPE int shmid_to_index(int shmid)
 {
 	return (shmid >> 16);
 } /* shmid_to_index() */
+#endif /* MCKERNEL_RUST_SHMID_HELPERS */
 
-static int shmid_to_seq(int shmid)
+#ifdef MCKERNEL_RUST_SHMID_HELPERS
+extern int shmid_to_seq(int shmid);
+#else
+SHMID_HELPER_SCOPE int shmid_to_seq(int shmid)
 {
 	return (shmid & ((1 << 16) - 1));
 } /* shmid_to_seq() */
+#endif /* MCKERNEL_RUST_SHMID_HELPERS */
+
+#undef SHMID_HELPER_SCOPE
+
+#if defined(MCKERNEL_RUST_SHM_PERM_HELPERS) || \
+	defined(MCKERNEL_SHM_PERM_HELPERS_TEST_EXPORT)
+#define SHM_PERM_HELPER_SCOPE
+#else
+#define SHM_PERM_HELPER_SCOPE static
+#endif
+
+#ifdef MCKERNEL_RUST_SHM_PERM_HELPERS
+extern int shmget_existing_access_result(uid_t euid, gid_t egid, int shmflg,
+		uid_t uid, uid_t cuid, gid_t gid, gid_t cgid, uint16_t mode);
+#else
+SHM_PERM_HELPER_SCOPE int shmget_existing_access_result(uid_t euid,
+		gid_t egid, int shmflg, uid_t uid, uid_t cuid, gid_t gid,
+		gid_t cgid, uint16_t mode)
+{
+	int req;
+
+	if (!euid) {
+		return 0;
+	}
+
+	req = (shmflg | (shmflg << 3) | (shmflg << 6)) & 0700;
+	if ((uid == euid) || (cuid == euid)) {
+		/* nothing to do */
+	}
+	else if ((gid == egid) || (cgid == egid)) {
+		req >>= 3;
+	}
+	else {
+		req >>= 6;
+	}
+
+	return (req & ~mode) ? -EACCES : 0;
+}
+#endif /* MCKERNEL_RUST_SHM_PERM_HELPERS */
+
+#ifdef MCKERNEL_RUST_SHM_PERM_HELPERS
+extern int shmat_access_result(uid_t euid, gid_t egid, int shmflg,
+		uid_t uid, uid_t cuid, gid_t gid, gid_t cgid, uint16_t mode);
+#else
+SHM_PERM_HELPER_SCOPE int shmat_access_result(uid_t euid, gid_t egid,
+		int shmflg, uid_t uid, uid_t cuid, gid_t gid, gid_t cgid,
+		uint16_t mode)
+{
+	int req;
+
+	req = 4;
+	if (!(shmflg & SHM_RDONLY)) {
+		req |= 2;
+	}
+
+	if (!euid) {
+		req = 0;
+	}
+	else if ((euid == uid) || (euid == cuid)) {
+		req <<= 6;
+	}
+	else if ((egid == gid) || (egid == cgid)) {
+		req <<= 3;
+	}
+	else {
+		req <<= 0;
+	}
+
+	return (req & ~mode) ? -EACCES : 0;
+}
+#endif /* MCKERNEL_RUST_SHM_PERM_HELPERS */
+
+#ifdef MCKERNEL_RUST_SHM_PERM_HELPERS
+extern int shmctl_ipc_stat_access_result(uid_t euid, gid_t egid,
+		uid_t uid, uid_t cuid, gid_t gid, gid_t cgid, uint16_t mode);
+#else
+SHM_PERM_HELPER_SCOPE int shmctl_ipc_stat_access_result(uid_t euid,
+		gid_t egid, uid_t uid, uid_t cuid, gid_t gid, gid_t cgid,
+		uint16_t mode)
+{
+	int req;
+
+	if (!euid) {
+		req = 0;
+	} else if ((euid == uid) || (euid == cuid)) {
+		req = 0400;
+	} else if ((egid == gid) || (egid == cgid)) {
+		req = 0040;
+	} else {
+		req = 0004;
+	}
+
+	return (req & ~mode) ? -EACCES : 0;
+}
+#endif /* MCKERNEL_RUST_SHM_PERM_HELPERS */
+
+#ifdef MCKERNEL_RUST_SHM_PERM_HELPERS
+extern int shm_owner_result(uid_t euid, uid_t uid, uid_t cuid);
+#else
+SHM_PERM_HELPER_SCOPE int shm_owner_result(uid_t euid, uid_t uid, uid_t cuid)
+{
+	return ((uid == euid) || (cuid == euid)) ? 0 : -EPERM;
+}
+#endif /* MCKERNEL_RUST_SHM_PERM_HELPERS */
+
+#ifdef MCKERNEL_RUST_SHM_PERM_HELPERS
+extern int shm_owner_or_cap_result(int has_cap, uid_t euid, uid_t uid,
+		uid_t cuid);
+#else
+SHM_PERM_HELPER_SCOPE int shm_owner_or_cap_result(int has_cap, uid_t euid,
+		uid_t uid, uid_t cuid)
+{
+	return (has_cap || (uid == euid) || (cuid == euid)) ? 0 : -EPERM;
+}
+#endif /* MCKERNEL_RUST_SHM_PERM_HELPERS */
+
+#ifdef MCKERNEL_RUST_SHM_PERM_HELPERS
+extern int shmlock_rlimit_result(int has_cap, rlim_t rlim_cur,
+		size_t user_locked, size_t size);
+#else
+SHM_PERM_HELPER_SCOPE int shmlock_rlimit_result(int has_cap, rlim_t rlim_cur,
+		size_t user_locked, size_t size)
+{
+	if (!rlim_cur && !has_cap) {
+		return -EPERM;
+	}
+
+	if (!has_cap
+			&& (rlim_cur != (rlim_t)-1)
+			&& ((rlim_cur < user_locked)
+				|| ((rlim_cur - user_locked) < size))) {
+		return -ENOMEM;
+	}
+
+	return 0;
+}
+#endif /* MCKERNEL_RUST_SHM_PERM_HELPERS */
+
+#undef SHM_PERM_HELPER_SCOPE
 
 int shmobj_list_lookup(int shmid, struct shmobj **objp)
 {
@@ -6436,30 +6601,16 @@ int do_shmget(const key_t key, const size_t size, const int shmflg)
 	}
 
 	if (obj) {
-		if (proc->euid) {
-			int req;
-
-			req = (shmflg | (shmflg << 3) | (shmflg << 6)) & 0700;
-			if ((obj->ds.shm_perm.uid == proc->euid)
-					|| (obj->ds.shm_perm.cuid == proc->euid)) {
-				/*  nothing to do */
-			}
-			else if ((obj->ds.shm_perm.gid == proc->egid)
-					|| (obj->ds.shm_perm.cgid == proc->egid)) {
-				/*
-				 * XXX: need to check supplementary group IDs
-				 */
-				req >>= 3;
-			}
-			else {
-				req >>= 6;
-			}
-			if (req & ~obj->ds.shm_perm.mode) {
-				shmobj_list_unlock();
-				memobj_unref(&obj->memobj);
-				dkprintf("do_shmget(%#lx,%#lx,%#x): -EINVAL\n", key, size, shmflg);
-				return -EACCES;
-			}
+		error = shmget_existing_access_result(proc->euid, proc->egid,
+				shmflg, obj->ds.shm_perm.uid,
+				obj->ds.shm_perm.cuid, obj->ds.shm_perm.gid,
+				obj->ds.shm_perm.cgid, obj->ds.shm_perm.mode);
+		if (error) {
+			shmobj_list_unlock();
+			memobj_unref(&obj->memobj);
+			dkprintf("do_shmget(%#lx,%#lx,%#x): -EINVAL\n",
+				 key, size, shmflg);
+			return error;
 		}
 		if (obj->ds.shm_segsz < size) {
 			shmobj_list_unlock();
@@ -6551,7 +6702,6 @@ SYSCALL_DECLARE(shmat)
 	uintptr_t addr;
 	int prot;
 	int vrflags;
-	int req;
 	struct shmobj *obj;
 	size_t pgsize;
 
@@ -6576,31 +6726,19 @@ SYSCALL_DECLARE(shmat)
 	len = obj->real_segsz;
 
 	prot = PROT_READ;
-	req = 4;
 	if (!(shmflg & SHM_RDONLY)) {
 		prot |= PROT_WRITE;
-		req |= 2;
 	}
 
-	if (!proc->euid) {
-		req = 0;
-	}
-	else if ((proc->euid == obj->ds.shm_perm.uid)
-			|| (proc->euid == obj->ds.shm_perm.cuid)) {
-		req <<= 6;
-	}
-	else if ((proc->egid == obj->ds.shm_perm.gid)
-			|| (proc->egid == obj->ds.shm_perm.cgid)) {
-		req <<= 3;
-	}
-	else {
-		req <<= 0;
-	}
-	if (~obj->ds.shm_perm.mode & req) {
+	error = shmat_access_result(proc->euid, proc->egid, shmflg,
+			obj->ds.shm_perm.uid, obj->ds.shm_perm.cuid,
+			obj->ds.shm_perm.gid, obj->ds.shm_perm.cgid,
+			obj->ds.shm_perm.mode);
+	if (error) {
 		shmobj_list_unlock();
 		memobj_unref(&obj->memobj);
 		dkprintf("shmat(%#x,%p,%#x): -EINVAL\n", shmid, shmaddr, shmflg);
-		return -EACCES;
+		return error;
 	}
 
 	ihk_rwspinlock_write_lock_noirq(&vm->memory_range_lock);
@@ -6671,7 +6809,6 @@ SYSCALL_DECLARE(shmctl)
 	int error;
 	struct shmid_ds ads;
 	time_t now = time();
-	int req;
 	int maxi;
 	struct shmobj *obj;
 	struct rlimit *rlim;
@@ -6690,13 +6827,14 @@ SYSCALL_DECLARE(shmctl)
 			dkprintf("shmctl(%#x,%d,%p): lookup: %d\n", shmid, cmd, buf, error);
 			return error;
 		}
-		if (!has_cap_sys_admin(thread)
-				&& (obj->ds.shm_perm.uid != proc->euid)
-				&& (obj->ds.shm_perm.cuid != proc->euid)) {
+		error = shm_owner_or_cap_result(has_cap_sys_admin(thread),
+				proc->euid, obj->ds.shm_perm.uid,
+				obj->ds.shm_perm.cuid);
+		if (error) {
 			shmobj_list_unlock();
 			memobj_unref(&obj->memobj);
 			dkprintf("shmctl(%#x,%d,%p): -EPERM\n", shmid, cmd, buf);
-			return -EPERM;
+			return error;
 		}
 		oldmode = obj->ds.shm_perm.mode;
 		obj->ds.shm_perm.mode |= SHM_DEST;
@@ -6716,12 +6854,13 @@ SYSCALL_DECLARE(shmctl)
 			dkprintf("shmctl(%#x,%d,%p): lookup: %d\n", shmid, cmd, buf, error);
 			return error;
 		}
-		if ((obj->ds.shm_perm.uid != proc->euid)
-				&& (obj->ds.shm_perm.cuid != proc->euid)) {
+		error = shm_owner_result(proc->euid, obj->ds.shm_perm.uid,
+				obj->ds.shm_perm.cuid);
+		if (error) {
 			shmobj_list_unlock();
 			memobj_unref(&obj->memobj);
 			dkprintf("shmctl(%#x,%d,%p): -EPERM\n", shmid, cmd, buf);
-			return -EPERM;
+			return error;
 		}
 		error = copy_from_user(&ads, buf, sizeof(ads));
 		if (error) {
@@ -6755,23 +6894,18 @@ SYSCALL_DECLARE(shmctl)
 		}
 
 		if (cmd == IPC_STAT) {
-			if (!proc->euid) {
-				req = 0;
-			} else if ((proc->euid == obj->ds.shm_perm.uid) ||
-				   (proc->euid == obj->ds.shm_perm.cuid)) {
-				req = 0400;
-			} else if ((proc->egid == obj->ds.shm_perm.gid) ||
-				   (proc->egid == obj->ds.shm_perm.cgid)) {
-				req = 0040;
-			} else {
-				req = 0004;
-			}
-			if (req & ~obj->ds.shm_perm.mode) {
+			error = shmctl_ipc_stat_access_result(proc->euid,
+					proc->egid, obj->ds.shm_perm.uid,
+					obj->ds.shm_perm.cuid,
+					obj->ds.shm_perm.gid,
+					obj->ds.shm_perm.cgid,
+					obj->ds.shm_perm.mode);
+			if (error) {
 				shmobj_list_unlock();
 				memobj_unref(&obj->memobj);
 				dkprintf("shmctl(%#x,%d,%p): -EACCES\n", shmid,
 					 cmd, buf);
-				return -EACCES;
+				return error;
 			}
 		}
 
@@ -6828,20 +6962,23 @@ SYSCALL_DECLARE(shmctl)
 			dkprintf("shmctl(%#x,%d,%p): lookup: %d\n", shmid, cmd, buf, error);
 			return error;
 		}
-		if (!has_cap_ipc_lock(thread)
-				&& (obj->ds.shm_perm.cuid != proc->euid)
-				&& (obj->ds.shm_perm.uid != proc->euid)) {
+		error = shm_owner_or_cap_result(has_cap_ipc_lock(thread),
+				proc->euid, obj->ds.shm_perm.uid,
+				obj->ds.shm_perm.cuid);
+		if (error) {
 			shmobj_list_unlock();
 			memobj_unref(&obj->memobj);
 			dkprintf("shmctl(%#x,%d,%p): perm shm: %d\n", shmid, cmd, buf, error);
-			return -EPERM;
+			return error;
 		}
 		rlim = &proc->rlimit[MCK_RLIMIT_MEMLOCK];
-		if (!rlim->rlim_cur && !has_cap_ipc_lock(thread)) {
+		error = shmlock_rlimit_result(has_cap_ipc_lock(thread),
+				rlim->rlim_cur, 0, 0);
+		if (error) {
 			shmobj_list_unlock();
 			memobj_unref(&obj->memobj);
 			dkprintf("shmctl(%#x,%d,%p): perm proc: %d\n", shmid, cmd, buf, error);
-			return -EPERM;
+			return error;
 		}
 		if (!(obj->ds.shm_perm.mode & SHM_LOCKED)
 				&& ((obj->pgshift == 0)
@@ -6856,15 +6993,14 @@ SYSCALL_DECLARE(shmctl)
 				return -ENOMEM;
 			}
 			size = obj->real_segsz;
-			if (!has_cap_ipc_lock(thread)
-					&& (rlim->rlim_cur != (rlim_t)-1)
-					&& ((rlim->rlim_cur < user->locked)
-						|| ((rlim->rlim_cur - user->locked) < size))) {
+			error = shmlock_rlimit_result(has_cap_ipc_lock(thread),
+					rlim->rlim_cur, user->locked, size);
+			if (error) {
 				shmlock_users_unlock();
 				memobj_unref(&obj->memobj);
 				shmobj_list_unlock();
 				dkprintf("shmctl(%#x,%d,%p): too large: %d\n", shmid, cmd, buf, error);
-				return -ENOMEM;
+				return error;
 			}
 			obj->ds.shm_perm.mode |= SHM_LOCKED;
 			obj->user = user;
@@ -6884,13 +7020,14 @@ SYSCALL_DECLARE(shmctl)
 			dkprintf("shmctl(%#x,%d,%p): lookup: %d\n", shmid, cmd, buf, error);
 			return error;
 		}
-		if (!has_cap_ipc_lock(thread)
-				&& (obj->ds.shm_perm.cuid != proc->euid)
-				&& (obj->ds.shm_perm.uid != proc->euid)) {
+		error = shm_owner_or_cap_result(has_cap_ipc_lock(thread),
+				proc->euid, obj->ds.shm_perm.uid,
+				obj->ds.shm_perm.cuid);
+		if (error) {
 			shmobj_list_unlock();
 			memobj_unref(&obj->memobj);
 			dkprintf("shmctl(%#x,%d,%p): perm shm: %d\n", shmid, cmd, buf, error);
-			return -EPERM;
+			return error;
 		}
 		if ((obj->ds.shm_perm.mode & SHM_LOCKED)
 			       && ((obj->pgshift == 0)
@@ -8346,10 +8483,19 @@ SYSCALL_DECLARE(sched_getscheduler)
 	return thread->sched_policy;
 }
 
-SYSCALL_DECLARE(sched_get_priority_max)
+#if defined(MCKERNEL_RUST_SCHED_PRIO_HELPERS) || \
+	defined(MCKERNEL_SCHED_PRIO_HELPERS_TEST_EXPORT)
+#define SCHED_PRIO_HELPER_SCOPE
+#else
+#define SCHED_PRIO_HELPER_SCOPE static
+#endif
+
+#ifdef MCKERNEL_RUST_SCHED_PRIO_HELPERS
+extern int sched_get_priority_max_value(int policy);
+#else
+SCHED_PRIO_HELPER_SCOPE int sched_get_priority_max_value(int policy)
 {
 	int ret = -EINVAL;
-	int policy = ihk_mc_syscall_arg0(ctx);
 
 	switch (policy) {
 		case SCHED_FIFO:
@@ -8365,11 +8511,14 @@ SYSCALL_DECLARE(sched_get_priority_max)
 	}
 	return ret;
 }
+#endif /* MCKERNEL_RUST_SCHED_PRIO_HELPERS */
 
-SYSCALL_DECLARE(sched_get_priority_min)
+#ifdef MCKERNEL_RUST_SCHED_PRIO_HELPERS
+extern int sched_get_priority_min_value(int policy);
+#else
+SCHED_PRIO_HELPER_SCOPE int sched_get_priority_min_value(int policy)
 {
 	int ret = -EINVAL;
-	int policy = ihk_mc_syscall_arg0(ctx);
 
 	switch (policy) {
 		case SCHED_FIFO:
@@ -8383,6 +8532,23 @@ SYSCALL_DECLARE(sched_get_priority_min)
 			ret = 0;
 	}
 	return ret;
+}
+#endif /* MCKERNEL_RUST_SCHED_PRIO_HELPERS */
+
+#undef SCHED_PRIO_HELPER_SCOPE
+
+SYSCALL_DECLARE(sched_get_priority_max)
+{
+	int policy = ihk_mc_syscall_arg0(ctx);
+
+	return sched_get_priority_max_value(policy);
+}
+
+SYSCALL_DECLARE(sched_get_priority_min)
+{
+	int policy = ihk_mc_syscall_arg0(ctx);
+
+	return sched_get_priority_min_value(policy);
 }
 
 SYSCALL_DECLARE(sched_rr_get_interval)

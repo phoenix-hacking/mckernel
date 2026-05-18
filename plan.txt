@@ -53,6 +53,9 @@ ABI and layout foundation
 - Added ABI/layout checks for `struct list_head`, `mcs_lock_node_t`, and
   `struct ihk_page_allocator_desc` before moving the bitmap-backed page
   allocator internals to Rust.
+- Added ABI/layout checks for `struct memobj`, `struct ipc_perm`,
+  `struct shmid_ds`, and `struct shmobj` before moving SysV shared-memory
+  helper policy to Rust.
 - Preserved public C headers, symbol names, syscall numbers, ioctl values, IKC
   packet formats, and linker-visible entry points.
 
@@ -78,6 +81,19 @@ First Rust primitive replacements
   `page_to_phys()` and `is_splitable()` from `kernel/mem.c`. Page hash lookup,
   page-table walking, mapping/unmapping, and memory-object operations remain
   C-owned.
+- Ported the SysV shared-memory ID helper cluster behind the existing C ABI:
+  `get_shmid_max_index()`, `get_shmid_index()`, `make_shmid()`,
+  `shmid_to_index()`, and `shmid_to_seq()` from `kernel/syscall.c`.
+- Ported the SysV shared-memory permission and memory-lock rlimit helper
+  cluster behind the existing C ABI: `shmget_existing_access_result()`,
+  `shmat_access_result()`, `shmctl_ipc_stat_access_result()`,
+  `shm_owner_result()`, `shm_owner_or_cap_result()`, and
+  `shmlock_rlimit_result()`. Shared-memory object lookup, locking, reference
+  handling, user-copy, mapping, and syscall orchestration remain C-owned.
+- Ported the scheduler priority policy helper pair behind the existing C ABI:
+  `sched_get_priority_max_value()` and `sched_get_priority_min_value()` from
+  `kernel/syscall.c`. The syscall wrappers still extract arguments in C, and
+  scheduler/thread lookup behavior remains C-owned.
 - Ported the exported bitops scan/hweight helper cluster behind the existing C
   ABI: `find_next_bit()`, `find_next_zero_bit()`, `find_first_bit()`,
   `find_first_zero_bit()`, and the `__sw_hweight*()` helpers.
@@ -153,6 +169,9 @@ First Rust primitive replacements
   duplicate symbols while the C fallback build remains available.
 - Guarded selected C page query/splitability helpers so Rust can replace them
   without duplicate symbols while the C fallback build remains available.
+- Guarded selected C SysV shmid, shared-memory permission, memory-lock rlimit,
+  and scheduler priority helpers so Rust can replace them without duplicate
+  symbols while the C fallback build remains available.
 
 Equivalence and build checks already established
 ------------------------------------------------
@@ -183,6 +202,13 @@ Equivalence and build checks already established
 - Added direct page query/splitability equivalence coverage for null pages,
   physical-address extraction, page mode classification, multi-map counts, and
   shared-memory splitability override behavior.
+- Added direct SysV shmid/helper equivalence coverage for maximum allocated
+  index discovery, first-free allocation, word-boundary holes, sequential
+  allocation, shmid construction, signed shmid index extraction, sequence
+  extraction, shared-memory permission checks, owner/capability checks, and
+  memory-lock rlimit policy.
+- Added direct scheduler priority helper equivalence coverage for valid RT,
+  normal, batch, idle, deadline, and invalid policies.
 - Added direct bitmap parse equivalence coverage for hex chunks, comma
   grouping, whitespace handling, overflow/invalid input, list ranges, user
   wrapper lengths, and mask-width error behavior.
@@ -223,8 +249,8 @@ Known current validation state
   workload layer, and focused V11 Rocky gate with required LTP/XPMEM.
 - V9 McKernel boot-only validation passed on Rocky VM.
 - V10 is stable at the current minimal workload level. The latest completed
-  rerun after the Rust NUMA free-to-tree and deferred-free enqueue helper ports
-  was the direct TTY Rocky command on 2026-05-18:
+  rerun after the Rust SysV shared-memory permission/helper batch was the
+  sudo-authenticated non-root Rocky command on 2026-05-18 at 04:20 EDT:
   `scripts/rocky-rust-validation.sh --skip-deps --skip-rust --boot-smoke --trace-smoke --yes --jobs 2`.
   It passed `mcexec /bin/true`, relative `mcexec hostname`, absolute
   `mcexec /usr/bin/hostname`, and `mcstat`, then shut down cleanly.
@@ -257,15 +283,15 @@ Known current validation state
 - An intermediate V11 invocation at `/tmp/mckernel-v11-20260518-015012.log`
   stopped before boot because sudo credentials were unavailable in that
   non-interactive run; the same installed image passed in the 01:50 EDT run.
-- The 03:34 EDT page-helper plus memory/init-helper,
-  bitops/free-preflight/string/plist/numparse/bitmap-parse/waitq-core batch
-  passed equivalence, source hygiene, shell syntax, Rust/C image builds, symbol
-  export checks for the new page, memory/init, and waitq exports, expected
-  unresolved-symbol checks, and SIMD scan. A V10 runtime rerun attempt during
-  the preceding memory-touching batch completed configure/build/module/tool
-  work, then stopped before install/boot because sudo required an interactive
-  password prompt in that non-interactive run; use the 01:48/01:50 EDT runtime
-  logs as the current runtime baseline until the next successful runtime gate.
+- The 04:20 EDT SysV shared-memory permission/helper batch plus
+  page/memory/init-helper, bitops/free-preflight/string/plist/numparse/
+  bitmap-parse/waitq-core batch passed equivalence, source hygiene, shell
+  syntax, Rust/C image builds, symbol export checks for the new shmid,
+  shared-memory permission, scheduler priority, page, memory/init, and waitq
+  exports, expected unresolved-symbol checks, SIMD scan, V10 boot smoke, and a
+  targeted SysV shared-memory runtime smoke. The targeted smoke covered
+  `shmget()` create, existing-key lookup, `IPC_STAT`, read/write `shmat()`,
+  read-only `shmat()`, `shmdt()`, and `IPC_RMID`.
 - Direct strace is no longer the active V11 blocker. Direct forms including
   `mcexec strace -o ... /bin/true` now complete successfully.
 - The Rocky `stat`/`strace-f` panic was fixed by avoiding the missing
@@ -393,6 +419,8 @@ Success:
 - waitq-core equivalence passes.
 - memory/init helper equivalence passes.
 - page query/splitability helper equivalence passes.
+- SysV shmid and shared-memory permission helper equivalence passes.
+- scheduler priority helper equivalence passes.
 - plist equivalence passes.
 - bitops equivalence passes.
 - string/memory equivalence passes.
@@ -722,6 +750,15 @@ Scope:
     `find_command_line()`, `is_mckernel_memory()`, and `phys_to_nid()`.
   - page query/splitability helpers are Rust-owned:
     `page_to_phys()` and `is_splitable()`.
+  - SysV shmid helpers are Rust-owned:
+    `get_shmid_max_index()`, `get_shmid_index()`, `make_shmid()`,
+    `shmid_to_index()`, and `shmid_to_seq()`.
+  - SysV shared-memory permission and rlimit helpers are Rust-owned:
+    `shmget_existing_access_result()`, `shmat_access_result()`,
+    `shmctl_ipc_stat_access_result()`, `shm_owner_result()`,
+    `shm_owner_or_cap_result()`, and `shmlock_rlimit_result()`.
+  - scheduler priority min/max policy helpers are Rust-owned:
+    `sched_get_priority_max_value()` and `sched_get_priority_min_value()`.
 
 Exit criteria:
 - V3 through V5 pass.
@@ -812,6 +849,12 @@ Scope:
   handlers.
 - Keep x86_64 syscall entry glue in C/assembly until generic handling is
   stable.
+- Current completed slices:
+  - SysV shared-memory ID, shmid construction, permission, and memory-lock
+    rlimit helpers are Rust-owned while object lookup, locking, user-copy,
+    mapping, and syscall orchestration remain C-owned.
+  - Scheduler priority min/max policy helpers are Rust-owned while syscall
+    wrappers and scheduler/thread lookup remain C-owned.
 
 Exit criteria:
 - syscall delegation tests pass.
