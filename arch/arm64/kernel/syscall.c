@@ -2593,7 +2593,14 @@ time_t time(void)
 
 SYSCALL_DECLARE(time)
 {
-	return time();
+	time_t now = time();
+	time_t *tloc = (time_t *)ihk_mc_syscall_arg0(ctx);
+
+	if (tloc && copy_to_user(tloc, &now, sizeof(now))) {
+		return -EFAULT;
+	}
+
+	return now;
 }
 
 void calculate_time_from_tsc(struct timespec *ts)

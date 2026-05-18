@@ -1747,7 +1747,14 @@ SYSCALL_DECLARE(arch_prctl)
 
 SYSCALL_DECLARE(time)
 {
-	return time();
+	time_t now = time();
+	time_t *tloc = (time_t *)ihk_mc_syscall_arg0(ctx);
+
+	if (tloc && copy_to_user(tloc, &now, sizeof(now))) {
+		return -EFAULT;
+	}
+
+	return now;
 }
 
 static int vdso_get_vdso_info(void)

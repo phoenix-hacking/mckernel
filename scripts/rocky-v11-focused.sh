@@ -13,7 +13,10 @@ x86_64 tests are classified instead of silently using old hardcoded paths.
 Options:
   --prefix PATH         Installed McKernel prefix. Default: /opt/mckernel-rust
   --boot-cpus LIST      CPU list passed to mcreboot.sh -c. Default: 1,2
+                       Use --boot-cpus 1 on a two-vCPU VM.
   --boot-mem SPEC       Memory passed to mcreboot.sh -m. Default: 1536M@0
+  --no-boot-oversubscribe
+                       Do not pass -O to mcreboot.sh. Default: pass -O.
   --classify-only       Only report external prerequisite availability.
   --build-only          Classify prerequisites and build focused test binaries.
   --skip-boot           Assume McKernel is already booted.
@@ -22,6 +25,8 @@ Options:
   --require-ltp         Fail if LTP prerequisites are missing.
   --require-xpmem       Fail if XPMEM prerequisites are missing.
   --ltp-tests LIST      Space-separated LTP tests to run when available.
+  --ltp-mcexec-threads N
+                       mcexec syscall worker threads for LTP tests. Default: 64.
   --keep-running        Leave McKernel running after the focused slice.
   --timeout SEC         Per-test timeout. Default: 90
   --log-dir PATH        Directory for logs. Default: /tmp/mckernel-v11-focused-<timestamp>
@@ -32,6 +37,7 @@ USAGE
 PREFIX=/opt/mckernel-rust
 BOOT_CPUS=1,2
 BOOT_MEM=1536M@0
+BOOT_OVERSUBSCRIBE=1
 SKIP_BOOT=0
 KEEP_RUNNING=0
 CLASSIFY_ONLY=0
@@ -40,6 +46,7 @@ RUN_EXTERNAL=1
 REQUIRE_LTP=0
 REQUIRE_XPMEM=0
 TEST_TIMEOUT=90
+LTP_MCEEXEC_THREADS="${LTP_MCEEXEC_THREADS:-64}"
 LOG_DIR="/tmp/mckernel-v11-focused-$(date +%Y%m%d-%H%M%S)"
 LTP_TESTS="${LTP_TESTS:-futex_wait01 futex_wait02 futex_wait03 futex_wait04 futex_wait_bitset01 futex_wait_bitset02 futex_wake01 futex_wake02 futex_wake03 process_vm01 time01 fork01}"
 
@@ -56,6 +63,10 @@ while [ "$#" -gt 0 ]; do
 		--boot-mem)
 			BOOT_MEM="${2:?missing value for --boot-mem}"
 			shift 2
+			;;
+		--no-boot-oversubscribe)
+			BOOT_OVERSUBSCRIBE=0
+			shift
 			;;
 		--classify-only)
 			CLASSIFY_ONLY=1
@@ -88,6 +99,10 @@ while [ "$#" -gt 0 ]; do
 			;;
 		--ltp-tests)
 			LTP_TESTS="${2:?missing value for --ltp-tests}"
+			shift 2
+			;;
+		--ltp-mcexec-threads)
+			LTP_MCEEXEC_THREADS="${2:?missing value for --ltp-mcexec-threads}"
 			shift 2
 			;;
 		--keep-running)
@@ -315,20 +330,64 @@ build_test_binaries() {
 	fi
 }
 
+validate_boot_cpus() {
+	local part
+	local start
+	local end
+	local cpu
+	local -a parts
+
+	if [ ! -d /sys/devices/system/cpu/cpu1 ]; then
+		echo "error: focused V11 needs at least two vCPUs; CPU 0 stays with Linux." >&2
+		exit 1
+	fi
+
+	IFS=',' read -r -a parts <<<"$BOOT_CPUS"
+	for part in "${parts[@]}"; do
+		if [[ "$part" =~ ^([0-9]+)-([0-9]+)$ ]]; then
+			start="${BASH_REMATCH[1]}"
+			end="${BASH_REMATCH[2]}"
+		elif [[ "$part" =~ ^[0-9]+$ ]]; then
+			start="$part"
+			end="$part"
+		else
+			echo "error: invalid --boot-cpus entry: $part" >&2
+			exit 1
+		fi
+
+		if [ "$start" -gt "$end" ]; then
+			echo "error: invalid descending --boot-cpus range: $part" >&2
+			exit 1
+		fi
+
+		for ((cpu = start; cpu <= end; cpu++)); do
+			if [ "$cpu" -eq 0 ]; then
+				echo "error: --boot-cpus must leave CPU 0 with Linux." >&2
+				exit 1
+			fi
+			if [ ! -d "/sys/devices/system/cpu/cpu$cpu" ]; then
+				echo "error: --boot-cpus $BOOT_CPUS needs CPU $cpu, but this VM does not expose that CPU." >&2
+				exit 1
+			fi
+		done
+	done
+}
+
 boot_mckernel() {
 	if [ "$SKIP_BOOT" -eq 1 ]; then
 		say "Using already booted McKernel"
 		return
 	fi
 
-	if [ "$(nproc)" -lt 3 ]; then
-		echo "error: focused V11 defaults need at least 3 vCPUs; CPU 0 stays with Linux and $BOOT_CPUS go to McKernel." >&2
-		exit 1
-	fi
+	validate_boot_cpus
 
 	say "Booting McKernel for focused V11"
+	local boot_args=(-c "$BOOT_CPUS" -m "$BOOT_MEM")
+	if [ "$BOOT_OVERSUBSCRIBE" -eq 1 ]; then
+		boot_args+=(-O)
+	fi
 	sudo "$MCSTOP" -k
-	sudo "$MCREBOOT" -c "$BOOT_CPUS" -m "$BOOT_MEM"
+	sudo "$MCREBOOT" "${boot_args[@]}"
 	shutdown_needed=1
 
 	sudo "$IHKOSCTL" 0 kmsg >"$LOG_DIR/boot.kmsg"
@@ -403,17 +462,21 @@ run_ltp_slice() {
 	local ltpbin
 	local ltproot
 	local tp
+	local mcexec_args=("$MCEXEC")
 	ltpbin="$(ltp_bin_dir)"
 	ltproot="$(ltp_root_dir)"
+	if [ "${LTP_MCEEXEC_THREADS:-0}" -gt 0 ]; then
+		mcexec_args+=(-t "$LTP_MCEEXEC_THREADS")
+	fi
 
 	say "Running LTP-backed Rocky V11 slice"
 	for tp in $LTP_TESTS; do
 		local label="ltp-${tp}"
 		local log="$LOG_DIR/${label}.log"
 		if [ "${LTP_USE_SUDO:-1}" -eq 1 ]; then
-			run_logged "$label" sudo env "LTPROOT=$ltproot" "PATH=$PATH:$ltpbin" "$MCEXEC" "$ltpbin/$tp"
+			run_logged "$label" sudo env "LTPROOT=$ltproot" "PATH=$PATH:$ltpbin" "${mcexec_args[@]}" "$ltpbin/$tp"
 		else
-			run_logged "$label" env "LTPROOT=$ltproot" "PATH=$PATH:$ltpbin" "$MCEXEC" "$ltpbin/$tp"
+			run_logged "$label" env "LTPROOT=$ltproot" "PATH=$PATH:$ltpbin" "${mcexec_args[@]}" "$ltpbin/$tp"
 		fi
 		if grep -E '(^|[[:space:]])T(FAIL|BROK)([[:space:]]|:)' "$log" >/dev/null; then
 			echo "error: LTP reported failure markers in $log" >&2
@@ -435,6 +498,7 @@ run_xpmem_slice() {
 	say "Running XPMEM Rocky V11 slice"
 	run_in_dir_logged "xpmem-basic" "test/xpmem" \
 		env MCSTOP=0 MCREBOOT=0 MCK_DIR="$PREFIX" \
+		XPMEM_RUN_UPSTREAM=0 \
 		XPMEM_DIR="$(xpmem_install_dir)" XPMEM_BUILD_DIR="$(xpmem_build_dir)" \
 		./go_test.sh
 }

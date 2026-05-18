@@ -397,10 +397,19 @@ void
 add_tid_entry(int osnum, int pid, int tid)
 {
 	const struct cred *cred = get_pid_cred(pid);
+	struct procfs_list_entry *parent;
 
 	if(!cred)
 		return;
 	down(&procfs_file_list_lock);
+	parent = find_pid_entry(osnum, pid);
+	if (!parent) {
+		parent = get_pid_entry(osnum, pid);
+		if (parent) {
+			add_procfs_entries(parent, pid_entry_stuff,
+					   cred->uid, cred->gid);
+		}
+	}
 	_add_tid_entry(osnum, pid, tid, cred);
 	up(&procfs_file_list_lock);
 }

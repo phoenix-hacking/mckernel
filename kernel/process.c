@@ -3197,6 +3197,10 @@ release_sigcommon(struct sig_common *sigcommon)
 void __release_tid(struct process *proc, struct thread *thread) {
 	int i;
 
+	if (!proc->tids) {
+		return;
+	}
+
 	for (i = 0; i < proc->nr_tids; ++i) {
 		if (proc->tids[i].thread != thread) continue;
 

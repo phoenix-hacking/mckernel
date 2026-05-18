@@ -9,6 +9,7 @@
 #include <sys/wait.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
+#include <sched.h>
 #include <xpmem.h>
 #include <libgen.h>
 #include "util.h"
@@ -45,10 +46,13 @@ int main(int argc, char **argv)
 	if (pid == 0) {
 		/* Child process */
 		void *shm = shmat(shmid, NULL, 0);
+		volatile xpmem_segid_t *shared_segid;
 
 		CHKANDJUMP(shm == (void *)-1, "shmat in child");
 
-		while ((segid = *(xpmem_segid_t *)shm) == 0) {
+		shared_segid = shm;
+		while ((segid = *shared_segid) == 0) {
+			sched_yield();
 		};
 
 		rc = shmdt(shm);
@@ -75,9 +79,11 @@ int main(int argc, char **argv)
 	} else {
 		/* Parent process */
 		void *shm = shmat(shmid, NULL, 0);
+		volatile xpmem_segid_t *shared_segid;
 		struct shmid_ds buf;
 
 		CHKANDJUMP(shm == (void *)-1, "shmat in parent");
+		shared_segid = shm;
 		rc = xpmem_init();
 		CHKANDJUMP(rc != 0, "xpmem_init");
 
@@ -85,7 +91,7 @@ int main(int argc, char **argv)
 			(void *)0666);
 		OKNG(segid == -1, "xpmem_make");
 
-		*(xpmem_segid_t *)shm = segid;
+		*shared_segid = segid;
 
 		rc = waitpid(pid, &status, 0);
 		CHKANDJUMP(rc == -1, "waitpid failed\n");

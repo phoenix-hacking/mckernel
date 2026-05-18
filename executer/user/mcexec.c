@@ -3357,6 +3357,42 @@ int overlay_blacklist(const char *path)
 	return 0;
 }
 
+static int is_proc_task_leaf_path(const char *path)
+{
+	int pid, tid, offset = 0;
+
+	if (sscanf(path, "/proc/self/task/%d/%n", &tid, &offset) == 1 &&
+	    path[offset] != '\0') {
+		return 1;
+	}
+
+	offset = 0;
+	if (sscanf(path, "/proc/%d/task/%d/%n", &pid, &tid, &offset) == 2 &&
+	    path[offset] != '\0') {
+		return 1;
+	}
+
+	return 0;
+}
+
+static int mapped_proc_task_parent_exists(const char *mapped)
+{
+	char parent[PATH_MAX];
+	char *slash;
+	struct stat sb;
+
+	strncpy(parent, mapped, PATH_MAX);
+	parent[PATH_MAX - 1] = '\0';
+
+	slash = strrchr(parent, '/');
+	if (!slash) {
+		return 0;
+	}
+	*slash = '\0';
+
+	return stat(parent, &sb) == 0;
+}
+
 /* Fixup paths that need to point to mckernel files
  * dirfd/in are openat/fstatat/faccessat arguments,
  * buf is a buffer we can dirty assumed to be PATH_MAX long
@@ -3570,6 +3606,10 @@ checkexist:
 	rc = stat(buf, &sb);
 	__dprintf("trying %s: %d\n", buf, rc == -1 ? errno : 0);
 	if (rc == -1 && errno == ENOENT) {
+		if (is_proc_task_leaf_path(path) &&
+		    mapped_proc_task_parent_exists(buf)) {
+			return buf;
+		}
 		if (overlay_blacklist(path)) {
 			__dprintf("blacklisted %s\n", path);
 			return "/nonexisting";
@@ -4314,6 +4354,8 @@ gettid_out:
 
 				/* Reinit signals and syscall threads */
 				init_sigaction();
+				/* Only the caller survives fork(); inherited workers are stale. */
+				thread_data = NULL;
 
 				__dprintf("pid(%d): signals and syscall threads OK\n", 
 						getpid());

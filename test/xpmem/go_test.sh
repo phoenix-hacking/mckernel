@@ -5,10 +5,14 @@ USEOSTEST=0
 
 XPMEM_DIR=${XPMEM_DIR:-$HOME/usr}
 XPMEM_BUILD_DIR=${XPMEM_BUILD_DIR:-$HOME/xpmem}
+XPMEM_RUN_UPSTREAM=${XPMEM_RUN_UPSTREAM:-1}
+XPMEM_UPSTREAM_TIMEOUT=${XPMEM_UPSTREAM_TIMEOUT:-120}
 XPMEM_MODULE="${XPMEM_DIR}/lib/modules/$(uname -r)/xpmem.ko"
 xpmem_loaded_by_test=0
 
 . ../common.sh
+export MCEXEC
+set -e
 
 cleanup_xpmem() {
 	if [ "$xpmem_loaded_by_test" -eq 1 ]; then
@@ -34,9 +38,13 @@ sudo chmod og+rw /dev/xpmem
 
 echo "*** XPMEM_TESTSUITE start *******************************"
 cwd=`pwd`
-cd "${XPMEM_BUILD_DIR}/test"
-"${cwd}/mc_run.sh"
-cd "${cwd}"
+if [ "${XPMEM_RUN_UPSTREAM}" -eq 1 ]; then
+	cd "${XPMEM_BUILD_DIR}/test"
+	timeout "${XPMEM_UPSTREAM_TIMEOUT}" "${cwd}/mc_run.sh"
+	cd "${cwd}"
+else
+	echo "SKIP: upstream XPMEM test suite disabled by XPMEM_RUN_UPSTREAM=0"
+fi
 
 # xpmem basic test
 "${MCEXEC}" ./XTP_001

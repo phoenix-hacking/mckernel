@@ -1,4 +1,4 @@
-execve("/usr/bin/time", ["/usr/bin/time", "/bin/ls"], 0x547ffffffc70 /* 67 vars */) = 0
+execve("/usr/bin/time", ["/usr/bin/time", "/bin/ls"], 0x547ffffffc70 /* 66 vars */) = 0
 arch_prctl(0x3001 /* ARCH_??? */, 0x547ffffffb50) = -1 EINVAL (Invalid argument)
 uname({sysname="Linux", nodename="localhost.localdomain", ...}) = 0
 access("/etc/ld.so.preload", R_OK)      = -1 ENOENT (No such file or directory)
@@ -22,200 +22,196 @@ mprotect(0x2aaaaadd8000, 16384, PROT_READ) = 0
 mprotect(0x155555704000, 4096, PROT_READ) = 0
 mprotect(0x155555a2f000, 4096, PROT_READ) = 0
 munmap(0x2aaaaaa00000, 45743)           = 0
-clock_gettime(CLOCK_MONOTONIC, {tv_sec=92841, tv_nsec=648315711}) = 0
-clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLDstrace: Process 219078 attached
-, child_tidptr=0x2aaaaade31d0) = 219078
-[pid 219078] execve("/bin/ls", ["/bin/ls"], 0x547ffffffca0 /* 67 vars */ <unfinished ...>
-[pid 219074] rt_sigaction(SIGINT, {sa_handler=SIG_IGN, sa_mask=[INT], sa_flags=SA_RESTORER|SA_RESTART, sa_restorer=0x2aaaaaa5a630},  <unfinished ...>
-[pid 219078] <... execve resumed>)      = 0
-[pid 219074] <... rt_sigaction resumed>{sa_handler=SIG_DFL, sa_mask=[], sa_flags=0}, 8) = 0
-[pid 219078] arch_prctl(0x3001 /* ARCH_??? */, 0x547ffffffb50 <unfinished ...>
-[pid 219074] rt_sigaction(SIGQUIT, {sa_handler=SIG_IGN, sa_mask=[QUIT], sa_flags=SA_RESTORER|SA_RESTART, sa_restorer=0x2aaaaaa5a630},  <unfinished ...>
-[pid 219078] <... arch_prctl resumed>)  = -1 EINVAL (Invalid argument)
-[pid 219074] <... rt_sigaction resumed>{sa_handler=SIG_DFL, sa_mask=[], sa_flags=0}, 8) = 0
-[pid 219078] uname( <unfinished ...>
-[pid 219074] wait4(-1,  <unfinished ...>
-[pid 219078] <... uname resumed>{sysname="Linux", nodename="localhost.localdomain", ...}) = 0
-[pid 219078] access("/etc/ld.so.preload", R_OK) = -1 ENOENT (No such file or directory)
-[pid 219078] openat(AT_FDCWD, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 10
-[pid 219078] fstat(10, {st_mode=S_IFREG|0644, st_size=45743, ...}) = 0
-[pid 219078] mmap(NULL, 45743, PROT_READ, MAP_PRIVATE, 10, 0) = 0x2aaaaaa00000
-[pid 219078] close(10)                  = 0
-[pid 219078] openat(AT_FDCWD, "/lib64/libselinux.so.1", O_RDONLY|O_CLOEXEC) = 10
-[pid 219078] read(10, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\200z\0\0\0\0\0\0"..., 832) = 832
-[pid 219078] lseek(10, 157360, SEEK_SET) = 157360
-[pid 219078] read(10, "\4\0\0\0\20\0\0\0\5\0\0\0GNU\0\2\0\0\300\4\0\0\0\3\0\0\0\0\0\0\0", 32) = 32
-[pid 219078] fstat(10, {st_mode=S_IFREG|0755, st_size=172104, ...}) = 0
-[pid 219078] lseek(10, 157360, SEEK_SET) = 157360
-[pid 219078] read(10, "\4\0\0\0\20\0\0\0\5\0\0\0GNU\0\2\0\0\300\4\0\0\0\3\0\0\0\0\0\0\0", 32) = 32
-[pid 219078] mmap(NULL, 2270704, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 10, 0) = 0x2aaaaaa0c000
-[pid 219078] mprotect(0x2aaaaaa33000, 2097152, PROT_NONE) = 0
-[pid 219078] mmap(0x2aaaaac33000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 10, 0x27000) = 0x2aaaaac33000
-[pid 219078] mmap(0x2aaaaac35000, 5616, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x2aaaaac35000
-[pid 219078] close(10)                  = 0
-[pid 219078] openat(AT_FDCWD, "/lib64/libcap.so.2", O_RDONLY|O_CLOEXEC) = 10
-[pid 219078] read(10, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\220&\0\0\0\0\0\0"..., 832) = 832
-[pid 219078] lseek(10, 26952, SEEK_SET) = 26952
-[pid 219078] read(10, "\4\0\0\0\20\0\0\0\5\0\0\0GNU\0\2\0\0\300\4\0\0\0\3\0\0\0\0\0\0\0", 32) = 32
-[pid 219078] fstat(10, {st_mode=S_IFREG|0755, st_size=33752, ...}) = 0
-[pid 219078] mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x2aaaaac37000
-[pid 219078] lseek(10, 26952, SEEK_SET) = 26952
-[pid 219078] read(10, "\4\0\0\0\20\0\0\0\5\0\0\0GNU\0\2\0\0\300\4\0\0\0\3\0\0\0\0\0\0\0", 32) = 32
-[pid 219078] mmap(NULL, 2126224, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 10, 0) = 0x2aaaaac39000
-[pid 219078] mprotect(0x2aaaaac40000, 2093056, PROT_NONE) = 0
-[pid 219078] mmap(0x2aaaaae3f000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 10, 0x6000) = 0x2aaaaae3f000
-[pid 219078] close(10)                  = 0
-[pid 219078] openat(AT_FDCWD, "/lib64/libc.so.6", O_RDONLY|O_CLOEXEC) = 10
-[pid 219078] read(10, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0@\251\3\0\0\0\0\0"..., 832) = 832
-[pid 219078] fstat(10, {st_mode=S_IFREG|0755, st_size=2164744, ...}) = 0
-[pid 219078] lseek(10, 808, SEEK_SET)   = 808
-[pid 219078] read(10, "\4\0\0\0\20\0\0\0\5\0\0\0GNU\0\2\0\0\300\4\0\0\0\3\0\0\0\0\0\0\0", 32) = 32
-[pid 219078] mmap(NULL, 4020384, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 10, 0) = 0x2aaaaae41000
-[pid 219078] mprotect(0x2aaaab00d000, 2097152, PROT_NONE) = 0
-[pid 219078] mmap(0x2aaaab20d000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 10, 0x1cc000) = 0x2aaaab20d000
-[pid 219078] mmap(0x2aaaab213000, 14496, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x2aaaab213000
-[pid 219078] close(10)                  = 0
-[pid 219078] openat(AT_FDCWD, "/lib64/libpcre2-8.so.0", O_RDONLY|O_CLOEXEC) = 10
-[pid 219078] read(10, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\200#\0\0\0\0\0\0"..., 832) = 832
-[pid 219078] lseek(10, 533040, SEEK_SET) = 533040
-[pid 219078] read(10, "\4\0\0\0\20\0\0\0\5\0\0\0GNU\0\2\0\0\300\4\0\0\0\3\0\0\0\0\0\0\0", 32) = 32
-[pid 219078] fstat(10, {st_mode=S_IFREG|0755, st_size=543304, ...}) = 0
-[pid 219078] lseek(10, 533040, SEEK_SET) = 533040
-[pid 219078] read(10, "\4\0\0\0\20\0\0\0\5\0\0\0GNU\0\2\0\0\300\4\0\0\0\3\0\0\0\0\0\0\0", 32) = 32
-[pid 219078] mmap(NULL, 2634280, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 10, 0) = 0x2aaaab217000
-[pid 219078] mprotect(0x2aaaab29a000, 2093056, PROT_NONE) = 0
-[pid 219078] mmap(0x2aaaab499000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 10, 0x82000) = 0x2aaaab499000
-[pid 219078] close(10)                  = 0
-[pid 219078] openat(AT_FDCWD, "/lib64/libdl.so.2", O_RDONLY|O_CLOEXEC) = 10
-[pid 219078] read(10, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0p\16\0\0\0\0\0\0"..., 832) = 832
-[pid 219078] fstat(10, {st_mode=S_IFREG|0755, st_size=19128, ...}) = 0
-[pid 219078] mmap(NULL, 2109600, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 10, 0) = 0x2aaaab49b000
-[pid 219078] mprotect(0x2aaaab49e000, 2093056, PROT_NONE) = 0
-[pid 219078] mmap(0x2aaaab69d000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 10, 0x2000) = 0x2aaaab69d000
-[pid 219078] close(10)                  = 0
-[pid 219078] openat(AT_FDCWD, "/lib64/libpthread.so.0", O_RDONLY|O_CLOEXEC) = 10
-[pid 219078] read(10, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\360n\0\0\0\0\0\0"..., 832) = 832
-[pid 219078] fstat(10, {st_mode=S_IFREG|0755, st_size=149936, ...}) = 0
-[pid 219078] mmap(NULL, 2225344, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 10, 0) = 0x2aaaab69f000
-[pid 219078] mprotect(0x2aaaab6ba000, 2093056, PROT_NONE) = 0
-[pid 219078] mmap(0x2aaaab8b9000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 10, 0x1a000) = 0x2aaaab8b9000
-[pid 219078] mmap(0x2aaaab8bb000, 13504, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x2aaaab8bb000
-[pid 219078] close(10)                  = 0
-[pid 219078] mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x2aaaab8bf000
-[pid 219078] arch_prctl(ARCH_SET_FS, 0x2aaaab8c0380) = 0
-[pid 219078] mprotect(0x2aaaab20d000, 16384, PROT_READ) = 0
-[pid 219078] mprotect(0x2aaaab8b9000, 4096, PROT_READ) = 0
-[pid 219078] mprotect(0x2aaaab69d000, 4096, PROT_READ) = 0
-[pid 219078] mprotect(0x2aaaab499000, 4096, PROT_READ) = 0
-[pid 219078] mprotect(0x2aaaaae3f000, 4096, PROT_READ) = 0
-[pid 219078] mprotect(0x2aaaaac33000, 4096, PROT_READ) = 0
-[pid 219078] mprotect(0x15555571f000, 8192, PROT_READ) = 0
-[pid 219078] mprotect(0x155555a2f000, 4096, PROT_READ) = 0
-[pid 219078] munmap(0x2aaaaaa00000, 45743) = 0
-[pid 219078] set_tid_address(0x2aaaab8c0650) = 219078
-[pid 219078] set_robust_list(0x2aaaab8c0660, 24) = 0
-[pid 219078] rt_sigaction(SIGRTMIN, {sa_handler=0x2aaaab6a5970, sa_mask=[], sa_flags=SA_RESTORER|SA_SIGINFO, sa_restorer=0x2aaaab6b1990}, NULL, 8) = 0
-[pid 219078] rt_sigaction(SIGRT_1, {sa_handler=0x2aaaab6a5a00, sa_mask=[], sa_flags=SA_RESTORER|SA_RESTART|SA_SIGINFO, sa_restorer=0x2aaaab6b1990}, NULL, 8) = 0
-[pid 219078] rt_sigprocmask(SIG_UNBLOCK, [RTMIN RT_1], NULL, 8) = 0
-[pid 219078] prlimit64(0, RLIMIT_STACK, NULL, {rlim_cur=8192*1024, rlim_max=RLIM64_INFINITY}) = 0
-[pid 219078] prctl(PR_CAPBSET_READ, CAP_MAC_OVERRIDE) = 1
-[pid 219078] prctl(PR_CAPBSET_READ, 0x30 /* CAP_??? */) = -1 EINVAL (Invalid argument)
-[pid 219078] prctl(PR_CAPBSET_READ, CAP_CHECKPOINT_RESTORE) = 1
-[pid 219078] prctl(PR_CAPBSET_READ, 0x2c /* CAP_??? */) = -1 EINVAL (Invalid argument)
-[pid 219078] prctl(PR_CAPBSET_READ, 0x2a /* CAP_??? */) = -1 EINVAL (Invalid argument)
-[pid 219078] prctl(PR_CAPBSET_READ, 0x29 /* CAP_??? */) = -1 EINVAL (Invalid argument)
-[pid 219078] statfs(0x2aaaaaa2c013, {f_type=SELINUX_MAGIC, f_bsize=4096, f_blocks=0, f_bfree=0, f_bavail=0, f_files=0, f_ffree=0, f_fsid={val=[0, 0]}, f_namelen=255, f_frsize=4096, f_flags=ST_VALID|ST_RELATIME}) = 0
-[pid 219078] statfs("/sys/fs/selinux", {f_type=SELINUX_MAGIC, f_bsize=4096, f_blocks=0, f_bfree=0, f_bavail=0, f_files=0, f_ffree=0, f_fsid={val=[0, 0]}, f_namelen=255, f_frsize=4096, f_flags=ST_VALID|ST_RELATIME}) = 0
-[pid 219078] getrandom("\x2b\x6f\x66\xfb\xb2\x70\x05\xf0", 8, GRND_NONBLOCK) = 8
-[pid 219078] brk(NULL)                  = 0x155555a00000
-[pid 219078] brk(0x155555a21000)        = 0x155555a21000
-[pid 219078] access("/etc/selinux/config", F_OK) = 0
-[pid 219078] openat(AT_FDCWD, 0x2aaaaafdf2b0, O_RDONLY|O_CLOEXEC) = 10
-[pid 219078] fstat(10, {st_mode=S_IFREG|0644, st_size=217800208, ...}) = 0
-[pid 219078] mmap(NULL, 217800208, PROT_READ, MAP_PRIVATE, 10, 0) = 0x2aaaab8c1000
-[pid 219078] close(10)                  = 0
-[pid 219078] openat(AT_FDCWD, "/usr/share/locale/locale.alias", O_RDONLY|O_CLOEXEC) = 10
-[pid 219078] fstat(10, {st_mode=S_IFREG|0644, st_size=2997, ...}) = 0
-[pid 219078] read(10, "# Locale name alias data base.\n#"..., 4096) = 2997
-[pid 219078] read(10, "", 4096)         = 0
-[pid 219078] close(10)                  = 0
-[pid 219078] openat(AT_FDCWD, "/usr/lib/locale/C.UTF-8/LC_IDENTIFICATION", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
-[pid 219078] openat(AT_FDCWD, "/usr/lib/locale/C.utf8/LC_IDENTIFICATION", O_RDONLY|O_CLOEXEC) = 10
-[pid 219078] fstat(10, {st_mode=S_IFREG|0644, st_size=252, ...}) = 0
-[pid 219078] mmap(NULL, 252, PROT_READ, MAP_PRIVATE, 10, 0) = 0x2aaab8877000
-[pid 219078] close(10)                  = 0
-[pid 219078] openat(AT_FDCWD, "/usr/lib64/gconv/gconv-modules.cache", O_RDONLY) = 10
-[pid 219078] fstat(10, {st_mode=S_IFREG|0644, st_size=26998, ...}) = 0
-[pid 219078] mmap(NULL, 26998, PROT_READ, MAP_SHARED, 10, 0) = 0x2aaab8878000
-[pid 219078] close(10)                  = 0
-[pid 219078] futex(0x2aaaab2129a8, FUTEX_WAKE_PRIVATE, 2147483647) = 0
-[pid 219078] openat(AT_FDCWD, "/usr/lib/locale/C.UTF-8/LC_MEASUREMENT", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
-[pid 219078] openat(AT_FDCWD, "/usr/lib/locale/C.utf8/LC_MEASUREMENT", O_RDONLY|O_CLOEXEC) = 10
-[pid 219078] fstat(10, {st_mode=S_IFREG|0644, st_size=23, ...}) = 0
-[pid 219078] mmap(NULL, 23, PROT_READ, MAP_PRIVATE, 10, 0) = 0x2aaab887f000
-[pid 219078] close(10)                  = 0
-[pid 219078] openat(AT_FDCWD, "/usr/lib/locale/C.UTF-8/LC_TELEPHONE", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
-[pid 219078] openat(AT_FDCWD, "/usr/lib/locale/C.utf8/LC_TELEPHONE", O_RDONLY|O_CLOEXEC) = 10
-[pid 219078] fstat(10, {st_mode=S_IFREG|0644, st_size=47, ...}) = 0
-[pid 219078] mmap(NULL, 47, PROT_READ, MAP_PRIVATE, 10, 0) = 0x2aaab8880000
-[pid 219078] close(10)                  = 0
-[pid 219078] openat(AT_FDCWD, "/usr/lib/locale/C.UTF-8/LC_ADDRESS", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
-[pid 219078] openat(AT_FDCWD, "/usr/lib/locale/C.utf8/LC_ADDRESS", O_RDONLY|O_CLOEXEC) = 10
-[pid 219078] fstat(10, {st_mode=S_IFREG|0644, st_size=131, ...}) = 0
-[pid 219078] mmap(NULL, 131, PROT_READ, MAP_PRIVATE, 10, 0) = 0x2aaab8881000
-[pid 219078] close(10)                  = 0
-[pid 219078] openat(AT_FDCWD, "/usr/lib/locale/C.UTF-8/LC_NAME", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
-[pid 219078] openat(AT_FDCWD, "/usr/lib/locale/C.utf8/LC_NAME", O_RDONLY|O_CLOEXEC) = 10
-[pid 219078] fstat(10, {st_mode=S_IFREG|0644, st_size=62, ...}) = 0
-[pid 219078] mmap(NULL, 62, PROT_READ, MAP_PRIVATE, 10, 0) = 0x2aaab8882000
-[pid 219078] close(10)                  = 0
-[pid 219078] openat(AT_FDCWD, "/usr/lib/locale/C.UTF-8/LC_PAPER", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
-[pid 219078] openat(AT_FDCWD, "/usr/lib/locale/C.utf8/LC_PAPER", O_RDONLY|O_CLOEXEC) = 10
-[pid 219078] fstat(10, {st_mode=S_IFREG|0644, st_size=34, ...}) = 0
-[pid 219078] mmap(NULL, 34, PROT_READ, MAP_PRIVATE, 10, 0) = 0x2aaab8883000
-[pid 219078] close(10)                  = 0
-[pid 219078] openat(AT_FDCWD, "/usr/lib/locale/C.UTF-8/LC_MESSAGES", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
-[pid 219078] openat(AT_FDCWD, "/usr/lib/locale/C.utf8/LC_MESSAGES", O_RDONLY|O_CLOEXEC) = 10
-[pid 219078] fstat(10, {st_mode=S_IFDIR|0755, st_size=29, ...}) = 0
-[pid 219078] close(10)                  = 0
-[pid 219078] openat(AT_FDCWD, "/usr/lib/locale/C.utf8/LC_MESSAGES/SYS_LC_MESSAGES", O_RDONLY|O_CLOEXEC) = 10
-[pid 219078] fstat(10, {st_mode=S_IFREG|0644, st_size=53, ...}) = 0
-[pid 219078] mmap(NULL, 53, PROT_READ, MAP_PRIVATE, 10, 0) = 0x2aaab8884000
-[pid 219078] close(10)                  = 0
-[pid 219078] openat(AT_FDCWD, "/usr/lib/locale/C.UTF-8/LC_MONETARY", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
-[pid 219078] openat(AT_FDCWD, "/usr/lib/locale/C.utf8/LC_MONETARY", O_RDONLY|O_CLOEXEC) = 10
-[pid 219078] fstat(10, {st_mode=S_IFREG|0644, st_size=282, ...}) = 0
-[pid 219078] mmap(NULL, 282, PROT_READ, MAP_PRIVATE, 10, 0) = 0x2aaab8885000
-[pid 219078] close(10)                  = 0
-[pid 219078] openat(AT_FDCWD, "/usr/lib/locale/C.UTF-8/LC_COLLATE", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
-[pid 219078] openat(AT_FDCWD, "/usr/lib/locale/C.utf8/LC_COLLATE", O_RDONLY|O_CLOEXEC) = 10
-[pid 219078] fstat(10, {st_mode=S_IFREG|0644, st_size=6949250, ...}) = 0
-[pid 219078] mmap(NULL, 6949250, PROT_READ, MAP_PRIVATE, 10, 0) = 0x2aaab8886000
-[pid 219078] close(10)                  = 0
-[pid 219078] openat(AT_FDCWD, "/usr/lib/locale/C.UTF-8/LC_TIME", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
-[pid 219078] openat(AT_FDCWD, "/usr/lib/locale/C.utf8/LC_TIME", O_RDONLY|O_CLOEXEC) = 10
-[pid 219078] fstat(10, {st_mode=S_IFREG|0644, st_size=3360, ...}) = 0
-[pid 219078] mmap(NULL, 3360, PROT_READ, MAP_PRIVATE, 10, 0) = 0x2aaab8f27000
-[pid 219078] close(10)                  = 0
-[pid 219078] openat(AT_FDCWD, "/usr/lib/locale/C.UTF-8/LC_NUMERIC", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
-[pid 219078] openat(AT_FDCWD, "/usr/lib/locale/C.utf8/LC_NUMERIC", O_RDONLY|O_CLOEXEC) = 10
-[pid 219078] fstat(10, {st_mode=S_IFREG|0644, st_size=50, ...}) = 0
-[pid 219078] mmap(NULL, 50, PROT_READ, MAP_PRIVATE, 10, 0) = 0x2aaab8f28000
-[pid 219078] close(10)                  = 0
-[pid 219078] openat(AT_FDCWD, "/usr/lib/locale/C.UTF-8/LC_CTYPE", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
-[pid 219078] openat(AT_FDCWD, "/usr/lib/locale/C.utf8/LC_CTYPE", O_RDONLY|O_CLOEXEC) = 10
-[pid 219078] fstat(10, {st_mode=S_IFREG|0644, st_size=337024, ...}) = 0
-[pid 219078] mmap(NULL, 337024, PROT_READ, MAP_PRIVATE, 10, 0) = 0x2aaab8f29000
-[pid 219078] close(10)                  = 0
-[pid 219078] ioctl(1, TCGETS, 0x547ffffffa90) = -1 ENOTTY (Inappropriate ioctl for device)
-[pid 219078] ioctl(1, TIOCGWINSZ, 0x547ffffffb60) = -1 ENOTTY (Inappropriate ioctl for device)
-[pid 219078] openat(AT_FDCWD, ".", O_RDONLY|O_NONBLOCK|O_CLOEXEC|O_DIRECTORY) = 10
-[pid 219078] fstat(10, {st_mode=S_IFDIR|0775, st_size=144, ...}) = 0
-[pid 219078] getdents64(10, 0x155555a08b80 /* 10 entries */, 32768) = 304
-[pid 219078] getdents64(10, 0x155555a08b80 /* 0 entries */, 32768) = 0
-[pid 219078] close(10)                  = 0
-[pid 219078] fstat(1, {st_mode=S_IFREG|0664, st_size=17265, ...}) = 0
-[pid 219078] write(1, "check.log\ninit.sh\nptrace_setopti"..., 82check.log
+clock_gettime(CLOCK_MONOTONIC, {tv_sec=6825, tv_nsec=577654507}) = 0
+clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLDstrace: Process 67235 attached
+, child_tidptr=0x2aaaaade31d0) = 67235
+[pid 67235] execve("/bin/ls", ["/bin/ls"], 0x547ffffffca0 /* 66 vars */ <unfinished ...>
+[pid 67231] rt_sigaction(SIGINT, {sa_handler=SIG_IGN, sa_mask=[INT], sa_flags=SA_RESTORER|SA_RESTART, sa_restorer=0x2aaaaaa5a630}, {sa_handler=SIG_DFL, sa_mask=[], sa_flags=0}, 8) = 0
+[pid 67231] rt_sigaction(SIGQUIT, {sa_handler=SIG_IGN, sa_mask=[QUIT], sa_flags=SA_RESTORER|SA_RESTART, sa_restorer=0x2aaaaaa5a630}, {sa_handler=SIG_DFL, sa_mask=[], sa_flags=0}, 8) = 0
+[pid 67235] <... execve resumed>)       = 0
+[pid 67231] wait4(-1,  <unfinished ...>
+[pid 67235] arch_prctl(0x3001 /* ARCH_??? */, 0x547ffffffb50) = -1 EINVAL (Invalid argument)
+[pid 67235] uname({sysname="Linux", nodename="localhost.localdomain", ...}) = 0
+[pid 67235] access("/etc/ld.so.preload", R_OK) = -1 ENOENT (No such file or directory)
+[pid 67235] openat(AT_FDCWD, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 10
+[pid 67235] fstat(10, {st_mode=S_IFREG|0644, st_size=45743, ...}) = 0
+[pid 67235] mmap(NULL, 45743, PROT_READ, MAP_PRIVATE, 10, 0) = 0x2aaaaaa00000
+[pid 67235] close(10)                   = 0
+[pid 67235] openat(AT_FDCWD, "/lib64/libselinux.so.1", O_RDONLY|O_CLOEXEC) = 10
+[pid 67235] read(10, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\200z\0\0\0\0\0\0"..., 832) = 832
+[pid 67235] lseek(10, 157360, SEEK_SET) = 157360
+[pid 67235] read(10, "\4\0\0\0\20\0\0\0\5\0\0\0GNU\0\2\0\0\300\4\0\0\0\3\0\0\0\0\0\0\0", 32) = 32
+[pid 67235] fstat(10, {st_mode=S_IFREG|0755, st_size=172104, ...}) = 0
+[pid 67235] lseek(10, 157360, SEEK_SET) = 157360
+[pid 67235] read(10, "\4\0\0\0\20\0\0\0\5\0\0\0GNU\0\2\0\0\300\4\0\0\0\3\0\0\0\0\0\0\0", 32) = 32
+[pid 67235] mmap(NULL, 2270704, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 10, 0) = 0x2aaaaaa0c000
+[pid 67235] mprotect(0x2aaaaaa33000, 2097152, PROT_NONE) = 0
+[pid 67235] mmap(0x2aaaaac33000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 10, 0x27000) = 0x2aaaaac33000
+[pid 67235] mmap(0x2aaaaac35000, 5616, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x2aaaaac35000
+[pid 67235] close(10)                   = 0
+[pid 67235] openat(AT_FDCWD, "/lib64/libcap.so.2", O_RDONLY|O_CLOEXEC) = 10
+[pid 67235] read(10, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\220&\0\0\0\0\0\0"..., 832) = 832
+[pid 67235] lseek(10, 26952, SEEK_SET)  = 26952
+[pid 67235] read(10, "\4\0\0\0\20\0\0\0\5\0\0\0GNU\0\2\0\0\300\4\0\0\0\3\0\0\0\0\0\0\0", 32) = 32
+[pid 67235] fstat(10, {st_mode=S_IFREG|0755, st_size=33752, ...}) = 0
+[pid 67235] mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x2aaaaac37000
+[pid 67235] lseek(10, 26952, SEEK_SET)  = 26952
+[pid 67235] read(10, "\4\0\0\0\20\0\0\0\5\0\0\0GNU\0\2\0\0\300\4\0\0\0\3\0\0\0\0\0\0\0", 32) = 32
+[pid 67235] mmap(NULL, 2126224, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 10, 0) = 0x2aaaaac39000
+[pid 67235] mprotect(0x2aaaaac40000, 2093056, PROT_NONE) = 0
+[pid 67235] mmap(0x2aaaaae3f000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 10, 0x6000) = 0x2aaaaae3f000
+[pid 67235] close(10)                   = 0
+[pid 67235] openat(AT_FDCWD, "/lib64/libc.so.6", O_RDONLY|O_CLOEXEC) = 10
+[pid 67235] read(10, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0@\251\3\0\0\0\0\0"..., 832) = 832
+[pid 67235] fstat(10, {st_mode=S_IFREG|0755, st_size=2164744, ...}) = 0
+[pid 67235] lseek(10, 808, SEEK_SET)    = 808
+[pid 67235] read(10, "\4\0\0\0\20\0\0\0\5\0\0\0GNU\0\2\0\0\300\4\0\0\0\3\0\0\0\0\0\0\0", 32) = 32
+[pid 67235] mmap(NULL, 4020384, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 10, 0) = 0x2aaaaae41000
+[pid 67235] mprotect(0x2aaaab00d000, 2097152, PROT_NONE) = 0
+[pid 67235] mmap(0x2aaaab20d000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 10, 0x1cc000) = 0x2aaaab20d000
+[pid 67235] mmap(0x2aaaab213000, 14496, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x2aaaab213000
+[pid 67235] close(10)                   = 0
+[pid 67235] openat(AT_FDCWD, "/lib64/libpcre2-8.so.0", O_RDONLY|O_CLOEXEC) = 10
+[pid 67235] read(10, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\200#\0\0\0\0\0\0"..., 832) = 832
+[pid 67235] lseek(10, 533040, SEEK_SET) = 533040
+[pid 67235] read(10, "\4\0\0\0\20\0\0\0\5\0\0\0GNU\0\2\0\0\300\4\0\0\0\3\0\0\0\0\0\0\0", 32) = 32
+[pid 67235] fstat(10, {st_mode=S_IFREG|0755, st_size=543304, ...}) = 0
+[pid 67235] lseek(10, 533040, SEEK_SET) = 533040
+[pid 67235] read(10, "\4\0\0\0\20\0\0\0\5\0\0\0GNU\0\2\0\0\300\4\0\0\0\3\0\0\0\0\0\0\0", 32) = 32
+[pid 67235] mmap(NULL, 2634280, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 10, 0) = 0x2aaaab217000
+[pid 67235] mprotect(0x2aaaab29a000, 2093056, PROT_NONE) = 0
+[pid 67235] mmap(0x2aaaab499000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 10, 0x82000) = 0x2aaaab499000
+[pid 67235] close(10)                   = 0
+[pid 67235] openat(AT_FDCWD, "/lib64/libdl.so.2", O_RDONLY|O_CLOEXEC) = 10
+[pid 67235] read(10, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0p\16\0\0\0\0\0\0"..., 832) = 832
+[pid 67235] fstat(10, {st_mode=S_IFREG|0755, st_size=19128, ...}) = 0
+[pid 67235] mmap(NULL, 2109600, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 10, 0) = 0x2aaaab49b000
+[pid 67235] mprotect(0x2aaaab49e000, 2093056, PROT_NONE) = 0
+[pid 67235] mmap(0x2aaaab69d000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 10, 0x2000) = 0x2aaaab69d000
+[pid 67235] close(10)                   = 0
+[pid 67235] openat(AT_FDCWD, "/lib64/libpthread.so.0", O_RDONLY|O_CLOEXEC) = 10
+[pid 67235] read(10, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\360n\0\0\0\0\0\0"..., 832) = 832
+[pid 67235] fstat(10, {st_mode=S_IFREG|0755, st_size=149936, ...}) = 0
+[pid 67235] mmap(NULL, 2225344, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 10, 0) = 0x2aaaab69f000
+[pid 67235] mprotect(0x2aaaab6ba000, 2093056, PROT_NONE) = 0
+[pid 67235] mmap(0x2aaaab8b9000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 10, 0x1a000) = 0x2aaaab8b9000
+[pid 67235] mmap(0x2aaaab8bb000, 13504, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x2aaaab8bb000
+[pid 67235] close(10)                   = 0
+[pid 67235] mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x2aaaab8bf000
+[pid 67235] arch_prctl(ARCH_SET_FS, 0x2aaaab8c0380) = 0
+[pid 67235] mprotect(0x2aaaab20d000, 16384, PROT_READ) = 0
+[pid 67235] mprotect(0x2aaaab8b9000, 4096, PROT_READ) = 0
+[pid 67235] mprotect(0x2aaaab69d000, 4096, PROT_READ) = 0
+[pid 67235] mprotect(0x2aaaab499000, 4096, PROT_READ) = 0
+[pid 67235] mprotect(0x2aaaaae3f000, 4096, PROT_READ) = 0
+[pid 67235] mprotect(0x2aaaaac33000, 4096, PROT_READ) = 0
+[pid 67235] mprotect(0x15555571f000, 8192, PROT_READ) = 0
+[pid 67235] mprotect(0x155555a2f000, 4096, PROT_READ) = 0
+[pid 67235] munmap(0x2aaaaaa00000, 45743) = 0
+[pid 67235] set_tid_address(0x2aaaab8c0650) = 67235
+[pid 67235] set_robust_list(0x2aaaab8c0660, 24) = 0
+[pid 67235] rt_sigaction(SIGRTMIN, {sa_handler=0x2aaaab6a5970, sa_mask=[], sa_flags=SA_RESTORER|SA_SIGINFO, sa_restorer=0x2aaaab6b1990}, NULL, 8) = 0
+[pid 67235] rt_sigaction(SIGRT_1, {sa_handler=0x2aaaab6a5a00, sa_mask=[], sa_flags=SA_RESTORER|SA_RESTART|SA_SIGINFO, sa_restorer=0x2aaaab6b1990}, NULL, 8) = 0
+[pid 67235] rt_sigprocmask(SIG_UNBLOCK, [RTMIN RT_1], NULL, 8) = 0
+[pid 67235] prlimit64(0, RLIMIT_STACK, NULL, {rlim_cur=8192*1024, rlim_max=RLIM64_INFINITY}) = 0
+[pid 67235] prctl(PR_CAPBSET_READ, CAP_MAC_OVERRIDE) = 1
+[pid 67235] prctl(PR_CAPBSET_READ, 0x30 /* CAP_??? */) = -1 EINVAL (Invalid argument)
+[pid 67235] prctl(PR_CAPBSET_READ, CAP_CHECKPOINT_RESTORE) = 1
+[pid 67235] prctl(PR_CAPBSET_READ, 0x2c /* CAP_??? */) = -1 EINVAL (Invalid argument)
+[pid 67235] prctl(PR_CAPBSET_READ, 0x2a /* CAP_??? */) = -1 EINVAL (Invalid argument)
+[pid 67235] prctl(PR_CAPBSET_READ, 0x29 /* CAP_??? */) = -1 EINVAL (Invalid argument)
+[pid 67235] statfs(0x2aaaaaa2c013, {f_type=SELINUX_MAGIC, f_bsize=4096, f_blocks=0, f_bfree=0, f_bavail=0, f_files=0, f_ffree=0, f_fsid={val=[0, 0]}, f_namelen=255, f_frsize=4096, f_flags=ST_VALID|ST_RELATIME}) = 0
+[pid 67235] statfs("/sys/fs/selinux", {f_type=SELINUX_MAGIC, f_bsize=4096, f_blocks=0, f_bfree=0, f_bavail=0, f_files=0, f_ffree=0, f_fsid={val=[0, 0]}, f_namelen=255, f_frsize=4096, f_flags=ST_VALID|ST_RELATIME}) = 0
+[pid 67235] getrandom("\x5c\x48\x21\xd2\xcd\xb7\xcd\x69", 8, GRND_NONBLOCK) = 8
+[pid 67235] brk(NULL)                   = 0x155555a00000
+[pid 67235] brk(0x155555a21000)         = 0x155555a21000
+[pid 67235] access("/etc/selinux/config", F_OK) = 0
+[pid 67235] openat(AT_FDCWD, 0x2aaaaafdf2b0, O_RDONLY|O_CLOEXEC) = 10
+[pid 67235] fstat(10, {st_mode=S_IFREG|0644, st_size=217800208, ...}) = 0
+[pid 67235] mmap(NULL, 217800208, PROT_READ, MAP_PRIVATE, 10, 0) = 0x2aaaab8c1000
+[pid 67235] close(10)                   = 0
+[pid 67235] openat(AT_FDCWD, "/usr/share/locale/locale.alias", O_RDONLY|O_CLOEXEC) = 10
+[pid 67235] fstat(10, {st_mode=S_IFREG|0644, st_size=2997, ...}) = 0
+[pid 67235] read(10, "# Locale name alias data base.\n#"..., 4096) = 2997
+[pid 67235] read(10, "", 4096)          = 0
+[pid 67235] close(10)                   = 0
+[pid 67235] openat(AT_FDCWD, "/usr/lib/locale/C.UTF-8/LC_IDENTIFICATION", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+[pid 67235] openat(AT_FDCWD, "/usr/lib/locale/C.utf8/LC_IDENTIFICATION", O_RDONLY|O_CLOEXEC) = 10
+[pid 67235] fstat(10, {st_mode=S_IFREG|0644, st_size=252, ...}) = 0
+[pid 67235] mmap(NULL, 252, PROT_READ, MAP_PRIVATE, 10, 0) = 0x2aaab8877000
+[pid 67235] close(10)                   = 0
+[pid 67235] openat(AT_FDCWD, "/usr/lib64/gconv/gconv-modules.cache", O_RDONLY) = 10
+[pid 67235] fstat(10, {st_mode=S_IFREG|0644, st_size=26998, ...}) = 0
+[pid 67235] mmap(NULL, 26998, PROT_READ, MAP_SHARED, 10, 0) = 0x2aaab8878000
+[pid 67235] close(10)                   = 0
+[pid 67235] futex(0x2aaaab2129a8, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+[pid 67235] openat(AT_FDCWD, "/usr/lib/locale/C.UTF-8/LC_MEASUREMENT", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+[pid 67235] openat(AT_FDCWD, "/usr/lib/locale/C.utf8/LC_MEASUREMENT", O_RDONLY|O_CLOEXEC) = 10
+[pid 67235] fstat(10, {st_mode=S_IFREG|0644, st_size=23, ...}) = 0
+[pid 67235] mmap(NULL, 23, PROT_READ, MAP_PRIVATE, 10, 0) = 0x2aaab887f000
+[pid 67235] close(10)                   = 0
+[pid 67235] openat(AT_FDCWD, "/usr/lib/locale/C.UTF-8/LC_TELEPHONE", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+[pid 67235] openat(AT_FDCWD, "/usr/lib/locale/C.utf8/LC_TELEPHONE", O_RDONLY|O_CLOEXEC) = 10
+[pid 67235] fstat(10, {st_mode=S_IFREG|0644, st_size=47, ...}) = 0
+[pid 67235] mmap(NULL, 47, PROT_READ, MAP_PRIVATE, 10, 0) = 0x2aaab8880000
+[pid 67235] close(10)                   = 0
+[pid 67235] openat(AT_FDCWD, "/usr/lib/locale/C.UTF-8/LC_ADDRESS", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+[pid 67235] openat(AT_FDCWD, "/usr/lib/locale/C.utf8/LC_ADDRESS", O_RDONLY|O_CLOEXEC) = 10
+[pid 67235] fstat(10, {st_mode=S_IFREG|0644, st_size=131, ...}) = 0
+[pid 67235] mmap(NULL, 131, PROT_READ, MAP_PRIVATE, 10, 0) = 0x2aaab8881000
+[pid 67235] close(10)                   = 0
+[pid 67235] openat(AT_FDCWD, "/usr/lib/locale/C.UTF-8/LC_NAME", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+[pid 67235] openat(AT_FDCWD, "/usr/lib/locale/C.utf8/LC_NAME", O_RDONLY|O_CLOEXEC) = 10
+[pid 67235] fstat(10, {st_mode=S_IFREG|0644, st_size=62, ...}) = 0
+[pid 67235] mmap(NULL, 62, PROT_READ, MAP_PRIVATE, 10, 0) = 0x2aaab8882000
+[pid 67235] close(10)                   = 0
+[pid 67235] openat(AT_FDCWD, "/usr/lib/locale/C.UTF-8/LC_PAPER", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+[pid 67235] openat(AT_FDCWD, "/usr/lib/locale/C.utf8/LC_PAPER", O_RDONLY|O_CLOEXEC) = 10
+[pid 67235] fstat(10, {st_mode=S_IFREG|0644, st_size=34, ...}) = 0
+[pid 67235] mmap(NULL, 34, PROT_READ, MAP_PRIVATE, 10, 0) = 0x2aaab8883000
+[pid 67235] close(10)                   = 0
+[pid 67235] openat(AT_FDCWD, "/usr/lib/locale/C.UTF-8/LC_MESSAGES", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+[pid 67235] openat(AT_FDCWD, "/usr/lib/locale/C.utf8/LC_MESSAGES", O_RDONLY|O_CLOEXEC) = 10
+[pid 67235] fstat(10, {st_mode=S_IFDIR|0755, st_size=29, ...}) = 0
+[pid 67235] close(10)                   = 0
+[pid 67235] openat(AT_FDCWD, "/usr/lib/locale/C.utf8/LC_MESSAGES/SYS_LC_MESSAGES", O_RDONLY|O_CLOEXEC) = 10
+[pid 67235] fstat(10, {st_mode=S_IFREG|0644, st_size=53, ...}) = 0
+[pid 67235] mmap(NULL, 53, PROT_READ, MAP_PRIVATE, 10, 0) = 0x2aaab8884000
+[pid 67235] close(10)                   = 0
+[pid 67235] openat(AT_FDCWD, "/usr/lib/locale/C.UTF-8/LC_MONETARY", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+[pid 67235] openat(AT_FDCWD, "/usr/lib/locale/C.utf8/LC_MONETARY", O_RDONLY|O_CLOEXEC) = 10
+[pid 67235] fstat(10, {st_mode=S_IFREG|0644, st_size=282, ...}) = 0
+[pid 67235] mmap(NULL, 282, PROT_READ, MAP_PRIVATE, 10, 0) = 0x2aaab8885000
+[pid 67235] close(10)                   = 0
+[pid 67235] openat(AT_FDCWD, "/usr/lib/locale/C.UTF-8/LC_COLLATE", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+[pid 67235] openat(AT_FDCWD, "/usr/lib/locale/C.utf8/LC_COLLATE", O_RDONLY|O_CLOEXEC) = 10
+[pid 67235] fstat(10, {st_mode=S_IFREG|0644, st_size=6949250, ...}) = 0
+[pid 67235] mmap(NULL, 6949250, PROT_READ, MAP_PRIVATE, 10, 0) = 0x2aaab8886000
+[pid 67235] close(10)                   = 0
+[pid 67235] openat(AT_FDCWD, "/usr/lib/locale/C.UTF-8/LC_TIME", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+[pid 67235] openat(AT_FDCWD, "/usr/lib/locale/C.utf8/LC_TIME", O_RDONLY|O_CLOEXEC) = 10
+[pid 67235] fstat(10, {st_mode=S_IFREG|0644, st_size=3360, ...}) = 0
+[pid 67235] mmap(NULL, 3360, PROT_READ, MAP_PRIVATE, 10, 0) = 0x2aaab8f27000
+[pid 67235] close(10)                   = 0
+[pid 67235] openat(AT_FDCWD, "/usr/lib/locale/C.UTF-8/LC_NUMERIC", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+[pid 67235] openat(AT_FDCWD, "/usr/lib/locale/C.utf8/LC_NUMERIC", O_RDONLY|O_CLOEXEC) = 10
+[pid 67235] fstat(10, {st_mode=S_IFREG|0644, st_size=50, ...}) = 0
+[pid 67235] mmap(NULL, 50, PROT_READ, MAP_PRIVATE, 10, 0) = 0x2aaab8f28000
+[pid 67235] close(10)                   = 0
+[pid 67235] openat(AT_FDCWD, "/usr/lib/locale/C.UTF-8/LC_CTYPE", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+[pid 67235] openat(AT_FDCWD, "/usr/lib/locale/C.utf8/LC_CTYPE", O_RDONLY|O_CLOEXEC) = 10
+[pid 67235] fstat(10, {st_mode=S_IFREG|0644, st_size=337024, ...}) = 0
+[pid 67235] mmap(NULL, 337024, PROT_READ, MAP_PRIVATE, 10, 0) = 0x2aaab8f29000
+[pid 67235] close(10)                   = 0
+[pid 67235] ioctl(1, TCGETS, 0x547ffffffa90) = -1 ENOTTY (Inappropriate ioctl for device)
+[pid 67235] ioctl(1, TIOCGWINSZ, 0x547ffffffb60) = -1 ENOTTY (Inappropriate ioctl for device)
+[pid 67235] openat(AT_FDCWD, ".", O_RDONLY|O_NONBLOCK|O_CLOEXEC|O_DIRECTORY) = 10
+[pid 67235] fstat(10, {st_mode=S_IFDIR|0775, st_size=144, ...}) = 0
+[pid 67235] getdents64(10, 0x155555a08b80 /* 10 entries */, 32768) = 304
+[pid 67235] getdents64(10, 0x155555a08b80 /* 0 entries */, 32768) = 0
+[pid 67235] close(10)                   = 0
+[pid 67235] fstat(1, {st_mode=S_IFREG|0664, st_size=16886, ...}) = 0
+[pid 67235] write(1, "check.log\ninit.sh\nptrace_setopti"..., 82check.log
 init.sh
 ptrace_setoptions
 qual_syscall
@@ -224,13 +220,13 @@ stat
 strace-f
 test.sh
 ) = 82
-[pid 219078] close(1)                   = 0
-[pid 219078] close(2)                   = 0
-[pid 219078] exit_group(0 <unfinished ...>
-[pid 219078] +++ exited with 0 +++
-<... wait4 resumed>[{WIFEXITED(s) && WEXITSTATUS(s) == 0}], 0, {ru_utime={tv_sec=0, tv_usec=0}, ru_stime={tv_sec=0, tv_usec=0}, ...}) = 219078
---- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=219078, si_uid=0, si_status=0, si_utime=0, si_stime=0} ---
-clock_gettime(CLOCK_MONOTONIC, {tv_sec=92842, tv_nsec=75110318}) = 0
+[pid 67235] close(1)                    = 0
+[pid 67235] close(2)                    = 0
+[pid 67235] exit_group(0 <unfinished ...>
+[pid 67235] +++ exited with 0 +++
+<... wait4 resumed>[{WIFEXITED(s) && WEXITSTATUS(s) == 0}], 0, {ru_utime={tv_sec=0, tv_usec=0}, ru_stime={tv_sec=0, tv_usec=0}, ...}) = 67235
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=67235, si_uid=0, si_status=0, si_utime=0, si_stime=0} ---
+clock_gettime(CLOCK_MONOTONIC, {tv_sec=6826, tv_nsec=54956358}) = 0
 rt_sigaction(SIGINT, {sa_handler=SIG_DFL, sa_mask=[INT], sa_flags=SA_RESTORER|SA_RESTART, sa_restorer=0x2aaaaaa5a630}, {sa_handler=SIG_IGN, sa_mask=[INT], sa_flags=SA_RESTORER|SA_RESTART, sa_restorer=0x2aaaaaa5a630}, 8) = 0
 rt_sigaction(SIGQUIT, {sa_handler=SIG_DFL, sa_mask=[QUIT], sa_flags=SA_RESTORER|SA_RESTART, sa_restorer=0x2aaaaaa5a630}, {sa_handler=SIG_IGN, sa_mask=[QUIT], sa_flags=SA_RESTORER|SA_RESTART, sa_restorer=0x2aaaaaa5a630}, 8) = 0
 write(2, "0.00", 40.00)                     = 4
@@ -247,7 +243,7 @@ write(2, "t", 1t)                        = 1
 write(2, "e", 1e)                        = 1
 write(2, "m", 1m)                        = 1
 write(2, " ", 1 )                        = 1
-write(2, "0:00.42", 70:00.42)                  = 7
+write(2, "0:00.47", 70:00.47)                  = 7
 write(2, "e", 1e)                        = 1
 write(2, "l", 1l)                        = 1
 write(2, "a", 1a)                        = 1

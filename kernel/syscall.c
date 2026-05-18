@@ -132,7 +132,10 @@ static void do_mod_exit(int status);
  * (1) pmi_proxy + gdb + #CPU OMP threads
  * (2) pmi_proxy + #CPU OMP threads + POSIX AIO IO + POSIX AIO notification
  */
-#define NR_TIDS (allow_oversubscribe ? (num_processors * 2) : num_processors)
+#define OVERSUBSCRIBED_NR_TIDS 128
+#define NR_TIDS (allow_oversubscribe ? \
+	((num_processors * 2) > OVERSUBSCRIBED_NR_TIDS ? \
+	 (num_processors * 2) : OVERSUBSCRIBED_NR_TIDS) : num_processors)
 
 long (*linux_wait_event)(void *_resp, unsigned long nsec_timeout);
 int (*linux_printk)(const char *fmt, ...);
@@ -3325,6 +3328,7 @@ unsigned long do_fork(int clone_flags, unsigned long newsp,
 	unsigned long clone_pthread_start_routine = 0;
 	struct vm_range *range = NULL;
 	int helper_thread = 0;
+	int tid_table_created = 0;
 
 	dkprintf("%s,flags=%08x,newsp=%lx,ptidptr=%lx,"
 		"ctidptr=%lx,tls=%lx,curpc=%lx,cursp=%lx",
@@ -3479,6 +3483,7 @@ unsigned long do_fork(int clone_flags, unsigned long newsp,
 				err =  -ENOMEM;
 				goto destroy_thread;
 			}
+			tid_table_created = 1;
 
 			if ((err = settid(new, NR_TIDS, tids)) < 0) {
 				mcs_rwlock_writer_unlock(&newproc->threads_lock,
@@ -3699,8 +3704,10 @@ free_mod_clone_arg:
 
 release_ids:
 	if (clone_flags & CLONE_VM) {
-		kfree(newproc->tids);
-		newproc->tids = NULL;
+		if (tid_table_created && !newproc->nr_tids) {
+			kfree(newproc->tids);
+			newproc->tids = NULL;
+		}
 	} else {
 		request1.number = __NR_kill;
 		request1.args[0] = newproc->pid;
