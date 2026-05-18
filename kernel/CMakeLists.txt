@@ -50,6 +50,7 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/abi.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/bitmap.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/llist.rs"
+		"${CMAKE_CURRENT_SOURCE_DIR}/rust/page_alloc.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/rbtree.rs"
 	)
 	set(RUST_KERNEL_CFG)
@@ -116,6 +117,9 @@ if (RUST_KERNEL_ENABLED)
 	)
 	set_source_files_properties("${PROJECT_SOURCE_DIR}/lib/bitmap.c"
 		PROPERTIES COMPILE_DEFINITIONS MCKERNEL_RUST_BITMAP_CORE)
+	set_source_files_properties("${PROJECT_SOURCE_DIR}/lib/page_alloc.c"
+		PROPERTIES COMPILE_DEFINITIONS
+		"MCKERNEL_RUST_PAGE_ALLOC_RBTREE;MCKERNEL_RUST_PAGEALLOC_BITMAP")
 else()
 	list(APPEND MCKERNEL_SRCS rbtree.c llist.c)
 endif()

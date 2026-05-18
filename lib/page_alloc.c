@@ -35,6 +35,25 @@ void free_pages(void *, int npages);
 #define ADDRESS(desc, index, bit)    \
 	((desc)->start + (((uintptr_t)(index) * 64 + (bit)) << ((desc)->shift)))
 
+#ifdef MCKERNEL_RUST_PAGEALLOC_BITMAP
+unsigned long __ihk_pagealloc_large_nolock(
+		struct ihk_page_allocator_desc *desc, int npages, int p2align);
+unsigned long __ihk_pagealloc_alloc_nolock(
+		struct ihk_page_allocator_desc *desc, int npages, int p2align);
+void __ihk_pagealloc_reserve_nolock(
+		struct ihk_page_allocator_desc *desc,
+		unsigned long start, unsigned long end);
+int __ihk_pagealloc_free_nolock(
+		struct ihk_page_allocator_desc *desc,
+		unsigned long address, int npages, unsigned long *bad_address);
+unsigned long __ihk_pagealloc_count_nolock(
+		struct ihk_page_allocator_desc *desc);
+int __ihk_pagealloc_query_free_nolock(
+		struct ihk_page_allocator_desc *desc);
+void __ihk_pagealloc_zero_free_pages_nolock(
+		struct ihk_page_allocator_desc *desc);
+#endif
+
 void *__ihk_pagealloc_init(unsigned long start, unsigned long size,
                            unsigned long unit, void *initial,
                            unsigned long *pdescsize)
@@ -107,6 +126,16 @@ void ihk_pagealloc_destroy(void *__desc)
 static unsigned long __ihk_pagealloc_large(struct ihk_page_allocator_desc *desc,
                                            int npages, int p2align)
 {
+#ifdef MCKERNEL_RUST_PAGEALLOC_BITMAP
+	mcs_lock_node_t node;
+	unsigned long address;
+
+	mcs_lock_lock(&desc->lock, &node);
+	address = __ihk_pagealloc_large_nolock(desc, npages, p2align);
+	mcs_lock_unlock(&desc->lock, &node);
+
+	return address;
+#else
 	unsigned int i, j, mi;
 	int nblocks;
 	int nfrags;
@@ -147,11 +176,22 @@ static unsigned long __ihk_pagealloc_large(struct ihk_page_allocator_desc *desc,
 	mcs_lock_unlock(&desc->lock, &node);
 
 	return 0;
+#endif
 }
 
 unsigned long ihk_pagealloc_alloc(void *__desc, int npages, int p2align)
 {
 	struct ihk_page_allocator_desc *desc = __desc;
+#ifdef MCKERNEL_RUST_PAGEALLOC_BITMAP
+	mcs_lock_node_t node;
+	unsigned long address;
+
+	mcs_lock_lock(&desc->lock, &node);
+	address = __ihk_pagealloc_alloc_nolock(desc, npages, p2align);
+	mcs_lock_unlock(&desc->lock, &node);
+
+	return address;
+#else
 	unsigned int i, mi;
 	int j;
 	unsigned long v, mask;
@@ -191,13 +231,19 @@ unsigned long ihk_pagealloc_alloc(void *__desc, int npages, int p2align)
 
 	/* We use null pointer for failure */
 	return 0;
+#endif
 }
 
 void ihk_pagealloc_reserve(void *__desc, unsigned long start, unsigned long end)
 {
-	int i, n;
 	struct ihk_page_allocator_desc *desc = __desc;
 	mcs_lock_node_t node;
+#ifdef MCKERNEL_RUST_PAGEALLOC_BITMAP
+	mcs_lock_lock(&desc->lock, &node);
+	__ihk_pagealloc_reserve_nolock(desc, start, end);
+	mcs_lock_unlock(&desc->lock, &node);
+#else
+	int i, n;
 
 	n = (end + (1 << desc->shift) - 1 - desc->start) >> desc->shift;
 	i = ((start - desc->start) >> desc->shift);
@@ -215,11 +261,27 @@ void ihk_pagealloc_reserve(void *__desc, unsigned long start, unsigned long end)
 		}
 	}
 	mcs_lock_unlock(&desc->lock, &node);
+#endif
 }
 
 void ihk_pagealloc_free(void *__desc, unsigned long address, int npages)
 {
 	struct ihk_page_allocator_desc *desc = __desc;
+#ifdef MCKERNEL_RUST_PAGEALLOC_BITMAP
+	unsigned long bad_address = address;
+	int rc;
+	mcs_lock_node_t node;
+
+	mcs_lock_lock(&desc->lock, &node);
+	rc = __ihk_pagealloc_free_nolock(desc, address, npages, &bad_address);
+	mcs_lock_unlock(&desc->lock, &node);
+
+	if (rc) {
+		kprintf("%s: double-freeing page 0x%lx\n",
+			__FUNCTION__, bad_address);
+		panic("panic");
+	}
+#else
 	int i;
 	unsigned mi;
 	mcs_lock_node_t node;
@@ -238,11 +300,22 @@ void ihk_pagealloc_free(void *__desc, unsigned long address, int npages)
 		}
 	}
 	mcs_lock_unlock(&desc->lock, &node);
+#endif
 }
 
 unsigned long ihk_pagealloc_count(void *__desc)
 {
 	struct ihk_page_allocator_desc *desc = __desc;
+#ifdef MCKERNEL_RUST_PAGEALLOC_BITMAP
+	unsigned long n;
+	mcs_lock_node_t node;
+
+	mcs_lock_lock(&desc->lock, &node);
+	n = __ihk_pagealloc_count_nolock(desc);
+	mcs_lock_unlock(&desc->lock, &node);
+
+	return n;
+#else
 	unsigned long i, j, n = 0;
 	mcs_lock_node_t node;
 
@@ -256,13 +329,24 @@ unsigned long ihk_pagealloc_count(void *__desc)
 		}
 	}
 	mcs_lock_unlock(&desc->lock, &node);
-	
+
 	return n;
+#endif
 }
 
 int ihk_pagealloc_query_free(void *__desc)
 {
 	struct ihk_page_allocator_desc *desc = __desc;
+#ifdef MCKERNEL_RUST_PAGEALLOC_BITMAP
+	int npages;
+	mcs_lock_node_t node;
+
+	mcs_lock_lock(&desc->lock, &node);
+	npages = __ihk_pagealloc_query_free_nolock(desc);
+	mcs_lock_unlock(&desc->lock, &node);
+
+	return npages;
+#else
 	unsigned int mi;
 	int j;
 	unsigned long v;
@@ -285,11 +369,23 @@ int ihk_pagealloc_query_free(void *__desc)
 	mcs_lock_unlock(&desc->lock, &node);
 
 	return npages;
+#endif
 }
 
 void __ihk_pagealloc_zero_free_pages(void *__desc)
 {
 	struct ihk_page_allocator_desc *desc = __desc;
+#ifdef MCKERNEL_RUST_PAGEALLOC_BITMAP
+	mcs_lock_node_t node;
+
+	kprintf("zeroing free memory... ");
+
+	mcs_lock_lock(&desc->lock, &node);
+	__ihk_pagealloc_zero_free_pages_nolock(desc);
+	mcs_lock_unlock(&desc->lock, &node);
+
+	kprintf("\nzeroing done\n");
+#else
 	unsigned int mi;
 	int j;
 	unsigned long v;
@@ -314,6 +410,7 @@ kprintf("zeroing free memory... ");
 	mcs_lock_unlock(&desc->lock, &node);
 
 kprintf("\nzeroing done\n");
+#endif
 }
 
 
@@ -331,6 +428,27 @@ int deferred_zero_at_free = 1;
  * NOTE: invariant property: free_chunk structures are placed in the very front
  * of their corresponding memory (i.e., they are on the free memory chunk itself).
  */
+
+#ifdef MCKERNEL_RUST_PAGE_ALLOC_RBTREE
+int __page_alloc_rbtree_free_range(struct rb_root *root,
+		unsigned long addr, unsigned long size);
+unsigned long __page_alloc_rbtree_alloc_pages(struct rb_root *root,
+		int npages, int p2align);
+unsigned long __page_alloc_rbtree_reserve_pages(struct rb_root *root,
+		unsigned long aligned_addr, int npages);
+struct free_chunk *__page_alloc_rbtree_get_root_chunk(
+		struct rb_root *root);
+int __ihk_numa_add_free_pages(struct ihk_mc_numa_node *node,
+		unsigned long addr, unsigned long size);
+int __ihk_numa_zero_free_pages_node(struct ihk_mc_numa_node *node,
+		int nr_pages);
+unsigned long __ihk_numa_alloc_pages_nolock(
+		struct ihk_mc_numa_node *node, int npages, int p2align);
+int __ihk_numa_free_pages_to_tree_nolock(
+		struct ihk_mc_numa_node *node, unsigned long addr, int npages);
+int __ihk_numa_defer_zero_free_pages(
+		struct ihk_mc_numa_node *node, unsigned long addr, int npages);
+#else
 
 #ifdef ENABLE_FUGAKU_HACKS
 size_t __count_free_bytes(struct rb_root *root)
@@ -664,6 +782,7 @@ static struct free_chunk *__page_alloc_rbtree_get_root_chunk(
 	rb_erase(node, root);
 	return container_of(node, struct free_chunk, node);
 }
+#endif /* MCKERNEL_RUST_PAGE_ALLOC_RBTREE */
 
 /*
  * External routines.
@@ -671,6 +790,19 @@ static struct free_chunk *__page_alloc_rbtree_get_root_chunk(
 int ihk_numa_add_free_pages(struct ihk_mc_numa_node *node,
 		unsigned long addr, unsigned long size)
 {
+#ifdef MCKERNEL_RUST_PAGE_ALLOC_RBTREE
+	int rc = __ihk_numa_add_free_pages(node, addr, size);
+
+	if (rc) {
+		kprintf("%s: ERROR: adding 0x%lx:%lu\n",
+				__FUNCTION__, addr, size);
+		return rc;
+	}
+
+	dkprintf("%s: added free pages 0x%lx:%lu\n",
+		__FUNCTION__, addr, size);
+	return 0;
+#else
 	if (zero_at_free) {
 		/* Zero chunk */
 		memset(phys_to_virt(addr), 0, size);
@@ -693,6 +825,7 @@ int ihk_numa_add_free_pages(struct ihk_mc_numa_node *node,
 	dkprintf("%s: added free pages 0x%lx:%lu\n",
 		__FUNCTION__, addr, size);
 	return 0;
+#endif
 }
 
 #define IHK_NUMA_ALL_PAGES	(0)
@@ -705,6 +838,26 @@ int __ihk_numa_zero_free_pages(struct ihk_mc_numa_node *__node, int nr_pages)
 	if (!zero_at_free)
 		return 0;
 
+#ifdef MCKERNEL_RUST_PAGE_ALLOC_RBTREE
+	/* If explicitly specified, zero only in __node */
+	max_i = __node ? 1 : ihk_mc_get_nr_numa_nodes();
+
+	/* Look at NUMA nodes in the order of distance */
+	for (i = 0; i < max_i; ++i) {
+		struct ihk_mc_numa_node *node;
+
+		/* Unless explicitly specified.. */
+		node = __node ? __node : ihk_mc_get_numa_node_by_distance(i);
+		if (!node) {
+			break;
+		}
+
+		nr_zeroed_pages += __ihk_numa_zero_free_pages_node(
+				node, nr_pages);
+	}
+
+	return nr_zeroed_pages;
+#else
 	/* If explicitly specified, zero only in __node */
 	max_i = __node ? 1 : ihk_mc_get_nr_numa_nodes();
 
@@ -782,6 +935,7 @@ int __ihk_numa_zero_free_pages(struct ihk_mc_numa_node *__node, int nr_pages)
 	}
 
 	return nr_zeroed_pages;
+#endif
 }
 
 void ihk_numa_zero_free_pages(struct ihk_mc_numa_node *__node)
@@ -813,6 +967,18 @@ unsigned long ihk_numa_alloc_pages(struct ihk_mc_numa_node *node,
 	}
 #endif
 
+#ifdef MCKERNEL_RUST_PAGE_ALLOC_RBTREE
+	mcs_lock_lock(&node->lock, &mcs_node);
+	addr = __ihk_numa_alloc_pages_nolock(node, npages, p2align);
+	mcs_lock_unlock(&node->lock, &mcs_node);
+
+	if (addr) {
+		dkprintf("%s: allocated pages 0x%lx:%lu\n",
+				__FUNCTION__, addr, npages << PAGE_SHIFT);
+	}
+
+	return addr;
+#else
 	mcs_lock_lock(&node->lock, &mcs_node);
 retry:
 	if (zero_at_free) {
@@ -880,6 +1046,7 @@ unlock_out:
 	mcs_lock_unlock(&node->lock, &mcs_node);
 
 	return addr;
+#endif
 }
 
 void ihk_numa_free_pages(struct ihk_mc_numa_node *node,
@@ -942,6 +1109,18 @@ void ihk_numa_free_pages(struct ihk_mc_numa_node *node,
 			(zero_at_free && !defer_zero_at_free)) {
 		mcs_lock_lock(&node->lock, &mcs_node);
 
+#ifdef MCKERNEL_RUST_PAGE_ALLOC_RBTREE
+		if (__ihk_numa_free_pages_to_tree_nolock(node, addr, npages)) {
+			kprintf("%s: ERROR: freeing 0x%lx:%lu\n",
+					__FUNCTION__, addr, npages << PAGE_SHIFT);
+		}
+		else {
+			dkprintf("%s: freed%s chunk 0x%lx:%lu\n",
+					__FUNCTION__,
+					zero_at_free ? " and zeroed" : "",
+					addr, npages << PAGE_SHIFT);
+		}
+#else
 		if (__page_alloc_rbtree_free_range(&node->free_chunks, addr,
 					npages << PAGE_SHIFT)) {
 			kprintf("%s: ERROR: freeing 0x%lx:%lu\n",
@@ -964,6 +1143,7 @@ void ihk_numa_free_pages(struct ihk_mc_numa_node *node,
 					zero_at_free ? " and zeroed" : "",
 					addr, npages << PAGE_SHIFT);
 		}
+#endif
 		mcs_lock_unlock(&node->lock, &mcs_node);
 	}
 	/*
@@ -971,6 +1151,13 @@ void ihk_numa_free_pages(struct ihk_mc_numa_node *node,
 	 * Put the chunk to the to_zero list.
 	 */
 	else {
+#ifdef MCKERNEL_RUST_PAGE_ALLOC_RBTREE
+		if (__ihk_numa_defer_zero_free_pages(node, addr, npages)) {
+			kprintf("%s: ERROR: deferring free 0x%lx:%lu\n",
+					__FUNCTION__, addr, npages << PAGE_SHIFT);
+			return;
+		}
+#else
 		struct free_chunk *chunk =
 			(struct free_chunk *)phys_to_virt(addr);
 		chunk->addr = addr;
@@ -978,6 +1165,7 @@ void ihk_numa_free_pages(struct ihk_mc_numa_node *node,
 		ihk_atomic_add(npages, &node->nr_to_zero_pages);
 		barrier();
 		llist_add(&chunk->list, &node->to_zero_list);
+#endif
 
 		/* Ask Linux to clear memory */
 		if (cpu_local_var_initialized &&

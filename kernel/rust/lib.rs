@@ -5,6 +5,7 @@ use core::panic::PanicInfo;
 pub mod abi;
 mod bitmap;
 mod llist;
+mod page_alloc;
 mod rbtree;
 
 #[panic_handler]

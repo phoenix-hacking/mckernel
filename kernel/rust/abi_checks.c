@@ -2,6 +2,9 @@
 #include <affinity.h>
 #include <syscall.h>
 #include <llist.h>
+#include <rbtree.h>
+#include <ihk/lock.h>
+#include <ihk/page_alloc.h>
 #include <ihk/context.h>
 
 #define ABI_ASSERT(cond, msg) _Static_assert(cond, msg)
@@ -42,3 +45,89 @@ ABI_ASSERT(sizeof(struct llist_node) == 8,
 	   "Rust/C llist_node size mismatch");
 ABI_ASSERT(ABI_OFFSET(struct llist_node, next) == 0,
 	   "Rust/C llist_node next offset mismatch");
+ABI_ASSERT(sizeof(struct rb_node) == 24,
+	   "Rust/C rb_node size mismatch");
+ABI_ASSERT(ABI_OFFSET(struct rb_node, rb_right) == 8,
+	   "Rust/C rb_node rb_right offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct rb_node, rb_left) == 16,
+	   "Rust/C rb_node rb_left offset mismatch");
+ABI_ASSERT(sizeof(struct rb_root) == 8,
+	   "Rust/C rb_root size mismatch");
+ABI_ASSERT(sizeof(struct free_chunk) == 48,
+	   "Rust/C free_chunk size mismatch");
+ABI_ASSERT(ABI_OFFSET(struct free_chunk, addr) == 0,
+	   "Rust/C free_chunk addr offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct free_chunk, size) == 8,
+	   "Rust/C free_chunk size offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct free_chunk, node) == 16,
+	   "Rust/C free_chunk node offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct free_chunk, list) == 40,
+	   "Rust/C free_chunk list offset mismatch");
+ABI_ASSERT(sizeof(struct list_head) == 16,
+	   "Rust/C list_head size mismatch");
+ABI_ASSERT(ABI_OFFSET(struct list_head, prev) == 8,
+	   "Rust/C list_head prev offset mismatch");
+ABI_ASSERT(sizeof(mcs_lock_node_t) == 64,
+	   "Rust/C mcs_lock_node_t size mismatch");
+ABI_ASSERT(ABI_OFFSET(mcs_lock_node_t, locked) == 0,
+	   "Rust/C mcs_lock_node_t locked offset mismatch");
+ABI_ASSERT(ABI_OFFSET(mcs_lock_node_t, next) == 8,
+	   "Rust/C mcs_lock_node_t next offset mismatch");
+ABI_ASSERT(ABI_OFFSET(mcs_lock_node_t, irqsave) == 16,
+	   "Rust/C mcs_lock_node_t irqsave offset mismatch");
+ABI_ASSERT(sizeof(struct ihk_page_allocator_desc) == 192,
+	   "Rust/C ihk_page_allocator_desc size mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ihk_page_allocator_desc, start) == 0,
+	   "Rust/C ihk_page_allocator_desc start offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ihk_page_allocator_desc, end) == 8,
+	   "Rust/C ihk_page_allocator_desc end offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ihk_page_allocator_desc, last) == 16,
+	   "Rust/C ihk_page_allocator_desc last offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ihk_page_allocator_desc, count) == 20,
+	   "Rust/C ihk_page_allocator_desc count offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ihk_page_allocator_desc, flag) == 24,
+	   "Rust/C ihk_page_allocator_desc flag offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ihk_page_allocator_desc, shift) == 28,
+	   "Rust/C ihk_page_allocator_desc shift offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ihk_page_allocator_desc, lock) == 64,
+	   "Rust/C ihk_page_allocator_desc lock offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ihk_page_allocator_desc, list) == 128,
+	   "Rust/C ihk_page_allocator_desc list offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ihk_page_allocator_desc, map) == 144,
+	   "Rust/C ihk_page_allocator_desc map offset mismatch");
+ABI_ASSERT(sizeof(ihk_atomic_t) == 4,
+	   "Rust/C ihk_atomic_t size mismatch");
+ABI_ASSERT(ABI_OFFSET(ihk_atomic_t, counter) == 0,
+	   "Rust/C ihk_atomic_t counter offset mismatch");
+ABI_ASSERT(sizeof(struct ihk_mc_numa_node) == 256,
+	   "Rust/C ihk_mc_numa_node size mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ihk_mc_numa_node, id) == 0,
+	   "Rust/C ihk_mc_numa_node id offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ihk_mc_numa_node, linux_numa_id) == 4,
+	   "Rust/C ihk_mc_numa_node linux_numa_id offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ihk_mc_numa_node, type) == 8,
+	   "Rust/C ihk_mc_numa_node type offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ihk_mc_numa_node, allocators) == 16,
+	   "Rust/C ihk_mc_numa_node allocators offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ihk_mc_numa_node, nodes_by_distance) == 32,
+	   "Rust/C ihk_mc_numa_node nodes_by_distance offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ihk_mc_numa_node, zeroing_workers) == 40,
+	   "Rust/C ihk_mc_numa_node zeroing_workers offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ihk_mc_numa_node, nr_to_zero_pages) == 44,
+	   "Rust/C ihk_mc_numa_node nr_to_zero_pages offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ihk_mc_numa_node, zeroed_list) == 48,
+	   "Rust/C ihk_mc_numa_node zeroed_list offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ihk_mc_numa_node, to_zero_list) == 56,
+	   "Rust/C ihk_mc_numa_node to_zero_list offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ihk_mc_numa_node, free_chunks) == 64,
+	   "Rust/C ihk_mc_numa_node free_chunks offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ihk_mc_numa_node, lock) == 128,
+	   "Rust/C ihk_mc_numa_node lock offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ihk_mc_numa_node, nr_pages) == 192,
+	   "Rust/C ihk_mc_numa_node nr_pages offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ihk_mc_numa_node, nr_free_pages) == 200,
+	   "Rust/C ihk_mc_numa_node nr_free_pages offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ihk_mc_numa_node, min_addr) == 208,
+	   "Rust/C ihk_mc_numa_node min_addr offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ihk_mc_numa_node, max_addr) == 216,
+	   "Rust/C ihk_mc_numa_node max_addr offset mismatch");

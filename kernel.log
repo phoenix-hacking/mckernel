@@ -3168,3 +3168,282 @@ Update 2026-05-17 22:23 EDT:
   - The Rocky Linux + McKernel baseline is now working through the focused V11
     gate with required LTP and XPMEM prerequisites present.
   - Rust conversion was intentionally not started in this pass.
+
+Update 2026-05-17 23:30 EDT:
+- Reconfirmed the accepted Rocky Linux + McKernel baseline, then started Rust
+  conversion with the page allocator.
+- Baseline before allocator edits:
+  - V10 passed with log `/tmp/mckernel-v10-20260517-231705.log`.
+  - Required focused V11 passed with log directory
+    `/tmp/mckernel-v11-focused-20260517-231859`.
+- Rust allocator work:
+  - Added `kernel/rust/page_alloc.rs`.
+  - Rust now exports C ABI replacements for
+    `__page_alloc_rbtree_free_range()` and
+    `__page_alloc_rbtree_alloc_pages()` when ENABLE_RUST_KERNEL is on.
+  - `lib/page_alloc.c` keeps the C helper implementations for
+    ENABLE_RUST_KERNEL=OFF fallback builds and uses the Rust symbols only under
+    `MCKERNEL_RUST_PAGE_ALLOC_RBTREE`.
+  - Added ABI checks for `struct rb_node`, `struct rb_root`, and
+    `struct free_chunk`.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with allocator-helper
+    coverage for coalescing, aligned allocation, exact allocation, overlap
+    rejection, and exhaustion. The Rust object unresolved-symbol and SIMD
+    checks still pass.
+- Validation after allocator Rust port:
+  - `kernel/rust/tests/run_equivalence.sh` passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed.
+  - C fallback configured in `/tmp/mckernel-rocky-c-fallback` with
+    `-DENABLE_RUST_KERNEL=OFF`, and
+    `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - V10 passed after reinstall with log
+    `/tmp/mckernel-v10-20260517-232911.log`.
+  - Required focused V11 passed after reinstall with log directory
+    `/tmp/mckernel-v11-focused-20260517-233048`.
+- Focused V11 after the Rust allocator helper port passed strace issues 943,
+  944, 945, 946, 960, and 961; strace test1/test2; strace-bundle
+  `ptrace_setoptions`, `qual_syscall`, `stat`, and `strace-f`; local probes
+  `C1176T03`, `C1176T04`, `futex_wake_op`, `C1399T01`, `CT_001`, host-strace
+  CT_001 no delegated Linux `time`, `C1324T02`, and `C1324T03`; required LTP
+  tests `futex_wait01`, `futex_wait02`, `futex_wait03`, `futex_wait04`,
+  `futex_wait_bitset01`, `futex_wait_bitset02`, `futex_wake01`,
+  `futex_wake02`, `futex_wake03`, `process_vm01`, `time01`, and `fork01`; and
+  in-repo XPMEM tests `XTP_001` through `XTP_007` and `XTP_901` through
+  `XTP_905`.
+- Remaining strict upstream gaps are unchanged: stock large-page runtime needs
+  a larger VM, issue-1324 `C1324T01` still reaches `fork()` `ENOMEM` before
+  ptrace on this VM, and no x86_64 mcexec-options suite is present in this
+  checkout.
+
+Update 2026-05-17 23:53 EDT:
+- Continued the Rust page allocator phase while preserving both C and Rust
+  versions.
+- Implementation:
+  - Added Rust layout mirrors and compile-time assertions for
+    `struct list_head`, `mcs_lock_node_t`, and
+    `struct ihk_page_allocator_desc`.
+  - Added Rust C ABI no-lock helpers for the generic bitmap-backed page
+    allocator:
+    `__ihk_pagealloc_large_nolock()`, `__ihk_pagealloc_alloc_nolock()`,
+    `__ihk_pagealloc_reserve_nolock()`, `__ihk_pagealloc_free_nolock()`,
+    `__ihk_pagealloc_count_nolock()`, and
+    `__ihk_pagealloc_query_free_nolock()`.
+  - Kept exported page allocator symbols in C wrappers so MCS lock and IRQ
+    state handling remain in the original C path.
+  - Added `MCKERNEL_RUST_PAGEALLOC_BITMAP` only for Rust-enabled builds; the
+    Rust-disabled C fallback build still uses the original C allocator logic.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with bitmap page allocator
+    wrapper equivalence coverage. The new line is
+    `page_alloc_bitmap ok digest=d699dc763517ab2c`.
+- Local validation:
+  - `kernel/rust/tests/run_equivalence.sh` passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `git diff --check` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh scripts/rocky-rust-validation.sh scripts/rocky-v11-focused.sh`
+    passed.
+  - Rust object exports now include the rbtree helper symbols and the six
+    bitmap allocator no-lock helper symbols; unresolved symbols are still only
+    `ihk_mc_chk_page_address`, `phys_to_virt`, `virt_to_phys`, and
+    `zero_at_free`.
+- Runtime validation after reinstall:
+  - V10 smoke passed with log `/tmp/mckernel-v10-20260517-234955.log`.
+  - V10 covered `mcexec /bin/true`, relative `mcexec hostname`, absolute
+    `mcexec /usr/bin/hostname`, and `mcstat`, then shut down cleanly.
+  - Required focused V11 passed with log directory
+    `/tmp/mckernel-v11-focused-20260517-235120` and tee log
+    `/tmp/mckernel-v11-20260517-235120.log`.
+  - Focused V11 passed strace issues 943, 944, 945, 946, 960, and 961; strace
+    test1/test2; strace-bundle `ptrace_setoptions`, `qual_syscall`, `stat`,
+    and `strace-f`; local probes `C1176T03`, `C1176T04`, `futex_wake_op`,
+    `C1399T01`, `CT_001`, host-strace CT_001 no delegated Linux `time`,
+    `C1324T02`, and `C1324T03`; required LTP tests `futex_wait01`,
+    `futex_wait02`, `futex_wait03`, `futex_wait04`, `futex_wait_bitset01`,
+    `futex_wait_bitset02`, `futex_wake01`, `futex_wake02`, `futex_wake03`,
+    `process_vm01`, `time01`, and `fork01`; and in-repo XPMEM tests
+    `XTP_001` through `XTP_007` and `XTP_901` through `XTP_905`.
+  - Post-run cleanup was clean: no `mcctrl`, `ihk`, or `ihk_smp_x86_64`
+    modules; no `/dev/mcd*` or `/dev/mcos*`; and no stale `mcexec`, `strace`,
+    `ihkmond`, `mcstop+release`, `mcreboot`, `ihkosctl`, or `mcctrl`
+    processes.
+- Remaining strict upstream gaps are unchanged:
+  - Stock large-page runtime needs a larger VM.
+  - issue-1324 `C1324T01` still reaches `fork()` `ENOMEM` before ptrace on
+    this VM.
+  - This checkout still has no x86_64 mcexec-options suite.
+- Path forward:
+  - Keep Phase 4 focused on allocator internals.
+  - Next safe Rust slice is `__ihk_pagealloc_zero_free_pages()` as a no-lock
+    helper behind the C lock/log wrapper, or the rbtree reserve/get-root helper
+    pair needed before higher NUMA allocator migration.
+  - Do not move `ihk_numa_alloc_pages()`/`ihk_numa_free_pages()` until the
+    helper-level allocator ABI and stress coverage remain green across V10 and
+    required V11.
+
+Update 2026-05-18 00:07 EDT:
+- Continued the Rust page allocator phase with both C and Rust versions kept
+  buildable.
+- Implementation:
+  - Added Rust `__ihk_pagealloc_zero_free_pages_nolock()` and kept exported
+    `__ihk_pagealloc_zero_free_pages()` in C so existing kprintf behavior,
+    MCS locking, and IRQ state handling stay in the C wrapper.
+  - Added Rust `__page_alloc_rbtree_reserve_pages()` and
+    `__page_alloc_rbtree_get_root_chunk()` behind
+    `MCKERNEL_RUST_PAGE_ALLOC_RBTREE`.
+  - Added a Rust zero-page helper that clears through volatile u64 stores so
+    the kernel Rust object does not depend on external memset or SIMD codegen.
+  - Extended `kernel/rust/tests/run_equivalence.sh` to cover rbtree reserve,
+    rbtree get-root, and zero-free page behavior. The bitmap allocator harness
+    maps allocator physical addresses into a static page arena and verifies
+    that only free pages are zeroed.
+- Local validation:
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `page_alloc ok digest=bbeef5e7f59e821f` and `page_alloc_bitmap ok
+    digest=2b88fa7cbcf7b56f`.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `git diff --check` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh scripts/rocky-rust-validation.sh scripts/rocky-v11-focused.sh`
+    passed.
+  - Rust object exports now include rbtree free/alloc/reserve/get-root helpers,
+    the six bitmap allocator no-lock helpers, and the zero-free no-lock helper.
+    Unresolved symbols are still only `ihk_mc_chk_page_address`,
+    `phys_to_virt`, `virt_to_phys`, and `zero_at_free`.
+- Runtime validation after reinstall:
+  - V10 smoke passed with log `/tmp/mckernel-v10-20260518-000344.log`.
+  - V10 covered `mcexec /bin/true`, relative `mcexec hostname`, absolute
+    `mcexec /usr/bin/hostname`, and `mcstat`, then shut down cleanly.
+  - Required focused V11 passed with log directory
+    `/tmp/mckernel-v11-focused-20260518-000546` and tee log
+    `/tmp/mckernel-v11-20260518-000546.log`.
+  - Focused V11 passed strace issues 943, 944, 945, 946, 960, and 961; strace
+    test1/test2; strace-bundle `ptrace_setoptions`, `qual_syscall`, `stat`,
+    and `strace-f`; local probes `C1176T03`, `C1176T04`, `futex_wake_op`,
+    `C1399T01`, `CT_001`, host-strace CT_001 no delegated Linux `time`,
+    `C1324T02`, and `C1324T03`; required LTP tests `futex_wait01`,
+    `futex_wait02`, `futex_wait03`, `futex_wait04`, `futex_wait_bitset01`,
+    `futex_wait_bitset02`, `futex_wake01`, `futex_wake02`, `futex_wake03`,
+    `process_vm01`, `time01`, and `fork01`; and in-repo XPMEM tests
+    `XTP_001` through `XTP_007` and `XTP_901` through `XTP_905`.
+- Remaining strict upstream gaps are unchanged:
+  - Stock large-page runtime needs a larger VM.
+  - issue-1324 `C1324T01` still reaches `fork()` `ENOMEM` before ptrace on
+    this VM.
+  - This checkout still has no x86_64 mcexec-options suite.
+- Path forward:
+  - Keep Phase 4 on allocator internals.
+  - Next safe Rust slice is `ihk_numa_add_free_pages()` after allocator
+    helper-level stress is widened.
+  - Keep `ihk_numa_alloc_pages()` and `ihk_numa_free_pages()` in C until the
+    NUMA add/free helper path is validated across equivalence, V10, and
+    required V11.
+
+Update 2026-05-18 00:17 EDT:
+- Pushed one more allocator conversion slice after the zero-free and rbtree
+  reserve/get-root runtime gates passed.
+- Implementation:
+  - Added Rust ABI mirrors and C/Rust layout assertions for `ihk_atomic_t` and
+    `struct ihk_mc_numa_node`.
+  - Added Rust `__ihk_numa_add_free_pages()` to own the helper body for
+    incoming range zeroing, rbtree free insertion, min/max physical address
+    tracking, and `nr_pages`/`nr_free_pages` accounting.
+  - Kept exported `ihk_numa_add_free_pages()` in C as the compatibility and
+    error-logging wrapper.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with NUMA add-free
+    coverage for zeroed page tails, adjacent chunk merge, overlap rejection,
+    min/max tracking, accounting, and allocation from the resulting free tree.
+- Local validation:
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `page_alloc ok digest=bbeef5e7f59e821f` and `page_alloc_bitmap ok
+    digest=769eacea14c35aa8`.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `git diff --check` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh scripts/rocky-rust-validation.sh scripts/rocky-v11-focused.sh`
+    passed.
+  - Rust object exports now include `__ihk_numa_add_free_pages()` in addition
+    to the rbtree and bitmap page allocator helper set. Unresolved symbols are
+    still only `ihk_mc_chk_page_address`, `phys_to_virt`, `virt_to_phys`, and
+    `zero_at_free`.
+- Runtime validation after reinstall:
+  - V10 smoke passed with log `/tmp/mckernel-v10-20260518-001347.log`.
+  - Required focused V11 passed with log directory
+    `/tmp/mckernel-v11-focused-20260518-001513` and tee log
+    `/tmp/mckernel-v11-20260518-001513.log`.
+  - Focused V11 passed the same accepted strace, local issue, required LTP,
+    and in-repo XPMEM coverage as the previous allocator gate. `C1324T01`
+    remains a classified small-VM `fork()` `ENOMEM` skip before ptrace.
+- Path forward:
+  - Do not jump directly into `ihk_numa_alloc_pages()` or
+    `ihk_numa_free_pages()`.
+  - First widen allocator-specific stress for NUMA add/free accounting and the
+    deferred-zero llist movement.
+  - A bounded next Rust candidate is `__ihk_numa_zero_free_pages()` after that
+    stress exists.
+
+Update 2026-05-18 01:34 EDT:
+- Pushed a larger allocator conversion slice to get beyond the previous
+  one-percent cadence while keeping C and Rust builds alive.
+- Implementation:
+  - Added Rust private llist and atomic helpers inside `kernel/rust/page_alloc.rs`
+    for allocator-local deferred-zero handling.
+  - Added Rust `__ihk_numa_zero_free_pages_node()` to process one NUMA node's
+    `to_zero_list`, zero page payloads after `struct free_chunk`, move chunks
+    to `zeroed_list`, and update `nr_to_zero_pages`.
+  - Kept the exported C `__ihk_numa_zero_free_pages()` wrapper responsible for
+    the all-node traversal and `zero_at_free` policy check.
+  - Added Rust `__ihk_numa_alloc_pages_nolock()` to drain `zeroed_list` into
+    the rbtree free allocator, opportunistically run the Rust node-zero helper
+    when free pages are short, allocate through the Rust rbtree allocator, and
+    update `nr_free_pages`.
+  - Kept exported C `ihk_numa_alloc_pages()` responsible for CPU-local-cache
+    precheck, MCS lock/unlock, exported ABI, and debug logging.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with deferred-zero list
+    movement, zeroing threshold behavior, and NUMA allocation-from-zeroed-list
+    coverage. Latest allocator digest:
+    `page_alloc_bitmap ok digest=55907c0dc3681134`.
+- Local validation:
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `page_alloc ok digest=bbeef5e7f59e821f` and `page_alloc_bitmap ok
+    digest=55907c0dc3681134`.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `git diff --check` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh scripts/rocky-rust-validation.sh scripts/rocky-v11-focused.sh`
+    passed.
+  - Rust object exports now include `__ihk_numa_add_free_pages`,
+    `__ihk_numa_zero_free_pages_node`, and
+    `__ihk_numa_alloc_pages_nolock` in addition to the earlier page allocator
+    helpers. Unresolved Rust object symbols are still only
+    `ihk_mc_chk_page_address`, `phys_to_virt`, `virt_to_phys`, and
+    `zero_at_free`.
+- Runtime validation:
+  - V10 smoke passed with log `/tmp/mckernel-v10-20260518-012700.log`.
+  - First required focused V11 run after this wider conversion hit only the
+    `ltp-futex_wait_bitset02` timing threshold, with log directory
+    `/tmp/mckernel-v11-focused-20260518-012938`; boot kmsg showed no panic or
+    allocator error.
+  - Required focused V11 rerun passed with log directory
+    `/tmp/mckernel-v11-focused-20260518-013200` and tee log
+    `/tmp/mckernel-v11-20260518-013200.log`.
+  - The passing focused V11 run covered the accepted strace issues, strace
+    bundle tests, local issue probes, required LTP futex/process/time/fork
+    tests, and XPMEM `XTP_001` through `XTP_007` plus `XTP_901` through
+    `XTP_905`. `C1324T01` remains a classified small-VM `fork()` `ENOMEM`
+    case before ptrace.
+- Path forward:
+  - Next bounded allocator candidates are direct free-to-rbtree and deferred
+    free enqueue helpers behind C wrappers.
+  - Keep full exported `ihk_numa_free_pages()` orchestration and IKC/Linux
+    zero-request handling in C until V12 stress covers deferred frees across
+    CPUs and zero-at-free transitions.

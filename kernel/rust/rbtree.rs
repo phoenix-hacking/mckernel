@@ -16,14 +16,14 @@ const RB_BLACK: CULong = 1;
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct RbNode {
-    __rb_parent_color: CULong,
-    rb_right: *mut RbNode,
-    rb_left: *mut RbNode,
+    pub(crate) __rb_parent_color: CULong,
+    pub(crate) rb_right: *mut RbNode,
+    pub(crate) rb_left: *mut RbNode,
 }
 
 #[repr(C)]
 pub struct RbRoot {
-    rb_node: *mut RbNode,
+    pub(crate) rb_node: *mut RbNode,
 }
 
 #[repr(C)]
@@ -76,6 +76,17 @@ unsafe fn rb_set_parent(rb: *mut RbNode, p: *mut RbNode) {
 #[inline(always)]
 unsafe fn rb_set_parent_color(rb: *mut RbNode, p: *mut RbNode, color: CULong) {
     (*rb).__rb_parent_color = p as CULong | color;
+}
+
+pub(crate) unsafe fn rb_link_node(
+    node: *mut RbNode,
+    parent: *mut RbNode,
+    rb_link: *mut *mut RbNode,
+) {
+    core::ptr::write_volatile(&raw mut (*node).__rb_parent_color, parent as CULong);
+    core::ptr::write_volatile(&raw mut (*node).rb_left, null_mut());
+    core::ptr::write_volatile(&raw mut (*node).rb_right, null_mut());
+    core::ptr::write_volatile(rb_link, node);
 }
 
 #[inline(always)]

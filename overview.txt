@@ -1,7 +1,7 @@
 McKernel Rust Migration Overview
-Updated: 2026-05-17
+Updated: 2026-05-18
 
-Overall Rust ownership estimate: 2%
+Overall Rust ownership estimate: 5%
 
 How to read this number
 ------------------------------------------------------------
@@ -22,7 +22,7 @@ Rust build/link foundation                   90   Rust object builds and links i
 ABI/layout foundation                        10   Initial shared structs covered; many kernel structs still need assertions
 Shared primitives                            42   rbtree, llist, bitmap core, zero-area search, and region helpers ported
 x86_64 memory management                      0   Still C
-Page allocator                                0   Still C
+Page allocator                               16   Rust owns rbtree helper cluster, rbtree reserve/get-root helpers, bitmap-backed no-lock allocator internals, zero-free no-lock helper, NUMA add-free, NUMA zero-free node helper, and NUMA alloc no-lock body; public free orchestration, locks/logging, CPU-local-cache fast path, and IKC zero requests still C
 Process/VM management                         0   Still C
 Syscall core                                  0   Still C
 Scheduler/timers/wait/futex                   0   Still C
@@ -31,7 +31,7 @@ host/IKC/mcctrl/IHK modules              0 Rust   Compatibility patches only
 User tools                                    0   Still C
 arm64                                         0   Deferred until x86_64 stabilizes
 
-Overall estimate: 2% Rust-owned.
+Overall estimate: 5% Rust-owned.
 
 This percentage should be treated as a functional-area estimate, not a strict
 line-count. A later phase can add an automated LOC counter.
@@ -48,8 +48,37 @@ Current completed Rust-owned behavior
   bitmap_allocate_region(), and bitmap_release_region() when
   ENABLE_RUST_KERNEL is on, while the C implementations remain available for
   fallback builds.
+- Rust now owns the first page-allocator rbtree helper cluster
+  `__page_alloc_rbtree_free_range()` and
+  `__page_alloc_rbtree_alloc_pages()` when ENABLE_RUST_KERNEL is on, while the
+  C helper implementations remain available for fallback builds.
+- Rust now owns the generic bitmap-backed page allocator no-lock helper
+  cluster when ENABLE_RUST_KERNEL is on:
+  `__ihk_pagealloc_large_nolock()`, `__ihk_pagealloc_alloc_nolock()`,
+  `__ihk_pagealloc_reserve_nolock()`, `__ihk_pagealloc_free_nolock()`,
+  `__ihk_pagealloc_count_nolock()`, and
+  `__ihk_pagealloc_query_free_nolock()`. The exported C page allocator API and
+  MCS lock/IRQ handling remain in C wrappers, and C fallback builds still use
+  the original C implementation.
+- Rust now owns the no-lock zero-free helper
+  `__ihk_pagealloc_zero_free_pages_nolock()` behind the C exported
+  `__ihk_pagealloc_zero_free_pages()` lock/log wrapper.
+- Rust now owns the rbtree reserve/get-root helper pair:
+  `__page_alloc_rbtree_reserve_pages()` and
+  `__page_alloc_rbtree_get_root_chunk()`.
+- Rust now owns the `__ihk_numa_add_free_pages()` helper body behind the
+  exported C logging wrapper, including incoming range zeroing, rbtree
+  insertion, min/max tracking, and free-page accounting.
+- Rust now owns the single-node deferred-zero helper
+  `__ihk_numa_zero_free_pages_node()` while the C wrapper still owns the
+  all-node traversal and zero-at-free policy check.
+- Rust now owns the under-lock NUMA allocation body
+  `__ihk_numa_alloc_pages_nolock()` while the exported C
+  `ihk_numa_alloc_pages()` wrapper still owns the CPU-local-cache precheck,
+  MCS lock/unlock, and debug logging.
 - Initial ABI/layout checks exist for shared structures.
-- Primitive equivalence testing exists in kernel/rust/tests/run_equivalence.sh.
+- Primitive and allocator-helper equivalence testing exists in
+  kernel/rust/tests/run_equivalence.sh.
 
 Current validation status
 ------------------------------------------------------------
@@ -57,26 +86,38 @@ Current validation status
 Last completed controlled verification step:
 - V10 minimal workloads still repeat cleanly on the Rocky VM after the V11
   ptrace, gettime, VDSO, strace-suite, and Rocky harness fixes. Latest
-  completed rerun was the escalated direct command on 2026-05-17:
+  completed rerun was the direct TTY Rocky command on 2026-05-18:
   `scripts/rocky-rust-validation.sh --skip-deps --skip-rust --boot-smoke --trace-smoke --yes --jobs 2`.
 - The preserved command was:
   `scripts/rocky-rust-validation.sh --skip-deps --skip-rust --boot-smoke --trace-smoke --yes --jobs 2`
 - The run configured, built, installed, cleaned stale state, booted McKernel,
   passed `mcexec /bin/true`, relative `mcexec hostname`, absolute
   `mcexec /usr/bin/hostname`, and `mcstat`, then shut down.
-- V11 focused Rocky regression now has a single runnable entry point:
-  `scripts/rocky-v11-focused.sh --timeout 120`.
-- The latest focused V11 log directory is:
-  `/tmp/mckernel-v11-focused-20260517-194702`.
+- V11 focused Rocky regression now has a single runnable entry point. The
+  required LTP/XPMEM focused gate is:
+  `scripts/rocky-v11-focused.sh --timeout 120 --require-ltp --require-xpmem`.
+- Latest V10 log after the Rust NUMA zero-free and alloc no-lock helper ports:
+  `/tmp/mckernel-v10-20260518-012700.log`.
+- The latest focused V11 log directory after the Rust NUMA zero-free and alloc
+  no-lock helper ports is:
+  `/tmp/mckernel-v11-focused-20260518-013200`.
+- The tee log for that V11 run is:
+  `/tmp/mckernel-v11-20260518-013200.log`.
 - That run classified missing external prerequisites, built focused test
   binaries, booted McKernel with two McKernel CPUs and 1536M memory, passed
   strace issues 943, 944, 945, 946, 960, and 961; `strace/test1.sh`;
   `strace/test2.sh`; bundle tests `ptrace_setoptions`, `qual_syscall`,
   `stat`, and `strace-f`; `C1176T03`; `C1176T04`; `futex_wake_op`;
   `C1399T01`; `CT_001` including host-strace confirmation that Linux `time`
-  was not delegated; and issue-1324 subcases `C1324T03` and `C1324T02`.
+  was not delegated; issue-1324 subcases `C1324T03` and `C1324T02`;
+  required LTP futex/process/time/fork tests; and in-repo XPMEM
+  `XTP_001` through `XTP_007` and `XTP_901` through `XTP_905`.
 - The same focused run classified `C1324T01` as still blocked by this VM size:
   it fails at `fork()` with `ENOMEM` before reaching ptrace.
+- The first V11 run after this wider allocator slice
+  (`/tmp/mckernel-v11-focused-20260518-012938`) hit a timing-only
+  `ltp-futex_wait_bitset02` threshold with waits around 230-257 ms. The rerun
+  above passed; boot kmsg showed no panic or allocator error.
 - The previous `RIP=0x1000` hostname SIGSEGV was fixed by making user-visible
   zero-fill mmap/page-fault paths explicitly clear pages instead of relying on
   allocator `zero_at_free` state.
@@ -108,13 +149,26 @@ Last completed controlled verification step:
   `mcexec`, `mcstat`, `ihkconfig`, and `ihkosctl`.
 - Earlier V0 through V6 checks are satisfied for this Rocky validation path.
 
-Latest local source verification after the V11 VDSO/time fixes:
+Latest local source verification after the Rust allocator helper ports:
 - `git diff --check` passed.
 - `bash -n` passed for `scripts/rocky-rust-validation.sh`,
   `scripts/rocky-v11-focused.sh`, and the touched shell test harnesses.
 - `kernel/rust/tests/run_equivalence.sh` passed.
+- The equivalence harness now includes rbtree reserve/get-root coverage, page
+  allocator zero-free coverage, NUMA add-free accounting/tree coverage,
+  single-node deferred-zero movement, and NUMA allocation from the zeroed-list
+  path. Latest allocator lines include
+  `page_alloc ok digest=bbeef5e7f59e821f` and `page_alloc_bitmap ok
+  digest=55907c0dc3681134`.
 - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
   passed after runtime testing.
+- `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+  passed for the Rust-disabled C fallback image.
+- Rust object exported the expected page allocator symbols, including
+  `__ihk_numa_add_free_pages()`, `__ihk_numa_zero_free_pages_node()`, and
+  `__ihk_numa_alloc_pages_nolock()`. It still has only the expected
+  unresolved kernel symbols: `ihk_mc_chk_page_address`, `phys_to_virt`,
+  `virt_to_phys`, and `zero_at_free`.
 - `make -C test/strace/issue clean all` passed after adding the missing
   `<ctype.h>` includes, clearing the previous `isspace()` warning.
 - V2 passed: `mckernel_rust_obj` built in `/tmp/mckernel-wsl-rust-zeroarea`.
@@ -128,10 +182,12 @@ Latest local source verification after the V11 VDSO/time fixes:
   `/lib/modules/6.6.87.2-microsoft-standard-WSL2/build`.
 
 Next verification step:
-- Install missing external prerequisites or use a larger Rocky VM if full V11
-  completion is required before risky Rust subsystem ports.
+- Continue the allocator phase by expanding Rust ownership beyond the current
+  rbtree helper, bitmap-backed no-lock, zero-free, and rbtree reserve/get-root
+  helper set plus NUMA add-free/zero-free/alloc no-lock body only after the
+  current V10 and required-LTP/XPMEM V11 gates are preserved.
 - The covered Rocky control-plane path is now clean through V10 and the
-  focused V11 local runner.
+  focused V11 runner with required LTP and XPMEM prerequisites.
 - V11 local probes now cover runnable futex, robust-list, and syscall-time
   delegation behavior without external LTP:
   `/tmp/mckernel-v11-focused-20260517-194702`.
@@ -148,24 +204,25 @@ Next verification step:
 - `test/large_page/x86_64` now builds all 4K test binaries locally:
   `001_4K`, `101_4K`, `201_4K`, `301_4K`, `401_4K`, `402_4K`, `501_4K`, and
   `601_4K`.
-- Remaining V11 runtime prerequisites:
-  local LTP is missing under `~/ltp/testcases/bin`, XPMEM is missing
-  `$HOME/usr/lib/modules/$(uname -r)/xpmem.ko`, `$HOME/xpmem/test`, and
-  `/dev/xpmem`, this tree only contains `test/mcexec_options/arm64` with no
-  x86_64 mcexec-options suite, and the stock large-page runtime recipe needs a
-  larger VM.
+- Remaining strict upstream V11 gaps:
+  this tree only contains `test/mcexec_options/arm64` with no x86_64
+  mcexec-options suite, the stock large-page runtime recipe needs a larger VM,
+  and issue-1324 `C1324T01` still reaches `fork()` `ENOMEM` before ptrace on
+  this small Rocky VM.
 - Preserve the V10 repeatability command and log rule for future regression
   checks:
   `scripts/rocky-rust-validation.sh --skip-deps --skip-rust --boot-smoke --trace-smoke --yes --jobs 2`
   with full logs under `/tmp/mckernel-v10-YYYYMMDD-HHMMSS.log`.
 
 Known failing or blocked step:
-- Full regression/runtime validation is not complete yet.
-- V11 strace, locally runnable futex/robust-list/syscall-time probes, and the
-  runnable issue-1324 small-VM subcases are clean. V11 as a whole is still open
-  until missing external prerequisites are installed or a larger/substitute
-  Rocky environment is provided for LTP, XPMEM, large-page runtime,
-  issue-1324 fork/ptrace memory pressure, and x86_64 mcexec options.
+- Focused Rocky runtime validation is complete for the accepted gate: V10
+  smoke and required-LTP/XPMEM V11 pass after the Rust rbtree allocator helper
+  port, Rust bitmap allocator no-lock helper port, Rust zero-free no-lock
+  helper port, Rust rbtree reserve/get-root helper port, Rust NUMA add-free
+  helper port, Rust NUMA zero-free node helper port, and Rust NUMA alloc
+  no-lock body port.
+- Strict upstream V11 remains open for large-page runtime, issue-1324
+  fork/ptrace memory pressure, and a missing x86_64 mcexec-options suite.
 - The pre-existing dirty `ihk` submodule marker is still present from the local
   Rocky compatibility patch and was not changed while fixing the hostname
   SIGSEGV.
@@ -233,12 +290,13 @@ Next migration target
 ------------------------------------------------------------
 
 Recommended next code phase:
-- Phase 1: harden the Rust build foundation and make the Rust/C fallback checks
-  easier to run repeatedly.
-
-Recommended next risky code phase after that:
-- Phase 2: expand ABI/layout coverage before porting memory management.
+- Continue Phase 4 page allocator by porting more allocator internals behind
+  the existing C ABI, with a narrow allocator stress/equivalence test before
+  runtime validation.
 
 Reason:
-- Memory, process, and syscall ports depend on exact layout stability. Expanding
-  layout checks first reduces the chance of subtle C/Rust ABI drift.
+- The Rocky baseline is clean and the first allocator helper cluster now has
+  C/Rust equivalence plus V10/V11 runtime coverage. The next allocator work
+  should target direct free-to-tree and deferred free enqueue helpers while
+  leaving full public free orchestration and IKC/Linux zero requests in C until
+  stress coverage is wider.
