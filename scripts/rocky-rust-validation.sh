@@ -231,7 +231,25 @@ ensure_rust() {
 
 update_submodules() {
 	say "Initializing submodules"
-	git -C "$ROOT_DIR" submodule update --init --recursive
+	local git_probe="$ROOT_DIR/.git/.mckernel-write-test.$$"
+	local can_update_git=0
+
+	if (: >"$git_probe") >/dev/null 2>&1; then
+		rm -f "$git_probe"
+		can_update_git=1
+	fi
+
+	if [ "$can_update_git" -eq 1 ]; then
+		git -C "$ROOT_DIR" submodule update --init --recursive
+	elif git -C "$ROOT_DIR" submodule status --recursive |
+			awk 'NF && substr($1, 1, 1) == "-" { missing = 1 }
+			     END { exit missing ? 1 : 0 }'; then
+		echo "Git metadata is read-only; submodules are already initialized, skipping update."
+	else
+		echo "error: Git metadata is read-only and at least one submodule is missing." >&2
+		echo "Run submodule initialization from a writable checkout before Rocky validation." >&2
+		exit 1
+	fi
 
 	local ihk_patch="$ROOT_DIR/scripts/patches/ihk-linux-compat.patch"
 	if [ -f "$ihk_patch" ]; then

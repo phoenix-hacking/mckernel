@@ -19,8 +19,8 @@ awk 'BEGIN{ng=0; ok=0; print "*** test1 start"}
 	}
 	test1=1
 }
-/^syscall_9999/{
-	if ($0 ~/errno 38/) {
+/^(syscall_9999|syscall_0x270f)/{
+	if ($0 ~/(errno 38|ENOSYS)/) {
 		print "test1-2 syscal_9999 OK"
 		ok++
 	}
@@ -42,5 +42,7 @@ END {
 	printf("*** test1 end ok=%d ng=%d\n", ok, ng)
 	exit(ng)
 }' check.log
+rc=$?
 
 rm -f check.log test1
+exit $rc

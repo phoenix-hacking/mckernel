@@ -1,5 +1,5 @@
 McKernel Rust Migration Overview
-Updated: 2026-05-16
+Updated: 2026-05-17
 
 Overall Rust ownership estimate: 2%
 
@@ -18,7 +18,7 @@ Use this initial dashboard to track the migration:
 
 Area                                      Rust %   Status
 ----                                      ------   ------
-Rust build/link foundation                   90   Rust object builds and links into mckernel.img; boot-only smoke passed, workloads pending
+Rust build/link foundation                   90   Rust object builds and links into mckernel.img; V10 minimal smoke and focused V11 strace now repeat cleanly on Rocky
 ABI/layout foundation                        10   Initial shared structs covered; many kernel structs still need assertions
 Shared primitives                            42   rbtree, llist, bitmap core, zero-area search, and region helpers ported
 x86_64 memory management                      0   Still C
@@ -55,9 +55,51 @@ Current validation status
 ------------------------------------------------------------
 
 Last completed controlled verification step:
-- V9 McKernel boot only, completed on Rocky VM on 2026-05-13.
-- The boot-only validation printed `IHK/McKernel started.` and
-  `IHK/McKernel booted.`
+- V10 minimal workloads still repeat cleanly on the Rocky VM after the V11
+  ptrace, gettime, VDSO, strace-suite, and Rocky harness fixes. Latest
+  completed rerun was the escalated direct command on 2026-05-17:
+  `scripts/rocky-rust-validation.sh --skip-deps --skip-rust --boot-smoke --trace-smoke --yes --jobs 2`.
+- The preserved command was:
+  `scripts/rocky-rust-validation.sh --skip-deps --skip-rust --boot-smoke --trace-smoke --yes --jobs 2`
+- The run configured, built, installed, cleaned stale state, booted McKernel,
+  passed `mcexec /bin/true`, relative `mcexec hostname`, absolute
+  `mcexec /usr/bin/hostname`, and `mcstat`, then shut down.
+- V11 focused Rocky regression now has a single runnable entry point:
+  `scripts/rocky-v11-focused.sh --timeout 120`.
+- The latest focused V11 log directory is:
+  `/tmp/mckernel-v11-focused-20260517-194702`.
+- That run classified missing external prerequisites, built focused test
+  binaries, booted McKernel with two McKernel CPUs and 1536M memory, passed
+  strace issues 943, 944, 945, 946, 960, and 961; `strace/test1.sh`;
+  `strace/test2.sh`; bundle tests `ptrace_setoptions`, `qual_syscall`,
+  `stat`, and `strace-f`; `C1176T03`; `C1176T04`; `futex_wake_op`;
+  `C1399T01`; `CT_001` including host-strace confirmation that Linux `time`
+  was not delegated; and issue-1324 subcases `C1324T03` and `C1324T02`.
+- The same focused run classified `C1324T01` as still blocked by this VM size:
+  it fails at `fork()` with `ENOMEM` before reaching ptrace.
+- The previous `RIP=0x1000` hostname SIGSEGV was fixed by making user-visible
+  zero-fill mmap/page-fault paths explicitly clear pages instead of relying on
+  allocator `zero_at_free` state.
+- V11 focused strace still passes after the VDSO fallback change. Latest full
+  log: `/tmp/mckernel-v11-strace-suite5-20260517-191602.log`.
+- The clean V11 strace slice covered issue tests 943, 944, 945, 946, 960, and
+  961; `strace/test1.sh`; `strace/test2.sh`; and bundle tests
+  `ptrace_setoptions`, `qual_syscall`, `stat`, and `strace-f`.
+- The previous direct strace timeout after `PTRACE_SETOPTIONS` is no longer
+  current. Direct `strace` forms including `strace -o ... /bin/true` now exit
+  successfully under `mcexec`.
+- The V11 `stat`/`strace-f` panic was fixed by avoiding the missing
+  Rocky/RHEL host `vgtod_virt` data. The McKernel log records:
+  `x86 local gettime disabled: host vgtod data unavailable`.
+- A later local probe found that advertising the host VDSO without VGTOD made
+  glibc `time()` return `0` even though raw `SYS_time` returned correct epoch
+  seconds. McKernel now disables the user VDSO on this Rocky path and serves
+  `SYS_time` locally from the boot-time/TSC fallback. The boot kmsg records:
+  `vdso disabled: host vgtod data unavailable`.
+- Rocky strace expectations were updated for modern userspace behavior:
+  `open()` may trace as `openat`, invalid syscall names may appear as
+  `syscall_0x270f`/`ENOSYS`, and newer strace uses different
+  `PTRACE_SETOPTIONS` masks.
 - V8 Module load only also passed on Rocky VM.
 - `ihk`, `ihk_smp_x86_64`, and `mcctrl` loaded with return code 0 and appeared
   in `lsmod` before boot validation.
@@ -66,7 +108,15 @@ Last completed controlled verification step:
   `mcexec`, `mcstat`, `ihkconfig`, and `ihkosctl`.
 - Earlier V0 through V6 checks are satisfied for this Rocky validation path.
 
-Latest local source verification after the V10 hostname diagnostic expansion:
+Latest local source verification after the V11 VDSO/time fixes:
+- `git diff --check` passed.
+- `bash -n` passed for `scripts/rocky-rust-validation.sh`,
+  `scripts/rocky-v11-focused.sh`, and the touched shell test harnesses.
+- `kernel/rust/tests/run_equivalence.sh` passed.
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+  passed after runtime testing.
+- `make -C test/strace/issue clean all` passed after adding the missing
+  `<ctype.h>` includes, clearing the previous `isspace()` warning.
 - V2 passed: `mckernel_rust_obj` built in `/tmp/mckernel-wsl-rust-zeroarea`.
 - V3 passed: `kernel/rust/tests/run_equivalence.sh`.
 - V4 passed: Rust-enabled `mckernel.img` built in
@@ -78,29 +128,47 @@ Latest local source verification after the V10 hostname diagnostic expansion:
   `/lib/modules/6.6.87.2-microsoft-standard-WSL2/build`.
 
 Next verification step:
-- V10 minimal user workloads with bounded smoke-command timeouts.
+- Install missing external prerequisites or use a larger Rocky VM if full V11
+  completion is required before risky Rust subsystem ports.
+- The covered Rocky control-plane path is now clean through V10 and the
+  focused V11 local runner.
+- V11 local probes now cover runnable futex, robust-list, and syscall-time
+  delegation behavior without external LTP:
+  `/tmp/mckernel-v11-focused-20260517-194702`.
+- That probe booted McKernel with two McKernel CPUs, passed
+  `C1176T03` futex signal interruption, `C1176T04` two-CPU
+  `sched_setaffinity`/sleep, `futex_wake_op`, `C1399T01` robust-list
+  validation, `CT_001` syscall time, and confirmed host `mcexec` did not issue
+  a delegated Linux `time` syscall for the test.
+- An additional small-VM issue-1324 probe passed runnable 1 GiB mapping-edge
+  checks for `/proc/self/mem` and `sigaltstack`:
+  `/tmp/mckernel-v11-1324-small-20260517-192221.log`. The remaining
+  fork/ptrace subcase `C1324T01` still returns `ENOMEM` before ptrace on this
+  3.1 GiB VM, including with 2048M McKernel memory and with `-O` overcommit.
+- `test/large_page/x86_64` now builds all 4K test binaries locally:
+  `001_4K`, `101_4K`, `201_4K`, `301_4K`, `401_4K`, `402_4K`, `501_4K`, and
+  `601_4K`.
+- Remaining V11 runtime prerequisites:
+  local LTP is missing under `~/ltp/testcases/bin`, XPMEM is missing
+  `$HOME/usr/lib/modules/$(uname -r)/xpmem.ko`, `$HOME/xpmem/test`, and
+  `/dev/xpmem`, this tree only contains `test/mcexec_options/arm64` with no
+  x86_64 mcexec-options suite, and the stock large-page runtime recipe needs a
+  larger VM.
+- Preserve the V10 repeatability command and log rule for future regression
+  checks:
+  `scripts/rocky-rust-validation.sh --skip-deps --skip-rust --boot-smoke --trace-smoke --yes --jobs 2`
+  with full logs under `/tmp/mckernel-v10-YYYYMMDD-HHMMSS.log`.
 
 Known failing or blocked step:
-- Full workload/runtime validation is not complete yet.
-- V10 now reaches final user mode and `mcexec /bin/true` passes after the
-  floating-point default-state restore fix.
-- The current Rocky failure is the next smoke command, hostname execution. The
-  target process reaches dynamic loader and libc setup, then dies with SIGSEGV
-  after an instruction fetch at `RIP=0x1000`. Host-side `mcexec` exits with
-  status 139 because it mirrors the target signal.
-- The latest V10 matrix shows the failure is path-sensitive as well as
-  VDSO-sensitive: relative `mcexec --disable-vdso hostname` passes, but
-  absolute `mcexec --disable-vdso /usr/bin/hostname` still reaches `RIP=0x1000`.
-  That points the next diagnostic pass at initial stack, argv/env layout,
-  auxv/VDSO selection, and dynamic-loader return targets rather than treating
-  VDSO as the only variable.
-- The active diagnostic pass resets bounded `mcexec_v10:` counters per process
-  and records syscall returns, offload returns, VDSO/auxv setup, signal
-  delivery/default termination, fatal page-fault registers, initial stack
-  markers, and byte/ascii dumps for user-range pointers found in the fatal
-  register/stack state. This should show whether `0x1000` came from a bad
-  signal handler, VDSO/auxv value, argv/env stack setup, dynamic loader state,
-  or syscall return path.
+- Full regression/runtime validation is not complete yet.
+- V11 strace, locally runnable futex/robust-list/syscall-time probes, and the
+  runnable issue-1324 small-VM subcases are clean. V11 as a whole is still open
+  until missing external prerequisites are installed or a larger/substitute
+  Rocky environment is provided for LTP, XPMEM, large-page runtime,
+  issue-1324 fork/ptrace memory pressure, and x86_64 mcexec options.
+- The pre-existing dirty `ihk` submodule marker is still present from the local
+  Rocky compatibility patch and was not changed while fixing the hostname
+  SIGSEGV.
 - The Rocky validation script now wraps each V10 smoke command in a timeout so
   future runs stop at the first failing command and print command output plus
   recent McKernel kmsg.
@@ -108,9 +176,9 @@ Known failing or blocked step:
   `mcexec-true` failed or timed out, it printed status `0` and continued to
   `mcexec-hostname`. The wrapper now preserves the actual `timeout` status and
   stops at the first failing smoke command.
-- V10 smoke now runs `mcexec` with `--debug-mcexec`, can optionally run under
-  `strace` with `--trace-smoke`, and dumps Linux process state, Linux dmesg,
-  recent McKernel kmsg, and `mcexec_v10:` handoff markers on failure.
+- V10 smoke can run under `strace` with `--trace-smoke`, and dumps Linux
+  process state, Linux dmesg, recent McKernel kmsg, and `mcexec_v10:` handoff
+  markers on failure.
 - The smoke watchdog default is now 8 seconds. The script uses an explicit
   `setsid`-based watchdog instead of relying on GNU `timeout`, because a stuck
   kernel ioctl can prevent `timeout` from returning cleanly.
@@ -128,9 +196,9 @@ Known failing or blocked step:
   to continue V9 with the Linux-trampoline fallback and no persistent boot-arg
   changes.
 - V9 boot-only passed with the Linux-trampoline fallback. The boot log still
-  reported `Trampoline area: 0x0` and `error: allocating fp_regs pages`, so V10
-  should be treated as the next runtime boundary rather than assuming workloads
-  are already validated.
+  reported `Trampoline area: 0x0` and `error: allocating fp_regs pages`; keep
+  watching those messages during the repeat V10 run, but they are not blocking
+  the latest minimal workload smoke.
 - WSL remains blocked for real boot/runtime smoke testing by host module and
   kernel development tree limitations.
 - ihk-smp-x86_64 compatibility against Linux 6.6 needs more work before WSL can

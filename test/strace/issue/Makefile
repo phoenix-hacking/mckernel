@@ -1,5 +1,5 @@
 CC=gcc
-MCEXEC=../../../../mic/mcexec
+MCEXEC ?= /opt/mckernel-rust/bin/mcexec
 TARGET=943 944 945 946 960 961
 all:: $(TARGET)
 

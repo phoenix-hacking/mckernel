@@ -35,6 +35,7 @@
 #include <rusage_private.h>
 #include <memory.h>
 #include <ihk/debug.h>
+#include <elfcore.h>
 
 void terminate_mcexec(int, int);
 extern long do_sigaction(int sig, struct k_sigaction *act, struct k_sigaction *oact);
@@ -310,6 +311,15 @@ extern int num_processors;
 
 extern ihk_mc_user_context_t *lookup_user_context(struct thread *thread);
 
+static struct x86_user_context *
+ptrace_user_context(struct thread *thread)
+{
+	if (thread->ptrace_saved_uctx_valid) {
+		return &thread->ptrace_saved_uctx;
+	}
+	return lookup_user_context(thread);
+}
+
 long
 ptrace_read_user(struct thread *thread, long addr, unsigned long *value)
 {
@@ -321,7 +331,7 @@ ptrace_read_user(struct thread *thread, long addr, unsigned long *value)
 		return -EIO;
 	}
 	else if (addr < sizeof(struct user_regs_struct)) {
-		uctx = lookup_user_context(thread);
+		uctx = ptrace_user_context(thread);
 		if (!uctx) {
 			return -EIO;
 		}
@@ -365,7 +375,7 @@ ptrace_write_user(struct thread *thread, long addr, unsigned long value)
 		return -EIO;
 	}
 	else if (addr < sizeof(struct user_regs_struct)) {
-		uctx = lookup_user_context(thread);
+		uctx = ptrace_user_context(thread);
 		if (!uctx) {
 			return -EIO;
 		}
@@ -495,11 +505,62 @@ long ptrace_write_fpregs(struct thread *thread, void *fpregs)
 			sizeof(struct i387_fxsave_struct));
 }
 
+static long
+ptrace_read_gpregs(struct thread *thread, struct user_regs_struct *regs)
+{
+	long addr;
+	unsigned long *p;
+	long rc = 0;
+
+	memset(regs, '\0', sizeof(*regs));
+	for (addr = 0, p = (unsigned long *)regs;
+			addr < sizeof(*regs);
+			addr += sizeof(*p), p++) {
+		rc = ptrace_read_user(thread, addr, p);
+		if (rc) {
+			break;
+		}
+	}
+
+	return rc;
+}
+
+static long ptrace_write_gpregs(struct thread *thread,
+		const struct user_regs_struct *regs)
+{
+	long addr;
+	const unsigned long *p;
+	long rc = 0;
+
+	for (addr = 0, p = (const unsigned long *)regs;
+			addr < sizeof(*regs);
+			addr += sizeof(*p), p++) {
+		rc = ptrace_write_user(thread, addr, *p);
+		if (rc) {
+			break;
+		}
+	}
+
+	return rc;
+}
+
 long ptrace_read_regset(struct thread *thread, long type, struct iovec *iov)
 {
 	long rc = -EINVAL;
 
 	switch (type) {
+	case NT_PRSTATUS: {
+		struct user_regs_struct regs;
+
+		if (iov->iov_len > sizeof(regs)) {
+			iov->iov_len = sizeof(regs);
+		}
+		rc = ptrace_read_gpregs(thread, &regs);
+		if (rc == 0) {
+			rc = copy_to_user(iov->iov_base, &regs, iov->iov_len);
+		}
+		break;
+	}
 	case NT_X86_XSTATE:
 		if (thread->fp_regs == NULL) {
 			return -ENOMEM;
@@ -521,6 +582,21 @@ long ptrace_write_regset(struct thread *thread, long type, struct iovec *iov)
 	long rc = -EINVAL;
 
 	switch (type) {
+	case NT_PRSTATUS: {
+		struct user_regs_struct regs;
+
+		if (iov->iov_len > sizeof(regs)) {
+			iov->iov_len = sizeof(regs);
+		}
+		rc = ptrace_read_gpregs(thread, &regs);
+		if (rc == 0) {
+			rc = copy_from_user(&regs, iov->iov_base, iov->iov_len);
+		}
+		if (rc == 0) {
+			rc = ptrace_write_gpregs(thread, &regs);
+		}
+		break;
+	}
 	case NT_X86_XSTATE:
 		if (thread->fp_regs == NULL) {
 			return -ENOMEM;
@@ -544,6 +620,7 @@ void ptrace_report_signal(struct thread *thread, int sig)
 	struct mcs_rwlock_node_irqsave lock;
 	struct process *proc = thread->proc;
 	int parent_pid;
+	int wake_parent = 0;
 	struct siginfo info;
 
 	dkprintf("ptrace_report_signal, tid=%d, pid=%d\n", thread->tid, thread->proc->pid);
@@ -568,7 +645,10 @@ void ptrace_report_signal(struct thread *thread, int sig)
 	}
 
 	if (thread == proc->main_thread) {
-		proc->status = PS_DELAY_TRACED;
+		/* Avoid delayed wakeup from the context-switch path while
+		 * schedule() still holds the runqueue lock. */
+		proc->status = PS_TRACED;
+		wake_parent = 1;
 		parent_pid = proc->parent->pid;
 	}
 	else {
@@ -576,6 +656,10 @@ void ptrace_report_signal(struct thread *thread, int sig)
 		waitq_wakeup(&thread->report_proc->waitpid_q);
 	}
 	mcs_rwlock_writer_unlock(&proc->update_lock, &lock);
+
+	if (wake_parent) {
+		waitq_wakeup(&proc->parent->waitpid_q);
+	}
 
 	memset(&info, '\0', sizeof info);
 	info.si_signo = SIGCHLD;
@@ -1815,6 +1899,18 @@ int arch_setup_vdso()
 		goto out;
 	}
 
+	if (gettime_local_support && !vdso.vgtod_virt) {
+		kprintf("x86 local gettime disabled: host vgtod data unavailable\n");
+		gettime_local_support = 0;
+		tod_data.do_local = 0;
+	}
+	if (!vdso.vgtod_virt && vdso.vdso_npages > 0) {
+		kprintf("vdso disabled: host vgtod data unavailable\n");
+		vdso.vdso_npages = 0;
+		container_size = 0;
+		vdso_offset = 0;
+	}
+
 	if (vdso.vdso_npages <= 0) {
 		error = 0;
 		goto out;
@@ -2671,7 +2767,7 @@ time_t time(void) {
 	struct timespec ats;
 	time_t ret = 0;
 
-	if (gettime_local_support) {
+	if (gettime_local_support || tod_data.clocks_per_sec) {
 		calculate_time_from_tsc(&ats);
 		ret = ats.tv_sec;
 	}
@@ -2684,6 +2780,29 @@ time_t time(void) {
 	return ret;
 }
 
+static void calculate_time_from_tod_data(struct timespec *ts)
+{
+	unsigned long ver;
+	struct timespec delta;
+
+	do {
+		while ((ver = ihk_atomic64_read(&tod_data.version)) & 1) {
+			cpu_pause();
+		}
+
+		rmb();
+		*ts = tod_data.origin;
+		rmb();
+	} while (ver != ihk_atomic64_read(&tod_data.version));
+
+	if (!tod_data.clocks_per_sec) {
+		return;
+	}
+
+	tsc_to_ts(rdtsc(), &delta);
+	ts_add(ts, &delta);
+}
+
 void calculate_time_from_tsc(struct timespec *ts)
 {
 	unsigned long seq;
@@ -2691,6 +2810,11 @@ void calculate_time_from_tsc(struct timespec *ts)
 	unsigned long ns;
 	unsigned long delta;
 	struct vsyscall_gtod_data *gtod = vdso.vgtod_virt;
+
+	if (!gtod) {
+		calculate_time_from_tod_data(ts);
+		return;
+	}
 
 	do {
 		for (;;) {

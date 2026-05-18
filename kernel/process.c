@@ -1578,13 +1578,11 @@ int add_process_memory_range(struct process_vm *vm,
 			&& !(flag & (VR_REMOTE | VR_DEMAND_PAGING | VR_XPMEM))
 			&& ((flag & VR_PROT_MASK) != VR_PROT_NONE)) {
 
-		if (!zero_at_free) {
 #ifdef ARCH_MEMCLEAR
-			memclear((void *)phys_to_virt(phys), end - start);
+		memclear((void *)phys_to_virt(phys), end - start);
 #else
-			memset((void *)phys_to_virt(phys), 0, end - start);
+		memset((void *)phys_to_virt(phys), 0, end - start);
 #endif
-		}
 	}
 
 	/* Return range object if requested */
@@ -2232,9 +2230,7 @@ retry:
 #ifdef PROFILE_ENABLE
 			profile_event_add(PROFILE_page_fault_anon_clr, pgsize);
 #endif // PROFILE_ENABLE
-			if (!zero_at_free) {
-				memset(virt, 0, pgsize);
-			}
+			memset(virt, 0, pgsize);
 			phys = virt_to_phys(virt);
 			if (phys_to_page(phys)) {
 				dkprintf("%s: NOPHYS,phys=%lx,vmr(%lx-%lx),flag=%x,fa=%lx,reason=%x\n",

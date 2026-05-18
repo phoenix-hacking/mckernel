@@ -2559,3 +2559,560 @@ Local verification:
 - `scripts/rocky-rust-validation.sh --build-only --skip-deps --skip-rust
   --jobs 2` is still blocked on WSL by the missing running-kernel build tree:
   `/lib/modules/6.6.87.2-microsoft-standard-WSL2/build`.
+
+## Rocky V10 Minimal Workload Baseline Candidate
+
+Observed result:
+- A newer Rocky V10 run completed shutdown successfully after the V9 boot path
+  and the V10 minimal workload smoke.
+- V9 boot-only remains passed.
+- V10 passed `mcexec /bin/true`, relative `mcexec hostname`, absolute
+  `mcexec /usr/bin/hostname`, and `mcstat`.
+- The previous hostname SIGSEGV after an instruction fetch at `RIP=0x1000` is
+  no longer current for this run.
+
+Interpretation:
+- The runtime boundary has moved past trivial process launch and the hostname
+  smoke matrix.
+- Treat V10 as a baseline candidate until it repeats once from a clean Rocky VM
+  boot.
+- Do not start risky Rust subsystem ports until the V10 repeatability run is
+  recorded and the V11 focused regression suites have been attempted.
+
+Adjusted:
+- `kernel/rust/tests/run_equivalence.sh`
+- `overview.txt`
+- `plan.txt`
+- `kernel.log`
+
+Change:
+- Guarded bitmap shift equivalence cases where the requested shift's word
+  offset is larger than the bitmap word count. The legacy C
+  `__bitmap_shift_right()` helper underflows the destination pointer for those
+  cases, so the equivalence harness now avoids comparing undefined C behavior.
+- Updated the current validation baseline from V9 boot-only/V10 hostname
+  boundary to V10 minimal workload pass.
+- Preserved the exact Rocky repeatability command:
+  `scripts/rocky-rust-validation.sh --skip-deps --skip-rust --boot-smoke --trace-smoke --yes --jobs 2`
+- Recorded the required full-log naming pattern:
+  `/tmp/mckernel-v10-YYYYMMDD-HHMMSS.log`.
+- Kept the previous `RIP=0x1000` hostname diagnostics as historical regression
+  context instead of the active failure boundary.
+
+Next validation:
+- From a clean Rocky VM boot, re-run V0 through V10 once with the preserved
+  command and save the full terminal log under the recorded `/tmp` pattern.
+- If that repeat run passes, move to V11 focused regression suites:
+  `user_space/futex`, `large_page/x86_64`, `xpmem`, `strace`,
+  `mcexec_options`, and syscall delegation tests.
+- Keep Rust work on build-foundation hardening and ABI/layout expansion until
+  V11 is stable; page allocator is the preferred first risky subsystem port
+  after that gate.
+
+Local verification:
+- V0 documentation checks passed: `plan.txt`, `overview.txt`, and `kernel.log`
+  exist, and `git diff --check` passed.
+- V1 source inventory passed for `kernel/rust` files, `ENABLE_RUST_KERNEL`,
+  and the C fallback files `kernel/rbtree.c`, `kernel/llist.c`, and
+  `lib/bitmap.c`.
+- `bash -n scripts/rocky-rust-validation.sh` passed.
+- `kernel/rust/tests/run_equivalence.sh` passed after the bitmap harness
+  guard.
+- Attempted the preserved Rocky repeatability command under `script` with full
+  log capture at `/tmp/mckernel-v10-20260516-211104.log`.
+- That attempt configured and built the Rust-enabled kernel image, host
+  modules, and smoke-test user tools, then stopped at install because `sudo`
+  required a password. No V8 through V10 runtime rerun occurred in this
+  session.
+
+## Rocky V10 Repeatability Failure
+
+Observed result:
+- Re-ran the preserved Rocky V10 command with full log capture at
+  `/tmp/mckernel-v10-20260516-211721.log`:
+  `scripts/rocky-rust-validation.sh --skip-deps --skip-rust --boot-smoke --trace-smoke --yes --jobs 2`
+- The run configured, built, installed, cleaned stale McKernel state, booted
+  McKernel, and printed `IHK/McKernel booted.`
+- `mcexec /bin/true` passed.
+- `mcexec hostname` failed with status 139.
+- Diagnostic retry `mcexec --disable-vdso hostname` also failed with status
+  139.
+- Diagnostic retry `mcexec --disable-vdso /usr/bin/hostname` also failed with
+  status 139.
+- `mcstat` passed after the hostname diagnostics.
+- Shutdown ran after the smoke diagnostics.
+
+Interpretation:
+- The earlier V10 minimal-workload pass is not repeatable yet.
+- V9 boot remains stable on this run, and trivial process launch still reaches
+  `/bin/true`.
+- V10 hostname execution is again the active runtime boundary.
+- The repeated no-VDSO failures mean this is not isolated to VDSO. The
+  absolute no-VDSO case still points at argv0/path-sensitive loader, initial
+  stack, auxv, or dynamic-loader state.
+
+High-signal diagnostics:
+- The first failing hostname process reported:
+  `mcexec_v10: fatal_page_fault ... addr=0x1000 ... rip=0x1000 ... rax=0x1000`
+- The signal default marker reported:
+  `mcexec_v10: signal_default ... sig=11 rip=0x1000 ... si_addr=0x1000`
+- The absolute no-VDSO case recorded `argv0_str="/usr/bin/hostname"` with
+  `vdso=0x0`, then failed the same way at `RIP=0x1000`.
+- Fatal user byte dumps still show q3 as `/lib64/libc.so.6` and q4 as an ELF
+  mapping, so the next debugging pass should compare loader/libc handoff state
+  against the `/bin/true` path and the earlier reported passing hostname run.
+
+Adjusted:
+- `overview.txt`
+- `plan.txt`
+- `kernel.log`
+
+Change:
+- Reclassified V10 from baseline candidate back to active hostname failure.
+- Preserved the repeatability command and log naming rule.
+- Recorded that V11 focused regressions must remain blocked until V10 repeats
+  cleanly.
+
+Local verification:
+- Before the runtime run, `git diff --check` passed.
+- `bash -n scripts/rocky-rust-validation.sh` passed.
+- `kernel/rust/tests/run_equivalence.sh` passed.
+- After updating the tracking docs with the repeatability failure,
+  `git diff --check`, `bash -n scripts/rocky-rust-validation.sh`, and
+  `kernel/rust/tests/run_equivalence.sh` passed again.
+
+## Rocky V10 Hostname Zero-Fill Fix
+
+Observed cause:
+- The repeatability failure was narrowed to glibc malloc initialization while
+  running `hostname`.
+- The fatal `RIP=0x1000` matched an indirect call through
+  `__malloc_initialize_hook`.
+- That hook is a libc BSS object and should be zero. Seeing `0x1000` there
+  pointed at user-visible zero-fill mmap/page-fault memory relying too much on
+  allocator `zero_at_free` state.
+
+Changed:
+- `kernel/process.c`
+  - Always clear pre-populated user mappings in `add_process_memory_range()`.
+  - Always clear anonymous/zero-object pages allocated by the process page
+    fault path.
+- `kernel/syscall.c`
+  - Always clear anonymous straight-map backing memory.
+- `kernel/fileobj.c`
+  - Clear newly allocated `MF_PREMAP|MF_ZEROFILL` pages before publishing them.
+- `kernel/hugefileobj.c`
+  - Always clear newly allocated zero-fill hugefile pages.
+
+Validation:
+- `git diff --check` passed.
+- `bash -n scripts/rocky-rust-validation.sh` passed.
+- `kernel/rust/tests/run_equivalence.sh` passed.
+- Re-ran the preserved Rocky V10 command with full log capture at
+  `/tmp/mckernel-v10-20260516-213542.log`:
+  `scripts/rocky-rust-validation.sh --skip-deps --skip-rust --boot-smoke --trace-smoke --yes --jobs 2`
+- The run configured, built, installed, cleaned stale McKernel state, booted
+  McKernel, and printed `IHK/McKernel booted.`
+- `mcexec /bin/true` passed.
+- `mcexec hostname` passed and printed `localhost.localdomain`.
+- `mcexec /usr/bin/hostname` passed and printed `localhost.localdomain`.
+- `mcstat` passed.
+- Shutdown completed and the script exited successfully.
+- The latest V10 log contains no `error:`, `Segmentation fault`,
+  `fatal_page_fault`, or `RIP=0x1000` markers.
+
+Interpretation:
+- V10 minimal workloads are now clean at the current Rocky smoke level.
+- The previous hostname SIGSEGV is historical regression evidence, not the
+  active boundary.
+- V11 focused regression suites are unblocked and are the next runtime gate
+  before risky Rust subsystem ports.
+- The pre-existing dirty `ihk` submodule marker is unchanged and remains tied
+  to the local Rocky compatibility patch state.
+
+## Rocky V11 Ptrace Exec And Main-Thread Stop Progress
+
+Observed cause:
+- V11 strace issue 945 had moved past the old hostname boundary but still
+  timed out after reporting:
+  `#945-1 execve in OK`, `#945-2 PTRACE_EVENT_EXEC OK`, and
+  `#945-3 execve out OK`.
+- A direct `mcexec strace -o ... /bin/true` run advanced past execve and
+  `arch_prctl`, then previously stalled around the first delegated loader
+  `access("/etc/ld.so.preload", R_OK)` trace.
+- Post-timeout kmsg showed that the delegated `access` syscall did return from
+  Linux with `-ENOENT`, then the tracee hung at the ptrace syscall-exit stop.
+- The delayed main-thread ptrace stop path relied on `PS_DELAY_TRACED`, which
+  wakes the parent from the architecture context-switch path. That path runs
+  while `schedule()` still holds the runqueue lock, so a ptrace waiter can miss
+  progress or deadlock there.
+
+Changed:
+- `arch/x86_64/kernel/syscall.c`
+  - Added `NT_PRSTATUS` support for `PTRACE_GETREGSET` and
+    `PTRACE_SETREGSET`.
+  - Added a ptrace register-context helper so `PTRACE_GETREGS` and
+    `PTRACE_GETREGSET` can read the saved execve context while reporting the
+    synthetic execve syscall-exit stop.
+  - Changed main-thread `ptrace_report_signal()` stops to publish
+    `PS_TRACED` and wake the parent before sleeping, avoiding the delayed
+    context-switch wakeup path for ptrace stops.
+- `kernel/include/process.h`
+  - Added `ptrace_saved_uctx` and `ptrace_saved_uctx_valid` to `struct thread`.
+- `kernel/syscall.c`
+  - Saved the original execve syscall context before replacing the user
+    context in `do_execveat()`.
+  - Reported the `PTRACE_EVENT_EXEC` stop, then synthesized the execve
+    syscall-exit stop with `rax=0` when the tracer requested
+    `PTRACE_SYSCALL`.
+  - Cleared the saved ptrace context on `PTRACE_CONT`, `PTRACE_SYSCALL`,
+    `PTRACE_SINGLESTEP`, `PTRACE_KILL`, and detach.
+  - Allowed ptraced waits to observe `PS_DELAY_TRACED` as a defensive
+    compatibility case.
+
+Validation:
+- `git diff --check` passed.
+- `bash -n scripts/rocky-rust-validation.sh` passed.
+- `kernel/rust/tests/run_equivalence.sh` passed.
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2` passed.
+- Installed the rebuilt image under `/opt/mckernel-rust`.
+- Re-ran the preserved V10 command with full log capture at
+  `/tmp/mckernel-v10-20260517-181523.log`:
+  `scripts/rocky-rust-validation.sh --skip-deps --skip-rust --boot-smoke --trace-smoke --yes --jobs 2`
+- The V10 run configured, built, installed, booted, passed `mcexec /bin/true`,
+  relative `mcexec hostname`, absolute `mcexec /usr/bin/hostname`, and
+  `mcstat`, then shut down cleanly.
+- Focused V11 issue 945 passed in
+  `/tmp/mckernel-v11-ptrace-945-maintraced-20260517-180822.log`:
+  `#945 test terminated ok=3 ng=0`, `ptrace_945_rc=0`.
+- Focused V11 strace issue run
+  `/tmp/mckernel-v11-strace-issues-maintraced-20260517-181022.log` completed
+  issues 943, 944, 945, 946, 960, and 961 without command timeouts.
+  Issues 945, 946, 960, and 961 reported zero internal NG counts.
+- Issues 943 and 944 still reported `#943/#944-3 open in NG` and
+  `#943/#944-4 open out NG`, but continued to completion. On Rocky this is
+  likely a stale test expectation for `SYS_open`, because modern glibc normally
+  implements `open()` through `openat`.
+- `mcexec strace -V` passed in
+  `/tmp/mckernel-v11-strace-version-maintraced-20260517-181114.log`.
+
+Remaining blocker:
+- Direct strace child tracing is still not clean. The repro
+  `/tmp/mckernel-v11-strace-debug-maintraced-20260517-181146.log` timed out
+  with `strace_debug_rc=124` after printing
+  `strace: ptrace_setoptions = 0x51` and before creating the `-o` trace file.
+- The remaining direct-strace evidence points at the child initial trace-stop
+  setup after `PTRACE_SETOPTIONS`, not at the now-fixed execve
+  `PTRACE_EVENT_EXEC` or execve syscall-exit register reporting path.
+- Keep V11 open until direct `mcexec strace -o ... /bin/true` and the broader
+  strace suite complete cleanly.
+
+## Rocky V11 Gettime And Strace Suite Progress
+
+Observed cause:
+- The direct strace blocker was cleared, but the broader focused strace suite
+  exposed a separate Rocky panic in the `stat`/`strace-f` paths.
+- The failing McKernel backtrace resolved to:
+  `sys_gettimeofday -> calculate_time_from_tsc`.
+- On this Rocky/RHEL 8.10 host, `mcctrl` intentionally reports no
+  `vdso.vgtod_virt` data because the old `vsyscall_gtod_data` symbol is not
+  exported.
+- McKernel still enabled the local x86_64 gettime fast path and dereferenced
+  that missing host VGTOD pointer.
+
+Changed:
+- `arch/x86_64/kernel/syscall.c`
+  - Disabled local gettime when `gettime_local_support` is requested but
+    `vdso.vgtod_virt` is unavailable.
+  - Added the explicit kmsg marker:
+    `x86 local gettime disabled: host vgtod data unavailable`.
+  - Added defensive guards so the local TSC path cannot dereference a missing
+    host VGTOD mapping.
+- `test/strace/issue/943.c`
+  - Accepted `SYS_openat` as the traced implementation of libc `open()` on
+    modern Rocky userspace.
+  - Returned nonzero when the internal test records NG counts.
+- `test/strace/issue/944.c`
+  - Accepted `SYS_openat` for the same Rocky libc behavior.
+  - Returned nonzero when the internal test records NG counts.
+- `test/strace/strace/test1.sh`
+  - Accepted modern strace invalid-syscall spelling as `syscall_0x270f` and
+    either numeric `errno 38` or symbolic `ENOSYS`.
+  - Preserved the awk result through cleanup.
+- `test/strace/strace/test2.sh`
+  - Accepted optional `[pid N]` prefixes in `execve`, `clone`, and `wait4`
+    traces.
+  - Preserved the awk result through cleanup.
+- `test/strace/strace-bundle/ptrace_setoptions`
+  - Accepted optional `/usr/bin/strace:` debug prefixes.
+  - Accepted newer strace option masks `0x5f` and `0x51` in addition to the
+    historical masks.
+
+Validation:
+- Rebuilt the Rocky image:
+  `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`.
+- Installed the rebuilt image under `/opt/mckernel-rust`.
+- Direct strace probes passed under `mcexec`, including:
+  `strace -qq -e trace=none /bin/true`,
+  `strace -qq -e trace=exit_group /bin/true`,
+  `strace -qq /bin/true`,
+  `strace -d -qq -e trace=none /bin/true`, and
+  `strace -d -o /tmp/mckernel-v11-strace-o-confirm.trace /bin/true`.
+- `make -C test/strace/issue clean all` passed.
+- `bash -n` passed for the patched strace shell scripts.
+- The focused V11 strace suite passed with full log:
+  `/tmp/mckernel-v11-strace-suite4-20260517-184603.log`.
+- That suite covered issue tests 943, 944, 945, 946, 960, and 961;
+  `strace/test1.sh`; `strace/test2.sh`; and bundle tests
+  `ptrace_setoptions`, `qual_syscall`, `stat`, and `strace-f`.
+- The post-suite kmsg was saved at:
+  `/tmp/mckernel-v11-strace-suite4-after.kmsg`.
+- Re-ran the preserved Rocky V10 command with full log capture at
+  `/tmp/mckernel-v10-20260517-184729.log`:
+  `scripts/rocky-rust-validation.sh --skip-deps --skip-rust --boot-smoke --trace-smoke --yes --jobs 2`.
+- The V10 run configured, built, installed, booted, passed `mcexec /bin/true`,
+  relative `mcexec hostname`, absolute `mcexec /usr/bin/hostname`, and
+  `mcstat`, then shut down cleanly.
+- After updating `overview.txt`, `plan.txt`, and this log, `git diff --check`
+  passed.
+- `bash -n scripts/rocky-rust-validation.sh test/strace/strace/test1.sh
+  test/strace/strace/test2.sh test/strace/strace-bundle/ptrace_setoptions`
+  passed.
+- `kernel/rust/tests/run_equivalence.sh` passed again.
+- After shutdown, no `mcctrl`, `ihk`, or `ihk_smp_x86_64` modules remained
+  loaded and no stale runtime processes were found.
+
+Interpretation:
+- V10 is clean again at the current Rocky minimal workload scope.
+- The previous `RIP=0x1000` hostname failure remains historical evidence, not
+  the current boundary.
+- The previous direct strace timeout after `PTRACE_SETOPTIONS` is no longer
+  current.
+- The focused V11 strace suite is now clean on Rocky.
+- V11 as a whole remains open until `user_space/futex`,
+  `large_page/x86_64`, `xpmem`, `mcexec_options`, and syscall delegation
+  tests are run cleanly or classified with missing local prerequisites.
+- The pre-existing dirty `ihk` submodule marker remains unchanged.
+
+## Rocky V11 VDSO Time And Local Probe Progress
+
+Observed cause:
+- After the gettimeofday panic fix, local V11 probes found a separate Rocky
+  time regression:
+  `test/issues/1036/CT_001` reported `glibc time(): 0 seconds` while raw
+  `SYS_time` returned the correct epoch seconds.
+- Boot kmsg showed:
+  `x86 local gettime disabled: host vgtod data unavailable` followed by
+  `vdso is enabled`.
+- That meant McKernel was still advertising the Rocky host VDSO to user
+  programs even though the host module could not provide the legacy VGTOD data
+  that the mapped VDSO expects.
+
+Changed:
+- `arch/x86_64/kernel/syscall.c`
+  - If `vdso.vgtod_virt` is unavailable, disable the user VDSO container and
+    log:
+    `vdso disabled: host vgtod data unavailable`.
+  - Keep the local `SYS_time` implementation on the boot-time/TSC fallback when
+    `tod_data.clocks_per_sec` is available, even though full local
+    gettimeofday/clock_gettime remains disabled for the missing host VGTOD
+    path.
+
+Validation:
+- Built local V11 probes:
+  `make -C test/issues/1176 all`,
+  `make -C test/issues/1399 all`,
+  `make -C test/issues/1036 all`, and
+  `make -C test/portability futex_wake_op MCEXEC=/opt/mckernel-rust/bin/mcexec`.
+- Rebuilt and installed the Rocky image:
+  `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+  followed by `sudo cmake --install /tmp/mckernel-rocky-rust`.
+- First local probe run
+  `/tmp/mckernel-v11-local-probes-20260517-191038.log` found the real
+  `glibc time() == 0` failure and showed that one-CPU boot made
+  `C1176T04` setup-invalid because the test hardcodes `CPU_SET(1)`.
+- After disabling the broken user VDSO, the second local probe
+  `/tmp/mckernel-v11-local-probes-20260517-191231.log` fixed glibc
+  `time()`, but host strace still saw Linux `time` syscalls from `mcexec`.
+- After keeping `SYS_time` local through `tod_data`, the third local probe
+  `/tmp/mckernel-v11-local-probes-20260517-191346.log` passed:
+  - `C1176T03` futex wait interrupted by signal.
+  - `C1176T04` two-CPU `sched_setaffinity`/sleep.
+  - `test/portability/futex_wake_op`.
+  - `C1399T01` robust-list invalid-length validation.
+  - `CT_001` glibc time vs raw `SYS_time`.
+  - Host strace summary for `CT_001` contained no Linux `time` syscall from
+    `mcexec`.
+- The passing local probe boot kmsg was saved at
+  `/tmp/mckernel-v11-local-probes-20260517-191346-boot.kmsg`; it records:
+  `x86 local gettime disabled: host vgtod data unavailable`,
+  `vdso disabled: host vgtod data unavailable`, and `vdso is disabled`.
+- Re-ran the preserved V10 command with full log capture at
+  `/tmp/mckernel-v10-20260517-191408.log`:
+  `scripts/rocky-rust-validation.sh --skip-deps --skip-rust --boot-smoke --trace-smoke --yes --jobs 2`.
+- V10 passed `mcexec /bin/true`, relative `mcexec hostname`, absolute
+  `mcexec /usr/bin/hostname`, and `mcstat`, then shut down cleanly.
+- Re-ran the focused V11 strace suite after the VDSO fallback change:
+  `/tmp/mckernel-v11-strace-suite5-20260517-191602.log`.
+- The suite passed issues 943, 944, 945, 946, 960, and 961;
+  `strace/test1.sh`; `strace/test2.sh`; and bundle tests
+  `ptrace_setoptions`, `qual_syscall`, `stat`, and `strace-f`.
+- Built the x86_64 large-page test binaries with a temporary test config:
+  `make -C test/large_page/x86_64 all`.
+  Built binaries: `001_4K`, `101_4K`, `201_4K`, `301_4K`, `401_4K`,
+  `402_4K`, `501_4K`, and `601_4K`.
+- Final hygiene after the tracker updates passed:
+  `git diff --check`,
+  `bash -n scripts/rocky-rust-validation.sh test/strace/strace/test1.sh
+  test/strace/strace/test2.sh test/strace/strace-bundle/ptrace_setoptions`,
+  and `kernel/rust/tests/run_equivalence.sh`.
+- After the V10 and V11 runs, no `mcctrl`, `ihk`, or `ihk_smp_x86_64`
+  modules remained loaded and no stale `mcexec`, `strace`, `ihkmond`,
+  `mcstop+release`, `mcreboot`, `ihkosctl`, or `mcctrl` processes were found.
+
+Prerequisite classification:
+- Local LTP is missing:
+  `~/ltp/testcases/bin/futex_wait01`, `process_vm01`, `time01`, and `fork01`
+  were not present.
+- XPMEM is missing:
+  `$HOME/usr/lib/modules/4.18.0-553.el8_10.x86_64/xpmem.ko`,
+  `/home/satoken/xpmem/test`, and `/dev/xpmem` were not present.
+- `test/mcexec_options` contains only the `arm64` suite in this checkout; no
+  x86_64 mcexec-options runtime suite is available to run on this Rocky x86_64
+  VM.
+- The stock `test/large_page/x86_64` runtime recipe requests 28G memory per
+  NUMA node and requires the large-page instrumentation patch and hugepage
+  setup. The current Rocky VM has 4 vCPUs and about 3.1GiB RAM, so the stock
+  runtime recipe is not runnable on this VM without a smaller Rocky-specific
+  test profile or a larger VM.
+
+Interpretation:
+- The C McKernel Rocky baseline is stronger: V10 is clean, focused V11 strace
+  is clean, and locally runnable V11 futex/robust-list/syscall-time probes are
+  clean.
+- The active V11 boundary is now external test coverage and environment
+  prerequisites, not a known McKernel runtime failure in the covered areas.
+
+## Rocky V11 Issue 1324 Small-VM Classification
+
+Goal:
+- Probe more non-strace V11 behavior without waiting on the full upstream
+  16 GiB issue-1324 memory recipe.
+
+Validation:
+- Booted McKernel with two McKernel CPUs and 1536M memory for:
+  `/tmp/mckernel-v11-1324-small-20260517-192221.log`.
+- Passed `C1324T03`, which maps 1 GiB and validates the mapping edge through
+  `/proc/self/mem`.
+- Passed `C1324T02`, which maps two 1 GiB regions and validates
+  `sigaltstack` copy-to/from-user behavior at the mapping edge.
+- `C1324T01` failed before ptrace with:
+  `failed to fork: : Cannot allocate memory`.
+- Retried only `C1324T01` with 2048M McKernel memory:
+  `/tmp/mckernel-v11-1324-t01-2g-20260517-192304.log`.
+  It still failed at `fork()` with `ENOMEM`.
+- Retried only `C1324T01` with the upstream-style `-O` overcommit flag and
+  1536M McKernel memory:
+  `/tmp/mckernel-v11-1324-t01-overcommit-20260517-192336.log`.
+  It still failed at `fork()` with `ENOMEM`.
+
+Interpretation:
+- Two additional 1 GiB mapping-edge subcases are now clean on Rocky.
+- The remaining issue-1324 fork/ptrace subcase is blocked by VM memory
+  capacity before it reaches the ptrace behavior under test. It should be
+  rerun on a larger Rocky VM using the upstream multi-1G-chunk boot profile
+  before issue 1324 is marked complete.
+- Final hygiene after these tracker updates passed `git diff --check`.
+- No `mcctrl`, `ihk`, or `ihk_smp_x86_64` modules remained loaded, and no
+  stale `mcexec`, `strace`, `ihkmond`, `mcstop+release`, `mcreboot`,
+  `ihkosctl`, or `mcctrl` processes were found.
+
+## Rocky Control-Plane Focused Runner Completion
+
+Goal:
+- Continue the Rocky Linux control-plane validation path before any new Rust
+  subsystem conversion work.
+- Make the runnable V11 scope reproducible from the installed Rocky prefix and
+  remove old hardcoded RHEL-era/user-home assumptions from the focused tests.
+
+Changed:
+- `scripts/rocky-rust-validation.sh`
+  - Tolerates the Codex read-only `.git` metadata mount when submodules are
+    already initialized, while still failing if a submodule is actually missing.
+- `scripts/rocky-v11-focused.sh`
+  - Added a Rocky-focused V11 runner that classifies external prerequisites,
+    builds local test binaries, boots McKernel, runs the focused strace slice,
+    runs local futex/robust-list/syscall-time probes, and classifies the
+    issue-1324 `C1324T01` small-VM ENOMEM boundary.
+- `CMakeLists.txt`
+  - Generates and installs `mck_test_config.sample` under
+    `${prefix}/share/mckernel` for Rocky-installed test use.
+- `test/common.sh`
+  - Defaults missing test configuration to `/opt/mckernel-rust` and a small
+    Rocky-safe boot profile instead of requiring an old external config file.
+- Strace, portability, issue-1036, issue-1176, issue-1324, and XPMEM test
+  harnesses now derive paths from environment/config defaults instead of old
+  hardcoded `mic/mcexec`, `/home/shirasawa`, or `/home/satoken` paths.
+- `test/issues/1324/C1324.sh`
+  - Calls the actual `C1324T01`, `C1324T02`, and `C1324T03` binaries.
+  - Supports `LOCAL_ONLY=1` for the runnable local slice without LTP.
+- `test/issues/1324/C1324T01.c`
+  - Includes `<sys/wait.h>` for the wait macros it uses.
+- `test/issues/1324/C1324T02.c`
+  - Initializes `ret` to zero on the success path.
+- `test/strace/issue/{943,944,945,946,960,961}.c`
+  - Include `<ctype.h>` so the existing `isspace()` use compiles without the
+    implicit-declaration warning.
+
+Validation:
+- `scripts/rocky-rust-validation.sh --skip-deps --skip-rust --boot-smoke --trace-smoke --yes --jobs 2`
+  completed successfully when run outside the Codex sandbox on the Rocky VM.
+- That V10 run configured, built, installed, cleaned stale state, booted
+  McKernel, passed `mcexec /bin/true`, relative `mcexec hostname`, absolute
+  `mcexec /usr/bin/hostname`, and `mcstat`, then shut down cleanly.
+- `scripts/rocky-v11-focused.sh --timeout 120` passed with log directory:
+  `/tmp/mckernel-v11-focused-20260517-194702`.
+- The focused V11 run classified missing external prerequisites:
+  - LTP missing under `/home/hgordon/ltp/testcases/bin`.
+  - XPMEM missing `/home/hgordon/usr/lib/modules/4.18.0-553.el8_10.x86_64/xpmem.ko`,
+    `/home/hgordon/xpmem/test`, and `/dev/xpmem`.
+  - `test/mcexec_options/x86_64` is absent.
+  - The stock large-page runtime recipe needs a larger VM than this 3.1 GiB
+    Rocky VM.
+- The focused V11 run built local test binaries and booted McKernel with two
+  McKernel CPUs and 1536M memory.
+- V11 strace passed issues 943, 944, 945, 946, 960, and 961; `strace/test1.sh`;
+  `strace/test2.sh`; and bundle tests `ptrace_setoptions`, `qual_syscall`,
+  `stat`, and `strace-f`.
+- Local probes passed:
+  - `C1176T03` futex wait interrupted by signal.
+  - `C1176T04` two-CPU `sched_setaffinity`/sleep.
+  - `test/portability/futex_wake_op`.
+  - `C1399T01` robust-list invalid-length validation.
+  - `CT_001` glibc time vs raw `SYS_time`.
+  - Host strace summary for `CT_001` contained no Linux `time` syscall from
+    `mcexec`.
+  - `C1324T03` `/proc/self/mem` 1 GiB mapping-edge validation.
+  - `C1324T02` `sigaltstack` copy-to/from-user 1 GiB mapping-edge validation.
+- `C1324T01` remains classified as not runnable on this VM size: it fails at
+  `fork()` with `ENOMEM` before reaching ptrace.
+- Post-run cleanup was clean: no `mcctrl`, `ihk`, or `ihk_smp_x86_64` modules
+  remained loaded; no `/dev/mcd*` or `/dev/mcos*` nodes remained; and no stale
+  `mcexec`, `strace`, `ihkmond`, `mcstop+release`, `mcreboot`, `ihkosctl`, or
+  `mcctrl` processes were found.
+- Final local hygiene passed:
+  - `bash -n scripts/rocky-rust-validation.sh scripts/rocky-v11-focused.sh` and
+    the touched shell test harnesses.
+  - `git diff --check`.
+  - `make -C test/strace/issue clean all`.
+  - `kernel/rust/tests/run_equivalence.sh`.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`.
+
+Interpretation:
+- The Rocky Linux control-plane baseline is now clean through V10 and the
+  focused V11 local runner.
+- The remaining V11 boundary is external coverage/environment capacity, not a
+  known McKernel runtime failure in the covered Rocky control-plane paths.
+- Do not start risky Rust subsystem conversion until either the missing external
+  prerequisites are installed or the project explicitly accepts this focused
+  Rocky scope as the C baseline for the next Rust phase.

@@ -539,7 +539,6 @@ static int wait_stopped(struct thread *thread, struct process *child, struct thr
 			ret = 0;
 			goto out;
 		}
-
 		/* TODO: define 0x7f in kernel/include/process.h */
 		if (status) {
 			*status =  (c_thread->exit_status << 8) | 0x7f;
@@ -557,7 +556,6 @@ static int wait_stopped(struct thread *thread, struct process *child, struct thr
 			ret = 0;
 			goto out;
 		}
-
 		/* TODO: define 0x7f in kernel/include/process.h */
 		if (status) {
 			*status = (child->group_exit_status << 8) | 0x7f;
@@ -575,7 +573,6 @@ static int wait_stopped(struct thread *thread, struct process *child, struct thr
 			ret = 0;
 			goto out;
 		}
-
 		/* TODO: define 0x7f in kernel/include/process.h */
 		if (status) {
 			*status = (child->main_thread->exit_status << 8) | 0x7f;
@@ -740,6 +737,7 @@ ptrace_detach_thread(struct thread *thread, int data)
 	list_del(&thread->report_siblings_list);
 	mcs_rwlock_reader_unlock(&proc->threads_lock, &lock);
 	thread->ptrace = 0;
+	thread->ptrace_saved_uctx_valid = 0;
 	kfree(thread->ptrace_debugreg);
 	thread->ptrace_debugreg = NULL;
 
@@ -918,7 +916,8 @@ wait_proc(int pid, int *status, int options, void *rusage, int *empty)
 		}
 
 		if ((c_thread->ptrace & PT_TRACED) &&
-		   (child->status & (PS_STOPPED | PS_TRACED))) {
+		   (child->status & (PS_STOPPED | PS_TRACED |
+				     PS_DELAY_TRACED))) {
 			ret = wait_stopped(thread, child, NULL, status,
 					   options);
 			if (ret == child->pid) {
@@ -1033,7 +1032,8 @@ wait_thread(int tid, int *status, int options, void *rusage, int *empty)
 		}
 
 		if ((child->ptrace & PT_TRACED) &&
-		    (child->status & (PS_STOPPED | PS_TRACED))) {
+		    (child->status & (PS_STOPPED | PS_TRACED |
+				      PS_DELAY_TRACED))) {
 			ret = wait_stopped(thread, child->proc, child, status,
 					   options);
 			if (ret == child->tid) {
@@ -2456,7 +2456,6 @@ straight_out:
 
 	/* Update straight mapping start address */
 	if (straight_phys) {
-		extern int zero_at_free;
 		range->straight_start =
 			(unsigned long)proc->straight_va +
 			(straight_phys - proc->straight_pa);
@@ -2469,9 +2468,7 @@ straight_out:
 				__FUNCTION__, addr, len, range->straight_start,
 				straight_phys);
 #endif
-		if (!zero_at_free) {
-			memset((void *)phys_to_virt(straight_phys), 0, len);
-		}
+		memset((void *)phys_to_virt(straight_phys), 0, len);
 	}
 
 	/* Determine pre-populated size */
@@ -2889,7 +2886,8 @@ SYSCALL_DECLARE(gettid)
 }
 
 extern void ptrace_report_signal(struct thread *thread, int sig);
-static int ptrace_report_exec(struct thread *thread)
+static int ptrace_report_exec(struct thread *thread,
+		ihk_mc_user_context_t *syscall_ctx)
 {
 	int ptrace = thread->ptrace;
 
@@ -2902,7 +2900,20 @@ static int ptrace_report_exec(struct thread *thread)
 		ptrace_report_signal(thread, sig);
 		preempt_disable();
 		memcpy(&thread->ctx, &ctx, sizeof ctx);
-		thread->ptrace |= PT_TRACED_AFTER_EXEC;
+	}
+	if (thread->ptrace & PT_TRACE_SYSCALL) {
+		ihk_mc_kernel_context_t ctx;
+		ihk_mc_user_context_t *new_uctx = thread->uctx;
+
+		memcpy(&ctx, &thread->ctx, sizeof ctx);
+		memcpy(&thread->ptrace_saved_uctx, syscall_ctx,
+				sizeof(thread->ptrace_saved_uctx));
+		thread->ptrace_saved_uctx_valid = 1;
+		thread->uctx = &thread->ptrace_saved_uctx;
+		arch_ptrace_syscall_event(thread,
+				&thread->ptrace_saved_uctx, 0);
+		thread->uctx = new_uctx;
+		memcpy(&thread->ctx, &ctx, sizeof ctx);
 	}
 	return 0;
 }
@@ -3101,7 +3112,10 @@ static int do_execveat(ihk_mc_user_context_t *ctx, int dirfd,
 	struct process_vm *vm = thread->vm;
 	struct vm_range *range;
 	struct process *proc = thread->proc;
+	ihk_mc_user_context_t execve_ctx;
 	int i;
+
+	memcpy(&execve_ctx, ctx, sizeof(execve_ctx));
 
 	ihk_rwspinlock_read_lock_noirq(&vm->memory_range_lock);
 
@@ -3242,7 +3256,7 @@ static int do_execveat(ihk_mc_user_context_t *ctx, int dirfd,
 	thread->sigstack.ss_flags = SS_DISABLE;
 	thread->sigstack.ss_size = 0;
 
-	error = ptrace_report_exec(thread);
+	error = ptrace_report_exec(thread, &execve_ctx);
 	if (error) {
 		kprintf("execve(): ERROR: ptrace_report_exec()\n");
 	}
@@ -7517,6 +7531,7 @@ static int ptrace_wakeup_sig(int pid, long request, long data) {
 
 	switch (request) {
 	case PTRACE_KILL:
+		child->ptrace_saved_uctx_valid = 0;
 		memset(&info, '\0', sizeof info);
 		info.si_signo = SIGKILL;
 		error = do_kill(thread, pid, -1, SIGKILL, &info, 0);
@@ -7527,6 +7542,7 @@ static int ptrace_wakeup_sig(int pid, long request, long data) {
 	case PTRACE_CONT:
 	case PTRACE_SINGLESTEP:
 	case PTRACE_SYSCALL:
+		child->ptrace_saved_uctx_valid = 0;
 		if (request == PTRACE_SINGLESTEP) {
 			set_single_step(child);
 		}
@@ -11136,15 +11152,6 @@ long syscall(int num, ihk_mc_user_context_t *ctx)
 	cpu_enable_interrupt();
 
 	if (cpu_local_var(current)->ptrace) {
-		/*
-		 * XXX: After PTRACE_EVENT_EXEC we need to report an extra SIGTRAP.
-		 * This is a tmp fix and should be moved into ptrace_report_exec()
-		 */
-		if (cpu_local_var(current)->ptrace & PT_TRACED_AFTER_EXEC) {
-			arch_ptrace_syscall_event(cpu_local_var(current), ctx, 0);
-			cpu_local_var(current)->ptrace &= ~(PT_TRACED_AFTER_EXEC);
-		}
-
 		arch_ptrace_syscall_event(cpu_local_var(current),
 				ctx, -ENOSYS);
 		num = ihk_mc_syscall_number(ctx);

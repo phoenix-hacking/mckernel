@@ -6,6 +6,7 @@
 #include <errno.h>
 #include <sys/ptrace.h>
 #include <signal.h>
+#include <sys/wait.h>
 
 
 #define GB (1024 * 1024 * 1024)

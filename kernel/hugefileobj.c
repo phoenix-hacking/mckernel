@@ -84,9 +84,7 @@ static int hugefileobj_get_page(struct memobj *memobj, off_t off,
 			goto out;
 		}
 
-		if (!zero_at_free) {
-			memset(obj->pages[pgind], 0, obj->pgsize);
-		}
+		memset(obj->pages[pgind], 0, obj->pgsize);
 		dkprintf("%s: obj: 0x%lx, allocated page for off: %lu"
 				" (ind: %d), page size: %lu\n",
 				__func__, obj, off, pgind, obj->pgsize);

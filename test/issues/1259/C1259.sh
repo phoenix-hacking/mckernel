@@ -3,8 +3,8 @@
 USELTP=0
 USEOSTEST=0
 
-XPMEM_DIR=$HOME/usr
-XPMEM_BUILD_DIR=/home/satoken/xpmem
+XPMEM_DIR=${XPMEM_DIR:-$HOME/usr}
+XPMEM_BUILD_DIR=${XPMEM_BUILD_DIR:-$HOME/xpmem}
 
 arch=`uname -p`
 if [ -f "./${arch}_config" ]; then
@@ -15,6 +15,15 @@ else
 fi
 
 . ../../common.sh
+
+if [ ! -f "${XPMEM_DIR}/lib/modules/`uname -r`/xpmem.ko" ]; then
+	echo "xpmem.ko not found under ${XPMEM_DIR}/lib/modules/`uname -r`" >&2
+	exit 77
+fi
+if [ ! -d "${XPMEM_BUILD_DIR}/test" ]; then
+	echo "XPMEM userspace tests not found: ${XPMEM_BUILD_DIR}/test" >&2
+	exit 77
+fi
 
 sudo insmod ${XPMEM_DIR}/lib/modules/`uname -r`/xpmem.ko
 sudo chmod og+rw /dev/xpmem

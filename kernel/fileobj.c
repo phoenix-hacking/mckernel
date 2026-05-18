@@ -589,6 +589,7 @@ static int fileobj_get_page(struct memobj *memobj, off_t off,
 
 			/* Update the array but see if someone did it already and use
 			 * that if so */
+			memset(virt, 0, PAGE_SIZE);
 			if (cmpxchg(&memobj->pages[page_ind], NULL, virt) != NULL) {
 				ihk_mc_free_pages_user(virt, 1);
 			}
@@ -785,4 +786,3 @@ out:
 			obj, off, p2align, physp, error);
 	return error;
 }
-

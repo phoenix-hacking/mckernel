@@ -300,6 +300,9 @@ int main(void)
 		memset(c, 0x5a, sizeof(c)); __bitmap_xor(c, a, b, bits); digest ^= digest_words(c, words);
 		memset(c, 0x5a, sizeof(c)); digest ^= (unsigned long)__bitmap_andnot(c, a, b, bits); digest ^= digest_words(c, words);
 		for (unsigned int si = 0; si < sizeof(shifts) / sizeof(shifts[0]); si++) {
+			int shift_words = shifts[si] / (int)(sizeof(unsigned long) * 8);
+			if (shift_words > words)
+				continue;
 			memset(c, 0x5a, sizeof(c)); __bitmap_shift_left(c, a, shifts[si], bits); digest ^= digest_words(c, words);
 			memset(c, 0x5a, sizeof(c)); __bitmap_shift_right(c, a, shifts[si], bits); digest ^= digest_words(c, words);
 		}

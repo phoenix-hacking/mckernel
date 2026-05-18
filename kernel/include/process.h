@@ -689,6 +689,8 @@ struct thread {
 	 * PTRACE_GETEVENTMSG will get from here.
 	 */
 	unsigned long ptrace_eventmsg;
+	ihk_mc_user_context_t ptrace_saved_uctx;
+	int ptrace_saved_uctx_valid;
 
 	ihk_atomic_t refcount;
 

@@ -11,7 +11,7 @@
 
 int main(int argc, char **argv)
 {
-	int rc, ret;
+	int rc, ret = 0;
 	void *addr1, *addr2;
 	stack_t *ss, *oss;
 	ssize_t stack_t_size = sizeof(stack_t);

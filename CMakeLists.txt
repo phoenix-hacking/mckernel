@@ -307,6 +307,7 @@ configure_file(scripts/mcreboot-smp.sh.in mcreboot.sh @ONLY)
 configure_file(scripts/mcstop+release-smp.sh.in mcstop+release.sh @ONLY)
 configure_file(scripts/mcreboot.1in mcreboot.1 @ONLY)
 configure_file(scripts/eclair-dump-backtrace.exp.in eclair-dump-backtrace.exp @ONLY)
+configure_file(test/mck_test_config.sample.in mck_test_config.sample @ONLY)
 install(PROGRAMS
 		"${CMAKE_CURRENT_BINARY_DIR}/mcreboot.sh"
 		"${CMAKE_CURRENT_BINARY_DIR}/mcstop+release.sh"
@@ -318,6 +319,8 @@ install(FILES "scripts/irqbalance_mck.in"
 	DESTINATION "${CMAKE_INSTALL_SYSCONFDIR}")
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/mcreboot.1"
 	DESTINATION "${CMAKE_INSTALL_MANDIR}/man1")
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/mck_test_config.sample"
+	DESTINATION "${CMAKE_INSTALL_DATADIR}/mckernel")
 
 
 configure_file(scripts/mckernel.spec.in scripts/mckernel.spec @ONLY)

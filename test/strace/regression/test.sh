@@ -1,9 +1,24 @@
 #!/bin/sh
-LTPDIR=/home/shirasawa/ltp2015/testcases/bin
-export PATH=/home/shirasawa/ltp2015/testcases/bin:$PATH
-MCEXEC=/home/shirasawa/wallaby11-smp-x86/development/mic/mcexec
+if [ -f "$HOME/.mck_test_config" ]; then
+	. "$HOME/.mck_test_config"
+fi
+MCK_DIR="${MCK_DIR:-/opt/mckernel-rust}"
+BIN="${BIN:-$MCK_DIR/bin}"
+LTPBIN="${LTPBIN:-${LTP:-$HOME/ltp}/testcases/bin}"
+MCEXEC="${MCEXEC:-$BIN/mcexec}"
+export PATH="$LTPBIN:$PATH"
+
+if [ ! -x "$MCEXEC" ]; then
+	echo "no mcexec found: $MCEXEC" >&2
+	exit 1
+fi
+if [ ! -d "$LTPBIN" ]; then
+	echo "no LTP testcases bin found: $LTPBIN" >&2
+	exit 77
+fi
+
 while read i;do
-if $MCEXEC $LTPDIR/$i > $i.log; then
+if $MCEXEC $LTPBIN/$i > $i.log; then
 	echo $i: OK
 else
 	echo $i: NG
