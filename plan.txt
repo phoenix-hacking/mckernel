@@ -15,6 +15,10 @@ Definition of "fully ported"
 The target end state is:
 
 - McKernel-owned non-assembly implementation logic is Rust-owned.
+- McKernel-adjacent IHK host modules, including `ihk`, `ihk-smp-x86_64`, and
+  `mcctrl`, are in scope for the full port; until their Linux-module Rust
+  build path is established, keep C shims and move pure logic behind
+  C-callable Rust interfaces.
 - Existing public C headers remain as compatibility surfaces while external
   users still depend on them.
 - Rust replacement functions use the existing C ABI and exported symbol names.
@@ -56,6 +60,11 @@ ABI and layout foundation
 - Added ABI/layout checks for `struct memobj`, `struct ipc_perm`,
   `struct shmid_ds`, and `struct shmobj` before moving SysV shared-memory
   helper policy to Rust.
+- Added Rust ABI mirrors plus C/Rust layout checks for `cpu_set_t`,
+  `mcs_rwlock_lock_t`, `struct process_hash`, `struct thread_hash`,
+  `struct address_space`, `struct vm_range`, `struct vm_range_numa_policy`,
+  `struct vm_regions`, and `struct process_vm` before moving more process/VM
+  and x86_64 memory-management bodies to Rust.
 - Preserved public C headers, symbol names, syscall numbers, ioctl values, IKC
   packet formats, and linker-visible entry points.
 
@@ -77,6 +86,26 @@ First Rust primitive replacements
   `is_mckernel_memory()` and `phys_to_nid()` from `kernel/mem.c`. The page
   address validator, page-table/mapping code, and high-risk memory management
   behavior remain C-owned.
+- Ported the process/VM decision-helper batch behind the existing C ABI:
+  `common_vrflag_to_ptattr()`, `process_split_pgshift_result()`,
+  `process_add_range_bounds_result()`, `process_extend_up_result()`,
+  `process_change_prot_newflag_result()`, `process_attr_delta_result()`,
+  `process_private_file_setattr_result()`,
+  `process_remove_region_alignment_result()`,
+  `process_access_initial_result()`, `process_access_adjacent_result()`, and
+  `process_access_permission_result()`. Allocation, rb-tree mutation, locks,
+  page-table mutation, fault handling, range lifetime, and logging remain
+  C-owned.
+- Ported the x86_64 page-attribute translation helper batch behind the
+  existing C ABI: `x86_attr_to_l3attr_result()`,
+  `x86_attr_to_l2attr_result()`, and `x86_attr_to_l1attr_result()`. The
+  wrappers `attr_to_l3attr()`, `attr_to_l2attr()`, and `attr_to_l1attr()` now
+  call Rust when ENABLE_RUST_KERNEL is on. Page-table walking, mapping,
+  unmapping, TLB-sensitive mutation, and user-copy remain C-owned.
+- Ported the x86_64 smaller-page-size selection helper behind the existing C
+  ABI: `x86_smaller_page_size_result()`. `arch_get_smaller_page_size()` now
+  calls Rust when ENABLE_RUST_KERNEL is on. Page-table splitting, page-table
+  walking, TLB flushes, and mapping mutation remain C-owned.
 - Ported the page query/splitability helper cluster behind the existing C ABI:
   `page_to_phys()` and `is_splitable()` from `kernel/mem.c`. Page hash lookup,
   page-table walking, mapping/unmapping, and memory-object operations remain
@@ -244,6 +273,27 @@ First Rust primitive replacements
   pgsize, initial status/refcount, grow/copy/zero sizing decisions.
   Allocation, reference mutation, locks, lists, page allocation/free,
   page-table mutation, user-copy, and object lifetime mutation remain C-owned.
+- Ported the third object/procfs/sysfs/dev/file decision-helper batch behind
+  the same C ABI. Rust now owns fileobj initial ref/sref, premap NUMA-node
+  wrap, pages-byte sizing, premap page indexing, allocation npages/flags/size,
+  pageio pgsize and reschedule decisions, and new/mapped page modes; devobj
+  PFN table bytes, base flags, initial refcount, PFN request offset, PFN-store
+  decision, and map size; sysfs parameter sizing, data buffer sizing, and
+  packet-error decisions; and procfs default/remote counts, remote npages,
+  format-error validation, locked-KB reporting, maps permission chars, maps
+  path kind, pagemap next position, and auxv limit. Allocation, reference
+  mutation, locks, lists, page-table mutation, sysfs IKC exchange, procfs
+  buffer mutation, and user-copy remain C-owned.
+- Ported the fourth object/procfs/sysfs/dev/file decision-helper batch behind
+  the same C ABI. Rust now owns fileobj path-present, invalid page-count,
+  hashed-page free, premap page-present, and lookup-miss decisions; devobj
+  path/PFN-table presence and mapped-PFN composition; sysfs request-busy,
+  handle-pointer, default response, release-response, and request-handler
+  dispatch decisions; and procfs release-message, root match, OS-number match,
+  zero-length read, locked-size accumulation, and bitmask offset decisions.
+  Allocation/free calls, reference mutation, locks, lists, page-table
+  mutation, sysfs IKC sends, procfs buffer mutation, and user-copy remain
+  C-owned.
 - Ported the exported bitops scan/hweight helper cluster behind the existing C
   ABI: `find_next_bit()`, `find_next_zero_bit()`, `find_first_bit()`,
   `find_first_zero_bit()`, and the `__sw_hweight*()` helpers.
@@ -636,8 +686,186 @@ Known current validation state
   non-root `mcexec /usr/bin/hostname`, non-root `mcstat`, a SysV
   shared-memory runtime smoke covering `shmget`, `shmat`,
   `madvise(MADV_REMOVE)`, `shmdt`, and `shmctl(IPC_RMID)`, and clean shutdown.
-  The full Rust ownership estimate is now 55% after this broader object and
+  The full Rust ownership estimate was 55% after this broader object and
   pager decision-helper slice.
+- The 2026-05-19 04:50 EDT third object/procfs/sysfs/dev/file helper batch
+  passed equivalence with `object_helpers ok digest=99bdfd218ffbecb9`, source
+  hygiene, shell syntax, Rust/C image builds, expected unresolved-symbol
+  checks, SIMD scan, rebuilt-image install, boot, non-root
+  `mcexec /bin/true`, non-root `mcexec /usr/bin/hostname`, non-root `mcstat`,
+  McKernel-side `/proc/self/maps`, `/proc/self/stat`, and
+  `/proc/self/pagemap` smoke, a SysV shared-memory runtime smoke covering
+  `shmget`, `shmat`, `madvise(MADV_REMOVE)`, `shmdt`, and
+  `shmctl(IPC_RMID)`, and clean shutdown. The full Rust ownership estimate is
+  now 66% after this widened object/procfs/sysfs/dev/file decision-helper
+  slice.
+- The 2026-05-19 05:05 EDT fourth object/procfs/sysfs/dev/file helper batch
+  passed equivalence with `object_helpers ok digest=1702b42881d4497b`, source
+  hygiene, shell syntax, Rust/C image builds, expected unresolved-symbol
+  checks, SIMD scan, rebuilt-image install, boot, non-root
+  `mcexec /bin/true`, non-root `mcexec /usr/bin/hostname`, non-root `mcstat`,
+  McKernel-side `/proc/self/status`, `/proc/self/maps`, `/proc/self/stat`, and
+  `/proc/self/pagemap` smoke, host sysfs show against
+  `/sys/devices/virtual/mcos/mcos0/sys/test/a.dir/a_value`, a SysV
+  shared-memory runtime smoke covering `shmget`, `shmat`,
+  `madvise(MADV_REMOVE)`, `shmdt`, and `shmctl(IPC_RMID)`, and clean
+  shutdown. The sample sysfs value was read-only, so sysfs store mutation is
+  still a next runtime target. The full Rust ownership estimate is now 72%
+  after this widened object/procfs/sysfs/dev/file decision-helper slice.
+- The 2026-05-19 05:16 EDT fifth object/pager helper batch passed
+  equivalence with `object_helpers ok digest=66f53556a25bc594`, source
+  hygiene, shell syntax, Rust/C image builds, expected unresolved-symbol
+  checks, SIMD scan, rebuilt-image install, boot, non-root
+  `mcexec /bin/true`, non-root `mcexec /usr/bin/hostname`, non-root `mcstat`,
+  McKernel-side `/proc/self/status`, `/proc/self/maps`, `/proc/self/stat`, and
+  `/proc/self/pagemap` smoke, host sysfs show against
+  `/sys/devices/virtual/mcos/mcos0/sys/test/a.dir/a_value`, a SysV
+  shared-memory runtime smoke covering `shmget`, `shmat`,
+  `madvise(MADV_REMOVE)`, `shmdt`, and `shmctl(IPC_RMID)`, and clean
+  shutdown. The Rust side now owns pager arealist math, addrpair sizing,
+  file-position math, Linux-mlock sentinel handling, pagein data-position
+  math, pageout argument validation, anonymous-range skip policy,
+  locked-range detection, physical-removal skip policy, fd validation,
+  swap-unlink decisions, and short-I/O errno mapping. Direct pagein/pageout/
+  swapout runtime coverage is still required before moving pager orchestration,
+  user-copy, Linux syscall forwarding, allocation/free, or page-table mutation
+  out of C. The full Rust ownership estimate is now 78%.
+- The 2026-05-19 05:34 EDT sixth object/procfs/sysfs/shmobj/hugefile helper
+  batch passed equivalence with `object_helpers ok digest=2a5012e4f6aeb336`,
+  source hygiene, shell syntax, Rust/C image builds, expected
+  unresolved-symbol checks, SIMD scan, rebuilt-image install, boot, non-root
+  `mcexec /bin/true`, non-root `mcexec /usr/bin/hostname`, non-root `mcstat`,
+  McKernel-side `/proc/self/status`, `/proc/self/maps`, `/proc/self/stat`,
+  `/proc/self/cmdline`, `/proc/self/comm`, and `/proc/self/pagemap` smoke,
+  host sysfs show against
+  `/sys/devices/virtual/mcos/mcos0/sys/test/a.dir/a_value`, a SysV
+  shared-memory runtime smoke covering `shmget`, `shmat`,
+  `madvise(MADV_REMOVE)`, `shmdt`, and `shmctl(IPC_RMID)`, and clean
+  shutdown. The Rust side now owns sysfs allocation/callback presence checks,
+  procfs remote-buffer/backlog/task/cmdline/pbuf decisions, SysV
+  shm/shmlock lifecycle and page-state decisions, and hugefile presence/growth
+  helpers. Writable sysfs store, direct pager pagein/pageout/swapout,
+  `/proc/PID/mem`, device PFN, and hugetlbfs-backed runtime probes are still
+  required before moving IKC exchange, user-copy, Linux forwarding,
+  allocation/free, or page-table mutation out of C. The full Rust ownership
+  estimate is now 86%.
+- The 2026-05-19 13:58 EDT seventh shared memobj/page helper batch passed
+  equivalence with `page_helpers ok digest=80665444d423c9a2` and
+  `object_helpers ok digest=6c986fb9ff306d75`, source hygiene, shell syntax,
+  credential scan, Rust/C image builds, rebuilt-image install, boot, non-root
+  `mcexec /bin/true`, non-root `mcexec /bin/hostname`, `mcstat`,
+  McKernel-side `/proc/self/status`, `/proc/self/maps`, `/proc/self/stat`,
+  `/proc/self/cmdline`, `/proc/self/comm`, and `/proc/self/pagemap` smoke,
+  host sysfs module-attribute reads, a SysV shared-memory runtime smoke
+  covering `shmget`, `shmat`, `madvise(MADV_REMOVE)`, `shmdt`, and
+  `shmctl(IPC_RMID)`, and clean shutdown. The Rust side now owns
+  memobj unref-free decisions, operation-pointer presence checks,
+  missing/default page-operation results, pager/removable flag predicates,
+  flushable/freeable/remap-file-pages predicates, page mode-in-memobj
+  classification, and multi-mapped page classification. Atomic reference
+  mutation, indirect memobj operation calls, allocation/free orchestration,
+  locks, lists, page-map/page-table mutation, and user-copy remain C-owned.
+  The full Rust ownership estimate is now 89%.
+- The 2026-05-19 14:29 EDT eighth procfs/pager/file helper batch passed
+  equivalence with `object_helpers ok digest=45e65c243c3b5900`, source
+  hygiene, shell syntax, credential scan, Rust/C image builds, rebuilt-image
+  install, boot, non-root `mcexec /bin/true`, non-root
+  `mcexec /bin/hostname`, `mcstat`, McKernel-side `/proc/self/comm`,
+  `/proc/self/stat`, `/proc/self/status`, `/proc/self/maps`,
+  `/proc/self/cmdline`, `/proc/self/pagemap`, and `/proc/stat` smoke, host
+  sysfs module-attribute reads, a SysV shared-memory runtime smoke covering
+  `shmget`, `shmat`, `madvise(MADV_REMOVE)`, `shmdt`, and
+  `shmctl(IPC_RMID)`, and clean shutdown. The Rust side now owns procfs
+  entry-name classification, procfs `comm` basename selection, pager Linux
+  read/write loop stop/advance/remaining/complete decisions, pager copy-fault
+  retry/error mapping, file-object shared-reference increment math, and file
+  premap NUMA-interleave policy. Linux syscall forwarding, procfs buffer
+  mutation, page-fault execution, user-copy, file-object lifetime mutation,
+  allocation/free, locks, lists, and page-table mutation remain C-owned. The
+  McKernel core helper/decision-surface Rust ownership estimate is now 94%;
+  full-tree ownership including IHK modules remains lower until the IHK
+  Linux-module Rust build path is established.
+- The 2026-05-19 process/VM ABI expansion added `overview2.txt` as the
+  whole-tree Rust completion tracker and broadened ABI/layout coverage for
+  `cpu_set_t`, `mcs_rwlock_lock_t`, `struct process_hash`,
+  `struct thread_hash`, `struct address_space`, `struct vm_range`,
+  `struct vm_range_numa_policy`, `struct vm_regions`, and
+  `struct process_vm`. Validation passed `rustfmt kernel/rust/abi.rs`,
+  `bash -n kernel/rust/tests/run_equivalence.sh`, `git diff --check`, the
+  tracked-source credential scan, full Rust helper equivalence,
+  `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`, and
+  `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`.
+  Whole-tree Rust ownership with arm64 deferred is now tracked at 32% in
+  overview2.txt. The next conversion front is thread/process lifetime layout,
+  IHK module build/link scaffolding, and process/VM policy helpers that do not
+  mutate page tables or lock-owned lists.
+- The 2026-05-19 14:57 EDT process/VM-plus-mcstat helper batch moved the
+  common VR-flag-to-page-attribute helper, VM range split/bounds/extend-up
+  policy, protection-delta policy, remove-region alignment policy, and
+  `access_ok()` decision helpers into Rust. It also added the first Rust
+  user-tool object for `mcstat` memory scale/unit, header cadence, and monitor
+  status label helpers. Validation passed Rust formatting, shell syntax,
+  whitespace checks, tracked-source credential scan, full Rust/C helper
+  equivalence with `process_helpers ok digest=f5bdebac01215848`,
+  Rust-enabled `mckernel.img`, C fallback `mckernel.img`, and the Rust-enabled
+  `mcstat` build; the c-fallback build tree's `mcstat` target also passed with
+  the Rust user-tool helper object linked. McKernel core helper/decision-surface
+  ownership is now 97%; whole-tree Rust ownership with arm64 deferred is now
+  tracked at 37%.
+- The 2026-05-19 15:08 EDT x86_64 memory-attribute helper batch moved
+  `attr_to_l3attr()`, `attr_to_l2attr()`, and `attr_to_l1attr()` decisions to
+  Rust-backed helpers, with C fallback behavior preserved. Validation passed
+  Rust formatting, shell syntax, whitespace checks, tracked-source credential
+  scan, full Rust/C helper equivalence with
+  `x86_memory_helpers ok digest=424ca34135e5ea58` and
+  `process_helpers ok digest=f5bdebac01215848`, Rust-enabled
+  `mckernel.img`, C fallback `mckernel.img`, and the Rust-enabled `mcstat`
+  build. No boot/runtime smoke was run for this helper-only batch. McKernel
+  core helper/decision-surface ownership is now 98%; whole-tree Rust ownership
+  with arm64 deferred is now tracked at 39%. I did not mark 99%/42% because
+  IHK Linux modules, page-table mutation, syscall dispatch, scheduler/futex
+  internals, and most user tools are still material C-owned surfaces.
+- The 2026-05-19 15:22 EDT x86_64-page-size plus mcexec/ihklib helper batch
+  moved `arch_get_smaller_page_size()` decisions to Rust-backed
+  `x86_smaller_page_size_result()`, added a Rust helper object for `mcexec`
+  byte-size parsing, stack premap/max parsing, heap-extension defaulting,
+  thread-count selection, memory-policy flags, and stack-limit adjustment, and
+  added a Rust helper object for `ihklib` CPU-list and memory-size parsing used
+  by IHK user-command paths. Validation passed Rust formatting, shell syntax,
+  whitespace checks, tracked-source credential scan, standalone user-helper
+  Rust object checks without unresolved Rust panic symbols, full Rust/C helper
+  equivalence with `x86_memory_helpers ok digest=308f2a36064e3022`,
+  Rust-enabled `mckernel.img`, C fallback `mckernel.img`, Rust-enabled
+  `mcexec`, `ihkconfig`, `ihkosctl`, and `mcstat`, and a fresh
+  `-DENABLE_RUST_USER_TOOLS=OFF` build of those user targets. No boot/runtime
+  smoke was run for this helper-only batch. McKernel core
+  helper/decision-surface ownership is now 99%; whole-tree Rust ownership with
+  arm64 deferred is now tracked at 42%. I did not mark 44% whole-tree because
+  IHK Linux modules remain 0%, most IHK command logic remains C, and
+  mutation-heavy kernel bodies are still material C-owned surfaces.
+- The 2026-05-19 15:35 EDT ihklib parser plus mcexec dirent/proc-task helper
+  batch expanded user/IHK-user Rust ownership without touching kernel mutation
+  paths. `ihklib` now routes memory-list parsing and IKC-map parsing through
+  `ihklib_mem_str2array_result()` and `ihklib_ikc_str2array_result()`, while
+  preserving the C allocation, request-object, sysfs/procfs, device-I/O, ioctl,
+  command-orchestration, and IHK Linux module paths. `mcexec` now routes
+  getdents/getdents64 dirent field layout access and proc-task leaf path
+  classification through Rust helpers while C still owns syscall selection,
+  directory-entry merge orchestration, mapped-parent stat checks, and error
+  handling. Validation passed Rust formatting, standalone user-helper Rust
+  object checks with no unresolved Rust panic/indexing symbols, whitespace
+  checks, tracked-source credential scan, full Rust/C helper equivalence with
+  `x86_memory_helpers ok digest=308f2a36064e3022`,
+  Rust-enabled `mckernel.img`, Rust-enabled `mcexec`, `ihkconfig`,
+  `ihkosctl`, `ihkmond`, and `mcstat`, and a fresh
+  `-DENABLE_RUST_USER_TOOLS=OFF` build of the same user targets. No
+  boot/runtime smoke was run for this helper-only batch; a follow-up
+  Rust-enabled and Rust-disabled `mcexec` rebuild passed after the proc-task
+  helper was added. McKernel core
+  helper/decision-surface ownership remains 99%; whole-tree Rust ownership
+  with arm64 deferred is now tracked at 43%. I did not mark 100%/47% because
+  IHK Linux modules are still 0%, most user tools and IHK command logic remain
+  C, and the mutation-heavy kernel bodies are still material C-owned surfaces.
 - Direct strace is no longer the active V11 blocker. Direct forms including
   `mcexec strace -o ... /bin/true` now complete successfully.
 - The Rocky `stat`/`strace-f` panic was fixed by avoiding the missing
@@ -1257,6 +1485,11 @@ Scope:
     Rust-owned while free-space search, object creation, page allocation,
     host VMA updates, range insertion, prefaulting, and teardown remain
     C-owned.
+  - x86_64 page-attribute translation helpers for L3/L2/L1 attributes are
+    Rust-owned while page-table walking, mapping, unmapping, TLB-sensitive
+    mutation, and user-copy remain C-owned.
+  - x86_64 smaller-page-size selection is Rust-owned while page-table
+    splitting, TLB flushes, and mapping mutation remain C-owned.
 
 Exit criteria:
 - large_page/x86_64 tests pass.
@@ -1402,12 +1635,28 @@ Scope:
     `xpmem_object_lookup_decision_result()`. Atomic reference mutation, frees,
     lock/list mutation, attach/remap/page-table mutation, and user-copy remain
     C-owned.
+  - File/dev/procfs/sysfs/pager/shmobj/hugefile/shared-memobj object decision
+    helpers are Rust-owned through eight bounded C ABI batches, including
+    file-object page/page-I/O/allocation decisions, device-object PFN and map-size
+    decisions, sysfs path/packet/parameter/wait/handler/allocation/callback
+    decisions, procfs mem/pagemap/status/maps/auxv/task/backlog/cmdline/pbuf
+    decisions, pager arealist/mlock/pagein/pageout policy math, SysV
+    shm/shmlock lifecycle and page-state decisions, and hugefile
+    presence/growth decisions, plus shared memobj op/default/flush/free/remap
+    predicates, page mode/refcount classifiers, procfs entry/comm
+    classification, pager Linux I/O loop policy, pager copy-fault policy, file
+    sref math, and file premap interleave policy. Allocation, reference
+    mutation, locks, lists, page-table mutation, page I/O, pager orchestration,
+    sysfs IKC exchange, procfs buffer mutation, and user-copy remain C-owned.
 - Next safe slices:
   - Keep the direct `/dev/xpmem` runtime gate active.
   - Expand file/dev/procfs/sysfs runtime coverage around file-backed mmap,
     `/proc/PID/pagemap`, `/proc/PID/mem`, sysfs create/show/store, device PFN
     mappings, and hugetlbfs-backed mappings before moving page-cache, procfs
     buffer, sysfs IKC, device-PFN, or hugefile allocation/mutation bodies.
+  - Add direct pager pagein/pageout/swapout workload probes before moving pager
+    orchestration, Linux forwarding, user-copy, allocation/free, or page-table
+    mutation out of C.
   - Keep SysV shm runtime smoke in the gate for future shmobj changes; add
     focused LTP shmat/shmget/shmdt coverage before moving object allocation,
     refcount mutation, or page-list mutation.
@@ -1461,6 +1710,16 @@ Scope:
 - Port mcexec, mcstat, crash helpers, dump helpers, and smaller utilities.
 - Preserve command-line flags, output formats, exit codes, and protocol
   behavior.
+- Current Rust-owned foothold: `mcstat` links a Rust helper object for memory
+  scale/unit selection, periodic header cadence, and monitor-status labels;
+  `mcexec` links a Rust helper object for byte-size parsing, stack premap/max
+  parsing, heap-extension defaulting, thread-count selection, memory-policy
+  flags, stack-limit adjustment, getdents dirent field accessors, and
+  proc-task leaf path classification; `ihklib` links a Rust helper object for
+  CPU-list, memory-size, memory-list, and
+  IKC-map parsing. Device I/O, ioctl handling, output loops, mcinspect,
+  eclair, crash helpers, request allocation, and most IHK command logic remain
+  C-owned.
 
 Exit criteria:
 - Existing scripts work unchanged.

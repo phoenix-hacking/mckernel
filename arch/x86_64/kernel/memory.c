@@ -21,6 +21,7 @@
 #include <errno.h>
 #include <list.h>
 #include <process.h>
+#include <arch-memory-helpers.h>
 #include <page.h>
 #include <cls.h>
 #include <kmalloc.h>
@@ -206,33 +207,15 @@ static unsigned long attr_to_l4attr(enum ihk_mc_pt_attribute attr)
 #endif
 static unsigned long attr_to_l3attr(enum ihk_mc_pt_attribute attr)
 {
-	unsigned long r = (attr & (ATTR_MASK | PTATTR_LARGEPAGE));
-
-	if ((attr & PTATTR_UNCACHABLE) && (attr & PTATTR_LARGEPAGE)) {
-		return r | PFL3_PCD | PFL3_PWT;
-	}
-	return r;
+	return x86_attr_to_l3attr_result(attr, ATTR_MASK);
 }
 static unsigned long attr_to_l2attr(enum ihk_mc_pt_attribute attr)
 {
-	unsigned long r = (attr & (ATTR_MASK | PTATTR_LARGEPAGE));
-
-	if ((attr & PTATTR_UNCACHABLE) && (attr & PTATTR_LARGEPAGE)) {
-		return r | PFL2_PCD | PFL2_PWT; 
-	}
-	return r;
+	return x86_attr_to_l2attr_result(attr, ATTR_MASK);
 }
 static unsigned long attr_to_l1attr(enum ihk_mc_pt_attribute attr)
 {
-	if (attr & PTATTR_UNCACHABLE) {
-		return (attr & ATTR_MASK) | PFL1_PCD | PFL1_PWT;
-	} 
-	else if (attr & PTATTR_WRITE_COMBINED) {
-		return (attr & ATTR_MASK) | PFL1_PWT;
-	}
-	else { 
-		return (attr & ATTR_MASK);
-	}
+	return x86_attr_to_l1attr_result(attr, ATTR_MASK);
 }
 
 #define PTLX_SHIFT(index) PTL ## index ## _SHIFT
@@ -2270,41 +2253,9 @@ out:
 int arch_get_smaller_page_size(void *args, size_t cursize, size_t *newsizep,
 		int *p2alignp)
 {
-	size_t newsize;
-	int p2align;
-	int error;
+	int error = x86_smaller_page_size_result(cursize, use_1gb_page,
+			newsizep, p2alignp);
 
-	if (0) {
-		/* dummy */
-		panic("not reached");
-	}
-	else if ((cursize > PTL3_SIZE) && use_1gb_page) {
-		/* 1GiB */
-		newsize = PTL3_SIZE;
-		p2align = PTL3_SHIFT - PTL1_SHIFT;
-	}
-	else if (cursize > PTL2_SIZE) {
-		/* 2MiB */
-		newsize = PTL2_SIZE;
-		p2align = PTL2_SHIFT - PTL1_SHIFT;
-	}
-	else if (cursize > PTL1_SIZE) {
-		/* 4KiB : basic page size */
-		newsize = PTL1_SIZE;
-		p2align = PTL1_SHIFT - PTL1_SHIFT;
-	}
-	else {
-		error = -ENOMEM;
-		newsize = 0;
-		p2align = -1;
-		goto out;
-	}
-
-	error = 0;
-	if (newsizep) *newsizep = newsize;
-	if (p2alignp) *p2alignp = p2align;
-
-out:
 	/*dkprintf("arch_get_smaller_page_size(%p,%lx): %d %lx %d\n",
 	  args, cursize, error, newsize, p2align);*/
 	return error;
@@ -3015,4 +2966,3 @@ int split_contiguous_pages(pte_t *ptep, size_t pgsize,
 {
 	return 0;
 }
-

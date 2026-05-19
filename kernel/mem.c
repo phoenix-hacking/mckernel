@@ -3115,6 +3115,18 @@ out:
 #ifdef MCKERNEL_RUST_PAGE_HELPERS
 extern int is_splitable(struct page *page, uint32_t memobj_flags);
 #else
+int page_mode_in_memobj_result(int mode)
+{
+	return mode == PM_MAPPED || mode == PM_PAGEIO ||
+		mode == PM_WILL_PAGEIO || mode == PM_DONE_PAGEIO ||
+		mode == PM_PAGEIO_EOF || mode == PM_PAGEIO_ERROR;
+}
+
+int page_multi_mapped_result(int count)
+{
+	return count > 1;
+}
+
 int is_splitable(struct page *page, uint32_t memobj_flags)
 {
 	int ret = 1;

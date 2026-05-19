@@ -54,15 +54,25 @@ const _: () = {
 
 #[inline(always)]
 unsafe fn page_is_in_memobj(page: *const Page) -> bool {
-    matches!(
-        read_volatile(&(*page).mode),
-        PM_MAPPED | PM_PAGEIO | PM_WILL_PAGEIO | PM_DONE_PAGEIO | PM_PAGEIO_EOF | PM_PAGEIO_ERROR
-    )
+    page_mode_in_memobj_result(read_volatile(&(*page).mode) as CInt) != 0
 }
 
 #[inline(always)]
 unsafe fn page_is_multi_mapped(page: *const Page) -> bool {
-    read_volatile(&(*page).count.counter) > 1
+    page_multi_mapped_result(read_volatile(&(*page).count.counter)) != 0
+}
+
+#[no_mangle]
+pub extern "C" fn page_mode_in_memobj_result(mode: CInt) -> CInt {
+    matches!(
+        mode as u8,
+        PM_MAPPED | PM_PAGEIO | PM_WILL_PAGEIO | PM_DONE_PAGEIO | PM_PAGEIO_EOF | PM_PAGEIO_ERROR
+    ) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn page_multi_mapped_result(count: CInt) -> CInt {
+    (count > 1) as CInt
 }
 
 #[no_mangle]

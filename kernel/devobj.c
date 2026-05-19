@@ -118,7 +118,7 @@ int devobj_create(int fd, size_t len, off_t off, struct memobj **objp, int *maxp
 	obj->handle = result.handle;
 
 	dkprintf("%s: path=%s\n", __FUNCTION__, result.path);
-	if (result.path[0]) {
+	if (devobj_path_present_result(result.path[0])) {
 		obj->memobj.path = kmalloc(PATH_MAX, IHK_MC_AP_NOWAIT);
 		if (!obj->memobj.path) {
 			error = -ENOMEM;
@@ -160,7 +160,7 @@ int devobj_create(int fd, size_t len, off_t off, struct memobj **objp, int *maxp
 
 out:
 	if (obj) {
-		if (obj->pfn_table) {
+		if (devobj_pfn_table_present_result((uintptr_t)obj->pfn_table)) {
 			ihk_mc_free_pages(obj->pfn_table, pfn_npages);
 		}
 		kfree(obj);
@@ -193,13 +193,13 @@ static void devobj_free(struct memobj *memobj)
 		/* through */
 	}
 
-	if (obj->pfn_table) {
+	if (devobj_pfn_table_present_result((uintptr_t)obj->pfn_table)) {
 		// Don't call memory_stat_rss_sub() because devobj related
 		// pages don't reside in main memory
 		ihk_mc_free_pages(obj->pfn_table, pfn_npages);
 	}
 
-	if (to_memobj(obj)->path) {
+	if (devobj_path_present_result((uintptr_t)to_memobj(obj)->path)) {
 		kfree(to_memobj(obj)->path);
 	}
 
@@ -268,8 +268,7 @@ pf_retry:
 			pfn = ihk_mc_map_memory(NULL,
 					devobj_pfn_phys_result(pfn),
 					devobj_map_size_result());
-			pfn = devobj_pfn_phys_result(pfn);
-			pfn |= attr;
+			pfn = devobj_mapped_pfn_result(pfn, attr);
 			dkprintf("devobj_get_page(%p %lx,%lx,%d):PFN_PRESENT after %#lx\n", memobj, obj->handle, off, p2align, pfn);
 		}
 #ifdef ENABLE_FUGAKU_HACKS

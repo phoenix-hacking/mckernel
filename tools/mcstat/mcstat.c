@@ -25,7 +25,28 @@
 #define MiB		(1024*1024)
 #define GiB		(1024*1024*1024)
 #define CONV_UNIT(d)	(((float)(d))/scale)
-#define UPDATE_COUNTER(c)	(c = (c + 1) % 10)
+
+#ifdef MCSTAT_RUST_HELPERS
+extern unsigned long mcstat_memory_scale_result(unsigned long max_usage);
+extern const char *mcstat_memory_unit_result(unsigned long max_usage);
+extern unsigned char mcstat_update_counter_result(unsigned char counter);
+extern const char *mcstat_monstatus_result(int status);
+#else
+static unsigned long mcstat_memory_scale_result(unsigned long max_usage)
+{
+	return max_usage < MiB100 ? MiB : GiB;
+}
+
+static const char *mcstat_memory_unit_result(unsigned long max_usage)
+{
+	return max_usage < MiB100 ? "MB" : "GB";
+}
+
+static unsigned char mcstat_update_counter_result(unsigned char counter)
+{
+	return (counter + 1) % 10;
+}
+#endif
 
 struct my_rusage {
 	struct ihk_os_rusage rusage;
@@ -116,7 +137,7 @@ devopen(int idx)
 }
 
 static void
-statistics_header(char *unit)
+statistics_header(const char *unit)
 {
     printf("------- memory (%s) ------- ------- tsc ------ --- thread ---\n",
 	   unit);
@@ -194,19 +215,17 @@ out:
 static void
 mcstatistics(int idx, int once, int delay, int count)
 {
-    int		i, scale;
-    char	*unit;
+    int		i;
+    unsigned long scale;
+    const char	*unit;
     unsigned char show = 0;
 
     if (mygetrusage(idx, &rbuf) < 0) {
 	printf("Device has not been created.\n");
 	exit(-1);
     }
-	if (rbuf.rusage.memory_max_usage < MiB100) {
-		scale = MiB; unit = "MB";
-	} else {
-		scale = GiB; unit = "GB";
-	}
+	scale = mcstat_memory_scale_result(rbuf.rusage.memory_max_usage);
+	unit = mcstat_memory_unit_result(rbuf.rusage.memory_max_usage);
     statistics_header(unit);
     for (;;) {
 
@@ -223,7 +242,8 @@ mcstatistics(int idx, int once, int delay, int count)
 	    break;
 	}
 	if (!once) {
-	    if (UPDATE_COUNTER(show) == 0) {
+	    show = mcstat_update_counter_result(show);
+	    if (show == 0) {
 		statistics_header(unit);
 	    }
 	}
@@ -307,7 +327,8 @@ next:
 }
 
 /* status is not contiguous numbers */
-static char *
+#ifndef MCSTAT_RUST_HELPERS
+static const char *
 monstatus(int status)
 {
     switch (status) {
@@ -324,6 +345,9 @@ monstatus(int status)
     }
     return "";
 }
+#else
+#define monstatus mcstat_monstatus_result
+#endif
 
 static void
 osusage_header()
@@ -362,7 +386,8 @@ mcosusage(int idx, int once, int delay, int count)
 	if (count > 0 && --count == 0) break;
 	sleep(delay);
 	if (!once) {
-	    if (UPDATE_COUNTER(show) == 0) {
+	    show = mcstat_update_counter_result(show);
+	    if (show == 0) {
 		osusage_header();
 	    }
 	}

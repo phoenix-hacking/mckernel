@@ -1,0 +1,115 @@
+McKernel Whole-Tree Rust Completion Overview
+Updated: 2026-05-19
+
+Scope
+------------------------------------------------------------
+
+This file tracks the literal full McKernel Rust port target on Rocky Linux.
+It is separate from overview.txt because overview.txt currently tracks the
+McKernel core helper/decision surface, where some areas are much farther ahead
+than the full source tree.
+
+Target definition:
+
+- Rocky Linux remains the paired Linux host target for the active x86_64 port.
+- All McKernel-owned non-arm64 functional code is in scope for Rust ownership.
+- IHK host modules are in scope: ihk, ihk-smp-x86_64, and mcctrl.
+- User tools are in scope where they are McKernel-owned.
+- Public C headers, ioctl numbers, syscall numbers, exported ABI symbols, and
+  Linux-facing compatibility surfaces may remain as C ABI shims while logic
+  moves to Rust.
+- Architecture assembly, trampolines, context-switch assembly, and Linux
+  kernel internals are not counted as Rust-port debt unless the project later
+  chooses to replace them.
+- arm64 is deferred and excluded from the active completion denominator until
+  the x86_64/Rocky target is stable.
+
+Whole-Tree Completion Estimate
+------------------------------------------------------------
+
+Whole-tree Rust ownership estimate, arm64 excluded: 43%
+
+This is an area-weighted engineering estimate, not a line-count. It is lower
+than the 99% McKernel core helper/decision-surface estimate because full-tree
+ownership also includes mutation-heavy kernel bodies, x86_64 page-table code,
+process lifetime code, syscall dispatch, scheduler/futex internals, IHK Linux
+host modules, and user tools. The estimate moved this round because process/VM
+decision logic, x86_64 page-attribute/page-size decisions, `mcstat` leaf
+behavior, `mcexec` option/policy, dirent layout, and proc-task path helpers,
+and `ihklib` CPU/memory/IKC parsers now have Rust ownership; IHK Linux modules
+remain the largest zero.
+
+Completion Dashboard
+------------------------------------------------------------
+
+Area                                      Rust %   Whole-tree status
+----                                      ------   -----------------
+Rust build/link foundation                   91   Rust object builds and links into mckernel.img on the Rocky x86_64 path; mcstat now links a Rust helper object; C fallback remains available
+ABI/layout foundation                        20   Loader, IKC, primitive, page, memobj, SysV shm, address-space, process-hash, VM range, VM region, and process_vm layouts are checked; IHK module layouts still need broader Rust mirrors
+Shared primitives                            78   rbtree, llist, plist, waitq list core, string/memory leaves, bitops, bitmap, parsing, and region helpers are Rust-owned
+x86_64 memory management                     13   Policy/query helpers, common VR-flag to page-attribute conversion, x86 page-attribute translation, and smaller-page-size selection are Rust-owned; page-table walking, mapping, unmapping, TLB-sensitive mutation, and user-copy are still C
+Page allocator                               20   Several allocator helper bodies are Rust-owned; lock-heavy fast paths, CPU-local cache, zeroing requests, and allocator mutation remain C
+Process/VM management                        15   Wait/clone/ptrace policy helpers plus VM range bounds, split-alignment, extend-up, protection-delta, and access-check decisions are Rust-owned; process lifetime, child lists, reparenting, VM range mutation, and rusage aggregation remain C
+Syscall core                                 25   Many syscall validation/policy helpers are Rust-owned; dispatch, argument orchestration, user-copy, Linux forwarding, and high-risk handlers remain C
+Scheduler/timers/wait/futex                  14   Scheduler/futex/time policy helpers and waitq list core are Rust-owned; callback paths, timer mutation, futex queues, wakeups, and locks remain C
+procfs/sysfs/xpmem/file objects              94   Decision-helper surface is mostly Rust-owned; allocation, reference mutation, IKC exchange, page I/O, procfs/sysfs buffer mutation, remap, and page-table mutation remain C
+host/IKC/mcctrl/IHK modules                   0   In full-port scope; Rust Linux-module build/link integration has not started
+User tools                                   24   mcstat, mcexec, and ihklib now link Rust helper objects for monitor labels, byte-size parsing, stack/heap/thread policy, memory-policy flags, getdents dirent field layout, proc-task path classification, CPU-list parsing, memory-list parsing, and IKC-map parsing; device I/O, ioctl handling, formatting loops, mcinspect, eclair, crash helpers, and most IHK command logic remain C
+Rocky runtime integration                    80   Rust McKernel image boots and focused Rocky smoke passes; wider runtime/performance coverage is pending
+
+What Counts As 100%
+------------------------------------------------------------
+
+An area is not complete until the Rust path is the primary implementation and
+the matching C path is either removed, retained only as a compatibility shim,
+or documented as a deliberate external boundary.
+
+The full-tree target reaches 100% only when all non-arm64 areas above are
+Rust-owned and these gates pass:
+
+- Rust-enabled full McKernel image builds on Rocky.
+- C fallback image still builds until the fallback is intentionally retired.
+- IHK Linux host modules build and load with Rust-owned logic behind their
+  Linux-facing entry points.
+- User tools build from Rust or are reduced to thin compatibility wrappers.
+- McKernel boots on Rocky with McKernel cores.
+- Non-root mcexec smoke passes.
+- procfs/sysfs smoke passes.
+- SysV shared memory smoke passes.
+- XPMEM runtime smoke passes when /dev/xpmem is present.
+- Memory-management smoke covers mmap, brk, mprotect, munmap, mincore,
+  page-fault, file-backed mmap, and hugetlbfs-backed mappings.
+- Scheduler/futex smoke covers wait, wake, timeout, requeue, affinity, and
+  timer behavior.
+- Regression tests include targeted equivalence tests for every moved helper
+  plus runtime probes for every moved mutation-heavy path.
+
+Current Blockers To 100%
+------------------------------------------------------------
+
+- No Rust build/link path exists yet for the IHK Linux host modules.
+- Most user tools do not yet have Rust crates or compatibility wrappers beyond
+  the current `mcstat`, `mcexec`, and `ihklib` helper objects.
+- x86_64 page-table and TLB-sensitive mutation are still C because direct
+  runtime probes must exist before moving them.
+- Process lifetime and VM range mutation are still C because child-list,
+  reparenting, rusage, locking, and teardown paths need staged runtime tests.
+- Syscall dispatch and user-copy-heavy handlers are still C.
+- Futex queue/wake internals, timer mutation, and scheduler callbacks are
+  still C.
+- Direct XPMEM runtime remains host-dependent; use /dev/xpmem when present and
+  keep helper-only conversions until runtime coverage exists.
+
+Next Milestones
+------------------------------------------------------------
+
+1. Add the first IHK Rust build/link spike for ihk, ihk-smp-x86_64, and mcctrl
+   with C-callable pure helpers.
+2. Expand ABI/layout coverage for thread/process lifetime and host-module-facing structs.
+3. Convert more process/VM and x86_64 memory policy helpers while adding
+   runtime probes before moving mutation-heavy bodies.
+4. Expand user-tool Rust crate scaffolding and port command parsing/output
+   logic beyond the current mcstat, mcexec, and ihklib helper objects,
+   especially mcinspect, eclair, crash helpers, and IHK command orchestration.
+5. Add a generated ownership report that combines symbol ownership and LOC so
+   this estimate can become mechanical instead of hand-maintained.

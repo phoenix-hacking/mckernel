@@ -578,6 +578,8 @@ enum {
 
 extern uintptr_t page_to_phys(struct page *);
 extern int is_splitable(struct page *, uint32_t);
+extern int page_mode_in_memobj_result(int);
+extern int page_multi_mapped_result(int);
 
 static void mix(unsigned long *digest, unsigned long value)
 {
@@ -630,6 +632,11 @@ int main(void)
 	mix(&digest, page_to_phys(NULL));
 	mix_signed(&digest, is_splitable(NULL, 0));
 	mix_signed(&digest, is_splitable(NULL, MF_SHM));
+
+	for (unsigned int i = 0; i < sizeof(modes) / sizeof(modes[0]); i++)
+		mix_signed(&digest, page_mode_in_memobj_result(modes[i]));
+	for (unsigned int i = 0; i < sizeof(counts) / sizeof(counts[0]); i++)
+		mix_signed(&digest, page_multi_mapped_result(counts[i]));
 
 	for (unsigned int i = 0; i < sizeof(modes) / sizeof(modes[0]); i++) {
 		for (unsigned int j = 0; j < sizeof(counts) / sizeof(counts[0]); j++) {
@@ -2669,6 +2676,17 @@ cat > "${tmpdir}/object_helpers_equiv.c" <<'EOF_OBJECT_HELPERS'
 #include <stdlib.h>
 #include <sys/types.h>
 
+extern int memobj_unref_should_free_result(int);
+extern int memobj_op_present_result(uintptr_t);
+extern int memobj_missing_page_op_result(void);
+extern uintptr_t memobj_missing_copy_page_result(void);
+extern int memobj_default_page_op_result(void);
+extern int memobj_has_pager_flags_result(unsigned int);
+extern int memobj_is_removable_flags_result(unsigned int);
+extern int memobj_flushable_page_result(int, int);
+extern int memobj_flushable_obj_result(int, unsigned int);
+extern int memobj_is_freeable_result(int, unsigned int);
+extern int memobj_callable_remap_file_pages_result(int, unsigned int);
 extern int fileobj_page_hash_result(long);
 extern int fileobj_page_mode_valid_result(int);
 extern int fileobj_lookup_ref_keep_result(int);
@@ -2683,8 +2701,29 @@ extern int fileobj_get_page_action_result(int, int, int *);
 extern int fileobj_pageio_zero_result(int);
 extern int fileobj_pageio_mode_after_read_result(ssize_t, size_t);
 extern int fileobj_flush_skip_result(int, int);
+extern int fileobj_initial_refcnt_result(void);
+extern unsigned long fileobj_initial_sref_result(void);
+extern int fileobj_premap_start_node_result(int);
+extern int fileobj_premap_next_node_result(int, int);
+extern size_t fileobj_pages_bytes_result(int);
+extern int fileobj_premap_page_index_result(long);
+extern int fileobj_alloc_npages_result(int);
+extern unsigned long fileobj_alloc_flags_result(int);
+extern size_t fileobj_alloc_size_result(int);
+extern size_t fileobj_pageio_pgsize_result(int);
+extern int fileobj_pageio_should_schedule_result(int);
+extern int fileobj_new_page_mode_result(void);
+extern int fileobj_mapped_mode_result(void);
+extern int fileobj_path_present_result(unsigned long);
+extern int fileobj_invalid_page_count_result(int);
+extern int fileobj_should_free_hashed_page_result(int, int);
+extern int fileobj_premap_page_present_result(uintptr_t);
+extern int fileobj_lookup_page_error_result(int);
+extern unsigned long fileobj_next_sref_result(unsigned long);
+extern int fileobj_premap_interleave_result(unsigned long);
 extern size_t devobj_npages_result(size_t);
 extern size_t devobj_pfn_table_npages_result(size_t);
+extern size_t devobj_pfn_table_bytes_result(size_t);
 extern long devobj_pgoff_result(long);
 extern int devobj_get_page_index_result(long, long, size_t, int *);
 extern int devobj_cached_pfn_needs_fetch_result(uintptr_t);
@@ -2692,22 +2731,108 @@ extern int devobj_pfn_present_result(uintptr_t);
 extern uintptr_t devobj_pfn_attr_result(uintptr_t);
 extern uintptr_t devobj_pfn_phys_result(uintptr_t);
 extern int devobj_pfn_absent_error_result(uintptr_t);
+extern int devobj_base_flags_result(void);
+extern int devobj_initial_refcnt_result(void);
+extern long devobj_pfn_request_offset_result(long);
+extern int devobj_should_store_pfn_result(uintptr_t);
+extern size_t devobj_map_size_result(void);
+extern int devobj_path_present_result(unsigned long);
+extern int devobj_pfn_table_present_result(uintptr_t);
+extern uintptr_t devobj_mapped_pfn_result(uintptr_t, uintptr_t);
 extern int sysfs_path_error_result(ssize_t, int, size_t);
 extern int sysfs_special_kind_result(long);
 extern int sysfs_string_nbits_result(size_t);
 extern int sysfs_response_error_result(ssize_t);
+extern int sysfs_param_sizes_valid_result(size_t, size_t, size_t, size_t,
+					  size_t, size_t);
+extern size_t sysfs_data_bufsize_result(void);
+extern int sysfs_packet_error_result(int, int);
+extern int sysfs_request_busy_result(int);
+extern int sysfs_handle_pointer_valid_result(uintptr_t);
+extern ssize_t sysfs_default_response_ssize_result(void);
+extern int sysfs_release_response_error_result(void);
+extern int sysfs_request_handler_kind_result(int);
+extern int sysfs_pointer_missing_result(uintptr_t);
+extern int sysfs_should_call_show_result(uintptr_t);
+extern int sysfs_should_call_store_result(uintptr_t);
+extern int sysfs_should_call_release_result(uintptr_t);
 extern unsigned long procfs_mem_reason_result(int);
 extern int procfs_mem_chunk_size_result(unsigned long, unsigned long);
 extern int procfs_pagemap_range_result(unsigned long, int,
 				       unsigned long *, unsigned long *);
 extern int procfs_status_state_result(int);
 extern char procfs_thread_stat_state_result(int, int);
+extern int procfs_default_count_result(void);
+extern int procfs_remote_count_result(unsigned long, int);
+extern int procfs_remote_npages_result(int);
+extern int procfs_format_error_result(int, int);
+extern unsigned long procfs_locked_kb_result(unsigned long);
+extern char procfs_maps_read_char_result(unsigned long);
+extern char procfs_maps_write_char_result(unsigned long);
+extern char procfs_maps_exec_char_result(unsigned long);
+extern char procfs_maps_private_char_result(unsigned long);
+extern int procfs_maps_path_kind_result(unsigned long, unsigned long,
+					unsigned long, unsigned long,
+					unsigned long, unsigned long,
+					unsigned long);
+extern unsigned long procfs_pagemap_next_result(unsigned long);
+extern unsigned int procfs_auxv_limit_result(void);
+extern int procfs_is_release_result(int);
+extern int procfs_root_matched_result(int);
+extern int procfs_osnum_match_result(int, int);
+extern int procfs_zero_length_result(unsigned long);
+extern unsigned long procfs_locked_size_add_result(unsigned long,
+						   unsigned long,
+						   unsigned long,
+						   unsigned long);
+extern int procfs_bitmask_next_offset_result(int, int);
+extern int procfs_pbuf_is_empty_result(unsigned long);
+extern int procfs_backlog_needed_result(uintptr_t);
+extern int procfs_lock_failed_action_result(uintptr_t);
+extern int procfs_lock_retry_result(void);
+extern int procfs_thread_tid_result(int, int, int);
+extern int procfs_task_missing_terminal_result(int);
+extern int procfs_pointer_present_result(uintptr_t);
+extern int procfs_buffer_chain_attach_result(unsigned long, uintptr_t);
+extern int procfs_entry_kind_result(const char *);
+extern uintptr_t procfs_comm_basename_result(uintptr_t);
 extern int pager_linux_io_retry_result(ssize_t);
+extern int pager_linux_io_stop_result(ssize_t);
+extern int pager_linux_io_first_result(ssize_t);
+extern ssize_t pager_linux_io_advance_result(ssize_t, ssize_t);
+extern size_t pager_linux_io_remaining_result(size_t, ssize_t);
+extern uintptr_t pager_linux_io_next_buf_result(uintptr_t, ssize_t);
+extern int pager_linux_io_complete_result(ssize_t, size_t);
+extern int pager_copy_fault_retry_result(int);
+extern int pager_copy_fault_error_result(int);
 extern int pager_myalloc_fits_result(size_t, size_t, size_t);
 extern size_t pager_myalloc_next_alloced_result(size_t, size_t);
 extern int pager_copy_size_error_result(size_t);
 extern unsigned long pager_fault_addr_result(unsigned long);
 extern size_t pager_read_chunk_size_result(size_t, size_t);
+extern int pager_arealist_tail_room_result(int);
+extern int pager_arealist_count_add_result(int, int);
+extern ssize_t pager_addrpair_size_result(unsigned long, unsigned long);
+extern ssize_t pager_file_pos_result(ssize_t, ssize_t);
+extern ssize_t pager_arealist_write_result(ssize_t, int, size_t);
+extern int pager_mlock_more_result(unsigned long);
+extern unsigned long pager_mlock_next_start_result(unsigned long);
+extern int pager_mlock_container_empty_result(uintptr_t, uintptr_t, int, int);
+extern int pager_mlock_needs_next_result(int, int);
+extern int pager_mlock_reset_count_result(void);
+extern int pager_mlock_next_count_result(int);
+extern ssize_t pager_pagein_data_pos_result(unsigned int, unsigned int,
+					    size_t, size_t);
+extern int pager_pageout_args_result(uintptr_t, uintptr_t, size_t,
+				     unsigned long, unsigned long);
+extern int pager_skip_anon_range_result(int, unsigned long, unsigned long,
+					unsigned long, unsigned long,
+					unsigned long, unsigned long);
+extern int pager_range_locked_result(unsigned long);
+extern int pager_skip_physical_removal_result(int);
+extern int pager_fd_valid_result(int);
+extern int pager_should_unlink_swap_result(long);
+extern long pager_io_short_result(long);
 extern int zeroobj_initial_flags_result(void);
 extern int zeroobj_initial_refcnt_result(void);
 extern int zeroobj_initial_page_mode_result(void);
@@ -2723,14 +2848,37 @@ extern int shmobj_destroy_page_npages_result(int);
 extern size_t shmobj_destroy_page_size_result(int);
 extern int shmobj_destroy_index_word_result(int);
 extern unsigned long shmobj_destroy_index_mask_result(int);
+extern int shmlock_user_locked_result(size_t);
+extern int shmlock_user_match_result(int, int);
+extern int shmlock_user_is_list_head_result(uintptr_t, uintptr_t);
+extern size_t shmlock_user_after_unlock_result(size_t, size_t);
+extern int shmlock_user_should_free_result(size_t);
+extern int shmobj_has_user_result(uintptr_t);
+extern int shmobj_destroy_page_count_invalid_result(int);
+extern int shmobj_destroy_page_should_free_result(int, int);
+extern int shmobj_should_free_direct_result(int);
+extern int shmobj_destroy_missing_flag_result(int);
+extern int shmobj_initial_refcnt_result(void);
+extern int shmobj_initial_index_result(void);
+extern int shmobj_initial_ds_pgshift_result(void);
 extern int shmobj_get_page_validate_result(size_t, long, int);
 extern int shmobj_lookup_page_validate_result(size_t, long);
 extern int shmobj_page_npages_result(int);
 extern int shmobj_page_pgshift_result(int);
+extern int shmobj_need_alloc_page_result(uintptr_t);
+extern int shmobj_new_page_mode_result(void);
+extern int shmobj_new_page_count_result(void);
+extern long shmobj_new_page_mapped_result(void);
+extern int shmobj_page_mode_valid_for_new_result(int);
+extern int shmobj_lookup_page_missing_error_result(uintptr_t);
+extern int shmobj_lookup_should_store_phys_result(uintptr_t);
 extern int shmobj_update_args_result(int, int, int);
 extern size_t shmobj_update_orig_pgsize_result(int);
 extern uintptr_t shmobj_update_page_phys_result(uintptr_t, size_t);
 extern long shmobj_update_page_offset_result(long, size_t);
+extern int shmobj_pte_missing_result(uintptr_t);
+extern int shmobj_update_has_more_pages_result(size_t, size_t);
+extern size_t shmobj_update_next_page_off_result(size_t, size_t);
 extern int hugefileobj_expected_p2align_result(int);
 extern int hugefileobj_validate_p2align_result(int, int);
 extern long hugefileobj_page_index_result(long, int);
@@ -2738,10 +2886,15 @@ extern int hugefileobj_npages_per_page_result(size_t);
 extern size_t hugefileobj_pgsize_result(int);
 extern int hugefileobj_initial_status_result(void);
 extern int hugefileobj_initial_refcnt_result(void);
+extern int hugefileobj_pointer_present_result(uintptr_t);
+extern int hugefileobj_pointer_missing_result(uintptr_t);
+extern int hugefileobj_page_present_result(uintptr_t);
+extern size_t hugefileobj_page_array_bytes_result(size_t);
 extern int hugefileobj_create_nr_pages_result(long, size_t, int);
 extern int hugefileobj_needs_grow_result(size_t, int);
 extern size_t hugefileobj_copy_bytes_result(size_t);
 extern size_t hugefileobj_zero_bytes_result(size_t, size_t);
+extern size_t hugefileobj_zero_start_index_result(size_t);
 
 static void mix(unsigned long *digest, unsigned long value)
 {
@@ -2753,12 +2906,24 @@ static void mix_signed(unsigned long *digest, long value)
 	mix(digest, (unsigned long)value);
 }
 
+static long ptr_offset(const char *base, uintptr_t ptr)
+{
+	if (!ptr)
+		return -1;
+	return (const char *)ptr - base;
+}
+
 int main(void)
 {
 	const long offsets[] = { -8192, -1, 0, 1, 4095, 4096, 1048576 };
 	const int modes[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, -1 };
 	const int flags[] = { 0, 2, 0x8, 0x10, 0x8000, 0x8010,
 			      0x100000, 0x200000, 0x400000, 0x401010 };
+	const unsigned int memobj_flags[] = {
+		0, 0x1, 0x4, 0x10, 0x10000, 0x200000, 0x400000,
+		0x11, 0x10001, 0x210010, 0x600000, 0xffffffffU,
+	};
+	const unsigned long mpol_flags[] = { 0, 1, 2, 4, 8, 9, 0xffffffffUL };
 	const size_t sizes[] = { 0, 1, 4095, 4096, 4097, 8191,
 				 8192, ~0UL - 2048 };
 	const uintptr_t pfns[] = { 0, 1, 0x1001, 0x8000000000000000UL,
@@ -2772,16 +2937,65 @@ int main(void)
 	const long page_offsets[] = { 0, 1, 4096, 8192 };
 	const size_t seg_sizes[] = { 0, 1, 4095, 4096, 4097, 8192 };
 	const int p2aligns[] = { 0, 1, 2 };
+	const int counts[] = { 0, 1, 8, 1024, 4095, 4096, 4097 };
+	const int messages[] = { 0x14, 0x15, 0x3a, 0x3b, 0x3c, 0x3e, 0x40 };
+	const char *procfs_names[] = {
+		"", "mckernel", "stat", "cpuinfo", "mem", "maps",
+		"pagemap", "status", "auxv", "cmdline", "comm",
+		"unknown", "maps/", "command",
+	};
+	const char *cmdlines[] = {
+		"", "exe", "/bin/sh", "/usr/bin/python3", "relative/path",
+		"/trailing/",
+	};
+	const unsigned long map_flags[] = {
+		0, 0x1, 0x2000, 0x10000, 0x20000, 0x40000,
+		0x70000, 0x12001, 0x4000, 0x54000,
+	};
 	unsigned long digest = 0x0b1ec75eed5eedUL;
 	unsigned long start = 0;
 	unsigned long end = 0;
 	int err = 0;
 	int ix = 0;
 
+	for (int ref = -2; ref <= 2; ref++)
+		mix_signed(&digest, memobj_unref_should_free_result(ref));
+	for (unsigned long ptr = 0; ptr <= 2; ptr++)
+		mix_signed(&digest, memobj_op_present_result(ptr));
+	mix_signed(&digest, memobj_missing_page_op_result());
+	mix(&digest, memobj_missing_copy_page_result());
+	mix_signed(&digest, memobj_default_page_op_result());
+	for (int has_page = 0; has_page <= 1; has_page++) {
+		for (int in_memobj = 0; in_memobj <= 1; in_memobj++)
+			mix_signed(&digest,
+				memobj_flushable_page_result(has_page, in_memobj));
+	}
+	for (unsigned int i = 0; i < sizeof(memobj_flags) / sizeof(memobj_flags[0]); i++) {
+		for (int has_memobj = 0; has_memobj <= 1; has_memobj++) {
+			mix_signed(&digest,
+				memobj_flushable_obj_result(has_memobj,
+					memobj_flags[i]));
+			mix_signed(&digest,
+				memobj_is_freeable_result(has_memobj,
+					memobj_flags[i]));
+			mix_signed(&digest,
+				memobj_callable_remap_file_pages_result(
+					has_memobj, memobj_flags[i]));
+		}
+		mix_signed(&digest,
+			memobj_has_pager_flags_result(memobj_flags[i]));
+		mix_signed(&digest,
+			memobj_is_removable_flags_result(memobj_flags[i]));
+	}
+
 	for (unsigned int i = 0; i < sizeof(offsets) / sizeof(offsets[0]); i++) {
 		mix_signed(&digest, fileobj_page_hash_result(offsets[i]));
 		mix_signed(&digest, devobj_pgoff_result(offsets[i]));
 	}
+	for (unsigned long sref = 0; sref <= 4; sref++)
+		mix(&digest, fileobj_next_sref_result(sref));
+	for (unsigned int i = 0; i < sizeof(mpol_flags) / sizeof(mpol_flags[0]); i++)
+		mix_signed(&digest, fileobj_premap_interleave_result(mpol_flags[i]));
 
 	for (unsigned int i = 0; i < sizeof(modes) / sizeof(modes[0]); i++) {
 		mix_signed(&digest, fileobj_page_mode_valid_result(modes[i]));
@@ -2806,12 +3020,54 @@ int main(void)
 		mix_signed(&digest, fileobj_pageio_zero_result(flags[i]));
 		mix_signed(&digest, fileobj_flush_skip_result(flags[i], 0));
 		mix_signed(&digest, fileobj_flush_skip_result(flags[i], 1));
+		mix(&digest, fileobj_alloc_flags_result(flags[i]));
 	}
+
+	mix_signed(&digest, fileobj_initial_refcnt_result());
+	mix(&digest, fileobj_initial_sref_result());
+	mix_signed(&digest, fileobj_new_page_mode_result());
+	mix_signed(&digest, fileobj_mapped_mode_result());
+	for (unsigned long value = 0; value <= 2; value++) {
+		mix_signed(&digest, fileobj_path_present_result(value));
+		mix_signed(&digest, devobj_path_present_result(value));
+		mix_signed(&digest, devobj_pfn_table_present_result(value));
+		mix_signed(&digest, fileobj_premap_page_present_result(value));
+	}
+	for (int count = -1; count <= 3; count++) {
+		mix_signed(&digest, fileobj_invalid_page_count_result(count));
+		mix_signed(&digest, fileobj_should_free_hashed_page_result(count, 0));
+		mix_signed(&digest, fileobj_should_free_hashed_page_result(count, 1));
+	}
+	mix_signed(&digest, fileobj_lookup_page_error_result(0));
+	mix_signed(&digest, fileobj_lookup_page_error_result(1));
+	for (int nodes = 1; nodes <= 8; nodes++) {
+		int node = fileobj_premap_start_node_result(nodes);
+
+		mix_signed(&digest, node);
+		for (int step = 0; step < 10; step++) {
+			node = fileobj_premap_next_node_result(node, nodes);
+			mix_signed(&digest, node);
+		}
+	}
+	for (int pages = 0; pages <= 7; pages++)
+		mix(&digest, fileobj_pages_bytes_result(pages));
+	for (unsigned int i = 0; i < sizeof(offsets) / sizeof(offsets[0]); i++)
+		mix_signed(&digest, fileobj_premap_page_index_result(offsets[i]));
+	for (unsigned int i = 0; i < sizeof(p2aligns) / sizeof(p2aligns[0]); i++) {
+		int npages = fileobj_alloc_npages_result(p2aligns[i]);
+
+		mix_signed(&digest, npages);
+		mix(&digest, fileobj_alloc_size_result(npages));
+		mix(&digest, fileobj_pageio_pgsize_result(p2aligns[i]));
+	}
+	for (int attempts = 0; attempts <= 100; attempts += 25)
+		mix_signed(&digest, fileobj_pageio_should_schedule_result(attempts));
 
 	for (unsigned int i = 0; i < sizeof(sizes) / sizeof(sizes[0]); i++) {
 		mix_signed(&digest, fileobj_premap_npages_result(sizes[i]));
 		mix(&digest, devobj_npages_result(sizes[i]));
 		mix(&digest, devobj_pfn_table_npages_result(sizes[i]));
+		mix(&digest, devobj_pfn_table_bytes_result(sizes[i]));
 		mix_signed(&digest, sysfs_string_nbits_result(sizes[i]));
 	}
 
@@ -2835,6 +3091,16 @@ int main(void)
 		mix(&digest, devobj_pfn_attr_result(pfns[i]));
 		mix(&digest, devobj_pfn_phys_result(pfns[i]));
 		mix_signed(&digest, devobj_pfn_absent_error_result(pfns[i]));
+		mix_signed(&digest, devobj_should_store_pfn_result(pfns[i]));
+	}
+	mix_signed(&digest, devobj_base_flags_result());
+	mix_signed(&digest, devobj_initial_refcnt_result());
+	mix(&digest, devobj_map_size_result());
+	for (unsigned int i = 0; i < sizeof(offsets) / sizeof(offsets[0]); i++)
+		mix_signed(&digest, devobj_pfn_request_offset_result(offsets[i]));
+	for (unsigned int i = 0; i < sizeof(pfns) / sizeof(pfns[0]); i++) {
+		for (unsigned int j = 0; j < sizeof(pfns) / sizeof(pfns[0]); j++)
+			mix(&digest, devobj_mapped_pfn_result(pfns[i], pfns[j]));
 	}
 
 	for (ssize_t n = -1; n <= 1025; n += 513) {
@@ -2847,11 +3113,47 @@ int main(void)
 
 	for (ssize_t ssize = -5; ssize <= 5; ssize += 5)
 		mix_signed(&digest, sysfs_response_error_result(ssize));
+	mix_signed(&digest, sysfs_param_sizes_valid_result(1024, 1024,
+		1024, 1024, 1024, 1024));
+	mix_signed(&digest, sysfs_param_sizes_valid_result(4097, 1024,
+		1024, 1024, 1024, 1024));
+	mix(&digest, sysfs_data_bufsize_result());
+	for (int send_error = -1; send_error <= 1; send_error++) {
+		for (int packet_error = -1; packet_error <= 1; packet_error++)
+			mix_signed(&digest, sysfs_packet_error_result(send_error,
+				packet_error));
+	}
+	for (int busy = -1; busy <= 1; busy++)
+		mix_signed(&digest, sysfs_request_busy_result(busy));
+	for (unsigned long handlep = 0; handlep <= 2; handlep++)
+		mix_signed(&digest, sysfs_handle_pointer_valid_result(handlep));
+	mix_signed(&digest, sysfs_default_response_ssize_result());
+	mix_signed(&digest, sysfs_release_response_error_result());
+	for (unsigned int i = 0; i < sizeof(messages) / sizeof(messages[0]); i++)
+		mix_signed(&digest, sysfs_request_handler_kind_result(messages[i]));
+	for (unsigned long ptr = 0; ptr <= 2; ptr++) {
+		mix_signed(&digest, sysfs_pointer_missing_result(ptr));
+		mix_signed(&digest, sysfs_should_call_show_result(ptr));
+		mix_signed(&digest, sysfs_should_call_store_result(ptr));
+		mix_signed(&digest, sysfs_should_call_release_result(ptr));
+	}
 
 	mix(&digest, procfs_mem_reason_result(0));
 	mix(&digest, procfs_mem_reason_result(1));
 	for (unsigned long left = 0; left <= 8192; left += 2048)
 		mix_signed(&digest, procfs_mem_chunk_size_result(4095, left));
+	mix_signed(&digest, procfs_default_count_result());
+	for (unsigned int i = 0; i < sizeof(addrs) / sizeof(addrs[0]); i++) {
+		for (unsigned int j = 0; j < sizeof(counts) / sizeof(counts[0]); j++) {
+			mix_signed(&digest, procfs_remote_count_result(addrs[i],
+				counts[j]));
+			mix_signed(&digest, procfs_remote_npages_result(counts[j]));
+			mix_signed(&digest, procfs_format_error_result(addrs[i] &
+				0xffff, counts[j]));
+		}
+	}
+	for (unsigned int i = 0; i < sizeof(sizes) / sizeof(sizes[0]); i++)
+		mix(&digest, procfs_locked_kb_result(sizes[i]));
 
 	for (int count = -8; count <= 24; count += 8) {
 		mix_signed(&digest, procfs_pagemap_range_result(16, count, &start, &end));
@@ -2865,9 +3167,88 @@ int main(void)
 		mix_signed(&digest, procfs_thread_stat_state_result(statuses[i], 0));
 		mix_signed(&digest, procfs_thread_stat_state_result(statuses[i], 1));
 	}
+	for (unsigned int i = 0; i < sizeof(map_flags) / sizeof(map_flags[0]); i++) {
+		mix_signed(&digest, procfs_maps_read_char_result(map_flags[i]));
+		mix_signed(&digest, procfs_maps_write_char_result(map_flags[i]));
+		mix_signed(&digest, procfs_maps_exec_char_result(map_flags[i]));
+		mix_signed(&digest, procfs_maps_private_char_result(map_flags[i]));
+		mix_signed(&digest, procfs_maps_path_kind_result(0x1000,
+			0x2000, map_flags[i], 0x1000, 0x3000, 0x4000, 0x8000));
+		mix_signed(&digest, procfs_maps_path_kind_result(0x3000,
+			0x4000, map_flags[i], 0x1000, 0x3000, 0x4000, 0x8000));
+		mix_signed(&digest, procfs_maps_path_kind_result(0x5000,
+			0x6000, map_flags[i], 0x1000, 0x3000, 0x4000, 0x8000));
+	}
+	for (unsigned long pos = 0; pos <= 8192; pos += 4096)
+		mix(&digest, procfs_pagemap_next_result(pos));
+	mix(&digest, procfs_auxv_limit_result());
+	for (unsigned int i = 0; i < sizeof(messages) / sizeof(messages[0]); i++)
+		mix_signed(&digest, procfs_is_release_result(messages[i]));
+	for (int ret = -1; ret <= 2; ret++)
+		mix_signed(&digest, procfs_root_matched_result(ret));
+	for (int osnum = 0; osnum <= 2; osnum++) {
+		for (int req = 0; req <= 2; req++)
+			mix_signed(&digest, procfs_osnum_match_result(osnum, req));
+	}
+	for (unsigned int i = 0; i < sizeof(sizes) / sizeof(sizes[0]); i++)
+		mix_signed(&digest, procfs_zero_length_result(sizes[i]));
+	for (unsigned int i = 0; i < sizeof(map_flags) / sizeof(map_flags[0]); i++)
+		mix(&digest, procfs_locked_size_add_result(1024, 4096,
+			8192, map_flags[i]));
+	for (int offset = -2; offset <= 8; offset += 5) {
+		for (int written = -1; written <= 4; written += 5)
+			mix_signed(&digest,
+				procfs_bitmask_next_offset_result(offset, written));
+	}
+	mix_signed(&digest, procfs_pbuf_is_empty_result(~0UL));
+	mix_signed(&digest, procfs_pbuf_is_empty_result(0));
+	for (unsigned long ptr = 0; ptr <= 2; ptr++) {
+		mix_signed(&digest, procfs_backlog_needed_result(ptr));
+		mix_signed(&digest, procfs_lock_failed_action_result(ptr));
+		mix_signed(&digest, procfs_pointer_present_result(ptr));
+	}
+	mix_signed(&digest, procfs_lock_retry_result());
+	mix_signed(&digest, procfs_entry_kind_result(NULL));
+	for (unsigned int i = 0; i < sizeof(procfs_names) / sizeof(procfs_names[0]); i++)
+		mix_signed(&digest, procfs_entry_kind_result(procfs_names[i]));
+	mix_signed(&digest, ptr_offset(NULL, procfs_comm_basename_result(0)));
+	for (unsigned int i = 0; i < sizeof(cmdlines) / sizeof(cmdlines[0]); i++)
+		mix_signed(&digest, ptr_offset(cmdlines[i],
+			procfs_comm_basename_result((uintptr_t)cmdlines[i])));
+	for (int task = 0; task <= 1; task++) {
+		mix_signed(&digest, procfs_thread_tid_result(task, 77, 42));
+		mix_signed(&digest, procfs_task_missing_terminal_result(task));
+	}
+	{
+		const unsigned long pbufs[] = { 0, ~0UL - 1, ~0UL };
+
+		for (unsigned int p = 0; p < sizeof(pbufs) / sizeof(pbufs[0]); p++) {
+		for (unsigned long top = 0; top <= 1; top++)
+			mix_signed(&digest,
+				procfs_buffer_chain_attach_result(pbufs[p], top));
+		}
+	}
 
 	for (unsigned int i = 0; i < sizeof(io_rets) / sizeof(io_rets[0]); i++)
 		mix_signed(&digest, pager_linux_io_retry_result(io_rets[i]));
+	for (long done = -1; done <= 3; done++) {
+		mix_signed(&digest, pager_linux_io_first_result(done));
+		for (unsigned int i = 0; i < sizeof(io_rets) / sizeof(io_rets[0]); i++) {
+			mix_signed(&digest, pager_linux_io_stop_result(io_rets[i]));
+			mix_signed(&digest,
+				pager_linux_io_advance_result(done, io_rets[i]));
+			mix(&digest, pager_linux_io_remaining_result(8192,
+				io_rets[i]));
+			mix(&digest, pager_linux_io_next_buf_result(0x10000,
+				io_rets[i]));
+			mix_signed(&digest,
+				pager_linux_io_complete_result(done, 4096));
+		}
+	}
+	for (int faulted = 0; faulted <= 2; faulted++)
+		mix_signed(&digest, pager_copy_fault_retry_result(faulted));
+	for (int ret = -1; ret <= 1; ret++)
+		mix_signed(&digest, pager_copy_fault_error_result(ret));
 
 	for (unsigned int i = 0; i < sizeof(sizes) / sizeof(sizes[0]); i++) {
 		mix_signed(&digest, pager_copy_size_error_result(sizes[i]));
@@ -2882,6 +3263,73 @@ int main(void)
 		mix(&digest, pager_read_chunk_size_result(off, off));
 		mix(&digest, pager_read_chunk_size_result(off, off + 1));
 		mix(&digest, pager_read_chunk_size_result(off, off + 4097));
+	}
+	for (int tail = -1; tail <= 130; tail += 17)
+		mix_signed(&digest, pager_arealist_tail_room_result(tail));
+	for (int base = -2; base <= 4; base += 3) {
+		for (int add = -1; add <= 3; add += 2)
+			mix_signed(&digest,
+				pager_arealist_count_add_result(base, add));
+	}
+	for (unsigned int i = 0; i < sizeof(addrs) / sizeof(addrs[0]); i++) {
+		for (unsigned int j = 0; j < sizeof(addrs) / sizeof(addrs[0]); j++) {
+			mix_signed(&digest,
+				pager_addrpair_size_result(addrs[i], addrs[j]));
+			mix_signed(&digest,
+				pager_file_pos_result(addrs[i], addrs[j]));
+		}
+	}
+	for (long written = -1; written <= 8192; written += 2049) {
+		for (int count = 0; count <= 4; count++)
+			mix_signed(&digest,
+				pager_arealist_write_result(written, count, 32));
+	}
+	for (unsigned int i = 0; i < sizeof(addrs) / sizeof(addrs[0]); i++) {
+		mix_signed(&digest, pager_mlock_more_result(addrs[i]));
+		mix(&digest, pager_mlock_next_start_result(addrs[i]));
+	}
+	mix_signed(&digest, pager_mlock_more_result(~0UL));
+	for (unsigned long from = 0; from <= 1; from++) {
+		for (unsigned long tail = 0; tail <= 1; tail++)
+			mix_signed(&digest,
+				pager_mlock_container_empty_result(from, tail,
+					from, tail));
+	}
+	for (int ccount = 0; ccount <= 3; ccount++) {
+		for (int cur_count = 0; cur_count <= 3; cur_count++)
+			mix_signed(&digest,
+				pager_mlock_needs_next_result(ccount, cur_count));
+		mix_signed(&digest, pager_mlock_next_count_result(ccount));
+	}
+	mix_signed(&digest, pager_mlock_reset_count_result());
+	for (unsigned int swap_count = 0; swap_count <= 3; swap_count++) {
+		for (unsigned int mlock_count = 0; mlock_count <= 3; mlock_count++)
+			mix_signed(&digest,
+				pager_pagein_data_pos_result(swap_count,
+					mlock_count, 64, 32));
+	}
+	for (unsigned int i = 0; i < sizeof(addrs) / sizeof(addrs[0]); i++) {
+		mix_signed(&digest, pager_pageout_args_result(addrs[i],
+			0x2000, 4096, 0x1000, 0x9000));
+		mix_signed(&digest, pager_pageout_args_result(0x2000,
+			addrs[i], 4096, 0x1000, 0x9000));
+	}
+	mix_signed(&digest, pager_pageout_args_result(0x2000, 0x3000,
+		0x9000, 0x1000, 0x9000));
+	for (unsigned int i = 0; i < sizeof(map_flags) / sizeof(map_flags[0]); i++) {
+		mix_signed(&digest, pager_skip_anon_range_result(0, 0x5000,
+			0x2000, 0x8000, 0x1000, 0x9000, map_flags[i]));
+		mix_signed(&digest, pager_skip_anon_range_result(1, 0x5000,
+			0x2000, 0x8000, 0x1000, 0x9000, map_flags[i]));
+		mix_signed(&digest, pager_range_locked_result(map_flags[i]));
+	}
+	for (int flag = 0; flag <= 8; flag++)
+		mix_signed(&digest, pager_skip_physical_removal_result(flag));
+	for (int fd = -2; fd <= 2; fd++)
+		mix_signed(&digest, pager_fd_valid_result(fd));
+	for (long result = -2; result <= 2; result++) {
+		mix_signed(&digest, pager_should_unlink_swap_result(result));
+		mix_signed(&digest, pager_io_short_result(result));
 	}
 
 	mix_signed(&digest, zeroobj_initial_flags_result());
@@ -2898,6 +3346,9 @@ int main(void)
 	}
 
 	mix_signed(&digest, shmobj_initial_flags_result());
+	mix_signed(&digest, shmobj_initial_refcnt_result());
+	mix_signed(&digest, shmobj_initial_index_result());
+	mix_signed(&digest, shmobj_initial_ds_pgshift_result());
 	for (unsigned int i = 0; i < sizeof(flags) / sizeof(flags[0]); i++)
 		mix_signed(&digest, shmobj_indexed_flags_result(flags[i]));
 	for (unsigned int i = 0; i < sizeof(pgshifts) / sizeof(pgshifts[0]); i++) {
@@ -2921,6 +3372,36 @@ int main(void)
 		mix_signed(&digest, shmobj_destroy_index_word_result(index));
 		mix(&digest, shmobj_destroy_index_mask_result(index));
 	}
+	for (size_t locked = 0; locked <= 8192; locked += 4096) {
+		mix_signed(&digest, shmlock_user_locked_result(locked));
+		mix(&digest, shmlock_user_after_unlock_result(locked, 4096));
+		mix_signed(&digest, shmlock_user_should_free_result(locked));
+	}
+	for (int ruid = -1; ruid <= 2; ruid++) {
+		mix_signed(&digest, shmlock_user_match_result(ruid, 1));
+		mix_signed(&digest, shmlock_user_match_result(1, ruid));
+	}
+	for (unsigned long chain = 0; chain <= 1; chain++) {
+		for (unsigned long head = 0; head <= 1; head++)
+			mix_signed(&digest,
+				shmlock_user_is_list_head_result(chain, head));
+	}
+	for (unsigned long ptr = 0; ptr <= 2; ptr++) {
+		mix_signed(&digest, shmobj_has_user_result(ptr));
+		mix_signed(&digest, shmobj_need_alloc_page_result(ptr));
+		mix_signed(&digest, shmobj_lookup_page_missing_error_result(ptr));
+		mix_signed(&digest, shmobj_lookup_should_store_phys_result(ptr));
+		mix_signed(&digest, shmobj_pte_missing_result(ptr));
+	}
+	for (int count = -1; count <= 3; count++) {
+		mix_signed(&digest, shmobj_destroy_page_count_invalid_result(count));
+		mix_signed(&digest, shmobj_destroy_page_should_free_result(count, 0));
+		mix_signed(&digest, shmobj_destroy_page_should_free_result(count, 1));
+	}
+	for (int index = -2; index <= 2; index++)
+		mix_signed(&digest, shmobj_should_free_direct_result(index));
+	for (unsigned int i = 0; i < sizeof(flags) / sizeof(flags[0]); i++)
+		mix_signed(&digest, shmobj_destroy_missing_flag_result(flags[i]));
 	for (unsigned int i = 0; i < sizeof(seg_sizes) / sizeof(seg_sizes[0]); i++) {
 		for (unsigned int j = 0; j < sizeof(page_offsets) / sizeof(page_offsets[0]); j++) {
 			for (unsigned int k = 0; k < sizeof(p2aligns) / sizeof(p2aligns[0]); k++) {
@@ -2935,6 +3416,12 @@ int main(void)
 		mix_signed(&digest, shmobj_page_npages_result(p2aligns[i]));
 		mix_signed(&digest, shmobj_page_pgshift_result(p2aligns[i]));
 	}
+	mix_signed(&digest, shmobj_new_page_mode_result());
+	mix_signed(&digest, shmobj_new_page_count_result());
+	mix_signed(&digest, shmobj_new_page_mapped_result());
+	for (unsigned int i = 0; i < sizeof(modes) / sizeof(modes[0]); i++)
+		mix_signed(&digest,
+			shmobj_page_mode_valid_for_new_result(modes[i]));
 	for (int has_pt = 0; has_pt <= 1; has_pt++) {
 		for (int has_page = 0; has_page <= 1; has_page++) {
 			for (int has_vaddr = 0; has_vaddr <= 1; has_vaddr++) {
@@ -2948,10 +3435,18 @@ int main(void)
 	for (unsigned long off = 0; off <= 8192; off += 4096) {
 		mix(&digest, shmobj_update_page_phys_result(0x100000, off));
 		mix_signed(&digest, shmobj_update_page_offset_result(0x200000, off));
+		mix_signed(&digest,
+			shmobj_update_has_more_pages_result(off, 8192));
+		mix(&digest, shmobj_update_next_page_off_result(off, 4096));
 	}
 
 	mix_signed(&digest, hugefileobj_initial_status_result());
 	mix_signed(&digest, hugefileobj_initial_refcnt_result());
+	for (unsigned long ptr = 0; ptr <= 2; ptr++) {
+		mix_signed(&digest, hugefileobj_pointer_present_result(ptr));
+		mix_signed(&digest, hugefileobj_pointer_missing_result(ptr));
+		mix_signed(&digest, hugefileobj_page_present_result(ptr));
+	}
 	for (unsigned int i = 1; i < sizeof(pgshifts) / sizeof(pgshifts[0]); i++) {
 		int pgshift = pgshifts[i];
 		int expected = hugefileobj_expected_p2align_result(pgshift);
@@ -2976,9 +3471,11 @@ int main(void)
 		for (int needed = 0; needed <= 6; needed += 3) {
 			mix_signed(&digest, hugefileobj_needs_grow_result(old,
 				needed));
+			mix(&digest, hugefileobj_page_array_bytes_result(old));
 			mix(&digest, hugefileobj_copy_bytes_result(old));
 			mix(&digest, hugefileobj_zero_bytes_result(old,
 				old + (size_t)needed));
+			mix(&digest, hugefileobj_zero_start_index_result(old));
 		}
 	}
 
@@ -4435,6 +4932,183 @@ int main(void)
 }
 EOF_PAGE_ALLOC_BITMAP
 
+cat > "${tmpdir}/process_helpers_equiv.c" <<'EOF_PROCESS_HELPERS'
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#define VERIFY_READ 0
+#define VERIFY_WRITE 1
+#define VR_IO_NOCACHE 0x100UL
+#define VR_REMOTE 0x200UL
+#define VR_WRITE_COMBINED 0x400UL
+#define VR_PRIVATE 0x2000UL
+#define VR_PROT_READ 0x00010000UL
+#define VR_PROT_WRITE 0x00020000UL
+#define VR_PROT_EXEC 0x00040000UL
+#define MF_HUGETLBFS 0x100000U
+#define PTATTR_ACTIVE 0x01UL
+#define PTATTR_WRITABLE 0x02UL
+#define PTATTR_USER 0x04UL
+#define PTATTR_NO_EXECUTE 0x8000000000000000UL
+#define PTATTR_UNCACHABLE 0x10000UL
+#define PTATTR_FOR_USER 0x20000UL
+#define PTATTR_WRITE_COMBINED 0x40000UL
+
+extern unsigned long common_vrflag_to_ptattr(unsigned long, unsigned long, void *);
+extern int process_split_pgshift_result(int, uintptr_t);
+extern int process_add_range_bounds_result(unsigned long, unsigned long,
+					   unsigned long, unsigned long);
+extern int process_extend_up_result(unsigned long, unsigned long, int,
+				    unsigned long, unsigned long);
+extern unsigned long process_change_prot_newflag_result(unsigned long,
+							unsigned long);
+extern void process_attr_delta_result(unsigned long, unsigned long,
+				      unsigned long *, unsigned long *);
+extern unsigned long process_private_file_setattr_result(int, unsigned long,
+							 unsigned int,
+							 unsigned long);
+extern int process_remove_region_alignment_result(unsigned long, unsigned long);
+extern int process_access_initial_result(int, unsigned long, unsigned long);
+extern int process_access_adjacent_result(unsigned long, int, unsigned long);
+extern int process_access_permission_result(int, unsigned long);
+
+static void mix(unsigned long *digest, unsigned long value)
+{
+	*digest ^= value + 0x9e3779b97f4a7c15UL + (*digest << 6) + (*digest >> 2);
+}
+
+int main(void)
+{
+	unsigned long digest = 0x50524f4348454c50UL;
+	unsigned long clr = 0, set = 0;
+	unsigned long flags[] = {
+		0,
+		VR_PROT_READ,
+		VR_PROT_WRITE,
+		VR_PROT_READ | VR_PROT_WRITE,
+		VR_PROT_READ | VR_PROT_EXEC,
+		VR_IO_NOCACHE | VR_PROT_READ,
+		VR_REMOTE | VR_PROT_WRITE,
+		VR_WRITE_COMBINED | VR_PROT_READ | VR_PROT_EXEC,
+	};
+
+	for (unsigned int i = 0; i < sizeof(flags) / sizeof(flags[0]); i++)
+		mix(&digest, common_vrflag_to_ptattr(flags[i], 0, 0));
+
+	mix(&digest, process_split_pgshift_result(21, 0x200000));
+	mix(&digest, process_split_pgshift_result(21, 0x201000));
+	mix(&digest, process_split_pgshift_result(0, 0x1234));
+	mix(&digest, process_add_range_bounds_result(0x1000, 0x9000, 0x1000, 0x9000));
+	mix(&digest, process_add_range_bounds_result(0x1000, 0x9000, 0, 0x8000));
+	mix(&digest, process_add_range_bounds_result(0x1000, 0x9000, 0x2000, 0xa000));
+	mix(&digest, process_extend_up_result(0x4000, 0x9000, 0, 0, 0x5000));
+	mix(&digest, process_extend_up_result(0x4000, 0x9000, 0, 0, 0x4000));
+	mix(&digest, process_extend_up_result(0x4000, 0x9000, 0, 0, 0xa000));
+	mix(&digest, process_extend_up_result(0x4000, 0x9000, 1, 0x4800, 0x5000));
+	mix(&digest, process_change_prot_newflag_result(0x12340000UL | VR_PRIVATE,
+							VR_PROT_READ | VR_PROT_WRITE));
+	process_attr_delta_result(PTATTR_USER | PTATTR_ACTIVE,
+				  PTATTR_USER | PTATTR_WRITABLE, &clr, &set);
+	mix(&digest, clr);
+	mix(&digest, set);
+	mix(&digest, process_private_file_setattr_result(1, VR_PRIVATE, 0,
+							 PTATTR_WRITABLE | PTATTR_ACTIVE));
+	mix(&digest, process_private_file_setattr_result(1, VR_PRIVATE,
+							 MF_HUGETLBFS,
+							 PTATTR_WRITABLE | PTATTR_ACTIVE));
+	mix(&digest, process_remove_region_alignment_result(0x1000, 0x2000));
+	mix(&digest, process_remove_region_alignment_result(0x1001, 0x2000));
+	mix(&digest, process_access_initial_result(1, 0x1000, 0x1000));
+	mix(&digest, process_access_initial_result(0, 0, 0x1000));
+	mix(&digest, process_access_initial_result(1, 0x2000, 0x1000));
+	mix(&digest, process_access_adjacent_result(0x2000, 1, 0x2000));
+	mix(&digest, process_access_adjacent_result(0x2000, 0, 0));
+	mix(&digest, process_access_adjacent_result(0x2000, 1, 0x3000));
+	mix(&digest, process_access_permission_result(VERIFY_READ, VR_PROT_READ));
+	mix(&digest, process_access_permission_result(VERIFY_READ, VR_PROT_WRITE));
+	mix(&digest, process_access_permission_result(VERIFY_WRITE, VR_PROT_WRITE));
+	mix(&digest, process_access_permission_result(VERIFY_WRITE, VR_PROT_READ));
+	mix(&digest, process_access_permission_result(99, 0));
+
+	printf("process_helpers ok digest=%016lx\n", digest);
+	return 0;
+}
+EOF_PROCESS_HELPERS
+
+cat > "${tmpdir}/x86_memory_helpers_equiv.c" <<'EOF_X86_MEMORY_HELPERS'
+#include <stdio.h>
+#include <stddef.h>
+
+#define PTATTR_ACTIVE 0x01UL
+#define PTATTR_WRITABLE 0x02UL
+#define PTATTR_USER 0x04UL
+#define PTATTR_LARGEPAGE 0x80UL
+#define PTATTR_FILEOFF (1UL << 11)
+#define PTATTR_NO_EXECUTE 0x8000000000000000UL
+#define PTATTR_UNCACHABLE 0x10000UL
+#define PTATTR_FOR_USER 0x20000UL
+#define PTATTR_WRITE_COMBINED 0x40000UL
+
+extern unsigned long x86_attr_to_l3attr_result(unsigned long, unsigned long);
+extern unsigned long x86_attr_to_l2attr_result(unsigned long, unsigned long);
+extern unsigned long x86_attr_to_l1attr_result(unsigned long, unsigned long);
+extern int x86_smaller_page_size_result(size_t, int, size_t *, int *);
+
+static void mix(unsigned long *digest, unsigned long value)
+{
+	*digest ^= value + 0x9e3779b97f4a7c15UL + (*digest << 6) + (*digest >> 2);
+}
+
+int main(void)
+{
+	unsigned long digest = 0x5838364d454d484cUL;
+	unsigned long attr_mask = PTATTR_FILEOFF | PTATTR_WRITABLE |
+		PTATTR_USER | PTATTR_ACTIVE | PTATTR_NO_EXECUTE;
+	unsigned long attrs[] = {
+		0,
+		PTATTR_ACTIVE | PTATTR_USER,
+		PTATTR_ACTIVE | PTATTR_WRITABLE | PTATTR_USER,
+		PTATTR_ACTIVE | PTATTR_USER | PTATTR_LARGEPAGE,
+		PTATTR_ACTIVE | PTATTR_USER | PTATTR_LARGEPAGE |
+			PTATTR_UNCACHABLE,
+		PTATTR_ACTIVE | PTATTR_USER | PTATTR_UNCACHABLE,
+		PTATTR_ACTIVE | PTATTR_USER | PTATTR_WRITE_COMBINED,
+		PTATTR_ACTIVE | PTATTR_USER | PTATTR_WRITE_COMBINED |
+			PTATTR_UNCACHABLE,
+		PTATTR_ACTIVE | PTATTR_USER | PTATTR_NO_EXECUTE,
+		PTATTR_FILEOFF | PTATTR_LARGEPAGE,
+	};
+
+	for (unsigned int i = 0; i < sizeof(attrs) / sizeof(attrs[0]); i++) {
+		mix(&digest, x86_attr_to_l3attr_result(attrs[i], attr_mask));
+		mix(&digest, x86_attr_to_l2attr_result(attrs[i], attr_mask));
+		mix(&digest, x86_attr_to_l1attr_result(attrs[i], attr_mask));
+	}
+	size_t sizes[] = {
+		0, 1, 4096, 4097, 2UL * 1024 * 1024,
+		(2UL * 1024 * 1024) + 1, 1024UL * 1024 * 1024,
+		(1024UL * 1024 * 1024) + 1,
+	};
+	for (unsigned int i = 0; i < sizeof(sizes) / sizeof(sizes[0]); i++) {
+		for (int use_1gb = 0; use_1gb <= 1; use_1gb++) {
+			size_t newsize = 0xfeedfaceUL;
+			int p2align = 12345;
+			int error = x86_smaller_page_size_result(sizes[i],
+					use_1gb, &newsize, &p2align);
+			mix(&digest, sizes[i]);
+			mix(&digest, use_1gb);
+			mix(&digest, (unsigned long)(unsigned int)-error);
+			mix(&digest, newsize);
+			mix(&digest, (unsigned long)(unsigned int)p2align);
+		}
+	}
+
+	printf("x86_memory_helpers ok digest=%016lx\n", digest);
+	return 0;
+}
+EOF_X86_MEMORY_HELPERS
+
 cat > "${tmpdir}/rust_stubs.c" <<'EOF_STUBS'
 int ihk_mc_chk_page_address(unsigned long mem_addr) { (void)mem_addr; return 0; }
 unsigned long virt_to_phys(void *v) { return (unsigned long)v; }
@@ -4532,6 +5206,11 @@ cc "${kflags[@]}" -I"${tmpdir}" -ffunction-sections -fdata-sections \
 cc "${kflags[@]}" -I"${tmpdir}" -ffunction-sections -fdata-sections \
 	-c kernel/object_helpers.c -o "${tmpdir}/out/object_helpers_c.o"
 cc "${kflags[@]}" -I"${tmpdir}" -ffunction-sections -fdata-sections \
+	-c kernel/process_helpers.c -o "${tmpdir}/out/process_helpers_c.o"
+cc "${kflags[@]}" -I"${tmpdir}" -ffunction-sections -fdata-sections \
+	-c arch/x86_64/kernel/memory_helpers.c \
+	-o "${tmpdir}/out/x86_memory_helpers_c.o"
+cc "${kflags[@]}" -I"${tmpdir}" -ffunction-sections -fdata-sections \
 	-c kernel/plist.c -o "${tmpdir}/out/plist_c.o"
 cc "${kflags[@]}" -ffunction-sections -fdata-sections -c lib/bitmap.c -o "${tmpdir}/out/bitmap_c.o"
 cc "${kflags[@]}" -ffunction-sections -fdata-sections -c lib/bitops.c -o "${tmpdir}/out/bitops_c.o"
@@ -4613,6 +5292,18 @@ cc -Wl,--gc-sections "${tmpdir}/object_helpers_equiv.c" \
 cc -Wl,--gc-sections "${tmpdir}/object_helpers_equiv.c" \
 	"${tmpdir}/rust_stubs.c" "${tmpdir}/out/mckernel_rust.o" \
 	-o "${tmpdir}/out/object_helpers_rust"
+cc -Wl,--gc-sections -Wl,--unresolved-symbols=ignore-all \
+	-Wl,--noinhibit-exec "${tmpdir}/process_helpers_equiv.c" \
+	"${tmpdir}/out/process_helpers_c.o" -o "${tmpdir}/out/process_helpers_c"
+cc -Wl,--gc-sections "${tmpdir}/process_helpers_equiv.c" \
+	"${tmpdir}/rust_stubs.c" "${tmpdir}/out/mckernel_rust.o" \
+	-o "${tmpdir}/out/process_helpers_rust"
+cc -Wl,--gc-sections "${tmpdir}/x86_memory_helpers_equiv.c" \
+	"${tmpdir}/out/x86_memory_helpers_c.o" \
+	-o "${tmpdir}/out/x86_memory_helpers_c"
+cc -Wl,--gc-sections "${tmpdir}/x86_memory_helpers_equiv.c" \
+	"${tmpdir}/rust_stubs.c" "${tmpdir}/out/mckernel_rust.o" \
+	-o "${tmpdir}/out/x86_memory_helpers_rust"
 cc -Wl,--gc-sections "${tmpdir}/plist_equiv.c" "${tmpdir}/out/plist_c.o" \
 	-o "${tmpdir}/out/plist_c"
 cc "${tmpdir}/plist_equiv.c" "${tmpdir}/rust_stubs.c" \
@@ -4674,6 +5365,10 @@ cc "${kflags[@]}" -I"${tmpdir}" -I. -ffunction-sections -fdata-sections \
 "${tmpdir}/out/xpmem_helpers_rust" > "${tmpdir}/out/xpmem_helpers_rust.out"
 "${tmpdir}/out/object_helpers_c" > "${tmpdir}/out/object_helpers_c.out"
 "${tmpdir}/out/object_helpers_rust" > "${tmpdir}/out/object_helpers_rust.out"
+"${tmpdir}/out/process_helpers_c" > "${tmpdir}/out/process_helpers_c.out"
+"${tmpdir}/out/process_helpers_rust" > "${tmpdir}/out/process_helpers_rust.out"
+"${tmpdir}/out/x86_memory_helpers_c" > "${tmpdir}/out/x86_memory_helpers_c.out"
+"${tmpdir}/out/x86_memory_helpers_rust" > "${tmpdir}/out/x86_memory_helpers_rust.out"
 "${tmpdir}/out/plist_c" > "${tmpdir}/out/plist_c.out"
 "${tmpdir}/out/plist_rust" > "${tmpdir}/out/plist_rust.out"
 "${tmpdir}/out/bitops_c" > "${tmpdir}/out/bitops_c.out"
@@ -4708,6 +5403,8 @@ diff -u "${tmpdir}/out/rlimit_helpers_c.out" "${tmpdir}/out/rlimit_helpers_rust.
 diff -u "${tmpdir}/out/syscall_policy_helpers_c.out" "${tmpdir}/out/syscall_policy_helpers_rust.out"
 diff -u "${tmpdir}/out/xpmem_helpers_c.out" "${tmpdir}/out/xpmem_helpers_rust.out"
 diff -u "${tmpdir}/out/object_helpers_c.out" "${tmpdir}/out/object_helpers_rust.out"
+diff -u "${tmpdir}/out/process_helpers_c.out" "${tmpdir}/out/process_helpers_rust.out"
+diff -u "${tmpdir}/out/x86_memory_helpers_c.out" "${tmpdir}/out/x86_memory_helpers_rust.out"
 diff -u "${tmpdir}/out/plist_c.out" "${tmpdir}/out/plist_rust.out"
 diff -u "${tmpdir}/out/bitops_c.out" "${tmpdir}/out/bitops_rust.out"
 diff -u "${tmpdir}/out/string_c.out" "${tmpdir}/out/string_rust.out"
@@ -4743,6 +5440,8 @@ cat "${tmpdir}/out/rlimit_helpers_c.out"
 cat "${tmpdir}/out/syscall_policy_helpers_c.out"
 cat "${tmpdir}/out/xpmem_helpers_c.out"
 cat "${tmpdir}/out/object_helpers_c.out"
+cat "${tmpdir}/out/process_helpers_c.out"
+cat "${tmpdir}/out/x86_memory_helpers_c.out"
 cat "${tmpdir}/out/plist_c.out"
 cat "${tmpdir}/out/bitops_c.out"
 cat "${tmpdir}/out/string_c.out"

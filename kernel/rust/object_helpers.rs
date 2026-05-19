@@ -5,6 +5,8 @@ use crate::abi::{CInt, CLong, CULong, OffT, SizeT};
 const ENOENT: CInt = 2;
 const EINTR: CInt = 4;
 const EIO: CInt = 5;
+const EAGAIN: CInt = 11;
+const ENXIO: CInt = 6;
 const ENOMEM: CInt = 12;
 const EFAULT: CInt = 14;
 const EINVAL: CInt = 22;
@@ -21,6 +23,7 @@ const PAGE_P2ALIGN: CInt = 0;
 const PTL1_SHIFT: CInt = 12;
 const AUXV_LEN: CInt = 38;
 
+const PM_NONE: CInt = 0x00;
 const PM_WILL_PAGEIO: CInt = 0x02;
 const PM_PAGEIO: CInt = 0x03;
 const PM_DONE_PAGEIO: CInt = 0x04;
@@ -36,11 +39,14 @@ const MF_ZEROFILL: CInt = 0x0010;
 const MF_REG_FILE: CInt = 0x1000;
 const MF_DEV_FILE: CInt = 0x2000;
 const MF_PREMAP: CInt = 0x8000;
+const MF_XPMEM: CInt = 0x10000;
 const MF_ZEROOBJ: CInt = 0x20000;
 const MF_SHM: CInt = 0x40000;
 const MF_HUGETLBFS: CInt = 0x100000;
 const MF_PRIVATE: CInt = 0x200000;
 const MF_REMAP_FILE_PAGES: CInt = 0x400000;
+
+const SHM_DEST: CInt = 0o1000;
 
 const MAP_PRIVATE: CInt = 0x02;
 
@@ -93,16 +99,119 @@ const PROCFS_MAPS_PATH_VDSO: CInt = 1;
 const PROCFS_MAPS_PATH_VVAR: CInt = 2;
 const PROCFS_MAPS_PATH_STACK: CInt = 3;
 const PROCFS_MAPS_PATH_HEAP: CInt = 4;
+const PROCFS_LOCK_ACTION_BACKLOG: CInt = 1;
+const PROCFS_LOCK_ACTION_EAGAIN: CInt = 2;
+const PROCFS_ENTRY_UNKNOWN: CInt = 0;
+const PROCFS_ENTRY_MCKERNEL: CInt = 1;
+const PROCFS_ENTRY_STAT: CInt = 2;
+const PROCFS_ENTRY_CPUINFO: CInt = 3;
+const PROCFS_ENTRY_MEM: CInt = 4;
+const PROCFS_ENTRY_MAPS: CInt = 5;
+const PROCFS_ENTRY_PAGEMAP: CInt = 6;
+const PROCFS_ENTRY_STATUS: CInt = 7;
+const PROCFS_ENTRY_AUXV: CInt = 8;
+const PROCFS_ENTRY_CMDLINE: CInt = 9;
+const PROCFS_ENTRY_COMM: CInt = 10;
 
 const VR_STACK: CULong = 0x1;
+const VR_AP_USER: CULong = 0x4;
 const VR_PRIVATE: CULong = 0x2000;
+const VR_LOCKED: CULong = 0x4000;
 const VR_PROT_READ: CULong = 0x00010000;
 const VR_PROT_WRITE: CULong = 0x00020000;
 const VR_PROT_EXEC: CULong = 0x00040000;
 
+const SYSFS_HANDLER_UNKNOWN: CInt = 0;
+const SYSFS_HANDLER_SHOW: CInt = 1;
+const SYSFS_HANDLER_STORE: CInt = 2;
+const SYSFS_HANDLER_RELEASE: CInt = 3;
+const SCD_MSG_SYSFS_REQ_SHOW: CInt = 0x3a;
+const SCD_MSG_SYSFS_REQ_STORE: CInt = 0x3c;
+const SCD_MSG_SYSFS_REQ_RELEASE: CInt = 0x3e;
+const SCD_MSG_PROCFS_RELEASE: CInt = 0x15;
+const MLOCKADDRS_SIZE: CInt = 128;
+const MPOL_SHM_PREMAP: CULong = 0x08;
+
 #[inline(always)]
 fn page_offset(value: CULong) -> CULong {
     value & (PAGE_SIZE - 1)
+}
+
+unsafe fn cstr_eq(mut actual: *const u8, expected: &[u8]) -> bool {
+    if actual.is_null() {
+        return false;
+    }
+
+    let mut i = 0;
+    loop {
+        let ch = *actual;
+        let want = if i < expected.len() { expected[i] } else { 0 };
+
+        if ch != want {
+            return false;
+        }
+        if ch == 0 {
+            return true;
+        }
+
+        actual = actual.add(1);
+        i += 1;
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn memobj_unref_should_free_result(refcnt: CInt) -> CInt {
+    (refcnt == 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn memobj_op_present_result(op: CULong) -> CInt {
+    (op != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn memobj_missing_page_op_result() -> CInt {
+    -ENXIO
+}
+
+#[no_mangle]
+pub extern "C" fn memobj_missing_copy_page_result() -> CULong {
+    (-(ENXIO as CLong)) as CULong
+}
+
+#[no_mangle]
+pub extern "C" fn memobj_default_page_op_result() -> CInt {
+    0
+}
+
+#[no_mangle]
+pub extern "C" fn memobj_has_pager_flags_result(flags: u32) -> CInt {
+    ((flags & MF_HAS_PAGER as u32) != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn memobj_is_removable_flags_result(flags: u32) -> CInt {
+    ((flags & MF_IS_REMOVABLE as u32) != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn memobj_flushable_page_result(has_page: CInt, page_in_memobj: CInt) -> CInt {
+    (has_page != 0 && page_in_memobj != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn memobj_flushable_obj_result(has_memobj: CInt, flags: u32) -> CInt {
+    (has_memobj != 0 && (flags & (MF_ZEROFILL | MF_PRIVATE) as u32) == 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn memobj_is_freeable_result(has_memobj: CInt, flags: u32) -> CInt {
+    (has_memobj == 0 || (flags & MF_XPMEM as u32) == 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn memobj_callable_remap_file_pages_result(has_memobj: CInt, flags: u32) -> CInt {
+    (has_memobj != 0 && (flags & MF_REMAP_FILE_PAGES as u32) != 0) as CInt
 }
 
 #[no_mangle]
@@ -303,6 +412,48 @@ pub extern "C" fn fileobj_mapped_mode_result() -> CInt {
 }
 
 #[no_mangle]
+pub extern "C" fn fileobj_path_present_result(value: CULong) -> CInt {
+    (value != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn fileobj_invalid_page_count_result(count: CInt) -> CInt {
+    (count != 1) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn fileobj_should_free_hashed_page_result(
+    count: CInt,
+    page_unmap_result: CInt,
+) -> CInt {
+    (count == 1 && page_unmap_result != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn fileobj_premap_page_present_result(page: CULong) -> CInt {
+    (page != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn fileobj_lookup_page_error_result(has_page: CInt) -> CInt {
+    if has_page != 0 {
+        0
+    } else {
+        -1
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn fileobj_next_sref_result(sref: CULong) -> CULong {
+    sref.wrapping_add(1)
+}
+
+#[no_mangle]
+pub extern "C" fn fileobj_premap_interleave_result(mpol_flags: CULong) -> CInt {
+    ((mpol_flags & MPOL_SHM_PREMAP) != 0) as CInt
+}
+
+#[no_mangle]
 pub extern "C" fn devobj_npages_result(len: SizeT) -> SizeT {
     len.wrapping_add((PAGE_SIZE - 1) as SizeT) / PAGE_SIZE as SizeT
 }
@@ -396,6 +547,21 @@ pub extern "C" fn devobj_map_size_result() -> SizeT {
 }
 
 #[no_mangle]
+pub extern "C" fn devobj_path_present_result(value: CULong) -> CInt {
+    (value != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn devobj_pfn_table_present_result(pfn_table: CULong) -> CInt {
+    (pfn_table != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn devobj_mapped_pfn_result(mapped_pfn: CULong, attr: CULong) -> CULong {
+    devobj_pfn_phys_result(mapped_pfn) | attr
+}
+
+#[no_mangle]
 pub extern "C" fn sysfs_path_error_result(
     n: CLong,
     path_is_absolute: CInt,
@@ -463,6 +629,56 @@ pub extern "C" fn sysfs_data_bufsize_result() -> SizeT {
 #[no_mangle]
 pub extern "C" fn sysfs_packet_error_result(send_error: CInt, packet_error: CInt) -> CInt {
     (send_error != 0 || packet_error != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn sysfs_request_busy_result(busy: CInt) -> CInt {
+    (busy != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn sysfs_handle_pointer_valid_result(handlep: CULong) -> CInt {
+    (handlep != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn sysfs_default_response_ssize_result() -> CLong {
+    -(EIO as CLong)
+}
+
+#[no_mangle]
+pub extern "C" fn sysfs_release_response_error_result() -> CInt {
+    0
+}
+
+#[no_mangle]
+pub extern "C" fn sysfs_request_handler_kind_result(msg: CInt) -> CInt {
+    match msg {
+        SCD_MSG_SYSFS_REQ_SHOW => SYSFS_HANDLER_SHOW,
+        SCD_MSG_SYSFS_REQ_STORE => SYSFS_HANDLER_STORE,
+        SCD_MSG_SYSFS_REQ_RELEASE => SYSFS_HANDLER_RELEASE,
+        _ => SYSFS_HANDLER_UNKNOWN,
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn sysfs_pointer_missing_result(ptr: CULong) -> CInt {
+    (ptr == 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn sysfs_should_call_show_result(show: CULong) -> CInt {
+    (show != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn sysfs_should_call_store_result(store: CULong) -> CInt {
+    (store != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn sysfs_should_call_release_result(release: CULong) -> CInt {
+    (release != 0) as CInt
 }
 
 #[no_mangle]
@@ -633,8 +849,191 @@ pub extern "C" fn procfs_auxv_limit_result() -> u32 {
 }
 
 #[no_mangle]
+pub extern "C" fn procfs_is_release_result(msg: CInt) -> CInt {
+    (msg == SCD_MSG_PROCFS_RELEASE) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn procfs_root_matched_result(sscanf_ret: CInt) -> CInt {
+    (sscanf_ret == 1) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn procfs_osnum_match_result(osnum: CInt, requested_osnum: CInt) -> CInt {
+    (osnum == requested_osnum) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn procfs_zero_length_result(left: CULong) -> CInt {
+    (left == 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn procfs_locked_size_add_result(
+    lockedsize: CULong,
+    range_start: CULong,
+    range_end: CULong,
+    flags: CULong,
+) -> CULong {
+    if (flags & VR_LOCKED) != 0 {
+        lockedsize.wrapping_add(range_end.wrapping_sub(range_start))
+    } else {
+        lockedsize
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn procfs_bitmask_next_offset_result(offset: CInt, written: CInt) -> CInt {
+    offset.wrapping_add(written).wrapping_add(1)
+}
+
+#[no_mangle]
+pub extern "C" fn procfs_pbuf_is_empty_result(pbuf: CULong) -> CInt {
+    (pbuf == CULong::MAX) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn procfs_backlog_needed_result(resultp: CULong) -> CInt {
+    (resultp == 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn procfs_lock_failed_action_result(resultp: CULong) -> CInt {
+    if procfs_backlog_needed_result(resultp) != 0 {
+        PROCFS_LOCK_ACTION_BACKLOG
+    } else {
+        PROCFS_LOCK_ACTION_EAGAIN
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn procfs_lock_retry_result() -> CInt {
+    -EAGAIN
+}
+
+#[no_mangle]
+pub extern "C" fn procfs_thread_tid_result(task_match: CInt, parsed_tid: CInt, pid: CInt) -> CInt {
+    if task_match != 0 {
+        parsed_tid
+    } else {
+        pid
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn procfs_task_missing_terminal_result(task_match: CInt) -> CInt {
+    (task_match != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn procfs_pointer_present_result(ptr: CULong) -> CInt {
+    (ptr != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn procfs_buffer_chain_attach_result(pbuf: CULong, buf_top: CULong) -> CInt {
+    (procfs_pbuf_is_empty_result(pbuf) != 0 && buf_top != 0) as CInt
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn procfs_entry_kind_result(name: *const u8) -> CInt {
+    if cstr_eq(name, b"mckernel\0") {
+        PROCFS_ENTRY_MCKERNEL
+    } else if cstr_eq(name, b"stat\0") {
+        PROCFS_ENTRY_STAT
+    } else if cstr_eq(name, b"cpuinfo\0") {
+        PROCFS_ENTRY_CPUINFO
+    } else if cstr_eq(name, b"mem\0") {
+        PROCFS_ENTRY_MEM
+    } else if cstr_eq(name, b"maps\0") {
+        PROCFS_ENTRY_MAPS
+    } else if cstr_eq(name, b"pagemap\0") {
+        PROCFS_ENTRY_PAGEMAP
+    } else if cstr_eq(name, b"status\0") {
+        PROCFS_ENTRY_STATUS
+    } else if cstr_eq(name, b"auxv\0") {
+        PROCFS_ENTRY_AUXV
+    } else if cstr_eq(name, b"cmdline\0") {
+        PROCFS_ENTRY_CMDLINE
+    } else if cstr_eq(name, b"comm\0") {
+        PROCFS_ENTRY_COMM
+    } else {
+        PROCFS_ENTRY_UNKNOWN
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn procfs_comm_basename_result(saved_cmdline: CULong) -> CULong {
+    let ptr = saved_cmdline as *const u8;
+
+    if ptr.is_null() {
+        return 0;
+    }
+
+    let mut cur = ptr;
+    let mut base = ptr;
+    loop {
+        let ch = *cur;
+
+        if ch == b'/' {
+            base = cur.add(1);
+        }
+        if ch == 0 {
+            break;
+        }
+        cur = cur.add(1);
+    }
+
+    base as CULong
+}
+
+#[no_mangle]
 pub extern "C" fn pager_linux_io_retry_result(ret: CLong) -> CInt {
     (ret == -(EINTR as CLong)) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn pager_linux_io_stop_result(ret: CLong) -> CInt {
+    (ret <= 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn pager_linux_io_first_result(done: CLong) -> CInt {
+    (done == 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn pager_linux_io_advance_result(done: CLong, ret: CLong) -> CLong {
+    done.wrapping_add(ret)
+}
+
+#[no_mangle]
+pub extern "C" fn pager_linux_io_remaining_result(remaining: SizeT, ret: CLong) -> SizeT {
+    remaining.wrapping_sub(ret as SizeT)
+}
+
+#[no_mangle]
+pub extern "C" fn pager_linux_io_next_buf_result(buf: CULong, ret: CLong) -> CULong {
+    buf.wrapping_add(ret as CULong)
+}
+
+#[no_mangle]
+pub extern "C" fn pager_linux_io_complete_result(done: CLong, target: SizeT) -> CInt {
+    (done as SizeT == target) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn pager_copy_fault_retry_result(faulted: CInt) -> CInt {
+    (faulted == 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn pager_copy_fault_error_result(ret: CInt) -> CInt {
+    if ret != 0 {
+        -EFAULT
+    } else {
+        0
+    }
 }
 
 #[no_mangle]
@@ -669,6 +1068,160 @@ pub extern "C" fn pager_read_chunk_size_result(off: SizeT, size: SizeT) -> SizeT
         PAGE_SIZE as SizeT
     } else {
         chunk
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn pager_arealist_tail_room_result(tail_count: CInt) -> CInt {
+    if tail_count < MLOCKADDRS_SIZE - 1 {
+        MLOCKADDRS_SIZE - tail_count
+    } else {
+        0
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn pager_arealist_count_add_result(count: CInt, add: CInt) -> CInt {
+    count.wrapping_add(add)
+}
+
+#[no_mangle]
+pub extern "C" fn pager_addrpair_size_result(start: CULong, end: CULong) -> CLong {
+    end.wrapping_sub(start) as CLong
+}
+
+#[no_mangle]
+pub extern "C" fn pager_file_pos_result(off: CLong, total_size: CLong) -> CLong {
+    off.wrapping_add(total_size)
+}
+
+#[no_mangle]
+pub extern "C" fn pager_arealist_write_result(
+    written: CLong,
+    count: CInt,
+    entry_size: SizeT,
+) -> CLong {
+    if written as SizeT != (count as SizeT).wrapping_mul(entry_size) {
+        -1
+    } else {
+        0
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn pager_mlock_more_result(start: CULong) -> CInt {
+    (start == CULong::MAX) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn pager_mlock_next_start_result(end: CULong) -> CULong {
+    end
+}
+
+#[no_mangle]
+pub extern "C" fn pager_mlock_container_empty_result(
+    from: CULong,
+    tail: CULong,
+    ccount: CInt,
+    tail_count: CInt,
+) -> CInt {
+    (from == tail && ccount == tail_count) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn pager_mlock_needs_next_result(ccount: CInt, cur_count: CInt) -> CInt {
+    (ccount == cur_count) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn pager_mlock_reset_count_result() -> CInt {
+    1
+}
+
+#[no_mangle]
+pub extern "C" fn pager_mlock_next_count_result(count: CInt) -> CInt {
+    count.wrapping_add(1)
+}
+
+#[no_mangle]
+pub extern "C" fn pager_pagein_data_pos_result(
+    swap_count: u32,
+    mlock_count: u32,
+    header_size: SizeT,
+    area_size: SizeT,
+) -> CLong {
+    header_size
+        .wrapping_add((swap_count as SizeT).wrapping_mul(area_size))
+        .wrapping_add((mlock_count as SizeT).wrapping_mul(area_size)) as CLong
+}
+
+#[no_mangle]
+pub extern "C" fn pager_pageout_args_result(
+    fname: CULong,
+    buf: CULong,
+    size: SizeT,
+    user_start: CULong,
+    user_end: CULong,
+) -> CInt {
+    let user_len = user_end.wrapping_sub(user_start);
+
+    if fname < user_start
+        || fname >= user_end
+        || buf < user_start
+        || buf >= user_end
+        || size > user_len as SizeT
+    {
+        -EINVAL
+    } else {
+        0
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn pager_skip_anon_range_result(
+    has_memobj: CInt,
+    start: CULong,
+    text_start: CULong,
+    stack_start: CULong,
+    user_start: CULong,
+    user_end: CULong,
+    flags: CULong,
+) -> CInt {
+    (has_memobj != 0
+        || start == text_start
+        || start == stack_start
+        || start < user_start
+        || start >= user_end
+        || (flags & VR_PROT_WRITE) == 0
+        || (flags & VR_AP_USER) == 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn pager_range_locked_result(flags: CULong) -> CInt {
+    ((flags & VR_LOCKED) != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn pager_skip_physical_removal_result(flags: CInt) -> CInt {
+    ((flags & 0x04) != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn pager_fd_valid_result(fd: CInt) -> CInt {
+    (fd >= 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn pager_should_unlink_swap_result(result: CLong) -> CInt {
+    (result != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn pager_io_short_result(result: CLong) -> CLong {
+    if result >= 0 {
+        -(EIO as CLong)
+    } else {
+        result
     }
 }
 
@@ -768,6 +1321,74 @@ pub extern "C" fn shmobj_destroy_index_mask_result(index: CInt) -> CULong {
 }
 
 #[no_mangle]
+pub extern "C" fn shmlock_user_locked_result(locked: SizeT) -> CInt {
+    (locked != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn shmlock_user_match_result(user_ruid: CInt, ruid: CInt) -> CInt {
+    (user_ruid == ruid) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn shmlock_user_is_list_head_result(chain: CULong, head: CULong) -> CInt {
+    (chain == head) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn shmlock_user_after_unlock_result(locked: SizeT, size: SizeT) -> SizeT {
+    locked.wrapping_sub(size)
+}
+
+#[no_mangle]
+pub extern "C" fn shmlock_user_should_free_result(locked: SizeT) -> CInt {
+    (locked == 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn shmobj_has_user_result(user: CULong) -> CInt {
+    (user != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn shmobj_destroy_page_count_invalid_result(count: CInt) -> CInt {
+    (count != 1) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn shmobj_destroy_page_should_free_result(
+    count: CInt,
+    page_unmap_result: CInt,
+) -> CInt {
+    (count == 1 && page_unmap_result != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn shmobj_should_free_direct_result(index: CInt) -> CInt {
+    (index < 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn shmobj_destroy_missing_flag_result(mode: CInt) -> CInt {
+    ((mode & SHM_DEST) == 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn shmobj_initial_refcnt_result() -> CInt {
+    1
+}
+
+#[no_mangle]
+pub extern "C" fn shmobj_initial_index_result() -> CInt {
+    -1
+}
+
+#[no_mangle]
+pub extern "C" fn shmobj_initial_ds_pgshift_result() -> CInt {
+    0
+}
+
+#[no_mangle]
 pub extern "C" fn shmobj_get_page_validate_result(
     real_segsz: SizeT,
     off: OffT,
@@ -808,6 +1429,45 @@ pub extern "C" fn shmobj_page_pgshift_result(p2align: CInt) -> CInt {
 }
 
 #[no_mangle]
+pub extern "C" fn shmobj_need_alloc_page_result(page: CULong) -> CInt {
+    (page == 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn shmobj_new_page_mode_result() -> CInt {
+    PM_MAPPED
+}
+
+#[no_mangle]
+pub extern "C" fn shmobj_new_page_count_result() -> CInt {
+    1
+}
+
+#[no_mangle]
+pub extern "C" fn shmobj_new_page_mapped_result() -> CLong {
+    0
+}
+
+#[no_mangle]
+pub extern "C" fn shmobj_page_mode_valid_for_new_result(mode: CInt) -> CInt {
+    (mode == PM_NONE) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn shmobj_lookup_page_missing_error_result(page: CULong) -> CInt {
+    if page != 0 {
+        0
+    } else {
+        -ENOENT
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn shmobj_lookup_should_store_phys_result(physp: CULong) -> CInt {
+    (physp != 0) as CInt
+}
+
+#[no_mangle]
 pub extern "C" fn shmobj_update_args_result(
     has_pt: CInt,
     has_orig_page: CInt,
@@ -833,6 +1493,25 @@ pub extern "C" fn shmobj_update_page_phys_result(base_phys: CULong, page_off: Si
 #[no_mangle]
 pub extern "C" fn shmobj_update_page_offset_result(orig_offset: OffT, page_off: SizeT) -> OffT {
     orig_offset.wrapping_add(page_off as OffT)
+}
+
+#[no_mangle]
+pub extern "C" fn shmobj_pte_missing_result(pte: CULong) -> CInt {
+    if pte == 0 {
+        -ENOENT
+    } else {
+        0
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn shmobj_update_has_more_pages_result(page_off: SizeT, orig_pgsize: SizeT) -> CInt {
+    (page_off < orig_pgsize) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn shmobj_update_next_page_off_result(page_off: SizeT, pte_size: SizeT) -> SizeT {
+    page_off.wrapping_add(pte_size)
 }
 
 #[no_mangle]
@@ -875,6 +1554,26 @@ pub extern "C" fn hugefileobj_initial_refcnt_result() -> CInt {
 }
 
 #[no_mangle]
+pub extern "C" fn hugefileobj_pointer_present_result(ptr: CULong) -> CInt {
+    (ptr != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn hugefileobj_pointer_missing_result(ptr: CULong) -> CInt {
+    (ptr == 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn hugefileobj_page_present_result(page: CULong) -> CInt {
+    (page != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn hugefileobj_page_array_bytes_result(nr_pages: SizeT) -> SizeT {
+    nr_pages * core::mem::size_of::<*mut u8>()
+}
+
+#[no_mangle]
 pub extern "C" fn hugefileobj_create_nr_pages_result(off: OffT, len: SizeT, pgshift: CInt) -> CInt {
     (off.wrapping_add(len as OffT) >> pgshift) as CInt
 }
@@ -895,4 +1594,9 @@ pub extern "C" fn hugefileobj_copy_bytes_result(current_nr_pages: SizeT) -> Size
 #[no_mangle]
 pub extern "C" fn hugefileobj_zero_bytes_result(old_nr_pages: SizeT, new_nr_pages: SizeT) -> SizeT {
     new_nr_pages.wrapping_sub(old_nr_pages) * core::mem::size_of::<*mut u8>()
+}
+
+#[no_mangle]
+pub extern "C" fn hugefileobj_zero_start_index_result(old_nr_pages: SizeT) -> SizeT {
+    old_nr_pages
 }

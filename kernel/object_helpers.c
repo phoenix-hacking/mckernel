@@ -8,11 +8,69 @@
 #include <process.h>
 #include <registers.h>
 #include <shm.h>
+#include <string.h>
+#include <syscall.h>
 #include <sysfs.h>
 
 #ifndef MCKERNEL_RUST_OBJECT_HELPERS
 
 #define FILEOBJ_PAGE_HASH_MASK 511
+
+int memobj_unref_should_free_result(int refcnt)
+{
+	return refcnt == 0;
+}
+
+int memobj_op_present_result(uintptr_t op)
+{
+	return op != 0;
+}
+
+int memobj_missing_page_op_result(void)
+{
+	return -ENXIO;
+}
+
+uintptr_t memobj_missing_copy_page_result(void)
+{
+	return (uintptr_t)-ENXIO;
+}
+
+int memobj_default_page_op_result(void)
+{
+	return 0;
+}
+
+int memobj_has_pager_flags_result(unsigned int flags)
+{
+	return !!(flags & MF_HAS_PAGER);
+}
+
+int memobj_is_removable_flags_result(unsigned int flags)
+{
+	return !!(flags & MF_IS_REMOVABLE);
+}
+
+int memobj_flushable_page_result(int has_page, int page_in_memobj)
+{
+	return has_page && page_in_memobj;
+}
+
+int memobj_flushable_obj_result(int has_memobj, unsigned int flags)
+{
+	return has_memobj && !(flags & (MF_ZEROFILL | MF_PRIVATE));
+}
+
+int memobj_is_freeable_result(int has_memobj, unsigned int flags)
+{
+	return !has_memobj || !(flags & MF_XPMEM);
+}
+
+int memobj_callable_remap_file_pages_result(int has_memobj,
+					    unsigned int flags)
+{
+	return has_memobj && (flags & MF_REMAP_FILE_PAGES);
+}
 
 int fileobj_page_hash_result(off_t off)
 {
@@ -180,6 +238,41 @@ int fileobj_mapped_mode_result(void)
 	return PM_MAPPED;
 }
 
+int fileobj_path_present_result(unsigned long value)
+{
+	return value != 0;
+}
+
+int fileobj_invalid_page_count_result(int count)
+{
+	return count != 1;
+}
+
+int fileobj_should_free_hashed_page_result(int count, int page_unmap_result)
+{
+	return count == 1 && page_unmap_result;
+}
+
+int fileobj_premap_page_present_result(uintptr_t page)
+{
+	return page != 0;
+}
+
+int fileobj_lookup_page_error_result(int has_page)
+{
+	return has_page ? 0 : -1;
+}
+
+unsigned long fileobj_next_sref_result(unsigned long sref)
+{
+	return sref + 1;
+}
+
+int fileobj_premap_interleave_result(unsigned long mpol_flags)
+{
+	return !!(mpol_flags & MPOL_SHM_PREMAP);
+}
+
 size_t devobj_npages_result(size_t len)
 {
 	return (len + PAGE_SIZE - 1) / PAGE_SIZE;
@@ -264,6 +357,21 @@ size_t devobj_map_size_result(void)
 	return PAGE_SIZE;
 }
 
+int devobj_path_present_result(unsigned long value)
+{
+	return value != 0;
+}
+
+int devobj_pfn_table_present_result(uintptr_t pfn_table)
+{
+	return pfn_table != 0;
+}
+
+uintptr_t devobj_mapped_pfn_result(uintptr_t mapped_pfn, uintptr_t attr)
+{
+	return devobj_pfn_phys_result(mapped_pfn) | attr;
+}
+
 int sysfs_path_error_result(ssize_t n, int path_is_absolute, size_t capacity)
 {
 	if (n >= capacity)
@@ -319,6 +427,60 @@ size_t sysfs_data_bufsize_result(void)
 int sysfs_packet_error_result(int send_error, int packet_error)
 {
 	return send_error || packet_error;
+}
+
+int sysfs_request_busy_result(int busy)
+{
+	return busy != 0;
+}
+
+int sysfs_handle_pointer_valid_result(uintptr_t handlep)
+{
+	return handlep != 0;
+}
+
+ssize_t sysfs_default_response_ssize_result(void)
+{
+	return -EIO;
+}
+
+int sysfs_release_response_error_result(void)
+{
+	return 0;
+}
+
+int sysfs_request_handler_kind_result(int msg)
+{
+	switch (msg) {
+	case SCD_MSG_SYSFS_REQ_SHOW:
+		return SYSFS_HANDLER_SHOW;
+	case SCD_MSG_SYSFS_REQ_STORE:
+		return SYSFS_HANDLER_STORE;
+	case SCD_MSG_SYSFS_REQ_RELEASE:
+		return SYSFS_HANDLER_RELEASE;
+	default:
+		return SYSFS_HANDLER_UNKNOWN;
+	}
+}
+
+int sysfs_pointer_missing_result(uintptr_t ptr)
+{
+	return ptr == 0;
+}
+
+int sysfs_should_call_show_result(uintptr_t show)
+{
+	return show != 0;
+}
+
+int sysfs_should_call_store_result(uintptr_t store)
+{
+	return store != 0;
+}
+
+int sysfs_should_call_release_result(uintptr_t release)
+{
+	return release != 0;
 }
 
 unsigned long procfs_mem_reason_result(int readwrite)
@@ -456,9 +618,163 @@ unsigned int procfs_auxv_limit_result(void)
 	return AUXV_LEN * sizeof(unsigned long);
 }
 
+int procfs_is_release_result(int msg)
+{
+	return msg == SCD_MSG_PROCFS_RELEASE;
+}
+
+int procfs_root_matched_result(int sscanf_ret)
+{
+	return sscanf_ret == 1;
+}
+
+int procfs_osnum_match_result(int osnum, int requested_osnum)
+{
+	return osnum == requested_osnum;
+}
+
+int procfs_zero_length_result(unsigned long left)
+{
+	return left == 0;
+}
+
+unsigned long procfs_locked_size_add_result(unsigned long lockedsize,
+					    unsigned long range_start,
+					    unsigned long range_end,
+					    unsigned long flags)
+{
+	return (flags & VR_LOCKED) ? lockedsize + range_end - range_start :
+		lockedsize;
+}
+
+int procfs_bitmask_next_offset_result(int offset, int written)
+{
+	return offset + written + 1;
+}
+
+int procfs_pbuf_is_empty_result(unsigned long pbuf)
+{
+	return pbuf == (unsigned long)-1;
+}
+
+int procfs_backlog_needed_result(uintptr_t resultp)
+{
+	return resultp == 0;
+}
+
+int procfs_lock_failed_action_result(uintptr_t resultp)
+{
+	return procfs_backlog_needed_result(resultp) ?
+		PROCFS_LOCK_ACTION_BACKLOG : PROCFS_LOCK_ACTION_EAGAIN;
+}
+
+int procfs_lock_retry_result(void)
+{
+	return -EAGAIN;
+}
+
+int procfs_thread_tid_result(int task_match, int parsed_tid, int pid)
+{
+	return task_match ? parsed_tid : pid;
+}
+
+int procfs_task_missing_terminal_result(int task_match)
+{
+	return task_match != 0;
+}
+
+int procfs_pointer_present_result(uintptr_t ptr)
+{
+	return ptr != 0;
+}
+
+int procfs_buffer_chain_attach_result(unsigned long pbuf, uintptr_t buf_top)
+{
+	return procfs_pbuf_is_empty_result(pbuf) && buf_top != 0;
+}
+
+int procfs_entry_kind_result(const char *name)
+{
+	if (!name)
+		return PROCFS_ENTRY_UNKNOWN;
+	if (!strcmp(name, "mckernel"))
+		return PROCFS_ENTRY_MCKERNEL;
+	if (!strcmp(name, "stat"))
+		return PROCFS_ENTRY_STAT;
+	if (!strcmp(name, "cpuinfo"))
+		return PROCFS_ENTRY_CPUINFO;
+	if (!strcmp(name, "mem"))
+		return PROCFS_ENTRY_MEM;
+	if (!strcmp(name, "maps"))
+		return PROCFS_ENTRY_MAPS;
+	if (!strcmp(name, "pagemap"))
+		return PROCFS_ENTRY_PAGEMAP;
+	if (!strcmp(name, "status"))
+		return PROCFS_ENTRY_STATUS;
+	if (!strcmp(name, "auxv"))
+		return PROCFS_ENTRY_AUXV;
+	if (!strcmp(name, "cmdline"))
+		return PROCFS_ENTRY_CMDLINE;
+	if (!strcmp(name, "comm"))
+		return PROCFS_ENTRY_COMM;
+	return PROCFS_ENTRY_UNKNOWN;
+}
+
+uintptr_t procfs_comm_basename_result(uintptr_t saved_cmdline)
+{
+	const char *comm = (const char *)saved_cmdline;
+	const char *slash;
+
+	if (!comm)
+		return 0;
+
+	slash = strrchr(comm, '/');
+	return (uintptr_t)(slash ? slash + 1 : comm);
+}
+
 int pager_linux_io_retry_result(ssize_t ret)
 {
 	return ret == -EINTR;
+}
+
+int pager_linux_io_stop_result(ssize_t ret)
+{
+	return ret <= 0;
+}
+
+int pager_linux_io_first_result(ssize_t done)
+{
+	return done == 0;
+}
+
+ssize_t pager_linux_io_advance_result(ssize_t done, ssize_t ret)
+{
+	return done + ret;
+}
+
+size_t pager_linux_io_remaining_result(size_t remaining, ssize_t ret)
+{
+	return remaining - ret;
+}
+
+uintptr_t pager_linux_io_next_buf_result(uintptr_t buf, ssize_t ret)
+{
+	return buf + ret;
+}
+
+int pager_linux_io_complete_result(ssize_t done, size_t target)
+{
+	return done == target;
+}
+
+int pager_copy_fault_retry_result(int faulted)
+{
+	return !faulted;
+}
+
+int pager_copy_fault_error_result(int ret)
+{
+	return ret ? -EFAULT : 0;
 }
 
 int pager_myalloc_fits_result(size_t allocated, size_t request, size_t size)
@@ -486,6 +802,119 @@ size_t pager_read_chunk_size_result(size_t off, size_t size)
 	size_t chunk = size - off;
 
 	return (chunk > PAGE_SIZE) ? PAGE_SIZE : chunk;
+}
+
+int pager_arealist_tail_room_result(int tail_count)
+{
+	if (tail_count < 128 - 1)
+		return 128 - tail_count;
+	return 0;
+}
+
+int pager_arealist_count_add_result(int count, int add)
+{
+	return count + add;
+}
+
+ssize_t pager_addrpair_size_result(unsigned long start, unsigned long end)
+{
+	return end - start;
+}
+
+ssize_t pager_file_pos_result(ssize_t off, ssize_t total_size)
+{
+	return off + total_size;
+}
+
+ssize_t pager_arealist_write_result(ssize_t written, int count,
+				    size_t entry_size)
+{
+	return (written != entry_size * count) ? -1 : 0;
+}
+
+int pager_mlock_more_result(unsigned long start)
+{
+	return start == (unsigned long)-1;
+}
+
+unsigned long pager_mlock_next_start_result(unsigned long end)
+{
+	return end;
+}
+
+int pager_mlock_container_empty_result(uintptr_t from, uintptr_t tail,
+				       int ccount, int tail_count)
+{
+	return from == tail && ccount == tail_count;
+}
+
+int pager_mlock_needs_next_result(int ccount, int cur_count)
+{
+	return ccount == cur_count;
+}
+
+int pager_mlock_reset_count_result(void)
+{
+	return 1;
+}
+
+int pager_mlock_next_count_result(int count)
+{
+	return count + 1;
+}
+
+ssize_t pager_pagein_data_pos_result(unsigned int swap_count,
+				     unsigned int mlock_count,
+				     size_t header_size, size_t area_size)
+{
+	return header_size + swap_count * area_size + mlock_count * area_size;
+}
+
+int pager_pageout_args_result(uintptr_t fname, uintptr_t buf, size_t size,
+			      unsigned long user_start, unsigned long user_end)
+{
+	if (fname < user_start || fname >= user_end ||
+	    buf < user_start || buf >= user_end ||
+	    size > user_end - user_start)
+		return -EINVAL;
+	return 0;
+}
+
+int pager_skip_anon_range_result(int has_memobj, unsigned long start,
+				 unsigned long text_start,
+				 unsigned long stack_start,
+				 unsigned long user_start,
+				 unsigned long user_end,
+				 unsigned long flags)
+{
+	return has_memobj || start == text_start || start == stack_start ||
+		start < user_start || start >= user_end ||
+		!(flags & VR_PROT_WRITE) || !(flags & VR_AP_USER);
+}
+
+int pager_range_locked_result(unsigned long flags)
+{
+	return !!(flags & VR_LOCKED);
+}
+
+int pager_skip_physical_removal_result(int flags)
+{
+	return !!(flags & 0x04);
+}
+
+int pager_fd_valid_result(int fd)
+{
+	return fd >= 0;
+}
+
+int pager_should_unlink_swap_result(long result)
+{
+	return result != 0;
+}
+
+long pager_io_short_result(long result)
+{
+	return result >= 0 ? -EIO : result;
 }
 
 int zeroobj_initial_flags_result(void)
@@ -570,6 +999,71 @@ unsigned long shmobj_destroy_index_mask_result(int index)
 	return 1UL << (index % 64);
 }
 
+int shmlock_user_locked_result(size_t locked)
+{
+	return locked != 0;
+}
+
+int shmlock_user_match_result(int user_ruid, int ruid)
+{
+	return user_ruid == ruid;
+}
+
+int shmlock_user_is_list_head_result(uintptr_t chain, uintptr_t head)
+{
+	return chain == head;
+}
+
+size_t shmlock_user_after_unlock_result(size_t locked, size_t size)
+{
+	return locked - size;
+}
+
+int shmlock_user_should_free_result(size_t locked)
+{
+	return locked == 0;
+}
+
+int shmobj_has_user_result(uintptr_t user)
+{
+	return user != 0;
+}
+
+int shmobj_destroy_page_count_invalid_result(int count)
+{
+	return count != 1;
+}
+
+int shmobj_destroy_page_should_free_result(int count, int page_unmap_result)
+{
+	return count == 1 && page_unmap_result;
+}
+
+int shmobj_should_free_direct_result(int index)
+{
+	return index < 0;
+}
+
+int shmobj_destroy_missing_flag_result(int mode)
+{
+	return !(mode & SHM_DEST);
+}
+
+int shmobj_initial_refcnt_result(void)
+{
+	return 1;
+}
+
+int shmobj_initial_index_result(void)
+{
+	return -1;
+}
+
+int shmobj_initial_ds_pgshift_result(void)
+{
+	return 0;
+}
+
 int shmobj_get_page_validate_result(size_t real_segsz, off_t off,
 				    int p2align)
 {
@@ -601,6 +1095,41 @@ int shmobj_page_pgshift_result(int p2align)
 	return p2align + PAGE_SHIFT;
 }
 
+int shmobj_need_alloc_page_result(uintptr_t page)
+{
+	return page == 0;
+}
+
+int shmobj_new_page_mode_result(void)
+{
+	return PM_MAPPED;
+}
+
+int shmobj_new_page_count_result(void)
+{
+	return 1;
+}
+
+long shmobj_new_page_mapped_result(void)
+{
+	return 0;
+}
+
+int shmobj_page_mode_valid_for_new_result(int mode)
+{
+	return mode == PM_NONE;
+}
+
+int shmobj_lookup_page_missing_error_result(uintptr_t page)
+{
+	return page ? 0 : -ENOENT;
+}
+
+int shmobj_lookup_should_store_phys_result(uintptr_t physp)
+{
+	return physp != 0;
+}
+
 int shmobj_update_args_result(int has_pt, int has_orig_page, int has_vaddr)
 {
 	return (has_pt && has_orig_page && has_vaddr) ? 0 : -ENOENT;
@@ -619,6 +1148,21 @@ uintptr_t shmobj_update_page_phys_result(uintptr_t base_phys, size_t page_off)
 off_t shmobj_update_page_offset_result(off_t orig_offset, size_t page_off)
 {
 	return orig_offset + page_off;
+}
+
+int shmobj_pte_missing_result(uintptr_t pte)
+{
+	return pte == 0 ? -ENOENT : 0;
+}
+
+int shmobj_update_has_more_pages_result(size_t page_off, size_t orig_pgsize)
+{
+	return page_off < orig_pgsize;
+}
+
+size_t shmobj_update_next_page_off_result(size_t page_off, size_t pte_size)
+{
+	return page_off + pte_size;
 }
 
 int hugefileobj_expected_p2align_result(int pgshift)
@@ -657,6 +1201,26 @@ int hugefileobj_initial_refcnt_result(void)
 	return 2;
 }
 
+int hugefileobj_pointer_present_result(uintptr_t ptr)
+{
+	return ptr != 0;
+}
+
+int hugefileobj_pointer_missing_result(uintptr_t ptr)
+{
+	return ptr == 0;
+}
+
+int hugefileobj_page_present_result(uintptr_t page)
+{
+	return page != 0;
+}
+
+size_t hugefileobj_page_array_bytes_result(size_t nr_pages)
+{
+	return nr_pages * sizeof(void *);
+}
+
 int hugefileobj_create_nr_pages_result(off_t off, size_t len, int pgshift)
 {
 	return (off + len) >> pgshift;
@@ -676,6 +1240,11 @@ size_t hugefileobj_copy_bytes_result(size_t current_nr_pages)
 size_t hugefileobj_zero_bytes_result(size_t old_nr_pages, size_t new_nr_pages)
 {
 	return (new_nr_pages - old_nr_pages) * sizeof(void *);
+}
+
+size_t hugefileobj_zero_start_index_result(size_t old_nr_pages)
+{
+	return old_nr_pages;
 }
 
 #endif /* MCKERNEL_RUST_OBJECT_HELPERS */

@@ -28,7 +28,42 @@ add_library(libmcexec STATIC arch/${ARCH}/archdep.S)
 SET_TARGET_PROPERTIES(libmcexec PROPERTIES OUTPUT_NAME mcexec)
 set_property(TARGET libmcexec PROPERTY POSITION_INDEPENDENT_CODE ON)
 
-add_executable(mcexec mcexec.c)
+option(ENABLE_RUST_USER_TOOLS "Enable Rust helpers in McKernel user tools" ON)
+
+set(MCEXEC_SRCS mcexec.c)
+if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
+	find_program(RUSTC rustc)
+	if (RUSTC)
+		set(MCEXEC_RUST_OBJ "${CMAKE_CURRENT_BINARY_DIR}/rust/mcexec_helpers.o")
+		add_custom_command(
+			OUTPUT "${MCEXEC_RUST_OBJ}"
+			COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/rust"
+			COMMAND ${RUSTC}
+				--crate-name mcexec_helpers
+				--crate-type lib
+				--edition=2021
+				-C panic=abort
+				-C opt-level=2
+				-C debuginfo=1
+				-C force-unwind-tables=no
+				--emit=obj=${MCEXEC_RUST_OBJ}
+				"${CMAKE_CURRENT_SOURCE_DIR}/rust/mcexec_helpers.rs"
+			DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/rust/mcexec_helpers.rs"
+			COMMENT "Building Rust mcexec helpers"
+			VERBATIM
+		)
+		add_custom_target(mcexec_rust_helpers DEPENDS "${MCEXEC_RUST_OBJ}")
+		set_source_files_properties("${MCEXEC_RUST_OBJ}"
+			PROPERTIES EXTERNAL_OBJECT TRUE GENERATED TRUE)
+		list(APPEND MCEXEC_SRCS "${MCEXEC_RUST_OBJ}")
+	endif()
+endif()
+
+add_executable(mcexec ${MCEXEC_SRCS})
+if (TARGET mcexec_rust_helpers)
+	add_dependencies(mcexec mcexec_rust_helpers)
+	target_compile_definitions(mcexec PRIVATE MCEXEC_RUST_HELPERS)
+endif()
 target_link_libraries(mcexec
 	libmcexec ${LIBRT} ${LIBNUMA} $<$<BOOL:ENABLE_QLMPI>:${LIBMPI}> pthread)
 target_include_directories(mcexec PUBLIC "${KERNEL_DIR}")

@@ -76,7 +76,7 @@ static int hugefileobj_get_page(struct memobj *memobj, off_t off,
 	pgind = hugefileobj_page_index_result(off, obj->pgshift);
 	npages = hugefileobj_npages_per_page_result(obj->pgsize);
 	ihk_mc_spinlock_lock_noirq(&obj->lock);
-	if (!obj->pages[pgind]) {
+	if (!hugefileobj_page_present_result((uintptr_t)obj->pages[pgind])) {
 		obj->pages[pgind] = ihk_mc_alloc_aligned_pages_user(npages,
 				p2align, IHK_MC_AP_NOWAIT | IHK_MC_AP_USER,
 				virt_addr);
@@ -107,14 +107,17 @@ static void __hugefileobj_free(struct memobj *memobj)
 	struct hugefileobj *obj = to_hugefileobj(memobj);
 
 	ihk_mc_spinlock_lock_noirq(&obj->lock);
-	kfree(memobj->path);
-	memobj->path = NULL;
+	if (hugefileobj_pointer_present_result((uintptr_t)memobj->path)) {
+		kfree(memobj->path);
+		memobj->path = NULL;
+	}
 
-	if (obj->pages) {
+	if (hugefileobj_pointer_present_result((uintptr_t)obj->pages)) {
 		int i;
 
 		for (i = 0; i < obj->nr_pages; ++i) {
-			if (obj->pages[i]) {
+			if (hugefileobj_page_present_result(
+				    (uintptr_t)obj->pages[i])) {
 				ihk_mc_free_pages_user(obj->pages[i],
 						hugefileobj_npages_per_page_result(
 							obj->pgsize));
@@ -173,7 +176,7 @@ int hugefileobj_pre_create(struct pager_create_result *result,
 
 	ihk_mc_spinlock_lock_noirq(&hugefileobj_list_lock);
 	obj = hugefileobj_lookup(result->handle);
-	if (obj) {
+	if (hugefileobj_pointer_present_result((uintptr_t)obj)) {
 		dkprintf("%s: found obj: 0x%lx %s (ino: %lu)\n",
 			 __func__,
 			 obj->memobj,
@@ -208,7 +211,7 @@ int hugefileobj_pre_create(struct pager_create_result *result,
 	ihk_atomic_set(&obj->memobj.refcnt,
 		       hugefileobj_initial_refcnt_result());
 
-	if (result->path[0]) {
+	if (hugefileobj_pointer_present_result(result->path[0])) {
 		obj->memobj.path = kmalloc(PATH_MAX, IHK_MC_AP_NOWAIT);
 		if (!obj->memobj.path) {
 			kprintf("%s: error: allocating path\n", __func__);
@@ -258,23 +261,24 @@ int hugefileobj_create(struct memobj *memobj, size_t len, off_t off,
 	ihk_mc_spinlock_lock_noirq(&obj->lock);
 	/* Expand or allocate if needed */
 	if (hugefileobj_needs_grow_result(obj->nr_pages, nr_pages)) {
-		void **pages = kmalloc(nr_pages * sizeof(void *),
-				       IHK_MC_AP_NOWAIT);
+		void **pages = kmalloc(hugefileobj_page_array_bytes_result(
+					       nr_pages), IHK_MC_AP_NOWAIT);
 
-		if (!pages) {
+		if (hugefileobj_pointer_missing_result((uintptr_t)pages)) {
 			ret = -ENOMEM;
 			goto out;
 		}
 
-		if (obj->nr_pages) {
+		if (hugefileobj_pointer_present_result(obj->nr_pages)) {
 			memcpy(pages, obj->pages,
 			       hugefileobj_copy_bytes_result(obj->nr_pages));
 		}
 
-		memset(pages + (obj->nr_pages * sizeof(void *)), 0,
+		memset(pages + hugefileobj_zero_start_index_result(
+			       obj->nr_pages), 0,
 		       hugefileobj_zero_bytes_result(obj->nr_pages, nr_pages));
 
-		if (obj->nr_pages) {
+		if (hugefileobj_pointer_present_result(obj->nr_pages)) {
 			kfree(obj->pages);
 		}
 
@@ -304,7 +308,8 @@ int hugefileobj_create(struct memobj *memobj, size_t len, off_t off,
 			for (pgind = ((obj->nr_pages > 8) ? (obj->nr_pages - 8) : 0);
 					pgind < obj->nr_pages; ++pgind) {
 #endif
-				if (obj->pages[pgind]) {
+				if (hugefileobj_page_present_result(
+					    (uintptr_t)obj->pages[pgind])) {
 					continue;
 				}
 

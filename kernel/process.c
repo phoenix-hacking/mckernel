@@ -22,6 +22,7 @@
  */
 
 #include <process.h>
+#include <process_helpers.h>
 #include <string.h>
 #include <errno.h>
 #include <kmalloc.h>
@@ -931,12 +932,7 @@ int split_process_memory_range(struct process_vm *vm, struct vm_range *range,
 	dkprintf("split_process_memory_range(%p,%lx-%lx,%lx,%p)\n",
 			vm, range->start, range->end, addr, splitp);
 
-	if (range->pgshift != 0) {
-		if (addr & ((1UL << range->pgshift) - 1)) {
-			/* split addr is not aligned */
-			range->pgshift = 0;
-		}
-	}
+	range->pgshift = process_split_pgshift_result(range->pgshift, addr);
 
 	error = ihk_mc_pt_split(vm->address_space->page_table, vm,
 			range, (void *)addr);
@@ -1408,39 +1404,6 @@ static int vm_range_insert(struct process_vm *vm, struct vm_range *newrange)
 	return 0;
 }
 
-enum ihk_mc_pt_attribute common_vrflag_to_ptattr(unsigned long flag, uint64_t fault, pte_t *ptep)
-{
-	enum ihk_mc_pt_attribute attr;
-
-	attr = PTATTR_USER | PTATTR_FOR_USER;
-
-	if (flag & VR_REMOTE) {
-		attr |= IHK_PTA_REMOTE;
-	}
-	else if (flag & VR_IO_NOCACHE) {
-		attr |= PTATTR_UNCACHABLE;
-	}
-
-	if ((flag & VR_PROT_MASK) != VR_PROT_NONE) {
-		attr |= PTATTR_ACTIVE;
-	}
-
-	if (flag & VR_PROT_WRITE) {
-		attr |= PTATTR_WRITABLE;
-	}
-
-	if (!(flag & VR_PROT_EXEC)) {
-		attr |= PTATTR_NO_EXECUTE;
-	}
-
-	if (flag & VR_WRITE_COMBINED) {
-		attr |= PTATTR_WRITE_COMBINED;
-	}
-
-	return attr;
-}
-
-
 /* Parallel memset implementation on top of general
  * SMP funcution call facility */
 struct memset_smp_req {
@@ -1502,13 +1465,14 @@ int add_process_memory_range(struct process_vm *vm,
 	struct vm_range *range;
 	int rc;
 
-	if ((start < vm->region.user_start)
-			|| (vm->region.user_end < end)) {
+	rc = process_add_range_bounds_result(vm->region.user_start,
+			vm->region.user_end, start, end);
+	if (rc) {
 		kprintf("%s: error: range %lx - %lx is not in user available area\n",
 				__FUNCTION__,
 				start, end, vm->region.user_start,
 				vm->region.user_end);
-		return -EINVAL;
+		return rc;
 	}
 
 	range = kmalloc(sizeof(struct vm_range), IHK_MC_AP_NOWAIT);
@@ -1697,23 +1661,12 @@ int extend_up_process_memory_range(struct process_vm *vm,
 
 	dkprintf("exntend_up_process_memory_range(%p,%p %#lx-%#lx,%#lx)\n",
 			vm, range, range->start, range->end, newend);
-	if (newend <= range->end) {
-		error = -EINVAL;
-		goto out;
-	}
-
-	if (vm->region.user_end < newend) {
-		error = -EPERM;
-		goto out;
-	}
-
 	next = next_process_memory_range(vm ,range);
-	if (next && (next->start < newend)) {
-		error = -ENOMEM;
+	error = process_extend_up_result(range->end, vm->region.user_end,
+			next != NULL, next ? next->start : 0, newend);
+	if (error)
 		goto out;
-	}
 
-	error = 0;
 	range->end = newend;
 
 out:
@@ -1729,13 +1682,13 @@ int change_prot_process_memory_range(struct process_vm *vm,
 	int error;
 	enum ihk_mc_pt_attribute oldattr;
 	enum ihk_mc_pt_attribute newattr;
-	enum ihk_mc_pt_attribute clrattr;
-	enum ihk_mc_pt_attribute setattr;
+	unsigned long clrattr;
+	unsigned long setattr;
 
 	dkprintf("change_prot_process_memory_range(%p,%lx-%lx,%lx)\n",
 			vm, range->start, range->end, protflag);
 
-	newflag = (range->flag & ~VR_PROT_MASK) | (protflag & VR_PROT_MASK);
+	newflag = process_change_prot_newflag_result(range->flag, protflag);
 	if (range->flag == newflag) {
 		/* nothing to do */
 		error = 0;
@@ -1745,8 +1698,7 @@ int change_prot_process_memory_range(struct process_vm *vm,
 	oldattr = arch_vrflag_to_ptattr(range->flag, PF_POPULATE, NULL);
 	newattr = arch_vrflag_to_ptattr(newflag, PF_POPULATE, NULL);
 
-	clrattr = oldattr & ~newattr;
-	setattr = newattr & ~oldattr;
+	process_attr_delta_result(oldattr, newattr, &clrattr, &setattr);
 
 	/*
 	 * If this is a file mapping don't set any new prot write.
@@ -1755,7 +1707,8 @@ int change_prot_process_memory_range(struct process_vm *vm,
 	 */
 	if (range->memobj && (range->flag & VR_PRIVATE) &&
 	    !(range->memobj->flags & MF_HUGETLBFS)) {
-		setattr &= ~PTATTR_WRITABLE;
+		setattr = process_private_file_setattr_result(1, range->flag,
+				range->memobj->flags, setattr);
 		if (!clrattr && !setattr) {
 			range->flag = newflag;
 			error = 0;
@@ -2904,9 +2857,10 @@ unsigned long extend_process_region(struct process_vm *vm,
 int remove_process_region(struct process_vm *vm,
                           unsigned long start, unsigned long end)
 {
-	if ((start & (PAGE_SIZE - 1)) || (end & (PAGE_SIZE - 1))) {
-		return -EINVAL;
-	}
+	int rc = process_remove_region_alignment_result(start, end);
+
+	if (rc)
+		return rc;
 
 	ihk_mc_spinlock_lock_noirq(&vm->page_table_lock);
 	/* We defer freeing to the time of exit */
@@ -4336,41 +4290,46 @@ debug_log(unsigned long arg)
 int access_ok(struct process_vm *vm, int type, uintptr_t addr, size_t len) {
 	struct vm_range *range, *next;
 	int first = true;
+	int rc;
 
 	range = lookup_process_memory_range(vm, addr, addr + len);
 
-	if (!range || range->start > addr) {
+	rc = process_access_initial_result(range != NULL,
+			range ? range->start : 0, addr);
+	if (rc) {
 		kprintf("%s: No VM range at 0x%llx, refusing access\n",
 			__FUNCTION__, addr);
-		return -EFAULT;
+		return rc;
 	}
 	do {
 		if (first) {
 			first = false;
 		} else {
 			next = next_process_memory_range(vm, range);
-			if (!next) {
+			rc = process_access_adjacent_result(range->end,
+					next != NULL, next ? next->start : 0);
+			if (rc && !next) {
 				kprintf("%s: No VM range after 0x%llx, but checking until 0x%llx. Refusing access\n",
 					__FUNCTION__, range->end, addr + len);
-				return -EFAULT;
+				return rc;
 			}
-			if (range->end != next->start) {
+			if (rc) {
 				kprintf("%s: 0x%llx - 0x%llx and 0x%llx - 0x%llx are not adjacent (request was %0x%llx-0x%llx %zu)\n",
 					__FUNCTION__, range->start, range->end,
 					next->start, next->end,
 					addr, addr+len, len);
-				return -EFAULT;
+				return rc;
 			}
 			range = next;
 		}
 
-		if ((type == VERIFY_WRITE && !(range->flag & VR_PROT_WRITE)) ||
-		    (type == VERIFY_READ && !(range->flag & VR_PROT_READ))) {
+		rc = process_access_permission_result(type, range->flag);
+		if (rc) {
 			kprintf("%s: 0x%llx - 0x%llx does not have prot %s (request was %0x%llx-0x%llx %zu)\n",
 				__FUNCTION__, range->start, range->end,
 				type == VERIFY_WRITE ? "write" : "ready",
 				addr, addr+len, len);
-			return -EACCES;
+			return rc;
 		}
 	} while (addr + len > range->end);
 

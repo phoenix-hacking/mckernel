@@ -132,7 +132,7 @@ static LIST_HEAD(shmlock_users);
 
 void shmlock_user_free(struct shmlock_user *user)
 {
-	if (user->locked) {
+	if (shmlock_user_locked_result(user->locked)) {
 		panic("shmlock_user_free()");
 	}
 	list_del(&user->chain);
@@ -144,11 +144,12 @@ int shmlock_user_get(uid_t ruid, struct shmlock_user **userp)
 	struct shmlock_user *user;
 
 	list_for_each_entry(user, &shmlock_users, chain) {
-		if (user->ruid == ruid) {
+		if (shmlock_user_match_result(user->ruid, ruid)) {
 			break;
 		}
 	}
-	if (&user->chain == &shmlock_users) {
+	if (shmlock_user_is_list_head_result((uintptr_t)&user->chain,
+					     (uintptr_t)&shmlock_users)) {
 		user = kmalloc(sizeof(*user), IHK_MC_AP_NOWAIT);
 		if (!user) {
 			return -ENOMEM;
@@ -188,11 +189,11 @@ int shmobj_create(struct shmid_ds *ds, struct memobj **objp)
 	obj->memobj.ops = &shmobj_ops;
 	obj->memobj.flags = shmobj_initial_flags_result();
 	obj->memobj.size = ds->shm_segsz;
-	ihk_atomic_set(&obj->memobj.refcnt, 1);
+	ihk_atomic_set(&obj->memobj.refcnt, shmobj_initial_refcnt_result());
 	obj->ds = *ds;
 	obj->ds.shm_perm.seq = the_seq++;
-	obj->ds.init_pgshift = 0;
-	obj->index = -1;
+	obj->ds.init_pgshift = shmobj_initial_ds_pgshift_result();
+	obj->index = shmobj_initial_index_result();
 	obj->pgshift = pgshift;
 	obj->real_segsz = shmobj_real_segsz_result(obj->ds.shm_segsz,
 			pgsize);
@@ -232,13 +233,14 @@ static void shmobj_destroy(struct shmobj *obj)
 	int npages;
 
 	dkprintf("shmobj_destroy(%p [%d %o])\n", obj, obj->index, obj->ds.shm_perm.mode);
-	if (obj->user) {
+	if (shmobj_has_user_result((uintptr_t)obj->user)) {
 		user = obj->user;
 		obj->user = NULL;
 		shmlock_users_lock();
 		size = obj->real_segsz;
-		user->locked -= size;
-		if (!user->locked) {
+		user->locked = shmlock_user_after_unlock_result(
+			user->locked, size);
+		if (shmlock_user_should_free_result(user->locked)) {
 			shmlock_user_free(user);
 		}
 		shmlock_users_unlock();
@@ -260,10 +262,13 @@ static void shmobj_destroy(struct shmobj *obj)
 		page_va = phys_to_virt(phys);
 		npages = shmobj_destroy_page_npages_result(page->pgshift);
 
-		if (ihk_atomic_read(&page->count) != 1) {
+		if (shmobj_destroy_page_count_invalid_result(
+			    ihk_atomic_read(&page->count))) {
 			kprintf("%s: WARNING: page count for phys 0x%lx is invalid\n",
 					__FUNCTION__, page->phys);
-		} else if (page_unmap(page)) {
+		} else if (shmobj_destroy_page_should_free_result(
+				   ihk_atomic_read(&page->count),
+				   page_unmap(page))) {
 			/* Other call sites of page_unmap are:
 			 * (1) MADV_REMOVE --> ... --> ihk_mc_pt_free_range()
 			 * (2) do_munmap --> ... --> free_process_memory_range()
@@ -304,7 +309,7 @@ static void shmobj_destroy(struct shmobj *obj)
 		ihk_mc_free_pages(phys_to_virt(page_to_phys(page)), npages);
 #endif
 	}
-	if (obj->index < 0) {
+	if (shmobj_should_free_direct_result(obj->index)) {
 		kfree(obj);
 	}
 	else {
@@ -327,7 +332,7 @@ static void shmobj_free(struct memobj *memobj)
 	dkprintf("%s(%p)\n", __func__, memobj);
 
 	shmobj_list_lock();
-	if (!(obj->ds.shm_perm.mode & SHM_DEST)) {
+	if (shmobj_destroy_missing_flag_result(obj->ds.shm_perm.mode)) {
 		ekprintf("%s called without going through rmid?", __func__);
 	}
 
@@ -371,7 +376,7 @@ static int shmobj_get_page(struct memobj *memobj, off_t off, int p2align,
 
 	page_list_lock(obj);
 	page = page_list_lookup(obj, off);
-	if (!page) {
+	if (shmobj_need_alloc_page_result((uintptr_t)page)) {
 		npages = shmobj_page_npages_result(p2align);
 		virt = ihk_mc_alloc_aligned_pages_user(npages, p2align,
 				IHK_MC_AP_NOWAIT, virt_addr);
@@ -386,7 +391,7 @@ static int shmobj_get_page(struct memobj *memobj, off_t off, int p2align,
 		phys = virt_to_phys(virt);
 		page = phys_to_page_insert_hash(phys);
 
-		if (page->mode != PM_NONE) {
+		if (!shmobj_page_mode_valid_for_new_result(page->mode)) {
 			ekprintf("shmobj_get_page(%p,%#lx,%d,%p):"
 					"page %p %#lx %d %d %#lx\n",
 					memobj, off, p2align, physp,
@@ -395,14 +400,15 @@ static int shmobj_get_page(struct memobj *memobj, off_t off, int p2align,
 			panic("shmobj_get_page()");
 		}
 		memset(virt, 0, npages*PAGE_SIZE);
-		page->mode = PM_MAPPED;
+		page->mode = shmobj_new_page_mode_result();
 		page->offset = off;
 		page->pgshift = shmobj_page_pgshift_result(p2align);
 
 		/* Page contents should survive over unmap */
-		ihk_atomic_set(&page->count, 1);
+		ihk_atomic_set(&page->count, shmobj_new_page_count_result());
 
-		ihk_atomic64_set(&page->mapped, 0);
+		ihk_atomic64_set(&page->mapped,
+				 shmobj_new_page_mapped_result());
 		page_list_insert(obj, page);
 		virt = NULL;
 		dkprintf("shmobj_get_page(%p,%#lx,%d,%p):alloc page. %p %#lx\n",
@@ -451,8 +457,8 @@ static int shmobj_lookup_page(struct memobj *memobj, off_t off, int p2align,
 	page_list_lock(obj);
 	page = page_list_lookup(obj, off);
 	page_list_unlock(obj);
-	if (!page) {
-		error = -ENOENT;
+	error = shmobj_lookup_page_missing_error_result((uintptr_t)page);
+	if (error) {
 		dkprintf("shmobj_lookup_page(%p,%#lx,%d,%p):page not found. %d\n",
 				memobj, off, p2align, physp, error);
 		goto out;
@@ -460,7 +466,7 @@ static int shmobj_lookup_page(struct memobj *memobj, off_t off, int p2align,
 	phys = page_to_phys(page);
 
 	error = 0;
-	if (physp) {
+	if (shmobj_lookup_should_store_phys_result((uintptr_t)physp)) {
 		*physp = phys;
 	}
 
@@ -494,8 +500,8 @@ static int shmobj_update_page(struct memobj *memobj, page_table_t pt,
 	}
 	base_phys = page_to_phys(orig_page);
 	pte = ihk_mc_pt_lookup_pte(pt, vaddr, 0, NULL, &pte_size, &p2align);
-	if (!pte) {
-		error = -ENOENT;
+	error = shmobj_pte_missing_result((uintptr_t)pte);
+	if (error) {
 		dkprintf("%s(%p,%p,%p,%p): pte not found. %d\n",
 				__func__, memobj, pt, orig_page, vaddr);
 		goto out;
@@ -508,11 +514,11 @@ static int shmobj_update_page(struct memobj *memobj, page_table_t pt,
 
 	/* Fit pages to pte */
 	page_off = pte_size;
-	while (page_off < orig_pgsize) {
+	while (shmobj_update_has_more_pages_result(page_off, orig_pgsize)) {
 		pte = ihk_mc_pt_lookup_pte(pt, vaddr + page_off, 0, NULL,
 				&pte_size, &p2align);
-		if (!pte) {
-			error = -ENOENT;
+		error = shmobj_pte_missing_result((uintptr_t)pte);
+		if (error) {
 			dkprintf("%s(%p,%p,%p,%p): pte not found. %d\n",
 					__func__, memobj, pt, orig_page, vaddr);
 			goto out;
@@ -533,7 +539,8 @@ static int shmobj_update_page(struct memobj *memobj, page_table_t pt,
 				ihk_atomic64_read(&orig_page->mapped));
 		page_list_insert(obj, page);
 
-		page_off += pte_size;
+		page_off = shmobj_update_next_page_off_result(
+			page_off, pte_size);
 	}
 
 	error = 0;

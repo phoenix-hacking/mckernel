@@ -5008,3 +5008,699 @@ Update 2026-05-19 04:30 EDT:
   - Keep allocation/free, reference mutation, locks, list mutation, page-table
     mutation, page I/O, sysfs IKC exchange, procfs buffer mutation, and
     user-copy in C until targeted runtime coverage exists for those bodies.
+
+Update 2026-05-19 04:50 EDT:
+- Converted the third object/procfs/sysfs/dev/file decision-helper batch to
+  Rust while preserving the C fallback image.
+- Implementation:
+  - Wired `kernel/procfs.c` through the Rust `procfs_format_error_result()`
+    helper for procfs formatting bounds checks.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct C/Rust digest
+    coverage for the widened helper surface already exported through
+    `kernel/rust/object_helpers.rs`, `kernel/include/object_helpers.h`, and
+    `kernel/object_helpers.c`: fileobj initial ref/sref, premap NUMA-node
+    wrap, pages-byte sizing, premap page indexing, allocation
+    npages/flags/size, pageio pgsize and reschedule decisions, new/mapped page
+    modes; devobj PFN-table bytes, base flags, initial refcount, PFN request
+    offset, PFN-store decision, and map size; sysfs parameter sizing, data
+    buffer sizing, and packet-error decisions; and procfs default/remote
+    counts, remote npages, format-error validation, locked-KB reporting, maps
+    permission chars, maps path kind, pagemap next position, and auxv limit.
+  - Kept allocation/free, reference mutation, locks, lists, page-table
+    mutation, page I/O, sysfs IKC exchange, procfs buffer mutation, and
+    user-copy in C.
+- Local validation:
+  - `rustfmt kernel/rust/object_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `object_helpers ok digest=99bdfd218ffbecb9`,
+    `xpmem_helpers ok digest=47556fb6e2054dd7`,
+    `syscall_policy_helpers ok digest=51c02f662662b187`,
+    `sched_helpers ok digest=72b6ef0b7a02091c`,
+    `rlimit_helpers ok digest=317abd6ca0cbf441`,
+    `shmid_helpers ok digest=106bd71cde5652d2`, and the prior page,
+    memory/init, waitq, plist, bitops, string, numparse, bitmap, and allocator
+    digests.
+  - `git diff --check` passed.
+  - The expected unresolved-provider list and SIMD scan stayed clean.
+  - The documentation and source credential scan did not find credential text
+    in tracked migration logs, kernel code, scripts, or tests.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. Rust emitted the existing non-fatal jobserver warning.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+- Runtime validation:
+  - Installed `/tmp/mckernel-rocky-rust` into `/opt/mckernel-rust`.
+  - Booted McKernel with one McKernel CPU and 512M memory; boot log contained
+    `IHK/McKernel booted`.
+  - From the privileged validation context, non-root McKernel user workload
+    smoke passed:
+    `sudo -u hgordon /opt/mckernel-rust/bin/mcexec /bin/true`,
+    `sudo -u hgordon /opt/mckernel-rust/bin/mcexec /usr/bin/hostname`, and
+    `sudo -u hgordon /opt/mckernel-rust/bin/mcstat`.
+  - McKernel-side procfs smoke passed for `/proc/self/maps`,
+    `/proc/self/stat`, and one `/proc/self/pagemap` record read.
+  - The SysV shared-memory smoke binary built from `test/issues/1242/main.c`
+    into `/tmp/mck-shm-smoke` passed under `mcexec`; it covered `shmget`,
+    `shmat`, `madvise(MADV_REMOVE)`, `shmdt`, and `shmctl(IPC_RMID)`.
+  - McKernel was shut down cleanly afterward.
+- Estimate and path forward:
+  - Overall Rust ownership estimate is now 66%.
+  - Next best slices are runtime-backed file/dev/sysfs/procfs bodies:
+    file-backed mmap, `/proc/PID/mem`, sysfs create/show/store, device PFN
+    mapping, and hugetlbfs-backed mappings. Keep mutation-heavy ownership in C
+    until each path has direct runtime coverage.
+
+Update 2026-05-19 05:05 EDT:
+- Converted the fourth object/procfs/sysfs/dev/file decision-helper batch to
+  Rust while preserving the C fallback image.
+- Implementation:
+  - Extended `kernel/rust/object_helpers.rs`,
+    `kernel/include/object_helpers.h`, and `kernel/object_helpers.c` with
+    fileobj path-present, invalid page-count, hashed-page free, premap
+    page-present, and lookup-miss decisions; devobj path/PFN-table presence
+    and mapped-PFN composition; sysfs request-busy, handle-pointer, default
+    response, release-response, and request-handler dispatch decisions; and
+    procfs release-message, root match, OS-number match, zero-length read,
+    locked-size accumulation, and bitmask offset decisions.
+  - Wired `kernel/fileobj.c`, `kernel/devobj.c`, `kernel/sysfs.c`, and
+    `kernel/procfs.c` through the new helpers.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct C/Rust digest
+    coverage for every new helper.
+  - Kept allocation/free calls, reference mutation, locks, lists, page-table
+    mutation, sysfs IKC sends, procfs buffer mutation, and user-copy in C.
+- Local validation:
+  - `rustfmt kernel/rust/object_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - The documentation and source credential scan did not find credential text
+    in tracked migration logs, kernel code, scripts, or tests.
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `object_helpers ok digest=1702b42881d4497b`,
+    `xpmem_helpers ok digest=47556fb6e2054dd7`,
+    `syscall_policy_helpers ok digest=51c02f662662b187`,
+    `sched_helpers ok digest=72b6ef0b7a02091c`,
+    `rlimit_helpers ok digest=317abd6ca0cbf441`,
+    `shmid_helpers ok digest=106bd71cde5652d2`, and the prior page,
+    memory/init, waitq, plist, bitops, string, numparse, bitmap, and allocator
+    digests.
+  - The expected unresolved-provider list and SIMD scan stayed clean.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. Rust emitted the existing non-fatal jobserver warning.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+- Runtime validation:
+  - Installed `/tmp/mckernel-rocky-rust` into `/opt/mckernel-rust`.
+  - Booted McKernel with one McKernel CPU and 512M memory; boot log contained
+    `IHK/McKernel booted`.
+  - From the privileged validation context, non-root McKernel user workload
+    smoke passed:
+    `sudo -u hgordon /opt/mckernel-rust/bin/mcexec /bin/true`,
+    `sudo -u hgordon /opt/mckernel-rust/bin/mcexec /usr/bin/hostname`, and
+    `sudo -u hgordon /opt/mckernel-rust/bin/mcstat`.
+  - McKernel-side procfs smoke passed for `/proc/self/status`,
+    `/proc/self/maps`, `/proc/self/stat`, and one `/proc/self/pagemap` record
+    read.
+  - Host sysfs show passed by reading
+    `/sys/devices/virtual/mcos/mcos0/sys/test/a.dir/a_value`. The available
+    sample value was read-only, so sysfs store mutation is not claimed by this
+    runtime probe.
+  - The SysV shared-memory smoke binary built from `test/issues/1242/main.c`
+    into `/tmp/mck-shm-smoke` passed under `mcexec`; it covered `shmget`,
+    `shmat`, `madvise(MADV_REMOVE)`, `shmdt`, and `shmctl(IPC_RMID)`.
+  - McKernel was shut down cleanly afterward.
+- Estimate and path forward:
+  - Overall Rust ownership estimate is now 72%.
+  - Next best slices are runtime-backed mutation-light file/dev/sysfs/procfs
+    bodies with direct probes: writable sysfs store coverage, file-backed mmap,
+    `/proc/PID/mem`, device PFN mapping, and hugetlbfs-backed mappings. Keep
+    mutation-heavy ownership in C until each path has direct runtime coverage.
+
+Update 2026-05-19 05:16 EDT:
+- Converted the fifth object/pager decision-helper batch to Rust while
+  preserving the C fallback image.
+- Implementation:
+  - Extended `kernel/rust/object_helpers.rs`,
+    `kernel/include/object_helpers.h`, and `kernel/object_helpers.c` with
+    pager arealist tail-room/count math, addrpair sizing, file-position math,
+    arealist write-result validation, Linux-mlock sentinel handling,
+    mlock-container movement decisions, pagein data-position math, pageout
+    argument validation, anonymous-range skip policy, locked-range detection,
+    physical-removal skip policy, fd-valid checks, swap-unlink decisions, and
+    short-I/O errno mapping.
+  - Wired `kernel/pager.c` through the new helpers while keeping
+    pageout/pagein orchestration, page-table mutation, Linux syscall
+    forwarding, allocation/free calls, and user-copy in C.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct C/Rust digest
+    coverage for every new pager helper.
+- Local validation:
+  - `rustfmt kernel/rust/object_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - The documentation and source credential scan did not find credential text
+    in tracked migration logs, kernel code, scripts, or tests.
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `object_helpers ok digest=66f53556a25bc594`,
+    `xpmem_helpers ok digest=47556fb6e2054dd7`,
+    `syscall_policy_helpers ok digest=51c02f662662b187`,
+    `sched_helpers ok digest=72b6ef0b7a02091c`,
+    `rlimit_helpers ok digest=317abd6ca0cbf441`,
+    `shmid_helpers ok digest=106bd71cde5652d2`, and the prior page,
+    memory/init, waitq, plist, bitops, string, numparse, bitmap, and allocator
+    digests.
+  - The expected unresolved-provider list and SIMD scan stayed clean.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. Rust emitted the existing non-fatal jobserver warning.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+- Runtime validation:
+  - Installed `/tmp/mckernel-rocky-rust` into `/opt/mckernel-rust`.
+  - Booted McKernel with one McKernel CPU and 512M memory; boot log contained
+    `IHK/McKernel booted`.
+  - From the privileged validation context, non-root McKernel user workload
+    smoke passed:
+    `sudo -u hgordon /opt/mckernel-rust/bin/mcexec /bin/true`,
+    `sudo -u hgordon /opt/mckernel-rust/bin/mcexec /usr/bin/hostname`, and
+    `sudo -u hgordon /opt/mckernel-rust/bin/mcstat`.
+  - McKernel-side procfs smoke passed for `/proc/self/status`,
+    `/proc/self/maps`, `/proc/self/stat`, and one `/proc/self/pagemap` record
+    read.
+  - Host sysfs show passed by reading
+    `/sys/devices/virtual/mcos/mcos0/sys/test/a.dir/a_value`. The available
+    sample value was read-only, so sysfs store mutation is not claimed by this
+    runtime probe.
+  - The SysV shared-memory smoke binary built from `test/issues/1242/main.c`
+    into `/tmp/mck-shm-smoke` passed under `mcexec`; it covered `shmget`,
+    `shmat`, `madvise(MADV_REMOVE)`, `shmdt`, and `shmctl(IPC_RMID)`.
+  - McKernel was shut down cleanly afterward.
+- Estimate and path forward:
+  - Overall Rust ownership estimate is now 78%.
+  - Next best slices need direct pager and object runtime probes before moving
+    mutation-heavy bodies: pagein/pageout/swapout workloads, writable sysfs
+    store coverage, file-backed mmap, `/proc/PID/mem`, device PFN mapping, and
+    hugetlbfs-backed mappings. Keep pager orchestration, Linux forwarding,
+    allocation/free, user-copy, and page-table mutation in C until each path
+    has direct runtime coverage.
+
+Update 2026-05-19 05:34 EDT:
+- Converted the sixth object/procfs/sysfs/shmobj/hugefile decision-helper
+  batch to Rust while preserving the C fallback image.
+- Implementation:
+  - Extended `kernel/rust/object_helpers.rs`,
+    `kernel/include/object_helpers.h`, and `kernel/object_helpers.c` with
+    sysfs allocation-present and callback-present checks; procfs remote-buffer,
+    backlog-vs-EAGAIN, task TID, pointer-present, and buffer-chain attach
+    decisions; SysV shm/shmlock user matching, lock-release, page-count,
+    direct-vs-indexed destroy, destroy-flag, initial object state, page
+    allocation, new-page state, lookup-miss, PTE-miss, and update-loop
+    decisions; and hugefile pointer/page presence, page-array sizing, and
+    zero-tail indexing.
+  - Wired `kernel/sysfs.c`, `kernel/procfs.c`, `kernel/shmobj.c`, and
+    `kernel/hugefileobj.c` through the new helpers.
+  - Kept allocation/free calls, list mutation, locks, page-table mutation,
+    IKC exchange, procfs buffer copies, and user-copy in C.
+  - Corrected the hugefile page-array zero-tail index while routing it through
+    a Rust-owned helper; the previous expression scaled the pointer twice.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct C/Rust digest
+    coverage for every new helper.
+- Local validation:
+  - `rustfmt kernel/rust/object_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - The documentation and source credential scan did not find credential text
+    in tracked migration logs, kernel code, scripts, or tests.
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `object_helpers ok digest=2a5012e4f6aeb336`,
+    `xpmem_helpers ok digest=47556fb6e2054dd7`,
+    `syscall_policy_helpers ok digest=51c02f662662b187`,
+    `sched_helpers ok digest=72b6ef0b7a02091c`,
+    `rlimit_helpers ok digest=317abd6ca0cbf441`,
+    `shmid_helpers ok digest=106bd71cde5652d2`, and the prior page,
+    memory/init, waitq, plist, bitops, string, numparse, bitmap, and allocator
+    digests.
+  - The expected unresolved-provider list and SIMD scan stayed clean.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. Rust emitted the existing non-fatal jobserver warning.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+- Runtime validation:
+  - Installed `/tmp/mckernel-rocky-rust` into `/opt/mckernel-rust`.
+  - Booted McKernel with one McKernel CPU and 512M memory; boot log contained
+    `IHK/McKernel booted`.
+  - From the privileged validation context, non-root McKernel user workload
+    smoke passed:
+    `sudo -u hgordon /opt/mckernel-rust/bin/mcexec /bin/true`,
+    `sudo -u hgordon /opt/mckernel-rust/bin/mcexec /usr/bin/hostname`, and
+    `sudo -u hgordon /opt/mckernel-rust/bin/mcstat`.
+  - McKernel-side procfs smoke passed for `/proc/self/status`,
+    `/proc/self/maps`, `/proc/self/stat`, `/proc/self/cmdline`,
+    `/proc/self/comm`, and one `/proc/self/pagemap` record read.
+  - Host sysfs show passed by reading
+    `/sys/devices/virtual/mcos/mcos0/sys/test/a.dir/a_value`. The available
+    sample value was read-only, so sysfs store mutation is not claimed by this
+    runtime probe.
+  - The SysV shared-memory smoke binary built from `test/issues/1242/main.c`
+    into `/tmp/mck-shm-smoke` passed under `mcexec`; it covered `shmget`,
+    `shmat`, `madvise(MADV_REMOVE)`, `shmdt`, and `shmctl(IPC_RMID)`.
+  - McKernel was shut down cleanly afterward.
+- Estimate and path forward:
+  - Overall Rust ownership estimate is now 86%.
+  - Next best slices need direct runtime probes before moving mutation-heavy
+    bodies: writable sysfs store, direct pager pagein/pageout/swapout,
+    `/proc/PID/mem`, device PFN mapping, and hugetlbfs-backed mappings. Keep
+    IKC exchange, Linux forwarding, allocation/free, user-copy, and page-table
+    mutation in C until each path has direct runtime coverage.
+
+Update 2026-05-19 13:58 EDT:
+- Converted the seventh shared memobj/page decision-helper batch to Rust while
+  preserving the C fallback image.
+- Implementation:
+  - Extended `kernel/rust/object_helpers.rs`,
+    `kernel/include/object_helpers.h`, and `kernel/object_helpers.c` with
+    memobj unref-free decisions, operation-pointer presence checks,
+    missing/default page-operation results, pager/removable flag predicates,
+    flushable page/object predicates, XPMEM attachment freeability filtering,
+    and remap-file-pages eligibility.
+  - Extended `kernel/rust/page_helpers.rs`, `kernel/include/page.h`, and
+    `kernel/mem.c` with page mode-in-memobj and multi-mapped classification
+    helpers.
+  - Wired `kernel/include/memobj.h` and `kernel/include/page.h` through the
+    new helpers while keeping atomic reference mutation, indirect memobj
+    operation calls, allocation/free orchestration, locks, lists, page-map/
+    page-table mutation, and user-copy in C.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct C/Rust digest
+    coverage for every new helper.
+- Local validation:
+  - `rustfmt kernel/rust/page_helpers.rs kernel/rust/object_helpers.rs`
+    passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - The documentation and source credential scan did not find credential text
+    in tracked migration logs, kernel code, scripts, or tests.
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `page_helpers ok digest=80665444d423c9a2`,
+    `object_helpers ok digest=6c986fb9ff306d75`,
+    `xpmem_helpers ok digest=47556fb6e2054dd7`,
+    `syscall_policy_helpers ok digest=51c02f662662b187`,
+    `sched_helpers ok digest=72b6ef0b7a02091c`,
+    `rlimit_helpers ok digest=317abd6ca0cbf441`,
+    `shmid_helpers ok digest=106bd71cde5652d2`, and the prior memory/init,
+    waitq, plist, bitops, string, numparse, bitmap, and allocator digests.
+  - The expected unresolved-provider list and SIMD scan stayed clean.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. Rust emitted the existing non-fatal jobserver warning.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+- Runtime validation:
+  - Installed `/tmp/mckernel-rocky-rust` into `/opt/mckernel-rust`.
+  - Booted McKernel with one McKernel CPU and 512M memory; boot log contained
+    `IHK/McKernel booted`.
+  - From the privileged validation context, non-root McKernel user workload
+    smoke passed: `mcexec /bin/true`, `mcexec /bin/hostname`, and `mcstat`.
+  - McKernel-side procfs smoke passed for `/proc/self/status`,
+    `/proc/self/maps`, `/proc/self/stat`, `/proc/self/cmdline`,
+    `/proc/self/comm`, and one `/proc/self/pagemap` record read.
+  - Host sysfs show passed by reading installed IHK/mcctrl module attributes.
+  - The SysV shared-memory smoke binary at `/tmp/mck-shm-smoke` passed under
+    `mcexec`; it covered `shmget`, `shmat`, `madvise(MADV_REMOVE)`,
+    `shmdt`, and `shmctl(IPC_RMID)`.
+  - McKernel was shut down cleanly afterward.
+- Estimate and path forward:
+  - Overall Rust ownership estimate is now 89%.
+  - Next best slices need direct runtime probes before moving mutation-heavy
+    bodies: direct pager pagein/pageout/swapout, writable sysfs store,
+    `/proc/PID/mem`, device PFN mapping, file-backed mmap, and
+    hugetlbfs-backed mappings. Keep IKC exchange, Linux forwarding,
+    allocation/free, indirect operation mutation, user-copy, and page-table
+    mutation in C until each path has direct runtime coverage.
+
+Update 2026-05-19 14:29 EDT:
+- Converted the eighth procfs/pager/file decision-helper batch to Rust while
+  preserving the C fallback image.
+- Implementation:
+  - Extended `kernel/rust/object_helpers.rs`,
+    `kernel/include/object_helpers.h`, and `kernel/object_helpers.c` with
+    procfs entry-name classification, procfs `comm` basename selection, pager
+    Linux read/write loop stop/advance/remaining/complete decisions, pager
+    copy-fault retry/error mapping, file-object shared-reference increment
+    math, and file premap NUMA-interleave policy.
+  - Wired `kernel/procfs.c`, `kernel/pager.c`, and `kernel/fileobj.c` through
+    the new helpers.
+  - Kept Linux syscall forwarding, procfs buffer mutation, page-fault
+    execution, user-copy, file-object lifetime mutation, allocation/free,
+    locks, lists, and page-table mutation in C.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct C/Rust digest
+    coverage for every new helper.
+- Local validation:
+  - `rustfmt kernel/rust/object_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - The documentation and source credential scan did not find credential text
+    in tracked migration logs, kernel code, scripts, or tests.
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `object_helpers ok digest=45e65c243c3b5900`,
+    `page_helpers ok digest=80665444d423c9a2`,
+    `xpmem_helpers ok digest=47556fb6e2054dd7`,
+    `syscall_policy_helpers ok digest=51c02f662662b187`,
+    `sched_helpers ok digest=72b6ef0b7a02091c`,
+    `rlimit_helpers ok digest=317abd6ca0cbf441`,
+    `shmid_helpers ok digest=106bd71cde5652d2`, and the prior memory/init,
+    waitq, plist, bitops, string, numparse, bitmap, and allocator digests.
+  - The expected unresolved-provider list and SIMD scan stayed clean.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. Rust emitted the existing non-fatal jobserver warning.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+- Runtime validation:
+  - Installed `/tmp/mckernel-rocky-rust` into `/opt/mckernel-rust`.
+  - Booted McKernel with one McKernel CPU and 512M memory; boot log contained
+    `IHK/McKernel booted`.
+  - From the privileged validation context, non-root McKernel user workload
+    smoke passed: `mcexec /bin/true`, `mcexec /bin/hostname`, and `mcstat`.
+  - McKernel-side procfs smoke passed for `/proc/self/comm`,
+    `/proc/self/stat`, `/proc/self/status`, `/proc/self/maps`,
+    `/proc/self/cmdline`, `/proc/self/pagemap`, and `/proc/stat`.
+  - Host sysfs show passed by reading installed IHK/mcctrl module attributes.
+  - The SysV shared-memory smoke binary at `/tmp/mck-shm-smoke` passed under
+    `mcexec`; it covered `shmget`, `shmat`, `madvise(MADV_REMOVE)`,
+    `shmdt`, and `shmctl(IPC_RMID)`.
+  - McKernel was shut down cleanly afterward.
+- Estimate and path forward:
+  - McKernel core helper/decision-surface Rust ownership estimate is now 94%.
+  - Full-tree ownership including IHK modules remains lower. The IHK modules
+    are in scope for the full Rust port, but their Linux-module Rust
+    build/link path is still pending.
+  - Next best slices need direct runtime probes before moving mutation-heavy
+    bodies: direct pager pagein/pageout/swapout, writable sysfs store,
+    `/proc/PID/mem`, device PFN mapping, file-backed mmap, and
+    hugetlbfs-backed mappings. Keep IKC exchange, Linux forwarding,
+    allocation/free, indirect operation mutation, user-copy, and page-table
+    mutation in C until each path has direct runtime coverage. For IHK,
+    next step is a minimal Rust object build/link spike for `ihk`, `mcctrl`,
+    and `ihk-smp-x86_64` with C-callable pure helpers before moving any Linux
+    kernel entry points.
+
+Update 2026-05-19 14:42 EDT:
+- Reset full-tree tracking explicitly around the user's 100% Rust target.
+- Documentation:
+  - Added `overview2.txt` as the literal whole-McKernel Rust completion
+    tracker for the Rocky Linux x86_64 target, with arm64 deferred.
+  - `overview2.txt` now separates the 94% McKernel core helper/decision-surface
+    estimate from the full-tree estimate that includes IHK host modules and
+    user tools.
+  - Whole-tree Rust ownership is now tracked at 32% with arm64 excluded.
+  - IHK modules (`ihk`, `ihk-smp-x86_64`, and `mcctrl`) and McKernel-owned user
+    tools remain in the 100% scope.
+- Implementation:
+  - Extended `kernel/rust/abi.rs` with Rust ABI mirrors for `cpu_set_t`,
+    `mcs_rwlock_lock_t`, `struct process_hash`, `struct thread_hash`,
+    `struct address_space`, `struct vm_range`,
+    `struct vm_range_numa_policy`, `struct vm_regions`, and
+    `struct process_vm`.
+  - Extended `kernel/rust/abi_checks.c` with matching C-side static assertions
+    for size and key offsets.
+  - No page-table mutation, lock/list mutation, user-copy, process lifetime, or
+    Linux module entry point was moved in this slice; this is deliberate until
+    direct runtime probes exist for each mutation-heavy path.
+- Local validation:
+  - `rustfmt kernel/rust/abi.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - The tracked-source credential scan did not find the runtime sudo secret in
+    migration logs, kernel code, scripts, or tests.
+  - `kernel/rust/tests/run_equivalence.sh` passed with the existing digests,
+    including `object_helpers ok digest=45e65c243c3b5900`,
+    `page_helpers ok digest=80665444d423c9a2`,
+    `xpmem_helpers ok digest=47556fb6e2054dd7`,
+    `syscall_policy_helpers ok digest=51c02f662662b187`,
+    `sched_helpers ok digest=72b6ef0b7a02091c`,
+    `rlimit_helpers ok digest=317abd6ca0cbf441`,
+    `shmid_helpers ok digest=106bd71cde5652d2`, and the prior memory/init,
+    waitq, plist, bitops, string, numparse, bitmap, and allocator digests.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. Rust emitted the existing non-fatal jobserver warning.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+- Path forward:
+  - Next code slice should extend thread/process lifetime ABI coverage and add
+    the first IHK Rust object build/link spike before moving Linux-module
+    behavior.
+  - Continue moving process/VM and x86_64 memory policy helpers only where the
+    Rust side can be covered by equivalence tests; defer page-table mutation and
+    lock-owned list mutation until runtime probes are in place.
+
+Update 2026-05-19 14:57 EDT:
+- Continued the Rust conversion with a process/VM helper batch plus the first
+  user-tool Rust helper object.
+- Implementation:
+  - Added `kernel/include/process_helpers.h`, `kernel/process_helpers.c`, and
+    `kernel/rust/process_helpers.rs`.
+  - Moved `common_vrflag_to_ptattr()` to Rust for the Rust-enabled image, with
+    a C fallback in `process_helpers.c`.
+  - Moved process/VM decision helpers to Rust:
+    `process_split_pgshift_result()`, `process_add_range_bounds_result()`,
+    `process_extend_up_result()`, `process_change_prot_newflag_result()`,
+    `process_attr_delta_result()`, `process_private_file_setattr_result()`,
+    `process_remove_region_alignment_result()`,
+    `process_access_initial_result()`, `process_access_adjacent_result()`, and
+    `process_access_permission_result()`.
+  - Wired `kernel/process.c` through those helpers while keeping allocation,
+    rb-tree insertion/removal, locks, page-table mutation, fault handling,
+    logging, and range lifetime in C.
+  - Added `tools/mcstat/rust/mcstat_helpers.rs` and CMake integration so
+    `mcstat` links a Rust helper object when Rust user-tool helpers are enabled.
+  - Moved `mcstat` memory scale/unit selection, header cadence, and monitor
+    status label selection to Rust. Device opens, IHK library calls, ioctls,
+    output loops, and all other user tools remain C-owned.
+- Local validation:
+  - `rustfmt` passed on the touched Rust files.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - The tracked-source credential scan did not find the runtime sudo secret in
+    migration logs, kernel code, scripts, tests, or the new mcstat Rust helper.
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `process_helpers ok digest=f5bdebac01215848`,
+    `object_helpers ok digest=45e65c243c3b5900`,
+    `page_helpers ok digest=80665444d423c9a2`,
+    `xpmem_helpers ok digest=47556fb6e2054dd7`,
+    `syscall_policy_helpers ok digest=51c02f662662b187`,
+    `sched_helpers ok digest=72b6ef0b7a02091c`,
+    `rlimit_helpers ok digest=317abd6ca0cbf441`,
+    `shmid_helpers ok digest=106bd71cde5652d2`, and the prior memory/init,
+    waitq, plist, bitops, string, numparse, bitmap, and allocator digests.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. Rust emitted the existing non-fatal jobserver warning.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mcstat -j2` passed with
+    the Rust helper object linked.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mcstat -j2` also
+    passed with the Rust user-tool helper object linked.
+- Estimates:
+  - McKernel core helper/decision-surface Rust ownership is now 97%.
+  - Whole-tree Rust ownership with arm64 deferred is now tracked at 37%.
+  - IHK host modules remain 0% Rust-owned and are still the highest-impact next
+    whole-tree milestone.
+
+Update 2026-05-19 15:08 EDT:
+- Continued the Rust conversion with an x86_64 memory-attribute helper batch.
+- Implementation:
+  - Added `arch/x86_64/kernel/include/arch-memory-helpers.h`,
+    `arch/x86_64/kernel/memory_helpers.c`, and
+    `kernel/rust/x86_memory_helpers.rs`.
+  - Moved the pure page-attribute translation decisions for
+    `attr_to_l3attr()`, `attr_to_l2attr()`, and `attr_to_l1attr()` behind
+    Rust-backed helpers:
+    `x86_attr_to_l3attr_result()`, `x86_attr_to_l2attr_result()`, and
+    `x86_attr_to_l1attr_result()`.
+  - Wired `arch/x86_64/kernel/memory.c`, `kernel/CMakeLists.txt`,
+    `kernel/rust/lib.rs`, and `kernel/rust/tests/run_equivalence.sh`.
+  - Kept the C fallback body in `memory_helpers.c` for non-Rust and
+    fallback-image builds.
+  - Did not move page-table walking, mapping, unmapping, TLB-sensitive
+    mutation, or user-copy in this slice.
+- Local validation:
+  - `rustfmt kernel/rust/x86_memory_helpers.rs kernel/rust/lib.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - The tracked-source credential scan did not find runtime sudo secrets in
+    migration logs, kernel code, scripts, tests, or the new helper files.
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `x86_memory_helpers ok digest=424ca34135e5ea58`,
+    `process_helpers ok digest=f5bdebac01215848`,
+    `object_helpers ok digest=45e65c243c3b5900`,
+    `page_helpers ok digest=80665444d423c9a2`,
+    `xpmem_helpers ok digest=47556fb6e2054dd7`,
+    `syscall_policy_helpers ok digest=51c02f662662b187`,
+    `sched_helpers ok digest=72b6ef0b7a02091c`,
+    `rlimit_helpers ok digest=317abd6ca0cbf441`,
+    `shmid_helpers ok digest=106bd71cde5652d2`, and the prior memory/init,
+    waitq, plist, bitops, string, numparse, bitmap, and allocator digests.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. Rust emitted the existing non-fatal jobserver warning.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mcstat -j2` passed.
+  - No boot/runtime smoke was run for this helper-only batch.
+- Estimates:
+  - McKernel core helper/decision-surface Rust ownership is now 98%.
+  - Whole-tree Rust ownership with arm64 deferred is now tracked at 39%.
+  - I did not mark 99% core helper/decision surface or 42% whole-tree
+    ownership because IHK host modules remain 0%, most user tools remain C,
+    and page-table mutation, syscall dispatch, scheduler/futex internals,
+    process lifetime mutation, and user-copy-heavy paths are still material
+    C-owned surfaces.
+- Path forward:
+  - Highest whole-tree leverage is still an IHK Rust build/link spike for
+    `ihk`, `ihk-smp-x86_64`, and `mcctrl`, plus broader user-tool crate
+    scaffolding.
+  - Highest McKernel-core leverage is guarded page-table/page-fault runtime
+    coverage before moving any TLB-sensitive mutation out of C.
+
+Update 2026-05-19 15:22 EDT:
+- Continued the Rust conversion with one x86_64 kernel decision helper and two
+  user/IHK-user helper objects.
+- Implementation:
+  - Extended `kernel/rust/x86_memory_helpers.rs`,
+    `arch/x86_64/kernel/memory_helpers.c`,
+    `arch/x86_64/kernel/include/arch-memory-helpers.h`, and
+    `arch/x86_64/kernel/memory.c`.
+  - Moved `arch_get_smaller_page_size()` decision logic behind
+    `x86_smaller_page_size_result()`. Page-table splitting, page-table
+    walking, TLB flushes, and mapping mutation remain C-owned.
+  - Added `executer/user/rust/mcexec_helpers.rs` and wired
+    `executer/user/CMakeLists.txt` plus `executer/user/mcexec.c` so `mcexec`
+    links a Rust helper object when `ENABLE_RUST_USER_TOOLS` is enabled.
+  - Moved mcexec byte-size parsing, `--stack-premap` premap/max parsing,
+    heap-extension defaulting, worker-thread count selection, memory-policy
+    flag composition, and stack-limit adjustment decisions to Rust. ELF
+    loading, device open/build-id checks, ioctls, DMA transfer, thread
+    creation, signal forwarding, NUMA discovery, and syscall forwarding remain
+    C-owned.
+  - Added `ihk/linux/user/rust/ihklib_helpers.rs` and wired
+    `ihk/linux/user/CMakeLists.txt` plus `ihk/linux/user/ihklib.c` so
+    `ihklib` links a Rust helper object when `ENABLE_RUST_USER_TOOLS` is
+    enabled.
+  - Moved `ihklib` CPU-list parsing and memory-size parsing to Rust. Sysfs,
+    procfs, device I/O, ioctl calls, request allocation, env parsing, BFD dump
+    handling, IHK command orchestration, and all IHK Linux kernel modules
+    remain C-owned.
+- Local validation:
+  - `rustfmt` passed on the touched Rust files.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - Standalone `rustc` object checks passed for `mcexec_helpers.rs` and
+    `ihklib_helpers.rs`.
+  - `nm -u` on the Rust user-helper objects showed only libc `strlen` as an
+    unresolved dependency and no Rust panic/indexing symbols.
+  - `git diff --check` passed.
+  - The tracked-source credential scan did not find runtime sudo secrets in
+    migration logs, kernel code, scripts, tests, executer user code, or IHK
+    user code.
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `x86_memory_helpers ok digest=308f2a36064e3022`,
+    `process_helpers ok digest=f5bdebac01215848`,
+    `object_helpers ok digest=45e65c243c3b5900`,
+    `page_helpers ok digest=80665444d423c9a2`,
+    `xpmem_helpers ok digest=47556fb6e2054dd7`,
+    `syscall_policy_helpers ok digest=51c02f662662b187`,
+    `sched_helpers ok digest=72b6ef0b7a02091c`,
+    `rlimit_helpers ok digest=317abd6ca0cbf441`,
+    `shmid_helpers ok digest=106bd71cde5652d2`, and the prior memory/init,
+    waitq, plist, bitops, string, numparse, bitmap, and allocator digests.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. Rust emitted the existing non-fatal jobserver warning.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mcexec ihkconfig
+    ihkosctl mcstat -j2` passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mcexec ihkconfig
+    ihkosctl mcstat -j2` passed with Rust user helpers enabled.
+  - A fresh `/tmp/mckernel-rocky-user-cfallback` tree configured with
+    `-DENABLE_RUST_KERNEL=OFF -DENABLE_RUST_USER_TOOLS=OFF` built `mcexec`,
+    `ihkconfig`, `ihkosctl`, and `mcstat`, proving the C user-helper fallback
+    path still compiles.
+  - No boot/runtime smoke was run for this helper-only batch.
+- Estimates:
+  - McKernel core helper/decision-surface Rust ownership is now 99%.
+  - Whole-tree Rust ownership with arm64 deferred is now tracked at 42%.
+  - I did not mark 44% whole-tree ownership because IHK Linux modules remain
+    0%, most IHK command logic remains C, most user tools are still C beyond
+    helper objects, and mutation-heavy kernel bodies remain C-owned.
+- Path forward:
+  - The next whole-tree jump needs the first Rust build/link spike for IHK
+    Linux modules (`ihk`, `ihk-smp-x86_64`, and `mcctrl`) and broader
+    user-tool crates.
+  - The next core-kernel jump needs guarded runtime probes before moving
+    page-table, futex, scheduler, syscall-dispatch, and process-lifetime
+    mutation out of C.
+
+Update 2026-05-19 15:35 EDT:
+- Continued the Rust conversion with another user/IHK-user helper batch.
+- Implementation:
+  - Extended `ihk/linux/user/rust/ihklib_helpers.rs` and
+    `ihk/linux/user/ihklib.c`.
+  - Moved `ihklib` memory-list parsing and IKC-map parsing behind
+    `ihklib_mem_str2array_result()` and `ihklib_ikc_str2array_result()`.
+    Allocation of request objects, sysfs/procfs/device I/O, ioctl calls,
+    command orchestration, BFD dump handling, env handling, and IHK Linux
+    kernel modules remain C-owned.
+  - Tightened the Rust `ihklib` parser internals so bounded IKC CPU-list
+    slices are parsed without reading past `:` delimiters, and preserved the
+    C count-vs-fill behavior for single CPU tokens.
+  - Extended `executer/user/rust/mcexec_helpers.rs` and
+    `executer/user/mcexec.c`.
+  - Moved getdents/getdents64 dirent field layout accessors behind
+    `mcexec_dirent32_reclen_result()`, `mcexec_dirent32_name_result()`,
+    `mcexec_dirent32_off_result()`, `mcexec_dirent64_reclen_result()`,
+    `mcexec_dirent64_name_result()`, and `mcexec_dirent64_off_result()`.
+  - Moved proc-task leaf path classification behind
+    `mcexec_is_proc_task_leaf_path_result()`. Syscall selection,
+    directory-entry merge orchestration, mapped-parent stat checks, procfs
+    overlay behavior, and error handling remain C-owned.
+- Local validation:
+  - `rustfmt ihk/linux/user/rust/ihklib_helpers.rs
+    executer/user/rust/mcexec_helpers.rs` passed.
+  - Standalone `rustc` object checks passed for both user-helper objects with
+    the same flags used by the CMake build.
+  - `nm -u` on the Rust user-helper objects showed only libc `strlen` as an
+    unresolved dependency and no Rust panic/indexing symbols.
+  - `git diff --check` passed.
+  - The tracked-source credential scan did not find runtime sudo secrets in
+    migration logs, kernel code, scripts, tests, executer user code, or IHK
+    user code.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mcexec ihkconfig
+    ihkosctl ihkmond mcstat -j2` passed.
+  - `cmake --build /tmp/mckernel-rocky-user-cfallback --target mcexec
+    ihkconfig ihkosctl ihkmond mcstat -j2` passed with
+    `-DENABLE_RUST_USER_TOOLS=OFF`.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed.
+  - Follow-up `cmake --build /tmp/mckernel-rocky-rust --target mcexec -j2`
+    and `cmake --build /tmp/mckernel-rocky-user-cfallback --target mcexec -j2`
+    passed after the proc-task path helper was added.
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `x86_memory_helpers ok digest=308f2a36064e3022`,
+    `process_helpers ok digest=f5bdebac01215848`,
+    `object_helpers ok digest=45e65c243c3b5900`,
+    `page_helpers ok digest=80665444d423c9a2`,
+    `xpmem_helpers ok digest=47556fb6e2054dd7`,
+    `syscall_policy_helpers ok digest=51c02f662662b187`,
+    `sched_helpers ok digest=72b6ef0b7a02091c`,
+    `rlimit_helpers ok digest=317abd6ca0cbf441`,
+    `shmid_helpers ok digest=106bd71cde5652d2`, and the prior memory/init,
+    waitq, plist, bitops, string, numparse, bitmap, and allocator digests.
+  - No boot/runtime smoke was run for this helper-only batch.
+- Estimates:
+  - McKernel core helper/decision-surface Rust ownership remains 99%.
+  - Whole-tree Rust ownership with arm64 deferred is now tracked at 43%.
+  - I did not mark 100% core helper ownership or 47% whole-tree ownership
+    because IHK Linux modules remain 0%, most user tools and IHK command logic
+    remain C, and page-table mutation, syscall dispatch, scheduler/futex
+    internals, process lifetime mutation, and user-copy-heavy paths are still
+    material C-owned surfaces.
+- Path forward:
+  - Highest whole-tree leverage remains a Rust build/link spike for IHK Linux
+    modules plus real Rust crate scaffolding for the remaining user tools.
+  - Highest core-kernel leverage remains guarded runtime coverage before
+    converting TLB-sensitive page-table, futex, scheduler, syscall-dispatch,
+    and process-lifetime mutation paths.

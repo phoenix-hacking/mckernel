@@ -250,7 +250,7 @@ int fileobj_create(int fd, struct memobj **objp, int *maxprotp, int flags,
 			       fileobj_initial_refcnt_result());
 		obj->sref = fileobj_initial_sref_result();
 
-		if (result.path[0]) {
+		if (fileobj_path_present_result(result.path[0])) {
 			newobj->memobj.path = kmalloc(PATH_MAX, IHK_MC_AP_NOWAIT);
 			if (!newobj->memobj.path) {
 				error = -ENOMEM;
@@ -284,7 +284,8 @@ int fileobj_create(int fd, struct memobj **objp, int *maxprotp, int flags,
 			memset(mo->pages, 0,
 			       fileobj_pages_bytes_result(nr_pages));
 
-			if (cpu_local_var(current)->proc->mpol_flags & MPOL_SHM_PREMAP) {
+			if (fileobj_premap_interleave_result(
+				    cpu_local_var(current)->proc->mpol_flags)) {
 				/* Get the actual pages NUMA interleaved */
 				for (j = 0; j < nr_pages; ++j) {
 					mo->pages[j] = ihk_mc_alloc_aligned_pages_node_user(1,
@@ -319,7 +320,7 @@ error_cleanup:
 	}
 	else {
 found:
-		obj->sref++;
+		obj->sref = fileobj_next_sref_result(obj->sref);
 		dkprintf("%s: existing obj 0x%lx, %s\n",
 			__FUNCTION__,
 			obj,
@@ -373,12 +374,13 @@ static void fileobj_free(struct memobj *memobj)
 		 * the second get_page() reaping the pageio and decremented
 		 * by clear_range().
 		 */
-		if (ihk_atomic_read(&page->count) != 1) {
+		if (fileobj_invalid_page_count_result(ihk_atomic_read(&page->count))) {
 			kprintf("%s: WARNING: page count is %d for phys 0x%lx is invalid, flags: 0x%lx\n",
 				__func__, ihk_atomic_read(&page->count),
 				page->phys, to_memobj(obj)->flags);
 		}
-		else if (page_unmap(page)) {
+		else if (fileobj_should_free_hashed_page_result(
+				 ihk_atomic_read(&page->count), page_unmap(page))) {
 			ihk_mc_free_pages_user(page_va, 1);
 			/* Track change in page->count for !MF_PREMAP pages.
 			 * It is decremented here or in clear_range()
@@ -396,7 +398,8 @@ static void fileobj_free(struct memobj *memobj)
 		int i;
 
 		for (i = 0; i < to_memobj(obj)->nr_pages; ++i) {
-			if (to_memobj(obj)->pages[i]) {
+			if (fileobj_premap_page_present_result(
+				    (uintptr_t)to_memobj(obj)->pages[i])) {
 				dkprintf("%s: pages[i]=%p\n", __func__, i,
 					 to_memobj(obj)->pages[i]);
 				// Track change in fileobj->pages[] for MF_PREMAP pages
@@ -417,7 +420,7 @@ static void fileobj_free(struct memobj *memobj)
 		kfree(to_memobj(obj)->pages);
 	}
 
-	if (to_memobj(obj)->path) {
+	if (fileobj_path_present_result((uintptr_t)to_memobj(obj)->path)) {
 		dkprintf("%s: %s\n", __func__, to_memobj(obj)->path);
 		kfree(to_memobj(obj)->path);
 	}
@@ -756,7 +759,8 @@ static int fileobj_lookup_page(struct memobj *memobj, off_t off,
 	mcs_lock_lock(&obj->page_hash_locks[hash], &mcs_node);
 
 	page = __fileobj_page_hash_lookup(obj, hash, off);
-	if (!page) {
+	error = fileobj_lookup_page_error_result(!!page);
+	if (error) {
 		goto out;
 	}
 

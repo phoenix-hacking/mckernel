@@ -9,6 +9,7 @@
 #include <waitq.h>
 #include <page.h>
 #include <shm.h>
+#include <process.h>
 
 #define ABI_ASSERT(cond, msg) _Static_assert(cond, msg)
 #define ABI_OFFSET(type, member) __builtin_offsetof(type, member)
@@ -194,3 +195,122 @@ ABI_ASSERT(ABI_OFFSET(struct shmobj, ds) == 80,
 	   "Rust/C shmobj ds offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct shmobj, chain) == 216,
 	   "Rust/C shmobj chain offset mismatch");
+
+ABI_ASSERT(sizeof(cpu_set_t) == 128,
+	   "Rust/C cpu_set_t size mismatch");
+ABI_ASSERT(sizeof(mcs_rwlock_lock_t) == 64,
+	   "Rust/C mcs_rwlock_lock_t size mismatch");
+ABI_ASSERT(ABI_OFFSET(mcs_rwlock_lock_t, slock) == 0,
+	   "Rust/C mcs_rwlock_lock_t slock offset mismatch");
+ABI_ASSERT(sizeof(struct process_hash) == 5888,
+	   "Rust/C process_hash size mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process_hash, list) == 0,
+	   "Rust/C process_hash list offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process_hash, lock) == 1216,
+	   "Rust/C process_hash lock offset mismatch");
+ABI_ASSERT(sizeof(struct thread_hash) == 5888,
+	   "Rust/C thread_hash size mismatch");
+ABI_ASSERT(ABI_OFFSET(struct thread_hash, lock) == 1216,
+	   "Rust/C thread_hash lock offset mismatch");
+ABI_ASSERT(sizeof(struct address_space) == 168,
+	   "Rust/C address_space size mismatch");
+ABI_ASSERT(ABI_OFFSET(struct address_space, free_cb) == 16,
+	   "Rust/C address_space free_cb offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct address_space, refcount) == 24,
+	   "Rust/C address_space refcount offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct address_space, cpu_set) == 32,
+	   "Rust/C address_space cpu_set offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct address_space, cpu_set_lock) == 160,
+	   "Rust/C address_space cpu_set_lock offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct address_space, nslots) == 164,
+	   "Rust/C address_space nslots offset mismatch");
+#ifdef ENABLE_TOFU
+ABI_ASSERT(sizeof(struct vm_range) == 104,
+	   "Rust/C vm_range size mismatch");
+ABI_ASSERT(ABI_OFFSET(struct vm_range, tofu_stag_list) == 80,
+	   "Rust/C vm_range tofu_stag_list offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct vm_range, private_data) == 96,
+	   "Rust/C vm_range private_data offset mismatch");
+#else
+ABI_ASSERT(sizeof(struct vm_range) == 88,
+	   "Rust/C vm_range size mismatch");
+ABI_ASSERT(ABI_OFFSET(struct vm_range, private_data) == 80,
+	   "Rust/C vm_range private_data offset mismatch");
+#endif
+ABI_ASSERT(ABI_OFFSET(struct vm_range, vm_rb_node) == 0,
+	   "Rust/C vm_range vm_rb_node offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct vm_range, start) == 24,
+	   "Rust/C vm_range start offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct vm_range, straight_start) == 48,
+	   "Rust/C vm_range straight_start offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct vm_range, memobj) == 56,
+	   "Rust/C vm_range memobj offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct vm_range, objoff) == 64,
+	   "Rust/C vm_range objoff offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct vm_range, pgshift) == 72,
+	   "Rust/C vm_range pgshift offset mismatch");
+ABI_ASSERT(sizeof(struct vm_range_numa_policy) == 80,
+	   "Rust/C vm_range_numa_policy size mismatch");
+ABI_ASSERT(ABI_OFFSET(struct vm_range_numa_policy, policy_rb_node) == 0,
+	   "Rust/C vm_range_numa_policy policy_rb_node offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct vm_range_numa_policy, start) == 24,
+	   "Rust/C vm_range_numa_policy start offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct vm_range_numa_policy, numa_mask) == 40,
+	   "Rust/C vm_range_numa_policy numa_mask offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct vm_range_numa_policy, numa_mem_policy) == 72,
+	   "Rust/C vm_range_numa_policy numa_mem_policy offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct vm_range_numa_policy, il_prev) == 76,
+	   "Rust/C vm_range_numa_policy il_prev offset mismatch");
+ABI_ASSERT(sizeof(struct vm_regions) == 120,
+	   "Rust/C vm_regions size mismatch");
+ABI_ASSERT(ABI_OFFSET(struct vm_regions, brk_start) == 48,
+	   "Rust/C vm_regions brk_start offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct vm_regions, brk_end_allocated) == 64,
+	   "Rust/C vm_regions brk_end_allocated offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct vm_regions, map_start) == 72,
+	   "Rust/C vm_regions map_start offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct vm_regions, stack_start) == 88,
+	   "Rust/C vm_regions stack_start offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct vm_regions, user_start) == 104,
+	   "Rust/C vm_regions user_start offset mismatch");
+#ifdef ENABLE_TOFU
+ABI_ASSERT(sizeof(struct process_vm) == 376,
+	   "Rust/C process_vm size mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process_vm, tofu_stag_lock) == 304,
+	   "Rust/C process_vm tofu_stag_lock offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process_vm, tofu_stag_hash) == 312,
+	   "Rust/C process_vm tofu_stag_hash offset mismatch");
+#else
+ABI_ASSERT(sizeof(struct process_vm) == 304,
+	   "Rust/C process_vm size mismatch");
+#endif
+ABI_ASSERT(ABI_OFFSET(struct process_vm, address_space) == 0,
+	   "Rust/C process_vm address_space offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process_vm, vm_range_tree) == 8,
+	   "Rust/C process_vm vm_range_tree offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process_vm, region) == 16,
+	   "Rust/C process_vm region offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process_vm, proc) == 136,
+	   "Rust/C process_vm proc offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process_vm, free_cb) == 152,
+	   "Rust/C process_vm free_cb offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process_vm, vdso_addr) == 160,
+	   "Rust/C process_vm vdso_addr offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process_vm, page_table_lock) == 176,
+	   "Rust/C process_vm page_table_lock offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process_vm, memory_range_lock) == 180,
+	   "Rust/C process_vm memory_range_lock offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process_vm, refcount) == 188,
+	   "Rust/C process_vm refcount offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process_vm, currss) == 200,
+	   "Rust/C process_vm currss offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process_vm, numa_mask) == 208,
+	   "Rust/C process_vm numa_mask offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process_vm, vm_range_numa_policy_tree) == 248,
+	   "Rust/C process_vm vm_range_numa_policy_tree offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process_vm, range_cache) == 256,
+	   "Rust/C process_vm range_cache offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process_vm, range_cache_ind) == 288,
+	   "Rust/C process_vm range_cache_ind offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process_vm, swapinfo) == 296,
+	   "Rust/C process_vm swapinfo offset mismatch");

@@ -213,6 +213,27 @@ static unsigned long mcexec_flags = 0;
 static int nr_processes = 0;
 static int nr_threads = -1;
 
+#ifdef MCEXEC_RUST_HELPERS
+extern unsigned long mcexec_atobytes_result(const char *string);
+extern void mcexec_parse_stack_arg_result(const char *string,
+		long *stack_premap, long *stack_max);
+extern unsigned long mcexec_default_heap_extension_result(
+		unsigned long heap_extension, unsigned long page_size);
+extern int mcexec_default_thread_count_result(int nr_threads,
+		int omp_present, int omp_threads, int nr_processes, int ncpu);
+extern unsigned long mcexec_mpol_flags_result(int no_heap, int no_stack,
+		int no_bss, int shm_premap);
+extern void mcexec_apply_stack_max_result(long stack_max,
+		rlim_t *rlim_cur, rlim_t *rlim_max);
+extern unsigned short mcexec_dirent32_reclen_result(const void *dirp);
+extern char *mcexec_dirent32_name_result(void *dirp);
+extern void *mcexec_dirent32_off_result(void *dirp);
+extern unsigned short mcexec_dirent64_reclen_result(const void *dirp);
+extern char *mcexec_dirent64_name_result(void *dirp);
+extern void *mcexec_dirent64_off_result(void *dirp);
+extern int mcexec_is_proc_task_leaf_path_result(const char *path);
+#endif
+
 struct fork_sync {
 	int status;
 	volatile int success;
@@ -1655,6 +1676,14 @@ static void destroy_local_environ(char **local_env)
 
 unsigned long atobytes(char *string)
 {
+#ifdef MCEXEC_RUST_HELPERS
+	if (!string || !strlen(string)) {
+		errno = ERANGE;
+		return 0;
+	}
+	errno = 0;
+	return mcexec_atobytes_result(string);
+#else
 	unsigned long mult = 1;
 	unsigned long ret;
 	char orig_postfix = 0;
@@ -1689,6 +1718,7 @@ unsigned long atobytes(char *string)
 
 	errno = 0;
 	return ret;
+#endif
 }
 
 static struct option mcexec_options[] = {
@@ -2253,6 +2283,11 @@ int main(int argc, char **argv)
 #endif /* ADD_ENVS_OPTION */
 			
 			case 's': {
+#ifdef MCEXEC_RUST_HELPERS
+				mcexec_parse_stack_arg_result(optarg,
+						&stack_premap, &stack_max);
+				errno = 0;
+#else
 				char *token, *dup, *line;
 
 				dup = strdup(optarg);
@@ -2266,6 +2301,7 @@ int main(int argc, char **argv)
 					stack_max = atobytes(token);
 				}
 				free(dup);
+#endif
 				__dprintf("stack_premap=%ld,stack_max=%ld\n",
 					  stack_premap, stack_max);
 				break;
@@ -2289,7 +2325,12 @@ int main(int argc, char **argv)
 	}
 
 	if (heap_extension == -1) {
+#ifdef MCEXEC_RUST_HELPERS
+		heap_extension = mcexec_default_heap_extension_result(
+				heap_extension, sysconf(_SC_PAGESIZE));
+#else
 		heap_extension = sysconf(_SC_PAGESIZE);
+#endif
 	}
 
 	if (optind >= argc) {
@@ -2513,12 +2554,17 @@ int main(int argc, char **argv)
 	}
 
 	/* Overwrite the max with <max> of "--stack-premap <premap>,<max>" */
+#ifdef MCEXEC_RUST_HELPERS
+	mcexec_apply_stack_max_result(stack_max, &rlim_stack.rlim_cur,
+			&rlim_stack.rlim_max);
+#else
 	if (stack_max != -1) {
 		rlim_stack.rlim_cur = stack_max;
 		if (rlim_stack.rlim_max != -1 && rlim_stack.rlim_max < rlim_stack.rlim_cur) {
 			rlim_stack.rlim_max = rlim_stack.rlim_cur;
 		}
 	}
+#endif
 
 	desc->rlimit[MCK_RLIMIT_STACK].rlim_cur = rlim_stack.rlim_cur;
 	desc->rlimit[MCK_RLIMIT_STACK].rlim_max = rlim_stack.rlim_max;
@@ -2570,13 +2616,28 @@ int main(int argc, char **argv)
 	}
 
 	if (nr_threads > 0) {
+#ifdef MCEXEC_RUST_HELPERS
+		n_threads = mcexec_default_thread_count_result(nr_threads,
+				0, 0, nr_processes, ncpu);
+#else
 		n_threads = nr_threads;
+#endif
 	}
 	else if (getenv("OMP_NUM_THREADS")) {
+#ifdef MCEXEC_RUST_HELPERS
+		n_threads = mcexec_default_thread_count_result(nr_threads,
+				1, atoi(getenv("OMP_NUM_THREADS")),
+				nr_processes, ncpu);
+#else
 		/* Leave some headroom for helper threads.. */
 		n_threads = atoi(getenv("OMP_NUM_THREADS")) + 4;
+#endif
 	}
 	else {
+#ifdef MCEXEC_RUST_HELPERS
+		n_threads = mcexec_default_thread_count_result(nr_threads,
+				0, 0, nr_processes, ncpu);
+#else
 		/*
 		 * When running with partitioned execution, do not allow
 		 * more threads then the corresponding number of CPUs.
@@ -2594,6 +2655,7 @@ int main(int argc, char **argv)
 		else {
 			n_threads = ncpu;
 		}
+#endif
 	}
 
 	/* 
@@ -2752,6 +2814,10 @@ int main(int argc, char **argv)
 
 	desc->profile = profile;
 	desc->nr_processes = nr_processes;
+#ifdef MCEXEC_RUST_HELPERS
+	desc->mpol_flags = mcexec_mpol_flags_result(mpol_no_heap,
+			mpol_no_stack, mpol_no_bss, mpol_shm_premap);
+#else
 	desc->mpol_flags = 0;
 	if (mpol_no_heap) {
 		desc->mpol_flags |= MPOL_NO_HEAP;
@@ -2768,6 +2834,7 @@ int main(int argc, char **argv)
 	if (mpol_shm_premap) {
 		desc->mpol_flags |= MPOL_SHM_PREMAP;
 	}
+#endif
 
 	desc->mpol_threshold = mpol_threshold;
 	desc->heap_extension = heap_extension;
@@ -3359,6 +3426,9 @@ int overlay_blacklist(const char *path)
 
 static int is_proc_task_leaf_path(const char *path)
 {
+#ifdef MCEXEC_RUST_HELPERS
+	return mcexec_is_proc_task_leaf_path_result(path);
+#else
 	int pid, tid, offset = 0;
 
 	if (sscanf(path, "/proc/self/task/%d/%n", &tid, &offset) == 1 &&
@@ -3373,6 +3443,7 @@ static int is_proc_task_leaf_path(const char *path)
 	}
 
 	return 0;
+#endif
 }
 
 static int mapped_proc_task_parent_exists(const char *mapped)
@@ -3642,6 +3713,16 @@ struct linux_dirent64 {
 static inline unsigned short dirent_reclen(int sysnum, void *_dirp)
 {
 
+#ifdef MCEXEC_RUST_HELPERS
+#ifdef	__NR_getdents
+		if (sysnum == __NR_getdents) {
+			return mcexec_dirent32_reclen_result(_dirp);
+		}
+#endif
+		if (sysnum == __NR_getdents64) {
+			return mcexec_dirent64_reclen_result(_dirp);
+		}
+#endif
 #ifdef	__NR_getdents
 		if (sysnum == __NR_getdents) {
 			struct linux_dirent *dirp = _dirp;
@@ -3662,6 +3743,16 @@ static inline unsigned short dirent_reclen(int sysnum, void *_dirp)
 static inline char *dirent_name(int sysnum, void *_dirp)
 {
 
+#ifdef MCEXEC_RUST_HELPERS
+#ifdef	__NR_getdents
+		if (sysnum == __NR_getdents) {
+			return mcexec_dirent32_name_result(_dirp);
+		}
+#endif
+		if (sysnum == __NR_getdents64) {
+			return mcexec_dirent64_name_result(_dirp);
+		}
+#endif
 #ifdef	__NR_getdents
 		if (sysnum == __NR_getdents) {
 			struct linux_dirent *dirp = _dirp;
@@ -3682,6 +3773,16 @@ static inline char *dirent_name(int sysnum, void *_dirp)
 static inline void *dirent_off(int sysnum, void *_dirp)
 {
 
+#ifdef MCEXEC_RUST_HELPERS
+#ifdef	__NR_getdents
+		if (sysnum == __NR_getdents) {
+			return mcexec_dirent32_off_result(_dirp);
+		}
+#endif
+		if (sysnum == __NR_getdents64) {
+			return mcexec_dirent64_off_result(_dirp);
+		}
+#endif
 #ifdef	__NR_getdents
 		if (sysnum == __NR_getdents) {
 			struct linux_dirent *dirp = _dirp;

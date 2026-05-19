@@ -56,6 +56,7 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/page_alloc.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/page_helpers.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/plist.rs"
+		"${CMAKE_CURRENT_SOURCE_DIR}/rust/process_helpers.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/rbtree.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/rlimit_helpers.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/sched_helpers.rs"
@@ -63,6 +64,7 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/string.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_policy.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/waitq.rs"
+		"${CMAKE_CURRENT_SOURCE_DIR}/rust/x86_memory_helpers.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/xpmem_helpers.rs"
 	)
 	set(RUST_KERNEL_CFG)
@@ -101,7 +103,7 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
 endif()
 
 set(MCKERNEL_SRCS
-	init.c mem.c debug.c mikc.c listeners.c ap.c syscall.c cls.c host.c process.c
+	init.c mem.c debug.c mikc.c listeners.c ap.c syscall.c cls.c host.c process.c process_helpers.c
 	copy.c waitq.c futex.c timer.c plist.c object_helpers.c fileobj.c shmobj.c zeroobj.c
 	procfs.c devobj.c sysfs.c xpmem.c profile.c freeze.c pager.c
 	gencore.c hugefileobj.c
@@ -148,6 +150,10 @@ if (RUST_KERNEL_ENABLED)
 	set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/mem.c"
 		PROPERTIES COMPILE_DEFINITIONS
 		"MCKERNEL_RUST_MEM_HELPERS;MCKERNEL_RUST_PAGE_HELPERS")
+	set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/process.c"
+		PROPERTIES COMPILE_DEFINITIONS MCKERNEL_RUST_PROCESS_HELPERS)
+	set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/process_helpers.c"
+		PROPERTIES COMPILE_DEFINITIONS MCKERNEL_RUST_PROCESS_HELPERS)
 	set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/object_helpers.c"
 		PROPERTIES COMPILE_DEFINITIONS MCKERNEL_RUST_OBJECT_HELPERS)
 	set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/fileobj.c"
@@ -186,6 +192,7 @@ if (BUILD_TARGET STREQUAL "smp-x86")
 		${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/interrupt.S
 		${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/local.c
 		${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/memory.c
+		${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/memory_helpers.c
 		${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/mikc.c
 		${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/perfctr.c
 		${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/syscall.c
@@ -194,6 +201,11 @@ if (BUILD_TARGET STREQUAL "smp-x86")
 
 	)
 	set(LINKER_SCRIPT "smp-x86.lds")
+	if (RUST_KERNEL_ENABLED)
+		set_source_files_properties(
+			"${PROJECT_SOURCE_DIR}/arch/${ARCH}/kernel/memory_helpers.c"
+			PROPERTIES COMPILE_DEFINITIONS MCKERNEL_RUST_X86_MEMORY_HELPERS)
+	endif()
 elseif (BUILD_TARGET STREQUAL "smp-arm64")
 
 	configure_file(${KERNEL_DIR}/include/generated/vdso-offsets.h include/vdso-offsets.h)

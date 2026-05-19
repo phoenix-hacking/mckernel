@@ -12,6 +12,7 @@ mod object_helpers;
 mod page_alloc;
 mod page_helpers;
 mod plist;
+mod process_helpers;
 mod rbtree;
 mod rlimit_helpers;
 mod sched_helpers;
@@ -19,6 +20,7 @@ mod shmid_helpers;
 mod string;
 mod syscall_policy;
 mod waitq;
+mod x86_memory_helpers;
 mod xpmem_helpers;
 
 #[panic_handler]

@@ -206,7 +206,7 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 	}
 	dprintf("r: %p\n", r);
 
-	if (rpacket->msg == SCD_MSG_PROCFS_RELEASE) {
+	if (procfs_is_release_result(rpacket->msg)) {
 		struct mckernel_procfs_buffer *pbuf;
 		unsigned long phys;
 		unsigned long next;
@@ -221,7 +221,7 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 		goto err;
 	}
 
-	if (r->pbuf == PA_NULL) {
+	if (procfs_pbuf_is_empty_result(r->pbuf)) {
 		tmp = ihk_mc_alloc_pages(1, IHK_MC_AP_NOWAIT);
 		if (!tmp)
 			goto err;
@@ -254,8 +254,8 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 	 * check for "mcos%d/"
 	 */
 	ret = sscanf(r->fname, "mcos%d/", &rosnum);
-	if (ret == 1) {
-		if (osnum != rosnum) {
+	if (procfs_root_matched_result(ret)) {
+		if (!procfs_osnum_match_result(osnum, rosnum)) {
 			kprintf("ERROR: process_procfs_request osnum mismatch "
 				"(we are %d != requested %d)\n",
 				osnum, rosnum);
@@ -294,12 +294,12 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 			goto end;
 		}
 		p = strchr(p, '/') + 1;
+		tid = pid;
 		if((tids = sscanf(p, "task/%d/", &tid)) == 1){
 			p = strchr(p, '/') + 1;
 			p = strchr(p, '/') + 1;
 		}
-		else
-			tid = pid;
+		tid = procfs_thread_tid_result(tids, tid, pid);
 
 		mcs_rwlock_reader_lock(&proc->threads_lock, &tlock);
 		list_for_each_entry(thread, &proc->threads_list, siblings_list){
@@ -310,7 +310,7 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 		}
 		if(thread == NULL){
 			kprintf("process_procfs_request: no such tid %d-%d\n", pid, tid);
-			if(tids){
+			if(procfs_task_missing_terminal_result(tids)){
 				mcs_rwlock_reader_unlock(&proc->threads_lock, &tlock);
 				process_unlock(proc, &lock);
 				goto end;
@@ -322,11 +322,12 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 		mcs_rwlock_reader_unlock(&proc->threads_lock, &tlock);
 		hold_process(proc);
 		vm = proc->vm;
-		if(vm)
+		if(procfs_pointer_present_result((uintptr_t)vm))
 			hold_process_vm(vm);
 		process_unlock(proc, &lock);
 	}
-	else if (!strcmp(p, "mckernel")) {
+	else switch (procfs_entry_kind_result(p)) {
+	case PROCFS_ENTRY_MCKERNEL:
 		ans = snprintf(buf, count, "%s-%s\n",
 				MCKERNEL_VERSION, BUILDID);
 
@@ -334,8 +335,7 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 			goto err;
 		ans = 0;
 		goto end;
-	}
-	else if (!strcmp(p, "stat")) {	/* "/proc/stat" */
+	case PROCFS_ENTRY_STAT: {	/* "/proc/stat" */
 		extern int num_processors;	/* kernel/ap.c */
 		int cpu;
 
@@ -350,7 +350,7 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 		goto end;
 	}
 #ifdef POSTK_DEBUG_ARCH_DEP_42 /* /proc/cpuinfo support added. */
-	else if (!strcmp(p, "cpuinfo")) { /* "/proc/cpuinfo" */
+	case PROCFS_ENTRY_CPUINFO: { /* "/proc/cpuinfo" */
 		ans = ihk_mc_show_cpuinfo(buf, count, 0, &eof);
 		if (procfs_format_error_result(ans, count))
 			goto err;
@@ -360,7 +360,7 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 		goto end;
 	}
 #endif /* POSTK_DEBUG_ARCH_DEP_42 */
-	else {
+	default:
 		kprintf("unsupported procfs entry: %s\n", p);
 		goto end;
 	}
@@ -371,7 +371,7 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 	 * The offset is treated as the beginning of the virtual address area
 	 * of the process. The count is the length of the area.
 	 */
-	if (strcmp(p, "mem") == 0) {
+	if (procfs_entry_kind_result(p) == PROCFS_ENTRY_MEM) {
 		uint64_t reason = procfs_mem_reason_result(readwrite);
 		unsigned long offset = r->offset;
 		unsigned long left = r->count;
@@ -379,7 +379,7 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 		struct page_table *pt = vm->address_space->page_table;
 
 		ans = 0;
-		if(left == 0)
+		if (procfs_zero_length_result(left))
 			goto end;
 
 #if 0
@@ -428,17 +428,18 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 	/*
 	 * mcos%d/PID/maps
 	 */
-	if (strcmp(p, "maps") == 0) {
+	if (procfs_entry_kind_result(p) == PROCFS_ENTRY_MAPS) {
 		struct vm_range *range;
 
 		if (!ihk_rwspinlock_read_trylock_noirq(&vm->memory_range_lock)) {
-			if (!result) {
+			if (procfs_lock_failed_action_result((uintptr_t)result) ==
+			    PROCFS_LOCK_ACTION_BACKLOG) {
 				if ((err = procfs_backlog(vm, rpacket))) {
 					goto err;
 				}
 			}
 			else {
-				*result = -EAGAIN;
+				*result = procfs_lock_retry_result();
 			}
 			goto out;
 		}
@@ -513,7 +514,7 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 	/*
 	 * mcos%d/PID/pagemap
 	 */
-	if (strcmp(p, "pagemap") == 0) {
+	if (procfs_entry_kind_result(p) == PROCFS_ENTRY_PAGEMAP) {
 		uint64_t *_buf = (uint64_t *)buf;
 		unsigned long start, end;
 
@@ -524,13 +525,14 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 		}
 
 		if (!ihk_rwspinlock_read_trylock_noirq(&vm->memory_range_lock)) {
-			if (!result) {
+			if (procfs_lock_failed_action_result((uintptr_t)result) ==
+			    PROCFS_LOCK_ACTION_BACKLOG) {
 				if ((err = procfs_backlog(vm, rpacket))) {
 					goto err;
 				}
 			}
 			else {
-				*result = -EAGAIN;
+				*result = procfs_lock_retry_result();
 			}
 			goto out;
 		}
@@ -556,7 +558,7 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 	 * mcos%d/PID/status
 	 */
 #define BITMASKS_BUF_SIZE	2048
-	if (strcmp(p, "status") == 0) {
+	if (procfs_entry_kind_result(p) == PROCFS_ENTRY_STATUS) {
 		extern int num_processors;	/* kernel/ap.c */
 		struct vm_range *range;
 		unsigned long lockedsize = 0;
@@ -576,47 +578,48 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 		}
 
 		if (!ihk_rwspinlock_read_trylock_noirq(&vm->memory_range_lock)) {
-			if (!result) {
+			if (procfs_lock_failed_action_result((uintptr_t)result) ==
+			    PROCFS_LOCK_ACTION_BACKLOG) {
 				if ((err = procfs_backlog(vm, rpacket))) {
 					goto err;
 				}
 			}
 			else {
-				*result = -EAGAIN;
+				*result = procfs_lock_retry_result();
 			}
 			goto out;
 		}
 		range = lookup_process_memory_range(vm, 0, -1);
 		while (range) {
-			if(range->flag & VR_LOCKED)
-				lockedsize += range->end - range->start;
+			lockedsize = procfs_locked_size_add_result(lockedsize,
+					range->start, range->end, range->flag);
 			range = next_process_memory_range(vm, range);
 		}
 		ihk_rwspinlock_read_unlock_noirq(&vm->memory_range_lock);
 
 		cpu_bitmask = &bitmasks[bitmasks_offset];
-		bitmasks_offset += bitmap_scnprintf(cpu_bitmask,
+		bitmasks_offset = procfs_bitmask_next_offset_result(
+				bitmasks_offset, bitmap_scnprintf(cpu_bitmask,
 				BITMASKS_BUF_SIZE - bitmasks_offset,
-				thread->cpu_set.__bits, num_processors);
-		bitmasks_offset++;
+				thread->cpu_set.__bits, num_processors));
 
 		cpu_list = &bitmasks[bitmasks_offset];
-		bitmasks_offset += bitmap_scnlistprintf(cpu_list,
+		bitmasks_offset = procfs_bitmask_next_offset_result(
+				bitmasks_offset, bitmap_scnlistprintf(cpu_list,
 				BITMASKS_BUF_SIZE - bitmasks_offset,
-				thread->cpu_set.__bits, __CPU_SETSIZE);
-		bitmasks_offset++;
+				thread->cpu_set.__bits, __CPU_SETSIZE));
 
 		numa_bitmask = &bitmasks[bitmasks_offset];
-		bitmasks_offset += bitmap_scnprintf(numa_bitmask,
+		bitmasks_offset = procfs_bitmask_next_offset_result(
+				bitmasks_offset, bitmap_scnprintf(numa_bitmask,
 				BITMASKS_BUF_SIZE - bitmasks_offset,
-				proc->vm->numa_mask, PROCESS_NUMA_MASK_BITS);
-		bitmasks_offset++;
+				proc->vm->numa_mask, PROCESS_NUMA_MASK_BITS));
 
 		numa_list = &bitmasks[bitmasks_offset];
-		bitmasks_offset += bitmap_scnlistprintf(numa_list,
+		bitmasks_offset = procfs_bitmask_next_offset_result(
+				bitmasks_offset, bitmap_scnlistprintf(numa_list,
 				BITMASKS_BUF_SIZE - bitmasks_offset,
-				proc->vm->numa_mask, PROCESS_NUMA_MASK_BITS);
-		bitmasks_offset++;
+				proc->vm->numa_mask, PROCESS_NUMA_MASK_BITS));
 
 		mcs_rwlock_reader_lock(&proc->threads_lock, &lock);
 		list_for_each_entry(thread_iter, &proc->threads_list,
@@ -692,7 +695,7 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 	/* 
 	 * mcos%d/PID/auxv
 	 */
-	if (strcmp(p, "auxv") == 0) {
+	if (procfs_entry_kind_result(p) == PROCFS_ENTRY_AUXV) {
 		unsigned int limit = procfs_auxv_limit_result();
 
 		if (buf_add(&buf_top, &buf_cur, proc->saved_auxv, limit) < 0)
@@ -704,10 +707,11 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 	/* 
 	 * mcos%d/PID/cmdline
 	 */
-	if (strcmp(p, "cmdline") == 0) {
+	if (procfs_entry_kind_result(p) == PROCFS_ENTRY_CMDLINE) {
 		unsigned int limit = proc->saved_cmdline_len;
 
-		if(!proc->saved_cmdline){
+		if(!procfs_pointer_present_result(
+			   (uintptr_t)proc->saved_cmdline)){
 			if (buf_add(&buf_top, &buf_cur, "", 0) < 0)
 				goto err;
 			ans = 0;
@@ -727,16 +731,13 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 	 * of the process. The count is the length of the area.
 	 */
 
-	if (!strcmp(p, "comm")) {
+	if (procfs_entry_kind_result(p) == PROCFS_ENTRY_COMM) {
 		const char *comm = "exe";
+		uintptr_t basename = procfs_comm_basename_result(
+			(uintptr_t)proc->saved_cmdline);
 
-		if (proc->saved_cmdline) {
-			comm = strrchr(proc->saved_cmdline, '/');
-			if (comm)
-				comm++;
-			else
-				comm = proc->saved_cmdline;
-		}
+		if (procfs_pointer_present_result(basename))
+			comm = (const char *)basename;
 
 		ans = snprintf(buf, count, "%s\n", comm);
 		if (buf_add(&buf_top, &buf_cur, buf, ans) < 0)
@@ -745,20 +746,17 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 		goto end;
 	}
 
-	if (!strcmp(p, "stat")) {
+	if (procfs_entry_kind_result(p) == PROCFS_ENTRY_STAT) {
 		const char *comm = "exe";
 		char state;
 		struct mcs_rwlock_node_irqsave lock;
 		struct thread *thread_iter;
 		int nr_threads = 0;
+		uintptr_t basename = procfs_comm_basename_result(
+			(uintptr_t)proc->saved_cmdline);
 
-		if (proc->saved_cmdline) {
-			comm = strrchr(proc->saved_cmdline, '/');
-			if (comm)
-				comm++;
-			else
-				comm = proc->saved_cmdline;
-		}
+		if (procfs_pointer_present_result(basename))
+			comm = (const char *)basename;
 
 		state = procfs_thread_stat_state_result(thread->status,
 				thread->in_syscall_offload);
@@ -809,7 +807,7 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 		    0, 0LL, 0L, 0L	      // policy...
 		);
 
-		if (ans < 0 || ans > count ||
+		if (procfs_format_error_result(ans, count) ||
 		    buf_add(&buf_top, &buf_cur, buf, ans) < 0)
 			goto err;
 		ans = 0;
@@ -826,7 +824,7 @@ end:
 	r->ret = ans;
 	r->eof = eof;
 	err = 0;
-	if (r->pbuf == PA_NULL && buf_top)
+	if (procfs_buffer_chain_attach_result(r->pbuf, (uintptr_t)buf_top))
 		r->pbuf = virt_to_phys(buf_top);
 err:
 	send_procfs_answer(rpacket, err);

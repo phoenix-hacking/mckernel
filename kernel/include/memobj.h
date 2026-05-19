@@ -22,6 +22,7 @@
 #include <list.h>
 #include <pager.h>
 #include <page.h>
+#include <object_helpers.h>
 
 enum {
 	/* for memobj.flags */
@@ -85,7 +86,8 @@ static inline int memobj_unref(struct memobj *obj)
 {
 	int cnt;
 
-	if ((cnt = ihk_atomic_dec_return(&obj->refcnt)) == 0) {
+	cnt = ihk_atomic_dec_return(&obj->refcnt);
+	if (memobj_unref_should_free_result(cnt)) {
 		(*obj->ops->free)(obj);
 	}
 
@@ -95,64 +97,64 @@ static inline int memobj_unref(struct memobj *obj)
 static inline int memobj_get_page(struct memobj *obj, off_t off,
 		int p2align, uintptr_t *physp, unsigned long *pflag, uintptr_t virt_addr)
 {
-	if (obj->ops->get_page) {
+	if (memobj_op_present_result((uintptr_t)obj->ops->get_page)) {
 		return (*obj->ops->get_page)(obj, off, p2align, physp, pflag, virt_addr);
 	}
-	return -ENXIO;
+	return memobj_missing_page_op_result();
 }
 
 static inline uintptr_t memobj_copy_page(struct memobj *obj,
 		uintptr_t orgphys, int p2align)
 {
-	if (obj->ops->copy_page) {
+	if (memobj_op_present_result((uintptr_t)obj->ops->copy_page)) {
 		return (*obj->ops->copy_page)(obj, orgphys, p2align);
 	}
-	return -ENXIO;
+	return memobj_missing_copy_page_result();
 }
 
 static inline int memobj_flush_page(struct memobj *obj, uintptr_t phys, size_t pgsize)
 {
-	if (obj->ops->flush_page) {
+	if (memobj_op_present_result((uintptr_t)obj->ops->flush_page)) {
 		return (*obj->ops->flush_page)(obj, phys, pgsize);
 	}
-	return 0;
+	return memobj_default_page_op_result();
 }
 
 static inline int memobj_invalidate_page(struct memobj *obj, uintptr_t phys,
 		size_t pgsize)
 {
-	if (obj->ops->invalidate_page) {
+	if (memobj_op_present_result((uintptr_t)obj->ops->invalidate_page)) {
 		return (*obj->ops->invalidate_page)(obj, phys, pgsize);
 	}
-	return 0;
+	return memobj_default_page_op_result();
 }
 
 static inline int memobj_lookup_page(struct memobj *obj, off_t off,
 		int p2align, uintptr_t *physp, unsigned long *pflag)
 {
-	if (obj->ops->lookup_page) {
+	if (memobj_op_present_result((uintptr_t)obj->ops->lookup_page)) {
 		return (*obj->ops->lookup_page)(obj, off, p2align, physp, pflag);
 	}
-	return -ENXIO;
+	return memobj_missing_page_op_result();
 }
 
 static inline int memobj_update_page(struct memobj *obj, page_table_t pt,
 		struct page *orig_page, void *vaddr)
 {
-	if (obj->ops->update_page) {
+	if (memobj_op_present_result((uintptr_t)obj->ops->update_page)) {
 		return (*obj->ops->update_page)(obj, pt, orig_page, vaddr);
 	}
-	return -ENXIO;
+	return memobj_missing_page_op_result();
 }
 
 static inline int memobj_has_pager(struct memobj *obj)
 {
-	return !!(obj->flags & MF_HAS_PAGER);
+	return memobj_has_pager_flags_result(obj->flags);
 }
 
 static inline int memobj_is_removable(struct memobj *obj)
 {
-	return !!(obj->flags & MF_IS_REMOVABLE);
+	return memobj_is_removable_flags_result(obj->flags);
 }
 
 int fileobj_create(int fd, struct memobj **objp, int *maxprotp, int flags,
@@ -171,17 +173,16 @@ void hugefileobj_cleanup(void);
 static inline int is_flushable(struct page *page, struct memobj *memobj)
 {
 	/* Only memory with backing store needs flush */
-	if (!page || !page_is_in_memobj(page))
+	if (!memobj_flushable_page_result(!!page,
+			page ? page_is_in_memobj(page) : 0))
 		return 0;
 
 	/* memobj could be NULL when calling ihk_mc_pt_clear_range()
 	 * for range with memobj with pages.
 	 * We don't call .flush_page for /dev/shm/ map.
 	 */
-	if (!memobj || (memobj->flags & (MF_ZEROFILL | MF_PRIVATE)))
-		return 0;
-
-	return 1;
+	return memobj_flushable_obj_result(!!memobj,
+			memobj ? memobj->flags : 0);
 }
 
 static inline int is_freeable(struct memobj *memobj)
@@ -189,17 +190,14 @@ static inline int is_freeable(struct memobj *memobj)
 	/* XPMEM attachment isn't freeable because it's an additional
 	 * map to the first map of the exposed area.
 	 */
-	if (memobj && (memobj->flags & MF_XPMEM))
-		return 0;
-
-	return 1;
+	return memobj_is_freeable_result(!!memobj,
+			memobj ? memobj->flags : 0);
 }
 
 static inline int is_callable_remap_file_pages(struct memobj *memobj)
 {
-	if (!memobj || !(memobj->flags & MF_REMAP_FILE_PAGES))
-		return 0;
-	return 1;
+	return memobj_callable_remap_file_pages_result(!!memobj,
+			memobj ? memobj->flags : 0);
 }
 
 #endif /* HEADER_MEMOBJ_H */
