@@ -24,6 +24,7 @@
 #include <sysfs_msg.h>
 #include <vsprintf.h>
 #include <ihk/debug.h>
+#include <object_helpers.h>
 
 static size_t sysfs_data_bufsize;
 static void *sysfs_data_buf;
@@ -32,23 +33,18 @@ static int setup_special_create(struct sysfs_req_create_param *param, struct sys
 {
 	void *cinstance = (void *)param->client_instance;
 
-	switch (param->client_ops) {
-	case (long)SYSFS_SNOOPING_OPS_d32:
-	case (long)SYSFS_SNOOPING_OPS_d64:
-	case (long)SYSFS_SNOOPING_OPS_u32:
-	case (long)SYSFS_SNOOPING_OPS_u64:
-	case (long)SYSFS_SNOOPING_OPS_u32K:
+	switch (sysfs_special_kind_result(param->client_ops)) {
+	case SYSFS_SPECIAL_KIND_DIRECT:
 		param->client_instance = virt_to_phys(cinstance);
 		return 0;
 
-	case (long)SYSFS_SNOOPING_OPS_s:
-		pbp->nbits = 8 * (strlen(cinstance) + 1);
+	case SYSFS_SPECIAL_KIND_STRING:
+		pbp->nbits = sysfs_string_nbits_result(strlen(cinstance));
 		pbp->ptr = (void *)virt_to_phys(cinstance);
 		param->client_instance = virt_to_phys(pbp);
 		return 0;
 
-	case (long)SYSFS_SNOOPING_OPS_pbl:
-	case (long)SYSFS_SNOOPING_OPS_pb:
+	case SYSFS_SPECIAL_KIND_BITMAP:
 		*pbp = *(struct sysfs_bitmap_param *)cinstance;
 		pbp->ptr = (void *)virt_to_phys(pbp->ptr);
 		param->client_instance = virt_to_phys(pbp);
@@ -88,15 +84,16 @@ sysfs_createf(struct sysfs_ops *ops, void *instance, int mode,
 	va_start(ap, fmt);
 	n = vsnprintf(param->path, sizeof(param->path), fmt, ap);
 	va_end(ap);
-	if (n >= sizeof(param->path)) {
-		error = -ENAMETOOLONG;
-		ekprintf("sysfs_createf:vsnprintf failed. %d\n", error);
-		goto out;
-	}
 	dkprintf("sysfs_createf:path %s\n", param->path);
-	if (param->path[0] != '/') {
-		error = -ENOENT;
-		ekprintf("sysfs_createf:not an absolute path. %d\n", error);
+	error = sysfs_path_error_result(n, param->path[0] == '/',
+			sizeof(param->path));
+	if (error) {
+		if (error == -ENAMETOOLONG) {
+			ekprintf("sysfs_createf:vsnprintf failed. %d\n", error);
+		}
+		else {
+			ekprintf("sysfs_createf:not an absolute path. %d\n", error);
+		}
 		goto out;
 	}
 
@@ -166,15 +163,16 @@ sysfs_mkdirf(sysfs_handle_t *dirhp, const char *fmt, ...)
 	va_start(ap, fmt);
 	n = vsnprintf(param->path, sizeof(param->path), fmt, ap);
 	va_end(ap);
-	if (n >= sizeof(param->path)) {
-		error = -ENAMETOOLONG;
-		ekprintf("sysfs_mkdirf:vsnprintf failed. %d\n", error);
-		goto out;
-	}
 	dkprintf("sysfs_mkdirf:path %s\n", param->path);
-	if (param->path[0] != '/') {
-		error = -ENOENT;
-		ekprintf("sysfs_mkdirf:not an absolute path. %d\n", error);
+	error = sysfs_path_error_result(n, param->path[0] == '/',
+			sizeof(param->path));
+	if (error) {
+		if (error == -ENAMETOOLONG) {
+			ekprintf("sysfs_mkdirf:vsnprintf failed. %d\n", error);
+		}
+		else {
+			ekprintf("sysfs_mkdirf:not an absolute path. %d\n", error);
+		}
 		goto out;
 	}
 
@@ -240,15 +238,16 @@ sysfs_symlinkf(sysfs_handle_t targeth, const char *fmt, ...)
 	va_start(ap, fmt);
 	n = vsnprintf(param->path, sizeof(param->path), fmt, ap);
 	va_end(ap);
-	if (n >= sizeof(param->path)) {
-		error = -ENAMETOOLONG;
-		ekprintf("sysfs_symlinkf:vsnprintf failed. %d\n", error);
-		goto out;
-	}
 	dkprintf("sysfs_symlinkf:path %s\n", param->path);
-	if (param->path[0] != '/') {
-		error = -ENOENT;
-		ekprintf("sysfs_symlinkf:not an absolute path. %d\n", error);
+	error = sysfs_path_error_result(n, param->path[0] == '/',
+			sizeof(param->path));
+	if (error) {
+		if (error == -ENAMETOOLONG) {
+			ekprintf("sysfs_symlinkf:vsnprintf failed. %d\n", error);
+		}
+		else {
+			ekprintf("sysfs_symlinkf:not an absolute path. %d\n", error);
+		}
 		goto out;
 	}
 
@@ -311,15 +310,16 @@ sysfs_lookupf(sysfs_handle_t *objhp, const char *fmt, ...)
 	va_start(ap, fmt);
 	n = vsnprintf(param->path, sizeof(param->path), fmt, ap);
 	va_end(ap);
-	if (n >= sizeof(param->path)) {
-		error = -ENAMETOOLONG;
-		ekprintf("sysfs_lookupf:vsnprintf failed. %d\n", error);
-		goto out;
-	}
 	dkprintf("sysfs_lookupf:path %s\n", param->path);
-	if (param->path[0] != '/') {
-		error = -ENOENT;
-		ekprintf("sysfs_lookupf:not an absolute path. %d\n", error);
+	error = sysfs_path_error_result(n, param->path[0] == '/',
+			sizeof(param->path));
+	if (error) {
+		if (error == -ENAMETOOLONG) {
+			ekprintf("sysfs_lookupf:vsnprintf failed. %d\n", error);
+		}
+		else {
+			ekprintf("sysfs_lookupf:not an absolute path. %d\n", error);
+		}
 		goto out;
 	}
 
@@ -385,15 +385,16 @@ sysfs_unlinkf(int flags, const char *fmt, ...)
 	va_start(ap, fmt);
 	n = vsnprintf(param->path, sizeof(param->path), fmt, ap);
 	va_end(ap);
-	if (n >= sizeof(param->path)) {
-		error = -ENAMETOOLONG;
-		ekprintf("sysfs_unlinkf:vsnprintf failed. %d\n", error);
-		goto out;
-	}
 	dkprintf("sysfs_unlinkf:path %s\n", param->path);
-	if (param->path[0] != '/') {
-		error = -ENOENT;
-		ekprintf("sysfs_unlinkf:not an absolute path. %d\n", error);
+	error = sysfs_path_error_result(n, param->path[0] == '/',
+			sizeof(param->path));
+	if (error) {
+		if (error == -ENAMETOOLONG) {
+			ekprintf("sysfs_unlinkf:vsnprintf failed. %d\n", error);
+		}
+		else {
+			ekprintf("sysfs_unlinkf:not an absolute path. %d\n", error);
+		}
 		goto out;
 	}
 
@@ -450,10 +451,7 @@ sysfss_req_show(long nodeh, struct sysfs_ops *ops, void *instance)
 		}
 	}
 
-	error = 0;
-	if (ssize < 0) {
-		error = ssize;
-	}
+	error = sysfs_response_error_result(ssize);
 
 	packet.msg = SCD_MSG_SYSFS_RESP_SHOW;
 	packet.err = error;
@@ -466,7 +464,7 @@ sysfss_req_show(long nodeh, struct sysfs_ops *ops, void *instance)
 		/* through */
 	}
 
-	if (error || packet.err) {
+	if (sysfs_packet_error_result(error, packet.err)) {
 		ekprintf("sysfss_req_show(%#lx,%p,%p): %d %d\n",
 				nodeh, ops, instance, error, packet.err);
 	}
@@ -496,10 +494,7 @@ sysfss_req_store(long nodeh, struct sysfs_ops *ops, void *instance,
 		}
 	}
 
-	error = 0;
-	if (ssize < 0) {
-		error = ssize;
-	}
+	error = sysfs_response_error_result(ssize);
 
 	packet.msg = SCD_MSG_SYSFS_RESP_STORE;
 	packet.err = error;
@@ -512,7 +507,7 @@ sysfss_req_store(long nodeh, struct sysfs_ops *ops, void *instance,
 		/* through */
 	}
 
-	if (error || packet.err) {
+	if (sysfs_packet_error_result(error, packet.err)) {
 		ekprintf("sysfss_req_store(%#lx,%p,%p,%d): %d %d\n",
 				nodeh, ops, instance, size, error, packet.err);
 	}
@@ -544,7 +539,7 @@ sysfss_req_release(long nodeh, struct sysfs_ops *ops, void *instance)
 		/* through */
 	}
 
-	if (error || packet.err) {
+	if (sysfs_packet_error_result(error, packet.err)) {
 		ekprintf("sysfss_req_release(%#lx,%p,%p): %d %d\n",
 				nodeh, ops, instance, error, packet.err);
 	}
@@ -589,16 +584,17 @@ sysfs_init(void)
 
 	dkprintf("sysfs_init()\n");
 
-	if ((sizeof(struct sysfs_req_create_param) > PAGE_SIZE)
-			|| (sizeof(struct sysfs_req_mkdir_param) > PAGE_SIZE)
-			|| (sizeof(struct sysfs_req_symlink_param) > PAGE_SIZE)
-			|| (sizeof(struct sysfs_req_lookup_param) > PAGE_SIZE)
-			|| (sizeof(struct sysfs_req_unlink_param) > PAGE_SIZE)
-			|| (sizeof(struct sysfs_req_setup_param) > PAGE_SIZE)) {
+	if (!sysfs_param_sizes_valid_result(
+			sizeof(struct sysfs_req_create_param),
+			sizeof(struct sysfs_req_mkdir_param),
+			sizeof(struct sysfs_req_symlink_param),
+			sizeof(struct sysfs_req_lookup_param),
+			sizeof(struct sysfs_req_unlink_param),
+			sizeof(struct sysfs_req_setup_param))) {
 		panic("struct sysfs_*_req_param too large");
 	}
 
-	sysfs_data_bufsize = PAGE_SIZE;
+	sysfs_data_bufsize = sysfs_data_bufsize_result();
 	sysfs_data_buf = ihk_mc_alloc_pages(1, IHK_MC_AP_NOWAIT);
 	if (!sysfs_data_buf) {
 		error = -ENOMEM;
@@ -616,7 +612,7 @@ sysfs_init(void)
 
 	param->busy = 1;
 	param->buf_rpa = virt_to_phys(sysfs_data_buf);
-	param->bufsize = PAGE_SIZE;
+	param->bufsize = sysfs_data_bufsize_result();
 
 	packet.msg = SCD_MSG_SYSFS_REQ_SETUP;
 	packet.sysfs_arg1 = virt_to_phys(param);

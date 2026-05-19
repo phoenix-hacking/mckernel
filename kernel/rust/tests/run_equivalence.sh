@@ -864,6 +864,14 @@ cat > "${tmpdir}/sched_helpers_equiv.c" <<'EOF_SCHED_HELPERS'
 
 extern int sched_get_priority_max_value(int);
 extern int sched_get_priority_min_value(int);
+extern int sched_policy_is_valid(int);
+extern int sched_policy_needs_root(int);
+extern int setscheduler_validate(int, int);
+extern long sched_rr_interval_nsec(int);
+extern int sched_affinity_permission_result(unsigned int, unsigned int,
+					    unsigned int);
+extern int sched_getaffinity_len_result(unsigned long, int);
+extern unsigned long sched_affinity_copy_len(unsigned long, unsigned long);
 
 static void mix(unsigned long *digest, unsigned long value)
 {
@@ -880,17 +888,2104 @@ int main(void)
 	static const int policies[] = {
 		-100, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 99,
 	};
+	static const int priorities[] = {
+		-1, 0, 1, 2, 50, 99, 100,
+	};
+	static const unsigned int ids[][3] = {
+		{ 0, 10, 20 },
+		{ 10, 10, 20 },
+		{ 20, 10, 20 },
+		{ 30, 10, 20 },
+		{ 99, 99, 99 },
+	};
+	static const unsigned long lens[] = {
+		0, 1, 4, 7, 8, 16, 128, 129,
+	};
+	static const int cpu_counts[] = {
+		1, 2, 8, 63, 64, 65, 1024,
+	};
 	unsigned long digest = 0x5c7ed123456789abUL;
 
 	for (unsigned int i = 0; i < sizeof(policies) / sizeof(policies[0]); i++) {
 		mix_signed(&digest, sched_get_priority_max_value(policies[i]));
 		mix_signed(&digest, sched_get_priority_min_value(policies[i]));
+		mix_signed(&digest, sched_policy_is_valid(policies[i]));
+		mix_signed(&digest, sched_policy_needs_root(policies[i]));
+		mix_signed(&digest, sched_rr_interval_nsec(policies[i]));
+		for (unsigned int p = 0; p < sizeof(priorities) / sizeof(priorities[0]); p++)
+			mix_signed(&digest, setscheduler_validate(policies[i], priorities[p]));
+	}
+
+	for (unsigned int i = 0; i < sizeof(ids) / sizeof(ids[0]); i++) {
+		mix_signed(&digest, sched_affinity_permission_result(ids[i][0],
+			ids[i][1], ids[i][2]));
+	}
+
+	for (unsigned int i = 0; i < sizeof(lens) / sizeof(lens[0]); i++) {
+		for (unsigned int j = 0; j < sizeof(cpu_counts) / sizeof(cpu_counts[0]); j++)
+			mix_signed(&digest, sched_getaffinity_len_result(lens[i], cpu_counts[j]));
+		mix(&digest, sched_affinity_copy_len(lens[i], 128));
+		mix(&digest, sched_affinity_copy_len(lens[i], 1024));
 	}
 
 	printf("sched_helpers ok digest=%016lx\n", digest);
 	return 0;
 }
 EOF_SCHED_HELPERS
+
+cat > "${tmpdir}/rlimit_helpers_equiv.c" <<'EOF_RLIMIT_HELPERS'
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+extern int prlimit_validate_resource(int);
+extern int prlimit_validate_new_limit(uint64_t, uint64_t);
+extern int prlimit_linux_update_needed(int);
+extern int prlimit_to_mckernel_resource(int);
+
+static void mix(unsigned long *digest, unsigned long value)
+{
+	*digest ^= value + 0x9e3779b97f4a7c15UL + (*digest << 6) + (*digest >> 2);
+}
+
+static void mix_signed(unsigned long *digest, long value)
+{
+	mix(digest, (unsigned long)value);
+}
+
+int main(void)
+{
+	static const int resources[] = {
+		-100, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8,
+		9, 10, 11, 12, 13, 14, 15, 16, 17, 99,
+	};
+	static const uint64_t limits[][2] = {
+		{ 0, 0 },
+		{ 0, 1 },
+		{ 1, 0 },
+		{ 4096, 4096 },
+		{ 4097, 4096 },
+		{ UINT64_MAX, UINT64_MAX },
+		{ UINT64_MAX, UINT64_MAX - 1 },
+	};
+	unsigned long digest = 0x714d175123456789UL;
+
+	for (unsigned int i = 0; i < sizeof(resources) / sizeof(resources[0]); i++) {
+		mix_signed(&digest, prlimit_validate_resource(resources[i]));
+		mix_signed(&digest, prlimit_linux_update_needed(resources[i]));
+		mix_signed(&digest, prlimit_to_mckernel_resource(resources[i]));
+	}
+
+	for (unsigned int i = 0; i < sizeof(limits) / sizeof(limits[0]); i++) {
+		mix_signed(&digest, prlimit_validate_new_limit(limits[i][0],
+			limits[i][1]));
+	}
+
+	printf("rlimit_helpers ok digest=%016lx\n", digest);
+	return 0;
+}
+EOF_RLIMIT_HELPERS
+
+cat > "${tmpdir}/syscall_policy_helpers_equiv.c" <<'EOF_SYSCALL_POLICY_HELPERS'
+#include <limits.h>
+#include <stdint.h>
+#include <stddef.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#define VR_RESERVED 0x2UL
+#define VR_IO_NOCACHE 0x100UL
+#define VR_REMOTE 0x200UL
+#define VR_LOCKED 0x4000UL
+#define PAGE_SIZE 4096UL
+#define PAGE_MASK (~(PAGE_SIZE - 1))
+#define PGOFF_LIMIT (1UL << 51)
+#define MCL_CURRENT 0x01
+#define MCL_FUTURE 0x02
+#define PROT_READ 0x01
+#define PROT_WRITE 0x02
+#define PROT_EXEC 0x04
+#define MAP_SHARED 0x01
+#define MAP_PRIVATE 0x02
+#define MAP_FIXED 0x10
+#define MAP_ANONYMOUS 0x20
+#define MAP_LOCKED 0x2000
+#define MAP_POPULATE 0x8000
+#define VR_DEMAND_PAGING 0x1000UL
+#define VR_PRIVATE 0x2000UL
+#define VR_PROT_READ 0x00010000UL
+#define VR_PROT_WRITE 0x00020000UL
+#define VR_PROT_EXEC 0x00040000UL
+#define VR_PROT_MASK 0x00070000UL
+#define PROT_TO_VR_FLAG(prot) (((unsigned long)(prot) << 16) & VR_PROT_MASK)
+#define VRFLAG_PROT_TO_MAXPROT(vrflag) (((vrflag) & VR_PROT_MASK) << 4)
+#define MREMAP_MAYMOVE 0x01
+#define MREMAP_FIXED 0x02
+#define MS_ASYNC 0x01
+#define MS_INVALIDATE 0x02
+#define MS_SYNC 0x04
+#define MPOL_DEFAULT 0
+#define MPOL_PREFERRED 1
+#define MPOL_BIND 2
+#define MPOL_INTERLEAVE 3
+#define MPOL_F_STATIC_NODES (1 << 15)
+#define MPOL_F_RELATIVE_NODES (1 << 14)
+#define MPOL_F_NODE (1 << 0)
+#define MPOL_F_ADDR (1 << 1)
+#define MPOL_F_MEMS_ALLOWED (1 << 2)
+#define MPOL_MF_STRICT (1 << 0)
+#define MPOL_MF_MOVE (1 << 1)
+#define MPOL_MF_MOVE_ALL (1 << 2)
+#define SIG_BLOCK 0
+#define SIG_UNBLOCK 1
+#define SIG_SETMASK 2
+#define SIGKILL_MASK (1UL << 8)
+#define SIGSTOP_MASK (1UL << 18)
+#define SFD_CLOEXEC 02000000
+#define SFD_NONBLOCK 04000
+#define RUSAGE_SELF 0
+#define RUSAGE_CHILDREN -1
+#define RUSAGE_THREAD 1
+#define ITIMER_REAL 0
+#define ITIMER_VIRTUAL 1
+#define ITIMER_PROF 2
+#define CLOCK_REALTIME 0
+#define CLOCK_MONOTONIC 1
+#define CLOCK_PROCESS_CPUTIME_ID 2
+#define CLOCK_THREAD_CPUTIME_ID 3
+#define NS_PER_SEC 1000000000L
+#define TIME_DISPATCH_NOOP 0
+#define TIME_DISPATCH_LOCAL_REALTIME 1
+#define TIME_DISPATCH_PROCESS_CPUTIME 2
+#define TIME_DISPATCH_THREAD_CPUTIME 3
+#define TIME_DISPATCH_FORWARD 4
+#define MINSIGSTKSZ 2048
+#define SS_DISABLE 2
+#define IOV_MAX 1024UL
+#define PROCESS_VM_READ 0
+#define PROCESS_VM_WRITE 1
+#define PTRACE_O_TRACESYSGOOD 1
+#define PTRACE_O_TRACEFORK 2
+#define PTRACE_O_TRACEVFORK 4
+#define PTRACE_O_TRACECLONE 8
+#define PTRACE_O_TRACEEXEC 0x10
+#define PTRACE_O_TRACEVFORKDONE 0x20
+#define PTRACE_O_TRACEEXIT 0x40
+#define PTRACE_O_MASK 0x7f
+#define PT_TRACED 0x80
+#define PT_TRACE_EXEC 0x100
+#define PT_TRACE_SYSCALL 0x200
+#define PTRACE_EVENT_FORK 1
+#define PTRACE_EVENT_VFORK 2
+#define PTRACE_EVENT_CLONE 3
+#define PTRACE_EVENT_EXEC 4
+#define PTRACE_EVENT_VFORK_DONE 5
+#define PS_RUNNING 0x1
+#define PS_ZOMBIE 0x8
+#define PS_EXITED 0x10
+#define PS_STOPPED 0x20
+#define PS_TRACED 0x40
+#define PS_DELAY_TRACED 0x400
+#define SIGNAL_STOP_STOPPED 0x1
+#define SIGNAL_STOP_CONTINUED 0x2
+#undef WNOHANG
+#undef WUNTRACED
+#undef WSTOPPED
+#undef WEXITED
+#undef WCONTINUED
+#undef WNOWAIT
+#undef __WALL
+#undef __WCLONE
+#define WNOHANG 0x00000001
+#define WUNTRACED 0x00000002
+#define WSTOPPED WUNTRACED
+#define WEXITED 0x00000004
+#define WCONTINUED 0x00000008
+#define WNOWAIT 0x01000000
+#define __WALL 0x40000000
+#define __WCLONE ((int)0x80000000u)
+#define P_ALL 0
+#define P_PID 1
+#define P_PGID 2
+#define SIGCHLD 17
+#define SIGTRAP 5
+#define _NSIG 64
+#define CSIGNAL 0x000000ff
+#define CLONE_VM 0x00000100
+#define CLONE_FS 0x00000200
+#define CLONE_SIGHAND 0x00000800
+#define CLONE_VFORK 0x00004000
+#define CLONE_PARENT 0x00008000
+#define CLONE_THREAD 0x00010000
+#define CLONE_NEWNS 0x00020000
+#define CLONE_SYSVSEM 0x00040000
+#define CLONE_NEWIPC 0x08000000
+#define CLONE_NEWPID 0x20000000
+#define AT_FDCWD -100
+#define AT_SYMLINK_NOFOLLOW 0x100
+#define AT_EMPTY_PATH 0x1000
+#define FUTEX_WAIT 0
+#define FUTEX_CMP_REQUEUE 4
+#define FUTEX_WAKE_OP 5
+#define FUTEX_WAIT_BITSET 9
+#define FUTEX_PRIVATE_FLAG 128
+#define FUTEX_CLOCK_REALTIME 256
+#define FUTEX_CMD_MASK (~(FUTEX_PRIVATE_FLAG | FUTEX_CLOCK_REALTIME))
+
+extern int robust_list_len_result(size_t);
+extern int tkill_tid_result(int);
+extern int tgkill_target_result(int, int);
+extern int sigaction_validate(int, int);
+extern int rt_sigprocmask_validate(size_t, size_t, int, int);
+extern unsigned long rt_sigprocmask_apply(unsigned long, unsigned long, int,
+					  int);
+extern int rt_sigpending_size_result(size_t, size_t);
+extern int signalfd4_sigsetsize_result(size_t, size_t);
+extern int signalfd4_flags_result(int);
+extern int setpgid_normalize_pid(int, int);
+extern int setpgid_normalize_pgid(int, int);
+extern int setpgid_execed_result(int);
+extern int memlock_prepare_range(uintptr_t, size_t, uintptr_t, uintptr_t,
+				 uintptr_t *, size_t *, uintptr_t *);
+extern int memlock_range_flag_result(unsigned long);
+extern int range_has_disallowed_change_flags(unsigned long);
+extern int munmap_prepare_range(uintptr_t, size_t, uintptr_t, uintptr_t,
+				size_t *);
+extern int mprotect_prepare_range(uintptr_t, size_t, uintptr_t, uintptr_t,
+				  size_t *, uintptr_t *);
+extern int mlockall_policy_result(int, int, uint64_t);
+extern int remap_file_pages_prepare(uintptr_t, size_t, int, size_t,
+				    uintptr_t *, uintptr_t *, long *);
+extern int mremap_prepare_args(uintptr_t, size_t, size_t, int, uintptr_t,
+			       uintptr_t, uintptr_t, size_t *, size_t *,
+			       uintptr_t *, int *);
+extern int mremap_fixed_range_result(uintptr_t, uintptr_t, uintptr_t,
+				     uintptr_t, uintptr_t);
+extern int mremap_maymove_result(int);
+extern int msync_prepare_range(uintptr_t, size_t, int, size_t *, uintptr_t *);
+extern int msync_locked_range_result(int, unsigned long);
+extern int mbind_prepare_range(uintptr_t, unsigned long, unsigned long *);
+extern int mempolicy_nodemask_bits_result(unsigned long, unsigned long *);
+extern int mempolicy_nodemask_bits_is_clamped(unsigned long);
+extern int mbind_mode_flags_result(int, unsigned int, int *, int *);
+extern int mempolicy_mode_is_supported(int);
+extern int set_mempolicy_normalize_mode(int, int *);
+extern int get_mempolicy_validate(unsigned long, int, int, unsigned long, int,
+				  unsigned long *);
+extern int move_pages_policy_result(int, int);
+extern int brk_prepare_result(unsigned long, unsigned long, unsigned long,
+			      unsigned long, unsigned long *, int *);
+extern unsigned long brk_default_vrflags(void);
+extern int mincore_prepare_range(uintptr_t, size_t, uintptr_t, uintptr_t,
+				 uintptr_t *);
+extern unsigned long mmap_base_vrflags(int, int, unsigned long, int);
+extern int mmap_populated_mapping_result(int);
+extern int mmap_should_set_host_ro(int, int, int);
+extern int mmap_update_private_maxprot(int, int);
+extern int mmap_prot_denied_result(int, int, int *);
+extern unsigned long mmap_maxprot_to_vrflags(int);
+extern int mmap_should_force_straight(int, int, unsigned long, size_t, size_t);
+extern int mmap_is_shared(int);
+extern int getrusage_who_result(int);
+extern int itimer_which_result(int);
+extern int itimer_is_real(int);
+extern int itimer_should_start(long, long);
+extern int clock_gettime_dispatch(int, int, int);
+extern int gettimeofday_dispatch(int, int, int);
+extern int nanosleep_validate_timespec(long, long);
+extern int rt_sigtimedwait_prepare(size_t, size_t, int);
+extern int rt_sigtimedwait_timeout_result(long, long, int);
+extern void rt_sigtimedwait_prepare_masks(unsigned long, unsigned long,
+					  unsigned long *, unsigned long *,
+					  unsigned long *);
+extern void rt_sigtimedwait_deadline(long, long, long, long, long *, long *);
+extern int rt_sigtimedwait_timeout_expired(long, long, long, long);
+extern int sigmask_to_signal_number(unsigned long);
+extern int rt_sigqueueinfo_pid_result(int);
+extern int sigsuspend_sigsetsize_result(size_t, size_t);
+extern unsigned long sigsuspend_prepare_mask(unsigned long);
+extern int sigsuspend_pending_matches(unsigned long, unsigned long);
+extern int sigaction_sigsetsize_result(size_t, size_t);
+extern int sigaltstack_validate(int, size_t);
+extern int sigaltstack_is_disable(int);
+extern int process_vm_validate_args(unsigned long, unsigned long, unsigned long);
+extern int process_vm_op_is_write(int);
+extern int process_vm_op_is_valid(int);
+extern int ptrace_signal_data_result(long);
+extern int ptrace_detach_signal_result(long);
+extern int ptrace_user_area_result(long, unsigned long);
+extern int ptrace_status_allows_io(int);
+extern int ptrace_setoptions_flags_result(int);
+extern int ptrace_apply_options(int, int);
+extern int ptrace_child_traced_result(int, int, int);
+extern int ptrace_attach_policy_result(int, int, int, int);
+extern int ptrace_detach_state_result(int, int);
+extern int ptrace_siginfo_state_result(int, int);
+extern int wait4_options_result(int);
+extern int waitid_to_wait_pid_result(int, int, int *);
+extern int waitid_options_result(int);
+extern int wait_should_scan_process_result(int);
+extern int wait_should_scan_thread_result(int, int);
+extern int wait_process_pid_matches_result(int, int, int, int);
+extern int wait_thread_tid_matches_result(int, int, int);
+extern int wait_process_exited_candidate_result(int, int);
+extern int wait_thread_exited_candidate_result(int, int);
+extern int wait_nonptraced_stop_candidate_result(int, int, int);
+extern int wait_ptraced_stop_candidate_result(int, int);
+extern int wait_continued_candidate_result(int, int);
+extern int wait_reap_needed_result(int);
+extern int wait_nohang_result(int);
+extern int wait_empty_result(int);
+extern int wait_stopped_status_result(int);
+extern int wait_continued_status_result(void);
+extern int wait_zombie_skip_host_result(int, int, int);
+extern int wait_thread_empty_candidate_result(int, int);
+extern int waitid_status_code_result(int);
+extern int clone_pthread_marker_result(int, unsigned long, unsigned long);
+extern int clone_flags_result(int, int);
+extern int clone_host_parent_flags_result(int, int);
+extern int clone_report_thread_result(int, int);
+extern int ptrace_exec_event_signal_result(int);
+extern int ptrace_syscall_event_signal_result(int);
+extern int ptrace_clone_event_result(int, int);
+extern int ptrace_clone_reparent_result(int);
+extern int execveat_policy_result(int, int, int);
+extern int futex_decode_flags_result(int, int *, int *);
+extern int futex_wait_timeout_needed_result(int, int);
+extern int futex_timeout_is_absolute_result(int);
+extern int futex_clock_id_result(int);
+extern unsigned int futex_requeue_val2_result(int, unsigned long);
+extern unsigned long futex_timeout_ns_result(int, long, long, long, long);
+
+static void mix(unsigned long *digest, unsigned long value)
+{
+	*digest ^= value + 0x9e3779b97f4a7c15UL + (*digest << 6) + (*digest >> 2);
+}
+
+static void mix_signed(unsigned long *digest, long value)
+{
+	mix(digest, (unsigned long)value);
+}
+
+struct range_case {
+	uintptr_t start;
+	size_t len;
+	uintptr_t user_start;
+	uintptr_t user_end;
+};
+
+static void exercise_memlock(unsigned long *digest)
+{
+	static const struct range_case cases[] = {
+		{ 0x10000UL, 0, 0x10000UL, 0x20000UL },
+		{ 0x10001UL, 1, 0x10000UL, 0x20000UL },
+		{ 0x0UL, 4096, 0x10000UL, 0x20000UL },
+		{ 0x1f000UL, 0x2000, 0x10000UL, 0x20000UL },
+		{ ULONG_MAX - 0xfffUL, 0x3000, 0x10000UL, 0x20000UL },
+	};
+
+	for (unsigned int i = 0; i < sizeof(cases) / sizeof(cases[0]); i++) {
+		uintptr_t start = 0xa5a5;
+		uintptr_t end = 0x5a5a;
+		size_t len = 0xcccc;
+		int rc = memlock_prepare_range(cases[i].start, cases[i].len,
+			cases[i].user_start, cases[i].user_end,
+			&start, &len, &end);
+
+		mix_signed(digest, rc);
+		mix(digest, start);
+		mix(digest, len);
+		mix(digest, end);
+	}
+}
+
+static void exercise_unmap_protect(unsigned long *digest)
+{
+	static const struct range_case cases[] = {
+		{ 0x10000UL, 0, 0x10000UL, 0x20000UL },
+		{ 0x10000UL, 4096, 0x10000UL, 0x20000UL },
+		{ 0x10001UL, 4096, 0x10000UL, 0x20000UL },
+		{ 0x1f000UL, 4096, 0x10000UL, 0x20000UL },
+		{ 0x20000UL, 4096, 0x10000UL, 0x20000UL },
+		{ 0x10000UL, 0x10001, 0x10000UL, 0x20000UL },
+		{ ULONG_MAX - 0xfffUL, 0x3000, 0x10000UL, 0x20000UL },
+	};
+
+	for (unsigned int i = 0; i < sizeof(cases) / sizeof(cases[0]); i++) {
+		size_t len = 0xdddd;
+		uintptr_t end = 0xbeef;
+
+		mix_signed(digest, munmap_prepare_range(cases[i].start,
+			cases[i].len, cases[i].user_start, cases[i].user_end,
+			&len));
+		mix(digest, len);
+
+		len = 0xeeee;
+		mix_signed(digest, mprotect_prepare_range(cases[i].start,
+			cases[i].len, cases[i].user_start, cases[i].user_end,
+			&len, &end));
+		mix(digest, len);
+		mix(digest, end);
+	}
+}
+
+static void exercise_memory_syscall_policy(unsigned long *digest)
+{
+	static const int mlock_flags[] = { 0, MCL_CURRENT, MCL_FUTURE,
+		MCL_CURRENT | MCL_FUTURE, 4 };
+	static const struct range_case remap_cases[] = {
+		{ 0x10000UL, 0, 0, 0 },
+		{ 0x10001UL, PAGE_SIZE, 0, 0 },
+		{ 0x10000UL, PAGE_SIZE, 0, 0 },
+		{ 0xfffffffffffff000UL, PAGE_SIZE * 2, 0, 0 },
+	};
+	static const size_t pgoffs[] = { 0, 1, PGOFF_LIMIT - 1, PGOFF_LIMIT };
+	static const int prot_values[] = { 0, 1 };
+	static const int mremap_flags[] = {
+		0, MREMAP_MAYMOVE, MREMAP_FIXED,
+		MREMAP_FIXED | MREMAP_MAYMOVE, 4,
+	};
+	static const int msync_flags[] = {
+		0, MS_ASYNC, MS_INVALIDATE, MS_SYNC,
+		MS_ASYNC | MS_SYNC, 8,
+	};
+	static const unsigned long maxnodes[] = {
+		0, 1, 255, 256, 257, PAGE_SIZE << 3, (PAGE_SIZE << 3) + 1,
+	};
+	static const int modes[] = {
+		-1, MPOL_DEFAULT, MPOL_PREFERRED, MPOL_BIND, MPOL_INTERLEAVE,
+		4, MPOL_BIND | MPOL_F_STATIC_NODES,
+		MPOL_BIND | MPOL_F_RELATIVE_NODES,
+		MPOL_BIND | MPOL_F_STATIC_NODES | MPOL_F_RELATIVE_NODES,
+	};
+	static const int mempolicy_flags[] = {
+		0, MPOL_MF_STRICT, MPOL_MF_MOVE,
+		MPOL_MF_STRICT | MPOL_MF_MOVE,
+	};
+
+	for (unsigned int i = 0; i < sizeof(mlock_flags) / sizeof(mlock_flags[0]); i++) {
+		mix_signed(digest, mlockall_policy_result(mlock_flags[i], 0, 0));
+		mix_signed(digest, mlockall_policy_result(mlock_flags[i], 0, 4096));
+		mix_signed(digest, mlockall_policy_result(mlock_flags[i], 1, 0));
+	}
+
+	for (unsigned int i = 0; i < sizeof(remap_cases) / sizeof(remap_cases[0]); i++) {
+		for (unsigned int p = 0; p < sizeof(prot_values) / sizeof(prot_values[0]); p++) {
+			for (unsigned int o = 0; o < sizeof(pgoffs) / sizeof(pgoffs[0]); o++) {
+				uintptr_t start = 0xa5a5;
+				uintptr_t end = 0x5a5a;
+				long off = -1;
+
+				mix_signed(digest, remap_file_pages_prepare(remap_cases[i].start,
+					remap_cases[i].len, prot_values[p], pgoffs[o],
+					&start, &end, &off));
+				mix(digest, start);
+				mix(digest, end);
+				mix(digest, (unsigned long)off);
+			}
+		}
+	}
+
+	for (unsigned int f = 0; f < sizeof(mremap_flags) / sizeof(mremap_flags[0]); f++) {
+		size_t oldsize = 0;
+		size_t newsize = 0;
+		uintptr_t oldend = 0;
+		int no_op = 0;
+
+		mix_signed(digest, mremap_prepare_args(0x10000, PAGE_SIZE,
+			PAGE_SIZE, mremap_flags[f], 0x30000, 0x10000, 0x80000,
+			&oldsize, &newsize, &oldend, &no_op));
+		mix(digest, oldsize);
+		mix(digest, newsize);
+		mix(digest, oldend);
+		mix_signed(digest, no_op);
+
+		mix_signed(digest, mremap_prepare_args(0x10001, PAGE_SIZE,
+			PAGE_SIZE * 2, mremap_flags[f], 0x30001, 0x10000, 0x80000,
+			&oldsize, &newsize, &oldend, &no_op));
+		mix(digest, oldsize);
+		mix(digest, newsize);
+		mix(digest, oldend);
+		mix_signed(digest, no_op);
+		mix_signed(digest, mremap_maymove_result(mremap_flags[f]));
+	}
+
+	mix_signed(digest, mremap_prepare_args(0xfffffffffffff000UL, 0x3000,
+		0x4000, MREMAP_MAYMOVE, 0, 0x10000, 0x80000,
+		&(size_t){0}, &(size_t){0}, &(uintptr_t){0}, &(int){0}));
+	mix_signed(digest, mremap_prepare_args(0x10000, PAGE_SIZE,
+		0x800000, MREMAP_MAYMOVE, 0, 0x10000, 0x80000,
+		&(size_t){0}, &(size_t){0}, &(uintptr_t){0}, &(int){0}));
+
+	mix_signed(digest, mremap_fixed_range_result(0x08000, 0x10000,
+		0x20000, 0x24000, 0x30000));
+	mix_signed(digest, mremap_fixed_range_result(0x22000, 0x10000,
+		0x20000, 0x24000, 0x26000));
+	mix_signed(digest, mremap_fixed_range_result(0x30000, 0x10000,
+		0x20000, 0x24000, 0x34000));
+
+	for (unsigned int f = 0; f < sizeof(msync_flags) / sizeof(msync_flags[0]); f++) {
+		size_t len = 0;
+		uintptr_t end = 0;
+
+		mix_signed(digest, msync_prepare_range(0x10000, PAGE_SIZE,
+			msync_flags[f], &len, &end));
+		mix(digest, len);
+		mix(digest, end);
+		mix_signed(digest, msync_prepare_range(0x10001, PAGE_SIZE,
+			msync_flags[f], &len, &end));
+		mix_signed(digest, msync_locked_range_result(msync_flags[f], 0));
+		mix_signed(digest, msync_locked_range_result(msync_flags[f], VR_LOCKED));
+	}
+	mix_signed(digest, msync_prepare_range(0xfffffffffffff000UL, 0x3000,
+		MS_SYNC, &(size_t){0}, &(uintptr_t){0}));
+
+	mix_signed(digest, mbind_prepare_range(0x10000, PAGE_SIZE,
+		&(unsigned long){0}));
+	mix_signed(digest, mbind_prepare_range(0x10001, PAGE_SIZE,
+		&(unsigned long){0}));
+	mix_signed(digest, mbind_prepare_range(0x10000, 0,
+		&(unsigned long){0}));
+	mix_signed(digest, mbind_prepare_range(0xfffffffffffff000UL, 0x3000,
+		&(unsigned long){0}));
+
+	for (unsigned int i = 0; i < sizeof(maxnodes) / sizeof(maxnodes[0]); i++) {
+		unsigned long bits = 0xdead;
+
+		mix_signed(digest, mempolicy_nodemask_bits_result(maxnodes[i], &bits));
+		mix(digest, bits);
+		mix_signed(digest, mempolicy_nodemask_bits_is_clamped(maxnodes[i]));
+	}
+
+	for (unsigned int m = 0; m < sizeof(modes) / sizeof(modes[0]); m++) {
+		for (unsigned int f = 0; f < sizeof(mempolicy_flags) / sizeof(mempolicy_flags[0]); f++) {
+			int mode_flags = 0;
+			int normalized = 0;
+
+			mix_signed(digest, mbind_mode_flags_result(modes[m],
+				mempolicy_flags[f], &mode_flags, &normalized));
+			mix_signed(digest, mode_flags);
+			mix_signed(digest, normalized);
+		}
+		mix_signed(digest, mempolicy_mode_is_supported(modes[m]));
+		mix_signed(digest, set_mempolicy_normalize_mode(modes[m], &(int){0}));
+	}
+
+	mix_signed(digest, get_mempolicy_validate(0, 0, MPOL_DEFAULT, 0, 2,
+		&(unsigned long){0}));
+	mix_signed(digest, get_mempolicy_validate(0x10000, 0, MPOL_DEFAULT, 0, 2,
+		&(unsigned long){0}));
+	mix_signed(digest, get_mempolicy_validate(0, MPOL_F_ADDR, MPOL_DEFAULT, 0, 2,
+		&(unsigned long){0}));
+	mix_signed(digest, get_mempolicy_validate(0, MPOL_F_NODE, MPOL_INTERLEAVE, 0, 2,
+		&(unsigned long){0}));
+	mix_signed(digest, get_mempolicy_validate(0x10000, MPOL_F_ADDR | MPOL_F_NODE,
+		MPOL_INTERLEAVE, 8, 2, &(unsigned long){0}));
+	mix_signed(digest, get_mempolicy_validate(0, MPOL_F_MEMS_ALLOWED,
+		MPOL_DEFAULT, 1, 2, &(unsigned long){0}));
+
+	mix_signed(digest, move_pages_policy_result(0, 0));
+	mix_signed(digest, move_pages_policy_result(1, 0));
+	mix_signed(digest, move_pages_policy_result(0, MPOL_MF_MOVE));
+	mix_signed(digest, move_pages_policy_result(0, MPOL_MF_MOVE_ALL));
+	mix_signed(digest, move_pages_policy_result(0, 8));
+}
+
+static void exercise_brk_mincore_mmap_policy(unsigned long *digest)
+{
+	static const unsigned long brk_addrs[] = {
+		0, 0x1000, 0x1fff, 0x2000, 0x3000, 0x4000, 0x4001,
+	};
+	static const struct range_case mincore_cases[] = {
+		{ 0x10000UL, 0, 0x10000UL, 0x20000UL },
+		{ 0x10000UL, PAGE_SIZE, 0x10000UL, 0x20000UL },
+		{ 0x10001UL, PAGE_SIZE, 0x10000UL, 0x20000UL },
+		{ 0x0UL, PAGE_SIZE, 0x10000UL, 0x20000UL },
+		{ 0x1f000UL, PAGE_SIZE * 2, 0x10000UL, 0x20000UL },
+		{ 0x10000UL, ULONG_MAX, 0x10000UL, 0x20000UL },
+	};
+	static const int prot_values[] = {
+		0, PROT_READ, PROT_WRITE, PROT_EXEC,
+		PROT_READ | PROT_WRITE,
+		PROT_READ | PROT_EXEC,
+		PROT_READ | PROT_WRITE | PROT_EXEC,
+	};
+	static const int mmap_flags[] = {
+		0, MAP_SHARED, MAP_PRIVATE, MAP_PRIVATE | MAP_ANONYMOUS,
+		MAP_PRIVATE | MAP_ANONYMOUS | MAP_LOCKED,
+		MAP_PRIVATE | MAP_ANONYMOUS | MAP_POPULATE,
+		MAP_PRIVATE | MAP_ANONYMOUS | MAP_FIXED,
+	};
+	static const int maxprots[] = {
+		0, PROT_READ, PROT_WRITE, PROT_EXEC,
+		PROT_READ | PROT_WRITE,
+		PROT_READ | PROT_EXEC,
+		PROT_READ | PROT_WRITE | PROT_EXEC,
+	};
+
+	for (unsigned int i = 0; i < sizeof(brk_addrs) / sizeof(brk_addrs[0]); i++) {
+		unsigned long result = 0xaaaa;
+		int extend = -1;
+
+		mix_signed(digest, brk_prepare_result(brk_addrs[i],
+			0x1000, 0x2000, 0x4000, &result, &extend));
+		mix(digest, result);
+		mix_signed(digest, extend);
+	}
+	mix(digest, brk_default_vrflags());
+
+	for (unsigned int i = 0; i < sizeof(mincore_cases) / sizeof(mincore_cases[0]); i++) {
+		uintptr_t end = 0xbeef;
+
+		mix_signed(digest, mincore_prepare_range(mincore_cases[i].start,
+			mincore_cases[i].len, mincore_cases[i].user_start,
+			mincore_cases[i].user_end, &end));
+		mix(digest, end);
+	}
+
+	for (unsigned int p = 0; p < sizeof(prot_values) / sizeof(prot_values[0]); p++) {
+		for (unsigned int f = 0; f < sizeof(mmap_flags) / sizeof(mmap_flags[0]); f++) {
+			mix(digest, mmap_base_vrflags(prot_values[p], mmap_flags[f],
+				VR_REMOTE, 0));
+			mix(digest, mmap_base_vrflags(prot_values[p], mmap_flags[f],
+				VR_REMOTE, 1));
+			mix_signed(digest, mmap_populated_mapping_result(mmap_flags[f]));
+			mix_signed(digest, mmap_should_set_host_ro(mmap_flags[f],
+				prot_values[p], 0));
+			mix_signed(digest, mmap_should_set_host_ro(mmap_flags[f],
+				prot_values[p], 1));
+			mix_signed(digest, mmap_is_shared(mmap_flags[f]));
+		}
+	}
+
+	for (unsigned int f = 0; f < sizeof(mmap_flags) / sizeof(mmap_flags[0]); f++) {
+		for (unsigned int m = 0; m < sizeof(maxprots) / sizeof(maxprots[0]); m++) {
+			mix_signed(digest, mmap_update_private_maxprot(mmap_flags[f],
+				maxprots[m]));
+			mix(digest, mmap_maxprot_to_vrflags(maxprots[m]));
+			for (unsigned int p = 0; p < sizeof(prot_values) / sizeof(prot_values[0]); p++) {
+				int denied = 0x55;
+
+				mix_signed(digest, mmap_prot_denied_result(prot_values[p],
+					maxprots[m], &denied));
+				mix_signed(digest, denied);
+			}
+		}
+	}
+
+	mix_signed(digest, mmap_should_force_straight(MAP_PRIVATE | MAP_ANONYMOUS,
+		1, 0x10000, 0x4000, 0x2000));
+	mix_signed(digest, mmap_should_force_straight(MAP_PRIVATE | MAP_ANONYMOUS,
+		1, 0, 0x4000, 0x2000));
+	mix_signed(digest, mmap_should_force_straight(MAP_PRIVATE | MAP_ANONYMOUS | MAP_FIXED,
+		1, 0x10000, 0x4000, 0x2000));
+	mix_signed(digest, mmap_should_force_straight(MAP_PRIVATE | MAP_ANONYMOUS,
+		1, 0x10000, 0x1000, 0x2000));
+	mix_signed(digest, mmap_should_force_straight(MAP_PRIVATE | MAP_ANONYMOUS,
+		0, 0x10000, 0x4000, 0x2000));
+}
+
+static void exercise_signal_time_policy(unsigned long *digest)
+{
+	static const int tids[] = { INT_MIN, -1, 0, 1, 99 };
+	static const size_t sigset_sizes[] = { 0, sizeof(unsigned long),
+		sizeof(unsigned long) + 1 };
+	static const int hows[] = { -1, SIG_BLOCK, SIG_UNBLOCK, SIG_SETMASK, 3 };
+	static const unsigned long masks[] = {
+		0, 1, SIGKILL_MASK, SIGSTOP_MASK,
+		SIGKILL_MASK | SIGSTOP_MASK | 0x55UL,
+	};
+	static const int signalfd_flags[] = {
+		0, SFD_NONBLOCK, SFD_CLOEXEC, SFD_NONBLOCK | SFD_CLOEXEC,
+		0x10, SFD_NONBLOCK | 0x10,
+	};
+	static const int who_values[] = {
+		RUSAGE_CHILDREN, RUSAGE_SELF, RUSAGE_THREAD, -2, 2,
+	};
+	static const int itimers[] = {
+		-1, ITIMER_REAL, ITIMER_VIRTUAL, ITIMER_PROF, 3,
+	};
+	static const long timeval_pairs[][2] = {
+		{ 0, 0 }, { 1, 0 }, { 0, 1 }, { -1, 0 },
+	};
+	static const int clock_ids[] = {
+		-1, CLOCK_REALTIME, CLOCK_PROCESS_CPUTIME_ID,
+		CLOCK_THREAD_CPUTIME_ID, 11,
+	};
+	static const int bools[] = { 0, 1 };
+	static const long timespecs[][2] = {
+		{ 0, 0 },
+		{ 1, 999999999L },
+		{ 1, NS_PER_SEC },
+		{ -1, 0 },
+		{ 0, -1 },
+	};
+
+	for (unsigned int g = 0; g < sizeof(tids) / sizeof(tids[0]); g++) {
+		for (unsigned int t = 0; t < sizeof(tids) / sizeof(tids[0]); t++)
+			mix_signed(digest, tgkill_target_result(tids[g], tids[t]));
+	}
+
+	for (unsigned int s = 0; s < sizeof(sigset_sizes) / sizeof(sigset_sizes[0]); s++) {
+		for (unsigned int h = 0; h < sizeof(hows) / sizeof(hows[0]); h++) {
+			mix_signed(digest, rt_sigprocmask_validate(sigset_sizes[s],
+				sizeof(unsigned long), 0, hows[h]));
+			mix_signed(digest, rt_sigprocmask_validate(sigset_sizes[s],
+				sizeof(unsigned long), 1, hows[h]));
+		}
+		mix_signed(digest, rt_sigpending_size_result(sigset_sizes[s],
+			sizeof(unsigned long)));
+		mix_signed(digest, signalfd4_sigsetsize_result(sigset_sizes[s],
+			sizeof(unsigned long)));
+	}
+
+	for (unsigned int m = 0; m < sizeof(masks) / sizeof(masks[0]); m++) {
+		for (unsigned int s = 0; s < sizeof(masks) / sizeof(masks[0]); s++) {
+			for (unsigned int h = 0; h < sizeof(hows) / sizeof(hows[0]); h++) {
+				mix(digest, rt_sigprocmask_apply(masks[m], masks[s],
+					0, hows[h]));
+				mix(digest, rt_sigprocmask_apply(masks[m], masks[s],
+					1, hows[h]));
+			}
+		}
+	}
+
+	for (unsigned int f = 0; f < sizeof(signalfd_flags) / sizeof(signalfd_flags[0]); f++)
+		mix_signed(digest, signalfd4_flags_result(signalfd_flags[f]));
+
+	for (unsigned int w = 0; w < sizeof(who_values) / sizeof(who_values[0]); w++)
+		mix_signed(digest, getrusage_who_result(who_values[w]));
+
+	for (unsigned int i = 0; i < sizeof(itimers) / sizeof(itimers[0]); i++) {
+		mix_signed(digest, itimer_which_result(itimers[i]));
+		mix_signed(digest, itimer_is_real(itimers[i]));
+	}
+
+	for (unsigned int i = 0; i < sizeof(timeval_pairs) / sizeof(timeval_pairs[0]); i++)
+		mix_signed(digest, itimer_should_start(timeval_pairs[i][0],
+			timeval_pairs[i][1]));
+
+	for (unsigned int c = 0; c < sizeof(clock_ids) / sizeof(clock_ids[0]); c++) {
+		for (unsigned int l = 0; l < sizeof(bools) / sizeof(bools[0]); l++) {
+			for (unsigned int t = 0; t < sizeof(bools) / sizeof(bools[0]); t++)
+				mix_signed(digest, clock_gettime_dispatch(clock_ids[c],
+					bools[l], bools[t]));
+		}
+	}
+
+	for (unsigned int tv = 0; tv < sizeof(bools) / sizeof(bools[0]); tv++) {
+		for (unsigned int tz = 0; tz < sizeof(bools) / sizeof(bools[0]); tz++) {
+			for (unsigned int l = 0; l < sizeof(bools) / sizeof(bools[0]); l++)
+				mix_signed(digest, gettimeofday_dispatch(bools[tv],
+					bools[tz], bools[l]));
+		}
+	}
+
+	for (unsigned int i = 0; i < sizeof(timespecs) / sizeof(timespecs[0]); i++)
+		mix_signed(digest, nanosleep_validate_timespec(timespecs[i][0],
+			timespecs[i][1]));
+}
+
+static void exercise_signal_wait_policy(unsigned long *digest)
+{
+	static const size_t sigset_sizes[] = {
+		0, sizeof(unsigned long), sizeof(unsigned long) + 1,
+	};
+	static const unsigned long masks[] = {
+		0, 1, 2, SIGKILL_MASK, SIGSTOP_MASK,
+		SIGKILL_MASK | SIGSTOP_MASK | 0x55UL, 0x8000000000000000UL,
+	};
+	static const long timeouts[][2] = {
+		{ 0, 0 },
+		{ 0, 1 },
+		{ 1, 999999999L },
+		{ 1, NS_PER_SEC },
+		{ -1, 0 },
+		{ 0, -1 },
+	};
+	static const long deadlines[][4] = {
+		{ 10, 20, 0, 0 },
+		{ 10, 999999999L, 0, 1 },
+		{ 10, 900000000L, 1, 200000000L },
+	};
+	static const long expiry[][4] = {
+		{ 9, 999999999L, 10, 0 },
+		{ 10, 0, 10, 0 },
+		{ 10, 1, 10, 0 },
+		{ 11, 0, 10, 999999999L },
+	};
+	static const int flags[] = { 0, SS_DISABLE, 1, 3 };
+	static const size_t stack_sizes[] = { 0, MINSIGSTKSZ - 1, MINSIGSTKSZ,
+		MINSIGSTKSZ + 1 };
+	static const int pids[] = { -1, 0, 1, 99 };
+
+	for (unsigned int s = 0; s < sizeof(sigset_sizes) / sizeof(sigset_sizes[0]); s++) {
+		mix_signed(digest, rt_sigtimedwait_prepare(sigset_sizes[s],
+			sizeof(unsigned long), 0));
+		mix_signed(digest, rt_sigtimedwait_prepare(sigset_sizes[s],
+			sizeof(unsigned long), 1));
+		mix_signed(digest, sigsuspend_sigsetsize_result(sigset_sizes[s],
+			sizeof(unsigned long)));
+		mix_signed(digest, sigaction_sigsetsize_result(sigset_sizes[s],
+			sizeof(unsigned long)));
+	}
+
+	for (unsigned int i = 0; i < sizeof(timeouts) / sizeof(timeouts[0]); i++) {
+		mix_signed(digest, rt_sigtimedwait_timeout_result(timeouts[i][0],
+			timeouts[i][1], 0));
+		mix_signed(digest, rt_sigtimedwait_timeout_result(timeouts[i][0],
+			timeouts[i][1], 1));
+	}
+
+	for (unsigned int raw = 0; raw < sizeof(masks) / sizeof(masks[0]); raw++) {
+		for (unsigned int cur = 0; cur < sizeof(masks) / sizeof(masks[0]); cur++) {
+			unsigned long wait_mask = 0;
+			unsigned long blocked_mask = 0;
+			unsigned long interrupt_mask = 0;
+
+			rt_sigtimedwait_prepare_masks(masks[raw], masks[cur],
+				&wait_mask, &blocked_mask, &interrupt_mask);
+			mix(digest, wait_mask);
+			mix(digest, blocked_mask);
+			mix(digest, interrupt_mask);
+			mix(digest, sigsuspend_prepare_mask(masks[raw]));
+			mix_signed(digest, sigsuspend_pending_matches(masks[cur],
+				wait_mask));
+		}
+		mix_signed(digest, sigmask_to_signal_number(masks[raw]));
+	}
+
+	for (unsigned int i = 0; i < sizeof(deadlines) / sizeof(deadlines[0]); i++) {
+		long sec = 0;
+		long nsec = 0;
+
+		rt_sigtimedwait_deadline(deadlines[i][0], deadlines[i][1],
+			deadlines[i][2], deadlines[i][3], &sec, &nsec);
+		mix_signed(digest, sec);
+		mix_signed(digest, nsec);
+	}
+
+	for (unsigned int i = 0; i < sizeof(expiry) / sizeof(expiry[0]); i++)
+		mix_signed(digest, rt_sigtimedwait_timeout_expired(expiry[i][0],
+			expiry[i][1], expiry[i][2], expiry[i][3]));
+
+	for (unsigned int i = 0; i < sizeof(pids) / sizeof(pids[0]); i++)
+		mix_signed(digest, rt_sigqueueinfo_pid_result(pids[i]));
+
+	for (unsigned int f = 0; f < sizeof(flags) / sizeof(flags[0]); f++) {
+		for (unsigned int s = 0; s < sizeof(stack_sizes) / sizeof(stack_sizes[0]); s++)
+			mix_signed(digest, sigaltstack_validate(flags[f],
+				stack_sizes[s]));
+		mix_signed(digest, sigaltstack_is_disable(flags[f]));
+	}
+}
+
+static void exercise_ptrace_process_vm_policy(unsigned long *digest)
+{
+	static const unsigned long flags[] = { 0, 1, ULONG_MAX };
+	static const unsigned long iovcnts[] = { 0, 1, IOV_MAX, IOV_MAX + 1 };
+	static const int ops[] = { -1, PROCESS_VM_READ, PROCESS_VM_WRITE, 2 };
+	static const long signal_data[] = { -1, 0, 1, 19, 64, 65, LONG_MAX };
+	static const long addrs[] = { LONG_MIN, -1, 0, 7, 8, 120, 121, LONG_MAX };
+	static const int statuses[] = {
+		0, PS_RUNNING, PS_STOPPED, PS_TRACED, PS_STOPPED | PS_TRACED,
+	};
+	static const int option_flags[] = {
+		0, PTRACE_O_TRACESYSGOOD, PTRACE_O_TRACEFORK,
+		PTRACE_O_TRACEVFORK, PTRACE_O_TRACECLONE, PTRACE_O_TRACEEXEC,
+		PTRACE_O_TRACEVFORKDONE, PTRACE_O_TRACEEXIT, PTRACE_O_MASK,
+		PTRACE_O_MASK | 0x80, -1,
+	};
+	static const int ptrace_values[] = {
+		0, PT_TRACED, PT_TRACE_EXEC, PT_TRACED | PT_TRACE_EXEC,
+	};
+	static const int bools[] = { 0, 1 };
+	static const int pids[] = { 1, 2 };
+
+	for (unsigned int f = 0; f < sizeof(flags) / sizeof(flags[0]); f++) {
+		for (unsigned int l = 0; l < sizeof(iovcnts) / sizeof(iovcnts[0]); l++) {
+			for (unsigned int r = 0; r < sizeof(iovcnts) / sizeof(iovcnts[0]); r++)
+				mix_signed(digest, process_vm_validate_args(flags[f],
+					iovcnts[l], iovcnts[r]));
+		}
+	}
+
+	for (unsigned int i = 0; i < sizeof(ops) / sizeof(ops[0]); i++) {
+		mix_signed(digest, process_vm_op_is_write(ops[i]));
+		mix_signed(digest, process_vm_op_is_valid(ops[i]));
+	}
+
+	for (unsigned int i = 0; i < sizeof(signal_data) / sizeof(signal_data[0]); i++) {
+		mix_signed(digest, ptrace_signal_data_result(signal_data[i]));
+		mix_signed(digest, ptrace_detach_signal_result(signal_data[i]));
+	}
+
+	for (unsigned int i = 0; i < sizeof(addrs) / sizeof(addrs[0]); i++) {
+		mix_signed(digest, ptrace_user_area_result(addrs[i], 128));
+		mix_signed(digest, ptrace_user_area_result(addrs[i], 8));
+	}
+
+	for (unsigned int i = 0; i < sizeof(statuses) / sizeof(statuses[0]); i++)
+		mix_signed(digest, ptrace_status_allows_io(statuses[i]));
+
+	for (unsigned int f = 0; f < sizeof(option_flags) / sizeof(option_flags[0]); f++) {
+		mix_signed(digest, ptrace_setoptions_flags_result(option_flags[f]));
+		for (unsigned int p = 0; p < sizeof(ptrace_values) / sizeof(ptrace_values[0]); p++)
+			mix_signed(digest, ptrace_apply_options(ptrace_values[p],
+				option_flags[f]));
+	}
+
+	for (unsigned int c = 0; c < sizeof(bools) / sizeof(bools[0]); c++) {
+		for (unsigned int p = 0; p < sizeof(bools) / sizeof(bools[0]); p++) {
+			for (unsigned int t = 0; t < sizeof(ptrace_values) / sizeof(ptrace_values[0]); t++)
+				mix_signed(digest, ptrace_child_traced_result(bools[c],
+					bools[p], ptrace_values[t]));
+		}
+	}
+
+	for (unsigned int tr = 0; tr < sizeof(pids) / sizeof(pids[0]); tr++) {
+		for (unsigned int ta = 0; ta < sizeof(pids) / sizeof(pids[0]); ta++) {
+			for (unsigned int pt = 0; pt < sizeof(ptrace_values) / sizeof(ptrace_values[0]); pt++) {
+				for (unsigned int same = 0; same < sizeof(bools) / sizeof(bools[0]); same++)
+					mix_signed(digest, ptrace_attach_policy_result(
+						pids[tr], pids[ta], ptrace_values[pt],
+						bools[same]));
+			}
+		}
+	}
+
+	for (unsigned int traced = 0; traced < sizeof(bools) / sizeof(bools[0]); traced++) {
+		for (unsigned int same = 0; same < sizeof(bools) / sizeof(bools[0]); same++)
+			mix_signed(digest, ptrace_detach_state_result(bools[traced],
+				bools[same]));
+	}
+
+	for (unsigned int s = 0; s < sizeof(statuses) / sizeof(statuses[0]); s++) {
+		for (unsigned int h = 0; h < sizeof(bools) / sizeof(bools[0]); h++)
+			mix_signed(digest, ptrace_siginfo_state_result(statuses[s],
+				bools[h]));
+	}
+}
+
+static void exercise_wait_policy(unsigned long *digest)
+{
+	static const int pids[] = { -55, -2, -1, 0, 1, 2, 55 };
+	static const int pgids[] = { 1, 2, 55 };
+	static const int statuses[] = {
+		0, PS_RUNNING, PS_ZOMBIE, PS_EXITED, PS_STOPPED, PS_TRACED,
+		PS_DELAY_TRACED, PS_STOPPED | PS_TRACED,
+		PS_TRACED | PS_DELAY_TRACED,
+	};
+	static const int signal_flags[] = {
+		0, SIGNAL_STOP_STOPPED, SIGNAL_STOP_CONTINUED,
+		SIGNAL_STOP_STOPPED | SIGNAL_STOP_CONTINUED,
+	};
+	static const int ptrace_values[] = { 0, PT_TRACED, PT_TRACE_EXEC,
+		PT_TRACED | PT_TRACE_EXEC };
+	static const int option_values[] = {
+		0, WNOHANG, WUNTRACED, WEXITED, WCONTINUED, WNOWAIT,
+		WEXITED | WNOHANG, WEXITED | WNOWAIT,
+		WUNTRACED | WCONTINUED, WEXITED | WUNTRACED | WCONTINUED,
+		__WCLONE, __WALL, WEXITED | __WCLONE,
+		WEXITED | __WALL | WNOWAIT, WEXITED | WUNTRACED |
+		WCONTINUED | WNOHANG | WNOWAIT | __WCLONE | __WALL,
+		0x10, -1,
+	};
+	static const int idtypes[] = { P_ALL, P_PID, P_PGID, 3, -1 };
+	static const int bools[] = { 0, 1 };
+	static const int termsigs[] = { 0, SIGCHLD, 9, 15 };
+	static const int wait_statuses[] = {
+		0, 1, 9, 0x7f, 0x137f, 0xffff, 0x0100, 0x8b,
+	};
+
+	for (unsigned int o = 0; o < sizeof(option_values) / sizeof(option_values[0]); o++) {
+		mix_signed(digest, wait4_options_result(option_values[o]));
+		mix_signed(digest, waitid_options_result(option_values[o]));
+		mix_signed(digest, wait_should_scan_process_result(option_values[o]));
+		mix_signed(digest, wait_reap_needed_result(option_values[o]));
+		mix_signed(digest, wait_nohang_result(option_values[o]));
+		for (unsigned int p = 0; p < sizeof(pids) / sizeof(pids[0]); p++)
+			mix_signed(digest, wait_should_scan_thread_result(pids[p],
+				option_values[o]));
+		for (unsigned int s = 0; s < sizeof(statuses) / sizeof(statuses[0]); s++) {
+			mix_signed(digest, wait_process_exited_candidate_result(
+				option_values[o], statuses[s]));
+			mix_signed(digest, wait_thread_exited_candidate_result(
+				option_values[o], statuses[s]));
+			for (unsigned int pt = 0; pt < sizeof(ptrace_values) / sizeof(ptrace_values[0]); pt++)
+				mix_signed(digest, wait_ptraced_stop_candidate_result(
+					ptrace_values[pt], statuses[s]));
+		}
+		for (unsigned int fl = 0; fl < sizeof(signal_flags) / sizeof(signal_flags[0]); fl++) {
+			mix_signed(digest, wait_continued_candidate_result(
+				signal_flags[fl], option_values[o]));
+			for (unsigned int pt = 0; pt < sizeof(ptrace_values) / sizeof(ptrace_values[0]); pt++)
+				mix_signed(digest, wait_nonptraced_stop_candidate_result(
+					ptrace_values[pt], signal_flags[fl],
+					option_values[o]));
+		}
+	}
+
+	for (unsigned int idt = 0; idt < sizeof(idtypes) / sizeof(idtypes[0]); idt++) {
+		for (unsigned int id = 0; id < sizeof(pids) / sizeof(pids[0]); id++) {
+			int pid = 0x12345678;
+
+			mix_signed(digest, waitid_to_wait_pid_result(idtypes[idt],
+				pids[id], &pid));
+			mix_signed(digest, pid);
+		}
+	}
+
+	for (unsigned int p = 0; p < sizeof(pids) / sizeof(pids[0]); p++) {
+		for (unsigned int pg = 0; pg < sizeof(pgids) / sizeof(pgids[0]); pg++) {
+			for (unsigned int cg = 0; cg < sizeof(pgids) / sizeof(pgids[0]); cg++) {
+				for (unsigned int cp = 0; cp < sizeof(pids) / sizeof(pids[0]); cp++)
+					mix_signed(digest, wait_process_pid_matches_result(
+						pids[p], pgids[pg], pgids[cg],
+						pids[cp]));
+			}
+		}
+	}
+
+	for (unsigned int tid = 0; tid < sizeof(pids) / sizeof(pids[0]); tid++) {
+		for (unsigned int child = 0; child < sizeof(pids) / sizeof(pids[0]); child++) {
+			for (unsigned int main = 0; main < sizeof(bools) / sizeof(bools[0]); main++)
+				mix_signed(digest, wait_thread_tid_matches_result(
+					pids[tid], pids[child], bools[main]));
+		}
+	}
+
+	for (unsigned int e = 0; e < sizeof(bools) / sizeof(bools[0]); e++)
+		mix_signed(digest, wait_empty_result(bools[e]));
+
+	for (unsigned int s = 0; s < sizeof(wait_statuses) / sizeof(wait_statuses[0]); s++) {
+		mix_signed(digest, wait_stopped_status_result(wait_statuses[s]));
+		mix_signed(digest, waitid_status_code_result(wait_statuses[s]));
+	}
+	mix_signed(digest, wait_continued_status_result());
+
+	for (unsigned int ppid = 0; ppid < sizeof(pids) / sizeof(pids[0]); ppid++) {
+		for (unsigned int cur = 0; cur < sizeof(pids) / sizeof(pids[0]); cur++) {
+			for (unsigned int nw = 0; nw < sizeof(bools) / sizeof(bools[0]); nw++)
+				mix_signed(digest, wait_zombie_skip_host_result(
+					pids[ppid], pids[cur], bools[nw]));
+		}
+	}
+
+	for (unsigned int main = 0; main < sizeof(bools) / sizeof(bools[0]); main++) {
+		for (unsigned int sig = 0; sig < sizeof(termsigs) / sizeof(termsigs[0]); sig++)
+			mix_signed(digest, wait_thread_empty_candidate_result(
+				bools[main], termsigs[sig]));
+	}
+}
+
+static void exercise_clone_exec_futex_policy(unsigned long *digest)
+{
+	static const int clone_flags[] = {
+		0, SIGCHLD, CLONE_VM, CLONE_THREAD,
+		CLONE_VM | CLONE_THREAD | CLONE_SIGHAND,
+		CLONE_VM | CLONE_THREAD | CLONE_SIGHAND | SIGCHLD,
+		CLONE_VM | CLONE_THREAD | CLONE_SIGHAND | 65,
+		CLONE_SIGHAND, CLONE_THREAD | CLONE_SIGHAND,
+		CLONE_FS | CLONE_NEWNS, CLONE_NEWIPC | CLONE_SYSVSEM,
+		CLONE_VM | CLONE_THREAD | CLONE_SIGHAND | CLONE_NEWPID,
+		CLONE_PARENT | SIGCHLD, CLONE_VFORK | SIGCHLD,
+		CLONE_VFORK | 9,
+	};
+	static const unsigned long stack_values[] = {
+		0, 1, 0x10000UL, 0x7fffffffffffUL,
+	};
+	static const int ptrace_values[] = {
+		0, PT_TRACED, PT_TRACE_EXEC, PT_TRACE_SYSCALL,
+		PTRACE_O_TRACESYSGOOD, PTRACE_O_TRACEFORK,
+		PTRACE_O_TRACEVFORK, PTRACE_O_TRACEVFORKDONE,
+		PTRACE_O_TRACECLONE, PTRACE_O_TRACEEXEC,
+		PT_TRACE_SYSCALL | PTRACE_O_TRACESYSGOOD,
+		PTRACE_O_TRACEVFORK | PTRACE_O_TRACEVFORKDONE,
+		PTRACE_O_TRACEFORK | PTRACE_O_TRACECLONE,
+	};
+	static const int events[] = {
+		0, PTRACE_EVENT_FORK, PTRACE_EVENT_VFORK,
+		PTRACE_EVENT_CLONE, PTRACE_EVENT_EXEC,
+		PTRACE_EVENT_VFORK_DONE,
+	};
+	static const int exec_flags[] = {
+		0, AT_SYMLINK_NOFOLLOW, AT_EMPTY_PATH,
+		AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH, 0x200, -1,
+	};
+	static const int dirfds[] = {
+		AT_FDCWD, -200, -1, 0, 3,
+	};
+	static const int first_chars[] = {
+		0, '/', '.', 'a',
+	};
+	static const int futex_flags[] = {
+		FUTEX_WAIT, FUTEX_WAIT_BITSET, FUTEX_CMP_REQUEUE,
+		FUTEX_WAKE_OP, FUTEX_WAIT | FUTEX_PRIVATE_FLAG,
+		FUTEX_WAIT_BITSET | FUTEX_CLOCK_REALTIME,
+		FUTEX_WAKE_OP | FUTEX_PRIVATE_FLAG | FUTEX_CLOCK_REALTIME,
+		-1,
+	};
+	static const unsigned long arg3_values[] = {
+		0, 1, 0xffffffffUL, 0x100000001UL,
+	};
+	static const long time_values[][4] = {
+		{ 0, 0, 0, 0 },
+		{ 1, 2, 0, 1 },
+		{ 10, 500, 2, 250 },
+		{ 2, 0, 10, 0 },
+	};
+	static const int bools[] = { 0, 1 };
+
+	for (unsigned int f = 0; f < sizeof(clone_flags) / sizeof(clone_flags[0]); f++) {
+		for (unsigned int c = 0; c < sizeof(bools) / sizeof(bools[0]); c++)
+			mix_signed(digest, clone_flags_result(clone_flags[f],
+				bools[c]));
+		for (unsigned int s = 0; s < sizeof(stack_values) / sizeof(stack_values[0]); s++) {
+			for (unsigned int p = 0; p < sizeof(stack_values) / sizeof(stack_values[0]); p++)
+				mix_signed(digest, clone_pthread_marker_result(
+					clone_flags[f], stack_values[s],
+					stack_values[p]));
+		}
+		for (unsigned int p = 0; p < sizeof(dirfds) / sizeof(dirfds[0]); p++)
+			mix_signed(digest, clone_host_parent_flags_result(
+				clone_flags[f], dirfds[p]));
+		for (unsigned int b = 0; b < sizeof(bools) / sizeof(bools[0]); b++)
+			mix_signed(digest, clone_report_thread_result(
+				clone_flags[f], bools[b] ? SIGCHLD : 9));
+	}
+
+	for (unsigned int p = 0; p < sizeof(ptrace_values) / sizeof(ptrace_values[0]); p++) {
+		mix_signed(digest, ptrace_exec_event_signal_result(
+			ptrace_values[p]));
+		mix_signed(digest, ptrace_syscall_event_signal_result(
+			ptrace_values[p]));
+		for (unsigned int f = 0; f < sizeof(clone_flags) / sizeof(clone_flags[0]); f++)
+			mix_signed(digest, ptrace_clone_event_result(
+				ptrace_values[p], clone_flags[f]));
+	}
+
+	for (unsigned int e = 0; e < sizeof(events) / sizeof(events[0]); e++)
+		mix_signed(digest, ptrace_clone_reparent_result(events[e]));
+
+	for (unsigned int f = 0; f < sizeof(exec_flags) / sizeof(exec_flags[0]); f++) {
+		for (unsigned int d = 0; d < sizeof(dirfds) / sizeof(dirfds[0]); d++) {
+			for (unsigned int c = 0; c < sizeof(first_chars) / sizeof(first_chars[0]); c++)
+				mix_signed(digest, execveat_policy_result(
+					exec_flags[f], dirfds[d], first_chars[c]));
+		}
+	}
+
+	for (unsigned int f = 0; f < sizeof(futex_flags) / sizeof(futex_flags[0]); f++) {
+		int op = 0x12345678;
+		int fshared = 0x12345678;
+
+		mix_signed(digest, futex_decode_flags_result(futex_flags[f],
+			&op, &fshared));
+		mix_signed(digest, op);
+		mix_signed(digest, fshared);
+		mix_signed(digest, futex_clock_id_result(futex_flags[f]));
+		mix_signed(digest, futex_wait_timeout_needed_result(op, 0));
+		mix_signed(digest, futex_wait_timeout_needed_result(op, 1));
+		mix_signed(digest, futex_timeout_is_absolute_result(op));
+		for (unsigned int a = 0; a < sizeof(arg3_values) / sizeof(arg3_values[0]); a++)
+			mix(digest, futex_requeue_val2_result(op, arg3_values[a]));
+		for (unsigned int t = 0; t < sizeof(time_values) / sizeof(time_values[0]); t++)
+			mix(digest, futex_timeout_ns_result(op, time_values[t][0],
+				time_values[t][1], time_values[t][2],
+				time_values[t][3]));
+	}
+}
+
+int main(void)
+{
+	static const size_t robust_lens[] = { 0, 1, 23, 24, 25, 64 };
+	static const int tids[] = { INT_MIN, -2, -1, 0, 1, 12345 };
+	static const int sigs[] = { -1, 0, 1, 9, 19, 64, 65 };
+	static const int pids[] = { -1, 0, 1, 55 };
+	static const int currents[] = { 1, 100 };
+	static const int execed[] = { -1, 0, 1, 2 };
+	static const unsigned long flags[] = {
+		0, VR_RESERVED, VR_IO_NOCACHE, VR_REMOTE,
+		VR_RESERVED | VR_REMOTE, 0x4000,
+	};
+	unsigned long digest = 0x6d63537973506f6cUL;
+
+	for (unsigned int i = 0; i < sizeof(robust_lens) / sizeof(robust_lens[0]); i++)
+		mix_signed(&digest, robust_list_len_result(robust_lens[i]));
+
+	for (unsigned int i = 0; i < sizeof(tids) / sizeof(tids[0]); i++)
+		mix_signed(&digest, tkill_tid_result(tids[i]));
+
+	for (unsigned int i = 0; i < sizeof(sigs) / sizeof(sigs[0]); i++) {
+		mix_signed(&digest, sigaction_validate(sigs[i], 0));
+		mix_signed(&digest, sigaction_validate(sigs[i], 1));
+	}
+
+	for (unsigned int c = 0; c < sizeof(currents) / sizeof(currents[0]); c++) {
+		for (unsigned int p = 0; p < sizeof(pids) / sizeof(pids[0]); p++) {
+			int pid = setpgid_normalize_pid(currents[c], pids[p]);
+
+			mix_signed(&digest, pid);
+			for (unsigned int g = 0; g < sizeof(pids) / sizeof(pids[0]); g++)
+				mix_signed(&digest, setpgid_normalize_pgid(pid, pids[g]));
+		}
+	}
+
+	for (unsigned int i = 0; i < sizeof(execed) / sizeof(execed[0]); i++)
+		mix_signed(&digest, setpgid_execed_result(execed[i]));
+
+	for (unsigned int i = 0; i < sizeof(flags) / sizeof(flags[0]); i++) {
+		mix_signed(&digest, memlock_range_flag_result(flags[i]));
+		mix_signed(&digest, range_has_disallowed_change_flags(flags[i]));
+	}
+
+	exercise_memlock(&digest);
+	exercise_unmap_protect(&digest);
+	exercise_memory_syscall_policy(&digest);
+	exercise_brk_mincore_mmap_policy(&digest);
+	exercise_signal_time_policy(&digest);
+	exercise_signal_wait_policy(&digest);
+	exercise_ptrace_process_vm_policy(&digest);
+	exercise_wait_policy(&digest);
+	exercise_clone_exec_futex_policy(&digest);
+
+	printf("syscall_policy_helpers ok digest=%016lx\n", digest);
+	return 0;
+}
+EOF_SYSCALL_POLICY_HELPERS
+
+cat > "${tmpdir}/xpmem_helpers_equiv.c" <<'EOF_XPMEM_HELPERS'
+#include <limits.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+
+#define XPMEM_RDONLY 0x1
+#define XPMEM_RDWR 0x2
+#define XPMEM_PERMIT_MODE 0x1
+#define XPMEM_PERM_IRUSR 00400
+#define XPMEM_PERM_IWUSR 00200
+#define XPMEM_FLAG_DESTROYING 0x00040
+#define XPMEM_FLAG_VALIDPTEs 0x00200
+#define VR_PROT_WRITE 0x00020000UL
+#define PAGE_SIZE 4096UL
+#define PAGE_MASK (~(PAGE_SIZE - 1))
+
+extern int xpmem_id_to_tgid_result(long);
+extern int xpmem_tg_hashtable_index_result(int);
+extern int xpmem_ap_hashtable_index_result(long);
+extern int xpmem_make_id_result(int, int, long *);
+extern int xpmem_positive_id_result(long);
+extern int xpmem_owner_policy_result(int, int);
+extern int xpmem_make_initial_policy_result(int, unsigned long, size_t);
+extern int xpmem_make_alignment_result(unsigned long, size_t);
+extern int xpmem_get_policy_result(long, int, int, int);
+extern int xpmem_perms_result(int, int, unsigned long, short, int, int);
+extern int xpmem_check_permit_mode_result(int, int, int, unsigned long, int,
+					  int);
+extern int xpmem_validate_access_result(int, int, int, unsigned long, size_t,
+					long, size_t, int, unsigned long *);
+extern int xpmem_attach_initial_policy_result(long, long, unsigned long,
+					      size_t, int, size_t *);
+extern int xpmem_destroying_state_result(int, int);
+extern int xpmem_is_destroying_result(int);
+extern int xpmem_destroying_error_result(int, int);
+extern int xpmem_two_destroying_error_result(int, int, int);
+extern int xpmem_three_destroying_error_result(int, int, int, int);
+extern int xpmem_attach_destroying_result(int, int);
+extern int xpmem_close_decision_result(int, int, int *, int *);
+extern int xpmem_ref_drop_should_free_result(int);
+extern int xpmem_begin_destroy_result(int, int *);
+extern int xpmem_finish_destroy_result(int);
+extern int xpmem_object_lookup_decision_result(long, long, int, int, int);
+extern int xpmem_detach_lookup_result(int, unsigned long, unsigned long, int);
+extern int xpmem_attach_overlap_result(int, int, unsigned long, size_t,
+				       unsigned long);
+extern int xpmem_remove_range_step_result(unsigned long, unsigned long,
+					  unsigned long, unsigned long,
+					  unsigned long, int, int *, int *,
+					  int *, int *);
+extern int xpmem_remove_memory_range_action_result(unsigned long,
+						   unsigned long,
+						   unsigned long, size_t,
+						   unsigned long *,
+						   unsigned long *, int *,
+						   int *);
+extern int xpmem_range_private_invalid_result(int, unsigned long,
+					      unsigned long, int);
+extern int xpmem_clear_pte_range_result(int, unsigned long, unsigned long,
+					size_t, unsigned long, unsigned long,
+					unsigned long *, unsigned long *,
+					int *);
+extern int xpmem_fault_vaddr_result(unsigned long, unsigned long, size_t,
+				    unsigned long, unsigned long *);
+extern int xpmem_straight_phys_result(unsigned long, unsigned long, size_t,
+				      unsigned long, unsigned long *, size_t *);
+extern int xpmem_remote_pte_missing_result(int, int, int);
+extern unsigned long xpmem_seg_phys_plus_off_result(unsigned long, size_t,
+						    unsigned long);
+extern int xpmem_att_page_fits_result(unsigned long, size_t, unsigned long,
+				      unsigned long, size_t);
+extern int xpmem_pte_mismatch_result(unsigned long, unsigned long);
+extern int xpmem_unpin_step_result(unsigned long, size_t, int,
+				   unsigned long *, int *);
+
+static void mix(unsigned long *digest, unsigned long value)
+{
+	*digest ^= value + 0x9e3779b97f4a7c15UL + (*digest << 6) + (*digest >> 2);
+}
+
+static void mix_signed(unsigned long *digest, long value)
+{
+	mix(digest, (unsigned long)value);
+}
+
+int main(void)
+{
+	static const int permit_types[] = { 0, XPMEM_PERMIT_MODE, 2 };
+	static const unsigned long permit_values[] = { 0, 0600, 0666, 0777, 01000 };
+	static const size_t sizes[] = { 0, 1, 4095, 4096, 8192, ULONG_MAX };
+	static const unsigned long addrs[] = {
+		0, 1, 4095, 4096, 0x10000UL, ULONG_MAX - 1,
+	};
+	static const long segids[] = { LONG_MIN, -1, 0, 1, LONG_MAX };
+	static const int flags[] = {
+		0, XPMEM_RDONLY, XPMEM_RDWR,
+		XPMEM_RDONLY | XPMEM_RDWR, 4,
+	};
+	static const int bools[] = { 0, 1 };
+	static const int ids[] = { 0, 1, 1000, 1001 };
+	static const int uniqs[] = {
+		-1, 0, 1, 7, 8, INT_MAX >> 1, (INT_MAX >> 1) + 1, INT_MAX,
+	};
+	static const unsigned long modes[] = {
+		0, 0001, 0002, 0004, 0020, 0040, 0200, 0400, 0600, 0640, 0666,
+	};
+	static const short perm_flags[] = { XPMEM_PERM_IRUSR, XPMEM_PERM_IWUSR };
+	static const long offsets[] = { LONG_MIN, -1, 0, 1, 4095, 4096, LONG_MAX };
+	static const unsigned long seg_vaddrs[] = {
+		0, 0x10000UL, 0x18000UL, ULONG_MAX - 0xfffUL,
+	};
+	static const int destroy_flags[] = {
+		0, XPMEM_FLAG_DESTROYING, 0x00080,
+		XPMEM_FLAG_DESTROYING | 0x00080, 0x00200,
+	};
+	static const int error_values[] = { -22, -14, -2, -1, 0, 1 };
+	static const int ref_counts[] = { -2, -1, 0, 1, 2, 3 };
+	static const unsigned long range_starts[] = {
+		0, 1, 4096, 8192, ULONG_MAX,
+	};
+	unsigned long digest = 0x78706d656d527573UL;
+
+	for (unsigned int id = 0; id < sizeof(segids) / sizeof(segids[0]); id++) {
+		mix_signed(&digest, xpmem_id_to_tgid_result(segids[id]));
+		mix_signed(&digest, xpmem_ap_hashtable_index_result(segids[id]));
+		mix_signed(&digest, xpmem_positive_id_result(segids[id]));
+	}
+
+	for (unsigned int t = 0; t < sizeof(ids) / sizeof(ids[0]); t++) {
+		mix_signed(&digest, xpmem_tg_hashtable_index_result(ids[t]));
+		for (unsigned int u = 0; u < sizeof(uniqs) / sizeof(uniqs[0]); u++) {
+			long id = 0x13579bdf2468ace0L;
+			int ret = xpmem_make_id_result(ids[t], uniqs[u], &id);
+
+			mix_signed(&digest, ret);
+			mix_signed(&digest, id);
+			if (!ret) {
+				mix_signed(&digest, xpmem_id_to_tgid_result(id));
+				mix_signed(&digest, xpmem_ap_hashtable_index_result(id));
+			}
+		}
+	}
+
+	for (unsigned int cp = 0; cp < sizeof(ids) / sizeof(ids[0]); cp++) {
+		for (unsigned int tg = 0; tg < sizeof(ids) / sizeof(ids[0]); tg++)
+			mix_signed(&digest, xpmem_owner_policy_result(ids[cp],
+				ids[tg]));
+	}
+
+	for (unsigned int t = 0; t < sizeof(permit_types) / sizeof(permit_types[0]); t++) {
+		for (unsigned int v = 0; v < sizeof(permit_values) / sizeof(permit_values[0]); v++) {
+			for (unsigned int s = 0; s < sizeof(sizes) / sizeof(sizes[0]); s++)
+				mix_signed(&digest, xpmem_make_initial_policy_result(
+					permit_types[t], permit_values[v], sizes[s]));
+		}
+	}
+
+	for (unsigned int a = 0; a < sizeof(addrs) / sizeof(addrs[0]); a++) {
+		for (unsigned int s = 0; s < sizeof(sizes) / sizeof(sizes[0]); s++)
+			mix_signed(&digest, xpmem_make_alignment_result(addrs[a],
+				sizes[s]));
+	}
+
+	for (unsigned int id = 0; id < sizeof(segids) / sizeof(segids[0]); id++) {
+		for (unsigned int f = 0; f < sizeof(flags) / sizeof(flags[0]); f++) {
+			for (unsigned int t = 0; t < sizeof(permit_types) / sizeof(permit_types[0]); t++) {
+				for (unsigned int h = 0; h < sizeof(bools) / sizeof(bools[0]); h++)
+					mix_signed(&digest, xpmem_get_policy_result(
+						segids[id], flags[f], permit_types[t],
+						bools[h]));
+			}
+		}
+	}
+
+	for (unsigned int u = 0; u < sizeof(ids) / sizeof(ids[0]); u++) {
+		for (unsigned int g = 0; g < sizeof(ids) / sizeof(ids[0]); g++) {
+			for (unsigned int m = 0; m < sizeof(modes) / sizeof(modes[0]); m++) {
+				for (unsigned int p = 0; p < sizeof(perm_flags) / sizeof(perm_flags[0]); p++) {
+					for (unsigned int cu = 0; cu < sizeof(ids) / sizeof(ids[0]); cu++) {
+						for (unsigned int cg = 0; cg < sizeof(ids) / sizeof(ids[0]); cg++)
+							mix_signed(&digest, xpmem_perms_result(
+								ids[u], ids[g], modes[m],
+								perm_flags[p], ids[cu], ids[cg]));
+					}
+				}
+			}
+		}
+	}
+
+	for (unsigned int f = 0; f < sizeof(flags) / sizeof(flags[0]); f++) {
+		for (unsigned int m = 0; m < sizeof(modes) / sizeof(modes[0]); m++) {
+			for (unsigned int cu = 0; cu < sizeof(ids) / sizeof(ids[0]); cu++) {
+				for (unsigned int cg = 0; cg < sizeof(ids) / sizeof(ids[0]); cg++)
+					mix_signed(&digest, xpmem_check_permit_mode_result(
+						flags[f], ids[1], ids[2], modes[m],
+						ids[cu], ids[cg]));
+			}
+		}
+	}
+
+	for (unsigned int id = 0; id < sizeof(segids) / sizeof(segids[0]); id++) {
+		for (unsigned int o = 0; o < sizeof(offsets) / sizeof(offsets[0]); o++) {
+			for (unsigned int a = 0; a < sizeof(addrs) / sizeof(addrs[0]); a++) {
+				for (unsigned int s = 0; s < sizeof(sizes) / sizeof(sizes[0]); s++) {
+					for (unsigned int f = 0; f < sizeof(bools) / sizeof(bools[0]); f++) {
+						size_t adjusted = 0x12345678abcdef00UL;
+						mix_signed(&digest, xpmem_attach_initial_policy_result(
+							segids[id], offsets[o], addrs[a],
+							sizes[s], bools[f], &adjusted));
+						mix(&digest, adjusted);
+					}
+				}
+			}
+		}
+	}
+
+	for (unsigned int cp = 0; cp < sizeof(ids) / sizeof(ids[0]); cp++) {
+		for (unsigned int tg = 0; tg < sizeof(ids) / sizeof(ids[0]); tg++) {
+			for (unsigned int apm = 0; apm < sizeof(flags) / sizeof(flags[0]); apm++) {
+				for (unsigned int sv = 0; sv < sizeof(seg_vaddrs) / sizeof(seg_vaddrs[0]); sv++) {
+					for (unsigned int ss = 0; ss < sizeof(sizes) / sizeof(sizes[0]); ss++) {
+						for (unsigned int o = 0; o < sizeof(offsets) / sizeof(offsets[0]); o++) {
+							for (unsigned int sz = 0; sz < sizeof(sizes) / sizeof(sizes[0]); sz++) {
+								unsigned long vaddr = 0xdeadbeefUL;
+								mix_signed(&digest, xpmem_validate_access_result(
+									ids[cp], ids[tg], flags[apm],
+									seg_vaddrs[sv], sizes[ss],
+									offsets[o], sizes[sz], XPMEM_RDWR,
+									&vaddr));
+								mix(&digest, vaddr);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	for (unsigned int n = 0; n < sizeof(ref_counts) / sizeof(ref_counts[0]); n++) {
+		for (unsigned int h = 0; h < sizeof(bools) / sizeof(bools[0]); h++) {
+			int flush_objects = 0x1234;
+			int exit_partition = 0x5678;
+
+			mix_signed(&digest, xpmem_close_decision_result(
+				ref_counts[n], bools[h], &flush_objects,
+				&exit_partition));
+			mix_signed(&digest, flush_objects);
+			mix_signed(&digest, exit_partition);
+			mix_signed(&digest, xpmem_ref_drop_should_free_result(
+				ref_counts[n]));
+		}
+	}
+
+	for (unsigned int fl = 0; fl < sizeof(destroy_flags) / sizeof(destroy_flags[0]); fl++) {
+		mix_signed(&digest, xpmem_is_destroying_result(destroy_flags[fl]));
+		for (unsigned int rd = 0; rd < sizeof(bools) / sizeof(bools[0]); rd++)
+			mix_signed(&digest, xpmem_destroying_state_result(
+				destroy_flags[fl], bools[rd]));
+		{
+			int new_flags = 0x2468;
+
+			mix_signed(&digest, xpmem_begin_destroy_result(
+				destroy_flags[fl], &new_flags));
+			mix_signed(&digest, new_flags);
+			mix_signed(&digest, xpmem_finish_destroy_result(
+				destroy_flags[fl]));
+		}
+		for (unsigned int e = 0; e < sizeof(error_values) / sizeof(error_values[0]); e++)
+			mix_signed(&digest, xpmem_destroying_error_result(
+				destroy_flags[fl], error_values[e]));
+		for (unsigned int tg = 0; tg < sizeof(destroy_flags) / sizeof(destroy_flags[0]); tg++)
+			mix_signed(&digest, xpmem_attach_destroying_result(
+				destroy_flags[fl], destroy_flags[tg]));
+		for (unsigned int tg = 0; tg < sizeof(destroy_flags) / sizeof(destroy_flags[0]); tg++) {
+			for (unsigned int e = 0; e < sizeof(error_values) / sizeof(error_values[0]); e++)
+				mix_signed(&digest, xpmem_two_destroying_error_result(
+					destroy_flags[fl], destroy_flags[tg],
+					error_values[e]));
+			for (unsigned int att = 0; att < sizeof(destroy_flags) / sizeof(destroy_flags[0]); att++) {
+				for (unsigned int e = 0; e < sizeof(error_values) / sizeof(error_values[0]); e++)
+					mix_signed(&digest, xpmem_three_destroying_error_result(
+						destroy_flags[fl], destroy_flags[tg],
+						destroy_flags[att], error_values[e]));
+			}
+		}
+	}
+
+	for (unsigned int c = 0; c < sizeof(segids) / sizeof(segids[0]); c++) {
+		for (unsigned int r = 0; r < sizeof(segids) / sizeof(segids[0]); r++) {
+			for (unsigned int fl = 0; fl < sizeof(destroy_flags) / sizeof(destroy_flags[0]); fl++) {
+				for (unsigned int rd = 0; rd < sizeof(bools) / sizeof(bools[0]); rd++) {
+					for (unsigned int stop = 0; stop < sizeof(bools) / sizeof(bools[0]); stop++)
+						mix_signed(&digest,
+							xpmem_object_lookup_decision_result(
+								segids[c], segids[r],
+								destroy_flags[fl],
+								bools[rd], bools[stop]));
+				}
+			}
+		}
+	}
+
+	for (unsigned int hr = 0; hr < sizeof(bools) / sizeof(bools[0]); hr++) {
+		for (unsigned int rs = 0; rs < sizeof(range_starts) / sizeof(range_starts[0]); rs++) {
+			for (unsigned int a = 0; a < sizeof(addrs) / sizeof(addrs[0]); a++) {
+				for (unsigned int hp = 0; hp < sizeof(bools) / sizeof(bools[0]); hp++)
+					mix_signed(&digest, xpmem_detach_lookup_result(
+						bools[hr], range_starts[rs],
+						addrs[a], bools[hp]));
+			}
+		}
+	}
+
+	for (unsigned int cp = 0; cp < sizeof(ids) / sizeof(ids[0]); cp++) {
+		for (unsigned int tg = 0; tg < sizeof(ids) / sizeof(ids[0]); tg++) {
+			for (unsigned int rv = 0; rv < sizeof(addrs) / sizeof(addrs[0]); rv++) {
+				for (unsigned int sz = 0; sz < sizeof(sizes) / sizeof(sizes[0]); sz++) {
+					for (unsigned int sv = 0; sv < sizeof(seg_vaddrs) / sizeof(seg_vaddrs[0]); sv++)
+						mix_signed(&digest, xpmem_attach_overlap_result(
+							ids[cp], ids[tg], addrs[rv],
+							sizes[sz], seg_vaddrs[sv]));
+				}
+			}
+		}
+	}
+
+	for (unsigned int rs = 0; rs < sizeof(range_starts) / sizeof(range_starts[0]); rs++) {
+		for (unsigned int re = 0; re < sizeof(range_starts) / sizeof(range_starts[0]); re++) {
+			for (unsigned int st = 0; st < sizeof(range_starts) / sizeof(range_starts[0]); st++) {
+				for (unsigned int en = 0; en < sizeof(range_starts) / sizeof(range_starts[0]); en++) {
+					int split_start = 0x1234;
+					int split_end = 0x1234;
+					int ro_freed = 0x1234;
+					int remove_private = 0x1234;
+
+					mix_signed(&digest, xpmem_remove_range_step_result(
+						range_starts[rs], range_starts[re],
+						range_starts[st], range_starts[en],
+						(en & 1) ? VR_PROT_WRITE : 0,
+						en & 1, &split_start, &split_end,
+						&ro_freed, &remove_private));
+					mix_signed(&digest, split_start);
+					mix_signed(&digest, split_end);
+					mix_signed(&digest, ro_freed);
+					mix_signed(&digest, remove_private);
+				}
+			}
+		}
+	}
+
+	for (unsigned int vs = 0; vs < sizeof(range_starts) / sizeof(range_starts[0]); vs++) {
+		for (unsigned int ve = 0; ve < sizeof(range_starts) / sizeof(range_starts[0]); ve++) {
+			for (unsigned int av = 0; av < sizeof(seg_vaddrs) / sizeof(seg_vaddrs[0]); av++) {
+				for (unsigned int sz = 0; sz < sizeof(sizes) / sizeof(sizes[0]); sz++) {
+					unsigned long remaining = 0x1111;
+					unsigned long middle = 0x2222;
+					int full = 0x3333;
+					int needs_middle = 0x4444;
+
+					mix_signed(&digest,
+						xpmem_remove_memory_range_action_result(
+							range_starts[vs], range_starts[ve],
+							seg_vaddrs[av], sizes[sz],
+							&remaining, &middle, &full,
+							&needs_middle));
+					mix(&digest, remaining);
+					mix(&digest, middle);
+					mix_signed(&digest, full);
+					mix_signed(&digest, needs_middle);
+				}
+			}
+		}
+	}
+
+	for (unsigned int h = 0; h < sizeof(bools) / sizeof(bools[0]); h++) {
+		for (unsigned int rs = 0; rs < sizeof(range_starts) / sizeof(range_starts[0]); rs++) {
+			for (unsigned int v = 0; v < sizeof(addrs) / sizeof(addrs[0]); v++) {
+				for (unsigned int m = 0; m < sizeof(bools) / sizeof(bools[0]); m++)
+					mix_signed(&digest, xpmem_range_private_invalid_result(
+						bools[h], range_starts[rs], addrs[v],
+						bools[m]));
+			}
+		}
+	}
+
+	for (unsigned int fl = 0; fl < sizeof(destroy_flags) / sizeof(destroy_flags[0]); fl++) {
+		for (unsigned int av = 0; av < sizeof(seg_vaddrs) / sizeof(seg_vaddrs[0]); av++) {
+			for (unsigned int at = 0; at < sizeof(addrs) / sizeof(addrs[0]); at++) {
+				for (unsigned int sz = 0; sz < sizeof(sizes) / sizeof(sizes[0]); sz++) {
+					for (unsigned int st = 0; st < sizeof(addrs) / sizeof(addrs[0]); st++) {
+						unsigned long unpin_at = 0xaaaa;
+						unsigned long invalidate_len = 0xbbbb;
+						int clear_valid = 0xcccc;
+
+						mix_signed(&digest, xpmem_clear_pte_range_result(
+							destroy_flags[fl], seg_vaddrs[av],
+							addrs[at], sizes[sz], addrs[st],
+							addrs[(st + 1) % (sizeof(addrs) / sizeof(addrs[0]))],
+							&unpin_at, &invalidate_len,
+							&clear_valid));
+						mix(&digest, unpin_at);
+						mix(&digest, invalidate_len);
+						mix_signed(&digest, clear_valid);
+
+						unpin_at = 0xaaaa;
+						invalidate_len = 0xbbbb;
+						clear_valid = 0xcccc;
+						mix_signed(&digest, xpmem_clear_pte_range_result(
+							destroy_flags[fl] | XPMEM_FLAG_VALIDPTEs,
+							seg_vaddrs[av], addrs[at], sizes[sz],
+							addrs[st],
+							addrs[(st + 1) % (sizeof(addrs) / sizeof(addrs[0]))],
+							&unpin_at, &invalidate_len,
+							&clear_valid));
+						mix(&digest, unpin_at);
+						mix(&digest, invalidate_len);
+						mix_signed(&digest, clear_valid);
+					}
+				}
+			}
+		}
+	}
+
+	for (unsigned int v = 0; v < sizeof(addrs) / sizeof(addrs[0]); v++) {
+		for (unsigned int at = 0; at < sizeof(addrs) / sizeof(addrs[0]); at++) {
+			for (unsigned int sz = 0; sz < sizeof(sizes) / sizeof(sizes[0]); sz++) {
+				for (unsigned int av = 0; av < sizeof(seg_vaddrs) / sizeof(seg_vaddrs[0]); av++) {
+					unsigned long seg_vaddr = 0xfeedfaceUL;
+
+					mix_signed(&digest, xpmem_fault_vaddr_result(
+						addrs[v], addrs[at], sizes[sz],
+						seg_vaddrs[av], &seg_vaddr));
+					mix(&digest, seg_vaddr);
+				}
+			}
+		}
+	}
+
+	for (unsigned int sv = 0; sv < sizeof(seg_vaddrs) / sizeof(seg_vaddrs[0]); sv++) {
+		for (unsigned int base = 0; base < sizeof(seg_vaddrs) / sizeof(seg_vaddrs[0]); base++) {
+			for (unsigned int sz = 0; sz < sizeof(sizes) / sizeof(sizes[0]); sz++) {
+				unsigned long seg_phys = 0x12345678UL;
+				size_t seg_pgsize = 0x1234;
+
+				mix_signed(&digest, xpmem_straight_phys_result(
+					seg_vaddrs[sv], seg_vaddrs[base],
+					sizes[sz], 0x40000000UL, &seg_phys,
+					&seg_pgsize));
+				mix(&digest, seg_phys);
+				mix(&digest, seg_pgsize);
+			}
+		}
+	}
+
+	for (unsigned int h = 0; h < sizeof(bools) / sizeof(bools[0]); h++) {
+		for (unsigned int empty = 0; empty < sizeof(bools) / sizeof(bools[0]); empty++) {
+			for (unsigned int page_in = 0; page_in < sizeof(bools) / sizeof(bools[0]); page_in++)
+				mix_signed(&digest, xpmem_remote_pte_missing_result(
+					bools[h], bools[empty], bools[page_in]));
+		}
+	}
+
+	for (unsigned int phys = 0; phys < sizeof(seg_vaddrs) / sizeof(seg_vaddrs[0]); phys++) {
+		for (unsigned int sz = 1; sz < sizeof(sizes) / sizeof(sizes[0]); sz++) {
+			for (unsigned int sv = 0; sv < sizeof(seg_vaddrs) / sizeof(seg_vaddrs[0]); sv++)
+				mix(&digest, xpmem_seg_phys_plus_off_result(
+					seg_vaddrs[phys], sizes[sz], seg_vaddrs[sv]));
+		}
+	}
+
+	for (unsigned int pg = 0; pg < sizeof(addrs) / sizeof(addrs[0]); pg++) {
+		for (unsigned int sz = 1; sz < sizeof(sizes) / sizeof(sizes[0]); sz++) {
+			for (unsigned int st = 0; st < sizeof(range_starts) / sizeof(range_starts[0]); st++) {
+				for (unsigned int en = 0; en < sizeof(range_starts) / sizeof(range_starts[0]); en++)
+					mix_signed(&digest, xpmem_att_page_fits_result(
+						addrs[pg], sizes[sz], range_starts[st],
+						range_starts[en], sizes[sz]));
+			}
+		}
+	}
+
+	for (unsigned int a = 0; a < sizeof(addrs) / sizeof(addrs[0]); a++) {
+		for (unsigned int b = 0; b < sizeof(seg_vaddrs) / sizeof(seg_vaddrs[0]); b++)
+			mix_signed(&digest, xpmem_pte_mismatch_result(
+				addrs[a], seg_vaddrs[b]));
+	}
+
+	for (unsigned int v = 0; v < sizeof(addrs) / sizeof(addrs[0]); v++) {
+		for (unsigned int sz = 1; sz < sizeof(sizes) / sizeof(sizes[0]); sz++) {
+			for (unsigned int h = 0; h < sizeof(bools) / sizeof(bools[0]); h++) {
+				unsigned long next_vaddr = 0x1234;
+				int unpinned = 0x5678;
+
+				mix_signed(&digest, xpmem_unpin_step_result(
+					addrs[v], sizes[sz], bools[h],
+					&next_vaddr, &unpinned));
+				mix(&digest, next_vaddr);
+				mix_signed(&digest, unpinned);
+			}
+		}
+	}
+
+	printf("xpmem_helpers ok digest=%016lx\n", digest);
+	return 0;
+}
+EOF_XPMEM_HELPERS
+
+cat > "${tmpdir}/object_helpers_equiv.c" <<'EOF_OBJECT_HELPERS'
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+
+extern int fileobj_page_hash_result(long);
+extern int fileobj_page_mode_valid_result(int);
+extern int fileobj_lookup_ref_keep_result(int);
+extern int fileobj_create_base_flags_result(int);
+extern int fileobj_apply_result_flags_result(int, int);
+extern int fileobj_status_from_flags_result(int);
+extern int fileobj_hugetlbfs_result(int);
+extern int fileobj_premap_zerofill_result(int);
+extern int fileobj_premap_npages_result(size_t);
+extern int fileobj_validate_p2align_result(int);
+extern int fileobj_get_page_action_result(int, int, int *);
+extern int fileobj_pageio_zero_result(int);
+extern int fileobj_pageio_mode_after_read_result(ssize_t, size_t);
+extern int fileobj_flush_skip_result(int, int);
+extern size_t devobj_npages_result(size_t);
+extern size_t devobj_pfn_table_npages_result(size_t);
+extern long devobj_pgoff_result(long);
+extern int devobj_get_page_index_result(long, long, size_t, int *);
+extern int devobj_cached_pfn_needs_fetch_result(uintptr_t);
+extern int devobj_pfn_present_result(uintptr_t);
+extern uintptr_t devobj_pfn_attr_result(uintptr_t);
+extern uintptr_t devobj_pfn_phys_result(uintptr_t);
+extern int devobj_pfn_absent_error_result(uintptr_t);
+extern int sysfs_path_error_result(ssize_t, int, size_t);
+extern int sysfs_special_kind_result(long);
+extern int sysfs_string_nbits_result(size_t);
+extern int sysfs_response_error_result(ssize_t);
+extern unsigned long procfs_mem_reason_result(int);
+extern int procfs_mem_chunk_size_result(unsigned long, unsigned long);
+extern int procfs_pagemap_range_result(unsigned long, int,
+				       unsigned long *, unsigned long *);
+extern int procfs_status_state_result(int);
+extern char procfs_thread_stat_state_result(int, int);
+extern int pager_linux_io_retry_result(ssize_t);
+extern int pager_myalloc_fits_result(size_t, size_t, size_t);
+extern size_t pager_myalloc_next_alloced_result(size_t, size_t);
+extern int pager_copy_size_error_result(size_t);
+extern unsigned long pager_fault_addr_result(unsigned long);
+extern size_t pager_read_chunk_size_result(size_t, size_t);
+extern int zeroobj_initial_flags_result(void);
+extern int zeroobj_initial_refcnt_result(void);
+extern int zeroobj_initial_page_mode_result(void);
+extern long zeroobj_initial_page_offset_result(void);
+extern int zeroobj_get_page_validate_result(long, int, int);
+extern int shmobj_init_pgshift_result(int);
+extern size_t shmobj_pgsize_result(int);
+extern int shmobj_initial_flags_result(void);
+extern int shmobj_indexed_flags_result(int);
+extern size_t shmobj_real_segsz_result(size_t, size_t);
+extern int shmobj_page_contains_offset_result(long, int, long);
+extern int shmobj_destroy_page_npages_result(int);
+extern size_t shmobj_destroy_page_size_result(int);
+extern int shmobj_destroy_index_word_result(int);
+extern unsigned long shmobj_destroy_index_mask_result(int);
+extern int shmobj_get_page_validate_result(size_t, long, int);
+extern int shmobj_lookup_page_validate_result(size_t, long);
+extern int shmobj_page_npages_result(int);
+extern int shmobj_page_pgshift_result(int);
+extern int shmobj_update_args_result(int, int, int);
+extern size_t shmobj_update_orig_pgsize_result(int);
+extern uintptr_t shmobj_update_page_phys_result(uintptr_t, size_t);
+extern long shmobj_update_page_offset_result(long, size_t);
+extern int hugefileobj_expected_p2align_result(int);
+extern int hugefileobj_validate_p2align_result(int, int);
+extern long hugefileobj_page_index_result(long, int);
+extern int hugefileobj_npages_per_page_result(size_t);
+extern size_t hugefileobj_pgsize_result(int);
+extern int hugefileobj_initial_status_result(void);
+extern int hugefileobj_initial_refcnt_result(void);
+extern int hugefileobj_create_nr_pages_result(long, size_t, int);
+extern int hugefileobj_needs_grow_result(size_t, int);
+extern size_t hugefileobj_copy_bytes_result(size_t);
+extern size_t hugefileobj_zero_bytes_result(size_t, size_t);
+
+static void mix(unsigned long *digest, unsigned long value)
+{
+	*digest ^= value + 0x9e3779b97f4a7c15UL + (*digest << 6) + (*digest >> 2);
+}
+
+static void mix_signed(unsigned long *digest, long value)
+{
+	mix(digest, (unsigned long)value);
+}
+
+int main(void)
+{
+	const long offsets[] = { -8192, -1, 0, 1, 4095, 4096, 1048576 };
+	const int modes[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, -1 };
+	const int flags[] = { 0, 2, 0x8, 0x10, 0x8000, 0x8010,
+			      0x100000, 0x200000, 0x400000, 0x401010 };
+	const size_t sizes[] = { 0, 1, 4095, 4096, 4097, 8191,
+				 8192, ~0UL - 2048 };
+	const uintptr_t pfns[] = { 0, 1, 0x1001, 0x8000000000000000UL,
+				   0x8000000000001001UL,
+				   0x0100000000003001UL };
+	const long ops[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 999, -1 };
+	const int statuses[] = { 1, 2, 4, 8, 0x10, 0x20, 0x40, 0x60, 0 };
+	const ssize_t io_rets[] = { -4, -1, 0, 1, 4096 };
+	const unsigned long addrs[] = { 0, 1, 4095, 4096, 0x12345 };
+	const int pgshifts[] = { 0, 12, 21, 30 };
+	const long page_offsets[] = { 0, 1, 4096, 8192 };
+	const size_t seg_sizes[] = { 0, 1, 4095, 4096, 4097, 8192 };
+	const int p2aligns[] = { 0, 1, 2 };
+	unsigned long digest = 0x0b1ec75eed5eedUL;
+	unsigned long start = 0;
+	unsigned long end = 0;
+	int err = 0;
+	int ix = 0;
+
+	for (unsigned int i = 0; i < sizeof(offsets) / sizeof(offsets[0]); i++) {
+		mix_signed(&digest, fileobj_page_hash_result(offsets[i]));
+		mix_signed(&digest, devobj_pgoff_result(offsets[i]));
+	}
+
+	for (unsigned int i = 0; i < sizeof(modes) / sizeof(modes[0]); i++) {
+		mix_signed(&digest, fileobj_page_mode_valid_result(modes[i]));
+		mix_signed(&digest, fileobj_get_page_action_result(0, modes[i], &err));
+		mix_signed(&digest, err);
+		mix_signed(&digest, fileobj_get_page_action_result(1, modes[i], &err));
+		mix_signed(&digest, err);
+	}
+
+	for (int ref = -1; ref <= 4; ref++)
+		mix_signed(&digest, fileobj_lookup_ref_keep_result(ref));
+
+	for (unsigned int i = 0; i < sizeof(flags) / sizeof(flags[0]); i++) {
+		int base = fileobj_create_base_flags_result(flags[i]);
+		int applied = fileobj_apply_result_flags_result(base, flags[i]);
+
+		mix_signed(&digest, base);
+		mix_signed(&digest, applied);
+		mix_signed(&digest, fileobj_status_from_flags_result(applied));
+		mix_signed(&digest, fileobj_hugetlbfs_result(flags[i]));
+		mix_signed(&digest, fileobj_premap_zerofill_result(flags[i]));
+		mix_signed(&digest, fileobj_pageio_zero_result(flags[i]));
+		mix_signed(&digest, fileobj_flush_skip_result(flags[i], 0));
+		mix_signed(&digest, fileobj_flush_skip_result(flags[i], 1));
+	}
+
+	for (unsigned int i = 0; i < sizeof(sizes) / sizeof(sizes[0]); i++) {
+		mix_signed(&digest, fileobj_premap_npages_result(sizes[i]));
+		mix(&digest, devobj_npages_result(sizes[i]));
+		mix(&digest, devobj_pfn_table_npages_result(sizes[i]));
+		mix_signed(&digest, sysfs_string_nbits_result(sizes[i]));
+	}
+
+	for (int align = -1; align <= 2; align++)
+		mix_signed(&digest, fileobj_validate_p2align_result(align));
+
+	for (long ssize = -5; ssize <= 8192; ssize += 4096)
+		mix_signed(&digest, fileobj_pageio_mode_after_read_result(ssize, 4096));
+
+	for (long base = -1; base <= 2; base++) {
+		for (long pgoff = -1; pgoff <= 5; pgoff++) {
+			ix = 0x76543210;
+			mix_signed(&digest, devobj_get_page_index_result(pgoff, base, 3, &ix));
+			mix_signed(&digest, ix);
+		}
+	}
+
+	for (unsigned int i = 0; i < sizeof(pfns) / sizeof(pfns[0]); i++) {
+		mix_signed(&digest, devobj_cached_pfn_needs_fetch_result(pfns[i]));
+		mix_signed(&digest, devobj_pfn_present_result(pfns[i]));
+		mix(&digest, devobj_pfn_attr_result(pfns[i]));
+		mix(&digest, devobj_pfn_phys_result(pfns[i]));
+		mix_signed(&digest, devobj_pfn_absent_error_result(pfns[i]));
+	}
+
+	for (ssize_t n = -1; n <= 1025; n += 513) {
+		mix_signed(&digest, sysfs_path_error_result(n, 0, 1024));
+		mix_signed(&digest, sysfs_path_error_result(n, 1, 1024));
+	}
+
+	for (unsigned int i = 0; i < sizeof(ops) / sizeof(ops[0]); i++)
+		mix_signed(&digest, sysfs_special_kind_result(ops[i]));
+
+	for (ssize_t ssize = -5; ssize <= 5; ssize += 5)
+		mix_signed(&digest, sysfs_response_error_result(ssize));
+
+	mix(&digest, procfs_mem_reason_result(0));
+	mix(&digest, procfs_mem_reason_result(1));
+	for (unsigned long left = 0; left <= 8192; left += 2048)
+		mix_signed(&digest, procfs_mem_chunk_size_result(4095, left));
+
+	for (int count = -8; count <= 24; count += 8) {
+		mix_signed(&digest, procfs_pagemap_range_result(16, count, &start, &end));
+		mix(&digest, start);
+		mix(&digest, end);
+	}
+	mix_signed(&digest, procfs_pagemap_range_result(3, 8, &start, &end));
+
+	for (unsigned int i = 0; i < sizeof(statuses) / sizeof(statuses[0]); i++) {
+		mix_signed(&digest, procfs_status_state_result(statuses[i]));
+		mix_signed(&digest, procfs_thread_stat_state_result(statuses[i], 0));
+		mix_signed(&digest, procfs_thread_stat_state_result(statuses[i], 1));
+	}
+
+	for (unsigned int i = 0; i < sizeof(io_rets) / sizeof(io_rets[0]); i++)
+		mix_signed(&digest, pager_linux_io_retry_result(io_rets[i]));
+
+	for (unsigned int i = 0; i < sizeof(sizes) / sizeof(sizes[0]); i++) {
+		mix_signed(&digest, pager_copy_size_error_result(sizes[i]));
+		mix(&digest, pager_myalloc_next_alloced_result(0, sizes[i]));
+		mix_signed(&digest, pager_myalloc_fits_result(0, sizes[i], 8192));
+		mix_signed(&digest, pager_myalloc_fits_result(sizes[i], 1, 8192));
+	}
+	mix_signed(&digest, pager_myalloc_fits_result(~0UL, 1, 4));
+	for (unsigned int i = 0; i < sizeof(addrs) / sizeof(addrs[0]); i++)
+		mix(&digest, pager_fault_addr_result(addrs[i]));
+	for (size_t off = 0; off <= 8192; off += 4096) {
+		mix(&digest, pager_read_chunk_size_result(off, off));
+		mix(&digest, pager_read_chunk_size_result(off, off + 1));
+		mix(&digest, pager_read_chunk_size_result(off, off + 4097));
+	}
+
+	mix_signed(&digest, zeroobj_initial_flags_result());
+	mix_signed(&digest, zeroobj_initial_refcnt_result());
+	mix_signed(&digest, zeroobj_initial_page_mode_result());
+	mix_signed(&digest, zeroobj_initial_page_offset_result());
+	for (unsigned int i = 0; i < sizeof(page_offsets) / sizeof(page_offsets[0]); i++) {
+		for (int p2 = 0; p2 <= 1; p2++) {
+			mix_signed(&digest, zeroobj_get_page_validate_result(
+				page_offsets[i], p2, 0));
+			mix_signed(&digest, zeroobj_get_page_validate_result(
+				page_offsets[i], p2, 1));
+		}
+	}
+
+	mix_signed(&digest, shmobj_initial_flags_result());
+	for (unsigned int i = 0; i < sizeof(flags) / sizeof(flags[0]); i++)
+		mix_signed(&digest, shmobj_indexed_flags_result(flags[i]));
+	for (unsigned int i = 0; i < sizeof(pgshifts) / sizeof(pgshifts[0]); i++) {
+		int pgshift = shmobj_init_pgshift_result(pgshifts[i]);
+		size_t pgsize = shmobj_pgsize_result(pgshift);
+
+		mix_signed(&digest, pgshift);
+		mix(&digest, pgsize);
+		for (unsigned int j = 0; j < sizeof(seg_sizes) / sizeof(seg_sizes[0]); j++)
+			mix(&digest, shmobj_real_segsz_result(seg_sizes[j], pgsize));
+		for (unsigned int j = 0; j < sizeof(page_offsets) / sizeof(page_offsets[0]); j++)
+			mix_signed(&digest, shmobj_page_contains_offset_result(
+				page_offsets[j], pgshift, page_offsets[(j + 1) %
+				(sizeof(page_offsets) / sizeof(page_offsets[0]))]));
+	}
+	for (unsigned int i = 1; i < sizeof(pgshifts) / sizeof(pgshifts[0]); i++) {
+		mix_signed(&digest, shmobj_destroy_page_npages_result(pgshifts[i]));
+		mix(&digest, shmobj_destroy_page_size_result(pgshifts[i]));
+	}
+	for (int index = 0; index <= 129; index += 31) {
+		mix_signed(&digest, shmobj_destroy_index_word_result(index));
+		mix(&digest, shmobj_destroy_index_mask_result(index));
+	}
+	for (unsigned int i = 0; i < sizeof(seg_sizes) / sizeof(seg_sizes[0]); i++) {
+		for (unsigned int j = 0; j < sizeof(page_offsets) / sizeof(page_offsets[0]); j++) {
+			for (unsigned int k = 0; k < sizeof(p2aligns) / sizeof(p2aligns[0]); k++) {
+				mix_signed(&digest, shmobj_get_page_validate_result(
+					seg_sizes[i], page_offsets[j], p2aligns[k]));
+			}
+			mix_signed(&digest, shmobj_lookup_page_validate_result(
+				seg_sizes[i], page_offsets[j]));
+		}
+	}
+	for (unsigned int i = 0; i < sizeof(p2aligns) / sizeof(p2aligns[0]); i++) {
+		mix_signed(&digest, shmobj_page_npages_result(p2aligns[i]));
+		mix_signed(&digest, shmobj_page_pgshift_result(p2aligns[i]));
+	}
+	for (int has_pt = 0; has_pt <= 1; has_pt++) {
+		for (int has_page = 0; has_page <= 1; has_page++) {
+			for (int has_vaddr = 0; has_vaddr <= 1; has_vaddr++) {
+				mix_signed(&digest, shmobj_update_args_result(
+					has_pt, has_page, has_vaddr));
+			}
+		}
+	}
+	for (unsigned int i = 1; i < sizeof(pgshifts) / sizeof(pgshifts[0]); i++)
+		mix(&digest, shmobj_update_orig_pgsize_result(pgshifts[i]));
+	for (unsigned long off = 0; off <= 8192; off += 4096) {
+		mix(&digest, shmobj_update_page_phys_result(0x100000, off));
+		mix_signed(&digest, shmobj_update_page_offset_result(0x200000, off));
+	}
+
+	mix_signed(&digest, hugefileobj_initial_status_result());
+	mix_signed(&digest, hugefileobj_initial_refcnt_result());
+	for (unsigned int i = 1; i < sizeof(pgshifts) / sizeof(pgshifts[0]); i++) {
+		int pgshift = pgshifts[i];
+		int expected = hugefileobj_expected_p2align_result(pgshift);
+		size_t pgsize = hugefileobj_pgsize_result(pgshift);
+
+		mix_signed(&digest, expected);
+		mix_signed(&digest, hugefileobj_validate_p2align_result(
+			expected, pgshift));
+		mix_signed(&digest, hugefileobj_validate_p2align_result(
+			expected + 1, pgshift));
+		mix(&digest, pgsize);
+		mix_signed(&digest, hugefileobj_npages_per_page_result(pgsize));
+		for (unsigned int j = 0; j < sizeof(page_offsets) / sizeof(page_offsets[0]); j++)
+			mix_signed(&digest, hugefileobj_page_index_result(
+				page_offsets[j], pgshift));
+		mix_signed(&digest, hugefileobj_create_nr_pages_result(0,
+			pgsize, pgshift));
+		mix_signed(&digest, hugefileobj_create_nr_pages_result(pgsize,
+			pgsize * 3, pgshift));
+	}
+	for (size_t old = 0; old <= 4; old += 2) {
+		for (int needed = 0; needed <= 6; needed += 3) {
+			mix_signed(&digest, hugefileobj_needs_grow_result(old,
+				needed));
+			mix(&digest, hugefileobj_copy_bytes_result(old));
+			mix(&digest, hugefileobj_zero_bytes_result(old,
+				old + (size_t)needed));
+		}
+	}
+
+	printf("object_helpers ok digest=%016lx\n", digest);
+	return 0;
+}
+EOF_OBJECT_HELPERS
 
 cat > "${tmpdir}/plist_equiv.c" <<'EOF_PLIST'
 #include <stddef.h>
@@ -2426,8 +4521,16 @@ cc "${kflags[@]}" -I"${tmpdir}" -ffunction-sections -fdata-sections \
 cc "${kflags[@]}" -I"${tmpdir}" -ffunction-sections -fdata-sections \
 	-DMCKERNEL_SHMID_HELPERS_TEST_EXPORT \
 	-DMCKERNEL_SHM_PERM_HELPERS_TEST_EXPORT \
-	-DMCKERNEL_SCHED_PRIO_HELPERS_TEST_EXPORT -c kernel/syscall.c \
+	-DMCKERNEL_RLIMIT_HELPERS_TEST_EXPORT \
+	-DMCKERNEL_SCHED_PRIO_HELPERS_TEST_EXPORT \
+	-DMCKERNEL_SCHED_POLICY_HELPERS_TEST_EXPORT \
+	-DMCKERNEL_SYSCALL_POLICY_HELPERS_TEST_EXPORT -c kernel/syscall.c \
 	-o "${tmpdir}/out/syscall_shmid_c.o"
+cc "${kflags[@]}" -I"${tmpdir}" -ffunction-sections -fdata-sections \
+	-DMCKERNEL_XPMEM_HELPERS_TEST_EXPORT -c kernel/xpmem.c \
+	-o "${tmpdir}/out/xpmem_helpers_c.o"
+cc "${kflags[@]}" -I"${tmpdir}" -ffunction-sections -fdata-sections \
+	-c kernel/object_helpers.c -o "${tmpdir}/out/object_helpers_c.o"
 cc "${kflags[@]}" -I"${tmpdir}" -ffunction-sections -fdata-sections \
 	-c kernel/plist.c -o "${tmpdir}/out/plist_c.o"
 cc "${kflags[@]}" -ffunction-sections -fdata-sections -c lib/bitmap.c -o "${tmpdir}/out/bitmap_c.o"
@@ -2487,6 +4590,29 @@ cc -Wl,--gc-sections -Wl,--unresolved-symbols=ignore-all \
 cc -Wl,--gc-sections "${tmpdir}/sched_helpers_equiv.c" \
 	"${tmpdir}/rust_stubs.c" "${tmpdir}/out/mckernel_rust.o" \
 	-o "${tmpdir}/out/sched_helpers_rust"
+cc -Wl,--gc-sections -Wl,--unresolved-symbols=ignore-all \
+	-Wl,--noinhibit-exec "${tmpdir}/rlimit_helpers_equiv.c" \
+	"${tmpdir}/out/syscall_shmid_c.o" -o "${tmpdir}/out/rlimit_helpers_c"
+cc -Wl,--gc-sections "${tmpdir}/rlimit_helpers_equiv.c" \
+	"${tmpdir}/rust_stubs.c" "${tmpdir}/out/mckernel_rust.o" \
+	-o "${tmpdir}/out/rlimit_helpers_rust"
+cc -Wl,--gc-sections -Wl,--unresolved-symbols=ignore-all \
+	-Wl,--noinhibit-exec "${tmpdir}/syscall_policy_helpers_equiv.c" \
+	"${tmpdir}/out/syscall_shmid_c.o" -o "${tmpdir}/out/syscall_policy_helpers_c"
+cc -Wl,--gc-sections "${tmpdir}/syscall_policy_helpers_equiv.c" \
+	"${tmpdir}/rust_stubs.c" "${tmpdir}/out/mckernel_rust.o" \
+	-o "${tmpdir}/out/syscall_policy_helpers_rust"
+cc -Wl,--gc-sections -Wl,--unresolved-symbols=ignore-all \
+	-Wl,--noinhibit-exec "${tmpdir}/xpmem_helpers_equiv.c" \
+	"${tmpdir}/out/xpmem_helpers_c.o" -o "${tmpdir}/out/xpmem_helpers_c"
+cc -Wl,--gc-sections "${tmpdir}/xpmem_helpers_equiv.c" \
+	"${tmpdir}/rust_stubs.c" "${tmpdir}/out/mckernel_rust.o" \
+	-o "${tmpdir}/out/xpmem_helpers_rust"
+cc -Wl,--gc-sections "${tmpdir}/object_helpers_equiv.c" \
+	"${tmpdir}/out/object_helpers_c.o" -o "${tmpdir}/out/object_helpers_c"
+cc -Wl,--gc-sections "${tmpdir}/object_helpers_equiv.c" \
+	"${tmpdir}/rust_stubs.c" "${tmpdir}/out/mckernel_rust.o" \
+	-o "${tmpdir}/out/object_helpers_rust"
 cc -Wl,--gc-sections "${tmpdir}/plist_equiv.c" "${tmpdir}/out/plist_c.o" \
 	-o "${tmpdir}/out/plist_c"
 cc "${tmpdir}/plist_equiv.c" "${tmpdir}/rust_stubs.c" \
@@ -2540,6 +4666,14 @@ cc "${kflags[@]}" -I"${tmpdir}" -I. -ffunction-sections -fdata-sections \
 "${tmpdir}/out/shmid_helpers_rust" > "${tmpdir}/out/shmid_helpers_rust.out"
 "${tmpdir}/out/sched_helpers_c" > "${tmpdir}/out/sched_helpers_c.out"
 "${tmpdir}/out/sched_helpers_rust" > "${tmpdir}/out/sched_helpers_rust.out"
+"${tmpdir}/out/rlimit_helpers_c" > "${tmpdir}/out/rlimit_helpers_c.out"
+"${tmpdir}/out/rlimit_helpers_rust" > "${tmpdir}/out/rlimit_helpers_rust.out"
+"${tmpdir}/out/syscall_policy_helpers_c" > "${tmpdir}/out/syscall_policy_helpers_c.out"
+"${tmpdir}/out/syscall_policy_helpers_rust" > "${tmpdir}/out/syscall_policy_helpers_rust.out"
+"${tmpdir}/out/xpmem_helpers_c" > "${tmpdir}/out/xpmem_helpers_c.out"
+"${tmpdir}/out/xpmem_helpers_rust" > "${tmpdir}/out/xpmem_helpers_rust.out"
+"${tmpdir}/out/object_helpers_c" > "${tmpdir}/out/object_helpers_c.out"
+"${tmpdir}/out/object_helpers_rust" > "${tmpdir}/out/object_helpers_rust.out"
 "${tmpdir}/out/plist_c" > "${tmpdir}/out/plist_c.out"
 "${tmpdir}/out/plist_rust" > "${tmpdir}/out/plist_rust.out"
 "${tmpdir}/out/bitops_c" > "${tmpdir}/out/bitops_c.out"
@@ -2570,6 +4704,10 @@ diff -u "${tmpdir}/out/mem_init_helpers_c.out" "${tmpdir}/out/mem_init_helpers_r
 diff -u "${tmpdir}/out/page_helpers_c.out" "${tmpdir}/out/page_helpers_rust.out"
 diff -u "${tmpdir}/out/shmid_helpers_c.out" "${tmpdir}/out/shmid_helpers_rust.out"
 diff -u "${tmpdir}/out/sched_helpers_c.out" "${tmpdir}/out/sched_helpers_rust.out"
+diff -u "${tmpdir}/out/rlimit_helpers_c.out" "${tmpdir}/out/rlimit_helpers_rust.out"
+diff -u "${tmpdir}/out/syscall_policy_helpers_c.out" "${tmpdir}/out/syscall_policy_helpers_rust.out"
+diff -u "${tmpdir}/out/xpmem_helpers_c.out" "${tmpdir}/out/xpmem_helpers_rust.out"
+diff -u "${tmpdir}/out/object_helpers_c.out" "${tmpdir}/out/object_helpers_rust.out"
 diff -u "${tmpdir}/out/plist_c.out" "${tmpdir}/out/plist_rust.out"
 diff -u "${tmpdir}/out/bitops_c.out" "${tmpdir}/out/bitops_rust.out"
 diff -u "${tmpdir}/out/string_c.out" "${tmpdir}/out/string_rust.out"
@@ -2601,6 +4739,10 @@ cat "${tmpdir}/out/mem_init_helpers_c.out"
 cat "${tmpdir}/out/page_helpers_c.out"
 cat "${tmpdir}/out/shmid_helpers_c.out"
 cat "${tmpdir}/out/sched_helpers_c.out"
+cat "${tmpdir}/out/rlimit_helpers_c.out"
+cat "${tmpdir}/out/syscall_policy_helpers_c.out"
+cat "${tmpdir}/out/xpmem_helpers_c.out"
+cat "${tmpdir}/out/object_helpers_c.out"
 cat "${tmpdir}/out/plist_c.out"
 cat "${tmpdir}/out/bitops_c.out"
 cat "${tmpdir}/out/string_c.out"

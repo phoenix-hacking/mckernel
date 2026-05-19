@@ -107,6 +107,377 @@ char *syscall_name[] MCKERNEL_UNUSED = {
 static ihk_spinlock_t tod_data_lock = SPIN_LOCK_UNLOCKED;
 static unsigned long uti_desc; /* Address of struct uti_desc object in syscall_intercept.c */
 
+#if defined(MCKERNEL_SYSCALL_POLICY_HELPERS_TEST_EXPORT)
+#define SYSCALL_POLICY_HELPER_PROTO
+#else
+#define SYSCALL_POLICY_HELPER_PROTO static
+#endif
+
+#define TIME_DISPATCH_NOOP 0
+#define TIME_DISPATCH_LOCAL_REALTIME 1
+#define TIME_DISPATCH_PROCESS_CPUTIME 2
+#define TIME_DISPATCH_THREAD_CPUTIME 3
+#define TIME_DISPATCH_FORWARD 4
+
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern int robust_list_len_result(size_t len);
+extern int tkill_tid_result(int tid);
+extern int tgkill_target_result(int tgid, int tid);
+extern int sigaction_validate(int sig, int has_act);
+extern int rt_sigprocmask_validate(size_t sigsetsize,
+		size_t expected_sigset_size, int has_set, int how);
+extern unsigned long rt_sigprocmask_apply(unsigned long current_mask,
+		unsigned long set_mask, int has_set, int how);
+extern int rt_sigpending_size_result(size_t sigsetsize,
+		size_t expected_sigset_size);
+extern int signalfd4_sigsetsize_result(size_t sigsetsize,
+		size_t expected_sigset_size);
+extern int signalfd4_flags_result(int flags);
+extern int setpgid_normalize_pid(int current_pid, int pid);
+extern int setpgid_normalize_pgid(int pid, int pgid);
+extern int setpgid_execed_result(int execed);
+extern int memlock_prepare_range(uintptr_t start0, size_t len0,
+		uintptr_t user_start, uintptr_t user_end,
+		uintptr_t *startp, size_t *lenp, uintptr_t *endp);
+extern int memlock_range_flag_result(unsigned long flag);
+extern int range_has_disallowed_change_flags(unsigned long flag);
+extern int munmap_prepare_range(uintptr_t addr, size_t len0,
+		uintptr_t user_start, uintptr_t user_end, size_t *lenp);
+extern int mprotect_prepare_range(uintptr_t start, size_t len0,
+		uintptr_t user_start, uintptr_t user_end,
+		size_t *lenp, uintptr_t *endp);
+extern int mlockall_policy_result(int flags, int is_privileged,
+		unsigned long memlock_cur);
+extern int remap_file_pages_prepare(uintptr_t start0, size_t size, int prot,
+		size_t pgoff, uintptr_t *startp, uintptr_t *endp, off_t *offp);
+extern int mremap_prepare_args(uintptr_t oldaddr, size_t oldsize0,
+		size_t newsize0, int flags, uintptr_t newaddr,
+		uintptr_t user_start, uintptr_t user_end,
+		size_t *oldsizep, size_t *newsizep, uintptr_t *oldendp,
+		int *no_opp);
+extern int mremap_fixed_range_result(uintptr_t newstart,
+		uintptr_t user_start, uintptr_t oldstart, uintptr_t oldend,
+		uintptr_t newend);
+extern int mremap_maymove_result(int flags);
+extern int msync_prepare_range(uintptr_t start0, size_t len0, int flags,
+		size_t *lenp, uintptr_t *endp);
+extern int msync_locked_range_result(int flags, unsigned long range_flags);
+extern int mbind_prepare_range(uintptr_t addr, unsigned long len0,
+		unsigned long *lenp);
+extern int mempolicy_nodemask_bits_result(unsigned long maxnode,
+		unsigned long *nodemask_bitsp);
+extern int mempolicy_nodemask_bits_is_clamped(unsigned long maxnode);
+extern int mbind_mode_flags_result(int mode, unsigned int flags,
+		int *mode_flagsp, int *normalized_modep);
+extern int mempolicy_mode_is_supported(int mode);
+extern int set_mempolicy_normalize_mode(int mode, int *normalized_modep);
+extern int get_mempolicy_validate(unsigned long addr, int flags,
+		int process_policy, unsigned long maxnode, int nr_numa_nodes,
+		unsigned long *nodemask_bitsp);
+extern int move_pages_policy_result(int pid, int flags);
+extern int brk_prepare_result(unsigned long address, unsigned long brk_start,
+		unsigned long brk_end, unsigned long brk_end_allocated,
+		unsigned long *resultp, int *extend_neededp);
+extern unsigned long brk_default_vrflags(void);
+extern int mincore_prepare_range(uintptr_t start, size_t len,
+		uintptr_t user_start, uintptr_t user_end, uintptr_t *endp);
+extern unsigned long mmap_base_vrflags(int prot, int flags,
+		unsigned long vrf0, int anon_on_demand);
+extern int mmap_populated_mapping_result(int flags);
+extern int mmap_should_set_host_ro(int flags, int prot, int anonymous_only);
+extern int mmap_update_private_maxprot(int flags, int maxprot);
+extern int mmap_prot_denied_result(int prot, int maxprot, int *deniedp);
+extern unsigned long mmap_maxprot_to_vrflags(int maxprot);
+extern int mmap_should_force_straight(int flags, int straight_map,
+		unsigned long phys, size_t len, size_t threshold);
+extern int mmap_is_shared(int flags);
+extern int getrusage_who_result(int who);
+extern int itimer_which_result(int which);
+extern int itimer_is_real(int which);
+extern int itimer_should_start(long value_sec, long value_usec);
+extern int clock_gettime_dispatch(int clock_id, int local_support, int has_ts);
+extern int gettimeofday_dispatch(int has_tv, int has_tz, int local_support);
+extern int nanosleep_validate_timespec(long sec, long nsec);
+extern int rt_sigtimedwait_prepare(size_t sigsetsize,
+		size_t expected_sigset_size, int has_set);
+extern int rt_sigtimedwait_timeout_result(long sec, long nsec,
+		int local_support);
+extern void rt_sigtimedwait_prepare_masks(unsigned long raw_wait_mask,
+		unsigned long current_mask, unsigned long *wait_maskp,
+		unsigned long *blocked_maskp, unsigned long *interrupt_maskp);
+extern void rt_sigtimedwait_deadline(long now_sec, long now_nsec,
+		long timeout_sec, long timeout_nsec, long *deadline_secp,
+		long *deadline_nsecp);
+extern int rt_sigtimedwait_timeout_expired(long now_sec, long now_nsec,
+		long deadline_sec, long deadline_nsec);
+extern int sigmask_to_signal_number(unsigned long mask);
+extern int rt_sigqueueinfo_pid_result(int pid);
+extern int sigsuspend_sigsetsize_result(size_t sigsetsize,
+		size_t expected_sigset_size);
+extern unsigned long sigsuspend_prepare_mask(unsigned long raw_mask);
+extern int sigsuspend_pending_matches(unsigned long pending_mask,
+		unsigned long suspend_mask);
+extern int sigaction_sigsetsize_result(size_t sigsetsize,
+		size_t expected_sigset_size);
+extern int sigaltstack_validate(int flags, size_t size);
+extern int sigaltstack_is_disable(int flags);
+extern int process_vm_validate_args(unsigned long flags,
+		unsigned long liovcnt, unsigned long riovcnt);
+extern int process_vm_op_is_write(int op);
+extern int process_vm_op_is_valid(int op);
+extern int ptrace_signal_data_result(long data);
+extern int ptrace_detach_signal_result(long data);
+extern int ptrace_user_area_result(long addr, unsigned long user_struct_size);
+extern int ptrace_status_allows_io(int status);
+extern int ptrace_setoptions_flags_result(int flags);
+extern int ptrace_apply_options(int current, int flags);
+extern int ptrace_child_traced_result(int has_child, int has_proc, int ptrace);
+extern int ptrace_attach_policy_result(int tracer_pid, int target_pid,
+		int target_ptrace, int same_process);
+extern int ptrace_detach_state_result(int is_traced, int same_report_proc);
+extern int ptrace_siginfo_state_result(int status, int has_siginfo);
+extern int wait4_options_result(int options);
+extern int waitid_to_wait_pid_result(int idtype, int id, int *pidp);
+extern int waitid_options_result(int options);
+extern int wait_should_scan_process_result(int options);
+extern int wait_should_scan_thread_result(int pid, int options);
+extern int wait_process_pid_matches_result(int pid, int parent_pgid,
+		int child_pgid, int child_pid);
+extern int wait_thread_tid_matches_result(int tid, int child_tid,
+		int is_main_thread);
+extern int wait_process_exited_candidate_result(int options,
+		int child_status);
+extern int wait_thread_exited_candidate_result(int options, int child_status);
+extern int wait_nonptraced_stop_candidate_result(int ptrace, int signal_flags,
+		int options);
+extern int wait_ptraced_stop_candidate_result(int ptrace, int status);
+extern int wait_continued_candidate_result(int signal_flags, int options);
+extern int wait_reap_needed_result(int options);
+extern int wait_nohang_result(int options);
+extern int wait_empty_result(int empty);
+extern int wait_stopped_status_result(int exit_status);
+extern int wait_continued_status_result(void);
+extern int wait_zombie_skip_host_result(int ppid_parent_pid,
+		int current_pid, int nowait);
+extern int wait_thread_empty_candidate_result(int is_main_thread, int termsig);
+extern int waitid_status_code_result(int status);
+extern int clone_pthread_marker_result(int clone_flags, unsigned long newsp,
+		unsigned long parent_tidptr);
+extern int clone_flags_result(int clone_flags, int coredump_barrier_count);
+extern int clone_host_parent_flags_result(int clone_flags, int ppid_parent_pid);
+extern int clone_report_thread_result(int clone_flags, int termsig);
+extern int ptrace_exec_event_signal_result(int ptrace);
+extern int ptrace_syscall_event_signal_result(int ptrace);
+extern int ptrace_clone_event_result(int ptrace, int clone_flags);
+extern int ptrace_clone_reparent_result(int event);
+extern int execveat_policy_result(int flags, int dirfd, int filename_first);
+extern int futex_decode_flags_result(int flags, int *opp, int *fsharedp);
+extern int futex_wait_timeout_needed_result(int op, int has_utime);
+extern int futex_timeout_is_absolute_result(int op);
+extern int futex_clock_id_result(int flags);
+extern unsigned int futex_requeue_val2_result(int op, unsigned long arg3);
+extern unsigned long futex_timeout_ns_result(int op, long timeout_sec,
+		long timeout_nsec, long now_sec, long now_nsec);
+#else
+SYSCALL_POLICY_HELPER_PROTO int robust_list_len_result(size_t len);
+SYSCALL_POLICY_HELPER_PROTO int tkill_tid_result(int tid);
+SYSCALL_POLICY_HELPER_PROTO int tgkill_target_result(int tgid, int tid);
+SYSCALL_POLICY_HELPER_PROTO int sigaction_validate(int sig, int has_act);
+SYSCALL_POLICY_HELPER_PROTO int rt_sigprocmask_validate(size_t sigsetsize,
+		size_t expected_sigset_size, int has_set, int how);
+SYSCALL_POLICY_HELPER_PROTO unsigned long rt_sigprocmask_apply(
+		unsigned long current_mask, unsigned long set_mask, int has_set,
+		int how);
+SYSCALL_POLICY_HELPER_PROTO int rt_sigpending_size_result(size_t sigsetsize,
+		size_t expected_sigset_size);
+SYSCALL_POLICY_HELPER_PROTO int signalfd4_sigsetsize_result(
+		size_t sigsetsize, size_t expected_sigset_size);
+SYSCALL_POLICY_HELPER_PROTO int signalfd4_flags_result(int flags);
+SYSCALL_POLICY_HELPER_PROTO int setpgid_normalize_pid(int current_pid, int pid);
+SYSCALL_POLICY_HELPER_PROTO int setpgid_normalize_pgid(int pid, int pgid);
+SYSCALL_POLICY_HELPER_PROTO int setpgid_execed_result(int execed);
+SYSCALL_POLICY_HELPER_PROTO int memlock_prepare_range(uintptr_t start0,
+		size_t len0, uintptr_t user_start, uintptr_t user_end,
+		uintptr_t *startp, size_t *lenp, uintptr_t *endp);
+SYSCALL_POLICY_HELPER_PROTO int memlock_range_flag_result(unsigned long flag);
+SYSCALL_POLICY_HELPER_PROTO int range_has_disallowed_change_flags(
+		unsigned long flag);
+SYSCALL_POLICY_HELPER_PROTO int munmap_prepare_range(uintptr_t addr,
+		size_t len0, uintptr_t user_start, uintptr_t user_end,
+		size_t *lenp);
+SYSCALL_POLICY_HELPER_PROTO int mprotect_prepare_range(uintptr_t start,
+		size_t len0, uintptr_t user_start, uintptr_t user_end,
+		size_t *lenp, uintptr_t *endp);
+SYSCALL_POLICY_HELPER_PROTO int mlockall_policy_result(int flags,
+		int is_privileged, unsigned long memlock_cur);
+SYSCALL_POLICY_HELPER_PROTO int remap_file_pages_prepare(uintptr_t start0,
+		size_t size, int prot, size_t pgoff, uintptr_t *startp,
+		uintptr_t *endp, off_t *offp);
+SYSCALL_POLICY_HELPER_PROTO int mremap_prepare_args(uintptr_t oldaddr,
+		size_t oldsize0, size_t newsize0, int flags, uintptr_t newaddr,
+		uintptr_t user_start, uintptr_t user_end,
+		size_t *oldsizep, size_t *newsizep, uintptr_t *oldendp,
+		int *no_opp);
+SYSCALL_POLICY_HELPER_PROTO int mremap_fixed_range_result(
+		uintptr_t newstart, uintptr_t user_start, uintptr_t oldstart,
+		uintptr_t oldend, uintptr_t newend);
+SYSCALL_POLICY_HELPER_PROTO int mremap_maymove_result(int flags);
+SYSCALL_POLICY_HELPER_PROTO int msync_prepare_range(uintptr_t start0,
+		size_t len0, int flags, size_t *lenp, uintptr_t *endp);
+SYSCALL_POLICY_HELPER_PROTO int msync_locked_range_result(int flags,
+		unsigned long range_flags);
+SYSCALL_POLICY_HELPER_PROTO int mbind_prepare_range(uintptr_t addr,
+		unsigned long len0, unsigned long *lenp);
+SYSCALL_POLICY_HELPER_PROTO int mempolicy_nodemask_bits_result(
+		unsigned long maxnode, unsigned long *nodemask_bitsp);
+SYSCALL_POLICY_HELPER_PROTO int mempolicy_nodemask_bits_is_clamped(
+		unsigned long maxnode);
+SYSCALL_POLICY_HELPER_PROTO int mbind_mode_flags_result(int mode,
+		unsigned int flags, int *mode_flagsp, int *normalized_modep);
+SYSCALL_POLICY_HELPER_PROTO int mempolicy_mode_is_supported(int mode);
+SYSCALL_POLICY_HELPER_PROTO int set_mempolicy_normalize_mode(int mode,
+		int *normalized_modep);
+SYSCALL_POLICY_HELPER_PROTO int get_mempolicy_validate(unsigned long addr,
+		int flags, int process_policy, unsigned long maxnode,
+		int nr_numa_nodes, unsigned long *nodemask_bitsp);
+SYSCALL_POLICY_HELPER_PROTO int move_pages_policy_result(int pid, int flags);
+SYSCALL_POLICY_HELPER_PROTO int brk_prepare_result(unsigned long address,
+		unsigned long brk_start, unsigned long brk_end,
+		unsigned long brk_end_allocated, unsigned long *resultp,
+		int *extend_neededp);
+SYSCALL_POLICY_HELPER_PROTO unsigned long brk_default_vrflags(void);
+SYSCALL_POLICY_HELPER_PROTO int mincore_prepare_range(uintptr_t start,
+		size_t len, uintptr_t user_start, uintptr_t user_end,
+		uintptr_t *endp);
+SYSCALL_POLICY_HELPER_PROTO unsigned long mmap_base_vrflags(int prot,
+		int flags, unsigned long vrf0, int anon_on_demand);
+SYSCALL_POLICY_HELPER_PROTO int mmap_populated_mapping_result(int flags);
+SYSCALL_POLICY_HELPER_PROTO int mmap_should_set_host_ro(int flags, int prot,
+		int anonymous_only);
+SYSCALL_POLICY_HELPER_PROTO int mmap_update_private_maxprot(int flags,
+		int maxprot);
+SYSCALL_POLICY_HELPER_PROTO int mmap_prot_denied_result(int prot,
+		int maxprot, int *deniedp);
+SYSCALL_POLICY_HELPER_PROTO unsigned long mmap_maxprot_to_vrflags(int maxprot);
+SYSCALL_POLICY_HELPER_PROTO int mmap_should_force_straight(int flags,
+		int straight_map, unsigned long phys, size_t len,
+		size_t threshold);
+SYSCALL_POLICY_HELPER_PROTO int mmap_is_shared(int flags);
+SYSCALL_POLICY_HELPER_PROTO int getrusage_who_result(int who);
+SYSCALL_POLICY_HELPER_PROTO int itimer_which_result(int which);
+SYSCALL_POLICY_HELPER_PROTO int itimer_is_real(int which);
+SYSCALL_POLICY_HELPER_PROTO int itimer_should_start(long value_sec,
+		long value_usec);
+SYSCALL_POLICY_HELPER_PROTO int clock_gettime_dispatch(int clock_id,
+		int local_support, int has_ts);
+SYSCALL_POLICY_HELPER_PROTO int gettimeofday_dispatch(int has_tv, int has_tz,
+		int local_support);
+SYSCALL_POLICY_HELPER_PROTO int nanosleep_validate_timespec(long sec,
+		long nsec);
+SYSCALL_POLICY_HELPER_PROTO int rt_sigtimedwait_prepare(size_t sigsetsize,
+		size_t expected_sigset_size, int has_set);
+SYSCALL_POLICY_HELPER_PROTO int rt_sigtimedwait_timeout_result(long sec,
+		long nsec, int local_support);
+SYSCALL_POLICY_HELPER_PROTO void rt_sigtimedwait_prepare_masks(
+		unsigned long raw_wait_mask, unsigned long current_mask,
+		unsigned long *wait_maskp, unsigned long *blocked_maskp,
+		unsigned long *interrupt_maskp);
+SYSCALL_POLICY_HELPER_PROTO void rt_sigtimedwait_deadline(long now_sec,
+		long now_nsec, long timeout_sec, long timeout_nsec,
+		long *deadline_secp, long *deadline_nsecp);
+SYSCALL_POLICY_HELPER_PROTO int rt_sigtimedwait_timeout_expired(long now_sec,
+		long now_nsec, long deadline_sec, long deadline_nsec);
+SYSCALL_POLICY_HELPER_PROTO int sigmask_to_signal_number(unsigned long mask);
+SYSCALL_POLICY_HELPER_PROTO int rt_sigqueueinfo_pid_result(int pid);
+SYSCALL_POLICY_HELPER_PROTO int sigsuspend_sigsetsize_result(
+		size_t sigsetsize, size_t expected_sigset_size);
+SYSCALL_POLICY_HELPER_PROTO unsigned long sigsuspend_prepare_mask(
+		unsigned long raw_mask);
+SYSCALL_POLICY_HELPER_PROTO int sigsuspend_pending_matches(
+		unsigned long pending_mask, unsigned long suspend_mask);
+SYSCALL_POLICY_HELPER_PROTO int sigaction_sigsetsize_result(
+		size_t sigsetsize, size_t expected_sigset_size);
+SYSCALL_POLICY_HELPER_PROTO int sigaltstack_validate(int flags, size_t size);
+SYSCALL_POLICY_HELPER_PROTO int sigaltstack_is_disable(int flags);
+SYSCALL_POLICY_HELPER_PROTO int process_vm_validate_args(unsigned long flags,
+		unsigned long liovcnt, unsigned long riovcnt);
+SYSCALL_POLICY_HELPER_PROTO int process_vm_op_is_write(int op);
+SYSCALL_POLICY_HELPER_PROTO int process_vm_op_is_valid(int op);
+SYSCALL_POLICY_HELPER_PROTO int ptrace_signal_data_result(long data);
+SYSCALL_POLICY_HELPER_PROTO int ptrace_detach_signal_result(long data);
+SYSCALL_POLICY_HELPER_PROTO int ptrace_user_area_result(long addr,
+		unsigned long user_struct_size);
+SYSCALL_POLICY_HELPER_PROTO int ptrace_status_allows_io(int status);
+SYSCALL_POLICY_HELPER_PROTO int ptrace_setoptions_flags_result(int flags);
+SYSCALL_POLICY_HELPER_PROTO int ptrace_apply_options(int current, int flags);
+SYSCALL_POLICY_HELPER_PROTO int ptrace_child_traced_result(int has_child,
+		int has_proc, int ptrace);
+SYSCALL_POLICY_HELPER_PROTO int ptrace_attach_policy_result(int tracer_pid,
+		int target_pid, int target_ptrace, int same_process);
+SYSCALL_POLICY_HELPER_PROTO int ptrace_detach_state_result(int is_traced,
+		int same_report_proc);
+SYSCALL_POLICY_HELPER_PROTO int ptrace_siginfo_state_result(int status,
+		int has_siginfo);
+SYSCALL_POLICY_HELPER_PROTO int wait4_options_result(int options);
+SYSCALL_POLICY_HELPER_PROTO int waitid_to_wait_pid_result(int idtype, int id,
+		int *pidp);
+SYSCALL_POLICY_HELPER_PROTO int waitid_options_result(int options);
+SYSCALL_POLICY_HELPER_PROTO int wait_should_scan_process_result(int options);
+SYSCALL_POLICY_HELPER_PROTO int wait_should_scan_thread_result(int pid,
+		int options);
+SYSCALL_POLICY_HELPER_PROTO int wait_process_pid_matches_result(int pid,
+		int parent_pgid, int child_pgid, int child_pid);
+SYSCALL_POLICY_HELPER_PROTO int wait_thread_tid_matches_result(int tid,
+		int child_tid, int is_main_thread);
+SYSCALL_POLICY_HELPER_PROTO int wait_process_exited_candidate_result(
+		int options, int child_status);
+SYSCALL_POLICY_HELPER_PROTO int wait_thread_exited_candidate_result(
+		int options, int child_status);
+SYSCALL_POLICY_HELPER_PROTO int wait_nonptraced_stop_candidate_result(
+		int ptrace, int signal_flags, int options);
+SYSCALL_POLICY_HELPER_PROTO int wait_ptraced_stop_candidate_result(int ptrace,
+		int status);
+SYSCALL_POLICY_HELPER_PROTO int wait_continued_candidate_result(
+		int signal_flags, int options);
+SYSCALL_POLICY_HELPER_PROTO int wait_reap_needed_result(int options);
+SYSCALL_POLICY_HELPER_PROTO int wait_nohang_result(int options);
+SYSCALL_POLICY_HELPER_PROTO int wait_empty_result(int empty);
+SYSCALL_POLICY_HELPER_PROTO int wait_stopped_status_result(int exit_status);
+SYSCALL_POLICY_HELPER_PROTO int wait_continued_status_result(void);
+SYSCALL_POLICY_HELPER_PROTO int wait_zombie_skip_host_result(
+		int ppid_parent_pid, int current_pid, int nowait);
+SYSCALL_POLICY_HELPER_PROTO int wait_thread_empty_candidate_result(
+		int is_main_thread, int termsig);
+SYSCALL_POLICY_HELPER_PROTO int waitid_status_code_result(int status);
+SYSCALL_POLICY_HELPER_PROTO int clone_pthread_marker_result(int clone_flags,
+		unsigned long newsp, unsigned long parent_tidptr);
+SYSCALL_POLICY_HELPER_PROTO int clone_flags_result(int clone_flags,
+		int coredump_barrier_count);
+SYSCALL_POLICY_HELPER_PROTO int clone_host_parent_flags_result(
+		int clone_flags, int ppid_parent_pid);
+SYSCALL_POLICY_HELPER_PROTO int clone_report_thread_result(int clone_flags,
+		int termsig);
+SYSCALL_POLICY_HELPER_PROTO int ptrace_exec_event_signal_result(int ptrace);
+SYSCALL_POLICY_HELPER_PROTO int ptrace_syscall_event_signal_result(int ptrace);
+SYSCALL_POLICY_HELPER_PROTO int ptrace_clone_event_result(int ptrace,
+		int clone_flags);
+SYSCALL_POLICY_HELPER_PROTO int ptrace_clone_reparent_result(int event);
+SYSCALL_POLICY_HELPER_PROTO int execveat_policy_result(int flags, int dirfd,
+		int filename_first);
+SYSCALL_POLICY_HELPER_PROTO int futex_decode_flags_result(int flags,
+		int *opp, int *fsharedp);
+SYSCALL_POLICY_HELPER_PROTO int futex_wait_timeout_needed_result(int op,
+		int has_utime);
+SYSCALL_POLICY_HELPER_PROTO int futex_timeout_is_absolute_result(int op);
+SYSCALL_POLICY_HELPER_PROTO int futex_clock_id_result(int flags);
+SYSCALL_POLICY_HELPER_PROTO unsigned int futex_requeue_val2_result(int op,
+		unsigned long arg3);
+SYSCALL_POLICY_HELPER_PROTO unsigned long futex_timeout_ns_result(int op,
+		long timeout_sec, long timeout_nsec, long now_sec, long now_nsec);
+#endif
+
+#undef SYSCALL_POLICY_HELPER_PROTO
+
 void save_syscall_return_value(int num, unsigned long rc);
 extern long alloc_debugreg(struct thread *thread);
 extern int num_processors;
@@ -513,7 +884,8 @@ static int wait_zombie(struct thread *thread, struct process *child, int *status
 		*status = child->group_exit_status;
 	}
     
-	if(child->ppid_parent->pid != thread->proc->pid || child->nowait)
+	if (wait_zombie_skip_host_result(child->ppid_parent->pid,
+			thread->proc->pid, child->nowait))
 		return child->pid;
 	request.number = __NR_wait4;
 	request.args[0] = child->pid;
@@ -544,12 +916,12 @@ static int wait_stopped(struct thread *thread, struct process *child, struct thr
 		}
 		/* TODO: define 0x7f in kernel/include/process.h */
 		if (status) {
-			*status =  (c_thread->exit_status << 8) | 0x7f;
+			*status = wait_stopped_status_result(c_thread->exit_status);
 		}
 
 		/* Reap exit_status. signal_flags is reaped on receiving */
 		/* signal in do_kill(). */
-		if (!(options & WNOWAIT)) {
+		if (wait_reap_needed_result(options)) {
 			c_thread->exit_status = 0;
 		}
 	}
@@ -561,12 +933,13 @@ static int wait_stopped(struct thread *thread, struct process *child, struct thr
 		}
 		/* TODO: define 0x7f in kernel/include/process.h */
 		if (status) {
-			*status = (child->group_exit_status << 8) | 0x7f;
+			*status = wait_stopped_status_result(
+					child->group_exit_status);
 		}
 
 		/* Reap exit_status. signal_flags is reaped on receiving */
 		/* signal in do_kill(). */
-		if (!(options & WNOWAIT)) {
+		if (wait_reap_needed_result(options)) {
 			child->group_exit_status = 0;
 		}
 	}
@@ -578,12 +951,13 @@ static int wait_stopped(struct thread *thread, struct process *child, struct thr
 		}
 		/* TODO: define 0x7f in kernel/include/process.h */
 		if (status) {
-			*status = (child->main_thread->exit_status << 8) | 0x7f;
+			*status = wait_stopped_status_result(
+					child->main_thread->exit_status);
 		}
 
 		/* Reap exit_status. signal_flags is reaped on receiving */
 		/* signal in do_kill(). */
-		if (!(options & WNOWAIT)) {
+		if (wait_reap_needed_result(options)) {
 			child->main_thread->exit_status = 0;
 		}
 	}
@@ -601,11 +975,11 @@ static int wait_continued(struct thread *thread, struct process *child,
 	int ret;
 
 	if (status) {
-		*status = 0xffff;
+		*status = wait_continued_status_result();
 	}
 
 	/* Reap signal_flags */
-	if(!(options & WNOWAIT)) {
+	if (wait_reap_needed_result(options)) {
 		if (c_thread)
 			c_thread->signal_flags &= ~SIGNAL_STOP_CONTINUED;
 		else
@@ -806,18 +1180,16 @@ wait_proc(int pid, int *status, int options, void *rusage, int *empty)
 		 * thread or the one we are looking for specifically when
 		 * __WCLONE is passed
 		 */
-		if ((pid >= 0 || -pid != child->pgid) &&
-		    pid != -1 &&
-		    (pid != 0 || pgid != child->pgid) &&
-		    (pid <= 0 || pid != child->pid))
+		if (!wait_process_pid_matches_result(pid, pgid, child->pgid,
+				child->pid))
 			continue;
 
 		*empty = 0;
 
-		if ((options & WEXITED) &&
-		    child->status == PS_ZOMBIE) {
+		if (wait_process_exited_candidate_result(options,
+				child->status)) {
 			ret = wait_zombie(thread, child, status, options);
-			if (!(options & WNOWAIT) &&
+			if (wait_reap_needed_result(options) &&
 			    child->parent == child->ppid_parent) {
 				struct mcs_rwlock_node updatelock;
 				struct mcs_rwlock_node childlock;
@@ -877,7 +1249,7 @@ wait_proc(int pid, int *status, int options, void *rusage, int *empty)
 				mcs_rwlock_writer_lock_noirq(
 					     &child->threads_lock, &child_lock);
 				c_thread = child->main_thread;
-				if (c_thread && !(options & WNOWAIT) &&
+				if (c_thread && wait_reap_needed_result(options) &&
 				    (c_thread->ptrace & PT_TRACED)) {
 					mcs_rwlock_writer_unlock_noirq(
 					     &child->threads_lock, &child_lock);
@@ -899,16 +1271,15 @@ wait_proc(int pid, int *status, int options, void *rusage, int *empty)
 		mcs_rwlock_writer_lock_noirq(&child->threads_lock, &child_lock);
 		c_thread = child->main_thread;
 
-		if (!(c_thread->ptrace & PT_TRACED) &&
-		    (c_thread->signal_flags & SIGNAL_STOP_STOPPED) &&
-		    (options & WUNTRACED)) {
+		if (wait_nonptraced_stop_candidate_result(c_thread->ptrace,
+				c_thread->signal_flags, options)) {
 			/*
 			 * Not ptraced and in stopped state and WUNTRACED is
 			 * specified
 			 */
 			ret = wait_stopped(thread, child, NULL, status,
 					   options);
-			if (!(options & WNOWAIT)) {
+			if (wait_reap_needed_result(options)) {
 				c_thread->signal_flags &= ~SIGNAL_STOP_STOPPED;
 			}
 			mcs_rwlock_writer_unlock_noirq(&proc->children_lock,
@@ -918,9 +1289,8 @@ wait_proc(int pid, int *status, int options, void *rusage, int *empty)
 			goto out_found;
 		}
 
-		if ((c_thread->ptrace & PT_TRACED) &&
-		   (child->status & (PS_STOPPED | PS_TRACED |
-				     PS_DELAY_TRACED))) {
+		if (wait_ptraced_stop_candidate_result(c_thread->ptrace,
+				child->status)) {
 			ret = wait_stopped(thread, child, NULL, status,
 					   options);
 			if (ret == child->pid) {
@@ -928,7 +1298,7 @@ wait_proc(int pid, int *status, int options, void *rusage, int *empty)
 				if (pid == c_thread->tid) {
 					ret = c_thread->tid;
 				}
-				if (!(options & WNOWAIT)) {
+				if (wait_reap_needed_result(options)) {
 					c_thread->signal_flags &=
 							   ~SIGNAL_STOP_STOPPED;
 				}
@@ -940,11 +1310,11 @@ wait_proc(int pid, int *status, int options, void *rusage, int *empty)
 			}
 		}
 
-		if ((c_thread->signal_flags & SIGNAL_STOP_CONTINUED) &&
-		    (options & WCONTINUED)) {
+		if (wait_continued_candidate_result(c_thread->signal_flags,
+				options)) {
 			ret = wait_continued(thread, child, NULL, status,
 					     options);
-			if (!(options & WNOWAIT)) {
+			if (wait_reap_needed_result(options)) {
 				c_thread->signal_flags &=
 							 ~SIGNAL_STOP_CONTINUED;
 			}
@@ -961,10 +1331,8 @@ wait_proc(int pid, int *status, int options, void *rusage, int *empty)
 	if (*empty) {
 		list_for_each_entry(child, &proc->ptraced_children_list,
 				    ptraced_siblings_list) {
-			if ((pid < 0 && -pid == child->pgid) ||
-			    pid == -1 ||
-			    (pid == 0 && pgid == child->pgid) ||
-			    (pid > 0 && pid == child->pid)) {
+			if (wait_process_pid_matches_result(pid, pgid,
+					child->pgid, child->pid)) {
 				*empty = 0;
 				break;
 			}
@@ -988,16 +1356,14 @@ wait_thread(int tid, int *status, int options, void *rusage, int *empty)
 	mcs_rwlock_writer_lock_noirq(&thread->proc->threads_lock, &lock);
 	list_for_each_entry_safe(child, next, &proc->report_threads_list,
 				 report_siblings_list) {
-		if (tid != -1 && child->tid != tid)
-			continue;
-		if (child == child->proc->main_thread)
+		if (!wait_thread_tid_matches_result(tid, child->tid,
+				child == child->proc->main_thread))
 			continue;
 		*empty = 0;
-		if ((options & WEXITED) &&
-		    (child->status == PS_EXITED ||
-		     child->status == PS_ZOMBIE)) {
+		if (wait_thread_exited_candidate_result(options,
+				child->status)) {
 			ret = child->tid;
-			if (!(options & WNOWAIT)) {
+			if (wait_reap_needed_result(options)) {
 				if (child->ptrace & PT_TRACED) {
 					mcs_rwlock_writer_unlock_noirq(
 					    &thread->proc->threads_lock, &lock);
@@ -1017,16 +1383,15 @@ wait_thread(int tid, int *status, int options, void *rusage, int *empty)
 			goto out_found;
 		}
 
-		if (!(child->ptrace & PT_TRACED) &&
-		    (child->signal_flags & SIGNAL_STOP_STOPPED) &&
-		    (options & WUNTRACED)) {
+		if (wait_nonptraced_stop_candidate_result(child->ptrace,
+				child->signal_flags, options)) {
 			/*
 			 * Not ptraced and in stopped state and WUNTRACED is
 			 * specified
 			 */
 			ret = wait_stopped(thread, child->proc, child, status,
 					   options);
-			if (!(options & WNOWAIT)) {
+			if (wait_reap_needed_result(options)) {
 				child->signal_flags &= ~SIGNAL_STOP_STOPPED;
 			}
 			mcs_rwlock_writer_unlock_noirq(
@@ -1034,14 +1399,13 @@ wait_thread(int tid, int *status, int options, void *rusage, int *empty)
 			goto out_found;
 		}
 
-		if ((child->ptrace & PT_TRACED) &&
-		    (child->status & (PS_STOPPED | PS_TRACED |
-				      PS_DELAY_TRACED))) {
+		if (wait_ptraced_stop_candidate_result(child->ptrace,
+				child->status)) {
 			ret = wait_stopped(thread, child->proc, child, status,
 					   options);
 			if (ret == child->tid) {
 				/* Are we looking for a specific thread? */
-				if (!(options & WNOWAIT)) {
+				if (wait_reap_needed_result(options)) {
 					child->signal_flags &=
 							   ~SIGNAL_STOP_STOPPED;
 				}
@@ -1051,11 +1415,11 @@ wait_thread(int tid, int *status, int options, void *rusage, int *empty)
 			}
 		}
 
-		if ((child->signal_flags & SIGNAL_STOP_CONTINUED) &&
-		    (options & WCONTINUED)) {
+		if (wait_continued_candidate_result(child->signal_flags,
+				options)) {
 			ret = wait_continued(thread, child->proc, child, status,
 					     options);
-			if (!(options & WNOWAIT)) {
+			if (wait_reap_needed_result(options)) {
 				child->signal_flags &= ~SIGNAL_STOP_CONTINUED;
 			}
 			mcs_rwlock_writer_unlock_noirq(
@@ -1067,9 +1431,9 @@ wait_thread(int tid, int *status, int options, void *rusage, int *empty)
 	if (*empty) {
 		list_for_each_entry(child, &proc->threads_list,
 				    siblings_list) {
-			if (child == child->proc->main_thread)
-				continue;
-			if (child->termsig && child->termsig != SIGCHLD) {
+			if (wait_thread_empty_candidate_result(
+					child == child->proc->main_thread,
+					child->termsig)) {
 				*empty = 0;
 				break;
 			}
@@ -1101,25 +1465,24 @@ do_wait(int pid, int *status, int options, void *rusage)
 			      PS_INTERRUPTIBLE);
 	pid = orgpid;
 
-	if (!(options & __WCLONE)) {
+	if (wait_should_scan_process_result(options)) {
 		if ((ret = wait_proc(pid, status, options, rusage, &empty))) {
 			goto out_found;
 		}
 	}
-	if ((pid == -1 || pid > 0) &&
-	    (options & (__WCLONE | __WALL))) {
+	if (wait_should_scan_thread_result(pid, options)) {
 		if ((ret = wait_thread(pid, status, options, rusage, &empty))) {
 			goto out_found;
 		}
 	}
 
-	if (empty) {
-		ret = -ECHILD;
+	ret = wait_empty_result(empty);
+	if (ret) {
 		goto out_notfound;
 	}
 
 	/* Don't sleep if WNOHANG requested */
-	if (options & WNOHANG) {
+	if (wait_nohang_result(options)) {
 		*status = 0;
 		ret = 0;
 		goto out_notfound;
@@ -1161,9 +1524,10 @@ SYSCALL_DECLARE(wait4)
 	int rc;
 	struct rusage usage;
 
-	if(options & ~(WNOHANG | WUNTRACED | WCONTINUED | __WCLONE | __WALL)){
+	rc = wait4_options_result(options);
+	if (rc) {
 		dkprintf("wait4: unexpected options(%x).\n", options);
-		return -EINVAL;
+		return rc;
 	}
 	memset(&usage, '\0', sizeof usage);
 	rc = do_wait(pid, &st, WEXITED | options, &usage);
@@ -1185,22 +1549,15 @@ SYSCALL_DECLARE(waitid)
 	int rc;
 	struct rusage usage;
 
-	if(idtype == P_PID)
-		pid = id;
-	else if(idtype == P_PGID)
-		pid = -id;
-	else if(idtype == P_ALL)
-		pid = -1;
-	else
-		return -EINVAL;
-	if(options & ~(WEXITED | WSTOPPED | WCONTINUED | WNOHANG | WNOWAIT | __WCLONE | __WALL)){
+	rc = waitid_to_wait_pid_result(idtype, id, &pid);
+	if (rc) {
+		return rc;
+	}
+	rc = waitid_options_result(options);
+	if (rc) {
 		dkprintf("wait4: unexpected options(%x).\n", options);
 		dkprintf("waitid: unexpected options(%x).\n", options);
-		return -EINVAL;
-	}
-	if(!(options & (WEXITED | WSTOPPED | WCONTINUED))){
-		dkprintf("waitid: no waiting status(%x).\n", options);
-		return -EINVAL;
+		return rc;
 	}
 	memset(&usage, '\0', sizeof usage);
 	rc = do_wait(pid, &status, options, &usage);
@@ -1216,14 +1573,7 @@ SYSCALL_DECLARE(waitid)
 		                             timeval_to_jiffy(&usage.ru_utime);
 		info._sifields._sigchld.si_stime =
 		                             timeval_to_jiffy(&usage.ru_stime);
-		if((status & 0x000000ff) == 0x0000007f)
-			info.si_code = CLD_STOPPED;
-		else if((status & 0x0000ffff) == 0x0000ffff)
-			info.si_code = CLD_CONTINUED;
-		else if(status & 0x000000ff)
-			info.si_code = CLD_KILLED;
-		else
-			info.si_code = CLD_EXITED;
+		info.si_code = waitid_status_code_result(status);
 		copy_to_user(infop, &info, sizeof info);
 	}
 	return 0;
@@ -2177,19 +2527,9 @@ straight_out:
 	}
 
 	/* do the map */
-	vrflags = VR_NONE;
-	vrflags |= vrf0;
-	vrflags |= PROT_TO_VR_FLAG(prot);
-	vrflags |= (flags & MAP_PRIVATE)? VR_PRIVATE: 0;
-	vrflags |= (flags & MAP_LOCKED)? VR_LOCKED: 0;
-	vrflags |= VR_DEMAND_PAGING;
-	if (flags & MAP_ANONYMOUS && !anon_on_demand) {
-		if (flags & MAP_PRIVATE) {
-			vrflags &= ~VR_DEMAND_PAGING;
-		}
-	}
+	vrflags = mmap_base_vrflags(prot, flags, vrf0, anon_on_demand);
 
-	if (flags & (MAP_POPULATE | MAP_LOCKED)) {
+	if (mmap_populated_mapping_result(flags)) {
 		dkprintf("%s: 0x%lx:%lu %s%s|\n",
 			__func__, addr, len,
 				flags & MAP_POPULATE ? "|MAP_POPULATE" : "",
@@ -2207,7 +2547,7 @@ straight_out:
 	}
 #endif
 
-	if ((flags & MAP_ANONYMOUS) && !(prot & PROT_WRITE)) {
+	if (mmap_should_set_host_ro(flags, prot, 1)) {
 		error = set_host_vma(addr, len, PROT_READ | PROT_EXEC, 1/* holding memory_range_lock */);
 		if (error) {
 			kprintf("do_mmap:set_host_vma failed. %d\n", error);
@@ -2323,7 +2663,7 @@ straight_out:
 				 len, region->map_end, p2align, error);
 			goto out;
 		}
-		if (!(prot & PROT_WRITE)) {
+		if (mmap_should_set_host_ro(flags, prot, 0)) {
 			error = set_host_vma(addr, len, PROT_READ | PROT_EXEC,
 					     1/* holding memory_range_lock */);
 			if (error) {
@@ -2390,7 +2730,7 @@ straight_out:
 			phys = virt_to_phys(p);
 		}
 	}
-	else if (flags & MAP_SHARED) {
+	else if (mmap_is_shared(flags)) {
 		dkprintf("%s: MAP_SHARED,flags=%x,len=%ld\n", __FUNCTION__, flags, len);
 		memset(&ads, 0, sizeof(ads));
 		ads.shm_segsz = len;
@@ -2411,24 +2751,20 @@ straight_out:
 		}
 	}
 
-	if ((flags & MAP_PRIVATE) && (maxprot & PROT_READ)) {
-		maxprot |= PROT_WRITE;
-	}
-	denied = prot & ~maxprot;
-	if (denied) {
+	maxprot = mmap_update_private_maxprot(flags, maxprot);
+	error = mmap_prot_denied_result(prot, maxprot, &denied);
+	if (error) {
 		ekprintf("do_mmap:denied %x. %x %x\n", denied, prot, maxprot);
-		error = (denied == PROT_EXEC)? -EPERM: -EACCES;
 		goto out;
 	}
-	vrflags |= VRFLAG_PROT_TO_MAXPROT(PROT_TO_VR_FLAG(maxprot));
+	vrflags |= mmap_maxprot_to_vrflags(maxprot);
 
 	/*
 	 * Large anonymous non-fix allocations are in straight mapping,
 	 * pretend demand paging to avoid filling in PTEs
 	 */
-	if ((flags & MAP_ANONYMOUS) && proc->straight_map &&
-			!(flags & MAP_FIXED) && phys) {
-		if (len >= proc->straight_map_threshold) {
+	if (mmap_should_force_straight(flags, proc->straight_map, phys, len,
+			proc->straight_map_threshold)) {
 			dkprintf("%s: range 0x%lx:%lu will be straight, addding VR_DEMAND\n",
 					__FUNCTION__, addr, len);
 			vrflags |= VR_DEMAND_PAGING;
@@ -2437,14 +2773,14 @@ straight_out:
 #ifdef PROFILE_ENABLE
 			profile_event_add(PROFILE_mmap_anon_straight, len);
 #endif // PROFILE_ENABLE
-		}
-		else {
+	}
+	else if ((flags & MAP_ANONYMOUS) && proc->straight_map &&
+			!(flags & MAP_FIXED) && phys) {
 #ifdef PROFILE_ENABLE
-			if (cpu_local_var(current)->profile)
-				kprintf("%s: contiguous but not straight? len: %lu\n", __func__, len);
-			profile_event_add(PROFILE_mmap_anon_not_straight, len);
+		if (cpu_local_var(current)->profile)
+			kprintf("%s: contiguous but not straight? len: %lu\n", __func__, len);
+		profile_event_add(PROFILE_mmap_anon_not_straight, len);
 #endif // PROFILE_ENABLE
-		}
 	}
 
 	error = add_process_memory_range(thread->vm, addr, addr+len, phys,
@@ -2613,14 +2949,9 @@ SYSCALL_DECLARE(munmap)
 	dkprintf("[%d]sys_munmap(%lx,%lx)\n",
 			ihk_mc_get_processor_id(), addr, len0);
 
-	len = (len0 + PAGE_SIZE - 1) & PAGE_MASK;
-	if ((addr & (PAGE_SIZE - 1))
-			|| (addr < region->user_start)
-			|| (region->user_end <= addr)
-			|| (len == 0)
-			|| (len > (region->user_end - region->user_start))
-			|| ((region->user_end - len) < addr)) {
-		error = -EINVAL;
+	error = munmap_prepare_range(addr, len0, region->user_start,
+			region->user_end, &len);
+	if (error) {
 		goto out;
 	}
 
@@ -2641,15 +2972,15 @@ out:
 
 SYSCALL_DECLARE(mprotect)
 {
-	const intptr_t start = ihk_mc_syscall_arg0(ctx);
+	const uintptr_t start = ihk_mc_syscall_arg0(ctx);
 	const size_t len0 = ihk_mc_syscall_arg1(ctx);
 	const int prot = ihk_mc_syscall_arg2(ctx);
 	struct thread *thread = cpu_local_var(current);
 	struct vm_regions *region = &thread->vm->region;
 	size_t len;
-	intptr_t end;
+	uintptr_t end;
 	struct vm_range *first;
-	intptr_t addr;
+	uintptr_t addr;
 	struct vm_range *range;
 	int error;
 	struct vm_range *changed;
@@ -2660,19 +2991,14 @@ SYSCALL_DECLARE(mprotect)
 	dkprintf("[%d]sys_mprotect(%lx,%lx,%x)\n",
 			ihk_mc_get_processor_id(), start, len0, prot);
 
-	len = (len0 + PAGE_SIZE - 1) & PAGE_MASK;
-	end = start + len;
-
-	/* check arguments */
-	if (start & (PAGE_SIZE - 1)) {
+	error = mprotect_prepare_range(start, len0, region->user_start,
+			region->user_end, &len, &end);
+	if (error == -EINVAL) {
 		ekprintf("[%d]sys_mprotect(%lx,%lx,%x): -EINVAL\n",
 				ihk_mc_get_processor_id(), start, len0, prot);
 		return -EINVAL;
 	}
-
-	if ((start < region->user_start)
-			|| (region->user_end <= start)
-			|| ((region->user_end - start) < len)) {
+	if (error == -ENOMEM) {
 		ekprintf("[%d]sys_mprotect(%lx,%lx,%x): -ENOMEM\n",
 				ihk_mc_get_processor_id(), start, len0, prot);
 		return -ENOMEM;
@@ -2725,7 +3051,7 @@ SYSCALL_DECLARE(mprotect)
 			goto out;
 		}
 
-		if (range->flag & (VR_REMOTE | VR_RESERVED | VR_IO_NOCACHE)) {
+		if (range_has_disallowed_change_flags(range->flag)) {
 			ekprintf("sys_mprotect(%lx,%lx,%x):cannot change\n",
 					start, len0, prot);
 			error = -ENOMEM;
@@ -2800,35 +3126,22 @@ SYSCALL_DECLARE(brk)
 	unsigned long r;
 	unsigned long vrflag;
 	unsigned long old_brk_end_allocated = 0;
+	int extend_needed;
 
 	dkprintf("SC(%d)[sys_brk] brk_start=%lx,end=%lx\n",
 			ihk_mc_get_processor_id(), region->brk_start, region->brk_end);
 
 	flush_nfo_tlb();
 
-	/* brk change fail, including glibc trick brk(0) to obtain current brk */
-	if (address < region->brk_start) {
-		r = region->brk_end;
-		goto out;
-	}
-
-	/* brk change fail, because we don't shrink memory region  */
-	if (address < region->brk_end) {
-		r = region->brk_end;
-		goto out;
-	}
-
-	/* If already allocated, just expand and return */
-	if (address <= region->brk_end_allocated) {
-		region->brk_end = address;
-		r = region->brk_end;
+	brk_prepare_result(address, region->brk_start, region->brk_end,
+			region->brk_end_allocated, &r, &extend_needed);
+	if (!extend_needed) {
+		region->brk_end = r;
 		goto out;
 	}
 
 	/* Try to extend memory region */
-	vrflag = VR_PROT_READ | VR_PROT_WRITE;
-	vrflag |= VR_PRIVATE;
-	vrflag |= VRFLAG_PROT_TO_MAXPROT(vrflag);
+	vrflag = brk_default_vrflags();
 	old_brk_end_allocated = region->brk_end_allocated;
 	ihk_rwspinlock_write_lock_noirq(&cpu_local_var(current)->vm->memory_range_lock);
 	region->brk_end_allocated =
@@ -2893,10 +3206,11 @@ static int ptrace_report_exec(struct thread *thread,
 		ihk_mc_user_context_t *syscall_ctx)
 {
 	int ptrace = thread->ptrace;
+	int sig;
 
-	if (ptrace & (PT_TRACE_EXEC|PTRACE_O_TRACEEXEC)) {
+	sig = ptrace_exec_event_signal_result(ptrace);
+	if (sig) {
 		ihk_mc_kernel_context_t ctx;
-		int sig = (SIGTRAP | (PTRACE_EVENT_EXEC << 8));
 
 		memcpy(&ctx, &thread->ctx, sizeof ctx);
 		preempt_enable();
@@ -2923,39 +3237,16 @@ static int ptrace_report_exec(struct thread *thread,
 
 void ptrace_syscall_event(struct thread *thread)
 {
-	int ptrace = thread->ptrace;
+	int sig = ptrace_syscall_event_signal_result(thread->ptrace);
 
-	if (ptrace & PT_TRACE_SYSCALL) {
-		int sig = (SIGTRAP | ((ptrace & PTRACE_O_TRACESYSGOOD) ? 0x80 : 0));
+	if (sig) {
 		ptrace_report_signal(thread, sig);
 	}
 }
 
 static int ptrace_check_clone_event(struct thread *thread, int clone_flags)
 {
-	int event = 0;
-
-	if (clone_flags & CLONE_VFORK) {
-		/* vfork */
-		if (thread->ptrace & PTRACE_O_TRACEVFORK) {
-			event = PTRACE_EVENT_VFORK;
-		}
-		if (thread->ptrace & PTRACE_O_TRACEVFORKDONE) {
-			event = PTRACE_EVENT_VFORK_DONE;
-		}
-	} else if ((clone_flags & CSIGNAL) == SIGCHLD) {
-		/* fork */
-		if (thread->ptrace & PTRACE_O_TRACEFORK) {
-			event = PTRACE_EVENT_FORK;
-		}
-	} else {
-		/* clone */
-		if (thread->ptrace & PTRACE_O_TRACECLONE) {
-			event = PTRACE_EVENT_CLONE;
-		}
-	}
-
-	return event;
+	return ptrace_clone_event_result(thread->ptrace, clone_flags);
 }
 
 static int ptrace_attach_thread(struct thread *thread, struct process *proc)
@@ -3029,7 +3320,7 @@ static int ptrace_report_clone(struct thread *thread, struct thread *new, int ev
 	parent_pid = thread->proc->parent->pid;
 	mcs_rwlock_writer_unlock_noirq(&thread->proc->update_lock, &lock);
 
-	if (event != PTRACE_EVENT_VFORK_DONE) {
+	if (ptrace_clone_reparent_result(event)) {
 		/* PTRACE_EVENT_FORK or PTRACE_EVENT_VFORK or PTRACE_EVENT_CLONE */
 
 		mcs_rwlock_writer_lock_noirq(&new->proc->update_lock, &updatelock);
@@ -3339,7 +3630,7 @@ unsigned long do_fork(int clone_flags, unsigned long newsp,
 			 newsp, cursp);
 
 	/* CLONE_VM and newsp == parent_tidptr impiles pthread start routine addr */
-	if ((clone_flags & CLONE_VM) && newsp == parent_tidptr) {
+	if (clone_pthread_marker_result(clone_flags, newsp, parent_tidptr)) {
 		old->clone_pthread_start_routine = parent_tidptr;
 		dkprintf("%s: clone_pthread_start_routine: 0x%lx\n", __func__,
 			old->clone_pthread_start_routine);
@@ -3351,35 +3642,13 @@ unsigned long do_fork(int clone_flags, unsigned long newsp,
 	old->clone_pthread_start_routine = 0;
 
 	parent_cpuid = old->cpu_id;
-	if (((clone_flags & CLONE_VM) && !(clone_flags & CLONE_THREAD)) ||
-		(!(clone_flags & CLONE_VM) && (clone_flags & CLONE_THREAD))) {
-		kprintf("clone(): ERROR: CLONE_VM and CLONE_THREAD should be set together\n");
-		return -EINVAL;
-	}
-
-	if (termsig < 0 || _NSIG < termsig) {
-		return -EINVAL;
-	}
-
-	if((clone_flags & CLONE_SIGHAND) &&
-	   !(clone_flags & CLONE_VM)){
-		return -EINVAL;
-	}
-	if((clone_flags & CLONE_THREAD) &&
-	   !(clone_flags & CLONE_SIGHAND)){
-		return -EINVAL;
-	}
-	if((clone_flags & CLONE_FS) &&
-	   (clone_flags & CLONE_NEWNS)){
-		return -EINVAL;
-	}
-	if((clone_flags & CLONE_NEWIPC) &&
-	   (clone_flags & CLONE_SYSVSEM)){
-		return -EINVAL;
-	}
-	if((clone_flags & CLONE_NEWPID) &&
-	   (clone_flags & CLONE_THREAD)){
-		return -EINVAL;
+	err = clone_flags_result(clone_flags, oldproc->coredump_barrier_count);
+	if (err) {
+		if (((clone_flags & CLONE_VM) && !(clone_flags & CLONE_THREAD)) ||
+			(!(clone_flags & CLONE_VM) && (clone_flags & CLONE_THREAD))) {
+			kprintf("clone(): ERROR: CLONE_VM and CLONE_THREAD should be set together\n");
+		}
+		return err;
 	}
 
 #if 0
@@ -3388,10 +3657,6 @@ unsigned long do_fork(int clone_flags, unsigned long newsp,
 		return -EINVAL;
 	}
 #endif
-
-	if (oldproc->coredump_barrier_count) {
-		return -EINVAL;
-	}
 
 	/* N-th creation put the new on Linux CPU. It's turned off when zero is 
 	   set to uti_thread_rank. */
@@ -3541,10 +3806,8 @@ retry_tid:
 				   new->vm->region.user_start;
 		request1.args[3] =
 			       virt_to_phys(new->vm->address_space->page_table);
-		if(clone_flags & CLONE_PARENT){
-			if(oldproc->ppid_parent->pid != 1)
-				request1.args[0] = clone_flags;
-		}
+		request1.args[0] = clone_host_parent_flags_result(clone_flags,
+				oldproc->ppid_parent->pid);
 		newproc->pid = do_syscall(&request1, ihk_mc_get_processor_id());
 		if (newproc->pid < 0) {
 			kprintf("ERROR: forking host process\n");
@@ -3676,7 +3939,7 @@ retry_tid:
 			goto free_mod_clone_arg;
 		}
 	}
-	else if (termsig && termsig != SIGCHLD) {
+	else if (clone_report_thread_result(clone_flags, termsig)) {
 		struct mcs_rwlock_node_irqsave lock;
 
 		mcs_rwlock_writer_lock(&oldproc->threads_lock, &lock);
@@ -3796,6 +4059,1250 @@ SYSCALL_DECLARE(kill)
 	return error;
 }
 
+#if defined(MCKERNEL_SYSCALL_POLICY_HELPERS_TEST_EXPORT)
+#define SYSCALL_POLICY_HELPER_SCOPE
+#else
+#define SYSCALL_POLICY_HELPER_SCOPE static
+#endif
+
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+SYSCALL_POLICY_HELPER_SCOPE int
+robust_list_len_result(size_t len)
+{
+	return len == 24 ? 0 : -EINVAL;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+tkill_tid_result(int tid)
+{
+	return tid <= 0 ? -EINVAL : 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+tgkill_target_result(int tgid, int tid)
+{
+	return (tgid <= 0 || tid <= 0) ? -EINVAL : 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+sigaction_validate(int sig, int has_act)
+{
+	if (!valid_signal(sig) || sig < 1) {
+		return -EINVAL;
+	}
+	if (has_act && (sig == SIGKILL || sig == SIGSTOP)) {
+		return -EINVAL;
+	}
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+rt_sigprocmask_validate(size_t sigsetsize, size_t expected_sigset_size,
+		int has_set, int how)
+{
+	if (sigsetsize != expected_sigset_size) {
+		return -EINVAL;
+	}
+
+	if (has_set &&
+			how != SIG_BLOCK &&
+			how != SIG_UNBLOCK &&
+			how != SIG_SETMASK) {
+		return -EINVAL;
+	}
+
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE unsigned long
+rt_sigprocmask_apply(unsigned long current_mask, unsigned long set_mask,
+		int has_set, int how)
+{
+	unsigned long mask = current_mask;
+
+	if (has_set) {
+		switch (how) {
+		case SIG_BLOCK:
+			mask |= set_mask;
+			break;
+		case SIG_UNBLOCK:
+			mask &= ~set_mask;
+			break;
+		case SIG_SETMASK:
+			mask = set_mask;
+			break;
+		}
+	}
+
+	mask &= ~__sigmask(SIGKILL);
+	mask &= ~__sigmask(SIGSTOP);
+	return mask;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+rt_sigpending_size_result(size_t sigsetsize, size_t expected_sigset_size)
+{
+	return sigsetsize > expected_sigset_size ? -EINVAL : 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+signalfd4_sigsetsize_result(size_t sigsetsize, size_t expected_sigset_size)
+{
+	return sigsetsize != expected_sigset_size ? -EINVAL : 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+signalfd4_flags_result(int flags)
+{
+	return (flags & ~(SFD_NONBLOCK | SFD_CLOEXEC)) ? -EINVAL : 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+setpgid_normalize_pid(int current_pid, int pid)
+{
+	return pid == 0 ? current_pid : pid;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+setpgid_normalize_pgid(int pid, int pgid)
+{
+	return pgid == 0 ? pid : pgid;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+setpgid_execed_result(int execed)
+{
+	return execed ? -EACCES : 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+memlock_prepare_range(uintptr_t start0, size_t len0,
+		uintptr_t user_start, uintptr_t user_end,
+		uintptr_t *startp, size_t *lenp, uintptr_t *endp)
+{
+	uintptr_t start = start0 & PAGE_MASK;
+	size_t len = (start & (PAGE_SIZE - 1)) + len0;
+	uintptr_t end;
+
+	len = (len + PAGE_SIZE - 1) & PAGE_MASK;
+	end = start + len;
+	*startp = start;
+	*lenp = len;
+	*endp = end;
+
+	if (end < start) {
+		return -EINVAL;
+	}
+
+	if ((start < user_start)
+			|| (user_end <= start)
+			|| (len > (user_end - user_start))
+			|| ((user_end - len) < start)) {
+		return -ENOMEM;
+	}
+
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+memlock_range_flag_result(unsigned long flag)
+{
+	return (flag & (VR_REMOTE | VR_RESERVED | VR_IO_NOCACHE)) ?
+		-EINVAL : 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+range_has_disallowed_change_flags(unsigned long flag)
+{
+	return (flag & (VR_REMOTE | VR_RESERVED | VR_IO_NOCACHE)) ? 1 : 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+munmap_prepare_range(uintptr_t addr, size_t len0,
+		uintptr_t user_start, uintptr_t user_end, size_t *lenp)
+{
+	size_t len = (len0 + PAGE_SIZE - 1) & PAGE_MASK;
+
+	*lenp = len;
+	if ((addr & (PAGE_SIZE - 1))
+			|| (addr < user_start)
+			|| (user_end <= addr)
+			|| (len == 0)
+			|| (len > (user_end - user_start))
+			|| ((user_end - len) < addr)) {
+		return -EINVAL;
+	}
+
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+mprotect_prepare_range(uintptr_t start, size_t len0,
+		uintptr_t user_start, uintptr_t user_end,
+		size_t *lenp, uintptr_t *endp)
+{
+	size_t len = (len0 + PAGE_SIZE - 1) & PAGE_MASK;
+	uintptr_t end = start + len;
+
+	*lenp = len;
+	*endp = end;
+	if (start & (PAGE_SIZE - 1)) {
+		return -EINVAL;
+	}
+
+	if ((start < user_start)
+			|| (user_end <= start)
+			|| ((user_end - start) < len)) {
+		return -ENOMEM;
+	}
+
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+mlockall_policy_result(int flags, int is_privileged, unsigned long memlock_cur)
+{
+	if (!flags || (flags & ~(MCL_CURRENT | MCL_FUTURE))) {
+		return -EINVAL;
+	}
+	if (is_privileged) {
+		return 0;
+	}
+	if (memlock_cur != 0) {
+		return -ENOMEM;
+	}
+	return -EPERM;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+remap_file_pages_prepare(uintptr_t start0, size_t size, int prot,
+		size_t pgoff, uintptr_t *startp, uintptr_t *endp, off_t *offp)
+{
+#define PGOFF_LIMIT ((off_t)1 << ((8 * sizeof(off_t) - 1) - PAGE_SHIFT))
+	uintptr_t start = start0 & PAGE_MASK;
+	uintptr_t end = start + size;
+	off_t off = (off_t)pgoff << PAGE_SHIFT;
+
+	*startp = start;
+	*endp = end;
+	*offp = off;
+	if ((size <= 0) || (size & (PAGE_SIZE - 1)) || (prot != 0)
+			|| (PGOFF_LIMIT <= pgoff)
+			|| ((PGOFF_LIMIT - pgoff) < (size / PAGE_SIZE))
+			|| !((start < end) || (end == 0))) {
+		return -EINVAL;
+	}
+
+	return 0;
+#undef PGOFF_LIMIT
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+mremap_prepare_args(uintptr_t oldaddr, size_t oldsize0,
+		size_t newsize0, int flags, uintptr_t newaddr,
+		uintptr_t user_start, uintptr_t user_end,
+		size_t *oldsizep, size_t *newsizep, uintptr_t *oldendp,
+		int *no_opp)
+{
+	size_t oldsize = (oldsize0 + PAGE_SIZE - 1) & PAGE_MASK;
+	size_t newsize = (newsize0 + PAGE_SIZE - 1) & PAGE_MASK;
+	uintptr_t oldend = oldaddr + oldsize;
+
+	*oldsizep = oldsize;
+	*newsizep = newsize;
+	*oldendp = oldend;
+	*no_opp = 0;
+	if ((oldaddr & ~PAGE_MASK)
+			|| (newsize == 0)
+			|| (flags & ~(MREMAP_MAYMOVE | MREMAP_FIXED))
+			|| ((flags & MREMAP_FIXED)
+				&& !(flags & MREMAP_MAYMOVE))
+			|| ((flags & MREMAP_FIXED)
+				&& (newaddr & ~PAGE_MASK))) {
+		return -EINVAL;
+	}
+
+	if (!(flags & MREMAP_FIXED) && oldsize == newsize) {
+		*no_opp = 1;
+		return 0;
+	}
+
+	if (oldend < oldaddr) {
+		return -EINVAL;
+	}
+
+	if (newsize > (user_end - user_start)) {
+		return -ENOMEM;
+	}
+
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+mremap_fixed_range_result(uintptr_t newstart, uintptr_t user_start,
+		uintptr_t oldstart, uintptr_t oldend, uintptr_t newend)
+{
+	if (newstart < user_start) {
+		return -EPERM;
+	}
+	if ((newstart < oldend) && (oldstart < newend)) {
+		return -EINVAL;
+	}
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+mremap_maymove_result(int flags)
+{
+	return (flags & MREMAP_MAYMOVE) ? 0 : -ENOMEM;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+msync_prepare_range(uintptr_t start0, size_t len0, int flags,
+		size_t *lenp, uintptr_t *endp)
+{
+	size_t len = (len0 + PAGE_SIZE - 1) & PAGE_MASK;
+	uintptr_t end = start0 + len;
+
+	*lenp = len;
+	*endp = end;
+	if ((start0 & ~PAGE_MASK)
+			|| (flags & ~(MS_ASYNC | MS_INVALIDATE | MS_SYNC))
+			|| ((flags & MS_ASYNC) && (flags & MS_SYNC))) {
+		return -EINVAL;
+	}
+	if (end < start0) {
+		return -ENOMEM;
+	}
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+msync_locked_range_result(int flags, unsigned long range_flags)
+{
+	return ((flags & MS_INVALIDATE) && (range_flags & VR_LOCKED)) ?
+		-EBUSY : 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+mbind_prepare_range(uintptr_t addr, unsigned long len0, unsigned long *lenp)
+{
+	unsigned long len;
+
+	if (addr & ~PAGE_MASK) {
+		return -EINVAL;
+	}
+
+	len = (len0 + PAGE_SIZE - 1) & PAGE_MASK;
+	*lenp = len;
+	if (addr + len < addr || addr == (addr + len)) {
+		return -EINVAL;
+	}
+
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+mempolicy_nodemask_bits_result(unsigned long maxnode,
+		unsigned long *nodemask_bitsp)
+{
+	unsigned long nodemask_bits = 0;
+
+	if (maxnode) {
+		nodemask_bits = ALIGN(maxnode, 8);
+		if (maxnode > (PAGE_SIZE << 3)) {
+			*nodemask_bitsp = nodemask_bits;
+			return -EINVAL;
+		}
+
+		if (nodemask_bits > PROCESS_NUMA_MASK_BITS) {
+			nodemask_bits = PROCESS_NUMA_MASK_BITS;
+		}
+	}
+
+	*nodemask_bitsp = nodemask_bits;
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+mempolicy_nodemask_bits_is_clamped(unsigned long maxnode)
+{
+	return maxnode && (ALIGN(maxnode, 8) > PROCESS_NUMA_MASK_BITS);
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+mbind_mode_flags_result(int mode, unsigned int flags,
+		int *mode_flagsp, int *normalized_modep)
+{
+	int mode_flags;
+
+	if ((mode & MPOL_F_STATIC_NODES) && (mode & MPOL_F_RELATIVE_NODES)) {
+		return -EINVAL;
+	}
+
+	if ((flags & MPOL_MF_STRICT) && (flags & MPOL_MF_MOVE)) {
+		return -EINVAL;
+	}
+
+	mode_flags = mode & MPOL_MODE_FLAGS;
+	*mode_flagsp = mode_flags;
+	*normalized_modep = mode & ~MPOL_MODE_FLAGS;
+	if (mode_flags & MPOL_F_RELATIVE_NODES) {
+		return -EINVAL;
+	}
+
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+mempolicy_mode_is_supported(int mode)
+{
+	return mode == MPOL_DEFAULT || mode == MPOL_BIND ||
+		mode == MPOL_INTERLEAVE || mode == MPOL_PREFERRED;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+set_mempolicy_normalize_mode(int mode, int *normalized_modep)
+{
+	if ((mode & MPOL_F_STATIC_NODES) &&
+	    (mode & MPOL_F_RELATIVE_NODES)) {
+		return -EINVAL;
+	}
+	*normalized_modep = mode & ~MPOL_MODE_FLAGS;
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+get_mempolicy_validate(unsigned long addr, int flags, int process_policy,
+		unsigned long maxnode, int nr_numa_nodes,
+		unsigned long *nodemask_bitsp)
+{
+	*nodemask_bitsp = 0;
+	if ((!(flags & MPOL_F_ADDR) && addr) ||
+		(flags & ~(MPOL_F_ADDR | MPOL_F_NODE | MPOL_F_MEMS_ALLOWED)) ||
+		((flags & MPOL_F_NODE) && !(flags & MPOL_F_ADDR) &&
+		 process_policy == MPOL_INTERLEAVE)) {
+		return -EINVAL;
+	}
+
+	if ((flags & MPOL_F_ADDR) && !addr) {
+		return -EFAULT;
+	}
+
+	if (maxnode) {
+		if (maxnode < nr_numa_nodes) {
+			return -EINVAL;
+		}
+
+		*nodemask_bitsp = ALIGN(maxnode, 8);
+		if (*nodemask_bitsp > PROCESS_NUMA_MASK_BITS) {
+			*nodemask_bitsp = PROCESS_NUMA_MASK_BITS;
+		}
+	}
+
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+move_pages_policy_result(int pid, int flags)
+{
+	if (pid) {
+		return -EINVAL;
+	}
+	if ((flags & ~(MPOL_MF_MOVE | MPOL_MF_MOVE_ALL)) ||
+			(flags & MPOL_MF_MOVE_ALL)) {
+		return -EINVAL;
+	}
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+getrusage_who_result(int who)
+{
+	return (who != RUSAGE_SELF &&
+			who != RUSAGE_CHILDREN &&
+			who != RUSAGE_THREAD) ? -EINVAL : 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+itimer_which_result(int which)
+{
+	return (which != ITIMER_REAL &&
+			which != ITIMER_VIRTUAL &&
+			which != ITIMER_PROF) ? -EINVAL : 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+itimer_is_real(int which)
+{
+	return which == ITIMER_REAL;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+itimer_should_start(long value_sec, long value_usec)
+{
+	return (value_sec == 0 && value_usec == 0) ? 0 : 1;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+clock_gettime_dispatch(int clock_id, int local_support, int has_ts)
+{
+	if (!has_ts) {
+		return TIME_DISPATCH_NOOP;
+	}
+
+	if (local_support && clock_id == CLOCK_REALTIME) {
+		return TIME_DISPATCH_LOCAL_REALTIME;
+	}
+
+	if (clock_id == CLOCK_PROCESS_CPUTIME_ID) {
+		return TIME_DISPATCH_PROCESS_CPUTIME;
+	}
+
+	if (clock_id == CLOCK_THREAD_CPUTIME_ID) {
+		return TIME_DISPATCH_THREAD_CPUTIME;
+	}
+
+	return TIME_DISPATCH_FORWARD;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+gettimeofday_dispatch(int has_tv, int has_tz, int local_support)
+{
+	if (!has_tv && !has_tz) {
+		return TIME_DISPATCH_NOOP;
+	}
+
+	if (!has_tz && local_support) {
+		return TIME_DISPATCH_LOCAL_REALTIME;
+	}
+
+	return TIME_DISPATCH_FORWARD;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+nanosleep_validate_timespec(long sec, long nsec)
+{
+	return (sec < 0 || nsec < 0 || nsec >= NS_PER_SEC) ? -EINVAL : 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+rt_sigtimedwait_prepare(size_t sigsetsize, size_t expected_sigset_size,
+		int has_set)
+{
+	if (sigsetsize > expected_sigset_size) {
+		return -EINVAL;
+	}
+
+	if (!has_set) {
+		return -EFAULT;
+	}
+
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+rt_sigtimedwait_timeout_result(long sec, long nsec, int local_support)
+{
+	if (sec < 0 || nsec < 0 || nsec >= NS_PER_SEC) {
+		return -EINVAL;
+	}
+
+	if (!local_support && (sec || nsec)) {
+		return -EOPNOTSUPP;
+	}
+
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE void
+rt_sigtimedwait_prepare_masks(unsigned long raw_wait_mask,
+		unsigned long current_mask, unsigned long *wait_maskp,
+		unsigned long *blocked_maskp, unsigned long *interrupt_maskp)
+{
+	unsigned long wait_mask = raw_wait_mask;
+	unsigned long blocked_mask;
+
+	wait_mask &= ~__sigmask(SIGKILL);
+	wait_mask &= ~__sigmask(SIGSTOP);
+	blocked_mask = current_mask | wait_mask;
+
+	*wait_maskp = wait_mask;
+	*blocked_maskp = blocked_mask;
+	*interrupt_maskp = ~blocked_mask;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE void
+rt_sigtimedwait_deadline(long now_sec, long now_nsec, long timeout_sec,
+		long timeout_nsec, long *deadline_secp, long *deadline_nsecp)
+{
+	long sec = now_sec + timeout_sec;
+	long nsec = now_nsec + timeout_nsec;
+
+	if (nsec >= NS_PER_SEC) {
+		sec++;
+		nsec -= NS_PER_SEC;
+	}
+
+	*deadline_secp = sec;
+	*deadline_nsecp = nsec;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+rt_sigtimedwait_timeout_expired(long now_sec, long now_nsec,
+		long deadline_sec, long deadline_nsec)
+{
+	return now_sec > deadline_sec ||
+		(now_sec == deadline_sec && now_nsec >= deadline_nsec);
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+sigmask_to_signal_number(unsigned long mask)
+{
+	int sig;
+
+	for (sig = 0; mask; sig++, mask >>= 1)
+		;
+	return sig;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+rt_sigqueueinfo_pid_result(int pid)
+{
+	return pid <= 0 ? -ESRCH : 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+sigsuspend_sigsetsize_result(size_t sigsetsize, size_t expected_sigset_size)
+{
+	return sigsetsize > expected_sigset_size ? -EINVAL : 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE unsigned long
+sigsuspend_prepare_mask(unsigned long raw_mask)
+{
+	raw_mask &= ~__sigmask(SIGKILL);
+	raw_mask &= ~__sigmask(SIGSTOP);
+	return raw_mask;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+sigsuspend_pending_matches(unsigned long pending_mask, unsigned long suspend_mask)
+{
+	return !(pending_mask & suspend_mask);
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+sigaction_sigsetsize_result(size_t sigsetsize, size_t expected_sigset_size)
+{
+	return sigsetsize != expected_sigset_size ? -EINVAL : 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+sigaltstack_validate(int flags, size_t size)
+{
+	if (flags != 0 && flags != SS_DISABLE) {
+		return -EINVAL;
+	}
+	if (flags != SS_DISABLE && size < MINSIGSTKSZ) {
+		return -ENOMEM;
+	}
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+sigaltstack_is_disable(int flags)
+{
+	return flags == SS_DISABLE;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+process_vm_validate_args(unsigned long flags, unsigned long liovcnt,
+		unsigned long riovcnt)
+{
+	if (flags) {
+		return -EINVAL;
+	}
+
+	if (liovcnt > IOV_MAX || riovcnt > IOV_MAX) {
+		return -EINVAL;
+	}
+
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+process_vm_op_is_write(int op)
+{
+	return op == PROCESS_VM_WRITE;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+process_vm_op_is_valid(int op)
+{
+	return op == PROCESS_VM_READ || op == PROCESS_VM_WRITE;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+ptrace_signal_data_result(long data)
+{
+	return (data > 64 || data < 0) ? -EINVAL : 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+ptrace_detach_signal_result(long data)
+{
+	return (data > 64 || data < 0) ? -EIO : 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+ptrace_user_area_result(long addr, unsigned long user_struct_size)
+{
+	return (addr > user_struct_size - 8 || addr < 0) ? -EFAULT : 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+ptrace_status_allows_io(int status)
+{
+	return status & (PS_STOPPED | PS_TRACED) ? 1 : 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+ptrace_setoptions_flags_result(int flags)
+{
+	if (flags & ~(PTRACE_O_TRACESYSGOOD|
+				PTRACE_O_TRACEFORK|
+				PTRACE_O_TRACEVFORK|
+				PTRACE_O_TRACECLONE|
+				PTRACE_O_TRACEEXEC|
+				PTRACE_O_TRACEVFORKDONE|
+				PTRACE_O_TRACEEXIT)) {
+		return -EINVAL;
+	}
+
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+ptrace_apply_options(int current, int flags)
+{
+	return (current & ~PTRACE_O_MASK) | flags;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+ptrace_child_traced_result(int has_child, int has_proc, int ptrace)
+{
+	return (!has_child || !has_proc || !(ptrace & PT_TRACED)) ? -ESRCH : 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+ptrace_attach_policy_result(int tracer_pid, int target_pid,
+		int target_ptrace, int same_process)
+{
+	if (tracer_pid == target_pid) {
+		return -EPERM;
+	}
+
+	if ((target_ptrace & PT_TRACED) || same_process) {
+		return -EPERM;
+	}
+
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+ptrace_detach_state_result(int is_traced, int same_report_proc)
+{
+	return (!is_traced || !same_report_proc) ? -ESRCH : 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+ptrace_siginfo_state_result(int status, int has_siginfo)
+{
+	if (!ptrace_status_allows_io(status)) {
+		return -ESRCH;
+	}
+
+	return has_siginfo ? 0 : -ESRCH;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+wait4_options_result(int options)
+{
+	return (options & ~(WNOHANG | WUNTRACED | WCONTINUED |
+				__WCLONE | __WALL)) ? -EINVAL : 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+waitid_to_wait_pid_result(int idtype, int id, int *pidp)
+{
+	if (idtype == P_PID) {
+		*pidp = id;
+	}
+	else if (idtype == P_PGID) {
+		*pidp = -id;
+	}
+	else if (idtype == P_ALL) {
+		*pidp = -1;
+	}
+	else {
+		return -EINVAL;
+	}
+
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+waitid_options_result(int options)
+{
+	if (options & ~(WEXITED | WSTOPPED | WCONTINUED | WNOHANG |
+				WNOWAIT | __WCLONE | __WALL)) {
+		return -EINVAL;
+	}
+
+	if (!(options & (WEXITED | WSTOPPED | WCONTINUED))) {
+		return -EINVAL;
+	}
+
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+wait_should_scan_process_result(int options)
+{
+	return (options & __WCLONE) ? 0 : 1;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+wait_should_scan_thread_result(int pid, int options)
+{
+	return ((pid == -1 || pid > 0) && (options & (__WCLONE | __WALL))) ?
+		1 : 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+wait_process_pid_matches_result(int pid, int parent_pgid, int child_pgid,
+		int child_pid)
+{
+	if (pid == -1) {
+		return 1;
+	}
+	if (pid < 0) {
+		return -pid == child_pgid;
+	}
+	if (pid == 0) {
+		return parent_pgid == child_pgid;
+	}
+	return pid == child_pid;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+wait_thread_tid_matches_result(int tid, int child_tid, int is_main_thread)
+{
+	if (is_main_thread) {
+		return 0;
+	}
+	return tid == -1 || tid == child_tid;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+wait_process_exited_candidate_result(int options, int child_status)
+{
+	return (options & WEXITED) && child_status == PS_ZOMBIE;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+wait_thread_exited_candidate_result(int options, int child_status)
+{
+	return (options & WEXITED) &&
+		(child_status == PS_EXITED || child_status == PS_ZOMBIE);
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+wait_nonptraced_stop_candidate_result(int ptrace, int signal_flags,
+		int options)
+{
+	return !(ptrace & PT_TRACED) &&
+		(signal_flags & SIGNAL_STOP_STOPPED) &&
+		(options & WUNTRACED);
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+wait_ptraced_stop_candidate_result(int ptrace, int status)
+{
+	return (ptrace & PT_TRACED) &&
+		(status & (PS_STOPPED | PS_TRACED | PS_DELAY_TRACED));
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+wait_continued_candidate_result(int signal_flags, int options)
+{
+	return (signal_flags & SIGNAL_STOP_CONTINUED) &&
+		(options & WCONTINUED);
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+wait_reap_needed_result(int options)
+{
+	return (options & WNOWAIT) ? 0 : 1;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+wait_nohang_result(int options)
+{
+	return (options & WNOHANG) ? 1 : 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+wait_empty_result(int empty)
+{
+	return empty ? -ECHILD : 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+wait_stopped_status_result(int exit_status)
+{
+	return (exit_status << 8) | 0x7f;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+wait_continued_status_result(void)
+{
+	return 0xffff;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+wait_zombie_skip_host_result(int ppid_parent_pid, int current_pid, int nowait)
+{
+	return ppid_parent_pid != current_pid || nowait;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+wait_thread_empty_candidate_result(int is_main_thread, int termsig)
+{
+	return !is_main_thread && termsig && termsig != SIGCHLD;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+waitid_status_code_result(int status)
+{
+	if ((status & 0x000000ff) == 0x0000007f) {
+		return CLD_STOPPED;
+	}
+	else if ((status & 0x0000ffff) == 0x0000ffff) {
+		return CLD_CONTINUED;
+	}
+	else if (status & 0x000000ff) {
+		return CLD_KILLED;
+	}
+	return CLD_EXITED;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+clone_pthread_marker_result(int clone_flags, unsigned long newsp,
+		unsigned long parent_tidptr)
+{
+	return (clone_flags & CLONE_VM) && newsp == parent_tidptr;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+clone_flags_result(int clone_flags, int coredump_barrier_count)
+{
+	int termsig = clone_flags & CSIGNAL;
+
+	if (((clone_flags & CLONE_VM) && !(clone_flags & CLONE_THREAD)) ||
+			(!(clone_flags & CLONE_VM) &&
+			 (clone_flags & CLONE_THREAD))) {
+		return -EINVAL;
+	}
+
+	if (termsig < 0 || _NSIG < termsig) {
+		return -EINVAL;
+	}
+
+	if ((clone_flags & CLONE_SIGHAND) && !(clone_flags & CLONE_VM)) {
+		return -EINVAL;
+	}
+
+	if ((clone_flags & CLONE_THREAD) && !(clone_flags & CLONE_SIGHAND)) {
+		return -EINVAL;
+	}
+
+	if ((clone_flags & CLONE_FS) && (clone_flags & CLONE_NEWNS)) {
+		return -EINVAL;
+	}
+
+	if ((clone_flags & CLONE_NEWIPC) && (clone_flags & CLONE_SYSVSEM)) {
+		return -EINVAL;
+	}
+
+	if ((clone_flags & CLONE_NEWPID) && (clone_flags & CLONE_THREAD)) {
+		return -EINVAL;
+	}
+
+	if (coredump_barrier_count) {
+		return -EINVAL;
+	}
+
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+clone_host_parent_flags_result(int clone_flags, int ppid_parent_pid)
+{
+	if ((clone_flags & CLONE_PARENT) && ppid_parent_pid != 1) {
+		return clone_flags;
+	}
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+clone_report_thread_result(int clone_flags, int termsig)
+{
+	return (clone_flags & CLONE_VM) && termsig && termsig != SIGCHLD;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+ptrace_exec_event_signal_result(int ptrace)
+{
+	return (ptrace & (PT_TRACE_EXEC | PTRACE_O_TRACEEXEC)) ?
+		(SIGTRAP | (PTRACE_EVENT_EXEC << 8)) : 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+ptrace_syscall_event_signal_result(int ptrace)
+{
+	return (ptrace & PT_TRACE_SYSCALL) ?
+		(SIGTRAP | ((ptrace & PTRACE_O_TRACESYSGOOD) ? 0x80 : 0)) :
+		0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+ptrace_clone_event_result(int ptrace, int clone_flags)
+{
+	int event = 0;
+
+	if (clone_flags & CLONE_VFORK) {
+		if (ptrace & PTRACE_O_TRACEVFORK) {
+			event = PTRACE_EVENT_VFORK;
+		}
+		if (ptrace & PTRACE_O_TRACEVFORKDONE) {
+			event = PTRACE_EVENT_VFORK_DONE;
+		}
+	}
+	else if ((clone_flags & CSIGNAL) == SIGCHLD) {
+		if (ptrace & PTRACE_O_TRACEFORK) {
+			event = PTRACE_EVENT_FORK;
+		}
+	}
+	else {
+		if (ptrace & PTRACE_O_TRACECLONE) {
+			event = PTRACE_EVENT_CLONE;
+		}
+	}
+
+	return event;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+ptrace_clone_reparent_result(int event)
+{
+	return event != PTRACE_EVENT_VFORK_DONE;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+execveat_policy_result(int flags, int dirfd, int filename_first)
+{
+	if ((flags & ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH)) != 0) {
+		return -EINVAL;
+	}
+
+	if (filename_first == '/' || dirfd == AT_FDCWD) {
+		return 0;
+	}
+
+	if (dirfd < 0) {
+		return -EBADF;
+	}
+
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+futex_decode_flags_result(int flags, int *opp, int *fsharedp)
+{
+	*fsharedp = (flags & FUTEX_PRIVATE_FLAG) ? 0 : 1;
+	*opp = flags & FUTEX_CMD_MASK;
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+futex_wait_timeout_needed_result(int op, int has_utime)
+{
+	return has_utime && (op == FUTEX_WAIT || op == FUTEX_WAIT_BITSET);
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+futex_timeout_is_absolute_result(int op)
+{
+	return op == FUTEX_WAIT_BITSET;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+futex_clock_id_result(int flags)
+{
+	return (flags & FUTEX_CLOCK_REALTIME) ? CLOCK_REALTIME :
+		CLOCK_MONOTONIC;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE unsigned int
+futex_requeue_val2_result(int op, unsigned long arg3)
+{
+	return (op == FUTEX_CMP_REQUEUE || op == FUTEX_WAKE_OP) ?
+		(uint32_t)arg3 : 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE unsigned long
+futex_timeout_ns_result(int op, long timeout_sec, long timeout_nsec,
+		long now_sec, long now_nsec)
+{
+	unsigned long target =
+		(unsigned long)(timeout_sec * NS_PER_SEC + timeout_nsec);
+
+	if (op == FUTEX_WAIT_BITSET) {
+		unsigned long now =
+			(unsigned long)(now_sec * NS_PER_SEC + now_nsec);
+		return target - now;
+	}
+
+	return target;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+brk_prepare_result(unsigned long address, unsigned long brk_start,
+		unsigned long brk_end, unsigned long brk_end_allocated,
+		unsigned long *resultp, int *extend_neededp)
+{
+	if (address < brk_start || address < brk_end) {
+		*resultp = brk_end;
+		*extend_neededp = 0;
+		return 0;
+	}
+
+	if (address <= brk_end_allocated) {
+		*resultp = address;
+		*extend_neededp = 0;
+		return 0;
+	}
+
+	*resultp = brk_end;
+	*extend_neededp = 1;
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE unsigned long
+brk_default_vrflags(void)
+{
+	unsigned long vrflag = VR_PROT_READ | VR_PROT_WRITE;
+
+	vrflag |= VR_PRIVATE;
+	vrflag |= VRFLAG_PROT_TO_MAXPROT(vrflag);
+	return vrflag;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+mincore_prepare_range(uintptr_t start, size_t len, uintptr_t user_start,
+		uintptr_t user_end, uintptr_t *endp)
+{
+	*endp = start + len;
+	if (start & (PAGE_SIZE - 1)) {
+		return -EINVAL;
+	}
+	if ((start < user_start)
+			|| (user_end <= start)
+			|| ((user_end - start) < len)) {
+		return -ENOMEM;
+	}
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE unsigned long
+mmap_base_vrflags(int prot, int flags, unsigned long vrf0, int anon_on_demand)
+{
+	unsigned long vrflags = VR_NONE;
+
+	vrflags |= vrf0;
+	vrflags |= PROT_TO_VR_FLAG(prot);
+	vrflags |= (flags & MAP_PRIVATE) ? VR_PRIVATE : 0;
+	vrflags |= (flags & MAP_LOCKED) ? VR_LOCKED : 0;
+	vrflags |= VR_DEMAND_PAGING;
+	if (flags & MAP_ANONYMOUS && !anon_on_demand) {
+		if (flags & MAP_PRIVATE) {
+			vrflags &= ~VR_DEMAND_PAGING;
+		}
+	}
+	return vrflags;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+mmap_populated_mapping_result(int flags)
+{
+	return (flags & (MAP_POPULATE | MAP_LOCKED)) ? 1 : 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+mmap_should_set_host_ro(int flags, int prot, int anonymous_only)
+{
+	if (anonymous_only && !(flags & MAP_ANONYMOUS)) {
+		return 0;
+	}
+	return !(prot & PROT_WRITE);
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+mmap_update_private_maxprot(int flags, int maxprot)
+{
+	if ((flags & MAP_PRIVATE) && (maxprot & PROT_READ)) {
+		maxprot |= PROT_WRITE;
+	}
+	return maxprot;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+mmap_prot_denied_result(int prot, int maxprot, int *deniedp)
+{
+	int denied = prot & ~maxprot;
+
+	*deniedp = denied;
+	if (!denied) {
+		return 0;
+	}
+	return (denied == PROT_EXEC) ? -EPERM : -EACCES;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE unsigned long
+mmap_maxprot_to_vrflags(int maxprot)
+{
+	return VRFLAG_PROT_TO_MAXPROT(PROT_TO_VR_FLAG(maxprot));
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+mmap_should_force_straight(int flags, int straight_map, unsigned long phys,
+		size_t len, size_t threshold)
+{
+	return (flags & MAP_ANONYMOUS) && straight_map &&
+		!(flags & MAP_FIXED) && phys && (len >= threshold);
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+mmap_is_shared(int flags)
+{
+	return (flags & MAP_SHARED) ? 1 : 0;
+}
+#endif
+
+#undef SYSCALL_POLICY_HELPER_SCOPE
+
 SYSCALL_DECLARE(tgkill)
 {
 	int tgid = ihk_mc_syscall_arg0(ctx);
@@ -3803,9 +5310,11 @@ SYSCALL_DECLARE(tgkill)
 	int sig = ihk_mc_syscall_arg2(ctx);
 	struct thread *thread = cpu_local_var(current);
 	struct siginfo info;
+	int error;
 
-	if (tgid <= 0 || tid <= 0) {
-		return -EINVAL;
+	error = tgkill_target_result(tgid, tid);
+	if (error) {
+		return error;
 	}
 
 	memset(&info, '\0', sizeof info);
@@ -3822,14 +5331,17 @@ SYSCALL_DECLARE(tkill)
 	int sig = ihk_mc_syscall_arg1(ctx);
 	struct thread *thread = cpu_local_var(current);
 	struct siginfo info;
+	int error;
 
 	memset(&info, '\0', sizeof info);
 	info.si_signo = sig;
 	info.si_code = SI_TKILL;
 	info._sifields._kill.si_pid = thread->proc->pid;
 
-	if(tid <= 0)
-		return -EINVAL;
+	error = tkill_tid_result(tid);
+	if (error) {
+		return error;
+	}
 
 	return do_kill(thread, -1, tid, sig, &info, 0);
 }
@@ -4056,17 +5568,16 @@ SYSCALL_DECLARE(setpgid)
 	struct mcs_rwlock_node_irqsave lock;
 	long rc;
 
-	if(pid == 0)
-		pid = proc->pid;
-	if(pgid == 0)
-		pgid = pid;
+	pid = setpgid_normalize_pid(proc->pid, pid);
+	pgid = setpgid_normalize_pgid(pid, pgid);
 
 	if(proc->pid != pid){
 		proc = find_process(pid, &lock);
 		if(proc){
-			if(proc->execed){
+			rc = setpgid_execed_result(proc->execed);
+			if(rc){
 				process_unlock(proc, &lock);
-				return -EACCES;
+				return rc;
 			}
 			process_unlock(proc, &lock);
 		}
@@ -4087,16 +5598,11 @@ SYSCALL_DECLARE(setpgid)
 
 /* Ignore the registration by start_thread() (in pthread_create.c)
    because McKernel doesn't unlock mutex-es held by the thread which has been killed. */
-#define ROBUST_LIST_HEAD_SIZE 24
 SYSCALL_DECLARE(set_robust_list)
 {
 	size_t len = (size_t)ihk_mc_syscall_arg1(ctx);
 
-	if (len != ROBUST_LIST_HEAD_SIZE) {
-		return -EINVAL;
-	}
-
-	return 0;
+	return robust_list_len_result(len);
 }
 
 int
@@ -4106,12 +5612,11 @@ do_sigaction(int sig, struct k_sigaction *act, struct k_sigaction *oact)
 	struct k_sigaction *k;
 	struct mcs_rwlock_node_irqsave mcs_rw_node;
 	ihk_mc_user_context_t ctx0;
+	int error;
 
-	if (!valid_signal(sig) || sig < 1) {
-		return -EINVAL;
-	}
-	if (act && (sig == SIGKILL || sig == SIGSTOP)) {
-		return -EINVAL;
+	error = sigaction_validate(sig, act != NULL);
+	if (error) {
+		return error;
 	}
 
 	mcs_rwlock_writer_lock(&thread->sigcommon->lock, &mcs_rw_node);
@@ -4312,24 +5817,11 @@ SYSCALL_DECLARE(execveat)
 	int flags = (int)ihk_mc_syscall_arg4(ctx);
 	long ret;
 
-	/* validate flags */
-	if ((flags & ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH)) != 0) {
-		ret = -EINVAL;
+	ret = execveat_policy_result(flags, dirfd, filename[0]);
+	if (ret) {
 		goto out;
 	}
 
-	if (filename[0] == '/' || dirfd == AT_FDCWD) {
-		/* behave same as execve */
-		goto exec;
-	}
-
-	/* validate dirfd */
-	if (dirfd < 0 && dirfd != AT_FDCWD) {
-		ret = -EBADF;
-		goto out;
-	}
-
-exec:
 	ret = do_execveat(ctx, dirfd, filename,
 			(char **)ihk_mc_syscall_arg2(ctx),
 			(char **)ihk_mc_syscall_arg3(ctx), flags);
@@ -4496,17 +5988,15 @@ SYSCALL_DECLARE(rt_sigprocmask)
 	sigset_t *oldset = (sigset_t *)ihk_mc_syscall_arg2(ctx);
 	size_t sigsetsize = (size_t)ihk_mc_syscall_arg3(ctx);
 	struct thread *thread = cpu_local_var(current);
-	__sigset_t wsig;
+	__sigset_t wsig = 0;
 	ihk_mc_user_context_t ctx0;
+	int error;
 
-	if(sigsetsize != sizeof(sigset_t))
-		return -EINVAL;
-
-	if(set &&
-	   how != SIG_BLOCK &&
-	   how != SIG_UNBLOCK &&
-	   how != SIG_SETMASK)
-		return -EINVAL;
+	error = rt_sigprocmask_validate(sigsetsize, sizeof(sigset_t),
+			set != NULL, how);
+	if (error) {
+		return error;
+	}
 
 	if(oldset){
 		wsig = thread->sigmask.__val[0];
@@ -4516,20 +6006,9 @@ SYSCALL_DECLARE(rt_sigprocmask)
 	if(set){
 		if(copy_from_user(&wsig, set->__val, sizeof wsig))
 			goto fault;
-		switch(how){
-		    case SIG_BLOCK:
-			thread->sigmask.__val[0] |= wsig;
-			break;
-		    case SIG_UNBLOCK:
-			thread->sigmask.__val[0] &= ~wsig;
-			break;
-		    case SIG_SETMASK:
-			thread->sigmask.__val[0] = wsig;
-			break;
-		}
 	}
-	thread->sigmask.__val[0] &= ~__sigmask(SIGKILL);
-	thread->sigmask.__val[0] &= ~__sigmask(SIGSTOP);
+	thread->sigmask.__val[0] = rt_sigprocmask_apply(
+			thread->sigmask.__val[0], wsig, set != NULL, how);
 	wsig = thread->sigmask.__val[0];
 
 	ihk_mc_syscall_arg0(&ctx0) = wsig;
@@ -4549,9 +6028,12 @@ SYSCALL_DECLARE(rt_sigpending)
 	struct thread *thread = cpu_local_var(current);
 	sigset_t *set = (sigset_t *)ihk_mc_syscall_arg0(ctx);
 	size_t sigsetsize = (size_t)ihk_mc_syscall_arg1(ctx);
+	int error;
 
-	if (sigsetsize > sizeof(sigset_t))
-		return -EINVAL;
+	error = rt_sigpending_size_result(sigsetsize, sizeof(sigset_t));
+	if (error) {
+		return error;
+	}
 
 	lock = &thread->sigcommon->lock;
 	head = &thread->sigcommon->sigpending;
@@ -4591,13 +6073,18 @@ SYSCALL_DECLARE(signalfd4)
 	__sigset_t mask;
 	size_t sigsetsize = (size_t)ihk_mc_syscall_arg2(ctx);
 	int flags = ihk_mc_syscall_arg3(ctx);
+	int error;
 
-	if(sigsetsize != sizeof(sigset_t))
-		return -EINVAL;
+	error = signalfd4_sigsetsize_result(sigsetsize, sizeof(sigset_t));
+	if (error) {
+		return error;
+	}
 	if(copy_from_user(&mask, maskp, sizeof mask))
 		return -EFAULT;
-	if(flags & ~(SFD_NONBLOCK | SFD_CLOEXEC))
-		return -EINVAL;
+	error = signalfd4_flags_result(flags);
+	if (error) {
+		return error;
+	}
 
 	if(fd == -1){
 		struct syscall_request request IHK_DMA_ALIGN;
@@ -5515,6 +7002,7 @@ SYSCALL_DECLARE(rt_sigtimedwait)
 	struct thread *thread = cpu_local_var(current);
 	siginfo_t winfo;
 	__sigset_t bset;
+	__sigset_t blocked_set;
 	__sigset_t wset;
 	__sigset_t nset;
 	struct timespec wtimeout;
@@ -5527,44 +7015,39 @@ SYSCALL_DECLARE(rt_sigtimedwait)
         struct timespec ats;
         struct timespec ets;
 	struct ihk_os_cpu_monitor *monitor = cpu_local_var(monitor);
+	int error;
 
 	monitor->status = IHK_OS_MONITOR_KERNEL_HEAVY;
 
-	if (sigsetsize > sizeof(sigset_t))
-		return -EINVAL;
+	error = rt_sigtimedwait_prepare(sigsetsize, sizeof(sigset_t),
+			set != NULL);
+	if (error) {
+		return error;
+	}
 
-	if(set == NULL)
-		return -EFAULT;
 	memset(&winfo, '\0', sizeof winfo);
 	if(copy_from_user(&wset, set, sizeof wset))
 		return -EFAULT;
 	if(timeout){
 		if(copy_from_user(&wtimeout, timeout, sizeof wtimeout))
 			return -EFAULT;
-		if(wtimeout.tv_nsec >= 1000000000L || wtimeout.tv_nsec < 0 ||
-		   wtimeout.tv_sec < 0)
-			return -EINVAL;
-		if (!gettime_local_support &&
-		    (wtimeout.tv_sec || wtimeout.tv_nsec)) {
-			return -EOPNOTSUPP;
+		error = rt_sigtimedwait_timeout_result(wtimeout.tv_sec,
+				wtimeout.tv_nsec, gettime_local_support);
+		if (error) {
+			return error;
 		}
 	}
 
-	wset &= ~__sigmask(SIGKILL);
-	wset &= ~__sigmask(SIGSTOP);
 	bset = thread->sigmask.__val[0];
-	thread->sigmask.__val[0] = bset | wset;
-	nset = ~(bset | wset);
+	rt_sigtimedwait_prepare_masks(wset, bset, &wset, &blocked_set, &nset);
+	thread->sigmask.__val[0] = blocked_set;
 
 	if(timeout){
 		if (gettime_local_support) {
 			calculate_time_from_tsc(&ets);
-			ets.tv_sec += wtimeout.tv_sec;
-			ets.tv_nsec += wtimeout.tv_nsec;
-			if(ets.tv_nsec >= 1000000000L){
-				ets.tv_sec++;
-				ets.tv_nsec -= 1000000000L;
-			}
+			rt_sigtimedwait_deadline(ets.tv_sec, ets.tv_nsec,
+					wtimeout.tv_sec, wtimeout.tv_nsec,
+					&ets.tv_sec, &ets.tv_nsec);
 		}
 		else {
 			memset(&ats, '\0', sizeof ats);
@@ -5579,9 +7062,9 @@ SYSCALL_DECLARE(rt_sigtimedwait)
 			if(timeout){
 				if (gettime_local_support)
 					calculate_time_from_tsc(&ats);
-				if(ats.tv_sec > ets.tv_sec ||
-				   (ats.tv_sec == ets.tv_sec &&
-				    ats.tv_nsec >= ets.tv_nsec)){
+				if(rt_sigtimedwait_timeout_expired(ats.tv_sec,
+						ats.tv_nsec, ets.tv_sec,
+						ets.tv_nsec)){
 					return -EAGAIN;
 				}
 			}
@@ -5659,7 +7142,8 @@ SYSCALL_DECLARE(rt_sigtimedwait)
 			return -EFAULT;
 		}
 	}
-	for(w = pending->sigmask.__val[0], sig = 0; w; sig++, w >>= 1);
+	w = pending->sigmask.__val[0];
+	sig = sigmask_to_signal_number(w);
 	kfree(pending);
 
 	return sig;
@@ -5671,9 +7155,12 @@ SYSCALL_DECLARE(rt_sigqueueinfo)
 	int sig = (int)ihk_mc_syscall_arg1(ctx);
 	void *winfo = (void *)ihk_mc_syscall_arg2(ctx);
 	struct siginfo info;
+	int error;
 
-	if(pid <= 0)
-		return -ESRCH;
+	error = rt_sigqueueinfo_pid_result(pid);
+	if (error) {
+		return error;
+	}
 
 	if(copy_from_user(&info, winfo, sizeof info))
 		return -EFAULT;
@@ -5694,9 +7181,7 @@ do_sigsuspend(struct thread *thread, const sigset_t *set)
 
 	monitor->status = IHK_OS_MONITOR_KERNEL_HEAVY;
 
-	wset = set->__val[0];
-	wset &= ~__sigmask(SIGKILL);
-	wset &= ~__sigmask(SIGSTOP);
+	wset = sigsuspend_prepare_mask(set->__val[0]);
 	bset = thread->sigmask.__val[0];
 	thread->sigmask.__val[0] = wset;
 
@@ -5740,7 +7225,8 @@ do_sigsuspend(struct thread *thread, const sigset_t *set)
 		head = &thread->sigcommon->sigpending;
 		mcs_rwlock_writer_lock(lock, &mcs_rw_node);
 		list_for_each_entry(pending, head, list){
-			if(!(pending->sigmask.__val[0] & wset))
+			if(sigsuspend_pending_matches(
+					pending->sigmask.__val[0], wset))
 				break;
 		}
 
@@ -5751,10 +7237,11 @@ do_sigsuspend(struct thread *thread, const sigset_t *set)
 			head = &thread->sigpending;
 			mcs_rwlock_writer_lock(lock, &mcs_rw_node);
 			list_for_each_entry(pending, head, list){
-				if(!(pending->sigmask.__val[0] & wset))
+				if(sigsuspend_pending_matches(
+						pending->sigmask.__val[0], wset))
 					break;
 			}
-		}
+	}
 		if(&pending->list == head){
 			mcs_rwlock_writer_unlock(lock, &mcs_rw_node);
 			continue;
@@ -5782,9 +7269,12 @@ SYSCALL_DECLARE(rt_sigsuspend)
 	const sigset_t *set = (const sigset_t *)ihk_mc_syscall_arg0(ctx);
 	size_t sigsetsize = (size_t)ihk_mc_syscall_arg1(ctx);
 	sigset_t wset;
+	int error;
 
-	if (sigsetsize > sizeof(sigset_t))
-		return -EINVAL;
+	error = sigsuspend_sigsetsize_result(sigsetsize, sizeof(sigset_t));
+	if (error) {
+		return error;
+	}
 	if(copy_from_user(&wset, set, sizeof wset))
 		return -EFAULT;
 
@@ -5801,8 +7291,10 @@ SYSCALL_DECLARE(rt_sigaction)
 	struct k_sigaction new_sa, old_sa;
 	int rc;
 
-	if (sigsetsize != sizeof(sigset_t))
-		return -EINVAL;
+	rc = sigaction_sigsetsize_result(sigsetsize, sizeof(sigset_t));
+	if (rc) {
+		return rc;
+	}
 
 	if (act) {
 		if (copy_from_user(&new_sa.sa, act, sizeof(new_sa.sa))) {
@@ -5828,6 +7320,7 @@ SYSCALL_DECLARE(sigaltstack)
 	const stack_t *ss = (const stack_t *)ihk_mc_syscall_arg0(ctx);
 	stack_t *oss = (stack_t *)ihk_mc_syscall_arg1(ctx);
 	stack_t	wss;
+	int error;
 
 	if(oss)
 		if(copy_to_user(oss, &thread->sigstack, sizeof wss))
@@ -5835,17 +7328,16 @@ SYSCALL_DECLARE(sigaltstack)
 	if(ss){
 		if(copy_from_user(&wss, ss, sizeof wss))
 			return -EFAULT;
-		if(wss.ss_flags != 0 && wss.ss_flags != SS_DISABLE)
-			return -EINVAL;
-		if(wss.ss_flags == SS_DISABLE){
+		error = sigaltstack_validate(wss.ss_flags, wss.ss_size);
+		if (error) {
+			return error;
+		}
+		if(sigaltstack_is_disable(wss.ss_flags)){
 			thread->sigstack.ss_sp = NULL;
 			thread->sigstack.ss_flags = SS_DISABLE;
 			thread->sigstack.ss_size = 0;
 		}
 		else{
-			if(wss.ss_size < MINSIGSTKSZ)
-				return -ENOMEM;
-
 			memcpy(&thread->sigstack, &wss, sizeof wss);
 		}
 	}
@@ -5858,7 +7350,7 @@ SYSCALL_DECLARE(mincore)
 	const uintptr_t start = ihk_mc_syscall_arg0(ctx);
 	const size_t len = ihk_mc_syscall_arg1(ctx);
 	uint8_t * const vec = (void *)ihk_mc_syscall_arg2(ctx);
-	const uintptr_t end = start + len;
+	uintptr_t end;
 	struct thread *thread = cpu_local_var(current);
 	struct process_vm *vm = thread->vm;
 	void *up;
@@ -5868,16 +7360,15 @@ SYSCALL_DECLARE(mincore)
 	int error;
 	pte_t *ptep;
 
-	if (start & (PAGE_SIZE - 1)) {
+	error = mincore_prepare_range(start, len, vm->region.user_start,
+			vm->region.user_end, &end);
+	if (error == -EINVAL) {
 		dkprintf("mincore(0x%lx,0x%lx,%p): EINVAL\n", start, len, vec);
-		return -EINVAL;
+		return error;
 	}
-	if ((start < vm->region.user_start)
-			|| (vm->region.user_end <= start)
-			|| ((vm->region.user_end - start) < len))
-	{
+	if (error == -ENOMEM) {
 		dkprintf("mincore(0x%lx,0x%lx,%p): EINVAL\n", start, len, vec);
-		return -ENOMEM;
+		return error;
 	}
 
 	range = NULL;
@@ -7147,11 +8638,7 @@ long do_futex(int n, unsigned long arg0, unsigned long arg1,
 		monitor->status = IHK_OS_MONITOR_KERNEL_HEAVY;
 	} 
 
-	/* Cross-address space futex? */
-	if (op & FUTEX_PRIVATE_FLAG) {
-		fshared = 0;
-	}
-	op = (op & FUTEX_CMD_MASK);
+	futex_decode_flags_result(op, &op, &fshared);
 	
 	dkprintf("futex op=[%x, %s],uaddr=%lx, val=%x, utime=%lx, uaddr2=%lx, val3=%x, []=%x, shared: %d\n",
 			flags,
@@ -7164,18 +8651,18 @@ long do_futex(int n, unsigned long arg0, unsigned long arg1,
 			(op == FUTEX_REQUEUE) ? "FUTEX_REQUEUE (NOT IMPL!)" : "unknown",
 			(unsigned long)uaddr, val, utime, uaddr2, val3, *uaddr, fshared);
 
-	if ((op == FUTEX_WAIT || op == FUTEX_WAIT_BITSET) && utime) {
+	if (futex_wait_timeout_needed_result(op, utime != NULL)) {
 		dkprintf("%s: utime=%ld.%09ld\n",
 				__func__, utime->tv_sec, utime->tv_nsec);
 	}
-	if (utime && (op == FUTEX_WAIT_BITSET || op == FUTEX_WAIT)) {
+	if (futex_wait_timeout_needed_result(op, utime != NULL)) {
 		unsigned long nsec_timeout;
 		if (!uti_clv) {
 			/* Use cycles for non-UTI case */
 
 		/* As per the Linux implementation FUTEX_WAIT specifies the duration of
 		 * the timeout, while FUTEX_WAIT_BITSET specifies the absolute timestamp */
-		if (op == FUTEX_WAIT_BITSET) {
+		if (futex_timeout_is_absolute_result(op)) {
 			struct timespec ats;
 
 			if (!gettime_local_support ||
@@ -7190,8 +8677,7 @@ long do_futex(int n, unsigned long arg0, unsigned long arg1,
 
 				request.number = n;
 				request.args[0] = virt_to_phys(tv_now);
-				request.args[1] = (flags & FUTEX_CLOCK_REALTIME)?
-						      CLOCK_REALTIME: CLOCK_MONOTONIC;
+				request.args[1] = futex_clock_id_result(flags);
 
 				int r = do_syscall(&request,
 						   ihk_mc_get_processor_id());
@@ -7208,38 +8694,41 @@ long do_futex(int n, unsigned long arg0, unsigned long arg1,
 				calculate_time_from_tsc(&ats);
 			}
 
-			nsec_timeout = (utime->tv_sec * NS_PER_SEC + utime->tv_nsec) -
-				(ats.tv_sec * NS_PER_SEC + ats.tv_nsec);
+			nsec_timeout = futex_timeout_ns_result(op,
+					utime->tv_sec, utime->tv_nsec,
+					ats.tv_sec, ats.tv_nsec);
 		}
 		else {
-			nsec_timeout = (utime->tv_sec * NS_PER_SEC + utime->tv_nsec);
+			nsec_timeout = futex_timeout_ns_result(op,
+					utime->tv_sec, utime->tv_nsec, 0, 0);
 		}
 		timeout = nsec_timeout * 1000 / ihk_mc_get_ns_per_tsc();
 
 		}
 		else{
-			if (op == FUTEX_WAIT_BITSET) { /* User passed absolute time */
+			if (futex_timeout_is_absolute_result(op)) { /* User passed absolute time */
 				struct timespec ats;
-				ret = (*linux_clock_gettime)((flags & FUTEX_CLOCK_REALTIME) ? CLOCK_REALTIME: CLOCK_MONOTONIC, &ats);
+				ret = (*linux_clock_gettime)(futex_clock_id_result(flags), &ats);
 				if (ret) {
 					return ret;
 				}
 				dkprintf("%s: ats=%ld.%09ld\n",
 						__func__, ats.tv_sec, ats.tv_nsec);
 				/* Use nsec for UTI case */
-				timeout = (utime->tv_sec * NS_PER_SEC + utime->tv_nsec) -
-					(ats.tv_sec * NS_PER_SEC + ats.tv_nsec);
+				timeout = futex_timeout_ns_result(op,
+						utime->tv_sec, utime->tv_nsec,
+						ats.tv_sec, ats.tv_nsec);
 			} else { /* User passed relative time */
 				/* Use nsec for UTI case */
-				timeout = (utime->tv_sec * NS_PER_SEC + utime->tv_nsec);
+				timeout = futex_timeout_ns_result(op,
+						utime->tv_sec, utime->tv_nsec, 0, 0);
 			}
 		}
 	}
 
 	/* Requeue parameter in 'utime' if op == FUTEX_CMP_REQUEUE.
 	 * number of waiters to wake in 'utime' if op == FUTEX_WAKE_OP. */
-	if (op == FUTEX_CMP_REQUEUE || op == FUTEX_WAKE_OP)
-		val2 = (uint32_t) (unsigned long) arg3;
+	val2 = futex_requeue_val2_result(op, arg3);
 
 	ret = futex(uaddr, op, val, timeout, uaddr2, val2, val3, fshared);
 
@@ -7346,6 +8835,8 @@ SYSCALL_DECLARE(exit)
 	return 0;
 }
 
+#if !defined(MCKERNEL_RUST_RLIMIT_HELPERS) || \
+	defined(MCKERNEL_RLIMIT_HELPERS_TEST_EXPORT)
 static int rlimits[] = {
 #ifdef RLIMIT_AS
 	RLIMIT_AS,	MCK_RLIMIT_AS,
@@ -7396,13 +8887,65 @@ static int rlimits[] = {
 	RLIMIT_STACK,	MCK_RLIMIT_STACK,
 #endif
 };
+#endif /* !MCKERNEL_RUST_RLIMIT_HELPERS || MCKERNEL_RLIMIT_HELPERS_TEST_EXPORT */
+
+#if defined(MCKERNEL_RUST_RLIMIT_HELPERS) || \
+	defined(MCKERNEL_RLIMIT_HELPERS_TEST_EXPORT)
+#define RLIMIT_HELPER_SCOPE
+#else
+#define RLIMIT_HELPER_SCOPE static
+#endif
+
+#ifdef MCKERNEL_RUST_RLIMIT_HELPERS
+extern int prlimit_validate_resource(int resource);
+extern int prlimit_validate_new_limit(rlim_t rlim_cur, rlim_t rlim_max);
+extern int prlimit_linux_update_needed(int resource);
+extern int prlimit_to_mckernel_resource(int resource);
+#else
+RLIMIT_HELPER_SCOPE int prlimit_validate_resource(int resource)
+{
+	return (resource < 0 || resource >= RLIMIT_NLIMITS) ? -EINVAL : 0;
+}
+
+RLIMIT_HELPER_SCOPE int prlimit_validate_new_limit(rlim_t rlim_cur,
+		rlim_t rlim_max)
+{
+	return rlim_cur > rlim_max ? -EINVAL : 0;
+}
+
+RLIMIT_HELPER_SCOPE int prlimit_linux_update_needed(int resource)
+{
+	switch (resource) {
+	case RLIMIT_FSIZE:
+	case RLIMIT_NOFILE:
+	case RLIMIT_LOCKS:
+	case RLIMIT_MSGQUEUE:
+		return 1;
+	default:
+		return 0;
+	}
+}
+
+RLIMIT_HELPER_SCOPE int prlimit_to_mckernel_resource(int resource)
+{
+	int i;
+
+	for (i = 0; i < sizeof(rlimits) / sizeof(int); i += 2) {
+		if (rlimits[i] == resource) {
+			return rlimits[i + 1];
+		}
+	}
+
+	return -1;
+}
+#endif /* MCKERNEL_RUST_RLIMIT_HELPERS */
+
+#undef RLIMIT_HELPER_SCOPE
 
 static int do_prlimit64(int pid, int resource, struct rlimit *_new_limit,
 			struct rlimit *old_limit)
 {
 	struct rlimit new_limit;
-	int resource_found;
-	int i;
 	int mcresource;
 	struct process *proc;
 	struct resource_set *rset = cpu_local_var(resource_set);
@@ -7415,8 +8958,9 @@ static int do_prlimit64(int pid, int resource, struct rlimit *_new_limit,
 	int ret;
 	ihk_mc_user_context_t ctx;
 
-	if (resource < 0 || resource >= RLIMIT_NLIMITS) {
-		return -EINVAL;
+	ret = prlimit_validate_resource(resource);
+	if (ret) {
+		return ret;
 	}
 
 	if (_new_limit) {
@@ -7425,16 +8969,14 @@ static int do_prlimit64(int pid, int resource, struct rlimit *_new_limit,
 			return -EFAULT;
 		}
 
-		if (new_limit.rlim_cur > new_limit.rlim_max) {
-			return -EINVAL;
+		ret = prlimit_validate_new_limit(new_limit.rlim_cur,
+						 new_limit.rlim_max);
+		if (ret) {
+			return ret;
 		}
 
 		/* update Linux side value as well */
-		switch (resource) {
-		case RLIMIT_FSIZE:
-		case RLIMIT_NOFILE:
-		case RLIMIT_LOCKS:
-		case RLIMIT_MSGQUEUE:
+		if (prlimit_linux_update_needed(resource)) {
 			ihk_mc_syscall_arg0(&ctx) = pid;
 			ihk_mc_syscall_arg1(&ctx) = resource;
 			ihk_mc_syscall_arg2(&ctx) =
@@ -7444,21 +8986,12 @@ static int do_prlimit64(int pid, int resource, struct rlimit *_new_limit,
 			ret = syscall_generic_forwarding(__NR_prlimit64, &ctx);
 			if (ret < 0)
 				return ret;
-			break;
 		}
 	}
 
 	/* translate resource */
-	resource_found = 0;
-	for (i = 0; i < sizeof(rlimits) / sizeof(int); i += 2) {
-		if (rlimits[i] == resource) {
-			mcresource = rlimits[i + 1];
-			resource_found = 1;
-			break;
-		}
-	}
-
-	if (!resource_found) {
+	mcresource = prlimit_to_mckernel_resource(resource);
+	if (mcresource < 0) {
 		ihk_mc_syscall_arg0(&ctx) = pid;
 		ihk_mc_syscall_arg1(&ctx) = resource;
 		ihk_mc_syscall_arg2(&ctx) =
@@ -7566,11 +9099,12 @@ SYSCALL_DECLARE(getrusage)
 	struct timespec stime;
 	struct mcs_rwlock_node lock;
 	struct timespec ats;
+	int error;
 
-	if(who != RUSAGE_SELF &&
-	   who != RUSAGE_CHILDREN &&
-	   who != RUSAGE_THREAD)
-		return -EINVAL;
+	error = getrusage_who_result(who);
+	if (error) {
+		return error;
+	}
 
 	memset(&kusage, '\0', sizeof kusage);
 
@@ -7668,8 +9202,8 @@ static int ptrace_wakeup_sig(int pid, long request, long data) {
 		goto out;
 	}
 
-	if (data > 64 || data < 0) {
-		error = -EINVAL;
+	error = ptrace_signal_data_result(data);
+	if (error) {
 		goto out;
 	}
 
@@ -7741,12 +9275,14 @@ static long ptrace_pokeuser(int pid, long addr, long data)
 	long rc = -EIO;
 	struct thread *child;
 
-	if(addr > sizeof(struct user) - 8 || addr < 0)
-		return -EFAULT;
+	rc = ptrace_user_area_result(addr, sizeof(struct user));
+	if (rc) {
+		return rc;
+	}
 	child = find_thread(0, pid);
 	if (!child)
 		return -ESRCH;
-	if(child->status & (PS_STOPPED | PS_TRACED)){
+	if(ptrace_status_allows_io(child->status)){
 		rc = ptrace_write_user(child, addr, (unsigned long)data);
 	}
 	thread_unlock(child);
@@ -7760,12 +9296,14 @@ static long ptrace_peekuser(int pid, long addr, long data)
 	struct thread *child;
 	unsigned long *p = (unsigned long *)data;
 
-	if(addr > sizeof(struct user) - 8|| addr < 0)
-		return -EFAULT;
+	rc = ptrace_user_area_result(addr, sizeof(struct user));
+	if (rc) {
+		return rc;
+	}
 	child = find_thread(0, pid);
 	if (!child)
 		return -ESRCH;
-	if(child->status & (PS_STOPPED | PS_TRACED)){
+	if(ptrace_status_allows_io(child->status)){
 		unsigned long value;
 		rc = ptrace_read_user(child, addr, &value);
 		if (rc == 0) {
@@ -7786,7 +9324,7 @@ static long ptrace_getregs(int pid, long data)
 	child = find_thread(0, pid);
 	if (!child)
 		return -ESRCH;
-	if(child->status & (PS_STOPPED | PS_TRACED)){
+	if(ptrace_status_allows_io(child->status)){
 		struct user_regs_struct user_regs;
 		long addr;
 		unsigned long *p;
@@ -7815,7 +9353,7 @@ static long ptrace_setregs(int pid, long data)
 	child = find_thread(0, pid);
 	if (!child)
 		return -ESRCH;
-	if(child->status & (PS_STOPPED | PS_TRACED)){
+	if(ptrace_status_allows_io(child->status)){
 		struct user_regs_struct user_regs;
 		rc = copy_from_user(&user_regs, regs, sizeof(struct user_regs_struct));
 		if (rc == 0) {
@@ -7847,7 +9385,7 @@ static long ptrace_getfpregs(int pid, long data)
 	child = find_thread(0, pid);
 	if (!child)
 		return -ESRCH;
-	if(child->status & (PS_STOPPED | PS_TRACED)){
+	if(ptrace_status_allows_io(child->status)){
 		rc = ptrace_read_fpregs(child, (void *)data);
 	}
 	thread_unlock(child);
@@ -7863,7 +9401,7 @@ static long ptrace_setfpregs(int pid, long data)
 	child = find_thread(0, pid);
 	if (!child)
 		return -ESRCH;
-	if(child->status & (PS_STOPPED | PS_TRACED)){
+	if(ptrace_status_allows_io(child->status)){
 		rc = ptrace_write_fpregs(child, (void *)data);
 	}
 	thread_unlock(child);
@@ -7882,7 +9420,7 @@ static long ptrace_getregset(int pid, long type, long data)
 	child = find_thread(0, pid);
 	if (!child)
 		return -ESRCH;
-	if(child->status & (PS_STOPPED | PS_TRACED)){
+	if(ptrace_status_allows_io(child->status)){
 		struct iovec iov;
 
 		rc = copy_from_user(&iov, (struct iovec *)data, sizeof(iov));
@@ -7907,7 +9445,7 @@ static long ptrace_setregset(int pid, long type, long data)
 	child = find_thread(0, pid);
 	if (!child)
 		return -ESRCH;
-	if(child->status & (PS_STOPPED | PS_TRACED)){
+	if(ptrace_status_allows_io(child->status)){
 		struct iovec iov;
 
 		rc = copy_from_user(&iov, (struct iovec *)data, sizeof(iov));
@@ -7933,7 +9471,7 @@ static long ptrace_peektext(int pid, long addr, long data)
 	child = find_thread(0, pid);
 	if (!child)
 		return -ESRCH;
-	if(child->status & (PS_STOPPED | PS_TRACED)){
+	if(ptrace_status_allows_io(child->status)){
 		unsigned long value;
 		rc = read_process_vm(child->vm, &value, (void *)addr, sizeof(value));
 		if (rc != 0) { 
@@ -7955,7 +9493,7 @@ static long ptrace_poketext(int pid, long addr, long data)
 	child = find_thread(0, pid);
 	if (!child)
 		return -ESRCH;
-	if(child->status & (PS_STOPPED | PS_TRACED)){
+	if(ptrace_status_allows_io(child->status)){
 		rc = patch_process_vm(child->vm, (void *)addr, &data, sizeof(data));
 		if (rc) {
 			dkprintf("ptrace_poketext: bad address 0x%llx\n", addr);
@@ -7980,26 +9518,21 @@ static int ptrace_setoptions(int pid, int flags)
 	 * PTRACE_O_TRACEEXEC
 	 * PTRACE_O_TRACEVFORKDONE
 	 */
-	if (flags & ~(PTRACE_O_TRACESYSGOOD|
-				PTRACE_O_TRACEFORK|
-				PTRACE_O_TRACEVFORK|
-				PTRACE_O_TRACECLONE|
-				PTRACE_O_TRACEEXEC|
-				PTRACE_O_TRACEVFORKDONE|
-				PTRACE_O_TRACEEXIT)) {
+	ret = ptrace_setoptions_flags_result(flags);
+	if (ret) {
 		kprintf("ptrace_setoptions: not supported flag %x\n", flags);
-		ret = -EINVAL;
 		goto out;
 	}
 
 	child = find_thread(0, pid);
-	if (!child || !child->proc || !(child->ptrace & PT_TRACED)) {
-		ret = -ESRCH;
+	ret = ptrace_child_traced_result(child != NULL,
+			child != NULL && child->proc != NULL,
+			child ? child->ptrace : 0);
+	if (ret) {
 		goto unlockout;
 	}
 	
-	child->ptrace &= ~PTRACE_O_MASK;	/* PT_TRACE_EXEC remains */
-	child->ptrace |= flags;
+	child->ptrace = ptrace_apply_options(child->ptrace, flags);
 	dkprintf("%s: (PT_TRACED%s%s%s%s%s%s)\n",
 		__func__,
 		flags & PTRACE_O_TRACESYSGOOD ? "|PTRACE_O_TRACESYSGOOD" : "",
@@ -8033,16 +9566,10 @@ static int ptrace_attach(int pid)
 		goto out;
 	}
 
-	if (proc->pid == pid) {
+	error = ptrace_attach_policy_result(proc->pid, pid, thread->ptrace,
+			thread->proc == proc);
+	if (error) {
 		thread_unlock(thread);
-		error = -EPERM;
-		goto out;
-	}
-
-	if ((thread->ptrace & PT_TRACED) ||
-	    thread->proc == proc) {
-		thread_unlock(thread);
-		error = -EPERM;
 		goto out;
 	}
 
@@ -8070,8 +9597,9 @@ int ptrace_detach(int pid, int data)
 	struct thread *mythread = cpu_local_var(current);
 	struct process *proc = mythread->proc;;
 
-	if (data > 64 || data < 0) {
-		return -EIO;
+	error = ptrace_detach_signal_result(data);
+	if (error) {
+		return error;
 	}
 
 	thread = find_thread(0, pid);
@@ -8080,9 +9608,10 @@ int ptrace_detach(int pid, int data)
 		goto out;
 	}
 
-	if (!(thread->ptrace & PT_TRACED) || thread->report_proc != proc) {
+	error = ptrace_detach_state_result(!!(thread->ptrace & PT_TRACED),
+			thread->report_proc == proc);
+	if (error) {
 		thread_unlock(thread);
-		error = -ESRCH;
 		goto out;
 	}
 
@@ -8103,7 +9632,7 @@ static long ptrace_geteventmsg(int pid, long data)
 	if (!child) {
 		return -ESRCH;
 	}
-	if(child->status & (PS_STOPPED | PS_TRACED)){
+	if(ptrace_status_allows_io(child->status)){
 		if (copy_to_user(msg_p, &child->ptrace_eventmsg,
 				 sizeof(*msg_p))) {
 			rc = -EFAULT;
@@ -8128,16 +9657,12 @@ ptrace_getsiginfo(int pid, siginfo_t *data)
 		return -ESRCH;
 	}
 
-	if(!(child->status & (PS_STOPPED | PS_TRACED))){
-		rc = -ESRCH;
-	}
-	else if (child->ptrace_recvsig) {
+	rc = ptrace_siginfo_state_result(child->status,
+			child->ptrace_recvsig != NULL);
+	if (!rc && child->ptrace_recvsig) {
 		if (copy_to_user(data, &child->ptrace_recvsig->info, sizeof(siginfo_t))) {
 			rc = -EFAULT;
 		}
-	}
-	else {
-		rc = -ESRCH;
 	}
 	thread_unlock(child);
 	return rc;
@@ -8154,7 +9679,7 @@ ptrace_setsiginfo(int pid, siginfo_t *data)
 		return -ESRCH;
 	}
 
-	if(!(child->status & (PS_STOPPED | PS_TRACED))){
+	if(!ptrace_status_allows_io(child->status)){
 		rc = -ESRCH;
 	}
 	else {
@@ -8290,19 +9815,100 @@ SYSCALL_DECLARE(ptrace)
 	return error;
 }
 
+#if defined(MCKERNEL_RUST_SCHED_POLICY_HELPERS) || \
+	defined(MCKERNEL_SCHED_POLICY_HELPERS_TEST_EXPORT)
+#define SCHED_POLICY_HELPER_SCOPE
+#else
+#define SCHED_POLICY_HELPER_SCOPE static
+#endif
+
+#ifdef MCKERNEL_RUST_SCHED_POLICY_HELPERS
+extern int sched_policy_is_valid(int policy);
+extern int sched_policy_needs_root(int policy);
+extern int setscheduler_validate(int policy, int priority);
+extern long sched_rr_interval_nsec(int policy);
+extern int sched_affinity_permission_result(uid_t caller_euid,
+		uid_t target_ruid, uid_t target_euid);
+extern int sched_getaffinity_len_result(size_t len, int nr_cpus);
+extern size_t sched_affinity_copy_len(size_t len, size_t cpuset_size);
+#else
+SCHED_POLICY_HELPER_SCOPE int sched_policy_is_valid(int policy)
+{
+	return policy == SCHED_DEADLINE ||
+		policy == SCHED_FIFO || policy == SCHED_RR ||
+		policy == SCHED_NORMAL || policy == SCHED_BATCH ||
+		policy == SCHED_IDLE;
+}
+
+SCHED_POLICY_HELPER_SCOPE int sched_policy_needs_root(int policy)
+{
+	return sched_policy_is_valid(policy) && policy != SCHED_NORMAL;
+}
+
+SCHED_POLICY_HELPER_SCOPE int setscheduler_validate(int policy, int priority)
+{
+	if ((policy == SCHED_FIFO || policy == SCHED_RR) &&
+		((priority < 1) ||
+		 (priority > MAX_USER_RT_PRIO - 1))) {
+		return -EINVAL;
+	}
+
+	if ((policy == SCHED_NORMAL || policy == SCHED_BATCH || policy == SCHED_IDLE) &&
+		(priority != 0)) {
+		return -EINVAL;
+	}
+
+	return 0;
+}
+
+SCHED_POLICY_HELPER_SCOPE long sched_rr_interval_nsec(int policy)
+{
+	return policy == SCHED_RR ? 10000 : 0;
+}
+
+SCHED_POLICY_HELPER_SCOPE int sched_affinity_permission_result(uid_t caller_euid,
+		uid_t target_ruid, uid_t target_euid)
+{
+	if (caller_euid != 0 &&
+			caller_euid != target_ruid &&
+			caller_euid != target_euid) {
+		return -EPERM;
+	}
+
+	return 0;
+}
+
+SCHED_POLICY_HELPER_SCOPE int sched_getaffinity_len_result(size_t len,
+		int nr_cpus)
+{
+	if (len * 8 < nr_cpus) {
+		return -EINVAL;
+	}
+	if (len & (sizeof(unsigned long)-1)) {
+		return -EINVAL;
+	}
+
+	return 0;
+}
+
+SCHED_POLICY_HELPER_SCOPE size_t sched_affinity_copy_len(size_t len,
+		size_t cpuset_size)
+{
+	return len < cpuset_size ? len : cpuset_size;
+}
+#endif /* MCKERNEL_RUST_SCHED_POLICY_HELPERS */
+
+#undef SCHED_POLICY_HELPER_SCOPE
+
 /* We do not have actual scheduling classes so we just make sure we store
  * policies and priorities in a POSIX/Linux complaint manner */
 static int setscheduler(struct thread *thread, int policy, struct sched_param *param)
 {
-	if ((policy == SCHED_FIFO || policy == SCHED_RR) &&
-		((param->sched_priority < 1) ||
-		 (param->sched_priority > MAX_USER_RT_PRIO - 1))) {
-		return -EINVAL;
-	}
-	
-	if ((policy == SCHED_NORMAL || policy == SCHED_BATCH || policy == SCHED_IDLE) &&
-		(param->sched_priority != 0)) {
-		return -EINVAL;
+	int ret;
+
+	ret = setscheduler_validate(policy, param->sched_priority);
+	if (ret) {
+		return ret;
 	}
 
 	memcpy(&thread->sched_param, param, sizeof(*param));
@@ -8412,14 +10018,11 @@ SYSCALL_DECLARE(sched_setscheduler)
 		return -EINVAL;
 	}
 	
-	if (policy != SCHED_DEADLINE &&
-			policy != SCHED_FIFO && policy != SCHED_RR &&
-			policy != SCHED_NORMAL && policy != SCHED_BATCH &&
-			policy != SCHED_IDLE) {
+	if (!sched_policy_is_valid(policy)) {
 		return -EINVAL;
 	}
 
-	if (policy != SCHED_NORMAL) {
+	if (sched_policy_needs_root(policy)) {
 		
 		/* Ask Linux about permissions */
 		request1.number = __NR_sched_setparam;
@@ -8574,10 +10177,7 @@ SYSCALL_DECLARE(sched_rr_get_interval)
 	}
 	
 	t.tv_sec = 0;
-	t.tv_nsec = 0;
-	if (thread->sched_policy == SCHED_RR) {
-		t.tv_nsec = 10000;
-	}
+	t.tv_nsec = sched_rr_interval_nsec(thread->sched_policy);
 	
 	retval = copy_to_user(utime, &t, sizeof(t)) ? -EFAULT : 0;
 	
@@ -8603,7 +10203,7 @@ SYSCALL_DECLARE(sched_setaffinity)
 		memset(&k_cpu_set, 0, sizeof(k_cpu_set));
 	}
 
-	len = MIN2(len, sizeof(k_cpu_set));
+	len = sched_affinity_copy_len(len, sizeof(k_cpu_set));
 
 	if (copy_from_user(&k_cpu_set, u_cpu_set, len)) {
 		dkprintf("%s: error: copy_from_user failed for %p:%d\n",
@@ -8626,9 +10226,8 @@ SYSCALL_DECLARE(sched_setaffinity)
 		if (!thread)
 			return -ESRCH;
 
-		if (mythread->proc->euid != 0 &&
-				mythread->proc->euid != thread->proc->ruid &&
-				mythread->proc->euid != thread->proc->euid) {
+		if (sched_affinity_permission_result(mythread->proc->euid,
+				thread->proc->ruid, thread->proc->euid)) {
 			thread_unlock(thread);
 			return -EPERM;
 		}
@@ -8680,16 +10279,13 @@ SYSCALL_DECLARE(sched_getaffinity)
 	int ret;
 
 	dkprintf("%s() len: %d, mask: %p\n", __FUNCTION__, len, u_cpu_set);
-	if (len * 8 < num_processors) {
+	ret = sched_getaffinity_len_result(len, num_processors);
+	if (ret) {
 		dkprintf("%s: Too small buffer.\n", __func__);
-		return -EINVAL;
-	}
-	if (len & (sizeof(unsigned long)-1)) {
-		dkprintf("%s: Size not align to unsigned long.\n", __func__);
-		return -EINVAL;
+		return ret;
 	}
 
-	len = MIN2(len, sizeof(k_cpu_set));
+	len = sched_affinity_copy_len(len, sizeof(k_cpu_set));
 
 	if(tid == 0){
 		thread = cpu_local_var(current);
@@ -8701,9 +10297,8 @@ SYSCALL_DECLARE(sched_getaffinity)
 		thread = find_thread(0, tid);
 		if(!thread)
 			return -ESRCH;
-		if(mythread->proc->euid != 0 &&
-		   mythread->proc->euid != thread->proc->ruid &&
-		   mythread->proc->euid != thread->proc->euid){
+		if(sched_affinity_permission_result(mythread->proc->euid,
+		   thread->proc->ruid, thread->proc->euid)){
 			thread_unlock(thread);
 			return -EPERM;
 		}
@@ -8740,13 +10335,14 @@ SYSCALL_DECLARE(setitimer)
 	int timer_start = 1;
 	struct itimerval wkval;
 	struct timeval tv;
+	int error;
 
-	if(which != ITIMER_REAL &&
-	   which != ITIMER_VIRTUAL &&
-	   which != ITIMER_PROF)
-		return -EINVAL;
+	error = itimer_which_result(which);
+	if (error) {
+		return error;
+	}
 
-	if(which == ITIMER_REAL){
+	if(itimer_is_real(which)){
 		request.number = __NR_setitimer;
 		request.args[0] = ihk_mc_syscall_arg0(ctx);
 		request.args[1] = ihk_mc_syscall_arg1(ctx);
@@ -8773,9 +10369,9 @@ SYSCALL_DECLARE(setitimer)
 		}
 		thread->itimer_virtual_value.tv_sec = 0;
 		thread->itimer_virtual_value.tv_nsec = 0;
-		if(thread->itimer_virtual.it_value.tv_sec == 0 &&
-		   thread->itimer_virtual.it_value.tv_usec == 0)
-			timer_start = 0;
+		timer_start = itimer_should_start(
+				thread->itimer_virtual.it_value.tv_sec,
+				thread->itimer_virtual.it_value.tv_usec);
 	}
 	else if(which == ITIMER_PROF){
 		if(old){
@@ -8796,9 +10392,9 @@ SYSCALL_DECLARE(setitimer)
 		}
 		thread->itimer_prof_value.tv_sec = 0;
 		thread->itimer_prof_value.tv_nsec = 0;
-		if(thread->itimer_prof.it_value.tv_sec == 0 &&
-		   thread->itimer_prof.it_value.tv_usec == 0)
-			timer_start = 0;
+		timer_start = itimer_should_start(
+				thread->itimer_prof.it_value.tv_sec,
+				thread->itimer_prof.it_value.tv_usec);
 	}
 	thread->itimer_enabled = timer_start;
 	set_timer(0);
@@ -8813,13 +10409,14 @@ SYSCALL_DECLARE(getitimer)
 	struct thread *thread = cpu_local_var(current);
 	struct itimerval wkval;
 	struct timeval tv;
+	int error;
 
-	if(which != ITIMER_REAL &&
-	   which != ITIMER_VIRTUAL &&
-	   which != ITIMER_PROF)
-		return -EINVAL;
+	error = itimer_which_result(which);
+	if (error) {
+		return error;
+	}
 
-	if(which == ITIMER_REAL){
+	if(itimer_is_real(which)){
 		request.number = __NR_getitimer;
 		request.args[0] = ihk_mc_syscall_arg0(ctx);
 		request.args[1] = ihk_mc_syscall_arg1(ctx);
@@ -8861,14 +10458,16 @@ SYSCALL_DECLARE(clock_gettime)
 	struct syscall_request request IHK_DMA_ALIGN;
 	int error;
 	struct timespec ats;
+	int dispatch;
 
-	if (!ts) {
-		/* nothing to do */
+	dispatch = clock_gettime_dispatch(clock_id, gettime_local_support,
+			ts != NULL);
+	if (dispatch == TIME_DISPATCH_NOOP) {
 		return 0;
 	}
 
 	/* Do it locally if supported */
-	if (gettime_local_support && clock_id == CLOCK_REALTIME) {
+	if (dispatch == TIME_DISPATCH_LOCAL_REALTIME) {
 		calculate_time_from_tsc(&ats);
 
 		error = copy_to_user(ts, &ats, sizeof(ats));
@@ -8876,7 +10475,7 @@ SYSCALL_DECLARE(clock_gettime)
 		dkprintf("clock_gettime(): %d\n", error);
 		return error;
 	}
-	else if(clock_id == CLOCK_PROCESS_CPUTIME_ID){
+	else if(dispatch == TIME_DISPATCH_PROCESS_CPUTIME){
 		struct thread *thread = cpu_local_var(current);
 		struct process *proc = thread->proc;
 		struct thread *child;
@@ -8905,7 +10504,7 @@ SYSCALL_DECLARE(clock_gettime)
 		mcs_rwlock_reader_unlock_noirq(&proc->threads_lock, &lock);
 		return copy_to_user(ts, &ats, sizeof ats);
 	}
-	else if(clock_id == CLOCK_THREAD_CPUTIME_ID){
+	else if(dispatch == TIME_DISPATCH_THREAD_CPUTIME){
 		struct thread *thread = cpu_local_var(current);
 
 		tsc_to_ts(thread->user_tsc + thread->system_tsc, &ats);
@@ -8928,14 +10527,16 @@ SYSCALL_DECLARE(gettimeofday)
 	struct timeval atv;
 	int error;
 	struct timespec ats;
+	int dispatch;
 
-	if (!tv && !tz) {
-		/* nothing to do */
+	dispatch = gettimeofday_dispatch(tv != NULL, tz != NULL,
+			gettime_local_support);
+	if (dispatch == TIME_DISPATCH_NOOP) {
 		return 0;
 	}
 
 	/* Do it locally if supported */
-	if (!tz && gettime_local_support) {
+	if (dispatch == TIME_DISPATCH_LOCAL_REALTIME) {
 		calculate_time_from_tsc(&ats);
 
 		atv.tv_sec = ats.tv_sec;
@@ -9031,8 +10632,9 @@ SYSCALL_DECLARE(nanosleep)
 			return -EFAULT;
 		}
 
-		if (_tv.tv_sec < 0 || _tv.tv_nsec >= NS_PER_SEC) {
-			return -EINVAL;
+		ret = nanosleep_validate_timespec(_tv.tv_sec, _tv.tv_nsec);
+		if (ret) {
+			return ret;
 		}
 
 		nanosecs = _tv.tv_sec * NS_PER_SEC + _tv.tv_nsec;
@@ -9118,21 +10720,9 @@ SYSCALL_DECLARE(mlock)
 	dkprintf("[%d]sys_mlock(%lx,%lx)\n",
 			ihk_mc_get_processor_id(), start0, len0);
 
-	start = start0 & PAGE_MASK;
-	len = (start & (PAGE_SIZE - 1)) + len0;
-	len = (len + PAGE_SIZE - 1) & PAGE_MASK;
-	end = start + len;
-
-	if (end < start) {
-		error = -EINVAL;
-		goto out2;
-	}
-
-	if ((start < region->user_start)
-			|| (region->user_end <= start)
-			|| (len > (region->user_end - region->user_start))
-			|| ((region->user_end - len) < start)) {
-		error = -ENOMEM;
+	error = memlock_prepare_range(start0, len0, region->user_start,
+			region->user_end, &start, &len, &end);
+	if (error) {
 		goto out2;
 	}
 
@@ -9164,13 +10754,13 @@ SYSCALL_DECLARE(mlock)
 			goto out;
 		}
 
-		if (range->flag & (VR_REMOTE | VR_RESERVED | VR_IO_NOCACHE)) {
+		error = memlock_range_flag_result(range->flag);
+		if (error) {
 			ekprintf("[%d]sys_mlock(%lx,%lx):cannot change."
 				       " [%lx-%lx) %lx\n",
 					ihk_mc_get_processor_id(), start0,
 					len0, range->start, range->end,
 					range->flag);
-			error = -EINVAL;
 			goto out;
 		}
 	}
@@ -9293,21 +10883,9 @@ SYSCALL_DECLARE(munlock)
 	dkprintf("[%d]sys_munlock(%lx,%lx)\n",
 			ihk_mc_get_processor_id(), start0, len0);
 
-	start = start0 & PAGE_MASK;
-	len = (start & (PAGE_SIZE - 1)) + len0;
-	len = (len + PAGE_SIZE - 1) & PAGE_MASK;
-	end = start + len;
-
-	if (end < start) {
-		error = -EINVAL;
-		goto out2;
-	}
-
-	if ((start < region->user_start)
-			|| (region->user_end <= start)
-			|| (len > (region->user_end - region->user_start))
-			|| ((region->user_end - len) < start)) {
-		error = -ENOMEM;
+	error = memlock_prepare_range(start0, len0, region->user_start,
+			region->user_end, &start, &len, &end);
+	if (error) {
 		goto out2;
 	}
 
@@ -9339,13 +10917,13 @@ SYSCALL_DECLARE(munlock)
 			goto out;
 		}
 
-		if (range->flag & (VR_REMOTE | VR_RESERVED | VR_IO_NOCACHE)) {
+		error = memlock_range_flag_result(range->flag);
+		if (error) {
 			ekprintf("[%d]sys_munlock(%lx,%lx):cannot change."
 				       " [%lx-%lx) %lx\n",
 					ihk_mc_get_processor_id(), start0,
 					len0, range->start, range->end,
 					range->flag);
-			error = -EINVAL;
 			goto out;
 		}
 	}
@@ -9433,24 +11011,27 @@ SYSCALL_DECLARE(mlockall)
 	const int flags = ihk_mc_syscall_arg0(ctx);
 	struct thread *thread = cpu_local_var(current);
 	struct process *proc = thread->proc;
+	int error;
 
-	if (!flags || (flags & ~(MCL_CURRENT|MCL_FUTURE))) {
+	error = mlockall_policy_result(flags, proc->euid == 0,
+			proc->rlimit[MCK_RLIMIT_MEMLOCK].rlim_cur);
+	if (error == -EINVAL) {
 		kprintf("mlockall(0x%x):invalid flags: EINVAL\n", flags);
-		return -EINVAL;
+		return error;
 	}
 
-	if (!proc->euid) {
+	if (!error) {
 		kprintf("mlockall(0x%x):priv user: 0\n", flags);
-		return 0;
+		return error;
 	}
 
-	if (proc->rlimit[MCK_RLIMIT_MEMLOCK].rlim_cur != 0) {
+	if (error == -ENOMEM) {
 		kprintf("mlockall(0x%x):limits exists: ENOMEM\n", flags);
-		return -ENOMEM;
+		return error;
 	}
 
 	kprintf("mlockall(0x%x):no lock permitted: EPERM\n", flags);
-	return -EPERM;
+	return error;
 } /* sys_mlockall() */
 
 SYSCALL_DECLARE(munlockall)
@@ -9467,9 +11048,9 @@ SYSCALL_DECLARE(remap_file_pages)
 	const size_t pgoff = ihk_mc_syscall_arg3(ctx);
 	const int flags = ihk_mc_syscall_arg4(ctx);
 	int error;
-	const uintptr_t start = start0 & PAGE_MASK;
-	const uintptr_t end = start + size;
-	const off_t off = (off_t)pgoff << PAGE_SHIFT;
+	uintptr_t start;
+	uintptr_t end;
+	off_t off;
 	struct thread * const thread = cpu_local_var(current);
 	struct vm_range *range;
 	int er;
@@ -9478,22 +11059,19 @@ SYSCALL_DECLARE(remap_file_pages)
 	dkprintf("sys_remap_file_pages(%#lx,%#lx,%#x,%#lx,%#x)\n",
 			start0, size, prot, pgoff, flags);
 	ihk_rwspinlock_write_lock_noirq(&thread->vm->memory_range_lock);
-#define	PGOFF_LIMIT	((off_t)1 << ((8*sizeof(off_t) - 1) - PAGE_SHIFT))
-	if ((size <= 0) || (size & (PAGE_SIZE - 1)) || (prot != 0)
-			|| (PGOFF_LIMIT <= pgoff)
-			|| ((PGOFF_LIMIT - pgoff) < (size / PAGE_SIZE))
-			|| !((start < end) || (end == 0))) {
+	error = remap_file_pages_prepare(start0, size, prot, pgoff,
+			&start, &end, &off);
+	if (error) {
 		ekprintf("sys_remap_file_pages(%#lx,%#lx,%#x,%#lx,%#x):"
 				"invalid args\n",
 				start0, size, prot, pgoff, flags);
-		error = -EINVAL;
 		goto out;
 	}
 
 	range = lookup_process_memory_range(thread->vm, start, end);
 	if (!range || (start < range->start) || (range->end < end)
 			|| (range->flag & VR_PRIVATE)
-			|| (range->flag & (VR_REMOTE|VR_IO_NOCACHE|VR_RESERVED))
+			|| range_has_disallowed_change_flags(range->flag)
 			|| !is_callable_remap_file_pages(range->memobj)) {
 		ekprintf("sys_remap_file_pages(%#lx,%#lx,%#x,%#lx,%#x):"
 				"invalid VMR:[%#lx-%#lx) %#lx %p\n",
@@ -9544,10 +11122,10 @@ SYSCALL_DECLARE(mremap)
 	const size_t newsize0 = ihk_mc_syscall_arg2(ctx);
 	const int flags = ihk_mc_syscall_arg3(ctx);
 	const uintptr_t newaddr = ihk_mc_syscall_arg4(ctx);
-	const size_t oldsize = (oldsize0 + PAGE_SIZE - 1) & PAGE_MASK;
-	const size_t newsize = (newsize0 + PAGE_SIZE - 1) & PAGE_MASK;
+	size_t oldsize;
+	size_t newsize;
 	const uintptr_t oldstart = oldaddr;
-	const uintptr_t oldend = oldstart + oldsize;
+	uintptr_t oldend;
 	struct thread *thread = cpu_local_var(current);
 	struct process_vm *vm = thread->vm;
 	int error;
@@ -9559,6 +11137,7 @@ SYSCALL_DECLARE(mremap)
 	uintptr_t ret;
 	uintptr_t lckstart = -1;
 	uintptr_t lckend = -1;
+	int no_op;
 
 	dkprintf("sys_mremap(%#lx,%#lx,%#lx,%#x,%#lx)\n",
 			oldaddr, oldsize0, newsize0, flags, newaddr);
@@ -9573,44 +11152,26 @@ SYSCALL_DECLARE(mremap)
 
 	ihk_rwspinlock_write_lock_noirq(&vm->memory_range_lock);
 
-	/* check arguments */
-	if ((oldaddr & ~PAGE_MASK)
-			|| (newsize == 0)
-			|| (flags & ~(MREMAP_MAYMOVE | MREMAP_FIXED))
-			|| ((flags & MREMAP_FIXED)
-				&& !(flags & MREMAP_MAYMOVE))
-			|| ((flags & MREMAP_FIXED)
-				&& (newaddr & ~PAGE_MASK))) {
-		error = -EINVAL;
+	error = mremap_prepare_args(oldaddr, oldsize0, newsize0, flags,
+			newaddr, vm->region.user_start, vm->region.user_end,
+			&oldsize, &newsize, &oldend, &no_op);
+	if (error == -EINVAL) {
 		ekprintf("sys_mremap(%#lx,%#lx,%#lx,%#x,%#lx):invalid. %d\n",
 				oldaddr, oldsize0, newsize0, flags, newaddr,
 				error);
 		goto out;
 	}
-
-	/* check necessity of remap */
-	if (!(flags & MREMAP_FIXED) && oldsize == newsize) {
-		/* Nothing to do */
-		error = 0;
-		newstart = oldaddr;
-		goto out;
-	}
-
-	if (oldend < oldstart) {
-		error = -EINVAL;
-		ekprintf("sys_mremap(%#lx,%#lx,%#lx,%#x,%#lx):"
-				"old range overflow. %d\n",
-				oldaddr, oldsize0, newsize0,
-				flags, newaddr, error);
-		goto out;
-	}
-
-	if (newsize > (vm->region.user_end - vm->region.user_start)) {
-		error = -ENOMEM;
+	if (error == -ENOMEM) {
 		ekprintf("sys_mremap(%#lx,%#lx,%#lx,%#x,%#lx):"
 				"cannot allocate. %d\n",
 				oldaddr, oldsize0, newsize0,
 				flags, newaddr, error);
+		goto out;
+	}
+	if (no_op) {
+		/* Nothing to do */
+		error = 0;
+		newstart = oldaddr;
 		goto out;
 	}
 
@@ -9618,7 +11179,7 @@ SYSCALL_DECLARE(mremap)
 	range = lookup_process_memory_range(vm, oldstart, oldstart+PAGE_SIZE);
 	if (!range || (oldstart < range->start) || (range->end < oldend)
 			|| (range->flag & (VR_FILEOFF))
-			|| (range->flag & (VR_REMOTE|VR_IO_NOCACHE|VR_RESERVED))) {
+			|| range_has_disallowed_change_flags(range->flag)) {
 		error = -EFAULT;
 		ekprintf("sys_mremap(%#lx,%#lx,%#lx,%#x,%#lx):"
 				"lookup failed. %d %p %#lx-%#lx %#lx\n",
@@ -9634,8 +11195,9 @@ SYSCALL_DECLARE(mremap)
 		need_relocate = 1;
 		newstart = newaddr;
 		newend = newstart + newsize;
-		if (newstart < vm->region.user_start) {
-			error = -EPERM;
+		error = mremap_fixed_range_result(newstart,
+				vm->region.user_start, oldstart, oldend, newend);
+		if (error == -EPERM) {
 			ekprintf("sys_mremap(%#lx,%#lx,%#lx,%#x,%#lx):"
 					"mmap_min_addr %#lx. %d\n",
 					oldaddr, oldsize0, newsize0, flags,
@@ -9643,8 +11205,7 @@ SYSCALL_DECLARE(mremap)
 					error);
 			goto out;
 		}
-		if ((newstart < oldend) && (oldstart < newend)) {
-			error = -EINVAL;
+		if (error == -EINVAL) {
 			ekprintf("sys_mremap(%#lx,%#lx,%#lx,%#x,%#lx):"
 					"fixed:overlapped. %d\n",
 					oldaddr, oldsize0, newsize0, flags,
@@ -9667,8 +11228,8 @@ SYSCALL_DECLARE(mremap)
 				goto out;
 			}
 		}
-		if (!(flags & MREMAP_MAYMOVE)) {
-			error = -ENOMEM;
+		error = mremap_maymove_result(flags);
+		if (error) {
 			ekprintf("sys_mremap(%#lx,%#lx,%#lx,%#x,%#lx):"
 					"cannot relocate. %d\n",
 					oldaddr, oldsize0, newsize0, flags,
@@ -9813,9 +11374,9 @@ SYSCALL_DECLARE(msync)
 	const uintptr_t start0 = ihk_mc_syscall_arg0(ctx);
 	const size_t len0 = ihk_mc_syscall_arg1(ctx);
 	const int flags = ihk_mc_syscall_arg2(ctx);
-	const size_t len = (len0 + PAGE_SIZE - 1) & PAGE_MASK;
+	size_t len;
 	const uintptr_t start = start0;
-	const uintptr_t end = start + len;
+	uintptr_t end;
 	struct thread *thread = cpu_local_var(current);
 	struct process_vm *vm = thread->vm;
 	int error;
@@ -9827,16 +11388,8 @@ SYSCALL_DECLARE(msync)
 	dkprintf("sys_msync(%#lx,%#lx,%#x)\n", start0, len0, flags);
 	ihk_rwspinlock_read_lock_noirq(&vm->memory_range_lock);
 
-	if ((start0 & ~PAGE_MASK)
-			|| (flags & ~(MS_ASYNC|MS_INVALIDATE|MS_SYNC))
-			|| ((flags & MS_ASYNC) && (flags & MS_SYNC))) {
-		error = -EINVAL;
-		ekprintf("sys_msync(%#lx,%#lx,%#x):invalid args. %d\n",
-				start0, len0, flags, error);
-		goto out;
-	}
-	if (end < start) {
-		error = -ENOMEM;
+	error = msync_prepare_range(start0, len0, flags, &len, &end);
+	if (error) {
 		ekprintf("sys_msync(%#lx,%#lx,%#x):invalid args. %d\n",
 				start0, len0, flags, error);
 		goto out;
@@ -9863,8 +11416,8 @@ SYSCALL_DECLARE(msync)
 					range?range->flag:0);
 			goto out;
 		}
-		if ((flags & MS_INVALIDATE) && (range->flag & VR_LOCKED)) {
-			error = -EBUSY;
+		error = msync_locked_range_result(flags, range->flag);
+		if (error) {
 			ekprintf("sys_msync(%#lx,%#lx,%#x):"
 					"locked VMR %d %#lx-%#lx %#lx\n",
 					start0, len0, flags, error,
@@ -9980,13 +11533,9 @@ SYSCALL_DECLARE(mbind)
 	}
 
 	/* Validate arguments */
-	if (addr & ~PAGE_MASK) {
-		return -EINVAL;
-	}
-
-	len = (len + PAGE_SIZE - 1) & PAGE_MASK;
-	if (addr + len < addr || addr == (addr + len)) {
-		return -EINVAL;
+	error = mbind_prepare_range(addr, len, &len);
+	if (error) {
+		return error;
 	}
 
 #ifdef ENABLE_FUGAKU_HACKS
@@ -9995,47 +11544,25 @@ SYSCALL_DECLARE(mbind)
 
 	memset(numa_mask, 0, sizeof(numa_mask));
 
-	if (maxnode) {
-		nodemask_bits = ALIGN(maxnode, 8);
-		if (maxnode > (PAGE_SIZE << 3)) {
-			dkprintf("%s: ERROR: nodemask_bits bigger than PAGE_SIZE bits\n",
-				__FUNCTION__);
-			error = -EINVAL;
-			goto out;
-		}
-
-		if (nodemask_bits > PROCESS_NUMA_MASK_BITS) {
-			dkprintf("%s: WARNING: process NUMA mask bits is insufficient\n",
-				__FUNCTION__);
-			nodemask_bits = PROCESS_NUMA_MASK_BITS;
-		}
-	}
-
-	if ((mode & MPOL_F_STATIC_NODES) && (mode & MPOL_F_RELATIVE_NODES)) {
-		dkprintf("%s: error: MPOL_F_STATIC_NODES & MPOL_F_RELATIVE_NODES\n",
-				__FUNCTION__);
-		error = -EINVAL;
+	error = mempolicy_nodemask_bits_result(maxnode, &nodemask_bits);
+	if (error) {
+		dkprintf("%s: ERROR: nodemask_bits bigger than PAGE_SIZE bits\n",
+			__FUNCTION__);
 		goto out;
 	}
-
-	if ((flags & MPOL_MF_STRICT) && (flags & MPOL_MF_MOVE)) {
-		dkprintf("%s: error: MPOL_MF_STRICT & MPOL_MF_MOVE\n",
-				__FUNCTION__);
-		/*
-		 * XXX: man page claims the correct error code is EIO,
-		 * but LTP tests for EINVAL.
-		 */
-		error = -EINVAL;
-		goto out;
+	if (mempolicy_nodemask_bits_is_clamped(maxnode)) {
+		dkprintf("%s: WARNING: process NUMA mask bits is insufficient\n",
+			__FUNCTION__);
 	}
 
-	mode_flags = (mode & (MPOL_F_STATIC_NODES | MPOL_F_RELATIVE_NODES));
-	mode &= ~(MPOL_F_STATIC_NODES | MPOL_F_RELATIVE_NODES);
-
-	if (mode_flags & MPOL_F_RELATIVE_NODES) {
-		/* Not supported.. */
-		dkprintf("%s: error: MPOL_F_RELATIVE_NODES not supported\n",
+	error = mbind_mode_flags_result(mode, flags, &mode_flags, &mode);
+	if (error) {
+		dkprintf("%s: error: invalid mode/flags combination\n",
 				__FUNCTION__);
+		goto out;
+	}
+	(void)mode_flags;
+	if (!mempolicy_mode_is_supported(mode)) {
 		error = -EINVAL;
 		goto out;
 	}
@@ -10270,28 +11797,25 @@ SYSCALL_DECLARE(set_mempolicy)
 
 	memset(numa_mask, 0, sizeof(numa_mask));
 
-	if (maxnode) {
-		nodemask_bits = ALIGN(maxnode, 8);
-		if (maxnode > (PAGE_SIZE << 3)) {
-			dkprintf("%s: ERROR: nodemask_bits bigger than PAGE_SIZE bits\n",
-				__FUNCTION__);
-			error = -EINVAL;
-			goto out;
-		}
-
-		if (nodemask_bits > PROCESS_NUMA_MASK_BITS) {
-			dkprintf("%s: WARNING: process NUMA mask bits is insufficient\n",
-				__FUNCTION__);
-			nodemask_bits = PROCESS_NUMA_MASK_BITS;
-		}
+	error = mempolicy_nodemask_bits_result(maxnode, &nodemask_bits);
+	if (error) {
+		dkprintf("%s: ERROR: nodemask_bits bigger than PAGE_SIZE bits\n",
+			__FUNCTION__);
+		goto out;
+	}
+	if (mempolicy_nodemask_bits_is_clamped(maxnode)) {
+		dkprintf("%s: WARNING: process NUMA mask bits is insufficient\n",
+			__FUNCTION__);
 	}
 
-	if ((mode & MPOL_F_STATIC_NODES) &&
-	    (mode & MPOL_F_RELATIVE_NODES)) {
+	error = set_mempolicy_normalize_mode(mode, &mode);
+	if (error) {
+		goto out;
+	}
+	if (!mempolicy_mode_is_supported(mode)) {
 		error = -EINVAL;
 		goto out;
 	}
-	mode &= ~MPOL_MODE_FLAGS;
 
 	switch (mode) {
 		case MPOL_DEFAULT:
@@ -10438,32 +11962,14 @@ SYSCALL_DECLARE(get_mempolicy)
 	int error = 0;
 	int policy;
 
-	if ((!(flags & MPOL_F_ADDR) && addr) ||
-		(flags & ~(MPOL_F_ADDR | MPOL_F_NODE | MPOL_F_MEMS_ALLOWED)) ||
-		((flags & MPOL_F_NODE) && !(flags & MPOL_F_ADDR) &&
-		 vm->numa_mem_policy == MPOL_INTERLEAVE)) {
-		return -EINVAL;
+	error = get_mempolicy_validate(addr, flags, vm->numa_mem_policy,
+			maxnode, ihk_mc_get_nr_numa_nodes(), &nodemask_bits);
+	if (error) {
+		return error;
 	}
-
-	/*
-	 * XXX: man page claims the correct error code is EINVAL,
-	 * but LTP tests for EFAULT.
-	 */
-	if ((flags & MPOL_F_ADDR) && !addr) {
-		return -EFAULT;
-	}
-
-	if (maxnode) {
-		if (maxnode < ihk_mc_get_nr_numa_nodes()) {
-			return -EINVAL;
-		}
-
-		nodemask_bits = ALIGN(maxnode, 8);
-		if (nodemask_bits > PROCESS_NUMA_MASK_BITS) {
-			dkprintf("%s: WARNING: process NUMA mask bits is insufficient\n",
-				__FUNCTION__);
-			nodemask_bits = PROCESS_NUMA_MASK_BITS;
-		}
+	if (mempolicy_nodemask_bits_is_clamped(maxnode)) {
+		dkprintf("%s: WARNING: process NUMA mask bits is insufficient\n",
+			__FUNCTION__);
 	}
 
 	/* case of MPOL_F_NODE and MPOL_F_ADDR are specified */
@@ -10569,23 +12075,16 @@ SYSCALL_DECLARE(move_pages)
 
 	t_s = rdtsc();
 
-	/* Only self is supported for now */
-	if (pid) {
-		kprintf("%s: ERROR: only self (pid == 0)"
-				" is supported\n", __FUNCTION__);
-		ret = -EINVAL;
-		goto out;
-	}
-
-    /* Check flags */
-	if (flags & ~(MPOL_MF_MOVE|MPOL_MF_MOVE_ALL)) {
-		ret = -EINVAL;
-		goto out;
-	}
-	if (flags & MPOL_MF_MOVE_ALL) {
-		kprintf("%s: ERROR: MPOL_MF_MOVE_ALL"
-			" not supported\n", __func__);
-		ret = -EINVAL;
+	ret = move_pages_policy_result(pid, flags);
+	if (ret) {
+		if (pid) {
+			kprintf("%s: ERROR: only self (pid == 0)"
+					" is supported\n", __FUNCTION__);
+		}
+		else if (flags & MPOL_MF_MOVE_ALL) {
+			kprintf("%s: ERROR: MPOL_MF_MOVE_ALL"
+				" not supported\n", __func__);
+		}
 		goto out;
 	}
 
@@ -10771,7 +12270,12 @@ SYSCALL_DECLARE(process_vm_writev)
 		(const struct iovec *)ihk_mc_syscall_arg3(ctx);
 	unsigned long riovcnt = ihk_mc_syscall_arg4(ctx);
 	unsigned long flags = ihk_mc_syscall_arg5(ctx);
+	int ret;
 
+	ret = process_vm_validate_args(flags, liovcnt, riovcnt);
+	if (ret) {
+		return ret;
+	}
 	return do_process_vm_read_writev(pid, local_iov, liovcnt,
 		remote_iov, riovcnt, flags, PROCESS_VM_WRITE);
 }
@@ -10786,7 +12290,12 @@ SYSCALL_DECLARE(process_vm_readv)
 		(const struct iovec *)ihk_mc_syscall_arg3(ctx);
 	unsigned long riovcnt = ihk_mc_syscall_arg4(ctx);
 	unsigned long flags = ihk_mc_syscall_arg5(ctx);
+	int ret;
 
+	ret = process_vm_validate_args(flags, liovcnt, riovcnt);
+	if (ret) {
+		return ret;
+	}
 	return do_process_vm_read_writev(pid, local_iov, liovcnt,
 		remote_iov, riovcnt, flags, PROCESS_VM_READ);
 }

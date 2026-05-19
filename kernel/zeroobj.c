@@ -21,6 +21,7 @@
 #include <page.h>
 #include <string.h>
 #include <ihk/debug.h>
+#include <object_helpers.h>
 
 struct zeroobj {
 	struct memobj		memobj;		/* must be first */
@@ -106,9 +107,10 @@ static int alloc_zeroobj(void)
 
 	memset(obj, 0, sizeof(*obj));
 	obj->memobj.ops = &zeroobj_ops;
-	obj->memobj.flags = MF_ZEROOBJ;
+	obj->memobj.flags = zeroobj_initial_flags_result();
 	obj->memobj.size = 0;
-	ihk_atomic_set(&obj->memobj.refcnt, 2); // never reaches 0
+	ihk_atomic_set(&obj->memobj.refcnt,
+			zeroobj_initial_refcnt_result()); // never reaches 0
 	page_list_init(obj);
 
 	virt = ihk_mc_alloc_pages(1, IHK_MC_AP_NOWAIT);	/* XXX:NYI:large page */
@@ -129,8 +131,8 @@ static int alloc_zeroobj(void)
 	}
 
 	memset(virt, 0, PAGE_SIZE);
-	page->mode = PM_MAPPED;
-	page->offset = 0;
+	page->mode = zeroobj_initial_page_mode_result();
+	page->offset = zeroobj_initial_page_offset_result();
 	ihk_atomic_set(&page->count, 1);
 	ihk_atomic64_set(&page->mapped, 0);
 	page_list_insert(obj, page);
@@ -186,22 +188,21 @@ static int zeroobj_get_page(struct memobj *memobj, off_t off, int p2align,
 
 	dkprintf("zeroobj_get_page(%p,%#lx,%d,%p)\n",
 			memobj, off, p2align, physp);
-	if (off & ~PAGE_MASK) {
-		error = -EINVAL;
+	error = zeroobj_get_page_validate_result(off, p2align, 1);
+	if (error == -EINVAL) {
 		ekprintf("zeroobj_get_page(%p,%#lx,%d,%p):invalid argument. %d\n",
 				memobj, off, p2align, physp, error);
 		goto out;
 	}
-	if (p2align != PAGE_P2ALIGN) {		/* XXX:NYI:large pages */
-		error = -ENOMEM;
+	if (error == -ENOMEM) {		/* XXX:NYI:large pages */
 		dkprintf("zeroobj_get_page(%p,%#lx,%d,%p):large page. %d\n",
 				memobj, off, p2align, physp, error);
 		goto out;
 	}
 
 	page = page_list_first(obj);
-	if (!page) {
-		error = -ENOMEM;
+	error = zeroobj_get_page_validate_result(off, p2align, !!page);
+	if (error) {
 		ekprintf("zeroobj_get_page(%p,%#lx,%d,%p):page not found. %d\n",
 				memobj, off, p2align, physp, error);
 		goto out;

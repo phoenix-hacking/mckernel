@@ -3543,6 +3543,8 @@ Update 2026-05-18 02:05 EDT:
     passed.
   - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
     passed.
+  - The rebuilt Rust object exports the new XPMEM refcount/object-list helper
+    symbols, and the actual build object SIMD scan stayed clean.
 - Runtime validation:
   - Did not rerun V10/V11 for this batch to avoid excessive full runtime loops.
   - Current runtime baseline remains the clean V10 log
@@ -3992,3 +3994,1017 @@ Update 2026-05-18 04:20 EDT:
     in C until broader syscall-family tests exist.
   - Next good targets are additional pure syscall policy helpers or a V12
     allocator stress expansion before moving more allocator orchestration.
+
+Update 2026-05-18 04:32 EDT:
+- Added another syscall-adjacent Rust conversion batch, focused on scheduler
+  policy/affinity helpers and prlimit resource helpers.
+- Implementation:
+  - Extended `kernel/rust/sched_helpers.rs` with Rust-owned C ABI exports for
+    `sched_policy_is_valid()`, `sched_policy_needs_root()`,
+    `setscheduler_validate()`, `sched_rr_interval_nsec()`,
+    `sched_affinity_permission_result()`, `sched_getaffinity_len_result()`,
+    and `sched_affinity_copy_len()`.
+  - Added `kernel/rust/rlimit_helpers.rs` with Rust-owned C ABI exports for
+    `prlimit_validate_resource()`, `prlimit_validate_new_limit()`,
+    `prlimit_linux_update_needed()`, and
+    `prlimit_to_mckernel_resource()`.
+  - Wired the new Rust module into `kernel/rust/lib.rs` and the Rust CMake
+    source list.
+  - Guarded the matching C helper implementations in `kernel/syscall.c` with
+    `MCKERNEL_RUST_SCHED_POLICY_HELPERS` and
+    `MCKERNEL_RUST_RLIMIT_HELPERS`, while preserving C fallback and
+    test-export paths.
+  - Updated scheduler syscall bodies to use the helpers while leaving thread
+    lookup, Linux permission forwarding, affinity mask mutation, migration
+    requests, and user-copy in C.
+  - Updated `do_prlimit64()` to use Rust-owned resource validation,
+    soft/hard ordering, Linux-forwarding resource detection, and McKernel
+    resource mapping while leaving process lookup, locks, user-copy, rlimit
+    storage, and Linux forwarding in C.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct C/Rust digest
+    coverage for scheduler policy validity, root-required checks, priority
+    validation, RR interval selection, affinity permission/length behavior,
+    prlimit resource validation, soft/hard ordering, Linux-forwarding resource
+    detection, and McKernel resource mapping.
+- Local validation:
+  - `rustfmt kernel/rust/lib.rs kernel/rust/sched_helpers.rs kernel/rust/rlimit_helpers.rs`
+    passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh scripts/rocky-rust-validation.sh scripts/rocky-v11-focused.sh`
+    passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `sched_helpers ok digest=72b6ef0b7a02091c`,
+    `rlimit_helpers ok digest=317abd6ca0cbf441`,
+    `shmid_helpers ok digest=106bd71cde5652d2`, and the prior page, memory,
+    waitq, plist, bitops, string, numparse, bitmap, and allocator digests.
+  - `git diff --check` passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - The rebuilt Rust object exports the new scheduler/prlimit helper symbols.
+    The expected unresolved-provider list remains `ihk_get_kargs`,
+    `ihk_mc_chk_page_address`, `ihk_mc_get_memory_chunk`,
+    `ihk_mc_get_nr_memory_chunks`, `phys_to_virt`, `shmid_index`,
+    `virt_to_phys`, and `zero_at_free`; the actual build object SIMD scan
+    stayed clean.
+- Runtime validation:
+  - Installed the rebuilt Rust image and booted McKernel with one McKernel CPU
+    and 512M memory.
+  - Targeted scheduler/prlimit smoke passed under McKernel. It covered
+    scheduler priority min/max, invalid scheduler policy handling,
+    `sched_setparam()`, `sched_setscheduler(SCHED_OTHER)`,
+    `sched_rr_get_interval()`, `sched_getaffinity()`, `sched_setaffinity()`
+    with the current mask, short affinity buffer rejection,
+    `getrlimit(RLIMIT_AS)`, `prlimit(RLIMIT_AS)`, same-limit `prlimit()` set,
+    and invalid resource rejection.
+  - `mcstat` also completed after the targeted smoke, and McKernel shut down
+    cleanly.
+- Path forward:
+  - Continue with pure syscall policy helpers or widen allocator stress before
+    moving more allocator orchestration. Avoid porting syscall bodies that own
+    user-copy, process/thread lifetime, or mapping side effects until broader
+    syscall-family runtime coverage exists.
+
+Update 2026-05-18 04:50 EDT:
+- Added a larger syscall-policy Rust conversion batch, focused on pure errno,
+  normalization, and range-validation helpers that are safe to validate without
+  moving locks, object lifetime, user-copy, or page-table mutation.
+- Implementation:
+  - Added `kernel/rust/syscall_policy.rs` and wired it into
+    `kernel/rust/lib.rs` plus the Rust CMake source list.
+  - Added Rust-owned C ABI exports for `robust_list_len_result()`,
+    `tkill_tid_result()`, `sigaction_validate()`,
+    `setpgid_normalize_pid()`, `setpgid_normalize_pgid()`,
+    `setpgid_execed_result()`, `memlock_prepare_range()`,
+    `memlock_range_flag_result()`, `range_has_disallowed_change_flags()`,
+    `munmap_prepare_range()`, and `mprotect_prepare_range()`.
+  - Guarded matching C fallback/test-export helpers in `kernel/syscall.c` with
+    `MCKERNEL_RUST_SYSCALL_POLICY_HELPERS` and
+    `MCKERNEL_SYSCALL_POLICY_HELPERS_TEST_EXPORT`.
+  - Wired `tkill()`, `setpgid()`, `set_robust_list()`, `do_sigaction()`,
+    `munmap()`, `mprotect()`, `mlock()`, `munlock()`,
+    `remap_file_pages()`, and `mremap()` to the helpers where the existing C
+    logic was pure validation or flag policy.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct C/Rust digest
+    coverage for robust-list length checks, `tkill` tid validation,
+    signal-action restrictions, `setpgid` normalization and execed behavior,
+    memory-lock range math, memory-range flag rejection, `munmap` validation,
+    and `mprotect` validation.
+- Local validation:
+  - `rustfmt kernel/rust/lib.rs kernel/rust/syscall_policy.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `syscall_policy_helpers ok digest=c9a25ab61c71eeab`,
+    `sched_helpers ok digest=72b6ef0b7a02091c`,
+    `rlimit_helpers ok digest=317abd6ca0cbf441`,
+    `shmid_helpers ok digest=106bd71cde5652d2`, and the prior page,
+    memory/init, waitq, plist, bitops, string, numparse, bitmap, and allocator
+    digests.
+  - `git diff --check` passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - The rebuilt Rust object exports all new syscall-policy helper symbols.
+    The expected unresolved-provider list remains `ihk_get_kargs`,
+    `ihk_mc_chk_page_address`, `ihk_mc_get_memory_chunk`,
+    `ihk_mc_get_nr_memory_chunks`, `phys_to_virt`, `shmid_index`,
+    `virt_to_phys`, and `zero_at_free`; the actual build object SIMD scan
+    stayed clean.
+- Runtime validation:
+  - Installed the rebuilt Rust image and booted McKernel with one McKernel CPU
+    and 512M memory.
+  - Targeted syscall-policy smoke passed under McKernel. It covered valid and
+    invalid `set_robust_list()` lengths, invalid `tkill()` tid handling,
+    `sigaction(SIGUSR1)`, rejected `sigaction(SIGKILL)`, aligned and
+    unaligned `mprotect()`, zero-length `mlock()`/`munlock()`, and aligned/
+    unaligned `munmap()`.
+  - `mcstat` completed after the targeted smoke, and McKernel shut down
+    cleanly.
+- Path forward:
+  - Continue with more syscall-adjacent pure helpers or widen allocator/VM
+    stress before moving stateful syscall bodies. Keep user-copy, range-tree
+    mutation, process/thread lifetime, and page-table side effects in C until
+    the corresponding runtime coverage is broader.
+
+Update 2026-05-18 15:36 EDT:
+- Added another syscall/memory Rust conversion batch, focused on memory-policy
+  validation helpers while keeping stateful VM, NUMA mask, migration, and
+  page-table work in C.
+- Implementation:
+  - Extended `kernel/rust/syscall_policy.rs` with Rust-owned C ABI exports for
+    `mlockall_policy_result()`, `remap_file_pages_prepare()`,
+    `mremap_prepare_args()`, `mremap_fixed_range_result()`,
+    `mremap_maymove_result()`, `msync_prepare_range()`,
+    `msync_locked_range_result()`, `mbind_prepare_range()`,
+    `mempolicy_nodemask_bits_result()`,
+    `mempolicy_nodemask_bits_is_clamped()`, `mbind_mode_flags_result()`,
+    `mempolicy_mode_is_supported()`, `set_mempolicy_normalize_mode()`,
+    `get_mempolicy_validate()`, and `move_pages_policy_result()`.
+  - Added matching guarded C fallback/test-export declarations and
+    implementations in `kernel/syscall.c`.
+  - Wired `mlockall()`, `remap_file_pages()`, `mremap()`, `msync()`,
+    `mbind()`, `set_mempolicy()`, `get_mempolicy()`, and `move_pages()` to
+    the new helpers for pure validation and policy decisions.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct C/Rust digest
+    coverage for the new helpers, including boundary cases for remap offsets,
+    mremap flags and range overflow, msync flag conflicts, mbind alignment and
+    nodemask sizing, mempolicy mode flags, get_mempolicy flag rules, and
+    move_pages policy restrictions.
+  - Equivalence caught an incorrect Rust `VR_LOCKED` constant before the image
+    build. Corrected it to the kernel value `0x4000` and reran the full
+    harness successfully.
+- Local validation:
+  - `rustfmt kernel/rust/syscall_policy.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `syscall_policy_helpers ok digest=106066f7c6a0a23f`,
+    `sched_helpers ok digest=72b6ef0b7a02091c`,
+    `rlimit_helpers ok digest=317abd6ca0cbf441`,
+    `shmid_helpers ok digest=106bd71cde5652d2`, and the prior page,
+    memory/init, waitq, plist, bitops, string, numparse, bitmap, and allocator
+    digests.
+  - `git diff --check` passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - The rebuilt Rust object exports all new memory-policy helper symbols. The
+    expected unresolved-provider list remains `ihk_get_kargs`,
+    `ihk_mc_chk_page_address`, `ihk_mc_get_memory_chunk`,
+    `ihk_mc_get_nr_memory_chunks`, `phys_to_virt`, `shmid_index`,
+    `virt_to_phys`, and `zero_at_free`; the actual build object SIMD scan
+    stayed clean.
+- Runtime validation:
+  - Installed the rebuilt Rust image and booted McKernel with one McKernel CPU
+    and 512M memory.
+  - Targeted memory-policy smoke passed under McKernel. It covered invalid
+    `mlockall()` flags, same-size and invalid-fixed `mremap()`, invalid
+    `msync()` flags, invalid `remap_file_pages()` size, unaligned `mbind()`,
+    invalid `set_mempolicy()` mode flags, null-address `get_mempolicy()`, and
+    invalid `move_pages()` policy requests.
+  - `mcstat` completed after the targeted smoke, and McKernel shut down
+    cleanly.
+- Path forward:
+  - Continue expanding Rust ownership around pure syscall helpers, then widen
+    runtime coverage before moving stateful memory syscall bodies. The next
+    strategic options are allocator/VM stress expansion, more NUMA policy
+    helpers, or process/signal helper extraction with equivalence first.
+
+Update 2026-05-18 15:48 EDT:
+- Added another Rust syscall-policy conversion batch focused on the pure
+  validation and policy decisions around `brk()`, `mincore()`, and `do_mmap()`.
+  The mutable VM-range tree work, page-table work, file mapping operations,
+  and user-copy pieces remain in C.
+- Implementation:
+  - Extended `kernel/rust/syscall_policy.rs` with Rust-owned C ABI exports for
+    `brk_prepare_result()`, `brk_default_vrflags()`,
+    `mincore_prepare_range()`, `mmap_base_vrflags()`,
+    `mmap_populated_mapping_result()`, `mmap_should_set_host_ro()`,
+    `mmap_update_private_maxprot()`, `mmap_prot_denied_result()`,
+    `mmap_maxprot_to_vrflags()`, `mmap_should_force_straight()`, and
+    `mmap_is_shared()`.
+  - Added guarded C fallback/test-export declarations and implementations in
+    `kernel/syscall.c`.
+  - Wired `brk()`, `mincore()`, and `do_mmap()` to use the new helpers for
+    range preparation, default VM flags, MAP_POPULATE/MAP_LOCKED decisions,
+    host read-only mapping decisions, private max-protection updates,
+    protection-denial errno selection, max-protection-to-VM-flag conversion,
+    straight-mapping decisions, and shared/private mapping classification.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct C/Rust digest
+    coverage for the new helpers, including underflow/overflow ranges,
+    page-alignment behavior, host read-only mapping cases, private maximum
+    protection updates, disallowed protection checks, max-protection flag
+    conversion, straight mapping, and shared mapping classification.
+- Local validation:
+  - `rustfmt kernel/rust/lib.rs kernel/rust/syscall_policy.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `syscall_policy_helpers ok digest=f0a9670347e66b66`,
+    `sched_helpers ok digest=72b6ef0b7a02091c`,
+    `rlimit_helpers ok digest=317abd6ca0cbf441`,
+    `shmid_helpers ok digest=106bd71cde5652d2`, and the prior page,
+    memory/init, waitq, plist, bitops, string, numparse, bitmap, and allocator
+    digests.
+  - `git diff --check` passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - The rebuilt Rust object exports all new mmap/brk/mincore helper symbols.
+    The expected unresolved-provider list remains `ihk_get_kargs`,
+    `ihk_mc_chk_page_address`, `ihk_mc_get_memory_chunk`,
+    `ihk_mc_get_nr_memory_chunks`, `phys_to_virt`, `shmid_index`,
+    `virt_to_phys`, and `zero_at_free`; the actual build object SIMD scan
+    stayed clean.
+- Runtime validation:
+  - Installed the rebuilt Rust image and booted McKernel with one McKernel CPU
+    and 512M memory.
+  - Targeted mmap/brk/mincore smoke passed under McKernel. It covered anonymous
+    private mapping, file-backed read-only mapping, `MAP_POPULATE`,
+    `MAP_LOCKED`, `mprotect()` on the mapping, `mincore()` on a mapped page,
+    invalid unaligned `mincore()`, `brk()` growth/restore, and invalid
+    fixed-address `mmap()`.
+  - `mcstat` completed after the targeted smoke, and McKernel shut down
+    cleanly.
+- Path forward:
+  - Continue converting bounded syscall helper logic where equivalence tests can
+    directly compare C and Rust decisions. Good next targets are additional
+    mmap-adjacent flag helpers, more signal/process validation helpers, or
+    allocator/VM stress expansion before moving stateful VM mutation paths.
+
+Update 2026-05-18 16:02 EDT:
+- Added another Rust syscall-policy conversion batch focused on live signal and
+  time syscall validation/dispatch decisions. Signal queues, user-copy, actual
+  timer state mutation, CPU-time accounting walks, and Linux forwarding remain
+  in C.
+- Implementation:
+  - Extended `kernel/rust/syscall_policy.rs` with Rust-owned C ABI exports for
+    `tgkill_target_result()`, `rt_sigprocmask_validate()`,
+    `rt_sigprocmask_apply()`, `rt_sigpending_size_result()`,
+    `signalfd4_sigsetsize_result()`, `signalfd4_flags_result()`,
+    `getrusage_who_result()`, `itimer_which_result()`, `itimer_is_real()`,
+    `itimer_should_start()`, `clock_gettime_dispatch()`,
+    `gettimeofday_dispatch()`, and `nanosleep_validate_timespec()`.
+  - Added matching guarded C fallback/test-export declarations and
+    implementations in `kernel/syscall.c`.
+  - Wired `tgkill()`, `rt_sigprocmask()`, `rt_sigpending()`, `signalfd4()`,
+    `getrusage()`, `setitimer()`, `getitimer()`, `clock_gettime()`,
+    `gettimeofday()`, and `nanosleep()` to use the new helpers for pure
+    validation and dispatch decisions.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct C/Rust digest
+    coverage for the new helpers, including signal mask application, invalid
+    signal-set sizes, invalid signalfd flags, itimer modes, clock dispatch,
+    gettimeofday dispatch, and negative/overflow nanosecond cases.
+  - Equivalence caught a nanosleep edge case before the image build: the C
+    `NS_PER_SEC` comparison rejects negative nanoseconds. The Rust helper now
+    makes that behavior explicit with a direct `nsec < 0` check.
+- Local validation:
+  - `rustfmt kernel/rust/syscall_policy.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `syscall_policy_helpers ok digest=21bd5986b543e98b`,
+    `sched_helpers ok digest=72b6ef0b7a02091c`,
+    `rlimit_helpers ok digest=317abd6ca0cbf441`,
+    `shmid_helpers ok digest=106bd71cde5652d2`, and the prior page,
+    memory/init, waitq, plist, bitops, string, numparse, bitmap, and allocator
+    digests.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. Rust emitted the existing non-fatal jobserver warning from the
+    CMake/Make environment, then linked `mckernel.img`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - The rebuilt Rust object exports all new signal/time helper symbols. The
+    expected unresolved-provider list remains `ihk_get_kargs`,
+    `ihk_mc_chk_page_address`, `ihk_mc_get_memory_chunk`,
+    `ihk_mc_get_nr_memory_chunks`, `phys_to_virt`, `shmid_index`,
+    `virt_to_phys`, and `zero_at_free`; the actual build object SIMD scan
+    stayed clean.
+- Runtime validation:
+  - Installed the already-built Rust image, booted McKernel with one McKernel
+    CPU and 512M memory, and confirmed `IHK/McKernel booted`.
+  - Targeted signal/time smoke passed under McKernel with
+    `/opt/mckernel-rust/bin/mcexec /tmp/mckernel-signal-time-smoke`. It covered
+    `sigprocmask()`, invalid direct `rt_sigprocmask()`, invalid
+    `rt_sigpending()` size, invalid `tgkill()`, invalid `signalfd4()` size and
+    flags, valid and invalid `getrusage()`, valid and invalid itimer calls,
+    `clock_gettime()`, null-pointer `clock_gettime()` behavior,
+    `gettimeofday()`, null-pointer `gettimeofday()` behavior, invalid
+    `nanosleep()`, and a short valid `nanosleep()`.
+  - `mcstat` completed after the targeted smoke, and McKernel shut down
+    cleanly.
+- Path forward:
+  - Continue with bounded, directly comparable syscall helpers. The best next
+    candidates are remaining signal/wait helpers, process selector helpers, and
+    additional mmap-adjacent pure decisions before moving stateful syscall
+    bodies into Rust.
+
+Update 2026-05-18 16:18 EDT:
+- Added another Rust syscall-policy conversion batch focused on signal-wait and
+  alternate-signal-stack helper policy. Pending-signal list traversal, signal
+  delivery, action storage, thread status transitions, alternate-stack storage
+  updates, and user-copy remain in C.
+- Implementation:
+  - Extended `kernel/rust/syscall_policy.rs` with Rust-owned C ABI exports for
+    `rt_sigtimedwait_prepare()`, `rt_sigtimedwait_timeout_result()`,
+    `rt_sigtimedwait_prepare_masks()`, `rt_sigtimedwait_deadline()`,
+    `rt_sigtimedwait_timeout_expired()`, `sigmask_to_signal_number()`,
+    `rt_sigqueueinfo_pid_result()`, `sigsuspend_sigsetsize_result()`,
+    `sigsuspend_prepare_mask()`, `sigsuspend_pending_matches()`,
+    `sigaction_sigsetsize_result()`, `sigaltstack_validate()`, and
+    `sigaltstack_is_disable()`.
+  - Added matching guarded C fallback/test-export declarations and
+    implementations in `kernel/syscall.c`.
+  - Wired `rt_sigtimedwait()`, `rt_sigqueueinfo()`, `rt_sigsuspend()`,
+    `rt_sigaction()`, and `sigaltstack()` to use the new helpers for size
+    checks, null-set policy, timeout validation, signal-mask normalization,
+    blocked/interrupt mask derivation, deadline math, timeout expiry checks,
+    signal-number extraction, pid validation, pending-mask matching, and
+    alternate-stack flag/size decisions.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct C/Rust digest
+    coverage for the new helpers, including negative and overflow nanosecond
+    cases, non-local-timeout policy, protected signal mask stripping,
+    deadline carry, timeout expiry boundaries, signal-number extraction,
+    invalid pid handling, sigsuspend pending matching, sigaction size checks,
+    and sigaltstack disabled/invalid/too-small/valid cases.
+- Local validation:
+  - `rustfmt kernel/rust/syscall_policy.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `syscall_policy_helpers ok digest=b1edd1c842dcd217`,
+    `sched_helpers ok digest=72b6ef0b7a02091c`,
+    `rlimit_helpers ok digest=317abd6ca0cbf441`,
+    `shmid_helpers ok digest=106bd71cde5652d2`, and the prior page,
+    memory/init, waitq, plist, bitops, string, numparse, bitmap, and allocator
+    digests.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. Rust emitted the existing non-fatal jobserver warning from the
+    CMake/Make environment, then linked `mckernel.img`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - The rebuilt Rust object exports all new signal-wait helper symbols. The
+    expected unresolved-provider list remains `ihk_get_kargs`,
+    `ihk_mc_chk_page_address`, `ihk_mc_get_memory_chunk`,
+    `ihk_mc_get_nr_memory_chunks`, `phys_to_virt`, `shmid_index`,
+    `virt_to_phys`, and `zero_at_free`; the actual build object SIMD scan
+    stayed clean.
+- Runtime validation:
+  - Installed the rebuilt Rust image, booted McKernel with one McKernel CPU and
+    512M memory, and confirmed `IHK/McKernel booted`.
+  - Targeted signal-wait smoke passed under McKernel with
+    `/opt/mckernel-rust/bin/mcexec /tmp/mckernel-signal-wait-smoke`. It covered
+    invalid `sigaltstack()` flags, too-small and valid alternate stacks,
+    alternate-stack disable, invalid and valid `rt_sigaction()` behavior,
+    invalid `rt_sigtimedwait()` sizes, null sets, invalid timeout,
+    zero-timeout no-signal behavior, invalid `rt_sigqueueinfo()` pid, and
+    invalid `rt_sigsuspend()` size.
+  - `mcstat` completed after the targeted smoke, and McKernel shut down
+    cleanly.
+- Path forward:
+  - Continue with more directly comparable syscall helpers. The best next
+    candidates are process selector/lifecycle validation helpers,
+    `process_vm_*` argument validation, and remaining mmap-adjacent pure
+    policy before moving any stateful syscall bodies into Rust.
+
+Update 2026-05-18 16:28 EDT:
+- Added another Rust syscall-policy conversion batch focused on ptrace and
+  process-vm wrapper policy. Process lookup, ptrace state mutation, register
+  access, remote memory reads/writes, cross-process VM copying, and user-copy
+  remain in C.
+- Implementation:
+  - Extended `kernel/rust/syscall_policy.rs` with Rust-owned C ABI exports for
+    `process_vm_validate_args()`, `process_vm_op_is_write()`,
+    `process_vm_op_is_valid()`, `ptrace_signal_data_result()`,
+    `ptrace_detach_signal_result()`, `ptrace_user_area_result()`,
+    `ptrace_status_allows_io()`, `ptrace_setoptions_flags_result()`,
+    `ptrace_apply_options()`, `ptrace_child_traced_result()`,
+    `ptrace_attach_policy_result()`, `ptrace_detach_state_result()`, and
+    `ptrace_siginfo_state_result()`.
+  - Added matching guarded C fallback/test-export declarations and
+    implementations in `kernel/syscall.c`.
+  - Wired `process_vm_readv()` and `process_vm_writev()` to validate flags and
+    iovec counts through Rust-owned helpers before calling
+    `do_process_vm_read_writev()`.
+  - Wired ptrace signal validation, detach signal validation, user-area address
+    checks, stopped/traced status gating, setoptions mask/application, traced
+    child checks, attach policy, detach state checks, and siginfo state checks
+    through the new helpers.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct C/Rust digest
+    coverage for process-vm argument validation and ptrace signal/address/status/
+    options/attach/detach/siginfo policy.
+- Local validation:
+  - `rustfmt kernel/rust/syscall_policy.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `syscall_policy_helpers ok digest=e5979922a12123ad`,
+    `sched_helpers ok digest=72b6ef0b7a02091c`,
+    `rlimit_helpers ok digest=317abd6ca0cbf441`,
+    `shmid_helpers ok digest=106bd71cde5652d2`, and the prior page,
+    memory/init, waitq, plist, bitops, string, numparse, bitmap, and allocator
+    digests.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. Rust emitted the existing non-fatal jobserver warning from the
+    CMake/Make environment, then linked `mckernel.img`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - The rebuilt Rust object exports all new ptrace/process-vm helper symbols.
+    The expected unresolved-provider list remains `ihk_get_kargs`,
+    `ihk_mc_chk_page_address`, `ihk_mc_get_memory_chunk`,
+    `ihk_mc_get_nr_memory_chunks`, `phys_to_virt`, `shmid_index`,
+    `virt_to_phys`, and `zero_at_free`; the actual build object SIMD scan
+    stayed clean.
+- Runtime validation:
+  - Installed the rebuilt Rust image, booted McKernel with one McKernel CPU and
+    512M memory, and confirmed `IHK/McKernel booted`.
+  - Targeted ptrace/process-vm smoke passed under McKernel with
+    `/opt/mckernel-rust/bin/mcexec /tmp/mckernel-ptrace-process-vm-smoke`. It
+    covered invalid ptrace detach signal, invalid `PTRACE_SETOPTIONS` flags,
+    invalid `PTRACE_PEEKUSER` address, self-attach rejection, invalid
+    `process_vm_readv()` flags, too many local iovecs, and too many remote
+    iovecs for `process_vm_writev()`.
+  - `mcstat` completed after the targeted smoke, and McKernel shut down
+    cleanly.
+- Path forward:
+  - Continue converting bounded policy helpers with direct equivalence. Good
+    next targets are XPMEM access policy, additional process lifecycle
+    validators, and more object/file policy before moving stateful mutation
+    bodies.
+
+Update 2026-05-18 16:40 EDT:
+- Added a Rust XPMEM helper conversion batch focused on pure make/get/access
+  policy decisions. XPMEM object lookup, reference handling,
+  segment/access-permit/attachment allocation, attach/remap operations,
+  page-table updates, and user-copy remain in C.
+- Implementation:
+  - Added `kernel/rust/xpmem_helpers.rs` and wired it through
+    `kernel/rust/lib.rs` and `kernel/CMakeLists.txt`.
+  - Added Rust-owned C ABI exports for `xpmem_make_initial_policy_result()`,
+    `xpmem_make_alignment_result()`, `xpmem_get_policy_result()`,
+    `xpmem_perms_result()`, `xpmem_check_permit_mode_result()`,
+    `xpmem_validate_access_result()`, and `xpmem_attach_overlap_result()`.
+  - Added guarded C fallback/test-export implementations in `kernel/xpmem.c`.
+  - Wired `xpmem_make()`, `xpmem_get()`, `xpmem_check_permit_mode()`,
+    `xpmem_perms()`, `xpmem_validate_access()`, and the same-process attach
+    overlap check through the new helpers.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct C/Rust digest
+    coverage for make/get argument policy, page-alignment rules, permission bit
+    resolution, read/write permit checks, access validation, computed segment
+    virtual addresses, and attach-overlap rejection.
+- Local validation:
+  - `rustfmt kernel/rust/xpmem_helpers.rs kernel/rust/lib.rs
+    kernel/rust/syscall_policy.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `xpmem_helpers ok digest=e80a39f533ae180d`,
+    `syscall_policy_helpers ok digest=e5979922a12123ad`,
+    `sched_helpers ok digest=72b6ef0b7a02091c`,
+    `rlimit_helpers ok digest=317abd6ca0cbf441`,
+    `shmid_helpers ok digest=106bd71cde5652d2`, and the prior page,
+    memory/init, waitq, plist, bitops, string, numparse, bitmap, and allocator
+    digests.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. CMake regenerated for the new Rust source and XPMEM compile
+    definition; Rust emitted the existing non-fatal jobserver warning, then the
+    image linked.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - The rebuilt Rust object exports all new XPMEM helper symbols plus the
+    ptrace/process-vm helper symbols. The expected unresolved-provider list
+    remains `ihk_get_kargs`, `ihk_mc_chk_page_address`,
+    `ihk_mc_get_memory_chunk`, `ihk_mc_get_nr_memory_chunks`, `phys_to_virt`,
+    `shmid_index`, `virt_to_phys`, and `zero_at_free`; the actual build object
+    SIMD scan stayed clean.
+  - Scanned the touched logs and source paths for the sudo credential string;
+    no matches were present.
+- Runtime validation:
+  - Installed the rebuilt Rust image, booted McKernel with one McKernel CPU and
+    512M memory, and confirmed `IHK/McKernel booted`.
+  - Reran the ptrace/process-vm smoke under McKernel:
+    `/opt/mckernel-rust/bin/mcexec /tmp/mckernel-ptrace-process-vm-smoke`
+    printed `ptrace_process_vm_smoke ok`.
+  - `mcstat` completed after the smoke, and McKernel shut down cleanly.
+  - Direct XPMEM user runtime was not run in this slice because `/dev/xpmem` is
+    not present on this host. The new XPMEM policy logic is covered by direct
+    C/Rust equivalence, Rust and C-fallback image builds, symbol scans, SIMD
+    scan, and rebuilt-image boot smoke.
+- Path forward:
+  - Add or enable a direct `/dev/xpmem` runtime gate, then port more XPMEM
+    ID/hash/refcount policy helpers.
+  - Continue syscall/process helper conversions where C/Rust equivalence can
+    prove parity before any full runtime build is spent.
+
+Update 2026-05-18 17:44 EDT:
+- Expanded the Rust XPMEM conversion beyond the first make/get/access policy
+  slice. This batch moved ID packing/unpacking, thread-group and
+  access-permit hash selection, positive-ID checks, owner checks, attach
+  alignment/rounding policy, detach lookup policy, and generic destroying-state
+  error decisions into Rust-owned C ABI helpers.
+- Implementation:
+  - Extended `kernel/rust/xpmem_helpers.rs` with Rust-owned exports for
+    `xpmem_id_to_tgid_result()`, `xpmem_tg_hashtable_index_result()`,
+    `xpmem_ap_hashtable_index_result()`, `xpmem_make_id_result()`,
+    `xpmem_positive_id_result()`, `xpmem_owner_policy_result()`,
+    `xpmem_attach_initial_policy_result()`,
+    `xpmem_destroying_state_result()`, `xpmem_is_destroying_result()`,
+    `xpmem_destroying_error_result()`,
+    `xpmem_two_destroying_error_result()`,
+    `xpmem_three_destroying_error_result()`,
+    `xpmem_attach_destroying_result()`, and
+    `xpmem_detach_lookup_result()`.
+  - Added matching C fallback/test-export implementations in `kernel/xpmem.c`.
+  - Routed `xpmem_segid_to_tgid()`, `xpmem_apid_to_tgid()`,
+    `xpmem_tg_hashtable_index()`, and `xpmem_ap_hashtable_index()` through
+    Rust helpers when `MCKERNEL_RUST_XPMEM_HELPERS` is enabled.
+  - Wired XPMEM make/remove/release/attach/detach, process-range cleanup,
+    page-fault/update checks, and page validation through the new helpers where
+    the decision is pure flag, ID, owner, alignment, or errno policy.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct C/Rust digest
+    coverage for the new helpers, including boundary IDs, overflow uniq values,
+    hash buckets, attach rounding/truncation, owner mismatch, destroying flags,
+    caller-selected errno values, and detach no-op/error/continue decisions.
+- Local validation:
+  - `rustfmt kernel/rust/xpmem_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `bash -n test/xpmem/go_test.sh` and
+    `bash -n test/issues/1259/C1259.sh` passed after adding the XPMEM device
+    node fallback.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `xpmem_helpers ok digest=2b3983e289a03c82`,
+    `syscall_policy_helpers ok digest=e5979922a12123ad`,
+    `sched_helpers ok digest=72b6ef0b7a02091c`,
+    `rlimit_helpers ok digest=317abd6ca0cbf441`,
+    `shmid_helpers ok digest=106bd71cde5652d2`, and the prior page,
+    memory/init, waitq, plist, bitops, string, numparse, bitmap, and allocator
+    digests.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. Rust emitted the existing non-fatal jobserver warning, then the
+    image linked.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - The rebuilt Rust object exports the new XPMEM helper symbols. The expected
+    unresolved-provider list remains `ihk_get_kargs`,
+    `ihk_mc_chk_page_address`, `ihk_mc_get_memory_chunk`,
+    `ihk_mc_get_nr_memory_chunks`, `phys_to_virt`, `shmid_index`,
+    `virt_to_phys`, and `zero_at_free`; the actual build object SIMD scan
+    stayed clean.
+  - Scanned touched logs and source paths for the sudo credential string; no
+    matches were present.
+- Runtime validation:
+  - Installed the rebuilt Rust image, booted McKernel with one McKernel CPU and
+    512M memory, and confirmed `IHK/McKernel booted`.
+  - Reran the ptrace/process-vm smoke under McKernel:
+    `/opt/mckernel-rust/bin/mcexec /tmp/mckernel-ptrace-process-vm-smoke`
+    printed `ptrace_process_vm_smoke ok`.
+  - `mcstat` completed after the smoke, and McKernel shut down cleanly.
+  - Direct XPMEM user runtime was not run because `/dev/xpmem` is not present
+    on this host. The new XPMEM logic is covered by direct C/Rust equivalence,
+    both image builds, symbol/SIMD scans, and rebuilt-image boot smoke.
+- Path forward:
+  - Enable a direct `/dev/xpmem` runtime gate when the device is available.
+  - Continue converting XPMEM refcount/object-list policy and small file/procfs
+    decision helpers before attempting lock/list mutation bodies in Rust.
+
+Update 2026-05-18 17:55 EDT:
+- Converted a larger syscall wait-policy slice to Rust while keeping the C
+  fallback path buildable. This batch moved wait4/waitid option validation,
+  waitid idtype/pid normalization, process/thread candidate selection,
+  stopped/continued status construction, nohang/empty handling, host-wait skip
+  decisions, and waitid status-code selection into Rust-owned C ABI helpers.
+- Implementation:
+  - Extended `kernel/rust/syscall_policy.rs` with exports for
+    `wait4_options_result()`, `waitid_to_wait_pid_result()`,
+    `waitid_options_result()`, `wait_should_scan_process_result()`,
+    `wait_should_scan_thread_result()`, `wait_process_pid_matches_result()`,
+    `wait_thread_tid_matches_result()`,
+    `wait_process_exited_candidate_result()`,
+    `wait_thread_exited_candidate_result()`,
+    `wait_nonptraced_stop_candidate_result()`,
+    `wait_ptraced_stop_candidate_result()`,
+    `wait_continued_candidate_result()`, `wait_reap_needed_result()`,
+    `wait_nohang_result()`, `wait_empty_result()`,
+    `wait_stopped_status_result()`, `wait_continued_status_result()`,
+    `wait_zombie_skip_host_result()`, `wait_thread_empty_candidate_result()`,
+    and `waitid_status_code_result()`.
+  - Added matching guarded C fallback/test-export implementations in
+    `kernel/syscall.c`.
+  - Wired `wait_zombie()`, `wait_stopped()`, `wait_continued()`,
+    `wait_proc()`, `wait_thread()`, `do_wait()`, `wait4`, and `waitid`
+    through the new helpers where the decision is pure selector, option,
+    status, or errno policy.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct C/Rust digest
+    coverage for valid and invalid wait options, waitid pid normalization,
+    process and thread matching, exited/stopped/continued candidates,
+    reap/nohang/empty decisions, status generation, host-wait skip policy, and
+    waitid status-code selection.
+- Local validation:
+  - `rustfmt kernel/rust/syscall_policy.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `syscall_policy_helpers ok digest=4d17857eb31e0261`,
+    `xpmem_helpers ok digest=2b3983e289a03c82`,
+    `sched_helpers ok digest=72b6ef0b7a02091c`,
+    `rlimit_helpers ok digest=317abd6ca0cbf441`,
+    `shmid_helpers ok digest=106bd71cde5652d2`, and the prior page,
+    memory/init, waitq, plist, bitops, string, numparse, bitmap, and allocator
+    digests.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. Rust emitted the existing non-fatal jobserver warning, then the
+    image linked.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - The rebuilt Rust object exports the new wait helper symbols. The expected
+    unresolved-provider list remains `ihk_get_kargs`,
+    `ihk_mc_chk_page_address`, `ihk_mc_get_memory_chunk`,
+    `ihk_mc_get_nr_memory_chunks`, `phys_to_virt`, `shmid_index`,
+    `virt_to_phys`, and `zero_at_free`; the actual build object SIMD scan
+    stayed clean.
+  - Scanned touched logs and source paths for the sudo credential string; no
+    matches were present.
+- Runtime validation:
+  - Installed the rebuilt Rust image, booted McKernel with one McKernel CPU and
+    512M memory, and confirmed `IHK/McKernel booted`.
+  - Ran a targeted wait smoke under McKernel:
+    `/opt/mckernel-rust/bin/mcexec /tmp/mckernel-wait-smoke` printed
+    `wait_smoke ok`.
+  - The smoke covered invalid `wait4()` options, invalid `waitid()` status
+    options, `fork()` plus `wait4()` reaping,
+    `waitid(P_PID, ..., WEXITED | WNOWAIT)`, and final `wait4()` reap after
+    `WNOWAIT`.
+  - `mcstat` completed after the smoke, and McKernel shut down cleanly.
+- Path forward:
+  - Keep process lifetime, child-list mutation, reparenting, rusage
+    aggregation, ptrace detach mutation, host wait cleanup, and user-copy in C
+    until a broader process-lifetime runtime suite exists.
+  - Next high-yield Rust slices are small syscall/file/procfs decisions or
+    XPMEM refcount/object-list policy helpers that can be covered by direct
+    equivalence before spending full image/runtime validation.
+
+Update 2026-05-18 18:07 EDT:
+- Converted a larger pure-decision syscall batch to Rust while preserving the
+  C fallback image. This batch moved clone flag/dependency validation,
+  pthread-start marker detection, clone parent/report decisions, ptrace
+  exec/syscall/clone event selection, execveat flag/dirfd policy, futex
+  command/private decode, futex timeout clock/math, and futex requeue argument
+  selection into Rust-owned C ABI helpers.
+- Implementation:
+  - Extended `kernel/rust/syscall_policy.rs` with exports for
+    `clone_pthread_marker_result()`, `clone_flags_result()`,
+    `clone_host_parent_flags_result()`, `clone_report_thread_result()`,
+    `ptrace_exec_event_signal_result()`,
+    `ptrace_syscall_event_signal_result()`, `ptrace_clone_event_result()`,
+    `ptrace_clone_reparent_result()`, `execveat_policy_result()`,
+    `futex_decode_flags_result()`, `futex_wait_timeout_needed_result()`,
+    `futex_timeout_is_absolute_result()`, `futex_clock_id_result()`,
+    `futex_requeue_val2_result()`, and `futex_timeout_ns_result()`.
+  - Added matching guarded C fallback/test-export implementations in
+    `kernel/syscall.c`.
+  - Wired `ptrace_report_exec()`, `ptrace_syscall_event()`,
+    `ptrace_check_clone_event()`, `ptrace_report_clone()`, `do_fork()`,
+    `execveat`, and `do_futex()` through the new helpers where the behavior is
+    pure flag, status, selector, clock, timeout, or errno policy.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct C/Rust digest
+    coverage for clone flag combinations, coredump-barrier rejection,
+    pthread marker detection, clone parent/report policy, ptrace event
+    selection, execveat flags and dirfds, futex command decoding, futex clock
+    selection, timeout math, and requeue argument handling.
+- Local validation:
+  - `rustfmt kernel/rust/syscall_policy.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `syscall_policy_helpers ok digest=51c02f662662b187`,
+    `xpmem_helpers ok digest=2b3983e289a03c82`,
+    `sched_helpers ok digest=72b6ef0b7a02091c`,
+    `rlimit_helpers ok digest=317abd6ca0cbf441`,
+    `shmid_helpers ok digest=106bd71cde5652d2`, and the prior page,
+    memory/init, waitq, plist, bitops, string, numparse, bitmap, and allocator
+    digests.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. Rust emitted the existing non-fatal jobserver warning, then the
+    image linked.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - The equivalence harness confirmed the expected unresolved-provider list
+    and kept the actual Rust object SIMD scan clean.
+- Runtime validation:
+  - Installed the rebuilt Rust image, booted McKernel with one McKernel CPU and
+    512M memory, and ran a targeted clone/exec/futex smoke under McKernel:
+    `/opt/mckernel-rust/bin/mcexec /tmp/mckernel-clone-exec-futex-smoke`
+    printed `clone_exec_futex_smoke ok`.
+  - The smoke covered invalid `execveat()` flags, invalid relative
+    `execveat()` dirfd handling, child `execveat()` of `/bin/true`,
+    `fork()`/`waitpid()`, `pthread_create()`/`pthread_join()`,
+    `FUTEX_WAKE_PRIVATE`, and `FUTEX_WAIT_PRIVATE` mismatch behavior.
+  - `mcstat` completed after the smoke, and McKernel shut down cleanly.
+- Path forward:
+  - Keep thread/process allocation, ptrace report state mutation, exec image
+    loading, futex queues, futex wake/requeue internals, Linux clock/syscall
+    fallback, and user-copy in C until broader runtime coverage is available.
+  - Next high-yield Rust slices are syscall/file/procfs decision helpers or
+    XPMEM refcount/object-list policy helpers that can be validated by direct
+    equivalence before another full runtime gate.
+
+Update 2026-05-18 18:21 EDT:
+- Converted another XPMEM pure-decision batch to Rust while keeping the C
+  fallback image buildable. This batch moved range removal split/free
+  decisions, attachment trim and middle-range policy, private-range
+  validation, PTE invalidation range math, fault-address validation and
+  segment-address mapping, straight-map physical translation, missing
+  remote-PTE decisions, segment physical offset calculation, attachment
+  page-size fit checks, PTE mismatch errno selection, and unpin walk next-step
+  decisions into Rust-owned C ABI helpers.
+- Implementation:
+  - Extended `kernel/rust/xpmem_helpers.rs` with exports for
+    `xpmem_remove_range_step_result()`,
+    `xpmem_remove_memory_range_action_result()`,
+    `xpmem_range_private_invalid_result()`,
+    `xpmem_clear_pte_range_result()`, `xpmem_fault_vaddr_result()`,
+    `xpmem_straight_phys_result()`, `xpmem_remote_pte_missing_result()`,
+    `xpmem_seg_phys_plus_off_result()`, `xpmem_att_page_fits_result()`,
+    `xpmem_pte_mismatch_result()`, and `xpmem_unpin_step_result()`.
+  - Added matching guarded C fallback/test-export implementations in
+    `kernel/xpmem.c`.
+  - Wired `xpmem_remove_process_range()`,
+    `xpmem_remove_process_memory_range()`, `xpmem_clear_PTEs_of_att()`,
+    `_xpmem_fault_process_memory_range()`, and `xpmem_unpin_pages()` through
+    the new helpers where the behavior is pure range, flag, address, page-size,
+    or errno policy.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct C/Rust digest
+    coverage for range splitting, RO-free/private-data decisions, attachment
+    full/partial/middle trim policy, private-range validation, invalidation
+    overlap math, fault address bounds, straight-map physical translation,
+    missing remote-PTE outcomes, segment physical offset math, page fit checks,
+    PTE mismatch checks, and unpin walk progression.
+- Local validation:
+  - `rustfmt kernel/rust/xpmem_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `xpmem_helpers ok digest=3f8eb55a22c18333`,
+    `syscall_policy_helpers ok digest=51c02f662662b187`,
+    `sched_helpers ok digest=72b6ef0b7a02091c`,
+    `rlimit_helpers ok digest=317abd6ca0cbf441`,
+    `shmid_helpers ok digest=106bd71cde5652d2`, and the prior page,
+    memory/init, waitq, plist, bitops, string, numparse, bitmap, and allocator
+    digests. The first equivalence run exposed C pointer-type warnings in the
+    test-export path; those were fixed and the final run was clean.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. Rust emitted the existing non-fatal jobserver warning, then the
+    image linked.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - The rebuilt Rust object exports the new XPMEM range/page-table helper
+    symbols. The expected unresolved-provider list remains
+    `ihk_get_kargs`, `ihk_mc_chk_page_address`, `ihk_mc_get_memory_chunk`,
+    `ihk_mc_get_nr_memory_chunks`, `phys_to_virt`, `shmid_index`,
+    `virt_to_phys`, and `zero_at_free`; the actual build object SIMD scan
+    stayed clean.
+- Runtime validation:
+  - Installed the rebuilt Rust image, booted McKernel with one McKernel CPU and
+    512M memory, completed `mcstat`, and shut down cleanly.
+  - Direct XPMEM user runtime still was not run because `/dev/xpmem` is absent
+    on this host. The new XPMEM range/page-table policy logic is covered by
+    direct C/Rust equivalence, both image builds, symbol/SIMD scans, and the
+    rebuilt-image boot sanity gate.
+- Path forward:
+  - Enable a direct `/dev/xpmem` runtime gate when the device is available.
+  - Continue with XPMEM refcount/object-list/procfs decision helpers or other
+    syscall/file decision helpers that can be proven by direct equivalence
+    before moving lock/list/page-table mutation bodies into Rust.
+
+Update 2026-05-19 02:59 EDT:
+- Resolved the immediate direct XPMEM runtime blocker on this Rocky host. The
+  installed XPMEM module at `/home/hgordon/usr/lib/modules/4.18.0-553.el8_10.x86_64/xpmem.ko`
+  loaded successfully, `/dev/xpmem` was created, and the device permissions
+  were opened for the runtime tests.
+- Converted the next XPMEM refcount/object-list and destroy-state decision
+  slice to Rust while keeping the C fallback image buildable.
+- Implementation:
+  - Extended `kernel/rust/xpmem_helpers.rs` with exports for
+    `xpmem_close_decision_result()`,
+    `xpmem_ref_drop_should_free_result()`,
+    `xpmem_begin_destroy_result()`, `xpmem_finish_destroy_result()`, and
+    `xpmem_object_lookup_decision_result()`.
+  - Added matching guarded C fallback/test-export implementations in
+    `kernel/xpmem.c`.
+  - Wired `xpmem_close()`, `xpmem_remove_seg()`, `xpmem_release_ap()`,
+    `xpmem_flush()`, `xpmem_attach()` cleanup, `xpmem_detach()`,
+    `xpmem_detach_att()`, `xpmem_remove_process_memory_range()`,
+    `__xpmem_tg_ref_by_tgid_nolock_internal()`,
+    `xpmem_seg_ref_by_segid()`, `xpmem_ap_ref_by_apid()`, and the tg/seg/ap/
+    attachment deref paths through the new helpers where the behavior is pure
+    close/exit, refcount-free, lookup, or destroy-flag policy.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct C/Rust digest
+    coverage for close cleanup/partition-exit decisions, refcount drop-to-free
+    decisions, begin/finish destroy flag transitions, and object-list lookup
+    skip/take/stop behavior.
+- Local validation:
+  - `rustfmt kernel/rust/xpmem_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `xpmem_helpers ok digest=47556fb6e2054dd7`,
+    `syscall_policy_helpers ok digest=51c02f662662b187`,
+    `sched_helpers ok digest=72b6ef0b7a02091c`,
+    `rlimit_helpers ok digest=317abd6ca0cbf441`,
+    `shmid_helpers ok digest=106bd71cde5652d2`, and the prior page,
+    memory/init, waitq, plist, bitops, string, numparse, bitmap, and allocator
+    digests.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. Rust emitted the existing non-fatal jobserver warning, then the
+    image linked.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+- Runtime validation:
+  - Installed the rebuilt Rust image into `/opt/mckernel-rust`.
+  - Booted McKernel with one McKernel CPU and 512M memory; boot log contained
+    `IHK/McKernel booted`.
+  - Ran the focused direct XPMEM suite:
+    `test/xpmem/go_test.sh` with `XPMEM_RUN_UPSTREAM=0`,
+    `XPMEM_DIR=/home/hgordon/usr`, and `MCK_DIR=/opt/mckernel-rust`.
+  - The focused XPMEM run passed `XTP_001` through `XTP_007` and `XTP_901`
+    through `XTP_905`.
+  - McKernel was shut down cleanly afterward.
+  - After shutdown, the XPMEM misc device remained registered under
+    `/sys/class/misc/xpmem`, but `/dev/xpmem` could be absent outside the
+    privileged test context. Updated `test/xpmem/go_test.sh` and
+    `test/issues/1259/C1259.sh` to create `/dev/xpmem` from
+    `/sys/class/misc/xpmem/dev` and restore read/write permissions whenever
+    devtmpfs/udev has not created the node.
+  - Reran the focused XPMEM suite with the harness fix; `XTP_001` through
+    `XTP_007` and `XTP_901` through `XTP_905` passed again, followed by clean
+    McKernel shutdown.
+- Path forward:
+  - Keep the direct XPMEM module/device/runtime gate active for future XPMEM
+    batches.
+  - Next safe slices are procfs/sysfs/file-object decisions or more XPMEM
+    lifecycle policy helpers. Keep atomic mutation, list mutation,
+    attach/remap mutation, page-table mutation, frees, and user-copy in C until
+    a broader runtime suite covers those paths.
+
+Update 2026-05-19 04:10 EDT:
+- Converted the first file/dev/procfs/sysfs object decision slice to Rust while
+  preserving a C fallback image.
+- Implementation:
+  - Added `kernel/rust/object_helpers.rs` and wired it into
+    `kernel/rust/lib.rs` plus the Rust CMake source list.
+  - Added `kernel/include/object_helpers.h` and `kernel/object_helpers.c` so
+    non-Rust builds keep the same helper behavior.
+  - Wired `kernel/fileobj.c` through Rust helpers for page-hash selection,
+    valid page modes, object-list refcount keep/skip decisions, base flags,
+    pager-result flag application, status selection, hugetlbfs dispatch,
+    premap/zerofill detection, premap page count, p2align validation,
+    get-page action selection, page-I/O read result mode selection, and flush
+    skip decisions.
+  - Wired `kernel/devobj.c` through Rust helpers for page count, PFN-table page
+    count, page-offset calculation, range-index validation, cached-PFN fetch
+    decisions, PFN present/attribute/physical extraction, and absent-PFN error
+    selection.
+  - Wired `kernel/sysfs.c` through Rust helpers for special sysfs operation
+    classification, string nbit sizing, path validation, and show/store
+    response error mapping.
+  - Wired `kernel/procfs.c` through Rust helpers for `/proc/PID/mem` page-fault
+    reason and chunk sizing, `/proc/PID/pagemap` range validation, process
+    status string selection, and `/proc/PID/stat` thread state selection.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct C/Rust digest
+    coverage for the new object helper surface.
+- Local validation:
+  - `rustfmt kernel/rust/object_helpers.rs kernel/rust/lib.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `object_helpers ok digest=e94198efdbdbee32`,
+    `xpmem_helpers ok digest=47556fb6e2054dd7`,
+    `syscall_policy_helpers ok digest=51c02f662662b187`,
+    `sched_helpers ok digest=72b6ef0b7a02091c`,
+    `rlimit_helpers ok digest=317abd6ca0cbf441`,
+    `shmid_helpers ok digest=106bd71cde5652d2`, and the prior page,
+    memory/init, waitq, plist, bitops, string, numparse, bitmap, and allocator
+    digests.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - The rebuilt Rust object exports the expected new `fileobj_*`, `devobj_*`,
+    `sysfs_*`, and `procfs_*` helper symbols. The helper equivalence harness
+    kept the expected unresolved-provider list and SIMD scan clean.
+- Runtime validation:
+  - Attempted the standard Rocky script
+    `scripts/rocky-rust-validation.sh --skip-deps --skip-rust --boot-smoke --trace-smoke --yes --jobs 2`.
+    It completed the rebuild phase, then stopped at plain
+    `sudo cmake --install` because that sudo call could not prompt from the
+    non-interactive shell.
+  - Continued with manual `sudo -S` runtime validation to avoid another broad
+    rebuild: installed `/tmp/mckernel-rocky-rust` into `/opt/mckernel-rust`,
+    booted McKernel with one McKernel CPU and 512M memory, and confirmed the
+    boot log contained `IHK/McKernel booted`.
+  - Root-run smoke passed: `/opt/mckernel-rust/bin/mcexec /bin/true`,
+    `/opt/mckernel-rust/bin/mcexec /usr/bin/hostname`, and
+    `/opt/mckernel-rust/bin/mcstat`.
+  - A follow-up boot verified the non-root device path from the root context:
+    `sudo -u hgordon /opt/mckernel-rust/bin/mcexec /bin/true` and
+    `sudo -u hgordon /opt/mckernel-rust/bin/mcstat` both passed.
+  - Linux-side procfs reads passed: `/proc/mcos0/mckernel` and
+    `/proc/mcos0/stat`.
+  - McKernel-side procfs smoke passed:
+    `/opt/mckernel-rust/bin/mcexec /bin/sh -c 'cat /proc/self/status >/dev/null; cat /proc/self/maps >/dev/null'`.
+  - Focused XPMEM runtime passed against the rebuilt Rust image:
+    `test/xpmem/go_test.sh` with `XPMEM_RUN_UPSTREAM=0`,
+    `XPMEM_DIR=/home/hgordon/usr`,
+    `XPMEM_BUILD_DIR=/home/hgordon/xpmem`, and
+    `MCK_DIR=/opt/mckernel-rust`; `XTP_001` through `XTP_007` and `XTP_901`
+    through `XTP_905` all passed.
+  - McKernel was shut down cleanly afterward. `xpmem` remains loaded as the
+    pre-existing direct XPMEM runtime module/device gate.
+- Path forward:
+  - Keep the direct XPMEM gate active for XPMEM slices.
+  - Add runtime coverage for file-backed mmap, `/proc/PID/pagemap`,
+    `/proc/PID/mem`, sysfs create/show/store, and device PFN mappings before
+    moving page-cache, procfs buffer, sysfs IKC, device-PFN, lock/list,
+    page-table, or free/mutation bodies into Rust.
+
+Update 2026-05-19 04:30 EDT:
+- Converted the second object-helper decision slice to Rust while preserving
+  the C fallback image.
+- Implementation:
+  - Extended `kernel/rust/object_helpers.rs`,
+    `kernel/include/object_helpers.h`, and `kernel/object_helpers.c` with
+    pager, zeroobj, SysV shmobj, and hugefile object helper exports.
+  - Wired `kernel/pager.c` through Rust helpers for EINTR retry decisions,
+    scratch allocation accounting, copy-size validation, fault-address
+    masking, and read chunk sizing.
+  - Wired `kernel/zeroobj.c` through Rust helpers for initial object flags,
+    refcount, mapped-page mode/offset, and get-page validation.
+  - Wired `kernel/shmobj.c` through Rust helpers for pgshift/pgsize
+    selection, flags, real segment sizing, page containment, destroy-page
+    sizing/indexing, get/lookup-page validation, page npages/pgshift, and
+    update-page address/offset decisions.
+  - Wired `kernel/hugefileobj.c` through Rust helpers for refcount keep/skip,
+    p2align validation, page index, per-page count, pgsize, initial
+    status/refcount, needed-page count, grow decision, and copy/zero sizing.
+  - Extended `kernel/rust/tests/run_equivalence.sh` to exercise the new helper
+    surface against both C fallback and Rust implementations.
+- Local validation:
+  - `rustfmt kernel/rust/object_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed with
+    `object_helpers ok digest=df930918ecdae83e`,
+    `xpmem_helpers ok digest=47556fb6e2054dd7`,
+    `syscall_policy_helpers ok digest=51c02f662662b187`,
+    `sched_helpers ok digest=72b6ef0b7a02091c`,
+    `rlimit_helpers ok digest=317abd6ca0cbf441`,
+    `shmid_helpers ok digest=106bd71cde5652d2`, and the prior page,
+    memory/init, waitq, plist, bitops, string, numparse, bitmap, and allocator
+    digests.
+  - The expected unresolved-provider list and SIMD scan remained clean. The
+    temporary helper name `hugefileobj_needs_expand_result` was renamed to
+    `hugefileobj_needs_grow_result` because the existing SIMD grep guard
+    matched the substring `pand` inside `expand`.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. Rust emitted the existing non-fatal jobserver warning.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+- Runtime validation:
+  - Installed `/tmp/mckernel-rocky-rust` into `/opt/mckernel-rust`.
+  - Booted McKernel with one McKernel CPU and 512M memory; boot log contained
+    `IHK/McKernel booted`.
+  - From the privileged validation context, non-root McKernel user workload
+    smoke passed:
+    `sudo -u hgordon /opt/mckernel-rust/bin/mcexec /bin/true`,
+    `sudo -u hgordon /opt/mckernel-rust/bin/mcexec /usr/bin/hostname`, and
+    `sudo -u hgordon /opt/mckernel-rust/bin/mcstat`.
+  - A SysV shared-memory smoke binary built from `test/issues/1242/main.c`
+    into `/tmp/mck-shm-smoke` passed under `mcexec`; it covered `shmget`,
+    `shmat`, `madvise(MADV_REMOVE)`, `shmdt`, and `shmctl(IPC_RMID)`.
+  - McKernel was shut down cleanly afterward.
+- Estimate and path forward:
+  - Overall Rust ownership estimate is now 55%.
+  - Keep allocation/free, reference mutation, locks, list mutation, page-table
+    mutation, page I/O, sysfs IKC exchange, procfs buffer mutation, and
+    user-copy in C until targeted runtime coverage exists for those bodies.

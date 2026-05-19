@@ -26,6 +26,7 @@
 #include <mman.h>
 #include <bitmap.h>
 #include <init.h>
+#include <object_helpers.h>
 
 //#define DEBUG_PRINT_PROCFS
 
@@ -225,14 +226,14 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 		if (!tmp)
 			goto err;
 		buf = tmp;
-		count = PAGE_SIZE;
+		count = procfs_default_count_result();
 	}
 	else {
 		dprintf("remote pbuf: %x\n", r->pbuf);
 		pbuf = ihk_mc_map_memory(NULL, r->pbuf, r->count);
 		dprintf("pbuf: %x\n", pbuf);
-		count = r->count + ((uintptr_t)pbuf & (PAGE_SIZE - 1));
-		npages = (count + (PAGE_SIZE - 1)) / PAGE_SIZE;
+		count = procfs_remote_count_result(pbuf, r->count);
+		npages = procfs_remote_npages_result(count);
 		vbuf = ihk_mc_map_virtual(pbuf, npages,
 					  PTATTR_WRITABLE|PTATTR_ACTIVE);
 		dprintf("buf: %p\n", vbuf);
@@ -340,7 +341,7 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 
 		for (cpu = 0; cpu < num_processors; ++cpu) {
 			ans = snprintf(buf, count, "cpu%d\n", cpu);
-			if (ans < 0 || ans > count)
+			if (procfs_format_error_result(ans, count))
 				goto err;
 			if (buf_add(&buf_top, &buf_cur, buf, ans) < 0)
 				goto err;
@@ -351,7 +352,7 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 #ifdef POSTK_DEBUG_ARCH_DEP_42 /* /proc/cpuinfo support added. */
 	else if (!strcmp(p, "cpuinfo")) { /* "/proc/cpuinfo" */
 		ans = ihk_mc_show_cpuinfo(buf, count, 0, &eof);
-		if (ans < 0 || ans > count)
+		if (procfs_format_error_result(ans, count))
 			goto err;
 		if (buf_add(&buf_top, &buf_cur, buf, ans) < 0)
 			goto err;
@@ -371,7 +372,7 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 	 * of the process. The count is the length of the area.
 	 */
 	if (strcmp(p, "mem") == 0) {
-		uint64_t reason = PF_POPULATE | PF_WRITE | PF_USER;
+		uint64_t reason = procfs_mem_reason_result(readwrite);
 		unsigned long offset = r->offset;
 		unsigned long left = r->count;
 		int ret;
@@ -389,17 +390,11 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 		}
 #endif
 
-		if(readwrite == 0)
-			reason = PF_POPULATE | PF_USER;
-
 		while(left){
 			unsigned long pa;
 			char *va;
-			int pos = offset & (PAGE_SIZE - 1);
-			int size = PAGE_SIZE - pos;
+			int size = procfs_mem_chunk_size_result(offset, left);
 
-			if(size > left)
-				size = left;
 			ret = page_fault_process_vm(vm, (void *)offset, reason);
 			if(ret){
 				if(ans == 0)
@@ -450,6 +445,37 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 
 		range = lookup_process_memory_range(vm, 0, -1);
 		while (range) {
+			const char *path;
+			int path_kind = procfs_maps_path_kind_result(range->start,
+					range->end, range->flag,
+					(unsigned long)vm->vdso_addr,
+					(unsigned long)vm->vvar_addr,
+					vm->region.brk_start,
+					vm->region.brk_end_allocated);
+
+			if (range->memobj && range->memobj->path) {
+				path = range->memobj->path;
+			}
+			else {
+				switch (path_kind) {
+				case PROCFS_MAPS_PATH_VDSO:
+					path = "[vdso]";
+					break;
+				case PROCFS_MAPS_PATH_VVAR:
+					path = "[vvar]";
+					break;
+				case PROCFS_MAPS_PATH_STACK:
+					path = "[stack]";
+					break;
+				case PROCFS_MAPS_PATH_HEAP:
+					path = "[heap]";
+					break;
+				default:
+					path = "";
+					break;
+				}
+			}
+
 			/* format is (from man proc):
 			 *  address           perms offset  dev   inode   pathname
 			 *  08048000-08056000 r-xp 00000000 03:0c 64593   /usr/sbin/gpm
@@ -457,30 +483,19 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 			ans = snprintf(buf, count,
 				 "%012lx-%012lx %s%s%s%s %lx %lx:%lx %d\t\t\t%s\n",
 				 range->start, range->end,
-				 range->flag & VR_PROT_READ ? "r" : "-",
-				 range->flag & VR_PROT_WRITE ? "w" : "-",
-				 range->flag & VR_PROT_EXEC ? "x" : "-",
-				 range->flag & VR_PRIVATE ? "p" : "s",
+				 procfs_maps_read_char_result(range->flag) == 'r' ? "r" : "-",
+				 procfs_maps_write_char_result(range->flag) == 'w' ? "w" : "-",
+				 procfs_maps_exec_char_result(range->flag) == 'x' ? "x" : "-",
+				 procfs_maps_private_char_result(range->flag) == 'p' ? "p" : "s",
 				 /* TODO: fill in file details! */
 				 0UL,
 				 0UL,
 				 0UL,
 				 0,
-				 range->memobj && range->memobj->path ?
-					range->memobj->path :
-				 range->start == (unsigned long)vm->vdso_addr ?
-					"[vdso]" :
-				 range->start == (unsigned long)vm->vvar_addr ?
-					"[vvar]" :
-				 range->flag & VR_STACK ?
-					"[stack]" :
-				 range->start >= vm->region.brk_start &&
-				    range->end <= vm->region.brk_end_allocated ?
-					"[heap]" :
-					""
+				 path
 				);
 
-			if (ans < 0 || ans > count ||
+			if (procfs_format_error_result(ans, count) ||
 			    buf_add(&buf_top, &buf_cur, buf, ans) < 0) {
 				ihk_rwspinlock_read_unlock_noirq(
 							&vm->memory_range_lock);
@@ -500,17 +515,13 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 	 */
 	if (strcmp(p, "pagemap") == 0) {
 		uint64_t *_buf = (uint64_t *)buf;
-		uint64_t start, end;
+		unsigned long start, end;
 
-		/* Check alignment */
-		if ((offset % sizeof(uint64_t) != 0) || 
-		    (count % sizeof(uint64_t) != 0)) {
-			ans = -EINVAL;
+		ans = procfs_pagemap_range_result(offset, count,
+				&start, &end);
+		if (ans) {
 			goto end;
 		}
-
-		start = (offset / sizeof(uint64_t)) << PAGE_SHIFT;
-		end = start + ((count / sizeof(uint64_t)) << PAGE_SHIFT);
 
 		if (!ihk_rwspinlock_read_trylock_noirq(&vm->memory_range_lock)) {
 			if (!result) {
@@ -528,7 +539,7 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 			*_buf = ihk_mc_pt_virt_to_pagemap(proc->vm->address_space->page_table, start);
 			dprintf("PID: %d, /proc/pagemap: 0x%lx -> %lx\n",  proc->proc->pid, 
 					start, *_buf);
-			start += PAGE_SIZE;
+			start = procfs_pagemap_next_result(start);
 			++_buf;
 		}
 
@@ -614,13 +625,20 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 		}
 		mcs_rwlock_reader_unlock(&proc->threads_lock, &lock);
 
-		state = "R (running)";
-		if (proc->status == PS_STOPPED)
+		switch (procfs_status_state_result(proc->status)) {
+		case PROCFS_STATUS_STOPPED:
 			state = "T (stopped)";
-		else if (proc->status == PS_TRACED)
+			break;
+		case PROCFS_STATUS_TRACED:
 			state = "T (tracing stop)";
-		else if (proc->status == PS_EXITED)
+			break;
+		case PROCFS_STATUS_EXITED:
 			state = "Z (zombie)";
+			break;
+		default:
+			state = "R (running)";
+			break;
+		}
 		ans = snprintf(buf, count,
 			"Pid:\t%d\n"
 			"Uid:\t%d\t%d\t%d\t%d\n"
@@ -632,36 +650,36 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 			proc->ruid, proc->euid, proc->suid, proc->fsuid,
 			proc->rgid, proc->egid, proc->sgid, proc->fsgid,
 			state,
-			(lockedsize + 1023) >> 10,
+			procfs_locked_kb_result(lockedsize),
 			nr_threads);
-		if (ans < 0 || ans > count ||
+		if (procfs_format_error_result(ans, count) ||
 		    buf_add(&buf_top, &buf_cur, buf, ans) < 0) {
 			goto err;
 		}
 
 		ans = snprintf(buf, count, "Cpus_allowed:\t%s\n", cpu_bitmask);
-		if (ans < 0 || ans > count ||
+		if (procfs_format_error_result(ans, count) ||
 		    buf_add(&buf_top, &buf_cur, buf, ans) < 0) {
 			kfree(bitmasks);
 			goto err;
 		}
 		ans = snprintf(buf, count, "Cpus_allowed_list:\t%s\n",
 			       cpu_list);
-		if (ans < 0 || ans > count ||
+		if (procfs_format_error_result(ans, count) ||
 		    buf_add(&buf_top, &buf_cur, buf, ans) < 0) {
 			kfree(bitmasks);
 			goto err;
 		}
 		ans = snprintf(buf, count, "Mems_allowed:\t%s\n",
 			       numa_bitmask);
-		if (ans < 0 || ans > count ||
+		if (procfs_format_error_result(ans, count) ||
 		    buf_add(&buf_top, &buf_cur, buf, ans) < 0) {
 			kfree(bitmasks);
 			goto err;
 		}
 		ans = snprintf(buf, count, "Mems_allowed_list:\t%s\n",
 			       numa_list);
-		if (ans < 0 || ans > count ||
+		if (procfs_format_error_result(ans, count) ||
 		    buf_add(&buf_top, &buf_cur, buf, ans) < 0) {
 			kfree(bitmasks);
 			goto err;
@@ -675,7 +693,7 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 	 * mcos%d/PID/auxv
 	 */
 	if (strcmp(p, "auxv") == 0) {
-		unsigned int limit = AUXV_LEN * sizeof(unsigned long);
+		unsigned int limit = procfs_auxv_limit_result();
 
 		if (buf_add(&buf_top, &buf_cur, proc->saved_auxv, limit) < 0)
 			goto err;
@@ -742,31 +760,8 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 				comm = proc->saved_cmdline;
 		}
 
-		switch (thread->status & (0x3f)) {
-		case PS_INTERRUPTIBLE:
-			state = 'S';
-			break;
-		case PS_UNINTERRUPTIBLE:
-			state = 'D';
-			break;
-		case PS_ZOMBIE:
-			state = 'Z';
-			break;
-		case PS_EXITED:
-			state = 'X';
-			break;
-		case PS_STOPPED:
-			state = 'T';
-			break;
-		case PS_RUNNING:
-		default:
-			if (thread->in_syscall_offload > 0) {
-				state = 'S';
-			}
-			else {
-				state = 'R';
-			}
-		}
+		state = procfs_thread_stat_state_result(thread->status,
+				thread->in_syscall_offload);
 
 		mcs_rwlock_reader_lock(&proc->threads_lock, &lock);
 		list_for_each_entry(thread_iter, &proc->threads_list,

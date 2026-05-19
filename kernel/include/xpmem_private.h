@@ -68,19 +68,33 @@ typedef union {
 	xpmem_apid_t apid;
 } xpmem_id_t;
 
+#ifdef MCKERNEL_RUST_XPMEM_HELPERS
+extern pid_t xpmem_id_to_tgid_result(long id);
+extern int xpmem_tg_hashtable_index_result(pid_t tgid);
+extern int xpmem_ap_hashtable_index_result(xpmem_apid_t apid);
+#endif
+
 /* Shift INT_MAX by one so we can tell when we overflow. */
 #define XPMEM_MAX_UNIQ_ID	(INT_MAX >> 1)
 
 static inline pid_t xpmem_segid_to_tgid(xpmem_segid_t segid)
 {
 	DBUG_ON(segid <= 0);
+#ifdef MCKERNEL_RUST_XPMEM_HELPERS
+	return xpmem_id_to_tgid_result(segid);
+#else
 	return ((xpmem_id_t *)&segid)->xpmem_id.tgid;
+#endif
 }
 
 static inline pid_t xpmem_apid_to_tgid(xpmem_apid_t apid)
 {
 	DBUG_ON(apid <= 0);
+#ifdef MCKERNEL_RUST_XPMEM_HELPERS
+	return xpmem_id_to_tgid_result(apid);
+#else
 	return ((xpmem_id_t *)&apid)->xpmem_id.tgid;
+#endif
 }
 
 /*
@@ -109,7 +123,11 @@ static inline int xpmem_tg_hashtable_index(pid_t tgid)
 {
 	int index;
 
+#ifdef MCKERNEL_RUST_XPMEM_HELPERS
+	index = xpmem_tg_hashtable_index_result(tgid);
+#else
 	index = (unsigned int)tgid % XPMEM_TG_HASHTABLE_SIZE;
+#endif
 
 	XPMEM_DEBUG("return: tgid=%lu, index=%d", tgid, index);
 
@@ -122,7 +140,11 @@ static inline int xpmem_ap_hashtable_index(xpmem_apid_t apid)
 
         DBUG_ON(apid <= 0);
 
+#ifdef MCKERNEL_RUST_XPMEM_HELPERS
+	index = xpmem_ap_hashtable_index_result(apid);
+#else
 	index = ((xpmem_id_t *)&apid)->xpmem_id.uniq % XPMEM_AP_HASHTABLE_SIZE;
+#endif
 
 	XPMEM_DEBUG("return: apid=0x%lx, index=%d", apid, index);
 
@@ -444,4 +466,3 @@ static inline int xpmem_is_private_data(
 }
 
 #endif /* _XPMEM_PRIVATE_H */
-

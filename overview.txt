@@ -1,7 +1,7 @@
 McKernel Rust Migration Overview
-Updated: 2026-05-18
+Updated: 2026-05-19
 
-Overall Rust ownership estimate: 14%
+Overall Rust ownership estimate: 55%
 
 How to read this number
 ------------------------------------------------------------
@@ -21,17 +21,17 @@ Area                                      Rust %   Status
 Rust build/link foundation                   90   Rust object builds and links into mckernel.img; V10 minimal smoke and focused V11 strace now repeat cleanly on Rocky
 ABI/layout foundation                        12   Initial shared structs plus page, memobj, ipc_perm, shmid_ds, and shmobj layouts covered; many kernel structs still need assertions
 Shared primitives                            78   rbtree, llist, plist priority-list core, string/memory leaf helpers, numeric parsers, bitops scan/hweight helpers, bitmap core, parse, zero-area search, and region helpers ported
-x86_64 memory management                      2   Memory chunk classification, NUMA-ID lookup, page-to-physical lookup, and splitability policy helpers ported; page tables, mapping, and address validation remain C
+x86_64 memory management                      6   Memory chunk classification, NUMA-ID lookup, page-to-physical lookup, splitability policy, syscall-side VM range validation, memory-policy validation, mmap/brk/mincore policy helpers, and selected pager/object sizing helpers ported; page tables and mapping mutation remain C
 Page allocator                               20   Rust owns rbtree helper cluster, rbtree reserve/get-root helpers, bitmap-backed no-lock allocator internals, zero-free no-lock helper, NUMA add-free, NUMA zero-free node helper, NUMA alloc no-lock body, direct free-to-tree helper, deferred free enqueue helper, and free-path preflight/policy; locks/logging, CPU-local-cache fast path, and IKC zero requests still C
-Process/VM management                         0   Still C
-Syscall core                                  2   SysV shared-memory ID, shmid construction, shm permission/rlimit policy, and scheduler priority min/max helpers ported; syscall dispatch and high-risk handlers remain C
-Scheduler/timers/wait/futex                   3   Waitqueue locked list core is Rust-owned; scheduler callbacks, locks, timers, futex logic still C
-procfs/sysfs/xpmem/file objects               0   Still C
+Process/VM management                        11   wait4/waitid selector, option, status, nohang, process/thread wait policy, clone flag validation, clone parent/report policy, and ptrace event selection helpers ported; child-list mutation, reparenting, rusage aggregation, process lifetime, and ptrace detach mutation remain C
+Syscall core                                 25   SysV shared-memory ID, shmid construction, shm permission/rlimit policy, prlimit resource mapping, scheduler priority/policy helpers, syscall policy/range validation, memory-policy syscall helpers, mmap/brk/mincore policy helpers, signal/time syscall policy helpers, signal-wait/altstack helpers, ptrace/process-vm helpers, wait4/waitid policy helpers, execveat policy, clone policy, futex decode/timeout helpers, and SysV shm object decision helpers ported; syscall dispatch and high-risk handlers remain C
+Scheduler/timers/wait/futex                  14   Waitqueue locked list core plus scheduler priority, policy, RR interval, affinity permission/length, wait4/waitid wait policy, futex command/private decode, futex timeout clock/math/requeue helpers, signal mask policy, signal-wait mask/deadline policy, itimer dispatch/start, clock dispatch, and nanosleep validation helpers are Rust-owned; scheduler callbacks, locks, timers, and futex queue/wake internals still C
+procfs/sysfs/xpmem/file objects              50   XPMEM make/get/access, ID/hash, owner, attach/detach, destroying-state, range removal, attachment trim, PTE invalidation, fault-address, straight-map, PTE-missing, PTE-fit, unpin-step, close/refcount decision, destroy-flag, and object-list lookup policy helpers ported; fileobj/devobj/sysfs/procfs plus pager/zeroobj/shmobj/hugefile decision helpers now ported; direct XPMEM runtime gate is enabled; allocation, refcount mutation, lock/list mutation, remap/page-table mutation, page I/O, procfs buffer mutation, sysfs IKC exchange, and user-copy remain C
 host/IKC/mcctrl/IHK modules              0 Rust   Compatibility patches only
 User tools                                    0   Still C
 arm64                                         0   Deferred until x86_64 stabilizes
 
-Overall estimate: 14% Rust-owned.
+Overall estimate: 55% Rust-owned.
 
 This percentage should be treated as a functional-area estimate, not a strict
 line-count. A later phase can add an automated LOC counter.
@@ -86,6 +86,161 @@ Current completed Rust-owned behavior
   `kernel/syscall.c`: `sched_get_priority_max_value()` and
   `sched_get_priority_min_value()`. The syscall wrappers still extract
   arguments in C, and scheduler/thread lookup behavior remains C-owned.
+- Rust now owns additional scheduler policy and affinity helpers from
+  `kernel/syscall.c`: `sched_policy_is_valid()`,
+  `sched_policy_needs_root()`, `setscheduler_validate()`,
+  `sched_rr_interval_nsec()`, `sched_affinity_permission_result()`,
+  `sched_getaffinity_len_result()`, and `sched_affinity_copy_len()`. Thread
+  lookup, Linux permission forwarding, affinity mask mutation, migration
+  requests, and user-copy remain C-owned.
+- Rust now owns `prlimit64` resource policy helpers from `kernel/syscall.c`:
+  `prlimit_validate_resource()`, `prlimit_validate_new_limit()`,
+  `prlimit_linux_update_needed()`, and `prlimit_to_mckernel_resource()`.
+  Process lookup, rlimit storage, lock ownership, user-copy, and Linux
+  forwarding remain C-owned.
+- Rust now owns syscall policy and VM range validation helpers from
+  `kernel/syscall.c`: `robust_list_len_result()`, `tkill_tid_result()`,
+  `sigaction_validate()`, `setpgid_normalize_pid()`,
+  `setpgid_normalize_pgid()`, `setpgid_execed_result()`,
+  `memlock_prepare_range()`, `memlock_range_flag_result()`,
+  `range_has_disallowed_change_flags()`, `munmap_prepare_range()`, and
+  `mprotect_prepare_range()`. Signal/action state, process lookup, VM range
+  tree mutation, page-table changes, locking, and user-copy remain C-owned.
+- Rust now owns additional memory-syscall and NUMA-policy validation helpers
+  from `kernel/syscall.c`: `mlockall_policy_result()`,
+  `remap_file_pages_prepare()`, `mremap_prepare_args()`,
+  `mremap_fixed_range_result()`, `mremap_maymove_result()`,
+  `msync_prepare_range()`, `msync_locked_range_result()`,
+  `mbind_prepare_range()`, `mempolicy_nodemask_bits_result()`,
+  `mempolicy_nodemask_bits_is_clamped()`, `mbind_mode_flags_result()`,
+  `mempolicy_mode_is_supported()`, `set_mempolicy_normalize_mode()`,
+  `get_mempolicy_validate()`, and `move_pages_policy_result()`. Mapping
+  mutation, NUMA mask copy/verification, migration allocation, page-table
+  updates, and range-tree ownership remain C-owned.
+- Rust now owns additional `brk()`, `mincore()`, and `do_mmap()` policy
+  helpers from `kernel/syscall.c`: `brk_prepare_result()`,
+  `brk_default_vrflags()`, `mincore_prepare_range()`,
+  `mmap_base_vrflags()`, `mmap_populated_mapping_result()`,
+  `mmap_should_set_host_ro()`, `mmap_update_private_maxprot()`,
+  `mmap_prot_denied_result()`, `mmap_maxprot_to_vrflags()`,
+  `mmap_should_force_straight()`, and `mmap_is_shared()`. Free-space search,
+  memory-object creation, physical page allocation, host VMA updates, range
+  insertion, prefaulting, and mapping teardown remain C-owned.
+- Rust now owns additional signal/time syscall policy helpers from
+  `kernel/syscall.c`: `tgkill_target_result()`,
+  `rt_sigprocmask_validate()`, `rt_sigprocmask_apply()`,
+  `rt_sigpending_size_result()`, `signalfd4_sigsetsize_result()`,
+  `signalfd4_flags_result()`, `getrusage_who_result()`,
+  `itimer_which_result()`, `itimer_is_real()`, `itimer_should_start()`,
+  `clock_gettime_dispatch()`, `gettimeofday_dispatch()`, and
+  `nanosleep_validate_timespec()`. Signal queue ownership, user-copy, actual
+  timer state updates, CPU-time accounting walks, and Linux forwarding remain
+  C-owned.
+- Rust now owns additional signal-wait and alternate-signal-stack policy
+  helpers from `kernel/syscall.c`: `rt_sigtimedwait_prepare()`,
+  `rt_sigtimedwait_timeout_result()`, `rt_sigtimedwait_prepare_masks()`,
+  `rt_sigtimedwait_deadline()`, `rt_sigtimedwait_timeout_expired()`,
+  `sigmask_to_signal_number()`, `rt_sigqueueinfo_pid_result()`,
+  `sigsuspend_sigsetsize_result()`, `sigsuspend_prepare_mask()`,
+  `sigsuspend_pending_matches()`, `sigaction_sigsetsize_result()`,
+  `sigaltstack_validate()`, and `sigaltstack_is_disable()`. Pending-signal
+  list traversal, signal delivery, signal-action storage, thread status
+  transitions, alternate-stack storage updates, and user-copy remain C-owned.
+- Rust now owns additional ptrace and process-vm policy helpers from
+  `kernel/syscall.c`: `process_vm_validate_args()`,
+  `process_vm_op_is_write()`, `process_vm_op_is_valid()`,
+  `ptrace_signal_data_result()`, `ptrace_detach_signal_result()`,
+  `ptrace_user_area_result()`, `ptrace_status_allows_io()`,
+  `ptrace_setoptions_flags_result()`, `ptrace_apply_options()`,
+  `ptrace_child_traced_result()`, `ptrace_attach_policy_result()`,
+  `ptrace_detach_state_result()`, and `ptrace_siginfo_state_result()`. Process
+  lookup, ptrace attach/detach state mutation, register access, remote memory
+  reads/writes, cross-process VM copying, and user-copy remain C-owned.
+- Rust now owns wait4/waitid process/thread wait policy helpers from
+  `kernel/syscall.c`: `wait4_options_result()`,
+  `waitid_to_wait_pid_result()`, `waitid_options_result()`,
+  `wait_should_scan_process_result()`, `wait_should_scan_thread_result()`,
+  `wait_process_pid_matches_result()`, `wait_thread_tid_matches_result()`,
+  `wait_process_exited_candidate_result()`,
+  `wait_thread_exited_candidate_result()`,
+  `wait_nonptraced_stop_candidate_result()`,
+  `wait_ptraced_stop_candidate_result()`,
+  `wait_continued_candidate_result()`, `wait_reap_needed_result()`,
+  `wait_nohang_result()`, `wait_empty_result()`,
+  `wait_stopped_status_result()`, `wait_continued_status_result()`,
+  `wait_zombie_skip_host_result()`, `wait_thread_empty_candidate_result()`,
+  and `waitid_status_code_result()`. Child-list traversal/mutation,
+  reparenting, rusage aggregation, signal delivery, ptrace detach mutation,
+  host wait cleanup, and user-copy remain C-owned.
+- Rust now owns clone, execveat, ptrace-event, and futex command policy
+  helpers from `kernel/syscall.c`: `clone_pthread_marker_result()`,
+  `clone_flags_result()`, `clone_host_parent_flags_result()`,
+  `clone_report_thread_result()`, `ptrace_exec_event_signal_result()`,
+  `ptrace_syscall_event_signal_result()`, `ptrace_clone_event_result()`,
+  `ptrace_clone_reparent_result()`, `execveat_policy_result()`,
+  `futex_decode_flags_result()`, `futex_wait_timeout_needed_result()`,
+  `futex_timeout_is_absolute_result()`, `futex_clock_id_result()`,
+  `futex_requeue_val2_result()`, and `futex_timeout_ns_result()`. Actual
+  thread/process allocation, ptrace report mutation, exec image loading,
+  futex queues, futex wake/requeue internals, Linux clock/syscall fallback,
+  and user-copy remain C-owned.
+- Rust now owns XPMEM policy helpers from `kernel/xpmem.c`:
+  `xpmem_make_initial_policy_result()`, `xpmem_make_alignment_result()`,
+  `xpmem_get_policy_result()`, `xpmem_perms_result()`,
+  `xpmem_check_permit_mode_result()`, `xpmem_validate_access_result()`, and
+  `xpmem_attach_overlap_result()`.
+- Rust now owns additional XPMEM ID, hash, owner, attach/detach, and
+  destroying-state policy helpers from `kernel/xpmem.c` and
+  `kernel/include/xpmem_private.h`: `xpmem_id_to_tgid_result()`,
+  `xpmem_tg_hashtable_index_result()`,
+  `xpmem_ap_hashtable_index_result()`, `xpmem_make_id_result()`,
+  `xpmem_positive_id_result()`, `xpmem_owner_policy_result()`,
+  `xpmem_attach_initial_policy_result()`, `xpmem_destroying_state_result()`,
+  `xpmem_is_destroying_result()`, `xpmem_destroying_error_result()`,
+  `xpmem_two_destroying_error_result()`,
+  `xpmem_three_destroying_error_result()`,
+  `xpmem_attach_destroying_result()`, and
+  `xpmem_detach_lookup_result()`. XPMEM object allocation, lock ownership,
+  refcount mutation, list mutation, remap/page-table updates, and user-copy
+  remain C-owned.
+- Rust now owns additional XPMEM range and page-table decision helpers from
+  `kernel/xpmem.c`: `xpmem_remove_range_step_result()`,
+  `xpmem_remove_memory_range_action_result()`,
+  `xpmem_range_private_invalid_result()`,
+  `xpmem_clear_pte_range_result()`, `xpmem_fault_vaddr_result()`,
+  `xpmem_straight_phys_result()`, `xpmem_remote_pte_missing_result()`,
+  `xpmem_seg_phys_plus_off_result()`, `xpmem_att_page_fits_result()`,
+  `xpmem_pte_mismatch_result()`, and `xpmem_unpin_step_result()`. Range
+  splitting/freeing, attachment list mutation, page-table mutation, PTE
+  installation, pin/unpin accounting mutation, and user-copy remain C-owned.
+- Rust now owns additional XPMEM refcount/object-list and destroy-state
+  decision helpers from `kernel/xpmem.c`:
+  `xpmem_close_decision_result()`,
+  `xpmem_ref_drop_should_free_result()`,
+  `xpmem_begin_destroy_result()`, `xpmem_finish_destroy_result()`, and
+  `xpmem_object_lookup_decision_result()`. Atomic increments/decrements,
+  kfree, lock ownership, list mutation, attachment/remap/page-table mutation,
+  and user-copy remain C-owned.
+- Rust now owns the first file/dev/procfs/sysfs object decision helper batch
+  behind the existing C ABI through `kernel/rust/object_helpers.rs`:
+  file-object hash/mode/refcount keep/base-flag/status/premap/page-I/O/flush
+  decisions; device-object page-count, PFN-table, PFN-cache, PFN-present,
+  physical-address, and range-index decisions; sysfs path validation,
+  special-op classification, string-bit sizing, and response-error mapping;
+  and procfs memory-fault reason, chunk sizing, pagemap range, process-status
+  state, and thread-stat state selection. C fallback builds use
+  `kernel/object_helpers.c`. Allocation, locks, list mutation, page-table
+  mutation, page I/O, sysfs IKC exchange, procfs buffer mutation, and user-copy
+  remain C-owned.
+- Rust now owns the second object-helper decision batch behind the same C ABI:
+  pager EINTR retry, scratch allocation sizing, copy-size validation,
+  fault-address masking, and read chunk sizing; zeroobj initial flags/refcount
+  and page validation; SysV shmobj pgshift/pgsize, flag, real-size,
+  page-containment, destroy-index, get/lookup-page, and update-page address
+  decisions; and hugefile object p2align, page-index, per-page count, pgsize,
+  initial status/refcount, grow/copy/zero sizing decisions. Allocation,
+  refcount mutation, locks, list mutation, page-table mutation, page
+  allocation/free, user-copy, and object lifetime mutation remain C-owned.
 - Rust now owns the numeric parser leaf helpers from `lib/vsprintf.c`:
   `simple_strtoul()`, `simple_strtol()`, `simple_strtoull()`,
   `simple_strtoll()`, `strict_strtoul()`, `strict_strtol()`,
@@ -145,6 +300,33 @@ Current completed Rust-owned behavior
 
 Current validation status
 ------------------------------------------------------------
+
+Latest local conversion validation was the 2026-05-19 04:30 EDT
+pager/zeroobj/shmobj/hugefile object-helper batch. It passed `rustfmt`,
+`bash -n kernel/rust/tests/run_equivalence.sh`, and
+`kernel/rust/tests/run_equivalence.sh` with
+`object_helpers ok digest=df930918ecdae83e`, while preserving
+`xpmem_helpers ok digest=47556fb6e2054dd7`,
+`syscall_policy_helpers ok digest=51c02f662662b187`,
+`sched_helpers ok digest=72b6ef0b7a02091c`,
+`rlimit_helpers ok digest=317abd6ca0cbf441`, and the prior page,
+memory/init, waitq, plist, bitops, string, numparse, bitmap, and allocator
+digests.
+- Rust and C fallback images both passed:
+  `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2` and
+  `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`.
+- The rebuilt Rust object exports the broadened `pager_*`, `zeroobj_*`,
+  `shmobj_*`, and `hugefileobj_*` helper symbols. The equivalence harness kept
+  the expected unresolved-provider list and SIMD scan clean.
+- Manual runtime validation installed `/tmp/mckernel-rocky-rust` into
+  `/opt/mckernel-rust`, booted McKernel with one McKernel CPU and 512M memory,
+  confirmed `IHK/McKernel booted`, then passed from the root validation
+  context: `sudo -u hgordon /opt/mckernel-rust/bin/mcexec /bin/true`,
+  `sudo -u hgordon /opt/mckernel-rust/bin/mcexec /usr/bin/hostname`,
+  `sudo -u hgordon /opt/mckernel-rust/bin/mcstat`, and a SysV shared-memory
+  smoke binary covering `shmget`, `shmat`, `madvise(MADV_REMOVE)`, `shmdt`,
+  and `shmctl(IPC_RMID)`.
+- McKernel was shut down cleanly afterward.
 
 Last completed controlled verification step:
 - V10 minimal workloads still repeat cleanly on the Rocky VM after the V11
@@ -216,6 +398,163 @@ Last completed controlled verification step:
 - A targeted SysV shared-memory runtime smoke also passed under McKernel at
   04:20 EDT. It exercised `shmget()` create, existing-key lookup, `IPC_STAT`,
   read/write `shmat()`, read-only `shmat()`, `shmdt()`, and `IPC_RMID`.
+- Latest local conversion validation was the 04:32 EDT scheduler/prlimit
+  helper batch. It passed `kernel/rust/tests/run_equivalence.sh` with
+  `sched_helpers ok digest=72b6ef0b7a02091c`,
+  `rlimit_helpers ok digest=317abd6ca0cbf441`, and the prior
+  `shmid_helpers ok digest=106bd71cde5652d2`, page/memory/init, waitq,
+  plist, bitops, string, numparse, bitmap, and allocator digests. It also
+  passed `rustfmt`, `bash -n`, `git diff --check`, Rust/C image builds, Rust
+  symbol export checks, the expected unresolved-symbol scan, and the SIMD
+  scan.
+- The same 04:32 EDT batch installed the rebuilt Rust image and passed a
+  targeted scheduler/prlimit runtime smoke under McKernel. The smoke covered
+  scheduler priority min/max, invalid scheduler policy handling,
+  `sched_setparam()`, `sched_setscheduler(SCHED_OTHER)`,
+  `sched_rr_get_interval()`, `sched_getaffinity()`, `sched_setaffinity()` with
+  the current mask, short affinity buffer rejection, `getrlimit(RLIMIT_AS)`,
+  `prlimit(RLIMIT_AS)`, same-limit `prlimit()` set, and invalid resource
+  rejection.
+- Latest local conversion validation was the 04:50 EDT syscall-policy and VM
+  range-validation helper batch. It passed `kernel/rust/tests/run_equivalence.sh`
+  with `syscall_policy_helpers ok digest=c9a25ab61c71eeab` plus the prior
+  shmid, scheduler, prlimit, page/memory/init, waitq, plist, bitops, string,
+  numparse, bitmap, and allocator digests. It also passed `rustfmt`,
+  `bash -n`, `git diff --check`, Rust/C image builds, Rust symbol export
+  checks, the expected unresolved-symbol scan, and the SIMD scan.
+- The same 04:50 EDT batch installed the rebuilt Rust image, booted McKernel
+  with one McKernel CPU and 512M memory, and passed a targeted syscall-policy
+  runtime smoke under McKernel. The smoke covered valid and invalid
+  `set_robust_list()` lengths, invalid `tkill()` tid handling,
+  `sigaction(SIGUSR1)`, rejected `sigaction(SIGKILL)`, aligned and unaligned
+  `mprotect()`, zero-length `mlock()`/`munlock()`, and aligned/unaligned
+  `munmap()`.
+- Latest local conversion validation was the 15:36 EDT memory-policy helper
+  expansion. It passed `kernel/rust/tests/run_equivalence.sh` with the expanded
+  `syscall_policy_helpers ok digest=106066f7c6a0a23f` plus the prior shmid,
+  scheduler, prlimit, page/memory/init, waitq, plist, bitops, string,
+  numparse, bitmap, and allocator digests. It also passed `rustfmt`,
+  `bash -n`, `git diff --check`, Rust/C image builds, Rust symbol export
+  checks, the expected unresolved-symbol scan, and the SIMD scan.
+- The same 15:36 EDT batch installed the rebuilt Rust image, booted McKernel
+  with one McKernel CPU and 512M memory, and passed a targeted memory-policy
+  runtime smoke under McKernel. The smoke covered invalid `mlockall()` flags,
+  same-size and invalid-fixed `mremap()`, invalid `msync()` flags, invalid
+  `remap_file_pages()` size, unaligned `mbind()`, invalid `set_mempolicy()`
+  mode flags, null-address `get_mempolicy()`, and invalid `move_pages()`
+  policy requests.
+- Latest local conversion validation was the 16:28 EDT ptrace/process-vm helper
+  expansion. It passed `kernel/rust/tests/run_equivalence.sh` with the expanded
+  `syscall_policy_helpers ok digest=e5979922a12123ad` plus the prior shmid,
+  scheduler, prlimit, page/memory/init, waitq, plist, bitops, string,
+  numparse, bitmap, and allocator digests. It also passed `rustfmt`,
+  `bash -n`, `git diff --check`, Rust/C image builds, Rust symbol export
+  checks, the expected unresolved-symbol scan, and the SIMD scan.
+- The same 16:28 EDT batch installed the rebuilt Rust image, booted McKernel
+  with one McKernel CPU and 512M memory, and passed a targeted ptrace/process-vm
+  runtime smoke under McKernel. The smoke covered invalid ptrace detach signal,
+  invalid `PTRACE_SETOPTIONS` flags, invalid `PTRACE_PEEKUSER` address,
+  self-attach rejection, invalid `process_vm_readv()` flags, too many local
+  iovecs, and too many remote iovecs for `process_vm_writev()`.
+- Latest local conversion validation was the 16:40 EDT XPMEM helper expansion.
+  It passed `kernel/rust/tests/run_equivalence.sh` with
+  `xpmem_helpers ok digest=e80a39f533ae180d` and kept
+  `syscall_policy_helpers ok digest=e5979922a12123ad` plus the prior shmid,
+  scheduler, prlimit, page/memory/init, waitq, plist, bitops, string,
+  numparse, bitmap, and allocator digests. It also passed `rustfmt`,
+  `bash -n`, `git diff --check`, Rust/C image builds, Rust symbol export
+  checks, the expected unresolved-symbol scan, and the SIMD scan.
+- The same 16:40 EDT batch installed the rebuilt Rust image, booted McKernel
+  with one McKernel CPU and 512M memory, confirmed `IHK/McKernel booted`,
+  reran the targeted ptrace/process-vm runtime smoke under `mcexec`, completed
+  `mcstat`, and shut down cleanly. A direct XPMEM user runtime smoke was not
+  run in this slice because `/dev/xpmem` is not present on this host; the new
+  XPMEM policy logic is covered by direct C/Rust equivalence and both image
+  builds.
+- Latest local conversion validation is the 17:44 EDT expanded XPMEM
+  ID/hash/owner/attach/detach/destroying-state helper batch. It passed
+  `kernel/rust/tests/run_equivalence.sh` with
+  `xpmem_helpers ok digest=2b3983e289a03c82` and kept
+  `syscall_policy_helpers ok digest=e5979922a12123ad`,
+  `sched_helpers ok digest=72b6ef0b7a02091c`,
+  `rlimit_helpers ok digest=317abd6ca0cbf441`, and
+  `shmid_helpers ok digest=106bd71cde5652d2`. It also passed `rustfmt`,
+  `bash -n`, `git diff --check`, Rust/C image builds, Rust symbol export
+  checks, the expected unresolved-symbol scan, the SIMD scan, and a credential
+  string scan over touched logs/source paths.
+- The same 17:44 EDT batch installed the rebuilt Rust image, booted McKernel
+  with one McKernel CPU and 512M memory, confirmed `IHK/McKernel booted`,
+  reran the targeted ptrace/process-vm smoke under `mcexec`, completed
+  `mcstat`, and shut down cleanly. Direct XPMEM user runtime remains blocked
+  on this host because `/dev/xpmem` is absent.
+- Latest local conversion validation is the 17:55 EDT wait4/waitid
+  process/thread wait-policy helper batch. It passed
+  `kernel/rust/tests/run_equivalence.sh` with
+  `syscall_policy_helpers ok digest=4d17857eb31e0261` and kept
+  `xpmem_helpers ok digest=2b3983e289a03c82`,
+  `sched_helpers ok digest=72b6ef0b7a02091c`,
+  `rlimit_helpers ok digest=317abd6ca0cbf441`, and
+  `shmid_helpers ok digest=106bd71cde5652d2`. It also passed `rustfmt`,
+  `bash -n`, `git diff --check`, Rust/C image builds, Rust symbol export
+  checks, the expected unresolved-symbol scan, the SIMD scan, and a credential
+  string scan over touched logs/source paths.
+- The same 17:55 EDT batch installed the rebuilt Rust image, booted McKernel
+  with one McKernel CPU and 512M memory, confirmed `IHK/McKernel booted`, and
+  passed a targeted wait runtime smoke under `mcexec`. The smoke covered
+  invalid `wait4()` options, invalid `waitid()` status options, `fork()` plus
+  `wait4()` reaping, `waitid(P_PID, ..., WEXITED | WNOWAIT)`, and final
+  `wait4()` reap after `WNOWAIT`; `mcstat` completed and McKernel shut down
+  cleanly.
+- Latest local conversion validation is the 18:07 EDT clone/execveat/
+  ptrace-event/futex helper batch. It passed
+  `kernel/rust/tests/run_equivalence.sh` with
+  `syscall_policy_helpers ok digest=51c02f662662b187` and kept
+  `xpmem_helpers ok digest=2b3983e289a03c82`,
+  `sched_helpers ok digest=72b6ef0b7a02091c`,
+  `rlimit_helpers ok digest=317abd6ca0cbf441`, and
+  `shmid_helpers ok digest=106bd71cde5652d2`. It also passed `rustfmt`,
+  `bash -n`, `git diff --check`, Rust/C image builds, the expected
+  unresolved-symbol scan, and the SIMD scan.
+- The same 18:07 EDT batch installed the rebuilt Rust image, booted McKernel
+  with one McKernel CPU and 512M memory, and passed a targeted clone/exec/futex
+  runtime smoke under `mcexec`. The smoke covered invalid `execveat()` flags,
+  invalid relative `execveat()` dirfd handling, child `execveat()` of
+  `/bin/true`, `fork()`/`waitpid()`, `pthread_create()`/`pthread_join()`,
+  `FUTEX_WAKE_PRIVATE`, and `FUTEX_WAIT_PRIVATE` mismatch behavior; `mcstat`
+  completed and McKernel shut down cleanly.
+- Latest local conversion validation is the 18:21 EDT XPMEM range/page-table
+  decision helper batch. It passed `kernel/rust/tests/run_equivalence.sh` with
+  `xpmem_helpers ok digest=3f8eb55a22c18333` and kept
+  `syscall_policy_helpers ok digest=51c02f662662b187`,
+  `sched_helpers ok digest=72b6ef0b7a02091c`,
+  `rlimit_helpers ok digest=317abd6ca0cbf441`, and
+  `shmid_helpers ok digest=106bd71cde5652d2`. It also passed `rustfmt`,
+  `bash -n`, `git diff --check`, Rust/C image builds, Rust symbol export
+  checks, the expected unresolved-symbol scan, and the SIMD scan.
+- The same 18:21 EDT batch installed the rebuilt Rust image, booted McKernel
+  with one McKernel CPU and 512M memory, completed `mcstat`, and shut down
+  cleanly. At that point direct XPMEM user runtime was blocked on this host
+  because `/dev/xpmem` was absent.
+- Latest local conversion validation is the 2026-05-19 02:59 EDT XPMEM
+  refcount/object-list and destroy-state decision helper batch. It passed
+  `kernel/rust/tests/run_equivalence.sh` with
+  `xpmem_helpers ok digest=47556fb6e2054dd7` and kept
+  `syscall_policy_helpers ok digest=51c02f662662b187`,
+  `sched_helpers ok digest=72b6ef0b7a02091c`,
+  `rlimit_helpers ok digest=317abd6ca0cbf441`, and
+  `shmid_helpers ok digest=106bd71cde5652d2`. It also passed `rustfmt`,
+  `bash -n`, `git diff --check`, Rust/C image builds, Rust symbol export
+  checks, and the SIMD scan.
+- The same 2026-05-19 batch resolved the direct XPMEM runtime blocker by
+  loading the installed XPMEM module from `/home/hgordon/usr/lib/modules/$(uname -r)/xpmem.ko`,
+  which created `/dev/xpmem`. The rebuilt Rust image was installed, booted with
+  one McKernel CPU and 512M memory, and passed the focused XPMEM runtime suite
+  `test/xpmem/go_test.sh` with upstream tests disabled. The run passed
+  `XTP_001` through `XTP_007` and `XTP_901` through `XTP_905`; McKernel was
+  then shut down cleanly. The XPMEM harnesses were also updated to recreate
+  `/dev/xpmem` from `/sys/class/misc/xpmem/dev` when the misc device is
+  registered but the dev node is absent, and the focused XPMEM suite passed
+  again with that fix.
 - The previous `RIP=0x1000` hostname SIGSEGV was fixed by making user-visible
   zero-fill mmap/page-fault paths explicitly clear pages instead of relying on
   allocator `zero_at_free` state.
@@ -247,7 +586,7 @@ Last completed controlled verification step:
   `mcexec`, `mcstat`, `ihkconfig`, and `ihkosctl`.
 - Earlier V0 through V6 checks are satisfied for this Rocky validation path.
 
-Latest local source verification after the Rust shm permission/helper port:
+Latest local source verification after the Rust XPMEM refcount/object-list helper ports:
 - `git diff --check` passed.
 - `bash -n` passed for `scripts/rocky-rust-validation.sh`,
   `scripts/rocky-v11-focused.sh`, and the touched shell test harnesses.
@@ -255,15 +594,26 @@ Latest local source verification after the Rust shm permission/helper port:
 - The equivalence harness now includes direct bitops coverage, direct
   string/memory leaf coverage, plist priority/FIFO/delete coverage, memory/init
   helper coverage, page query/splitability helper coverage, SysV shmid,
-  shmid construction, shared-memory permission, and shmlock rlimit helper
-  coverage, scheduler priority helper coverage, rbtree
+  shmid construction, shared-memory permission, shmlock rlimit helper
+  coverage, scheduler priority/policy/affinity helper coverage, prlimit
+  helper coverage, syscall policy and VM range-validation helper coverage,
+  ptrace/process-vm policy helper coverage, wait4/waitid process/thread wait
+  policy coverage, clone/execveat/ptrace-event/futex command policy coverage,
+  XPMEM policy/ID/hash/attach/detach/destroying-state helper coverage, XPMEM
+  range removal, attachment trim, PTE invalidation, fault-address,
+  straight-map, remote-PTE, PTE-fit/mismatch, and unpin-step helper coverage,
+  XPMEM close/refcount-drop, begin/finish destroy, and object-list lookup
+  decision coverage, rbtree
   reserve/get-root coverage, page allocator zero-free coverage, NUMA add-free
   accounting/tree coverage, single-node deferred-zero movement, NUMA
   allocation from the zeroed-list path, direct free-to-tree behavior,
   immediate zero-and-free behavior, deferred free enqueue/zero/reallocate
   behavior, and ignored out-of-range/zero-page free behavior. Latest lines
   include `shmid_helpers ok digest=106bd71cde5652d2`,
-  `sched_helpers ok digest=1402920486e5ac84`,
+  `sched_helpers ok digest=72b6ef0b7a02091c`,
+  `rlimit_helpers ok digest=317abd6ca0cbf441`,
+  `syscall_policy_helpers ok digest=51c02f662662b187`,
+  `xpmem_helpers ok digest=47556fb6e2054dd7`,
   `page_helpers ok digest=b7d1e5ed6a71e5f9`,
   `mem_init_helpers ok digest=435709f3a5bc062f`,
   `bitops ok digest=de062950e3e23679`,
@@ -272,9 +622,16 @@ Latest local source verification after the Rust shm permission/helper port:
   `page_alloc ok digest=bbeef5e7f59e821f`, and `page_alloc_bitmap ok
   digest=d9f2d2b25941c9c8`.
 - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
-  passed after the syscall helper Rust port.
+  passed after the XPMEM refcount/object-list helper Rust port.
 - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
   passed for the Rust-disabled C fallback image.
+- Direct XPMEM runtime is now enabled on this host after loading the installed
+  XPMEM module. The rebuilt Rust image passed `test/xpmem/go_test.sh` with
+  `XPMEM_RUN_UPSTREAM=0`, covering `XTP_001` through `XTP_007` and
+  `XTP_901` through `XTP_905`; McKernel shut down cleanly afterward. The XPMEM
+  test harnesses now recreate `/dev/xpmem` from `/sys/class/misc/xpmem/dev`
+  when devtmpfs/udev has not created the node, and the focused XPMEM suite was
+  rerun successfully with that fix.
 - Rust object exported the expected syscall helper, page, memory/init, waitq,
   bitops, and page allocator symbols,
   including `find_next_bit()`, `find_next_zero_bit()`, `find_first_bit()`,
@@ -295,7 +652,94 @@ Latest local source verification after the Rust shm permission/helper port:
   `shmctl_ipc_stat_access_result()`, `shm_owner_result()`,
   `shm_owner_or_cap_result()`, `shmlock_rlimit_result()`,
   `sched_get_priority_max_value()`, and
-  `sched_get_priority_min_value()`. Its expected unresolved kernel provider
+  `sched_get_priority_min_value()`, plus `sched_policy_is_valid()`,
+  `sched_policy_needs_root()`, `setscheduler_validate()`,
+  `sched_rr_interval_nsec()`, `sched_affinity_permission_result()`,
+  `sched_getaffinity_len_result()`, `sched_affinity_copy_len()`,
+  `prlimit_validate_resource()`, `prlimit_validate_new_limit()`,
+  `prlimit_linux_update_needed()`, and `prlimit_to_mckernel_resource()`, plus
+  `robust_list_len_result()`, `tkill_tid_result()`,
+  `sigaction_validate()`, `setpgid_normalize_pid()`,
+  `setpgid_normalize_pgid()`, `setpgid_execed_result()`,
+  `memlock_prepare_range()`, `memlock_range_flag_result()`,
+  `range_has_disallowed_change_flags()`, `munmap_prepare_range()`, and
+  `mprotect_prepare_range()`, plus `mlockall_policy_result()`,
+  `remap_file_pages_prepare()`, `mremap_prepare_args()`,
+  `mremap_fixed_range_result()`, `mremap_maymove_result()`,
+  `msync_prepare_range()`, `msync_locked_range_result()`,
+  `mbind_prepare_range()`, `mempolicy_nodemask_bits_result()`,
+  `mempolicy_nodemask_bits_is_clamped()`, `mbind_mode_flags_result()`,
+  `mempolicy_mode_is_supported()`, `set_mempolicy_normalize_mode()`,
+  `get_mempolicy_validate()`, and `move_pages_policy_result()`, plus
+  `brk_prepare_result()`, `brk_default_vrflags()`,
+  `mincore_prepare_range()`, `mmap_base_vrflags()`,
+  `mmap_populated_mapping_result()`, `mmap_should_set_host_ro()`,
+  `mmap_update_private_maxprot()`, `mmap_prot_denied_result()`,
+  `mmap_maxprot_to_vrflags()`, `mmap_should_force_straight()`, and
+  `mmap_is_shared()`, plus `tgkill_target_result()`,
+  `rt_sigprocmask_validate()`, `rt_sigprocmask_apply()`,
+  `rt_sigpending_size_result()`, `signalfd4_sigsetsize_result()`,
+  `signalfd4_flags_result()`, `getrusage_who_result()`,
+  `itimer_which_result()`, `itimer_is_real()`, `itimer_should_start()`,
+  `clock_gettime_dispatch()`, `gettimeofday_dispatch()`, and
+  `nanosleep_validate_timespec()`, plus `rt_sigtimedwait_prepare()`,
+  `rt_sigtimedwait_timeout_result()`, `rt_sigtimedwait_prepare_masks()`,
+  `rt_sigtimedwait_deadline()`, `rt_sigtimedwait_timeout_expired()`,
+  `sigmask_to_signal_number()`, `rt_sigqueueinfo_pid_result()`,
+  `sigsuspend_sigsetsize_result()`, `sigsuspend_prepare_mask()`,
+  `sigsuspend_pending_matches()`, `sigaction_sigsetsize_result()`,
+  `sigaltstack_validate()`, and `sigaltstack_is_disable()`, plus
+  `process_vm_validate_args()`, `process_vm_op_is_write()`,
+  `process_vm_op_is_valid()`, `ptrace_signal_data_result()`,
+  `ptrace_detach_signal_result()`, `ptrace_user_area_result()`,
+  `ptrace_status_allows_io()`, `ptrace_setoptions_flags_result()`,
+  `ptrace_apply_options()`, `ptrace_child_traced_result()`,
+  `ptrace_attach_policy_result()`, `ptrace_detach_state_result()`,
+  `ptrace_siginfo_state_result()`, plus `wait4_options_result()`,
+  `waitid_to_wait_pid_result()`, `waitid_options_result()`,
+  `wait_should_scan_process_result()`, `wait_should_scan_thread_result()`,
+  `wait_process_pid_matches_result()`, `wait_thread_tid_matches_result()`,
+  `wait_process_exited_candidate_result()`,
+  `wait_thread_exited_candidate_result()`,
+  `wait_nonptraced_stop_candidate_result()`,
+  `wait_ptraced_stop_candidate_result()`,
+  `wait_continued_candidate_result()`, `wait_reap_needed_result()`,
+  `wait_nohang_result()`, `wait_empty_result()`,
+  `wait_stopped_status_result()`, `wait_continued_status_result()`,
+  `wait_zombie_skip_host_result()`, `wait_thread_empty_candidate_result()`,
+  `waitid_status_code_result()`, plus `clone_pthread_marker_result()`,
+  `clone_flags_result()`, `clone_host_parent_flags_result()`,
+  `clone_report_thread_result()`, `ptrace_exec_event_signal_result()`,
+  `ptrace_syscall_event_signal_result()`, `ptrace_clone_event_result()`,
+  `ptrace_clone_reparent_result()`, `execveat_policy_result()`,
+  `futex_decode_flags_result()`, `futex_wait_timeout_needed_result()`,
+  `futex_timeout_is_absolute_result()`, `futex_clock_id_result()`,
+  `futex_requeue_val2_result()`, `futex_timeout_ns_result()`, and the XPMEM
+  policy exports
+  `xpmem_make_initial_policy_result()`, `xpmem_make_alignment_result()`,
+  `xpmem_get_policy_result()`, `xpmem_perms_result()`,
+  `xpmem_check_permit_mode_result()`, `xpmem_validate_access_result()`,
+  `xpmem_attach_overlap_result()`, `xpmem_id_to_tgid_result()`,
+  `xpmem_tg_hashtable_index_result()`,
+  `xpmem_ap_hashtable_index_result()`, `xpmem_make_id_result()`,
+  `xpmem_positive_id_result()`, `xpmem_owner_policy_result()`,
+  `xpmem_attach_initial_policy_result()`, `xpmem_destroying_state_result()`,
+  `xpmem_is_destroying_result()`, `xpmem_destroying_error_result()`,
+  `xpmem_two_destroying_error_result()`,
+  `xpmem_three_destroying_error_result()`,
+  `xpmem_attach_destroying_result()`, and
+  `xpmem_detach_lookup_result()`, plus `xpmem_remove_range_step_result()`,
+  `xpmem_remove_memory_range_action_result()`,
+  `xpmem_range_private_invalid_result()`,
+  `xpmem_clear_pte_range_result()`, `xpmem_fault_vaddr_result()`,
+  `xpmem_straight_phys_result()`, `xpmem_remote_pte_missing_result()`,
+  `xpmem_seg_phys_plus_off_result()`, `xpmem_att_page_fits_result()`,
+  `xpmem_pte_mismatch_result()`, `xpmem_unpin_step_result()`,
+  `xpmem_close_decision_result()`,
+  `xpmem_ref_drop_should_free_result()`,
+  `xpmem_begin_destroy_result()`, `xpmem_finish_destroy_result()`, and
+  `xpmem_object_lookup_decision_result()`.
+  Its expected unresolved kernel provider
   list is now
   `ihk_get_kargs`, `ihk_mc_chk_page_address`, `ihk_mc_get_memory_chunk`,
   `ihk_mc_get_nr_memory_chunks`, `phys_to_virt`, `shmid_index`,
@@ -316,11 +760,12 @@ Latest local source verification after the Rust shm permission/helper port:
   `/lib/modules/6.6.87.2-microsoft-standard-WSL2/build`.
 
 Next verification step:
-- Continue the migration with one of two bounded next slices: either widen
-  allocator V12 stress before moving more of `ihk_numa_free_pages()`, or port
-  another shared leaf-helper cluster with direct C/Rust equivalence. Run V10
-  and required-LTP/XPMEM V11 again after the next larger allocator or
-  memory-management behavior batch.
+- Continue the migration with another bounded helper slice that has direct
+  C/Rust equivalence. Best next targets are procfs/sysfs/file-object decision
+  helpers or more XPMEM object lifecycle policy that still keeps lock/list and
+  page-table mutation in C. Run focused XPMEM runtime again after the next
+  XPMEM behavior batch, and reserve required-LTP/full V11 for larger
+  accumulated changes.
 - To reduce build latency, use `kernel/rust/tests/run_equivalence.sh`,
   `git diff --check`, `bash -n`, and Rust object symbol/SIMD scans after each
   bounded Rust helper batch. Reserve full Rust/C image builds and V10/V11
@@ -361,11 +806,18 @@ Known failing or blocked step:
   helper port, Rust NUMA zero-free node helper port, and Rust NUMA alloc
   no-lock body port, direct free-to-tree helper port, and deferred free enqueue
   helper port.
-- The later 04:20 EDT SysV shared-memory permission/helper batch plus
-  page/memory/init-helper, bitops/free-preflight/string/plist/numparse/
-  bitmap-parse/waitq-core batch is validated through equivalence, source
-  hygiene, shell syntax, Rust/C image builds, symbol scan, SIMD scan, V10 boot
-  smoke, and a targeted SysV shared-memory runtime smoke.
+- The latest XPMEM helper batches plus the 16:28 EDT ptrace/process-vm batch
+  and prior signal-wait, signal/time, mmap/brk/mincore, memory-policy,
+  syscall-policy, scheduler/prlimit, SysV shared-memory, page/memory/init-helper,
+  bitops/free-preflight/string/plist/numparse/bitmap-parse/waitq-core work is
+  validated through equivalence, source hygiene, shell syntax, Rust/C image
+  builds, symbol scan, SIMD scan, V10 boot smoke, targeted SysV shared-memory
+  runtime smoke, targeted scheduler/prlimit runtime smoke, targeted
+  syscall-policy runtime smoke, targeted memory-policy runtime smoke, targeted
+  mmap/brk/mincore runtime smoke, targeted signal/time runtime smoke, targeted
+  signal-wait runtime smoke, targeted ptrace/process-vm runtime smoke, and
+  focused XPMEM runtime smoke. Direct XPMEM user runtime is no longer blocked
+  on this host when the installed XPMEM module is loaded.
 - Strict upstream V11 remains open for large-page runtime, issue-1324
   fork/ptrace memory pressure, and a missing x86_64 mcexec-options suite.
 - The pre-existing dirty `ihk` submodule marker is still present from the local
@@ -435,17 +887,15 @@ Next migration target
 ------------------------------------------------------------
 
 Recommended next code phase:
-- Continue Phase 4 page allocator only after widening allocator stress, or take
-  another bounded helper cluster if it has direct equivalence coverage and does
-  not pull allocator/user-copy dependencies into Rust. Good candidates are
-  non-varargs formatting helpers, simple list helpers, small exported
-  arithmetic/utility functions, or the next memory helper only after its
-  C/Rust harness can model the required page-address and page-table state.
+- Continue object/file/procfs/sysfs conversion only where runtime coverage can
+  exercise the path: file-backed mmap, `/proc/PID/pagemap`, `/proc/PID/mem`,
+  sysfs create/show/store, and device PFN mappings. Another bounded helper
+  cluster is acceptable if it has direct C/Rust equivalence coverage and does
+  not pull allocator/user-copy dependencies into Rust.
 
 Reason:
 - The Rocky baseline is clean and the current Rust helper set has C/Rust
-  equivalence plus image-build validation. The next allocator work should widen
-  allocator-specific V12 stress around free/list movement and accounting before
-  moving the remaining public `ihk_numa_free_pages()` lock/log/IKC
-  orchestration. Keep IKC/Linux zero requests in C until deferred-free stress
-  is broader.
+  equivalence, full Rust/C image-build validation, boot smoke, and a SysV shm
+  runtime smoke. Keep allocation/free, refcount mutation, lock/list mutation,
+  page-table mutation, page I/O, sysfs IKC exchange, procfs buffer mutation,
+  and user-copy in C until targeted runtime coverage exists for those bodies.

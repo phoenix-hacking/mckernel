@@ -2,6 +2,7 @@
 #include <ihk/mm.h>
 #include <kmsg.h>
 #include <kmalloc.h>
+#include <object_helpers.h>
 #include <string.h>
 #include <ihk/debug.h>
 
@@ -43,7 +44,8 @@ static struct hugefileobj *hugefileobj_lookup(uintptr_t handle)
 			/* for the interval between last put and fileobj_free
 			 * taking list_lock
 			 */
-			if (memobj_ref(&p->memobj) <= 1) {
+			if (!fileobj_lookup_ref_keep_result(
+				    memobj_ref(&p->memobj))) {
 				ihk_atomic_dec(&p->memobj.refcnt);
 				continue;
 			}
@@ -63,14 +65,16 @@ static int hugefileobj_get_page(struct memobj *memobj, off_t off,
 	int ret = 0;
 	int npages;
 
-	if (p2align != obj->pgshift - PTL1_SHIFT) {
+	ret = hugefileobj_validate_p2align_result(p2align, obj->pgshift);
+	if (ret) {
 		kprintf("%s: p2align %d but expected %d\n",
-			__func__, p2align, obj->pgshift - PTL1_SHIFT);
-		return -ENOMEM;
+			__func__, p2align,
+			hugefileobj_expected_p2align_result(obj->pgshift));
+		return ret;
 	}
 
-	pgind = off >> obj->pgshift;
-	npages = obj->pgsize >> PAGE_SHIFT;
+	pgind = hugefileobj_page_index_result(off, obj->pgshift);
+	npages = hugefileobj_npages_per_page_result(obj->pgsize);
 	ihk_mc_spinlock_lock_noirq(&obj->lock);
 	if (!obj->pages[pgind]) {
 		obj->pages[pgind] = ihk_mc_alloc_aligned_pages_user(npages,
@@ -112,7 +116,8 @@ static void __hugefileobj_free(struct memobj *memobj)
 		for (i = 0; i < obj->nr_pages; ++i) {
 			if (obj->pages[i]) {
 				ihk_mc_free_pages_user(obj->pages[i],
-						obj->pgsize >> PAGE_SHIFT);
+						hugefileobj_npages_per_page_result(
+							obj->pgsize));
 				dkprintf("%s: obj: 0x%lx, freed page at "
 					 "ind: %d\n", __func__, obj, i);
 			}
@@ -190,17 +195,18 @@ int hugefileobj_pre_create(struct pager_create_result *result,
 	}
 
 	obj->handle = result->handle;
-	obj->pgsize = (1UL << result->pgshift);
+	obj->pgsize = hugefileobj_pgsize_result(result->pgshift);
 	obj->pgshift = result->pgshift;
 	obj->pages = NULL;
 	obj->nr_pages = 0;
 	ihk_mc_spinlock_init(&obj->lock);
 	obj->memobj.flags = result->flags;
-	obj->memobj.status = MEMOBJ_READY;
+	obj->memobj.status = hugefileobj_initial_status_result();
 	obj->memobj.ops = &hugefileobj_ops;
 
 	/* keep mapping around when process is gone */
-	ihk_atomic_set(&obj->memobj.refcnt, 2);
+	ihk_atomic_set(&obj->memobj.refcnt,
+		       hugefileobj_initial_refcnt_result());
 
 	if (result->path[0]) {
 		obj->memobj.path = kmalloc(PATH_MAX, IHK_MC_AP_NOWAIT);
@@ -247,11 +253,11 @@ int hugefileobj_create(struct memobj *memobj, size_t len, off_t off,
 			off,
 			obj->pgshift);
 
-	nr_pages = (off + len) >> obj->pgshift;
+	nr_pages = hugefileobj_create_nr_pages_result(off, len, obj->pgshift);
 
 	ihk_mc_spinlock_lock_noirq(&obj->lock);
 	/* Expand or allocate if needed */
-	if (obj->nr_pages < nr_pages) {
+	if (hugefileobj_needs_grow_result(obj->nr_pages, nr_pages)) {
 		void **pages = kmalloc(nr_pages * sizeof(void *),
 				       IHK_MC_AP_NOWAIT);
 
@@ -262,11 +268,11 @@ int hugefileobj_create(struct memobj *memobj, size_t len, off_t off,
 
 		if (obj->nr_pages) {
 			memcpy(pages, obj->pages,
-			       obj->nr_pages * sizeof(void *));
+			       hugefileobj_copy_bytes_result(obj->nr_pages));
 		}
 
 		memset(pages + (obj->nr_pages * sizeof(void *)), 0,
-				(nr_pages - obj->nr_pages) * sizeof(void *));
+		       hugefileobj_zero_bytes_result(obj->nr_pages, nr_pages));
 
 		if (obj->nr_pages) {
 			kfree(obj->pages);
@@ -302,9 +308,11 @@ int hugefileobj_create(struct memobj *memobj, size_t len, off_t off,
 					continue;
 				}
 
-				npages = obj->pgsize >> PAGE_SHIFT;
+				npages = hugefileobj_npages_per_page_result(
+					obj->pgsize);
 				obj->pages[pgind] = ihk_mc_alloc_aligned_pages_user(npages,
-						obj->pgshift - PTL1_SHIFT,
+						hugefileobj_expected_p2align_result(
+							obj->pgshift),
 						IHK_MC_AP_NOWAIT | IHK_MC_AP_USER, 0);
 				if (!obj->pages[pgind]) {
 					kprintf("%s: error: could not allocate page for off: %lu"

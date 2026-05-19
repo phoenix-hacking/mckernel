@@ -28,6 +28,7 @@
 #include <rusage_private.h>
 #include <ihk/debug.h>
 #include <mman.h>
+#include <object_helpers.h>
 
 //#define DEBUG_PRINT_FILEOBJ
 
@@ -110,12 +111,7 @@ static struct page *__fileobj_page_hash_lookup(struct fileobj *obj,
 	struct page *page;
 
 	list_for_each_entry(page, &obj->page_hash[hash], list) {
-		if ((page->mode != PM_WILL_PAGEIO)
-				&& (page->mode != PM_PAGEIO)
-				&& (page->mode != PM_DONE_PAGEIO)
-				&& (page->mode != PM_PAGEIO_EOF)
-				&& (page->mode != PM_PAGEIO_ERROR)
-				&& (page->mode != PM_MAPPED)) {
+		if (!fileobj_page_mode_valid_result(page->mode)) {
 			kprintf("page_list_lookup(%p,%lx): mode %x\n",
 					obj, off, page->mode);
 			panic("page_list_lookup:invalid obj page");
@@ -172,7 +168,7 @@ static struct fileobj *obj_list_lookup(uintptr_t handle)
 			/* for the interval between last put and fileobj_free
 			 * taking list_lock
 			 */
-			if (memobj_ref(&p->memobj) <= 1) {
+			if (!fileobj_lookup_ref_keep_result(memobj_ref(&p->memobj))) {
 				ihk_atomic_dec(&p->memobj.refcnt);
 				continue;
 			}
@@ -216,7 +212,7 @@ int fileobj_create(int fd, struct memobj **objp, int *maxprotp, int flags,
 		goto out;
 	}
 
-	if (result.flags & MF_HUGETLBFS) {
+	if (fileobj_hugetlbfs_result(result.flags)) {
 		return hugefileobj_pre_create(&result, objp, maxprotp);
 	}
 
@@ -235,9 +231,7 @@ int fileobj_create(int fd, struct memobj **objp, int *maxprotp, int flags,
 	}
 	memset(newobj, 0, sizeof(*newobj));
 	newobj->memobj.ops = &fileobj_ops;
-	newobj->memobj.flags = MF_HAS_PAGER | MF_REG_FILE |
-		MF_REMAP_FILE_PAGES |
-		((flags & MAP_PRIVATE) ? MF_PRIVATE : 0);
+	newobj->memobj.flags = fileobj_create_base_flags_result(flags);
 	newobj->handle = result.handle;
 
 	fileobj_page_hash_init(newobj);
@@ -248,13 +242,13 @@ int fileobj_create(int fd, struct memobj **objp, int *maxprotp, int flags,
 		obj_list_insert(newobj);
 		obj = newobj;
 		to_memobj(obj)->size = result.size;
-		to_memobj(obj)->flags |= result.flags;
-		to_memobj(obj)->status = MEMOBJ_READY;
-		ihk_atomic_set(&to_memobj(obj)->refcnt, 1);
-		obj->sref = 1;
-		if (to_memobj(obj)->flags & MF_PREFETCH) {
-			to_memobj(obj)->status = MEMOBJ_TO_BE_PREFETCHED;
-		}
+		to_memobj(obj)->flags = fileobj_apply_result_flags_result(
+			to_memobj(obj)->flags, result.flags);
+		to_memobj(obj)->status =
+			fileobj_status_from_flags_result(to_memobj(obj)->flags);
+		ihk_atomic_set(&to_memobj(obj)->refcnt,
+			       fileobj_initial_refcnt_result());
+		obj->sref = fileobj_initial_sref_result();
 
 		if (result.path[0]) {
 			newobj->memobj.path = kmalloc(PATH_MAX, IHK_MC_AP_NOWAIT);
@@ -270,13 +264,12 @@ int fileobj_create(int fd, struct memobj **objp, int *maxprotp, int flags,
 		dkprintf("%s: %s\n", __FUNCTION__, obj->memobj.path);
 
 		/* XXX: KNL specific optimization for OFP runs */
-		if ((to_memobj(obj)->flags & MF_PREMAP) &&
-				(to_memobj(obj)->flags & MF_ZEROFILL)) {
+		if (fileobj_premap_zerofill_result(to_memobj(obj)->flags)) {
 			struct memobj *mo = to_memobj(obj);
-			int nr_pages = (result.size + (PAGE_SIZE - 1))
-				>> PAGE_SHIFT;
+			int nr_pages = fileobj_premap_npages_result(result.size);
 			int j = 0;
-			int node = ihk_mc_get_nr_numa_nodes() / 2;
+			int node = fileobj_premap_start_node_result(
+				ihk_mc_get_nr_numa_nodes());
 			dkprintf("%s: MF_PREMAP, start node: %d\n",
 				__FUNCTION__, node);
 
@@ -288,7 +281,8 @@ int fileobj_create(int fd, struct memobj **objp, int *maxprotp, int flags,
 			}
 
 			mo->nr_pages = nr_pages;
-			memset(mo->pages, 0, nr_pages * sizeof(*mo->pages));
+			memset(mo->pages, 0,
+			       fileobj_pages_bytes_result(nr_pages));
 
 			if (cpu_local_var(current)->proc->mpol_flags & MPOL_SHM_PREMAP) {
 				/* Get the actual pages NUMA interleaved */
@@ -306,10 +300,8 @@ int fileobj_create(int fd, struct memobj **objp, int *maxprotp, int flags,
 
 					memset(mo->pages[j], 0, PAGE_SIZE);
 
-					++node;
-					if (node == ihk_mc_get_nr_numa_nodes()) {
-						node = ihk_mc_get_nr_numa_nodes() / 2;
-					}
+					node = fileobj_premap_next_node_result(
+						node, ihk_mc_get_nr_numa_nodes());
 				}
 				dkprintf("%s: allocated %d pages interleaved\n",
 						__FUNCTION__, nr_pages);
@@ -400,8 +392,7 @@ static void fileobj_free(struct memobj *memobj)
 	}
 
 	/* Pre-mapped zerofilled? */
-	if (to_memobj(obj)->flags & MF_PREMAP &&
-			to_memobj(obj)->flags & MF_ZEROFILL) {
+	if (fileobj_premap_zerofill_result(to_memobj(obj)->flags)) {
 		int i;
 
 		for (i = 0; i < to_memobj(obj)->nr_pages; ++i) {
@@ -474,7 +465,7 @@ static void fileobj_do_pageio(void *args0)
 	ihk_mc_user_context_t ctx;
 	ssize_t ss;
 	struct mcs_lock_node mcs_node;
-	int hash = (off >> PAGE_SHIFT) & FILEOBJ_PAGE_HASH_MASK;	
+	int hash = fileobj_page_hash_result(off);
 	int attempts = 0;
 
 	mcs_lock_lock(&obj->page_hash_locks[hash], &mcs_node);
@@ -486,7 +477,7 @@ static void fileobj_do_pageio(void *args0)
 	while (page->mode == PM_PAGEIO) {
 		mcs_lock_unlock(&obj->page_hash_locks[hash], &mcs_node);
 		++attempts;
-		if (attempts > 49) {
+		if (fileobj_pageio_should_schedule_result(attempts)) {
 			dkprintf("%s: %s:%lu PM_PAGEIO loop %d -> schedule()\n",
 				__func__, to_memobj(obj)->path, off, attempts);
 			schedule();
@@ -496,7 +487,7 @@ static void fileobj_do_pageio(void *args0)
 	}
 
 	if (page->mode == PM_WILL_PAGEIO) {
-		if (to_memobj(obj)->flags & MF_ZEROFILL) {
+		if (fileobj_pageio_zero_result(to_memobj(obj)->flags)) {
 			void *virt = phys_to_virt(page_to_phys(page));
 			memset(virt, 0, PAGE_SIZE);
 #ifdef PROFILE_ENABLE
@@ -525,17 +516,16 @@ static void fileobj_do_pageio(void *args0)
 				panic("fileobj_do_pageio:invalid page mode");
 			}
 
-			if (ss == 0) {
+			page->mode = fileobj_pageio_mode_after_read_result(ss, pgsize);
+			if (page->mode == PM_PAGEIO_EOF) {
 				dkprintf("fileobj_do_pageio(%p,%lx,%lx):EOF? %ld\n",
 						obj, off, pgsize, ss);
-				page->mode = PM_PAGEIO_EOF;
 				goto out;
 			}
-			else if (ss != pgsize) {
+			else if (page->mode == PM_PAGEIO_ERROR) {
 				kprintf("fileobj_do_pageio(%p,%lx,%lx):"
 						"read failed. %ld\n",
 						obj, off, pgsize, ss);
-				page->mode = PM_PAGEIO_ERROR;
 				goto out;
 			}
 		}
@@ -560,20 +550,20 @@ static int fileobj_get_page(struct memobj *memobj, off_t off,
 	uintptr_t phys = -1;
 	struct page *page;
 	struct mcs_lock_node mcs_node;
-	int hash = (off >> PAGE_SHIFT) & FILEOBJ_PAGE_HASH_MASK;	
+	int hash = fileobj_page_hash_result(off);
+	int action;
 
 	dkprintf("fileobj_get_page(%p,%lx,%x,%x,%p)\n", obj, off, p2align, virt_addr, physp);
-	if (p2align != PAGE_P2ALIGN) {
-		return -ENOMEM;
-	}
+	error = fileobj_validate_p2align_result(p2align);
+	if (error)
+		return error;
 
 #ifdef PROFILE_ENABLE
 	profile_event_add(PROFILE_page_fault_file, PAGE_SIZE);
 #endif // PROFILE_ENABLE
 
-	if (memobj->flags & MF_PREMAP &&
-			memobj->flags & MF_ZEROFILL) {
-		int page_ind = off >> PAGE_SHIFT;
+	if (fileobj_premap_zerofill_result(memobj->flags)) {
+		int page_ind = fileobj_premap_page_index_result(off);
 
 		if (!memobj->pages[page_ind]) {
 			virt = ihk_mc_alloc_pages_user(1, IHK_MC_AP_NOWAIT | IHK_MC_AP_USER, virt_addr);
@@ -612,8 +602,9 @@ static int fileobj_get_page(struct memobj *memobj, off_t off,
 
 	mcs_lock_lock(&obj->page_hash_locks[hash], &mcs_node);
 	page = __fileobj_page_hash_lookup(obj, hash, off);
-	if (!page || (page->mode == PM_WILL_PAGEIO)
-			|| (page->mode == PM_PAGEIO)) {
+	action = fileobj_get_page_action_result(!!page,
+			page ? page->mode : PM_NONE, &error);
+	if (action == FILEOBJ_PAGE_ACTION_START_IO) {
 		struct pageio_args *args;
 		args = kmalloc(sizeof(*args), IHK_MC_AP_NOWAIT);
 		if (!args) {
@@ -625,11 +616,10 @@ static int fileobj_get_page(struct memobj *memobj, off_t off,
 		}
 
 		if (!page) {
-			int npages = 1 << p2align;
+			int npages = fileobj_alloc_npages_result(p2align);
 
-			virt = ihk_mc_alloc_pages_user(npages, (IHK_MC_AP_NOWAIT |
-					((to_memobj(obj)->flags & MF_ZEROFILL) ?
-						IHK_MC_AP_USER : 0)),
+			virt = ihk_mc_alloc_pages_user(npages,
+					fileobj_alloc_flags_result(to_memobj(obj)->flags),
 					virt_addr);
 			if (!virt) {
 				error = -ENOMEM;
@@ -644,7 +634,7 @@ static int fileobj_get_page(struct memobj *memobj, off_t off,
 			page = phys_to_page_insert_hash(phys);
 			// Track change in page->count for !MF_PREMAP pages. 
 			// Add when setting the PTE for a page with count of one in ihk_mc_pt_set_range().
-			dkprintf("%s: phys_to_page_insert_hash(),phys=%lx,virt=%lx,size=%lx,pgsize=%lx\n", __FUNCTION__, phys, virt, npages * PAGE_SIZE, PAGE_SIZE);
+			dkprintf("%s: phys_to_page_insert_hash(),phys=%lx,virt=%lx,size=%lx,pgsize=%lx\n", __FUNCTION__, phys, virt, fileobj_alloc_size_result(npages), PAGE_SIZE);
 
 			if (page->mode != PM_NONE) {
 				panic("fileobj_get_page:invalid new page");
@@ -653,31 +643,25 @@ static int fileobj_get_page(struct memobj *memobj, off_t off,
 			ihk_atomic_set(&page->count, 1);
 			ihk_atomic64_set(&page->mapped, 0);
 			__fileobj_page_hash_insert(obj, page, hash);
-			page->mode = PM_WILL_PAGEIO;
+			page->mode = fileobj_new_page_mode_result();
 		}
 
 		memobj_ref(&obj->memobj);
 
 		args->fileobj = obj;
 		args->objoff = off;
-		args->pgsize = PAGE_SIZE << p2align;
+		args->pgsize = fileobj_pageio_pgsize_result(p2align);
 
 		proc->pgio_fp = &fileobj_do_pageio;
 		proc->pgio_arg = args;
 
-		error = -ERESTART;
 		goto out;
 	}
-	else if (page->mode == PM_DONE_PAGEIO) {
-		page->mode = PM_MAPPED;
+	else if (action == FILEOBJ_PAGE_ACTION_MAP_DONE) {
+		page->mode = fileobj_mapped_mode_result();
 		dkprintf("%s: PM_DONE_PAGEIO-->PM_MAPPED,obj=%lx,off=%lx,phys=%lx\n", __FUNCTION__, obj, off, page_to_phys(page));
 	}
-	else if (page->mode == PM_PAGEIO_EOF) {
-		error = -ERANGE;
-		goto pageio_error;
-	}
-	else if (page->mode == PM_PAGEIO_ERROR) {
-		error = -EIO;
+	else if (action == FILEOBJ_PAGE_ACTION_ERROR) {
 		goto pageio_error;
 	}
 
@@ -713,12 +697,12 @@ static int fileobj_flush_page(struct memobj *memobj, uintptr_t phys,
 	ssize_t ss;
 
 	dkprintf("%s: phys=%lx,to_memobj(obj)->flags=%x,memobj->flags=%x,page=%p\n", __FUNCTION__, phys, to_memobj(obj)->flags, memobj->flags, phys_to_page(phys));
-	if (to_memobj(obj)->flags & MF_ZEROFILL) {
+	if (fileobj_flush_skip_result(to_memobj(obj)->flags, 1)) {
 		return 0;
 	}
 
 	page = phys_to_page(phys);
-	if (!page) {
+	if (fileobj_flush_skip_result(to_memobj(obj)->flags, !!page)) {
 		kprintf("%s: warning: tried to flush non-existing page for phys addr: 0x%lx\n", 
 			__FUNCTION__, phys);
 		return 0;
@@ -761,13 +745,13 @@ static int fileobj_lookup_page(struct memobj *memobj, off_t off,
 	int error = -1;
 	struct page *page;
 	struct mcs_lock_node mcs_node;
-	int hash = (off >> PAGE_SHIFT) & FILEOBJ_PAGE_HASH_MASK;
+	int hash = fileobj_page_hash_result(off);
 
 	dkprintf("fileobj_lookup_page(%p,%lx,%x,%p)\n", obj, off, p2align, physp);
 
-	if (p2align != PAGE_P2ALIGN) {
-		return -ENOMEM;
-	}
+	error = fileobj_validate_p2align_result(p2align);
+	if (error)
+		return error;
 
 	mcs_lock_lock(&obj->page_hash_locks[hash], &mcs_node);
 

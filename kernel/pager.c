@@ -22,6 +22,7 @@
 #include <process.h>
 #include <swapfmt.h>
 #include <ihk/debug.h>
+#include <object_helpers.h>
 
 #define O_RDONLY	00000000
 #define O_WRONLY	00000001
@@ -151,9 +152,10 @@ myalloc(struct swapinfo *si, size_t sz)
 {
 	void	*p = NULL;
 
-	if ((si->ubuf_alloced + sz) < si->ubuf_size) {
+	if (pager_myalloc_fits_result(si->ubuf_alloced, sz, si->ubuf_size)) {
 		p = (void*) &((char*)si->user_buf)[si->ubuf_alloced];
-		si->ubuf_alloced += sz;
+		si->ubuf_alloced =
+			pager_myalloc_next_alloced_result(si->ubuf_alloced, sz);
 	}
 	return p;
 }
@@ -204,7 +206,7 @@ linux_read(int fd, void *buf, size_t count)
 		ihk_mc_syscall_arg1(&ctx0) = (uintptr_t) buf;
 		ihk_mc_syscall_arg2(&ctx0) = count;
 		sz0 = syscall_generic_forwarding(__NR_read, &ctx0);
-		if (sz0 == -EINTR)
+		if (pager_linux_io_retry_result(sz0))
 			continue;
 		if (sz0 <= 0) {
 			if (sz == 0)
@@ -235,7 +237,7 @@ linux_write(int fd, void *buf, size_t count)
 		ihk_mc_syscall_arg1(&ctx0) = (uintptr_t) buf;
 		ihk_mc_syscall_arg2(&ctx0) = count;
 		sz0 = syscall_generic_forwarding(__NR_write, &ctx0);
-		if (sz0 == -EINTR)
+		if (pager_linux_io_retry_result(sz0))
 			continue;
 		if (sz0 <= 0) {
 			if (sz == 0)
@@ -317,8 +319,8 @@ pager_copy_from_user(void * dst, void * from, size_t size, struct process_vm *vm
 	unsigned long rphys;
 	int faulted = 0;
 
-	if (size > PAGE_SIZE) {
-		ret = -EFAULT;
+	ret = pager_copy_size_error_result(size);
+	if (ret) {
 		return ret;
 	}
 		
@@ -329,7 +331,7 @@ retry_lookup:
 
 	if (ret) {
 		uint64_t reason = PF_POPULATE | PF_WRITE | PF_USER;
-		void *addr= (void *)(((unsigned long)dst)& PAGE_MASK);
+		void *addr = (void *)pager_fault_addr_result((unsigned long)dst);
 
 		if (faulted) {
 			ret = -EFAULT;
@@ -360,8 +362,7 @@ pager_read(struct swapinfo *si, int fd, void *start, size_t size,struct process_
 	ssize_t		off, sz, rs;
 
 	for (off = 0; off < size; off += sz) {
-		sz = size - off;
-		sz = (sz > UDATA_BUFSIZE) ? UDATA_BUFSIZE : sz;
+		sz = pager_read_chunk_size_result(off, size);
 		rs = linux_read(fd, si->udata_buf, sz);
 		if (rs != sz) return rs;
 		

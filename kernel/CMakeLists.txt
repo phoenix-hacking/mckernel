@@ -52,14 +52,18 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/llist.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/mem_helpers.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/numparse.rs"
+		"${CMAKE_CURRENT_SOURCE_DIR}/rust/object_helpers.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/page_alloc.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/page_helpers.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/plist.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/rbtree.rs"
+		"${CMAKE_CURRENT_SOURCE_DIR}/rust/rlimit_helpers.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/sched_helpers.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/shmid_helpers.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/string.rs"
+		"${CMAKE_CURRENT_SOURCE_DIR}/rust/syscall_policy.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/waitq.rs"
+		"${CMAKE_CURRENT_SOURCE_DIR}/rust/xpmem_helpers.rs"
 	)
 	set(RUST_KERNEL_CFG)
 	if (ENABLE_TOFU)
@@ -98,7 +102,7 @@ endif()
 
 set(MCKERNEL_SRCS
 	init.c mem.c debug.c mikc.c listeners.c ap.c syscall.c cls.c host.c process.c
-	copy.c waitq.c futex.c timer.c plist.c fileobj.c shmobj.c zeroobj.c
+	copy.c waitq.c futex.c timer.c plist.c object_helpers.c fileobj.c shmobj.c zeroobj.c
 	procfs.c devobj.c sysfs.c xpmem.c profile.c freeze.c pager.c
 	gencore.c hugefileobj.c
 
@@ -144,9 +148,21 @@ if (RUST_KERNEL_ENABLED)
 	set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/mem.c"
 		PROPERTIES COMPILE_DEFINITIONS
 		"MCKERNEL_RUST_MEM_HELPERS;MCKERNEL_RUST_PAGE_HELPERS")
+	set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/object_helpers.c"
+		PROPERTIES COMPILE_DEFINITIONS MCKERNEL_RUST_OBJECT_HELPERS)
+	set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/fileobj.c"
+		PROPERTIES COMPILE_DEFINITIONS MCKERNEL_RUST_OBJECT_HELPERS)
+	set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/devobj.c"
+		PROPERTIES COMPILE_DEFINITIONS MCKERNEL_RUST_OBJECT_HELPERS)
+	set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/procfs.c"
+		PROPERTIES COMPILE_DEFINITIONS MCKERNEL_RUST_OBJECT_HELPERS)
+	set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/sysfs.c"
+		PROPERTIES COMPILE_DEFINITIONS MCKERNEL_RUST_OBJECT_HELPERS)
 	set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/syscall.c"
 		PROPERTIES COMPILE_DEFINITIONS
-		"MCKERNEL_RUST_SHMID_HELPERS;MCKERNEL_RUST_SHM_PERM_HELPERS;MCKERNEL_RUST_SCHED_PRIO_HELPERS")
+		"MCKERNEL_RUST_SHMID_HELPERS;MCKERNEL_RUST_SHM_PERM_HELPERS;MCKERNEL_RUST_RLIMIT_HELPERS;MCKERNEL_RUST_SCHED_PRIO_HELPERS;MCKERNEL_RUST_SCHED_POLICY_HELPERS;MCKERNEL_RUST_SYSCALL_POLICY_HELPERS")
+	set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/xpmem.c"
+		PROPERTIES COMPILE_DEFINITIONS MCKERNEL_RUST_XPMEM_HELPERS)
 else()
 	list(APPEND MCKERNEL_SRCS rbtree.c llist.c)
 endif()
