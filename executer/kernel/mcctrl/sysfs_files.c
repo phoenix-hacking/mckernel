@@ -17,6 +17,7 @@
 #include <linux/version.h>
 #include "config.h"
 #include "mcctrl.h"
+#include "mcctrl_rust.h"
 #include "sysfs_msg.h"
 
 #define dprintk(...) do { if (0) printk(__VA_ARGS__); } while (0)
@@ -96,7 +97,6 @@ void setup_local_snooping_files(ihk_os_t os)
 	struct mcctrl_usrdata *udp = ihk_host_os_get_usrdata(os);
 	struct sysfsm_bitmap_param param;
 	static unsigned long cpu_offline = 0x0;
-	int i;
 	int error;
 
 	if (!udp) {
@@ -105,9 +105,8 @@ void setup_local_snooping_files(ihk_os_t os)
 	}
 
 	memset(udp->cpu_online, 0, sizeof(udp->cpu_online));
-	for (i = 0; i < udp->cpu_info->n_cpus; i++) {
-		set_bit(i, udp->cpu_online);
-	}
+	mcctrl_fill_sequential_bitset(udp->cpu_online, udp->cpu_info->n_cpus,
+				      CPU_LONGS, BITS_PER_LONG);
 
 	param.nbits = CPU_LONGS * BITS_PER_LONG;
 	param.ptr = &udp->cpu_online;
@@ -205,26 +204,20 @@ void free_topology_info(ihk_os_t os)
  */
 int mckernel_cpu_2_linux_cpu(struct mcctrl_usrdata *udp, int cpu_id)
 {
-	return (cpu_id < udp->cpu_info->n_cpus) ?
-		udp->cpu_info->mapping[cpu_id] : -1;
+	return mcctrl_lwk_to_linux_index(udp->cpu_info->mapping,
+					 udp->cpu_info->n_cpus, cpu_id);
 }
 
 int mckernel_cpu_2_hw_id(struct mcctrl_usrdata *udp, int cpu_id)
 {
-	return (cpu_id < udp->cpu_info->n_cpus) ?
-		udp->cpu_info->hw_ids[cpu_id] : -1;
+	return mcctrl_lwk_to_linux_index(udp->cpu_info->hw_ids,
+					 udp->cpu_info->n_cpus, cpu_id);
 }
 
 int linux_cpu_2_mckernel_cpu(struct mcctrl_usrdata *udp, int cpu_id)
 {
-	int i;
-
-	for (i = 0; i < udp->cpu_info->n_cpus; ++i) {
-		if (udp->cpu_info->mapping[i] == cpu_id)
-			return i;
-	}
-
-	return -1;
+	return mcctrl_linux_to_lwk_index(udp->cpu_info->mapping,
+					 udp->cpu_info->n_cpus, cpu_id);
 }
 
 #if 0
@@ -265,20 +258,14 @@ int linux_cpu_2_hw_id(struct mcctrl_usrdata *udp, int cpu)
 
 int mckernel_numa_2_linux_numa(struct mcctrl_usrdata *udp, int numa_id)
 {
-	return (numa_id < udp->mem_info->n_numa_nodes) ?
-		udp->mem_info->numa_mapping[numa_id] : -1;
+	return mcctrl_lwk_to_linux_index(udp->mem_info->numa_mapping,
+					 udp->mem_info->n_numa_nodes, numa_id);
 }
 
 int linux_numa_2_mckernel_numa(struct mcctrl_usrdata *udp, int numa_id)
 {
-	int i;
-
-	for (i = 0; i < udp->mem_info->n_numa_nodes; ++i) {
-		if (udp->mem_info->numa_mapping[i] == numa_id)
-			return i;
-	}
-
-	return -1;
+	return mcctrl_linux_to_lwk_index(udp->mem_info->numa_mapping,
+					 udp->mem_info->n_numa_nodes, numa_id);
 }
 
 
@@ -785,18 +772,17 @@ static int read_file(void *buf, size_t size, char *fmt, va_list ap)
 #else
 	ss = kernel_read(fp, off, buf, size);
 #endif
-	if (ss < 0) {
-		error = ss;
-		eprintk("mcctrl:read_file:kernel_read failed. %d\n", error);
+	error = mcctrl_read_buffer_status(buf, size, ss);
+	if (error) {
+		if (ss < 0) {
+			eprintk("mcctrl:read_file:kernel_read failed. %d\n",
+					error);
+		} else {
+			eprintk("mcctrl:read_file:buffer overflow. %d\n",
+					error);
+		}
 		goto out;
 	}
-	if (ss >= size) {
-		error = -ENOSPC;
-		eprintk("mcctrl:read_file:buffer overflow. %d\n", error);
-		goto out;
-	}
-	*(char *)(buf + ss) = '\0';
-
 	error = 0;
 out:
 	if (!IS_ERR_OR_NULL(fp)) {
@@ -835,10 +821,10 @@ static int read_long(long *valuep, char *fmt, ...)
 		goto out;
 	}
 
-	n = sscanf(buf, "%ld", valuep);
+	n = mcctrl_parse_long(buf, valuep);
 	if (n != 1) {
 		error = -EIO;
-		eprintk("mcctrl:read_long:sscanf failed. %d\n", error);
+		eprintk("mcctrl:read_long:parse failed. %d\n", error);
 		goto out;
 	}
 
@@ -879,17 +865,17 @@ static int read_link(char *buf, size_t bufsize, char *fmt, ...)
 	set_fs(KERNEL_DS);
 	ss = mcctrl_sys_readlinkat(AT_FDCWD, filename, buf, bufsize);
 	set_fs(old_fs);
-	if (ss < 0) {
-		error = ss;
-		eprintk("mcctrl:read_link:sys_readlink failed. %d\n", error);
+	error = mcctrl_read_buffer_status(buf, bufsize, ss);
+	if (error) {
+		if (ss < 0) {
+			eprintk("mcctrl:read_link:sys_readlink failed. %d\n",
+					error);
+		} else {
+			eprintk("mcctrl:read_link:linkname too long. %d\n",
+					error);
+		}
 		goto out;
 	}
-	if (ss >= bufsize) {
-		error = -ENOSPC;
-		eprintk("mcctrl:read_link:linkname too long. %d\n", error);
-		goto out;
-	}
-	buf[ss] = '\0';
 
 	error = 0;
 out:
@@ -927,7 +913,7 @@ static int setup_one_pci(struct mcctrl_usrdata *udp, const char *name)
 		goto out;
 	}
 
-	if (strncmp(buf, "../../../devices/", 17)) {
+	if (!mcctrl_pci_realpath_valid(buf)) {
 		error = -ENOENT;
 		eprintk("mcctrl:setup_one_pci:"
 				"realpath is not /sys/devices. %d\n", error);

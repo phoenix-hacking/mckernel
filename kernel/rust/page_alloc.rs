@@ -260,6 +260,94 @@ fn map_bit(n: u32) -> u32 {
 }
 
 #[inline(always)]
+fn fls_ulong(mut value: CULong) -> CInt {
+    let mut bits = 0;
+
+    while value != 0 {
+        bits += 1;
+        value >>= 1;
+    }
+
+    bits
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn pagealloc_init_layout_result(
+    size: CULong,
+    unit: CULong,
+    desc_struct_size: CULong,
+    page_shiftp: *mut CInt,
+    mapsizep: *mut CInt,
+    mapalignedp: *mut CInt,
+    desc_pagesp: *mut CInt,
+) -> CInt {
+    if unit == 0 {
+        return -EINVAL;
+    }
+
+    let page_shift = fls_ulong(unit) - 1;
+    let mapsize = (size >> page_shift) as CInt;
+    let mapaligned = ((mapsize + 63) >> 6) << 3;
+    let descsize = desc_struct_size as CInt + mapaligned;
+    let desc_pages = (descsize + PAGE_SIZE as CInt - 1) >> PAGE_SHIFT;
+
+    if !page_shiftp.is_null() {
+        unsafe {
+            *page_shiftp = page_shift;
+        }
+    }
+    if !mapsizep.is_null() {
+        unsafe {
+            *mapsizep = mapsize;
+        }
+    }
+    if !mapalignedp.is_null() {
+        unsafe {
+            *mapalignedp = mapaligned;
+        }
+    }
+    if !desc_pagesp.is_null() {
+        unsafe {
+            *desc_pagesp = desc_pages;
+        }
+    }
+
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn pagealloc_reserve_tail_result(map: *mut CULong, first: CInt, limit: CInt) {
+    if map.is_null() {
+        return;
+    }
+
+    let mut i = first;
+    while i < limit {
+        let index = map_index(i as u32) as usize;
+        let bit = map_bit(i as u32);
+        let word = map.add(index);
+        let value = read_volatile(word) | ((1 as CULong) << bit);
+        write_volatile(word, value);
+        i += 1;
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn pagealloc_init_end_result(start: CULong, size: CULong) -> CULong {
+    start + size
+}
+
+#[no_mangle]
+pub extern "C" fn pagealloc_init_count_result(mapaligned: CInt) -> CInt {
+    mapaligned >> 3
+}
+
+#[no_mangle]
+pub extern "C" fn pagealloc_destroy_pages_result(flag: CInt) -> CInt {
+    flag
+}
+
+#[inline(always)]
 unsafe fn desc_address(desc: *mut IhkPageAllocatorDesc, index: u32, bit: u32) -> CULong {
     (*desc)
         .start

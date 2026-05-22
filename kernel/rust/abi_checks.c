@@ -10,6 +10,9 @@
 #include <page.h>
 #include <shm.h>
 #include <process.h>
+#include <timer.h>
+#include <ihk/ihk_monitor.h>
+#include <ihk/ihk_rusage.h>
 
 #define ABI_ASSERT(cond, msg) _Static_assert(cond, msg)
 #define ABI_OFFSET(type, member) __builtin_offsetof(type, member)
@@ -87,6 +90,14 @@ ABI_ASSERT(ABI_OFFSET(waitq_entry_t, flags) == 24,
 	   "Rust/C waitq_entry_t flags offset mismatch");
 ABI_ASSERT(ABI_OFFSET(waitq_entry_t, func) == 32,
 	   "Rust/C waitq_entry_t func offset mismatch");
+ABI_ASSERT(sizeof(struct timer) == 56,
+	   "Rust/C timer size mismatch");
+ABI_ASSERT(ABI_OFFSET(struct timer, processes) == 8,
+	   "Rust/C timer processes offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct timer, list) == 32,
+	   "Rust/C timer list offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct timer, thread) == 48,
+	   "Rust/C timer thread offset mismatch");
 ABI_ASSERT(sizeof(struct page) == 80,
 	   "Rust/C page size mismatch");
 ABI_ASSERT(ABI_OFFSET(struct page, list) == 0,
@@ -212,6 +223,18 @@ ABI_ASSERT(sizeof(struct thread_hash) == 5888,
 	   "Rust/C thread_hash size mismatch");
 ABI_ASSERT(ABI_OFFSET(struct thread_hash, lock) == 1216,
 	   "Rust/C thread_hash lock offset mismatch");
+ABI_ASSERT(sizeof(struct resource_set) == 384,
+	   "Rust/C resource_set size mismatch");
+ABI_ASSERT(ABI_OFFSET(struct resource_set, path) == 16,
+	   "Rust/C resource_set path offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct resource_set, process_hash) == 24,
+	   "Rust/C resource_set process_hash offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct resource_set, phys_mem_lock) == 64,
+	   "Rust/C resource_set phys_mem_lock offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct resource_set, cpu_set) == 128,
+	   "Rust/C resource_set cpu_set offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct resource_set, pid1) == 320,
+	   "Rust/C resource_set pid1 offset mismatch");
 ABI_ASSERT(sizeof(struct address_space) == 168,
 	   "Rust/C address_space size mismatch");
 ABI_ASSERT(ABI_OFFSET(struct address_space, free_cb) == 16,
@@ -314,3 +337,151 @@ ABI_ASSERT(ABI_OFFSET(struct process_vm, range_cache_ind) == 288,
 	   "Rust/C process_vm range_cache_ind offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct process_vm, swapinfo) == 296,
 	   "Rust/C process_vm swapinfo offset mismatch");
+
+ABI_ASSERT(sizeof(struct process) == 1728,
+	   "Rust/C process size mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process, vm) == 128,
+	   "Rust/C process vm offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process, threads_list) == 136,
+	   "Rust/C process threads_list offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process, main_thread) == 168,
+	   "Rust/C process main_thread offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process, parent) == 272,
+	   "Rust/C process parent offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process, refcount) == 416,
+	   "Rust/C process refcount offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process, status) == 420,
+	   "Rust/C process status offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process, group_exit_status) == 424,
+	   "Rust/C process group_exit_status offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process, waitpid_q) == 432,
+	   "Rust/C process waitpid_q offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process, pid) == 456,
+	   "Rust/C process pid offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process, rlimit) == 512,
+	   "Rust/C process rlimit offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process, cpu_set) == 1152,
+	   "Rust/C process cpu_set offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process, mckfd_lock) == 1284,
+	   "Rust/C process mckfd_lock offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process, stime) == 1296,
+	   "Rust/C process stime offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process, maxrss) == 1360,
+	   "Rust/C process maxrss offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process, straight_map) == 1432,
+	   "Rust/C process straight_map offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process, perf_status) == 1456,
+	   "Rust/C process perf_status offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process, monitoring_event) == 1464,
+	   "Rust/C process monitoring_event offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process, profile) == 1472,
+	   "Rust/C process profile offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process, nr_processes) == 1616,
+	   "Rust/C process nr_processes offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process, straight_va) == 1624,
+	   "Rust/C process straight_va offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process, coredump_lock) == 1664,
+	   "Rust/C process coredump_lock offset mismatch");
+
+ABI_ASSERT(sizeof(struct thread) == 5568,
+	   "Rust/C thread size mismatch");
+ABI_ASSERT(ABI_OFFSET(struct thread, cpu_id) == 16,
+	   "Rust/C thread cpu_id offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct thread, status) == 4184,
+	   "Rust/C thread status offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct thread, vm) == 4200,
+	   "Rust/C thread vm offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct thread, ctx) == 4208,
+	   "Rust/C thread ctx offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct thread, proc) == 4304,
+	   "Rust/C thread proc offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct thread, sched_list) == 4328,
+	   "Rust/C thread sched_list offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct thread, sched_policy) == 4344,
+	   "Rust/C thread sched_policy offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct thread, spin_sleep_lock) == 4352,
+	   "Rust/C thread spin_sleep_lock offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct thread, report_proc) == 4360,
+	   "Rust/C thread report_proc offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct thread, ptrace) == 4384,
+	   "Rust/C thread ptrace offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct thread, ptrace_saved_uctx) == 4400,
+	   "Rust/C thread ptrace_saved_uctx offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct thread, refcount) == 4628,
+	   "Rust/C thread refcount offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct thread, clear_child_tid) == 4632,
+	   "Rust/C thread clear_child_tid offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct thread, cpu_set) == 4656,
+	   "Rust/C thread cpu_set offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct thread, sigcommon) == 4824,
+	   "Rust/C thread sigcommon offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct thread, sigmask) == 4832,
+	   "Rust/C thread sigmask offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct thread, sigstack) == 4840,
+	   "Rust/C thread sigstack offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct thread, sigpending) == 4864,
+	   "Rust/C thread sigpending offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct thread, scd_wq) == 5176,
+	   "Rust/C thread scd_wq offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct thread, futex_q) == 5232,
+	   "Rust/C thread futex_q offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct thread, pmc_alloc_map) == 5464,
+	   "Rust/C thread pmc_alloc_map offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct thread, coredump_regs) == 5480,
+	   "Rust/C thread coredump_regs offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct thread, rpf_backlog) == 5520,
+	   "Rust/C thread rpf_backlog offset mismatch");
+
+ABI_ASSERT(sizeof(struct mckfd) == 80,
+	   "Rust/C mckfd size mismatch");
+ABI_ASSERT(ABI_OFFSET(struct mckfd, fd) == 8,
+	   "Rust/C mckfd fd offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct mckfd, data) == 16,
+	   "Rust/C mckfd data offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct mckfd, read_cb) == 32,
+	   "Rust/C mckfd read_cb offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct mckfd, dup_cb) == 72,
+	   "Rust/C mckfd dup_cb offset mismatch");
+ABI_ASSERT(sizeof(struct sig_common) == 2176,
+	   "Rust/C sig_common size mismatch");
+ABI_ASSERT(ABI_OFFSET(struct sig_common, use) == 64,
+	   "Rust/C sig_common use offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct sig_common, action) == 72,
+	   "Rust/C sig_common action offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct sig_common, sigpending) == 2120,
+	   "Rust/C sig_common sigpending offset mismatch");
+ABI_ASSERT(sizeof(struct sig_pending) == 160,
+	   "Rust/C sig_pending size mismatch");
+ABI_ASSERT(ABI_OFFSET(struct sig_pending, sigmask) == 16,
+	   "Rust/C sig_pending sigmask offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct sig_pending, info) == 24,
+	   "Rust/C sig_pending info offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct sig_pending, ptracecont) == 152,
+	   "Rust/C sig_pending ptracecont offset mismatch");
+ABI_ASSERT(sizeof(struct mcexec_tid) == 16,
+	   "Rust/C mcexec_tid size mismatch");
+ABI_ASSERT(ABI_OFFSET(struct mcexec_tid, thread) == 8,
+	   "Rust/C mcexec_tid thread offset mismatch");
+
+ABI_ASSERT(sizeof(struct ihk_os_cpu_register) == 32,
+	   "Rust/C ihk_os_cpu_register size mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ihk_os_cpu_register, val) == 8,
+	   "Rust/C ihk_os_cpu_register val offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ihk_os_cpu_register, sync) == 24,
+	   "Rust/C ihk_os_cpu_register sync offset mismatch");
+ABI_ASSERT(sizeof(struct ihk_os_cpu_monitor) == 24,
+	   "Rust/C ihk_os_cpu_monitor size mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ihk_os_cpu_monitor, counter) == 8,
+	   "Rust/C ihk_os_cpu_monitor counter offset mismatch");
+ABI_ASSERT(sizeof(struct ihk_os_monitor) == 1032,
+	   "Rust/C ihk_os_monitor size mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ihk_os_monitor, cpu) == 1032,
+	   "Rust/C ihk_os_monitor cpu offset mismatch");
+ABI_ASSERT(sizeof(struct ihk_os_rusage) == 16568,
+	   "Rust/C ihk_os_rusage size mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ihk_os_rusage, memory_max_usage) == 128,
+	   "Rust/C ihk_os_rusage memory_max_usage offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ihk_os_rusage, cpuacct_usage_percpu) == 8368,
+	   "Rust/C ihk_os_rusage cpuacct_usage_percpu offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct ihk_os_rusage, num_threads) == 16560,
+	   "Rust/C ihk_os_rusage num_threads offset mismatch");

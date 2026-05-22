@@ -98,10 +98,26 @@ unsafe fn waitq_entry_from_link(link: *mut ListHead) -> *mut WaitqEntry {
     (link as *mut u8).sub(offset_of!(WaitqEntry, link)) as *mut WaitqEntry
 }
 
+unsafe extern "C" {
+    fn default_wake_function(
+        entry: *mut WaitqEntry,
+        mode: CUInt,
+        flags: CInt,
+        key: *mut c_void,
+    ) -> CInt;
+}
+
 #[no_mangle]
 pub unsafe extern "C" fn waitq_init(waitq: *mut Waitq) {
     (*waitq).lock.head_tail = 0;
     init_list_head(waitq_list(waitq));
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn waitq_init_entry(entry: *mut WaitqEntry, proc: *mut c_void) {
+    (*entry).private = proc;
+    (*entry).func = Some(default_wake_function);
+    init_list_head(entry_link(entry));
 }
 
 #[no_mangle]
@@ -137,4 +153,9 @@ pub unsafe extern "C" fn waitq_wake_nr_locked(waitq: *mut Waitq, nr: CInt) -> CI
     }
 
     count - 1
+}
+
+#[no_mangle]
+pub extern "C" fn waitq_wake_schedule_needed_result(count: CInt) -> CInt {
+    (count > 0) as CInt
 }

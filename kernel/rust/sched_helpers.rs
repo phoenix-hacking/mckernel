@@ -103,3 +103,51 @@ pub extern "C" fn sched_affinity_copy_len(len: usize, cpuset_size: usize) -> usi
         cpuset_size
     }
 }
+
+#[no_mangle]
+pub extern "C" fn timer_spin_sleep_remaining_result(timeout: u64, elapsed: u64) -> u64 {
+    if elapsed < timeout {
+        timeout - elapsed
+    } else {
+        1
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn timer_runq_should_schedule_result(runq_len: CInt) -> CInt {
+    (runq_len > 1) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn timer_after_spin_remaining_result(timeout: u64, loop_timeout: u64) -> u64 {
+    if timeout < loop_timeout {
+        0
+    } else {
+        timeout - loop_timeout
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn timer_after_tick_remaining_result(timeout: u64, loop_timeout: u64) -> u64 {
+    let remaining = timeout.wrapping_sub(loop_timeout);
+
+    if remaining < loop_timeout {
+        0
+    } else {
+        remaining
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn futex_key_match_result(
+    has_key1: CInt,
+    has_key2: CInt,
+    word1: usize,
+    ptr1: usize,
+    offset1: usize,
+    word2: usize,
+    ptr2: usize,
+    offset2: usize,
+) -> CInt {
+    (has_key1 != 0 && has_key2 != 0 && word1 == word2 && ptr1 == ptr2 && offset1 == offset2) as CInt
+}

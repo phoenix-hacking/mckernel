@@ -31,6 +31,7 @@
 #include <futex.h>
 #include <bitops.h>
 #include <timer.h>
+#include <sched_helpers.h>
 #include <ihk/debug.h>
 
 //#define DEBUG_PRINT_TIMER
@@ -69,13 +70,8 @@ uint64_t schedule_timeout(uint64_t timeout)
 		/* Woken up by someone? */
 		if (thread->spin_sleep == 0) {
 			t_e = rdtsc();
-
-			if ((t_e - t_s) < timeout) {
-				timeout -= (t_e - t_s);
-			}
-			else {
-				timeout = 1;
-			}
+			timeout = timer_spin_sleep_remaining_result(timeout,
+								   t_e - t_s);
 
 			ihk_mc_spinlock_unlock(&thread->spin_sleep_lock, irqstate);
 			break;
@@ -86,7 +82,7 @@ uint64_t schedule_timeout(uint64_t timeout)
 		/* Give a chance to another thread (if any) in case the core is
 		 * oversubscribed, but make sure we will be re-scheduled */
 		irqstate = ihk_mc_spinlock_lock(&(v->runq_lock));
-		need_schedule = v->runq_len > 1 ? 1 : 0;
+		need_schedule = timer_runq_should_schedule_result(v->runq_len);
 
 		if (need_schedule) {
 			xchg4(&(cpu_local_var(current)->status), PS_RUNNING);
@@ -107,18 +103,15 @@ uint64_t schedule_timeout(uint64_t timeout)
 		}
 
 		/* Time out? */
-		if (timeout < LOOP_TIMEOUT) {
-			timeout = 0;
-
+		timeout = timer_after_spin_remaining_result(timeout,
+							    LOOP_TIMEOUT);
+		if (!timeout) {
 			/* We are not sleeping any more */
 			irqstate = ihk_mc_spinlock_lock(&thread->spin_sleep_lock);
 			thread->spin_sleep = 0;
 			ihk_mc_spinlock_unlock(&thread->spin_sleep_lock, irqstate);
 
 			break;
-		}
-		else {
-			timeout -= LOOP_TIMEOUT;
 		}
 	}
 
@@ -146,9 +139,9 @@ void wake_timers_loop(void)
 		
 		list_for_each_entry_safe(timer, timer_next, &timers, list) {
 			
-			timer->timeout -= LOOP_TIMEOUT;
-			if (timer->timeout < LOOP_TIMEOUT) {
-				timer->timeout = 0;
+			timer->timeout = timer_after_tick_remaining_result(
+				timer->timeout, LOOP_TIMEOUT);
+			if (!timer->timeout) {
 				list_del(&timer->list);
 
 				dkprintf("timers timeout occurred, waking up pid: %d\n", 

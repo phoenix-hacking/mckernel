@@ -71,10 +71,11 @@
 #include <asm/io.h>
 #include "config.h"
 #include "mcctrl.h"
+#include <mcctrl_rust.h>
 #include <archdeps.h>
 #include <asm/pgtable.h>
 
-#define ALIGN_WAIT_BUF(z)   (((z + 63) >> 6) << 6)
+#define ALIGN_WAIT_BUF(z)   mcctrl_align_wait_buf(z)
 
 //#define SC_DEBUG
 
@@ -1002,9 +1003,8 @@ static int pager_req_create(ihk_os_t os, int fd, uintptr_t result_pa)
 		printk("pager_req_create(%d,%lx):vfs_stat failed. %d\n", fd, (long)result_pa, error);
 		goto out;
 	}
-	if (S_ISCHR(st.mode) && (MAJOR(st.rdev) == 1) &&
-			(MINOR(st.rdev) == 1 ||   // /dev/mem
-			 MINOR(st.rdev) == 5)) {  // /dev/zero
+	if (S_ISCHR(st.mode) &&
+			mcctrl_special_char_device(MAJOR(st.rdev), MINOR(st.rdev))) {
 		/* treat memory devices and zero devices as regular files */
 	}
 	else if (S_ISCHR(st.mode) && (MAJOR(st.rdev) == 1)) {
@@ -1033,10 +1033,7 @@ static int pager_req_create(ihk_os_t os, int fd, uintptr_t result_pa)
 		if (pathbuf) {
 			fullpath = d_path(&file->f_path, pathbuf, PATH_MAX);
 			if (!IS_ERR(fullpath)) {
-				if (!strncmp("/tmp/ompi.", fullpath, 10) ||
-						!strncmp("/dev/shm/", fullpath, 9) ||
-						(!strncmp("/var/opt/FJSVtcs/ple/daemonif/",
-							fullpath, 30) && !strstr(fullpath, "dstore_sm.lock"))) {
+				if (mcctrl_pager_treat_as_device_path(fullpath)) {
 					printk("%s: treating %s as a device file..\n",
 						__func__, fullpath);
 					kfree(pathbuf);
@@ -1057,11 +1054,11 @@ static int pager_req_create(ihk_os_t os, int fd, uintptr_t result_pa)
 		goto out;
 	}
 
-	if (!strcmp(inode->i_sb->s_type->name, "tmpfs")) {
+	if (mcctrl_fs_is_tmpfs(inode->i_sb->s_type->name)) {
 		mf_flags = MF_IS_REMOVABLE;
 	}
 
-	if (!strcmp(inode->i_sb->s_type->name, "proc")) {
+	if (mcctrl_fs_is_proc(inode->i_sb->s_type->name)) {
 		error = -ESRCH;
 		goto out;
 	}
@@ -1269,8 +1266,7 @@ static int pager_req_read(ihk_os_t os, uintptr_t handle, off_t off, size_t size,
 
 	major = MAJOR(file->f_mapping->host->i_rdev);
 	minor = MINOR(file->f_mapping->host->i_rdev);
-	if ((major == 1 && minor == 1) || // /dev/mem
-		(major == 1 && minor == 5)) { // /dev/zero
+	if (mcctrl_special_char_device(major, minor)) {
 		/* Nothing to check */
 	}
 	else {
@@ -1496,10 +1492,7 @@ static int pager_req_map(ihk_os_t os, int fd, size_t len, off_t off,
 		if (pathbuf) {
 			fullpath = d_path(&file->f_path, pathbuf, PATH_MAX);
 			if (!IS_ERR(fullpath)) {
-				if (!strncmp("/tmp/ompi.", fullpath, 10) ||
-						!strncmp("/dev/shm/", fullpath, 9) ||
-						!strncmp("/var/opt/FJSVtcs/ple/daemonif/",
-							fullpath, 30)) {
+				if (mcctrl_pager_should_populate_path(fullpath)) {
 					dprintk("%s: pre-populating %s..\n",
 						__func__, fullpath);
 					prot_and_flags |= MAP_POPULATE;
@@ -1908,8 +1901,7 @@ int mcctrl_file_to_pidfd_hash_insert(struct file *filp,
 	unsigned long irqflags;
 	struct mcctrl_file_to_pidfd *file2pidfd_iter;
 	struct mcctrl_file_to_pidfd *file2pidfd;
-	int hash = (int)((unsigned long)filp &
-			(unsigned long)MCCTRL_FILE_2_PIDFD_HASH_MASK);
+	int hash = mcctrl_ptr_hash(filp, MCCTRL_FILE_2_PIDFD_HASH_MASK);
 	int ret = 0;
 
 	file2pidfd = kmalloc(sizeof(*file2pidfd), GFP_ATOMIC);
@@ -1922,13 +1914,14 @@ int mcctrl_file_to_pidfd_hash_insert(struct file *filp,
 	file2pidfd->group_leader = group_leader;
 	file2pidfd->fd = fd;
 	/* Only copy the name under /proc/tofu/dev/ */
-	strncpy(file2pidfd->tofu_dev_path, path + 15, 128);
+	mcctrl_tofu_dev_name_copy(file2pidfd->tofu_dev_path,
+				  sizeof(file2pidfd->tofu_dev_path), path);
 	file2pidfd->pde_data = pde_data;
 
 	spin_lock_irqsave(&mcctrl_file_to_pidfd_hash_lock, irqflags);
 	list_for_each_entry(file2pidfd_iter,
 			&mcctrl_file_to_pidfd_hash[hash], hash) {
-		if (file2pidfd_iter->filp == filp) {
+		if (mcctrl_ptr_eq(file2pidfd_iter->filp, filp)) {
 			printk("%s: WARNING: filp: %p, pid: %d, fd: %d exists\n",
 					__func__, filp, pid, fd);
 			ret = -EBUSY;
@@ -1961,14 +1954,14 @@ struct mcctrl_file_to_pidfd *mcctrl_file_to_pidfd_hash_lookup(
 	unsigned long irqflags;
 	struct mcctrl_file_to_pidfd *file2pidfd_iter;
 	struct mcctrl_file_to_pidfd *file2pidfd = NULL;
-	int hash = (int)((unsigned long)filp &
-			(unsigned long)MCCTRL_FILE_2_PIDFD_HASH_MASK);
+	int hash = mcctrl_ptr_hash(filp, MCCTRL_FILE_2_PIDFD_HASH_MASK);
 
 	spin_lock_irqsave(&mcctrl_file_to_pidfd_hash_lock, irqflags);
 	list_for_each_entry(file2pidfd_iter,
 			&mcctrl_file_to_pidfd_hash[hash], hash) {
-		if (file2pidfd_iter->filp == filp && 
-				file2pidfd_iter->group_leader == group_leader) {
+		if (mcctrl_file_to_pidfd_lookup_match(
+			    file2pidfd_iter->filp, filp,
+			    file2pidfd_iter->group_leader, group_leader)) {
 			file2pidfd = file2pidfd_iter;
 			dprintk("%s: filp: %p, pid: %d, fd: %d found\n",
 					__func__, filp, file2pidfd->pid, file2pidfd->fd);
@@ -1986,23 +1979,16 @@ int mcctrl_file_to_pidfd_hash_remove(struct file *filp,
 {
 	unsigned long irqflags;
 	struct mcctrl_file_to_pidfd *file2pidfd_iter;
-	int hash = (int)((unsigned long)filp &
-			(unsigned long)MCCTRL_FILE_2_PIDFD_HASH_MASK);
+	int hash = mcctrl_ptr_hash(filp, MCCTRL_FILE_2_PIDFD_HASH_MASK);
 	int ret = 0;
 
 	spin_lock_irqsave(&mcctrl_file_to_pidfd_hash_lock, irqflags);
 	list_for_each_entry(file2pidfd_iter,
 			&mcctrl_file_to_pidfd_hash[hash], hash) {
-		if (file2pidfd_iter->filp != filp)
-			continue;
-
-		if (file2pidfd_iter->os != os)
-			continue;
-
-		if (file2pidfd_iter->group_leader != group_leader)
-			continue;
-
-		if (file2pidfd_iter->fd != fd)
+		if (!mcctrl_file_to_pidfd_remove_match(
+			    file2pidfd_iter->filp, filp, file2pidfd_iter->os,
+			    os, file2pidfd_iter->group_leader, group_leader,
+			    file2pidfd_iter->fd, fd))
 			continue;
 
 		list_del(&file2pidfd_iter->hash);
@@ -2080,7 +2066,7 @@ void __return_syscall(ihk_os_t os, struct mcctrl_per_proc_data *ppd,
 				goto out_free_open;
 			}
 
-			if (!strncmp("/proc/tofu/dev/", fullpath, 15)) {
+			if (mcctrl_tofu_dev_path(fullpath)) {
 				res->pde_data = PDE_DATA(file_inode(f.file));
 				dprintk("%s: fd: %d, path: %s, PDE_DATA: 0x%lx\n",
 						__func__,
@@ -2132,8 +2118,8 @@ out_fdput_open:
 			}
 
 			/* Looking for /proc/tofu/dev/tniXcqY pattern */
-			__ret = sscanf(fullpath, "/proc/tofu/dev/tni%dcq%d", &tni, &cq);
-			if (__ret == 2) {
+			__ret = mcctrl_tofu_cq_path_parse(fullpath, &tni, &cq);
+			if (__ret) {
 				extern long __mcctrl_tof_utofu_unlocked_ioctl_cq(void *pde_data,
 						unsigned int cmd, unsigned long arg);
 

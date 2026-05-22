@@ -849,6 +849,18 @@ pub extern "C" fn procfs_auxv_limit_result() -> u32 {
 }
 
 #[no_mangle]
+pub extern "C" fn procfs_cmdline_limit_result(
+    saved_cmdline: CULong,
+    saved_cmdline_len: u32,
+) -> u32 {
+    if saved_cmdline != 0 {
+        saved_cmdline_len
+    } else {
+        0
+    }
+}
+
+#[no_mangle]
 pub extern "C" fn procfs_is_release_result(msg: CInt) -> CInt {
     (msg == SCD_MSG_PROCFS_RELEASE) as CInt
 }
@@ -985,6 +997,15 @@ pub unsafe extern "C" fn procfs_comm_basename_result(saved_cmdline: CULong) -> C
     }
 
     base as CULong
+}
+
+#[no_mangle]
+pub extern "C" fn procfs_comm_name_result(fallback: CULong, basename: CULong) -> CULong {
+    if basename != 0 {
+        basename
+    } else {
+        fallback
+    }
 }
 
 #[no_mangle]

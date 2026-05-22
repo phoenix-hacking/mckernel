@@ -61,6 +61,57 @@ const PROCESS_VM_READ: CInt = 0;
 const PROCESS_VM_WRITE: CInt = 1;
 
 const SIGTRAP: CInt = 5;
+const PTRACE_CONT: CLong = 7;
+const PTRACE_KILL: CLong = 8;
+const PTRACE_SINGLESTEP: CLong = 9;
+const PTRACE_TRACEME: CLong = 0;
+const PTRACE_PEEKTEXT: CLong = 1;
+const PTRACE_PEEKDATA: CLong = 2;
+const PTRACE_PEEKUSER: CLong = 3;
+const PTRACE_POKETEXT: CLong = 4;
+const PTRACE_POKEDATA: CLong = 5;
+const PTRACE_POKEUSER: CLong = 6;
+const PTRACE_GETREGS: CLong = 12;
+const PTRACE_SETREGS: CLong = 13;
+const PTRACE_GETFPREGS: CLong = 14;
+const PTRACE_SETFPREGS: CLong = 15;
+const PTRACE_ATTACH: CLong = 16;
+const PTRACE_DETACH: CLong = 17;
+const PTRACE_SYSCALL: CLong = 24;
+const PTRACE_SETOPTIONS: CLong = 0x4200;
+const PTRACE_GETEVENTMSG: CLong = 0x4201;
+const PTRACE_GETSIGINFO: CLong = 0x4202;
+const PTRACE_SETSIGINFO: CLong = 0x4203;
+const PTRACE_GETREGSET: CLong = 0x4204;
+const PTRACE_SETREGSET: CLong = 0x4205;
+const PTRACE_WAKEUP_ACTION_NONE: CInt = 0;
+const PTRACE_WAKEUP_ACTION_KILL: CInt = 1;
+const PTRACE_WAKEUP_ACTION_RESUME: CInt = 2;
+const PTRACE_RESUME_SIGNAL_SOURCE_USER: CInt = 0;
+const PTRACE_RESUME_SIGNAL_SOURCE_SENDSIG: CInt = 1;
+const PTRACE_RESUME_SIGNAL_SOURCE_RECVSIG: CInt = 2;
+const PTRACE_SIGINFO_STORE_SENDSIG: CInt = 0x1;
+const PTRACE_SIGINFO_STORE_RECVSIG: CInt = 0x2;
+const PTRACE_SIGINFO_ALLOC_SENDSIG: CInt = 0x4;
+const PTRACE_DISPATCH_ARCH: CInt = 0;
+const PTRACE_DISPATCH_TRACEME: CInt = 1;
+const PTRACE_DISPATCH_WAKEUP: CInt = 2;
+const PTRACE_DISPATCH_GETREGS: CInt = 3;
+const PTRACE_DISPATCH_SETREGS: CInt = 4;
+const PTRACE_DISPATCH_GETFPREGS: CInt = 5;
+const PTRACE_DISPATCH_SETFPREGS: CInt = 6;
+const PTRACE_DISPATCH_PEEKUSER: CInt = 7;
+const PTRACE_DISPATCH_POKEUSER: CInt = 8;
+const PTRACE_DISPATCH_PEEKTEXT: CInt = 9;
+const PTRACE_DISPATCH_POKETEXT: CInt = 10;
+const PTRACE_DISPATCH_SETOPTIONS: CInt = 11;
+const PTRACE_DISPATCH_ATTACH: CInt = 12;
+const PTRACE_DISPATCH_DETACH: CInt = 13;
+const PTRACE_DISPATCH_GETSIGINFO: CInt = 14;
+const PTRACE_DISPATCH_SETSIGINFO: CInt = 15;
+const PTRACE_DISPATCH_GETREGSET: CInt = 16;
+const PTRACE_DISPATCH_SETREGSET: CInt = 17;
+const PTRACE_DISPATCH_GETEVENTMSG: CInt = 18;
 const PTRACE_O_MASK: CInt = 0x7f;
 const PTRACE_O_TRACESYSGOOD: CInt = 0x01;
 const PTRACE_O_TRACEFORK: CInt = 0x02;
@@ -76,6 +127,7 @@ const PTRACE_ALLOWED_OPTIONS: CInt = PTRACE_O_TRACESYSGOOD
     | PTRACE_O_TRACEEXEC
     | PTRACE_O_TRACEVFORKDONE
     | PTRACE_O_TRACEEXIT;
+const PS_RUNNING: CInt = 0x1;
 const PS_STOPPED: CInt = 0x20;
 const PS_TRACED: CInt = 0x40;
 const PT_TRACED: CInt = 0x80;
@@ -87,11 +139,15 @@ const PTRACE_EVENT_CLONE: CInt = 3;
 const PTRACE_EVENT_EXEC: CInt = 4;
 const PTRACE_EVENT_VFORK_DONE: CInt = 5;
 const SIGCHLD: CInt = 17;
+const SIGCONT: CInt = 18;
+const SIGURG: CInt = 23;
+const SIG_IGN_HANDLER: CULong = 1;
 
 const SIGNAL_STOP_STOPPED: CInt = 0x1;
 const SIGNAL_STOP_CONTINUED: CInt = 0x2;
 const PS_ZOMBIE: CInt = 0x8;
 const PS_EXITED: CInt = 0x10;
+const PS_DELAY_STOPPED: CInt = 0x200;
 const PS_DELAY_TRACED: CInt = 0x400;
 const WNOHANG: CInt = 0x00000001;
 const WUNTRACED: CInt = 0x00000002;
@@ -106,8 +162,17 @@ const P_PID: CInt = 1;
 const P_PGID: CInt = 2;
 const CLD_EXITED: CInt = 1;
 const CLD_KILLED: CInt = 2;
+const CLD_DUMPED: CInt = 3;
 const CLD_STOPPED: CInt = 5;
 const CLD_CONTINUED: CInt = 6;
+const EXIT_GROUP_STATUS_CONFIRMED: CULong = 0x0000000100000000;
+const WAIT_STOP_SOURCE_NONE: CInt = 0;
+const WAIT_STOP_SOURCE_THREAD: CInt = 1;
+const WAIT_STOP_SOURCE_PROCESS: CInt = 2;
+const WAIT_STOP_SOURCE_MAIN_THREAD: CInt = 3;
+const WAIT_THREAD_REAP_ACTION_NONE: CInt = 0;
+const WAIT_THREAD_REAP_ACTION_RELEASE: CInt = 1;
+const WAIT_THREAD_REAP_ACTION_PTRACE_DETACH: CInt = 2;
 
 const CSIGNAL: CInt = 0x000000ff;
 const CLONE_VM: CInt = 0x00000100;
@@ -118,8 +183,15 @@ const CLONE_PARENT: CInt = 0x00008000;
 const CLONE_THREAD: CInt = 0x00010000;
 const CLONE_NEWNS: CInt = 0x00020000;
 const CLONE_SYSVSEM: CInt = 0x00040000;
+const CLONE_SETTLS: CInt = 0x00080000;
+const CLONE_PARENT_SETTID: CInt = 0x00100000;
+const CLONE_CHILD_CLEARTID: CInt = 0x00200000;
+const CLONE_CHILD_SETTID: CInt = 0x01000000;
 const CLONE_NEWIPC: CInt = 0x08000000;
 const CLONE_NEWPID: CInt = 0x20000000;
+const SPAWN_TO_REMOTE: CInt = 1;
+const CLONE_TLS_SOURCE_INHERIT: CInt = 0;
+const CLONE_TLS_SOURCE_ARGUMENT: CInt = 1;
 
 const AT_FDCWD: CInt = -100;
 const AT_SYMLINK_NOFOLLOW: CInt = 0x100;
@@ -158,6 +230,15 @@ const MPOL_MF_MOVE_ALL: CInt = 1 << 2;
 const RUSAGE_SELF: CInt = 0;
 const RUSAGE_CHILDREN: CInt = -1;
 const RUSAGE_THREAD: CInt = 1;
+const GETRUSAGE_DISPATCH_SELF: CInt = 1;
+const GETRUSAGE_DISPATCH_CHILDREN: CInt = 2;
+const GETRUSAGE_DISPATCH_THREAD: CInt = 3;
+const GETRUSAGE_THREAD_UPDATE_READY: CInt = 0;
+const GETRUSAGE_THREAD_UPDATE_INTERRUPT: CInt = 1;
+const TERMINATE_CHILD_ACTION_NONE: CInt = 0;
+const TERMINATE_CHILD_ACTION_FREE_ZOMBIE: CInt = 1;
+const TERMINATE_CHILD_ACTION_REPARENT_CHILD: CInt = 2;
+const TERMINATE_CHILD_ACTION_REPARENT_PTRACED: CInt = 3;
 
 const ITIMER_REAL: CInt = 0;
 const ITIMER_VIRTUAL: CInt = 1;
@@ -285,6 +366,31 @@ pub extern "C" fn signalfd4_flags_result(flags: CInt) -> CInt {
     } else {
         0
     }
+}
+
+#[no_mangle]
+pub extern "C" fn syscall_refresh_cred_needed_result(rc: CLong) -> CInt {
+    (rc == 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn syscall_getpid_result(pid: CInt) -> CInt {
+    pid
+}
+
+#[no_mangle]
+pub extern "C" fn syscall_getppid_result(ppid: CInt) -> CInt {
+    ppid
+}
+
+#[no_mangle]
+pub extern "C" fn syscall_gettid_result(tid: CInt) -> CInt {
+    tid
+}
+
+#[no_mangle]
+pub extern "C" fn syscall_set_tid_address_return_result(pid: CInt) -> CInt {
+    pid
 }
 
 #[no_mangle]
@@ -747,6 +853,37 @@ pub extern "C" fn getrusage_who_result(who: CInt) -> CInt {
 }
 
 #[no_mangle]
+pub extern "C" fn getrusage_dispatch_result(who: CInt) -> CInt {
+    if who == RUSAGE_SELF {
+        GETRUSAGE_DISPATCH_SELF
+    } else if who == RUSAGE_CHILDREN {
+        GETRUSAGE_DISPATCH_CHILDREN
+    } else if who == RUSAGE_THREAD {
+        GETRUSAGE_DISPATCH_THREAD
+    } else {
+        0
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn getrusage_thread_update_action_result(
+    is_current_thread: CInt,
+    status: CInt,
+    in_kernel: CInt,
+) -> CInt {
+    if is_current_thread == 0 && status == PS_RUNNING && in_kernel == 0 {
+        GETRUSAGE_THREAD_UPDATE_INTERRUPT
+    } else {
+        GETRUSAGE_THREAD_UPDATE_READY
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn getrusage_maxrss_kb_result(maxrss: CLong) -> CLong {
+    maxrss / 1024
+}
+
+#[no_mangle]
 pub extern "C" fn itimer_which_result(which: CInt) -> CInt {
     if which != ITIMER_REAL && which != ITIMER_VIRTUAL && which != ITIMER_PROF {
         -EINVAL
@@ -916,6 +1053,49 @@ pub extern "C" fn sigmask_to_signal_number(mask: CULong) -> CInt {
     }
 
     signal
+}
+
+fn signal_is_default_ignored(sig: CInt) -> bool {
+    sig == SIGCHLD || sig == SIGURG || sig == SIGCONT
+}
+
+#[no_mangle]
+pub extern "C" fn signal_pending_deliverable_result(
+    delflag: CInt,
+    sig: CInt,
+    handler_addr: CULong,
+    pending_mask: CULong,
+    blocked_mask: CULong,
+) -> CInt {
+    if delflag == 0
+        && signal_is_default_ignored(sig)
+        && (handler_addr == 0 || handler_addr == SIG_IGN_HANDLER)
+    {
+        return 0;
+    }
+
+    ((pending_mask & blocked_mask) == 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn signal_pending_interrupt_action_result(
+    sig: CInt,
+    handler_addr: CULong,
+    pending_mask: CULong,
+    blocked_mask: CULong,
+    interrupted: CInt,
+) -> CInt {
+    if signal_pending_deliverable_result(0, sig, handler_addr, pending_mask, blocked_mask) == 0 {
+        return 0;
+    }
+    if interrupted != 0 {
+        return 0;
+    }
+    if !signal_is_default_ignored(sig) && handler_addr == 0 {
+        2
+    } else {
+        1
+    }
 }
 
 #[no_mangle]
@@ -1123,6 +1303,135 @@ pub extern "C" fn ptrace_siginfo_state_result(status: CInt, has_siginfo: CInt) -
     }
 
     0
+}
+
+#[no_mangle]
+pub extern "C" fn ptrace_eventmsg_state_result(status: CInt) -> CInt {
+    if ptrace_status_allows_io(status) != 0 {
+        0
+    } else {
+        -ESRCH
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn ptrace_wakeup_request_action_result(request: CLong) -> CInt {
+    if request == PTRACE_KILL {
+        PTRACE_WAKEUP_ACTION_KILL
+    } else if request == PTRACE_CONT || request == PTRACE_SINGLESTEP || request == PTRACE_SYSCALL {
+        PTRACE_WAKEUP_ACTION_RESUME
+    } else {
+        PTRACE_WAKEUP_ACTION_NONE
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn ptrace_resume_single_step_result(request: CLong) -> CInt {
+    (request == PTRACE_SINGLESTEP) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn ptrace_resume_trace_syscall_result(request: CLong) -> CInt {
+    (request == PTRACE_SYSCALL) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn ptrace_resume_signal_needed_result(request: CLong, data: CLong) -> CInt {
+    (ptrace_wakeup_request_action_result(request) == PTRACE_WAKEUP_ACTION_RESUME
+        && data != 0
+        && data != SIGSTOP as CLong) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn ptrace_resume_signal_source_result(
+    request: CLong,
+    has_sendsig: CInt,
+    has_recvsig: CInt,
+) -> CInt {
+    if request == PTRACE_CONT && has_sendsig != 0 {
+        PTRACE_RESUME_SIGNAL_SOURCE_SENDSIG
+    } else if request == PTRACE_CONT && has_recvsig != 0 {
+        PTRACE_RESUME_SIGNAL_SOURCE_RECVSIG
+    } else {
+        PTRACE_RESUME_SIGNAL_SOURCE_USER
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn ptrace_detach_forward_signal_needed_result(data: CInt) -> CInt {
+    (data != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn ptrace_detach_exit_signal_needed_result(status: CInt) -> CInt {
+    (status == PS_EXITED || status == PS_ZOMBIE) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn ptrace_setsiginfo_target_result(
+    status: CInt,
+    has_sendsig: CInt,
+    has_recvsig: CInt,
+) -> CInt {
+    if ptrace_status_allows_io(status) == 0 {
+        return -ESRCH;
+    }
+
+    let mut target = PTRACE_SIGINFO_STORE_SENDSIG;
+    if has_sendsig == 0 {
+        target |= PTRACE_SIGINFO_ALLOC_SENDSIG;
+    }
+    if has_recvsig != 0 {
+        target |= PTRACE_SIGINFO_STORE_RECVSIG;
+    }
+    target
+}
+
+#[no_mangle]
+pub extern "C" fn ptrace_request_dispatch_result(request: CLong) -> CInt {
+    if request == PTRACE_TRACEME {
+        PTRACE_DISPATCH_TRACEME
+    } else if request == PTRACE_KILL
+        || request == PTRACE_CONT
+        || request == PTRACE_SINGLESTEP
+        || request == PTRACE_SYSCALL
+    {
+        PTRACE_DISPATCH_WAKEUP
+    } else if request == PTRACE_GETREGS {
+        PTRACE_DISPATCH_GETREGS
+    } else if request == PTRACE_SETREGS {
+        PTRACE_DISPATCH_SETREGS
+    } else if request == PTRACE_GETFPREGS {
+        PTRACE_DISPATCH_GETFPREGS
+    } else if request == PTRACE_SETFPREGS {
+        PTRACE_DISPATCH_SETFPREGS
+    } else if request == PTRACE_PEEKUSER {
+        PTRACE_DISPATCH_PEEKUSER
+    } else if request == PTRACE_POKEUSER {
+        PTRACE_DISPATCH_POKEUSER
+    } else if request == PTRACE_PEEKTEXT || request == PTRACE_PEEKDATA {
+        PTRACE_DISPATCH_PEEKTEXT
+    } else if request == PTRACE_POKETEXT || request == PTRACE_POKEDATA {
+        PTRACE_DISPATCH_POKETEXT
+    } else if request == PTRACE_SETOPTIONS {
+        PTRACE_DISPATCH_SETOPTIONS
+    } else if request == PTRACE_ATTACH {
+        PTRACE_DISPATCH_ATTACH
+    } else if request == PTRACE_DETACH {
+        PTRACE_DISPATCH_DETACH
+    } else if request == PTRACE_GETSIGINFO {
+        PTRACE_DISPATCH_GETSIGINFO
+    } else if request == PTRACE_SETSIGINFO {
+        PTRACE_DISPATCH_SETSIGINFO
+    } else if request == PTRACE_GETREGSET {
+        PTRACE_DISPATCH_GETREGSET
+    } else if request == PTRACE_SETREGSET {
+        PTRACE_DISPATCH_SETREGSET
+    } else if request == PTRACE_GETEVENTMSG {
+        PTRACE_DISPATCH_GETEVENTMSG
+    } else {
+        PTRACE_DISPATCH_ARCH
+    }
 }
 
 #[no_mangle]
@@ -1361,6 +1670,203 @@ pub extern "C" fn waitid_status_code_result(status: CInt) -> CInt {
 }
 
 #[no_mangle]
+pub extern "C" fn wait_stopped_source_result(
+    has_c_thread: CInt,
+    c_thread_exit_status: CInt,
+    child_status: CInt,
+    child_group_exit_status: CInt,
+    main_thread_exit_status: CInt,
+) -> CInt {
+    if has_c_thread != 0 {
+        if c_thread_exit_status != 0 {
+            WAIT_STOP_SOURCE_THREAD
+        } else {
+            WAIT_STOP_SOURCE_NONE
+        }
+    } else if (child_status & (PS_STOPPED | PS_DELAY_STOPPED)) != 0 {
+        if child_group_exit_status != 0 {
+            WAIT_STOP_SOURCE_PROCESS
+        } else {
+            WAIT_STOP_SOURCE_NONE
+        }
+    } else if main_thread_exit_status != 0 {
+        WAIT_STOP_SOURCE_MAIN_THREAD
+    } else {
+        WAIT_STOP_SOURCE_NONE
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn wait_stopped_exit_status_result(
+    source: CInt,
+    c_thread_exit_status: CInt,
+    child_group_exit_status: CInt,
+    main_thread_exit_status: CInt,
+) -> CInt {
+    if source == WAIT_STOP_SOURCE_THREAD {
+        c_thread_exit_status
+    } else if source == WAIT_STOP_SOURCE_PROCESS {
+        child_group_exit_status
+    } else if source == WAIT_STOP_SOURCE_MAIN_THREAD {
+        main_thread_exit_status
+    } else {
+        0
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn wait_report_id_result(source: CInt, child_pid: CInt, c_thread_tid: CInt) -> CInt {
+    if source == WAIT_STOP_SOURCE_THREAD {
+        c_thread_tid
+    } else {
+        child_pid
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn wait_reaped_exit_status_result(options: CInt, exit_status: CInt) -> CInt {
+    if wait_reap_needed_result(options) != 0 {
+        0
+    } else {
+        exit_status
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn wait_reaped_signal_flags_result(
+    options: CInt,
+    signal_flags: CInt,
+    clear_mask: CInt,
+) -> CInt {
+    if wait_reap_needed_result(options) != 0 {
+        signal_flags & !clear_mask
+    } else {
+        signal_flags
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn wait_process_reparent_needed_result(options: CInt, parent_is_ppid: CInt) -> CInt {
+    (wait_reap_needed_result(options) != 0 && parent_is_ppid != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn wait_main_thread_ptrace_detach_needed_result(
+    options: CInt,
+    ptrace: CInt,
+) -> CInt {
+    (wait_reap_needed_result(options) != 0 && (ptrace & PT_TRACED) != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn wait_thread_reap_action_result(options: CInt, ptrace: CInt) -> CInt {
+    if wait_reap_needed_result(options) == 0 {
+        WAIT_THREAD_REAP_ACTION_NONE
+    } else if (ptrace & PT_TRACED) != 0 {
+        WAIT_THREAD_REAP_ACTION_PTRACE_DETACH
+    } else {
+        WAIT_THREAD_REAP_ACTION_RELEASE
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn wait_status_copy_needed_result(rc: CInt, has_status: CInt) -> CInt {
+    (rc >= 0 && has_status != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn wait_rusage_copy_needed_result(has_rusage: CInt) -> CInt {
+    (has_rusage != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn waitid_siginfo_needed_result(rc: CInt, has_infop: CInt) -> CInt {
+    (rc > 0 && has_infop != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn exit_code_status_result(code: CInt) -> CInt {
+    (code >> 8) & 255
+}
+
+#[no_mangle]
+pub extern "C" fn exit_code_signal_result(code: CInt) -> CInt {
+    code & 255
+}
+
+#[no_mangle]
+pub extern "C" fn exit_syscall_code_result(status: CInt) -> CInt {
+    (status & 255) << 8
+}
+
+#[no_mangle]
+pub extern "C" fn thread_exit_signal_result(ptrace: CInt, termsig: CInt) -> CInt {
+    if ptrace != 0 {
+        SIGCHLD
+    } else {
+        termsig
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn sigchld_code_result(exit_status: CInt) -> CInt {
+    if (exit_status & 0x7f) != 0 {
+        if (exit_status & 0x80) != 0 {
+            CLD_DUMPED
+        } else {
+            CLD_KILLED
+        }
+    } else {
+        CLD_EXITED
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn exit_group_status_claimed_result(old_exit_status: CULong) -> CInt {
+    ((old_exit_status & EXIT_GROUP_STATUS_CONFIRMED) != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn exit_group_status_result(rc: CInt, sig: CInt) -> CULong {
+    EXIT_GROUP_STATUS_CONFIRMED | (((rc as CULong) & 0xff) << 8) | ((sig as CULong) & 0xff)
+}
+
+#[no_mangle]
+pub extern "C" fn terminate_thread_active_result(status: CInt) -> CInt {
+    (status != PS_EXITED && status != PS_ZOMBIE) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn terminate_status_result(rc: CInt, sig: CInt) -> CInt {
+    ((rc & 0x00ff) << 8) | (sig & 0xff)
+}
+
+#[no_mangle]
+pub extern "C" fn terminate_report_thread_release_needed_result(
+    same_process: CInt,
+    termsig: CInt,
+) -> CInt {
+    (same_process != 0 && termsig != 0 && termsig != SIGCHLD) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn terminate_child_action_result(
+    ppid_is_exiting: CInt,
+    parent_is_exiting: CInt,
+    child_status: CInt,
+) -> CInt {
+    if ppid_is_exiting == 0 {
+        TERMINATE_CHILD_ACTION_NONE
+    } else if child_status == PS_ZOMBIE {
+        TERMINATE_CHILD_ACTION_FREE_ZOMBIE
+    } else if parent_is_exiting != 0 {
+        TERMINATE_CHILD_ACTION_REPARENT_CHILD
+    } else {
+        TERMINATE_CHILD_ACTION_REPARENT_PTRACED
+    }
+}
+
+#[no_mangle]
 pub extern "C" fn clone_pthread_marker_result(
     clone_flags: CInt,
     newsp: CULong,
@@ -1426,6 +1932,69 @@ pub extern "C" fn clone_host_parent_flags_result(clone_flags: CInt, ppid_parent_
 #[no_mangle]
 pub extern "C" fn clone_report_thread_result(clone_flags: CInt, termsig: CInt) -> CInt {
     if (clone_flags & CLONE_VM) != 0 && termsig != 0 && termsig != SIGCHLD {
+        1
+    } else {
+        0
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn clone_parent_tid_store_needed_result(clone_flags: CInt) -> CInt {
+    if (clone_flags & CLONE_PARENT_SETTID) != 0 {
+        1
+    } else {
+        0
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn clone_child_cleartid_needed_result(clone_flags: CInt) -> CInt {
+    if (clone_flags & CLONE_CHILD_CLEARTID) != 0 {
+        1
+    } else {
+        0
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn clone_child_tid_store_needed_result(clone_flags: CInt) -> CInt {
+    if (clone_flags & CLONE_CHILD_SETTID) != 0 {
+        1
+    } else {
+        0
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn clone_tls_source_result(clone_flags: CInt) -> CInt {
+    if (clone_flags & CLONE_SETTLS) != 0 {
+        CLONE_TLS_SOURCE_ARGUMENT
+    } else {
+        CLONE_TLS_SOURCE_INHERIT
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn clone_use_last_cpu_result(mod_clone: CInt, uti_use_last_cpu: CInt) -> CInt {
+    if mod_clone == SPAWN_TO_REMOTE && uti_use_last_cpu != 0 {
+        1
+    } else {
+        0
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn clone_remote_spawn_result(previous_mod_clone: CInt) -> CInt {
+    if previous_mod_clone == SPAWN_TO_REMOTE {
+        1
+    } else {
+        0
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn clone_parent_use_pid1_result(parent_status: CInt) -> CInt {
+    if parent_status == PS_EXITED || parent_status == PS_ZOMBIE {
         1
     } else {
         0

@@ -52,6 +52,7 @@
 #include <mc_perf_event.h>
 #include <march.h>
 #include <process.h>
+#include <process_helpers.h>
 #include <bitops.h>
 #include <bitmap.h>
 #include <xpmem.h>
@@ -119,6 +120,53 @@ static unsigned long uti_desc; /* Address of struct uti_desc object in syscall_i
 #define TIME_DISPATCH_THREAD_CPUTIME 3
 #define TIME_DISPATCH_FORWARD 4
 
+#define PTRACE_WAKEUP_ACTION_NONE 0
+#define PTRACE_WAKEUP_ACTION_KILL 1
+#define PTRACE_WAKEUP_ACTION_RESUME 2
+#define PTRACE_RESUME_SIGNAL_SOURCE_USER 0
+#define PTRACE_RESUME_SIGNAL_SOURCE_SENDSIG 1
+#define PTRACE_RESUME_SIGNAL_SOURCE_RECVSIG 2
+#define PTRACE_SIGINFO_STORE_SENDSIG 0x1
+#define PTRACE_SIGINFO_STORE_RECVSIG 0x2
+#define PTRACE_SIGINFO_ALLOC_SENDSIG 0x4
+#define PTRACE_DISPATCH_ARCH 0
+#define PTRACE_DISPATCH_TRACEME 1
+#define PTRACE_DISPATCH_WAKEUP 2
+#define PTRACE_DISPATCH_GETREGS 3
+#define PTRACE_DISPATCH_SETREGS 4
+#define PTRACE_DISPATCH_GETFPREGS 5
+#define PTRACE_DISPATCH_SETFPREGS 6
+#define PTRACE_DISPATCH_PEEKUSER 7
+#define PTRACE_DISPATCH_POKEUSER 8
+#define PTRACE_DISPATCH_PEEKTEXT 9
+#define PTRACE_DISPATCH_POKETEXT 10
+#define PTRACE_DISPATCH_SETOPTIONS 11
+#define PTRACE_DISPATCH_ATTACH 12
+#define PTRACE_DISPATCH_DETACH 13
+#define PTRACE_DISPATCH_GETSIGINFO 14
+#define PTRACE_DISPATCH_SETSIGINFO 15
+#define PTRACE_DISPATCH_GETREGSET 16
+#define PTRACE_DISPATCH_SETREGSET 17
+#define PTRACE_DISPATCH_GETEVENTMSG 18
+#define WAIT_STOP_SOURCE_NONE 0
+#define WAIT_STOP_SOURCE_THREAD 1
+#define WAIT_STOP_SOURCE_PROCESS 2
+#define WAIT_STOP_SOURCE_MAIN_THREAD 3
+#define WAIT_THREAD_REAP_ACTION_NONE 0
+#define WAIT_THREAD_REAP_ACTION_RELEASE 1
+#define WAIT_THREAD_REAP_ACTION_PTRACE_DETACH 2
+#define GETRUSAGE_DISPATCH_SELF 1
+#define GETRUSAGE_DISPATCH_CHILDREN 2
+#define GETRUSAGE_DISPATCH_THREAD 3
+#define GETRUSAGE_THREAD_UPDATE_READY 0
+#define GETRUSAGE_THREAD_UPDATE_INTERRUPT 1
+#define TERMINATE_CHILD_ACTION_NONE 0
+#define TERMINATE_CHILD_ACTION_FREE_ZOMBIE 1
+#define TERMINATE_CHILD_ACTION_REPARENT_CHILD 2
+#define TERMINATE_CHILD_ACTION_REPARENT_PTRACED 3
+#define CLONE_TLS_SOURCE_INHERIT 0
+#define CLONE_TLS_SOURCE_ARGUMENT 1
+
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 extern int robust_list_len_result(size_t len);
 extern int tkill_tid_result(int tid);
@@ -133,6 +181,11 @@ extern int rt_sigpending_size_result(size_t sigsetsize,
 extern int signalfd4_sigsetsize_result(size_t sigsetsize,
 		size_t expected_sigset_size);
 extern int signalfd4_flags_result(int flags);
+extern int syscall_refresh_cred_needed_result(long rc);
+extern int syscall_getpid_result(int pid);
+extern int syscall_getppid_result(int ppid);
+extern int syscall_gettid_result(int tid);
+extern int syscall_set_tid_address_return_result(int pid);
 extern int setpgid_normalize_pid(int current_pid, int pid);
 extern int setpgid_normalize_pgid(int pid, int pgid);
 extern int setpgid_execed_result(int execed);
@@ -211,6 +264,12 @@ extern void rt_sigtimedwait_deadline(long now_sec, long now_nsec,
 extern int rt_sigtimedwait_timeout_expired(long now_sec, long now_nsec,
 		long deadline_sec, long deadline_nsec);
 extern int sigmask_to_signal_number(unsigned long mask);
+extern int signal_pending_deliverable_result(int delflag, int sig,
+		unsigned long handler_addr, unsigned long pending_mask,
+		unsigned long blocked_mask);
+extern int signal_pending_interrupt_action_result(int sig,
+		unsigned long handler_addr, unsigned long pending_mask,
+		unsigned long blocked_mask, int interrupted);
 extern int rt_sigqueueinfo_pid_result(int pid);
 extern int sigsuspend_sigsetsize_result(size_t sigsetsize,
 		size_t expected_sigset_size);
@@ -236,6 +295,18 @@ extern int ptrace_attach_policy_result(int tracer_pid, int target_pid,
 		int target_ptrace, int same_process);
 extern int ptrace_detach_state_result(int is_traced, int same_report_proc);
 extern int ptrace_siginfo_state_result(int status, int has_siginfo);
+extern int ptrace_eventmsg_state_result(int status);
+extern int ptrace_wakeup_request_action_result(long request);
+extern int ptrace_resume_single_step_result(long request);
+extern int ptrace_resume_trace_syscall_result(long request);
+extern int ptrace_resume_signal_needed_result(long request, long data);
+extern int ptrace_resume_signal_source_result(long request, int has_sendsig,
+		int has_recvsig);
+extern int ptrace_detach_forward_signal_needed_result(int data);
+extern int ptrace_detach_exit_signal_needed_result(int status);
+extern int ptrace_setsiginfo_target_result(int status, int has_sendsig,
+		int has_recvsig);
+extern int ptrace_request_dispatch_result(long request);
 extern int wait4_options_result(int options);
 extern int waitid_to_wait_pid_result(int idtype, int id, int *pidp);
 extern int waitid_options_result(int options);
@@ -261,11 +332,53 @@ extern int wait_zombie_skip_host_result(int ppid_parent_pid,
 		int current_pid, int nowait);
 extern int wait_thread_empty_candidate_result(int is_main_thread, int termsig);
 extern int waitid_status_code_result(int status);
+extern int wait_stopped_source_result(int has_c_thread,
+		int c_thread_exit_status, int child_status,
+		int child_group_exit_status, int main_thread_exit_status);
+extern int wait_stopped_exit_status_result(int source,
+		int c_thread_exit_status, int child_group_exit_status,
+		int main_thread_exit_status);
+extern int wait_report_id_result(int source, int child_pid, int c_thread_tid);
+extern int wait_reaped_exit_status_result(int options, int exit_status);
+extern int wait_reaped_signal_flags_result(int options, int signal_flags,
+		int clear_mask);
+extern int wait_process_reparent_needed_result(int options,
+		int parent_is_ppid);
+extern int wait_main_thread_ptrace_detach_needed_result(int options,
+		int ptrace);
+extern int wait_thread_reap_action_result(int options, int ptrace);
+extern int wait_status_copy_needed_result(int rc, int has_status);
+extern int wait_rusage_copy_needed_result(int has_rusage);
+extern int waitid_siginfo_needed_result(int rc, int has_infop);
+extern int getrusage_dispatch_result(int who);
+extern int getrusage_thread_update_action_result(int is_current_thread,
+		int status, int in_kernel);
+extern long getrusage_maxrss_kb_result(long maxrss);
+extern int exit_code_status_result(int code);
+extern int exit_code_signal_result(int code);
+extern int exit_syscall_code_result(int status);
+extern int thread_exit_signal_result(int ptrace, int termsig);
+extern int sigchld_code_result(int exit_status);
+extern int exit_group_status_claimed_result(unsigned long old_exit_status);
+extern unsigned long exit_group_status_result(int rc, int sig);
+extern int terminate_thread_active_result(int status);
+extern int terminate_status_result(int rc, int sig);
+extern int terminate_report_thread_release_needed_result(int same_process,
+		int termsig);
+extern int terminate_child_action_result(int ppid_is_exiting,
+		int parent_is_exiting, int child_status);
 extern int clone_pthread_marker_result(int clone_flags, unsigned long newsp,
 		unsigned long parent_tidptr);
 extern int clone_flags_result(int clone_flags, int coredump_barrier_count);
 extern int clone_host_parent_flags_result(int clone_flags, int ppid_parent_pid);
 extern int clone_report_thread_result(int clone_flags, int termsig);
+extern int clone_parent_tid_store_needed_result(int clone_flags);
+extern int clone_child_cleartid_needed_result(int clone_flags);
+extern int clone_child_tid_store_needed_result(int clone_flags);
+extern int clone_tls_source_result(int clone_flags);
+extern int clone_use_last_cpu_result(int mod_clone, int uti_use_last_cpu);
+extern int clone_remote_spawn_result(int previous_mod_clone);
+extern int clone_parent_use_pid1_result(int parent_status);
 extern int ptrace_exec_event_signal_result(int ptrace);
 extern int ptrace_syscall_event_signal_result(int ptrace);
 extern int ptrace_clone_event_result(int ptrace, int clone_flags);
@@ -293,6 +406,11 @@ SYSCALL_POLICY_HELPER_PROTO int rt_sigpending_size_result(size_t sigsetsize,
 SYSCALL_POLICY_HELPER_PROTO int signalfd4_sigsetsize_result(
 		size_t sigsetsize, size_t expected_sigset_size);
 SYSCALL_POLICY_HELPER_PROTO int signalfd4_flags_result(int flags);
+SYSCALL_POLICY_HELPER_PROTO int syscall_refresh_cred_needed_result(long rc);
+SYSCALL_POLICY_HELPER_PROTO int syscall_getpid_result(int pid);
+SYSCALL_POLICY_HELPER_PROTO int syscall_getppid_result(int ppid);
+SYSCALL_POLICY_HELPER_PROTO int syscall_gettid_result(int tid);
+SYSCALL_POLICY_HELPER_PROTO int syscall_set_tid_address_return_result(int pid);
 SYSCALL_POLICY_HELPER_PROTO int setpgid_normalize_pid(int current_pid, int pid);
 SYSCALL_POLICY_HELPER_PROTO int setpgid_normalize_pgid(int pid, int pgid);
 SYSCALL_POLICY_HELPER_PROTO int setpgid_execed_result(int execed);
@@ -388,6 +506,12 @@ SYSCALL_POLICY_HELPER_PROTO void rt_sigtimedwait_deadline(long now_sec,
 SYSCALL_POLICY_HELPER_PROTO int rt_sigtimedwait_timeout_expired(long now_sec,
 		long now_nsec, long deadline_sec, long deadline_nsec);
 SYSCALL_POLICY_HELPER_PROTO int sigmask_to_signal_number(unsigned long mask);
+SYSCALL_POLICY_HELPER_PROTO int signal_pending_deliverable_result(int delflag,
+		int sig, unsigned long handler_addr, unsigned long pending_mask,
+		unsigned long blocked_mask);
+SYSCALL_POLICY_HELPER_PROTO int signal_pending_interrupt_action_result(int sig,
+		unsigned long handler_addr, unsigned long pending_mask,
+		unsigned long blocked_mask, int interrupted);
 SYSCALL_POLICY_HELPER_PROTO int rt_sigqueueinfo_pid_result(int pid);
 SYSCALL_POLICY_HELPER_PROTO int sigsuspend_sigsetsize_result(
 		size_t sigsetsize, size_t expected_sigset_size);
@@ -418,6 +542,23 @@ SYSCALL_POLICY_HELPER_PROTO int ptrace_detach_state_result(int is_traced,
 		int same_report_proc);
 SYSCALL_POLICY_HELPER_PROTO int ptrace_siginfo_state_result(int status,
 		int has_siginfo);
+SYSCALL_POLICY_HELPER_PROTO int ptrace_eventmsg_state_result(int status);
+SYSCALL_POLICY_HELPER_PROTO int ptrace_wakeup_request_action_result(
+		long request);
+SYSCALL_POLICY_HELPER_PROTO int ptrace_resume_single_step_result(long request);
+SYSCALL_POLICY_HELPER_PROTO int ptrace_resume_trace_syscall_result(
+		long request);
+SYSCALL_POLICY_HELPER_PROTO int ptrace_resume_signal_needed_result(
+		long request, long data);
+SYSCALL_POLICY_HELPER_PROTO int ptrace_resume_signal_source_result(
+		long request, int has_sendsig, int has_recvsig);
+SYSCALL_POLICY_HELPER_PROTO int ptrace_detach_forward_signal_needed_result(
+		int data);
+SYSCALL_POLICY_HELPER_PROTO int ptrace_detach_exit_signal_needed_result(
+		int status);
+SYSCALL_POLICY_HELPER_PROTO int ptrace_setsiginfo_target_result(
+		int status, int has_sendsig, int has_recvsig);
+SYSCALL_POLICY_HELPER_PROTO int ptrace_request_dispatch_result(long request);
 SYSCALL_POLICY_HELPER_PROTO int wait4_options_result(int options);
 SYSCALL_POLICY_HELPER_PROTO int waitid_to_wait_pid_result(int idtype, int id,
 		int *pidp);
@@ -449,6 +590,49 @@ SYSCALL_POLICY_HELPER_PROTO int wait_zombie_skip_host_result(
 SYSCALL_POLICY_HELPER_PROTO int wait_thread_empty_candidate_result(
 		int is_main_thread, int termsig);
 SYSCALL_POLICY_HELPER_PROTO int waitid_status_code_result(int status);
+SYSCALL_POLICY_HELPER_PROTO int wait_stopped_source_result(int has_c_thread,
+		int c_thread_exit_status, int child_status,
+		int child_group_exit_status, int main_thread_exit_status);
+SYSCALL_POLICY_HELPER_PROTO int wait_stopped_exit_status_result(int source,
+		int c_thread_exit_status, int child_group_exit_status,
+		int main_thread_exit_status);
+SYSCALL_POLICY_HELPER_PROTO int wait_report_id_result(int source,
+		int child_pid, int c_thread_tid);
+SYSCALL_POLICY_HELPER_PROTO int wait_reaped_exit_status_result(int options,
+		int exit_status);
+SYSCALL_POLICY_HELPER_PROTO int wait_reaped_signal_flags_result(int options,
+		int signal_flags, int clear_mask);
+SYSCALL_POLICY_HELPER_PROTO int wait_process_reparent_needed_result(
+		int options, int parent_is_ppid);
+SYSCALL_POLICY_HELPER_PROTO int wait_main_thread_ptrace_detach_needed_result(
+		int options, int ptrace);
+SYSCALL_POLICY_HELPER_PROTO int wait_thread_reap_action_result(int options,
+		int ptrace);
+SYSCALL_POLICY_HELPER_PROTO int wait_status_copy_needed_result(int rc,
+		int has_status);
+SYSCALL_POLICY_HELPER_PROTO int wait_rusage_copy_needed_result(int has_rusage);
+SYSCALL_POLICY_HELPER_PROTO int waitid_siginfo_needed_result(int rc,
+		int has_infop);
+SYSCALL_POLICY_HELPER_PROTO int getrusage_dispatch_result(int who);
+SYSCALL_POLICY_HELPER_PROTO int getrusage_thread_update_action_result(
+		int is_current_thread, int status, int in_kernel);
+SYSCALL_POLICY_HELPER_PROTO long getrusage_maxrss_kb_result(long maxrss);
+SYSCALL_POLICY_HELPER_PROTO int exit_code_status_result(int code);
+SYSCALL_POLICY_HELPER_PROTO int exit_code_signal_result(int code);
+SYSCALL_POLICY_HELPER_PROTO int exit_syscall_code_result(int status);
+SYSCALL_POLICY_HELPER_PROTO int thread_exit_signal_result(int ptrace,
+		int termsig);
+SYSCALL_POLICY_HELPER_PROTO int sigchld_code_result(int exit_status);
+SYSCALL_POLICY_HELPER_PROTO int exit_group_status_claimed_result(
+		unsigned long old_exit_status);
+SYSCALL_POLICY_HELPER_PROTO unsigned long exit_group_status_result(int rc,
+		int sig);
+SYSCALL_POLICY_HELPER_PROTO int terminate_thread_active_result(int status);
+SYSCALL_POLICY_HELPER_PROTO int terminate_status_result(int rc, int sig);
+SYSCALL_POLICY_HELPER_PROTO int terminate_report_thread_release_needed_result(
+		int same_process, int termsig);
+SYSCALL_POLICY_HELPER_PROTO int terminate_child_action_result(
+		int ppid_is_exiting, int parent_is_exiting, int child_status);
 SYSCALL_POLICY_HELPER_PROTO int clone_pthread_marker_result(int clone_flags,
 		unsigned long newsp, unsigned long parent_tidptr);
 SYSCALL_POLICY_HELPER_PROTO int clone_flags_result(int clone_flags,
@@ -457,6 +641,19 @@ SYSCALL_POLICY_HELPER_PROTO int clone_host_parent_flags_result(
 		int clone_flags, int ppid_parent_pid);
 SYSCALL_POLICY_HELPER_PROTO int clone_report_thread_result(int clone_flags,
 		int termsig);
+SYSCALL_POLICY_HELPER_PROTO int clone_parent_tid_store_needed_result(
+		int clone_flags);
+SYSCALL_POLICY_HELPER_PROTO int clone_child_cleartid_needed_result(
+		int clone_flags);
+SYSCALL_POLICY_HELPER_PROTO int clone_child_tid_store_needed_result(
+		int clone_flags);
+SYSCALL_POLICY_HELPER_PROTO int clone_tls_source_result(int clone_flags);
+SYSCALL_POLICY_HELPER_PROTO int clone_use_last_cpu_result(int mod_clone,
+		int uti_use_last_cpu);
+SYSCALL_POLICY_HELPER_PROTO int clone_remote_spawn_result(
+		int previous_mod_clone);
+SYSCALL_POLICY_HELPER_PROTO int clone_parent_use_pid1_result(
+		int parent_status);
 SYSCALL_POLICY_HELPER_PROTO int ptrace_exec_event_signal_result(int ptrace);
 SYSCALL_POLICY_HELPER_PROTO int ptrace_syscall_event_signal_result(int ptrace);
 SYSCALL_POLICY_HELPER_PROTO int ptrace_clone_event_result(int ptrace,
@@ -907,64 +1104,51 @@ static int wait_stopped(struct thread *thread, struct process *child, struct thr
 	dkprintf("wait_stopped,proc->pid=%d,child->pid=%d,options=%08x\n",
 			 thread->proc->pid, child->pid, options);
 	int ret;
+	int source = wait_stopped_source_result(c_thread != NULL,
+			c_thread ? c_thread->exit_status : 0, child->status,
+			child->group_exit_status,
+			child->main_thread->exit_status);
+	int exit_status;
 
-	if (c_thread) {
-		/* Skip this process because exit_status has been reaped. */
-		if (!c_thread->exit_status) {
-			ret = 0;
-			goto out;
-		}
-		/* TODO: define 0x7f in kernel/include/process.h */
-		if (status) {
-			*status = wait_stopped_status_result(c_thread->exit_status);
-		}
-
-		/* Reap exit_status. signal_flags is reaped on receiving */
-		/* signal in do_kill(). */
-		if (wait_reap_needed_result(options)) {
-			c_thread->exit_status = 0;
-		}
+	/* Skip this process because exit_status has been reaped. */
+	if (source == WAIT_STOP_SOURCE_NONE) {
+		ret = 0;
+		goto out;
 	}
-	else if (child->status & (PS_STOPPED | PS_DELAY_STOPPED)) {
-		/* Skip this process because exit_status has been reaped. */
-		if (!child->group_exit_status) {
-			ret = 0;
-			goto out;
-		}
-		/* TODO: define 0x7f in kernel/include/process.h */
-		if (status) {
-			*status = wait_stopped_status_result(
-					child->group_exit_status);
-		}
 
-		/* Reap exit_status. signal_flags is reaped on receiving */
-		/* signal in do_kill(). */
-		if (wait_reap_needed_result(options)) {
-			child->group_exit_status = 0;
-		}
+	exit_status = wait_stopped_exit_status_result(source,
+			c_thread ? c_thread->exit_status : 0,
+			child->group_exit_status,
+			child->main_thread->exit_status);
+	/* TODO: define 0x7f in kernel/include/process.h */
+	if (status) {
+		*status = wait_stopped_status_result(exit_status);
 	}
-	else {
-		/* Skip this process because exit_status has been reaped. */
-		if (!child->main_thread->exit_status) {
-			ret = 0;
-			goto out;
-		}
-		/* TODO: define 0x7f in kernel/include/process.h */
-		if (status) {
-			*status = wait_stopped_status_result(
-					child->main_thread->exit_status);
-		}
 
-		/* Reap exit_status. signal_flags is reaped on receiving */
-		/* signal in do_kill(). */
-		if (wait_reap_needed_result(options)) {
-			child->main_thread->exit_status = 0;
-		}
+	/* Reap exit_status. signal_flags is reaped on receiving */
+	/* signal in do_kill(). */
+	switch (source) {
+	case WAIT_STOP_SOURCE_THREAD:
+		process_wait_exit_status_reap_result(c_thread,
+			__builtin_offsetof(struct thread, exit_status),
+			options);
+		break;
+	case WAIT_STOP_SOURCE_PROCESS:
+		process_wait_exit_status_reap_result(child,
+			__builtin_offsetof(struct process, group_exit_status),
+			options);
+		break;
+	case WAIT_STOP_SOURCE_MAIN_THREAD:
+		process_wait_exit_status_reap_result(child->main_thread,
+			__builtin_offsetof(struct thread, exit_status),
+			options);
+		break;
 	}
 
 	dkprintf("wait_stopped,child->pid=%d,status=%08x\n",
 			 child->pid, status ? *status : -1);
-	ret = c_thread ? c_thread->tid : child->pid;
+	ret = wait_report_id_result(source, child->pid,
+			c_thread ? c_thread->tid : 0);
  out:
 	return ret;    
 }
@@ -979,13 +1163,14 @@ static int wait_continued(struct thread *thread, struct process *child,
 	}
 
 	/* Reap signal_flags */
-	if (wait_reap_needed_result(options)) {
-		if (c_thread)
-			c_thread->signal_flags &= ~SIGNAL_STOP_CONTINUED;
-		else
-			child->main_thread->signal_flags &=
-							 ~SIGNAL_STOP_CONTINUED;
-	}
+	if (c_thread)
+		process_thread_signal_flags_reap_result(c_thread,
+				__builtin_offsetof(struct thread, signal_flags),
+				options, SIGNAL_STOP_CONTINUED);
+	else
+		process_thread_signal_flags_reap_result(child->main_thread,
+				__builtin_offsetof(struct thread, signal_flags),
+				options, SIGNAL_STOP_CONTINUED);
 
 	dkprintf("wait4,SIGNAL_STOP_CONTINUED,pid=%d,status=%08x\n",
 			 child->pid, status ? *status : -1);
@@ -1005,15 +1190,10 @@ thread_exit_signal(struct thread *thread)
 		return;
 	}
 
-	if (thread->ptrace)
-		sig = SIGCHLD;
-	else
-		sig = thread->termsig;
+	sig = thread_exit_signal_result(thread->ptrace, thread->termsig);
 	memset(&info, '\0', sizeof(info));
 	info.si_signo = sig;
-	info.si_code = (thread->exit_status & 0x7f) ?
-		       ((thread->exit_status & 0x80) ?
-			CLD_DUMPED : CLD_KILLED) : CLD_EXITED;
+	info.si_code = sigchld_code_result(thread->exit_status);
 	info._sifields._sigchld.si_pid = thread->tid;
 	info._sifields._sigchld.si_status = thread->exit_status;
 	tsc_to_ts(thread->user_tsc, &ats);
@@ -1054,9 +1234,7 @@ finalize_process(struct process *proc)
 
 			memset(&info, '\0', sizeof info);
 			info.si_signo = SIGCHLD;
-			info.si_code = (exit_status & 0x7f)?
-			               ((exit_status & 0x80)?
-			                CLD_DUMPED: CLD_KILLED): CLD_EXITED;
+			info.si_code = sigchld_code_result(exit_status);
 			info._sifields._sigchld.si_pid = proc->pid;
 			info._sifields._sigchld.si_status = exit_status;
 			info._sifields._sigchld.si_utime =
@@ -1093,14 +1271,14 @@ ptrace_detach_thread(struct thread *thread, int data)
 		}
 		mcs_rwlock_reader_lock(&proc->children_lock, &lock);
 
-		list_del(&tracee_proc->siblings_list);
+		process_list_detach_result(&tracee_proc->siblings_list);
 		mcs_rwlock_reader_unlock(&proc->children_lock, &lock);
 
 		mcs_rwlock_reader_lock(&tracee_proc->children_lock, &lock);
-		list_del(&tracee_proc->ptraced_siblings_list);
-		list_add_tail(&tracee_proc->siblings_list,
-			      &parent->children_list);
-		tracee_proc->parent = parent;
+		process_ptrace_main_detach_reparent_result(tracee_proc,
+			__builtin_offsetof(struct process, parent), parent,
+			&tracee_proc->ptraced_siblings_list,
+			&tracee_proc->siblings_list, &parent->children_list);
 
 		mcs_rwlock_reader_unlock(&tracee_proc->children_lock, &lock);
 	}
@@ -1109,23 +1287,25 @@ ptrace_detach_thread(struct thread *thread, int data)
 	    thread->proc != pid1) {
 		report_proc = thread->proc;
 	}
-	thread->report_proc = report_proc;
 	mcs_rwlock_reader_lock(&proc->threads_lock, &lock);
-	list_del(&thread->report_siblings_list);
+	process_thread_report_detach_result(thread,
+		__builtin_offsetof(struct thread, report_proc), report_proc,
+		&thread->report_siblings_list);
 	mcs_rwlock_reader_unlock(&proc->threads_lock, &lock);
-	thread->ptrace = 0;
-	thread->ptrace_saved_uctx_valid = 0;
-	kfree(thread->ptrace_debugreg);
-	thread->ptrace_debugreg = NULL;
+	kfree(process_thread_ptrace_cleanup_result(thread,
+		__builtin_offsetof(struct thread, ptrace),
+		__builtin_offsetof(struct thread, ptrace_saved_uctx_valid),
+		__builtin_offsetof(struct thread, ptrace_debugreg)));
 
 	clear_single_step(thread);
 	if (report_proc) {
 		mcs_rwlock_reader_lock(&report_proc->threads_lock, &lock);
-		list_add_tail(&thread->report_siblings_list,
-			      &report_proc->report_threads_list);
+		process_thread_report_attach_result(thread, 0, 0, 0,
+			__builtin_offsetof(struct thread, report_proc),
+			report_proc, &thread->report_siblings_list,
+			&report_proc->report_threads_list);
 		mcs_rwlock_reader_unlock(&report_proc->threads_lock, &lock);
-		if (thread->status == PS_EXITED ||
-		    thread->status == PS_ZOMBIE) {
+		if (ptrace_detach_exit_signal_needed_result(thread->status)) {
 			/*
 			 * Traced thread reports to the original parent with
 			 * the termination signal in addition to the report
@@ -1135,7 +1315,7 @@ ptrace_detach_thread(struct thread *thread, int data)
 		}
 	}
 
-	if (data) {
+	if (ptrace_detach_forward_signal_needed_result(data)) {
 		struct siginfo info;
 
 		memset(&info, '\0', sizeof(info));
@@ -1189,8 +1369,8 @@ wait_proc(int pid, int *status, int options, void *rusage, int *empty)
 		if (wait_process_exited_candidate_result(options,
 				child->status)) {
 			ret = wait_zombie(thread, child, status, options);
-			if (wait_reap_needed_result(options) &&
-			    child->parent == child->ppid_parent) {
+			if (wait_process_reparent_needed_result(options,
+			    child->parent == child->ppid_parent)) {
 				struct mcs_rwlock_node updatelock;
 				struct mcs_rwlock_node childlock;
 				struct process *pid1;
@@ -1214,7 +1394,7 @@ wait_proc(int pid, int *status, int options, void *rusage, int *empty)
 				set_process_rusage(child, rusage);
 				mcs_rwlock_writer_unlock_noirq(
 					       &proc->update_lock, &updatelock);
-				list_del(&child->siblings_list);
+				process_list_detach_result(&child->siblings_list);
 				mcs_rwlock_writer_unlock_noirq(
 						   &proc->children_lock, &lock);
 
@@ -1224,8 +1404,8 @@ wait_proc(int pid, int *status, int options, void *rusage, int *empty)
 				child->ppid_parent = pid1;
 				mcs_rwlock_writer_lock_noirq(
 					      &pid1->children_lock, &childlock);
-				list_add_tail(&child->siblings_list,
-					      &pid1->children_list);
+				process_list_add_tail_result(&child->siblings_list,
+							     &pid1->children_list);
 				mcs_rwlock_writer_unlock_noirq(
 					      &pid1->children_lock, &childlock);
 				mcs_rwlock_writer_unlock_noirq(
@@ -1234,7 +1414,8 @@ wait_proc(int pid, int *status, int options, void *rusage, int *empty)
 					     &child->threads_lock, &child_lock);
 				c_thread = child->main_thread;
 				if (c_thread &&
-				    (c_thread->ptrace & PT_TRACED)) {
+				    wait_main_thread_ptrace_detach_needed_result(
+					    options, c_thread->ptrace)) {
 					mcs_rwlock_writer_unlock_noirq(
 					     &child->threads_lock, &child_lock);
 					ptrace_detach_thread(c_thread, 0);
@@ -1249,8 +1430,9 @@ wait_proc(int pid, int *status, int options, void *rusage, int *empty)
 				mcs_rwlock_writer_lock_noirq(
 					     &child->threads_lock, &child_lock);
 				c_thread = child->main_thread;
-				if (c_thread && wait_reap_needed_result(options) &&
-				    (c_thread->ptrace & PT_TRACED)) {
+				if (c_thread &&
+				    wait_main_thread_ptrace_detach_needed_result(
+					    options, c_thread->ptrace)) {
 					mcs_rwlock_writer_unlock_noirq(
 					     &child->threads_lock, &child_lock);
 					mcs_rwlock_writer_unlock_noirq(
@@ -1279,9 +1461,10 @@ wait_proc(int pid, int *status, int options, void *rusage, int *empty)
 			 */
 			ret = wait_stopped(thread, child, NULL, status,
 					   options);
-			if (wait_reap_needed_result(options)) {
-				c_thread->signal_flags &= ~SIGNAL_STOP_STOPPED;
-			}
+			process_thread_signal_flags_reap_result(c_thread,
+					__builtin_offsetof(struct thread,
+							   signal_flags),
+					options, SIGNAL_STOP_STOPPED);
 			mcs_rwlock_writer_unlock_noirq(&proc->children_lock,
 						       &lock);
 			mcs_rwlock_writer_unlock_noirq(&child->threads_lock,
@@ -1298,10 +1481,10 @@ wait_proc(int pid, int *status, int options, void *rusage, int *empty)
 				if (pid == c_thread->tid) {
 					ret = c_thread->tid;
 				}
-				if (wait_reap_needed_result(options)) {
-					c_thread->signal_flags &=
-							   ~SIGNAL_STOP_STOPPED;
-				}
+				process_thread_signal_flags_reap_result(c_thread,
+						__builtin_offsetof(struct thread,
+								   signal_flags),
+						options, SIGNAL_STOP_STOPPED);
 				mcs_rwlock_writer_unlock_noirq(
 						   &proc->children_lock, &lock);
 				mcs_rwlock_writer_unlock_noirq(
@@ -1314,10 +1497,10 @@ wait_proc(int pid, int *status, int options, void *rusage, int *empty)
 				options)) {
 			ret = wait_continued(thread, child, NULL, status,
 					     options);
-			if (wait_reap_needed_result(options)) {
-				c_thread->signal_flags &=
-							 ~SIGNAL_STOP_CONTINUED;
-			}
+			process_thread_signal_flags_reap_result(c_thread,
+					__builtin_offsetof(struct thread,
+							   signal_flags),
+					options, SIGNAL_STOP_CONTINUED);
 			mcs_rwlock_writer_unlock_noirq(&proc->children_lock,
 						       &lock);
 			mcs_rwlock_writer_unlock_noirq(&child->threads_lock,
@@ -1362,24 +1545,29 @@ wait_thread(int tid, int *status, int options, void *rusage, int *empty)
 		*empty = 0;
 		if (wait_thread_exited_candidate_result(options,
 				child->status)) {
+			int action;
+
 			ret = child->tid;
-			if (wait_reap_needed_result(options)) {
-				if (child->ptrace & PT_TRACED) {
-					mcs_rwlock_writer_unlock_noirq(
-					    &thread->proc->threads_lock, &lock);
-					ptrace_detach_thread(child, 0);
-				}
-				else {
-					list_del(&child->report_siblings_list);
-					child->report_proc = NULL;
-					mcs_rwlock_writer_unlock_noirq(
-					    &thread->proc->threads_lock, &lock);
-					release_thread(child);
-				}
-			}
-			else
+			action = wait_thread_reap_action_result(options,
+					child->ptrace);
+			if (action == WAIT_THREAD_REAP_ACTION_PTRACE_DETACH) {
 				mcs_rwlock_writer_unlock_noirq(
 					    &thread->proc->threads_lock, &lock);
+				ptrace_detach_thread(child, 0);
+			}
+			else if (action == WAIT_THREAD_REAP_ACTION_RELEASE) {
+				process_thread_report_detach_result(child,
+					__builtin_offsetof(struct thread,
+							   report_proc),
+					NULL, &child->report_siblings_list);
+				mcs_rwlock_writer_unlock_noirq(
+				    &thread->proc->threads_lock, &lock);
+				release_thread(child);
+			}
+			else {
+				mcs_rwlock_writer_unlock_noirq(
+					    &thread->proc->threads_lock, &lock);
+			}
 			goto out_found;
 		}
 
@@ -1391,9 +1579,10 @@ wait_thread(int tid, int *status, int options, void *rusage, int *empty)
 			 */
 			ret = wait_stopped(thread, child->proc, child, status,
 					   options);
-			if (wait_reap_needed_result(options)) {
-				child->signal_flags &= ~SIGNAL_STOP_STOPPED;
-			}
+			process_thread_signal_flags_reap_result(child,
+					__builtin_offsetof(struct thread,
+							   signal_flags),
+					options, SIGNAL_STOP_STOPPED);
 			mcs_rwlock_writer_unlock_noirq(
 					    &thread->proc->threads_lock, &lock);
 			goto out_found;
@@ -1405,10 +1594,10 @@ wait_thread(int tid, int *status, int options, void *rusage, int *empty)
 					   options);
 			if (ret == child->tid) {
 				/* Are we looking for a specific thread? */
-				if (wait_reap_needed_result(options)) {
-					child->signal_flags &=
-							   ~SIGNAL_STOP_STOPPED;
-				}
+				process_thread_signal_flags_reap_result(child,
+						__builtin_offsetof(struct thread,
+								   signal_flags),
+						options, SIGNAL_STOP_STOPPED);
 				mcs_rwlock_writer_unlock_noirq(
 					    &thread->proc->threads_lock, &lock);
 				goto out_found;
@@ -1419,9 +1608,10 @@ wait_thread(int tid, int *status, int options, void *rusage, int *empty)
 				options)) {
 			ret = wait_continued(thread, child->proc, child, status,
 					     options);
-			if (wait_reap_needed_result(options)) {
-				child->signal_flags &= ~SIGNAL_STOP_CONTINUED;
-			}
+			process_thread_signal_flags_reap_result(child,
+					__builtin_offsetof(struct thread,
+							   signal_flags),
+					options, SIGNAL_STOP_CONTINUED);
 			mcs_rwlock_writer_unlock_noirq(
 					    &thread->proc->threads_lock, &lock);
 			goto out_found;
@@ -1531,9 +1721,9 @@ SYSCALL_DECLARE(wait4)
 	}
 	memset(&usage, '\0', sizeof usage);
 	rc = do_wait(pid, &st, WEXITED | options, &usage);
-	if(rc >= 0 && status)
+	if (wait_status_copy_needed_result(rc, status != NULL))
 		copy_to_user(status, &st, sizeof(int));
-	if (rusage)
+	if (wait_rusage_copy_needed_result(rusage != NULL))
 		copy_to_user(rusage, &usage, sizeof usage);
 	return rc;
 }
@@ -1563,7 +1753,7 @@ SYSCALL_DECLARE(waitid)
 	rc = do_wait(pid, &status, options, &usage);
 	if(rc < 0)
 		return rc;
-	if(rc && infop){
+	if(waitid_siginfo_needed_result(rc, infop != NULL)){
 		siginfo_t info;
 		memset(&info, '\0', sizeof(siginfo_t));
 		info.si_signo = SIGCHLD;
@@ -1587,9 +1777,10 @@ void terminate_mcexec(int rc, int sig)
 	struct process *proc = mythread->proc;
 	struct syscall_request request IHK_DMA_ALIGN;
 
-	if ((old_exit_status = proc->group_exit_status) & 0x0000000100000000L)
+	old_exit_status = proc->group_exit_status;
+	if (exit_group_status_claimed_result(old_exit_status))
 		return;
-	exit_status = 0x0000000100000000L | ((rc & 0x00ff) << 8) | (sig & 0xff);
+	exit_status = exit_group_status_result(rc, sig);
 	if (cmpxchg(&proc->group_exit_status,
 				old_exit_status, exit_status) != old_exit_status)
 		return;
@@ -1695,7 +1886,7 @@ void terminate(int rc, int sig)
 	ts_add(&proc->stime, &ats);
 	mythread->user_tsc = 0;
 	mythread->system_tsc = 0;
-	exit_status = ((rc & 0x00ff) << 8) | (sig & 0xff);
+	exit_status = terminate_status_result(rc, sig);
 	proc->group_exit_status = exit_status;
 	mythread->exit_status = exit_status;
 	proc->status = PS_EXITED;
@@ -1729,7 +1920,7 @@ void terminate(int rc, int sig)
 	terminate_mcexec(rc, sig);
 
 	mcs_rwlock_writer_lock(&proc->threads_lock, &lock);
-	list_del(&mythread->siblings_list);
+	process_list_detach_result(&mythread->siblings_list);
 	mcs_rwlock_writer_unlock(&proc->threads_lock, &lock);
 
 	mcs_rwlock_reader_lock(&proc->threads_lock, &lock);
@@ -1767,8 +1958,7 @@ void terminate(int rc, int sig)
 		found = 0;
 		list_for_each_entry(thread, &proc->threads_list,
 				    siblings_list) {
-			if (thread->status != PS_EXITED &&
-			    thread->status != PS_ZOMBIE) {
+			if (terminate_thread_active_result(thread->status)) {
 				found = 1;
 				break;
 			}
@@ -1783,7 +1973,8 @@ void terminate(int rc, int sig)
 	}
 
 	mcs_rwlock_writer_lock(&proc->threads_lock, &lock);
-	list_add_tail(&mythread->siblings_list, &proc->threads_list);
+	process_list_add_tail_result(&mythread->siblings_list,
+				     &proc->threads_list);
 	mcs_rwlock_writer_unlock(&proc->threads_lock, &lock);
 
 	vm = proc->vm;
@@ -1808,12 +1999,15 @@ void terminate(int rc, int sig)
 		thr = list_first_entry(&proc->report_threads_list,
 				       struct thread, report_siblings_list);
 		if (thr->ptrace) {
-			int release_flag = thr->proc == proc &&
-						   thr->termsig &&
-						   thr->termsig != SIGCHLD;
+			int release_flag =
+				terminate_report_thread_release_needed_result(
+						thr->proc == proc, thr->termsig);
 
 			if (release_flag) {
-				thr->termsig = 0;
+				process_thread_termsig_clear_result(thr,
+					__builtin_offsetof(struct thread,
+							   termsig),
+					release_flag);
 			}
 			ptrace_detach_thread(thr, 0);
 			if (release_flag) {
@@ -1822,8 +2016,9 @@ void terminate(int rc, int sig)
 		}
 		else {
 			mcs_rwlock_writer_lock(&proc->threads_lock, &lock);
-			list_del(&thr->report_siblings_list);
-			thr->report_proc = NULL;
+			process_thread_report_detach_result(thr,
+				__builtin_offsetof(struct thread, report_proc),
+				NULL, &thr->report_siblings_list);
 			mcs_rwlock_writer_unlock(&proc->threads_lock, &lock);
 			release_thread(thr);
 		}
@@ -1842,33 +2037,56 @@ void terminate(int rc, int sig)
 				mcs_rwlock_writer_lock_noirq(&child->update_lock,
 						&updatelock);
 
-				if (child->ppid_parent == proc &&
-						child->status == PS_ZOMBIE) {
-					list_del_init(&child->hash_list);
-					list_del_init(&child->siblings_list);
+				switch (terminate_child_action_result(
+						child->ppid_parent == proc,
+						child->parent == proc,
+						child->status)) {
+				case TERMINATE_CHILD_ACTION_FREE_ZOMBIE:
+					process_list_del_init_result(
+						&child->hash_list);
+					process_list_del_init_result(
+						&child->siblings_list);
 					free_child = 1;
-				}
-				else if (child->ppid_parent == proc) {
+					break;
+				case TERMINATE_CHILD_ACTION_REPARENT_CHILD:
 					mcs_rwlock_writer_lock_noirq(&proc->children_lock,
 							&childlock);
 					mcs_rwlock_writer_lock_noirq(&pid1->children_lock,
 							&childlock1);
-					child->ppid_parent = pid1;
-					if (child->parent == proc) {
-						child->parent = pid1;
-						list_del(&child->siblings_list);
-						list_add_tail(&child->siblings_list,
-								&pid1->children_list);
-					}
-					else{
-						list_del(&child->ptraced_siblings_list);
-						list_add_tail(&child->ptraced_siblings_list,
-								&pid1->ptraced_children_list);
-					}
+					process_child_reparent_result(child,
+						__builtin_offsetof(
+							struct process,
+							ppid_parent),
+						__builtin_offsetof(
+							struct process,
+							parent),
+						pid1, &child->siblings_list,
+						&pid1->children_list, 1);
 					mcs_rwlock_writer_unlock_noirq(&pid1->children_lock,
 							&childlock1);
 					mcs_rwlock_writer_unlock_noirq(&proc->children_lock,
 							&childlock);
+					break;
+				case TERMINATE_CHILD_ACTION_REPARENT_PTRACED:
+					mcs_rwlock_writer_lock_noirq(&proc->children_lock,
+							&childlock);
+					mcs_rwlock_writer_lock_noirq(&pid1->children_lock,
+							&childlock1);
+					process_child_reparent_result(child,
+						__builtin_offsetof(
+							struct process,
+							ppid_parent),
+						__builtin_offsetof(
+							struct process,
+							parent),
+						pid1,
+						&child->ptraced_siblings_list,
+						&pid1->ptraced_children_list, 0);
+					mcs_rwlock_writer_unlock_noirq(&pid1->children_lock,
+							&childlock1);
+					mcs_rwlock_writer_unlock_noirq(&proc->children_lock,
+							&childlock);
+					break;
 				}
 
 				mcs_rwlock_writer_unlock_noirq(&child->update_lock,
@@ -3165,14 +3383,14 @@ out:
 
 SYSCALL_DECLARE(getpid)
 {
-	return cpu_local_var(current)->proc->pid;
+	return syscall_getpid_result(cpu_local_var(current)->proc->pid);
 }
 
 SYSCALL_DECLARE(getppid)
 {
 	struct thread *thread = cpu_local_var(current);
 
-	return thread->proc->ppid_parent->pid;
+	return syscall_getppid_result(thread->proc->ppid_parent->pid);
 }
 
 static int settid(struct thread *thread, int nr_tids, int *tids)
@@ -3198,7 +3416,7 @@ static int settid(struct thread *thread, int nr_tids, int *tids)
 
 SYSCALL_DECLARE(gettid)
 {
-	return cpu_local_var(current)->tid;
+	return syscall_gettid_result(cpu_local_var(current)->tid);
 }
 
 extern void ptrace_report_signal(struct thread *thread, int sig);
@@ -3259,15 +3477,16 @@ static int ptrace_attach_thread(struct thread *thread, struct process *proc)
 	if (thread->report_proc) {
 		mcs_rwlock_writer_lock(&thread->report_proc->threads_lock,
 				       &lock);
-		list_del(&thread->report_siblings_list);
+		process_list_detach_result(&thread->report_siblings_list);
 		mcs_rwlock_writer_unlock(&thread->report_proc->threads_lock,
 					 &lock);
 	}
 
 	mcs_rwlock_writer_lock(&proc->threads_lock, &lock);
-	list_add_tail(&thread->report_siblings_list,
-		      &proc->report_threads_list);
-	thread->report_proc = proc;
+	process_thread_report_attach_result(thread, 0, 0, 0,
+		__builtin_offsetof(struct thread, report_proc),
+		proc, &thread->report_siblings_list,
+		&proc->report_threads_list);
 	mcs_rwlock_writer_unlock(&proc->threads_lock, &lock);
 
 	child = thread->proc;
@@ -3275,14 +3494,15 @@ static int ptrace_attach_thread(struct thread *thread, struct process *proc)
 		parent = child->parent;
 		dkprintf("ptrace_attach() parent->pid=%d\n", parent->pid);
 		mcs_rwlock_writer_lock(&parent->children_lock, &lock);
-		list_del(&child->siblings_list);
-		list_add_tail(&child->ptraced_siblings_list,
-			      &parent->ptraced_children_list);
+		process_list_detach_result(&child->siblings_list);
+		process_list_add_tail_result(&child->ptraced_siblings_list,
+					     &parent->ptraced_children_list);
 		mcs_rwlock_writer_unlock(&parent->children_lock, &lock);
 
 		mcs_rwlock_writer_lock(&proc->children_lock, &lock);
-		list_add_tail(&child->siblings_list, &proc->children_list);
-		child->parent = proc;
+		process_ptrace_main_attach_reparent_result(child,
+			__builtin_offsetof(struct process, parent), proc,
+			&child->siblings_list, &proc->children_list);
 		mcs_rwlock_writer_unlock(&proc->children_lock, &lock);
 	}
 
@@ -3694,7 +3914,8 @@ unsigned long do_fork(int clone_flags, unsigned long newsp,
 	}
 	else {
 		cpuid = obtain_clone_cpuid(&oldproc->cpu_set,
-				(old->mod_clone == SPAWN_TO_REMOTE && oldproc->uti_use_last_cpu));
+				clone_use_last_cpu_result(old->mod_clone,
+					oldproc->uti_use_last_cpu));
 		if (cpuid == -1) {
 			kprintf("do_fork,core not available\n");
 			return -EAGAIN;
@@ -3826,7 +4047,7 @@ retry_tid:
 		}
 	}
 
-	if (clone_flags & CLONE_PARENT_SETTID) {
+	if (clone_parent_tid_store_needed_result(clone_flags)) {
 		dkprintf("clone_flags & CLONE_PARENT_SETTID: 0x%lX\n",
 		         parent_tidptr);
 		
@@ -3836,14 +4057,14 @@ retry_tid:
 		}
 	}
 	
-	if (clone_flags & CLONE_CHILD_CLEARTID) {
+	if (clone_child_cleartid_needed_result(clone_flags)) {
 		dkprintf("clone_flags & CLONE_CHILD_CLEARTID: 0x%lX\n", 
 			     child_tidptr);
 
 		new->clear_child_tid = (int*)child_tidptr;
 	}
 	
-	if (clone_flags & CLONE_CHILD_SETTID) {
+	if (clone_child_tid_store_needed_result(clone_flags)) {
 		unsigned long phys;
 		dkprintf("clone_flags & CLONE_CHILD_SETTID: 0x%lX\n",
 				child_tidptr);
@@ -3858,7 +4079,7 @@ retry_tid:
 		*((int*)phys_to_virt(phys)) = new->tid;
 	}
 	
-	if (clone_flags & CLONE_SETTLS) {
+	if (clone_tls_source_result(clone_flags) == CLONE_TLS_SOURCE_ARGUMENT) {
 		dkprintf("clone_flags & CLONE_SETTLS: 0x%lX\n", 
 			     tlsblock_base);
 		
@@ -3875,8 +4096,8 @@ retry_tid:
 	new->status = PS_RUNNING;
 	
 	/* Only the first do_fork() call creates a thread on a Linux CPU */
-	if (cmpxchg(&old->mod_clone, SPAWN_TO_REMOTE, SPAWN_TO_LOCAL) ==
-			SPAWN_TO_REMOTE) {
+	if (clone_remote_spawn_result(cmpxchg(&old->mod_clone,
+					SPAWN_TO_REMOTE, SPAWN_TO_LOCAL))) {
 		new->mod_clone = SPAWNING_TO_REMOTE;
 		if (old->mod_clone_arg) {
 			new->mod_clone_arg = kmalloc(sizeof(struct uti_attr),
@@ -3902,7 +4123,7 @@ retry_tid:
 			mcs_rwlock_reader_lock(&oldproc->update_lock, &lock);
 			parent = oldproc->ppid_parent;
 			mcs_rwlock_reader_lock_noirq(&parent->update_lock, &parent_lock);
-			if(parent->status == PS_EXITED || parent->status == PS_ZOMBIE){
+			if (clone_parent_use_pid1_result(parent->status)) {
 				mcs_rwlock_reader_unlock_noirq(&parent->update_lock, &parent_lock);
 				parent = cpu_local_var(resource_set)->pid1;
 				mcs_rwlock_reader_lock_noirq(&parent->update_lock, &parent_lock);
@@ -3943,10 +4164,12 @@ retry_tid:
 		struct mcs_rwlock_node_irqsave lock;
 
 		mcs_rwlock_writer_lock(&oldproc->threads_lock, &lock);
-		new->termsig = termsig;
-		new->report_proc = oldproc;
-		list_add_tail(&new->report_siblings_list,
-			      &oldproc->report_threads_list);
+		process_thread_report_attach_result(new,
+			__builtin_offsetof(struct thread, termsig), 1,
+			termsig,
+			__builtin_offsetof(struct thread, report_proc),
+			oldproc, &new->report_siblings_list,
+			&oldproc->report_threads_list);
 		mcs_rwlock_writer_unlock(&oldproc->threads_lock, &lock);
 		hold_thread(new);
 	}
@@ -3998,7 +4221,8 @@ SYSCALL_DECLARE(set_tid_address)
 	cpu_local_var(current)->clear_child_tid = 
 	                        (int*)ihk_mc_syscall_arg0(ctx);
 
-	return cpu_local_var(current)->proc->pid;
+	return syscall_set_tid_address_return_result(
+		cpu_local_var(current)->proc->pid);
 }
 
 SYSCALL_DECLARE(times)
@@ -4155,6 +4379,36 @@ SYSCALL_POLICY_HELPER_SCOPE int
 signalfd4_flags_result(int flags)
 {
 	return (flags & ~(SFD_NONBLOCK | SFD_CLOEXEC)) ? -EINVAL : 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+syscall_refresh_cred_needed_result(long rc)
+{
+	return rc == 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+syscall_getpid_result(int pid)
+{
+	return pid;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+syscall_getppid_result(int ppid)
+{
+	return ppid;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+syscall_gettid_result(int tid)
+{
+	return tid;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+syscall_set_tid_address_return_result(int pid)
+{
+	return pid;
 }
 
 SYSCALL_POLICY_HELPER_SCOPE int
@@ -4666,6 +4920,44 @@ sigmask_to_signal_number(unsigned long mask)
 	return sig;
 }
 
+static int
+signal_is_default_ignored(int sig)
+{
+	return sig == SIGCHLD || sig == SIGURG || sig == SIGCONT;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+signal_pending_deliverable_result(int delflag, int sig,
+		unsigned long handler_addr, unsigned long pending_mask,
+		unsigned long blocked_mask)
+{
+	if (!delflag && signal_is_default_ignored(sig) &&
+			(handler_addr == 0 ||
+			 handler_addr == (unsigned long)SIG_IGN)) {
+		return 0;
+	}
+
+	return (pending_mask & blocked_mask) ? 0 : 1;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+signal_pending_interrupt_action_result(int sig, unsigned long handler_addr,
+		unsigned long pending_mask, unsigned long blocked_mask,
+		int interrupted)
+{
+	if (!signal_pending_deliverable_result(0, sig, handler_addr,
+			pending_mask, blocked_mask)) {
+		return 0;
+	}
+	if (interrupted) {
+		return 0;
+	}
+	if (!signal_is_default_ignored(sig) && handler_addr == 0) {
+		return 2;
+	}
+	return 1;
+}
+
 SYSCALL_POLICY_HELPER_SCOPE int
 rt_sigqueueinfo_pid_result(int pid)
 {
@@ -4824,6 +5116,136 @@ ptrace_siginfo_state_result(int status, int has_siginfo)
 	}
 
 	return has_siginfo ? 0 : -ESRCH;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+ptrace_eventmsg_state_result(int status)
+{
+	return ptrace_status_allows_io(status) ? 0 : -ESRCH;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+ptrace_wakeup_request_action_result(long request)
+{
+	if (request == PTRACE_KILL) {
+		return PTRACE_WAKEUP_ACTION_KILL;
+	}
+	if (request == PTRACE_CONT || request == PTRACE_SINGLESTEP ||
+			request == PTRACE_SYSCALL) {
+		return PTRACE_WAKEUP_ACTION_RESUME;
+	}
+	return PTRACE_WAKEUP_ACTION_NONE;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+ptrace_resume_single_step_result(long request)
+{
+	return request == PTRACE_SINGLESTEP;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+ptrace_resume_trace_syscall_result(long request)
+{
+	return request == PTRACE_SYSCALL;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+ptrace_resume_signal_needed_result(long request, long data)
+{
+	return ptrace_wakeup_request_action_result(request) ==
+		PTRACE_WAKEUP_ACTION_RESUME && data != 0 && data != SIGSTOP;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+ptrace_resume_signal_source_result(long request, int has_sendsig,
+		int has_recvsig)
+{
+	if (request == PTRACE_CONT && has_sendsig) {
+		return PTRACE_RESUME_SIGNAL_SOURCE_SENDSIG;
+	}
+	if (request == PTRACE_CONT && has_recvsig) {
+		return PTRACE_RESUME_SIGNAL_SOURCE_RECVSIG;
+	}
+	return PTRACE_RESUME_SIGNAL_SOURCE_USER;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+ptrace_detach_forward_signal_needed_result(int data)
+{
+	return data != 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+ptrace_detach_exit_signal_needed_result(int status)
+{
+	return status == PS_EXITED || status == PS_ZOMBIE;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+ptrace_setsiginfo_target_result(int status, int has_sendsig, int has_recvsig)
+{
+	int target = PTRACE_SIGINFO_STORE_SENDSIG;
+
+	if (!ptrace_status_allows_io(status)) {
+		return -ESRCH;
+	}
+	if (!has_sendsig) {
+		target |= PTRACE_SIGINFO_ALLOC_SENDSIG;
+	}
+	if (has_recvsig) {
+		target |= PTRACE_SIGINFO_STORE_RECVSIG;
+	}
+	return target;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+ptrace_request_dispatch_result(long request)
+{
+	switch (request) {
+	case PTRACE_TRACEME:
+		return PTRACE_DISPATCH_TRACEME;
+	case PTRACE_KILL:
+	case PTRACE_CONT:
+	case PTRACE_SINGLESTEP:
+	case PTRACE_SYSCALL:
+		return PTRACE_DISPATCH_WAKEUP;
+	case PTRACE_GETREGS:
+		return PTRACE_DISPATCH_GETREGS;
+	case PTRACE_SETREGS:
+		return PTRACE_DISPATCH_SETREGS;
+	case PTRACE_GETFPREGS:
+		return PTRACE_DISPATCH_GETFPREGS;
+	case PTRACE_SETFPREGS:
+		return PTRACE_DISPATCH_SETFPREGS;
+	case PTRACE_PEEKUSER:
+		return PTRACE_DISPATCH_PEEKUSER;
+	case PTRACE_POKEUSER:
+		return PTRACE_DISPATCH_POKEUSER;
+	case PTRACE_PEEKTEXT:
+	case PTRACE_PEEKDATA:
+		return PTRACE_DISPATCH_PEEKTEXT;
+	case PTRACE_POKETEXT:
+	case PTRACE_POKEDATA:
+		return PTRACE_DISPATCH_POKETEXT;
+	case PTRACE_SETOPTIONS:
+		return PTRACE_DISPATCH_SETOPTIONS;
+	case PTRACE_ATTACH:
+		return PTRACE_DISPATCH_ATTACH;
+	case PTRACE_DETACH:
+		return PTRACE_DISPATCH_DETACH;
+	case PTRACE_GETSIGINFO:
+		return PTRACE_DISPATCH_GETSIGINFO;
+	case PTRACE_SETSIGINFO:
+		return PTRACE_DISPATCH_SETSIGINFO;
+	case PTRACE_GETREGSET:
+		return PTRACE_DISPATCH_GETREGSET;
+	case PTRACE_SETREGSET:
+		return PTRACE_DISPATCH_SETREGSET;
+	case PTRACE_GETEVENTMSG:
+		return PTRACE_DISPATCH_GETEVENTMSG;
+	default:
+		return PTRACE_DISPATCH_ARCH;
+	}
 }
 
 SYSCALL_POLICY_HELPER_SCOPE int
@@ -4999,6 +5421,209 @@ waitid_status_code_result(int status)
 }
 
 SYSCALL_POLICY_HELPER_SCOPE int
+wait_stopped_source_result(int has_c_thread, int c_thread_exit_status,
+		int child_status, int child_group_exit_status,
+		int main_thread_exit_status)
+{
+	if (has_c_thread) {
+		return c_thread_exit_status ? WAIT_STOP_SOURCE_THREAD :
+			WAIT_STOP_SOURCE_NONE;
+	}
+	if (child_status & (PS_STOPPED | PS_DELAY_STOPPED)) {
+		return child_group_exit_status ? WAIT_STOP_SOURCE_PROCESS :
+			WAIT_STOP_SOURCE_NONE;
+	}
+	return main_thread_exit_status ? WAIT_STOP_SOURCE_MAIN_THREAD :
+		WAIT_STOP_SOURCE_NONE;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+wait_stopped_exit_status_result(int source, int c_thread_exit_status,
+		int child_group_exit_status, int main_thread_exit_status)
+{
+	switch (source) {
+	case WAIT_STOP_SOURCE_THREAD:
+		return c_thread_exit_status;
+	case WAIT_STOP_SOURCE_PROCESS:
+		return child_group_exit_status;
+	case WAIT_STOP_SOURCE_MAIN_THREAD:
+		return main_thread_exit_status;
+	default:
+		return 0;
+	}
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+wait_report_id_result(int source, int child_pid, int c_thread_tid)
+{
+	return source == WAIT_STOP_SOURCE_THREAD ? c_thread_tid : child_pid;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+wait_reaped_exit_status_result(int options, int exit_status)
+{
+	return wait_reap_needed_result(options) ? 0 : exit_status;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+wait_reaped_signal_flags_result(int options, int signal_flags, int clear_mask)
+{
+	return wait_reap_needed_result(options) ?
+		(signal_flags & ~clear_mask) : signal_flags;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+wait_process_reparent_needed_result(int options, int parent_is_ppid)
+{
+	return wait_reap_needed_result(options) && parent_is_ppid;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+wait_main_thread_ptrace_detach_needed_result(int options, int ptrace)
+{
+	return wait_reap_needed_result(options) && (ptrace & PT_TRACED);
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+wait_thread_reap_action_result(int options, int ptrace)
+{
+	if (!wait_reap_needed_result(options)) {
+		return WAIT_THREAD_REAP_ACTION_NONE;
+	}
+	return (ptrace & PT_TRACED) ?
+		WAIT_THREAD_REAP_ACTION_PTRACE_DETACH :
+		WAIT_THREAD_REAP_ACTION_RELEASE;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+wait_status_copy_needed_result(int rc, int has_status)
+{
+	return rc >= 0 && has_status;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+wait_rusage_copy_needed_result(int has_rusage)
+{
+	return has_rusage;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+waitid_siginfo_needed_result(int rc, int has_infop)
+{
+	return rc > 0 && has_infop;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+getrusage_dispatch_result(int who)
+{
+	switch (who) {
+	case RUSAGE_SELF:
+		return GETRUSAGE_DISPATCH_SELF;
+	case RUSAGE_CHILDREN:
+		return GETRUSAGE_DISPATCH_CHILDREN;
+	case RUSAGE_THREAD:
+		return GETRUSAGE_DISPATCH_THREAD;
+	default:
+		return 0;
+	}
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+getrusage_thread_update_action_result(int is_current_thread, int status,
+		int in_kernel)
+{
+	return !is_current_thread && status == PS_RUNNING && !in_kernel ?
+		GETRUSAGE_THREAD_UPDATE_INTERRUPT :
+		GETRUSAGE_THREAD_UPDATE_READY;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE long
+getrusage_maxrss_kb_result(long maxrss)
+{
+	return maxrss / 1024;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+exit_code_status_result(int code)
+{
+	return (code >> 8) & 255;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+exit_code_signal_result(int code)
+{
+	return code & 255;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+exit_syscall_code_result(int status)
+{
+	return (status & 255) << 8;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+thread_exit_signal_result(int ptrace, int termsig)
+{
+	return ptrace ? SIGCHLD : termsig;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+sigchld_code_result(int exit_status)
+{
+	if (exit_status & 0x7f) {
+		return (exit_status & 0x80) ? CLD_DUMPED : CLD_KILLED;
+	}
+	return CLD_EXITED;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+exit_group_status_claimed_result(unsigned long old_exit_status)
+{
+	return (old_exit_status & 0x0000000100000000UL) ? 1 : 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE unsigned long
+exit_group_status_result(int rc, int sig)
+{
+	return 0x0000000100000000UL |
+		(((unsigned long)rc & 0xff) << 8) |
+		((unsigned long)sig & 0xff);
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+terminate_thread_active_result(int status)
+{
+	return status != PS_EXITED && status != PS_ZOMBIE;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+terminate_status_result(int rc, int sig)
+{
+	return ((rc & 0x00ff) << 8) | (sig & 0xff);
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+terminate_report_thread_release_needed_result(int same_process, int termsig)
+{
+	return same_process && termsig && termsig != SIGCHLD;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+terminate_child_action_result(int ppid_is_exiting, int parent_is_exiting,
+		int child_status)
+{
+	if (!ppid_is_exiting) {
+		return TERMINATE_CHILD_ACTION_NONE;
+	}
+	if (child_status == PS_ZOMBIE) {
+		return TERMINATE_CHILD_ACTION_FREE_ZOMBIE;
+	}
+	return parent_is_exiting ?
+		TERMINATE_CHILD_ACTION_REPARENT_CHILD :
+		TERMINATE_CHILD_ACTION_REPARENT_PTRACED;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
 clone_pthread_marker_result(int clone_flags, unsigned long newsp,
 		unsigned long parent_tidptr)
 {
@@ -5060,6 +5685,49 @@ SYSCALL_POLICY_HELPER_SCOPE int
 clone_report_thread_result(int clone_flags, int termsig)
 {
 	return (clone_flags & CLONE_VM) && termsig && termsig != SIGCHLD;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+clone_parent_tid_store_needed_result(int clone_flags)
+{
+	return !!(clone_flags & CLONE_PARENT_SETTID);
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+clone_child_cleartid_needed_result(int clone_flags)
+{
+	return !!(clone_flags & CLONE_CHILD_CLEARTID);
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+clone_child_tid_store_needed_result(int clone_flags)
+{
+	return !!(clone_flags & CLONE_CHILD_SETTID);
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+clone_tls_source_result(int clone_flags)
+{
+	return (clone_flags & CLONE_SETTLS) ?
+		CLONE_TLS_SOURCE_ARGUMENT : CLONE_TLS_SOURCE_INHERIT;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+clone_use_last_cpu_result(int mod_clone, int uti_use_last_cpu)
+{
+	return mod_clone == SPAWN_TO_REMOTE && uti_use_last_cpu;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+clone_remote_spawn_result(int previous_mod_clone)
+{
+	return previous_mod_clone == SPAWN_TO_REMOTE;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+clone_parent_use_pid1_result(int parent_status)
+{
+	return parent_status == PS_EXITED || parent_status == PS_ZOMBIE;
 }
 
 SYSCALL_POLICY_HELPER_SCOPE int
@@ -5403,7 +6071,7 @@ SYSCALL_DECLARE(setresuid)
 	int rc;
 
 	rc = syscall_generic_forwarding(__NR_setresuid, ctx);
-	if(rc == 0){
+	if (syscall_refresh_cred_needed_result(rc)) {
 		do_setresuid();
 	}
 	return rc;
@@ -5414,7 +6082,7 @@ SYSCALL_DECLARE(setreuid)
 	int rc;
 
 	rc = syscall_generic_forwarding(__NR_setreuid, ctx);
-	if(rc == 0){
+	if (syscall_refresh_cred_needed_result(rc)) {
 		do_setresuid();
 	}
 	return rc;
@@ -5425,7 +6093,7 @@ SYSCALL_DECLARE(setuid)
 	long rc;
 
 	rc = syscall_generic_forwarding(__NR_setuid, ctx);
-	if(rc == 0){
+	if (syscall_refresh_cred_needed_result(rc)) {
 		do_setresuid();
 	}
 	return rc;
@@ -5450,7 +6118,7 @@ SYSCALL_DECLARE(setresgid)
 	int rc;
 
 	rc = syscall_generic_forwarding(__NR_setresgid, ctx);
-	if(rc == 0){
+	if (syscall_refresh_cred_needed_result(rc)) {
 		do_setresgid();
 	}
 	return rc;
@@ -5461,7 +6129,7 @@ SYSCALL_DECLARE(setregid)
 	int rc;
 
 	rc = syscall_generic_forwarding(__NR_setregid, ctx);
-	if(rc == 0){
+	if (syscall_refresh_cred_needed_result(rc)) {
 		do_setresgid();
 	}
 	return rc;
@@ -5472,7 +6140,7 @@ SYSCALL_DECLARE(setgid)
 	long rc;
 
 	rc = syscall_generic_forwarding(__NR_setgid, ctx);
-	if(rc == 0){
+	if (syscall_refresh_cred_needed_result(rc)) {
 		do_setresgid();
 	}
 	return rc;
@@ -7099,7 +7767,7 @@ SYSCALL_DECLARE(rt_sigtimedwait)
 		}
 
 		if(&pending->list != head){
-			list_del(&pending->list);
+			process_list_detach_result(&pending->list);
 			thread->sigmask.__val[0] = bset;
 			mcs_rwlock_writer_unlock(lock, &mcs_rw_node);
 			break;
@@ -7127,7 +7795,7 @@ SYSCALL_DECLARE(rt_sigtimedwait)
 		}
 
 		if(&pending->list != head){
-			list_del(&pending->list);
+			process_list_detach_result(&pending->list);
 			thread->sigmask.__val[0] = bset;
 			mcs_rwlock_writer_unlock(lock, &mcs_rw_node);
 			do_signal(-EINTR, NULL, thread, pending, -1);
@@ -7247,7 +7915,7 @@ do_sigsuspend(struct thread *thread, const sigset_t *set)
 			continue;
 		}
 
-		list_del(&pending->list);
+		process_list_detach_result(&pending->list);
 		mcs_rwlock_writer_unlock(lock, &mcs_rw_node);
 		thread->sigmask.__val[0] = bset;
 		do_signal(-EINTR, NULL, thread, pending, -1);
@@ -8762,8 +9430,8 @@ do_exit(int code)
 	struct process *proc = thread->proc;
 	struct mcs_rwlock_node_irqsave lock;
 	int nproc;
-	int exit_status = (code >> 8) & 255;
-	int sig = code & 255;
+	int exit_status = exit_code_status_result(code);
+	int sig = exit_code_signal_result(code);
 	struct timespec ats;
 
 	dkprintf("sys_exit,pid=%d\n", proc->pid);
@@ -8787,8 +9455,7 @@ do_exit(int code)
 	mcs_rwlock_reader_lock(&proc->threads_lock, &lock);
 	nproc = 0;
 	list_for_each_entry(child, &proc->threads_list, siblings_list) {
-		if (child->status != PS_EXITED &&
-		    child->status != PS_ZOMBIE)
+		if (terminate_thread_active_result(child->status))
 			nproc++;
 	}
 
@@ -8829,9 +9496,9 @@ do_exit(int code)
 
 SYSCALL_DECLARE(exit)
 {
-	int exit_status = ((int)ihk_mc_syscall_arg0(ctx)) & 255;
+	int code = exit_syscall_code_result((int)ihk_mc_syscall_arg0(ctx));
 
-	do_exit(exit_status << 8);
+	do_exit(code);
 	return 0;
 }
 
@@ -9100,24 +9767,29 @@ SYSCALL_DECLARE(getrusage)
 	struct mcs_rwlock_node lock;
 	struct timespec ats;
 	int error;
+	int dispatch;
 
 	error = getrusage_who_result(who);
 	if (error) {
 		return error;
 	}
+	dispatch = getrusage_dispatch_result(who);
 
 	memset(&kusage, '\0', sizeof kusage);
 
-	if(who == RUSAGE_SELF){
+	if(dispatch == GETRUSAGE_DISPATCH_SELF){
 		struct thread *child;
 
 		memset(&utime, '\0', sizeof utime);
 		memset(&stime, '\0', sizeof stime);
 		mcs_rwlock_reader_lock_noirq(&proc->threads_lock, &lock);
 		list_for_each_entry(child, &proc->threads_list, siblings_list){
-			if(child != thread &&
-			   child->status == PS_RUNNING &&
-			   !child->in_kernel){
+			int update_action =
+				getrusage_thread_update_action_result(
+					child == thread, child->status,
+					child->in_kernel);
+
+			if(update_action == GETRUSAGE_THREAD_UPDATE_INTERRUPT){
 				child->times_update = 0;
 				ihk_mc_interrupt_cpu(child->cpu_id,
 						ihk_mc_get_vector(IHK_GV_IKC));
@@ -9141,21 +9813,22 @@ SYSCALL_DECLARE(getrusage)
 		ts_to_tv(&kusage.ru_utime, &utime);
 		ts_to_tv(&kusage.ru_stime, &stime);
 
-		kusage.ru_maxrss = proc->maxrss / 1024;
+		kusage.ru_maxrss = getrusage_maxrss_kb_result(proc->maxrss);
 	}
-	else if(who == RUSAGE_CHILDREN){
+	else if(dispatch == GETRUSAGE_DISPATCH_CHILDREN){
 		ts_to_tv(&kusage.ru_utime, &proc->utime_children);
 		ts_to_tv(&kusage.ru_stime, &proc->stime_children);
 
-		kusage.ru_maxrss = proc->maxrss_children / 1024;
+		kusage.ru_maxrss =
+			getrusage_maxrss_kb_result(proc->maxrss_children);
 	}
-	else if(who == RUSAGE_THREAD){
+	else if(dispatch == GETRUSAGE_DISPATCH_THREAD){
 		tsc_to_ts(thread->user_tsc, &ats);
 		ts_to_tv(&kusage.ru_utime, &ats);
 		tsc_to_ts(thread->system_tsc, &ats);
 		ts_to_tv(&kusage.ru_stime, &ats);
 
-		kusage.ru_maxrss = proc->maxrss / 1024;
+		kusage.ru_maxrss = getrusage_maxrss_kb_result(proc->maxrss);
 	}
 
 	if(copy_to_user(usage, &kusage, sizeof kusage))
@@ -9195,6 +9868,8 @@ static int ptrace_wakeup_sig(int pid, long request, long data) {
 	struct siginfo info;
 	struct mcs_rwlock_node_irqsave lock;
 	struct thread *thread = cpu_local_var(current);
+	int action;
+	int source;
 
 	child = find_thread(pid, pid);
 	if (!child) {
@@ -9207,9 +9882,12 @@ static int ptrace_wakeup_sig(int pid, long request, long data) {
 		goto out;
 	}
 
-	switch (request) {
-	case PTRACE_KILL:
-		child->ptrace_saved_uctx_valid = 0;
+	action = ptrace_wakeup_request_action_result(request);
+	switch (action) {
+	case PTRACE_WAKEUP_ACTION_KILL:
+		process_thread_ptrace_saved_context_clear_result(child,
+			__builtin_offsetof(struct thread,
+					   ptrace_saved_uctx_valid));
 		memset(&info, '\0', sizeof info);
 		info.si_signo = SIGKILL;
 		error = do_kill(thread, pid, -1, SIGKILL, &info, 0);
@@ -9217,32 +9895,36 @@ static int ptrace_wakeup_sig(int pid, long request, long data) {
 			goto out;
 		}
 		break;
-	case PTRACE_CONT:
-	case PTRACE_SINGLESTEP:
-	case PTRACE_SYSCALL:
-		child->ptrace_saved_uctx_valid = 0;
-		if (request == PTRACE_SINGLESTEP) {
+	case PTRACE_WAKEUP_ACTION_RESUME:
+		process_thread_ptrace_saved_context_clear_result(child,
+			__builtin_offsetof(struct thread,
+					   ptrace_saved_uctx_valid));
+		if (ptrace_resume_single_step_result(request)) {
 			set_single_step(child);
 		}
 		mcs_rwlock_writer_lock(&child->proc->update_lock, &lock);
-		child->ptrace &= ~PT_TRACE_SYSCALL;
-		if (request == PTRACE_SYSCALL) {
-			child->ptrace |= PT_TRACE_SYSCALL;
-		}
+		process_thread_ptrace_trace_syscall_update_result(child,
+			__builtin_offsetof(struct thread, ptrace),
+			ptrace_resume_trace_syscall_result(request));
 		mcs_rwlock_writer_unlock(&child->proc->update_lock, &lock);
-		if(data != 0 && data != SIGSTOP) {
+		if (ptrace_resume_signal_needed_result(request, data)) {
+			struct sig_pending *pending;
 
 			/* TODO: Tracing process replace the original
 			   signal with "data" */
-			if (request == PTRACE_CONT && child->ptrace_sendsig) {
-				memcpy(&info, &child->ptrace_sendsig->info, sizeof info);
-				kfree(child->ptrace_sendsig);
-				child->ptrace_sendsig = NULL;
-			}
-			else if (request == PTRACE_CONT && child->ptrace_recvsig) {
-				memcpy(&info, &child->ptrace_recvsig->info, sizeof info);
-				kfree(child->ptrace_recvsig);
-				child->ptrace_recvsig = NULL;
+			source = ptrace_resume_signal_source_result(request,
+					child->ptrace_sendsig != NULL,
+					child->ptrace_recvsig != NULL);
+			pending = process_thread_ptrace_pending_signal_take_result(
+					child,
+					__builtin_offsetof(struct thread,
+							   ptrace_sendsig),
+					__builtin_offsetof(struct thread,
+							   ptrace_recvsig),
+					source);
+			if (pending) {
+				memcpy(&info, &pending->info, sizeof info);
+				kfree(pending);
 			}
 			else {
 				memset(&info, '\0', sizeof info);
@@ -9632,7 +10314,8 @@ static long ptrace_geteventmsg(int pid, long data)
 	if (!child) {
 		return -ESRCH;
 	}
-	if(ptrace_status_allows_io(child->status)){
+	rc = ptrace_eventmsg_state_result(child->status);
+	if (!rc) {
 		if (copy_to_user(msg_p, &child->ptrace_eventmsg,
 				 sizeof(*msg_p))) {
 			rc = -EFAULT;
@@ -9673,29 +10356,32 @@ ptrace_setsiginfo(int pid, siginfo_t *data)
 {
 	struct thread *child;
 	int rc = 0;
+	int target;
 
 	child = find_thread(0, pid);
 	if (!child) {
 		return -ESRCH;
 	}
 
-	if(!ptrace_status_allows_io(child->status)){
-		rc = -ESRCH;
+	target = ptrace_setsiginfo_target_result(child->status,
+			child->ptrace_sendsig != NULL,
+			child->ptrace_recvsig != NULL);
+	if (target < 0) {
+		rc = target;
 	}
 	else {
-		if (child->ptrace_sendsig == NULL) {
+		if (target & PTRACE_SIGINFO_ALLOC_SENDSIG) {
 			child->ptrace_sendsig = kmalloc(sizeof(struct sig_pending), IHK_MC_AP_NOWAIT);
 			if (child->ptrace_sendsig == NULL) {
 				rc = -ENOMEM;
 			}
 		}
 
-		if (!rc &&
+		if (!rc && (target & PTRACE_SIGINFO_STORE_SENDSIG) &&
 		    copy_from_user(&child->ptrace_sendsig->info, data, sizeof(siginfo_t))) {
 			rc = -EFAULT;
 		}
-		if (!rc &&
-		    child->ptrace_recvsig){
+		if (!rc && (target & PTRACE_SIGINFO_STORE_RECVSIG)) {
 			    if(copy_from_user(&child->ptrace_recvsig->info, data, sizeof(siginfo_t))) {
 				rc = -EFAULT;
 			}
@@ -9712,97 +10398,99 @@ SYSCALL_DECLARE(ptrace)
 	const long addr = (long)ihk_mc_syscall_arg2(ctx);
 	const long data = (long)ihk_mc_syscall_arg3(ctx);
 	long error = -EOPNOTSUPP;
+	int dispatch = ptrace_request_dispatch_result(request);
 
-	switch(request) {
-	case PTRACE_TRACEME:
+	switch (dispatch) {
+	case PTRACE_DISPATCH_TRACEME:
 		dkprintf("ptrace: PTRACE_TRACEME\n");
 		error = ptrace_traceme();
 		break;
-	case PTRACE_KILL:
-		dkprintf("ptrace: PTRACE_KILL\n");
+	case PTRACE_DISPATCH_WAKEUP:
+		if (request == PTRACE_KILL) {
+			dkprintf("ptrace: PTRACE_KILL\n");
+		}
+		else if (request == PTRACE_CONT) {
+			dkprintf("ptrace: PTRACE_CONT: data=%d\n", data);
+		}
+		else if (request == PTRACE_SINGLESTEP) {
+			dkprintf("ptrace: PTRACE_SINGLESTEP: data=%d\n", data);
+		}
+		else {
+			dkprintf("ptrace: PTRACE_SYSCALL: data=%d\n", data);
+		}
 		error = ptrace_wakeup_sig(pid, request, data);
 		break;
-	case PTRACE_CONT:
-		dkprintf("ptrace: PTRACE_CONT: data=%d\n", data);
-		error = ptrace_wakeup_sig(pid, request, data);
-		break;
-	case PTRACE_GETREGS:
+	case PTRACE_DISPATCH_GETREGS:
 		error = ptrace_getregs(pid, data);
 		dkprintf("PTRACE_GETREGS: data=%p return=%p\n", data, error);
 		break;
-	case PTRACE_PEEKUSER:
+	case PTRACE_DISPATCH_PEEKUSER:
 		error = ptrace_peekuser(pid, addr, data);
 		dkprintf("PTRACE_PEEKUSER: addr=%p return=%p\n", addr, error);
 		break;
-	case PTRACE_POKEUSER:
+	case PTRACE_DISPATCH_POKEUSER:
 		error = ptrace_pokeuser(pid, addr, data);
 		dkprintf("PTRACE_POKEUSER: addr=%p data=%p return=%p\n", addr, data, error);
 		break;
-	case PTRACE_SETOPTIONS:
+	case PTRACE_DISPATCH_SETOPTIONS:
 		error = ptrace_setoptions(pid, data);
 		dkprintf("PTRACE_SETOPTIONS: flags=%d return=%p\n", data, error);
 		break;
-	case PTRACE_PEEKTEXT:
+	case PTRACE_DISPATCH_PEEKTEXT:
 		error = ptrace_peektext(pid, addr, data);
-		dkprintf("PTRACE_PEEKTEXT: addr=%p return=%p\n", addr, error);
+		if (request == PTRACE_PEEKTEXT) {
+			dkprintf("PTRACE_PEEKTEXT: addr=%p return=%p\n", addr, error);
+		}
+		else {
+			dkprintf("PTRACE_PEEKDATA: addr=%p return=%p\n", addr, error);
+		}
 		break;
-	case PTRACE_PEEKDATA:
-		error = ptrace_peektext(pid, addr, data);
-		dkprintf("PTRACE_PEEKDATA: addr=%p return=%p\n", addr, error);
-		break;
-	case PTRACE_POKETEXT:
+	case PTRACE_DISPATCH_POKETEXT:
 		error = ptrace_poketext(pid, addr, data);
-		dkprintf("PTRACE_POKETEXT: addr=%p data=%p\n", addr, data);
+		if (request == PTRACE_POKETEXT) {
+			dkprintf("PTRACE_POKETEXT: addr=%p data=%p\n", addr, data);
+		}
+		else {
+			dkprintf("PTRACE_POKEDATA: addr=%p data=%p\n", addr, data);
+		}
 		break;
-	case PTRACE_POKEDATA:
-		error = ptrace_poketext(pid, addr, data);
-		dkprintf("PTRACE_POKEDATA: addr=%p data=%p\n", addr, data);
-		break;
-	case PTRACE_SINGLESTEP:
-		dkprintf("ptrace: PTRACE_SINGLESTEP: data=%d\n", data);
-		error = ptrace_wakeup_sig(pid, request, data);
-		break;
-	case PTRACE_GETFPREGS:
+	case PTRACE_DISPATCH_GETFPREGS:
 		dkprintf("ptrace: PTRACE_GETFPREGS: data=%p\n", data);
 		error = ptrace_getfpregs(pid, data);
 		break;
-	case PTRACE_SETFPREGS:
+	case PTRACE_DISPATCH_SETFPREGS:
 		dkprintf("ptrace: PTRACE_SETFPREGS: data=%p\n", data);
 		error = ptrace_setfpregs(pid, data);
 		break;
-	case PTRACE_SETREGS:
+	case PTRACE_DISPATCH_SETREGS:
 		error = ptrace_setregs(pid, data);
 		dkprintf("PTRACE_SETREGS: data=%p return=%p\n", data, error);
 		break;
-	case PTRACE_ATTACH:
+	case PTRACE_DISPATCH_ATTACH:
 		dkprintf("ptrace: PTRACE_ATTACH: pid=%d\n", pid);
 		error = ptrace_attach(pid);
 		break;
-	case PTRACE_DETACH:
+	case PTRACE_DISPATCH_DETACH:
 		dkprintf("ptrace: PTRACE_DETACH: data=%d\n", data);
 		error = ptrace_detach(pid, data);
 		break;
-	case PTRACE_SYSCALL:
-		dkprintf("ptrace: PTRACE_SYSCALL: data=%d\n", data);
-		error = ptrace_wakeup_sig(pid, request, data);
-		break;
-	case PTRACE_GETSIGINFO:
+	case PTRACE_DISPATCH_GETSIGINFO:
 		dkprintf("ptrace: PTRACE_GETSIGINFO: data=%p\n", data);
 		error = ptrace_getsiginfo(pid, (siginfo_t *)data);
 		break;
-	case PTRACE_SETSIGINFO:
+	case PTRACE_DISPATCH_SETSIGINFO:
 		dkprintf("ptrace: PTRACE_SETSIGINFO: data=%p\n", data);
 		error = ptrace_setsiginfo(pid, (siginfo_t *)data);
 		break;
-	case PTRACE_GETREGSET:
+	case PTRACE_DISPATCH_GETREGSET:
 		dkprintf("ptrace: PTRACE_GETREGSET: addr=0x%x, data=%p\n", addr, data);
 		error = ptrace_getregset(pid, addr, data);
 		break;
-	case PTRACE_SETREGSET:
+	case PTRACE_DISPATCH_SETREGSET:
 		dkprintf("ptrace: PTRACE_SETREGSET: addr=0x%x, data=%p\n", addr, data);
 		error = ptrace_setregset(pid, addr, data);
 		break;
-	case PTRACE_GETEVENTMSG:
+	case PTRACE_DISPATCH_GETEVENTMSG:
 		dkprintf("ptrace: PTRACE_GETEVENTMSG: data=%p\n", data);
 		error = ptrace_geteventmsg(pid, data);
 		break;
@@ -12999,23 +13687,14 @@ check_sig_pending()
 				 sig++, x >>= 1) {
 			}
 			k = thread->sigcommon->action + sig - 1;
-			if ((sig != SIGCHLD &&
-				 sig != SIGURG &&
-				 sig != SIGCONT) ||
-				(k->sa.sa_handler != SIG_IGN &&
-				 k->sa.sa_handler != NULL)) {
-				if (!(pending->sigmask.__val[0] & w)) {
-					if (pending->interrupted == 0) {
-						pending->interrupted = 1;
-						found = 1;
-						if (sig != SIGCHLD &&
-							sig != SIGURG &&
-							sig != SIGCONT &&
-							!k->sa.sa_handler) {
-							found = 2;
-							break;
-						}
-					}
+			found = signal_pending_interrupt_action_result(sig,
+					(unsigned long)k->sa.sa_handler,
+					pending->sigmask.__val[0], w,
+					pending->interrupted);
+			if (found) {
+				pending->interrupted = 1;
+				if (found == 2) {
+					break;
 				}
 			}
 		}
@@ -13075,28 +13754,22 @@ getsigpending(struct thread *thread, int delflag)
 					sig++, x >>= 1) {
 			}
 			k = thread->sigcommon->action + sig - 1;
-			if (delflag ||
-			   (sig != SIGCHLD &&
-				sig != SIGURG &&
-				sig != SIGCONT) ||
-			   (k->sa.sa_handler != (void *)1 &&
-				k->sa.sa_handler != NULL)){
-				if (!(pending->sigmask.__val[0] & w)) {
-					if (delflag)
-						list_del(&pending->list);
-
-					if (delflag) {
-						mcs_rwlock_writer_unlock(
-							lock,
-							&mcs_rw_node);
-					}
-					else {
-						mcs_rwlock_reader_unlock(
-							lock,
-							&mcs_rw_node);
-					}
-					return pending;
+			if (signal_pending_deliverable_result(delflag, sig,
+					(unsigned long)k->sa.sa_handler,
+					pending->sigmask.__val[0], w)) {
+				if (delflag) {
+					process_list_detach_result(&pending->list);
 				}
+
+				if (delflag) {
+					mcs_rwlock_writer_unlock(lock,
+							&mcs_rw_node);
+				}
+				else {
+					mcs_rwlock_reader_unlock(lock,
+							&mcs_rw_node);
+				}
+				return pending;
 			}
 		}
 

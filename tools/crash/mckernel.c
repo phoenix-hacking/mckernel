@@ -13,6 +13,88 @@
 
 #include "defs.h"
 
+#ifndef TREE_LINEAR_ORDER
+#define TREE_LINEAR_ORDER (VERBOSE << 9)
+#endif
+
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+extern int mck_crash_x86_direct_phys_result(ulong addr,
+		ulong linux_page_offset, ulong x86_kernel_phys_base,
+		ulong map_kernel_start, ulong map_fixed_start,
+		ulong map_st_start, ulong *phys_out);
+extern const char *mck_crash_thread_status_label_result(int status);
+extern int mck_crash_vr_perm_result(char *buf, ulong flag);
+extern int mck_crash_default_path_result(char *buf, size_t buf_size,
+		ulong start, ulong end, ulong flag, ulong vdso_addr, ulong vvar_addr,
+		ulong brk_start, ulong brk_end_allocated);
+extern int mck_crash_child_pos_result(char *dst, size_t dst_size,
+		const char *src, char side);
+extern int mck_crash_root_pos_result(char *dst, size_t dst_size);
+extern const char *mck_crash_pgshift_label_result(int pgshift);
+extern int mck_crash_symbol_value_cmd_result(char *dst, size_t dst_size,
+		const char *name);
+extern int mck_crash_add_symbol_file_cmd_result(char *dst, size_t dst_size,
+		const char *filename);
+extern size_t mck_crash_kmsg_first_part_result(int head, int tail, int len);
+extern const char *mck_crash_thread_comm_result(const char *saved_cmdline,
+		int is_idle);
+extern int mck_crash_mcps_line_result(char *buf, size_t buf_size,
+		int is_active, int tid, int pid, int ppid, int cpu, ulong thread,
+		const char *status, const char *comm);
+extern int mck_crash_mcps_header_result(char *buf, size_t buf_size);
+extern int mck_crash_range_filter_result(ulong start, ulong end,
+		ulong match_addr);
+extern int mck_crash_mcmem_line_result(char *buf, size_t buf_size,
+		ulong start, ulong end, const char *perm, ulong memobj,
+		const char *path);
+extern int mck_crash_mcmem_process_line_result(char *buf, size_t buf_size,
+		ulong pid, ulong thread);
+extern int mck_crash_mcmem_header_result(char *buf, size_t buf_size);
+extern int mck_crash_mcvtop_header_result(char *buf, size_t buf_size);
+extern int mck_crash_pte_line_result(char *buf, size_t buf_size,
+		ulong virt, ulong phys, const char *size_label,
+		const char *flags);
+extern int mck_crash_pte_raw_line_result(char *buf, size_t buf_size,
+		ulong pte);
+extern int mck_crash_pte_not_found_result(char *buf, size_t buf_size,
+		ulong addr);
+extern int mck_crash_memory_range_header_result(char *buf, size_t buf_size);
+extern ulong mck_crash_pte_phys_result(ulong pte, ulong virt, int pgshift,
+		ulong mask);
+extern ulong mck_crash_x86_sign_extend_result(ulong virt);
+extern int mck_crash_pte_should_skip_result(ulong pte, ulong prev_pte,
+		ulong attr_mask, int pgshift, int prev_pgshift, ulong virt,
+		ulong prev_virt);
+extern int mck_crash_pte_lookup_range_result(ulong addr, ulong virt,
+		ulong index, int level_shift, ulong nonfixed_mask);
+extern int mck_crash_x86_pte_flags_result(char *buf, size_t buf_size,
+		ulong pte, ulong rw, ulong user, ulong pwt, ulong pcd,
+		ulong accessed, ulong dirty, ulong global, ulong nx);
+extern int mck_crash_arm64_pte_flags_result(char *buf, size_t buf_size,
+		ulong pte, ulong valid, ulong user, ulong rdonly,
+		ulong shared, ulong af, ulong ng, ulong pxn, ulong uxn,
+		ulong dirty, ulong special, ulong write, ulong cont,
+		ulong prot_none);
+extern int mck_crash_parse_context_values_result(const char *input,
+		ulong badaddr, ulong *decimal_out, ulong *hex_out);
+extern ulong mck_crash_pid_hash_head_result(ulong thash, ulong pid,
+		ulong hash_size, ulong list_head_size);
+extern int mck_crash_parse_hex_addr_result(const char *input,
+		ulong badaddr, ulong *addr_out);
+extern int mck_crash_same_boot_result(ulong old_boot_param_pa,
+		ulong old_boot_sec, ulong old_boot_nsec,
+		ulong new_boot_param_pa, ulong new_boot_sec,
+		ulong new_boot_nsec);
+extern int mck_crash_x86_pte_is_type_page_result(ulong pte, int level,
+		ulong page_pse);
+extern int mck_crash_arm64_pte_is_type_page_result(ulong pte, int level,
+		ulong pte_type_mask, ulong pte_type_page, ulong pmd_type_mask,
+		ulong pmd_type_sect);
+extern int mck_crash_ptl_shift_result(int level, int l1, int l2, int l3,
+		int l4);
+extern int mck_crash_kmsg_wrap_result(int head, int tail);
+#endif
+
 static int mck_loaded;
 static struct mck_symbol_table {
 	ulong clv;
@@ -108,6 +190,14 @@ int mcreadmem(ulonglong addr, int memtype, void *buffer, long size,
 #ifdef X86_64
 	if (LINUX_PAGE_OFFSET != -1UL &&
 			x86_kernel_phys_base != -1UL) {
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+		if (!mck_crash_x86_direct_phys_result(addr,
+					LINUX_PAGE_OFFSET, x86_kernel_phys_base,
+					MAP_KERNEL_START, MAP_FIXED_START,
+					MAP_ST_START, &phys)) {
+			kvtop(NULL, addr, &phys, 0);
+		}
+#else
 		if (addr >= MAP_KERNEL_START &&
 			addr < MAP_KERNEL_START + 0x4000) {
 			phys = addr - MAP_KERNEL_START + x86_kernel_phys_base;
@@ -124,6 +214,7 @@ int mcreadmem(ulonglong addr, int memtype, void *buffer, long size,
 		else {
 			kvtop(NULL, addr, &phys, 0);
 		}
+#endif
 		addr = phys_to_virt(phys);
 	}
 #elif defined ARM64
@@ -152,7 +243,11 @@ get_symbol_value(char *name)
 	ulong value;
 
 	value = -1;
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	mck_crash_symbol_value_cmd_result(buf, sizeof(buf), name);
+#else
 	sprintf(buf, "printf \"%%p\", &%s", name);
+#endif
 	open_tmpfile2();
 	if (gdb_pass_through(buf, pc->tmpfile2, GNU_RETURN_ON_ERROR|QUIET)) {
 		rewind(pc->tmpfile2);
@@ -268,7 +363,12 @@ lookup_pid(ulong pid, ulong thash, ulong *thread)
 		.callback_data = &wrap,
 	};
 	wrap.pid = pid;
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	ld.end = mck_crash_pid_hash_head_result(thash, pid, HASH_SIZE,
+			SIZE(list_head));
+#else
 	ld.end = thash + (pid % HASH_SIZE) * SIZE(list_head);
+#endif
 	if (mcreadmem(ld.end, KVADDR, &ld.start, sizeof(ld.start), "first list element",
 				RETURN_ON_ERROR|QUIET) && ld.start != ld.end) {
 		do_list(&ld);
@@ -296,11 +396,15 @@ mck_str_to_context(char *string, ulong *pid, ulong *thread)
 	s = string;
 	dvalue = hvalue = BADADDR;
 
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	mck_crash_parse_context_values_result(s, BADADDR, &dvalue, &hvalue);
+#else
 	if (decimal(s, 0))
 		dvalue = dtol(s, RETURN_ON_ERROR|QUIET, NULL);
 
 	if (hexadecimal(s, 0))
 		hvalue = htol(s, RETURN_ON_ERROR|QUIET, NULL);
+#endif
 
 	if (mcreadmem(MCK_SYMBOL(clv) + MCK_MEMBER_OFFSET(clv_resource_set),
 		    KVADDR, &rset, sizeof(rset), "clv resource_set",
@@ -428,10 +532,19 @@ mckernel_refresh_symbols(int fatal)
 	MCK_SIZE_INIT(clv, "struct cpu_local_var");
 
 	/* use assign to avoid error the first time (unset) */
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	if (mck_crash_same_boot_result(MCK_ASSIGN_SYMBOL(boot_param_pa),
+				MCK_ASSIGN_SYMBOL(boot_param_boot_sec),
+				MCK_ASSIGN_SYMBOL(boot_param_boot_nsec),
+				boot_param_pa, boot_param_boot_sec,
+				boot_param_boot_nsec))
+		return;
+#else
 	if (MCK_ASSIGN_SYMBOL(boot_param_pa) == boot_param_pa &&
 	    MCK_ASSIGN_SYMBOL(boot_param_boot_sec) == boot_param_boot_sec &&
 	    MCK_ASSIGN_SYMBOL(boot_param_boot_nsec) == boot_param_boot_nsec)
 		return;
+#endif
 
 	MCK_ASSIGN_SYMBOL(boot_param_pa) = boot_param_pa;
 	MCK_ASSIGN_SYMBOL(boot_param) = boot_param;
@@ -490,7 +603,11 @@ cmd_mcsymbols(void)
 	if (lstat(filename, (struct stat *)buf) < 0)
 		error(FATAL, "Error on lstat(%s): %m", filename);
 
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	mck_crash_add_symbol_file_cmd_result(buf, sizeof(buf), filename);
+#else
 	snprintf(buf, BUFSIZ, "add-symbol-file %s 0", filename);
+#endif
 
 	fprintf(fp, "Loading symbols from %s...", filename);
 	st->flags |= ADD_SYMBOL_FILE;
@@ -543,8 +660,11 @@ mcps_print_one(ulong thread, int cpu, int is_active, int is_idle)
 	ulong proc, parent_proc, tmp;
 	int tid = 0, pid = 0, ppid = 0, status;
 	long saved_cmdline_len;
-	char *saved_cmdline, *comm = is_idle ? "idle" : "";
+	char *saved_cmdline = NULL, *comm = is_idle ? "idle" : "";
 	char *status_st;
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	char line[256];
+#endif
 
 	if (!is_idle)
 		mcreadmem(thread + MCK_MEMBER_OFFSET(thread_tid), KVADDR,
@@ -553,6 +673,9 @@ mcps_print_one(ulong thread, int cpu, int is_active, int is_idle)
 	mcreadmem(thread + MCK_MEMBER_OFFSET(thread_status), KVADDR,
 		&status, sizeof(ulong), "thread_status",
 		RETURN_ON_ERROR);
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	status_st = (char *)mck_crash_thread_status_label_result(status);
+#else
 	switch (status) {
 	case PS_RUNNING:
 		status_st = "RU";
@@ -573,6 +696,7 @@ mcps_print_one(ulong thread, int cpu, int is_active, int is_idle)
 		status_st = "??";
 		break;
 	}
+#endif
 	mcreadmem(thread + MCK_MEMBER_OFFSET(thread_proc), KVADDR,
 		&proc, sizeof(ulong), "thread_proc",
 		RETURN_ON_ERROR);
@@ -594,6 +718,9 @@ mcps_print_one(ulong thread, int cpu, int is_active, int is_idle)
 		else
 			comm = saved_cmdline;
 	}
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	comm = (char *)mck_crash_thread_comm_result(saved_cmdline, is_idle);
+#endif
 	mcreadmem(proc + MCK_MEMBER_OFFSET(process_pid), KVADDR,
 		&pid, sizeof(int), "process_pid",
 		RETURN_ON_ERROR);
@@ -606,10 +733,17 @@ mcps_print_one(ulong thread, int cpu, int is_active, int is_idle)
 			RETURN_ON_ERROR);
 	}
 
-	fprintf(fp, "%s%6d %6d %6d %3d %016lx %2s %s\n",
-		is_active ? ">" : " ",
-		tid, pid, ppid, cpu, thread,
-		status_st, comm);
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	if (mck_crash_mcps_line_result(line, sizeof(line),
+			is_active, tid, pid, ppid, cpu, thread, status_st,
+			comm) >= 0) {
+		fprintf(fp, "%s\n", line);
+	} else
+#endif
+		fprintf(fp, "%s%6d %6d %6d %3d %016lx %2s %s\n",
+			is_active ? ">" : " ",
+			tid, pid, ppid, cpu, thread,
+			status_st, comm);
 	if (saved_cmdline_len)
 		FREEBUF(saved_cmdline);
 
@@ -637,6 +771,9 @@ static void
 cmd_mcps(void)
 {
 	int c, cpu;
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	char header[80];
+#endif
 
 	if (!mck_loaded)
 		error(FATAL, "You must run mcsymbols first");
@@ -653,8 +790,13 @@ cmd_mcps(void)
 	if (argerrs)
 		cmd_usage(pc->curcmd, SYNOPSIS);
 
-	fprintf(fp, " %6s %6s %6s %3s %-16s %2s %s\n",
-	       "TID", "PID", "PPID", "CPU", "THREAD", "ST", "COMM");
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	if (mck_crash_mcps_header_result(header, sizeof(header)) >= 0)
+		fprintf(fp, "%s\n", header);
+	else
+#endif
+		fprintf(fp, " %6s %6s %6s %3s %-16s %2s %s\n",
+		       "TID", "PID", "PPID", "CPU", "THREAD", "ST", "COMM");
 	for (cpu = 0; cpu < MCK_SYMBOL(num_processors); cpu++) {
 		ulong clv = MCK_SYMBOL(clv) + cpu * MCK_SIZE(clv);
 		ulong thread, idle_thread;
@@ -741,6 +883,10 @@ mcmem_print_one_range(ulong range, void *cb_arg)
 	ulong memobj;
 	ulong path;
 	char path_str[MAXPATHLEN];
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	char perm[5];
+	char line[MAXPATHLEN + 128];
+#endif
 	struct mcmem_print_wrap *wrap = cb_arg;
 
 	if (!mcreadmem(range + MCK_MEMBER_OFFSET(vm_range_start), KVADDR,
@@ -750,10 +896,21 @@ mcmem_print_one_range(ulong range, void *cb_arg)
 		     &end, sizeof(end), "vm_range end", RETURN_ON_ERROR))
 		return 1;
 
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	switch (mck_crash_range_filter_result(start, end, wrap->match_addr)) {
+	case 1:
+		return 1;
+	case -1:
+		return 0;
+	default:
+		break;
+	}
+#else
 	if (wrap->match_addr != -1UL && start > wrap->match_addr)
 		return 1;
 	if (wrap->match_addr != -1UL && end <= wrap->match_addr)
 		return 0;
+#endif
 
 	if (!mcreadmem(range + MCK_MEMBER_OFFSET(vm_range_flag), KVADDR,
 		     &flag, sizeof(flag), "vm_range flag", RETURN_ON_ERROR))
@@ -771,6 +928,12 @@ mcmem_print_one_range(ulong range, void *cb_arg)
 		path_str[MAXPATHLEN-1] = 0;
 	}
 	if (path_str[0] == 0) {
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+		mck_crash_default_path_result(path_str, sizeof(path_str),
+				start, end, flag,
+				wrap->vdso_addr, wrap->vvar_addr,
+				wrap->brk_start, wrap->brk_end_allocated);
+#else
 		if (start == wrap->vdso_addr)
 			strcpy(path_str, "[vdso]");
 		else if (start == wrap->vvar_addr)
@@ -780,8 +943,21 @@ mcmem_print_one_range(ulong range, void *cb_arg)
 		else if (start >= wrap->brk_start &&
 				end <= wrap->brk_end_allocated)
 			strcpy(path_str, "[heap]");
+#endif
 	}
 
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	mck_crash_vr_perm_result(perm, flag);
+	if (mck_crash_mcmem_line_result(line, sizeof(line),
+			start, end, perm, memobj, path_str) >= 0)
+		fprintf(fp, "%s\n", line);
+	else
+		fprintf(fp, "%016lx-%016lx %s %08lx %016lx   %s\n",
+			start, end, perm,
+			end - start,
+			memobj,
+			path_str);
+#else
 	fprintf(fp, "%016lx-%016lx %s%s%s%s %08lx %016lx   %s\n",
 		start, end,
 		flag & VR_PROT_READ  ? "r" : "-",
@@ -791,6 +967,7 @@ mcmem_print_one_range(ulong range, void *cb_arg)
 		end - start,
 		memobj,
 		path_str);
+#endif
 
 	return 0;
 }
@@ -819,7 +996,12 @@ mck_rbtree_iteration(ulong node_p, struct tree_data_cb *td, char *pos)
 	    sizeof(void *), "rb_node rb_left", RETURN_ON_ERROR) && new_p) {
 		if (mcreadmem(new_p+OFFSET(rb_node_rb_left), KVADDR, &test_p,
 			sizeof(void *), "rb_node rb_left", RETURN_ON_ERROR|QUIET)) {
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+			mck_crash_child_pos_result(new_pos, sizeof(new_pos),
+					pos, 'l');
+#else
 			sprintf(new_pos, "%s/l", pos);
+#endif
 			mck_rbtree_iteration(new_p, td, new_pos);
 		} else
 			error(INFO, "rb_node: %lx: corrupted rb_left pointer: %lx\n",
@@ -842,7 +1024,12 @@ mck_rbtree_iteration(ulong node_p, struct tree_data_cb *td, char *pos)
 	    sizeof(void *), "rb_node rb_left", RETURN_ON_ERROR) && new_p) {
 		if (mcreadmem(new_p+OFFSET(rb_node_rb_left), KVADDR, &test_p,
 			sizeof(void *), "rb_node rb_left", RETURN_ON_ERROR|QUIET)) {
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+			mck_crash_child_pos_result(new_pos, sizeof(new_pos),
+					pos, 'l');
+#else
 			sprintf(new_pos, "%s/l", pos);
+#endif
 			mck_rbtree_iteration(new_p, td, new_pos);
 		} else
 			error(INFO, "rb_node: %lx: corrupted rb_left pointer: %lx\n",
@@ -853,7 +1040,12 @@ mck_rbtree_iteration(ulong node_p, struct tree_data_cb *td, char *pos)
 	    sizeof(void *), "rb_node rb_right", RETURN_ON_ERROR) && new_p) {
 		if (mcreadmem(new_p+OFFSET(rb_node_rb_left), KVADDR, &test_p,
 			sizeof(void *), "rb_node rb_left", RETURN_ON_ERROR|QUIET)) {
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+			mck_crash_child_pos_result(new_pos, sizeof(new_pos),
+					pos, 'r');
+#else
 			sprintf(new_pos, "%s/r", pos);
+#endif
 			mck_rbtree_iteration(new_p, td, new_pos);
 		} else
 			error(INFO, "rb_node: %lx: corrupted rb_right pointer: %lx\n",
@@ -872,7 +1064,11 @@ mck_do_rbtree(struct tree_data_cb *td)
 		error(FATAL, "red-black trees do not exist or have changed "
 			"their format\n");
 
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	mck_crash_root_pos_result(pos, sizeof(pos));
+#else
 	sprintf(pos, "root");
+#endif
 
 	if (td->flags & TREE_NODE_POINTER)
 		start = td->start;
@@ -892,6 +1088,9 @@ cmd_mcmem(void)
 {
 	int c;
 	ulong thread, process_vm, pid;
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	char line[256];
+#endif
 	struct tree_data_cb td = {
 		.flags = TREE_LINEAR_ORDER | TREE_ROOT_OFFSET_ENTERED,
 		.node_member_offset = MCK_MEMBER_OFFSET(vm_range_vm_rb_node),
@@ -946,9 +1145,20 @@ next:
 		"process_vm region.brk_end_allocated", RETURN_ON_ERROR|QUIET);
 	td.start = process_vm + MCK_MEMBER_OFFSET(process_vm_vm_range_tree);
 	td.cb_arg = &wrap;
-	fprintf(fp, "Memory mapping for process %ld / %lx\n", pid, thread);
-	fprintf(fp, "%-16s %-16s %4s %-8s %-16s  %s\n",
-		"START", "END", "PERM", "SIZE", "MEMOBJ", "BACKING FILE");
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	if (mck_crash_mcmem_process_line_result(line, sizeof(line),
+			pid, thread) >= 0)
+		fprintf(fp, "%s\n", line);
+	else
+#endif
+		fprintf(fp, "Memory mapping for process %ld / %lx\n", pid, thread);
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	if (mck_crash_mcmem_header_result(line, sizeof(line)) >= 0)
+		fprintf(fp, "%s\n", line);
+	else
+#endif
+		fprintf(fp, "%-16s %-16s %4s %-8s %-16s  %s\n",
+			"START", "END", "PERM", "SIZE", "MEMOBJ", "BACKING FILE");
 	mck_do_rbtree(&td);
 
 	if (args[optind])
@@ -1173,6 +1383,12 @@ arch_init(void)
 static const char*
 pgshift_to_string(int pgshift)
 {
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	const char *label = mck_crash_pgshift_label_result(pgshift);
+
+	if (label)
+		return label;
+#endif
 	switch (pgshift) {
 	case 12: return "4K";
 	case 16: return "64K";
@@ -1199,22 +1415,40 @@ static int
 pte_is_type_page(ulong pte, int level)
 {
 #ifdef X86_64
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	return mck_crash_x86_pte_is_type_page_result(pte, level, _PAGE_PSE);
+#else
 	if (level == 1)
 		return TRUE;
 	return (level == 2 || level == 3) && (pte & _PAGE_PSE) != 0;
+#endif
 #elif defined(ARM64)
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	return mck_crash_arm64_pte_is_type_page_result(pte, level,
+			PTE_TYPE_MASK, PTE_TYPE_PAGE, PMD_TYPE_MASK,
+			PMD_TYPE_SECT);
+#else
 	if (level == 1)
 		return (pte & PTE_TYPE_MASK) == PTE_TYPE_PAGE;
 
 	return (pte & PMD_TYPE_MASK) == PMD_TYPE_SECT;
+#endif
 #endif
 }
 
 static int
 ptl_shift(int level)
 {
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	int shift = mck_crash_ptl_shift_result(level, PTL_SHIFTS[0],
+			PTL_SHIFTS[1], PTL_SHIFTS[2], PTL_SHIFTS[3]);
+
+	if (shift >= 0)
+		return shift;
+#else
 	if (level >= 1 && level <= 4)
 		return PTL_SHIFTS[level-1];
+#endif
 
 	error(FATAL, "ptl_shift called with invalid level %d\n", level);
 	return 0; // never happens
@@ -1223,14 +1457,28 @@ ptl_shift(int level)
 static void
 pte_print_(ulong pte, ulong virt, int level, int lookup)
 {
+#ifndef MCKERNEL_CRASH_RUST_HELPERS
 	int others = 0;
+#else
+	char flags[128];
+	char line[256];
+#endif
 	int pgshift = level ? ptl_shift(level) : 0;
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	ulong phys = mck_crash_pte_phys_result(pte, virt, pgshift,
+			PT_PHYSMASK);
+#else
 	ulong phys = pte_get_phys(pte) + (virt & ((1 << pgshift) - 1));
+#endif
 
 #ifdef X86_64
 	/* sign extension */
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	virt = mck_crash_x86_sign_extend_result(virt);
+#else
 	if (virt >= 0x0000800000000000UL)
 		virt |= 0xffff000000000000UL;
+#endif
 #endif
 
 
@@ -1241,9 +1489,14 @@ pte_print_(ulong pte, ulong virt, int level, int lookup)
 	}
 #endif
 
+#ifdef X86_64
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	mck_crash_x86_pte_flags_result(flags, sizeof(flags), pte,
+			_PAGE_RW, _PAGE_USER, _PAGE_PWT, _PAGE_PCD,
+			_PAGE_ACCESSED, _PAGE_DIRTY, _PAGE_GLOBAL, _PAGE_NX);
+#else
 	fprintf(fp, "%016lx %016lx %4s (",
 		virt, phys, pgshift_to_string(pgshift));
-#ifdef X86_64
 	if (pte & _PAGE_RW)
 		fprintf(fp, "%sRW", others++ ? "|" : "");
 	if (pte & _PAGE_USER)
@@ -1260,7 +1513,16 @@ pte_print_(ulong pte, ulong virt, int level, int lookup)
 		fprintf(fp, "%sGLOBAL", others++ ? "|" : "");
 	if (pte & _PAGE_NX)
 		fprintf(fp, "%sNX", others++ ? "|" : "");
+#endif
 #elif defined(ARM64)
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	mck_crash_arm64_pte_flags_result(flags, sizeof(flags), pte,
+			PTE_VALID, PTE_USER, PTE_RDONLY, PTE_SHARED, PTE_AF,
+			PTE_NG, PTE_PXN, PTE_UXN, PTE_DIRTY, PTE_SPECIAL,
+			PTE_WRITE, PTE_CONT, PTE_PROT_NONE);
+#else
+	fprintf(fp, "%016lx %016lx %4s (",
+		virt, phys, pgshift_to_string(pgshift));
 	if (pte & PTE_VALID)
 		fprintf(fp, "%sVALID", others++ ? "|" : "");
 	if (pte & PTE_USER)
@@ -1290,10 +1552,25 @@ pte_print_(ulong pte, ulong virt, int level, int lookup)
 	if (!others)
 		fprintf(fp, "%016lx", pte);
 #endif
+#endif
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	if (mck_crash_pte_line_result(line, sizeof(line), virt, phys,
+			pgshift_to_string(pgshift), flags) >= 0)
+		fprintf(fp, "%s\n", line);
+	else
+		fprintf(fp, "%016lx %016lx %4s (%s)\n",
+			virt, phys, pgshift_to_string(pgshift), flags);
+#else
 	fprintf(fp, ")\n");
+#endif
 
 	if (lookup && pte) {
-		fprintf(fp, "PTE: %lx\n", pte);
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+		if (mck_crash_pte_raw_line_result(line, sizeof(line), pte) >= 0)
+			fprintf(fp, "%s\n", line);
+		else
+#endif
+			fprintf(fp, "PTE: %lx\n", pte);
 	}
 }
 
@@ -1304,9 +1581,14 @@ pte_print(ulong pte, ulong virt, int level, int lookup)
 	static int prev_pgshift, prev_level, skipped_pte;
 	int pgshift = level ? ptl_shift(level) : 0;
 
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	if (mck_crash_pte_should_skip_result(pte, prev_pte, PTATTRMASK,
+				pgshift, prev_pgshift, virt, prev_virt)) {
+#else
 	if ((pte & PTATTRMASK) == (prev_pte & PTATTRMASK) &&
 	    pgshift == prev_pgshift &&
 	    virt == prev_virt + (1L << pgshift)) {
+#endif
 		if (skipped_pte < 2)
 			skipped_pte++;
 		prev_pte = pte;
@@ -1339,9 +1621,25 @@ pte_do_walk(ulong pt, ulong virt, int level, int lookup,
 {
 	ulong i;
 	ulong pte;
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	char line[96];
+#endif
 
 	for (i = 0; i < PTL_ENTRIES[level-1]; i++) {
 		/* lookup: skip out of range entries */
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+		if (lookup) {
+			int lookup_action;
+
+			lookup_action = mck_crash_pte_lookup_range_result(addr,
+					virt, i, ptl_shift(level),
+					ADDR_NONFIXED_MASK);
+			if (lookup_action > 0)
+				continue;
+			if (lookup_action < 0)
+				break;
+		}
+#else
 		if (lookup && (addr & ADDR_NONFIXED_MASK) >=
 				((virt & ADDR_NONFIXED_MASK) +
 				 ((i + 1) << ptl_shift(level))))
@@ -1350,6 +1648,7 @@ pte_do_walk(ulong pt, ulong virt, int level, int lookup,
 				((virt & ADDR_NONFIXED_MASK) +
 				 (i << ptl_shift(level))))
 			break;
+#endif
 
 		if (!mcreadmem(pt + i * sizeof(pte), KVADDR, &pte, sizeof(pte),
 			     "page table entry", RETURN_ON_ERROR|QUIET))
@@ -1371,14 +1670,27 @@ pte_do_walk(ulong pt, ulong virt, int level, int lookup,
 	}
 
 	if (lookup) {
-		fprintf(fp, "Couldn't find valid PTE for 0x%lx\n", addr);
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+		if (mck_crash_pte_not_found_result(line, sizeof(line), addr) >= 0)
+			fprintf(fp, "%s\n", line);
+		else
+#endif
+			fprintf(fp, "Couldn't find valid PTE for 0x%lx\n", addr);
 	}
 }
 
 static void
 pte_walk(ulong pt, int lookup, ulong addr, ulong prefix)
 {
-	fprintf(fp, "%-16s %-16s %s %s\n", "VIRT", "PHYS", "SIZE", "FLAGS");
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	char header[64];
+
+	if (mck_crash_mcvtop_header_result(header, sizeof(header)) >= 0)
+		fprintf(fp, "%s\n", header);
+	else
+#endif
+		fprintf(fp, "%-16s %-16s %s %s\n",
+			"VIRT", "PHYS", "SIZE", "FLAGS");
 	pte_do_walk(pt, 0, PGTABLE_LEVELS, lookup, addr, prefix);
 	pte_print(0, 0, 0, lookup); // flush last one if any
 }
@@ -1390,6 +1702,9 @@ cmd_mcvtop(void)
 	char *s;
 	ulong thread = 0, process_vm, address_space;
 	ulong page_table, addr = BADADDR;
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	char line[64];
+#endif
 	struct tree_data_cb td = {
 		.flags = TREE_LINEAR_ORDER | TREE_ROOT_OFFSET_ENTERED,
 		.node_member_offset = MCK_MEMBER_OFFSET(vm_range_vm_rb_node),
@@ -1473,9 +1788,13 @@ next:
 	if (!s)
 		cmd_usage(pc->curcmd, SYNOPSIS);
 
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	mck_crash_parse_hex_addr_result(s, BADADDR, &addr);
+#else
 	if (hexadecimal(s, 0)) {
 		addr = htol(s, RETURN_ON_ERROR, NULL);
 	}
+#endif
 	if (addr == BADADDR)
 		error(FATAL, "address needs to be a hex value");
 
@@ -1517,7 +1836,12 @@ next:
 		"process_vm region.brk_end_allocated", RETURN_ON_ERROR|QUIET);
 	td.start = process_vm + MCK_MEMBER_OFFSET(process_vm_vm_range_tree);
 	td.cb_arg = &wrap;
-	fprintf(fp, "\nMemory range:\n");
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	if (mck_crash_memory_range_header_result(line, sizeof(line)) >= 0)
+		fprintf(fp, "%s\n", line);
+	else
+#endif
+		fprintf(fp, "\nMemory range:\n");
 	mck_do_rbtree(&td);
 
 skip_mem_range:
@@ -1592,10 +1916,19 @@ cmd_mckmsg(void)
 		return;
 
 	msg = GETBUF(kmsg_buf_len);
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	part = mck_crash_kmsg_first_part_result(kmsg_buf_head,
+			kmsg_buf_tail, kmsg_buf_len);
+#else
 	part = kmsg_buf_tail < kmsg_buf_head ? kmsg_buf_len - kmsg_buf_head :
 					       kmsg_buf_tail - kmsg_buf_head;
+#endif
 	if (!read_string(kmsg_buf_str + kmsg_buf_head, msg, part) ||
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	    (mck_crash_kmsg_wrap_result(kmsg_buf_head, kmsg_buf_tail) &&
+#else
 	    (kmsg_buf_tail < kmsg_buf_head &&
+#endif
 	     !read_string(kmsg_buf_str, msg + part, kmsg_buf_tail))) {
 		FREEBUF(msg);
 		error(FATAL, "could not read kmsg buf\n");

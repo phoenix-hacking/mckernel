@@ -708,7 +708,9 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 	 * mcos%d/PID/cmdline
 	 */
 	if (procfs_entry_kind_result(p) == PROCFS_ENTRY_CMDLINE) {
-		unsigned int limit = proc->saved_cmdline_len;
+		unsigned int limit = procfs_cmdline_limit_result(
+			(uintptr_t)proc->saved_cmdline,
+			proc->saved_cmdline_len);
 
 		if(!procfs_pointer_present_result(
 			   (uintptr_t)proc->saved_cmdline)){
@@ -732,12 +734,12 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 	 */
 
 	if (procfs_entry_kind_result(p) == PROCFS_ENTRY_COMM) {
-		const char *comm = "exe";
+		const char *comm;
 		uintptr_t basename = procfs_comm_basename_result(
 			(uintptr_t)proc->saved_cmdline);
 
-		if (procfs_pointer_present_result(basename))
-			comm = (const char *)basename;
+		comm = (const char *)procfs_comm_name_result(
+			(uintptr_t)"exe", basename);
 
 		ans = snprintf(buf, count, "%s\n", comm);
 		if (buf_add(&buf_top, &buf_cur, buf, ans) < 0)
@@ -747,7 +749,7 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 	}
 
 	if (procfs_entry_kind_result(p) == PROCFS_ENTRY_STAT) {
-		const char *comm = "exe";
+		const char *comm;
 		char state;
 		struct mcs_rwlock_node_irqsave lock;
 		struct thread *thread_iter;
@@ -755,8 +757,8 @@ static int _process_procfs_request(struct ikc_scd_packet *rpacket, int *result)
 		uintptr_t basename = procfs_comm_basename_result(
 			(uintptr_t)proc->saved_cmdline);
 
-		if (procfs_pointer_present_result(basename))
-			comm = (const char *)basename;
+		comm = (const char *)procfs_comm_name_result(
+			(uintptr_t)"exe", basename);
 
 		state = procfs_thread_stat_state_result(thread->status,
 				thread->in_syscall_offload);

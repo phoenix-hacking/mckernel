@@ -154,6 +154,8 @@ int procfs_maps_path_kind_result(unsigned long range_start,
 				 unsigned long brk_end_allocated);
 unsigned long procfs_pagemap_next_result(unsigned long start);
 unsigned int procfs_auxv_limit_result(void);
+unsigned int procfs_cmdline_limit_result(uintptr_t saved_cmdline,
+					 unsigned int saved_cmdline_len);
 int procfs_is_release_result(int msg);
 int procfs_root_matched_result(int sscanf_ret);
 int procfs_osnum_match_result(int osnum, int requested_osnum);
@@ -173,6 +175,7 @@ int procfs_pointer_present_result(uintptr_t ptr);
 int procfs_buffer_chain_attach_result(unsigned long pbuf, uintptr_t buf_top);
 int procfs_entry_kind_result(const char *name);
 uintptr_t procfs_comm_basename_result(uintptr_t saved_cmdline);
+uintptr_t procfs_comm_name_result(uintptr_t fallback, uintptr_t basename);
 
 int pager_linux_io_retry_result(ssize_t ret);
 int pager_linux_io_stop_result(ssize_t ret);

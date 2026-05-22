@@ -38,6 +38,47 @@ unsigned long x86_attr_to_l1attr_result(unsigned long attr,
 		return attr & attr_mask;
 }
 
+unsigned long x86_set_pte_value_result(unsigned long phys,
+					unsigned long attr,
+					unsigned long attr_mask)
+{
+	if (attr & PTATTR_LARGEPAGE)
+		return phys | x86_attr_to_l2attr_result(attr, attr_mask) |
+			PFL2_SIZE;
+
+	return phys | x86_attr_to_l1attr_result(attr, attr_mask);
+}
+
+int x86_pt_set_pte_value_result(size_t pgsize, unsigned long phys,
+				unsigned long attr, unsigned long attr_mask,
+				int use_1gb_page, unsigned long *entryp)
+{
+	unsigned long entry;
+
+	if (pgsize == PTL1_SIZE) {
+		entry = phys | x86_attr_to_l1attr_result(attr, attr_mask);
+	}
+	else if (pgsize == PTL2_SIZE) {
+		if (phys & (PTL2_SIZE - 1))
+			return -1;
+		entry = phys | x86_attr_to_l2attr_result(
+			attr | PTATTR_LARGEPAGE, attr_mask);
+	}
+	else if ((pgsize == PTL3_SIZE) && use_1gb_page) {
+		if (phys & (PTL3_SIZE - 1))
+			return -1;
+		entry = phys | x86_attr_to_l3attr_result(
+			attr | PTATTR_LARGEPAGE, attr_mask);
+	}
+	else {
+		return -EINVAL;
+	}
+
+	if (entryp)
+		*entryp = entry;
+	return 0;
+}
+
 int x86_smaller_page_size_result(size_t cursize, int use_1gb,
 				 size_t *newsizep, int *p2alignp)
 {
@@ -70,6 +111,23 @@ int x86_smaller_page_size_result(size_t cursize, int use_1gb,
 		*p2alignp = p2align;
 
 	return 0;
+}
+
+unsigned long x86_early_alloc_align_end_result(unsigned long end_addr)
+{
+	return (end_addr + PAGE_SIZE - 1) & PAGE_MASK;
+}
+
+int x86_early_alloc_exhausted_result(unsigned long current_phys,
+				     unsigned long bootstrap_end)
+{
+	return current_phys >= bootstrap_end;
+}
+
+unsigned long x86_early_alloc_next_result(unsigned long current,
+					  int nr_pages)
+{
+	return current + ((unsigned long)nr_pages * PAGE_SIZE);
 }
 
 #endif /* MCKERNEL_RUST_X86_MEMORY_HELPERS */

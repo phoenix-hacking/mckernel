@@ -18,6 +18,7 @@
 # endif
 #endif
 #include "mcctrl.h"
+#include <mcctrl_rust.h>
 
 #if defined(RHEL_RELEASE_CODE) && defined(RHEL_RELEASE_VERSION)
 #define MCCTRL_RHEL_RELEASE_AT_LEAST(major, minor) \
@@ -55,32 +56,6 @@ static int mcctrl_prepare_binprm(struct linux_binprm *bprm)
 #define MCCTRL_PREPARE_BINPRM(bprm) prepare_binprm(bprm)
 #endif
 
-static int pathcheck(const char *file, const char *list)
-{
-	const char *p;
-	const char *q;
-	const char *r;
-	int l;
-
-	if(!*list)
-		return 1;
-	p = list;
-	do{
-		q = strchr(p, ':');
-		if(!q)
-			q = strchr(p, '\0');
-		for(r = q - 1; r >= p && *r == '/'; r--);
-		l = r - p + 1;
-
-		if(!strncmp(file, p, l) &&
-		   file[l] == '/')
-			return 1;
-
-		p = q + 1;
-	} while(*q);
-	return 0;
-}
-
 static int load_elf(struct linux_binprm *bprm
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3,8,0)
                     , struct pt_regs *regs
@@ -91,7 +66,6 @@ static int load_elf(struct linux_binprm *bprm
 	const
 #endif
 	char *wp;
-	char *cp;
 	struct file *file;
 	int rc;
 	struct elfhdr *elf_ex = (struct elfhdr *)bprm->buf;
@@ -142,11 +116,7 @@ static int load_elf(struct linux_binprm *bprm
 	if(!path || IS_ERR(path))
 		path = bprm->interp;
 
-	cp = strrchr(path, '/');
-	if(!cp ||
-	   !strcmp(cp, "/mcexec") ||
-	   !strcmp(cp, "/ihkosctl") ||
-	   !strcmp(cp, "/ihkconfig")) {
+	if (mcctrl_binfmt_skip_path(path)) {
 		kfree(pbuf);
 		return -ENOEXEC;
 	}
@@ -255,7 +225,7 @@ static int load_elf(struct linux_binprm *bprm
 	}
 
 	if(env_mcexec_wl)
-		rc = !pathcheck(path, env_mcexec_wl);
+		rc = !mcctrl_path_allowed(path, env_mcexec_wl);
 	else
 		rc = 1;
 

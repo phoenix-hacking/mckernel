@@ -74,6 +74,7 @@
 #include <syscall.h>
 #include <kmalloc.h>
 #include <ikc/queue.h>
+#include <sched_helpers.h>
 
 
 unsigned long ihk_mc_get_ns_per_tsc(void);
@@ -103,10 +104,13 @@ static struct futex_hash_bucket *hash_futex(union futex_key *key)
  */
 static inline int match_futex(union futex_key *key1, union futex_key *key2)
 {
-	return (key1 && key2
-		&& key1->both.word == key2->both.word
-		&& key1->both.ptr == key2->both.ptr
-		&& key1->both.offset == key2->both.offset);
+	return futex_key_match_result(key1 != NULL, key2 != NULL,
+		key1 ? key1->both.word : 0,
+		key1 ? (unsigned long)key1->both.ptr : 0,
+		key1 ? key1->both.offset : 0,
+		key2 ? key2->both.word : 0,
+		key2 ? (unsigned long)key2->both.ptr : 0,
+		key2 ? key2->both.offset : 0);
 }
 
 /*
@@ -940,4 +944,3 @@ int futex_init(void)
 
 	return 0;
 }
-

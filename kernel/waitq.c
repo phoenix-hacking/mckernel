@@ -17,9 +17,11 @@
 
 #ifdef MCKERNEL_RUST_WAITQ_CORE
 extern void waitq_init(waitq_t *waitq);
+extern void waitq_init_entry(waitq_entry_t *entry, struct thread *proc);
 extern void waitq_add_entry_locked(waitq_t *waitq, waitq_entry_t *entry);
 extern void waitq_remove_entry_locked(waitq_t *waitq, waitq_entry_t *entry);
 extern int waitq_wake_nr_locked(waitq_t *waitq, int nr);
+extern int waitq_wake_schedule_needed_result(int count);
 #endif
 
 int
@@ -47,6 +49,7 @@ waitq_init(waitq_t *waitq)
 }
 #endif
 
+#ifndef MCKERNEL_RUST_WAITQ_CORE
 void
 waitq_init_entry(waitq_entry_t *entry, struct thread *proc)
 {
@@ -54,6 +57,13 @@ waitq_init_entry(waitq_entry_t *entry, struct thread *proc)
 	entry->func = default_wake_function;
 	INIT_LIST_HEAD(&entry->link);
 }
+
+int
+waitq_wake_schedule_needed_result(int count)
+{
+	return count > 0;
+}
+#endif
 
 int
 waitq_active(waitq_t *waitq)
@@ -144,7 +154,7 @@ waitq_wake_nr(waitq_t * waitq, int nr)
 	int count = waitq_wake_nr_locked(waitq, nr);
 	ihk_mc_spinlock_unlock_noirq(&waitq->lock);
 
-	if (count > 0)
+	if (waitq_wake_schedule_needed_result(count))
 		schedule();
 	
 	return count;

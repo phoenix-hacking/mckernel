@@ -52,6 +52,7 @@
 #include <archdeps.h>
 #include <uti.h>
 #include <futex.h>
+#include <mcctrl_rust.h>
 
 //#define DEBUG
 
@@ -733,7 +734,7 @@ static long mcexec_get_cpuset(ihk_os_t os, unsigned long arg)
 	if (!pe) {
 		/* First process to enter CPU partitioning */
 		pr_debug("%s: pe_list_len:%d\n", __func__, pe_list_len);
-		if (pe_list_len >= PE_LIST_MAXLEN) {
+		if (mcctrl_partition_list_evict(pe_list_len, PE_LIST_MAXLEN)) {
 			/* delete head entry of pe_list */
 			pe_itr = list_first_entry(&udp->part_exec_list,
 					struct mcctrl_part_exec, chain);
@@ -763,7 +764,7 @@ static long mcexec_get_cpuset(ihk_os_t os, unsigned long arg)
 
 	mutex_lock(&pe->lock);
 
-	if (pe->nr_processes != req.nr_processes) {
+	if (mcctrl_partition_count_mismatch(pe->nr_processes, req.nr_processes)) {
 		printk("%s: error: requested number of processes"
 				" doesn't match current partitioned execution\n",
 				__FUNCTION__);
@@ -771,7 +772,8 @@ static long mcexec_get_cpuset(ihk_os_t os, unsigned long arg)
 		goto put_and_unlock_out;
 	}
 
-	if (pe->nr_processes_joined >= pe->nr_processes) {
+	if (!mcctrl_partition_join_allowed(pe->nr_processes_joined,
+					   pe->nr_processes)) {
 		printk("%s: too many processes have joined to the group of %d\n",
 				__func__, req.ppid);
 		ret = -EINVAL;
@@ -828,7 +830,7 @@ static long mcexec_get_cpuset(ihk_os_t os, unsigned long arg)
 	pli_next = NULL;
 
 	/* Last process? Wake up first in list */
-	if (pe->nr_processes_left == 0) {
+	if (mcctrl_partition_last_process(pe->nr_processes_left)) {
 		pli_next = list_first_entry(&pe->pli_list,
 			struct process_list_item, list);
 		list_del(&pli_next->list);
@@ -841,14 +843,17 @@ static long mcexec_get_cpuset(ihk_os_t os, unsigned long arg)
 
 	/* Wait for the rest if not the last or if the last but
 	 * the woken process is different than the last */
-	if (pe->nr_processes_left || (pli_next && pli_next != pli)) {
+	if (mcctrl_partition_wait_required(pe->nr_processes_left,
+					   pli_next != NULL, pli_next == pli)) {
 		dprintk("%s: pid: %d, waiting in list\n",
 				__FUNCTION__, task_tgid_vnr(current));
 		mutex_unlock(&pe->lock);
 		/* Timeout period: 10 secs + (#procs * 0.1sec) */
 		ret = wait_event_interruptible_timeout(pli->pli_wq,
 				pli->ready,
-				msecs_to_jiffies(10000 + req.nr_processes * 100));
+				msecs_to_jiffies(
+					mcctrl_partition_wait_timeout_msecs(
+						req.nr_processes)));
 		mutex_lock(&pe->lock);
 
 		/* First timeout task? Wake up everyone else,
@@ -1122,7 +1127,7 @@ next_cpu:
 	memcpy(&pe->cpus_used, cpus_used, sizeof(*cpus_used));
 
 	/* If not last process, wake up next process in list */
-	if (pe->nr_processes_left != 0) {
+	if (mcctrl_partition_wake_next(pe->nr_processes_left)) {
 		++pe->process_rank;
 		pli_next = list_first_entry(&pe->pli_list,
 			struct process_list_item, list);
@@ -2898,7 +2903,8 @@ static long mcexec_release_user_space(struct release_user_space_desc *__user arg
 
 #if 1
 	return mcctrl_clear_pte_range(desc.user_start,
-				      desc.user_end - desc.user_start);
+				      mcctrl_release_user_space_len(
+					      desc.user_start, desc.user_end));
 #else
 	return release_user_space(desc.user_start, desc.user_end - desc.user_start);
 #endif
@@ -3387,22 +3393,13 @@ static int __mcctrl_control_perm(unsigned int request)
 	kuid_t euid;
 
 	/* black list */
-	switch (request) {
-	case IHK_OS_AUX_PERF_NUM:
-	case IHK_OS_AUX_PERF_SET:
-	case IHK_OS_AUX_PERF_GET:
-	case IHK_OS_AUX_PERF_ENABLE:
-	case IHK_OS_AUX_PERF_DISABLE:
-	case IHK_OS_AUX_PERF_DESTROY:
+	if (mcctrl_control_request_needs_root(request)) {
 		euid = current_euid();
 		pr_debug("%s: request=0x%x, euid=%u\n",
 			 __func__, request, euid.val);
 		if (euid.val) {
 			ret = -EPERM;
 		}
-		break;
-	default:
-		break;
 	}
 	pr_debug("%s: request=0x%x, ret=%d\n", __func__, request, ret);
 

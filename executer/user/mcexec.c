@@ -223,8 +223,29 @@ extern int mcexec_default_thread_count_result(int nr_threads,
 		int omp_present, int omp_threads, int nr_processes, int ncpu);
 extern unsigned long mcexec_mpol_flags_result(int no_heap, int no_stack,
 		int no_bss, int shm_premap);
+extern int mcexec_ompi_mpol_policy_result(const char *mpol,
+		int mpol_default, int mpol_interleave, int mpol_bind,
+		int mpol_preferred, int *mode, int *nodemask_action);
 extern void mcexec_apply_stack_max_result(long stack_max,
 		rlim_t *rlim_cur, rlim_t *rlim_max);
+extern int mcexec_parse_int_base0_full_result(const char *string,
+		int require_positive, int *result);
+extern int mcexec_atoi_result(const char *string);
+extern unsigned long mcexec_strtoul_hex_result(const char *string);
+extern int mcexec_parse_optional_mcosid_result(const char *string,
+		int *result);
+extern int mcexec_env_list_count_result(const void *head);
+extern void *mcexec_search_env_list_result(void *head, const char *name);
+extern int mcexec_add_env_list_result(void *headp, char *add_string);
+extern void mcexec_destroy_env_list_result(void *head);
+extern char **mcexec_create_local_environ_result(void *inc_list);
+extern void mcexec_destroy_local_environ_result(char **local_env);
+extern char *mcexec_shift_flib_affinity_result(const char *affinity,
+		int shift);
+extern int mcexec_parse_rlimit_stack_env_result(const char *env,
+		rlim_t *cur, rlim_t *max);
+extern void mcexec_apply_saved_stack_limit_result(rlim_t saved_cur,
+		rlim_t saved_max, rlim_t *rlim_cur, rlim_t *rlim_max);
 extern unsigned short mcexec_dirent32_reclen_result(const void *dirp);
 extern char *mcexec_dirent32_name_result(void *dirp);
 extern void *mcexec_dirent32_off_result(void *dirp);
@@ -232,6 +253,46 @@ extern unsigned short mcexec_dirent64_reclen_result(const void *dirp);
 extern char *mcexec_dirent64_name_result(void *dirp);
 extern void *mcexec_dirent64_off_result(void *dirp);
 extern int mcexec_is_proc_task_leaf_path_result(const char *path);
+extern int mcexec_path_is_absolute_result(const char *path);
+extern int mcexec_path_is_single_component_exec_result(const char *path);
+extern int mcexec_path_len_less_than_result(const char *path, size_t limit);
+extern int mcexec_copy_path_result(const char *path, char *out, size_t size);
+extern int mcexec_join_path_result(const char *prefix, const char *path,
+		char *out, size_t size);
+extern int mcexec_objdump_rpath_cmd_result(const char *path, char *out,
+		size_t size);
+extern int mcexec_getpath_execveat_prepare_result(int dirfd,
+		const char *filename, int flags, int at_fdcwd,
+		int at_empty_path, int at_symlink_nofollow,
+		char *pathbuf, size_t size, int *check_symlink);
+extern int mcexec_build_ld_preload_result(const char *libdir,
+		const char *existing, int enable_uti,
+		int disable_sched_yield, int enable_qlmpi,
+		char *out, size_t size);
+extern int mcexec_overlay_addfd_prepare_result(const char *path,
+		int mcosid, char *linux_path, size_t linux_size,
+		char *mck_path, size_t mck_size, size_t *pathlen);
+extern int mcexec_mcos_device_path_result(char *out, size_t size,
+		int mcosid);
+extern int mcexec_proc_self_fd_path_result(char *out, size_t size,
+		int dirfd);
+extern int mcexec_join_path_inplace_result(char *path, size_t size,
+		const char *leaf);
+extern int mcexec_path_is_dev_xpmem_result(const char *path);
+extern int mcexec_path_has_libuti_result(const char *path);
+extern int mcexec_overlay_uti_path_result(const char *libdir,
+		const char *path, char *out, size_t size);
+extern int mcexec_overlay_proc_self_path_result(const char *path,
+		int mcosid, int pid, char *out, size_t size);
+extern int mcexec_overlay_proc_path_result(const char *path, int mcosid,
+		char *out, size_t size);
+extern int mcexec_overlay_sys_path_result(const char *path, int mcosid,
+		char *out, size_t size, size_t *mapped_offset);
+extern int mcexec_normalize_overlay_path_result(char *path, size_t *len);
+extern int mcexec_parse_proc_task_ids_result(const char *path,
+		int current_pid, int *pid, int *tid);
+extern int mcexec_proc_task_check_path_result(char *out, size_t size,
+		int mcosid, int pid, int tid);
 #endif
 
 struct fork_sync {
@@ -388,8 +449,13 @@ char *search_file(char *orgpath, int mode)
 		return orgpath;
 	}
 
+#ifdef MCEXEC_RUST_HELPERS
+	n = mcexec_join_path_result(altroot, orgpath, modpath,
+			sizeof(modpath));
+#else
 	n = snprintf(modpath, sizeof(modpath), "%s/%s", altroot, orgpath);
-	if (n >= sizeof(modpath)) {
+#endif
+	if (n < 0 || n >= sizeof(modpath)) {
 		__eprintf("modified path too long: %s/%s\n", altroot, orgpath);
 		return NULL;
 	}
@@ -494,26 +560,50 @@ int lookup_exec_path(char *filename, char *path, int max_len, int execvp)
 {
 	int found;
 	int error;
+	int filename_absolute;
+	int filename_single_component;
+	int filename_len_lt_255;
 	struct stat sb;
 	char *link_path = NULL;
 
 	found = 0;
+#ifdef MCEXEC_RUST_HELPERS
+	filename_absolute = mcexec_path_is_absolute_result(filename);
+	filename_single_component =
+		mcexec_path_is_single_component_exec_result(filename);
+	filename_len_lt_255 = mcexec_path_len_less_than_result(filename, 255);
+#else
+	filename_absolute = !strncmp(filename, "/", 1);
+	filename_single_component =
+		strncmp(filename, ".", 1) && !strchr(filename, '/');
+	filename_len_lt_255 = strlen(filename) < 255;
+#endif
 
 	/* Is file not absolute path? */
-	if (strncmp(filename, "/", 1)) {
+	if (!filename_absolute) {
 		
 		/* Is filename a single component without path? */
-		while (strncmp(filename, ".", 1) && !strchr(filename, '/')) {
+		while (filename_single_component) {
 
 			char *token, *string, *tofree;
 			char *PATH = getenv("COKERNEL_PATH");
 
 			if (!execvp) {
+#ifdef MCEXEC_RUST_HELPERS
+				error = mcexec_copy_path_result(filename, path,
+						max_len);
+				if (error < 0) {
+					free(link_path);
+					return error == -ENAMETOOLONG ?
+						ENAMETOOLONG : EINVAL;
+				}
+#else
 				if (strlen(filename) + 1 > max_len) {
 					free(link_path);
 					return ENAMETOOLONG;
 				}
 				strcpy(path, filename);
+#endif
 				error = access(path, X_OK);
 				if (error) {
 					free(link_path);
@@ -527,7 +617,7 @@ int lookup_exec_path(char *filename, char *path, int max_len, int execvp)
 				PATH = getenv("PATH");
 			}
 
-			if (strlen(filename) >= 255) {
+			if (!filename_len_lt_255) {
 				free(link_path);
 				return ENAMETOOLONG;
 			}
@@ -544,8 +634,13 @@ int lookup_exec_path(char *filename, char *path, int max_len, int execvp)
 
 			while ((token = strsep(&string, ":")) != NULL) {
 
-				error = snprintf(path, max_len, 
+#ifdef MCEXEC_RUST_HELPERS
+				error = mcexec_join_path_result(token, filename,
+						path, max_len);
+#else
+				error = snprintf(path, max_len,
 						"%s/%s", token, filename);
+#endif
 				if (error < 0 || error >= max_len) {
 					fprintf(stderr, "lookup_exec_path(): array too small?\n");
 					continue;
@@ -568,7 +663,11 @@ int lookup_exec_path(char *filename, char *path, int max_len, int execvp)
 
 		/* Not in path, file to be open from the working directory */
 		if (!found) {
+#ifdef MCEXEC_RUST_HELPERS
+			error = mcexec_copy_path_result(filename, path, max_len);
+#else
 			error = snprintf(path, max_len, "%s", filename);
+#endif
 
 			if (error < 0 || error >= max_len) {
 				fprintf(stderr, "lookup_exec_path(): array too small?\n");
@@ -580,14 +679,23 @@ int lookup_exec_path(char *filename, char *path, int max_len, int execvp)
 		}
 	}
 	/* Absolute path */
-	else if (!strncmp(filename, "/", 1)) {
+	else if (filename_absolute) {
 		char *root = getenv("COKERNEL_EXEC_ROOT");
 
 		if (root) {
+#ifdef MCEXEC_RUST_HELPERS
+			error = mcexec_join_path_result(root, filename, path,
+					max_len);
+#else
 			error = snprintf(path, max_len, "%s/%s", root, filename);
+#endif
 		}
 		else {
+#ifdef MCEXEC_RUST_HELPERS
+			error = mcexec_copy_path_result(filename, path, max_len);
+#else
 			error = snprintf(path, max_len, "%s", filename);
+#endif
 		}
 
 		if (error < 0 || error >= max_len) {
@@ -723,11 +831,24 @@ int load_elf_desc(char *filename, struct program_load_desc **desc_p,
 		exec_path = malloc(strlen(cwd) + strlen(filename) + 2);
 		if (!exec_path) {
 			fprintf(stderr, "Error: allocating exec_path\n");
+			free(cwd);
 			fclose(fp);
 			return ENOMEM;
 		}
 
+#ifdef MCEXEC_RUST_HELPERS
+		if (mcexec_join_path_result(cwd, filename, exec_path,
+					strlen(cwd) + strlen(filename) + 2) < 0) {
+			fprintf(stderr, "Error: building exec_path\n");
+			free(exec_path);
+			exec_path = NULL;
+			free(cwd);
+			fclose(fp);
+			return ENOMEM;
+		}
+#else
 		sprintf(exec_path, "%s/%s", cwd, filename);
+#endif
 		free(cwd);
 	}
 	
@@ -1391,7 +1512,14 @@ static int reduce_stack(struct rlimit *orig_rlim, char *argv[])
 		__eprintf("Could not readlink /proc/self/exe? %m\n");
 		return 1;
 	} else if (error >= sizeof(path)) {
+#ifdef MCEXEC_RUST_HELPERS
+		if (mcexec_copy_path_result("/proc/self/exe", path,
+					sizeof(path)) < 0) {
+			return 1;
+		}
+#else
 		strcpy(path, "/proc/self/exe");
+#endif
 	} else {
 		path[error] = '\0';
 	}
@@ -1560,6 +1688,9 @@ struct env_list_entry {
 
 static int get_env_list_entry_count(struct env_list_entry *head)
 {
+#ifdef MCEXEC_RUST_HELPERS
+	return mcexec_env_list_count_result(head);
+#else
 	int list_count = 0;
 	struct env_list_entry *current = head;
 
@@ -1568,10 +1699,14 @@ static int get_env_list_entry_count(struct env_list_entry *head)
 		current = current->next;
 	}
 	return list_count;
+#endif
 }
 
 static struct env_list_entry *search_env_list(struct env_list_entry *head, char *name)
 {
+#ifdef MCEXEC_RUST_HELPERS
+	return mcexec_search_env_list_result(head, name);
+#else
 	struct env_list_entry *current = head;
 
 	while (current) {
@@ -1581,10 +1716,17 @@ static struct env_list_entry *search_env_list(struct env_list_entry *head, char 
 		current = current->next;
 	}
 	return NULL;
+#endif
 }
 
 static void add_env_list(struct env_list_entry **head, char *add_string)
 {
+#ifdef MCEXEC_RUST_HELPERS
+	if (mcexec_add_env_list_result(head, add_string) == -EINVAL) {
+		printf("\"%s\" is not env value.\n", add_string);
+	}
+	return;
+#else
 	struct env_list_entry *current = NULL;
 	char *value = NULL;
 	char *name = NULL;
@@ -1623,10 +1765,14 @@ static void add_env_list(struct env_list_entry **head, char *add_string)
 	}
 	*head = current;
 	return;
+#endif
 }
 
 static void destroy_env_list(struct env_list_entry *head)
 {
+#ifdef MCEXEC_RUST_HELPERS
+	mcexec_destroy_env_list_result(head);
+#else
 	struct env_list_entry *current = head;
 	struct env_list_entry *next = NULL;
 
@@ -1636,10 +1782,14 @@ static void destroy_env_list(struct env_list_entry *head)
 		free(current);
 		current = next;
 	}
+#endif
 }
 
 static char **create_local_environ(struct env_list_entry *inc_list)
 {
+#ifdef MCEXEC_RUST_HELPERS
+	return mcexec_create_local_environ_result(inc_list);
+#else
 	int list_count = 0;
 	int i = 0;
 	struct env_list_entry *current = inc_list;
@@ -1656,10 +1806,14 @@ static char **create_local_environ(struct env_list_entry *inc_list)
 		i++;
 	}
 	return local_env;
+#endif
 }
 
 static void destroy_local_environ(char **local_env)
 {
+#ifdef MCEXEC_RUST_HELPERS
+	mcexec_destroy_local_environ_result(local_env);
+#else
 	int i = 0;
 
 	if (!local_env) {
@@ -1671,6 +1825,7 @@ static void destroy_local_environ(char **local_env)
 		local_env[i] = NULL;
 	}
 	free(local_env);
+#endif
 }
 #endif /* ADD_ENVS_OPTION */
 
@@ -1953,7 +2108,14 @@ opendev()
 	char buildid[] = BUILDID;
     char query_result[sizeof(BUILDID)];
 
+#ifdef MCEXEC_RUST_HELPERS
+	if (mcexec_mcos_device_path_result(dev, sizeof(dev), mcosid) < 0) {
+		fprintf(stderr, "Error: Failed to build mcos device path.\n");
+		return -1;
+	}
+#else
 	sprintf(dev, "/dev/mcos%d", mcosid);
+#endif
 
 	/* Open OS chardev for ioctl() */
 	f = open(dev, O_RDWR);
@@ -2021,11 +2183,26 @@ static ssize_t find_libdir(char *libdir, size_t len)
 		fprintf(stderr, "readlink /proc/self/exe: %ld\n", -rc);
 		goto out;
 	} else if (rc >= sizeof(path)) {
+#ifdef MCEXEC_RUST_HELPERS
+		if (mcexec_copy_path_result("/proc/self/exe", path,
+					sizeof(path)) < 0) {
+			rc = -ERANGE;
+			goto out;
+		}
+#else
 		strcpy(path, "/proc/self/exe");
+#endif
 	} else {
 		path[rc] = '\0';
 	}
 
+#ifdef MCEXEC_RUST_HELPERS
+	rc = mcexec_objdump_rpath_cmd_result(path, cmd, sizeof(cmd));
+	if (rc < 0) {
+		rc = -ERANGE;
+		goto out;
+	}
+#else
 	rc = snprintf(cmd, sizeof(cmd),
 		      "objdump -x %s | awk '/RPATH/ { print $2 }'",
 		      path);
@@ -2033,6 +2210,7 @@ static ssize_t find_libdir(char *libdir, size_t len)
 		rc = -ERANGE;
 		goto out;
 	}
+#endif
 
 	filep = popen(cmd, "r");
 	if (!filep) {
@@ -2055,12 +2233,20 @@ static ssize_t find_libdir(char *libdir, size_t len)
 		goto out;
 	}
 
+#ifdef MCEXEC_RUST_HELPERS
+	rc = mcexec_copy_path_result(line, libdir, len);
+	if (rc < 0) {
+		rc = -ERANGE;
+		goto out;
+	}
+#else
 	rc = snprintf(libdir, len, "%s", line);
 
 	if (rc > len) {
 		rc = -ERANGE;
 		goto out;
 	}
+#endif
 
 out:
 	if (filep) {
@@ -2074,9 +2260,11 @@ static void ld_preload_init()
 {
 	char envbuf[PATH_MAX];
 	char *ld_preload_str;
+#ifndef MCEXEC_RUST_HELPERS
 	size_t remainder = PATH_MAX;
 	int nelem = 0;
 	char elembuf[PATH_MAX];
+#endif
 	char libdir[PATH_MAX];
 
 	if (find_libdir(libdir, sizeof(libdir)) < 0) {
@@ -2086,6 +2274,26 @@ static void ld_preload_init()
 
 	memset(envbuf, 0, PATH_MAX);
 
+#ifdef MCEXEC_RUST_HELPERS
+	ld_preload_str = getenv(ld_preload_envname);
+	{
+		int rc;
+#ifdef ENABLE_QLMPI
+		int enable_qlmpi = 1;
+#else
+		int enable_qlmpi = 0;
+#endif
+
+		rc = mcexec_build_ld_preload_result(libdir, ld_preload_str,
+				enable_uti, disable_sched_yield, enable_qlmpi,
+				envbuf, sizeof(envbuf));
+		if (rc < 0) {
+			fprintf(stderr, "%s: warning: LD_PRELOAD line is too long\n",
+					__FUNCTION__);
+			return;
+		}
+	}
+#else
 	if (enable_uti) {
 		LD_PRELOAD_PREPARE("libmck_syscall_intercept.so");
 		LD_PRELOAD_APPEND;
@@ -2107,6 +2315,7 @@ static void ld_preload_init()
 		sprintf(elembuf, "%s%s", nelem > 0 ? ":" : "", ld_preload_str);
 		LD_PRELOAD_APPEND;
 	}
+#endif
 
 	if (strlen(envbuf)) {
 		if (setenv("LD_PRELOAD", envbuf, 1) < 0) {
@@ -2234,30 +2443,56 @@ int main(int argc, char **argv)
 				  mcexec_options, NULL)) != -1) {
 #endif /* ADD_ENVS_OPTION */
 		switch (opt) {
+#ifndef MCEXEC_RUST_HELPERS
 			char *tmp;
+#endif
 
 			case 'c':
+#ifdef MCEXEC_RUST_HELPERS
+				if (mcexec_parse_int_base0_full_result(
+						optarg, 0, &target_core) < 0) {
+					fprintf(stderr, "error: -c: invalid target CPU\n");
+					exit(EXIT_FAILURE);
+				}
+#else
 				target_core = strtol(optarg, &tmp, 0);
 				if (*tmp != '\0') {
 					fprintf(stderr, "error: -c: invalid target CPU\n");
 					exit(EXIT_FAILURE);
 				}
+#endif
 				break;
 
 			case 'n':
+#ifdef MCEXEC_RUST_HELPERS
+				if (mcexec_parse_int_base0_full_result(
+						optarg, 1, &nr_processes) < 0) {
+					fprintf(stderr, "error: -n: invalid number of processes\n");
+					exit(EXIT_FAILURE);
+				}
+#else
 				nr_processes = strtol(optarg, &tmp, 0);
 				if (*tmp != '\0' || nr_processes <= 0) {
 					fprintf(stderr, "error: -n: invalid number of processes\n");
 					exit(EXIT_FAILURE);
 				}
+#endif
 				break;
 
 			case 't':
+#ifdef MCEXEC_RUST_HELPERS
+				if (mcexec_parse_int_base0_full_result(
+						optarg, 1, &nr_threads) < 0) {
+					fprintf(stderr, "error: -t: invalid number of threads\n");
+					exit(EXIT_FAILURE);
+				}
+#else
 				nr_threads = strtol(optarg, &tmp, 0);
 				if (*tmp != '\0' || nr_threads <= 0) {
 					fprintf(stderr, "error: -t: invalid number of threads\n");
 					exit(EXIT_FAILURE);
 				}
+#endif
 				break;
 
 			case 'M':
@@ -2308,11 +2543,19 @@ int main(int argc, char **argv)
 			}
 
 			case 'u':
+#ifdef MCEXEC_RUST_HELPERS
+				uti_thread_rank = mcexec_atoi_result(optarg);
+#else
 				uti_thread_rank = atoi(optarg);
+#endif
 				break;
 
 			case 'f':
+#ifdef MCEXEC_RUST_HELPERS
+				mcexec_flags = mcexec_strtoul_hex_result(optarg);
+#else
 				mcexec_flags = strtoul(optarg, NULL, 16);
+#endif
 				break;
 
 			case 0:	/* long opt */
@@ -2339,10 +2582,16 @@ int main(int argc, char **argv)
 	}
 
 	/* Determine OS device */
+#ifdef MCEXEC_RUST_HELPERS
+	if (mcexec_parse_optional_mcosid_result(argv[optind], &num)) {
+		++optind;
+	}
+#else
 	if (isdigit(*argv[optind])) {
 		num = atoi(argv[optind]);
 		++optind;
 	}
+#endif
 
 	/* No more arguments? */
 	if (optind >= argc) {
@@ -2365,6 +2614,22 @@ int main(int argc, char **argv)
 
 	/* XXX: Fugaku: Fujitsu process placement fix */
 	if (getenv("FLIB_AFFINITY_ON_PROCESS")) {
+#ifdef MCEXEC_RUST_HELPERS
+		char *flib_aff;
+
+		flib_aff = mcexec_shift_flib_affinity_result(
+				getenv("FLIB_AFFINITY_ON_PROCESS"), 12);
+		if (!flib_aff) {
+			fprintf(stderr, "error: allocating memory for "
+					"FLIB_AFFINITY_ON_PROCESS\n");
+			exit(EXIT_FAILURE);
+		}
+
+		__dprintf("FLIB_AFFINITY_ON_PROCESS: %s -> %s\n",
+				getenv("FLIB_AFFINITY_ON_PROCESS"), flib_aff);
+		setenv("FLIB_AFFINITY_ON_PROCESS", flib_aff, 1);
+		free(flib_aff);
+#else
 		char *cpu_s;
 		int flib_size;
 		char *flib_aff_orig, *flib_aff;
@@ -2419,6 +2684,7 @@ int main(int argc, char **argv)
 		__dprintf("FLIB_AFFINITY_ON_PROCESS: %s -> %s\n",
 				getenv("FLIB_AFFINITY_ON_PROCESS"), flib_aff);
 		setenv("FLIB_AFFINITY_ON_PROCESS", flib_aff, 1);
+#endif
 	}
 
 	ld_preload_init();
@@ -2510,6 +2776,19 @@ int main(int argc, char **argv)
 	/* Restore the stack size when mcexec stack was shrinked */
 	p = getenv(rlimit_stack_envname);
 	if (p) {
+#ifdef MCEXEC_RUST_HELPERS
+		int parse_rc;
+
+		parse_rc = mcexec_parse_rlimit_stack_env_result(p,
+				&lcur, &lmax);
+		if (parse_rc) {
+			fprintf(stderr, "Error: Failed to parse %s %d\n",
+					rlimit_stack_envname, parse_rc);
+			return 1;
+		}
+		mcexec_apply_saved_stack_limit_result(lcur, lmax,
+				&rlim_stack.rlim_cur, &rlim_stack.rlim_max);
+#else
 		char *saveptr;
 		char *token;
 		errno = 0;
@@ -2551,6 +2830,7 @@ int main(int argc, char **argv)
 		if (lcur > rlim_stack.rlim_cur) {
 			rlim_stack.rlim_cur = lcur;
 		}
+#endif
 	}
 
 	/* Overwrite the max with <max> of "--stack-premap <premap>,<max>" */
@@ -2862,6 +3142,30 @@ int main(int argc, char **argv)
 		__dprintf("OMPI_MCA_plm_ple_memory_allocation_policy: %s\n",
 			  mpol);
 
+#ifdef MCEXEC_RUST_HELPERS
+		{
+			int mode;
+			int nodemask_action;
+
+			if (mcexec_ompi_mpol_policy_result(mpol,
+						MPOL_DEFAULT, MPOL_INTERLEAVE,
+						MPOL_BIND, MPOL_PREFERRED,
+						&mode, &nodemask_action)) {
+				desc->mpol_mode = mode;
+				if (nodemask_action == 1) {
+					numa_local(desc->cpu_set,
+							desc->mpol_nodemask);
+				}
+				else if (nodemask_action == 2) {
+					numa_nonlocal(desc->cpu_set,
+							desc->mpol_nodemask);
+				}
+				else if (nodemask_action == 3) {
+					numa_all(desc->mpol_nodemask);
+				}
+			}
+		}
+#else
 		if (!strncmp(mpol, "localalloc", 10)) {
 			/* MPOL_DEFAULT has the same effect as MPOL_LOCAL */
 			desc->mpol_mode = MPOL_DEFAULT;
@@ -2898,6 +3202,7 @@ int main(int argc, char **argv)
 			desc->mpol_mode = MPOL_PREFERRED;
 			numa_nonlocal(desc->cpu_set, desc->mpol_nodemask);
 		}
+#endif
 
 		__dprintf("mpol_mode: %d, mpol_nodemask: %ld\n",
 			  desc->mpol_mode, desc->mpol_nodemask[0]);
@@ -3281,6 +3586,22 @@ LIST_HEAD(overlay_fd_list);
 void overlay_addfd(int fd, const char *path)
 {
 	struct overlay_fd *ofd;
+#ifdef MCEXEC_RUST_HELPERS
+	char linux_path[PATH_MAX];
+	char mck_path[PATH_MAX];
+	size_t pathlen;
+	int rc;
+
+	rc = mcexec_overlay_addfd_prepare_result(path, mcosid,
+			linux_path, sizeof(linux_path), mck_path,
+			sizeof(mck_path), &pathlen);
+	if (rc <= 0) {
+		if (rc < 0) {
+			fprintf(stderr, "%s: path too long\n", __func__);
+		}
+		return;
+	}
+#else
 	int n;
 	char mcos[32], *real_path;
 	const char *prefix = "";
@@ -3297,6 +3618,7 @@ void overlay_addfd(int fd, const char *path)
 
 	/* point to first character after mcos string */
 	real_path += n;
+#endif
 
 	ofd = malloc(sizeof(*ofd));
 	if (!ofd) {
@@ -3311,9 +3633,15 @@ void overlay_addfd(int fd, const char *path)
 	ofd->mck_dirents_size = 0;
 	ofd->linux_dirents = NULL;
 	ofd->linux_dirents_size = 0;
+#ifdef MCEXEC_RUST_HELPERS
+	ofd->pathlen = pathlen;
+	strncpy(ofd->linux_path, linux_path, PATH_MAX);
+	strncpy(ofd->mck_path, mck_path, PATH_MAX);
+#else
 	ofd->pathlen = snprintf(ofd->linux_path, PATH_MAX, "%s%s",
 				prefix, real_path);
 	strncpy(ofd->mck_path, path, PATH_MAX);
+#endif
 
 	pthread_spin_lock(&overlay_fd_lock);
 	list_add(&ofd->link, &overlay_fd_list);
@@ -3379,6 +3707,19 @@ int overlay_blacklist(const char *path)
 	int pid = -1;
 	int tid = -1;
 
+#ifdef MCEXEC_RUST_HELPERS
+	if (mcexec_parse_proc_task_ids_result(path, getpid(), &pid, &tid)) {
+		char check_path[PATH_MAX];
+		struct stat sb;
+
+		rc = mcexec_proc_task_check_path_result(check_path,
+				sizeof(check_path), mcosid, pid, tid);
+		if (rc < 0)
+			return -ENOENT;
+		if (pid > 0 && tid > 0 && stat(check_path, &sb) < 0)
+			return -ENOENT;
+	}
+#else
 	/* handle /proc/N/task/tid/ files */
 	if (sscanf(path, "/proc/self/task/%d/", &tid) == 1) {
 		pid = getpid();
@@ -3396,6 +3737,7 @@ int overlay_blacklist(const char *path)
 		if (stat(check_path, &sb) < 0)
 			return -ENOENT;
 	}
+#endif
 
 	if (strncmp(path, "/sys/", 5))
 		return 0;
@@ -3487,7 +3829,17 @@ overlay_path(int dirfd, const char *in, char *buf, int *resolvelinks)
 	__dprintf("considering fd %d path %s\n", dirfd, in);
 
 	if (dirfd != AT_FDCWD && in[0] != '/') {
+#ifdef MCEXEC_RUST_HELPERS
+		rc = mcexec_proc_self_fd_path_result(buf, PATH_MAX, dirfd);
+		if (rc < 0) {
+			fprintf(stderr,
+				"%s: /proc/self/fd/%d path truncated\n",
+				__func__, dirfd);
+			return in;
+		}
+#else
 		snprintf(buf, PATH_MAX, "/proc/self/fd/%d", dirfd);
+#endif
 
 		n = readlink(buf, tmpbuf, PATH_MAX);
 		if (n == PATH_MAX || n < 0) {
@@ -3500,6 +3852,14 @@ overlay_path(int dirfd, const char *in, char *buf, int *resolvelinks)
 		}
 		tmpbuf[n] = 0;
 
+#ifdef MCEXEC_RUST_HELPERS
+		n = mcexec_join_path_inplace_result(tmpbuf, PATH_MAX, in);
+		if (n < 0) {
+			fprintf(stderr, "%s: %s truncated\n",
+				__func__, tmpbuf);
+			return in;
+		}
+#else
 		if (n > 0 && tmpbuf[n-1] == '/')
 			n--;
 
@@ -3509,6 +3869,7 @@ overlay_path(int dirfd, const char *in, char *buf, int *resolvelinks)
 				__func__, tmpbuf);
 			return in;
 		}
+#endif
 
 		path = tmpbuf;
 	} else if (in[0] != '/') {
@@ -3519,6 +3880,14 @@ overlay_path(int dirfd, const char *in, char *buf, int *resolvelinks)
 			return in;
 		}
 
+#ifdef MCEXEC_RUST_HELPERS
+		n = mcexec_join_path_inplace_result(tmpbuf, PATH_MAX, in);
+		if (n < 0) {
+			fprintf(stderr, "%s: %s truncated\n",
+				__func__, tmpbuf);
+			return in;
+		}
+#else
 		n = strlen(tmpbuf);
 		if (n > 0 && tmpbuf[n-1] == '/')
 			n--;
@@ -3529,16 +3898,42 @@ overlay_path(int dirfd, const char *in, char *buf, int *resolvelinks)
 				__func__, tmpbuf);
 			return in;
 		}
+#endif
 
 		path = tmpbuf;
 	}
 
 	__dprintf("glued to %s\n", path);
 
+#ifdef MCEXEC_RUST_HELPERS
+	if (mcexec_path_is_dev_xpmem_result(path))
+		return "/dev/null";
+#else
 	if (!strcmp(path, "/dev/xpmem"))
 		return "/dev/null";
+#endif
 
 
+#ifdef MCEXEC_RUST_HELPERS
+	if (enable_uti && mcexec_path_has_libuti_result(path)) {
+		char libdir[PATH_MAX];
+
+		if (find_libdir(libdir, sizeof(libdir)) < 0) {
+			fprintf(stderr, "error: failed to find library directory\n");
+			return in;
+		}
+		n = mcexec_overlay_uti_path_result(libdir, path, buf,
+				PATH_MAX);
+		if (n < 0) {
+			fprintf(stderr, "%s: %s truncated\n",
+				__func__, path);
+			return in;
+		}
+		__dprintf("%s: %s replaced with %s\n",
+			  __func__, path, buf);
+		goto checkexist;
+	}
+#else
 	if (enable_uti && strstr(path, "libuti.so")) {
 		char libdir[PATH_MAX];
 		char *basename;
@@ -3559,8 +3954,31 @@ overlay_path(int dirfd, const char *in, char *buf, int *resolvelinks)
 			  __func__, path, buf);
 		goto checkexist;
 	}
+#endif
 
 
+#ifdef MCEXEC_RUST_HELPERS
+	rc = mcexec_overlay_proc_self_path_result(path, mcosid, getpid(),
+			buf, PATH_MAX);
+	if (rc > 0) {
+		n = rc;
+		goto checkexist;
+	}
+	if (rc < 0) {
+		fprintf(stderr, "%s: %s truncated\n", __func__, path);
+		return in;
+	}
+
+	rc = mcexec_overlay_proc_path_result(path, mcosid, buf, PATH_MAX);
+	if (rc > 0) {
+		n = rc;
+		goto checkexist;
+	}
+	if (rc < 0) {
+		fprintf(stderr, "%s: %s truncated\n", __func__, path);
+		return in;
+	}
+#else
 	if (!strncmp(path, "/proc/self", 10) &&
 	    (path[10] == '/' || path[10] == '\0')) {
 		n = snprintf(buf, PATH_MAX, "/proc/mcos%d/%d%s",
@@ -3574,6 +3992,7 @@ overlay_path(int dirfd, const char *in, char *buf, int *resolvelinks)
 			     mcosid, path + 5);
 		goto checkexist;
 	}
+#endif
 
 	if (!strncmp(path, "/sys", 4) &&
 	    (path[4] == '/' || path[4] == '\0')) {
@@ -3653,11 +4072,24 @@ checkexist_resolvelinks:
 		linkpath++;
 	}
 
+#ifdef MCEXEC_RUST_HELPERS
+	{
+		size_t mapped_offset = 0;
+
+		rc = mcexec_overlay_sys_path_result(path, mcosid, buf,
+				PATH_MAX, &mapped_offset);
+		if (rc <= 0)
+			return in;
+		n = rc;
+		path = buf + mapped_offset;
+	}
+#else
 	n = snprintf(buf, PATH_MAX, "/sys/devices/virtual/mcos/mcos%d",
 		     mcosid);
 	tmppath = buf + n;
 	n += snprintf(buf + n, PATH_MAX - n, "/sys/%s", path + 5);
 	path = tmppath;
+#endif
 
 checkexist:
 	if (n >= PATH_MAX) {
@@ -3665,6 +4097,17 @@ checkexist:
 		return in;
 	}
 
+#ifdef MCEXEC_RUST_HELPERS
+	{
+		size_t normalized_len = (size_t)n;
+
+		rc = mcexec_normalize_overlay_path_result(buf,
+				&normalized_len);
+		if (rc < 0)
+			return in;
+		n = normalized_len;
+	}
+#else
 	while ((tmppath = strstr(buf, "//"))) {
 		memmove(tmppath, tmppath + 1, PATH_MAX - (tmppath + 1 - buf));
 		n--;
@@ -3673,6 +4116,7 @@ checkexist:
 		buf[n-1] = 0;
 		n--;
 	}
+#endif
 
 	rc = stat(buf, &sb);
 	__dprintf("trying %s: %d\n", buf, rc == -1 ? errno : 0);
@@ -4152,6 +4596,27 @@ err:
 static int getpath_execveat(int dirfd, const char *filename, int flags,
 		char *pathbuf, size_t size)
 {
+#ifdef MCEXEC_RUST_HELPERS
+	int check_symlink = 0;
+	int ret;
+
+	ret = mcexec_getpath_execveat_prepare_result(dirfd, filename, flags,
+			AT_FDCWD, AT_EMPTY_PATH, AT_SYMLINK_NOFOLLOW,
+			pathbuf, size, &check_symlink);
+	if (ret) {
+		return ret;
+	}
+
+	if (check_symlink) {
+		int rc;
+
+		if ((rc = readlink(filename, pathbuf, PATH_MAX)) != -1) {
+			return ELOOP;
+		}
+	}
+
+	return 0;
+#else
 	int rc, ret = 0;
 	size_t len;
 
@@ -4179,6 +4644,7 @@ static int getpath_execveat(int dirfd, const char *filename, int flags,
 
 out:
 	return ret;
+#endif
 }
 
 int main_loop(struct thread_data_s *my_thread)

@@ -23,6 +23,7 @@
 #include "mcctrl.h"
 #include <linux/version.h>
 #include <linux/semaphore.h>
+#include <mcctrl_rust.h>
 
 //#define PROCFS_DEBUG
 
@@ -279,7 +280,7 @@ find_base_entry(int osnum)
 {
 	char name[12];
 
-	sprintf(name, "mcos%d", osnum);
+	mcctrl_format_mcos_name(name, sizeof(name), osnum);
 	return find_procfs_entry(NULL, name);
 }
 
@@ -291,7 +292,7 @@ find_pid_entry(int osnum, int pid)
 
 	if(!(e = find_base_entry(osnum)))
 		return NULL;
-	sprintf(name, "%d", pid);
+	mcctrl_format_decimal_name(name, sizeof(name), pid);
 	return find_procfs_entry(e, name);
 }
 
@@ -305,7 +306,7 @@ find_tid_entry(int osnum, int pid, int tid)
 		return NULL;
 	if(!(e = find_procfs_entry(e, "task")))
 		return NULL;
-	sprintf(name, "%d", tid);
+	mcctrl_format_decimal_name(name, sizeof(name), tid);
 	return find_procfs_entry(e, name);
 }
 
@@ -317,7 +318,7 @@ get_base_entry(int osnum)
 	kuid_t uid = KUIDT_INIT(0);
 	kgid_t gid = KGIDT_INIT(0);
 
-	sprintf(name, "mcos%d", osnum);
+	mcctrl_format_mcos_name(name, sizeof(name), osnum);
 	e = find_procfs_entry(NULL, name);
 	if(!e){
 		e = add_procfs_entry(NULL, name, S_IFDIR | 0555,
@@ -338,10 +339,10 @@ get_pid_entry(int osnum, int pid)
 	kuid_t uid = KUIDT_INIT(0);
 	kgid_t gid = KGIDT_INIT(0);
 
-	sprintf(name, "mcos%d", osnum);
+	mcctrl_format_mcos_name(name, sizeof(name), osnum);
 	if(!(parent = find_procfs_entry(NULL, name)))
 		return NULL;
-	sprintf(name, "%d", pid);
+	mcctrl_format_decimal_name(name, sizeof(name), pid);
 	e = find_procfs_entry(parent, name);
 	if(!e)
 		e = add_procfs_entry(parent, name, S_IFDIR | 0555,
@@ -358,15 +359,15 @@ get_tid_entry(int osnum, int pid, int tid)
 	kuid_t uid = KUIDT_INIT(0);
 	kgid_t gid = KGIDT_INIT(0);
 
-	sprintf(name, "mcos%d", osnum);
+	mcctrl_format_mcos_name(name, sizeof(name), osnum);
 	if(!(parent = find_procfs_entry(NULL, name)))
 		return NULL;
-	sprintf(name, "%d", pid);
+	mcctrl_format_decimal_name(name, sizeof(name), pid);
 	if(!(parent = find_procfs_entry(parent, name)))
 		return NULL;
 	if(!(parent = find_procfs_entry(parent, "task")))
 		return NULL;
-	sprintf(name, "%d", tid);
+	mcctrl_format_decimal_name(name, sizeof(name), tid);
 	e = find_procfs_entry(parent, name);
 	if(!e)
 		e = add_procfs_entry(parent, name, S_IFDIR | 0555,

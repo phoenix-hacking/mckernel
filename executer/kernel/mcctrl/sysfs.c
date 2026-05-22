@@ -16,6 +16,7 @@
 #include <linux/version.h>
 #include <linux/interrupt.h>
 #include "mcctrl.h"
+#include "mcctrl_rust.h"
 #include "sysfs_msg.h"
 
 #define dprintk(...) do { if (0) printk(__VA_ARGS__); } while (0)
@@ -2267,14 +2268,13 @@ sysfsm_createf(ihk_os_t os, struct sysfsm_ops *ops, void *instance, int mode,
 	va_start(ap, fmt);
 	n = vsnprintf(param->path, sizeof(param->path), fmt, ap);
 	va_end(ap);
-	if (n >= sizeof(param->path)) {
-		error = -ENAMETOOLONG;
+	error = mcctrl_sysfs_path_error(param->path, n, sizeof(param->path));
+	if (error == -ENAMETOOLONG) {
 		eprintk("mcctrl:sysfsm_createf:vsnprintf failed. %d\n", error);
 		goto out;
 	}
 	dprintk("mcctrl:sysfsm_createf:path %s\n", param->path);
-	if (param->path[0] != '/') {
-		error = -ENOENT;
+	if (error == -ENOENT) {
 		eprintk("mcctrl:sysfsm_createf:not an absolute path. %d\n",
 				error);
 		goto out;
@@ -2342,14 +2342,13 @@ sysfsm_mkdirf(ihk_os_t os, sysfs_handle_t *dirhp, const char *fmt, ...)
 	va_start(ap, fmt);
 	n = vsnprintf(param->path, sizeof(param->path), fmt, ap);
 	va_end(ap);
-	if (n >= sizeof(param->path)) {
-		error = -ENAMETOOLONG;
+	error = mcctrl_sysfs_path_error(param->path, n, sizeof(param->path));
+	if (error == -ENAMETOOLONG) {
 		eprintk("mcctrl:sysfsm_mkdirf:vsnprintf failed. %d\n", error);
 		goto out;
 	}
 	dprintk("mcctrl:sysfsm_mkdirf:path %s\n", param->path);
-	if (param->path[0] != '/') {
-		error = -ENOENT;
+	if (error == -ENOENT) {
 		eprintk("mcctrl:sysfsm_mkdirf:not an absolute path. %d\n",
 				error);
 		goto out;
@@ -2410,14 +2409,13 @@ sysfsm_symlinkf(ihk_os_t os, sysfs_handle_t targeth, const char *fmt, ...)
 	va_start(ap, fmt);
 	n = vsnprintf(param->path, sizeof(param->path), fmt, ap);
 	va_end(ap);
-	if (n >= sizeof(param->path)) {
-		error = -ENAMETOOLONG;
+	error = mcctrl_sysfs_path_error(param->path, n, sizeof(param->path));
+	if (error == -ENAMETOOLONG) {
 		eprintk("mcctrl:sysfsm_symlinkf:vsnprintf failed. %d\n", error);
 		goto out;
 	}
 	dprintk("mcctrl:sysfsm_symlinkf:path %s\n", param->path);
-	if (param->path[0] != '/') {
-		error = -ENOENT;
+	if (error == -ENOENT) {
 		eprintk("mcctrl:sysfsm_symlinkf:not an absolute path. %d\n",
 				error);
 		goto out;
@@ -2474,14 +2472,13 @@ sysfsm_lookupf(ihk_os_t os, sysfs_handle_t *objhp, const char *fmt, ...)
 	va_start(ap, fmt);
 	n = vsnprintf(param->path, sizeof(param->path), fmt, ap);
 	va_end(ap);
-	if (n >= sizeof(param->path)) {
-		error = -ENAMETOOLONG;
+	error = mcctrl_sysfs_path_error(param->path, n, sizeof(param->path));
+	if (error == -ENAMETOOLONG) {
 		eprintk("mcctrl:sysfsm_lookupf:vsnprintf failed. %d\n", error);
 		goto out;
 	}
 	dprintk("mcctrl:sysfsm_lookupf:path %s\n", param->path);
-	if (param->path[0] != '/') {
-		error = -ENOENT;
+	if (error == -ENOENT) {
 		eprintk("mcctrl:sysfsm_lookupf:not an absolute path. %d\n",
 				error);
 		goto out;
@@ -2540,14 +2537,13 @@ sysfsm_unlinkf(ihk_os_t os, int flags, const char *fmt, ...)
 	va_start(ap, fmt);
 	n = vsnprintf(param->path, sizeof(param->path), fmt, ap);
 	va_end(ap);
-	if (n >= sizeof(param->path)) {
-		error = -ENAMETOOLONG;
+	error = mcctrl_sysfs_path_error(param->path, n, sizeof(param->path));
+	if (error == -ENAMETOOLONG) {
 		eprintk("mcctrl:sysfsm_unlinkf:vsnprintf failed. %d\n", error);
 		goto out;
 	}
 	dprintk("mcctrl:sysfsm_unlinkf:path %s\n", param->path);
-	if (param->path[0] != '/') {
-		error = -ENOENT;
+	if (error == -ENOENT) {
 		eprintk("mcctrl:sysfsm_unlinkf:not an absolute path. %d\n",
 				error);
 		goto out;

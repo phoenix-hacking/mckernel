@@ -157,13 +157,14 @@ chain_process(struct process *proc)
 	struct process_hash *phash;
 
 	mcs_rwlock_writer_lock(&parent->children_lock, &lock);
-	list_add_tail(&proc->siblings_list, &parent->children_list);
+	process_list_add_tail_result(&proc->siblings_list,
+				     &parent->children_list);
 	mcs_rwlock_writer_unlock(&parent->children_lock, &lock);
 
 	hash = process_hash(proc->pid);
 	phash = cpu_local_var(resource_set)->process_hash;
 	mcs_rwlock_writer_lock(&phash->lock[hash], &lock);
-	list_add_tail(&proc->hash_list, &phash->list[hash]);
+	process_list_add_tail_result(&proc->hash_list, &phash->list[hash]);
 	mcs_rwlock_writer_unlock(&phash->lock[hash], &lock);
 }
 
@@ -177,13 +178,14 @@ chain_thread(struct thread *thread)
 	struct thread_hash *thash;
 
 	mcs_rwlock_writer_lock(&proc->threads_lock, &lock);
-	list_add_tail(&thread->siblings_list, &proc->threads_list);
+	process_list_add_tail_result(&thread->siblings_list,
+				     &proc->threads_list);
 	mcs_rwlock_writer_unlock(&proc->threads_lock, &lock);
 
 	hash = thread_hash(thread->tid);
 	thash = cpu_local_var(resource_set)->thread_hash;
 	mcs_rwlock_writer_lock(&thash->lock[hash], &lock);
-	list_add_tail(&thread->hash_list, &thash->list[hash]);
+	process_list_add_tail_result(&thread->hash_list, &thash->list[hash]);
 	mcs_rwlock_writer_unlock(&thash->lock[hash], &lock);
 
 	ihk_atomic_inc(&vm->refcount);
@@ -222,10 +224,12 @@ hold_address_space(struct address_space *asp)
 void
 release_address_space(struct address_space *asp)
 {
-	if (!ihk_atomic_dec_and_test(&asp->refcount)) {
+	if (!process_release_address_space_should_destroy_result(
+		    ihk_atomic_dec_and_test(&asp->refcount))) {
 		return;
 	}
-	if(asp->free_cb)
+	if (process_release_address_space_should_run_free_cb_result(
+		    (unsigned long)asp->free_cb))
 		asp->free_cb(asp, asp->opt);
 	ihk_mc_pt_destroy(asp->page_table);
 	kfree(asp);
@@ -234,14 +238,7 @@ release_address_space(struct address_space *asp)
 void
 detach_address_space(struct address_space *asp, int pid)
 {
-	int i;
-
-	for(i = 0; i < asp->nslots; i++){
-		if(asp->pids[i] == pid){
-			asp->pids[i] = 0;
-			break;
-		}
-	}
+	process_address_space_pid_detach_result(asp->pids, asp->nslots, pid);
 	release_address_space(asp);
 }
 
@@ -312,7 +309,7 @@ struct thread *create_thread(unsigned long user_pc,
 
 	/* Use requested CPU cores */
 	for_each_set_bit(cpu, __cpu_set, cpu_set_size * BITS_PER_BYTE) {
-		if (cpu >= num_processors) {
+		if (!process_create_cpu_allowed_result(cpu, num_processors)) {
 			kprintf("%s: invalid CPU requested in initial cpu_set\n",
 				__FUNCTION__);
 			goto err;
@@ -326,7 +323,7 @@ struct thread *create_thread(unsigned long user_pc,
 	}
 
 	/* Default allows all cores */
-	if (cpu_set_empty) {
+	if (process_create_use_default_cpu_set_result(cpu_set_empty)) {
 		struct ihk_mc_cpu_info *infop;
 		int i;
 
@@ -439,7 +436,7 @@ clone_thread(struct thread *org, unsigned long pc, unsigned long sp,
 	thread->sched_param.sched_priority = org->sched_param.sched_priority;
 
 	/* clone VM */
-	if (clone_flags & CLONE_VM) {
+	if (process_clone_shares_vm_result(clone_flags)) {
 		proc = org->proc;
 		thread->vm = org->vm;
 		thread->proc = proc;
@@ -515,34 +512,26 @@ clone_thread(struct thread *org, unsigned long pc, unsigned long sp,
 				goto free_fork_process_mckfd;
 			}
 			memcpy(mckfd, cur, sizeof(struct mckfd));
-			
-			if (proc->mckfd == NULL) {
-				proc->mckfd = mckfd;
-				mckfd->next = NULL;
-			}
-			else {
-				mckfd->next = proc->mckfd;
-				proc->mckfd = mckfd;
-			}
+			process_mckfd_push_head_result(&proc->mckfd, mckfd);
 
-			if (mckfd->dup_cb) {
+			if (process_mckfd_should_dup_result(
+				    (unsigned long)mckfd->dup_cb)) {
 				mckfd->dup_cb(mckfd, NULL);
 			}
 		}
 		ihk_mc_spinlock_unlock(&proc->mckfd_lock, irqstate);
 
-		thread->vm->vdso_addr = org->vm->vdso_addr;
-		thread->vm->vvar_addr = org->vm->vvar_addr;
-
-		thread->sigstack.ss_sp = org->sigstack.ss_sp;
-		thread->sigstack.ss_flags = org->sigstack.ss_flags;
-		thread->sigstack.ss_size = org->sigstack.ss_size;
+		process_clone_copy_vm_thread_state_result(thread->vm, org->vm,
+			__builtin_offsetof(struct process_vm, vdso_addr),
+			__builtin_offsetof(struct process_vm, vvar_addr),
+			thread, org, __builtin_offsetof(struct thread, sigstack),
+			sizeof(thread->sigstack));
 
 		dkprintf("fork(): copy_user_ranges() OK\n");
 	}
 
 	/* clone signal handlers */
-	if (clone_flags & CLONE_SIGHAND) {
+	if (process_clone_shares_sighand_result(clone_flags)) {
 		thread->sigcommon = org->sigcommon;
 		ihk_atomic_inc(&org->sigcommon->use);
 	}
@@ -552,7 +541,7 @@ clone_thread(struct thread *org, unsigned long pc, unsigned long sp,
 		thread->sigcommon = kmalloc(sizeof(struct sig_common),
 		                             IHK_MC_AP_NOWAIT);
 		if (!thread->sigcommon) {
-			if (clone_flags & CLONE_VM) {
+			if (process_clone_shares_vm_result(clone_flags)) {
 				goto free_clone_process;
 			}
 			goto free_fork_process_mckfd;
@@ -595,13 +584,10 @@ free_clone_process:
 free_fork_process_mckfd:
 	{
 		long irqstate = ihk_mc_spinlock_lock(&proc->mckfd_lock);
-		struct mckfd *cur = proc->mckfd;
+		struct mckfd *cur;
 
-		while (cur) {
-			struct mckfd *next = cur->next;
-
+		while ((cur = process_mckfd_pop_head_result(&proc->mckfd))) {
 			kfree(cur);
-			cur = next;
 		}
 		ihk_mc_spinlock_unlock(&proc->mckfd_lock, irqstate);
 	}
@@ -655,19 +641,20 @@ ptrace_traceme(void)
 	if (thread == proc->main_thread) {
 		mcs_rwlock_writer_lock_noirq(&parent->children_lock,
 					     &child_lock);
-		list_add_tail(&proc->ptraced_siblings_list,
-			      &parent->ptraced_children_list);
+		process_list_add_tail_result(&proc->ptraced_siblings_list,
+					     &parent->ptraced_children_list);
 		mcs_rwlock_writer_unlock_noirq(&parent->children_lock,
 					       &child_lock);
 	}
 	if (!thread->report_proc) {
 		mcs_rwlock_writer_lock_noirq(&parent->threads_lock,
 					     &child_lock);
-		list_add_tail(&thread->report_siblings_list,
-			      &parent->report_threads_list);
+		process_thread_report_attach_result(thread, 0, 0, 0,
+			__builtin_offsetof(struct thread, report_proc),
+			parent, &thread->report_siblings_list,
+			&parent->report_threads_list);
 		mcs_rwlock_writer_unlock_noirq(&parent->threads_lock,
 					       &child_lock);
-		thread->report_proc = parent;
 	}
 
 	thread->ptrace = PT_TRACED | PT_TRACE_EXEC;
@@ -2949,23 +2936,24 @@ release_process(struct process *proc)
 	struct mcs_rwlock_node_irqsave lock;
 	struct resource_set *rset;
 
-	if (!ihk_atomic_dec_and_test(&proc->refcount)) {
+	if (!process_ref_release_should_destroy_result(
+		    ihk_atomic_dec_and_test(&proc->refcount))) {
 		return;
 	}
 
 	rset = cpu_local_var(resource_set);
-	if (!list_empty(&proc->hash_list)) {
+	if (process_list_is_linked_result(&proc->hash_list)) {
 		struct process_hash *phash = rset->process_hash;
 		int hash = process_hash(proc->pid);
 
 		mcs_rwlock_writer_lock(&phash->lock[hash], &lock);
-		list_del(&proc->hash_list);
+		process_list_detach_result(&proc->hash_list);
 		mcs_rwlock_writer_unlock(&phash->lock[hash], &lock);
 	}
 
 	parent = proc->parent;
 	mcs_rwlock_writer_lock(&parent->children_lock, &lock);
-	list_del(&proc->siblings_list);
+	process_list_detach_result(&proc->siblings_list);
 	mcs_rwlock_writer_unlock(&parent->children_lock, &lock);
 
 	if (proc->tids) kfree(proc->tids);
@@ -2984,13 +2972,10 @@ release_process(struct process *proc)
 
 	{
 		long irqstate = ihk_mc_spinlock_lock(&proc->mckfd_lock);
-		struct mckfd *cur = proc->mckfd;
+		struct mckfd *cur;
 
-		while (cur) {
-			struct mckfd *next = cur->next;
-
+		while ((cur = process_mckfd_pop_head_result(&proc->mckfd))) {
 			kfree(cur);
-			cur = next;
 		}
 		ihk_mc_spinlock_unlock(&proc->mckfd_lock, irqstate);
 	}
@@ -3046,7 +3031,8 @@ release_process_vm(struct process_vm *vm)
 	struct vm_range_numa_policy *policy;
 	struct rb_node *node;
 
-	if (!ihk_atomic_dec_and_test(&vm->refcount)) {
+	if (!process_ref_release_should_destroy_result(
+		    ihk_atomic_dec_and_test(&vm->refcount))) {
 		return;
 	}
 
@@ -3056,14 +3042,16 @@ release_process_vm(struct process_vm *vm)
 
 		irqstate = ihk_mc_spinlock_lock(&proc->mckfd_lock);
 		for (fdp = proc->mckfd; fdp; fdp = fdp->next) {
-			if (fdp->close_cb) {
+			if (process_release_mckfd_should_close_result(
+				    (unsigned long)fdp->close_cb)) {
 				fdp->close_cb(fdp, NULL);
 			}
 		}
 		ihk_mc_spinlock_unlock(&proc->mckfd_lock, irqstate);
 	}
 
-	if(vm->free_cb)
+	if (process_release_vm_should_run_free_cb_result(
+		    (unsigned long)vm->free_cb))
 		vm->free_cb(vm, vm->opt);
 
 	flush_nfo_tlb_mm(vm);
@@ -3112,7 +3100,7 @@ out:
 
 int hold_thread(struct thread *thread)
 {
-	if (thread->status == PS_EXITED) {
+	if (process_hold_thread_warn_exited_result(thread->status)) {
 		kprintf("hold_thread: WARNING: already exited process,tid=%d\n",
 			thread->tid);
 	}
@@ -3131,15 +3119,20 @@ void
 release_sigcommon(struct sig_common *sigcommon)
 {
 	struct sig_pending *pending;
-	struct sig_pending *next;
 
-	if (!ihk_atomic_dec_and_test(&sigcommon->use)) {
+	if (!process_sigcommon_release_should_destroy_result(
+		    ihk_atomic_dec_and_test(&sigcommon->use))) {
 		return;
 	}
 
-	list_for_each_entry_safe(pending, next, &sigcommon->sigpending, list){
-		list_del(&pending->list);
-		kfree(pending);
+	if (process_sigpending_cleanup_needed_result(
+		    list_empty(&sigcommon->sigpending))) {
+		while ((pending = process_sigpending_pop_front_result(
+				&sigcommon->sigpending,
+				__builtin_offsetof(struct sig_pending,
+						   list)))) {
+			kfree(pending);
+		}
 	}
 	kfree(sigcommon);
 }
@@ -3155,46 +3148,58 @@ void __release_tid(struct process *proc, struct thread *thread) {
 		return;
 	}
 
-	for (i = 0; i < proc->nr_tids; ++i) {
-		if (proc->tids[i].thread != thread) continue;
-
-		proc->tids[i].thread = NULL;
+	i = process_tid_index_for_thread_result(proc->tids, proc->nr_tids,
+						sizeof(proc->tids[0]),
+						__builtin_offsetof(
+							struct mcexec_tid,
+							thread),
+						(unsigned long)thread);
+	if (process_tid_index_found_result(i) &&
+	    process_tid_release_slot_result(proc->tids, i,
+					    sizeof(proc->tids[0]),
+					    __builtin_offsetof(
+						    struct mcexec_tid,
+						    thread))) {
 		dkprintf("%s: tid %d has been released by %p\n",
 			__FUNCTION__, thread->tid, thread);
-		break;
 	}
 }
 
 /* Replace tid specified by thread with tid specified by new_tid */
 void __find_and_replace_tid(struct process *proc, struct thread *thread, int new_tid) {
-	int i;
+	int i = process_tid_index_for_thread_result(
+		proc->tids, proc->nr_tids, sizeof(proc->tids[0]),
+		__builtin_offsetof(struct mcexec_tid, thread),
+		(unsigned long)thread);
 
-	for (i = 0; i < proc->nr_tids; ++i) {
-		if (proc->tids[i].thread != thread) continue;
-
-		proc->tids[i].thread = NULL;
-		proc->tids[i].tid = new_tid;
+	if (process_tid_index_found_result(i) &&
+	    process_tid_replace_slot_result(proc->tids, i,
+					    sizeof(proc->tids[0]),
+					    __builtin_offsetof(
+						    struct mcexec_tid, tid),
+					    __builtin_offsetof(
+						    struct mcexec_tid,
+						    thread),
+					    new_tid)) {
 		dkprintf("%s: tid %d (thread %p) has been relaced with tid %d\n",
 				__FUNCTION__, thread->tid, thread, new_tid);
-		break;
 	}
 }
 
 void destroy_thread(struct thread *thread)
 {
 	struct sig_pending *pending;
-	struct sig_pending *signext;
 	struct mcs_rwlock_node_irqsave lock, updatelock;
 	struct process *proc = thread->proc;
 	struct timespec ats;
 
-	if (!list_empty(&thread->hash_list)) {
+	if (process_list_is_linked_result(&thread->hash_list)) {
 		struct resource_set *resource_set = cpu_local_var(resource_set);
 		int hash = thread_hash(thread->tid);
 
 		mcs_rwlock_writer_lock(&resource_set->thread_hash->lock[hash],
 					&lock);
-		list_del(&thread->hash_list);
+		process_list_detach_result(&thread->hash_list);
 		mcs_rwlock_writer_unlock(&resource_set->thread_hash->lock[hash],
 					&lock);
 	}
@@ -3207,38 +3212,53 @@ void destroy_thread(struct thread *thread)
 	mcs_rwlock_writer_unlock(&proc->update_lock, &updatelock);
 
 	mcs_rwlock_writer_lock(&proc->threads_lock, &lock);
-	list_del(&thread->siblings_list);
-	if (thread->uti_state == UTI_STATE_EPILOGUE) {
+	process_list_detach_result(&thread->siblings_list);
+	switch (process_destroy_thread_tid_action_result(proc->tids != NULL,
+							thread == proc->main_thread,
+							thread->uti_state)) {
+	case 2:
 		__find_and_replace_tid(proc, thread, thread->uti_refill_tid);
-	}
-	else if (thread != proc->main_thread) {
+		break;
+	case 1:
 		__release_tid(proc, thread);
+		break;
+	default:
+		break;
 	}
 
 	cpu_clear(thread->cpu_id, &thread->vm->address_space->cpu_set,
 	          &thread->vm->address_space->cpu_set_lock);
-	list_for_each_entry_safe(pending, signext, &thread->sigpending, list){
-		list_del(&pending->list);
-		kfree(pending);
+	if (process_sigpending_cleanup_needed_result(
+		    list_empty(&thread->sigpending))) {
+		while ((pending = process_sigpending_pop_front_result(
+				&thread->sigpending,
+				__builtin_offsetof(struct sig_pending,
+						   list)))) {
+			kfree(pending);
+		}
 	}
 
-	if (thread->ptrace_debugreg) {
+	if (process_optional_ptr_should_free_result(
+		    (unsigned long)thread->ptrace_debugreg)) {
 		kfree(thread->ptrace_debugreg);
 	}
-	if (thread->ptrace_recvsig) {
+	if (process_optional_ptr_should_free_result(
+		    (unsigned long)thread->ptrace_recvsig)) {
 		kfree(thread->ptrace_recvsig);
 	}
-	if (thread->ptrace_sendsig) {
+	if (process_optional_ptr_should_free_result(
+		    (unsigned long)thread->ptrace_sendsig)) {
 		kfree(thread->ptrace_sendsig);
 	}
-	if (thread->fp_regs) {
+	if (process_optional_ptr_should_free_result(
+		    (unsigned long)thread->fp_regs)) {
 		release_fp_regs(thread);
 	}
 	kfree(thread->coredump_regs);
 
 	release_sigcommon(thread->sigcommon);
 
-	if (thread != proc->main_thread)
+	if (process_thread_should_free_pages_result(thread == proc->main_thread))
 		free_thread_pages(thread);
 	mcs_rwlock_writer_unlock(&proc->threads_lock, &lock);
 }
@@ -3247,7 +3267,8 @@ void release_thread(struct thread *thread)
 {
 	struct process_vm *vm;
 
-	if (!ihk_atomic_dec_and_test(&thread->refcount)) {
+	if (!process_ref_release_should_destroy_result(
+		    ihk_atomic_dec_and_test(&thread->refcount))) {
 		return;
 	}
 
@@ -3422,7 +3443,7 @@ new_resource_set()
 	init_process(pid1, pid1);
 	pid1->pid = 1;
 	hash = process_hash(1);
-	list_add_tail(&pid1->hash_list, &phash->list[hash]);
+	process_list_add_tail_result(&pid1->hash_list, &phash->list[hash]);
 	res->pid1 = pid1;
 
 	return res;
@@ -3449,7 +3470,7 @@ proc_init()
 	}
 	res->path[0] = '/';
 	res->path[0] = '\0';
-	list_add_tail(&res->list, &resource_set_list);
+	process_list_add_tail_result(&res->list, &resource_set_list);
 }
 
 void sched_init(void)
@@ -3470,8 +3491,8 @@ void sched_init(void)
 	init_process(idle_thread->proc, NULL);
 	cpu_local_var(idle_proc).nohost = 1;
 	idle_thread->proc->vm = &cpu_local_var(idle_vm);
-	list_add_tail(&idle_thread->siblings_list,
-	               &idle_thread->proc->children_list);
+	process_list_add_tail_result(&idle_thread->siblings_list,
+				     &idle_thread->proc->children_list);
 
 	ihk_mc_init_context(&idle_thread->ctx, NULL, idle);
 	ihk_rwspinlock_init(&idle_thread->vm->memory_range_lock);
@@ -3537,7 +3558,7 @@ static void do_migrate(void)
 		int clear_old_cpu = 1;
 
 		/* 0. check if migration is necessary */
-		list_del(&req->list);
+		process_list_detach_result(&req->list);
 		if (req->thread->cpu_id != cur_cpu_id) /* already not here */
 			goto ack;
 		if (CPU_ISSET(cur_cpu_id, &req->thread->cpu_set)) /* good affinity */
@@ -3553,12 +3574,12 @@ static void do_migrate(void)
 		/* 2. migrate thread */
 		v = get_cpu_local_var(cpu_id);
 		double_rq_lock(cur_v, v, &irqstate);
-		list_del(&req->thread->sched_list);
-		cur_v->runq_len -= 1;
+		process_list_detach_counted_result(&req->thread->sched_list,
+						   &cur_v->runq_len);
 		old_cpu_id = req->thread->cpu_id;
 		req->thread->cpu_id = cpu_id;
-		list_add_tail(&req->thread->sched_list, &v->runq);
-		v->runq_len += 1;
+		process_list_add_tail_counted_result(&req->thread->sched_list,
+						     &v->runq, &v->runq_len);
 
 		/* Find out whether there is another thread of the same process
 		 * on the source CPU */
@@ -3762,13 +3783,14 @@ void schedule(void)
 	
 	/* All runnable processes are on the runqueue */
 	if (prev && prev != &cpu_local_var(idle)) {
-		list_del(&prev->sched_list);
-		--v->runq_len;
+		process_list_detach_counted_result(&prev->sched_list,
+						   &v->runq_len);
 
 		/* Round-robin if not exited yet */
 		if (prev->status != PS_EXITED) {
-			list_add_tail(&prev->sched_list, &(v->runq));
-			++v->runq_len;
+			process_list_add_tail_counted_result(&prev->sched_list,
+							     &(v->runq),
+							     &v->runq_len);
 		}
 	}
 
@@ -4057,7 +4079,7 @@ void sched_request_migrate(int cpu_id, struct thread *thread)
 	waitq_init(&req.wq);
 	waitq_prepare_to_wait(&req.wq, &entry, PS_UNINTERRUPTIBLE);
 
-	list_add_tail(&req.list, &v->migq);
+	process_list_add_tail_result(&req.list, &v->migq);
 
 	ihk_mc_spinlock_lock_noirq(&v->runq_lock);
 	v->flags |= CPU_FLAG_NEED_RESCHED | CPU_FLAG_NEED_MIGRATE;
@@ -4081,8 +4103,8 @@ void sched_request_migrate(int cpu_id, struct thread *thread)
 void __runq_add_thread(struct thread *thread, int cpu_id)
 {
 	struct cpu_local_var *v = get_cpu_local_var(cpu_id);
-	list_add_tail(&thread->sched_list, &v->runq);
-	++v->runq_len;
+	process_list_add_tail_counted_result(&thread->sched_list, &v->runq,
+					     &v->runq_len);
 	v->flags |= CPU_FLAG_NEED_RESCHED;
 	thread->cpu_id = cpu_id;
 	//thread->proc->status = PS_RUNNING;	/* not set here */
@@ -4135,8 +4157,7 @@ void runq_del_thread(struct thread *thread, int cpu_id)
 	unsigned long irqstate;
 
 	irqstate = ihk_mc_spinlock_lock(&(v->runq_lock));
-	list_del(&thread->sched_list);
-	--v->runq_len;
+	process_list_detach_counted_result(&thread->sched_list, &v->runq_len);
 
 	if (!v->runq_len)
 		get_cpu_local_var(cpu_id)->status = CPU_STATUS_IDLE;

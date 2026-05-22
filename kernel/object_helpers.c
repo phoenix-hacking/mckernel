@@ -618,6 +618,12 @@ unsigned int procfs_auxv_limit_result(void)
 	return AUXV_LEN * sizeof(unsigned long);
 }
 
+unsigned int procfs_cmdline_limit_result(uintptr_t saved_cmdline,
+					 unsigned int saved_cmdline_len)
+{
+	return saved_cmdline ? saved_cmdline_len : 0;
+}
+
 int procfs_is_release_result(int msg)
 {
 	return msg == SCD_MSG_PROCFS_RELEASE;
@@ -730,6 +736,11 @@ uintptr_t procfs_comm_basename_result(uintptr_t saved_cmdline)
 
 	slash = strrchr(comm, '/');
 	return (uintptr_t)(slash ? slash + 1 : comm);
+}
+
+uintptr_t procfs_comm_name_result(uintptr_t fallback, uintptr_t basename)
+{
+	return basename ? basename : fallback;
 }
 
 int pager_linux_io_retry_result(ssize_t ret)

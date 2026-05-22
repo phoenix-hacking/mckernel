@@ -1,5 +1,5 @@
 McKernel Whole-Tree Rust Completion Overview
-Updated: 2026-05-19
+Updated: 2026-05-22
 
 Scope
 ------------------------------------------------------------
@@ -13,7 +13,10 @@ Target definition:
 
 - Rocky Linux remains the paired Linux host target for the active x86_64 port.
 - All McKernel-owned non-arm64 functional code is in scope for Rust ownership.
-- IHK host modules are in scope: ihk, ihk-smp-x86_64, and mcctrl.
+- IHK host modules remain tracked as full-tree context: ihk, ihk-smp-x86_64,
+  and mcctrl. Active migration iterations should focus on McKernel-owned code
+  unless the user explicitly asks to spend the iteration on IHK/external
+  boundary work.
 - User tools are in scope where they are McKernel-owned.
 - Public C headers, ioctl numbers, syscall numbers, exported ABI symbols, and
   Linux-facing compatibility surfaces may remain as C ABI shims while logic
@@ -27,35 +30,237 @@ Target definition:
 Whole-Tree Completion Estimate
 ------------------------------------------------------------
 
-Whole-tree Rust ownership estimate, arm64 excluded: 43%
+Functional dashboard average, arm64 excluded: 64.8%
+McKernel-owned core row average, excluding build/host/user/Rocky/arm64: 57.0%
+Mechanical Rust implementation share: 15.8%
 
-This is an area-weighted engineering estimate, not a line-count. It is lower
-than the 99% McKernel core helper/decision-surface estimate because full-tree
-ownership also includes mutation-heavy kernel bodies, x86_64 page-table code,
-process lifetime code, syscall dispatch, scheduler/futex internals, IHK Linux
-host modules, and user tools. The estimate moved this round because process/VM
+This is an area-weighted engineering estimate, not a line-count, and it is
+deliberately lower than earlier helper-surface estimates. Full ownership still
+includes mutation-heavy kernel bodies, x86_64 page-table code, process
+lifetime code, syscall dispatch, scheduler/futex internals, IHK Linux host
+modules, and user tools. The estimate moved this round because process/VM
 decision logic, x86_64 page-attribute/page-size decisions, `mcstat` leaf
-behavior, `mcexec` option/policy, dirent layout, and proc-task path helpers,
-and `ihklib` CPU/memory/IKC parsers now have Rust ownership; IHK Linux modules
-remain the largest zero.
+behavior, `mcexec` option/env-list, policy, dirent layout, and proc-task path
+helpers, `mcexec` extra-environment allocation/copy/free and OMPI
+memory-policy classification, saved stack-limit parsing/application, FLIB
+affinity CPU-list shifting, LD_PRELOAD string construction, overlay fd path
+preparation, and execveat path construction, `ihklib` CPU/memory/IKC parser,
+cpuset.mems allocation, request-formatting helpers, packed-env parser,
+create-os env parser, first-match env lookup, reserve-memory config parsing,
+environment action classification, parsed-env cleanup, device path formatting,
+IHK command integer/hex/status helpers, mcinspect status/action/path/option
+helpers, eclair dump-section/path/GDB packet-format/remote-reply helpers,
+crash extension label/path/command/address-translation helpers, IHK
+Linux-module Rust object links for `ihk`, `ihk-smp-x86_64`, and `mcctrl`,
+mcctrl control/IKC policy helpers, the larger IHK core/SMP module policy batch
+for kmsg, monitor, freeze/thaw, ioctl permission, boot sizing, request
+validation, dump sizing, panic-dump exclusion, x86 status mapping, IHK
+page-allocator descriptor/order/mask/address helpers, extra SMP CPU-bound
+checks, host-driver map/unmap range math, SMP kernel vtop/bootstrap math,
+load-file/load-memory arithmetic, memory assignment policy, free-list
+insertion/merge decisions, wait/debug decode, reserve-memory stop/leftover
+policy, request granularity checks, partial-release policy, x86_64 trampoline
+and identity-page-table sizing decisions, dump query/NMI/topology/cache
+decisions, host-driver ioctl/debug/aux-call, device lifecycle validation,
+read/write completion, mmap calculation helpers, IHK user command dispatch,
+resource/get/set target selection, release-all handling, ihkosctl size and
+interrupt parsing, and ihkmond facility/action/path/slot decisions now have
+Rust ownership. Recent passes also moved eclair GDB remote command
+classification, Hg/T/qThreadExtraInfo thread-id parsing, memory-read packet
+parsing, and mcexec overlay/device/proc/sys path construction into Rust.
+This pass moved more crash-extension command-output decisions into Rust,
+including thread command-name basename selection, memory-range filtering,
+PTE physical-address derivation, x86 sign extension, PTE flag formatting,
+PTE coalescing, and lookup range skip/break decisions.
+This pass added Rust ownership for crash PID/thread context parsing, PID
+hash-bucket selection, boot-refresh comparison, PTE type classification,
+page-table level shift selection, mcvtop address parsing, and kmsg wrap checks.
+This pass added Rust ownership for mcinspect DWARF size/offset/address form
+classification, DWARF expression validation, structure/member/global tag-name
+matching, thread marker/command-name selection, CPU-local address math,
+sched-list thread derivation, and vtop process-selection helpers. It also
+expanded mcstat Rust ownership to CLI delay/count parsing, mcos device-path
+formatting, NUMA memory total/current/max aggregation, and corrected the Rust
+monitor-status constants to match the IHK header.
+This pass expanded eclair Rust ownership across static GDB response
+construction, qSupported/qC/qAttached/target.xml/qTStatus/memory-map/thread-list
+formatting, packet checksum parsing/summing, Ctrl-C command construction, and
+register/memory byte hex formatting while keeping socket I/O, GDB process
+orchestration, dump reads, and NMI side effects in C.
+This pass moved the crash extension's `mcps` row formatting and `mcmem`
+mapping-line formatting into Rust while keeping crash API reads, list/tree
+walking, command orchestration, and fallback output in C.
+This pass expanded crash Rust output ownership again: `mcps` and `mcmem`
+headers, `mcmem` process lines, `mcvtop` headers, full PTE table rows, raw PTE
+lines, lookup-failure text, and memory-range section markers are now built in
+Rust with C fallbacks.
+This pass expanded eclair Rust ownership again: simple GDB remote replies,
+packet frame construction, banner and usage text, `/dev/mcosN` open-error text,
+invalid physical-memory diagnostics, and symbol lookup-failure diagnostics are
+now built in Rust with C fallbacks.
+This pass expanded IHK SMP-module Rust ownership: full CPU/NUMA mapping
+lookups, CPU-list request serialization, and IKC-map request serialization are
+now Rust-owned in `ihk-smp-x86_64`, with the C side reduced to compatibility
+wrappers and error logging.
+This pass added another IHK SMP-module Rust slice: CPU request-array bounds
+preflight for OS assign/release and device reserve/release paths, plus IKC
+source/destination pair bounds preflight, now run through Rust before C performs
+cpumask construction, CPU hotplug, IKC map mutation, and state changes.
+This stabilization pass fixed the SMP CPU assign/release/reserve stack-frame
+problem by moving the request logging string buffer out of those C compatibility
+wrappers' stack frames and into heap allocation with shared cleanup. No new
+Rust ownership percentage was counted for this fix; it preserves the validated
+Rust SMP preflight path without pretending CPU hotplug/cpumask mutation has
+already moved to Rust.
+This pass expanded IHK SMP Rust ownership again: CPU-state transition
+predicates, OS CPU ownership checks, IKC source/destination state checks,
+reserve/release rollback-state filters, available-CPU query filters, CPU
+mapping copy, and release-time CPU mapping compaction now live in Rust while
+C still owns reset calls, hotplug sysfs writes, status mutation, locks,
+copy_to_user/copy_from_user, and module lifecycle side effects.
+This pass expanded IHK SMP Rust ownership through sysfs/topology helpers:
+CPU-online sysfs path construction, CPU topology prefix construction, cache
+topology prefix construction, sysfs string newline trimming, and sysfs long
+parsing now live in Rust. C still owns file open/read/write, allocation,
+topology list mutation, bitmap parsing, and hotplug side effects.
+This pass expanded IHK module Rust ownership in `ihk` and `mcctrl`: the IHK
+core page-allocator bitmap reserve, small-allocation scan, large-allocation
+scan, and free-bit mutation are now Rust-owned while the Linux spinlock,
+descriptor allocation, exported allocator ABI, and fallback wrappers remain in
+C; mcctrl sysfs CPU/NUMA mapping lookups and local CPU-online bitset
+construction are now Rust-owned while sysfs object creation, topology list
+walking, cpumask translation, and kernel object lifetime remain C. A focused
+IHK module helper smoke was added to `kernel/rust/tests/run_equivalence.sh`.
+This pass added another small mcctrl sysfs Rust slice: read-buffer completion,
+decimal long parsing, and PCI realpath prefix classification now live in Rust
+helpers with C fallbacks; file open/readlink, sysfs creation, PCI directory
+walking, and node-topology list selection remain C.
+This pass wired the IHK module-load smoke into the Rocky validation wrapper and
+validated Rust-linked load/unload for `ihk`, `ihk-smp-x86_64`, and `mcctrl`.
+It also moved the mcctrl Tofu file-to-pidfd device-name buffer fill into Rust,
+with C still owning allocation, hash/list locking, insertion/removal, and
+lifetime.
+This pass expanded `mcexec` Rust ownership across executable/interpreter
+path-resolution policy: absolute-path and single-component classification,
+filename length-limit checks, bounded path copy, root-prefix joins,
+PATH/COKERNEL_PATH candidate joins, and altroot interpreter candidate
+construction now live in Rust. C still owns environment lookup, PATH token
+iteration, filesystem access/stat calls, diagnostics, and path lifetime.
+This pass also made ownership reporting stricter and easier to gate: the report
+now emits dashboard rows in functional-dashboard order, checks overview files
+for duplicated dashboard rows, exports dashboard data in JSON, and supports
+per-area `--fail-on-c-area` gates. A small follow-up `mcexec` path-formatting
+slice moved `/proc/self/exe` fallback copies, relative `exec_path` joining,
+RPATH `objdump` command construction, and RPATH libdir bounded copy through
+Rust helpers. C still owns `readlink()`, `popen()`, `getline()`, ELF parsing,
+and process execution.
+This pass completed the requested Batch 2 ABI/layout checkpoint and then
+expanded it into a larger lifecycle/helper batch. Rust mirrors and compile-time
+assertions now cover process/thread lifetime structs, private `resource_set`,
+`sig_common`, `sig_pending`, `mckfd`, `mcexec_tid`, wait/futex support structs,
+public IHK monitor/rusage/register/resource descriptors, and private host Linux
+device/OS/file objects compiled into the `ihk` module. The new code also moves
+address-space release, clone VM/sighand branch decisions, initial CPU-set
+fallback, mckfd duplicate/close decisions, process/thread refcount cleanup
+gates, and IHK open/release/close/init/exit/minor-registration policies through
+Rust helpers. The follow-up lifecycle batch moved process TID-table scans,
+sigpending cleanup gates, optional ptrace/fp cleanup gates, IHK register-device
+cleanup decisions, destroy-all-OS candidate/restore decisions, stray-kmsg trim
+counts, event-list cleanup gates, destroy callback policy, and notifier
+registration/deregistration policy into Rust helpers. The ABI/layout report
+gate remains green with zero C implementation debt in that area.
+The next McKernel-owned Process/VM follow-up moved process/thread list add-tail
+and detach helpers through Rust for `chain_process()`, `chain_thread()`,
+`ptrace_traceme()`, `release_process()`, `destroy_thread()`, and
+initialization-only process list setup. Scheduler runqueue and migration queue
+mutation remain C-owned for a scheduler-specific pass. The long-running target
+was revised upward to a verified 65 percentage point aggregate gain across
+McKernel-owned core sections during this session and has now landed at +66
+points.
+Subsequent McKernel-owned syscall follow-ups moved bounded wait/ptrace/process
+list rewiring, pending-signal delivery and offloaded-interrupt classification,
+ptrace wakeup/siginfo/eventmsg classification, ptrace request dispatch
+classification, wait/reap result-shape classification, getrusage
+dispatch/update classification, process-exit status/siginfo classification,
+and terminate cleanup/reparent action classification through Rust helpers. A
+contained mutation-heavy Process/VM follow-up also moved terminate child cleanup
+delete-init and reparent/list-move mutation behind Rust helpers while C keeps
+locks, release calls, ptrace detach, signal delivery, and memory cleanup. The
+latest syscall follow-up moved clone parent/child TID gates, TLS source
+selection, last-CPU placement, remote-spawn, and `CLONE_PARENT` pid1 fallback
+result shaping through Rust helpers. The latest Process/VM mutation follow-up
+moved clone report-thread, `ptrace_traceme()`, and `ptrace_attach_thread()`
+report-list attach mutation through a Rust helper while C keeps lock and
+lifetime ownership. A follow-up moved report-list detach/retarget and
+main-thread ptrace-detach reparenting through Rust helpers as well. The next
+cleanup pass reused those helpers for wait-thread reap and terminate cleanup,
+and moved release-time `termsig` clearing through Rust. The following pass
+moved ptrace detach state cleanup through Rust while C still frees the returned
+debug-register pointer. The wait signal-flag reap mutation pass then moved
+stopped/continued signal-flag clearing through Rust helpers, and the next pass
+moved wait stopped exit-status reap mutation through Rust helpers. The
+next pass moved ptrace wakeup saved-context clearing and syscall-trace flag
+mutation through Rust helpers. Ptrace resume pending-signal take/clear now
+routes through Rust helpers too, and ptrace detach signal-forward gates now
+route through Rust syscall policy helpers. The final pass moved ptrace attach
+main-thread reparent/list-add mutation through Rust while C keeps the existing
+lock split. The long-running verified gain is now +66 points, exceeding the
+65-point aggregate target; top-level syscall dispatch, ptrace handler bodies,
+user-copy, locks, allocation, register/memory access, signal delivery, broader
+child-list orchestration, rusage aggregation, and Linux forwarding remain
+C-owned.
+The latest +60 McKernel-owned lift moved eight more bounded surfaces through
+Rust helpers: waitqueue entry initialization and wake scheduling predicates,
+x86 early allocator alignment/exhaustion/next-pointer arithmetic,
+page-allocator init end/count and destroy-page count helpers, fork-time
+process VM/thread metadata copy, getpid/getppid/gettid/set_tid_address return
+shaping, procfs cmdline/comm helpers, and timer ABI layout assertions. The
+current honest distance to 100 is still substantial in mutation-heavy areas:
+the x86_64 memory row is 73 points away, the page allocator row is 66 points
+away, scheduler/timer/futex/wait internals are 69 points away, ABI/layout is
+54 points away, syscall core is 34 points away, and Process/VM is 32 points
+away.
 
 Completion Dashboard
 ------------------------------------------------------------
 
 Area                                      Rust %   Whole-tree status
 ----                                      ------   -----------------
-Rust build/link foundation                   91   Rust object builds and links into mckernel.img on the Rocky x86_64 path; mcstat now links a Rust helper object; C fallback remains available
-ABI/layout foundation                        20   Loader, IKC, primitive, page, memobj, SysV shm, address-space, process-hash, VM range, VM region, and process_vm layouts are checked; IHK module layouts still need broader Rust mirrors
-Shared primitives                            78   rbtree, llist, plist, waitq list core, string/memory leaves, bitops, bitmap, parsing, and region helpers are Rust-owned
-x86_64 memory management                     13   Policy/query helpers, common VR-flag to page-attribute conversion, x86 page-attribute translation, and smaller-page-size selection are Rust-owned; page-table walking, mapping, unmapping, TLB-sensitive mutation, and user-copy are still C
-Page allocator                               20   Several allocator helper bodies are Rust-owned; lock-heavy fast paths, CPU-local cache, zeroing requests, and allocator mutation remain C
-Process/VM management                        15   Wait/clone/ptrace policy helpers plus VM range bounds, split-alignment, extend-up, protection-delta, and access-check decisions are Rust-owned; process lifetime, child lists, reparenting, VM range mutation, and rusage aggregation remain C
-Syscall core                                 25   Many syscall validation/policy helpers are Rust-owned; dispatch, argument orchestration, user-copy, Linux forwarding, and high-risk handlers remain C
-Scheduler/timers/wait/futex                  14   Scheduler/futex/time policy helpers and waitq list core are Rust-owned; callback paths, timer mutation, futex queues, wakeups, and locks remain C
-procfs/sysfs/xpmem/file objects              94   Decision-helper surface is mostly Rust-owned; allocation, reference mutation, IKC exchange, page I/O, procfs/sysfs buffer mutation, remap, and page-table mutation remain C
-host/IKC/mcctrl/IHK modules                   0   In full-port scope; Rust Linux-module build/link integration has not started
-User tools                                   24   mcstat, mcexec, and ihklib now link Rust helper objects for monitor labels, byte-size parsing, stack/heap/thread policy, memory-policy flags, getdents dirent field layout, proc-task path classification, CPU-list parsing, memory-list parsing, and IKC-map parsing; device I/O, ioctl handling, formatting loops, mcinspect, eclair, crash helpers, and most IHK command logic remain C
-Rocky runtime integration                    80   Rust McKernel image boots and focused Rocky smoke passes; wider runtime/performance coverage is pending
+Rust build/link foundation                   95   Rust object builds and links into mckernel.img on the Rocky x86_64 path; user tools link Rust helper objects; IHK Linux-module Kbuild can now link prebuilt Rust objects for `ihk`, `ihk-smp-x86_64`, and `mcctrl`; C fallback remains available
+ABI/layout foundation                        46   Loader, IKC, primitive, page, memobj, SysV shm, resource_set, address-space, process-hash, VM range, VM region, process_vm, process/thread lifetime, signal/mckfd/mcexec_tid, wait/futex support, timer, IHK monitor/rusage/register/resource, and host Linux device/OS/file layouts are checked; broader lifecycle internals still need expansion before mutation-heavy moves
+Shared primitives                            84   rbtree, llist, plist, waitq init/entry/list core, wake scheduling predicate, string/memory leaves, bitops, bitmap, parsing, and region helpers are Rust-owned
+x86_64 memory management                     27   Policy/query helpers, common VR-flag to page-attribute conversion, x86 page-attribute translation, PTE value shaping, page-size PTE validation/value selection, smaller-page-size selection, and early allocator arithmetic/exhaustion checks are Rust-owned; page-table walking, mapping, unmapping, TLB-sensitive mutation, and user-copy are still C
+Page allocator                               34   Several allocator helper bodies are Rust-owned, including init layout/end/count calculation, tail-map reservation, and destroy-page count; lock-heavy fast paths, CPU-local cache, zeroing requests, allocator lifetime, and broad allocator mutation remain C
+Process/VM management                        68   Wait/clone/ptrace policy helpers plus clone VM/sighand sharing branches, fork-time VM/thread metadata copy, VM range bounds, split-alignment, extend-up, protection-delta, access-check decisions, address-space release, address-space PID detach mutation, CPU-set fallback, mckfd duplicate/close decisions, mckfd push/pop-head mutation, TID-table scan/index decisions, TID slot release/replace writes, sigpending list pop/unlink, process/thread list add/detach helpers, terminate child cleanup list unlink/reparent mutation helpers, thread report-list attach/detach mutation helpers, ptrace main-thread attach/detach reparent helpers, ptrace detach/wakeup state and pending-signal cleanup helpers, wait signal-flag and exit-status reap mutation helpers, terminate/wait report-thread release cleanup helpers, optional ptrace/fp cleanup gates, and lifecycle/refcount/free-callback/TID-release policy predicates are Rust-owned; broader process lifetime mutation, child-list orchestration, VM range mutation, signal forwarding, full wait orchestration, and rusage aggregation remain C
+Syscall core                                 66   Many syscall validation/policy helpers, credential-refresh forwarding gates, getpid/getppid/gettid/set_tid_address return shaping, bounded wait/ptrace/termination/signal list rewiring, pending-signal delivery/offload-interrupt classification, ptrace wakeup/siginfo/eventmsg result classification, ptrace request dispatch classification, wait/reap result-shape classification, getrusage dispatch/update classification, process-exit status/siginfo classification, terminate cleanup/reparent action classification, clone spawn/TID/TLS/reparent result shaping, and ptrace detach signal-forward gates are Rust-owned; top-level dispatch, argument orchestration, user-copy, Linux forwarding, locks, allocation, register/memory access, signal delivery, child-list mutation, rusage aggregation, and high-risk handlers remain C
+Scheduler/timers/wait/futex                  31   Scheduler/futex/time policy helpers, timer spin-sleep/runqueue/remaining-time arithmetic, futex key matching, waitq init/entry/list core, wake scheduling predicate, bounded scheduler runqueue/migration list rewiring, and paired runqueue length updates are Rust-owned; callback paths, timer queues, futex queues, wakeups, IPIs, context switching, and locks remain C
+procfs/sysfs/xpmem/file objects             100   Decision-helper surface is Rust-owned, including procfs cmdline/comm helpers; allocation, reference mutation, IKC exchange, page I/O, procfs/sysfs buffer mutation, remap, and page-table mutation remain C
+host/IKC/mcctrl/IHK modules                  61   Rust Linux-module build/link integration is active on Rocky x86_64 for all three host/module targets and Rust-linked module-load smoke now passes: `ihk` links `rust/core_helpers.o` for page-allocator bitmap math, page-allocator descriptor sizing, descriptor-order calculation, allocation classification, allocator mask/address/block math, allocator padding reservation, small/large bitmap allocation scan, allocator free-bit mutation, free-path address conversion, host-driver map/unmap range math, open-path validation predicates, monitor/rusage page rounding, reserve-CPU count validation, kmsg ring length/shift decisions, stray-kmsg trim count, release precheck/delete policy, open/refcount/callback policy, minor-slot registration policy, register-device allocation/cdev/device-create cleanup policy, release/close/init/exit/destroy callback presence/failure policy, destroy-all-OS candidate/restore decisions, event-list cleanup gate, notifier match/add/remove policy, hung-monitor status classification, freeze/thaw policy, read-kaddr mode selection, OS ioctl permission/debug/aux-call classification, device destroy/detect-hungup validation, destroy pointer/refcount policy, read/write copy completion math, and mmap VMA/refcount/physical-offset decisions; `ihk-smp-x86_64` links `rust/smp_driver_helpers.o` for dump bitmap math, request validation, LWK-to-Linux index bounds, full CPU/NUMA mapping lookups, CPU-list request serialization, IKC-map request serialization, CPU request-array bounds preflight, IKC source/destination pair bounds preflight, CPU-state transition predicates, CPU mapping copy/release compaction, CPU sysfs path construction, CPU/cache topology prefix construction, sysfs string newline trimming, sysfs long parsing, reserve/release CPU bounds, boot busy/status gates, boot/dump page sizing, CPU-count validation, panic dump-exclusion policy, x86 built-in status mapping, monitor panic classification, freeze/frozen fold decisions, kernel vtop/bootstrap math, load-file/load-memory arithmetic, memory assignment policy, free-list insertion/merge decisions, wait/debug decode, reserve-memory stop/leftover/granularity decisions, partial-release policy, trampoline page usability, identity-page-table sizing/order/mapping decisions, dump query memory-area sizing/chunk fitting/map math, dump NMI command policy, interrupt CPU validation, topology snprintf overflow checks, and cache index/size decisions; `mcctrl` links `rust/mcctrl_helpers.o` for binfmt/path whitelist decisions, pager path/fs/device decisions, procfs mcos/pid/tid name formatting, futex command/private/realtime decode plus labels, control permission/partition/release arithmetic, IKC timeout/free/release/cpu/init validation policy, sysfs CPU/NUMA mapping lookup helpers, local CPU-online bitset construction, sysfs read-buffer completion, sysfs decimal long parsing, PCI realpath prefix classification, and Tofu file-to-pidfd device-name buffer mutation; public Linux-module and private host Linux object layout assertions now compile into `ihk`; lock/list mutation, device allocation, memory registration, IKC exchange mutation, broad page allocator lifetime, and kernel object lifecycle mutation remain C-owned/pending
+User tools                                   83   mcstat, mcexec, ihklib, ihkconfig, ihkosctl, ihkmond, mcinspect, eclair, and the crash extension now link Rust helper objects for monitor labels, OS-status labels, mcstat CLI delay/count parsing, mcstat mcos device-path formatting, mcstat NUMA memory total/current/max aggregation, mcexec option integer/flag/mcos-id parsing, extra-env list count/search/allocation/copy/free, byte-size parsing, stack/heap/thread policy, saved stack-limit env parsing/application, memory-policy flags, OMPI memory-policy classification, FLIB affinity CPU-list shifting, LD_PRELOAD string construction, overlay fd path preparation, execveat path construction, getdents dirent field layout, proc-task path classification, mcos device and proc/self-fd path formatting, relative fd/cwd path joining, /dev/xpmem overlay, UTI library redirection, proc/sys overlay path construction, overlay path normalization, proc-task blacklist path construction, CPU-list parsing, memory-list parsing, IKC-map parsing, cpuset.mems parsing/allocation, request-to-string formatting, meminfo path formatting, packed-env parsing, create-os env parsing, first-match env lookup, reserve-memory config parsing, environment action classification, parsed-env cleanup, generic command integer/hex parsing, device path formatting, IHK OS-status labels, ihkconfig/ihkosctl command dispatch, get/resource/set target classification, release-all detection, ihkosctl allocation-size parsing and interrupt argument packing, ihkmond facility/action classification, ihkmond mcos/tmp/kmsg path formatting, file-buffer rotation, consumer-slot, and create-wait timeout decisions, mcinspect status labels, pid/vtop parsing, mcinspect action validation, mcinspect DWARF size/offset/address form classification, DWARF expression validation, structure/member/global tag-name matching, thread active marker and command basename selection, CPU-local address math, sched-list thread derivation, vtop process-selection helpers, eclair physmem section-name formatting, eclair GDB remote hex/binary packet formatting, eclair option integer parsing, eclair GDB remote command classification, Hg/T/qThreadExtraInfo thread-id parsing, memory-read packet parsing, static GDB reply formatting, qSupported/qC/qAttached/target.xml/qTStatus/memory-map/thread-list response construction, packet checksum parsing/summing, Ctrl-C command construction, register-byte formatting, memory-byte formatting, simple GDB reply buffering, packet-frame construction, banner/usage/open-error formatting, invalid physical-memory and lookup-failure diagnostics, eclair remote reply selection, eclair GDB target-command formatting, eclair thread-extra-info formatting, crash extension status/permission/path/page-size labels, crash GDB command formatting, x86 crash address translation decisions, kmsg ring split math, thread command-name basename selection, mcps header/row formatting, memory-range filtering, mcmem process/header/mapping-line formatting, mcvtop header and memory-range section formatting, PTE physical-address derivation, x86 sign extension, PTE flag-string formatting, full PTE output-line formatting, raw PTE and lookup-failure line formatting, PTE coalescing decisions, lookup range skip/break decisions, PID/thread context parsing, PID hash-bucket selection, boot-refresh comparison, PTE type classification, page-table level shift selection, mcvtop address parsing, and kmsg wrap checks; device I/O, ioctl handling, DWARF/BFD traversal, crash command orchestration, eclair GDB process/socket orchestration, eclair dump NMI side effects, register/memory reads, ihkmond daemon/thread/event-loop mutation, and most IHK command mutation remain C
+Rocky runtime integration                    82   Rust McKernel image boots and focused Rocky smoke passes; Rust-linked IHK module-load smoke passes; wider runtime/performance coverage is pending
+
+Mechanical Ownership Report
+------------------------------------------------------------
+
+The area estimates above remain functional estimates. A conservative LOC
+denominator is now available:
+
+`scripts/rust-ownership-report.py --top 25 --check-dashboard overview.txt --check-dashboard overview2.txt`
+
+Current x86_64 active-scope baseline from that script:
+
+- Rust implementation LOC: 18,501.
+- C implementation-debt LOC: 98,475.
+- C/header boundary LOC: 27,582.
+- Required assembly LOC: 872.
+- Tests/smokes LOC: 117,863.
+- External/generated LOC: 230,989.
+- Mechanical Rust implementation share: 15.8%.
+
+This mechanical number is intentionally lower than the functional estimate
+because it treats mixed C wrapper files as C implementation debt until the file
+is reduced to an explicitly allowed boundary. External/vendor code is reported
+for visibility but excluded from the Rust ownership denominator.
 
 What Counts As 100%
 ------------------------------------------------------------
@@ -87,9 +292,15 @@ Rust-owned and these gates pass:
 Current Blockers To 100%
 ------------------------------------------------------------
 
-- No Rust build/link path exists yet for the IHK Linux host modules.
-- Most user tools do not yet have Rust crates or compatibility wrappers beyond
-  the current `mcstat`, `mcexec`, and `ihklib` helper objects.
+- Rust build/link and module-load smoke now pass for `ihk`, `ihk-smp-x86_64`,
+  and `mcctrl`; a focused IHK module helper smoke covers page-allocator bitmap
+  mutation, mcctrl sysfs mapping helpers, and Tofu device-name buffer fill, but
+  refcount mutation, lock/list mutation, broad allocation/lifetime ownership,
+  memory registration, and IKC exchange remain pending.
+- Most user tools still use C orchestration, even though `mcstat`, `mcexec`,
+  `ihklib`, `ihkconfig`, `ihkosctl`, `ihkmond`, `mcinspect`, `eclair`, and the
+  crash extension now link Rust helper objects for substantial parsing,
+  formatting, policy, and output-decision slices.
 - x86_64 page-table and TLB-sensitive mutation are still C because direct
   runtime probes must exist before moving them.
 - Process lifetime and VM range mutation are still C because child-list,
@@ -103,13 +314,16 @@ Current Blockers To 100%
 Next Milestones
 ------------------------------------------------------------
 
-1. Add the first IHK Rust build/link spike for ihk, ihk-smp-x86_64, and mcctrl
-   with C-callable pure helpers.
-2. Expand ABI/layout coverage for thread/process lifetime and host-module-facing structs.
+1. Use the passing module-load smoke for Rust-linked `ihk`, `ihk-smp-x86_64`,
+   and `mcctrl` as the gate for deeper module policy and carefully staged
+   mutation-heavy body moves.
+2. Expand remaining private process/thread lifecycle and IHK module object
+   layouts, especially refcount, lock/list, allocation, and lifecycle structs.
 3. Convert more process/VM and x86_64 memory policy helpers while adding
    runtime probes before moving mutation-heavy bodies.
 4. Expand user-tool Rust crate scaffolding and port command parsing/output
-   logic beyond the current mcstat, mcexec, and ihklib helper objects,
-   especially mcinspect, eclair, crash helpers, and IHK command orchestration.
-5. Add a generated ownership report that combines symbol ownership and LOC so
-   this estimate can become mechanical instead of hand-maintained.
+   logic beyond the current mcstat, mcexec, ihklib, mcinspect, eclair, and
+   crash helper objects, especially IHK command orchestration and dump paths.
+5. Keep `scripts/rust-ownership-report.py` current and drive its C
+   implementation-debt list down until every remaining C/assembly file has an
+   allowed-boundary reason.

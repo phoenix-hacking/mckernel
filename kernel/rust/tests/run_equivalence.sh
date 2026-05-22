@@ -257,6 +257,7 @@ extern void waitq_init_entry(waitq_entry_t *, struct thread *);
 extern void waitq_add_entry_locked(waitq_t *, waitq_entry_t *);
 extern void waitq_remove_entry_locked(waitq_t *, waitq_entry_t *);
 extern int waitq_wake_nr_locked(waitq_t *, int);
+extern int waitq_wake_schedule_needed_result(int);
 
 int sched_wakeup_thread(struct thread *thread, int state)
 {
@@ -337,6 +338,9 @@ int main(void)
 		items[i].entry.flags = 0xf00d0000U + i;
 		waitq_init_entry(&items[i].entry,
 				 (struct thread *)(uintptr_t)(0x1000 + i * 0x40));
+		require(items[i].entry.func != NULL);
+		mix(&digest, (unsigned long)items[i].entry.func(
+			&items[i].entry, 0, 0, NULL));
 		items[i].entry.func = record_wake;
 		require(items[i].entry.private ==
 			(void *)(uintptr_t)(0x1000 + i * 0x40));
@@ -355,11 +359,13 @@ int main(void)
 
 	ret = waitq_wake_nr_locked(&waitq, 0);
 	require(ret == 0);
+	require(waitq_wake_schedule_needed_result(ret) == 0);
 	require(items[0].wakes == 0 && items[1].wakes == 0 && items[2].wakes == 0);
 	mix(&digest, (unsigned long)(int)ret);
 
 	ret = waitq_wake_nr_locked(&waitq, 2);
 	require(ret == 2);
+	require(waitq_wake_schedule_needed_result(ret) == 1);
 	require(items[0].wakes == 1 && items[1].wakes == 1 && items[2].wakes == 0);
 	mix(&digest, (unsigned long)(int)ret);
 	digest_waitq(&digest, &waitq);
@@ -388,6 +394,7 @@ int main(void)
 
 	ret = waitq_wake_nr_locked(&waitq, 1);
 	require(ret == -1);
+	require(waitq_wake_schedule_needed_result(ret) == 0);
 	mix(&digest, (unsigned long)(int)ret);
 
 	printf("waitq ok digest=%016lx\n", digest);
@@ -879,6 +886,16 @@ extern int sched_affinity_permission_result(unsigned int, unsigned int,
 					    unsigned int);
 extern int sched_getaffinity_len_result(unsigned long, int);
 extern unsigned long sched_affinity_copy_len(unsigned long, unsigned long);
+extern unsigned long timer_spin_sleep_remaining_result(unsigned long,
+						       unsigned long);
+extern int timer_runq_should_schedule_result(int);
+extern unsigned long timer_after_spin_remaining_result(unsigned long,
+						       unsigned long);
+extern unsigned long timer_after_tick_remaining_result(unsigned long,
+						       unsigned long);
+extern int futex_key_match_result(int, int, unsigned long, unsigned long,
+				  unsigned long, unsigned long, unsigned long,
+				  unsigned long);
 
 static void mix(unsigned long *digest, unsigned long value)
 {
@@ -911,6 +928,18 @@ int main(void)
 	static const int cpu_counts[] = {
 		1, 2, 8, 63, 64, 65, 1024,
 	};
+	static const unsigned long timeouts[] = {
+		0, 1, 499, 500, 501, 999, 1000, ~0UL,
+	};
+	static const int runq_lens[] = {
+		-1, 0, 1, 2, 8,
+	};
+	static const unsigned long futex_keys[][6] = {
+		{ 0x1000, 0x2000, 0, 0x1000, 0x2000, 0 },
+		{ 0x1000, 0x2000, 4, 0x1000, 0x2000, 8 },
+		{ 0x1000, 0x2000, 4, 0x1001, 0x2000, 4 },
+		{ 0x1000, 0x2000, 4, 0x1000, 0x3000, 4 },
+	};
 	unsigned long digest = 0x5c7ed123456789abUL;
 
 	for (unsigned int i = 0; i < sizeof(policies) / sizeof(policies[0]); i++) {
@@ -933,6 +962,29 @@ int main(void)
 			mix_signed(&digest, sched_getaffinity_len_result(lens[i], cpu_counts[j]));
 		mix(&digest, sched_affinity_copy_len(lens[i], 128));
 		mix(&digest, sched_affinity_copy_len(lens[i], 1024));
+	}
+
+	for (unsigned int i = 0; i < sizeof(timeouts) / sizeof(timeouts[0]); i++) {
+		for (unsigned int j = 0; j < sizeof(timeouts) / sizeof(timeouts[0]); j++) {
+			mix(&digest, timer_spin_sleep_remaining_result(timeouts[i], timeouts[j]));
+			mix(&digest, timer_after_spin_remaining_result(timeouts[i], timeouts[j]));
+			mix(&digest, timer_after_tick_remaining_result(timeouts[i], timeouts[j]));
+		}
+	}
+
+	for (unsigned int i = 0; i < sizeof(runq_lens) / sizeof(runq_lens[0]); i++)
+		mix_signed(&digest, timer_runq_should_schedule_result(runq_lens[i]));
+
+	for (unsigned int i = 0; i < sizeof(futex_keys) / sizeof(futex_keys[0]); i++) {
+		mix_signed(&digest, futex_key_match_result(1, 1,
+			futex_keys[i][0], futex_keys[i][1], futex_keys[i][2],
+			futex_keys[i][3], futex_keys[i][4], futex_keys[i][5]));
+		mix_signed(&digest, futex_key_match_result(0, 1,
+			futex_keys[i][0], futex_keys[i][1], futex_keys[i][2],
+			futex_keys[i][3], futex_keys[i][4], futex_keys[i][5]));
+		mix_signed(&digest, futex_key_match_result(1, 0,
+			futex_keys[i][0], futex_keys[i][1], futex_keys[i][2],
+			futex_keys[i][3], futex_keys[i][4], futex_keys[i][5]));
 	}
 
 	printf("sched_helpers ok digest=%016lx\n", digest);
@@ -1053,6 +1105,15 @@ cat > "${tmpdir}/syscall_policy_helpers_equiv.c" <<'EOF_SYSCALL_POLICY_HELPERS'
 #define RUSAGE_SELF 0
 #define RUSAGE_CHILDREN -1
 #define RUSAGE_THREAD 1
+#define GETRUSAGE_DISPATCH_SELF 1
+#define GETRUSAGE_DISPATCH_CHILDREN 2
+#define GETRUSAGE_DISPATCH_THREAD 3
+#define GETRUSAGE_THREAD_UPDATE_READY 0
+#define GETRUSAGE_THREAD_UPDATE_INTERRUPT 1
+#define TERMINATE_CHILD_ACTION_NONE 0
+#define TERMINATE_CHILD_ACTION_FREE_ZOMBIE 1
+#define TERMINATE_CHILD_ACTION_REPARENT_CHILD 2
+#define TERMINATE_CHILD_ACTION_REPARENT_PTRACED 3
 #define ITIMER_REAL 0
 #define ITIMER_VIRTUAL 1
 #define ITIMER_PROF 2
@@ -1071,6 +1132,59 @@ cat > "${tmpdir}/syscall_policy_helpers_equiv.c" <<'EOF_SYSCALL_POLICY_HELPERS'
 #define IOV_MAX 1024UL
 #define PROCESS_VM_READ 0
 #define PROCESS_VM_WRITE 1
+#define PTRACE_TRACEME 0
+#define PTRACE_PEEKTEXT 1
+#define PTRACE_PEEKDATA 2
+#define PTRACE_PEEKUSER 3
+#define PTRACE_POKETEXT 4
+#define PTRACE_POKEDATA 5
+#define PTRACE_POKEUSER 6
+#define PTRACE_CONT 7
+#define PTRACE_KILL 8
+#define PTRACE_SINGLESTEP 9
+#define PTRACE_GETREGS 12
+#define PTRACE_SETREGS 13
+#define PTRACE_GETFPREGS 14
+#define PTRACE_SETFPREGS 15
+#define PTRACE_ATTACH 16
+#define PTRACE_DETACH 17
+#define PTRACE_SYSCALL 24
+#define PTRACE_GETFPXREGS 18
+#define PTRACE_SETFPXREGS 19
+#define PTRACE_SETOPTIONS 0x4200
+#define PTRACE_GETEVENTMSG 0x4201
+#define PTRACE_GETSIGINFO 0x4202
+#define PTRACE_SETSIGINFO 0x4203
+#define PTRACE_GETREGSET 0x4204
+#define PTRACE_SETREGSET 0x4205
+#define PTRACE_WAKEUP_ACTION_NONE 0
+#define PTRACE_WAKEUP_ACTION_KILL 1
+#define PTRACE_WAKEUP_ACTION_RESUME 2
+#define PTRACE_RESUME_SIGNAL_SOURCE_USER 0
+#define PTRACE_RESUME_SIGNAL_SOURCE_SENDSIG 1
+#define PTRACE_RESUME_SIGNAL_SOURCE_RECVSIG 2
+#define PTRACE_SIGINFO_STORE_SENDSIG 0x1
+#define PTRACE_SIGINFO_STORE_RECVSIG 0x2
+#define PTRACE_SIGINFO_ALLOC_SENDSIG 0x4
+#define PTRACE_DISPATCH_ARCH 0
+#define PTRACE_DISPATCH_TRACEME 1
+#define PTRACE_DISPATCH_WAKEUP 2
+#define PTRACE_DISPATCH_GETREGS 3
+#define PTRACE_DISPATCH_SETREGS 4
+#define PTRACE_DISPATCH_GETFPREGS 5
+#define PTRACE_DISPATCH_SETFPREGS 6
+#define PTRACE_DISPATCH_PEEKUSER 7
+#define PTRACE_DISPATCH_POKEUSER 8
+#define PTRACE_DISPATCH_PEEKTEXT 9
+#define PTRACE_DISPATCH_POKETEXT 10
+#define PTRACE_DISPATCH_SETOPTIONS 11
+#define PTRACE_DISPATCH_ATTACH 12
+#define PTRACE_DISPATCH_DETACH 13
+#define PTRACE_DISPATCH_GETSIGINFO 14
+#define PTRACE_DISPATCH_SETSIGINFO 15
+#define PTRACE_DISPATCH_GETREGSET 16
+#define PTRACE_DISPATCH_SETREGSET 17
+#define PTRACE_DISPATCH_GETEVENTMSG 18
 #define PTRACE_O_TRACESYSGOOD 1
 #define PTRACE_O_TRACEFORK 2
 #define PTRACE_O_TRACEVFORK 4
@@ -1092,9 +1206,18 @@ cat > "${tmpdir}/syscall_policy_helpers_equiv.c" <<'EOF_SYSCALL_POLICY_HELPERS'
 #define PS_EXITED 0x10
 #define PS_STOPPED 0x20
 #define PS_TRACED 0x40
+#define PS_DELAY_STOPPED 0x200
 #define PS_DELAY_TRACED 0x400
 #define SIGNAL_STOP_STOPPED 0x1
 #define SIGNAL_STOP_CONTINUED 0x2
+#define WAIT_STOP_SOURCE_NONE 0
+#define WAIT_STOP_SOURCE_THREAD 1
+#define WAIT_STOP_SOURCE_PROCESS 2
+#define WAIT_STOP_SOURCE_MAIN_THREAD 3
+#define WAIT_THREAD_REAP_ACTION_NONE 0
+#define WAIT_THREAD_REAP_ACTION_RELEASE 1
+#define WAIT_THREAD_REAP_ACTION_PTRACE_DETACH 2
+#define EXIT_GROUP_STATUS_CONFIRMED 0x0000000100000000UL
 #undef WNOHANG
 #undef WUNTRACED
 #undef WSTOPPED
@@ -1115,6 +1238,10 @@ cat > "${tmpdir}/syscall_policy_helpers_equiv.c" <<'EOF_SYSCALL_POLICY_HELPERS'
 #define P_PID 1
 #define P_PGID 2
 #define SIGCHLD 17
+#define SIGSTOP 19
+#define SIGCONT 18
+#define SIGURG 23
+#define SIG_IGN_HANDLER 1UL
 #define SIGTRAP 5
 #define _NSIG 64
 #define CSIGNAL 0x000000ff
@@ -1126,8 +1253,17 @@ cat > "${tmpdir}/syscall_policy_helpers_equiv.c" <<'EOF_SYSCALL_POLICY_HELPERS'
 #define CLONE_THREAD 0x00010000
 #define CLONE_NEWNS 0x00020000
 #define CLONE_SYSVSEM 0x00040000
+#define CLONE_SETTLS 0x00080000
+#define CLONE_PARENT_SETTID 0x00100000
+#define CLONE_CHILD_CLEARTID 0x00200000
+#define CLONE_CHILD_SETTID 0x01000000
 #define CLONE_NEWIPC 0x08000000
 #define CLONE_NEWPID 0x20000000
+#define SPAWN_TO_LOCAL 0
+#define SPAWN_TO_REMOTE 1
+#define SPAWNING_TO_REMOTE 1001
+#define CLONE_TLS_SOURCE_INHERIT 0
+#define CLONE_TLS_SOURCE_ARGUMENT 1
 #define AT_FDCWD -100
 #define AT_SYMLINK_NOFOLLOW 0x100
 #define AT_EMPTY_PATH 0x1000
@@ -1149,6 +1285,11 @@ extern unsigned long rt_sigprocmask_apply(unsigned long, unsigned long, int,
 extern int rt_sigpending_size_result(size_t, size_t);
 extern int signalfd4_sigsetsize_result(size_t, size_t);
 extern int signalfd4_flags_result(int);
+extern int syscall_refresh_cred_needed_result(long);
+extern int syscall_getpid_result(int);
+extern int syscall_getppid_result(int);
+extern int syscall_gettid_result(int);
+extern int syscall_set_tid_address_return_result(int);
 extern int setpgid_normalize_pid(int, int);
 extern int setpgid_normalize_pgid(int, int);
 extern int setpgid_execed_result(int);
@@ -1194,6 +1335,9 @@ extern unsigned long mmap_maxprot_to_vrflags(int);
 extern int mmap_should_force_straight(int, int, unsigned long, size_t, size_t);
 extern int mmap_is_shared(int);
 extern int getrusage_who_result(int);
+extern int getrusage_dispatch_result(int);
+extern int getrusage_thread_update_action_result(int, int, int);
+extern long getrusage_maxrss_kb_result(long);
 extern int itimer_which_result(int);
 extern int itimer_is_real(int);
 extern int itimer_should_start(long, long);
@@ -1208,6 +1352,11 @@ extern void rt_sigtimedwait_prepare_masks(unsigned long, unsigned long,
 extern void rt_sigtimedwait_deadline(long, long, long, long, long *, long *);
 extern int rt_sigtimedwait_timeout_expired(long, long, long, long);
 extern int sigmask_to_signal_number(unsigned long);
+extern int signal_pending_deliverable_result(int, int, unsigned long,
+					     unsigned long, unsigned long);
+extern int signal_pending_interrupt_action_result(int, unsigned long,
+						  unsigned long, unsigned long,
+						  int);
 extern int rt_sigqueueinfo_pid_result(int);
 extern int sigsuspend_sigsetsize_result(size_t, size_t);
 extern unsigned long sigsuspend_prepare_mask(unsigned long);
@@ -1228,6 +1377,16 @@ extern int ptrace_child_traced_result(int, int, int);
 extern int ptrace_attach_policy_result(int, int, int, int);
 extern int ptrace_detach_state_result(int, int);
 extern int ptrace_siginfo_state_result(int, int);
+extern int ptrace_eventmsg_state_result(int);
+extern int ptrace_wakeup_request_action_result(long);
+extern int ptrace_resume_single_step_result(long);
+extern int ptrace_resume_trace_syscall_result(long);
+extern int ptrace_resume_signal_needed_result(long, long);
+extern int ptrace_resume_signal_source_result(long, int, int);
+extern int ptrace_detach_forward_signal_needed_result(int);
+extern int ptrace_detach_exit_signal_needed_result(int);
+extern int ptrace_setsiginfo_target_result(int, int, int);
+extern int ptrace_request_dispatch_result(long);
 extern int wait4_options_result(int);
 extern int waitid_to_wait_pid_result(int, int, int *);
 extern int waitid_options_result(int);
@@ -1248,10 +1407,39 @@ extern int wait_continued_status_result(void);
 extern int wait_zombie_skip_host_result(int, int, int);
 extern int wait_thread_empty_candidate_result(int, int);
 extern int waitid_status_code_result(int);
+extern int wait_stopped_source_result(int, int, int, int, int);
+extern int wait_stopped_exit_status_result(int, int, int, int);
+extern int wait_report_id_result(int, int, int);
+extern int wait_reaped_exit_status_result(int, int);
+extern int wait_reaped_signal_flags_result(int, int, int);
+extern int wait_process_reparent_needed_result(int, int);
+extern int wait_main_thread_ptrace_detach_needed_result(int, int);
+extern int wait_thread_reap_action_result(int, int);
+extern int wait_status_copy_needed_result(int, int);
+extern int wait_rusage_copy_needed_result(int);
+extern int waitid_siginfo_needed_result(int, int);
+extern int exit_code_status_result(int);
+extern int exit_code_signal_result(int);
+extern int exit_syscall_code_result(int);
+extern int thread_exit_signal_result(int, int);
+extern int sigchld_code_result(int);
+extern int exit_group_status_claimed_result(unsigned long);
+extern unsigned long exit_group_status_result(int, int);
+extern int terminate_thread_active_result(int);
+extern int terminate_status_result(int, int);
+extern int terminate_report_thread_release_needed_result(int, int);
+extern int terminate_child_action_result(int, int, int);
 extern int clone_pthread_marker_result(int, unsigned long, unsigned long);
 extern int clone_flags_result(int, int);
 extern int clone_host_parent_flags_result(int, int);
 extern int clone_report_thread_result(int, int);
+extern int clone_parent_tid_store_needed_result(int);
+extern int clone_child_cleartid_needed_result(int);
+extern int clone_child_tid_store_needed_result(int);
+extern int clone_tls_source_result(int);
+extern int clone_use_last_cpu_result(int, int);
+extern int clone_remote_spawn_result(int);
+extern int clone_parent_use_pid1_result(int);
 extern int ptrace_exec_event_signal_result(int);
 extern int ptrace_syscall_event_signal_result(int);
 extern int ptrace_clone_event_result(int, int);
@@ -1609,6 +1797,19 @@ static void exercise_signal_time_policy(unsigned long *digest)
 	static const int who_values[] = {
 		RUSAGE_CHILDREN, RUSAGE_SELF, RUSAGE_THREAD, -2, 2,
 	};
+	static const int statuses[] = {
+		0, PS_RUNNING, PS_ZOMBIE, PS_EXITED, PS_STOPPED,
+	};
+	static const long rss_values[] = {
+		-2048, -1, 0, 1, 1023, 1024, 4096, 123456789,
+	};
+	static const int exit_codes[] = {
+		-1, 0, 1, 9, 0x7f, 0x80, 0x8b, 0x0100, 0xff00,
+	};
+	static const unsigned long group_statuses[] = {
+		0, 1, 0xff00, EXIT_GROUP_STATUS_CONFIRMED,
+		EXIT_GROUP_STATUS_CONFIRMED | 0x8b,
+	};
 	static const int itimers[] = {
 		-1, ITIMER_REAL, ITIMER_VIRTUAL, ITIMER_PROF, 3,
 	};
@@ -1660,8 +1861,56 @@ static void exercise_signal_time_policy(unsigned long *digest)
 	for (unsigned int f = 0; f < sizeof(signalfd_flags) / sizeof(signalfd_flags[0]); f++)
 		mix_signed(digest, signalfd4_flags_result(signalfd_flags[f]));
 
-	for (unsigned int w = 0; w < sizeof(who_values) / sizeof(who_values[0]); w++)
+	for (unsigned int w = 0; w < sizeof(who_values) / sizeof(who_values[0]); w++) {
 		mix_signed(digest, getrusage_who_result(who_values[w]));
+		mix_signed(digest, getrusage_dispatch_result(who_values[w]));
+	}
+	for (unsigned int c = 0; c < sizeof(bools) / sizeof(bools[0]); c++) {
+		for (unsigned int s = 0; s < sizeof(statuses) / sizeof(statuses[0]); s++) {
+			for (unsigned int k = 0; k < sizeof(bools) / sizeof(bools[0]); k++)
+				mix_signed(digest, getrusage_thread_update_action_result(
+					bools[c], statuses[s], bools[k]));
+		}
+	}
+	for (unsigned int r = 0; r < sizeof(rss_values) / sizeof(rss_values[0]); r++)
+		mix_signed(digest, getrusage_maxrss_kb_result(rss_values[r]));
+	for (unsigned int e = 0; e < sizeof(exit_codes) / sizeof(exit_codes[0]); e++) {
+		mix_signed(digest, exit_code_status_result(exit_codes[e]));
+		mix_signed(digest, exit_code_signal_result(exit_codes[e]));
+		mix_signed(digest, exit_syscall_code_result(exit_codes[e]));
+		mix_signed(digest, sigchld_code_result(exit_codes[e]));
+		for (unsigned int p = 0; p < sizeof(bools) / sizeof(bools[0]); p++)
+			mix_signed(digest, thread_exit_signal_result(
+				bools[p], exit_codes[e]));
+	}
+	for (unsigned int g = 0; g < sizeof(group_statuses) / sizeof(group_statuses[0]); g++)
+		mix_signed(digest, exit_group_status_claimed_result(
+			group_statuses[g]));
+	for (unsigned int rc = 0; rc < sizeof(exit_codes) / sizeof(exit_codes[0]); rc++) {
+		for (unsigned int sig = 0; sig < sizeof(exit_codes) / sizeof(exit_codes[0]); sig++)
+			mix(digest, exit_group_status_result(exit_codes[rc],
+				exit_codes[sig]));
+	}
+	for (unsigned int s = 0; s < sizeof(statuses) / sizeof(statuses[0]); s++)
+		mix_signed(digest, terminate_thread_active_result(statuses[s]));
+	for (unsigned int rc = 0; rc < sizeof(exit_codes) / sizeof(exit_codes[0]); rc++) {
+		for (unsigned int sig = 0; sig < sizeof(exit_codes) / sizeof(exit_codes[0]); sig++)
+			mix_signed(digest, terminate_status_result(
+				exit_codes[rc], exit_codes[sig]));
+	}
+	for (unsigned int same = 0; same < sizeof(bools) / sizeof(bools[0]); same++) {
+		for (unsigned int sig = 0; sig < sizeof(exit_codes) / sizeof(exit_codes[0]); sig++)
+			mix_signed(digest, terminate_report_thread_release_needed_result(
+				bools[same], exit_codes[sig]));
+	}
+	for (unsigned int ppid = 0; ppid < sizeof(bools) / sizeof(bools[0]); ppid++) {
+		for (unsigned int parent = 0; parent < sizeof(bools) / sizeof(bools[0]); parent++) {
+			for (unsigned int s = 0; s < sizeof(statuses) / sizeof(statuses[0]); s++)
+				mix_signed(digest, terminate_child_action_result(
+					bools[ppid], bools[parent],
+					statuses[s]));
+		}
+	}
 
 	for (unsigned int i = 0; i < sizeof(itimers) / sizeof(itimers[0]); i++) {
 		mix_signed(digest, itimer_which_result(itimers[i]));
@@ -1725,6 +1974,9 @@ static void exercise_signal_wait_policy(unsigned long *digest)
 	static const size_t stack_sizes[] = { 0, MINSIGSTKSZ - 1, MINSIGSTKSZ,
 		MINSIGSTKSZ + 1 };
 	static const int pids[] = { -1, 0, 1, 99 };
+	static const int sigs[] = { 1, SIGCHLD, SIGCONT, SIGURG, 9, 64 };
+	static const unsigned long handlers[] = { 0, SIG_IGN_HANDLER, 0x1000 };
+	static const int bools[] = { 0, 1 };
 
 	for (unsigned int s = 0; s < sizeof(sigset_sizes) / sizeof(sigset_sizes[0]); s++) {
 		mix_signed(digest, rt_sigtimedwait_prepare(sigset_sizes[s],
@@ -1779,6 +2031,27 @@ static void exercise_signal_wait_policy(unsigned long *digest)
 	for (unsigned int i = 0; i < sizeof(pids) / sizeof(pids[0]); i++)
 		mix_signed(digest, rt_sigqueueinfo_pid_result(pids[i]));
 
+	for (unsigned int s = 0; s < sizeof(sigs) / sizeof(sigs[0]); s++) {
+		for (unsigned int h = 0; h < sizeof(handlers) / sizeof(handlers[0]); h++) {
+			for (unsigned int p = 0; p < sizeof(masks) / sizeof(masks[0]); p++) {
+				for (unsigned int b = 0; b < sizeof(masks) / sizeof(masks[0]); b++) {
+					for (unsigned int d = 0; d < sizeof(bools) / sizeof(bools[0]); d++) {
+						mix_signed(digest,
+							signal_pending_deliverable_result(
+								bools[d], sigs[s],
+								handlers[h],
+								masks[p], masks[b]));
+						mix_signed(digest,
+							signal_pending_interrupt_action_result(
+								sigs[s], handlers[h],
+								masks[p], masks[b],
+								bools[d]));
+					}
+				}
+			}
+		}
+	}
+
 	for (unsigned int f = 0; f < sizeof(flags) / sizeof(flags[0]); f++) {
 		for (unsigned int s = 0; s < sizeof(stack_sizes) / sizeof(stack_sizes[0]); s++)
 			mix_signed(digest, sigaltstack_validate(flags[f],
@@ -1808,6 +2081,18 @@ static void exercise_ptrace_process_vm_policy(unsigned long *digest)
 	};
 	static const int bools[] = { 0, 1 };
 	static const int pids[] = { 1, 2 };
+	static const long ptrace_requests[] = {
+		PTRACE_TRACEME, PTRACE_PEEKTEXT, PTRACE_PEEKDATA,
+		PTRACE_PEEKUSER, PTRACE_POKETEXT, PTRACE_POKEDATA,
+		PTRACE_POKEUSER, PTRACE_CONT, PTRACE_KILL,
+		PTRACE_SINGLESTEP, PTRACE_GETREGS, PTRACE_SETREGS,
+		PTRACE_GETFPREGS, PTRACE_SETFPREGS, PTRACE_ATTACH,
+		PTRACE_DETACH, PTRACE_SYSCALL, PTRACE_SETOPTIONS,
+		PTRACE_GETEVENTMSG, PTRACE_GETSIGINFO, PTRACE_SETSIGINFO,
+		PTRACE_GETREGSET, PTRACE_SETREGSET, PTRACE_GETFPXREGS,
+		PTRACE_SETFPXREGS, 999,
+	};
+	static const long ptrace_data[] = { 0, 1, SIGSTOP, 64, 65 };
 
 	for (unsigned int f = 0; f < sizeof(flags) / sizeof(flags[0]); f++) {
 		for (unsigned int l = 0; l < sizeof(iovcnts) / sizeof(iovcnts[0]); l++) {
@@ -1871,6 +2156,32 @@ static void exercise_ptrace_process_vm_policy(unsigned long *digest)
 		for (unsigned int h = 0; h < sizeof(bools) / sizeof(bools[0]); h++)
 			mix_signed(digest, ptrace_siginfo_state_result(statuses[s],
 				bools[h]));
+		mix_signed(digest, ptrace_eventmsg_state_result(statuses[s]));
+		for (unsigned int send = 0; send < sizeof(bools) / sizeof(bools[0]); send++) {
+			for (unsigned int recv = 0; recv < sizeof(bools) / sizeof(bools[0]); recv++)
+				mix_signed(digest, ptrace_setsiginfo_target_result(
+					statuses[s], bools[send], bools[recv]));
+		}
+	}
+
+	for (unsigned int r = 0; r < sizeof(ptrace_requests) / sizeof(ptrace_requests[0]); r++) {
+		mix_signed(digest, ptrace_request_dispatch_result(
+			ptrace_requests[r]));
+		mix_signed(digest, ptrace_wakeup_request_action_result(
+			ptrace_requests[r]));
+		mix_signed(digest, ptrace_resume_single_step_result(
+			ptrace_requests[r]));
+		mix_signed(digest, ptrace_resume_trace_syscall_result(
+			ptrace_requests[r]));
+		for (unsigned int d = 0; d < sizeof(ptrace_data) / sizeof(ptrace_data[0]); d++)
+			mix_signed(digest, ptrace_resume_signal_needed_result(
+				ptrace_requests[r], ptrace_data[d]));
+		for (unsigned int send = 0; send < sizeof(bools) / sizeof(bools[0]); send++) {
+			for (unsigned int recv = 0; recv < sizeof(bools) / sizeof(bools[0]); recv++)
+				mix_signed(digest, ptrace_resume_signal_source_result(
+					ptrace_requests[r], bools[send],
+					bools[recv]));
+		}
 	}
 }
 
@@ -1880,7 +2191,7 @@ static void exercise_wait_policy(unsigned long *digest)
 	static const int pgids[] = { 1, 2, 55 };
 	static const int statuses[] = {
 		0, PS_RUNNING, PS_ZOMBIE, PS_EXITED, PS_STOPPED, PS_TRACED,
-		PS_DELAY_TRACED, PS_STOPPED | PS_TRACED,
+		PS_DELAY_STOPPED, PS_DELAY_TRACED, PS_STOPPED | PS_TRACED,
 		PS_TRACED | PS_DELAY_TRACED,
 	};
 	static const int signal_flags[] = {
@@ -1904,6 +2215,8 @@ static void exercise_wait_policy(unsigned long *digest)
 	static const int wait_statuses[] = {
 		0, 1, 9, 0x7f, 0x137f, 0xffff, 0x0100, 0x8b,
 	};
+	static const int exit_statuses[] = { 0, 1, 9, 0x13, 0xff, 0x137f };
+	static const int wait_results[] = { -10, -1, 0, 1, 55 };
 
 	for (unsigned int o = 0; o < sizeof(option_values) / sizeof(option_values[0]); o++) {
 		mix_signed(digest, wait4_options_result(option_values[o]));
@@ -1911,6 +2224,17 @@ static void exercise_wait_policy(unsigned long *digest)
 		mix_signed(digest, wait_should_scan_process_result(option_values[o]));
 		mix_signed(digest, wait_reap_needed_result(option_values[o]));
 		mix_signed(digest, wait_nohang_result(option_values[o]));
+		for (unsigned int b = 0; b < sizeof(bools) / sizeof(bools[0]); b++) {
+			mix_signed(digest, wait_process_reparent_needed_result(
+				option_values[o], bools[b]));
+			mix_signed(digest, wait_rusage_copy_needed_result(bools[b]));
+			for (unsigned int rc = 0; rc < sizeof(wait_results) / sizeof(wait_results[0]); rc++) {
+				mix_signed(digest, wait_status_copy_needed_result(
+					wait_results[rc], bools[b]));
+				mix_signed(digest, waitid_siginfo_needed_result(
+					wait_results[rc], bools[b]));
+			}
+		}
 		for (unsigned int p = 0; p < sizeof(pids) / sizeof(pids[0]); p++)
 			mix_signed(digest, wait_should_scan_thread_result(pids[p],
 				option_values[o]));
@@ -1926,10 +2250,48 @@ static void exercise_wait_policy(unsigned long *digest)
 		for (unsigned int fl = 0; fl < sizeof(signal_flags) / sizeof(signal_flags[0]); fl++) {
 			mix_signed(digest, wait_continued_candidate_result(
 				signal_flags[fl], option_values[o]));
+			mix_signed(digest, wait_reaped_signal_flags_result(
+				option_values[o], signal_flags[fl],
+				SIGNAL_STOP_STOPPED));
+			mix_signed(digest, wait_reaped_signal_flags_result(
+				option_values[o], signal_flags[fl],
+				SIGNAL_STOP_CONTINUED));
 			for (unsigned int pt = 0; pt < sizeof(ptrace_values) / sizeof(ptrace_values[0]); pt++)
 				mix_signed(digest, wait_nonptraced_stop_candidate_result(
 					ptrace_values[pt], signal_flags[fl],
 					option_values[o]));
+		}
+		for (unsigned int pt = 0; pt < sizeof(ptrace_values) / sizeof(ptrace_values[0]); pt++) {
+			mix_signed(digest, wait_main_thread_ptrace_detach_needed_result(
+				option_values[o], ptrace_values[pt]));
+			mix_signed(digest, wait_thread_reap_action_result(
+				option_values[o], ptrace_values[pt]));
+		}
+		for (unsigned int e = 0; e < sizeof(exit_statuses) / sizeof(exit_statuses[0]); e++)
+			mix_signed(digest, wait_reaped_exit_status_result(
+				option_values[o], exit_statuses[e]));
+	}
+
+	for (unsigned int has = 0; has < sizeof(bools) / sizeof(bools[0]); has++) {
+		for (unsigned int s = 0; s < sizeof(statuses) / sizeof(statuses[0]); s++) {
+			for (unsigned int ce = 0; ce < sizeof(exit_statuses) / sizeof(exit_statuses[0]); ce++) {
+				for (unsigned int ge = 0; ge < sizeof(exit_statuses) / sizeof(exit_statuses[0]); ge++) {
+					for (unsigned int me = 0; me < sizeof(exit_statuses) / sizeof(exit_statuses[0]); me++) {
+						int source = wait_stopped_source_result(
+							bools[has], exit_statuses[ce],
+							statuses[s], exit_statuses[ge],
+							exit_statuses[me]);
+
+						mix_signed(digest, source);
+						mix_signed(digest, wait_stopped_exit_status_result(
+							source, exit_statuses[ce],
+							exit_statuses[ge],
+							exit_statuses[me]));
+						mix_signed(digest, wait_report_id_result(
+							source, 55, 77));
+					}
+				}
+			}
 		}
 	}
 
@@ -1997,7 +2359,12 @@ static void exercise_clone_exec_futex_policy(unsigned long *digest)
 		CLONE_FS | CLONE_NEWNS, CLONE_NEWIPC | CLONE_SYSVSEM,
 		CLONE_VM | CLONE_THREAD | CLONE_SIGHAND | CLONE_NEWPID,
 		CLONE_PARENT | SIGCHLD, CLONE_VFORK | SIGCHLD,
-		CLONE_VFORK | 9,
+		CLONE_VFORK | 9, CLONE_SETTLS,
+		CLONE_PARENT_SETTID, CLONE_CHILD_CLEARTID,
+		CLONE_CHILD_SETTID,
+		CLONE_VM | CLONE_THREAD | CLONE_SIGHAND | CLONE_SETTLS |
+			CLONE_PARENT_SETTID | CLONE_CHILD_CLEARTID |
+			CLONE_CHILD_SETTID | SIGCHLD,
 	};
 	static const unsigned long stack_values[] = {
 		0, 1, 0x10000UL, 0x7fffffffffffUL,
@@ -2043,6 +2410,13 @@ static void exercise_clone_exec_futex_policy(unsigned long *digest)
 		{ 2, 0, 10, 0 },
 	};
 	static const int bools[] = { 0, 1 };
+	static const int ptrace_data_values[] = { 0, 1, 9, 64 };
+	static const int process_statuses[] = {
+		0, PS_RUNNING, PS_EXITED, PS_ZOMBIE, PS_STOPPED,
+	};
+	static const int mod_clone_values[] = {
+		SPAWN_TO_LOCAL, SPAWN_TO_REMOTE, SPAWNING_TO_REMOTE, 7,
+	};
 
 	for (unsigned int f = 0; f < sizeof(clone_flags) / sizeof(clone_flags[0]); f++) {
 		for (unsigned int c = 0; c < sizeof(bools) / sizeof(bools[0]); c++)
@@ -2060,7 +2434,32 @@ static void exercise_clone_exec_futex_policy(unsigned long *digest)
 		for (unsigned int b = 0; b < sizeof(bools) / sizeof(bools[0]); b++)
 			mix_signed(digest, clone_report_thread_result(
 				clone_flags[f], bools[b] ? SIGCHLD : 9));
+		mix_signed(digest, clone_parent_tid_store_needed_result(
+			clone_flags[f]));
+		mix_signed(digest, clone_child_cleartid_needed_result(
+			clone_flags[f]));
+		mix_signed(digest, clone_child_tid_store_needed_result(
+			clone_flags[f]));
+		mix_signed(digest, clone_tls_source_result(clone_flags[f]));
 	}
+
+	for (unsigned int m = 0; m < sizeof(mod_clone_values) / sizeof(mod_clone_values[0]); m++) {
+		mix_signed(digest, clone_remote_spawn_result(
+			mod_clone_values[m]));
+		for (unsigned int b = 0; b < sizeof(bools) / sizeof(bools[0]); b++)
+			mix_signed(digest, clone_use_last_cpu_result(
+				mod_clone_values[m], bools[b]));
+	}
+
+	for (unsigned int s = 0; s < sizeof(process_statuses) / sizeof(process_statuses[0]); s++)
+		mix_signed(digest, clone_parent_use_pid1_result(
+			process_statuses[s]));
+	for (unsigned int s = 0; s < sizeof(process_statuses) / sizeof(process_statuses[0]); s++)
+		mix_signed(digest, ptrace_detach_exit_signal_needed_result(
+			process_statuses[s]));
+	for (unsigned int d = 0; d < sizeof(ptrace_data_values) / sizeof(ptrace_data_values[0]); d++)
+		mix_signed(digest, ptrace_detach_forward_signal_needed_result(
+			ptrace_data_values[d]));
 
 	for (unsigned int p = 0; p < sizeof(ptrace_values) / sizeof(ptrace_values[0]); p++) {
 		mix_signed(digest, ptrace_exec_event_signal_result(
@@ -2112,6 +2511,7 @@ int main(void)
 	static const int pids[] = { -1, 0, 1, 55 };
 	static const int currents[] = { 1, 100 };
 	static const int execed[] = { -1, 0, 1, 2 };
+	static const long syscall_rcs[] = { -4095, -1, 0, 1, 255 };
 	static const unsigned long flags[] = {
 		0, VR_RESERVED, VR_IO_NOCACHE, VR_REMOTE,
 		VR_RESERVED | VR_REMOTE, 0x4000,
@@ -2141,6 +2541,15 @@ int main(void)
 
 	for (unsigned int i = 0; i < sizeof(execed) / sizeof(execed[0]); i++)
 		mix_signed(&digest, setpgid_execed_result(execed[i]));
+
+	for (unsigned int i = 0; i < sizeof(syscall_rcs) / sizeof(syscall_rcs[0]); i++)
+		mix_signed(&digest, syscall_refresh_cred_needed_result(syscall_rcs[i]));
+	for (unsigned int i = 0; i < sizeof(pids) / sizeof(pids[0]); i++) {
+		mix_signed(&digest, syscall_getpid_result(pids[i]));
+		mix_signed(&digest, syscall_getppid_result(pids[i]));
+		mix_signed(&digest, syscall_gettid_result(pids[i]));
+		mix_signed(&digest, syscall_set_tid_address_return_result(pids[i]));
+	}
 
 	for (unsigned int i = 0; i < sizeof(flags) / sizeof(flags[0]); i++) {
 		mix_signed(&digest, memlock_range_flag_result(flags[i]));
@@ -2777,6 +3186,7 @@ extern int procfs_maps_path_kind_result(unsigned long, unsigned long,
 					unsigned long);
 extern unsigned long procfs_pagemap_next_result(unsigned long);
 extern unsigned int procfs_auxv_limit_result(void);
+extern unsigned int procfs_cmdline_limit_result(uintptr_t, unsigned int);
 extern int procfs_is_release_result(int);
 extern int procfs_root_matched_result(int);
 extern int procfs_osnum_match_result(int, int);
@@ -2796,6 +3206,7 @@ extern int procfs_pointer_present_result(uintptr_t);
 extern int procfs_buffer_chain_attach_result(unsigned long, uintptr_t);
 extern int procfs_entry_kind_result(const char *);
 extern uintptr_t procfs_comm_basename_result(uintptr_t);
+extern uintptr_t procfs_comm_name_result(uintptr_t, uintptr_t);
 extern int pager_linux_io_retry_result(ssize_t);
 extern int pager_linux_io_stop_result(ssize_t);
 extern int pager_linux_io_first_result(ssize_t);
@@ -3182,6 +3593,8 @@ int main(void)
 	for (unsigned long pos = 0; pos <= 8192; pos += 4096)
 		mix(&digest, procfs_pagemap_next_result(pos));
 	mix(&digest, procfs_auxv_limit_result());
+	for (unsigned long ptr = 0; ptr <= 1; ptr++)
+		mix(&digest, procfs_cmdline_limit_result(ptr, 1234));
 	for (unsigned int i = 0; i < sizeof(messages) / sizeof(messages[0]); i++)
 		mix_signed(&digest, procfs_is_release_result(messages[i]));
 	for (int ret = -1; ret <= 2; ret++)
@@ -3215,6 +3628,10 @@ int main(void)
 	for (unsigned int i = 0; i < sizeof(cmdlines) / sizeof(cmdlines[0]); i++)
 		mix_signed(&digest, ptr_offset(cmdlines[i],
 			procfs_comm_basename_result((uintptr_t)cmdlines[i])));
+	mix(&digest, procfs_comm_name_result((uintptr_t)"exe", 0) ==
+		(uintptr_t)"exe");
+	mix(&digest, procfs_comm_name_result((uintptr_t)"exe",
+		(uintptr_t)"bash") == (uintptr_t)"bash");
 	for (int task = 0; task <= 1; task++) {
 		mix_signed(&digest, procfs_thread_tid_result(task, 77, 42));
 		mix_signed(&digest, procfs_task_missing_terminal_result(task));
@@ -4672,6 +5089,15 @@ int main(void)
 				    LOCAL_PAGE_SIZE, initial_desc, &desc_pages);
 	require(desc == initial_desc);
 	require(desc_pages == 1);
+	require(((struct ihk_page_allocator_desc *)desc)->end ==
+		pagealloc_init_end_result(ARENA_BASE,
+			256 * LOCAL_PAGE_SIZE));
+	require(((struct ihk_page_allocator_desc *)desc)->count ==
+		(unsigned int)pagealloc_init_count_result(32));
+	require(pagealloc_destroy_pages_result(
+		((struct ihk_page_allocator_desc *)desc)->flag) == 1);
+	mix(&digest, ((struct ihk_page_allocator_desc *)desc)->end);
+	mix(&digest, ((struct ihk_page_allocator_desc *)desc)->count);
 	sample_state(&digest, desc);
 	require(ihk_pagealloc_count(desc) == 256);
 	require(ihk_pagealloc_query_free(desc) == 256);
@@ -4933,6 +5359,7 @@ int main(void)
 EOF_PAGE_ALLOC_BITMAP
 
 cat > "${tmpdir}/process_helpers_equiv.c" <<'EOF_PROCESS_HELPERS'
+#include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -4954,6 +5381,17 @@ cat > "${tmpdir}/process_helpers_equiv.c" <<'EOF_PROCESS_HELPERS'
 #define PTATTR_UNCACHABLE 0x10000UL
 #define PTATTR_FOR_USER 0x20000UL
 #define PTATTR_WRITE_COMBINED 0x40000UL
+#define PS_EXITED 0x10
+#define PT_TRACE_SYSCALL 0x200
+#define PTRACE_RESUME_SIGNAL_SOURCE_SENDSIG 1
+#define PTRACE_RESUME_SIGNAL_SOURCE_RECVSIG 2
+#define UTI_STATE_RUNNING_IN_LINUX 2
+#define UTI_STATE_EPILOGUE 3
+#define CLONE_VM 0x00000100
+#define CLONE_SIGHAND 0x00000800
+#define WNOWAIT 0x01000000
+#define SIGNAL_STOP_STOPPED 0x1
+#define SIGNAL_STOP_CONTINUED 0x2
 
 extern unsigned long common_vrflag_to_ptattr(unsigned long, unsigned long, void *);
 extern int process_split_pgshift_result(int, uintptr_t);
@@ -4972,16 +5410,191 @@ extern int process_remove_region_alignment_result(unsigned long, unsigned long);
 extern int process_access_initial_result(int, unsigned long, unsigned long);
 extern int process_access_adjacent_result(unsigned long, int, unsigned long);
 extern int process_access_permission_result(int, unsigned long);
+extern int process_ref_release_should_destroy_result(int);
+extern int process_release_address_space_should_destroy_result(int);
+extern int process_release_address_space_should_run_free_cb_result(unsigned long);
+extern int process_create_cpu_allowed_result(int, int);
+extern int process_create_use_default_cpu_set_result(int);
+extern int process_address_space_pid_detach_result(int *, int, int);
+extern int process_clone_shares_vm_result(int);
+extern int process_clone_shares_sighand_result(int);
+extern int process_mckfd_should_dup_result(unsigned long);
+extern int process_clone_copy_vm_thread_state_result(void *, const void *,
+						     unsigned long,
+						     unsigned long, void *,
+						     const void *,
+						     unsigned long, size_t);
+extern int process_tid_index_for_thread_result(const void *, int,
+					       unsigned long, unsigned long,
+					       unsigned long);
+extern int process_tid_index_found_result(int);
+extern int process_tid_release_slot_result(void *, int, unsigned long,
+					   unsigned long);
+extern int process_tid_replace_slot_result(void *, int, unsigned long,
+					   unsigned long, unsigned long, int);
+extern int process_sigpending_cleanup_needed_result(int);
+extern void *process_sigpending_pop_front_result(void *, unsigned long);
+extern int process_list_is_linked_result(const void *);
+extern void process_list_detach_result(void *);
+extern int process_list_detach_counted_result(void *, size_t *);
+extern void process_list_add_tail_result(void *, void *);
+extern int process_list_add_tail_counted_result(void *, void *,
+					       size_t *);
+extern int process_list_move_tail_result(void *, void *);
+extern int process_list_del_init_result(void *);
+extern int process_child_reparent_result(void *, unsigned long, unsigned long,
+					 void *, void *, void *, int);
+extern int process_thread_report_attach_result(void *, unsigned long, int, int,
+					       unsigned long, void *, void *,
+					       void *);
+extern int process_thread_report_detach_result(void *, unsigned long, void *,
+					       void *);
+extern int process_ptrace_main_detach_reparent_result(void *, unsigned long,
+						      void *, void *, void *,
+						      void *);
+extern int process_ptrace_main_attach_reparent_result(void *, unsigned long,
+						      void *, void *, void *);
+extern int process_thread_termsig_clear_result(void *, unsigned long, int);
+extern void *process_thread_ptrace_cleanup_result(void *, unsigned long,
+						  unsigned long,
+						  unsigned long);
+extern int process_thread_ptrace_saved_context_clear_result(void *,
+							    unsigned long);
+extern int process_thread_ptrace_trace_syscall_update_result(void *,
+							     unsigned long,
+							     int);
+extern void *process_thread_ptrace_pending_signal_take_result(void *,
+							     unsigned long,
+							     unsigned long,
+							     int);
+extern int process_thread_signal_flags_reap_result(void *, unsigned long, int,
+						   int);
+extern int process_wait_exit_status_reap_result(void *, unsigned long, int);
+extern int process_optional_ptr_should_free_result(unsigned long);
+extern int process_hold_thread_warn_exited_result(int);
+extern int process_sigcommon_release_should_destroy_result(int);
+extern int process_destroy_thread_tid_action_result(int, int, int);
+extern int process_thread_should_free_pages_result(int);
+extern int process_release_vm_should_run_free_cb_result(unsigned long);
+extern int process_release_mckfd_should_close_result(unsigned long);
+extern int process_mckfd_push_head_result(void *, void *);
+extern void *process_mckfd_pop_head_result(void *);
 
 static void mix(unsigned long *digest, unsigned long value)
 {
 	*digest ^= value + 0x9e3779b97f4a7c15UL + (*digest << 6) + (*digest >> 2);
 }
 
+struct fake_tid {
+	int tid;
+	void *thread;
+};
+
+struct fake_vm_state {
+	unsigned long pad;
+	void *vdso_addr;
+	void *vvar_addr;
+};
+
+struct fake_sigstack {
+	void *ss_sp;
+	int ss_flags;
+	unsigned long ss_size;
+};
+
+struct fake_thread_state {
+	int pad;
+	struct fake_sigstack sigstack;
+};
+
+struct fake_list_head {
+	struct fake_list_head *next;
+	struct fake_list_head *prev;
+};
+
+struct fake_pending {
+	struct fake_list_head list;
+	unsigned long value;
+};
+
+struct fake_process {
+	void *ppid_parent;
+	void *parent;
+	struct fake_list_head siblings;
+	struct fake_list_head ptraced_siblings;
+	int group_exit_status;
+	unsigned long value;
+};
+
+struct fake_thread {
+	int termsig;
+	int exit_status;
+	void *report_proc;
+	struct fake_list_head report_siblings;
+	int ptrace;
+	int ptrace_saved_uctx_valid;
+	void *ptrace_debugreg;
+	void *ptrace_sendsig;
+	void *ptrace_recvsig;
+	int signal_flags;
+	unsigned long value;
+};
+
+struct fake_mckfd {
+	struct fake_mckfd *next;
+	int fd;
+};
+
+static void fake_list_init(struct fake_list_head *head)
+{
+	head->next = head;
+	head->prev = head;
+}
+
+static void fake_list_add_tail(struct fake_list_head *entry,
+			       struct fake_list_head *head)
+{
+	entry->next = head;
+	entry->prev = head->prev;
+	head->prev->next = entry;
+	head->prev = entry;
+}
+
 int main(void)
 {
 	unsigned long digest = 0x50524f4348454c50UL;
 	unsigned long clr = 0, set = 0;
+	struct fake_tid tids[3] = {
+		{ 10, (void *)0x1000 },
+		{ 11, (void *)0x2000 },
+		{ 12, (void *)0x3000 },
+	};
+	struct fake_list_head pending_head;
+	struct fake_list_head other_head;
+	struct fake_list_head old_children;
+	struct fake_list_head new_children;
+	struct fake_list_head new_ptraced;
+	struct fake_pending pending_a = { { 0 }, 0xa1 };
+	struct fake_pending pending_b = { { 0 }, 0xb2 };
+	struct fake_pending *pending;
+	struct fake_process old_parent = { 0 };
+	struct fake_process pid1 = { 0 };
+	struct fake_process child_a = { 0 };
+	struct fake_process child_b = { 0 };
+	struct fake_thread report_thread_a = { 0 };
+	struct fake_thread report_thread_b = { 0 };
+	struct fake_vm_state src_vm = { 0, (void *)0x700000, (void *)0x710000 };
+	struct fake_vm_state dst_vm = { 0 };
+	struct fake_thread_state src_thread = {
+		0, { (void *)0x720000, 0x33, 0x4400 }
+	};
+	struct fake_thread_state dst_thread = { 0 };
+	size_t runq_len = 0;
+	struct fake_mckfd fd_a = { 0, 3 };
+	struct fake_mckfd fd_b = { 0, 4 };
+	struct fake_mckfd *fd_head = &fd_a;
+	struct fake_mckfd *fd;
+	int pids[] = { 10, 20, 30, 20 };
 	unsigned long flags[] = {
 		0,
 		VR_PROT_READ,
@@ -5030,6 +5643,354 @@ int main(void)
 	mix(&digest, process_access_permission_result(VERIFY_WRITE, VR_PROT_WRITE));
 	mix(&digest, process_access_permission_result(VERIFY_WRITE, VR_PROT_READ));
 	mix(&digest, process_access_permission_result(99, 0));
+	mix(&digest, process_ref_release_should_destroy_result(0));
+	mix(&digest, process_ref_release_should_destroy_result(1));
+	mix(&digest, process_release_address_space_should_destroy_result(0));
+	mix(&digest, process_release_address_space_should_destroy_result(1));
+	mix(&digest, process_release_address_space_should_run_free_cb_result(0));
+	mix(&digest, process_release_address_space_should_run_free_cb_result(0x4000));
+	mix(&digest, process_create_cpu_allowed_result(0, 4));
+	mix(&digest, process_create_cpu_allowed_result(4, 4));
+	mix(&digest, process_create_cpu_allowed_result(-1, 4));
+	mix(&digest, process_create_use_default_cpu_set_result(0));
+	mix(&digest, process_create_use_default_cpu_set_result(1));
+	mix(&digest, process_address_space_pid_detach_result(pids, 4, 20));
+	mix(&digest, pids[1] == 0);
+	mix(&digest, pids[3] == 20);
+	mix(&digest, process_address_space_pid_detach_result(pids, 4, 99));
+	mix(&digest, process_address_space_pid_detach_result(NULL, 4, 20));
+	mix(&digest, process_address_space_pid_detach_result(pids, 0, 20));
+	mix(&digest, process_clone_shares_vm_result(CLONE_VM));
+	mix(&digest, process_clone_shares_vm_result(0));
+	mix(&digest, process_clone_shares_sighand_result(CLONE_SIGHAND));
+	mix(&digest, process_clone_shares_sighand_result(CLONE_VM));
+	mix(&digest, process_mckfd_should_dup_result(0));
+	mix(&digest, process_mckfd_should_dup_result(0x5000));
+	mix(&digest, process_clone_copy_vm_thread_state_result(&dst_vm,
+		&src_vm, offsetof(struct fake_vm_state, vdso_addr),
+		offsetof(struct fake_vm_state, vvar_addr), &dst_thread,
+		&src_thread, offsetof(struct fake_thread_state, sigstack),
+		sizeof(src_thread.sigstack)));
+	mix(&digest, dst_vm.vdso_addr == src_vm.vdso_addr);
+	mix(&digest, dst_vm.vvar_addr == src_vm.vvar_addr);
+	mix(&digest, dst_thread.sigstack.ss_sp == src_thread.sigstack.ss_sp);
+	mix(&digest, dst_thread.sigstack.ss_flags ==
+		src_thread.sigstack.ss_flags);
+	mix(&digest, dst_thread.sigstack.ss_size ==
+		src_thread.sigstack.ss_size);
+	mix(&digest, process_clone_copy_vm_thread_state_result(NULL,
+		&src_vm, offsetof(struct fake_vm_state, vdso_addr),
+		offsetof(struct fake_vm_state, vvar_addr), &dst_thread,
+		&src_thread, offsetof(struct fake_thread_state, sigstack),
+		sizeof(src_thread.sigstack)));
+	mix(&digest, process_tid_index_for_thread_result(tids, 3,
+							 sizeof(tids[0]),
+							 offsetof(struct fake_tid,
+								  thread),
+							 0x2000));
+	mix(&digest, process_tid_index_for_thread_result(tids, 3,
+							 sizeof(tids[0]),
+							 offsetof(struct fake_tid,
+								  thread),
+							 0x9000));
+	mix(&digest, process_tid_index_for_thread_result(NULL, 3,
+							 sizeof(tids[0]),
+							 offsetof(struct fake_tid,
+								  thread),
+							 0x2000));
+	mix(&digest, process_tid_index_found_result(1));
+	mix(&digest, process_tid_index_found_result(-1));
+	mix(&digest, process_tid_release_slot_result(tids, 1,
+						     sizeof(tids[0]),
+						     offsetof(struct fake_tid,
+							      thread)));
+	mix(&digest, tids[1].thread == NULL);
+	mix(&digest, process_tid_replace_slot_result(tids, 2,
+						     sizeof(tids[0]),
+						     offsetof(struct fake_tid,
+							      tid),
+						     offsetof(struct fake_tid,
+							      thread),
+						     99));
+	mix(&digest, tids[2].tid);
+	mix(&digest, tids[2].thread == NULL);
+	mix(&digest, process_tid_release_slot_result(tids, -1,
+						     sizeof(tids[0]),
+						     offsetof(struct fake_tid,
+							      thread)));
+	mix(&digest, process_sigpending_cleanup_needed_result(0));
+	mix(&digest, process_sigpending_cleanup_needed_result(1));
+	fake_list_init(&pending_head);
+	process_list_add_tail_result(&pending_a.list, &pending_head);
+	process_list_add_tail_result(&pending_b.list, &pending_head);
+	process_list_add_tail_result(NULL, &pending_head);
+	process_list_add_tail_result(&pending_b.list, NULL);
+	mix(&digest, pending_head.next == &pending_a.list);
+	mix(&digest, pending_head.prev == &pending_b.list);
+	mix(&digest, pending_a.list.prev == &pending_head);
+	mix(&digest, pending_b.list.next == &pending_head);
+	pending = process_sigpending_pop_front_result(
+		&pending_head, offsetof(struct fake_pending, list));
+	mix(&digest, pending == &pending_a);
+	mix(&digest, pending_head.next == &pending_b.list);
+	mix(&digest, pending_a.list.next == (void *)0x00100129);
+	mix(&digest, process_list_is_linked_result(&pending_b.list));
+	process_list_detach_result(&pending_b.list);
+	mix(&digest, process_list_is_linked_result(&pending_b.list));
+	mix(&digest, pending_head.next == &pending_head);
+	process_list_add_tail_result(&pending_b.list, &pending_head);
+	pending = process_sigpending_pop_front_result(
+		&pending_head, offsetof(struct fake_pending, list));
+	mix(&digest, pending == &pending_b);
+	mix(&digest, pending_head.next == &pending_head);
+	mix(&digest, process_sigpending_pop_front_result(
+		&pending_head, offsetof(struct fake_pending, list)) == NULL);
+	mix(&digest, process_list_is_linked_result(&pending_head));
+	process_list_detach_result(NULL);
+	process_list_detach_result(&pending_head);
+	mix(&digest, pending_head.next == &pending_head);
+	fake_list_init(&pending_head);
+	mix(&digest, process_list_add_tail_counted_result(&pending_a.list,
+							  &pending_head,
+							  &runq_len));
+	mix(&digest, runq_len);
+	mix(&digest, process_list_add_tail_counted_result(&pending_b.list,
+							  &pending_head,
+							  &runq_len));
+	mix(&digest, runq_len);
+	mix(&digest, process_list_detach_counted_result(&pending_a.list,
+							&runq_len));
+	mix(&digest, runq_len);
+	mix(&digest, pending_head.next == &pending_b.list);
+	mix(&digest, process_list_detach_counted_result(NULL, &runq_len));
+	mix(&digest, process_list_add_tail_counted_result(&pending_a.list,
+							  NULL, &runq_len));
+	mix(&digest, runq_len);
+	fake_list_init(&other_head);
+	mix(&digest, process_list_move_tail_result(&pending_b.list,
+						   &other_head));
+	mix(&digest, pending_head.next == &pending_head);
+	mix(&digest, other_head.next == &pending_b.list);
+	mix(&digest, pending_b.list.prev == &other_head);
+	mix(&digest, process_list_move_tail_result(NULL, &pending_head));
+	mix(&digest, process_list_move_tail_result(&pending_a.list, NULL));
+	mix(&digest, process_list_del_init_result(&pending_b.list));
+	mix(&digest, other_head.next == &other_head);
+	mix(&digest, pending_b.list.next == &pending_b.list);
+	mix(&digest, process_list_del_init_result(NULL));
+	fake_list_init(&old_children);
+	fake_list_init(&new_children);
+	fake_list_init(&new_ptraced);
+	fake_list_init(&child_a.siblings);
+	fake_list_init(&child_a.ptraced_siblings);
+	fake_list_init(&child_b.siblings);
+	fake_list_init(&child_b.ptraced_siblings);
+	child_a.ppid_parent = &old_parent;
+	child_a.parent = &old_parent;
+	child_b.ppid_parent = &old_parent;
+	child_b.parent = &old_parent;
+	fake_list_add_tail(&child_a.siblings, &old_children);
+	fake_list_add_tail(&child_b.ptraced_siblings, &old_children);
+	mix(&digest, process_child_reparent_result(&child_a,
+		offsetof(struct fake_process, ppid_parent),
+		offsetof(struct fake_process, parent), &pid1,
+		&child_a.siblings, &new_children, 1));
+	mix(&digest, child_a.ppid_parent == &pid1);
+	mix(&digest, child_a.parent == &pid1);
+	mix(&digest, new_children.next == &child_a.siblings);
+	mix(&digest, process_child_reparent_result(&child_b,
+		offsetof(struct fake_process, ppid_parent),
+		offsetof(struct fake_process, parent), &pid1,
+		&child_b.ptraced_siblings, &new_ptraced, 0));
+	mix(&digest, child_b.ppid_parent == &pid1);
+	mix(&digest, child_b.parent == &old_parent);
+	mix(&digest, new_ptraced.next == &child_b.ptraced_siblings);
+	mix(&digest, process_child_reparent_result(NULL,
+		offsetof(struct fake_process, ppid_parent),
+		offsetof(struct fake_process, parent), &pid1,
+		&child_b.ptraced_siblings, &new_ptraced, 0));
+	fake_list_init(&other_head);
+	fake_list_init(&report_thread_a.report_siblings);
+	fake_list_init(&report_thread_b.report_siblings);
+	mix(&digest, process_thread_report_attach_result(&report_thread_a,
+		offsetof(struct fake_thread, termsig), 1, 9,
+		offsetof(struct fake_thread, report_proc), &pid1,
+		&report_thread_a.report_siblings, &other_head));
+	mix(&digest, report_thread_a.termsig == 9);
+	mix(&digest, report_thread_a.report_proc == &pid1);
+	mix(&digest, other_head.next == &report_thread_a.report_siblings);
+	mix(&digest, process_thread_report_attach_result(&report_thread_b,
+		offsetof(struct fake_thread, termsig), 0, 15,
+		offsetof(struct fake_thread, report_proc), &old_parent,
+		&report_thread_b.report_siblings, &other_head));
+	mix(&digest, report_thread_b.termsig == 0);
+	mix(&digest, report_thread_b.report_proc == &old_parent);
+	mix(&digest, other_head.prev == &report_thread_b.report_siblings);
+	mix(&digest, process_thread_report_detach_result(&report_thread_a,
+		offsetof(struct fake_thread, report_proc), NULL,
+		&report_thread_a.report_siblings));
+	mix(&digest, report_thread_a.report_proc == NULL);
+	mix(&digest, other_head.next == &report_thread_b.report_siblings);
+	mix(&digest, process_thread_report_detach_result(&report_thread_b,
+		offsetof(struct fake_thread, report_proc), &pid1,
+		&report_thread_b.report_siblings));
+	mix(&digest, report_thread_b.report_proc == &pid1);
+	mix(&digest, other_head.next == &other_head);
+	fake_list_init(&old_children);
+	fake_list_init(&new_children);
+	fake_list_init(&child_a.siblings);
+	fake_list_init(&child_a.ptraced_siblings);
+	child_a.parent = &old_parent;
+	fake_list_add_tail(&child_a.ptraced_siblings, &old_children);
+	mix(&digest, process_ptrace_main_detach_reparent_result(&child_a,
+		offsetof(struct fake_process, parent), &pid1,
+		&child_a.ptraced_siblings, &child_a.siblings, &new_children));
+	mix(&digest, child_a.parent == &pid1);
+	mix(&digest, old_children.next == &old_children);
+	mix(&digest, new_children.next == &child_a.siblings);
+	mix(&digest, process_ptrace_main_detach_reparent_result(NULL,
+		offsetof(struct fake_process, parent), &pid1,
+		&child_a.ptraced_siblings, &child_a.siblings, &new_children));
+	fake_list_init(&new_children);
+	fake_list_init(&child_b.siblings);
+	child_b.parent = &old_parent;
+	mix(&digest, process_ptrace_main_attach_reparent_result(&child_b,
+		offsetof(struct fake_process, parent), &pid1,
+		&child_b.siblings, &new_children));
+	mix(&digest, child_b.parent == &pid1);
+	mix(&digest, new_children.next == &child_b.siblings);
+	mix(&digest, process_ptrace_main_attach_reparent_result(NULL,
+		offsetof(struct fake_process, parent), &pid1,
+		&child_b.siblings, &new_children));
+	report_thread_b.termsig = 12;
+	mix(&digest, process_thread_termsig_clear_result(&report_thread_b,
+		offsetof(struct fake_thread, termsig), 0));
+	mix(&digest, report_thread_b.termsig == 12);
+	mix(&digest, process_thread_termsig_clear_result(&report_thread_b,
+		offsetof(struct fake_thread, termsig), 1));
+	mix(&digest, report_thread_b.termsig == 0);
+	mix(&digest, process_thread_termsig_clear_result(NULL,
+		offsetof(struct fake_thread, termsig), 1));
+	report_thread_b.ptrace = 0x123;
+	report_thread_b.ptrace_saved_uctx_valid = 1;
+	report_thread_b.ptrace_debugreg = (void *)0xabc0;
+	mix(&digest, process_thread_ptrace_cleanup_result(&report_thread_b,
+		offsetof(struct fake_thread, ptrace),
+		offsetof(struct fake_thread, ptrace_saved_uctx_valid),
+		offsetof(struct fake_thread, ptrace_debugreg)) ==
+		(void *)0xabc0);
+	mix(&digest, report_thread_b.ptrace == 0);
+	mix(&digest, report_thread_b.ptrace_saved_uctx_valid == 0);
+	mix(&digest, report_thread_b.ptrace_debugreg == NULL);
+	mix(&digest, process_thread_ptrace_cleanup_result(NULL,
+		offsetof(struct fake_thread, ptrace),
+		offsetof(struct fake_thread, ptrace_saved_uctx_valid),
+		offsetof(struct fake_thread, ptrace_debugreg)) == NULL);
+	report_thread_b.ptrace_saved_uctx_valid = 1;
+	mix(&digest, process_thread_ptrace_saved_context_clear_result(
+		&report_thread_b,
+		offsetof(struct fake_thread, ptrace_saved_uctx_valid)));
+	mix(&digest, report_thread_b.ptrace_saved_uctx_valid == 0);
+	mix(&digest, process_thread_ptrace_saved_context_clear_result(NULL,
+		offsetof(struct fake_thread, ptrace_saved_uctx_valid)));
+	report_thread_b.ptrace = 0x77 | PT_TRACE_SYSCALL;
+	mix(&digest, process_thread_ptrace_trace_syscall_update_result(
+		&report_thread_b, offsetof(struct fake_thread, ptrace), 0));
+	mix(&digest, (report_thread_b.ptrace & PT_TRACE_SYSCALL) == 0);
+	mix(&digest, process_thread_ptrace_trace_syscall_update_result(
+		&report_thread_b, offsetof(struct fake_thread, ptrace), 1));
+	mix(&digest, (report_thread_b.ptrace & PT_TRACE_SYSCALL) != 0);
+	mix(&digest, process_thread_ptrace_trace_syscall_update_result(NULL,
+		offsetof(struct fake_thread, ptrace), 1));
+	report_thread_b.ptrace_sendsig = (void *)0x5010;
+	report_thread_b.ptrace_recvsig = (void *)0x6010;
+	mix(&digest, process_thread_ptrace_pending_signal_take_result(
+		&report_thread_b, offsetof(struct fake_thread, ptrace_sendsig),
+		offsetof(struct fake_thread, ptrace_recvsig),
+		PTRACE_RESUME_SIGNAL_SOURCE_SENDSIG) == (void *)0x5010);
+	mix(&digest, report_thread_b.ptrace_sendsig == NULL);
+	mix(&digest, report_thread_b.ptrace_recvsig == (void *)0x6010);
+	mix(&digest, process_thread_ptrace_pending_signal_take_result(
+		&report_thread_b, offsetof(struct fake_thread, ptrace_sendsig),
+		offsetof(struct fake_thread, ptrace_recvsig),
+		PTRACE_RESUME_SIGNAL_SOURCE_RECVSIG) == (void *)0x6010);
+	mix(&digest, report_thread_b.ptrace_recvsig == NULL);
+	mix(&digest, process_thread_ptrace_pending_signal_take_result(
+		&report_thread_b, offsetof(struct fake_thread, ptrace_sendsig),
+		offsetof(struct fake_thread, ptrace_recvsig), 0) == NULL);
+	mix(&digest, process_thread_ptrace_pending_signal_take_result(NULL,
+		offsetof(struct fake_thread, ptrace_sendsig),
+		offsetof(struct fake_thread, ptrace_recvsig),
+		PTRACE_RESUME_SIGNAL_SOURCE_SENDSIG) == NULL);
+	report_thread_b.signal_flags =
+		SIGNAL_STOP_STOPPED | SIGNAL_STOP_CONTINUED;
+	mix(&digest, process_thread_signal_flags_reap_result(&report_thread_b,
+		offsetof(struct fake_thread, signal_flags), 0,
+		SIGNAL_STOP_STOPPED));
+	mix(&digest, report_thread_b.signal_flags == SIGNAL_STOP_CONTINUED);
+	mix(&digest, process_thread_signal_flags_reap_result(&report_thread_b,
+		offsetof(struct fake_thread, signal_flags), WNOWAIT,
+		SIGNAL_STOP_CONTINUED));
+	mix(&digest, report_thread_b.signal_flags == SIGNAL_STOP_CONTINUED);
+	mix(&digest, process_thread_signal_flags_reap_result(NULL,
+		offsetof(struct fake_thread, signal_flags), 0,
+		SIGNAL_STOP_CONTINUED));
+	report_thread_b.exit_status = 0x7f;
+	mix(&digest, process_wait_exit_status_reap_result(&report_thread_b,
+		offsetof(struct fake_thread, exit_status), WNOWAIT));
+	mix(&digest, report_thread_b.exit_status == 0x7f);
+	mix(&digest, process_wait_exit_status_reap_result(&report_thread_b,
+		offsetof(struct fake_thread, exit_status), 0));
+	mix(&digest, report_thread_b.exit_status == 0);
+	child_a.group_exit_status = 0x55;
+	mix(&digest, process_wait_exit_status_reap_result(&child_a,
+		offsetof(struct fake_process, group_exit_status), 0));
+	mix(&digest, child_a.group_exit_status == 0);
+	mix(&digest, process_wait_exit_status_reap_result(NULL,
+		offsetof(struct fake_thread, exit_status), 0));
+	mix(&digest, process_thread_report_attach_result(NULL,
+		offsetof(struct fake_thread, termsig), 1, 9,
+		offsetof(struct fake_thread, report_proc), &pid1,
+		&report_thread_b.report_siblings, &other_head));
+	mix(&digest, process_optional_ptr_should_free_result(0));
+	mix(&digest, process_optional_ptr_should_free_result(0x6000));
+	mix(&digest, process_hold_thread_warn_exited_result(PS_EXITED));
+	mix(&digest, process_hold_thread_warn_exited_result(0));
+	mix(&digest, process_sigcommon_release_should_destroy_result(0));
+	mix(&digest, process_sigcommon_release_should_destroy_result(1));
+	mix(&digest, process_destroy_thread_tid_action_result(0, 0,
+							     UTI_STATE_RUNNING_IN_LINUX));
+	mix(&digest, process_destroy_thread_tid_action_result(1, 0,
+							     UTI_STATE_RUNNING_IN_LINUX));
+	mix(&digest, process_destroy_thread_tid_action_result(1, 1,
+							     UTI_STATE_RUNNING_IN_LINUX));
+	mix(&digest, process_destroy_thread_tid_action_result(1, 0,
+							     UTI_STATE_EPILOGUE));
+	mix(&digest, process_thread_should_free_pages_result(0));
+	mix(&digest, process_thread_should_free_pages_result(1));
+	mix(&digest, process_release_vm_should_run_free_cb_result(0));
+	mix(&digest, process_release_vm_should_run_free_cb_result(0x1000));
+	mix(&digest, process_release_mckfd_should_close_result(0));
+	mix(&digest, process_release_mckfd_should_close_result(0x2000));
+	fd_head = NULL;
+	fd_a.next = NULL;
+	fd_b.next = NULL;
+	mix(&digest, process_mckfd_push_head_result(&fd_head, &fd_a));
+	mix(&digest, fd_head == &fd_a);
+	mix(&digest, fd_a.next == NULL);
+	mix(&digest, process_mckfd_push_head_result(&fd_head, &fd_b));
+	mix(&digest, fd_head == &fd_b);
+	mix(&digest, fd_b.next == &fd_a);
+	mix(&digest, process_mckfd_push_head_result(NULL, &fd_a));
+	mix(&digest, process_mckfd_push_head_result(&fd_head, NULL));
+	fd = process_mckfd_pop_head_result(&fd_head);
+	mix(&digest, fd == &fd_b);
+	mix(&digest, fd_head == &fd_a);
+	mix(&digest, fd_b.next == NULL);
+	fd = process_mckfd_pop_head_result(&fd_head);
+	mix(&digest, fd == &fd_a);
+	mix(&digest, fd_head == NULL);
+	mix(&digest, process_mckfd_pop_head_result(&fd_head) == NULL);
 
 	printf("process_helpers ok digest=%016lx\n", digest);
 	return 0;
@@ -5053,7 +6014,14 @@ cat > "${tmpdir}/x86_memory_helpers_equiv.c" <<'EOF_X86_MEMORY_HELPERS'
 extern unsigned long x86_attr_to_l3attr_result(unsigned long, unsigned long);
 extern unsigned long x86_attr_to_l2attr_result(unsigned long, unsigned long);
 extern unsigned long x86_attr_to_l1attr_result(unsigned long, unsigned long);
+extern unsigned long x86_set_pte_value_result(unsigned long, unsigned long,
+					      unsigned long);
+extern int x86_pt_set_pte_value_result(size_t, unsigned long, unsigned long,
+				       unsigned long, int, unsigned long *);
 extern int x86_smaller_page_size_result(size_t, int, size_t *, int *);
+extern unsigned long x86_early_alloc_align_end_result(unsigned long);
+extern int x86_early_alloc_exhausted_result(unsigned long, unsigned long);
+extern unsigned long x86_early_alloc_next_result(unsigned long, int);
 
 static void mix(unsigned long *digest, unsigned long value)
 {
@@ -5084,6 +6052,8 @@ int main(void)
 		mix(&digest, x86_attr_to_l3attr_result(attrs[i], attr_mask));
 		mix(&digest, x86_attr_to_l2attr_result(attrs[i], attr_mask));
 		mix(&digest, x86_attr_to_l1attr_result(attrs[i], attr_mask));
+		mix(&digest, x86_set_pte_value_result(0x200000 + i * 0x1000,
+						      attrs[i], attr_mask));
 	}
 	size_t sizes[] = {
 		0, 1, 4096, 4097, 2UL * 1024 * 1024,
@@ -5102,12 +6072,149 @@ int main(void)
 			mix(&digest, newsize);
 			mix(&digest, (unsigned long)(unsigned int)p2align);
 		}
+		mix(&digest, x86_early_alloc_align_end_result(sizes[i]));
+		mix(&digest, (unsigned int)x86_early_alloc_exhausted_result(
+			sizes[i], 2UL * 1024 * 1024));
+		mix(&digest, x86_early_alloc_next_result(sizes[i],
+			(int)i - 2));
+	}
+	{
+		size_t pgsizes[] = {
+			4096, 2UL * 1024 * 1024, 1024UL * 1024 * 1024,
+			12345,
+		};
+		unsigned long phys[] = {
+			0, 4096, 2UL * 1024 * 1024,
+			(2UL * 1024 * 1024) + 4096,
+			1024UL * 1024 * 1024,
+			(1024UL * 1024 * 1024) + 4096,
+		};
+
+		for (unsigned int p = 0; p < sizeof(pgsizes) / sizeof(pgsizes[0]); p++) {
+			for (unsigned int a = 0; a < sizeof(attrs) / sizeof(attrs[0]); a++) {
+				for (unsigned int h = 0; h < sizeof(phys) / sizeof(phys[0]); h++) {
+					for (int use_1gb = 0; use_1gb <= 1; use_1gb++) {
+						unsigned long entry = 0x12345678UL;
+						int error = x86_pt_set_pte_value_result(
+							pgsizes[p], phys[h], attrs[a],
+							attr_mask, use_1gb, &entry);
+
+						mix(&digest, pgsizes[p]);
+						mix(&digest, phys[h]);
+						mix(&digest, attrs[a]);
+						mix(&digest, use_1gb);
+						mix(&digest, (unsigned long)(unsigned int)-error);
+						mix(&digest, entry);
+					}
+				}
+			}
+		}
 	}
 
-	printf("x86_memory_helpers ok digest=%016lx\n", digest);
+printf("x86_memory_helpers ok digest=%016lx\n", digest);
 	return 0;
 }
 EOF_X86_MEMORY_HELPERS
+
+cat > "${tmpdir}/mcexec_helpers_smoke.c" <<'EOF_MCEXEC_HELPERS'
+#include <errno.h>
+#include <limits.h>
+#include <stdio.h>
+#include <string.h>
+
+extern int mcexec_path_is_absolute_result(const char *path);
+extern int mcexec_path_is_single_component_exec_result(const char *path);
+extern int mcexec_path_len_less_than_result(const char *path, size_t limit);
+extern int mcexec_copy_path_result(const char *path, char *out, size_t size);
+extern int mcexec_join_path_result(const char *prefix, const char *path,
+				   char *out, size_t size);
+extern int mcexec_objdump_rpath_cmd_result(const char *path, char *out,
+					   size_t size);
+
+#define require(expr) do { \
+	if (!(expr)) { \
+		fprintf(stderr, "require failed at %s:%d: %s\n", \
+			__FILE__, __LINE__, #expr); \
+		return 1; \
+	} \
+} while (0)
+
+static void mix(unsigned long *digest, unsigned long value)
+{
+	*digest ^= value + 0x9e3779b97f4a7c15UL + (*digest << 6) + (*digest >> 2);
+}
+
+int main(void)
+{
+	char out[64];
+	char limited[255 + 1];
+	unsigned long digest = 0x6d636578656370UL;
+	int i;
+	int rc;
+
+	require(mcexec_path_is_absolute_result("/bin/hostname") == 1);
+	require(mcexec_path_is_absolute_result("bin/hostname") == 0);
+	require(mcexec_path_is_absolute_result("") == 0);
+
+	require(mcexec_path_is_single_component_exec_result("hostname") == 1);
+	require(mcexec_path_is_single_component_exec_result("") == 1);
+	require(mcexec_path_is_single_component_exec_result("./hostname") == 0);
+	require(mcexec_path_is_single_component_exec_result(".hidden") == 0);
+	require(mcexec_path_is_single_component_exec_result("bin/hostname") == 0);
+	require(mcexec_path_is_single_component_exec_result("/bin/hostname") == 0);
+
+	memset(limited, 'a', sizeof(limited));
+	limited[254] = '\0';
+	require(mcexec_path_len_less_than_result(limited, 255) == 1);
+	limited[254] = 'a';
+	limited[255] = '\0';
+	require(mcexec_path_len_less_than_result(limited, 255) == 0);
+
+	memset(out, 0xa5, sizeof(out));
+	rc = mcexec_copy_path_result("abc", out, sizeof(out));
+	require(rc == 3);
+	require(strcmp(out, "abc") == 0);
+	mix(&digest, (unsigned long)rc);
+	for (i = 0; out[i]; i++)
+		mix(&digest, (unsigned long)(unsigned char)out[i]);
+
+	require(mcexec_copy_path_result("abcd", out, 4) == -ENAMETOOLONG);
+	require(mcexec_copy_path_result("abcd", out, 5) == 4);
+
+	memset(out, 0xa5, sizeof(out));
+	rc = mcexec_join_path_result("/root", "/bin/hostname", out,
+				     sizeof(out));
+	require(rc == (int)strlen("/root//bin/hostname"));
+	require(strcmp(out, "/root//bin/hostname") == 0);
+	mix(&digest, (unsigned long)rc);
+	for (i = 0; out[i]; i++)
+		mix(&digest, (unsigned long)(unsigned char)out[i]);
+
+	rc = mcexec_join_path_result("", "hostname", out, sizeof(out));
+	require(rc == (int)strlen("/hostname"));
+	require(strcmp(out, "/hostname") == 0);
+
+	rc = mcexec_join_path_result("/usr/bin", "hostname", out, sizeof(out));
+	require(rc == (int)strlen("/usr/bin/hostname"));
+	require(strcmp(out, "/usr/bin/hostname") == 0);
+	require(mcexec_join_path_result("/usr/bin", "hostname", out,
+					strlen("/usr/bin/hostname")) ==
+		-ENAMETOOLONG);
+
+	rc = mcexec_objdump_rpath_cmd_result("/proc/self/exe", out,
+					     sizeof(out));
+	require(rc == (int)strlen("objdump -x /proc/self/exe | awk '/RPATH/ { print $2 }'"));
+	require(strcmp(out,
+		       "objdump -x /proc/self/exe | awk '/RPATH/ { print $2 }'")
+		== 0);
+	require(mcexec_objdump_rpath_cmd_result("/proc/self/exe", out,
+						strlen(out)) ==
+		-ENAMETOOLONG);
+
+	printf("mcexec_helpers ok digest=%016lx\n", digest);
+	return 0;
+}
+EOF_MCEXEC_HELPERS
 
 cat > "${tmpdir}/rust_stubs.c" <<'EOF_STUBS'
 int ihk_mc_chk_page_address(unsigned long mem_addr) { (void)mem_addr; return 0; }
@@ -5127,6 +6234,16 @@ __attribute__((weak)) int ihk_mc_get_memory_chunk(int id, unsigned long *start,
 	return 0;
 }
 __attribute__((weak)) char *ihk_get_kargs(void) { return 0; }
+struct waitq_entry;
+__attribute__((weak)) int default_wake_function(struct waitq_entry *entry,
+		unsigned mode, int flags, void *key)
+{
+	(void)entry;
+	(void)mode;
+	(void)flags;
+	(void)key;
+	return 0;
+}
 unsigned long shmid_index[512];
 int zero_at_free = 1;
 EOF_STUBS
@@ -5188,6 +6305,8 @@ cc "${kflags[@]}" -I"${tmpdir}" -ffunction-sections -fdata-sections \
 	-DMCKERNEL_RUST_WAITQ_CORE -c kernel/waitq.c \
 	-o "${tmpdir}/out/waitq_dispatch_c.o"
 cc "${kflags[@]}" -I"${tmpdir}" -ffunction-sections -fdata-sections \
+	-c kernel/sched_helpers.c -o "${tmpdir}/out/sched_runtime_c.o"
+cc "${kflags[@]}" -I"${tmpdir}" -ffunction-sections -fdata-sections \
 	-c kernel/mem.c -o "${tmpdir}/out/mem_c.o"
 cc "${kflags[@]}" -I"${tmpdir}" -ffunction-sections -fdata-sections \
 	-Dmain=mckernel_init_main -c kernel/init.c \
@@ -5236,6 +6355,88 @@ rustc --crate-name mckernel_rust \
 	--emit=obj="${tmpdir}/out/mckernel_rust.o" \
 	kernel/rust/lib.rs
 
+rustc --crate-name ihk_core_helpers \
+	--crate-type lib \
+	--edition=2021 \
+	-C panic=abort \
+	-C opt-level=2 \
+	-C debuginfo=1 \
+	-C code-model=kernel \
+	-C relocation-model=static \
+	-C no-redzone=yes \
+	-C force-frame-pointers=yes \
+	-C overflow-checks=off \
+	-C force-unwind-tables=no \
+	-C no-vectorize-loops \
+	-C no-vectorize-slp \
+	--emit=obj="${tmpdir}/out/ihk_core_helpers.o" \
+	ihk/linux/core/rust/core_helpers.rs
+
+rustc --crate-name mcctrl_helpers \
+	--crate-type lib \
+	--edition=2021 \
+	-C panic=abort \
+	-C opt-level=2 \
+	-C debuginfo=1 \
+	-C code-model=kernel \
+	-C relocation-model=static \
+	-C no-redzone=yes \
+	-C force-frame-pointers=yes \
+	-C overflow-checks=off \
+	-C force-unwind-tables=no \
+	-C no-vectorize-loops \
+	-C no-vectorize-slp \
+	--emit=obj="${tmpdir}/out/mcctrl_helpers.o" \
+	executer/kernel/mcctrl/rust/mcctrl_helpers.rs
+
+rustc --crate-name smp_driver_helpers \
+	--crate-type lib \
+	--edition=2021 \
+	-C panic=abort \
+	-C opt-level=2 \
+	-C debuginfo=1 \
+	-C code-model=kernel \
+	-C relocation-model=static \
+	-C no-redzone=yes \
+	-C force-frame-pointers=yes \
+	-C overflow-checks=off \
+	-C force-unwind-tables=no \
+	-C no-vectorize-loops \
+	-C no-vectorize-slp \
+	--emit=obj="${tmpdir}/out/smp_driver_helpers.o" \
+	ihk/linux/driver/smp/rust/smp_driver_helpers.rs
+
+rustc --crate-name mcexec_helpers \
+	--crate-type lib \
+	--edition=2021 \
+	-C panic=abort \
+	-C opt-level=2 \
+	-C debuginfo=1 \
+	-C force-unwind-tables=no \
+	--emit=obj="${tmpdir}/out/mcexec_helpers.o" \
+	executer/user/rust/mcexec_helpers.rs
+
+check_module_rust_object()
+{
+	local obj="$1"
+
+	if nm -u "${obj}" | grep -q .; then
+		echo "unexpected undefined symbols in ${obj}" >&2
+		nm -u "${obj}" >&2
+		exit 1
+	fi
+
+	if readelf -r "${obj}" | grep -q 'R_X86_64_GOTPCREL'; then
+		echo "unsupported x86_64 kernel-module relocation in ${obj}" >&2
+		readelf -r "${obj}" | grep 'R_X86_64_GOTPCREL' >&2
+		exit 1
+	fi
+}
+
+check_module_rust_object "${tmpdir}/out/ihk_core_helpers.o"
+check_module_rust_object "${tmpdir}/out/mcctrl_helpers.o"
+check_module_rust_object "${tmpdir}/out/smp_driver_helpers.o"
+
 cc "${tmpdir}/rbtree_equiv.c" "${tmpdir}/out/rbtree_c.o" -o "${tmpdir}/out/rbtree_c"
 cc -Wl,--gc-sections "${tmpdir}/rbtree_equiv.c" \
 	"${tmpdir}/out/mckernel_rust.o" -o "${tmpdir}/out/rbtree_rust"
@@ -5265,7 +6466,8 @@ cc -Wl,--gc-sections "${tmpdir}/shmid_helpers_equiv.c" \
 	-o "${tmpdir}/out/shmid_helpers_rust"
 cc -Wl,--gc-sections -Wl,--unresolved-symbols=ignore-all \
 	-Wl,--noinhibit-exec "${tmpdir}/sched_helpers_equiv.c" \
-	"${tmpdir}/out/syscall_shmid_c.o" -o "${tmpdir}/out/sched_helpers_c"
+	"${tmpdir}/out/syscall_shmid_c.o" "${tmpdir}/out/sched_runtime_c.o" \
+	-o "${tmpdir}/out/sched_helpers_c"
 cc -Wl,--gc-sections "${tmpdir}/sched_helpers_equiv.c" \
 	"${tmpdir}/rust_stubs.c" "${tmpdir}/out/mckernel_rust.o" \
 	-o "${tmpdir}/out/sched_helpers_rust"
@@ -5342,6 +6544,12 @@ cc "${kflags[@]}" -I"${tmpdir}" -I. -ffunction-sections -fdata-sections \
 	-DMCKERNEL_RUST_PAGEALLOC_BITMAP -DMCKERNEL_RUST_PAGE_ALLOC_RBTREE \
 	"${tmpdir}/page_alloc_bitmap_equiv.c" "${tmpdir}/out/mckernel_rust.o" \
 	-Wl,--gc-sections -o "${tmpdir}/out/page_alloc_bitmap_rust"
+cc -Wl,--gc-sections kernel/rust/tests/ihk_module_helpers_smoke.c \
+	"${tmpdir}/out/ihk_core_helpers.o" "${tmpdir}/out/mcctrl_helpers.o" \
+	"${tmpdir}/out/smp_driver_helpers.o" \
+	-o "${tmpdir}/out/ihk_module_helpers_smoke"
+cc -Wl,--gc-sections "${tmpdir}/mcexec_helpers_smoke.c" \
+	"${tmpdir}/out/mcexec_helpers.o" -o "${tmpdir}/out/mcexec_helpers_smoke"
 
 "${tmpdir}/out/rbtree_c" > "${tmpdir}/out/rbtree_c.out"
 "${tmpdir}/out/rbtree_rust" > "${tmpdir}/out/rbtree_rust.out"
@@ -5391,6 +6599,8 @@ cc "${kflags[@]}" -I"${tmpdir}" -I. -ffunction-sections -fdata-sections \
 	cat "${tmpdir}/out/page_alloc_bitmap_rust.out"
 	exit 1
 }
+"${tmpdir}/out/ihk_module_helpers_smoke" > "${tmpdir}/out/ihk_module_helpers_smoke.out"
+"${tmpdir}/out/mcexec_helpers_smoke" > "${tmpdir}/out/mcexec_helpers_smoke.out"
 
 diff -u "${tmpdir}/out/rbtree_c.out" "${tmpdir}/out/rbtree_rust.out"
 diff -u "${tmpdir}/out/llist_c.out" "${tmpdir}/out/llist_rust.out"
@@ -5415,6 +6625,7 @@ diff -u "${tmpdir}/out/page_alloc_c.out" "${tmpdir}/out/page_alloc_rust.out"
 diff -u "${tmpdir}/out/page_alloc_bitmap_c.out" "${tmpdir}/out/page_alloc_bitmap_rust.out"
 
 nm -u "${tmpdir}/out/mckernel_rust.o" | tee "${tmpdir}/out/rust.undefined"
+grep -Eq 'U default_wake_function' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_chk_page_address' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_get_kargs' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_get_memory_chunk' "${tmpdir}/out/rust.undefined"
@@ -5423,7 +6634,7 @@ grep -Eq 'U phys_to_virt' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U shmid_index' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U virt_to_phys' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U zero_at_free' "${tmpdir}/out/rust.undefined"
-test "$(grep -c ' U ' "${tmpdir}/out/rust.undefined")" -eq 8
+test "$(grep -c ' U ' "${tmpdir}/out/rust.undefined")" -eq 9
 
 simd_count="$(objdump -d "${tmpdir}/out/mckernel_rust.o" |
 	grep -Eic 'xmm|ymm|mmx|movdqa|movdqu|movups|pshuf|padd|pand|pxor|popcnt' || true)"
@@ -5450,4 +6661,6 @@ cat "${tmpdir}/out/bitmap_c.out"
 cat "${tmpdir}/out/bitmap_parse_c.out"
 cat "${tmpdir}/out/page_alloc_c.out"
 cat "${tmpdir}/out/page_alloc_bitmap_c.out"
+cat "${tmpdir}/out/ihk_module_helpers_smoke.out"
+cat "${tmpdir}/out/mcexec_helpers_smoke.out"
 echo "rust object unresolved symbols and SIMD checks ok"

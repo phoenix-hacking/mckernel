@@ -29,6 +29,7 @@
 #include <uti.h>
 
 #include <futex.h>
+#include <mcctrl_rust.h>
 #include <mc_jhash.h>
 #include <arch-futex.h>
 
@@ -1064,11 +1065,11 @@ static int futex(uint32_t *uaddr, int op, uint32_t val, uint64_t timeout,
 		struct uti_info *uti_info)
 {
 	int clockrt, ret = -ENOSYS;
-	int cmd = op & FUTEX_CMD_MASK;
+	int cmd = mcctrl_futex_cmd(op);
 
 
-	clockrt = op & FUTEX_CLOCK_REALTIME;
-	if (clockrt && cmd != FUTEX_WAIT_BITSET && cmd != FUTEX_WAIT_REQUEUE_PI)
+	clockrt = mcctrl_futex_clock_realtime(op);
+	if (clockrt && !mcctrl_futex_realtime_cmd_valid(cmd))
 		return -ENOSYS;
 
 	switch (cmd) {
@@ -1149,23 +1150,17 @@ long do_futex(int n, unsigned long arg0, unsigned long arg1,
 	uti_info->uti_futex_resp = uti_futex_resp;
 
 	/* Cross-address space futex? */
-	if (op & FUTEX_PRIVATE_FLAG) {
+	if (mcctrl_futex_is_private(op)) {
 		fshared = 0;
 	}
-	op = (op & FUTEX_CMD_MASK);
+	op = mcctrl_futex_cmd(op);
 
 	dprintk("futex op=[%x, %s],uaddr=%lx, val=%x, utime=%p, uaddr2=%p, val3=%x, shared: %d\n",
 			flags,
-			(op == FUTEX_WAIT) ? "FUTEX_WAIT" :
-			(op == FUTEX_WAIT_BITSET) ? "FUTEX_WAIT_BITSET" :
-			(op == FUTEX_WAKE) ? "FUTEX_WAKE" :
-			(op == FUTEX_WAKE_OP) ? "FUTEX_WAKE_OP" :
-			(op == FUTEX_WAKE_BITSET) ? "FUTEX_WAKE_BITSET" :
-			(op == FUTEX_CMP_REQUEUE) ? "FUTEX_CMP_REQUEUE" :
-			(op == FUTEX_REQUEUE) ? "FUTEX_REQUEUE (NOT IMPL!)" : "unknown",
+			mcctrl_futex_op_label(op),
 			(unsigned long)uaddr, val, utime, uaddr2, val3, fshared);
 
-	if (utime && (op == FUTEX_WAIT_BITSET || op == FUTEX_WAIT)) {
+	if (utime && mcctrl_futex_wait_uses_timeout(op)) {
 		if (copy_from_user(&ts, utime, sizeof(ts)) != 0) {
 			return -EFAULT;
 		}
@@ -1195,7 +1190,7 @@ long do_futex(int n, unsigned long arg0, unsigned long arg1,
 
 	/* Requeue parameter in 'utime' if op == FUTEX_CMP_REQUEUE.
 	 * number of waiters to wake in 'utime' if op == FUTEX_WAKE_OP. */
-	if (op == FUTEX_CMP_REQUEUE || op == FUTEX_WAKE_OP) {
+	if (mcctrl_futex_arg3_is_val2(op)) {
 		val2 = (uint32_t) (unsigned long) arg3;
 	}
 
@@ -1204,13 +1199,7 @@ long do_futex(int n, unsigned long arg0, unsigned long arg1,
 
 	dprintk("futex op=[%x, %s],uaddr=%lx, val=%x, utime=%p, uaddr2=%p, val3=%x, shared: %d, ret: %d\n",
 			op,
-			(op == FUTEX_WAIT) ? "FUTEX_WAIT" :
-			(op == FUTEX_WAIT_BITSET) ? "FUTEX_WAIT_BITSET" :
-			(op == FUTEX_WAKE) ? "FUTEX_WAKE" :
-			(op == FUTEX_WAKE_OP) ? "FUTEX_WAKE_OP" :
-			(op == FUTEX_WAKE_BITSET) ? "FUTEX_WAKE_BITSET" :
-			(op == FUTEX_CMP_REQUEUE) ? "FUTEX_CMP_REQUEUE" :
-			(op == FUTEX_REQUEUE) ? "FUTEX_REQUEUE (NOT IMPL!)" : "unknown",
+			mcctrl_futex_op_label(op),
 			(unsigned long)uaddr, val, utime, uaddr2, val3, fshared, ret);
 
 	return ret;

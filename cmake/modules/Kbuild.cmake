@@ -40,13 +40,14 @@ endif()
 string(REPLACE ";" " " KBUILD_MAKE_FLAGS_STR "${KBUILD_MAKE_FLAGS}")
 
 function(kmod MODULE_NAME)
-	cmake_parse_arguments(KMOD "" "INSTALL_DEST" "C_FLAGS;SOURCES;EXTRA_SYMBOLS;DEPENDS" ${ARGN})
+	cmake_parse_arguments(KMOD "" "INSTALL_DEST" "C_FLAGS;SOURCES;EXTRA_SYMBOLS;DEPENDS;PREBUILT_OBJECTS" ${ARGN})
 
 	add_custom_target(${MODULE_NAME}_ko ALL
 		DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/${MODULE_NAME}.ko"
 			"${CMAKE_CURRENT_BINARY_DIR}/Module.symvers")
 
-	string(REGEX REPLACE "\\.c(;|$)" ".o\\1" KMOD_OBJECTS "${KMOD_SOURCES}")
+	string(REGEX REPLACE "\\.c(;|$)" ".o\\1" KMOD_C_OBJECTS "${KMOD_SOURCES}")
+	set(KMOD_OBJECTS ${KMOD_C_OBJECTS} ${KMOD_PREBUILT_OBJECTS})
 	string(REPLACE ";" " " OBJECTS "${KMOD_OBJECTS}")
 	string(REPLACE ";" " " C_FLAGS "${KMOD_C_FLAGS}")
 	string(REPLACE ";" " " EXTRA_SYMBOLS "${KMOD_EXTRA_SYMBOLS}")
@@ -72,7 +73,7 @@ endif(ENABLE_WERROR)
 	add_custom_command(
 		OUTPUT
 			old_timestamp
-			${KMOD_OBJECTS}
+			${KMOD_C_OBJECTS}
 			${KMOD_O_CMD}
 			"${MODULE_NAME}.o"
 			".${MODULE_NAME}.o.cmd"

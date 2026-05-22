@@ -103,7 +103,7 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
 endif()
 
 set(MCKERNEL_SRCS
-	init.c mem.c debug.c mikc.c listeners.c ap.c syscall.c cls.c host.c process.c process_helpers.c
+	init.c mem.c debug.c mikc.c listeners.c ap.c syscall.c cls.c host.c process.c process_helpers.c sched_helpers.c
 	copy.c waitq.c futex.c timer.c plist.c object_helpers.c fileobj.c shmobj.c zeroobj.c
 	procfs.c devobj.c sysfs.c xpmem.c profile.c freeze.c pager.c
 	gencore.c hugefileobj.c
@@ -154,6 +154,8 @@ if (RUST_KERNEL_ENABLED)
 		PROPERTIES COMPILE_DEFINITIONS MCKERNEL_RUST_PROCESS_HELPERS)
 	set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/process_helpers.c"
 		PROPERTIES COMPILE_DEFINITIONS MCKERNEL_RUST_PROCESS_HELPERS)
+	set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/sched_helpers.c"
+		PROPERTIES COMPILE_DEFINITIONS MCKERNEL_RUST_SCHED_RUNTIME_HELPERS)
 	set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/object_helpers.c"
 		PROPERTIES COMPILE_DEFINITIONS MCKERNEL_RUST_OBJECT_HELPERS)
 	set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/fileobj.c"

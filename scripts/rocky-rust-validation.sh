@@ -15,6 +15,8 @@ Options:
   --build-only          Configure/build only; skip install.
   --skip-deps           Do not install OS packages.
   --skip-rust           Do not install or switch Rust nightly.
+  --skip-ihk-patch      Do not apply the local IHK compatibility patch.
+  --module-load-smoke   After build, load/unload Rust-linked IHK modules.
   --boot-only           After install, boot McKernel and check kmsg; skip workloads.
   --boot-smoke          After install, boot McKernel and run mcexec smoke tests.
   --yes                 Allow boot validation without an interactive confirmation.
@@ -53,9 +55,11 @@ KMSG_TAIL_LINES="${KMSG_TAIL_LINES:-40}"
 V10_TAIL_LINES="${V10_TAIL_LINES:-30}"
 INSTALL_DEPS=1
 INSTALL_RUST=1
+APPLY_IHK_PATCH=1
 DO_INSTALL=1
 BOOT_ONLY=0
 BOOT_SMOKE=0
+MODULE_LOAD_SMOKE=0
 ASSUME_YES=0
 
 while [ "$#" -gt 0 ]; do
@@ -70,6 +74,14 @@ while [ "$#" -gt 0 ]; do
 			;;
 		--skip-rust)
 			INSTALL_RUST=0
+			shift
+			;;
+		--skip-ihk-patch)
+			APPLY_IHK_PATCH=0
+			shift
+			;;
+		--module-load-smoke)
+			MODULE_LOAD_SMOKE=1
 			shift
 			;;
 		--boot-only)
@@ -252,7 +264,9 @@ update_submodules() {
 	fi
 
 	local ihk_patch="$ROOT_DIR/scripts/patches/ihk-linux-compat.patch"
-	if [ -f "$ihk_patch" ]; then
+	if [ "$APPLY_IHK_PATCH" -eq 0 ]; then
+		echo "Skipping local IHK compatibility patch by request."
+	elif [ -f "$ihk_patch" ]; then
 		say "Applying local IHK compatibility patch"
 		if git -C "$ROOT_DIR/ihk" apply --check "$ihk_patch" >/dev/null 2>&1; then
 			git -C "$ROOT_DIR/ihk" apply "$ihk_patch"
@@ -288,6 +302,37 @@ configure_and_build() {
 install_artifacts() {
 	say "Installing into $PREFIX"
 	sudo cmake --install "$BUILD_DIR"
+}
+
+confirm_module_load_smoke() {
+	cat <<EOF
+
+About to load and unload Rust-linked IHK host modules from the build tree:
+  ihk.ko, ihk-smp-x86_64.ko, mcctrl.ko
+
+This does not boot McKernel or reserve CPUs/memory, but it does execute kernel
+module init/exit paths. Make sure no McKernel OS instance is running and no IHK
+modules are already loaded.
+
+EOF
+	if [ "$ASSUME_YES" -eq 1 ]; then
+		return
+	fi
+
+	cat <<EOF
+Type 'yes' to continue:
+EOF
+	read -r answer
+	if [ "$answer" != "yes" ]; then
+		echo "Skipping module-load smoke test."
+		exit 0
+	fi
+}
+
+module_load_smoke() {
+	confirm_module_load_smoke
+	say "Running IHK module-load smoke"
+	"$ROOT_DIR/scripts/ihk-module-load-smoke.sh" --build-dir "$BUILD_DIR"
 }
 
 ensure_selinux_permissive_for_boot() {
@@ -612,6 +657,10 @@ fi
 update_submodules
 configure_and_build
 
+if [ "$MODULE_LOAD_SMOKE" -eq 1 ]; then
+	module_load_smoke
+fi
+
 if [ "$DO_INSTALL" -eq 1 ]; then
 	install_artifacts
 fi
@@ -621,5 +670,6 @@ if [ "$BOOT_SMOKE" -eq 1 ]; then
 else
 	say "Build validation complete"
 	echo "Install prefix: $PREFIX"
+	echo "Run with --module-load-smoke --yes to load/unload Rust-linked IHK modules from the build tree."
 	echo "Run with --boot-smoke --yes after taking a VM snapshot to boot and run mcexec smoke tests."
 fi

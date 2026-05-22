@@ -1,6 +1,7 @@
 use core::ffi::c_void;
+use core::ptr::copy_nonoverlapping;
 
-use crate::abi::{CInt, CULong};
+use crate::abi::{AbiListHead, CInt, CULong};
 
 const EINVAL: CInt = 22;
 const EACCES: CInt = 13;
@@ -12,6 +13,20 @@ const PAGE_SIZE: CULong = 4096;
 
 const VERIFY_READ: CInt = 0;
 const VERIFY_WRITE: CInt = 1;
+
+const PS_EXITED: CInt = 0x10;
+const PT_TRACE_SYSCALL: CInt = 0x200;
+const PTRACE_RESUME_SIGNAL_SOURCE_SENDSIG: CInt = 1;
+const PTRACE_RESUME_SIGNAL_SOURCE_RECVSIG: CInt = 2;
+const UTI_STATE_EPILOGUE: CInt = 3;
+const PROCESS_TID_ACTION_NONE: CInt = 0;
+const PROCESS_TID_ACTION_RELEASE: CInt = 1;
+const PROCESS_TID_ACTION_REPLACE: CInt = 2;
+const CLONE_VM: CInt = 0x0000_0100;
+const CLONE_SIGHAND: CInt = 0x0000_0800;
+const WNOWAIT: CInt = 0x0100_0000;
+const LIST_POISON1: usize = 0x0010_0129;
+const LIST_POISON2: usize = 0x0020_0229;
 
 const VR_IO_NOCACHE: CULong = 0x100;
 const VR_REMOTE: CULong = 0x200;
@@ -186,4 +201,683 @@ pub extern "C" fn process_access_permission_result(verify_type: CInt, flags: CUL
     } else {
         0
     }
+}
+
+#[no_mangle]
+pub extern "C" fn process_ref_release_should_destroy_result(dec_and_test: CInt) -> CInt {
+    (dec_and_test != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn process_release_address_space_should_destroy_result(dec_and_test: CInt) -> CInt {
+    (dec_and_test != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn process_release_address_space_should_run_free_cb_result(
+    free_cb_addr: CULong,
+) -> CInt {
+    (free_cb_addr != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn process_create_cpu_allowed_result(cpu: CInt, num_processors: CInt) -> CInt {
+    (cpu >= 0 && cpu < num_processors) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn process_create_use_default_cpu_set_result(cpu_set_empty: CInt) -> CInt {
+    (cpu_set_empty != 0) as CInt
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_address_space_pid_detach_result(
+    pids: *mut CInt,
+    nslots: CInt,
+    pid: CInt,
+) -> CInt {
+    if pids.is_null() || nslots <= 0 {
+        return -1;
+    }
+
+    let mut i = 0;
+    while i < nslots {
+        let slot = pids.add(i as usize);
+        if *slot == pid {
+            *slot = 0;
+            return i;
+        }
+        i += 1;
+    }
+
+    -1
+}
+
+#[no_mangle]
+pub extern "C" fn process_clone_shares_vm_result(clone_flags: CInt) -> CInt {
+    ((clone_flags & CLONE_VM) != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn process_clone_shares_sighand_result(clone_flags: CInt) -> CInt {
+    ((clone_flags & CLONE_SIGHAND) != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn process_mckfd_should_dup_result(dup_cb_addr: CULong) -> CInt {
+    (dup_cb_addr != 0) as CInt
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_clone_copy_vm_thread_state_result(
+    dst_vm: *mut c_void,
+    src_vm: *const c_void,
+    vdso_offset: CULong,
+    vvar_offset: CULong,
+    dst_thread: *mut c_void,
+    src_thread: *const c_void,
+    sigstack_offset: CULong,
+    sigstack_size: usize,
+) -> CInt {
+    if dst_vm.is_null() || src_vm.is_null() || dst_thread.is_null() || src_thread.is_null() {
+        return 0;
+    }
+
+    let dvm = dst_vm.cast::<u8>();
+    let svm = src_vm.cast::<u8>();
+    let dthread = dst_thread.cast::<u8>();
+    let sthread = src_thread.cast::<u8>();
+
+    *(dvm.add(vdso_offset as usize).cast::<*mut c_void>()) =
+        *(svm.add(vdso_offset as usize).cast::<*mut c_void>());
+    *(dvm.add(vvar_offset as usize).cast::<*mut c_void>()) =
+        *(svm.add(vvar_offset as usize).cast::<*mut c_void>());
+    copy_nonoverlapping(
+        sthread.add(sigstack_offset as usize),
+        dthread.add(sigstack_offset as usize),
+        sigstack_size,
+    );
+
+    1
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_tid_index_for_thread_result(
+    tids: *const c_void,
+    nr_tids: CInt,
+    entry_stride: CULong,
+    thread_offset: CULong,
+    thread_addr: CULong,
+) -> CInt {
+    if tids.is_null() || nr_tids <= 0 || entry_stride == 0 || thread_addr == 0 {
+        return -1;
+    }
+
+    let base = tids.cast::<u8>();
+    let stride = entry_stride as usize;
+    let offset = thread_offset as usize;
+
+    for index in 0..(nr_tids as usize) {
+        let entry = base.add(index.saturating_mul(stride).saturating_add(offset));
+        let stored = *(entry.cast::<CULong>());
+        if stored == thread_addr {
+            return index as CInt;
+        }
+    }
+
+    -1
+}
+
+#[no_mangle]
+pub extern "C" fn process_tid_index_found_result(index: CInt) -> CInt {
+    (index >= 0) as CInt
+}
+
+fn checked_entry_addr(
+    base: *mut c_void,
+    index: CInt,
+    entry_stride: CULong,
+    member_offset: CULong,
+) -> Option<*mut u8> {
+    if base.is_null() || index < 0 || entry_stride == 0 {
+        return None;
+    }
+
+    let offset = (index as usize)
+        .checked_mul(entry_stride as usize)?
+        .checked_add(member_offset as usize)?;
+    Some(base.cast::<u8>().wrapping_add(offset))
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_tid_release_slot_result(
+    tids: *mut c_void,
+    index: CInt,
+    entry_stride: CULong,
+    thread_offset: CULong,
+) -> CInt {
+    let Some(thread_slot) = checked_entry_addr(tids, index, entry_stride, thread_offset) else {
+        return 0;
+    };
+
+    *(thread_slot.cast::<CULong>()) = 0;
+    1
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_tid_replace_slot_result(
+    tids: *mut c_void,
+    index: CInt,
+    entry_stride: CULong,
+    tid_offset: CULong,
+    thread_offset: CULong,
+    new_tid: CInt,
+) -> CInt {
+    let Some(tid_slot) = checked_entry_addr(tids, index, entry_stride, tid_offset) else {
+        return 0;
+    };
+    let Some(thread_slot) = checked_entry_addr(tids, index, entry_stride, thread_offset) else {
+        return 0;
+    };
+
+    *(thread_slot.cast::<CULong>()) = 0;
+    *(tid_slot.cast::<CInt>()) = new_tid;
+    1
+}
+
+#[no_mangle]
+pub extern "C" fn process_sigpending_cleanup_needed_result(list_empty: CInt) -> CInt {
+    (list_empty == 0) as CInt
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_sigpending_pop_front_result(
+    head: *mut AbiListHead,
+    list_offset: CULong,
+) -> *mut c_void {
+    if head.is_null() {
+        return core::ptr::null_mut();
+    }
+
+    let first = (*head).next;
+    if first.is_null() || first == head {
+        return core::ptr::null_mut();
+    }
+
+    let next = (*first).next;
+    (*head).next = next;
+    if !next.is_null() {
+        (*next).prev = head;
+    }
+    (*first).next = LIST_POISON1 as *mut AbiListHead;
+    (*first).prev = LIST_POISON2 as *mut AbiListHead;
+
+    first.cast::<u8>().wrapping_sub(list_offset as usize).cast()
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_list_is_linked_result(entry: *const AbiListHead) -> CInt {
+    if entry.is_null() {
+        return 0;
+    }
+
+    let next = (*entry).next;
+    (!next.is_null() && next != entry.cast_mut()) as CInt
+}
+
+unsafe fn list_detach(entry: *mut AbiListHead) -> bool {
+    if entry.is_null() {
+        return false;
+    }
+
+    let prev = (*entry).prev;
+    let next = (*entry).next;
+    if prev.is_null() || next.is_null() || next == entry {
+        return false;
+    }
+
+    (*next).prev = prev;
+    (*prev).next = next;
+    (*entry).next = LIST_POISON1 as *mut AbiListHead;
+    (*entry).prev = LIST_POISON2 as *mut AbiListHead;
+    true
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_list_detach_result(entry: *mut AbiListHead) {
+    let _ = list_detach(entry);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_list_detach_counted_result(
+    entry: *mut AbiListHead,
+    lenp: *mut CULong,
+) -> CInt {
+    if lenp.is_null() || !list_detach(entry) {
+        return 0;
+    }
+
+    *lenp = (*lenp).wrapping_sub(1);
+    1
+}
+
+unsafe fn list_add_tail(entry: *mut AbiListHead, head: *mut AbiListHead) -> bool {
+    if entry.is_null() || head.is_null() {
+        return false;
+    }
+
+    let prev = (*head).prev;
+    if prev.is_null() {
+        return false;
+    }
+
+    (*entry).next = head;
+    (*entry).prev = prev;
+    (*prev).next = entry;
+    (*head).prev = entry;
+    true
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_list_add_tail_result(
+    entry: *mut AbiListHead,
+    head: *mut AbiListHead,
+) {
+    let _ = list_add_tail(entry, head);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_list_add_tail_counted_result(
+    entry: *mut AbiListHead,
+    head: *mut AbiListHead,
+    lenp: *mut CULong,
+) -> CInt {
+    if lenp.is_null() || !list_add_tail(entry, head) {
+        return 0;
+    }
+
+    *lenp = (*lenp).wrapping_add(1);
+    1
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_list_move_tail_result(
+    entry: *mut AbiListHead,
+    head: *mut AbiListHead,
+) -> CInt {
+    if entry.is_null() || head.is_null() {
+        return 0;
+    }
+    if !list_detach(entry) {
+        return 0;
+    }
+    list_add_tail(entry, head) as CInt
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_list_del_init_result(entry: *mut AbiListHead) -> CInt {
+    if entry.is_null() {
+        return 0;
+    }
+
+    let prev = (*entry).prev;
+    let next = (*entry).next;
+    if prev.is_null() || next.is_null() {
+        return 0;
+    }
+
+    if next != entry {
+        (*next).prev = prev;
+        (*prev).next = next;
+    }
+    (*entry).next = entry;
+    (*entry).prev = entry;
+    1
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_child_reparent_result(
+    child: *mut c_void,
+    ppid_parent_offset: CULong,
+    parent_offset: CULong,
+    new_parent: *mut c_void,
+    entry: *mut AbiListHead,
+    head: *mut AbiListHead,
+    update_parent: CInt,
+) -> CInt {
+    if child.is_null() || new_parent.is_null() || entry.is_null() || head.is_null() {
+        return 0;
+    }
+
+    let base = child.cast::<u8>();
+    *(base
+        .wrapping_add(ppid_parent_offset as usize)
+        .cast::<*mut c_void>()) = new_parent;
+    if update_parent != 0 {
+        *(base
+            .wrapping_add(parent_offset as usize)
+            .cast::<*mut c_void>()) = new_parent;
+    }
+
+    process_list_move_tail_result(entry, head)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_thread_report_attach_result(
+    thread: *mut c_void,
+    termsig_offset: CULong,
+    update_termsig: CInt,
+    termsig: CInt,
+    report_proc_offset: CULong,
+    report_proc: *mut c_void,
+    entry: *mut AbiListHead,
+    head: *mut AbiListHead,
+) -> CInt {
+    if thread.is_null() || report_proc.is_null() || entry.is_null() || head.is_null() {
+        return 0;
+    }
+
+    let base = thread.cast::<u8>();
+    if update_termsig != 0 {
+        *(base.wrapping_add(termsig_offset as usize).cast::<CInt>()) = termsig;
+    }
+    *(base
+        .wrapping_add(report_proc_offset as usize)
+        .cast::<*mut c_void>()) = report_proc;
+
+    list_add_tail(entry, head) as CInt
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_thread_report_detach_result(
+    thread: *mut c_void,
+    report_proc_offset: CULong,
+    report_proc: *mut c_void,
+    entry: *mut AbiListHead,
+) -> CInt {
+    if thread.is_null() || entry.is_null() {
+        return 0;
+    }
+
+    *(thread
+        .cast::<u8>()
+        .wrapping_add(report_proc_offset as usize)
+        .cast::<*mut c_void>()) = report_proc;
+    list_detach(entry) as CInt
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_ptrace_main_detach_reparent_result(
+    process: *mut c_void,
+    parent_offset: CULong,
+    parent: *mut c_void,
+    ptraced_entry: *mut AbiListHead,
+    sibling_entry: *mut AbiListHead,
+    children_head: *mut AbiListHead,
+) -> CInt {
+    if process.is_null()
+        || parent.is_null()
+        || ptraced_entry.is_null()
+        || sibling_entry.is_null()
+        || children_head.is_null()
+    {
+        return 0;
+    }
+    let _ = list_detach(ptraced_entry);
+    if !list_add_tail(sibling_entry, children_head) {
+        return 0;
+    }
+
+    *(process
+        .cast::<u8>()
+        .wrapping_add(parent_offset as usize)
+        .cast::<*mut c_void>()) = parent;
+    1
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_ptrace_main_attach_reparent_result(
+    process: *mut c_void,
+    parent_offset: CULong,
+    parent: *mut c_void,
+    sibling_entry: *mut AbiListHead,
+    children_head: *mut AbiListHead,
+) -> CInt {
+    if process.is_null() || parent.is_null() || sibling_entry.is_null() || children_head.is_null() {
+        return 0;
+    }
+    if !list_add_tail(sibling_entry, children_head) {
+        return 0;
+    }
+
+    *(process
+        .cast::<u8>()
+        .wrapping_add(parent_offset as usize)
+        .cast::<*mut c_void>()) = parent;
+    1
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_thread_termsig_clear_result(
+    thread: *mut c_void,
+    termsig_offset: CULong,
+    clear_termsig: CInt,
+) -> CInt {
+    if thread.is_null() || clear_termsig == 0 {
+        return 0;
+    }
+
+    *(thread
+        .cast::<u8>()
+        .wrapping_add(termsig_offset as usize)
+        .cast::<CInt>()) = 0;
+    1
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_thread_ptrace_cleanup_result(
+    thread: *mut c_void,
+    ptrace_offset: CULong,
+    saved_valid_offset: CULong,
+    debugreg_offset: CULong,
+) -> *mut c_void {
+    if thread.is_null() {
+        return core::ptr::null_mut();
+    }
+
+    let base = thread.cast::<u8>();
+    let debugreg_slot = base
+        .wrapping_add(debugreg_offset as usize)
+        .cast::<*mut c_void>();
+    let debugreg = *debugreg_slot;
+    *(base.wrapping_add(ptrace_offset as usize).cast::<CInt>()) = 0;
+    *(base
+        .wrapping_add(saved_valid_offset as usize)
+        .cast::<CInt>()) = 0;
+    *debugreg_slot = core::ptr::null_mut();
+    debugreg
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_thread_ptrace_saved_context_clear_result(
+    thread: *mut c_void,
+    saved_valid_offset: CULong,
+) -> CInt {
+    if thread.is_null() {
+        return 0;
+    }
+
+    *(thread
+        .cast::<u8>()
+        .wrapping_add(saved_valid_offset as usize)
+        .cast::<CInt>()) = 0;
+    1
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_thread_ptrace_trace_syscall_update_result(
+    thread: *mut c_void,
+    ptrace_offset: CULong,
+    trace_syscall: CInt,
+) -> CInt {
+    if thread.is_null() {
+        return 0;
+    }
+
+    let ptrace = thread
+        .cast::<u8>()
+        .wrapping_add(ptrace_offset as usize)
+        .cast::<CInt>();
+    *ptrace &= !PT_TRACE_SYSCALL;
+    if trace_syscall != 0 {
+        *ptrace |= PT_TRACE_SYSCALL;
+    }
+    *ptrace
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_thread_ptrace_pending_signal_take_result(
+    thread: *mut c_void,
+    sendsig_offset: CULong,
+    recvsig_offset: CULong,
+    source: CInt,
+) -> *mut c_void {
+    if thread.is_null() {
+        return core::ptr::null_mut();
+    }
+
+    let base = thread.cast::<u8>();
+    let slot = if source == PTRACE_RESUME_SIGNAL_SOURCE_SENDSIG {
+        base.wrapping_add(sendsig_offset as usize)
+            .cast::<*mut c_void>()
+    } else if source == PTRACE_RESUME_SIGNAL_SOURCE_RECVSIG {
+        base.wrapping_add(recvsig_offset as usize)
+            .cast::<*mut c_void>()
+    } else {
+        return core::ptr::null_mut();
+    };
+
+    let pending = *slot;
+    *slot = core::ptr::null_mut();
+    pending
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_thread_signal_flags_reap_result(
+    thread: *mut c_void,
+    signal_flags_offset: CULong,
+    options: CInt,
+    clear_mask: CInt,
+) -> CInt {
+    if thread.is_null() {
+        return 0;
+    }
+
+    let signal_flags = thread
+        .cast::<u8>()
+        .wrapping_add(signal_flags_offset as usize)
+        .cast::<CInt>();
+    if (options & WNOWAIT) == 0 {
+        *signal_flags &= !clear_mask;
+    }
+    *signal_flags
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_wait_exit_status_reap_result(
+    object: *mut c_void,
+    exit_status_offset: CULong,
+    options: CInt,
+) -> CInt {
+    if object.is_null() {
+        return 0;
+    }
+
+    let exit_status = object
+        .cast::<u8>()
+        .wrapping_add(exit_status_offset as usize)
+        .cast::<CInt>();
+    if (options & WNOWAIT) == 0 {
+        *exit_status = 0;
+    }
+    *exit_status
+}
+
+#[no_mangle]
+pub extern "C" fn process_optional_ptr_should_free_result(ptr_addr: CULong) -> CInt {
+    (ptr_addr != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn process_hold_thread_warn_exited_result(status: CInt) -> CInt {
+    (status == PS_EXITED) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn process_sigcommon_release_should_destroy_result(dec_and_test: CInt) -> CInt {
+    (dec_and_test != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn process_destroy_thread_tid_action_result(
+    has_tids: CInt,
+    is_main_thread: CInt,
+    uti_state: CInt,
+) -> CInt {
+    if has_tids == 0 {
+        PROCESS_TID_ACTION_NONE
+    } else if uti_state == UTI_STATE_EPILOGUE {
+        PROCESS_TID_ACTION_REPLACE
+    } else if is_main_thread == 0 {
+        PROCESS_TID_ACTION_RELEASE
+    } else {
+        PROCESS_TID_ACTION_NONE
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn process_thread_should_free_pages_result(is_main_thread: CInt) -> CInt {
+    (is_main_thread == 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn process_release_vm_should_run_free_cb_result(free_cb_addr: CULong) -> CInt {
+    (free_cb_addr != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn process_release_mckfd_should_close_result(close_cb_addr: CULong) -> CInt {
+    (close_cb_addr != 0) as CInt
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_mckfd_push_head_result(
+    headp: *mut *mut c_void,
+    entry: *mut c_void,
+) -> CInt {
+    if headp.is_null() || entry.is_null() {
+        return 0;
+    }
+
+    let next_slot = entry.cast::<*mut c_void>();
+    *next_slot = *headp;
+    *headp = entry;
+    1
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_mckfd_pop_head_result(headp: *mut *mut c_void) -> *mut c_void {
+    if headp.is_null() {
+        return core::ptr::null_mut();
+    }
+
+    let current = *headp;
+    if current.is_null() {
+        return core::ptr::null_mut();
+    }
+
+    let next_slot = current.cast::<*mut c_void>();
+    *headp = *next_slot;
+    *next_slot = core::ptr::null_mut();
+    current
 }

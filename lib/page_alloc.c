@@ -36,6 +36,15 @@ void free_pages(void *, int npages);
 	((desc)->start + (((uintptr_t)(index) * 64 + (bit)) << ((desc)->shift)))
 
 #ifdef MCKERNEL_RUST_PAGEALLOC_BITMAP
+int pagealloc_init_layout_result(unsigned long size, unsigned long unit,
+		unsigned long desc_struct_size, int *page_shiftp,
+		int *mapsizep, int *mapalignedp, int *desc_pagesp);
+void pagealloc_reserve_tail_result(unsigned long *map, int first,
+		int limit);
+unsigned long pagealloc_init_end_result(unsigned long start,
+		unsigned long size);
+int pagealloc_init_count_result(int mapaligned);
+int pagealloc_destroy_pages_result(int flag);
 unsigned long __ihk_pagealloc_large_nolock(
 		struct ihk_page_allocator_desc *desc, int npages, int p2align);
 unsigned long __ihk_pagealloc_alloc_nolock(
@@ -52,6 +61,56 @@ int __ihk_pagealloc_query_free_nolock(
 		struct ihk_page_allocator_desc *desc);
 void __ihk_pagealloc_zero_free_pages_nolock(
 		struct ihk_page_allocator_desc *desc);
+#else
+static int pagealloc_init_layout_result(unsigned long size, unsigned long unit,
+		unsigned long desc_struct_size, int *page_shiftp,
+		int *mapsizep, int *mapalignedp, int *desc_pagesp)
+{
+	int page_shift;
+	int mapsize;
+	int mapaligned;
+	int descsize;
+
+	if (!unit)
+		return -EINVAL;
+
+	page_shift = fls(unit) - 1;
+	mapsize = size >> page_shift;
+	mapaligned = ((mapsize + 63) >> 6) << 3;
+	descsize = desc_struct_size + mapaligned;
+	descsize = (descsize + PAGE_SIZE - 1) >> PAGE_SHIFT;
+
+	*page_shiftp = page_shift;
+	*mapsizep = mapsize;
+	*mapalignedp = mapaligned;
+	*desc_pagesp = descsize;
+	return 0;
+}
+
+static void pagealloc_reserve_tail_result(unsigned long *map, int first,
+		int limit)
+{
+	int i;
+
+	for (i = first; i < limit; i++)
+		map[MAP_INDEX(i)] |= (1UL << MAP_BIT(i));
+}
+
+static unsigned long pagealloc_init_end_result(unsigned long start,
+		unsigned long size)
+{
+	return start + size;
+}
+
+static int pagealloc_init_count_result(int mapaligned)
+{
+	return mapaligned >> 3;
+}
+
+static int pagealloc_destroy_pages_result(int flag)
+{
+	return flag;
+}
 #endif
 
 void *__ihk_pagealloc_init(unsigned long start, unsigned long size,
@@ -60,20 +119,14 @@ void *__ihk_pagealloc_init(unsigned long start, unsigned long size,
 {
 	/* Unit must be power of 2, and size and start must be unit-aligned */
 	struct ihk_page_allocator_desc *desc;
-	int i, page_shift, descsize, mapsize, mapaligned;
+	int page_shift, descsize, mapsize, mapaligned;
 	int flag = 0;
 
-	if (!unit) {
+	if (pagealloc_init_layout_result(size, unit, sizeof(*desc),
+				&page_shift, &mapsize, &mapaligned,
+				&descsize)) {
 		return NULL;
 	}
-	page_shift = fls(unit) - 1;
-
-	/* round up to 64-bit */
-	mapsize = (size >> page_shift);
-	mapaligned = ((mapsize + 63) >> 6) << 3;
-	descsize = sizeof(*desc) + mapaligned;
-	
-	descsize = (descsize + PAGE_SIZE - 1) >> PAGE_SHIFT;
 
 	if (initial) {
 		desc = initial;
@@ -91,9 +144,9 @@ void *__ihk_pagealloc_init(unsigned long start, unsigned long size,
 	memset(desc, 0, descsize * PAGE_SIZE);
 
 	desc->start = start;
-	desc->end = start + size;
+	desc->end = pagealloc_init_end_result(start, size);
 	desc->last = 0;
-	desc->count = mapaligned >> 3;
+	desc->count = pagealloc_init_count_result(mapaligned);
 	desc->shift = page_shift;
 	desc->flag = flag;
 
@@ -103,9 +156,7 @@ void *__ihk_pagealloc_init(unsigned long start, unsigned long size,
 	mcs_lock_init(&desc->lock);
 
 	/* Reserve align padding area */
-	for (i = mapsize; i < mapaligned * 8; i++) {
-		desc->map[MAP_INDEX(i)] |= (1UL << MAP_BIT(i));
-	}
+	pagealloc_reserve_tail_result(desc->map, mapsize, mapaligned * 8);
 
 	return desc;
 }
@@ -120,7 +171,7 @@ void ihk_pagealloc_destroy(void *__desc)
 {
 	struct ihk_page_allocator_desc *desc = __desc;
 
-	ihk_mc_free_pages(desc, desc->flag);
+	ihk_mc_free_pages(desc, pagealloc_destroy_pages_result(desc->flag));
 }
 
 static unsigned long __ihk_pagealloc_large(struct ihk_page_allocator_desc *desc,

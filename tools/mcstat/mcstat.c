@@ -30,7 +30,16 @@
 extern unsigned long mcstat_memory_scale_result(unsigned long max_usage);
 extern const char *mcstat_memory_unit_result(unsigned long max_usage);
 extern unsigned char mcstat_update_counter_result(unsigned char counter);
+extern int mcstat_parse_i32_result(const char *arg);
+extern int mcstat_mcos_path_result(char *path, int index);
+extern unsigned long mcstat_memory_total_result(const unsigned long *values,
+		int count);
+extern unsigned long mcstat_memory_current_result(unsigned long kmem_usage,
+		const unsigned long *numa_values, int count);
+extern unsigned long mcstat_memory_max_result(unsigned long kmem_max_usage,
+		unsigned long user_max_usage);
 extern const char *mcstat_monstatus_result(int status);
+extern const char *mcstat_os_status_result(int status);
 #else
 static unsigned long mcstat_memory_scale_result(unsigned long max_usage)
 {
@@ -45,6 +54,11 @@ static const char *mcstat_memory_unit_result(unsigned long max_usage)
 static unsigned char mcstat_update_counter_result(unsigned char counter)
 {
 	return (counter + 1) % 10;
+}
+
+static int mcstat_parse_i32_result(const char *arg)
+{
+	return atoi(arg);
 }
 #endif
 
@@ -101,10 +115,10 @@ main(int argc, char **argv)
 	    }
 	}
     }
-    if (optind < argc) { /* interval */
-	delay = atoi(argv[optind]);
+	if (optind < argc) { /* interval */
+	delay = mcstat_parse_i32_result(argv[optind]);
 	if (optind + 1 < argc) { /* count */
-	    count = atoi(argv[optind+1]);
+	    count = mcstat_parse_i32_result(argv[optind+1]);
 	} else {
 	    count = -1; /* inifi */
 	}
@@ -131,7 +145,11 @@ devopen(int idx)
     int		fd;
     char	fn[128];
 
+#ifdef MCSTAT_RUST_HELPERS
+    mcstat_mcos_path_result(fn, idx);
+#else
     snprintf(fn, 128, "/dev/mcos%d", idx);
+#endif
     fd = open(fn, O_RDONLY);
     return fd;
 }
@@ -153,7 +171,9 @@ mygetrusage(int idx, struct my_rusage *rbp)
 {
 	int rc;
 	int num_numa_nodes;
+#ifndef MCSTAT_RUST_HELPERS
 	int i;
+#endif
 	unsigned long *memtotal = NULL;
 
 	rc = ihk_os_getrusage(idx, &rbp->rusage,
@@ -189,22 +209,39 @@ mygetrusage(int idx, struct my_rusage *rbp)
 		goto out;
 	}
 
+#ifdef MCSTAT_RUST_HELPERS
+	rbp->memory_total =
+		mcstat_memory_total_result(memtotal, num_numa_nodes);
+#else
 	rbp->memory_total = 0;
 	for (i = 0; i < num_numa_nodes; i++) {
 		rbp->memory_total += memtotal[i];
 	}
+#endif
 
 	/* Calculate current by taking a sum over NUMA nodes */
 
+#ifdef MCSTAT_RUST_HELPERS
+	rbp->memory_cur_usage =
+		mcstat_memory_current_result(rbp->rusage.memory_kmem_usage,
+				rbp->rusage.memory_numa_stat, num_numa_nodes);
+#else
 	rbp->memory_cur_usage = rbp->rusage.memory_kmem_usage;
 	for (i = 0; i < num_numa_nodes; i++) {
 		rbp->memory_cur_usage += rbp->rusage.memory_numa_stat[i];
 	}
+#endif
 
 	/* Calculate max by taking a sum of kernel and user */
 
+#ifdef MCSTAT_RUST_HELPERS
+	rbp->memory_max_usage =
+		mcstat_memory_max_result(rbp->rusage.memory_kmem_max_usage,
+				rbp->rusage.memory_max_usage);
+#else
 	rbp->memory_max_usage = rbp->rusage.memory_kmem_max_usage +
 		rbp->rusage.memory_max_usage;
+#endif
 
 	rc = 0;
 out:
@@ -262,6 +299,7 @@ mcstatistics(int idx, int once, int delay, int count)
 }
 
 /* ihk_os_status enum is defined in ihk/linux/include/ihk/status.h */
+#ifndef MCSTAT_RUST_HELPERS
 static char *charstat[] = {
 	[IHK_OS_STATUS_NOT_BOOTED] = "None",
 	[IHK_OS_STATUS_BOOTING] = "Booting",
@@ -275,6 +313,13 @@ static char *charstat[] = {
 	[IHK_OS_STATUS_HUNGUP] = "Hangup",	/* OS is hungup */
 	[IHK_OS_STATUS_COUNT] = NULL,		/* End mark */
 };
+
+static const char *
+mcstat_os_status_result(int status)
+{
+	return charstat[status];
+}
+#endif
 
 /* Return value:
  *	Zero or positive:	IHK_OS_STATUS value
@@ -311,7 +356,7 @@ mcstatus(int idx, int delay, int count)
 		}
 
 		printf("McKernel status: %s\n",
-		       charstat[rc] ? : "Unknown");
+		       mcstat_os_status_result(rc) ? : "Unknown");
 
 next:
 		if (count > 0 && --count == 0) {

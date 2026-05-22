@@ -47,19 +47,21 @@ void *early_alloc_pages(int nr_pages)
 	void *p;
 
 	if (!last_page) {
-		last_page = (char *)(((unsigned long)_end + PAGE_SIZE - 1)
-		                     & PAGE_MASK);
+		last_page = (char *)x86_early_alloc_align_end_result(
+			(unsigned long)_end);
 		/* Convert the virtual address from text's to straight maps */
 		last_page = phys_to_virt(virt_to_phys(last_page));
 	} else if (last_page == (void *)-1) {
 		panic("Early allocator is already finalized. Do not use it.\n");
 	} else {
-        if(virt_to_phys(last_page) >= bootstrap_mem_end) {
-            panic("Early allocator: Out of memory\n");
-        }
-    }
+		if (x86_early_alloc_exhausted_result(virt_to_phys(last_page),
+				bootstrap_mem_end)) {
+			panic("Early allocator: Out of memory\n");
+		}
+	}
 	p = last_page;
-	last_page += (nr_pages * PAGE_SIZE);
+	last_page = (char *)x86_early_alloc_next_result(
+		(unsigned long)last_page, nr_pages);
 
 	return p;
 }
@@ -238,12 +240,7 @@ static unsigned long attr_to_l1attr(enum ihk_mc_pt_attribute attr)
 
 void set_pte(pte_t *ppte, unsigned long phys, enum ihk_mc_pt_attribute attr)
 {
-	if (attr & PTATTR_LARGEPAGE) {
-		*ppte = phys | attr_to_l2attr(attr) | PFL2_SIZE;
-	}
-	else {
-		*ppte = phys | attr_to_l1attr(attr);
-	}
+	*ppte = x86_set_pte_value_result(phys, attr, ATTR_MASK);
 }
 
 
@@ -2171,31 +2168,22 @@ int ihk_mc_pt_set_pte(page_table_t pt, pte_t *ptep, size_t pgsize,
 		uintptr_t phys, enum ihk_mc_pt_attribute attr)
 {
 	int error;
+	unsigned long entry = 0;
 
 	dkprintf("ihk_mc_pt_set_pte(%p,%p,%lx,%lx,%x)\n",
 			pt, ptep, pgsize, phys, attr);
 
-	if (pgsize == PTL1_SIZE) {
-		*ptep = phys | attr_to_l1attr(attr);
-	}
-	else if (pgsize == PTL2_SIZE) {
-		if (phys & (PTL2_SIZE - 1)) {
+	error = x86_pt_set_pte_value_result(pgsize, phys, attr, ATTR_MASK,
+					    use_1gb_page, &entry);
+	if (error) {
+		if (error == -1 && pgsize == PTL2_SIZE) {
 			kprintf("%s: error: phys needs to be PTL2_SIZE aligned\n", __FUNCTION__);
-			error = -1;
 			goto out;
 		}
-		*ptep = phys | attr_to_l2attr(attr | PTATTR_LARGEPAGE);
-	}
-	else if ((pgsize == PTL3_SIZE) && (use_1gb_page)) {
-		if (phys & (PTL3_SIZE - 1)) {
+		if (error == -1 && pgsize == PTL3_SIZE) {
 			kprintf("%s: error: phys needs to be PTL3_SIZE aligned\n", __FUNCTION__);
-			error = -1;
 			goto out;
 		}
-		*ptep = phys | attr_to_l3attr(attr | PTATTR_LARGEPAGE);
-	}
-	else {
-		error = -EINVAL;
 		ekprintf("ihk_mc_pt_set_pte(%p,%p,%lx,%lx,%x):"
 				"page size. %d %lx\n",
 				pt, ptep, pgsize, phys, attr, error, *ptep);
@@ -2203,6 +2191,7 @@ int ihk_mc_pt_set_pte(page_table_t pt, pte_t *ptep, size_t pgsize,
 		goto out;
 	}
 
+	*ptep = entry;
 	error = 0;
 out:
 	dkprintf("ihk_mc_pt_set_pte(%p,%p,%lx,%lx,%x): %d %lx\n",

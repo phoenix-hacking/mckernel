@@ -24,6 +24,45 @@
 #include <libgen.h>
 #include <bfd.h>
 
+#ifdef MCINSPECT_RUST_HELPERS
+#define MCINSPECT_DWARF_FORM_UNSIGNED 1
+#define MCINSPECT_DWARF_FORM_SIGNED 2
+#define MCINSPECT_DWARF_FORM_LOCLIST 3
+#define MCINSPECT_DWARF_FORM_EXPRLOC 4
+#define MCINSPECT_DWARF_FORM_UNSUPPORTED (-1)
+extern const char *mcinspect_thread_status_label_result(int status);
+extern const char *mcinspect_thread_active_marker_result(int active);
+extern const char *mcinspect_thread_comm_result(const char *cmd_line,
+		int is_idle);
+extern int mcinspect_parse_pid_result(const char *arg);
+extern int mcinspect_parse_vtop_addr_result(const char *arg,
+		unsigned long *addr);
+extern int mcinspect_need_action_result(int ps, int vtop);
+extern int mcinspect_mcos_path_result(char *path, int index);
+extern int mcinspect_dwarf_size_form_action_result(unsigned int form,
+		unsigned int data1, unsigned int data2, unsigned int data4,
+		unsigned int data8, unsigned int udata, unsigned int sdata);
+extern int mcinspect_dwarf_signed_nonnegative_result(long long value);
+extern int mcinspect_dwarf_plus_uconst_expr_result(long len, long cents,
+		unsigned int atom, unsigned int plus_uconst);
+extern int mcinspect_dwarf_named_tag_match_result(unsigned int tag,
+		unsigned int expected_tag, const char *name,
+		const char *expected_name);
+extern int mcinspect_dwarf_addr_form_action_result(unsigned int form,
+		unsigned int block1, unsigned int block2, unsigned int block4,
+		unsigned int block, unsigned int data4, unsigned int data8,
+		unsigned int sec_offset, unsigned int exprloc);
+extern int mcinspect_dwarf_addr_expr_result(long len, long cents,
+		unsigned int atom, unsigned int op_addr);
+extern unsigned long mcinspect_cpu_local_base_result(unsigned long clv,
+		unsigned long clv_size, int cpu);
+extern unsigned long mcinspect_thread_from_sched_list_result(
+		unsigned long thread_sched_list,
+		unsigned long thread_sched_list_offset);
+extern int mcinspect_mcvtop_should_lookup_proc_result(int pid);
+extern int mcinspect_vtop_has_process_result(unsigned long proc);
+#endif
+
 void usage(char **argv)
 {
 	printf("Usage: %s <options>\n", basename(argv[0]));
@@ -267,6 +306,9 @@ int dwarf_get_size(Dwarf_Debug dbg,
 	Dwarf_Unsigned size;
 	Dwarf_Half form;
 	int rc;
+#ifdef MCINSPECT_RUST_HELPERS
+	int form_action;
+#endif
 
 	rc = dwarf_attr(die, DW_AT_byte_size, &attr, perr);
 	if (rc != DW_DLV_OK) {
@@ -280,19 +322,35 @@ int dwarf_get_size(Dwarf_Debug dbg,
 		return rc;
 	}
 
+#ifdef MCINSPECT_RUST_HELPERS
+	form_action = mcinspect_dwarf_size_form_action_result(form,
+			DW_FORM_data1, DW_FORM_data2, DW_FORM_data4,
+			DW_FORM_data8, DW_FORM_udata, DW_FORM_sdata);
+	if (form_action == MCINSPECT_DWARF_FORM_UNSIGNED) {
+#else
 	if (form == DW_FORM_data1 ||
 			form == DW_FORM_data2 ||
 			form == DW_FORM_data2 ||
 			form == DW_FORM_data4 ||
 			form == DW_FORM_data8 ||
 			form == DW_FORM_udata) {
+#endif
 		dwarf_formudata(attr, &size, 0);
 	}
+#ifdef MCINSPECT_RUST_HELPERS
+	else if (form_action == MCINSPECT_DWARF_FORM_SIGNED) {
+#else
 	else if (form == DW_FORM_sdata) {
+#endif
 		Dwarf_Signed ssize;
 		dwarf_formsdata(attr, &ssize, 0);
 
+#ifdef MCINSPECT_RUST_HELPERS
+		if (!mcinspect_dwarf_signed_nonnegative_result(
+					(long long)ssize)) {
+#else
 		if (ssize < 0) {
+#endif
 			fprintf(stderr, "%s: unsupported negative size\n",
 				__func__);
 			return DW_DLV_ERROR;
@@ -311,10 +369,17 @@ int dwarf_get_size(Dwarf_Debug dbg,
 			return DW_DLV_ERROR;
 		}
 
+#ifdef MCINSPECT_RUST_HELPERS
+		if (!mcinspect_dwarf_plus_uconst_expr_result(len,
+					locdescs[0]->ld_cents,
+					(locdescs[0]->ld_s[0]).lr_atom,
+					DW_OP_plus_uconst)) {
+#else
 		if (len != 1 ||
 				locdescs[0]->ld_cents != 1 ||
 				(locdescs[0]->ld_s[0]).lr_atom
 				!= DW_OP_plus_uconst) {
+#endif
 			fprintf(stderr,
 					"%s: unsupported location expression\n",
 					__func__);
@@ -421,6 +486,9 @@ int dwarf_get_offset(Dwarf_Debug dbg,
 	Dwarf_Unsigned offset;
 	Dwarf_Half form;
 	int rc;
+#ifdef MCINSPECT_RUST_HELPERS
+	int form_action;
+#endif
 
 	rc = dwarf_attr(die, DW_AT_data_member_location, &attr, perr);
 	if (rc != DW_DLV_OK) {
@@ -434,19 +502,35 @@ int dwarf_get_offset(Dwarf_Debug dbg,
 		return rc;
 	}
 
+#ifdef MCINSPECT_RUST_HELPERS
+	form_action = mcinspect_dwarf_size_form_action_result(form,
+			DW_FORM_data1, DW_FORM_data2, DW_FORM_data4,
+			DW_FORM_data8, DW_FORM_udata, DW_FORM_sdata);
+	if (form_action == MCINSPECT_DWARF_FORM_UNSIGNED) {
+#else
 	if (form == DW_FORM_data1 ||
 			form == DW_FORM_data2 ||
 			form == DW_FORM_data2 ||
 			form == DW_FORM_data4 ||
 			form == DW_FORM_data8 ||
 			form == DW_FORM_udata) {
+#endif
 		dwarf_formudata(attr, &offset, 0);
 	}
+#ifdef MCINSPECT_RUST_HELPERS
+	else if (form_action == MCINSPECT_DWARF_FORM_SIGNED) {
+#else
 	else if (form == DW_FORM_sdata) {
+#endif
 		Dwarf_Signed soffset;
 		dwarf_formsdata(attr, &soffset, 0);
 
+#ifdef MCINSPECT_RUST_HELPERS
+		if (!mcinspect_dwarf_signed_nonnegative_result(
+					(long long)soffset)) {
+#else
 		if (soffset < 0) {
+#endif
 			fprintf(stderr, "%s: unsupported negative offset\n",
 				__func__);
 			return DW_DLV_ERROR;
@@ -465,10 +549,17 @@ int dwarf_get_offset(Dwarf_Debug dbg,
 			return DW_DLV_ERROR;
 		}
 
+#ifdef MCINSPECT_RUST_HELPERS
+		if (!mcinspect_dwarf_plus_uconst_expr_result(len,
+					locdescs[0]->ld_cents,
+					(locdescs[0]->ld_s[0]).lr_atom,
+					DW_OP_plus_uconst)) {
+#else
 		if (len != 1 ||
 				locdescs[0]->ld_cents != 1 ||
 				(locdescs[0]->ld_s[0]).lr_atom
 				!= DW_OP_plus_uconst) {
+#endif
 			fprintf(stderr,
 					"%s: unsupported location expression\n",
 					__func__);
@@ -521,8 +612,14 @@ int dwarf_struct_field_offset(Dwarf_Debug dbg, Dwarf_Die die, void *arg)
 		goto out;
 	}
 
+#ifdef MCINSPECT_RUST_HELPERS
+	if (!mcinspect_dwarf_named_tag_match_result(tag,
+				DW_TAG_structure_type, name,
+				dsfo->struct_name)) {
+#else
 	if (tag != DW_TAG_structure_type || !name ||
 			strcasecmp(name, dsfo->struct_name)) {
+#endif
 		rc = DW_DLV_NO_ENTRY;
 		goto out;
 	}
@@ -553,8 +650,14 @@ int dwarf_struct_field_offset(Dwarf_Debug dbg, Dwarf_Die die, void *arg)
 			goto out;
 		}
 
+#ifdef MCINSPECT_RUST_HELPERS
+		if (!mcinspect_dwarf_named_tag_match_result(tag,
+					DW_TAG_member, name,
+					dsfo->field_name)) {
+#else
 		if (tag != DW_TAG_member || !name ||
 				strcasecmp(name, dsfo->field_name)) {
+#endif
 			goto next_child;
 		}
 
@@ -637,6 +740,9 @@ int dwarf_get_address(Dwarf_Debug dbg,
 	Dwarf_Half directform = 0;
 	int rc, i;
 	int found = 0;
+#ifdef MCINSPECT_RUST_HELPERS
+	int form_action;
+#endif
 
 	Dwarf_Signed atcnt = 0;
 	Dwarf_Attribute *atlist = 0;
@@ -688,6 +794,13 @@ int dwarf_get_address(Dwarf_Debug dbg,
 		}
 		dwarf_whatform_direct(attr, &directform, perr);
 
+#ifdef MCINSPECT_RUST_HELPERS
+		form_action = mcinspect_dwarf_addr_form_action_result(form,
+				DW_FORM_block1, DW_FORM_block2, DW_FORM_block4,
+				DW_FORM_block, DW_FORM_data4, DW_FORM_data8,
+				DW_FORM_sec_offset, DW_FORM_exprloc);
+		if (form_action == MCINSPECT_DWARF_FORM_LOCLIST) {
+#else
 		if (form == DW_FORM_block1 ||
 				form == DW_FORM_block2 ||
 				form == DW_FORM_block4 ||
@@ -695,6 +808,7 @@ int dwarf_get_address(Dwarf_Debug dbg,
 				form == DW_FORM_data4 ||
 				form == DW_FORM_data8 ||
 				form == DW_FORM_sec_offset) {
+#endif
 
 			Dwarf_Locdesc **locdescs;
 			Dwarf_Signed len;
@@ -707,10 +821,17 @@ int dwarf_get_address(Dwarf_Debug dbg,
 				goto dealloc_out;
 			}
 
+#ifdef MCINSPECT_RUST_HELPERS
+			if (!mcinspect_dwarf_addr_expr_result(len,
+						locdescs[0]->ld_cents,
+						(locdescs[0]->ld_s[0]).lr_atom,
+						DW_OP_addr)) {
+#else
 			if (len != 1 ||
 					locdescs[0]->ld_cents != 1 ||
 					(locdescs[0]->ld_s[0]).lr_atom
 					!= DW_OP_addr) {
+#endif
 				fprintf(stderr,
 						"%s: unsupported addr expression\n",
 						__func__);
@@ -720,7 +841,11 @@ int dwarf_get_address(Dwarf_Debug dbg,
 
 			addr = (locdescs[0]->ld_s[0]).lr_number;
 		}
+#ifdef MCINSPECT_RUST_HELPERS
+		else if (form_action == MCINSPECT_DWARF_FORM_EXPRLOC)  {
+#else
 		else if (form == DW_FORM_exprloc)  {
+#endif
 			Dwarf_Half address_size = 0;
 			Dwarf_Ptr x = 0;
 			Dwarf_Unsigned tempud = 0;
@@ -765,10 +890,17 @@ int dwarf_get_address(Dwarf_Debug dbg,
 			}
 
 			/* len is always 1 */
+#ifdef MCINSPECT_RUST_HELPERS
+			if (!mcinspect_dwarf_addr_expr_result(len,
+						locdescs[0].ld_cents,
+						(locdescs[0].ld_s[0]).lr_atom,
+						DW_OP_addr)) {
+#else
 			if (len != 1 ||
 					locdescs[0].ld_cents != 1 ||
 					(locdescs[0].ld_s[0]).lr_atom
 					!= DW_OP_addr) {
+#endif
 				fprintf(stderr,
 						"%s: unsupported addr expression\n",
 						__func__);
@@ -841,8 +973,13 @@ int dwarf_global_var_addr(Dwarf_Debug dbg, Dwarf_Die die, void *arg)
 		goto out;
 	}
 
+#ifdef MCINSPECT_RUST_HELPERS
+	if (!mcinspect_dwarf_named_tag_match_result(tag,
+				DW_TAG_variable, name, gva->variable)) {
+#else
 	if (tag != DW_TAG_variable || !name ||
 			strcasecmp(name, gva->variable)) {
+#endif
 		rc = DW_DLV_NO_ENTRY;
 		goto out;
 	}
@@ -1022,9 +1159,13 @@ void print_thread(int cpu,
 	ihk_read_val(proc + process_saved_cmdline_len_offset,
 			&cmd_line_len);
 
+#ifdef MCINSPECT_RUST_HELPERS
+	comm = (char *)mcinspect_thread_comm_result(NULL, thread == idle);
+#else
 	if (thread == idle) {
 		comm = "(idle)";
 	}
+#endif
 
 	if (cmd_line_len) {
 		cmd_line = malloc(cmd_line_len + 1);
@@ -1038,18 +1179,33 @@ void print_thread(int cpu,
 		ihk_read_val(proc + process_saved_cmdline_offset, &cmd_line_addr);
 		ihk_read_kernel(cmd_line_addr, cmd_line_len, cmd_line,
 				IHK_OS_READ_KADDR_VIRT);
+#ifdef MCINSPECT_RUST_HELPERS
+		comm = (char *)mcinspect_thread_comm_result(cmd_line,
+				thread == idle);
+#else
 		comm = basename(cmd_line);
+#endif
 	}
 
 	printf("%3d %s%6d %6d 0x%16lx %2s %s\n",
-			cpu, active ? ">" : " ", tid, pid, thread,
+			cpu,
+#ifdef MCINSPECT_RUST_HELPERS
+			mcinspect_thread_active_marker_result(active),
+#else
+			active ? ">" : " ",
+#endif
+			tid, pid, thread,
 			//"DS",
+#ifdef MCINSPECT_RUST_HELPERS
+			mcinspect_thread_status_label_result(status),
+#else
 			status == PS_RUNNING ? "R" :
 			status == PS_INTERRUPTIBLE ? "IN" :
 			status == PS_UNINTERRUPTIBLE ? "UN" :
 			status == PS_ZOMBIE ? "Z" :
 			status == PS_EXITED ? "E" :
 			status == PS_STOPPED ? "S" : "U",
+#endif
 			comm);
 
 	if (cmd_line)
@@ -1073,7 +1229,11 @@ int mcps(Dwarf_Debug dbg)
 		unsigned long idle;
 		unsigned long current;
 
+#ifdef MCINSPECT_RUST_HELPERS
+		per_cpu = mcinspect_cpu_local_base_result(clv, clv_size, cpu);
+#else
 		per_cpu = clv + (clv_size * cpu);
+#endif
 		runq = per_cpu + clv_runq_offset;
 		idle = per_cpu + clv_idle_offset;
 		ihk_read_val(per_cpu + clv_current_offset, &current);
@@ -1084,7 +1244,13 @@ int mcps(Dwarf_Debug dbg)
 		/* Iterate threads */
 		for (; thread_sched_list != runq;
 				ihk_read_val(thread_sched_list, &thread_sched_list)) {
+#ifdef MCINSPECT_RUST_HELPERS
+			thread = mcinspect_thread_from_sched_list_result(
+					thread_sched_list,
+					thread_sched_list_offset);
+#else
 			thread = thread_sched_list - thread_sched_list_offset;
+#endif
 
 			if (thread == current)
 				continue;
@@ -1112,7 +1278,11 @@ int find_proc(Dwarf_Debug dbg, int pid, unsigned long *rproc)
 		unsigned long thread_sched_list;
 		int ipid;
 
+#ifdef MCINSPECT_RUST_HELPERS
+		per_cpu = mcinspect_cpu_local_base_result(clv, clv_size, cpu);
+#else
 		per_cpu = clv + (clv_size * cpu);
+#endif
 		runq = per_cpu + clv_runq_offset;
 		ihk_read_val(per_cpu + clv_runq_offset, &thread_sched_list);
 
@@ -1121,7 +1291,13 @@ int find_proc(Dwarf_Debug dbg, int pid, unsigned long *rproc)
 				ihk_read_val(thread_sched_list, &thread_sched_list)) {
 			unsigned long proc;
 
+#ifdef MCINSPECT_RUST_HELPERS
+			thread = mcinspect_thread_from_sched_list_result(
+					thread_sched_list,
+					thread_sched_list_offset);
+#else
 			thread = thread_sched_list - thread_sched_list_offset;
+#endif
 
 			ihk_read_val(thread + thread_proc_offset, &proc);
 			ihk_read_val(proc + process_pid_offset, &ipid);
@@ -1173,7 +1349,11 @@ int mcvtop(Dwarf_Debug dbg, int pid, unsigned long vtop_addr)
 	unsigned long init_pt;
 	unsigned long vm, ap, pt = 0;
 
+#ifdef MCINSPECT_RUST_HELPERS
+	if (mcinspect_mcvtop_should_lookup_proc_result(pid)) {
+#else
 	if (pid != 0) {
+#endif
 		if (find_proc(dbg, pid, &proc) < 0) {
 			fprintf(stderr, "%s: error: finding PID %d\n",
 				__func__, pid);
@@ -1184,7 +1364,11 @@ int mcvtop(Dwarf_Debug dbg, int pid, unsigned long vtop_addr)
 	get_pointer_symbol_val(swapper_page_table, &init_pt);
 	printf("%s: init_pt: 0x%lx\n", __func__, init_pt);
 
+#ifdef MCINSPECT_RUST_HELPERS
+	if (mcinspect_vtop_has_process_result(proc)) {
+#else
 	if (proc) {
+#endif
 		ihk_read_val(proc + process_vm_offset, &vm);
 		ihk_read_val(vm + vm_address_space_offset, &ap);
 		ihk_read_val(ap + address_space_page_table_offset, &pt);
@@ -1258,6 +1442,9 @@ int main(int argc, char **argv)
 	Dwarf_Handler errhand = 0;
 	Dwarf_Ptr errarg = 0;
 	int opt;
+#ifdef MCINSPECT_RUST_HELPERS
+	char mcos_path[64];
+#endif
 
 	debug = 0;
 	mcfd = -1;
@@ -1275,6 +1462,14 @@ int main(int argc, char **argv)
 			break;
 
 		case 'v':
+#ifdef MCINSPECT_RUST_HELPERS
+			if (mcinspect_parse_vtop_addr_result(optarg,
+						&vtop_addr)) {
+				fprintf(stderr, "error: invalid VA? (expected format: 0xXXXX)\n\n");
+				usage(argv);
+				exit(1);
+			}
+#else
 			vtop_addr = strtoul(optarg, 0, 16);
 			if (vtop_addr == 0 ||
 					errno == EINVAL || errno == ERANGE) {
@@ -1282,10 +1477,15 @@ int main(int argc, char **argv)
 				usage(argv);
 				exit(1);
 			}
+#endif
 			break;
 
 		case 'p':
+#ifdef MCINSPECT_RUST_HELPERS
+			pid = mcinspect_parse_pid_result(optarg);
+#else
 			pid = atoi(optarg);
+#endif
 			break;
 		}
 	}
@@ -1301,7 +1501,11 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 
+#ifdef MCINSPECT_RUST_HELPERS
+	if (!mcinspect_need_action_result(ps, vtop)) {
+#else
 	if (!ps && !vtop) {
+#endif
 		printf("PID: %d\n", pid);
 		usage(argv);
 		exit(1);
@@ -1312,7 +1516,12 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 
+#ifdef MCINSPECT_RUST_HELPERS
+	mcinspect_mcos_path_result(mcos_path, 0);
+	mcfd = open(mcos_path, O_RDONLY);
+#else
 	mcfd = open("/dev/mcos0", O_RDONLY);
+#endif
 	if (mcfd < 0) {
 		fprintf(stderr, "error: opening IHK OS device file\n");
 		exit(1);
@@ -1344,5 +1553,3 @@ int main(int argc, char **argv)
 	close(mcfd);
 	return 0;
 }
-
-

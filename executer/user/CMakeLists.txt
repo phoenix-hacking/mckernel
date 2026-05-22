@@ -70,7 +70,40 @@ target_include_directories(mcexec PUBLIC "${KERNEL_DIR}")
 set_property(TARGET mcexec PROPERTY POSITION_INDEPENDENT_CODE ON)
 set_property(TARGET mcexec PROPERTY LINK_FLAGS "-fPIE -pie")
 
-add_executable(mcinspect mcinspect.c)
+set(MCINSPECT_SRCS mcinspect.c)
+if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
+	find_program(RUSTC rustc)
+	if (RUSTC)
+		set(MCINSPECT_RUST_OBJ "${CMAKE_CURRENT_BINARY_DIR}/rust/mcinspect_helpers.o")
+		add_custom_command(
+			OUTPUT "${MCINSPECT_RUST_OBJ}"
+			COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/rust"
+			COMMAND ${RUSTC}
+				--crate-name mcinspect_helpers
+				--crate-type lib
+				--edition=2021
+				-C panic=abort
+				-C opt-level=2
+				-C debuginfo=1
+				-C force-unwind-tables=no
+				--emit=obj=${MCINSPECT_RUST_OBJ}
+				"${CMAKE_CURRENT_SOURCE_DIR}/rust/mcinspect_helpers.rs"
+			DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/rust/mcinspect_helpers.rs"
+			COMMENT "Building Rust mcinspect helpers"
+			VERBATIM
+		)
+		add_custom_target(mcinspect_rust_helpers DEPENDS "${MCINSPECT_RUST_OBJ}")
+		set_source_files_properties("${MCINSPECT_RUST_OBJ}"
+			PROPERTIES EXTERNAL_OBJECT TRUE GENERATED TRUE)
+		list(APPEND MCINSPECT_SRCS "${MCINSPECT_RUST_OBJ}")
+	endif()
+endif()
+
+add_executable(mcinspect ${MCINSPECT_SRCS})
+if (TARGET mcinspect_rust_helpers)
+	add_dependencies(mcinspect mcinspect_rust_helpers)
+	target_compile_definitions(mcinspect PRIVATE MCINSPECT_RUST_HELPERS)
+endif()
 if (NOT LIBDWARF)
 	target_include_directories(mcinspect PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/lib/")
 	target_include_directories(mcinspect PRIVATE
@@ -84,7 +117,40 @@ target_link_libraries(mcinspect ${LIBBFD})
 set_property(TARGET mcinspect PROPERTY POSITION_INDEPENDENT_CODE ON)
 set_property(TARGET mcinspect PROPERTY LINK_FLAGS "-fPIE -pie")
 
-add_executable(eclair eclair.c arch/${ARCH}/arch-eclair.c)
+set(ECLAIR_SRCS eclair.c arch/${ARCH}/arch-eclair.c)
+if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
+	find_program(RUSTC rustc)
+	if (RUSTC)
+		set(ECLAIR_RUST_OBJ "${CMAKE_CURRENT_BINARY_DIR}/rust/eclair_helpers.o")
+		add_custom_command(
+			OUTPUT "${ECLAIR_RUST_OBJ}"
+			COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/rust"
+			COMMAND ${RUSTC}
+				--crate-name eclair_helpers
+				--crate-type lib
+				--edition=2021
+				-C panic=abort
+				-C opt-level=2
+				-C debuginfo=1
+				-C force-unwind-tables=no
+				--emit=obj=${ECLAIR_RUST_OBJ}
+				"${CMAKE_CURRENT_SOURCE_DIR}/rust/eclair_helpers.rs"
+			DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/rust/eclair_helpers.rs"
+			COMMENT "Building Rust eclair helpers"
+			VERBATIM
+		)
+		add_custom_target(eclair_rust_helpers DEPENDS "${ECLAIR_RUST_OBJ}")
+		set_source_files_properties("${ECLAIR_RUST_OBJ}"
+			PROPERTIES EXTERNAL_OBJECT TRUE GENERATED TRUE)
+		list(APPEND ECLAIR_SRCS "${ECLAIR_RUST_OBJ}")
+	endif()
+endif()
+
+add_executable(eclair ${ECLAIR_SRCS})
+if (TARGET eclair_rust_helpers)
+	add_dependencies(eclair eclair_rust_helpers)
+	target_compile_definitions(eclair PRIVATE ECLAIR_RUST_HELPERS)
+endif()
 target_link_libraries(eclair ${LIBBFD})
 set_property(TARGET eclair PROPERTY POSITION_INDEPENDENT_CODE ON)
 set_property(TARGET eclair PROPERTY LINK_FLAGS "-fPIE -pie")
