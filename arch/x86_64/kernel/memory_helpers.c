@@ -130,4 +130,64 @@ unsigned long x86_early_alloc_next_result(unsigned long current,
 	return current + ((unsigned long)nr_pages * PAGE_SIZE);
 }
 
+void x86_pt_indices_result(unsigned long virt, int *l4idxp, int *l3idxp,
+			   int *l2idxp, int *l1idxp)
+{
+	if (l4idxp)
+		*l4idxp = (virt >> PTL4_SHIFT) & (PT_ENTRIES - 1);
+	if (l3idxp)
+		*l3idxp = (virt >> PTL3_SHIFT) & (PT_ENTRIES - 1);
+	if (l2idxp)
+		*l2idxp = (virt >> PTL2_SHIFT) & (PT_ENTRIES - 1);
+	if (l1idxp)
+		*l1idxp = (virt >> PTL1_SHIFT) & (PT_ENTRIES - 1);
+}
+
+void x86_walk_bounds_result(unsigned long start, unsigned long end,
+			    unsigned long base, unsigned long span,
+			    int shift, int *sixp, int *eixp)
+{
+	unsigned long size = 1UL << shift;
+	int six = start <= base ? 0 : (int)((start - base) >> shift);
+	int eix;
+
+	if (end == 0 || (span && base + span <= end))
+		eix = PT_ENTRIES;
+	else
+		eix = (int)(((end - base) + (size - 1)) >> shift);
+
+	if (sixp)
+		*sixp = six;
+	if (eixp)
+		*eixp = eix;
+}
+
+int x86_split_large_page_prepare_result(unsigned long entry, size_t pgsize,
+					unsigned long *child_entryp,
+					size_t *rss_pgsizep,
+					unsigned long *step_p)
+{
+	if (pgsize != PTL3_SIZE && pgsize != PTL2_SIZE)
+		return -EINVAL;
+
+	if (child_entryp) {
+		if (pgsize == PTL2_SIZE)
+			*child_entryp = entry & ~PFL2_SIZE;
+		else
+			*child_entryp = entry;
+	}
+	if (rss_pgsizep)
+		*rss_pgsizep = pgsize / PT_ENTRIES;
+	if (step_p)
+		*step_p = pgsize / PT_ENTRIES;
+
+	return 0;
+}
+
+unsigned long x86_split_large_page_next_entry_result(unsigned long entry,
+						    size_t pgsize)
+{
+	return entry + pgsize / PT_ENTRIES;
+}
+
 #endif /* MCKERNEL_RUST_X86_MEMORY_HELPERS */

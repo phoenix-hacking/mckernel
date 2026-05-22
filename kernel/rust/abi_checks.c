@@ -98,6 +98,14 @@ ABI_ASSERT(ABI_OFFSET(struct timer, list) == 32,
 	   "Rust/C timer list offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct timer, thread) == 48,
 	   "Rust/C timer thread offset mismatch");
+ABI_ASSERT(sizeof(struct rusage) == 144,
+	   "Rust/C rusage size mismatch");
+ABI_ASSERT(ABI_OFFSET(struct rusage, ru_stime) == 16,
+	   "Rust/C rusage ru_stime offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct rusage, ru_maxrss) == 32,
+	   "Rust/C rusage ru_maxrss offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct rusage, ru_nivcsw) == 136,
+	   "Rust/C rusage ru_nivcsw offset mismatch");
 ABI_ASSERT(sizeof(struct page) == 80,
 	   "Rust/C page size mismatch");
 ABI_ASSERT(ABI_OFFSET(struct page, list) == 0,

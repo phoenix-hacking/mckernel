@@ -125,6 +125,28 @@ int process_access_permission_result(int verify_type, unsigned long flags)
 	return 0;
 }
 
+int process_range_cache_hit_result(unsigned long cache_start,
+				   unsigned long cache_end,
+				   unsigned long start,
+				   unsigned long end)
+{
+	return cache_start <= start && cache_end >= end;
+}
+
+int process_lookup_range_relation_result(unsigned long start,
+					 unsigned long end,
+					 unsigned long range_start,
+					 unsigned long range_end)
+{
+	if (end <= range_start)
+		return -1;
+	if (start >= range_end)
+		return 1;
+	if (start < range_start)
+		return -2;
+	return 0;
+}
+
 int process_ref_release_should_destroy_result(int dec_and_test)
 {
 	return dec_and_test != 0;

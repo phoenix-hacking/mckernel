@@ -152,17 +152,23 @@ static int
 get_futex_key(uint32_t *uaddr, int fshared, union futex_key *key)
 {
 	unsigned long address = (unsigned long)uaddr;
+	unsigned long base;
+	unsigned long offset;
 	unsigned long phys;
 	struct thread *thread = cpu_local_var(current);
 	struct process_vm *mm = thread->vm;
+	int is_private;
+	int error;
 
 	/*
 	 * The futex address must be "naturally" aligned.
 	 */
-	key->both.offset = address % PAGE_SIZE;
-	if (((address % sizeof(uint32_t)) != 0))
-		return -EINVAL;
-	address -= key->both.offset;
+	error = futex_key_prepare_result(address, fshared, &base, &offset,
+					 &is_private);
+	if (error)
+		return error;
+	key->both.offset = offset;
+	address = base;
 
 	/*
 	 * PROCESS_PRIVATE futexes are fast.
@@ -171,7 +177,7 @@ get_futex_key(uint32_t *uaddr, int fshared, union futex_key *key)
 	 * Note : We do have to check 'uaddr' is a valid user address,
 	 *        but access_ok() should be faster than find_vma()
 	 */
-	if (!fshared) {
+	if (is_private) {
 		key->private.mm = mm;
 		key->private.address = address;
 		get_futex_key_refs(key);

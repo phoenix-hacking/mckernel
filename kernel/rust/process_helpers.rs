@@ -204,6 +204,34 @@ pub extern "C" fn process_access_permission_result(verify_type: CInt, flags: CUL
 }
 
 #[no_mangle]
+pub extern "C" fn process_range_cache_hit_result(
+    cache_start: CULong,
+    cache_end: CULong,
+    start: CULong,
+    end: CULong,
+) -> CInt {
+    (cache_start <= start && cache_end >= end) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn process_lookup_range_relation_result(
+    start: CULong,
+    end: CULong,
+    range_start: CULong,
+    range_end: CULong,
+) -> CInt {
+    if end <= range_start {
+        -1
+    } else if start >= range_end {
+        1
+    } else if start < range_start {
+        -2
+    } else {
+        0
+    }
+}
+
+#[no_mangle]
 pub extern "C" fn process_ref_release_should_destroy_result(dec_and_test: CInt) -> CInt {
     (dec_and_test != 0) as CInt
 }

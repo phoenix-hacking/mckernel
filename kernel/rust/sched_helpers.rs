@@ -10,6 +10,7 @@ const SCHED_IDLE: CInt = 5;
 const SCHED_DEADLINE: CInt = 6;
 const MAX_USER_RT_PRIO: CInt = 100;
 const SCHED_RR_INTERVAL_NSEC: i64 = 10_000;
+const PAGE_SIZE: usize = 4096;
 
 #[no_mangle]
 pub extern "C" fn sched_get_priority_max_value(policy: CInt) -> CInt {
@@ -150,4 +151,52 @@ pub extern "C" fn futex_key_match_result(
     offset2: usize,
 ) -> CInt {
     (has_key1 != 0 && has_key2 != 0 && word1 == word2 && ptr1 == ptr2 && offset1 == offset2) as CInt
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn futex_key_prepare_result(
+    address: usize,
+    fshared: CInt,
+    basep: *mut usize,
+    offsetp: *mut usize,
+    privatep: *mut CInt,
+) -> CInt {
+    let offset = address % PAGE_SIZE;
+
+    if (address % core::mem::size_of::<u32>()) != 0 {
+        return -EINVAL;
+    }
+
+    if !basep.is_null() {
+        unsafe {
+            *basep = address - offset;
+        }
+    }
+    if !offsetp.is_null() {
+        unsafe {
+            *offsetp = offset;
+        }
+    }
+    if !privatep.is_null() {
+        unsafe {
+            *privatep = (fshared == 0) as CInt;
+        }
+    }
+
+    0
+}
+
+#[no_mangle]
+pub extern "C" fn syscall_offload_should_schedule_result(
+    no_preempt: CInt,
+    tid: CInt,
+    need_resched: CInt,
+    runq_len: CInt,
+    is_sched_setaffinity: CInt,
+) -> CInt {
+    if no_preempt != 0 || tid == 0 {
+        return 0;
+    }
+
+    (need_resched != 0 || runq_len > 1 || is_sched_setaffinity != 0) as CInt
 }

@@ -394,6 +394,20 @@ pub extern "C" fn syscall_set_tid_address_return_result(pid: CInt) -> CInt {
 }
 
 #[no_mangle]
+pub extern "C" fn syscall_use_requester_tid_result(
+    syscall_nr: CInt,
+    arg0: CULong,
+    sched_setaffinity_nr: CInt,
+) -> CInt {
+    (syscall_nr == sched_setaffinity_nr && arg0 == 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn syscall_preempt_disable_needed_result(rtid: CInt) -> CInt {
+    (rtid == -1) as CInt
+}
+
+#[no_mangle]
 pub extern "C" fn setpgid_normalize_pid(current_pid: CInt, pid: CInt) -> CInt {
     if pid == 0 {
         current_pid
@@ -520,6 +534,32 @@ pub unsafe extern "C" fn mprotect_prepare_range(
     }
 
     0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mprotect_split_needed_result(
+    range_start: CULong,
+    range_end: CULong,
+    addr: CULong,
+    end: CULong,
+    split_startp: *mut CInt,
+    split_endp: *mut CInt,
+) {
+    if !split_startp.is_null() {
+        unsafe {
+            *split_startp = (range_start < addr) as CInt;
+        }
+    }
+    if !split_endp.is_null() {
+        unsafe {
+            *split_endp = (end < range_end) as CInt;
+        }
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn mprotect_write_changed_result(range_flags: CULong, protflags: CULong) -> CInt {
+    (((range_flags ^ protflags) & VR_PROT_WRITE) != 0) as CInt
 }
 
 #[no_mangle]

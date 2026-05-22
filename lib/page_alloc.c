@@ -502,7 +502,19 @@ int __ihk_numa_defer_zero_free_pages(
 int __ihk_numa_free_pages_prepare(
 		struct ihk_mc_numa_node *node, unsigned long addr, int npages,
 		int defer_zero_at_free);
+int __ihk_numa_linux_zero_request_action(int cpu_initialized,
+		int has_current, int is_idle, int nohost, int zeroing_workers);
 #else
+
+int __ihk_numa_linux_zero_request_action(int cpu_initialized,
+		int has_current, int is_idle, int nohost, int zeroing_workers)
+{
+	if (!cpu_initialized || !has_current || is_idle || nohost)
+		return 0;
+	if (zeroing_workers > 0)
+		return 2;
+	return 1;
+}
 
 #ifdef ENABLE_FUGAKU_HACKS
 size_t __count_free_bytes(struct rb_root *root)
@@ -1110,6 +1122,7 @@ void ihk_numa_free_pages(struct ihk_mc_numa_node *node,
 	int defer_zero_at_free = deferred_zero_at_free;
 #ifdef MCKERNEL_RUST_PAGE_ALLOC_RBTREE
 	int free_action;
+	int zero_request_action;
 #endif
 
 #ifdef ENABLE_PER_CPU_ALLOC_CACHE
@@ -1157,6 +1170,8 @@ void ihk_numa_free_pages(struct ihk_mc_numa_node *node,
 	}
 
 	if (free_action == 1) {
+		struct thread *current_thread;
+
 		if (__ihk_numa_defer_zero_free_pages(node, addr, npages)) {
 			kprintf("%s: ERROR: deferring free 0x%lx:%lu\n",
 					__FUNCTION__, addr, npages << PAGE_SHIFT);
@@ -1164,18 +1179,22 @@ void ihk_numa_free_pages(struct ihk_mc_numa_node *node,
 		}
 
 		/* Ask Linux to clear memory */
-		if (cpu_local_var_initialized &&
-				cpu_local_var(current) &&
-				cpu_local_var(current) != &cpu_local_var(idle) &&
-				!cpu_local_var(current)->proc->nohost) {
+		current_thread = cpu_local_var_initialized ?
+			cpu_local_var(current) : NULL;
+		zero_request_action = __ihk_numa_linux_zero_request_action(
+				cpu_local_var_initialized,
+				current_thread != NULL,
+				current_thread && current_thread == &cpu_local_var(idle),
+				current_thread && current_thread->proc->nohost,
+				ihk_atomic_read(&node->zeroing_workers));
+		if (zero_request_action == 2) {
+			dkprintf("%s: skipping Linux zero request..\n", __func__);
+			return;
+		}
+		if (zero_request_action == 1) {
 			struct ihk_ikc_channel_desc *syscall_channel =
 				cpu_local_var(ikc2linux);
 			struct ikc_scd_packet packet IHK_DMA_ALIGN;
-
-			if (ihk_atomic_read(&node->zeroing_workers) > 0) {
-				dkprintf("%s: skipping Linux zero request..\n", __func__);
-				return;
-			}
 
 			ihk_atomic_inc(&node->zeroing_workers);
 
@@ -1187,7 +1206,7 @@ void ihk_numa_free_pages(struct ihk_mc_numa_node *node,
 			smp_store_release(&packet.req.valid, 1);
 			packet.msg = SCD_MSG_SYSCALL_ONESIDE;
 			packet.ref = ihk_mc_get_processor_id();
-			packet.pid = cpu_local_var(current)->proc->pid;
+			packet.pid = current_thread->proc->pid;
 			packet.resp_pa = 0;
 
 			if (ihk_ikc_send(syscall_channel, &packet, 0) < 0) {

@@ -262,7 +262,7 @@ pte_t *get_pte(struct page_table *pt, void *virt, enum ihk_mc_pt_attribute attr,
 		pt = init_pt;
 	}
 
-	GET_VIRT_INDICES(v, l4idx, l3idx, l2idx, l1idx);
+	x86_pt_indices_result(v, &l4idx, &l3idx, &l2idx, &l1idx);
 
     /* TODO: more detailed attribute check */
 	if (pt->entry[l4idx] & PFL4_PRESENT) {
@@ -336,7 +336,7 @@ static int __set_pt_page(struct page_table *pt, void *virt, unsigned long phys,
 		phys &= PAGE_MASK;
 	}
 
-	GET_VIRT_INDICES(v, l4idx, l3idx, l2idx, l1idx);
+	x86_pt_indices_result(v, &l4idx, &l3idx, &l2idx, &l1idx);
 
 	/* TODO: more detailed attribute check */
 	if (pt->entry[l4idx] & PFL4_PRESENT) {
@@ -415,7 +415,7 @@ static int __clear_pt_page(struct page_table *pt, void *virt, int largepage)
 		v &= PAGE_MASK;
 	}
 
-	GET_VIRT_INDICES(v, l4idx, l3idx, l2idx, l1idx);
+	x86_pt_indices_result(v, &l4idx, &l3idx, &l2idx, &l1idx);
 
 	if (!(pt->entry[l4idx] & PFL4_PRESENT)) {
 		return -EINVAL;
@@ -476,7 +476,7 @@ int ihk_mc_pt_virt_to_phys_size(struct page_table *pt,
 		pt = init_pt;
 	}
 
-	GET_VIRT_INDICES(v, l4idx, l3idx, l2idx, l1idx);
+	x86_pt_indices_result(v, &l4idx, &l3idx, &l2idx, &l1idx);
 
 	if (!(pt->entry[l4idx] & PFL4_PRESENT)) {
 		return -EFAULT;
@@ -530,7 +530,7 @@ int ihk_mc_pt_print_pte(struct page_table *pt, void *virt)
 		pt = init_pt;
 	}
 
-	GET_VIRT_INDICES(v, l4idx, l3idx, l2idx, l1idx);
+	x86_pt_indices_result(v, &l4idx, &l3idx, &l2idx, &l1idx);
 
 	__kprintf("l4 table: 0x%lX l4idx: %d \n", virt_to_phys(pt), l4idx);
 	if (!(pt->entry[l4idx] & PFL4_PRESENT)) {
@@ -720,9 +720,8 @@ static int walk_pte_l1(struct page_table *pt, uint64_t base, uint64_t start,
 	int error;
 	uint64_t off;
 
-	six = (start <= base)? 0: ((start - base) >> PTL1_SHIFT);
-	eix = ((end == 0) || ((base + PTL2_SIZE) <= end))? PT_ENTRIES
-		: (((end - base) + (PTL1_SIZE - 1)) >> PTL1_SHIFT);
+	x86_walk_bounds_result(start, end, base, PTL2_SIZE, PTL1_SHIFT,
+			       &six, &eix);
 
 	ret = -ENOENT;
 	for (i = six; i < eix; ++i) {
@@ -750,9 +749,8 @@ static int walk_pte_l2(struct page_table *pt, uint64_t base, uint64_t start,
 	int error;
 	uint64_t off;
 
-	six = (start <= base)? 0: ((start - base) >> PTL2_SHIFT);
-	eix = ((end == 0) || ((base + PTL3_SIZE) <= end))? PT_ENTRIES
-		: (((end - base) + (PTL2_SIZE - 1)) >> PTL2_SHIFT);
+	x86_walk_bounds_result(start, end, base, PTL3_SIZE, PTL2_SHIFT,
+			       &six, &eix);
 
 	ret = -ENOENT;
 	for (i = six; i < eix; ++i) {
@@ -780,9 +778,8 @@ static int walk_pte_l3(struct page_table *pt, uint64_t base, uint64_t start,
 	int error;
 	uint64_t off;
 
-	six = (start <= base)? 0: ((start - base) >> PTL3_SHIFT);
-	eix = ((end == 0) || ((base + PTL4_SIZE) <= end))? PT_ENTRIES
-		: (((end - base) + (PTL3_SIZE - 1)) >> PTL3_SHIFT);
+	x86_walk_bounds_result(start, end, base, PTL4_SIZE, PTL3_SHIFT,
+			       &six, &eix);
 
 	ret = -ENOENT;
 	for (i = six; i < eix; ++i) {
@@ -810,9 +807,7 @@ static int walk_pte_l4(struct page_table *pt, uint64_t base, uint64_t start,
 	int error;
 	uint64_t off;
 
-	six = (start <= base)? 0: ((start - base) >> PTL4_SHIFT);
-	eix = (end == 0)? PT_ENTRIES
-		:(((end - base) + (PTL4_SIZE - 1)) >> PTL4_SHIFT);
+	x86_walk_bounds_result(start, end, base, 0, PTL4_SHIFT, &six, &eix);
 
 	ret = -ENOENT;
 	for (i = six; i < eix; ++i) {
@@ -838,8 +833,10 @@ static int split_large_page(pte_t *ptep, size_t pgsize)
 	uintptr_t phys;
 	struct page *page;
 	pte_t pte;
+	size_t rss_pgsize;
 
-	if ((pgsize != PTL3_SIZE) && (pgsize != PTL2_SIZE)) {
+	if (x86_split_large_page_prepare_result(*ptep, pgsize, &pte,
+						&rss_pgsize, NULL)) {
 		ekprintf("split_large_page:invalid pgsize %#lx\n", pgsize);
 		return -EINVAL;
 	}
@@ -848,12 +845,6 @@ static int split_large_page(pte_t *ptep, size_t pgsize)
 	if (pt == NULL) {
 		ekprintf("split_large_page:__alloc_new_pt failed\n");
 		return -ENOMEM;
-	}
-
-	pte = *ptep;
-	if (pgsize == PTL2_SIZE) {
-		/* break down to basic page size */
-		pte &= ~PFL2_SIZE;
 	}
 
 	if (pte_is_fileoff(ptep, pgsize)) {
@@ -875,14 +866,14 @@ static int split_large_page(pte_t *ptep, size_t pgsize)
 		switch(pgsize) {
 		case PTL3_SIZE:
 			dkprintf("%lx+,%s: calling memory_stat_rss_add(),size=%ld,pgsize=%ld\n", pte_is_fileoff(ptep, pgsize) ? pte_get_off(&pte, pgsize) : pte_get_phys(&pte), __FUNCTION__, PTL2_SIZE, PTL2_SIZE);
-			memory_stat_rss_add(PTL2_SIZE, PTL2_SIZE);
+			memory_stat_rss_add(rss_pgsize, rss_pgsize);
 			break;
 		case PTL2_SIZE:
 			dkprintf("%lx+,%s: calling memory_stat_rss_add(),size=%ld,pgsize=%ld\n", pte_is_fileoff(ptep, pgsize) ? pte_get_off(&pte, pgsize) : pte_get_phys(&pte), __FUNCTION__, PTL1_SIZE, PTL1_SIZE);
-			memory_stat_rss_add(PTL1_SIZE, PTL1_SIZE);
+			memory_stat_rss_add(rss_pgsize, rss_pgsize);
 			break;
 		}
-		pte += pgsize / PT_ENTRIES;
+		pte = x86_split_large_page_next_entry_result(pte, pgsize);
 	}
 
 	*ptep = (virt_to_phys(pt) & PT_PHYSMASK) | PFL2_PDIR_ATTR;
@@ -1070,9 +1061,8 @@ static int walk_pte_l1_safe(struct page_table *pt, uint64_t base, uint64_t start
 	if (!pt)
 		return 0;
 
-	six = (start <= base)? 0: ((start - base) >> PTL1_SHIFT);
-	eix = ((end == 0) || ((base + PTL2_SIZE) <= end))? PT_ENTRIES
-		: (((end - base) + (PTL1_SIZE - 1)) >> PTL1_SHIFT);
+	x86_walk_bounds_result(start, end, base, PTL2_SIZE, PTL1_SHIFT,
+			       &six, &eix);
 
 	ret = -ENOENT;
 	for (i = six; i < eix; ++i) {
@@ -1109,9 +1099,8 @@ static int walk_pte_l2_safe(struct page_table *pt, uint64_t base, uint64_t start
 	if (!pt)
 		return 0;
 
-	six = (start <= base)? 0: ((start - base) >> PTL2_SHIFT);
-	eix = ((end == 0) || ((base + PTL3_SIZE) <= end))? PT_ENTRIES
-		: (((end - base) + (PTL2_SIZE - 1)) >> PTL2_SHIFT);
+	x86_walk_bounds_result(start, end, base, PTL3_SIZE, PTL2_SHIFT,
+			       &six, &eix);
 
 	ret = -ENOENT;
 	for (i = six; i < eix; ++i) {
@@ -1148,9 +1137,8 @@ static int walk_pte_l3_safe(struct page_table *pt, uint64_t base, uint64_t start
 	if (!pt)
 		return 0;
 
-	six = (start <= base)? 0: ((start - base) >> PTL3_SHIFT);
-	eix = ((end == 0) || ((base + PTL4_SIZE) <= end))? PT_ENTRIES
-		: (((end - base) + (PTL3_SIZE - 1)) >> PTL3_SHIFT);
+	x86_walk_bounds_result(start, end, base, PTL4_SIZE, PTL3_SHIFT,
+			       &six, &eix);
 
 	ret = -ENOENT;
 	for (i = six; i < eix; ++i) {
@@ -1187,9 +1175,7 @@ static int walk_pte_l4_safe(struct page_table *pt, uint64_t base, uint64_t start
 	if (!pt)
 		return 0;
 
-	six = (start <= base)? 0: ((start - base) >> PTL4_SHIFT);
-	eix = (end == 0)? PT_ENTRIES
-		:(((end - base) + (PTL4_SIZE - 1)) >> PTL4_SHIFT);
+	x86_walk_bounds_result(start, end, base, 0, PTL4_SHIFT, &six, &eix);
 
 	ret = -ENOENT;
 	for (i = six; i < eix; ++i) {
@@ -1784,7 +1770,7 @@ static pte_t *lookup_pte(struct page_table *pt, uintptr_t virt, int pgshift,
 	size_t size;
 	int p2align;
 
-	GET_VIRT_INDICES(virt, l4idx, l3idx, l2idx, l1idx);
+	x86_pt_indices_result(virt, &l4idx, &l3idx, &l2idx, &l1idx);
 
 	ptep = NULL;
 	if (!pgshift) {

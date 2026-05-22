@@ -18,6 +18,7 @@ const PTL3_SIZE: CULong = 1 << PTL3_SHIFT;
 const PFLX_PWT: CULong = 0x08;
 const PFLX_PCD: CULong = 0x10;
 const PFL2_SIZE: CULong = 0x80;
+const PT_ENTRIES: CULong = 512;
 
 #[no_mangle]
 pub extern "C" fn x86_attr_to_l3attr_result(attr: CULong, attr_mask: CULong) -> CULong {
@@ -145,4 +146,108 @@ pub extern "C" fn x86_early_alloc_exhausted_result(
 #[no_mangle]
 pub extern "C" fn x86_early_alloc_next_result(current: CULong, nr_pages: i32) -> CULong {
     current + ((nr_pages as CULong) * PTL1_SIZE)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_pt_indices_result(
+    virt: CULong,
+    l4idxp: *mut i32,
+    l3idxp: *mut i32,
+    l2idxp: *mut i32,
+    l1idxp: *mut i32,
+) {
+    if !l4idxp.is_null() {
+        unsafe {
+            *l4idxp = ((virt >> 39) & (PT_ENTRIES - 1)) as i32;
+        }
+    }
+    if !l3idxp.is_null() {
+        unsafe {
+            *l3idxp = ((virt >> PTL3_SHIFT) & (PT_ENTRIES - 1)) as i32;
+        }
+    }
+    if !l2idxp.is_null() {
+        unsafe {
+            *l2idxp = ((virt >> PTL2_SHIFT) & (PT_ENTRIES - 1)) as i32;
+        }
+    }
+    if !l1idxp.is_null() {
+        unsafe {
+            *l1idxp = ((virt >> PTL1_SHIFT) & (PT_ENTRIES - 1)) as i32;
+        }
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_walk_bounds_result(
+    start: CULong,
+    end: CULong,
+    base: CULong,
+    span: CULong,
+    shift: i32,
+    sixp: *mut i32,
+    eixp: *mut i32,
+) {
+    let size = 1u64 << shift;
+    let six = if start <= base {
+        0
+    } else {
+        ((start - base) >> shift) as i32
+    };
+    let eix = if end == 0 || (span != 0 && base.wrapping_add(span) <= end) {
+        PT_ENTRIES as i32
+    } else {
+        (((end - base) + (size - 1)) >> shift) as i32
+    };
+
+    if !sixp.is_null() {
+        unsafe {
+            *sixp = six;
+        }
+    }
+    if !eixp.is_null() {
+        unsafe {
+            *eixp = eix;
+        }
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_split_large_page_prepare_result(
+    entry: CULong,
+    pgsize: CULong,
+    child_entryp: *mut CULong,
+    rss_pgsizep: *mut CULong,
+    step_p: *mut CULong,
+) -> i32 {
+    if pgsize != PTL3_SIZE && pgsize != PTL2_SIZE {
+        return -EINVAL;
+    }
+
+    if !child_entryp.is_null() {
+        unsafe {
+            *child_entryp = if pgsize == PTL2_SIZE {
+                entry & !PFL2_SIZE
+            } else {
+                entry
+            };
+        }
+    }
+    if !rss_pgsizep.is_null() {
+        unsafe {
+            *rss_pgsizep = pgsize / PT_ENTRIES;
+        }
+    }
+    if !step_p.is_null() {
+        unsafe {
+            *step_p = pgsize / PT_ENTRIES;
+        }
+    }
+
+    0
+}
+
+#[no_mangle]
+pub extern "C" fn x86_split_large_page_next_entry_result(entry: CULong, pgsize: CULong) -> CULong {
+    entry + pgsize / PT_ENTRIES
 }

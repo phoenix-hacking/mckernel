@@ -1563,22 +1563,26 @@ struct vm_range *lookup_process_memory_range(
 		if (!vm->range_cache[c_i])
 			continue;
 
-		if (vm->range_cache[c_i]->start <= start &&
-			vm->range_cache[c_i]->end >= end)
+		if (process_range_cache_hit_result(vm->range_cache[c_i]->start,
+			vm->range_cache[c_i]->end, start, end))
 			return vm->range_cache[c_i];
 	}
 
 	while (node) {
+		int relation;
+
 		range = rb_entry(node, struct vm_range, vm_rb_node);
-		if (end <= range->start) {
-			node = node->rb_left;
-		} else if (start >= range->end) {
-			node = node->rb_right;
-		} else if (start < range->start) {
+		relation = process_lookup_range_relation_result(start, end,
+				range->start, range->end);
+		if (relation < -1) {
 			/* We have a match, but we need to try left to
 			 * return the first possible match */
 			match = range;
 			node = node->rb_left;
+		} else if (relation < 0) {
+			node = node->rb_left;
+		} else if (relation > 0) {
+			node = node->rb_right;
 		} else {
 			match = range;
 			break;

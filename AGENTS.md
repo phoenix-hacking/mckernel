@@ -33,8 +33,9 @@ The Rust migration is intentionally incremental:
   reason clearly and choose the largest safe McKernel-owned slice instead.
 - Recent long-running goals are measured as aggregate functional percentage
   points across the dashboard rows, not as literal whole-tree LOC percentage.
-  The latest verified run added +60 aggregate points across McKernel-owned core
-  sections. Count only verified, McKernel-owned movement; do not inflate
+  The latest verified run added +34 aggregate points toward the requested +135
+  campaign, leaving 101 requested campaign points still to earn with verified
+  code. Count only verified, McKernel-owned movement; do not inflate
   percentages with external software, third-party code, or unverified high-risk
   mutation.
 
@@ -61,21 +62,22 @@ strict line-count. A conservative mechanical LOC baseline is available with
 | Area | Rust % | Status |
 | --- | ---: | --- |
 | Rust build/link foundation | 95 | Rust objects build and link into `mckernel.img`; user tools link Rust helper objects; IHK Linux-module Kbuild links Rust helpers into `ihk`, `ihk-smp-x86_64`, and `mcctrl`; Rust-linked module-load smoke has passed. |
-| ABI/layout foundation | 46 | Shared kernel/user structs plus private process/thread lifecycle, wait/futex, timer, IHK monitor/rusage/register/resource, and host Linux device/OS/file layouts are covered; broader lifecycle layout remains before mutation-heavy Rust ownership. |
+| ABI/layout foundation | 50 | Shared kernel/user structs plus private process/thread lifecycle, wait/futex, timer, `timeval`/`rusage`, IHK monitor/register/resource, and host Linux device/OS/file layouts are covered; broader lifecycle layout remains before mutation-heavy Rust ownership. |
 | Shared primitives | 84 | rbtree, llist, plist, waitqueue init/entry/list core, wake scheduling predicate, string/memory leaf helpers, numeric parsers, bitops, bitmap, parse, zero-area search, and region helpers are Rust-owned. |
-| x86_64 memory management | 27 | Classification, NUMA/page queries, splitability, page-attribute conversion, PTE value shaping, page-size PTE validation/value selection, early allocator arithmetic/exhaustion checks, VM range validation, memory-policy validation, and selected pager/object sizing helpers are Rust-owned; page-table walking, mapping mutation, TLB-sensitive mutation, and user-copy remain C. |
-| Page allocator | 34 | Rbtree helper cluster, bitmap-backed no-lock allocator internals, init layout/end/count calculation, tail-map reservation, destroy-page count, NUMA free/alloc helpers, and free-path policy are Rust-owned; locks/logging, CPU-local cache fast path, allocator lifetime, and IKC zero requests remain C. |
-| Process/VM management | 68 | Wait/clone/ptrace/VM policy, fork VM/thread metadata copy, address-space release and PID detach mutation, CPU-set fallback, mckfd decisions plus push/pop-head mutation, TID-table scan/index decisions, TID slot release/replace writes, sigpending list pop/unlink, process/thread list add/detach helpers, terminate child cleanup list unlink/reparent mutation helpers, thread report-list attach/detach mutation helpers, ptrace main-thread attach/detach reparent helpers, ptrace detach/wakeup state and pending-signal cleanup helpers, wait signal-flag and exit-status reap mutation helpers, terminate/wait report-thread release cleanup helpers, optional ptrace/fp cleanup gates, and lifecycle/refcount predicates are Rust-owned; broader child-list orchestration, rusage aggregation, broad process lifetime mutation, signal forwarding, and full wait orchestration remain C. |
-| Syscall core | 66 | SysV shm, prlimit, scheduler, syscall/range validation, credential-refresh forwarding gates, getpid/getppid/gettid/set_tid_address return shaping, memory-policy, mmap/brk/mincore, signal/time, ptrace/process-vm, wait, execveat, clone, futex policy helpers, bounded wait/ptrace/termination/signal list rewiring, pending-signal delivery/offload-interrupt classification, ptrace wakeup/siginfo/eventmsg result classification, ptrace request dispatch classification, wait/reap result-shape classification, getrusage dispatch/update classification, process-exit status/siginfo classification, terminate cleanup/reparent action classification, clone spawn/TID/TLS/reparent result shaping, and ptrace detach signal-forward gates are Rust-owned; top-level syscall dispatch, user-copy, Linux forwarding, locks, allocation, register/memory access, signal delivery, child-list mutation, rusage aggregation, and high-risk handlers remain C. |
-| Scheduler/timers/wait/futex | 31 | Waitqueue init/entry/list core, wake scheduling predicate, bounded runqueue/migration list rewiring plus runqueue length updates, timer spin-sleep/runqueue/remaining-time arithmetic, futex key matching, and scheduler/futex/signal/timer policy helpers are Rust-owned; callbacks, locks, wakeups, IPIs, timer queues, context switching, and futex queue/wake internals remain C. |
+| x86_64 memory management | 35 | Classification, NUMA/page queries, splitability, page-attribute conversion, PTE value shaping, page-size PTE validation/value selection, early allocator arithmetic/exhaustion checks, page-table index calculation, walk-bound calculation, split-large-page preparation/entry arithmetic, VM range validation, memory-policy validation, and selected pager/object sizing helpers are Rust-owned; page-table mapping mutation, TLB-sensitive mutation, and user-copy remain C. |
+| Page allocator | 38 | Rbtree helper cluster, bitmap-backed no-lock allocator internals, init layout/end/count calculation, tail-map reservation, destroy-page count, NUMA free/alloc helpers, free-path policy, and Linux zero-request action selection are Rust-owned; locks/logging, CPU-local cache fast path, allocator lifetime, and IKC zero request side effects remain C. |
+| Process/VM management | 72 | Wait/clone/ptrace/VM policy, fork VM/thread metadata copy, address-space release and PID detach mutation, range-cache/lookup relation decisions, CPU-set fallback, mckfd decisions plus push/pop-head mutation, TID-table scan/index decisions, TID slot release/replace writes, sigpending list pop/unlink, process/thread list add/detach helpers, terminate child cleanup list unlink/reparent mutation helpers, thread report-list attach/detach mutation helpers, ptrace main-thread attach/detach reparent helpers, ptrace detach/wakeup state and pending-signal cleanup helpers, wait signal-flag and exit-status reap mutation helpers, terminate/wait report-thread release cleanup helpers, optional ptrace/fp cleanup gates, and lifecycle/refcount predicates are Rust-owned; broader child-list orchestration, rusage aggregation, broad process lifetime mutation, signal forwarding, and full wait orchestration remain C. |
+| Syscall core | 72 | SysV shm, prlimit, scheduler, syscall/range validation, credential-refresh forwarding gates, requester-TID and preempt-disable gates, getpid/getppid/gettid/set_tid_address return shaping, memory-policy, mmap/brk/mincore, mprotect split/write-change decisions, signal/time, ptrace/process-vm, wait, execveat, clone, futex policy helpers, bounded wait/ptrace/termination/signal list rewiring, pending-signal delivery/offload-interrupt classification, ptrace wakeup/siginfo/eventmsg result classification, ptrace request dispatch classification, wait/reap result-shape classification, getrusage dispatch/update classification, process-exit status/siginfo classification, terminate cleanup/reparent action classification, clone spawn/TID/TLS/reparent result shaping, and ptrace detach signal-forward gates are Rust-owned; top-level syscall dispatch, user-copy, Linux forwarding, locks, allocation, register/memory access, signal delivery, child-list mutation, rusage aggregation, and high-risk handlers remain C. |
+| Scheduler/timers/wait/futex | 39 | Waitqueue init/entry/list core, wake scheduling predicate, bounded runqueue/migration list rewiring plus runqueue length updates, timer spin-sleep/runqueue/remaining-time arithmetic, futex key matching and key preparation, syscall-offload scheduling decisions, and scheduler/futex/signal/timer policy helpers are Rust-owned; callbacks, locks, wakeups, IPIs, timer queues, context switching, and futex queue/wake internals remain C. |
 | procfs/sysfs/xpmem/file objects | 100 | XPMEM and file/dev/procfs/sysfs/pager decision-helper surface is Rust-owned through multiple batches, including procfs cmdline/comm helpers; this is not full subsystem ownership because allocation, refcount mutation, lock/list mutation, remap/page-table mutation, page I/O, procfs buffer mutation, sysfs IKC exchange, and user-copy remain C. |
 | host/IKC/mcctrl/IHK modules | 61 | Context only unless explicitly in scope. Rust helper linkage is active for `ihk`, `ihk-smp-x86_64`, and `mcctrl`; many host driver, SMP, sysfs, IKC policy, and mcctrl helpers are Rust-owned; lock/list mutation, device allocation, memory registration, IKC exchange mutation, broad allocation/lifetime ownership, and kernel object lifecycle mutation remain pending. |
 | User tools | 83 | `mcstat`, `mcexec`, `ihklib`, `mcinspect`, `eclair`, and crash-extension helper surfaces are substantially Rust-owned; device I/O, ioctl handling, DWARF/BFD walking, crash command orchestration, GDB process/socket orchestration, daemon/thread/event-loop mutation, dump NMI side effects, register/memory reads, and most IHK command mutation remain C. |
+| Rocky runtime integration | 82 | Rust McKernel image and focused Rocky smokes have passed in prior runs; this pass did not run boot or reboot-capable validation. Wider runtime/performance coverage remains pending. |
 | arm64 | 0 | Deferred until x86_64 stabilizes. |
 
-Honest current distance: the non-arm64 dashboard average is 64.8%, while the
-McKernel-owned core rows in this table average 57.0%. The conservative
-mechanical LOC share is 15.8% Rust implementation. The functional percentages
+Honest current distance: the non-arm64 dashboard average is 67.6%, while the
+McKernel-owned core rows in this table average 61.3%. The conservative
+mechanical LOC share is 16.0% Rust implementation. The functional percentages
 track verified Rust-owned surfaces; they are not a claim that mutation-heavy
 kernel bodies are already fully Rust.
 
@@ -84,13 +86,13 @@ kernel bodies are already fully Rust.
 | Area | Current | Points To 100 |
 | --- | ---: | ---: |
 | Rust build/link foundation | 95 | 5 |
-| ABI/layout foundation | 46 | 54 |
+| ABI/layout foundation | 50 | 50 |
 | Shared primitives | 84 | 16 |
-| x86_64 memory management | 27 | 73 |
-| Page allocator | 34 | 66 |
-| Process/VM management | 68 | 32 |
-| Syscall core | 66 | 34 |
-| Scheduler/timers/wait/futex | 31 | 69 |
+| x86_64 memory management | 35 | 65 |
+| Page allocator | 38 | 62 |
+| Process/VM management | 72 | 28 |
+| Syscall core | 72 | 28 |
+| Scheduler/timers/wait/futex | 39 | 61 |
 | procfs/sysfs/xpmem/file objects | 100 | 0 for helper/decision surface; mutation bodies still C |
 | host/IKC/mcctrl/IHK modules | 61 | 39 |
 | User tools | 83 | 17 |
@@ -205,6 +207,15 @@ into Rust. Continue from the McKernel-owned parts first:
   walking/mutation, timer queues, futex wake queues, rusage aggregation,
   scheduler/context-switch side effects, and procfs/sysfs buffer or IKC
   mutation.
+- The latest +34 verified slice toward the requested +135 campaign routes
+  futex key preparation, syscall-offload scheduling decisions, x86 page-table
+  index and walk-bound arithmetic, split-large-page preparation/entry
+  arithmetic, syscall requester/preempt gates, `mprotect` split/write-change
+  decisions, VM range-cache/lookup relation decisions, page-allocator Linux
+  zero-request action selection, and `timeval`/`rusage` ABI assertions through
+  Rust helpers. C still owns locks, allocation/free, user-copy, Linux
+  forwarding, page-table map/unmap mutation, signal delivery, wakeups, timer
+  queues, futex queues, scheduler handoff, and broad lifetime mutation.
 - IHK open/release/close/init/exit/minor-registration, register-device cleanup,
   destroy-all-OS candidate/restore, stray-kmsg trim, event-list cleanup,
   destroy callback, and notifier policy decisions route through Rust helpers;
@@ -218,7 +229,7 @@ Latest documented validation passed:
 - `kernel/rust/tests/run_equivalence.sh`.
 - `git diff --check`.
 - `python3 -m py_compile scripts/rust-ownership-report.py`.
-- `scripts/rust-ownership-report.py`.
+- `scripts/rust-ownership-report.py --check-dashboard overview.txt --check-dashboard overview2.txt --top 25`.
 - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`.
 - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`.
 
@@ -242,10 +253,12 @@ At the start or end of every run, describe the next major set of work.
 
 Recommended next phase:
 
-- Push the next ownership step into high-debt McKernel-owned syscall/process
-  helpers: rusage aggregation boundaries, signal-delivery bodies, ptrace
-  handler body slices, VM range mutation preflight, and timer/futex wake-path
-  decisions with targeted runtime coverage.
+- Continue the remaining +101 points in the requested +135 campaign by
+  targeting high-debt McKernel-owned rows first: x86 page-table clear/visit
+  decision helpers, allocator CPU-cache/zeroed-list policy before mutation,
+  syscall ptrace/getrusage handler body slices, scheduler/futex wake/requeue
+  decisions, and process VM-range mutation preflight with synthetic equivalence
+  coverage.
 - Keep the high-risk orchestration in C until runtime coverage exists:
   process lifetime mutation, child-list mutation, rusage aggregation, ptrace
   detach mutation, scheduling decisions, wakeups, timers, memory registration,

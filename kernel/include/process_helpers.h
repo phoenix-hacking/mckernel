@@ -32,6 +32,14 @@ int process_access_initial_result(int has_range, unsigned long range_start,
 int process_access_adjacent_result(unsigned long range_end, int has_next,
 				   unsigned long next_start);
 int process_access_permission_result(int verify_type, unsigned long flags);
+int process_range_cache_hit_result(unsigned long cache_start,
+				   unsigned long cache_end,
+				   unsigned long start,
+				   unsigned long end);
+int process_lookup_range_relation_result(unsigned long start,
+					 unsigned long end,
+					 unsigned long range_start,
+					 unsigned long range_end);
 int process_ref_release_should_destroy_result(int dec_and_test);
 int process_release_address_space_should_destroy_result(int dec_and_test);
 int process_release_address_space_should_run_free_cb_result(

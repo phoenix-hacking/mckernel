@@ -845,11 +845,28 @@ pub unsafe extern "C" fn __ihk_numa_free_pages_prepare(
         zero_phys_range(addr, size);
     }
 
-    if zero_at_free == 0 || defer_zero_at_free == 0 {
+    return if zero_at_free == 0 || defer_zero_at_free == 0 {
         IHK_NUMA_FREE_DIRECT
     } else {
         IHK_NUMA_FREE_DEFERRED
+    };
+}
+
+#[no_mangle]
+pub extern "C" fn __ihk_numa_linux_zero_request_action(
+    cpu_initialized: CInt,
+    has_current: CInt,
+    is_idle: CInt,
+    nohost: CInt,
+    zeroing_workers: CInt,
+) -> CInt {
+    if cpu_initialized == 0 || has_current == 0 || is_idle != 0 || nohost != 0 {
+        return 0;
     }
+    if zeroing_workers > 0 {
+        return 2;
+    }
+    1
 }
 
 #[no_mangle]

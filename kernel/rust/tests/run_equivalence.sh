@@ -896,6 +896,9 @@ extern unsigned long timer_after_tick_remaining_result(unsigned long,
 extern int futex_key_match_result(int, int, unsigned long, unsigned long,
 				  unsigned long, unsigned long, unsigned long,
 				  unsigned long);
+extern int futex_key_prepare_result(unsigned long, int, unsigned long *,
+				    unsigned long *, int *);
+extern int syscall_offload_should_schedule_result(int, int, int, int, int);
 
 static void mix(unsigned long *digest, unsigned long value)
 {
@@ -940,6 +943,10 @@ int main(void)
 		{ 0x1000, 0x2000, 4, 0x1001, 0x2000, 4 },
 		{ 0x1000, 0x2000, 4, 0x1000, 0x3000, 4 },
 	};
+	static const unsigned long futex_addrs[] = {
+		0, 1, 3, 4, 0xfff, 0x1000, 0x1004, 0x1ffc,
+	};
+	static const int binary[] = { 0, 1 };
 	unsigned long digest = 0x5c7ed123456789abUL;
 
 	for (unsigned int i = 0; i < sizeof(policies) / sizeof(policies[0]); i++) {
@@ -985,6 +992,32 @@ int main(void)
 		mix_signed(&digest, futex_key_match_result(1, 0,
 			futex_keys[i][0], futex_keys[i][1], futex_keys[i][2],
 			futex_keys[i][3], futex_keys[i][4], futex_keys[i][5]));
+	}
+
+	for (unsigned int i = 0; i < sizeof(futex_addrs) / sizeof(futex_addrs[0]); i++) {
+		for (unsigned int s = 0; s < sizeof(binary) / sizeof(binary[0]); s++) {
+			unsigned long base = 0xdeadbeefUL;
+			unsigned long offset = 0xfeedfaceUL;
+			int is_private = -99;
+			int rc = futex_key_prepare_result(futex_addrs[i],
+				binary[s], &base, &offset, &is_private);
+
+			mix_signed(&digest, rc);
+			mix(&digest, base);
+			mix(&digest, offset);
+			mix_signed(&digest, is_private);
+		}
+	}
+
+	for (unsigned int n = 0; n < sizeof(binary) / sizeof(binary[0]); n++) {
+		for (int tid = 0; tid <= 2; tid++) {
+			for (int runq = 0; runq <= 3; runq++) {
+				mix_signed(&digest,
+					syscall_offload_should_schedule_result(
+						binary[n], tid, binary[tid & 1],
+						runq, binary[runq & 1]));
+			}
+		}
 	}
 
 	printf("sched_helpers ok digest=%016lx\n", digest);
@@ -1290,6 +1323,8 @@ extern int syscall_getpid_result(int);
 extern int syscall_getppid_result(int);
 extern int syscall_gettid_result(int);
 extern int syscall_set_tid_address_return_result(int);
+extern int syscall_use_requester_tid_result(int, unsigned long, int);
+extern int syscall_preempt_disable_needed_result(int);
 extern int setpgid_normalize_pid(int, int);
 extern int setpgid_normalize_pgid(int, int);
 extern int setpgid_execed_result(int);
@@ -1301,6 +1336,10 @@ extern int munmap_prepare_range(uintptr_t, size_t, uintptr_t, uintptr_t,
 				size_t *);
 extern int mprotect_prepare_range(uintptr_t, size_t, uintptr_t, uintptr_t,
 				  size_t *, uintptr_t *);
+extern void mprotect_split_needed_result(unsigned long, unsigned long,
+					 unsigned long, unsigned long,
+					 int *, int *);
+extern int mprotect_write_changed_result(unsigned long, unsigned long);
 extern int mlockall_policy_result(int, int, uint64_t);
 extern int remap_file_pages_prepare(uintptr_t, size_t, int, size_t,
 				    uintptr_t *, uintptr_t *, long *);
@@ -1521,6 +1560,16 @@ static void exercise_unmap_protect(unsigned long *digest)
 			&len, &end));
 		mix(digest, len);
 		mix(digest, end);
+		for (unsigned int r = 0; r < sizeof(cases) / sizeof(cases[0]); r++) {
+			int split_start = -7;
+			int split_end = -9;
+
+			mprotect_split_needed_result(cases[r].start,
+				cases[r].user_end, cases[i].start, end,
+				&split_start, &split_end);
+			mix_signed(digest, split_start);
+			mix_signed(digest, split_end);
+		}
 	}
 }
 
@@ -2512,6 +2561,8 @@ int main(void)
 	static const int currents[] = { 1, 100 };
 	static const int execed[] = { -1, 0, 1, 2 };
 	static const long syscall_rcs[] = { -4095, -1, 0, 1, 255 };
+	static const int syscall_numbers[] = { 0, 1, 203, 204, 9999 };
+	static const int rtids[] = { -2, -1, 0, 1, 77 };
 	static const unsigned long flags[] = {
 		0, VR_RESERVED, VR_IO_NOCACHE, VR_REMOTE,
 		VR_RESERVED | VR_REMOTE, 0x4000,
@@ -2550,10 +2601,21 @@ int main(void)
 		mix_signed(&digest, syscall_gettid_result(pids[i]));
 		mix_signed(&digest, syscall_set_tid_address_return_result(pids[i]));
 	}
+	for (unsigned int i = 0; i < sizeof(syscall_numbers) / sizeof(syscall_numbers[0]); i++) {
+		for (unsigned int p = 0; p < sizeof(pids) / sizeof(pids[0]); p++) {
+			mix_signed(&digest, syscall_use_requester_tid_result(
+				syscall_numbers[i], (unsigned long)pids[p], 203));
+		}
+	}
+	for (unsigned int i = 0; i < sizeof(rtids) / sizeof(rtids[0]); i++)
+		mix_signed(&digest, syscall_preempt_disable_needed_result(rtids[i]));
 
 	for (unsigned int i = 0; i < sizeof(flags) / sizeof(flags[0]); i++) {
 		mix_signed(&digest, memlock_range_flag_result(flags[i]));
 		mix_signed(&digest, range_has_disallowed_change_flags(flags[i]));
+		for (unsigned int p = 0; p < sizeof(flags) / sizeof(flags[0]); p++)
+			mix_signed(&digest, mprotect_write_changed_result(
+				flags[i], flags[p]));
 	}
 
 	exercise_memlock(&digest);
@@ -4772,6 +4834,7 @@ extern unsigned long __page_alloc_rbtree_reserve_pages(struct rb_root *root,
 						       unsigned long aligned_addr,
 						       int npages);
 extern struct free_chunk *__page_alloc_rbtree_get_root_chunk(struct rb_root *root);
+extern int __ihk_numa_linux_zero_request_action(int, int, int, int, int);
 #endif
 
 static void mix(unsigned long *digest, unsigned long value)
@@ -4864,6 +4927,21 @@ int main(void)
 						  ARENA_BASE + 2 * LOCAL_PAGE_SIZE,
 						  1) == 0);
 	mix(&digest, digest_tree(&root));
+	for (int cpu_initialized = 0; cpu_initialized <= 1; cpu_initialized++) {
+		for (int has_current = 0; has_current <= 1; has_current++) {
+			for (int is_idle = 0; is_idle <= 1; is_idle++) {
+				for (int nohost = 0; nohost <= 1; nohost++) {
+					for (int workers = 0; workers <= 2; workers++) {
+						mix(&digest,
+						    __ihk_numa_linux_zero_request_action(
+							    cpu_initialized,
+							    has_current, is_idle,
+							    nohost, workers));
+					}
+				}
+			}
+		}
+	}
 	{
 		struct free_chunk *chunk;
 		int chunks = 0;
@@ -5410,6 +5488,10 @@ extern int process_remove_region_alignment_result(unsigned long, unsigned long);
 extern int process_access_initial_result(int, unsigned long, unsigned long);
 extern int process_access_adjacent_result(unsigned long, int, unsigned long);
 extern int process_access_permission_result(int, unsigned long);
+extern int process_range_cache_hit_result(unsigned long, unsigned long,
+					  unsigned long, unsigned long);
+extern int process_lookup_range_relation_result(unsigned long, unsigned long,
+						unsigned long, unsigned long);
 extern int process_ref_release_should_destroy_result(int);
 extern int process_release_address_space_should_destroy_result(int);
 extern int process_release_address_space_should_run_free_cb_result(unsigned long);
@@ -5643,6 +5725,31 @@ int main(void)
 	mix(&digest, process_access_permission_result(VERIFY_WRITE, VR_PROT_WRITE));
 	mix(&digest, process_access_permission_result(VERIFY_WRITE, VR_PROT_READ));
 	mix(&digest, process_access_permission_result(99, 0));
+	{
+		static const unsigned long ranges[][2] = {
+			{ 0x1000, 0x2000 },
+			{ 0x2000, 0x3000 },
+			{ 0x4000, 0x8000 },
+		};
+		static const unsigned long lookups[][2] = {
+			{ 0x0, 0x1000 },
+			{ 0x1000, 0x1800 },
+			{ 0x1800, 0x2800 },
+			{ 0x3000, 0x3800 },
+			{ 0x7000, 0x9000 },
+		};
+
+		for (unsigned int r = 0; r < sizeof(ranges) / sizeof(ranges[0]); r++) {
+			for (unsigned int l = 0; l < sizeof(lookups) / sizeof(lookups[0]); l++) {
+				mix(&digest, process_range_cache_hit_result(
+					ranges[r][0], ranges[r][1],
+					lookups[l][0], lookups[l][1]));
+				mix(&digest, process_lookup_range_relation_result(
+					lookups[l][0], lookups[l][1],
+					ranges[r][0], ranges[r][1]));
+			}
+		}
+	}
 	mix(&digest, process_ref_release_should_destroy_result(0));
 	mix(&digest, process_ref_release_should_destroy_result(1));
 	mix(&digest, process_release_address_space_should_destroy_result(0));
@@ -6022,6 +6129,15 @@ extern int x86_smaller_page_size_result(size_t, int, size_t *, int *);
 extern unsigned long x86_early_alloc_align_end_result(unsigned long);
 extern int x86_early_alloc_exhausted_result(unsigned long, unsigned long);
 extern unsigned long x86_early_alloc_next_result(unsigned long, int);
+extern void x86_pt_indices_result(unsigned long, int *, int *, int *, int *);
+extern void x86_walk_bounds_result(unsigned long, unsigned long,
+				   unsigned long, unsigned long, int,
+				   int *, int *);
+extern int x86_split_large_page_prepare_result(unsigned long, size_t,
+					       unsigned long *, size_t *,
+					       unsigned long *);
+extern unsigned long x86_split_large_page_next_entry_result(unsigned long,
+							    size_t);
 
 static void mix(unsigned long *digest, unsigned long value)
 {
@@ -6061,6 +6177,14 @@ int main(void)
 		(1024UL * 1024 * 1024) + 1,
 	};
 	for (unsigned int i = 0; i < sizeof(sizes) / sizeof(sizes[0]); i++) {
+		int l4idx = -1, l3idx = -1, l2idx = -1, l1idx = -1;
+
+		x86_pt_indices_result(sizes[i], &l4idx, &l3idx, &l2idx,
+			&l1idx);
+		mix(&digest, (unsigned int)l4idx);
+		mix(&digest, (unsigned int)l3idx);
+		mix(&digest, (unsigned int)l2idx);
+		mix(&digest, (unsigned int)l1idx);
 		for (int use_1gb = 0; use_1gb <= 1; use_1gb++) {
 			size_t newsize = 0xfeedfaceUL;
 			int p2align = 12345;
@@ -6077,6 +6201,21 @@ int main(void)
 			sizes[i], 2UL * 1024 * 1024));
 		mix(&digest, x86_early_alloc_next_result(sizes[i],
 			(int)i - 2));
+	}
+	for (unsigned int s = 0; s < sizeof(sizes) / sizeof(sizes[0]); s++) {
+		for (unsigned int e = 0; e < sizeof(sizes) / sizeof(sizes[0]); e++) {
+			int six = -123;
+			int eix = -456;
+
+			x86_walk_bounds_result(sizes[s], sizes[e],
+				4096, 2UL * 1024 * 1024, 12, &six, &eix);
+			mix(&digest, (unsigned int)six);
+			mix(&digest, (unsigned int)eix);
+			x86_walk_bounds_result(sizes[s], sizes[e],
+				0, 0, 39, &six, &eix);
+			mix(&digest, (unsigned int)six);
+			mix(&digest, (unsigned int)eix);
+		}
 	}
 	{
 		size_t pgsizes[] = {
@@ -6107,6 +6246,23 @@ int main(void)
 						mix(&digest, entry);
 					}
 				}
+			}
+		}
+		for (unsigned int p = 0; p < sizeof(pgsizes) / sizeof(pgsizes[0]); p++) {
+			for (unsigned int a = 0; a < sizeof(attrs) / sizeof(attrs[0]); a++) {
+				unsigned long child = 0xaaaaaaaaUL;
+				size_t rss_pgsize = 0xbbbbbbbbUL;
+				unsigned long step = 0xccccccccUL;
+				int error = x86_split_large_page_prepare_result(
+					attrs[a], pgsizes[p], &child,
+					&rss_pgsize, &step);
+
+				mix(&digest, (unsigned long)(unsigned int)-error);
+				mix(&digest, child);
+				mix(&digest, rss_pgsize);
+				mix(&digest, step);
+				mix(&digest, x86_split_large_page_next_entry_result(
+					attrs[a], pgsizes[p]));
 			}
 		}
 	}

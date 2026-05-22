@@ -14,5 +14,11 @@ int futex_key_match_result(int has_key1, int has_key2,
 			   unsigned long word1, unsigned long ptr1,
 			   unsigned long offset1, unsigned long word2,
 			   unsigned long ptr2, unsigned long offset2);
+int futex_key_prepare_result(unsigned long address, int fshared,
+			     unsigned long *basep, unsigned long *offsetp,
+			     int *privatep);
+int syscall_offload_should_schedule_result(int no_preempt, int tid,
+					   int need_resched, int runq_len,
+					   int is_sched_setaffinity);
 
 #endif /* MCKERNEL_SCHED_HELPERS_H */

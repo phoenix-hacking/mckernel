@@ -60,6 +60,7 @@
 #include <ihk/monitor.h>
 #include <profile.h>
 #include <ihk/debug.h>
+#include <sched_helpers.h>
 #include "../executer/include/uti.h"
 
 /* Headers taken from kitten LWK */
@@ -186,6 +187,9 @@ extern int syscall_getpid_result(int pid);
 extern int syscall_getppid_result(int ppid);
 extern int syscall_gettid_result(int tid);
 extern int syscall_set_tid_address_return_result(int pid);
+extern int syscall_use_requester_tid_result(int syscall_nr, unsigned long arg0,
+		int sched_setaffinity_nr);
+extern int syscall_preempt_disable_needed_result(int rtid);
 extern int setpgid_normalize_pid(int current_pid, int pid);
 extern int setpgid_normalize_pgid(int pid, int pgid);
 extern int setpgid_execed_result(int execed);
@@ -199,6 +203,11 @@ extern int munmap_prepare_range(uintptr_t addr, size_t len0,
 extern int mprotect_prepare_range(uintptr_t start, size_t len0,
 		uintptr_t user_start, uintptr_t user_end,
 		size_t *lenp, uintptr_t *endp);
+extern void mprotect_split_needed_result(unsigned long range_start,
+		unsigned long range_end, unsigned long addr, unsigned long end,
+		int *split_startp, int *split_endp);
+extern int mprotect_write_changed_result(unsigned long range_flags,
+		unsigned long protflags);
 extern int mlockall_policy_result(int flags, int is_privileged,
 		unsigned long memlock_cur);
 extern int remap_file_pages_prepare(uintptr_t start0, size_t size, int prot,
@@ -411,6 +420,10 @@ SYSCALL_POLICY_HELPER_PROTO int syscall_getpid_result(int pid);
 SYSCALL_POLICY_HELPER_PROTO int syscall_getppid_result(int ppid);
 SYSCALL_POLICY_HELPER_PROTO int syscall_gettid_result(int tid);
 SYSCALL_POLICY_HELPER_PROTO int syscall_set_tid_address_return_result(int pid);
+SYSCALL_POLICY_HELPER_PROTO int syscall_use_requester_tid_result(
+		int syscall_nr, unsigned long arg0, int sched_setaffinity_nr);
+SYSCALL_POLICY_HELPER_PROTO int syscall_preempt_disable_needed_result(
+		int rtid);
 SYSCALL_POLICY_HELPER_PROTO int setpgid_normalize_pid(int current_pid, int pid);
 SYSCALL_POLICY_HELPER_PROTO int setpgid_normalize_pgid(int pid, int pgid);
 SYSCALL_POLICY_HELPER_PROTO int setpgid_execed_result(int execed);
@@ -426,6 +439,12 @@ SYSCALL_POLICY_HELPER_PROTO int munmap_prepare_range(uintptr_t addr,
 SYSCALL_POLICY_HELPER_PROTO int mprotect_prepare_range(uintptr_t start,
 		size_t len0, uintptr_t user_start, uintptr_t user_end,
 		size_t *lenp, uintptr_t *endp);
+SYSCALL_POLICY_HELPER_PROTO void mprotect_split_needed_result(
+		unsigned long range_start, unsigned long range_end,
+		unsigned long addr, unsigned long end, int *split_startp,
+		int *split_endp);
+SYSCALL_POLICY_HELPER_PROTO int mprotect_write_changed_result(
+		unsigned long range_flags, unsigned long protflags);
 SYSCALL_POLICY_HELPER_PROTO int mlockall_policy_result(int flags,
 		int is_privileged, unsigned long memlock_cur);
 SYSCALL_POLICY_HELPER_PROTO int remap_file_pages_prepare(uintptr_t start0,
@@ -798,7 +817,8 @@ long do_syscall(struct syscall_request *req, int cpu)
 	/* The current thread is the requester */
 	req->rtid = cpu_local_var(current)->tid;
 
-	if (req->number == __NR_sched_setaffinity && req->args[0] == 0) {
+	if (syscall_use_requester_tid_result(req->number, req->args[0],
+					     __NR_sched_setaffinity)) {
 		/* mcexec thread serving migrate-to-Linux request must have
 		   the same tid as the requesting McKernel thread because the
 		   serving thread jumps to hfi driver and then jumps to
@@ -816,7 +836,7 @@ long do_syscall(struct syscall_request *req, int cpu)
 #endif
 	send_syscall(req, cpu, &res);
 
-	if (req->rtid == -1) {
+	if (syscall_preempt_disable_needed_result(req->rtid)) {
 		preempt_disable();
 	}
 
@@ -868,9 +888,9 @@ long do_syscall(struct syscall_request *req, int cpu)
 				&(get_this_cpu_local_var()->runq_lock));
 			v = get_this_cpu_local_var();
 
-			if (v->flags & CPU_FLAG_NEED_RESCHED ||
-			    v->runq_len > 1 ||
-			    req->number == __NR_sched_setaffinity) {
+			if (syscall_offload_should_schedule_result(0, thread->tid,
+			    v->flags & CPU_FLAG_NEED_RESCHED, v->runq_len,
+			    req->number == __NR_sched_setaffinity)) {
 				v->flags &= ~CPU_FLAG_NEED_RESCHED;
 				do_schedule = 1;
 			}
@@ -3205,6 +3225,8 @@ SYSCALL_DECLARE(mprotect)
 	const unsigned long protflags = PROT_TO_VR_FLAG(prot);
 	unsigned long denied;
 	int ro_changed = 0;
+	int split_start;
+	int split_end;
 
 	dkprintf("[%d]sys_mprotect(%lx,%lx,%x)\n",
 			ihk_mc_get_processor_id(), start, len0, prot);
@@ -3276,7 +3298,9 @@ SYSCALL_DECLARE(mprotect)
 			goto out;
 		}
 
-		if (range->start < addr) {
+		mprotect_split_needed_result(range->start, range->end, addr,
+					     end, &split_start, &split_end);
+		if (split_start) {
 			error = split_process_memory_range(thread->vm, range, addr, &range);
 			if (error) {
 				ekprintf("sys_mprotect(%lx,%lx,%x):split failed. %d\n",
@@ -3284,7 +3308,7 @@ SYSCALL_DECLARE(mprotect)
 				goto out;
 			}
 		}
-		if (end < range->end) {
+		if (split_end) {
 			error = split_process_memory_range(thread->vm, range, end, NULL);
 			if (error) {
 				ekprintf("sys_mprotect(%lx,%lx,%x):split failed. %d\n",
@@ -3293,7 +3317,7 @@ SYSCALL_DECLARE(mprotect)
 			}
 		}
 
-		if ((range->flag ^ protflags) & VR_PROT_WRITE) {
+		if (mprotect_write_changed_result(range->flag, protflags)) {
 			ro_changed = 1;
 		}
 
@@ -4412,6 +4436,19 @@ syscall_set_tid_address_return_result(int pid)
 }
 
 SYSCALL_POLICY_HELPER_SCOPE int
+syscall_use_requester_tid_result(int syscall_nr, unsigned long arg0,
+		int sched_setaffinity_nr)
+{
+	return syscall_nr == sched_setaffinity_nr && arg0 == 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+syscall_preempt_disable_needed_result(int rtid)
+{
+	return rtid == -1;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
 setpgid_normalize_pid(int current_pid, int pid)
 {
 	return pid == 0 ? current_pid : pid;
@@ -4511,6 +4548,24 @@ mprotect_prepare_range(uintptr_t start, size_t len0,
 	}
 
 	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE void
+mprotect_split_needed_result(unsigned long range_start, unsigned long range_end,
+		unsigned long addr, unsigned long end, int *split_startp,
+		int *split_endp)
+{
+	if (split_startp)
+		*split_startp = range_start < addr;
+	if (split_endp)
+		*split_endp = end < range_end;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+mprotect_write_changed_result(unsigned long range_flags,
+		unsigned long protflags)
+{
+	return ((range_flags ^ protflags) & VR_PROT_WRITE) != 0;
 }
 
 SYSCALL_POLICY_HELPER_SCOPE int

@@ -23,5 +23,16 @@ int x86_early_alloc_exhausted_result(unsigned long current_phys,
 				     unsigned long bootstrap_end);
 unsigned long x86_early_alloc_next_result(unsigned long current,
 					  int nr_pages);
+void x86_pt_indices_result(unsigned long virt, int *l4idxp, int *l3idxp,
+			   int *l2idxp, int *l1idxp);
+void x86_walk_bounds_result(unsigned long start, unsigned long end,
+			    unsigned long base, unsigned long span,
+			    int shift, int *sixp, int *eixp);
+int x86_split_large_page_prepare_result(unsigned long entry, size_t pgsize,
+					unsigned long *child_entryp,
+					size_t *rss_pgsizep,
+					unsigned long *step_p);
+unsigned long x86_split_large_page_next_entry_result(unsigned long entry,
+						    size_t pgsize);
 
 #endif /* HEADER_X86_MEMORY_HELPERS_H */

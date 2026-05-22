@@ -293,6 +293,26 @@ pub struct TimeVal {
 }
 
 #[repr(C)]
+pub struct RUsage {
+    pub ru_utime: TimeVal,
+    pub ru_stime: TimeVal,
+    pub ru_maxrss: CLong,
+    pub ru_ixrss: CLong,
+    pub ru_idrss: CLong,
+    pub ru_isrss: CLong,
+    pub ru_minflt: CLong,
+    pub ru_majflt: CLong,
+    pub ru_nswap: CLong,
+    pub ru_inblock: CLong,
+    pub ru_oublock: CLong,
+    pub ru_msgsnd: CLong,
+    pub ru_msgrcv: CLong,
+    pub ru_nsignals: CLong,
+    pub ru_nvcsw: CLong,
+    pub ru_nivcsw: CLong,
+}
+
+#[repr(C)]
 pub struct ITimerVal {
     pub it_interval: TimeVal,
     pub it_value: TimeVal,
@@ -858,6 +878,12 @@ const _: () = {
     assert_eq_usize(size_of::<CpuSet>(), 128);
     assert_eq_usize(align_of::<CpuSet>(), 8);
     assert_eq_usize(size_of::<TimeSpec>(), 16);
+    assert_eq_usize(size_of::<TimeVal>(), 16);
+    assert_eq_usize(offset_of!(TimeVal, tv_usec), 8);
+    assert_eq_usize(size_of::<RUsage>(), 144);
+    assert_eq_usize(offset_of!(RUsage, ru_stime), 16);
+    assert_eq_usize(offset_of!(RUsage, ru_maxrss), 32);
+    assert_eq_usize(offset_of!(RUsage, ru_nivcsw), 136);
     assert_eq_usize(size_of::<ITimerVal>(), 32);
     assert_eq_usize(size_of::<Waitq>(), 24);
     assert_eq_usize(offset_of!(Waitq, waitq), 8);

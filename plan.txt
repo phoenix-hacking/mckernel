@@ -4465,3 +4465,72 @@ Update 2026-05-22 McKernel-owned +60 cross-section lift:
     runtime coverage before moving allocation/free, user-copy, Linux
     forwarding, broad lock/list ownership, page-table mutation, signal
     delivery, scheduler handoff, or futex queue mutation out of C.
+
+Update 2026-05-22 McKernel-owned +34 verified slice toward +135 campaign:
+- Implemented:
+  - Added Rust/C fallback futex key-preparation and syscall-offload scheduling
+    decision helpers, then routed McKernel futex key setup and offload
+    scheduling gates through them.
+  - Added Rust/C fallback x86_64 page-table index, walk-bound, and
+    split-large-page preparation/next-entry arithmetic helpers, then used them
+    in selected x86_64 page-table walk/query/split paths while leaving mapping
+    mutation and TLB-sensitive side effects in C.
+  - Added Rust/C fallback syscall requester-TID, preempt-disable, `mprotect`
+    split, and `mprotect` write-change helpers. C still owns dispatch,
+    user-copy, Linux forwarding, locks, and handler body side effects.
+  - Added Rust/C fallback process range-cache and lookup relation helpers for
+    `lookup_process_memory_range()` while C keeps rb-tree traversal, mutation,
+    locking, and cache writes.
+  - Added a Rust/C fallback page-allocator Linux zero-request action selector
+    for the free path while C still owns CPU-local access, request sending,
+    logging, locks, and allocator lifetime.
+  - Added Rust and C ABI assertions for `timeval`/`rusage` layout to stage
+    later getrusage/rusage aggregation moves.
+- Validation:
+  - `rustfmt kernel/rust/sched_helpers.rs kernel/rust/x86_memory_helpers.rs
+    kernel/rust/syscall_policy.rs kernel/rust/process_helpers.rs
+    kernel/rust/page_alloc.rs kernel/rust/abi.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `python3 -m py_compile scripts/rust-ownership-report.py` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `sched_helpers ok digest=48704844fcf4e05f`,
+    `syscall_policy_helpers ok digest=f79388e2444e87b9`,
+    `process_helpers ok digest=e9582e5a6e553035`,
+    `x86_memory_helpers ok digest=d2fadb9c8287755f`,
+    `page_alloc ok digest=ab1eb0ddcf425064`, and
+    `page_alloc_bitmap ok digest=744cb68804fe6ff0`.
+  - `scripts/rust-ownership-report.py --check-dashboard overview.txt
+    --check-dashboard overview2.txt --top 20` passed before doc refresh with
+    Rust implementation 18,745 LOC, C implementation debt 98,637 LOC, boundary
+    27,615 LOC, required assembly 872 LOC, tests/smokes 117,863 LOC,
+    external/generated 230,989 LOC, and mechanical Rust ownership 16.0%.
+    The same dashboard check passed again after the doc/script updates with
+    `--top 25`.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. The existing Rust jobserver warning appeared, but the target linked
+    successfully.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed, validating C fallback coverage for the new helpers.
+- Estimates:
+  - ABI/layout foundation: 46% -> 50% (+4).
+  - x86_64 memory management: 27% -> 35% (+8).
+  - Page allocator: 34% -> 38% (+4).
+  - Process/VM management: 68% -> 72% (+4).
+  - Syscall core: 66% -> 72% (+6).
+  - Scheduler/timers/wait/futex: 31% -> 39% (+8).
+  - Latest verified slice total: +34 aggregate points toward the requested
+    +135 campaign; 101 requested campaign points remain.
+  - Honest distance to 100: Rust build/link is 5 points away, ABI/layout 50,
+    shared primitives 16, x86_64 memory 65, page allocator 62, Process/VM 28,
+    syscall core 28, scheduler/timer/futex/wait 61, object helper surface 0
+    with mutation bodies still C, host/IHK/mcctrl 39, user tools 17, Rocky
+    runtime integration 18, and arm64 remains deferred.
+- Next major work:
+  - Continue the remaining +101 requested campaign points with x86 page-table
+    clear/visit decision helpers, allocator CPU-cache/zeroed-list policy before
+    mutation, syscall ptrace/getrusage handler body slices, scheduler/futex
+    wake/requeue decisions, and process VM-range mutation preflight. Keep
+    allocation/free, user-copy, Linux forwarding, broad lock/list ownership,
+    page-table map/unmap mutation, signal delivery, scheduler handoff, and
+    futex queue mutation in C until direct runtime coverage exists.
