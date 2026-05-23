@@ -1,6 +1,7 @@
-use core::ptr::write;
+use core::mem::size_of;
+use core::ptr::{copy_nonoverlapping, write};
 
-use crate::abi::{CInt, CLong, CULong, SizeT};
+use crate::abi::{CInt, CLong, CULong, RUsage, SizeT};
 
 const EINVAL: CInt = 22;
 const ENOMEM: CInt = 12;
@@ -133,6 +134,15 @@ const PS_TRACED: CInt = 0x40;
 const PT_TRACED: CInt = 0x80;
 const PT_TRACE_EXEC: CInt = 0x100;
 const PT_TRACE_SYSCALL: CInt = 0x200;
+
+type PtraceReadUserWordFn = unsafe extern "C" fn(CULong, CLong, *mut CULong) -> CLong;
+type PtraceWriteUserWordFn = unsafe extern "C" fn(CULong, CLong, CULong) -> CLong;
+type PtraceReadVmWordFn = unsafe extern "C" fn(CULong, CULong, *mut CULong) -> CLong;
+type PtraceWriteVmWordFn = unsafe extern "C" fn(CULong, CULong, CULong) -> CLong;
+type PtraceFpregsIoFn = unsafe extern "C" fn(CULong, CULong) -> CLong;
+type PtraceUserCopyFromFn = unsafe extern "C" fn(*mut u8, CULong, SizeT) -> CLong;
+type PtraceUserCopyToFn = unsafe extern "C" fn(CULong, *const u8, SizeT) -> CLong;
+type PtraceRegsetIoFn = unsafe extern "C" fn(CULong, CLong, *mut u8) -> CLong;
 const PTRACE_EVENT_FORK: CInt = 1;
 const PTRACE_EVENT_VFORK: CInt = 2;
 const PTRACE_EVENT_CLONE: CInt = 3;
@@ -919,8 +929,86 @@ pub extern "C" fn getrusage_thread_update_action_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn getrusage_thread_times_update_prepare_result(
+    thread_addr: CULong,
+    times_update_offset: CULong,
+    update_action: CInt,
+) -> CInt {
+    if thread_addr == 0 {
+        return 0;
+    }
+
+    let times_update = thread_addr.wrapping_add(times_update_offset) as *mut CInt;
+    if update_action == GETRUSAGE_THREAD_UPDATE_INTERRUPT {
+        unsafe {
+            write(times_update, 0);
+        }
+        return 1;
+    }
+
+    unsafe {
+        write(times_update, 1);
+    }
+    0
+}
+
+#[no_mangle]
 pub extern "C" fn getrusage_maxrss_kb_result(maxrss: CLong) -> CLong {
     maxrss / 1024
+}
+
+#[inline(always)]
+fn getrusage_tsc_to_timespec(tsc: CULong, clocks_per_sec: CULong) -> (CLong, CLong) {
+    if clocks_per_sec == 0 {
+        return (0, 0);
+    }
+
+    let mut sec = (tsc / clocks_per_sec) as CLong;
+    let mut nsec =
+        ((NS_PER_SEC as CULong).wrapping_mul(tsc % clocks_per_sec) / clocks_per_sec) as CLong;
+
+    if nsec >= NS_PER_SEC {
+        nsec -= NS_PER_SEC;
+        sec += 1;
+    }
+
+    (sec, nsec)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn getrusage_timespec_add_tsc_result(
+    secp: *mut CLong,
+    nsecp: *mut CLong,
+    tsc: CULong,
+    clocks_per_sec: CULong,
+) {
+    let (add_sec, add_nsec) = getrusage_tsc_to_timespec(tsc, clocks_per_sec);
+    let mut sec = *secp + add_sec;
+    let mut nsec = *nsecp + add_nsec;
+
+    while nsec >= NS_PER_SEC {
+        sec += 1;
+        nsec -= NS_PER_SEC;
+    }
+
+    write(secp, sec);
+    write(nsecp, nsec);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn getrusage_fill_timespec_result(
+    usage: *mut RUsage,
+    utime_sec: CLong,
+    utime_nsec: CLong,
+    stime_sec: CLong,
+    stime_nsec: CLong,
+    maxrss: CLong,
+) {
+    (*usage).ru_utime.tv_sec = utime_sec;
+    (*usage).ru_utime.tv_usec = utime_nsec / 1000;
+    (*usage).ru_stime.tv_sec = stime_sec;
+    (*usage).ru_stime.tv_usec = stime_nsec / 1000;
+    (*usage).ru_maxrss = getrusage_maxrss_kb_result(maxrss);
 }
 
 #[no_mangle]
@@ -1293,6 +1381,22 @@ pub extern "C" fn ptrace_apply_options(current: CInt, flags: CInt) -> CInt {
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn ptrace_setoptions_apply_thread_result(
+    thread_addr: CULong,
+    ptrace_offset: CULong,
+    flags: CInt,
+) -> CInt {
+    if thread_addr == 0 {
+        return 0;
+    }
+
+    let ptracep = thread_addr.wrapping_add(ptrace_offset) as *mut CInt;
+    let updated = ptrace_apply_options(unsafe { *ptracep }, flags);
+    unsafe { write(ptracep, updated) };
+    updated
+}
+
+#[no_mangle]
 pub extern "C" fn ptrace_child_traced_result(
     has_child: CInt,
     has_proc: CInt,
@@ -1324,6 +1428,21 @@ pub extern "C" fn ptrace_attach_policy_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn ptrace_attach_mark_traced_result(
+    thread_addr: CULong,
+    ptrace_offset: CULong,
+) -> CInt {
+    if thread_addr == 0 {
+        return 0;
+    }
+
+    let ptracep = thread_addr.wrapping_add(ptrace_offset) as *mut CInt;
+    let traced = PT_TRACED | PT_TRACE_EXEC;
+    unsafe { write(ptracep, traced) };
+    traced
+}
+
+#[no_mangle]
 pub extern "C" fn ptrace_detach_state_result(is_traced: CInt, same_report_proc: CInt) -> CInt {
     if is_traced == 0 || same_report_proc == 0 {
         -ESRCH
@@ -1352,6 +1471,23 @@ pub extern "C" fn ptrace_eventmsg_state_result(status: CInt) -> CInt {
     } else {
         -ESRCH
     }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ptrace_eventmsg_prepare_result(
+    status: CInt,
+    eventmsg: CULong,
+    outp: *mut CULong,
+) -> CInt {
+    let rc = ptrace_eventmsg_state_result(status);
+    if rc != 0 {
+        return rc;
+    }
+
+    if !outp.is_null() {
+        unsafe { write(outp, eventmsg) };
+    }
+    0
 }
 
 #[no_mangle]
@@ -1425,6 +1561,311 @@ pub extern "C" fn ptrace_setsiginfo_target_result(
         target |= PTRACE_SIGINFO_STORE_RECVSIG;
     }
     target
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ptrace_getsiginfo_prepare_result(
+    status: CInt,
+    pending_addr: CULong,
+    info_offset: CULong,
+    outp: *mut u8,
+    info_size: SizeT,
+) -> CInt {
+    let rc = ptrace_siginfo_state_result(status, (pending_addr != 0) as CInt);
+    if rc != 0 {
+        return rc;
+    }
+    if outp.is_null() {
+        return -EFAULT;
+    }
+
+    unsafe {
+        copy_nonoverlapping(
+            pending_addr.wrapping_add(info_offset) as *const u8,
+            outp,
+            info_size,
+        );
+    }
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ptrace_setsiginfo_store_result(
+    thread_addr: CULong,
+    sendsig_offset: CULong,
+    recvsig_offset: CULong,
+    info_offset: CULong,
+    target: CInt,
+    allocated_sendsig: CULong,
+    infop: *const u8,
+    info_size: SizeT,
+) -> CInt {
+    if target < 0 {
+        return target;
+    }
+    if thread_addr == 0 {
+        return -ESRCH;
+    }
+
+    let sendsig_slot = thread_addr.wrapping_add(sendsig_offset) as *mut CULong;
+    let recvsig_slot = thread_addr.wrapping_add(recvsig_offset) as *mut CULong;
+
+    if (target & PTRACE_SIGINFO_ALLOC_SENDSIG) != 0 {
+        if allocated_sendsig == 0 {
+            return -ENOMEM;
+        }
+        unsafe { write(sendsig_slot, allocated_sendsig) };
+    }
+
+    if (target & (PTRACE_SIGINFO_STORE_SENDSIG | PTRACE_SIGINFO_STORE_RECVSIG)) != 0
+        && infop.is_null()
+    {
+        return -EFAULT;
+    }
+
+    if (target & PTRACE_SIGINFO_STORE_SENDSIG) != 0 {
+        let pending = unsafe { *sendsig_slot };
+        if pending == 0 {
+            return -ENOMEM;
+        }
+        unsafe {
+            copy_nonoverlapping(
+                infop,
+                pending.wrapping_add(info_offset) as *mut u8,
+                info_size,
+            );
+        }
+    }
+
+    if (target & PTRACE_SIGINFO_STORE_RECVSIG) != 0 {
+        let pending = unsafe { *recvsig_slot };
+        if pending == 0 {
+            return -ESRCH;
+        }
+        unsafe {
+            copy_nonoverlapping(
+                infop,
+                pending.wrapping_add(info_offset) as *mut u8,
+                info_size,
+            );
+        }
+    }
+
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ptrace_read_user_words_result(
+    thread_addr: CULong,
+    outp: *mut CULong,
+    bytes: SizeT,
+    read_fn: Option<PtraceReadUserWordFn>,
+) -> CLong {
+    if thread_addr == 0 || outp.is_null() {
+        return -EFAULT as CLong;
+    }
+    let Some(read_word) = read_fn else {
+        return -EFAULT as CLong;
+    };
+
+    let word_size = size_of::<CULong>();
+    let mut offset = 0usize;
+    let mut index = 0usize;
+    while offset < bytes {
+        let rc = unsafe { read_word(thread_addr, offset as CLong, outp.wrapping_add(index)) };
+        if rc != 0 {
+            return rc;
+        }
+        offset = offset.wrapping_add(word_size);
+        index = index.wrapping_add(1);
+    }
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ptrace_write_user_words_result(
+    thread_addr: CULong,
+    inp: *const CULong,
+    bytes: SizeT,
+    write_fn: Option<PtraceWriteUserWordFn>,
+) -> CLong {
+    if thread_addr == 0 || inp.is_null() {
+        return -EFAULT as CLong;
+    }
+    let Some(write_word) = write_fn else {
+        return -EFAULT as CLong;
+    };
+
+    let word_size = size_of::<CULong>();
+    let mut offset = 0usize;
+    let mut index = 0usize;
+    while offset < bytes {
+        let value = unsafe { *inp.wrapping_add(index) };
+        let rc = unsafe { write_word(thread_addr, offset as CLong, value) };
+        if rc != 0 {
+            return rc;
+        }
+        offset = offset.wrapping_add(word_size);
+        index = index.wrapping_add(1);
+    }
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ptrace_read_user_word_result(
+    status: CInt,
+    thread_addr: CULong,
+    user_area_offset: CLong,
+    outp: *mut CULong,
+    read_fn: Option<PtraceReadUserWordFn>,
+) -> CLong {
+    if ptrace_status_allows_io(status) == 0 {
+        return -EIO as CLong;
+    }
+    if thread_addr == 0 || outp.is_null() {
+        return -EFAULT as CLong;
+    }
+    let Some(read_word) = read_fn else {
+        return -EFAULT as CLong;
+    };
+
+    unsafe { read_word(thread_addr, user_area_offset, outp) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ptrace_write_user_word_result(
+    status: CInt,
+    thread_addr: CULong,
+    user_area_offset: CLong,
+    value: CULong,
+    write_fn: Option<PtraceWriteUserWordFn>,
+) -> CLong {
+    if ptrace_status_allows_io(status) == 0 {
+        return -EIO as CLong;
+    }
+    if thread_addr == 0 {
+        return -EFAULT as CLong;
+    }
+    let Some(write_word) = write_fn else {
+        return -EFAULT as CLong;
+    };
+
+    unsafe { write_word(thread_addr, user_area_offset, value) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ptrace_read_vm_word_result(
+    status: CInt,
+    vm_addr: CULong,
+    user_addr: CULong,
+    outp: *mut CULong,
+    read_fn: Option<PtraceReadVmWordFn>,
+) -> CLong {
+    if ptrace_status_allows_io(status) == 0 {
+        return -EIO as CLong;
+    }
+    if vm_addr == 0 || outp.is_null() {
+        return -EFAULT as CLong;
+    }
+    let Some(read_word) = read_fn else {
+        return -EFAULT as CLong;
+    };
+
+    unsafe { read_word(vm_addr, user_addr, outp) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ptrace_write_vm_word_result(
+    status: CInt,
+    vm_addr: CULong,
+    user_addr: CULong,
+    value: CULong,
+    write_fn: Option<PtraceWriteVmWordFn>,
+) -> CLong {
+    if ptrace_status_allows_io(status) == 0 {
+        return -EIO as CLong;
+    }
+    if vm_addr == 0 {
+        return -EFAULT as CLong;
+    }
+    let Some(write_word) = write_fn else {
+        return -EFAULT as CLong;
+    };
+
+    unsafe { write_word(vm_addr, user_addr, value) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ptrace_fpregs_io_result(
+    status: CInt,
+    thread_addr: CULong,
+    data_addr: CULong,
+    io_fn: Option<PtraceFpregsIoFn>,
+) -> CLong {
+    if ptrace_status_allows_io(status) == 0 {
+        return -EIO as CLong;
+    }
+    if thread_addr == 0 {
+        return -EFAULT as CLong;
+    }
+    let Some(io) = io_fn else {
+        return -EFAULT as CLong;
+    };
+
+    unsafe { io(thread_addr, data_addr) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ptrace_regset_io_result(
+    status: CInt,
+    thread_addr: CULong,
+    regset_type: CLong,
+    user_iovec_addr: CULong,
+    iovp: *mut u8,
+    iov_size: SizeT,
+    iov_len_offset: SizeT,
+    iov_len_size: SizeT,
+    copy_from_fn: Option<PtraceUserCopyFromFn>,
+    io_fn: Option<PtraceRegsetIoFn>,
+    copy_to_fn: Option<PtraceUserCopyToFn>,
+) -> CLong {
+    if ptrace_status_allows_io(status) == 0 {
+        return -EIO as CLong;
+    }
+    if thread_addr == 0 || iovp.is_null() {
+        return -EFAULT as CLong;
+    }
+    if iov_len_offset > iov_size || iov_len_size > iov_size.wrapping_sub(iov_len_offset) {
+        return -EFAULT as CLong;
+    }
+
+    let Some(copy_from_user) = copy_from_fn else {
+        return -EFAULT as CLong;
+    };
+    let Some(regset_io) = io_fn else {
+        return -EFAULT as CLong;
+    };
+    let Some(copy_to_user) = copy_to_fn else {
+        return -EFAULT as CLong;
+    };
+
+    let mut rc = unsafe { copy_from_user(iovp, user_iovec_addr, iov_size) };
+    if rc != 0 {
+        return rc;
+    }
+
+    rc = unsafe { regset_io(thread_addr, regset_type, iovp) };
+    if rc != 0 {
+        return rc;
+    }
+
+    unsafe {
+        copy_to_user(
+            user_iovec_addr.wrapping_add(iov_len_offset as CULong),
+            iovp.wrapping_add(iov_len_offset) as *const u8,
+            iov_len_size,
+        )
+    }
 }
 
 #[no_mangle]

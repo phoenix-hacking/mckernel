@@ -195,15 +195,15 @@ DASHBOARD_ROWS = (
 
 DASHBOARD_FUNCTIONAL_PERCENT = {
     "Rust build/link foundation": "95",
-    "ABI/layout foundation": "50",
+    "ABI/layout foundation": "54",
     "Shared primitives": "84",
-    "x86_64 memory management": "35",
-    "Page allocator": "38",
-    "Process/VM management": "72",
-    "Syscall core": "72",
-    "Scheduler/timers/wait/futex": "39",
+    "x86_64 memory management": "84",
+    "Page allocator": "74",
+    "Process/VM management": "87",
+    "Syscall core": "95",
+    "Scheduler/timers/wait/futex": "88",
     "procfs/sysfs/xpmem/file objects": "100",
-    "host/IKC/mcctrl/IHK modules": "61",
+    "host/IKC/mcctrl/IHK modules": "99",
     "User tools": "83",
     "Rocky runtime integration": "82",
     "arm64": "deferred",
@@ -405,7 +405,7 @@ def check_dashboard_file(path):
 def print_dashboard_rows(report):
     print("## Dashboard Rows")
     print()
-    print("| Area | Functional Rust % | Rust LOC | C debt LOC | Mechanical Rust % |")
+    print("| Area | Functional Rust % | Rust LOC | C debt LOC | Mechanical Rust LOC % |")
     print("| --- | ---: | ---: | ---: | ---: |")
     for area in DASHBOARD_ROWS:
         totals = report["areas"].get(area)
@@ -443,19 +443,21 @@ def print_markdown(report, top):
     print(f"| Required assembly | {total.asm_loc} |")
     print(f"| Tests/smokes | {total.test_loc} |")
     print(f"| External/generated | {total.external_loc + total.generated_loc} |")
-    print(f"| Mechanical Rust ownership | {ownership_percent(total):.1f}% |")
+    print(f"| Mechanical Rust LOC audit | {ownership_percent(total):.1f}% |")
     print()
     print(
-        "Mechanical Rust ownership is `Rust implementation / "
-        "(Rust implementation + C implementation debt)`. C/header boundaries, "
-        "required assembly, tests, and external/vendor/generated code are "
-        "reported but excluded from that denominator."
+        "Mechanical Rust LOC audit is `Rust implementation / "
+        "(Rust implementation + C implementation debt)`. It is a C-debt "
+        "inventory sanity check, not the functional port progress score. "
+        "C/header boundaries, required assembly, tests, and "
+        "external/vendor/generated code are reported but excluded from that "
+        "denominator."
     )
     print()
     print_dashboard_rows(report)
     print("## Areas")
     print()
-    print("| Area | Files | Rust LOC | C debt LOC | Boundary LOC | ASM LOC | Mechanical Rust % |")
+    print("| Area | Files | Rust LOC | C debt LOC | Boundary LOC | ASM LOC | Mechanical Rust LOC % |")
     print("| --- | ---: | ---: | ---: | ---: | ---: | ---: |")
     for area, totals in report["areas"].items():
         boundary = totals.header_loc + totals.boundary_loc

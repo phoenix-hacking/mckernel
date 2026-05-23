@@ -1,7 +1,7 @@
 use core::ffi::c_void;
 use core::ptr::copy_nonoverlapping;
 
-use crate::abi::{AbiListHead, CInt, CULong};
+use crate::abi::{AbiListHead, CInt, CULong, VmRange};
 
 const EINVAL: CInt = 22;
 const EACCES: CInt = 13;
@@ -229,6 +229,215 @@ pub extern "C" fn process_lookup_range_relation_result(
     } else {
         0
     }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_range_cache_replace_result(
+    cache: *mut *mut c_void,
+    count: CInt,
+    from: *mut c_void,
+    to: *mut c_void,
+) -> CInt {
+    if cache.is_null() || count <= 0 || from.is_null() {
+        return 0;
+    }
+
+    let mut replaced = 0;
+    let mut i = 0;
+    while i < count {
+        let slot = unsafe { cache.add(i as usize) };
+        if unsafe { *slot == from } {
+            unsafe {
+                *slot = to;
+            }
+            replaced += 1;
+        }
+        i += 1;
+    }
+
+    replaced
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_range_cache_store_result(
+    cache: *mut *mut c_void,
+    count: CInt,
+    indexp: *mut CInt,
+    match_range: *mut c_void,
+) -> CInt {
+    if cache.is_null() || count <= 0 || indexp.is_null() || match_range.is_null() {
+        return -EINVAL;
+    }
+
+    let new_index = unsafe { (*indexp - 1 + count) % count };
+    unsafe {
+        *indexp = new_index;
+        *cache.add(new_index as usize) = match_range;
+    }
+    new_index
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_range_end_commit_result(
+    range: *mut VmRange,
+    newend: CULong,
+) -> CInt {
+    if range.is_null() {
+        return 0;
+    }
+
+    unsafe {
+        (*range).end = newend;
+    }
+    1
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_range_flag_commit_result(
+    range: *mut VmRange,
+    newflag: CULong,
+) -> CInt {
+    if range.is_null() {
+        return 0;
+    }
+
+    unsafe {
+        (*range).flag = newflag;
+    }
+    1
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_range_stack_start_commit_result(
+    range: *mut VmRange,
+    fault_addr: CULong,
+    pgshift: CInt,
+) -> CInt {
+    if range.is_null() {
+        return 0;
+    }
+
+    let new_start = if pgshift > 0 && (pgshift as usize) < CULong::BITS as usize {
+        fault_addr & !((1u64 << pgshift) - 1)
+    } else if pgshift == 0 {
+        fault_addr & !(PAGE_SIZE - 1)
+    } else {
+        return 0;
+    };
+
+    unsafe {
+        (*range).start = new_start;
+    }
+    1
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_remove_range_step_result(
+    range_start: CULong,
+    range_end: CULong,
+    remove_start: CULong,
+    remove_end: CULong,
+    range_flags: CULong,
+    private_data: CULong,
+    split_startp: *mut CInt,
+    split_endp: *mut CInt,
+    ro_freedp: *mut CInt,
+    xpmem_removep: *mut CInt,
+) {
+    if !split_startp.is_null() {
+        unsafe {
+            *split_startp = (range_start < remove_start) as CInt;
+        }
+    }
+    if !split_endp.is_null() {
+        unsafe {
+            *split_endp = (remove_end < range_end) as CInt;
+        }
+    }
+    if !ro_freedp.is_null() {
+        unsafe {
+            *ro_freedp = ((range_flags & VR_PROT_WRITE) == 0) as CInt;
+        }
+    }
+    if !xpmem_removep.is_null() {
+        unsafe {
+            *xpmem_removep = (private_data != 0) as CInt;
+        }
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_split_range_init_result(
+    low: *const VmRange,
+    high: *mut VmRange,
+    addr: CULong,
+) -> CInt {
+    if low.is_null() || high.is_null() {
+        return 0;
+    }
+
+    (*high).start = addr;
+    (*high).straight_start = if (*low).straight_start != 0 {
+        (*low)
+            .straight_start
+            .wrapping_add(addr.wrapping_sub((*low).start))
+    } else {
+        0
+    };
+    (*high).end = (*low).end;
+    (*high).flag = (*low).flag;
+    (*high).pgshift = (*low).pgshift;
+    (*high).private_data = (*low).private_data;
+
+    if !(*low).memobj.is_null() {
+        (*high).memobj = (*low).memobj;
+        (*high).objoff = (*low)
+            .objoff
+            .wrapping_add(addr.wrapping_sub((*low).start) as i64);
+    } else {
+        core::ptr::write_volatile(
+            core::ptr::addr_of_mut!((*high).memobj),
+            core::ptr::null_mut(),
+        );
+        core::ptr::write_volatile(core::ptr::addr_of_mut!((*high).objoff), 0);
+    }
+
+    1
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_split_range_commit_result(low: *mut VmRange, addr: CULong) {
+    if !low.is_null() {
+        (*low).end = addr;
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_join_range_prepare_result(
+    surviving: *mut VmRange,
+    merging: *const VmRange,
+) -> CInt {
+    if surviving.is_null() || merging.is_null() {
+        return -EINVAL;
+    }
+
+    if (*surviving).end != (*merging).start
+        || (*surviving).flag != (*merging).flag
+        || (*surviving).memobj != (*merging).memobj
+    {
+        return -EINVAL;
+    }
+
+    if !(*surviving).memobj.is_null() {
+        let len = (*surviving).end.wrapping_sub((*surviving).start);
+        let endoff = (*surviving).objoff.wrapping_add(len as i64);
+        if endoff != (*merging).objoff {
+            return -EINVAL;
+        }
+    }
+
+    (*surviving).end = (*merging).end;
+    0
 }
 
 #[no_mangle]

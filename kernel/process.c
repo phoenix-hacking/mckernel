@@ -970,16 +970,10 @@ int split_process_memory_range(struct process_vm *vm, struct vm_range *range,
 		goto out;
 	}
 
-	newrange->start = addr;
-	newrange->straight_start = 0;
-	if (range->straight_start) {
-		newrange->straight_start =
-			range->straight_start + (addr - range->start);
+	if (!process_split_range_init_result(range, newrange, addr)) {
+		error = -EINVAL;
+		goto out;
 	}
-	newrange->end = range->end;
-	newrange->flag = range->flag;
-	newrange->pgshift = range->pgshift;
-	newrange->private_data = range->private_data;
 
 #ifdef ENABLE_TOFU
 	INIT_LIST_HEAD(&newrange->tofu_stag_list);
@@ -998,15 +992,9 @@ int split_process_memory_range(struct process_vm *vm, struct vm_range *range,
 
 	if (range->memobj) {
 		memobj_ref(range->memobj);
-		newrange->memobj = range->memobj;
-		newrange->objoff = range->objoff + (addr - range->start);
-	}
-	else {
-		newrange->memobj = NULL;
-		newrange->objoff = 0;
 	}
 
-	range->end = addr;
+	process_split_range_commit_result(range, addr);
 
 	error = vm_range_insert(vm, newrange);
 	if (error) {
@@ -1031,39 +1019,21 @@ int join_process_memory_range(struct process_vm *vm,
 		struct vm_range *surviving, struct vm_range *merging)
 {
 	int error;
-	int i;
 
 	dkprintf("join_process_memory_range(%p,%lx-%lx,%lx-%lx)\n",
 			vm, surviving->start, surviving->end,
 			merging->start, merging->end);
 
-	if ((surviving->end != merging->start)
-			|| (surviving->flag != merging->flag)
-			|| (surviving->memobj != merging->memobj)) {
-		error = -EINVAL;
+	error = process_join_range_prepare_result(surviving, merging);
+	if (error)
 		goto out;
-	}
-	if (surviving->memobj != NULL) {
-		size_t len;
-		off_t endoff;
-
-		len = surviving->end - surviving->start;
-		endoff = surviving->objoff + len;
-		if (endoff != merging->objoff) {
-			return -EINVAL;
-		}
-	}
-
-	surviving->end = merging->end;
 
 	if (merging->memobj) {
 		memobj_unref(merging->memobj);
 	}
 	rb_erase(&merging->vm_rb_node, &vm->vm_range_tree);
-	for (i = 0; i < VM_RANGE_CACHE_SIZE; ++i) {
-		if (vm->range_cache[i] == merging)
-			vm->range_cache[i] = surviving;
-	}
+	process_range_cache_replace_result(vm->range_cache,
+			VM_RANGE_CACHE_SIZE, merging, surviving);
 
 #ifdef ENABLE_TOFU
 	/* Move Tofu stag range entries */
@@ -1100,7 +1070,7 @@ static int free_process_memory_range(struct process_vm *vm,
 {
 	const intptr_t start0 = range->start;
 	const intptr_t end0 = range->end;
-	int error, i;
+	int error;
 	intptr_t start;
 	intptr_t end;
 	struct vm_range *neighbor;
@@ -1219,10 +1189,8 @@ straight_out:
 #endif
 
 	rb_erase(&range->vm_rb_node, &vm->vm_range_tree);
-	for (i = 0; i < VM_RANGE_CACHE_SIZE; ++i) {
-		if (vm->range_cache[i] == range)
-			vm->range_cache[i] = NULL;
-	}
+	process_range_cache_replace_result(vm->range_cache,
+			VM_RANGE_CACHE_SIZE, range, NULL);
 
 	/* For straight ranges just free physical memory */
 	if (range->straight_start) {
@@ -1313,9 +1281,19 @@ int remove_process_memory_range(struct process_vm *vm,
 
 	next = lookup_process_memory_range(vm, start, end);
 	while ((range = next) && range->start < end) {
-		next = next_process_memory_range(vm, range);
+		int split_start;
+		int split_end;
+		int mark_ro_freed;
+		int remove_xpmem;
 
-		if (range->start < start) {
+		next = next_process_memory_range(vm, range);
+		process_remove_range_step_result(range->start, range->end,
+				start, end, range->flag,
+				(unsigned long)range->private_data,
+				&split_start, &split_end, &mark_ro_freed,
+				&remove_xpmem);
+
+		if (split_start) {
 			error = split_process_memory_range(vm,
 					range, start, &range);
 			if (error) {
@@ -1326,7 +1304,7 @@ int remove_process_memory_range(struct process_vm *vm,
 			}
 		}
 
-		if (end < range->end) {
+		if (split_end) {
 			error = split_process_memory_range(vm,
 					range, end, NULL);
 			if (error) {
@@ -1337,11 +1315,11 @@ int remove_process_memory_range(struct process_vm *vm,
 			}
 		}
 
-		if (!(range->flag & VR_PROT_WRITE)) {
+		if (mark_ro_freed) {
 			ro_freed = 1;
 		}
 
-		if (range->private_data) {
+		if (remove_xpmem) {
 			xpmem_remove_process_memory_range(vm, range);
 		}
 
@@ -1590,9 +1568,9 @@ struct vm_range *lookup_process_memory_range(
 	}
 
 	if (match && end > match->start) {
-		vm->range_cache_ind = (vm->range_cache_ind - 1 + VM_RANGE_CACHE_SIZE)
-			% VM_RANGE_CACHE_SIZE;
-		vm->range_cache[vm->range_cache_ind] = match;
+		process_range_cache_store_result(vm->range_cache,
+				VM_RANGE_CACHE_SIZE, &vm->range_cache_ind,
+				match);
 	}
 
 out:
@@ -1658,7 +1636,7 @@ int extend_up_process_memory_range(struct process_vm *vm,
 	if (error)
 		goto out;
 
-	range->end = newend;
+	process_range_end_commit_result(range, newend);
 
 out:
 	dkprintf("exntend_up_process_memory_range(%p,%p %#lx-%#lx,%#lx):%d\n",
@@ -1701,7 +1679,7 @@ int change_prot_process_memory_range(struct process_vm *vm,
 		setattr = process_private_file_setattr_result(1, range->flag,
 				range->memobj->flags, setattr);
 		if (!clrattr && !setattr) {
-			range->flag = newflag;
+			process_range_flag_commit_result(range, newflag);
 			error = 0;
 			goto out;
 		}
@@ -1719,7 +1697,7 @@ int change_prot_process_memory_range(struct process_vm *vm,
 		goto out;
 	}
 
-	range->flag = newflag;
+	process_range_flag_commit_result(range, newflag);
 	error = 0;
 out:
 	dkprintf("change_prot_process_memory_range(%p,%lx-%lx,%lx): %d\n",
@@ -2358,12 +2336,8 @@ static int do_page_fault_process_vm(struct process_vm *vm, void *fault_addr0, ui
 			locked = 1;
 		}
 
-		if (range->pgshift) {
-			range->start = fault_addr &
-				~((1UL << range->pgshift) - 1);
-		} else {
-			range->start = fault_addr & PAGE_MASK;
-		}
+		process_range_stack_start_commit_result(range, fault_addr,
+				range->pgshift);
 
 		if (locked) {
 			ihk_rwspinlock_write_unlock_noirq(&vm->memory_range_lock);

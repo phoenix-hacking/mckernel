@@ -229,6 +229,8 @@ static int cmpxchg_futex_value_locked(uint32_t __user *uaddr, uint32_t uval, uin
 static void wake_futex(struct futex_q *q)
 {
 	struct thread *p = q->task;
+	void *uti_futex_resp = q->uti_futex_resp;
+	int linux_cpu = q->linux_cpu;
 
 	/*
 	 * We set q->lock_ptr = NULL _before_ we wake up the task. If
@@ -238,35 +240,36 @@ static void wake_futex(struct futex_q *q)
 	 * wake up.
 	 */
 
-	plist_del(&q->list, &q->list.plist);
-	/*
-	 * The waiting task can free the futex_q as soon as
-	 * q->lock_ptr = NULL is written, without taking any locks. A
-	 * memory barrier is required here to prevent the following
-	 * store to lock_ptr from getting ahead of the plist_del.
-	 */
-	barrier();
-	q->lock_ptr = NULL;
+	futex_wake_mark_woken_result((unsigned long)q,
+				     __builtin_offsetof(struct futex_q, list),
+				     __builtin_offsetof(struct plist_node, plist),
+				     __builtin_offsetof(struct futex_q,
+							lock_ptr));
 
 
-	if (q->uti_futex_resp) { 
+	if (futex_wake_target_result((unsigned long)uti_futex_resp) ==
+			FUTEX_WAKE_TARGET_LINUX) {
 		int rc;
 		struct ikc_scd_packet pckt;
 		struct ihk_ikc_channel_desc *resp_channel;
 
 		dkprintf("%s: waking up migrated-to-Linux thread (tid %d),uti_futex_resp=%p,linux_cpu: %d\n",
-			__func__, p->tid, q->uti_futex_resp, q->linux_cpu);
+			__func__, p->tid, uti_futex_resp, linux_cpu);
 
 		/* does this Linux CPU have a connected channel? */
-		if (ikc2linuxs[q->linux_cpu]) {
-			resp_channel = ikc2linuxs[q->linux_cpu];
-		} else {
-			resp_channel = cpu_local_var(ikc2linux);
-		}
+		resp_channel = (struct ihk_ikc_channel_desc *)
+			futex_wake_linux_channel_result(
+				(unsigned long)ikc2linuxs[linux_cpu],
+				(unsigned long)cpu_local_var(ikc2linux));
 
-		pckt.msg = SCD_MSG_FUTEX_WAKE;
-		pckt.futex.resp = q->uti_futex_resp;
-		pckt.futex.spin_sleep = &p->spin_sleep;
+		futex_wake_ikc_packet_fill_result((unsigned long)&pckt,
+			__builtin_offsetof(struct ikc_scd_packet, msg),
+			__builtin_offsetof(struct ikc_scd_packet, futex.resp),
+			__builtin_offsetof(struct ikc_scd_packet,
+					   futex.spin_sleep),
+			SCD_MSG_FUTEX_WAKE,
+			(unsigned long)uti_futex_resp,
+			(unsigned long)&p->spin_sleep);
 		rc = ihk_ikc_send(resp_channel, &pckt, 0);
 		if (rc) {
 			dkprintf("%s: ERROR: ihk_ikc_send returned %d, resp_channel=%p\n",
@@ -279,28 +282,43 @@ static void wake_futex(struct futex_q *q)
 	}
 }
 
+static void futex_wake_scan_bridge(unsigned long q_addr)
+{
+	wake_futex((struct futex_q *)q_addr);
+}
+
 /*
  * Express the locking dependencies for lockdep:
  */
+static void futex_hb_lock_bridge(unsigned long lock_addr)
+{
+	ihk_mc_spinlock_lock_noirq((ihk_spinlock_t *)lock_addr);
+}
+
+static void futex_hb_unlock_bridge(unsigned long lock_addr)
+{
+	ihk_mc_spinlock_unlock_noirq((ihk_spinlock_t *)lock_addr);
+}
+
+static void futex_key_refs_bridge(unsigned long key_addr)
+{
+	get_futex_key_refs((union futex_key *)key_addr);
+}
+
 static inline void
 double_lock_hb(struct futex_hash_bucket *hb1, struct futex_hash_bucket *hb2)
 {
-	if (hb1 <= hb2) {
-		ihk_mc_spinlock_lock_noirq(&hb1->lock);
-		if (hb1 < hb2)
-			ihk_mc_spinlock_lock_noirq(&hb2->lock);
-	} else { /* hb1 > hb2 */
-		ihk_mc_spinlock_lock_noirq(&hb2->lock);
-		ihk_mc_spinlock_lock_noirq(&hb1->lock);
-	}
+	futex_double_lock_hb_result((unsigned long)hb1, (unsigned long)hb2,
+			__builtin_offsetof(struct futex_hash_bucket, lock),
+			futex_hb_lock_bridge);
 }
 
 static inline void
 double_unlock_hb(struct futex_hash_bucket *hb1, struct futex_hash_bucket *hb2)
 {
-	ihk_mc_spinlock_unlock_noirq(&hb1->lock);
-	if (hb1 != hb2)
-		ihk_mc_spinlock_unlock_noirq(&hb2->lock);
+	futex_double_unlock_hb_result((unsigned long)hb1, (unsigned long)hb2,
+			__builtin_offsetof(struct futex_hash_bucket, lock),
+			futex_hb_unlock_bridge);
 }
 
 /*
@@ -310,13 +328,12 @@ static int futex_wake(uint32_t *uaddr, int fshared, int nr_wake,
 		uint32_t bitset)
 {
 	struct futex_hash_bucket *hb;
-	struct futex_q *this, *next;
 	struct plist_head *head;
 	union futex_key key = FUTEX_KEY_INIT;
 	int ret;
 	unsigned long irqstate;
 
-	if (!bitset)
+	if (!futex_wake_bitset_valid_result(bitset))
 		return -EINVAL;
 
 	ret = get_futex_key(uaddr, fshared, &key);
@@ -327,19 +344,16 @@ static int futex_wake(uint32_t *uaddr, int fshared, int nr_wake,
 	irqstate = ihk_mc_spinlock_lock(&hb->lock);
 	head = &hb->chain;
 
-	plist_for_each_entry_safe(this, next, head, list) {
-		if (match_futex (&this->key, &key)) {
-			
-			/* RIKEN: no pi state... */
-			/* Check if one of the bits is set in both bitsets */
-			if (!(this->bitset & bitset))
-				continue;
-
-			wake_futex(this);
-			if (++ret >= nr_wake)
-				break;
-		}
-	}
+	ret = futex_wake_scan_result((unsigned long)head,
+			__builtin_offsetof(struct futex_q, list),
+			__builtin_offsetof(struct futex_q, key),
+			__builtin_offsetof(struct futex_q, bitset),
+			__builtin_offsetof(union futex_key, both.word),
+			__builtin_offsetof(union futex_key, both.ptr),
+			__builtin_offsetof(union futex_key, both.offset),
+			key.both.word, (unsigned long)key.both.ptr,
+			key.both.offset, bitset, 1, nr_wake,
+			futex_wake_scan_bridge);
 
 	ihk_mc_spinlock_unlock(&hb->lock, irqstate);
 	put_futex_key(fshared, &key);
@@ -358,7 +372,6 @@ futex_wake_op(uint32_t *uaddr1, int fshared, uint32_t *uaddr2,
 	union futex_key key1 = FUTEX_KEY_INIT, key2 = FUTEX_KEY_INIT;
 	struct futex_hash_bucket *hb1, *hb2;
 	struct plist_head *head;
-	struct futex_q *this, *next;
 	int ret, op_ret;
 
 retry:
@@ -397,25 +410,30 @@ retry_private:
 
 	head = &hb1->chain;
 
-	plist_for_each_entry_safe(this, next, head, list) {
-		if (match_futex (&this->key, &key1)) {
-			wake_futex(this);
-			if (++ret >= nr_wake)
-				break;
-		}
-	}
+	ret = futex_wake_scan_result((unsigned long)head,
+			__builtin_offsetof(struct futex_q, list),
+			__builtin_offsetof(struct futex_q, key),
+			__builtin_offsetof(struct futex_q, bitset),
+			__builtin_offsetof(union futex_key, both.word),
+			__builtin_offsetof(union futex_key, both.ptr),
+			__builtin_offsetof(union futex_key, both.offset),
+			key1.both.word, (unsigned long)key1.both.ptr,
+			key1.both.offset, 0, 0, nr_wake,
+			futex_wake_scan_bridge);
 
 	if (op_ret > 0) {
 		head = &hb2->chain;
 
-		op_ret = 0;
-		plist_for_each_entry_safe(this, next, head, list) {
-			if (match_futex (&this->key, &key2)) {
-				wake_futex(this);
-				if (++op_ret >= nr_wake2)
-					break;
-			}
-		}
+		op_ret = futex_wake_scan_result((unsigned long)head,
+				__builtin_offsetof(struct futex_q, list),
+				__builtin_offsetof(struct futex_q, key),
+				__builtin_offsetof(struct futex_q, bitset),
+				__builtin_offsetof(union futex_key, both.word),
+				__builtin_offsetof(union futex_key, both.ptr),
+				__builtin_offsetof(union futex_key, both.offset),
+				key2.both.word, (unsigned long)key2.both.ptr,
+				key2.both.offset, 0, 0, nr_wake2,
+				futex_wake_scan_bridge);
 		ret += op_ret;
 	}
 
@@ -439,21 +457,54 @@ static inline
 void requeue_futex(struct futex_q *q, struct futex_hash_bucket *hb1,
 		   struct futex_hash_bucket *hb2, union futex_key *key2)
 {
+#ifdef CONFIG_DEBUG_PI_LIST
+	const unsigned long debug_spinlock_offset =
+		__builtin_offsetof(struct plist_node, plist.spinlock);
+#else
+	const unsigned long debug_spinlock_offset = 0;
+#endif
 
 	/*
 	 * If key1 and key2 hash to the same bucket, no need to
 	 * requeue.
 	 */
-	if ((&hb1->chain != &hb2->chain)) {
-		plist_del(&q->list, &hb1->chain);
-		plist_add(&q->list, &hb2->chain);
-		q->lock_ptr = &hb2->lock;
-#ifdef CONFIG_DEBUG_PI_LIST
-		q->list.plist.spinlock = &hb2->lock;
-#endif
+	futex_requeue_move_result((unsigned long)q,
+				  __builtin_offsetof(struct futex_q, list),
+				  __builtin_offsetof(struct futex_q, lock_ptr),
+				  (unsigned long)&hb1->chain,
+				  (unsigned long)&hb2->chain,
+				  (unsigned long)&hb2->lock,
+				  debug_spinlock_offset);
+	if (futex_requeue_key_update_result((unsigned long)q,
+				__builtin_offsetof(struct futex_q, key),
+				(unsigned long)key2, sizeof(*key2),
+				futex_key_refs_bridge)) {
+		get_futex_key_refs(key2);
+		q->key = *key2;
 	}
-	get_futex_key_refs(key2);
-	q->key = *key2;
+}
+
+struct futex_requeue_scan_context {
+	struct futex_hash_bucket *hb1;
+	struct futex_hash_bucket *hb2;
+	union futex_key *key2;
+};
+
+static void futex_requeue_wake_bridge(unsigned long q_addr,
+				      unsigned long ctx_addr)
+{
+	(void)ctx_addr;
+	wake_futex((struct futex_q *)q_addr);
+}
+
+static void futex_requeue_move_bridge(unsigned long q_addr,
+				      unsigned long ctx_addr)
+{
+	struct futex_requeue_scan_context *ctx =
+		(struct futex_requeue_scan_context *)ctx_addr;
+
+	requeue_futex((struct futex_q *)q_addr, ctx->hb1, ctx->hb2,
+			ctx->key2);
 }
 
 /**
@@ -479,8 +530,8 @@ static int futex_requeue(uint32_t *uaddr1, int fshared, uint32_t *uaddr2,
 	union futex_key key1 = FUTEX_KEY_INIT, key2 = FUTEX_KEY_INIT;
 	int drop_count = 0, task_count = 0, ret;
 	struct futex_hash_bucket *hb1, *hb2;
+	struct futex_requeue_scan_context requeue_ctx;
 	struct plist_head *head1;
-	struct futex_q *this, *next;
 
 	ret = get_futex_key(uaddr1, fshared, &key1);
 	if ((ret != 0))
@@ -506,27 +557,19 @@ static int futex_requeue(uint32_t *uaddr1, int fshared, uint32_t *uaddr2,
 	}
 
 	head1 = &hb1->chain;
-	plist_for_each_entry_safe(this, next, head1, list) {
-		if (task_count - nr_wake >= nr_requeue)
-			break;
-
-		if (!match_futex(&this->key, &key1))
-			continue;
-
-		/*
-		 * Wake nr_wake waiters.  For requeue_pi, if we acquired the
-		 * lock, we already woke the top_waiter.  If not, it will be
-		 * woken by futex_unlock_pi().
-		 */
-		/* RIKEN: no requeue_pi at this moment */
-		if (++task_count <= nr_wake) {
-			wake_futex(this);
-			continue;
-		}
-
-		requeue_futex(this, hb1, hb2, &key2);
-		drop_count++;
-	}
+	requeue_ctx.hb1 = hb1;
+	requeue_ctx.hb2 = hb2;
+	requeue_ctx.key2 = &key2;
+	task_count = futex_requeue_scan_result((unsigned long)head1,
+			__builtin_offsetof(struct futex_q, list),
+			__builtin_offsetof(struct futex_q, key),
+			__builtin_offsetof(union futex_key, both.word),
+			__builtin_offsetof(union futex_key, both.ptr),
+			__builtin_offsetof(union futex_key, both.offset),
+			key1.both.word, (unsigned long)key1.both.ptr,
+			key1.both.offset, nr_wake, nr_requeue, &drop_count,
+			futex_requeue_wake_bridge, futex_requeue_move_bridge,
+			(unsigned long)&requeue_ctx);
 
 out_unlock:
 	double_unlock_hb(hb1, hb2);
@@ -554,7 +597,9 @@ static inline struct futex_hash_bucket *queue_lock(struct futex_q *q)
 
 	get_futex_key_refs(&q->key);
 	hb = hash_futex(&q->key);
-	q->lock_ptr = &hb->lock;
+	futex_queue_lock_ptr_store_result((unsigned long)q,
+		__builtin_offsetof(struct futex_q, lock_ptr),
+		(unsigned long)&hb->lock);
 
 	ihk_mc_spinlock_lock_noirq(&hb->lock);
 	return hb;
@@ -565,6 +610,37 @@ queue_unlock(struct futex_q *q, struct futex_hash_bucket *hb)
 {
 	ihk_mc_spinlock_unlock_noirq(&hb->lock);
 	drop_futex_key_refs(&q->key);
+}
+
+static int futex_wait_get_key_bridge(unsigned long uaddr, int fshared,
+				     unsigned long key_addr)
+{
+	return get_futex_key((uint32_t *)uaddr, fshared,
+			(union futex_key *)key_addr);
+}
+
+static unsigned long futex_wait_queue_lock_bridge(unsigned long q_addr)
+{
+	return (unsigned long)queue_lock((struct futex_q *)q_addr);
+}
+
+static int futex_wait_get_value_bridge(unsigned long value_addr,
+				       unsigned long uaddr)
+{
+	return get_futex_value_locked((uint32_t *)value_addr,
+			(uint32_t *)uaddr);
+}
+
+static void futex_wait_queue_unlock_bridge(unsigned long q_addr,
+					   unsigned long hb_addr)
+{
+	queue_unlock((struct futex_q *)q_addr,
+			(struct futex_hash_bucket *)hb_addr);
+}
+
+static void futex_wait_put_key_bridge(int fshared, unsigned long key_addr)
+{
+	put_futex_key(fshared, (union futex_key *)key_addr);
 }
 
 /**
@@ -585,6 +661,12 @@ static inline void queue_me(struct futex_q *q, struct futex_hash_bucket *hb)
 	struct thread *thread = cpu_local_var(current);
 	ihk_spinlock_t *_runq_lock = &cpu_local_var(runq_lock);
 	unsigned int *_flags = &cpu_local_var(flags);
+#ifdef CONFIG_DEBUG_PI_LIST
+	const unsigned long debug_spinlock_offset =
+		__builtin_offsetof(struct plist_node, plist.spinlock);
+#else
+	const unsigned long debug_spinlock_offset = 0;
+#endif
 
 	/*
 	 * The priority used to register this element is
@@ -598,23 +680,35 @@ static inline void queue_me(struct futex_q *q, struct futex_hash_bucket *hb)
 	 */
 	prio = 10; 
 
-	plist_node_init(&q->list, prio);
-#ifdef CONFIG_DEBUG_PI_LIST
-	q->list.plist.spinlock = &hb->lock;
-#endif
-	plist_add(&q->list, &hb->chain);
+	futex_queue_insert_result((unsigned long)q,
+		__builtin_offsetof(struct futex_q, list),
+		(unsigned long)&hb->chain,
+		prio,
+		debug_spinlock_offset,
+		(unsigned long)&hb->lock);
 
 	/* Store information about wait thread for uti-futex*/
-	q->task = thread;
-	q->th_spin_sleep_pa = virt_to_phys((void *)&thread->spin_sleep);
-	q->th_status_pa = virt_to_phys((void *)&thread->status);
-	q->th_spin_sleep_lock_pa = virt_to_phys((void *)&thread->spin_sleep_lock);
-	q->proc_status_pa = virt_to_phys((void *)&thread->proc->status);
-	q->proc_update_lock_pa = virt_to_phys((void *)&thread->proc->update_lock);
-	q->runq_lock_pa = virt_to_phys((void *)_runq_lock);
-	q->clv_flags_pa = virt_to_phys((void *)_flags);
-	q->intr_id = ihk_mc_get_interrupt_id(thread->cpu_id);
-	q->intr_vector = ihk_mc_get_vector(IHK_GV_IKC);
+	futex_queue_publish_waiter_result((unsigned long)q,
+		__builtin_offsetof(struct futex_q, task),
+		__builtin_offsetof(struct futex_q, th_spin_sleep_pa),
+		__builtin_offsetof(struct futex_q, th_status_pa),
+		__builtin_offsetof(struct futex_q, th_spin_sleep_lock_pa),
+		__builtin_offsetof(struct futex_q, proc_status_pa),
+		__builtin_offsetof(struct futex_q, proc_update_lock_pa),
+		__builtin_offsetof(struct futex_q, runq_lock_pa),
+		__builtin_offsetof(struct futex_q, clv_flags_pa),
+		__builtin_offsetof(struct futex_q, intr_id),
+		__builtin_offsetof(struct futex_q, intr_vector),
+		(unsigned long)thread,
+		virt_to_phys((void *)&thread->spin_sleep),
+		virt_to_phys((void *)&thread->status),
+		virt_to_phys((void *)&thread->spin_sleep_lock),
+		virt_to_phys((void *)&thread->proc->status),
+		virt_to_phys((void *)&thread->proc->update_lock),
+		virt_to_phys((void *)_runq_lock),
+		virt_to_phys((void *)_flags),
+		ihk_mc_get_interrupt_id(thread->cpu_id),
+		ihk_mc_get_vector(IHK_GV_IKC));
 
 	ihk_mc_spinlock_unlock_noirq(&hb->lock);
 }
@@ -658,10 +752,11 @@ retry:
 			ihk_mc_spinlock_unlock_noirq(lock_ptr);
 			goto retry;
 		}
-		plist_del(&q->list, &q->list.plist);
+		ret = futex_unqueue_detach_result((unsigned long)q,
+			__builtin_offsetof(struct futex_q, list),
+			__builtin_offsetof(struct plist_node, plist));
 
 		ihk_mc_spinlock_unlock_noirq(lock_ptr);
-		ret = 1;
 	}
 
 	drop_futex_key_refs(&q->key);
@@ -684,13 +779,16 @@ static int64_t futex_wait_queue_me(struct futex_hash_bucket *hb,
 	int64_t time_remain = 0;
 	unsigned long irqstate;
 	struct thread *thread = cpu_local_var(current);
+	int schedule_action;
 	/*
 	 * The task state is guaranteed to be set before another task can
 	 * wake it. 
 	 * queue_me() calls spin_unlock() upon completion, serializing
 	 * access to the hash list and forcing a memory barrier.
 	 */
-	xchg4(&(thread->status), PS_INTERRUPTIBLE);
+	futex_wait_mark_interruptible_result((unsigned long)thread,
+		__builtin_offsetof(struct thread, status),
+		PS_INTERRUPTIBLE);
 
 	/* Indicate spin sleep. Note that schedule_timeout() with
 	 * idle_halt should use spin sleep because sleep with timeout
@@ -698,28 +796,31 @@ static int64_t futex_wait_queue_me(struct futex_hash_bucket *hb,
 	 */
 	if (!idle_halt || timeout) {
 		irqstate = ihk_mc_spinlock_lock(&thread->spin_sleep_lock);
-		thread->spin_sleep = 1;
+		futex_wait_spin_sleep_store_result((unsigned long)thread,
+			__builtin_offsetof(struct thread, spin_sleep), 1);
 		ihk_mc_spinlock_unlock(&thread->spin_sleep_lock, irqstate);
 	}
 
 	queue_me(q, hb);
-	
-	if (!plist_node_empty(&q->list)) {
-		if (timeout) {
-			dkprintf("futex_wait_queue_me(): tid: %d schedule_timeout()\n", thread->tid);
-			time_remain = schedule_timeout(timeout);
-		}
-		else {
-			dkprintf("futex_wait_queue_me(): tid: %d schedule()\n", thread->tid);
-			spin_sleep_or_schedule();
-			time_remain = 0;
-		}
-		dkprintf("futex_wait_queue_me(): tid: %d woken up\n", thread->tid);
+
+	schedule_action = futex_wait_schedule_action_result(
+		!plist_node_empty(&q->list), timeout);
+	if (schedule_action == FUTEX_WAIT_SCHEDULE_TIMEOUT) {
+		dkprintf("futex_wait_queue_me(): tid: %d schedule_timeout()\n", thread->tid);
+		time_remain = schedule_timeout(timeout);
+	} else if (schedule_action == FUTEX_WAIT_SCHEDULE_DIRECT) {
+		dkprintf("futex_wait_queue_me(): tid: %d schedule()\n", thread->tid);
+		spin_sleep_or_schedule();
+		time_remain = 0;
 	}
+	if (schedule_action != FUTEX_WAIT_SCHEDULE_NONE)
+		dkprintf("futex_wait_queue_me(): tid: %d woken up\n", thread->tid);
 	
 	/* This does not need to be serialized */
-	thread->status = PS_RUNNING;
-	thread->spin_sleep = 0;
+	futex_wait_finish_state_result((unsigned long)thread,
+		__builtin_offsetof(struct thread, status),
+		__builtin_offsetof(struct thread, spin_sleep),
+		PS_RUNNING);
 	
 	return time_remain;
 }
@@ -744,7 +845,7 @@ static int64_t futex_wait_queue_me(struct futex_hash_bucket *hb,
 static int futex_wait_setup(uint32_t __user *uaddr, uint32_t val, int fshared,
 		struct futex_q *q, struct futex_hash_bucket **hb)
 {
-	uint32_t uval;
+	unsigned long hb_addr = 0;
 	int ret;
 
 	/*
@@ -764,27 +865,17 @@ static int futex_wait_setup(uint32_t __user *uaddr, uint32_t val, int fshared,
 	 * a wakeup when *uaddr != val on entry to the syscall.  This is
 	 * rare, but normal.
 	 */
-	q->key = FUTEX_KEY_INIT;
-	ret = get_futex_key(uaddr, fshared, &q->key);
-	if (ret != 0)
-		return ret;
-
-	*hb = queue_lock(q);
-
-	ret = get_futex_value_locked(&uval, uaddr);
-	if (ret) {
-		queue_unlock(q, *hb);
-		put_futex_key(fshared, &q->key);
-		return ret;
-	}
-
-	if (uval != val) {
-		queue_unlock(q, *hb);
-		ret = -EWOULDBLOCK;
-	}
-
-	if (ret)
-		put_futex_key(fshared, &q->key);
+	ret = futex_wait_setup_result((unsigned long)uaddr, val, fshared,
+			(unsigned long)q, &hb_addr,
+			__builtin_offsetof(struct futex_q, key),
+			sizeof(q->key),
+			futex_wait_get_key_bridge,
+			futex_wait_queue_lock_bridge,
+			futex_wait_get_value_bridge,
+			futex_wait_queue_unlock_bridge,
+			futex_wait_put_key_bridge);
+	if (!ret)
+		*hb = (struct futex_hash_bucket *)hb_addr;
 	return ret;
 }
 
@@ -795,9 +886,9 @@ static int futex_wait(uint32_t __user *uaddr, int fshared,
 	int64_t time_remain;
 	struct futex_q lq;
 	struct futex_q *q = NULL;
-	int ret;
+	int has_pending_signal = 0, post_action, ret, unqueued;
 
-	if (!bitset)
+	if (!futex_wake_bitset_valid_result(bitset))
 		return -EINVAL;
 
 	q = &lq;
@@ -811,9 +902,12 @@ static int futex_wait(uint32_t __user *uaddr, int fshared,
 	}
 #endif
 
-	q->bitset = bitset;
-	q->requeue_pi_key = NULL;
-	q->uti_futex_resp = cpu_local_var(uti_futex_resp);
+	futex_wait_prepare_q_result((unsigned long)q,
+		__builtin_offsetof(struct futex_q, bitset),
+		__builtin_offsetof(struct futex_q, requeue_pi_key),
+		__builtin_offsetof(struct futex_q, uti_futex_resp),
+		bitset,
+		(unsigned long)cpu_local_var(uti_futex_resp));
 
 retry:
 	/* Prepare to wait on uaddr. */
@@ -829,23 +923,28 @@ retry:
 
 	/* If we were woken (and unqueued), we succeeded, whatever. */
 	ret = 0;
-	if (!unqueue_me(q)) {
+	unqueued = unqueue_me(q);
+	if (unqueued && !(timeout && !time_remain))
+		has_pending_signal = hassigpending(cpu_local_var(current)) != NULL;
+	post_action = futex_wait_post_action_result(unqueued, timeout,
+			time_remain, has_pending_signal,
+			time_remain == -ERESTARTSYS);
+	if (post_action == FUTEX_WAIT_POST_SUCCESS) {
 		dkprintf("%s: tid=%d unqueued\n",
 				__func__, cpu_local_var(current)->tid);
 		goto out_put_key;
 	}
-	ret = -ETIMEDOUT;
 
 	/* RIKEN: timer expired case (indicated by !time_remain) */
-	if (timeout && !time_remain) {
+	if (post_action == FUTEX_WAIT_POST_TIMEOUT) {
+		ret = -ETIMEDOUT;
 		dkprintf("%s: tid=%d timer expired\n",
 				__func__, cpu_local_var(current)->tid);
 		goto out_put_key;
 	}
 
 	/* RIKEN: futex_wait_queue_me() returns -ERESTARTSYS when waiting on Linux CPU and woken up by signal */
-	if (hassigpending(cpu_local_var(current)) ||
-			time_remain == -ERESTARTSYS) {
+	if (post_action == FUTEX_WAIT_POST_INTERRUPT) {
 		ret = -EINTR;
 		dkprintf("%s: tid=%d woken up by signal\n",
 				__func__, cpu_local_var(current)->tid);
@@ -939,14 +1038,31 @@ int futex(uint32_t *uaddr, int op, uint32_t val, uint64_t timeout,
 
 int futex_init(void)
 {
-	int i;
+	int ret;
+#ifdef CONFIG_DEBUG_PI_LIST
+	const unsigned long debug_spinlock_offset =
+		__builtin_offsetof(struct plist_head, spinlock);
+	const unsigned long debug_rawlock_offset =
+		__builtin_offsetof(struct plist_head, rawlock);
+#else
+	const unsigned long debug_spinlock_offset = 0;
+	const unsigned long debug_rawlock_offset = 0;
+#endif
 
 	futex_queues = kmalloc(sizeof(struct futex_hash_bucket) *
 			(1 << FUTEX_HASHBITS), IHK_MC_AP_NOWAIT);
-	for (i = 0; i < (1 << FUTEX_HASHBITS); i++) {
-		plist_head_init(&futex_queues[i].chain, &futex_queues[i].lock);
-		ihk_mc_spinlock_init(&futex_queues[i].lock);
-	}
+	ret = futex_hash_bucket_table_init_result((unsigned long)futex_queues,
+			1 << FUTEX_HASHBITS,
+			sizeof(struct futex_hash_bucket),
+			__builtin_offsetof(struct futex_hash_bucket, lock),
+			0,
+			__builtin_offsetof(struct futex_hash_bucket, chain),
+			__builtin_offsetof(struct plist_head, prio_list),
+			__builtin_offsetof(struct plist_head, node_list),
+			debug_spinlock_offset,
+			debug_rawlock_offset);
+	if (ret < 0)
+		return ret;
 
 	return 0;
 }

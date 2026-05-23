@@ -1,6 +1,7 @@
 #![no_std]
 
 use core::ffi::{c_char, c_int, c_long, c_uint, c_ulong};
+use core::sync::atomic::{compiler_fence, AtomicI32, AtomicUsize, Ordering};
 
 const NUL: c_char = 0;
 const IHK_OS_AUX_PERF_NUM: c_uint = 0x1129_0100;
@@ -123,6 +124,41 @@ unsafe fn parse_i32_at(ptr: *const c_char, pos: &mut usize, out: *mut c_int) -> 
     true
 }
 
+unsafe fn llist_pop_first(head_addr: usize) -> usize {
+    let head = &*(head_addr as *const AtomicUsize);
+    let mut entry = head.load(Ordering::Acquire);
+
+    loop {
+        if entry == 0 {
+            return 0;
+        }
+
+        let next = core::ptr::read_volatile(entry as *const usize);
+        match head.compare_exchange(entry, next, Ordering::AcqRel, Ordering::Acquire) {
+            Ok(_) => return entry,
+            Err(current) => entry = current,
+        }
+    }
+}
+
+unsafe fn llist_add_first(head_addr: usize, node_addr: usize) {
+    let head = &*(head_addr as *const AtomicUsize);
+    let next_ptr = node_addr as *mut usize;
+    let mut first = head.load(Ordering::Acquire);
+
+    loop {
+        core::ptr::write_volatile(next_ptr, first);
+        match head.compare_exchange(first, node_addr, Ordering::AcqRel, Ordering::Acquire) {
+            Ok(_) => return,
+            Err(current) => first = current,
+        }
+    }
+}
+
+unsafe fn atomic_i32_at(obj_addr: usize, offset: usize) -> &'static AtomicI32 {
+    &*((obj_addr.wrapping_add(offset)) as *const AtomicI32)
+}
+
 #[no_mangle]
 pub extern "C" fn mcctrl_align_wait_buf_result(size: usize) -> usize {
     size.wrapping_add(63) & !63usize
@@ -173,6 +209,78 @@ pub extern "C" fn mcctrl_partition_wake_next_result(left: c_int) -> c_int {
 #[no_mangle]
 pub extern "C" fn mcctrl_release_user_space_len_result(start: c_ulong, end: c_ulong) -> c_ulong {
     end.wrapping_sub(start)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_zero_mckernel_pages_step_result(
+    node_addr: c_ulong,
+    to_zero_list_offset: c_ulong,
+    zeroed_list_offset: c_ulong,
+    nr_to_zero_pages_offset: c_ulong,
+    free_chunk_addr_offset: c_ulong,
+    free_chunk_size_offset: c_ulong,
+    free_chunk_list_offset: c_ulong,
+    free_chunk_sizeof: c_ulong,
+    phys_to_virt_base: c_ulong,
+    page_shift: c_uint,
+    addr_out: *mut c_ulong,
+    size_out: *mut c_ulong,
+) -> c_int {
+    if node_addr == 0 {
+        return 0;
+    }
+
+    let llnode = llist_pop_first(node_addr.wrapping_add(to_zero_list_offset) as usize);
+    if llnode == 0 {
+        return 0;
+    }
+
+    let chunk = llnode.wrapping_sub(free_chunk_list_offset as usize);
+    let addr = core::ptr::read_volatile(
+        chunk.wrapping_add(free_chunk_addr_offset as usize) as *const c_ulong
+    );
+    let size = core::ptr::read_volatile(
+        chunk.wrapping_add(free_chunk_size_offset as usize) as *const c_ulong
+    );
+    let zero_len = (size as usize).saturating_sub(free_chunk_sizeof as usize);
+
+    if zero_len != 0 {
+        let zero_ptr = phys_to_virt_base
+            .wrapping_add(addr)
+            .wrapping_add(free_chunk_sizeof) as *mut u8;
+        let mut offset = 0usize;
+        while offset < zero_len {
+            core::ptr::write_volatile(zero_ptr.add(offset), 0);
+            offset += 1;
+        }
+    }
+
+    llist_add_first(node_addr.wrapping_add(zeroed_list_offset) as usize, llnode);
+    compiler_fence(Ordering::SeqCst);
+    atomic_i32_at(node_addr as usize, nr_to_zero_pages_offset as usize)
+        .fetch_sub((size >> page_shift) as c_int, Ordering::SeqCst);
+
+    if !addr_out.is_null() {
+        core::ptr::write_volatile(addr_out, addr);
+    }
+    if !size_out.is_null() {
+        core::ptr::write_volatile(size_out, size);
+    }
+
+    1
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_zero_mckernel_pages_finish_result(
+    node_addr: c_ulong,
+    zeroing_workers_offset: c_ulong,
+) {
+    if node_addr == 0 {
+        return;
+    }
+
+    atomic_i32_at(node_addr as usize, zeroing_workers_offset as usize)
+        .fetch_sub(1, Ordering::SeqCst);
 }
 
 #[no_mangle]

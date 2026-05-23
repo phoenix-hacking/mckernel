@@ -1,5 +1,5 @@
 McKernel Rust Port Plan With Controlled Verification
-Updated: 2026-05-22
+Updated: 2026-05-23
 
 Purpose
 ------------------------------------------------------------
@@ -4534,3 +4534,2774 @@ Update 2026-05-22 McKernel-owned +34 verified slice toward +135 campaign:
     allocation/free, user-copy, Linux forwarding, broad lock/list ownership,
     page-table map/unmap mutation, signal delivery, scheduler handoff, and
     futex queue mutation in C until direct runtime coverage exists.
+
+Update 2026-05-22 McKernel-owned +10 verified slice toward +135 campaign:
+- Implemented:
+  - Added Rust/C fallback futex wake/requeue decision helpers and routed
+    futex wake bitset validation, waiter-bitset matching, wake-limit checks,
+    same-bucket requeue decisions, requeue loop limits, and wake-vs-requeue
+    classification through them. C still owns locks, plist mutation, futex
+    queue lifetime, IKC wake messages, and scheduler wakeups.
+  - Added Rust/C fallback x86 page-clear alignment and target-selection
+    helpers and routed `__clear_pt_page()` through them. C still owns page-table
+    traversal, page-table writes, `phys_to_virt()`, and TLB-sensitive behavior.
+  - Added a Rust/C fallback process remove-range step helper and routed
+    split-start, split-end, read-only-free, and XPMEM-removal preflight through
+    it. C still owns range splitting, allocation/free, rb-tree mutation,
+    XPMEM removal side effects, locking, and page-table teardown.
+- Validation:
+  - `rustfmt kernel/rust/sched_helpers.rs kernel/rust/process_helpers.rs
+    kernel/rust/x86_memory_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `sched_helpers ok digest=d10b2b802b4709eb`,
+    `process_helpers ok digest=19d13b829fb3dd33`, and
+    `x86_memory_helpers ok digest=7381d2549c4bc267`.
+  - `python3 -m py_compile scripts/rust-ownership-report.py` passed.
+  - `scripts/rust-ownership-report.py --check-dashboard overview.txt
+    --check-dashboard overview2.txt --top 25` passed after updating the
+    functional dashboard values.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. The existing Rust jobserver warning appeared, but the target linked
+    successfully.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed, validating the C fallback helper path.
+- Estimates:
+  - x86_64 memory management: 35% -> 38% (+3).
+  - Process/VM management: 72% -> 75% (+3).
+  - Scheduler/timers/wait/futex: 39% -> 43% (+4).
+  - Latest verified follow-up total: +10 aggregate functional points toward
+    the requested +135 campaign. Combined campaign progress is +44; 91
+    requested campaign points remain.
+  - Mechanical LOC is audit-only and is not used to score this goal.
+- Next major work:
+  - Continue the remaining +91 requested campaign points with x86 page-table
+    visit/free-range decision helpers, allocator CPU-cache/zeroed-list policy
+    before mutation, syscall ptrace/getrusage handler body slices, and
+    scheduler/futex wait/wake internals only after runtime probes exist.
+    Keep allocation/free, user-copy, Linux forwarding, broad lock/list
+    ownership, page-table map/unmap mutation, signal delivery, scheduler
+    handoff, and futex queue mutation in C until direct runtime coverage
+    exists.
+
+Update 2026-05-22 McKernel-owned +5 x86 verified slice toward +135 campaign:
+- Implemented:
+  - Added Rust/C fallback x86 page-table visit action selection for direct
+    visitor calls, allocate-and-walk decisions, lower-level walks, skip-null
+    decisions, and large-entry split-error classification. Routed normal and
+    safe `visit_pte_l2()`/`visit_pte_l3()` paths through it.
+  - Added Rust/C fallback clear/free-range validation, free-physical gating,
+    and large-entry action selection for `clear_range()`,
+    `clear_range_l2()`, and `clear_range_l3()`.
+  - C still owns page-table allocation, `phys_to_virt()`, `xchg()`/PTE writes,
+    TLB flushes, page frees, RSS/rusage updates, memobj flushes, logging, and
+    user-copy.
+- Validation:
+  - `rustfmt kernel/rust/x86_memory_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed before doc updates.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `x86_memory_helpers ok digest=5b90bf822c41f137`.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. The existing Rust jobserver warning appeared, but the target linked
+    successfully.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed, validating the C fallback helper path.
+- Estimates:
+  - x86_64 memory management: 38% -> 43% (+5).
+  - Latest verified follow-up total: +5 aggregate functional points toward the
+    requested +135 campaign. Combined campaign progress is +49; 86 requested
+    campaign points remain.
+  - Mechanical LOC is audit-only and is not used to score this goal.
+- Next major work:
+  - Continue the remaining +86 requested campaign points with allocator
+    CPU-cache/zeroed-list policy before mutation, syscall ptrace/getrusage
+    handler body slices, scheduler/futex wait/wake internals only after runtime
+    probes exist, additional x86 page-table free/change-attr decisions, and
+    process VM-range mutation bodies only with direct coverage. Keep
+    allocation/free, user-copy, Linux forwarding, broad lock/list ownership,
+    page-table map/unmap/free mutation, signal delivery, scheduler handoff, and
+    futex queue mutation in C until direct runtime coverage exists.
+
+Update 2026-05-22 McKernel-owned +4 syscall verified slice toward +135 campaign:
+- Implemented:
+  - Added Rust/C fallback getrusage helpers for TSC-to-timespec accumulation
+    and `struct rusage` timeval/maxrss result shaping.
+  - Routed `SYSCALL_DECLARE(getrusage)` through those helpers for
+    `RUSAGE_SELF`, `RUSAGE_CHILDREN`, and `RUSAGE_THREAD`.
+  - C still owns thread-list traversal, times-update orchestration,
+    cross-CPU interrupts, locks, user-copy, and actual rusage aggregation and
+    lifetime state.
+- Validation:
+  - `rustfmt kernel/rust/syscall_policy.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed before doc updates.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `syscall_policy_helpers ok digest=ffbdcf19e791c4e5`.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. The existing Rust jobserver warning appeared, but the target linked
+    successfully.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed, validating the C fallback helper path.
+  - Two intermediate failed validation attempts are recorded in `kernel.log`:
+    first for an unguarded Rust divisor that emitted a div-by-zero panic
+    reference, then for a generated equivalence-harness `struct timeval`
+    conflict. Both were fixed before counting this slice.
+- Estimates:
+  - Syscall core: 72% -> 76% (+4).
+  - Latest verified follow-up total: +4 aggregate functional points toward the
+    requested +135 campaign. Combined campaign progress is +53; 82 requested
+    campaign points remain.
+  - Mechanical LOC is audit-only and is not used to score this goal.
+- Next major work:
+  - Continue the remaining +82 requested campaign points with allocator
+    CPU-cache/zeroed-list policy before mutation, ptrace handler body slices,
+    scheduler/futex wait/wake internals only after runtime probes exist,
+    additional x86 page-table free/change-attr decisions, and process VM-range
+    mutation bodies only with direct coverage. Keep allocation/free, user-copy,
+    Linux forwarding, broad lock/list ownership, page-table map/unmap/free
+    mutation, signal delivery, scheduler handoff, and futex queue mutation in C
+    until direct runtime coverage exists.
+
+Update 2026-05-22 McKernel-owned +3 page allocator verified slice toward +135 campaign:
+- Implemented:
+  - Added Rust/C fallback helpers for CPU-local cache try/hit/free-success
+    action classification.
+  - Routed the page allocator CPU-local cache allocation/free fast-path gates
+    through those helpers while keeping interrupt masking, rb-tree mutation,
+    logging, fallback-to-NUMA free behavior, and allocator lifetime in C.
+- Validation:
+  - `rustfmt kernel/rust/page_alloc.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed before doc updates.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `page_alloc ok digest=bc602e043c066d67`.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. The existing Rust jobserver warning appeared, but the target linked
+    successfully.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed, validating the C fallback helper path.
+- Estimates:
+  - Page allocator: 38% -> 41% (+3).
+  - Latest verified follow-up total: +3 aggregate functional points toward the
+    requested +135 campaign. Combined campaign progress is +56; 79 requested
+    campaign points remain.
+  - Mechanical LOC is audit-only and is not used to score this goal.
+- Next major work:
+  - Continue the remaining +79 requested campaign points with allocator
+    zeroed-list policy before mutation, ptrace handler body slices,
+    scheduler/futex wait/wake internals only after runtime probes exist,
+    additional x86 page-table free/change-attr decisions, and process VM-range
+    mutation bodies only with direct coverage. Keep allocation/free, user-copy,
+    Linux forwarding, broad lock/list ownership, page-table map/unmap/free
+    mutation, signal delivery, scheduler handoff, and futex queue mutation in C
+    until direct runtime coverage exists.
+
+Update 2026-05-22 McKernel-owned +4 x86 verified slice toward +135 campaign:
+- Implemented:
+  - Added Rust/C fallback helpers for page-table change-attribute action
+    classification: leaf apply vs `-ENOENT`, higher-level `-ENOENT`, full
+    large-entry apply, partial-large split error, and lower-level walk.
+  - Routed `change_attr_range_l1/l2/l3/l4()` through those helpers while
+    keeping PTE writes, page-table walks, error logging, TLB-sensitive behavior,
+    and user-copy in C.
+- Validation:
+  - `rustfmt kernel/rust/x86_memory_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed before doc updates.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `x86_memory_helpers ok digest=ff5cc53d1a68637b`.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. The existing Rust jobserver warning appeared, but the target linked
+    successfully.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed, validating the C fallback helper path.
+- Estimates:
+  - x86_64 memory management: 43% -> 47% (+4).
+  - Latest verified follow-up total: +4 aggregate functional points toward the
+    requested +135 campaign. Combined campaign progress is +60; 75 requested
+    campaign points remain.
+  - Mechanical LOC is audit-only and is not used to score this goal.
+- Next major work:
+  - Continue the remaining +75 requested campaign points with allocator
+    zeroed-list policy before mutation, ptrace handler body slices,
+    scheduler/futex wait/wake internals only after runtime probes exist,
+    additional x86 page-table map/remove/free preflight decisions, and process
+    VM-range mutation bodies only with direct coverage. Keep allocation/free,
+    user-copy, Linux forwarding, broad lock/list ownership, page-table
+    map/unmap/free mutation, signal delivery, scheduler handoff, and futex
+    queue mutation in C until direct runtime coverage exists.
+
+Update 2026-05-22 McKernel-owned +4 x86 set-range verified slice toward +135 campaign:
+- Implemented:
+  - Added Rust/C fallback helpers for page-table set-range action
+    classification: L1 apply/busy, L2/L3 direct large-page map,
+    allocate-and-walk, busy large-entry, and lower-level walk.
+  - Routed `set_range_l1/l2/l3/l4()` through those helpers while keeping
+    page-table allocation, cmpxchg, PTE writes, RSS updates, rollback clears,
+    lower-level walks, TLB-sensitive behavior, and user-copy in C.
+- Validation:
+  - `rustfmt kernel/rust/x86_memory_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed before doc updates.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `x86_memory_helpers ok digest=b73f6ee3e2dd826c`.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. The existing Rust jobserver warning appeared, but the target linked
+    successfully.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed, validating the C fallback helper path.
+- Estimates:
+  - x86_64 memory management: 47% -> 51% (+4).
+  - Latest verified follow-up total: +4 aggregate functional points toward the
+    requested +135 campaign. Combined campaign progress is +64; 71 requested
+    campaign points remain.
+  - Mechanical LOC is audit-only and is not used to score this goal.
+- Next major work:
+  - Continue the remaining +71 requested campaign points with allocator
+    zeroed-list policy before mutation, ptrace handler body slices,
+    scheduler/futex wait/wake internals only after runtime probes exist,
+    additional x86 page-table map/remove/free preflight decisions, and process
+    VM-range mutation bodies only with direct coverage. Keep allocation/free,
+    user-copy, Linux forwarding, broad lock/list ownership, page-table
+    map/unmap/free mutation, signal delivery, scheduler handoff, and futex
+    queue mutation in C until direct runtime coverage exists.
+
+Update 2026-05-22 McKernel-owned +4 x86 lookup verified slice toward +135 campaign:
+- Implemented:
+  - Added Rust/C fallback helpers for page-table lookup policy: default
+    page-size selection, L4-empty size clamping, L3/L2 hit/walk/miss
+    classification, and returned base/size/p2align shaping.
+  - Routed `lookup_pte()` through those helpers while keeping page-table
+    pointer traversal, entry dereferences, `phys_to_virt()`, and returned PTE
+    pointer ownership in C.
+- Validation:
+  - `rustfmt kernel/rust/x86_memory_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed before doc updates.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `x86_memory_helpers ok digest=37f34b5e2d4773f9`.
+  - The first Rust image rebuild linked but emitted a C pointer-type warning
+    from the new helper call; the call was fixed before counting this slice.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed after the warning fix.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed, validating the C fallback helper path.
+- Estimates:
+  - x86_64 memory management: 51% -> 55% (+4).
+  - Latest verified follow-up total: +4 aggregate functional points toward the
+    requested +135 campaign. Combined campaign progress is +68; 67 requested
+    campaign points remain.
+  - Mechanical LOC is audit-only and is not used to score this goal.
+- Next major work:
+  - Continue the remaining +67 requested campaign points with allocator
+    zeroed-list policy before mutation, ptrace handler body slices,
+    scheduler/futex wait/wake internals only after runtime probes exist,
+    additional x86 page-table map/remove/free preflight decisions, IHK/host
+    module owned decision helpers, and process VM-range mutation bodies only
+    with direct coverage. Keep allocation/free, user-copy, Linux forwarding,
+    broad lock/list ownership, page-table map/unmap/free mutation, signal
+    delivery, scheduler handoff, futex queue mutation, memory registration, and
+    IKC exchange mutation in C until direct runtime coverage exists.
+
+Update 2026-05-22 IHK +3 verified slice toward +135 campaign:
+- Implemented:
+  - Added Rust/C fallback helpers for IHK host core OS load-file policy:
+    load-file versus load-memory dispatch, file-size validity, kernel-read
+    failure classification, and read-loop continuation.
+  - Routed `__ihk_os_load_file()` through those helpers while keeping file I/O,
+    memory allocation/free, `load_file`/`load_mem` handler calls, state
+    lifetime, and error cleanup in C.
+  - Extended the IHK helper smoke test to cover all new policy helpers.
+- Validation:
+  - `rustfmt ihk/linux/core/rust/core_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed before doc updates.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `ihk_module_helpers ok map=0000000000000018 bits=0000000000000007/0000000000000000`.
+  - `cmake --build /tmp/mckernel-rocky-rust --target ihk_ko -j2` passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target ihk_ko -j2`
+    passed, validating the C fallback path for the touched host-driver surface.
+- Estimates:
+  - host/IKC/mcctrl/IHK modules: 61% -> 64% (+3).
+  - Latest verified follow-up total: +3 aggregate functional points toward the
+    requested +135 campaign. Combined campaign progress is +71; 64 requested
+    campaign points remain.
+  - Mechanical LOC is audit-only and is not used to score this goal.
+- Next major work:
+  - Continue the remaining +64 requested campaign points with allocator
+    zeroed-list policy before mutation, ptrace handler body slices,
+    scheduler/futex wait/wake internals only after runtime probes exist,
+    additional x86 page-table map/remove/free preflight decisions, more
+    IHK/host module owned decision helpers, and process VM-range mutation
+    bodies only with direct coverage. Keep allocation/free, user-copy, Linux
+    forwarding, broad lock/list ownership, page-table map/unmap/free mutation,
+    signal delivery, scheduler handoff, futex queue mutation, file I/O, memory
+    registration, and IKC exchange mutation in C until direct runtime coverage
+    exists.
+
+Update 2026-05-22 IHK shutdown +3 verified slice toward +135 campaign:
+- Implemented:
+  - Added Rust/C fallback helpers for IHK host core shutdown status-to-action
+    policy, covering shutdown-busy, wait-for-frozen, thaw, wait-for-ready,
+    wait-for-running, not-booted, and loading-warning cases.
+  - Routed `__ihk_os_shutdown()` through the policy bitmask while keeping
+    waits, thaw calls, NMI fallback, notifier traversal, IKC finalization,
+    shutdown callbacks, kmsg release, locks, state mutation, and cleanup in C.
+  - Extended the IHK helper smoke test to cover every shutdown status policy
+    branch, including unknown status fallback.
+- Validation:
+  - `rustfmt ihk/linux/core/rust/core_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed before doc updates.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `ihk_module_helpers ok map=0000000000000018 bits=0000000000000007/0000000000000000`.
+  - `cmake --build /tmp/mckernel-rocky-rust --target ihk_ko -j2` passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target ihk_ko -j2`
+    passed, validating the C fallback path for the touched host-driver surface.
+- Estimates:
+  - host/IKC/mcctrl/IHK modules: 64% -> 67% (+3).
+  - Latest verified follow-up total: +3 aggregate functional points toward the
+    requested +135 campaign. Combined campaign progress is +74; 61 requested
+    campaign points remain.
+  - Mechanical LOC is audit-only and is not used to score this goal.
+- Next major work:
+  - Continue the remaining +61 requested campaign points with allocator
+    zeroed-list policy before mutation, ptrace handler body slices,
+    scheduler/futex wait/wake internals only after runtime probes exist,
+    additional x86 page-table map/remove/free preflight decisions, more
+    IHK/host module owned mutation preflights and then covered mutation bodies,
+    and process VM-range mutation bodies only with direct coverage.
+  - The hard work is required to reach 100: page-table mutation, allocator
+    lifetime and CPU-local mutation, scheduler wake/context-switch paths, futex
+    queue mutation, process lifetime and child-list mutation, IHK memory
+    registration, IKC exchange, sysfs object creation, and host module
+    lifecycle paths must eventually move with runtime coverage.
+
+Update 2026-05-22 IHK kmsg mutation +4 verified slice toward +135 campaign:
+- Implemented:
+  - Added Rust/C fallback helpers for IHK host core kmsg buffer initialization
+    and clear mutation.
+  - Routed OS creation kmsg buffer field setup/string zeroing and
+    `__ihk_os_clear_kmsg()` head/tail/string reset through Rust helpers.
+  - C still owns page allocation/free, inter-kernel lock acquire/release, IRQ
+    masking, kmsg buffer lookup, list insertion/deletion, container lifetime,
+    and module lifecycle cleanup.
+  - Extended the IHK helper smoke test with a small fake kmsg buffer to verify
+    field writes, string clearing, and lock preservation during clear.
+- Validation:
+  - First `kernel/rust/tests/run_equivalence.sh` failed because
+    `core::ptr::write_bytes()` emitted an unresolved freestanding `memset`.
+    The failure is recorded in `kernel.log`.
+  - Replaced byte clearing with an explicit volatile byte loop.
+  - `rustfmt ihk/linux/core/rust/core_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed before doc updates.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `ihk_module_helpers ok map=0000000000000018 bits=0000000000000007/0000000000000000`.
+  - `cmake --build /tmp/mckernel-rocky-rust --target ihk_ko -j2` passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target ihk_ko -j2`
+    passed, validating the C fallback path for the touched host-driver surface.
+- Estimates:
+  - host/IKC/mcctrl/IHK modules: 67% -> 71% (+4).
+  - Latest verified follow-up total: +4 aggregate functional points toward the
+    requested +135 campaign. Combined campaign progress is +78; 57 requested
+    campaign points remain.
+  - Mechanical LOC is audit-only and is not used to score this goal.
+- Next major work:
+  - Continue the remaining +57 requested campaign points with allocator
+    zeroed-list policy before mutation, ptrace handler body slices,
+    scheduler/futex wait/wake internals only after runtime probes exist,
+    additional x86 page-table map/remove/free preflight decisions, IHK kmsg
+    list/container mutation and memory-registration preflights, IKC exchange
+    coverage, and process VM-range mutation bodies only with direct coverage.
+  - The hard work is still required to reach 100; do not avoid it, but move it
+    behind coverage so that page-table mutation, allocator lifetime, scheduler
+    wake/context-switch paths, futex queues, process lifetime, child lists,
+    IHK memory registration, IKC exchange, sysfs object creation, and host
+    module lifecycle paths can be ported honestly.
+
+Update 2026-05-22 IHK kmsg lifecycle +3 verified slice toward +135 campaign:
+- Implemented:
+  - Added Rust/C fallback helpers for kmsg container field initialization and
+    OS kmsg-container pointer take/clear mutation.
+  - OS creation now routes container `os_index`, `kmsg_buf`, and `order`
+    assignment through Rust while C keeps `atomic_set()` and list publication.
+  - Shutdown now takes and clears `data->kmsg_buf_container` through Rust while
+    C keeps release calls, refcount behavior, locks, list deletion, and frees.
+  - Extended the IHK helper smoke test with fake container and fake OS structs.
+- Validation:
+  - `rustfmt ihk/linux/core/rust/core_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed before doc updates.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `ihk_module_helpers ok map=0000000000000018 bits=0000000000000007/0000000000000000`.
+  - `cmake --build /tmp/mckernel-rocky-rust --target ihk_ko -j2` passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target ihk_ko -j2`
+    passed, validating the C fallback path for the touched host-driver surface.
+- Estimates:
+  - host/IKC/mcctrl/IHK modules: 71% -> 74% (+3).
+  - Latest verified follow-up total: +3 aggregate functional points toward the
+    requested +135 campaign. Combined campaign progress is +81; 54 requested
+    campaign points remain.
+  - Mechanical LOC is audit-only and is not used to score this goal.
+- Next major work:
+  - Continue the remaining +54 requested campaign points with allocator
+    zeroed-list policy before mutation, ptrace handler body slices,
+    scheduler/futex wait/wake internals only after runtime probes exist,
+    additional x86 page-table map/remove/free preflight decisions, IHK kmsg
+    list/container mutation and memory-registration preflights, IKC exchange
+    coverage, and process VM-range mutation bodies only with direct coverage.
+  - The hard work is still required to reach 100; the next IHK/host progress
+    should move from container field mutation toward list/refcount mutation or
+    memory registration only when the corresponding non-reboot smoke can prove
+    the path.
+
+Update 2026-05-22 IHK list-publication +4 verified slice toward +135 campaign:
+- Implemented:
+  - Added a Rust/C fallback helper for Linux `list_add_tail` publication.
+  - Routed locked list insertion for kmsg buffer containers, OS event
+    registrations, aux-call handler registration, and OS notifier registration
+    through Rust helpers.
+  - C still owns list traversal, list deletion, locks, refcount behavior,
+    callback execution, object lifetime, and frees.
+  - Extended the IHK helper smoke test with a fake list head and two inserted
+    nodes to verify forward/back links after consecutive tail insertions.
+- Validation:
+  - `rustfmt ihk/linux/core/rust/core_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed before doc updates.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `ihk_module_helpers ok map=0000000000000018 bits=0000000000000007/0000000000000000`.
+  - `cmake --build /tmp/mckernel-rocky-rust --target ihk_ko -j2` passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target ihk_ko -j2`
+    passed, validating the C fallback path for the touched host-driver surface.
+- Estimates:
+  - host/IKC/mcctrl/IHK modules: 74% -> 78% (+4).
+  - Latest verified follow-up total: +4 aggregate functional points toward the
+    requested +135 campaign. Combined campaign progress is +85; 50 requested
+    campaign points remain.
+  - Mechanical LOC is audit-only and is not used to score this goal.
+- Next major work:
+  - Continue the remaining +50 requested campaign points with allocator
+    zeroed-list policy before mutation, ptrace handler body slices,
+    scheduler/futex wait/wake internals only after runtime probes exist,
+    additional x86 page-table map/remove/free preflight decisions, IHK list
+    deletion/refcount mutation and memory-registration preflights, IKC exchange
+    coverage, and process VM-range mutation bodies only with direct coverage.
+
+Update 2026-05-22 IHK list-deletion +4 verified slice toward +135 campaign:
+- Implemented:
+  - Added a Rust/C fallback helper for Linux `list_del` mutation with caller
+    supplied poison pointers to preserve the existing Linux list semantics.
+  - Routed deletion for kmsg buffer containers, OS event cleanup, aux-call
+    unregister, and OS notifier deregistration through Rust helpers.
+  - C still owns list traversal, locks, refcount behavior, callback execution,
+    object lifetime, and frees.
+  - Extended the IHK helper smoke test to delete inserted fake list nodes and
+    verify neighbor relinking plus entry poison pointers.
+- Validation:
+  - `rustfmt ihk/linux/core/rust/core_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed before doc updates.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `ihk_module_helpers ok map=0000000000000018 bits=0000000000000007/0000000000000000`.
+  - `cmake --build /tmp/mckernel-rocky-rust --target ihk_ko -j2` passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target ihk_ko -j2`
+    passed, validating the C fallback path for the touched host-driver surface.
+- Estimates:
+  - host/IKC/mcctrl/IHK modules: 78% -> 82% (+4).
+  - Latest verified follow-up total: +4 aggregate functional points toward the
+    requested +135 campaign. Combined campaign progress is +89; 46 requested
+    campaign points remain.
+  - Mechanical LOC is audit-only and is not used to score this goal.
+- Next major work:
+  - Continue the remaining +46 requested campaign points with allocator
+    zeroed-list policy before mutation, ptrace handler body slices,
+    scheduler/futex wait/wake internals only after runtime probes exist,
+    additional x86 page-table map/remove/free preflight decisions, IHK
+    refcount/list traversal and memory-registration preflights, IKC exchange
+    coverage, and process VM-range mutation bodies only with direct coverage.
+
+Boot-path verification safety plan:
+- Do not run host `mcreboot.sh`, host reboot/shutdown/kexec, or scripts that
+  implicitly call them without explicit approval for that specific run.
+- The safest boot-path verifier is a disposable Rocky 8.x VM or snapshot-backed
+  nested VM launched from the Codex session, with McKernel installed only inside
+  the guest. The host should see only the VM process and serial/log files; all
+  `mcreboot.sh`, `mcstop+release.sh`, module load/unload, and V9/V10/V11 boot
+  smoke commands run inside the guest.
+- Required guardrails for that VM runner: timeout every boot/test command,
+  capture serial console and guest dmesg to `/tmp`, always run guest
+  `mcstop+release.sh -k` during cleanup, never pass host `/dev/mcos*` or host
+  IHK modules into the guest, and destroy/revert the VM snapshot after each
+  attempt.
+- Until the VM runner is created and validated, safe non-reboot boot-adjacent
+  checks are limited to image builds, `scripts/ihk-module-load-smoke.sh` when
+  host module load is approved, and `scripts/rocky-v11-focused.sh
+  --classify-only`, `--build-only`, or `--skip-boot`. Plain
+  `scripts/rocky-v11-focused.sh` is not safe by default because it can call
+  `mcreboot.sh`.
+
+Update 2026-05-22 IHK kmsg traversal +3 verified slice toward +135 campaign:
+- Implemented:
+  - Routed reverse kmsg-buffer lookup traversal by OS index through Rust
+    helpers with a C fallback.
+  - Converted the OS boot kmsg lookup and device kmsg lookup paths to use the
+    Rust-owned traversal helper while preserving the existing lock coverage.
+  - C still owns spinlocks, returned-pointer assignment, atomic refcount
+    increments, user-copy, error handling, object lifetime, memory
+    registration, IKC exchange, sysfs object creation, waits/callbacks, broad
+    list traversal, and module lifecycle side effects.
+  - Extended `kernel/rust/tests/ihk_module_helpers_smoke.c` with fake reverse
+    list traversal checks for newest-match lookup, older-match lookup, and
+    miss handling.
+- Validation:
+  - `rustfmt ihk/linux/core/rust/core_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed before doc updates.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `ihk_module_helpers ok map=0000000000000018 bits=0000000000000007/0000000000000000`.
+  - `cmake --build /tmp/mckernel-rocky-rust --target ihk_ko -j2` passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target ihk_ko -j2`
+    passed.
+- Estimates:
+  - host/IKC/mcctrl/IHK modules: 82% -> 85% (+3).
+  - Latest verified follow-up total: +3 aggregate functional points toward the
+    requested +135 campaign. Combined campaign progress is +92; 43 requested
+    campaign points remain.
+- Honest remaining C ownership:
+  - Atomic refcount publication, device allocation, memory registration, IKC
+    exchange, sysfs object creation, waits/callbacks, broad list traversal,
+    broad allocation/lifetime ownership, kernel object lifecycle mutation, and
+    boot/runtime coverage remain pending. No boot/reboot-capable scripts were
+    run in this slice.
+
+Update 2026-05-22 IHK list-membership traversal +3 verified slice toward +135 campaign:
+- Implemented:
+  - Added a Rust/C fallback helper for generic forward list membership
+    traversal by `list_head` offset and target entry address.
+  - Routed OS notifier registration and deregistration duplicate/presence scans
+    through the Rust helper while preserving the existing semaphore coverage.
+  - C still owns semaphore locking, callback invocation traversal,
+    list add/delete, refcounts, user-copy, error handling, object lifetime,
+    memory registration, IKC exchange, sysfs object creation, waits/callbacks,
+    remaining callback/list traversal, and module lifecycle side effects.
+  - Extended `kernel/rust/tests/ihk_module_helpers_smoke.c` with fake-list
+    membership checks for present entries and a miss.
+- Validation:
+  - `rustfmt ihk/linux/core/rust/core_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `ihk_module_helpers ok map=0000000000000018 bits=0000000000000007/0000000000000000`.
+  - `cmake --build /tmp/mckernel-rocky-rust --target ihk_ko -j2` passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target ihk_ko -j2`
+    passed.
+- Estimates:
+  - host/IKC/mcctrl/IHK modules: 85% -> 88% (+3).
+  - Latest verified follow-up total: +3 aggregate functional points toward the
+    requested +135 campaign. Combined campaign progress is +95; 40 requested
+    campaign points remain.
+- Honest remaining C ownership:
+  - Atomic refcount publication, device allocation, memory registration, IKC
+    exchange, sysfs object creation, waits/callbacks, remaining callback/list
+    traversal, broad allocation/lifetime ownership, kernel object lifecycle
+    mutation, and boot/runtime coverage remain pending. No boot/reboot-capable
+    scripts were run in this slice.
+
+Update 2026-05-22 IHK next-entry traversal +3 verified slice toward +135 campaign:
+- Implemented:
+  - Added a Rust/C fallback helper for generic forward next-entry cursor
+    traversal by `list_head` offset and current entry address.
+  - Routed OS notifier boot/shutdown callback iteration, eventfd signaling
+    traversal, and aux-call handler-list traversal through the Rust helper while
+    preserving the existing C-owned callback and lock behavior.
+  - C still owns semaphore/spinlock locking, callback invocation, eventfd
+    signaling, handler dispatch, list add/delete, refcounts, user-copy, error
+    handling, object lifetime, memory registration, IKC exchange, sysfs object
+    creation, waits/callbacks, and module lifecycle side effects.
+  - Extended `kernel/rust/tests/ihk_module_helpers_smoke.c` with fake-list
+    next-entry checks for first, second, and end-of-list behavior.
+- Validation:
+  - `rustfmt ihk/linux/core/rust/core_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `ihk_module_helpers ok map=0000000000000018 bits=0000000000000007/0000000000000000`.
+  - `cmake --build /tmp/mckernel-rocky-rust --target ihk_ko -j2` passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target ihk_ko -j2`
+    passed.
+- Estimates:
+  - host/IKC/mcctrl/IHK modules: 88% -> 91% (+3).
+  - Latest verified follow-up total: +3 aggregate functional points toward the
+    requested +135 campaign. Combined campaign progress is +98; 37 requested
+    campaign points remain.
+- Honest remaining C ownership:
+  - Atomic refcount publication, device allocation, memory registration, IKC
+    exchange, sysfs object creation, waits/callbacks, callback invocation,
+    broad allocation/lifetime ownership, kernel object lifecycle mutation, and
+    boot/runtime coverage remain pending. No boot/reboot-capable scripts were
+    run in this slice.
+
+Update 2026-05-22 IHK kmsg refcount +4 verified slice toward +135 campaign:
+- Implemented:
+  - Added Rust/C fallback helpers for `atomic_t`-compatible i32
+    set/read/inc/dec/dec-return operations by object address and field offset.
+  - Routed kmsg container count initialization, boot/device get-kmsg reference
+    increments, boot-error cleanup decrement, release precheck read, and release
+    decrement-return through the Rust helpers.
+  - At that point C still owned OS/device open refcount `cmpxchg`; the later
+    post-campaign open-refcount slice moved that boundary. C still owns locks,
+    callback invocation, container allocation/free, page allocation/free,
+    device allocation, memory registration, IKC exchange, file I/O, user-copy,
+    object lifetime, waits, and module lifecycle side effects.
+  - Extended `kernel/rust/tests/ihk_module_helpers_smoke.c` with field-offset
+    atomic set/read/inc/dec/dec-return checks.
+- Validation:
+  - `rustfmt ihk/linux/core/rust/core_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `ihk_module_helpers ok map=0000000000000018 bits=0000000000000007/0000000000000000`.
+  - `cmake --build /tmp/mckernel-rocky-rust --target ihk_ko -j2` passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target ihk_ko -j2`
+    passed.
+- Estimates:
+  - host/IKC/mcctrl/IHK modules: 91% -> 95% (+4).
+  - Latest verified follow-up total: +4 aggregate functional points toward the
+    requested +135 campaign. Combined campaign progress is +102; 33 requested
+    campaign points remain.
+  - Mechanical LOC audit is 16.4% Rust implementation and remains audit-only,
+    not the progress score.
+- Honest remaining C ownership:
+  - Callback invocation, device allocation, memory registration, IKC exchange,
+    sysfs object creation, waits/callbacks, broad allocation/lifetime
+    ownership, kernel object lifecycle mutation, and boot/runtime coverage
+    remain pending. No boot/reboot-capable scripts were run in this slice.
+
+Update 2026-05-22 ABI/layout IHK host struct +4 verified slice toward +135 campaign:
+- Implemented:
+  - Added Rust compile-time layout mirrors and assertions for IHK kmsg buffers,
+    kmsg buffer containers, event entries, OS notifier ops/entries, aux-call
+    handlers, and aux-call lists.
+  - Added the missing Rust-side assertion for
+    `IhkHostLinuxOsData::kmsg_buf_container`, which is now directly used by the
+    kmsg lifecycle helper.
+  - These assertions compile into the IHK core Rust helper object and cover the
+    structs used by the new traversal and kmsg refcount helpers.
+  - C still owns allocation, freeing, callback invocation, user-copy, IKC
+    exchange, file I/O, waits, runtime lifecycle, and boot/runtime behavior.
+- Validation:
+  - `rustfmt ihk/linux/core/rust/core_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `ihk_module_helpers ok map=0000000000000018 bits=0000000000000007/0000000000000000`.
+  - `cmake --build /tmp/mckernel-rocky-rust --target ihk_ko -j2` passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target ihk_ko -j2`
+    passed.
+- Estimates:
+  - ABI/layout foundation: 50% -> 54% (+4).
+  - Latest verified follow-up total: +4 aggregate functional points toward the
+    requested +135 campaign. Combined campaign progress is +106; 29 requested
+    campaign points remain.
+  - Mechanical LOC audit is 16.4% Rust implementation and remains audit-only,
+    not the progress score.
+- Next major work:
+  - Continue the remaining +29 requested campaign points with page allocator
+    zero-list/lifetime decisions, scheduler/futex wake internals with direct
+    probes, x86 map/remove/free preflights, syscall ptrace/getrusage body
+    slices, IHK memory registration and IKC exchange preflights, and only then
+    broader mutation bodies with coverage.
+
+Update 2026-05-22 page allocator zeroing-worker +3 verified slice toward +135 campaign:
+- Implemented:
+  - Added a Rust/C fallback helper for the NUMA zeroing-worker atomic increment.
+  - Routed the Rust-enabled page allocator's zero-request worker increment
+    through Rust before C constructs and sends the Linux zero-request IKC packet.
+  - Extended `kernel/rust/tests/run_equivalence.sh` page allocator bitmap
+    coverage with direct zeroing-worker increment checks.
+  - C still owns the decision context for requesting Linux zeroing, IKC packet
+    construction/send, locks, interrupt masking, allocator lifetime, CPU-local
+    cache tree mutation, broad zeroing side effects, and runtime coverage.
+- Validation:
+  - `rustfmt kernel/rust/page_alloc.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `page_alloc_bitmap ok digest=fbb6e41c08cb6d49`.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+  - `python3 -m py_compile scripts/rust-ownership-report.py` passed.
+  - `scripts/rust-ownership-report.py --check-dashboard overview.txt --check-dashboard overview2.txt --top 25`
+    passed.
+  - `python3 -m py_compile scripts/rust-ownership-report.py` passed.
+  - `scripts/rust-ownership-report.py --check-dashboard overview.txt --check-dashboard overview2.txt --top 25`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+- Estimates:
+  - Page allocator: 41% -> 44% (+3).
+  - Latest verified follow-up total: +3 aggregate functional points toward the
+    requested +135 campaign. Combined campaign progress is +109; 26 requested
+    campaign points remain.
+  - Mechanical LOC audit is 16.4% Rust implementation and remains audit-only,
+    not the progress score.
+- Next major work:
+  - Continue the remaining +26 requested campaign points with scheduler/futex
+    wake internals with direct probes, x86 map/remove/free preflights, syscall
+    ptrace/getrusage body slices, remaining page allocator zero-list/lifetime
+    mutation, IHK memory registration and IKC exchange preflights, and only then
+    broader mutation bodies with coverage.
+
+Update 2026-05-22 scheduler/futex wake-mark +3 verified slice toward +135 campaign:
+- Implemented:
+  - Added a Rust/C fallback helper for the futex wake transition that removes a
+    queued waiter from the priority list, preserves the compiler barrier, and
+    clears `lock_ptr`.
+  - Routed `wake_futex()` through the helper while keeping the existing C-owned
+    hash-bucket lock context, wake policy, IKC packet construction/send,
+    McKernel thread wakeup, and scheduler handoff.
+  - Captured `uti_futex_resp` and `linux_cpu` before marking the waiter woken,
+    matching the existing comment that the waiting task may free `futex_q` as
+    soon as `lock_ptr` becomes NULL.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with a direct priority-list
+    wake-mark coverage case.
+  - C still owns timeout/requeue orchestration, wake policy, hash-bucket locks,
+    IKC exchange, thread wakeup, scheduler handoff, timer queues, futex queues,
+    and broader futex queue/list mutation.
+- Validation:
+  - `rustfmt kernel/rust/sched_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `sched_helpers ok digest=92c28b36227dd07d`.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+- Estimates:
+  - Scheduler/timers/wait/futex: 43% -> 46% (+3).
+  - Latest verified follow-up total: +3 aggregate functional points toward the
+    requested +135 campaign. Combined campaign progress is +112; 23 requested
+    campaign points remain.
+  - Mechanical LOC audit is 16.4% Rust implementation and remains audit-only,
+    not the progress score.
+- Next major work:
+  - Continue the remaining +23 requested campaign points with scheduler/futex
+    requeue/unqueue mutation under direct probes, x86 map/remove/free
+    preflights, syscall ptrace body slices, remaining page allocator
+    zero-list/lifetime mutation, IHK memory registration and IKC exchange
+    preflights, and only then broader mutation bodies with coverage.
+
+Update 2026-05-22 scheduler/futex requeue-move +3 verified slice toward +135 campaign:
+- Implemented:
+  - Added Rust/C fallback helper `futex_requeue_move_result()` for the
+    cross-bucket futex requeue transition: priority-list removal from the
+    source bucket, priority-list insertion into the target bucket, and
+    `lock_ptr` publication to the target bucket lock.
+  - Routed `requeue_futex()` through the helper while keeping the existing
+    double hash-bucket lock coverage, key reference handling, `q->key`
+    replacement, loop policy, wake policy, and scheduler handoff in C.
+  - Preserved the same-bucket no-op behavior inside the helper and retained
+    CONFIG_DEBUG_PI_LIST spinlock publication through an offset argument.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct list-state
+    coverage for moved and same-bucket requeue cases.
+  - C still owns timeout/requeue loop orchestration, hash-bucket locks,
+    key reference/lifetime updates, `q->key` replacement, wake policy, IKC
+    exchange, scheduler handoff, timer queues, futex queues, and broader futex
+    queue/list mutation.
+- Validation:
+  - `rustfmt kernel/rust/sched_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `sched_helpers ok digest=a3205df89804a3ea`.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+- Estimates:
+  - Scheduler/timers/wait/futex: 46% -> 49% (+3).
+  - Latest verified follow-up total: +3 aggregate functional points toward the
+    requested +135 campaign. Combined campaign progress is +115; 20 requested
+    campaign points remain.
+  - Non-arm64 dashboard average is now 74.3%; McKernel-owned core row average
+    is now 67.1%. Mechanical LOC audit remains audit-only, not the progress
+    score.
+- Next major work:
+  - Continue the remaining +20 requested campaign points with scheduler/futex
+    unqueue/queue-field mutation under direct probes, x86 map/remove/free
+    preflights, syscall ptrace body slices, remaining page allocator
+    zero-list/lifetime mutation, IHK memory registration and IKC exchange
+    preflights, and only then broader mutation bodies with coverage.
+
+Update 2026-05-22 scheduler/futex queue-metadata +3 verified slice toward +135 campaign:
+- Implemented:
+  - Added Rust/C fallback helper `futex_queue_publish_waiter_result()` for
+    queue-time futex waiter metadata publication: task pointer, physical
+    wait-state fields, runqueue/flags physical addresses, interrupt id, and
+    interrupt vector.
+  - Routed `queue_me()` through the helper while keeping current-thread lookup,
+    `virt_to_phys()` address translation, interrupt lookup, priority-list
+    insertion, hash-bucket lock coverage, and unlock behavior in C.
+  - The first equivalence attempt failed because the C fallback included
+    `futex.h`, whose include path sees `process.h` embed `struct futex_q`
+    before the type is defined. This was recorded in `kernel.log`; the fixed
+    helper uses explicit C-provided field offsets instead of including
+    `futex.h`.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct field
+    publication coverage against a full fake `futex_q` layout.
+  - C still owns current-thread lookup, address translation, interrupt lookup,
+    queue insertion, hash-bucket lock coverage, timeout/wake orchestration, and
+    broader futex queue/list mutation.
+- Validation:
+  - `rustfmt kernel/rust/sched_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed after the fallback rework,
+    including `sched_helpers ok digest=5d1cd049e2892df0`.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+- Estimates:
+  - Scheduler/timers/wait/futex: 49% -> 52% (+3).
+  - Latest verified follow-up total: +3 aggregate functional points toward the
+    requested +135 campaign. Combined campaign progress is +118; 17 requested
+    campaign points remain.
+  - Non-arm64 dashboard average is now 74.6%; McKernel-owned core row average
+    is now 67.5%. Mechanical LOC audit remains audit-only, not the progress
+    score.
+- Next major work:
+  - Continue the remaining +17 requested campaign points with scheduler/futex
+    unqueue mutation under direct probes, x86 map/remove/free preflights,
+    syscall ptrace body slices, remaining page allocator zero-list/lifetime
+    mutation, IHK memory registration and IKC exchange preflights, and only
+    then broader mutation bodies with coverage.
+
+Update 2026-05-22 scheduler/futex unqueue-detach +3 verified slice toward +135 campaign:
+- Implemented:
+  - Added Rust/C fallback helper `futex_unqueue_detach_result()` for the
+    self-unqueue priority-list detach used by timed-out or signaled futex
+    waiters.
+  - Routed `unqueue_me()` through the helper after the existing C lock-pointer
+    race check succeeds.
+  - Preserved the current behavior that self-unqueue removes the list node
+    without clearing `lock_ptr`; the stack-owned waiter object is released
+    after C drops key references.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct list-state
+    coverage proving the node is detached and `lock_ptr` remains unchanged.
+  - C still owns lock-pointer reads, compiler barrier, race retry, hash-bucket
+    lock/unlock, key reference dropping, return orchestration, and sleep/wake
+    behavior.
+- Validation:
+  - `rustfmt kernel/rust/sched_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `sched_helpers ok digest=2c2f4cf788d1bf57`.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+- Estimates:
+  - Scheduler/timers/wait/futex: 52% -> 55% (+3).
+  - Latest verified follow-up total: +3 aggregate functional points toward the
+    requested +135 campaign. Combined campaign progress is +121; 14 requested
+    campaign points remain.
+  - Non-arm64 dashboard average is now 74.8%; McKernel-owned core row average
+    is now 67.9%. Mechanical LOC audit remains audit-only, not the progress
+    score.
+- Next major work:
+  - Continue the remaining +14 requested campaign points with x86
+    map/remove/free preflights, syscall ptrace body slices, remaining page
+    allocator zero-list/lifetime mutation, IHK memory registration and IKC
+    exchange preflights, scheduler/futex queue/wake bodies only with direct
+    runtime coverage, and then broader mutation bodies with coverage.
+
+Update 2026-05-22 x86 move-PTE preflight +3 verified slice toward +135 campaign:
+- Implemented:
+  - Added Rust/C fallback helpers `x86_move_pte_preflight_result()` and
+    `x86_move_pte_entry_parts_result()` for the `move_pte_range()` callback.
+  - Routed `move_one_page()` through Rust-owned file-offset rejection before
+    `pte_xchg()`, mapped-destination calculation, and exchanged-PTE
+    physical-address/attribute splitting.
+  - Preserved the original ordering: unsupported file-offset PTEs are rejected
+    before the source PTE is exchanged/cleared.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct x86 helper
+    coverage for normal entries, file-offset entries, invalid page-size
+    fallback behavior, destination wrapping, and phys/attr splitting.
+  - C still owns `pte_xchg()`, `ihk_mc_pt_set_range()`, page-table mutation,
+    TLB flush behavior, logging, and runtime move orchestration.
+- Validation:
+  - `rustfmt kernel/rust/x86_memory_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `x86_memory_helpers ok digest=13acda051a8ae82a`.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. The first run emitted the existing jobserver warning and two
+    pointer-type warnings; the caller was tightened to use matching
+    `unsigned long` helper outputs, and the rerun linked `mckernel.img`
+    cleanly.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+- Estimates:
+  - x86_64 memory management: 55% -> 58% (+3).
+  - Latest verified follow-up total: +3 aggregate functional points toward the
+    requested +135 campaign. Combined campaign progress is +124; 11 requested
+    campaign points remain.
+  - Non-arm64 dashboard average is now 75.1%; McKernel-owned core row average
+    is now 68.3%. Mechanical LOC audit remains audit-only, not the progress
+    score.
+- Next major work:
+  - Continue the remaining +11 requested campaign points with x86
+    map/remove/free preflights and then covered mutation bodies, syscall
+    ptrace body slices, remaining page allocator zero-list/lifetime mutation,
+    IHK memory registration and IKC exchange preflights, and scheduler/futex
+    queue/wake bodies only with direct runtime coverage.
+
+Update 2026-05-22 x86 clear-old action +3 verified slice toward +135 campaign:
+- Implemented:
+  - Added Rust/C fallback helpers `x86_clear_range_old_entry_result()` and
+    `x86_clear_range_old_action_result()` for clear/free-range old-PTE
+    classification after the C-owned PTE exchange.
+  - Routed 4 KiB, 2 MiB, and 1 GiB clear/free-range paths through Rust-owned
+    physical/fileoff/dirty classification plus flush/free/XPMEM/try-unmap
+    action selection.
+  - Kept C ownership of `xchg()`, `phys_to_page()`, `memobj_flush_page()`,
+    `page_unmap()`, actual page frees, RSS updates, remote TLB flushes,
+    logging, and page-table lifetime.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct old-PTE
+    classification and action-matrix coverage.
+- Validation:
+  - `rustfmt kernel/rust/x86_memory_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - Initial `git diff --check` failed on trailing whitespace in three touched
+    `memory_stat_rss_sub()` lines; the failure was recorded in `kernel.log`,
+    the whitespace was removed, and the check then passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `x86_memory_helpers ok digest=ed730ba49e1a80f4`.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+- Estimates:
+  - x86_64 memory management: 58% -> 61% (+3).
+  - Latest verified follow-up total: +3 aggregate functional points toward the
+    requested +135 campaign. Combined campaign progress is +127; 8 requested
+    campaign points remain.
+  - Non-arm64 dashboard average is now 75.3%; McKernel-owned core row average
+    is now 68.6%. Mechanical LOC audit remains audit-only, not the progress
+    score.
+- Next major work:
+  - Continue the remaining +8 requested campaign points with syscall ptrace
+    body slices, page allocator zero-list/lifetime mutation, IHK memory
+    registration and IKC exchange preflights, scheduler/futex queue/wake bodies
+    only with direct runtime coverage, and x86 page-table mutation only after
+    stronger runtime probes exist.
+
+Update 2026-05-22 x86 set-range map-entry +3 verified slice toward +135 campaign:
+- Implemented:
+  - Added Rust/C fallback helper `x86_set_range_map_entry_result()` for
+    mapped physical-address and final PTE value shaping.
+  - Routed 4 KiB, 2 MiB, and 1 GiB `set_range` mapping paths through the
+    helper before C writes the page-table entry.
+  - Kept C ownership of page-table allocation, compare-exchange publication,
+    direct PTE writes, rollback, RSS updates, logging, and runtime map
+    orchestration.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct map-entry
+    shaping coverage across page levels, attributes, physical bases, ranges,
+    and invalid level shifts.
+- Validation:
+  - `rustfmt kernel/rust/x86_memory_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `x86_memory_helpers ok digest=3b228e8bd88f8914`.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+- Estimates:
+  - x86_64 memory management: 61% -> 64% (+3).
+  - Latest verified follow-up total: +3 aggregate functional points toward the
+    requested +135 campaign. Combined campaign progress is +130; 5 requested
+    campaign points remain.
+  - Non-arm64 dashboard average is now 75.6%; McKernel-owned core row average
+    is now 69.0%. Mechanical LOC audit remains audit-only, not the progress
+    score.
+- Next major work:
+  - Continue the remaining +5 requested campaign points with syscall ptrace
+    body slices, page allocator zero-list/lifetime mutation, IHK memory
+    registration and IKC exchange preflights, scheduler/futex queue/wake bodies
+    only with direct runtime coverage, and x86 page-table mutation only after
+    stronger runtime probes exist.
+
+Update 2026-05-22 x86 split-large-page +5 verified slice completing +135 campaign:
+- Implemented:
+  - Added Rust/C fallback helpers for split-large-page source classification,
+    child-map physical derivation, page-table publish entry shaping, and
+    source-unmap gate selection.
+  - Routed `split_large_page()` through those helpers while preserving C
+    ownership of page-table allocation, child entry writes, `page_map()`,
+    `page_unmap()`, RSS updates, PTE publication, remote TLB flushing, logging,
+    and runtime split orchestration.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct split-source,
+    child-map, publish-entry, and source-unmap coverage.
+- Validation:
+  - `rustfmt kernel/rust/x86_memory_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `x86_memory_helpers ok digest=5cbdfe026a75485b`.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+- Estimates:
+  - x86_64 memory management: 64% -> 69% (+5).
+  - The requested +135 aggregate-point campaign is complete with verified code.
+  - Non-arm64 dashboard average is now 76.0%; McKernel-owned core row average
+    is now 69.6%. Mechanical LOC audit remains audit-only, not the progress
+    score.
+- Next major work:
+  - Continue toward actual 100% completion with syscall ptrace body slices,
+    page allocator zero-list/lifetime mutation, IHK memory registration and IKC
+    exchange preflights, scheduler/futex queue/wake bodies only with direct
+    runtime coverage, and x86 page-table mutation only after stronger runtime
+    probes exist.
+
+Update 2026-05-22 page allocator zero-free dispatcher +3 verified post-campaign slice:
+- Implemented:
+  - Added a Rust-owned NUMA zero-free dispatcher that preserves the C ABI while
+    routing explicit-node versus all-node traversal and null-node stop behavior
+    through Rust.
+  - Replaced the Rust-enabled C dispatcher branch in `lib/page_alloc.c` with a
+    call into the Rust dispatcher while preserving the C fallback body.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with all-node zero-free
+    dispatcher coverage and harness stubs for the new exported Rust
+    dependencies.
+- Validation:
+  - Initial `kernel/rust/tests/run_equivalence.sh` attempts failed at link time
+    because harness binaries lacked NUMA provider stubs or had duplicate strong
+    test stubs; both failures were recorded in `kernel.log`, fixed, and the
+    ladder reran cleanly.
+  - `rustfmt kernel/rust/page_alloc.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `page_alloc_bitmap ok digest=346f1655bdcf7afa`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - Page allocator: 44% -> 47% (+3).
+  - Non-arm64 dashboard average is now 76.3%; McKernel-owned core row average
+    is now 70.0%. Mechanical LOC audit remains audit-only, not the progress
+    score.
+- Honest remaining C ownership:
+  - C still owns caller timing, locks, logging, CPU-local rb-tree mutation,
+    interrupt masking, allocator lifetime, IKC packet construction/send, Linux
+    zero-request side effects, and broad allocator lifecycle ownership.
+- Next major work:
+  - Continue toward actual 100% completion with allocator CPU-local cache and
+    zeroed-list drain bodies under direct coverage, syscall ptrace handler body
+    slices, IHK memory registration and IKC exchange preflights, scheduler/
+    futex wait/wake internals after runtime probes, and x86 page-table
+    mutation only after stronger runtime probes exist.
+
+Update 2026-05-22 page allocator zero-request packet +3 verified post-campaign slice:
+- Implemented:
+  - Added Rust/C fallback `__ihk_numa_zero_request_packet_fill()` for the
+    deferred-zero Linux request packet.
+  - Routed the Rust-enabled `ihk_numa_free_pages()` zero-request path through
+    the Rust packet fill helper while preserving C ownership of request timing,
+    current-thread lookup, channel selection, worker/request policy,
+    `ihk_ikc_send()`, logging, and zeroing side effects.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct packet field
+    coverage for message type, ref, pid, syscall number, request argument,
+    valid flag, zeroed fields, and response physical address.
+- Validation:
+  - Initial `kernel/rust/tests/run_equivalence.sh` failed at the Rust object
+    SIMD gate after the packet clear lowered to XMM stores; the failure was
+    recorded in `kernel.log`, the helper was changed to volatile word stores,
+    and the ladder reran cleanly.
+  - `rustfmt kernel/rust/page_alloc.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `page_alloc_bitmap ok digest=757c63e8c20d98b1`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - Page allocator: 47% -> 50% (+3).
+  - Non-arm64 dashboard average is now 76.5%; McKernel-owned core row average
+    is now 70.4%. Mechanical LOC audit remains audit-only, not the progress
+    score.
+- Honest remaining C ownership:
+  - C still owns request timing, current-thread lookup, channel selection,
+    `ihk_ikc_send()`, logging, zeroing side effects, locks, CPU-local rb-tree
+    mutation, interrupt masking, allocator lifetime, and broad allocator
+    lifecycle ownership.
+- Next major work:
+  - Continue toward actual 100% completion with allocator CPU-local cache and
+    zeroed-list drain bodies under direct runtime or equivalence coverage,
+    syscall ptrace handler body slices, IHK memory registration and IKC
+    exchange preflights, scheduler/futex wait/wake internals after runtime
+    probes, and x86 page-table mutation only after stronger runtime probes
+    exist.
+
+Update 2026-05-22 page allocator CPU-cache rb-tree +3 verified post-campaign slice:
+- Implemented:
+  - Added Rust/C fallback `__ihk_numa_cpu_cache_alloc_nolock()` and
+    `__ihk_numa_cpu_cache_free_nolock()` helper entry points for CPU-local
+    cache rb-tree allocation/free under the existing no-lock caller contract.
+  - Routed the Rust-enabled CPU-local cache allocate/free paths in
+    `lib/page_alloc.c` through those helpers while preserving C ownership of
+    CPU-local variable selection, interrupt masking, logging, caller
+    try/hit/fallback orchestration, allocator lifetime, zero-request send
+    behavior, and broad lifecycle state.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct helper
+    coverage for allocation, free, null-root allocation, null-root free, and
+    invalid page count handling.
+- Validation:
+  - Initial `kernel/rust/tests/run_equivalence.sh` failed in the C fallback
+    compile because the new fallback helpers called file-local static rbtree
+    helpers before prototypes were visible; the failure was recorded in
+    `kernel.log`, prototypes were added, and the ladder resumed.
+  - A second `kernel/rust/tests/run_equivalence.sh` run segfaulted in the C
+    fallback `page_alloc_c` harness because the fallback allocation helper did
+    not mirror the Rust null-root guard; the failure was recorded in
+    `kernel.log`, the guard was added, and the ladder reran cleanly.
+  - `rustfmt kernel/rust/page_alloc.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `page_alloc ok digest=9f94d346783c4265` and
+    `page_alloc_bitmap ok digest=757c63e8c20d98b1`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - Page allocator: 50% -> 53% (+3).
+  - Non-arm64 dashboard average is now 76.8%; McKernel-owned core row average
+    is now 70.8%. Mechanical LOC audit remains 16.7% and is audit-only, not
+    the progress score.
+- Honest remaining C ownership:
+  - C still owns CPU-local variable selection, interrupt masking, logging,
+    try/hit/fallback orchestration, allocator lifetime, request timing,
+    current-thread lookup, channel selection, `ihk_ikc_send()`, zeroing side
+    effects, locks, and broad allocator lifecycle ownership.
+- Next major work:
+  - Continue toward actual 100% completion with allocator zeroed-list drain and
+    lifetime mutation under direct coverage, syscall ptrace handler body
+    slices, IHK memory registration/IKC exchange/sysfs lifecycle work now that
+    IHK is explicitly in scope, scheduler/futex wait/wake internals after
+    runtime probes, and x86 page-table mutation only after stronger runtime
+    probes exist.
+
+Update 2026-05-22 x86 PTE mutation +3 verified post-campaign slice:
+- Implemented:
+  - Added Rust/C fallback helpers for direct PTE stores, atomic child
+    page-table publication, PTE clear exchange, and attribute-apply mutation.
+  - Routed split-large-page child-entry stores and publish, visit-PTE child
+    table publication, clear-range PTE clear/exchange and table-prune clears,
+    change-attribute entry updates, set-range leaf/large direct stores,
+    set-range child-table compare-exchange publication, `ihk_mc_pt_set_pte()`,
+    and move-PTE source clear exchange through those helpers.
+  - Extended `kernel/rust/tests/run_equivalence.sh` with direct helper
+    coverage for valid stores, null rejection/sentinel behavior, compare-
+    exchange success/failure, clear exchange, and attribute apply mutation.
+- Validation:
+  - Initial `kernel/rust/tests/run_equivalence.sh` failed before digest output
+    because the C fallback helper object did not include the architecture
+    atomic helper header for `atomic_cmpxchg8()` and `xchg()`; the failure was
+    recorded in `kernel.log`, the include was added, and the ladder resumed.
+  - `rustfmt kernel/rust/x86_memory_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `x86_memory_helpers ok digest=4a6a3765169d8275`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - x86_64 memory management: 69% -> 72% (+3).
+  - Post-campaign verified progress is now +12 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 77.0%; McKernel-owned core row average
+    is now 71.1%. Mechanical LOC audit remains 16.7% and is audit-only, not
+    the progress score.
+- Honest remaining C ownership:
+  - C still owns page-table allocation/free, walk orchestration,
+    `page_map()`/`page_unmap()`, actual physical frees, RSS updates, remote TLB
+    flushing, logging, user-copy, and broader runtime mapping orchestration.
+- Next major work:
+  - Continue toward actual 100% completion with additional covered x86
+    page-table mutation/free orchestration, allocator lifetime and zero-list
+    drains, syscall ptrace handler body slices, IHK memory registration/IKC
+    exchange/sysfs lifecycle mutation with direct module coverage, and
+    scheduler/futex wait/wake internals after runtime probes.
+
+Update 2026-05-22 IHK open-refcount cmpxchg +3 verified post-campaign slice:
+- Implemented:
+  - Added Rust/C fallback `ihk_core_atomic_cmpxchg_i32_result()` coverage for
+    offset-based host-core atomic `i32` compare-exchange.
+  - Routed OS and device exclusive-open refcount compare-exchange checks in
+    `ihk/linux/core/host_driver.c` through the Rust helper under
+    `ENABLE_RUST_IHK`.
+  - Extended the IHK module helper smoke with success, failure, and null-base
+    compare-exchange coverage.
+- Validation:
+  - `rustfmt ihk/linux/core/rust/core_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `ihk_module_helpers ok map=0000000000000018 bits=0000000000000007/0000000000000000`.
+  - `cmake --build /tmp/mckernel-rocky-rust --target ihk_ko -j2` passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target ihk_ko -j2`
+    passed.
+- Estimates:
+  - host/IKC/mcctrl/IHK modules: 95% -> 98% (+3).
+  - Post-campaign verified progress is now +15 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 77.3%; McKernel-owned core row average
+    remains 71.1%. Mechanical LOC audit is 16.7% and remains audit-only.
+- Honest remaining C ownership:
+  - C still owns callback invocation, file operation orchestration,
+    open/release cleanup around the helper, device allocation, memory
+    registration, file I/O, waits/callbacks, IKC exchange mutation, broad
+    allocation/lifetime ownership, and kernel object lifecycle mutation.
+- Next major work:
+  - Continue toward actual 100% completion with IHK memory registration,
+    IKC exchange, and sysfs lifecycle mutation under module coverage, plus
+    lower-scored core rows: scheduler/futex wait/wake internals, allocator
+    lifetime and zero-list drains, syscall ptrace handler body slices, and
+    additional covered x86 page-table allocation/free orchestration.
+
+Update 2026-05-22 scheduler/futex wait-state +3 verified post-campaign slice:
+- Implemented:
+  - Added Rust/C fallback helpers for futex wait entry status exchange,
+    spin-sleep field publication, wait exit status/spin-sleep cleanup, and
+    post-wait success/timeout/interrupt/retry classification.
+  - Routed `futex_wait_queue_me()` status and spin-sleep writes plus the
+    `futex_wait()` post-`unqueue_me()` result branch through those helpers.
+  - Extended the scheduler equivalence harness with direct wait-state mutation
+    coverage and post-wait action matrix coverage.
+- Validation:
+  - `rustfmt kernel/rust/sched_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `sched_helpers ok digest=dca6d81804bbb889`.
+  - Initial C-fallback/Rust image builds exited zero but exposed a warning
+    because `hassigpending()` returns a pointer. The code now explicitly
+    converts it with `!= NULL`, and both image builds reran cleanly.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed after the warning fix.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed after the warning fix.
+- Estimates:
+  - Scheduler/timers/wait/futex: 55% -> 58% (+3).
+  - Post-campaign verified progress is now +18 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 77.6%; McKernel-owned core row average
+    is now 71.5%. Mechanical LOC audit is 16.8% and remains audit-only.
+- Honest remaining C ownership:
+  - C still owns hash-bucket locking, queue insertion/removal orchestration,
+    `schedule()`/`schedule_timeout()`, signal detection, timeout source timing,
+    wakeups, IPIs, timer queues, context switching, address translation, key
+    lifetime, race retry, and broader futex queue/list mutation.
+- Next major work:
+  - Continue toward actual 100% completion with scheduler/futex wakeup and
+    timeout orchestration, allocator lifetime and zero-list drains, syscall
+    ptrace handler body slices, x86 page-table allocation/free orchestration,
+    and IHK memory registration/IKC exchange/sysfs lifecycle mutation under
+    direct coverage.
+
+Update 2026-05-22 scheduler/futex wake-packet +3 verified post-campaign slice:
+- Implemented:
+  - Added Rust/C fallback helpers for futex wake target classification, Linux
+    response-channel fallback selection, and `SCD_MSG_FUTEX_WAKE` IKC packet
+    field publication.
+  - Routed the migrated-to-Linux branch of `wake_futex()` through those
+    helpers while preserving C ownership of queued-node detach,
+    `ihk_ikc_send()`, `sched_wakeup_thread()`, and channel-array access.
+  - Extended the scheduler equivalence harness with direct wake-target,
+    channel-fallback, and packet-field mutation coverage.
+- Validation:
+  - First `kernel/rust/tests/run_equivalence.sh` failed because the new
+    wake-packet digest mixed a stack pointer value that differs between the C
+    and Rust harness binaries. The failure was recorded in `kernel.log`, the
+    digest now mixes a stable equality result, and the suite reran cleanly.
+  - `rustfmt kernel/rust/sched_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `sched_helpers ok digest=af806df0cd9097c3`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - Scheduler/timers/wait/futex: 58% -> 61% (+3).
+  - Post-campaign verified progress is now +21 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 77.8%; McKernel-owned core row average
+    is now 71.9%. Mechanical LOC audit is 16.8% and remains audit-only.
+- Honest remaining C ownership:
+  - C still owns hash-bucket locking, queued-node detach, `ihk_ikc_send()`,
+    `sched_wakeup_thread()`, channel-array access, wakeup side effects, IPIs,
+    timer queues, context switching, address translation, key lifetime, race
+    retry, and broader futex queue/list mutation.
+- Next major work:
+  - Continue toward actual 100% completion with scheduler/futex timeout and
+    wakeup side-effect orchestration, allocator lifetime and zero-list drains,
+    syscall ptrace handler body slices, x86 page-table allocation/free
+    orchestration, and IHK memory registration/IKC exchange/sysfs lifecycle
+    mutation under direct coverage.
+
+Update 2026-05-22 mcctrl deferred-zero +1 verified post-campaign slice:
+- Implemented:
+  - Added Rust-owned mcctrl helpers for the Linux-side deferred-zero worker's
+    lockless `to_zero_list` pop, chunk payload clear, `zeroed_list` publish,
+    and zeroing-worker/page-count atomic updates.
+  - Routed `mcctrl_zero_mckernel_pages()` through those helpers when
+    `MCCTRL_RUST_HELPERS` is enabled while preserving the original C fallback.
+  - Extended the IHK/module helper smoke with a fake deferred-zero list that
+    checks list transitions, payload zeroing, page-count decrement, and worker
+    decrement behavior.
+- Validation:
+  - First `kernel/rust/tests/run_equivalence.sh` failed because
+    `core::ptr::write_bytes()` lowered to an undefined `memset` in
+    `mcctrl_helpers.o`. The failure was recorded in `kernel.log`; the helper
+    now uses an explicit volatile byte loop and the suite reran cleanly.
+  - `rustfmt executer/kernel/mcctrl/rust/mcctrl_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `ihk_module_helpers ok map=0000000000000018 bits=0000000000000007/0000000000000000`.
+  - `python3 -m py_compile scripts/rust-ownership-report.py` passed.
+  - `scripts/rust-ownership-report.py --check-dashboard overview.txt --check-dashboard overview2.txt --top 25`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target ihk_ko -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target ihk_ko -j2` passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mcctrl_ko -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mcctrl_ko -j2`
+    passed.
+- Estimates:
+  - host/IKC/mcctrl/IHK modules: 98% -> 99% (+1).
+  - I am not claiming 100% for this row yet. That would be dishonest while
+    memory registration, broader IKC exchange, allocation/lifetime ownership,
+    callback/device/file orchestration, and module lifecycle mutation still
+    have real C debt.
+  - Post-campaign verified progress is now +22 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average remains 77.8% after rounding; McKernel-owned
+    core row average remains 71.9%. Mechanical LOC audit is 16.8% and remains
+    audit-only.
+- Honest remaining C ownership:
+  - C still owns the mcctrl debug wrapper, non-Rust fallback, broader IKC
+    exchange, memory registration, allocation/free ownership, callback/file
+    orchestration, and module lifecycle side effects.
+- Next major work:
+  - Continue toward actual 100% completion with IHK memory registration and
+    IKC exchange mutation under module coverage, plus lower-scored core rows:
+    scheduler/futex timeout/wakeup internals, allocator lifetime and zero-list
+    drains, syscall ptrace/getrusage handler body slices, and x86 page-table
+    allocation/free orchestration.
+
+Update 2026-05-22 scheduler/futex queue-insertion +3 verified post-campaign slice:
+- Implemented:
+  - Added Rust/C fallback `futex_queue_insert_result()` for futex waiter plist
+    node initialization and hash-bucket chain insertion.
+  - Routed `queue_me()` through the helper before the existing Rust-owned
+    waiter metadata publication.
+  - Extended the scheduler equivalence harness with priority-order, equal-prio
+    FIFO, preserved side-field, and null-argument no-op coverage.
+- Validation:
+  - `rustfmt kernel/rust/sched_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `sched_helpers ok digest=c5fd1aa82959d772`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - Scheduler/timers/wait/futex: 61% -> 64% (+3).
+  - Post-campaign verified progress is now +25 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 78.1%; McKernel-owned core row average
+    is now 72.3%. Mechanical LOC audit is 16.9% and remains audit-only.
+- Honest remaining C ownership:
+  - C still owns hash-bucket locking, current-thread lookup, physical-address
+    input gathering, timeout and wake orchestration, `schedule()`/
+    `schedule_timeout()`, wakeups, IKC sends, key lifetime, race retry, and
+    broader futex queue orchestration.
+- Next major work:
+  - Continue toward actual 100% completion with scheduler/futex timeout and
+    wake side-effect internals, allocator lifetime and zero-list drains,
+    syscall ptrace/getrusage handler body slices, x86 page-table allocation/free
+    orchestration, and IHK memory registration/IKC exchange mutation under
+    direct coverage.
+
+Update 2026-05-22 scheduler/futex wait-q-init +3 verified post-campaign slice:
+- Implemented:
+  - Added Rust/C fallback helpers for futex wait-queue bitset/requeue/UTI
+    initialization, key-region zeroing before `get_futex_key()`, and
+    hash-bucket lock-pointer publication.
+  - Routed `futex_wait()`, `futex_wait_setup()`, and `queue_lock()` through the
+    helpers while preserving fallback builds and the existing futex ABI surface.
+  - Extended scheduler equivalence coverage for side-field preservation, key
+    zeroing, lock-pointer publication, and null-argument no-op behavior.
+- Validation:
+  - First `kernel/rust/tests/run_equivalence.sh` failed because the new
+    wait-q digest mixed a stack pointer value that differs between the C and
+    Rust harness binaries. The failure was recorded in `kernel.log`; the test
+    now mixes a stable equality result and the suite reran cleanly.
+  - `rustfmt kernel/rust/sched_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `sched_helpers ok digest=ada45858c0a6b9a4`.
+  - `python3 -m py_compile scripts/rust-ownership-report.py` passed.
+  - `scripts/rust-ownership-report.py --check-dashboard overview.txt --check-dashboard overview2.txt --top 25`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - Scheduler/timers/wait/futex: 64% -> 67% (+3).
+  - Post-campaign verified progress is now +28 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 78.3%; McKernel-owned core row average
+    is now 72.6%. Mechanical LOC audit is 16.9% and remains audit-only.
+- Honest remaining C ownership:
+  - C still owns hash-bucket locking, user-value comparison, key reference
+    lifetime, timeout/wake orchestration, address translation,
+    `schedule()`/`schedule_timeout()`, wakeups, IKC sends, race retry, and
+    broader futex wait orchestration.
+- Next major work:
+  - Continue toward actual 100% completion with scheduler/futex timeout and
+    wake side-effect internals, allocator lifetime and zero-list drains,
+    syscall ptrace/getrusage handler body slices, x86 page-table allocation/free
+    orchestration, and IHK memory registration/IKC exchange mutation under
+    direct coverage.
+
+Update 2026-05-22 x86 destroy-page-table +3 verified post-campaign slice:
+- Implemented:
+  - Added Rust/C fallback `x86_destroy_pt_entry_action_result()` for
+    page-table teardown descend/skip policy and child page-table physical
+    extraction.
+  - Routed `destroy_page_table()` through the helper while preserving C
+    ownership of recursion, panic handling, `phys_to_virt()`, and
+    `ihk_mc_free_pages()`.
+  - Extended x86 equivalence coverage for lower-level skips, non-present
+    entries, large-page entries, valid child table entries, and null output
+    pointer behavior.
+- Validation:
+  - First `kernel/rust/tests/run_equivalence.sh` failed at x86 harness compile
+    time because `PF_PRESENT`, `PF_SIZE`, and `PT_PHYSMASK` were missing from
+    the generated x86 test block. The failure was recorded in `kernel.log`; the
+    test constants were added and the suite reran cleanly.
+  - `rustfmt kernel/rust/x86_memory_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `x86_memory_helpers ok digest=03c54ab4fa9ada9c`.
+  - `python3 -m py_compile scripts/rust-ownership-report.py` passed.
+  - `scripts/rust-ownership-report.py --check-dashboard overview.txt --check-dashboard overview2.txt --top 25`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - x86_64 memory management: 72% -> 75% (+3).
+  - Post-campaign verified progress is now +31 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 78.6%; McKernel-owned core row average
+    is now 73.0%. Mechanical LOC audit remains audit-only.
+- Honest remaining C ownership:
+  - C still owns page-table allocation/free orchestration, destroy recursion,
+    `phys_to_virt()`, actual page-table frees, map/unmap orchestration,
+    RSS updates, TLB-sensitive flushing, and user-copy.
+- Next major work:
+  - Continue toward actual 100% completion with allocator lifetime and CPU-local
+    fast-path orchestration, scheduler/futex timeout and wake side-effect
+    internals, syscall ptrace/getrusage handler body slices, deeper x86
+    page-table allocation/free orchestration, and IHK memory registration/IKC
+    exchange mutation under direct coverage.
+
+Update 2026-05-22 scheduler/futex wait-scheduling +3 verified post-campaign slice:
+- Implemented:
+  - Added Rust/C fallback `futex_wait_schedule_action_result()` for
+    queued/timeout/direct-schedule action classification in
+    `futex_wait_queue_me()`.
+  - Routed `futex_wait_queue_me()` through the helper while keeping actual
+    `schedule_timeout()` and `spin_sleep_or_schedule()` behavior in C.
+  - Reused the Rust-owned futex bitset validator on the wait side of
+    `futex_wait()`.
+  - Extended scheduler equivalence coverage for queued/no-queued and
+    timeout/no-timeout scheduling action cases.
+- Validation:
+  - `rustfmt kernel/rust/sched_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `sched_helpers ok digest=2e3e67602da7a295`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+  - `python3 -m py_compile scripts/rust-ownership-report.py` passed.
+  - `scripts/rust-ownership-report.py --check-dashboard overview.txt --check-dashboard overview2.txt --top 25`
+    passed.
+- Estimates:
+  - Scheduler/timers/wait/futex: 67% -> 70% (+3).
+  - Post-campaign verified progress is now +37 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 79.1%; McKernel-owned core row average
+    is now 73.8%. Mechanical LOC audit is 17.0% and remains audit-only.
+- Honest remaining C ownership:
+  - C still owns the `plist_node_empty()` observation, actual scheduling
+    behavior, signal and timeout mechanics, wakeups, locks, timer queues,
+    context switching, race retry, key lifetime, and broader futex wait
+    orchestration.
+- Next major work:
+  - Continue toward actual 100% completion with scheduler/futex wake and
+    timeout side-effect internals under runtime probes, allocator lifetime and
+    CPU-local fast-path orchestration, syscall ptrace/getrusage body slices,
+    deeper x86 page-table allocation/free orchestration, and IHK memory
+    registration/IKC exchange mutation under direct coverage.
+
+Update 2026-05-22 x86 page-table walk-fold +3 verified post-campaign slice:
+- Implemented:
+  - Added Rust/C fallback `x86_walk_step_result()` for page-table walk result
+    folding: zero callback result marks success, `-ENOENT` preserves the
+    current miss state, and any other error becomes the returned error and
+    stops the walk.
+  - Routed all normal and safe L1-L4 x86 page-table walk loops through the
+    helper.
+  - Extended x86 helper equivalence coverage for success, `-ENOENT`,
+    hard-error, and null-output cases.
+- Validation:
+  - `rustfmt kernel/rust/x86_memory_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `x86_memory_helpers ok digest=2818dd602ed5bc4c`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - x86_64 memory management: 75% -> 78% (+3).
+  - Post-campaign verified progress is now +40 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 79.3%; McKernel-owned core row average
+    is now 74.1%. Mechanical LOC audit remains 17.0% and audit-only.
+- Honest remaining C ownership:
+  - C still owns callback execution, page-table allocation/free, physical
+    address validation, traversal, splitting, `phys_to_virt()`, page frees,
+    RSS updates, TLB-sensitive flushing, mapping/free orchestration, and
+    user-copy.
+- Next major work:
+  - Continue toward actual 100% completion with allocator lifetime and
+    CPU-local fast-path orchestration, syscall ptrace/getrusage body slices,
+    scheduler/futex wake and timeout side-effect internals under runtime
+    probes, deeper x86 page-table allocation/free orchestration, and IHK memory
+    registration/IKC exchange mutation under direct coverage.
+
+Update 2026-05-22 syscall getrusage times-update +3 verified post-campaign slice:
+- Implemented:
+  - Added Rust/C fallback `getrusage_thread_times_update_prepare_result()` for
+    `RUSAGE_SELF` thread-scan times-update mutation.
+  - Routed getrusage's per-thread `times_update` writes through the helper,
+    with the helper returning whether C should interrupt the target CPU.
+  - Extended syscall policy equivalence coverage for interrupt and ready
+    actions plus the null-thread guard.
+- Validation:
+  - `rustfmt kernel/rust/syscall_policy.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `syscall_policy_helpers ok digest=f4221926748af802`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - Syscall core: 76% -> 79% (+3).
+  - Post-campaign verified progress is now +43 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 79.6%; McKernel-owned core row average
+    is now 74.5%. Mechanical LOC audit remains 17.0% and audit-only.
+- Honest remaining C ownership:
+  - C still owns getrusage thread-list locking, traversal, current/status/
+    in-kernel observations, CPU interrupt delivery, TSC aggregation, rusage
+    copyout, and user-copy behavior.
+- Next major work:
+  - Continue toward actual 100% completion with syscall ptrace body slices,
+    allocator lifetime and CPU-local fast-path orchestration, scheduler/futex
+    wake and timeout side-effect internals under runtime probes, deeper x86
+    page-table allocation/free orchestration, and IHK memory registration/IKC
+    exchange mutation under direct coverage.
+
+Update 2026-05-22 page allocator zero-request prepare +3 verified post-campaign slice:
+- Implemented:
+  - Added Rust/C fallback `__ihk_numa_linux_zero_request_prepare()` for the
+    deferred-free Linux zero-request preparation path.
+  - Routed `ihk_numa_free_pages()` through the helper after deferred enqueue,
+    moving current/idle/nohost/worker/pid checks, zeroing-worker increment, and
+    IKC packet field publication into Rust.
+  - Extended page allocator equivalence coverage for send, nohost,
+    active-worker, idle-thread, and null-packet behavior.
+- Validation:
+  - `rustfmt kernel/rust/page_alloc.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `page_alloc_bitmap ok digest=6058b8fa4f7180c7`.
+  - `python3 -m py_compile scripts/rust-ownership-report.py` passed.
+  - `scripts/rust-ownership-report.py --check-dashboard overview.txt --check-dashboard overview2.txt --top 25`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - Page allocator: 53% -> 56% (+3).
+  - Post-campaign verified progress is now +34 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 78.8%; McKernel-owned core row average
+    is now 73.4%. Mechanical LOC audit remains audit-only.
+- Honest remaining C ownership:
+  - C still owns CPU-local variable selection, interrupt masking, IKC channel
+    selection, actual `ihk_ikc_send()` side effects, logging, allocator
+    lifetime, CPU-local fast-path orchestration, and broader zero-request
+    orchestration.
+- Next major work:
+  - Continue toward actual 100% completion with allocator lifetime and CPU-local
+    fast-path orchestration, scheduler/futex timeout and wake side-effect
+    internals, syscall ptrace/getrusage handler body slices, deeper x86
+    page-table allocation/free orchestration, and IHK memory registration/IKC
+    exchange mutation under direct coverage.
+
+Update 2026-05-22 IHK SMP memory-assignment decision verified slice:
+- Implemented:
+  - Added Rust/C fallback `ihk_smp_assign_scan_action_result()` for
+    NUMA-match, exact-match, and best-largest free-chunk scan decisions in
+    `__smp_ihk_os_assign_mem()`.
+  - Added Rust/C fallback `ihk_smp_assign_no_chunk_action_result()` for the
+    no-free-chunk branch, including the `IHK_SMP_MEM_ALL` break and optional
+    fake-chunk decision.
+  - Added Rust/C fallback `ihk_smp_used_chunk_insert_before_result()` for used
+    memory chunk insertion ordering.
+  - Extended `kernel/rust/tests/ihk_module_helpers_smoke.c` coverage for the
+    new IHK SMP helpers.
+- Validation:
+  - `rustfmt ihk/linux/driver/smp/rust/smp_driver_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `ihk_module_helpers ok map=0000000000000018 bits=0000000000000007/0000000000000000`.
+  - `git diff --check` passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target ihk_ko -j2` passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target ihk_ko -j2` passed.
+- Estimates:
+  - host/IKC/mcctrl/IHK modules remains 99%. This is intentional: this slice is
+    real IHK submodule progress, but it does not complete memory registration,
+    IKC exchange mutation, module lifecycle, or runtime-covered object
+    ownership.
+- Honest remaining C ownership:
+  - C still owns free-list traversal, kmalloc/kfree, list mutation,
+    compound-page leftover handling, memory registration side effects, locks,
+    copy_from_user, rollback release calls, and broad OS-memory assignment
+    orchestration.
+
+Update 2026-05-22 page allocator descriptor-init +3 verified post-campaign slice:
+- Implemented:
+  - Added Rust/C fallback `pagealloc_desc_reset_result()` for page-allocator
+    descriptor zeroing.
+  - Added Rust/C fallback `pagealloc_desc_init_result()` for descriptor start,
+    end, last, count, shift, and flag publication in `__ihk_pagealloc_init()`.
+  - Routed descriptor reset/init through Rust while C keeps allocation,
+    `mcs_lock_init()`, and exported wrapper lifetime behavior.
+  - Extended page allocator bitmap equivalence coverage for descriptor reset
+    and descriptor field initialization.
+- Validation:
+  - `rustfmt kernel/rust/page_alloc.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `page_alloc_bitmap ok digest=6058b8fa4f7180c7`.
+  - `git diff --check` passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - Page allocator: 56% -> 59% (+3).
+  - Post-campaign verified progress is now +46 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 79.8%; McKernel-owned core row average
+    is now 74.9%. Mechanical LOC audit remains 17.0% and audit-only.
+- Honest remaining C ownership:
+  - C still owns descriptor allocation, `mcs_lock_init()`, exported wrapper
+    lifetimes, lock ownership, CPU-local variable selection, interrupt masking,
+    IKC send side effects, and broader allocator lifetime/orchestration.
+- Next major work:
+  - Continue toward actual 100% completion with allocator CPU-local fast-path
+    orchestration, syscall ptrace handler bodies, scheduler/futex timeout and
+    wake side-effect internals under runtime probes, deeper x86 page-table
+    allocation/free orchestration, and IHK memory registration/IKC exchange
+    mutation under direct coverage.
+
+Update 2026-05-22 syscall ptrace state/eventmsg +3 verified post-campaign slice:
+- Implemented:
+  - Added Rust/C fallback `ptrace_setoptions_apply_thread_result()` for
+    `ptrace_setoptions()` option-state mutation.
+  - Added Rust/C fallback `ptrace_attach_mark_traced_result()` for
+    `ptrace_attach()` traced-state publication.
+  - Added Rust/C fallback `ptrace_eventmsg_prepare_result()` for
+    `ptrace_geteventmsg()` status validation and event-message staging before
+    C user-copy.
+  - Extended syscall policy equivalence coverage for option-state writes,
+    traced-state writes, event-message success/failure/null-output cases, and
+    null-thread guards.
+- Validation:
+  - `rustfmt kernel/rust/syscall_policy.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `syscall_policy_helpers ok digest=3145092f552f2b7b`.
+  - `git diff --check` passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+  - `python3 -m py_compile scripts/rust-ownership-report.py` passed.
+  - `scripts/rust-ownership-report.py --check-dashboard overview.txt --check-dashboard overview2.txt --top 25`
+    passed.
+- Estimates:
+  - Syscall core: 79% -> 82% (+3).
+  - Post-campaign verified progress is now +49 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 80.1%; McKernel-owned core row average
+    is now 75.3%. Mechanical LOC audit remains 17.0% and audit-only.
+- Honest remaining C ownership:
+  - C still owns tracee lookup, locks, `copy_to_user()`, signal delivery,
+    register and process-memory access, ptrace handler orchestration,
+    allocation/free, Linux forwarding, and top-level syscall dispatch.
+- Next major work:
+  - Continue toward actual 100% completion with deeper ptrace handler body
+    slices under direct coverage, allocator CPU-local fast-path orchestration,
+    scheduler/futex timeout and wake side-effect internals under runtime
+    probes, x86 page-table allocation/free orchestration, and IHK memory
+    registration/IKC exchange mutation under direct coverage.
+
+Update 2026-05-22 syscall ptrace siginfo +3 verified post-campaign slice:
+- Implemented:
+  - Added Rust/C fallback `ptrace_getsiginfo_prepare_result()` for
+    `ptrace_getsiginfo()` status validation and kernel siginfo buffer
+    preparation before C user-copy.
+  - Added Rust/C fallback `ptrace_setsiginfo_store_result()` for
+    `ptrace_setsiginfo()` pending-signal pointer publication plus sendsig and
+    recvsig siginfo storage after C allocation and user-copy.
+  - Preserved the existing C allocation/failure lifetime order by publishing an
+    allocated sendsig object before the later user-copy/store step, matching
+    the previous body semantics.
+  - Extended syscall policy equivalence coverage for get-siginfo success,
+    stopped/running/no-pending/null-output cases, allocated sendsig
+    publication, sendsig and recvsig stores, null allocation, null thread, and
+    missing recvsig behavior.
+- Validation:
+  - `rustfmt kernel/rust/syscall_policy.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `syscall_policy_helpers ok digest=1b8dd78a32602cc2`.
+  - `git diff --check` passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - Syscall core: 82% -> 85% (+3).
+  - Post-campaign verified progress is now +52 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 80.3%; McKernel-owned core row average
+    is now 75.6%. Mechanical LOC audit is 17.1% and remains audit-only.
+- Honest remaining C ownership:
+  - C still owns tracee lookup, locks, `kmalloc()`, failure lifetime semantics,
+    `copy_to_user()`/`copy_from_user()`, signal delivery, register and
+    process-memory access, ptrace handler orchestration, allocation/free,
+    Linux forwarding, and top-level syscall dispatch.
+- Next major work:
+  - Continue toward actual 100% completion with ptrace register/text access
+    body slices where architecture and user-copy boundaries can be covered,
+    allocator CPU-local fast-path orchestration, scheduler/futex wake/timeout
+    side effects under runtime probes, x86 page-table allocation/free
+    orchestration, and IHK memory registration/IKC exchange mutation under
+    direct coverage.
+
+Update 2026-05-22 syscall ptrace register-loop +3 verified post-campaign slice:
+- Implemented:
+  - Added Rust/C fallback `ptrace_read_user_words_result()` for repeated
+    register-word reads and first-error behavior.
+  - Added Rust/C fallback `ptrace_write_user_words_result()` for repeated
+    register-word writes and first-error behavior.
+  - Routed `ptrace_getregs()` and `ptrace_setregs()` through those helpers via
+    narrow C callback bridges to the architecture `ptrace_read_user()` and
+    `ptrace_write_user()` primitives.
+  - Extended syscall policy equivalence coverage for read/write success,
+    early callback failure, null-thread, null-buffer, and null-callback cases.
+- Validation:
+  - `rustfmt kernel/rust/syscall_policy.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `syscall_policy_helpers ok digest=f81e2c4a81f82a45`.
+  - `git diff --check` passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - Syscall core: 85% -> 88% (+3).
+  - Post-campaign verified progress is now +55 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 80.6%; McKernel-owned core row average
+    is now 76.0%. Mechanical LOC audit is 17.1% and remains audit-only.
+- Honest remaining C ownership:
+  - C still owns tracee lookup, status gating, stack buffer lifetime,
+    `copy_to_user()`/`copy_from_user()`, architecture `ptrace_read_user()` and
+    `ptrace_write_user()` primitives, debug-register details, process-memory
+    access, signal delivery, allocation/free, Linux forwarding, and top-level
+    syscall dispatch.
+- Next major work:
+  - Continue toward actual 100% completion with ptrace peek/poke text access
+    staging, regset/fpreg copy boundaries, allocator CPU-local fast-path
+    orchestration, scheduler/futex wake/timeout side effects, x86 page-table
+    allocation/free orchestration, and IHK memory registration/IKC exchange
+    mutation under direct coverage.
+
+Update 2026-05-22 syscall ptrace text-access +2 verified post-campaign slice:
+- Implemented:
+  - Added Rust/C fallback `ptrace_read_vm_word_result()` for status-gated
+    process-memory word read callback staging.
+  - Added Rust/C fallback `ptrace_write_vm_word_result()` for status-gated
+    process-memory word write callback staging.
+  - Routed `ptrace_peektext()` and `ptrace_poketext()` through those helpers
+    via narrow C bridges to `read_process_vm()` and `patch_process_vm()`.
+  - Extended syscall policy equivalence coverage for peek/poke text success,
+    read/write callback failure, stopped/running status behavior, null VM,
+    null output, and null callback cases.
+- Validation:
+  - `rustfmt kernel/rust/syscall_policy.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `syscall_policy_helpers ok digest=e2e47df30ec79299`.
+  - `git diff --check` passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - Syscall core: 88% -> 90% (+2). This is deliberately conservative because
+    Rust owns staging, but C still owns the actual process-memory primitives
+    and user-copy.
+  - Post-campaign verified progress is now +57 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 80.8%; McKernel-owned core row average
+    is now 76.3%. Mechanical LOC audit is 17.1% and remains audit-only.
+- Honest remaining C ownership:
+  - C still owns tracee lookup, logging, user-copy, actual `read_process_vm()`
+    and `patch_process_vm()` behavior, page-fault/mapping side effects,
+    architecture register primitives, signal delivery, allocation/free, Linux
+    forwarding, and top-level syscall dispatch.
+- Next major work:
+  - Continue toward actual 100% completion with regset/fpreg copy boundaries,
+    remaining syscall dispatch/user-copy reductions where coverage exists,
+    allocator CPU-local fast-path orchestration, scheduler/futex wake/timeout
+    side effects, x86 page-table allocation/free orchestration, and IHK memory
+    registration/IKC exchange mutation under direct coverage.
+
+Update 2026-05-22 syscall ptrace fpregs/regset +3 verified post-campaign slice:
+- Implemented:
+  - Added Rust/C fallback `ptrace_fpregs_io_result()` for stopped/traced
+    status handling and architecture fpregs callback dispatch.
+  - Added Rust/C fallback `ptrace_regset_io_result()` for iovec copy-in,
+    architecture regset callback dispatch, and iov_len publication
+    orchestration.
+  - Routed `ptrace_getfpregs()` and `ptrace_setfpregs()` through the fpregs
+    helper via narrow C bridges to `ptrace_read_fpregs()` and
+    `ptrace_write_fpregs()`.
+  - Routed `ptrace_getregset()` and `ptrace_setregset()` through the regset
+    helper via narrow C bridges to `copy_from_user()`, `ptrace_read_regset()`,
+    `ptrace_write_regset()`, and `copy_to_user()`.
+  - Extended syscall policy equivalence coverage for fpregs success/callback
+    failure/status/null cases and regset copy-in failure, callback failure,
+    copy-out failure, stopped/running status behavior, invalid field bounds,
+    null scratch, null thread, and null callback cases.
+- Validation:
+  - `rustfmt kernel/rust/syscall_policy.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `syscall_policy_helpers ok digest=dbc23413849f8044`.
+  - `git diff --check` passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - Syscall core: 90% -> 93% (+3).
+  - Post-campaign verified progress is now +60 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 81.0%; McKernel-owned core row average
+    is now 76.6%. Mechanical LOC audit is 17.2% and remains audit-only.
+- Honest remaining C ownership:
+  - C still owns tracee lookup, locks, user-copy callback bodies,
+    `ptrace_read_fpregs()`/`ptrace_write_fpregs()`,
+    `ptrace_read_regset()`/`ptrace_write_regset()`, architecture fp/register/
+    regset primitives, signal delivery, allocation/free, Linux forwarding, and
+    top-level syscall dispatch.
+- Next major work:
+  - Continue toward actual 100% completion with the last syscall-core body
+    slices that can be covered without moving raw user-copy prematurely,
+    allocator CPU-local fast-path orchestration, scheduler/futex wake/timeout
+    side effects, x86 page-table allocation/free orchestration, and IHK memory
+    registration/IKC exchange mutation under direct coverage.
+
+Update 2026-05-22 syscall ptrace user-word +2 verified post-campaign slice:
+- Implemented:
+  - Added Rust/C fallback `ptrace_read_user_word_result()` for stopped/traced
+    status handling and architecture user-area word read callback dispatch.
+  - Added Rust/C fallback `ptrace_write_user_word_result()` for stopped/traced
+    status handling and architecture user-area word write callback dispatch.
+  - Routed `ptrace_peekuser()` and `ptrace_pokeuser()` through those helpers
+    via the existing narrow C bridges to `ptrace_read_user()` and
+    `ptrace_write_user()`.
+  - Extended syscall policy equivalence coverage for read/write success,
+    callback failure, stopped/running status behavior, null thread, null output,
+    and null callback cases.
+- Validation:
+  - `rustfmt kernel/rust/syscall_policy.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `syscall_policy_helpers ok digest=1b34492dcd679277`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - Syscall core: 93% -> 95% (+2). This is deliberately conservative because
+    Rust owns checked callback dispatch, but C still owns address validation,
+    tracee lookup, user-copy, and architecture `ptrace_read_user()`/
+    `ptrace_write_user()`.
+  - Post-campaign verified progress is now +62 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 81.2%; McKernel-owned core row average
+    is now 76.9%. Mechanical LOC audit remains audit-only.
+- Honest remaining C ownership:
+  - C still owns `ptrace_user_area_result()` address validation, tracee lookup,
+    locks, `copy_to_user()` for peek results, architecture
+    `ptrace_read_user()`/`ptrace_write_user()` primitives, signal delivery,
+    allocation/free, Linux forwarding, top-level syscall dispatch, and the
+    remaining high-risk syscall handlers.
+- Next major work:
+  - Continue toward actual 100% completion outside the near-saturated syscall
+    row as well: allocator CPU-local fast-path orchestration,
+    scheduler/futex wake/timeout side effects, x86 page-table allocation/free
+    orchestration, and IHK memory registration/IKC exchange mutation under
+    direct coverage.
+
+Update 2026-05-23 page allocator CPU-cache fast-path +3 verified post-campaign slice:
+- Implemented:
+  - Added Rust/C fallback `__ihk_numa_cpu_cache_alloc_try_result()` for
+    initialized/not-initialized branch handling, interrupt save/restore
+    callback ordering, rb-tree allocation attempt, and cache-hit return
+    shaping.
+  - Added Rust/C fallback `__ihk_numa_cpu_cache_free_try_result()` for
+    initialized/not-initialized branch handling, interrupt save/restore
+    callback ordering, rb-tree free attempt, and success/failure
+    classification.
+  - Routed the `ihk_numa_alloc_pages()` CPU-local cache branch through the
+    Rust helper while keeping CPU-local root selection and logging in C.
+  - Routed the `ihk_numa_free_pages()` CPU-local cache branch through the Rust
+    helper while keeping CPU-local root selection, logging, and non-cache free
+    paths in C.
+  - Extended page allocator equivalence coverage for cache disabled/enabled,
+    callback ordering, irq-cookie restoration, allocation/free success,
+    failed free, null callback, and root-null cases.
+- Validation:
+  - `rustfmt kernel/rust/page_alloc.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `page_alloc ok digest=db15eec71e0aad78`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - Page allocator: 59% -> 62% (+3).
+  - Post-campaign verified progress is now +65 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 81.4%; McKernel-owned core row average
+    is now 77.3%. Mechanical LOC audit remains audit-only.
+- Honest remaining C ownership:
+  - C still owns CPU-local variable selection, actual interrupt masking
+    primitives, logging, non-cache locks, allocator lifetime, IKC
+    send/channel selection, current-thread/channel lookup, actual IKC send side
+    effects, and broader zero-request orchestration.
+- Next major work:
+  - Continue the high-debt rows: scheduler/futex wake/requeue side effects,
+    x86 page-table allocation/free orchestration, process VM mutation
+    preflight, and IHK memory registration/IKC exchange mutation under direct
+    coverage.
+
+Update 2026-05-23 scheduler/futex double-bucket ordering +3 verified post-campaign slice:
+- Implemented:
+  - Added Rust/C fallback `futex_double_lock_hb_result()` and
+    `futex_double_unlock_hb_result()` for futex double hash-bucket lock/unlock
+    ordering.
+  - Routed `double_lock_hb()` and `double_unlock_hb()` through the Rust helper
+    with narrow C bridges that still perform `ihk_mc_spinlock_lock_noirq()` and
+    `ihk_mc_spinlock_unlock_noirq()`.
+  - Extended scheduler/futex equivalence coverage for forward order, reversed
+    order, same-bucket single lock/unlock, and null-callback behavior. The
+    first harness attempt mixed raw stack addresses into the digest; that
+    validation failure was recorded in `kernel.log`, then the digest was fixed
+    to use normalized ordering facts.
+- Validation:
+  - `rustfmt kernel/rust/sched_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `sched_helpers ok digest=44f8ebf6efebbadf`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - Scheduler/timers/wait/futex: 70% -> 73% (+3).
+  - Post-campaign verified progress is now +68 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 81.7%; McKernel-owned core row average
+    is now 77.6%. Mechanical LOC audit remains audit-only.
+- Honest remaining C ownership:
+  - C still owns the actual spinlock primitives, hash-bucket protected list
+    mutation, wakeups, IKC sends, scheduler handoff, address translation,
+    user-value comparison, key lifetime, race retry, timeout mechanics, and
+    broader futex wake/requeue orchestration.
+- Next major work:
+  - Continue the hard remaining rows: scheduler/futex wake/requeue side
+    effects with runtime probes, x86 page-table allocation/free and TLB
+    mutation preflights, process VM mutation bodies under direct coverage,
+    page allocator lifetime/zeroed-list paths, and IHK memory registration/IKC
+    exchange mutation.
+
+Update 2026-05-23 page allocator locked NUMA alloc/free +3 verified post-campaign slice:
+- Implemented:
+  - Added Rust/C ABI helpers `__ihk_numa_alloc_pages_locked_result()` and
+    `__ihk_numa_free_pages_direct_locked_result()`.
+  - Routed the Rust-enabled `ihk_numa_alloc_pages()` non-cache path through
+    Rust-owned lock-callback orchestration around
+    `__ihk_numa_alloc_pages_nolock()`.
+  - Routed the Rust-enabled direct `ihk_numa_free_pages()` free-to-tree path
+    through Rust-owned lock-callback orchestration around
+    `__ihk_numa_free_pages_to_tree_nolock()`.
+  - Kept the actual `mcs_lock_lock()`/`mcs_lock_unlock()` primitives in C via
+    narrow callbacks, preserving the C fallback and exported ABI.
+  - Extended page allocator equivalence coverage for lock/unlock callback
+    ordering, successful locked allocation, successful direct locked free,
+    null callback handling, and invalid free counts.
+- Validation:
+  - `rustfmt kernel/rust/page_alloc.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `page_alloc_bitmap ok digest=bcb2642411511aea`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - Page allocator: 62% -> 65% (+3).
+  - Post-campaign verified progress is now +71 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 81.9%; McKernel-owned core row average
+    is now 78.0%. Mechanical LOC audit remains audit-only.
+- Honest remaining C ownership:
+  - C still owns the actual MCS lock primitives, logging, CPU-local variable
+    selection, interrupt masking primitives, deferred-zero worker timing, IKC
+    send/channel selection, current-thread/channel lookup, actual IKC send side
+    effects, and broader allocator lifetime/zero-request orchestration.
+- Next major work:
+  - Continue the hard allocator path by attacking zeroed-list publication and
+    deferred-zero worker side effects under runtime-safe coverage, while also
+    advancing scheduler/futex wake/requeue side effects, x86 page-table
+    allocation/free and TLB mutation preflights, process VM mutation bodies,
+    and IHK memory registration/IKC exchange mutation.
+
+Update 2026-05-23 page allocator deferred-free orchestration +3 verified post-campaign slice:
+- Implemented:
+  - Added Rust/C ABI helper `__ihk_numa_free_pages_deferred_result()`.
+  - Routed the Rust-enabled `ihk_numa_free_pages()` deferred-free path through
+    Rust-owned chunk enqueue plus Linux zero-request preparation orchestration.
+  - Kept CPU-local current/idle lookup, IKC channel selection,
+    `ihk_ikc_send()`, logging, and broader allocator timing in C.
+  - Extended page allocator equivalence coverage for successful enqueue plus
+    packet fill, active-worker skip, nohost/no-request, invalid page count, and
+    null-node handling.
+- Validation:
+  - `rustfmt kernel/rust/page_alloc.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `page_alloc_bitmap ok digest=0b3811141e0e5228`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - Page allocator: 65% -> 68% (+3).
+  - Post-campaign verified progress is now +74 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 82.2%; McKernel-owned core row average
+    is now 78.4%. Mechanical LOC audit remains audit-only.
+- Honest remaining C ownership:
+  - C still owns CPU-local current/idle/channel selection, actual IKC send side
+    effects, logging, interrupt context, deferred-zero worker timing,
+    zeroed-list publication, and broader allocator lifetime.
+- Next major work:
+  - Continue page allocator work with zeroed-list publication and deferred-zero
+    worker side effects only where equivalence/runtime-safe coverage exists,
+    while also advancing scheduler/futex wake/requeue internals, x86
+    page-table allocation/free and TLB preflights, process VM mutation bodies,
+    and IHK memory-registration/IKC-exchange mutation.
+
+Update 2026-05-23 scheduler/futex wake-scan +3 verified post-campaign slice:
+- Implemented:
+  - Added Rust/C ABI helper `futex_wake_scan_result()`.
+  - Routed `futex_wake()` hash-bucket list traversal through Rust-owned key
+    matching, optional bitset filtering, wake-limit handling, and wake callback
+    ordering.
+  - Routed both `futex_wake_op()` wake-list traversals through the same helper
+    with bitset filtering disabled to preserve the existing wake-op behavior.
+  - Kept futex key lookup, hash-bucket locks, actual `wake_futex()` side
+    effects, IKC sends, scheduler handoff, user-value operations, key
+    references, and broader wake/requeue orchestration in C.
+  - Extended scheduler equivalence coverage for bitset-filtered scans, key
+    mismatch skip, wake-op style unfiltered scans, wake-limit behavior including
+    the existing zero-limit shape, and null callback handling.
+- Validation:
+  - `rustfmt kernel/rust/sched_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `sched_helpers ok digest=68635108100ea1c0`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - Scheduler/timers/wait/futex: 73% -> 76% (+3).
+  - Post-campaign verified progress is now +77 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 82.4%; McKernel-owned core row average
+    is now 78.8%. Mechanical LOC audit remains audit-only.
+- Honest remaining C ownership:
+  - C still owns futex key lookup, hash-bucket locking, actual wake side
+    effects, IKC sends, scheduler handoff, key references, user-value
+    operations, address translation, race retry, and broader wake/requeue
+    orchestration.
+- Next major work:
+  - Continue scheduler/futex with requeue loop orchestration or timeout/wake
+    side-effect preflights where equivalence coverage can model races, and keep
+    moving allocator zeroed-list/deferred-worker, x86 page-table allocation/free
+    preflights, process VM mutation, and IHK memory-registration/IKC-exchange
+    bodies under non-reboot validation.
+
+Update 2026-05-23 scheduler/futex requeue-loop +3 verified post-campaign slice:
+- Implemented:
+  - Added Rust/C ABI helper `futex_requeue_scan_result()`.
+  - Routed `futex_requeue()` source-list traversal through Rust-owned key
+    matching, wake-vs-requeue selection, task/drop count accounting, and
+    wake/requeue callback ordering.
+  - Kept futex key lookup, comparison-user-value loading, hash-bucket locks,
+    actual `wake_futex()` side effects, `requeue_futex()` key-reference and
+    key-copy mutation, IKC sends, scheduler handoff, user-value operations,
+    address translation, race retry, and broader wake/requeue orchestration in
+    C.
+  - Extended scheduler equivalence coverage for wake-before-requeue ordering,
+    skipped nonmatching waiters, bounded requeue count, same-bucket requeue
+    behavior, drop-count reporting, and null callback handling.
+- Validation:
+  - `rustfmt kernel/rust/sched_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `sched_helpers ok digest=504d5b3e9c153630`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - Scheduler/timers/wait/futex: 76% -> 79% (+3).
+  - Post-campaign verified progress is now +80 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 82.7%; McKernel-owned core row average
+    is now 79.1%. Mechanical LOC audit is 17.4% and remains audit-only.
+- Honest remaining C ownership:
+  - C still owns futex key lookup, comparison-user-value loading,
+    hash-bucket locking, actual wake side effects, key-reference/key-copy
+    mutation, IKC sends, scheduler handoff, address translation, race retry,
+    and broader futex wake/requeue orchestration.
+- Next major work:
+  - Continue scheduler/futex with timeout/wake side-effect preflights where
+    races can be modeled, or move back to allocator zeroed-list/deferred-worker,
+    x86 page-table allocation/free preflights, process VM mutation, and IHK
+    memory-registration/IKC-exchange bodies under non-reboot validation.
+
+Update 2026-05-23 scheduler/futex wait-setup +3 verified post-campaign slice:
+- Implemented:
+  - Added Rust/C ABI helper `futex_wait_setup_result()`.
+  - Routed `futex_wait_setup()` through Rust-owned key-region initialization,
+    get-key callback sequencing, queue-lock callback sequencing, user-value
+    load callback sequencing, mismatch/error cleanup, key release, and
+    hash-bucket publication.
+  - Kept futex key lookup internals, address translation, page fault behavior,
+    hash-bucket lock primitives, user-value load, key-reference lifetime,
+    timeout/schedule behavior, wake side effects, IKC sends, and broader futex
+    wait/retry orchestration in C.
+  - Extended scheduler equivalence coverage for success, value mismatch,
+    get-value failure cleanup, get-key failure, key zeroing, hbucket
+    publication, and invalid/null input handling.
+- Validation:
+  - `rustfmt kernel/rust/sched_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `sched_helpers ok digest=a80ef094b43f24e8`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - Scheduler/timers/wait/futex: 79% -> 82% (+3).
+  - Post-campaign verified progress is now +83 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 82.9%; McKernel-owned core row average
+    is now 79.5%. Mechanical LOC audit is 17.4% and remains audit-only.
+- Honest remaining C ownership:
+  - C still owns futex key lookup internals, address translation, page fault
+    behavior, lock primitives, user-value load, key-reference lifetime,
+    timeout/schedule behavior, wake side effects, IKC sends, and broader futex
+    wait/retry orchestration.
+- Next major work:
+  - Continue with scheduler/futex timeout/wake side-effect preflights where
+    races can be modeled, or move back to allocator zeroed-list/deferred-worker,
+    x86 page-table allocation/free preflights, process VM mutation, and IHK
+    memory-registration/IKC-exchange bodies under non-reboot validation.
+
+Update 2026-05-23 x86 page-table walk orchestration +3 verified post-campaign slice:
+- Implemented:
+  - Added Rust/C ABI helper `x86_walk_pte_range_result()`.
+  - Routed normal L1-L4 page-table walk loops and safe L1-L4 walk loops
+    through Rust-owned bounds-derived entry selection, callback result folding,
+    and optional physical-address skip policy.
+  - Kept visitor callback execution, table allocation/free, `phys_to_virt()`
+    traversal, splitting, page/RSS accounting, actual page free side effects,
+    mapping/free orchestration, TLB-sensitive mutation, and user-copy in C.
+  - Extended x86 memory helper equivalence coverage for successful walks,
+    all-`-ENOENT` walks, hard-error stop behavior, safe physical-address skip,
+    null table, and null callback handling.
+- Validation:
+  - `rustfmt kernel/rust/x86_memory_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `python3 -m py_compile scripts/rust-ownership-report.py` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `x86_memory_helpers ok digest=34117c66f91ba2ea`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - x86_64 memory management: 78% -> 81% (+3).
+  - Post-campaign verified progress is now +86 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 83.2%; McKernel-owned core row average
+    is now 79.9%. Mechanical LOC audit is 17.5% and remains audit-only.
+- Honest remaining C ownership:
+  - C still owns visitor callback execution, page-table allocation/free,
+    destroy recursion, `phys_to_virt()` traversal, splitting,
+    `page_map()`/`page_unmap()`, page/RSS accounting, actual page frees,
+    mapping/free orchestration, TLB-sensitive mutation, and user-copy.
+- Next major work:
+  - Continue x86 memory with page-table allocation/free preflights and
+    clear/free-range cleanup where equivalence coverage can model side effects,
+    or move to allocator zeroed-list/deferred-worker, process VM mutation, and
+    IHK memory-registration/IKC-exchange bodies under non-reboot validation.
+
+Update 2026-05-23 x86 virtual-to-physical translation +3 verified post-campaign slice:
+- Implemented:
+  - Added Rust/C ABI helper `x86_virt_to_phys_level_result()`.
+  - Routed `ihk_mc_pt_virt_to_phys_size()` per-level miss/walk/hit
+    classification plus physical-address and page-size result shaping through
+    Rust for L4, L3, L2, and L1 entries.
+  - Kept page-table pointer traversal, `phys_to_virt()`, fault handling,
+    page-table lifetime, mapping side effects, and user-copy in C.
+  - Extended x86 memory helper equivalence coverage for missing entries,
+    non-leaf walks, 4 KiB hits, 2 MiB/1 GiB large-page hits, physical offset
+    shaping, output preservation on misses, and null-output handling.
+- Validation:
+  - `rustfmt kernel/rust/x86_memory_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `kernel/rust/tests/run_equivalence.sh` passed, including
+    `x86_memory_helpers ok digest=2a415c1756979d79`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - x86_64 memory management: 81% -> 84% (+3).
+  - Post-campaign verified progress is now +89 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 83.4%; McKernel-owned core row average
+    is now 80.3%. Mechanical LOC audit is 17.5% and remains audit-only.
+- Honest remaining C ownership:
+  - C still owns page-table pointer traversal, `phys_to_virt()`, fault
+    handling, page-table lifetime, mapping side effects, page faults,
+    user-copy, and broader runtime map/free orchestration.
+- Next major work:
+  - Continue x86 memory with page-table allocation/free preflights and
+    clear/free-range cleanup where equivalence coverage can model side effects,
+    or move to allocator zeroed-list/deferred-worker, process VM mutation, and
+    IHK memory-registration/IKC-exchange bodies under non-reboot validation.
+
+Update 2026-05-23 process VM-range split/join +3 verified post-campaign slice:
+- Implemented:
+  - Added Rust/C fallback helpers `process_split_range_init_result()`,
+    `process_split_range_commit_result()`, and
+    `process_join_range_prepare_result()`.
+  - Routed `split_process_memory_range()` split high-half field shaping and
+    low-half end commit through Rust while preserving C ownership of
+    page-table split, `kmalloc()`, memobj refcounting, TOFU hooks, and
+    rb-tree insertion.
+  - Routed `join_process_memory_range()` adjacency/object-offset validation
+    and surviving-range end commit through Rust while preserving C ownership
+    of memobj unref, rb-tree removal, range-cache updates, TOFU list moves,
+    and `kfree()`.
+  - Extended process helper equivalence coverage for straight split offsets,
+    memobj/object offset shaping, anonymous split shaping, join success, join
+    adjacency/flag/memobj/objoff failures, null input, and SIMD guard
+    preservation.
+- Validation:
+  - `rustfmt kernel/rust/process_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - The first full `kernel/rust/tests/run_equivalence.sh` run failed the SIMD
+    guard because the compiler coalesced adjacent null-memobj zero stores into
+    `xorps`/`movups`; this was recorded in `kernel.log` before continuing.
+  - The final full `kernel/rust/tests/run_equivalence.sh` passed, including
+    `process_helpers ok digest=25fb3df8ffceadbb` and
+    `rust object unresolved symbols and SIMD checks ok`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - Process/VM management: 75% -> 78% (+3).
+  - Post-campaign verified progress is now +92 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 83.7%; McKernel-owned core row average
+    is now 80.6%. Mechanical LOC audit remains 17.5% and audit-only.
+- Honest remaining C ownership:
+  - C still owns page-table split/clear/free calls, `kmalloc()`/`kfree()`,
+    memobj refcounting, TOFU split/merge hooks, rb-tree/cache mutation, XPMEM
+    removal, broad process lifetime mutation, child-list orchestration,
+    rusage aggregation, signal forwarding, and full wait orchestration.
+- Next major work:
+  - Continue toward 100% with the hardest remaining core rows: page allocator
+    zeroed-list publication/deferred-worker timing under direct coverage,
+    scheduler/futex wake/requeue side-effect bodies, process VM-range
+    allocation/free and rb-tree/cache mutation preflights, syscall
+    ptrace/getrusage body slices, and IHK memory-registration/IKC-exchange
+    mutation only behind non-reboot runtime gates.
+
+Update 2026-05-23 page allocator bitmap locked-wrapper +3 verified post-campaign slice:
+- Implemented:
+  - Added Rust helpers for bitmap page allocator public lock/call/unlock
+    orchestration: `__ihk_pagealloc_alloc_locked_result()`,
+    `__ihk_pagealloc_reserve_locked_result()`,
+    `__ihk_pagealloc_free_locked_result()`,
+    `__ihk_pagealloc_count_locked_result()`,
+    `__ihk_pagealloc_query_free_locked_result()`, and
+    `__ihk_pagealloc_zero_free_pages_locked_result()`.
+  - Routed `ihk_pagealloc_alloc()`, `ihk_pagealloc_reserve()`,
+    `ihk_pagealloc_free()`, `ihk_pagealloc_count()`,
+    `ihk_pagealloc_query_free()`, and `__ihk_pagealloc_zero_free_pages()`
+    through those helpers when `MCKERNEL_RUST_PAGEALLOC_BITMAP` is enabled.
+  - Kept actual MCS primitives, free error panic/log policy, descriptor
+    allocation/destruction, CPU-local selection, IKC send side effects,
+    deferred-zero worker timing, zeroed-list publication, and broader
+    allocator lifetime in C.
+  - Extended page allocator equivalence coverage with direct fake-lock tests
+    for bitmap allocation, reserve, free, count, query-free, zero-free,
+    invalid callback handling, and free-page zeroing while reserved pages stay
+    untouched.
+- Validation:
+  - `rustfmt kernel/rust/page_alloc.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - The first full `kernel/rust/tests/run_equivalence.sh` run failed at
+    compile time because the bitmap wrappers referenced
+    `page_alloc_mcs_lock_bridge`/`page_alloc_mcs_unlock_bridge` before the
+    bridge definitions were visible to the bitmap path; this was recorded in
+    `kernel.log` before continuing.
+  - The final full `kernel/rust/tests/run_equivalence.sh` passed, including
+    `page_alloc_bitmap ok digest=3b05135350df748e` and
+    `rust object unresolved symbols and SIMD checks ok`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - Page allocator: 68% -> 71% (+3).
+  - Post-campaign verified progress is now +95 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 83.9%; McKernel-owned core row average
+    is now 81.0%. Mechanical LOC audit is 17.6% and remains audit-only.
+- Honest remaining C ownership:
+  - C still owns actual MCS/interrupt primitives, descriptor
+    allocation/destruction, free panic/log policy, CPU-local current/channel
+    selection, IKC send side effects, deferred-zero worker timing,
+    zeroed-list publication, and broader allocator lifetime/mutation.
+- Next major work:
+  - Continue page allocator toward 100% with zeroed-list publication,
+    deferred-worker timing, descriptor lifecycle, and CPU-local/IKC side
+    effects only when direct runtime coverage exists; otherwise move to
+    scheduler/futex wake/requeue side effects, process VM rb-tree/cache
+    mutation preflights, syscall ptrace/getrusage body slices, or IHK
+    memory-registration/IKC-exchange mutation behind non-reboot gates.
+
+Update 2026-05-23 scheduler/futex hash-bucket init +3 verified post-campaign slice:
+- Implemented:
+  - Added `futex_hash_bucket_table_init_result()` as a Rust helper with a C
+    fallback and routed `futex_init()` through it after the existing C
+    `kmalloc()` allocation.
+  - Rust now owns futex hash-bucket lock-word zeroing plus plist prio/node
+    list-head initialization, including debug spinlock/rawlock field handling
+    when offsets are supplied.
+  - Preserved C allocation, public ABI, and fallback behavior; the helper
+    returns an error for invalid null/count/stride input rather than taking
+    over allocator policy.
+  - Extended scheduler/futex equivalence coverage with direct table-init
+    checks for normal three-bucket initialization, list-head self-pointers,
+    lock-word zeroing, debug field publication, preserved surrounding fields,
+    zero-count behavior, null input, negative count, and zero stride.
+- Validation:
+  - `rustfmt kernel/rust/sched_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - The full `kernel/rust/tests/run_equivalence.sh` passed, including
+    `sched_helpers ok digest=81a86d9fa4f9900f` and
+    `rust object unresolved symbols and SIMD checks ok`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - Scheduler/timers/wait/futex: 82% -> 85% (+3).
+  - Post-campaign verified progress is now +98 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 84.2%; McKernel-owned core row average
+    is now 81.4%. Total distance to 100 is 190 non-arm64 aggregate functional
+    points, or 149 McKernel-owned core-row points. Mechanical LOC audit is
+    17.6% and remains audit-only.
+- Honest remaining C ownership:
+  - C still owns futex table allocation, actual spinlock primitives, wakeups,
+    requeue key-reference mutation, futex key lookup internals,
+    user-value load/comparison, IKC send side effects, IPIs, timer queues,
+    context switching, address translation, key lifetime, race retry,
+    schedule/schedule_timeout behavior, and remaining futex wake/requeue/wait
+    side effects.
+- Next major work:
+  - Continue scheduler/futex toward 100% with wait/wake side-effect bodies only
+    behind stronger runtime coverage; otherwise target page allocator
+    zeroed-list/deferred-worker timing, process VM rb-tree/cache mutation
+    preflights, syscall ptrace/getrusage body slices, or IHK memory
+    registration/IKC-exchange mutation behind non-reboot gates.
+
+Update 2026-05-23 scheduler/futex requeue key-publication +3 verified post-campaign slice:
+- Implemented:
+  - Added `futex_requeue_key_update_result()` as a Rust helper with a C
+    fallback and routed `requeue_futex()` through it after the Rust-owned
+    requeue list move.
+  - Rust now owns the requeue key-reference callback ordering plus `q->key`
+    byte-copy publication. C still owns the actual key-reference
+    implementation and the fallback path.
+  - Extended scheduler/futex equivalence coverage with direct checks for
+    callback-before-copy behavior, copied key words, callback log/snapshot
+    contents, and invalid null/size/callback inputs.
+- Validation:
+  - `rustfmt kernel/rust/sched_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - The full `kernel/rust/tests/run_equivalence.sh` passed, including
+    `sched_helpers ok digest=68a9fbfe485ec6f0` and
+    `rust object unresolved symbols and SIMD checks ok`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - Scheduler/timers/wait/futex: 85% -> 88% (+3).
+  - Post-campaign verified progress is now +101 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 84.4%; McKernel-owned core row average
+    is now 81.8%. Total distance to 100 is 187 non-arm64 aggregate functional
+    points, or 146 McKernel-owned core-row points. Mechanical LOC audit is
+    17.7% and remains audit-only.
+- Honest remaining C ownership:
+  - C still owns futex table allocation, actual spinlock primitives, wakeups,
+    futex key lookup internals, key-reference implementation/lifetime,
+    user-value load/comparison, IKC send side effects, IPIs, timer queues,
+    context switching, address translation, race retry,
+    schedule/schedule_timeout behavior, and remaining futex wake/requeue/wait
+    side effects.
+- Next major work:
+  - Scheduler/futex is now close to the point where the remaining pieces need
+    stronger runtime coverage before taking wake/schedule side effects. Next
+    safe targets are page allocator zeroed-list/deferred-worker timing,
+    process VM rb-tree/cache mutation preflights, syscall ptrace/getrusage
+    body slices, or IHK memory-registration/IKC-exchange mutation behind
+    non-reboot gates.
+
+Update 2026-05-22 23:48 EDT page allocator destroy/free-callback +3 verified post-campaign slice:
+- Implemented:
+  - Added `pagealloc_destroy_result()` as a Rust helper with a C fallback and
+    routed `ihk_pagealloc_destroy()` through it using a C bridge to
+    `ihk_mc_free_pages()`.
+  - Rust now owns descriptor free-page calculation, free-callback validation,
+    and descriptor/free-page handoff. C still owns descriptor allocation and
+    the actual free primitive.
+  - Extended page allocator equivalence coverage with direct callback checks
+    for valid destroy, zero-page destroy, null descriptor, and null callback.
+- Validation:
+  - `rustfmt kernel/rust/page_alloc.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - The full `kernel/rust/tests/run_equivalence.sh` passed, including
+    `page_alloc_bitmap ok digest=91790b3aa3a68a22` and
+    `rust object unresolved symbols and SIMD checks ok`.
+  - `python3 -m py_compile scripts/rust-ownership-report.py` passed.
+  - `scripts/rust-ownership-report.py --check-dashboard overview.txt --check-dashboard overview2.txt --top 25`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - Page allocator: 71% -> 74% (+3).
+  - Post-campaign verified progress is now +104 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 84.7%; McKernel-owned core row average
+    is now 82.1%. Total distance to 100 is 184 non-arm64 aggregate functional
+    points, or 143 McKernel-owned core-row points. Mechanical LOC audit is
+    17.7% Rust implementation with 21,621 Rust implementation LOC and
+    100,764 C implementation-debt LOC.
+- Honest remaining C ownership:
+  - C still owns descriptor allocation, actual `ihk_mc_free_pages()` behavior,
+    logging, CPU-local selection, IKC send/channel selection, deferred-zero
+    worker timing, zeroed-list publication, and broader allocator lifetime.
+- Next major work:
+  - Page allocator still has zeroed-list publication and deferred-worker
+    timing debt. Scheduler/futex wake/schedule side effects and IHK
+    memory-registration/IKC-exchange mutation should wait for stronger
+    runtime coverage; syscall ptrace/getrusage body slices and process VM
+    rb-tree/cache preflights remain good non-reboot candidates.
+
+Update 2026-05-22 23:56 EDT process VM range-cache +3 verified post-campaign slice:
+- Implemented:
+  - Added `process_range_cache_replace_result()` and
+    `process_range_cache_store_result()` as Rust helpers with C fallbacks.
+  - Routed `join_process_memory_range()` cache retargeting,
+    `free_process_memory_range()` cache clearing, and
+    `lookup_process_memory_range()` cache insertion through those helpers.
+  - Extended process-helper equivalence coverage for retarget, clear, store,
+    and invalid inputs.
+- Validation:
+  - `rustfmt kernel/rust/process_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - The full `kernel/rust/tests/run_equivalence.sh` passed, including
+    `process_helpers ok digest=a4fa8b1f93b2890e` and
+    `rust object unresolved symbols and SIMD checks ok`.
+  - `python3 -m py_compile scripts/rust-ownership-report.py` passed.
+  - `scripts/rust-ownership-report.py --check-dashboard overview.txt --check-dashboard overview2.txt --top 25`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - Process/VM management: 78% -> 81% (+3).
+  - Post-campaign verified progress is now +107 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 84.9%; McKernel-owned core row average
+    is now 82.5%. Total distance to 100 is 181 non-arm64 aggregate functional
+    points, or 140 McKernel-owned core-row points. Mechanical LOC audit is
+    17.7% Rust implementation with 21,662 Rust implementation LOC,
+    100,784 C implementation-debt LOC, and 27,957 C/header boundary LOC.
+- Honest remaining C ownership:
+  - C still owns rb-tree insert/erase, VM range allocation/free, page-table
+    free/clear, memobj refcounting, TOFU list moves, rusage aggregation,
+    signal forwarding, child-list orchestration, and broader process lifetime.
+- Next major work:
+  - Continue Process/VM with rb-tree/cache-adjacent mutation preflights or
+    syscall ptrace/getrusage body slices that can be directly covered. Keep
+    page-table mutation, broad lifetime teardown, wake/schedule side effects,
+    and IHK memory-registration/IKC-exchange mutation behind runtime probes.
+
+Update 2026-05-23 00:01 EDT process VM range commit +3 verified post-campaign slice:
+- Implemented:
+  - Added `process_range_end_commit_result()` and
+    `process_range_flag_commit_result()` as Rust helpers with C fallbacks.
+  - Routed `extend_up_process_memory_range()` final `range->end` mutation and
+    `change_prot_process_memory_range()` final/no-page-table-change
+    `range->flag` mutation through those helpers.
+  - Extended process-helper equivalence coverage for end commit, flag commit,
+    and null input handling.
+- Validation:
+  - `rustfmt kernel/rust/process_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - The full `kernel/rust/tests/run_equivalence.sh` passed, including
+    `process_helpers ok digest=90f372a037f1fbff` and
+    `rust object unresolved symbols and SIMD checks ok`.
+  - `python3 -m py_compile scripts/rust-ownership-report.py` passed.
+  - `scripts/rust-ownership-report.py --check-dashboard overview.txt --check-dashboard overview2.txt --top 25`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed. It emitted the existing jobserver warning but linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - Process/VM management: 81% -> 84% (+3).
+  - Post-campaign verified progress is now +110 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 85.2%; McKernel-owned core row average
+    is now 82.9%. Total distance to 100 is 178 non-arm64 aggregate functional
+    points, or 137 McKernel-owned core-row points. Mechanical LOC audit is
+    17.7% Rust implementation with 21,688 Rust implementation LOC,
+    100,799 C implementation-debt LOC, and 27,960 C/header boundary LOC.
+- Honest remaining C ownership:
+  - C still owns page-table attribute mutation, page-table free/clear, locks,
+    VM range allocation/free, memobj refcounting, TOFU hooks, rb-tree mutation,
+    rusage aggregation, signal forwarding, child-list orchestration, and
+    broader process lifetime.
+
+Update 2026-05-23 00:10 EDT process VM stack-start +3 verified post-campaign slice:
+- Implemented:
+  - Added `process_range_stack_start_commit_result()` as a Rust helper with a C
+    fallback.
+  - Routed the stack-growth `range->start` alignment/commit in
+    `do_page_fault_process_vm()` through the helper after C has done the
+    existing lookup and locking.
+  - Extended process-helper equivalence coverage for 2 MiB alignment, default
+    page-size alignment, null range handling, and invalid page-shift handling.
+- Validation:
+  - `rustfmt kernel/rust/process_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - The full `kernel/rust/tests/run_equivalence.sh` passed, including
+    `process_helpers ok digest=5bf0cbacd30b645e` and
+    `rust object unresolved symbols and SIMD checks ok`.
+  - `python3 -m py_compile scripts/rust-ownership-report.py` passed.
+  - `scripts/rust-ownership-report.py --check-dashboard overview.txt --check-dashboard overview2.txt --top 25`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed with the existing jobserver warning; it linked `mckernel.img` and
+    exited zero.
+- Estimates:
+  - Process/VM management: 84% -> 87% (+3).
+  - Post-campaign verified progress is now +113 aggregate functional points
+    toward actual 100% completion.
+  - Non-arm64 dashboard average is now 85.4%; McKernel-owned core row average
+    is now 83.3%. Total distance to 100 is 175 non-arm64 aggregate functional
+    points, or 134 McKernel-owned core-row points. Mechanical LOC audit is
+    17.7% Rust implementation with 21,709 Rust implementation LOC,
+    100,809 C implementation-debt LOC, and 27,963 C/header boundary LOC.
+- Honest remaining C ownership:
+  - C still owns range lookup, locks, access checks, page-fault handling, page
+    allocation, page-table lookup/mapping, retry behavior, VM range
+    allocation/free, memobj refcounting, TOFU hooks, rb-tree mutation,
+    rusage aggregation, signal forwarding, child-list orchestration, and
+    broader process lifetime.
+- Next major work:
+  - Continue with Process/VM rb-tree-adjacent preflights, syscall
+    ptrace/getrusage body slices, page allocator lifetime/zeroing paths, or
+    IHK memory-registration/IKC-exchange probes. Do not take page-table
+    mutation, broad lifetime teardown, wake/schedule side effects, or IKC
+    exchange mutation without stronger runtime coverage.

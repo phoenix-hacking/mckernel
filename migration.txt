@@ -1,0 +1,162 @@
+McKernel Core OS Rust Ownership Tracker
+Updated: 2026-05-23
+
+Purpose
+------------------------------------------------------------
+
+This file tracks the stricter target: the x86_64 McKernel core OS should be
+owned by Rust, not merely surrounded by Rust helpers. `overview.txt` remains the
+broad functional dashboard. This tracker answers a narrower question: how close
+is the core OS to having McKernel-owned C bodies replaced by Rust-owned core
+programs?
+
+Scope
+------------------------------------------------------------
+
+In scope:
+- x86_64 McKernel kernel image core.
+- x86_64 memory management, page allocator, process/VM, syscall core,
+  scheduler/timers/wait/futex, shared primitives, and required ABI/layout
+  foundations.
+- Kernel-side Rocky control-plane pieces required to load, boot, control, and
+  shut down McKernel, including IHK/mcctrl kernel-module paths when they own
+  McKernel behavior.
+
+Out of scope for this tracker:
+- arm64. It is intentionally deferred.
+- User-space tools such as mcstat, mcexec, ihklib, mcinspect, eclair, crash
+  extension helpers, and daemon/tool command orchestration.
+- Linux kernel APIs, third-party code, toolchain behavior, and external ABI
+  surfaces that McKernel must preserve.
+- Public C headers and exported C ABI declarations that are kept for
+  compatibility.
+
+What Counts As Core Rust Ownership
+------------------------------------------------------------
+
+Counts as migrated:
+- Rust owns the primary execution body for a core OS operation.
+- Rust owns the state transition, mutation, validation, error shaping, and
+  side-effect orchestration for that operation.
+- C is limited to public ABI entry points, fallback scaffolding, trivial
+  adapters, or calls into external primitives that are not McKernel-owned logic.
+
+Partial credit:
+- Rust owns the decision/policy/result shaping, but C still performs locks,
+  allocation/free, user-copy, page-table writes, wakeups, IKC sends, signal
+  delivery, or lifecycle mutation.
+
+Does not count as full core ownership:
+- A Rust function that only calls back into the old C implementation.
+- A C orchestration path that calls Rust helper islands while keeping the main
+  McKernel-owned execution body in C.
+- Layout assertions, C ABI declarations, or tests by themselves.
+- New C helper logic, unless it is clearly fallback or glue used to verify and
+  route Rust behavior.
+
+Current Strict Read
+------------------------------------------------------------
+
+The broad x86_64/Rocky functional dashboard is about 83-85% migrated, but that
+number includes helper, policy, layout, and bounded mutation surfaces. For this
+stricter "core OS is Rust-owned" target, the current practical estimate is:
+
+Strict x86_64 core Rust ownership: about 50-60%.
+
+That estimate is intentionally lower than the functional dashboard because much
+of the remaining C is not shallow glue. It still owns high-risk core execution
+bodies: page-table mutation, allocator lifetime, syscall dispatch, user-copy,
+process lifetime, page faults, scheduler wake/context behavior, futex wake/wait
+side effects, signal delivery, IKC exchange, and kernel object lifecycle.
+
+Core OS Ownership Table
+------------------------------------------------------------
+
+The `overview.txt` dashboard percentage is listed only for comparison. The
+strict percentage is the score for this file.
+
+Area                                      Overview %   Strict Core %   Strict Core Status
+----                                      ----------   -------------   ------------------
+ABI/layout foundation                             54              54   Partial. Layout coverage is broad enough for many helpers, but broader private lifecycle layout is still needed before large mutation-heavy bodies can move cleanly.
+Shared primitives                                 84              78   Mostly Rust-owned. Remaining work is less about helpers and more about making these primitives usable as the normal Rust-side substrate for core bodies.
+x86_64 memory management                          84              50   Partial. Many page-table decisions and small mutation helpers are Rust-owned, but page-table allocation/free, traversal orchestration, page_map/page_unmap, RSS updates, TLB-sensitive flushing, physical/free orchestration, and user-copy remain C-owned.
+Page allocator                                    74              45   Partial. Bitmap and NUMA helpers are substantial, but allocator lifetime, CPU-local variable ownership, actual free primitives, MCS/interrupt primitives, IKC send side effects, zeroed-list publication, and broader allocator mutation remain C-owned.
+Process/VM management                             87              55   Partial. Many lifecycle, wait, ptrace, range, and list helpers are Rust-owned, but VM range allocation/free, memobj refcounting, rb-tree mutation, page-fault handling, page-table lookup/allocation/mapping, child-list orchestration, rusage aggregation, broad process lifetime, and signal forwarding remain C-owned.
+Syscall core                                      95              58   Partial. Policy and many handler subpaths are Rust-owned, but top-level syscall dispatch, user-copy, Linux forwarding, locks, allocation/free, register/fp primitives, process-memory access, signal delivery, ptrace orchestration, and high-risk handler bodies remain C-owned.
+Scheduler/timers/wait/futex                       88              52   Partial. Queue/list helpers and policies are broad, but timer queues, actual spinlock primitives, wakeups, IPIs, context switching, futex key lifetime, user-value loads, futex table allocation, race retry, schedule/schedule_timeout, and wake/requeue/wait side effects remain C-owned.
+procfs/sysfs/xpmem/file objects                  100              60   Helper surface complete, not full subsystem ownership. Allocation, refcount mutation, lock/list mutation, remap/page-table mutation, page I/O, procfs buffer mutation, sysfs IKC exchange, and user-copy still need Rust ownership before this is truly core-complete.
+host/IKC/mcctrl/IHK kernel paths                   99              62   Near complete for helper/control policy coverage, but not fully Rust-owned. Callback invocation, device allocation, memory registration, file I/O, waits/callbacks, broad IKC exchange mutation, broad allocation/lifetime, and kernel object lifecycle remain C-owned.
+
+Primary Remaining Core C Bodies
+------------------------------------------------------------
+
+These are the blockers that matter for "core C is replaced with Rust core":
+
+- Page-table allocation/free, recursive destruction, traversal orchestration,
+  page_map/page_unmap, RSS updates, TLB-sensitive flushing, and map/free
+  rollback behavior.
+- Page allocator lifetime, CPU-local allocator ownership, free-to-system
+  primitives, deferred-zero publication, and IKC-backed zeroing side effects.
+- Process and VM lifetime: VM range allocation/free, memobj refcounting,
+  rb-tree mutation, page-fault orchestration, child-list mutation, rusage
+  aggregation, wait orchestration, signal forwarding, and release paths.
+- Syscall entry/dispatch, user-copy boundaries, Linux forwarding, remaining
+  high-risk syscall handlers, and architecture register/fp/regset operations.
+- Scheduler/timer/futex execution bodies: timer queues, wakeups, IPIs, context
+  switching, futex table allocation, futex key lifetime, user-value loads,
+  futex wait/wake/requeue side effects, and race retry behavior.
+- Kernel-side Rocky control plane: IKC exchange mutation, callback invocation,
+  waits, object allocation/free, device lifecycle, memory registration, file
+  I/O, and kernel object lifecycle.
+
+Migration Phases
+------------------------------------------------------------
+
+Phase 1: Helper migration.
+Rust owns policies, validators, layout mirrors, result shaping, and bounded
+helpers. C still owns the main execution body. Much of the current dashboard
+progress lives here.
+
+Phase 2: Body migration.
+Rust owns the primary operation body. C becomes a narrow ABI wrapper or fallback
+path. This is the next phase for the core OS target.
+
+Phase 3: Side-effect ownership.
+Rust owns mutation and orchestration across locks, refs, lists, allocation,
+page-table writes, wakeups, user-copy staging, signal delivery, and IKC send or
+receive behavior where those effects are McKernel-owned.
+
+Phase 4: Fallback retirement gate.
+C fallback remains only while needed for validation. A path reaches core
+complete when the Rust body is the normal path, equivalence or runtime coverage
+exists, and the remaining C is ABI glue, external-interface glue, or approved
+fallback scaffolding.
+
+Update Rule
+------------------------------------------------------------
+
+When a migration slice lands, update this file only if it changes strict core
+ownership:
+
+- Move a row forward only when Rust owns more of the primary body, not merely
+  another helper called by C.
+- Record C additions as glue/fallback only; do not count new C decision logic as
+  Rust progress.
+- Keep `overview.txt` for the broader functional percentage dashboard.
+- Keep this file focused on x86_64 core OS ownership and the remaining C bodies
+  that block a mostly Rust McKernel core.
+
+Validation Gates
+------------------------------------------------------------
+
+Core ownership claims should be backed by non-reboot validation first:
+
+- Rust and C fallback builds still compile.
+- Focused equivalence tests cover policy, shaping, and bounded mutation helpers.
+- `mckernel.img` links with the Rust-owned path enabled.
+- Rust-linked IHK/mcctrl module-load smoke remains clean.
+- Runtime Rocky smokes are added before retiring C fallback for mutation-heavy
+  paths.
+
+Reboot-capable validation remains opt-in and must not be run without explicit
+approval.

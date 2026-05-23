@@ -73,6 +73,20 @@ int mcctrl_partition_wait_required_result(int left, int woke_any, int woke_self)
 unsigned int mcctrl_partition_wait_timeout_msecs_result(int nr_processes);
 int mcctrl_partition_wake_next_result(int left);
 unsigned long mcctrl_release_user_space_len_result(unsigned long start, unsigned long end);
+int mcctrl_zero_mckernel_pages_step_result(unsigned long node_addr,
+					   unsigned long to_zero_list_offset,
+					   unsigned long zeroed_list_offset,
+					   unsigned long nr_to_zero_pages_offset,
+					   unsigned long free_chunk_addr_offset,
+					   unsigned long free_chunk_size_offset,
+					   unsigned long free_chunk_list_offset,
+					   unsigned long free_chunk_sizeof,
+					   unsigned long phys_to_virt_base,
+					   unsigned int page_shift,
+					   unsigned long *addr_out,
+					   unsigned long *size_out);
+void mcctrl_zero_mckernel_pages_finish_result(unsigned long node_addr,
+					     unsigned long zeroing_workers_offset);
 int mcctrl_control_request_needs_root_result(unsigned int request);
 int mcctrl_ikc_free_addrs_owner_result(int free_addrs_count);
 int mcctrl_ikc_desc_free_at_put_result(int allocated_internally);

@@ -2505,6 +2505,36 @@ struct ihk_mc_numa_node {
 
 void mcctrl_zero_mckernel_pages(unsigned long arg)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	struct ihk_mc_numa_node *node =
+		(struct ihk_mc_numa_node *)arg;
+	unsigned long addr;
+	unsigned long size;
+
+	while (mcctrl_zero_mckernel_pages_step_result(
+			(unsigned long)node,
+			offsetof(struct ihk_mc_numa_node, to_zero_list),
+			offsetof(struct ihk_mc_numa_node, zeroed_list),
+			offsetof(struct ihk_mc_numa_node, nr_to_zero_pages),
+			offsetof(struct free_chunk, addr),
+			offsetof(struct free_chunk, size),
+			offsetof(struct free_chunk, list),
+			sizeof(struct free_chunk),
+			(unsigned long)phys_to_virt(0),
+			PAGE_SHIFT,
+			&addr,
+			&size)) {
+		dprintk("%s: zeroed %lu pages @ McKernel NUMA %d (chunk: 0x%lx:%lu)\n",
+				__func__,
+				size >> PAGE_SHIFT,
+				node->id,
+				addr, size);
+	}
+
+	mcctrl_zero_mckernel_pages_finish_result(
+			(unsigned long)node,
+			offsetof(struct ihk_mc_numa_node, zeroing_workers));
+#else
 	struct llist_node *llnode;
 	struct ihk_mc_numa_node *node =
 		(struct ihk_mc_numa_node *)arg;
@@ -2533,6 +2563,7 @@ void mcctrl_zero_mckernel_pages(unsigned long arg)
 	}
 
 	atomic_dec(&node->zeroing_workers);
+#endif
 }
 
 

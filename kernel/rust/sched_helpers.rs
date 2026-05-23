@@ -1,7 +1,22 @@
-use crate::abi::CInt;
+use core::ptr::write_volatile;
+use core::sync::atomic::{compiler_fence, AtomicI32, Ordering};
+
+use crate::abi::{CInt, CULong};
+
+type FutexHbLockFn = unsafe extern "C" fn(usize);
+type FutexHbUnlockFn = unsafe extern "C" fn(usize);
+type FutexWakeScanFn = unsafe extern "C" fn(usize);
+type FutexRequeueScanFn = unsafe extern "C" fn(usize, usize);
+type FutexKeyRefsFn = unsafe extern "C" fn(usize);
+type FutexWaitGetKeyFn = unsafe extern "C" fn(usize, CInt, usize) -> CInt;
+type FutexWaitQueueLockFn = unsafe extern "C" fn(usize) -> usize;
+type FutexWaitGetValueFn = unsafe extern "C" fn(usize, usize) -> CInt;
+type FutexWaitQueueUnlockFn = unsafe extern "C" fn(usize, usize);
+type FutexWaitPutKeyFn = unsafe extern "C" fn(CInt, usize);
 
 const EINVAL: CInt = 22;
 const EPERM: CInt = 1;
+const EWOULDBLOCK: CInt = 11;
 const SCHED_NORMAL: CInt = 0;
 const SCHED_FIFO: CInt = 1;
 const SCHED_RR: CInt = 2;
@@ -11,6 +26,80 @@ const SCHED_DEADLINE: CInt = 6;
 const MAX_USER_RT_PRIO: CInt = 100;
 const SCHED_RR_INTERVAL_NSEC: i64 = 10_000;
 const PAGE_SIZE: usize = 4096;
+const FUTEX_WAIT_POST_SUCCESS: CInt = 0;
+const FUTEX_WAIT_POST_RETRY: CInt = 1;
+const FUTEX_WAIT_POST_TIMEOUT: CInt = 2;
+const FUTEX_WAIT_POST_INTERRUPT: CInt = 3;
+const FUTEX_WAIT_SCHEDULE_NONE: CInt = 0;
+const FUTEX_WAIT_SCHEDULE_TIMEOUT: CInt = 1;
+const FUTEX_WAIT_SCHEDULE_DIRECT: CInt = 2;
+const FUTEX_WAKE_TARGET_MCKERNEL: CInt = 0;
+const FUTEX_WAKE_TARGET_LINUX: CInt = 1;
+const PLIST_NODE_PLIST_OFFSET: usize = 8;
+const PLIST_HEAD_NODE_LIST_OFFSET: usize = 16;
+const PLIST_NODE_LIST_OFFSET: usize = PLIST_NODE_PLIST_OFFSET + PLIST_HEAD_NODE_LIST_OFFSET;
+
+unsafe fn init_list_head_addr(list_addr: usize) {
+    unsafe {
+        write_volatile(list_addr as *mut usize, list_addr);
+        write_volatile(
+            list_addr.wrapping_add(core::mem::size_of::<usize>()) as *mut usize,
+            list_addr,
+        );
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn futex_hash_bucket_table_init_result(
+    buckets_addr: usize,
+    bucket_count: CInt,
+    bucket_stride: usize,
+    lock_offset: usize,
+    lock_word_offset: usize,
+    chain_offset: usize,
+    prio_list_offset: usize,
+    node_list_offset: usize,
+    debug_spinlock_offset: usize,
+    debug_rawlock_offset: usize,
+) -> CInt {
+    if bucket_count < 0 || bucket_stride == 0 {
+        return -EINVAL;
+    }
+    if bucket_count != 0 && buckets_addr == 0 {
+        return -EINVAL;
+    }
+
+    let count = bucket_count as usize;
+    for i in 0..count {
+        let Some(bucket_delta) = bucket_stride.checked_mul(i) else {
+            return -EINVAL;
+        };
+        let bucket = buckets_addr.wrapping_add(bucket_delta);
+        let lock_addr = bucket.wrapping_add(lock_offset);
+        let chain_addr = bucket.wrapping_add(chain_offset);
+
+        unsafe {
+            write_volatile(lock_addr.wrapping_add(lock_word_offset) as *mut u32, 0);
+            init_list_head_addr(chain_addr.wrapping_add(prio_list_offset));
+            init_list_head_addr(chain_addr.wrapping_add(node_list_offset));
+
+            if debug_spinlock_offset != 0 {
+                write_volatile(
+                    chain_addr.wrapping_add(debug_spinlock_offset) as *mut usize,
+                    lock_addr,
+                );
+            }
+            if debug_rawlock_offset != 0 {
+                write_volatile(
+                    chain_addr.wrapping_add(debug_rawlock_offset) as *mut usize,
+                    0,
+                );
+            }
+        }
+    }
+
+    bucket_count
+}
 
 #[no_mangle]
 pub extern "C" fn sched_get_priority_max_value(policy: CInt) -> CInt {
@@ -184,6 +273,710 @@ pub unsafe extern "C" fn futex_key_prepare_result(
     }
 
     0
+}
+
+#[no_mangle]
+pub extern "C" fn futex_wake_bitset_valid_result(bitset: u32) -> CInt {
+    (bitset != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn futex_waiter_matches_bitset_result(
+    waiter_bitset: u32,
+    requested_bitset: u32,
+) -> CInt {
+    ((waiter_bitset & requested_bitset) != 0) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn futex_wake_limit_reached_result(woken: CInt, nr_wake: CInt) -> CInt {
+    (woken >= nr_wake) as CInt
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn futex_wake_scan_result(
+    chain_addr: usize,
+    q_list_offset: usize,
+    q_key_offset: usize,
+    q_bitset_offset: usize,
+    key_word_offset: usize,
+    key_ptr_offset: usize,
+    key_offset_offset: usize,
+    target_word: usize,
+    target_ptr: usize,
+    target_offset: CInt,
+    requested_bitset: u32,
+    use_bitset: CInt,
+    nr_wake: CInt,
+    wake_fn: Option<FutexWakeScanFn>,
+) -> CInt {
+    if chain_addr == 0 {
+        return 0;
+    }
+    let Some(wake) = wake_fn else {
+        return 0;
+    };
+
+    let head_node = chain_addr.wrapping_add(PLIST_HEAD_NODE_LIST_OFFSET);
+    let mut pos = unsafe { core::ptr::read_volatile(head_node as *const usize) };
+    let mut woken = 0;
+
+    while pos != head_node {
+        let next = unsafe { core::ptr::read_volatile(pos as *const usize) };
+        let q_addr = pos
+            .wrapping_sub(PLIST_NODE_LIST_OFFSET)
+            .wrapping_sub(q_list_offset);
+        let key_addr = q_addr.wrapping_add(q_key_offset);
+        let word = unsafe {
+            core::ptr::read_volatile(key_addr.wrapping_add(key_word_offset) as *const usize)
+        };
+        let ptr = unsafe {
+            core::ptr::read_volatile(key_addr.wrapping_add(key_ptr_offset) as *const usize)
+        };
+        let offset = unsafe {
+            core::ptr::read_volatile(key_addr.wrapping_add(key_offset_offset) as *const CInt)
+        };
+
+        if word == target_word && ptr == target_ptr && offset == target_offset {
+            let bitset_matches = if use_bitset == 0 {
+                true
+            } else {
+                let waiter_bitset = unsafe {
+                    core::ptr::read_volatile(q_addr.wrapping_add(q_bitset_offset) as *const u32)
+                };
+                (waiter_bitset & requested_bitset) != 0
+            };
+
+            if bitset_matches {
+                unsafe {
+                    wake(q_addr);
+                }
+                woken += 1;
+                if woken >= nr_wake {
+                    break;
+                }
+            }
+        }
+
+        pos = next;
+    }
+
+    woken
+}
+
+#[no_mangle]
+pub extern "C" fn futex_requeue_should_move_result(
+    source_chain: usize,
+    target_chain: usize,
+) -> CInt {
+    (source_chain != target_chain) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn futex_requeue_loop_done_result(
+    task_count: CInt,
+    nr_wake: CInt,
+    nr_requeue: CInt,
+) -> CInt {
+    ((task_count as i64 - nr_wake as i64) >= nr_requeue as i64) as CInt
+}
+
+#[no_mangle]
+pub extern "C" fn futex_requeue_should_wake_result(task_count: CInt, nr_wake: CInt) -> CInt {
+    (task_count <= nr_wake) as CInt
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn futex_requeue_scan_result(
+    chain_addr: usize,
+    q_list_offset: usize,
+    q_key_offset: usize,
+    key_word_offset: usize,
+    key_ptr_offset: usize,
+    key_offset_offset: usize,
+    target_word: usize,
+    target_ptr: usize,
+    target_offset: CInt,
+    nr_wake: CInt,
+    nr_requeue: CInt,
+    drop_countp: *mut CInt,
+    wake_fn: Option<FutexRequeueScanFn>,
+    requeue_fn: Option<FutexRequeueScanFn>,
+    ctx_addr: usize,
+) -> CInt {
+    if !drop_countp.is_null() {
+        unsafe {
+            core::ptr::write_volatile(drop_countp, 0);
+        }
+    }
+    if chain_addr == 0 {
+        return 0;
+    }
+    let Some(wake) = wake_fn else {
+        return 0;
+    };
+    let Some(requeue) = requeue_fn else {
+        return 0;
+    };
+
+    let head_node = chain_addr.wrapping_add(PLIST_HEAD_NODE_LIST_OFFSET);
+    let mut pos = unsafe { core::ptr::read_volatile(head_node as *const usize) };
+    let mut task_count: CInt = 0;
+    let mut drop_count: CInt = 0;
+
+    while pos != head_node {
+        if (task_count as i64 - nr_wake as i64) >= nr_requeue as i64 {
+            break;
+        }
+
+        let next = unsafe { core::ptr::read_volatile(pos as *const usize) };
+        let q_addr = pos
+            .wrapping_sub(PLIST_NODE_LIST_OFFSET)
+            .wrapping_sub(q_list_offset);
+        let key_addr = q_addr.wrapping_add(q_key_offset);
+        let word = unsafe {
+            core::ptr::read_volatile(key_addr.wrapping_add(key_word_offset) as *const usize)
+        };
+        let ptr = unsafe {
+            core::ptr::read_volatile(key_addr.wrapping_add(key_ptr_offset) as *const usize)
+        };
+        let offset = unsafe {
+            core::ptr::read_volatile(key_addr.wrapping_add(key_offset_offset) as *const CInt)
+        };
+
+        if word == target_word && ptr == target_ptr && offset == target_offset {
+            task_count = task_count.wrapping_add(1);
+            if task_count <= nr_wake {
+                unsafe {
+                    wake(q_addr, ctx_addr);
+                }
+            } else {
+                unsafe {
+                    requeue(q_addr, ctx_addr);
+                }
+                drop_count = drop_count.wrapping_add(1);
+            }
+        }
+
+        pos = next;
+    }
+
+    if !drop_countp.is_null() {
+        unsafe {
+            core::ptr::write_volatile(drop_countp, drop_count);
+        }
+    }
+
+    task_count
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn futex_double_lock_hb_result(
+    hb1_addr: usize,
+    hb2_addr: usize,
+    lock_offset: usize,
+    lock_fn: Option<FutexHbLockFn>,
+) {
+    let Some(lock) = lock_fn else {
+        return;
+    };
+
+    unsafe {
+        if hb1_addr <= hb2_addr {
+            lock(hb1_addr.wrapping_add(lock_offset));
+            if hb1_addr < hb2_addr {
+                lock(hb2_addr.wrapping_add(lock_offset));
+            }
+        } else {
+            lock(hb2_addr.wrapping_add(lock_offset));
+            lock(hb1_addr.wrapping_add(lock_offset));
+        }
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn futex_double_unlock_hb_result(
+    hb1_addr: usize,
+    hb2_addr: usize,
+    lock_offset: usize,
+    unlock_fn: Option<FutexHbUnlockFn>,
+) {
+    let Some(unlock) = unlock_fn else {
+        return;
+    };
+
+    unsafe {
+        unlock(hb1_addr.wrapping_add(lock_offset));
+        if hb1_addr != hb2_addr {
+            unlock(hb2_addr.wrapping_add(lock_offset));
+        }
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn futex_wake_mark_woken_result(
+    q_addr: usize,
+    list_offset: usize,
+    node_plist_offset: usize,
+    lock_ptr_offset: usize,
+) {
+    let list = q_addr.wrapping_add(list_offset);
+    unsafe {
+        crate::plist::plist_del(
+            list as *mut crate::plist::PlistNode,
+            list.wrapping_add(node_plist_offset) as *mut crate::plist::PlistHead,
+        );
+        compiler_fence(Ordering::SeqCst);
+        write_volatile(q_addr.wrapping_add(lock_ptr_offset) as *mut usize, 0);
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn futex_unqueue_detach_result(
+    q_addr: usize,
+    list_offset: usize,
+    node_plist_offset: usize,
+) -> CInt {
+    let list = q_addr.wrapping_add(list_offset);
+    unsafe {
+        crate::plist::plist_del(
+            list as *mut crate::plist::PlistNode,
+            list.wrapping_add(node_plist_offset) as *mut crate::plist::PlistHead,
+        );
+    }
+    1
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn futex_requeue_move_result(
+    q_addr: usize,
+    list_offset: usize,
+    lock_ptr_offset: usize,
+    source_chain: usize,
+    target_chain: usize,
+    target_lock: usize,
+    debug_spinlock_offset: usize,
+) -> CInt {
+    if source_chain == target_chain {
+        return 0;
+    }
+
+    let list = q_addr.wrapping_add(list_offset);
+    unsafe {
+        crate::plist::plist_del(
+            list as *mut crate::plist::PlistNode,
+            source_chain as *mut crate::plist::PlistHead,
+        );
+        crate::plist::plist_add(
+            list as *mut crate::plist::PlistNode,
+            target_chain as *mut crate::plist::PlistHead,
+        );
+        write_volatile(
+            q_addr.wrapping_add(lock_ptr_offset) as *mut usize,
+            target_lock,
+        );
+        if debug_spinlock_offset != 0 {
+            write_volatile(
+                list.wrapping_add(debug_spinlock_offset) as *mut usize,
+                target_lock,
+            );
+        }
+    }
+
+    1
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn futex_requeue_key_update_result(
+    q_addr: usize,
+    q_key_offset: usize,
+    key_addr: usize,
+    key_size: usize,
+    get_refs_fn: Option<FutexKeyRefsFn>,
+) -> CInt {
+    if q_addr == 0 || key_addr == 0 || key_size == 0 {
+        return -EINVAL;
+    }
+    let Some(get_refs) = get_refs_fn else {
+        return -EINVAL;
+    };
+
+    unsafe {
+        get_refs(key_addr);
+        let dst = q_addr.wrapping_add(q_key_offset) as *mut u8;
+        let src = key_addr as *const u8;
+        for i in 0..key_size {
+            write_volatile(dst.add(i), core::ptr::read_volatile(src.add(i)));
+        }
+    }
+
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn futex_queue_publish_waiter_result(
+    q_addr: usize,
+    task_offset: usize,
+    th_spin_sleep_pa_offset: usize,
+    th_status_pa_offset: usize,
+    th_spin_sleep_lock_pa_offset: usize,
+    proc_status_pa_offset: usize,
+    proc_update_lock_pa_offset: usize,
+    runq_lock_pa_offset: usize,
+    clv_flags_pa_offset: usize,
+    intr_id_offset: usize,
+    intr_vector_offset: usize,
+    task: usize,
+    th_spin_sleep_pa: CULong,
+    th_status_pa: CULong,
+    th_spin_sleep_lock_pa: CULong,
+    proc_status_pa: CULong,
+    proc_update_lock_pa: CULong,
+    runq_lock_pa: CULong,
+    clv_flags_pa: CULong,
+    intr_id: CInt,
+    intr_vector: CInt,
+) {
+    unsafe {
+        write_volatile(q_addr.wrapping_add(task_offset) as *mut usize, task);
+        write_volatile(
+            q_addr.wrapping_add(th_spin_sleep_pa_offset) as *mut CULong,
+            th_spin_sleep_pa,
+        );
+        write_volatile(
+            q_addr.wrapping_add(th_status_pa_offset) as *mut CULong,
+            th_status_pa,
+        );
+        write_volatile(
+            q_addr.wrapping_add(th_spin_sleep_lock_pa_offset) as *mut CULong,
+            th_spin_sleep_lock_pa,
+        );
+        write_volatile(
+            q_addr.wrapping_add(proc_status_pa_offset) as *mut CULong,
+            proc_status_pa,
+        );
+        write_volatile(
+            q_addr.wrapping_add(proc_update_lock_pa_offset) as *mut CULong,
+            proc_update_lock_pa,
+        );
+        write_volatile(
+            q_addr.wrapping_add(runq_lock_pa_offset) as *mut CULong,
+            runq_lock_pa,
+        );
+        write_volatile(
+            q_addr.wrapping_add(clv_flags_pa_offset) as *mut CULong,
+            clv_flags_pa,
+        );
+        write_volatile(q_addr.wrapping_add(intr_id_offset) as *mut CInt, intr_id);
+        write_volatile(
+            q_addr.wrapping_add(intr_vector_offset) as *mut CInt,
+            intr_vector,
+        );
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn futex_queue_insert_result(
+    q_addr: usize,
+    list_offset: usize,
+    chain_addr: usize,
+    prio: CInt,
+    debug_spinlock_offset: usize,
+    lock_addr: usize,
+) {
+    if q_addr == 0 || chain_addr == 0 {
+        return;
+    }
+
+    let node_addr = q_addr.wrapping_add(list_offset);
+    unsafe {
+        write_volatile(node_addr as *mut CInt, prio);
+        init_list_head_addr(node_addr.wrapping_add(PLIST_NODE_PLIST_OFFSET));
+        init_list_head_addr(
+            node_addr
+                .wrapping_add(PLIST_NODE_PLIST_OFFSET)
+                .wrapping_add(PLIST_HEAD_NODE_LIST_OFFSET),
+        );
+        if debug_spinlock_offset != 0 {
+            write_volatile(
+                node_addr.wrapping_add(debug_spinlock_offset) as *mut usize,
+                lock_addr,
+            );
+        }
+        crate::plist::plist_add(
+            node_addr as *mut crate::plist::PlistNode,
+            chain_addr as *mut crate::plist::PlistHead,
+        );
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn futex_wait_prepare_q_result(
+    q_addr: usize,
+    bitset_offset: usize,
+    requeue_pi_key_offset: usize,
+    uti_futex_resp_offset: usize,
+    bitset: u32,
+    uti_futex_resp: usize,
+) {
+    if q_addr == 0 {
+        return;
+    }
+
+    unsafe {
+        write_volatile(q_addr.wrapping_add(bitset_offset) as *mut u32, bitset);
+        write_volatile(q_addr.wrapping_add(requeue_pi_key_offset) as *mut usize, 0);
+        write_volatile(
+            q_addr.wrapping_add(uti_futex_resp_offset) as *mut usize,
+            uti_futex_resp,
+        );
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn futex_wait_key_init_result(
+    q_addr: usize,
+    key_offset: usize,
+    key_size: usize,
+) {
+    if q_addr == 0 {
+        return;
+    }
+
+    let key_addr = q_addr.wrapping_add(key_offset);
+    let mut i = 0;
+    while i < key_size {
+        unsafe {
+            write_volatile(key_addr.wrapping_add(i) as *mut u8, 0);
+        }
+        i += 1;
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn futex_queue_lock_ptr_store_result(
+    q_addr: usize,
+    lock_ptr_offset: usize,
+    lock_addr: usize,
+) {
+    if q_addr == 0 {
+        return;
+    }
+
+    unsafe {
+        write_volatile(
+            q_addr.wrapping_add(lock_ptr_offset) as *mut usize,
+            lock_addr,
+        );
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn futex_wait_setup_result(
+    uaddr: usize,
+    val: u32,
+    fshared: CInt,
+    q_addr: usize,
+    hb_out: *mut usize,
+    key_offset: usize,
+    key_size: usize,
+    get_key_fn: Option<FutexWaitGetKeyFn>,
+    queue_lock_fn: Option<FutexWaitQueueLockFn>,
+    get_value_fn: Option<FutexWaitGetValueFn>,
+    queue_unlock_fn: Option<FutexWaitQueueUnlockFn>,
+    put_key_fn: Option<FutexWaitPutKeyFn>,
+) -> CInt {
+    if q_addr == 0 {
+        return -EINVAL;
+    }
+    let Some(get_key) = get_key_fn else {
+        return -EINVAL;
+    };
+    let Some(queue_lock) = queue_lock_fn else {
+        return -EINVAL;
+    };
+    let Some(get_value) = get_value_fn else {
+        return -EINVAL;
+    };
+    let Some(queue_unlock) = queue_unlock_fn else {
+        return -EINVAL;
+    };
+    let Some(put_key) = put_key_fn else {
+        return -EINVAL;
+    };
+
+    unsafe {
+        futex_wait_key_init_result(q_addr, key_offset, key_size);
+    }
+    let key_addr = q_addr.wrapping_add(key_offset);
+    let mut ret = unsafe { get_key(uaddr, fshared, key_addr) };
+    if ret != 0 {
+        return ret;
+    }
+
+    let hb_addr = unsafe { queue_lock(q_addr) };
+    if !hb_out.is_null() {
+        unsafe {
+            core::ptr::write_volatile(hb_out, hb_addr);
+        }
+    }
+
+    let mut uval = 0u32;
+    ret = unsafe { get_value((&raw mut uval) as usize, uaddr) };
+    if ret != 0 {
+        unsafe {
+            queue_unlock(q_addr, hb_addr);
+            put_key(fshared, key_addr);
+        }
+        return ret;
+    }
+
+    if uval != val {
+        unsafe {
+            queue_unlock(q_addr, hb_addr);
+            put_key(fshared, key_addr);
+        }
+        return -EWOULDBLOCK;
+    }
+
+    0
+}
+
+#[inline(always)]
+unsafe fn atomic_i32_at(addr: usize, offset: usize) -> Option<&'static AtomicI32> {
+    if addr == 0 {
+        None
+    } else {
+        Some(unsafe { &*((addr.wrapping_add(offset)) as *const AtomicI32) })
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn futex_wait_mark_interruptible_result(
+    thread_addr: usize,
+    status_offset: usize,
+    interruptible_status: CInt,
+) -> CInt {
+    unsafe {
+        atomic_i32_at(thread_addr, status_offset)
+            .map(|status| status.swap(interruptible_status, Ordering::SeqCst))
+            .unwrap_or(0)
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn futex_wait_spin_sleep_store_result(
+    thread_addr: usize,
+    spin_sleep_offset: usize,
+    value: CInt,
+) -> CInt {
+    if thread_addr == 0 {
+        return 0;
+    }
+
+    unsafe {
+        let spin_sleep = thread_addr.wrapping_add(spin_sleep_offset) as *mut CInt;
+        let old = core::ptr::read_volatile(spin_sleep);
+        write_volatile(spin_sleep, value);
+        old
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn futex_wait_finish_state_result(
+    thread_addr: usize,
+    status_offset: usize,
+    spin_sleep_offset: usize,
+    running_status: CInt,
+) -> CInt {
+    if thread_addr == 0 {
+        return 0;
+    }
+
+    unsafe {
+        let status = thread_addr.wrapping_add(status_offset) as *mut CInt;
+        let old = core::ptr::read_volatile(status);
+        write_volatile(status, running_status);
+        write_volatile(thread_addr.wrapping_add(spin_sleep_offset) as *mut CInt, 0);
+        old
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn futex_wait_schedule_action_result(queued: CInt, timeout: u64) -> CInt {
+    if queued == 0 {
+        return FUTEX_WAIT_SCHEDULE_NONE;
+    }
+    if timeout != 0 {
+        FUTEX_WAIT_SCHEDULE_TIMEOUT
+    } else {
+        FUTEX_WAIT_SCHEDULE_DIRECT
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn futex_wait_post_action_result(
+    unqueued: CInt,
+    timeout: u64,
+    time_remain: i64,
+    has_pending_signal: CInt,
+    restart_sys: CInt,
+) -> CInt {
+    if unqueued == 0 {
+        return FUTEX_WAIT_POST_SUCCESS;
+    }
+    if timeout != 0 && time_remain == 0 {
+        return FUTEX_WAIT_POST_TIMEOUT;
+    }
+    if has_pending_signal != 0 || restart_sys != 0 {
+        return FUTEX_WAIT_POST_INTERRUPT;
+    }
+    FUTEX_WAIT_POST_RETRY
+}
+
+#[no_mangle]
+pub extern "C" fn futex_wake_target_result(uti_futex_resp: usize) -> CInt {
+    if uti_futex_resp != 0 {
+        FUTEX_WAKE_TARGET_LINUX
+    } else {
+        FUTEX_WAKE_TARGET_MCKERNEL
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn futex_wake_linux_channel_result(
+    linux_channel: usize,
+    fallback_channel: usize,
+) -> usize {
+    if linux_channel != 0 {
+        linux_channel
+    } else {
+        fallback_channel
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn futex_wake_ikc_packet_fill_result(
+    packet_addr: usize,
+    msg_offset: usize,
+    resp_offset: usize,
+    spin_sleep_offset: usize,
+    msg: CInt,
+    resp: usize,
+    spin_sleep_addr: usize,
+) {
+    if packet_addr == 0 {
+        return;
+    }
+
+    unsafe {
+        write_volatile(packet_addr.wrapping_add(msg_offset) as *mut CInt, msg);
+        write_volatile(packet_addr.wrapping_add(resp_offset) as *mut usize, resp);
+        write_volatile(
+            packet_addr.wrapping_add(spin_sleep_offset) as *mut usize,
+            spin_sleep_addr,
+        );
+    }
 }
 
 #[no_mangle]

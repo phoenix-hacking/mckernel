@@ -168,6 +168,23 @@ static unsigned long uti_desc; /* Address of struct uti_desc object in syscall_i
 #define CLONE_TLS_SOURCE_INHERIT 0
 #define CLONE_TLS_SOURCE_ARGUMENT 1
 
+typedef long (*ptrace_read_user_word_fn_t)(unsigned long thread_addr,
+		long addr, unsigned long *value);
+typedef long (*ptrace_write_user_word_fn_t)(unsigned long thread_addr,
+		long addr, unsigned long value);
+typedef long (*ptrace_read_vm_word_fn_t)(unsigned long vm_addr,
+		unsigned long addr, unsigned long *value);
+typedef long (*ptrace_write_vm_word_fn_t)(unsigned long vm_addr,
+		unsigned long addr, unsigned long value);
+typedef long (*ptrace_fpregs_io_fn_t)(unsigned long thread_addr,
+		unsigned long data_addr);
+typedef long (*ptrace_user_copy_from_fn_t)(void *dst,
+		unsigned long src_addr, size_t bytes);
+typedef long (*ptrace_user_copy_to_fn_t)(unsigned long dst_addr,
+		const void *src, size_t bytes);
+typedef long (*ptrace_regset_io_fn_t)(unsigned long thread_addr,
+		long type, void *iovp);
+
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 extern int robust_list_len_result(size_t len);
 extern int tkill_tid_result(int tid);
@@ -299,12 +316,18 @@ extern int ptrace_user_area_result(long addr, unsigned long user_struct_size);
 extern int ptrace_status_allows_io(int status);
 extern int ptrace_setoptions_flags_result(int flags);
 extern int ptrace_apply_options(int current, int flags);
+extern int ptrace_setoptions_apply_thread_result(unsigned long thread_addr,
+		unsigned long ptrace_offset, int flags);
 extern int ptrace_child_traced_result(int has_child, int has_proc, int ptrace);
 extern int ptrace_attach_policy_result(int tracer_pid, int target_pid,
 		int target_ptrace, int same_process);
+extern int ptrace_attach_mark_traced_result(unsigned long thread_addr,
+		unsigned long ptrace_offset);
 extern int ptrace_detach_state_result(int is_traced, int same_report_proc);
 extern int ptrace_siginfo_state_result(int status, int has_siginfo);
 extern int ptrace_eventmsg_state_result(int status);
+extern int ptrace_eventmsg_prepare_result(int status, unsigned long eventmsg,
+		unsigned long *outp);
 extern int ptrace_wakeup_request_action_result(long request);
 extern int ptrace_resume_single_step_result(long request);
 extern int ptrace_resume_trace_syscall_result(long request);
@@ -315,6 +338,40 @@ extern int ptrace_detach_forward_signal_needed_result(int data);
 extern int ptrace_detach_exit_signal_needed_result(int status);
 extern int ptrace_setsiginfo_target_result(int status, int has_sendsig,
 		int has_recvsig);
+extern int ptrace_getsiginfo_prepare_result(int status,
+		unsigned long pending_addr, unsigned long info_offset,
+		void *outp, size_t info_size);
+extern int ptrace_setsiginfo_store_result(unsigned long thread_addr,
+		unsigned long sendsig_offset, unsigned long recvsig_offset,
+		unsigned long info_offset, int target,
+		unsigned long allocated_sendsig, const void *infop,
+		size_t info_size);
+extern long ptrace_read_user_words_result(unsigned long thread_addr,
+		unsigned long *outp, size_t bytes,
+		ptrace_read_user_word_fn_t read_fn);
+extern long ptrace_write_user_words_result(unsigned long thread_addr,
+		const unsigned long *inp, size_t bytes,
+		ptrace_write_user_word_fn_t write_fn);
+extern long ptrace_read_user_word_result(int status, unsigned long thread_addr,
+		long user_area_offset, unsigned long *outp,
+		ptrace_read_user_word_fn_t read_fn);
+extern long ptrace_write_user_word_result(int status, unsigned long thread_addr,
+		long user_area_offset, unsigned long value,
+		ptrace_write_user_word_fn_t write_fn);
+extern long ptrace_read_vm_word_result(int status, unsigned long vm_addr,
+		unsigned long user_addr, unsigned long *outp,
+		ptrace_read_vm_word_fn_t read_fn);
+extern long ptrace_write_vm_word_result(int status, unsigned long vm_addr,
+		unsigned long user_addr, unsigned long value,
+		ptrace_write_vm_word_fn_t write_fn);
+extern long ptrace_fpregs_io_result(int status, unsigned long thread_addr,
+		unsigned long data_addr, ptrace_fpregs_io_fn_t io_fn);
+extern long ptrace_regset_io_result(int status, unsigned long thread_addr,
+		long type, unsigned long user_iovec_addr, void *iovp,
+		size_t iov_size, size_t iov_len_offset, size_t iov_len_size,
+		ptrace_user_copy_from_fn_t copy_from_fn,
+		ptrace_regset_io_fn_t io_fn,
+		ptrace_user_copy_to_fn_t copy_to_fn);
 extern int ptrace_request_dispatch_result(long request);
 extern int wait4_options_result(int options);
 extern int waitid_to_wait_pid_result(int idtype, int id, int *pidp);
@@ -362,7 +419,15 @@ extern int waitid_siginfo_needed_result(int rc, int has_infop);
 extern int getrusage_dispatch_result(int who);
 extern int getrusage_thread_update_action_result(int is_current_thread,
 		int status, int in_kernel);
+extern int getrusage_thread_times_update_prepare_result(
+		unsigned long thread_addr, unsigned long times_update_offset,
+		int update_action);
 extern long getrusage_maxrss_kb_result(long maxrss);
+extern void getrusage_timespec_add_tsc_result(long *secp, long *nsecp,
+		unsigned long tsc, unsigned long clocks_per_sec);
+extern void getrusage_fill_timespec_result(struct rusage *usage,
+		long utime_sec, long utime_nsec, long stime_sec,
+		long stime_nsec, long maxrss);
 extern int exit_code_status_result(int code);
 extern int exit_code_signal_result(int code);
 extern int exit_syscall_code_result(int status);
@@ -553,15 +618,22 @@ SYSCALL_POLICY_HELPER_PROTO int ptrace_user_area_result(long addr,
 SYSCALL_POLICY_HELPER_PROTO int ptrace_status_allows_io(int status);
 SYSCALL_POLICY_HELPER_PROTO int ptrace_setoptions_flags_result(int flags);
 SYSCALL_POLICY_HELPER_PROTO int ptrace_apply_options(int current, int flags);
+SYSCALL_POLICY_HELPER_PROTO int ptrace_setoptions_apply_thread_result(
+		unsigned long thread_addr, unsigned long ptrace_offset,
+		int flags);
 SYSCALL_POLICY_HELPER_PROTO int ptrace_child_traced_result(int has_child,
 		int has_proc, int ptrace);
 SYSCALL_POLICY_HELPER_PROTO int ptrace_attach_policy_result(int tracer_pid,
 		int target_pid, int target_ptrace, int same_process);
+SYSCALL_POLICY_HELPER_PROTO int ptrace_attach_mark_traced_result(
+		unsigned long thread_addr, unsigned long ptrace_offset);
 SYSCALL_POLICY_HELPER_PROTO int ptrace_detach_state_result(int is_traced,
 		int same_report_proc);
 SYSCALL_POLICY_HELPER_PROTO int ptrace_siginfo_state_result(int status,
 		int has_siginfo);
 SYSCALL_POLICY_HELPER_PROTO int ptrace_eventmsg_state_result(int status);
+SYSCALL_POLICY_HELPER_PROTO int ptrace_eventmsg_prepare_result(int status,
+		unsigned long eventmsg, unsigned long *outp);
 SYSCALL_POLICY_HELPER_PROTO int ptrace_wakeup_request_action_result(
 		long request);
 SYSCALL_POLICY_HELPER_PROTO int ptrace_resume_single_step_result(long request);
@@ -577,6 +649,26 @@ SYSCALL_POLICY_HELPER_PROTO int ptrace_detach_exit_signal_needed_result(
 		int status);
 SYSCALL_POLICY_HELPER_PROTO int ptrace_setsiginfo_target_result(
 		int status, int has_sendsig, int has_recvsig);
+SYSCALL_POLICY_HELPER_PROTO int ptrace_getsiginfo_prepare_result(
+		int status, unsigned long pending_addr,
+		unsigned long info_offset, void *outp, size_t info_size);
+SYSCALL_POLICY_HELPER_PROTO int ptrace_setsiginfo_store_result(
+		unsigned long thread_addr, unsigned long sendsig_offset,
+		unsigned long recvsig_offset, unsigned long info_offset,
+		int target, unsigned long allocated_sendsig, const void *infop,
+		size_t info_size);
+SYSCALL_POLICY_HELPER_PROTO long ptrace_read_user_words_result(
+		unsigned long thread_addr, unsigned long *outp, size_t bytes,
+		ptrace_read_user_word_fn_t read_fn);
+SYSCALL_POLICY_HELPER_PROTO long ptrace_write_user_words_result(
+		unsigned long thread_addr, const unsigned long *inp,
+		size_t bytes, ptrace_write_user_word_fn_t write_fn);
+SYSCALL_POLICY_HELPER_PROTO long ptrace_read_vm_word_result(int status,
+		unsigned long vm_addr, unsigned long user_addr,
+		unsigned long *outp, ptrace_read_vm_word_fn_t read_fn);
+SYSCALL_POLICY_HELPER_PROTO long ptrace_write_vm_word_result(int status,
+		unsigned long vm_addr, unsigned long user_addr,
+		unsigned long value, ptrace_write_vm_word_fn_t write_fn);
 SYSCALL_POLICY_HELPER_PROTO int ptrace_request_dispatch_result(long request);
 SYSCALL_POLICY_HELPER_PROTO int wait4_options_result(int options);
 SYSCALL_POLICY_HELPER_PROTO int waitid_to_wait_pid_result(int idtype, int id,
@@ -635,7 +727,16 @@ SYSCALL_POLICY_HELPER_PROTO int waitid_siginfo_needed_result(int rc,
 SYSCALL_POLICY_HELPER_PROTO int getrusage_dispatch_result(int who);
 SYSCALL_POLICY_HELPER_PROTO int getrusage_thread_update_action_result(
 		int is_current_thread, int status, int in_kernel);
+SYSCALL_POLICY_HELPER_PROTO int
+getrusage_thread_times_update_prepare_result(unsigned long thread_addr,
+		unsigned long times_update_offset, int update_action);
 SYSCALL_POLICY_HELPER_PROTO long getrusage_maxrss_kb_result(long maxrss);
+SYSCALL_POLICY_HELPER_PROTO void getrusage_timespec_add_tsc_result(
+		long *secp, long *nsecp, unsigned long tsc,
+		unsigned long clocks_per_sec);
+SYSCALL_POLICY_HELPER_PROTO void getrusage_fill_timespec_result(
+		struct rusage *usage, long utime_sec, long utime_nsec,
+		long stime_sec, long stime_nsec, long maxrss);
 SYSCALL_POLICY_HELPER_PROTO int exit_code_status_result(int code);
 SYSCALL_POLICY_HELPER_PROTO int exit_code_signal_result(int code);
 SYSCALL_POLICY_HELPER_PROTO int exit_syscall_code_result(int status);
@@ -5137,6 +5238,23 @@ ptrace_apply_options(int current, int flags)
 }
 
 SYSCALL_POLICY_HELPER_SCOPE int
+ptrace_setoptions_apply_thread_result(unsigned long thread_addr,
+		unsigned long ptrace_offset, int flags)
+{
+	int *ptracep;
+	int updated;
+
+	if (!thread_addr) {
+		return 0;
+	}
+
+	ptracep = (int *)(thread_addr + ptrace_offset);
+	updated = ptrace_apply_options(*ptracep, flags);
+	*ptracep = updated;
+	return updated;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
 ptrace_child_traced_result(int has_child, int has_proc, int ptrace)
 {
 	return (!has_child || !has_proc || !(ptrace & PT_TRACED)) ? -ESRCH : 0;
@@ -5155,6 +5273,22 @@ ptrace_attach_policy_result(int tracer_pid, int target_pid,
 	}
 
 	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+ptrace_attach_mark_traced_result(unsigned long thread_addr,
+		unsigned long ptrace_offset)
+{
+	int *ptracep;
+	int traced = PT_TRACED | PT_TRACE_EXEC;
+
+	if (!thread_addr) {
+		return 0;
+	}
+
+	ptracep = (int *)(thread_addr + ptrace_offset);
+	*ptracep = traced;
+	return traced;
 }
 
 SYSCALL_POLICY_HELPER_SCOPE int
@@ -5177,6 +5311,22 @@ SYSCALL_POLICY_HELPER_SCOPE int
 ptrace_eventmsg_state_result(int status)
 {
 	return ptrace_status_allows_io(status) ? 0 : -ESRCH;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+ptrace_eventmsg_prepare_result(int status, unsigned long eventmsg,
+		unsigned long *outp)
+{
+	int rc = ptrace_eventmsg_state_result(status);
+
+	if (rc) {
+		return rc;
+	}
+
+	if (outp) {
+		*outp = eventmsg;
+	}
+	return 0;
 }
 
 SYSCALL_POLICY_HELPER_SCOPE int
@@ -5251,6 +5401,229 @@ ptrace_setsiginfo_target_result(int status, int has_sendsig, int has_recvsig)
 		target |= PTRACE_SIGINFO_STORE_RECVSIG;
 	}
 	return target;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+ptrace_getsiginfo_prepare_result(int status, unsigned long pending_addr,
+		unsigned long info_offset, void *outp, size_t info_size)
+{
+	int rc = ptrace_siginfo_state_result(status, pending_addr != 0);
+
+	if (rc) {
+		return rc;
+	}
+	if (!outp) {
+		return -EFAULT;
+	}
+
+	memcpy(outp, (void *)(pending_addr + info_offset), info_size);
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
+ptrace_setsiginfo_store_result(unsigned long thread_addr,
+		unsigned long sendsig_offset, unsigned long recvsig_offset,
+		unsigned long info_offset, int target,
+		unsigned long allocated_sendsig, const void *infop,
+		size_t info_size)
+{
+	unsigned long *sendsig_slot;
+	unsigned long *recvsig_slot;
+	unsigned long pending;
+
+	if (target < 0) {
+		return target;
+	}
+	if (!thread_addr) {
+		return -ESRCH;
+	}
+
+	sendsig_slot = (unsigned long *)(thread_addr + sendsig_offset);
+	recvsig_slot = (unsigned long *)(thread_addr + recvsig_offset);
+
+	if (target & PTRACE_SIGINFO_ALLOC_SENDSIG) {
+		if (!allocated_sendsig) {
+			return -ENOMEM;
+		}
+		*sendsig_slot = allocated_sendsig;
+	}
+
+	if ((target & (PTRACE_SIGINFO_STORE_SENDSIG |
+		       PTRACE_SIGINFO_STORE_RECVSIG)) && !infop) {
+		return -EFAULT;
+	}
+
+	if (target & PTRACE_SIGINFO_STORE_SENDSIG) {
+		pending = *sendsig_slot;
+		if (!pending) {
+			return -ENOMEM;
+		}
+		memcpy((void *)(pending + info_offset), infop, info_size);
+	}
+
+	if (target & PTRACE_SIGINFO_STORE_RECVSIG) {
+		pending = *recvsig_slot;
+		if (!pending) {
+			return -ESRCH;
+		}
+		memcpy((void *)(pending + info_offset), infop, info_size);
+	}
+
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE long
+ptrace_read_user_words_result(unsigned long thread_addr, unsigned long *outp,
+		size_t bytes, ptrace_read_user_word_fn_t read_fn)
+{
+	size_t addr;
+	unsigned long *p;
+
+	if (!thread_addr || !outp || !read_fn) {
+		return -EFAULT;
+	}
+
+	for (addr = 0, p = outp; addr < bytes; addr += sizeof(*p), p++) {
+		long rc = read_fn(thread_addr, addr, p);
+
+		if (rc) {
+			return rc;
+		}
+	}
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE long
+ptrace_write_user_words_result(unsigned long thread_addr,
+		const unsigned long *inp, size_t bytes,
+		ptrace_write_user_word_fn_t write_fn)
+{
+	size_t addr;
+	const unsigned long *p;
+
+	if (!thread_addr || !inp || !write_fn) {
+		return -EFAULT;
+	}
+
+	for (addr = 0, p = inp; addr < bytes; addr += sizeof(*p), p++) {
+		long rc = write_fn(thread_addr, addr, *p);
+
+		if (rc) {
+			return rc;
+		}
+	}
+	return 0;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE long
+ptrace_read_user_word_result(int status, unsigned long thread_addr,
+		long user_area_offset, unsigned long *outp,
+		ptrace_read_user_word_fn_t read_fn)
+{
+	if (!ptrace_status_allows_io(status)) {
+		return -EIO;
+	}
+	if (!thread_addr || !outp || !read_fn) {
+		return -EFAULT;
+	}
+
+	return read_fn(thread_addr, user_area_offset, outp);
+}
+
+SYSCALL_POLICY_HELPER_SCOPE long
+ptrace_write_user_word_result(int status, unsigned long thread_addr,
+		long user_area_offset, unsigned long value,
+		ptrace_write_user_word_fn_t write_fn)
+{
+	if (!ptrace_status_allows_io(status)) {
+		return -EIO;
+	}
+	if (!thread_addr || !write_fn) {
+		return -EFAULT;
+	}
+
+	return write_fn(thread_addr, user_area_offset, value);
+}
+
+SYSCALL_POLICY_HELPER_SCOPE long
+ptrace_read_vm_word_result(int status, unsigned long vm_addr,
+		unsigned long user_addr, unsigned long *outp,
+		ptrace_read_vm_word_fn_t read_fn)
+{
+	if (!ptrace_status_allows_io(status)) {
+		return -EIO;
+	}
+	if (!vm_addr || !outp || !read_fn) {
+		return -EFAULT;
+	}
+
+	return read_fn(vm_addr, user_addr, outp);
+}
+
+SYSCALL_POLICY_HELPER_SCOPE long
+ptrace_write_vm_word_result(int status, unsigned long vm_addr,
+		unsigned long user_addr, unsigned long value,
+		ptrace_write_vm_word_fn_t write_fn)
+{
+	if (!ptrace_status_allows_io(status)) {
+		return -EIO;
+	}
+	if (!vm_addr || !write_fn) {
+		return -EFAULT;
+	}
+
+	return write_fn(vm_addr, user_addr, value);
+}
+
+SYSCALL_POLICY_HELPER_SCOPE long
+ptrace_fpregs_io_result(int status, unsigned long thread_addr,
+		unsigned long data_addr, ptrace_fpregs_io_fn_t io_fn)
+{
+	if (!ptrace_status_allows_io(status)) {
+		return -EIO;
+	}
+	if (!thread_addr || !io_fn) {
+		return -EFAULT;
+	}
+
+	return io_fn(thread_addr, data_addr);
+}
+
+SYSCALL_POLICY_HELPER_SCOPE long
+ptrace_regset_io_result(int status, unsigned long thread_addr, long type,
+		unsigned long user_iovec_addr, void *iovp, size_t iov_size,
+		size_t iov_len_offset, size_t iov_len_size,
+		ptrace_user_copy_from_fn_t copy_from_fn,
+		ptrace_regset_io_fn_t io_fn,
+		ptrace_user_copy_to_fn_t copy_to_fn)
+{
+	long rc;
+
+	if (!ptrace_status_allows_io(status)) {
+		return -EIO;
+	}
+	if (!thread_addr || !iovp) {
+		return -EFAULT;
+	}
+	if (iov_len_offset > iov_size || iov_len_size > iov_size - iov_len_offset) {
+		return -EFAULT;
+	}
+	if (!copy_from_fn || !io_fn || !copy_to_fn) {
+		return -EFAULT;
+	}
+
+	rc = copy_from_fn(iovp, user_iovec_addr, iov_size);
+	if (rc) {
+		return rc;
+	}
+	rc = io_fn(thread_addr, type, iovp);
+	if (rc) {
+		return rc;
+	}
+
+	return copy_to_fn(user_iovec_addr + iov_len_offset,
+			(void *)((unsigned long)iovp + iov_len_offset),
+			iov_len_size);
 }
 
 SYSCALL_POLICY_HELPER_SCOPE int
@@ -5592,10 +5965,67 @@ getrusage_thread_update_action_result(int is_current_thread, int status,
 		GETRUSAGE_THREAD_UPDATE_READY;
 }
 
+SYSCALL_POLICY_HELPER_SCOPE int
+getrusage_thread_times_update_prepare_result(unsigned long thread_addr,
+		unsigned long times_update_offset, int update_action)
+{
+	int *times_update;
+
+	if (!thread_addr)
+		return 0;
+
+	times_update = (int *)(thread_addr + times_update_offset);
+	if (update_action == GETRUSAGE_THREAD_UPDATE_INTERRUPT) {
+		*times_update = 0;
+		return 1;
+	}
+
+	*times_update = 1;
+	return 0;
+}
+
 SYSCALL_POLICY_HELPER_SCOPE long
 getrusage_maxrss_kb_result(long maxrss)
 {
 	return maxrss / 1024;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE void
+getrusage_timespec_add_tsc_result(long *secp, long *nsecp,
+		unsigned long tsc, unsigned long clocks_per_sec)
+{
+	long sec_delta;
+	long ns_delta;
+
+	if (!clocks_per_sec) {
+		return;
+	}
+
+	sec_delta = tsc / clocks_per_sec;
+	ns_delta = NS_PER_SEC * (tsc % clocks_per_sec) / clocks_per_sec;
+	if (ns_delta >= NS_PER_SEC) {
+		ns_delta -= NS_PER_SEC;
+		sec_delta++;
+	}
+
+	*secp += sec_delta;
+	*nsecp += ns_delta;
+	while (*nsecp >= NS_PER_SEC) {
+		(*secp)++;
+		*nsecp -= NS_PER_SEC;
+	}
+}
+
+SYSCALL_POLICY_HELPER_SCOPE void
+getrusage_fill_timespec_result(struct rusage *usage, long utime_sec,
+		long utime_nsec, long stime_sec, long stime_nsec,
+		long maxrss)
+{
+	usage->ru_utime.tv_sec = utime_sec;
+	usage->ru_utime.tv_usec = utime_nsec / 1000;
+	usage->ru_stime.tv_sec = stime_sec;
+	usage->ru_stime.tv_usec = stime_nsec / 1000;
+	usage->ru_maxrss = getrusage_maxrss_kb_result(maxrss);
 }
 
 SYSCALL_POLICY_HELPER_SCOPE int
@@ -9820,7 +10250,6 @@ SYSCALL_DECLARE(getrusage)
 	struct timespec utime;
 	struct timespec stime;
 	struct mcs_rwlock_node lock;
-	struct timespec ats;
 	int error;
 	int dispatch;
 
@@ -9844,13 +10273,14 @@ SYSCALL_DECLARE(getrusage)
 					child == thread, child->status,
 					child->in_kernel);
 
-			if(update_action == GETRUSAGE_THREAD_UPDATE_INTERRUPT){
-				child->times_update = 0;
+			if(getrusage_thread_times_update_prepare_result(
+					(unsigned long)child,
+					__builtin_offsetof(struct thread,
+							   times_update),
+					update_action)){
 				ihk_mc_interrupt_cpu(child->cpu_id,
 						ihk_mc_get_vector(IHK_GV_IKC));
 			}
-			else
-				child->times_update = 1;
 		}
 		utime.tv_sec = proc->utime.tv_sec;
 		utime.tv_nsec = proc->utime.tv_nsec;
@@ -9859,31 +10289,38 @@ SYSCALL_DECLARE(getrusage)
 		list_for_each_entry(child, &proc->threads_list, siblings_list){
 			while(!child->times_update)
 				cpu_pause();
-			tsc_to_ts(child->user_tsc, &ats);
-			ts_add(&utime, &ats);
-			tsc_to_ts(child->system_tsc, &ats);
-			ts_add(&stime, &ats);
+			getrusage_timespec_add_tsc_result(&utime.tv_sec,
+					&utime.tv_nsec, child->user_tsc,
+					tod_data.clocks_per_sec);
+			getrusage_timespec_add_tsc_result(&stime.tv_sec,
+					&stime.tv_nsec, child->system_tsc,
+					tod_data.clocks_per_sec);
 		}
 		mcs_rwlock_reader_unlock_noirq(&proc->threads_lock, &lock);
-		ts_to_tv(&kusage.ru_utime, &utime);
-		ts_to_tv(&kusage.ru_stime, &stime);
-
-		kusage.ru_maxrss = getrusage_maxrss_kb_result(proc->maxrss);
+		getrusage_fill_timespec_result(&kusage, utime.tv_sec,
+				utime.tv_nsec, stime.tv_sec, stime.tv_nsec,
+				proc->maxrss);
 	}
 	else if(dispatch == GETRUSAGE_DISPATCH_CHILDREN){
-		ts_to_tv(&kusage.ru_utime, &proc->utime_children);
-		ts_to_tv(&kusage.ru_stime, &proc->stime_children);
-
-		kusage.ru_maxrss =
-			getrusage_maxrss_kb_result(proc->maxrss_children);
+		getrusage_fill_timespec_result(&kusage,
+				proc->utime_children.tv_sec,
+				proc->utime_children.tv_nsec,
+				proc->stime_children.tv_sec,
+				proc->stime_children.tv_nsec,
+				proc->maxrss_children);
 	}
 	else if(dispatch == GETRUSAGE_DISPATCH_THREAD){
-		tsc_to_ts(thread->user_tsc, &ats);
-		ts_to_tv(&kusage.ru_utime, &ats);
-		tsc_to_ts(thread->system_tsc, &ats);
-		ts_to_tv(&kusage.ru_stime, &ats);
-
-		kusage.ru_maxrss = getrusage_maxrss_kb_result(proc->maxrss);
+		memset(&utime, '\0', sizeof utime);
+		memset(&stime, '\0', sizeof stime);
+		getrusage_timespec_add_tsc_result(&utime.tv_sec,
+				&utime.tv_nsec, thread->user_tsc,
+				tod_data.clocks_per_sec);
+		getrusage_timespec_add_tsc_result(&stime.tv_sec,
+				&stime.tv_nsec, thread->system_tsc,
+				tod_data.clocks_per_sec);
+		getrusage_fill_timespec_result(&kusage, utime.tv_sec,
+				utime.tv_nsec, stime.tv_sec, stime.tv_nsec,
+				proc->maxrss);
 	}
 
 	if(copy_to_user(usage, &kusage, sizeof kusage))
@@ -10006,6 +10443,78 @@ out:
 
 extern long ptrace_read_user(struct thread *thread, long addr, unsigned long *value);
 extern long ptrace_write_user(struct thread *thread, long addr, unsigned long value);
+extern long ptrace_read_fpregs(struct thread *thread, void *fpregs);
+extern long ptrace_write_fpregs(struct thread *thread, void *fpregs);
+extern long ptrace_read_regset(struct thread *thread, long type, struct iovec *iov);
+extern long ptrace_write_regset(struct thread *thread, long type, struct iovec *iov);
+
+static long
+ptrace_read_user_word_bridge(unsigned long thread_addr, long addr,
+		unsigned long *value)
+{
+	return ptrace_read_user((struct thread *)thread_addr, addr, value);
+}
+
+static long
+ptrace_write_user_word_bridge(unsigned long thread_addr, long addr,
+		unsigned long value)
+{
+	return ptrace_write_user((struct thread *)thread_addr, addr, value);
+}
+
+static long
+ptrace_read_vm_word_bridge(unsigned long vm_addr, unsigned long addr,
+		unsigned long *value)
+{
+	return read_process_vm((struct process_vm *)vm_addr, value,
+			(void *)addr, sizeof(*value));
+}
+
+static long
+ptrace_write_vm_word_bridge(unsigned long vm_addr, unsigned long addr,
+		unsigned long value)
+{
+	return patch_process_vm((struct process_vm *)vm_addr, (void *)addr,
+			&value, sizeof(value));
+}
+
+static long
+ptrace_read_fpregs_bridge(unsigned long thread_addr, unsigned long data_addr)
+{
+	return ptrace_read_fpregs((struct thread *)thread_addr, (void *)data_addr);
+}
+
+static long
+ptrace_write_fpregs_bridge(unsigned long thread_addr, unsigned long data_addr)
+{
+	return ptrace_write_fpregs((struct thread *)thread_addr, (void *)data_addr);
+}
+
+static long
+ptrace_copy_from_user_bridge(void *dst, unsigned long src_addr, size_t bytes)
+{
+	return copy_from_user(dst, (void *)src_addr, bytes);
+}
+
+static long
+ptrace_copy_to_user_bridge(unsigned long dst_addr, const void *src, size_t bytes)
+{
+	return copy_to_user((void *)dst_addr, src, bytes);
+}
+
+static long
+ptrace_read_regset_bridge(unsigned long thread_addr, long type, void *iovp)
+{
+	return ptrace_read_regset((struct thread *)thread_addr, type,
+			(struct iovec *)iovp);
+}
+
+static long
+ptrace_write_regset_bridge(unsigned long thread_addr, long type, void *iovp)
+{
+	return ptrace_write_regset((struct thread *)thread_addr, type,
+			(struct iovec *)iovp);
+}
 
 static long ptrace_pokeuser(int pid, long addr, long data)
 {
@@ -10019,9 +10528,8 @@ static long ptrace_pokeuser(int pid, long addr, long data)
 	child = find_thread(0, pid);
 	if (!child)
 		return -ESRCH;
-	if(ptrace_status_allows_io(child->status)){
-		rc = ptrace_write_user(child, addr, (unsigned long)data);
-	}
+	rc = ptrace_write_user_word_result(child->status, (unsigned long)child,
+			addr, (unsigned long)data, ptrace_write_user_word_bridge);
 	thread_unlock(child);
 
 	return rc;
@@ -10040,9 +10548,12 @@ static long ptrace_peekuser(int pid, long addr, long data)
 	child = find_thread(0, pid);
 	if (!child)
 		return -ESRCH;
-	if(ptrace_status_allows_io(child->status)){
+	{
 		unsigned long value;
-		rc = ptrace_read_user(child, addr, &value);
+
+		rc = ptrace_read_user_word_result(child->status,
+				(unsigned long)child, addr, &value,
+				ptrace_read_user_word_bridge);
 		if (rc == 0) {
 			rc = copy_to_user(p, (char *)&value, sizeof(value));
 		}
@@ -10063,15 +10574,11 @@ static long ptrace_getregs(int pid, long data)
 		return -ESRCH;
 	if(ptrace_status_allows_io(child->status)){
 		struct user_regs_struct user_regs;
-		long addr;
-		unsigned long *p;
+
 		memset(&user_regs, '\0', sizeof(struct user_regs_struct));
-		for (addr = 0, p = (unsigned long *)&user_regs;
-				addr < sizeof(struct user_regs_struct);
-				addr += sizeof(*p), p++) {
-			rc = ptrace_read_user(child, addr, p);
-			if (rc) break;
-		}
+		rc = ptrace_read_user_words_result((unsigned long)child,
+				(unsigned long *)&user_regs, sizeof(user_regs),
+				ptrace_read_user_word_bridge);
 		if (rc == 0) {
 			rc = copy_to_user(regs, &user_regs, sizeof(struct user_regs_struct));
 		}
@@ -10094,25 +10601,16 @@ static long ptrace_setregs(int pid, long data)
 		struct user_regs_struct user_regs;
 		rc = copy_from_user(&user_regs, regs, sizeof(struct user_regs_struct));
 		if (rc == 0) {
-			long addr;
-			unsigned long *p;
-			for (addr = 0, p = (unsigned long *)&user_regs;
-					addr < sizeof(struct user_regs_struct);
-					addr += sizeof(*p), p++) {
-				rc = ptrace_write_user(child, addr, *p);
-				if (rc) {
-					break;
-				}
-			}
+			rc = ptrace_write_user_words_result((unsigned long)child,
+					(unsigned long *)&user_regs,
+					sizeof(user_regs),
+					ptrace_write_user_word_bridge);
 		}
 	}
 	thread_unlock(child);
 
 	return rc;
 }
-
-extern long ptrace_read_fpregs(struct thread *thread, void *fpregs);
-extern long ptrace_write_fpregs(struct thread *thread, void *fpregs);
 
 static long ptrace_getfpregs(int pid, long data)
 {
@@ -10122,9 +10620,8 @@ static long ptrace_getfpregs(int pid, long data)
 	child = find_thread(0, pid);
 	if (!child)
 		return -ESRCH;
-	if(ptrace_status_allows_io(child->status)){
-		rc = ptrace_read_fpregs(child, (void *)data);
-	}
+	rc = ptrace_fpregs_io_result(child->status, (unsigned long)child,
+			(unsigned long)data, ptrace_read_fpregs_bridge);
 	thread_unlock(child);
 
 	return rc;
@@ -10138,16 +10635,12 @@ static long ptrace_setfpregs(int pid, long data)
 	child = find_thread(0, pid);
 	if (!child)
 		return -ESRCH;
-	if(ptrace_status_allows_io(child->status)){
-		rc = ptrace_write_fpregs(child, (void *)data);
-	}
+	rc = ptrace_fpregs_io_result(child->status, (unsigned long)child,
+			(unsigned long)data, ptrace_write_fpregs_bridge);
 	thread_unlock(child);
 
 	return rc;
 }
-
-extern long ptrace_read_regset(struct thread *thread, long type, struct iovec *iov);
-extern long ptrace_write_regset(struct thread *thread, long type, struct iovec *iov);
 
 static long ptrace_getregset(int pid, long type, long data)
 {
@@ -10157,17 +10650,14 @@ static long ptrace_getregset(int pid, long type, long data)
 	child = find_thread(0, pid);
 	if (!child)
 		return -ESRCH;
-	if(ptrace_status_allows_io(child->status)){
+	{
 		struct iovec iov;
 
-		rc = copy_from_user(&iov, (struct iovec *)data, sizeof(iov));
-		if (rc == 0) {
-			rc = ptrace_read_regset(child, type, &iov);
-		}
-		if (rc == 0) {
-			rc = copy_to_user(&((struct iovec *)data)->iov_len,
-					&iov.iov_len, sizeof(iov.iov_len));
-		}
+		rc = ptrace_regset_io_result(child->status, (unsigned long)child,
+				type, (unsigned long)data, &iov, sizeof(iov),
+				__builtin_offsetof(struct iovec, iov_len),
+				sizeof(iov.iov_len), ptrace_copy_from_user_bridge,
+				ptrace_read_regset_bridge, ptrace_copy_to_user_bridge);
 	}
 	thread_unlock(child);
 
@@ -10182,17 +10672,14 @@ static long ptrace_setregset(int pid, long type, long data)
 	child = find_thread(0, pid);
 	if (!child)
 		return -ESRCH;
-	if(ptrace_status_allows_io(child->status)){
+	{
 		struct iovec iov;
 
-		rc = copy_from_user(&iov, (struct iovec *)data, sizeof(iov));
-		if (rc == 0) {
-			rc = ptrace_write_regset(child, type, &iov);
-		}
-		if (rc == 0) {
-			rc = copy_to_user(&((struct iovec *)data)->iov_len,
-					&iov.iov_len, sizeof(iov.iov_len));
-		}
+		rc = ptrace_regset_io_result(child->status, (unsigned long)child,
+				type, (unsigned long)data, &iov, sizeof(iov),
+				__builtin_offsetof(struct iovec, iov_len),
+				sizeof(iov.iov_len), ptrace_copy_from_user_bridge,
+				ptrace_write_regset_bridge, ptrace_copy_to_user_bridge);
 	}
 	thread_unlock(child);
 
@@ -10208,11 +10695,17 @@ static long ptrace_peektext(int pid, long addr, long data)
 	child = find_thread(0, pid);
 	if (!child)
 		return -ESRCH;
-	if(ptrace_status_allows_io(child->status)){
+	{
 		unsigned long value;
-		rc = read_process_vm(child->vm, &value, (void *)addr, sizeof(value));
-		if (rc != 0) { 
-			dkprintf("ptrace_peektext: bad area  addr=0x%llx\n", addr);
+
+		rc = ptrace_read_vm_word_result(child->status,
+				(unsigned long)child->vm, addr, &value,
+				ptrace_read_vm_word_bridge);
+		if (rc != 0) {
+			if (ptrace_status_allows_io(child->status)) {
+				dkprintf("ptrace_peektext: bad area  addr=0x%llx\n",
+					 addr);
+			}
 		} else {
 			rc = copy_to_user(p, &value, sizeof(value));
 		}
@@ -10230,10 +10723,15 @@ static long ptrace_poketext(int pid, long addr, long data)
 	child = find_thread(0, pid);
 	if (!child)
 		return -ESRCH;
-	if(ptrace_status_allows_io(child->status)){
-		rc = patch_process_vm(child->vm, (void *)addr, &data, sizeof(data));
+	{
+		rc = ptrace_write_vm_word_result(child->status,
+				(unsigned long)child->vm, addr, data,
+				ptrace_write_vm_word_bridge);
 		if (rc) {
-			dkprintf("ptrace_poketext: bad address 0x%llx\n", addr);
+			if (ptrace_status_allows_io(child->status)) {
+				dkprintf("ptrace_poketext: bad address 0x%llx\n",
+					 addr);
+			}
 		}
 	}
 	thread_unlock(child);
@@ -10269,7 +10767,8 @@ static int ptrace_setoptions(int pid, int flags)
 		goto unlockout;
 	}
 	
-	child->ptrace = ptrace_apply_options(child->ptrace, flags);
+	ptrace_setoptions_apply_thread_result((unsigned long)child,
+			__builtin_offsetof(struct thread, ptrace), flags);
 	dkprintf("%s: (PT_TRACED%s%s%s%s%s%s)\n",
 		__func__,
 		flags & PTRACE_O_TRACESYSGOOD ? "|PTRACE_O_TRACESYSGOOD" : "",
@@ -10310,7 +10809,8 @@ static int ptrace_attach(int pid)
 		goto out;
 	}
 
-	thread->ptrace = PT_TRACED | PT_TRACE_EXEC;
+	ptrace_attach_mark_traced_result((unsigned long)thread,
+			__builtin_offsetof(struct thread, ptrace));
 	error = ptrace_attach_thread(thread, proc);
 
 	thread_unlock(thread);
@@ -10362,6 +10862,7 @@ out:
 static long ptrace_geteventmsg(int pid, long data)
 {
 	unsigned long *msg_p = (unsigned long *)data;
+	unsigned long eventmsg = 0;
 	long rc = -ESRCH;
 	struct thread *child;
 
@@ -10369,10 +10870,10 @@ static long ptrace_geteventmsg(int pid, long data)
 	if (!child) {
 		return -ESRCH;
 	}
-	rc = ptrace_eventmsg_state_result(child->status);
+	rc = ptrace_eventmsg_prepare_result(child->status,
+			child->ptrace_eventmsg, &eventmsg);
 	if (!rc) {
-		if (copy_to_user(msg_p, &child->ptrace_eventmsg,
-				 sizeof(*msg_p))) {
+		if (copy_to_user(msg_p, &eventmsg, sizeof(*msg_p))) {
 			rc = -EFAULT;
 		}
 		else {
@@ -10388,6 +10889,7 @@ static long
 ptrace_getsiginfo(int pid, siginfo_t *data)
 {
 	struct thread *child;
+	siginfo_t info;
 	int rc = 0;
 
 	child = find_thread(0, pid);
@@ -10395,10 +10897,12 @@ ptrace_getsiginfo(int pid, siginfo_t *data)
 		return -ESRCH;
 	}
 
-	rc = ptrace_siginfo_state_result(child->status,
-			child->ptrace_recvsig != NULL);
-	if (!rc && child->ptrace_recvsig) {
-		if (copy_to_user(data, &child->ptrace_recvsig->info, sizeof(siginfo_t))) {
+	rc = ptrace_getsiginfo_prepare_result(child->status,
+			(unsigned long)child->ptrace_recvsig,
+			__builtin_offsetof(struct sig_pending, info),
+			&info, sizeof(info));
+	if (!rc) {
+		if (copy_to_user(data, &info, sizeof(info))) {
 			rc = -EFAULT;
 		}
 	}
@@ -10410,6 +10914,8 @@ static long
 ptrace_setsiginfo(int pid, siginfo_t *data)
 {
 	struct thread *child;
+	struct sig_pending *allocated_sendsig = NULL;
+	siginfo_t info;
 	int rc = 0;
 	int target;
 
@@ -10426,19 +10932,58 @@ ptrace_setsiginfo(int pid, siginfo_t *data)
 	}
 	else {
 		if (target & PTRACE_SIGINFO_ALLOC_SENDSIG) {
-			child->ptrace_sendsig = kmalloc(sizeof(struct sig_pending), IHK_MC_AP_NOWAIT);
-			if (child->ptrace_sendsig == NULL) {
+			allocated_sendsig = kmalloc(sizeof(struct sig_pending),
+					IHK_MC_AP_NOWAIT);
+			if (allocated_sendsig == NULL) {
 				rc = -ENOMEM;
+			}
+			else {
+				rc = ptrace_setsiginfo_store_result(
+						(unsigned long)child,
+						__builtin_offsetof(struct thread,
+								   ptrace_sendsig),
+						__builtin_offsetof(struct thread,
+								   ptrace_recvsig),
+						__builtin_offsetof(struct sig_pending,
+								   info),
+						PTRACE_SIGINFO_ALLOC_SENDSIG,
+						(unsigned long)allocated_sendsig,
+						NULL, 0);
 			}
 		}
 
-		if (!rc && (target & PTRACE_SIGINFO_STORE_SENDSIG) &&
-		    copy_from_user(&child->ptrace_sendsig->info, data, sizeof(siginfo_t))) {
-			rc = -EFAULT;
+		if (!rc && (target & PTRACE_SIGINFO_STORE_SENDSIG)) {
+			if (copy_from_user(&info, data, sizeof(info))) {
+				rc = -EFAULT;
+			}
+			else {
+				rc = ptrace_setsiginfo_store_result(
+						(unsigned long)child,
+						__builtin_offsetof(struct thread,
+								   ptrace_sendsig),
+						__builtin_offsetof(struct thread,
+								   ptrace_recvsig),
+						__builtin_offsetof(struct sig_pending,
+								   info),
+						PTRACE_SIGINFO_STORE_SENDSIG,
+						0, &info, sizeof(info));
+			}
 		}
 		if (!rc && (target & PTRACE_SIGINFO_STORE_RECVSIG)) {
-			    if(copy_from_user(&child->ptrace_recvsig->info, data, sizeof(siginfo_t))) {
+			if (copy_from_user(&info, data, sizeof(info))) {
 				rc = -EFAULT;
+			}
+			else {
+				rc = ptrace_setsiginfo_store_result(
+						(unsigned long)child,
+						__builtin_offsetof(struct thread,
+								   ptrace_sendsig),
+						__builtin_offsetof(struct thread,
+								   ptrace_recvsig),
+						__builtin_offsetof(struct sig_pending,
+								   info),
+						PTRACE_SIGINFO_STORE_RECVSIG,
+						0, &info, sizeof(info));
 			}
 		}
 	}

@@ -6,6 +6,7 @@
 
 struct list_head;
 struct mckfd;
+struct vm_range;
 
 int process_split_pgshift_result(int pgshift, uintptr_t addr);
 int process_add_range_bounds_result(unsigned long user_start,
@@ -40,6 +41,30 @@ int process_lookup_range_relation_result(unsigned long start,
 					 unsigned long end,
 					 unsigned long range_start,
 					 unsigned long range_end);
+int process_range_cache_replace_result(struct vm_range **cache, int count,
+				       struct vm_range *from,
+				       struct vm_range *to);
+int process_range_cache_store_result(struct vm_range **cache, int count,
+				     int *indexp, struct vm_range *match);
+int process_range_end_commit_result(struct vm_range *range, uintptr_t newend);
+int process_range_flag_commit_result(struct vm_range *range,
+				     unsigned long newflag);
+int process_range_stack_start_commit_result(struct vm_range *range,
+					    uintptr_t fault_addr,
+					    int pgshift);
+void process_remove_range_step_result(unsigned long range_start,
+				      unsigned long range_end,
+				      unsigned long remove_start,
+				      unsigned long remove_end,
+				      unsigned long range_flags,
+				      unsigned long private_data,
+				      int *split_startp, int *split_endp,
+				      int *ro_freedp, int *xpmem_removep);
+int process_split_range_init_result(const struct vm_range *low,
+				    struct vm_range *high, uintptr_t addr);
+void process_split_range_commit_result(struct vm_range *low, uintptr_t addr);
+int process_join_range_prepare_result(struct vm_range *surviving,
+				      const struct vm_range *merging);
 int process_ref_release_should_destroy_result(int dec_and_test);
 int process_release_address_space_should_destroy_result(int dec_and_test);
 int process_release_address_space_should_run_free_cb_result(

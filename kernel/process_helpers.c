@@ -147,6 +147,151 @@ int process_lookup_range_relation_result(unsigned long start,
 	return 0;
 }
 
+int process_range_cache_replace_result(struct vm_range **cache, int count,
+				       struct vm_range *from,
+				       struct vm_range *to)
+{
+	int i;
+	int replaced = 0;
+
+	if (!cache || count <= 0 || !from)
+		return 0;
+
+	for (i = 0; i < count; ++i) {
+		if (cache[i] == from) {
+			cache[i] = to;
+			replaced++;
+		}
+	}
+
+	return replaced;
+}
+
+int process_range_cache_store_result(struct vm_range **cache, int count,
+				     int *indexp, struct vm_range *match)
+{
+	if (!cache || count <= 0 || !indexp || !match)
+		return -EINVAL;
+
+	*indexp = (*indexp - 1 + count) % count;
+	cache[*indexp] = match;
+	return *indexp;
+}
+
+int process_range_end_commit_result(struct vm_range *range, uintptr_t newend)
+{
+	if (!range)
+		return 0;
+
+	range->end = newend;
+	return 1;
+}
+
+int process_range_flag_commit_result(struct vm_range *range,
+				     unsigned long newflag)
+{
+	if (!range)
+		return 0;
+
+	range->flag = newflag;
+	return 1;
+}
+
+int process_range_stack_start_commit_result(struct vm_range *range,
+					    uintptr_t fault_addr,
+					    int pgshift)
+{
+	if (!range)
+		return 0;
+
+	if (pgshift > 0 && pgshift < (int)(sizeof(unsigned long) * 8))
+		range->start = fault_addr & ~((1UL << pgshift) - 1);
+	else if (pgshift == 0)
+		range->start = fault_addr & PAGE_MASK;
+	else
+		return 0;
+
+	return 1;
+}
+
+void process_remove_range_step_result(unsigned long range_start,
+				      unsigned long range_end,
+				      unsigned long remove_start,
+				      unsigned long remove_end,
+				      unsigned long range_flags,
+				      unsigned long private_data,
+				      int *split_startp, int *split_endp,
+				      int *ro_freedp, int *xpmem_removep)
+{
+	if (split_startp)
+		*split_startp = range_start < remove_start;
+	if (split_endp)
+		*split_endp = remove_end < range_end;
+	if (ro_freedp)
+		*ro_freedp = !(range_flags & VR_PROT_WRITE);
+	if (xpmem_removep)
+		*xpmem_removep = private_data != 0;
+}
+
+int process_split_range_init_result(const struct vm_range *low,
+				    struct vm_range *high, uintptr_t addr)
+{
+	if (!low || !high)
+		return 0;
+
+	high->start = addr;
+	high->straight_start = 0;
+	if (low->straight_start)
+		high->straight_start =
+			low->straight_start + (addr - low->start);
+	high->end = low->end;
+	high->flag = low->flag;
+	high->pgshift = low->pgshift;
+	high->private_data = low->private_data;
+
+	if (low->memobj) {
+		high->memobj = low->memobj;
+		high->objoff = low->objoff + (addr - low->start);
+	}
+	else {
+		high->memobj = NULL;
+		high->objoff = 0;
+	}
+
+	return 1;
+}
+
+void process_split_range_commit_result(struct vm_range *low, uintptr_t addr)
+{
+	if (low)
+		low->end = addr;
+}
+
+int process_join_range_prepare_result(struct vm_range *surviving,
+				      const struct vm_range *merging)
+{
+	if (!surviving || !merging)
+		return -EINVAL;
+
+	if ((surviving->end != merging->start)
+			|| (surviving->flag != merging->flag)
+			|| (surviving->memobj != merging->memobj))
+		return -EINVAL;
+
+	if (surviving->memobj != NULL) {
+		size_t len;
+		off_t endoff;
+
+		len = surviving->end - surviving->start;
+		endoff = surviving->objoff + len;
+		if (endoff != merging->objoff)
+			return -EINVAL;
+	}
+
+	surviving->end = merging->end;
+	return 0;
+}
+
 int process_ref_release_should_destroy_result(int dec_and_test)
 {
 	return dec_and_test != 0;
