@@ -28,8 +28,29 @@ extern int num_processors;
 struct cpu_local_var *clv;
 int cpu_local_var_initialized = 0;
 
+#ifdef MCKERNEL_RUST_CLS_HELPERS
+extern void cpu_local_var_init_result(int num_processors,
+		struct ihk_os_cpu_monitor *monitor_cpu,
+		struct rusage_percpu *rusage_cpu,
+		void *(*alloc_pages)(int nr_pages, int flags));
+extern struct cpu_local_var *get_cpu_local_var_result(int id);
+#ifndef ENABLE_FUGAKU_HACKS
+extern void preempt_enable_result(void);
+extern void preempt_disable_result(void);
+#endif
+
+static void *cls_alloc_pages_bridge(int nr_pages, int flags)
+{
+	return ihk_mc_alloc_pages(nr_pages, flags);
+}
+#endif
+
 void cpu_local_var_init(void)
 {
+#ifdef MCKERNEL_RUST_CLS_HELPERS
+	cpu_local_var_init_result(num_processors, monitor->cpu, rusage.cpu,
+			cls_alloc_pages_bridge);
+#else
 	int z;
 	int i;
 
@@ -51,11 +72,16 @@ void cpu_local_var_init(void)
 
 	cpu_local_var_initialized = 1;
 	smp_mb();
+#endif
 }
 
 struct cpu_local_var *get_cpu_local_var(int id)
 {
+#ifdef MCKERNEL_RUST_CLS_HELPERS
+	return get_cpu_local_var_result(id);
+#else
 	return clv + id;
+#endif
 }
 
 #ifdef ENABLE_FUGAKU_HACKS
@@ -64,7 +90,9 @@ void __show_context_stack(struct thread *thread,
 #endif
 void preempt_enable(void)
 {
-#ifndef ENABLE_FUGAKU_HACKS
+#if defined(MCKERNEL_RUST_CLS_HELPERS) && !defined(ENABLE_FUGAKU_HACKS)
+	preempt_enable_result();
+#elif !defined(ENABLE_FUGAKU_HACKS)
 	if (cpu_local_var_initialized)
 		ihk_atomic_dec(&cpu_local_var(no_preempt));
 #else
@@ -92,9 +120,13 @@ void preempt_enable(void)
 
 void preempt_disable(void)
 {
+#if defined(MCKERNEL_RUST_CLS_HELPERS) && !defined(ENABLE_FUGAKU_HACKS)
+	preempt_disable_result();
+#else
 	if (cpu_local_var_initialized) {
 		ihk_atomic_inc(&cpu_local_var(no_preempt));
 	}
+#endif
 }
 
 int add_backlog(int (*func)(void *arg), void *arg)

@@ -587,6 +587,33 @@ extern uintptr_t page_to_phys(struct page *);
 extern int is_splitable(struct page *, uint32_t);
 extern int page_mode_in_memobj_result(int);
 extern int page_multi_mapped_result(int);
+extern void page_map_count_inc_result(struct page *);
+extern int page_unmap_locked_result(struct page *);
+extern int page_insert_hash_init_result(struct page *, struct list_head *,
+					uint64_t);
+extern struct page *page_hash_lookup_result(struct list_head *, uint64_t);
+extern int page_hash_bucket_init_result(struct list_head *);
+extern int page_hash_count_bucket_result(struct list_head *);
+extern int page_hash_count_all_result(unsigned long, unsigned long, int,
+				      unsigned long, unsigned long,
+				      unsigned long (*)(unsigned long),
+				      void (*)(unsigned long, unsigned long));
+extern struct page *phys_to_page_lookup_orchestrate_result(uint64_t,
+				      unsigned long, unsigned long, int,
+				      uint64_t, unsigned long, unsigned long,
+				      unsigned long (*)(unsigned long),
+				      void (*)(unsigned long, unsigned long));
+extern struct page *phys_to_page_insert_hash_orchestrate_result(uint64_t,
+				      unsigned long, unsigned long, int,
+				      uint64_t, unsigned long, unsigned long,
+				      unsigned long, int,
+				      unsigned long (*)(unsigned long),
+				      void (*)(unsigned long, unsigned long),
+				      struct page *(*)(unsigned long, int));
+extern int page_unmap_orchestrate_result(struct page *, unsigned long, int,
+				      uint64_t, unsigned long,
+				      unsigned long (*)(unsigned long),
+				      void (*)(unsigned long, unsigned long));
 
 static void mix(unsigned long *digest, unsigned long value)
 {
@@ -614,6 +641,54 @@ static struct page make_page(uint8_t mode, int count, uint64_t phys)
 	page.hash.next = &page.hash;
 	page.hash.prev = &page.hash;
 	return page;
+}
+
+static void list_add_tail(struct list_head *new, struct list_head *head)
+{
+	struct list_head *prev = head->prev;
+
+	new->next = head;
+	new->prev = prev;
+	prev->next = new;
+	head->prev = new;
+}
+
+struct fake_lock {
+	unsigned long id;
+	unsigned long locks;
+	unsigned long unlocks;
+	unsigned long last_flags;
+};
+
+static unsigned long fake_page_hash_lock(unsigned long lock_addr)
+{
+	struct fake_lock *lock = (struct fake_lock *)lock_addr;
+
+	lock->locks++;
+	return 0xabc000UL + (lock->id << 8) + lock->locks;
+}
+
+static void fake_page_hash_unlock(unsigned long lock_addr, unsigned long flags)
+{
+	struct fake_lock *lock = (struct fake_lock *)lock_addr;
+
+	lock->unlocks++;
+	lock->last_flags = flags;
+}
+
+static struct page fake_alloc_pages[4];
+static int fake_alloc_next;
+static unsigned long fake_alloc_size;
+static int fake_alloc_flag;
+
+static struct page *fake_page_alloc(unsigned long size, int flag)
+{
+	fake_alloc_size = size;
+	fake_alloc_flag = flag;
+	if (fake_alloc_next >= 4)
+		return NULL;
+
+	return &fake_alloc_pages[fake_alloc_next++];
 }
 
 int main(void)
@@ -655,6 +730,145 @@ int main(void)
 				mix_signed(&digest, is_splitable(&page, flags[k]));
 			}
 		}
+	}
+	{
+		struct list_head hash_head = { &hash_head, &hash_head };
+		struct page first = make_page(PM_MAPPED, 2, 0x400000);
+		struct page second = make_page(PM_MAPPED, 1, 0x401000);
+
+		list_add_tail(&first.hash, &hash_head);
+		list_add_tail(&second.hash, &hash_head);
+		page_map_count_inc_result(&first);
+		mix_signed(&digest, first.count.counter);
+		mix_signed(&digest, page_unmap_locked_result(&first));
+		mix_signed(&digest, first.count.counter);
+		mix(&digest, hash_head.next == &first.hash);
+		mix(&digest, first.hash.next == &second.hash);
+		mix_signed(&digest, page_unmap_locked_result(&first));
+		mix_signed(&digest, first.count.counter);
+		mix_signed(&digest, page_unmap_locked_result(&first));
+		mix_signed(&digest, first.count.counter);
+		mix(&digest, hash_head.next == &second.hash);
+		mix(&digest, second.hash.prev == &hash_head);
+		mix(&digest, first.hash.next == (void *)0x00100129);
+		mix(&digest, first.hash.prev == (void *)0x00200229);
+		mix_signed(&digest, page_unmap_locked_result(&second));
+		mix_signed(&digest, second.count.counter);
+		mix(&digest, hash_head.next == &hash_head);
+		mix(&digest, hash_head.prev == &hash_head);
+	}
+	{
+		struct list_head hash_head = { &hash_head, &hash_head };
+		struct page existing = make_page(PM_MAPPED, 4, 0x500000);
+		struct page inserted = make_page(PM_PAGEIO, 9, 0xdeadbeef);
+
+		list_add_tail(&existing.hash, &hash_head);
+		mix_signed(&digest, page_insert_hash_init_result(&inserted,
+			&hash_head, 0x600000));
+		mix(&digest, inserted.phys);
+		mix_signed(&digest, inserted.mode);
+		mix_signed(&digest, inserted.count.counter);
+		mix(&digest, inserted.list.next == &inserted.list);
+		mix(&digest, inserted.list.prev == &inserted.list);
+		mix(&digest, hash_head.next == &inserted.hash);
+		mix(&digest, inserted.hash.next == &existing.hash);
+		mix(&digest, existing.hash.prev == &inserted.hash);
+		mix_signed(&digest, page_insert_hash_init_result(NULL,
+			&hash_head, 0x700000));
+		mix_signed(&digest, page_insert_hash_init_result(&inserted,
+			NULL, 0x700000));
+		mix(&digest, page_hash_lookup_result(&hash_head, 0x600000) ==
+			&inserted);
+		mix(&digest, page_hash_lookup_result(&hash_head, 0x500000) ==
+			&existing);
+		mix(&digest, page_hash_lookup_result(&hash_head, 0x700000) ==
+			NULL);
+		mix(&digest, page_hash_lookup_result(NULL, 0x600000) == NULL);
+		mix_signed(&digest, page_hash_count_bucket_result(&hash_head));
+		mix_signed(&digest, page_hash_count_bucket_result(NULL));
+		mix_signed(&digest, page_hash_bucket_init_result(&hash_head));
+		mix(&digest, hash_head.next == &hash_head);
+		mix(&digest, hash_head.prev == &hash_head);
+		mix_signed(&digest, page_hash_bucket_init_result(NULL));
+	}
+	{
+		struct list_head buckets[4];
+		struct fake_lock locks[4] = {
+			{ .id = 0 }, { .id = 1 }, { .id = 2 }, { .id = 3 },
+		};
+		struct page existing = make_page(PM_MAPPED, 3, 0x2000);
+		struct page unmap_page = make_page(PM_MAPPED, 2, 0x3000);
+
+		for (unsigned int i = 0; i < 4; i++)
+			page_hash_bucket_init_result(&buckets[i]);
+		list_add_tail(&existing.hash, &buckets[2]);
+		list_add_tail(&unmap_page.hash, &buckets[3]);
+
+		mix_signed(&digest, page_hash_count_all_result(
+			(unsigned long)buckets, (unsigned long)locks, 4,
+			sizeof(buckets[0]), sizeof(locks[0]),
+			fake_page_hash_lock, fake_page_hash_unlock));
+		for (unsigned int i = 0; i < 4; i++) {
+			mix(&digest, locks[i].locks);
+			mix(&digest, locks[i].unlocks);
+			mix(&digest, locks[i].last_flags);
+		}
+		mix(&digest, phys_to_page_lookup_orchestrate_result(0x2000,
+			(unsigned long)buckets, (unsigned long)locks, 12, 3,
+			sizeof(buckets[0]), sizeof(locks[0]),
+			fake_page_hash_lock, fake_page_hash_unlock) == &existing);
+		mix(&digest, phys_to_page_lookup_orchestrate_result(0x7000,
+			(unsigned long)buckets, (unsigned long)locks, 12, 3,
+			sizeof(buckets[0]), sizeof(locks[0]),
+			fake_page_hash_lock, fake_page_hash_unlock) == NULL);
+		mix(&digest, locks[2].locks);
+		mix(&digest, locks[3].locks);
+
+		fake_alloc_next = 0;
+		mix(&digest, phys_to_page_insert_hash_orchestrate_result(0x2000,
+			(unsigned long)buckets, (unsigned long)locks, 12, 3,
+			sizeof(buckets[0]), sizeof(locks[0]), sizeof(struct page),
+			77, fake_page_hash_lock, fake_page_hash_unlock,
+			fake_page_alloc) == &existing);
+		mix_signed(&digest, fake_alloc_next);
+		mix(&digest, phys_to_page_insert_hash_orchestrate_result(0x5000,
+			(unsigned long)buckets, (unsigned long)locks, 12, 3,
+			sizeof(buckets[0]), sizeof(locks[0]), sizeof(struct page),
+			77, fake_page_hash_lock, fake_page_hash_unlock,
+			fake_page_alloc) == &fake_alloc_pages[0]);
+		mix(&digest, fake_alloc_size);
+		mix_signed(&digest, fake_alloc_flag);
+		mix(&digest, fake_alloc_pages[0].phys);
+		mix_signed(&digest, fake_alloc_pages[0].mode);
+		mix_signed(&digest, fake_alloc_pages[0].count.counter);
+		mix(&digest, page_hash_lookup_result(&buckets[1], 0x5000) ==
+			&fake_alloc_pages[0]);
+
+		fake_alloc_next = 4;
+		mix(&digest, phys_to_page_insert_hash_orchestrate_result(0x9000,
+			(unsigned long)buckets, (unsigned long)locks, 12, 3,
+			sizeof(buckets[0]), sizeof(locks[0]), sizeof(struct page),
+			78, fake_page_hash_lock, fake_page_hash_unlock,
+			fake_page_alloc) == NULL);
+		mix_signed(&digest, page_unmap_orchestrate_result(&unmap_page,
+			(unsigned long)locks, 12, 3, sizeof(locks[0]),
+			fake_page_hash_lock, fake_page_hash_unlock));
+		mix_signed(&digest, unmap_page.count.counter);
+		mix(&digest, buckets[3].next == &unmap_page.hash);
+		mix_signed(&digest, page_unmap_orchestrate_result(&unmap_page,
+			(unsigned long)locks, 12, 3, sizeof(locks[0]),
+			fake_page_hash_lock, fake_page_hash_unlock));
+		mix_signed(&digest, unmap_page.count.counter);
+		mix(&digest, buckets[3].next == &buckets[3]);
+		mix(&digest, unmap_page.hash.next == (void *)0x00100129);
+		mix_signed(&digest, page_hash_count_all_result(
+			0, (unsigned long)locks, 4, sizeof(buckets[0]),
+			sizeof(locks[0]), fake_page_hash_lock,
+			fake_page_hash_unlock));
+		mix(&digest, phys_to_page_lookup_orchestrate_result(0x2000,
+			0, (unsigned long)locks, 12, 3, sizeof(buckets[0]),
+			sizeof(locks[0]), fake_page_hash_lock,
+			fake_page_hash_unlock) == NULL);
 	}
 
 	printf("page_helpers ok digest=%016lx\n", digest);
@@ -977,16 +1191,67 @@ extern void futex_wake_ikc_packet_fill_result(unsigned long, unsigned long,
 					      unsigned long, unsigned long,
 					      int, unsigned long,
 					      unsigned long);
+extern int futex_wake_orchestrate_result(
+	unsigned long, unsigned long, unsigned long, unsigned long,
+	unsigned long, unsigned long, unsigned long, unsigned long,
+	unsigned long, unsigned long, unsigned long, unsigned long, int,
+	unsigned long, int, unsigned long (*)(int),
+	int (*)(unsigned long, unsigned long),
+	void (*)(unsigned long, int),
+	void (*)(int, unsigned long, unsigned long, int, unsigned long, int));
 extern int futex_hash_bucket_table_init_result(unsigned long, int,
 					       unsigned long, unsigned long,
 					       unsigned long, unsigned long,
 					       unsigned long, unsigned long,
 					       unsigned long, unsigned long);
+extern int futex_init_table_result(unsigned long, int, unsigned long, int,
+				   unsigned long (*)(unsigned long, int),
+				   unsigned long, unsigned long, unsigned long,
+				   unsigned long, unsigned long, unsigned long,
+				   unsigned long);
+extern unsigned long futex_hash_bucket_result(unsigned long, unsigned long,
+					      int, unsigned long,
+					      unsigned int (*)(unsigned long));
+extern int futex_dispatch_result(int, unsigned long, unsigned int,
+				 unsigned long, unsigned long,
+				 unsigned int, unsigned int, int,
+				 int (*)(unsigned long, int,
+					 unsigned int, unsigned long,
+					 unsigned int, int),
+				 int (*)(unsigned long, int,
+					 unsigned int, unsigned int),
+				 int (*)(unsigned long, int,
+					 unsigned long, unsigned int,
+					 unsigned int, int, unsigned int,
+					 int),
+				 int (*)(unsigned long, int,
+					 unsigned long, unsigned int,
+					 unsigned int, unsigned int),
+				 void (*)(int));
 extern int syscall_offload_should_schedule_result(int, int, int, int, int);
+
+#define FUTEX_WAIT 0
+#define FUTEX_WAKE 1
+#define FUTEX_REQUEUE 3
+#define FUTEX_CMP_REQUEUE 4
+#define FUTEX_WAKE_OP 5
+#define FUTEX_WAIT_BITSET 9
+#define FUTEX_WAKE_BITSET 10
+#define FUTEX_WAIT_REQUEUE_PI 11
+#define FUTEX_PRIVATE_FLAG 128
+#define FUTEX_CLOCK_REALTIME 256
+#define FUTEX_BITSET_MATCH_ANY 0xffffffffU
+#define ENOSYS 38
 
 #define FUTEX_WAIT_SCHEDULE_NONE 0
 #define FUTEX_WAIT_SCHEDULE_TIMEOUT 1
 #define FUTEX_WAIT_SCHEDULE_DIRECT 2
+#define FUTEX_WAKE_TARGET_MCKERNEL 0
+#define FUTEX_WAKE_TARGET_LINUX 1
+#define FUTEX_WAKE_LOG_LINUX_TARGET 1
+#define FUTEX_WAKE_LOG_SEND_FAILED 2
+#define FUTEX_WAKE_LOG_SEND_OK 3
+#define FUTEX_WAKE_LOG_MCKERNEL_TARGET 4
 
 struct futex_key {
 	unsigned long opaque[3];
@@ -1186,6 +1451,363 @@ static unsigned long futex_hash_bucket_table_init_digest(void)
 	return digest;
 }
 
+static void *futex_alloc_ptr;
+static unsigned long futex_alloc_size;
+static int futex_alloc_flag;
+static int futex_alloc_fail;
+
+static unsigned long fake_futex_alloc(unsigned long size, int flag)
+{
+	futex_alloc_size = size;
+	futex_alloc_flag = flag;
+	return futex_alloc_fail ? 0 : (unsigned long)futex_alloc_ptr;
+}
+
+static unsigned long futex_init_table_digest(void)
+{
+	struct fake_futex_table_bucket buckets[4];
+	unsigned long slot = 0;
+	unsigned long digest = 0x6675746578696e69UL;
+	unsigned long chain_offset =
+		offsetof(struct fake_futex_table_bucket, chain);
+	int ret;
+
+	memset(buckets, 0xa5, sizeof(buckets));
+	futex_alloc_ptr = buckets;
+	futex_alloc_size = 0;
+	futex_alloc_flag = 0;
+	futex_alloc_fail = 0;
+	ret = futex_init_table_result((unsigned long)&slot, 2,
+		sizeof(buckets[0]), 77, fake_futex_alloc,
+		offsetof(struct fake_futex_table_bucket, lock_word),
+		0, chain_offset,
+		offsetof(struct plist_head, prio_list),
+		offsetof(struct plist_head, node_list),
+		offsetof(struct fake_futex_table_bucket, debug_spinlock) -
+			chain_offset,
+		offsetof(struct fake_futex_table_bucket, debug_rawlock) -
+			chain_offset);
+	require(ret == 4);
+	require(slot == (unsigned long)buckets);
+	require(futex_alloc_size == sizeof(buckets));
+	require(futex_alloc_flag == 77);
+	require(buckets[0].lock_word == 0);
+	require(buckets[3].chain.node_list.next ==
+		&buckets[3].chain.node_list);
+	mix_signed(&digest, ret);
+	mix(&digest, slot == (unsigned long)buckets);
+	mix(&digest, futex_alloc_size);
+	mix_signed(&digest, futex_alloc_flag);
+	mix(&digest, buckets[3].debug_spinlock -
+		(unsigned long)&buckets[3]);
+
+	slot = 0x1234;
+	futex_alloc_fail = 1;
+	ret = futex_init_table_result((unsigned long)&slot, 2,
+		sizeof(buckets[0]), 88, fake_futex_alloc,
+		offsetof(struct fake_futex_table_bucket, lock_word),
+		0, chain_offset,
+		offsetof(struct plist_head, prio_list),
+		offsetof(struct plist_head, node_list), 0, 0);
+	require(ret < 0);
+	require(slot == 0);
+	mix_signed(&digest, ret);
+	mix(&digest, slot);
+	mix_signed(&digest, futex_init_table_result(0, 2,
+		sizeof(buckets[0]), 88, fake_futex_alloc,
+		offsetof(struct fake_futex_table_bucket, lock_word),
+		0, chain_offset,
+		offsetof(struct plist_head, prio_list),
+		offsetof(struct plist_head, node_list), 0, 0));
+	mix_signed(&digest, futex_init_table_result((unsigned long)&slot, -1,
+		sizeof(buckets[0]), 88, fake_futex_alloc,
+		offsetof(struct fake_futex_table_bucket, lock_word),
+		0, chain_offset,
+		offsetof(struct plist_head, prio_list),
+		offsetof(struct plist_head, node_list), 0, 0));
+	mix_signed(&digest, futex_init_table_result((unsigned long)&slot, 2,
+		sizeof(buckets[0]), 88, NULL,
+		offsetof(struct fake_futex_table_bucket, lock_word),
+		0, chain_offset,
+		offsetof(struct plist_head, prio_list),
+		offsetof(struct plist_head, node_list), 0, 0));
+
+	return digest;
+}
+
+static unsigned int fake_futex_hash(unsigned long key_addr)
+{
+	struct futex_key *key = (struct futex_key *)key_addr;
+
+	return (unsigned int)(key->opaque[0] ^ (key->opaque[1] << 7) ^
+		(key->opaque[2] >> 3));
+}
+
+static unsigned long futex_hash_bucket_digest(void)
+{
+	struct fake_futex_table_bucket buckets[4];
+	struct futex_key key = { .opaque = { 0x11, 0x20, 0x88 } };
+	unsigned long digest = 0x6675746578686173UL;
+	unsigned long bucket;
+
+	bucket = futex_hash_bucket_result((unsigned long)&key,
+		(unsigned long)buckets, 2, sizeof(buckets[0]),
+		fake_futex_hash);
+	mix(&digest, bucket - (unsigned long)buckets);
+	mix(&digest, bucket == (unsigned long)&buckets[
+		fake_futex_hash((unsigned long)&key) & 3]);
+	key.opaque[0] = 0xdeadbeef;
+	key.opaque[1] = 0x1234;
+	key.opaque[2] = 0x5678;
+	bucket = futex_hash_bucket_result((unsigned long)&key,
+		(unsigned long)buckets, 2, sizeof(buckets[0]),
+		fake_futex_hash);
+	mix(&digest, bucket - (unsigned long)buckets);
+	mix(&digest, futex_hash_bucket_result(0, (unsigned long)buckets, 2,
+		sizeof(buckets[0]), fake_futex_hash));
+	mix(&digest, futex_hash_bucket_result((unsigned long)&key, 0, 2,
+		sizeof(buckets[0]), fake_futex_hash));
+	mix(&digest, futex_hash_bucket_result((unsigned long)&key,
+		(unsigned long)buckets, -1, sizeof(buckets[0]),
+		fake_futex_hash));
+	mix(&digest, futex_hash_bucket_result((unsigned long)&key,
+		(unsigned long)buckets, 2, 0, fake_futex_hash));
+	mix(&digest, futex_hash_bucket_result((unsigned long)&key,
+		(unsigned long)buckets, 2, sizeof(buckets[0]), NULL));
+
+	return digest;
+}
+
+struct futex_dispatch_trace {
+	int wait_count;
+	int wake_count;
+	int requeue_count;
+	int wake_op_count;
+	int invalid_count;
+	unsigned long uaddr;
+	unsigned long uaddr2;
+	unsigned int val;
+	unsigned int val2;
+	unsigned int val3;
+	int fshared;
+	int cmpval_present;
+	unsigned int cmpval;
+	int requeue_pi;
+	int clockrt;
+	int invalid_cmd;
+};
+
+static struct futex_dispatch_trace dispatch_trace;
+
+static void reset_futex_dispatch_trace(void)
+{
+	memset(&dispatch_trace, 0, sizeof(dispatch_trace));
+	dispatch_trace.invalid_cmd = -1;
+}
+
+static int fake_dispatch_wait(unsigned long uaddr, int fshared,
+			      unsigned int val, unsigned long timeout,
+			      unsigned int val3, int clockrt)
+{
+	dispatch_trace.wait_count++;
+	dispatch_trace.uaddr = uaddr;
+	dispatch_trace.val = val;
+	dispatch_trace.val3 = val3;
+	dispatch_trace.fshared = fshared;
+	dispatch_trace.clockrt = clockrt;
+	mix(&timeout, uaddr);
+	return 1000 + (int)(val3 & 0xffU) + (clockrt ? 20 : 0) +
+		(int)(timeout & 3UL);
+}
+
+static int fake_dispatch_wake(unsigned long uaddr, int fshared,
+			      unsigned int val, unsigned int val3)
+{
+	dispatch_trace.wake_count++;
+	dispatch_trace.uaddr = uaddr;
+	dispatch_trace.val = val;
+	dispatch_trace.val3 = val3;
+	dispatch_trace.fshared = fshared;
+	return 2000 + (int)(val3 & 0xffU);
+}
+
+static int fake_dispatch_requeue(unsigned long uaddr, int fshared,
+				 unsigned long uaddr2, unsigned int val,
+				 unsigned int val2, int cmpval_present,
+				 unsigned int cmpval, int requeue_pi)
+{
+	dispatch_trace.requeue_count++;
+	dispatch_trace.uaddr = uaddr;
+	dispatch_trace.uaddr2 = uaddr2;
+	dispatch_trace.val = val;
+	dispatch_trace.val2 = val2;
+	dispatch_trace.fshared = fshared;
+	dispatch_trace.cmpval_present = cmpval_present;
+	dispatch_trace.cmpval = cmpval;
+	dispatch_trace.requeue_pi = requeue_pi;
+	return 3000 + cmpval_present * 10 + (int)(cmpval & 0xffU) +
+		requeue_pi;
+}
+
+static int fake_dispatch_wake_op(unsigned long uaddr, int fshared,
+				 unsigned long uaddr2, unsigned int val,
+				 unsigned int val2, unsigned int val3)
+{
+	dispatch_trace.wake_op_count++;
+	dispatch_trace.uaddr = uaddr;
+	dispatch_trace.uaddr2 = uaddr2;
+	dispatch_trace.val = val;
+	dispatch_trace.val2 = val2;
+	dispatch_trace.val3 = val3;
+	dispatch_trace.fshared = fshared;
+	return 4000 + (int)(val2 & 0xffU) + (int)(val3 & 0xffU);
+}
+
+static void fake_dispatch_invalid(int cmd)
+{
+	dispatch_trace.invalid_count++;
+	dispatch_trace.invalid_cmd = cmd;
+}
+
+static unsigned long futex_dispatch_digest(void)
+{
+	unsigned long digest = 0x6675746578646973UL;
+	int ret;
+
+	reset_futex_dispatch_trace();
+	ret = futex_dispatch_result(FUTEX_WAIT, 0x1000, 0x22, 0x3000,
+		0x2000, 0x44, 0x55, 1, fake_dispatch_wait,
+		fake_dispatch_wake, fake_dispatch_requeue,
+		fake_dispatch_wake_op, fake_dispatch_invalid);
+	require(dispatch_trace.wait_count == 1);
+	require(dispatch_trace.val3 == FUTEX_BITSET_MATCH_ANY);
+	require(dispatch_trace.clockrt == 0);
+	mix_signed(&digest, ret);
+	mix(&digest, dispatch_trace.val3);
+
+	reset_futex_dispatch_trace();
+	ret = futex_dispatch_result(FUTEX_WAIT_BITSET, 0x1004, 0x23, 0x3001,
+		0x2004, 0x45, 0xa5, 0, fake_dispatch_wait,
+		fake_dispatch_wake, fake_dispatch_requeue,
+		fake_dispatch_wake_op, fake_dispatch_invalid);
+	require(dispatch_trace.wait_count == 1);
+	require(dispatch_trace.val3 == 0xa5U);
+	require(dispatch_trace.fshared == 0);
+	mix_signed(&digest, ret);
+	mix(&digest, dispatch_trace.val3);
+
+	reset_futex_dispatch_trace();
+	ret = futex_dispatch_result(FUTEX_WAKE, 0x1010, 0x24, 0x3002,
+		0x2010, 0x46, 0x88, 1, fake_dispatch_wait,
+		fake_dispatch_wake, fake_dispatch_requeue,
+		fake_dispatch_wake_op, fake_dispatch_invalid);
+	require(dispatch_trace.wake_count == 1);
+	require(dispatch_trace.val3 == FUTEX_BITSET_MATCH_ANY);
+	mix_signed(&digest, ret);
+	mix(&digest, dispatch_trace.val3);
+
+	reset_futex_dispatch_trace();
+	ret = futex_dispatch_result(FUTEX_WAKE_BITSET, 0x1014, 0x25, 0x3003,
+		0x2014, 0x47, 0x77, 0, fake_dispatch_wait,
+		fake_dispatch_wake, fake_dispatch_requeue,
+		fake_dispatch_wake_op, fake_dispatch_invalid);
+	require(dispatch_trace.wake_count == 1);
+	require(dispatch_trace.val3 == 0x77U);
+	mix_signed(&digest, ret);
+	mix(&digest, dispatch_trace.val3);
+
+	reset_futex_dispatch_trace();
+	ret = futex_dispatch_result(FUTEX_REQUEUE, 0x1020, 0x26, 0x3004,
+		0x2020, 0x48, 0x66, 1, fake_dispatch_wait,
+		fake_dispatch_wake, fake_dispatch_requeue,
+		fake_dispatch_wake_op, fake_dispatch_invalid);
+	require(dispatch_trace.requeue_count == 1);
+	require(dispatch_trace.cmpval_present == 0);
+	require(dispatch_trace.cmpval == 0);
+	require(dispatch_trace.requeue_pi == 0);
+	mix_signed(&digest, ret);
+	mix_signed(&digest, dispatch_trace.cmpval_present);
+
+	reset_futex_dispatch_trace();
+	ret = futex_dispatch_result(FUTEX_CMP_REQUEUE, 0x1024, 0x27, 0x3005,
+		0x2024, 0x49, 0x65, 0, fake_dispatch_wait,
+		fake_dispatch_wake, fake_dispatch_requeue,
+		fake_dispatch_wake_op, fake_dispatch_invalid);
+	require(dispatch_trace.requeue_count == 1);
+	require(dispatch_trace.cmpval_present == 1);
+	require(dispatch_trace.cmpval == 0x65U);
+	mix_signed(&digest, ret);
+	mix(&digest, dispatch_trace.cmpval);
+
+	reset_futex_dispatch_trace();
+	ret = futex_dispatch_result(FUTEX_WAKE_OP, 0x1030, 0x28, 0x3006,
+		0x2030, 0x4a, 0x64, 1, fake_dispatch_wait,
+		fake_dispatch_wake, fake_dispatch_requeue,
+		fake_dispatch_wake_op, fake_dispatch_invalid);
+	require(dispatch_trace.wake_op_count == 1);
+	require(dispatch_trace.val2 == 0x4aU);
+	require(dispatch_trace.val3 == 0x64U);
+	mix_signed(&digest, ret);
+	mix(&digest, dispatch_trace.val2);
+
+	reset_futex_dispatch_trace();
+	ret = futex_dispatch_result(FUTEX_WAIT_BITSET | FUTEX_CLOCK_REALTIME,
+		0x1040, 0x29, 0x3007, 0x2040, 0x4b, 0x63, 0,
+		fake_dispatch_wait, fake_dispatch_wake,
+		fake_dispatch_requeue, fake_dispatch_wake_op,
+		fake_dispatch_invalid);
+	require(dispatch_trace.wait_count == 1);
+	require(dispatch_trace.clockrt == FUTEX_CLOCK_REALTIME);
+	mix_signed(&digest, ret);
+	mix_signed(&digest, dispatch_trace.clockrt);
+
+	reset_futex_dispatch_trace();
+	ret = futex_dispatch_result(FUTEX_WAKE | FUTEX_CLOCK_REALTIME, 0x1050,
+		0x2a, 0x3008, 0x2050, 0x4c, 0x62, 1,
+		fake_dispatch_wait, fake_dispatch_wake,
+		fake_dispatch_requeue, fake_dispatch_wake_op,
+		fake_dispatch_invalid);
+	require(ret == -ENOSYS);
+	require(dispatch_trace.invalid_count == 0);
+	mix_signed(&digest, ret);
+	mix_signed(&digest, dispatch_trace.invalid_count);
+
+	reset_futex_dispatch_trace();
+	ret = futex_dispatch_result(FUTEX_WAIT_REQUEUE_PI | FUTEX_CLOCK_REALTIME,
+		0x1060, 0x2b, 0x3009, 0x2060, 0x4d, 0x61, 0,
+		fake_dispatch_wait, fake_dispatch_wake,
+		fake_dispatch_requeue, fake_dispatch_wake_op,
+		fake_dispatch_invalid);
+	require(ret == -ENOSYS);
+	require(dispatch_trace.invalid_count == 1);
+	require(dispatch_trace.invalid_cmd == FUTEX_WAIT_REQUEUE_PI);
+	mix_signed(&digest, ret);
+	mix_signed(&digest, dispatch_trace.invalid_cmd);
+
+	reset_futex_dispatch_trace();
+	ret = futex_dispatch_result(99, 0x1070, 0x2c, 0x300a,
+		0x2070, 0x4e, 0x60, 1, fake_dispatch_wait,
+		fake_dispatch_wake, fake_dispatch_requeue,
+		fake_dispatch_wake_op, fake_dispatch_invalid);
+	require(ret == -ENOSYS);
+	require(dispatch_trace.invalid_count == 1);
+	require(dispatch_trace.invalid_cmd == 99);
+	mix_signed(&digest, ret);
+	mix_signed(&digest, dispatch_trace.invalid_cmd);
+
+	reset_futex_dispatch_trace();
+	ret = futex_dispatch_result(FUTEX_WAIT, 0x1080, 0x2d, 0x300b,
+		0x2080, 0x4f, 0x5f, 1, NULL, fake_dispatch_wake,
+		fake_dispatch_requeue, fake_dispatch_wake_op,
+		fake_dispatch_invalid);
+	require(ret == -ENOSYS);
+	require(dispatch_trace.wait_count == 0);
+	require(dispatch_trace.invalid_count == 0);
+	mix_signed(&digest, ret);
+	mix_signed(&digest, dispatch_trace.wait_count);
+	return digest;
+}
+
 static unsigned long hb_lock_log[8];
 static int hb_lock_count;
 static unsigned long hb_unlock_log[8];
@@ -1334,6 +1956,157 @@ static unsigned long futex_wake_mark_woken_digest(void)
 	mix(&digest, (unsigned long)node_count);
 	mix(&digest, (unsigned long)prio_count << 16);
 	mix(&digest, (unsigned long)second.lock_ptr);
+	return digest;
+}
+
+static int wake_orch_send_rc;
+static int wake_orch_send_count;
+static int wake_orch_wake_count;
+static int wake_orch_log_count;
+static int wake_orch_last_event;
+static int wake_orch_last_cpu;
+static int wake_orch_last_status;
+static unsigned long wake_orch_last_channel;
+static unsigned long wake_orch_last_packet;
+static unsigned long wake_orch_last_thread;
+
+static void reset_wake_orch_trace(void)
+{
+	wake_orch_send_rc = 0;
+	wake_orch_send_count = 0;
+	wake_orch_wake_count = 0;
+	wake_orch_log_count = 0;
+	wake_orch_last_event = 0;
+	wake_orch_last_cpu = 0;
+	wake_orch_last_status = 0;
+	wake_orch_last_channel = 0;
+	wake_orch_last_packet = 0;
+	wake_orch_last_thread = 0;
+}
+
+static unsigned long fake_wake_orch_linux_channel(int linux_cpu)
+{
+	return 0xabc00000UL + (unsigned long)(unsigned int)linux_cpu;
+}
+
+static int fake_wake_orch_send(unsigned long channel, unsigned long packet)
+{
+	wake_orch_send_count++;
+	wake_orch_last_channel = channel;
+	wake_orch_last_packet = packet;
+	return wake_orch_send_rc;
+}
+
+static void fake_wake_orch_thread(unsigned long thread, int status)
+{
+	struct fake_thread_state *state = (struct fake_thread_state *)thread;
+
+	wake_orch_wake_count++;
+	wake_orch_last_thread = thread;
+	wake_orch_last_status = status;
+	state->status = status;
+}
+
+static void fake_wake_orch_log(int event, unsigned long thread,
+			       unsigned long uti_futex_resp, int linux_cpu,
+			       unsigned long channel, int rc)
+{
+	(void)thread;
+	(void)uti_futex_resp;
+	(void)rc;
+	wake_orch_log_count++;
+	wake_orch_last_event = event;
+	wake_orch_last_cpu = linux_cpu;
+	wake_orch_last_channel = channel;
+}
+
+static unsigned long futex_wake_orchestrate_digest(void)
+{
+	struct plist_head head;
+	struct fake_thread_state thread = { 0 };
+	struct fake_futex_q q = { 0 };
+	struct fake_wake_packet packet = { 0 };
+	unsigned long digest = 0x66757465776f7263UL;
+	int target;
+
+	plist_head_init(&head);
+	plist_node_init(&q.list, 9);
+	plist_add(&q.list, &head);
+	q.task = &thread;
+	q.lock_ptr = (void *)0x12345678UL;
+	q.uti_futex_resp = (void *)0x77770000UL;
+	q.linux_cpu = 5;
+
+	reset_wake_orch_trace();
+	target = futex_wake_orchestrate_result((unsigned long)&q,
+		offsetof(struct fake_futex_q, list),
+		offsetof(struct plist_node, plist),
+		offsetof(struct fake_futex_q, lock_ptr),
+		offsetof(struct fake_futex_q, task),
+		offsetof(struct fake_futex_q, uti_futex_resp),
+		offsetof(struct fake_futex_q, linux_cpu),
+		offsetof(struct fake_thread_state, spin_sleep),
+		(unsigned long)&packet,
+		offsetof(struct fake_wake_packet, msg),
+		offsetof(struct fake_wake_packet, futex.resp),
+		offsetof(struct fake_wake_packet, futex.spin_sleep),
+		99, 0xeeee0000UL, 17, fake_wake_orch_linux_channel,
+		fake_wake_orch_send, fake_wake_orch_thread,
+		fake_wake_orch_log);
+	require(target == FUTEX_WAKE_TARGET_LINUX);
+	require(q.lock_ptr == NULL);
+	require(plist_node_empty(&q.list));
+	require(wake_orch_send_count == 1);
+	require(wake_orch_wake_count == 0);
+	require(wake_orch_log_count == 2);
+	require(wake_orch_last_event == FUTEX_WAKE_LOG_SEND_OK);
+	require(wake_orch_last_cpu == 5);
+	require(wake_orch_last_channel == 0xabc00005UL);
+	require(wake_orch_last_packet == (unsigned long)&packet);
+	require(packet.msg == 99);
+	require(packet.futex.resp == (void *)0x77770000UL);
+	require(packet.futex.spin_sleep == &thread.spin_sleep);
+	mix(&digest, (unsigned long)target);
+	mix(&digest, wake_orch_last_channel);
+	mix(&digest, (unsigned long)packet.futex.spin_sleep -
+		(unsigned long)&thread);
+
+	plist_node_init(&q.list, 4);
+	plist_add(&q.list, &head);
+	q.lock_ptr = (void *)0x12345678UL;
+	q.uti_futex_resp = NULL;
+	q.linux_cpu = 0;
+	thread.status = 0;
+	packet = (struct fake_wake_packet){ 0 };
+
+	reset_wake_orch_trace();
+	target = futex_wake_orchestrate_result((unsigned long)&q,
+		offsetof(struct fake_futex_q, list),
+		offsetof(struct plist_node, plist),
+		offsetof(struct fake_futex_q, lock_ptr),
+		offsetof(struct fake_futex_q, task),
+		offsetof(struct fake_futex_q, uti_futex_resp),
+		offsetof(struct fake_futex_q, linux_cpu),
+		offsetof(struct fake_thread_state, spin_sleep),
+		(unsigned long)&packet,
+		offsetof(struct fake_wake_packet, msg),
+		offsetof(struct fake_wake_packet, futex.resp),
+		offsetof(struct fake_wake_packet, futex.spin_sleep),
+		99, 0xeeee0000UL, 23, fake_wake_orch_linux_channel,
+		fake_wake_orch_send, fake_wake_orch_thread,
+		fake_wake_orch_log);
+	require(target == FUTEX_WAKE_TARGET_MCKERNEL);
+	require(q.lock_ptr == NULL);
+	require(plist_node_empty(&q.list));
+	require(wake_orch_send_count == 0);
+	require(wake_orch_wake_count == 1);
+	require(wake_orch_log_count == 1);
+	require(wake_orch_last_event == FUTEX_WAKE_LOG_MCKERNEL_TARGET);
+	require(thread.status == 23);
+	mix(&digest, (unsigned long)target);
+	mix_signed(&digest, thread.status);
+	mix_signed(&digest, wake_orch_log_count);
+
 	return digest;
 }
 
@@ -2411,8 +3184,12 @@ int main(void)
 	mix_signed(&digest, futex_requeue_should_move_result(0x1000, 0x1000));
 	mix_signed(&digest, futex_requeue_should_move_result(0x1000, 0x2000));
 	mix(&digest, futex_hash_bucket_table_init_digest());
+	mix(&digest, futex_init_table_digest());
+	mix(&digest, futex_hash_bucket_digest());
+	mix(&digest, futex_dispatch_digest());
 	mix(&digest, futex_double_lock_digest());
 	mix(&digest, futex_wake_mark_woken_digest());
+	mix(&digest, futex_wake_orchestrate_digest());
 	mix(&digest, futex_unqueue_detach_digest());
 	mix(&digest, futex_wake_scan_digest());
 	mix(&digest, futex_requeue_move_digest());
@@ -2581,6 +3358,11 @@ cat > "${tmpdir}/syscall_policy_helpers_equiv.c" <<'EOF_SYSCALL_POLICY_HELPERS'
 #define TIME_DISPATCH_FORWARD 4
 #define MINSIGSTKSZ 2048
 #define SS_DISABLE 2
+typedef struct fake_stack {
+	void *ss_sp;
+	int ss_flags;
+	size_t ss_size;
+} stack_t;
 #define IOV_MAX 1024UL
 #define PROCESS_VM_READ 0
 #define PROCESS_VM_WRITE 1
@@ -2746,6 +3528,28 @@ struct rusage {
 	long ru_nivcsw;
 };
 
+struct fake_siginfo_child {
+	int si_pid;
+	int si_uid;
+	int si_status;
+	int padding;
+	long si_utime;
+	long si_stime;
+};
+
+union fake_siginfo_fields {
+	int pad[28];
+	struct fake_siginfo_child sigchld;
+};
+
+struct fake_siginfo {
+	int si_signo;
+	int si_errno;
+	int si_code;
+	int padding;
+	union fake_siginfo_fields sifields;
+};
+
 struct fake_getrusage_thread {
 	int pad;
 	int times_update;
@@ -2804,6 +3608,148 @@ struct fake_regset_thread {
 
 static struct fake_regset_thread *active_regset_thread;
 
+struct fake_syscall_process_ids {
+	int pid;
+	int ruid;
+	int euid;
+	int suid;
+	int rgid;
+	int egid;
+	int sgid;
+	struct fake_syscall_process_ids *ppid_parent;
+};
+
+struct fake_syscall_thread_ids {
+	int tid;
+	struct fake_syscall_process_ids *proc;
+	int *clear_child_tid;
+};
+
+struct fake_sigaltstack_thread {
+	int prefix;
+	stack_t sigstack;
+	int suffix;
+};
+
+struct fake_wait_thread {
+	int tid;
+	int signal_flags;
+};
+
+struct fake_wait_process {
+	int pid;
+	struct fake_wait_thread *main_thread;
+};
+
+static int fake_getresid_fail_after = -1;
+static int fake_getresid_calls;
+static int fake_stack_copy_from_fail;
+static int fake_stack_copy_to_fail;
+static int fake_stack_copy_from_calls;
+static int fake_stack_copy_to_calls;
+static int fake_waitid_copy_to_calls;
+static size_t fake_waitid_copy_to_bytes;
+static int fake_wait4_do_wait_calls;
+static int fake_wait4_copy_to_calls;
+static int fake_wait4_pid;
+static int fake_wait4_options;
+static int fake_wait4_rc;
+static int fake_wait4_status;
+static struct rusage fake_wait4_seen_usage;
+static int fake_wait_reap_calls;
+static void *fake_wait_reap_thread;
+static int fake_wait_reap_options;
+static int fake_wait_reap_clear_mask;
+
+static long
+fake_copy_int_to_user(unsigned long dst_addr, const int *src)
+{
+	int *dst = (int *)(uintptr_t)dst_addr;
+
+	if (fake_getresid_fail_after >= 0 &&
+			fake_getresid_calls >= fake_getresid_fail_after) {
+		fake_getresid_calls++;
+		return -1;
+	}
+
+	*dst = *src;
+	fake_getresid_calls++;
+	return 0;
+}
+
+static long
+fake_copy_stack_from_user(void *dst, unsigned long src_addr, size_t bytes)
+{
+	fake_stack_copy_from_calls++;
+	if (fake_stack_copy_from_fail)
+		return -1;
+	memcpy(dst, (const void *)(uintptr_t)src_addr, bytes);
+	return 0;
+}
+
+static long
+fake_copy_stack_to_user(unsigned long dst_addr, const void *src, size_t bytes)
+{
+	fake_stack_copy_to_calls++;
+	if (fake_stack_copy_to_fail)
+		return -1;
+	memcpy((void *)(uintptr_t)dst_addr, src, bytes);
+	return 0;
+}
+
+static long
+fake_waitid_copy_to_user(unsigned long dst_addr, const void *src, size_t bytes)
+{
+	fake_waitid_copy_to_calls++;
+	fake_waitid_copy_to_bytes = bytes;
+	memcpy((void *)(uintptr_t)dst_addr, src, bytes);
+	return 0;
+}
+
+static int
+fake_wait4_do_wait(int pid, int *status, int options, struct rusage *usage)
+{
+	fake_wait4_do_wait_calls++;
+	fake_wait4_pid = pid;
+	fake_wait4_options = options;
+	fake_wait4_seen_usage = *usage;
+	*status = fake_wait4_status;
+	usage->ru_utime.tv_sec = 1;
+	usage->ru_utime.tv_usec = 2345;
+	usage->ru_stime.tv_sec = 6;
+	usage->ru_stime.tv_usec = 7890;
+	usage->ru_maxrss = 42;
+	usage->ru_nvcsw = 7;
+	return fake_wait4_rc;
+}
+
+static long
+fake_wait4_copy_to_user(unsigned long dst_addr, const void *src, size_t bytes)
+{
+	fake_wait4_copy_to_calls++;
+	memcpy((void *)(uintptr_t)dst_addr, src, bytes);
+	return 0;
+}
+
+static int
+fake_wait_signal_flags_reap(void *thread, unsigned long signal_flags_offset,
+			    int options, int clear_mask)
+{
+	int *signal_flags;
+
+	fake_wait_reap_calls++;
+	fake_wait_reap_thread = thread;
+	fake_wait_reap_options = options;
+	fake_wait_reap_clear_mask = clear_mask;
+	if (!thread)
+		return 0;
+
+	signal_flags = (int *)((char *)thread + signal_flags_offset);
+	if (!(options & WNOWAIT))
+		*signal_flags &= ~clear_mask;
+	return *signal_flags;
+}
+
 extern int robust_list_len_result(size_t);
 extern int tkill_tid_result(int);
 extern int tgkill_target_result(int, int);
@@ -2819,6 +3765,22 @@ extern int syscall_getpid_result(int);
 extern int syscall_getppid_result(int);
 extern int syscall_gettid_result(int);
 extern int syscall_set_tid_address_return_result(int);
+extern long syscall_getpid_body_result(void *, size_t, size_t);
+extern long syscall_getppid_body_result(void *, size_t, size_t, size_t);
+extern long syscall_gettid_body_result(void *, size_t);
+extern long syscall_set_tid_address_body_result(void *, size_t, size_t,
+					       size_t, int *);
+extern long syscall_get_process_id_field_result(void *, size_t, size_t);
+extern long syscall_getresid_body_result(void *, size_t, size_t, size_t,
+					 size_t, unsigned long,
+					 unsigned long, unsigned long,
+					 long (*)(unsigned long,
+						  const int *));
+extern long sigaltstack_body_result(void *, size_t, unsigned long,
+				    unsigned long,
+				    long (*)(void *, unsigned long, size_t),
+				    long (*)(unsigned long, const void *,
+					     size_t));
 extern int syscall_use_requester_tid_result(int, unsigned long, int);
 extern int syscall_preempt_disable_needed_result(int);
 extern int setpgid_normalize_pid(int, int);
@@ -2987,6 +3949,11 @@ extern int wait_nohang_result(int);
 extern int wait_empty_result(int);
 extern int wait_stopped_status_result(int);
 extern int wait_continued_status_result(void);
+extern int wait_continued_body_result(void *, void *, int *, int,
+				      unsigned long, unsigned long,
+				      unsigned long, unsigned long,
+				      int (*)(void *, unsigned long, int,
+					       int));
 extern int wait_zombie_skip_host_result(int, int, int);
 extern int wait_thread_empty_candidate_result(int, int);
 extern int waitid_status_code_result(int);
@@ -3000,7 +3967,17 @@ extern int wait_main_thread_ptrace_detach_needed_result(int, int);
 extern int wait_thread_reap_action_result(int, int);
 extern int wait_status_copy_needed_result(int, int);
 extern int wait_rusage_copy_needed_result(int);
+extern long wait4_body_result(int, unsigned long, int, unsigned long,
+			      int (*)(int, int *, int, struct rusage *),
+			      long (*)(unsigned long, const void *, size_t));
 extern int waitid_siginfo_needed_result(int, int);
+extern void waitid_copy_siginfo_result(int, unsigned long, int, long, long,
+				       long, long,
+				       long (*)(unsigned long,
+						const void *, size_t));
+extern long waitid_body_result(int, int, unsigned long, int,
+			       int (*)(int, int *, int, struct rusage *),
+			       long (*)(unsigned long, const void *, size_t));
 extern int exit_code_status_result(int);
 extern int exit_code_signal_result(int);
 extern int exit_syscall_code_result(int);
@@ -4538,6 +5515,202 @@ static void exercise_wait_policy(unsigned long *digest)
 	}
 	mix_signed(digest, wait_continued_status_result());
 
+	{
+		struct fake_wait_thread main_thread = {
+			.tid = 100,
+			.signal_flags = SIGNAL_STOP_CONTINUED | SIGNAL_STOP_STOPPED,
+		};
+		struct fake_wait_thread report_thread = {
+			.tid = 200,
+			.signal_flags = SIGNAL_STOP_CONTINUED | SIGNAL_STOP_STOPPED,
+		};
+		struct fake_wait_process child = {
+			.pid = 55,
+			.main_thread = &main_thread,
+		};
+		int status = -1;
+		int ret;
+
+		fake_wait_reap_calls = 0;
+		fake_wait_reap_thread = NULL;
+		ret = wait_continued_body_result(NULL, &child, &status, 0,
+			offsetof(struct fake_wait_process, pid),
+			offsetof(struct fake_wait_process, main_thread),
+			offsetof(struct fake_wait_thread, tid),
+			offsetof(struct fake_wait_thread, signal_flags),
+			fake_wait_signal_flags_reap);
+		mix_signed(digest, ret);
+		mix_signed(digest, status);
+		mix_signed(digest, main_thread.signal_flags);
+		mix_signed(digest, report_thread.signal_flags);
+		mix_signed(digest, fake_wait_reap_calls);
+		mix_signed(digest, fake_wait_reap_thread == &main_thread);
+		mix_signed(digest, fake_wait_reap_options);
+		mix_signed(digest, fake_wait_reap_clear_mask);
+
+		status = -1;
+		fake_wait_reap_calls = 0;
+		fake_wait_reap_thread = NULL;
+		ret = wait_continued_body_result(&report_thread, &child, &status,
+			WNOWAIT, offsetof(struct fake_wait_process, pid),
+			offsetof(struct fake_wait_process, main_thread),
+			offsetof(struct fake_wait_thread, tid),
+			offsetof(struct fake_wait_thread, signal_flags),
+			fake_wait_signal_flags_reap);
+		mix_signed(digest, ret);
+		mix_signed(digest, status);
+		mix_signed(digest, main_thread.signal_flags);
+		mix_signed(digest, report_thread.signal_flags);
+		mix_signed(digest, fake_wait_reap_calls);
+		mix_signed(digest, fake_wait_reap_thread == &report_thread);
+		mix_signed(digest, fake_wait_reap_options);
+		mix_signed(digest, fake_wait_reap_clear_mask);
+
+		fake_wait_reap_calls = 0;
+		ret = wait_continued_body_result(&report_thread, &child, NULL,
+			0, offsetof(struct fake_wait_process, pid),
+			offsetof(struct fake_wait_process, main_thread),
+			offsetof(struct fake_wait_thread, tid),
+			offsetof(struct fake_wait_thread, signal_flags),
+			fake_wait_signal_flags_reap);
+		mix_signed(digest, ret);
+		mix_signed(digest, fake_wait_reap_calls);
+	}
+
+	{
+		int status_out = -1;
+		struct rusage usage_out;
+		long rc;
+
+		memset(&usage_out, 0xa5, sizeof(usage_out));
+		memset(&fake_wait4_seen_usage, 0, sizeof(fake_wait4_seen_usage));
+		fake_wait4_do_wait_calls = 0;
+		fake_wait4_copy_to_calls = 0;
+		fake_wait4_rc = 77;
+		fake_wait4_status = 0x1234;
+		rc = wait4_body_result(123,
+			(unsigned long)(uintptr_t)&status_out,
+			WNOHANG, (unsigned long)(uintptr_t)&usage_out,
+			fake_wait4_do_wait, fake_wait4_copy_to_user);
+		mix_signed(digest, rc);
+		mix_signed(digest, fake_wait4_do_wait_calls);
+		mix_signed(digest, fake_wait4_copy_to_calls);
+		mix_signed(digest, fake_wait4_pid);
+		mix_signed(digest, fake_wait4_options);
+		mix_signed(digest, status_out);
+		mix_signed(digest, fake_wait4_seen_usage.ru_utime.tv_sec);
+		mix_signed(digest, fake_wait4_seen_usage.ru_maxrss);
+		mix_signed(digest, usage_out.ru_utime.tv_sec);
+		mix_signed(digest, usage_out.ru_utime.tv_usec);
+		mix_signed(digest, usage_out.ru_stime.tv_sec);
+		mix_signed(digest, usage_out.ru_stime.tv_usec);
+		mix_signed(digest, usage_out.ru_maxrss);
+		mix_signed(digest, usage_out.ru_nvcsw);
+
+		status_out = -1;
+		memset(&usage_out, 0x5a, sizeof(usage_out));
+		fake_wait4_do_wait_calls = 0;
+		fake_wait4_copy_to_calls = 0;
+		fake_wait4_rc = -10;
+		fake_wait4_status = 0x5678;
+		rc = wait4_body_result(321,
+			(unsigned long)(uintptr_t)&status_out,
+			WNOWAIT, (unsigned long)(uintptr_t)&usage_out,
+			fake_wait4_do_wait, fake_wait4_copy_to_user);
+		mix_signed(digest, rc);
+		mix_signed(digest, fake_wait4_do_wait_calls);
+		mix_signed(digest, fake_wait4_copy_to_calls);
+		mix_signed(digest, status_out);
+		mix_signed(digest, usage_out.ru_maxrss);
+
+		fake_wait4_do_wait_calls = 0;
+		fake_wait4_copy_to_calls = 0;
+		rc = wait4_body_result(1, 0, -1, 0,
+			fake_wait4_do_wait, fake_wait4_copy_to_user);
+		mix_signed(digest, rc);
+		mix_signed(digest, fake_wait4_do_wait_calls);
+		mix_signed(digest, fake_wait4_copy_to_calls);
+	}
+
+	{
+		struct fake_siginfo info;
+		long rc;
+
+		memset(&info, 0xa5, sizeof(info));
+		fake_waitid_copy_to_calls = 0;
+		fake_waitid_copy_to_bytes = 0;
+		waitid_copy_siginfo_result(55, (unsigned long)(uintptr_t)&info,
+			0x137f, 12, 34567, 2, 990000,
+			fake_waitid_copy_to_user);
+		mix_signed(digest, fake_waitid_copy_to_calls);
+		mix_signed(digest, (long)fake_waitid_copy_to_bytes);
+		mix_signed(digest, info.si_signo);
+		mix_signed(digest, info.si_errno);
+		mix_signed(digest, info.si_code);
+		mix_signed(digest, info.sifields.sigchld.si_pid);
+		mix_signed(digest, info.sifields.sigchld.si_uid);
+		mix_signed(digest, info.sifields.sigchld.si_status);
+		mix_signed(digest, info.sifields.sigchld.si_utime);
+		mix_signed(digest, info.sifields.sigchld.si_stime);
+
+		memset(&info, 0x5a, sizeof(info));
+		fake_waitid_copy_to_calls = 0;
+		waitid_copy_siginfo_result(0, (unsigned long)(uintptr_t)&info,
+			0, 1, 0, 1, 0, fake_waitid_copy_to_user);
+		waitid_copy_siginfo_result(55, 0, 0, 1, 0, 1, 0,
+			fake_waitid_copy_to_user);
+		mix_signed(digest, fake_waitid_copy_to_calls);
+		mix_signed(digest, ((unsigned char *)&info)[0]);
+
+		memset(&info, 0xa5, sizeof(info));
+		memset(&fake_wait4_seen_usage, 0, sizeof(fake_wait4_seen_usage));
+		fake_wait4_do_wait_calls = 0;
+		fake_wait4_copy_to_calls = 0;
+		fake_wait4_rc = 55;
+		fake_wait4_status = 0x137f;
+		rc = waitid_body_result(P_PID, 44,
+			(unsigned long)(uintptr_t)&info, WEXITED | WNOHANG,
+			fake_wait4_do_wait, fake_wait4_copy_to_user);
+		mix_signed(digest, rc);
+		mix_signed(digest, fake_wait4_do_wait_calls);
+		mix_signed(digest, fake_wait4_copy_to_calls);
+		mix_signed(digest, fake_wait4_pid);
+		mix_signed(digest, fake_wait4_options);
+		mix_signed(digest, fake_wait4_seen_usage.ru_utime.tv_sec);
+		mix_signed(digest, info.si_signo);
+		mix_signed(digest, info.si_code);
+		mix_signed(digest, info.sifields.sigchld.si_pid);
+		mix_signed(digest, info.sifields.sigchld.si_status);
+		mix_signed(digest, info.sifields.sigchld.si_utime);
+		mix_signed(digest, info.sifields.sigchld.si_stime);
+
+		memset(&info, 0x5a, sizeof(info));
+		fake_wait4_do_wait_calls = 0;
+		fake_wait4_copy_to_calls = 0;
+		fake_wait4_rc = -10;
+		fake_wait4_status = 0x1234;
+		rc = waitid_body_result(P_PGID, 7,
+			(unsigned long)(uintptr_t)&info, WEXITED | WNOWAIT,
+			fake_wait4_do_wait, fake_wait4_copy_to_user);
+		mix_signed(digest, rc);
+		mix_signed(digest, fake_wait4_do_wait_calls);
+		mix_signed(digest, fake_wait4_copy_to_calls);
+		mix_signed(digest, fake_wait4_pid);
+		mix_signed(digest, fake_wait4_options);
+		mix_signed(digest, ((unsigned char *)&info)[0]);
+
+		fake_wait4_do_wait_calls = 0;
+		fake_wait4_copy_to_calls = 0;
+		rc = waitid_body_result(99, 1, 0, WEXITED,
+			fake_wait4_do_wait, fake_wait4_copy_to_user);
+		mix_signed(digest, rc);
+		mix_signed(digest, fake_wait4_do_wait_calls);
+		rc = waitid_body_result(P_ALL, 0, 0, 0,
+			fake_wait4_do_wait, fake_wait4_copy_to_user);
+		mix_signed(digest, rc);
+		mix_signed(digest, fake_wait4_do_wait_calls);
+	}
+
 	for (unsigned int ppid = 0; ppid < sizeof(pids) / sizeof(pids[0]); ppid++) {
 		for (unsigned int cur = 0; cur < sizeof(pids) / sizeof(pids[0]); cur++) {
 			for (unsigned int nw = 0; nw < sizeof(bools) / sizeof(bools[0]); nw++)
@@ -4756,6 +5929,208 @@ int main(void)
 		mix_signed(&digest, syscall_getppid_result(pids[i]));
 		mix_signed(&digest, syscall_gettid_result(pids[i]));
 		mix_signed(&digest, syscall_set_tid_address_return_result(pids[i]));
+	}
+	{
+		struct fake_syscall_process_ids parent = {
+			.pid = 701,
+			.ruid = 710,
+			.euid = 711,
+			.suid = 712,
+			.rgid = 713,
+			.egid = 714,
+			.sgid = 715,
+		};
+		struct fake_syscall_process_ids proc = {
+			.pid = 801,
+			.ruid = 810,
+			.euid = 811,
+			.suid = 812,
+			.rgid = 813,
+			.egid = 814,
+			.sgid = 815,
+			.ppid_parent = &parent,
+		};
+		struct fake_syscall_thread_ids thread = {
+			.tid = 901,
+			.proc = &proc,
+			.clear_child_tid = (int *)0x1234UL,
+		};
+		int clear_child_tid_slot = 0;
+		int rid_out[3] = { -1, -1, -1 };
+
+		mix_signed(&digest, syscall_getpid_body_result(&thread,
+			offsetof(struct fake_syscall_thread_ids, proc),
+			offsetof(struct fake_syscall_process_ids, pid)));
+		mix_signed(&digest, syscall_getppid_body_result(&thread,
+			offsetof(struct fake_syscall_thread_ids, proc),
+			offsetof(struct fake_syscall_process_ids, ppid_parent),
+			offsetof(struct fake_syscall_process_ids, pid)));
+		mix_signed(&digest, syscall_gettid_body_result(&thread,
+			offsetof(struct fake_syscall_thread_ids, tid)));
+		mix_signed(&digest, syscall_get_process_id_field_result(&thread,
+			offsetof(struct fake_syscall_thread_ids, proc),
+			offsetof(struct fake_syscall_process_ids, ruid)));
+		mix_signed(&digest, syscall_get_process_id_field_result(&thread,
+			offsetof(struct fake_syscall_thread_ids, proc),
+			offsetof(struct fake_syscall_process_ids, euid)));
+		mix_signed(&digest, syscall_get_process_id_field_result(&thread,
+			offsetof(struct fake_syscall_thread_ids, proc),
+			offsetof(struct fake_syscall_process_ids, rgid)));
+		mix_signed(&digest, syscall_get_process_id_field_result(&thread,
+			offsetof(struct fake_syscall_thread_ids, proc),
+			offsetof(struct fake_syscall_process_ids, egid)));
+		mix_signed(&digest, syscall_set_tid_address_body_result(&thread,
+			offsetof(struct fake_syscall_thread_ids, clear_child_tid),
+			offsetof(struct fake_syscall_thread_ids, proc),
+			offsetof(struct fake_syscall_process_ids, pid),
+			&clear_child_tid_slot));
+		require(thread.clear_child_tid == &clear_child_tid_slot);
+		mix_signed(&digest, (long)(uintptr_t)thread.clear_child_tid -
+			(long)(uintptr_t)&clear_child_tid_slot);
+
+		fake_getresid_fail_after = -1;
+		fake_getresid_calls = 0;
+		mix_signed(&digest, syscall_getresid_body_result(&thread,
+			offsetof(struct fake_syscall_thread_ids, proc),
+			offsetof(struct fake_syscall_process_ids, ruid),
+			offsetof(struct fake_syscall_process_ids, euid),
+			offsetof(struct fake_syscall_process_ids, suid),
+			(unsigned long)(uintptr_t)&rid_out[0],
+			(unsigned long)(uintptr_t)&rid_out[1],
+			(unsigned long)(uintptr_t)&rid_out[2],
+			fake_copy_int_to_user));
+		mix_signed(&digest, rid_out[0]);
+		mix_signed(&digest, rid_out[1]);
+		mix_signed(&digest, rid_out[2]);
+		mix_signed(&digest, fake_getresid_calls);
+
+		rid_out[0] = rid_out[1] = rid_out[2] = -1;
+		fake_getresid_fail_after = -1;
+		fake_getresid_calls = 0;
+		mix_signed(&digest, syscall_getresid_body_result(&thread,
+			offsetof(struct fake_syscall_thread_ids, proc),
+			offsetof(struct fake_syscall_process_ids, rgid),
+			offsetof(struct fake_syscall_process_ids, egid),
+			offsetof(struct fake_syscall_process_ids, sgid),
+			(unsigned long)(uintptr_t)&rid_out[0],
+			(unsigned long)(uintptr_t)&rid_out[1],
+			(unsigned long)(uintptr_t)&rid_out[2],
+			fake_copy_int_to_user));
+		mix_signed(&digest, rid_out[0]);
+		mix_signed(&digest, rid_out[1]);
+		mix_signed(&digest, rid_out[2]);
+		mix_signed(&digest, fake_getresid_calls);
+
+		rid_out[0] = rid_out[1] = rid_out[2] = -1;
+		fake_getresid_fail_after = 1;
+		fake_getresid_calls = 0;
+		mix_signed(&digest, syscall_getresid_body_result(&thread,
+			offsetof(struct fake_syscall_thread_ids, proc),
+			offsetof(struct fake_syscall_process_ids, ruid),
+			offsetof(struct fake_syscall_process_ids, euid),
+			offsetof(struct fake_syscall_process_ids, suid),
+			(unsigned long)(uintptr_t)&rid_out[0],
+			(unsigned long)(uintptr_t)&rid_out[1],
+			(unsigned long)(uintptr_t)&rid_out[2],
+			fake_copy_int_to_user));
+		mix_signed(&digest, rid_out[0]);
+		mix_signed(&digest, rid_out[1]);
+		mix_signed(&digest, rid_out[2]);
+		mix_signed(&digest, fake_getresid_calls);
+	}
+	{
+		struct fake_sigaltstack_thread thread = {
+			.prefix = 7,
+			.sigstack = {
+				.ss_sp = (void *)0x1111UL,
+				.ss_flags = 0,
+				.ss_size = MINSIGSTKSZ + 64,
+			},
+			.suffix = 9,
+		};
+		stack_t old_stack = { 0 };
+		stack_t new_stack = {
+			.ss_sp = (void *)0x2222UL,
+			.ss_flags = 0,
+			.ss_size = MINSIGSTKSZ + 128,
+		};
+		stack_t disable_stack = {
+			.ss_sp = (void *)0x3333UL,
+			.ss_flags = SS_DISABLE,
+			.ss_size = 0,
+		};
+		stack_t small_stack = {
+			.ss_sp = (void *)0x4444UL,
+			.ss_flags = 0,
+			.ss_size = MINSIGSTKSZ - 1,
+		};
+
+		fake_stack_copy_from_fail = 0;
+		fake_stack_copy_to_fail = 0;
+		fake_stack_copy_from_calls = 0;
+		fake_stack_copy_to_calls = 0;
+		mix_signed(&digest, sigaltstack_body_result(&thread,
+			offsetof(struct fake_sigaltstack_thread, sigstack),
+			(unsigned long)(uintptr_t)&new_stack,
+			(unsigned long)(uintptr_t)&old_stack,
+			fake_copy_stack_from_user, fake_copy_stack_to_user));
+		mix(&digest, (unsigned long)(uintptr_t)old_stack.ss_sp);
+		mix_signed(&digest, old_stack.ss_flags);
+		mix(&digest, old_stack.ss_size);
+		mix(&digest, (unsigned long)(uintptr_t)thread.sigstack.ss_sp);
+		mix_signed(&digest, thread.sigstack.ss_flags);
+		mix(&digest, thread.sigstack.ss_size);
+		mix_signed(&digest, fake_stack_copy_from_calls);
+		mix_signed(&digest, fake_stack_copy_to_calls);
+
+		fake_stack_copy_from_fail = 0;
+		fake_stack_copy_to_fail = 0;
+		fake_stack_copy_from_calls = 0;
+		fake_stack_copy_to_calls = 0;
+		mix_signed(&digest, sigaltstack_body_result(&thread,
+			offsetof(struct fake_sigaltstack_thread, sigstack),
+			(unsigned long)(uintptr_t)&disable_stack, 0,
+			fake_copy_stack_from_user, fake_copy_stack_to_user));
+		mix(&digest, (unsigned long)(uintptr_t)thread.sigstack.ss_sp);
+		mix_signed(&digest, thread.sigstack.ss_flags);
+		mix(&digest, thread.sigstack.ss_size);
+		mix_signed(&digest, fake_stack_copy_from_calls);
+		mix_signed(&digest, fake_stack_copy_to_calls);
+
+		fake_stack_copy_from_fail = 0;
+		fake_stack_copy_to_fail = 0;
+		fake_stack_copy_from_calls = 0;
+		fake_stack_copy_to_calls = 0;
+		mix_signed(&digest, sigaltstack_body_result(&thread,
+			offsetof(struct fake_sigaltstack_thread, sigstack),
+			(unsigned long)(uintptr_t)&small_stack, 0,
+			fake_copy_stack_from_user, fake_copy_stack_to_user));
+		mix(&digest, (unsigned long)(uintptr_t)thread.sigstack.ss_sp);
+		mix_signed(&digest, thread.sigstack.ss_flags);
+		mix(&digest, thread.sigstack.ss_size);
+		mix_signed(&digest, fake_stack_copy_from_calls);
+
+		fake_stack_copy_from_fail = 1;
+		fake_stack_copy_to_fail = 0;
+		fake_stack_copy_from_calls = 0;
+		fake_stack_copy_to_calls = 0;
+		mix_signed(&digest, sigaltstack_body_result(&thread,
+			offsetof(struct fake_sigaltstack_thread, sigstack),
+			(unsigned long)(uintptr_t)&new_stack, 0,
+			fake_copy_stack_from_user, fake_copy_stack_to_user));
+		mix_signed(&digest, fake_stack_copy_from_calls);
+
+		fake_stack_copy_from_fail = 0;
+		fake_stack_copy_to_fail = 1;
+		fake_stack_copy_from_calls = 0;
+		fake_stack_copy_to_calls = 0;
+		mix_signed(&digest, sigaltstack_body_result(&thread,
+			offsetof(struct fake_sigaltstack_thread, sigstack),
+			(unsigned long)(uintptr_t)&new_stack,
+			(unsigned long)(uintptr_t)&old_stack,
+			fake_copy_stack_from_user, fake_copy_stack_to_user));
+		mix_signed(&digest, fake_stack_copy_from_calls);
+		mix_signed(&digest, fake_stack_copy_to_calls);
 	}
 	for (unsigned int i = 0; i < sizeof(syscall_numbers) / sizeof(syscall_numbers[0]); i++) {
 		for (unsigned int p = 0; p < sizeof(pids) / sizeof(pids[0]); p++) {
@@ -5383,6 +6758,27 @@ extern int sysfs_pointer_missing_result(uintptr_t);
 extern int sysfs_should_call_show_result(uintptr_t);
 extern int sysfs_should_call_store_result(uintptr_t);
 extern int sysfs_should_call_release_result(uintptr_t);
+typedef ssize_t (*sysfss_show_fn_t)(void *, void *, void *, size_t);
+typedef ssize_t (*sysfss_store_fn_t)(void *, void *, void *, size_t);
+typedef void (*sysfss_release_fn_t)(void *, void *);
+typedef int (*sysfss_send_fn_t)(int, int, long, long);
+typedef void (*sysfss_packet_show_fn_t)(long, void *, void *);
+typedef void (*sysfss_packet_store_fn_t)(long, void *, void *, size_t);
+typedef void (*sysfss_packet_release_fn_t)(long, void *, void *);
+extern int sysfss_req_show_body_result(long, void *, void *, void *, size_t,
+				       sysfss_show_fn_t, sysfss_send_fn_t,
+				       ssize_t *, int *);
+extern int sysfss_req_store_body_result(long, void *, void *, void *, size_t,
+					sysfss_store_fn_t, sysfss_send_fn_t,
+					ssize_t *, int *);
+extern int sysfss_req_release_body_result(long, void *, void *,
+					  sysfss_release_fn_t,
+					  sysfss_send_fn_t, int *);
+extern int sysfss_packet_handler_body_result(int, int, long, long, long,
+					     sysfss_packet_show_fn_t,
+					     sysfss_packet_store_fn_t,
+					     sysfss_packet_release_fn_t,
+					     int *);
 extern unsigned long procfs_mem_reason_result(int);
 extern int procfs_mem_chunk_size_result(unsigned long, unsigned long);
 extern int procfs_pagemap_range_result(unsigned long, int,
@@ -5540,6 +6936,100 @@ static long ptr_offset(const char *base, uintptr_t ptr)
 	if (!ptr)
 		return -1;
 	return (const char *)ptr - base;
+}
+
+static int fake_sysfs_send_error;
+static int fake_sysfs_send_calls;
+static int fake_sysfs_release_calls;
+static int fake_sysfs_last_msg;
+static int fake_sysfs_last_err;
+static long fake_sysfs_last_arg1;
+static long fake_sysfs_last_arg2;
+static int fake_sysfs_packet_show_calls;
+static int fake_sysfs_packet_store_calls;
+static int fake_sysfs_packet_release_calls;
+static long fake_sysfs_packet_last_nodeh;
+static long fake_sysfs_packet_last_ops;
+static long fake_sysfs_packet_last_instance;
+static size_t fake_sysfs_packet_last_size;
+
+static void reset_fake_sysfs(void)
+{
+	fake_sysfs_send_error = 0;
+	fake_sysfs_send_calls = 0;
+	fake_sysfs_release_calls = 0;
+	fake_sysfs_last_msg = 0;
+	fake_sysfs_last_err = 0;
+	fake_sysfs_last_arg1 = 0;
+	fake_sysfs_last_arg2 = 0;
+	fake_sysfs_packet_show_calls = 0;
+	fake_sysfs_packet_store_calls = 0;
+	fake_sysfs_packet_release_calls = 0;
+	fake_sysfs_packet_last_nodeh = 0;
+	fake_sysfs_packet_last_ops = 0;
+	fake_sysfs_packet_last_instance = 0;
+	fake_sysfs_packet_last_size = 0;
+}
+
+static int fake_sysfs_send(int msg, int err, long arg1, long arg2)
+{
+	fake_sysfs_send_calls++;
+	fake_sysfs_last_msg = msg;
+	fake_sysfs_last_err = err;
+	fake_sysfs_last_arg1 = arg1;
+	fake_sysfs_last_arg2 = arg2;
+	return fake_sysfs_send_error;
+}
+
+static ssize_t fake_sysfs_show(void *ops, void *instance, void *buf,
+			       size_t bufsize)
+{
+	(void)ops;
+	(void)instance;
+	(void)buf;
+	return (ssize_t)bufsize - 3;
+}
+
+static ssize_t fake_sysfs_store(void *ops, void *instance, void *buf,
+				size_t size)
+{
+	(void)ops;
+	(void)instance;
+	(void)buf;
+	return -((ssize_t)size + 5);
+}
+
+static void fake_sysfs_release(void *ops, void *instance)
+{
+	(void)ops;
+	(void)instance;
+	fake_sysfs_release_calls++;
+}
+
+static void fake_sysfs_packet_show(long nodeh, void *ops, void *instance)
+{
+	fake_sysfs_packet_show_calls++;
+	fake_sysfs_packet_last_nodeh = nodeh;
+	fake_sysfs_packet_last_ops = (long)ops;
+	fake_sysfs_packet_last_instance = (long)instance;
+}
+
+static void fake_sysfs_packet_store(long nodeh, void *ops, void *instance,
+				    size_t size)
+{
+	fake_sysfs_packet_store_calls++;
+	fake_sysfs_packet_last_nodeh = nodeh;
+	fake_sysfs_packet_last_ops = (long)ops;
+	fake_sysfs_packet_last_instance = (long)instance;
+	fake_sysfs_packet_last_size = size;
+}
+
+static void fake_sysfs_packet_release(long nodeh, void *ops, void *instance)
+{
+	fake_sysfs_packet_release_calls++;
+	fake_sysfs_packet_last_nodeh = nodeh;
+	fake_sysfs_packet_last_ops = (long)ops;
+	fake_sysfs_packet_last_instance = (long)instance;
 }
 
 int main(void)
@@ -5766,6 +7256,87 @@ int main(void)
 		mix_signed(&digest, sysfs_should_call_store_result(ptr));
 		mix_signed(&digest, sysfs_should_call_release_result(ptr));
 	}
+	ssize_t sysfs_ssize = 0;
+	int sysfs_packet_err = 0;
+	reset_fake_sysfs();
+	mix_signed(&digest, sysfss_req_show_body_result(0x1234,
+		(void *)0x10, (void *)0x20, (void *)0x30, 128,
+		fake_sysfs_show, fake_sysfs_send, &sysfs_ssize,
+		&sysfs_packet_err));
+	mix_signed(&digest, sysfs_ssize);
+	mix_signed(&digest, sysfs_packet_err);
+	mix_signed(&digest, fake_sysfs_send_calls);
+	mix_signed(&digest, fake_sysfs_last_msg);
+	mix_signed(&digest, fake_sysfs_last_err);
+	mix_signed(&digest, fake_sysfs_last_arg1);
+	mix_signed(&digest, fake_sysfs_last_arg2);
+	reset_fake_sysfs();
+	fake_sysfs_send_error = -14;
+	mix_signed(&digest, sysfss_req_show_body_result(0x55, NULL, NULL,
+		NULL, 4096, NULL, fake_sysfs_send, &sysfs_ssize,
+		&sysfs_packet_err));
+	mix_signed(&digest, sysfs_ssize);
+	mix_signed(&digest, sysfs_packet_err);
+	mix_signed(&digest, fake_sysfs_send_error);
+	reset_fake_sysfs();
+	mix_signed(&digest, sysfss_req_store_body_result(0x2233,
+		(void *)0x11, (void *)0x22, (void *)0x33, 9,
+		fake_sysfs_store, fake_sysfs_send, &sysfs_ssize,
+		&sysfs_packet_err));
+	mix_signed(&digest, sysfs_ssize);
+	mix_signed(&digest, sysfs_packet_err);
+	mix_signed(&digest, fake_sysfs_last_msg);
+	mix_signed(&digest, fake_sysfs_last_err);
+	mix_signed(&digest, fake_sysfs_last_arg2);
+	reset_fake_sysfs();
+	mix_signed(&digest, sysfss_req_release_body_result(0x3344,
+		(void *)0x44, (void *)0x55, fake_sysfs_release,
+		fake_sysfs_send, &sysfs_packet_err));
+	mix_signed(&digest, sysfs_packet_err);
+	mix_signed(&digest, fake_sysfs_release_calls);
+	mix_signed(&digest, fake_sysfs_last_msg);
+	mix_signed(&digest, fake_sysfs_last_arg1);
+	int sysfs_handler_kind = 0;
+	reset_fake_sysfs();
+	mix_signed(&digest, sysfss_packet_handler_body_result(0x3a, 77,
+		0x4001, 0x4002, 0x4003, fake_sysfs_packet_show,
+		fake_sysfs_packet_store, fake_sysfs_packet_release,
+		&sysfs_handler_kind));
+	mix_signed(&digest, sysfs_handler_kind);
+	mix_signed(&digest, fake_sysfs_packet_show_calls);
+	mix_signed(&digest, fake_sysfs_packet_last_nodeh);
+	mix_signed(&digest, fake_sysfs_packet_last_ops);
+	mix_signed(&digest, fake_sysfs_packet_last_instance);
+	reset_fake_sysfs();
+	mix_signed(&digest, sysfss_packet_handler_body_result(0x3c, 99,
+		0x5001, 0x5002, 0x5003, fake_sysfs_packet_show,
+		fake_sysfs_packet_store, fake_sysfs_packet_release,
+		&sysfs_handler_kind));
+	mix_signed(&digest, sysfs_handler_kind);
+	mix_signed(&digest, fake_sysfs_packet_store_calls);
+	mix_signed(&digest, fake_sysfs_packet_last_nodeh);
+	mix_signed(&digest, fake_sysfs_packet_last_ops);
+	mix_signed(&digest, fake_sysfs_packet_last_instance);
+	mix(&digest, fake_sysfs_packet_last_size);
+	reset_fake_sysfs();
+	mix_signed(&digest, sysfss_packet_handler_body_result(0x3e, 0,
+		0x6001, 0x6002, 0x6003, fake_sysfs_packet_show,
+		fake_sysfs_packet_store, fake_sysfs_packet_release,
+		&sysfs_handler_kind));
+	mix_signed(&digest, sysfs_handler_kind);
+	mix_signed(&digest, fake_sysfs_packet_release_calls);
+	mix_signed(&digest, fake_sysfs_packet_last_nodeh);
+	mix_signed(&digest, fake_sysfs_packet_last_ops);
+	mix_signed(&digest, fake_sysfs_packet_last_instance);
+	reset_fake_sysfs();
+	mix_signed(&digest, sysfss_packet_handler_body_result(0x41, -1,
+		0x7001, 0x7002, 0x7003, fake_sysfs_packet_show,
+		fake_sysfs_packet_store, fake_sysfs_packet_release,
+		&sysfs_handler_kind));
+	mix_signed(&digest, sysfs_handler_kind);
+	mix_signed(&digest, fake_sysfs_packet_show_calls);
+	mix_signed(&digest, fake_sysfs_packet_store_calls);
+	mix_signed(&digest, fake_sysfs_packet_release_calls);
 
 	mix(&digest, procfs_mem_reason_result(0));
 	mix(&digest, procfs_mem_reason_result(1));
@@ -6898,6 +8469,84 @@ int main(void)
 }
 EOF_NUMPARSE
 
+cat > "${tmpdir}/printf_decimal_equiv.c" <<'EOF_PRINTF_DECIMAL'
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+
+extern int snprintf(char *, size_t, const char *, ...);
+
+static void mix(unsigned long *digest, unsigned long value)
+{
+	*digest ^= value + 0x9e3779b97f4a7c15UL + (*digest << 6) + (*digest >> 2);
+}
+
+static void mix_signed(unsigned long *digest, long value)
+{
+	mix(digest, (unsigned long)value);
+}
+
+static size_t bounded_len(const char *buf, size_t max)
+{
+	size_t len = 0;
+
+	while (len < max && buf[len])
+		len++;
+	return len;
+}
+
+static void mix_buf(unsigned long *digest, const char *buf, size_t max)
+{
+	size_t len = bounded_len(buf, max);
+
+	mix(digest, len);
+	for (size_t i = 0; i < len; i++)
+		mix(digest, (unsigned char)buf[i]);
+}
+
+#define RUN(size_value, fmt, ...) do {					\
+	char buf[96];							\
+	size_t out_size = (size_value);					\
+	for (size_t i = 0; i < sizeof(buf); i++)			\
+		buf[i] = (char)(0x30 + (i % 10));			\
+	int rc = snprintf(buf, out_size, fmt, __VA_ARGS__);		\
+	mix_signed(&digest, rc);					\
+	if (out_size > sizeof(buf))					\
+		out_size = sizeof(buf);				\
+	mix_buf(&digest, buf, out_size);				\
+} while (0)
+
+int main(void)
+{
+	unsigned long digest = 0xdec1a1f0cafed00dUL;
+
+	RUN(96, "%u", 0U);
+	RUN(96, "%u", 99999U);
+	RUN(96, "%u", 100000U);
+	RUN(96, "%u", 1234567890U);
+	RUN(96, "%d", -2147483647);
+	RUN(96, "%+d:% d:%08u", 17, 17, 42U);
+	RUN(96, "%-12u:%12u:%.6u", 123U, 123U, 123U);
+	RUN(96, "%llu", 0xffffffffffffffffULL);
+	RUN(96, "%020llu", 1234567890123456789ULL);
+	RUN(96, "%lld", -9223372036854775807LL);
+	RUN(96, "%#x:%#o:%llu", 0x2aU, 052U, 9876543210123ULL);
+	RUN(96, "%#X:%#08x:%#-8o", 0xABCDU, 0x2aU, 052U);
+	RUN(96, "%hhd:%hhu:%hd:%hu", -3, 250U, -1234, 65000U);
+	RUN(96, "%p:%16p", (void *)(uintptr_t)0x1234,
+	    (void *)(uintptr_t)0x1234);
+	RUN(96, "%10.3s:%-8s:%s", "abcdef", "xy", (char *)0);
+	RUN(7, "%-8.5s", "abcdef");
+	RUN(16, "%020llu", 1234567890123456789ULL);
+	RUN(8, "%-12u", 123456U);
+	RUN(1, "%u", 123456U);
+	RUN(0, "%u", 123456U);
+
+	printf("printf_decimal ok digest=%016lx\n", digest);
+	return 0;
+}
+EOF_PRINTF_DECIMAL
+
 cat > "${tmpdir}/page_alloc_equiv.c" <<'EOF_PAGE_ALLOC'
 extern int printf(const char *, ...);
 extern void exit(int);
@@ -7017,9 +8666,13 @@ extern int __ihk_numa_cpu_cache_free_success_result(int);
 								   void (*)(unsigned long));
 	extern int __ihk_numa_cpu_cache_free_try_result(int, struct rb_root *,
 							unsigned long, int,
-							unsigned long (*)(void),
-							void (*)(unsigned long));
+								   unsigned long (*)(void),
+								   void (*)(unsigned long));
 	extern int __ihk_numa_linux_zero_request_action(int, int, int, int, int);
+	extern int ihk_numa_free_pages_finish_result(int, int, int,
+		unsigned long, unsigned long, int, int, unsigned long,
+		int (*)(unsigned long),
+		void (*)(int, unsigned long, unsigned long, int, int, int));
 	#endif
 
 static void mix(unsigned long *digest, unsigned long value)
@@ -7080,6 +8733,124 @@ static unsigned long digest_tree(struct rb_root *root)
 		irq_save_calls = 0;
 		irq_restore_calls = 0;
 		restored_irq_cookie = 0;
+	}
+
+	static int finish_send_count;
+	static int finish_send_rc;
+	static unsigned long finish_send_packet;
+	static int finish_log_count;
+	static unsigned long finish_log_digest;
+
+	static int fake_finish_send(unsigned long packet_addr)
+	{
+		finish_send_count++;
+		finish_send_packet = packet_addr;
+		return finish_send_rc;
+	}
+
+	static void fake_finish_log(int event, unsigned long node_addr,
+			unsigned long addr, int npages, int zero_at_free_value,
+			int detail)
+	{
+		finish_log_count++;
+		mix(&finish_log_digest, (unsigned long)event);
+		mix(&finish_log_digest, node_addr);
+		mix(&finish_log_digest, addr);
+		mix(&finish_log_digest, (unsigned long)npages);
+		mix(&finish_log_digest, (unsigned long)zero_at_free_value);
+		mix(&finish_log_digest, (unsigned long)(int)detail);
+	}
+
+	static void reset_finish_trace(int send_rc)
+	{
+		finish_send_count = 0;
+		finish_send_rc = send_rc;
+		finish_send_packet = 0;
+		finish_log_count = 0;
+		finish_log_digest = 0x6672656566696e69UL;
+	}
+
+	static unsigned long numa_free_finish_digest(void)
+	{
+		unsigned long digest = 0x66726565646f6e65UL;
+
+		reset_finish_trace(0);
+		require(ihk_numa_free_pages_finish_result(0, 0, 0,
+			0x11110000UL, ARENA_BASE, 2, 1, 0xaaaa0000UL,
+			fake_finish_send, fake_finish_log) == 0);
+		require(finish_send_count == 0);
+		require(finish_log_count == 1);
+		mix(&digest, finish_log_digest);
+
+		reset_finish_trace(0);
+		require(ihk_numa_free_pages_finish_result(0, 5, 0,
+			0x11110000UL, ARENA_BASE, 3, 0, 0xaaaa0001UL,
+			fake_finish_send, fake_finish_log) == 0);
+		require(finish_send_count == 0);
+		require(finish_log_count == 1);
+		mix(&digest, finish_log_digest);
+
+		reset_finish_trace(0);
+		require(ihk_numa_free_pages_finish_result(2, 0, 0,
+			0x11110000UL, ARENA_BASE, 4, 1, 0xaaaa0002UL,
+			fake_finish_send, fake_finish_log) == 0);
+		require(finish_send_count == 0);
+		require(finish_log_count == 0);
+		mix(&digest, finish_log_digest);
+
+		reset_finish_trace(0);
+		require(ihk_numa_free_pages_finish_result(1, 0, -22,
+			0x11110000UL, ARENA_BASE, 5, 1, 0xaaaa0003UL,
+			fake_finish_send, fake_finish_log) == 0);
+		require(finish_send_count == 0);
+		require(finish_log_count == 1);
+		mix(&digest, finish_log_digest);
+
+		reset_finish_trace(0);
+		require(ihk_numa_free_pages_finish_result(1, 0, 2,
+			0x11110000UL, ARENA_BASE, 6, 1, 0xaaaa0004UL,
+			fake_finish_send, fake_finish_log) == 0);
+		require(finish_send_count == 0);
+		require(finish_log_count == 1);
+		mix(&digest, finish_log_digest);
+
+		reset_finish_trace(0);
+		require(ihk_numa_free_pages_finish_result(1, 0, 1,
+			0x11110000UL, ARENA_BASE, 7, 1, 0xaaaa0005UL,
+			fake_finish_send, fake_finish_log) == 0);
+		require(finish_send_count == 1);
+		require(finish_send_packet == 0xaaaa0005UL);
+		require(finish_log_count == 1);
+		mix(&digest, finish_log_digest);
+		mix(&digest, finish_send_packet);
+
+		reset_finish_trace(-7);
+		require(ihk_numa_free_pages_finish_result(1, 0, 1,
+			0x11110000UL, ARENA_BASE, 8, 1, 0xaaaa0006UL,
+			fake_finish_send, fake_finish_log) == 0);
+		require(finish_send_count == 1);
+		require(finish_send_packet == 0xaaaa0006UL);
+		require(finish_log_count == 1);
+		mix(&digest, finish_log_digest);
+		mix(&digest, finish_send_packet);
+
+		reset_finish_trace(0);
+		require(ihk_numa_free_pages_finish_result(1, 0, 0,
+			0x11110000UL, ARENA_BASE, 9, 1, 0xaaaa0007UL,
+			fake_finish_send, fake_finish_log) == 0);
+		require(finish_send_count == 0);
+		require(finish_log_count == 0);
+		mix(&digest, finish_log_digest);
+
+		reset_finish_trace(0);
+		require(ihk_numa_free_pages_finish_result(9, 0, 0,
+			0x11110000UL, ARENA_BASE, 10, 1, 0xaaaa0008UL,
+			fake_finish_send, fake_finish_log) == 0);
+		require(finish_send_count == 0);
+		require(finish_log_count == 1);
+		mix(&digest, finish_log_digest);
+
+		return digest;
 	}
 
 	int main(void)
@@ -7271,6 +9042,7 @@ static unsigned long digest_tree(struct rb_root *root)
 		require(root.rb_node == NULL);
 	}
 	mix(&digest, digest_tree(&root));
+	mix(&digest, numa_free_finish_digest());
 
 	printf("page_alloc ok digest=%016lx\n", digest);
 	return 0;
@@ -7616,6 +9388,113 @@ static void fake_mcs_unlock(unsigned long lock_addr, unsigned long lock_node_add
 	mcs_unlock_count++;
 }
 
+static unsigned long irq_cookie = 0xfacefeed12345678UL;
+static int irq_save_count;
+static int irq_restore_count;
+static unsigned long irq_restore_cookie;
+
+static unsigned long fake_irq_save(void)
+{
+	irq_save_count++;
+	return irq_cookie;
+}
+
+static void fake_irq_restore(unsigned long irqstate)
+{
+	irq_restore_count++;
+	irq_restore_cookie = irqstate;
+}
+
+static void reset_irq_trace(void)
+{
+	irq_save_count = 0;
+	irq_restore_count = 0;
+	irq_restore_cookie = 0;
+}
+
+static int top_free_send_count;
+static int top_free_send_rc;
+static unsigned long top_free_send_packet;
+static int top_free_log_count;
+static unsigned long top_free_expected_node;
+static unsigned long top_free_log_digest;
+static int top_alloc_log_count;
+static unsigned long top_alloc_expected_node;
+static unsigned long top_alloc_log_digest;
+static int top_add_free_log_count;
+static unsigned long top_add_free_expected_node;
+static unsigned long top_add_free_log_digest;
+
+static int fake_top_free_send(unsigned long packet_addr)
+{
+	top_free_send_count++;
+	top_free_send_packet = packet_addr;
+	return top_free_send_rc;
+}
+
+static void fake_top_free_log(int event, unsigned long node_addr,
+			      unsigned long addr, int npages,
+			      int zero_at_free_value, int detail)
+{
+	top_free_log_count++;
+	mix(&top_free_log_digest, (unsigned long)event);
+	mix(&top_free_log_digest,
+	    (unsigned long)(node_addr == top_free_expected_node));
+	mix(&top_free_log_digest, addr);
+	mix(&top_free_log_digest, (unsigned long)npages);
+	mix(&top_free_log_digest, (unsigned long)zero_at_free_value);
+	mix(&top_free_log_digest, (unsigned long)(int)detail);
+}
+
+static void reset_top_free_trace(int send_rc)
+{
+	top_free_send_count = 0;
+	top_free_send_rc = send_rc;
+	top_free_send_packet = 0;
+	top_free_log_count = 0;
+	top_free_expected_node = 0;
+	top_free_log_digest = 0x746f706672656521UL;
+}
+
+static void fake_top_alloc_log(int event, unsigned long node_addr,
+			       unsigned long addr, int npages, int source)
+{
+	top_alloc_log_count++;
+	mix(&top_alloc_log_digest, (unsigned long)event);
+	mix(&top_alloc_log_digest,
+	    (unsigned long)(node_addr == top_alloc_expected_node));
+	mix(&top_alloc_log_digest, addr);
+	mix(&top_alloc_log_digest, (unsigned long)npages);
+	mix(&top_alloc_log_digest, (unsigned long)source);
+}
+
+static void reset_top_alloc_trace(void)
+{
+	top_alloc_log_count = 0;
+	top_alloc_expected_node = 0;
+	top_alloc_log_digest = 0x746f70616c6c6f63UL;
+}
+
+static void fake_top_add_free_log(int event, unsigned long node_addr,
+				  unsigned long addr, unsigned long size,
+				  int rc)
+{
+	top_add_free_log_count++;
+	mix(&top_add_free_log_digest, (unsigned long)event);
+	mix(&top_add_free_log_digest,
+	    (unsigned long)(node_addr == top_add_free_expected_node));
+	mix(&top_add_free_log_digest, addr);
+	mix(&top_add_free_log_digest, size);
+	mix(&top_add_free_log_digest, (unsigned long)(int)rc);
+}
+
+static void reset_top_add_free_trace(void)
+{
+	top_add_free_log_count = 0;
+	top_add_free_expected_node = 0;
+	top_add_free_log_digest = 0x6164646672656521UL;
+}
+
 static void *pagealloc_destroy_free_ptr;
 static int pagealloc_destroy_free_pages;
 static int pagealloc_destroy_free_count;
@@ -7834,14 +9713,20 @@ static unsigned long digest_free_tree(struct rb_root *root)
 static unsigned long numa_locked_orchestration_digest(void)
 {
 	struct ihk_mc_numa_node numa;
+	struct rb_root cache_root = { NULL };
 	mcs_lock_node_t lock_node;
 	unsigned long base = ARENA_BASE + 232 * LOCAL_PAGE_SIZE;
+	unsigned long cache_base = ARENA_BASE + 236 * LOCAL_PAGE_SIZE;
 	unsigned long lock_offset = __builtin_offsetof(struct ihk_mc_numa_node,
 						       lock);
 	unsigned long lock_addr;
 	unsigned long node_addr = (unsigned long)&lock_node;
 	unsigned long digest = 0x6e756d616c6f636bUL;
 	unsigned long addr;
+	int source;
+	int direct_rc;
+	int zero_request_action;
+	struct ikc_scd_packet packet;
 	int rc;
 
 	memset(&numa, 0, sizeof(numa));
@@ -7903,6 +9788,405 @@ static unsigned long numa_locked_orchestration_digest(void)
 	require(mcs_lock_count == 0);
 	require(mcs_unlock_count == 0);
 	mix(&digest, (unsigned long)rc);
+
+	zero_at_free = 0;
+	require(__page_alloc_rbtree_free_range(&cache_root, cache_base,
+					       2 * LOCAL_PAGE_SIZE) == 0);
+
+	reset_irq_trace();
+	reset_mcs_trace();
+	source = -1;
+	addr = ihk_numa_alloc_pages_orchestrate_result(&numa, 1, &cache_root,
+		1, 0, lock_offset, node_addr, fake_irq_save, fake_irq_restore,
+		fake_mcs_lock, fake_mcs_unlock, &source);
+	require(addr == cache_base);
+	require(source == 1);
+	require(irq_save_count == 1);
+	require(irq_restore_count == 1);
+	require(irq_restore_cookie == irq_cookie);
+	require(mcs_lock_count == 0);
+	require(mcs_unlock_count == 0);
+	mix(&digest, addr - cache_base);
+	mix(&digest, (unsigned long)source);
+	mix(&digest, (unsigned long)irq_save_count);
+	mix(&digest, digest_free_tree(&cache_root));
+
+	reset_irq_trace();
+	reset_mcs_trace();
+	source = -1;
+	addr = ihk_numa_alloc_pages_orchestrate_result(&numa, 0, &cache_root,
+		1, 0, lock_offset, node_addr, fake_irq_save, fake_irq_restore,
+		fake_mcs_lock, fake_mcs_unlock, &source);
+	require(addr == base);
+	require(source == 2);
+	require(numa.nr_free_pages == 3);
+	require(irq_save_count == 0);
+	require(irq_restore_count == 0);
+	require(mcs_lock_count == 1);
+	require(mcs_unlock_count == 1);
+	require(mcs_lock_log[0][0] == lock_addr);
+	mix(&digest, addr - base);
+	mix(&digest, (unsigned long)source);
+	mix(&digest, numa.nr_free_pages);
+	mix(&digest, (unsigned long)mcs_lock_count);
+
+	rc = __ihk_numa_free_pages_direct_locked_result(&numa, addr, 1,
+		lock_offset, node_addr, fake_mcs_lock, fake_mcs_unlock);
+	require(rc == 0);
+	require(numa.nr_free_pages == 4);
+	mix(&digest, numa.nr_free_pages);
+
+	reset_irq_trace();
+	reset_mcs_trace();
+	source = -1;
+	addr = ihk_numa_alloc_pages_orchestrate_result(&numa, 0, &cache_root,
+		1, 0, lock_offset, node_addr, fake_irq_save, fake_irq_restore,
+		NULL, fake_mcs_unlock, &source);
+	require(addr == 0);
+	require(source == 0);
+	require(irq_save_count == 0);
+	require(irq_restore_count == 0);
+	require(mcs_lock_count == 0);
+	require(mcs_unlock_count == 0);
+	mix(&digest, addr);
+	mix(&digest, (unsigned long)source);
+
+	zero_at_free = 0;
+	addr = __ihk_numa_alloc_pages_locked_result(&numa, 1, 0,
+		lock_offset, node_addr, fake_mcs_lock, fake_mcs_unlock);
+	require(addr == base);
+	require(numa.nr_free_pages == 3);
+	reset_mcs_trace();
+	direct_rc = -1;
+	zero_request_action = -1;
+	rc = ihk_numa_free_pages_orchestrate_result(&numa, addr, 1, 1,
+		&packet, 0, 0, 0, 0, 0, 0, 0, 0, lock_offset, node_addr,
+		fake_mcs_lock, fake_mcs_unlock, &direct_rc,
+		&zero_request_action);
+	require(rc == 0);
+	require(direct_rc == 0);
+	require(zero_request_action == 0);
+	require(numa.nr_free_pages == 4);
+	require(mcs_lock_count == 1);
+	require(mcs_unlock_count == 1);
+	mix(&digest, (unsigned long)rc);
+	mix(&digest, (unsigned long)direct_rc);
+	mix(&digest, numa.nr_free_pages);
+
+	direct_rc = -1;
+	zero_request_action = -1;
+	rc = ihk_numa_free_pages_orchestrate_result(&numa,
+		base + 8 * LOCAL_PAGE_SIZE, 1, 1, &packet, 0, 0, 0, 0, 0, 0,
+		0, 0, lock_offset, node_addr, fake_mcs_lock, fake_mcs_unlock,
+		&direct_rc, &zero_request_action);
+	require(rc == 2);
+	require(direct_rc == 0);
+	require(zero_request_action == 0);
+	mix(&digest, (unsigned long)rc);
+
+	addr = __ihk_numa_alloc_pages_locked_result(&numa, 1, 0,
+		lock_offset, node_addr, fake_mcs_lock, fake_mcs_unlock);
+	require(addr == base);
+	zero_at_free = 1;
+	numa.to_zero_list.first = NULL;
+	numa.nr_to_zero_pages.counter = 0;
+	direct_rc = -1;
+	zero_request_action = -1;
+	rc = ihk_numa_free_pages_orchestrate_result(&numa, addr, 1, 1,
+		&packet, 0, 0, 0, 0, 0, 0, 0, 0, lock_offset, node_addr,
+		fake_mcs_lock, fake_mcs_unlock, &direct_rc,
+		&zero_request_action);
+	require(rc == 1);
+	require(direct_rc == 0);
+	require(zero_request_action == 0);
+	require(numa.nr_to_zero_pages.counter == 1);
+	require(numa.to_zero_list.first != NULL);
+	mix(&digest, (unsigned long)rc);
+	mix(&digest, (unsigned long)numa.nr_to_zero_pages.counter);
+	return digest;
+}
+
+static unsigned long numa_alloc_top_level_digest(void)
+{
+	struct ihk_mc_numa_node numa;
+	struct rb_root cache_root = { NULL };
+	mcs_lock_node_t lock_node;
+	unsigned long base = ARENA_BASE + 248 * LOCAL_PAGE_SIZE;
+	unsigned long cache_base = ARENA_BASE + 252 * LOCAL_PAGE_SIZE;
+	unsigned long lock_offset = __builtin_offsetof(struct ihk_mc_numa_node,
+						       lock);
+	unsigned long node_addr = (unsigned long)&lock_node;
+	unsigned long lock_addr;
+	unsigned long digest = 0x746f70616c6c6f63UL;
+	unsigned long addr;
+
+	memset(&numa, 0, sizeof(numa));
+	memset(&lock_node, 0, sizeof(lock_node));
+	numa.min_addr = base;
+	numa.max_addr = base + 4 * LOCAL_PAGE_SIZE;
+	numa.nr_pages = 4;
+	numa.nr_free_pages = 4;
+	zero_at_free = 0;
+	require(__page_alloc_rbtree_free_range(&numa.free_chunks, base,
+					       4 * LOCAL_PAGE_SIZE) == 0);
+	require(__page_alloc_rbtree_free_range(&cache_root, cache_base,
+					       2 * LOCAL_PAGE_SIZE) == 0);
+	lock_addr = (unsigned long)&numa.lock;
+
+	reset_irq_trace();
+	reset_mcs_trace();
+	reset_top_alloc_trace();
+	top_alloc_expected_node = (unsigned long)&numa;
+	addr = ihk_numa_alloc_pages_result(&numa, 1, &cache_root, 1, 0,
+		lock_offset, node_addr, fake_irq_save, fake_irq_restore,
+		fake_mcs_lock, fake_mcs_unlock, fake_top_alloc_log);
+	require(addr == cache_base);
+	require(irq_save_count == 1);
+	require(irq_restore_count == 1);
+	require(irq_restore_cookie == irq_cookie);
+	require(mcs_lock_count == 0);
+	require(mcs_unlock_count == 0);
+	require(top_alloc_log_count == 1);
+	require(numa.nr_free_pages == 4);
+	mix(&digest, top_alloc_log_digest);
+	mix(&digest, digest_free_tree(&cache_root));
+	mix(&digest, numa.nr_free_pages);
+	mix(&digest, (unsigned long)irq_save_count);
+
+	reset_irq_trace();
+	reset_mcs_trace();
+	reset_top_alloc_trace();
+	top_alloc_expected_node = (unsigned long)&numa;
+	addr = ihk_numa_alloc_pages_result(&numa, 0, NULL, 1, 0,
+		lock_offset, node_addr, fake_irq_save, fake_irq_restore,
+		fake_mcs_lock, fake_mcs_unlock, fake_top_alloc_log);
+	require(addr == base);
+	require(irq_save_count == 0);
+	require(irq_restore_count == 0);
+	require(mcs_lock_count == 1);
+	require(mcs_unlock_count == 1);
+	require(mcs_lock_log[0][0] == lock_addr);
+	require(mcs_lock_log[0][1] == node_addr);
+	require(mcs_unlock_log[0][0] == lock_addr);
+	require(mcs_unlock_log[0][1] == node_addr);
+	require(top_alloc_log_count == 1);
+	require(numa.nr_free_pages == 3);
+	mix(&digest, top_alloc_log_digest);
+	mix(&digest, numa.nr_free_pages);
+	mix(&digest, digest_free_tree(&numa.free_chunks));
+	mix(&digest, (unsigned long)mcs_lock_count);
+
+	reset_irq_trace();
+	reset_mcs_trace();
+	reset_top_alloc_trace();
+	top_alloc_expected_node = (unsigned long)&numa;
+	addr = ihk_numa_alloc_pages_result(&numa, 0, NULL, 1, 0,
+		lock_offset, node_addr, fake_irq_save, fake_irq_restore,
+		NULL, fake_mcs_unlock, fake_top_alloc_log);
+	require(addr == 0);
+	require(irq_save_count == 0);
+	require(irq_restore_count == 0);
+	require(mcs_lock_count == 0);
+	require(mcs_unlock_count == 0);
+	require(top_alloc_log_count == 0);
+	require(numa.nr_free_pages == 3);
+	mix(&digest, top_alloc_log_digest);
+	mix(&digest, numa.nr_free_pages);
+
+	return digest;
+}
+
+static unsigned long numa_add_zero_top_level_digest(void)
+{
+	struct ihk_mc_numa_node numa;
+	struct free_chunk *chunk =
+		(struct free_chunk *)phys_to_virt(ARENA_BASE +
+				212 * LOCAL_PAGE_SIZE);
+	unsigned long base = ARENA_BASE + 208 * LOCAL_PAGE_SIZE;
+	unsigned long zero_base = ARENA_BASE + 212 * LOCAL_PAGE_SIZE;
+	unsigned long digest = 0x6164646672656521UL;
+	int rc;
+
+	memset(&numa, 0, sizeof(numa));
+	memset(chunk, 0, sizeof(*chunk));
+	numa.min_addr = ~0UL;
+	zero_at_free = 1;
+	fill_page_arena(0x88);
+
+	reset_top_add_free_trace();
+	top_add_free_expected_node = (unsigned long)&numa;
+	rc = ihk_numa_add_free_pages_result(&numa, base,
+		2 * LOCAL_PAGE_SIZE, fake_top_add_free_log);
+	require(rc == 0);
+	require(top_add_free_log_count == 1);
+	require(numa.min_addr == base);
+	require(numa.max_addr == base + 2 * LOCAL_PAGE_SIZE);
+	require(numa.nr_pages == 2);
+	require(numa.nr_free_pages == 2);
+	require_page_bytes(208, sizeof(struct free_chunk), 0);
+	require_page_bytes(209, 0, 0);
+	mix(&digest, top_add_free_log_digest);
+	mix(&digest, digest_free_tree(&numa.free_chunks));
+	mix(&digest, numa.nr_free_pages);
+
+	zero_at_free = 0;
+	reset_top_add_free_trace();
+	top_add_free_expected_node = (unsigned long)&numa;
+	rc = ihk_numa_add_free_pages_result(&numa, base,
+		LOCAL_PAGE_SIZE, fake_top_add_free_log);
+	require(rc == EINVAL);
+	require(top_add_free_log_count == 1);
+	require(numa.nr_pages == 2);
+	require(numa.nr_free_pages == 2);
+	mix(&digest, top_add_free_log_digest);
+	mix(&digest, digest_free_tree(&numa.free_chunks));
+
+	memset(&numa, 0, sizeof(numa));
+	memset(chunk, 0, sizeof(*chunk));
+	fill_page_arena(0x99);
+	zero_at_free = 1;
+	chunk->addr = zero_base;
+	chunk->size = LOCAL_PAGE_SIZE;
+	numa.nr_to_zero_pages.counter = 1;
+	llist_add(&chunk->list, &numa.to_zero_list);
+	ihk_numa_zero_free_pages(&numa);
+	require(numa.nr_to_zero_pages.counter == 0);
+	require(numa.to_zero_list.first == NULL);
+	require(numa.zeroed_list.first == &chunk->list);
+	require_page_bytes(212, sizeof(struct free_chunk), 0);
+	mix(&digest, (unsigned long)numa.nr_to_zero_pages.counter);
+	mix(&digest, (unsigned long)(numa.zeroed_list.first == &chunk->list));
+
+	return digest;
+}
+
+static unsigned long numa_free_top_level_digest(void)
+{
+	struct ihk_mc_numa_node numa;
+	struct rb_root cache_root = { NULL };
+	struct process proc;
+	struct thread current;
+	struct thread idle;
+	struct ikc_scd_packet packet;
+	mcs_lock_node_t lock_node;
+	unsigned long base = ARENA_BASE + 240 * LOCAL_PAGE_SIZE;
+	unsigned long cache_base = ARENA_BASE + 244 * LOCAL_PAGE_SIZE;
+	unsigned long lock_offset = __builtin_offsetof(struct ihk_mc_numa_node,
+						       lock);
+	unsigned long node_addr = (unsigned long)&lock_node;
+	unsigned long digest = 0x746f706672656521UL;
+
+	memset(&numa, 0, sizeof(numa));
+	memset(&proc, 0, sizeof(proc));
+	memset(&current, 0, sizeof(current));
+	memset(&idle, 0, sizeof(idle));
+	memset(&lock_node, 0, sizeof(lock_node));
+	memset(&packet, 0, sizeof(packet));
+	numa.min_addr = base;
+	numa.max_addr = base + 4 * LOCAL_PAGE_SIZE;
+	numa.nr_pages = 4;
+	proc.pid = 1357;
+	proc.nohost = 0;
+	current.proc = &proc;
+	top_free_expected_node = (unsigned long)&numa;
+	zero_at_free = 0;
+
+	reset_irq_trace();
+	reset_mcs_trace();
+	reset_top_free_trace(0);
+	top_free_expected_node = (unsigned long)&numa;
+	ihk_numa_free_pages_result(&numa, cache_base, 1, 1, zero_at_free,
+		&packet, 1, &cache_root, (unsigned long)&current,
+		(unsigned long)&idle, __builtin_offsetof(struct thread, proc),
+		__builtin_offsetof(struct process, nohost),
+		__builtin_offsetof(struct process, pid), 3, 0x12345678UL,
+		lock_offset, node_addr, fake_irq_save, fake_irq_restore,
+		fake_mcs_lock, fake_mcs_unlock, fake_top_free_send,
+		fake_top_free_log);
+	require(irq_save_count == 1);
+	require(irq_restore_count == 1);
+	require(mcs_lock_count == 0);
+	require(top_free_send_count == 0);
+	require(top_free_log_count == 1);
+	require(cache_root.rb_node != NULL);
+	mix(&digest, top_free_log_digest);
+	mix(&digest, digest_free_tree(&cache_root));
+	mix(&digest, (unsigned long)irq_save_count);
+
+	reset_irq_trace();
+	reset_mcs_trace();
+	reset_top_free_trace(0);
+	top_free_expected_node = (unsigned long)&numa;
+	ihk_numa_free_pages_result(&numa, cache_base, 0, 1, zero_at_free,
+		&packet, 1, &cache_root, (unsigned long)&current,
+		(unsigned long)&idle, __builtin_offsetof(struct thread, proc),
+		__builtin_offsetof(struct process, nohost),
+		__builtin_offsetof(struct process, pid), 3, 0x12345678UL,
+		lock_offset, node_addr, fake_irq_save, fake_irq_restore,
+		fake_mcs_lock, fake_mcs_unlock, fake_top_free_send,
+		fake_top_free_log);
+	require(irq_save_count == 1);
+	require(irq_restore_count == 1);
+	require(mcs_lock_count == 0);
+	require(top_free_send_count == 0);
+	require(top_free_log_count == 1);
+	mix(&digest, top_free_log_digest);
+
+	require(__page_alloc_rbtree_free_range(&numa.free_chunks, base,
+					       LOCAL_PAGE_SIZE) == 0);
+	require(numa.nr_free_pages == 0);
+	reset_irq_trace();
+	reset_mcs_trace();
+	reset_top_free_trace(0);
+	top_free_expected_node = (unsigned long)&numa;
+	ihk_numa_free_pages_result(&numa, base + LOCAL_PAGE_SIZE, 1, 1,
+		zero_at_free, &packet, 0, NULL, 0, 0, 0, 0, 0, 0,
+		0x12345678UL, lock_offset, node_addr, fake_irq_save,
+		fake_irq_restore, fake_mcs_lock, fake_mcs_unlock,
+		fake_top_free_send, fake_top_free_log);
+	require(irq_save_count == 0);
+	require(mcs_lock_count == 1);
+	require(mcs_unlock_count == 1);
+	require(numa.nr_free_pages == 1);
+	require(top_free_send_count == 0);
+	require(top_free_log_count == 1);
+	mix(&digest, top_free_log_digest);
+	mix(&digest, numa.nr_free_pages);
+	mix(&digest, digest_free_tree(&numa.free_chunks));
+
+	zero_at_free = 1;
+	memset(&packet, 0, sizeof(packet));
+	reset_irq_trace();
+	reset_mcs_trace();
+	reset_top_free_trace(0);
+	top_free_expected_node = (unsigned long)&numa;
+	ihk_numa_free_pages_result(&numa, base + 2 * LOCAL_PAGE_SIZE, 1, 1,
+		zero_at_free, &packet, 1, NULL, (unsigned long)&current,
+		(unsigned long)&idle, __builtin_offsetof(struct thread, proc),
+		__builtin_offsetof(struct process, nohost),
+		__builtin_offsetof(struct process, pid), 7, 0x87654321UL,
+		lock_offset, node_addr, NULL, NULL, fake_mcs_lock,
+		fake_mcs_unlock, fake_top_free_send, fake_top_free_log);
+	require(irq_save_count == 0);
+	require(mcs_lock_count == 0);
+	require(top_free_send_count == 1);
+	require(top_free_send_packet == (unsigned long)&packet);
+	require(top_free_log_count == 1);
+	require(numa.nr_to_zero_pages.counter == 1);
+	require(numa.zeroing_workers.counter == 1);
+	require(numa.to_zero_list.first != NULL);
+	require(packet.msg == SCD_MSG_SYSCALL_ONESIDE);
+	require(packet.ref == 7);
+	require(packet.pid == 1357);
+	require(packet.req.valid == 1);
+	require(packet.req.number == 0x87654321UL);
+	require(packet.req.args[0] == (unsigned long)&numa);
+	mix(&digest, top_free_log_digest);
+	mix(&digest, top_free_send_packet == (unsigned long)&packet);
+	mix(&digest, (unsigned long)numa.nr_to_zero_pages.counter);
+	mix(&digest, (unsigned long)numa.zeroing_workers.counter);
+	mix(&digest, packet.req.number);
+	mix(&digest, packet.req.args[0] == (unsigned long)&numa);
 	return digest;
 }
 
@@ -8016,6 +10300,9 @@ int main(void)
 	mix(&digest, pagealloc_destroy_orchestration_digest());
 	mix(&digest, pagealloc_locked_orchestration_digest());
 	mix(&digest, numa_locked_orchestration_digest());
+	mix(&digest, numa_alloc_top_level_digest());
+	mix(&digest, numa_add_zero_top_level_digest());
+	mix(&digest, numa_free_top_level_digest());
 
 	{
 		struct ihk_mc_numa_node numa;
@@ -8560,6 +10847,188 @@ int main(void)
 }
 EOF_PAGE_ALLOC_BITMAP
 
+cat > "${tmpdir}/cls_helpers_smoke.c" <<'EOF_CLS_HELPERS'
+extern int printf(const char *, ...);
+extern void abort(void);
+extern void exit(int);
+
+#define PROFILE_ENABLE 1
+#define ENABLE_RUSAGE 1
+#include <cls.h>
+#include <page.h>
+#include <rusage.h>
+#include <ihk/ihk_monitor.h>
+
+struct cpu_local_var *clv;
+int cpu_local_var_initialized;
+struct rusage_global rusage;
+
+static struct ihk_os_cpu_monitor monitor_cpu[4];
+static unsigned char cls_arena[4 * 8192] __attribute__((aligned(64)));
+static int current_cpu;
+static int alloc_pages_seen;
+static int alloc_flags_seen;
+
+extern void cpu_local_var_init_result(int, struct ihk_os_cpu_monitor *,
+		struct rusage_percpu *, void *(*)(int, int));
+extern struct cpu_local_var *get_cpu_local_var_result(int);
+extern void preempt_enable_result(void);
+extern void preempt_disable_result(void);
+
+int ihk_mc_get_processor_id(void)
+{
+	return current_cpu;
+}
+
+static void *fake_alloc_pages(int nr_pages, int flags)
+{
+	alloc_pages_seen = nr_pages;
+	alloc_flags_seen = flags;
+	if ((unsigned long)nr_pages * PAGE_SIZE > sizeof(cls_arena))
+		abort();
+	return cls_arena;
+}
+
+static void require_line(int cond, int line)
+{
+	if (!cond) {
+		printf("cls require failed line=%d\n", line);
+		exit(1);
+	}
+}
+
+#define require(cond) require_line((cond), __LINE__)
+
+static void mix(unsigned long *digest, unsigned long value)
+{
+	*digest ^= value + 0x9e3779b97f4a7c15UL + (*digest << 6) + (*digest >> 2);
+}
+
+int main(void)
+{
+	unsigned long digest = 0x1badc0deUL;
+	int expected_pages;
+
+	cpu_local_var_init_result(2, monitor_cpu, rusage.cpu, fake_alloc_pages);
+	expected_pages = (sizeof(struct cpu_local_var) * 2 + PAGE_SIZE - 1) >> PAGE_SHIFT;
+
+	require(clv == (struct cpu_local_var *)cls_arena);
+	require(cpu_local_var_initialized == 1);
+	require(alloc_pages_seen == expected_pages);
+	require(alloc_flags_seen == 1);
+	require(clv[0].monitor == &monitor_cpu[0]);
+	require(clv[1].monitor == &monitor_cpu[1]);
+	require(clv[0].rusage == &rusage.cpu[0]);
+	require(clv[1].rusage == &rusage.cpu[1]);
+	require(clv[0].smp_func_req_list.next == &clv[0].smp_func_req_list);
+	require(clv[0].smp_func_req_list.prev == &clv[0].smp_func_req_list);
+	require(clv[1].backlog_list.next == &clv[1].backlog_list);
+	require(clv[1].backlog_list.prev == &clv[1].backlog_list);
+	require(get_cpu_local_var_result(1) == &clv[1]);
+
+	current_cpu = 1;
+	clv[1].no_preempt.counter = 3;
+	preempt_disable_result();
+	require(clv[1].no_preempt.counter == 4);
+	preempt_enable_result();
+	require(clv[1].no_preempt.counter == 3);
+
+	mix(&digest, sizeof(struct cpu_local_var));
+	mix(&digest, (unsigned long)alloc_pages_seen);
+	mix(&digest, (unsigned long)alloc_flags_seen);
+	mix(&digest, (unsigned long)(clv[1].monitor - monitor_cpu));
+	mix(&digest, (unsigned long)(clv[1].rusage - rusage.cpu));
+	mix(&digest, (unsigned long)clv[1].no_preempt.counter);
+
+	printf("cls_helpers ok digest=%016lx\n", digest);
+	return 0;
+}
+EOF_CLS_HELPERS
+
+cat > "${tmpdir}/kmalloc_helpers_smoke.c" <<'EOF_KMALLOC_HELPERS'
+extern int printf(const char *, ...);
+extern void abort(void);
+
+#include <list.h>
+#include <cls.h>
+
+static unsigned char arena[512] __attribute__((aligned(64)));
+static int current_cpu = 7;
+
+extern void ___kmalloc_init_chunk_result(struct kmalloc_header *, int);
+extern void ___kmalloc_insert_chunk_result(struct list_head *,
+		struct kmalloc_header *);
+extern void ___kmalloc_consolidate_list_result(struct list_head *);
+
+int ihk_mc_get_processor_id(void)
+{
+	return current_cpu;
+}
+
+static void require(int cond)
+{
+	if (!cond)
+		abort();
+}
+
+static void mix(unsigned long *digest, unsigned long value)
+{
+	*digest ^= value + 0x9e3779b97f4a7c15UL + (*digest << 6) + (*digest >> 2);
+}
+
+int main(void)
+{
+	struct list_head free_list;
+	struct kmalloc_header *a = (struct kmalloc_header *)(arena + 0);
+	struct kmalloc_header *b = (struct kmalloc_header *)
+		((char *)a + sizeof(struct kmalloc_header) + 32);
+	struct kmalloc_header *c = (struct kmalloc_header *)
+		((char *)b + sizeof(struct kmalloc_header) + 48 + 64);
+	struct kmalloc_header *chunk;
+	unsigned long digest = 0x51a7f00dUL;
+	int count = 0;
+
+	INIT_LIST_HEAD(&free_list);
+	INIT_LIST_HEAD(&a->list);
+	INIT_LIST_HEAD(&b->list);
+	INIT_LIST_HEAD(&c->list);
+
+	___kmalloc_init_chunk_result(a, 32);
+	current_cpu = 8;
+	___kmalloc_init_chunk_result(b, 48);
+	current_cpu = 9;
+	___kmalloc_init_chunk_result(c, 16);
+
+	require(a->front_magic == 0x5c5c5c5c && a->end_magic == 0x6d6d6d6d);
+	require(a->cpu_id == 7 && b->cpu_id == 8 && c->cpu_id == 9);
+
+	___kmalloc_insert_chunk_result(&free_list, c);
+	___kmalloc_insert_chunk_result(&free_list, a);
+	___kmalloc_insert_chunk_result(&free_list, b);
+
+	chunk = list_first_entry(&free_list, struct kmalloc_header, list);
+	require(chunk == a);
+	require(list_entry(a->list.next, struct kmalloc_header, list) == b);
+	require(list_entry(b->list.next, struct kmalloc_header, list) == c);
+
+	___kmalloc_consolidate_list_result(&free_list);
+	require(a->size == 32 + (int)sizeof(struct kmalloc_header) + 48);
+	require(list_entry(a->list.next, struct kmalloc_header, list) == c);
+	require(c->list.next == &free_list);
+
+	list_for_each_entry(chunk, &free_list, list) {
+		mix(&digest, (unsigned long)((char *)chunk - (char *)arena));
+		mix(&digest, (unsigned long)chunk->size);
+		mix(&digest, (unsigned long)chunk->cpu_id);
+		count++;
+	}
+	require(count == 2);
+
+	printf("kmalloc_helpers ok digest=%016lx\n", digest);
+	return 0;
+}
+EOF_KMALLOC_HELPERS
+
 cat > "${tmpdir}/process_helpers_equiv.c" <<'EOF_PROCESS_HELPERS'
 #include <stddef.h>
 #include <stdint.h>
@@ -8571,10 +11040,23 @@ cat > "${tmpdir}/process_helpers_equiv.c" <<'EOF_PROCESS_HELPERS'
 #define VR_IO_NOCACHE 0x100UL
 #define VR_REMOTE 0x200UL
 #define VR_WRITE_COMBINED 0x400UL
+#define VR_DEMAND_PAGING 0x1000UL
 #define VR_PRIVATE 0x2000UL
+#define VR_XPMEM 0x40000000UL
 #define VR_PROT_READ 0x00010000UL
 #define VR_PROT_WRITE 0x00020000UL
 #define VR_PROT_EXEC 0x00040000UL
+#define NOPHYS (~0UL)
+#define PROCESS_ADD_RANGE_MAP_SKIP 0
+#define PROCESS_ADD_RANGE_MAP_UPDATE 1
+#define PROCESS_ADD_RANGE_MAP_MARK_XPMEM 2
+#define PROCESS_ADD_RANGE_MAP_DEMAND 3
+#define PROCESS_ADD_RANGE_LOG_ALLOC_FAILED 1
+#define PROCESS_ADD_RANGE_LOG_INSERT_FAILED 2
+#define PROCESS_ADD_RANGE_LOG_PREP_FAILED 3
+#define PROCESS_ADD_RANGE_LOG_DEMAND 4
+#define PROCESS_VM_RANGE_INSERT_LOG_OVERLAP 1
+#define PROCESS_VM_RANGE_INSERT_LOG_SUCCESS 2
 #define MF_HUGETLBFS 0x100000U
 #define PTATTR_ACTIVE 0x01UL
 #define PTATTR_WRITABLE 0x02UL
@@ -8607,6 +11089,23 @@ extern unsigned long common_vrflag_to_ptattr(unsigned long, unsigned long, void 
 extern int process_split_pgshift_result(int, uintptr_t);
 extern int process_add_range_bounds_result(unsigned long, unsigned long,
 					   unsigned long, unsigned long);
+extern int process_add_range_init_result(void *, unsigned long,
+					 unsigned long, unsigned long,
+					 void *, long, int, void *);
+extern int process_add_range_mapping_result(unsigned long, unsigned long,
+					    unsigned long, unsigned long *,
+					    int *);
+extern int process_add_range_orchestrate_result(
+	void *, unsigned long, unsigned long, unsigned long, unsigned long,
+	unsigned long, void *, long, int, void *, void **,
+	void *(*)(unsigned long), void (*)(void *), int (*)(void *, void *),
+	int (*)(void *, void *, unsigned long, unsigned long),
+	void (*)(void *, unsigned long, unsigned long), void (*)(void *),
+	void (*)(unsigned long, unsigned long),
+	void (*)(int, int, unsigned long, unsigned long));
+extern int process_vm_range_insert_result(void *, void *, void *,
+					  void (*)(int, void *, void *, void *),
+					  void (*)(void *));
 extern int process_extend_up_result(unsigned long, unsigned long, int,
 				    unsigned long, unsigned long);
 extern unsigned long process_change_prot_newflag_result(unsigned long,
@@ -8711,6 +11210,27 @@ static void mix(unsigned long *digest, unsigned long value)
 	*digest ^= value + 0x9e3779b97f4a7c15UL + (*digest << 6) + (*digest >> 2);
 }
 
+static int check_add_range_mapping(unsigned long *digest, unsigned long phys,
+				   unsigned long flag, unsigned long range_flag,
+				   int expected_action,
+				   unsigned long expected_attr,
+				   int expected_memclear)
+{
+	unsigned long attr = 0xfeedfaceUL;
+	int memclear = -1;
+	int action = process_add_range_mapping_result(phys, flag, range_flag,
+						      &attr, &memclear);
+
+	if (action != expected_action || attr != expected_attr ||
+	    memclear != expected_memclear)
+		return 1;
+
+	mix(digest, (unsigned long)action);
+	mix(digest, attr);
+	mix(digest, (unsigned long)memclear);
+	return 0;
+}
+
 struct fake_tid {
 	int tid;
 	void *thread;
@@ -8777,6 +11297,10 @@ struct fake_rb_node {
 	struct fake_rb_node *rb_left;
 };
 
+struct fake_rb_root {
+	struct fake_rb_node *rb_node;
+};
+
 struct fake_vm_range {
 	struct fake_rb_node vm_rb_node;
 	unsigned long start;
@@ -8789,6 +11313,170 @@ struct fake_vm_range {
 	int padding;
 	void *private_data;
 };
+
+static struct fake_vm_range add_orch_range;
+static int add_orch_alloc_fail;
+static int add_orch_alloc_count;
+static int add_orch_free_count;
+static int add_orch_insert_count;
+static int add_orch_update_count;
+static int add_orch_remove_count;
+static int add_orch_mark_count;
+static int add_orch_memclear_count;
+static int add_orch_log_count;
+static int add_orch_insert_rc;
+static int add_orch_update_rc;
+static int add_orch_last_log_event;
+static int add_orch_last_log_rc;
+static unsigned long add_orch_alloc_size;
+static unsigned long add_orch_update_phys;
+static unsigned long add_orch_update_attr;
+static unsigned long add_orch_remove_start;
+static unsigned long add_orch_remove_end;
+static unsigned long add_orch_memclear_phys;
+static unsigned long add_orch_memclear_bytes;
+static void *add_orch_last_vm;
+static void *add_orch_last_range;
+static int range_insert_log_count;
+static int range_insert_dump_count;
+static int range_insert_last_event;
+static void *range_insert_last_vm;
+static void *range_insert_last_newrange;
+static void *range_insert_last_range;
+
+static void reset_add_orchestrate_trace(void)
+{
+	add_orch_range = (struct fake_vm_range){ 0 };
+	add_orch_alloc_fail = 0;
+	add_orch_alloc_count = 0;
+	add_orch_free_count = 0;
+	add_orch_insert_count = 0;
+	add_orch_update_count = 0;
+	add_orch_remove_count = 0;
+	add_orch_mark_count = 0;
+	add_orch_memclear_count = 0;
+	add_orch_log_count = 0;
+	add_orch_insert_rc = 0;
+	add_orch_update_rc = 0;
+	add_orch_last_log_event = 0;
+	add_orch_last_log_rc = 0;
+	add_orch_alloc_size = 0;
+	add_orch_update_phys = 0;
+	add_orch_update_attr = 0;
+	add_orch_remove_start = 0;
+	add_orch_remove_end = 0;
+	add_orch_memclear_phys = 0;
+	add_orch_memclear_bytes = 0;
+	add_orch_last_vm = NULL;
+	add_orch_last_range = NULL;
+}
+
+static void *fake_add_range_alloc(unsigned long size)
+{
+	add_orch_alloc_count++;
+	add_orch_alloc_size = size;
+	return add_orch_alloc_fail ? NULL : &add_orch_range;
+}
+
+static void fake_add_range_free(void *range)
+{
+	add_orch_free_count++;
+	add_orch_last_range = range;
+}
+
+static int fake_add_range_insert(void *vm, void *range)
+{
+	add_orch_insert_count++;
+	add_orch_last_vm = vm;
+	add_orch_last_range = range;
+	return add_orch_insert_rc;
+}
+
+static int fake_add_range_update(void *vm, void *range, unsigned long phys,
+				 unsigned long attr)
+{
+	add_orch_update_count++;
+	add_orch_last_vm = vm;
+	add_orch_last_range = range;
+	add_orch_update_phys = phys;
+	add_orch_update_attr = attr;
+	return add_orch_update_rc;
+}
+
+static void fake_add_range_remove(void *vm, unsigned long start,
+				  unsigned long end)
+{
+	add_orch_remove_count++;
+	add_orch_last_vm = vm;
+	add_orch_remove_start = start;
+	add_orch_remove_end = end;
+}
+
+static void fake_add_range_mark_xpmem(void *range)
+{
+	add_orch_mark_count++;
+	add_orch_last_range = range;
+}
+
+static void fake_add_range_memclear(unsigned long phys, unsigned long bytes)
+{
+	add_orch_memclear_count++;
+	add_orch_memclear_phys = phys;
+	add_orch_memclear_bytes = bytes;
+}
+
+static void fake_add_range_log(int event, int rc, unsigned long start,
+			       unsigned long end)
+{
+	add_orch_log_count++;
+	add_orch_last_log_event = event;
+	add_orch_last_log_rc = rc;
+	add_orch_remove_start = start;
+	add_orch_remove_end = end;
+}
+
+static void reset_range_insert_trace(void)
+{
+	range_insert_log_count = 0;
+	range_insert_dump_count = 0;
+	range_insert_last_event = 0;
+	range_insert_last_vm = NULL;
+	range_insert_last_newrange = NULL;
+	range_insert_last_range = NULL;
+}
+
+static void fake_range_insert_log(int event, void *vm, void *newrange,
+				  void *range)
+{
+	range_insert_log_count++;
+	range_insert_last_event = event;
+	range_insert_last_vm = vm;
+	range_insert_last_newrange = newrange;
+	range_insert_last_range = range;
+}
+
+static void fake_range_insert_dump(void *vm)
+{
+	range_insert_dump_count++;
+	range_insert_last_vm = vm;
+}
+
+static void mix_range_tree(unsigned long *digest, struct fake_rb_node *node)
+{
+	struct fake_vm_range *range;
+
+	if (!node) {
+		mix(digest, 0);
+		return;
+	}
+
+	mix_range_tree(digest, node->rb_left);
+	range = (struct fake_vm_range *)node;
+	mix(digest, range->start);
+	mix(digest, range->end);
+	mix(digest, range->flag);
+	mix_range_tree(digest, node->rb_right);
+}
 
 static void fake_list_init(struct fake_list_head *head)
 {
@@ -8860,6 +11548,248 @@ int main(void)
 	mix(&digest, process_add_range_bounds_result(0x1000, 0x9000, 0x1000, 0x9000));
 	mix(&digest, process_add_range_bounds_result(0x1000, 0x9000, 0, 0x8000));
 	mix(&digest, process_add_range_bounds_result(0x1000, 0x9000, 0x2000, 0xa000));
+	{
+		unsigned long memobj_marker;
+		struct fake_vm_range add_range = {
+			.vm_rb_node = {
+				.__rb_parent_color = 0x11111111UL,
+				.rb_right = (struct fake_rb_node *)0x22222222UL,
+				.rb_left = (struct fake_rb_node *)0x33333333UL,
+			},
+			.start = 0x44,
+			.end = 0x55,
+			.flag = 0x66,
+			.straight_start = 0x77,
+			.memobj = (void *)0x88,
+			.objoff = 0x99,
+			.pgshift = 1,
+			.private_data = (void *)0xaa,
+		};
+
+		require(process_add_range_init_result(&add_range, 0x2000,
+			0x6000, VR_PROT_READ | VR_PRIVATE, &memobj_marker,
+			0x1234, 21, (void *)0xfeedUL) == 1);
+		require(add_range.vm_rb_node.__rb_parent_color ==
+			(unsigned long)&add_range.vm_rb_node);
+		require(add_range.vm_rb_node.rb_right ==
+			(struct fake_rb_node *)0x22222222UL);
+		require(add_range.vm_rb_node.rb_left ==
+			(struct fake_rb_node *)0x33333333UL);
+		require(add_range.start == 0x2000);
+		require(add_range.end == 0x6000);
+		require(add_range.flag == (VR_PROT_READ | VR_PRIVATE));
+		require(add_range.straight_start == 0);
+		require(add_range.memobj == &memobj_marker);
+		require(add_range.objoff == 0x1234);
+		require(add_range.pgshift == 21);
+		require(add_range.private_data == (void *)0xfeedUL);
+		require(process_add_range_init_result(NULL, 0x2000, 0x6000,
+			VR_PROT_READ, NULL, 0, 0, NULL) == 0);
+		mix(&digest, add_range.start ^ add_range.end);
+		mix(&digest, add_range.flag);
+		mix(&digest, add_range.vm_rb_node.__rb_parent_color -
+			(unsigned long)&add_range);
+		mix(&digest, add_range.objoff);
+		mix(&digest, add_range.pgshift);
+	}
+	require(check_add_range_mapping(&digest, NOPHYS, VR_PROT_READ,
+		VR_PROT_READ, PROCESS_ADD_RANGE_MAP_SKIP, 0, 0) == 0);
+	require(check_add_range_mapping(&digest, 0x100000,
+		VR_REMOTE | VR_PROT_WRITE, VR_REMOTE | VR_PROT_WRITE,
+		PROCESS_ADD_RANGE_MAP_UPDATE, 0, 0) == 0);
+	require(check_add_range_mapping(&digest, 0x100000,
+		VR_IO_NOCACHE | VR_PROT_READ, VR_IO_NOCACHE | VR_PROT_READ,
+		PROCESS_ADD_RANGE_MAP_UPDATE, PTATTR_UNCACHABLE, 1) == 0);
+	require(check_add_range_mapping(&digest, 0x100000,
+		VR_XPMEM | VR_PROT_READ, VR_XPMEM | VR_PROT_READ,
+		PROCESS_ADD_RANGE_MAP_MARK_XPMEM, 0, 0) == 0);
+	require(check_add_range_mapping(&digest, 0x100000,
+		VR_DEMAND_PAGING | VR_PROT_READ,
+		VR_DEMAND_PAGING | VR_PROT_READ,
+		PROCESS_ADD_RANGE_MAP_DEMAND, 0, 0) == 0);
+	require(check_add_range_mapping(&digest, 0x100000, 0, 0,
+		PROCESS_ADD_RANGE_MAP_SKIP, 0, 0) == 0);
+	require(check_add_range_mapping(&digest, 0x100000,
+		VR_PROT_READ | VR_PROT_WRITE,
+		VR_PROT_READ | VR_PROT_WRITE,
+		PROCESS_ADD_RANGE_MAP_UPDATE, 0, 1) == 0);
+	{
+		unsigned long memobj_marker;
+		int vm_marker;
+		void *published = (void *)0x1234UL;
+		int rc;
+
+		reset_add_orchestrate_trace();
+		rc = process_add_range_orchestrate_result(&vm_marker,
+			sizeof(struct fake_vm_range), 0x2000, 0x6000,
+			0x100000, VR_PROT_READ | VR_PROT_WRITE,
+			&memobj_marker, 0x1234, 21, (void *)0xfeedUL,
+			&published, fake_add_range_alloc, fake_add_range_free,
+			fake_add_range_insert, fake_add_range_update,
+			fake_add_range_remove, fake_add_range_mark_xpmem,
+			fake_add_range_memclear, fake_add_range_log);
+		require(rc == 0);
+		require(published == &add_orch_range);
+		require(add_orch_alloc_count == 1);
+		require(add_orch_alloc_size == sizeof(struct fake_vm_range));
+		require(add_orch_insert_count == 1);
+		require(add_orch_update_count == 1);
+		require(add_orch_update_phys == 0x100000);
+		require(add_orch_update_attr == 0);
+		require(add_orch_memclear_count == 1);
+		require(add_orch_memclear_phys == 0x100000);
+		require(add_orch_memclear_bytes == 0x4000);
+		require(add_orch_free_count == 0);
+		require(add_orch_remove_count == 0);
+		require(add_orch_range.memobj == &memobj_marker);
+		require(add_orch_range.private_data == (void *)0xfeedUL);
+		mix(&digest, add_orch_update_count);
+		mix(&digest, add_orch_memclear_bytes);
+
+		reset_add_orchestrate_trace();
+		published = (void *)0x1234UL;
+		rc = process_add_range_orchestrate_result(&vm_marker,
+			sizeof(struct fake_vm_range), 0x3000, 0x5000,
+			0x200000, VR_XPMEM | VR_PROT_READ, &memobj_marker,
+			0, 12, NULL, &published, fake_add_range_alloc,
+			fake_add_range_free, fake_add_range_insert,
+			fake_add_range_update, fake_add_range_remove,
+			fake_add_range_mark_xpmem, fake_add_range_memclear,
+			fake_add_range_log);
+		require(rc == 0);
+		require(published == &add_orch_range);
+		require(add_orch_mark_count == 1);
+		require(add_orch_update_count == 0);
+		require(add_orch_memclear_count == 0);
+		mix(&digest, add_orch_mark_count);
+
+		reset_add_orchestrate_trace();
+		add_orch_update_rc = -9;
+		published = (void *)0x1234UL;
+		rc = process_add_range_orchestrate_result(&vm_marker,
+			sizeof(struct fake_vm_range), 0x4000, 0x8000,
+			0x300000, VR_PROT_READ, &memobj_marker, 0, 12,
+			NULL, &published, fake_add_range_alloc,
+			fake_add_range_free, fake_add_range_insert,
+			fake_add_range_update, fake_add_range_remove,
+			fake_add_range_mark_xpmem, fake_add_range_memclear,
+			fake_add_range_log);
+		require(rc == -9);
+		require(published == (void *)0x1234UL);
+		require(add_orch_remove_count == 1);
+		require(add_orch_remove_start == 0x4000);
+		require(add_orch_remove_end == 0x8000);
+		require(add_orch_free_count == 1);
+		require(add_orch_last_log_event ==
+			PROCESS_ADD_RANGE_LOG_PREP_FAILED);
+		mix(&digest, add_orch_free_count);
+		mix(&digest, add_orch_last_log_event);
+
+		reset_add_orchestrate_trace();
+		add_orch_alloc_fail = 1;
+		rc = process_add_range_orchestrate_result(&vm_marker,
+			sizeof(struct fake_vm_range), 0x1000, 0x2000,
+			0x300000, VR_PROT_READ, &memobj_marker, 0, 12,
+			NULL, NULL, fake_add_range_alloc, fake_add_range_free,
+			fake_add_range_insert, fake_add_range_update,
+			fake_add_range_remove, fake_add_range_mark_xpmem,
+			fake_add_range_memclear, fake_add_range_log);
+		require(rc == -12);
+		require(add_orch_insert_count == 0);
+		require(add_orch_last_log_event ==
+			PROCESS_ADD_RANGE_LOG_ALLOC_FAILED);
+		mix(&digest, add_orch_last_log_event);
+
+		reset_add_orchestrate_trace();
+		add_orch_insert_rc = -7;
+		rc = process_add_range_orchestrate_result(&vm_marker,
+			sizeof(struct fake_vm_range), 0x1000, 0x2000,
+			0x300000, VR_PROT_READ, &memobj_marker, 0, 12,
+			NULL, NULL, fake_add_range_alloc, fake_add_range_free,
+			fake_add_range_insert, fake_add_range_update,
+			fake_add_range_remove, fake_add_range_mark_xpmem,
+			fake_add_range_memclear, fake_add_range_log);
+		require(rc == -7);
+		require(add_orch_free_count == 1);
+		require(add_orch_update_count == 0);
+		require(add_orch_last_log_event ==
+			PROCESS_ADD_RANGE_LOG_INSERT_FAILED);
+		mix(&digest, add_orch_last_log_event);
+
+		reset_add_orchestrate_trace();
+		rc = process_add_range_orchestrate_result(&vm_marker,
+			sizeof(struct fake_vm_range), 0x1000, 0x2000,
+			0x300000, VR_DEMAND_PAGING | VR_PROT_READ,
+			&memobj_marker, 0, 12, NULL, NULL,
+			fake_add_range_alloc, fake_add_range_free,
+			fake_add_range_insert, fake_add_range_update,
+			fake_add_range_remove, fake_add_range_mark_xpmem,
+			fake_add_range_memclear, fake_add_range_log);
+		require(rc == 0);
+		require(add_orch_last_log_event ==
+			PROCESS_ADD_RANGE_LOG_DEMAND);
+		require(add_orch_update_count == 0);
+		require(add_orch_memclear_count == 0);
+		mix(&digest, add_orch_last_log_event);
+	}
+	{
+		struct fake_rb_root root = { 0 };
+		struct fake_vm_range middle = {
+			.start = 0x3000, .end = 0x4000, .flag = 0x31,
+		};
+		struct fake_vm_range left = {
+			.start = 0x1000, .end = 0x2000, .flag = 0x11,
+		};
+		struct fake_vm_range right = {
+			.start = 0x5000, .end = 0x7000, .flag = 0x51,
+		};
+		struct fake_vm_range overlap = {
+			.start = 0x3800, .end = 0x3900, .flag = 0x81,
+		};
+		int vm_marker;
+		int rc;
+
+		reset_range_insert_trace();
+		rc = process_vm_range_insert_result(&root, &middle,
+			&vm_marker, fake_range_insert_log,
+			fake_range_insert_dump);
+		require(rc == 0);
+		require(root.rb_node == &middle.vm_rb_node);
+		require(range_insert_log_count == 1);
+		require(range_insert_dump_count == 1);
+		require(range_insert_last_event ==
+			PROCESS_VM_RANGE_INSERT_LOG_SUCCESS);
+		require(range_insert_last_vm == &vm_marker);
+		require(range_insert_last_newrange == &middle);
+		require(range_insert_last_range == NULL);
+
+		rc = process_vm_range_insert_result(&root, &left,
+			&vm_marker, fake_range_insert_log,
+			fake_range_insert_dump);
+		require(rc == 0);
+		rc = process_vm_range_insert_result(&root, &right,
+			&vm_marker, fake_range_insert_log,
+			fake_range_insert_dump);
+		require(rc == 0);
+		require(range_insert_log_count == 3);
+		require(range_insert_dump_count == 3);
+		mix_range_tree(&digest, root.rb_node);
+
+		rc = process_vm_range_insert_result(&root, &overlap,
+			&vm_marker, fake_range_insert_log,
+			fake_range_insert_dump);
+		require(rc == -14);
+		require(range_insert_log_count == 4);
+		require(range_insert_dump_count == 3);
+		require(range_insert_last_event ==
+			PROCESS_VM_RANGE_INSERT_LOG_OVERLAP);
+		require(range_insert_last_newrange == &overlap);
+		require(range_insert_last_range == &middle);
+		require(overlap.vm_rb_node.rb_left == NULL);
+		require(overlap.vm_rb_node.rb_right == NULL);
+		mix(&digest, range_insert_last_event);
+		mix_range_tree(&digest, root.rb_node);
+	}
 	mix(&digest, process_extend_up_result(0x4000, 0x9000, 0, 0, 0x5000));
 	mix(&digest, process_extend_up_result(0x4000, 0x9000, 0, 0, 0x4000));
 	mix(&digest, process_extend_up_result(0x4000, 0x9000, 0, 0, 0xa000));
@@ -9509,6 +12439,7 @@ cat > "${tmpdir}/x86_memory_helpers_equiv.c" <<'EOF_X86_MEMORY_HELPERS'
 #define PTATTR_WRITE_COMBINED 0x40000UL
 #define PF_PRESENT 0x01UL
 #define PF_SIZE 0x80UL
+#define PT_ENTRIES 512
 #define PT_PHYSMASK ((((1UL << 52) - 1)) & ~(4096UL - 1))
 
 extern unsigned long x86_attr_to_l3attr_result(unsigned long, unsigned long);
@@ -9601,6 +12532,22 @@ extern void x86_move_pte_entry_parts_result(unsigned long, unsigned long *,
 					    unsigned long *);
 extern int x86_destroy_pt_entry_action_result(int, unsigned long,
 					      unsigned long *);
+extern void *x86_pt_create_result(void *, int, void *(*)(int, int));
+extern void x86_pt_destroy_root_result(void *, void (*)(int, void *));
+extern int x86_pt_prepare_map_result(void *, void *, unsigned long,
+				     unsigned long, int, unsigned long,
+				     void *(*)(int, int),
+				     unsigned long (*)(void *),
+				     int (*)(void *, unsigned long,
+					     unsigned long, unsigned long));
+extern int x86_pt_set_pte_body_result(void *, unsigned long *, size_t,
+				      unsigned long, unsigned long,
+				      unsigned long, int,
+				      void (*)(int, void *, unsigned long *,
+					       size_t, unsigned long,
+					       unsigned long, int,
+					       unsigned long),
+				      void (*)(void));
 
 static void mix(unsigned long *digest, unsigned long value)
 {
@@ -9637,6 +12584,101 @@ static int fake_walk_pte_cb(void *arg, unsigned long *ptep,
 static int fake_walk_phys_check(unsigned long phys)
 {
 	return phys == 0xdead000UL ? -1 : 0;
+}
+
+struct fake_page_table {
+	unsigned long entry[PT_ENTRIES];
+};
+
+static struct fake_page_table fake_created_tables[4];
+static int fake_pt_alloc_count;
+static int fake_pt_alloc_fail;
+static int fake_pt_last_ap_flag;
+static int fake_pt_destroy_calls;
+static int fake_pt_destroy_level;
+static void *fake_pt_destroy_ptr;
+static int fake_pt_set_page_calls;
+static int fake_pt_set_page_fail_after;
+static int fake_pt_set_page_fail_error;
+static unsigned long fake_pt_set_page_digest;
+static void *fake_pt_set_expected_pt;
+static int fake_pt_set_pte_log_count;
+static int fake_pt_set_pte_panic_count;
+static unsigned long fake_pt_set_pte_digest;
+
+static void *fake_pt_alloc_pages(int nr_pages, int ap_flag)
+{
+	struct fake_page_table *pt;
+
+	if (fake_pt_alloc_fail || nr_pages != 1 ||
+	    fake_pt_alloc_count >= (int)(sizeof(fake_created_tables) /
+		    sizeof(fake_created_tables[0]))) {
+		return NULL;
+	}
+
+	fake_pt_last_ap_flag = ap_flag;
+	pt = &fake_created_tables[fake_pt_alloc_count++];
+	for (int i = 0; i < PT_ENTRIES; i++)
+		pt->entry[i] = 0xf00d0000UL + (unsigned long)i;
+	return pt;
+}
+
+static void fake_pt_destroy(int level, void *pt)
+{
+	fake_pt_destroy_calls++;
+	fake_pt_destroy_level = level;
+	fake_pt_destroy_ptr = pt;
+}
+
+static unsigned long fake_pt_virt_to_phys(void *addr)
+{
+	for (int i = 0;
+	     i < (int)(sizeof(fake_created_tables) /
+		     sizeof(fake_created_tables[0])); i++) {
+		if (addr == &fake_created_tables[i])
+			return 0x100000000UL + ((unsigned long)i << 12);
+	}
+
+	return 0x1fff0000UL;
+}
+
+static int fake_pt_set_page(void *pt, unsigned long virt, unsigned long phys,
+			    unsigned long attr)
+{
+	fake_pt_set_page_calls++;
+	mix(&fake_pt_set_page_digest, pt == fake_pt_set_expected_pt);
+	mix(&fake_pt_set_page_digest, virt);
+	mix(&fake_pt_set_page_digest, phys);
+	mix(&fake_pt_set_page_digest, attr);
+
+	if (fake_pt_set_page_fail_after &&
+	    fake_pt_set_page_calls == fake_pt_set_page_fail_after) {
+		return fake_pt_set_page_fail_error;
+	}
+
+	return 0;
+}
+
+static void fake_pt_set_pte_log(int event, void *pt, unsigned long *ptep,
+				size_t pgsize, unsigned long phys,
+				unsigned long attr, int error,
+				unsigned long current)
+{
+	fake_pt_set_pte_log_count++;
+	mix(&fake_pt_set_pte_digest, (unsigned int)event);
+	mix(&fake_pt_set_pte_digest, pt == fake_pt_set_expected_pt);
+	mix(&fake_pt_set_pte_digest, ptep != NULL);
+	mix(&fake_pt_set_pte_digest, pgsize);
+	mix(&fake_pt_set_pte_digest, phys);
+	mix(&fake_pt_set_pte_digest, attr);
+	mix(&fake_pt_set_pte_digest, (unsigned int)-error);
+	mix(&fake_pt_set_pte_digest, current);
+}
+
+static void fake_pt_set_pte_panic(void)
+{
+	fake_pt_set_pte_panic_count++;
+	mix(&fake_pt_set_pte_digest, 0x70616e6963UL);
 }
 
 int main(void)
@@ -10123,6 +13165,193 @@ int main(void)
 					1);
 			}
 		}
+		{
+			struct fake_page_table init;
+			struct fake_page_table *pt;
+
+			for (int i = 0; i < PT_ENTRIES; i++)
+				init.entry[i] = 0x80000000UL + (unsigned long)i;
+
+			fake_pt_alloc_count = 0;
+			fake_pt_alloc_fail = 0;
+			fake_pt_last_ap_flag = -1;
+			pt = x86_pt_create_result(&init, 7, fake_pt_alloc_pages);
+			require(pt == &fake_created_tables[0]);
+			require(fake_pt_alloc_count == 1);
+			require(fake_pt_last_ap_flag == 7);
+			for (int i = 0; i < PT_ENTRIES / 2; i++) {
+				require(pt->entry[i] == 0);
+				mix(&digest, pt->entry[i]);
+			}
+			for (int i = PT_ENTRIES / 2; i < PT_ENTRIES; i++) {
+				require(pt->entry[i] == init.entry[i]);
+				mix(&digest, pt->entry[i]);
+			}
+
+			fake_pt_alloc_fail = 1;
+			require(x86_pt_create_result(&init, 8,
+				fake_pt_alloc_pages) == NULL);
+			require(x86_pt_create_result(&init, 8, NULL) == NULL);
+			mix(&digest, (unsigned int)fake_pt_alloc_count);
+
+			for (int i = 0; i < PT_ENTRIES; i++)
+				pt->entry[i] = 0x90000000UL + (unsigned long)i;
+			fake_pt_destroy_calls = 0;
+			fake_pt_destroy_level = -1;
+			fake_pt_destroy_ptr = NULL;
+			x86_pt_destroy_root_result(pt, fake_pt_destroy);
+			require(fake_pt_destroy_calls == 1);
+			require(fake_pt_destroy_level == 4);
+			require(fake_pt_destroy_ptr == pt);
+			for (int i = 0; i < PT_ENTRIES / 2; i++) {
+				require(pt->entry[i] == 0x90000000UL +
+					(unsigned long)i);
+				mix(&digest, pt->entry[i]);
+			}
+			for (int i = PT_ENTRIES / 2; i < PT_ENTRIES; i++) {
+				require(pt->entry[i] == 0);
+				mix(&digest, pt->entry[i]);
+			}
+			x86_pt_destroy_root_result(pt, NULL);
+			require(fake_pt_destroy_calls == 1);
+			mix(&digest, 0x70746c696665UL);
+		}
+		{
+			struct fake_page_table root = { 0 };
+			struct fake_page_table init = { 0 };
+			int ret;
+
+			fake_pt_alloc_count = 0;
+			fake_pt_alloc_fail = 0;
+			ret = x86_pt_prepare_map_result(&root, &init, 0,
+				1UL << 39, 0, PTATTR_WRITABLE,
+				fake_pt_alloc_pages, fake_pt_virt_to_phys,
+				fake_pt_set_page);
+			require(ret == 0);
+			require(fake_pt_alloc_count == 2);
+			require(root.entry[0] ==
+				(fake_pt_virt_to_phys(&fake_created_tables[0]) |
+				 0x07UL));
+			require(root.entry[1] ==
+				(fake_pt_virt_to_phys(&fake_created_tables[1]) |
+				 0x07UL));
+			mix(&digest, root.entry[0]);
+			mix(&digest, root.entry[1]);
+
+			root.entry[3] = 0x1007UL;
+			fake_pt_alloc_count = 0;
+			ret = x86_pt_prepare_map_result(&root, &init,
+				3UL << 39, 0, 0, PTATTR_WRITABLE,
+				fake_pt_alloc_pages, fake_pt_virt_to_phys,
+				fake_pt_set_page);
+			require(ret == 0);
+			require(fake_pt_alloc_count == 0);
+			mix(&digest, root.entry[3]);
+
+			root.entry[4] = 0;
+			fake_pt_alloc_fail = 1;
+			ret = x86_pt_prepare_map_result(&root, &init,
+				4UL << 39, 0, 0, PTATTR_WRITABLE,
+				fake_pt_alloc_pages, fake_pt_virt_to_phys,
+				fake_pt_set_page);
+			require(ret == -12);
+			require(root.entry[4] == 0);
+			require(x86_pt_prepare_map_result(&root, &init,
+				4UL << 39, 0, 0, PTATTR_WRITABLE,
+				NULL, fake_pt_virt_to_phys,
+				fake_pt_set_page) == -12);
+			require(x86_pt_prepare_map_result(&root, &init,
+				4UL << 39, 0, 0, PTATTR_WRITABLE,
+				fake_pt_alloc_pages, NULL,
+				fake_pt_set_page) == -12);
+			mix(&digest, 0x70746669727374UL);
+
+			fake_pt_set_page_calls = 0;
+			fake_pt_set_page_fail_after = 0;
+			fake_pt_set_page_fail_error = 0;
+			fake_pt_set_expected_pt = &init;
+			fake_pt_set_page_digest = 0x70747365747067UL;
+			ret = x86_pt_prepare_map_result(NULL, &init, 0x4000,
+				0x3000, 1, PTATTR_WRITABLE,
+				fake_pt_alloc_pages, fake_pt_virt_to_phys,
+				fake_pt_set_page);
+			require(ret == 0);
+			require(fake_pt_set_page_calls == 3);
+			mix(&digest, fake_pt_set_page_digest);
+
+			fake_pt_set_page_calls = 0;
+			fake_pt_set_page_fail_after = 2;
+			fake_pt_set_page_fail_error = -7;
+			fake_pt_set_expected_pt = &root;
+			fake_pt_set_page_digest = 0x70746661696cUL;
+			ret = x86_pt_prepare_map_result(&root, &init, 0x8000,
+				0x3000, 1, PTATTR_WRITABLE,
+				fake_pt_alloc_pages, fake_pt_virt_to_phys,
+				fake_pt_set_page);
+			require(ret == -7);
+			require(fake_pt_set_page_calls == 2);
+			require(x86_pt_prepare_map_result(&root, &init,
+				0x8000, 0x1000, 1, PTATTR_WRITABLE,
+				fake_pt_alloc_pages, fake_pt_virt_to_phys,
+				NULL) == -12);
+			mix(&digest, fake_pt_set_page_digest);
+		}
+		{
+			struct fake_page_table pt = { 0 };
+			unsigned long slot;
+			size_t pgsizes[] = {
+				4096, 2UL * 1024 * 1024,
+				1024UL * 1024 * 1024, 12345,
+			};
+			unsigned long phys[] = {
+				0x1000, 2UL * 1024 * 1024,
+				(2UL * 1024 * 1024) + 0x1000,
+				1024UL * 1024 * 1024,
+				(1024UL * 1024 * 1024) + 0x1000,
+			};
+
+			fake_pt_set_expected_pt = &pt;
+			fake_pt_set_pte_log_count = 0;
+			fake_pt_set_pte_panic_count = 0;
+			fake_pt_set_pte_digest = 0x707465626f6479UL;
+			for (unsigned int p = 0;
+			     p < sizeof(pgsizes) / sizeof(pgsizes[0]); p++) {
+				for (unsigned int h = 0;
+				     h < sizeof(phys) / sizeof(phys[0]); h++) {
+					for (int use_1gb = 0; use_1gb <= 1;
+					     use_1gb++) {
+						slot = 0xabcdef00UL | p;
+						int error = x86_pt_set_pte_body_result(
+							&pt, &slot, pgsizes[p],
+							phys[h], attrs[p %
+							(sizeof(attrs) /
+							 sizeof(attrs[0]))],
+							attr_mask, use_1gb,
+							fake_pt_set_pte_log,
+							fake_pt_set_pte_panic);
+
+						mix(&fake_pt_set_pte_digest,
+							pgsizes[p]);
+						mix(&fake_pt_set_pte_digest,
+							phys[h]);
+						mix(&fake_pt_set_pte_digest,
+							(unsigned int)use_1gb);
+						mix(&fake_pt_set_pte_digest,
+							(unsigned int)-error);
+						mix(&fake_pt_set_pte_digest, slot);
+					}
+				}
+			}
+			require(fake_pt_set_pte_log_count > 0);
+			require(fake_pt_set_pte_panic_count > 0);
+			slot = 0;
+			require(x86_pt_set_pte_body_result(&pt, &slot, 4096,
+				0x5000, PTATTR_ACTIVE, attr_mask, 0, NULL,
+				NULL) == 0);
+			require(slot == (0x5000 | PTATTR_ACTIVE));
+			mix(&digest, fake_pt_set_pte_digest);
+			mix(&digest, slot);
+		}
 
 		for (unsigned int e = 0; e < sizeof(move_entries) / sizeof(move_entries[0]); e++) {
 			for (unsigned int p = 0; p < sizeof(move_pgsizes) / sizeof(move_pgsizes[0]); p++) {
@@ -10389,6 +13618,10 @@ __attribute__((weak)) int ihk_mc_get_memory_chunk(int id, unsigned long *start,
 	return 0;
 }
 __attribute__((weak)) char *ihk_get_kargs(void) { return 0; }
+struct cpu_local_var;
+__attribute__((weak)) struct cpu_local_var *clv;
+__attribute__((weak)) int cpu_local_var_initialized;
+__attribute__((weak)) int ihk_mc_get_processor_id(void) { return 0; }
 struct ihk_mc_numa_node;
 __attribute__((weak)) int ihk_mc_get_nr_numa_nodes(void) { return 0; }
 __attribute__((weak)) struct ihk_mc_numa_node *
@@ -10500,6 +13733,9 @@ cc "${kflags[@]}" -I"${tmpdir}" -ffunction-sections -fdata-sections -fno-builtin
 	-c lib/string.c -o "${tmpdir}/out/string_c.o"
 cc "${kflags[@]}" -I"${tmpdir}" -ffunction-sections -fdata-sections -fno-builtin \
 	-c lib/vsprintf.c -o "${tmpdir}/out/vsprintf_c.o"
+cc "${kflags[@]}" -I"${tmpdir}" -ffunction-sections -fdata-sections -fno-builtin \
+	-DMCKERNEL_RUST_NUMPARSE -c lib/vsprintf.c \
+	-o "${tmpdir}/out/vsprintf_numparse_c.o"
 
 rustc --crate-name mckernel_rust \
 	--crate-type lib \
@@ -10661,7 +13897,8 @@ cc -Wl,--gc-sections "${tmpdir}/object_helpers_equiv.c" \
 	-o "${tmpdir}/out/object_helpers_rust"
 cc -Wl,--gc-sections -Wl,--unresolved-symbols=ignore-all \
 	-Wl,--noinhibit-exec "${tmpdir}/process_helpers_equiv.c" \
-	"${tmpdir}/out/process_helpers_c.o" -o "${tmpdir}/out/process_helpers_c"
+	"${tmpdir}/out/process_helpers_c.o" "${tmpdir}/out/rbtree_c.o" \
+	-o "${tmpdir}/out/process_helpers_c"
 cc -Wl,--gc-sections "${tmpdir}/process_helpers_equiv.c" \
 	"${tmpdir}/rust_stubs.c" "${tmpdir}/out/mckernel_rust.o" \
 	-o "${tmpdir}/out/process_helpers_rust"
@@ -10687,6 +13924,12 @@ cc -fno-builtin -Wl,--gc-sections "${tmpdir}/numparse_equiv.c" \
 	-o "${tmpdir}/out/numparse_c"
 cc -fno-builtin "${tmpdir}/numparse_equiv.c" "${tmpdir}/rust_stubs.c" \
 	"${tmpdir}/out/mckernel_rust.o" -o "${tmpdir}/out/numparse_rust"
+cc -fno-builtin -Wl,--gc-sections "${tmpdir}/printf_decimal_equiv.c" \
+	"${tmpdir}/out/vsprintf_c.o" "${tmpdir}/out/string_c.o" \
+	-o "${tmpdir}/out/printf_decimal_c"
+cc -fno-builtin -Wl,--gc-sections "${tmpdir}/printf_decimal_equiv.c" \
+	"${tmpdir}/rust_stubs.c" "${tmpdir}/out/vsprintf_numparse_c.o" \
+	"${tmpdir}/out/mckernel_rust.o" -o "${tmpdir}/out/printf_decimal_rust"
 cc -Wl,--gc-sections "${tmpdir}/bitmap_equiv.c" "${tmpdir}/ctype_stub.c" \
 	"${tmpdir}/out/bitmap_c.o" "${tmpdir}/out/bitops_c.o" -o "${tmpdir}/out/bitmap_c"
 cc "${tmpdir}/bitmap_equiv.c" "${tmpdir}/rust_stubs.c" \
@@ -10709,6 +13952,14 @@ cc "${kflags[@]}" -I"${tmpdir}" -I. -ffunction-sections -fdata-sections \
 	-DMCKERNEL_RUST_PAGEALLOC_BITMAP -DMCKERNEL_RUST_PAGE_ALLOC_RBTREE \
 	"${tmpdir}/page_alloc_bitmap_equiv.c" "${tmpdir}/out/mckernel_rust.o" \
 	-Wl,--gc-sections -o "${tmpdir}/out/page_alloc_bitmap_rust"
+cc "${kflags[@]}" -I"${tmpdir}" -I. -ffunction-sections -fdata-sections \
+	"${tmpdir}/cls_helpers_smoke.c" "${tmpdir}/rust_stubs.c" \
+	"${tmpdir}/out/mckernel_rust.o" \
+	-Wl,--gc-sections -o "${tmpdir}/out/cls_helpers_smoke"
+cc "${kflags[@]}" -I"${tmpdir}" -I. -ffunction-sections -fdata-sections \
+	"${tmpdir}/kmalloc_helpers_smoke.c" "${tmpdir}/rust_stubs.c" \
+	"${tmpdir}/out/mckernel_rust.o" \
+	-Wl,--gc-sections -o "${tmpdir}/out/kmalloc_helpers_smoke"
 cc -Wl,--gc-sections kernel/rust/tests/ihk_module_helpers_smoke.c \
 	"${tmpdir}/out/ihk_core_helpers.o" "${tmpdir}/out/mcctrl_helpers.o" \
 	"${tmpdir}/out/smp_driver_helpers.o" \
@@ -10750,6 +14001,8 @@ cc -Wl,--gc-sections "${tmpdir}/mcexec_helpers_smoke.c" \
 "${tmpdir}/out/string_rust" > "${tmpdir}/out/string_rust.out"
 "${tmpdir}/out/numparse_c" > "${tmpdir}/out/numparse_c.out"
 "${tmpdir}/out/numparse_rust" > "${tmpdir}/out/numparse_rust.out"
+"${tmpdir}/out/printf_decimal_c" > "${tmpdir}/out/printf_decimal_c.out"
+"${tmpdir}/out/printf_decimal_rust" > "${tmpdir}/out/printf_decimal_rust.out"
 "${tmpdir}/out/bitmap_c" > "${tmpdir}/out/bitmap_c.out"
 "${tmpdir}/out/bitmap_rust" > "${tmpdir}/out/bitmap_rust.out"
 "${tmpdir}/out/bitmap_parse_c" > "${tmpdir}/out/bitmap_parse_c.out"
@@ -10762,6 +14015,14 @@ cc -Wl,--gc-sections "${tmpdir}/mcexec_helpers_smoke.c" \
 }
 "${tmpdir}/out/page_alloc_bitmap_rust" > "${tmpdir}/out/page_alloc_bitmap_rust.out" || {
 	cat "${tmpdir}/out/page_alloc_bitmap_rust.out"
+	exit 1
+}
+"${tmpdir}/out/cls_helpers_smoke" > "${tmpdir}/out/cls_helpers_smoke.out" || {
+	cat "${tmpdir}/out/cls_helpers_smoke.out"
+	exit 1
+}
+"${tmpdir}/out/kmalloc_helpers_smoke" > "${tmpdir}/out/kmalloc_helpers_smoke.out" || {
+	cat "${tmpdir}/out/kmalloc_helpers_smoke.out"
 	exit 1
 }
 "${tmpdir}/out/ihk_module_helpers_smoke" > "${tmpdir}/out/ihk_module_helpers_smoke.out"
@@ -10784,6 +14045,7 @@ diff -u "${tmpdir}/out/plist_c.out" "${tmpdir}/out/plist_rust.out"
 diff -u "${tmpdir}/out/bitops_c.out" "${tmpdir}/out/bitops_rust.out"
 diff -u "${tmpdir}/out/string_c.out" "${tmpdir}/out/string_rust.out"
 diff -u "${tmpdir}/out/numparse_c.out" "${tmpdir}/out/numparse_rust.out"
+diff -u "${tmpdir}/out/printf_decimal_c.out" "${tmpdir}/out/printf_decimal_rust.out"
 diff -u "${tmpdir}/out/bitmap_c.out" "${tmpdir}/out/bitmap_rust.out"
 diff -u "${tmpdir}/out/bitmap_parse_c.out" "${tmpdir}/out/bitmap_parse_rust.out"
 diff -u "${tmpdir}/out/page_alloc_c.out" "${tmpdir}/out/page_alloc_rust.out"
@@ -10797,11 +14059,14 @@ grep -Eq 'U ihk_mc_get_nr_numa_nodes' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_get_numa_node_by_distance' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_get_memory_chunk' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_get_nr_memory_chunks' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U ihk_mc_get_processor_id' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U phys_to_virt' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U shmid_index' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U virt_to_phys' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U zero_at_free' "${tmpdir}/out/rust.undefined"
-test "$(grep -c ' U ' "${tmpdir}/out/rust.undefined")" -eq 11
+grep -Eq 'U clv' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U cpu_local_var_initialized' "${tmpdir}/out/rust.undefined"
+test "$(grep -c ' U ' "${tmpdir}/out/rust.undefined")" -eq 14
 
 simd_count="$(objdump -d "${tmpdir}/out/mckernel_rust.o" |
 	grep -Eic 'xmm|ymm|mmx|movdqa|movdqu|movups|pshuf|padd|pand|pxor|popcnt' || true)"
@@ -10824,10 +14089,13 @@ cat "${tmpdir}/out/plist_c.out"
 cat "${tmpdir}/out/bitops_c.out"
 cat "${tmpdir}/out/string_c.out"
 cat "${tmpdir}/out/numparse_c.out"
+cat "${tmpdir}/out/printf_decimal_c.out"
 cat "${tmpdir}/out/bitmap_c.out"
 cat "${tmpdir}/out/bitmap_parse_c.out"
 cat "${tmpdir}/out/page_alloc_c.out"
 cat "${tmpdir}/out/page_alloc_bitmap_c.out"
+cat "${tmpdir}/out/cls_helpers_smoke.out"
+cat "${tmpdir}/out/kmalloc_helpers_smoke.out"
 cat "${tmpdir}/out/ihk_module_helpers_smoke.out"
 cat "${tmpdir}/out/mcexec_helpers_smoke.out"
 echo "rust object unresolved symbols and SIMD checks ok"

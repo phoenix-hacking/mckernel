@@ -1,7 +1,8 @@
 use core::ffi::c_void;
-use core::ptr::copy_nonoverlapping;
+use core::ptr::{copy_nonoverlapping, null_mut};
 
-use crate::abi::{AbiListHead, CInt, CULong, VmRange};
+use crate::abi::{AbiListHead, CInt, CULong, OffT, VmRange};
+use crate::rbtree::{rb_insert_color, rb_link_node, RbNode, RbRoot};
 
 const EINVAL: CInt = 22;
 const EACCES: CInt = 13;
@@ -31,14 +32,28 @@ const LIST_POISON2: usize = 0x0020_0229;
 const VR_IO_NOCACHE: CULong = 0x100;
 const VR_REMOTE: CULong = 0x200;
 const VR_WRITE_COMBINED: CULong = 0x400;
+const VR_DEMAND_PAGING: CULong = 0x1000;
 const VR_PRIVATE: CULong = 0x2000;
+const VR_XPMEM: CULong = 0x4000_0000;
 const VR_PROT_NONE: CULong = 0x0000_0000;
 const VR_PROT_READ: CULong = 0x0001_0000;
 const VR_PROT_WRITE: CULong = 0x0002_0000;
 const VR_PROT_EXEC: CULong = 0x0004_0000;
 const VR_PROT_MASK: CULong = 0x0007_0000;
+const NOPHYS: CULong = !0;
 
 const MF_HUGETLBFS: u32 = 0x100000;
+
+const PROCESS_ADD_RANGE_MAP_SKIP: CInt = 0;
+const PROCESS_ADD_RANGE_MAP_UPDATE: CInt = 1;
+const PROCESS_ADD_RANGE_MAP_MARK_XPMEM: CInt = 2;
+const PROCESS_ADD_RANGE_MAP_DEMAND: CInt = 3;
+const PROCESS_ADD_RANGE_LOG_ALLOC_FAILED: CInt = 1;
+const PROCESS_ADD_RANGE_LOG_INSERT_FAILED: CInt = 2;
+const PROCESS_ADD_RANGE_LOG_PREP_FAILED: CInt = 3;
+const PROCESS_ADD_RANGE_LOG_DEMAND: CInt = 4;
+const PROCESS_VM_RANGE_INSERT_LOG_OVERLAP: CInt = 1;
+const PROCESS_VM_RANGE_INSERT_LOG_SUCCESS: CInt = 2;
 
 const PTATTR_ACTIVE: CULong = 0x01;
 const PTATTR_WRITABLE: CULong = 0x02;
@@ -48,6 +63,19 @@ const PTATTR_UNCACHABLE: CULong = 0x10000;
 const PTATTR_FOR_USER: CULong = 0x20000;
 const PTATTR_WRITE_COMBINED: CULong = 0x40000;
 const IHK_PTA_REMOTE: CULong = 0;
+
+type ProcessAddRangeAllocFn = unsafe extern "C" fn(CULong) -> *mut VmRange;
+type ProcessAddRangeFreeFn = unsafe extern "C" fn(*mut VmRange);
+type ProcessAddRangeInsertFn = unsafe extern "C" fn(*mut c_void, *mut VmRange) -> CInt;
+type ProcessAddRangeUpdateFn =
+    unsafe extern "C" fn(*mut c_void, *mut VmRange, CULong, CULong) -> CInt;
+type ProcessAddRangeRemoveFn = unsafe extern "C" fn(*mut c_void, CULong, CULong);
+type ProcessAddRangeMarkXpmemFn = unsafe extern "C" fn(*mut VmRange);
+type ProcessAddRangeMemclearFn = unsafe extern "C" fn(CULong, CULong);
+type ProcessAddRangeLogFn = unsafe extern "C" fn(CInt, CInt, CULong, CULong);
+type ProcessVmRangeInsertLogFn =
+    unsafe extern "C" fn(CInt, *mut c_void, *mut VmRange, *mut VmRange);
+type ProcessVmRangeInsertDumpFn = unsafe extern "C" fn(*mut c_void);
 
 #[no_mangle]
 pub extern "C" fn common_vrflag_to_ptattr(
@@ -106,6 +134,265 @@ pub extern "C" fn process_add_range_bounds_result(
     } else {
         0
     }
+}
+
+#[inline(always)]
+#[cfg(enable_tofu)]
+unsafe fn init_list_head(head: *mut AbiListHead) {
+    (*head).next = head;
+    (*head).prev = head;
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_add_range_init_result(
+    range: *mut VmRange,
+    start: CULong,
+    end: CULong,
+    flag: CULong,
+    memobj: *mut c_void,
+    offset: OffT,
+    pgshift: CInt,
+    private_data: *mut c_void,
+) -> CInt {
+    if range.is_null() {
+        return 0;
+    }
+
+    (*range).vm_rb_node.__rb_parent_color = range as CULong;
+    (*range).start = start;
+    (*range).end = end;
+    (*range).flag = flag;
+    (*range).memobj = memobj;
+    (*range).objoff = offset;
+    (*range).pgshift = pgshift;
+    (*range).private_data = private_data;
+    (*range).straight_start = 0;
+    #[cfg(enable_tofu)]
+    init_list_head(&raw mut (*range).tofu_stag_list);
+    1
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_add_range_mapping_result(
+    phys: CULong,
+    flag: CULong,
+    range_flag: CULong,
+    attrp: *mut CULong,
+    memclearp: *mut CInt,
+) -> CInt {
+    let mut attr = 0;
+    let action = if phys == NOPHYS {
+        PROCESS_ADD_RANGE_MAP_SKIP
+    } else if (flag & VR_REMOTE) != 0 {
+        attr = IHK_PTA_REMOTE;
+        PROCESS_ADD_RANGE_MAP_UPDATE
+    } else if (flag & VR_IO_NOCACHE) != 0 {
+        attr = PTATTR_UNCACHABLE;
+        PROCESS_ADD_RANGE_MAP_UPDATE
+    } else if (flag & VR_XPMEM) != 0 {
+        PROCESS_ADD_RANGE_MAP_MARK_XPMEM
+    } else if (flag & VR_DEMAND_PAGING) != 0 {
+        PROCESS_ADD_RANGE_MAP_DEMAND
+    } else if (range_flag & VR_PROT_MASK) == VR_PROT_NONE {
+        PROCESS_ADD_RANGE_MAP_SKIP
+    } else {
+        PROCESS_ADD_RANGE_MAP_UPDATE
+    };
+
+    let memclear = phys != NOPHYS
+        && (flag & (VR_REMOTE | VR_DEMAND_PAGING | VR_XPMEM)) == 0
+        && (flag & VR_PROT_MASK) != VR_PROT_NONE;
+
+    if !attrp.is_null() {
+        *attrp = attr;
+    }
+    if !memclearp.is_null() {
+        *memclearp = memclear as CInt;
+    }
+
+    action
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_add_range_orchestrate_result(
+    vm: *mut c_void,
+    range_size: CULong,
+    start: CULong,
+    end: CULong,
+    phys: CULong,
+    flag: CULong,
+    memobj: *mut c_void,
+    offset: OffT,
+    pgshift: CInt,
+    private_data: *mut c_void,
+    rp: *mut *mut VmRange,
+    alloc_fn: Option<ProcessAddRangeAllocFn>,
+    free_fn: Option<ProcessAddRangeFreeFn>,
+    insert_fn: Option<ProcessAddRangeInsertFn>,
+    update_fn: Option<ProcessAddRangeUpdateFn>,
+    remove_fn: Option<ProcessAddRangeRemoveFn>,
+    mark_xpmem_fn: Option<ProcessAddRangeMarkXpmemFn>,
+    memclear_fn: Option<ProcessAddRangeMemclearFn>,
+    log_fn: Option<ProcessAddRangeLogFn>,
+) -> CInt {
+    let Some(alloc_fn) = alloc_fn else {
+        return -EINVAL;
+    };
+    let Some(free_fn) = free_fn else {
+        return -EINVAL;
+    };
+    let Some(insert_fn) = insert_fn else {
+        return -EINVAL;
+    };
+    let Some(update_fn) = update_fn else {
+        return -EINVAL;
+    };
+    let Some(remove_fn) = remove_fn else {
+        return -EINVAL;
+    };
+    let Some(mark_xpmem_fn) = mark_xpmem_fn else {
+        return -EINVAL;
+    };
+    let Some(memclear_fn) = memclear_fn else {
+        return -EINVAL;
+    };
+
+    let range = alloc_fn(range_size);
+    if range.is_null() {
+        if let Some(log_fn) = log_fn {
+            log_fn(PROCESS_ADD_RANGE_LOG_ALLOC_FAILED, -ENOMEM, start, end);
+        }
+        return -ENOMEM;
+    }
+
+    process_add_range_init_result(
+        range,
+        start,
+        end,
+        flag,
+        memobj,
+        offset,
+        pgshift,
+        private_data,
+    );
+
+    let mut rc = insert_fn(vm, range);
+    if rc != 0 {
+        if let Some(log_fn) = log_fn {
+            log_fn(PROCESS_ADD_RANGE_LOG_INSERT_FAILED, rc, start, end);
+        }
+        free_fn(range);
+        return rc;
+    }
+
+    let mut map_attr = 0;
+    let mut should_memclear = 0;
+    let map_action = process_add_range_mapping_result(
+        phys,
+        flag,
+        (*range).flag,
+        &mut map_attr,
+        &mut should_memclear,
+    );
+    if map_action == PROCESS_ADD_RANGE_MAP_UPDATE {
+        rc = update_fn(vm, range, phys, map_attr);
+    } else if map_action == PROCESS_ADD_RANGE_MAP_MARK_XPMEM {
+        mark_xpmem_fn(range);
+    } else if map_action == PROCESS_ADD_RANGE_MAP_DEMAND {
+        if let Some(log_fn) = log_fn {
+            log_fn(
+                PROCESS_ADD_RANGE_LOG_DEMAND,
+                0,
+                (*range).start,
+                (*range).end,
+            );
+        }
+    }
+
+    if rc != 0 {
+        if let Some(log_fn) = log_fn {
+            log_fn(
+                PROCESS_ADD_RANGE_LOG_PREP_FAILED,
+                rc,
+                (*range).start,
+                (*range).end,
+            );
+        }
+        remove_fn(vm, (*range).start, (*range).end);
+        free_fn(range);
+        return rc;
+    }
+
+    if should_memclear != 0 {
+        memclear_fn(phys, end - start);
+    }
+
+    if !rp.is_null() {
+        *rp = range;
+    }
+
+    0
+}
+
+#[inline(always)]
+unsafe fn vm_range_rb_node(range: *mut VmRange) -> *mut RbNode {
+    (&raw mut (*range).vm_rb_node).cast::<RbNode>()
+}
+
+#[inline(always)]
+unsafe fn vm_range_from_rb_node(node: *mut RbNode) -> *mut VmRange {
+    node.cast::<VmRange>()
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_vm_range_insert_result(
+    root: *mut RbRoot,
+    newrange: *mut VmRange,
+    vm: *mut c_void,
+    log_fn: Option<ProcessVmRangeInsertLogFn>,
+    dump_fn: Option<ProcessVmRangeInsertDumpFn>,
+) -> CInt {
+    if root.is_null() || newrange.is_null() {
+        return -EINVAL;
+    }
+
+    let mut link: *mut *mut RbNode = &raw mut (*root).rb_node;
+    let mut parent: *mut RbNode = null_mut();
+
+    while !(*link).is_null() {
+        let current = *link;
+        let range = vm_range_from_rb_node(current);
+
+        parent = current;
+        if (*newrange).end <= (*range).start {
+            link = &raw mut (*current).rb_left;
+        } else if (*newrange).start >= (*range).end {
+            link = &raw mut (*current).rb_right;
+        } else {
+            if let Some(log_fn) = log_fn {
+                log_fn(PROCESS_VM_RANGE_INSERT_LOG_OVERLAP, vm, newrange, range);
+            }
+            return -EFAULT;
+        }
+    }
+
+    if let Some(log_fn) = log_fn {
+        log_fn(
+            PROCESS_VM_RANGE_INSERT_LOG_SUCCESS,
+            vm,
+            newrange,
+            null_mut(),
+        );
+    }
+    if let Some(dump_fn) = dump_fn {
+        dump_fn(vm);
+    }
+
+    let node = vm_range_rb_node(newrange);
+    rb_link_node(node, parent, link);
+    rb_insert_color(node, root);
+
+    0
 }
 
 #[no_mangle]

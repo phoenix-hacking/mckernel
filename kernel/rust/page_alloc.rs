@@ -12,19 +12,39 @@ use crate::rbtree::{
 const PAGE_SHIFT: CULong = 12;
 const PAGE_SIZE: CULong = 1 << PAGE_SHIFT;
 const EINVAL: CInt = 22;
+const ENOMEM: CInt = 12;
 const IHK_NUMA_FREE_DIRECT: CInt = 0;
 const IHK_NUMA_FREE_DEFERRED: CInt = 1;
 const IHK_NUMA_FREE_IGNORED: CInt = 2;
 const IHK_NUMA_CPU_CACHE_FREE_NOT_TRIED: CInt = 0;
 const IHK_NUMA_CPU_CACHE_FREE_SUCCESS: CInt = 1;
 const IHK_NUMA_CPU_CACHE_FREE_FAILED: CInt = 2;
+const IHK_NUMA_ALLOC_LOG_CACHE_HIT: CInt = 1;
+const IHK_NUMA_ALLOC_LOG_DIRECT_OK: CInt = 2;
+const IHK_NUMA_ADD_FREE_LOG_ERROR: CInt = 1;
+const IHK_NUMA_ADD_FREE_LOG_OK: CInt = 2;
+const IHK_NUMA_FREE_LOG_DIRECT_ERROR: CInt = 1;
+const IHK_NUMA_FREE_LOG_DIRECT_OK: CInt = 2;
+const IHK_NUMA_FREE_LOG_DEFER_ERROR: CInt = 3;
+const IHK_NUMA_FREE_LOG_ZERO_SKIP: CInt = 4;
+const IHK_NUMA_FREE_LOG_SEND_FAIL: CInt = 5;
+const IHK_NUMA_FREE_LOG_SEND_OK: CInt = 6;
+const IHK_NUMA_FREE_LOG_UNEXPECTED: CInt = 7;
+const IHK_NUMA_FREE_LOG_CPU_CACHE_OK: CInt = 8;
+const IHK_NUMA_FREE_LOG_CPU_CACHE_FAILED: CInt = 9;
 const SCD_MSG_SYSCALL_ONESIDE: CInt = 0x4;
 
 type PageAllocIrqSaveFn = unsafe extern "C" fn() -> CULong;
 type PageAllocIrqRestoreFn = unsafe extern "C" fn(CULong);
+type PageAllocAllocPagesFn = unsafe extern "C" fn(CInt, CInt) -> *mut c_void;
 type PageAllocFreePagesFn = unsafe extern "C" fn(*mut c_void, CInt);
+type PageAllocMcsLockInitFn = unsafe extern "C" fn(CULong);
 type PageAllocMcsLockFn = unsafe extern "C" fn(CULong, CULong);
 type PageAllocMcsUnlockFn = unsafe extern "C" fn(CULong, CULong);
+type PageAllocZeroSendFn = unsafe extern "C" fn(CULong) -> CInt;
+type PageAllocAllocLogFn = unsafe extern "C" fn(CInt, CULong, CULong, CInt, CInt);
+type PageAllocAddFreeLogFn = unsafe extern "C" fn(CInt, CULong, CULong, CULong, CInt);
+type PageAllocFreeLogFn = unsafe extern "C" fn(CInt, CULong, CULong, CInt, CInt, CInt);
 
 #[repr(C)]
 #[derive(Clone, Copy)]
@@ -330,6 +350,99 @@ pub unsafe extern "C" fn pagealloc_init_layout_result(
     }
 
     0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn pagealloc_init_result(
+    start: CULong,
+    size: CULong,
+    unit: CULong,
+    initial: *mut c_void,
+    pdescsize: *mut CULong,
+    desc_struct_size: CULong,
+    alloc_flag: CInt,
+    page_size: CULong,
+    lock_offset: CULong,
+    alloc_pages_fn: Option<PageAllocAllocPagesFn>,
+    lock_init_fn: Option<PageAllocMcsLockInitFn>,
+    statusp: *mut CInt,
+) -> *mut IhkPageAllocatorDesc {
+    let mut page_shift: CInt = 0;
+    let mut mapsize: CInt = 0;
+    let mut mapaligned: CInt = 0;
+    let mut desc_pages: CInt = 0;
+
+    if !statusp.is_null() {
+        unsafe {
+            *statusp = 0;
+        }
+    }
+
+    let layout_rc = unsafe {
+        pagealloc_init_layout_result(
+            size,
+            unit,
+            desc_struct_size,
+            &mut page_shift,
+            &mut mapsize,
+            &mut mapaligned,
+            &mut desc_pages,
+        )
+    };
+    if layout_rc != 0 {
+        if !statusp.is_null() {
+            unsafe {
+                *statusp = layout_rc;
+            }
+        }
+        return null_mut();
+    }
+
+    let desc = if !initial.is_null() {
+        if !pdescsize.is_null() {
+            unsafe {
+                *pdescsize = desc_pages as CULong;
+            }
+        }
+        initial.cast::<IhkPageAllocatorDesc>()
+    } else {
+        let Some(alloc_pages) = alloc_pages_fn else {
+            if !statusp.is_null() {
+                unsafe {
+                    *statusp = -EINVAL;
+                }
+            }
+            return null_mut();
+        };
+        unsafe { alloc_pages(desc_pages, alloc_flag).cast::<IhkPageAllocatorDesc>() }
+    };
+
+    if desc.is_null() {
+        if !statusp.is_null() {
+            unsafe {
+                *statusp = -ENOMEM;
+            }
+        }
+        return null_mut();
+    }
+
+    let Some(lock_init) = lock_init_fn else {
+        if !statusp.is_null() {
+            unsafe {
+                *statusp = -EINVAL;
+            }
+        }
+        return null_mut();
+    };
+
+    unsafe {
+        pagealloc_desc_reset_result(desc, desc_pages, page_size);
+        pagealloc_desc_init_result(desc, start, size, page_shift, mapaligned, desc_pages);
+        lock_init((desc as CULong).wrapping_add(lock_offset));
+        pagealloc_reserve_tail_result((*desc).map.as_mut_ptr(), mapsize, mapaligned * 8);
+    }
+
+    desc
 }
 
 #[no_mangle]
@@ -729,6 +842,30 @@ pub unsafe extern "C" fn __ihk_numa_add_free_pages(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn ihk_numa_add_free_pages_result(
+    node: *mut IhkMcNumaNode,
+    addr: CULong,
+    size: CULong,
+    log_fn: Option<PageAllocAddFreeLogFn>,
+) -> CInt {
+    let rc = unsafe { __ihk_numa_add_free_pages(node, addr, size) };
+
+    if let Some(log_fn) = log_fn {
+        if rc != 0 {
+            unsafe {
+                log_fn(IHK_NUMA_ADD_FREE_LOG_ERROR, node as CULong, addr, size, rc);
+            }
+        } else {
+            unsafe {
+                log_fn(IHK_NUMA_ADD_FREE_LOG_OK, node as CULong, addr, size, 0);
+            }
+        }
+    }
+
+    rc
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn __ihk_numa_zero_free_pages_node(
     node: *mut IhkMcNumaNode,
     nr_pages: CInt,
@@ -852,6 +989,13 @@ pub unsafe extern "C" fn __ihk_numa_zero_free_pages_dispatch(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn ihk_numa_zero_free_pages_result(node: *mut IhkMcNumaNode) {
+    unsafe {
+        __ihk_numa_zero_free_pages_dispatch(node, 0);
+    }
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn __ihk_numa_alloc_pages_nolock(
     node: *mut IhkMcNumaNode,
     npages: CInt,
@@ -949,6 +1093,126 @@ pub unsafe extern "C" fn __ihk_numa_alloc_pages_locked_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn ihk_numa_alloc_pages_orchestrate_result(
+    node: *mut IhkMcNumaNode,
+    cpu_initialized: CInt,
+    cache_root: *mut RbRoot,
+    npages: CInt,
+    p2align: CInt,
+    lock_offset: CULong,
+    lock_node_addr: CULong,
+    irq_save_fn: Option<PageAllocIrqSaveFn>,
+    irq_restore_fn: Option<PageAllocIrqRestoreFn>,
+    lock_fn: Option<PageAllocMcsLockFn>,
+    unlock_fn: Option<PageAllocMcsUnlockFn>,
+    sourcep: *mut CInt,
+) -> CULong {
+    if !sourcep.is_null() {
+        unsafe {
+            *sourcep = 0;
+        }
+    }
+
+    let cache_addr = unsafe {
+        __ihk_numa_cpu_cache_alloc_try_result(
+            cpu_initialized,
+            cache_root,
+            npages,
+            p2align,
+            irq_save_fn,
+            irq_restore_fn,
+        )
+    };
+    if __ihk_numa_cpu_cache_alloc_hit_result(cache_addr) != 0 {
+        if !sourcep.is_null() {
+            unsafe {
+                *sourcep = 1;
+            }
+        }
+        return cache_addr;
+    }
+
+    let addr = unsafe {
+        __ihk_numa_alloc_pages_locked_result(
+            node,
+            npages,
+            p2align,
+            lock_offset,
+            lock_node_addr,
+            lock_fn,
+            unlock_fn,
+        )
+    };
+    if addr != 0 && !sourcep.is_null() {
+        unsafe {
+            *sourcep = 2;
+        }
+    }
+
+    addr
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_numa_alloc_pages_result(
+    node: *mut IhkMcNumaNode,
+    cpu_initialized: CInt,
+    cache_root: *mut RbRoot,
+    npages: CInt,
+    p2align: CInt,
+    lock_offset: CULong,
+    lock_node_addr: CULong,
+    irq_save_fn: Option<PageAllocIrqSaveFn>,
+    irq_restore_fn: Option<PageAllocIrqRestoreFn>,
+    lock_fn: Option<PageAllocMcsLockFn>,
+    unlock_fn: Option<PageAllocMcsUnlockFn>,
+    log_fn: Option<PageAllocAllocLogFn>,
+) -> CULong {
+    let mut source: CInt = 0;
+    let addr = unsafe {
+        ihk_numa_alloc_pages_orchestrate_result(
+            node,
+            cpu_initialized,
+            cache_root,
+            npages,
+            p2align,
+            lock_offset,
+            lock_node_addr,
+            irq_save_fn,
+            irq_restore_fn,
+            lock_fn,
+            unlock_fn,
+            &raw mut source,
+        )
+    };
+
+    if let Some(log_fn) = log_fn {
+        if source == 1 {
+            unsafe {
+                log_fn(
+                    IHK_NUMA_ALLOC_LOG_CACHE_HIT,
+                    node as CULong,
+                    addr,
+                    npages,
+                    source,
+                );
+            }
+        } else if addr != 0 {
+            unsafe {
+                log_fn(
+                    IHK_NUMA_ALLOC_LOG_DIRECT_OK,
+                    node as CULong,
+                    addr,
+                    npages,
+                    source,
+                );
+            }
+        }
+    }
+
+    addr
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn __ihk_numa_free_pages_direct_locked_result(
     node: *mut IhkMcNumaNode,
     addr: CULong,
@@ -974,6 +1238,255 @@ pub unsafe extern "C" fn __ihk_numa_free_pages_direct_locked_result(
         let rc = __ihk_numa_free_pages_to_tree_nolock(node, addr, npages);
         unlock(lock_addr, lock_node_addr);
         rc
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_numa_free_pages_orchestrate_result(
+    node: *mut IhkMcNumaNode,
+    addr: CULong,
+    npages: CInt,
+    defer_zero_at_free: CInt,
+    packet: *mut IkcScdPacket,
+    cpu_initialized: CInt,
+    current_thread: CULong,
+    idle_thread: CULong,
+    thread_proc_offset: CULong,
+    proc_nohost_offset: CULong,
+    proc_pid_offset: CULong,
+    cpu_ref: CInt,
+    syscall_number: CULong,
+    lock_offset: CULong,
+    lock_node_addr: CULong,
+    lock_fn: Option<PageAllocMcsLockFn>,
+    unlock_fn: Option<PageAllocMcsUnlockFn>,
+    direct_rcp: *mut CInt,
+    zero_request_actionp: *mut CInt,
+) -> CInt {
+    if !direct_rcp.is_null() {
+        unsafe {
+            *direct_rcp = 0;
+        }
+    }
+    if !zero_request_actionp.is_null() {
+        unsafe {
+            *zero_request_actionp = 0;
+        }
+    }
+
+    let free_action =
+        unsafe { __ihk_numa_free_pages_prepare(node, addr, npages, defer_zero_at_free) };
+    if free_action == IHK_NUMA_FREE_IGNORED {
+        return free_action;
+    }
+
+    if free_action == IHK_NUMA_FREE_DIRECT {
+        let rc = unsafe {
+            __ihk_numa_free_pages_direct_locked_result(
+                node,
+                addr,
+                npages,
+                lock_offset,
+                lock_node_addr,
+                lock_fn,
+                unlock_fn,
+            )
+        };
+        if !direct_rcp.is_null() {
+            unsafe {
+                *direct_rcp = rc;
+            }
+        }
+        return free_action;
+    }
+
+    if free_action == IHK_NUMA_FREE_DEFERRED {
+        let zero_request_action = unsafe {
+            __ihk_numa_free_pages_deferred_result(
+                node,
+                addr,
+                npages,
+                packet,
+                cpu_initialized,
+                current_thread,
+                idle_thread,
+                thread_proc_offset,
+                proc_nohost_offset,
+                proc_pid_offset,
+                cpu_ref,
+                syscall_number,
+            )
+        };
+        if !zero_request_actionp.is_null() {
+            unsafe {
+                *zero_request_actionp = zero_request_action;
+            }
+        }
+    }
+
+    free_action
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_numa_free_pages_finish_result(
+    free_action: CInt,
+    direct_rc: CInt,
+    zero_request_action: CInt,
+    node_addr: CULong,
+    addr: CULong,
+    npages: CInt,
+    zero_at_free_value: CInt,
+    packet_addr: CULong,
+    send_fn: Option<PageAllocZeroSendFn>,
+    log_fn: Option<PageAllocFreeLogFn>,
+) -> CInt {
+    let log = |event: CInt, detail: CInt| {
+        if let Some(log_fn) = log_fn {
+            unsafe {
+                log_fn(event, node_addr, addr, npages, zero_at_free_value, detail);
+            }
+        }
+    };
+
+    if free_action == IHK_NUMA_FREE_IGNORED {
+        return 0;
+    }
+
+    if free_action == IHK_NUMA_FREE_DIRECT {
+        if direct_rc != 0 {
+            log(IHK_NUMA_FREE_LOG_DIRECT_ERROR, direct_rc);
+        } else {
+            log(IHK_NUMA_FREE_LOG_DIRECT_OK, 0);
+        }
+        return 0;
+    }
+
+    if free_action == IHK_NUMA_FREE_DEFERRED {
+        if zero_request_action < 0 {
+            log(IHK_NUMA_FREE_LOG_DEFER_ERROR, zero_request_action);
+            return 0;
+        }
+        if zero_request_action == 2 {
+            log(IHK_NUMA_FREE_LOG_ZERO_SKIP, zero_request_action);
+            return 0;
+        }
+        if zero_request_action == 1 {
+            let send_rc = if let Some(send_fn) = send_fn {
+                unsafe { send_fn(packet_addr) }
+            } else {
+                -EINVAL
+            };
+            if send_rc < 0 {
+                log(IHK_NUMA_FREE_LOG_SEND_FAIL, send_rc);
+            } else {
+                log(IHK_NUMA_FREE_LOG_SEND_OK, send_rc);
+            }
+        }
+        return 0;
+    }
+
+    log(IHK_NUMA_FREE_LOG_UNEXPECTED, free_action);
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_numa_free_pages_result(
+    node: *mut IhkMcNumaNode,
+    addr: CULong,
+    npages: CInt,
+    defer_zero_at_free_value: CInt,
+    zero_at_free_value: CInt,
+    packet: *mut IkcScdPacket,
+    cpu_initialized: CInt,
+    cache_root: *mut RbRoot,
+    current_thread: CULong,
+    idle_thread: CULong,
+    thread_proc_offset: CULong,
+    proc_nohost_offset: CULong,
+    proc_pid_offset: CULong,
+    cpu_ref: CInt,
+    syscall_number: CULong,
+    lock_offset: CULong,
+    lock_node_addr: CULong,
+    irq_save_fn: Option<PageAllocIrqSaveFn>,
+    irq_restore_fn: Option<PageAllocIrqRestoreFn>,
+    lock_fn: Option<PageAllocMcsLockFn>,
+    unlock_fn: Option<PageAllocMcsUnlockFn>,
+    send_fn: Option<PageAllocZeroSendFn>,
+    log_fn: Option<PageAllocFreeLogFn>,
+) -> CInt {
+    let log = |event: CInt, detail: CInt| {
+        if let Some(log_fn) = log_fn {
+            unsafe {
+                log_fn(
+                    event,
+                    node as CULong,
+                    addr,
+                    npages,
+                    zero_at_free_value,
+                    detail,
+                );
+            }
+        }
+    };
+
+    let cache_action = unsafe {
+        __ihk_numa_cpu_cache_free_try_result(
+            cpu_initialized,
+            cache_root,
+            addr,
+            npages,
+            irq_save_fn,
+            irq_restore_fn,
+        )
+    };
+    if cache_action == IHK_NUMA_CPU_CACHE_FREE_SUCCESS {
+        log(IHK_NUMA_FREE_LOG_CPU_CACHE_OK, 0);
+        return 0;
+    }
+    if cache_action == IHK_NUMA_CPU_CACHE_FREE_FAILED {
+        log(IHK_NUMA_FREE_LOG_CPU_CACHE_FAILED, cache_action);
+    }
+
+    let mut direct_rc = 0;
+    let mut zero_request_action = 0;
+    let free_action = unsafe {
+        ihk_numa_free_pages_orchestrate_result(
+            node,
+            addr,
+            npages,
+            defer_zero_at_free_value,
+            packet,
+            cpu_initialized,
+            current_thread,
+            idle_thread,
+            thread_proc_offset,
+            proc_nohost_offset,
+            proc_pid_offset,
+            cpu_ref,
+            syscall_number,
+            lock_offset,
+            lock_node_addr,
+            lock_fn,
+            unlock_fn,
+            &mut direct_rc,
+            &mut zero_request_action,
+        )
+    };
+
+    unsafe {
+        ihk_numa_free_pages_finish_result(
+            free_action,
+            direct_rc,
+            zero_request_action,
+            node as CULong,
+            addr,
+            npages,
+            zero_at_free_value,
+            packet as CULong,
+            send_fn,
+            log_fn,
+        )
     }
 }
 

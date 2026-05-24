@@ -90,6 +90,7 @@ extern unsigned long ihk_core_list_next_entry_result(unsigned long head_addr,
 extern unsigned long ihk_core_kmsg_find_by_os_index_reverse_result(
 		unsigned long head_addr, unsigned long list_offset,
 		unsigned long os_index_offset, int os_index);
+extern int ihk_core_dma_request_result(void *channel, void *request);
 extern int mcctrl_lwk_to_linux_index_result(const int *mapping, int count,
 		int index);
 extern int mcctrl_linux_to_lwk_index_result(const int *mapping, int count,
@@ -254,6 +255,30 @@ struct fake_kmsg_node {
 	int os_index;
 };
 
+struct fake_dma_ops {
+	int (*request)(void *channel, void *request);
+	void (*get_info)(void *channel, void *info);
+};
+
+struct fake_dma_channel {
+	void *dev;
+	void *priv;
+	int channel;
+	struct fake_dma_ops *ops;
+};
+
+static void *expected_dma_channel;
+static void *expected_dma_request;
+static int dma_callback_count;
+
+static int fake_dma_request(void *channel, void *request)
+{
+	if (channel != expected_dma_channel || request != expected_dma_request)
+		return -5;
+	dma_callback_count++;
+	return 1234;
+}
+
 static void require(int condition)
 {
 	if (!condition)
@@ -328,6 +353,27 @@ int main(void)
 		(struct fake_zero_chunk *)zero_backing;
 	struct fake_zero_chunk *zero_chunk_b =
 		(struct fake_zero_chunk *)(zero_backing + 4096);
+	struct fake_dma_ops dma_ops = {
+		.request = fake_dma_request,
+		.get_info = NULL,
+	};
+	struct fake_dma_ops dma_ops_no_request = {
+		.request = NULL,
+		.get_info = NULL,
+	};
+	struct fake_dma_channel dma_channel = {
+		.dev = (void *)0x1111,
+		.priv = (void *)0x2222,
+		.channel = 5,
+		.ops = &dma_ops,
+	};
+	struct fake_dma_channel dma_channel_no_request = {
+		.dev = (void *)0x1111,
+		.priv = (void *)0x2222,
+		.channel = 5,
+		.ops = &dma_ops_no_request,
+	};
+	int dma_request;
 	unsigned long zero_phys_base = 0x400000UL;
 	unsigned long zero_virt_base =
 		(unsigned long)zero_backing - zero_phys_base;
@@ -608,6 +654,12 @@ int main(void)
 			(unsigned long)&kmsg_head,
 			offsetof(struct fake_kmsg_node, list),
 			offsetof(struct fake_kmsg_node, os_index), 9) == 0);
+	expected_dma_channel = &dma_channel;
+	expected_dma_request = &dma_request;
+	require(ihk_core_dma_request_result(&dma_channel, &dma_request) == 1234);
+	require(dma_callback_count == 1);
+	require(ihk_core_dma_request_result(&dma_channel_no_request,
+			&dma_request) == -22);
 
 	require(mcctrl_lwk_to_linux_index_result(mapping, 3, 1) == 2);
 	require(mcctrl_lwk_to_linux_index_result(mapping, 3, -1) == -1);

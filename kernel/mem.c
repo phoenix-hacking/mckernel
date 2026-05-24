@@ -1969,13 +1969,59 @@ void numa_sysfs_setup(void) {
 struct list_head page_hash[PHYS_PAGE_HASH_SIZE];
 ihk_spinlock_t page_hash_locks[PHYS_PAGE_HASH_SIZE];
 
+typedef unsigned long (*page_hash_lock_fn_t)(unsigned long lock_addr);
+typedef void (*page_hash_unlock_fn_t)(unsigned long lock_addr,
+		unsigned long flags);
+typedef struct page *(*page_hash_alloc_fn_t)(unsigned long size, int flag);
+
+struct page *page_hash_lookup_result(struct list_head *hash_head,
+		uint64_t phys);
+int page_hash_bucket_init_result(struct list_head *hash_head);
+int page_hash_count_bucket_result(struct list_head *hash_head);
+int page_hash_count_all_result(unsigned long hash_heads_addr,
+		unsigned long locks_addr, int bucket_count,
+		unsigned long hash_head_stride, unsigned long lock_stride,
+		page_hash_lock_fn_t lock_fn, page_hash_unlock_fn_t unlock_fn);
+struct page *phys_to_page_lookup_orchestrate_result(uint64_t phys,
+		unsigned long hash_heads_addr, unsigned long locks_addr,
+		int hash_shift, uint64_t hash_mask,
+		unsigned long hash_head_stride, unsigned long lock_stride,
+		page_hash_lock_fn_t lock_fn, page_hash_unlock_fn_t unlock_fn);
+struct page *phys_to_page_insert_hash_orchestrate_result(uint64_t phys,
+		unsigned long hash_heads_addr, unsigned long locks_addr,
+		int hash_shift, uint64_t hash_mask,
+		unsigned long hash_head_stride, unsigned long lock_stride,
+		unsigned long page_size, int alloc_flag,
+		page_hash_lock_fn_t lock_fn, page_hash_unlock_fn_t unlock_fn,
+		page_hash_alloc_fn_t alloc_fn);
+int page_unmap_orchestrate_result(struct page *page,
+		unsigned long locks_addr, int hash_shift, uint64_t hash_mask,
+		unsigned long lock_stride, page_hash_lock_fn_t lock_fn,
+		page_hash_unlock_fn_t unlock_fn);
+
+static unsigned long page_hash_lock_bridge(unsigned long lock_addr)
+{
+	return ihk_mc_spinlock_lock((ihk_spinlock_t *)lock_addr);
+}
+
+static void page_hash_unlock_bridge(unsigned long lock_addr,
+		unsigned long flags)
+{
+	ihk_mc_spinlock_unlock((ihk_spinlock_t *)lock_addr, flags);
+}
+
+static struct page *page_hash_alloc_bridge(unsigned long size, int flag)
+{
+	return kmalloc(size, flag);
+}
+
 static void page_init(void)
 {
 	int i;
 
 	for (i = 0; i < PHYS_PAGE_HASH_SIZE; ++i) {
 		ihk_mc_spinlock_init(&page_hash_locks[i]);
-		INIT_LIST_HEAD(&page_hash[i]);
+		page_hash_bucket_init_result(&page_hash[i]);
 	}
 
 	return;
@@ -1983,60 +2029,239 @@ static void page_init(void)
 
 static int page_hash_count_pages(void)
 {
-	int i;
-	int cnt = 0;
-
-	for (i = 0; i < PHYS_PAGE_HASH_SIZE; ++i) {
-		unsigned long irqflags;
-		struct page *page_iter;
-
-		irqflags = ihk_mc_spinlock_lock(&page_hash_locks[i]);
-
-		list_for_each_entry(page_iter, &page_hash[i], hash) {
-			++cnt;
-		}
-
-		ihk_mc_spinlock_unlock(&page_hash_locks[i], irqflags);
-	}
-
-	return cnt;
-}
-
-/* XXX: page_hash_lock must be held */
-static struct page *__phys_to_page(uintptr_t phys)
-{
-	int hash = (phys >> PAGE_SHIFT) & PHYS_PAGE_HASH_MASK;
-	struct page *page_iter, *page = NULL;
-
-	list_for_each_entry(page_iter, &page_hash[hash], hash) {
-		if (page_iter->phys == phys) {
-			page = page_iter;
-			break;
-		}
-	}
-
-	return page;
+	return page_hash_count_all_result((unsigned long)page_hash,
+			(unsigned long)page_hash_locks, PHYS_PAGE_HASH_SIZE,
+			sizeof(page_hash[0]), sizeof(page_hash_locks[0]),
+			page_hash_lock_bridge, page_hash_unlock_bridge);
 }
 
 struct page *phys_to_page(uintptr_t phys)
 {
-	int hash = (phys >> PAGE_SHIFT) & PHYS_PAGE_HASH_MASK;
-	struct page *page = NULL;
-	unsigned long irqflags;
-
-	irqflags = ihk_mc_spinlock_lock(&page_hash_locks[hash]);
-	page = __phys_to_page(phys);
-	ihk_mc_spinlock_unlock(&page_hash_locks[hash], irqflags);
-
-	return page;
+	return phys_to_page_lookup_orchestrate_result(phys,
+			(unsigned long)page_hash, (unsigned long)page_hash_locks,
+			PAGE_SHIFT, PHYS_PAGE_HASH_MASK, sizeof(page_hash[0]),
+			sizeof(page_hash_locks[0]), page_hash_lock_bridge,
+			page_hash_unlock_bridge);
 }
 
 #ifdef MCKERNEL_RUST_PAGE_HELPERS
 extern uintptr_t page_to_phys(struct page *page);
+extern void page_map_count_inc_result(struct page *page);
+extern int page_unmap_locked_result(struct page *page);
+extern int page_insert_hash_init_result(struct page *page,
+		struct list_head *hash_head, uint64_t phys);
+extern struct page *page_hash_lookup_result(struct list_head *hash_head,
+		uint64_t phys);
+extern int page_hash_bucket_init_result(struct list_head *hash_head);
+extern int page_hash_count_bucket_result(struct list_head *hash_head);
+extern int page_hash_count_all_result(unsigned long hash_heads_addr,
+		unsigned long locks_addr, int bucket_count,
+		unsigned long hash_head_stride, unsigned long lock_stride,
+		page_hash_lock_fn_t lock_fn, page_hash_unlock_fn_t unlock_fn);
+extern struct page *phys_to_page_lookup_orchestrate_result(uint64_t phys,
+		unsigned long hash_heads_addr, unsigned long locks_addr,
+		int hash_shift, uint64_t hash_mask,
+		unsigned long hash_head_stride, unsigned long lock_stride,
+		page_hash_lock_fn_t lock_fn, page_hash_unlock_fn_t unlock_fn);
+extern struct page *phys_to_page_insert_hash_orchestrate_result(uint64_t phys,
+		unsigned long hash_heads_addr, unsigned long locks_addr,
+		int hash_shift, uint64_t hash_mask,
+		unsigned long hash_head_stride, unsigned long lock_stride,
+		unsigned long page_size, int alloc_flag,
+		page_hash_lock_fn_t lock_fn, page_hash_unlock_fn_t unlock_fn,
+		page_hash_alloc_fn_t alloc_fn);
+extern int page_unmap_orchestrate_result(struct page *page,
+		unsigned long locks_addr, int hash_shift, uint64_t hash_mask,
+		unsigned long lock_stride, page_hash_lock_fn_t lock_fn,
+		page_hash_unlock_fn_t unlock_fn);
 #else
 uintptr_t page_to_phys(struct page *page)
 {
 	return page ? page->phys : 0;
+}
+
+void page_map_count_inc_result(struct page *page)
+{
+	ihk_atomic_inc(&page->count);
+}
+
+int page_unmap_locked_result(struct page *page)
+{
+	if (ihk_atomic_sub_return(1, &page->count) > 0) {
+		return 0;
+	}
+
+	list_del(&page->hash);
+	return 1;
+}
+
+int page_insert_hash_init_result(struct page *page, struct list_head *hash_head,
+		uint64_t phys)
+{
+	if (!page || !hash_head) {
+		return 0;
+	}
+
+	list_add(&page->hash, hash_head);
+	page->phys = phys;
+	page->mode = PM_NONE;
+	INIT_LIST_HEAD(&page->list);
+	ihk_atomic_set(&page->count, 0);
+	return 1;
+}
+
+struct page *page_hash_lookup_result(struct list_head *hash_head,
+		uint64_t phys)
+{
+	struct page *page_iter;
+
+	if (!hash_head) {
+		return NULL;
+	}
+
+	list_for_each_entry(page_iter, hash_head, hash) {
+		if (page_iter->phys == phys) {
+			return page_iter;
+		}
+	}
+
+	return NULL;
+}
+
+int page_hash_bucket_init_result(struct list_head *hash_head)
+{
+	if (!hash_head) {
+		return 0;
+	}
+
+	INIT_LIST_HEAD(hash_head);
+	return 1;
+}
+
+int page_hash_count_bucket_result(struct list_head *hash_head)
+{
+	struct page *page_iter;
+	int count = 0;
+
+	if (!hash_head) {
+		return 0;
+	}
+
+	list_for_each_entry(page_iter, hash_head, hash) {
+		++count;
+	}
+
+	return count;
+}
+
+int page_hash_count_all_result(unsigned long hash_heads_addr,
+		unsigned long locks_addr, int bucket_count,
+		unsigned long hash_head_stride, unsigned long lock_stride,
+		page_hash_lock_fn_t lock_fn, page_hash_unlock_fn_t unlock_fn)
+{
+	int i, count = 0;
+
+	if (!hash_heads_addr || !locks_addr || bucket_count < 0 ||
+			!hash_head_stride || !lock_stride ||
+			!lock_fn || !unlock_fn) {
+		return -EINVAL;
+	}
+
+	for (i = 0; i < bucket_count; ++i) {
+		struct list_head *hash_head = (struct list_head *)
+			(hash_heads_addr + hash_head_stride * i);
+		unsigned long lock_addr = locks_addr + lock_stride * i;
+		unsigned long flags = lock_fn(lock_addr);
+
+		count += page_hash_count_bucket_result(hash_head);
+		unlock_fn(lock_addr, flags);
+	}
+
+	return count;
+}
+
+struct page *phys_to_page_lookup_orchestrate_result(uint64_t phys,
+		unsigned long hash_heads_addr, unsigned long locks_addr,
+		int hash_shift, uint64_t hash_mask,
+		unsigned long hash_head_stride, unsigned long lock_stride,
+		page_hash_lock_fn_t lock_fn, page_hash_unlock_fn_t unlock_fn)
+{
+	unsigned long hash_head_addr, lock_addr, flags;
+	unsigned long hash;
+	struct page *page;
+
+	if (!hash_heads_addr || !locks_addr || hash_shift < 0 ||
+			hash_shift >= 64 || !hash_head_stride || !lock_stride ||
+			!lock_fn || !unlock_fn) {
+		return NULL;
+	}
+
+	hash = (phys >> hash_shift) & hash_mask;
+	hash_head_addr = hash_heads_addr + hash_head_stride * hash;
+	lock_addr = locks_addr + lock_stride * hash;
+	flags = lock_fn(lock_addr);
+	page = page_hash_lookup_result((struct list_head *)hash_head_addr, phys);
+	unlock_fn(lock_addr, flags);
+
+	return page;
+}
+
+struct page *phys_to_page_insert_hash_orchestrate_result(uint64_t phys,
+		unsigned long hash_heads_addr, unsigned long locks_addr,
+		int hash_shift, uint64_t hash_mask,
+		unsigned long hash_head_stride, unsigned long lock_stride,
+		unsigned long page_size, int alloc_flag,
+		page_hash_lock_fn_t lock_fn, page_hash_unlock_fn_t unlock_fn,
+		page_hash_alloc_fn_t alloc_fn)
+{
+	unsigned long hash_head_addr, lock_addr, flags;
+	unsigned long hash;
+	struct page *page;
+
+	if (!hash_heads_addr || !locks_addr || hash_shift < 0 ||
+			hash_shift >= 64 || !hash_head_stride || !lock_stride ||
+			!lock_fn || !unlock_fn || !alloc_fn) {
+		return NULL;
+	}
+
+	hash = (phys >> hash_shift) & hash_mask;
+	hash_head_addr = hash_heads_addr + hash_head_stride * hash;
+	lock_addr = locks_addr + lock_stride * hash;
+	flags = lock_fn(lock_addr);
+	page = page_hash_lookup_result((struct list_head *)hash_head_addr, phys);
+	if (!page) {
+		page = alloc_fn(page_size, alloc_flag);
+		if (page) {
+			page_insert_hash_init_result(page,
+					(struct list_head *)hash_head_addr, phys);
+		}
+	}
+	unlock_fn(lock_addr, flags);
+
+	return page;
+}
+
+int page_unmap_orchestrate_result(struct page *page,
+		unsigned long locks_addr, int hash_shift, uint64_t hash_mask,
+		unsigned long lock_stride, page_hash_lock_fn_t lock_fn,
+		page_hash_unlock_fn_t unlock_fn)
+{
+	unsigned long lock_addr, flags;
+	unsigned long hash;
+	int ret;
+
+	if (!page || !locks_addr || hash_shift < 0 || hash_shift >= 64 ||
+			!lock_stride || !lock_fn || !unlock_fn) {
+		return 0;
+	}
+
+	hash = (page->phys >> hash_shift) & hash_mask;
+	lock_addr = locks_addr + lock_stride * hash;
+	flags = lock_fn(lock_addr);
+	ret = page_unmap_locked_result(page);
+	unlock_fn(lock_addr, flags);
+
+	return ret;
 }
 #endif /* MCKERNEL_RUST_PAGE_HELPERS */
 
@@ -2047,44 +2272,34 @@ uintptr_t page_to_phys(struct page *page)
  */
 struct page *phys_to_page_insert_hash(uint64_t phys)
 {
-	int hash = (phys >> PAGE_SHIFT) & PHYS_PAGE_HASH_MASK;
-	struct page *page = NULL;
-	unsigned long irqflags;
+	struct page *page;
 
-	irqflags = ihk_mc_spinlock_lock(&page_hash_locks[hash]);
-	page = __phys_to_page(phys);
+	page = phys_to_page_insert_hash_orchestrate_result(phys,
+			(unsigned long)page_hash, (unsigned long)page_hash_locks,
+			PAGE_SHIFT, PHYS_PAGE_HASH_MASK, sizeof(page_hash[0]),
+			sizeof(page_hash_locks[0]), sizeof(*page),
+			IHK_MC_AP_CRITICAL, page_hash_lock_bridge,
+			page_hash_unlock_bridge, page_hash_alloc_bridge);
 	if (!page) {
-		int hash = (phys >> PAGE_SHIFT) & PHYS_PAGE_HASH_MASK;
-		page = kmalloc(sizeof(*page), IHK_MC_AP_CRITICAL);
-		if (!page) {
-			kprintf("%s: error allocating page\n", __FUNCTION__);
-			goto out;
-		}
-
-		list_add(&page->hash, &page_hash[hash]);
-		page->phys = phys;
-		page->mode = PM_NONE;
-		INIT_LIST_HEAD(&page->list);
-		ihk_atomic_set(&page->count, 0);
+		kprintf("%s: error allocating page\n", __FUNCTION__);
 	}
-out:
-	ihk_mc_spinlock_unlock(&page_hash_locks[hash], irqflags);
 
 	return page;
 }
 
 int page_unmap(struct page *page)
 {
-	int hash = (page->phys >> PAGE_SHIFT) & PHYS_PAGE_HASH_MASK;
-	unsigned long irqflags;
+	int ret;
 
-	irqflags = ihk_mc_spinlock_lock(&page_hash_locks[hash]);
 	dkprintf("page_unmap(%p %x %d)\n", page, page->mode, page->count);
-	if (ihk_atomic_sub_return(1, &page->count) > 0) {
+	ret = page_unmap_orchestrate_result(page,
+			(unsigned long)page_hash_locks, PAGE_SHIFT,
+			PHYS_PAGE_HASH_MASK, sizeof(page_hash_locks[0]),
+			page_hash_lock_bridge, page_hash_unlock_bridge);
+	if (!ret) {
 		/* other mapping exist */
 		dkprintf("page_unmap(%p %x %d): 0\n",
 				page, page->mode, page->count);
-		ihk_mc_spinlock_unlock(&page_hash_locks[hash], irqflags);
 		return 0;
 	}
 
@@ -2096,8 +2311,6 @@ int page_unmap(struct page *page)
 
 	dkprintf("page_unmap(%p %x %d): 1\n", page, page->mode, page->count);
 
-	list_del(&page->hash);
-	ihk_mc_spinlock_unlock(&page_hash_locks[hash], irqflags);
 	return 1;
 }
 
@@ -2581,8 +2794,18 @@ void __kfree(void *ptr)
 }
 
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern void ___kmalloc_insert_chunk_result(struct list_head *free_list,
+		struct kmalloc_header *chunk);
+extern void ___kmalloc_init_chunk_result(struct kmalloc_header *h, int size);
+extern void ___kmalloc_consolidate_list_result(struct list_head *list);
+
+#define ___kmalloc_insert_chunk ___kmalloc_insert_chunk_result
+#define ___kmalloc_init_chunk ___kmalloc_init_chunk_result
+#define ___kmalloc_consolidate_list ___kmalloc_consolidate_list_result
+#else
 static void ___kmalloc_insert_chunk(struct list_head *free_list,
-	struct kmalloc_header *chunk)
+		struct kmalloc_header *chunk)
 {
 	struct kmalloc_header *chunk_iter, *next_chunk = NULL;
 
@@ -2641,6 +2864,7 @@ reiterate:
 	list_del(&next_chunk->list);
 	goto reiterate;
 }
+#endif
 
 
 void kmalloc_consolidate_free_list(void)

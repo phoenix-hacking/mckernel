@@ -88,15 +88,29 @@ struct futex_hash_bucket *get_futex_queues(void)
 	return futex_queues;
 }
 
+static unsigned long futex_kmalloc_bridge(unsigned long size, int flag)
+{
+	return (unsigned long)kmalloc(size, flag);
+}
+
+static unsigned int futex_key_hash_bridge(unsigned long key_addr)
+{
+	union futex_key *key = (union futex_key *)key_addr;
+
+	return mc_jhash2((uint32_t *)&key->both.word,
+			(sizeof(key->both.word) + sizeof(key->both.ptr)) / 4,
+			key->both.offset);
+}
+
 /*
  * We hash on the keys returned from get_futex_key (see below).
  */
 static struct futex_hash_bucket *hash_futex(union futex_key *key)
 {
-	uint32_t hash = mc_jhash2((uint32_t *)&key->both.word,
-			  (sizeof(key->both.word)+sizeof(key->both.ptr))/4,
-			  key->both.offset);
-	return &futex_queues[hash & ((1 << FUTEX_HASHBITS)-1)];
+	return (struct futex_hash_bucket *)futex_hash_bucket_result(
+			(unsigned long)key, (unsigned long)futex_queues,
+			FUTEX_HASHBITS, sizeof(struct futex_hash_bucket),
+			futex_key_hash_bridge);
 }
 
 /*
@@ -226,12 +240,49 @@ static int cmpxchg_futex_value_locked(uint32_t __user *uaddr, uint32_t uval, uin
  * The hash bucket lock must be held when this is called.
  * Afterwards, the futex_q must not be accessed.
  */
+static unsigned long futex_wake_linux_channel_bridge(int linux_cpu)
+{
+	return (unsigned long)ikc2linuxs[linux_cpu];
+}
+
+static int futex_wake_send_bridge(unsigned long channel_addr,
+				  unsigned long packet_addr)
+{
+	return ihk_ikc_send((struct ihk_ikc_channel_desc *)channel_addr,
+			(void *)packet_addr, 0);
+}
+
+static void futex_wake_thread_bridge(unsigned long thread_addr, int status)
+{
+	sched_wakeup_thread((struct thread *)thread_addr, status);
+}
+
+static void futex_wake_log_bridge(int event, unsigned long thread_addr,
+				  unsigned long uti_futex_resp, int linux_cpu,
+				  unsigned long channel_addr, int rc)
+{
+	struct thread *p = (struct thread *)thread_addr;
+
+	if (event == FUTEX_WAKE_LOG_LINUX_TARGET) {
+		dkprintf("%s: waking up migrated-to-Linux thread (tid %d),uti_futex_resp=%p,linux_cpu: %d\n",
+			__func__, p->tid, (void *)uti_futex_resp, linux_cpu);
+	}
+	else if (event == FUTEX_WAKE_LOG_SEND_FAILED) {
+		dkprintf("%s: ERROR: ihk_ikc_send returned %d, resp_channel=%p\n",
+				__func__, rc, (void *)channel_addr);
+	}
+	else if (event == FUTEX_WAKE_LOG_SEND_OK) {
+		dkprintf("%s: futex wake IKC sent, resp_channel=%p\n",
+				__func__, (void *)channel_addr);
+	}
+	else if (event == FUTEX_WAKE_LOG_MCKERNEL_TARGET) {
+		dkprintf("%s: waking up McKernel thread (tid %d)\n",
+				__func__, p->tid);
+	}
+}
+
 static void wake_futex(struct futex_q *q)
 {
-	struct thread *p = q->task;
-	void *uti_futex_resp = q->uti_futex_resp;
-	int linux_cpu = q->linux_cpu;
-
 	/*
 	 * We set q->lock_ptr = NULL _before_ we wake up the task. If
 	 * a non futex wake up happens on another CPU then the task
@@ -240,46 +291,25 @@ static void wake_futex(struct futex_q *q)
 	 * wake up.
 	 */
 
-	futex_wake_mark_woken_result((unsigned long)q,
-				     __builtin_offsetof(struct futex_q, list),
-				     __builtin_offsetof(struct plist_node, plist),
-				     __builtin_offsetof(struct futex_q,
-							lock_ptr));
+	struct ikc_scd_packet pckt;
 
-
-	if (futex_wake_target_result((unsigned long)uti_futex_resp) ==
-			FUTEX_WAKE_TARGET_LINUX) {
-		int rc;
-		struct ikc_scd_packet pckt;
-		struct ihk_ikc_channel_desc *resp_channel;
-
-		dkprintf("%s: waking up migrated-to-Linux thread (tid %d),uti_futex_resp=%p,linux_cpu: %d\n",
-			__func__, p->tid, uti_futex_resp, linux_cpu);
-
-		/* does this Linux CPU have a connected channel? */
-		resp_channel = (struct ihk_ikc_channel_desc *)
-			futex_wake_linux_channel_result(
-				(unsigned long)ikc2linuxs[linux_cpu],
-				(unsigned long)cpu_local_var(ikc2linux));
-
-		futex_wake_ikc_packet_fill_result((unsigned long)&pckt,
+	futex_wake_orchestrate_result((unsigned long)q,
+			__builtin_offsetof(struct futex_q, list),
+			__builtin_offsetof(struct plist_node, plist),
+			__builtin_offsetof(struct futex_q, lock_ptr),
+			__builtin_offsetof(struct futex_q, task),
+			__builtin_offsetof(struct futex_q, uti_futex_resp),
+			__builtin_offsetof(struct futex_q, linux_cpu),
+			__builtin_offsetof(struct thread, spin_sleep),
+			(unsigned long)&pckt,
 			__builtin_offsetof(struct ikc_scd_packet, msg),
 			__builtin_offsetof(struct ikc_scd_packet, futex.resp),
 			__builtin_offsetof(struct ikc_scd_packet,
 					   futex.spin_sleep),
-			SCD_MSG_FUTEX_WAKE,
-			(unsigned long)uti_futex_resp,
-			(unsigned long)&p->spin_sleep);
-		rc = ihk_ikc_send(resp_channel, &pckt, 0);
-		if (rc) {
-			dkprintf("%s: ERROR: ihk_ikc_send returned %d, resp_channel=%p\n",
-					__func__, rc, resp_channel);
-		}
-	} else {
-		dkprintf("%s: waking up McKernel thread (tid %d)\n",
-				__func__, p->tid);
-		sched_wakeup_thread(p, PS_NORMAL);
-	}
+			SCD_MSG_FUTEX_WAKE, (unsigned long)cpu_local_var(ikc2linux),
+			PS_NORMAL, futex_wake_linux_channel_bridge,
+			futex_wake_send_bridge, futex_wake_thread_bridge,
+			futex_wake_log_bridge);
 }
 
 static void futex_wake_scan_bridge(unsigned long q_addr)
@@ -880,7 +910,7 @@ static int futex_wait_setup(uint32_t __user *uaddr, uint32_t val, int fshared,
 }
 
 static int futex_wait(uint32_t __user *uaddr, int fshared,
-		uint32_t val, uint64_t timeout, uint32_t bitset, int clockrt)
+		      uint32_t val, uint64_t timeout, uint32_t bitset, int clockrt)
 {
 	struct futex_hash_bucket *hb;
 	int64_t time_remain;
@@ -966,70 +996,55 @@ out:
 	return ret;
 }
 
+static int futex_dispatch_wait_bridge(unsigned long uaddr, int fshared,
+		uint32_t val, uint64_t timeout, uint32_t val3, int clockrt)
+{
+	return futex_wait((uint32_t *)uaddr, fshared, val, timeout, val3,
+			clockrt);
+}
+
+static int futex_dispatch_wake_bridge(unsigned long uaddr, int fshared,
+		uint32_t val, uint32_t val3)
+{
+	return futex_wake((uint32_t *)uaddr, fshared, val, val3);
+}
+
+static int futex_dispatch_requeue_bridge(unsigned long uaddr, int fshared,
+		unsigned long uaddr2, uint32_t val, uint32_t val2,
+		int cmpval_present, uint32_t cmpval, int requeue_pi)
+{
+	uint32_t local_cmpval = cmpval;
+
+	return futex_requeue((uint32_t *)uaddr, fshared, (uint32_t *)uaddr2,
+			val, val2, cmpval_present ? &local_cmpval : NULL,
+			requeue_pi);
+}
+
+static int futex_dispatch_wake_op_bridge(unsigned long uaddr, int fshared,
+		unsigned long uaddr2, uint32_t val, uint32_t val2, uint32_t val3)
+{
+	return futex_wake_op((uint32_t *)uaddr, fshared, (uint32_t *)uaddr2,
+			val, val2, val3);
+}
+
+static void futex_dispatch_invalid_bridge(int cmd)
+{
+	kprintf("futex() invalid cmd: %d \n", cmd);
+}
+
 int futex(uint32_t *uaddr, int op, uint32_t val, uint64_t timeout,
 		uint32_t *uaddr2, uint32_t val2, uint32_t val3, int fshared)
 {
-	int clockrt, ret = -ENOSYS;
-	int cmd = op & FUTEX_CMD_MASK;
-
 	dkprintf("%s: uaddr=%p, op=%x, val=%x, timeout=%ld, uaddr2=%p, val2=%x, val3=%x, fshared=%d\n",
 			__func__, uaddr, op, val, timeout, uaddr2,
 			val2, val3, fshared);
 
-	clockrt = op & FUTEX_CLOCK_REALTIME;
-	if (clockrt && cmd != FUTEX_WAIT_BITSET && cmd != FUTEX_WAIT_REQUEUE_PI)
-		return -ENOSYS;
-
-	switch (cmd) {
-	case FUTEX_WAIT:
-		val3 = FUTEX_BITSET_MATCH_ANY;
-	case FUTEX_WAIT_BITSET:
-		ret = futex_wait(uaddr, fshared, val, timeout, val3, clockrt);
-		break;
-	case FUTEX_WAKE:
-		val3 = FUTEX_BITSET_MATCH_ANY;
-	case FUTEX_WAKE_BITSET:
-		ret = futex_wake(uaddr, fshared, val, val3);
-		break;
-	case FUTEX_REQUEUE:
-		ret = futex_requeue(uaddr, fshared, uaddr2,
-				val, val2, NULL, 0);
-		break;
-	case FUTEX_CMP_REQUEUE:
-		ret = futex_requeue(uaddr, fshared, uaddr2,
-				val, val2, &val3, 0);
-		break;
-	case FUTEX_WAKE_OP:
-		ret = futex_wake_op(uaddr, fshared, uaddr2, val, val2, val3);
-		break;
-	/* RIKEN: these calls are not supported for now.	
-	case FUTEX_LOCK_PI:
-		if (futex_cmpxchg_enabled)
-			ret = futex_lock_pi(uaddr, fshared, val, timeout, 0);
-		break;
-	case FUTEX_UNLOCK_PI:
-		if (futex_cmpxchg_enabled)
-			ret = futex_unlock_pi(uaddr, fshared);
-		break;
-	case FUTEX_TRYLOCK_PI:
-		if (futex_cmpxchg_enabled)
-			ret = futex_lock_pi(uaddr, fshared, 0, timeout, 1);
-		break;
-	case FUTEX_WAIT_REQUEUE_PI:
-		val3 = FUTEX_BITSET_MATCH_ANY;
-		ret = futex_wait_requeue_pi(uaddr, fshared, val, timeout, val3,
-					    clockrt, uaddr2);
-		break;
-	case FUTEX_CMP_REQUEUE_PI:
-		ret = futex_requeue(uaddr, fshared, uaddr2, val, val2, &val3,
-				    1);
-		break;
-	*/
-	default:
-		kprintf("futex() invalid cmd: %d \n", cmd); 
-		ret = -ENOSYS;
-	}
-	return ret;
+	return futex_dispatch_result(op, (unsigned long)uaddr, val, timeout,
+			(unsigned long)uaddr2, val2, val3, fshared,
+			futex_dispatch_wait_bridge, futex_dispatch_wake_bridge,
+			futex_dispatch_requeue_bridge,
+			futex_dispatch_wake_op_bridge,
+			futex_dispatch_invalid_bridge);
 }
 
 #ifndef ARRAY_SIZE
@@ -1049,11 +1064,11 @@ int futex_init(void)
 	const unsigned long debug_rawlock_offset = 0;
 #endif
 
-	futex_queues = kmalloc(sizeof(struct futex_hash_bucket) *
-			(1 << FUTEX_HASHBITS), IHK_MC_AP_NOWAIT);
-	ret = futex_hash_bucket_table_init_result((unsigned long)futex_queues,
-			1 << FUTEX_HASHBITS,
+	ret = futex_init_table_result((unsigned long)&futex_queues,
+			FUTEX_HASHBITS,
 			sizeof(struct futex_hash_bucket),
+			IHK_MC_AP_NOWAIT,
+			futex_kmalloc_bridge,
 			__builtin_offsetof(struct futex_hash_bucket, lock),
 			0,
 			__builtin_offsetof(struct futex_hash_bucket, chain),

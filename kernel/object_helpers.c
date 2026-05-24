@@ -483,6 +483,115 @@ int sysfs_should_call_release_result(uintptr_t release)
 	return release != 0;
 }
 
+int sysfss_req_show_body_result(long nodeh, void *ops, void *instance,
+				void *data_buf, size_t data_bufsize,
+				sysfss_show_fn_t show_fn,
+				sysfss_send_fn_t send_fn, ssize_t *ssizep,
+				int *packet_errp)
+{
+	ssize_t ssize = sysfs_default_response_ssize_result();
+	int packet_err;
+	int send_error;
+
+	if (show_fn) {
+		ssize = show_fn(ops, instance, data_buf, data_bufsize);
+	}
+
+	packet_err = sysfs_response_error_result(ssize);
+	send_error = send_fn(SCD_MSG_SYSFS_RESP_SHOW, packet_err, nodeh,
+			ssize);
+	if (ssizep) {
+		*ssizep = ssize;
+	}
+	if (packet_errp) {
+		*packet_errp = packet_err;
+	}
+	return send_error;
+}
+
+int sysfss_req_store_body_result(long nodeh, void *ops, void *instance,
+				 void *data_buf, size_t size,
+				 sysfss_store_fn_t store_fn,
+				 sysfss_send_fn_t send_fn, ssize_t *ssizep,
+				 int *packet_errp)
+{
+	ssize_t ssize = sysfs_default_response_ssize_result();
+	int packet_err;
+	int send_error;
+
+	if (store_fn) {
+		ssize = store_fn(ops, instance, data_buf, size);
+	}
+
+	packet_err = sysfs_response_error_result(ssize);
+	send_error = send_fn(SCD_MSG_SYSFS_RESP_STORE, packet_err, nodeh,
+			ssize);
+	if (ssizep) {
+		*ssizep = ssize;
+	}
+	if (packet_errp) {
+		*packet_errp = packet_err;
+	}
+	return send_error;
+}
+
+int sysfss_req_release_body_result(long nodeh, void *ops, void *instance,
+				   sysfss_release_fn_t release_fn,
+				   sysfss_send_fn_t send_fn,
+				   int *packet_errp)
+{
+	int packet_err;
+	int send_error;
+
+	if (release_fn) {
+		release_fn(ops, instance);
+	}
+
+	packet_err = sysfs_release_response_error_result();
+	send_error = send_fn(SCD_MSG_SYSFS_RESP_RELEASE, packet_err, nodeh, 0);
+	if (packet_errp) {
+		*packet_errp = packet_err;
+	}
+	return send_error;
+}
+
+int sysfss_packet_handler_body_result(int msg, int error, long arg1,
+				      long arg2, long arg3,
+				      sysfss_packet_show_fn_t show_fn,
+				      sysfss_packet_store_fn_t store_fn,
+				      sysfss_packet_release_fn_t release_fn,
+				      int *kindp)
+{
+	int kind = sysfs_request_handler_kind_result(msg);
+
+	if (kindp) {
+		*kindp = kind;
+	}
+
+	switch (kind) {
+	case SYSFS_HANDLER_SHOW:
+		if (!show_fn) {
+			return -EIO;
+		}
+		show_fn(arg1, (void *)arg2, (void *)arg3);
+		return 0;
+	case SYSFS_HANDLER_STORE:
+		if (!store_fn) {
+			return -EIO;
+		}
+		store_fn(arg1, (void *)arg2, (void *)arg3, error);
+		return 0;
+	case SYSFS_HANDLER_RELEASE:
+		if (!release_fn) {
+			return -EIO;
+		}
+		release_fn(arg1, (void *)arg2, (void *)arg3);
+		return 0;
+	default:
+		return -EINVAL;
+	}
+}
+
 unsigned long procfs_mem_reason_result(int readwrite)
 {
 	if (readwrite)

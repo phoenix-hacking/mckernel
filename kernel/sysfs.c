@@ -29,6 +29,42 @@
 static size_t sysfs_data_bufsize;
 static void *sysfs_data_buf;
 
+static ssize_t
+sysfss_show_bridge(void *ops0, void *instance, void *buf, size_t bufsize)
+{
+	struct sysfs_ops *ops = ops0;
+
+	return ops->show(ops, instance, buf, bufsize);
+}
+
+static ssize_t
+sysfss_store_bridge(void *ops0, void *instance, void *buf, size_t size)
+{
+	struct sysfs_ops *ops = ops0;
+
+	return ops->store(ops, instance, buf, size);
+}
+
+static void
+sysfss_release_bridge(void *ops0, void *instance)
+{
+	struct sysfs_ops *ops = ops0;
+
+	ops->release(ops, instance);
+}
+
+static int
+sysfss_send_bridge(int msg, int err, long arg1, long arg2)
+{
+	struct ikc_scd_packet packet;
+
+	packet.msg = msg;
+	packet.err = err;
+	packet.sysfs_arg1 = arg1;
+	packet.sysfs_arg2 = arg2;
+	return ihk_ikc_send(cpu_local_var(ikc2linux), &packet, 0);
+}
+
 static int setup_special_create(struct sysfs_req_create_param *param, struct sysfs_bitmap_param *pbp)
 {
 	void *cinstance = (void *)param->client_instance;
@@ -435,41 +471,35 @@ static void
 sysfss_req_show(long nodeh, struct sysfs_ops *ops, void *instance)
 {
 	int error;
+	int packet_err;
 	ssize_t ssize;
-	struct ikc_scd_packet packet;
+	sysfss_show_fn_t show_fn = NULL;
 
 	dkprintf("sysfss_req_show(%#lx,%p,%p)\n", nodeh, ops, instance);
 
-	ssize = sysfs_default_response_ssize_result();
 	if (sysfs_should_call_show_result((uintptr_t)ops->show)) {
-		ssize = (*ops->show)(ops, instance, sysfs_data_buf,
-				sysfs_data_bufsize);
-		if (ssize < 0) {
-			ekprintf("sysfss_req_show:->show failed. %ld\n",
-					ssize);
-			/* through */
-		}
+		show_fn = sysfss_show_bridge;
 	}
 
-	error = sysfs_response_error_result(ssize);
+	error = sysfss_req_show_body_result(nodeh, ops, instance,
+			sysfs_data_buf, sysfs_data_bufsize, show_fn,
+			sysfss_send_bridge, &ssize, &packet_err);
 
-	packet.msg = SCD_MSG_SYSFS_RESP_SHOW;
-	packet.err = error;
-	packet.sysfs_arg1 = nodeh;
-	packet.sysfs_arg2 = ssize;
-
-	error = ihk_ikc_send(cpu_local_var(ikc2linux), &packet, 0);
+	if (show_fn && ssize < 0) {
+		ekprintf("sysfss_req_show:->show failed. %ld\n", ssize);
+		/* through */
+	}
 	if (error) {
 		ekprintf("sysfss_req_show:ihk_ikc_send failed. %d\n", error);
 		/* through */
 	}
 
-	if (sysfs_packet_error_result(error, packet.err)) {
+	if (sysfs_packet_error_result(error, packet_err)) {
 		ekprintf("sysfss_req_show(%#lx,%p,%p): %d %d\n",
-				nodeh, ops, instance, error, packet.err);
+				nodeh, ops, instance, error, packet_err);
 	}
 	dkprintf("sysfss_req_show(%#lx,%p,%p): %d %d %ld\n",
-			nodeh, ops, instance, error, packet.err, ssize);
+			nodeh, ops, instance, error, packet_err, ssize);
 	return;
 } /* sysfss_req_show() */
 
@@ -478,41 +508,36 @@ sysfss_req_store(long nodeh, struct sysfs_ops *ops, void *instance,
 		size_t size)
 {
 	int error;
+	int packet_err;
 	ssize_t ssize;
-	struct ikc_scd_packet packet;
+	sysfss_store_fn_t store_fn = NULL;
 
 	dkprintf("sysfss_req_store(%#lx,%p,%p,%d)\n",
 			nodeh, ops, instance, size);
 
-	ssize = sysfs_default_response_ssize_result();
 	if (sysfs_should_call_store_result((uintptr_t)ops->store)) {
-		ssize = (*ops->store)(ops, instance, sysfs_data_buf, size);
-		if (ssize < 0) {
-			ekprintf("sysfss_req_store:->store failed. %ld\n",
-					ssize);
-			/* through */
-		}
+		store_fn = sysfss_store_bridge;
 	}
 
-	error = sysfs_response_error_result(ssize);
+	error = sysfss_req_store_body_result(nodeh, ops, instance,
+			sysfs_data_buf, size, store_fn, sysfss_send_bridge,
+			&ssize, &packet_err);
 
-	packet.msg = SCD_MSG_SYSFS_RESP_STORE;
-	packet.err = error;
-	packet.sysfs_arg1 = nodeh;
-	packet.sysfs_arg2 = ssize;
-
-	error = ihk_ikc_send(cpu_local_var(ikc2linux), &packet, 0);
+	if (store_fn && ssize < 0) {
+		ekprintf("sysfss_req_store:->store failed. %ld\n", ssize);
+		/* through */
+	}
 	if (error) {
 		ekprintf("sysfss_req_store:ihk_ikc_send failed. %d\n", error);
 		/* through */
 	}
 
-	if (sysfs_packet_error_result(error, packet.err)) {
+	if (sysfs_packet_error_result(error, packet_err)) {
 		ekprintf("sysfss_req_store(%#lx,%p,%p,%d): %d %d\n",
-				nodeh, ops, instance, size, error, packet.err);
+				nodeh, ops, instance, size, error, packet_err);
 	}
 	dkprintf("sysfss_req_store(%#lx,%p,%p,%d): %d %d %ld\n",
-			nodeh, ops, instance, size, error, packet.err, ssize);
+			nodeh, ops, instance, size, error, packet_err, ssize);
 	return;
 } /* sysfss_req_store() */
 
@@ -520,57 +545,64 @@ static void
 sysfss_req_release(long nodeh, struct sysfs_ops *ops, void *instance)
 {
 	int error;
-	struct ikc_scd_packet packet;
+	int packet_err;
+	sysfss_release_fn_t release_fn = NULL;
 
 	dkprintf("sysfss_req_release(%#lx,%p,%p)\n", nodeh, ops, instance);
 
 	if (sysfs_should_call_release_result((uintptr_t)ops->release)) {
-		(*ops->release)(ops, instance);
+		release_fn = sysfss_release_bridge;
 	}
 
-	packet.msg = SCD_MSG_SYSFS_RESP_RELEASE;
-	packet.err = sysfs_release_response_error_result();
-	packet.sysfs_arg1 = nodeh;
-
-	error = ihk_ikc_send(cpu_local_var(ikc2linux), &packet, 0);
+	error = sysfss_req_release_body_result(nodeh, ops, instance,
+			release_fn, sysfss_send_bridge, &packet_err);
 	if (error) {
 		ekprintf("sysfss_req_release:ihk_ikc_send failed. %d\n",
 				error);
 		/* through */
 	}
 
-	if (sysfs_packet_error_result(error, packet.err)) {
+	if (sysfs_packet_error_result(error, packet_err)) {
 		ekprintf("sysfss_req_release(%#lx,%p,%p): %d %d\n",
-				nodeh, ops, instance, error, packet.err);
+				nodeh, ops, instance, error, packet_err);
 	}
 	dkprintf("sysfss_req_release(%#lx,%p,%p): %d %d\n",
-			nodeh, ops, instance, error, packet.err);
+			nodeh, ops, instance, error, packet_err);
 	return;
 } /* sysfss_req_release() */
+
+static void
+sysfss_packet_show_bridge(long nodeh, void *ops, void *instance)
+{
+	sysfss_req_show(nodeh, ops, instance);
+}
+
+static void
+sysfss_packet_store_bridge(long nodeh, void *ops, void *instance, size_t size)
+{
+	sysfss_req_store(nodeh, ops, instance, size);
+}
+
+static void
+sysfss_packet_release_bridge(long nodeh, void *ops, void *instance)
+{
+	sysfss_req_release(nodeh, ops, instance);
+}
 
 void
 sysfss_packet_handler(struct ihk_ikc_channel_desc *ch, int msg, int error,
 		long arg1, long arg2, long arg3)
 {
-	switch (sysfs_request_handler_kind_result(msg)) {
-	case SYSFS_HANDLER_SHOW:
-		sysfss_req_show(arg1, (void *)arg2, (void *)arg3);
-		break;
+	int kind;
 
-	case SYSFS_HANDLER_STORE:
-		sysfss_req_store(arg1, (void *)arg2, (void *)arg3, error);
-		break;
+	sysfss_packet_handler_body_result(msg, error, arg1, arg2, arg3,
+			sysfss_packet_show_bridge, sysfss_packet_store_bridge,
+			sysfss_packet_release_bridge, &kind);
 
-	case SYSFS_HANDLER_RELEASE:
-		sysfss_req_release(arg1, (void *)arg2, (void *)arg3);
-		break;
-
-	default:
+	if (kind == SYSFS_HANDLER_UNKNOWN) {
 		kprintf("sysfss_packet_handler:unknown message. msg %d"
 				" error %d arg1 %#lx arg2 %#lx arg3 %#lx\n",
 				msg, error, arg1, arg2, arg3);
-		break;
-
 	}
 	return;
 } /* sysfss_packet_handler() */

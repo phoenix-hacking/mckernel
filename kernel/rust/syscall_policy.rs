@@ -1,7 +1,8 @@
-use core::mem::size_of;
+use core::ffi::c_void;
+use core::mem::{size_of, ManuallyDrop, MaybeUninit};
 use core::ptr::{copy_nonoverlapping, write};
 
-use crate::abi::{CInt, CLong, CULong, RUsage, SizeT};
+use crate::abi::{CInt, CLong, CULong, RUsage, SigInfo, SigInfoChild, SigStack, SizeT};
 
 const EINVAL: CInt = 22;
 const ENOMEM: CInt = 12;
@@ -143,6 +144,11 @@ type PtraceFpregsIoFn = unsafe extern "C" fn(CULong, CULong) -> CLong;
 type PtraceUserCopyFromFn = unsafe extern "C" fn(*mut u8, CULong, SizeT) -> CLong;
 type PtraceUserCopyToFn = unsafe extern "C" fn(CULong, *const u8, SizeT) -> CLong;
 type PtraceRegsetIoFn = unsafe extern "C" fn(CULong, CLong, *mut u8) -> CLong;
+type SyscallCopyIntToUserFn = unsafe extern "C" fn(CULong, *const CInt) -> CLong;
+type SyscallCopyFromUserFn = unsafe extern "C" fn(*mut u8, CULong, SizeT) -> CLong;
+type SyscallCopyToUserFn = unsafe extern "C" fn(CULong, *const u8, SizeT) -> CLong;
+type Wait4DoWaitFn = unsafe extern "C" fn(CInt, *mut CInt, CInt, *mut RUsage) -> CInt;
+type WaitSignalFlagsReapFn = unsafe extern "C" fn(*mut c_void, CULong, CInt, CInt) -> CInt;
 const PTRACE_EVENT_FORK: CInt = 1;
 const PTRACE_EVENT_VFORK: CInt = 2;
 const PTRACE_EVENT_CLONE: CInt = 3;
@@ -401,6 +407,92 @@ pub extern "C" fn syscall_gettid_result(tid: CInt) -> CInt {
 #[no_mangle]
 pub extern "C" fn syscall_set_tid_address_return_result(pid: CInt) -> CInt {
     pid
+}
+
+#[inline(always)]
+unsafe fn field_ptr<T>(base: *mut u8, offset: SizeT) -> *mut T {
+    base.add(offset).cast::<T>()
+}
+
+#[inline(always)]
+unsafe fn thread_process(thread: *mut u8, proc_offset: SizeT) -> *mut u8 {
+    *field_ptr::<*mut u8>(thread, proc_offset)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn syscall_getpid_body_result(
+    thread: *mut u8,
+    proc_offset: SizeT,
+    pid_offset: SizeT,
+) -> CLong {
+    let proc = thread_process(thread, proc_offset);
+    *field_ptr::<CInt>(proc, pid_offset) as CLong
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn syscall_getppid_body_result(
+    thread: *mut u8,
+    proc_offset: SizeT,
+    ppid_parent_offset: SizeT,
+    pid_offset: SizeT,
+) -> CLong {
+    let proc = thread_process(thread, proc_offset);
+    let parent = *field_ptr::<*mut u8>(proc, ppid_parent_offset);
+    *field_ptr::<CInt>(parent, pid_offset) as CLong
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn syscall_gettid_body_result(thread: *mut u8, tid_offset: SizeT) -> CLong {
+    *field_ptr::<CInt>(thread, tid_offset) as CLong
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn syscall_set_tid_address_body_result(
+    thread: *mut u8,
+    clear_child_tid_offset: SizeT,
+    proc_offset: SizeT,
+    pid_offset: SizeT,
+    clear_child_tid: *mut CInt,
+) -> CLong {
+    *field_ptr::<*mut CInt>(thread, clear_child_tid_offset) = clear_child_tid;
+    syscall_getpid_body_result(thread, proc_offset, pid_offset)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn syscall_get_process_id_field_result(
+    thread: *mut u8,
+    proc_offset: SizeT,
+    field_offset: SizeT,
+) -> CLong {
+    let proc = thread_process(thread, proc_offset);
+    *field_ptr::<CInt>(proc, field_offset) as CLong
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn syscall_getresid_body_result(
+    thread: *mut u8,
+    proc_offset: SizeT,
+    first_offset: SizeT,
+    second_offset: SizeT,
+    third_offset: SizeT,
+    first_user_addr: CULong,
+    second_user_addr: CULong,
+    third_user_addr: CULong,
+    copy_int_fn: SyscallCopyIntToUserFn,
+) -> CLong {
+    let proc = thread_process(thread, proc_offset);
+
+    if copy_int_fn(first_user_addr, field_ptr::<CInt>(proc, first_offset)) != 0 {
+        return -(EFAULT as CLong);
+    }
+    if copy_int_fn(second_user_addr, field_ptr::<CInt>(proc, second_offset)) != 0 {
+        return -(EFAULT as CLong);
+    }
+    if copy_int_fn(third_user_addr, field_ptr::<CInt>(proc, third_offset)) != 0 {
+        return -(EFAULT as CLong);
+    }
+
+    0
 }
 
 #[no_mangle]
@@ -1296,6 +1388,57 @@ pub extern "C" fn sigaltstack_is_disable(flags: CInt) -> CInt {
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn sigaltstack_body_result(
+    thread: *mut u8,
+    sigstack_offset: SizeT,
+    ss_addr: CULong,
+    oss_addr: CULong,
+    copy_from_fn: Option<SyscallCopyFromUserFn>,
+    copy_to_fn: Option<SyscallCopyToUserFn>,
+) -> CLong {
+    let thread_sigstack = field_ptr::<SigStack>(thread, sigstack_offset);
+    let stack_size = size_of::<SigStack>();
+
+    if oss_addr != 0 {
+        let Some(copy_to) = copy_to_fn else {
+            return -EFAULT as CLong;
+        };
+        if copy_to(oss_addr, thread_sigstack.cast::<u8>(), stack_size) != 0 {
+            return -EFAULT as CLong;
+        }
+    }
+
+    if ss_addr == 0 {
+        return 0;
+    }
+
+    let Some(copy_from) = copy_from_fn else {
+        return -EFAULT as CLong;
+    };
+    let mut new_stack = MaybeUninit::<SigStack>::uninit();
+    if copy_from(new_stack.as_mut_ptr().cast::<u8>(), ss_addr, stack_size) != 0 {
+        return -EFAULT as CLong;
+    }
+
+    let new_stack = new_stack.assume_init();
+    let error = sigaltstack_validate(new_stack.ss_flags, new_stack.ss_size);
+    if error != 0 {
+        return error as CLong;
+    }
+
+    if sigaltstack_is_disable(new_stack.ss_flags) != 0 {
+        (*thread_sigstack).ss_sp = core::ptr::null_mut();
+        (*thread_sigstack).ss_flags = SS_DISABLE;
+        (*thread_sigstack).padding = 0;
+        (*thread_sigstack).ss_size = 0;
+    } else {
+        copy_nonoverlapping(&new_stack, thread_sigstack, 1);
+    }
+
+    0
+}
+
+#[no_mangle]
 pub extern "C" fn process_vm_validate_args(
     flags: CULong,
     liovcnt: CULong,
@@ -2116,6 +2259,50 @@ pub extern "C" fn wait_continued_status_result() -> CInt {
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn wait_continued_body_result(
+    c_thread: *mut c_void,
+    child: *mut c_void,
+    status: *mut CInt,
+    options: CInt,
+    child_pid_offset: CULong,
+    child_main_thread_offset: CULong,
+    thread_tid_offset: CULong,
+    thread_signal_flags_offset: CULong,
+    reap_fn: WaitSignalFlagsReapFn,
+) -> CInt {
+    if !status.is_null() {
+        write(status, wait_continued_status_result());
+    }
+
+    let target_thread = if c_thread.is_null() {
+        *child
+            .cast::<u8>()
+            .wrapping_add(child_main_thread_offset as usize)
+            .cast::<*mut c_void>()
+    } else {
+        c_thread
+    };
+    reap_fn(
+        target_thread,
+        thread_signal_flags_offset,
+        options,
+        SIGNAL_STOP_CONTINUED,
+    );
+
+    if c_thread.is_null() {
+        *child
+            .cast::<u8>()
+            .wrapping_add(child_pid_offset as usize)
+            .cast::<CInt>()
+    } else {
+        *c_thread
+            .cast::<u8>()
+            .wrapping_add(thread_tid_offset as usize)
+            .cast::<CInt>()
+    }
+}
+
+#[no_mangle]
 pub extern "C" fn wait_zombie_skip_host_result(
     ppid_parent_pid: CInt,
     current_pid: CInt,
@@ -2260,9 +2447,137 @@ pub extern "C" fn wait_rusage_copy_needed_result(has_rusage: CInt) -> CInt {
     (has_rusage != 0) as CInt
 }
 
+unsafe fn zero_rusage(usage: *mut RUsage) {
+    let raw = usage as *mut u8;
+    let mut offset = 0;
+    while offset < size_of::<RUsage>() {
+        raw.add(offset).write_volatile(0);
+        offset += 1;
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn wait4_body_result(
+    pid: CInt,
+    status_addr: CULong,
+    options: CInt,
+    rusage_addr: CULong,
+    do_wait_fn: Wait4DoWaitFn,
+    copy_to_fn: SyscallCopyToUserFn,
+) -> CLong {
+    let valid = wait4_options_result(options);
+    if valid != 0 {
+        return valid as CLong;
+    }
+
+    let mut status: CInt = 0;
+    let mut usage = MaybeUninit::<RUsage>::uninit();
+    let usage_ptr = usage.as_mut_ptr();
+    zero_rusage(usage_ptr);
+
+    let rc = do_wait_fn(pid, &mut status as *mut CInt, WEXITED | options, usage_ptr);
+    if wait_status_copy_needed_result(rc, (status_addr != 0) as CInt) != 0 {
+        let src = &status as *const CInt as *const u8;
+        copy_to_fn(status_addr, src, size_of::<CInt>());
+    }
+    if wait_rusage_copy_needed_result((rusage_addr != 0) as CInt) != 0 {
+        copy_to_fn(rusage_addr, usage_ptr as *const u8, size_of::<RUsage>());
+    }
+    rc as CLong
+}
+
 #[no_mangle]
 pub extern "C" fn waitid_siginfo_needed_result(rc: CInt, has_infop: CInt) -> CInt {
     (rc > 0 && has_infop != 0) as CInt
+}
+
+fn timeval_to_jiffy_result(sec: CLong, usec: CLong) -> CLong {
+    sec * 100 + usec / 10000
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn waitid_copy_siginfo_result(
+    rc: CInt,
+    infop_addr: CULong,
+    status: CInt,
+    utime_sec: CLong,
+    utime_usec: CLong,
+    stime_sec: CLong,
+    stime_usec: CLong,
+    copy_to_fn: SyscallCopyToUserFn,
+) {
+    if waitid_siginfo_needed_result(rc, (infop_addr != 0) as CInt) == 0 {
+        return;
+    }
+
+    let mut info = MaybeUninit::<SigInfo>::uninit();
+    let info_ptr = info.as_mut_ptr();
+    unsafe {
+        let raw = info_ptr as *mut u8;
+        let mut offset = 0;
+        while offset < size_of::<SigInfo>() {
+            raw.add(offset).write_volatile(0);
+            offset += 1;
+        }
+
+        let info = &mut *info_ptr;
+        info.si_signo = SIGCHLD;
+        info.si_code = waitid_status_code_result(status);
+        info.sifields.sigchld = ManuallyDrop::new(SigInfoChild {
+            si_pid: rc,
+            si_uid: 0,
+            si_status: status,
+            padding: 0,
+            si_utime: timeval_to_jiffy_result(utime_sec, utime_usec),
+            si_stime: timeval_to_jiffy_result(stime_sec, stime_usec),
+        });
+        let src = info as *const SigInfo as *const u8;
+        copy_to_fn(infop_addr, src, size_of::<SigInfo>());
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn waitid_body_result(
+    idtype: CInt,
+    id: CInt,
+    infop_addr: CULong,
+    options: CInt,
+    do_wait_fn: Wait4DoWaitFn,
+    copy_to_fn: SyscallCopyToUserFn,
+) -> CLong {
+    let mut pid: CInt = 0;
+    let mut rc = waitid_to_wait_pid_result(idtype, id, &mut pid as *mut CInt);
+    if rc != 0 {
+        return rc as CLong;
+    }
+
+    rc = waitid_options_result(options);
+    if rc != 0 {
+        return rc as CLong;
+    }
+
+    let mut status: CInt = 0;
+    let mut usage = MaybeUninit::<RUsage>::uninit();
+    let usage_ptr = usage.as_mut_ptr();
+    zero_rusage(usage_ptr);
+
+    rc = do_wait_fn(pid, &mut status as *mut CInt, options, usage_ptr);
+    if rc < 0 {
+        return rc as CLong;
+    }
+
+    let usage = &*usage_ptr;
+    waitid_copy_siginfo_result(
+        rc,
+        infop_addr,
+        status,
+        usage.ru_utime.tv_sec,
+        usage.ru_utime.tv_usec,
+        usage.ru_stime.tv_sec,
+        usage.ru_stime.tv_usec,
+        copy_to_fn,
+    );
+    0
 }
 
 #[no_mangle]

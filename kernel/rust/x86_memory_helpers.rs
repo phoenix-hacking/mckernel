@@ -1,8 +1,8 @@
 use core::ffi::c_void;
-use core::ptr::{read_volatile, write_volatile};
+use core::ptr::{copy_nonoverlapping, read_volatile, write_bytes, write_volatile};
 use core::sync::atomic::{AtomicU64, Ordering};
 
-use crate::abi::CULong;
+use crate::abi::{CInt, CULong};
 
 const PTATTR_LARGEPAGE: CULong = 0x80;
 const PTATTR_UNCACHABLE: CULong = 0x10000;
@@ -13,6 +13,7 @@ const ENOMEM: i32 = 12;
 const ENOTSUPP: i32 = 524;
 const ENOENT: i32 = 2;
 
+const PTL4_SHIFT: i32 = 39;
 const PTL1_SHIFT: i32 = 12;
 const PTL2_SHIFT: i32 = 21;
 const PTL3_SHIFT: i32 = 30;
@@ -30,10 +31,13 @@ const PFLX_PCD: CULong = 0x10;
 const PFL2_PRESENT: CULong = 0x01;
 const PFL2_SIZE: CULong = 0x80;
 const PFL2_PDIR_ATTR: CULong = 0x07;
+const PFL4_PDIR_ATTR: CULong = 0x07;
 const PFL_FILEOFF: CULong = 1 << 11;
 const PT_ENTRIES: CULong = 512;
 const PTE_NULL: CULong = 0;
 const NOPHYS: CULong = !0;
+const IHK_MC_AP_CRITICAL: CInt = 0x000001;
+const IHK_MC_PT_FIRST_LEVEL: CInt = 0;
 
 const X86_VISIT_PTE_SKIP: i32 = 0;
 const X86_VISIT_PTE_DIRECT: i32 = 1;
@@ -70,10 +74,20 @@ const X86_VTOP_WALK: i32 = 1;
 const X86_VTOP_HIT: i32 = 2;
 const X86_DESTROY_PT_SKIP: i32 = 0;
 const X86_DESTROY_PT_DESCEND: i32 = 1;
+const X86_PT_SET_PTE_LOG_L2_ALIGN: CInt = 1;
+const X86_PT_SET_PTE_LOG_L3_ALIGN: CInt = 2;
+const X86_PT_SET_PTE_LOG_PAGE_SIZE: CInt = 3;
 
 type X86WalkPteCallback =
     unsafe extern "C" fn(*mut c_void, *mut CULong, CULong, CULong, CULong) -> i32;
 type X86WalkPhysCheckFn = unsafe extern "C" fn(CULong) -> i32;
+type X86PtAllocPagesFn = unsafe extern "C" fn(CInt, CInt) -> *mut c_void;
+type X86PtDestroyFn = unsafe extern "C" fn(CInt, *mut c_void);
+type X86PtVirtToPhysFn = unsafe extern "C" fn(*mut c_void) -> CULong;
+type X86PtSetPageFn = unsafe extern "C" fn(*mut c_void, CULong, CULong, CULong) -> CInt;
+type X86PtSetPteLogFn =
+    unsafe extern "C" fn(CInt, *mut c_void, *mut CULong, CULong, CULong, CULong, CInt, CULong);
+type X86PtSetPtePanicFn = unsafe extern "C" fn();
 
 #[no_mangle]
 pub extern "C" fn x86_attr_to_l3attr_result(attr: CULong, attr_mask: CULong) -> CULong {
@@ -984,4 +998,203 @@ pub unsafe extern "C" fn x86_destroy_pt_entry_action_result(
         }
     }
     X86_DESTROY_PT_DESCEND
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_pt_create_result(
+    init_pt: *mut c_void,
+    ap_flag: CInt,
+    alloc_fn: Option<X86PtAllocPagesFn>,
+) -> *mut c_void {
+    let Some(alloc) = alloc_fn else {
+        return core::ptr::null_mut();
+    };
+    let pt = unsafe { alloc(1, ap_flag) };
+    if pt.is_null() {
+        return core::ptr::null_mut();
+    }
+
+    let init_entries = init_pt as *const CULong;
+    let pt_entries = pt as *mut CULong;
+    unsafe {
+        write_bytes(pt_entries, 0, PT_ENTRIES as usize);
+        copy_nonoverlapping(
+            init_entries.add((PT_ENTRIES as usize) / 2),
+            pt_entries.add((PT_ENTRIES as usize) / 2),
+            (PT_ENTRIES as usize) / 2,
+        );
+    }
+
+    pt
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_pt_destroy_root_result(
+    pt: *mut c_void,
+    destroy_fn: Option<X86PtDestroyFn>,
+) {
+    let entries = pt as *mut CULong;
+    unsafe {
+        write_bytes(
+            entries.add((PT_ENTRIES as usize) / 2),
+            0,
+            (PT_ENTRIES as usize) / 2,
+        );
+    }
+
+    if let Some(destroy) = destroy_fn {
+        unsafe {
+            destroy(4, pt);
+        }
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_pt_prepare_map_result(
+    pt: *mut c_void,
+    init_pt: *mut c_void,
+    virt: CULong,
+    size: CULong,
+    flag: CInt,
+    writable_attr: CULong,
+    alloc_fn: Option<X86PtAllocPagesFn>,
+    virt_to_phys_fn: Option<X86PtVirtToPhysFn>,
+    set_page_fn: Option<X86PtSetPageFn>,
+) -> CInt {
+    let entries = if pt.is_null() {
+        init_pt as *mut CULong
+    } else {
+        pt as *mut CULong
+    };
+    let mut v = virt;
+    let l4idx = ((v >> PTL4_SHIFT) & (PT_ENTRIES - 1)) as usize;
+
+    if flag == IHK_MC_PT_FIRST_LEVEL {
+        let Some(alloc) = alloc_fn else {
+            return -ENOMEM;
+        };
+        let Some(virt_to_phys) = virt_to_phys_fn else {
+            return -ENOMEM;
+        };
+        let l4e = ((v.wrapping_add(size) >> PTL4_SHIFT) & (PT_ENTRIES - 1)) as usize;
+        let mut ret = 0;
+
+        for idx in l4idx..=l4e {
+            let entryp = unsafe { entries.add(idx) };
+            if unsafe { read_volatile(entryp) } & PFL2_PRESENT != 0 {
+                return 0;
+            }
+
+            let newpt = unsafe { alloc(1, IHK_MC_AP_CRITICAL) };
+            if newpt.is_null() {
+                ret = -ENOMEM;
+            } else {
+                let entry = unsafe { virt_to_phys(newpt) } | PFL4_PDIR_ATTR;
+                unsafe {
+                    write_volatile(entryp, entry);
+                }
+            }
+        }
+        ret
+    } else {
+        let Some(set_page) = set_page_fn else {
+            return -ENOMEM;
+        };
+        let end = v.wrapping_add(size);
+        let mut ret = 0;
+
+        while v < end {
+            ret = unsafe { set_page(entries as *mut c_void, v, 0, writable_attr) };
+            if ret != 0 {
+                break;
+            }
+            v = v.wrapping_add(PTL1_SIZE);
+        }
+        ret
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_pt_set_pte_body_result(
+    pt: *mut c_void,
+    ptep: *mut CULong,
+    pgsize: CULong,
+    phys: CULong,
+    attr: CULong,
+    attr_mask: CULong,
+    use_1gb_page: CInt,
+    log_fn: Option<X86PtSetPteLogFn>,
+    panic_fn: Option<X86PtSetPtePanicFn>,
+) -> CInt {
+    let mut entry = 0;
+    let current = if ptep.is_null() {
+        0
+    } else {
+        unsafe { read_volatile(ptep) }
+    };
+    let error = unsafe {
+        x86_pt_set_pte_value_result(pgsize, phys, attr, attr_mask, use_1gb_page, &mut entry)
+    };
+
+    if error != 0 {
+        if error == -1 && pgsize == PTL2_SIZE {
+            if let Some(log) = log_fn {
+                unsafe {
+                    log(
+                        X86_PT_SET_PTE_LOG_L2_ALIGN,
+                        pt,
+                        ptep,
+                        pgsize,
+                        phys,
+                        attr,
+                        error,
+                        current,
+                    );
+                }
+            }
+            return error;
+        }
+        if error == -1 && pgsize == PTL3_SIZE {
+            if let Some(log) = log_fn {
+                unsafe {
+                    log(
+                        X86_PT_SET_PTE_LOG_L3_ALIGN,
+                        pt,
+                        ptep,
+                        pgsize,
+                        phys,
+                        attr,
+                        error,
+                        current,
+                    );
+                }
+            }
+            return error;
+        }
+        if let Some(log) = log_fn {
+            unsafe {
+                log(
+                    X86_PT_SET_PTE_LOG_PAGE_SIZE,
+                    pt,
+                    ptep,
+                    pgsize,
+                    phys,
+                    attr,
+                    error,
+                    current,
+                );
+            }
+        }
+        if let Some(panic) = panic_fn {
+            unsafe {
+                panic();
+            }
+        }
+        return error;
+    }
+
+    unsafe {
+        x86_pte_store_result(ptep, entry);
+    }
+    0
 }

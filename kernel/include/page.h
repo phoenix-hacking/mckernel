@@ -41,6 +41,7 @@ enum page_mode {
 struct page *phys_to_page(uintptr_t phys);
 uintptr_t page_to_phys(struct page *page);
 int page_unmap(struct page *page);
+void page_map_count_inc_result(struct page *page);
 struct page *phys_to_page_insert_hash(uint64_t phys);
 int page_mode_in_memobj_result(int mode);
 int page_multi_mapped_result(int count);
@@ -50,7 +51,7 @@ void finish_free_pages_pending(void);
 
 static inline void page_map(struct page *page)
 {
-	ihk_atomic_inc(&page->count);
+	page_map_count_inc_result(page);
 }
 
 static inline int page_is_in_memobj(struct page *page)

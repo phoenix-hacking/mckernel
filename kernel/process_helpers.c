@@ -56,6 +56,186 @@ int process_add_range_bounds_result(unsigned long user_start,
 	return (start < user_start || user_end < end) ? -EINVAL : 0;
 }
 
+int process_add_range_init_result(struct vm_range *range, unsigned long start,
+				  unsigned long end, unsigned long flag,
+				  void *memobj, off_t offset, int pgshift,
+				  void *private_data)
+{
+	if (!range)
+		return 0;
+
+	RB_CLEAR_NODE(&range->vm_rb_node);
+	range->start = start;
+	range->end = end;
+	range->flag = flag;
+	range->memobj = memobj;
+	range->objoff = offset;
+	range->pgshift = pgshift;
+	range->private_data = private_data;
+	range->straight_start = 0;
+#ifdef ENABLE_TOFU
+	INIT_LIST_HEAD(&range->tofu_stag_list);
+#endif
+	return 1;
+}
+
+int process_add_range_mapping_result(unsigned long phys, unsigned long flag,
+				     unsigned long range_flag,
+				     unsigned long *attrp,
+				     int *memclearp)
+{
+	unsigned long attr = 0;
+	int action = PROCESS_ADD_RANGE_MAP_SKIP;
+	int memclear = phys != NOPHYS &&
+		!(flag & (VR_REMOTE | VR_DEMAND_PAGING | VR_XPMEM)) &&
+		((flag & VR_PROT_MASK) != VR_PROT_NONE);
+
+	if (phys == NOPHYS) {
+		action = PROCESS_ADD_RANGE_MAP_SKIP;
+	}
+	else if (flag & VR_REMOTE) {
+		attr = IHK_PTA_REMOTE;
+		action = PROCESS_ADD_RANGE_MAP_UPDATE;
+	}
+	else if (flag & VR_IO_NOCACHE) {
+		attr = PTATTR_UNCACHABLE;
+		action = PROCESS_ADD_RANGE_MAP_UPDATE;
+	}
+	else if (flag & VR_XPMEM) {
+		action = PROCESS_ADD_RANGE_MAP_MARK_XPMEM;
+	}
+	else if (flag & VR_DEMAND_PAGING) {
+		action = PROCESS_ADD_RANGE_MAP_DEMAND;
+	}
+	else if ((range_flag & VR_PROT_MASK) == VR_PROT_NONE) {
+		action = PROCESS_ADD_RANGE_MAP_SKIP;
+	}
+	else {
+		action = PROCESS_ADD_RANGE_MAP_UPDATE;
+	}
+
+	if (attrp)
+		*attrp = attr;
+	if (memclearp)
+		*memclearp = memclear;
+
+	return action;
+}
+
+int process_add_range_orchestrate_result(
+	struct process_vm *vm, unsigned long range_size, unsigned long start,
+	unsigned long end, unsigned long phys, unsigned long flag,
+	struct memobj *memobj, off_t offset, int pgshift, void *private_data,
+	struct vm_range **rp, process_add_range_alloc_fn_t alloc_fn,
+	process_add_range_free_fn_t free_fn,
+	process_add_range_insert_fn_t insert_fn,
+	process_add_range_update_fn_t update_fn,
+	process_add_range_remove_fn_t remove_fn,
+	process_add_range_mark_xpmem_fn_t mark_xpmem_fn,
+	process_add_range_memclear_fn_t memclear_fn,
+	process_add_range_log_fn_t log_fn)
+{
+	struct vm_range *range;
+	unsigned long map_attr = 0;
+	int should_memclear = 0;
+	int map_action;
+	int rc;
+
+	if (!alloc_fn || !free_fn || !insert_fn || !update_fn || !remove_fn ||
+	    !mark_xpmem_fn || !memclear_fn)
+		return -EINVAL;
+
+	range = alloc_fn(range_size);
+	if (!range) {
+		if (log_fn)
+			log_fn(PROCESS_ADD_RANGE_LOG_ALLOC_FAILED, -ENOMEM,
+			       start, end);
+		return -ENOMEM;
+	}
+
+	process_add_range_init_result(range, start, end, flag, memobj, offset,
+			pgshift, private_data);
+
+	rc = insert_fn(vm, range);
+	if (rc) {
+		if (log_fn)
+			log_fn(PROCESS_ADD_RANGE_LOG_INSERT_FAILED, rc,
+			       start, end);
+		free_fn(range);
+		return rc;
+	}
+
+	map_action = process_add_range_mapping_result(phys, flag, range->flag,
+			&map_attr, &should_memclear);
+	if (map_action == PROCESS_ADD_RANGE_MAP_UPDATE) {
+		rc = update_fn(vm, range, phys, map_attr);
+	}
+	else if (map_action == PROCESS_ADD_RANGE_MAP_MARK_XPMEM) {
+		mark_xpmem_fn(range);
+	}
+	else if (map_action == PROCESS_ADD_RANGE_MAP_DEMAND && log_fn) {
+		log_fn(PROCESS_ADD_RANGE_LOG_DEMAND, 0, range->start,
+		       range->end);
+	}
+
+	if (rc) {
+		if (log_fn)
+			log_fn(PROCESS_ADD_RANGE_LOG_PREP_FAILED, rc,
+			       range->start, range->end);
+		remove_fn(vm, range->start, range->end);
+		free_fn(range);
+		return rc;
+	}
+
+	if (should_memclear)
+		memclear_fn(phys, end - start);
+
+	if (rp)
+		*rp = range;
+
+	return 0;
+}
+
+int process_vm_range_insert_result(struct rb_root *root,
+				   struct vm_range *newrange,
+				   struct process_vm *vm,
+				   process_vm_range_insert_log_fn_t log_fn,
+				   process_vm_range_insert_dump_fn_t dump_fn)
+{
+	struct rb_node **new, *parent = NULL;
+	struct vm_range *range;
+
+	if (!root || !newrange)
+		return -EINVAL;
+
+	new = &root->rb_node;
+	while (*new) {
+		range = rb_entry(*new, struct vm_range, vm_rb_node);
+		parent = *new;
+		if (newrange->end <= range->start) {
+			new = &(*new)->rb_left;
+		}
+		else if (newrange->start >= range->end) {
+			new = &(*new)->rb_right;
+		}
+		else {
+			if (log_fn)
+				log_fn(PROCESS_VM_RANGE_INSERT_LOG_OVERLAP,
+				       vm, newrange, range);
+			return -EFAULT;
+		}
+	}
+
+	if (log_fn)
+		log_fn(PROCESS_VM_RANGE_INSERT_LOG_SUCCESS, vm, newrange, NULL);
+	if (dump_fn)
+		dump_fn(vm);
+	rb_link_node(&newrange->vm_rb_node, parent, new);
+	rb_insert_color(&newrange->vm_rb_node, root);
+
+	return 0;
+}
+
 int process_extend_up_result(unsigned long current_end,
 			     unsigned long user_end, int has_next,
 			     unsigned long next_start,

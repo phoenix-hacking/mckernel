@@ -5,6 +5,7 @@ use core::panic::PanicInfo;
 pub mod abi;
 mod bitmap;
 mod bitops;
+mod cls_helpers;
 mod llist;
 mod mem_helpers;
 mod numparse;

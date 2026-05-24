@@ -11470,3 +11470,269 @@ Update 2026-05-23 00:10 EDT process VM stack-start +3 verified post-campaign sli
     allocation/free, memobj refcounting, TOFU hooks, rb-tree mutation,
     rusage aggregation, signal forwarding, child-list orchestration, and
     broader process lifetime.
+
+Update 2026-05-23 ownership-dashboard parser failure:
+- Failing command:
+  - `scripts/rust-ownership-report.py --check-dashboard overview.txt --check-dashboard overview2.txt --top 25`
+- Environment:
+  - Worktree: `/home/hgordon/mckernel`.
+  - Target: documentation dashboard validation only; no boot or reboot-capable
+    validation was running.
+- Error summary:
+  - The dashboard checker reported `overview.txt: duplicate dashboard row
+    x86_64 memory management appears 2 times` after the latest prose update.
+  - Suspected cause is a new latest-slice line or bullet beginning with an
+    exact dashboard row name outside the dashboard table, causing the checker
+    to parse prose as a second row. Next action is to reword the prose and
+    rerun the same gate.
+- Resolution:
+  - Reworded the `overview.txt` prose so it no longer starts with the exact
+    dashboard row name and updated `scripts/rust-ownership-report.py` dashboard
+    percentages to match the new functional scores.
+  - The same command then passed, reporting 17.9% mechanical Rust LOC audit
+    with dashboard functional rows x86_64 memory 88, page allocator 77, and
+    scheduler/timers/wait/futex 91.
+
+Update 2026-05-23 page allocator free-orchestration fallback failure:
+- Failing command:
+  - `kernel/rust/tests/run_equivalence.sh`
+- Environment:
+  - Worktree: `/home/hgordon/mckernel`.
+  - Target: non-reboot Rust/C equivalence harness after adding
+    `ihk_numa_free_pages_orchestrate_result()`.
+- Error summary:
+  - The C fallback build for `page_alloc_bitmap_equiv.c` failed to link:
+    `undefined reference to __ihk_numa_free_pages_prepare`.
+  - Cause: the new C fallback orchestrator called the Rust-owned prepare helper
+    name, but the non-Rust fallback build did not provide that symbol. Next
+    action is to replace the fallback call with local C prepare logic or add a
+    proper C fallback helper, then rerun the same equivalence gate.
+
+Update 2026-05-23 x86 prepare-map equivalence digest failure:
+- Failing command:
+  - `kernel/rust/tests/run_equivalence.sh`
+- Environment:
+  - Worktree: `/home/hgordon/mckernel`.
+  - Target: non-reboot Rust/C equivalence harness after adding
+    `x86_pt_prepare_map_result()`.
+- Error summary:
+  - The x86 helper equivalence output diverged:
+    C fallback `x86_memory_helpers ok digest=717ac55f57272ac0`,
+    Rust helper `x86_memory_helpers ok digest=7c42b55ee2b4ecfa`.
+  - The failure is isolated to the new x86 memory helper equivalence cases.
+    Next action is to align callback ordering/result publication with the C
+    fallback and rerun the same gate before unrelated changes.
+- Resolution:
+  - The helper logic matched; the equivalence test mixed process-local fake
+    pointer addresses into the digest. Normalized the fake
+    `virt_to_phys()` mapping and set-page callback pointer digest to stable
+    values, then reran the same command successfully with
+    `x86_memory_helpers ok digest=39dcb1d0c6c1e89e`.
+
+Update 2026-05-24 page allocator top-level free equivalence failure:
+- Failing command:
+  - `kernel/rust/tests/run_equivalence.sh`
+- Environment:
+  - Worktree: `/home/hgordon/mckernel`.
+  - Target: non-reboot Rust/C equivalence harness after adding
+    `ihk_numa_free_pages_result()`.
+- Error summary:
+  - The generated page-allocator equivalence program failed a `require()` with
+    `require failed line=912`.
+  - The failure is isolated to the new top-level NUMA free-page equivalence
+    cases. Next action is to map that generated line to the failing assertion,
+    fix the helper or test expectation, and rerun the same equivalence gate
+    before unrelated changes.
+  - After correcting that test setup, the same gate advanced to a digest
+    mismatch in `page_alloc_bitmap`: C fallback
+    `dfa46c562e120432`, Rust helper `84937682054a78fe`. Next action is to
+    identify the divergent top-level free side effect/log sequence and align
+    the Rust helper with the C fallback.
+- Resolution:
+  - The helper behavior matched; the new equivalence test mixed the
+    process-local stack address of the NUMA node into the digest. Normalized
+    the log digest to compare the expected node identity instead of the raw
+    address, then reran the same command successfully with
+    `page_alloc_bitmap ok digest=953c73f87339c534`.
+
+Update 2026-05-24 page allocator add/zero top-level equivalence failure:
+- Failing command:
+  - `kernel/rust/tests/run_equivalence.sh`
+- Environment:
+  - Worktree: `/home/hgordon/mckernel`.
+  - Target: non-reboot Rust/C equivalence harness after adding
+    `ihk_numa_add_free_pages_result()` and public
+    `ihk_numa_zero_free_pages_result()`.
+- Error summary:
+  - The generated page-allocator equivalence program failed a `require()` with
+    `require failed line=1000`.
+  - The failure is isolated to the new top-level NUMA add/zero equivalence
+    cases. Next action is to map the generated line to the failing assertion,
+    fix the helper or test expectation, and rerun the same equivalence gate
+    before unrelated changes.
+- Resolution:
+  - The public zero-free wrapper test left `zero_at_free` disabled after the
+    duplicate-add failure case, so the expected zero-list publication was not
+    attempted. Restored `zero_at_free = 1` before the wrapper call, then reran
+    the same command successfully with
+    `page_alloc_bitmap ok digest=8556bdeaa7090fa7`.
+
+Update 2026-05-24 CPU-local Rust lifecycle validation failure:
+- Failing command:
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+- Environment:
+  - Worktree: `/home/hgordon/mckernel`.
+  - Target: Rust-enabled non-reboot `mckernel.img` build after adding the
+    CPU-local layout/lifecycle Rust slice.
+- Error summary:
+  - `kernel/rust/abi_checks.c` failed to compile because
+    `struct rusage_percpu` was incomplete at the new C static assertions.
+  - The failure is isolated to the C ABI check include path; the Rust object
+    itself had already built successfully with the new CPU-local layout mirror.
+- Resolution:
+  - Included McKernel's private `rusage.h` before `cls.h` in
+    `kernel/rust/abi_checks.c`, then reran the same Rust-enabled
+    `mckernel.img` build successfully.
+
+Update 2026-05-24 CPU-local Rust lifecycle smoke failure:
+- Failing command:
+  - `kernel/rust/tests/run_equivalence.sh`
+- Environment:
+  - Worktree: `/home/hgordon/mckernel`.
+  - Target: non-reboot Rust/C equivalence harness after adding the
+    `cls_helpers_smoke` coverage for CPU-local initialization and preempt
+    counter updates.
+- Error summary:
+  - The generated `cls_helpers_smoke` program aborted before printing a digest.
+  - The failure is isolated to the new smoke assertion path; the main Rust
+    helper equivalence cases and Rust-enabled image build had already passed.
+- Resolution:
+  - The smoke was compiling `struct cpu_local_var` without the Rocky build's
+    `PROFILE_ENABLE` and `ENABLE_RUSAGE` flags. Added those defines to the
+    generated smoke source and reran the same equivalence command successfully
+    with `cls_helpers ok digest=3020b4b56921f7dc`.
+
+Update 2026-05-24 Rust `number()` equivalence link failure:
+- Failing command:
+  - `kernel/rust/tests/run_equivalence.sh`
+- Environment:
+  - Worktree: `/home/hgordon/mckernel`.
+  - Target: non-reboot Rust/C equivalence harness after routing
+    `lib/vsprintf.c:number()` through Rust-owned `number_result()`.
+- Error summary:
+  - Linking the generated Rust-backed `printf_decimal` equivalence binary
+    failed because `number_result()` emitted references to
+    `core::panicking::panic_bounds_check`.
+  - The failure is isolated to Rust slice indexing in the new formatting body;
+    next action is to remove bounds-checking code paths from that helper and
+    rerun the same equivalence gate before unrelated changes.
+- Resolution:
+  - Replaced checked Rust slice indexing and zero-initialized temporary digit
+    storage with raw pointer writes over uninitialized stack storage, preserving
+    the existing kernel no-SIMD/no-panic object constraint. Reran the same
+    equivalence command successfully with
+    `printf_decimal ok digest=9b42843c73ef2870` and the expected unresolved
+    symbol/SIMD checks.
+
+Update 2026-05-24 ABI signal/futex/register layout build failure:
+- Failing command:
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+- Environment:
+  - Worktree: `/home/hgordon/mckernel`.
+  - Target: Rust-enabled x86_64 kernel image after adding signal, futex, and
+    ptrace/user-register ABI layout mirrors.
+- Error summary:
+  - `kernel/rust/abi_checks.c` included `arch/x86_64/kernel/include/elf.h`
+    directly, but that header expects `a8_uint64_t` and `elf_greg64_t`
+    typedef context that is not present in this ABI-check translation unit.
+  - The failure is isolated to the new direct `user_regs64_struct` assertion.
+    The preceding Rust equivalence suite passed with
+    `printf_decimal ok digest=ba6e3675fed38849`.
+- Resolution:
+  - Pending in the same migration slice: avoid the direct ELF header dependency
+    in `abi_checks.c` and keep the user register checks on the kernel-owned
+    `struct user_regs_struct`/ptrace layout that is already available through
+    `process.h`.
+
+Update 2026-05-24 XPMEM/SysV shm/memobj ABI layout build failure:
+- Failing command:
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+- Environment:
+  - Worktree: `/home/hgordon/mckernel`.
+  - Target: Rust-enabled x86_64 kernel image after adding XPMEM, SysV
+    shared-memory, memobj, kref, rb-augment, ftrace, and low-level lock ABI
+    layout mirrors.
+- Error summary:
+  - Rust rejected `FtraceBranchUnion` because its `FtraceBranchCounts` field
+    did not implement `Copy` or use `ManuallyDrop`, which Rust requires for
+    union fields to avoid drop side effects.
+  - The failure occurred before C static assertions were reached.
+- Resolution:
+  - Added `Clone, Copy` to the ftrace branch-count mirror, making the Rust
+    union field trivially copyable, then reran the Rust-enabled build. The
+    build progressed to C ABI-check compilation before the next include-context
+    issue below.
+
+Update 2026-05-24 XPMEM ABI-check include-context build failure:
+- Failing command:
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+- Environment:
+  - Worktree: `/home/hgordon/mckernel`.
+  - Target: Rust-enabled x86_64 kernel image after making the ftrace branch
+    layout mirror trivially copyable and rerunning the ABI/layout build.
+- Error summary:
+  - `kernel/rust/abi_checks.c` included `xpmem_private.h` directly, but that
+    header's inline debug paths expand `XPMEM_DEBUG()` through
+    `cpu_local_var(current)` and require runtime thread-local context that is
+    not present in the standalone ABI-check translation unit.
+  - The failure is isolated to the new direct XPMEM private-header include
+    context. The Rust ABI object compiled successfully before C assertion
+    compilation started.
+- Resolution:
+  - Reordered `kernel/rust/abi_checks.c` includes so `process.h`/`cls.h`
+    provide the normal CPU-local/thread context before `xpmem_private.h`.
+    Reran the Rust-enabled image build successfully, then passed
+    `kernel/rust/tests/run_equivalence.sh`,
+    `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`,
+    `python3 -m py_compile scripts/rust-ownership-report.py`,
+    `scripts/rust-ownership-report.py --check-dashboard overview.txt
+    --check-dashboard overview2.txt --top 5`, and `git diff --check`.
+
+Update 2026-05-24 waitid siginfo equivalence test helper failure:
+- Failing command:
+  - `kernel/rust/tests/run_equivalence.sh`
+- Environment:
+  - Worktree: `/home/hgordon/mckernel`.
+  - Target: Rust/C equivalence suite after moving `waitid()` SIGCHLD siginfo
+    construction and copyout sequencing into the syscall policy helper path.
+- Error summary:
+  - The generated `syscall_policy_helpers_equiv.c` test used a non-existent
+    `mix_unsigned()` digest helper in the new waitid siginfo side-effect case.
+  - Both C and Rust helper objects reached the test compile, but linking the
+    generated C test failed with undefined references to `mix_unsigned`.
+- Resolution:
+  - Replaced the new test calls with the existing `mix_signed()` digest helper
+    and reran validation before making unrelated changes. The test compile
+    advanced to the unresolved-symbol audit before the next issue below.
+
+Update 2026-05-24 waitid siginfo unresolved-symbol audit failure:
+- Failing command:
+  - `kernel/rust/tests/run_equivalence.sh`
+- Environment:
+  - Worktree: `/home/hgordon/mckernel`.
+  - Target: Rust/C equivalence suite after fixing the waitid siginfo test
+    digest helper.
+- Error summary:
+  - The equivalence run reached the Rust object unresolved-symbol audit, then
+    printed the allowed unresolved runtime symbols (`clv`,
+    `cpu_local_var_initialized`, `default_wake_function`, memory/NUMA helpers,
+    `phys_to_virt`, `virt_to_phys`, `zero_at_free`, etc.) and exited nonzero.
+  - This indicates the audit command now has no disallowed-symbol input after
+    filtering, but the pipeline still returns a failing status.
+- Resolution:
+  - The symbol filter itself was correct. The failing step was the subsequent
+    SIMD audit: `MaybeUninit::<SigInfo>::zeroed()` for the 128-byte waitid
+    `siginfo_t` let rustc emit SIMD zeroing. Replaced it with explicit byte
+    stores before field publication, then reran `kernel/rust/tests/run_equivalence.sh`
+    successfully, including `syscall_policy_helpers ok digest=8ad93729a7427541`
+    and `rust object unresolved symbols and SIMD checks ok`.

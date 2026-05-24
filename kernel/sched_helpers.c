@@ -6,6 +6,17 @@
 #include <sched_helpers.h>
 
 #define PAGE_SIZE 4096UL
+#define FUTEX_WAIT 0
+#define FUTEX_WAKE 1
+#define FUTEX_REQUEUE 3
+#define FUTEX_CMP_REQUEUE 4
+#define FUTEX_WAKE_OP 5
+#define FUTEX_WAIT_BITSET 9
+#define FUTEX_WAKE_BITSET 10
+#define FUTEX_WAIT_REQUEUE_PI 11
+#define FUTEX_PRIVATE_FLAG 128
+#define FUTEX_CLOCK_REALTIME 256
+#define FUTEX_BITSET_MATCH_ANY 0xffffffffU
 
 #ifndef MCKERNEL_RUST_SCHED_RUNTIME_HELPERS
 
@@ -50,6 +61,109 @@ int futex_hash_bucket_table_init_result(unsigned long buckets_addr,
 	}
 
 	return bucket_count;
+}
+
+int futex_init_table_result(unsigned long queues_slot_addr, int hashbits,
+			    unsigned long bucket_stride, int alloc_flag,
+			    futex_alloc_fn_t alloc_fn,
+			    unsigned long lock_offset,
+			    unsigned long lock_word_offset,
+			    unsigned long chain_offset,
+			    unsigned long prio_list_offset,
+			    unsigned long node_list_offset,
+			    unsigned long debug_spinlock_offset,
+			    unsigned long debug_rawlock_offset)
+{
+	unsigned long buckets_addr;
+	unsigned long bucket_count;
+	unsigned long bytes;
+
+	if (!queues_slot_addr || hashbits < 0 || !bucket_stride || !alloc_fn)
+		return -EINVAL;
+	if ((unsigned long)hashbits >= sizeof(unsigned long) * 8)
+		return -EINVAL;
+	bucket_count = 1UL << hashbits;
+	if (bucket_count > ((unsigned long)-1) / bucket_stride)
+		return -EINVAL;
+	bytes = bucket_count * bucket_stride;
+
+	buckets_addr = alloc_fn(bytes, alloc_flag);
+	*(unsigned long *)queues_slot_addr = buckets_addr;
+	return futex_hash_bucket_table_init_result(buckets_addr,
+			(int)bucket_count, bucket_stride, lock_offset,
+			lock_word_offset, chain_offset, prio_list_offset,
+			node_list_offset, debug_spinlock_offset,
+			debug_rawlock_offset);
+}
+
+unsigned long futex_hash_bucket_result(unsigned long key_addr,
+				       unsigned long queues_addr,
+				       int hashbits,
+				       unsigned long bucket_stride,
+				       futex_hash_fn_t hash_fn)
+{
+	unsigned long bucket_count;
+	unsigned long hash;
+
+	if (!key_addr || !queues_addr || hashbits < 0 ||
+			!bucket_stride || !hash_fn)
+		return 0;
+	if ((unsigned long)hashbits >= sizeof(unsigned long) * 8)
+		return 0;
+
+	bucket_count = 1UL << hashbits;
+	hash = hash_fn(key_addr);
+	if ((hash & (bucket_count - 1)) >
+			((unsigned long)-1 - queues_addr) / bucket_stride)
+		return 0;
+
+	return queues_addr + bucket_stride * (hash & (bucket_count - 1));
+}
+
+int futex_dispatch_result(int op, unsigned long uaddr, uint32_t val,
+			  uint64_t timeout, unsigned long uaddr2,
+			  uint32_t val2, uint32_t val3, int fshared,
+			  futex_dispatch_wait_fn_t wait_fn,
+			  futex_dispatch_wake_fn_t wake_fn,
+			  futex_dispatch_requeue_fn_t requeue_fn,
+			  futex_dispatch_wake_op_fn_t wake_op_fn,
+			  futex_dispatch_invalid_fn_t invalid_fn)
+{
+	int clockrt;
+	int cmd;
+
+	cmd = op & ~(FUTEX_PRIVATE_FLAG | FUTEX_CLOCK_REALTIME);
+	clockrt = op & FUTEX_CLOCK_REALTIME;
+	if (clockrt && cmd != FUTEX_WAIT_BITSET &&
+			cmd != FUTEX_WAIT_REQUEUE_PI)
+		return -ENOSYS;
+
+	switch (cmd) {
+	case FUTEX_WAIT:
+		return wait_fn ? wait_fn(uaddr, fshared, val, timeout,
+				FUTEX_BITSET_MATCH_ANY, clockrt) : -ENOSYS;
+	case FUTEX_WAIT_BITSET:
+		return wait_fn ? wait_fn(uaddr, fshared, val, timeout, val3,
+				clockrt) : -ENOSYS;
+	case FUTEX_WAKE:
+		return wake_fn ? wake_fn(uaddr, fshared, val,
+				FUTEX_BITSET_MATCH_ANY) : -ENOSYS;
+	case FUTEX_WAKE_BITSET:
+		return wake_fn ? wake_fn(uaddr, fshared, val, val3) : -ENOSYS;
+	case FUTEX_REQUEUE:
+		return requeue_fn ? requeue_fn(uaddr, fshared, uaddr2, val,
+				val2, 0, 0, 0) : -ENOSYS;
+	case FUTEX_CMP_REQUEUE:
+		return requeue_fn ? requeue_fn(uaddr, fshared, uaddr2, val,
+				val2, 1, val3, 0) : -ENOSYS;
+	case FUTEX_WAKE_OP:
+		return wake_op_fn ? wake_op_fn(uaddr, fshared, uaddr2, val,
+				val2, val3) : -ENOSYS;
+	default:
+		if (invalid_fn)
+			invalid_fn(cmd);
+		return -ENOSYS;
+	}
 }
 
 uint64_t timer_spin_sleep_remaining_result(uint64_t timeout, uint64_t elapsed)
@@ -617,6 +731,70 @@ void futex_wake_ikc_packet_fill_result(unsigned long packet_addr,
 	*(int *)(packet_addr + msg_offset) = msg;
 	*(unsigned long *)(packet_addr + resp_offset) = resp;
 	*(unsigned long *)(packet_addr + spin_sleep_offset) = spin_sleep_addr;
+}
+
+int futex_wake_orchestrate_result(
+	unsigned long q_addr, unsigned long q_list_offset,
+	unsigned long q_node_plist_offset, unsigned long q_lock_ptr_offset,
+	unsigned long q_task_offset, unsigned long q_uti_futex_resp_offset,
+	unsigned long q_linux_cpu_offset,
+	unsigned long thread_spin_sleep_offset,
+	unsigned long packet_addr, unsigned long packet_msg_offset,
+	unsigned long packet_resp_offset,
+	unsigned long packet_spin_sleep_offset, int msg,
+	unsigned long fallback_channel, int wake_status,
+	futex_wake_linux_channel_by_cpu_fn_t linux_channel_fn,
+	futex_wake_send_fn_t send_fn,
+	futex_wake_thread_fn_t wake_thread_fn,
+	futex_wake_log_fn_t log_fn)
+{
+	unsigned long thread_addr;
+	unsigned long uti_futex_resp;
+	int target;
+
+	if (!q_addr)
+		return -EINVAL;
+
+	thread_addr = *(unsigned long *)(q_addr + q_task_offset);
+	uti_futex_resp = *(unsigned long *)(q_addr + q_uti_futex_resp_offset);
+
+	futex_wake_mark_woken_result(q_addr, q_list_offset,
+			q_node_plist_offset, q_lock_ptr_offset);
+
+	target = futex_wake_target_result(uti_futex_resp);
+	if (target == FUTEX_WAKE_TARGET_LINUX) {
+		int linux_cpu = *(int *)(q_addr + q_linux_cpu_offset);
+		unsigned long linux_channel = linux_channel_fn ?
+			linux_channel_fn(linux_cpu) : 0;
+		unsigned long resp_channel =
+			futex_wake_linux_channel_result(linux_channel,
+					fallback_channel);
+		int rc = -ENOSYS;
+
+		if (log_fn)
+			log_fn(FUTEX_WAKE_LOG_LINUX_TARGET, thread_addr,
+			       uti_futex_resp, linux_cpu, resp_channel, 0);
+		futex_wake_ikc_packet_fill_result(packet_addr,
+				packet_msg_offset, packet_resp_offset,
+				packet_spin_sleep_offset, msg, uti_futex_resp,
+				thread_addr + thread_spin_sleep_offset);
+		if (send_fn)
+			rc = send_fn(resp_channel, packet_addr);
+		if (log_fn) {
+			log_fn(rc < 0 ? FUTEX_WAKE_LOG_SEND_FAILED :
+			       FUTEX_WAKE_LOG_SEND_OK, thread_addr,
+			       uti_futex_resp, linux_cpu, resp_channel, rc);
+		}
+		return target;
+	}
+
+	if (wake_thread_fn) {
+		if (log_fn)
+			log_fn(FUTEX_WAKE_LOG_MCKERNEL_TARGET, thread_addr,
+			       uti_futex_resp, 0, 0, 0);
+		wake_thread_fn(thread_addr, wake_status);
+	}
+	return target;
 }
 
 int syscall_offload_should_schedule_result(int no_preempt, int tid,

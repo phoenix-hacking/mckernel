@@ -1,4 +1,4 @@
-use core::ptr::write;
+use core::{ffi::c_void, ptr::write};
 
 use crate::abi::{CInt, CLong, CULong, OffT, SizeT};
 
@@ -126,8 +126,11 @@ const SYSFS_HANDLER_SHOW: CInt = 1;
 const SYSFS_HANDLER_STORE: CInt = 2;
 const SYSFS_HANDLER_RELEASE: CInt = 3;
 const SCD_MSG_SYSFS_REQ_SHOW: CInt = 0x3a;
+const SCD_MSG_SYSFS_RESP_SHOW: CInt = 0x3b;
 const SCD_MSG_SYSFS_REQ_STORE: CInt = 0x3c;
+const SCD_MSG_SYSFS_RESP_STORE: CInt = 0x3d;
 const SCD_MSG_SYSFS_REQ_RELEASE: CInt = 0x3e;
+const SCD_MSG_SYSFS_RESP_RELEASE: CInt = 0x3f;
 const SCD_MSG_PROCFS_RELEASE: CInt = 0x15;
 const MLOCKADDRS_SIZE: CInt = 128;
 const MPOL_SHM_PREMAP: CULong = 0x08;
@@ -679,6 +682,175 @@ pub extern "C" fn sysfs_should_call_store_result(store: CULong) -> CInt {
 #[no_mangle]
 pub extern "C" fn sysfs_should_call_release_result(release: CULong) -> CInt {
     (release != 0) as CInt
+}
+
+pub type SysfssShowFn = Option<
+    unsafe extern "C" fn(
+        ops: *mut c_void,
+        instance: *mut c_void,
+        buf: *mut c_void,
+        bufsize: SizeT,
+    ) -> CLong,
+>;
+pub type SysfssStoreFn = Option<
+    unsafe extern "C" fn(
+        ops: *mut c_void,
+        instance: *mut c_void,
+        buf: *mut c_void,
+        size: SizeT,
+    ) -> CLong,
+>;
+pub type SysfssReleaseFn = Option<unsafe extern "C" fn(ops: *mut c_void, instance: *mut c_void)>;
+pub type SysfssSendFn =
+    Option<unsafe extern "C" fn(msg: CInt, err: CInt, arg1: CLong, arg2: CLong) -> CInt>;
+pub type SysfssPacketShowFn =
+    Option<unsafe extern "C" fn(nodeh: CLong, ops: *mut c_void, instance: *mut c_void)>;
+pub type SysfssPacketStoreFn = Option<
+    unsafe extern "C" fn(nodeh: CLong, ops: *mut c_void, instance: *mut c_void, size: SizeT),
+>;
+pub type SysfssPacketReleaseFn =
+    Option<unsafe extern "C" fn(nodeh: CLong, ops: *mut c_void, instance: *mut c_void)>;
+
+#[inline(always)]
+unsafe fn store_sysfs_response(
+    ssizep: *mut CLong,
+    packet_errp: *mut CInt,
+    ssize: CLong,
+    err: CInt,
+) {
+    if !ssizep.is_null() {
+        write(ssizep, ssize);
+    }
+    if !packet_errp.is_null() {
+        write(packet_errp, err);
+    }
+}
+
+#[inline(always)]
+unsafe fn sysfss_send(
+    send_fn: SysfssSendFn,
+    msg: CInt,
+    err: CInt,
+    arg1: CLong,
+    arg2: CLong,
+) -> CInt {
+    match send_fn {
+        Some(send) => send(msg, err, arg1, arg2),
+        None => -EIO,
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sysfss_req_show_body_result(
+    nodeh: CLong,
+    ops: *mut c_void,
+    instance: *mut c_void,
+    data_buf: *mut c_void,
+    data_bufsize: SizeT,
+    show_fn: SysfssShowFn,
+    send_fn: SysfssSendFn,
+    ssizep: *mut CLong,
+    packet_errp: *mut CInt,
+) -> CInt {
+    let ssize = match show_fn {
+        Some(show) => show(ops, instance, data_buf, data_bufsize),
+        None => sysfs_default_response_ssize_result(),
+    };
+    let packet_err = sysfs_response_error_result(ssize);
+    let send_error = sysfss_send(send_fn, SCD_MSG_SYSFS_RESP_SHOW, packet_err, nodeh, ssize);
+    store_sysfs_response(ssizep, packet_errp, ssize, packet_err);
+    send_error
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sysfss_req_store_body_result(
+    nodeh: CLong,
+    ops: *mut c_void,
+    instance: *mut c_void,
+    data_buf: *mut c_void,
+    size: SizeT,
+    store_fn: SysfssStoreFn,
+    send_fn: SysfssSendFn,
+    ssizep: *mut CLong,
+    packet_errp: *mut CInt,
+) -> CInt {
+    let ssize = match store_fn {
+        Some(store) => store(ops, instance, data_buf, size),
+        None => sysfs_default_response_ssize_result(),
+    };
+    let packet_err = sysfs_response_error_result(ssize);
+    let send_error = sysfss_send(send_fn, SCD_MSG_SYSFS_RESP_STORE, packet_err, nodeh, ssize);
+    store_sysfs_response(ssizep, packet_errp, ssize, packet_err);
+    send_error
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sysfss_req_release_body_result(
+    nodeh: CLong,
+    ops: *mut c_void,
+    instance: *mut c_void,
+    release_fn: SysfssReleaseFn,
+    send_fn: SysfssSendFn,
+    packet_errp: *mut CInt,
+) -> CInt {
+    if let Some(release) = release_fn {
+        release(ops, instance);
+    }
+    let packet_err = sysfs_release_response_error_result();
+    let send_error = sysfss_send(send_fn, SCD_MSG_SYSFS_RESP_RELEASE, packet_err, nodeh, 0);
+    if !packet_errp.is_null() {
+        write(packet_errp, packet_err);
+    }
+    send_error
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sysfss_packet_handler_body_result(
+    msg: CInt,
+    error: CInt,
+    arg1: CLong,
+    arg2: CLong,
+    arg3: CLong,
+    show_fn: SysfssPacketShowFn,
+    store_fn: SysfssPacketStoreFn,
+    release_fn: SysfssPacketReleaseFn,
+    kindp: *mut CInt,
+) -> CInt {
+    let kind = sysfs_request_handler_kind_result(msg);
+
+    if !kindp.is_null() {
+        write(kindp, kind);
+    }
+
+    match kind {
+        SYSFS_HANDLER_SHOW => match show_fn {
+            Some(show) => {
+                show(arg1, arg2 as *mut c_void, arg3 as *mut c_void);
+                0
+            }
+            None => -EIO,
+        },
+        SYSFS_HANDLER_STORE => match store_fn {
+            Some(store) => {
+                store(
+                    arg1,
+                    arg2 as *mut c_void,
+                    arg3 as *mut c_void,
+                    error as SizeT,
+                );
+                0
+            }
+            None => -EIO,
+        },
+        SYSFS_HANDLER_RELEASE => match release_fn {
+            Some(release) => {
+                release(arg1, arg2 as *mut c_void, arg3 as *mut c_void);
+                0
+            }
+            None => -EIO,
+        },
+        _ => -EINVAL,
+    }
 }
 
 #[no_mangle]

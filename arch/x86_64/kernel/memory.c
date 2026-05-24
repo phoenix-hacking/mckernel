@@ -592,62 +592,34 @@ int ihk_mc_pt_set_page(page_table_t pt, void *virt,
 	return __set_pt_page(pt, virt, phys, attr | PTATTR_ACTIVE);
 }
 
+static void *x86_pt_alloc_pages_bridge(int nr_pages, int ap_flag)
+{
+	return ihk_mc_alloc_pages(nr_pages, (ihk_mc_ap_flag)ap_flag);
+}
+
+static unsigned long x86_pt_virt_to_phys_bridge(void *addr)
+{
+	return virt_to_phys(addr);
+}
+
+static int x86_pt_set_page_bridge(void *pt, unsigned long virt,
+		unsigned long phys, unsigned long attr)
+{
+	return __set_pt_page(pt, (void *)virt, phys, attr);
+}
+
 int ihk_mc_pt_prepare_map(page_table_t p, void *virt, unsigned long size,
                           enum ihk_mc_pt_prepare_flag flag)
 {
-	int l4idx, l4e, ret = 0;
-	unsigned long v = (unsigned long)virt;
-	struct page_table *pt = p, *newpt;
-	unsigned long l;
-	enum ihk_mc_pt_attribute attr = PTATTR_WRITABLE;
-
-	if (!pt) {
-		pt = init_pt;
-	}
-
-	l4idx = ((v) >> PTL4_SHIFT) & (PT_ENTRIES - 1);
-
-	if (flag == IHK_MC_PT_FIRST_LEVEL) {
-		l4e = ((v + size) >> PTL4_SHIFT)  & (PT_ENTRIES - 1);
-
-		for (; l4idx <= l4e; l4idx++) {
-			if (pt->entry[l4idx] & PFL4_PRESENT) {
-				return 0;
-			} else {
-				newpt = __alloc_new_pt(IHK_MC_AP_CRITICAL);
-				if (!newpt) {
-					ret = -ENOMEM;
-				} else { 
-					pt->entry[l4idx] = virt_to_phys(newpt)
-						| PFL4_PDIR_ATTR;
-				}
-			}
-		}
-	} else {
-		/* Call without ACTIVE flag */
-		l = v + size;
-		for (; v < l; v += PAGE_SIZE) {
-			if ((ret = __set_pt_page(pt, (void *)v, 0, attr))) {
-				break;
-			}
-		}
-	}
-	return ret;
+	return x86_pt_prepare_map_result(p, init_pt, (unsigned long)virt,
+			size, flag, PTATTR_WRITABLE,
+			x86_pt_alloc_pages_bridge, x86_pt_virt_to_phys_bridge,
+			x86_pt_set_page_bridge);
 }
 
 struct page_table *ihk_mc_pt_create(ihk_mc_ap_flag ap_flag)
 {
-	struct page_table *pt = ihk_mc_alloc_pages(1, ap_flag);
-
-	if(pt == NULL)
-		return NULL;
-
-	memset(pt->entry, 0, PAGE_SIZE);
-	/* Copy the kernel space */
-	memcpy(pt->entry + PT_ENTRIES / 2, init_pt->entry + PT_ENTRIES / 2,
-	       sizeof(pt->entry[0]) * PT_ENTRIES / 2);
-
-	return pt;
+	return x86_pt_create_result(init_pt, ap_flag, x86_pt_alloc_pages_bridge);
 }
 
 static void destroy_page_table(int level, struct page_table *pt)
@@ -679,14 +651,14 @@ static void destroy_page_table(int level, struct page_table *pt)
 	return;
 }
 
+static void x86_pt_destroy_bridge(int level, void *pt)
+{
+	destroy_page_table(level, pt);
+}
+
 void ihk_mc_pt_destroy(struct page_table *pt)
 {
-	const int level = 4;	/* PML4 */
-
-	/* clear shared entry */
-	memset(pt->entry + PT_ENTRIES / 2, 0, sizeof(pt->entry[0]) * PT_ENTRIES / 2);
-
-	destroy_page_table(level, pt);
+	x86_pt_destroy_root_result(pt, x86_pt_destroy_bridge);
 	return;
 }
 
@@ -2005,36 +1977,44 @@ out:
 	return error;
 }
 
+static void x86_pt_set_pte_log_bridge(int event, void *pt, pte_t *ptep,
+		size_t pgsize, unsigned long phys, unsigned long attr,
+		int error, unsigned long current)
+{
+	switch (event) {
+	case X86_PT_SET_PTE_LOG_L2_ALIGN:
+		kprintf("%s: error: phys needs to be PTL2_SIZE aligned\n",
+				__FUNCTION__);
+		break;
+	case X86_PT_SET_PTE_LOG_L3_ALIGN:
+		kprintf("%s: error: phys needs to be PTL3_SIZE aligned\n",
+				__FUNCTION__);
+		break;
+	case X86_PT_SET_PTE_LOG_PAGE_SIZE:
+		ekprintf("ihk_mc_pt_set_pte(%p,%p,%lx,%lx,%x):"
+				"page size. %d %lx\n",
+				pt, ptep, pgsize, phys, (int)attr,
+				error, current);
+		break;
+	}
+}
+
+static void x86_pt_set_pte_panic_bridge(void)
+{
+	panic("ihk_mc_pt_set_pte:page size");
+}
+
 int ihk_mc_pt_set_pte(page_table_t pt, pte_t *ptep, size_t pgsize,
 		uintptr_t phys, enum ihk_mc_pt_attribute attr)
 {
 	int error;
-	unsigned long entry = 0;
 
 	dkprintf("ihk_mc_pt_set_pte(%p,%p,%lx,%lx,%x)\n",
 			pt, ptep, pgsize, phys, attr);
 
-	error = x86_pt_set_pte_value_result(pgsize, phys, attr, ATTR_MASK,
-					    use_1gb_page, &entry);
-	if (error) {
-		if (error == -1 && pgsize == PTL2_SIZE) {
-			kprintf("%s: error: phys needs to be PTL2_SIZE aligned\n", __FUNCTION__);
-			goto out;
-		}
-		if (error == -1 && pgsize == PTL3_SIZE) {
-			kprintf("%s: error: phys needs to be PTL3_SIZE aligned\n", __FUNCTION__);
-			goto out;
-		}
-		ekprintf("ihk_mc_pt_set_pte(%p,%p,%lx,%lx,%x):"
-				"page size. %d %lx\n",
-				pt, ptep, pgsize, phys, attr, error, *ptep);
-		panic("ihk_mc_pt_set_pte:page size");
-		goto out;
-	}
-
-	x86_pte_store_result(ptep, entry);
-	error = 0;
-out:
+	error = x86_pt_set_pte_body_result(pt, ptep, pgsize, phys, attr,
+			ATTR_MASK, use_1gb_page, x86_pt_set_pte_log_bridge,
+			x86_pt_set_pte_panic_bridge);
 	dkprintf("ihk_mc_pt_set_pte(%p,%p,%lx,%lx,%x): %d %lx\n",
 			pt, ptep, pgsize, phys, attr, error, *ptep);
 	return error;

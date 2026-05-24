@@ -129,6 +129,38 @@ int sysfs_pointer_missing_result(uintptr_t ptr);
 int sysfs_should_call_show_result(uintptr_t show);
 int sysfs_should_call_store_result(uintptr_t store);
 int sysfs_should_call_release_result(uintptr_t release);
+typedef ssize_t (*sysfss_show_fn_t)(void *ops, void *instance, void *buf,
+				    size_t bufsize);
+typedef ssize_t (*sysfss_store_fn_t)(void *ops, void *instance, void *buf,
+				     size_t size);
+typedef void (*sysfss_release_fn_t)(void *ops, void *instance);
+typedef int (*sysfss_send_fn_t)(int msg, int err, long arg1, long arg2);
+typedef void (*sysfss_packet_show_fn_t)(long nodeh, void *ops,
+					void *instance);
+typedef void (*sysfss_packet_store_fn_t)(long nodeh, void *ops,
+					 void *instance, size_t size);
+typedef void (*sysfss_packet_release_fn_t)(long nodeh, void *ops,
+					   void *instance);
+int sysfss_req_show_body_result(long nodeh, void *ops, void *instance,
+				void *data_buf, size_t data_bufsize,
+				sysfss_show_fn_t show_fn,
+				sysfss_send_fn_t send_fn, ssize_t *ssizep,
+				int *packet_errp);
+int sysfss_req_store_body_result(long nodeh, void *ops, void *instance,
+				 void *data_buf, size_t size,
+				 sysfss_store_fn_t store_fn,
+				 sysfss_send_fn_t send_fn, ssize_t *ssizep,
+				 int *packet_errp);
+int sysfss_req_release_body_result(long nodeh, void *ops, void *instance,
+				   sysfss_release_fn_t release_fn,
+				   sysfss_send_fn_t send_fn,
+				   int *packet_errp);
+int sysfss_packet_handler_body_result(int msg, int error, long arg1,
+				      long arg2, long arg3,
+				      sysfss_packet_show_fn_t show_fn,
+				      sysfss_packet_store_fn_t store_fn,
+				      sysfss_packet_release_fn_t release_fn,
+				      int *kindp);
 
 unsigned long procfs_mem_reason_result(int readwrite);
 int procfs_mem_chunk_size_result(unsigned long offset, unsigned long left);

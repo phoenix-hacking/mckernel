@@ -332,6 +332,10 @@ int strict_strtoll(const char *cp, unsigned int base, long long *res)
 EXPORT_SYMBOL(strict_strtoll);
 #endif /* MCKERNEL_RUST_NUMPARSE */
 
+#ifdef MCKERNEL_RUST_NUMPARSE
+extern int skip_atoi_result(const char **s);
+#define skip_atoi skip_atoi_result
+#else
 static int skip_atoi(const char **s)
 {
 	int i=0;
@@ -340,7 +344,16 @@ static int skip_atoi(const char **s)
 		i = i*10 + *((*s)++) - '0';
 	return i;
 }
+#endif
 
+#ifdef MCKERNEL_RUST_NUMPARSE
+extern char *put_dec_trunc_result(char *buf, unsigned q);
+extern char *put_dec_full_result(char *buf, unsigned q);
+extern char *put_dec_result(char *buf, unsigned long long num);
+#define put_dec_trunc put_dec_trunc_result
+#define put_dec_full put_dec_full_result
+#define put_dec put_dec_result
+#else
 /* Decimal conversion is by far the most typical, and is used
  * for /proc and /sys data. This directly impacts e.g. top performance
  * with many processes running. We optimize it for speed
@@ -438,6 +451,7 @@ static char* __attribute__((noinline))
 		buf = put_dec_full(buf, rem);
 	}
 }
+#endif /* MCKERNEL_RUST_NUMPARSE */
 
 #define ZEROPAD	1		/* pad with zero */
 #define SIGN	2		/* unsigned/signed long */
@@ -480,6 +494,11 @@ struct printf_spec {
 	int			qualifier;
 };
 
+#ifdef MCKERNEL_RUST_NUMPARSE
+extern char *number_result(char *buf, char *end, unsigned long long num,
+			struct printf_spec spec);
+#define number number_result
+#else
 static char *number(char *buf, char *end, unsigned long long num,
 			struct printf_spec spec)
 {
@@ -596,7 +615,13 @@ static char *number(char *buf, char *end, unsigned long long num,
 	}
 	return buf;
 }
+#endif /* MCKERNEL_RUST_NUMPARSE */
 
+#ifdef MCKERNEL_RUST_NUMPARSE
+extern char *string_result(char *buf, char *end, char *s,
+			struct printf_spec spec);
+#define string string_result
+#else
 static char *string(char *buf, char *end, char *s, struct printf_spec spec)
 {
 	int len, i;
@@ -625,6 +650,7 @@ static char *string(char *buf, char *end, char *s, struct printf_spec spec)
 	}
 	return buf;
 }
+#endif /* MCKERNEL_RUST_NUMPARSE */
 
 static char *symbol_string(char *buf, char *end, void *ptr,
 				struct printf_spec spec, char ext)
@@ -689,6 +715,10 @@ static char *pointer(const char *fmt, char *buf, char *end, void *ptr,
 	return number(buf, end, (unsigned long) ptr, spec);
 }
 
+#ifdef MCKERNEL_RUST_NUMPARSE
+extern int format_decode_result(const char *fmt, struct printf_spec *spec);
+#define format_decode format_decode_result
+#else
 /*
  * Helper function to decode printf style format.
  * Each call decode a token from the format and return the
@@ -891,6 +921,7 @@ qualifier:
 
 	return ++fmt - start;
 }
+#endif /* MCKERNEL_RUST_NUMPARSE */
 
 /**
  * vsnprintf - Format a string and place it in a buffer

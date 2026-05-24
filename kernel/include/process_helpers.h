@@ -6,13 +6,77 @@
 
 struct list_head;
 struct mckfd;
+struct memobj;
+struct process_vm;
+struct rb_root;
 struct vm_range;
+
+typedef struct vm_range *(*process_add_range_alloc_fn_t)(unsigned long size);
+typedef void (*process_add_range_free_fn_t)(struct vm_range *range);
+typedef int (*process_add_range_insert_fn_t)(struct process_vm *vm,
+					     struct vm_range *range);
+typedef int (*process_add_range_update_fn_t)(struct process_vm *vm,
+					     struct vm_range *range,
+					     unsigned long phys,
+					     unsigned long attr);
+typedef void (*process_add_range_remove_fn_t)(struct process_vm *vm,
+					      unsigned long start,
+					      unsigned long end);
+typedef void (*process_add_range_mark_xpmem_fn_t)(struct vm_range *range);
+typedef void (*process_add_range_memclear_fn_t)(unsigned long phys,
+						unsigned long bytes);
+typedef void (*process_add_range_log_fn_t)(int event, int rc,
+					   unsigned long start,
+					   unsigned long end);
+typedef void (*process_vm_range_insert_log_fn_t)(int event,
+						 struct process_vm *vm,
+						 struct vm_range *newrange,
+						 struct vm_range *range);
+typedef void (*process_vm_range_insert_dump_fn_t)(struct process_vm *vm);
+
+#define PROCESS_ADD_RANGE_MAP_SKIP 0
+#define PROCESS_ADD_RANGE_MAP_UPDATE 1
+#define PROCESS_ADD_RANGE_MAP_MARK_XPMEM 2
+#define PROCESS_ADD_RANGE_MAP_DEMAND 3
+
+#define PROCESS_ADD_RANGE_LOG_ALLOC_FAILED 1
+#define PROCESS_ADD_RANGE_LOG_INSERT_FAILED 2
+#define PROCESS_ADD_RANGE_LOG_PREP_FAILED 3
+#define PROCESS_ADD_RANGE_LOG_DEMAND 4
+
+#define PROCESS_VM_RANGE_INSERT_LOG_OVERLAP 1
+#define PROCESS_VM_RANGE_INSERT_LOG_SUCCESS 2
 
 int process_split_pgshift_result(int pgshift, uintptr_t addr);
 int process_add_range_bounds_result(unsigned long user_start,
 				    unsigned long user_end,
 				    unsigned long start,
 				    unsigned long end);
+int process_add_range_init_result(struct vm_range *range, unsigned long start,
+				  unsigned long end, unsigned long flag,
+				  void *memobj, off_t offset, int pgshift,
+				  void *private_data);
+int process_add_range_mapping_result(unsigned long phys, unsigned long flag,
+				     unsigned long range_flag,
+				     unsigned long *attrp,
+				     int *memclearp);
+int process_add_range_orchestrate_result(
+	struct process_vm *vm, unsigned long range_size, unsigned long start,
+	unsigned long end, unsigned long phys, unsigned long flag,
+	struct memobj *memobj, off_t offset, int pgshift, void *private_data,
+	struct vm_range **rp, process_add_range_alloc_fn_t alloc_fn,
+	process_add_range_free_fn_t free_fn,
+	process_add_range_insert_fn_t insert_fn,
+	process_add_range_update_fn_t update_fn,
+	process_add_range_remove_fn_t remove_fn,
+	process_add_range_mark_xpmem_fn_t mark_xpmem_fn,
+	process_add_range_memclear_fn_t memclear_fn,
+	process_add_range_log_fn_t log_fn);
+int process_vm_range_insert_result(struct rb_root *root,
+				   struct vm_range *newrange,
+				   struct process_vm *vm,
+				   process_vm_range_insert_log_fn_t log_fn,
+				   process_vm_range_insert_dump_fn_t dump_fn);
 int process_extend_up_result(unsigned long current_end,
 			     unsigned long user_end, int has_next,
 			     unsigned long next_start,

@@ -1,5 +1,5 @@
 McKernel Rust Port Plan With Controlled Verification
-Updated: 2026-05-23
+Updated: 2026-05-24
 
 Purpose
 ------------------------------------------------------------
@@ -8,6 +8,199 @@ This document records the Rust migration work completed so far and defines the
 full granular plan for porting McKernel-owned implementation code to Rust. The
 verification strategy is intentionally staged: each checkpoint tests one layer,
 has a clear success result, and stops before later layers make debugging noisy.
+
+Current QEMU boot-path status
+------------------------------------------------------------
+
+The active x86_64/Rocky validation path still uses non-reboot
+build/equivalence gates plus the existing Rocky VM boot scripts when explicitly
+approved. A QEMU setup pass on 2026-05-24 installed Rocky
+QEMU/libvirt/image/debug tooling, exposed `qemu-system-x86_64` through the
+Rocky `qemu-kvm` binary, confirmed libvirt is active, and confirmed Rust
+nightly plus LTP/XPMEM prerequisites are ready. `/dev/kvm` is not exposed in
+this environment, so QEMU boot validation must start with TCG/software
+emulation unless nested KVM is enabled. The repository still does not contain a
+system-QEMU McKernel boot harness; the existing Rocky boot scripts still rely
+on the mcreboot/VM path and were not run because reboot-capable validation
+needs explicit approval.
+
+Update 2026-05-24 standalone Rust target tracking
+------------------------------------------------------------
+
+`migration.txt` now tracks a stricter standalone Rust end-state in addition to
+the broad `overview.txt` dashboard and the strict-core ownership score. The
+standalone target means the default x86_64/Rocky kernel and required
+control-plane implementation are Rust-owned below the external/user-code
+boundary. Other users can still write C or other language code on top of the OS,
+and compatibility headers can remain, but McKernel-owned C execution bodies and
+C fallback implementations should not be required underneath that boundary.
+
+Current standalone Rust readiness is recorded as about 40% (roughly 35-45%).
+It remains lower than strict-core ownership because many default-path C bodies,
+fallbacks, wrappers, allocation/lifetime primitives, page-table mutation,
+user-copy, scheduler/futex/signal side effects, IKC exchange, and object
+lifecycle paths still need Rust ownership before the OS can fairly be called
+standalone Rust.
+
+Update 2026-05-24 wait_continued +1 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- Syscall core strict ownership 71% -> 72% by routing `wait_continued()` body
+  sequencing through Rust. Rust now owns continued-status publication,
+  main-thread versus report-thread signal-flag reap target selection,
+  continued-signal reap callback dispatch, WNOWAIT preservation through the
+  existing reap helper, and process-pid versus thread-tid return selection. C
+  keeps the wait list scans, wait locks, caller-side duplicate reap behavior,
+  scheduler behavior, and fallback implementation.
+
+Validation passed `rustfmt kernel/rust/syscall_policy.rs`, `bash -n
+kernel/rust/tests/run_equivalence.sh`, `git diff --check` for the touched
+files, `kernel/rust/tests/run_equivalence.sh` with
+`syscall_policy_helpers ok digest=32b31e4ccf384031` and the unresolved-symbol/
+SIMD gate, Rust-enabled `cmake --build /tmp/mckernel-rocky-rust --target
+mckernel.img -j2`, and C-fallback `cmake --build
+/tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`.
+
+Update 2026-05-24 waitid wrapper +2 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- Syscall core strict ownership 69% -> 71% by routing `waitid()` wrapper
+  sequencing through Rust. Rust now owns idtype-to-wait-pid validation, option
+  validation, zeroed `struct rusage` preparation, `do_wait()` callback
+  invocation, negative wait-result propagation, siginfo copyout dispatch, and
+  final waitid return shaping. C keeps the syscall ABI wrapper, raw argument
+  extraction, `do_wait()` scanning/sleeping, wait locks, the actual
+  `copy_to_user()` primitive, scheduler behavior, and fallback implementation.
+
+Validation passed `rustfmt kernel/rust/syscall_policy.rs`, `bash -n
+kernel/rust/tests/run_equivalence.sh`, `git diff --check` for the touched
+files, `kernel/rust/tests/run_equivalence.sh` with
+`syscall_policy_helpers ok digest=d0c2318108da36fc` and the unresolved-symbol/
+SIMD gate, Rust-enabled `cmake --build /tmp/mckernel-rocky-rust --target
+mckernel.img -j2`, and C-fallback `cmake --build
+/tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`.
+
+Update 2026-05-24 wait4 wrapper +2 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- Syscall core strict ownership 67% -> 69% by routing `wait4()` wrapper
+  sequencing through Rust. Rust now owns option validation, zeroed
+  `struct rusage` preparation, `do_wait()` callback invocation with `WEXITED`,
+  status copyout gating, rusage copyout gating, copyout callback dispatch, and
+  final return shaping. C keeps the syscall ABI wrapper, raw argument
+  extraction, `do_wait()` scanning/sleeping, wait locks, the actual
+  `copy_to_user()` primitive, scheduler behavior, and fallback implementation.
+
+Validation passed `rustfmt kernel/rust/syscall_policy.rs`, `bash -n
+kernel/rust/tests/run_equivalence.sh`, `git diff --check` for the touched
+files, `kernel/rust/tests/run_equivalence.sh` with
+`syscall_policy_helpers ok digest=843b24513bd01fe2` and the unresolved-symbol/
+SIMD gate, Rust-enabled `cmake --build /tmp/mckernel-rocky-rust --target
+mckernel.img -j2`, and C-fallback `cmake --build
+/tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`.
+
+Update 2026-05-24 waitid SIGCHLD siginfo +1 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- Syscall core strict ownership 66% -> 67% by routing `waitid()` SIGCHLD
+  siginfo construction and copyout callback sequencing through Rust. Rust now
+  owns the waitid siginfo eligibility gate, zeroed `siginfo_t` preparation,
+  `si_signo`/`si_code`/child PID/status population, child utime/stime
+  timeval-to-jiffy conversion, and copyout callback dispatch. C keeps the
+  syscall ABI wrapper, `do_wait()` scanning/sleeping, wait locks,
+  status/rusage production, the actual `copy_to_user()` primitive, scheduler
+  behavior, and fallback implementation.
+
+Validation passed `rustfmt kernel/rust/syscall_policy.rs`, `bash -n
+kernel/rust/tests/run_equivalence.sh`, `git diff --check` for the touched
+files, `kernel/rust/tests/run_equivalence.sh` with
+`syscall_policy_helpers ok digest=8ad93729a7427541` and the unresolved-symbol/
+SIMD gate, Rust-enabled `cmake --build /tmp/mckernel-rocky-rust --target
+mckernel.img -j2`, and C-fallback `cmake --build
+/tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`.
+
+Update 2026-05-24 host-core DMA request callback +1 completion slice
+------------------------------------------------------------
+
+The requested +50 continuation is complete with 50 broad functional points
+landed. This slice moved the final broad point in the host/control-plane row:
+
+- host/IKC/mcctrl/IHK modules 99% -> 100% by routing `ihk_dma_request()`
+  through Rust-owned channel/ops validation, request callback presence
+  handling, callback invocation, and no-callback `-EINVAL` shaping. C keeps the
+  exported ABI wrapper, C fallback, and DMA provider callback body.
+
+Validation passed `rustfmt ihk/linux/core/rust/core_helpers.rs`,
+`git diff --check` for the touched host and smoke files,
+`kernel/rust/tests/run_equivalence.sh`, Rust-linked `cmake --build
+/tmp/mckernel-rocky-rust --target ihk_ko -j2`, C-fallback `cmake --build
+/tmp/mckernel-rocky-c-fallback --target ihk_ko -j2`,
+`python3 -m py_compile scripts/rust-ownership-report.py`,
+`scripts/rust-ownership-report.py --check-dashboard overview.txt
+--check-dashboard overview2.txt --top 5`, and `git diff --check`.
+C still owns device allocation, memory registration, file I/O,
+waits/callbacks beyond the bounded DMA dispatcher, broader IKC exchange
+mutation, broad allocation/lifetime ownership, and kernel object lifecycle.
+
+Update 2026-05-24 XPMEM/SysV shm/memobj ABI-layout +13 slice
+------------------------------------------------------------
+
+The requested +50 continuation is now +49 broad functional points landed, with
+1 broad point remaining. This slice closed the currently scoped x86_64/Rocky
+ABI/layout foundation row:
+
+- ABI/layout foundation 87% -> 100% by adding Rust/C compile-time layout
+  mirrors for low-level `ihk_rwlock`, `kref`, rbtree augmentation callbacks,
+  ftrace branch-data records, `memobj_ops`, `memobj`, SysV shm limit/info and
+  lock-user state, and the XPMEM ID/hash/thread-group/segment/access-permit/
+  partition/permission/attachment object graph.
+
+Validation passed `rustfmt kernel/rust/abi.rs`, `git diff --check --
+kernel/rust/abi.rs kernel/rust/abi_checks.c`, Rust-enabled `cmake --build
+/tmp/mckernel-rocky-rust --target mckernel.img -j2`, the full equivalence
+suite with `object_helpers ok digest=5aa2610a74119a37`, C-fallback
+`cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`,
+`python3 -m py_compile scripts/rust-ownership-report.py`,
+`scripts/rust-ownership-report.py --check-dashboard overview.txt
+--check-dashboard overview2.txt --top 5`, and `git diff --check`.
+C still owns XPMEM attach/detach, SysV shm lifetime, memobj refcounting,
+page I/O, ftrace accounting, rbtree mutation, locking primitives,
+allocation/free, user-copy, object lifecycle side effects, and fallback
+implementation.
+
+Update 2026-05-24 x86 CPU-local/sysfs/profile ABI-layout +5 slice
+------------------------------------------------------------
+
+The requested +50 continuation is now +36 broad functional points landed, with
+14 broad points remaining. This slice moved another core ABI/layout foundation:
+
+- ABI/layout foundation 82% -> 87% by adding Rust/C compile-time layout
+  mirrors for the x86 CPU-local page (`struct x86_cpu_local_variables`),
+  x86 kernel context (`ihk_mc_kernel_context_t`), TLS `user_desc`, sysfs
+  operation callbacks/handle/bitmap parameters, `itimerval`, and
+  `profile_event`.
+
+Validation passed `rustfmt kernel/rust/abi.rs`, `bash -n
+kernel/rust/tests/run_equivalence.sh`, `git diff --check --
+kernel/rust/abi.rs kernel/rust/abi_checks.c`, Rust-enabled `cmake --build
+/tmp/mckernel-rocky-rust --target mckernel.img -j2`, the full equivalence
+suite with `object_helpers ok digest=5aa2610a74119a37`, and C-fallback
+`cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`.
+C still owns CPU-local stack switching, GDT/TSS mutation, TLS setup, sysfs
+callback execution, profile accumulation, timer delivery, copy paths, and
+fallback implementation.
 
 Definition of "fully ported"
 ------------------------------------------------------------
@@ -28,6 +221,303 @@ The target end state is:
 - Host/user components are ported where technically supportable by the target
   kernel and toolchain. If external Rust Linux modules are not supported, keep a
   small C module shim and move pure logic behind C-callable Rust interfaces.
+
+Update 2026-05-24 coredump/uio ABI-layout +4 and sysfs packet-dispatch +3 strict-core slice
+------------------------------------------------------------
+
+The requested +50 continuation is now +31 broad functional points landed, with
+19 broad points remaining. This slice moved both broad foundation ownership and
+strict sysfs dispatch ownership:
+
+- ABI/layout foundation 78% -> 82% by adding Rust/C compile-time layout
+  mirrors for ELF core headers, program headers, note headers, `elf_siginfo`,
+  `prstatus64_timeval`, `elf_prstatus64`, `elf_prpsinfo64`, and `iovec`.
+- procfs/sysfs/xpmem/file objects strict ownership 64% -> 67% by routing sysfs
+  show/store/release request dispatch through Rust-owned
+  `sysfss_packet_handler_body_result()` with C fallback: request-kind
+  classification, typed callback selection, show/store/release callback
+  dispatch, store-size publication from the incoming packet error field, and
+  unknown-message classification.
+
+Validation passed `rustfmt kernel/rust/object_helpers.rs kernel/rust/abi.rs`,
+`bash -n kernel/rust/tests/run_equivalence.sh`, Rust-enabled
+`cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`, the full
+equivalence suite with `object_helpers ok digest=5aa2610a74119a37`, and
+C-fallback `cmake --build /tmp/mckernel-rocky-c-fallback --target
+mckernel.img -j2`. C still owns coredump note generation, architecture
+register capture, process-memory dumping, user-vector walking, copy paths, the
+public sysfs IKC handler wrapper, unknown-message logging, callback bodies, raw
+IKC send behavior, global buffer lifetime, allocation/free, sysfs path
+formatting, busy waits, host-side object creation, user-copy, and fallback
+implementation.
+
+Update 2026-05-24 active target clarification and sysfs response-body strict-core slice
+------------------------------------------------------------
+
+The live continuation target is +50 aggregate broad dashboard points, not +32.
+The current broad movement is +50/50 and the continuation target is complete.
+Older `+32` references in this plan are historical 32/50 intermediate
+checkpoints from a completed prior +50 continuation.
+
+This slice does not add broad dashboard points because the
+procfs/sysfs/xpmem/file-object row is already 100%, but it moves strict
+`migration.txt` ownership:
+
+- procfs/sysfs/xpmem/file objects strict ownership 60% -> 64% by routing sysfs
+  show/store/release response-body sequencing through Rust-owned
+  `sysfss_req_show_body_result()`, `sysfss_req_store_body_result()`, and
+  `sysfss_req_release_body_result()` with C fallbacks: default ssize/error
+  shaping, optional callback dispatch, response packet msg/err/arg
+  publication, send callback dispatch, and output publication.
+
+Validation passed `rustfmt kernel/rust/object_helpers.rs`,
+`bash -n kernel/rust/tests/run_equivalence.sh`, Rust-enabled
+`cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`, the full
+equivalence suite with `object_helpers ok digest=7cd4dc50fb2b3740`,
+C-fallback `cmake --build /tmp/mckernel-rocky-c-fallback --target
+mckernel.img -j2`, `python3 -m py_compile scripts/rust-ownership-report.py`,
+and `scripts/rust-ownership-report.py --check-dashboard overview.txt
+--check-dashboard overview2.txt --top 5`. C still owns callback bodies, the
+actual `ihk_ikc_send()` primitive, logging, global buffer lifetime,
+packet-handler dispatch, allocation/free, sysfs path formatting, busy waits,
+host-side object creation, user-copy, and fallback implementation.
+
+Update 2026-05-24 sigaltstack +3 verified strict-core slice
+------------------------------------------------------------
+
+This slice does not add broad dashboard points because Syscall Core is already
+100%, but it moves strict `migration.txt` ownership:
+
+- Syscall Core strict ownership 63% -> 66% by routing `sigaltstack()` body
+  sequencing through Rust-owned `sigaltstack_body_result()` with C fallback:
+  optional old-stack copyout, optional new-stack copyin, validation,
+  disabled-stack normalization, and thread `sigstack` mutation.
+
+Validation passed `rustfmt kernel/rust/syscall_policy.rs`,
+`bash -n kernel/rust/tests/run_equivalence.sh`, `git diff --check`, the full
+equivalence suite with `syscall_policy_helpers ok digest=93c7cdec3b0f3148`,
+Rust-enabled `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img
+-j2`, and C-fallback `cmake --build /tmp/mckernel-rocky-c-fallback --target
+mckernel.img -j2`. C still owns the syscall ABI wrapper, current-thread
+lookup, actual user-copy primitive callbacks, top-level syscall dispatch,
+Linux forwarding, signal delivery, and fallback implementation.
+
+Update 2026-05-24 sysfs control-plane ABI-layout +4 verified active +50 slice
+------------------------------------------------------------
+
+The requested +50 continuation is now +27 broad functional points landed, with
+23 remaining. This slice closed another Rocky control-plane ABI/layout
+prerequisite:
+
+- ABI/layout foundation 74% -> 78% by adding Rust/C compile-time layout
+  mirrors for sysfs create, mkdir, symlink, lookup, unlink, and setup request
+  packets.
+
+Validation passed `rustfmt kernel/rust/abi.rs`,
+`bash -n kernel/rust/tests/run_equivalence.sh`, the full equivalence suite with
+`syscall_policy_helpers ok digest=93c7cdec3b0f3148`, Rust-enabled
+`cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`,
+C-fallback `cmake --build /tmp/mckernel-rocky-c-fallback --target
+mckernel.img -j2`, `python3 -m py_compile scripts/rust-ownership-report.py`,
+`scripts/rust-ownership-report.py --check-dashboard overview.txt
+--check-dashboard overview2.txt --top 5`, and `git diff --check`. C still
+owns sysfs allocation, path formatting, IKC sends, busy waits, host-side object
+creation, show/store callbacks, release handling, and fallback implementation.
+
+Update 2026-05-24 x86 register/FPU save-state ABI-layout +4 verified active +50 slice
+------------------------------------------------------------
+
+The requested +50 continuation is now +23 broad functional points landed, with
+27 remaining. This slice closed another x86 ABI/layout prerequisite:
+
+- ABI/layout foundation 70% -> 74% by adding Rust/C compile-time layout
+  mirrors for x86 descriptor pointers, `tss64`, `i387_fxsave_struct`, YMM high
+  halves, LWP save areas, bound-register state, `xsave_hdr_struct`, and
+  packed/aligned `xsave_struct` register/FPU save-state layout.
+
+Validation passed `rustfmt kernel/rust/abi.rs`,
+`bash -n kernel/rust/tests/run_equivalence.sh`, the full equivalence suite with
+`syscall_policy_helpers ok digest=93c7cdec3b0f3148`, Rust-enabled
+`cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`,
+C-fallback `cmake --build /tmp/mckernel-rocky-c-fallback --target
+mckernel.img -j2`, `python3 -m py_compile scripts/rust-ownership-report.py`,
+`scripts/rust-ownership-report.py --check-dashboard overview.txt
+--check-dashboard overview2.txt --top 5`, and `git diff --check`. C still
+owns context switching, ptrace register access, signal-frame FPU save/restore,
+XSAVE/XRSTOR execution, architecture trap behavior, and fallback
+implementation.
+
+Update 2026-05-24 syscall/control-plane ABI-layout +4 verified active +50 slice
+------------------------------------------------------------
+
+The requested +50 continuation is now +19 broad functional points landed, with
+31 remaining. This slice closed another core ABI/layout prerequisite:
+
+- ABI/layout foundation 66% -> 70% by adding Rust/C compile-time layout
+  mirrors for `ikc_scd_init_param`, `syscall_post`, coredump `coretable`,
+  procfs request/file descriptors, `sysinfo`, `tod_data_s`, CPU mapping
+  requests, perf-control descriptors, UTI attributes/context, and
+  `move_pages_smp_req`.
+
+Validation passed `rustfmt kernel/rust/abi.rs`,
+`bash -n kernel/rust/tests/run_equivalence.sh`, the full equivalence suite with
+`syscall_policy_helpers ok digest=93c7cdec3b0f3148`, Rust-enabled
+`cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`,
+C-fallback `cmake --build /tmp/mckernel-rocky-c-fallback --target
+mckernel.img -j2`, `python3 -m py_compile scripts/rust-ownership-report.py`,
+`scripts/rust-ownership-report.py --check-dashboard overview.txt
+--check-dashboard overview2.txt --top 5`, and `git diff --check`. C still
+owns procfs buffer mutation, perf-control side effects, UTI scheduling, time
+publication, move-pages page-table mutation, CPU mapping exchange, user-copy,
+locks, IKC exchange, callback bodies, and fallback implementation.
+
+Update 2026-05-24 signal/futex/register ABI-layout +4 verified active +50 slice
+------------------------------------------------------------
+
+The requested +50 continuation is now +15 broad functional points landed, with
+35 remaining. This slice closed another core ABI/layout prerequisite:
+
+- ABI/layout foundation 62% -> 66% by adding Rust/C compile-time layout
+  mirrors for x86 signal action, altstack, `siginfo_t`, `signalfd_siginfo`,
+  ptrace `user_regs_struct`, `user_fpregs_struct`, `struct user`, futex
+  hash-bucket/key/queue layouts, and the key offsets embedded in process/thread
+  state.
+
+Validation passed `rustfmt kernel/rust/abi.rs`, `git diff --check`,
+`kernel/rust/tests/run_equivalence.sh` with
+`printf_decimal ok digest=ba6e3675fed38849`, Rust-enabled
+`cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`, and
+C-fallback `cmake --build /tmp/mckernel-rocky-c-fallback --target
+mckernel.img -j2`. The first Rust-enabled image build failed because
+`abi_checks.c` included `elf.h` without the ELF typedef context; that failure
+was recorded in `kernel.log`, and the check was narrowed to the kernel-owned
+ptrace/user-register structs available through `process.h`. C still owns
+top-level syscall dispatch, user-copy, signal delivery, actual register access
+primitives, futex key lifetime, wait/wake side effects, scheduler handoff, lock
+primitives, and IKC send behavior.
+
+Update 2026-05-24 shared formatting +4 verified active +50 slice
+------------------------------------------------------------
+
+The requested +50 continuation is now +4 broad functional points landed, with
+46 remaining. This slice moved the central numeric formatter body rather than
+another leaf digit helper:
+
+- Shared primitives 89% -> 93% by routing `number()` sign, prefix, width,
+  precision, zero/space padding, octal/hex/decimal digit staging, bounded
+  output writes, and returned pointer advancement through Rust-owned
+  `number_result()` when Rust numparse helpers are enabled.
+
+Validation initially failed because the first Rust implementation used checked
+slice indexing and emitted a `core::panicking::panic_bounds_check` reference;
+that failure and fix are recorded in `kernel.log`. After switching the
+temporary digit staging to raw pointer writes over uninitialized stack storage,
+validation passed `rustfmt kernel/rust/numparse.rs`,
+`bash -n kernel/rust/tests/run_equivalence.sh`, and the full equivalence suite
+with `printf_decimal ok digest=9b42843c73ef2870`. C still owns format-token
+decoding, string and pointer extension dispatch, va_arg extraction, `%n`
+writes, final NUL termination, and the surrounding `vsnprintf()` loop.
+
+Update 2026-05-24 shared format-decoder +4 verified active +50 slice
+------------------------------------------------------------
+
+The requested +50 continuation is now +8 broad functional points landed, with
+42 remaining. This slice moved the `vsnprintf()` format-token parser body:
+
+- Shared primitives 93% -> 97% by routing `format_decode()` literal-span,
+  flag, field-width, precision, qualifier, conversion-type, base, signedness,
+  and width/precision continuation-state parsing through Rust-owned
+  `format_decode_result()` when Rust numparse helpers are enabled.
+
+Validation passed `rustfmt kernel/rust/numparse.rs`,
+`bash -n kernel/rust/tests/run_equivalence.sh`, and the full equivalence suite
+with `printf_decimal ok digest=9b42843c73ef2870`. C still owns the surrounding
+`vsnprintf()` loop, va_arg extraction, string and pointer extension dispatch,
+`%n` writes, final NUL termination, and output buffer lifetime.
+
+Update 2026-05-24 shared string-format +3 verified active +50 slice
+------------------------------------------------------------
+
+The requested +50 continuation is now +11 broad functional points landed, with
+39 remaining. This slice completes the broad shared-primitives dashboard row:
+
+- Shared primitives 97% -> 100% by routing `string()` `%s` output formatting
+  through Rust-owned `string_result()` when Rust numparse helpers are enabled:
+  NULL-string substitution, precision-bounded length selection, left/right
+  padding, bounded output writes, and returned pointer advancement.
+
+Validation passed `rustfmt kernel/rust/numparse.rs`,
+`bash -n kernel/rust/tests/run_equivalence.sh`, and the full equivalence suite
+with `printf_decimal ok digest=ba6e3675fed38849`. C still owns the surrounding
+`vsnprintf()` loop, va_arg extraction, pointer extension dispatch, `%n` writes,
+final NUL termination, and output buffer lifetime.
+
+Update 2026-05-24 ABI/shared-primitives +7 verified prior +50 slice
+------------------------------------------------------------
+
+The prior +50 continuation reached +39 broad functional points landed, with 11
+remaining. This slice moved two core prerequisites:
+
+- ABI/layout foundation 54% -> 58% by adding Rust/C compile-time layout mirrors
+  for `struct pager_create_result`, `struct pager_map_result`,
+  `struct ihk_mc_memory_area`, `struct ihk_mc_memory_node`,
+  `struct ihk_mc_pa_ops`, `struct tlb_flush_entry`, and
+  `struct ihk_mc_page_cache_header`.
+- Shared primitives 84% -> 87% by routing the `vsnprintf()` decimal digit
+  emission path through Rust-owned `put_dec_trunc_result()`,
+  `put_dec_full_result()`, and `put_dec_result()` when Rust numparse helpers
+  are enabled.
+
+Validation passed `rustfmt kernel/rust/abi.rs kernel/rust/numparse.rs`,
+`bash -n kernel/rust/tests/run_equivalence.sh`, the full equivalence suite with
+`printf_decimal ok digest=31ce3c0f3ecf93c1`, and both C-fallback and
+Rust-enabled `mckernel.img` builds. C still owns variadic `printf` format
+parsing, width/sign/precision buffer policy, output orchestration, and broader
+private lifecycle layout coverage.
+
+Update 2026-05-24 CPU-local lifecycle +7 verified prior +50 slice
+------------------------------------------------------------
+
+The prior +50 continuation reached +46 broad functional points landed, with 4
+remaining. This slice moved a CPU-local core prerequisite and one bounded
+CPU-local execution body:
+
+- ABI/layout foundation 58% -> 62% by adding Rust/C compile-time layout mirrors
+  for `struct rusage_percpu`, kmalloc cache/header metadata, SMP function call
+  packets, backlog entries, and the full x86_64 `struct cpu_local_var` layout.
+- Page allocator 95% -> 98% by routing CPU-local storage initialization,
+  `get_cpu_local_var()` pointer selection, and normal preempt counter inc/dec
+  through Rust with C fallbacks.
+
+Validation passed `rustfmt kernel/rust/abi.rs kernel/rust/cls_helpers.rs`,
+`bash -n kernel/rust/tests/run_equivalence.sh`, the full equivalence suite with
+`cls_helpers ok digest=3020b4b56921f7dc`, and both C-fallback and Rust-enabled
+`mckernel.img` builds. C still owns the actual allocation/free primitives,
+MCS/interrupt primitives, logging callbacks, IKC send side effects,
+deferred-zero worker timing, FUGAKU debug preempt behavior, and broader
+allocator lifetime/mutation.
+
+Update 2026-05-24 kmalloc/shared-parser +4 verified prior +50 completion slice
+------------------------------------------------------------
+
+The prior +50 continuation reached +50 broad functional points landed, so the
+adjusted continuation target is complete. This slice moved one bounded
+allocator mutation cluster and one shared parser body:
+
+- Shared primitives 87% -> 89% by routing `skip_atoi()` format
+  width/precision pointer advancement through Rust-owned `skip_atoi_result()`
+  when Rust numparse helpers are enabled.
+- Page allocator 98% -> 100% by routing kmalloc chunk header initialization,
+  sorted free-list insertion, and adjacent free-chunk consolidation through
+  Rust-owned helpers with C fallbacks.
+
+Validation passed `rustfmt kernel/rust/mem_helpers.rs kernel/rust/numparse.rs`,
+`bash -n kernel/rust/tests/run_equivalence.sh`, the full equivalence suite with
+`kmalloc_helpers ok digest=54cdbef90d9c7f07`, and both C-fallback and
+Rust-enabled `mckernel.img` builds. C still owns public `kmalloc()`/`kfree()`
+entry sequencing, heap metadata lifetime, the surrounding variadic formatter
+parser, output orchestration, locking context, primitive allocation/free
+behavior, and fallback implementations.
 
 Completed migration work
 ------------------------------------------------------------
@@ -65,6 +555,10 @@ ABI and layout foundation
   `struct address_space`, `struct vm_range`, `struct vm_range_numa_policy`,
   `struct vm_regions`, and `struct process_vm` before moving more process/VM
   and x86_64 memory-management bodies to Rust.
+- Added Rust ABI mirrors plus C/Rust layout checks for pager create/map result
+  packets and McKernel memory-control structures: `struct ihk_mc_memory_area`,
+  `struct ihk_mc_memory_node`, `struct ihk_mc_pa_ops`,
+  `struct tlb_flush_entry`, and `struct ihk_mc_page_cache_header`.
 - Preserved public C headers, symbol names, syscall numbers, ioctl values, IKC
   packet formats, and linker-visible entry points.
 
@@ -7305,3 +7799,662 @@ Update 2026-05-23 00:10 EDT process VM stack-start +3 verified post-campaign sli
     IHK memory-registration/IKC-exchange probes. Do not take page-table
     mutation, broad lifetime teardown, wake/schedule side effects, or IKC
     exchange mutation without stronger runtime coverage.
+
+Update 2026-05-23 x86/page/futex +10 verified continuation slice toward revised +35 goal:
+- Implemented:
+  - Added Rust-owned page refcount/hash lifecycle helpers for `page_map()`
+    count increments, locked `page_unmap()` count/list deletion,
+    phys-to-page hash traversal, hash insertion initialization, and page-hash
+    bucket init/count.
+  - Added Rust-owned `__ihk_pagealloc_init()` orchestration for layout,
+    allocation callback, descriptor initialization, lock callback, and tail-map
+    reservation.
+  - Added Rust-owned futex table initialization orchestration for allocation
+    callback, global pointer publication, and bucket table initialization.
+  - Preserved C fallbacks and kept external allocation/lock primitives as C
+    callbacks.
+- Validation:
+  - `rustfmt kernel/rust/page_helpers.rs kernel/rust/page_alloc.rs kernel/rust/sched_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `python3 -m py_compile scripts/rust-ownership-report.py` passed.
+  - The first
+    `scripts/rust-ownership-report.py --check-dashboard overview.txt --check-dashboard overview2.txt --top 25`
+    rerun failed because a new prose line in `overview.txt` began with an
+    exact dashboard row name and was parsed as a duplicate row. The failure is
+    recorded in `kernel.log`; after rewording that prose and updating the
+    report's functional percent map, the same command passed.
+  - The full `kernel/rust/tests/run_equivalence.sh` passed, including
+    `page_helpers ok digest=83a48b282c82457c`,
+    `sched_helpers ok digest=cf493b9170405954`,
+    `page_alloc_bitmap ok digest=91790b3aa3a68a22`, and
+    `rust object unresolved symbols and SIMD checks ok`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed with the existing jobserver warning; it linked `mckernel.img` and
+    exited zero.
+- Estimates:
+  - x86_64 memory management: 84% -> 88% (+4).
+  - Page allocator: 74% -> 77% (+3).
+  - Scheduler/timers/wait/futex: 88% -> 91% (+3).
+  - Revised +35 goal progress: +10 verified aggregate points so far, +25
+    remaining.
+  - Strict `migration.txt` movement: about +8 strict-core points, moving the
+    strict x86_64 core estimate to about 52-62%.
+  - Post-campaign verified progress is now +123 aggregate functional points
+    toward actual 100% completion. Non-arm64 dashboard average is now 86.3%;
+    McKernel-owned core row average is now 84.5%. Total distance to 100 is
+    165 non-arm64 aggregate functional points, or 124 McKernel-owned core-row
+    points. Mechanical LOC audit is 17.9% Rust implementation with 21,938 Rust
+    implementation LOC, 100,931 C implementation-debt LOC, and 27,975
+    C/header boundary LOC; it remains an inventory signal, not the progress
+    score.
+- Honest remaining C ownership:
+  - C still owns external allocation and lock primitives, page-hash locks and
+    logging, actual page frees, page-table mutation, allocator lifetime,
+    futex wake/wait/requeue side effects, scheduler handoff, user-copy, and
+    broad runtime lifetime behavior.
+
+Update 2026-05-23 page-hash/futex-hash +5 verified continuation slice toward revised +35 goal:
+- Implemented:
+  - Added Rust-owned page-hash orchestration helpers for locked count-all
+    traversal, locked `phys_to_page()` lookup, locked
+    `phys_to_page_insert_hash()` lookup/allocation-callback/insert, and locked
+    `page_unmap()` orchestration.
+  - Routed `page_hash_count_pages()`, `phys_to_page()`,
+    `phys_to_page_insert_hash()`, and `page_unmap()` through those helpers
+    while preserving C fallbacks and keeping the actual spinlock and allocation
+    primitives as callbacks.
+  - Added Rust-owned futex hash-bucket selection with a C key-hash callback and
+    routed `hash_futex()` through it.
+  - Extended page-helper and scheduler-helper equivalence coverage for the new
+    orchestration paths.
+- Validation:
+  - `rustfmt kernel/rust/page_helpers.rs kernel/rust/sched_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `python3 -m py_compile scripts/rust-ownership-report.py` passed.
+  - The full `kernel/rust/tests/run_equivalence.sh` passed, including
+    `page_helpers ok digest=8487e6bc559e457d`,
+    `sched_helpers ok digest=1e4506b505343675`,
+    `page_alloc_bitmap ok digest=91790b3aa3a68a22`, and
+    `rust object unresolved symbols and SIMD checks ok`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed with the existing jobserver warning; it linked `mckernel.img` and
+    exited zero.
+- Estimates:
+  - x86_64 memory management: 88% -> 91% (+3).
+  - Scheduler/timers/wait/futex: 91% -> 93% (+2).
+  - Revised +35 goal progress: +15 verified aggregate points so far, +20
+    remaining.
+  - Strict `migration.txt` movement: about +13 strict-core points total for
+    this continuation, moving the strict x86_64 core estimate to about 54-64%.
+  - Post-campaign verified progress is now +128 aggregate functional points
+    toward actual 100% completion. Non-arm64 dashboard average is now 86.7%;
+    McKernel-owned core row average is now 85.1%. Total distance to 100 is
+    160 non-arm64 aggregate functional points, or 119 McKernel-owned core-row
+    points. Mechanical LOC audit is 18.0% Rust implementation with 22,116 Rust
+    implementation LOC, 101,089 C implementation-debt LOC, and 27,981
+    C/header boundary LOC; it remains an inventory signal, not the progress
+    score.
+- Honest remaining C ownership:
+  - C still owns actual spinlock, allocation, and key-hash primitives,
+    page-hash debug logging, page frees, page-table mutation, allocator
+    lifetime, futex wake/wait/requeue side effects, scheduler handoff,
+    user-copy, and broad runtime lifetime behavior.
+
+Update 2026-05-23 page allocator alloc-orchestration +3 verified continuation slice:
+
+- Scope:
+  - Added Rust-owned `ihk_numa_alloc_pages_orchestrate_result()` to own the
+    main allocation path's CPU-cache allocation attempt, cache-hit source
+    classification, fallback to locked NUMA allocation, and missing-callback
+    failure behavior.
+  - Routed `ihk_numa_alloc_pages()` through that Rust/C fallback helper while
+    preserving the existing C ABI, logging, CPU-local variable selection,
+    interrupt primitive callbacks, and MCS lock primitive callbacks.
+  - Extended page-allocator bitmap equivalence coverage for cache-first
+    allocation, NUMA fallback allocation, callback ordering, source
+    publication, and missing callback behavior.
+- Validation:
+  - `rustfmt kernel/rust/page_alloc.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `python3 -m py_compile scripts/rust-ownership-report.py` passed.
+  - `scripts/rust-ownership-report.py --check-dashboard overview.txt --check-dashboard overview2.txt --top 25` passed.
+  - The full `kernel/rust/tests/run_equivalence.sh` passed, including
+    `page_alloc_bitmap ok digest=3644257ef714193f` and
+    `rust object unresolved symbols and SIMD checks ok`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed with the existing jobserver warning; it linked `mckernel.img` and
+    exited zero.
+- Estimates:
+  - Page allocator: 77% -> 80% (+3).
+  - Revised +35 goal progress: +18 verified aggregate points so far, +17
+    remaining.
+  - Strict `migration.txt` movement: about +16 strict-core points total for
+    this continuation, moving the strict x86_64 core estimate to about 55-65%.
+  - Post-campaign verified progress is now +131 aggregate functional points
+    toward actual 100% completion. Non-arm64 dashboard average is now 86.9%;
+    McKernel-owned core row average is now 85.5%. Total distance to 100 is
+    157 non-arm64 aggregate functional points, or 116 McKernel-owned core-row
+    points.
+- Honest remaining C ownership:
+  - C still owns CPU-local variable selection, logging, actual interrupt and
+    MCS lock primitives, actual allocation/free primitives, IKC send side
+    effects, deferred-zero worker timing, zeroed-list publication, and broader
+    allocator lifetime behavior.
+
+Update 2026-05-23 page allocator free-orchestration +3 verified continuation slice:
+
+- Scope:
+  - Added Rust-owned `ihk_numa_free_pages_orchestrate_result()` to own the
+    post-cache `ihk_numa_free_pages()` direct-versus-deferred free
+    orchestration, ignored-free classification, direct-free callback result
+    publication, and deferred-free zero-request action publication.
+  - Routed the Rust-enabled `ihk_numa_free_pages()` path through that helper
+    while preserving the existing C ABI, logging, CPU-local current/channel
+    selection, IKC send side effects, and MCS lock primitive callbacks.
+  - Added C fallback logic for the equivalence harness and logged the initial
+    missing fallback symbol failure in `kernel.log` before fixing it.
+  - Extended page-allocator bitmap equivalence coverage for direct free,
+    ignored free, and deferred free orchestration outputs.
+- Validation:
+  - Initial `kernel/rust/tests/run_equivalence.sh` failed because the C
+    fallback orchestrator referenced missing symbol
+    `__ihk_numa_free_pages_prepare`; the failure is recorded in `kernel.log`.
+  - `rustfmt kernel/rust/page_alloc.rs` passed after the fix.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed after the fix.
+  - `git diff --check` passed after the fix.
+  - `python3 -m py_compile scripts/rust-ownership-report.py` passed after
+    the fix.
+  - `scripts/rust-ownership-report.py --check-dashboard overview.txt --check-dashboard overview2.txt --top 25` passed after the fix.
+  - The full `kernel/rust/tests/run_equivalence.sh` passed after the fix,
+    including `page_alloc_bitmap ok digest=c7e535b154b79d5e` and
+    `rust object unresolved symbols and SIMD checks ok`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed after the fix.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed after the fix with the existing jobserver warning; it linked
+    `mckernel.img` and exited zero.
+- Estimates:
+  - Page allocator: 80% -> 83% (+3).
+  - Revised +35 goal progress: +21 verified aggregate points so far, +14
+    remaining.
+  - Strict `migration.txt` movement: about +19 strict-core points total for
+    this continuation, moving the strict x86_64 core estimate to about 56-66%.
+  - Post-campaign verified progress is now +134 aggregate functional points
+    toward actual 100% completion. Non-arm64 dashboard average is now 87.2%;
+    McKernel-owned core row average is now 85.9%. Total distance to 100 is
+    154 non-arm64 aggregate functional points, or 113 McKernel-owned core-row
+    points.
+- Honest remaining C ownership:
+  - C still owns CPU-local current/channel selection, logging, actual
+    interrupt and MCS lock primitives, actual allocation/free primitives, IKC
+    send side effects, deferred-zero worker timing, zeroed-list publication,
+    and broader allocator lifetime behavior.
+
+Update 2026-05-23 scheduler/futex dispatch +3 verified continuation slice:
+
+- Scope:
+  - Added Rust-owned `futex_dispatch_result()` to own top-level `futex()`
+    command decode, private/realtime flag handling, clock-realtime rejection,
+    wait/wake/requeue/wake-op callback selection, and invalid-command callback
+    routing.
+  - Routed `kernel/futex.c:futex()` through C callback bridges so C still owns
+    the side-effect bodies for wait, wake, requeue, wake-op, logging, and all
+    lock/runtime primitives.
+  - Added C fallback logic and equivalence coverage for the supported futex
+    commands, clock-realtime rejection, unsupported wait-requeue-PI routing,
+    invalid commands, and missing callback behavior.
+- Validation:
+  - `rustfmt kernel/rust/sched_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - The full `kernel/rust/tests/run_equivalence.sh` passed, including
+    `sched_helpers ok digest=78fdc3d33065184f` and
+    `rust object unresolved symbols and SIMD checks ok`.
+  - `git diff --check` passed.
+  - `python3 -m py_compile scripts/rust-ownership-report.py` passed.
+  - `scripts/rust-ownership-report.py --check-dashboard overview.txt --check-dashboard overview2.txt --top 25` passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed with the existing jobserver warning; it linked `mckernel.img` and
+    exited zero.
+- Estimates:
+  - Scheduler/timers/wait/futex: 93% -> 96% (+3).
+  - Revised +35 goal progress: +24 verified aggregate points so far, +11
+    remaining.
+  - Strict `migration.txt` movement: about +22 strict-core points total for
+    this continuation, moving the strict x86_64 core estimate to about 57-67%.
+  - Post-campaign verified progress is now +137 aggregate functional points
+    toward actual 100% completion. Non-arm64 dashboard average is now 87.4%;
+    McKernel-owned core row average is now 86.3%. Total distance to 100 is
+    151 non-arm64 aggregate functional points, or 110 McKernel-owned core-row
+    points.
+- Honest remaining C ownership:
+  - C still owns dispatch side-effect callback bodies, actual spinlock,
+    allocation, and hash primitives, futex key lifetime, user-value loads,
+    wake/requeue/wait side effects, timer queues, scheduler handoff, and
+    context switching.
+
+Update 2026-05-23 Process/VM range initialization +3 verified continuation slice:
+
+- Scope:
+  - Added Rust-owned `process_add_range_init_result()` for
+    `add_process_memory_range()` VM-range object initialization.
+  - Moved rb-node clear state, start/end/flag/memobj/objoff/pgshift/private
+    data publication, straight-start reset, and optional Tofu list
+    initialization behind the Rust helper.
+  - Routed `kernel/process.c:add_process_memory_range()` through the Rust/C
+    fallback helper while leaving allocation/free, rb-tree insertion,
+    memobj refcounting, page-table updates, XPMEM side effects, rollback,
+    user-copy, and broader VM lifetime in C.
+  - Added C fallback logic and equivalence coverage for field publication,
+    rb-node clear semantics, preserved child pointers, and null-range handling.
+- Validation:
+  - `rustfmt kernel/rust/process_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - The full `kernel/rust/tests/run_equivalence.sh` passed, including
+    `process_helpers ok digest=c8c7596d6bc6cb66` and
+    `rust object unresolved symbols and SIMD checks ok`.
+  - `git diff --check` passed.
+  - `python3 -m py_compile scripts/rust-ownership-report.py` passed.
+  - `scripts/rust-ownership-report.py --check-dashboard overview.txt --check-dashboard overview2.txt --top 25` passed.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed with the existing jobserver warning; it linked `mckernel.img` and
+    exited zero.
+- Estimates:
+  - Process/VM management: 87% -> 90% (+3).
+  - Revised +35 goal progress: +27 verified aggregate points so far, +8
+    remaining.
+  - Strict `migration.txt` movement: about +25 strict-core points total for
+    this continuation, moving the strict x86_64 core estimate to about 58-68%.
+  - Post-campaign verified progress is now +140 aggregate functional points
+    toward actual 100% completion. Non-arm64 dashboard average is now 87.7%;
+    McKernel-owned core row average is now 86.6%. Total distance to 100 is
+    148 non-arm64 aggregate functional points, or 107 McKernel-owned core-row
+    points.
+- Honest remaining C ownership:
+  - C still owns VM range allocation/free, rb-tree insertion, memobj
+    refcounting, page-table update decisions and side effects, XPMEM flag side
+    effects, rollback, user-copy, and broader VM lifetime behavior.
+
+Update 2026-05-23 Process/VM range mapping-action +3 verified continuation slice:
+
+- Scope:
+  - Added Rust-owned `process_add_range_mapping_result()` for
+    `add_process_memory_range()` map/no-map action selection.
+  - Moved NOPHYS skip, remote/uncached/normal page-table update attr
+    selection, XPMEM mark action, demand-paging logging action, PROT_NONE
+    skip, and memclear gating behind the Rust helper.
+  - Routed `kernel/process.c:add_process_memory_range()` through the Rust/C
+    fallback helper while leaving allocation/free, rb-tree insertion, memobj
+    refcounting, actual `update_process_page_table()` calls, XPMEM flag
+    mutation, memclear, rollback, user-copy, and broader VM lifetime in C.
+  - Added C fallback logic and equivalence coverage for NOPHYS, remote,
+    uncached, XPMEM, demand-paging, PROT_NONE, and normal mapping cases.
+- Validation:
+  - `rustfmt kernel/rust/process_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `python3 -m py_compile scripts/rust-ownership-report.py` passed.
+  - `scripts/rust-ownership-report.py --check-dashboard overview.txt --check-dashboard overview2.txt --top 25` passed.
+  - The full `kernel/rust/tests/run_equivalence.sh` passed, including
+    `process_helpers ok digest=df124e68726bad52` and
+    `rust object unresolved symbols and SIMD checks ok`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed with the existing jobserver warning; it linked `mckernel.img` and
+    exited zero.
+- Estimates:
+  - Process/VM management: 90% -> 93% (+3).
+  - Revised +35 goal progress: +30 verified aggregate points so far, +5
+    remaining.
+  - Strict `migration.txt` movement: about +28 strict-core points total for
+    this continuation, moving the strict x86_64 core estimate to about 59-69%.
+  - Post-campaign verified progress is now +143 aggregate functional points
+    toward actual 100% completion. Non-arm64 dashboard average is now 87.9%;
+    McKernel-owned core row average is now 87.0%. Total distance to 100 is
+    145 non-arm64 aggregate functional points, or 104 McKernel-owned core-row
+    points.
+- Honest remaining C ownership:
+  - C still owns VM range allocation/free, rb-tree insertion, memobj
+    refcounting, actual page-table update side effects, XPMEM flag mutation,
+    memclear, rollback, user-copy, and broader VM lifetime behavior.
+
+Update 2026-05-23 Process/VM add-range orchestration +5 verified continuation slice:
+
+- Scope:
+  - Added Rust-owned `process_add_range_orchestrate_result()` for the
+    post-bounds `add_process_memory_range()` body.
+  - Moved allocation-callback handling, VM range initialization,
+    insertion/update callback sequencing, insert/update failure cleanup, XPMEM
+    and demand-paging actions, memclear callback gating, and returned-range
+    publication into Rust.
+  - Routed `kernel/process.c:add_process_memory_range()` through the Rust/C
+    fallback orchestrator while leaving allocation/free callbacks,
+    `vm_range_insert()` rb-tree mutation side effects, actual
+    `update_process_page_table()` side effects, XPMEM flag mutation, memclear
+    side effects, rollback side effects, user-copy, and broader VM lifetime in
+    C.
+  - Added C fallback logic and equivalence coverage for normal success, XPMEM,
+    update failure cleanup, allocation failure, insert failure, and
+    demand-paging logging cases.
+- Validation:
+  - `rustfmt kernel/rust/process_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - `git diff --check` passed.
+  - `python3 -m py_compile scripts/rust-ownership-report.py` passed.
+  - `scripts/rust-ownership-report.py --check-dashboard overview.txt --check-dashboard overview2.txt --top 25` passed.
+  - The full `kernel/rust/tests/run_equivalence.sh` passed, including
+    `process_helpers ok digest=010895ac2df2169d` and
+    `rust object unresolved symbols and SIMD checks ok`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed with the existing jobserver warning; it linked `mckernel.img` and
+    exited zero.
+- Estimates:
+  - Process/VM management: 93% -> 98% (+5).
+  - Revised +35 goal progress: +35 verified aggregate points; target complete.
+  - Strict `migration.txt` movement: about +33 strict-core points total for
+    this continuation, moving the strict x86_64 core estimate to about 60-70%.
+  - Post-campaign verified progress is now +148 aggregate functional points
+    toward actual 100% completion. Non-arm64 dashboard average is now 88.3%;
+    McKernel-owned core row average is now 87.6%. Total distance to 100 is
+    140 non-arm64 aggregate functional points, or 99 McKernel-owned core-row
+    points.
+- Honest remaining C ownership:
+  - C still owns VM range allocation/free callbacks, rb-tree mutation side
+    effects, memobj refcounting, actual page-table update side effects, XPMEM
+    flag mutation, memclear side effects, rollback side effects, user-copy,
+    and broader VM lifetime behavior.
+
+Update 2026-05-24 x86 page-table root-lifecycle +3 verified active +50 slice:
+
+- Scope:
+  - Added Rust-owned `x86_pt_create_result()` and
+    `x86_pt_destroy_root_result()` for x86_64 page-table root lifecycle.
+  - Routed `ihk_mc_pt_create()` through Rust allocation-callback orchestration,
+    root zeroing, and kernel-half entry copy from `init_pt`.
+  - Routed `ihk_mc_pt_destroy()` through Rust root kernel-half clearing and
+    destroy-recursion callback dispatch.
+  - Kept C ownership for the actual `ihk_mc_alloc_pages()` and
+    `ihk_mc_free_pages()` primitives, recursive child-table destruction below
+    the root, `phys_to_virt()`, page-table traversal, page frees,
+    TLB-sensitive behavior, RSS updates, and user-copy.
+  - Added C fallback logic and equivalence coverage for create success,
+    allocation failure, null callback, destroy callback dispatch, and destroy
+    with no callback.
+- Validation:
+  - `rustfmt kernel/rust/x86_memory_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - The full `kernel/rust/tests/run_equivalence.sh` passed, including
+    `x86_memory_helpers ok digest=b1a9ce41d6284016` and
+    `rust object unresolved symbols and SIMD checks ok`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed with the existing jobserver warning; it linked `mckernel.img` and
+    exited zero.
+- Estimates:
+  - x86_64 memory management: 91% -> 94% (+3).
+  - Active +50 continuation progress: +17 verified aggregate points so far,
+    +33 remaining.
+  - Strict `migration.txt` movement: about +19 strict-core points total for
+    this continuation, moving the strict x86_64 core estimate to about 64-74%.
+  - Post-campaign verified progress is now +165 aggregate functional points
+    toward actual 100% completion. Non-arm64 dashboard average is now 89.8%;
+    McKernel-owned core row average is now 89.8%. Total distance to 100 is
+    123 non-arm64 aggregate functional points, or 82 McKernel-owned core-row
+    points.
+- Honest remaining C ownership:
+  - C still owns page-table allocation/free primitives, recursive child-table
+    destruction below the root, `phys_to_virt()`/free orchestration, callback
+    primitive implementations, page-table traversal orchestration, actual page
+    frees, RSS updates, mapping/free rollback behavior, TLB-sensitive flushing,
+    and user-copy.
+
+Update 2026-05-24 page allocator top-level allocation +3 verified active +50 slice:
+
+- Scope:
+  - Added Rust-owned `ihk_numa_alloc_pages_result()` for the exported
+    `ihk_numa_alloc_pages()` allocation path.
+  - Moved cache-hit logging selection, direct-allocation logging selection,
+    source-aware return shaping, and the exported allocation handoff around the
+    existing cache-first/source-selection/fallback-to-NUMA orchestration into
+    Rust.
+  - Routed `lib/page_alloc.c:ihk_numa_alloc_pages()` through the Rust/C
+    fallback helper while keeping public C ABI and fallback behavior intact.
+  - Kept C ownership for CPU-local variable selection, actual cache/tree lock
+    primitives, `ihk_mc_alloc_pages()`, MCS/interrupt primitives, logging
+    primitive bodies, allocator lifetime, zeroed-list publication timing,
+    deferred-zero worker timing, and broader allocator mutation.
+  - Added equivalence coverage for cache-hit allocation, direct NUMA
+    allocation, and failure/no-log behavior without digesting raw stack
+    pointers.
+- Validation:
+  - `rustfmt kernel/rust/page_alloc.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - The full `kernel/rust/tests/run_equivalence.sh` passed, including
+    `page_alloc_bitmap ok digest=d8ba50a90955fad2` and
+    `rust object unresolved symbols and SIMD checks ok`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed with the existing jobserver warning; it linked `mckernel.img` and
+    exited zero.
+- Estimates:
+  - Page allocator: 89% -> 92% (+3).
+  - Active +50 continuation progress: +29 verified aggregate points so far,
+    +21 remaining.
+  - Strict `migration.txt` movement: about +31 strict-core points total for
+    this continuation, with page allocator strict-core ownership at 64%.
+  - Post-campaign verified progress is now +177 aggregate functional points
+    toward actual 100% completion. Non-arm64 dashboard average is now 90.8%;
+    McKernel-owned core row average is now 91.3%. Total distance to 100 is
+    111 non-arm64 aggregate functional points, or 70 McKernel-owned core-row
+    points.
+- Honest remaining C ownership:
+  - C still owns CPU-local variable selection, actual cache/tree lock
+    primitives, `ihk_mc_alloc_pages()`, MCS/interrupt primitives, logging
+    primitive bodies, allocator lifetime, zeroed-list publication timing,
+    deferred-zero worker timing, and broader allocator mutation.
+
+Update 2026-05-24 page allocator add/zero top-level +3 verified active +50 slice:
+
+- Scope:
+  - Added Rust-owned `ihk_numa_add_free_pages_result()` and
+    `ihk_numa_zero_free_pages_result()`.
+  - Moved exported `ihk_numa_add_free_pages()` success/error log selection,
+    return shaping around the NUMA add-free mutation body, and public
+    `ihk_numa_zero_free_pages()` dispatch into Rust.
+  - Routed `lib/page_alloc.c:ihk_numa_add_free_pages()` and the Rust
+    page-allocator `ihk_numa_zero_free_pages()` path through the Rust/C
+    fallback helpers while preserving public C ABI behavior.
+  - Kept C ownership for logging primitive bodies, actual allocation/free and
+    lock/interrupt primitives, allocator lifetime, IKC send side effects,
+    deferred-zero worker timing, and broader allocator mutation.
+  - Added equivalence coverage for add-free success, duplicate-add error
+    return/log shaping, and public zero-free wrapper publication to the
+    zeroed-list path.
+- Validation:
+  - `rustfmt kernel/rust/page_alloc.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - The first full `kernel/rust/tests/run_equivalence.sh` failed in the new
+    public zero-free wrapper test because `zero_at_free` had been left disabled
+    after the duplicate-add error case; this was recorded in `kernel.log`.
+  - After restoring `zero_at_free = 1` for that wrapper case, the full
+    `kernel/rust/tests/run_equivalence.sh` passed, including
+    `page_alloc_bitmap ok digest=8556bdeaa7090fa7` and
+    `rust object unresolved symbols and SIMD checks ok`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed with the existing jobserver warning; it linked `mckernel.img` and
+    exited zero.
+- Estimates:
+  - Page allocator: 92% -> 95% (+3).
+  - Then-active +50 continuation checkpoint: +32 verified aggregate points so
+    far, +18 remaining at that historical point.
+  - Strict `migration.txt` movement: about +34 strict-core points total for
+    this continuation, with page allocator strict-core ownership at 67%.
+  - Post-campaign verified progress is now +180 aggregate functional points
+    toward actual 100% completion. Non-arm64 dashboard average is now 91.0%;
+    McKernel-owned core row average is now 91.6%. Total distance to 100 is
+    108 non-arm64 aggregate functional points, or 67 McKernel-owned core-row
+    points.
+- Honest remaining C ownership:
+  - C still owns logging primitive bodies, actual allocation/free and
+    lock/interrupt primitives, allocator lifetime, IKC send side effects,
+    deferred-zero worker timing, and broader allocator mutation.
+
+Update 2026-05-24 page allocator top-level free +3 verified active +50 slice:
+
+- Scope:
+  - Added Rust-owned `ihk_numa_free_pages_result()` for exported
+    `ihk_numa_free_pages()` top-level body sequencing.
+  - Moved CPU-cache free attempt classification, cache success/error log
+    selection, direct-versus-deferred free dispatch, Linux zero-request send
+    callback sequencing, final log selection, and return shaping into Rust.
+  - Routed `lib/page_alloc.c:ihk_numa_free_pages()` through the Rust/C fallback
+    helper on the Rust page-allocator path.
+  - Kept C ownership for CPU-local variable selection, actual
+    lock/interrupt/MCS primitives, `ihk_mc_free_pages()` primitive behavior,
+    IKC channel lookup and send side effects, logging primitive bodies,
+    deferred-zero worker timing, zeroed-list publication, allocator lifetime,
+    and broad allocator mutation.
+  - Added C fallback logic and equivalence coverage for CPU-cache success,
+    CPU-cache failure fallback, direct free, deferred zero request, send/log
+    sequencing, and null-cache/no-IRQ behavior.
+- Validation:
+  - `rustfmt kernel/rust/page_alloc.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - The full `kernel/rust/tests/run_equivalence.sh` passed, including
+    `page_alloc_bitmap ok digest=953c73f87339c534` and
+    `rust object unresolved symbols and SIMD checks ok`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed with the existing jobserver warning; it linked `mckernel.img` and
+    exited zero.
+- Estimates:
+  - Page allocator: 86% -> 89% (+3).
+  - Active +50 continuation progress: +26 verified aggregate points so far,
+    +24 remaining.
+  - Strict `migration.txt` movement: about +28 strict-core points total for
+    this continuation, with page allocator strict-core ownership at 61%.
+  - Post-campaign verified progress is now +174 aggregate functional points
+    toward actual 100% completion. Non-arm64 dashboard average is now 90.5%;
+    McKernel-owned core row average is now 90.9%. Total distance to 100 is
+    114 non-arm64 aggregate functional points, or 73 McKernel-owned core-row
+    points.
+- Honest remaining C ownership:
+  - C still owns CPU-local variable selection, actual lock/interrupt/MCS
+    primitive implementations, `ihk_mc_alloc_pages()`/`ihk_mc_free_pages()`
+    primitives, IKC channel lookup and send side effects, logging primitive
+    bodies, deferred-zero worker timing, zeroed-list publication, allocator
+    lifetime, and broad allocator mutation.
+
+Update 2026-05-24 x86 set-PTE body +3 verified active +50 slice:
+
+- Scope:
+  - Added Rust-owned `x86_pt_set_pte_body_result()` for
+    `ihk_mc_pt_set_pte()` body sequencing.
+  - Moved page-size/value selection callback orchestration, alignment error
+    classification, log-callback selection, panic-callback dispatch for invalid
+    page sizes, PTE store invocation, and final return shaping into Rust.
+  - Routed `arch/x86_64/kernel/memory.c:ihk_mc_pt_set_pte()` through the
+    Rust/C fallback helper.
+  - Kept C ownership for debug log wrappers, the actual log/panic primitives,
+    broader page-table traversal, allocation/free primitives, recursive
+    child-table destruction, page frees, RSS/TLB-sensitive behavior, rollback
+    orchestration, and user-copy.
+  - Added C fallback logic and equivalence coverage for valid 4 KiB/2 MiB/1 GiB
+    stores, alignment errors, invalid page-size panic callback dispatch, and
+    null log/panic callbacks.
+- Validation:
+  - `rustfmt kernel/rust/x86_memory_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - The full `kernel/rust/tests/run_equivalence.sh` passed, including
+    `x86_memory_helpers ok digest=0db20cb0350e799f` and
+    `rust object unresolved symbols and SIMD checks ok`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed with the existing jobserver warning; it linked `mckernel.img` and
+    exited zero.
+- Estimates:
+  - x86_64 memory management: 97% -> 100% (+3).
+  - Active +50 continuation progress: +23 verified aggregate points so far,
+    +27 remaining.
+  - Strict `migration.txt` movement: about +24 strict-core points total for
+    this continuation, with x86_64 memory strict-core ownership at 64%.
+  - Post-campaign verified progress is now +171 aggregate functional points
+    toward actual 100% completion. Non-arm64 dashboard average is now 90.3%;
+    McKernel-owned core row average is now 90.5%. Total distance to 100 is
+    117 non-arm64 aggregate functional points, or 76 McKernel-owned core-row
+    points.
+- Honest remaining C ownership:
+  - The broad x86_64 memory dashboard row is now 100%, but strict ownership is
+    not complete: C still owns page-table allocation/free primitives, recursive
+    child-table destruction below the root, `phys_to_virt()`/free orchestration,
+    callback primitive implementations, page-table traversal orchestration,
+    actual page frees, RSS updates, mapping/free rollback behavior,
+    TLB-sensitive flushing, and user-copy.
+
+Update 2026-05-24 x86 page-table prepare-map +3 verified active +50 slice:
+
+- Scope:
+  - Added Rust-owned `x86_pt_prepare_map_result()` for
+    `ihk_mc_pt_prepare_map()` orchestration.
+  - Moved initial page-table selection, first-level L4 index range traversal,
+    present-entry short-circuit behavior, allocation callback sequencing, L4
+    entry physical-address publication, last-level page setup loop sequencing,
+    set-page callback ordering, and first error return propagation into Rust.
+  - Routed `arch/x86_64/kernel/memory.c:ihk_mc_pt_prepare_map()` through the
+    Rust/C fallback helper.
+  - Kept C ownership for the actual `ihk_mc_alloc_pages()` primitive,
+    `virt_to_phys()`, the underlying `__set_pt_page()` body, recursive
+    child-table destruction, page frees, TLB-sensitive behavior, RSS updates,
+    mapping/free rollback orchestration, and user-copy.
+  - Added C fallback logic and equivalence coverage for first-level allocation
+    success, present-entry short-circuit, allocation failure, missing callback
+    failure, last-level set-page success, and set-page callback failure.
+- Validation:
+  - `rustfmt kernel/rust/x86_memory_helpers.rs` passed.
+  - `bash -n kernel/rust/tests/run_equivalence.sh` passed.
+  - The full `kernel/rust/tests/run_equivalence.sh` passed, including
+    `x86_memory_helpers ok digest=39dcb1d0c6c1e89e` and
+    `rust object unresolved symbols and SIMD checks ok`.
+  - `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+    passed.
+  - `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img -j2`
+    passed with the existing jobserver warning; it linked `mckernel.img` and
+    exited zero.
+- Estimates:
+  - x86_64 memory management: 94% -> 97% (+3).
+  - Active +50 continuation progress: +20 verified aggregate points so far,
+    +30 remaining.
+  - Strict `migration.txt` movement: about +22 strict-core points total for
+    this continuation, moving the strict x86_64 core estimate to about 65-75%.
+  - Post-campaign verified progress is now +168 aggregate functional points
+    toward actual 100% completion. Non-arm64 dashboard average is now 90.0%;
+    McKernel-owned core row average is now 90.1%. Total distance to 100 is
+    120 non-arm64 aggregate functional points, or 79 McKernel-owned core-row
+    points.
+- Honest remaining C ownership:
+  - C still owns page-table allocation/free primitives, recursive child-table
+    destruction below the root, `phys_to_virt()`/free orchestration, callback
+    primitive implementations, page-table traversal orchestration, actual page
+    frees, RSS updates, mapping/free rollback behavior, TLB-sensitive flushing,
+    and user-copy.

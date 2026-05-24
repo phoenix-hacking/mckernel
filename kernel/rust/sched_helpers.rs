@@ -1,4 +1,4 @@
-use core::ptr::write_volatile;
+use core::ptr::{read_volatile, write_volatile};
 use core::sync::atomic::{compiler_fence, AtomicI32, Ordering};
 
 use crate::abi::{CInt, CULong};
@@ -13,6 +13,18 @@ type FutexWaitQueueLockFn = unsafe extern "C" fn(usize) -> usize;
 type FutexWaitGetValueFn = unsafe extern "C" fn(usize, usize) -> CInt;
 type FutexWaitQueueUnlockFn = unsafe extern "C" fn(usize, usize);
 type FutexWaitPutKeyFn = unsafe extern "C" fn(CInt, usize);
+type FutexAllocFn = unsafe extern "C" fn(usize, CInt) -> usize;
+type FutexHashFn = unsafe extern "C" fn(usize) -> u32;
+type FutexDispatchWaitFn = unsafe extern "C" fn(usize, CInt, u32, u64, u32, CInt) -> CInt;
+type FutexDispatchWakeFn = unsafe extern "C" fn(usize, CInt, u32, u32) -> CInt;
+type FutexDispatchRequeueFn =
+    unsafe extern "C" fn(usize, CInt, usize, u32, u32, CInt, u32, CInt) -> CInt;
+type FutexDispatchWakeOpFn = unsafe extern "C" fn(usize, CInt, usize, u32, u32, u32) -> CInt;
+type FutexDispatchInvalidFn = unsafe extern "C" fn(CInt);
+type FutexWakeLinuxChannelByCpuFn = unsafe extern "C" fn(CInt) -> usize;
+type FutexWakeSendFn = unsafe extern "C" fn(usize, usize) -> CInt;
+type FutexWakeThreadFn = unsafe extern "C" fn(usize, CInt);
+type FutexWakeLogFn = unsafe extern "C" fn(CInt, usize, usize, CInt, usize, CInt);
 
 const EINVAL: CInt = 22;
 const EPERM: CInt = 1;
@@ -35,6 +47,22 @@ const FUTEX_WAIT_SCHEDULE_TIMEOUT: CInt = 1;
 const FUTEX_WAIT_SCHEDULE_DIRECT: CInt = 2;
 const FUTEX_WAKE_TARGET_MCKERNEL: CInt = 0;
 const FUTEX_WAKE_TARGET_LINUX: CInt = 1;
+const FUTEX_WAKE_LOG_LINUX_TARGET: CInt = 1;
+const FUTEX_WAKE_LOG_SEND_FAILED: CInt = 2;
+const FUTEX_WAKE_LOG_SEND_OK: CInt = 3;
+const FUTEX_WAKE_LOG_MCKERNEL_TARGET: CInt = 4;
+const FUTEX_WAIT: CInt = 0;
+const FUTEX_WAKE: CInt = 1;
+const FUTEX_REQUEUE: CInt = 3;
+const FUTEX_CMP_REQUEUE: CInt = 4;
+const FUTEX_WAKE_OP: CInt = 5;
+const FUTEX_WAIT_BITSET: CInt = 9;
+const FUTEX_WAKE_BITSET: CInt = 10;
+const FUTEX_WAIT_REQUEUE_PI: CInt = 11;
+const FUTEX_PRIVATE_FLAG: CInt = 128;
+const FUTEX_CLOCK_REALTIME: CInt = 256;
+const FUTEX_BITSET_MATCH_ANY: u32 = 0xffff_ffff;
+const ENOSYS: CInt = 38;
 const PLIST_NODE_PLIST_OFFSET: usize = 8;
 const PLIST_HEAD_NODE_LIST_OFFSET: usize = 16;
 const PLIST_NODE_LIST_OFFSET: usize = PLIST_NODE_PLIST_OFFSET + PLIST_HEAD_NODE_LIST_OFFSET;
@@ -99,6 +127,163 @@ pub unsafe extern "C" fn futex_hash_bucket_table_init_result(
     }
 
     bucket_count
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn futex_init_table_result(
+    queues_slot_addr: usize,
+    hashbits: CInt,
+    bucket_stride: usize,
+    alloc_flag: CInt,
+    alloc_fn: Option<FutexAllocFn>,
+    lock_offset: usize,
+    lock_word_offset: usize,
+    chain_offset: usize,
+    prio_list_offset: usize,
+    node_list_offset: usize,
+    debug_spinlock_offset: usize,
+    debug_rawlock_offset: usize,
+) -> CInt {
+    if queues_slot_addr == 0 || hashbits < 0 || bucket_stride == 0 {
+        return -EINVAL;
+    }
+
+    let Some(alloc_fn) = alloc_fn else {
+        return -EINVAL;
+    };
+    let Some(bucket_count) = (1usize).checked_shl(hashbits as u32) else {
+        return -EINVAL;
+    };
+    let Some(bytes) = bucket_stride.checked_mul(bucket_count) else {
+        return -EINVAL;
+    };
+
+    let buckets_addr = unsafe { alloc_fn(bytes, alloc_flag) };
+    unsafe {
+        write_volatile(queues_slot_addr as *mut usize, buckets_addr);
+    }
+    futex_hash_bucket_table_init_result(
+        buckets_addr,
+        bucket_count as CInt,
+        bucket_stride,
+        lock_offset,
+        lock_word_offset,
+        chain_offset,
+        prio_list_offset,
+        node_list_offset,
+        debug_spinlock_offset,
+        debug_rawlock_offset,
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn futex_hash_bucket_result(
+    key_addr: usize,
+    queues_addr: usize,
+    hashbits: CInt,
+    bucket_stride: usize,
+    hash_fn: Option<FutexHashFn>,
+) -> usize {
+    if key_addr == 0 || queues_addr == 0 || hashbits < 0 || bucket_stride == 0 {
+        return 0;
+    }
+    let Some(hash_fn) = hash_fn else {
+        return 0;
+    };
+    let Some(bucket_count) = (1usize).checked_shl(hashbits as u32) else {
+        return 0;
+    };
+
+    let hash = unsafe { hash_fn(key_addr) } as usize;
+    let index = hash & bucket_count.wrapping_sub(1);
+    let Some(delta) = bucket_stride.checked_mul(index) else {
+        return 0;
+    };
+    queues_addr.checked_add(delta).unwrap_or(0)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn futex_dispatch_result(
+    op: CInt,
+    uaddr: usize,
+    val: u32,
+    timeout: u64,
+    uaddr2: usize,
+    val2: u32,
+    val3: u32,
+    fshared: CInt,
+    wait_fn: Option<FutexDispatchWaitFn>,
+    wake_fn: Option<FutexDispatchWakeFn>,
+    requeue_fn: Option<FutexDispatchRequeueFn>,
+    wake_op_fn: Option<FutexDispatchWakeOpFn>,
+    invalid_fn: Option<FutexDispatchInvalidFn>,
+) -> CInt {
+    let cmd = op & !(FUTEX_PRIVATE_FLAG | FUTEX_CLOCK_REALTIME);
+    let clockrt = op & FUTEX_CLOCK_REALTIME;
+
+    if clockrt != 0 && cmd != FUTEX_WAIT_BITSET && cmd != FUTEX_WAIT_REQUEUE_PI {
+        return -ENOSYS;
+    }
+
+    match cmd {
+        FUTEX_WAIT => {
+            let Some(wait_fn) = wait_fn else {
+                return -ENOSYS;
+            };
+            unsafe {
+                wait_fn(
+                    uaddr,
+                    fshared,
+                    val,
+                    timeout,
+                    FUTEX_BITSET_MATCH_ANY,
+                    clockrt,
+                )
+            }
+        }
+        FUTEX_WAIT_BITSET => {
+            let Some(wait_fn) = wait_fn else {
+                return -ENOSYS;
+            };
+            unsafe { wait_fn(uaddr, fshared, val, timeout, val3, clockrt) }
+        }
+        FUTEX_WAKE => {
+            let Some(wake_fn) = wake_fn else {
+                return -ENOSYS;
+            };
+            unsafe { wake_fn(uaddr, fshared, val, FUTEX_BITSET_MATCH_ANY) }
+        }
+        FUTEX_WAKE_BITSET => {
+            let Some(wake_fn) = wake_fn else {
+                return -ENOSYS;
+            };
+            unsafe { wake_fn(uaddr, fshared, val, val3) }
+        }
+        FUTEX_REQUEUE => {
+            let Some(requeue_fn) = requeue_fn else {
+                return -ENOSYS;
+            };
+            unsafe { requeue_fn(uaddr, fshared, uaddr2, val, val2, 0, 0, 0) }
+        }
+        FUTEX_CMP_REQUEUE => {
+            let Some(requeue_fn) = requeue_fn else {
+                return -ENOSYS;
+            };
+            unsafe { requeue_fn(uaddr, fshared, uaddr2, val, val2, 1, val3, 0) }
+        }
+        FUTEX_WAKE_OP => {
+            let Some(wake_op_fn) = wake_op_fn else {
+                return -ENOSYS;
+            };
+            unsafe { wake_op_fn(uaddr, fshared, uaddr2, val, val2, val3) }
+        }
+        _ => {
+            if let Some(invalid_fn) = invalid_fn {
+                unsafe { invalid_fn(cmd) };
+            }
+            -ENOSYS
+        }
+    }
 }
 
 #[no_mangle]
@@ -977,6 +1162,118 @@ pub unsafe extern "C" fn futex_wake_ikc_packet_fill_result(
             spin_sleep_addr,
         );
     }
+}
+
+#[inline(always)]
+unsafe fn read_usize_field(base: usize, offset: usize) -> usize {
+    read_volatile(base.wrapping_add(offset) as *const usize)
+}
+
+#[inline(always)]
+unsafe fn read_cint_field(base: usize, offset: usize) -> CInt {
+    read_volatile(base.wrapping_add(offset) as *const CInt)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn futex_wake_orchestrate_result(
+    q_addr: usize,
+    q_list_offset: usize,
+    q_node_plist_offset: usize,
+    q_lock_ptr_offset: usize,
+    q_task_offset: usize,
+    q_uti_futex_resp_offset: usize,
+    q_linux_cpu_offset: usize,
+    thread_spin_sleep_offset: usize,
+    packet_addr: usize,
+    packet_msg_offset: usize,
+    packet_resp_offset: usize,
+    packet_spin_sleep_offset: usize,
+    msg: CInt,
+    fallback_channel: usize,
+    wake_status: CInt,
+    linux_channel_fn: Option<FutexWakeLinuxChannelByCpuFn>,
+    send_fn: Option<FutexWakeSendFn>,
+    wake_thread_fn: Option<FutexWakeThreadFn>,
+    log_fn: Option<FutexWakeLogFn>,
+) -> CInt {
+    if q_addr == 0 {
+        return -EINVAL;
+    }
+
+    let thread_addr = read_usize_field(q_addr, q_task_offset);
+    let uti_futex_resp = read_usize_field(q_addr, q_uti_futex_resp_offset);
+
+    futex_wake_mark_woken_result(
+        q_addr,
+        q_list_offset,
+        q_node_plist_offset,
+        q_lock_ptr_offset,
+    );
+
+    let target = futex_wake_target_result(uti_futex_resp);
+    if target == FUTEX_WAKE_TARGET_LINUX {
+        let linux_cpu = read_cint_field(q_addr, q_linux_cpu_offset);
+        let linux_channel = if let Some(linux_channel_fn) = linux_channel_fn {
+            linux_channel_fn(linux_cpu)
+        } else {
+            0
+        };
+        let resp_channel = futex_wake_linux_channel_result(linux_channel, fallback_channel);
+        if let Some(log_fn) = log_fn {
+            log_fn(
+                FUTEX_WAKE_LOG_LINUX_TARGET,
+                thread_addr,
+                uti_futex_resp,
+                linux_cpu,
+                resp_channel,
+                0,
+            );
+        }
+        futex_wake_ikc_packet_fill_result(
+            packet_addr,
+            packet_msg_offset,
+            packet_resp_offset,
+            packet_spin_sleep_offset,
+            msg,
+            uti_futex_resp,
+            thread_addr.wrapping_add(thread_spin_sleep_offset),
+        );
+
+        let mut rc = -ENOSYS;
+        if let Some(send_fn) = send_fn {
+            rc = send_fn(resp_channel, packet_addr);
+        }
+        if let Some(log_fn) = log_fn {
+            log_fn(
+                if rc < 0 {
+                    FUTEX_WAKE_LOG_SEND_FAILED
+                } else {
+                    FUTEX_WAKE_LOG_SEND_OK
+                },
+                thread_addr,
+                uti_futex_resp,
+                linux_cpu,
+                resp_channel,
+                rc,
+            );
+        }
+        return target;
+    }
+
+    if let Some(wake_thread_fn) = wake_thread_fn {
+        if let Some(log_fn) = log_fn {
+            log_fn(
+                FUTEX_WAKE_LOG_MCKERNEL_TARGET,
+                thread_addr,
+                uti_futex_resp,
+                0,
+                0,
+                0,
+            );
+        }
+        wake_thread_fn(thread_addr, wake_status);
+    }
+    target
 }
 
 #[no_mangle]

@@ -42,10 +42,24 @@
 #define X86_DESTROY_PT_SKIP		0
 #define X86_DESTROY_PT_DESCEND		1
 
+#define X86_PT_SET_PTE_LOG_L2_ALIGN	1
+#define X86_PT_SET_PTE_LOG_L3_ALIGN	2
+#define X86_PT_SET_PTE_LOG_PAGE_SIZE	3
+
 typedef int (*x86_walk_pte_callback_t)(void *args, unsigned long *ptep,
 				       uint64_t base, uint64_t start,
 				       uint64_t end);
 typedef int (*x86_walk_phys_check_fn_t)(unsigned long phys);
+typedef void *(*x86_pt_alloc_pages_fn_t)(int nr_pages, int ap_flag);
+typedef void (*x86_pt_destroy_fn_t)(int level, void *pt);
+typedef unsigned long (*x86_pt_virt_to_phys_fn_t)(void *addr);
+typedef int (*x86_pt_set_page_fn_t)(void *pt, unsigned long virt,
+				    unsigned long phys, unsigned long attr);
+typedef void (*x86_pt_set_pte_log_fn_t)(int event, void *pt,
+					unsigned long *ptep, size_t pgsize,
+					unsigned long phys, unsigned long attr,
+					int error, unsigned long current);
+typedef void (*x86_pt_set_pte_panic_fn_t)(void);
 
 unsigned long x86_attr_to_l3attr_result(unsigned long attr,
 					unsigned long attr_mask);
@@ -181,5 +195,19 @@ void x86_move_pte_entry_parts_result(unsigned long entry,
 				     unsigned long *attrp);
 int x86_destroy_pt_entry_action_result(int level, unsigned long entry,
 				       unsigned long *lower_physp);
+void *x86_pt_create_result(void *init_pt, int ap_flag,
+			   x86_pt_alloc_pages_fn_t alloc_fn);
+void x86_pt_destroy_root_result(void *pt, x86_pt_destroy_fn_t destroy_fn);
+int x86_pt_prepare_map_result(void *pt, void *init_pt, unsigned long virt,
+			      unsigned long size, int flag,
+			      unsigned long writable_attr,
+			      x86_pt_alloc_pages_fn_t alloc_fn,
+			      x86_pt_virt_to_phys_fn_t virt_to_phys_fn,
+			      x86_pt_set_page_fn_t set_page_fn);
+int x86_pt_set_pte_body_result(void *pt, unsigned long *ptep, size_t pgsize,
+			       unsigned long phys, unsigned long attr,
+			       unsigned long attr_mask, int use_1gb_page,
+			       x86_pt_set_pte_log_fn_t log_fn,
+			       x86_pt_set_pte_panic_fn_t panic_fn);
 
 #endif /* HEADER_X86_MEMORY_HELPERS_H */

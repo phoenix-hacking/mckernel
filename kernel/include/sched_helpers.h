@@ -30,6 +30,35 @@ typedef int (*futex_wait_get_value_fn_t)(unsigned long value_addr,
 typedef void (*futex_wait_queue_unlock_fn_t)(unsigned long q_addr,
 					     unsigned long hb_addr);
 typedef void (*futex_wait_put_key_fn_t)(int fshared, unsigned long key_addr);
+typedef unsigned long (*futex_alloc_fn_t)(unsigned long size, int flag);
+typedef unsigned int (*futex_hash_fn_t)(unsigned long key_addr);
+typedef int (*futex_dispatch_wait_fn_t)(unsigned long uaddr, int fshared,
+					uint32_t val, uint64_t timeout,
+					uint32_t val3, int clockrt);
+typedef int (*futex_dispatch_wake_fn_t)(unsigned long uaddr, int fshared,
+					uint32_t val, uint32_t val3);
+typedef int (*futex_dispatch_requeue_fn_t)(unsigned long uaddr, int fshared,
+					   unsigned long uaddr2, uint32_t val,
+					   uint32_t val2, int cmpval_present,
+					   uint32_t cmpval, int requeue_pi);
+typedef int (*futex_dispatch_wake_op_fn_t)(unsigned long uaddr, int fshared,
+					   unsigned long uaddr2, uint32_t val,
+					   uint32_t val2, uint32_t val3);
+typedef void (*futex_dispatch_invalid_fn_t)(int cmd);
+typedef unsigned long (*futex_wake_linux_channel_by_cpu_fn_t)(int linux_cpu);
+typedef int (*futex_wake_send_fn_t)(unsigned long channel_addr,
+				    unsigned long packet_addr);
+typedef void (*futex_wake_thread_fn_t)(unsigned long thread_addr,
+				       int status);
+typedef void (*futex_wake_log_fn_t)(int event, unsigned long thread_addr,
+				    unsigned long uti_futex_resp,
+				    int linux_cpu,
+				    unsigned long channel_addr, int rc);
+
+#define FUTEX_WAKE_LOG_LINUX_TARGET 1
+#define FUTEX_WAKE_LOG_SEND_FAILED 2
+#define FUTEX_WAKE_LOG_SEND_OK 3
+#define FUTEX_WAKE_LOG_MCKERNEL_TARGET 4
 
 uint64_t timer_spin_sleep_remaining_result(uint64_t timeout, uint64_t elapsed);
 int timer_runq_should_schedule_result(int runq_len);
@@ -182,6 +211,20 @@ void futex_wake_ikc_packet_fill_result(unsigned long packet_addr,
 				       unsigned long spin_sleep_offset,
 				       int msg, unsigned long resp,
 				       unsigned long spin_sleep_addr);
+int futex_wake_orchestrate_result(
+	unsigned long q_addr, unsigned long q_list_offset,
+	unsigned long q_node_plist_offset, unsigned long q_lock_ptr_offset,
+	unsigned long q_task_offset, unsigned long q_uti_futex_resp_offset,
+	unsigned long q_linux_cpu_offset,
+	unsigned long thread_spin_sleep_offset,
+	unsigned long packet_addr, unsigned long packet_msg_offset,
+	unsigned long packet_resp_offset,
+	unsigned long packet_spin_sleep_offset, int msg,
+	unsigned long fallback_channel, int wake_status,
+	futex_wake_linux_channel_by_cpu_fn_t linux_channel_fn,
+	futex_wake_send_fn_t send_fn,
+	futex_wake_thread_fn_t wake_thread_fn,
+	futex_wake_log_fn_t log_fn);
 int futex_hash_bucket_table_init_result(unsigned long buckets_addr,
 					int bucket_count,
 					unsigned long bucket_stride,
@@ -192,6 +235,29 @@ int futex_hash_bucket_table_init_result(unsigned long buckets_addr,
 					unsigned long node_list_offset,
 					unsigned long debug_spinlock_offset,
 					unsigned long debug_rawlock_offset);
+int futex_init_table_result(unsigned long queues_slot_addr, int hashbits,
+			    unsigned long bucket_stride, int alloc_flag,
+			    futex_alloc_fn_t alloc_fn,
+			    unsigned long lock_offset,
+			    unsigned long lock_word_offset,
+			    unsigned long chain_offset,
+			    unsigned long prio_list_offset,
+			    unsigned long node_list_offset,
+			    unsigned long debug_spinlock_offset,
+			    unsigned long debug_rawlock_offset);
+unsigned long futex_hash_bucket_result(unsigned long key_addr,
+				       unsigned long queues_addr,
+				       int hashbits,
+				       unsigned long bucket_stride,
+				       futex_hash_fn_t hash_fn);
+int futex_dispatch_result(int op, unsigned long uaddr, uint32_t val,
+			  uint64_t timeout, unsigned long uaddr2,
+			  uint32_t val2, uint32_t val3, int fshared,
+			  futex_dispatch_wait_fn_t wait_fn,
+			  futex_dispatch_wake_fn_t wake_fn,
+			  futex_dispatch_requeue_fn_t requeue_fn,
+			  futex_dispatch_wake_op_fn_t wake_op_fn,
+			  futex_dispatch_invalid_fn_t invalid_fn);
 int syscall_offload_should_schedule_result(int no_preempt, int tid,
 					   int need_resched, int runq_len,
 					   int is_sched_setaffinity);

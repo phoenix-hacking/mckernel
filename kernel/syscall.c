@@ -184,6 +184,18 @@ typedef long (*ptrace_user_copy_to_fn_t)(unsigned long dst_addr,
 		const void *src, size_t bytes);
 typedef long (*ptrace_regset_io_fn_t)(unsigned long thread_addr,
 		long type, void *iovp);
+typedef long (*syscall_copy_int_to_user_fn_t)(unsigned long dst_addr,
+		const int *src);
+typedef long (*syscall_copy_from_user_fn_t)(void *dst,
+		unsigned long src_addr, size_t bytes);
+typedef long (*syscall_copy_to_user_fn_t)(unsigned long dst_addr,
+		const void *src, size_t bytes);
+typedef int (*wait4_do_wait_fn_t)(int pid, int *status, int options,
+		struct rusage *usage);
+typedef int (*wait_signal_flags_reap_fn_t)(void *thread,
+		unsigned long signal_flags_offset, int options, int clear_mask);
+static long syscall_copy_to_user_bridge(unsigned long dst_addr,
+		const void *src, size_t bytes);
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 extern int robust_list_len_result(size_t len);
@@ -204,6 +216,21 @@ extern int syscall_getpid_result(int pid);
 extern int syscall_getppid_result(int ppid);
 extern int syscall_gettid_result(int tid);
 extern int syscall_set_tid_address_return_result(int pid);
+extern long syscall_getpid_body_result(void *thread, size_t proc_offset,
+		size_t pid_offset);
+extern long syscall_getppid_body_result(void *thread, size_t proc_offset,
+		size_t ppid_parent_offset, size_t pid_offset);
+extern long syscall_gettid_body_result(void *thread, size_t tid_offset);
+extern long syscall_set_tid_address_body_result(void *thread,
+		size_t clear_child_tid_offset, size_t proc_offset,
+		size_t pid_offset, int *clear_child_tid);
+extern long syscall_get_process_id_field_result(void *thread,
+		size_t proc_offset, size_t field_offset);
+extern long syscall_getresid_body_result(void *thread, size_t proc_offset,
+		size_t first_offset, size_t second_offset,
+		size_t third_offset, unsigned long first_user_addr,
+		unsigned long second_user_addr, unsigned long third_user_addr,
+		syscall_copy_int_to_user_fn_t copy_int_fn);
 extern int syscall_use_requester_tid_result(int syscall_nr, unsigned long arg0,
 		int sched_setaffinity_nr);
 extern int syscall_preempt_disable_needed_result(int rtid);
@@ -306,6 +333,10 @@ extern int sigaction_sigsetsize_result(size_t sigsetsize,
 		size_t expected_sigset_size);
 extern int sigaltstack_validate(int flags, size_t size);
 extern int sigaltstack_is_disable(int flags);
+extern long sigaltstack_body_result(void *thread, size_t sigstack_offset,
+		unsigned long ss_addr, unsigned long oss_addr,
+		syscall_copy_from_user_fn_t copy_from_fn,
+		syscall_copy_to_user_fn_t copy_to_fn);
 extern int process_vm_validate_args(unsigned long flags,
 		unsigned long liovcnt, unsigned long riovcnt);
 extern int process_vm_op_is_write(int op);
@@ -394,6 +425,13 @@ extern int wait_nohang_result(int options);
 extern int wait_empty_result(int empty);
 extern int wait_stopped_status_result(int exit_status);
 extern int wait_continued_status_result(void);
+extern int wait_continued_body_result(struct thread *c_thread,
+		struct process *child, int *status, int options,
+		unsigned long child_pid_offset,
+		unsigned long child_main_thread_offset,
+		unsigned long thread_tid_offset,
+		unsigned long thread_signal_flags_offset,
+		wait_signal_flags_reap_fn_t reap_fn);
 extern int wait_zombie_skip_host_result(int ppid_parent_pid,
 		int current_pid, int nowait);
 extern int wait_thread_empty_candidate_result(int is_main_thread, int termsig);
@@ -415,7 +453,17 @@ extern int wait_main_thread_ptrace_detach_needed_result(int options,
 extern int wait_thread_reap_action_result(int options, int ptrace);
 extern int wait_status_copy_needed_result(int rc, int has_status);
 extern int wait_rusage_copy_needed_result(int has_rusage);
+extern long wait4_body_result(int pid, unsigned long status_addr, int options,
+		unsigned long rusage_addr, wait4_do_wait_fn_t do_wait_fn,
+		syscall_copy_to_user_fn_t copy_to_fn);
 extern int waitid_siginfo_needed_result(int rc, int has_infop);
+extern void waitid_copy_siginfo_result(int rc, unsigned long infop_addr,
+		int status, long utime_sec, long utime_usec,
+		long stime_sec, long stime_usec,
+		syscall_copy_to_user_fn_t copy_to_fn);
+extern long waitid_body_result(int idtype, int id, unsigned long infop_addr,
+		int options, wait4_do_wait_fn_t do_wait_fn,
+		syscall_copy_to_user_fn_t copy_to_fn);
 extern int getrusage_dispatch_result(int who);
 extern int getrusage_thread_update_action_result(int is_current_thread,
 		int status, int in_kernel);
@@ -485,6 +533,23 @@ SYSCALL_POLICY_HELPER_PROTO int syscall_getpid_result(int pid);
 SYSCALL_POLICY_HELPER_PROTO int syscall_getppid_result(int ppid);
 SYSCALL_POLICY_HELPER_PROTO int syscall_gettid_result(int tid);
 SYSCALL_POLICY_HELPER_PROTO int syscall_set_tid_address_return_result(int pid);
+SYSCALL_POLICY_HELPER_PROTO long syscall_getpid_body_result(void *thread,
+		size_t proc_offset, size_t pid_offset);
+SYSCALL_POLICY_HELPER_PROTO long syscall_getppid_body_result(void *thread,
+		size_t proc_offset, size_t ppid_parent_offset,
+		size_t pid_offset);
+SYSCALL_POLICY_HELPER_PROTO long syscall_gettid_body_result(void *thread,
+		size_t tid_offset);
+SYSCALL_POLICY_HELPER_PROTO long syscall_set_tid_address_body_result(
+		void *thread, size_t clear_child_tid_offset,
+		size_t proc_offset, size_t pid_offset, int *clear_child_tid);
+SYSCALL_POLICY_HELPER_PROTO long syscall_get_process_id_field_result(
+		void *thread, size_t proc_offset, size_t field_offset);
+SYSCALL_POLICY_HELPER_PROTO long syscall_getresid_body_result(void *thread,
+		size_t proc_offset, size_t first_offset, size_t second_offset,
+		size_t third_offset, unsigned long first_user_addr,
+		unsigned long second_user_addr, unsigned long third_user_addr,
+		syscall_copy_int_to_user_fn_t copy_int_fn);
 SYSCALL_POLICY_HELPER_PROTO int syscall_use_requester_tid_result(
 		int syscall_nr, unsigned long arg0, int sched_setaffinity_nr);
 SYSCALL_POLICY_HELPER_PROTO int syscall_preempt_disable_needed_result(
@@ -607,6 +672,10 @@ SYSCALL_POLICY_HELPER_PROTO int sigaction_sigsetsize_result(
 		size_t sigsetsize, size_t expected_sigset_size);
 SYSCALL_POLICY_HELPER_PROTO int sigaltstack_validate(int flags, size_t size);
 SYSCALL_POLICY_HELPER_PROTO int sigaltstack_is_disable(int flags);
+SYSCALL_POLICY_HELPER_PROTO long sigaltstack_body_result(void *thread,
+		size_t sigstack_offset, unsigned long ss_addr,
+		unsigned long oss_addr, syscall_copy_from_user_fn_t copy_from_fn,
+		syscall_copy_to_user_fn_t copy_to_fn);
 SYSCALL_POLICY_HELPER_PROTO int process_vm_validate_args(unsigned long flags,
 		unsigned long liovcnt, unsigned long riovcnt);
 SYSCALL_POLICY_HELPER_PROTO int process_vm_op_is_write(int op);
@@ -696,6 +765,13 @@ SYSCALL_POLICY_HELPER_PROTO int wait_nohang_result(int options);
 SYSCALL_POLICY_HELPER_PROTO int wait_empty_result(int empty);
 SYSCALL_POLICY_HELPER_PROTO int wait_stopped_status_result(int exit_status);
 SYSCALL_POLICY_HELPER_PROTO int wait_continued_status_result(void);
+SYSCALL_POLICY_HELPER_PROTO int wait_continued_body_result(
+		struct thread *c_thread, struct process *child, int *status,
+		int options, unsigned long child_pid_offset,
+		unsigned long child_main_thread_offset,
+		unsigned long thread_tid_offset,
+		unsigned long thread_signal_flags_offset,
+		wait_signal_flags_reap_fn_t reap_fn);
 SYSCALL_POLICY_HELPER_PROTO int wait_zombie_skip_host_result(
 		int ppid_parent_pid, int current_pid, int nowait);
 SYSCALL_POLICY_HELPER_PROTO int wait_thread_empty_candidate_result(
@@ -722,8 +798,20 @@ SYSCALL_POLICY_HELPER_PROTO int wait_thread_reap_action_result(int options,
 SYSCALL_POLICY_HELPER_PROTO int wait_status_copy_needed_result(int rc,
 		int has_status);
 SYSCALL_POLICY_HELPER_PROTO int wait_rusage_copy_needed_result(int has_rusage);
+SYSCALL_POLICY_HELPER_PROTO long wait4_body_result(int pid,
+		unsigned long status_addr, int options, unsigned long rusage_addr,
+		wait4_do_wait_fn_t do_wait_fn,
+		syscall_copy_to_user_fn_t copy_to_fn);
 SYSCALL_POLICY_HELPER_PROTO int waitid_siginfo_needed_result(int rc,
 		int has_infop);
+SYSCALL_POLICY_HELPER_PROTO void waitid_copy_siginfo_result(int rc,
+		unsigned long infop_addr, int status, long utime_sec,
+		long utime_usec, long stime_sec, long stime_usec,
+		syscall_copy_to_user_fn_t copy_to_fn);
+SYSCALL_POLICY_HELPER_PROTO long waitid_body_result(int idtype, int id,
+		unsigned long infop_addr, int options,
+		wait4_do_wait_fn_t do_wait_fn,
+		syscall_copy_to_user_fn_t copy_to_fn);
 SYSCALL_POLICY_HELPER_PROTO int getrusage_dispatch_result(int who);
 SYSCALL_POLICY_HELPER_PROTO int getrusage_thread_update_action_result(
 		int is_current_thread, int status, int in_kernel);
@@ -1277,25 +1365,15 @@ static int wait_stopped(struct thread *thread, struct process *child, struct thr
 static int wait_continued(struct thread *thread, struct process *child,
 			  struct thread *c_thread, int *status, int options)
 {
-	int ret;
-
-	if (status) {
-		*status = wait_continued_status_result();
-	}
-
-	/* Reap signal_flags */
-	if (c_thread)
-		process_thread_signal_flags_reap_result(c_thread,
-				__builtin_offsetof(struct thread, signal_flags),
-				options, SIGNAL_STOP_CONTINUED);
-	else
-		process_thread_signal_flags_reap_result(child->main_thread,
-				__builtin_offsetof(struct thread, signal_flags),
-				options, SIGNAL_STOP_CONTINUED);
+	int ret = wait_continued_body_result(c_thread, child, status, options,
+			__builtin_offsetof(struct process, pid),
+			__builtin_offsetof(struct process, main_thread),
+			__builtin_offsetof(struct thread, tid),
+			__builtin_offsetof(struct thread, signal_flags),
+			process_thread_signal_flags_reap_result);
 
 	dkprintf("wait4,SIGNAL_STOP_CONTINUED,pid=%d,status=%08x\n",
 			 child->pid, status ? *status : -1);
-	ret = c_thread ? c_thread->tid : child->pid;
 	return ret;
 }
 
@@ -1825,28 +1903,22 @@ do_wait(int pid, int *status, int options, void *rusage)
 	goto exit;
 }
 
+static int wait4_do_wait_bridge(int pid, int *status, int options,
+		struct rusage *usage)
+{
+	return do_wait(pid, status, options, usage);
+}
+
 SYSCALL_DECLARE(wait4)
 {
 	int pid = (int)ihk_mc_syscall_arg0(ctx);
 	int *status = (int *)ihk_mc_syscall_arg1(ctx);
 	int options = (int)ihk_mc_syscall_arg2(ctx);
 	void *rusage = (void *)ihk_mc_syscall_arg3(ctx);
-	int st;
-	int rc;
-	struct rusage usage;
 
-	rc = wait4_options_result(options);
-	if (rc) {
-		dkprintf("wait4: unexpected options(%x).\n", options);
-		return rc;
-	}
-	memset(&usage, '\0', sizeof usage);
-	rc = do_wait(pid, &st, WEXITED | options, &usage);
-	if (wait_status_copy_needed_result(rc, status != NULL))
-		copy_to_user(status, &st, sizeof(int));
-	if (wait_rusage_copy_needed_result(rusage != NULL))
-		copy_to_user(rusage, &usage, sizeof usage);
-	return rc;
+	return wait4_body_result(pid, (unsigned long)status, options,
+			(unsigned long)rusage, wait4_do_wait_bridge,
+			syscall_copy_to_user_bridge);
 }
 
 SYSCALL_DECLARE(waitid)
@@ -1855,39 +1927,9 @@ SYSCALL_DECLARE(waitid)
 	int id = (int)ihk_mc_syscall_arg1(ctx);
 	siginfo_t *infop = (siginfo_t *)ihk_mc_syscall_arg2(ctx);
 	int options = (int)ihk_mc_syscall_arg3(ctx);
-	int pid;
-	int status;
-	int rc;
-	struct rusage usage;
 
-	rc = waitid_to_wait_pid_result(idtype, id, &pid);
-	if (rc) {
-		return rc;
-	}
-	rc = waitid_options_result(options);
-	if (rc) {
-		dkprintf("wait4: unexpected options(%x).\n", options);
-		dkprintf("waitid: unexpected options(%x).\n", options);
-		return rc;
-	}
-	memset(&usage, '\0', sizeof usage);
-	rc = do_wait(pid, &status, options, &usage);
-	if(rc < 0)
-		return rc;
-	if(waitid_siginfo_needed_result(rc, infop != NULL)){
-		siginfo_t info;
-		memset(&info, '\0', sizeof(siginfo_t));
-		info.si_signo = SIGCHLD;
-		info._sifields._sigchld.si_pid = rc;
-		info._sifields._sigchld.si_status = status;
-		info._sifields._sigchld.si_utime =
-		                             timeval_to_jiffy(&usage.ru_utime);
-		info._sifields._sigchld.si_stime =
-		                             timeval_to_jiffy(&usage.ru_stime);
-		info.si_code = waitid_status_code_result(status);
-		copy_to_user(infop, &info, sizeof info);
-	}
-	return 0;
+	return waitid_body_result(idtype, id, (unsigned long)infop, options,
+			wait4_do_wait_bridge, syscall_copy_to_user_bridge);
 }
 
 void terminate_mcexec(int rc, int sig)
@@ -3508,14 +3550,17 @@ out:
 
 SYSCALL_DECLARE(getpid)
 {
-	return syscall_getpid_result(cpu_local_var(current)->proc->pid);
+	return syscall_getpid_body_result(cpu_local_var(current),
+			__builtin_offsetof(struct thread, proc),
+			__builtin_offsetof(struct process, pid));
 }
 
 SYSCALL_DECLARE(getppid)
 {
-	struct thread *thread = cpu_local_var(current);
-
-	return syscall_getppid_result(thread->proc->ppid_parent->pid);
+	return syscall_getppid_body_result(cpu_local_var(current),
+			__builtin_offsetof(struct thread, proc),
+			__builtin_offsetof(struct process, ppid_parent),
+			__builtin_offsetof(struct process, pid));
 }
 
 static int settid(struct thread *thread, int nr_tids, int *tids)
@@ -3541,7 +3586,8 @@ static int settid(struct thread *thread, int nr_tids, int *tids)
 
 SYSCALL_DECLARE(gettid)
 {
-	return syscall_gettid_result(cpu_local_var(current)->tid);
+	return syscall_gettid_body_result(cpu_local_var(current),
+			__builtin_offsetof(struct thread, tid));
 }
 
 extern void ptrace_report_signal(struct thread *thread, int sig);
@@ -4343,11 +4389,11 @@ release_cpuid:
 
 SYSCALL_DECLARE(set_tid_address)
 {
-	cpu_local_var(current)->clear_child_tid = 
-	                        (int*)ihk_mc_syscall_arg0(ctx);
-
-	return syscall_set_tid_address_return_result(
-		cpu_local_var(current)->proc->pid);
+	return syscall_set_tid_address_body_result(cpu_local_var(current),
+			__builtin_offsetof(struct thread, clear_child_tid),
+			__builtin_offsetof(struct thread, proc),
+			__builtin_offsetof(struct process, pid),
+			(int *)ihk_mc_syscall_arg0(ctx));
 }
 
 SYSCALL_DECLARE(times)
@@ -4534,6 +4580,81 @@ SYSCALL_POLICY_HELPER_SCOPE int
 syscall_set_tid_address_return_result(int pid)
 {
 	return pid;
+}
+
+static inline void *syscall_offset_ptr(void *base, size_t offset)
+{
+	return (char *)base + offset;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE long
+syscall_getpid_body_result(void *thread, size_t proc_offset,
+		size_t pid_offset)
+{
+	void *proc = *(void **)syscall_offset_ptr(thread, proc_offset);
+
+	return *(int *)syscall_offset_ptr(proc, pid_offset);
+}
+
+SYSCALL_POLICY_HELPER_SCOPE long
+syscall_getppid_body_result(void *thread, size_t proc_offset,
+		size_t ppid_parent_offset, size_t pid_offset)
+{
+	void *proc = *(void **)syscall_offset_ptr(thread, proc_offset);
+	void *parent = *(void **)syscall_offset_ptr(proc, ppid_parent_offset);
+
+	return *(int *)syscall_offset_ptr(parent, pid_offset);
+}
+
+SYSCALL_POLICY_HELPER_SCOPE long
+syscall_gettid_body_result(void *thread, size_t tid_offset)
+{
+	return *(int *)syscall_offset_ptr(thread, tid_offset);
+}
+
+SYSCALL_POLICY_HELPER_SCOPE long
+syscall_set_tid_address_body_result(void *thread,
+		size_t clear_child_tid_offset, size_t proc_offset,
+		size_t pid_offset, int *clear_child_tid)
+{
+	*(int **)syscall_offset_ptr(thread, clear_child_tid_offset) =
+		clear_child_tid;
+
+	return syscall_getpid_body_result(thread, proc_offset, pid_offset);
+}
+
+SYSCALL_POLICY_HELPER_SCOPE long
+syscall_get_process_id_field_result(void *thread, size_t proc_offset,
+		size_t field_offset)
+{
+	void *proc = *(void **)syscall_offset_ptr(thread, proc_offset);
+
+	return *(int *)syscall_offset_ptr(proc, field_offset);
+}
+
+SYSCALL_POLICY_HELPER_SCOPE long
+syscall_getresid_body_result(void *thread, size_t proc_offset,
+		size_t first_offset, size_t second_offset,
+		size_t third_offset, unsigned long first_user_addr,
+		unsigned long second_user_addr, unsigned long third_user_addr,
+		syscall_copy_int_to_user_fn_t copy_int_fn)
+{
+	void *proc = *(void **)syscall_offset_ptr(thread, proc_offset);
+
+	if (copy_int_fn(first_user_addr,
+			(int *)syscall_offset_ptr(proc, first_offset))) {
+		return -EFAULT;
+	}
+	if (copy_int_fn(second_user_addr,
+			(int *)syscall_offset_ptr(proc, second_offset))) {
+		return -EFAULT;
+	}
+	if (copy_int_fn(third_user_addr,
+			(int *)syscall_offset_ptr(proc, third_offset))) {
+		return -EFAULT;
+	}
+
+	return 0;
 }
 
 SYSCALL_POLICY_HELPER_SCOPE int
@@ -5162,6 +5283,49 @@ SYSCALL_POLICY_HELPER_SCOPE int
 sigaltstack_is_disable(int flags)
 {
 	return flags == SS_DISABLE;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE long
+sigaltstack_body_result(void *thread, size_t sigstack_offset,
+		unsigned long ss_addr, unsigned long oss_addr,
+		syscall_copy_from_user_fn_t copy_from_fn,
+		syscall_copy_to_user_fn_t copy_to_fn)
+{
+	stack_t *thread_sigstack =
+		(stack_t *)syscall_offset_ptr(thread, sigstack_offset);
+	stack_t wss;
+	int error;
+
+	if (oss_addr) {
+		if (!copy_to_fn ||
+				copy_to_fn(oss_addr, thread_sigstack,
+					sizeof(*thread_sigstack))) {
+			return -EFAULT;
+		}
+	}
+
+	if (!ss_addr) {
+		return 0;
+	}
+
+	if (!copy_from_fn || copy_from_fn(&wss, ss_addr, sizeof(wss))) {
+		return -EFAULT;
+	}
+
+	error = sigaltstack_validate(wss.ss_flags, wss.ss_size);
+	if (error) {
+		return error;
+	}
+
+	if (sigaltstack_is_disable(wss.ss_flags)) {
+		thread_sigstack->ss_sp = NULL;
+		thread_sigstack->ss_flags = SS_DISABLE;
+		thread_sigstack->ss_size = 0;
+	} else {
+		memcpy(thread_sigstack, &wss, sizeof(wss));
+	}
+
+	return 0;
 }
 
 SYSCALL_POLICY_HELPER_SCOPE int
@@ -5822,6 +5986,37 @@ wait_continued_status_result(void)
 }
 
 SYSCALL_POLICY_HELPER_SCOPE int
+wait_continued_body_result(struct thread *c_thread, struct process *child,
+		int *status, int options, unsigned long child_pid_offset,
+		unsigned long child_main_thread_offset,
+		unsigned long thread_tid_offset,
+		unsigned long thread_signal_flags_offset,
+		wait_signal_flags_reap_fn_t reap_fn)
+{
+	char *child_base = (char *)child;
+	struct thread *target_thread;
+
+	if (status) {
+		*status = wait_continued_status_result();
+	}
+
+	if (c_thread) {
+		target_thread = c_thread;
+	}
+	else {
+		target_thread = *(struct thread **)(child_base +
+				child_main_thread_offset);
+	}
+	reap_fn(target_thread, thread_signal_flags_offset, options,
+			SIGNAL_STOP_CONTINUED);
+
+	if (c_thread) {
+		return *(int *)((char *)c_thread + thread_tid_offset);
+	}
+	return *(int *)(child_base + child_pid_offset);
+}
+
+SYSCALL_POLICY_HELPER_SCOPE int
 wait_zombie_skip_host_result(int ppid_parent_pid, int current_pid, int nowait)
 {
 	return ppid_parent_pid != current_pid || nowait;
@@ -5935,10 +6130,91 @@ wait_rusage_copy_needed_result(int has_rusage)
 	return has_rusage;
 }
 
+SYSCALL_POLICY_HELPER_SCOPE long
+wait4_body_result(int pid, unsigned long status_addr, int options,
+		unsigned long rusage_addr, wait4_do_wait_fn_t do_wait_fn,
+		syscall_copy_to_user_fn_t copy_to_fn)
+{
+	int status;
+	int rc;
+	struct rusage usage;
+
+	rc = wait4_options_result(options);
+	if (rc) {
+		return rc;
+	}
+
+	memset(&usage, '\0', sizeof(usage));
+	rc = do_wait_fn(pid, &status, WEXITED | options, &usage);
+	if (wait_status_copy_needed_result(rc, status_addr != 0)) {
+		copy_to_fn(status_addr, &status, sizeof(status));
+	}
+	if (wait_rusage_copy_needed_result(rusage_addr != 0)) {
+		copy_to_fn(rusage_addr, &usage, sizeof(usage));
+	}
+	return rc;
+}
+
 SYSCALL_POLICY_HELPER_SCOPE int
 waitid_siginfo_needed_result(int rc, int has_infop)
 {
 	return rc > 0 && has_infop;
+}
+
+SYSCALL_POLICY_HELPER_SCOPE void
+waitid_copy_siginfo_result(int rc, unsigned long infop_addr, int status,
+		long utime_sec, long utime_usec, long stime_sec,
+		long stime_usec, syscall_copy_to_user_fn_t copy_to_fn)
+{
+	siginfo_t info;
+	struct timeval utime = { .tv_sec = utime_sec, .tv_usec = utime_usec };
+	struct timeval stime = { .tv_sec = stime_sec, .tv_usec = stime_usec };
+
+	if (!waitid_siginfo_needed_result(rc, infop_addr != 0) || !copy_to_fn) {
+		return;
+	}
+
+	memset(&info, '\0', sizeof(info));
+	info.si_signo = SIGCHLD;
+	info._sifields._sigchld.si_pid = rc;
+	info._sifields._sigchld.si_status = status;
+	info._sifields._sigchld.si_utime = timeval_to_jiffy(&utime);
+	info._sifields._sigchld.si_stime = timeval_to_jiffy(&stime);
+	info.si_code = waitid_status_code_result(status);
+	copy_to_fn(infop_addr, &info, sizeof(info));
+}
+
+SYSCALL_POLICY_HELPER_SCOPE long
+waitid_body_result(int idtype, int id, unsigned long infop_addr, int options,
+		wait4_do_wait_fn_t do_wait_fn,
+		syscall_copy_to_user_fn_t copy_to_fn)
+{
+	int pid;
+	int status;
+	int rc;
+	struct rusage usage;
+
+	rc = waitid_to_wait_pid_result(idtype, id, &pid);
+	if (rc) {
+		return rc;
+	}
+
+	rc = waitid_options_result(options);
+	if (rc) {
+		return rc;
+	}
+
+	memset(&usage, '\0', sizeof(usage));
+	rc = do_wait_fn(pid, &status, options, &usage);
+	if (rc < 0) {
+		return rc;
+	}
+
+	waitid_copy_siginfo_result(rc, infop_addr, status,
+			usage.ru_utime.tv_sec, usage.ru_utime.tv_usec,
+			usage.ru_stime.tv_sec, usage.ru_stime.tv_usec,
+			copy_to_fn);
+	return 0;
 }
 
 SYSCALL_POLICY_HELPER_SCOPE int
@@ -6646,70 +6922,81 @@ SYSCALL_DECLARE(setfsgid)
 
 SYSCALL_DECLARE(getuid)
 {
-	struct thread *thread = cpu_local_var(current);
-	struct process *proc = thread->proc;
-
-	return proc->ruid;
+	return syscall_get_process_id_field_result(cpu_local_var(current),
+			__builtin_offsetof(struct thread, proc),
+			__builtin_offsetof(struct process, ruid));
 }
 
 SYSCALL_DECLARE(geteuid)
 {
-	struct thread *thread = cpu_local_var(current);
-	struct process *proc = thread->proc;
+	return syscall_get_process_id_field_result(cpu_local_var(current),
+			__builtin_offsetof(struct thread, proc),
+			__builtin_offsetof(struct process, euid));
+}
 
-	return proc->euid;
+static long
+syscall_copy_int_to_user_bridge(unsigned long dst_addr, const int *src)
+{
+	return copy_to_user((void *)dst_addr, src, sizeof(*src));
+}
+
+static long
+syscall_copy_from_user_bridge(void *dst, unsigned long src_addr, size_t bytes)
+{
+	return copy_from_user(dst, (const void *)src_addr, bytes);
+}
+
+static long
+syscall_copy_to_user_bridge(unsigned long dst_addr, const void *src,
+		size_t bytes)
+{
+	return copy_to_user((void *)dst_addr, src, bytes);
 }
 
 SYSCALL_DECLARE(getresuid)
 {
 	struct thread *thread = cpu_local_var(current);
-	struct process *proc = thread->proc;
 	int *ruid = (int *)ihk_mc_syscall_arg0(ctx);
 	int *euid = (int *)ihk_mc_syscall_arg1(ctx);
 	int *suid = (int *)ihk_mc_syscall_arg2(ctx);
 
-	if(copy_to_user(ruid, &proc->ruid, sizeof(int)))
-		return -EFAULT;
-	if(copy_to_user(euid, &proc->euid, sizeof(int)))
-		return -EFAULT;
-	if(copy_to_user(suid, &proc->suid, sizeof(int)))
-		return -EFAULT;
-
-	return 0;
+	return syscall_getresid_body_result(thread,
+			__builtin_offsetof(struct thread, proc),
+			__builtin_offsetof(struct process, ruid),
+			__builtin_offsetof(struct process, euid),
+			__builtin_offsetof(struct process, suid),
+			(unsigned long)ruid, (unsigned long)euid,
+			(unsigned long)suid, syscall_copy_int_to_user_bridge);
 }
 
 SYSCALL_DECLARE(getgid)
 {
-	struct thread *thread = cpu_local_var(current);
-	struct process *proc = thread->proc;
-
-	return proc->rgid;
+	return syscall_get_process_id_field_result(cpu_local_var(current),
+			__builtin_offsetof(struct thread, proc),
+			__builtin_offsetof(struct process, rgid));
 }
 
 SYSCALL_DECLARE(getegid)
 {
-	struct thread *thread = cpu_local_var(current);
-	struct process *proc = thread->proc;
-
-	return proc->egid;
+	return syscall_get_process_id_field_result(cpu_local_var(current),
+			__builtin_offsetof(struct thread, proc),
+			__builtin_offsetof(struct process, egid));
 }
 
 SYSCALL_DECLARE(getresgid)
 {
 	struct thread *thread = cpu_local_var(current);
-	struct process *proc = thread->proc;
 	int *rgid = (int *)ihk_mc_syscall_arg0(ctx);
 	int *egid = (int *)ihk_mc_syscall_arg1(ctx);
 	int *sgid = (int *)ihk_mc_syscall_arg2(ctx);
 
-	if(copy_to_user(rgid, &proc->rgid, sizeof(int)))
-		return -EFAULT;
-	if(copy_to_user(egid, &proc->egid, sizeof(int)))
-		return -EFAULT;
-	if(copy_to_user(sgid, &proc->sgid, sizeof(int)))
-		return -EFAULT;
-
-	return 0;
+	return syscall_getresid_body_result(thread,
+			__builtin_offsetof(struct thread, proc),
+			__builtin_offsetof(struct process, rgid),
+			__builtin_offsetof(struct process, egid),
+			__builtin_offsetof(struct process, sgid),
+			(unsigned long)rgid, (unsigned long)egid,
+			(unsigned long)sgid, syscall_copy_int_to_user_bridge);
 }
 
 SYSCALL_DECLARE(setpgid)
@@ -8472,30 +8759,12 @@ SYSCALL_DECLARE(sigaltstack)
 	struct thread *thread = cpu_local_var(current);
 	const stack_t *ss = (const stack_t *)ihk_mc_syscall_arg0(ctx);
 	stack_t *oss = (stack_t *)ihk_mc_syscall_arg1(ctx);
-	stack_t	wss;
-	int error;
 
-	if(oss)
-		if(copy_to_user(oss, &thread->sigstack, sizeof wss))
-			return -EFAULT;
-	if(ss){
-		if(copy_from_user(&wss, ss, sizeof wss))
-			return -EFAULT;
-		error = sigaltstack_validate(wss.ss_flags, wss.ss_size);
-		if (error) {
-			return error;
-		}
-		if(sigaltstack_is_disable(wss.ss_flags)){
-			thread->sigstack.ss_sp = NULL;
-			thread->sigstack.ss_flags = SS_DISABLE;
-			thread->sigstack.ss_size = 0;
-		}
-		else{
-			memcpy(&thread->sigstack, &wss, sizeof wss);
-		}
-	}
-
-	return 0;
+	return sigaltstack_body_result(thread,
+			__builtin_offsetof(struct thread, sigstack),
+			(unsigned long)ss, (unsigned long)oss,
+			syscall_copy_from_user_bridge,
+			syscall_copy_to_user_bridge);
 }
 
 SYSCALL_DECLARE(mincore)

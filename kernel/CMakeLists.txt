@@ -49,6 +49,7 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/lib.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/abi.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/bitmap.rs"
+		"${CMAKE_CURRENT_SOURCE_DIR}/rust/cls_helpers.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/llist.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/mem_helpers.rs"
 		"${CMAKE_CURRENT_SOURCE_DIR}/rust/numparse.rs"
@@ -70,6 +71,9 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
 	set(RUST_KERNEL_CFG)
 	if (ENABLE_TOFU)
 		list(APPEND RUST_KERNEL_CFG "--cfg" "enable_tofu")
+	endif()
+	if (ENABLE_PER_CPU_ALLOC_CACHE)
+		list(APPEND RUST_KERNEL_CFG "--cfg" "enable_per_cpu_alloc_cache")
 	endif()
 	add_custom_command(
 		OUTPUT "${RUST_KERNEL_OBJ}"
@@ -145,6 +149,8 @@ if (RUST_KERNEL_ENABLED)
 		PROPERTIES COMPILE_DEFINITIONS MCKERNEL_RUST_PLIST_CORE)
 	set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/waitq.c"
 		PROPERTIES COMPILE_DEFINITIONS MCKERNEL_RUST_WAITQ_CORE)
+	set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/cls.c"
+		PROPERTIES COMPILE_DEFINITIONS MCKERNEL_RUST_CLS_HELPERS)
 	set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/init.c"
 		PROPERTIES COMPILE_DEFINITIONS MCKERNEL_RUST_INIT_HELPERS)
 	set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/mem.c"

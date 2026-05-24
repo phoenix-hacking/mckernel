@@ -663,4 +663,124 @@ int x86_destroy_pt_entry_action_result(int level, unsigned long entry,
 	return X86_DESTROY_PT_DESCEND;
 }
 
+void *x86_pt_create_result(void *init_pt, int ap_flag,
+			   x86_pt_alloc_pages_fn_t alloc_fn)
+{
+	unsigned long *init = init_pt;
+	unsigned long *pt;
+	int i;
+
+	if (!alloc_fn)
+		return NULL;
+
+	pt = alloc_fn(1, ap_flag);
+	if (!pt)
+		return NULL;
+
+	for (i = 0; i < PT_ENTRIES; i++)
+		pt[i] = 0;
+
+	for (i = PT_ENTRIES / 2; i < PT_ENTRIES; i++)
+		pt[i] = init[i];
+
+	return pt;
+}
+
+void x86_pt_destroy_root_result(void *pt, x86_pt_destroy_fn_t destroy_fn)
+{
+	unsigned long *entries = pt;
+	int i;
+
+	for (i = PT_ENTRIES / 2; i < PT_ENTRIES; i++)
+		entries[i] = 0;
+
+	if (destroy_fn)
+		destroy_fn(4, pt);
+}
+
+int x86_pt_prepare_map_result(void *pt, void *init_pt, unsigned long virt,
+			      unsigned long size, int flag,
+			      unsigned long writable_attr,
+			      x86_pt_alloc_pages_fn_t alloc_fn,
+			      x86_pt_virt_to_phys_fn_t virt_to_phys_fn,
+			      x86_pt_set_page_fn_t set_page_fn)
+{
+	unsigned long *entries = pt ? pt : init_pt;
+	unsigned long v = virt;
+	int l4idx = (v >> PTL4_SHIFT) & (PT_ENTRIES - 1);
+	int ret = 0;
+
+	if (flag == 0) {
+		int l4e = ((v + size) >> PTL4_SHIFT) & (PT_ENTRIES - 1);
+
+		if (!alloc_fn || !virt_to_phys_fn)
+			return -ENOMEM;
+
+		for (; l4idx <= l4e; l4idx++) {
+			if (entries[l4idx] & PFL4_PRESENT) {
+				return 0;
+			} else {
+				void *newpt = alloc_fn(1, 0x000001);
+
+				if (!newpt) {
+					ret = -ENOMEM;
+				} else {
+					entries[l4idx] = virt_to_phys_fn(newpt) |
+						PFL4_PDIR_ATTR;
+				}
+			}
+		}
+	} else {
+		unsigned long end = v + size;
+
+		if (!set_page_fn)
+			return -ENOMEM;
+
+		for (; v < end; v += PAGE_SIZE) {
+			ret = set_page_fn(entries, v, 0, writable_attr);
+			if (ret)
+				break;
+		}
+	}
+
+	return ret;
+}
+
+int x86_pt_set_pte_body_result(void *pt, unsigned long *ptep, size_t pgsize,
+			       unsigned long phys, unsigned long attr,
+			       unsigned long attr_mask, int use_1gb_page,
+			       x86_pt_set_pte_log_fn_t log_fn,
+			       x86_pt_set_pte_panic_fn_t panic_fn)
+{
+	unsigned long entry = 0;
+	unsigned long current = ptep ? *ptep : 0;
+	int error;
+
+	error = x86_pt_set_pte_value_result(pgsize, phys, attr, attr_mask,
+					    use_1gb_page, &entry);
+	if (error) {
+		if (error == -1 && pgsize == PTL2_SIZE) {
+			if (log_fn)
+				log_fn(X86_PT_SET_PTE_LOG_L2_ALIGN, pt, ptep,
+				       pgsize, phys, attr, error, current);
+			return error;
+		}
+		if (error == -1 && pgsize == PTL3_SIZE) {
+			if (log_fn)
+				log_fn(X86_PT_SET_PTE_LOG_L3_ALIGN, pt, ptep,
+				       pgsize, phys, attr, error, current);
+			return error;
+		}
+		if (log_fn)
+			log_fn(X86_PT_SET_PTE_LOG_PAGE_SIZE, pt, ptep, pgsize,
+			       phys, attr, error, current);
+		if (panic_fn)
+			panic_fn();
+		return error;
+	}
+
+	x86_pte_store_result(ptep, entry);
+	return 0;
+}
+
 #endif /* MCKERNEL_RUST_X86_MEMORY_HELPERS */

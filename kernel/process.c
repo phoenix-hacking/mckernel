@@ -1340,33 +1340,31 @@ int remove_process_memory_range(struct process_vm *vm,
 	return 0;
 }
 
+static void vm_range_insert_log_bridge(int event, struct process_vm *vm,
+				       struct vm_range *newrange,
+				       struct vm_range *range)
+{
+	if (event == PROCESS_VM_RANGE_INSERT_LOG_OVERLAP) {
+		ekprintf("vm_range_insert(%p,%lx-%lx %x): overlap %lx-%lx %lx\n",
+				vm, newrange->start, newrange->end, newrange->flag,
+				range->start, range->end, range->flag);
+	}
+	else if (event == PROCESS_VM_RANGE_INSERT_LOG_SUCCESS) {
+		dkprintf("vm_range_insert: %p,%p: %lx-%lx %x\n", vm,
+				newrange, newrange->start, newrange->end,
+				newrange->flag);
+	}
+}
+
+static void vm_range_insert_dump_bridge(struct process_vm *vm)
+{
+	dump_tree(vm);
+}
+
 static int vm_range_insert(struct process_vm *vm, struct vm_range *newrange)
 {
-	struct rb_root *root = &vm->vm_range_tree;
-	struct rb_node **new = &(root->rb_node), *parent = NULL;
-	struct vm_range *range;
-
-	while (*new) {
-		range = rb_entry(*new, struct vm_range, vm_rb_node);
-		parent = *new;
-		if (newrange->end <= range->start) {
-			new = &((*new)->rb_left);
-		} else if (newrange->start >= range->end) {
-			new = &((*new)->rb_right);
-		} else {
-			ekprintf("vm_range_insert(%p,%lx-%lx %x): overlap %lx-%lx %lx\n",
-					vm, newrange->start, newrange->end, newrange->flag,
-					range->start, range->end, range->flag);
-			return -EFAULT;
-		}
-	}
-
-	dkprintf("vm_range_insert: %p,%p: %lx-%lx %x\n", vm, newrange, newrange->start, newrange->end, newrange->flag);
-	dump_tree(vm);
-	rb_link_node(&newrange->vm_rb_node, parent, new);
-	rb_insert_color(&newrange->vm_rb_node, root);
-
-	return 0;
+	return process_vm_range_insert_result(&vm->vm_range_tree, newrange, vm,
+			vm_range_insert_log_bridge, vm_range_insert_dump_bridge);
 }
 
 /* Parallel memset implementation on top of general
@@ -1420,6 +1418,78 @@ void *memset_smp(cpu_set_t *cpu_set, void *s, int c, size_t n)
 	return NULL;
 }
 
+static struct vm_range *process_add_range_alloc_bridge(unsigned long size)
+{
+	return kmalloc(size, IHK_MC_AP_NOWAIT);
+}
+
+static void process_add_range_free_bridge(struct vm_range *range)
+{
+	kfree(range);
+}
+
+static int process_add_range_insert_bridge(struct process_vm *vm,
+					   struct vm_range *range)
+{
+	return vm_range_insert(vm, range);
+}
+
+static int process_add_range_update_bridge(struct process_vm *vm,
+					   struct vm_range *range,
+					   unsigned long phys,
+					   unsigned long attr)
+{
+	return update_process_page_table(vm, range, phys, attr);
+}
+
+static void process_add_range_remove_bridge(struct process_vm *vm,
+					    unsigned long start,
+					    unsigned long end)
+{
+	remove_process_memory_range(vm, start, end, NULL);
+}
+
+static void process_add_range_mark_xpmem_bridge(struct vm_range *range)
+{
+	range->memobj->flags |= MF_XPMEM;
+}
+
+static void process_add_range_memclear_bridge(unsigned long phys,
+					      unsigned long bytes)
+{
+#ifdef ARCH_MEMCLEAR
+	memclear((void *)phys_to_virt(phys), bytes);
+#else
+	memset((void *)phys_to_virt(phys), 0, bytes);
+#endif
+}
+
+static void process_add_range_log_bridge(int event, int rc,
+					 unsigned long start,
+					 unsigned long end)
+{
+	switch (event) {
+	case PROCESS_ADD_RANGE_LOG_ALLOC_FAILED:
+		kprintf("%s: ERROR: allocating pages for range\n",
+			"add_process_memory_range");
+		break;
+	case PROCESS_ADD_RANGE_LOG_INSERT_FAILED:
+		kprintf("%s: ERROR: could not insert range: %d\n",
+			"add_process_memory_range", rc);
+		break;
+	case PROCESS_ADD_RANGE_LOG_PREP_FAILED:
+		kprintf("%s: ERROR: preparing page tables\n",
+			"add_process_memory_range");
+		break;
+	case PROCESS_ADD_RANGE_LOG_DEMAND:
+		dkprintf("%s: range: 0x%lx - 0x%lx is demand paging\n",
+				"add_process_memory_range", start, end);
+		break;
+	default:
+		break;
+	}
+}
+
 int add_process_memory_range(struct process_vm *vm,
 		unsigned long start, unsigned long end,
 		unsigned long phys, unsigned long flag,
@@ -1427,7 +1497,6 @@ int add_process_memory_range(struct process_vm *vm,
 		int pgshift, void *private_data, struct vm_range **rp)
 {
 	dkprintf("%s: start=%lx,end=%lx,phys=%lx,flag=%lx\n", __FUNCTION__, start, end, phys, flag);
-	struct vm_range *range;
 	int rc;
 
 	rc = process_add_range_bounds_result(vm->region.user_start,
@@ -1440,86 +1509,16 @@ int add_process_memory_range(struct process_vm *vm,
 		return rc;
 	}
 
-	range = kmalloc(sizeof(struct vm_range), IHK_MC_AP_NOWAIT);
-	if (!range) {
-		kprintf("%s: ERROR: allocating pages for range\n", __FUNCTION__);
-		return -ENOMEM;
-	}
-
-	RB_CLEAR_NODE(&range->vm_rb_node);
-	range->start = start;
-	range->end = end;
-	range->flag = flag;
-	range->memobj = memobj;
-	range->objoff = offset;
-	range->pgshift = pgshift;
-	range->private_data = private_data;
-	range->straight_start = 0;
-#ifdef ENABLE_TOFU
-	INIT_LIST_HEAD(&range->tofu_stag_list);
-#endif
-
-	rc = vm_range_insert(vm, range);
-	if (rc) {
-		kprintf("%s: ERROR: could not insert range: %d\n",
-			__func__, rc);
-		kfree(range);
-		return rc;
-	}
-
-	rc = 0;
-	if (phys == NOPHYS) {
-		/* Nothing to map */
-	}
-	else if (flag & VR_REMOTE) {
-		rc = update_process_page_table(vm, range, phys, IHK_PTA_REMOTE);
-	}
-	else if (flag & VR_IO_NOCACHE) {
-		rc = update_process_page_table(vm, range, phys, PTATTR_UNCACHABLE);
-	}
-	else if (flag & VR_XPMEM) {
-		range->memobj->flags |= MF_XPMEM;
-		// xpmem_update_process_page_table() is called in do_mmap()
-	}
-	else if (flag & VR_DEMAND_PAGING) {
-		dkprintf("%s: range: 0x%lx - 0x%lx is demand paging\n",
-				__FUNCTION__, range->start, range->end);
-		rc = 0;
-	}
-	else if ((range->flag & VR_PROT_MASK) == VR_PROT_NONE) {
-		rc = 0;
-	}
-	else {
-		rc = update_process_page_table(vm, range, phys, 0);
-		// memory_stat_rss_add() is called in ihk_mc_pt_set_range()
-	}
-
-	if (rc != 0) {
-		kprintf("%s: ERROR: preparing page tables\n", __FUNCTION__);
-		remove_process_memory_range(vm,
-				range->start, range->end, NULL);
-		kfree(range);
-		return rc;
-	}
-
-	/* Clear content! */
-	if (phys != NOPHYS
-			&& !(flag & (VR_REMOTE | VR_DEMAND_PAGING | VR_XPMEM))
-			&& ((flag & VR_PROT_MASK) != VR_PROT_NONE)) {
-
-#ifdef ARCH_MEMCLEAR
-		memclear((void *)phys_to_virt(phys), end - start);
-#else
-		memset((void *)phys_to_virt(phys), 0, end - start);
-#endif
-	}
-
-	/* Return range object if requested */
-	if (rp) {
-		*rp = range;
-	}
-
-	return 0;
+	return process_add_range_orchestrate_result(vm, sizeof(struct vm_range),
+			start, end, phys, flag, memobj, offset, pgshift,
+			private_data, rp, process_add_range_alloc_bridge,
+			process_add_range_free_bridge,
+			process_add_range_insert_bridge,
+			process_add_range_update_bridge,
+			process_add_range_remove_bridge,
+			process_add_range_mark_xpmem_bridge,
+			process_add_range_memclear_bridge,
+			process_add_range_log_bridge);
 }
 
 struct vm_range *lookup_process_memory_range(
