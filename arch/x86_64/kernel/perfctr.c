@@ -29,6 +29,11 @@ static int ihk_mc_perfctr_fixed_init(int counter, int mode);
 #define DDEBUG_DEFAULT DDEBUG_PRINT
 #endif
 
+int is_sampling_event(struct mc_perf_event *event)
+{
+	return event->attr.sample_period != 0;
+}
+
 #define X86_CR4_PCE     0x00000100
 
 #define PERFCTR_CHKANDJUMP(cond, msg, err)								\
@@ -225,7 +230,7 @@ int ihk_mc_perfctr_init_raw(int counter, unsigned int code, int mode)
 
 int ihk_mc_perfctr_set_extra(struct mc_perf_event *event)
 {
-	struct thread *thread = cpu_local_var(current);
+	struct thread *thread = get_this_cpu_local_var()->current;
 
 	// allocate extra_reg
 	if (thread->extra_reg_alloc_map & (1UL << event->extra_reg.idx)) {

@@ -13,39 +13,22 @@
 #ifndef ARCH_CPU_H
 #define ARCH_CPU_H
 
-#define mb()    asm volatile("mfence":::"memory")
-#define rmb()   asm volatile("lfence":::"memory")
-#define wmb()   asm volatile("sfence" ::: "memory")
+void mb(void);
+void rmb(void);
+void wmb(void);
+void smp_mb(void);
+void smp_rmb(void);
+void smp_wmb(void);
+void arch_barrier(void);
 
-#define smp_mb()    mb()
-#define smp_rmb()   rmb()
-#define smp_wmb()	barrier()
-
-#define arch_barrier()	asm volatile("" : : : "memory")
-
-static inline unsigned long read_tsc(void)
-{
-	unsigned int low, high;
-
-	asm volatile("rdtsc" : "=a"(low), "=d"(high));
-
-	return (low | ((unsigned long)high << 32));
-}
-
-#define smp_load_acquire(p)						\
-({									\
-	typeof(*p) ___p1 = ACCESS_ONCE(*p);				\
-	compiletime_assert_atomic_type(*p);				\
-	barrier();							\
-	___p1;								\
-})
-
-#define smp_store_release(p, v)			\
-({							\
-	compiletime_assert_atomic_type(*p);	\
-	barrier();							\
-	WRITE_ONCE(*p, v);					\
-})
+unsigned long read_tsc(void);
+unsigned long smp_load_acquire_ulong(const unsigned long *p);
+unsigned int smp_load_acquire_uint(const unsigned int *p);
+int smp_load_acquire_int(const int *p);
+void *smp_load_acquire_ptr(void *const *p);
+void smp_store_release_ulong(unsigned long *p, unsigned long v);
+void smp_store_release_uint(unsigned int *p, unsigned int v);
+void smp_store_release_int(int *p, int v);
 
 void arch_flush_icache_all(void);
 

@@ -1,5 +1,7 @@
 #![no_std]
 
+#[cfg(mckernel_crash_x86_64)]
+use core::ffi::{c_int, c_long, c_void};
 use core::panic::PanicInfo;
 
 const VR_STACK: usize = 0x1;
@@ -13,6 +15,11 @@ const PS_INTERRUPTIBLE: i32 = 0x2;
 const PS_UNINTERRUPTIBLE: i32 = 0x4;
 const PS_ZOMBIE: i32 = 0x8;
 const PS_STOPPED: i32 = 0x20;
+const STR_PID: i32 = 0x1;
+const STR_TASK: i32 = 0x2;
+const STR_INVALID: i32 = 0x4;
+const LINUX_PAGE_OFFSET_BASE_NAME: [u8; 23] = *b"linux_page_offset_base\0";
+const X86_KERNEL_PHYS_BASE_NAME: [u8; 21] = *b"x86_kernel_phys_base\0";
 
 static STATUS_RUNNING: [u8; 3] = *b"RU\0";
 static STATUS_INTERRUPTIBLE: [u8; 3] = *b"IN\0";
@@ -31,6 +38,32 @@ static PGSHIFT_512G: [u8; 5] = *b"512G\0";
 static PGSHIFT_4T: [u8; 3] = *b"4T\0";
 static PGSHIFT_32P: [u8; 4] = *b"32P\0";
 static EMPTY: [u8; 1] = *b"\0";
+
+type MckCrashReadUlongFn = unsafe extern "C" fn(addr: usize, out: *mut usize) -> i32;
+type MckCrashReadIntFn = unsafe extern "C" fn(addr: usize, out: *mut i32) -> i32;
+type MckCrashLookupPidFn =
+    unsafe extern "C" fn(pid: usize, thash: usize, thread_out: *mut usize) -> i32;
+type MckCrashGetSymbolFn = unsafe extern "C" fn(name: *const u8) -> usize;
+
+#[cfg(mckernel_crash_x86_64)]
+unsafe extern "C" {
+    static mut LINUX_PAGE_OFFSET: usize;
+    #[link_name = "x86_kernel_phys_base"]
+    static mut X86_KERNEL_PHYS_BASE_CRASH: usize;
+    static mck_crash_map_kernel_start: usize;
+    static mck_crash_map_fixed_start: usize;
+    static mck_crash_map_st_start: usize;
+
+    fn kvtop(task: *mut c_void, vaddr: usize, paddr: *mut usize, verbose: c_int) -> c_int;
+    fn readmem(
+        addr: u64,
+        memtype: c_int,
+        buffer: *mut c_void,
+        size: c_long,
+        type_: *mut u8,
+        error_handle: usize,
+    ) -> c_int;
+}
 
 unsafe fn cstr_len(ptr: *const u8) -> usize {
     if ptr.is_null() {
@@ -389,6 +422,98 @@ pub unsafe extern "C" fn mck_crash_x86_direct_phys_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn mck_crash_mcreadmem_x86_addr_result(
+    addr: usize,
+    linux_page_offset: usize,
+    x86_kernel_phys_base: usize,
+    map_kernel_start: usize,
+    map_fixed_start: usize,
+    map_st_start: usize,
+    translated_out: *mut usize,
+) -> i32 {
+    if translated_out.is_null()
+        || linux_page_offset == usize::MAX
+        || x86_kernel_phys_base == usize::MAX
+    {
+        return 0;
+    }
+
+    let mut phys = 0usize;
+    if unsafe {
+        mck_crash_x86_direct_phys_result(
+            addr,
+            linux_page_offset,
+            x86_kernel_phys_base,
+            map_kernel_start,
+            map_fixed_start,
+            map_st_start,
+            &mut phys,
+        )
+    } != 0
+    {
+        unsafe {
+            *translated_out = phys.wrapping_add(linux_page_offset);
+        }
+        return 1;
+    }
+
+    unsafe {
+        *translated_out = addr;
+    }
+    2
+}
+
+#[cfg(mckernel_crash_x86_64)]
+#[no_mangle]
+pub unsafe extern "C" fn mcreadmem(
+    addr: u64,
+    memtype: c_int,
+    buffer: *mut c_void,
+    size: c_long,
+    type_: *mut u8,
+    error_handle: usize,
+) -> c_int {
+    let mut translated = addr as usize;
+    let linux_page_offset = unsafe { LINUX_PAGE_OFFSET };
+    let x86_base = unsafe { X86_KERNEL_PHYS_BASE_CRASH };
+
+    if linux_page_offset != usize::MAX && x86_base != usize::MAX {
+        let mut out = 0usize;
+        let action = unsafe {
+            mck_crash_mcreadmem_x86_addr_result(
+                translated,
+                linux_page_offset,
+                x86_base,
+                mck_crash_map_kernel_start,
+                mck_crash_map_fixed_start,
+                mck_crash_map_st_start,
+                &mut out,
+            )
+        };
+        if action == 1 {
+            translated = out;
+        } else if action == 2 {
+            let mut phys = 0usize;
+            unsafe {
+                kvtop(core::ptr::null_mut(), translated, &mut phys, 0);
+            }
+            translated = phys.wrapping_add(linux_page_offset);
+        }
+    }
+
+    unsafe {
+        readmem(
+            translated as u64,
+            memtype,
+            buffer,
+            size,
+            type_,
+            error_handle,
+        )
+    }
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn mck_crash_thread_status_label_result(status: i32) -> *const u8 {
     if status == PS_RUNNING {
         STATUS_RUNNING.as_ptr()
@@ -597,6 +722,42 @@ pub unsafe extern "C" fn mck_crash_kmsg_first_part_result(head: i32, tail: i32, 
     } else {
         (tail - head) as usize
     }
+}
+
+type MckCrashReadStringFn = unsafe extern "C" fn(addr: usize, buf: *mut u8, len: i32) -> i32;
+
+#[no_mangle]
+pub unsafe extern "C" fn mck_crash_kmsg_read_body_result(
+    kmsg_buf_str: usize,
+    head: i32,
+    tail: i32,
+    len: i32,
+    msg: *mut u8,
+    read_fn: MckCrashReadStringFn,
+) -> i32 {
+    if msg.is_null()
+        || len <= 0
+        || head < 0
+        || tail < 0
+        || head > len
+        || tail > len
+        || (read_fn as usize) == 0
+    {
+        return 0;
+    }
+
+    let first_len = mck_crash_kmsg_first_part_result(head, tail, len) as i32;
+    if unsafe { read_fn(kmsg_buf_str.wrapping_add(head as usize), msg, first_len) } == 0 {
+        return 0;
+    }
+
+    if mck_crash_kmsg_wrap_result(head, tail) != 0
+        && unsafe { read_fn(kmsg_buf_str, msg.add(first_len as usize), tail) } == 0
+    {
+        return 0;
+    }
+
+    1
 }
 
 #[no_mangle]
@@ -951,6 +1112,93 @@ pub extern "C" fn mck_crash_pid_hash_head_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn mck_crash_context_lookup_body_result(
+    input: *const u8,
+    badaddr: usize,
+    clv: usize,
+    clv_resource_set_offset: isize,
+    resource_set_thread_hash_offset: isize,
+    thread_tid_offset: isize,
+    pid_out: *mut usize,
+    thread_out: *mut usize,
+    read_ulong_fn: Option<MckCrashReadUlongFn>,
+    read_int_fn: Option<MckCrashReadIntFn>,
+    lookup_pid_fn: Option<MckCrashLookupPidFn>,
+) -> i32 {
+    if input.is_null() {
+        return STR_INVALID;
+    }
+
+    let mut dvalue = badaddr;
+    let mut hvalue = badaddr;
+    unsafe {
+        mck_crash_parse_context_values_result(input, badaddr, &mut dvalue, &mut hvalue);
+    }
+
+    if let (Some(read_ulong), Some(lookup_pid)) = (read_ulong_fn, lookup_pid_fn) {
+        let mut rset = 0usize;
+        let mut thash = 0usize;
+        if unsafe {
+            read_ulong(
+                clv.wrapping_add(clv_resource_set_offset as usize),
+                &mut rset,
+            )
+        } != 0
+            && unsafe {
+                read_ulong(
+                    rset.wrapping_add(resource_set_thread_hash_offset as usize),
+                    &mut thash,
+                )
+            } != 0
+        {
+            let mut found_thread = 0usize;
+            if dvalue != badaddr && unsafe { lookup_pid(dvalue, thash, &mut found_thread) } != 0 {
+                unsafe {
+                    if !pid_out.is_null() {
+                        *pid_out = dvalue;
+                    }
+                    if !thread_out.is_null() {
+                        *thread_out = found_thread;
+                    }
+                }
+                return STR_PID;
+            }
+
+            if hvalue != badaddr && unsafe { lookup_pid(hvalue, thash, &mut found_thread) } != 0 {
+                unsafe {
+                    if !pid_out.is_null() {
+                        *pid_out = hvalue;
+                    }
+                    if !thread_out.is_null() {
+                        *thread_out = found_thread;
+                    }
+                }
+                return STR_PID;
+            }
+        }
+    }
+
+    if hvalue != badaddr {
+        if let Some(read_int) = read_int_fn {
+            let mut tid = 0i32;
+            if unsafe { read_int(hvalue.wrapping_add(thread_tid_offset as usize), &mut tid) } != 0 {
+                unsafe {
+                    if !thread_out.is_null() {
+                        *thread_out = hvalue;
+                    }
+                    if !pid_out.is_null() {
+                        *pid_out = tid as usize;
+                    }
+                }
+                return STR_TASK;
+            }
+        }
+    }
+
+    STR_INVALID
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn mck_crash_parse_hex_addr_result(
     input: *const u8,
     badaddr: usize,
@@ -979,6 +1227,24 @@ pub extern "C" fn mck_crash_same_boot_result(
     (old_boot_param_pa == new_boot_param_pa
         && old_boot_sec == new_boot_sec
         && old_boot_nsec == new_boot_nsec) as i32
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mck_crash_x86_arch_init_body_result(
+    linux_page_offset_out: *mut usize,
+    x86_kernel_phys_base_out: *mut usize,
+    get_symbol_fn: MckCrashGetSymbolFn,
+) {
+    if !linux_page_offset_out.is_null() {
+        unsafe {
+            *linux_page_offset_out = get_symbol_fn(LINUX_PAGE_OFFSET_BASE_NAME.as_ptr());
+        }
+    }
+    if !x86_kernel_phys_base_out.is_null() {
+        unsafe {
+            *x86_kernel_phys_base_out = get_symbol_fn(X86_KERNEL_PHYS_BASE_NAME.as_ptr());
+        }
+    }
 }
 
 #[no_mangle]

@@ -1694,6 +1694,7 @@ pub struct IhkOsRusage {
 }
 
 #[repr(C)]
+#[derive(Clone, Copy)]
 pub struct RusagePercpu {
     pub user_tsc: CULong,
     pub system_tsc: CULong,
@@ -2295,6 +2296,8 @@ const _: () = {
 
     #[cfg(not(enable_tofu))]
     assert_eq_usize(size_of::<Process>(), 1728);
+    #[cfg(enable_tofu)]
+    assert_eq_usize(size_of::<Process>(), 18112);
     assert_eq_usize(align_of::<Process>(), 64);
     assert_eq_usize(offset_of!(Process, vm), 128);
     assert_eq_usize(offset_of!(Process, threads_list), 136);
@@ -2311,14 +2314,22 @@ const _: () = {
     assert_eq_usize(offset_of!(Process, stime), 1296);
     assert_eq_usize(offset_of!(Process, maxrss), 1360);
     assert_eq_usize(offset_of!(Process, straight_map), 1432);
+    #[cfg(enable_tofu)]
+    assert_eq_usize(offset_of!(Process, enable_tofu), 1436);
     assert_eq_usize(offset_of!(Process, perf_status), 1456);
     assert_eq_usize(offset_of!(Process, monitoring_event), 1464);
     assert_eq_usize(offset_of!(Process, profile), 1472);
     assert_eq_usize(offset_of!(Process, nr_processes), 1616);
     assert_eq_usize(offset_of!(Process, straight_va), 1624);
     assert_eq_usize(offset_of!(Process, coredump_lock), 1664);
+    #[cfg(enable_tofu)]
+    assert_eq_usize(offset_of!(Process, fd_pde_data), 1728);
+    #[cfg(enable_tofu)]
+    assert_eq_usize(offset_of!(Process, fd_path), 9920);
 
     #[cfg(not(enable_tofu))]
+    assert_eq_usize(size_of::<Thread>(), 5568);
+    #[cfg(enable_tofu)]
     assert_eq_usize(size_of::<Thread>(), 5568);
     assert_eq_usize(align_of::<Thread>(), 64);
     assert_eq_usize(offset_of!(Thread, cpu_id), 16);
@@ -2344,6 +2355,8 @@ const _: () = {
     assert_eq_usize(offset_of!(Thread, pmc_alloc_map), 5464);
     assert_eq_usize(offset_of!(Thread, coredump_regs), 5480);
     assert_eq_usize(offset_of!(Thread, rpf_backlog), 5520);
+    #[cfg(enable_tofu)]
+    assert_eq_usize(offset_of!(Thread, fd_path_in_open), 5536);
 
     assert_eq_usize(size_of::<Mckfd>(), 80);
     assert_eq_usize(offset_of!(Mckfd, fd), 8);
@@ -2407,23 +2420,65 @@ const _: () = {
     assert_eq_usize(size_of::<Backlog>(), 32);
     assert_eq_usize(offset_of!(Backlog, func), 16);
     assert_eq_usize(offset_of!(Backlog, arg), 24);
+    #[cfg(not(enable_tofu))]
     assert_eq_usize(size_of::<CpuLocalVar>(), 8128);
+    #[cfg(enable_tofu)]
+    assert_eq_usize(size_of::<CpuLocalVar>(), 24576);
     assert_eq_usize(align_of::<CpuLocalVar>(), 64);
     assert_eq_usize(offset_of!(CpuLocalVar, idle), 64);
     assert_eq_usize(offset_of!(CpuLocalVar, idle_proc), 5632);
+    #[cfg(not(enable_tofu))]
     assert_eq_usize(offset_of!(CpuLocalVar, idle_vm), 7360);
+    #[cfg(enable_tofu)]
+    assert_eq_usize(offset_of!(CpuLocalVar, idle_vm), 23744);
+    #[cfg(not(enable_tofu))]
     assert_eq_usize(offset_of!(CpuLocalVar, idle_asp), 7664);
+    #[cfg(enable_tofu)]
+    assert_eq_usize(offset_of!(CpuLocalVar, idle_asp), 24120);
+    #[cfg(not(enable_tofu))]
     assert_eq_usize(offset_of!(CpuLocalVar, current), 7848);
+    #[cfg(enable_tofu)]
+    assert_eq_usize(offset_of!(CpuLocalVar, current), 24304);
+    #[cfg(not(enable_tofu))]
     assert_eq_usize(offset_of!(CpuLocalVar, runq), 7872);
+    #[cfg(enable_tofu)]
+    assert_eq_usize(offset_of!(CpuLocalVar, runq), 24328);
+    #[cfg(not(enable_tofu))]
     assert_eq_usize(offset_of!(CpuLocalVar, status), 7920);
+    #[cfg(enable_tofu)]
+    assert_eq_usize(offset_of!(CpuLocalVar, status), 24376);
+    #[cfg(not(enable_tofu))]
     assert_eq_usize(offset_of!(CpuLocalVar, pending_free_pages), 7928);
+    #[cfg(enable_tofu)]
+    assert_eq_usize(offset_of!(CpuLocalVar, pending_free_pages), 24384);
+    #[cfg(not(enable_tofu))]
     assert_eq_usize(offset_of!(CpuLocalVar, migq), 7952);
+    #[cfg(enable_tofu)]
+    assert_eq_usize(offset_of!(CpuLocalVar, migq), 24408);
+    #[cfg(not(enable_tofu))]
     assert_eq_usize(offset_of!(CpuLocalVar, no_preempt), 7976);
+    #[cfg(enable_tofu)]
+    assert_eq_usize(offset_of!(CpuLocalVar, no_preempt), 24432);
+    #[cfg(not(enable_tofu))]
     assert_eq_usize(offset_of!(CpuLocalVar, monitor), 8000);
+    #[cfg(enable_tofu)]
+    assert_eq_usize(offset_of!(CpuLocalVar, monitor), 24456);
+    #[cfg(not(enable_tofu))]
     assert_eq_usize(offset_of!(CpuLocalVar, rusage), 8008);
+    #[cfg(enable_tofu)]
+    assert_eq_usize(offset_of!(CpuLocalVar, rusage), 24464);
+    #[cfg(not(enable_tofu))]
     assert_eq_usize(offset_of!(CpuLocalVar, smp_func_req_list), 8024);
+    #[cfg(enable_tofu)]
+    assert_eq_usize(offset_of!(CpuLocalVar, smp_func_req_list), 24480);
+    #[cfg(not(enable_tofu))]
     assert_eq_usize(offset_of!(CpuLocalVar, backlog_list), 8056);
+    #[cfg(enable_tofu)]
+    assert_eq_usize(offset_of!(CpuLocalVar, backlog_list), 24512);
+    #[cfg(not(enable_tofu))]
     assert_eq_usize(offset_of!(CpuLocalVar, uti_futex_resp), 8072);
+    #[cfg(enable_tofu)]
+    assert_eq_usize(offset_of!(CpuLocalVar, uti_futex_resp), 24528);
     assert_eq_usize(size_of::<IhkRegisterDeviceData>(), 32);
     assert_eq_usize(offset_of!(IhkRegisterDeviceData, ops), 8);
     assert_eq_usize(offset_of!(IhkRegisterDeviceData, flag), 24);

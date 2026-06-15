@@ -305,15 +305,14 @@ enum {
 
         TOF_RSC_NUM     /* 372 */
 };
-#define TOF_RSC_TOQ(TNI, CQID)  (TOF_RSC_TNI0_TOQ0 + (TNI * 12) + CQID)
-#define TOF_RSC_TCQ(TNI, CQID)  (TOF_RSC_TNI0_TCQ0 + (TNI * 12) + CQID)
-#define TOF_RSC_MRQ(TNI, CQID)  (TOF_RSC_TNI0_MRQ0 + (TNI * 12) + CQID)
-#define TOF_RSC_PBQ(TNI)        (TOF_RSC_TNI0_PBQ + TNI)
-#define TOF_RSC_PRQ(TNI)        (TOF_RSC_TNI0_PRQ + TNI)
-#define TOF_RSC_STT(TNI, CQID)  (TOF_RSC_TNI0_STEERINGTABLE0 + (TNI * 12) + CQID)
-#define TOF_RSC_MBT(TNI, CQID)  (TOF_RSC_TNI0_MBTABLE0 + (TNI * 12) + CQID)
+int TOF_RSC_TOQ(int tni, int cqid);
+int TOF_RSC_TCQ(int tni, int cqid);
+int TOF_RSC_MRQ(int tni, int cqid);
+int TOF_RSC_PBQ(int tni);
+int TOF_RSC_PRQ(int tni);
+int TOF_RSC_STT(int tni, int cqid);
+int TOF_RSC_MBT(int tni, int cqid);
 
 #endif
 
 /* vim: set noet ts=8 sw=8 sts=0 tw=0 : */
-

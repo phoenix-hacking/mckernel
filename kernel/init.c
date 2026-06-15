@@ -226,7 +226,7 @@ void monitor_init(void)
 	z = sizeof(struct ihk_os_monitor) +
 	    sizeof(struct ihk_os_cpu_monitor) * cpu_info->ncpus;
 	z = (z + PAGE_SIZE -1) >> PAGE_SHIFT;
-	monitor = ihk_mc_alloc_pages(z, IHK_MC_AP_CRITICAL);
+	monitor = _ihk_mc_alloc_aligned_pages_node(z, PAGE_P2ALIGN, IHK_MC_AP_CRITICAL, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);
 	memset(monitor, 0, z * PAGE_SIZE);
 	monitor->num_processors = cpu_info->ncpus;
 	phys = virt_to_phys(monitor);

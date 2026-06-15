@@ -70,7 +70,8 @@ struct memobj;
  * as well, so that Linux can also call into LWK text.
  * It's defined by cmake.
  */
-#define STACK_TOP(region)  ((region)->user_end)
+struct vm_regions;
+unsigned long STACK_TOP(const struct vm_regions *region);
 
 #define MAP_VMAP_SIZE      0x0000000100000000UL
 
@@ -152,17 +153,17 @@ typedef unsigned long pte_t;
 #define PM_ENTRY_BYTES      sizeof(uint64_t)
 #define PM_STATUS_BITS      3
 #define PM_STATUS_OFFSET    (64 - PM_STATUS_BITS)
-#define PM_STATUS_MASK      (((1LL << PM_STATUS_BITS) - 1) << PM_STATUS_OFFSET)
-#define PM_STATUS(nr)       (((nr) << PM_STATUS_OFFSET) & PM_STATUS_MASK)
+#define PM_STATUS_MASK      0xe000000000000000ULL
+uint64_t PM_STATUS(uint64_t nr);
 #define PM_PSHIFT_BITS      6
 #define PM_PSHIFT_OFFSET    (PM_STATUS_OFFSET - PM_PSHIFT_BITS)
-#define PM_PSHIFT_MASK      (((1LL << PM_PSHIFT_BITS) - 1) << PM_PSHIFT_OFFSET)
-#define PM_PSHIFT(x)        (((uint64_t) (x) << PM_PSHIFT_OFFSET) & PM_PSHIFT_MASK)
-#define PM_PFRAME_MASK      ((1LL << PM_PSHIFT_OFFSET) - 1)
-#define PM_PFRAME(x)        ((x) & PM_PFRAME_MASK)
+#define PM_PSHIFT_MASK      0x1f80000000000000ULL
+uint64_t PM_PSHIFT(uint64_t x);
+#define PM_PFRAME_MASK      0x007fffffffffffffULL
+uint64_t PM_PFRAME(uint64_t x);
 
-#define PM_PRESENT          PM_STATUS(4LL)
-#define PM_SWAP             PM_STATUS(2LL)
+#define PM_PRESENT          0x8000000000000000ULL
+#define PM_SWAP             0x4000000000000000ULL
 
 #define USER_STACK_PREPAGE_SIZE	LARGE_PAGE_SIZE
 #define USER_STACK_PAGE_MASK	LARGE_PAGE_MASK
@@ -185,255 +186,44 @@ enum ihk_mc_pt_attribute {
 
 extern enum ihk_mc_pt_attribute attr_mask;
 
-static inline int pfn_is_write_combined(uintptr_t pfn)
-{
-	return ((pfn & PFL1_PWT) && !(pfn & PFL1_PCD));
-}
-
-static inline int pte_is_null(pte_t *ptep)
-{
-	return (*ptep == PTE_NULL);
-}
-
-static inline int pte_is_present(pte_t *ptep)
-{
-	return !!(*ptep & PF_PRESENT);
-}
-
-static inline int pte_is_writable(pte_t *ptep)
-{
-	return !!(*ptep & PF_WRITABLE);
-}
-
-static inline int pte_is_dirty(pte_t *ptep, size_t pgsize)
-{
-	switch (pgsize) {
-	case PTL1_SIZE:	return !!(*ptep & PFL1_DIRTY);
-	case PTL2_SIZE:	return !!(*ptep & PFL2_DIRTY);
-	case PTL3_SIZE:	return !!(*ptep & PFL3_DIRTY);
-	default:
-#if 0	/* XXX: workaround. cannot use panic() here */
-		panic("pte_is_dirty");
-#else
-		return !!(*ptep & PTATTR_DIRTY);
-#endif
-	}
-}
-
-static inline int pte_is_fileoff(pte_t *ptep, size_t pgsize)
-{
-	switch (pgsize) {
-	case PTL1_SIZE:	return !!(*ptep & PFL1_FILEOFF);
-	case PTL2_SIZE:	return !!(*ptep & PFL2_FILEOFF);
-	case PTL3_SIZE:	return !!(*ptep & PFL3_FILEOFF);
-	default:
-#if 0	/* XXX: workaround. cannot use panic() here */
-		panic("pte_is_fileoff");
-#else
-		return !!(*ptep & PTATTR_FILEOFF);
-#endif
-	}
-}
-
-static inline void pte_update_phys(pte_t *ptep, unsigned long phys)
-{
-	*ptep = (*ptep & ~PT_PHYSMASK) | (phys & PT_PHYSMASK);
-}
-
-static inline uintptr_t pte_get_phys(pte_t *ptep)
-{
-	return (*ptep & PT_PHYSMASK);
-}
-
-static inline off_t pte_get_off(pte_t *ptep, size_t pgsize)
-{
-	return (off_t)(*ptep & PAGE_MASK);
-}
-
-static inline enum ihk_mc_pt_attribute pte_get_attr(pte_t *ptep, size_t pgsize)
-{
-	enum ihk_mc_pt_attribute attr;
-
-	attr = *ptep & attr_mask;
-	if (*ptep & PFLX_PWT) {
-		if (*ptep & PFLX_PCD) {
-			attr |= PTATTR_UNCACHABLE;
-		}
-		else {
-			attr |= PTATTR_WRITE_COMBINED;
-		}
-	}
-	if (((pgsize == PTL2_SIZE) && (*ptep & PFL2_SIZE))
-			|| ((pgsize == PTL3_SIZE) && (*ptep & PFL3_SIZE))) {
-		attr |= PTATTR_LARGEPAGE;
-	}
-
-	return attr;
-} /* pte_get_attr() */
-
-static inline void pte_make_null(pte_t *ptep, size_t pgsize)
-{
-	*ptep = PTE_NULL;
-	return;
-}
-
-static inline void pte_make_fileoff(off_t off,
-		enum ihk_mc_pt_attribute ptattr, size_t pgsize, pte_t *ptep)
-{
-	uint64_t attr;
-
-	attr = ptattr & ~PAGE_MASK;
-
-	switch (pgsize) {
-	case PTL1_SIZE:	attr |= PFL1_FILEOFF;			break;
-	case PTL2_SIZE:	attr |= PFL2_FILEOFF | PFL2_SIZE;	break;
-	case PTL3_SIZE:	attr |= PFL3_FILEOFF | PFL3_SIZE;	break;
-	default:
-#if 0	/* XXX: workaround. cannot use panic() here */
-		panic("pte_make_fileoff");
-#else
-		attr |= PTATTR_FILEOFF;
-#endif
-		break;
-	}
-	*ptep = (off & PAGE_MASK) | attr;
-}
-
-#if 0	/* XXX: workaround. cannot use panic() here */
-static inline void pte_xchg(pte_t *ptep, pte_t *valp)
-{
-	*valp = xchg(ptep, *valp);
-}
-#else
-#define	pte_xchg(p,vp)	do { *(vp) = xchg((p), *(vp)); } while (0)
-#endif
-
-static inline void pte_clear_dirty(pte_t *ptep, size_t pgsize)
-{
-	uint64_t mask;
-
-	switch (pgsize) {
-	default:	/* through */
-	case PTL1_SIZE:	mask = ~PFL1_DIRTY;	break;
-	case PTL2_SIZE:	mask = ~PFL2_DIRTY;	break;
-	case PTL3_SIZE:	mask = ~PFL3_DIRTY;	break;
-	}
-
-	asm volatile ("lock andq %0,%1" :: "r"(mask), "m"(*ptep));
-	return;
-}
-
-static inline void pte_set_dirty(pte_t *ptep, size_t pgsize)
-{
-	uint64_t mask;
-
-	switch (pgsize) {
-	default:	/* through */
-	case PTL1_SIZE:	mask = PFL1_DIRTY;	break;
-	case PTL2_SIZE:	mask = PFL2_DIRTY;	break;
-	case PTL3_SIZE:	mask = PFL3_DIRTY;	break;
-	}
-
-	asm volatile ("lock orq %0,%1" :: "r"(mask), "m"(*ptep));
-	return;
-}
-
-static inline int pte_is_contiguous(pte_t *ptep)
-{
-	return 0;
-}
-
-static inline int pgsize_is_contiguous(size_t pgsize)
-{
-	return 0;
-}
-
-static inline int pgsize_to_tbllv(size_t pgsize)
-{
-	switch (pgsize) {
-	case PTL1_SIZE:	return 1;
-	case PTL2_SIZE:	return 2;
-	case PTL3_SIZE:	return 3;
-	case PTL4_SIZE:	return 4;
-	default:
-#if 0	/* XXX: workaround. cannot use panic() here */
-		panic("pgsize_to_tbllv");
-#else
-		return 0;
-#endif
-	}
-	return 0;
-}
-
-static inline int pgsize_to_pgshift(size_t pgsize)
-{
-	switch (pgsize) {
-	case PTL1_SIZE:	return PTL1_SHIFT;
-	case PTL2_SIZE:	return PTL2_SHIFT;
-	case PTL3_SIZE:	return PTL3_SHIFT;
-	case PTL4_SIZE:	return PTL4_SHIFT;
-	default: return -EINVAL;
-	}
-}
-
-static inline size_t tbllv_to_pgsize(int level)
-{
-	switch (level) {
-	case 1: return PTL1_SIZE;
-	case 2: return PTL2_SIZE;
-	case 3: return PTL3_SIZE;
-	case 4: return PTL4_SIZE;
-	default:
-#if 0	/* XXX: workaround. cannot use panic() here */
-		panic("tbllv_to_pgsize");
-#else
-		return 0;
-#endif
-	}
-	return 0;
-}
-
-static inline size_t tbllv_to_contpgsize(int level)
-{
-	return 0;
-}
-
-static inline int tbllv_to_contpgshift(int level)
-{
-	return 0;
-}
-
-static inline pte_t *get_contiguous_head(pte_t *__ptep, size_t __pgsize)
-{
-	return __ptep;
-}
-
-static inline pte_t *get_contiguous_tail(pte_t *__ptep, size_t __pgsize)
-{
-	return __ptep;
-}
+int pfn_is_write_combined(uintptr_t pfn);
+int pte_is_null(pte_t *ptep);
+int pte_is_present(pte_t *ptep);
+int pte_is_writable(pte_t *ptep);
+int pte_is_dirty(pte_t *ptep, size_t pgsize);
+int pte_is_fileoff(pte_t *ptep, size_t pgsize);
+void pte_update_phys(pte_t *ptep, unsigned long phys);
+uintptr_t pte_get_phys(pte_t *ptep);
+off_t pte_get_off(pte_t *ptep, size_t pgsize);
+enum ihk_mc_pt_attribute pte_get_attr(pte_t *ptep, size_t pgsize);
+void pte_make_null(pte_t *ptep, size_t pgsize);
+void pte_make_fileoff(off_t off, enum ihk_mc_pt_attribute ptattr,
+		      size_t pgsize, pte_t *ptep);
+void pte_xchg(pte_t *ptep, pte_t *valp);
+void pte_clear_dirty(pte_t *ptep, size_t pgsize);
+void pte_set_dirty(pte_t *ptep, size_t pgsize);
+int pte_is_contiguous(pte_t *ptep);
+int pgsize_is_contiguous(size_t pgsize);
+int pgsize_to_tbllv(size_t pgsize);
+int pgsize_to_pgshift(size_t pgsize);
+size_t tbllv_to_pgsize(int level);
+size_t tbllv_to_contpgsize(int level);
+int tbllv_to_contpgshift(int level);
+pte_t *get_contiguous_head(pte_t *__ptep, size_t __pgsize);
+pte_t *get_contiguous_tail(pte_t *__ptep, size_t __pgsize);
+int split_contiguous_pages(pte_t *ptep, size_t pgsize,
+		uint32_t memobj_flags);
+int page_is_contiguous_head(pte_t *ptep, size_t pgsize);
+int page_is_contiguous_tail(pte_t *ptep, size_t pgsize);
+struct page_table;
+void arch_adjust_allocate_page_size(struct page_table *pt,
+				    uintptr_t fault_addr,
+				    pte_t *ptep,
+				    void **pgaddrp,
+				    size_t *pgsizep);
 
 int split_contiguous_pages(pte_t *ptep, size_t pgsize,
 		uint32_t memobj_flags);
-
-static inline int page_is_contiguous_head(pte_t *ptep, size_t pgsize)
-{
-	return 0;
-}
-
-static inline int page_is_contiguous_tail(pte_t *ptep, size_t pgsize)
-{
-	return 0;
-}
-
-struct page_table;
-static inline void arch_adjust_allocate_page_size(struct page_table *pt,
-						  uintptr_t fault_addr,
-						  pte_t *ptep,
-						  void **pgaddrp,
-						  size_t *pgsizep)
-{
-}
 void set_pte(pte_t *ppte, unsigned long phys, enum ihk_mc_pt_attribute attr);
 pte_t *get_pte(struct page_table *pt, void *virt, enum ihk_mc_pt_attribute attr);
 
@@ -453,8 +243,8 @@ extern unsigned long ap_trampoline;
 
 #ifdef ENABLE_FUGAKU_HACKS
 #ifndef __ASSEMBLY__
-# define ALIGN_UP(x, align)     ALIGN_DOWN((x) + (align) - 1, align)
-# define ALIGN_DOWN(x, align)   ((x) & ~((align) - 1))
+unsigned long ALIGN_UP(unsigned long x, unsigned long align);
+unsigned long ALIGN_DOWN(unsigned long x, unsigned long align);
 #endif /* !__ASSEMBLY__ */
 #endif
 

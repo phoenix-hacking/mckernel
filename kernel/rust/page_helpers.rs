@@ -6,10 +6,61 @@ use crate::abi::{CInt, CULong, OffT};
 
 type PageHashLockFn = unsafe extern "C" fn(usize) -> CULong;
 type PageHashUnlockFn = unsafe extern "C" fn(usize, CULong);
+type PageHashLockInitFn = unsafe extern "C" fn(usize);
+type PageHashBucketInitFn = unsafe extern "C" fn(*mut ListHead) -> CInt;
 type PageHashAllocFn = unsafe extern "C" fn(usize, CInt) -> *mut Page;
+type PageMapCountIncFn = unsafe extern "C" fn(*mut Page);
+type PageHashCountAllFn = unsafe extern "C" fn(
+    usize,
+    usize,
+    CInt,
+    usize,
+    usize,
+    Option<PageHashLockFn>,
+    Option<PageHashUnlockFn>,
+) -> CInt;
+type PhysToPageLookupOrchestrateFn = unsafe extern "C" fn(
+    CULong,
+    usize,
+    usize,
+    CInt,
+    CULong,
+    usize,
+    usize,
+    Option<PageHashLockFn>,
+    Option<PageHashUnlockFn>,
+) -> *mut Page;
+type PhysToPageInsertOrchestrateFn = unsafe extern "C" fn(
+    CULong,
+    usize,
+    usize,
+    CInt,
+    CULong,
+    usize,
+    usize,
+    usize,
+    CInt,
+    Option<PageHashLockFn>,
+    Option<PageHashUnlockFn>,
+    Option<PageHashAllocFn>,
+) -> *mut Page;
+type PhysToPageInsertLogFn = unsafe extern "C" fn(CULong);
+type PageUnmapOrchestrateFn = unsafe extern "C" fn(
+    *mut Page,
+    usize,
+    CInt,
+    CULong,
+    usize,
+    Option<PageHashLockFn>,
+    Option<PageHashUnlockFn>,
+) -> CInt;
+type PageUnmapLogFn = unsafe extern "C" fn(CInt, *mut Page, CInt);
 
 const MF_SHM: u32 = 0x40000;
 const EINVAL: CInt = 22;
+const PAGE_UNMAP_LOG_ENTER: CInt = 1;
+const PAGE_UNMAP_LOG_STILL_MAPPED: CInt = 2;
+const PAGE_UNMAP_LOG_UNMAPPED: CInt = 3;
 const PM_WILL_PAGEIO: u8 = 0x02;
 const PM_PAGEIO: u8 = 0x03;
 const PM_DONE_PAGEIO: u8 = 0x04;
@@ -61,12 +112,12 @@ const _: () = {
 };
 
 #[inline(always)]
-unsafe fn page_is_in_memobj(page: *const Page) -> bool {
+unsafe fn page_in_memobj_predicate(page: *const Page) -> bool {
     page_mode_in_memobj_result(read_volatile(&(*page).mode) as CInt) != 0
 }
 
 #[inline(always)]
-unsafe fn page_is_multi_mapped(page: *const Page) -> bool {
+unsafe fn page_multi_mapped_predicate(page: *const Page) -> bool {
     page_multi_mapped_result(read_volatile(&(*page).count.counter)) != 0
 }
 
@@ -116,6 +167,34 @@ pub extern "C" fn page_multi_mapped_result(count: CInt) -> CInt {
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn page_is_in_memobj_body_result(page: *mut Page) -> CInt {
+    if page.is_null() {
+        return 0;
+    }
+
+    page_mode_in_memobj_result(unsafe { read_volatile(&(*page).mode) } as CInt)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn page_is_multi_mapped_body_result(page: *mut Page) -> CInt {
+    if page.is_null() {
+        return 0;
+    }
+
+    page_multi_mapped_result(unsafe { read_volatile(&(*page).count.counter) })
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn page_is_in_memobj(page: *mut Page) -> CInt {
+    unsafe { page_is_in_memobj_body_result(page) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn page_is_multi_mapped(page: *mut Page) -> CInt {
+    unsafe { page_is_multi_mapped_body_result(page) }
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn page_to_phys(page: *mut Page) -> CULong {
     if page.is_null() {
         0
@@ -127,6 +206,23 @@ pub unsafe extern "C" fn page_to_phys(page: *mut Page) -> CULong {
 #[no_mangle]
 pub unsafe extern "C" fn page_map_count_inc_result(page: *mut Page) {
     page_count(page).fetch_add(1, Ordering::SeqCst);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn page_map_body_result(
+    page: *mut Page,
+    count_inc_fn: Option<PageMapCountIncFn>,
+) {
+    if let Some(count_inc) = count_inc_fn {
+        count_inc(page);
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn page_map(page: *mut Page) {
+    unsafe {
+        page_map_body_result(page, Some(page_map_count_inc_result));
+    }
 }
 
 #[no_mangle]
@@ -186,6 +282,41 @@ pub unsafe extern "C" fn page_hash_bucket_init_result(hash_head: *mut ListHead) 
 
     init_list_head(hash_head);
     1
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn page_hash_tables_init_body_result(
+    hash_heads_addr: usize,
+    locks_addr: usize,
+    bucket_count: CInt,
+    hash_head_stride: usize,
+    lock_stride: usize,
+    lock_init_fn: Option<PageHashLockInitFn>,
+    bucket_init_fn: Option<PageHashBucketInitFn>,
+) -> CInt {
+    if bucket_count < 0 {
+        return -EINVAL;
+    }
+    let (Some(lock_init), Some(bucket_init)) = (lock_init_fn, bucket_init_fn) else {
+        return -EINVAL;
+    };
+
+    let mut initialized: CInt = 0;
+    for index in 0..bucket_count as usize {
+        let (Some(hash_head_addr), Some(lock_addr)) = (
+            addr_at(hash_heads_addr, hash_head_stride, index),
+            addr_at(locks_addr, lock_stride, index),
+        ) else {
+            return -EINVAL;
+        };
+
+        unsafe {
+            lock_init(lock_addr);
+            initialized += (bucket_init(hash_head_addr as *mut ListHead) != 0) as CInt;
+        }
+    }
+
+    initialized
 }
 
 #[no_mangle]
@@ -256,6 +387,32 @@ pub unsafe extern "C" fn page_hash_count_all_result(
     }
 
     total
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn page_hash_count_pages_body_result(
+    hash_heads_addr: usize,
+    locks_addr: usize,
+    bucket_count: CInt,
+    hash_head_stride: usize,
+    lock_stride: usize,
+    lock_fn: Option<PageHashLockFn>,
+    unlock_fn: Option<PageHashUnlockFn>,
+    count_all_fn: Option<PageHashCountAllFn>,
+) -> CInt {
+    let Some(count_all) = count_all_fn else {
+        return -EINVAL;
+    };
+
+    count_all(
+        hash_heads_addr,
+        locks_addr,
+        bucket_count,
+        hash_head_stride,
+        lock_stride,
+        lock_fn,
+        unlock_fn,
+    )
 }
 
 #[no_mangle]
@@ -336,6 +493,80 @@ pub unsafe extern "C" fn phys_to_page_insert_hash_orchestrate_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn phys_to_page_lookup_body_result(
+    phys: CULong,
+    hash_heads_addr: usize,
+    locks_addr: usize,
+    hash_shift: CInt,
+    hash_mask: CULong,
+    hash_head_stride: usize,
+    lock_stride: usize,
+    lock_fn: Option<PageHashLockFn>,
+    unlock_fn: Option<PageHashUnlockFn>,
+    lookup_fn: Option<PhysToPageLookupOrchestrateFn>,
+) -> *mut Page {
+    let Some(lookup) = lookup_fn else {
+        return core::ptr::null_mut();
+    };
+
+    lookup(
+        phys,
+        hash_heads_addr,
+        locks_addr,
+        hash_shift,
+        hash_mask,
+        hash_head_stride,
+        lock_stride,
+        lock_fn,
+        unlock_fn,
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn phys_to_page_insert_hash_body_result(
+    phys: CULong,
+    hash_heads_addr: usize,
+    locks_addr: usize,
+    hash_shift: CInt,
+    hash_mask: CULong,
+    hash_head_stride: usize,
+    lock_stride: usize,
+    page_size: usize,
+    alloc_flag: CInt,
+    lock_fn: Option<PageHashLockFn>,
+    unlock_fn: Option<PageHashUnlockFn>,
+    alloc_fn: Option<PageHashAllocFn>,
+    insert_fn: Option<PhysToPageInsertOrchestrateFn>,
+    log_fn: Option<PhysToPageInsertLogFn>,
+) -> *mut Page {
+    let Some(insert) = insert_fn else {
+        return core::ptr::null_mut();
+    };
+
+    let page = insert(
+        phys,
+        hash_heads_addr,
+        locks_addr,
+        hash_shift,
+        hash_mask,
+        hash_head_stride,
+        lock_stride,
+        page_size,
+        alloc_flag,
+        lock_fn,
+        unlock_fn,
+        alloc_fn,
+    );
+    if page.is_null() {
+        if let Some(log) = log_fn {
+            log(phys);
+        }
+    }
+
+    page
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn page_unmap_orchestrate_result(
     page: *mut Page,
     locks_addr: usize,
@@ -367,8 +598,54 @@ pub unsafe extern "C" fn page_unmap_orchestrate_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn page_unmap_body_result(
+    page: *mut Page,
+    locks_addr: usize,
+    hash_shift: CInt,
+    hash_mask: CULong,
+    lock_stride: usize,
+    lock_fn: Option<PageHashLockFn>,
+    unlock_fn: Option<PageHashUnlockFn>,
+    orchestrate_fn: Option<PageUnmapOrchestrateFn>,
+    log_fn: Option<PageUnmapLogFn>,
+) -> CInt {
+    if page.is_null() {
+        return 0;
+    }
+    let Some(orchestrate) = orchestrate_fn else {
+        return 0;
+    };
+
+    if let Some(log) = log_fn {
+        log(PAGE_UNMAP_LOG_ENTER, page, 0);
+    }
+
+    let ret = orchestrate(
+        page,
+        locks_addr,
+        hash_shift,
+        hash_mask,
+        lock_stride,
+        lock_fn,
+        unlock_fn,
+    );
+    if ret == 0 {
+        if let Some(log) = log_fn {
+            log(PAGE_UNMAP_LOG_STILL_MAPPED, page, ret);
+        }
+        return 0;
+    }
+
+    if let Some(log) = log_fn {
+        log(PAGE_UNMAP_LOG_UNMAPPED, page, ret);
+    }
+
+    1
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn is_splitable(page: *mut Page, memobj_flags: u32) -> CInt {
-    if !page.is_null() && (page_is_in_memobj(page) || page_is_multi_mapped(page)) {
+    if !page.is_null() && (page_in_memobj_predicate(page) || page_multi_mapped_predicate(page)) {
         if (memobj_flags & MF_SHM) != 0 {
             return 1;
         }

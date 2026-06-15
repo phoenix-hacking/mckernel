@@ -42,27 +42,19 @@ struct page *phys_to_page(uintptr_t phys);
 uintptr_t page_to_phys(struct page *page);
 int page_unmap(struct page *page);
 void page_map_count_inc_result(struct page *page);
+void page_map_body_result(struct page *page,
+		void (*count_inc_fn)(struct page *page));
 struct page *phys_to_page_insert_hash(uint64_t phys);
 int page_mode_in_memobj_result(int mode);
 int page_multi_mapped_result(int count);
+int page_is_in_memobj_body_result(struct page *page);
+int page_is_multi_mapped_body_result(struct page *page);
 
 void begin_free_pages_pending(void);
 void finish_free_pages_pending(void);
-
-static inline void page_map(struct page *page)
-{
-	page_map_count_inc_result(page);
-}
-
-static inline int page_is_in_memobj(struct page *page)
-{
-	return page_mode_in_memobj_result(page->mode);
-}
-
-static inline int page_is_multi_mapped(struct page *page)
-{
-	return page_multi_mapped_result(ihk_atomic_read(&page->count));
-}
+void page_map(struct page *page);
+int page_is_in_memobj(struct page *page);
+int page_is_multi_mapped(struct page *page);
 
 /* Should we take page faults on ANONYMOUS mappings? */
 extern int anon_on_demand;

@@ -1,3 +1,4 @@
+use core::ffi::c_void;
 use core::mem::{align_of, offset_of, size_of};
 use core::ptr::{read_volatile, write_volatile};
 
@@ -102,8 +103,40 @@ unsafe fn list_move_tail(entry: *mut ListHead, head: *mut ListHead) {
     list_add_tail(entry, head);
 }
 
-#[inline(always)]
-unsafe fn plist_first(head: *mut PlistHead) -> *mut PlistNode {
+#[no_mangle]
+pub unsafe extern "C" fn plist_head_init(head: *mut PlistHead, _lock: *mut c_void) {
+    init_list_head(&raw mut (*head).prio_list);
+    init_list_head(&raw mut (*head).node_list);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn plist_head_init_raw(head: *mut PlistHead, _lock: *mut c_void) {
+    init_list_head(&raw mut (*head).prio_list);
+    init_list_head(&raw mut (*head).node_list);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn plist_node_init(node: *mut PlistNode, prio: CInt) {
+    (*node).prio = prio;
+    plist_head_init(&raw mut (*node).plist, core::ptr::null_mut());
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn plist_head_empty(head: *const PlistHead) -> CInt {
+    if list_empty(&raw const (*head).node_list as *mut ListHead) {
+        1
+    } else {
+        0
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn plist_node_empty(node: *const PlistNode) -> CInt {
+    plist_head_empty(&raw const (*node).plist)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn plist_first(head: *const PlistHead) -> *mut PlistNode {
     plist_from_node(read_volatile(&(*head).node_list.next))
 }
 
@@ -144,7 +177,7 @@ pub unsafe extern "C" fn plist_add(node: *mut PlistNode, head: *mut PlistHead) {
 #[no_mangle]
 pub unsafe extern "C" fn plist_del(node: *mut PlistNode, _head: *mut PlistHead) {
     if !list_empty(prio_link(node)) {
-        let next = plist_first(&raw mut (*node).plist);
+        let next = plist_first(&raw const (*node).plist);
 
         list_move_tail(prio_link(next), prio_link(node));
         list_del_init(prio_link(node));

@@ -11,10 +11,7 @@ extern int translate_rva_to_rpa(ihk_os_t os, unsigned long rpt, unsigned long rv
 
 #define PFN_WRITE_COMBINED _PAGE_PWT
 
-static inline bool pte_is_write_combined(pte_t pte)
-{
-	return ((pte_flags(pte) & _PAGE_PWT) && !(pte_flags(pte) & _PAGE_PCD));
-}
+extern int mcctrl_pte_is_write_combined_result(unsigned long flags);
 
 #define ARCH_PERF_COUNTER_START	0
 
@@ -24,15 +21,7 @@ static const unsigned long arch_rus_vm_flags = VM_RESERVED | VM_MIXEDMAP;
 static const unsigned long arch_rus_vm_flags = VM_DONTDUMP | VM_MIXEDMAP;
 #endif
 
-#define xchg4(ptr, x)						\
-({									\
-	int __x = (x);					\
-	asm volatile("xchgl %k0,%1"				\
-			 : "=r" (__x)				\
-			 : "m" (*ptr), "0" (__x)		\
-			 : "memory");				\
-	__x;								\
-})
+extern int xchg4(int *ptr, int x);
 
 enum x86_pf_error_code {
 	PF_PROT     =       1 << 0,

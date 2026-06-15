@@ -10,7 +10,7 @@
  * Wirzenius wrote this portably, Torvalds fucked it up :-)
  */
 
-/* 
+/*
  * Fri Jul 13 2001 Crutcher Dunnavant <crutcher+kernel@datastacks.com>
  * - changed to provide snprintf and vsnprintf functions
  * So Feb  1 16:51:32 CET 2004 Juergen Quade <quade@hsnr.de>
@@ -51,6 +51,99 @@ unsigned char _ctype[] = {
 	_L,_L,_L,_L,_L,_L,_L,_L,_L,_L,_L,_L,_L,_L,_L,_L,       /* 224-239 */
 	_L,_L,_L,_L,_L,_L,_L,_P,_L,_L,_L,_L,_L,_L,_L,_L};      /* 240-255 */
 
+unsigned char __ismask(int c)
+{
+	return _ctype[(int)(unsigned char)c];
+}
+
+int isalnum(int c)
+{
+	return (__ismask(c) & (_U|_L|_D)) != 0;
+}
+
+int isalpha(int c)
+{
+	return (__ismask(c) & (_U|_L)) != 0;
+}
+
+int iscntrl(int c)
+{
+	return (__ismask(c) & _C) != 0;
+}
+
+int isdigit(int c)
+{
+	return (__ismask(c) & _D) != 0;
+}
+
+int isgraph(int c)
+{
+	return (__ismask(c) & (_P|_U|_L|_D)) != 0;
+}
+
+int islower(int c)
+{
+	return (__ismask(c) & _L) != 0;
+}
+
+int isprint(int c)
+{
+	return (__ismask(c) & (_P|_U|_L|_D|_SP)) != 0;
+}
+
+int ispunct(int c)
+{
+	return (__ismask(c) & _P) != 0;
+}
+
+int isspace(int c)
+{
+	return (__ismask(c) & _S) != 0;
+}
+
+int isupper(int c)
+{
+	return (__ismask(c) & _U) != 0;
+}
+
+int isxdigit(int c)
+{
+	return (__ismask(c) & (_D|_X)) != 0;
+}
+
+int isascii(int c)
+{
+	return ((unsigned char)c) <= 0x7f;
+}
+
+int toascii(int c)
+{
+	return ((unsigned char)c) & 0x7f;
+}
+
+unsigned char __tolower(unsigned char c)
+{
+	if (isupper(c))
+		c -= 'A' - 'a';
+	return c;
+}
+
+unsigned char __toupper(unsigned char c)
+{
+	if (islower(c))
+		c -= 'a' - 'A';
+	return c;
+}
+
+int tolower(int c)
+{
+	return __tolower((unsigned char)c);
+}
+
+int toupper(int c)
+{
+	return __toupper((unsigned char)c);
+}
 
 #define do_div(n,base) ({					\
         uint32_t __base = (base);                               \
@@ -440,7 +533,7 @@ static char* put_dec_full(char *buf, unsigned q)
 	return buf;
 }
 /* No inlining helps gcc to use registers better */
-static char* __attribute__((noinline)) 
+static char* __attribute__((noinline))
 	put_dec(char *buf, unsigned long long num)
 {
 	while (1) {
@@ -617,11 +710,7 @@ static char *number(char *buf, char *end, unsigned long long num,
 }
 #endif /* MCKERNEL_RUST_NUMPARSE */
 
-#ifdef MCKERNEL_RUST_NUMPARSE
-extern char *string_result(char *buf, char *end, char *s,
-			struct printf_spec spec);
-#define string string_result
-#else
+#ifndef MCKERNEL_RUST_NUMPARSE
 static char *string(char *buf, char *end, char *s, struct printf_spec spec)
 {
 	int len, i;
@@ -652,6 +741,7 @@ static char *string(char *buf, char *end, char *s, struct printf_spec spec)
 }
 #endif /* MCKERNEL_RUST_NUMPARSE */
 
+#ifndef MCKERNEL_RUST_NUMPARSE
 static char *symbol_string(char *buf, char *end, void *ptr,
 				struct printf_spec spec, char ext)
 {
@@ -714,6 +804,7 @@ static char *pointer(const char *fmt, char *buf, char *end, void *ptr,
 
 	return number(buf, end, (unsigned long) ptr, spec);
 }
+#endif /* MCKERNEL_RUST_NUMPARSE */
 
 #ifdef MCKERNEL_RUST_NUMPARSE
 extern int format_decode_result(const char *fmt, struct printf_spec *spec);
@@ -923,6 +1014,133 @@ qualifier:
 }
 #endif /* MCKERNEL_RUST_NUMPARSE */
 
+#ifdef MCKERNEL_RUST_NUMPARSE
+extern char *printf_copy_literal_result(char *buf, char *end,
+					const char *src, int read);
+extern char *printf_char_result(char *buf, char *end, int ch,
+				struct printf_spec spec);
+extern char *printf_emit_char_result(char *buf, char *end, int ch);
+extern void printf_write_nchars_result(char *buf, char *str, void *out,
+				       int qualifier);
+extern void printf_terminate_result(char *buf, size_t size, char *end,
+				    char *str);
+typedef int (*printf_read_int_fn)(void *ctx);
+typedef unsigned long long (*printf_read_number_fn)(void *ctx, int type);
+typedef void *(*printf_read_pointer_fn)(void *ctx, int type, int qualifier);
+typedef void *(*scanf_read_output_fn)(void *ctx, int conversion,
+				      int qualifier, int is_sign);
+extern int vsnprintf_loop_result(char *buf, size_t size, const char *fmt,
+				 void *ctx, printf_read_int_fn read_int,
+				 printf_read_number_fn read_number,
+				 printf_read_pointer_fn read_pointer);
+extern int vsscanf_loop_result(const char *buf, const char *fmt, void *ctx,
+			       scanf_read_output_fn read_output);
+
+struct rust_printf_args {
+	va_list args;
+};
+
+static int rust_printf_read_int(void *ctx)
+{
+	struct rust_printf_args *state = ctx;
+
+	return va_arg(state->args, int);
+}
+
+static unsigned long long rust_printf_read_number(void *ctx, int type)
+{
+	struct rust_printf_args *state = ctx;
+
+	switch (type) {
+	case FORMAT_TYPE_LONG_LONG:
+		return va_arg(state->args, long long);
+	case FORMAT_TYPE_ULONG:
+		return va_arg(state->args, unsigned long);
+	case FORMAT_TYPE_LONG:
+		return va_arg(state->args, long);
+	case FORMAT_TYPE_SIZE_T:
+		return va_arg(state->args, size_t);
+	case FORMAT_TYPE_PTRDIFF:
+		return va_arg(state->args, ptrdiff_t);
+	case FORMAT_TYPE_UBYTE:
+		return (unsigned char)va_arg(state->args, int);
+	case FORMAT_TYPE_BYTE:
+		return (signed char)va_arg(state->args, int);
+	case FORMAT_TYPE_USHORT:
+		return (unsigned short)va_arg(state->args, int);
+	case FORMAT_TYPE_SHORT:
+		return (short)va_arg(state->args, int);
+	case FORMAT_TYPE_INT:
+		return (int)va_arg(state->args, int);
+	default:
+		return va_arg(state->args, unsigned int);
+	}
+}
+
+static void *rust_printf_read_pointer(void *ctx, int type, int qualifier)
+{
+	struct rust_printf_args *state = ctx;
+
+	switch (type) {
+	case FORMAT_TYPE_STR:
+		return va_arg(state->args, char *);
+	case FORMAT_TYPE_NRCHARS:
+		if (qualifier == 'l')
+			return va_arg(state->args, long *);
+		if (qualifier == 'Z' || qualifier == 'z')
+			return va_arg(state->args, size_t *);
+		return va_arg(state->args, int *);
+	default:
+		return va_arg(state->args, void *);
+	}
+}
+
+static void *rust_scanf_read_output(void *ctx, int conversion,
+				    int qualifier, int is_sign)
+{
+	struct rust_printf_args *state = ctx;
+
+	switch (conversion) {
+	case 'c':
+	case 's':
+		return va_arg(state->args, char *);
+	case 'n':
+		if (qualifier == 'l')
+			return va_arg(state->args, long *);
+		if (qualifier == 'Z' || qualifier == 'z')
+			return va_arg(state->args, size_t *);
+		return va_arg(state->args, int *);
+	default:
+		switch (qualifier) {
+		case 'H':
+			if (is_sign)
+				return va_arg(state->args, signed char *);
+			return va_arg(state->args, unsigned char *);
+		case 'h':
+			if (is_sign)
+				return va_arg(state->args, short *);
+			return va_arg(state->args, unsigned short *);
+		case 'l':
+			if (is_sign)
+				return va_arg(state->args, long *);
+			return va_arg(state->args, unsigned long *);
+		case 'L':
+			if (is_sign)
+				return va_arg(state->args, long long *);
+			return va_arg(state->args, unsigned long long *);
+		case 'Z':
+		case 'z':
+			return va_arg(state->args, size_t *);
+		default:
+			if (is_sign)
+				return va_arg(state->args, int *);
+			return va_arg(state->args, unsigned int *);
+		}
+	}
+}
+
+#endif
+
 /**
  * vsnprintf - Format a string and place it in a buffer
  * @buf: The buffer to place the result into
@@ -947,10 +1165,27 @@ qualifier:
  * Call this function if you are already dealing with a va_list.
  * You probably want snprintf() instead.
  */
+#ifdef MCKERNEL_RUST_NUMPARSE
+int vsnprintf(char *buf, size_t size, const char *fmt, va_list args)
+{
+	struct rust_printf_args state;
+	int ret;
+
+	va_copy(state.args, args);
+	ret = vsnprintf_loop_result(buf, size, fmt, &state, rust_printf_read_int,
+				    rust_printf_read_number,
+				    rust_printf_read_pointer);
+	va_end(state.args);
+	return ret;
+}
+#else
 int vsnprintf(char *buf, size_t size, const char *fmt, va_list args)
 {
 	unsigned long long num;
-	char *str, *end, c;
+	char *str, *end;
+#ifndef MCKERNEL_RUST_NUMPARSE
+	char c;
+#endif
 	int read;
 	struct printf_spec spec = {0};
 
@@ -979,6 +1214,9 @@ int vsnprintf(char *buf, size_t size, const char *fmt, va_list args)
 
 		switch (spec.type) {
 		case FORMAT_TYPE_NONE: {
+#ifdef MCKERNEL_RUST_NUMPARSE
+			str = printf_copy_literal_result(str, end, old_fmt, read);
+#else
 			int copy = read;
 			if (str < end) {
 				if (copy > end - str)
@@ -986,6 +1224,7 @@ int vsnprintf(char *buf, size_t size, const char *fmt, va_list args)
 				memcpy(str, old_fmt, copy);
 			}
 			str += read;
+#endif
 			break;
 		}
 
@@ -998,6 +1237,10 @@ int vsnprintf(char *buf, size_t size, const char *fmt, va_list args)
 			break;
 
 		case FORMAT_TYPE_CHAR:
+#ifdef MCKERNEL_RUST_NUMPARSE
+			str = printf_char_result(str, end,
+					(unsigned char) va_arg(args, int), spec);
+#else
 			if (!(spec.flags & LEFT)) {
 				while (--spec.field_width > 0) {
 					if (str < end)
@@ -1015,6 +1258,7 @@ int vsnprintf(char *buf, size_t size, const char *fmt, va_list args)
 					*str = ' ';
 				++str;
 			}
+#endif
 			break;
 
 		case FORMAT_TYPE_STR:
@@ -1029,20 +1273,41 @@ int vsnprintf(char *buf, size_t size, const char *fmt, va_list args)
 			break;
 
 		case FORMAT_TYPE_PERCENT_CHAR:
+#ifdef MCKERNEL_RUST_NUMPARSE
+			str = printf_emit_char_result(str, end, '%');
+#else
 			if (str < end)
 				*str = '%';
 			++str;
+#endif
 			break;
 
 		case FORMAT_TYPE_INVALID:
+#ifdef MCKERNEL_RUST_NUMPARSE
+			str = printf_emit_char_result(str, end, '%');
+#else
 			if (str < end)
 				*str = '%';
 			++str;
+#endif
 			break;
 
 		case FORMAT_TYPE_NRCHARS: {
 			int qualifier = spec.qualifier;
 
+#ifdef MCKERNEL_RUST_NUMPARSE
+			if (qualifier == 'l') {
+				printf_write_nchars_result(buf, str,
+						va_arg(args, long *), qualifier);
+			} else if (qualifier == 'Z' ||
+					qualifier == 'z') {
+				printf_write_nchars_result(buf, str,
+						va_arg(args, size_t *), qualifier);
+			} else {
+				printf_write_nchars_result(buf, str,
+						va_arg(args, int *), qualifier);
+			}
+#else
 			if (qualifier == 'l') {
 				long *ip = va_arg(args, long *);
 				*ip = (str - buf);
@@ -1054,6 +1319,7 @@ int vsnprintf(char *buf, size_t size, const char *fmt, va_list args)
 				int *ip = va_arg(args, int *);
 				*ip = (str - buf);
 			}
+#endif
 			break;
 		}
 
@@ -1106,16 +1372,21 @@ int vsnprintf(char *buf, size_t size, const char *fmt, va_list args)
 	}
 
 	if (size > 0) {
+#ifdef MCKERNEL_RUST_NUMPARSE
+		printf_terminate_result(buf, size, end, str);
+#else
 		if (str < end)
 			*str = '\0';
 		else
 			end[-1] = '\0';
+#endif
 	}
 
 	/* the trailing null byte doesn't count towards the total */
 	return str-buf;
 
 }
+#endif
 EXPORT_SYMBOL(vsnprintf);
 
 /**
@@ -1245,6 +1516,15 @@ EXPORT_SYMBOL(sprintf);
  */
 int vsscanf(const char * buf, const char * fmt, va_list args)
 {
+#ifdef MCKERNEL_RUST_NUMPARSE
+	struct rust_printf_args state;
+	int ret;
+
+	va_copy(state.args, args);
+	ret = vsscanf_loop_result(buf, fmt, &state, rust_scanf_read_output);
+	va_end(state.args);
+	return ret;
+#else
 	const char *str = buf;
 	char *next;
 	char digit;
@@ -1273,11 +1553,11 @@ int vsscanf(const char * buf, const char * fmt, va_list args)
 			continue;
 		}
 
-		if (!*fmt)
-			break;
-		++fmt;
-		
-		/* skip this conversion.
+			if (!*fmt)
+				break;
+			++fmt;
+
+			/* skip this conversion.
 		 * advance both strings to next white space
 		 */
 		if (*fmt == '*') {
@@ -1365,7 +1645,7 @@ int vsscanf(const char * buf, const char * fmt, va_list args)
 			break;
 		case '%':
 			/* looking for '%' in str */
-			if (*str++ != '%') 
+			if (*str++ != '%')
 				return num;
 			continue;
 		default:
@@ -1462,6 +1742,7 @@ int vsscanf(const char * buf, const char * fmt, va_list args)
 	}
 
 	return num;
+#endif
 }
 EXPORT_SYMBOL(vsscanf);
 

@@ -23,8 +23,8 @@ int ihk_mc_ikc_init_first_local(struct ihk_ikc_channel_desc *channel,
 			+ (PAGE_SIZE - 1)) / PAGE_SIZE;
 
 	/* Place both sides in this side */
-	rq = ihk_mc_alloc_pages(mikc_queue_pages, IHK_MC_AP_CRITICAL);
-	wq = ihk_mc_alloc_pages(mikc_queue_pages, IHK_MC_AP_CRITICAL);
+	rq = _ihk_mc_alloc_aligned_pages_node(mikc_queue_pages, PAGE_P2ALIGN, IHK_MC_AP_CRITICAL, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);
+	wq = _ihk_mc_alloc_aligned_pages_node(mikc_queue_pages, PAGE_P2ALIGN, IHK_MC_AP_CRITICAL, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);
 
 	ihk_ikc_init_queue(rq, 0, 0,
 			mikc_queue_pages * PAGE_SIZE, MASTER_IKCQ_PKTSIZE);

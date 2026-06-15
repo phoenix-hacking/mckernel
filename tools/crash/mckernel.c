@@ -18,10 +18,16 @@
 #endif
 
 #ifdef MCKERNEL_CRASH_RUST_HELPERS
+extern int mcreadmem(ulonglong addr, int memtype, void *buffer, long size,
+		char *type, ulong error_handle);
 extern int mck_crash_x86_direct_phys_result(ulong addr,
 		ulong linux_page_offset, ulong x86_kernel_phys_base,
 		ulong map_kernel_start, ulong map_fixed_start,
 		ulong map_st_start, ulong *phys_out);
+extern int mck_crash_mcreadmem_x86_addr_result(ulong addr,
+		ulong linux_page_offset, ulong x86_kernel_phys_base,
+		ulong map_kernel_start, ulong map_fixed_start,
+		ulong map_st_start, ulong *translated_out);
 extern const char *mck_crash_thread_status_label_result(int status);
 extern int mck_crash_vr_perm_result(char *buf, ulong flag);
 extern int mck_crash_default_path_result(char *buf, size_t buf_size,
@@ -36,6 +42,9 @@ extern int mck_crash_symbol_value_cmd_result(char *dst, size_t dst_size,
 extern int mck_crash_add_symbol_file_cmd_result(char *dst, size_t dst_size,
 		const char *filename);
 extern size_t mck_crash_kmsg_first_part_result(int head, int tail, int len);
+typedef int (*mck_crash_read_string_fn_t)(ulong addr, char *buf, int len);
+extern int mck_crash_kmsg_read_body_result(ulong kmsg_buf_str, int head,
+		int tail, int len, char *msg, mck_crash_read_string_fn_t read_fn);
 extern const char *mck_crash_thread_comm_result(const char *saved_cmdline,
 		int is_idle);
 extern int mck_crash_mcps_line_result(char *buf, size_t buf_size,
@@ -79,12 +88,27 @@ extern int mck_crash_parse_context_values_result(const char *input,
 		ulong badaddr, ulong *decimal_out, ulong *hex_out);
 extern ulong mck_crash_pid_hash_head_result(ulong thash, ulong pid,
 		ulong hash_size, ulong list_head_size);
+typedef int (*mck_crash_context_read_ulong_fn_t)(ulong addr, ulong *out);
+typedef int (*mck_crash_context_read_int_fn_t)(ulong addr, int *out);
+typedef int (*mck_crash_context_lookup_pid_fn_t)(ulong pid, ulong thash,
+		ulong *thread_out);
+extern int mck_crash_context_lookup_body_result(const char *input,
+		ulong badaddr, ulong clv, long clv_resource_set_offset,
+		long resource_set_thread_hash_offset, long thread_tid_offset,
+		ulong *pid_out, ulong *thread_out,
+		mck_crash_context_read_ulong_fn_t read_ulong_fn,
+		mck_crash_context_read_int_fn_t read_int_fn,
+		mck_crash_context_lookup_pid_fn_t lookup_pid_fn);
 extern int mck_crash_parse_hex_addr_result(const char *input,
 		ulong badaddr, ulong *addr_out);
 extern int mck_crash_same_boot_result(ulong old_boot_param_pa,
 		ulong old_boot_sec, ulong old_boot_nsec,
 		ulong new_boot_param_pa, ulong new_boot_sec,
 		ulong new_boot_nsec);
+typedef ulong (*mck_crash_get_symbol_fn_t)(const char *name);
+extern void mck_crash_x86_arch_init_body_result(ulong *linux_page_offset_out,
+		ulong *x86_kernel_phys_base_out,
+		mck_crash_get_symbol_fn_t get_symbol_fn);
 extern int mck_crash_x86_pte_is_type_page_result(ulong pte, int level,
 		ulong page_pse);
 extern int mck_crash_arm64_pte_is_type_page_result(ulong pte, int level,
@@ -169,6 +193,11 @@ static struct mck_size_table {
 #define MAP_ST_START       0xffff800000000000UL
 unsigned long LINUX_PAGE_OFFSET = -1UL;
 unsigned long x86_kernel_phys_base = -1UL;
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+const unsigned long mck_crash_map_kernel_start = MAP_KERNEL_START;
+const unsigned long mck_crash_map_fixed_start = MAP_FIXED_START;
+const unsigned long mck_crash_map_st_start = MAP_ST_START;
+#endif
 static inline ulong phys_to_virt(ulong phys)
 {
 	return phys + LINUX_PAGE_OFFSET;
@@ -183,6 +212,7 @@ static inline ulong phys_to_virt(ulong phys)
 }
 #endif
 
+#ifndef MCKERNEL_CRASH_RUST_HELPERS
 int mcreadmem(ulonglong addr, int memtype, void *buffer, long size,
 	char *type, ulong error_handle)
 {
@@ -191,11 +221,19 @@ int mcreadmem(ulonglong addr, int memtype, void *buffer, long size,
 	if (LINUX_PAGE_OFFSET != -1UL &&
 			x86_kernel_phys_base != -1UL) {
 #ifdef MCKERNEL_CRASH_RUST_HELPERS
-		if (!mck_crash_x86_direct_phys_result(addr,
+		switch (mck_crash_mcreadmem_x86_addr_result(addr,
 					LINUX_PAGE_OFFSET, x86_kernel_phys_base,
 					MAP_KERNEL_START, MAP_FIXED_START,
 					MAP_ST_START, &phys)) {
+		case 1:
+			addr = phys;
+			break;
+		case 2:
 			kvtop(NULL, addr, &phys, 0);
+			addr = phys_to_virt(phys);
+			break;
+		default:
+			break;
 		}
 #else
 		if (addr >= MAP_KERNEL_START &&
@@ -214,8 +252,8 @@ int mcreadmem(ulonglong addr, int memtype, void *buffer, long size,
 		else {
 			kvtop(NULL, addr, &phys, 0);
 		}
-#endif
 		addr = phys_to_virt(phys);
+#endif
 	}
 #elif defined ARM64
 	/*
@@ -230,6 +268,7 @@ int mcreadmem(ulonglong addr, int memtype, void *buffer, long size,
 
 	return readmem(addr, memtype, buffer, size, type, error_handle);
 }
+#endif
 
 /* helpers - symbol helpers */
 
@@ -381,18 +420,44 @@ lookup_pid(ulong pid, ulong thash, ulong *thread)
 	return FALSE;
 }
 
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+static int
+mck_context_read_resource_ulong(ulong addr, ulong *out)
+{
+	return mcreadmem(addr, KVADDR, out, sizeof(*out), "resource lookup",
+			RETURN_ON_ERROR|QUIET);
+}
+
+static int
+mck_context_read_tid(ulong addr, int *out)
+{
+	return mcreadmem(addr, KVADDR, out, sizeof(*out), "thread tid",
+			RETURN_ON_ERROR|QUIET);
+}
+#endif
+
 static int
 mck_str_to_context(char *string, ulong *pid, ulong *thread)
 {
+#ifndef MCKERNEL_CRASH_RUST_HELPERS
 	ulong dvalue, hvalue;
 	ulong rset, thash;
 	char *s;
+#endif
 
 	if (string == NULL) {
 		error(INFO, "received NULL string\n");
 		return STR_INVALID;
 	}
 
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	return mck_crash_context_lookup_body_result(string, BADADDR,
+			MCK_SYMBOL(clv), MCK_MEMBER_OFFSET(clv_resource_set),
+			MCK_MEMBER_OFFSET(resource_set_thread_hash),
+			MCK_MEMBER_OFFSET(thread_tid), pid, thread,
+			mck_context_read_resource_ulong, mck_context_read_tid,
+			lookup_pid);
+#else
 	s = string;
 	dvalue = hvalue = BADADDR;
 
@@ -443,6 +508,7 @@ mck_str_to_context(char *string, ulong *pid, ulong *thread)
 	}
 
 	return STR_INVALID;
+#endif
 }
 
 
@@ -573,6 +639,14 @@ mckernel_refresh_symbols(int fatal)
 }
 
 static void arch_init(void);
+
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+static ulong
+mck_crash_get_symbol_bridge(const char *name)
+{
+	return get_symbol_value((char *)name);
+}
+#endif
 
 
 /* mcsymbols */
@@ -1277,8 +1351,13 @@ static void
 arch_init(void)
 {
 #ifdef X86_64
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	mck_crash_x86_arch_init_body_result(&LINUX_PAGE_OFFSET,
+			&x86_kernel_phys_base, mck_crash_get_symbol_bridge);
+#else
 	LINUX_PAGE_OFFSET = get_symbol_value("linux_page_offset_base");
 	x86_kernel_phys_base = get_symbol_value("x86_kernel_phys_base");
+#endif
 #elif defined(ARM64)
 	V2PHYS_OFFSET = get_symbol_value("memstart_addr");
 
@@ -1894,7 +1973,9 @@ cmd_mckmsg(void)
 {
 	int kmsg_buf_head, kmsg_buf_tail, kmsg_buf_len;
 	ulong kmsg_buf_str;
+#ifndef MCKERNEL_CRASH_RUST_HELPERS
 	size_t part;
+#endif
 	char *msg;
 
 	if (!mck_loaded)
@@ -1917,22 +1998,21 @@ cmd_mckmsg(void)
 
 	msg = GETBUF(kmsg_buf_len);
 #ifdef MCKERNEL_CRASH_RUST_HELPERS
-	part = mck_crash_kmsg_first_part_result(kmsg_buf_head,
-			kmsg_buf_tail, kmsg_buf_len);
+	if (!mck_crash_kmsg_read_body_result(kmsg_buf_str, kmsg_buf_head,
+				kmsg_buf_tail, kmsg_buf_len, msg, read_string)) {
+		FREEBUF(msg);
+		error(FATAL, "could not read kmsg buf\n");
+	}
 #else
 	part = kmsg_buf_tail < kmsg_buf_head ? kmsg_buf_len - kmsg_buf_head :
-					       kmsg_buf_tail - kmsg_buf_head;
-#endif
+						       kmsg_buf_tail - kmsg_buf_head;
 	if (!read_string(kmsg_buf_str + kmsg_buf_head, msg, part) ||
-#ifdef MCKERNEL_CRASH_RUST_HELPERS
-	    (mck_crash_kmsg_wrap_result(kmsg_buf_head, kmsg_buf_tail) &&
-#else
 	    (kmsg_buf_tail < kmsg_buf_head &&
-#endif
 	     !read_string(kmsg_buf_str, msg + part, kmsg_buf_tail))) {
 		FREEBUF(msg);
 		error(FATAL, "could not read kmsg buf\n");
 	}
+#endif
 
 	fprintf(fp, "%s", msg);
 	FREEBUF(msg);

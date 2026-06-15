@@ -24,23 +24,16 @@ struct ddebug {
 
 #define DDEBUG_DEFAULT DDEBUG_NONE
 
-#define DDEBUG_SYMBOL()                                  \
-	static struct ddebug __aligned(8)                \
-	__attribute__((section("__verbose"))) ddebug = { \
-		.file = __FILE__,                        \
-		.func = __func__,                        \
-		.line = __LINE__,                        \
-		.flags = DDEBUG_DEFAULT,                 \
-	}
-
-#define DDEBUG_TEST ddebug.flags
-
-
-
 #define dkprintf(fmt, args...)        \
 do {                                  \
-	DDEBUG_SYMBOL();              \
-	if (DDEBUG_TEST)              \
+	static struct ddebug __aligned(8) \
+	__attribute__((section("__verbose"))) ddebug = { \
+		.file = __FILE__,        \
+		.func = __func__,        \
+		.line = __LINE__,        \
+		.flags = DDEBUG_DEFAULT, \
+	};                            \
+	if (ddebug.flags)             \
 		kprintf(fmt, ##args); \
 } while (0)
 #define ekprintf(fmt, args...) kprintf(fmt, ##args)
@@ -52,14 +45,5 @@ do {                                  \
 		panic("");                             \
 	}                                              \
 } while (0)
-
-#define STATIC_ASSERT(cond) _STATIC_ASSERT(cond, __LINE__)
-#define _STATIC_ASSERT(cond, line) __STATIC_ASSERT(cond, line)
-#define __STATIC_ASSERT(cond, line)			\
-	static void __static_assert_ ## line (void) {	\
-		STATIC_ASSERT_LOCAL(cond);		\
-	}
-#define STATIC_ASSERT_LOCAL(cond) ((void)sizeof(struct { int:-!!!(cond); }))
-
 
 #endif

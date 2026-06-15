@@ -159,7 +159,7 @@ show_fake_cpu_info(struct sysfs_ops *ops0, void *instance, void *buf,
 		size_t size)
 {
 	struct fake_cpu_info_ops *ops
-		= container_of(ops0, struct fake_cpu_info_ops, ops);
+		= ((struct fake_cpu_info_ops *)((char *)(ops0) - offsetof(struct fake_cpu_info_ops, ops)));
 	struct fake_cpu_info *info = instance;
 	ssize_t n;
 
@@ -184,7 +184,7 @@ store_fake_cpu_info(struct sysfs_ops *ops0, void *instance, void *buf,
 		size_t size)
 {
 	struct fake_cpu_info_ops *ops
-		= container_of(ops0, struct fake_cpu_info_ops, ops);
+		= ((struct fake_cpu_info_ops *)((char *)(ops0) - offsetof(struct fake_cpu_info_ops, ops)));
 	struct fake_cpu_info *info = instance;
 	ssize_t n;
 
@@ -229,7 +229,7 @@ cpu_sysfs_setup(void)
 
 	/* sample of more complex variable ****************************/
 	/* setup table */
-	info = kmalloc(sizeof(*info) * num_processors, IHK_MC_AP_CRITICAL);
+	info = kmalloc_tracked(sizeof(*info) * num_processors, IHK_MC_AP_CRITICAL, __FILE__, __LINE__);
 	for (cpu = 0; cpu < num_processors; ++cpu) {
 		info[cpu].online = 1;
 	}
@@ -282,18 +282,17 @@ reiterate:
 	reqs_left = 0;
 
 	irq_flags = ihk_mc_spinlock_lock(
-			&cpu_local_var(smp_func_req_lock));
+			&get_this_cpu_local_var()->smp_func_req_lock);
 
 	/* Take requests one-by-one */
-	if (!list_empty(&cpu_local_var(smp_func_req_list))) {
-		req = list_first_entry(&cpu_local_var(smp_func_req_list),
-			struct smp_func_call_request, list);
+	if (!list_empty(&get_this_cpu_local_var()->smp_func_req_list)) {
+		req = ((struct smp_func_call_request *)((char *)((&get_this_cpu_local_var()->smp_func_req_list)->next) - offsetof(struct smp_func_call_request, list)));
 		list_del(&req->list);
 
-		reqs_left = !list_empty(&cpu_local_var(smp_func_req_list));
+		reqs_left = !list_empty(&get_this_cpu_local_var()->smp_func_req_list);
 	}
 
-	ihk_mc_spinlock_unlock(&cpu_local_var(smp_func_req_lock),
+	ihk_mc_spinlock_unlock(&get_this_cpu_local_var()->smp_func_req_lock,
 			irq_flags);
 
 	if (req) {
@@ -326,8 +325,7 @@ int smp_call_func(cpu_set_t *__cpu_set, smp_func_t __func, void *__arg)
 	/* Make sure it won't change in between */
 	cpu_set = *__cpu_set;
 
-	for_each_set_bit(cpu, (unsigned long *)&cpu_set,
-			sizeof(cpu_set) * BITS_PER_BYTE) {
+	for ((cpu) = find_first_bit(((unsigned long *)&cpu_set), (sizeof(cpu_set) * BITS_PER_BYTE)); (cpu) < (sizeof(cpu_set) * BITS_PER_BYTE); (cpu) = find_next_bit(((unsigned long *)&cpu_set), (sizeof(cpu_set) * BITS_PER_BYTE), (cpu) + 1)) {
 
 		if (cpu == ihk_mc_get_processor_id()) {
 			call_on_this_cpu = 1;
@@ -342,7 +340,7 @@ int smp_call_func(cpu_set_t *__cpu_set, smp_func_t __func, void *__arg)
 		return -EINVAL;
 	}
 
-	reqs = kmalloc(sizeof(*reqs) * nr_cpus, IHK_MC_AP_NOWAIT);
+	reqs = kmalloc_tracked(sizeof(*reqs) * nr_cpus, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 	if (!reqs) {
 		ret = -ENOMEM;
 		goto free_out;
@@ -358,8 +356,7 @@ int smp_call_func(cpu_set_t *__cpu_set, smp_func_t __func, void *__arg)
 
 	/* Add requests and send IPIs */
 	cpu_index = 0;
-	for_each_set_bit(cpu, (unsigned long *)&cpu_set,
-			sizeof(cpu_set) * BITS_PER_BYTE) {
+	for ((cpu) = find_first_bit(((unsigned long *)&cpu_set), (sizeof(cpu_set) * BITS_PER_BYTE)); (cpu) < (sizeof(cpu_set) * BITS_PER_BYTE); (cpu) = find_next_bit(((unsigned long *)&cpu_set), (sizeof(cpu_set) * BITS_PER_BYTE), (cpu) + 1)) {
 		unsigned long irq_flags;
 
 		reqs[cpu_index].cpu_index = cpu_index;
@@ -397,7 +394,7 @@ int smp_call_func(cpu_set_t *__cpu_set, smp_func_t __func, void *__arg)
 
 	dkprintf("%s: waiting for remote CPUs..\n", __func__);
 	/* Wait for the rest of the CPUs */
-	while (smp_load_acquire(&sfcd.cpus_left.counter) > 0) {
+	while (smp_load_acquire_int(&sfcd.cpus_left.counter) > 0) {
 		cpu_pause();
 	}
 
@@ -413,8 +410,7 @@ int smp_call_func(cpu_set_t *__cpu_set, smp_func_t __func, void *__arg)
 	ret = 0;
 
 free_out:
-	kfree(reqs);
+	kfree_tracked(reqs, __FILE__, __LINE__);
 
 	return ret;
 }
-

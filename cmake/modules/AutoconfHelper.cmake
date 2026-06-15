@@ -341,7 +341,7 @@ function(ac_try_compile SOURCE VAR)
         # Set up CMakeLists.txt for static library:
         file(WRITE
             ${CMAKE_TMP_DIR}/CMakeLists.txt
-            "add_library(compile STATIC src.c)"
+            "cmake_minimum_required(VERSION 3.11)\nproject(AutoconfHelperProbe C)\nadd_library(compile STATIC src.c)\n"
         )
 
         # Configure:

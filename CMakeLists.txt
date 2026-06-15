@@ -4,9 +4,9 @@ if (NOT CMAKE_BUILD_TYPE)
 	set (CMAKE_BUILD_TYPE "Debug" CACHE STRING "Build type: Debug Release..." FORCE)
 endif (NOT CMAKE_BUILD_TYPE)
 
-enable_language(C ASM)
-
 project(mckernel C ASM)
+set(CMAKE_SUPPRESS_DEVELOPER_WARNINGS TRUE CACHE BOOL
+	"Suppress CMake developer warnings from dependency probe projects" FORCE)
 set(MCKERNEL_VERSION "1.8.0")
 
 # See "Fedora Packaging Guidelines -- Versioning"
@@ -237,7 +237,7 @@ if (NOT LIBDWARF)
 	if (CMAKE_CROSSCOMPILING)
 		message(FATAL_ERROR "Could not find libdwarf.so, install libdwarf-devel to ${CMAKE_FIND_ROOT_PATH}")
 	endif()
-	message("WARNING: libdwarf will be compiled locally")
+	message(STATUS "libdwarf not found; compiling bundled libdwarf locally")
 	enable_language(CXX)
 else()
 	# Note that libdwarf-devel provides /usr/include/libdwarf/dwarf.h
@@ -278,11 +278,11 @@ set(CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_FULL_LIBDIR})
 
 # ihk: ultimately should support extrnal build, but add as subproject for now
 if (EXISTS ${PROJECT_SOURCE_DIR}/ihk/CMakeLists.txt)
-	set(IHK_SOURCE_DIR "ihk" CACHE STRINGS "path to ihk source directory from mckernel sources")
+	set(IHK_SOURCE_DIR "ihk" CACHE STRING "path to ihk source directory from mckernel sources")
 elseif (EXISTS ${PROJECT_SOURCE_DIR}/../ihk/CMakeLists.txt)
-	set(IHK_SOURCE_DIR "../ihk" CACHE STRINGS "path to ihk source directory from mckernel sources")
+	set(IHK_SOURCE_DIR "../ihk" CACHE STRING "path to ihk source directory from mckernel sources")
 else()
-	set(IHK_SOURCE_DIR "ihk" CACHE STRINGS "path to ihk source directory from mckernel sources")
+	set(IHK_SOURCE_DIR "ihk" CACHE STRING "path to ihk source directory from mckernel sources")
 endif()
 if (EXISTS ${PROJECT_SOURCE_DIR}/${IHK_SOURCE_DIR}/CMakeLists.txt)
 	set(IHK_FULL_SOURCE_DIR ${PROJECT_SOURCE_DIR}/${IHK_SOURCE_DIR})

@@ -86,6 +86,369 @@
 #define pr_ppd(msg, tid, ppd) do { } while(0)
 #endif
 
+#ifndef MCCTRL_RUST_HELPERS
+unsigned long mcctrl_align_wait_buf(unsigned long size)
+{
+	return ((size + 63) >> 6) << 6;
+}
+
+int mcctrl_partition_list_evict(int len, int max_len)
+{
+	return len >= max_len;
+}
+
+int mcctrl_partition_count_mismatch(int existing, int requested)
+{
+	return existing != requested;
+}
+
+int mcctrl_partition_join_allowed(int joined, int total)
+{
+	return joined < total;
+}
+
+int mcctrl_partition_last_process(int left)
+{
+	return left == 0;
+}
+
+int mcctrl_partition_wait_required(int left, int woke_any, int woke_self)
+{
+	return left || (woke_any && !woke_self);
+}
+
+unsigned int mcctrl_partition_wait_timeout_msecs(int nr_processes)
+{
+	return 10000 + nr_processes * 100;
+}
+
+int mcctrl_partition_wake_next(int left)
+{
+	return left != 0;
+}
+
+unsigned long mcctrl_release_user_space_len(unsigned long start,
+					    unsigned long end)
+{
+	return end - start;
+}
+
+int mcctrl_control_request_needs_root(unsigned int request)
+{
+	return request == IHK_OS_AUX_PERF_NUM ||
+		request == IHK_OS_AUX_PERF_SET ||
+		request == IHK_OS_AUX_PERF_GET ||
+		request == IHK_OS_AUX_PERF_ENABLE ||
+		request == IHK_OS_AUX_PERF_DISABLE ||
+		request == IHK_OS_AUX_PERF_DESTROY;
+}
+
+int mcctrl_control_perm(unsigned int request, unsigned int euid)
+{
+	return mcctrl_control_request_needs_root(request) && euid ? -EPERM : 0;
+}
+
+int mcctrl_cpu_register_copyback(int op, int read_op)
+{
+	return op == read_op;
+}
+
+int mcctrl_ikc_free_addrs_owner(int free_addrs_count)
+{
+	return free_addrs_count != 0;
+}
+
+int mcctrl_ikc_desc_free_at_put(int allocated_internally)
+{
+	return allocated_internally != 0;
+}
+
+int mcctrl_ikc_wait_mode(long timeout)
+{
+	return timeout < 0 ? -1 : timeout > 0 ? 1 : 0;
+}
+
+unsigned long mcctrl_ikc_busy_timeout_msecs(long timeout)
+{
+	return -timeout;
+}
+
+int mcctrl_ikc_wait_abort_return(int wait_ret)
+{
+	return wait_ret < 0 ? wait_ret : -ETIME;
+}
+
+int mcctrl_ikc_release_packet_after_handler(int msg)
+{
+	return msg != SCD_MSG_SYSCALL_ONESIDE;
+}
+
+int mcctrl_ikc_cpu_nonnegative(int cpu)
+{
+	return cpu >= 0;
+}
+
+int mcctrl_ikc_cpu_index_valid(int cpu, int num_channels)
+{
+	return cpu >= 0 && cpu < num_channels;
+}
+
+int mcctrl_ikc_linux_cpu_valid(int linux_cpu, int nr_cpu_ids)
+{
+	return linux_cpu <= nr_cpu_ids;
+}
+
+int mcctrl_ikc_init_uses_last_channel(int port)
+{
+	return port == MCCTRL_IKC_INIT_LAST_CHANNEL_PORT;
+}
+
+int mcctrl_ikc_cpu_count_valid(int n_cpus)
+{
+	return n_cpus >= 1;
+}
+
+int mcctrl_lwk_to_linux_index(const int *mapping, int count, int index)
+{
+	if (!mapping || index < 0 || index >= count)
+		return -1;
+	return mapping[index];
+}
+
+int mcctrl_linux_to_lwk_index(const int *mapping, int count, int linux_id)
+{
+	int i;
+
+	if (!mapping || count <= 0)
+		return -1;
+	for (i = 0; i < count; ++i) {
+		if (mapping[i] == linux_id)
+			return i;
+	}
+	return -1;
+}
+
+void mcctrl_fill_sequential_bitset(unsigned long *bits, int bit_count,
+				   int word_count, int bits_per_word)
+{
+	int bit;
+
+	if (!bits || bit_count < 0 || word_count <= 0 || bits_per_word <= 0)
+		return;
+
+	memset(bits, 0, sizeof(*bits) * word_count);
+	for (bit = 0; bit < bit_count && bit < word_count * bits_per_word;
+	     ++bit) {
+		bits[bit / bits_per_word] |= 1UL << (bit % bits_per_word);
+	}
+}
+
+int mcctrl_read_buffer_status(char *buf, unsigned long size, long bytes_read)
+{
+	if (bytes_read < 0)
+		return bytes_read;
+	if (!buf || bytes_read >= size)
+		return -ENOSPC;
+	buf[bytes_read] = '\0';
+	return 0;
+}
+
+int mcctrl_parse_long(const char *buf, long *value_out)
+{
+	return sscanf(buf, "%ld", value_out);
+}
+
+int mcctrl_pci_realpath_valid(const char *path)
+{
+	return path && !strncmp(path, "../../../devices/", 17);
+}
+
+int mcctrl_ptr_hash(const void *ptr, unsigned long mask)
+{
+	return (int)((unsigned long)ptr & mask);
+}
+
+int mcctrl_ptr_eq(const void *a, const void *b)
+{
+	return a == b;
+}
+
+int mcctrl_file_to_pidfd_lookup_match(const void *entry_filp,
+				      const void *filp,
+				      const void *entry_group_leader,
+				      const void *group_leader)
+{
+	return entry_filp == filp && entry_group_leader == group_leader;
+}
+
+int mcctrl_file_to_pidfd_remove_match(const void *entry_filp,
+				      const void *filp, const void *entry_os,
+				      const void *os,
+				      const void *entry_group_leader,
+				      const void *group_leader, int entry_fd,
+				      int fd)
+{
+	return entry_filp == filp && entry_os == os &&
+		entry_group_leader == group_leader && entry_fd == fd;
+}
+
+int mcctrl_tofu_dev_path(const char *path)
+{
+	return path && !strncmp(path, "/proc/tofu/dev/", 15);
+}
+
+unsigned long mcctrl_tofu_dev_tail_offset(void)
+{
+	return sizeof("/proc/tofu/dev/") - 1;
+}
+
+void mcctrl_tofu_dev_name_copy(char *dst, unsigned long dst_size,
+			       const char *path)
+{
+	if (!dst || !dst_size || !path)
+		return;
+	strncpy(dst, path + mcctrl_tofu_dev_tail_offset(), dst_size);
+}
+
+int mcctrl_tofu_cq_path_parse(const char *path, int *tni_out, int *cq_out)
+{
+	return path && sscanf(path, "/proc/tofu/dev/tni%dcq%d",
+			      tni_out, cq_out) == 2;
+}
+
+int mcctrl_sysfs_path_error(const char *path, long written,
+			    unsigned long path_size)
+{
+	if ((unsigned long)written >= path_size)
+		return -ENAMETOOLONG;
+	if (!path || path[0] != '/')
+		return -ENOENT;
+	return 0;
+}
+
+int mcctrl_binfmt_skip_path(const char *path)
+{
+	const char *cp;
+
+	if (!path)
+		return 1;
+
+	cp = strrchr(path, '/');
+	return !cp || !strcmp(cp, "/mcexec") ||
+		!strcmp(cp, "/ihkosctl") || !strcmp(cp, "/ihkconfig");
+}
+
+int mcctrl_path_allowed(const char *file, const char *list)
+{
+	const char *p;
+	const char *q;
+	const char *r;
+	int l;
+
+	if (!file || !list)
+		return 0;
+	if (!*list)
+		return 1;
+	p = list;
+	do {
+		q = strchr(p, ':');
+		if (!q)
+			q = strchr(p, '\0');
+		for (r = q - 1; r >= p && *r == '/'; r--)
+			;
+		l = r - p + 1;
+
+		if (!strncmp(file, p, l) && file[l] == '/')
+			return 1;
+
+		p = q + 1;
+	} while (*q);
+	return 0;
+}
+
+int mcctrl_pager_treat_as_device_path(const char *path)
+{
+	return path && (!strncmp("/tmp/ompi.", path, 10) ||
+		!strncmp("/dev/shm/", path, 9) ||
+		(!strncmp("/var/opt/FJSVtcs/ple/daemonif/", path, 30) &&
+		 !strstr(path, "dstore_sm.lock")));
+}
+
+int mcctrl_pager_should_populate_path(const char *path)
+{
+	return path && (!strncmp("/tmp/ompi.", path, 10) ||
+		!strncmp("/dev/shm/", path, 9) ||
+		!strncmp("/var/opt/FJSVtcs/ple/daemonif/", path, 30));
+}
+
+int mcctrl_fs_is_tmpfs(const char *name)
+{
+	return name && !strcmp(name, "tmpfs");
+}
+
+int mcctrl_fs_is_proc(const char *name)
+{
+	return name && !strcmp(name, "proc");
+}
+
+int mcctrl_special_char_device(unsigned int major, unsigned int minor)
+{
+	return major == 1 && (minor == 1 || minor == 5);
+}
+
+int mcctrl_format_mcos_name(char *buf, unsigned long buflen, int osnum)
+{
+	return snprintf(buf, buflen, "mcos%d", osnum);
+}
+
+int mcctrl_format_decimal_name(char *buf, unsigned long buflen, int value)
+{
+	return snprintf(buf, buflen, "%d", value);
+}
+
+int mcctrl_futex_cmd(int op)
+{
+	return op & FUTEX_CMD_MASK;
+}
+
+int mcctrl_futex_is_private(int op)
+{
+	return (op & FUTEX_PRIVATE_FLAG) != 0;
+}
+
+int mcctrl_futex_clock_realtime(int op)
+{
+	return (op & FUTEX_CLOCK_REALTIME) != 0;
+}
+
+int mcctrl_futex_realtime_cmd_valid(int cmd)
+{
+	return cmd == FUTEX_WAIT_BITSET || cmd == FUTEX_WAIT_REQUEUE_PI;
+}
+
+int mcctrl_futex_wait_uses_timeout(int cmd)
+{
+	return cmd == FUTEX_WAIT_BITSET || cmd == FUTEX_WAIT;
+}
+
+int mcctrl_futex_arg3_is_val2(int cmd)
+{
+	return cmd == FUTEX_CMP_REQUEUE || cmd == FUTEX_WAKE_OP;
+}
+
+const char *mcctrl_futex_op_label(int cmd)
+{
+	return (cmd == FUTEX_WAIT) ? "FUTEX_WAIT" :
+		(cmd == FUTEX_WAIT_BITSET) ? "FUTEX_WAIT_BITSET" :
+		(cmd == FUTEX_WAKE) ? "FUTEX_WAKE" :
+		(cmd == FUTEX_WAKE_OP) ? "FUTEX_WAKE_OP" :
+		(cmd == FUTEX_WAKE_BITSET) ? "FUTEX_WAKE_BITSET" :
+		(cmd == FUTEX_CMP_REQUEUE) ? "FUTEX_CMP_REQUEUE" :
+		(cmd == FUTEX_REQUEUE) ? "FUTEX_REQUEUE (NOT IMPL!)" :
+		"unknown";
+}
+#endif
+
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4,0,0)
 #define BITMAP_SCNLISTPRINTF(buf, buflen, maskp, nmaskbits) \
         bitmap_scnlistprintf(buf, buflen, maskp, nmaskbits)
@@ -381,8 +744,232 @@ struct mcos_handler_info *new_mcos_handler_info(ihk_os_t os, struct file *file)
 	return info;
 }
 
+#ifdef MCCTRL_RUST_HELPERS
+static int mcctrl_control_ikc_send_bridge(unsigned long os, int cpu,
+					  struct ikc_scd_packet *packet)
+{
+	return mcctrl_ikc_send((ihk_os_t)os, cpu, packet);
+}
+
+static void *mcctrl_control_get_cpu_info_bridge(unsigned long os)
+{
+	return ihk_os_get_cpu_info((ihk_os_t)os);
+}
+
+static int mcctrl_control_cpu_info_n_cpus_bridge(void *info)
+{
+	return ((struct ihk_cpu_info *)info)->n_cpus;
+}
+
+static void mcctrl_control_get_cpu_log_bridge(int stage)
+{
+	if (stage == 0)
+		printk("Error: cannot retrieve CPU info.\n");
+	else
+		printk("Error: # of cpu is invalid.\n");
+}
+
+static void *mcctrl_control_get_usrdata_bridge(unsigned long os)
+{
+	return ihk_host_os_get_usrdata((ihk_os_t)os);
+}
+
+static void *mcctrl_control_usrdata_mem_info_bridge(void *usrdata)
+{
+	return ((struct mcctrl_usrdata *)usrdata)->mem_info;
+}
+
+static int mcctrl_control_mem_info_n_nodes_bridge(void *mem_info)
+{
+	return ((struct ihk_mem_info *)mem_info)->n_numa_nodes;
+}
+
+static void mcctrl_control_get_nodes_log_bridge(int stage)
+{
+	if (stage == 0)
+		pr_err("%s: error: mcctrl_usrdata not found\n",
+		       "mcexec_get_nodes");
+	else
+		pr_err("%s: error: mem_info not found\n", "mcexec_get_nodes");
+}
+
+static int mcctrl_control_usrdata_cpu_count_bridge(void *usrdata)
+{
+	return ((struct mcctrl_usrdata *)usrdata)->cpu_info->n_cpus;
+}
+
+static void *mcctrl_control_cpu_register_alloc_bridge(unsigned long size)
+{
+	return kmalloc(size, GFP_KERNEL);
+}
+
+static void mcctrl_control_cpu_register_free_bridge(void *ptr)
+{
+	kfree(ptr);
+}
+
+static unsigned long mcctrl_control_virt_to_phys_bridge(void *ptr)
+{
+	return virt_to_phys(ptr);
+}
+
+static int mcctrl_control_cpu_register_send_wait_bridge(
+	unsigned long os, int cpu, struct ikc_scd_packet *packet,
+	long timeout, int *do_free, void *desc)
+{
+	return mcctrl_ikc_send_wait((ihk_os_t)os, cpu, packet, timeout,
+				    NULL, do_free, 1, desc);
+}
+
+static void mcctrl_control_cpu_register_error_log_bridge(int stage, int cpu,
+							int ret)
+{
+	switch (stage) {
+	case 0:
+		pr_err("%s: error: mcctrl_usrdata not found\n",
+		       "__mcctrl_os_read_write_cpu_register");
+		break;
+	case 1:
+		pr_err("%s: error: cpu (%d) is out of range\n",
+		       "__mcctrl_os_read_write_cpu_register", cpu);
+		break;
+	case 2:
+		printk("%s: ERROR: allocating cpu register desc\n",
+		       "__mcctrl_os_read_write_cpu_register");
+		break;
+	case 3:
+		printk("%s: ERROR sending IKC msg: %d\n",
+		       "__mcctrl_os_read_write_cpu_register", ret);
+		break;
+	}
+}
+
+static void mcctrl_control_cpu_register_done_log_bridge(
+	int op, int is_read, int cpu, unsigned long addr_ext,
+	unsigned long val)
+{
+	(void)op;
+#ifndef ENABLE_FUGAKU_HACKS
+	dprintk("%s: MCCTRL_OS_CPU_%s_REGISTER: CPU: %d, addr_ext: 0x%lx, val: 0x%lx\n",
+#else
+	printk("%s: MCCTRL_OS_CPU_%s_REGISTER: CPU: %d, addr_ext: 0x%lx, val: 0x%lx\n",
+#endif
+		"__mcctrl_os_read_write_cpu_register",
+		(is_read ? "READ" : "WRITE"), cpu, addr_ext, val);
+}
+
+static int mcctrl_control_validate_os_bridge(unsigned long os)
+{
+	return ihk_host_validate_os((ihk_os_t)os);
+}
+
+static int mcctrl_control_current_pid_bridge(void)
+{
+	return task_tgid_vnr(current);
+}
+
+static int mcctrl_control_current_tid_bridge(void)
+{
+	return task_pid_vnr(current);
+}
+
+static void *mcctrl_control_current_task_bridge(void)
+{
+	return current;
+}
+
+static void *mcctrl_control_get_ppd_bridge(void *usrdata, int pid)
+{
+	return mcctrl_get_per_proc_data((struct mcctrl_usrdata *)usrdata, pid);
+}
+
+static void mcctrl_control_put_ppd_bridge(void *ppd)
+{
+	mcctrl_put_per_proc_data((struct mcctrl_per_proc_data *)ppd);
+}
+
+static void *mcctrl_control_get_ptd_bridge(void *ppd, void *task)
+{
+	return mcctrl_get_per_thread_data(
+		(struct mcctrl_per_proc_data *)ppd,
+		(struct task_struct *)task);
+}
+
+static void mcctrl_control_put_ptd_bridge(void *ptd)
+{
+	mcctrl_put_per_thread_data((struct mcctrl_per_thread_data *)ptd);
+}
+
+static void *mcctrl_control_ptd_data_bridge(void *ptd)
+{
+	return ((struct mcctrl_per_thread_data *)ptd)->data;
+}
+
+static int mcctrl_control_packet_ref_bridge(void *packet)
+{
+	return ((struct ikc_scd_packet *)packet)->ref;
+}
+
+static int mcctrl_control_channel_read_cpu_bridge(void *usrdata,
+						  int packet_ref)
+{
+	struct mcctrl_usrdata *ud = usrdata;
+	struct ihk_ikc_channel_desc *ch;
+
+	ch = (ud->channels + packet_ref)->c;
+	return ch->send.queue->read_cpu;
+}
+
+static void mcctrl_control_request_cpu_error_log_bridge(
+	int stage, unsigned long os, int pid, int tid)
+{
+	switch (stage) {
+	case 0:
+		pr_err("%s: ERROR: mcctrl_usrdata not found for OS %p\n",
+		       "mcctrl_get_request_os_cpu", (void *)os);
+		break;
+	case 1:
+		kprintf("%s: ERROR: no per-process structure for PID %d??\n",
+			"mcctrl_get_request_os_cpu", pid);
+		break;
+	case 2:
+		printk("%s: ERROR: mcctrl_get_per_thread_data failed\n",
+		       "mcctrl_get_request_os_cpu");
+		break;
+	case 3:
+		printk("%s: ERROR: no packet registered for TID %d\n",
+		       "mcctrl_get_request_os_cpu", tid);
+		break;
+	}
+}
+
+static void mcctrl_control_request_cpu_ptd_log_bridge(int stage, int tid,
+						      void *ptd)
+{
+	if (stage == 0)
+		pr_ptd("get", tid, (struct mcctrl_per_thread_data *)ptd);
+	else
+		pr_ptd("put", tid, (struct mcctrl_per_thread_data *)ptd);
+}
+
+static void mcctrl_control_request_cpu_result_log_bridge(unsigned long os,
+							 int cpu)
+{
+#ifndef ENABLE_FUGAKU_HACKS
+	pr_info("%s: OS: %lx, CPU: %d\n",
+#else
+	dprintk("%s: OS: %lx, CPU: %d\n",
+#endif
+		"mcctrl_get_request_os_cpu", os, cpu);
+}
+#endif
+
 static long mcexec_debug_log(ihk_os_t os, unsigned long arg)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_control_debug_log_body_result(
+		(unsigned long)os, arg, mcctrl_control_ikc_send_bridge);
+#else
 	struct ikc_scd_packet isp;
 
 	memset(&isp, '\0', sizeof isp);
@@ -390,6 +977,7 @@ static long mcexec_debug_log(ihk_os_t os, unsigned long arg)
 	isp.arg = arg;
 	mcctrl_ikc_send(os, 0, &isp);
 	return 0;
+#endif
 }
 
 int mcexec_close_exec(ihk_os_t os, int pid);
@@ -578,6 +1166,12 @@ static long mcexec_send_signal(ihk_os_t os, struct signal_desc *sigparam)
 
 static long mcexec_get_cpu(ihk_os_t os)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_control_get_cpu_body_result(
+		(unsigned long)os, mcctrl_control_get_cpu_info_bridge,
+		mcctrl_control_cpu_info_n_cpus_bridge,
+		mcctrl_control_get_cpu_log_bridge);
+#else
 	struct ihk_cpu_info *info;
 
 	info = ihk_os_get_cpu_info(os);
@@ -591,10 +1185,18 @@ static long mcexec_get_cpu(ihk_os_t os)
 	}
 
 	return info->n_cpus;
+#endif
 }
 
 static long mcexec_get_nodes(ihk_os_t os)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_control_get_nodes_body_result(
+		(unsigned long)os, mcctrl_control_get_usrdata_bridge,
+		mcctrl_control_usrdata_mem_info_bridge,
+		mcctrl_control_mem_info_n_nodes_bridge,
+		mcctrl_control_get_nodes_log_bridge);
+#else
 	struct mcctrl_usrdata *usrdata = ihk_host_os_get_usrdata(os);
 
 	if (!usrdata) {
@@ -608,6 +1210,7 @@ static long mcexec_get_nodes(ihk_os_t os)
 	}
 
 	return usrdata->mem_info->n_numa_nodes;
+#endif
 }
 
 extern int linux_numa_2_mckernel_numa(struct mcctrl_usrdata *udp, int numa_id);
@@ -3390,21 +3993,355 @@ out:
 static int __mcctrl_control_perm(unsigned int request)
 {
 	int ret = 0;
+	unsigned int euid_val = 0;
 	kuid_t euid;
 
 	/* black list */
 	if (mcctrl_control_request_needs_root(request)) {
 		euid = current_euid();
+		euid_val = euid.val;
 		pr_debug("%s: request=0x%x, euid=%u\n",
 			 __func__, request, euid.val);
-		if (euid.val) {
-			ret = -EPERM;
-		}
 	}
+	ret = mcctrl_control_perm(request, euid_val);
 	pr_debug("%s: request=0x%x, ret=%d\n", __func__, request, ret);
 
 	return ret;
 }
+
+#ifdef MCCTRL_RUST_HELPERS
+static long mcctrl_control_prepare_image_cb(unsigned long os, unsigned long arg,
+					    unsigned long file)
+{
+	return mcexec_prepare_image((ihk_os_t)os,
+				    (struct program_load_desc *)arg,
+				    (struct file *)file);
+}
+
+static long mcctrl_control_transfer_image_cb(unsigned long os,
+					     unsigned long arg,
+					     unsigned long file)
+{
+	(void)file;
+	return mcexec_transfer_image((ihk_os_t)os,
+				     (struct remote_transfer *)arg);
+}
+
+static long mcctrl_control_start_image_cb(unsigned long os, unsigned long arg,
+					  unsigned long file)
+{
+	return mcexec_start_image((ihk_os_t)os,
+				  (struct program_load_desc *)arg,
+				  (struct file *)file);
+}
+
+static long mcctrl_control_wait_syscall_cb(unsigned long os, unsigned long arg,
+					   unsigned long file)
+{
+	(void)file;
+	return mcexec_wait_syscall((ihk_os_t)os,
+				   (struct syscall_wait_desc *)arg);
+}
+
+static long mcctrl_control_ret_syscall_cb(unsigned long os, unsigned long arg,
+					  unsigned long file)
+{
+	(void)file;
+	return mcexec_ret_syscall((ihk_os_t)os,
+				  (struct syscall_ret_desc *)arg);
+}
+
+static long mcctrl_control_load_syscall_cb(unsigned long os, unsigned long arg,
+					   unsigned long file)
+{
+	(void)file;
+	return mcexec_load_syscall((ihk_os_t)os,
+				   (struct syscall_load_desc *)arg);
+}
+
+static long mcctrl_control_send_signal_cb(unsigned long os, unsigned long arg,
+					  unsigned long file)
+{
+	(void)file;
+	return mcexec_send_signal((ihk_os_t)os, (struct signal_desc *)arg);
+}
+
+static long mcctrl_control_get_cpu_cb(unsigned long os, unsigned long arg,
+				      unsigned long file)
+{
+	(void)arg;
+	(void)file;
+	return mcexec_get_cpu((ihk_os_t)os);
+}
+
+static long mcctrl_control_create_ppd_cb(unsigned long os, unsigned long arg,
+					 unsigned long file)
+{
+	return mcexec_create_per_process_data(
+		(ihk_os_t)os, (struct rpgtable_desc * __user)arg,
+		(struct file *)file);
+}
+
+static long mcctrl_control_get_nodes_cb(unsigned long os, unsigned long arg,
+					unsigned long file)
+{
+	(void)arg;
+	(void)file;
+	return mcexec_get_nodes((ihk_os_t)os);
+}
+
+static long mcctrl_control_get_cpuset_cb(unsigned long os, unsigned long arg,
+					 unsigned long file)
+{
+	(void)file;
+	return mcexec_get_cpuset((ihk_os_t)os, arg);
+}
+
+static long mcctrl_control_strncpy_from_user_cb(unsigned long os,
+						unsigned long arg,
+						unsigned long file)
+{
+	(void)file;
+	return mcexec_strncpy_from_user(
+		(ihk_os_t)os, (struct strncpy_from_user_desc *)arg);
+}
+
+static long mcctrl_control_open_exec_cb(unsigned long os, unsigned long arg,
+					unsigned long file)
+{
+	(void)file;
+	return mcexec_open_exec((ihk_os_t)os, (char *)arg);
+}
+
+static long mcctrl_control_close_exec_cb(unsigned long os, unsigned long arg,
+					 unsigned long file)
+{
+	(void)arg;
+	(void)file;
+	return mcexec_close_exec((ihk_os_t)os, task_tgid_vnr(current));
+}
+
+static long mcctrl_control_prepare_dma_cb(unsigned long os, unsigned long arg,
+					  unsigned long file)
+{
+	(void)file;
+	return mcexec_pin_region((ihk_os_t)os, (unsigned long *)arg);
+}
+
+static long mcctrl_control_free_dma_cb(unsigned long os, unsigned long arg,
+				       unsigned long file)
+{
+	(void)file;
+	return mcexec_free_region((ihk_os_t)os, (unsigned long *)arg);
+}
+
+static long mcctrl_control_get_cred_cb(unsigned long os, unsigned long arg,
+				       unsigned long file)
+{
+	(void)os;
+	(void)file;
+	return mcexec_getcred(arg);
+}
+
+static long mcctrl_control_get_credv_cb(unsigned long os, unsigned long arg,
+					unsigned long file)
+{
+	(void)os;
+	(void)file;
+	return mcexec_getcredv((int *)arg);
+}
+
+static long mcctrl_control_sys_mount_cb(unsigned long os, unsigned long arg,
+					unsigned long file)
+{
+	(void)os;
+	(void)file;
+	return mcexec_sys_mount((struct sys_mount_desc *)arg);
+}
+
+static long mcctrl_control_sys_umount_cb(unsigned long os, unsigned long arg,
+					 unsigned long file)
+{
+	(void)os;
+	(void)file;
+	return mcexec_sys_umount((struct sys_mount_desc *)arg);
+}
+
+static long mcctrl_control_sys_unshare_cb(unsigned long os, unsigned long arg,
+					  unsigned long file)
+{
+	(void)os;
+	(void)file;
+	return mcexec_sys_unshare((struct sys_unshare_desc *)arg);
+}
+
+static long mcctrl_control_uti_get_ctx_cb(unsigned long os, unsigned long arg,
+					  unsigned long file)
+{
+	(void)file;
+	return mcexec_uti_get_ctx((ihk_os_t)os,
+				  (struct uti_get_ctx_desc *)arg);
+}
+
+static long mcctrl_control_uti_switch_ctx_cb(unsigned long os,
+					     unsigned long arg,
+					     unsigned long file)
+{
+	return mcctrl_switch_ctx((ihk_os_t)os,
+				 (struct uti_switch_ctx_desc *)arg,
+				 (struct file *)file);
+}
+
+static long mcctrl_control_sig_thread_cb(unsigned long os, unsigned long arg,
+					 unsigned long file)
+{
+	return mcexec_sig_thread((ihk_os_t)os, arg, (struct file *)file);
+}
+
+static long mcctrl_control_syscall_thread_cb(unsigned long os,
+					     unsigned long arg,
+					     unsigned long file)
+{
+	return mcexec_syscall_thread((ihk_os_t)os, arg, (struct file *)file);
+}
+
+static long mcctrl_control_terminate_thread_cb(unsigned long os,
+					       unsigned long arg,
+					       unsigned long file)
+{
+	(void)file;
+	return mcexec_terminate_thread((ihk_os_t)os,
+				       (struct terminate_thread_desc *)arg);
+}
+
+static long mcctrl_control_release_user_space_cb(unsigned long os,
+						 unsigned long arg,
+						 unsigned long file)
+{
+	(void)os;
+	(void)file;
+	return mcexec_release_user_space(
+		(struct release_user_space_desc *)arg);
+}
+
+static long mcctrl_control_get_num_pool_threads_cb(unsigned long os,
+						   unsigned long arg,
+						   unsigned long file)
+{
+	(void)arg;
+	(void)file;
+	return mcctrl_get_num_pool_threads((ihk_os_t)os);
+}
+
+static long mcctrl_control_uti_attr_cb(unsigned long os, unsigned long arg,
+				       unsigned long file)
+{
+	(void)file;
+	return mcexec_uti_attr((ihk_os_t)os,
+			       (struct uti_attr_desc __user *)arg);
+}
+
+static long mcctrl_control_debug_log_cb(unsigned long os, unsigned long arg,
+					unsigned long file)
+{
+	(void)file;
+	return mcexec_debug_log((ihk_os_t)os, arg);
+}
+
+static long mcctrl_control_perf_num_cb(unsigned long os, unsigned long arg,
+				       unsigned long file)
+{
+	(void)file;
+	return mcctrl_perf_num((ihk_os_t)os, arg);
+}
+
+static long mcctrl_control_perf_set_cb(unsigned long os, unsigned long arg,
+				       unsigned long file)
+{
+	(void)file;
+	return mcctrl_perf_set((ihk_os_t)os,
+			       (struct ihk_perf_event_attr *)arg);
+}
+
+static long mcctrl_control_perf_get_cb(unsigned long os, unsigned long arg,
+				       unsigned long file)
+{
+	(void)file;
+	return mcctrl_perf_get((ihk_os_t)os, (unsigned long *)arg);
+}
+
+static long mcctrl_control_perf_enable_cb(unsigned long os, unsigned long arg,
+					  unsigned long file)
+{
+	(void)arg;
+	(void)file;
+	return mcctrl_perf_enable((ihk_os_t)os);
+}
+
+static long mcctrl_control_perf_disable_cb(unsigned long os, unsigned long arg,
+					   unsigned long file)
+{
+	(void)arg;
+	(void)file;
+	return mcctrl_perf_disable((ihk_os_t)os);
+}
+
+static long mcctrl_control_perf_destroy_cb(unsigned long os, unsigned long arg,
+					   unsigned long file)
+{
+	(void)arg;
+	(void)file;
+	return mcctrl_perf_destroy((ihk_os_t)os);
+}
+
+static long mcctrl_control_getrusage_cb(unsigned long os, unsigned long arg,
+					unsigned long file)
+{
+	(void)file;
+	return mcctrl_getrusage((ihk_os_t)os,
+				(struct mcctrl_ioctl_getrusage_desc *)arg);
+}
+
+static const struct mcctrl_control_dispatch_ops mcctrl_control_dispatch_ops = {
+	.prepare_image = mcctrl_control_prepare_image_cb,
+	.transfer_image = mcctrl_control_transfer_image_cb,
+	.start_image = mcctrl_control_start_image_cb,
+	.wait_syscall = mcctrl_control_wait_syscall_cb,
+	.ret_syscall = mcctrl_control_ret_syscall_cb,
+	.load_syscall = mcctrl_control_load_syscall_cb,
+	.send_signal = mcctrl_control_send_signal_cb,
+	.get_cpu = mcctrl_control_get_cpu_cb,
+	.create_ppd = mcctrl_control_create_ppd_cb,
+	.get_nodes = mcctrl_control_get_nodes_cb,
+	.get_cpuset = mcctrl_control_get_cpuset_cb,
+	.strncpy_from_user = mcctrl_control_strncpy_from_user_cb,
+	.open_exec = mcctrl_control_open_exec_cb,
+	.close_exec = mcctrl_control_close_exec_cb,
+	.prepare_dma = mcctrl_control_prepare_dma_cb,
+	.free_dma = mcctrl_control_free_dma_cb,
+	.get_cred = mcctrl_control_get_cred_cb,
+	.get_credv = mcctrl_control_get_credv_cb,
+	.sys_mount = mcctrl_control_sys_mount_cb,
+	.sys_umount = mcctrl_control_sys_umount_cb,
+	.sys_unshare = mcctrl_control_sys_unshare_cb,
+	.uti_get_ctx = mcctrl_control_uti_get_ctx_cb,
+	.uti_switch_ctx = mcctrl_control_uti_switch_ctx_cb,
+	.sig_thread = mcctrl_control_sig_thread_cb,
+	.syscall_thread = mcctrl_control_syscall_thread_cb,
+	.terminate_thread = mcctrl_control_terminate_thread_cb,
+	.release_user_space = mcctrl_control_release_user_space_cb,
+	.get_num_pool_threads = mcctrl_control_get_num_pool_threads_cb,
+	.uti_attr = mcctrl_control_uti_attr_cb,
+	.debug_log = mcctrl_control_debug_log_cb,
+	.perf_num = mcctrl_control_perf_num_cb,
+	.perf_set = mcctrl_control_perf_set_cb,
+	.perf_get = mcctrl_control_perf_get_cb,
+	.perf_enable = mcctrl_control_perf_enable_cb,
+	.perf_disable = mcctrl_control_perf_disable_cb,
+	.perf_destroy = mcctrl_control_perf_destroy_cb,
+	.getrusage = mcctrl_control_getrusage_cb,
+};
+#endif
 
 long __mcctrl_control(ihk_os_t os, unsigned int req, unsigned long arg,
                       struct file *file)
@@ -3418,6 +4355,11 @@ long __mcctrl_control(ihk_os_t os, unsigned int req, unsigned long arg,
 		return ret;
 	}
 
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_control_dispatch_body_result(
+		(unsigned long)os, req, arg, (unsigned long)file,
+		&mcctrl_control_dispatch_ops);
+#else
 	switch (req) {
 	case MCEXEC_UP_PREPARE_IMAGE:
 		return mcexec_prepare_image(os,
@@ -3535,10 +4477,26 @@ long __mcctrl_control(ihk_os_t os, unsigned int req, unsigned long arg,
 		return mcctrl_getrusage(os, (struct mcctrl_ioctl_getrusage_desc *)arg);
 	}
 	return -EINVAL;
+#endif
 }
 
 int mcctrl_get_request_os_cpu(ihk_os_t os, int *ret_cpu)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_control_get_request_os_cpu_body_result(
+		(unsigned long)os, ret_cpu, mcctrl_control_validate_os_bridge,
+		mcctrl_control_get_usrdata_bridge,
+		mcctrl_control_current_pid_bridge,
+		mcctrl_control_current_tid_bridge,
+		mcctrl_control_current_task_bridge,
+		mcctrl_control_get_ppd_bridge, mcctrl_control_put_ppd_bridge,
+		mcctrl_control_get_ptd_bridge, mcctrl_control_put_ptd_bridge,
+		mcctrl_control_ptd_data_bridge, mcctrl_control_packet_ref_bridge,
+		mcctrl_control_channel_read_cpu_bridge,
+		mcctrl_control_request_cpu_error_log_bridge,
+		mcctrl_control_request_cpu_ptd_log_bridge,
+		mcctrl_control_request_cpu_result_log_bridge);
+#else
 	struct mcctrl_usrdata *usrdata;
 	struct mcctrl_per_proc_data *ppd;
 	struct mcctrl_per_thread_data *ptd;
@@ -3602,17 +4560,32 @@ out_put_ppd:
 	mcctrl_put_per_proc_data(ppd);
 
 	return ret;
+#endif
 }
 
 int __mcctrl_os_read_write_cpu_register(ihk_os_t os, int cpu,
 		struct ihk_os_cpu_register *desc,
 		enum mcctrl_os_cpu_operation op)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_control_cpu_register_body_result(
+		(unsigned long)os, cpu, desc, op,
+		mcctrl_control_get_usrdata_bridge,
+		mcctrl_control_usrdata_cpu_count_bridge,
+		mcctrl_control_cpu_register_alloc_bridge,
+		mcctrl_control_cpu_register_free_bridge,
+		mcctrl_control_virt_to_phys_bridge,
+		mcctrl_control_cpu_register_send_wait_bridge,
+		mcctrl_control_cpu_register_error_log_bridge,
+		mcctrl_control_cpu_register_done_log_bridge);
+#else
 	struct mcctrl_usrdata *udp = ihk_host_os_get_usrdata(os);
 	struct ikc_scd_packet isp;
 	struct ihk_os_cpu_register *ldesc = NULL;
 	int do_free = 0;
 	int ret = -EINVAL;
+	int is_read = mcctrl_cpu_register_copyback(op,
+			MCCTRL_OS_CPU_READ_REGISTER);
 
 	if (!udp) {
 		pr_err("%s: error: mcctrl_usrdata not found\n", __func__);
@@ -3620,7 +4593,7 @@ int __mcctrl_os_read_write_cpu_register(ihk_os_t os, int cpu,
 		goto out;
 	}
 
-	if (cpu < 0 || cpu >= udp->cpu_info->n_cpus) {
+	if (!mcctrl_ikc_cpu_index_valid(cpu, udp->cpu_info->n_cpus)) {
 		pr_err("%s: error: cpu (%d) is out of range\n",
 		       __func__, cpu);
 		ret = -EINVAL;
@@ -3650,7 +4623,7 @@ int __mcctrl_os_read_write_cpu_register(ihk_os_t os, int cpu,
 	}
 
 	/* Update if read */
-	if (op == MCCTRL_OS_CPU_READ_REGISTER) {
+	if (is_read) {
 		desc->val = ldesc->val;
 	}
 
@@ -3663,7 +4636,7 @@ int __mcctrl_os_read_write_cpu_register(ihk_os_t os, int cpu,
 	printk("%s: MCCTRL_OS_CPU_%s_REGISTER: CPU: %d, addr_ext: 0x%lx, val: 0x%lx\n",
 #endif
 		__FUNCTION__,
-		(op == MCCTRL_OS_CPU_READ_REGISTER ? "READ" : "WRITE"), cpu,
+		(is_read ? "READ" : "WRITE"), cpu,
 		desc->addr_ext, desc->val);
 
 out:
@@ -3671,6 +4644,7 @@ out:
 		kfree(ldesc);
 	}
 	return ret;
+#endif
 }
 
 int mcctrl_os_read_cpu_register(ihk_os_t os, int cpu,

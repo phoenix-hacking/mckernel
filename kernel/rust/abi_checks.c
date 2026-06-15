@@ -31,6 +31,40 @@
 #include <xpmem_private.h>
 #include <futex.h>
 
+/* This translation unit only asserts layouts. xpmem_private.h contains inline
+ * helpers that reference file-local ref/deref bodies normally defined in
+ * xpmem.c, so provide inert definitions here to keep the ABI check build
+ * warning-free without exporting or changing runtime behavior.
+ */
+static struct xpmem_thread_group *__xpmem_tg_ref_by_tgid_nolock_internal(
+	pid_t tgid, int index, int return_destroying)
+{
+	(void)tgid;
+	(void)index;
+	(void)return_destroying;
+	return 0;
+}
+
+static void xpmem_tg_deref(struct xpmem_thread_group *tg)
+{
+	(void)tg;
+}
+
+static void xpmem_seg_deref(struct xpmem_segment *seg)
+{
+	(void)seg;
+}
+
+static void xpmem_ap_deref(struct xpmem_access_permit *ap)
+{
+	(void)ap;
+}
+
+static void xpmem_att_deref(struct xpmem_attachment *att)
+{
+	(void)att;
+}
+
 #define ABI_ASSERT(cond, msg) _Static_assert(cond, msg)
 #define ABI_OFFSET(type, member) __builtin_offsetof(type, member)
 
@@ -771,8 +805,13 @@ ABI_ASSERT(ABI_OFFSET(struct process_vm, range_cache_ind) == 288,
 ABI_ASSERT(ABI_OFFSET(struct process_vm, swapinfo) == 296,
 	   "Rust/C process_vm swapinfo offset mismatch");
 
+#ifdef ENABLE_TOFU
+ABI_ASSERT(sizeof(struct process) == 18112,
+	   "Rust/C process size mismatch");
+#else
 ABI_ASSERT(sizeof(struct process) == 1728,
 	   "Rust/C process size mismatch");
+#endif
 ABI_ASSERT(ABI_OFFSET(struct process, vm) == 128,
 	   "Rust/C process vm offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct process, threads_list) == 136,
@@ -803,6 +842,10 @@ ABI_ASSERT(ABI_OFFSET(struct process, maxrss) == 1360,
 	   "Rust/C process maxrss offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct process, straight_map) == 1432,
 	   "Rust/C process straight_map offset mismatch");
+#ifdef ENABLE_TOFU
+ABI_ASSERT(ABI_OFFSET(struct process, enable_tofu) == 1436,
+	   "Rust/C process enable_tofu offset mismatch");
+#endif
 ABI_ASSERT(ABI_OFFSET(struct process, perf_status) == 1456,
 	   "Rust/C process perf_status offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct process, monitoring_event) == 1464,
@@ -815,6 +858,12 @@ ABI_ASSERT(ABI_OFFSET(struct process, straight_va) == 1624,
 	   "Rust/C process straight_va offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct process, coredump_lock) == 1664,
 	   "Rust/C process coredump_lock offset mismatch");
+#ifdef ENABLE_TOFU
+ABI_ASSERT(ABI_OFFSET(struct process, fd_pde_data) == 1728,
+	   "Rust/C process fd_pde_data offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct process, fd_path) == 9920,
+	   "Rust/C process fd_path offset mismatch");
+#endif
 
 ABI_ASSERT(sizeof(struct thread) == 5568,
 	   "Rust/C thread size mismatch");
@@ -864,6 +913,10 @@ ABI_ASSERT(ABI_OFFSET(struct thread, coredump_regs) == 5480,
 	   "Rust/C thread coredump_regs offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct thread, rpf_backlog) == 5520,
 	   "Rust/C thread rpf_backlog offset mismatch");
+#ifdef ENABLE_TOFU
+ABI_ASSERT(ABI_OFFSET(struct thread, fd_path_in_open) == 5536,
+	   "Rust/C thread fd_path_in_open offset mismatch");
+#endif
 
 ABI_ASSERT(sizeof(struct mckfd) == 80,
 	   "Rust/C mckfd size mismatch");
@@ -1086,14 +1139,47 @@ ABI_ASSERT(ABI_OFFSET(struct backlog, func) == 16,
 	   "Rust/C backlog func offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct backlog, arg) == 24,
 	   "Rust/C backlog arg offset mismatch");
+#ifdef ENABLE_TOFU
+ABI_ASSERT(sizeof(struct cpu_local_var) == 24576,
+	   "Rust/C cpu_local_var size mismatch");
+#else
 ABI_ASSERT(sizeof(struct cpu_local_var) == 8128,
 	   "Rust/C cpu_local_var size mismatch");
+#endif
 ABI_ASSERT(__alignof__(struct cpu_local_var) == 64,
 	   "Rust/C cpu_local_var alignment mismatch");
 ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, idle) == 64,
 	   "Rust/C cpu_local_var idle offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, idle_proc) == 5632,
 	   "Rust/C cpu_local_var idle_proc offset mismatch");
+#ifdef ENABLE_TOFU
+ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, idle_vm) == 23744,
+	   "Rust/C cpu_local_var idle_vm offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, idle_asp) == 24120,
+	   "Rust/C cpu_local_var idle_asp offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, current) == 24304,
+	   "Rust/C cpu_local_var current offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, runq) == 24328,
+	   "Rust/C cpu_local_var runq offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, status) == 24376,
+	   "Rust/C cpu_local_var status offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, pending_free_pages) == 24384,
+	   "Rust/C cpu_local_var pending_free_pages offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, migq) == 24408,
+	   "Rust/C cpu_local_var migq offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, no_preempt) == 24432,
+	   "Rust/C cpu_local_var no_preempt offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, monitor) == 24456,
+	   "Rust/C cpu_local_var monitor offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, rusage) == 24464,
+	   "Rust/C cpu_local_var rusage offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, smp_func_req_list) == 24480,
+	   "Rust/C cpu_local_var smp_func_req_list offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, backlog_list) == 24512,
+	   "Rust/C cpu_local_var backlog_list offset mismatch");
+ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, uti_futex_resp) == 24528,
+	   "Rust/C cpu_local_var uti_futex_resp offset mismatch");
+#else
 ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, idle_vm) == 7360,
 	   "Rust/C cpu_local_var idle_vm offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, idle_asp) == 7664,
@@ -1120,3 +1206,4 @@ ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, backlog_list) == 8056,
 	   "Rust/C cpu_local_var backlog_list offset mismatch");
 ABI_ASSERT(ABI_OFFSET(struct cpu_local_var, uti_futex_resp) == 8072,
 	   "Rust/C cpu_local_var uti_futex_resp offset mismatch");
+#endif

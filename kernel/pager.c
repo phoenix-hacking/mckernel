@@ -118,13 +118,13 @@ area_print(struct vm_regions *region)
 static int
 myalloc_init(struct swapinfo *si, void *p, size_t sz)
 {
-	extern SYSCALL_DECLARE(mlock);
+	extern long sys_mlock(int n, ihk_mc_user_context_t *ctx);
 	ihk_mc_user_context_t ctx0;
 	int	cc;
 
 	/* pin the buffer down in McKernel side */
-	ihk_mc_syscall_arg0(&ctx0) = (uintptr_t) p;
-	ihk_mc_syscall_arg1(&ctx0) = sz;
+	ihk_mc_syscall_set_arg0(&ctx0, (uintptr_t) p);
+	ihk_mc_syscall_set_arg1(&ctx0, sz);
 	cc = sys_mlock(__NR_mlock, &ctx0);
 	if (cc < 0) return cc;
 	/* init */
@@ -138,12 +138,12 @@ myalloc_init(struct swapinfo *si, void *p, size_t sz)
 void
 myalloc_finalize(struct swapinfo *si)
 {
-	extern SYSCALL_DECLARE(munlock);
+	extern long sys_munlock(int n, ihk_mc_user_context_t *ctx);
 	ihk_mc_user_context_t ctx0;
 
 	/* unpindown in McKernel side */
-	ihk_mc_syscall_arg0(&ctx0) = (uintptr_t) si->user_buf;
-	ihk_mc_syscall_arg1(&ctx0) = si->ubuf_size;
+	ihk_mc_syscall_set_arg0(&ctx0, (uintptr_t) si->user_buf);
+	ihk_mc_syscall_set_arg1(&ctx0, si->ubuf_size);
 	sys_munlock(__NR_munlock, &ctx0);
 }
 
@@ -172,10 +172,10 @@ linux_open(char *fname, int flag, int mode)
 	ihk_mc_user_context_t ctx0;
 	int fd;
 
-	ihk_mc_syscall_arg0(&ctx0) = -100;		/* dirfd = AT_FDCWD */
-	ihk_mc_syscall_arg1(&ctx0) = (uintptr_t)fname;	/* pathname = fname */
-	ihk_mc_syscall_arg2(&ctx0) = flag;		/* flags = flag */
-	ihk_mc_syscall_arg3(&ctx0) = mode;		/* mode = mode */
+	ihk_mc_syscall_set_arg0(&ctx0, -100);		/* dirfd = AT_FDCWD */
+	ihk_mc_syscall_set_arg1(&ctx0, (uintptr_t)fname);	/* pathname = fname */
+	ihk_mc_syscall_set_arg2(&ctx0, flag);		/* flags = flag */
+	ihk_mc_syscall_set_arg3(&ctx0, mode);		/* mode = mode */
 	fd = syscall_generic_forwarding(__NR_openat, &ctx0);
 	return fd;
 }
@@ -185,9 +185,9 @@ linux_unlink(char *fname)
 {
 	ihk_mc_user_context_t ctx0;
 
-	ihk_mc_syscall_arg0(&ctx0) = -100;		/* dirfd = AT_FDCWD */
-	ihk_mc_syscall_arg1(&ctx0) = (uintptr_t)fname;	/* pathname = fname */
-	ihk_mc_syscall_arg2(&ctx0) = 0;			/* flags = 0 */
+	ihk_mc_syscall_set_arg0(&ctx0, -100);		/* dirfd = AT_FDCWD */
+	ihk_mc_syscall_set_arg1(&ctx0, (uintptr_t)fname);	/* pathname = fname */
+	ihk_mc_syscall_set_arg2(&ctx0, 0);			/* flags = 0 */
 	return syscall_generic_forwarding(__NR_unlinkat, &ctx0);
 }
 
@@ -198,13 +198,13 @@ linux_read(int fd, void *buf, size_t count)
 	ssize_t		sz;
 	size_t count0 = count;
 
-	ihk_mc_syscall_arg0(&ctx0) = fd;
+	ihk_mc_syscall_set_arg0(&ctx0, fd);
 	sz = 0;
 	for (;;) {
 		ssize_t sz0;
 
-		ihk_mc_syscall_arg1(&ctx0) = (uintptr_t) buf;
-		ihk_mc_syscall_arg2(&ctx0) = count;
+		ihk_mc_syscall_set_arg1(&ctx0, (uintptr_t) buf);
+		ihk_mc_syscall_set_arg2(&ctx0, count);
 		sz0 = syscall_generic_forwarding(__NR_read, &ctx0);
 		if (pager_linux_io_retry_result(sz0))
 			continue;
@@ -230,13 +230,13 @@ linux_write(int fd, void *buf, size_t count)
 	ssize_t		sz;
 	size_t count0 = count;
 
-	ihk_mc_syscall_arg0(&ctx0) = fd;
+	ihk_mc_syscall_set_arg0(&ctx0, fd);
 	sz = 0;
 	for (;;) {
 		ssize_t sz0;
 
-		ihk_mc_syscall_arg1(&ctx0) = (uintptr_t) buf;
-		ihk_mc_syscall_arg2(&ctx0) = count;
+		ihk_mc_syscall_set_arg1(&ctx0, (uintptr_t) buf);
+		ihk_mc_syscall_set_arg2(&ctx0, count);
 		sz0 = syscall_generic_forwarding(__NR_write, &ctx0);
 		if (pager_linux_io_retry_result(sz0))
 			continue;
@@ -261,9 +261,9 @@ linux_lseek(int fd, off_t off, int whence)
 	ihk_mc_user_context_t ctx0;
 	int		cc;
 
-	ihk_mc_syscall_arg0(&ctx0) = fd;
-	ihk_mc_syscall_arg1(&ctx0) = off;
-	ihk_mc_syscall_arg2(&ctx0) = whence;
+	ihk_mc_syscall_set_arg0(&ctx0, fd);
+	ihk_mc_syscall_set_arg1(&ctx0, off);
+	ihk_mc_syscall_set_arg2(&ctx0, whence);
 	cc = syscall_generic_forwarding(__NR_lseek, &ctx0);
 	return cc;
 }
@@ -274,7 +274,7 @@ linux_close(int fd)
 	ihk_mc_user_context_t ctx0;
 	int		cc;
 
-	ihk_mc_syscall_arg0(&ctx0) = fd;
+	ihk_mc_syscall_set_arg0(&ctx0, fd);
 	cc = syscall_generic_forwarding(__NR_close, &ctx0);
 	return cc;
 }
@@ -289,9 +289,9 @@ linux_munmap(void *addr, size_t len, int flag)
 	ihk_mc_user_context_t ctx0;
 	int		cc;
 
-	ihk_mc_syscall_arg0(&ctx0) = (uintptr_t) addr;
-	ihk_mc_syscall_arg1(&ctx0) = len;
-	ihk_mc_syscall_arg2(&ctx0) = flag;
+	ihk_mc_syscall_set_arg0(&ctx0, (uintptr_t) addr);
+	ihk_mc_syscall_set_arg1(&ctx0, len);
+	ihk_mc_syscall_set_arg2(&ctx0, flag);
 	cc = syscall_generic_forwarding(__NR_munmap, &ctx0);
 	return cc;
 }
@@ -387,11 +387,11 @@ mlocklist_req(unsigned long start, unsigned long end, struct addrpair *addr, int
 	int		cc;
 
 #define PAGER_REQ_MLOCK_LIST	0x0008
-	ihk_mc_syscall_arg0(&ctx0) = PAGER_REQ_MLOCK_LIST;
-	ihk_mc_syscall_arg1(&ctx0) = start;
-	ihk_mc_syscall_arg2(&ctx0) = end;
-	ihk_mc_syscall_arg3(&ctx0) = (unsigned long) addr;
-	ihk_mc_syscall_arg4(&ctx0) = nent;
+	ihk_mc_syscall_set_arg0(&ctx0, PAGER_REQ_MLOCK_LIST);
+	ihk_mc_syscall_set_arg1(&ctx0, start);
+	ihk_mc_syscall_set_arg2(&ctx0, end);
+	ihk_mc_syscall_set_arg3(&ctx0, (unsigned long) addr);
+	ihk_mc_syscall_set_arg4(&ctx0, nent);
 	cc = syscall_generic_forwarding(__NR_mmap, &ctx0);
 	return cc;
 }
@@ -652,7 +652,7 @@ debug_dump(char *msg, unsigned char *p)
 int
 do_pagein(int flag)
 {
-	struct thread		*thread = cpu_local_var(current);
+	struct thread		*thread = get_this_cpu_local_var()->current;
 	struct process_vm	*vm = thread->vm;
 	int		fd, i;
 	ssize_t		pos, sz, rs;
@@ -687,22 +687,22 @@ do_pagein(int flag)
 	print_region("after pagin", vm);
 	dkprintf("do_pagein: done, currss(%lx)\n", vm->currss);
 	vm->swapinfo = NULL;
-	kfree(si->swapfname);
-	kfree(si);
+	kfree_tracked(si->swapfname, __FILE__, __LINE__);
+	kfree_tracked(si, __FILE__, __LINE__);
 	return 0;
 err:
 	linux_close(fd);
 	ekprintf("pagein: read error: return(%lx) size(%lx)\n", rs, sz);
 	vm->swapinfo = NULL;
-	kfree(si->swapfname);
-	kfree(si);
+	kfree_tracked(si->swapfname, __FILE__, __LINE__);
+	kfree_tracked(si, __FILE__, __LINE__);
 	return -1;
 }
 
 int
 do_pageout(char *fname, void *buf, size_t size, int flag)
 {
-	struct thread		*thread = cpu_local_var(current);
+	struct thread		*thread = get_this_cpu_local_var()->current;
 	struct process_vm	*vm = thread->vm;
 	struct vm_regions	*region = &vm->region;
 	struct vm_range		*range, *next;
@@ -720,21 +720,21 @@ do_pageout(char *fname, void *buf, size_t size, int flag)
 			region->user_start, region->user_end);
 	if (cc)
 		return cc;
-	if (!(si = kmalloc(sizeof(struct swapinfo), IHK_MC_AP_NOWAIT))) {
+	if (!(si = kmalloc_tracked(sizeof(struct swapinfo), IHK_MC_AP_NOWAIT, __FILE__, __LINE__))) {
 		ekprintf("do_pageout: Cannot allocate working memory in kmalloc\n");
 		return -ENOMEM;
 	}
 	memset(si, '\0', sizeof(struct swapinfo));
 	cc = myalloc_init(si, buf, size);
 	if (cc < 0) {
-		kfree(si);
+		kfree_tracked(si, __FILE__, __LINE__);
 		ekprintf("do_pageout: Cannot pin buf (%p) down\n", buf);
 		return cc;
 	}
 	si->udata_buf = myalloc(si, UDATA_BUFSIZE);
-	si->swapfname = kmalloc(strlen_user(fname) + 1, IHK_MC_AP_NOWAIT);
+	si->swapfname = kmalloc_tracked(strlen_user(fname) + 1, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 	if (si->swapfname == NULL) {
-		kfree(si);
+		kfree_tracked(si, __FILE__, __LINE__);
 		ekprintf("do_pageout: Cannot allocate working memory in kmalloc\n");
 		return -ENOMEM;
 	}
@@ -909,8 +909,8 @@ free_exit:
 	arealist_free(&si->mlock_area); arealist_free(&si->swap_area); 
 	if (pager_should_unlink_swap_result(cc)) {
 		pager_unlink(si, si->swapfname);
-		kfree(si->swapfname);
-		kfree(si);
+		kfree_tracked(si->swapfname, __FILE__, __LINE__);
+		kfree_tracked(si, __FILE__, __LINE__);
 	}
 	else {
 		vm->swapinfo = si;

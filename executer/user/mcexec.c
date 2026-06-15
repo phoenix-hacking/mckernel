@@ -178,6 +178,131 @@ struct kernel_termios {
 struct thread_data_s;
 int main_loop(struct thread_data_s *);
 
+#ifndef MCEXEC_RUST_HELPERS
+int get_syscall_args(int pid, syscall_args *args)
+{
+	return ptrace(PTRACE_GETREGS, pid, NULL, args);
+}
+
+int set_syscall_args(int pid, syscall_args *args)
+{
+	return ptrace(PTRACE_SETREGS, pid, NULL, args);
+}
+
+unsigned long get_syscall_number(syscall_args *args)
+{
+	return args->orig_rax;
+}
+
+unsigned long get_syscall_return(syscall_args *args)
+{
+	return args->rax;
+}
+
+unsigned long get_syscall_arg1(syscall_args *args)
+{
+	return args->rdi;
+}
+
+unsigned long get_syscall_arg2(syscall_args *args)
+{
+	return args->rsi;
+}
+
+unsigned long get_syscall_arg3(syscall_args *args)
+{
+	return args->rdx;
+}
+
+unsigned long get_syscall_arg4(syscall_args *args)
+{
+	return args->r10;
+}
+
+unsigned long get_syscall_arg5(syscall_args *args)
+{
+	return args->r8;
+}
+
+unsigned long get_syscall_arg6(syscall_args *args)
+{
+	return args->r9;
+}
+
+unsigned long get_syscall_rip(syscall_args *args)
+{
+	return args->rip;
+}
+
+void set_syscall_number(syscall_args *args, unsigned long value)
+{
+	args->orig_rax = value;
+}
+
+void set_syscall_return(syscall_args *args, unsigned long value)
+{
+	args->rax = value;
+}
+
+void set_syscall_arg1(syscall_args *args, unsigned long value)
+{
+	args->rdi = value;
+}
+
+void set_syscall_arg2(syscall_args *args, unsigned long value)
+{
+	args->rsi = value;
+}
+
+void set_syscall_arg3(syscall_args *args, unsigned long value)
+{
+	args->rdx = value;
+}
+
+void set_syscall_arg4(syscall_args *args, unsigned long value)
+{
+	args->r10 = value;
+}
+
+void set_syscall_arg5(syscall_args *args, unsigned long value)
+{
+	args->r8 = value;
+}
+
+void set_syscall_arg6(syscall_args *args, unsigned long value)
+{
+	args->r9 = value;
+}
+
+int syscall_enter(syscall_args *args)
+{
+	return get_syscall_return(args) == (unsigned long)-ENOSYS;
+}
+
+void set_bit(int nr, volatile unsigned long *addr)
+{
+	volatile unsigned int *p = (volatile unsigned int *)addr + (nr >> 5);
+	unsigned int mask = 1U << (nr & 31);
+
+	__sync_fetch_and_or((unsigned int *)p, mask);
+}
+
+void clear_bit(int nr, volatile unsigned long *addr)
+{
+	volatile unsigned int *p = (volatile unsigned int *)addr + (nr >> 5);
+	unsigned int mask = 1U << (nr & 31);
+
+	__sync_fetch_and_and((unsigned int *)p, ~mask);
+}
+
+int test_bit(int nr, const void *addr)
+{
+	const unsigned int *p = (const unsigned int *)addr;
+
+	return ((1U << (nr & 31)) & p[nr >> 5]) != 0;
+}
+#endif
+
 static int mcosid;
 int fd;
 static char *exec_path = NULL;
@@ -217,6 +342,12 @@ static int nr_threads = -1;
 extern unsigned long mcexec_atobytes_result(const char *string);
 extern void mcexec_parse_stack_arg_result(const char *string,
 		long *stack_premap, long *stack_max);
+extern int mcexec_apply_option_result(int opt, const char *optarg,
+		int *target_core, int *nr_processes, int *nr_threads,
+		unsigned long *mpol_threshold, unsigned long *heap_extension,
+		unsigned long *straight_map_threshold, long *stack_premap,
+		long *stack_max, int *uti_thread_rank,
+		unsigned long *mcexec_flags);
 extern unsigned long mcexec_default_heap_extension_result(
 		unsigned long heap_extension, unsigned long page_size);
 extern int mcexec_default_thread_count_result(int nr_threads,
@@ -234,9 +365,17 @@ extern int mcexec_atoi_result(const char *string);
 extern unsigned long mcexec_strtoul_hex_result(const char *string);
 extern int mcexec_parse_optional_mcosid_result(const char *string,
 		int *result);
+extern int mcexec_post_options_plan_result(int optind, int argc,
+		const char *candidate, unsigned long heap_extension,
+		unsigned long page_size, int current_mcosid,
+		unsigned long *planned_heap_extension, int *planned_mcosid,
+		int *planned_optind);
+extern int mcexec_usage_line_result(char *buf, size_t size, const char *prog,
+		int add_envs_option);
 extern int mcexec_env_list_count_result(const void *head);
 extern void *mcexec_search_env_list_result(void *head, const char *name);
 extern int mcexec_add_env_list_result(void *headp, char *add_string);
+extern void mcexec_add_env_list_body(void *headp, char *add_string);
 extern void mcexec_destroy_env_list_result(void *head);
 extern char **mcexec_create_local_environ_result(void *inc_list);
 extern void mcexec_destroy_local_environ_result(char **local_env);
@@ -259,8 +398,15 @@ extern int mcexec_path_len_less_than_result(const char *path, size_t limit);
 extern int mcexec_copy_path_result(const char *path, char *out, size_t size);
 extern int mcexec_join_path_result(const char *prefix, const char *path,
 		char *out, size_t size);
+extern int lookup_exec_path(char *filename, char *path, int max_len,
+		int execvp);
+extern int load_elf_desc_shebang(char *shebang_argv0,
+		struct program_load_desc **desc_p, char ***shebang_argv_p,
+		int execvp);
+char *search_file(char *orgpath, int mode);
 extern int mcexec_objdump_rpath_cmd_result(const char *path, char *out,
 		size_t size);
+extern ssize_t mcexec_find_libdir_body(char *libdir, size_t len);
 extern int mcexec_getpath_execveat_prepare_result(int dirfd,
 		const char *filename, int flags, int at_fdcwd,
 		int at_empty_path, int at_symlink_nofollow,
@@ -269,6 +415,7 @@ extern int mcexec_build_ld_preload_result(const char *libdir,
 		const char *existing, int enable_uti,
 		int disable_sched_yield, int enable_qlmpi,
 		char *out, size_t size);
+extern void mcexec_ld_preload_init_body(void);
 extern int mcexec_overlay_addfd_prepare_result(const char *path,
 		int mcosid, char *linux_path, size_t linux_size,
 		char *mck_path, size_t mck_size, size_t *pathlen);
@@ -289,10 +436,171 @@ extern int mcexec_overlay_proc_path_result(const char *path, int mcosid,
 extern int mcexec_overlay_sys_path_result(const char *path, int mcosid,
 		char *out, size_t size, size_t *mapped_offset);
 extern int mcexec_normalize_overlay_path_result(char *path, size_t *len);
+extern const char *overlay_path(int dirfd, const char *in, char *buf,
+		int *resolvelinks);
 extern int mcexec_parse_proc_task_ids_result(const char *path,
 		int current_pid, int *pid, int *tid);
 extern int mcexec_proc_task_check_path_result(char *out, size_t size,
 		int mcosid, int pid, int tid);
+extern int mcexec_flatten_strings_result(char *pre_strings, char **strings,
+		char **flat);
+extern int mcexec_shebang_argv_extend_result(char ***shebang_argv_p,
+		char *shebang);
+extern int mcexec_execve1_transfer_buffer_result(const void *desc,
+		size_t desc_size, const void *args, size_t args_len,
+		char **buffer_out, size_t *size_out);
+extern int mcexec_syscall_should_log_result(long number,
+		unsigned long arg0, long nr_write);
+extern long mcexec_errno_return_result(long ret, int errno_value);
+extern long mcexec_path_copy_return_result(long copy_ret,
+		unsigned long limit);
+extern long mcexec_close_plan_result(unsigned long remote_fd, int mcos_fd);
+extern int mcexec_setfsuid_needs_cred_result(unsigned long mode);
+extern long mcexec_sched_setaffinity_action_result(unsigned long pid_arg);
+extern void mcexec_exit_status_plan_result(long number,
+		unsigned long status, long nr_exit_group, int is_child,
+		int is_tty, int *sig, int *term, int *report_sig,
+		int *report_status);
+extern int mcexec_collect_active_tids_result(const void *head, int *tids,
+		size_t count);
+extern int mcexec_fork_sync_complete_result(void *top, int pid,
+		void **fs_out, void **node_out);
+extern int mcexec_fork_sync_remove_node_result(void *top, void *target);
+extern int mcexec_dirent_rewrite_offsets_result(void *dirents, size_t start,
+		size_t end, size_t base, int is64);
+extern int mcexec_copy_dirents_result(void *dst, const void *dirents,
+		size_t dirents_size, size_t offset, unsigned int *count,
+		int is64);
+extern int mcexec_dirent_buffer_contains_name_result(const void *dirents,
+		size_t dirents_size, const void *entry, int is64);
+int flatten_strings(char *pre_strings, char **strings, char **flat);
+int copy_dirents(void *_dirp, void *dirents, size_t dirents_size,
+		off_t offset, unsigned int *count, int sysnum);
+int overlay_getdents(int sysnum, int fd, void *_dirp, unsigned int count);
+void print_usage(char **argv);
+void print_desc(struct program_load_desc *desc);
+void print_flat(char *flat);
+unsigned long atobytes(char *string);
+pid_t gettid(void);
+int tgkill(int tgid, int tid, int sig);
+void do_syscall_return(int fd, int cpu, long ret, int n,
+		unsigned long src, unsigned long dest, unsigned long sz);
+void do_syscall_load(int fd, int cpu, unsigned long dest, unsigned long src,
+		unsigned long sz);
+long do_strncpy_from_user(int fd, void *dest, void *src, unsigned long n);
+int close_cloexec_fds(int mcos_fd);
+void init_sigaction(void);
+void sendsig(int sig, siginfo_t *siginfo, void *context);
+int init_worker_threads(int fd);
+void overlay_addfd(int fd, const char *path);
+void overlay_delfd(int fd);
+int overlay_blacklist(const char *path);
+long act_signalfd4(struct syscall_wait_desc *w);
+void act_sigaction(struct syscall_wait_desc *w);
+void act_sigprocmask(struct syscall_wait_desc *w);
+void act_signalfd4_syscall(struct syscall_wait_desc *w, int fd, int cpu);
+void act_rt_sigaction(struct syscall_wait_desc *w, int fd, int cpu);
+void act_rt_sigprocmask(struct syscall_wait_desc *w, int fd, int cpu);
+void act_setfsuid(struct syscall_wait_desc *w, int fd, int cpu);
+void act_setresuid(struct syscall_wait_desc *w, int fd, int cpu);
+void act_setreuid(struct syscall_wait_desc *w, int fd, int cpu);
+void act_setuid(struct syscall_wait_desc *w, int fd, int cpu);
+void act_setresgid(struct syscall_wait_desc *w, int fd, int cpu);
+void act_setregid(struct syscall_wait_desc *w, int fd, int cpu);
+void act_setgid(struct syscall_wait_desc *w, int fd, int cpu);
+void act_setfsgid(struct syscall_wait_desc *w, int fd, int cpu);
+void act_close(struct syscall_wait_desc *w, int fd, int cpu);
+void act_generic_syscall(struct syscall_wait_desc *w, int fd, int cpu);
+void act_sched_setaffinity(struct syscall_wait_desc *w, int fd, int cpu,
+		struct thread_data_s *my_thread);
+void act_getdents(struct syscall_wait_desc *w, int fd, int cpu);
+void act_perf_event_open(struct syscall_wait_desc *w, int fd, int cpu);
+void act_futex_clock(struct syscall_wait_desc *w, int fd, int cpu);
+void act_kill(struct syscall_wait_desc *w, int fd, int cpu,
+		struct thread_data_s *my_thread);
+void act_wait4(struct syscall_wait_desc *w, int fd, int cpu);
+void act_gettid(struct syscall_wait_desc *w, int fd, int cpu);
+void act_debug_mlock(struct syscall_wait_desc *w, int fd, int cpu);
+void act_swapout_unavailable(struct syscall_wait_desc *w, int fd, int cpu);
+void act_linux_spawn(struct syscall_wait_desc *w, int fd, int cpu);
+void act_clone_complete(struct syscall_wait_desc *w, int fd, int cpu);
+int act_clone_start(struct syscall_wait_desc *w, int fd, int cpu,
+		long *main_loop_ret);
+void act_exit(struct syscall_wait_desc *w, int cpu, int is_child);
+void act_execve_phase1(struct syscall_wait_desc *w, int fd, int cpu,
+		char *pathbuf);
+long act_execve_phase2(struct syscall_wait_desc *w, int fd, int cpu);
+int act_execve(struct syscall_wait_desc *w, int fd, int cpu,
+		char *pathbuf, long *main_loop_ret);
+void act_reserved_memory_syscall(struct syscall_wait_desc *w, int fd, int cpu);
+void act_readlinkat(struct syscall_wait_desc *w, int fd, int cpu,
+		char *pathbuf, char *tmpbuf);
+void act_openat(struct syscall_wait_desc *w, int fd, int cpu,
+		char *pathbuf, char *tmpbuf);
+void act_open(struct syscall_wait_desc *w, int fd, int cpu,
+		char *pathbuf, char *tmpbuf);
+void act_readlink(struct syscall_wait_desc *w, int fd, int cpu,
+		char *pathbuf, char *tmpbuf);
+void act_newfstatat(struct syscall_wait_desc *w, int fd, int cpu,
+		char *pathbuf, char *tmpbuf);
+void act_stat(struct syscall_wait_desc *w, int fd, int cpu,
+		char *pathbuf, char *tmpbuf);
+void act_faccessat(struct syscall_wait_desc *w, int fd, int cpu,
+		char *pathbuf, char *tmpbuf);
+void act_access(struct syscall_wait_desc *w, int fd, int cpu,
+		char *pathbuf, char *tmpbuf);
+void act_getxattr(struct syscall_wait_desc *w, int fd, int cpu,
+		char *pathbuf, char *tmpbuf);
+void act_lgetxattr(struct syscall_wait_desc *w, int fd, int cpu,
+		char *pathbuf, char *tmpbuf);
+int act_main_loop_syscall(struct syscall_wait_desc *w, int fd, int cpu,
+		struct thread_data_s *my_thread, char *pathbuf, char *tmpbuf,
+		long *main_loop_ret, int is_child);
+int act_main_loop_iteration(struct syscall_wait_desc *w, int fd,
+		struct thread_data_s *my_thread, char *pathbuf, char *tmpbuf,
+		long *main_loop_ret, int is_child);
+int act_main_loop_body(struct thread_data_s *my_thread, int fd, int is_child);
+void *mcexec_main_loop_thread_func_body(void *arg);
+int mcexec_create_worker_thread_body(struct thread_data_s **tp_out,
+		void *init_ready);
+void mcexec_join_all_threads_body(void);
+void mcexec_kill_thread_body(unsigned long tid, unsigned long sig,
+		struct thread_data_s *my_thread);
+long mcexec_do_generic_syscall_body(struct syscall_wait_desc *w);
+int mcexec_get_thp_disable_body(void);
+void mcexec_numa_local_body(unsigned long *localset,
+		unsigned long *nodemask, int nonlocal);
+void mcexec_numa_all_body(unsigned long *nodemask);
+void *mcexec_numa_node_set_body(int n, void *numa_nodes,
+		size_t cpu_set_size);
+int mcexec_opendev_body(void);
+int mcexec_reduce_stack_body(unsigned long orig_cur, unsigned long orig_max,
+		char **argv);
+int mcexec_getpath_execveat_body(int dirfd, const char *filename, int flags,
+		char *pathbuf, size_t size);
+void mcexec_overlay_list_add_body(struct list_head *new, struct list_head *head);
+void mcexec_overlay_list_del_body(struct list_head *entry);
+int mcexec_mapped_proc_task_parent_exists_body(const char *mapped);
+int mcexec_dirent_is64_body(int sysnum, int getdents64);
+#endif
+
+#ifdef MCEXEC_RUST_HELPERS
+#define SET_ERR(ret) ret = mcexec_errno_return_result(ret, errno)
+#define MCEXEC_PATH_COPY_RET(ret) mcexec_path_copy_return_result(ret, PATH_MAX)
+#define MCEXEC_SETFSUID_NEEDS_CRED(mode) \
+	mcexec_setfsuid_needs_cred_result(mode)
+#define MCEXEC_CLOSE_PLAN(remote_fd, mcos_fd) \
+	mcexec_close_plan_result(remote_fd, mcos_fd)
+#define MCEXEC_SCHED_SETAFFINITY_ACTION(pid_arg) \
+	mcexec_sched_setaffinity_action_result(pid_arg)
+#else
+#define SET_ERR(ret) if (ret == -1) ret = -errno
+#define MCEXEC_PATH_COPY_RET(ret) ((ret) >= PATH_MAX ? -ENAMETOOLONG : (ret))
+#define MCEXEC_SETFSUID_NEEDS_CRED(mode) ((mode) == 1)
+#define MCEXEC_CLOSE_PLAN(remote_fd, mcos_fd) \
+	((remote_fd) == (unsigned long)(mcos_fd) ? -EBADF : 0)
+#define MCEXEC_SCHED_SETAFFINITY_ACTION(pid_arg) \
+	((pid_arg) == 0 ? 1 : -EINVAL)
 #endif
 
 struct fork_sync {
@@ -313,6 +621,7 @@ pthread_mutex_t fork_sync_mutex = PTHREAD_MUTEX_INITIALIZER;
 unsigned long page_size;
 unsigned long page_mask;
 
+#ifndef MCEXEC_RUST_HELPERS
 pid_t gettid(void)
 {
 	return syscall(SYS_gettid);
@@ -322,7 +631,80 @@ int tgkill(int tgid, int tid, int sig)
 {
 	return syscall(SYS_tgkill, tgid, tid, sig);
 }
+#endif
 
+#ifdef MCEXEC_RUST_HELPERS
+struct program_load_desc *load_elf(FILE *fp, char **interp_pathp);
+
+struct program_load_desc *mcexec_load_alloc_desc_bridge(int nsections)
+{
+	struct program_load_desc *desc;
+	size_t size = sizeof(struct program_load_desc) +
+		sizeof(struct program_image_section) * nsections;
+
+	desc = malloc(size);
+	if (!desc) {
+		return NULL;
+	}
+	memset(desc, '\0', size);
+	desc->magic = PLD_MAGIC;
+	desc->num_sections = nsections;
+	desc->stack_prot = PROT_READ | PROT_WRITE | PROT_EXEC;
+	return desc;
+}
+
+void mcexec_load_publish_main_section_bridge(
+		struct program_load_desc *desc, int index,
+		unsigned long vaddr, unsigned long filesz,
+		unsigned long offset, unsigned long len, int prot, void *fp)
+{
+	desc->sections[index].vaddr = vaddr;
+	desc->sections[index].filesz = filesz;
+	desc->sections[index].offset = offset;
+	desc->sections[index].len = len;
+	desc->sections[index].interp = 0;
+	desc->sections[index].fp = fp;
+	desc->sections[index].prot = prot;
+}
+
+int *mcexec_load_cred_bridge(struct program_load_desc *desc)
+{
+	return desc->cred;
+}
+
+long mcexec_load_clk_tck_bridge(void)
+{
+	return sysconf(_SC_CLK_TCK);
+}
+
+void mcexec_load_finalize_desc_bridge(struct program_load_desc *desc,
+		int pid, int pgid, int reloc, unsigned long entry,
+		unsigned long at_phdr, unsigned long at_phent,
+		unsigned long at_phnum, unsigned long at_entry,
+		unsigned long at_clktck, int stack_prot)
+{
+	desc->pid = pid;
+	desc->pgid = pgid;
+	desc->reloc = reloc;
+	desc->entry = entry;
+	desc->at_phdr = at_phdr;
+	desc->at_phent = at_phent;
+	desc->at_phnum = at_phnum;
+	desc->at_entry = at_entry;
+	desc->at_clktck = at_clktck;
+	desc->stack_prot = stack_prot;
+}
+
+void mcexec_load_too_large_interp_bridge(void)
+{
+	__eprintf("too large PT_INTERP segment\n");
+}
+
+void mcexec_load_cannot_read_interp_bridge(void)
+{
+	__eprintf("cannot read PT_INTERP segment\n");
+}
+#else
 struct program_load_desc *load_elf(FILE *fp, char **interp_pathp)
 {
 	Elf64_Ehdr hdr;
@@ -437,7 +819,20 @@ struct program_load_desc *load_elf(FILE *fp, char **interp_pathp)
 
 	return desc;
 }
+#endif
 
+#ifdef MCEXEC_RUST_HELPERS
+const char *mcexec_altroot_bridge(void)
+{
+	return altroot;
+}
+
+void mcexec_search_file_path_too_long_bridge(const char *root,
+		const char *path)
+{
+	__eprintf("modified path too long: %s/%s\n", root, path);
+}
+#else
 char *search_file(char *orgpath, int mode)
 {
 	int error;
@@ -467,7 +862,12 @@ char *search_file(char *orgpath, int mode)
 
 	return NULL;
 }
+#endif
 
+#ifdef MCEXEC_RUST_HELPERS
+struct program_load_desc *load_interp(struct program_load_desc *desc0,
+		FILE *fp);
+#else
 struct program_load_desc *load_interp(struct program_load_desc *desc0, FILE *fp)
 {
 	Elf64_Ehdr hdr;
@@ -553,9 +953,44 @@ struct program_load_desc *load_interp(struct program_load_desc *desc0, FILE *fp)
 
 	return desc;
 }
+#endif
 
 unsigned char *dma_buf;
 
+#ifdef MCEXEC_RUST_HELPERS
+int mcexec_lookup_lstat_errno_bridge(const char *path)
+{
+	struct stat sb;
+
+	if (lstat(path, &sb) == -1) {
+		return errno;
+	}
+
+	return 0;
+}
+
+void mcexec_lookup_array_too_small_bridge(void)
+{
+	fprintf(stderr, "lookup_exec_path(): array too small?\n");
+}
+
+void mcexec_lookup_stat_error_bridge(const char *path, int error)
+{
+	__dprintf("lookup_exec_path(): error stat for %s: %d\n",
+		  path, error);
+}
+
+void mcexec_lookup_not_found_bridge(const char *filename)
+{
+	fprintf(stderr,
+		"lookup_exec_path(): error finding file %s\n", filename);
+}
+
+void mcexec_lookup_success_bridge(const char *path)
+{
+	__dprintf("lookup_exec_path(): %s\n", path);
+}
+#else
 int lookup_exec_path(char *filename, char *path, int max_len, int execvp) 
 {
 	int found;
@@ -730,8 +1165,112 @@ int lookup_exec_path(char *filename, char *path, int max_len, int execvp)
 
 	return 0;
 }
+#endif
 
-int load_elf_desc(char *filename, struct program_load_desc **desc_p, 
+#ifdef MCEXEC_RUST_HELPERS
+int load_elf_desc(char *filename, struct program_load_desc **desc_p,
+		char **shebang_p);
+
+int mcexec_load_desc_stat_size_bridge(const char *filename, long *size_out)
+{
+	struct stat sb;
+
+	if (stat(filename, &sb) == -1) {
+		__dprintf("Error: failed to stat %s\n", filename);
+		return errno;
+	}
+
+	*size_out = sb.st_size;
+	return 0;
+}
+
+void mcexec_load_desc_not_executable_bridge(const char *filename, int error)
+{
+	__dprintf("Error: %s is not an executable?, errno: %d\n",
+		  filename, error);
+}
+
+void mcexec_load_desc_zero_length_bridge(const char *filename)
+{
+	__dprintf("Error: file %s is zero length\n", filename);
+}
+
+void mcexec_load_desc_open_failed_bridge(const char *filename)
+{
+	__dprintf("Error: Failed to open %s\n", filename);
+}
+
+void mcexec_load_desc_header_failed_bridge(const char *filename)
+{
+	__dprintf("Error: Failed to read header from %s\n", filename);
+}
+
+void mcexec_load_desc_shebang_read_failed_bridge(const char *filename)
+{
+	__dprintf("Error: reading shebang path %s\n", filename);
+}
+
+void mcexec_load_desc_open_exec_failed_bridge(const char *filename,
+		int ret, int fd_value)
+{
+	fprintf(stderr, "Error: open_exec() fails for %s: %d (fd: %d)\n",
+		filename, ret, fd_value);
+}
+
+void mcexec_load_desc_publish_exec_path_bridge(char *path)
+{
+	if (exec_path) {
+		free(exec_path);
+	}
+	exec_path = path;
+}
+
+void mcexec_load_desc_strdup_failed_bridge(void)
+{
+	fprintf(stderr, "WARNING: strdup(filename) failed\n");
+}
+
+void mcexec_load_desc_getcwd_failed_bridge(void)
+{
+	fprintf(stderr, "Error: getting current working dir pathname\n");
+}
+
+void mcexec_load_desc_alloc_exec_path_failed_bridge(void)
+{
+	fprintf(stderr, "Error: allocating exec_path\n");
+}
+
+void mcexec_load_desc_build_exec_path_failed_bridge(void)
+{
+	fprintf(stderr, "Error: building exec_path\n");
+}
+
+void mcexec_load_desc_parse_elf_failed_bridge(void)
+{
+	fprintf(stderr, "Error: Failed to parse ELF!\n");
+}
+
+void mcexec_load_desc_interp_not_found_bridge(const char *path)
+{
+	fprintf(stderr, "Error: interp not found: %s\n", path);
+}
+
+void mcexec_load_desc_interp_open_failed_bridge(const char *path)
+{
+	fprintf(stderr, "Error: Failed to open %s\n", path);
+}
+
+void mcexec_load_desc_parse_interp_failed_bridge(void)
+{
+	fprintf(stderr, "Error: Failed to parse interp!\n");
+}
+
+void mcexec_load_desc_sections_bridge(int count)
+{
+	__dprintf("# of sections: %d\n", count);
+}
+#else
+int load_elf_desc(char *filename, struct program_load_desc **desc_p,
 		char **shebang_p)
 {
 	FILE *fp;
@@ -890,11 +1429,28 @@ int load_elf_desc(char *filename, struct program_load_desc **desc_p,
 	*desc_p = desc;
 	return 0;
 }
+#endif
 
 /* recursively resolve shebangs
  *
  * Note: shebang_argv_p must point to reallocable memory or be NULL
  */
+#ifdef MCEXEC_RUST_HELPERS
+int load_elf_desc_shebang(char *shebang_argv0,
+			  struct program_load_desc **desc_p,
+			  char ***shebang_argv_p,
+			  int execvp);
+
+void mcexec_load_shebang_find_error_bridge(const char *path)
+{
+	__dprintf("error: finding file: %s\n", path);
+}
+
+void mcexec_load_shebang_load_error_bridge(const char *path)
+{
+	__dprintf("error: loading file: %s\n", path);
+}
+#else
 int load_elf_desc_shebang(char *shebang_argv0,
 			  struct program_load_desc **desc_p,
 			  char ***shebang_argv_p,
@@ -916,6 +1472,16 @@ int load_elf_desc_shebang(char *shebang_argv0,
 	}
 
 	if (shebang) {
+#ifdef MCEXEC_RUST_HELPERS
+		if (!shebang_argv_p)
+			return load_elf_desc_shebang(shebang, desc_p,
+						     NULL, execvp);
+
+		if (mcexec_shebang_argv_extend_result(shebang_argv_p,
+				shebang) < 0) {
+			return ENOMEM;
+		}
+#else
 		char *shebang_params;
 		size_t shebang_param_count = 1;
 		size_t shebang_argv_count = 0;
@@ -957,6 +1523,7 @@ int load_elf_desc_shebang(char *shebang_argv0,
 			shebang_argv[1] = shebang_params;
 
 		*shebang_argv_p = shebang_argv;
+#endif
 
 		return load_elf_desc_shebang(shebang, desc_p, shebang_argv_p,
 					     execvp);
@@ -964,7 +1531,86 @@ int load_elf_desc_shebang(char *shebang_argv0,
 
 	return 0;
 }
+#endif
 
+#ifdef MCEXEC_RUST_HELPERS
+size_t mcexec_program_load_desc_size_bridge(void)
+{
+	return sizeof(struct program_load_desc);
+}
+
+size_t mcexec_program_image_section_size_bridge(void)
+{
+	return sizeof(struct program_image_section);
+}
+
+void mcexec_load_cannot_read_ehdr_bridge(void)
+{
+	__eprintf("Cannot read Ehdr.\n");
+}
+
+void mcexec_load_elfmag_mismatch_bridge(void)
+{
+	__eprintf("ELFMAG mismatched.\n");
+}
+
+void mcexec_load_phdr_failed_bridge(int index)
+{
+	__eprintf("Loading phdr failed (%d)\n", index);
+}
+
+void mcexec_load_realloc_failed_bridge(unsigned long size)
+{
+	__eprintf("realloc(%#lx) failed\n", (long)size);
+}
+
+void mcexec_load_pt_interp_on_interp_bridge(void)
+{
+	__eprintf("PT_INTERP on interp\n");
+}
+
+void mcexec_desc_set_num_sections_bridge(struct program_load_desc *desc,
+		int count)
+{
+	desc->num_sections = count;
+}
+
+void mcexec_desc_set_entry_bridge(struct program_load_desc *desc,
+		unsigned long entry)
+{
+	desc->entry = entry;
+}
+
+void mcexec_desc_set_interp_align_bridge(struct program_load_desc *desc,
+		unsigned long align)
+{
+	desc->interp_align = align;
+}
+
+void mcexec_desc_publish_interp_section_bridge(
+		struct program_load_desc *desc, int index,
+		unsigned long vaddr, unsigned long filesz,
+		unsigned long offset, unsigned long len, int prot, void *fp)
+{
+	desc->sections[index].vaddr = vaddr;
+	desc->sections[index].filesz = filesz;
+	desc->sections[index].offset = offset;
+	desc->sections[index].len = len;
+	desc->sections[index].interp = 1;
+	desc->sections[index].fp = fp;
+	desc->sections[index].prot = prot;
+}
+
+void mcexec_load_section_log_bridge(int index, unsigned long vaddr,
+		unsigned long filesz, unsigned long offset,
+		unsigned long len, int prot)
+{
+	__dprintf("%d: (%s) %lx, %lx, %lx, %lx, %x\n",
+		  index, "PT_LOAD", vaddr, filesz, offset, len, prot);
+}
+
+int transfer_image(int fd, struct program_load_desc *desc);
+#else
 int transfer_image(int fd, struct program_load_desc *desc)
 {
 	struct remote_transfer pt;
@@ -1058,7 +1704,120 @@ int transfer_image(int fd, struct program_load_desc *desc)
 
 	return 0;
 }
+#endif
 
+#ifdef MCEXEC_RUST_HELPERS
+int mcexec_desc_num_sections_bridge(const struct program_load_desc *desc)
+{
+	return desc->num_sections;
+}
+
+int mcexec_desc_cpu_bridge(const struct program_load_desc *desc)
+{
+	return desc->cpu;
+}
+
+int mcexec_desc_pid_bridge(const struct program_load_desc *desc)
+{
+	return desc->pid;
+}
+
+unsigned long mcexec_desc_entry_bridge(const struct program_load_desc *desc)
+{
+	return desc->entry;
+}
+
+unsigned long mcexec_desc_rprocess_bridge(const struct program_load_desc *desc)
+{
+	return desc->rprocess;
+}
+
+unsigned long mcexec_desc_section_vaddr_bridge(
+		const struct program_load_desc *desc, int index)
+{
+	return desc->sections[index].vaddr;
+}
+
+unsigned long mcexec_desc_section_len_bridge(
+		const struct program_load_desc *desc, int index)
+{
+	return desc->sections[index].len;
+}
+
+unsigned long mcexec_desc_section_remote_pa_bridge(
+		const struct program_load_desc *desc, int index)
+{
+	return desc->sections[index].remote_pa;
+}
+
+unsigned long mcexec_desc_section_filesz_bridge(
+		const struct program_load_desc *desc, int index)
+{
+	return desc->sections[index].filesz;
+}
+
+unsigned long mcexec_desc_section_offset_bridge(
+		const struct program_load_desc *desc, int index)
+{
+	return desc->sections[index].offset;
+}
+
+void *mcexec_desc_section_fp_bridge(
+		const struct program_load_desc *desc, int index)
+{
+	return desc->sections[index].fp;
+}
+
+void mcexec_transfer_seek_error_bridge(void)
+{
+	fprintf(stderr, "transfer_image(): error: seeking file position\n");
+}
+
+void mcexec_transfer_access_error_bridge(void)
+{
+	fprintf(stderr, "transfer_image(): error: accessing file\n");
+}
+
+void mcexec_transfer_short_error_bridge(void)
+{
+	fprintf(stderr, "transfer_image(): file too short?\n");
+}
+
+void mcexec_transfer_seeked_bridge(unsigned long offset,
+		unsigned long size)
+{
+	__dprintf("seeked to %lx | size %ld\n", offset, size);
+}
+
+void mcexec_print_desc_intro_bridge(const void *desc)
+{
+	if (debug) {
+		printf("print_desc: Desc (%p)\n", desc);
+		fflush(stdout);
+	}
+}
+
+void mcexec_print_desc_main_bridge(int cpu, int pid, unsigned long entry,
+		unsigned long rprocess)
+{
+	if (debug) {
+		printf("print_desc: CPU = %d, pid = %d, entry = %lx, rp = %lx\n",
+				cpu, pid, entry, rprocess);
+		fflush(stdout);
+	}
+}
+
+void mcexec_print_desc_section_bridge(unsigned long vaddr,
+		unsigned long len, unsigned long remote_pa,
+		unsigned long filesz)
+{
+	if (debug) {
+		printf("print_desc: vaddr: %lx, mem_len: %lx, remote_pa: %lx, files: %lx\n",
+				vaddr, len, remote_pa, filesz);
+		fflush(stdout);
+	}
+}
+#else
 void print_desc(struct program_load_desc *desc)
 {
 	int i;
@@ -1072,6 +1831,7 @@ void print_desc(struct program_load_desc *desc)
 				  desc->sections[i].remote_pa, desc->sections[i].filesz);
 	}
 }
+#endif
 
 #define PIN_SHIFT  12
 #define PIN_SIZE  (1 << PIN_SHIFT)
@@ -1082,6 +1842,17 @@ unsigned long dma_buf_pa;
 #endif
 
 
+#ifdef MCEXEC_RUST_HELPERS
+void mcexec_print_flat_count_bridge(long count)
+{
+	__dprintf("counter: %ld\n", count);
+}
+
+void mcexec_print_flat_entry_bridge(const char *entry)
+{
+	__dprintf("%s\n", entry);
+}
+#else
 void print_flat(char *flat) 
 {
 	long i, count;
@@ -1094,6 +1865,7 @@ void print_flat(char *flat)
 		__dprintf("%s\n", (flat + _flat[i + 1]));
 	}
 }
+#endif
 
 /* 
  * Flatten out a (char **) string array into the following format:
@@ -1111,6 +1883,7 @@ void print_flat(char *flat)
  * returns the total length of the flat string and updates flat to
  * point to the beginning.
  */
+#ifndef MCEXEC_RUST_HELPERS
 int flatten_strings(char *pre_strings, char **strings, char **flat)
 {
 	int full_len, len, i;
@@ -1183,6 +1956,7 @@ int flatten_strings(char *pre_strings, char **strings, char **flat)
 
 	return len;
 }
+#endif /* !MCEXEC_RUST_HELPERS */
 
 //#define NUM_HANDLER_THREADS	248
 
@@ -1206,11 +1980,38 @@ void *numa_nodes;
 size_t cpu_set_size;
 int n_threads;
 
+#ifndef MCEXEC_RUST_HELPERS
 static inline cpu_set_t *numa_node_set(int n)
 {
 	return (cpu_set_t *)(numa_nodes + n * cpu_set_size);
 }
+#else
+#define numa_node_set(n) \
+	((cpu_set_t *)mcexec_numa_node_set_body((n), numa_nodes, cpu_set_size))
+#endif
 
+#ifdef MCEXEC_RUST_HELPERS
+int mcexec_numa_node_cpu_isset_bridge(int node, int cpu)
+{
+	return CPU_ISSET_S(cpu, cpu_set_size, numa_node_set(node));
+}
+
+void mcexec_numa_local_cpu_log_bridge(int cpu)
+{
+	__dprintf("%d belongs to local set\n", cpu);
+}
+
+void mcexec_numa_node_cpu_log_bridge(int cpu, int node)
+{
+	__dprintf("%d belongs to node %d\n", cpu, node);
+}
+
+#define numa_local(localset, nodemask) \
+	mcexec_numa_local_body((unsigned long *)(localset), (nodemask), 0)
+#define numa_nonlocal(localset, nodemask) \
+	mcexec_numa_local_body((unsigned long *)(localset), (nodemask), 1)
+#define numa_all(nodemask) mcexec_numa_all_body(nodemask)
+#else
 static inline void _numa_local(__cpu_set_unit *localset,
 			       unsigned long *nodemask, int nonlocal)
 {
@@ -1268,6 +2069,7 @@ static inline void numa_all(unsigned long *nodemask)
 		set_bit(i, nodemask);
 	}
 }
+#endif
 
 pid_t master_tid;
 
@@ -1275,6 +2077,9 @@ pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 pthread_barrier_t init_ready;
 pthread_barrier_t uti_init_ready;
 
+#ifdef MCEXEC_RUST_HELPERS
+#define main_loop_thread_func mcexec_main_loop_thread_func_body
+#else
 static void *main_loop_thread_func(void *arg)
 {
 	struct thread_data_s *td = (struct thread_data_s *)arg;
@@ -1287,9 +2092,11 @@ static void *main_loop_thread_func(void *arg)
 
 	return NULL;
 }
+#endif
 
 #define LOCALSIG SIGURG
 
+#ifndef MCEXEC_RUST_HELPERS
 void
 sendsig(int sig, siginfo_t *siginfo, void *context)
 {
@@ -1374,7 +2181,27 @@ out:
 	if (!not_uti)
 		ioctl(fd, MCEXEC_UP_SIG_THREAD, 0);
 }
+#else
+int mcexec_sendsig_si_pid_bridge(const siginfo_t *siginfo)
+{
+	return siginfo->si_pid;
+}
 
+int mcexec_sendsig_si_signo_bridge(const siginfo_t *siginfo)
+{
+	return siginfo->si_signo;
+}
+
+void mcexec_sendsig_default_action_bridge(int sig)
+{
+	signal(sig, SIG_DFL);
+	kill(getpid(), sig);
+	for(;;)
+		sleep(1);
+}
+#endif
+
+#ifndef MCEXEC_RUST_HELPERS
 long
 act_signalfd4(struct syscall_wait_desc *w)
 {
@@ -1440,7 +2267,234 @@ act_signalfd4(struct syscall_wait_desc *w)
 	}
 	return rc;
 }
+#else
+ssize_t mcexec_act_signalfd4_write_bridge(int fd, const void *info,
+		size_t len)
+{
+	return write(fd, info, len);
+}
 
+void mcexec_act_signalfd4_write_error_bridge(void)
+{
+	fprintf(stderr, "error: writing sigpipe\n");
+}
+#endif
+
+#ifdef MCEXEC_RUST_HELPERS
+void mcexec_act_sigaction_install_bridge(int sig, int ignored)
+{
+	struct sigaction act;
+
+	memset(&act, '\0', sizeof act);
+	if (ignored) {
+		act.sa_handler = SIG_IGN;
+	}
+	else {
+		act.sa_sigaction = sendsig;
+		act.sa_flags = SA_SIGINFO;
+	}
+	sigaction(sig, &act, NULL);
+}
+
+void mcexec_act_sigprocmask_apply_bridge(unsigned long mask)
+{
+	sigset_t set;
+
+	sigemptyset(&set);
+	memcpy(&set, &mask, sizeof(unsigned long));
+	sigdelset(&set, LOCALSIG);
+	sigprocmask(SIG_SETMASK, &set, NULL);
+}
+
+long mcexec_path_readlinkat_bridge(int dirfd, const char *path,
+		char *buf, size_t size)
+{
+	long ret;
+
+	ret = readlinkat(dirfd, path, buf, size);
+	SET_ERR(ret);
+	__dprintf("readlinkat: dirfd=%d, path=%s, buf=%s, ret=%ld\n",
+		dirfd, path, buf, ret);
+	return ret;
+}
+
+long mcexec_path_readlink_bridge(const char *path, char *buf, size_t size)
+{
+	long ret;
+
+	ret = readlink(path, buf, size);
+	SET_ERR(ret);
+	__dprintf("readlink: path=%s, buf=%s, ret=%ld\n", path, buf, ret);
+	return ret;
+}
+
+long mcexec_path_fstatat_bridge(int dirfd, const char *path,
+		void *statbuf, int flags)
+{
+	long ret;
+
+	ret = fstatat(dirfd, path, statbuf, flags);
+	SET_ERR(ret);
+	__dprintf("fstatat: dirfd=%d, pathname=%s, buf=%p, flags=%x, ret=%ld\n",
+		  dirfd, path, statbuf, flags, ret);
+	return ret;
+}
+
+long mcexec_path_stat_bridge(const char *path, void *statbuf)
+{
+	long ret;
+
+	ret = stat(path, statbuf);
+	SET_ERR(ret);
+	__dprintf("stat: path=%s, ret=%ld\n", path, ret);
+	return ret;
+}
+
+long mcexec_path_faccessat_bridge(int dirfd, const char *path,
+		int mode, int flags)
+{
+	long ret;
+
+	ret = faccessat(dirfd, path, mode, flags);
+	SET_ERR(ret);
+	__dprintf("faccessat: dirfd=%d, pathname=%s, mode=%d, ret=%ld\n",
+		  dirfd, path, mode, ret);
+	return ret;
+}
+
+long mcexec_path_access_bridge(const char *path, int mode)
+{
+	long ret;
+
+	ret = access(path, mode);
+	SET_ERR(ret);
+	__dprintf("access: path=%s, ret=%ld\n", path, ret);
+	return ret;
+}
+
+long mcexec_path_getxattr_bridge(const char *path, const char *name,
+		void *value, size_t size)
+{
+	long ret;
+
+	ret = getxattr(path, name, value, size);
+	SET_ERR(ret);
+	__dprintf("getxattr: path=%s, name=%s, ret=%ld\n", path, name, ret);
+	return ret;
+}
+
+long mcexec_path_lgetxattr_bridge(const char *path, const char *name,
+		void *value, size_t size)
+{
+	long ret;
+
+	ret = lgetxattr(path, name, value, size);
+	SET_ERR(ret);
+	__dprintf("lgetxattr: path=%s, name=%s, ret=%ld\n", path, name, ret);
+	return ret;
+}
+
+void mcexec_path_openat_log_bridge(int dirfd, const char *path, int tid)
+{
+	__dprintf("openat: %d, %s,tid=%d\n", dirfd, path, tid);
+}
+
+void mcexec_path_open_log_bridge(const char *path)
+{
+	__dprintf("open: %s\n", path);
+}
+
+long mcexec_path_openat_bridge(int dirfd, const char *path,
+		unsigned long flags, unsigned long mode)
+{
+	long ret;
+
+	ret = openat(dirfd, path, flags, mode);
+	SET_ERR(ret);
+	return ret;
+}
+
+long mcexec_path_open_bridge(const char *path, unsigned long flags,
+		unsigned long mode)
+{
+	long ret;
+
+	ret = open(path, flags, mode);
+	SET_ERR(ret);
+	return ret;
+}
+
+void mcexec_cred_get_bridge(int mcos_fd, unsigned long arg)
+{
+	ioctl(mcos_fd, MCEXEC_UP_GET_CRED, arg);
+}
+
+long mcexec_cred_setfsuid_bridge(unsigned long uid)
+{
+	return setfsuid(uid);
+}
+
+long mcexec_cred_setresuid_bridge(unsigned long ruid,
+		unsigned long euid, unsigned long suid)
+{
+	long ret;
+
+	ret = setresuid(ruid, euid, suid);
+	SET_ERR(ret);
+	return ret;
+}
+
+long mcexec_cred_setreuid_bridge(unsigned long ruid, unsigned long euid)
+{
+	long ret;
+
+	ret = setreuid(ruid, euid);
+	SET_ERR(ret);
+	return ret;
+}
+
+long mcexec_cred_setuid_bridge(unsigned long uid)
+{
+	long ret;
+
+	ret = setuid(uid);
+	SET_ERR(ret);
+	return ret;
+}
+
+long mcexec_cred_setresgid_bridge(unsigned long rgid,
+		unsigned long egid, unsigned long sgid)
+{
+	long ret;
+
+	ret = setresgid(rgid, egid, sgid);
+	SET_ERR(ret);
+	return ret;
+}
+
+long mcexec_cred_setregid_bridge(unsigned long rgid, unsigned long egid)
+{
+	long ret;
+
+	ret = setregid(rgid, egid);
+	SET_ERR(ret);
+	return ret;
+}
+
+long mcexec_cred_setgid_bridge(unsigned long gid)
+{
+	long ret;
+
+	ret = setgid(gid);
+	SET_ERR(ret);
+	return ret;
+}
+
+long mcexec_cred_setfsgid_bridge(unsigned long gid)
+{
+	return setfsgid(gid);
+}
+#else
 void
 act_sigaction(struct syscall_wait_desc *w)
 {
@@ -1470,7 +2524,65 @@ act_sigprocmask(struct syscall_wait_desc *w)
 	sigdelset(&set, LOCALSIG);
 	sigprocmask(SIG_SETMASK, &set, NULL);
 }
+#endif
 
+#define DO_NOT_OVERWRITE 0
+#define MCEXEC_STACK_SIZE (10 * 1024 * 1024)	/* 10 MiB */
+
+#ifdef MCEXEC_RUST_HELPERS
+void mcexec_reduce_stack_newval_overflow_bridge(void)
+{
+	__eprintf("snprintf(%s):buffer overflow\n", rlimit_stack_envname);
+}
+
+int mcexec_reduce_stack_setenv_bridge(const char *newval)
+{
+	return setenv(rlimit_stack_envname, newval, DO_NOT_OVERWRITE);
+}
+
+void mcexec_reduce_stack_setenv_failed_bridge(void)
+{
+	__eprintf("failed to setenv(%s)\n", rlimit_stack_envname);
+}
+
+int mcexec_reduce_stack_setrlimit_bridge(unsigned long cur, unsigned long max)
+{
+	struct rlimit new_rlim;
+
+	new_rlim.rlim_cur = cur;
+	new_rlim.rlim_max = max;
+	return setrlimit(RLIMIT_STACK, &new_rlim);
+}
+
+void mcexec_reduce_stack_setrlimit_failed_bridge(void)
+{
+	__eprintf("failed to setrlimit(RLIMIT_STACK)\n");
+}
+
+ssize_t mcexec_reduce_stack_readlink_bridge(char *path, size_t size)
+{
+	return readlink("/proc/self/exe", path, size);
+}
+
+void mcexec_reduce_stack_readlink_failed_bridge(void)
+{
+	__eprintf("Could not readlink /proc/self/exe? %m\n");
+}
+
+int mcexec_reduce_stack_execv_bridge(const char *path, char **argv)
+{
+	return execv(path, argv);
+}
+
+void mcexec_reduce_stack_execv_failed_bridge(void)
+{
+	__eprintf("failed to execv(myself)\n");
+}
+
+#define reduce_stack(orig_rlim, argv) \
+	mcexec_reduce_stack_body((orig_rlim)->rlim_cur, (orig_rlim)->rlim_max, \
+			(argv))
+#else
 static int reduce_stack(struct rlimit *orig_rlim, char *argv[])
 {
 	int n;
@@ -1489,7 +2601,6 @@ static int reduce_stack(struct rlimit *orig_rlim, char *argv[])
 		return 1;
 	}
 
-#define	DO_NOT_OVERWRITE	0
 	error = setenv(rlimit_stack_envname, newval, DO_NOT_OVERWRITE);
 	if (error) {
 		__eprintf("failed to setenv(%s)\n", rlimit_stack_envname);
@@ -1497,7 +2608,6 @@ static int reduce_stack(struct rlimit *orig_rlim, char *argv[])
 	}
 
 	/* exec() myself with small stack */
-#define	MCEXEC_STACK_SIZE	(10 * 1024 * 1024)	/* 10 MiB */
 	new_rlim.rlim_cur = MCEXEC_STACK_SIZE;
 	new_rlim.rlim_max = orig_rlim->rlim_max;
 
@@ -1529,7 +2639,186 @@ static int reduce_stack(struct rlimit *orig_rlim, char *argv[])
 	__eprintf("failed to execv(myself)\n");
 	return 1;
 }
+#endif
 
+#ifdef MCEXEC_RUST_HELPERS
+int mcexec_print_usage_add_envs_bridge(void)
+{
+#ifdef ADD_ENVS_OPTION
+	return 1;
+#else
+	return 0;
+#endif
+}
+
+void mcexec_print_usage_write_bridge(const char *line, size_t len)
+{
+	fwrite(line, 1, len, stderr);
+}
+
+void mcexec_exit_debug_bridge(unsigned long status, int cpu)
+{
+	__dprintf("__NR_exit/__NR_exit_group: %ld (cpu_id: %d)\n",
+			status, cpu);
+}
+
+int mcexec_exit_isatty_bridge(int target_fd)
+{
+	return isatty(target_fd);
+}
+
+void mcexec_exit_report_signal_bridge(int sig)
+{
+	fprintf(stderr, "Terminate by signal %d\n", sig);
+}
+
+void mcexec_exit_report_status_bridge(int term)
+{
+	__dprintf("Exit status: %d\n", term);
+}
+
+void mcexec_exit_cmd_servers_bridge(void)
+{
+#ifdef USE_SYSCALL_MOD_CALL
+#ifdef CMD_DCFA
+	ibmic_cmd_server_exit();
+#endif
+
+#ifdef CMD_DCFAMPI
+	dcfampi_cmd_server_exit();
+#endif
+	mc_cmd_server_exit();
+	__dprintf("mccmd server exited\n");
+#endif
+}
+
+void mcexec_exit_replay_signal_bridge(int sig)
+{
+	signal(sig, SIG_DFL);
+	kill(getpid(), sig);
+	pause();
+}
+
+void mcexec_exit_process_bridge(int term)
+{
+	exit(term);
+}
+
+void mcexec_execve2_alloc_desc_failed_bridge(void)
+{
+	fprintf(stderr, "execve(): error allocating desc\n");
+}
+
+void mcexec_execve2_transfer_desc_failed_bridge(void)
+{
+	fprintf(stderr, "execve(): error obtaining ELF descriptor\n");
+}
+
+void mcexec_execve2_transfer_desc_ok_bridge(void)
+{
+	__dprintf("%s", "execve(): transfer ELF desc OK\n");
+}
+
+void mcexec_execve2_transfer_image_failed_bridge(void)
+{
+	fprintf(stderr, "error: transferring image\n");
+}
+
+void mcexec_execve2_image_transferred_bridge(void)
+{
+	__dprintf("%s", "execve(): image transferred\n");
+}
+
+void mcexec_execve2_close_exec_failed_bridge(int ret)
+{
+	fprintf(stderr, "error: MCEXEC_UP_CLOSE_EXEC failed with %d\n", ret);
+}
+
+int mcexec_execve1_enable_vdso_bridge(void)
+{
+	return enable_vdso;
+}
+
+unsigned long mcexec_execve1_rlim_cur_bridge(void)
+{
+	return rlim_stack.rlim_cur;
+}
+
+unsigned long mcexec_execve1_rlim_max_bridge(void)
+{
+	return rlim_stack.rlim_max;
+}
+
+long mcexec_execve1_stack_premap_bridge(void)
+{
+	return stack_premap;
+}
+
+void mcexec_desc_set_execve1_runtime_bridge(struct program_load_desc *desc,
+		int vdso, unsigned long rlim_cur, unsigned long rlim_max,
+		long prem)
+{
+	desc->enable_vdso = vdso;
+	desc->rlimit[RLIMIT_STACK].rlim_cur = rlim_cur;
+	desc->rlimit[RLIMIT_STACK].rlim_max = rlim_max;
+	desc->stack_premap = prem;
+}
+
+void mcexec_desc_set_args_len_bridge(struct program_load_desc *desc,
+		unsigned long args_len)
+{
+	desc->args_len = args_len;
+}
+
+void mcexec_execve1_load_desc_ok_bridge(const char *filename, int sections)
+{
+	__dprintf("execve(): load_elf_desc() for %s OK, num sections: %d\n",
+			filename, sections);
+}
+
+void mcexec_execve1_transfer_alloc_failed_bridge(const char *filename)
+{
+	fprintf(stderr,
+		"execve(): could not alloc transfer buffer for file %s\n",
+		filename);
+}
+
+void mcexec_execve1_transfer_failed_bridge(const char *filename)
+{
+	fprintf(stderr, "execve(): error transfering ELF for file %s\n",
+			filename);
+}
+
+void mcexec_execve1_transfer_ok_bridge(const char *filename)
+{
+	__dprintf("execve(): load_elf_desc() for %s OK\n", filename);
+}
+
+void mcexec_execve_invalid_phase_bridge(void)
+{
+	fprintf(stderr, "execve(): ERROR: invalid execve phase\n");
+}
+
+void mcexec_main_loop_log_syscall_bridge(int cpu, long number)
+{
+	__dprintf("[%d] got syscall: %ld\n", cpu, number);
+}
+
+void mcexec_main_loop_timeout_bridge(void)
+{
+	__dprintf("timed out.\n");
+}
+
+int mcexec_main_loop_thread_barrier_wait_bridge(void *barrier)
+{
+	return pthread_barrier_wait((pthread_barrier_t *)barrier);
+}
+
+int mcexec_main_loop_is_child_bridge(void)
+{
+	return ischild;
+}
+#else
 void print_usage(char **argv)
 {
 #ifdef ADD_ENVS_OPTION
@@ -1538,7 +2827,25 @@ void print_usage(char **argv)
 	fprintf(stderr, "usage: %s [-c target_core] [-n nr_partitions] [--mpol-threshold=N] [--enable-straight-map] [--extend-heap-by=N] [-s (--stack-premap=)[premap_size][,max]] [--mpol-no-heap] [--mpol-no-bss] [--mpol-no-stack] [--mpol-shm-premap] [--disable-sched-yield]  [--enable-uti] [--uti-thread-rank=N] [--uti-use-last-cpu] [<mcos-id>] (program) [args...]\n", argv[0]);
 #endif /* ADD_ENVS_OPTION */
 }
+#endif
 
+#ifdef MCEXEC_RUST_HELPERS
+void mcexec_init_sigaction_set_master_tid_bridge(int tid)
+{
+	master_tid = tid;
+}
+
+void mcexec_init_sigaction_install_bridge(int sig)
+{
+	struct sigaction act;
+
+	sigaction(sig, NULL, &act);
+	act.sa_sigaction = sendsig;
+	act.sa_flags &= ~(SA_RESTART);
+	act.sa_flags |= SA_SIGINFO;
+	sigaction(sig, &act, NULL);
+}
+#else
 void init_sigaction(void)
 {
 	int i;
@@ -1557,9 +2864,52 @@ void init_sigaction(void)
 		}
 	}
 }
+#endif
 
 static int max_cpuid;
 
+#ifdef MCEXEC_RUST_HELPERS
+void *mcexec_create_worker_thread_alloc_bridge(void)
+{
+	return malloc(sizeof(struct thread_data_s));
+}
+
+void mcexec_create_worker_thread_alloc_error_bridge(void)
+{
+	fprintf(stderr, "%s: error: allocating thread structure\n",
+		"create_worker_thread");
+}
+
+int mcexec_create_worker_thread_next_cpu_bridge(void)
+{
+	return max_cpuid++;
+}
+
+void *mcexec_create_worker_thread_lock_bridge(void)
+{
+	return &lock;
+}
+
+void mcexec_create_worker_thread_publish_bridge(struct thread_data_s *tp,
+		struct thread_data_s **tp_out)
+{
+	tp->next = thread_data;
+	thread_data = tp;
+
+	if (tp_out) {
+		*tp_out = tp;
+	}
+}
+
+int mcexec_create_worker_thread_pthread_create_bridge(struct thread_data_s *tp)
+{
+	return pthread_create(&tp->thread_id, NULL,
+			      &main_loop_thread_func, tp);
+}
+
+#define create_worker_thread(tp_out, init_ready) \
+	mcexec_create_worker_thread_body((tp_out), (init_ready))
+#else
 static int create_worker_thread(struct thread_data_s **tp_out, pthread_barrier_t *init_ready)
 {
 	struct thread_data_s *tp;
@@ -1585,7 +2935,9 @@ static int create_worker_thread(struct thread_data_s **tp_out, pthread_barrier_t
 	return pthread_create(&tp->thread_id, NULL, 
 	                      &main_loop_thread_func, tp);
 }
+#endif
 
+#ifndef MCEXEC_RUST_HELPERS
 int init_worker_threads(int fd)
 {
 	int i;
@@ -1607,6 +2959,37 @@ int init_worker_threads(int fd)
 	pthread_barrier_wait(&init_ready);
 	return 0;
 }
+#else
+void mcexec_init_worker_threads_lock_init_bridge(void)
+{
+	pthread_mutex_init(&lock, NULL);
+}
+
+void mcexec_init_worker_threads_barrier_init_bridge(int count)
+{
+	pthread_barrier_init(&init_ready, NULL, count);
+}
+
+void mcexec_init_worker_threads_reset_cpuid_bridge(void)
+{
+	max_cpuid = 0;
+}
+
+int mcexec_init_worker_threads_create_bridge(void)
+{
+	return create_worker_thread(NULL, &init_ready);
+}
+
+void mcexec_init_worker_threads_wait_bridge(void)
+{
+	pthread_barrier_wait(&init_ready);
+}
+
+void mcexec_init_worker_threads_error_bridge(int ret)
+{
+	printf("ERROR: creating worker threads (%d), check ulimit?\n", ret);
+}
+#endif
 
 #define MCK_RLIMIT_AS	0
 #define MCK_RLIMIT_CORE	1
@@ -1686,11 +3069,25 @@ struct env_list_entry {
 	struct env_list_entry *next;
 };
 
+#ifdef MCEXEC_RUST_HELPERS
+#define get_env_list_entry_count(head) mcexec_env_list_count_result(head)
+#define search_env_list(head, name) \
+	((struct env_list_entry *)mcexec_search_env_list_result((head), (name)))
+#define add_env_list(head, add_string) \
+	mcexec_add_env_list_body((head), (add_string))
+#define destroy_env_list(head) mcexec_destroy_env_list_result(head)
+#define create_local_environ(inc_list) \
+	mcexec_create_local_environ_result(inc_list)
+#define destroy_local_environ(local_env) \
+	mcexec_destroy_local_environ_result(local_env)
+
+void mcexec_add_env_list_invalid_bridge(const char *add_string)
+{
+	printf("\"%s\" is not env value.\n", add_string);
+}
+#else
 static int get_env_list_entry_count(struct env_list_entry *head)
 {
-#ifdef MCEXEC_RUST_HELPERS
-	return mcexec_env_list_count_result(head);
-#else
 	int list_count = 0;
 	struct env_list_entry *current = head;
 
@@ -1699,14 +3096,10 @@ static int get_env_list_entry_count(struct env_list_entry *head)
 		current = current->next;
 	}
 	return list_count;
-#endif
 }
 
 static struct env_list_entry *search_env_list(struct env_list_entry *head, char *name)
 {
-#ifdef MCEXEC_RUST_HELPERS
-	return mcexec_search_env_list_result(head, name);
-#else
 	struct env_list_entry *current = head;
 
 	while (current) {
@@ -1716,17 +3109,10 @@ static struct env_list_entry *search_env_list(struct env_list_entry *head, char 
 		current = current->next;
 	}
 	return NULL;
-#endif
 }
 
 static void add_env_list(struct env_list_entry **head, char *add_string)
 {
-#ifdef MCEXEC_RUST_HELPERS
-	if (mcexec_add_env_list_result(head, add_string) == -EINVAL) {
-		printf("\"%s\" is not env value.\n", add_string);
-	}
-	return;
-#else
 	struct env_list_entry *current = NULL;
 	char *value = NULL;
 	char *name = NULL;
@@ -1765,14 +3151,10 @@ static void add_env_list(struct env_list_entry **head, char *add_string)
 	}
 	*head = current;
 	return;
-#endif
 }
 
 static void destroy_env_list(struct env_list_entry *head)
 {
-#ifdef MCEXEC_RUST_HELPERS
-	mcexec_destroy_env_list_result(head);
-#else
 	struct env_list_entry *current = head;
 	struct env_list_entry *next = NULL;
 
@@ -1782,14 +3164,10 @@ static void destroy_env_list(struct env_list_entry *head)
 		free(current);
 		current = next;
 	}
-#endif
 }
 
 static char **create_local_environ(struct env_list_entry *inc_list)
 {
-#ifdef MCEXEC_RUST_HELPERS
-	return mcexec_create_local_environ_result(inc_list);
-#else
 	int list_count = 0;
 	int i = 0;
 	struct env_list_entry *current = inc_list;
@@ -1806,14 +3184,10 @@ static char **create_local_environ(struct env_list_entry *inc_list)
 		i++;
 	}
 	return local_env;
-#endif
 }
 
 static void destroy_local_environ(char **local_env)
 {
-#ifdef MCEXEC_RUST_HELPERS
-	mcexec_destroy_local_environ_result(local_env);
-#else
 	int i = 0;
 
 	if (!local_env) {
@@ -1825,20 +3199,18 @@ static void destroy_local_environ(char **local_env)
 		local_env[i] = NULL;
 	}
 	free(local_env);
-#endif
 }
+#endif
 #endif /* ADD_ENVS_OPTION */
 
+#ifdef MCEXEC_RUST_HELPERS
+void mcexec_atobytes_set_errno_bridge(int value)
+{
+	errno = value;
+}
+#else
 unsigned long atobytes(char *string)
 {
-#ifdef MCEXEC_RUST_HELPERS
-	if (!string || !strlen(string)) {
-		errno = ERANGE;
-		return 0;
-	}
-	errno = 0;
-	return mcexec_atobytes_result(string);
-#else
 	unsigned long mult = 1;
 	unsigned long ret;
 	char orig_postfix = 0;
@@ -1873,8 +3245,8 @@ unsigned long atobytes(char *string)
 
 	errno = 0;
 	return ret;
-#endif
 }
+#endif
 
 static struct option mcexec_options[] = {
 #ifndef __aarch64__
@@ -2083,6 +3455,9 @@ void bind_mount_recursive(const char *root, char *prefix)
 }
 #endif // MCEXEC_BIND_MOUNT
 
+#ifdef MCEXEC_RUST_HELPERS
+#define join_all_threads() mcexec_join_all_threads_body()
+#else
 static void
 join_all_threads()
 {
@@ -2097,10 +3472,26 @@ join_all_threads()
 			live_thread = 1;
 			pthread_join(tp->thread_id, NULL);
 			tp->joined = 1;
-		}
+			}
 	} while (live_thread);
 }
+#endif
 
+#ifdef MCEXEC_RUST_HELPERS
+void *mcexec_join_all_threads_head_bridge(void)
+{
+	return thread_data;
+}
+
+void mcexec_join_all_threads_join_bridge(struct thread_data_s *tp)
+{
+	pthread_join(tp->thread_id, NULL);
+}
+#endif
+
+#ifdef MCEXEC_RUST_HELPERS
+#define opendev() mcexec_opendev_body()
+#else
 static int
 opendev()
 {
@@ -2108,14 +3499,7 @@ opendev()
 	char buildid[] = BUILDID;
     char query_result[sizeof(BUILDID)];
 
-#ifdef MCEXEC_RUST_HELPERS
-	if (mcexec_mcos_device_path_result(dev, sizeof(dev), mcosid) < 0) {
-		fprintf(stderr, "Error: Failed to build mcos device path.\n");
-		return -1;
-	}
-#else
 	sprintf(dev, "/dev/mcos%d", mcosid);
-#endif
 
 	/* Open OS chardev for ioctl() */
 	f = open(dev, O_RDWR);
@@ -2139,6 +3523,87 @@ opendev()
 
 	return fd;
 }
+#endif
+
+#ifdef MCEXEC_RUST_HELPERS
+int mcexec_opendev_mcosid_bridge(void)
+{
+	return mcosid;
+}
+
+char *mcexec_opendev_dev_bridge(void)
+{
+	return dev;
+}
+
+size_t mcexec_opendev_dev_size_bridge(void)
+{
+	return sizeof(dev);
+}
+
+void mcexec_opendev_path_error_bridge(void)
+{
+	fprintf(stderr, "Error: Failed to build mcos device path.\n");
+}
+
+int mcexec_opendev_open_bridge(const char *path)
+{
+	return open(path, O_RDWR);
+}
+
+void mcexec_opendev_open_error_bridge(const char *path)
+{
+	fprintf(stderr, "Error: Failed to open %s.\n", path);
+}
+
+void mcexec_opendev_publish_fd_bridge(int value)
+{
+	fd = value;
+}
+
+size_t mcexec_opendev_buildid_size_bridge(void)
+{
+	return sizeof(BUILDID);
+}
+
+const char *mcexec_opendev_buildid_bridge(void)
+{
+	static char buildid[] = BUILDID;
+
+	return buildid;
+}
+
+char *mcexec_opendev_query_result_bridge(void)
+{
+	static char query_result[sizeof(BUILDID)];
+
+	memset(query_result, '\0', sizeof(query_result));
+	return query_result;
+}
+
+int mcexec_opendev_query_buildid_bridge(int target_fd, char *query_result)
+{
+	return ioctl(target_fd, IHK_OS_GET_BUILDID, query_result);
+}
+
+void mcexec_opendev_query_error_bridge(void)
+{
+	fprintf(stderr, "Error: IHK_OS_GET_BUILDID failed");
+}
+
+void mcexec_opendev_close_bridge(int target_fd)
+{
+	close(target_fd);
+}
+
+void mcexec_opendev_buildid_mismatch_bridge(const char *buildid,
+		const char *query_result)
+{
+	fprintf(stderr,
+		"Error: build-id of mcexec (%s) didn't match that of IHK (%s)\n",
+		buildid, query_result);
+}
+#endif
 
 #define LD_PRELOAD_PREPARE(name) do {	\
 	int n = 0;	\
@@ -2167,6 +3632,9 @@ opendev()
 		nelem++; \
 	} while (0)
 
+#ifdef MCEXEC_RUST_HELPERS
+#define find_libdir(libdir, len) mcexec_find_libdir_body((libdir), (len))
+#else
 static ssize_t find_libdir(char *libdir, size_t len)
 {
 	FILE *filep = NULL;
@@ -2183,26 +3651,11 @@ static ssize_t find_libdir(char *libdir, size_t len)
 		fprintf(stderr, "readlink /proc/self/exe: %ld\n", -rc);
 		goto out;
 	} else if (rc >= sizeof(path)) {
-#ifdef MCEXEC_RUST_HELPERS
-		if (mcexec_copy_path_result("/proc/self/exe", path,
-					sizeof(path)) < 0) {
-			rc = -ERANGE;
-			goto out;
-		}
-#else
 		strcpy(path, "/proc/self/exe");
-#endif
 	} else {
 		path[rc] = '\0';
 	}
 
-#ifdef MCEXEC_RUST_HELPERS
-	rc = mcexec_objdump_rpath_cmd_result(path, cmd, sizeof(cmd));
-	if (rc < 0) {
-		rc = -ERANGE;
-		goto out;
-	}
-#else
 	rc = snprintf(cmd, sizeof(cmd),
 		      "objdump -x %s | awk '/RPATH/ { print $2 }'",
 		      path);
@@ -2210,7 +3663,6 @@ static ssize_t find_libdir(char *libdir, size_t len)
 		rc = -ERANGE;
 		goto out;
 	}
-#endif
 
 	filep = popen(cmd, "r");
 	if (!filep) {
@@ -2233,20 +3685,12 @@ static ssize_t find_libdir(char *libdir, size_t len)
 		goto out;
 	}
 
-#ifdef MCEXEC_RUST_HELPERS
-	rc = mcexec_copy_path_result(line, libdir, len);
-	if (rc < 0) {
-		rc = -ERANGE;
-		goto out;
-	}
-#else
 	rc = snprintf(libdir, len, "%s", line);
 
 	if (rc > len) {
 		rc = -ERANGE;
 		goto out;
 	}
-#endif
 
 out:
 	if (filep) {
@@ -2255,16 +3699,117 @@ out:
 	free(line);
 	return rc;
 }
+#endif
 
+#ifdef MCEXEC_RUST_HELPERS
+ssize_t mcexec_find_libdir_readlink_bridge(char *path, size_t size)
+{
+	return readlink("/proc/self/exe", path, size);
+}
+
+void *mcexec_find_libdir_popen_bridge(const char *cmd)
+{
+	return popen(cmd, "r");
+}
+
+ssize_t mcexec_find_libdir_getline_bridge(char **line, size_t *linelen,
+		void *filep)
+{
+	return getline(line, linelen, filep);
+}
+
+void mcexec_find_libdir_pclose_bridge(void *filep)
+{
+	pclose(filep);
+}
+
+void mcexec_find_libdir_free_bridge(char *line)
+{
+	free(line);
+}
+
+void mcexec_find_libdir_readlink_failed_bridge(int error)
+{
+	fprintf(stderr, "readlink /proc/self/exe: %d\n", error);
+}
+
+void mcexec_find_libdir_objdump_failed_bridge(int error)
+{
+	fprintf(stderr, "objdump /proc/self/exe: %d\n", error);
+}
+
+void mcexec_find_libdir_rpath_not_found_bridge(int error)
+{
+	fprintf(stderr, "RPATH not found: %d\n", error);
+}
+#endif
+
+#ifdef MCEXEC_RUST_HELPERS
+#define ld_preload_init() mcexec_ld_preload_init_body()
+
+char *mcexec_ld_preload_getenv_bridge(const char *name)
+{
+	return getenv(name);
+}
+
+int mcexec_ld_preload_setenv_bridge(const char *value)
+{
+	return setenv("LD_PRELOAD", value, 1);
+}
+
+int mcexec_ld_preload_unsetenv_bridge(void)
+{
+	return unsetenv(ld_preload_envname);
+}
+
+int mcexec_ld_preload_enable_uti_bridge(void)
+{
+	return enable_uti;
+}
+
+int mcexec_ld_preload_disable_sched_yield_bridge(void)
+{
+	return disable_sched_yield;
+}
+
+int mcexec_ld_preload_enable_qlmpi_bridge(void)
+{
+#ifdef ENABLE_QLMPI
+	return 1;
+#else
+	return 0;
+#endif
+}
+
+void mcexec_ld_preload_find_failed_bridge(void)
+{
+	fprintf(stderr, "warning: did not set LD_PRELOAD\n");
+}
+
+void mcexec_ld_preload_line_too_long_bridge(void)
+{
+	fprintf(stderr, "%s: warning: LD_PRELOAD line is too long\n",
+			"ld_preload_init");
+}
+
+void mcexec_ld_preload_setenv_failed_bridge(void)
+{
+	printf("%s: warning: failed to set LD_PRELOAD environment variable\n",
+			"ld_preload_init");
+}
+
+void mcexec_ld_preload_debug_bridge(const char *envbuf)
+{
+	__dprintf("%s: preload library: %s\n", "ld_preload_init", envbuf);
+}
+#else
 static void ld_preload_init()
 {
 	char envbuf[PATH_MAX];
 	char *ld_preload_str;
-#ifndef MCEXEC_RUST_HELPERS
 	size_t remainder = PATH_MAX;
 	int nelem = 0;
 	char elembuf[PATH_MAX];
-#endif
 	char libdir[PATH_MAX];
 
 	if (find_libdir(libdir, sizeof(libdir)) < 0) {
@@ -2274,26 +3819,6 @@ static void ld_preload_init()
 
 	memset(envbuf, 0, PATH_MAX);
 
-#ifdef MCEXEC_RUST_HELPERS
-	ld_preload_str = getenv(ld_preload_envname);
-	{
-		int rc;
-#ifdef ENABLE_QLMPI
-		int enable_qlmpi = 1;
-#else
-		int enable_qlmpi = 0;
-#endif
-
-		rc = mcexec_build_ld_preload_result(libdir, ld_preload_str,
-				enable_uti, disable_sched_yield, enable_qlmpi,
-				envbuf, sizeof(envbuf));
-		if (rc < 0) {
-			fprintf(stderr, "%s: warning: LD_PRELOAD line is too long\n",
-					__FUNCTION__);
-			return;
-		}
-	}
-#else
 	if (enable_uti) {
 		LD_PRELOAD_PREPARE("libmck_syscall_intercept.so");
 		LD_PRELOAD_APPEND;
@@ -2315,7 +3840,6 @@ static void ld_preload_init()
 		sprintf(elembuf, "%s%s", nelem > 0 ? ":" : "", ld_preload_str);
 		LD_PRELOAD_APPEND;
 	}
-#endif
 
 	if (strlen(envbuf)) {
 		if (setenv("LD_PRELOAD", envbuf, 1) < 0) {
@@ -2329,7 +3853,16 @@ static void ld_preload_init()
 		unsetenv(ld_preload_envname);
 	}
 }
+#endif
 
+#ifdef MCEXEC_RUST_HELPERS
+int mcexec_get_thp_disable_prctl_bridge(void)
+{
+	return prctl(PR_GET_THP_DISABLE, 0, 0, 0, 0);
+}
+
+#define get_thp_disable() mcexec_get_thp_disable_body()
+#else
 static int get_thp_disable(void)
 {
 	int ret = 0;
@@ -2344,6 +3877,7 @@ static int get_thp_disable(void)
 
 	return ret;
 }
+#endif
 
 pthread_spinlock_t overlay_fd_lock;
 
@@ -2435,6 +3969,14 @@ int main(int argc, char **argv)
 	}
 
 	/* Parse options ("+" denotes stop at the first non-option) */
+#ifdef MCEXEC_RUST_HELPERS
+#define MCEXEC_APPLY_OPTION() \
+	mcexec_apply_option_result(opt, optarg, &target_core, \
+			&nr_processes, &nr_threads, &mpol_threshold, \
+			&heap_extension, &straight_map_threshold, \
+			&stack_premap, &stack_max, &uti_thread_rank, \
+			&mcexec_flags)
+#endif
 #ifdef ADD_ENVS_OPTION
 	while ((opt = getopt_long(argc, argv, "+c:n:t:M:h:e:s:m:u:S:f:",
 				  mcexec_options, NULL)) != -1) {
@@ -2449,8 +3991,7 @@ int main(int argc, char **argv)
 
 			case 'c':
 #ifdef MCEXEC_RUST_HELPERS
-				if (mcexec_parse_int_base0_full_result(
-						optarg, 0, &target_core) < 0) {
+				if (MCEXEC_APPLY_OPTION() < 0) {
 					fprintf(stderr, "error: -c: invalid target CPU\n");
 					exit(EXIT_FAILURE);
 				}
@@ -2465,8 +4006,7 @@ int main(int argc, char **argv)
 
 			case 'n':
 #ifdef MCEXEC_RUST_HELPERS
-				if (mcexec_parse_int_base0_full_result(
-						optarg, 1, &nr_processes) < 0) {
+				if (MCEXEC_APPLY_OPTION() < 0) {
 					fprintf(stderr, "error: -n: invalid number of processes\n");
 					exit(EXIT_FAILURE);
 				}
@@ -2481,8 +4021,7 @@ int main(int argc, char **argv)
 
 			case 't':
 #ifdef MCEXEC_RUST_HELPERS
-				if (mcexec_parse_int_base0_full_result(
-						optarg, 1, &nr_threads) < 0) {
+				if (MCEXEC_APPLY_OPTION() < 0) {
 					fprintf(stderr, "error: -t: invalid number of threads\n");
 					exit(EXIT_FAILURE);
 				}
@@ -2496,7 +4035,11 @@ int main(int argc, char **argv)
 				break;
 
 			case 'M':
+#ifdef MCEXEC_RUST_HELPERS
+				MCEXEC_APPLY_OPTION();
+#else
 				mpol_threshold = atobytes(optarg);
+#endif
 				break;
 
 			case 'm':
@@ -2504,11 +4047,19 @@ int main(int argc, char **argv)
 				break;
 
 			case 'h':
+#ifdef MCEXEC_RUST_HELPERS
+				MCEXEC_APPLY_OPTION();
+#else
 				heap_extension = atobytes(optarg);
+#endif
 				break;
 
 			case 'S':
+#ifdef MCEXEC_RUST_HELPERS
+				MCEXEC_APPLY_OPTION();
+#else
 				straight_map_threshold = atobytes(optarg);
+#endif
 				break;
 
 #ifdef ADD_ENVS_OPTION
@@ -2519,8 +4070,7 @@ int main(int argc, char **argv)
 			
 			case 's': {
 #ifdef MCEXEC_RUST_HELPERS
-				mcexec_parse_stack_arg_result(optarg,
-						&stack_premap, &stack_max);
+				MCEXEC_APPLY_OPTION();
 				errno = 0;
 #else
 				char *token, *dup, *line;
@@ -2544,7 +4094,7 @@ int main(int argc, char **argv)
 
 			case 'u':
 #ifdef MCEXEC_RUST_HELPERS
-				uti_thread_rank = mcexec_atoi_result(optarg);
+				MCEXEC_APPLY_OPTION();
 #else
 				uti_thread_rank = atoi(optarg);
 #endif
@@ -2552,7 +4102,7 @@ int main(int argc, char **argv)
 
 			case 'f':
 #ifdef MCEXEC_RUST_HELPERS
-				mcexec_flags = mcexec_strtoul_hex_result(optarg);
+				MCEXEC_APPLY_OPTION();
 #else
 				mcexec_flags = strtoul(optarg, NULL, 16);
 #endif
@@ -2566,14 +4116,32 @@ int main(int argc, char **argv)
 				exit(EXIT_FAILURE);
 		}
 	}
-
-	if (heap_extension == -1) {
 #ifdef MCEXEC_RUST_HELPERS
-		heap_extension = mcexec_default_heap_extension_result(
-				heap_extension, sysconf(_SC_PAGESIZE));
-#else
-		heap_extension = sysconf(_SC_PAGESIZE);
+#undef MCEXEC_APPLY_OPTION
 #endif
+
+#ifdef MCEXEC_RUST_HELPERS
+	{
+		unsigned long planned_heap_extension = heap_extension;
+		int planned_mcosid = num;
+		int planned_optind = optind;
+
+		if (mcexec_post_options_plan_result(optind, argc,
+				optind < argc ? argv[optind] : NULL,
+				heap_extension, page_size, num,
+				&planned_heap_extension, &planned_mcosid,
+				&planned_optind) < 0) {
+			print_usage(argv);
+			exit(EXIT_FAILURE);
+		}
+
+		heap_extension = planned_heap_extension;
+		num = planned_mcosid;
+		optind = planned_optind;
+	}
+#else
+	if (heap_extension == -1) {
+		heap_extension = sysconf(_SC_PAGESIZE);
 	}
 
 	if (optind >= argc) {
@@ -2582,22 +4150,17 @@ int main(int argc, char **argv)
 	}
 
 	/* Determine OS device */
-#ifdef MCEXEC_RUST_HELPERS
-	if (mcexec_parse_optional_mcosid_result(argv[optind], &num)) {
-		++optind;
-	}
-#else
 	if (isdigit(*argv[optind])) {
 		num = atoi(argv[optind]);
 		++optind;
 	}
-#endif
 
 	/* No more arguments? */
 	if (optind >= argc) {
 		print_usage(argv);
 		exit(EXIT_FAILURE);
 	}
+#endif
 
 	mcosid = num;
 	if (opendev() == -1)
@@ -3298,9 +4861,10 @@ int main(int argc, char **argv)
 }
 
 
+#ifndef MCEXEC_RUST_HELPERS
 void do_syscall_return(int fd, int cpu,
-                       long ret, int n, unsigned long src, unsigned long dest,
-                       unsigned long sz)
+		       long ret, int n, unsigned long src, unsigned long dest,
+		       unsigned long sz)
 {
 	struct syscall_ret_desc desc;
 
@@ -3317,7 +4881,7 @@ void do_syscall_return(int fd, int cpu,
 }
 
 void do_syscall_load(int fd, int cpu, unsigned long dest, unsigned long src,
-                     unsigned long sz)
+		     unsigned long sz)
 {
 	struct syscall_load_desc desc;
 
@@ -3331,7 +4895,32 @@ void do_syscall_load(int fd, int cpu, unsigned long dest, unsigned long src,
 		perror("load");
 	}
 }
+#endif
 
+#ifdef MCEXEC_RUST_HELPERS
+long mcexec_do_generic_syscall_raw_bridge(struct syscall_wait_desc *w)
+{
+	return syscall(w->sr.number, w->sr.args[0], w->sr.args[1], w->sr.args[2],
+		       w->sr.args[3], w->sr.args[4], w->sr.args[5]);
+}
+
+void mcexec_do_generic_syscall_start_bridge(unsigned long number)
+{
+	__dprintf("do_generic_syscall(%ld)\n", number);
+}
+
+void mcexec_do_generic_syscall_done_bridge(unsigned long number, long ret)
+{
+	__dprintf("do_generic_syscall(%ld):%ld (%#lx)\n", number, ret, ret);
+}
+
+#define do_generic_syscall(w) mcexec_do_generic_syscall_body(w)
+
+long mcexec_do_generic_syscall_bridge(struct syscall_wait_desc *w)
+{
+	return mcexec_do_generic_syscall_body(w);
+}
+#else
 static long
 do_generic_syscall(
 		struct syscall_wait_desc *w)
@@ -3342,18 +4931,43 @@ do_generic_syscall(
 
 	ret = syscall(w->sr.number, w->sr.args[0], w->sr.args[1], w->sr.args[2],
 		 w->sr.args[3], w->sr.args[4], w->sr.args[5]);
-	if (ret == -1) {
-		ret = -errno;
-	}
+	SET_ERR(ret);
 
 	__dprintf("do_generic_syscall(%ld):%ld (%#lx)\n", w->sr.number, ret, ret);
 	return ret;
 }
+#endif
 
 static struct uti_desc *uti_desc;
 
+#ifdef MCEXEC_RUST_HELPERS
+#define kill_thread(tid, sig, my_thread) \
+	mcexec_kill_thread_body((tid), (unsigned long)(sig), (my_thread))
+
+void *mcexec_kill_thread_head_bridge(void)
+{
+	return thread_data;
+}
+
+int mcexec_kill_thread_pthread_kill_bridge(struct thread_data_s *tp, int sig)
+{
+	return pthread_kill(tp->thread_id, sig);
+}
+
+void mcexec_kill_thread_not_found_bridge(unsigned long tid, int sig)
+{
+	printf("%s: ERROR: Thread not found (tid=%ld,sig=%d)\n",
+	       "kill_thread", tid, sig);
+}
+
+void mcexec_kill_thread_bridge(unsigned long tid, unsigned long sig,
+		struct thread_data_s *my_thread)
+{
+	mcexec_kill_thread_body(tid, sig, my_thread);
+}
+#else
 static void kill_thread(unsigned long tid, int sig,
-			struct thread_data_s *my_thread)
+	            struct thread_data_s *my_thread)
 {
 	struct thread_data_s *tp;
 
@@ -3370,6 +4984,249 @@ static void kill_thread(unsigned long tid, int sig,
 		}
 	}
 }
+#endif
+
+#ifdef MCEXEC_RUST_HELPERS
+int mcexec_waitid_pid_bridge(int pid, int opt, int *errno_out)
+{
+	siginfo_t info;
+	int ret;
+
+	memset(&info, '\0', sizeof info);
+	while ((ret = waitid(P_PID, pid, &info, opt)) == -1 &&
+			errno == EINTR)
+		;
+	if (errno_out)
+		*errno_out = errno;
+	if (ret == 0)
+		ret = info.si_pid;
+	return ret;
+}
+
+void mcexec_wait4_error_bridge(unsigned long requested_pid, int ret,
+		int errno_value)
+{
+	fprintf(stderr, "ERROR: waiting for %lu rc=%d errno=%d\n",
+			requested_pid, ret, errno_value);
+}
+
+void mcexec_gettid_alloc_error_bridge(void)
+{
+	fprintf(stderr, "__NR_gettid(): error allocating TIDs\n");
+}
+
+void mcexec_gettid_transfer_error_bridge(void)
+{
+	fprintf(stderr, "__NR_gettid(): error transfering TIDs\n");
+}
+
+void mcexec_debug_mlock_log_bridge(unsigned long addr, unsigned long len)
+{
+	printf("linux mlock(%p, %ld)\n", (void *)addr, len);
+	printf("str(%p)=%s", (void *)addr, (char *)addr);
+}
+
+long mcexec_debug_mlock_bridge(unsigned long addr, unsigned long len)
+{
+	return mlock((void *)addr, len);
+}
+
+void mcexec_swapout_unavailable_bridge(void)
+{
+	printf("mcexec has not been compiled with ENABLE_QLMPI\n");
+}
+
+void mcexec_linux_spawn_invalid_arg_bridge(void)
+{
+	fprintf(stderr, "linux_spawn(): ERROR: invalid argument \n");
+}
+
+void mcexec_linux_spawn_invalid_exec_path_bridge(void)
+{
+	fprintf(stderr, "linux_spawn(): ERROR: invalid exec_path \n");
+}
+
+void mcexec_linux_spawn_alloc_exec_path_failed_bridge(void)
+{
+	fprintf(stderr, "linux_spawn(): ERROR: failed to allocating exec_path\n");
+}
+
+void mcexec_linux_spawn_strncpy_failed_bridge(void)
+{
+	fprintf(stderr, "linux_spawn(): ERROR: failed to strncpy from user\n");
+}
+
+void mcexec_linux_spawn_alloc_argv_failed_bridge(int index)
+{
+	fprintf(stderr, "linux_spawn(): ERROR: failed to allocating argv[%d]\n",
+			index);
+}
+
+void mcexec_linux_spawn_posix_spawn_failed_bridge(int rc)
+{
+	fprintf(stderr, "linux_spawn(): ERROR: posix_spawn returned %d\n", rc);
+}
+
+void mcexec_fork_sync_lock_bridge(void)
+{
+	pthread_mutex_lock(&fork_sync_mutex);
+}
+
+void mcexec_fork_sync_unlock_bridge(void)
+{
+	pthread_mutex_unlock(&fork_sync_mutex);
+}
+
+void mcexec_fork_sync_munmap_bridge(void *fs)
+{
+	munmap(fs, sizeof(struct fork_sync));
+}
+
+void mcexec_fork_sync_free_bridge(void *node)
+{
+	free(node);
+}
+
+void *mcexec_clone_alloc_fork_sync_bridge(void)
+{
+	struct fork_sync *fs;
+
+	fs = mmap(NULL, sizeof(struct fork_sync), PROT_READ | PROT_WRITE,
+			MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+	if (fs == (void *)-1)
+		return NULL;
+
+	memset(fs, '\0', sizeof(struct fork_sync));
+	sem_init(&fs->sem, 1, 0);
+	return fs;
+}
+
+void *mcexec_clone_alloc_container_bridge(void)
+{
+	struct fork_sync_container *fsc;
+
+	fsc = malloc(sizeof(struct fork_sync_container));
+	if (!fsc)
+		return NULL;
+
+	memset(fsc, '\0', sizeof(struct fork_sync_container));
+	return fsc;
+}
+
+int mcexec_clone_fork_bridge(void)
+{
+	return fork();
+}
+
+void mcexec_clone_fork_failed_bridge(void)
+{
+	fprintf(stderr, "fork(): error forking child process\n");
+}
+
+long mcexec_clone_child_bridge(struct syscall_wait_desc *w, void *sync)
+{
+	struct fork_sync *fs = sync;
+	struct fork_sync_container *fp;
+	struct fork_sync_container *fb;
+	struct rpgtable_desc rpt;
+	int ret = 1;
+
+	ischild = 1;
+	close(fd);
+	fd = opendev();
+	if (fd < 0) {
+		fs->status = -errno;
+		fprintf(stderr, "ERROR: opening %s\n", dev);
+		goto fork_child_sync_pipe;
+	}
+
+	rpt.start = w->sr.args[1];
+	rpt.len = w->sr.args[2];
+	rpt.rpgtable = w->sr.args[3];
+	if (ioctl(fd, MCEXEC_UP_CREATE_PPD, &rpt)) {
+		fs->status = -errno;
+		fprintf(stderr, "ERROR: creating PPD %s\n", dev);
+		goto fork_child_sync_pipe;
+	}
+
+	init_sigaction();
+	thread_data = NULL;
+	__dprintf("pid(%d): signals and syscall threads OK\n", getpid());
+
+	if ((ret = ioctl(fd, MCEXEC_UP_GET_NUM_POOL_THREADS)) < 0) {
+		fprintf(stderr, "Error: obtaining thread pool count\n");
+	}
+
+	if (ret == 1) {
+		n_threads = 4;
+	}
+
+	if ((ret = init_worker_threads(fd)) != 0) {
+		fprintf(stderr, "%s: Error: creating worker threads: %s\n",
+			__func__, strerror(-ret));
+		close(fd);
+		exit(1);
+	}
+
+fork_child_sync_pipe:
+	for (fp = fork_sync_top; fp;) {
+		fb = fp->next;
+		if (fp->fs && fp->fs != fs) {
+			munmap(fp->fs, sizeof(struct fork_sync));
+		}
+		free(fp);
+		fp = fb;
+	}
+	fork_sync_top = NULL;
+
+	sem_post(&fs->sem);
+	if (fs->status) {
+		exit(1);
+	}
+
+	pthread_mutex_init(&fork_sync_mutex, NULL);
+
+	while (getppid() != 1 && fs->success == 0) {
+		sched_yield();
+	}
+
+	if (fs->success == 0) {
+		exit(1);
+	}
+
+	sem_destroy(&fs->sem);
+	munmap(fs, sizeof(struct fork_sync));
+	join_all_threads();
+	return ret;
+}
+
+int mcexec_clone_sem_trywait_bridge(void *fs)
+{
+	return sem_trywait(&((struct fork_sync *)fs)->sem);
+}
+
+int mcexec_clone_waitpid_nohang_bridge(int pid)
+{
+	int st;
+
+	return waitpid(pid, &st, WNOHANG);
+}
+
+void mcexec_clone_sched_yield_bridge(void)
+{
+	sched_yield();
+}
+
+void mcexec_clone_child_after_fork_failed_bridge(void)
+{
+	fprintf(stderr, "fork(): error with child process after fork\n");
+}
+
+void mcexec_clone_sem_destroy_bridge(void *fs)
+{
+	sem_destroy(&((struct fork_sync *)fs)->sem);
+}
+#endif
 
 static long util_thread(struct thread_data_s *my_thread,
 		unsigned long rp_rctx, int remote_tid, unsigned long pattr,
@@ -3471,6 +5328,42 @@ out:
 	return rc;
 }
 
+#ifdef MCEXEC_RUST_HELPERS
+long mcexec_sched_setaffinity_util_bridge(struct thread_data_s *my_thread,
+		unsigned long rp_rctx, int remote_tid, unsigned long pattr,
+		unsigned long uti_info, unsigned long uti_desc_arg)
+{
+	return util_thread(my_thread, rp_rctx, remote_tid, pattr, uti_info,
+			uti_desc_arg);
+}
+
+void mcexec_sched_setaffinity_invalid_bridge(unsigned long pid_arg)
+{
+	__eprintf("__NR_sched_setaffinity: invalid argument (%lx)\n",
+			pid_arg);
+}
+
+long mcexec_perf_event_open_bridge(void)
+{
+	return open("/dev/null", O_RDONLY);
+}
+
+long mcexec_clock_gettime_bridge(int clock_id, struct timespec *tv)
+{
+	long ret;
+
+	ret = clock_gettime(clock_id, tv);
+	SET_ERR(ret);
+	return ret;
+}
+
+void mcexec_clock_gettime_log_bridge(long sec, long nsec)
+{
+	__dprintf("clock_gettime=%016ld,%09ld\n", sec, nsec);
+}
+#endif
+
+#ifndef MCEXEC_RUST_HELPERS
 long do_strncpy_from_user(int fd, void *dest, void *src, unsigned long n)
 {
 	struct strncpy_from_user_desc desc;
@@ -3490,9 +5383,9 @@ long do_strncpy_from_user(int fd, void *dest, void *src, unsigned long n)
 
 	return desc.result;
 }
+#endif
 
-#define SET_ERR(ret) if (ret == -1) ret = -errno
-
+#ifndef MCEXEC_RUST_HELPERS
 int close_cloexec_fds(int mcos_fd)
 {
 	int fd;
@@ -3567,6 +5460,7 @@ int close_cloexec_fds(int mcos_fd)
 	
 	return 0;
 }
+#endif
 
 struct overlay_fd {
 	int fd; /* associated fd, points to mckernel side */
@@ -3581,27 +5475,33 @@ struct overlay_fd {
 	void *linux_dirents; /* cache of filtered Linux dirents */
 	size_t linux_dirents_size;
 };
-LIST_HEAD(overlay_fd_list);
+struct list_head overlay_fd_list = { &(overlay_fd_list), &(overlay_fd_list) };
 
+#ifndef MCEXEC_RUST_HELPERS
+static void overlay_list_add(struct list_head *new, struct list_head *head)
+{
+	head->next->prev = new;
+	new->next = head->next;
+	new->prev = head;
+	head->next = new;
+}
+
+static void overlay_list_del(struct list_head *entry)
+{
+	entry->next->prev = entry->prev;
+	entry->prev->next = entry->next;
+	entry->next = LIST_POISON1;
+	entry->prev = LIST_POISON2;
+}
+#else
+#define overlay_list_add(new, head) mcexec_overlay_list_add_body((new), (head))
+#define overlay_list_del(entry) mcexec_overlay_list_del_body(entry)
+#endif
+
+#ifndef MCEXEC_RUST_HELPERS
 void overlay_addfd(int fd, const char *path)
 {
 	struct overlay_fd *ofd;
-#ifdef MCEXEC_RUST_HELPERS
-	char linux_path[PATH_MAX];
-	char mck_path[PATH_MAX];
-	size_t pathlen;
-	int rc;
-
-	rc = mcexec_overlay_addfd_prepare_result(path, mcosid,
-			linux_path, sizeof(linux_path), mck_path,
-			sizeof(mck_path), &pathlen);
-	if (rc <= 0) {
-		if (rc < 0) {
-			fprintf(stderr, "%s: path too long\n", __func__);
-		}
-		return;
-	}
-#else
 	int n;
 	char mcos[32], *real_path;
 	const char *prefix = "";
@@ -3618,7 +5518,6 @@ void overlay_addfd(int fd, const char *path)
 
 	/* point to first character after mcos string */
 	real_path += n;
-#endif
 
 	ofd = malloc(sizeof(*ofd));
 	if (!ofd) {
@@ -3633,29 +5532,59 @@ void overlay_addfd(int fd, const char *path)
 	ofd->mck_dirents_size = 0;
 	ofd->linux_dirents = NULL;
 	ofd->linux_dirents_size = 0;
-#ifdef MCEXEC_RUST_HELPERS
-	ofd->pathlen = pathlen;
-	strncpy(ofd->linux_path, linux_path, PATH_MAX);
-	strncpy(ofd->mck_path, mck_path, PATH_MAX);
-#else
 	ofd->pathlen = snprintf(ofd->linux_path, PATH_MAX, "%s%s",
 				prefix, real_path);
 	strncpy(ofd->mck_path, path, PATH_MAX);
-#endif
 
 	pthread_spin_lock(&overlay_fd_lock);
-	list_add(&ofd->link, &overlay_fd_list);
+	overlay_list_add(&ofd->link, &overlay_fd_list);
 	pthread_spin_unlock(&overlay_fd_lock);
 }
+#else
+void mcexec_overlay_addfd_path_too_long_bridge(void)
+{
+	fprintf(stderr, "%s: path too long\n", "overlay_addfd");
+}
 
+int mcexec_overlay_addfd_publish_bridge(int fd, const char *linux_path,
+		const char *mck_path, size_t pathlen)
+{
+	struct overlay_fd *ofd;
+
+	ofd = malloc(sizeof(*ofd));
+	if (!ofd) {
+		fprintf(stderr, "%s: out of memory\n", "overlay_addfd");
+		return -ENOMEM;
+	}
+
+	ofd->fd = fd;
+	ofd->getdents_fd = -1;
+	ofd->linux_fd = -1;
+	ofd->mck_dirents = NULL;
+	ofd->mck_dirents_size = 0;
+	ofd->linux_dirents = NULL;
+	ofd->linux_dirents_size = 0;
+	ofd->pathlen = pathlen;
+	strncpy(ofd->linux_path, linux_path, PATH_MAX);
+	strncpy(ofd->mck_path, mck_path, PATH_MAX);
+
+	pthread_spin_lock(&overlay_fd_lock);
+	overlay_list_add(&ofd->link, &overlay_fd_list);
+	pthread_spin_unlock(&overlay_fd_lock);
+
+	return 0;
+}
+#endif
+
+#ifndef MCEXEC_RUST_HELPERS
 void overlay_delfd(int fd)
 {
 	struct overlay_fd *ofd;
 
 	pthread_spin_lock(&overlay_fd_lock);
-	list_for_each_entry(ofd, &overlay_fd_list, link) {
+	for (ofd = ((typeof(*ofd) *)((char *)((&overlay_fd_list)->next) - offsetof(typeof(*ofd), link))); &ofd->link != (&overlay_fd_list); ofd = ((typeof(*ofd) *)((char *)(ofd->link.next) - offsetof(typeof(*ofd), link)))) {
 		if (ofd->fd == fd) {
-			list_del(&ofd->link);
+			overlay_list_del(&ofd->link);
 			if (ofd->getdents_fd != -1)
 				close(ofd->getdents_fd);
 			if (ofd->linux_fd != -1)
@@ -3668,6 +5597,28 @@ void overlay_delfd(int fd)
 	}
 	pthread_spin_unlock(&overlay_fd_lock);
 }
+#else
+void mcexec_overlay_delfd_bridge(int fd)
+{
+	struct overlay_fd *ofd;
+
+	pthread_spin_lock(&overlay_fd_lock);
+	for (ofd = ((typeof(*ofd) *)((char *)((&overlay_fd_list)->next) - offsetof(typeof(*ofd), link))); &ofd->link != (&overlay_fd_list); ofd = ((typeof(*ofd) *)((char *)(ofd->link.next) - offsetof(typeof(*ofd), link)))) {
+		if (ofd->fd == fd) {
+			overlay_list_del(&ofd->link);
+			if (ofd->getdents_fd != -1)
+				close(ofd->getdents_fd);
+			if (ofd->linux_fd != -1)
+				close(ofd->linux_fd);
+			free(ofd->mck_dirents);
+			free(ofd->linux_dirents);
+			free(ofd);
+			break;
+		}
+	}
+	pthread_spin_unlock(&overlay_fd_lock);
+}
+#endif
 
 /* List of blacklisted paths
  *
@@ -3679,6 +5630,7 @@ void overlay_delfd(int fd)
  *  - symlinks can be assumed to be resolved previously
  */
 
+#ifndef MCEXEC_RUST_HELPERS
 struct overlay_blacklist_entry {
 	char *pattern;
 	int cpuid;
@@ -3765,12 +5717,31 @@ int overlay_blacklist(const char *path)
 
 	return 0;
 }
+#else
+int mcexec_overlay_mcosid_bridge(void)
+{
+	return mcosid;
+}
 
+int mcexec_overlay_stat_exists_bridge(const char *path)
+{
+	struct stat sb;
+
+	return stat(path, &sb) < 0 ? -errno : 0;
+}
+
+int mcexec_overlay_cpu_in_node_bridge(int cpu, int node)
+{
+	if (node < 0 || node >= nnodes || cpu < 0 || cpu >= ncpu)
+		return 0;
+
+	return CPU_ISSET_S(cpu, cpu_set_size, numa_node_set(node));
+}
+#endif
+
+#ifndef MCEXEC_RUST_HELPERS
 static int is_proc_task_leaf_path(const char *path)
 {
-#ifdef MCEXEC_RUST_HELPERS
-	return mcexec_is_proc_task_leaf_path_result(path);
-#else
 	int pid, tid, offset = 0;
 
 	if (sscanf(path, "/proc/self/task/%d/%n", &tid, &offset) == 1 &&
@@ -3785,9 +5756,10 @@ static int is_proc_task_leaf_path(const char *path)
 	}
 
 	return 0;
-#endif
 }
+#endif
 
+#ifndef MCEXEC_RUST_HELPERS
 static int mapped_proc_task_parent_exists(const char *mapped)
 {
 	char parent[PATH_MAX];
@@ -3805,6 +5777,96 @@ static int mapped_proc_task_parent_exists(const char *mapped)
 
 	return stat(parent, &sb) == 0;
 }
+#endif
+
+#ifdef MCEXEC_RUST_HELPERS
+int mcexec_overlay_enable_uti_bridge(void)
+{
+	return enable_uti;
+}
+
+int mcexec_overlay_find_libdir_bridge(char *out, size_t size)
+{
+	return find_libdir(out, size);
+}
+
+ssize_t mcexec_overlay_readlink_bridge(const char *path, char *out,
+		size_t size)
+{
+	return readlink(path, out, size);
+}
+
+int mcexec_overlay_lstat_is_symlink_bridge(const char *path, int *is_symlink)
+{
+	struct stat sb;
+
+	if (lstat(path, &sb) == -1)
+		return -errno;
+
+	*is_symlink = S_ISLNK(sb.st_mode);
+	return 0;
+}
+
+int mcexec_overlay_stat_errno_bridge(const char *path)
+{
+	struct stat sb;
+
+	return stat(path, &sb) == -1 ? errno : 0;
+}
+
+void mcexec_overlay_considering_bridge(int dirfd, const char *path)
+{
+	__dprintf("considering fd %d path %s\n", dirfd, path);
+}
+
+void mcexec_overlay_fd_path_truncated_bridge(int dirfd)
+{
+	fprintf(stderr, "%s: /proc/self/fd/%d path truncated\n",
+		"overlay_path", dirfd);
+}
+
+void mcexec_overlay_readlink_fd_failed_bridge(int dirfd, int error)
+{
+	fprintf(stderr, "%s: readlink /proc/self/fd/%d failed: %d\n",
+		"overlay_path", dirfd, error);
+}
+
+void mcexec_overlay_truncated_bridge(const char *path)
+{
+	fprintf(stderr, "%s: %s truncated\n", "overlay_path", path);
+}
+
+void mcexec_overlay_getcwd_failed_bridge(int error)
+{
+	fprintf(stderr, "%s: could not getcwd(): %d\n",
+		"overlay_path", error);
+}
+
+void mcexec_overlay_glued_bridge(const char *path)
+{
+	__dprintf("glued to %s\n", path);
+}
+
+void mcexec_overlay_find_libdir_failed_bridge(void)
+{
+	fprintf(stderr, "error: failed to find library directory\n");
+}
+
+void mcexec_overlay_replaced_bridge(const char *path, const char *mapped)
+{
+	__dprintf("%s: %s replaced with %s\n", "overlay_path", path, mapped);
+}
+
+void mcexec_overlay_trying_bridge(const char *path, int error)
+{
+	__dprintf("trying %s: %d\n", path, error);
+}
+
+void mcexec_overlay_blacklisted_bridge(const char *path)
+{
+	__dprintf("blacklisted %s\n", path);
+}
+#else
 
 /* Fixup paths that need to point to mckernel files
  * dirfd/in are openat/fstatat/faccessat arguments,
@@ -4134,6 +6196,7 @@ checkexist:
 
 	return buf;
 }
+#endif
 
 struct linux_dirent {
 	unsigned long  d_ino;     /* Inode number */
@@ -4244,6 +6307,242 @@ static inline void *dirent_off(int sysnum, void *_dirp)
 		exit(-1);
 }
 
+#ifdef MCEXEC_RUST_HELPERS
+#define dirent_is64(sysnum) mcexec_dirent_is64_body((sysnum), __NR_getdents64)
+
+void *mcexec_overlay_getdents_find_bridge(int fd)
+{
+	struct overlay_fd *ofd_iter;
+
+	pthread_spin_lock(&overlay_fd_lock);
+	for (ofd_iter = ((typeof(*ofd_iter) *)((char *)((&overlay_fd_list)->next) - offsetof(typeof(*ofd_iter), link))); &ofd_iter->link != (&overlay_fd_list); ofd_iter = ((typeof(*ofd_iter) *)((char *)(ofd_iter->link.next) - offsetof(typeof(*ofd_iter), link)))) {
+		if (ofd_iter->fd == fd) {
+			__dprintf("found overlay cache entry (%s)\n",
+					ofd_iter->linux_path);
+			pthread_spin_unlock(&overlay_fd_lock);
+			return ofd_iter;
+		}
+	}
+	pthread_spin_unlock(&overlay_fd_lock);
+
+	return NULL;
+}
+
+int mcexec_overlay_getdents_hide_orig_bridge(void *opaque)
+{
+	struct overlay_fd *ofd = opaque;
+	size_t len;
+
+	if (!ofd || strncmp(ofd->linux_path, "/proc", 5))
+		return 0;
+
+	len = strlen(ofd->linux_path);
+	return len >= 4 && !strncmp(ofd->linux_path + len - 4, "task", 4);
+}
+
+const char *mcexec_overlay_getdents_linux_path_bridge(void *opaque)
+{
+	struct overlay_fd *ofd = opaque;
+
+	return ofd->linux_path;
+}
+
+size_t mcexec_overlay_getdents_pathlen_bridge(void *opaque)
+{
+	struct overlay_fd *ofd = opaque;
+
+	return ofd->pathlen;
+}
+
+void *mcexec_overlay_getdents_mck_dirents_bridge(void *opaque)
+{
+	struct overlay_fd *ofd = opaque;
+
+	return ofd->mck_dirents;
+}
+
+size_t mcexec_overlay_getdents_mck_size_bridge(void *opaque)
+{
+	struct overlay_fd *ofd = opaque;
+
+	return ofd->mck_dirents_size;
+}
+
+void *mcexec_overlay_getdents_linux_dirents_bridge(void *opaque)
+{
+	struct overlay_fd *ofd = opaque;
+
+	return ofd->linux_dirents;
+}
+
+size_t mcexec_overlay_getdents_linux_size_bridge(void *opaque)
+{
+	struct overlay_fd *ofd = opaque;
+
+	return ofd->linux_dirents_size;
+}
+
+int mcexec_overlay_getdents_mck_fd_bridge(void *opaque)
+{
+	struct overlay_fd *ofd = opaque;
+
+	if (ofd->getdents_fd == -1) {
+		ofd->getdents_fd = open(ofd->mck_path, O_RDONLY | O_DIRECTORY);
+		if (ofd->getdents_fd < 0) {
+			int error = errno;
+
+			if (error != ENOENT) {
+				fprintf(stderr, "%s: could not open %s: %d\n",
+					"overlay_getdents", ofd->mck_path,
+					error);
+			}
+			return -error;
+		}
+	}
+
+	return ofd->getdents_fd;
+}
+
+int mcexec_overlay_getdents_linux_fd_bridge(void *opaque)
+{
+	struct overlay_fd *ofd = opaque;
+
+	if (ofd->linux_fd == -1) {
+		ofd->linux_fd = open(ofd->linux_path, O_RDONLY | O_DIRECTORY);
+		if (ofd->linux_fd < 0) {
+			int error = errno;
+
+			if (error != ENOENT) {
+				fprintf(stderr, "%s: could not open %s: %d\n",
+					"overlay_getdents", ofd->linux_path,
+					error);
+			}
+			return -error;
+		}
+	}
+
+	return ofd->linux_fd;
+}
+
+int mcexec_overlay_getdents_append_mck_bridge(void *opaque,
+		const void *dirp, size_t len, int is64)
+{
+	struct overlay_fd *ofd = opaque;
+	void *newbuf;
+	int rc;
+
+	newbuf = realloc(ofd->mck_dirents, ofd->mck_dirents_size + len);
+	if (!newbuf) {
+		fprintf(stderr, "%s: not enough memory (%zd)",
+			"overlay_getdents", ofd->mck_dirents_size + len);
+		return -ENOMEM;
+	}
+	ofd->mck_dirents = newbuf;
+	memcpy(ofd->mck_dirents + ofd->mck_dirents_size, dirp, len);
+
+	rc = mcexec_dirent_rewrite_offsets_result(ofd->mck_dirents,
+			ofd->mck_dirents_size, ofd->mck_dirents_size + len,
+			0, is64);
+	if (rc < 0)
+		return rc;
+
+	ofd->mck_dirents_size += len;
+	return 0;
+}
+
+int mcexec_overlay_getdents_append_linux_bridge(void *opaque,
+		const void *dirp, size_t len, int is64, int old_ret)
+{
+	struct overlay_fd *ofd = opaque;
+	void *newbuf;
+	int rc;
+
+	newbuf = realloc(ofd->linux_dirents, ofd->linux_dirents_size + len);
+	if (!newbuf) {
+		fprintf(stderr, "%s: not enough memory (%zd)",
+			"overlay_getdents", ofd->linux_dirents_size + len);
+		return old_ret;
+	}
+	ofd->linux_dirents = newbuf;
+	memcpy(ofd->linux_dirents + ofd->linux_dirents_size, dirp, len);
+	ofd->linux_dirents_size += len;
+
+	rc = mcexec_dirent_rewrite_offsets_result(ofd->linux_dirents, 0,
+			ofd->linux_dirents_size, ofd->mck_dirents_size,
+			is64);
+	if (rc < 0)
+		return rc;
+
+	return 0;
+}
+
+void mcexec_overlay_getdents_offset_bridge(long offset)
+{
+	__dprintf("offset: %ld\n", offset);
+}
+
+void mcexec_overlay_getdents_upper_bridge(int mck_ret, int ret,
+		unsigned int count)
+{
+	__dprintf("getdents from upper: mck_ret: %d, ret: %d, count: %d\n",
+		  mck_ret, ret, count);
+}
+
+void mcexec_overlay_getdents_lower_failed_bridge(int error)
+{
+	fprintf(stderr, "%s: linux getdents failed: %d\n",
+		"overlay_getdents", error);
+}
+
+void mcexec_overlay_getdents_blacklisted_bridge(const char *path)
+{
+	__dprintf("blacklisted: %s\n", path);
+}
+
+void mcexec_overlay_getdents_dupe_bridge(const char *name)
+{
+	__dprintf("dupe: %s\n", name);
+}
+
+void mcexec_overlay_getdents_lower_bridge(int linux_ret, int ret,
+		unsigned int count)
+{
+	__dprintf("getdents from lower: linux_ret: %d, ret: %d, count: %d\n",
+		  linux_ret, ret, count);
+}
+
+void mcexec_overlay_getdents_offset_too_large_bridge(long offset,
+		size_t mck_size, size_t linux_size)
+{
+	fprintf(stderr, "%s: offset (%ld) is too large (upper: %ld, lower: %ld)\n",
+		"overlay_getdents", offset, mck_size, linux_size);
+}
+
+void mcexec_overlay_getdents_upper_small_bridge(void)
+{
+	__dprintf("upper: Result buffer is too small\n");
+}
+
+void mcexec_overlay_getdents_lower_small_bridge(void)
+{
+	__dprintf("lower: Result buffer is too small\n");
+}
+
+void mcexec_overlay_getdents_mck_size_log_bridge(size_t size, long offset,
+		int len, unsigned int count)
+{
+	__dprintf("mck_dirents_size: %ld, offset: %ld, mck_len: %d, count: %d\n",
+		  size, offset, len, count);
+}
+
+void mcexec_overlay_getdents_linux_size_log_bridge(size_t size, long offset,
+		int len, unsigned int count)
+{
+	__dprintf("linux_dirents_size: %ld, offset: %ld, linux_len: %d, count: %d\n",
+		  size, offset, len, count);
+}
+#else
+
 int copy_dirents(void *_dirp, void *dirents, size_t dirents_size,
 		 off_t offset, unsigned int *count, int sysnum)
 {
@@ -4275,23 +6574,34 @@ int copy_dirents(void *_dirp, void *dirents, size_t dirents_size,
 out:
 	return len;
 }
+#endif
 
+#ifndef MCEXEC_RUST_HELPERS
 int overlay_getdents(int sysnum, int fd, void *_dirp, unsigned int count)
 {
 	void *dirp = NULL;
-	void *linux_dirp_iter, *mck_dirp_iter;
+	void *linux_dirp_iter;
+#ifndef MCEXEC_RUST_HELPERS
+	void *mck_dirp_iter;
+#endif
 	int ret, ret_before_edit;
 	int mck_ret = 0, pos;
-	int linux_ret = 0, mcpos;
+	int linux_ret = 0;
+#ifndef MCEXEC_RUST_HELPERS
+	int mcpos;
+#endif
 	unsigned short reclen;
 	struct overlay_fd *ofd = NULL, *ofd_iter;
 	int hide_orig = 0;
 	off_t offset;
 	char ofd_path[PATH_MAX];
 	int mck_len, linux_len;
+#ifdef MCEXEC_RUST_HELPERS
+	int helper_rc;
+#endif
 
 	pthread_spin_lock(&overlay_fd_lock);
-	list_for_each_entry(ofd_iter, &overlay_fd_list, link) {
+	for (ofd_iter = ((typeof(*ofd_iter) *)((char *)((&overlay_fd_list)->next) - offsetof(typeof(*ofd_iter), link))); &ofd_iter->link != (&overlay_fd_list); ofd_iter = ((typeof(*ofd_iter) *)((char *)(ofd_iter->link.next) - offsetof(typeof(*ofd_iter), link)))) {
 		if (ofd_iter->fd == fd) {
 			ofd = ofd_iter;
 			__dprintf("found overlay cache entry (%s)\n",
@@ -4375,6 +6685,16 @@ mck_again:
 		 * (EOF of fd) >= (EOF of upper + lower) is assumed.
 		 * See generic_file_llseek_size().
 		 */
+#ifdef MCEXEC_RUST_HELPERS
+		helper_rc = mcexec_dirent_rewrite_offsets_result(
+				ofd->mck_dirents, ofd->mck_dirents_size,
+				ofd->mck_dirents_size + ret, 0,
+				dirent_is64(sysnum));
+		if (helper_rc < 0) {
+			ret = helper_rc;
+			goto err;
+		}
+#else
 		for (mcpos = ofd->mck_dirents_size;
 		     mcpos < ofd->mck_dirents_size + ret;) {
 			mck_dirp_iter = ofd->mck_dirents + mcpos;
@@ -4391,6 +6711,7 @@ mck_again:
 
 			mcpos += reclen;
 		}
+#endif
 #ifdef DEBUG
 		printf("\n");
 #endif
@@ -4446,6 +6767,19 @@ linux_again:
 			continue;
 		}
 		/* remove duplicates */
+#ifdef MCEXEC_RUST_HELPERS
+		if (mcexec_dirent_buffer_contains_name_result(
+				ofd->mck_dirents, ofd->mck_dirents_size,
+				linux_dirp_iter, dirent_is64(sysnum))) {
+			__dprintf("dupe: %s\n",
+				  dirent_name(sysnum, linux_dirp_iter));
+			memmove(dirp + pos,
+				dirp + pos + reclen,
+				ret - pos - reclen);
+			ret -= reclen;
+			continue;
+		}
+#else
 		for (mcpos = 0; mcpos < ofd->mck_dirents_size;) {
 			mck_dirp_iter = ofd->mck_dirents + mcpos;
 			if (!strcmp(dirent_name(sysnum, mck_dirp_iter),
@@ -4462,6 +6796,7 @@ linux_again:
 		}
 		if (mcpos < ofd->mck_dirents_size)
 			continue;
+#endif
 
 		pos += reclen;
 	}
@@ -4489,6 +6824,16 @@ linux_again:
 		 * Rewrite all because ofd->mck_dirents_size might
 		 * have changed.
 		 */
+#ifdef MCEXEC_RUST_HELPERS
+		helper_rc = mcexec_dirent_rewrite_offsets_result(
+				ofd->linux_dirents, 0,
+				ofd->linux_dirents_size,
+				ofd->mck_dirents_size, dirent_is64(sysnum));
+		if (helper_rc < 0) {
+			ret = helper_rc;
+			goto err;
+		}
+#else
 		for (pos = 0; pos < ofd->linux_dirents_size;) {
 			linux_dirp_iter = ofd->linux_dirents + pos;
 			reclen = dirent_reclen(sysnum, linux_dirp_iter);
@@ -4505,6 +6850,7 @@ linux_again:
 
 			pos += reclen;
 		}
+#endif
 #ifdef DEBUG
 		printf("\n");
 #endif
@@ -4591,32 +6937,15 @@ err:
 
 	return ret;
 }
+#endif
 
+#ifdef MCEXEC_RUST_HELPERS
+#define getpath_execveat mcexec_getpath_execveat_body
+#else
 /* for execveat */
 static int getpath_execveat(int dirfd, const char *filename, int flags,
 		char *pathbuf, size_t size)
 {
-#ifdef MCEXEC_RUST_HELPERS
-	int check_symlink = 0;
-	int ret;
-
-	ret = mcexec_getpath_execveat_prepare_result(dirfd, filename, flags,
-			AT_FDCWD, AT_EMPTY_PATH, AT_SYMLINK_NOFOLLOW,
-			pathbuf, size, &check_symlink);
-	if (ret) {
-		return ret;
-	}
-
-	if (check_symlink) {
-		int rc;
-
-		if ((rc = readlink(filename, pathbuf, PATH_MAX)) != -1) {
-			return ELOOP;
-		}
-	}
-
-	return 0;
-#else
 	int rc, ret = 0;
 	size_t len;
 
@@ -4644,17 +6973,22 @@ static int getpath_execveat(int dirfd, const char *filename, int flags,
 
 out:
 	return ret;
-#endif
 }
+#endif
 
+#ifndef MCEXEC_RUST_HELPERS
 int main_loop(struct thread_data_s *my_thread)
 {
 	struct syscall_wait_desc w;
 	long ret;
+#ifndef MCEXEC_RUST_HELPERS
 	const char *fn;
 	int sig;
 	int term;
+#endif
+#ifndef MCEXEC_RUST_HELPERS
 	struct timespec tv;
+#endif
 	char pathbuf[PATH_MAX];
 	char tmpbuf[PATH_MAX];
 	int cpu = my_thread->cpu;
@@ -4669,6 +7003,11 @@ int main_loop(struct thread_data_s *my_thread)
 			continue;
 		}
 
+#ifdef MCEXEC_RUST_HELPERS
+		if (act_main_loop_iteration(&w, fd, my_thread, pathbuf,
+				tmpbuf, &ret, ischild))
+			return ret;
+#else
 		/* Don't print when got a msg to stdout */
 		if (!(w.sr.number == __NR_write && w.sr.args[0] == 1)) {
 			__dprintf("[%d] got syscall: %ld\n", cpu, w.sr.number);
@@ -4680,14 +7019,15 @@ int main_loop(struct thread_data_s *my_thread)
 
 		switch (w.sr.number) {
 		case __NR_openat:
+#ifdef MCEXEC_RUST_HELPERS
+			act_openat(&w, fd, cpu, pathbuf, tmpbuf);
+#else
 			/* check argument 1 dirfd */
 			ret = do_strncpy_from_user(fd, pathbuf,
 			                           (void *)w.sr.args[1],
 			                           PATH_MAX);
 			__dprintf("openat(dirfd == AT_FDCWD)\n");
-			if (ret >= PATH_MAX) {
-				ret = -ENAMETOOLONG;
-			}
+			ret = MCEXEC_PATH_COPY_RET(ret);
 			if (ret < 0) {
 				do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
 				break;
@@ -4706,9 +7046,13 @@ int main_loop(struct thread_data_s *my_thread)
 				overlay_addfd(ret, fn);
 
 			do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
+#endif
 			break;
 
 		case __NR_futex:
+#ifdef MCEXEC_RUST_HELPERS
+			act_futex_clock(&w, fd, cpu);
+#else
 			ret = clock_gettime(w.sr.args[1], &tv);
 			SET_ERR(ret);
 			__dprintf("clock_gettime=%016ld,%09ld\n",
@@ -4716,14 +7060,22 @@ int main_loop(struct thread_data_s *my_thread)
 					tv.tv_nsec);
 			do_syscall_return(fd, cpu, ret, 1, (unsigned long)&tv,
 			                  w.sr.args[0], sizeof(struct timespec));
+#endif
 			break;
 
 		case __NR_kill: // interrupt syscall
+#ifdef MCEXEC_RUST_HELPERS
+			act_kill(&w, fd, cpu, my_thread);
+#else
 			kill_thread(w.sr.args[1], w.sr.args[2], my_thread);
 			do_syscall_return(fd, cpu, 0, 0, 0, 0, 0);
+#endif
 			break;
 		case __NR_exit:
 		case __NR_exit_group:
+#ifdef MCEXEC_RUST_HELPERS
+			act_exit(&w, cpu, ischild);
+#else
 			sig = 0;
 			term = 0;
 			
@@ -4735,6 +7087,18 @@ int main_loop(struct thread_data_s *my_thread)
 
 			__dprintf("__NR_exit/__NR_exit_group: %ld (cpu_id: %d)\n",
 					w.sr.args[0], cpu);
+#ifdef MCEXEC_RUST_HELPERS
+			mcexec_exit_status_plan_result(w.sr.number, w.sr.args[0],
+					__NR_exit_group, ischild, isatty(2),
+					&sig, &term, &report_sig,
+					&report_status);
+			if (report_sig) {
+				fprintf(stderr, "Terminate by signal %d\n", sig);
+			}
+			else if (report_status) {
+				__dprintf("Exit status: %d\n", term);
+			}
+#else
 			if(w.sr.number == __NR_exit_group){
 				sig = w.sr.args[0] & 0x7f;
 				term = (w.sr.args[0] & 0xff00) >> 8;
@@ -4750,6 +7114,7 @@ int main_loop(struct thread_data_s *my_thread)
 				}
 				
 			}
+#endif
 
 #ifdef USE_SYSCALL_MOD_CALL
 #ifdef CMD_DCFA
@@ -4769,6 +7134,7 @@ int main_loop(struct thread_data_s *my_thread)
 			}
 
 			exit(term); /* Call release_handler() and proceed terminate() */
+#endif
 
 			//pthread_mutex_unlock(lock);
 			return w.sr.args[0];
@@ -4776,8 +7142,12 @@ int main_loop(struct thread_data_s *my_thread)
 		case __NR_mmap:
 		case __NR_munmap:
 		case __NR_mprotect:
+#ifdef MCEXEC_RUST_HELPERS
+			act_reserved_memory_syscall(&w, fd, cpu);
+#else
 			/* reserved for internal use */
 			do_syscall_return(fd, cpu, -ENOSYS, 0, 0, 0, 0);
+#endif
 			break;
 
 #ifdef USE_SYSCALL_MOD_CALL
@@ -4789,6 +7159,9 @@ int main_loop(struct thread_data_s *my_thread)
 #endif
 
 		case __NR_gettid:{
+#ifdef MCEXEC_RUST_HELPERS
+			act_gettid(&w, fd, cpu);
+#else
 			int rc = 0;
 			/*
 			 * Number of TIDs and the remote physical address where TIDs are
@@ -4796,8 +7169,10 @@ int main_loop(struct thread_data_s *my_thread)
 			 */
 			if (w.sr.args[4] > 0) {
 				struct remote_transfer trans;
+#ifndef MCEXEC_RUST_HELPERS
 				struct thread_data_s *tp;
 				int i = 0;
+#endif
 				int *tids = malloc(sizeof(int) * w.sr.args[4]);
 				if (!tids) {
 					fprintf(stderr, "__NR_gettid(): error allocating TIDs\n");
@@ -4805,6 +7180,14 @@ int main_loop(struct thread_data_s *my_thread)
 					goto gettid_out;
 				}
 
+#ifdef MCEXEC_RUST_HELPERS
+				if (mcexec_collect_active_tids_result(thread_data,
+						tids, w.sr.args[4]) < 0) {
+					rc = -EINVAL;
+					free(tids);
+					goto gettid_out;
+				}
+#else
 				for (tp = thread_data; tp && i < w.sr.args[4];
 				     tp = tp->next) {
 					if (tp->joined || tp->terminate)
@@ -4815,6 +7198,7 @@ int main_loop(struct thread_data_s *my_thread)
 				for (; i < w.sr.args[4]; ++i) {
 					tids[i] = 0;
 				}
+#endif
 
 				trans.userp = (void*)tids;
 				trans.rphys = w.sr.args[5];
@@ -4830,10 +7214,21 @@ int main_loop(struct thread_data_s *my_thread)
 			}
 gettid_out:
 			do_syscall_return(fd, cpu, rc, 0, 0, 0, 0);
+#endif
 			break;
 		}
 
 		case __NR_clone: {
+#ifdef MCEXEC_RUST_HELPERS
+			int flag = w.sr.args[0];
+
+			if (flag == 1) {
+				act_clone_complete(&w, fd, cpu);
+			}
+			else if (act_clone_start(&w, fd, cpu, &ret)) {
+				return ret;
+			}
+#else
 			struct fork_sync *fs;
 			struct fork_sync_container *fsc = NULL;
 			struct fork_sync_container *fp;
@@ -4843,6 +7238,9 @@ gettid_out:
 			pid_t pid;
 
 			if (flag == 1) {
+#ifdef MCEXEC_RUST_HELPERS
+				act_clone_complete(&w, fd, cpu);
+#else
 				pid = w.sr.args[1];
 				rc = 0;
 				pthread_mutex_lock(&fork_sync_mutex);
@@ -4861,6 +7259,7 @@ gettid_out:
 				}
 				pthread_mutex_unlock(&fork_sync_mutex);
 				do_syscall_return(fd, cpu, rc, 0, 0, 0, 0);
+#endif
 				break;
 			}
 
@@ -5011,6 +7410,12 @@ fork_err:
 				if (rc < 0) {
 					munmap(fs, sizeof(struct fork_sync));
 					pthread_mutex_lock(&fork_sync_mutex);
+#ifdef MCEXEC_RUST_HELPERS
+					if (mcexec_fork_sync_remove_node_result(
+							&fork_sync_top, fsc) > 0) {
+						free(fsc);
+					}
+#else
 					for (fp = fork_sync_top, fb = NULL; fp; fb = fp, fp = fp->next)
 						if (fp == fsc)
 							break;
@@ -5021,14 +7426,19 @@ fork_err:
 							fork_sync_top = fsc->next;
 						free(fp);
 					}
+#endif
 					pthread_mutex_unlock(&fork_sync_mutex);
 				}
 			}
 			do_syscall_return(fd, cpu, rc, 0, 0, 0, 0);
+#endif
 			break;
 		}
 
 		case __NR_wait4: {
+#ifdef MCEXEC_RUST_HELPERS
+			act_wait4(&w, fd, cpu);
+#else
 			int ret;
 			pid_t pid = w.sr.args[0];
 			int options = w.sr.args[2];
@@ -5048,14 +7458,20 @@ fork_err:
 			}
 
 			do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
+#endif
 			break;
 		}
 
 		/* Actually, performing execveat() for McKernel */
 		case __NR_execve: {
+#ifdef MCEXEC_RUST_HELPERS
+			if (act_execve(&w, fd, cpu, pathbuf, &ret))
+				return ret;
+#else
 
 			/* Execve phase */
 			switch (w.sr.args[0]) {
+#ifndef MCEXEC_RUST_HELPERS
 				struct program_load_desc *desc;
 				struct remote_transfer trans;
 				char *filename;
@@ -5063,10 +7479,15 @@ fork_err:
 				char *shebang_argv_flat;
 				char *buffer;
 				size_t size;
-				int ret, dirfd, flags;
+				int dirfd, flags;
+#endif
+				int ret;
 
 				/* Load descriptor phase */
 				case 1:
+#ifdef MCEXEC_RUST_HELPERS
+					act_execve_phase1(&w, fd, cpu, pathbuf);
+#else
 					shebang_argv = NULL;
 					buffer = NULL;
 					desc = NULL;
@@ -5103,6 +7524,18 @@ fork_err:
 					if (shebang_argv) {
 						desc->args_len = flatten_strings(NULL, shebang_argv,
 										 &shebang_argv_flat);
+#ifdef MCEXEC_RUST_HELPERS
+						ret = mcexec_execve1_transfer_buffer_result(
+							desc, size, shebang_argv_flat,
+							desc->args_len, &buffer, &size);
+						if (ret) {
+							fprintf(stderr,
+								"execve(): could not alloc transfer buffer for file %s\n",
+								filename);
+							free(shebang_argv_flat);
+							goto return_execve1;
+						}
+#else
 						buffer = malloc(size + desc->args_len);
 						if (!buffer) {
 							fprintf(stderr,
@@ -5115,8 +7548,11 @@ fork_err:
 						memcpy(buffer, desc, size);
 						memcpy(buffer + size, shebang_argv_flat,
 						       desc->args_len);
+#endif
 						free(shebang_argv_flat);
+#ifndef MCEXEC_RUST_HELPERS
 						size += desc->args_len;
+#endif
 					}
 
 					/* Copy descriptor to co-kernel side */
@@ -5145,10 +7581,16 @@ return_execve1:
 					free(desc);
 
 					do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
+#endif
 					break;
 
 				/* Copy program image phase */
 				case 2:
+#ifdef MCEXEC_RUST_HELPERS
+					ret = act_execve_phase2(&w, fd, cpu);
+					if (ret)
+						return ret;
+#else
 					
 					ret = -1;
 					/* Alloc descriptor */
@@ -5195,38 +7637,59 @@ return_execve1:
 					ret = 0;
 return_execve2:					
 					do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
+#endif
 					break;
 
 				default:
 					fprintf(stderr, "execve(): ERROR: invalid execve phase\n");
 					break;
 			}
+#endif
 
 			break;
 		}
 
 		case __NR_signalfd4:
+#ifdef MCEXEC_RUST_HELPERS
+			act_signalfd4_syscall(&w, fd, cpu);
+#else
 			ret = act_signalfd4(&w);
 			do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
+#endif
 			break;
 
 		case __NR_perf_event_open:
+#ifdef MCEXEC_RUST_HELPERS
+			act_perf_event_open(&w, fd, cpu);
+#else
 			ret = open("/dev/null", O_RDONLY);
 			do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
+#endif
 			break;
 
 		case __NR_rt_sigaction:
+#ifdef MCEXEC_RUST_HELPERS
+			act_rt_sigaction(&w, fd, cpu);
+#else
 			act_sigaction(&w);
 			do_syscall_return(fd, cpu, 0, 0, 0, 0, 0);
+#endif
 			break;
 
 		case __NR_rt_sigprocmask:
+#ifdef MCEXEC_RUST_HELPERS
+			act_rt_sigprocmask(&w, fd, cpu);
+#else
 			act_sigprocmask(&w);
 			do_syscall_return(fd, cpu, 0, 0, 0, 0, 0);
+#endif
 			break;
 
 		case __NR_setfsuid:
-			if(w.sr.args[1] == 1){
+#ifdef MCEXEC_RUST_HELPERS
+			act_setfsuid(&w, fd, cpu);
+#else
+			if (MCEXEC_SETFSUID_NEEDS_CRED(w.sr.args[1])) {
 				ioctl(fd, MCEXEC_UP_GET_CRED, w.sr.args[0]);
 				ret = 0;
 			}
@@ -5234,71 +7697,98 @@ return_execve2:
 				ret = setfsuid(w.sr.args[0]);
 			}
 			do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
+#endif
 			break;
 
 		case __NR_setresuid:
+#ifdef MCEXEC_RUST_HELPERS
+			act_setresuid(&w, fd, cpu);
+#else
 			ret = setresuid(w.sr.args[0], w.sr.args[1], w.sr.args[2]);
-			if(ret == -1)
-				ret = -errno;
+			SET_ERR(ret);
 			do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
+#endif
 			break;
 
 		case __NR_setreuid:
+#ifdef MCEXEC_RUST_HELPERS
+			act_setreuid(&w, fd, cpu);
+#else
 			ret = setreuid(w.sr.args[0], w.sr.args[1]);
-			if(ret == -1)
-				ret = -errno;
+			SET_ERR(ret);
 			do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
+#endif
 			break;
 
 		case __NR_setuid:
+#ifdef MCEXEC_RUST_HELPERS
+			act_setuid(&w, fd, cpu);
+#else
 			ret = setuid(w.sr.args[0]);
-			if(ret == -1)
-				ret = -errno;
+			SET_ERR(ret);
 			do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
+#endif
 			break;
 
 		case __NR_setresgid:
+#ifdef MCEXEC_RUST_HELPERS
+			act_setresgid(&w, fd, cpu);
+#else
 			ret = setresgid(w.sr.args[0], w.sr.args[1], w.sr.args[2]);
-			if(ret == -1)
-				ret = -errno;
+			SET_ERR(ret);
 			do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
+#endif
 			break;
 
 		case __NR_setregid:
+#ifdef MCEXEC_RUST_HELPERS
+			act_setregid(&w, fd, cpu);
+#else
 			ret = setregid(w.sr.args[0], w.sr.args[1]);
-			if(ret == -1)
-				ret = -errno;
+			SET_ERR(ret);
 			do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
+#endif
 			break;
 
 		case __NR_setgid:
+#ifdef MCEXEC_RUST_HELPERS
+			act_setgid(&w, fd, cpu);
+#else
 			ret = setgid(w.sr.args[0]);
-			if(ret == -1)
-				ret = -errno;
+			SET_ERR(ret);
 			do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
+#endif
 			break;
 
 		case __NR_setfsgid:
+#ifdef MCEXEC_RUST_HELPERS
+			act_setfsgid(&w, fd, cpu);
+#else
 			ret = setfsgid(w.sr.args[0]);
 			do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
+#endif
 			break;
 
 		case __NR_close:
-			if (w.sr.args[0] == fd)
-				ret = -EBADF;
-			else
+#ifdef MCEXEC_RUST_HELPERS
+			act_close(&w, fd, cpu);
+#else
+			ret = MCEXEC_CLOSE_PLAN(w.sr.args[0], fd);
+			if (ret == 0)
 				ret = do_generic_syscall(&w);
 			overlay_delfd(w.sr.args[0]);
 			do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
+#endif
 			break;
 
 		case __NR_readlinkat:
+#ifdef MCEXEC_RUST_HELPERS
+			act_readlinkat(&w, fd, cpu, pathbuf, tmpbuf);
+#else
 			/* check argument 1 dirfd */
 			ret = do_strncpy_from_user(fd, pathbuf,
 					(void *)w.sr.args[1], PATH_MAX);
-			if (ret >= PATH_MAX) {
-				ret = -ENAMETOOLONG;
-			}
+			ret = MCEXEC_PATH_COPY_RET(ret);
 			if (ret < 0) {
 				do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
 				break;
@@ -5315,13 +7805,15 @@ return_execve2:
 			__dprintf("readlinkat: dirfd=%d, path=%s, buf=%s, ret=%ld\n",
 				(int)w.sr.args[0], fn, (char *)w.sr.args[2], ret);
 			do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
+#endif
 			break;
 #ifdef __NR_readlink
 		case __NR_readlink:
+#ifdef MCEXEC_RUST_HELPERS
+			act_readlink(&w, fd, cpu, pathbuf, tmpbuf);
+#else
 			ret = do_strncpy_from_user(fd, pathbuf, (void *)w.sr.args[0], PATH_MAX);
-			if (ret >= PATH_MAX) {
-				ret = -ENAMETOOLONG;
-			}
+			ret = MCEXEC_PATH_COPY_RET(ret);
 			if (ret < 0) {
 				do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
 				break;
@@ -5334,14 +7826,16 @@ return_execve2:
 			__dprintf("readlink: path=%s, buf=%s, ret=%ld\n", 
 				fn, (char *)w.sr.args[1], ret);
 			do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
+#endif
 			break;
 #endif	/* __NR_readlink */
 
 		case __NR_newfstatat:
+#ifdef MCEXEC_RUST_HELPERS
+			act_newfstatat(&w, fd, cpu, pathbuf, tmpbuf);
+#else
 			ret = do_strncpy_from_user(fd, pathbuf, (void *)w.sr.args[1], PATH_MAX);
-			if (ret >= PATH_MAX) {
-				ret = -ENAMETOOLONG;
-			}
+			ret = MCEXEC_PATH_COPY_RET(ret);
 			if (ret < 0) {
 				do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
 				break;
@@ -5361,13 +7855,15 @@ return_execve2:
 				  (int)w.sr.args[3], ret);
 
 			do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
+#endif
 			break;
 #ifdef __NR_stat
 		case __NR_stat:
+#ifdef MCEXEC_RUST_HELPERS
+			act_stat(&w, fd, cpu, pathbuf, tmpbuf);
+#else
 			ret = do_strncpy_from_user(fd, pathbuf, (void *)w.sr.args[0], PATH_MAX);
-			if (ret >= PATH_MAX) {
-				ret = -ENAMETOOLONG;
-			}
+			ret = MCEXEC_PATH_COPY_RET(ret);
 			if (ret < 0) {
 				do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
 				break;
@@ -5379,17 +7875,19 @@ return_execve2:
 			SET_ERR(ret);
 			__dprintf("stat: path=%s, ret=%ld\n", fn, ret);
 			do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
+#endif
 			break;
 #endif /* __NR_stat */
 
 		case __NR_faccessat: {
+#ifdef MCEXEC_RUST_HELPERS
+			act_faccessat(&w, fd, cpu, pathbuf, tmpbuf);
+#else
 			int resolvelinks = 0;
 
 			ret = do_strncpy_from_user(fd, pathbuf,
 					(void *)w.sr.args[1], PATH_MAX);
-			if (ret >= PATH_MAX) {
-				ret = -ENAMETOOLONG;
-			}
+			ret = MCEXEC_PATH_COPY_RET(ret);
 			if (ret < 0) {
 				do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
 				break;
@@ -5412,15 +7910,17 @@ return_execve2:
 				  ret);
 
 			do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
+#endif
 			break;
 		}
 #ifdef __NR_access
 		case __NR_access:
+#ifdef MCEXEC_RUST_HELPERS
+			act_access(&w, fd, cpu, pathbuf, tmpbuf);
+#else
 			ret = do_strncpy_from_user(fd, pathbuf,
 					(void *)w.sr.args[0], PATH_MAX);
-			if (ret >= PATH_MAX) {
-				ret = -ENAMETOOLONG;
-			}
+			ret = MCEXEC_PATH_COPY_RET(ret);
 			if (ret < 0) {
 				do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
 				break;
@@ -5432,14 +7932,16 @@ return_execve2:
 			SET_ERR(ret);
 			__dprintf("access: path=%s, ret=%ld\n", fn, ret);
 			do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
+#endif
 			break;
 #endif /* __NR_access */
 		case __NR_getxattr:
+#ifdef MCEXEC_RUST_HELPERS
+			act_getxattr(&w, fd, cpu, pathbuf, tmpbuf);
+#else
 			ret = do_strncpy_from_user(fd, pathbuf,
 					(void *)w.sr.args[0], PATH_MAX);
-			if (ret >= PATH_MAX) {
-				ret = -ENAMETOOLONG;
-			}
+			ret = MCEXEC_PATH_COPY_RET(ret);
 			if (ret < 0) {
 				do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
 				break;
@@ -5454,13 +7956,15 @@ return_execve2:
 			__dprintf("getxattr: path=%s, name=%s, ret=%ld\n", fn,
 				  (char *)w.sr.args[1], ret);
 			do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
+#endif
 			break;
 		case __NR_lgetxattr:
+#ifdef MCEXEC_RUST_HELPERS
+			act_lgetxattr(&w, fd, cpu, pathbuf, tmpbuf);
+#else
 			ret = do_strncpy_from_user(fd, pathbuf,
 					(void *)w.sr.args[0], PATH_MAX);
-			if (ret >= PATH_MAX) {
-				ret = -ENAMETOOLONG;
-			}
+			ret = MCEXEC_PATH_COPY_RET(ret);
 			if (ret < 0) {
 				do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
 				break;
@@ -5475,29 +7979,38 @@ return_execve2:
 			__dprintf("lgetxattr: path=%s, name=%s, ret=%ld\n", fn,
 				  (char *)w.sr.args[1], ret);
 			do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
+#endif
 			break;
 #ifdef	__NR_getdents
 		case __NR_getdents:
 #endif
 		case __NR_getdents64:
+#ifdef MCEXEC_RUST_HELPERS
+			act_getdents(&w, fd, cpu);
+#else
 			ret = overlay_getdents(w.sr.number,
 					(int)w.sr.args[0],
 					(struct linux_dirent *)w.sr.args[1],
 					(unsigned int)w.sr.args[2]);
 			do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
+#endif
 			break;
 
 		case __NR_sched_setaffinity:
-			if (w.sr.args[0] == 0) {
+#ifdef MCEXEC_RUST_HELPERS
+			act_sched_setaffinity(&w, fd, cpu, my_thread);
+#else
+			ret = MCEXEC_SCHED_SETAFFINITY_ACTION(w.sr.args[0]);
+			if (ret > 0) {
 				ret = util_thread(my_thread, w.sr.args[1], w.sr.rtid,
 						w.sr.args[2], w.sr.args[3],
 						w.sr.args[4]);
 			}
 			else {
 				__eprintf("__NR_sched_setaffinity: invalid argument (%lx)\n", w.sr.args[0]);
-				ret = -EINVAL;
 			}
 			do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
+#endif
 			break;
 		case 801: {// swapout
 #ifdef ENABLE_QLMPI
@@ -5596,24 +8109,35 @@ return_swapout:
 
 			do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
 #else
+#ifdef MCEXEC_RUST_HELPERS
+			act_swapout_unavailable(&w, fd, cpu);
+#else
 			printf("mcexec has not been compiled with ENABLE_QLMPI\n");
 			ret = -1;
 			do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
+#endif
 #endif // ENABLE_QLMPI
 			break;
 		}
 		case 802: /* debugging purpose */
+#ifdef MCEXEC_RUST_HELPERS
+			act_debug_mlock(&w, fd, cpu);
+#else
 			printf("linux mlock(%p, %ld)\n",
 			       (void *)w.sr.args[0], w.sr.args[1]);
 			printf("str(%p)=%s", (void*)w.sr.args[0], (char*)w.sr.args[0]);
 			ret = mlock((void *)w.sr.args[0], w.sr.args[1]);
 			do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
+#endif
 			break;
 
 #ifndef ARG_MAX
 #define ARG_MAX 256
 #endif
 		case 811: { // linux_spawn
+#ifdef MCEXEC_RUST_HELPERS
+			act_linux_spawn(&w, fd, cpu);
+#else
 			int rc, i;
 			pid_t pid;
 			size_t slen;
@@ -5685,16 +8209,18 @@ return_linux_spawn:
 			}
 
 			do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
+#endif
 			break;
 		}
 
 #ifdef __NR_open
 		case __NR_open:
+#ifdef MCEXEC_RUST_HELPERS
+			act_open(&w, fd, cpu, pathbuf, tmpbuf);
+#else
 			ret = do_strncpy_from_user(fd, pathbuf,
 					(void *)w.sr.args[0], PATH_MAX);
-			if (ret >= PATH_MAX) {
-				ret = -ENAMETOOLONG;
-			}
+			ret = MCEXEC_PATH_COPY_RET(ret);
 			if (ret < 0) {
 				do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
 				break;
@@ -5709,15 +8235,21 @@ return_linux_spawn:
 				overlay_addfd(ret, fn);
 
 			do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
+#endif
 			break;
 #endif
 
 		default:
+#ifdef MCEXEC_RUST_HELPERS
+			act_generic_syscall(&w, fd, cpu);
+#else
 			ret = do_generic_syscall(&w);
 			do_syscall_return(fd, cpu, ret, 0, 0, 0, 0);
+#endif
 			break;
 
 		}
+#endif
 
 		my_thread->remote_tid = -1;
 
@@ -5726,3 +8258,4 @@ return_linux_spawn:
 	__dprintf("timed out.\n");
 	return 1;
 }
+#endif

@@ -110,6 +110,85 @@ unsafe fn set_bit(map: *mut CULong, bit: CULong) {
 }
 
 #[inline(always)]
+unsafe fn scn_store_nul(buf: *mut CChar, index: usize) {
+    write_volatile(buf.add(index), 0);
+}
+
+#[inline(always)]
+unsafe fn scn_append_byte(buf: *mut CChar, buflen: CUInt, len: CInt, byte: u8) -> CInt {
+    if buflen == 0 {
+        return len;
+    }
+
+    let pos = if len < 0 { 0 } else { len as usize };
+    let buflen = buflen as usize;
+    if pos + 1 < buflen {
+        write_volatile(buf.add(pos), byte as CChar);
+        scn_store_nul(buf, pos + 1);
+        len + 1
+    } else {
+        if pos < buflen {
+            scn_store_nul(buf, pos);
+        }
+        len
+    }
+}
+
+#[inline(always)]
+unsafe fn scn_append_decimal(buf: *mut CChar, buflen: CUInt, mut len: CInt, value: CInt) -> CInt {
+    let mut digits = core::mem::MaybeUninit::<[u8; 20]>::uninit();
+    let digit_ptr = digits.as_mut_ptr() as *mut u8;
+    let mut count = 0usize;
+    let mut value64 = value as i64;
+
+    if value64 < 0 {
+        len = scn_append_byte(buf, buflen, len, b'-');
+        value64 = -value64;
+    }
+
+    let mut n = value64 as u64;
+    loop {
+        *digit_ptr.add(count) = b'0' + modulo_nonzero(n, 10) as u8;
+        count += 1;
+        n /= 10;
+        if n == 0 {
+            break;
+        }
+    }
+
+    while count != 0 {
+        count -= 1;
+        len = scn_append_byte(buf, buflen, len, *digit_ptr.add(count));
+    }
+
+    len
+}
+
+#[inline(always)]
+unsafe fn scn_append_hex_width(
+    buf: *mut CChar,
+    buflen: CUInt,
+    mut len: CInt,
+    value: CULong,
+    width: CInt,
+) -> CInt {
+    let mut pos = width - 1;
+
+    while pos >= 0 {
+        let digit = ((value >> ((pos as usize) * 4)) & 0xf) as u8;
+        let byte = if digit < 10 {
+            b'0' + digit
+        } else {
+            b'a' + (digit - 10)
+        };
+        len = scn_append_byte(buf, buflen, len, byte);
+        pos -= 1;
+    }
+
+    len
+}
+
+#[inline(always)]
 fn is_space(ch: u8) -> bool {
     matches!(ch, b'\t' | b'\n' | 0x0b | 0x0c | b'\r' | b' ' | 0xa0)
 }
@@ -560,6 +639,139 @@ pub unsafe extern "C" fn __bitmap_weight(bitmap: *const CULong, bits: CInt) -> C
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn bitmap_zero(dst: *mut CULong, nbits: CInt) {
+    zero_words(dst, bits_to_longs(nbits));
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bitmap_fill(dst: *mut CULong, nbits: CInt) {
+    let nlongs = bits_to_longs(nbits);
+
+    if nlongs == 0 {
+        return;
+    }
+
+    for k in 0..(nlongs - 1) {
+        *dst.add(k) = !0;
+    }
+    *dst.add(nlongs - 1) = bitmap_last_word_mask(nbits);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bitmap_copy(dst: *mut CULong, src: *const CULong, nbits: CInt) {
+    for k in 0..bits_to_longs(nbits) {
+        *dst.add(k) = *src.add(k);
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bitmap_and(
+    dst: *mut CULong,
+    src1: *const CULong,
+    src2: *const CULong,
+    nbits: CInt,
+) -> CInt {
+    __bitmap_and(dst, src1, src2, nbits)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bitmap_or(
+    dst: *mut CULong,
+    src1: *const CULong,
+    src2: *const CULong,
+    nbits: CInt,
+) {
+    __bitmap_or(dst, src1, src2, nbits);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bitmap_xor(
+    dst: *mut CULong,
+    src1: *const CULong,
+    src2: *const CULong,
+    nbits: CInt,
+) {
+    __bitmap_xor(dst, src1, src2, nbits);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bitmap_andnot(
+    dst: *mut CULong,
+    src1: *const CULong,
+    src2: *const CULong,
+    nbits: CInt,
+) -> CInt {
+    __bitmap_andnot(dst, src1, src2, nbits)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bitmap_complement(dst: *mut CULong, src: *const CULong, nbits: CInt) {
+    __bitmap_complement(dst, src, nbits);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bitmap_equal(
+    src1: *const CULong,
+    src2: *const CULong,
+    nbits: CInt,
+) -> CInt {
+    __bitmap_equal(src1, src2, nbits)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bitmap_intersects(
+    src1: *const CULong,
+    src2: *const CULong,
+    nbits: CInt,
+) -> CInt {
+    __bitmap_intersects(src1, src2, nbits)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bitmap_subset(
+    src1: *const CULong,
+    src2: *const CULong,
+    nbits: CInt,
+) -> CInt {
+    __bitmap_subset(src1, src2, nbits)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bitmap_empty(src: *const CULong, nbits: CInt) -> CInt {
+    __bitmap_empty(src, nbits)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bitmap_full(src: *const CULong, nbits: CInt) -> CInt {
+    __bitmap_full(src, nbits)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bitmap_weight(src: *const CULong, nbits: CInt) -> CInt {
+    __bitmap_weight(src, nbits)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bitmap_shift_right(
+    dst: *mut CULong,
+    src: *const CULong,
+    n: CInt,
+    nbits: CInt,
+) {
+    __bitmap_shift_right(dst, src, n, nbits);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bitmap_shift_left(
+    dst: *mut CULong,
+    src: *const CULong,
+    n: CInt,
+    nbits: CInt,
+) {
+    __bitmap_shift_left(dst, src, n, nbits);
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn bitmap_ord_to_pos(buf: *const CULong, mut ord: CInt, bits: CInt) -> CInt {
     let mut pos = 0;
 
@@ -792,6 +1004,16 @@ pub unsafe extern "C" fn __bitmap_parse(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn bitmap_parse(
+    buf: *const CChar,
+    buflen: CUInt,
+    maskp: *mut CULong,
+    nmaskbits: CInt,
+) -> CInt {
+    __bitmap_parse(buf, buflen, 0, maskp, nmaskbits)
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn bitmap_parse_user(
     ubuf: *const CChar,
     ulen: CUInt,
@@ -926,6 +1148,107 @@ pub unsafe extern "C" fn bitmap_find_next_zero_area(
 
         return index;
     }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bitmap_scnprintf(
+    buf: *mut CChar,
+    buflen: CUInt,
+    maskp: *const CULong,
+    nmaskbits: CInt,
+) -> CInt {
+    let mut len: CInt = 0;
+
+    if buflen == 0 {
+        return 0;
+    }
+    scn_store_nul(buf, 0);
+
+    if maskp.is_null() {
+        return 1;
+    }
+
+    let mut chunksz = nmaskbits & (CHUNKSZ - 1);
+    if chunksz == 0 {
+        chunksz = CHUNKSZ;
+    }
+
+    let mut bit_index = ((nmaskbits + CHUNKSZ - 1) & !(CHUNKSZ - 1)) - CHUNKSZ;
+    let mut needs_sep = false;
+    while bit_index >= 0 {
+        let chunkmask = (1u64 << (chunksz as usize)) - 1;
+        let word = (bit_index / BITS_PER_LONG_I32) as usize;
+        let bit = (bit_index % BITS_PER_LONG_I32) as usize;
+        let value = (*maskp.add(word) >> bit) & chunkmask;
+
+        if needs_sep {
+            len = scn_append_byte(buf, buflen, len, b',');
+        }
+        len = scn_append_hex_width(buf, buflen, len, value, (chunksz + 3) / 4);
+
+        chunksz = CHUNKSZ;
+        needs_sep = true;
+        bit_index -= CHUNKSZ;
+    }
+
+    len
+}
+
+#[inline(always)]
+unsafe fn bitmap_scnlist_emit(
+    buf: *mut CChar,
+    buflen: CUInt,
+    rbot: CInt,
+    rtop: CInt,
+    mut len: CInt,
+) -> CInt {
+    if len > 0 {
+        len = scn_append_byte(buf, buflen, len, b',');
+    }
+    len = scn_append_decimal(buf, buflen, len, rbot);
+    if rbot != rtop {
+        len = scn_append_byte(buf, buflen, len, b'-');
+        len = scn_append_decimal(buf, buflen, len, rtop);
+    }
+    len
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn bitmap_scnlistprintf(
+    buf: *mut CChar,
+    buflen: CUInt,
+    maskp: *const CULong,
+    nmaskbits: CInt,
+) -> CInt {
+    let mut len: CInt = 0;
+
+    if buflen == 0 {
+        return 0;
+    }
+    scn_store_nul(buf, 0);
+
+    if maskp.is_null() {
+        return 1;
+    }
+
+    let bits = if nmaskbits <= 0 {
+        0
+    } else {
+        nmaskbits as CULong
+    };
+    let mut cur = find_next_bit(maskp, bits, 0);
+    let mut rbot = cur;
+
+    while cur < bits {
+        let rtop = cur;
+        cur = find_next_bit(maskp, bits, cur + 1);
+        if cur >= bits || cur > rtop + 1 {
+            len = bitmap_scnlist_emit(buf, buflen, rbot as CInt, rtop as CInt, len);
+            rbot = cur;
+        }
+    }
+
+    len
 }
 
 #[no_mangle]

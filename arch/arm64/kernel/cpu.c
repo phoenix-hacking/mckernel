@@ -372,7 +372,7 @@ static inline int is_hpcpwr_available(void)
 static inline void pwr_arm64hpc_map_retention_state_flag(void)
 {
 	extern unsigned long ihk_param_retention_state_flag_pa;
-	unsigned long size = BITS_TO_LONGS(NR_CPUS) * sizeof(unsigned long);
+	unsigned long size = (((NR_CPUS) + BITS_PER_LONG - 1) / BITS_PER_LONG) * sizeof(unsigned long);
 
 	if (!ihk_param_retention_state_flag_pa) {
 		return;
@@ -787,7 +787,7 @@ void handle_IPI(unsigned int vector, struct pt_regs *regs)
 		show_context_stack(regs);
 	}
 	else {
-		list_for_each_entry(h, &handlers[vector], list) {
+		for (h = ((typeof(*h) *)((char *)((&handlers[vector])->next) - offsetof(typeof(*h), list))); &h->list != (&handlers[vector]); h = ((typeof(*h) *)((char *)(h->list.next) - offsetof(typeof(*h), list)))) {
 			if (h->func) {
 				h->func(h->priv == NULL ? regs : h->priv);
 			}
@@ -1348,7 +1348,7 @@ long ihk_mc_show_cpuinfo(char *buf, size_t buf_size, unsigned long read_off, int
 	}
 
 	/* local buffer allocate */
-	lbuf = kmalloc(lbuf_size, IHK_MC_AP_NOWAIT);
+	lbuf = kmalloc_tracked(lbuf_size, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 	if (lbuf == NULL) {
 		ekprintf("%s: ERROR Local buffer allocation failed.\n");
 		ret = -ENOMEM;
@@ -1410,7 +1410,7 @@ long ihk_mc_show_cpuinfo(char *buf, size_t buf_size, unsigned long read_off, int
 	}
 
 err_free:
-	kfree(lbuf);
+	kfree_tracked(lbuf, __FILE__, __LINE__);
 err:
 	return ret;
 }
@@ -1658,7 +1658,7 @@ release_fp_regs(struct thread *thread)
 		if (thread->fp_regs) {
 			// calcurate number of pages for fp regs area
 			pages = (sizeof(fp_regs_struct) + PAGE_SIZE -1) >> PAGE_SHIFT;
-			ihk_mc_free_pages(thread->fp_regs, pages);
+			_ihk_mc_free_pages(thread->fp_regs, pages, IHK_MC_PG_KERNEL, __FILE__, __LINE__);
 			thread->fp_regs = NULL;
 		}
 
@@ -1678,7 +1678,7 @@ check_and_allocate_fp_regs(struct thread *thread)
 
 	if (!thread->fp_regs) {
 		pages = (sizeof(fp_regs_struct) + PAGE_SIZE -1) >> PAGE_SHIFT;
-		thread->fp_regs = ihk_mc_alloc_pages(pages, IHK_MC_AP_NOWAIT);
+		thread->fp_regs = _ihk_mc_alloc_aligned_pages_node(pages, PAGE_P2ALIGN, IHK_MC_AP_NOWAIT, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);
 
 		if (!thread->fp_regs) {
 			kprintf("error: allocating fp_regs pages\n");

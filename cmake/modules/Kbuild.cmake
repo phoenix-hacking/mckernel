@@ -40,7 +40,7 @@ endif()
 string(REPLACE ";" " " KBUILD_MAKE_FLAGS_STR "${KBUILD_MAKE_FLAGS}")
 
 function(kmod MODULE_NAME)
-	cmake_parse_arguments(KMOD "" "INSTALL_DEST" "C_FLAGS;SOURCES;EXTRA_SYMBOLS;DEPENDS;PREBUILT_OBJECTS" ${ARGN})
+	cmake_parse_arguments(KMOD "" "INSTALL_DEST" "C_FLAGS;SOURCES;EXTRA_SYMBOLS;DEPENDS;PREBUILT_OBJECTS;NON_STANDARD_OBJECTS" ${ARGN})
 
 	add_custom_target(${MODULE_NAME}_ko ALL
 		DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/${MODULE_NAME}.ko"
@@ -51,6 +51,10 @@ function(kmod MODULE_NAME)
 	string(REPLACE ";" " " OBJECTS "${KMOD_OBJECTS}")
 	string(REPLACE ";" " " C_FLAGS "${KMOD_C_FLAGS}")
 	string(REPLACE ";" " " EXTRA_SYMBOLS "${KMOD_EXTRA_SYMBOLS}")
+	set(non_standard_objects)
+	foreach(non_standard_object IN LISTS KMOD_NON_STANDARD_OBJECTS)
+		string(APPEND non_standard_objects "OBJECT_FILES_NON_STANDARD_${non_standard_object} := y\n")
+	endforeach()
 if(ENABLE_WERROR)
 	set(ccflags "${KBUILD_C_FLAGS} ${C_FLAGS} -Werror")
 else(ENABLE_WERROR)

@@ -3,5 +3,7 @@ src := @CMAKE_CURRENT_SOURCE_DIR@
 
 KBUILD_EXTRA_SYMBOLS := @EXTRA_SYMBOLS@
 
+@non_standard_objects@
+
 obj-m := @MODULE_NAME@.o
 @MODULE_NAME@-y := @OBJECTS@

@@ -1,5 +1,5 @@
 McKernel Rust Port Plan With Controlled Verification
-Updated: 2026-05-24
+Updated: 2026-05-26
 
 Purpose
 ------------------------------------------------------------
@@ -12,17 +12,1823 @@ has a clear success result, and stops before later layers make debugging noisy.
 Current QEMU boot-path status
 ------------------------------------------------------------
 
-The active x86_64/Rocky validation path still uses non-reboot
-build/equivalence gates plus the existing Rocky VM boot scripts when explicitly
-approved. A QEMU setup pass on 2026-05-24 installed Rocky
-QEMU/libvirt/image/debug tooling, exposed `qemu-system-x86_64` through the
-Rocky `qemu-kvm` binary, confirmed libvirt is active, and confirmed Rust
-nightly plus LTP/XPMEM prerequisites are ready. `/dev/kvm` is not exposed in
-this environment, so QEMU boot validation must start with TCG/software
-emulation unless nested KVM is enabled. The repository still does not contain a
-system-QEMU McKernel boot harness; the existing Rocky boot scripts still rely
-on the mcreboot/VM path and were not run because reboot-capable validation
-needs explicit approval.
+The active x86_64/Rocky validation path now has non-reboot
+build/equivalence gates plus a first safe QEMU guest boundary. The 2026-05-24
+setup installed Rocky QEMU/libvirt/image/debug tooling, exposed
+`qemu-system-x86_64` through the Rocky `qemu-kvm` binary, confirmed the system
+libvirt connection responds, confirmed Rust nightly plus LTP/XPMEM
+prerequisites are ready, and added `scripts/qemu-mckernel-guest.sh`. Host
+`/dev/kvm` is present when commands run outside the default sandbox, but the
+default sandbox itself does not expose `/dev/kvm`; QEMU runs from inside the
+sandbox should use `--accel auto` or `--accel tcg` unless the run is escalated
+or otherwise placed in a context where KVM is exposed. A 2026-05-25 non-boot
+KVM probe confirmed that unprivileged sandboxed QEMU still fails to initialize
+KVM, while an escalated/root QEMU process can initialize KVM and then be
+terminated by timeout without booting a guest.
+
+The QEMU runner boots an existing Rocky/RHEL-family qcow2 through a disposable
+overlay, cloud-init seed, SSH port-forward, serial log, optional read-only 9p
+share, and guest-only command execution. It refuses host `/dev/*` image paths,
+does not load host IHK modules, does not call host `mcreboot.sh`, and attempts
+guest-side `mcstop+release.sh -k` cleanup when SSH came up. Static validation
+passed `bash -n`, `--help`, dry-run command construction, invalid option
+rejection, and non-reboot build/equivalence gates. A real system-QEMU McKernel
+boot is still not proven until a Rocky 8.x guest image is supplied or generated
+and the guest install/boot smoke is run inside that VM.
+
+Latest QEMU check on 2026-05-26 confirmed `qemu-system-x86_64 --version`,
+observed `/dev/kvm` in the current environment, validated
+`scripts/qemu-mckernel-guest.sh --help`, validated
+`scripts/qemu-mckernel-guest.sh --image
+/tmp/mckernel-qemu-domigrate.ZtJIgE/base.qcow2 --accel auto --dry-run
+--log-dir /tmp/mckernel-qemu-domigrate.ZtJIgE/log` command construction, and
+ran a bounded TCG boot-process probe against that disposable blank qcow2. The
+blank image timed out cleanly under the wrapper as expected. No real guest boot
+ran.
+
+The later `do_wait()` pass repeated the safe checks with
+`/tmp/mckernel-qemu-dowait.tQCG5z/base.qcow2`: QEMU version, `/dev/kvm`, image
+file-type checks, runner `--help`, dry-run command construction, and a bounded
+TCG boot-process probe. Sandboxed QEMU could not bind the forwarded SSH port;
+the escalated retry started QEMU and then timed out waiting for SSH from the
+blank image, as expected. No real guest boot or host reboot path ran.
+
+The wait-candidate pass repeated the safe checks with
+`/tmp/mckernel-qemu-waitcand.yNsShP/base.qcow2`: QEMU version, `/dev/kvm`,
+image file-type checks, runner `--help`, dry-run command construction, and a
+bounded TCG boot-process probe. Sandboxed QEMU could not bind the forwarded SSH
+port; the escalated retry started QEMU and then timed out waiting for SSH from
+the blank image, as expected. No real guest boot or host reboot path ran.
+
+The wait-zombie/reparent pass repeated the safe checks with
+`/tmp/mckernel-qemu-waitzombie.vDIyU2/base.qcow2`: QEMU version, `/dev/kvm`,
+image file-type checks, runner `--help`, dry-run command construction, and a
+bounded TCG boot-process probe. The blank image timed out waiting for SSH as
+expected. No real guest boot or host reboot path ran.
+
+The wait-scan traversal pass repeated the safe checks with
+`/tmp/mckernel-qemu-waitscan.ogpUBC/base.qcow2`: QEMU version, `/dev/kvm`,
+image file-type checks, runner `--help`, dry-run command construction, and a
+bounded TCG boot-process probe. The blank image timed out waiting for SSH as
+expected, and no `qemu-system-x86_64` process remained. No real guest boot or
+host reboot path ran.
+
+The ptrace-detach body pass repeated the safe checks with
+`/tmp/mckernel-qemu-ptracedetach.kFpjUx/base.qcow2`: `/dev/kvm`, Rust/C
+fallback image file-type checks, runner `--help`, dry-run command
+construction, and a bounded TCG boot-process probe. The blank image timed out
+waiting for SSH as expected, and no `qemu-system-x86_64` process remained. No
+real guest boot or host reboot path ran.
+
+The signal/credential syscall wrapper pass repeated the safe checks with
+`/tmp/mckernel-qemu-sigcred.GZSrDp/base.qcow2`: `/dev/kvm`, Rust/C fallback
+image file-type checks, runner `--help`, dry-run command construction, and a
+bounded TCG boot-process probe. The blank image timed out waiting for SSH as
+expected, and no `qemu-system-x86_64` process remained. No real guest boot or
+host reboot path ran.
+
+The ten-slice syscall wrapper pass repeated the safe checks with
+`/tmp/mckernel-qemu-syswrap.BxExxT/base.qcow2`: `/dev/kvm`, Rust/C fallback
+image file-type checks, runner `--help`, dry-run command construction, and a
+bounded TCG boot-process probe. The blank image timed out waiting for SSH as
+expected, and no `qemu-system-x86_64` process remained. No real guest boot or
+host reboot path ran.
+
+Update 2026-05-26 ten-slice syscall wrapper strict-core batch
+------------------------------------------------------------
+
+Latest batch moved ten syscall wrapper bodies through Rust while preserving
+the C ABI wrapper, primitive callbacks, scalar no-SIMD Rust code generation,
+and C fallback scaffolding:
+
+- `times()` CPU-time accounting, child CPU-time aggregation, copyout, and
+  current-time return shaping.
+- `setpgid()` pid/pgid normalization, target process lookup, execed rejection,
+  Linux-forward callback dispatch, and post-success pgid mutation.
+- `setrlimit()`, `getrlimit()`, and `prlimit64()` argument routing into the
+  existing prlimit implementation callback.
+- `sysinfo()` zero/fill/copyout sequencing, `get_cpu_id()` CPU callback return
+  shaping, `mlockall()` policy/log/result sequencing, `munlockall()` log/return
+  sequencing, and `getcpu()` CPU/node copyout sequencing.
+- Equivalence coverage for success paths, copyout failures, missing callback
+  gates, process lookup failures, execed rejection, prlimit argument routing,
+  mlockall policy branches, and getcpu partial-copy behavior.
+
+The Syscall core strict ownership row moves 95% -> 96% in `migration.txt`.
+Post-+50 strict-core movement is now about +239 points. The broad Syscall core
+dashboard row is already capped at 100%, so this does not add broad dashboard
+percentage. Standalone readiness remains about 40% because primitive user-copy,
+Linux forwarding, process lookup/locking, time/CPU primitive callbacks,
+syscall dispatch, default-path C fallback scaffolding, and broader high-risk
+syscall bodies remain C-owned.
+
+Previous update 2026-05-26 signal/credential syscall wrapper strict-core batch
+------------------------------------------------------------
+
+Previous batch moved signal and credential syscall wrapper-body sequencing
+through Rust while preserving the C ABI wrapper, primitive callbacks, and C
+fallback scaffolding:
+
+- `kill()`, `tgkill()`, and `tkill()` target validation, siginfo construction,
+  do-kill callback dispatch, return shaping, and missing-callback error
+  shaping.
+- `setresuid()`, `setreuid()`, `setuid()`, `setresgid()`, `setregid()`, and
+  `setgid()` Linux-forward callback dispatch plus credential-refresh callback
+  sequencing.
+- `setfsuid()` and `setfsgid()` do-syscall callback dispatch,
+  credential-refresh callback sequencing, and return shaping.
+- Equivalence coverage for success, validation failure, negative forwarding
+  returns, missing refresh callback, and uid/gid setfsid dispatch cases.
+
+The Syscall core strict ownership row moves 94% -> 95% in `migration.txt`.
+Post-+50 strict-core movement is now about +229 points. The broad Syscall core
+dashboard row is already capped at 100%, so this does not add broad dashboard
+percentage. Standalone readiness remains about 40% because Linux forwarding,
+credential refresh source data, actual signal delivery, user-copy, locks,
+allocation/free, syscall dispatch, default-path primitive bodies, and fallback
+scaffolding remain C-owned.
+
+Previous update 2026-05-26 ptrace syscall request-dispatch strict-core batch
+------------------------------------------------------------
+
+Previous batch moved top-level `ptrace()` request/callback body dispatch through
+Rust while preserving the C ABI wrapper, primitive handler callbacks, and C
+fallback scaffolding:
+
+- `PTRACE_TRACEME`, kill/continue/singlestep/syscall wake requests, and
+  register/fpreg/regset get/set request routing.
+- User/text peek/poke request routing, including PEEKDATA/POKEDATA aliases.
+- Set-options, attach/detach, siginfo/eventmsg, arch fallback, and
+  unsupported/missing-callback error shaping.
+- Equivalence coverage for every dispatch case, alias routing, null ops, and
+  missing getregs/arch callbacks.
+
+The Syscall core strict ownership row moved 93% -> 94% in `migration.txt`.
+Post-+50 strict-core movement reached about +219 points. The broad Syscall core
+dashboard row was already capped at 100%, so this did not add broad dashboard
+percentage. Standalone readiness remains about 40% because thread lookup,
+user-copy, register/fpreg/regset primitives, process-memory access, signal
+delivery, allocation/free, default-path primitive bodies, and fallback
+scaffolding remained C-owned.
+
+Previous update 2026-05-26 ptrace-detach body strict-core batch
+------------------------------------------------------------
+
+Latest batch moved strict-core-only `ptrace_detach_thread()` main-body
+sequencing through Rust while preserving the C ABI wrapper, primitive
+callbacks, and C fallback scaffolding:
+
+- Main-thread detach gating, zombie finalization selection, tracer child-list
+  detach, and ptraced reparenting to the original parent.
+- Report-list detach/reattach, ptrace cleanup/free callback dispatch,
+  single-step clear dispatch, and exit-signal dispatch.
+- Forwarded-signal siginfo construction, `do_kill()` callback sequencing,
+  wake/release dispatch, and final process finalization dispatch.
+- Equivalence coverage for a main-thread zombie detach with forwarded signal,
+  a non-main no-report/no-forward detach, and invalid null-input rejection.
+
+The Syscall core strict ownership row moves 92% -> 93% in `migration.txt`, and
+the Process/VM strict ownership row moves 90% -> 91%. Post-+50 strict-core
+movement is now about +209 points. The broad Syscall core and Process/VM
+dashboard rows were already capped at 100%, so this does not add broad
+dashboard percentage. Standalone readiness remains about 40% because primitive
+lock/list/free/wakeup/signal callback bodies, syscall dispatch, user-copy
+primitive bodies, ptrace lookup/orchestration, default-path C primitive bodies,
+and fallback scaffolding remain C-owned.
+
+Previous update 2026-05-26 wait-scan traversal strict-core batch
+------------------------------------------------------------
+
+Latest batch moved strict-core-only outer `do_wait()` process/thread scan
+sequencing through Rust while preserving the C ABI wrapper, primitive
+callbacks, and offset-based C fallback scaffolding:
+
+- Parent children-lock callback ordering, children-list traversal, pid/pgid
+  matching, `empty` publication, and no-found unlock/return sequencing.
+- Process-zombie dispatch, process stopped/continued candidate dispatch, and
+  ptraced-children empty-scan traversal.
+- Report-thread list traversal, report-thread candidate dispatch, and regular
+  thread-list empty-scan traversal.
+- Equivalence coverage for process zombie dispatch, process candidate dispatch,
+  ptraced-child empty scans, invalid empty pointers, report-thread release
+  dispatch, and regular thread empty scans.
+
+The Syscall core strict ownership row moves 90% -> 92% in `migration.txt`, and
+the Process/VM strict ownership row moves 89% -> 90%. Post-+50 strict-core
+movement is now about +207 points. The broad Syscall core and Process/VM
+dashboard rows were already capped at 100%, so this does not add broad
+dashboard percentage. Standalone readiness improves only slightly because
+primitive lock/list/free bodies, waitqueue/schedule/signal primitive behavior,
+host wait primitive behavior, syscall dispatch, user-copy primitive bodies,
+default-path C primitive bodies, and fallback scaffolding remain C-owned.
+
+Previous update 2026-05-26 wait-zombie/reparent strict-core batch
+------------------------------------------------------------
+
+Previous batch moved strict-core-only `do_wait()` process-zombie sequencing
+through Rust while preserving the C ABI wrapper, typed primitive callbacks,
+and C fallback scaffolding:
+
+- Zombie status publication and host wait4 skip/request/warning/log result
+  selection.
+- Parent rusage aggregation, rusage result fill, parent child-list detach, and
+  PID-1 reparent/list attach sequencing.
+- Child main-thread ptrace-detach gating, parent/child/PID-1/thread lock and
+  unlock callback ordering, no-reparent unlock/detach ordering, process
+  release callback dispatch, and final found/result shaping.
+- Equivalence coverage for reparent, no-reparent, `WNOWAIT`, host wait
+  failure, rusage copy, callback ordering, and invalid thread cases.
+
+The Syscall core strict ownership row moved 89% -> 90% in `migration.txt`, and
+the Process/VM strict ownership row moved 88% -> 89%. Post-+50 strict-core
+movement was about +204 points. The broad Syscall core and Process/VM
+dashboard rows were already capped at 100%, so this does not add broad
+dashboard percentage. Standalone readiness improves only slightly because
+outer child/thread traversal, lock/list/free primitive bodies, host wait
+primitive behavior, syscall dispatch, user-copy primitive bodies, default-path
+C primitive bodies, and fallback scaffolding remain C-owned.
+
+Previous update 2026-05-26 wait-candidate strict-core batch
+------------------------------------------------------------
+
+Previous batch moved strict-core-only `do_wait()` process and report-thread
+candidate sequencing through Rust while preserving the C ABI wrapper, typed
+primitive callbacks, and C fallback scaffolding:
+
+- Process and report-thread stopped, ptraced-stopped, continued, and
+  report-thread exited candidate result sequencing.
+- Ptraced-stop miss return preservation and process TID rewrite for requested
+  thread waits.
+- Report-list detach, ptrace-detach, release, reap, unlock, and found
+  publication callback ordering.
+- Equivalence coverage for process stopped/continued hits and misses,
+  report-thread exit no-wait/detach/release actions, report-thread
+  stopped/continued hits and misses, and invalid callback/null cases.
+
+The Syscall core strict ownership row moved 88% -> 89% in `migration.txt`.
+Post-+50 strict-core movement was about +202 points. The broad Syscall core
+dashboard row was already capped at 100%, so this does not add broad dashboard
+percentage. Standalone readiness improves only slightly because child/thread
+list traversal, zombie scan/reparent behavior, waitqueue, schedule, signal,
+rusage, release/detach primitive bodies, syscall dispatch, user-copy primitive
+bodies, default-path C primitive bodies, and fallback scaffolding remain
+C-owned.
+
+Previous update 2026-05-26 do_wait strict-core batch
+------------------------------------------------------------
+
+The previous batch moved strict-core-only top-level `do_wait()` wait-loop
+sequencing through Rust while preserving the C ABI wrapper, typed primitive
+callbacks, and C fallback scaffolding:
+
+- Waitqueue entry initialization, prepare, and finish callback ordering.
+- Process/thread scan dispatch gates using the existing `wait_proc()` and
+  `wait_thread()` callbacks.
+- No-child, `WNOHANG`, pending-signal interrupt, schedule handoff,
+  wake/rescan, and wait-log sequencing.
+- Equivalence coverage for immediate process hit, clone/thread scan, empty
+  child set, `WNOHANG`, pending signal before sleep, sleep/rescan/found, and
+  invalid callback/null cases.
+
+The Syscall core strict ownership row moved 87% -> 88% in `migration.txt`.
+Post-+50 strict-core movement was about +201 points. The broad Syscall core
+dashboard row was already capped at 100%, so this did not add broad dashboard
+percentage. Standalone readiness improved only slightly because child/thread
+list traversal and mutation inside `wait_proc()`/`wait_thread()`, waitqueue,
+schedule, signal, rusage, release/detach, syscall dispatch, user-copy
+primitive bodies, default-path C primitive bodies, and fallback scaffolding
+remained C-owned.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/syscall_policy.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh`
+- `kernel/rust/tests/run_equivalence.sh`; final output included
+  `syscall_policy_helpers ok digest=bf93a8fed1d7d7bf` and
+  `rust object unresolved symbols and SIMD checks ok`.
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+- QEMU version, `/dev/kvm`, image file-type checks, runner `--help`, runner
+  dry-run, and bounded TCG probe against the disposable blank qcow2.
+
+Previous 2026-05-26 scheduler migration-completion strict-core batch
+------------------------------------------------------------
+
+Previous batch moved strict-core-only `do_migrate()` migration-completion
+sequencing through Rust while preserving the C ABI wrapper, typed primitive
+callbacks, and C fallback scaffolding:
+
+- Migration queue traversal with safe next-pointer capture.
+- Request list detach plus already-migrated, current-CPU-allowed, empty
+  affinity, and missing-target ack gates.
+- Affinity target selection and CPU-local callback dispatch.
+- Current/target runqueue lock ordering, runqueue detach/add, runqueue length
+  mutation, and thread CPU publication.
+- Same-VM sibling scan and address-space CPU-set lock/update sequencing.
+- Target `CPU_FLAG_NEED_RESCHED` publication, interrupt/vector callback
+  dispatch, migration log callback dispatch, waitqueue wake callback dispatch,
+  and validation/error shaping.
+
+The Scheduler/timers/wait/futex strict ownership row remains capped at 100% in
+`migration.txt`, but this adds about +2 post-cap strict-core points. Post-+50
+strict-core movement was about +200 points. The broad Scheduler/timers/
+wait/futex dashboard row was already capped at 100%, so this does not add
+broad dashboard percentage. Standalone readiness improves only slightly
+because spinlock/waitqueue/interrupt/vector/log primitive bodies, CPU-local
+lookup callbacks, context switching, `schedule()` primitive behavior,
+default-path C primitive bodies, and fallback scaffolding remain C-owned.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/sched_helpers.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh`
+- `kernel/rust/tests/run_equivalence.sh`; final output included
+  `sched_helpers ok digest=297c3f5b0b7c220c` and
+  `rust object unresolved symbols and SIMD checks ok`.
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+- Safe QEMU checks: `qemu-system-x86_64 --version`, `/dev/kvm` presence,
+  image file-type checks, `scripts/qemu-mckernel-guest.sh --help`, runner
+  dry-run with `/tmp/mckernel-qemu-domigrate.ZtJIgE/base.qcow2`, and a bounded
+  TCG boot-process probe whose wrapped run timed out cleanly as expected on the
+  disposable blank image. No real McKernel guest boot or reboot-capable
+  validation ran.
+
+Previous update 2026-05-26 scheduler migration-request strict-core batch
+------------------------------------------------------------
+
+Previous batch moved strict-core-only `sched_request_migrate()` request-body
+sequencing through Rust while preserving the C ABI wrapper, typed primitive
+callbacks, and C fallback scaffolding:
+
+- Request thread publication into the migration request object.
+- Target migration-queue lock callback ordering.
+- Waitqueue init/prepare/finish callback sequencing.
+- Migration request list insertion into the target CPU queue.
+- Target runqueue noirq lock/unlock callback ordering.
+- `CPU_FLAG_NEED_RESCHED`, `CPU_FLAG_NEED_MIGRATE`, and
+  `CPU_STATUS_RUNNING` publication.
+- Remote interrupt vector/callback selection.
+- Migration log callback dispatch, scheduler callback handoff, and
+  validation/error shaping.
+
+The Scheduler/timers/wait/futex strict ownership row remains capped at 100% in
+`migration.txt`, but this added about +2 post-cap strict-core points. Post-+50
+strict-core movement was about +198 points. The broad Scheduler/timers/
+wait/futex dashboard row was already capped at 100%, so this does not add
+broad dashboard percentage. Standalone readiness improves only slightly
+because target CPU-local lookup, current-thread wait-entry construction,
+spinlock/waitqueue/interrupt/vector/schedule/log primitive bodies, actual
+migration completion in `do_migrate()`, context switching, default-path C
+primitive bodies, and fallback scaffolding remain C-owned.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/sched_helpers.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh`
+- `kernel/rust/tests/run_equivalence.sh`; final output included
+  `sched_helpers ok digest=55c920613e2381d5` and
+  `rust object unresolved symbols and SIMD checks ok`.
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+- Safe QEMU checks: `qemu-system-x86_64 --version`, `/dev/kvm` presence,
+  image file-type checks, `scripts/qemu-mckernel-guest.sh --help`, runner
+  dry-run with `/tmp/mckernel-qemu-schedmig.qiFJJ6/base.qcow2`, and a bounded
+  TCG boot-process probe whose wrapped run timed out cleanly as expected on the
+  disposable blank image. No real McKernel guest boot or reboot-capable
+  validation ran.
+
+Previous update 2026-05-26 dump user-page traversal/dispatch strict-core batch
+------------------------------------------------------------
+
+Previous batch moved strict-core-only `ihk_mc_query_mem_user_page()` process
+traversal and page-table visitor dispatch through Rust while preserving the C
+ABI wrapper, page-table visitor primitive, PTE visitor body, and fallback
+scaffolding:
+
+- Process-hash bucket iteration and list cursor traversal.
+- Process recovery from the embedded `hash_list` member.
+- VM, address-space, and page-table pointer loading.
+- Null skip gates for VM/address-space/page-table holes.
+- Visitor argument shaping for `[0, USER_END)`.
+- `visit_pte_range_safe()` callback dispatch and dispatch count/error shaping.
+
+The x86_64 memory-management strict ownership row remains capped at 100% in
+`migration.txt`, but this added about +1 post-cap strict-core point. Post-+50
+strict-core movement was about +196 points. The broad x86_64 memory
+dashboard row was already capped at 100%, so this does not add broad dashboard
+percentage. Standalone readiness improves only slightly because current
+resource-set lookup, the page-table visitor primitive and PTE visitor body,
+low-level page/address data sources, process lifetime/list mutation, logging
+primitive behavior, default-path C primitive bodies, and fallback scaffolding
+remain C-owned.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/mem_helpers.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh`
+- `kernel/rust/tests/run_equivalence.sh`; final output included
+  `mem_init_helpers ok digest=f2832d4ec8ab78e8` and
+  `rust object unresolved symbols and SIMD checks ok`.
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+- Safe QEMU checks: `qemu-system-x86_64 --version`, `/dev/kvm` presence,
+  image file-type checks, `scripts/qemu-mckernel-guest.sh --help`, runner
+  dry-run with `/tmp/mckernel-qemu-userdump.qUVhow/base.qcow2`, and a bounded
+  TCG boot-process probe whose wrapped run timed out cleanly as expected on the
+  disposable blank image. No real McKernel guest boot or reboot-capable
+  validation ran.
+- `git diff --check`
+- `bash -n kernel/rust/tests/run_equivalence.sh scripts/qemu-mckernel-guest.sh scripts/rocky-rust-validation.sh`
+- `scripts/rust-ownership-report.py --check-dashboard overview.txt --check-dashboard overview2.txt --top 10`
+
+Previous update 2026-05-26 dump bitmap/completion strict-core batch
+------------------------------------------------------------
+
+Latest batch moved strict-core-only memory-dump page-set and bitmap
+data-production sequencing through Rust while preserving C ABI wrappers,
+typed primitive callbacks, volatile completion publication, and C fallback
+scaffolding:
+
+- Dump page-set completion clear/set sequencing.
+- Physical-address membership checks over memory chunks.
+- Variable-length dump bitmap range clearing across dump-page descriptors.
+- User PTE physical extraction, address validation, and bitmap marking.
+- Free-chunk traversal callback sequencing and bitmap marking.
+- Top-level last-CPU dump query dispatch for user/free-page collection.
+
+The x86_64 memory-management strict ownership row remains capped at 100% in
+`migration.txt`, but this adds about +2 post-cap strict-core points. Post-+50
+strict-core movement is now about +195 points. The broad x86_64 memory
+dashboard row was already capped at 100%, so this does not add broad dashboard
+percentage. Standalone readiness improves only slightly because process
+traversal, rb-tree primitive traversal callbacks, page-table visit callback
+invocation, low-level page/address data sources, logging primitive behavior,
+default-path C primitive bodies, and fallback scaffolding remain C-owned.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/mem_helpers.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh scripts/qemu-mckernel-guest.sh scripts/rocky-rust-validation.sh`
+- `kernel/rust/tests/run_equivalence.sh`; final output included
+  `mem_init_helpers ok digest=3b17b81ac8d56553` and
+  `rust object unresolved symbols and SIMD checks ok`.
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+- Safe QEMU checks: `qemu-system-x86_64 --version`, `/dev/kvm` presence,
+  image file-type checks, `scripts/qemu-mckernel-guest.sh --help`, runner
+  dry-run with `/tmp/mckernel-qemu-dumpmap.CnQDUA/base.qcow2`, and a bounded
+  TCG boot-process probe whose wrapped run timed out cleanly as expected on the
+  disposable blank image. No real McKernel guest boot or reboot-capable
+  validation ran.
+
+Update 2026-05-26 allocator NUMA topology/allocation strict-core batch
+------------------------------------------------------------
+
+Previous batch moved strict-core-only NUMA allocation-attempt and
+distance-ordered lookup sequencing through Rust while preserving C ABI
+wrappers, typed primitive callbacks, and C fallback scaffolding:
+
+- Allocation-attempt OOM flag initialization and NUMA-id bounds validation.
+- Rusage OOM callback dispatch and NUMA allocation callback dispatch.
+- Distance-vector bounds/null checks and distance-id lookup.
+- CPU-local readiness checks, current-NUMA callback dispatch, and
+  distance-ordered node pointer selection for
+  `ihk_mc_get_numa_node_by_distance()`.
+
+The Page allocator strict ownership row was recorded as 94% -> 95% in
+`migration.txt`. Post-+50 strict-core movement was about +193 points. The
+broad Page allocator dashboard row was already capped at 100%, so this does
+not add broad dashboard percentage. Standalone readiness improves only
+slightly because low-level page allocation/free primitive bodies, interrupt
+and spinlock primitive bodies, current-node primitive lookup, logging/panic
+primitive behavior, deferred-zero timing, IKC send side effects, default-path C
+primitive bodies, and fallback scaffolding remain C-owned.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/mem_helpers.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh`
+- `kernel/rust/tests/run_equivalence.sh`; final output included
+  `mem_init_helpers ok digest=c6e5831ac84d68d8` and
+  `rust object unresolved symbols and SIMD checks ok`.
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+- Safe QEMU checks: `qemu-system-x86_64 --version`, `/dev/kvm` presence,
+  image file-type checks, `scripts/qemu-mckernel-guest.sh --help`, runner
+  dry-run with `/tmp/mckernel-qemu-numatopo.4QuyLW/base.qcow2`, and a bounded
+  TCG boot-process probe whose wrapped run timed out cleanly as expected on the
+  disposable blank image. No real McKernel guest boot or reboot-capable
+  validation ran.
+
+Update 2026-05-26 allocator NUMA-distance strict-core batch
+------------------------------------------------------------
+
+Latest batch moved strict-core-only `numa_distances_init()` sequencing through
+Rust while preserving C ABI wrappers, typed bridge callbacks, and C fallback
+scaffolding:
+
+- Per-node `nodes_by_distance` allocation and publication.
+- Allocation-failure log callback routing while continuing other nodes.
+- NUMA distance matrix fill, distance/id stable ordering, and ordered distance
+  log callback sequencing.
+
+The Page allocator strict ownership row is now recorded as 93% -> 94% in
+`migration.txt`. Post-+50 strict-core movement was about +192 points. The
+broad Page allocator dashboard row was already capped at 100%, so this does
+not add broad dashboard percentage. Standalone readiness improves only
+slightly because low-level page allocation/free primitive bodies, interrupt
+and spinlock primitive bodies, logging/panic primitive behavior,
+deferred-zero timing, IKC send side effects, default-path C primitive bodies,
+and fallback scaffolding remain C-owned.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/mem_helpers.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh`
+- `kernel/rust/tests/run_equivalence.sh`; final output included
+  `mem_init_helpers ok digest=dcabaa1a141d5ef3` and
+  `rust object unresolved symbols and SIMD checks ok`.
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+- Safe QEMU checks: `qemu-system-x86_64 --version`, `/dev/kvm` presence,
+  image file-type checks, `scripts/qemu-mckernel-guest.sh --help`, runner
+  dry-run with `/tmp/mckernel-qemu-numadist.AnnC0b/base.qcow2`, and a bounded
+  TCG boot-process probe whose wrapped run timed out cleanly as expected on the
+  disposable blank image. No real McKernel guest boot or reboot-capable
+  validation ran.
+
+Update 2026-05-26 allocator lifecycle/mem_init strict-core batch
+------------------------------------------------------------
+
+Latest batch moved strict-core-only allocator registration and memory
+initialization lifecycle sequencing through Rust while preserving C ABI
+wrappers, typed bridge callbacks, and C fallback scaffolding:
+
+- `ihk_mc_set_page_allocator()` pagealloc tracking initialization,
+  early-allocator invalidation, and `pa_ops` publication.
+- Top-level `mem_init()` ordering for monitor init, rusage init, NUMA init,
+  allocator registration, page-fault handler publication, query-free interrupt
+  registration, page-hash init, virtual-map init, demand-paging flag/log
+  publication, and NUMA-distance init.
+
+The Page allocator strict ownership row is now recorded as 92% -> 93% in
+`migration.txt`. Post-+50 strict-core movement was about +191 points. The
+broad Page allocator dashboard row was already capped at 100%, so this does
+not add broad dashboard percentage. Standalone readiness improves only
+slightly because low-level page allocation/free primitive bodies, interrupt
+and spinlock primitive bodies, logging/panic primitive behavior,
+deferred-zero timing, IKC send side effects, default-path C primitive bodies,
+and fallback scaffolding remain C-owned.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/mem_helpers.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh`
+- `kernel/rust/tests/run_equivalence.sh`; final output included
+  `mem_init_helpers ok digest=8d38e73464524412` and
+  `rust object unresolved symbols and SIMD checks ok`.
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+- Safe QEMU checks: `qemu-system-x86_64 --version`, `/dev/kvm` presence,
+  image file-type checks, `scripts/qemu-mckernel-guest.sh --help`, runner
+  dry-run with `/tmp/mckernel-qemu-lifecycle2.tl97yy/base.qcow2`, and a
+  bounded TCG boot-process probe whose wrapped run timed out cleanly as
+  expected on the disposable blank image. No real McKernel guest boot or
+  reboot-capable validation ran.
+
+Update 2026-05-26 allocator tracking/lifecycle strict-core batch
+------------------------------------------------------------
+
+Latest batch moved strict-core-only allocator tracking and lifecycle
+maintenance through Rust while preserving C ABI wrappers, typed bridge
+callbacks, and C fallback scaffolding:
+
+- Shared pagealloc/kmalloc tracking hash and lock initialization.
+- Pagealloc/kmalloc memcheck bucket traversal, per-entry address-list locking,
+  current-runcount filtering, leak-count accumulation, runcount mutation, and
+  detail/summary leak-log callback sequencing.
+- Kmalloc remote free-list move into the CPU free list and consolidation under
+  the remote-list lock.
+
+The Page allocator strict ownership row is now recorded as 90% -> 92% in
+`migration.txt`. Post-+50 strict-core movement is now about +190 points. The
+broad Page allocator dashboard row was already capped at 100%, so this does
+not add broad dashboard percentage. Standalone readiness improves only
+slightly because low-level page allocation/free primitive bodies, interrupt
+and spinlock primitive bodies, logging/panic primitive behavior,
+deferred-zero timing, IKC send side effects, default-path C primitive bodies,
+and fallback scaffolding remain C-owned.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/mem_helpers.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh`
+- `kernel/rust/tests/run_equivalence.sh`; final output included
+  `kmalloc_helpers ok digest=31fdc2c4adc7d006`,
+  `pagealloc_track ok digest=504fd0be6a7cfb0b`, and
+  `rust object unresolved symbols and SIMD checks ok`.
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+- Safe QEMU checks: `qemu-system-x86_64 --version`, `/dev/kvm` presence,
+  image file-type checks, `scripts/qemu-mckernel-guest.sh --help`, runner
+  dry-run with `/tmp/mckernel-qemu-lifecycle.mAxKdJ/base.qcow2`, and a
+  bounded TCG boot-process probe whose wrapped run timed out cleanly as
+  expected on the disposable blank image. No real McKernel guest boot or
+  reboot-capable validation ran.
+
+Update 2026-05-26 pagealloc tracking wrapper strict-core batch
+------------------------------------------------------------
+
+Latest batch moved strict-core-only public pagealloc memdebug tracking wrapper
+sequencing through Rust while preserving C ABI wrappers, typed bridge
+callbacks, and C fallback scaffolding:
+
+- `_ihk_mc_alloc_aligned_pages_node()` no-debug/uninitialized fallback and
+  allocation-site hash selection.
+- Tracking-entry lookup, new entry allocation/init, file-string allocation and
+  publication, and alloc-count mutation.
+- Page-address entry allocation/init, per-entry list insertion, address-hash
+  insertion, and log callback selection.
+- `_ihk_mc_free_pages()` no-debug/uninitialized fallback, exact-start
+  partial-free tracking, covering-range middle/suffix split tracking,
+  address-entry rehashing, full-free list detach, count decrement, last-entry
+  metadata cleanup/free, invalid-size/invalid-free callback routing, and final
+  page-free callback sequencing.
+
+The Page allocator strict ownership row is now recorded as 88% -> 90% in
+`migration.txt`. Post-+50 strict-core movement is now about +188 points. The
+broad Page allocator dashboard row was already capped at 100%, so this does
+not add broad dashboard percentage. Standalone readiness improves only
+slightly because low-level page allocation/free primitive bodies, interrupt
+and spinlock primitive bodies, logging/panic primitive behavior,
+deferred-zero timing, IKC send side effects, default-path C primitive bodies,
+and fallback scaffolding remain C-owned.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/mem_helpers.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh`
+- `kernel/rust/tests/run_equivalence.sh`; final output included
+  `pagealloc_track ok digest=1c3f131498b15b77` and
+  `rust object unresolved symbols and SIMD checks ok`.
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+- Safe QEMU checks: `qemu-system-x86_64 --version`, `/dev/kvm` presence,
+  image file-type checks, `scripts/qemu-mckernel-guest.sh --help`, runner
+  dry-run with `/tmp/mckernel-qemu-pagealloc.O8Ur9D/base.qcow2`, and a
+  bounded TCG boot-process probe whose wrapped run timed out cleanly as
+  expected on the disposable blank image. No real McKernel guest boot or
+  reboot-capable validation ran.
+
+Previous update 2026-05-26 kmalloc tracking wrapper strict-core batch
+------------------------------------------------------------
+
+Previous batch moved strict-core-only public memdebug tracking wrapper
+sequencing through Rust while preserving C ABI wrappers, typed bridge
+callbacks, and C fallback scaffolding:
+
+- `_kmalloc()` no-debug/null fallback and allocation hash selection.
+- Tracking-entry lookup, new entry allocation/init, file-string allocation and
+  publication, and alloc-count increment.
+- Address-entry allocation/init, per-entry list insertion, address-hash
+  insertion, and log callback selection.
+- `_kfree()` no-debug/null fallback, address-hash lookup, address-entry detach,
+  per-entry list detach, count decrement, last-entry metadata cleanup/free, and
+  invalid-free callback routing.
+
+The Page allocator strict ownership row was recorded as 86% -> 88% in
+`migration.txt`. Post-+50 strict-core movement was about +186 points. The
+broad Page allocator dashboard row was already capped at 100%, so this does
+not add broad dashboard percentage. Standalone readiness improves only slightly
+because low-level page allocation/free primitive bodies, interrupt and spinlock
+primitive bodies, logging/panic primitive behavior, deferred-zero timing, IKC
+send side effects, default-path C primitive bodies, and fallback scaffolding
+remain C-owned.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/mem_helpers.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh`
+- `kernel/rust/tests/run_equivalence.sh`; final output included
+  `kmalloc_helpers ok digest=4dba05f7d7e30671` and
+  `rust object unresolved symbols and SIMD checks ok`.
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+- `git diff --check`
+- `bash -n kernel/rust/tests/run_equivalence.sh
+  scripts/qemu-mckernel-guest.sh scripts/rocky-rust-validation.sh`
+- `scripts/rust-ownership-report.py --check-dashboard overview.txt
+  --check-dashboard overview2.txt --top 10`
+- QEMU version, `/dev/kvm`, image file-type, runner `--help`, runner dry-run,
+  and bounded TCG boot-process checks passed; no real McKernel guest boot or
+  reboot-capable validation ran.
+
+Update 2026-05-26 kmalloc body strict-core batch
+------------------------------------------------------------
+
+Previous batch moved strict-core-only low-level kmalloc/free body sequencing
+through Rust while preserving C ABI wrappers, typed bridge callbacks, and C
+fallback scaffolding:
+
+- `___kmalloc()` size alignment, free-list fit search, exact-fit removal, chunk
+  split, empty-list page-refill callback ordering, interrupt save/restore
+  callback ordering, and return shaping.
+- `___kfree()` null handling, corruption callback routing, current-CPU
+  free-list insertion/consolidation, remote-CPU free-list publication under
+  lock callbacks, and normal/error return shaping.
+
+The Page allocator strict ownership row was recorded as 84% -> 86% in
+`migration.txt`. Post-+50 strict-core movement was about +184 points. The
+broad Page allocator dashboard row was already capped at 100%, so this does
+not add broad dashboard percentage. Standalone readiness improved only slightly
+because low-level page allocation/free primitive bodies, interrupt and spinlock
+primitive bodies, logging/panic primitive behavior, deferred-zero timing, IKC
+send side effects, default-path C primitive bodies, and fallback scaffolding
+remain C-owned.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/mem_helpers.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh`
+- `kernel/rust/tests/run_equivalence.sh` passed after fixing the logged
+  test-only `stddef.h` typedef conflict; final output included
+  `kmalloc_helpers ok digest=e8d759c35653d57c` and
+  `rust object unresolved symbols and SIMD checks ok`.
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+- `git diff --check`
+- `bash -n kernel/rust/tests/run_equivalence.sh
+  scripts/qemu-mckernel-guest.sh scripts/rocky-rust-validation.sh`
+- `scripts/rust-ownership-report.py --check-dashboard overview.txt
+  --check-dashboard overview2.txt --top 10`
+- QEMU version, `/dev/kvm`, image file-type, runner `--help`, runner dry-run,
+  and bounded TCG boot-process checks passed; no real McKernel guest boot or
+  reboot-capable validation ran.
+
+Update 2026-05-26 host IKC init strict-core batch
+------------------------------------------------------------
+
+Previous batch moved strict-core-only host IKC initialization sequencing through
+Rust while preserving C ABI wrappers, typed bridge callbacks, and C fallback
+scaffolding:
+
+- IKC2Linux channel-table allocation, zeroing, and pointer publication.
+- Linux connect-parameter shaping, connect retry/delay/log sequencing,
+  channel-slot publication, and current-channel callback sequencing.
+- IKC2McKernel connect-parameter shaping, retry/delay/log sequencing, and
+  regular-channel callback sequencing.
+
+The host/IKC/mcctrl/IHK strict ownership row was recorded as 89% -> 91% in
+`migration.txt`. Post-+50 strict-core movement was about +182 points. The
+broad host/IKC/mcctrl/IHK dashboard row was already capped at 100%, so this
+did not add broad dashboard percentage. Standalone readiness improved only
+slightly because actual allocation/connect/delay/log/panic/current-channel/
+regular-channel primitive bodies, raw IKC exchange side effects, default-path
+C primitive bodies, and fallback scaffolding remain C-owned.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/host_helpers.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh`
+- `kernel/rust/tests/run_equivalence.sh`
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+- `git diff --check`
+- `bash -n kernel/rust/tests/run_equivalence.sh
+  scripts/qemu-mckernel-guest.sh scripts/rocky-rust-validation.sh`
+- `scripts/rust-ownership-report.py --check-dashboard overview.txt
+  --check-dashboard overview2.txt --top 10`
+- QEMU version, `/dev/kvm`, runner `--help`, and runner dry-run checks passed;
+  no real guest boot ran.
+
+Update 2026-05-26 procfs maps/status/stat data-production batch
+------------------------------------------------------------
+
+Previous batch moved strict-core-only procfs maps/status/stat data-production
+sequencing through Rust while preserving C ABI wrappers, typed bridge
+callbacks, and C fallback scaffolding:
+
+- `/proc/PID/maps` memory-range traversal, path/default selection, permission
+  character selection, and line output.
+- `/proc/PID/status` locked-size traversal plus state, PID, UID/GID, VmLck,
+  thread count, CPU mask/list, and NUMA mask/list output.
+- Per-PID `stat` state, identity, command-name, thread-count, CPU, and
+  constant-field output.
+
+The procfs/sysfs/xpmem/file-object strict ownership row was recorded as
+88% -> 91% in `migration.txt`. Post-+50 strict-core movement was about
++180 points. The broad procfs/sysfs/xpmem/file-object dashboard row was already
+capped at 100%, so this did not add broad dashboard percentage. Standalone
+readiness improved only slightly because allocation/free primitives, request
+map/unmap, process/thread lookup, memory-range locking, raw IKC answer send,
+default-path C primitive bodies, and fallback scaffolding remained C-owned.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/object_helpers.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh`
+- `kernel/rust/tests/run_equivalence.sh`
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+- `git diff --check`
+- `bash -n kernel/rust/tests/run_equivalence.sh
+  scripts/qemu-mckernel-guest.sh scripts/rocky-rust-validation.sh`
+- `scripts/rust-ownership-report.py --check-dashboard overview.txt
+  --check-dashboard overview2.txt --top 10`
+- QEMU version, `/dev/kvm`, runner `--help`, and runner dry-run checks passed;
+  local qcow2 discovery only found disposable dry-run images, so no real guest
+  boot ran.
+
+Update 2026-05-26 procfs non-mem data-production batch
+------------------------------------------------------------
+
+Previous batch moved strict-core-only procfs non-mem data-production sequencing
+through Rust while preserving C ABI wrappers, typed bridge callbacks, and C
+fallback scaffolding:
+
+- Root `mckernel` version/buildid output.
+- Root `stat` CPU-line generation.
+- Per-process `auxv` byte output.
+- Per-process `cmdline` present/missing output.
+- Per-process `comm` basename/fallback/newline output.
+- `/proc/PID/pagemap` page-table-to-pagemap value-loop/result sequencing.
+
+The procfs/sysfs/xpmem/file-object strict ownership row was recorded as
+86% -> 88% in `migration.txt`. Post-+50 strict-core movement was about
++177 points. The broad procfs/sysfs/xpmem/file-object dashboard row was already
+capped at 100%, so this did not add broad dashboard percentage. Standalone
+readiness improved only slightly because allocation/free primitives, request
+map/unmap, process/thread lookup, memory-range locking, page-table primitive
+behavior, complex procfs status/stat/maps-style data production, raw IKC answer
+send, default-path C primitive bodies, and fallback scaffolding remained
+C-owned at that checkpoint.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/object_helpers.rs`
+- `kernel/rust/tests/run_equivalence.sh`
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+- `git diff --check`
+- `bash -n kernel/rust/tests/run_equivalence.sh
+  scripts/qemu-mckernel-guest.sh scripts/rocky-rust-validation.sh`
+- `scripts/rust-ownership-report.py --check-dashboard overview.txt
+  --check-dashboard overview2.txt --top 10`
+- QEMU version, `/dev/kvm`, runner `--help`, and runner dry-run checks passed;
+  no real guest boot ran.
+
+Update 2026-05-26 procfs mem/buffer batch
+------------------------------------------------------------
+
+Previous batch moved strict-core-only procfs buffer allocation and `/proc/PID/mem`
+data-copy sequencing through Rust while preserving C ABI wrappers, typed bridge
+callbacks, and C fallback scaffolding:
+
+- `buf_alloc()` allocation-callback/null-result handling, buffer metadata
+  initialization, and optional physical-address publication.
+- `/proc/PID/mem` zero-length handling, page-fault callback ordering,
+  virtual-to-physical translation callback ordering, McKernel-memory gate,
+  physical-to-virtual mapping callback, read-versus-write copy direction,
+  offset/remaining/result advancement, and partial-copy/error shaping.
+
+The procfs/sysfs/xpmem/file-object strict ownership row was recorded as
+84% -> 86% in `migration.txt`. Post-+50 strict-core movement was about
++175 points. The broad procfs/sysfs/xpmem/file-object dashboard row was already
+capped at 100%, so this did not add broad dashboard percentage. Standalone
+readiness improved only slightly because page allocation/free primitives,
+page-fault primitive behavior, page-table translation primitive behavior,
+`is_mckernel_memory()`, `phys_to_virt()`, `memcpy()`, request map/unmap,
+process/thread lookup, non-mem procfs data production, raw IKC answer send,
+default-path C primitive bodies, and fallback scaffolding remained C-owned.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/object_helpers.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh`
+- `kernel/rust/tests/run_equivalence.sh`
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+- `git diff --check`
+- `bash -n scripts/qemu-mckernel-guest.sh scripts/rocky-rust-validation.sh`
+- `scripts/rust-ownership-report.py --check-dashboard overview.txt
+  --check-dashboard overview2.txt --top 10`
+- QEMU version, `/dev/kvm`, runner `--help`, and runner dry-run checks passed;
+  no real guest boot ran.
+
+Update 2026-05-26 scheduler/timer batch
+------------------------------------------------------------
+
+Latest batch moved strict-core-only scheduler/timer runtime sequencing through
+Rust while preserving C ABI wrappers, typed bridge callbacks, and C fallback
+scaffolding:
+
+- `init_timers()` list-head and timer-lock initialization.
+- `schedule_timeout()` spin-wake checks, runqueue scheduling gate, status
+  publication, schedule callback handoff, zero-free/pause spin loop, timeout
+  decrement, and spin-sleep clear sequencing.
+- `wake_timers_loop()` timer-list tick, timeout decrement, expired timer
+  detach, debug-log callback, and waitqueue wake callback sequencing.
+- `set_timer()` runqueue scan plus LAPIC timer enable/disable decision
+  sequencing.
+
+The Scheduler/timers/wait/futex strict ownership row is now recorded as
+97% -> 100% in `migration.txt`. Post-+50 strict-core movement is now about
++173 points. The broad Scheduler/timers/wait/futex dashboard row was already
+capped at 100%, so this does not add broad dashboard percentage. Standalone
+readiness improves only slightly because actual spinlock primitives,
+rdtsc/pause primitive behavior, LAPIC timer primitive behavior, waitqueue wake
+primitive behavior, `schedule()`/context-switch behavior, current-thread
+lookup, futex primitive bodies, default-path C primitive bodies, and fallback
+scaffolding remain C-owned.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/sched_helpers.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh`
+- `kernel/rust/tests/run_equivalence.sh`
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+- `git diff --check`
+- `bash -n kernel/rust/tests/run_equivalence.sh
+  scripts/qemu-mckernel-guest.sh scripts/rocky-rust-validation.sh`
+- `scripts/rust-ownership-report.py --format json`
+- `scripts/rust-ownership-report.py --check-dashboard overview.txt
+  --check-dashboard overview2.txt --top 5`
+- QEMU version, `/dev/kvm`, runner `--help`, and runner dry-run checks passed;
+  no real guest boot ran.
+
+Update 2026-05-26 x86 user-copy/process-VM batch
+------------------------------------------------------------
+
+Latest batch moved strict-core-only x86 user-copy and process-VM copy-loop
+sequencing through Rust while preserving C ABI wrappers, typed C bridge
+callbacks, and C fallback scaffolding:
+
+- `verify_process_vm()` user-range validation and page-fault retry dispatch.
+- `read_process_vm()`, `write_process_vm()`, and `patch_process_vm()` per-page
+  chunk copying with direct versus mapped physical-copy selection.
+- `copy_from_user()` and `copy_to_user()` wrapper dispatch.
+- `strlen_user()` and `strcpy_from_user()` user string scanning/copying.
+- `getlong_user()`, `getint_user()`, `setlong_user()`, and `setint_user()`
+  scalar wrapper sequencing.
+
+The x86 memory strict ownership row is now recorded as 99% -> 100% in
+`migration.txt`. Post-+50 strict-core movement was about +170 points at that
+checkpoint. The
+broad x86_64 memory dashboard row was already capped at 100%, so this does
+not add broad dashboard percentage. Standalone readiness improves only
+slightly because current-thread lookup, page-fault primitive behavior,
+virtual-to-physical primitive behavior, map/unmap and phys-to-virt primitive
+bodies, logging callbacks, bridge glue, default-path C primitive bodies, and
+fallback scaffolding remain C-owned.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/x86_memory_helpers.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh`
+- `kernel/rust/tests/run_equivalence.sh`
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+- `git diff --check`
+- `bash -n kernel/rust/tests/run_equivalence.sh
+  scripts/qemu-mckernel-guest.sh scripts/rocky-rust-validation.sh`
+- `scripts/rust-ownership-report.py --format json`
+- `scripts/rust-ownership-report.py --check-dashboard overview.txt
+  --check-dashboard overview2.txt --top 5`
+- QEMU version, `/dev/kvm`, runner `--help`, and runner dry-run checks passed;
+  no real guest boot ran.
+
+Update 2026-05-26 host SCD dispatcher batch
+------------------------------------------------------------
+
+Previous batch moved strict-core-only host SCD packet dispatch sequencing
+through Rust while preserving C ABI wrappers, compact C bridge callbacks, and
+C fallback scaffolding:
+
+- Init-channel ACK logging dispatch.
+- Prepare-process reply dispatch.
+- Schedule-process request dispatch.
+- Wake-syscall-thread request dispatch.
+- Remote page-fault request dispatch.
+- Send-signal request dispatch.
+- Procfs request/release dispatch.
+- Cleanup process/fd dispatch.
+- Debug-log dispatch.
+- Sysfs show/store/release dispatch.
+- Perf-control and CPU register request dispatch.
+- Unknown-message logging dispatch.
+- Legacy return-value shaping and final packet release sequencing.
+
+The host control-plane strict ownership row was recorded as 86% -> 89% in
+`migration.txt`. Post-+50 strict-core movement was about +169 points at that
+checkpoint. The
+broad host/IKC/mcctrl/IHK dashboard row was already capped at 100%, so this
+does not add broad dashboard percentage. Standalone readiness improves only
+slightly because raw IKC send effects, primitive lookup/wakeup/register/debug
+behaviors, allocation/copy/map primitive bodies, broad IKC exchange mutation,
+kernel object lifecycle, default-path C primitive bodies, and fallback
+scaffolding remain C-owned.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/host_helpers.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh`
+- `kernel/rust/tests/run_equivalence.sh`
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+- `git diff --check`
+- `bash -n kernel/rust/tests/run_equivalence.sh
+  scripts/qemu-mckernel-guest.sh scripts/rocky-rust-validation.sh`
+- `scripts/rust-ownership-report.py --format json`
+- `scripts/rust-ownership-report.py --check-dashboard overview.txt
+  --check-dashboard overview2.txt --top 5`
+- QEMU version, `/dev/kvm`, runner `--help`, and runner dry-run checks passed;
+  no real guest boot ran.
+
+Update 2026-05-26 itimer batch
+------------------------------------------------------------
+
+Latest batch moved strict-core-only interval-timer syscall body sequencing
+through Rust while preserving C ABI wrappers and C fallback scaffolding:
+
+- `setitimer()` `which` validation, ITIMER_REAL Linux-forward callback
+  dispatch, virtual/prof timer slot selection, old-value current snapshot and
+  copyout callback sequencing, new-value copyin callback sequencing,
+  elapsed-time reset, enabled-state publication, `set_timer(0)` callback
+  dispatch, and return/error shaping.
+- `getitimer()` `which` validation, ITIMER_REAL Linux-forward callback
+  dispatch, virtual/prof current snapshot/copyout callback sequencing,
+  null-old no-op handling, and return/error shaping.
+
+Syscall strict ownership is now recorded as 85% -> 87% in `migration.txt`.
+Scheduler/timers/wait/futex strict ownership is now recorded as 95% -> 97%.
+Post-+50 strict-core movement was about +166 points at that checkpoint. The broad Syscall Core
+and Scheduler/timers/wait/futex dashboard rows were already capped at 100%, so
+this does not add broad dashboard percentage. Standalone readiness improves
+only slightly because default-path C primitive bodies and fallback scaffolding
+still remain: syscall ABI wrappers, raw argument extraction, actual
+`copy_from_user()`/`copy_to_user()`, `do_syscall()` forwarding primitive
+behavior, actual `set_timer()` behavior, timer queues, wake/context-switch
+primitives, spinlocks, broader futex wait/requeue side effects, and fallback
+scaffolding remain C-owned.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/syscall_policy.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh`
+- `kernel/rust/tests/run_equivalence.sh`
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+- `git diff --check`
+- `bash -n kernel/rust/tests/run_equivalence.sh
+  scripts/qemu-mckernel-guest.sh scripts/rocky-rust-validation.sh`
+- `scripts/rust-ownership-report.py --format json`
+- `scripts/rust-ownership-report.py --check-dashboard overview.txt
+  --check-dashboard overview2.txt --top 5`
+- QEMU version, `/dev/kvm`, runner `--help`, and runner dry-run checks passed;
+  no real guest boot ran.
+
+Update 2026-05-26 scheduler affinity batch
+------------------------------------------------------------
+
+Previous batch moved strict-core-only scheduler affinity body sequencing through
+Rust while preserving C ABI wrappers and C fallback scaffolding:
+
+- `sched_setaffinity()` argument validation, local/remote target selection,
+  remote lookup/unlock ordering, credential checks, cpuset copyin and zeroing,
+  target-process mask intersection, thread affinity mask publication,
+  current-CPU membership testing, migration callback dispatch, and
+  return/error shaping.
+- `sched_getaffinity()` size validation, local/remote target selection,
+  remote lookup/unlock ordering, cpuset copyout callback sequencing, and
+  return/error shaping.
+
+Syscall strict ownership is now recorded as 84% -> 85% in `migration.txt`.
+Scheduler/timers/wait/futex strict ownership is now recorded as 92% -> 95%.
+Post-+50 strict-core movement was about +162 points at that checkpoint. The broad Syscall Core
+and Scheduler/timers/wait/futex dashboard rows were already capped at 100%, so
+this does not add broad dashboard percentage. Standalone readiness improves
+only slightly because default-path C primitive bodies and fallback scaffolding
+still remain: syscall ABI wrappers, raw argument extraction, actual
+`copy_from_user()`/`copy_to_user()`, thread lookup/hold/release primitive
+bodies, migration request side effects, wake/context-switch primitives, timer
+queues, spinlocks, broader futex wait/requeue side effects, and fallback
+scaffolding remain C-owned.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/sched_helpers.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh`
+- `kernel/rust/tests/run_equivalence.sh`
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+- `git diff --check`
+- `bash -n kernel/rust/tests/run_equivalence.sh
+  scripts/qemu-mckernel-guest.sh scripts/rocky-rust-validation.sh`
+- `scripts/rust-ownership-report.py --format json`
+- `scripts/rust-ownership-report.py --check-dashboard overview.txt
+  --check-dashboard overview2.txt --top 5`
+- QEMU version, `/dev/kvm`, runner `--help`, and runner dry-run checks passed;
+  no real guest boot ran.
+
+Update 2026-05-26 scheduler syscall batch
+------------------------------------------------------------
+
+Previous batch moved strict-core-only scheduler syscall body sequencing through
+Rust while preserving C ABI wrappers and C fallback scaffolding:
+
+- `sched_setparam()` PID validation/normalization, remote-target lookup and
+  unlock ordering, Linux same-owner request shaping, user-parameter copyin,
+  remote re-lookup, scheduler-parameter callback dispatch, and return/error
+  shaping.
+- `sched_setscheduler()` policy validation, root-check request shaping,
+  user-parameter copyin, remote target lookup, Linux same-owner request
+  shaping, scheduler mutation callback dispatch, and return/error shaping.
+- `sched_getparam()`, `sched_getscheduler()`, and
+  `sched_rr_get_interval()` target selection, copyout callback sequencing,
+  policy/RR-interval result shaping, and fault/error handling.
+
+Syscall strict ownership is now recorded as 82% -> 84% in `migration.txt`.
+Scheduler/timers/wait/futex strict ownership is now recorded as 89% -> 92%.
+Post-+50 strict-core movement is now about +158 points. The broad Syscall Core
+and Scheduler/timers/wait/futex dashboard rows were already capped at 100%, so
+this does not add broad dashboard percentage. Standalone readiness improves
+only slightly because default-path C primitive bodies and fallback scaffolding
+still remain: syscall ABI wrappers, raw argument extraction, actual
+`copy_from_user()`/`copy_to_user()`, Linux forwarding primitive behavior,
+thread lookup/unlock primitive bodies, the final scheduler mutation callback,
+and scheduler affinity/migration side-effect bodies remain C-owned.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/sched_helpers.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh`
+- `kernel/rust/tests/run_equivalence.sh`
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+- `git diff --check`
+- `scripts/rust-ownership-report.py --format json`
+- QEMU version, `/dev/kvm`, runner `--help`, and runner dry-run checks passed;
+  no real guest boot ran.
+
+Update 2026-05-26 rusage/CPU-time syscall batch
+------------------------------------------------------------
+
+Previous batch moved strict-core-only syscall rusage/CPU-time sequencing through
+Rust while preserving C ABI wrappers and C fallback scaffolding:
+
+- `getrusage()` `who` validation, dispatch, zeroed `struct rusage`
+  preparation, SELF thread-list lock/update/wait/TSC aggregation, CHILDREN
+  and THREAD result filling, copyout callback sequencing, and error shaping.
+- Remote running user-thread times-update request and CPU interrupt callback
+  sequencing, with pause-callback wait loops for completion.
+- `clock_gettime()` no-output fast return, local realtime copyout, Linux
+  forward dispatch, thread CPU-time TSC aggregation, and process CPU-time
+  thread traversal/update/wait/aggregation/copyout sequencing.
+
+Syscall strict ownership was recorded as 78% -> 82% in `migration.txt`.
+Post-+50 strict-core movement was +153 points at that checkpoint. The broad Syscall Core
+dashboard row was already capped at 100%, so this does not add broad dashboard
+percentage. Standalone readiness improves only slightly because default-path C
+primitive bodies and fallback scaffolding still remain: syscall ABI wrappers,
+raw argument extraction, actual `copy_to_user()`, lock primitive bodies, CPU
+interrupt primitive behavior, TOD/gettime and Linux-forward callback bodies,
+and scheduler/time primitive bodies remain C-owned.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/syscall_policy.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh`
+- `kernel/rust/tests/run_equivalence.sh`
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+- `scripts/rocky-rust-validation.sh --build-only --skip-deps --skip-rust
+  --skip-ihk-patch --jobs 2`
+- Warning scan over `/tmp/mckernel-clean-build-rusage-cputime-rust.log`,
+  `/tmp/mckernel-clean-build-rusage-cputime-cfallback.log`, and
+  `/tmp/mckernel-clean-build-rusage-cputime-wrapper.log` found no
+  `warning`/`warn:` matches.
+- `git diff --check`
+- `bash -n scripts/rocky-rust-validation.sh
+  scripts/qemu-mckernel-guest.sh kernel/rust/tests/run_equivalence.sh`
+- `scripts/rust-ownership-report.py --check-dashboard overview.txt
+  --check-dashboard overview2.txt --top 5`
+- QEMU version, `/dev/kvm`, runner `--help`, and runner dry-run checks passed;
+  no real guest boot ran.
+
+Update 2026-05-26 Process/VM lifecycle release batch
+------------------------------------------------------------
+
+Latest batch moved strict-core-only Process/VM lifecycle release sequencing
+through Rust while preserving C ABI wrappers and C fallback scaffolding:
+
+- `release_sigcommon()` refcount gate, pending-signal list drain, pending
+  siginfo free callbacks, and final sigcommon free callback.
+- `__release_tid()` and `__find_and_replace_tid()` TID-slot scan, slot
+  clear/replace, thread TID update, and debug-log callback sequencing.
+- `release_thread()` refcount gate, profile callback, procfs delete callback,
+  destroy-thread callback, and VM-release callback sequencing.
+- `release_process_vm()` refcount gate, mckfd close/drain, optional free
+  callback, TLB flush callback, range-free callback, address-space
+  detach/process release, policy drain/free, and final VM free callback.
+
+Process/VM strict ownership is now recorded as 82% -> 88% in `migration.txt`.
+Post-+50 strict-core movement was +149 points at that checkpoint. The broad Process/VM
+dashboard row was already capped at 100%, so this does not add broad dashboard
+percentage. Standalone readiness improves only slightly because default-path C
+primitive bodies and fallback scaffolding still remain: atomic refcount
+primitives, spinlock primitives, allocator/free callback bodies, destroy_thread
+and release_process bodies, profile/procfs/TLB/range-free primitive bodies,
+page-fault behavior, signal forwarding, rusage aggregation, and broad process
+lifetime remain C-owned.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/process_helpers.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh`
+- `kernel/rust/tests/run_equivalence.sh`
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+- `scripts/rocky-rust-validation.sh --build-only --skip-deps --skip-rust
+  --skip-ihk-patch --jobs 2`
+- Warning scan over `/tmp/mckernel-clean-build-process-lifecycle-rust.log`,
+  `/tmp/mckernel-clean-build-process-lifecycle-cfallback.log`, and
+  `/tmp/mckernel-clean-build-process-lifecycle-wrapper.log` found no
+  `warning`/`warn:` matches.
+- QEMU version, `/dev/kvm`, runner `--help`, and runner dry-run checks passed;
+  no real guest boot ran.
+
+Update 2026-05-26 x86 clear-range body batch
+------------------------------------------------------------
+
+Latest batch moved strict-core-only x86 clear-range leaf/level/root body
+sequencing through Rust while preserving C ABI wrappers and C fallback
+scaffolding:
+
+- Leaf null-skip and PTE clear-exchange sequencing.
+- TLB flush-address queue callback sequencing.
+- Old-entry action callback handoff and old-effect callback orchestration.
+- Split-error log/return shaping and large-page clear sequencing.
+- Child table translation, child-walk dispatch, and error propagation.
+- `-ENOENT` child-table teardown/free sequencing.
+- Root skip/translation/dispatch and level-specific debug logging.
+
+Strict x86_64 memory ownership is now recorded as 98% -> 99% in
+`migration.txt`. Post-+50 strict-core movement was +143 points at that
+checkpoint. The broad
+x86_64 memory dashboard row was already capped at 100%, so this does not add
+broad dashboard percentage. Standalone readiness improves only slightly
+because default-path C primitive bodies and fallback scaffolding still remain:
+the public ABI wrappers, old-entry page lookup/refcount primitive behavior,
+actual page-table allocation/free and address-translation primitive bodies,
+page/RSS primitive bodies, remote TLB shootdown primitive behavior, and
+user-copy are still C-owned.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/x86_memory_helpers.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh`
+- `kernel/rust/tests/run_equivalence.sh`
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+- `scripts/rocky-rust-validation.sh --build-only --skip-deps --skip-rust
+  --skip-ihk-patch --jobs 2`
+- Warning scan over `/tmp/mckernel-clean-build-x86-clear-body-rust.log`,
+  `/tmp/mckernel-clean-build-x86-clear-body-cfallback.log`, and
+  `/tmp/mckernel-clean-build-x86-clear-body-wrapper.log` found no
+  `warning`/`warn:` matches.
+- QEMU version, `/dev/kvm`, runner `--help`, and runner dry-run checks passed;
+  no real guest boot ran.
+
+Update 2026-05-26 x86 visitor-body batch
+------------------------------------------------------------
+
+Latest batch moved strict-core-only x86 normal/safe `visit_pte_range()`
+visitor body sequencing through Rust while preserving C ABI wrappers and C
+fallback scaffolding:
+
+- Leaf skip/null and visitor callback dispatch.
+- Level direct visitor dispatch and E2BIG retry classification.
+- Split-error log/return shaping.
+- Child page-table allocation/publication and existing child-table
+  translation.
+- Child-walk callback dispatch for normal and safe traversal paths.
+- Root allocation/translation dispatch.
+- Top-level normal/safe visit-range walk dispatch.
+
+At that checkpoint, strict x86_64 memory ownership was recorded as 96% -> 98%
+in `migration.txt`. Post-+50 strict-core movement was +142 points. The broad
+x86_64 memory dashboard row was already capped at 100%, so this does not add
+broad dashboard percentage. Standalone readiness improves only slightly
+because default-path C primitive bodies and fallback scaffolding still remain:
+the actual page-table allocation/free and address-translation primitive bodies,
+page-table walk iteration callbacks, broader page-free/RSS accounting
+primitives, TLB primitive behavior, and user-copy are still C-owned.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/x86_memory_helpers.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh`
+- `kernel/rust/tests/run_equivalence.sh`
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+- `scripts/rocky-rust-validation.sh --build-only --skip-deps --skip-rust
+  --skip-ihk-patch --jobs 2`
+- Warning scan over `/tmp/mckernel-clean-build-x86-visit-body-rust.log`,
+  `/tmp/mckernel-clean-build-x86-visit-body-cfallback.log`, and
+  `/tmp/mckernel-clean-build-x86-visit-body-wrapper.log` found no
+  `warning`/`warn:` matches.
+- QEMU version, `/dev/kvm`, runner `--help`, and runner dry-run checks passed;
+  no real guest boot ran.
+
+Update 2026-05-26 x86 range-top batch
+------------------------------------------------------------
+
+Latest batch moved strict-core-only x86 clear/set range top-level
+orchestration through Rust while preserving C ABI wrappers and C fallback
+scaffolding:
+
+- Clear-range validation and invalid-range logging.
+- TLB invalid-address array allocation/free callback sequencing.
+- Clear-range argument publication and effective free-physical policy
+  selection.
+- Top-level `walk_pte_l4()` callback dispatch for clear and set paths.
+- Final remote TLB flush callback dispatch for clear-range paths.
+- Set-range argument, diff, attribute, page-shift, and range-state
+  publication.
+- Set-range top-level walk-failure log/return shaping.
+
+At that checkpoint, strict x86_64 memory ownership was recorded as 93% -> 96%
+in `migration.txt`. Post-+50 strict-core movement was +140 points at that
+checkpoint. The broad
+x86_64 memory dashboard row was already capped at 100%, so this does not add
+broad dashboard percentage. Standalone readiness improves only slightly
+because default-path C primitive bodies and fallback scaffolding still remained
+at that checkpoint: the actual TLB flush, page-table walk callbacks,
+allocation/free, address-translation, visitor callbacks, page-free/RSS
+accounting primitives, and user-copy were still C-owned.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/x86_memory_helpers.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh`
+- `kernel/rust/tests/run_equivalence.sh`
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+- `scripts/rocky-rust-validation.sh --build-only --skip-deps --skip-rust
+  --skip-ihk-patch --jobs 2`
+- Warning scan over `/tmp/mckernel-clean-build-x86-range-top-rust.log`,
+  `/tmp/mckernel-clean-build-x86-range-top-cfallback.log`, and
+  `/tmp/mckernel-clean-build-x86-range-top-wrapper.log` found no
+  `warning`/`warn:` matches after the pointer-type fix.
+- QEMU version, `/dev/kvm`, runner `--help`, and runner dry-run checks passed;
+  no real guest boot ran.
+
+The first equivalence run failed because the fake allocator rejected the real
+four-page range-top TLB-array allocation size, and the first warning scan found
+incompatible pointer-type warnings for set-range argument field pointers. Both
+failures were recorded in `kernel.log`, fixed, and rerun clean before this
+tracker update.
+
+Update 2026-05-25 x86 set-range level-body batch
+------------------------------------------------------------
+
+Latest batch moved strict-core-only x86 set-range leaf/level body
+orchestration through Rust while preserving C ABI wrappers and C fallback
+scaffolding:
+
+- Leaf action dispatch for mapped/busy/error paths.
+- Zeroed child page-table allocation and atomic page-table publication retry.
+- Existing child-table translation through the physical-to-virtual callback.
+- Child-walk callback dispatch and failure shaping.
+- Large-page map/store/RSS routing.
+- Unconsumed child page-table free sequencing.
+
+Strict x86_64 memory ownership is now recorded as 90% -> 93% in
+`migration.txt`. Post-+50 strict-core movement is now +137 points. The broad
+x86_64 memory dashboard row was already capped at 100%, so this does not add
+broad dashboard percentage. C still owns the public ABI wrappers, actual
+allocation/free and address-translation primitive bodies, child page-table walk
+callbacks, RSS primitive body, top-level `walk_pte_l4()` dispatch, and fallback
+scaffolding. Standalone readiness is unchanged.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/x86_memory_helpers.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh`
+- `kernel/rust/tests/run_equivalence.sh`
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+- `scripts/rocky-rust-validation.sh --build-only --skip-deps --skip-rust
+  --skip-ihk-patch --jobs 2`
+- Warning scan over
+  `/tmp/mckernel-clean-build-x86-setrange-body-rust.log`,
+  `/tmp/mckernel-clean-build-x86-setrange-body-cfallback.log`, and
+  `/tmp/mckernel-clean-build-x86-setrange-body-wrapper.log` found no
+  `warning`/`warn:` matches.
+- QEMU version, `/dev/kvm`, runner `--help`, and runner dry-run checks as
+  noted above; no real guest boot ran without a usable guest image.
+
+Update 2026-05-25 x86 set-range side-effect batch
+------------------------------------------------------------
+
+Latest batch moved a strict-core-only x86 set-range side-effect set through
+Rust while preserving C ABI wrappers and C fallback scaffolding:
+
+- Existing-mapping conflict cleanup.
+- Page-table allocation-failure cleanup.
+- L1/L2/L3 map/store/RSS-accounting callback ordering.
+- L2/L3 large-page success logging.
+- Child-walk failure logging.
+
+Strict x86_64 memory ownership is now recorded as 87% -> 90% in
+`migration.txt`. Post-+50 strict-core movement is now +134 points. The broad
+x86_64 memory dashboard row was already capped at 100%, so this does not add
+broad dashboard percentage. C still owns the public ABI wrappers, actual
+`clear_range()` primitive effects, page-table allocation/publication,
+`virt_to_phys()`/`phys_to_virt()`, child page-table walk callbacks, RSS
+primitive body, leftover page-table free behavior, and fallback scaffolding.
+Standalone readiness is unchanged.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/x86_memory_helpers.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh`
+- `kernel/rust/tests/run_equivalence.sh`
+- Local `objdump` SIMD-pattern check after fixing the first failed run.
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+- `scripts/rocky-rust-validation.sh --build-only --skip-deps --skip-rust
+  --skip-ihk-patch --jobs 2`
+- Warning scan over
+  `/tmp/mckernel-clean-build-x86-setrange-effects-rust.log`,
+  `/tmp/mckernel-clean-build-x86-setrange-effects-cfallback.log`, and
+  `/tmp/mckernel-clean-build-x86-setrange-effects-wrapper.log` found no
+  `warning`/`warn:` matches.
+- QEMU version, `/dev/kvm`, runner `--help`, and runner dry-run checks as
+  noted above; no real guest boot ran without a usable guest image.
+
+Update 2026-05-25 x86 clear-range side-effect batch
+------------------------------------------------------------
+
+Latest batch moved a strict-core-only x86 clear-range side-effect set through
+Rust while preserving C ABI wrappers and C fallback scaffolding:
+
+- TLB flush-address queue mutation for clear-range paths.
+- Old-PTE memobj-flush callback dispatch.
+- Anonymous-page free/RSS-sub callback ordering.
+- File-backed page-unmap/free/rusage-sub callback ordering.
+- XPMEM keep classification and log routing.
+- Full-span L2/L3 child page-table PTE-null/free sequencing.
+
+Strict x86_64 memory ownership is now recorded as 84% -> 87% in
+`migration.txt`. Post-+50 strict-core movement is now +131 points. The broad
+x86_64 memory dashboard row was already capped at 100%, so this does not add
+broad dashboard percentage. C still owns the public ABI wrappers, actual
+`remote_flush_tlb_array_cpumask()`, `phys_to_virt()`,
+`ihk_mc_free_pages_user()`, `page_unmap()`, RSS primitive bodies, page-table
+walking callbacks, allocation/free primitive behavior, and fallback
+scaffolding. Standalone readiness is unchanged.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/x86_memory_helpers.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh`
+- `kernel/rust/tests/run_equivalence.sh`
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- `cmake --build /tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`
+- `scripts/rocky-rust-validation.sh --build-only --skip-deps --skip-rust
+  --skip-ihk-patch --jobs 2`
+- Warning scan over `/tmp/mckernel-clean-build-x86-clear-effects-rust.log`,
+  `/tmp/mckernel-clean-build-x86-clear-effects-cfallback.log`, and
+  `/tmp/mckernel-clean-build-x86-clear-effects-wrapper.log` found no
+  `warning`/`warn:` matches.
+- `git diff --check`
+- `bash -n scripts/rocky-rust-validation.sh scripts/qemu-mckernel-guest.sh
+  kernel/rust/tests/run_equivalence.sh`
+- `scripts/rust-ownership-report.py --check-dashboard overview.txt
+  --check-dashboard overview2.txt --top 5`
+- QEMU dry-run check as noted above; no real guest boot ran without a usable
+  guest image.
+
+Update 2026-05-25 page-allocator policy-loop five-slice batch
+------------------------------------------------------------
+
+Latest batch moved five `mckernel_allocate_aligned_pages_node()` allocator
+policy-loop slices through Rust while preserving C ABI wrappers and C fallback
+scaffolding:
+
+- Explicit preferred-node allocation attempt, miss logging, rusage-add, and
+  phys-to-virt return shaping.
+- MPOL_BIND/MPOL_PREFERRED distance-order traversal with NUMA-mask filtering.
+- MPOL_INTERLEAVE retry loop, OOM retry behavior, and `il_prev` publication.
+- Distance-ordered fallback attempts with first-miss logging.
+- Order-based fallback attempts with rusage-add and phys-to-virt return
+  shaping.
+
+Strict Page allocator ownership is now recorded as 78% -> 84% for this batch.
+Post-+50 strict-core movement is now +128 points. The broad Page allocator
+dashboard row was already capped at 100%, so this does not add broad dashboard
+percentage. C still owns context lookup, logging primitive bodies, actual
+allocation/free primitive bodies, MCS/interrupt primitives, pa-ops primitive
+behavior, IKC side effects, broader allocator lifetime, and fallback
+scaffolding. Standalone readiness is unchanged.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/mem_helpers.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh`
+- `kernel/rust/tests/run_equivalence.sh`
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- Logged Rust build:
+  `/tmp/mckernel-clean-build-pagealloc-policy-five-rust.log`
+- Logged C fallback build:
+  `/tmp/mckernel-clean-build-pagealloc-policy-five-cfallback.log`
+- Logged wrapper build-only validation:
+  `/tmp/mckernel-clean-build-pagealloc-policy-five-wrapper.log`
+- Warning scan over those three logs found no `warning`/`warn:` matches.
+- `git diff --check`
+- `bash -n scripts/rocky-rust-validation.sh scripts/qemu-mckernel-guest.sh
+  kernel/rust/tests/run_equivalence.sh`
+- `scripts/rust-ownership-report.py --check-dashboard overview.txt
+  --check-dashboard overview2.txt --top 5`
+- No QEMU boot was run for this focused batch; QEMU/full runtime validation
+  remains reserved for larger merge points.
+
+Update 2026-05-25 Process/VM release-cleanup five-slice batch
+------------------------------------------------------------
+
+Latest batch moved five Process/VM release and cleanup slices through Rust
+while preserving C ABI wrappers and C fallback scaffolding:
+
+- Process memory-range drain traversal with free-callback and error-log
+  sequencing for `free_process_memory_ranges()` and
+  `free_all_process_memory_range()`.
+- mckfd close iteration plus drain/free list mutation for `release_process_vm()`,
+  `release_process()`, and fork-failure cleanup.
+- VM NUMA-policy rb-tree drain, erase, and free sequencing.
+- Release-time address-space detach, `proc->vm` clearing, and process release
+  callback sequencing.
+- Destroy-thread optional ptrace debug/receive/send signal, fp-reg release, and
+  coredump-reg cleanup sequencing.
+
+Strict Process/VM ownership is now recorded as 76% -> 82% for this batch.
+Post-+50 strict-core movement was +122 points at that checkpoint. The broad Process/VM
+dashboard row was already capped at 100%, so this does not add broad dashboard
+percentage. C still owns the actual lock primitives, allocator/free primitive
+bodies, callback primitive bodies, page-table side effects, page-fault behavior,
+broad process lifetime mutation, signal forwarding, and fallback scaffolding.
+Standalone readiness is unchanged.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/process_helpers.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh`
+- `kernel/rust/tests/run_equivalence.sh`
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- Logged Rust build:
+  `/tmp/mckernel-clean-build-process-vm-release-five-rust.log`
+- Logged C fallback build:
+  `/tmp/mckernel-clean-build-process-vm-release-five-cfallback.log`
+- Logged wrapper build-only validation:
+  `/tmp/mckernel-clean-build-process-vm-release-five-wrapper.log`
+- Warning scan over those three logs found no `warning`/`warn:` matches.
+- No QEMU boot was run for this focused batch; QEMU/full runtime validation
+  remains reserved for larger merge points.
+
+Update 2026-05-25 page-allocator/mem-runtime five-slice batch
+------------------------------------------------------------
+
+Latest batch moved five allocator runtime slices through Rust while preserving
+C ABI wrappers and C fallback scaffolding:
+
+- `___ihk_mc_alloc_aligned_pages_node()` pa-ops versus early-allocation
+  dispatch.
+- `___ihk_mc_alloc_pages()` default p2align/node/virtual-address shaping.
+- `___ihk_mc_free_pages()` pa-ops free dispatch.
+- Pending-free begin/enqueue/finish list mutation and callback sequencing.
+- Rbtree free-in-allocator memory-chunk containment, NUMA free callback, and
+  rusage-sub sequencing.
+
+Strict Page allocator ownership is now recorded as 72% -> 78% for this batch.
+Post-+50 strict-core movement was +116 points at that checkpoint. The broad Page allocator
+dashboard row was already capped at 100%, so this does not add broad dashboard
+percentage. C still owns the main `mckernel_allocate_aligned_pages_node()`
+explicit-node, memory-policy, distance-order, and fallback-order allocation
+loops, pa-ops implementation primitive behavior, logging primitive bodies, and
+fallback scaffolding. Standalone readiness is unchanged.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/mem_helpers.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh`
+- `kernel/rust/tests/run_equivalence.sh`
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- Logged Rust build:
+  `/tmp/mckernel-clean-build-mem-runtime-five-rust.log`
+- Logged C fallback build:
+  `/tmp/mckernel-clean-build-mem-runtime-five-cfallback.log`
+- Logged wrapper build-only validation:
+  `/tmp/mckernel-clean-build-mem-runtime-five-wrapper.log`
+- Warning scan over those three logs found no `warning`/`warn:` matches.
+- `git diff --check`
+- `bash -n scripts/rocky-rust-validation.sh scripts/qemu-mckernel-guest.sh
+  kernel/rust/tests/run_equivalence.sh`
+- `scripts/rust-ownership-report.py --check-dashboard overview.txt
+  --check-dashboard overview2.txt --top 5`
+- No QEMU boot was run for this focused batch; QEMU/full runtime validation
+  remains reserved for larger merge points.
+
+Update 2026-05-25 syscall-core five-slice batch
+------------------------------------------------------------
+
+Latest batch moved five syscall wrapper bodies through Rust while preserving C
+ABI wrappers and C fallback scaffolding:
+
+- `rt_sigprocmask()` validation, old-mask copyout, new-mask copyin, sigmask
+  mutation, and Linux-forward callback sequencing.
+- `rt_sigqueueinfo()` PID validation, siginfo copyin, and do-kill callback
+  sequencing.
+- `rt_sigaction()` sigset-size validation, action copyin, do-sigaction callback
+  sequencing, and old-action copyout.
+- `gettimeofday()` local realtime calculation/copyout selection plus offload
+  sequencing.
+- `nanosleep()` monitor status publication, local spin wait, pending-signal
+  break, remaining-time copyout, and offload sequencing.
+
+Strict Syscall core ownership is now recorded as 72% -> 78% for this batch.
+At that checkpoint, post-+50 strict-core movement was +110 points. The broad Syscall core
+dashboard row was already capped at 100%, so this does not add broad dashboard
+percentage. C still owns top-level syscall dispatch, the actual user-copy
+primitive, Linux forwarding callback bodies, signal delivery, scheduler/time
+primitive bodies, and fallback scaffolding. Standalone readiness is unchanged.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/syscall_policy.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh`
+- `kernel/rust/tests/run_equivalence.sh`
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- Logged Rust build:
+  `/tmp/mckernel-clean-build-syscall-five-rust.log`
+- Logged C fallback build:
+  `/tmp/mckernel-clean-build-syscall-five-cfallback.log`
+- Logged wrapper build-only validation:
+  `/tmp/mckernel-clean-build-syscall-five-wrapper.log`
+- Warning scan over those three logs found no `warning`/`warn:` matches.
+- `git diff --check`
+- `bash -n scripts/rocky-rust-validation.sh scripts/qemu-mckernel-guest.sh
+  kernel/rust/tests/run_equivalence.sh`
+- `scripts/rust-ownership-report.py --check-dashboard overview.txt
+  --check-dashboard overview2.txt --top 5`
+- No QEMU boot was run for this focused batch; QEMU/full runtime validation
+  remains reserved for larger merge points.
+
+Update 2026-05-25 x86 page-table setup +6 strict-core batch
+------------------------------------------------------------
+
+Latest batch moved five Process/VM range-management slices through Rust while
+preserving C fallback scaffolding:
+
+- Split-range publication sequencing after allocation/TOFU preparation.
+- Join-range memobj-unref, rb-erase, range-cache replacement, optional TOFU
+  callback dispatch, and free sequencing.
+- Free-range page-table action/span planning, including straight skip,
+  remote/reserved clear, hugepage clear, and regular free-span alignment.
+- Free-range final detach, cache replacement, straight physical free, and
+  main-straight cleanup sequencing.
+- Straight-range removal conversion gate and address/length math.
+
+Strict Process/VM ownership is now recorded as 70% -> 76% for this batch.
+At that checkpoint, post-+50 strict-core movement was +104 points. The broad Process/VM
+dashboard row was already capped at 100%, so this does not add broad dashboard
+percentage. C still owns memobj refcount primitive bodies, allocation/free
+primitive bodies, page-table free/clear side effects, page-fault behavior,
+TOFU primitive behavior, broader process lifetime mutation, and fallback
+scaffolding. Standalone readiness is unchanged.
+
+Validation for this batch:
+
+- `rustfmt kernel/rust/process_helpers.rs`
+- `bash -n kernel/rust/tests/run_equivalence.sh`
+- `kernel/rust/tests/run_equivalence.sh`
+- `cmake --build /tmp/mckernel-rocky-rust --target mckernel.img ihk_ko
+  ihk-smp-x86_64_ko mcctrl_ko -j2`
+- Logged Rust build:
+  `/tmp/mckernel-clean-build-process-vm-five-rust.log`
+- Logged C fallback build:
+  `/tmp/mckernel-clean-build-process-vm-five-cfallback.log`
+- Logged wrapper build-only validation:
+  `/tmp/mckernel-clean-build-process-vm-five-wrapper.log`
+- Warning scan over those three logs found no `warning`/`warn:` matches.
+- `git diff --check`
+- `bash -n scripts/rocky-rust-validation.sh scripts/qemu-mckernel-guest.sh
+  kernel/rust/tests/run_equivalence.sh`
+- `scripts/rust-ownership-report.py --check-dashboard overview.txt
+  --check-dashboard overview2.txt --top 5`
+
+No QEMU boot or reboot-capable validation was run for this focused batch. Full
+runtime validation remains reserved for larger merge points through the
+disposable QEMU guest path.
+
+------------------------------------------------------------
+
+The latest batch moved five x86_64 page-table setup slices through Rust while
+preserving C fallback scaffolding:
+
+- Zeroed page-table allocation behind `__alloc_new_pt()`.
+- Get-PTE allocation traversal.
+- `__set_pt_page()` regular-page mapping body sequencing.
+- `__set_pt_page()` large-page mapping body sequencing.
+- Kernel-address lock classification for the wrapper path.
+
+Strict x86_64 memory ownership is now recorded as 78% -> 84% for this batch.
+Post-+50 strict-core movement is now +98 points. The broad x86 memory dashboard
+row was already capped at 100%, so this does not add broad dashboard
+percentage. C still owns the public ABI wrapper, actual spinlock primitive,
+`ihk_mc_alloc_pages()` provider, `virt_to_phys()`/`phys_to_virt()` primitives,
+page-table free primitive behavior, broader range mapping/free rollback,
+RSS updates, TLB-sensitive flushing, and fallback scaffolding.
+
+Validation passed `rustfmt kernel/rust/x86_memory_helpers.rs kernel/rust/lib.rs`,
+`bash -n kernel/rust/tests/run_equivalence.sh`,
+`kernel/rust/tests/run_equivalence.sh` with
+`x86_memory_helpers ok digest=44390095bf9aa560`, Rust-enabled image/module
+build, C-fallback image build, build-only wrapper validation in
+`/tmp/mckernel-clean-build-x86-pt-setup-wrapper.log`, warning scan over the
+fresh direct and wrapper logs, `git diff --check`, validation script syntax
+checks, and the ownership report. An initial equivalence run failed on a new
+test expectation for missing allocation callback handling on an already mapped
+large-page path; the failure was recorded in `kernel.log`, the
+helper/fallback behavior and test were aligned so allocation is required only
+when a new page table is needed, and the rerun passed. No QEMU boot or
+reboot-capable validation was run for this focused batch.
+
+Update 2026-05-25 x86 five-slice memory +8 strict-core batch
+------------------------------------------------------------
+
+The latest batch moved five x86_64 memory execution bodies through Rust while
+preserving C fallback scaffolding:
+
+- `__clear_pt_page()` body sequencing.
+- `lookup_pte()` body orchestration.
+- `ihk_mc_pt_change_attr_range()` traversal and PTE attribute mutation.
+- `ihk_mc_pt_virt_to_pagemap()` result shaping.
+- `arch_vrflag_to_ptattr()` dirty-bit fault shaping.
+
+Strict x86_64 memory ownership is now recorded as 70% -> 78% for this batch.
+Post-+50 strict-core movement is now +92 points. The broad x86 memory dashboard
+row was already capped at 100%, so this does not add broad dashboard
+percentage. C still owns primitive `phys_to_virt()` behavior, page-table
+memory lifetime, TLB-sensitive flushing, broader visitor/mutation traversal,
+allocation/free primitives, and fallback scaffolding.
+
+Validation passed `rustfmt kernel/rust/x86_memory_helpers.rs kernel/rust/lib.rs`,
+`bash -n kernel/rust/tests/run_equivalence.sh`,
+`kernel/rust/tests/run_equivalence.sh` with
+`x86_memory_helpers ok digest=0e83f0a267c87b16`,
+Rust-enabled image/module build, C-fallback image build, build-only wrapper
+validation in `/tmp/mckernel-clean-build-x86-five-slice-wrapper.log`, warning
+scan over the fresh direct and wrapper logs, `git diff --check`, validation
+script syntax checks, and the ownership report. An initial combined build
+exposed an incompatible pointer-type warning in the `lookup_pte()` wrapper; it
+was fixed and the final logs are clean. No QEMU boot or reboot-capable
+validation was run for this focused batch.
 
 Update 2026-05-24 standalone Rust target tracking
 ------------------------------------------------------------
@@ -41,6 +1847,1032 @@ fallbacks, wrappers, allocation/lifetime primitives, page-table mutation,
 user-copy, scheduler/futex/signal side effects, IKC exchange, and object
 lifecycle paths still need Rust ownership before the OS can fairly be called
 standalone Rust.
+
+Update 2026-05-25 x86 virtual-to-physical walk +3 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- x86_64 memory management strict ownership 67% -> 70% by routing
+  `ihk_mc_pt_virt_to_phys_size()` walk orchestration through Rust. Rust now
+  owns null-root fallback to `init_pt`, page-table index calculation use, L4
+  miss/walk classification, L3 and L2 large-page hit return shaping, L1 hit
+  return shaping, physical and page-size publication, physical-to-virtual
+  callback dispatch between levels, and missing/null callback error shaping.
+  C keeps the public ABI wrapper, actual `phys_to_virt()` primitive behavior,
+  page-table memory lifetime, and fallback scaffolding.
+
+Validation passed `rustfmt kernel/rust/x86_memory_helpers.rs kernel/rust/lib.rs`,
+`bash -n kernel/rust/tests/run_equivalence.sh`,
+`kernel/rust/tests/run_equivalence.sh` with
+`x86_memory_helpers ok digest=00c3ebc66769489f`,
+`object_helpers ok digest=edebd23f366851a4`,
+`sched_helpers ok digest=c595ab25a3922ad9`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled image/module build, C-fallback image build, captured
+build-only wrapper validation in `/tmp/mckernel-clean-build-x86-vtop-wrapper.log`
+plus direct build logs with no `warning`/`warn:` matches, `git diff --check`,
+script syntax checks, and the ownership report. No QEMU boot or reboot-capable
+validation was run for this focused slice.
+
+Update 2026-05-25 x86 page-table destroy +3 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- x86_64 memory management strict ownership 64% -> 67% by routing recursive
+  page-table destruction below the root through Rust. Rust now owns level/null
+  validation with panic callback routing, present/non-large child-table
+  detection, child-table physical extraction through the existing entry
+  classifier, physical-to-virtual callback dispatch, recursive post-order
+  descent, free-page callback sequencing after children, and missing-callback
+  validation. C keeps the public ABI wrapper, actual `phys_to_virt()`
+  primitive behavior, actual page-free primitive behavior, panic primitive
+  bodies, and fallback scaffolding.
+
+Validation passed `rustfmt kernel/rust/x86_memory_helpers.rs kernel/rust/lib.rs`,
+`bash -n kernel/rust/tests/run_equivalence.sh`,
+`kernel/rust/tests/run_equivalence.sh` with
+`x86_memory_helpers ok digest=3f6679780901e480`,
+`object_helpers ok digest=edebd23f366851a4`,
+`sched_helpers ok digest=c595ab25a3922ad9`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled image/module build, C-fallback image build, captured
+build-only wrapper validation in
+`/tmp/mckernel-clean-build-x86-pt-destroy-wrapper.log` plus direct build logs
+with no `warning`/`warn:` matches, `git diff --check`, script syntax checks,
+and the ownership report. No QEMU boot or reboot-capable validation was run
+for this focused slice.
+
+Update 2026-05-25 host schedule-process +2 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- host/IKC/mcctrl/IHK kernel paths strict ownership 84% -> 86% by routing
+  `SCD_MSG_SCHEDULE_PROCESS` request sequencing through Rust. Rust now owns
+  thread/proc validation, current-CPU callback dispatch, received-log callback
+  sequencing, CPU-set allowed decision dispatch, fallback clone-CPU callback
+  dispatch, no-CPU error/log return shaping, TID publication callback ordering,
+  proc/thread running-status publication callback ordering, chain-thread/
+  process callback ordering, runqueue-add callback sequencing, queued-log
+  callback dispatch, and null/missing-callback validation. C keeps the actual
+  CPU-set test, clone-CPU selection primitive, field-write primitives, chain/
+  list mutation primitives, runqueue mutation primitive, logging primitive
+  bodies, and fallback scaffolding.
+
+Validation passed `rustfmt kernel/rust/host_helpers.rs kernel/rust/lib.rs`,
+`bash -n kernel/rust/tests/run_equivalence.sh`,
+`kernel/rust/tests/run_equivalence.sh` with
+`object_helpers ok digest=edebd23f366851a4`,
+`sched_helpers ok digest=c595ab25a3922ad9`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled image/module build, C-fallback image build, captured
+build-only wrapper validation in
+`/tmp/mckernel-clean-build-host-schedule-wrapper.log` plus direct build logs
+with no `warning`/`warn:` matches, `git diff --check`, script syntax checks,
+and the ownership report. No QEMU boot or reboot-capable validation was run
+for this focused slice.
+
+Update 2026-05-25 procfs backlog +1 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- procfs/sysfs/xpmem/file objects strict ownership 83% -> 84% by routing
+  procfs backlog allocation/copy/add/free-on-error sequencing through Rust.
+  Rust now owns packet-copy allocation callback dispatch, allocation-failure
+  return shaping, request copy callback dispatch, backlog add callback
+  dispatch, add-failure free callback dispatch, and null/missing-callback
+  validation. C keeps actual allocator/free primitives, byte-copy primitive,
+  backlog queue mutation, and fallback scaffolding.
+
+Validation passed `rustfmt kernel/rust/object_helpers.rs kernel/rust/lib.rs`,
+`bash -n kernel/rust/tests/run_equivalence.sh`,
+`kernel/rust/tests/run_equivalence.sh` with
+`object_helpers ok digest=2279bbc877a38f6f`,
+`sched_helpers ok digest=c595ab25a3922ad9`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled image/module build, C-fallback image build, captured
+build-only wrapper validation in
+`/tmp/mckernel-clean-build-procfs-backlog-wrapper.log` plus direct build logs
+with no `warning`/`warn:` matches, `git diff --check`, script syntax checks,
+and the ownership report. No QEMU boot or reboot-capable validation was run
+for this focused slice.
+
+Update 2026-05-25 host remote page-fault request +3 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- host/IKC/mcctrl/IHK kernel paths strict ownership 81% -> 84% by routing
+  remote page-fault request dispatch sequencing through Rust. Rust now owns
+  target-thread lookup callback dispatch, missing-thread log/body-error
+  routing, current-thread direct body dispatch, deferred packet allocation/copy
+  callback sequencing, backlog publication callback dispatch, scheduler wake
+  callback dispatch, thread unlock callback ordering, allocation-failure
+  unlock/error shaping, and null/missing-callback validation. C keeps actual
+  thread lookup, allocation, packet copy, thread-field publication, scheduler
+  wake, thread unlock, remote page-fault body primitive behavior, raw IKC send
+  side effects, and fallback scaffolding.
+
+Validation passed `rustfmt kernel/rust/host_helpers.rs kernel/rust/lib.rs`,
+`bash -n kernel/rust/tests/run_equivalence.sh`,
+`kernel/rust/tests/run_equivalence.sh` with
+`object_helpers ok digest=52d12813f36dde8a`,
+`sched_helpers ok digest=c595ab25a3922ad9`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled image/module build, C-fallback image build, captured
+build-only wrapper validation in
+`/tmp/mckernel-clean-build-host-rpf-request-wrapper.log` plus direct build logs
+with no `warning`/`warn:` matches, `git diff --check`, script syntax checks,
+and the ownership report. No QEMU boot or reboot-capable validation was run
+for this focused slice.
+
+Update 2026-05-25 host remote page-fault body +2 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- host/IKC/mcctrl/IHK kernel paths strict ownership 79% -> 81% by routing
+  remote page-fault body sequencing through Rust. Rust now owns error-only
+  answer routing, optional profile timestamp gating, populated fault-reason
+  construction, debug-log callback dispatch, preempt-disable/page-fault/
+  preempt-enable callback ordering, optional profile-event delta publication,
+  answer packet dispatch, and null/missing-callback validation. C keeps
+  current-thread/channel selection, the actual `page_fault_process_vm()`
+  primitive body, timestamp, preempt, profile-event and logging primitive
+  bodies, remote page-fault thread lookup/deferred scheduling, raw IKC send
+  side effects, and fallback scaffolding.
+
+Validation passed `rustfmt kernel/rust/host_helpers.rs kernel/rust/lib.rs`,
+`bash -n kernel/rust/tests/run_equivalence.sh`,
+`kernel/rust/tests/run_equivalence.sh` with
+`object_helpers ok digest=57ea7e9f62cdc012`,
+`sched_helpers ok digest=c595ab25a3922ad9`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled image/module build, C-fallback image build, captured
+build-only wrapper validation in
+`/tmp/mckernel-clean-build-host-rpf-body-wrapper.log` plus direct build logs
+with no `warning`/`warn:` matches, `git diff --check`, script syntax checks,
+and the ownership report. No QEMU boot or reboot-capable validation was run
+for this focused slice.
+
+Update 2026-05-25 host wake/debug request +2 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- host/IKC/mcctrl/IHK kernel paths strict ownership 77% -> 79% by routing
+  `SCD_MSG_WAKE_UP_SYSCALL_THREAD` and `SCD_MSG_DEBUG_LOG` request sequencing
+  through Rust. Rust now owns wake-target TID extraction, thread lookup
+  callback dispatch, missing-thread error shaping, optional wake logging,
+  waitqueue wake callback dispatch, thread unlock callback dispatch,
+  debug-log code extraction, optional debug-print callback dispatch,
+  debug-log callback dispatch, and null/missing-callback validation. C keeps
+  actual thread lookup, waitqueue wake, thread unlock, `debug_log()`, logging
+  primitive bodies, and fallback scaffolding.
+
+Validation passed `rustfmt kernel/rust/host_helpers.rs kernel/rust/lib.rs`,
+`bash -n kernel/rust/tests/run_equivalence.sh`,
+`kernel/rust/tests/run_equivalence.sh` with
+`object_helpers ok digest=1eb370b1d4146653`,
+`sched_helpers ok digest=c595ab25a3922ad9`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled image/module build, C-fallback image build, captured
+build-only wrapper validation in
+`/tmp/mckernel-clean-build-host-wake-debug-wrapper.log` plus direct build
+logs with no `warning`/`warn:` matches, `git diff --check`, script syntax
+checks, and the ownership report. No QEMU boot or reboot-capable validation
+was run for this focused slice.
+
+Update 2026-05-25 host send-signal request +2 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- host/IKC/mcctrl/IHK kernel paths strict ownership 75% -> 77% by routing
+  `SCD_MSG_SEND_SIGNAL` request sequencing through Rust. Rust now owns
+  mcctrl-signal descriptor physical-map callback dispatch, writable/active
+  virtual-map callback dispatch, descriptor copy into Rust-owned stack storage,
+  virtual and physical unmap sequencing, ACK packet/result sequencing before
+  delivery, do-kill callback dispatch, optional delivery-log callback dispatch,
+  map-failure ACK/error shaping, and null/missing-callback validation. C keeps
+  actual map/unmap primitive bodies, `do_kill()` signal-delivery primitive
+  behavior, logging primitives, raw IKC send side effects, and fallback
+  scaffolding.
+
+Validation passed `rustfmt kernel/rust/host_helpers.rs kernel/rust/lib.rs`,
+`bash -n kernel/rust/tests/run_equivalence.sh`,
+`kernel/rust/tests/run_equivalence.sh` with
+`object_helpers ok digest=5c14884942496b5c`,
+`sched_helpers ok digest=c595ab25a3922ad9`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled image/module build, C-fallback image build, captured
+build-only wrapper validation in
+`/tmp/mckernel-clean-build-host-send-signal-wrapper.log` plus direct build
+logs with no `warning`/`warn:` matches, `git diff --check`, script syntax
+checks, and the ownership report. No QEMU boot or reboot-capable validation
+was run for this focused slice.
+
+Update 2026-05-25 host cleanup request +2 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- host/IKC/mcctrl/IHK kernel paths strict ownership 73% -> 75% by routing
+  cleanup-process and cleanup-fd request sequencing through Rust. Rust now
+  owns process cleanup callback dispatch, cleanup-process response sequencing,
+  terminate callback ordering, fd cleanup callback dispatch, optional cleanup
+  logging callback dispatch, cleanup-fd response sequencing, and
+  null/missing-callback validation. C keeps actual process cleanup, FD cleanup,
+  terminate-host, logging, raw IKC send side effects, and fallback scaffolding.
+
+Validation passed `rustfmt kernel/rust/host_helpers.rs kernel/rust/lib.rs`,
+`bash -n kernel/rust/tests/run_equivalence.sh`,
+`kernel/rust/tests/run_equivalence.sh` with
+`object_helpers ok digest=aaaf409aedcf96e0`,
+`sched_helpers ok digest=c595ab25a3922ad9`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled image/module build, C-fallback image build, captured
+build-only wrapper validation in
+`/tmp/mckernel-clean-build-host-cleanup-request-wrapper.log` plus direct build
+logs with no `warning`/`warn:` matches, `git diff --check`, script syntax
+checks, and the ownership report. No QEMU boot or reboot-capable validation
+was run for this focused slice.
+
+Update 2026-05-25 host CPU register request +2 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- host/IKC/mcctrl/IHK kernel paths strict ownership 71% -> 73% by routing the
+  `SCD_MSG_CPU_RW_REG` request wrapper through Rust. Rust now owns descriptor
+  physical-map callback dispatch, writable/active virtual-map callback
+  dispatch, architecture register callback invocation, conditional virtual
+  unmap, physical unmap, response packet/result sequencing, and
+  null/missing-callback validation. C keeps actual map/unmap primitive bodies,
+  architecture register primitive bodies, raw IKC send side effects, and
+  fallback scaffolding.
+
+Validation passed `rustfmt kernel/rust/host_helpers.rs kernel/rust/lib.rs`,
+`bash -n kernel/rust/tests/run_equivalence.sh`,
+`kernel/rust/tests/run_equivalence.sh` with
+`object_helpers ok digest=9ec1e91005816b25`,
+`sched_helpers ok digest=c595ab25a3922ad9`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled image/module build, C-fallback image build, captured
+build-only wrapper validation in
+`/tmp/mckernel-clean-build-host-cpu-rw-request-wrapper.log` plus direct build
+logs with no `warning`/`warn:` matches, `git diff --check`, script syntax
+checks, and the ownership report. No QEMU boot or reboot-capable validation
+was run for this focused slice.
+
+Update 2026-05-25 host perf-control request +2 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- host/IKC/mcctrl/IHK kernel paths strict ownership 69% -> 71% by routing the
+  `SCD_MSG_PERF_CTRL` request wrapper through Rust. Rust now owns descriptor
+  physical-map callback dispatch, writable/active virtual-map callback
+  dispatch, Rust perf-control dispatch invocation, conditional virtual unmap,
+  physical unmap, ACK packet/result sequencing, and null/missing-callback
+  validation. C keeps actual map/unmap primitive bodies, actual perf counter
+  primitive bodies, raw IKC send side effects, and fallback scaffolding.
+
+Validation passed `rustfmt kernel/rust/host_helpers.rs kernel/rust/lib.rs`,
+`bash -n kernel/rust/tests/run_equivalence.sh`,
+`kernel/rust/tests/run_equivalence.sh` with
+`object_helpers ok digest=2b4877c61d86c3ea`,
+`sched_helpers ok digest=c595ab25a3922ad9`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled image/module build, C-fallback image build, captured
+build-only wrapper validation in
+`/tmp/mckernel-clean-build-host-perf-request-wrapper.log` plus direct build
+logs with no `warning`/`warn:` matches, `git diff --check`, script syntax
+checks, and the ownership report. No QEMU boot or reboot-capable validation
+was run for this focused slice.
+
+Update 2026-05-25 host perf-control dispatch +2 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- host/IKC/mcctrl/IHK kernel paths strict ownership 67% -> 69% by routing host
+  perf-control dispatch sequencing through Rust. Rust now owns
+  SET/GET/ENABLE/DISABLE selection, SET mode construction from exclude flags,
+  init/stop/reset callback ordering and early-error return shaping,
+  start/stop callback dispatch for enable/disable, GET read-value publication,
+  unexpected-type logging callback dispatch, and missing-callback/null
+  validation. C keeps host memory map/unmap, actual perf counter primitive
+  bodies, response sending, raw IKC send side effects, and fallback
+  scaffolding.
+
+Validation passed `rustfmt kernel/rust/host_helpers.rs kernel/rust/lib.rs`,
+`bash -n kernel/rust/tests/run_equivalence.sh`,
+`kernel/rust/tests/run_equivalence.sh` with
+`object_helpers ok digest=ead2d0c36dac1cfb`,
+`sched_helpers ok digest=c595ab25a3922ad9`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled image/module build, C-fallback image build, captured
+build-only wrapper validation in
+`/tmp/mckernel-clean-build-host-perf-ctrl-wrapper.log` plus direct build logs
+with no `warning`/`warn:` matches, `git diff --check`, script syntax checks,
+and the ownership report. No QEMU boot or reboot-capable validation was run
+for this focused slice.
+
+Update 2026-05-25 host perf/register reply +1 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- host/IKC/mcctrl/IHK kernel paths strict ownership 66% -> 67% by routing host
+  perf ACK and CPU register response packet/send-callback sequencing through
+  Rust. Rust now owns response-packet zeroing, response message publication,
+  request `arg`/`reply` transfer where applicable, error publication, and send
+  callback dispatch. C keeps perf counter operations, CPU register read/write,
+  host memory map/unmap, logging, raw IKC send side effects, and fallback
+  scaffolding.
+
+Validation passed `rustfmt kernel/rust/host_helpers.rs kernel/rust/lib.rs`,
+`bash -n kernel/rust/tests/run_equivalence.sh`,
+`kernel/rust/tests/run_equivalence.sh` with
+`object_helpers ok digest=b204571fbce5f2fc`,
+`sched_helpers ok digest=c595ab25a3922ad9`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled image/module build, C-fallback image build, captured
+build-only wrapper validation in
+`/tmp/mckernel-clean-build-host-control-replies-wrapper.log` plus direct build
+logs with no `warning`/`warn:` matches, `git diff --check`, script syntax
+checks, and the ownership report. No QEMU boot or reboot-capable validation was
+run for this focused slice.
+
+Update 2026-05-25 host traditional reply +2 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- host/IKC/mcctrl/IHK kernel paths strict ownership 64% -> 66% by routing
+  traditional host SCD ACK packet/send-callback sequencing through Rust for
+  prepare-process, send-signal, cleanup-process, and cleanup-fd responses.
+  Rust now owns response-packet zeroing, ACK message publication, request
+  `ref`/`arg` and `reply` transfer, error publication, and send callback
+  dispatch. C keeps the process preparation, cleanup, signal-delivery,
+  logging, terminate-host, and raw IKC send primitive bodies plus fallback
+  scaffolding.
+
+Validation passed `rustfmt kernel/rust/host_helpers.rs kernel/rust/lib.rs`,
+`bash -n kernel/rust/tests/run_equivalence.sh`,
+`kernel/rust/tests/run_equivalence.sh` with
+`object_helpers ok digest=2152d2fe7fc0ff00`,
+`sched_helpers ok digest=c595ab25a3922ad9`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled image/module build, C-fallback image build, captured
+build-only wrapper validation in
+`/tmp/mckernel-clean-build-host-traditional-reply-wrapper.log` plus direct
+build logs with no `warning`/`warn:` matches, `git diff --check`, script
+syntax checks, and the ownership report. No QEMU boot or reboot-capable
+validation was run for this focused slice.
+
+Update 2026-05-25 host remote page-fault answer +1 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- host/IKC/mcctrl/IHK kernel paths strict ownership 63% -> 64% by routing host
+  remote page-fault answer packet/send-callback sequencing through Rust. Rust
+  now owns answer-packet zeroing,
+  `SCD_MSG_REMOTE_PAGE_FAULT_ANSWER` publication, request
+  `ref`/`arg`/`reply`/`pid` transfer, error publication, and send callback
+  dispatch. C keeps `page_fault_process_vm()`, profiling/preempt handling,
+  response-channel lookup through `cpu_local_var()`, the actual IKC send
+  primitive, and fallback scaffolding.
+
+Validation passed `rustfmt kernel/rust/host_helpers.rs kernel/rust/lib.rs`,
+`bash -n kernel/rust/tests/run_equivalence.sh`,
+`kernel/rust/tests/run_equivalence.sh` with
+`object_helpers ok digest=077390b7d9500905`,
+`sched_helpers ok digest=c595ab25a3922ad9`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled image/module build, C-fallback image build, captured
+build-only wrapper validation in
+`/tmp/mckernel-clean-build-host-rpf-answer-wrapper.log` plus direct build logs
+with no `warning`/`warn:` matches, `git diff --check`, script syntax checks,
+and the ownership report. No QEMU boot or reboot-capable validation was run
+for this focused slice.
+
+Update 2026-05-24 procfs answer +1 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- procfs/sysfs/xpmem/file objects strict ownership 82% -> 83% by routing
+  procfs answer packet/send-callback sequencing through Rust. Rust now owns
+  answer-packet zeroing, `SCD_MSG_PROCFS_ANSWER` publication, request
+  `ref`/`arg`/`reply`/`pid` transfer, error publication, and send callback
+  dispatch. C keeps `cpu_local_var()` channel selection, the actual IKC send
+  primitive, request mapping/data production, and fallback scaffolding.
+
+Validation passed `rustfmt kernel/rust/object_helpers.rs`, `bash -n
+kernel/rust/tests/run_equivalence.sh`, `kernel/rust/tests/run_equivalence.sh`
+with `object_helpers ok digest=198e73836dfe1f06`,
+`sched_helpers ok digest=c595ab25a3922ad9`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled image/module build, C-fallback image build, captured
+build-only wrapper validation in
+`/tmp/mckernel-clean-build-procfs-answer-wrapper.log` with no
+`warning`/`warn:` matches, `git diff --check`, script syntax checks, and the
+ownership report. No QEMU boot or reboot-capable validation was run for this
+focused slice.
+
+Update 2026-05-24 procfs request-finalization +1 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- procfs/sysfs/xpmem/file objects strict ownership 81% -> 82% by routing
+  procfs request release/finalization mutation through Rust. Rust now owns
+  release-buffer free traversal dispatch and `ret` zeroing, completion
+  `ret`/`eof` publication, pbuf attach decision, physical-address callback
+  dispatch, and `pbuf` publication. C keeps request mapping/unmapping, procfs
+  data production, actual page free and physical-address primitives, answer
+  sending, and fallback scaffolding.
+
+Validation passed `rustfmt kernel/rust/object_helpers.rs`, `bash -n
+kernel/rust/tests/run_equivalence.sh`, `kernel/rust/tests/run_equivalence.sh`
+with `object_helpers ok digest=e176a037b8bd045b`,
+`sched_helpers ok digest=c595ab25a3922ad9`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled image/module build, C-fallback image build, captured
+build-only wrapper validation in
+`/tmp/mckernel-clean-build-procfs-request-final-wrapper.log` with no
+`warning`/`warn:` matches, `git diff --check`, script syntax checks, and the
+ownership report. No QEMU boot or reboot-capable validation was run for this
+focused slice.
+
+Update 2026-05-24 procfs buffer-chain +2 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- procfs/sysfs/xpmem/file objects strict ownership 79% -> 81% by routing
+  procfs buffer-chain append/release sequencing through Rust. Rust now owns
+  first-buffer allocation callback dispatch, cursor rollover at page capacity,
+  next-buffer physical-link publication, bounded copy callback sequencing,
+  per-buffer size mutation, allocation-failure cleanup, and release
+  traversal/free callback sequencing. C keeps actual page allocation/free,
+  physical-address translation, the byte-copy primitive, request
+  mapping/unmapping, `r->pbuf` publication, and fallback scaffolding.
+
+Validation passed `rustfmt kernel/rust/object_helpers.rs`, `bash -n
+kernel/rust/tests/run_equivalence.sh`, `kernel/rust/tests/run_equivalence.sh`
+with `object_helpers ok digest=49d5b05c000b4a34`,
+`sched_helpers ok digest=c595ab25a3922ad9`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled image/module build, C-fallback image build, captured
+build-only wrapper validation in
+`/tmp/mckernel-clean-build-procfs-buffer-chain-wrapper.log` with no
+`warning`/`warn:` matches, `git diff --check`, script syntax checks, and the
+ownership report. No QEMU boot or reboot-capable validation was run for this
+focused slice.
+
+Update 2026-05-24 procfs thread-control +1 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- procfs/sysfs/xpmem/file objects strict ownership 78% -> 79% by routing
+  `procfs_thread_ctl()` packet/control sequencing through Rust. Rust now owns
+  packet zeroing, TID create/delete packet field publication, response
+  physical-address callback sequencing, IKC send callback dispatch,
+  create-only wait-loop selection, and pause-callback polling. C keeps
+  thread/process field extraction, `cpu_local_var()`, `ihk_mc_get_osnum()`,
+  actual `virt_to_phys()`, actual `ihk_ikc_send()`, actual `cpu_pause()`, and
+  fallback scaffolding.
+
+Validation passed `rustfmt kernel/rust/object_helpers.rs`, `bash -n
+kernel/rust/tests/run_equivalence.sh`, `kernel/rust/tests/run_equivalence.sh`
+with `object_helpers ok digest=5d6f7a725df6ef3c`,
+`sched_helpers ok digest=c595ab25a3922ad9`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled image/module build, C-fallback image build, captured
+build-only wrapper validation in
+`/tmp/mckernel-clean-build-procfs-thread-ctl-wrapper.log` with no
+`warning`/`warn:` matches, `git diff --check`, script syntax checks, and the
+ownership report. No QEMU boot or reboot-capable validation was run for this
+focused slice.
+
+Update 2026-05-24 sysfs public request-wrapper +2 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- procfs/sysfs/xpmem/file objects strict ownership 76% -> 78% by routing
+  public sysfs request-wrapper post-format sequencing through Rust for create,
+  mkdir, symlink, lookup, and unlink. Rust now owns request-body callback
+  dispatch, send-error vs response-error log-event selection, phase
+  publication, and mkdir/lookup handle destination publication. C keeps
+  allocation/free, varargs path formatting, special-create wrapper logging,
+  raw `ihk_ikc_send()`, `cpu_pause()`/read-barrier primitives, final wrapper
+  entry/exit logging, and fallback scaffolding.
+
+Validation passed `rustfmt kernel/rust/object_helpers.rs`, `bash -n
+kernel/rust/tests/run_equivalence.sh`, `kernel/rust/tests/run_equivalence.sh`
+with `object_helpers ok digest=13f5c87cf93a6812`,
+`sched_helpers ok digest=c595ab25a3922ad9`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled `cmake --build /tmp/mckernel-rocky-rust --target
+mckernel.img -j2`, C-fallback `cmake --build
+/tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`, captured
+`scripts/rocky-rust-validation.sh --build-only --skip-deps --skip-rust
+--skip-ihk-patch --jobs 2` with no `warning`/`warn:` matches in
+`/tmp/mckernel-clean-build-sysfs-public-request.log`, `git diff --check`,
+syntax checks for the validation scripts, and the ownership report. No QEMU
+boot or reboot-capable validation was run for this focused slice.
+
+Update 2026-05-24 sysfs special-create +1 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- procfs/sysfs/xpmem/file objects strict ownership 75% -> 76% by routing
+  special sysfs create conversion through Rust. Rust now owns direct/string/
+  bitmap snooping-operation dispatch, string bit-count calculation, bitmap
+  parameter copy, physical-address callback sequencing, and `client_instance`
+  publication. C keeps the static wrapper, unknown-op logging, actual
+  `virt_to_phys()` primitive, create-request allocation, varargs path
+  formatting, IKC send/wait behavior, and fallback scaffolding.
+
+Validation passed `rustfmt kernel/rust/object_helpers.rs`, `bash -n
+kernel/rust/tests/run_equivalence.sh`, `kernel/rust/tests/run_equivalence.sh`
+with `object_helpers ok digest=b3fcc9b4bbe7afe0`,
+`sched_helpers ok digest=c595ab25a3922ad9`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled `cmake --build /tmp/mckernel-rocky-rust --target
+mckernel.img -j2`, C-fallback `cmake --build
+/tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`, captured
+`scripts/rocky-rust-validation.sh --build-only --skip-deps --skip-rust
+--skip-ihk-patch --jobs 2` with no `warning`/`warn:` matches in
+`/tmp/mckernel-clean-build-sysfs-special-create.log`, `git diff --check`,
+syntax checks for the validation scripts, and the ownership report. No QEMU
+boot or reboot-capable validation was run for this focused slice.
+
+Update 2026-05-24 sysfs request-wrapper +2 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- procfs/sysfs/xpmem/file objects strict ownership 73% -> 75% by routing the
+  sysfs server show/store/release request-wrapper sequencing through Rust. Rust
+  now owns callback-pointer selection, response body dispatch,
+  callback-error/send-error/packet-error/debug log-event selection, response
+  ssize/error publication, and release callback routing. C keeps the static
+  wrapper entry/debug line, actual sysfs ops callbacks, the actual
+  `ihk_ikc_send()` primitive, printk/dkprintf/ekprintf primitives, sysfs
+  data-buffer lifetime, and fallback scaffolding.
+
+Validation passed `rustfmt kernel/rust/object_helpers.rs`, `bash -n
+kernel/rust/tests/run_equivalence.sh`, `kernel/rust/tests/run_equivalence.sh`
+with `object_helpers ok digest=a4dd92d82df34356`,
+`sched_helpers ok digest=c595ab25a3922ad9`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled `cmake --build /tmp/mckernel-rocky-rust --target
+mckernel.img -j2`, C-fallback `cmake --build
+/tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`, captured
+`scripts/rocky-rust-validation.sh --build-only --skip-deps --skip-rust
+--skip-ihk-patch --jobs 2` with no `warning`/`warn:` matches in
+`/tmp/mckernel-clean-build-sysfs-req-wrapper.log`, `git diff --check`, syntax
+checks for the validation scripts, and the ownership report. No QEMU boot or
+reboot-capable validation was run for this focused slice.
+
+Update 2026-05-24 sysfs packet-handler wrapper +1 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- procfs/sysfs/xpmem/file objects strict ownership 72% -> 73% by routing the
+  public sysfs packet-handler wrapper dispatch through Rust. Rust now owns
+  request-kind dispatch, show/store/release callback routing,
+  unknown-message log-callback selection, kind publication, and return
+  shaping. C keeps the exported IKC handler ABI, actual `kprintf()` primitive,
+  callback bodies, and fallback scaffolding.
+
+Validation passed `rustfmt kernel/rust/object_helpers.rs`, `bash -n
+kernel/rust/tests/run_equivalence.sh`, `kernel/rust/tests/run_equivalence.sh`
+with `object_helpers ok digest=c04e2fecca56976e`,
+`sched_helpers ok digest=c595ab25a3922ad9`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled `cmake --build /tmp/mckernel-rocky-rust --target
+mckernel.img -j2`, C-fallback `cmake --build
+/tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`, captured
+`scripts/rocky-rust-validation.sh --build-only --skip-deps --skip-rust
+--skip-ihk-patch --jobs 2` with no `warning`/`warn:` matches in
+`/tmp/mckernel-clean-build-sysfs-handler.log`, and the ownership report. No
+QEMU boot or reboot-capable validation was run for this focused slice.
+
+Update 2026-05-24 sysfs init-body +2 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- procfs/sysfs/xpmem/file objects strict ownership 70% -> 72% by routing
+  `sysfs_init()` setup orchestration through Rust. Rust now owns sysfs request
+  layout-size validation, data-buffer size and pointer publication,
+  data-buffer allocation callback dispatch, setup-param allocation callback
+  dispatch, setup packet `buf_rpa`/`bufsize`/`busy` publication, setup
+  request-body dispatch, setup-param free callback sequencing, and stage/phase
+  error classification. C keeps the actual allocator/free primitives,
+  `virt_to_phys()`, `ihk_ikc_send()`, `cpu_pause()`/read-barrier primitives,
+  panic/logging, and fallback scaffolding.
+
+Validation passed `rustfmt kernel/rust/object_helpers.rs`, `bash -n
+kernel/rust/tests/run_equivalence.sh`, `kernel/rust/tests/run_equivalence.sh`
+with `object_helpers ok digest=d02b4da54f60e280`,
+`sched_helpers ok digest=c595ab25a3922ad9`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled `cmake --build /tmp/mckernel-rocky-rust --target
+mckernel.img -j2`, C-fallback `cmake --build
+/tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`, captured
+`scripts/rocky-rust-validation.sh --build-only --skip-deps --skip-rust
+--skip-ihk-patch --jobs 2` with no `warning`/`warn:` matches in
+`/tmp/mckernel-clean-build-sysfs-init.log`, `git diff --check`, syntax checks
+for the validation scripts, and the ownership report. The first equivalence
+attempt failed because the test harness used an ASLR-dependent fake physical
+address; that failure was logged, the stub was made deterministic, and the
+suite then passed. No QEMU boot or reboot-capable validation was run for this
+focused slice.
+
+Update 2026-05-24 sysfs request-body +3 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- procfs/sysfs/xpmem/file objects strict ownership 67% -> 70% by routing
+  public sysfs create, mkdir, symlink, lookup, unlink, and setup request-body
+  sequencing through Rust. Rust now owns IKC request send callback dispatch,
+  remote busy-wait polling with pause callbacks, response read barrier callback
+  sequencing, response error classification, and mkdir/lookup handle
+  publication. C keeps allocation/free, varargs path formatting, special sysfs
+  instance physical-address setup, the actual `ihk_ikc_send()` primitive,
+  logging, and fallback scaffolding.
+
+Validation passed `rustfmt kernel/rust/object_helpers.rs`, `bash -n
+kernel/rust/tests/run_equivalence.sh`, `kernel/rust/tests/run_equivalence.sh`
+with `object_helpers ok digest=512430333a6883ee`,
+`sched_helpers ok digest=c595ab25a3922ad9`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled `cmake --build /tmp/mckernel-rocky-rust --target
+mckernel.img -j2`, C-fallback `cmake --build
+/tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`, captured
+`scripts/rocky-rust-validation.sh --build-only --skip-deps --skip-rust
+--skip-ihk-patch --jobs 2` with no `warning`/`warn:` matches in
+`/tmp/mckernel-clean-build-sysfs-request.log`, `git diff --check`, syntax
+checks for the validation scripts, and the ownership report. No QEMU boot or
+reboot-capable validation was run for this focused slice.
+
+Update 2026-05-24 futex wait-entry +2 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only. This is recorded as +2 rather than +3 because the remaining C
+body here was wrapper/profile sequencing rather than a full wait or wake
+side-effect body:
+
+- Scheduler/timers/wait/futex strict ownership 87% -> 89% by routing
+  `futex_wait()` entry wrapper sequencing through Rust. Rust now owns bitset
+  validation before profile mutation, optional profile pause accounting before
+  the wait body, wait-body callback dispatch, optional profile resume timestamp
+  publication, and final return propagation. C keeps current-thread and
+  CPU-local response selection, the timestamp primitive, scheduler wait
+  behavior, actual futex queue/wake side effects, and fallback scaffolding.
+
+Validation passed `rustfmt kernel/rust/sched_helpers.rs`, `bash -n
+kernel/rust/tests/run_equivalence.sh`, `kernel/rust/tests/run_equivalence.sh`
+with `sched_helpers ok digest=c595ab25a3922ad9`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled `cmake --build /tmp/mckernel-rocky-rust --target
+mckernel.img -j2`, C-fallback `cmake --build
+/tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`, captured
+`scripts/rocky-rust-validation.sh --build-only --skip-deps --skip-rust
+--skip-ihk-patch --jobs 2` with no `warning`/`warn:` matches in
+`/tmp/mckernel-clean-build.log`, `git diff --check`, syntax checks for the
+validation scripts, and dashboard checks. No QEMU boot or reboot-capable
+validation was run for this focused slice.
+
+Update 2026-05-24 futex wake-op body +3 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- Scheduler/timers/wait/futex strict ownership 84% -> 87% by routing
+  `futex_wake_op()` body orchestration through Rust. Rust now owns source and
+  target get-key callback dispatch, hash-bucket callback dispatch, double-lock
+  callback ordering, in-user atomic-op callback dispatch, non-EFAULT error
+  return shaping, private `-EFAULT` retry looping, shared `-EFAULT`
+  key-release/retry sequencing, source and conditional target wake-scan
+  invocation, unlock callback ordering, put-key callback dispatch, and final
+  wake-count return shaping. C keeps the get-key/hash/atomic-op bridges,
+  actual spinlock primitives, actual in-user atomic primitive body, wake
+  callback side effects, key-reference primitive bodies and lifetime semantics,
+  IKC send/wake side effects, scheduler behavior, and broader wake/requeue
+  side effects.
+
+Validation passed `rustfmt kernel/rust/sched_helpers.rs`, `bash -n
+kernel/rust/tests/run_equivalence.sh`, `kernel/rust/tests/run_equivalence.sh`
+with `sched_helpers ok digest=0e91081e0572b753`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled `cmake --build /tmp/mckernel-rocky-rust --target
+mckernel.img -j2`, C-fallback `cmake --build
+/tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`, captured
+`scripts/rocky-rust-validation.sh --build-only --skip-deps --skip-rust
+--skip-ihk-patch --jobs 2` with no `warning`/`warn:` matches in
+`/tmp/mckernel-clean-build.log`, `git diff --check`, syntax checks for the
+validation scripts, and dashboard checks. No QEMU boot or reboot-capable
+validation was run for this focused slice.
+
+Update 2026-05-24 futex requeue-body +3 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- Scheduler/timers/wait/futex strict ownership 81% -> 84% by routing
+  `futex_requeue()` body orchestration through Rust. Rust now owns source and
+  target get-key callback dispatch, hash-bucket callback dispatch, double-lock
+  callback ordering, optional compare-value load callback sequencing and
+  mismatch return shaping, requeue-scan invocation, unlock callback ordering,
+  moved-waiter key-reference drop sequencing, put-key callback dispatch, and
+  final ret-or-task-count return shaping. C keeps the get-key/hash/get-value
+  bridges, actual spinlock primitives, wake/requeue callback side effects,
+  key-reference primitive bodies and lifetime semantics, user-value load
+  primitive body, IKC send/wake side effects, scheduler behavior, and broader
+  wake/requeue side effects.
+
+Validation passed `rustfmt kernel/rust/sched_helpers.rs`, `bash -n
+kernel/rust/tests/run_equivalence.sh`, `kernel/rust/tests/run_equivalence.sh`
+with `sched_helpers ok digest=ce323d2756d5a332`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled `cmake --build /tmp/mckernel-rocky-rust --target
+mckernel.img -j2`, C-fallback `cmake --build
+/tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`, captured
+`scripts/rocky-rust-validation.sh --build-only --skip-deps --skip-rust
+--skip-ihk-patch --jobs 2` with no `warning`/`warn:` matches in
+`/tmp/mckernel-clean-build.log`, `git diff --check`, syntax checks for the
+validation scripts, and dashboard checks. No QEMU boot or reboot-capable
+validation was run for this focused slice.
+
+Update 2026-05-24 futex wake-body +3 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- Scheduler/timers/wait/futex strict ownership 78% -> 81% by routing
+  `futex_wake()` body orchestration through Rust. Rust now owns bitset
+  validation, get-key callback dispatch, hash-bucket callback dispatch, lock
+  callback ordering, wake-scan invocation, unlock callback ordering, put-key
+  callback dispatch, and final return shaping. C keeps the get-key bridge call
+  site, hash-futex bridge/global queue selection, actual spinlock primitives,
+  actual wake side effects, key-reference lifetime semantics, IKC send/wake
+  side effects, scheduler behavior, user-value operations, and broader
+  wake/requeue side effects.
+
+Validation passed `rustfmt kernel/rust/sched_helpers.rs`, `bash -n
+kernel/rust/tests/run_equivalence.sh`, `kernel/rust/tests/run_equivalence.sh`
+with `sched_helpers ok digest=53b361f319d63330`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled `cmake --build /tmp/mckernel-rocky-rust --target
+mckernel.img -j2`, C-fallback `cmake --build
+/tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`, captured
+`scripts/rocky-rust-validation.sh --build-only --skip-deps --skip-rust
+--skip-ihk-patch --jobs 2` with no `warning`/`warn:` matches in
+`/tmp/mckernel-clean-build.log`, `git diff --check`, syntax checks for the
+validation scripts, and dashboard checks. No QEMU boot or reboot-capable
+validation was run for this focused slice.
+
+Update 2026-05-24 futex get-key +3 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- Scheduler/timers/wait/futex strict ownership 75% -> 78% by routing
+  `get_futex_key()` body orchestration through Rust. Rust now owns natural-
+  alignment validation dispatch, base/offset publication, private key
+  address/mm construction, private key-reference callback dispatch, shared-key
+  offset tagging, virtual-to-physical callback retry, page-fault callback
+  dispatch, failed-translation logging callback sequencing, final shared
+  physical key publication, and return shaping. C keeps current-thread/mm
+  selection, actual page-table translation, actual page-fault/populate
+  behavior, the no-op key-reference primitive body and lifetime semantics,
+  user-value loads/comparisons, spinlock primitives, scheduler behavior,
+  context switching, timer queues, IKC send/wake side effects, and broader
+  wait/requeue side effects.
+
+Validation passed `rustfmt kernel/rust/sched_helpers.rs`, `bash -n
+kernel/rust/tests/run_equivalence.sh`, `kernel/rust/tests/run_equivalence.sh`
+with `sched_helpers ok digest=056868da28120846`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled `cmake --build /tmp/mckernel-rocky-rust --target
+mckernel.img -j2`, C-fallback `cmake --build
+/tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`, captured
+`scripts/rocky-rust-validation.sh --build-only --skip-deps --skip-rust
+--skip-ihk-patch --jobs 2` with no `warning`/`warn:` matches in
+`/tmp/mckernel-clean-build.log`, `git diff --check`, syntax checks for the
+validation scripts, and dashboard checks. No QEMU boot or reboot-capable
+validation was run for this focused slice.
+
+Update 2026-05-24 futex wait-body +3 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- Scheduler/timers/wait/futex strict ownership 72% -> 75% by routing
+  `futex_wait()` body orchestration through Rust. Rust now owns wait-queue
+  preparation, setup callback dispatch, wait callback dispatch, unqueue
+  dispatch, pending-signal callback gating, post-action classification,
+  success/timeout/interrupt/retry return shaping, key-release callback
+  sequencing, and retry looping for the no-signal case. C keeps profile
+  timestamp bookkeeping around the body, current-thread and CPU-local response
+  lookup, futex setup primitive internals, queue/wait callback internals,
+  unqueue callback internals, actual signal-list lookup, actual key-reference
+  release primitive, scheduler behavior, context switching, timer queues,
+  user-value loads/comparisons, IKC send and wake primitives, and broader
+  wait/requeue side effects.
+
+Validation passed `rustfmt kernel/rust/sched_helpers.rs`, `bash -n
+kernel/rust/tests/run_equivalence.sh`, `kernel/rust/tests/run_equivalence.sh`
+with `sched_helpers ok digest=e9e1d8f2519bd5e7`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled `cmake --build /tmp/mckernel-rocky-rust --target
+mckernel.img -j2`, C-fallback `cmake --build
+/tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`, captured
+`scripts/rocky-rust-validation.sh --build-only --skip-deps --skip-rust
+--skip-ihk-patch --jobs 2` with no `warning`/`warn:` matches in
+`/tmp/mckernel-clean-build.log`, `git diff --check`, syntax checks for the
+validation scripts, and dashboard checks. No QEMU boot or reboot-capable
+validation was run for this focused slice.
+
+Update 2026-05-24 futex wait-queue-me +3 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- Scheduler/timers/wait/futex strict ownership 69% -> 72% by routing
+  `futex_wait_queue_me()` orchestration through Rust. Rust now owns
+  interruptible-state publication, idle-halt/timeout spin-sleep gating,
+  spin-sleep lock callback ordering, enqueue callback dispatch, queued-state
+  classification, timeout versus direct scheduling callback selection, wake
+  logging callback sequencing, final running-state restoration, and returned
+  remaining-time shaping. C keeps current-thread lookup, actual spinlock
+  primitives, `queue_me()` callback internals, `schedule_timeout()` and direct
+  scheduler primitive behavior, timer queues, context switching, futex key
+  lifetime internals, user-value loads/comparisons, IKC send and wake
+  primitives, and broader wait/requeue side effects.
+
+Validation passed `rustfmt kernel/rust/sched_helpers.rs`, `bash -n
+kernel/rust/tests/run_equivalence.sh`, `kernel/rust/tests/run_equivalence.sh`
+with `sched_helpers ok digest=8ac84170e572c915`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled `cmake --build /tmp/mckernel-rocky-rust --target
+mckernel.img -j2`, C-fallback `cmake --build
+/tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`, captured
+`scripts/rocky-rust-validation.sh --build-only --skip-deps --skip-rust
+--skip-ihk-patch --jobs 2` with no `warning`/`warn:` matches in
+`/tmp/mckernel-clean-build.log`, `git diff --check`, syntax checks for the
+validation scripts, and dashboard checks. No QEMU boot or reboot-capable
+validation was run for this focused slice.
+
+Update 2026-05-24 futex unqueue-me +3 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- Scheduler/timers/wait/futex strict ownership 66% -> 69% by routing futex
+  `unqueue_me()` orchestration through Rust. Rust now owns lock-pointer read
+  and compiler barrier, wrong-lock race detection and retry, detach dispatch
+  under the confirmed lock, unlock sequencing, already-woken no-lock return
+  shaping, and key-reference drop callback sequencing. C keeps the actual
+  spinlock primitives, futex key-reference primitive body and lifetime
+  internals, scheduler behavior, context switching, timer queues, user-value
+  loads/comparisons, IKC send and wake primitives, and broader wait/requeue
+  side effects.
+
+Validation passed `rustfmt kernel/rust/sched_helpers.rs`, `bash -n
+kernel/rust/tests/run_equivalence.sh`, `kernel/rust/tests/run_equivalence.sh`
+with `sched_helpers ok digest=e82f192a87d6ddf1`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled `cmake --build /tmp/mckernel-rocky-rust --target
+mckernel.img -j2`, C-fallback `cmake --build
+/tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`, captured
+`scripts/rocky-rust-validation.sh --build-only --skip-deps --skip-rust
+--skip-ihk-patch --jobs 2` with no `warning`/`warn:` matches in
+`/tmp/mckernel-clean-build.log`, `git diff --check`, syntax checks for the
+validation scripts, and dashboard checks. No QEMU boot or reboot-capable
+validation was run for this focused slice.
+
+Update 2026-05-24 futex queue-me +3 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- Scheduler/timers/wait/futex strict ownership 63% -> 66% by routing futex
+  `queue_me()` orchestration through Rust. Rust now owns waiter plist
+  insertion, waiter task and physical-address metadata publication,
+  interrupt/vector metadata setup, and hash-bucket unlock callback sequencing.
+  C keeps current-thread and CPU-local address selection, `virt_to_phys`,
+  interrupt/vector primitives, the actual spinlock primitive, futex key
+  lifetime, user-value loads, IKC send and scheduler wake primitives, timer
+  queues, context switching, schedule behavior, race retry, and broader futex
+  wait/requeue side effects.
+
+Validation passed `rustfmt kernel/rust/sched_helpers.rs`, `bash -n
+kernel/rust/tests/run_equivalence.sh`, `kernel/rust/tests/run_equivalence.sh`
+with `sched_helpers ok digest=20464f5624b402a2`,
+`printf_decimal ok digest=b403ba89612baeb3`, and the unresolved-symbol/SIMD
+gate, Rust-enabled `cmake --build /tmp/mckernel-rocky-rust --target
+mckernel.img -j2`, C-fallback `cmake --build
+/tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`, captured
+`scripts/rocky-rust-validation.sh --build-only --skip-deps --skip-rust
+--skip-ihk-patch --jobs 2` with no `warning`/`warn:` matches in
+`/tmp/mckernel-clean-build.log`, `git diff --check`, syntax checks for the
+validation scripts, and dashboard checks. An initial equivalence run failed
+because the new digest mixed ASLR-sensitive stack addresses; that was logged
+and fixed by mixing stable equality predicates instead. No QEMU boot or
+reboot-capable validation was run for this focused slice.
+
+Update 2026-05-24 vsnprintf pointer-format +1 strict-core slice
+------------------------------------------------------------
+
+The broad +50 continuation is already complete, so this slice is strict-core
+movement only:
+
+- Shared primitives strict ownership 99% -> 100% by routing scoped `%p`
+  pointer formatting through Rust for the current non-`CONFIG_KALLSYMS` kernel
+  path. Rust now owns null-pointer string output, default pointer
+  width/zero-padding/base selection, `%pS` fallback formatting, and
+  extension-consumption behavior. C keeps the public ABI wrapper, `va_arg`
+  extraction callbacks, and fallback implementation; that still blocks
+  standalone Rust but counts as ABI/fallback glue for strict shared-primitives
+  ownership.
+
+Validation passed `rustfmt kernel/rust/numparse.rs`, `bash -n
+kernel/rust/tests/run_equivalence.sh`, `git diff --check`,
+`kernel/rust/tests/run_equivalence.sh` with
+`printf_decimal ok digest=b403ba89612baeb3` and the unresolved-symbol/SIMD
+gate, Rust-enabled `cmake --build /tmp/mckernel-rocky-rust --target
+mckernel.img -j2`, C-fallback `cmake --build
+/tmp/mckernel-rocky-c-fallback --target mckernel.img -j2`, and
+`scripts/rocky-rust-validation.sh --build-only --skip-deps --skip-rust
+--skip-ihk-patch --jobs 2`. The final captured build-only log at
+`/tmp/mckernel-clean-build.log` had no `warning`/`warn:` matches after
+clearing stale Rust jobserver environment, adding layout-TU-only XPMEM stubs,
+marking the SMP startup object non-standard for objtool, and fixing the
+libdwarf autoconf probe CMakeLists generator.
+
+The previous formatter loop slice moved Shared primitives strict ownership
+96% -> 99% by routing the main `vsnprintf()` loop orchestration through Rust:
+format-token loop state, literal copying, width/precision continuation, `%c`,
+`%s`, numeric dispatch, `%%` and invalid-conversion percent emission, `%n`
+count stores, pointer-extension callback handoff, buffer termination, and
+return shaping.
+
+The previous formatter slice moved Shared primitives strict ownership
+94% -> 96% by routing bounded `vsnprintf()` actions through Rust:
+literal-span copying, `%c` padding/output, `%%` and invalid-conversion percent
+emission, `%n` count stores for int, long, and size_t qualifiers, and final
+buffer termination.
 
 Update 2026-05-24 wait_continued +1 strict-core slice
 ------------------------------------------------------------
@@ -5521,22 +8353,24 @@ Update 2026-05-22 IHK list-deletion +4 verified slice toward +135 campaign:
 Boot-path verification safety plan:
 - Do not run host `mcreboot.sh`, host reboot/shutdown/kexec, or scripts that
   implicitly call them without explicit approval for that specific run.
-- The safest boot-path verifier is a disposable Rocky 8.x VM or snapshot-backed
-  nested VM launched from the Codex session, with McKernel installed only inside
-  the guest. The host should see only the VM process and serial/log files; all
-  `mcreboot.sh`, `mcstop+release.sh`, module load/unload, and V9/V10/V11 boot
-  smoke commands run inside the guest.
-- Required guardrails for that VM runner: timeout every boot/test command,
-  capture serial console and guest dmesg to `/tmp`, always run guest
-  `mcstop+release.sh -k` during cleanup, never pass host `/dev/mcos*` or host
-  IHK modules into the guest, and destroy/revert the VM snapshot after each
+- Use `scripts/qemu-mckernel-guest.sh` as the safe guest boundary for future
+  boot-path verification. It creates a disposable qcow2 overlay, captures a
+  serial log under `/tmp`, runs requested commands only inside the guest over
+  SSH, refuses host device image paths, and attempts guest
+  `mcstop+release.sh -k` cleanup when SSH became ready.
+- All `mcreboot.sh`, `mcstop+release.sh`, module load/unload, and V9/V10/V11
+  boot smoke commands must run inside that guest unless the user explicitly
+  approves a host/VM script for that exact run.
+- Required remaining guardrails for real boot attempts: use a Rocky 8.x guest
+  image or disposable generated equivalent, timeout every boot/test command,
+  capture guest dmesg/kmsg artifacts to `/tmp`, never pass host `/dev/mcos*`
+  or host IHK modules into the guest, and destroy/revert the overlay after each
   attempt.
-- Until the VM runner is created and validated, safe non-reboot boot-adjacent
-  checks are limited to image builds, `scripts/ihk-module-load-smoke.sh` when
-  host module load is approved, and `scripts/rocky-v11-focused.sh
-  --classify-only`, `--build-only`, or `--skip-boot`. Plain
-  `scripts/rocky-v11-focused.sh` is not safe by default because it can call
-  `mcreboot.sh`.
+- Safe non-reboot boot-adjacent checks remain image builds,
+  `scripts/ihk-module-load-smoke.sh` when host module load is approved, and
+  `scripts/rocky-v11-focused.sh --classify-only`, `--build-only`, or
+  `--skip-boot`. Plain `scripts/rocky-v11-focused.sh` is not safe by default
+  because it can call `mcreboot.sh`.
 
 Update 2026-05-22 IHK kmsg traversal +3 verified slice toward +135 campaign:
 - Implemented:
@@ -8077,7 +10911,7 @@ Update 2026-05-23 Process/VM range initialization +3 verified continuation slice
     remaining.
   - Strict `migration.txt` movement: about +25 strict-core points total for
     this continuation, moving the strict x86_64 core estimate to about 58-68%.
-  - Post-campaign verified progress is now +140 aggregate functional points
+  - At that checkpoint, post-campaign verified progress was +140 aggregate functional points
     toward actual 100% completion. Non-arm64 dashboard average is now 87.7%;
     McKernel-owned core row average is now 86.6%. Total distance to 100 is
     148 non-arm64 aggregate functional points, or 107 McKernel-owned core-row
@@ -8121,7 +10955,7 @@ Update 2026-05-23 Process/VM range mapping-action +3 verified continuation slice
     remaining.
   - Strict `migration.txt` movement: about +28 strict-core points total for
     this continuation, moving the strict x86_64 core estimate to about 59-69%.
-  - Post-campaign verified progress is now +143 aggregate functional points
+  - At that checkpoint, post-campaign verified progress was +143 aggregate functional points
     toward actual 100% completion. Non-arm64 dashboard average is now 87.9%;
     McKernel-owned core row average is now 87.0%. Total distance to 100 is
     145 non-arm64 aggregate functional points, or 104 McKernel-owned core-row
@@ -8217,8 +11051,8 @@ Update 2026-05-24 x86 page-table root-lifecycle +3 verified active +50 slice:
     McKernel-owned core row average is now 89.8%. Total distance to 100 is
     123 non-arm64 aggregate functional points, or 82 McKernel-owned core-row
     points.
-- Honest remaining C ownership:
-  - C still owns page-table allocation/free primitives, recursive child-table
+- Honest remaining C ownership at that checkpoint:
+  - C still owned page-table allocation/free primitives, recursive child-table
     destruction below the root, `phys_to_virt()`/free orchestration, callback
     primitive implementations, page-table traversal orchestration, actual page
     frees, RSS updates, mapping/free rollback behavior, TLB-sensitive flushing,
@@ -8404,13 +11238,13 @@ Update 2026-05-24 x86 set-PTE body +3 verified active +50 slice:
     McKernel-owned core row average is now 90.5%. Total distance to 100 is
     117 non-arm64 aggregate functional points, or 76 McKernel-owned core-row
     points.
-- Honest remaining C ownership:
-  - The broad x86_64 memory dashboard row is now 100%, but strict ownership is
-    not complete: C still owns page-table allocation/free primitives, recursive
-    child-table destruction below the root, `phys_to_virt()`/free orchestration,
-    callback primitive implementations, page-table traversal orchestration,
-    actual page frees, RSS updates, mapping/free rollback behavior,
-    TLB-sensitive flushing, and user-copy.
+- Honest remaining C ownership at that checkpoint:
+  - The broad x86_64 memory dashboard row was 100%, but strict ownership was
+    not complete: C still owned page-table allocation/free primitives,
+    recursive child-table destruction below the root, `phys_to_virt()`/free
+    orchestration, callback primitive implementations, page-table traversal
+    orchestration, actual page frees, RSS updates, mapping/free rollback
+    behavior, TLB-sensitive flushing, and user-copy.
 
 Update 2026-05-24 x86 page-table prepare-map +3 verified active +50 slice:
 
@@ -8452,8 +11286,8 @@ Update 2026-05-24 x86 page-table prepare-map +3 verified active +50 slice:
     McKernel-owned core row average is now 90.1%. Total distance to 100 is
     120 non-arm64 aggregate functional points, or 79 McKernel-owned core-row
     points.
-- Honest remaining C ownership:
-  - C still owns page-table allocation/free primitives, recursive child-table
+- Honest remaining C ownership at that checkpoint:
+  - C still owned page-table allocation/free primitives, recursive child-table
     destruction below the root, `phys_to_virt()`/free orchestration, callback
     primitive implementations, page-table traversal orchestration, actual page
     frees, RSS updates, mapping/free rollback behavior, TLB-sensitive flushing,

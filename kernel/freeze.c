@@ -16,7 +16,7 @@ void
 freeze()
 {
 	unsigned long flags;
-	struct ihk_os_cpu_monitor *monitor = cpu_local_var(monitor);
+	struct ihk_os_cpu_monitor *monitor = get_this_cpu_local_var()->monitor;
 
 	if (monitor->status_bak & IHK_OS_MONITOR_ALLOW_THAW_REQUEST) {
 		return;
@@ -41,7 +41,7 @@ frozen:
 long
 freeze_thaw(void *nmi_ctx)
 {
-	struct ihk_os_cpu_monitor *monitor = cpu_local_var(monitor);
+	struct ihk_os_cpu_monitor *monitor = get_this_cpu_local_var()->monitor;
 
 	if (multi_intr_mode == 1) {
 		if (monitor->status != IHK_OS_MONITOR_KERNEL_FROZEN) {

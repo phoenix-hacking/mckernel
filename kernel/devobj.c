@@ -59,6 +59,119 @@ static struct memobj *to_memobj(struct devobj *devobj)
 	return &devobj->memobj;
 }
 
+#ifdef MCKERNEL_RUST_OBJECT_HELPERS
+static int devobj_unmap_bridge(uintptr_t handle)
+{
+	ihk_mc_user_context_t ctx;
+
+	ihk_mc_syscall_set_arg0(&ctx, PAGER_REQ_UNMAP);
+	ihk_mc_syscall_set_arg1(&ctx, handle);
+	ihk_mc_syscall_set_arg2(&ctx, 1);
+
+	return syscall_generic_forwarding(__NR_mmap, &ctx);
+}
+
+static void devobj_free_pages_bridge(void *addr, size_t npages)
+{
+	_ihk_mc_free_pages(addr, npages, IHK_MC_PG_KERNEL, __FILE__, __LINE__);
+}
+
+static void devobj_free_bridge(void *addr)
+{
+	kfree_tracked(addr, __FILE__, __LINE__);
+}
+
+static void devobj_profile_bridge(void)
+{
+#ifdef PROFILE_ENABLE
+	profile_event_add(PROFILE_page_fault_dev_file, PAGE_SIZE);
+#endif
+}
+
+static unsigned long devobj_lock_bridge(void *lock)
+{
+	return ihk_mc_spinlock_lock((ihk_spinlock_t *)lock);
+}
+
+static void devobj_unlock_bridge(void *lock, unsigned long irqstate)
+{
+	ihk_mc_spinlock_unlock((ihk_spinlock_t *)lock, irqstate);
+}
+
+static uintptr_t devobj_pfn_load_bridge(void *obj, int ix)
+{
+	return ((struct devobj *)obj)->pfn_table[ix];
+}
+
+static int devobj_fetch_pfn_bridge(void *memobj, void *obj, uintptr_t handle,
+				   off_t off, int p2align, uintptr_t *pfnp)
+{
+	ihk_mc_user_context_t ctx;
+	(void)memobj;
+	(void)obj;
+	(void)p2align;
+
+	ihk_mc_syscall_set_arg0(&ctx, PAGER_REQ_PFN);
+	ihk_mc_syscall_set_arg1(&ctx, handle);
+	ihk_mc_syscall_set_arg2(&ctx, devobj_pfn_request_offset_result(off));
+	ihk_mc_syscall_set_arg3(&ctx, virt_to_phys(pfnp));
+
+	return syscall_generic_forwarding(__NR_mmap, &ctx);
+}
+
+static int devobj_write_combined_bridge(uintptr_t pfn)
+{
+	return pfn_is_write_combined(pfn);
+}
+
+static uintptr_t devobj_map_memory_bridge(uintptr_t phys, size_t size)
+{
+	return ihk_mc_map_memory(NULL, phys, size);
+}
+
+static void devobj_pfn_store_bridge(void *obj, int ix, uintptr_t pfn)
+{
+	struct devobj *devobj = obj;
+
+	if (devobj_should_store_pfn_result(devobj->pfn_table[ix])) {
+		devobj->pfn_table[ix] = pfn;
+	}
+}
+
+static void devobj_log_bridge(int event, void *memobj, void *obj, off_t off,
+			      off_t pgoff, int p2align, int ix, int error,
+			      uintptr_t pfn)
+{
+	(void)pgoff;
+	(void)ix;
+
+	switch (event) {
+	case DEVOBJ_LOG_RELEASE_FAILED:
+		dkprintf("%s(%p %lx): release failed. %d\n",
+			 __func__, obj, pfn, error);
+		break;
+	case DEVOBJ_LOG_FREE_DONE:
+		dkprintf("%s(%p %lx):free\n", __func__, obj, pfn);
+		break;
+	case DEVOBJ_LOG_OUT_OF_RANGE:
+		kprintf("%s: error: out of range: off: %lu, page off: %lu obj->npages: %lu\n",
+			"devobj_get_page", off, pgoff,
+			((struct devobj *)obj)->npages);
+		break;
+	case DEVOBJ_LOG_FETCH_FAILED:
+		kprintf("devobj_get_page(%p %lx,%lx,%d):PAGER_REQ_PFN failed. %d\n",
+			memobj, ((struct devobj *)obj)->handle, off,
+			p2align, error);
+		break;
+	case DEVOBJ_LOG_NOT_PRESENT:
+		kprintf("devobj_get_page(%p %lx,%lx,%d):not present. %lx\n",
+			memobj, ((struct devobj *)obj)->handle, off,
+			p2align, pfn);
+		break;
+	}
+}
+#endif
+
 /***********************************************************************
  * devobj
  */
@@ -74,7 +187,7 @@ int devobj_create(int fd, size_t len, off_t off, struct memobj **objp, int *maxp
 
 	dkprintf("%s: fd: %d, len: %lu, off: %lu \n", __FUNCTION__, fd, len, off);
 
-	obj = kmalloc(sizeof(*obj), IHK_MC_AP_NOWAIT);
+	obj = kmalloc_tracked(sizeof(*obj), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 	if (!obj) {
 		error = -ENOMEM;
 		kprintf("%s: error: fd: %d, len: %lu, off: %lu kmalloc failed.\n", 
@@ -83,7 +196,7 @@ int devobj_create(int fd, size_t len, off_t off, struct memobj **objp, int *maxp
 	}
 	memset(obj, 0, sizeof(*obj));
 
-	obj->pfn_table = ihk_mc_alloc_pages(pfn_npages, IHK_MC_AP_NOWAIT);
+	obj->pfn_table = _ihk_mc_alloc_aligned_pages_node(pfn_npages, PAGE_P2ALIGN, IHK_MC_AP_NOWAIT, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);
 	if (!obj->pfn_table) {
 		error = -ENOMEM;
 		kprintf("%s: error: fd: %d, len: %lu, off: %lu allocating PFN failed.\n", 
@@ -92,12 +205,12 @@ int devobj_create(int fd, size_t len, off_t off, struct memobj **objp, int *maxp
 	}
 	memset(obj->pfn_table, 0, devobj_pfn_table_bytes_result(pfn_npages));
 
-	ihk_mc_syscall_arg0(&ctx) = PAGER_REQ_MAP;
-	ihk_mc_syscall_arg1(&ctx) = fd;
-	ihk_mc_syscall_arg2(&ctx) = len;
-	ihk_mc_syscall_arg3(&ctx) = off;
-	ihk_mc_syscall_arg4(&ctx) = virt_to_phys(&result);
-	ihk_mc_syscall_arg5(&ctx) = prot | populate_flags;
+	ihk_mc_syscall_set_arg0(&ctx, PAGER_REQ_MAP);
+	ihk_mc_syscall_set_arg1(&ctx, fd);
+	ihk_mc_syscall_set_arg2(&ctx, len);
+	ihk_mc_syscall_set_arg3(&ctx, off);
+	ihk_mc_syscall_set_arg4(&ctx, virt_to_phys(&result));
+	ihk_mc_syscall_set_arg5(&ctx, prot | populate_flags);
 
 	memset(&result, 0, sizeof(result));
 
@@ -119,7 +232,7 @@ int devobj_create(int fd, size_t len, off_t off, struct memobj **objp, int *maxp
 
 	dkprintf("%s: path=%s\n", __FUNCTION__, result.path);
 	if (devobj_path_present_result(result.path[0])) {
-		obj->memobj.path = kmalloc(PATH_MAX, IHK_MC_AP_NOWAIT);
+		obj->memobj.path = kmalloc_tracked(PATH_MAX, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 		if (!obj->memobj.path) {
 			error = -ENOMEM;
 			kprintf("%s: ERROR: Out of memory\n", __FUNCTION__);
@@ -161,9 +274,9 @@ int devobj_create(int fd, size_t len, off_t off, struct memobj **objp, int *maxp
 out:
 	if (obj) {
 		if (devobj_pfn_table_present_result((uintptr_t)obj->pfn_table)) {
-			ihk_mc_free_pages(obj->pfn_table, pfn_npages);
+			_ihk_mc_free_pages(obj->pfn_table, pfn_npages, IHK_MC_PG_KERNEL, __FILE__, __LINE__);
 		}
-		kfree(obj);
+		kfree_tracked(obj, __FILE__, __LINE__);
 	}
 	dkprintf("%s: ret: %d, fd: %d, len: %lu, off: %lu, handle: %p, maxprot: %x \n", 
 		__FUNCTION__, error, fd, len, off, result.handle, result.maxprot);
@@ -173,6 +286,14 @@ out:
 static void devobj_free(struct memobj *memobj)
 {
 	struct devobj *obj = to_devobj(memobj);
+#ifdef MCKERNEL_RUST_OBJECT_HELPERS
+	dkprintf("%s(%p %lx)\n", __func__, obj, obj->handle);
+	(void)devobj_free_body_result(
+		obj, to_memobj(obj)->path, obj->pfn_table, obj->handle,
+		obj->npages, devobj_unmap_bridge, devobj_free_pages_bridge,
+		devobj_free_bridge, devobj_log_bridge);
+	return;
+#else
 	uintptr_t handle;
 	const size_t pfn_npages = devobj_pfn_table_npages_result(obj->npages);
 	int error;
@@ -182,9 +303,9 @@ static void devobj_free(struct memobj *memobj)
 
 	handle = obj->handle;
 
-	ihk_mc_syscall_arg0(&ctx) = PAGER_REQ_UNMAP;
-	ihk_mc_syscall_arg1(&ctx) = handle;
-	ihk_mc_syscall_arg2(&ctx) = 1;
+	ihk_mc_syscall_set_arg0(&ctx, PAGER_REQ_UNMAP);
+	ihk_mc_syscall_set_arg1(&ctx, handle);
+	ihk_mc_syscall_set_arg2(&ctx, 1);
 
 	error = syscall_generic_forwarding(__NR_mmap, &ctx);
 	if (error) {
@@ -196,23 +317,37 @@ static void devobj_free(struct memobj *memobj)
 	if (devobj_pfn_table_present_result((uintptr_t)obj->pfn_table)) {
 		// Don't call memory_stat_rss_sub() because devobj related
 		// pages don't reside in main memory
-		ihk_mc_free_pages(obj->pfn_table, pfn_npages);
+		_ihk_mc_free_pages(obj->pfn_table, pfn_npages, IHK_MC_PG_KERNEL, __FILE__, __LINE__);
 	}
 
 	if (devobj_path_present_result((uintptr_t)to_memobj(obj)->path)) {
-		kfree(to_memobj(obj)->path);
+		kfree_tracked(to_memobj(obj)->path, __FILE__, __LINE__);
 	}
 
-	kfree(obj);
+	kfree_tracked(obj, __FILE__, __LINE__);
 
 	dkprintf("%s(%p %lx):free\n", __func__, obj, handle);
 	return;
+#endif
 }
 
 static int devobj_get_page(struct memobj *memobj, off_t off, int p2align, uintptr_t *physp, unsigned long *flag, uintptr_t virt_addr)
 {
-	const off_t pgoff = devobj_pgoff_result(off);
 	struct devobj *obj = to_devobj(memobj);
+#if defined(MCKERNEL_RUST_OBJECT_HELPERS) && !defined(ENABLE_FUGAKU_HACKS)
+	(void)virt_addr;
+	dkprintf("devobj_get_page(%p %lx,%lx,%d)\n",
+		 memobj, obj->handle, off, p2align);
+	return devobj_get_page_body_result(
+		memobj, obj, obj->handle, off, p2align, obj->pfn_pgoff,
+		obj->npages, &obj->pfn_table_lock, physp, flag,
+		devobj_profile_bridge, devobj_lock_bridge,
+		devobj_unlock_bridge, devobj_pfn_load_bridge,
+		devobj_fetch_pfn_bridge, devobj_write_combined_bridge,
+		devobj_map_memory_bridge, devobj_pfn_store_bridge,
+		devobj_log_bridge);
+#else
+	const off_t pgoff = devobj_pgoff_result(off);
 	int error;
 	uintptr_t pfn;
 	uintptr_t attr;
@@ -245,10 +380,10 @@ static int devobj_get_page(struct memobj *memobj, off_t off, int p2align, uintpt
 #ifdef ENABLE_FUGAKU_HACKS
 pf_retry:
 #endif
-		ihk_mc_syscall_arg0(&ctx) = PAGER_REQ_PFN;
-		ihk_mc_syscall_arg1(&ctx) = obj->handle;
-		ihk_mc_syscall_arg2(&ctx) = devobj_pfn_request_offset_result(off);
-		ihk_mc_syscall_arg3(&ctx) = virt_to_phys(&pfn);
+		ihk_mc_syscall_set_arg0(&ctx, PAGER_REQ_PFN);
+		ihk_mc_syscall_set_arg1(&ctx, obj->handle);
+		ihk_mc_syscall_set_arg2(&ctx, devobj_pfn_request_offset_result(off));
+		ihk_mc_syscall_set_arg3(&ctx, virt_to_phys(&pfn));
 
 		error = syscall_generic_forwarding(__NR_mmap, &ctx);
 		if (error) {
@@ -304,4 +439,5 @@ pf_retry:
 out:
 	dkprintf("devobj_get_page(%p %lx,%lx,%d): %d %lx\n", memobj, obj->handle, off, p2align, error, *physp);
 	return error;
+#endif
 }

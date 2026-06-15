@@ -398,11 +398,25 @@ out:
 	return error;
 }
 
-#define PFN_WRITE_COMBINED _PAGE_PWT
-static inline bool pte_is_write_combined(pte_t pte)
+#ifndef MCCTRL_RUST_HELPERS
+int
+mcctrl_pte_is_write_combined_result(unsigned long flags)
 {
-	return ((pte_flags(pte) & _PAGE_PWT) && !(pte_flags(pte) & _PAGE_PCD));
+	return ((flags & _PAGE_PWT) && !(flags & _PAGE_PCD));
 }
+
+int
+xchg4(int *ptr, int x)
+{
+	int old = x;
+
+	asm volatile("xchgl %k0,%1"
+			: "=r" (old)
+			: "m" (*ptr), "0" (old)
+			: "memory");
+	return old;
+}
+#endif
 
 /*
  * The assembler switch_ctx is save/load registers in the context.

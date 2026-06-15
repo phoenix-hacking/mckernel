@@ -32,6 +32,270 @@
 #include <page.h>
 #include <kmalloc.h>
 #include <ihk/debug.h>
+#include <cas.h>
+
+#ifndef MCKERNEL_RUST_X86_CPU_HELPERS
+unsigned long rdtsc(void)
+{
+	unsigned int high, low;
+
+	asm volatile("rdtsc" : "=a" (low), "=d" (high));
+
+	return (unsigned long)high << 32 | low;
+}
+
+unsigned long read_tsc(void)
+{
+	return rdtsc();
+}
+
+void mb(void)
+{
+	asm volatile("mfence" : : : "memory");
+}
+
+void rmb(void)
+{
+	asm volatile("lfence" : : : "memory");
+}
+
+void wmb(void)
+{
+	asm volatile("sfence" : : : "memory");
+}
+
+void smp_mb(void)
+{
+	mb();
+}
+
+void smp_rmb(void)
+{
+	rmb();
+}
+
+void smp_wmb(void)
+{
+	asm volatile("" : : : "memory");
+}
+
+void arch_barrier(void)
+{
+	asm volatile("" : : : "memory");
+}
+
+unsigned long smp_load_acquire_ulong(const unsigned long *p)
+{
+	unsigned long value = *(const volatile unsigned long *)p;
+
+	asm volatile("" : : : "memory");
+	return value;
+}
+
+unsigned int smp_load_acquire_uint(const unsigned int *p)
+{
+	unsigned int value = *(const volatile unsigned int *)p;
+
+	asm volatile("" : : : "memory");
+	return value;
+}
+
+int smp_load_acquire_int(const int *p)
+{
+	int value = *(const volatile int *)p;
+
+	asm volatile("" : : : "memory");
+	return value;
+}
+
+void *smp_load_acquire_ptr(void *const *p)
+{
+	void *value = *(void *const volatile *)p;
+
+	asm volatile("" : : : "memory");
+	return value;
+}
+
+void smp_store_release_ulong(unsigned long *p, unsigned long value)
+{
+	asm volatile("" : : : "memory");
+	*(volatile unsigned long *)p = value;
+}
+
+void smp_store_release_uint(unsigned int *p, unsigned int value)
+{
+	asm volatile("" : : : "memory");
+	*(volatile unsigned int *)p = value;
+}
+
+void smp_store_release_int(int *p, int value)
+{
+	asm volatile("" : : : "memory");
+	*(volatile int *)p = value;
+}
+
+unsigned long CVAL(unsigned int event, unsigned int mask)
+{
+	return (((event & 0xf00UL) << 24) | (mask << 8) | (event & 0xff));
+}
+
+unsigned long CVAL2(unsigned int event, unsigned int mask,
+		unsigned int inv, unsigned int count)
+{
+	return CVAL(event, mask) | ((inv & 1) << 23) | ((count & 0xff) << 24);
+}
+
+unsigned long xgetbv(unsigned int index)
+{
+	unsigned int low, high;
+
+	asm volatile("xgetbv" : "=a" (low), "=d" (high) : "c" (index));
+
+	return low | ((unsigned long)high << 32);
+}
+
+void xsetbv(unsigned int index, unsigned long val)
+{
+	unsigned int low, high;
+
+	low = val;
+	high = val >> 32;
+
+	asm volatile("xsetbv" : : "a" (low), "d" (high), "c" (index));
+}
+
+void wrmsr(unsigned int idx, unsigned long value)
+{
+	unsigned int high, low;
+
+	high = value >> 32;
+	low = value & 0xffffffffU;
+
+	asm volatile("wrmsr" : : "c" (idx), "a" (low), "d" (high) : "memory");
+}
+
+unsigned long rdpmc(unsigned int counter)
+{
+	unsigned int high, low;
+
+	asm volatile("rdpmc" : "=a" (low), "=d" (high) : "c" (counter));
+
+	return (unsigned long)high << 32 | low;
+}
+
+unsigned long rdmsr(unsigned int index)
+{
+	unsigned int high, low;
+
+	asm volatile("rdmsr" : "=a" (low), "=d" (high) : "c" (index));
+
+	return (unsigned long)high << 32 | low;
+}
+
+void ihk_mc_mb(void)
+{
+	asm volatile("mfence" : : : "memory");
+}
+
+unsigned long REGS_GET_STACK_POINTER(const void *regs)
+{
+	const ihk_mc_user_context_t *uc = regs;
+
+	return uc ? uc->gpr.rsp : 0;
+}
+
+unsigned long ihk_mc_syscall_arg0(const ihk_mc_user_context_t *uc)
+{
+	return uc ? uc->gpr.rdi : 0;
+}
+
+unsigned long ihk_mc_syscall_arg1(const ihk_mc_user_context_t *uc)
+{
+	return uc ? uc->gpr.rsi : 0;
+}
+
+unsigned long ihk_mc_syscall_arg2(const ihk_mc_user_context_t *uc)
+{
+	return uc ? uc->gpr.rdx : 0;
+}
+
+unsigned long ihk_mc_syscall_arg3(const ihk_mc_user_context_t *uc)
+{
+	return uc ? uc->gpr.r10 : 0;
+}
+
+unsigned long ihk_mc_syscall_arg4(const ihk_mc_user_context_t *uc)
+{
+	return uc ? uc->gpr.r8 : 0;
+}
+
+unsigned long ihk_mc_syscall_arg5(const ihk_mc_user_context_t *uc)
+{
+	return uc ? uc->gpr.r9 : 0;
+}
+
+void ihk_mc_syscall_set_arg0(ihk_mc_user_context_t *uc, unsigned long value)
+{
+	if (uc)
+		uc->gpr.rdi = value;
+}
+
+void ihk_mc_syscall_set_arg1(ihk_mc_user_context_t *uc, unsigned long value)
+{
+	if (uc)
+		uc->gpr.rsi = value;
+}
+
+void ihk_mc_syscall_set_arg2(ihk_mc_user_context_t *uc, unsigned long value)
+{
+	if (uc)
+		uc->gpr.rdx = value;
+}
+
+void ihk_mc_syscall_set_arg3(ihk_mc_user_context_t *uc, unsigned long value)
+{
+	if (uc)
+		uc->gpr.r10 = value;
+}
+
+void ihk_mc_syscall_set_arg4(ihk_mc_user_context_t *uc, unsigned long value)
+{
+	if (uc)
+		uc->gpr.r8 = value;
+}
+
+void ihk_mc_syscall_set_arg5(ihk_mc_user_context_t *uc, unsigned long value)
+{
+	if (uc)
+		uc->gpr.r9 = value;
+}
+
+unsigned long ihk_mc_syscall_ret(const ihk_mc_user_context_t *uc)
+{
+	return uc ? uc->gpr.rax : 0;
+}
+
+void ihk_mc_syscall_set_ret(ihk_mc_user_context_t *uc, unsigned long value)
+{
+	if (uc)
+		uc->gpr.rax = value;
+}
+
+unsigned long ihk_mc_syscall_number(const ihk_mc_user_context_t *uc)
+{
+	return uc ? uc->gpr.orig_rax : 0;
+}
+
+unsigned long ihk_mc_syscall_pc(const ihk_mc_user_context_t *uc)
+{
+	return uc ? uc->gpr.rip : 0;
+}
+
+unsigned long ihk_mc_syscall_sp(const ihk_mc_user_context_t *uc)
+{
+	return uc ? uc->gpr.rsp : 0;
+}
+#endif
 
 #define LAPIC_ID            0x020
 #define LAPIC_TIMER         0x320
@@ -78,6 +342,230 @@ static void (*lapic_write)(int reg, unsigned int value);
 static unsigned int (*lapic_read)(int reg);
 static void (*lapic_icr_write)(unsigned int h, unsigned int l);
 static void (*lapic_wait_icr_idle)(void);
+
+#ifndef MCKERNEL_RUST_ATOMIC_HELPERS
+int ihk_atomic_read(const ihk_atomic_t *v)
+{
+	return (*(volatile int *)&(v)->counter);
+}
+
+void ihk_atomic_set(ihk_atomic_t *v, int i)
+{
+	v->counter = i;
+}
+
+void ihk_atomic_add(int i, ihk_atomic_t *v)
+{
+	asm volatile("lock addl %1,%0"
+		     : "+m" (v->counter)
+		     : "ir" (i));
+}
+
+void ihk_atomic_sub(int i, ihk_atomic_t *v)
+{
+	asm volatile("lock subl %1,%0"
+		     : "+m" (v->counter)
+		     : "ir" (i));
+}
+
+void ihk_atomic_inc(ihk_atomic_t *v)
+{
+	asm volatile("lock incl %0"
+		     : "+m" (v->counter));
+}
+
+void ihk_atomic_dec(ihk_atomic_t *v)
+{
+	asm volatile("lock decl %0"
+		     : "+m" (v->counter));
+}
+
+int ihk_atomic_dec_and_test(ihk_atomic_t *v)
+{
+	unsigned char c;
+
+	asm volatile("lock decl %0; sete %1"
+		     : "+m" (v->counter), "=qm" (c)
+		     : : "memory");
+	return c != 0;
+}
+
+int ihk_atomic_inc_and_test(ihk_atomic_t *v)
+{
+	unsigned char c;
+
+	asm volatile("lock incl %0; sete %1"
+		     : "+m" (v->counter), "=qm" (c)
+		     : : "memory");
+	return c != 0;
+}
+
+int ihk_atomic_add_return(int i, ihk_atomic_t *v)
+{
+	int __i;
+
+	__i = i;
+	asm volatile("lock xaddl %0, %1"
+		     : "+r" (i), "+m" (v->counter)
+		     : : "memory");
+	return i + __i;
+}
+
+int ihk_atomic_sub_return(int i, ihk_atomic_t *v)
+{
+	return ihk_atomic_add_return(-i, v);
+}
+
+int ihk_atomic_inc_return(ihk_atomic_t *v)
+{
+	return ihk_atomic_add_return(1, v);
+}
+
+int ihk_atomic_dec_return(ihk_atomic_t *v)
+{
+	return ihk_atomic_sub_return(1, v);
+}
+
+long ihk_atomic64_read(const ihk_atomic64_t *v)
+{
+	return *(volatile long *)&(v)->counter64;
+}
+
+void ihk_atomic64_set(ihk_atomic64_t *v, long i)
+{
+	v->counter64 = i;
+}
+
+void ihk_atomic64_inc(ihk_atomic64_t *v)
+{
+	asm volatile("lock incq %0" : "+m" (v->counter64));
+}
+
+long ihk_atomic64_add_return(long i, ihk_atomic64_t *v)
+{
+	long __i;
+
+	__i = i;
+	asm volatile("lock xaddq %0, %1"
+		     : "+r" (i), "+m" (v->counter64)
+		     : : "memory");
+	return i + __i;
+}
+
+long ihk_atomic64_sub_return(long i, ihk_atomic64_t *v)
+{
+	return ihk_atomic64_add_return(-i, v);
+}
+
+unsigned long xchg8(unsigned long *ptr, unsigned long x)
+{
+	unsigned long __x = x;
+
+	asm volatile("xchgq %0,%1"
+		     : "=r" (__x)
+		     : "m" (*(volatile unsigned long *)(ptr)), "0" (__x)
+		     : "memory");
+	return __x;
+}
+
+int xchg4(int *ptr, int x)
+{
+	int __x = x;
+
+	asm volatile("xchgl %k0,%1"
+		     : "=r" (__x)
+		     : "m" (*ptr), "0" (__x)
+		     : "memory");
+	return __x;
+}
+
+unsigned long atomic_xchg_ulong(unsigned long *ptr, unsigned long x)
+{
+	return xchg8(ptr, x);
+}
+
+void *atomic_xchg_ptr(void **ptr, void *x)
+{
+	return (void *)xchg8((unsigned long *)ptr, (unsigned long)x);
+}
+
+unsigned long atomic_cmpxchg8(unsigned long *addr,
+		unsigned long oldval, unsigned long newval)
+{
+	asm volatile("lock; cmpxchgq %2, %1\n"
+		     : "=a" (oldval), "+m" (*addr)
+		     : "r" (newval), "0" (oldval)
+		     : "memory");
+	return oldval;
+}
+
+unsigned long atomic_cmpxchg4(unsigned int *addr,
+		unsigned int oldval, unsigned int newval)
+{
+	asm volatile("lock; cmpxchgl %2, %1\n"
+		     : "=a" (oldval), "+m" (*addr)
+		     : "r" (newval), "0" (oldval)
+		     : "memory");
+	return oldval;
+}
+
+int atomic_cmpxchg_int(int *addr, int oldval, int newval)
+{
+	return (int)atomic_cmpxchg4((unsigned int *)addr,
+				    (unsigned int)oldval,
+				    (unsigned int)newval);
+}
+
+unsigned long atomic_cmpxchg_ulong(unsigned long *addr,
+		unsigned long oldval, unsigned long newval)
+{
+	return atomic_cmpxchg8(addr, oldval, newval);
+}
+
+void *atomic_cmpxchg_ptr(void **addr, void *oldval, void *newval)
+{
+	return (void *)atomic_cmpxchg8((unsigned long *)addr,
+				       (unsigned long)oldval,
+				       (unsigned long)newval);
+}
+
+void ihk_atomic_add_long(long i, long *v)
+{
+	asm volatile("lock addq %1,%0"
+		     : "+m" (*v)
+		     : "ir" (i));
+}
+
+void ihk_atomic_add_ulong(long i, unsigned long *v)
+{
+	asm volatile("lock addq %1,%0"
+		     : "+m" (*v)
+		     : "ir" (i));
+}
+
+unsigned long ihk_atomic_add_long_return(long i, long *v)
+{
+	long __i;
+
+	__i = i;
+	asm volatile("lock xaddq %0, %1"
+		     : "+r" (i), "+m" (*v)
+		     : : "memory");
+	return i + __i;
+}
+
+int compare_and_swap(void *addr, unsigned long olddata, unsigned long newdata)
+{
+	unsigned long before;
+
+	asm volatile (
+		"lock; cmpxchgq %2,%1"
+		: "=a" (before), "+m" (*(unsigned long *)addr)
+		: "q" (newdata), "0" (olddata)
+		: "cc");
+	return before == olddata;
+}
+#endif
 void (*x86_issue_ipi)(unsigned int apicid, unsigned int low);
 int running_on_kvm(void);
 void smp_func_call_handler(void);
@@ -352,9 +840,250 @@ x2apic_read(int reg)
 	return (int)value;
 }
 
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern int x86_lapic_timer_enable_body_result(unsigned int clocks,
+		void (*write_fn)(int, unsigned int));
+extern int x86_lapic_timer_disable_body_result(
+		void (*write_fn)(int, unsigned int));
+extern int x86_lapic_ack_body_result(
+		void (*write_fn)(int, unsigned int));
+extern int x86_x2apic_issue_ipi_body_result(unsigned int apicid,
+		unsigned int low, void (*mb_fn)(void),
+		unsigned long (*disable_save_fn)(void),
+		void (*icr_write_fn)(unsigned int, unsigned int),
+		void (*restore_fn)(unsigned long));
+extern int x86_apic_issue_ipi_body_result(unsigned int apicid,
+		unsigned int low, int lapic_icr_id_shift,
+		unsigned long (*disable_save_fn)(void),
+		void (*wait_idle_fn)(void),
+		void (*icr_write_fn)(unsigned int, unsigned int),
+		void (*restore_fn)(unsigned long));
+extern unsigned long x86_x2apic_enabled_result(unsigned long msr,
+		unsigned long enable_bit);
+extern int x86_init_lapic_bsp_body_result(unsigned long enabled,
+		void (*select_fn)(int));
+extern int x86_init_lapic_body_result(int x2apic_enabled, void **lapic_vp_slot,
+		int apic_base_msr, unsigned long page_mask,
+		unsigned long page_size, unsigned long apic_enable_bit,
+		unsigned long (*read_msr_fn)(int),
+		void (*write_msr_fn)(int, unsigned long),
+		void *(*map_fixed_fn)(unsigned long, unsigned long, int),
+		void (*write_fn)(int, unsigned int));
+extern int x86_init_pstate_turbo_body_result(int no_turbo,
+		int platform_info_msr, int turbo_ratio_msr, int perf_ctl_msr,
+		int energy_perf_bias_msr, int (*running_on_kvm_fn)(void),
+		void (*cpuid6_fn)(unsigned long *, unsigned long *),
+		unsigned long (*read_msr_fn)(int),
+		void (*write_msr_fn)(int, unsigned long));
+extern int x86_init_pat_body_result(uint64_t *boot_pat_state,
+		int cr_pat_msr,
+		void (*cpuid_edx_fn)(unsigned long, unsigned long *),
+		unsigned long (*read_msr_fn)(int),
+		void (*write_msr_fn)(int, unsigned long),
+		void (*log_fn)(int));
+extern int x86_init_syscall_body_result(int efer_msr, int star_msr,
+		int lstar_msr, unsigned long kernel_cs, unsigned long user_cs,
+		unsigned long syscall_addr, unsigned long (*read_msr_fn)(int),
+		void (*write_msr_fn)(int, unsigned long));
+extern int x86_enable_no_execute_body_result(int no_execute_available,
+		int efer_msr, unsigned long nxe_bit,
+		unsigned long (*read_msr_fn)(int),
+		void (*write_msr_fn)(int, unsigned long));
+extern int x86_check_no_execute_body_result(int *no_execute_available_slot,
+		void (*cpuid_edx_fn)(unsigned long, unsigned long *),
+		void (*log_fn)(int, int), void (*enable_ptattr_fn)(void));
+extern int x86_init_gettime_support_body_result(
+		int *gettime_local_support_slot,
+		void (*cpuid_edx_fn)(unsigned long, unsigned long *),
+		void (*log_fn)(int));
+extern int x86_init_cpu_body_result(
+		void (*enable_page_protection_fault_fn)(void),
+		void (*enable_no_execute_fn)(void), void (*init_fpu_fn)(void),
+		void (*init_lapic_fn)(void), void (*init_syscall_fn)(void),
+		void (*init_perfctr_fn)(void), void (*init_pstate_turbo_fn)(void),
+		void (*init_pat_fn)(void));
+extern int x86_setup_phase1_body_result(void (*disable_interrupt_fn)(void),
+		void (*init_idt_fn)(void), void (*init_gdt_fn)(void),
+		void (*init_page_table_fn)(void));
+extern int x86_setup_phase2_body_result(void (*check_no_execute_fn)(void),
+		void (*init_lapic_bsp_fn)(void), void (*init_cpu_fn)(void),
+		void (*init_gettime_support_fn)(void), void (*log_fn)(int));
+extern int x86_ihk_mc_init_ap_body_result(char **trampoline_va_slot,
+		char **first_page_va_slot, unsigned long ap_trampoline,
+		unsigned long ap_trampoline_size, unsigned long page_size,
+		void *(*map_fixed_fn)(unsigned long, unsigned long, int),
+		int (*get_ncpus_fn)(void),
+		void (*init_processors_fn)(int),
+		void (*assign_processor_id_fn)(void),
+		void (*init_smp_processor_fn)(void),
+		void (*log_fn)(int, unsigned long));
+extern int x86_running_on_kvm_body_result(unsigned long signature_leaf,
+		void (*cpuid_fn)(unsigned long, unsigned long *,
+			unsigned long *, unsigned long *, unsigned long *));
+extern int x86_pvclock_available_body_result(long *pvti_msr_slot,
+		unsigned long signature_leaf, unsigned long features_leaf,
+		int feature_new_bit, int feature_old_bit, long msr_new,
+		long msr_old, void (*cpuid_fn)(unsigned long, unsigned long *,
+			unsigned long *, unsigned long *, unsigned long *),
+		void (*log_fn)(int));
+extern int x86_arch_cpu_read_write_register_body_result(void *desc, int op,
+		int read_op, int write_op, unsigned long addr_offset,
+		unsigned long val_offset, unsigned long (*read_msr_fn)(int),
+		void (*write_msr_fn)(int, unsigned long));
+
+static void
+x86_lapic_write_bridge(int reg, unsigned int value)
+{
+	lapic_write(reg, value);
+}
+
+static void
+x86_mb_bridge(void)
+{
+	ihk_mc_mb();
+}
+
+static unsigned long
+x86_cpu_disable_interrupt_save_bridge(void)
+{
+	return cpu_disable_interrupt_save();
+}
+
+static void
+x86_cpu_restore_interrupt_bridge(unsigned long flags)
+{
+	cpu_restore_interrupt(flags);
+}
+
+static unsigned long
+x86_read_msr_bridge(int reg)
+{
+	return rdmsr(reg);
+}
+
+static void
+x86_write_msr_bridge(int reg, unsigned long value)
+{
+	wrmsr(reg, value);
+}
+
+static void *
+x86_map_fixed_area_bridge(unsigned long phys, unsigned long size, int uncached)
+{
+	return map_fixed_area(phys, size, uncached);
+}
+
+static int
+x86_running_on_kvm_bridge(void)
+{
+	return running_on_kvm();
+}
+
+static void
+x86_cpuid6_bridge(unsigned long *eaxp, unsigned long *ecxp)
+{
+	unsigned long eax, ecx;
+
+	asm volatile("cpuid" : "=a" (eax), "=c" (ecx) :
+			"a" (0x6) : "%rbx", "%rdx");
+	*eaxp = eax;
+	*ecxp = ecx;
+}
+
+static void
+x86_cpuid_edx_bridge(unsigned long op, unsigned long *edxp)
+{
+	unsigned long edx;
+
+	asm volatile("cpuid" : "=d" (edx) : "a" (op) : "%rbx", "%rcx");
+	*edxp = edx;
+}
+
+static void
+x86_cpuid_leaf_bridge(unsigned long op, unsigned long *eaxp,
+		unsigned long *ebxp, unsigned long *ecxp,
+		unsigned long *edxp)
+{
+	unsigned long eax, ebx, ecx, edx;
+
+	asm volatile("cpuid" : "=a" (eax), "=b" (ebx), "=c" (ecx),
+			"=d" (edx) : "a" (op));
+	*eaxp = eax;
+	*ebxp = ebx;
+	*ecxp = ecx;
+	*edxp = edx;
+}
+
+static void
+x86_cpu_log_bridge(int event)
+{
+	switch (event) {
+	case 1:
+		kprintf("PAT not supported.\n");
+		break;
+	case 2:
+		dkprintf("PAT support detected and reconfigured.\n");
+		break;
+	case 3:
+		kprintf("Invariant TSC supported.\n");
+		break;
+	case 4:
+		kprintf("setup_x86 done.\n");
+		break;
+	}
+}
+
+static void
+x86_cpu_value_log_bridge(int event, int value)
+{
+	switch (event) {
+	case 1:
+		kprintf("no_execute_available: %d\n", value);
+		break;
+	}
+}
+
+extern void enable_ptattr_no_execute(void);
+static void
+x86_enable_ptattr_no_execute_bridge(void)
+{
+	enable_ptattr_no_execute();
+}
+
+static void
+x86_cpu_ulong_log_bridge(int event, unsigned long value)
+{
+	switch (event) {
+	case 1:
+		kprintf("Trampoline area: 0x%lx \n", value);
+		break;
+	case 2:
+		kprintf("# of cpus : %lu\n", value);
+		break;
+	}
+}
+
+static int
+x86_cpu_info_ncpus_bridge(void)
+{
+	struct ihk_mc_cpu_info *cpu_info = ihk_mc_get_cpu_info();
+
+	return cpu_info->ncpus;
+}
+
+static void
+x86_init_processors_local_bridge(int max_id)
+{
+	init_processors_local(max_id);
+}
+#endif
+
 void
 lapic_timer_enable(unsigned int clocks)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	x86_lapic_timer_enable_body_result(clocks, x86_lapic_write_bridge);
+#else
 	unsigned int lvtt_value;
 
 	lapic_write(LAPIC_TIMER_INITIAL, clocks / APIC_DIVISOR);
@@ -363,18 +1092,27 @@ lapic_timer_enable(unsigned int clocks)
 	/* initialize periodic timer */
 	lvtt_value = LOCAL_TIMER_VECTOR | APIC_LVT_TIMER_PERIODIC;
 	lapic_write(LAPIC_TIMER, lvtt_value);
+#endif
 }
 
 void
 lapic_timer_disable()
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	x86_lapic_timer_disable_body_result(x86_lapic_write_bridge);
+#else
 	lapic_write(LAPIC_TIMER_INITIAL, 0);
+#endif
 }
 
 void
 lapic_ack(void)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	x86_lapic_ack_body_result(x86_lapic_write_bridge);
+#else
 	lapic_write(LAPIC_EOI, 0);
+#endif
 }
 
 static void
@@ -406,6 +1144,11 @@ apic_icr_write(unsigned int h, unsigned int l)
 static void
 x2apic_x86_issue_ipi(unsigned int apicid, unsigned int low)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	x86_x2apic_issue_ipi_body_result(apicid, low, x86_mb_bridge,
+			x86_cpu_disable_interrupt_save_bridge,
+			x2apic_icr_write, x86_cpu_restore_interrupt_bridge);
+#else
 	unsigned long icr = low;
 	unsigned long flags;
 
@@ -413,31 +1156,71 @@ x2apic_x86_issue_ipi(unsigned int apicid, unsigned int low)
 	flags = cpu_disable_interrupt_save();
 	x2apic_icr_write(icr, apicid);
 	cpu_restore_interrupt(flags);
+#endif
 }
 
 static void
 apic_x86_issue_ipi(unsigned int apicid, unsigned int low)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	x86_apic_issue_ipi_body_result(apicid, low, LAPIC_ICR_ID_SHIFT,
+			x86_cpu_disable_interrupt_save_bridge,
+			apic_wait_icr_idle, apic_icr_write,
+			x86_cpu_restore_interrupt_bridge);
+#else
 	unsigned long flags;
 
 	flags = cpu_disable_interrupt_save();
 	apic_wait_icr_idle();
 	apic_icr_write(apicid << LAPIC_ICR_ID_SHIFT, low);
 	cpu_restore_interrupt(flags);
+#endif
 }
 
 unsigned long
 x2apic_is_enabled()
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	return x86_x2apic_enabled_result(rdmsr(MSR_IA32_APIC_BASE),
+			X2APIC_ENABLE);
+#else
 	unsigned long msr;
 
 	msr = rdmsr(MSR_IA32_APIC_BASE);
 
 	return (msr & X2APIC_ENABLE);
+#endif
 }
+
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+static void
+x86_lapic_bsp_select_bridge(int use_x2apic)
+{
+	if (use_x2apic) {
+		x2apic = 1;
+		lapic_write = x2apic_write;
+		lapic_read = x2apic_read;
+		lapic_icr_write = x2apic_icr_write;
+		lapic_wait_icr_idle = x2apic_wait_icr_idle;
+		x86_issue_ipi = x2apic_x86_issue_ipi;
+	}
+	else {
+		x2apic = 0;
+		lapic_write = apic_write;
+		lapic_read = apic_read;
+		lapic_icr_write = apic_icr_write;
+		lapic_wait_icr_idle = apic_wait_icr_idle;
+		x86_issue_ipi = apic_x86_issue_ipi;
+	}
+}
+#endif
 
 void init_lapic_bsp(void)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	x86_init_lapic_bsp_body_result(x2apic_is_enabled(),
+			x86_lapic_bsp_select_bridge);
+#else
 	if(x2apic_is_enabled()){
 		x2apic = 1;
 		lapic_write = x2apic_write;
@@ -455,11 +1238,18 @@ void init_lapic_bsp(void)
 		x86_issue_ipi = apic_x86_issue_ipi;
 
 	}
+#endif
 }
 
 void
 init_lapic()
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	x86_init_lapic_body_result(x2apic, &lapic_vp,
+			MSR_IA32_APIC_BASE, PAGE_MASK, PAGE_SIZE, 0x800,
+			x86_read_msr_bridge, x86_write_msr_bridge,
+			x86_map_fixed_area_bridge, x86_lapic_write_bridge);
+#else
 	if(!x2apic){
 		unsigned long baseaddr;
 
@@ -474,6 +1264,7 @@ init_lapic()
 
 	lapic_write(LAPIC_SPURIOUS, 0x1ff);
 	lapic_write(LAPIC_LVTPC, LOCAL_PERF_VECTOR);
+#endif
 }
 
 void print_msr(int idx)
@@ -502,6 +1293,13 @@ void print_msr(int idx)
 
 void init_pstate_and_turbo(void)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	x86_init_pstate_turbo_body_result(no_turbo, MSR_PLATFORM_INFO,
+			MSR_NHM_TURBO_RATIO_LIMIT, MSR_IA32_PERF_CTL,
+			MSR_IA32_ENERGY_PERF_BIAS, x86_running_on_kvm_bridge,
+			x86_cpuid6_bridge, x86_read_msr_bridge,
+			x86_write_msr_bridge);
+#else
 	uint64_t value;
 	uint64_t eax, ecx;
 
@@ -567,6 +1365,7 @@ void init_pstate_and_turbo(void)
 	//print_msr(MSR_IA32_MISC_ENABLE);
 	//print_msr(MSR_IA32_PERF_CTL);
 	//print_msr(MSR_IA32_ENERGY_PERF_BIAS);
+#endif
 }
 
 enum {
@@ -582,6 +1381,11 @@ enum {
 
 void init_pat(void)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	x86_init_pat_body_result(&boot_pat_state, MSR_IA32_CR_PAT,
+			x86_cpuid_edx_bridge, x86_read_msr_bridge,
+			x86_write_msr_bridge, x86_cpu_log_bridge);
+#else
 	uint64_t pat;
 	uint64_t edx;
 
@@ -626,6 +1430,7 @@ void init_pat(void)
 
 	wrmsr(MSR_IA32_CR_PAT, pat);
 	dkprintf("PAT support detected and reconfigured.\n");
+#endif
 }
 
 static void set_kstack(unsigned long ptr)
@@ -687,6 +1492,13 @@ static char *trampoline_va, *first_page_va;
   @*/
 void ihk_mc_init_ap(void)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	x86_ihk_mc_init_ap_body_result(&trampoline_va, &first_page_va,
+			ap_trampoline, AP_TRAMPOLINE_SIZE, PAGE_SIZE,
+			x86_map_fixed_area_bridge, x86_cpu_info_ncpus_bridge,
+			x86_init_processors_local_bridge, assign_processor_id,
+			init_smp_processor, x86_cpu_ulong_log_bridge);
+#else
 	struct ihk_mc_cpu_info *cpu_info = ihk_mc_get_cpu_info();
 
 	trampoline_va = map_fixed_area(ap_trampoline, AP_TRAMPOLINE_SIZE, 0);
@@ -700,6 +1512,7 @@ void ihk_mc_init_ap(void)
 	assign_processor_id();
 
 	init_smp_processor();
+#endif
 }
 
 extern void init_page_table(void);
@@ -707,8 +1520,113 @@ extern void init_page_table(void);
 extern char x86_syscall[];
 long (*__x86_syscall_handler)(int, ihk_mc_user_context_t *);
 
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+struct x86_thread_context_offsets {
+	unsigned long thread_status_offset;
+	unsigned long thread_uctx_offset;
+	unsigned long thread_tlsblock_base_offset;
+};
+
+extern int x86_init_context_body_result(ihk_mc_kernel_context_t *new_ctx,
+		void *stack_pointer, void *next_function,
+		void *(*stack_fn)(void));
+extern int x86_init_user_process_body_result(
+		ihk_mc_kernel_context_t *ctx, ihk_mc_user_context_t **puctx,
+		void *stack_pointer, unsigned long new_pc,
+		unsigned long user_sp, unsigned long user_cs,
+		unsigned long user_ds, unsigned long rflags_if,
+		void *enter_user_mode_addr);
+extern int x86_modify_user_context_result(ihk_mc_user_context_t *uctx,
+		int reg, unsigned long value, int stack_pointer_reg,
+		int program_counter_reg);
+extern ihk_mc_user_context_t *x86_lookup_user_context_body_result(
+		struct thread *thread, struct thread *current_thread,
+		int sleep_status_mask,
+		const struct x86_thread_context_offsets *offsets);
+extern int x86_syscall_handler_publish_result(unsigned long *slot,
+		void *handler);
+extern int x86_page_fault_handler_publish_result(unsigned long *slot,
+		void *handler);
+extern int x86_arch_noop_body_result(void);
+extern int x86_delay_us_body_result(int us, void (*delay_fn)(int));
+extern int x86_tick_log_body_result(int event, void (*log_fn)(int));
+extern int x86_arch_set_special_register_result(int reg_type, int fs_type,
+		unsigned long value, void (*write_fn)(unsigned long));
+extern int x86_arch_get_special_register_result(int reg_type, int fs_type,
+		unsigned long *valuep, unsigned long (*read_fn)(void));
+extern int x86_get_interrupt_id_result(int cpu,
+		void *(*cpu_local_fn)(int), unsigned long apic_id_offset);
+extern int x86_interrupt_cpu_result(int cpu, int vector, int num_processors,
+		void *(*cpu_local_fn)(int), unsigned long apic_id_offset,
+		void (*issue_ipi_fn)(unsigned long, int),
+		void (*log_fn)(int, int, int));
+
+static const struct x86_thread_context_offsets x86_thread_context_offsets = {
+	.thread_status_offset = __builtin_offsetof(struct thread, status),
+	.thread_uctx_offset = __builtin_offsetof(struct thread, uctx),
+	.thread_tlsblock_base_offset =
+		__builtin_offsetof(struct thread, tlsblock_base),
+};
+
+static void *x86_this_kstack_bridge(void)
+{
+	return get_x86_this_cpu_kstack();
+}
+
+static void *x86_cpu_local_bridge(int cpu)
+{
+	return get_x86_cpu_local_variable(cpu);
+}
+
+static void x86_arch_delay_bridge(int us)
+{
+	arch_delay(us);
+}
+
+static void x86_tick_log_bridge(int event)
+{
+	switch (event) {
+	case 1:
+		dkprintf("init_tick():\n");
+		break;
+	case 2:
+		dkprintf("init_delay():\n");
+		break;
+	case 3:
+		dkprintf("sync_tick():\n");
+		break;
+	}
+}
+
+static void x86_pvclock_log_bridge(int event)
+{
+	switch (event) {
+	case 1:
+		dkprintf("is_pvclock_available()\n");
+		break;
+	case 2:
+		dkprintf("is_pvclock_available(): false (not kvm)\n");
+		break;
+	case 3:
+		dkprintf("is_pvclock_available(): true (new)\n");
+		break;
+	case 4:
+		dkprintf("is_pvclock_available(): true (old)\n");
+		break;
+	case 5:
+		dkprintf("is_pvclock_available(): false (not supported)\n");
+		break;
+	}
+}
+#endif
+
 void init_syscall(void)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	x86_init_syscall_body_result(MSR_EFER, MSR_STAR, MSR_LSTAR,
+			KERNEL_CS, USER_CS, (unsigned long)x86_syscall,
+			x86_read_msr_bridge, x86_write_msr_bridge);
+#else
 	unsigned long r;
 
 	r = rdmsr(MSR_EFER);
@@ -720,6 +1638,7 @@ void init_syscall(void)
 	wrmsr(MSR_STAR, r);
 	
 	wrmsr(MSR_LSTAR, (unsigned long)x86_syscall);
+#endif
 }
 
 static void enable_page_protection_fault(void)
@@ -739,6 +1658,10 @@ static int no_execute_available = 0;
 
 static void enable_no_execute(void)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	x86_enable_no_execute_body_result(no_execute_available, MSR_EFER,
+			1UL << 11, x86_read_msr_bridge, x86_write_msr_bridge);
+#else
 	unsigned long efer;
 
 	if (!no_execute_available) {
@@ -751,10 +1674,16 @@ static void enable_no_execute(void)
 	wrmsr(MSR_EFER, efer);
 
 	return;
+#endif
 }
 
 static void check_no_execute(void)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	x86_check_no_execute_body_result(&no_execute_available,
+			x86_cpuid_edx_bridge, x86_cpu_value_log_bridge,
+			x86_enable_ptattr_no_execute_bridge);
+#else
 	uint32_t edx;
 	extern void enable_ptattr_no_execute(void);
 
@@ -768,10 +1697,15 @@ static void check_no_execute(void)
 	}
 
 	return;
+#endif
 }
 
 void init_gettime_support(void)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	x86_init_gettime_support_body_result(&gettime_local_support,
+			x86_cpuid_edx_bridge, x86_cpu_log_bridge);
+#else
 	uint64_t op;
 	uint64_t eax;
 	uint64_t ebx;
@@ -791,10 +1725,16 @@ void init_gettime_support(void)
 		gettime_local_support = 1;
 		kprintf("Invariant TSC supported.\n");
 	}
+#endif
 }
 
 void init_cpu(void)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	x86_init_cpu_body_result(enable_page_protection_fault,
+			enable_no_execute, init_fpu, init_lapic, init_syscall,
+			x86_init_perfctr, init_pstate_and_turbo, init_pat);
+#else
 	enable_page_protection_fault();
 	enable_no_execute();
 	init_fpu();
@@ -803,10 +1743,15 @@ void init_cpu(void)
 	x86_init_perfctr();
 	init_pstate_and_turbo();
 	init_pat();
+#endif
 }
 
 void setup_x86_phase1(void)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	x86_setup_phase1_body_result(cpu_disable_interrupt, init_idt,
+			init_gdt, init_page_table);
+#else
 	cpu_disable_interrupt();
 
 	init_idt();
@@ -814,10 +1759,15 @@ void setup_x86_phase1(void)
 	init_gdt();
 
 	init_page_table();
+#endif
 }
 
 void setup_x86_phase2(void)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	x86_setup_phase2_body_result(check_no_execute, init_lapic_bsp,
+			init_cpu, init_gettime_support, x86_cpu_log_bridge);
+#else
 	check_no_execute();
 
 	init_lapic_bsp();
@@ -827,6 +1777,7 @@ void setup_x86_phase2(void)
 	init_gettime_support();
 
 	kprintf("setup_x86 done.\n");
+#endif
 }
 
 static volatile int cpu_boot_status;
@@ -960,7 +1911,7 @@ void handle_interrupt(int vector, struct x86_user_context *regs)
 		struct siginfo info;
 
 		if (from_user && mcexec_v10_exception_logs < 32) {
-			struct thread *thread = cpu_local_var(current);
+			struct thread *thread = get_this_cpu_local_var()->current;
 
 			kprintf("mcexec_v10: exception cpu=%d vector=%d pid=%d tid=%d rip=0x%lx sp=0x%lx error=0x%lx rflags=0x%lx\n",
 				ihk_mc_get_processor_id(), vector,
@@ -1029,7 +1980,7 @@ void handle_interrupt(int vector, struct x86_user_context *regs)
 	else if (vector == LOCAL_PERF_VECTOR) {
 		struct siginfo info;
 		unsigned long value;
-		struct thread *thread = cpu_local_var(current);
+		struct thread *thread = get_this_cpu_local_var()->current;
         	struct process *proc = thread->proc;
 		long irqstate;
 		struct mckfd *fdp;
@@ -1070,7 +2021,7 @@ void handle_interrupt(int vector, struct x86_user_context *regs)
 		show_context_stack((uintptr_t *)regs->gpr.rbp);
 	}
 	else {
-		list_for_each_entry(h, &handlers[vector - 32], list) {
+		for (h = ((typeof(*h) *)((char *)((&handlers[vector - 32])->next) - offsetof(typeof(*h), list))); &h->list != (&handlers[vector - 32]); h = ((typeof(*h) *)((char *)(h->list.next) - offsetof(typeof(*h), list)))) {
 			if (h->func) {
 				h->func(h->priv);
 			}
@@ -1347,7 +2298,12 @@ extern unsigned long __page_fault_handler_address;
   @*/
 void ihk_mc_set_page_fault_handler(void (*h)(void *, uint64_t, void *))
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	x86_page_fault_handler_publish_result(&__page_fault_handler_address,
+			(void *)h);
+#else
 	__page_fault_handler_address = (unsigned long)h;
+#endif
 }
 
 extern char trampoline_code_data[], trampoline_code_data_end[];
@@ -1402,6 +2358,10 @@ void ihk_mc_boot_cpu(int cpuid, unsigned long pc)
 void ihk_mc_init_context(ihk_mc_kernel_context_t *new_ctx,
                          void *stack_pointer, void (*next_function)(void))
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	x86_init_context_body_result(new_ctx, stack_pointer,
+			(void *)next_function, x86_this_kstack_bridge);
+#else
 	unsigned long *sp;
 
 	if (!stack_pointer) {
@@ -1414,6 +2374,7 @@ void ihk_mc_init_context(ihk_mc_kernel_context_t *new_ctx,
 	/* Set the return address */
 	new_ctx->rsp = (unsigned long)(sp - 1);
 	sp[-1] = (unsigned long)next_function;
+#endif
 }
 
 extern char enter_user_mode[];
@@ -1421,7 +2382,7 @@ extern char enter_user_mode[];
 void mcexec_v10_trace_enter_user(struct x86_user_context *regs)
 {
 	static int mcexec_v10_enter_user_logs;
-	struct thread *thread = cpu_local_var(current);
+	struct thread *thread = get_this_cpu_local_var()->current;
 
 	if (mcexec_v10_enter_user_logs >= 32) {
 		return;
@@ -1448,10 +2409,10 @@ void mcexec_v10_trace_enter_user(struct x86_user_context *regs)
  */
 void release_runq_lock(void)
 {
-	ihk_mc_spinlock_unlock(&(cpu_local_var(runq_lock)), 
-			cpu_local_var(runq_irqstate));
+	ihk_mc_spinlock_unlock(&(get_this_cpu_local_var()->runq_lock),
+			get_this_cpu_local_var()->runq_irqstate);
 }
-                                       
+
 /*@
   @ requires \valid(ctx);
   @ requires \valid(puctx);
@@ -1466,6 +2427,11 @@ void ihk_mc_init_user_process(ihk_mc_kernel_context_t *ctx,
                               void *stack_pointer, unsigned long new_pc,
                               unsigned long user_sp)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	x86_init_user_process_body_result(ctx, puctx, stack_pointer, new_pc,
+			user_sp, USER_CS, USER_DS, RFLAGS_IF,
+			(void *)enter_user_mode);
+#else
 	char *sp;
 	ihk_mc_user_context_t *uctx;
 
@@ -1485,6 +2451,7 @@ void ihk_mc_init_user_process(ihk_mc_kernel_context_t *ctx,
 
 	ihk_mc_init_context(ctx, sp, (void (*)(void))enter_user_mode);
 	ctx->rsp0 = (unsigned long)stack_pointer;
+#endif
 }
 
 /*@
@@ -1503,11 +2470,16 @@ void ihk_mc_modify_user_context(ihk_mc_user_context_t *uctx,
                                 enum ihk_mc_user_context_regtype reg,
                                 unsigned long value)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	x86_modify_user_context_result(uctx, reg, value,
+			IHK_UCR_STACK_POINTER, IHK_UCR_PROGRAM_COUNTER);
+#else
 	if (reg == IHK_UCR_STACK_POINTER) {
 		uctx->gpr.rsp = value;
 	} else if (reg == IHK_UCR_PROGRAM_COUNTER) {
 		uctx->gpr.rip = value;
 	}
+#endif
 }
 
 #ifdef POSTK_DEBUG_ARCH_DEP_42 /* /proc/cpuinfo support added. */
@@ -1521,6 +2493,9 @@ long ihk_mc_show_cpuinfo(char *buf, size_t buf_size, unsigned long read_off, int
 void arch_clone_thread(struct thread *othread, unsigned long pc,
 			unsigned long sp, struct thread *nthread)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	x86_arch_noop_body_result();
+#endif
 	return;
 }
 
@@ -1539,7 +2514,12 @@ void ihk_mc_print_user_context(ihk_mc_user_context_t *uctx)
   @*/
 void ihk_mc_set_syscall_handler(long (*handler)(int, ihk_mc_user_context_t *))
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	x86_syscall_handler_publish_result((unsigned long *)&__x86_syscall_handler,
+			(void *)handler);
+#else
 	__x86_syscall_handler = handler;
+#endif
 }
 
 /*@
@@ -1547,7 +2527,11 @@ void ihk_mc_set_syscall_handler(long (*handler)(int, ihk_mc_user_context_t *))
   @*/
 void ihk_mc_delay_us(int us)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	x86_delay_us_body_result(us, x86_arch_delay_bridge);
+#else
 	arch_delay(us);
+#endif
 }
 
 void arch_show_extended_context(void)
@@ -1700,9 +2684,25 @@ void arch_cpu_stop(void)
   @   assumes type != IHK_ASR_X86_FS;
   @   ensures \result == -EINVAL;
   @*/
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+static void x86_fs_write_bridge(unsigned long value)
+{
+	wrmsr(MSR_FS_BASE, value);
+}
+
+static unsigned long x86_fs_read_bridge(void)
+{
+	return rdmsr(MSR_FS_BASE);
+}
+#endif
+
 int ihk_mc_arch_set_special_register(enum ihk_asr_type type,
                                      unsigned long value)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	return x86_arch_set_special_register_result(type, IHK_ASR_X86_FS,
+			value, x86_fs_write_bridge);
+#else
 	/* GS modification is not permitted */
 	switch (type) {
 	case IHK_ASR_X86_FS:
@@ -1711,6 +2711,7 @@ int ihk_mc_arch_set_special_register(enum ihk_asr_type type,
 	default:
 		return -EINVAL;
 	}
+#endif
 }
 
 /*@
@@ -1725,6 +2726,10 @@ int ihk_mc_arch_set_special_register(enum ihk_asr_type type,
 int ihk_mc_arch_get_special_register(enum ihk_asr_type type,
                                      unsigned long *value)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	return x86_arch_get_special_register_result(type, IHK_ASR_X86_FS,
+			value, x86_fs_read_bridge);
+#else
 	/* GS modification is not permitted */
 	switch (type) {
 	case IHK_ASR_X86_FS:
@@ -1733,19 +2738,52 @@ int ihk_mc_arch_get_special_register(enum ihk_asr_type type,
 	default:
 		return -EINVAL;
 	}
+#endif
 }
 
 int ihk_mc_get_interrupt_id(int cpu)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	return x86_get_interrupt_id_result(cpu, x86_cpu_local_bridge,
+			__builtin_offsetof(struct x86_cpu_local_variables,
+				apic_id));
+#else
 	return get_x86_cpu_local_variable(cpu)->apic_id;
+#endif
 }
 
 /*@
   @ requires \valid_cpuid(cpu);     // valid CPU logical ID
   @ ensures \result == 0
   @*/
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+static void x86_issue_ipi_bridge(unsigned long apic_id, int vector)
+{
+	x86_issue_ipi(apic_id, vector);
+}
+
+static void x86_interrupt_log_bridge(int event, int cpu, int vector)
+{
+	if (event == 1) {
+		kprintf("%s: invalid CPU id: %d\n",
+				"ihk_mc_interrupt_cpu", cpu);
+	} else if (event == 2) {
+		dkprintf("[%d] ihk_mc_interrupt_cpu: %d\n",
+				ihk_mc_get_processor_id(), cpu);
+	}
+	(void)vector;
+}
+#endif
+
 int ihk_mc_interrupt_cpu(int cpu, int vector)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	return x86_interrupt_cpu_result(cpu, vector, num_processors,
+			x86_cpu_local_bridge,
+			__builtin_offsetof(struct x86_cpu_local_variables,
+				apic_id),
+			x86_issue_ipi_bridge, x86_interrupt_log_bridge);
+#else
 	if (cpu < 0 || cpu >= num_processors) {
 		kprintf("%s: invalid CPU id: %d\n", __func__, cpu);
 		return -1;
@@ -1754,6 +2792,7 @@ int ihk_mc_interrupt_cpu(int cpu, int vector)
 
 	x86_issue_ipi(get_x86_cpu_local_variable(cpu)->apic_id, vector);
 	return 0;
+#endif
 }
 
 struct thread *arch_switch_context(struct thread *prev, struct thread *next)
@@ -1836,7 +2875,7 @@ release_fp_regs(struct thread *thread)
 
 	pages = (xsave_size + (PAGE_SIZE - 1)) >> PAGE_SHIFT;
 	dkprintf("release_fp_regs: pages=%d\n", pages);
-	ihk_mc_free_pages(thread->fp_regs, pages);
+	_ihk_mc_free_pages(thread->fp_regs, pages, IHK_MC_PG_KERNEL, __FILE__, __LINE__);
 	thread->fp_regs = NULL;
 }
 
@@ -1853,7 +2892,7 @@ check_and_allocate_fp_regs(struct thread *thread)
 	if (!thread->fp_regs) {
 		pages = (xsave_size + (PAGE_SIZE - 1)) >> PAGE_SHIFT;
 		dkprintf("save_fp_regs: pages=%d\n", pages);
-		thread->fp_regs = ihk_mc_alloc_pages(pages, IHK_MC_AP_NOWAIT);
+		thread->fp_regs = _ihk_mc_alloc_aligned_pages_node(pages, PAGE_P2ALIGN, IHK_MC_AP_NOWAIT, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);
 
 		if (!thread->fp_regs) {
 			kprintf("error: allocating fp_regs pages\n");
@@ -1984,11 +3023,16 @@ void clear_fp_regs(void)
 
 ihk_mc_user_context_t *lookup_user_context(struct thread *thread)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	return x86_lookup_user_context_body_result(thread, get_this_cpu_local_var()->current,
+			PS_INTERRUPTIBLE | PS_UNINTERRUPTIBLE |
+			PS_STOPPED | PS_TRACED, &x86_thread_context_offsets);
+#else
 	ihk_mc_user_context_t *uctx = thread->uctx;
 
 	if ((!(thread->status & (PS_INTERRUPTIBLE | PS_UNINTERRUPTIBLE
 						| PS_STOPPED | PS_TRACED))
-				&& (thread != cpu_local_var(current)))
+				&& (thread != get_this_cpu_local_var()->current))
 			|| !uctx->is_gpr_valid) {
 		return NULL;
 	}
@@ -2005,6 +3049,7 @@ ihk_mc_user_context_t *lookup_user_context(struct thread *thread)
 	}
 
 	return uctx;
+#endif
 } /* lookup_user_context() */
 
 extern long do_arch_prctl(unsigned long code, unsigned long address);
@@ -2017,6 +3062,9 @@ ihk_mc_init_user_tlsbase(ihk_mc_user_context_t *ctx,
 
 void arch_flush_icache_all(void)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	x86_arch_noop_body_result();
+#endif
 	return;
 }
 
@@ -2025,7 +3073,11 @@ void arch_flush_icache_all(void)
   @*/
 void init_tick(void)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	x86_tick_log_body_result(1, x86_tick_log_bridge);
+#else
 	dkprintf("init_tick():\n");
+#endif
 	return;
 }
 
@@ -2034,7 +3086,11 @@ void init_tick(void)
   @*/
 void init_delay(void)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	x86_tick_log_body_result(2, x86_tick_log_bridge);
+#else
 	dkprintf("init_delay():\n");
+#endif
 	return;
 }
 
@@ -2043,12 +3099,29 @@ void init_delay(void)
   @*/
 void sync_tick(void)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	x86_tick_log_body_result(3, x86_tick_log_bridge);
+#else
 	dkprintf("sync_tick():\n");
+#endif
 	return;
 }
 
 static int is_pvclock_available(void)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+#define KVM_CPUID_SIGNATURE 0x40000000
+#define KVM_CPUID_FEATURES 0x40000001
+#define KVM_FEATURE_CLOCKSOURCE2 3
+#define KVM_FEATURE_CLOCKSOURCE 0
+#define MSR_KVM_SYSTEM_TIME_NEW 0x4b564d01
+#define MSR_KVM_SYSTEM_TIME 0x12
+	return x86_pvclock_available_body_result(&pvti_msr,
+			KVM_CPUID_SIGNATURE, KVM_CPUID_FEATURES,
+			KVM_FEATURE_CLOCKSOURCE2, KVM_FEATURE_CLOCKSOURCE,
+			MSR_KVM_SYSTEM_TIME_NEW, MSR_KVM_SYSTEM_TIME,
+			x86_cpuid_leaf_bridge, x86_pvclock_log_bridge);
+#else
 	uint32_t eax;
 	uint32_t ebx;
 	uint32_t ecx;
@@ -2087,6 +3160,7 @@ static int is_pvclock_available(void)
 
 	dkprintf("is_pvclock_available(): false (not supported)\n");
 	return 0;
+#endif
 } /* is_pvclock_available() */
 
 int arch_setup_pvclock(void)
@@ -2104,7 +3178,7 @@ int arch_setup_pvclock(void)
 	npages = (size + PAGE_SIZE - 1) / PAGE_SIZE;
 	pvti_npages = npages;
 
-	pvti = ihk_mc_alloc_pages(npages, IHK_MC_AP_NOWAIT);
+	pvti = _ihk_mc_alloc_aligned_pages_node(npages, PAGE_P2ALIGN, IHK_MC_AP_NOWAIT, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);
 	if (!pvti) {
 		ekprintf("arch_setup_pvclock: allocate_pages failed.\n");
 		return -ENOMEM;
@@ -2137,6 +3211,11 @@ void arch_start_pvclock(void)
 #define KVM_CPUID_SIGNATURE	0x40000000
 
 int running_on_kvm(void) {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+#define KVM_CPUID_SIGNATURE	0x40000000
+	return x86_running_on_kvm_body_result(KVM_CPUID_SIGNATURE,
+			x86_cpuid_leaf_bridge);
+#else
 	static const char signature[12] = "KVMKVMKVM\0\0";
 	const uint32_t *sigptr = (const uint32_t *)signature;
 	uint64_t op;
@@ -2153,6 +3232,7 @@ int running_on_kvm(void) {
 	}
 
 	return 0;
+#endif
 }
 
 void
@@ -2174,7 +3254,7 @@ mod_nmi_ctx(void *nmi_ctx, void (*func)())
 
 void arch_save_panic_regs(void *irq_regs)
 {
-	struct thread *current = cpu_local_var(current);
+	struct thread *current = get_this_cpu_local_var()->current;
 	struct x86_user_context *regs =
 		(struct x86_user_context *)irq_regs;
 	struct x86_cpu_local_variables *x86v =
@@ -2262,6 +3342,14 @@ int arch_cpu_read_write_register(
 		struct ihk_os_cpu_register *desc,
 		enum mcctrl_os_cpu_operation op)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	return x86_arch_cpu_read_write_register_body_result(desc, op,
+			MCCTRL_OS_CPU_READ_REGISTER,
+			MCCTRL_OS_CPU_WRITE_REGISTER,
+			__builtin_offsetof(struct ihk_os_cpu_register, addr),
+			__builtin_offsetof(struct ihk_os_cpu_register, val),
+			x86_read_msr_bridge, x86_write_msr_bridge);
+#else
 	if (op == MCCTRL_OS_CPU_READ_REGISTER) {
 		desc->val = rdmsr(desc->addr);
 	}
@@ -2273,6 +3361,7 @@ int arch_cpu_read_write_register(
 	}
 
 	return 0;
+#endif
 }
 
 extern int nmi_mode;

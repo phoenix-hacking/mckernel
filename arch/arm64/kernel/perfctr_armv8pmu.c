@@ -493,7 +493,7 @@ static inline int armv8pmu_has_overflowed(uint32_t pmovsr)
 
 static inline int armv8pmu_counter_has_overflowed(uint32_t pmnc, int idx)
 {
-	return pmnc & BIT(idx);
+	return pmnc & (1UL << (idx));
 }
 
 /* @ref.impl linux-v4.15-rc3 arch/arm64/kernel/perf_event.c */
@@ -820,9 +820,7 @@ static void armv8pmu_handle_irq(void *priv)
 		if (proc->monitoring_event->counter_id == idx) {
 			event = proc->monitoring_event;
 		} else {
-			list_for_each_entry(sub,
-					&proc->monitoring_event->sibling_list,
-					group_entry) {
+			for (sub = ((typeof(*sub) *)((char *)((&proc->monitoring_event->sibling_list)->next) - offsetof(typeof(*sub), group_entry))); &sub->group_entry != (&proc->monitoring_event->sibling_list); sub = ((typeof(*sub) *)((char *)(sub->group_entry.next) - offsetof(typeof(*sub), group_entry)))) {
 				if (sub->counter_id == idx) {
 					event = sub;
 					break;
@@ -861,7 +859,7 @@ static void armv8pmu_create_pmceid_bitmap(unsigned long *bitmap, uint32_t nbits)
 {
 	uint32_t pmceid[2];
 
-	memset(bitmap, 0, BITS_TO_LONGS(nbits) * sizeof(unsigned long));
+	memset(bitmap, 0, (((nbits) + BITS_PER_LONG - 1) / BITS_PER_LONG) * sizeof(unsigned long));
 
 	pmceid[0] = read_sysreg(pmceid0_el0);
 	bitmap[0] = (unsigned long)pmceid[0];

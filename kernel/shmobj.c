@@ -26,7 +26,7 @@
 #include <object_helpers.h>
 
 
-static LIST_HEAD(shmobj_list_head);
+static struct list_head shmobj_list_head = { &(shmobj_list_head), &(shmobj_list_head) };
 static ihk_spinlock_t shmobj_list_lock_body = SPIN_LOCK_UNLOCKED;
 
 static memobj_free_func_t shmobj_free;
@@ -34,6 +34,9 @@ static memobj_get_page_func_t shmobj_get_page;
 static memobj_invalidate_page_func_t shmobj_invalidate_page;
 static memobj_lookup_page_func_t shmobj_lookup_page;
 static memobj_update_page_func_t shmobj_update_page;
+static void shmobj_destroy(struct shmobj *obj);
+int shmobj_create(struct shmid_ds *ds, struct memobj **objp);
+void shmlock_user_free(struct shmlock_user *user);
 
 static struct memobj_ops shmobj_ops = {
 	.free =	&shmobj_free,
@@ -88,7 +91,7 @@ static struct page *page_list_lookup(struct shmobj *obj, off_t off)
 {
 	struct page *page;
 
-	list_for_each_entry(page, &obj->page_list, list) {
+	for (page = ((typeof(*page) *)((char *)((&obj->page_list)->next) - offsetof(typeof(*page), list))); &page->list != (&obj->page_list); page = ((typeof(*page) *)((char *)(page->list.next) - offsetof(typeof(*page), list)))) {
 		if (shmobj_page_contains_offset_result(page->offset,
 				page->pgshift, off)) {
 			goto out;
@@ -106,8 +109,390 @@ static struct page *page_list_first(struct shmobj *obj)
 		return NULL;
 	}
 
-	return list_first_entry(&obj->page_list, struct page, list);
+	return ((struct page *)((char *)((&obj->page_list)->next) - offsetof(struct page, list)));
 }
+
+#ifdef MCKERNEL_RUST_OBJECT_HELPERS
+static void shmobj_ref_bridge(void *memobj)
+{
+	memobj_ref(memobj);
+}
+
+static void shmobj_unref_bridge(void *memobj)
+{
+	memobj_unref(memobj);
+}
+
+static void shmobj_page_list_lock_bridge(void *obj)
+{
+	page_list_lock(obj);
+}
+
+static void shmobj_page_list_unlock_bridge(void *obj)
+{
+	page_list_unlock(obj);
+}
+
+static void shmobj_global_list_lock_bridge(void *obj)
+{
+	(void)obj;
+	shmobj_list_lock();
+}
+
+static void shmobj_global_list_unlock_bridge(void *obj)
+{
+	(void)obj;
+	shmobj_list_unlock();
+}
+
+static void shmobj_users_lock_bridge(void *obj)
+{
+	(void)obj;
+	shmlock_users_lock();
+}
+
+static void shmobj_users_unlock_bridge(void *obj)
+{
+	(void)obj;
+	shmlock_users_unlock();
+}
+
+static void *shmobj_page_lookup_bridge(void *obj, off_t off)
+{
+	return page_list_lookup(obj, off);
+}
+
+static uintptr_t shmobj_page_phys_bridge(void *page)
+{
+	return page_to_phys((struct page *)page);
+}
+
+static void shmobj_lookup_log_bridge(int event, void *memobj, off_t off,
+				     int p2align, void *physp, int error,
+				     uintptr_t phys)
+{
+	switch (event) {
+	case SHMOBJ_LOG_LOOKUP_INVALID:
+		ekprintf("shmobj_lookup_page(%p,%#lx,%d,%p):invalid argument. %d\n",
+			 memobj, off, p2align, physp, error);
+		break;
+	case SHMOBJ_LOG_LOOKUP_RANGE:
+		ekprintf("shmobj_lookup_page(%p,%#lx,%d,%p):beyond the end. %d\n",
+			 memobj, off, p2align, physp, error);
+		break;
+	case SHMOBJ_LOG_LOOKUP_MISSING:
+		(void)phys;
+		dkprintf("shmobj_lookup_page(%p,%#lx,%d,%p):page not found. %d\n",
+			 memobj, off, p2align, physp, error);
+		break;
+	}
+}
+
+static void *shmobj_pte_lookup_bridge(void *pt, void *vaddr,
+				      size_t *pte_sizep, int *p2alignp)
+{
+	return ihk_mc_pt_lookup_pte((page_table_t)pt, vaddr, 0, NULL,
+				   pte_sizep, p2alignp);
+}
+
+static int shmobj_page_pgshift_bridge(void *page)
+{
+	return ((struct page *)page)->pgshift;
+}
+
+static void shmobj_page_set_pgshift_bridge(void *page, int pgshift)
+{
+	((struct page *)page)->pgshift = pgshift;
+}
+
+static int shmobj_page_mode_bridge(void *page)
+{
+	return ((struct page *)page)->mode;
+}
+
+static void shmobj_page_set_mode_bridge(void *page, int mode)
+{
+	((struct page *)page)->mode = mode;
+}
+
+static off_t shmobj_page_offset_bridge(void *page)
+{
+	return ((struct page *)page)->offset;
+}
+
+static void shmobj_page_set_offset_bridge(void *page, off_t offset)
+{
+	((struct page *)page)->offset = offset;
+}
+
+static int shmobj_page_count_bridge(void *page)
+{
+	return ihk_atomic_read(&((struct page *)page)->count);
+}
+
+static void shmobj_page_set_count_bridge(void *page, int count)
+{
+	ihk_atomic_set(&((struct page *)page)->count, count);
+}
+
+static long shmobj_page_mapped_bridge(void *page)
+{
+	return ihk_atomic64_read(&((struct page *)page)->mapped);
+}
+
+static void shmobj_page_set_mapped_bridge(void *page, long mapped)
+{
+	ihk_atomic64_set(&((struct page *)page)->mapped, mapped);
+}
+
+static void *shmobj_page_insert_hash_bridge(uintptr_t phys)
+{
+	return phys_to_page_insert_hash(phys);
+}
+
+static void shmobj_page_list_insert_bridge(void *obj, void *page)
+{
+	page_list_insert(obj, page);
+}
+
+static void shmobj_update_log_bridge(int event, void *memobj, void *pt,
+				     void *orig_page, void *vaddr, int error)
+{
+	switch (event) {
+	case SHMOBJ_LOG_UPDATE_INVALID:
+		dkprintf("%s(%p,%p,%p,%p): invalid argument. %d\n",
+			 "shmobj_update_page", memobj, pt, orig_page,
+			 vaddr, error);
+		break;
+	case SHMOBJ_LOG_UPDATE_PTE_MISSING:
+		dkprintf("%s(%p,%p,%p,%p): pte not found. %d\n",
+			 "shmobj_update_page", memobj, pt, orig_page,
+			 vaddr, error);
+		break;
+	}
+}
+
+static void *shmobj_alloc_page_bridge(int npages, int p2align,
+				      unsigned long flags, uintptr_t virt_addr)
+{
+	return _ihk_mc_alloc_aligned_pages_node(npages, p2align, flags, -1, IHK_MC_PG_USER, virt_addr, __FILE__, __LINE__);
+}
+
+static void shmobj_free_page_bridge(void *virt, int npages)
+{
+	_ihk_mc_free_pages(virt, npages, IHK_MC_PG_USER, __FILE__, __LINE__);
+}
+
+static uintptr_t shmobj_virt_to_phys_bridge(void *virt)
+{
+	return virt_to_phys(virt);
+}
+
+static void *shmobj_memset_bridge(void *dst, int value, size_t len)
+{
+	return memset(dst, value, len);
+}
+
+static void shmobj_page_count_inc_bridge(void *page)
+{
+	ihk_atomic_inc(&((struct page *)page)->count);
+}
+
+static void shmobj_panic_bridge(void)
+{
+	panic("shmobj_get_page()");
+}
+
+static void shmobj_get_log_bridge(int event, void *memobj, off_t off,
+				  int p2align, void *physp, int error,
+				  void *page, uintptr_t phys)
+{
+	switch (event) {
+	case SHMOBJ_LOG_GET_INVALID:
+		ekprintf("shmobj_get_page(%p,%#lx,%d,%p):invalid argument. %d\n",
+			 memobj, off, p2align, physp, error);
+		break;
+	case SHMOBJ_LOG_GET_RANGE:
+		ekprintf("shmobj_get_page(%p,%#lx,%d,%p):beyond the end. %d\n",
+			 memobj, off, p2align, physp, error);
+		break;
+	case SHMOBJ_LOG_GET_TOO_LARGE:
+		ekprintf("shmobj_get_page(%p,%#lx,%d,%p):too large. %d\n",
+			 memobj, off, p2align, physp, error);
+		break;
+	case SHMOBJ_LOG_GET_ALLOC_FAILED:
+		ekprintf("shmobj_get_page(%p,%#lx,%d,%p):alloc failed. %d\n",
+			 memobj, off, p2align, physp, error);
+		break;
+	case SHMOBJ_LOG_GET_PAGE_INVALID:
+		ekprintf("shmobj_get_page(%p,%#lx,%d,%p):page %p %#lx\n",
+			 memobj, off, p2align, physp, page, phys);
+		break;
+	case SHMOBJ_LOG_GET_ALLOCATED:
+		dkprintf("shmobj_get_page(%p,%#lx,%d,%p):alloc page. %p %#lx\n",
+			 memobj, off, p2align, physp, page, phys);
+		break;
+	}
+}
+
+static void shmobj_user_clear_bridge(void *obj)
+{
+	((struct shmobj *)obj)->user = NULL;
+}
+
+static size_t shmobj_user_locked_bridge(void *user)
+{
+	return ((struct shmlock_user *)user)->locked;
+}
+
+static void shmobj_user_set_locked_bridge(void *user, size_t locked)
+{
+	((struct shmlock_user *)user)->locked = locked;
+}
+
+static void shmobj_user_free_bridge(void *user)
+{
+	shmlock_user_free(user);
+}
+
+static void *shmobj_page_first_bridge(void *obj)
+{
+	return page_list_first(obj);
+}
+
+static void shmobj_page_remove_bridge(void *obj, void *page)
+{
+	page_list_remove(obj, page);
+}
+
+static void *shmobj_phys_to_virt_bridge(uintptr_t phys)
+{
+	return phys_to_virt(phys);
+}
+
+static int shmobj_page_unmap_bridge(void *page)
+{
+	return page_unmap(page);
+}
+
+static void shmobj_rss_sub_bridge(size_t size, size_t pgsize)
+{
+	memory_stat_rss_sub(size, pgsize);
+}
+
+static void shmobj_kfree_bridge(void *ptr)
+{
+	kfree_tracked(ptr, __FILE__, __LINE__);
+}
+
+static void *shmobj_kmalloc_bridge(size_t size, unsigned long flags)
+{
+	return kmalloc_tracked(size, flags, __FILE__, __LINE__);
+}
+
+static int shmobj_next_seq_bridge(void)
+{
+	extern int the_seq;
+
+	return the_seq++;
+}
+
+static void *shmobj_create_init_bridge(void *objp, void *dsp, int pgshift,
+				       size_t pgsize, size_t real_segsz,
+				       int seq)
+{
+	struct shmobj *obj = objp;
+	struct shmid_ds *ds = dsp;
+
+	(void)pgsize;
+	obj->memobj.ops = &shmobj_ops;
+	obj->memobj.flags = shmobj_initial_flags_result();
+	obj->memobj.size = ds->shm_segsz;
+	ihk_atomic_set(&obj->memobj.refcnt, shmobj_initial_refcnt_result());
+	obj->ds = *ds;
+	obj->ds.shm_perm.seq = seq;
+	obj->ds.init_pgshift = shmobj_initial_ds_pgshift_result();
+	obj->index = shmobj_initial_index_result();
+	obj->pgshift = pgshift;
+	obj->real_segsz = real_segsz;
+	page_list_init(obj);
+
+	return to_memobj(obj);
+}
+
+static void shmobj_create_log_bridge(int event, void *ds, void *objp,
+				     int error)
+{
+	struct shmid_ds *shm_ds = ds;
+
+	if (event == SHMOBJ_LOG_CREATE_ALLOC_FAILED) {
+		ekprintf("shmobj_create(%p %#lx,%p):kmalloc failed. %d\n",
+			 shm_ds, shm_ds->shm_segsz, objp, error);
+	}
+}
+
+static int shmobj_create_bridge(void *ds, void **objp)
+{
+	return shmobj_create(ds, (struct memobj **)objp);
+}
+
+static int shmobj_memobj_flags_bridge(void *memobj)
+{
+	return ((struct memobj *)memobj)->flags;
+}
+
+static void shmobj_memobj_set_flags_bridge(void *memobj, int flags)
+{
+	((struct memobj *)memobj)->flags = flags;
+}
+
+static void *shmobj_to_shmobj_bridge(void *memobj)
+{
+	return to_shmobj(memobj);
+}
+
+static void shmobj_indexed_free_bridge(void *obj, int word,
+				       unsigned long mask)
+{
+	extern struct shm_info the_shm_info;
+
+	list_del(&((struct shmobj *)obj)->chain);
+	--the_shm_info.used_ids;
+	shmid_index[word] &= ~mask;
+	kfree_tracked(obj, __FILE__, __LINE__);
+}
+
+static void shmobj_destroy_log_bridge(int event, void *obj, void *page,
+				      uintptr_t phys, size_t size,
+				      size_t pgsize)
+{
+	switch (event) {
+	case SHMOBJ_LOG_DESTROY_PAGE_COUNT_INVALID:
+		kprintf("%s: WARNING: page count for phys 0x%lx is invalid\n",
+			"shmobj_destroy", ((struct page *)page)->phys);
+		break;
+	case SHMOBJ_LOG_DESTROY_RSS_SUB:
+		dkprintf("%lx-,%s: calling memory_stat_rss_sub(),phys=%lx,size=%ld,pgsize=%ld\n",
+			 phys, "shmobj_destroy", phys, size, pgsize);
+		break;
+	}
+	(void)obj;
+}
+
+static void shmobj_destroy_bridge(void *obj)
+{
+	shmobj_destroy(obj);
+}
+
+static void shmobj_free_log_bridge(int event, void *memobj)
+{
+	if (event == SHMOBJ_LOG_FREE_MISSING_DEST) {
+		ekprintf("%s called without going through rmid?",
+			 "shmobj_free");
+	}
+	(void)memobj;
+}
+#endif
 
 /***********************************************************************
  * shmobj_list
@@ -128,29 +513,104 @@ void shmobj_list_unlock(void)
  * shmlock_users
  */
 ihk_spinlock_t shmlock_users_lock_body = SPIN_LOCK_UNLOCKED;
-static LIST_HEAD(shmlock_users);
+static struct list_head shmlock_users = { &(shmlock_users), &(shmlock_users) };
+
+#ifndef MCKERNEL_RUST_OBJECT_HELPERS
+void shmlock_users_lock(void)
+{
+	ihk_mc_spinlock_lock_noirq(&shmlock_users_lock_body);
+}
+
+void shmlock_users_unlock(void)
+{
+	ihk_mc_spinlock_unlock_noirq(&shmlock_users_lock_body);
+}
+#endif
+
+#ifdef MCKERNEL_RUST_OBJECT_HELPERS
+static void *shmlock_user_first_bridge(void)
+{
+	if (list_empty(&shmlock_users)) {
+		return NULL;
+	}
+	return ((struct shmlock_user *)((char *)((&shmlock_users)->next) - offsetof(struct shmlock_user, chain)));
+}
+
+static void *shmlock_user_next_bridge(void *userp)
+{
+	struct shmlock_user *user = userp;
+	struct list_head *next = user->chain.next;
+
+	if (next == &shmlock_users) {
+		return NULL;
+	}
+	return ((struct shmlock_user *)((char *)(next) - offsetof(struct shmlock_user, chain)));
+}
+
+static int shmlock_user_ruid_bridge(void *user)
+{
+	return ((struct shmlock_user *)user)->ruid;
+}
+
+static void shmlock_user_init_bridge(void *userp, int ruid)
+{
+	struct shmlock_user *user = userp;
+
+	user->ruid = ruid;
+	user->locked = 0;
+}
+
+static void shmlock_user_list_add_bridge(void *user)
+{
+	list_add(&((struct shmlock_user *)user)->chain, &shmlock_users);
+}
+
+static void shmlock_user_list_del_bridge(void *user)
+{
+	list_del(&((struct shmlock_user *)user)->chain);
+}
+
+static void shmlock_user_free_panic_bridge(void)
+{
+	panic("shmlock_user_free()");
+}
+#endif
 
 void shmlock_user_free(struct shmlock_user *user)
 {
+#ifdef MCKERNEL_RUST_OBJECT_HELPERS
+	(void)shmlock_user_free_body_result(
+		user, shmobj_user_locked_bridge, shmlock_user_list_del_bridge,
+		shmobj_kfree_bridge, shmlock_user_free_panic_bridge);
+	return;
+#else
 	if (shmlock_user_locked_result(user->locked)) {
 		panic("shmlock_user_free()");
 	}
 	list_del(&user->chain);
-	kfree(user);
+	kfree_tracked(user, __FILE__, __LINE__);
+#endif
 }
 
 int shmlock_user_get(uid_t ruid, struct shmlock_user **userp)
 {
+#ifdef MCKERNEL_RUST_OBJECT_HELPERS
+	return shmlock_user_get_body_result(
+		ruid, (void **)userp, sizeof(struct shmlock_user),
+		shmlock_user_first_bridge, shmlock_user_next_bridge,
+		shmlock_user_ruid_bridge, shmobj_kmalloc_bridge,
+		shmlock_user_init_bridge, shmlock_user_list_add_bridge);
+#else
 	struct shmlock_user *user;
 
-	list_for_each_entry(user, &shmlock_users, chain) {
+	for (user = ((typeof(*user) *)((char *)((&shmlock_users)->next) - offsetof(typeof(*user), chain))); &user->chain != (&shmlock_users); user = ((typeof(*user) *)((char *)(user->chain.next) - offsetof(typeof(*user), chain)))) {
 		if (shmlock_user_match_result(user->ruid, ruid)) {
 			break;
 		}
 	}
 	if (shmlock_user_is_list_head_result((uintptr_t)&user->chain,
 					     (uintptr_t)&shmlock_users)) {
-		user = kmalloc(sizeof(*user), IHK_MC_AP_NOWAIT);
+		user = kmalloc_tracked(sizeof(*user), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 		if (!user) {
 			return -ENOMEM;
 		}
@@ -160,6 +620,7 @@ int shmlock_user_get(uid_t ruid, struct shmlock_user **userp)
 	}
 	*userp = user;
 	return 0;
+#endif
 }
 
 /***********************************************************************
@@ -168,6 +629,20 @@ int shmlock_user_get(uid_t ruid, struct shmlock_user **userp)
 int the_seq = 0;
 int shmobj_create(struct shmid_ds *ds, struct memobj **objp)
 {
+#ifdef MCKERNEL_RUST_OBJECT_HELPERS
+	int error;
+
+	dkprintf("shmobj_create(%p %#lx,%p)\n", ds, ds->shm_segsz, objp);
+	error = shmobj_create_body_result(
+		ds, (void **)objp, ds->shm_segsz, ds->init_pgshift,
+		sizeof(struct shmobj), shmobj_kmalloc_bridge,
+		shmobj_kfree_bridge, shmobj_memset_bridge,
+		shmobj_next_seq_bridge, shmobj_create_init_bridge,
+		shmobj_create_log_bridge);
+	dkprintf("shmobj_create_indexed(%p %#lx,%p):%d %p\n",
+		 ds, ds->shm_segsz, objp, error, *objp);
+	return error;
+#else
 	struct shmobj *obj = NULL;
 	int error;
 	int pgshift;
@@ -177,7 +652,7 @@ int shmobj_create(struct shmid_ds *ds, struct memobj **objp)
 	pgshift = shmobj_init_pgshift_result(ds->init_pgshift);
 	pgsize = shmobj_pgsize_result(pgshift);
 
-	obj = kmalloc(sizeof(*obj), IHK_MC_AP_NOWAIT);
+	obj = kmalloc_tracked(sizeof(*obj), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 	if (!obj) {
 		error = -ENOMEM;
 		ekprintf("shmobj_create(%p %#lx,%p):kmalloc failed. %d\n",
@@ -205,15 +680,22 @@ int shmobj_create(struct shmid_ds *ds, struct memobj **objp)
 
 out:
 	if (obj) {
-		kfree(obj);
+		kfree_tracked(obj, __FILE__, __LINE__);
 	}
 	dkprintf("shmobj_create_indexed(%p %#lx,%p):%d %p\n",
 			ds, ds->shm_segsz, objp, error, *objp);
 	return error;
+#endif
 }
 
 int shmobj_create_indexed(struct shmid_ds *ds, struct shmobj **objp)
 {
+#ifdef MCKERNEL_RUST_OBJECT_HELPERS
+	return shmobj_create_indexed_body_result(
+		ds, (void **)objp, shmobj_create_bridge,
+		shmobj_memobj_flags_bridge, shmobj_memobj_set_flags_bridge,
+		shmobj_to_shmobj_bridge);
+#else
 	int error;
 	struct memobj *obj;
 
@@ -223,10 +705,27 @@ int shmobj_create_indexed(struct shmid_ds *ds, struct shmobj **objp)
 		*objp = to_shmobj(obj);
 	}
 	return error;
+#endif
 }
 
 static void shmobj_destroy(struct shmobj *obj)
 {
+#ifdef MCKERNEL_RUST_OBJECT_HELPERS
+	dkprintf("shmobj_destroy(%p [%d %o])\n", obj, obj->index,
+		 obj->ds.shm_perm.mode);
+	(void)shmobj_destroy_body_result(
+		obj, obj->user, obj->real_segsz, obj->index,
+		shmobj_user_clear_bridge, shmobj_user_locked_bridge,
+		shmobj_user_set_locked_bridge, shmobj_users_lock_bridge,
+		shmobj_users_unlock_bridge, shmobj_user_free_bridge,
+		shmobj_page_first_bridge, shmobj_page_remove_bridge,
+		shmobj_page_phys_bridge, shmobj_phys_to_virt_bridge,
+		shmobj_page_pgshift_bridge, shmobj_page_count_bridge,
+		shmobj_page_unmap_bridge, shmobj_free_page_bridge,
+		shmobj_rss_sub_bridge, shmobj_kfree_bridge,
+		shmobj_indexed_free_bridge, shmobj_destroy_log_bridge);
+	return;
+#else
 	extern struct shm_info the_shm_info;
 	struct shmlock_user *user;
 	size_t size;
@@ -280,12 +779,12 @@ static void shmobj_destroy(struct shmobj *obj)
 			size_t free_size =
 				shmobj_destroy_page_size_result(page->pgshift);
 
-			ihk_mc_free_pages_user(page_va, npages);
+			_ihk_mc_free_pages(page_va, npages, IHK_MC_PG_USER, __FILE__, __LINE__);
 			dkprintf("%lx-,%s: calling memory_stat_rss_sub(),phys=%lx,size=%ld,pgsize=%ld\n",
 				 phys, __func__, phys, free_size,
 				 free_pgsize);
 			memory_stat_rss_sub(free_size, free_pgsize);
-			kfree(page);
+			kfree_tracked(page, __FILE__, __LINE__);
 		}
 
 #if 0
@@ -306,11 +805,11 @@ static void shmobj_destroy(struct shmobj *obj)
 		}
 
 		page->mode = PM_NONE;
-		ihk_mc_free_pages(phys_to_virt(page_to_phys(page)), npages);
+		_ihk_mc_free_pages(phys_to_virt(page_to_phys(page)), npages, IHK_MC_PG_KERNEL, __FILE__, __LINE__);
 #endif
 	}
 	if (shmobj_should_free_direct_result(obj->index)) {
-		kfree(obj);
+		kfree_tracked(obj, __FILE__, __LINE__);
 	}
 	else {
 		int i = shmobj_destroy_index_word_result(obj->index);
@@ -319,9 +818,10 @@ static void shmobj_destroy(struct shmobj *obj)
 		list_del(&obj->chain);
 		--the_shm_info.used_ids;
 		shmid_index[i] &= ~x;
-		kfree(obj);
+		kfree_tracked(obj, __FILE__, __LINE__);
 	}
 	return;
+#endif
 }
 
 static void shmobj_free(struct memobj *memobj)
@@ -331,6 +831,14 @@ static void shmobj_free(struct memobj *memobj)
 
 	dkprintf("%s(%p)\n", __func__, memobj);
 
+#ifdef MCKERNEL_RUST_OBJECT_HELPERS
+	(void)shmobj_free_body_result(
+		memobj, obj, obj->ds.shm_perm.mode,
+		shmobj_global_list_lock_bridge, shmobj_global_list_unlock_bridge,
+		shmobj_destroy_bridge, shmobj_free_log_bridge);
+	dkprintf("%s(%p)\n", __func__, memobj);
+	return;
+#else
 	shmobj_list_lock();
 	if (shmobj_destroy_missing_flag_result(obj->ds.shm_perm.mode)) {
 		ekprintf("%s called without going through rmid?", __func__);
@@ -341,6 +849,7 @@ static void shmobj_free(struct memobj *memobj)
 
 	dkprintf("%s(%p)\n", __func__, memobj);
 	return;
+#endif
 }
 
 static int shmobj_get_page(struct memobj *memobj, off_t off, int p2align,
@@ -348,13 +857,34 @@ static int shmobj_get_page(struct memobj *memobj, off_t off, int p2align,
 {
 	struct shmobj *obj = to_shmobj(memobj);
 	int error;
+#ifndef MCKERNEL_RUST_OBJECT_HELPERS
 	struct page *page;
 	int npages;
 	void *virt = NULL;
 	uintptr_t phys = -1;
+#endif
 
 	dkprintf("shmobj_get_page(%p,%#lx,%d,%p)\n",
 			memobj, off, p2align, physp);
+#ifdef MCKERNEL_RUST_OBJECT_HELPERS
+	(void)pflag;
+	error = shmobj_get_page_body_result(
+		memobj, obj, obj->real_segsz, off, p2align, physp,
+		virt_addr, shmobj_ref_bridge, shmobj_unref_bridge,
+		shmobj_page_list_lock_bridge, shmobj_page_list_unlock_bridge,
+		shmobj_page_lookup_bridge, shmobj_alloc_page_bridge,
+		shmobj_free_page_bridge, shmobj_virt_to_phys_bridge,
+		shmobj_page_insert_hash_bridge, shmobj_page_mode_bridge,
+		shmobj_page_set_mode_bridge, shmobj_page_set_offset_bridge,
+		shmobj_page_set_pgshift_bridge, shmobj_page_set_count_bridge,
+		shmobj_page_set_mapped_bridge, shmobj_page_list_insert_bridge,
+		shmobj_page_count_inc_bridge, shmobj_page_phys_bridge,
+		shmobj_memset_bridge, shmobj_panic_bridge,
+		shmobj_get_log_bridge);
+	dkprintf("shmobj_get_page(%p,%#lx,%d,%p):%d\n",
+			memobj, off, p2align, physp, error);
+	return error;
+#else
 	memobj_ref(memobj);
 	error = shmobj_get_page_validate_result(obj->real_segsz, off,
 			p2align);
@@ -378,8 +908,7 @@ static int shmobj_get_page(struct memobj *memobj, off_t off, int p2align,
 	page = page_list_lookup(obj, off);
 	if (shmobj_need_alloc_page_result((uintptr_t)page)) {
 		npages = shmobj_page_npages_result(p2align);
-		virt = ihk_mc_alloc_aligned_pages_user(npages, p2align,
-				IHK_MC_AP_NOWAIT, virt_addr);
+		virt = _ihk_mc_alloc_aligned_pages_node(npages, p2align, IHK_MC_AP_NOWAIT, -1, IHK_MC_PG_USER, virt_addr, __FILE__, __LINE__);
 		if (!virt) {
 			page_list_unlock(obj);
 			error = -ENOMEM;
@@ -424,11 +953,12 @@ static int shmobj_get_page(struct memobj *memobj, off_t off, int p2align,
 out:
 	memobj_unref(memobj);
 	if (virt) {
-		ihk_mc_free_pages_user(virt, npages);
+		_ihk_mc_free_pages(virt, npages, IHK_MC_PG_USER, __FILE__, __LINE__);
 	}
 	dkprintf("shmobj_get_page(%p,%#lx,%d,%p):%d\n",
 			memobj, off, p2align, physp, error);
 	return error;
+#endif
 }
 
 static int shmobj_lookup_page(struct memobj *memobj, off_t off, int p2align,
@@ -436,11 +966,25 @@ static int shmobj_lookup_page(struct memobj *memobj, off_t off, int p2align,
 {
 	struct shmobj *obj = to_shmobj(memobj);
 	int error;
+#ifndef MCKERNEL_RUST_OBJECT_HELPERS
 	struct page *page;
+#endif
 	uintptr_t phys = NOPHYS;
 
 	dkprintf("shmobj_lookup_page(%p,%#lx,%d,%p)\n",
 			memobj, off, p2align, physp);
+#ifdef MCKERNEL_RUST_OBJECT_HELPERS
+	(void)pflag;
+	error = shmobj_lookup_page_body_result(
+		memobj, obj, obj->real_segsz, off, p2align, physp, &phys,
+		shmobj_ref_bridge, shmobj_unref_bridge,
+		shmobj_page_list_lock_bridge, shmobj_page_list_unlock_bridge,
+		shmobj_page_lookup_bridge, shmobj_page_phys_bridge,
+		shmobj_lookup_log_bridge);
+	dkprintf("shmobj_lookup_page(%p,%#lx,%d,%p):%d %#lx\n",
+			memobj, off, p2align, physp, error, phys);
+	return error;
+#else
 	memobj_ref(&obj->memobj);
 	error = shmobj_lookup_page_validate_result(obj->real_segsz, off);
 	if (error == -EINVAL) {
@@ -475,6 +1019,7 @@ out:
 	dkprintf("shmobj_lookup_page(%p,%#lx,%d,%p):%d %#lx\n",
 			memobj, off, p2align, physp, error, phys);
 	return error;
+#endif
 } /* shmobj_lookup_page() */
 
 static int shmobj_update_page(struct memobj *memobj, page_table_t pt,
@@ -482,14 +1027,32 @@ static int shmobj_update_page(struct memobj *memobj, page_table_t pt,
 {
 	struct shmobj *obj = to_shmobj(memobj);
 	int error;
+#ifndef MCKERNEL_RUST_OBJECT_HELPERS
 	pte_t *pte;
 	size_t pte_size, orig_pgsize, page_off;
 	struct page *page;
 	int p2align;
 	uintptr_t base_phys, phys;
+#endif
 
 	dkprintf("%s(%p,%p,%p,%p)\n",
 			memobj, pt, orig_page, vaddr);
+#ifdef MCKERNEL_RUST_OBJECT_HELPERS
+	error = shmobj_update_page_body_result(
+		memobj, obj, pt, orig_page, vaddr,
+		shmobj_ref_bridge, shmobj_unref_bridge,
+		shmobj_page_phys_bridge, shmobj_pte_lookup_bridge,
+		shmobj_page_pgshift_bridge, shmobj_page_set_pgshift_bridge,
+		shmobj_page_mode_bridge, shmobj_page_set_mode_bridge,
+		shmobj_page_offset_bridge, shmobj_page_set_offset_bridge,
+		shmobj_page_count_bridge, shmobj_page_set_count_bridge,
+		shmobj_page_mapped_bridge, shmobj_page_set_mapped_bridge,
+		shmobj_page_insert_hash_bridge, shmobj_page_list_insert_bridge,
+		shmobj_update_log_bridge);
+	dkprintf("%s(%p,%p,%p,%p):%d\n", __func__,
+			memobj, pt, orig_page, vaddr);
+	return error;
+#else
 	memobj_ref(&obj->memobj);
 
 	error = shmobj_update_args_result(!!pt, !!orig_page, !!vaddr);
@@ -550,4 +1113,5 @@ out:
 	dkprintf("%s(%p,%p,%p,%p):%d\n", __func__,
 			memobj, pt, orig_page, vaddr);
 	return error;
+#endif
 } /* shmobj_update_page() */

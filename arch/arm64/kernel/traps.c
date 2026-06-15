@@ -78,7 +78,7 @@ void do_fpsimd_exc(unsigned int esr, struct pt_regs *regs)
 }
 
 /* @ref.impl arch/arm64/kernel/traps.c */
-static LIST_HEAD(undef_hook);
+static struct list_head undef_hook = { &(undef_hook), &(undef_hook) };
 
 /* @ref.impl arch/arm64/kernel/traps.c */
 static ihk_spinlock_t undef_lock = SPIN_LOCK_UNLOCKED;
@@ -123,7 +123,7 @@ static int call_undef_hook(struct pt_regs *regs)
 #endif
 
 	flags = ihk_mc_spinlock_lock(&undef_lock);
-	list_for_each_entry(hook, &undef_hook, node)
+	for (hook = ((typeof(*hook) *)((char *)((&undef_hook)->next) - offsetof(typeof(*hook), node))); &hook->node != (&undef_hook); hook = ((typeof(*hook) *)((char *)(hook->node.next) - offsetof(typeof(*hook), node))))
 		if ((instr & hook->instr_mask) == hook->instr_val &&
 		    (regs->pstate & hook->pstate_mask) == hook->pstate_val)
 			fn = hook->fn;

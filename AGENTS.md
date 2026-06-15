@@ -1,6 +1,6 @@
 # McKernel Rust Migration Agent Notes
 
-Updated: 2026-05-24
+Updated: 2026-06-02
 
 ## Mission
 
@@ -40,7 +40,7 @@ The Rust migration is intentionally incremental:
 - `migration.txt` is the stricter x86_64 core-OS ownership tracker. It answers
   whether core McKernel C bodies have been replaced by Rust-owned core
   programs, not whether Rust helper coverage exists. Current strict x86_64
-  core Rust ownership is about 75% (roughly 70-80%); C may remain for ABI shims, fallback
+  core Rust ownership is 100% for the scoped sequencing table; C may remain for ABI shims, fallback
   scaffolding, trivial adapters, and external primitive callbacks, but Rust
   helper-only trampolines do not count as full core ownership.
 - `migration.txt` also tracks the final standalone Rust target. This is
@@ -60,12 +60,198 @@ The Rust migration is intentionally incremental:
   points, and about +60 strict-core points in `migration.txt`, so this
   continuation target is complete. Older +32 references are historical 32/50
   checkpoints from a completed prior continuation, not a live goal.
-- Post-+50 strict-core movement has added +6 strict syscall points so far by
-  moving `waitid()` SIGCHLD siginfo copyout-body sequencing and `wait4()`
-  wrapper validation/do-wait/copyout sequencing plus `waitid()` wrapper
-  validation/do-wait/siginfo-return sequencing and `wait_continued()`
-  status/reap/result sequencing into Rust. This does not add broad dashboard
-  percentage because the Syscall Core row is already capped at 100%.
+- Post-+50 strict-core movement is now about +398 strict-core points after
+  the broad dashboard reached its current cap. The latest verified movement
+  routes Page allocator low-level registration and dispatch through Rust:
+  `pa_ops` storage, tracking-init and early-invalidate callback ordering,
+  allocator ops publication, aligned/default allocation dispatch, free dispatch,
+  early-allocation fallback selection, and exported `___ihk_mc_*()` body
+  publication. Recent verified movement also routes top-level host IKC public
+  handler/wrapper sequencing through Rust: syscall packet
+  cast/response-channel/current-thread dispatch, dummy packet release dispatch,
+  and public IKC2Linux/IKC2McKernel init panic-on-error wrapper sequencing.
+  Recent verified movement also routes the public bitmap
+  `ihk_pagealloc_*()` wrapper layer through Rust: exported init failure
+  logging, default init, destroy free-callback dispatch,
+  alloc/reserve/free/count/query dispatch, double-free error routing, and
+  zero-free begin/done logging. Recent verified movement also routes
+  `set_mempolicy()` and `mbind()` body sequencing through Rust: nodemask-bit
+  validation, clamp-warning dispatch, mode normalization, default-policy
+  empty-mask validation, copyin fault shaping, process NUMA-mask reset,
+  preferred-without-mask publication, missing-mask rejection,
+  node-bound validation, valid-mask overlap detection, process-mask clearing,
+  interleave-state publication, straight-map/FUGAKU gates, mbind mode/flag
+  validation, address-range validation, memory-range lock/lookup ordering,
+  range-policy clear/allocate/rb-clear/insert sequencing, and range-policy
+  mask/policy/interleave publication. Earlier `get_mempolicy()` movement
+  already covered validation, `MPOL_F_NODE`/`MPOL_F_MEMS_ALLOWED`, address
+  range locking/lookup, range-policy search and unlock ordering, policy selection
+  plus mode copyout, and range/process nodemask copyout. The previous verified
+  movement routes `ihk_mc_pt_lookup_fault_pte()` and `lookup_node()` sequencing
+  through Rust: initial PTE lookup, missing-PTE fault dispatch, retry lookup,
+  recovered-PTE logging, lookup-node fault dispatch/error return,
+  address-space/page-table extraction, post-fault PTE lookup, absent-PTE
+  `-ENOENT` shaping, PTE physical-address extraction, and physical-to-NUMA-node
+  return shaping. The earlier verified movement routes
+  `query_free_mem_interrupt_handler()` sequencing through Rust:
+  NUMA-node iteration, per-node free-page callback dispatch, total
+  accumulation/logging, optional FUGAKU panic dispatch, `memdebug` lookup,
+  kmalloc/pagealloc memcheck dispatch, page-hash count/log callback dispatch,
+  and optional ATTACHED_MIC sbox scratch publication. The earlier verified
+  movement routes allocator wrapper selection and free handoff through Rust:
+  `mckernel_allocate_aligned_pages_node()` invalid-size/default-idle/
+  current-VM/range-policy/process-policy selection, current-node publication,
+  and `mckernel_free_pages()` pending-free versus allocator-free sequencing.
+  Earlier verified movement routes `init_process_stack()` primary
+  execution-body sequencing through Rust: stack sizing, max/min limit
+  selection, AP-user policy, aligned allocation, stack zeroing, VM stack range
+  creation, page-table set-range callback dispatch, auxv/argv/env stack
+  layout, `saved_auxv` publication, user stack pointer/context publication,
+  and VM stack bound publication. The earlier verified movement routes host
+  args/envs stack-prep sequencing
+  through Rust: arg/env page-count and range placement, argenv page
+  allocation/physical publication, argenv memory-range creation, remote
+  args/envs map/copy/unmap/TLB sequencing, local args/envs length publication,
+  saved_cmdline free/alloc/copy publication, argv/env pointer fixup, vDSO
+  map/clear, rprocess/rpgtable publication, and init_process_stack callback
+  dispatch/error shaping. The previous verified
+  movement routes host prepare-ranges ELF section-loop sequencing,
+  interpreter/aout relocation, section page-span/range calculation,
+  memory-range creation, user-page allocation, page-table mapping
+  dispatch/failure cleanup, remote-PA and text/data/map/brk publication,
+  entry/auxv/context adjustment, and data-too-large return shaping through
+  Rust. The previous verified movement routes host `process_msg_prepare_process()` freeze gates, program-descriptor
+  map/span validation, descriptor clone allocation/copy, main-thread creation,
+  process/thread/VM metadata publication, NUMA policy publication,
+  prepare-ranges dispatch, success cleanup, unmap, TLB flush, destroy, and
+  error shaping through Rust. The earlier verified movement
+  routes Process/VM `free_process_memory_range()` page-table free/clear
+  locking, memobj ref/unref ordering, TOFU removal callback dispatch,
+  final detach/straight cleanup, error-log selection, and return shaping
+  through Rust. The earlier verified movement
+  routes Process/VM remove-process-memory-range straight-map conversion,
+  range iteration, split, XPMEM removal, and free-dispatch sequencing through
+  Rust. The earlier verified movement routed Process/VM do-page-fault
+  outer-body, page-fault retry/page-I/O, and populate-loop sequencing through
+  Rust. Earlier verified movement routed Process/VM range lookup,
+  next/previous iteration, extend-up,
+  change-protection, and `access_ok()` body sequencing through Rust. The
+  earlier verified movement routed XPMEM clear-PTE and process-memory-range
+  removal sequencing through Rust. Earlier verified movement routed XPMEM
+  detach and munmap sequencing through Rust. Earlier verified movement
+  routes XPMEM access-permit release lifecycle sequencing through Rust:
+  destroy-start gating, attachment-list drain, attachment ref/detach/deref
+  callback ordering, final destroyed-state publication, AP hash-list unlink,
+  segment AP-list unlink, segment and segment-thread-group deref callback
+  ordering, AP destroyable dispatch, and already-destroying early return
+  behavior. The earlier verified movement
+  routes XPMEM thread-group segment-list drain sequencing through Rust:
+  writer-lock acquisition, empty-list detection, first-segment selection from
+  the list head, segment refcount callback ordering, unlock-before-removal,
+  per-segment removal callback dispatch, deref callback ordering, relock loop
+  sequencing, final unlock, and empty-list return behavior. The earlier
+  verified movement routes XPMEM segment-removal lifecycle sequencing through
+  Rust: destroy-start gating, segment destroy-flag publication, PTE-clear
+  callback ordering, final destroyed-state publication, segment-list
+  lock/unlock ordering, list unlink, destroyable/refdrop callback dispatch,
+  and already-destroying early return behavior. The earlier verified movement
+  routes XPMEM `close()`/`dup()`/flush lifecycle sequencing through Rust:
+  duplicate data clearing and open-count increment, close open-count decrement,
+  flush/partition-exit decisions, flush target-group lookup, hash-list unlink,
+  destroy-flag publication, access-permit/segment release callback ordering,
+  final destroyed-state publication, and destroy callback dispatch. The
+  earlier verified movement routes XPMEM `open()`/`openat()` body sequencing
+  through Rust: partition-init gate, Linux fd-forward result handling,
+  `__xpmem_open()` callback ordering, mckfd allocation/null handling, mckfd
+  zeroing and field publication, locked list-head insertion, unlock ordering,
+  open-count increment, and debug-log event selection. The still earlier
+  verified movement routed live mckfd syscall dispatch through Rust: `read()`,
+  `ioctl()`, `fcntl()`, and `close()` locked lookup, callback-vs-forward
+  selection, optional TOFU ioctl/close cleanup gates, close unlink mutation,
+  close-callback dispatch, mckfd free-callback dispatch, and Linux-forward
+  fallback sequencing. The still earlier verified
+  movement routed a ten-slice
+  syscall wrapper batch through Rust: `times()`,
+  `setpgid()`, `setrlimit()`, `getrlimit()`, `prlimit64()`, `sysinfo()`,
+  `get_cpu_id()`, `mlockall()`, `munlockall()`, and `getcpu()` sequencing for
+  CPU-time accounting/copyout, pgid normalization/find/forward/mutation,
+  prlimit argument routing, sysinfo fill/copyout, CPU/NUMA id copyout,
+  mlockall policy/logging, and missing-callback error shaping. The previous
+  movement routed signal and credential syscall wrapper bodies through Rust:
+  `kill()`, `tgkill()`, `tkill()`, `setresuid()`, `setreuid()`, `setuid()`,
+  `setfsuid()`, `setresgid()`, `setregid()`, `setgid()`, and `setfsgid()`
+  validation, siginfo shaping, do-kill callback dispatch, Linux-forward
+  dispatch, credential-refresh dispatch, setfsid syscall dispatch, and return
+  shaping. The previous movement routed top-level `ptrace()` request/callback
+  body dispatch through Rust: `PTRACE_TRACEME`, kill/continue/singlestep/syscall
+  wake requests, register/fpreg/regset get/set requests, user/text peek/poke
+  requests including data aliases, set-options, attach/detach,
+  siginfo/eventmsg, arch fallback, and unsupported/missing-callback error
+  shaping. The previous movement routed `ptrace_detach_thread()` main-body
+  sequencing through Rust:
+  main-thread detach gating, zombie finalization selection, tracer child-list
+  detach, ptraced reparenting, report-list detach/reattach, ptrace
+  cleanup/free dispatch, single-step clear, exit-signal dispatch,
+  forwarded-signal siginfo construction, `do_kill()` callback sequencing,
+  wake/release dispatch, and final process finalization dispatch. The previous
+  syscall movement routed the outer process/thread wait scan under `do_wait()`
+  through Rust:
+  parent children-lock callback ordering, children-list traversal, pid/pgid
+  matching, `empty` publication, zombie/candidate dispatch, ptraced-children
+  empty-scan traversal, report-thread list traversal, report-thread candidate
+  dispatch, regular thread-list empty-scan traversal, and offset-based C
+  fallback parity. The previous syscall movement routed the process-zombie/
+  reparent branch under `do_wait()` through Rust: zombie status publication,
+  host-wait skip/request/log selection, parent rusage aggregation, rusage
+  result fill, parent child-list detach, PID-1 reparent/list attach, child
+  main-thread ptrace-detach gate, parent and child lock/unlock callback
+  ordering, no-reparent unlock/detach ordering, and process release callback
+  dispatch. The previous syscall movement routed wait-scan candidate
+  sequencing under `do_wait()` through Rust:
+  report-thread exit/no-wait/detach/release decisions, nonptraced and ptraced
+  stop candidates, continued candidates, ptraced-stop miss return preservation,
+  process TID rewrite, and lock/release callback ordering. The previous
+  syscall movement routed top-level `do_wait()` wait-loop sequencing through
+  Rust: waitqueue init/prepare/finish callback ordering, process/thread scan
+  dispatch gates, no-child and `WNOHANG` result shaping, pending-signal
+  interrupt return, schedule callback handoff, wake/rescan behavior, and wait
+  log callback ordering. The previous scheduler movement routed `do_migrate()` scheduler
+  migration-completion sequencing through Rust: migration queue traversal,
+  request detach/ack gates, affinity target selection, runqueue detach/add
+  with length mutation, thread CPU update, same-VM sibling scan,
+  address-space CPU-set lock/update, target reschedule flag publication,
+  interrupt/vector callback selection, waitqueue wake callback dispatch, lock
+  ordering, and return shaping. The previous scheduler
+  movement routed `sched_request_migrate()` body sequencing through Rust:
+  request thread publication, target migration-queue lock callback ordering,
+  waitqueue init/prepare/finish callback sequencing, migration request list
+  insertion, target runqueue flag/status mutation, remote interrupt
+  vector/callback selection, log callback dispatch, scheduler callback
+  handoff, and validation/error shaping. The previous dump movement routed
+  memory dump user-page process-hash traversal, VM/address-space/page-table
+  pointer loading, null skip gates, visitor argument shaping, page-table
+  visitor callback dispatch, and dispatch-count/error shaping through Rust.
+  The previous dump bitmap movement routed memory dump page-set
+  completion, physical-address membership checks, variable-length dump bitmap
+  range clearing, user-PTE dump bitmap marking, free-chunk dump bitmap marking,
+  and top-level last-CPU dump query sequencing through Rust. The previous
+  allocator movement routed NUMA topology and
+  allocation dispatch through Rust: allocation-attempt OOM flag
+  initialization, NUMA-id bounds validation, rusage OOM callback dispatch,
+  NUMA allocation callback dispatch, distance-vector bounds/null checks,
+  distance-id lookup, CPU-local readiness checks, current-NUMA callback
+  dispatch, and distance-ordered node pointer selection. The earlier lifecycle
+  slice moved `numa_distances_init()` node-distance allocation,
+  distance-matrix fill, distance/id sorting, node publication,
+  allocation-failure logging, and ordered log callback sequencing. The prior
+  lifecycle slice moved
+  `ihk_mc_set_page_allocator()` tracking-init/early-allocator invalidation/
+  `pa_ops` publication plus top-level `mem_init()` monitor, rusage, NUMA,
+  allocator registration, page-fault handler publication, query-free interrupt
+  registration, page-hash init, virtual-map init, demand-paging flag/log
+  publication, and NUMA-distance init ordering. This latest remove-range
+  movement does not add broad dashboard percentage because the Process/VM row
+  is already capped at 100%.
 - Mechanical LOC ownership is audit-only. Use it to find remaining C debt, not
   to score progress toward the functional 100% core-category goal.
 
@@ -84,9 +270,9 @@ The Rust migration is intentionally incremental:
   explicitly asks for that exact revert.
 - QEMU boot-path setup on 2026-05-24 installed Rocky QEMU/libvirt/image/debug
   tooling and exposed `qemu-system-x86_64` through the Rocky `qemu-kvm` binary.
-  Libvirt is active, but `/dev/kvm` is not exposed in this environment, so QEMU
-  boot validation must start with TCG/software emulation unless nested KVM is
-  enabled. No in-tree system-QEMU McKernel boot harness exists yet. Existing
+  Libvirt is active, and `/dev/kvm` may be visible in some command contexts,
+  but QEMU boot validation should still start with TCG/software emulation
+  unless KVM initialization is explicitly verified for that run. Existing
   Rocky boot scripts still rely on the mcreboot/VM path and must not be run
   without explicit approval.
 
@@ -102,24 +288,51 @@ only as a debt inventory.
 | Rust build/link foundation | 95 | Rust objects build and link into `mckernel.img`; user tools link Rust helper objects; IHK Linux-module Kbuild links Rust helpers into `ihk`, `ihk-smp-x86_64`, and `mcctrl`; Rust-linked module-load smoke has passed. |
 | ABI/layout foundation | 100 | Shared kernel/user structs plus private process/thread lifecycle, wait/futex, timer, x86 signal action/altstack/siginfo/signalfd layouts, x86 CPU-local page and kernel-context layouts, x86 TLS user descriptor layout, ptrace user register/fpreg/user layouts, x86 descriptor/TSS/fxsave/xsave/YMM/LWP/bound-register save-state layouts, futex hash-bucket/key/queue layouts, syscall/init/post, procfs, coredump coretable, ELF core headers/notes/prstatus/prpsinfo, `iovec`, sysinfo, time-of-day, interval-timer and profile-event layouts, CPU mapping, perf, UTI, move-pages SMP request layouts, sysfs create/mkdir/symlink/lookup/unlink/setup request layouts, sysfs ops/handle/bitmap layouts, low-level rwlock, `kref`, rbtree augmentation callbacks, ftrace branch data, memobj ops/object state, SysV shared-memory limits/info/lock-user state, XPMEM ID/hash/thread-group/segment/access-permit/partition/permission/attachment layouts, `timeval`/`rusage`, pager create/map results, memory area/node/page-allocator ops/TLB-flush/page-cache headers, CPU-local/kmalloc/backlog/SMP-call layouts, IHK monitor/register/resource, host Linux device/OS/file layouts, and IHK kmsg/event/notifier/aux-call layouts are covered for the currently scoped x86_64/Rocky ABI foundation. This closes known layout prerequisites; mutation-heavy runtime bodies still need Rust ownership. |
 | Shared primitives | 100 | rbtree, llist, plist, waitqueue init/entry/list core, wake scheduling predicate, string/memory leaf helpers, numeric parsers including `skip_atoi()` format width/precision pointer advancement, `number()` sign/prefix/width/precision/padding/output orchestration for `vsnprintf()` numeric and pointer paths, `format_decode()` parsing of flags, width, precision, qualifiers, and conversion types, `string()` output formatting for `%s`, base-10 decimal formatting digit emission for `vsnprintf()`, bitops, bitmap, parse, zero-area search, and region helpers are Rust-owned. |
-| x86_64 memory management | 100 | Classification, NUMA/page queries, splitability, page-attribute conversion, PTE value shaping, page-size PTE validation/value selection, early allocator arithmetic/exhaustion checks, page-table index calculation, walk-bound calculation, normal/safe page-table walk iteration, callback result folding, optional physical-address skip policy, virtual-to-physical per-level miss/walk/hit decisions and physical/size result shaping, split-large-page preparation/entry arithmetic, split-large-page source classification, child-map physical derivation, page-table publish entry shaping, source-unmap gate selection, PTE direct-store helpers, atomic child-table publication helpers, PTE clear-exchange helpers, attribute-apply mutation helpers, page-clear alignment/target selection, page-table visit/direct-walk decision policy, clear/free-range validation and large-entry action selection, clear-range old-PTE phys/fileoff/dirty classification plus flush/free/unmap action selection, change-attribute leaf/large/walk action selection, set-range leaf/direct-large/allocate/busy/walk action selection, set-range mapped physical/PTE value shaping for 4 KiB/2 MiB/1 GiB entries, lookup-pte default size/level hit/walk/miss/shape decisions, move-PTE fileoff preflight/destination shaping/PTE phys-attr splitting, page-table destroy descend/skip policy, destroy child-table physical extraction, page-table root create/destroy-root lifecycle orchestration, page-table prepare-map first-level allocation/publish and last-level set-page callback orchestration, exported set-PTE body sequencing/log/panic/store orchestration, page refcount/hash lifecycle helpers, `page_map()` count increments, locked `page_unmap()` count/list deletion and lock orchestration, locked `phys_to_page()` lookup orchestration, locked `phys_to_page_insert_hash()` lookup/allocation-callback/insert orchestration, locked page-hash count-all traversal, phys-to-page hash traversal, hash insertion initialization, page-hash bucket init/count, VM range validation, memory-policy validation, and selected pager/object sizing helpers are Rust-owned; page-table allocation/free primitives, destroy recursion below the root, `phys_to_virt()`/free orchestration, callback execution, higher-level visitor and page-table traversal orchestration, actual page frees, RSS updates, mapping/free rollback orchestration, page-hash spinlock/allocation primitives and logging, TLB-sensitive flushing, and user-copy remain C. |
-| Page allocator | 100 | Rbtree helper cluster, bitmap-backed no-lock allocator internals, bitmap public locked-wrapper orchestration for alloc/reserve/free/count/query/zero-free, `__ihk_pagealloc_init()` layout/allocation-callback/descriptor-init/lock-callback/tail-reservation orchestration, init layout/end/count calculation, descriptor zeroing and descriptor field initialization, tail-map reservation, destroy-page count and descriptor destroy/free-callback orchestration, exported add-free log/error/return sequencing, NUMA free/alloc helpers, public zero-free wrapper dispatch, NUMA zero-free dispatcher/all-node traversal, exported `ihk_numa_alloc_pages()` top-level allocation body sequencing, main `ihk_numa_alloc_pages()` cache-first/source-selection/fallback-to-NUMA orchestration, exported `ihk_numa_free_pages()` CPU-cache/direct/deferred top-level body sequencing, main `ihk_numa_free_pages()` direct-versus-deferred free orchestration and post-action completion sequencing, main NUMA allocation lock-callback orchestration, direct free-to-tree lock-callback orchestration, deferred-free enqueue/zero-request orchestration, free-path policy, zeroing-worker atomic increment, CPU-local cache action classification, CPU-local cache rb-tree allocation/free helper entry points, CPU-local cache alloc/free fast-path orchestration with interrupt callback ordering and result classification, CPU-local storage initialization, CPU-local variable selection, normal preempt counter updates, kmalloc chunk header initialization, sorted kmalloc free-list insertion, adjacent free-chunk consolidation, Linux zero-request action selection, deferred-zero IKC packet field shaping, Linux zero-request preparation including current/idle/nohost/worker/pid checks plus packet fill and worker increment, and deferred-zero send/log callback sequencing are Rust-owned; logging callbacks, actual `ihk_mc_alloc_pages()`/`ihk_mc_free_pages()` and MCS/interrupt primitives, broader allocator lifetime, IKC channel lookup, current-thread/channel lookup, actual IKC send side effects, deferred-zero worker timing, and FUGAKU debug preempt path remain C. |
-| Process/VM management | 100 | Wait/clone/ptrace/VM policy, fork VM/thread metadata copy, address-space release and PID detach mutation, range-cache lookup relation plus range-cache replace/store mutation for join, free, and lookup paths, post-bounds `add_process_memory_range()` orchestration including VM range object initialization, mapping-action selection, insert/update failure cleanup, returned-range publication, and VM range-tree insertion traversal/link/color mutation, VM range end/flag commit mutation for extend-up and protection-change paths, stack-growth range-start alignment/commit mutation for the page-fault path, remove-range split/free preflight, split-range high-half field shaping and low-half end commit, join-range adjacency/object-offset validation and surviving-end commit, CPU-set fallback, mckfd decisions plus push/pop-head mutation, TID-table scan/index decisions, TID slot release/replace writes, sigpending list pop/unlink, process/thread list add/detach helpers, terminate child cleanup list unlink/reparent mutation helpers, thread report-list attach/detach mutation helpers, ptrace main-thread attach/detach reparent helpers, ptrace detach/wakeup state and pending-signal cleanup helpers, wait signal-flag and exit-status reap mutation helpers, terminate/wait report-thread release cleanup helpers, optional ptrace/fp cleanup gates, and lifecycle/refcount predicates are Rust-owned; VM range allocation/free callbacks, memobj refcounting, TOFU split/merge hooks, range-tree erase/removal side effects, page-fault handling, access-check orchestration, page-table lookup/allocation/mapping side effects, page-table attribute mutation/free/clear, broader child-list orchestration, rusage aggregation, broad process lifetime mutation, signal forwarding, and full wait orchestration remain C. |
-| Syscall core | 100 | SysV shm, prlimit, scheduler, syscall/range validation, credential-refresh forwarding gates, requester-TID and preempt-disable gates, getpid/getppid/gettid/set_tid_address return shaping plus direct ID leaf bodies, getuid/geteuid/getgid/getegid process-field leaf bodies, getresuid/getresgid ordered field-read and user-copy callback sequencing, memory-policy, mmap/brk/mincore, mprotect split/write-change decisions, signal/time, ptrace/process-vm, wait, execveat, clone, futex policy helpers, bounded wait/ptrace/termination/signal list rewiring, pending-signal delivery/offload-interrupt classification, ptrace wakeup/siginfo/eventmsg result classification, ptrace request dispatch classification, ptrace setoptions state mutation, ptrace attach traced-state mutation, ptrace event-message preparation, ptrace siginfo kernel-buffer preparation and pending-siginfo publication, ptrace peek/poke user-word status/callback orchestration, ptrace getregs/setregs register-word loop orchestration, ptrace peek/poke text status and VM-callback staging, ptrace fpregs status/callback orchestration, ptrace getregset/setregset iovec copy/callback/length-publication orchestration, wait/reap result-shape classification, getrusage dispatch/update classification, getrusage thread times-update mutation, getrusage TSC/timeval/rusage result shaping, process-exit status/siginfo classification, terminate cleanup/reparent action classification, clone spawn/TID/TLS/reparent result shaping, and ptrace detach signal-forward gates are Rust-owned; top-level syscall dispatch, actual user-copy primitive, Linux forwarding, locks, allocation/free, architecture fp/register/regset primitives, actual process-memory read/patch primitives, signal delivery, child-list mutation, rusage aggregation/traversal, CPU interrupt delivery, ptrace lookup/orchestration, and remaining high-risk handlers remain C. |
-| Scheduler/timers/wait/futex | 100 | Waitqueue init/entry/list core, wake scheduling predicate, bounded runqueue/migration list rewiring plus runqueue length updates, timer spin-sleep/runqueue/remaining-time arithmetic, futex hash-table allocation-callback/pointer-publication/table-initialization orchestration, futex hash-bucket selection with hash callback, top-level futex command dispatch/private/realtime decode, clock-realtime rejection, wait/wake/requeue/wake-op callback selection, invalid-command callback routing, futex hash-bucket table lock/list initialization, futex key matching/key preparation plus wake/requeue decision policy, futex double hash-bucket lock/unlock ordering, futex wake-list scan/key-match/bitset/limit orchestration, futex wake target orchestration, futex requeue source-list scan/key-match/wake-vs-requeue/drop-count orchestration, futex requeue key-reference callback and key-copy publication, futex wait-setup key-init/get-key/queue-lock/get-value/mismatch cleanup orchestration, futex wake-list detach and lock-pointer clear, futex requeue list move and lock-pointer publication, futex waiter plist initialization/insertion, futex wait-queue bitset/requeue/UTI initialization, key-region zeroing, hash-bucket lock-pointer publication, waiter metadata publication, self-unqueue list detach, wait-side bitset validation, wait scheduling action classification, wait-state status/spin-sleep mutation, futex post-wait success/timeout/interrupt/retry classification, futex wake target classification, Linux response-channel fallback selection, futex wake IKC packet field publication, syscall-offload scheduling decisions, and scheduler/futex/signal/timer policy helpers are Rust-owned; futex allocation/hash primitive callbacks, actual spinlock primitives, IKC send and scheduler wake primitives, futex key lookup internals, key-reference implementation/lifetime, user-value load, IPIs, timer queues, context switching, address translation, race retry, user-value comparison, schedule/schedule_timeout behavior, and remaining futex queue/requeue/wait side effects remain C. |
-| procfs/sysfs/xpmem/file objects | 100 | XPMEM and file/dev/procfs/sysfs/pager decision-helper surface is Rust-owned through multiple batches, including procfs cmdline/comm helpers, sysfs show/store/release response-body sequencing, and sysfs request packet dispatch; this is not full subsystem ownership because allocation, refcount mutation, lock/list mutation, remap/page-table mutation, page I/O, procfs buffer mutation, raw sysfs IKC send behavior, public IKC handler wrapping/logging, and user-copy remain C. |
-| host/IKC/mcctrl/IHK modules | 100 | Rust helper linkage is active for `ihk`, `ihk-smp-x86_64`, and `mcctrl`; many host driver, OS/device exclusive-open refcount compare-exchange mutation, generic locked list add/delete mutation, generic list-membership traversal, generic next-entry cursor traversal for notifier/event/aux-call paths, kmsg buffer/container lifecycle mutation, kmsg container atomic count set/read/inc/dec/dec-return, reverse kmsg list lookup traversal, DMA request callback dispatch, load-file dispatch/read-loop policy, shutdown status policy, SMP, sysfs, IKC policy, and mcctrl helpers are Rust-owned, including deferred-zero worker list pop, payload clear, zeroed-list publish, and atomic counter updates; device allocation, memory registration, file I/O, waits/callbacks beyond the bounded DMA dispatcher, broader IKC exchange mutation, broad allocation/lifetime ownership, and kernel object lifecycle mutation remain pending. |
+| x86_64 memory management | 100 | Classification, NUMA/page queries, splitability, page-attribute conversion, PTE value shaping, page-size PTE validation/value selection, early allocator arithmetic/exhaustion checks, page-table index calculation, walk-bound calculation, normal/safe page-table walk iteration, callback result folding, normal/safe visit-PTE leaf/level/root body sequencing and top-level visit-range dispatch, optional physical-address skip policy, virtual-to-physical per-level miss/walk/hit decisions and physical/size result shaping, split-large-page preparation/entry arithmetic, split-large-page source classification, child-map physical derivation, page-table publish entry shaping, source-unmap gate selection, PTE direct-store helpers, atomic child-table publication helpers, PTE clear-exchange helpers, attribute-apply mutation helpers, page-clear alignment/target selection, page-table visit/direct-walk decision policy, clear/free-range validation and large-entry action selection, clear-range old-PTE phys/fileoff/dirty classification plus flush/free/unmap action selection, clear/set range top-level validation/allocation/free/walk/flush orchestration, change-attribute leaf/large/walk action selection, set-range leaf/direct-large/allocate/busy/walk action selection, set-range mapped physical/PTE value shaping for 4 KiB/2 MiB/1 GiB entries, set-range conflict/alloc-failure/map-store-RSS/walk-failure side-effect sequencing, set-range leaf/level body orchestration, lookup-pte default size/level hit/walk/miss/shape decisions, move-PTE fileoff preflight/destination shaping/PTE phys-attr splitting, page-table destroy descend/skip policy, destroy child-table physical extraction, recursive page-table destroy/free-callback orchestration below the root, page-table root create/destroy-root lifecycle orchestration, page-table prepare-map first-level allocation/publish and last-level set-page callback orchestration, exported set-PTE body sequencing/log/panic/store orchestration, page refcount/hash lifecycle helpers, `page_map()` count increments, locked `page_unmap()` count/list deletion and lock orchestration, locked `phys_to_page()` lookup orchestration, locked `phys_to_page_insert_hash()` lookup/allocation-callback/insert orchestration, locked page-hash count-all traversal, phys-to-page hash traversal, hash insertion initialization, page-hash bucket init/count, VM range validation, memory-policy validation, selected pager/object sizing helpers, process-VM verification/page-fault/copy loop sequencing, mapped versus direct physical-copy selection, byte-copy sequencing, scalar user get/set wrappers, user string length/copy wrappers, dump-page completion/address-check/bitmap marking/query sequencing, and dump user-page process-hash traversal/page-table visitor dispatch are Rust-owned; page-table allocation/free primitives, page-fault primitive behavior, `phys_to_virt()`/`virt_to_phys()` primitive behavior, map/unmap primitive bodies, callback execution, broader page frees/RSS accounting, mapping/free rollback orchestration, page-hash spinlock/allocation primitives and logging, TLB-sensitive primitive behavior, current-thread/resource-set lookup, and C fallback scaffolding remain C. |
+| Page allocator | 100 | Rbtree helper cluster, bitmap-backed no-lock allocator internals, bitmap public locked-wrapper orchestration for alloc/reserve/free/count/query/zero-free, `__ihk_pagealloc_init()` layout/allocation-callback/descriptor-init/lock-callback/tail-reservation orchestration, init layout/end/count calculation, descriptor zeroing and descriptor field initialization, tail-map reservation, destroy-page count and descriptor destroy/free-callback orchestration, exported add-free log/error/return sequencing, NUMA free/alloc helpers, public zero-free wrapper dispatch, NUMA zero-free dispatcher/all-node traversal, exported `ihk_numa_alloc_pages()` top-level allocation body sequencing, main `ihk_numa_alloc_pages()` cache-first/source-selection/fallback-to-NUMA orchestration, exported `ihk_numa_free_pages()` top-level and main CPU-cache/direct/deferred free orchestration plus post-action completion sequencing, `numa_init()` node discovery/node-field publication/memory-chunk ingestion/early-heap adjustment/free-page-or-pagealloc dispatch/rusage accounting/final-node logging sequencing, NUMA allocation-attempt OOM/bounds/callback dispatch, distance-id lookup and distance-ordered NUMA node selection, main NUMA allocation lock-callback orchestration, direct free-to-tree lock-callback orchestration, deferred-free enqueue/zero-request orchestration, free-path policy, zeroing-worker atomic increment, CPU-local cache action classification, CPU-local cache rb-tree allocation/free helper entry points, CPU-local cache alloc/free fast-path orchestration with interrupt callback ordering and result classification, CPU-local storage initialization, CPU-local variable selection, normal preempt counter updates, kmalloc chunk header initialization, sorted kmalloc free-list insertion, adjacent free-chunk consolidation, low-level `___kmalloc()` allocation body sequencing, low-level `___kfree()` current/remote free body sequencing, kmalloc remote free-list move/consolidation sequencing, public `_kmalloc()`/`_kfree()` memdebug tracking wrapper sequencing, public `_ihk_mc_alloc_aligned_pages_node()`/`_ihk_mc_free_pages()` pagealloc memdebug tracking wrapper sequencing, pagealloc/kmalloc tracking hash initialization, pagealloc/kmalloc memcheck leak-scan traversal, runcount mutation, leak-log callback sequencing, `ihk_mc_set_page_allocator()` tracking-init/early-invalidate/`pa_ops` publication, top-level `mem_init()` allocator/memory lifecycle sequencing, NUMA-distance allocation/fill/sort/log sequencing, `query_free_mem_interrupt_handler()` node iteration/total accumulation/logging/memdebug/page-hash/sbox sequencing, and Linux zero-request action selection, deferred-zero IKC packet field shaping, Linux zero-request preparation including current/idle/nohost/worker/pid checks plus packet fill and worker increment, and deferred-zero send/log callback sequencing are Rust-owned; logging/panic callbacks, pa-ops implementation callback bodies, actual allocation/free primitive side effects below the published ops callbacks, and MCS/interrupt primitives, broader allocator lifetime, IKC channel lookup, current-thread/channel lookup, actual IKC send side effects, deferred-zero worker timing, and FUGAKU debug preempt path remain C. |
+| Process/VM management | 100 | Wait/clone/ptrace/VM policy, fork VM/thread metadata copy, address-space release and PID detach mutation, range-cache lookup relation plus range-cache replace/store mutation for join, free, and lookup paths, full VM range lookup traversal/cache publication, next/previous range iteration bodies, post-bounds `add_process_memory_range()` orchestration including VM range object initialization, mapping-action selection, insert/update failure cleanup, returned-range publication, and VM range-tree insertion traversal/link/color mutation, VM range end/flag commit mutation for extend-up and protection-change paths, stack-growth range-start alignment/commit mutation for the page-fault path, page-fault PTE lookup retry/log sequencing and `lookup_node()` fault/PTE/phys-to-node return sequencing, remove-range split/free preflight, remove-process-memory-range straight-map conversion/range-iteration/split/XPMEM/free dispatch sequencing, `free_process_memory_range()` page-table free/clear lock/memobj/finalize orchestration, split-range high-half field shaping and low-half end commit, join-range adjacency/object-offset validation and surviving-end commit, CPU-set fallback, mckfd decisions plus push/pop-head mutation, TID-table scan/index decisions, TID slot release/replace writes, sigpending list pop/unlink, sigcommon release-body sequencing, release_thread ref/profile/procfs/destroy/VM-release sequencing, release_process_vm ref/mckfd/free-callback/TLB/free-ranges/detach/policy-drain/final-free sequencing, process/thread list add/detach helpers, terminate child cleanup list unlink/reparent mutation helpers, thread report-list attach/detach mutation helpers, ptrace main-thread attach/detach reparent helpers, ptrace detach/wakeup state and pending-signal cleanup helpers, wait signal-flag and exit-status reap mutation helpers, terminate/wait report-thread release cleanup helpers, do-wait child/report-thread traversal and empty-scan sequencing, optional ptrace/fp cleanup gates, and lifecycle/refcount predicates are Rust-owned; VM range allocation/free callbacks, memobj refcounting, TOFU split/merge hooks, split/XPMEM primitive callbacks, page-fault range-resolution primitive behavior, page-table lookup/allocation/mapping side effects, page-table attribute mutation/free/clear, other child-list/lifetime orchestration, rusage aggregation, broad process lifetime mutation, signal forwarding, atomic refcount primitive bodies, lock/free primitive bodies, and remaining wait primitive behavior remain C. |
+| Syscall core | 100 | SysV shm, prlimit, scheduler priority/policy plus scheduler syscall body sequencing, syscall/range validation, credential-refresh forwarding gates, direct ID and uid/gid leaf bodies, kill/tkill/tgkill siginfo shaping and do-kill callback sequencing, forwarded uid/gid setter Linux-forward/credential-refresh sequencing, getresuid/getresgid ordered field-read and user-copy callback sequencing, mckfd lookup/dispatch and close sequencing, memory-policy syscalls including `get_mempolicy()`, `set_mempolicy()`, and `mbind()` body sequencing, mmap/brk/mincore/mprotect policy, signal/time syscall body sequencing, ptrace/process-vm helpers, wait4/waitid/do-wait sequencing, execveat/clone/futex policy helpers, bounded wait/ptrace/termination/signal list rewiring, ptrace request/event/register/regset sequencing, getrusage body sequencing, process-exit status/siginfo classification, terminate cleanup/reparent action classification, clone spawn/TID/TLS/reparent result shaping, and ptrace detach signal-forward gates are Rust-owned; top-level syscall dispatch, actual user-copy primitive, Linux forwarding primitive bodies, locks, allocation/free primitives, architecture fp/register/regset primitives, actual process-memory read/patch primitives, signal delivery primitive behavior, rusage aggregation/traversal, CPU interrupt delivery, ptrace lookup/orchestration, scheduler migration side-effect bodies, broader scheduler/time primitive bodies, waitqueue/schedule/signal primitive behavior, and other primitive C callback implementations remain C. |
+| Scheduler/timers/wait/futex | 100 | Waitqueue init/entry/list core, wake scheduling predicate, bounded runqueue/migration list rewiring plus runqueue length updates, scheduler set/get-param, set/get-scheduler, RR-interval, set-affinity, and get-affinity syscall validation/target-selection/permission-check/user-copy sequencing, scheduler migration-request body sequencing for waitq setup, request queue publication, target runqueue flag/status mutation, remote interrupt decision, log callback dispatch, schedule handoff, and waitq finish, scheduler migration-completion body sequencing for migration queue traversal, request detach/ack gates, affinity target selection, runqueue detach/add with length mutation, thread CPU update, same-VM sibling scan, address-space CPU-set update, target reschedule flag publication, interrupt dispatch, waitqueue wake, and lock ordering, timer spin-sleep/runqueue/remaining-time arithmetic, `init_timers()` list/lock initialization sequencing, `schedule_timeout()` spin-wake/runqueue/schedule-callback/spin-loop/timeout-expiry sequencing, `wake_timers_loop()` timer tick/decrement/detach/log/wakeup sequencing, `set_timer()` runqueue scan and LAPIC enable/disable decision sequencing, local interval-timer current-value subtraction, elapsed reset, enabled-state publication, and set-timer callback dispatch, futex hash-table allocation-callback/pointer-publication/table-initialization orchestration, futex hash-bucket selection with hash callback, top-level futex command dispatch/private/realtime decode, clock-realtime rejection, wait/wake/requeue/wake-op callback selection, invalid-command callback routing, futex hash-bucket table lock/list initialization, futex key matching/key preparation plus wake/requeue decision policy, futex double hash-bucket lock/unlock ordering, futex wake-list scan/key-match/bitset/limit orchestration, futex wake target orchestration, futex requeue source-list scan/key-match/wake-vs-requeue/drop-count orchestration, futex requeue key-reference callback and key-copy publication, futex wait-setup key-init/get-key/queue-lock/get-value/mismatch cleanup orchestration, futex wake-list detach and lock-pointer clear, futex requeue list move and lock-pointer publication, futex waiter plist initialization/insertion, futex wait-queue bitset/requeue/UTI initialization, key-region zeroing, hash-bucket lock-pointer publication, waiter metadata publication, self-unqueue list detach, wait-side bitset validation, wait scheduling action classification, wait-state status/spin-sleep mutation, futex post-wait success/timeout/interrupt/retry classification, futex wake target classification, Linux response-channel fallback selection, futex wake IKC packet field publication, syscall-offload scheduling decisions, and scheduler/futex/signal/timer policy helpers are Rust-owned; futex allocation/hash primitive callbacks, actual spinlock primitives, rdtsc/pause primitive behavior, LAPIC timer primitive behavior, waitqueue wake primitive behavior, IKC send and scheduler wake primitives, futex key lookup internals, key-reference implementation/lifetime, user-value load, IPIs, context switching, address translation, migration primitive callbacks, race retry, user-value comparison, `schedule()` primitive behavior, and remaining futex queue/requeue/wait side effects remain C. |
+| procfs/sysfs/xpmem/file objects | 100 | XPMEM and file/dev/procfs/sysfs/pager decision-helper surface is Rust-owned through multiple batches, including live mckfd lookup/dispatch, XPMEM open/close/dup/flush lifecycle sequencing, XPMEM release/remove wrapper sequencing, XPMEM AP hash-bucket release-drain sequencing, XPMEM thread-group destroy dispatch, XPMEM access-permit release lifecycle sequencing, XPMEM segment-removal lifecycle sequencing, XPMEM thread-group segment-list drain sequencing, procfs cmdline/comm helpers, sysfs show/store/release response-body sequencing, sysfs request packet dispatch, procfs buffer allocation/init/physical-publication sequencing, `/proc/PID/mem` page-fault/translation/memory-gate/copy-loop sequencing, root `mckernel`/`stat` output, per-process `auxv`/`cmdline`/`comm` output, `/proc/PID/pagemap` value-loop sequencing, `/proc/PID/maps` line output, `/proc/PID/status` body output, and per-PID `stat` body output; this is not full subsystem ownership because allocation/free primitives outside covered mckfd allocation/free-callback dispatch, refcount mutation, lock/list primitive behavior, remap/page-table mutation, page I/O, remaining procfs request mapping/lookup/lock primitives, raw sysfs/procfs IKC send behavior, public IKC handler wrapping/logging, and user-copy remain C. |
+| host/IKC/mcctrl/IHK modules | 100 | Rust helper linkage is active for `ihk`, `ihk-smp-x86_64`, and `mcctrl`; many host driver, OS/device exclusive-open refcount compare-exchange mutation, generic locked list add/delete mutation, generic list-membership traversal, generic next-entry cursor traversal for notifier/event/aux-call paths, kmsg buffer/container lifecycle mutation, kmsg container atomic count set/read/inc/dec/dec-return, reverse kmsg list lookup traversal, DMA request callback dispatch, load-file dispatch/read-loop policy, shutdown status policy, SMP, sysfs, IKC policy, and mcctrl helpers are Rust-owned, including deferred-zero worker list pop, payload clear, zeroed-list publish, atomic counter updates, top-level host SCD packet dispatcher classification/release sequencing, host prepare-process body sequencing, host prepare-ranges section/range/page-table sequencing, host args/envs stack-prep sequencing, init-stack primary execution-body sequencing, host IKC2Linux/IKC2McKernel initialization body sequencing, top-level syscall packet-handler wrapper sequencing, dummy packet-handler release sequencing, and public host IKC init panic-on-error wrapper sequencing; device allocation, memory registration, file I/O, waits/callbacks beyond the bounded dispatchers, broader IKC exchange mutation, broad allocation/lifetime ownership, and kernel object lifecycle mutation remain pending. |
 | User tools | 83 | `mcstat`, `mcexec`, `ihklib`, `mcinspect`, `eclair`, and crash-extension helper surfaces are substantially Rust-owned; device I/O, ioctl handling, DWARF/BFD walking, crash command orchestration, GDB process/socket orchestration, daemon/thread/event-loop mutation, dump NMI side effects, register/memory reads, and most IHK command mutation remain C. |
 | Rocky runtime integration | 82 | Rust McKernel image and focused Rocky smokes have passed in prior runs; this pass did not run boot or reboot-capable validation. Wider runtime/performance coverage remains pending. |
 | arm64 | 0 | Deferred until x86_64 stabilizes. |
 
 Honest current distance: the non-arm64 functional dashboard average is 96.7%,
 while the McKernel-owned core rows in this table average 100.0%. Mechanical LOC
-audit is 19.9% and is not a progress score. The functional percentages track
+audit is 27.9% and is not a progress score. The functional percentages track
 verified Rust-owned surfaces, and they are not a claim that mutation-heavy
 kernel bodies are already fully Rust. The current total distance to 100 is 40
 aggregate functional points across non-arm64 dashboard rows, or 0 points
 across the McKernel-owned core rows excluding build/host/user/Rocky/arm64.
+
+## Full-Port Tracker
+
+`full-port.txt` is the strict whole-repo x86_64/Rocky full standalone Rust
+tracker. It excludes arm64, third-party/vendor/generated code, public
+compatibility headers, tests, and unavoidable assembly-adjacent code.
+
+Use `full-port.txt` for the completed scored full-port campaign. Use
+`migration.txt` for strict core sequencing history, `overview.txt` for the
+functional dashboard, and `rust-source-retirement.txt` for the stricter
+per-file C-source retirement inventory. The current non-arm full-port scored
+tracker is 100.0% complete with 0.0% left, and the verified aggregate movement
+is +611.9 / +611.9 percentage points. Do not keep adding full-port percentage
+after this saturation point.
+
+Remaining work after the scored full-port closeout is source-retirement and
+default-path C-dependency cleanup outside `full-port.txt`. A C file that still
+contains a McKernel-owned implementation body for fallback builds should not be
+marked fully retired in `rust-source-retirement.txt`; record such work as
+default-path Rust ownership in `overview.txt` or as a validated note until the
+C implementation body is actually removed or reclassified by the retirement
+tracker's rules.
+
+Every full-port movement must be verified. Runtime-sensitive work must use QEMU
+and virtualization tooling, preferably KVM when available and verified. Do not
+use host reboot paths. Stop on first validation failure and log the failing
+command, environment, and short error summary in `kernel.log`.
 
 ## Strict Core OS Rust Ownership
 
@@ -148,12 +361,13 @@ Do not count these as full core ownership:
 - New C helper logic, unless it is clearly fallback or glue used to verify and
   route Rust behavior.
 
-Current strict x86_64 core Rust ownership is about 75% (roughly 70-80%). This estimate is
-lower than the broad `overview.txt` dashboard because remaining C still owns
-high-risk core execution bodies: page-table mutation, allocator lifetime,
-syscall dispatch, user-copy, process lifetime, page faults, scheduler
-wake/context behavior, futex wake/wait side effects, signal delivery, IKC
-exchange, and kernel object lifecycle.
+Current strict x86_64 core Rust ownership is 100% for the scoped sequencing
+table. This is not the standalone Rust end-state: remaining C still owns
+high-risk primitive/runtime bodies such as page-table mutation primitives,
+allocator lifetime primitives, syscall dispatch, raw user-copy primitive
+callbacks, process lifetime primitives, page-fault primitive behavior,
+scheduler wake/context behavior, futex wake/wait side effects, signal delivery,
+IKC exchange, and kernel object lifecycle.
 
 ## Standalone Rust End-State
 
@@ -193,14 +407,1106 @@ OS path.
 | Area | Overview % | Strict Core % | Strict Core Status |
 | --- | ---: | ---: | --- |
 | ABI/layout foundation | 100 | 100 | Currently complete for the scoped x86_64/Rocky ABI foundation. Rust/C assertions cover pager create/map result layouts, memory area/node/page-allocator ops/TLB-flush/page-cache headers, rusage-percpu, kmalloc metadata, SMP-call packets, backlog entries, full CPU-local storage layout, x86 CPU-local page and kernel-context layouts, x86 TLS user descriptor layout, x86 signal action/altstack/siginfo/signalfd layouts, ptrace user register/fpreg/user layouts, x86 descriptor/TSS/fxsave/xsave/YMM/LWP/bound-register save-state layouts, futex hash-bucket/key/queue layouts, syscall/init/post, procfs, coredump coretable, ELF core headers/notes/prstatus/prpsinfo, `iovec`, sysinfo, time-of-day, interval-timer and profile-event layouts, CPU mapping, perf, UTI, move-pages SMP request layouts, sysfs create/mkdir/symlink/lookup/unlink/setup request layouts, sysfs ops/handle/bitmap layouts, low-level rwlock, `kref`, rbtree augmentation callbacks, ftrace branch data, memobj ops/object state, SysV shared-memory limits/info/lock-user state, and the XPMEM ID/hash/thread-group/segment/access-permit/partition/permission/attachment object graph. This is prerequisite ownership, not runtime ownership of mutation-heavy bodies. |
-| Shared primitives | 100 | 94 | Numeric parsing, `skip_atoi()` format width/precision pointer advancement, `number()` sign/prefix/width/precision/padding/output orchestration, `format_decode()` format-token parsing, `string()` `%s` output formatting, and base-10 decimal digit emission for `vsnprintf()` are Rust-owned; remaining work is making these primitives the normal Rust-side substrate for core bodies. |
-| x86_64 memory management | 100 | 64 | Page-table decisions, page-table root create/destroy-root lifecycle orchestration, page-table prepare-map orchestration, exported set-PTE body sequencing, and page refcount/hash lifecycle bodies moved, but page-table allocation/free primitives, recursive child-table destruction below the root, traversal orchestration, page frees, RSS updates, TLB-sensitive flushing, physical/free orchestration, page-hash primitives/logging, and user-copy remain C-owned. |
-| Page allocator | 100 | 72 | Bitmap, NUMA, `__ihk_pagealloc_init()` orchestration, exported add-free log/error/return sequencing, public zero-free wrapper dispatch, exported `ihk_numa_alloc_pages()` top-level allocation body sequencing, main `ihk_numa_alloc_pages()` cache-first/source-selection/fallback-to-NUMA orchestration, exported `ihk_numa_free_pages()` CPU-cache/direct/deferred top-level body sequencing, main `ihk_numa_free_pages()` direct-versus-deferred free orchestration, free post-action completion sequencing, CPU-local storage initialization, CPU-local variable selection, normal preempt counter updates, kmalloc chunk header initialization, sorted kmalloc free-list insertion, and adjacent free-chunk consolidation moved, but allocator lifetime, actual allocation/free primitives, MCS/interrupt primitives, IKC channel lookup/send side effects, logging primitive bodies, deferred-zero worker timing, FUGAKU debug preempt behavior, and broader orchestration remain C-owned. |
-| Process/VM management | 100 | 70 | Many lifecycle, wait, ptrace, range, list, post-bounds add-range orchestration bodies, and VM range-tree insertion traversal/link/color mutation moved, but VM range allocation/free callbacks, memobj refcounting, range-tree erase/removal side effects, page faults, actual page-table lookup/allocation/mapping side effects, child-list orchestration, rusage aggregation, broad process lifetime, and signal forwarding remain C-owned. |
-| Syscall core | 100 | 72 | Policy, many handler subpaths, direct ID leaf bodies, simple uid/gid getter bodies, getresuid/getresgid ordered field-read plus user-copy callback sequencing, sigaltstack old-stack copyout/new-stack copyin/validation/thread-stack mutation sequencing, waitid SIGCHLD siginfo construction/copyout callback sequencing, wait4 wrapper validation/do-wait/copyout sequencing, waitid wrapper validation/do-wait/siginfo-return sequencing, and wait_continued status/reap/result sequencing moved, but top-level dispatch, the actual user-copy primitive, Linux forwarding, locks, allocation/free, register/fp primitives, process-memory access, signal delivery, ptrace orchestration, wait scanning/sleeping/list traversal internals, and high-risk handler bodies remain C-owned. |
-| Scheduler/timers/wait/futex | 100 | 63 | Queue/list helpers, policies, futex table orchestration, futex bucket selection, top-level futex command dispatch, and futex wake target orchestration moved, but timer queues, spinlock primitives, IPIs, context switching, futex key lifetime, user-value loads, allocation/hash callbacks, IKC send and scheduler wake primitives, race retry, schedule behavior, and wait/requeue side effects remain C-owned. |
-| procfs/sysfs/xpmem/file objects | 100 | 67 | Helper surface is complete, and sysfs show/store/release response-body sequencing plus sysfs request packet dispatch moved into Rust. Allocation, refcount mutation, lock/list mutation, remap/page-table mutation, page I/O, procfs buffer mutation, raw sysfs IKC send behavior, public IKC handler wrapping/logging, and user-copy still block full ownership. |
-| host/IKC/mcctrl/IHK kernel paths | 100 | 63 | Broad helper/control-plane coverage is complete, and the bounded IHK host DMA request callback dispatcher moved into Rust. Device allocation, memory registration, file I/O, waits/callbacks beyond that dispatcher, broad IKC exchange mutation, broad allocation/lifetime, and kernel object lifecycle remain C-owned. |
+| Shared primitives | 100 | 100 | Complete for the scoped x86_64/Rocky shared-primitives core. Numeric parsing, `skip_atoi()` format width/precision pointer advancement, `number()` sign/prefix/width/precision/padding/output orchestration, `format_decode()` format-token parsing, `string()` `%s` output formatting, base-10 decimal digit emission, and the main `vsnprintf()` loop orchestration are Rust-owned; public ABI wrappers, `va_arg` extraction glue, and fallback scaffolding still block standalone Rust, not this strict shared-primitives row. |
+| x86_64 memory management | 100 | 100 | Page-table decisions, page-table root create/destroy-root lifecycle orchestration, page-table prepare-map orchestration, exported set-PTE body sequencing, page refcount/hash lifecycle bodies, recursive child-table destruction/free-callback orchestration, full virtual-to-physical walks, page-clear traversal, lookup-PTE body orchestration, change-attribute traversal/PTE mutation, page-table setup/allocation traversal, clear-range TLB flush-address queue mutation, old-PTE memobj-flush/free/unmap/RSS side-effect sequencing, full-span child page-table teardown/free sequencing, clear-range leaf/level/root body sequencing, set-range conflict/alloc-failure/map-store-RSS/walk-failure side-effect sequencing, set-range leaf/level body orchestration, clear/set range top-level orchestration, normal/safe visit-PTE visitor body sequencing, process-VM verification/page-fault/copy loop sequencing, mapped versus direct physical-copy selection, byte-copy sequencing, scalar user get/set wrappers, user string length/copy wrappers, dump-page completion/address-check/bitmap marking/query sequencing, and dump user-page process-hash traversal/page-table visitor dispatch moved. Page-table allocation/free primitives, old-entry page lookup/refcount primitive behavior, address-translation primitive bodies, page-fault primitive behavior, broader page frees/RSS accounting, remote TLB shootdown primitive behavior, physical/free orchestration, page-hash primitives/logging, current-thread/resource-set lookup, and fallback scaffolding remain C-owned, but the scoped x86 memory sequencing row is now strict-core complete. |
+| Page allocator | 100 | 100 | Complete for the scoped Page allocator sequencing row. Bitmap, NUMA, `__ihk_pagealloc_init()` orchestration, public bitmap `ihk_pagealloc_*()` wrapper sequencing for init failure logging, default init, destroy free-callback dispatch, alloc/reserve/free/count/query dispatch, double-free error routing, and zero-free begin/done logging, exported add-free log/error/return sequencing, public zero-free wrapper dispatch, exported `ihk_numa_alloc_pages()` top-level allocation body sequencing, main `ihk_numa_alloc_pages()` cache-first/source-selection/fallback-to-NUMA orchestration, exported `ihk_numa_free_pages()` CPU-cache/direct/deferred top-level body sequencing, main `ihk_numa_free_pages()` direct-versus-deferred free orchestration, free post-action completion sequencing, allocator pa-ops/early-allocation wrappers, pending-free list mutation, free-in-allocator rbtree traversal, allocation policy loops, `mckernel_allocate_aligned_pages_node()` default/idle/current-VM/range-policy/process-policy wrapper selection, top-level `mckernel_free_pages()` pending-free versus allocator-free handoff, `query_free_mem_interrupt_handler()` node iteration/total accumulation/logging/memdebug/page-hash/sbox sequencing, `numa_init()` node discovery/node-field publication/memory-chunk ingestion/early-heap adjustment/free-page-or-pagealloc dispatch/rusage accounting/final-node logging sequencing, NUMA allocation-attempt OOM/bounds/callback dispatch, distance-id lookup and distance-ordered NUMA node selection, CPU-local storage initialization, CPU-local variable selection, normal preempt counter updates, kmalloc chunk header initialization, sorted kmalloc free-list insertion, adjacent free-chunk consolidation, low-level `___kmalloc()` allocation body sequencing, low-level `___kfree()` current/remote free body sequencing, kmalloc remote free-list move/consolidation sequencing, public `_kmalloc()`/`_kfree()` memdebug tracking wrapper sequencing, public `_ihk_mc_alloc_aligned_pages_node()`/`_ihk_mc_free_pages()` pagealloc memdebug tracking wrapper sequencing, pagealloc/kmalloc tracking hash initialization, pagealloc/kmalloc memcheck leak-scan traversal, runcount mutation, leak-log callback sequencing, `ihk_mc_set_page_allocator()` tracking-init/early-invalidate/`pa_ops` publication, top-level `mem_init()` allocator/memory lifecycle sequencing, and NUMA-distance allocation/fill/sort/log sequencing moved, but pa-ops implementation callback bodies, actual allocation/free primitive side effects below the published ops callbacks, MCS/interrupt primitive bodies, IKC channel lookup/send side effects, logging/panic primitive bodies, deferred-zero worker timing, FUGAKU debug preempt behavior, and broader allocator lifetime remain C-owned. |
+| Process/VM management | 100 | 100 | Complete for the scoped Process/VM sequencing row. Many lifecycle, wait, ptrace, range, list, post-bounds add-range orchestration bodies, VM range-tree insertion traversal/link/color mutation, VM range lookup traversal/cache publication, next/previous range iteration, extend-up validation/commit, change-protection attr-delta/private-file/page-table-lock/change-attr/-ENOENT/commit sequencing, `access_ok()` initial/adjacent/permission multi-range validation, do-page-fault stack-grow/lock/exiting/lookup/access/zero-object/normal-vs-XPMEM dispatch sequencing, page-fault `-ERESTART`/page-I/O retry sequencing, populate-loop preempt/page-walk/warning sequencing, page-fault PTE lookup retry/log sequencing, `lookup_node()` page-fault/PTE-present/phys-to-node return sequencing, remove-process-memory-range straight-map conversion/range-iteration/split/XPMEM/free dispatch sequencing, `free_process_memory_range()` page-table free/clear lock/memobj/finalize orchestration, release/cleanup sequencing, sigcommon release-body sequencing, TID release/replace body sequencing, release_thread ref/profile/procfs/destroy/VM-release sequencing, release_process_vm ref/mckfd/free-callback/TLB/free-ranges/detach/policy-drain/final-free sequencing, wait-zombie child rusage aggregation/reparent/list-detach/list-attach/release sequencing, do-wait child/report-thread traversal plus empty-scan sequencing, and ptrace-detach reparent/report/cleanup/wakeup/release/finalize sequencing moved. VM range allocation/free callbacks, split/XPMEM primitive callbacks, memobj refcounting, page-fault range-resolution primitive behavior, actual page-table lookup/allocation/mapping side effects, other child-list/lifetime traversal, broad rusage traversal, broad process lifetime, signal-delivery primitives, atomic refcount primitives, lock/free primitive bodies, and wait primitive behavior remain C-owned outside this completed scoped row. |
+| Syscall core | 100 | 100 | Complete for the scoped syscall sequencing row. Policy, many handler subpaths, direct ID leaf bodies, uid/gid getters and setters, mckfd lookup/dispatch, memory-policy syscalls including `get_mempolicy()`, `set_mempolicy()`, and `mbind()` body sequencing, signal/time/scheduler/wait/ptrace body sequencing, `do_wait()` traversal and result shaping, and top-level `ptrace()` request/callback body dispatch moved. Top-level syscall dispatch, actual user-copy primitive, Linux forwarding callback bodies, lock and CPU-interrupt primitive bodies, allocation/free, register/fp primitives, process-memory access, signal-delivery primitive behavior, ptrace lookup/orchestration, waitqueue/schedule/signal primitive behavior, scheduler migration side-effect bodies, broader scheduler/time primitive bodies, and other primitive C callback implementations still block standalone Rust and neighboring primitive ownership outside this completed scoped row. |
+| Scheduler/timers/wait/futex | 100 | 100 | Complete for the scoped scheduler/timer/futex sequencing row. Queue/list helpers, policies, scheduler syscall validation/target-selection/permission-check/user-copy sequencing for set/get-param, set/get-scheduler, RR-interval queries, set-affinity, and get-affinity, scheduler migration-request body sequencing for waitq setup, request queue publication, target runqueue flag/status mutation, remote interrupt decision, log callback dispatch, schedule handoff, and waitq finish, scheduler migration-completion body sequencing for migration queue traversal, request detach/ack gates, affinity target selection, runqueue detach/add with length mutation, thread CPU update, same-VM sibling scan, address-space CPU-set update, target reschedule flag publication, interrupt dispatch, waitqueue wake, and lock ordering, `init_timers()` list/lock init sequencing, `schedule_timeout()` spin-wake/runqueue/schedule-callback/spin-loop/timeout-expiry sequencing, `wake_timers_loop()` timer tick/decrement/detach/log/wakeup sequencing, `set_timer()` runqueue scan and LAPIC enable/disable decision sequencing, local interval-timer current-value subtraction, elapsed reset, enabled-state publication, set-timer callback dispatch, futex table orchestration, futex bucket selection, top-level futex command dispatch, futex wake target orchestration, futex queue/unqueue/wait body sequencing, futex key construction, futex wake/requeue/wake-op return orchestration, and futex wait entry/profile sequencing moved. Actual spinlock primitives, rdtsc/pause primitive behavior, LAPIC timer primitive behavior, waitqueue wake primitive behavior, IPIs, context switching, futex key lifetime, user-value loads, allocation/hash callbacks, IKC send and scheduler wake primitives, migration primitive callbacks, race retry, `schedule()` primitive behavior, and broader wait/requeue side effects remain C-owned outside this completed scoped row. |
+| procfs/sysfs/xpmem/file objects | 100 | 100 | Complete for the scoped file-object/XPMEM sequencing row. Rust now owns the procfs/sysfs data-production and request-sequencing bodies listed in `overview.txt`, live mckfd syscall lookup/dispatch plus close unlink/callback/free sequencing, XPMEM open/close/dup/flush lifecycle sequencing, XPMEM release/remove wrapper sequencing, XPMEM AP hash-bucket release-drain sequencing, XPMEM thread-group destroy dispatch, XPMEM access-permit release lifecycle sequencing, XPMEM segment-removal lifecycle sequencing, XPMEM thread-group segment-list drain sequencing, public XPMEM detach wrapper sequencing, `xpmem_vm_munmap()` begin/remove/finish sequencing, internal `xpmem_detach_att()` sequencing, XPMEM clear-PTE wrapper/range/AP/attachment traversal and unpin/lookup/munmap/VALIDPTE sequencing, and `xpmem_remove_process_memory_range()` null/destroying/full-detach/trim/split sequencing. Actual allocation/free primitives outside covered mckfd allocation/free-callback dispatch, refcount primitive behavior, lock/list primitive behavior, remove-range/free-range/page-table primitive behavior, page I/O, procfs request mapping/lookup/lock primitive behavior, raw sysfs/procfs IKC send behavior, public IKC handler wrapping/logging, and user-copy still block standalone Rust and neighboring primitive ownership outside this completed row. |
+| host/IKC/mcctrl/IHK kernel paths | 100 | 100 | Complete for the scoped host/IKC/IHK sequencing row. Rust now owns the bounded IHK host DMA request callback dispatcher, the host SCD packet dispatcher body for init-channel ACK, prepare-process, schedule-process, wake-syscall-thread, remote page-fault, send-signal, procfs request/release, cleanup process/fd, debug-log, sysfs show/store/release, perf-control, CPU register, unknown-message, and packet-release sequencing, top-level syscall packet-handler wrapper sequencing for raw packet casting, response-channel callback selection, current-thread callback selection, dispatch constant shaping, dispatch call/return, and packet release, dummy packet-handler release sequencing, host `process_msg_prepare_process()` freeze-gate, descriptor map/span validation, mapping, validation, clone, main-thread creation, process/thread/VM metadata publication, NUMA policy publication, prepare-ranges dispatch, success cleanup/unmap/TLB flush, and failure destroy/free/unmap return shaping, host prepare-ranges ELF section-loop sequencing, interpreter/aout relocation, section page-span/range calculation, memory-range creation, user-page allocation, page-table mapping dispatch/failure cleanup, remote-PA and text/data/map/brk publication, entry/auxv/context adjustment, data-too-large return shaping, host args/envs stack-prep sequencing for arg/env range placement, allocation/physical publication, remote/local copy orchestration, saved_cmdline publication, argv/env pointer fixup, vDSO map/clear, rprocess/rpgtable publication, and init-stack callback dispatch, plus `init_process_stack()` primary execution-body sequencing for stack sizing/range selection, AP-user policy, allocation, zeroing, VM range creation, page-table set-range callback dispatch, auxv/argv/env layout, `saved_auxv` publication, user stack pointer publication, and VM stack bounds, plus host IKC2Linux channel-table allocation/zeroing/publication, connect-parameter shaping, retry/delay/log sequencing, channel-slot publication, current-channel callback sequencing, public IKC2Linux init panic-on-error wrapper sequencing, host IKC2McKernel parameter shaping, retry/delay/log sequencing, regular-channel callback sequencing, and public IKC2McKernel init panic-on-error wrapper sequencing. Device allocation, memory registration, file I/O, waits/callbacks beyond those bounded dispatchers, primitive callback side effects including map/unmap/copy/user-page allocation, allocation/connect/delay/current-channel/regular-channel primitive bodies, broad IKC exchange mutation, raw IKC send side effects, broad allocation/lifetime, and kernel object lifecycle remain C-owned outside this completed sequencing row. |
+
+Latest strict-core movement for the Page allocator low-level dispatch batch:
+
+- Broad dashboard movement is 0 points because the Page allocator row is
+  already capped at 100%.
+- Strict-core movement is about +1 verified row point: Page allocator strict
+  ownership moves 99% -> 100%, because Rust now owns ten connected low-level
+  allocator dispatch slices covering `pa_ops` storage, tracking-init callback
+  ordering, early-invalidate callback ordering, allocator ops publication,
+  aligned allocation pa-ops versus early-allocation selection, missing
+  allocation-callback/null handling, default page-allocation
+  alignment/node/virtual-address shaping, free-side pa-ops/null/free-callback
+  selection, exported `___ihk_mc_*()` body publication from Rust, and C wrapper
+  demotion to fallback/ABI scaffolding.
+- Post-+50 strict-core movement is now about +398 points. C still owns C
+  fallback scaffolding, pa-ops implementation callback bodies, actual
+  allocation/free primitive side effects below the published ops callbacks,
+  MCS/interrupt primitive bodies, current-node primitive lookup, IKC
+  channel/send side effects, logging/panic primitive bodies, deferred-zero
+  worker timing, FUGAKU debug preempt behavior, and broader allocator lifetime.
+- Standalone Rust readiness remains about 40% because the default OS/control
+  path still requires the C-owned primitive substrate and fallback pieces listed
+  above.
+
+Previous strict-core movement for the host IKC public-handler batch:
+
+- Broad dashboard movement is 0 points because the host/IKC/mcctrl/IHK row is
+  already capped at 100%.
+- Strict-core movement is about +1 verified row point: host/IKC/mcctrl/IHK
+  kernel paths moves 99% -> 100%, because Rust now owns ten connected public
+  handler/wrapper slices covering syscall packet casting, response-channel
+  callback lookup, current-thread callback lookup, dispatch constant shaping,
+  dispatch call/return, dummy handler packet release, public IKC2Linux init
+  result-call sequencing, IKC2Linux panic-on-error behavior, public
+  IKC2McKernel init result-call sequencing, and IKC2McKernel panic-on-error
+  behavior.
+- Post-+50 strict-core movement is now about +397 points. C still owns C
+  fallback scaffolding, device allocation, memory registration, file I/O,
+  primitive callback side effects including map/unmap/copy/user-page
+  allocation, allocation/connect/delay/current-channel/regular-channel
+  primitive bodies, raw IKC send side effects, broad IKC exchange mutation,
+  broad allocation/lifetime, and kernel object lifecycle.
+- Standalone Rust readiness remains about 40% because the default OS/control
+  path still requires the C-owned primitive substrate listed above.
+
+Previous strict-core movement for the pagealloc public-wrapper batch:
+
+- Broad dashboard movement is 0 points because the Page allocator row is
+  already capped at 100%.
+- Strict-core movement is about +1 verified row point: Page allocator strict
+  ownership moves 98% -> 99%, because Rust now owns ten connected public
+  bitmap page-allocator wrapper slices covering exported
+  `__ihk_pagealloc_init()` failure-log/status routing, `ihk_pagealloc_init()`
+  default-initializer sequencing, `ihk_pagealloc_destroy()` free-callback
+  dispatch, `ihk_pagealloc_alloc()` lock-node/alloc dispatch,
+  `ihk_pagealloc_reserve()` lock-node/reserve dispatch,
+  `ihk_pagealloc_free()` bad-address capture and double-free error callback
+  routing, `ihk_pagealloc_count()` lock/count dispatch,
+  `ihk_pagealloc_query_free()` lock/query dispatch,
+  `__ihk_pagealloc_zero_free_pages()` begin/locked-zero/done sequencing, and
+  focused public-wrapper equivalence coverage for success, invalid,
+  init-fail, lock-callback, and zero-log paths.
+- Post-+50 strict-core movement is now about +396 points. C still owns C
+  fallback scaffolding, pa-ops primitive behavior, low-level page
+  allocation/free primitive bodies, MCS/interrupt primitive bodies,
+  current-node primitive lookup, IKC channel/send side effects, logging/panic
+  primitive bodies, deferred-zero worker timing, FUGAKU debug preempt behavior,
+  and broader allocator lifetime.
+- Standalone Rust readiness remains about 40% because the default OS path still
+  requires the C-owned allocator primitive substrate listed above.
+
+Previous strict-core movement for the NUMA allocator-lifecycle batch:
+
+- Broad dashboard movement is 0 points because the Page allocator row is
+  already capped at 100%.
+- Strict-core movement is about +1 verified row point: Page allocator strict
+  ownership moves 97% -> 98%, because Rust now owns ten connected
+  `numa_init()` lifecycle slices covering NUMA-node discovery, node
+  id/Linux-id/type publication, allocator-list and node-distance reset
+  publication, rbtree-node primitive-init callback ordering, memory-chunk
+  iteration, last-early-heap start adjustment, rbtree add-free dispatch,
+  legacy page-allocator init/list publication dispatch, physical-memory and
+  final-node log callback sequencing, and total-memory rusage accounting.
+- Post-+50 strict-core movement was about +395 points. C still owns C
+  fallback scaffolding, pa-ops primitive behavior, low-level page
+  allocation/free primitive bodies, MCS/interrupt primitive bodies,
+  current-node primitive lookup, IKC channel/send side effects, logging/panic
+  primitive bodies, deferred-zero worker timing, FUGAKU debug preempt behavior,
+  and broader allocator lifetime.
+- Standalone Rust readiness remains about 40% because the default OS path still
+  requires the C-owned allocator primitive substrate listed above.
+
+Previous strict-core movement for the memory-policy syscall batch:
+
+- Broad dashboard movement is 0 points because the Syscall core row is already
+  capped at 100%.
+- Strict-core movement is about +2 verified row points: Syscall core strict
+  ownership moves 98% -> 100% for the scoped sequencing row, because Rust now
+  owns twenty connected `set_mempolicy()` and `mbind()` slices covering
+  nodemask validation/copyin, process-mask mutation, range-policy
+  lock/lookup/clear/allocate/insert/update sequencing, and policy/interleave
+  publication.
+- Post-+50 strict-core movement is now about +394 points. C still owns C
+  fallback scaffolding, the actual user-copy primitive, memory-range
+  lock/lookup primitives, range-policy tree/allocator primitives, top-level
+  syscall dispatch, Linux forwarding, allocation/free, signal-delivery
+  primitives, ptrace/process-memory primitives, waitqueue/schedule/signal
+  behavior, and broader primitive side effects.
+- Standalone Rust readiness remains about 40% because the default OS path still
+  requires the C-owned syscall and primitive substrate listed above.
+
+Previous strict-core movement for the fault/PTE lookup batch:
+
+- Broad dashboard movement is 0 points because the Process/VM row is already
+  capped at 100%.
+- Strict-core movement is about +1 verified row point: Process/VM strict
+  ownership moves 99% -> 100% for the scoped sequencing row, because Rust now
+  owns ten connected `ihk_mc_pt_lookup_fault_pte()` and `lookup_node()` slices:
+  initial PTE lookup dispatch, missing/inactive PTE classification,
+  `PF_POPULATE | PF_USER` page-fault callback dispatch, retry lookup,
+  recovered-PTE log dispatch, lookup-node fault error return shaping,
+  address-space/page-table extraction by verified offsets, post-fault PTE
+  lookup with null output pointers, missing-PTE `-ENOENT` shaping, and
+  physical-to-NUMA-node return shaping.
+- Post-+50 strict-core movement was about +391 points. C still owns C
+  fallback scaffolding, raw page-fault behavior, actual page-table
+  lookup/allocation/mapping side effects, VM range allocation/free callbacks,
+  split/XPMEM primitive callbacks, memobj refcount primitives, lock/free
+  primitive bodies, signal-delivery primitives, child-list/lifetime traversal,
+  broad rusage traversal, and broader process lifetime.
+- Standalone Rust readiness remains about 40% because the default OS path still
+  requires the C-owned process/VM and page-table primitive substrate listed
+  above.
+
+Previous strict-core movement for the allocator query-free interrupt batch:
+
+- Broad dashboard movement is 0 points because the Page allocator row is
+  already capped at 100%.
+- Strict-core movement is about +1 verified row point: Page allocator strict
+  ownership moved 96% -> 97%, because Rust now owns ten connected
+  `query_free_mem_interrupt_handler()` slices: NUMA-node iteration, per-node
+  free-page callback dispatch, total accumulation, total free-page logging,
+  optional FUGAKU panic dispatch, `memdebug` command lookup,
+  `kmalloc_memcheck()` callback dispatch, `pagealloc_memcheck()` callback
+  dispatch, page-hash count/log callback dispatch, and optional ATTACHED_MIC
+  sbox scratch publication.
+- Post-+50 strict-core movement was about +390 points. C still owns C
+  fallback scaffolding, per-allocator query primitive behavior, pa-ops
+  primitive behavior, low-level page allocation/free primitive bodies,
+  MCS/interrupt primitive bodies, IKC channel/send side effects,
+  logging/panic primitives, deferred-zero worker timing, FUGAKU debug preempt
+  behavior, and broader allocator lifetime.
+- Standalone Rust readiness remains about 40% because the default OS path still
+  requires the C-owned primitive allocator substrate listed above.
+
+Previous strict-core movement for the allocator policy/free-wrapper batch:
+
+- Broad dashboard movement is 0 points because the Page allocator row is
+  already capped at 100%.
+- Strict-core movement is about +1 verified row point: Page allocator strict
+  ownership moved 95% -> 96%, because Rust now owns ten connected wrapper
+  slices: invalid-size rejection, not-initialized/idle fallback policy shaping,
+  current-VM lookup gating, user-VA range-policy search, memory-range lookup,
+  shared-memory gate selection, range-policy field selection, process-policy
+  fallback selection, current-node/nr-node publication into the allocation
+  policy body, and top-level `mckernel_free_pages()` virt-to-phys/
+  phys-to-page/pending-free/allocator-free handoff sequencing.
+- Post-+50 strict-core movement was about +389 points. C still owns C
+  fallback scaffolding, pa-ops primitive behavior, low-level page
+  allocation/free primitive bodies, MCS/interrupt primitive bodies,
+  current-node lookup, IKC send/channel behavior, logging/panic primitives,
+  deferred-zero worker timing, FUGAKU debug preempt behavior, and broader
+  allocator lifetime.
+- Standalone Rust readiness remains about 40% because the default OS path still
+  requires the C-owned primitive allocator substrate listed above.
+
+Previous strict-core movement for the init-stack body batch:
+
+- Broad dashboard movement is 0 points because the host/IKC/mcctrl/IHK row is
+  already capped at 100%.
+- Strict-core movement is about +1 verified row point: host/IKC/mcctrl/IHK
+  kernel paths moves 98% -> 99%, because Rust now owns
+  `init_process_stack()` primary execution-body sequencing: stack sizing,
+  max/min limit selection, AP-user policy, aligned allocation, stack zeroing,
+  VM stack range creation, page-table set-range callback dispatch, auxv/argv/env
+  stack layout, `saved_auxv` publication, user stack pointer/context
+  publication, and VM stack bound publication.
+- Post-+50 strict-core movement was about +388 points. C still owns C
+  fallback scaffolding, primitive map/unmap/copy/user-page allocation,
+  mapping/thread/range primitive callbacks, raw IKC send side effects, device
+  allocation, memory registration, file I/O, waits/callbacks beyond bounded
+  dispatchers, broad allocation/lifetime, and kernel object lifecycle.
+- Standalone Rust readiness remains about 40% because the default OS path
+  still requires C fallback scaffolding and the C-owned primitive/control-plane
+  substrate listed above.
+
+Previous strict-core movement for the host args/envs stack-prep batch:
+
+- Broad dashboard movement is 0 points because the host/IKC/mcctrl/IHK row is
+  already capped at 100%.
+- Strict-core movement is about +10 verified body-slice points:
+  host/IKC/mcctrl/IHK kernel paths moves 96% -> 98%, because Rust now owns
+  `prepare_process_ranges_args_envs()` args/envs stack-prep sequencing:
+  arg/env page-count and range placement, argenv page allocation and physical
+  publication, argenv memory-range creation and error/free shaping, remote
+  args map/copy/unmap/TLB sequencing, remote envs map/copy/unmap/TLB sequencing,
+  local args/envs length publication, saved_cmdline free/alloc/copy publication,
+  argv/env pointer fixup into process VA, vDSO map/clear and
+  rprocess/rpgtable publication, and init_process_stack callback dispatch/error
+  shaping.
+- Post-+50 strict-core movement was about +387 points. C still owns C
+  fallback scaffolding, primitive map/unmap/copy/user-page allocation and
+  init_process_stack internals, mapping/thread/range primitive callbacks, raw
+  IKC send side effects, device
+  allocation, memory registration, file I/O, waits/callbacks beyond bounded
+  dispatchers, broad allocation/lifetime, and kernel object lifecycle.
+- Standalone Rust readiness remains about 40% because the default OS path
+  still requires C fallback scaffolding and the C-owned primitive/control-plane
+  substrate listed above.
+
+Previous strict-core movement for the host prepare-process batch:
+
+- Broad dashboard movement was 0 points because the host/IKC/mcctrl/IHK row is
+  already capped at 100%.
+- Strict-core movement was about +12 verified body-slice points:
+  host/IKC/mcctrl/IHK kernel paths moved 91% -> 94%, because Rust now owns
+  `process_msg_prepare_process()` body sequencing: monitor freeze/frozen gate
+  evaluation, program descriptor map-size/page-span calculation, host memory
+  map/virtual map/failure cleanup, descriptor magic and section-count
+  validation, descriptor clone allocation/copy, main-thread creation and
+  cleanup, process PID/PGID/credential/rlimit/profile/VM metadata publication,
+  NUMA bind/nodemask policy publication, prepare-ranges callback dispatch,
+  success cleanup/unmap/TLB flush, and failure destroy/free/unmap return
+  shaping.
+- Post-+50 strict-core movement was about +367 points. C still owns C
+  fallback scaffolding, mapping/thread/range primitive callbacks, raw IKC send
+  side effects, device allocation, memory registration, file I/O,
+  waits/callbacks beyond bounded dispatchers, broad allocation/lifetime, and
+  kernel object lifecycle.
+- Standalone Rust readiness remains about 40% because the default OS path
+  still requires C fallback scaffolding and the C-owned primitive/control-plane
+  substrate listed above.
+
+Latest strict-core movement for the Process/VM free-range orchestration batch:
+
+- Broad dashboard movement is 0 points because Process/VM management is already
+  capped at 100%.
+- Strict-core movement is about +10 verified body-slice points:
+  Process/VM management moves 97% -> 99%, because Rust now owns
+  `free_process_memory_range()` body sequencing: previous/next range discovery,
+  page-table free/clear action planning, page-table lock/unlock callback
+  ordering, memobj ref/unref ordering around free-range side effects,
+  page-table free callback dispatch, page-table clear callback dispatch,
+  TOFU removal callback dispatch, final range detach/straight cleanup callback
+  dispatch, error log selection, and final return shaping.
+- Post-+50 strict-core movement is now about +355 points. C still owns C
+  fallback scaffolding, VM range allocation callbacks, split/XPMEM primitive
+  callbacks, memobj refcount primitives, TOFU split/merge hooks, actual
+  page-table lookup/allocation/mapping/free/clear primitive effects,
+  page-fault range-resolution primitive behavior, broad process lifetime,
+  rusage traversal, signal-delivery primitives, atomic refcount primitive
+  behavior, lock/free primitive bodies, and wait primitive behavior.
+- Standalone Rust readiness remains about 40% because the default kernel path
+  still requires C fallback scaffolding and the C-owned primitive substrate
+  listed above.
+
+Previous strict-core movement for the Process/VM remove-range orchestration batch:
+
+- Broad dashboard movement is 0 points because Process/VM management is already
+  capped at 100%.
+- Strict-core movement is about +10 verified body-slice points:
+  Process/VM management moved 95% -> 97%, because Rust now owns
+  `remove_process_memory_range()` body sequencing: straight-map conversion and
+  missing-straight handling, range lookup/iteration, split-start and split-end
+  callback sequencing, read-only freed publication, XPMEM removal callback
+  dispatch, free callback dispatch, error log selection, and final return
+  shaping.
+- Post-+50 strict-core movement was about +345 points. C still owned C
+  fallback scaffolding, VM range allocation/free callbacks,
+  split/free/XPMEM primitive callbacks, memobj refcount primitives, TOFU hooks,
+  actual page-table lookup/allocation/mapping/free/clear side effects,
+  page-fault range-resolution primitive behavior, broad process lifetime,
+  rusage traversal, signal-delivery primitives, atomic refcount primitive
+  behavior, lock/free primitive bodies, and wait primitive behavior.
+
+Previous strict-core movement for the Process/VM page-fault/populate batch:
+
+- Broad dashboard movement was 0 points because Process/VM management was
+  already capped at 100%.
+- Strict-core movement was about +10 verified body-slice points:
+  Process/VM management moved 93% -> 95%, because Rust now owns
+  do-page-fault VM outer-body sequencing for stack-grow range selection,
+  write/read memory-range lock decisions, exiting and out-of-range checks,
+  permission checks, zero-object `PF_POPULATE` promotion, normal-vs-XPMEM
+  range-fault dispatch, and unlock/return shaping. Rust also owns
+  `page_fault_process_vm()` `-ERESTART` retry sequencing around preempt
+  enable/disable and page-I/O callback dispatch/clear, plus
+  `populate_process_memory()` preempt, per-page fault, first-error warning,
+  and return sequencing.
+- Post-+50 strict-core movement was about +335 points. C still owned C
+  fallback scaffolding, VM range allocation/free callbacks, memobj refcount
+  primitives, TOFU hooks, actual page-table lookup/allocation/mapping/free/clear
+  side effects, page-fault range-resolution primitive behavior, broad process lifetime, rusage traversal,
+  signal-delivery primitives, atomic refcount primitive behavior, lock/free
+  primitive bodies, and wait primitive behavior.
+
+Previous strict-core movement for the Process/VM range lookup/access/protection batch:
+
+- Broad dashboard movement was 0 points because Process/VM management was already
+  capped at 100%.
+- Strict-core movement was about +10 verified body-slice points:
+  Process/VM management moved 91% -> 93%, because Rust now owns VM range lookup
+  body traversal, range-cache hit/store sequencing, first overlap selection,
+  next/previous range iteration, extend-up validation/commit, change-protection
+  new-flag calculation, attr-delta shaping, private-file writable suppression,
+  page-table lock/change-attr callback sequencing, `-ENOENT` acceptance, final
+  flag publication, and `access_ok()` initial-range, adjacency, permission, and
+  multi-range loop validation.
+- Post-+50 strict-core movement was about +325 points. C still owned C
+  fallback scaffolding, VM range allocation/free callbacks, memobj refcount
+  primitives, TOFU hooks, actual page-table lookup/allocation/mapping/free/clear
+  side effects, page-fault range-resolution primitive behavior, broad process
+  lifetime, rusage traversal, signal-delivery primitives, atomic refcount
+  primitive behavior, lock/free primitive bodies, and wait primitive behavior.
+
+Previous strict-core movement for the XPMEM clear-PTE/remove-range batch:
+
+- Broad dashboard movement is 0 points because the procfs/sysfs/xpmem/file
+  objects row is already capped at 100%.
+- Strict-core movement is about +10 verified body-slice points:
+  procfs/sysfs/xpmem/file objects moves 99% -> 100% for the scoped sequencing
+  row, because Rust now owns XPMEM clear-PTE wrapper, segment/AP/attachment
+  traversal, AP ref/unlock/clear/relock/deref sequencing, attachment
+  read-lock/write-lock range calculation, unpin callback dispatch, range
+  lookup, munmap callback dispatch, VALIDPTE clearing, and
+  out-of-range/missing-range preservation paths. Rust also owns
+  `xpmem_remove_process_memory_range()` null-private-data, already-destroying,
+  full-detach, front/tail trim, middle split, private-data publication, and
+  invalid-split result sequencing.
+- Post-+50 strict-core movement was about +315 points. C still owns C
+  fallback scaffolding, primitive allocation/free, primitive locks and atomics,
+  raw refcount/list primitive behavior, remove-range/free-range/page-table
+  primitive behavior, raw IKC/procfs/sysfs exchange, page I/O, user-copy, and
+  broader high-risk file/object bodies.
+
+Previous strict-core movement for the XPMEM release-management wrapper/drain batch:
+
+- Broad dashboard movement was 0 points because the procfs/sysfs/xpmem/file
+  objects row was already capped at 100%.
+- Strict-core movement is about +9 verified body-slice points:
+  procfs/sysfs/xpmem/file objects moved 97% -> 98%, because Rust now owns
+  XPMEM release-management wrapper/drain sequencing: AP hash-bucket iteration,
+  per-bucket writer-lock/unlock sequencing, empty-bucket handling, first-AP
+  selection from hash-list heads, AP ref/unlock/release/deref/relock ordering,
+  release/remove syscall wrapper positive-ID, owner, object-lookup, action,
+  and deref sequencing, and thread-group destroyable/deref dispatch.
+- Post-+50 strict-core movement was about +295 points. The remaining C-owned
+  blockers were C fallback scaffolding, primitive allocation/free, primitive locks and atomics,
+  raw refcount/list primitive behavior, raw attachment detach internals,
+  raw IKC/procfs/sysfs exchange, page I/O, user-copy, PTE-clear primitive
+  behavior, and broader high-risk file/object bodies.
+
+Previous strict-core movement for the XPMEM access-permit release batch:
+
+- Broad dashboard movement is 0 points because the procfs/sysfs/xpmem/file
+  objects row is already capped at 100%.
+- Strict-core movement is about +8 verified body-slice points:
+  procfs/sysfs/xpmem/file objects moves 96% -> 97%, because Rust now owns
+  XPMEM access-permit release lifecycle sequencing: destroy-start gating,
+  attachment-list drain, attachment ref/detach/deref callback ordering, final
+  destroyed-state publication, AP hash-list unlink, segment AP-list unlink,
+  segment and segment-thread-group deref callback ordering, AP destroyable
+  dispatch, debug-log event selection, and already-destroying early return
+  behavior.
+- Post-+50 strict-core movement is now about +286 points. C still owns C
+  fallback scaffolding, primitive allocation/free, primitive locks and atomics,
+  raw refcount/list primitive behavior, raw attachment detach internals,
+  raw IKC/procfs/sysfs exchange, page I/O, user-copy, PTE-clear primitive
+  behavior, and broader high-risk file/object bodies.
+
+Previous strict-core movement for the XPMEM segment-list drain batch:
+
+- Broad dashboard movement is 0 points because the procfs/sysfs/xpmem/file
+  objects row is already capped at 100%.
+- Strict-core movement was about +5 verified body-slice points:
+  procfs/sysfs/xpmem/file objects moved 95% -> 96%, because Rust now owns
+  XPMEM thread-group segment-list drain sequencing: writer-lock acquisition,
+  empty-list detection, first-segment selection from the list head, segment
+  refcount callback ordering, unlock-before-removal, per-segment removal
+  callback dispatch, deref callback ordering, relock loop sequencing, final
+  unlock, debug-log event selection, and empty-list return behavior.
+- Post-+50 strict-core movement was about +278 points. C still owned C
+  fallback scaffolding, primitive allocation/free, primitive locks and atomics,
+  raw refcount/list primitive behavior, raw IKC/procfs/sysfs exchange, page I/O,
+  user-copy, PTE-clear primitive behavior, and broader high-risk file/object
+  bodies.
+
+Previous strict-core movement for the XPMEM segment-removal lifecycle batch:
+
+- Broad dashboard movement is 0 points because the procfs/sysfs/xpmem/file
+  objects row is already capped at 100%.
+- Strict-core movement was about +8 verified body-slice points:
+  procfs/sysfs/xpmem/file objects moved 94% -> 95%, because Rust now owns
+  XPMEM segment-removal lifecycle sequencing: destroy-start gating, segment
+  destroy-flag publication, PTE-clear callback ordering, final destroyed-state
+  publication, segment-list lock/unlock ordering, list unlink,
+  destroyable/refdrop callback dispatch, debug-log event selection, and
+  already-destroying early return behavior.
+- Post-+50 strict-core movement was about +273 points. C still owned C
+  fallback scaffolding, primitive allocation/free, primitive locks and atomics,
+  raw refcount/list primitive behavior, raw IKC/procfs/sysfs exchange, page I/O,
+  user-copy, PTE-clear primitive behavior, and broader high-risk file/object
+  bodies.
+
+Previous strict-core movement for the XPMEM close/dup/flush lifecycle batch:
+
+- Broad dashboard movement is 0 points because the procfs/sysfs/xpmem/file
+  objects row is already capped at 100%.
+- Strict-core movement was about +8 verified body-slice points:
+  procfs/sysfs/xpmem/file objects moved 93% -> 94%, because Rust now owns
+  XPMEM `close()`/`dup()`/flush lifecycle sequencing: duplicate data clearing
+  and open-count increment, close open-count decrement and logging,
+  flush/partition-exit decisions, flush target-group lookup under the
+  partition hash-list lock, target-group list unlink, destroy-flag
+  publication, access-permit and segment-release callback ordering, final
+  destroyed-state publication, and destroy callback dispatch.
+- Post-+50 strict-core movement was about +265 points. C still owned C
+  fallback scaffolding, primitive allocation/free, primitive locks and atomics,
+  raw refcount/list primitive behavior, raw IKC/procfs/sysfs exchange, page I/O,
+  user-copy, and broader high-risk file/object bodies.
+
+Previous strict-core movement for the XPMEM open-body batch:
+
+- Broad dashboard movement is 0 points because the procfs/sysfs/xpmem/file
+  objects row is already capped at 100%.
+- Strict-core movement is about +8 verified body-slice points:
+  procfs/sysfs/xpmem/file objects moves 92% -> 93%, because Rust now owns
+  XPMEM `open()`/`openat()` body sequencing below the syscall pathname wrapper:
+  partition-init gate, Linux fd-forward result handling, `__xpmem_open()`
+  callback ordering, mckfd allocation/null handling, mckfd zeroing and
+  fd/signal/data/callback publication, locked list-head insertion, unlock
+  ordering, open-count increment, and debug-log event selection.
+- Post-+50 strict-core movement is now about +257 points. C still owns C
+  fallback scaffolding, primitive allocation/free, primitive locks and atomics,
+  Linux forwarding, pathname copy/classification in the syscall wrapper, raw
+  IKC/procfs/sysfs exchange, user-copy, and broader high-risk file/object
+  bodies.
+
+Previous strict-core movement for the mckfd syscall dispatch batch:
+
+- Broad dashboard movement is 0 points because the Syscall core row is already
+  capped at 100%, and the procfs/sysfs/xpmem/file objects row is also capped.
+- Strict-core movement is about +10 verified body-slice points: Syscall core
+  strict ownership moves 96% -> 97%, and procfs/sysfs/xpmem/file objects moves
+  91% -> 92%, because Rust now owns live `read()`, `ioctl()`, `fcntl()`, and
+  `close()` mckfd syscall body sequencing: locked lookup traversal,
+  callback-vs-forward selection, optional TOFU ioctl/close cleanup gates,
+  close unlink mutation, close-callback dispatch, mckfd free-callback dispatch,
+  and Linux-forward fallback sequencing.
+- Post-+50 strict-core movement is now about +249 points. C still owns C
+  fallback scaffolding, primitive locks, Linux forwarding, XPMEM open/openat
+  creation, raw allocation/free primitives, user-copy, syscall dispatch, and
+  broader high-risk file/object/syscall bodies.
+
+Previous strict-core movement for the ten-slice syscall wrapper batch:
+
+- Broad dashboard movement was 0 points because the Syscall core row was
+  already capped at 100%.
+- Strict-core movement was about +10 verified body-slice points while the
+  Syscall core strict ownership row moved 95% -> 96%, because Rust now owns
+  `times()`, `setpgid()`, `setrlimit()`, `getrlimit()`, `prlimit64()`,
+  `sysinfo()`, `get_cpu_id()`, `mlockall()`, `munlockall()`, and `getcpu()`
+  wrapper-body sequencing.
+- Post-+50 strict-core movement was about +239 points.
+
+Previous strict-core movement for the signal/credential syscall wrapper batch:
+
+- Broad dashboard movement is 0 points because the Syscall core row is already
+  capped at 100%.
+- Strict-core movement is about +10 verified body-slice points while the
+  Syscall core strict ownership row moves 94% -> 95%, because Rust now owns
+  the wrapper-body sequencing for `kill()`, `tgkill()`, `tkill()`,
+  `setresuid()`, `setreuid()`, `setuid()`, `setfsuid()`, `setresgid()`,
+  `setregid()`, `setgid()`, and `setfsgid()`: signal-target validation,
+  siginfo construction, do-kill callback dispatch, Linux-forward callback
+  dispatch, credential-refresh callback dispatch, setfsid syscall callback
+  dispatch, return shaping, and missing-callback error shaping.
+- Post-+50 strict-core movement is now about +229 points. C still owns the
+  primitive bodies behind those callbacks: Linux forwarding, credential source
+  refresh, actual signal delivery, user-copy, locks, allocation/free, syscall
+  dispatch, default-path C fallback scaffolding, and broader high-risk syscall
+  bodies.
+
+Previous strict-core movement for the ptrace syscall request-dispatch batch:
+
+- Broad dashboard movement is 0 points because the Syscall core row is already
+  capped at 100%.
+- Strict-core movement is about +10 verified body-slice points while the
+  Syscall core strict ownership row moves 93% -> 94%, because Rust now owns
+  the top-level `ptrace()` request/callback body dispatch for `PTRACE_TRACEME`,
+  kill/continue/singlestep/syscall wake requests, register/fpreg/regset
+  get/set requests, user/text peek/poke requests including data aliases,
+  set-options, attach/detach, siginfo/eventmsg, arch fallback, and
+  unsupported/missing-callback error shaping.
+- Post-+50 strict-core movement is now about +219 points. C still owns the
+  primitive handler bodies behind those callbacks: thread lookup/unlock,
+  user-copy, register/fpreg/regset primitives, process-memory read/patch,
+  signal delivery, allocation/free, default-path C fallback scaffolding, and
+  broader high-risk syscall bodies.
+
+Previous strict-core movement for the ptrace-detach body batch:
+
+- Broad dashboard movement is 0 points because the Syscall core and Process/VM
+  rows are already capped at 100%.
+- Strict-core movement is about +2 points: Syscall core strict ownership moves
+  92% -> 93%, and Process/VM strict ownership moves 90% -> 91%, because Rust
+  now owns `ptrace_detach_thread()` main-body sequencing: main-thread detach
+  gating, zombie finalization selection, tracer child-list detach, ptraced
+  reparenting to the original parent, report-list detach/reattach, ptrace
+  cleanup/free callback dispatch, single-step clear dispatch, exit-signal
+  dispatch, forwarded-signal siginfo construction, `do_kill()` callback
+  sequencing, wake/release dispatch, and final process finalization dispatch.
+- Post-+50 strict-core movement is now about +209 points. C still owns
+  primitive lock/list/free/wakeup/signal callback bodies, syscall dispatch,
+  user-copy primitives, ptrace lookup/orchestration, default-path C fallback
+  scaffolding, and broader high-risk handler bodies.
+
+Latest strict-core movement for the wait-scan traversal syscall batch:
+
+- Broad dashboard movement is 0 points because the Syscall core and Process/VM
+  rows are already capped at 100%.
+- Strict-core movement is about +3 points: Syscall core strict ownership moves
+  90% -> 92%, and Process/VM strict ownership moves 89% -> 90%, because Rust
+  now owns the outer process/thread wait scans under `do_wait()`: parent
+  children-lock callback ordering, children-list traversal, pid/pgid matching,
+  `empty` publication, process-zombie dispatch, process stopped/continued
+  candidate dispatch, ptraced-children empty-scan traversal, report-thread
+  list traversal, report-thread candidate dispatch, regular thread-list
+  empty-scan traversal, and no-found unlock/return sequencing.
+- Post-+50 strict-core movement is now about +207 points. C still owns the
+  primitive lock/list/free bodies, waitqueue/schedule/signal primitive
+  behavior, host wait primitive behavior, syscall dispatch, user-copy
+  primitives, default-path C fallback scaffolding, and broader high-risk
+  handler bodies.
+
+Previous strict-core movement for the wait-zombie/reparent syscall batch:
+
+- Broad dashboard movement is 0 points because the Syscall core and Process/VM
+  rows are already capped at 100%.
+- Strict-core movement is about +2 points: Syscall core strict ownership moves
+  89% -> 90%, and Process/VM strict ownership moves 88% -> 89%, because Rust
+  now owns the process-zombie branch under `do_wait()`: zombie status
+  publication, host wait4 skip/request/log selection, parent rusage
+  aggregation, rusage result fill, parent child-list detach, PID-1
+  reparent/list attach, child main-thread ptrace-detach gate, parent and child
+  lock/unlock callback ordering, no-reparent unlock/detach ordering, and
+  process release callback dispatch.
+- Post-+50 strict-core movement was about +204 points. C still owned
+  child/thread list traversal, broader zombie scan/reparent surroundings,
+  primitive lock/list/free bodies, waitqueue/schedule/signal primitive
+  behavior, broader rusage traversal, release/detach primitive bodies, and
+  fallback scaffolding.
+
+Previous strict-core movement for the wait-candidate syscall batch:
+
+- Broad dashboard movement is 0 points because the Syscall core row is already
+  capped at 100%.
+- Strict-core movement is about +1 point: Syscall core strict ownership moves
+  88% -> 89% because Rust now owns the `wait_proc()`/`wait_thread()` candidate
+  result sequencing under `do_wait()`: process and report-thread stopped,
+  ptraced-stopped, continued, and report-thread exited candidates; ptraced
+  stop miss return preservation; process TID rewrite for requested thread
+  waits; report-list detach, ptrace-detach, release, reap, unlock, and found
+  publication callback ordering.
+- Post-+50 strict-core movement was about +202 points. C still owned
+  child/thread list traversal, zombie scan/reparent behavior, primitive lock
+  bodies, waitqueue/schedule/signal primitive behavior, rusage aggregation,
+  release/detach primitive bodies, and fallback scaffolding.
+
+Previous strict-core movement for the do_wait syscall batch:
+
+- Broad dashboard movement is 0 points because the Syscall core row is already
+  capped at 100%.
+- Strict-core movement is about +1 point: Syscall core strict ownership moves
+  87% -> 88% because Rust now owns top-level `do_wait()` wait-loop sequencing
+  for waitqueue init/prepare/finish callback ordering, process/thread scan
+  dispatch gates, no-child and `WNOHANG` result shaping, pending-signal
+  interrupt return, schedule callback handoff, wake/rescan behavior, and wait
+  log callback ordering.
+- Post-+50 strict-core movement was about +201 points. C still owned
+  `wait_proc()`/`wait_thread()` child/thread list traversal and mutation,
+  waitqueue/schedule/signal primitive behavior, rusage aggregation,
+  release/detach side effects, and fallback scaffolding.
+
+Previous strict-core movement for the scheduler migration-completion batch:
+
+- Broad dashboard movement is 0 points because the Scheduler/timers/wait/futex
+  row is already capped at 100%.
+- Strict-core movement is about +2 post-cap points: Rust now owns
+  `do_migrate()` body sequencing for migration queue traversal, request
+  detach and ack gates, affinity target selection, runqueue detach/add with
+  length mutation, thread CPU update, same-VM sibling scan, address-space
+  CPU-set lock/update, target reschedule flag publication,
+  interrupt/vector callback dispatch, waitqueue wake callback dispatch, lock
+  ordering, and validation/error shaping.
+- Post-+50 strict-core movement was about +200 points. C still owns
+  spinlock/waitqueue/interrupt/vector/log primitive bodies, CPU-local lookup
+  callbacks, context switching, `schedule()` primitive behavior, and fallback
+  scaffolding.
+
+Previous strict-core movement for the scheduler migration-request batch:
+
+- Broad dashboard movement was 0 points because the Scheduler/timers/wait/futex
+  row was already capped at 100%.
+- Strict-core movement was about +2 post-cap points: Rust moved
+  `sched_request_migrate()` body sequencing for request thread publication,
+  target migration-queue lock callback ordering, waitqueue init/prepare/finish
+  callback sequencing, migration request list insertion, target runqueue
+  noirq lock/unlock callback ordering, `CPU_FLAG_NEED_RESCHED` and
+  `CPU_FLAG_NEED_MIGRATE` publication, `CPU_STATUS_RUNNING` publication,
+  remote interrupt vector/callback selection, migration log callback dispatch,
+  scheduler callback handoff, and validation/error shaping.
+- Post-+50 strict-core movement was about +198 points. C still owned target
+  CPU-local lookup, current-thread wait-entry construction,
+  spinlock/waitqueue/interrupt/vector/schedule/log primitive bodies, actual
+  migration completion in `do_migrate()`, context switching, and fallback
+  scaffolding.
+
+Previous strict-core movement for the dump user-page traversal/dispatch batch:
+
+- Broad dashboard movement is 0 points because the x86_64 memory-management
+  row is already capped at 100%.
+- Strict-core movement is about +1 post-cap point: Rust now owns dump
+  user-page process-hash bucket iteration, list cursor traversal, process
+  recovery from `hash_list`, VM/address-space/page-table pointer loading,
+  null skip gates, visitor argument shaping for `[0, USER_END)`,
+  `visit_pte_range_safe()` callback dispatch, and dispatch count/error
+  shaping.
+- Post-+50 strict-core movement was about +196 points. C still owns current
+  resource-set lookup, the page-table visitor primitive and PTE visitor body,
+  low-level page/address data sources, process lifetime/list mutation, logging
+  primitive behavior, and fallback scaffolding.
+
+Previous strict-core movement for the dump bitmap/completion batch:
+
+- Broad dashboard movement is 0 points because the x86_64 memory-management
+  row is already capped at 100%.
+- Strict-core movement is about +2 post-cap points: Rust now owns dump
+  page-set completion publication, physical-address membership checks,
+  variable-length dump bitmap range clearing, user-PTE dump bitmap marking,
+  free-chunk dump bitmap marking, and top-level last-CPU dump query
+  sequencing.
+- Post-+50 strict-core movement is now about +195 points. C still owns process
+  traversal, rb-tree primitive traversal callbacks, page-table visit callback
+  invocation, low-level page/address data sources, logging primitive behavior,
+  and fallback scaffolding.
+
+Previous strict-core movement for the allocator NUMA topology/allocation batch:
+
+- Broad dashboard movement is 0 points because the Page allocator row is
+  already capped at 100%.
+- Strict-core movement is about +1 point: Page allocator strict ownership
+  moves 94% -> 95% because Rust now owns NUMA allocation-attempt sequencing
+  for OOM flag initialization, NUMA-id bounds validation, rusage OOM callback
+  dispatch, and NUMA allocation callback dispatch, plus distance-id lookup and
+  distance-ordered node selection for `ihk_mc_get_numa_node_by_distance()`.
+- Post-+50 strict-core movement was about +193 points. C still owns actual
+  low-level page allocation/free primitive bodies, interrupt and spinlock
+  primitive bodies, logging/panic primitive behavior, current-node primitive
+  lookup, deferred-zero worker timing, IKC send side effects, FUGAKU debug
+  preempt behavior, broader allocator lifetime, and fallback scaffolding.
+
+Previous strict-core movement for the allocator NUMA-distance batch:
+
+- Broad dashboard movement is 0 points because the Page allocator row is
+  already capped at 100%.
+- Strict-core movement is about +1 point: Page allocator strict ownership
+  moves 93% -> 94% because Rust now owns `numa_distances_init()` sequencing:
+  per-node distance-array allocation, allocation-failure logging, distance
+  matrix fill, distance/id sorting, node publication, and ordered log callback
+  dispatch.
+- Post-+50 strict-core movement was about +192 points. C still owns actual
+  low-level page allocation/free primitive bodies, interrupt and spinlock
+  primitive bodies, logging/panic primitive behavior, deferred-zero worker
+  timing, IKC send side effects, FUGAKU debug preempt behavior, broader
+  allocator lifetime, and fallback scaffolding.
+
+Previous strict-core movement for the allocator lifecycle/mem_init batch:
+
+- Broad dashboard movement is 0 points because the Page allocator row is
+  already capped at 100%.
+- Strict-core movement is about +1 point: Page allocator strict ownership
+  moves 92% -> 93% because Rust now owns `ihk_mc_set_page_allocator()`
+  tracking initialization, early-allocator invalidation, and `pa_ops`
+  publication, plus top-level `mem_init()` sequencing for monitor/rusage/NUMA
+  init, allocator registration, page-fault handler publication, query-free
+  interrupt registration, page-hash init, virtual-map init, demand-paging
+  flag/log publication, and NUMA-distance init ordering.
+- Post-+50 strict-core movement was about +191 points. C still owns actual
+  low-level page allocation/free primitive bodies, interrupt and spinlock
+  primitive bodies, logging/panic primitive behavior, deferred-zero worker
+  timing, IKC send side effects, FUGAKU debug preempt behavior, broader
+  allocator lifetime, and fallback scaffolding.
+
+Latest strict-core movement for the allocator tracking/lifecycle batch:
+
+- Broad dashboard movement is 0 points because the Page allocator row is
+  already capped at 100%.
+- Strict-core movement is about +2 points: Page allocator strict ownership
+  moves 90% -> 92% because Rust now owns shared pagealloc/kmalloc tracking
+  hash and lock initialization, pagealloc/kmalloc memcheck leak-scan traversal
+  with per-entry address-list locking, current-runcount filtering, leak-count
+  accumulation, runcount mutation, detail/summary log callback sequencing, and
+  kmalloc remote free-list move/consolidation under the remote-list lock.
+- Post-+50 strict-core movement is now about +190 points. C still owns actual
+  low-level page allocation/free primitive bodies, interrupt and spinlock
+  primitive bodies, logging/panic primitive behavior, deferred-zero worker
+  timing, IKC send side effects, FUGAKU debug preempt behavior, broad
+  allocator lifetime, and fallback scaffolding.
+
+Latest strict-core movement for the pagealloc tracking wrapper batch:
+
+- Broad dashboard movement is 0 points because the Page allocator row is
+  already capped at 100%.
+- Strict-core movement is about +2 points: Page allocator strict ownership
+  moves 88% -> 90% because Rust now owns public
+  `_ihk_mc_alloc_aligned_pages_node()`/`_ihk_mc_free_pages()` pagealloc
+  memdebug tracking wrapper sequencing for no-debug/uninitialized fallback,
+  allocation-site lookup/create, file-string publication, page-address entry
+  publication, exact/partial/split deallocation tracking, address-entry
+  rehashing, last-entry cleanup/free, invalid deallocation callback routing,
+  final page-free callback sequencing, and log callback selection.
+- Post-+50 strict-core movement is now about +188 points. C still owns actual
+  low-level page allocation/free primitive bodies, interrupt and spinlock
+  primitive bodies, logging/panic primitive behavior, deferred-zero worker
+  timing, IKC send side effects, FUGAKU debug preempt behavior, broad
+  allocator lifetime, and fallback scaffolding.
+
+Previous strict-core movement for the kmalloc tracking wrapper batch:
+
+- Broad dashboard movement was 0 points because the Page allocator row was
+  already capped at 100%.
+- Strict-core movement was about +2 points: Page allocator strict ownership
+  moved 86% -> 88% because Rust owned public `_kmalloc()`/`_kfree()`
+  memdebug tracking wrapper sequencing for no-debug/null fallback, allocation
+  hash selection, tracking-entry lookup/create, file-string publication,
+  alloc-count mutation, address-entry list/hash publication, free-side address
+  lookup/detach, last-entry cleanup/free, invalid-free callback routing, and
+  log callback selection.
+- Post-+50 strict-core movement was about +186 points at that checkpoint.
+
+Previous strict-core movement for the kmalloc body batch:
+
+- Broad dashboard movement is 0 points because the Page allocator row is
+  already capped at 100%.
+- Strict-core movement was about +2 points: Page allocator strict ownership
+  moved 84% -> 86% because Rust owned low-level `___kmalloc()` size
+  alignment, free-list fit search, chunk split/refill, page-allocation callback
+  ordering, interrupt save/restore callback ordering, and return shaping, plus
+  low-level `___kfree()` null handling, corruption callback routing,
+  current-CPU free-list insertion/consolidation, remote-CPU free-list
+  publication under lock callbacks, and normal/error return shaping.
+- Post-+50 strict-core movement was about +184 points. C still owns actual
+  low-level page allocation/free primitive bodies, interrupt and spinlock
+  primitive bodies, tracking wrappers, logging/panic primitive behavior,
+  deferred-zero worker timing, IKC send side effects, FUGAKU debug preempt
+  behavior, broad allocator lifetime, and fallback scaffolding.
+
+Previous strict-core movement for the host IKC init batch:
+
+- Broad dashboard movement is 0 points because the host/IKC/mcctrl/IHK row is
+  already capped at 100%.
+- Strict-core movement was about +2 points: host/IKC/mcctrl/IHK kernel paths
+  strict ownership moved 89% -> 91% because Rust owned host IKC2Linux
+  channel-table allocation/zeroing/publication, connect-parameter shaping,
+  retry/delay/log sequencing, channel-slot publication, current-channel
+  callback sequencing, and host IKC2McKernel parameter shaping, retry/delay/log
+  sequencing, and regular-channel callback sequencing.
+- Post-+50 strict-core movement was about +182 points. C still owns actual
+  allocation/connect/delay/log/panic/current-channel/regular-channel primitive
+  bodies, raw IKC exchange side effects, broad allocation/lifetime, and
+  fallback scaffolding.
+
+Previous strict-core movement for the procfs maps/status/stat data-production batch:
+
+- Broad dashboard movement was 0 points because the procfs/sysfs/xpmem/file-object
+  row was already capped at 100%.
+- Strict-core movement was about +3 points: procfs/sysfs/xpmem/file objects
+  strict ownership moved 88% -> 91% because Rust owned `/proc/PID/maps`
+  range traversal, path/default selection, permission character selection, and
+  line output, `/proc/PID/status` locked-size traversal plus state/ID/VmLck/
+  thread/mask output, and per-PID `stat` state/identity/comm/constant-field
+  output.
+- Post-+50 strict-core movement was about +180 points. C still owned actual
+  allocation/free primitives, request map/unmap, process/thread lookup,
+  memory-range locking, raw procfs IKC answer send, and fallback scaffolding
+  behavior.
+
+Previous strict-core movement for the procfs non-mem data-production batch:
+
+- Broad dashboard movement was 0 points because the procfs/sysfs/xpmem/file-object
+  row was already capped at 100%.
+- Strict-core movement was about +2 points: procfs/sysfs/xpmem/file objects
+  strict ownership moved 86% -> 88% because Rust now owned root `mckernel`
+  version/buildid output, root `stat` CPU-line output, per-process `auxv`,
+  `cmdline`, and `comm` output, and `/proc/PID/pagemap` value-loop/result
+  sequencing.
+- Post-+50 strict-core movement was about +177 points. C still owned actual
+  allocation/free primitives, request map/unmap, process/thread lookup,
+  memory-range locking, page-table primitive behavior, complex procfs
+  status/stat/maps-style data production, raw IKC answer send, and fallback
+  scaffolding behavior at that checkpoint.
+
+Previous strict-core movement for the procfs mem/buffer batch:
+
+- Broad dashboard movement was 0 points because the procfs/sysfs/xpmem/file-object
+  row was already capped at 100%.
+- Strict-core movement was about +2 points: procfs/sysfs/xpmem/file objects
+  strict ownership moved 84% -> 86% because Rust now owns `buf_alloc()`
+  allocation-callback/null/init/optional physical-publication sequencing and
+  the `/proc/PID/mem` zero-length/page-fault/translation/memory-gate/phys-map/
+  read-vs-write copy-loop/error-shaping body.
+- Post-+50 strict-core movement was about +175 points. C still owned actual
+  page allocation/free primitives, page-fault primitive behavior, page-table
+  translation primitive behavior, `is_mckernel_memory()`, `phys_to_virt()`,
+  `memcpy()`, request map/unmap, process/thread lookup, raw IKC answer send,
+  and fallback scaffolding behavior at that checkpoint.
+
+Previous strict-core movement for the scheduler/timer batch:
+
+- Broad dashboard movement was 0 points because the Scheduler/timers/wait/futex
+  row was already capped at 100%.
+- Strict-core movement was about +3 points: Scheduler/timers/wait/futex strict
+  ownership moved 97% -> 100% because Rust now owns `init_timers()` list/lock
+  initialization sequencing, `schedule_timeout()` spin-wake/runqueue/schedule
+  handoff/spin-loop/timeout-expiry sequencing, `wake_timers_loop()` timer
+  tick/decrement/detach/log/wakeup sequencing, and `set_timer()` runqueue scan
+  plus LAPIC enable/disable decision sequencing.
+
+Previous strict-core movement for the x86 user-copy/process-VM batch:
+
+- Broad dashboard movement is 0 points because the x86_64 memory management
+  row is already capped at 100%.
+- Strict-core movement is about +1 point: x86_64 memory management strict
+  ownership moves 99% -> 100% because Rust now owns `verify_process_vm()`,
+  `read_process_vm()`, `write_process_vm()`, `patch_process_vm()`,
+  `copy_from_user()`, `copy_to_user()`, `strlen_user()`,
+  `strcpy_from_user()`, `getlong_user()`, `getint_user()`,
+  `setlong_user()`, and `setint_user()` sequencing behind the existing C ABI.
+- C still owns current-thread lookup, page-fault primitive behavior, virtual-
+  to-physical primitive behavior, map/unmap and phys-to-virt primitive bodies,
+  logging callbacks, bridge glue, and fallback scaffolding.
+- Validation passed the expanded x86 memory equivalence suite with
+  `x86_memory_helpers ok digest=bc79db2659ab2c2a`, Rust-enabled image/module
+  build, C-fallback image build, `git diff --check`, script syntax checks,
+  ownership report plus dashboard consistency gate, and QEMU version/help/
+  dry-run checks. No real QEMU guest boot or reboot-capable validation ran.
+
+Previous strict-core movement for the host SCD dispatcher batch:
+
+- Broad dashboard movement is 0 points because the host/IKC/mcctrl/IHK row is
+  already capped at 100%.
+- Strict-core movement is about +3 points: host/IKC/mcctrl/IHK kernel paths
+  strict ownership moves 86% -> 89% because Rust now owns
+  `syscall_packet_handler()` SCD message-family classification, callback
+  dispatch, legacy return shaping, sysfs show/store/release argument
+  extraction, unknown-message logging dispatch, and final packet release
+  sequencing.
+- C still owns the ABI wrapper, bridge callbacks, raw IKC send effects,
+  primitive lookup/wakeup/register/debug behaviors, allocation/copy/map
+  primitive bodies, broad IKC exchange mutation, and fallback scaffolding.
+- Validation passed the expanded host helper equivalence suite with
+  `object_helpers ok digest=46b2b56d8ab49745`, Rust-enabled image/module
+  build, C-fallback image build, `git diff --check`, script syntax checks,
+  ownership report plus dashboard consistency gate, and QEMU version/help/
+  dry-run checks. No real QEMU guest boot or reboot-capable validation ran.
+
+Previous strict-core movement for the itimer batch:
+
+- Broad dashboard movement is 0 points because Syscall Core and
+  Scheduler/timers/wait/futex are already capped at 100%.
+- Strict-core movement is about +4 points: Syscall core strict ownership moves
+  85% -> 87% and Scheduler/timers/wait/futex strict ownership moves 95% -> 97%
+  because Rust now owns local `setitimer()` and `getitimer()` validation,
+  ITIMER_REAL forwarding dispatch, virtual/prof old-value snapshot and copyout,
+  new-value copyin, elapsed reset, enabled-state publication,
+  `set_timer(0)` callback dispatch, null-old handling, and return/error
+  shaping.
+- C still owns syscall ABI wrappers, raw argument extraction, actual
+  `copy_from_user()`/`copy_to_user()` primitive bodies, `do_syscall()`
+  forwarding primitive behavior, actual `set_timer()` behavior, timer queues,
+  wake/context-switch primitives, spinlocks, broader futex wait/requeue side
+  effects, and fallback scaffolding.
+- Validation passed the expanded syscall-policy equivalence suite with
+  `syscall_policy_helpers ok digest=b445838b397f5e5c`, Rust-enabled
+  image/module build, C-fallback image build, `git diff --check`, syntax
+  checks over the validation scripts, ownership report plus dashboard
+  consistency gate, and QEMU
+  version/help/dry-run checks. No real QEMU guest boot or reboot-capable
+  validation ran.
+
+Previous strict-core movement for the scheduler affinity batch:
+
+- Broad dashboard movement is 0 points because Syscall Core and
+  Scheduler/timers/wait/futex are already capped at 100%.
+- Strict-core movement is about +4 points: Syscall core strict ownership moves
+  84% -> 85% and Scheduler/timers/wait/futex strict ownership moves 92% -> 95%
+  because Rust now owns `sched_setaffinity()` and `sched_getaffinity()`
+  validation, target selection, remote lookup/unlock ordering, permission
+  gates, cpuset copyin/copyout, target-process mask intersection, thread
+  affinity publication, migration callback dispatch, and return/error shaping.
+- C still owns syscall ABI wrappers, raw argument extraction, actual
+  `copy_from_user()`/`copy_to_user()` primitive bodies, thread
+  lookup/hold/release primitive bodies, migration request side effects, and
+  fallback scaffolding.
+- Validation passed the expanded scheduler equivalence suite with
+  `sched_helpers ok digest=91c80d48274899e5`, Rust-enabled image/module build,
+  C-fallback image build, `git diff --check`, ownership report, and QEMU
+  version/help/dry-run checks. No real QEMU guest boot or reboot-capable
+  validation ran.
+
+Latest strict-core movement for the rusage/CPU-time syscall batch:
+
+- Broad dashboard movement is 0 points because Syscall Core is already capped
+  at 100%.
+- Strict-core movement is about +4 points: Syscall core strict ownership moves
+  78% -> 82% because Rust now owns `getrusage()` validation/dispatch,
+  SELF/CHILDREN/THREAD aggregation/fill/copyout sequencing, remote thread
+  times-update request/interrupt sequencing, pause-callback wait loops, and
+  `clock_gettime()` local/forward/thread/process CPU-time sequencing.
+- C still owns syscall ABI wrappers, raw argument extraction, the actual
+  `copy_to_user()` primitive, lock primitive bodies, CPU interrupt primitive
+  behavior, TOD/gettime and Linux-forward callback bodies, scheduler/time
+  primitive bodies, and fallback scaffolding.
+- Validation passed the expanded equivalence suite with
+  `syscall_policy_helpers ok digest=67811b22d625a0cf`, Rust-enabled
+  image/module builds, C-fallback image build, build-only wrapper validation,
+  no-warning scans over the captured build logs, `git diff --check`, ownership
+  report gates, and QEMU version/help/dry-run checks. No real QEMU guest boot
+  ran.
+
+Latest strict-core movement for the Process/VM lifecycle release batch:
+
+- Broad dashboard movement is 0 points because Process/VM management is already
+  capped at 100%.
+- Strict-core movement is about +6 points: Process/VM management strict
+  ownership moves 82% -> 88% because Rust now owns sigcommon release-body
+  sequencing, TID release/replace body sequencing, `release_thread()`
+  ref/profile/procfs/destroy/VM-release sequencing, and
+  `release_process_vm()` ref/mckfd/free-callback/TLB/free-ranges/detach/
+  policy-drain/final-free sequencing.
+- C still owns atomic refcount primitives, spinlock primitives, actual
+  allocator/free callbacks, destroy_thread and release_process bodies,
+  profile/procfs/TLB/range-free primitive bodies, page-fault behavior, signal
+  forwarding, rusage, broad process lifetime, and fallback scaffolding.
+- Validation passed the expanded equivalence suite with
+  `process_helpers ok digest=b1b68056ccefbaac`, Rust-enabled image/module
+  builds, C-fallback image build, build-only wrapper validation, no-warning
+  scans over the captured build logs, ownership report gates, and QEMU
+  version/help/dry-run checks. No real QEMU guest boot ran.
+
+Latest strict-core movement for the x86 clear-range body batch:
+
+- Broad dashboard movement is 0 points because x86_64 memory management is
+  already capped at 100%.
+- Strict-core movement is about +1 point: x86_64 memory management strict
+  ownership moves 98% -> 99% because Rust now owns clear-range leaf/level/root
+  body sequencing: leaf null-skip and PTE clear-exchange sequencing, TLB
+  flush-address queue callback sequencing, old-entry action callback handoff,
+  old-effect callback orchestration, split-error log/return shaping, large-page
+  clear sequencing, child table translation, child-walk dispatch/error
+  propagation, `-ENOENT` child-table teardown/free sequencing, root
+  skip/translation/dispatch, and level-specific debug logging.
+- C still owns the public ABI wrappers, old-entry page lookup/refcount primitive
+  behavior, actual allocation/free and address-translation primitive bodies,
+  page/RSS primitive bodies, remote TLB shootdown primitive behavior, and
+  fallback scaffolding.
+- Validation passed the expanded equivalence suite with
+  `x86_memory_helpers ok digest=67f14d5e0baf12ee`, Rust-enabled image/module
+  builds, C-fallback image build, build-only wrapper validation, no-warning
+  scans over the captured build logs, and QEMU version/help/dry-run checks. No
+  real QEMU guest boot ran.
+
+Latest strict-core movement for the x86 visitor-body batch:
+
+- Broad dashboard movement is 0 points because x86_64 memory management is
+  already capped at 100%.
+- Strict-core movement is about +2 points: x86_64 memory management strict
+  ownership moves 96% -> 98% because Rust now owns normal and safe
+  `visit_pte_range()` visitor body sequencing: leaf skip/direct visitor
+  callback dispatch, level direct/E2BIG retry classification, split-error
+  log/return shaping, child page-table allocation/publication, existing
+  child-table translation, child-walk callback dispatch, root allocation/
+  translation dispatch, and top-level normal/safe visit-range walk dispatch.
+- C still owns the public ABI wrappers, actual allocation/free and
+  address-translation primitive bodies, page-table walk iteration callbacks,
+  broader page frees/RSS accounting, TLB primitive behavior, and fallback
+  scaffolding.
+- Validation passed the expanded equivalence suite with
+  `x86_memory_helpers ok digest=c701677a3fd62a6f`, Rust-enabled image/module
+  builds, C-fallback image build, build-only wrapper validation, no-warning
+  scans over the captured build logs, and QEMU version/help/dry-run checks. No
+  real QEMU guest boot ran.
+
+Latest strict-core movement for the x86 range-top batch:
+
+- Broad dashboard movement is 0 points because x86_64 memory management is
+  already capped at 100%.
+- Strict-core movement is about +3 points: x86_64 memory management strict
+  ownership moves 93% -> 96% because Rust now owns clear/set range top-level
+  orchestration: clear-range bounds validation, TLB invalid-address array
+  allocation/free callback sequencing, clear-range argument field publication,
+  clear-range top-level `walk_pte_l4` dispatch, final remote TLB flush
+  callback dispatch, set-range argument publication, set-range diff/attribute/
+  pgshift/range state publication, set-range top-level `walk_pte_l4` dispatch,
+  and set-range top-level walk-failure log/return shaping.
+- At that checkpoint, C still owned the public ABI wrappers, actual
+  allocation/free and TLB flush primitive bodies, page-table visitor
+  callbacks, lower-level walk callbacks, address-translation primitive bodies,
+  and fallback scaffolding.
+- Validation passed the expanded equivalence suite with
+  `x86_memory_helpers ok digest=f60c57b101779395`, Rust-enabled image/module
+  builds, C-fallback image build, build-only wrapper validation, no-warning
+  scans over the captured build logs, and QEMU version/help/dry-run checks.
+  Two initial validation failures were recorded in `kernel.log` and fixed
+  before the clean validation pass. No real QEMU guest boot ran because no
+  usable Rocky/RHEL-family qcow2 image was available from unprivileged paths.
+
+Latest strict-core movement for the x86 set-range level-body batch:
+
+- Broad dashboard movement is 0 points because x86_64 memory management is
+  already capped at 100%.
+- Strict-core movement is about +3 points: x86_64 memory management strict
+  ownership moves 90% -> 93% because Rust now owns `set_range_l1/l2/l3/l4`
+  leaf and level body orchestration: action dispatch, zeroed child page-table
+  allocation, atomic page-table publication retry, existing child-table
+  translation, child-walk callback dispatch, large-page map/store/RSS routing,
+  child-walk failure shaping, and unconsumed child-table free sequencing.
+- C still owns the public ABI wrappers, actual allocation/free and
+  address-translation primitive bodies, child page-table walk callbacks, RSS
+  primitive body, top-level `walk_pte_l4()` dispatch, and fallback scaffolding.
+- Validation passed the expanded equivalence suite with
+  `x86_memory_helpers ok digest=a354b06dbddad942`, Rust-enabled image/module
+  builds, C-fallback image build, build-only wrapper validation, no-warning
+  scans over the captured build logs, and QEMU version/help/dry-run checks. No
+  real QEMU guest boot ran because no usable Rocky/RHEL-family qcow2 image was
+  available from unprivileged paths.
+
+Latest strict-core movement for the x86 set-range side-effect batch:
+
+- Broad dashboard movement is 0 points because x86_64 memory management is
+  already capped at 100%.
+- Strict-core movement is about +3 points: x86_64 memory management strict
+  ownership moves 87% -> 90% because Rust now owns set-range existing-mapping
+  conflict cleanup, page-table allocation-failure cleanup, L1/L2/L3
+  map/store/RSS-accounting callback ordering, L2/L3 large-page success
+  logging, and child-walk failure logging.
+- C still owns actual `clear_range()` primitive effects, page-table
+  allocation/publication, `virt_to_phys()`/`phys_to_virt()`, child page-table
+  walk callbacks, RSS primitive body, leftover page-table free behavior, and
+  fallback scaffolding.
+- Validation passed the expanded equivalence suite with
+  `x86_memory_helpers ok digest=fd4909d0a758b83b`, Rust-enabled image/module
+  builds, C-fallback image build, build-only wrapper validation, no-warning
+  scans over the captured build logs, and QEMU version/help/dry-run checks. The
+  first equivalence attempt failed at the SIMD guard, was recorded in
+  `kernel.log`, fixed by passing scalar values through ignored callback slots,
+  checked with `objdump`, and rerun successfully. No real QEMU guest boot ran
+  because no usable Rocky/RHEL-family qcow2 image was available from
+  unprivileged paths.
+
+Latest strict-core movement for the x86 clear-range side-effect batch:
+
+- Broad dashboard movement is 0 points because x86_64 memory management is
+  already capped at 100%.
+- Strict-core movement is about +3 points: x86_64 memory management strict
+  ownership moves 84% -> 87% because Rust now owns clear-range TLB
+  flush-address queue mutation, old-PTE memobj-flush callback dispatch,
+  anonymous-page free/RSS-sub callback ordering, file-backed page-unmap/free/
+  rusage-sub callback ordering, XPMEM keep classification/log routing, and
+  full-span L2/L3 child page-table PTE-null/free sequencing.
+- C still owns actual `remote_flush_tlb_array_cpumask()`, `phys_to_virt()`,
+  `ihk_mc_free_pages_user()`, `page_unmap()`, RSS primitive bodies,
+  page-table walking callbacks, allocation/free primitive behavior, and
+  fallback scaffolding.
+- Validation passed the expanded equivalence suite with
+  `x86_memory_helpers ok digest=05ab1d79d7050a92`, Rust-enabled image/module
+  builds, C-fallback image build, build-only wrapper validation,
+  `git diff --check`, script syntax checks, ownership-report dashboard gates,
+  no-warning scans over the captured build logs, and QEMU dry-run command
+  construction. No real QEMU guest boot ran because no usable Rocky/RHEL-family
+  qcow2 guest image was available from unprivileged paths.
 
 Latest strict-core movement for the revised +35 continuation:
 
@@ -375,9 +1681,9 @@ Latest strict-core movement for the active +50 continuation:
 
 Primary remaining C blockers for "core C replaced with Rust core":
 
-- Page-table allocation/free primitives, recursive child-table destruction below
-  the root, traversal orchestration, page frees, RSS updates, TLB-sensitive
-  flushing, and map/free rollback.
+- Page-table allocation/free primitives, broader visitor/mutation traversal
+  orchestration, broader page frees/RSS accounting, remote TLB shootdown
+  primitive behavior, and map/free rollback.
 - Page allocator lifetime, remaining CPU-local allocator-cache ownership, allocation/free-to-
   system primitives, deferred-zero publication, and IKC-backed zeroing effects.
 - Process and VM lifetime: VM range allocation/free, memobj refcounting,
@@ -1460,26 +2766,40 @@ Use staged validation and stop at the first failure:
 
 At the start or end of every run, describe the next major set of work.
 
-Recommended next phase:
+Recommended next phase after stopping the full-port goal:
 
-- The requested +135 aggregate-point campaign, the follow-up +35 continuation,
-  the prior +50 continuation, and the active +50 continuation are complete.
-  Strict-core movement for the latest continuation is about +60 points, and
-  the full Rust port is not
-  complete. Continue toward 100% by targeting
-  high-debt McKernel-owned rows first: allocator zeroed-list policy before
-  mutation, syscall ptrace handler body slices, scheduler/futex
-  wait/wake internals after runtime probes, additional x86 page-table
-  map/remove/free preflight decisions, IHK/host-module owned mutation
-  preflights and then covered mutation bodies, IHK atomic refcount publication,
-  memory registration, IKC exchange, sysfs object creation/module lifecycle, and
-  remaining process VM range erase/removal and lifetime bodies only with direct
-  coverage.
-- Keep the high-risk orchestration in C until runtime coverage exists:
-  process lifetime mutation, child-list mutation, rusage aggregation, ptrace
-  detach mutation, scheduling decisions, wakeups, timers, memory registration,
-  IKC exchange, sysfs object creation, page-table mutation, page I/O,
-  user-copy, and broad lock/list ownership.
-- Continue object/file/procfs/sysfs conversion only where runtime coverage can
-  exercise the path: file-backed mmap, `/proc/PID/mem`, sysfs create/show/store,
-  device PFN mappings, and hugetlbfs-backed mappings.
+- Treat `full-port.txt` as complete and stop the full-port scoring campaign.
+  Future progress should be reflected outside `full-port.txt`, primarily in
+  `overview.txt` for broad/default-path ownership and in
+  `rust-source-retirement.txt` only when a C implementation body is actually
+  retired under that tracker's definition.
+- Continue batching movement at least 2 aggregate percentage points at a time
+  when updating percentages. If fewer than 2 points remain in a row, state that
+  explicitly and verify the final smaller closure.
+- Next concrete default-path user-tools batch: route the always-built
+  `sched_yield` shared library through Rust in the Rust-enabled build while
+  preserving the C fallback under `ENABLE_RUST_USER_TOOLS=OFF`, then pair it
+  with another built user-tool slice such as additional `mcstat` output or loop
+  control shaping so the outside tracker movement is at least +2. Validate
+  Rust and fallback builds plus symbol/smoke checks before updating trackers.
+- Do not count QLMPI (`qlfort`, `qlmpi`, `ql_server`, `ql_talker`,
+  `ql_mpiexec_*`) or UTI syscall-intercept work in the current build unless a
+  configured validation tree has `ENABLE_QLMPI=ON` or `ENABLE_UTI=ON`; the
+  current known Rocky build trees have both disabled.
+- Good retirement/default-path candidates after the first user-tools batch are
+  built user tools and host/control-plane surfaces with bounded side effects:
+  `mcstat`, `mcexec`, `mcinspect`, `eclair`, `ldump2mcdump`, IHK/mcctrl path
+  formatting and validation helpers, and additional host-module preflight
+  decisions. Avoid deleting fallback bodies unless the fallback requirement has
+  been explicitly retired or the C body is no longer McKernel-owned logic.
+- Continue to keep high-risk runtime mutation in C until direct runtime
+  coverage exists: allocation/free, refcount mutation, lock/list mutation,
+  page-table mutation, page I/O, procfs/sysfs IKC exchange, user-copy, process
+  lifetime mutation, scheduler wake/context behavior, signal delivery, memory
+  registration, and broad IKC exchange side effects.
+- Validation for the next batch should include targeted formatting,
+  `git diff --check`, `kernel/rust/tests/run_equivalence.sh` when helper logic
+  changes, Rust-enabled builds for touched targets, C-fallback builds for the
+  same targets, symbol checks proving the Rust-enabled path uses Rust helpers
+  and the fallback path does not, and runtime smoke only through the approved
+  non-reboot QEMU/guest path.

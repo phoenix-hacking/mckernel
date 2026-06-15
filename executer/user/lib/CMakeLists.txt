@@ -32,11 +32,16 @@ if (ENABLE_UTI)
 	  message(FATAL_ERROR "error: couldn't find libcap")
 	endif()
 
+	set(LIBUTI_CONFIGURE_ARGS --disable-static --with-rm=mckernel)
+	if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
+	  list(APPEND LIBUTI_CONFIGURE_ARGS --enable-rust)
+	endif()
+
  	include(ExternalProject)
 	ExternalProject_Add(libuti
  	  SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/uti
  	  BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/uti
-	  CONFIGURE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/uti/configure --disable-static --with-rm=mckernel
+	  CONFIGURE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/uti/configure ${LIBUTI_CONFIGURE_ARGS}
  	  BUILD_COMMAND ${MAKE}
 	  BUILD_IN_SOURCE FALSE
 	  INSTALL_COMMAND ""

@@ -96,21 +96,21 @@ enum profile_event_type profile_syscall2offload(enum profile_event_type sc)
 void profile_event_add(enum profile_event_type type, uint64_t tsc)
 {
 	struct profile_event *event = NULL;
-	if (!cpu_local_var(current)->profile)
+	if (!get_this_cpu_local_var()->current->profile)
 		return;
 
-	if (!cpu_local_var(current)->profile_events) {
+	if (!get_this_cpu_local_var()->current->profile_events) {
 		if (type == PROFILE_mpol_alloc_missed) {
 			return;
 		}
 
-		if (profile_alloc_events(cpu_local_var(current)) < 0) {
+		if (profile_alloc_events(get_this_cpu_local_var()->current) < 0) {
 			return;
 		}
 	}
 
 	if (type < PROFILE_EVENT_MAX) {
-		event = &cpu_local_var(current)->profile_events[type];
+		event = &get_this_cpu_local_var()->current->profile_events[type];
 	}
 	else {
 		kprintf("%s: WARNING: unknown event type %d\n",
@@ -240,8 +240,8 @@ int profile_accumulate_and_print_job_events(struct process *proc)
 	/* Allocate event counters */
 	if (!job_profile_events) {
 
-		job_profile_events = kmalloc(sizeof(*job_profile_events) *
-				PROFILE_EVENT_MAX, IHK_MC_AP_NOWAIT);
+		job_profile_events = kmalloc_tracked(sizeof(*job_profile_events) *
+				PROFILE_EVENT_MAX, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 
 		if (!job_profile_events) {
 			kprintf("%s: ERROR: allocating job profile counters\n",
@@ -321,8 +321,8 @@ int profile_alloc_events(struct thread *thread)
 	struct mcs_lock_node mcs_node;
 
 	if (!thread->profile_events) {
-		thread->profile_events = kmalloc(sizeof(*thread->profile_events) *
-				PROFILE_EVENT_MAX, IHK_MC_AP_NOWAIT);
+		thread->profile_events = kmalloc_tracked(sizeof(*thread->profile_events) *
+				PROFILE_EVENT_MAX, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 
 		if (!thread->profile_events) {
 			kprintf("%s: ERROR: allocating thread private profile counters\n",
@@ -336,8 +336,8 @@ int profile_alloc_events(struct thread *thread)
 
 	mcs_lock_lock(&proc->profile_lock, &mcs_node);
 	if (!proc->profile_events) {
-		proc->profile_events = kmalloc(sizeof(*proc->profile_events) *
-				PROFILE_EVENT_MAX, IHK_MC_AP_NOWAIT);
+		proc->profile_events = kmalloc_tracked(sizeof(*proc->profile_events) *
+				PROFILE_EVENT_MAX, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 
 		if (!proc->profile_events) {
 			kprintf("%s: ERROR: allocating proc private profile counters\n",
@@ -357,12 +357,12 @@ int profile_alloc_events(struct thread *thread)
 
 void profile_dealloc_thread_events(struct thread *thread)
 {
-	kfree(thread->profile_events);
+	kfree_tracked(thread->profile_events, __FILE__, __LINE__);
 }
 
 void profile_dealloc_proc_events(struct process *proc)
 {
-	kfree(proc->profile_events);
+	kfree_tracked(proc->profile_events, __FILE__, __LINE__);
 }
 
 static void profile_clear_process(struct process *proc)
@@ -386,7 +386,7 @@ static void profile_clear_thread(struct thread *thread)
 
 int do_profile(int flag)
 {
-	struct thread *thread = cpu_local_var(current);
+	struct thread *thread = get_this_cpu_local_var()->current;
 	struct process *proc = thread->proc;
 	unsigned long now_ts = rdtsc();
 
@@ -400,8 +400,7 @@ int do_profile(int flag)
 
 			/* Accumulate events from all threads to process level */
 			mcs_rwlock_reader_lock_noirq(&proc->threads_lock, &lock);
-			list_for_each_entry(_thread, &proc->threads_list,
-					siblings_list) {
+			for (_thread = ((typeof(*_thread) *)((char *)((&proc->threads_list)->next) - offsetof(typeof(*_thread), siblings_list))); &_thread->siblings_list != (&proc->threads_list); _thread = ((typeof(*_thread) *)((char *)(_thread->siblings_list.next) - offsetof(typeof(*_thread), siblings_list)))) {
 				profile_accumulate_events(_thread, proc);
 			}
 			mcs_rwlock_reader_unlock_noirq(&proc->threads_lock, &lock);
@@ -420,8 +419,7 @@ int do_profile(int flag)
 		/* Accumulate events from all threads */
 		mcs_rwlock_reader_lock_noirq(&proc->threads_lock, &lock);
 
-		list_for_each_entry(_thread, &proc->threads_list,
-				siblings_list) {
+		for (_thread = ((typeof(*_thread) *)((char *)((&proc->threads_list)->next) - offsetof(typeof(*_thread), siblings_list))); &_thread->siblings_list != (&proc->threads_list); _thread = ((typeof(*_thread) *)((char *)(_thread->siblings_list.next) - offsetof(typeof(*_thread), siblings_list)))) {
 			if (flag & PROF_PRINT) {
 				profile_accumulate_events(_thread, proc);
 			}
@@ -505,7 +503,7 @@ int do_profile(int flag)
 	return 0;
 }
 
-SYSCALL_DECLARE(profile)
+long sys_profile(int n, ihk_mc_user_context_t *ctx)
 {
 	int flag = (int)ihk_mc_syscall_arg0(ctx);
 	return do_profile(flag);

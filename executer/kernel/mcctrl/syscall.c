@@ -180,7 +180,7 @@ void mcctrl_put_per_thread_data(struct mcctrl_per_thread_data* _ptd)
 	}
 
 	mcctrl_put_per_thread_data_unsafe(ptd);
-	
+
 out:
 	write_unlock_irqrestore(&ppd->per_thread_data_hash_lock[hash], flags);
 }
@@ -200,7 +200,7 @@ int mcctrl_add_per_thread_data(struct mcctrl_per_proc_data *ppd, void *data)
 		goto out_noalloc;
 	}
 	memset(ptd_alloc, 0, sizeof(struct mcctrl_per_thread_data));
-	
+
 	/* Check if data for this thread exists and add if not */
 	write_lock_irqsave(&ppd->per_thread_data_hash_lock[hash], flags);
 	list_for_each_entry(ptd_iter, &ppd->per_thread_data_hash[hash], hash) {
@@ -223,7 +223,7 @@ int mcctrl_add_per_thread_data(struct mcctrl_per_proc_data *ppd, void *data)
 	ptd->tid = task_pid_vnr(current);
 	ptd->data = data;
 	atomic_set(&ptd->refcount, 1);
-	list_add_tail(&ptd->hash, &ppd->per_thread_data_hash[hash]); 
+	list_add_tail(&ptd->hash, &ppd->per_thread_data_hash[hash]);
 
  out:
 	write_unlock_irqrestore(&ppd->per_thread_data_hash_lock[hash], flags);
@@ -358,7 +358,7 @@ long syscall_backward(struct mcctrl_usrdata *usrdata, int num,
 	ppd = mcctrl_get_per_proc_data(usrdata, task_tgid_vnr(current));
 
 	if (!ppd) {
-		kprintf("%s: ERROR: no per-process structure for PID %d??\n", 
+		kprintf("%s: ERROR: no per-process structure for PID %d??\n",
 			__func__, task_tgid_vnr(current));
 		syscall_ret = -EINVAL;
 		goto no_ppd;
@@ -382,9 +382,9 @@ long syscall_backward(struct mcctrl_usrdata *usrdata, int num,
 	req = &packet->req;
 
 	/* Map response structure */
-	phys = ihk_device_map_memory(ihk_os_to_dev(usrdata->os), 
+	phys = ihk_device_map_memory(ihk_os_to_dev(usrdata->os),
 			packet->resp_pa, sizeof(*resp));
-	resp = ihk_device_map_virtual(ihk_os_to_dev(usrdata->os), 
+	resp = ihk_device_map_virtual(ihk_os_to_dev(usrdata->os),
 			phys, sizeof(*resp), NULL, 0);
 
 retry_alloc:
@@ -426,11 +426,11 @@ retry_alloc:
 
 	retry = 0;
  retry_offload:
-	dprintk("%s: tid: %d, syscall: %d SLEEPING\n", 
+	dprintk("%s: tid: %d, syscall: %d SLEEPING\n",
 			__FUNCTION__, task_pid_vnr(current), num);
 	/* wait for response */
 	syscall_ret = wait_event_interruptible(wqhln->wq_syscall, wqhln->req);
-	
+
 	/* debug */
 	if (syscall_ret == -ERESTARTSYS) {
 		printk("%s: INFO: interrupted by signal\n", __FUNCTION__);
@@ -470,9 +470,9 @@ retry_alloc:
 		free_packet = packet;
 		req = &packet->req;
 
-		phys2 = ihk_device_map_memory(ihk_os_to_dev(usrdata->os), 
+		phys2 = ihk_device_map_memory(ihk_os_to_dev(usrdata->os),
 				packet->resp_pa, sizeof(*resp));
-		resp2 = ihk_device_map_virtual(ihk_os_to_dev(usrdata->os), 
+		resp2 = ihk_device_map_virtual(ihk_os_to_dev(usrdata->os),
 				phys2, sizeof(*resp), NULL, 0);
 
 		if (resp != resp2) {
@@ -542,7 +542,7 @@ int remote_page_fault(struct mcctrl_usrdata *usrdata, void *fault_addr,
 		      struct ikc_scd_packet *packet)
 {
 	int error;
-	
+
 	dprintk("%s: tid: %d, fault_addr: %p, reason: %lu\n",
 			__FUNCTION__, task_pid_vnr(current), fault_addr, (unsigned long)reason);
 
@@ -1466,11 +1466,11 @@ static int pager_req_map(ihk_os_t os, int fd, size_t len, off_t off,
 	}
 
 	maxprot = 0;
-	if ((file->f_mode & FMODE_READ) && 
+	if ((file->f_mode & FMODE_READ) &&
 			(prot_and_flags ? (prot_and_flags & PROT_READ) : 1)) {
 		maxprot |= PROT_READ;
 	}
-	if ((file->f_mode & FMODE_WRITE) && 
+	if ((file->f_mode & FMODE_WRITE) &&
 			(prot_and_flags ? (prot_and_flags & PROT_WRITE) : 1)) {
 		maxprot |= PROT_WRITE;
 	}
@@ -1505,7 +1505,7 @@ static int pager_req_map(ihk_os_t os, int fd, size_t len, off_t off,
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3,5,0)
 	MCCTRL_MMAP_WRITE_LOCK(current->mm);
 
-	va = do_mmap_pgoff(file, ANY_WHERE, len, maxprot, 
+	va = do_mmap_pgoff(file, ANY_WHERE, len, maxprot,
 			prot_and_flags, pgoff);
 
 	MCCTRL_MMAP_WRITE_UNLOCK(current->mm);
@@ -1529,8 +1529,8 @@ static int pager_req_map(ihk_os_t os, int fd, size_t len, off_t off,
 	pager->map_uaddr = va;
 	pager->map_len = len;
 	pager->map_off = off;
-	
-	dprintk("pager_req_map(%s): 0x%lx - 0x%lx (len: %lu), map_off: %lu\n", 
+
+	dprintk("pager_req_map(%s): 0x%lx - 0x%lx (len: %lu), map_off: %lu\n",
 			file->f_dentry->d_name.name, va, va + len, len, off);
 
 	phys = ihk_device_map_memory(dev, result_rpa, sizeof(*resp));
@@ -1612,7 +1612,7 @@ static int pager_req_pfn(ihk_os_t os, uintptr_t handle, off_t off, uintptr_t ppf
 	pfn = PFN_VALID;	/* Use "not present" as the default setting */
 
 	MCCTRL_MMAP_READ_LOCK(current->mm);
-retry:	
+retry:
 	pgd = pgd_offset(current->mm, va);
 	if (!pgd_none(*pgd) && !pgd_bad(*pgd) && pgd_present(*pgd)) {
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 12, 0) && defined(CONFIG_X86_64_SMP)
@@ -1634,7 +1634,8 @@ retry:
 						pfn |= PFN_VALID | PFN_PRESENT;
 
 						/* Check if mapping is write-combined */
-						if (pte_is_write_combined(*pte)) {
+						if (mcctrl_pte_is_write_combined_result(
+								pte_flags(*pte))) {
 							pfn |= PFN_WRITE_COMBINED;
 						}
 					}
@@ -1658,7 +1659,7 @@ retry:
 
 		vma = find_vma(current->mm, va);
 		if (!vma || (va < vma->vm_start)) {
-			printk("%s: couldn't find VMA for va %lx\n", __FUNCTION__, va); 
+			printk("%s: couldn't find VMA for va %lx\n", __FUNCTION__, va);
 			error = -EINVAL;
 			goto out_release;
 		}
@@ -2345,10 +2346,10 @@ static int writecore(ihk_os_t os, unsigned long rcoretable, int chunks,
 	ihk_device_unmap_virtual(dev, cmdline, cmdline_len);
 	ihk_device_unmap_memory(dev, cmdline_phys, cmdline_len);
 
-	/* Every Linux documentation insists we should not 
-	 * open a file in the kernel module, but our karma 
-	 * leads us here. Precisely, Here we emulate the core 
-	 * dump routine of the Linux kernel in linux/fs/exec.c. 
+	/* Every Linux documentation insists we should not
+	 * open a file in the kernel module, but our karma
+	 * leads us here. Precisely, Here we emulate the core
+	 * dump routine of the Linux kernel in linux/fs/exec.c.
 	 * So we have a legitimate reason to do this.
 	 */
 	file = filp_open(fn, O_CREAT | O_RDWR | O_LARGEFILE | O_TRUNC, 0600);
@@ -2356,7 +2357,7 @@ static int writecore(ihk_os_t os, unsigned long rcoretable, int chunks,
 		dprintk("cannot open core file\n");
 		error = PTR_ERR(file);
 		goto fail;
-	}			
+	}
 
 	/* first we map the chunk table */
 	tablesize = sizeof(struct coretable) * chunks;
@@ -2384,11 +2385,11 @@ static int writecore(ihk_os_t os, unsigned long rcoretable, int chunks,
 				file->f_pos += ret;
 #endif
 			} else {
-				dprintk("cannot map physical memory(%lx) to virtual memory.\n", 
+				dprintk("cannot map physical memory(%lx) to virtual memory.\n",
 					phys);
 				ihk_device_unmap_memory(dev, phys, size);
 				break;
-			}			
+			}
 			/* unmap the chunk */
 			ihk_device_unmap_virtual(dev, pt, size);
 			ihk_device_unmap_memory(dev, phys, size);
@@ -2428,8 +2429,147 @@ fail:
 #define SCHED_CHECK_SAME_OWNER        0x01
 #define SCHED_CHECK_ROOT              0x02
 
+#ifdef MCCTRL_RUST_HELPERS
+void mcctrl_zero_mckernel_pages(unsigned long arg);
+
+static long mcctrl_in_kernel_pager_irq_bridge(unsigned long os,
+		struct syscall_request *req)
+{
+	return pager_call_irq((ihk_os_t)os, req);
+}
+
+static long mcctrl_in_kernel_pager_bridge(unsigned long os,
+		struct syscall_request *req)
+{
+	return pager_call((ihk_os_t)os, req);
+}
+
+static long mcctrl_in_kernel_clear_pte_bridge(unsigned long start,
+		unsigned long len)
+{
+	return mcctrl_clear_pte_range(start, len);
+}
+
+static long mcctrl_in_kernel_remap_bridge(unsigned long start,
+		unsigned long len, int prot)
+{
+	return remap_user_space(start, len, prot);
+}
+
+static void mcctrl_in_kernel_zero_pages_bridge(unsigned long arg)
+{
+	mcctrl_zero_mckernel_pages(arg);
+}
+
+static long mcctrl_in_kernel_writecore_bridge(unsigned long os,
+		unsigned long rcoretable, int chunks, unsigned long offset,
+		unsigned long filename)
+{
+	return writecore((ihk_os_t)os, rcoretable, chunks, offset, filename);
+}
+
+static long mcctrl_in_kernel_sched_same_owner_bridge(int pid)
+{
+	const struct cred *cred = current_cred();
+	const struct cred *pcred;
+	struct task_struct *p;
+	bool match;
+
+	rcu_read_lock();
+	p = pid_task(find_get_pid(pid), PIDTYPE_PID);
+	if (!p) {
+		rcu_read_unlock();
+		return -ESRCH;
+	}
+	rcu_read_unlock();
+
+	rcu_read_lock();
+	pcred = __task_cred(p);
+#if LINUX_VERSION_CODE > KERNEL_VERSION(3,4,0)
+	match = (uid_eq(cred->euid, pcred->euid) ||
+			uid_eq(cred->euid, pcred->uid));
+#else
+	match = ((cred->euid == pcred->euid) ||
+			(cred->euid == pcred->uid));
+#endif
+	rcu_read_unlock();
+
+	return match ? 0 : -EPERM;
+}
+
+static long mcctrl_in_kernel_sched_root_bridge(int unused)
+{
+	const struct cred *cred = current_cred();
+	bool match;
+
+	(void)unused;
+#if LINUX_VERSION_CODE > KERNEL_VERSION(3,4,0)
+	match = uid_eq(cred->euid, GLOBAL_ROOT_UID);
+#else
+	match = (cred->euid == 0);
+#endif
+	return match ? 0 : -EPERM;
+}
+
+#ifdef ENABLE_TOFU
+static long mcctrl_in_kernel_tofu_close_bridge(unsigned long os,
+		struct syscall_request *req)
+{
+	struct fd f;
+	int fd;
+
+	fd = (int)req->args[0];
+	if (fd > 2) {
+		f = fdget(fd);
+		if (f.file) {
+			mcctrl_file_to_pidfd_hash_remove(f.file, (ihk_os_t)os,
+					current->group_leader, fd);
+			fdput(f);
+		}
+	}
+
+	return 0;
+}
+#endif
+
+static void mcctrl_in_kernel_return_bridge(unsigned long os,
+		struct ikc_scd_packet *packet, long ret, int stid)
+{
+	__return_syscall((ihk_os_t)os, NULL, packet, ret, stid);
+}
+
+static void mcctrl_in_kernel_release_packet_bridge(
+		struct ikc_scd_packet *packet)
+{
+	ihk_ikc_release_packet((struct ihk_ikc_free_packet *)packet);
+}
+
+static const struct mcctrl_in_kernel_syscall_ops
+mcctrl_in_kernel_syscall_ops = {
+	.pager_irq = mcctrl_in_kernel_pager_irq_bridge,
+	.pager = mcctrl_in_kernel_pager_bridge,
+	.clear_pte = mcctrl_in_kernel_clear_pte_bridge,
+	.remap = mcctrl_in_kernel_remap_bridge,
+	.zero_pages = mcctrl_in_kernel_zero_pages_bridge,
+	.writecore = mcctrl_in_kernel_writecore_bridge,
+	.sched_same_owner = mcctrl_in_kernel_sched_same_owner_bridge,
+	.sched_root = mcctrl_in_kernel_sched_root_bridge,
+#ifdef ENABLE_TOFU
+	.tofu_close = mcctrl_in_kernel_tofu_close_bridge,
+#else
+	.tofu_close = NULL,
+#endif
+	.return_syscall = mcctrl_in_kernel_return_bridge,
+	.release_packet = mcctrl_in_kernel_release_packet_bridge,
+};
+#endif
+
 int __do_in_kernel_irq_syscall(ihk_os_t os, struct ikc_scd_packet *packet)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_in_kernel_irq_syscall_body_result((unsigned long)os,
+			packet, &mcctrl_in_kernel_syscall_ops, NULL);
+#else
 	struct syscall_request *sc = &packet->req;
 	int ret;
 
@@ -2447,6 +2587,7 @@ int __do_in_kernel_irq_syscall(ihk_os_t os, struct ikc_scd_packet *packet)
 	__return_syscall(os, NULL, packet, ret, 0);
 
 	return 0;
+#endif
 }
 
 /*
@@ -2574,6 +2715,14 @@ int __do_in_kernel_syscall(ihk_os_t os, struct ikc_scd_packet *packet)
 	long ret = -1;
 
 	dprintk("%s: system call: %lx\n", __FUNCTION__, sc->args[0]);
+#ifdef MCCTRL_RUST_HELPERS
+	(void)sc;
+	error = mcctrl_in_kernel_syscall_body_result((unsigned long)os,
+			packet, &mcctrl_in_kernel_syscall_ops, &ret);
+	dprintk("%s: system call: %ld, args[0]: %lx, error: %d, ret: %ld\n",
+		__FUNCTION__, sc->number, sc->args[0], error, ret);
+	return error;
+#else
 	switch (sc->number) {
 #ifdef ENABLE_TOFU
 	case __NR_close: {
@@ -2618,7 +2767,7 @@ int __do_in_kernel_syscall(ihk_os_t os, struct ikc_scd_packet *packet)
 		goto out_no_syscall_return;
 
 	case __NR_exit_group: {
-	
+
 		/* Make sure the user space handler will be called as well */
 		error = -ENOSYS;
 		goto out;
@@ -2628,18 +2777,18 @@ int __do_in_kernel_syscall(ihk_os_t os, struct ikc_scd_packet *packet)
 		ret = writecore(os, sc->args[1], sc->args[0], sc->args[2],
 				sc->args[3]);
 		break;
-	
+
 	case __NR_sched_setparam: {
 
 		switch (sc->args[0]) {
-			
+
 			case SCHED_CHECK_SAME_OWNER: {
 				const struct cred *cred = current_cred();
 				const struct cred *pcred;
 				bool match;
 				struct task_struct *p;
 				int pid = sc->args[1];
-				
+
 				rcu_read_lock();
 				p = pid_task(find_get_pid(pid), PIDTYPE_PID);
 				if (!p) {
@@ -2659,21 +2808,21 @@ int __do_in_kernel_syscall(ihk_os_t os, struct ikc_scd_packet *packet)
 						(cred->euid == pcred->uid));
 #endif
 				rcu_read_unlock();
-				
+
 				if (match) {
 					ret = 0;
 				}
 				else {
 					ret = -EPERM;
 				}
-				
+
 				break;
 			}
 
 			case SCHED_CHECK_ROOT: {
 				const struct cred *cred = current_cred();
 				bool match;
-				
+
 #if LINUX_VERSION_CODE > KERNEL_VERSION(3,4,0)
 				match = uid_eq(cred->euid, GLOBAL_ROOT_UID);
 #else
@@ -2685,11 +2834,11 @@ int __do_in_kernel_syscall(ihk_os_t os, struct ikc_scd_packet *packet)
 				else {
 					ret = -EPERM;
 				}
-				
+
 				break;
 			}
 		}
-			
+
 sched_setparam_out:
 		break;
 	}
@@ -2707,7 +2856,8 @@ out_no_syscall_return:
 
 	error = 0;
 out:
-	dprintk("%s: system call: %ld, args[0]: %lx, error: %d, ret: %ld\n", 
+	dprintk("%s: system call: %ld, args[0]: %lx, error: %d, ret: %ld\n",
 		__FUNCTION__, sc->number, sc->args[0], error, ret);
 	return error;
+#endif
 }

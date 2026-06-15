@@ -34,7 +34,7 @@ void init_processors_local(int max_id)
 
 	size = LOCALS_SPAN * max_id;
 	/* Is contiguous allocating adequate?? */
-	locals = ihk_mc_alloc_pages(size/PAGE_SIZE, IHK_MC_AP_CRITICAL);
+	locals = _ihk_mc_alloc_aligned_pages_node(size/PAGE_SIZE, PAGE_P2ALIGN, IHK_MC_AP_CRITICAL, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);
 	memset(locals, 0, size);
 
 	kprintf("locals = %p\n", locals);
@@ -80,7 +80,7 @@ static void set_gs_base(void *address)
 	wrmsr(MSR_GS_BASE, (unsigned long)address);
 }
 
-static ihk_atomic_t last_processor_id = IHK_ATOMIC_INIT(-1);
+static ihk_atomic_t last_processor_id = { .counter = -1 };
 
 void assign_processor_id(void)
 {

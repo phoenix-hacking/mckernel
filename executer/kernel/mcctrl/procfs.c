@@ -275,18 +275,53 @@ get_pid_cred(int pid)
 	return NULL;
 }
 
+#ifdef MCCTRL_RUST_HELPERS
+static void *
+mcctrl_procfs_find_entry_bridge(void *parent, const char *name)
+{
+	return find_procfs_entry(parent, name);
+}
+
+static void *
+mcctrl_procfs_add_dir_entry_bridge(void *parent, const char *name, int mode)
+{
+	kuid_t uid = KUIDT_INIT(0);
+	kgid_t gid = KGIDT_INIT(0);
+
+	return add_procfs_entry(parent, name, mode, uid, gid, NULL);
+}
+
+static void
+mcctrl_procfs_set_osnum_bridge(void *entry, int osnum)
+{
+	((struct procfs_list_entry *)entry)->osnum = osnum;
+}
+#endif
+
 static struct procfs_list_entry *
 find_base_entry(int osnum)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_procfs_find_base_entry_body_result(
+		osnum, mcctrl_format_mcos_name,
+		mcctrl_procfs_find_entry_bridge);
+#else
 	char name[12];
 
 	mcctrl_format_mcos_name(name, sizeof(name), osnum);
 	return find_procfs_entry(NULL, name);
+#endif
 }
 
 static struct procfs_list_entry *
 find_pid_entry(int osnum, int pid)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_procfs_find_pid_entry_body_result(
+		osnum, pid, mcctrl_format_mcos_name,
+		mcctrl_format_decimal_name,
+		mcctrl_procfs_find_entry_bridge);
+#else
 	struct procfs_list_entry *e;
 	char name[12];
 
@@ -294,11 +329,18 @@ find_pid_entry(int osnum, int pid)
 		return NULL;
 	mcctrl_format_decimal_name(name, sizeof(name), pid);
 	return find_procfs_entry(e, name);
+#endif
 }
 
 static struct procfs_list_entry *
 find_tid_entry(int osnum, int pid, int tid)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_procfs_find_tid_entry_body_result(
+		osnum, pid, tid, mcctrl_format_mcos_name,
+		mcctrl_format_decimal_name,
+		mcctrl_procfs_find_entry_bridge);
+#else
 	struct procfs_list_entry *e;
 	char name[12];
 
@@ -308,11 +350,19 @@ find_tid_entry(int osnum, int pid, int tid)
 		return NULL;
 	mcctrl_format_decimal_name(name, sizeof(name), tid);
 	return find_procfs_entry(e, name);
+#endif
 }
 
 static struct procfs_list_entry *
 get_base_entry(int osnum)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_procfs_get_base_entry_body_result(
+		osnum, mcctrl_format_mcos_name,
+		mcctrl_procfs_find_entry_bridge,
+		mcctrl_procfs_add_dir_entry_bridge,
+		mcctrl_procfs_set_osnum_bridge);
+#else
 	struct procfs_list_entry *e;
 	char name[12];
 	kuid_t uid = KUIDT_INIT(0);
@@ -328,11 +378,19 @@ get_base_entry(int osnum)
 		e->osnum = osnum;
 	}
 	return e;
+#endif
 }
 
 static struct procfs_list_entry *
 get_pid_entry(int osnum, int pid)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_procfs_get_pid_entry_body_result(
+		osnum, pid, mcctrl_format_mcos_name,
+		mcctrl_format_decimal_name,
+		mcctrl_procfs_find_entry_bridge,
+		mcctrl_procfs_add_dir_entry_bridge);
+#else
 	struct procfs_list_entry *parent;
 	struct procfs_list_entry *e;
 	char name[12];
@@ -348,11 +406,19 @@ get_pid_entry(int osnum, int pid)
 		e = add_procfs_entry(parent, name, S_IFDIR | 0555,
 		                     uid, gid, NULL);
 	return e;
+#endif
 }
 
 static struct procfs_list_entry *
 get_tid_entry(int osnum, int pid, int tid)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_procfs_get_tid_entry_body_result(
+		osnum, pid, tid, mcctrl_format_mcos_name,
+		mcctrl_format_decimal_name,
+		mcctrl_procfs_find_entry_bridge,
+		mcctrl_procfs_add_dir_entry_bridge);
+#else
 	struct procfs_list_entry *parent;
 	struct procfs_list_entry *e;
 	char name[12];
@@ -373,11 +439,29 @@ get_tid_entry(int osnum, int pid, int tid)
 		e = add_procfs_entry(parent, name, S_IFDIR | 0555,
 		                     uid, gid, NULL);
 	return e;
+#endif
 }
+
+#ifdef MCCTRL_RUST_HELPERS
+static void *mcctrl_procfs_find_tid_entry_bridge(int osnum, int pid, int tid);
+static void *mcctrl_procfs_get_tid_entry_bridge(int osnum, int pid, int tid);
+static void mcctrl_procfs_add_tid_entries_bridge(void *parent, void *credp);
+static void *mcctrl_procfs_find_exe_data_bridge(void *parent);
+static void mcctrl_procfs_add_exe_symlink_bridge(void *parent, void *target,
+						void *credp);
+#endif
 
 static void
 _add_tid_entry(int osnum, int pid, int tid, const struct cred *cred)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_procfs_add_tid_with_cred_body_result(
+		osnum, pid, tid, (void *)cred,
+		mcctrl_procfs_get_tid_entry_bridge,
+		mcctrl_procfs_add_tid_entries_bridge,
+		mcctrl_procfs_find_exe_data_bridge,
+		mcctrl_procfs_add_exe_symlink_bridge);
+#else
 	struct procfs_list_entry *parent;
 	struct procfs_list_entry *exe;
 
@@ -392,11 +476,166 @@ _add_tid_entry(int osnum, int pid, int tid, const struct cred *cred)
 		}
 		
 	}
+#endif
 }
+
+#ifdef MCCTRL_RUST_HELPERS
+static void *
+mcctrl_procfs_get_pid_cred_bridge(int pid)
+{
+	return (void *)get_pid_cred(pid);
+}
+
+static void
+mcctrl_procfs_lock_bridge(void)
+{
+	down(&procfs_file_list_lock);
+}
+
+static void
+mcctrl_procfs_unlock_bridge(void)
+{
+	up(&procfs_file_list_lock);
+}
+
+static void *
+mcctrl_procfs_find_base_entry_bridge(int osnum)
+{
+	return find_base_entry(osnum);
+}
+
+static void *
+mcctrl_procfs_find_pid_entry_bridge(int osnum, int pid)
+{
+	return find_pid_entry(osnum, pid);
+}
+
+static void *
+mcctrl_procfs_find_tid_entry_bridge(int osnum, int pid, int tid)
+{
+	return find_tid_entry(osnum, pid, tid);
+}
+
+static void *
+mcctrl_procfs_get_base_entry_bridge(int osnum)
+{
+	return get_base_entry(osnum);
+}
+
+static void *
+mcctrl_procfs_get_pid_entry_bridge(int osnum, int pid)
+{
+	return get_pid_entry(osnum, pid);
+}
+
+static void *
+mcctrl_procfs_get_tid_entry_bridge(int osnum, int pid, int tid)
+{
+	return get_tid_entry(osnum, pid, tid);
+}
+
+static void
+mcctrl_procfs_add_pid_entries_bridge(void *parent, void *credp)
+{
+	const struct cred *cred = credp;
+
+	add_procfs_entries(parent, pid_entry_stuff, cred->uid, cred->gid);
+}
+
+static void
+mcctrl_procfs_add_tid_entries_bridge(void *parent, void *credp)
+{
+	const struct cred *cred = credp;
+
+	add_procfs_entries(parent, tid_entry_stuff, cred->uid, cred->gid);
+}
+
+static void
+mcctrl_procfs_add_base_entries_bridge(void *parent)
+{
+	kuid_t uid = KUIDT_INIT(0);
+	kgid_t gid = KGIDT_INIT(0);
+
+	add_procfs_entries(parent, base_entry_stuff, uid, gid);
+}
+
+static void
+mcctrl_procfs_add_tid_with_cred_bridge(int osnum, int pid, int tid,
+				       void *cred)
+{
+	_add_tid_entry(osnum, pid, tid, cred);
+}
+
+static void
+mcctrl_procfs_delete_entry_bridge(void *entry)
+{
+	delete_procfs_entries(entry);
+}
+
+static void *
+mcctrl_procfs_find_exe_data_bridge(void *parent)
+{
+	struct procfs_list_entry *p = parent;
+	struct procfs_list_entry *exe;
+
+	exe = find_procfs_entry(p->parent->parent, "exe");
+	return exe ? exe->data : NULL;
+}
+
+static void
+mcctrl_procfs_add_exe_symlink_bridge(void *parent, void *target, void *credp)
+{
+	const struct cred *cred = credp;
+
+	add_procfs_entry(parent, "exe", S_IFLNK | 0777, cred->uid, cred->gid,
+			 target);
+}
+
+static void *
+mcctrl_procfs_add_pid_exe_bridge(void *parent, const char *path)
+{
+	kuid_t uid = KUIDT_INIT(0);
+	kgid_t gid = KGIDT_INIT(0);
+
+	return add_procfs_entry(parent, "exe", S_IFLNK | 0777, uid, gid,
+				path);
+}
+
+static void
+mcctrl_procfs_store_exe_path_bridge(void *entry, const char *path)
+{
+	struct procfs_list_entry *e = entry;
+
+	e->data = kmalloc(strlen(path) + 1, GFP_KERNEL);
+	strcpy(e->data, path);
+}
+
+static void
+mcctrl_procfs_add_task_exe_links_bridge(void *pid_parent, const char *path)
+{
+	struct procfs_list_entry *task;
+	struct procfs_list_entry *parent;
+
+	task = find_procfs_entry(pid_parent, "task");
+	list_for_each_entry(parent, &task->children, list) {
+		add_procfs_entry(parent, "exe", S_IFLNK | 0777,
+				 KUIDT_INIT(0), KGIDT_INIT(0), path);
+	}
+}
+#endif
 
 void
 add_tid_entry(int osnum, int pid, int tid)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_procfs_add_tid_entry_body_result(
+		osnum, pid, tid, mcctrl_procfs_get_pid_cred_bridge,
+		mcctrl_procfs_lock_bridge, mcctrl_procfs_unlock_bridge,
+		mcctrl_procfs_find_pid_entry_bridge,
+		mcctrl_procfs_get_pid_entry_bridge,
+		mcctrl_procfs_add_pid_entries_bridge,
+		mcctrl_procfs_add_tid_with_cred_bridge);
+#else
 	const struct cred *cred = get_pid_cred(pid);
 	struct procfs_list_entry *parent;
 
@@ -413,11 +652,20 @@ add_tid_entry(int osnum, int pid, int tid)
 	}
 	_add_tid_entry(osnum, pid, tid, cred);
 	up(&procfs_file_list_lock);
+#endif
 }
 
 void
 add_pid_entry(int osnum, int pid)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_procfs_add_pid_entry_body_result(
+		osnum, pid, mcctrl_procfs_get_pid_cred_bridge,
+		mcctrl_procfs_lock_bridge, mcctrl_procfs_unlock_bridge,
+		mcctrl_procfs_get_pid_entry_bridge,
+		mcctrl_procfs_add_pid_entries_bridge,
+		mcctrl_procfs_add_tid_with_cred_bridge);
+#else
 	struct procfs_list_entry *parent;
 	const struct cred *cred = get_pid_cred(pid);
 
@@ -428,11 +676,19 @@ add_pid_entry(int osnum, int pid)
 	add_procfs_entries(parent, pid_entry_stuff, cred->uid, cred->gid);
 	_add_tid_entry(osnum, pid, pid, cred);
 	up(&procfs_file_list_lock);
+#endif
 }
 
 void
 delete_tid_entry(int osnum, int pid, int tid)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_procfs_delete_tid_entry_body_result(
+		osnum, pid, tid, mcctrl_procfs_lock_bridge,
+		mcctrl_procfs_unlock_bridge,
+		mcctrl_procfs_find_tid_entry_bridge,
+		mcctrl_procfs_delete_entry_bridge);
+#else
 	struct procfs_list_entry *e;
 
 	down(&procfs_file_list_lock);
@@ -440,11 +696,19 @@ delete_tid_entry(int osnum, int pid, int tid)
 	if(e)
 		delete_procfs_entries(e);
 	up(&procfs_file_list_lock);
+#endif
 }
 
 void
 delete_pid_entry(int osnum, int pid)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_procfs_delete_pid_entry_body_result(
+		osnum, pid, mcctrl_procfs_lock_bridge,
+		mcctrl_procfs_unlock_bridge,
+		mcctrl_procfs_find_pid_entry_bridge,
+		mcctrl_procfs_delete_entry_bridge);
+#else
 	struct procfs_list_entry *e;
 
 	down(&procfs_file_list_lock);
@@ -452,11 +716,21 @@ delete_pid_entry(int osnum, int pid)
 	if(e)
 		delete_procfs_entries(e);
 	up(&procfs_file_list_lock);
+#endif
 }
 
 void
 proc_exe_link(int osnum, int pid, const char *path)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_procfs_exe_link_body_result(
+		osnum, pid, path, mcctrl_procfs_lock_bridge,
+		mcctrl_procfs_unlock_bridge,
+		mcctrl_procfs_find_pid_entry_bridge,
+		mcctrl_procfs_add_pid_exe_bridge,
+		mcctrl_procfs_store_exe_path_bridge,
+		mcctrl_procfs_add_task_exe_links_bridge);
+#else
 	struct procfs_list_entry *parent;
 	kuid_t uid = KUIDT_INIT(0);
 	kgid_t gid = KGIDT_INIT(0);
@@ -481,6 +755,7 @@ proc_exe_link(int osnum, int pid, const char *path)
 	}
 out:
 	up(&procfs_file_list_lock);
+#endif
 }
 
 /**
@@ -491,6 +766,13 @@ out:
 void
 procfs_init(int osnum)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_procfs_init_body_result(
+		osnum, mcctrl_procfs_lock_bridge,
+		mcctrl_procfs_unlock_bridge,
+		mcctrl_procfs_get_base_entry_bridge,
+		mcctrl_procfs_add_base_entries_bridge);
+#else
 	struct procfs_list_entry *parent;
 	kuid_t uid = KUIDT_INIT(0);
 	kgid_t gid = KGIDT_INIT(0);
@@ -499,6 +781,7 @@ procfs_init(int osnum)
 	parent = get_base_entry(osnum);
 	add_procfs_entries(parent, base_entry_stuff, uid, gid);
 	up(&procfs_file_list_lock);
+#endif
 }
 
 /**
@@ -509,6 +792,13 @@ procfs_init(int osnum)
 void
 procfs_exit(int osnum)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_procfs_exit_body_result(
+		osnum, mcctrl_procfs_lock_bridge,
+		mcctrl_procfs_unlock_bridge,
+		mcctrl_procfs_find_base_entry_bridge,
+		mcctrl_procfs_delete_entry_bridge);
+#else
 	struct procfs_list_entry *e;
 
 	down(&procfs_file_list_lock);
@@ -517,7 +807,46 @@ procfs_exit(int osnum)
 		delete_procfs_entries(e);
 	}
 	up(&procfs_file_list_lock);
+#endif
 }
+
+#ifdef MCCTRL_RUST_HELPERS
+static int mcctrl_procfs_entry_osnum_bridge(void *entry);
+static const char *mcctrl_procfs_getpath_bridge(void *entry, char *buf,
+						unsigned long size);
+static void *mcctrl_procfs_os_lookup_bridge(int osnum);
+static void *mcctrl_procfs_get_usrdata_bridge(void *os);
+static void *mcctrl_procfs_get_per_proc_bridge(void *usrdata, int pid);
+static void mcctrl_procfs_put_per_proc_bridge(void *ppd);
+static int mcctrl_procfs_ppd_cpu_bridge(void *ppd);
+static int mcctrl_procfs_get_order_bridge(unsigned long count);
+static void *mcctrl_procfs_alloc_pages_bridge(int order);
+static void mcctrl_procfs_free_pages_bridge(void *ptr, int order);
+static unsigned long mcctrl_procfs_virt_to_phys_bridge(void *ptr);
+static void *mcctrl_procfs_alloc_read_bridge(void);
+static void mcctrl_procfs_init_read_write_read_bridge(void *opaque,
+						      unsigned long pbuf,
+						      long offset,
+						      int count,
+						      int read_write,
+						      const char *path);
+static int mcctrl_procfs_send_request_bridge(void *os, int cpu, int pid,
+					     void *opaque, int *do_free);
+static int mcctrl_procfs_read_ret_bridge(void *opaque);
+static int mcctrl_procfs_read_eof_bridge(void *opaque);
+static void mcctrl_procfs_free_bridge(void *ptr);
+static int mcctrl_procfs_copy_kernel_to_user_bridge(void *ubuf, void *kbuf,
+						    unsigned long size);
+static void mcctrl_procfs_bad_osnum_bridge(void);
+static void mcctrl_procfs_osnum_mismatch_bridge(int path_osnum,
+						int entry_osnum);
+static void mcctrl_procfs_no_os_bridge(int osnum);
+static void mcctrl_procfs_no_usrdata_bridge(int osnum);
+static void mcctrl_procfs_no_ppd_bridge(int pid);
+static void mcctrl_procfs_alloc_error_bridge(void);
+static void mcctrl_procfs_copy_error_bridge(void);
+static void mcctrl_procfs_read_write_timeout_bridge(void);
+#endif
 
 /**
  * \brief The callback funciton for McKernel procfs
@@ -530,6 +859,47 @@ static ssize_t __mckernel_procfs_read_write(
 		char __user *buf, size_t nbytes,
 		loff_t *ppos, int read_write)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	char pathbuf[PROCFS_NAME_MAX];
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
+	struct inode *inode = file->f_inode;
+	struct proc_dir_entry *dp = PDE(inode);
+	struct procfs_list_entry *e = dp->data;
+#else
+	struct inode *inode = file->f_inode;
+	struct procfs_list_entry *e = MCCTRL_PDE_DATA(inode);
+#endif
+
+	return mcctrl_procfs_read_write_body_result(
+		e, (void *)buf, nbytes, (long *)ppos, read_write,
+		pathbuf, PROCFS_NAME_MAX, PAGE_SIZE,
+		mcctrl_procfs_entry_osnum_bridge,
+		mcctrl_procfs_getpath_bridge,
+		mcctrl_procfs_os_lookup_bridge,
+		mcctrl_procfs_get_usrdata_bridge,
+		mcctrl_procfs_get_per_proc_bridge,
+		mcctrl_procfs_put_per_proc_bridge,
+		mcctrl_procfs_ppd_cpu_bridge,
+		mcctrl_procfs_get_order_bridge,
+		mcctrl_procfs_alloc_pages_bridge,
+		mcctrl_procfs_free_pages_bridge,
+		mcctrl_procfs_virt_to_phys_bridge,
+		mcctrl_procfs_alloc_read_bridge,
+		mcctrl_procfs_init_read_write_read_bridge,
+		mcctrl_procfs_send_request_bridge,
+		mcctrl_procfs_read_ret_bridge,
+		mcctrl_procfs_read_eof_bridge,
+		mcctrl_procfs_free_bridge,
+		mcctrl_procfs_copy_kernel_to_user_bridge,
+		mcctrl_procfs_bad_osnum_bridge,
+		mcctrl_procfs_osnum_mismatch_bridge,
+		mcctrl_procfs_no_os_bridge,
+		mcctrl_procfs_no_usrdata_bridge,
+		mcctrl_procfs_no_ppd_bridge,
+		mcctrl_procfs_alloc_error_bridge,
+		mcctrl_procfs_copy_error_bridge,
+		mcctrl_procfs_read_write_timeout_bridge);
+#else
 	struct inode * inode = file->f_inode;
 	char *kern_buffer = NULL;
 	int order = 0;
@@ -707,6 +1077,7 @@ out:
 		kfree((void *)r);
 
 	return ret;
+#endif
 }
 
 static ssize_t mckernel_procfs_read(struct file *file,
@@ -725,6 +1096,15 @@ static ssize_t mckernel_procfs_write(struct file *file,
 static loff_t
 mckernel_procfs_lseek(struct file *file, loff_t offset, int orig)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	long new_pos = file->f_pos;
+	long ret = mcctrl_procfs_lseek_body_result(file->f_pos, offset, orig,
+						   &new_pos);
+
+	if (orig == 0 || orig == 1)
+		file->f_pos = new_pos;
+	return ret;
+#else
 	switch (orig) {
 	case 0:
 		file->f_pos = offset;
@@ -736,6 +1116,7 @@ mckernel_procfs_lseek(struct file *file, loff_t offset, int orig)
 		return -EINVAL;
 	}
 	return file->f_pos;
+#endif
 }
 
 struct procfs_work {
@@ -747,9 +1128,102 @@ struct procfs_work {
 	struct work_struct work;
 };
 
+#ifdef MCCTRL_RUST_HELPERS
+static void procfsm_work_main(struct work_struct *work0);
+
+static void *mcctrl_procfs_work_alloc_bridge(unsigned long size)
+{
+	return kzalloc(size, GFP_ATOMIC);
+}
+
+static void mcctrl_procfs_work_init_schedule_bridge(void *opaque)
+{
+	struct procfs_work *work = opaque;
+
+	INIT_WORK(&work->work, &procfsm_work_main);
+	schedule_work(&work->work);
+}
+
+static void mcctrl_procfs_alloc_failed_bridge(void)
+{
+	printk("%s: kzalloc failed\n", "procfsm_packet_handler");
+}
+
+static int mcctrl_procfs_get_index_bridge(void *os)
+{
+	return ihk_host_os_get_index(os);
+}
+
+static void mcctrl_procfs_add_tid_entry_bridge(int osnum, int pid, int tid)
+{
+	add_tid_entry(osnum, pid, tid);
+}
+
+static void mcctrl_procfs_delete_tid_entry_bridge(int osnum, int pid, int tid)
+{
+	delete_tid_entry(osnum, pid, tid);
+}
+
+static void *mcctrl_procfs_os_to_dev_bridge(void *os)
+{
+	return ihk_os_to_dev(os);
+}
+
+static unsigned long mcctrl_procfs_map_memory_bridge(void *dev,
+						    unsigned long phys,
+						    unsigned long size)
+{
+	return ihk_device_map_memory(dev, phys, size);
+}
+
+static void *mcctrl_procfs_map_virtual_bridge(void *dev, unsigned long phys,
+					     unsigned long size, void *attr,
+					     int flags)
+{
+	return ihk_device_map_virtual(dev, phys, size, attr, flags);
+}
+
+static void mcctrl_procfs_unmap_virtual_bridge(void *dev, void *virt,
+					       unsigned long size)
+{
+	ihk_device_unmap_virtual(dev, virt, size);
+}
+
+static void mcctrl_procfs_unmap_memory_bridge(void *dev, unsigned long phys,
+					      unsigned long size)
+{
+	ihk_device_unmap_memory(dev, phys, size);
+}
+
+static void mcctrl_procfs_unknown_work_bridge(int msg, int pid,
+					     unsigned long arg)
+{
+	pr_warn("%s: unknown work: msg: %d, pid: %d, arg: %lu)\n",
+		"procfsm_work_main", msg, pid, arg);
+}
+
+static void mcctrl_procfs_work_free_bridge(void *work)
+{
+	kfree(work);
+}
+#endif
+
 static void procfsm_work_main(struct work_struct *work0)
 {
 	struct procfs_work *work = container_of(work0, struct procfs_work, work);
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_procfs_work_main_body_result(work, sizeof(int),
+					    mcctrl_procfs_get_index_bridge,
+					    mcctrl_procfs_add_tid_entry_bridge,
+					    mcctrl_procfs_delete_tid_entry_bridge,
+					    mcctrl_procfs_os_to_dev_bridge,
+					    mcctrl_procfs_map_memory_bridge,
+					    mcctrl_procfs_map_virtual_bridge,
+					    mcctrl_procfs_unmap_virtual_bridge,
+					    mcctrl_procfs_unmap_memory_bridge,
+					    mcctrl_procfs_unknown_work_bridge,
+					    mcctrl_procfs_work_free_bridge);
+#else
 	unsigned long phys;
 	int *done;
 
@@ -781,11 +1255,19 @@ static void procfsm_work_main(struct work_struct *work0)
 
 	kfree(work);
 	return;
+#endif
 }
 
 int procfsm_packet_handler(void *os, int msg, int pid, unsigned long arg,
 			   unsigned long resp_pa)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_procfs_packet_handler_body_result(
+		os, msg, pid, arg, resp_pa, sizeof(struct procfs_work),
+		mcctrl_procfs_work_alloc_bridge,
+		mcctrl_procfs_work_init_schedule_bridge,
+		mcctrl_procfs_alloc_failed_bridge);
+#else
 	struct procfs_work *work = NULL;
 
 	work = kzalloc(sizeof(*work), GFP_ATOMIC);
@@ -803,6 +1285,7 @@ int procfsm_packet_handler(void *os, int msg, int pid, unsigned long arg,
 
 	schedule_work(&work->work);
 	return 0;
+#endif
 }
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 6, 0)
@@ -848,8 +1331,351 @@ struct mckernel_procfs_buffer {
 	char buf[];
 };
 
+#ifdef MCCTRL_RUST_HELPERS
+static int mcctrl_procfs_entry_osnum_bridge(void *entry)
+{
+	return ((struct procfs_list_entry *)entry)->osnum;
+}
+
+static void *mcctrl_procfs_os_lookup_bridge(int osnum)
+{
+	return osnum_to_os(osnum);
+}
+
+static void *mcctrl_procfs_alloc_bridge(unsigned long size)
+{
+	return kmalloc(size, GFP_KERNEL);
+}
+
+static void mcctrl_procfs_free_bridge(void *ptr)
+{
+	kfree(ptr);
+}
+
+static const char *mcctrl_procfs_getpath_bridge(void *entry, char *buf,
+						unsigned long size)
+{
+	return getpath(entry, buf, size);
+}
+
+static void mcctrl_procfs_init_buffer_info_bridge(void *opaque, void *os,
+						  int pid,
+						  unsigned long pa_null,
+						  const char *path)
+{
+	struct mckernel_procfs_buffer_info *info = opaque;
+
+	info->top_pa = pa_null;
+	info->cur_pa = pa_null;
+	info->os = os;
+	info->pid = pid;
+	strcpy(info->path, path);
+}
+
+static void mcctrl_procfs_set_file_private_bridge(void *file, void *data)
+{
+	((struct file *)file)->private_data = data;
+}
+
+static void *mcctrl_procfs_get_file_private_bridge(void *file)
+{
+	return ((struct file *)file)->private_data;
+}
+
+static unsigned long mcctrl_procfs_info_top_pa_bridge(void *opaque)
+{
+	return ((struct mckernel_procfs_buffer_info *)opaque)->top_pa;
+}
+
+static void *mcctrl_procfs_info_os_bridge(void *opaque)
+{
+	return ((struct mckernel_procfs_buffer_info *)opaque)->os;
+}
+
+static void *mcctrl_procfs_alloc_read_bridge(void)
+{
+	return kmalloc(sizeof(struct procfs_read), GFP_KERNEL);
+}
+
+static void mcctrl_procfs_init_release_read_bridge(void *opaque,
+						  unsigned long top_pa)
+{
+	volatile struct procfs_read *r = opaque;
+
+	memset((void *)r, '\0', sizeof(struct procfs_read));
+	r->pbuf = top_pa;
+	r->ret = -EIO;
+	r->fname[0] = '\0';
+}
+
+static int mcctrl_procfs_send_release_bridge(void *os, void *opaque,
+					     int *do_free)
+{
+	struct ikc_scd_packet isp;
+	volatile struct procfs_read *r = opaque;
+
+	isp.msg = SCD_MSG_PROCFS_RELEASE;
+	isp.ref = 0;
+	isp.arg = virt_to_phys((void *)r);
+	isp.pid = 0;
+	return mcctrl_ikc_send_wait(os, 0, &isp, 5000, NULL, do_free, 1,
+				    (void *)r);
+}
+
+static int mcctrl_procfs_read_ret_bridge(void *opaque)
+{
+	return ((volatile struct procfs_read *)opaque)->ret;
+}
+
+static void mcctrl_procfs_release_timeout_bridge(void)
+{
+	pr_info("%s: error: timeout (1 sec)\n",
+		"mckernel_procfs_buff_release");
+}
+
+static int mcctrl_procfs_info_pid_bridge(void *opaque)
+{
+	return ((struct mckernel_procfs_buffer_info *)opaque)->pid;
+}
+
+static unsigned long mcctrl_procfs_info_cur_pa_bridge(void *opaque)
+{
+	return ((struct mckernel_procfs_buffer_info *)opaque)->cur_pa;
+}
+
+static const char *mcctrl_procfs_info_path_bridge(void *opaque)
+{
+	return ((struct mckernel_procfs_buffer_info *)opaque)->path;
+}
+
+static void mcctrl_procfs_info_set_top_cur_bridge(void *opaque,
+						  unsigned long top_pa,
+						  unsigned long cur_pa)
+{
+	struct mckernel_procfs_buffer_info *info = opaque;
+
+	info->top_pa = top_pa;
+	info->cur_pa = cur_pa;
+}
+
+static void mcctrl_procfs_info_set_cur_bridge(void *opaque,
+					      unsigned long cur_pa)
+{
+	((struct mckernel_procfs_buffer_info *)opaque)->cur_pa = cur_pa;
+}
+
+static void *mcctrl_procfs_get_usrdata_bridge(void *os)
+{
+	return ihk_host_os_get_usrdata(os);
+}
+
+static void *mcctrl_procfs_get_per_proc_bridge(void *usrdata, int pid)
+{
+	return mcctrl_get_per_proc_data(usrdata, pid);
+}
+
+static void mcctrl_procfs_put_per_proc_bridge(void *ppd)
+{
+	mcctrl_put_per_proc_data(ppd);
+}
+
+static int mcctrl_procfs_ppd_cpu_bridge(void *ppd)
+{
+	return ((struct mcctrl_per_proc_data *)ppd)->ikc_target_cpu;
+}
+
+static void mcctrl_procfs_init_request_read_bridge(void *opaque,
+						   unsigned long pbuf,
+						   const char *path)
+{
+	volatile struct procfs_read *r = opaque;
+
+	memset((void *)r, '\0', sizeof(struct procfs_read));
+	r->pbuf = pbuf;
+	r->ret = -EIO;
+	strncpy((char *)r->fname, path, PROCFS_NAME_MAX);
+}
+
+static int mcctrl_procfs_send_request_bridge(void *os, int cpu, int pid,
+					     void *opaque, int *do_free)
+{
+	struct ikc_scd_packet isp;
+	volatile struct procfs_read *r = opaque;
+
+	isp.msg = SCD_MSG_PROCFS_REQUEST;
+	isp.ref = 0;
+	isp.arg = virt_to_phys((void *)r);
+	isp.pid = pid;
+	return mcctrl_ikc_send_wait(os, cpu, &isp, 5000, NULL, do_free, 1,
+				    (void *)r);
+}
+
+static unsigned long mcctrl_procfs_read_pbuf_bridge(void *opaque)
+{
+	return ((volatile struct procfs_read *)opaque)->pbuf;
+}
+
+static unsigned long mcctrl_procfs_buffer_pos_bridge(void *opaque)
+{
+	return ((struct mckernel_procfs_buffer *)opaque)->pos;
+}
+
+static unsigned long mcctrl_procfs_buffer_size_bridge(void *opaque)
+{
+	return ((struct mckernel_procfs_buffer *)opaque)->size;
+}
+
+static unsigned long mcctrl_procfs_buffer_next_pa_bridge(void *opaque)
+{
+	return ((struct mckernel_procfs_buffer *)opaque)->next_pa;
+}
+
+static int mcctrl_procfs_copy_buffer_to_user_bridge(void *ubuf, void *opaque,
+						    unsigned long offset,
+						    unsigned long size)
+{
+	struct mckernel_procfs_buffer *buf = opaque;
+
+	return copy_to_user((char __user *)ubuf, buf->buf + offset, size);
+}
+
+static void mcctrl_procfs_buff_read_no_usrdata_bridge(void)
+{
+	pr_err("%s: no MCCTRL data found for OS\n",
+	       "mckernel_procfs_buff_read");
+}
+
+static void mcctrl_procfs_buff_read_no_ppd_bridge(int pid)
+{
+	pr_err("%s: no per-process structure for PID %d",
+	       "mckernel_procfs_buff_read", pid);
+}
+
+static void mcctrl_procfs_buff_read_timeout_bridge(void)
+{
+	pr_info("%s: error: timeout (1 sec)\n",
+		"mckernel_procfs_buff_read");
+}
+
+static int mcctrl_procfs_get_order_bridge(unsigned long count)
+{
+	return get_order(count);
+}
+
+static void *mcctrl_procfs_alloc_pages_bridge(int order)
+{
+	return (void *)__get_free_pages(GFP_KERNEL, order);
+}
+
+static void mcctrl_procfs_free_pages_bridge(void *ptr, int order)
+{
+	free_pages((uintptr_t)ptr, order);
+}
+
+static unsigned long mcctrl_procfs_virt_to_phys_bridge(void *ptr)
+{
+	return virt_to_phys(ptr);
+}
+
+static void mcctrl_procfs_init_read_write_read_bridge(void *opaque,
+						      unsigned long pbuf,
+						      long offset,
+						      int count,
+						      int read_write,
+						      const char *path)
+{
+	volatile struct procfs_read *r = opaque;
+
+	r->pbuf = pbuf;
+	r->eof = 0;
+	r->ret = -EIO;
+	r->offset = offset;
+	r->count = count;
+	r->readwrite = read_write;
+	strncpy((char *)r->fname, path, PROCFS_NAME_MAX);
+}
+
+static int mcctrl_procfs_read_eof_bridge(void *opaque)
+{
+	return ((volatile struct procfs_read *)opaque)->eof;
+}
+
+static int mcctrl_procfs_copy_kernel_to_user_bridge(void *ubuf, void *kbuf,
+						    unsigned long size)
+{
+	return copy_to_user((char __user *)ubuf, kbuf, size);
+}
+
+static void mcctrl_procfs_bad_osnum_bridge(void)
+{
+	printk("%s: error: couldn't determine OS number\n",
+	       "__mckernel_procfs_read_write");
+}
+
+static void mcctrl_procfs_osnum_mismatch_bridge(int path_osnum,
+						int entry_osnum)
+{
+	printk("%s: error: OS numbers don't match (%d != %d)\n",
+	       "__mckernel_procfs_read_write", path_osnum, entry_osnum);
+}
+
+static void mcctrl_procfs_no_os_bridge(int osnum)
+{
+	printk("%s: error: no IHK OS data found for OS %d\n",
+	       "__mckernel_procfs_read_write", osnum);
+}
+
+static void mcctrl_procfs_no_usrdata_bridge(int osnum)
+{
+	printk("%s: error: no MCCTRL data found for OS %d\n",
+	       "__mckernel_procfs_read_write", osnum);
+}
+
+static void mcctrl_procfs_no_ppd_bridge(int pid)
+{
+	printk("%s: error: no per-process structure for PID %d",
+	       "__mckernel_procfs_read_write", pid);
+}
+
+static void mcctrl_procfs_alloc_error_bridge(void)
+{
+	printk("%s: ERROR: allocating kernel buffer\n",
+	       "__mckernel_procfs_read_write");
+}
+
+static void mcctrl_procfs_copy_error_bridge(void)
+{
+	printk("%s: ERROR: copy_to_user failed.\n",
+	       "__mckernel_procfs_read_write");
+}
+
+static void mcctrl_procfs_read_write_timeout_bridge(void)
+{
+	pr_info("%s: error: timeout (1 sec)\n",
+		"__mckernel_procfs_read_write");
+}
+#endif
+
 static int mckernel_procfs_buff_open(struct inode *inode, struct file *file)
 {
+#ifdef MCCTRL_RUST_HELPERS
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3, 10, 0)
+	struct proc_dir_entry *dp = PDE(inode);
+	struct procfs_list_entry *e = dp->data;
+#else
+	struct procfs_list_entry *e = MCCTRL_PDE_DATA(inode);
+#endif
+	return mcctrl_procfs_buff_open_body_result(
+		e, file, PROCFS_NAME_MAX,
+		sizeof(struct mckernel_procfs_buffer_info), PA_NULL,
+		mcctrl_procfs_entry_osnum_bridge,
+		mcctrl_procfs_os_lookup_bridge,
+		mcctrl_procfs_alloc_bridge,
+		mcctrl_procfs_free_bridge,
+		mcctrl_procfs_getpath_bridge,
+		mcctrl_procfs_init_buffer_info_bridge,
+		mcctrl_procfs_set_file_private_bridge);
+#else
 	struct mckernel_procfs_buffer_info *info;
 	int pid;
 	int ret;
@@ -894,10 +1720,24 @@ static int mckernel_procfs_buff_open(struct inode *inode, struct file *file)
 
 	kfree(path_buf);
 	return 0;
+#endif
 }
 
 static int mckernel_procfs_buff_release(struct inode *inode, struct file *file)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_procfs_buff_release_body_result(
+		file, PA_NULL, mcctrl_procfs_get_file_private_bridge,
+		mcctrl_procfs_set_file_private_bridge,
+		mcctrl_procfs_info_top_pa_bridge,
+		mcctrl_procfs_info_os_bridge,
+		mcctrl_procfs_alloc_read_bridge,
+		mcctrl_procfs_init_release_read_bridge,
+		mcctrl_procfs_send_release_bridge,
+		mcctrl_procfs_read_ret_bridge,
+		mcctrl_procfs_free_bridge,
+		mcctrl_procfs_release_timeout_bridge);
+#else
 	struct mckernel_procfs_buffer_info *info = file->private_data;
 	int rc = 0;
 
@@ -959,11 +1799,46 @@ out:
 	}
 	kfree(info);
 	return rc;
+#endif
 }
 
 static ssize_t mckernel_procfs_buff_read(struct file *file, char __user *ubuf,
 					 size_t nbytes, loff_t *ppos)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_procfs_buff_read_body_result(
+		file, (void *)ubuf, nbytes, (long *)ppos, PA_NULL, PAGE_SIZE,
+		mcctrl_procfs_get_file_private_bridge,
+		mcctrl_procfs_info_os_bridge,
+		mcctrl_procfs_info_pid_bridge,
+		mcctrl_procfs_info_top_pa_bridge,
+		mcctrl_procfs_info_cur_pa_bridge,
+		mcctrl_procfs_info_path_bridge,
+		mcctrl_procfs_info_set_top_cur_bridge,
+		mcctrl_procfs_info_set_cur_bridge,
+		mcctrl_procfs_get_usrdata_bridge,
+		mcctrl_procfs_get_per_proc_bridge,
+		mcctrl_procfs_put_per_proc_bridge,
+		mcctrl_procfs_ppd_cpu_bridge,
+		mcctrl_procfs_alloc_read_bridge,
+		mcctrl_procfs_init_request_read_bridge,
+		mcctrl_procfs_send_request_bridge,
+		mcctrl_procfs_read_ret_bridge,
+		mcctrl_procfs_read_pbuf_bridge,
+		mcctrl_procfs_free_bridge,
+		mcctrl_procfs_os_to_dev_bridge,
+		mcctrl_procfs_map_memory_bridge,
+		mcctrl_procfs_map_virtual_bridge,
+		mcctrl_procfs_unmap_virtual_bridge,
+		mcctrl_procfs_unmap_memory_bridge,
+		mcctrl_procfs_buffer_pos_bridge,
+		mcctrl_procfs_buffer_size_bridge,
+		mcctrl_procfs_buffer_next_pa_bridge,
+		mcctrl_procfs_copy_buffer_to_user_bridge,
+		mcctrl_procfs_buff_read_no_usrdata_bridge,
+		mcctrl_procfs_buff_read_no_ppd_bridge,
+		mcctrl_procfs_buff_read_timeout_bridge);
+#else
 	struct mckernel_procfs_buffer_info *info = file->private_data;
 	unsigned long phys;
 	struct mckernel_procfs_buffer *buf;
@@ -1118,6 +1993,7 @@ rep:
 
 	*ppos = pos;
 	return l;
+#endif
 }
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 6, 0)

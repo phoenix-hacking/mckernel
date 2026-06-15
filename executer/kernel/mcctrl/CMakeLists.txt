@@ -16,6 +16,9 @@ option(ENABLE_RUST_IHK_MODULE_HELPERS "Enable Rust helpers in IHK Linux modules"
 set(MCCTRL_RUST_KBUILD_OBJECTS)
 set(MCCTRL_RUST_C_FLAGS)
 set(MCCTRL_RUST_DEPENDS)
+set(MCCTRL_CORE_SOURCES
+	driver.c control.c ikc.c syscall.c procfs.c binfmt_mcexec.c
+	sysfs.c sysfs_files.c mc_plist.c futex.c arch/${ARCH}/archdeps.c arch/${ARCH}/cpu.c)
 
 if (ENABLE_RUST_IHK_MODULE_HELPERS AND "${ARCH}" STREQUAL "x86_64")
 	find_program(RUSTC rustc)
@@ -41,6 +44,7 @@ if (ENABLE_RUST_IHK_MODULE_HELPERS AND "${ARCH}" STREQUAL "x86_64")
 				-C force-unwind-tables=no
 				-C no-vectorize-loops
 				-C no-vectorize-slp
+				-C target-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,-fma
 				--emit=obj=${MCCTRL_RUST_OBJ}
 				"${MCCTRL_RUST_SRC}"
 			COMMAND ${CMAKE_COMMAND}
@@ -58,6 +62,12 @@ if (ENABLE_RUST_IHK_MODULE_HELPERS AND "${ARCH}" STREQUAL "x86_64")
 		list(APPEND MCCTRL_RUST_KBUILD_OBJECTS rust/mcctrl_helpers.o)
 		list(APPEND MCCTRL_RUST_C_FLAGS -DMCCTRL_RUST_HELPERS)
 		list(APPEND MCCTRL_RUST_DEPENDS mcctrl_rust_helpers)
+		list(REMOVE_ITEM MCCTRL_CORE_SOURCES binfmt_mcexec.c)
+		list(REMOVE_ITEM MCCTRL_CORE_SOURCES ikc.c)
+		list(REMOVE_ITEM MCCTRL_CORE_SOURCES mc_plist.c)
+		list(REMOVE_ITEM MCCTRL_CORE_SOURCES sysfs_files.c)
+		list(REMOVE_ITEM MCCTRL_CORE_SOURCES arch/${ARCH}/cpu.c)
+		list(REMOVE_ITEM MCCTRL_CORE_SOURCES arch/${ARCH}/archdeps.c)
 	endif()
 endif()
 
@@ -79,8 +89,7 @@ kmod(mcctrl
 		${ARCH_C_FLAGS}
 		${MCCTRL_RUST_C_FLAGS}
 	SOURCES
-		driver.c control.c ikc.c syscall.c procfs.c binfmt_mcexec.c
-		sysfs.c sysfs_files.c mc_plist.c futex.c arch/${ARCH}/archdeps.c arch/${ARCH}/cpu.c
+		${MCCTRL_CORE_SOURCES}
 	PREBUILT_OBJECTS
 		${MCCTRL_RUST_KBUILD_OBJECTS}
 	EXTRA_SYMBOLS

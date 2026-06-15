@@ -33,6 +33,253 @@
 #include <mc_jhash.h>
 #include <arch-futex.h>
 
+static int mcctrl_futex_atomic_access_ok_local(int *uaddr,
+					       unsigned long size)
+{
+#ifdef __UACCESS__
+	return access_ok(VERIFY_WRITE, uaddr, size);
+#else
+	(void)uaddr;
+	(void)size;
+	return 1;
+#endif
+}
+
+static int mcctrl_futex_atomic_cmpxchg_inatomic_local(int *uaddr,
+						      int oldval,
+						      int newval)
+{
+	asm volatile("1:\tlock; cmpxchgl %3, %1\n"
+		     "2:\t.section .fixup, \"ax\"\n"
+		     "3:\tmov     %2, %0\n"
+		     "\tjmp     2b\n"
+		     "\t.previous\n"
+		     " .section __ex_table,\"a\"\n"
+		     " .balign 8\n"
+		     " .quad 1b,3b\n"
+		     " .previous\n"
+		     : "=a" (oldval), "+m" (*uaddr)
+		     : "i" (-EFAULT), "r" (newval), "0" (oldval)
+		     : "memory");
+
+	return oldval;
+}
+
+#define MCCTRL_FUTEX_X86_ATOMIC_OP1(insn, ret, oldval, uaddr, oparg) \
+	asm volatile("1:\t" insn "\n"				\
+		     "2:\t.section .fixup,\"ax\"\n"		\
+		     "3:\tmov\t%3, %1\n"			\
+		     "\tjmp\t2b\n"				\
+		     "\t.previous\n"				\
+		     " .section __ex_table,\"a\"\n"		\
+		     " .balign 8\n"				\
+		     " .quad 1b,3b\n"				\
+		     " .previous\n"				\
+		     : "=r" (oldval), "=r" (ret), "+m" (*uaddr)	\
+		     : "i" (-EFAULT), "0" (oparg), "1" (0))
+
+#define MCCTRL_FUTEX_X86_ATOMIC_OP2(insn, ret, oldval, uaddr, oparg) \
+	asm volatile("1:\tmovl	%2, %0\n"			\
+		     "\tmovl\t%0, %3\n"				\
+		     "\t" insn "\n"				\
+		     "2:\tlock; cmpxchgl %3, %2\n"		\
+		     "\tjnz\t1b\n"				\
+		     "3:\t.section .fixup,\"ax\"\n"		\
+		     "4:\tmov\t%5, %1\n"			\
+		     "\tjmp\t3b\n"				\
+		     "\t.previous\n"				\
+		     " .section __ex_table,\"a\"\n"		\
+		     " .balign 8\n"				\
+		     " .quad 1b,4b\n"				\
+		     " .previous\n"				\
+		     " .section __ex_table,\"a\"\n"		\
+		     " .balign 8\n"				\
+		     " .quad 2b,4b\n"				\
+		     " .previous\n"				\
+		     : "=&a" (oldval), "=&r" (ret),		\
+		       "+m" (*uaddr), "=&r" (tem)		\
+		     : "r" (oparg), "i" (-EFAULT), "1" (0))
+
+static int mcctrl_futex_atomic_op_inuser_local(int op, int *uaddr,
+					       int oparg, int *oldval)
+{
+	int old = 0, ret, tem;
+
+	switch (op) {
+	case FUTEX_OP_SET:
+		MCCTRL_FUTEX_X86_ATOMIC_OP1("xchgl %0, %2", ret, old,
+					    uaddr, oparg);
+		break;
+	case FUTEX_OP_ADD:
+		MCCTRL_FUTEX_X86_ATOMIC_OP1("lock; xaddl %0, %2", ret,
+					    old, uaddr, oparg);
+		break;
+	case FUTEX_OP_OR:
+		MCCTRL_FUTEX_X86_ATOMIC_OP2("orl %4, %3", ret, old,
+					    uaddr, oparg);
+		break;
+	case FUTEX_OP_ANDN:
+		MCCTRL_FUTEX_X86_ATOMIC_OP2("andl %4, %3", ret, old,
+					    uaddr, oparg);
+		break;
+	case FUTEX_OP_XOR:
+		MCCTRL_FUTEX_X86_ATOMIC_OP2("xorl %4, %3", ret, old,
+					    uaddr, oparg);
+		break;
+	default:
+		ret = -ENOSYS;
+	}
+
+	if (!ret)
+		*oldval = old;
+
+	return ret;
+}
+
+#ifdef MCCTRL_RUST_HELPERS
+void mcctrl_futex_pagefault_disable_bridge(void)
+{
+	pagefault_disable();
+}
+
+void mcctrl_futex_pagefault_enable_bridge(void)
+{
+	pagefault_enable();
+}
+
+int mcctrl_futex_get_user_u32_bridge(uint32_t *dest, uint32_t *from)
+{
+	return __get_user(*dest, from);
+}
+
+int mcctrl_futex_atomic_access_ok_bridge(int *uaddr, unsigned long size)
+{
+	return mcctrl_futex_atomic_access_ok_local(uaddr, size);
+}
+
+int mcctrl_futex_atomic_cmpxchg_inatomic_bridge(int *uaddr, int oldval,
+						int newval)
+{
+	return mcctrl_futex_atomic_cmpxchg_inatomic_local(uaddr, oldval,
+							  newval);
+}
+
+int mcctrl_futex_atomic_op_inuser_bridge(int op, int *uaddr, int oparg,
+					 int *oldval)
+{
+	return mcctrl_futex_atomic_op_inuser_local(op, uaddr, oparg, oldval);
+}
+#else
+int get_futex_value_locked(uint32_t *dest, uint32_t *from)
+{
+	int ret;
+
+	pagefault_disable();
+	ret = __get_user(*dest, from);
+	pagefault_enable();
+
+	return ret ? -EFAULT : 0;
+}
+
+int futex_atomic_cmpxchg_inatomic(int *uaddr, int oldval, int newval)
+{
+	if (!mcctrl_futex_atomic_access_ok_local(uaddr, sizeof(int)))
+		return -EFAULT;
+
+	return mcctrl_futex_atomic_cmpxchg_inatomic_local(uaddr, oldval,
+							  newval);
+}
+
+int futex_atomic_op_inuser(int encoded_op, int *uaddr)
+{
+	int op = (encoded_op >> 28) & 7;
+	int cmp = (encoded_op >> 24) & 15;
+	int oparg = (encoded_op & 0x00fff000) >> 12;
+	int cmparg = encoded_op & 0xfff;
+	int oldval = 0, ret;
+
+	if (encoded_op & (FUTEX_OP_OPARG_SHIFT << 28))
+		oparg = 1 << oparg;
+
+	if (!mcctrl_futex_atomic_access_ok_local(uaddr, sizeof(int)))
+		return -EFAULT;
+
+	if (op == FUTEX_OP_ANDN)
+		oparg = ~oparg;
+	ret = mcctrl_futex_atomic_op_inuser_local(op, uaddr, oparg, &oldval);
+
+	if (!ret) {
+		switch (cmp) {
+		case FUTEX_OP_CMP_EQ:
+			ret = (oldval == cmparg);
+			break;
+		case FUTEX_OP_CMP_NE:
+			ret = (oldval != cmparg);
+			break;
+		case FUTEX_OP_CMP_LT:
+			ret = (oldval < cmparg);
+			break;
+		case FUTEX_OP_CMP_GE:
+			ret = (oldval >= cmparg);
+			break;
+		case FUTEX_OP_CMP_LE:
+			ret = (oldval <= cmparg);
+			break;
+		case FUTEX_OP_CMP_GT:
+			ret = (oldval > cmparg);
+			break;
+		default:
+			ret = -ENOSYS;
+		}
+	}
+	return ret;
+}
+
+static void mc_jhash_mix(uint32_t *a, uint32_t *b, uint32_t *c)
+{
+	*a -= *b; *a -= *c; *a ^= (*c >> 13);
+	*b -= *c; *b -= *a; *b ^= (*a << 8);
+	*c -= *a; *c -= *b; *c ^= (*b >> 13);
+	*a -= *b; *a -= *c; *a ^= (*c >> 12);
+	*b -= *c; *b -= *a; *b ^= (*a << 16);
+	*c -= *a; *c -= *b; *c ^= (*b >> 5);
+	*a -= *b; *a -= *c; *a ^= (*c >> 3);
+	*b -= *c; *b -= *a; *b ^= (*a << 10);
+	*c -= *a; *c -= *b; *c ^= (*b >> 15);
+}
+
+uint32_t mc_jhash2(const uint32_t *k, uint32_t length, uint32_t initval)
+{
+	uint32_t a, b, c, len;
+
+	a = b = JHASH_GOLDEN_RATIO;
+	c = initval;
+	len = length;
+
+	while (len >= 3) {
+		a += k[0];
+		b += k[1];
+		c += k[2];
+		mc_jhash_mix(&a, &b, &c);
+		k += 3;
+		len -= 3;
+	}
+
+	c += length * 4;
+
+	switch (len) {
+	case 2:
+		b += k[1];
+	case 1:
+		a += k[0];
+	};
+
+	mc_jhash_mix(&a, &b, &c);
+
+	return c;
+}
+#endif
+
 #ifdef DEBUG
 #define dprintk printk
 #else
@@ -221,8 +468,43 @@ struct rva_to_rpa_cache_node {
 	unsigned long rpa;
 };
 
+#ifdef MCCTRL_RUST_HELPERS
+static void *mcctrl_futex_rb_first_bridge(void *root)
+{
+	return rb_first((struct rb_root *)root);
+}
+
+static void mcctrl_futex_rb_erase_bridge(void *node, void *root)
+{
+	rb_erase((struct rb_node *)node, (struct rb_root *)root);
+}
+
+static void mcctrl_futex_rb_link_node_bridge(void *node, void *parent,
+					     void *link)
+{
+	rb_link_node((struct rb_node *)node, (struct rb_node *)parent,
+		     (struct rb_node **)link);
+}
+
+static void mcctrl_futex_rb_insert_color_bridge(void *node, void *root)
+{
+	rb_insert_color((struct rb_node *)node, (struct rb_root *)root);
+}
+
+static void mcctrl_futex_cache_free_bridge(void *ptr)
+{
+	kfree(ptr);
+}
+#endif
+
 void futex_remove_process(struct mcctrl_per_proc_data *ppd)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_futex_remove_process_body_result(&ppd->rva_to_rpa_cache,
+			mcctrl_futex_rb_first_bridge,
+			mcctrl_futex_rb_erase_bridge,
+			mcctrl_futex_cache_free_bridge);
+#else
 	struct rb_node *node;
 
 	while ((node = rb_first(&ppd->rva_to_rpa_cache))) {
@@ -233,11 +515,15 @@ void futex_remove_process(struct mcctrl_per_proc_data *ppd)
 		rb_erase(node, &ppd->rva_to_rpa_cache);
 		kfree(cache_node);
 	}
+#endif
 }
 
 struct rva_to_rpa_cache_node *rva_to_rpa_cache_search(struct rb_root *root,
 						      unsigned long rva)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_rva_to_rpa_cache_search_body_result(root, rva);
+#else
 	struct rb_node **iter = &root->rb_node, *parent = NULL;
 
 	while (*iter) {
@@ -257,11 +543,17 @@ struct rva_to_rpa_cache_node *rva_to_rpa_cache_search(struct rb_root *root,
 	}
 
 	return NULL;
+#endif
 }
 
 int rva_to_rpa_cache_insert(struct rb_root *root,
 			    struct rva_to_rpa_cache_node *cache_node)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_rva_to_rpa_cache_insert_body_result(root, cache_node,
+			mcctrl_futex_rb_link_node_bridge,
+			mcctrl_futex_rb_insert_color_bridge);
+#else
 	struct rb_node **iter = &root->rb_node, *parent = NULL;
 
 	while (*iter) {
@@ -283,6 +575,7 @@ int rva_to_rpa_cache_insert(struct rb_root *root,
 	rb_insert_color(&cache_node->node, root);
 
 	return 0;
+#endif
 }
 
 /**
@@ -647,7 +940,8 @@ static int futex_wake(uint32_t *uaddr, int fshared, int nr_wake,
 	irqstate = ihk_mc_spinlock_lock(&hb->lock);
 	head = &hb->chain;
 
-	mc_plist_for_each_entry_safe(this, next, head, list) {
+	list_for_each_entry_safe(this, next, &head->node_list,
+			list.plist.node_list) {
 		if (match_futex(&this->key, &key)) {
 			/* RIKEN: no pi state... */
 			/* Check if one of the bits is set in both bitsets */
@@ -937,7 +1231,8 @@ static int futex_requeue(uint32_t *uaddr1, int fshared, uint32_t *uaddr2,
 	}
 
 	head1 = &hb1->chain;
-	mc_plist_for_each_entry_safe(this, next, head1, list) {
+	list_for_each_entry_safe(this, next, &head1->node_list,
+			list.plist.node_list) {
 		if (task_count - nr_wake >= nr_requeue)
 			break;
 
@@ -1029,7 +1324,8 @@ retry_private:
 
 	head = &hb1->chain;
 
-	mc_plist_for_each_entry_safe(this, next, head, list) {
+	list_for_each_entry_safe(this, next, &head->node_list,
+			list.plist.node_list) {
 		if (match_futex(&this->key, &key1)) {
 			wake_futex(this, uti_info);
 			if (++ret >= nr_wake)
@@ -1041,7 +1337,8 @@ retry_private:
 		head = &hb2->chain;
 
 		op_ret = 0;
-		mc_plist_for_each_entry_safe(this, next, head, list) {
+		list_for_each_entry_safe(this, next, &head->node_list,
+				list.plist.node_list) {
 			if (match_futex(&this->key, &key2)) {
 				wake_futex(this, uti_info);
 				if (++op_ret >= nr_wake2)
@@ -1126,6 +1423,57 @@ static int futex(uint32_t *uaddr, int op, uint32_t val, uint64_t timeout,
 	return ret;
 }
 
+#ifdef MCCTRL_RUST_HELPERS
+void mcctrl_futex_set_resp_bridge(struct uti_info *uti_info,
+		void *uti_futex_resp)
+{
+	uti_info->uti_futex_resp = uti_futex_resp;
+}
+
+int mcctrl_futex_timeout_bridge(unsigned long utime_addr, int op, int flags,
+		uint64_t *timeout)
+{
+	mcctrl_timespec_t *utime = (mcctrl_timespec_t *)utime_addr;
+	mcctrl_timespec_t ts;
+	int ret;
+
+	if (copy_from_user(&ts, utime, sizeof(ts)) != 0) {
+		return -EFAULT;
+	}
+
+	dprintk("%s: utime=%ld.%09ld\n", __func__, ts.tv_sec, ts.tv_nsec);
+	if (!MCCTRL_TIMESPEC_VALID(&ts)) {
+		return -EINVAL;
+	}
+
+	if (op == FUTEX_WAIT_BITSET) {
+		mcctrl_timespec_t ats;
+
+		ret = uti_clock_gettime((flags & FUTEX_CLOCK_REALTIME) ?
+				CLOCK_REALTIME : CLOCK_MONOTONIC, &ats);
+		if (ret) {
+			return ret;
+		}
+
+		dprintk("%s: ats=%ld.%09ld\n", __func__,
+				ats.tv_sec, ats.tv_nsec);
+		*timeout = (ts.tv_sec * NS_PER_SEC + ts.tv_nsec) -
+			(ats.tv_sec * NS_PER_SEC + ats.tv_nsec);
+	} else {
+		*timeout = ts.tv_sec * NS_PER_SEC + ts.tv_nsec;
+	}
+
+	return 0;
+}
+
+int mcctrl_futex_dispatch_bridge(uint32_t *uaddr, int op, uint32_t val,
+		uint64_t timeout, uint32_t *uaddr2, uint32_t val2,
+		uint32_t val3, int fshared, struct uti_info *uti_info)
+{
+	return futex(uaddr, op, val, timeout, uaddr2, val2, val3, fshared,
+			uti_info);
+}
+#else
 long do_futex(int n, unsigned long arg0, unsigned long arg1,
 			  unsigned long arg2, unsigned long arg3,
 			  unsigned long arg4, unsigned long arg5,
@@ -1204,3 +1552,4 @@ long do_futex(int n, unsigned long arg0, unsigned long arg1,
 
 	return ret;
 }
+#endif

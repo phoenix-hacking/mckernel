@@ -24,6 +24,48 @@
 #define wprintk(...) do { if (1) printk(KERN_WARNING __VA_ARGS__); } while (0)
 #define eprintk(...) do { if (1) printk(KERN_ERR __VA_ARGS__); } while (0)
 
+#ifdef MCCTRL_RUST_HELPERS
+void mcctrl_cpumap_clear_bridge(void *mask)
+{
+	cpumask_clear((cpumask_t *)mask);
+}
+
+int mcctrl_cpumap_test_cpu_bridge(int cpu, const void *mask)
+{
+	return cpumask_test_cpu(cpu, (const cpumask_t *)mask);
+}
+
+void mcctrl_cpumap_set_cpu_bridge(int cpu, void *mask)
+{
+	cpumask_set_cpu(cpu, (cpumask_t *)mask);
+}
+
+const int *mcctrl_usrdata_cpu_mapping_bridge(struct mcctrl_usrdata *udp)
+{
+	return udp && udp->cpu_info ? udp->cpu_info->mapping : NULL;
+}
+
+const int *mcctrl_usrdata_cpu_hw_ids_bridge(struct mcctrl_usrdata *udp)
+{
+	return udp && udp->cpu_info ? udp->cpu_info->hw_ids : NULL;
+}
+
+int mcctrl_usrdata_cpu_count_bridge(struct mcctrl_usrdata *udp)
+{
+	return udp && udp->cpu_info ? udp->cpu_info->n_cpus : 0;
+}
+
+const int *mcctrl_usrdata_numa_mapping_bridge(struct mcctrl_usrdata *udp)
+{
+	return udp && udp->mem_info ? udp->mem_info->numa_mapping : NULL;
+}
+
+int mcctrl_usrdata_numa_count_bridge(struct mcctrl_usrdata *udp)
+{
+	return udp && udp->mem_info ? udp->mem_info->n_numa_nodes : 0;
+}
+#endif
+
 static ssize_t
 show_int(struct sysfsm_ops *ops, void *instance, void *buf, size_t size)
 {
@@ -202,6 +244,7 @@ void free_topology_info(ihk_os_t os)
 /*
  * CPU and NUMA node mapping conversion functions.
  */
+#ifndef MCCTRL_RUST_HELPERS
 int mckernel_cpu_2_linux_cpu(struct mcctrl_usrdata *udp, int cpu_id)
 {
 	return mcctrl_lwk_to_linux_index(udp->cpu_info->mapping,
@@ -267,6 +310,7 @@ int linux_numa_2_mckernel_numa(struct mcctrl_usrdata *udp, int numa_id)
 	return mcctrl_linux_to_lwk_index(udp->mem_info->numa_mapping,
 					 udp->mem_info->n_numa_nodes, numa_id);
 }
+#endif
 
 
 
@@ -274,10 +318,16 @@ static int translate_cpumap(struct mcctrl_usrdata *udp,
 		cpumask_t *linmap, cpumask_t *mckmap)
 {
 	int error;
+#ifndef MCCTRL_RUST_HELPERS
 	int lincpu;
 	int mckcpu;
+#endif
 
 	dprintk("translate_cpumap(%p,%p,%p)\n", udp, linmap, mckmap);
+#ifdef MCCTRL_RUST_HELPERS
+	error = mcctrl_translate_cpumap_result(udp->cpu_info->mapping,
+			udp->cpu_info->n_cpus, linmap, mckmap, nr_cpu_ids);
+#else
 	cpumask_clear(mckmap);
 	for_each_cpu(lincpu, linmap) {
 		mckcpu = linux_cpu_2_mckernel_cpu(udp, lincpu);
@@ -288,6 +338,7 @@ static int translate_cpumap(struct mcctrl_usrdata *udp,
 	}
 
 	error = 0;
+#endif
 	dprintk("translate_cpumap(%p,%p,%p): %d\n", udp, linmap, mckmap, error);
 	return error;
 } /* translate_cpumap() */

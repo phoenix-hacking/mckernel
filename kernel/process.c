@@ -23,6 +23,7 @@
 
 #include <process.h>
 #include <process_helpers.h>
+#include <sched_helpers.h>
 #include <string.h>
 #include <errno.h>
 #include <kmalloc.h>
@@ -52,7 +53,7 @@ static void dtree(struct rb_node *node, int l) {
 	if (!node)
 		return;
 
-	range = rb_entry(node, struct vm_range, vm_rb_node);
+	range = ((struct vm_range *)((char *)(node) - offsetof(struct vm_range, vm_rb_node)));
 
 	dtree(node->rb_left, l+1);
 	kprintf("dtree: %0*d, %p: %lx-%lx\n", l, 0, range, range->start, range->end);
@@ -80,6 +81,49 @@ static int copy_user_ranges(struct process_vm *vm, struct process_vm *orgvm);
 extern void __runq_add_proc(struct thread *proc, int cpu_id);
 extern void lapic_timer_enable(unsigned int clocks);
 extern void lapic_timer_disable();
+
+static const struct timer_runtime_offsets process_timer_runtime_offsets = {
+	.thread_status_offset = __builtin_offsetof(struct thread, status),
+	.thread_sched_list_offset = __builtin_offsetof(struct thread, sched_list),
+	.thread_spin_sleep_lock_offset =
+		__builtin_offsetof(struct thread, spin_sleep_lock),
+	.thread_spin_sleep_offset = __builtin_offsetof(struct thread, spin_sleep),
+	.thread_itimer_enabled_offset =
+		__builtin_offsetof(struct thread, itimer_enabled),
+	.cpu_runq_lock_offset = __builtin_offsetof(struct cpu_local_var, runq_lock),
+	.cpu_runq_offset = __builtin_offsetof(struct cpu_local_var, runq),
+	.cpu_runq_len_offset = __builtin_offsetof(struct cpu_local_var, runq_len),
+	.cpu_current_offset = __builtin_offsetof(struct cpu_local_var, current),
+	.cpu_timer_enabled_offset =
+		__builtin_offsetof(struct cpu_local_var, timer_enabled),
+	.cpu_backlog_list_offset =
+		__builtin_offsetof(struct cpu_local_var, backlog_list),
+	.timer_timeout_offset = __builtin_offsetof(struct timer, timeout),
+	.timer_waitq_offset = __builtin_offsetof(struct timer, processes),
+	.timer_list_offset = __builtin_offsetof(struct timer, list),
+	.timer_thread_offset = __builtin_offsetof(struct timer, thread),
+};
+
+static unsigned long process_timer_spin_lock_bridge(unsigned long lock_addr)
+{
+	return ihk_mc_spinlock_lock((ihk_spinlock_t *)lock_addr);
+}
+
+static void process_timer_spin_unlock_bridge(unsigned long lock_addr,
+					     unsigned long irqstate)
+{
+	ihk_mc_spinlock_unlock((ihk_spinlock_t *)lock_addr, irqstate);
+}
+
+static void process_timer_lapic_enable_bridge(unsigned int clocks)
+{
+	lapic_timer_enable(clocks);
+}
+
+static void process_timer_lapic_disable_bridge(void)
+{
+	lapic_timer_disable();
+}
 extern int num_processors;
 extern ihk_spinlock_t cpuid_head_lock;
 int ptrace_detach(int pid, int data);
@@ -89,6 +133,335 @@ extern void procfs_delete_thread(struct thread *);
 static int free_process_memory_range(struct process_vm *vm,
 					struct vm_range *range);
 static void free_thread_pages(struct thread *thread);
+static void process_free_thread_pages_bridge(void *thread);
+
+static void process_mckfd_free_bridge(struct mckfd *fdp)
+{
+	kfree_tracked(fdp, __FILE__, __LINE__);
+}
+
+static void process_mcs_writer_lock_bridge(unsigned long lock_addr, void *node)
+{
+	mcs_rwlock_writer_lock((struct mcs_rwlock_lock *)lock_addr,
+			       (struct mcs_rwlock_node_irqsave *)node);
+}
+
+static void process_mcs_writer_unlock_bridge(unsigned long lock_addr, void *node)
+{
+	mcs_rwlock_writer_unlock((struct mcs_rwlock_lock *)lock_addr,
+				 (struct mcs_rwlock_node_irqsave *)node);
+}
+
+static void process_mcs_reader_lock_bridge(unsigned long lock_addr, void *node)
+{
+	mcs_rwlock_reader_lock((struct mcs_rwlock_lock *)lock_addr,
+			       (struct mcs_rwlock_node_irqsave *)node);
+}
+
+static void process_mcs_reader_unlock_bridge(unsigned long lock_addr, void *node)
+{
+	mcs_rwlock_reader_unlock((struct mcs_rwlock_lock *)lock_addr,
+				 (struct mcs_rwlock_node_irqsave *)node);
+}
+
+static void process_hold_thread_bridge(void *thread)
+{
+	hold_thread((struct thread *)thread);
+}
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+static void
+process_ptrace_mcs_lock_noirq_bridge(unsigned long lock_addr, void *node)
+{
+	mcs_rwlock_writer_lock_noirq((struct mcs_rwlock_lock *)lock_addr,
+				     (struct mcs_rwlock_node *)node);
+}
+
+static void
+process_ptrace_mcs_unlock_noirq_bridge(unsigned long lock_addr, void *node)
+{
+	mcs_rwlock_writer_unlock_noirq((struct mcs_rwlock_lock *)lock_addr,
+				       (struct mcs_rwlock_node *)node);
+}
+
+static int
+process_ptrace_alloc_debugreg_bridge(void *thread)
+{
+	return alloc_debugreg((struct thread *)thread);
+}
+
+static void
+process_ptrace_clear_single_step_bridge(void *thread)
+{
+	clear_single_step((struct thread *)thread);
+}
+
+static void
+process_ptrace_hold_thread_bridge(void *thread)
+{
+	hold_thread((struct thread *)thread);
+}
+
+static void
+process_ptrace_traceme_log_bridge(int event, int pid,
+				  unsigned long value, int error)
+{
+	switch (event) {
+	case PROCESS_PTRACE_TRACEME_LOG_ENTER:
+		dkprintf("ptrace_traceme,pid=%d,proc->parent=%p\n",
+			 pid, (void *)value);
+		break;
+	case PROCESS_PTRACE_TRACEME_LOG_PARENT:
+		dkprintf("ptrace_traceme,parent->pid=%d\n", pid);
+		break;
+	case PROCESS_PTRACE_TRACEME_LOG_RETURN:
+		dkprintf("ptrace_traceme,returning,error=%d\n", error);
+		break;
+	default:
+		break;
+	}
+}
+#endif
+
+static void process_policy_free_bridge(void *policy)
+{
+	kfree_tracked(policy, __FILE__, __LINE__);
+}
+
+static void process_optional_free_bridge(void *ptr)
+{
+	kfree_tracked(ptr, __FILE__, __LINE__);
+}
+
+static int process_default_ncpus_bridge(void)
+{
+	struct ihk_mc_cpu_info *infop = ihk_mc_get_cpu_info();
+
+	return infop ? infop->ncpus : -EINVAL;
+}
+
+static void process_create_cpu_log_bridge(int event, int pid, int cpu)
+{
+	switch (event) {
+	case PROCESS_CREATE_CPU_LOG_INVALID:
+		kprintf("%s: invalid CPU requested in initial cpu_set\n",
+			"create_thread");
+		break;
+	case PROCESS_CREATE_CPU_LOG_REQUESTED:
+		dkprintf("%s: pid: %d, CPU: %d\n",
+			"create_thread", pid, cpu);
+		break;
+	default:
+		break;
+	}
+}
+
+static void process_spin_init_bridge(unsigned long lock_addr)
+{
+	ihk_mc_spinlock_init((ihk_spinlock_t *)lock_addr);
+}
+
+static void process_rwlock_init_bridge(unsigned long lock_addr)
+{
+	mcs_rwlock_init((mcs_rwlock_lock_t *)lock_addr);
+}
+
+static void process_waitq_init_bridge(unsigned long waitq_addr)
+{
+	waitq_init((waitq_t *)waitq_addr);
+}
+
+static void process_user_context_modify_bridge(void *uctx, int reg,
+					       unsigned long value)
+{
+	ihk_mc_modify_user_context(uctx, reg, value);
+}
+
+#ifdef PROFILE_ENABLE
+static void process_mcs_lock_init_bridge(unsigned long lock_addr)
+{
+	mcs_lock_init((mcs_lock_node_t *)lock_addr);
+}
+#endif
+
+static void process_vm_rwspin_init_bridge(unsigned long lock_addr)
+{
+	ihk_rwspinlock_init((ihk_rwspinlock_t *)lock_addr);
+}
+
+static void process_vm_init_numa_log_bridge(int numa_id)
+{
+	kprintf("%s: error: NUMA id is larger than mask size!\n",
+		"init_process_vm");
+	(void)numa_id;
+}
+
+static void *process_alloc_bridge(unsigned long size, unsigned long flags)
+{
+	return kmalloc_tracked(size, flags, __FILE__, __LINE__);
+}
+
+static void *process_pt_create_bridge(unsigned long flags)
+{
+	return ihk_mc_pt_create(flags);
+}
+
+static unsigned long process_spin_lock_bridge(unsigned long lock_addr)
+{
+	return ihk_mc_spinlock_lock((ihk_spinlock_t *)lock_addr);
+}
+
+static void process_spin_unlock_bridge(unsigned long lock_addr,
+				       unsigned long irqstate)
+{
+	ihk_mc_spinlock_unlock((ihk_spinlock_t *)lock_addr, irqstate);
+}
+
+static void process_sched_noirq_lock_bridge(unsigned long lock_addr)
+{
+	ihk_mc_spinlock_lock_noirq((ihk_spinlock_t *)lock_addr);
+}
+
+static void process_sched_noirq_unlock_bridge(unsigned long lock_addr)
+{
+	ihk_mc_spinlock_unlock_noirq((ihk_spinlock_t *)lock_addr);
+}
+
+static void process_rw_read_lock_bridge(unsigned long lock_addr)
+{
+	ihk_rwspinlock_read_lock_noirq((ihk_rwspinlock_t *)lock_addr);
+}
+
+static void process_rw_read_unlock_bridge(unsigned long lock_addr)
+{
+	ihk_rwspinlock_read_unlock_noirq((ihk_rwspinlock_t *)lock_addr);
+}
+
+static void process_rw_write_lock_bridge(unsigned long lock_addr)
+{
+	ihk_rwspinlock_write_lock_noirq((ihk_rwspinlock_t *)lock_addr);
+}
+
+static void process_rw_write_unlock_bridge(unsigned long lock_addr)
+{
+	ihk_rwspinlock_write_unlock_noirq((ihk_rwspinlock_t *)lock_addr);
+}
+
+static void process_sched_waitq_init_bridge(unsigned long waitq_addr)
+{
+	waitq_init((waitq_t *)waitq_addr);
+}
+
+static void process_sched_waitq_prepare_bridge(unsigned long waitq_addr,
+					       unsigned long entry_addr,
+					       int status)
+{
+	waitq_prepare_to_wait((waitq_t *)waitq_addr,
+			      (waitq_entry_t *)entry_addr, status);
+}
+
+static void process_sched_waitq_finish_bridge(unsigned long waitq_addr,
+					      unsigned long entry_addr)
+{
+	waitq_finish_wait((waitq_t *)waitq_addr,
+			  (waitq_entry_t *)entry_addr);
+}
+
+static int process_sched_vector_bridge(int vector_key)
+{
+	return ihk_mc_get_vector(vector_key);
+}
+
+static void process_sched_interrupt_bridge(int cpu, int vector)
+{
+	ihk_mc_interrupt_cpu(cpu, vector);
+}
+
+static void process_sched_schedule_bridge(void)
+{
+	schedule();
+}
+
+static void process_sched_migrate_log_bridge(unsigned long thread_addr,
+					     int tid, int cpu_id)
+{
+	(void)thread_addr;
+	dkprintf("%s: tid: %d -> cpu: %d\n",
+		 "sched_request_migrate", tid, cpu_id);
+}
+
+static unsigned long process_sched_cpu_local_bridge(int cpu_id)
+{
+	return (unsigned long)get_cpu_local_var(cpu_id);
+}
+
+static void process_sched_waitq_wakeup_bridge(unsigned long waitq_addr)
+{
+	waitq_wakeup((waitq_t *)waitq_addr);
+}
+
+static void process_sched_do_migrate_log_bridge(unsigned long thread_addr,
+						int tid, int old_cpu_id,
+						int new_cpu_id)
+{
+	(void)thread_addr;
+	dkprintf("%s: migrated TID %d from CPU %d to CPU %d\n",
+		 "do_migrate", tid, old_cpu_id, new_cpu_id);
+}
+
+static void process_release_tid_log_bridge(int tid, void *thread, int new_tid)
+{
+	(void)new_tid;
+	dkprintf("%s: tid %d has been released by %p\n",
+		"__release_tid", tid, thread);
+}
+
+static void process_replace_tid_log_bridge(int tid, void *thread, int new_tid)
+{
+	dkprintf("%s: tid %d (thread %p) has been relaced with tid %d\n",
+		"__find_and_replace_tid", tid, thread, new_tid);
+}
+
+static void process_release_thread_profile_bridge(void *thread, void *proc)
+{
+#ifdef PROFILE_ENABLE
+	profile_accumulate_events(thread, proc);
+	profile_dealloc_thread_events(thread);
+#else
+	(void)thread;
+	(void)proc;
+#endif
+}
+
+static void process_procfs_delete_thread_bridge(void *thread)
+{
+	procfs_delete_thread(thread);
+}
+
+static void process_destroy_thread_bridge(void *thread)
+{
+	destroy_thread(thread);
+}
+
+static void process_release_vm_bridge(void *vm)
+{
+	release_process_vm(vm);
+}
+
+static void process_flush_vm_bridge(void *vm)
+{
+	flush_nfo_tlb_mm(vm);
+}
+
+static void process_free_all_ranges_bridge(void *vm)
+{
+	free_all_process_memory_range(vm);
+}
+
+static void process_free_vm_bridge(void *vm)
+{
+	kfree_tracked(vm, __FILE__, __LINE__);
+}
 
 struct list_head resource_set_list;
 mcs_rwlock_lock_t    resource_set_lock;
@@ -98,53 +471,79 @@ int idle_halt = 0;
 int allow_oversubscribe = 0;
 int time_sharing = 1;
 
+static const struct process_init_state_offsets process_init_state_offsets = {
+	.pid_offset = __builtin_offsetof(struct process, pid),
+	.status_offset = __builtin_offsetof(struct process, status),
+	.parent_offset = __builtin_offsetof(struct process, parent),
+	.ppid_parent_offset = __builtin_offsetof(struct process, ppid_parent),
+	.pgid_offset = __builtin_offsetof(struct process, pgid),
+	.ruid_offset = __builtin_offsetof(struct process, ruid),
+	.euid_offset = __builtin_offsetof(struct process, euid),
+	.suid_offset = __builtin_offsetof(struct process, suid),
+	.fsuid_offset = __builtin_offsetof(struct process, fsuid),
+	.rgid_offset = __builtin_offsetof(struct process, rgid),
+	.egid_offset = __builtin_offsetof(struct process, egid),
+	.sgid_offset = __builtin_offsetof(struct process, sgid),
+	.fsgid_offset = __builtin_offsetof(struct process, fsgid),
+	.mpol_flags_offset = __builtin_offsetof(struct process, mpol_flags),
+	.mpol_threshold_offset =
+		__builtin_offsetof(struct process, mpol_threshold),
+	.thp_disable_offset = __builtin_offsetof(struct process, thp_disable),
+	.rlimit_offset = __builtin_offsetof(struct process, rlimit),
+	.rlimit_size = sizeof(((struct process *)0)->rlimit),
+	.cpu_set_offset = __builtin_offsetof(struct process, cpu_set),
+	.cpu_set_size = sizeof(((struct process *)0)->cpu_set),
+	.enable_uti_offset = __builtin_offsetof(struct process, enable_uti),
+};
+
+static const struct process_find_thread_offsets process_find_thread_offsets = {
+	.thread_hash_list_offset = __builtin_offsetof(struct thread, hash_list),
+	.thread_tid_offset = __builtin_offsetof(struct thread, tid),
+	.thread_proc_offset = __builtin_offsetof(struct thread, proc),
+	.proc_pid_offset = __builtin_offsetof(struct process, pid),
+};
+
+static const struct process_find_process_offsets process_find_process_offsets = {
+	.process_hash_list_offset =
+		__builtin_offsetof(struct process, hash_list),
+	.process_pid_offset = __builtin_offsetof(struct process, pid),
+};
+
 void
 init_process(struct process *proc, struct process *parent)
 {
-	/* These will be filled out when changing status */
-	proc->pid = -1;
-	proc->status = PS_RUNNING;
+	if (process_init_state_body_result(proc, parent,
+			&process_init_state_offsets, -1, PS_RUNNING) < 0)
+		panic("failed to initialize process state");
 
-	if(parent){
-		proc->parent = parent;
-		proc->ppid_parent = parent;
-		proc->pgid = parent->pgid;
-		proc->ruid = parent->ruid;
-		proc->euid = parent->euid;
-		proc->suid = parent->suid;
-		proc->fsuid = parent->fsuid;
-		proc->rgid = parent->rgid;
-		proc->egid = parent->egid;
-		proc->sgid = parent->sgid;
-		proc->fsgid = parent->fsgid;
-		proc->mpol_flags = parent->mpol_flags;
-		proc->mpol_threshold = parent->mpol_threshold;
-		proc->thp_disable = parent->thp_disable;
-		memcpy(proc->rlimit, parent->rlimit,
-		       sizeof(struct rlimit) * MCK_RLIM_MAX);
-		memcpy(&proc->cpu_set, &parent->cpu_set,
-		       sizeof(proc->cpu_set));
-		proc->enable_uti = parent->enable_uti;
-	}
-
-	INIT_LIST_HEAD(&proc->hash_list);
-	INIT_LIST_HEAD(&proc->siblings_list);
-	INIT_LIST_HEAD(&proc->ptraced_siblings_list);
-	mcs_rwlock_init(&proc->update_lock);
-	INIT_LIST_HEAD(&proc->report_threads_list);
-	INIT_LIST_HEAD(&proc->threads_list);
-	INIT_LIST_HEAD(&proc->children_list);
-	INIT_LIST_HEAD(&proc->ptraced_children_list);
-	mcs_rwlock_init(&proc->threads_lock);
-	mcs_rwlock_init(&proc->children_lock);
-	mcs_rwlock_init(&proc->coredump_lock);
-	ihk_mc_spinlock_init(&proc->mckfd_lock);
-	waitq_init(&proc->waitpid_q);
-	ihk_atomic_set(&proc->refcount, 2);
-	proc->monitoring_event = NULL;
+	if (process_init_links_body_result(proc,
+			__builtin_offsetof(struct process, hash_list),
+			__builtin_offsetof(struct process, siblings_list),
+			__builtin_offsetof(struct process,
+					   ptraced_siblings_list),
+			__builtin_offsetof(struct process, update_lock),
+			__builtin_offsetof(struct process,
+					   report_threads_list),
+			__builtin_offsetof(struct process, threads_list),
+			__builtin_offsetof(struct process, children_list),
+			__builtin_offsetof(struct process,
+					   ptraced_children_list),
+			__builtin_offsetof(struct process, threads_lock),
+			__builtin_offsetof(struct process, children_lock),
+			__builtin_offsetof(struct process, coredump_lock),
+			__builtin_offsetof(struct process, mckfd_lock),
+			__builtin_offsetof(struct process, waitpid_q),
+			__builtin_offsetof(struct process, refcount),
+			__builtin_offsetof(struct process, monitoring_event),
+			process_rwlock_init_bridge, process_spin_init_bridge,
+			process_waitq_init_bridge, NULL) < 0)
+		panic("failed to initialize process links");
 #ifdef PROFILE_ENABLE
-	mcs_lock_init(&proc->profile_lock);
-	proc->profile_events = NULL;
+	if (process_init_profile_body_result(proc,
+			__builtin_offsetof(struct process, profile_lock),
+			__builtin_offsetof(struct process, profile_events),
+			process_mcs_lock_init_bridge) < 0)
+		panic("failed to initialize process profile state");
 #endif
 }
 
@@ -156,16 +555,14 @@ chain_process(struct process *proc)
 	int hash;
 	struct process_hash *phash;
 
-	mcs_rwlock_writer_lock(&parent->children_lock, &lock);
-	process_list_add_tail_result(&proc->siblings_list,
-				     &parent->children_list);
-	mcs_rwlock_writer_unlock(&parent->children_lock, &lock);
-
 	hash = process_hash(proc->pid);
-	phash = cpu_local_var(resource_set)->process_hash;
-	mcs_rwlock_writer_lock(&phash->lock[hash], &lock);
-	process_list_add_tail_result(&proc->hash_list, &phash->list[hash]);
-	mcs_rwlock_writer_unlock(&phash->lock[hash], &lock);
+	phash = get_this_cpu_local_var()->resource_set->process_hash;
+	process_chain_process_body_result(&proc->siblings_list,
+		&parent->children_list, (unsigned long)&parent->children_lock,
+		&proc->hash_list, &phash->list[hash],
+		(unsigned long)&phash->lock[hash], &lock,
+		process_mcs_writer_lock_bridge,
+		process_mcs_writer_unlock_bridge);
 }
 
 void
@@ -177,218 +574,288 @@ chain_thread(struct thread *thread)
 	int hash;
 	struct thread_hash *thash;
 
-	mcs_rwlock_writer_lock(&proc->threads_lock, &lock);
-	process_list_add_tail_result(&thread->siblings_list,
-				     &proc->threads_list);
-	mcs_rwlock_writer_unlock(&proc->threads_lock, &lock);
-
 	hash = thread_hash(thread->tid);
-	thash = cpu_local_var(resource_set)->thread_hash;
-	mcs_rwlock_writer_lock(&thash->lock[hash], &lock);
-	process_list_add_tail_result(&thread->hash_list, &thash->list[hash]);
-	mcs_rwlock_writer_unlock(&thash->lock[hash], &lock);
-
-	ihk_atomic_inc(&vm->refcount);
+	thash = get_this_cpu_local_var()->resource_set->thread_hash;
+	process_chain_thread_body_result(&thread->siblings_list,
+		&proc->threads_list, (unsigned long)&proc->threads_lock,
+		&thread->hash_list, &thash->list[hash],
+		(unsigned long)&thash->lock[hash], vm,
+		__builtin_offsetof(struct process_vm, refcount), &lock,
+		process_mcs_writer_lock_bridge,
+		process_mcs_writer_unlock_bridge, NULL);
 }
 
 struct address_space *
 create_address_space(struct resource_set *res, int n)
 {
-	struct address_space *asp;
-	void *pt;
-
-	asp = kmalloc(sizeof(struct address_space) + sizeof(int) * n, IHK_MC_AP_NOWAIT);
-	if(!asp)
-		return NULL;
-	pt = ihk_mc_pt_create(IHK_MC_AP_NOWAIT);
-	if(!pt){
-		kfree(asp);
-		return NULL;
-	}
-
-	memset(asp, '\0', sizeof(struct address_space) + sizeof(int) * n);
-	asp->nslots = n;
-	asp->page_table = pt;
-	ihk_atomic_set(&asp->refcount, 1);
-	memset(&asp->cpu_set, 0, sizeof(cpu_set_t));
-	ihk_mc_spinlock_init(&asp->cpu_set_lock);
-	return asp;
+	(void)res;
+	return process_create_address_space_body_result(n,
+		sizeof(struct address_space), sizeof(int), IHK_MC_AP_NOWAIT,
+		__builtin_offsetof(struct address_space, page_table),
+		__builtin_offsetof(struct address_space, refcount),
+		__builtin_offsetof(struct address_space, cpu_set),
+		sizeof(cpu_set_t),
+		__builtin_offsetof(struct address_space, cpu_set_lock),
+		__builtin_offsetof(struct address_space, nslots),
+		process_alloc_bridge,
+		process_optional_free_bridge,
+		process_pt_create_bridge,
+		NULL,
+		process_spin_init_bridge);
 }
 
 void
 hold_address_space(struct address_space *asp)
 {
-	ihk_atomic_inc(&asp->refcount);
+	process_hold_address_space_public_result(asp,
+		__builtin_offsetof(struct address_space, refcount),
+		NULL);
+}
+
+static void process_pt_destroy_bridge(void *page_table)
+{
+	ihk_mc_pt_destroy(page_table);
 }
 
 void
 release_address_space(struct address_space *asp)
 {
-	if (!process_release_address_space_should_destroy_result(
-		    ihk_atomic_dec_and_test(&asp->refcount))) {
-		return;
-	}
-	if (process_release_address_space_should_run_free_cb_result(
-		    (unsigned long)asp->free_cb))
-		asp->free_cb(asp, asp->opt);
-	ihk_mc_pt_destroy(asp->page_table);
-	kfree(asp);
+	process_release_address_space_public_result(asp,
+		__builtin_offsetof(struct address_space, refcount),
+		__builtin_offsetof(struct address_space, free_cb),
+		__builtin_offsetof(struct address_space, opt),
+		__builtin_offsetof(struct address_space, page_table),
+		NULL,
+		process_pt_destroy_bridge,
+		process_optional_free_bridge);
+}
+
+static void process_release_address_space_action_bridge(void *asp)
+{
+	release_address_space(asp);
 }
 
 void
 detach_address_space(struct address_space *asp, int pid)
 {
-	process_address_space_pid_detach_result(asp->pids, asp->nslots, pid);
-	release_address_space(asp);
+	process_detach_address_space_public_result(asp, pid,
+		__builtin_offsetof(struct address_space, pids),
+		__builtin_offsetof(struct address_space, nslots),
+		process_release_address_space_action_bridge);
 }
 
 static int
 init_process_vm(struct process *owner, struct address_space *asp, struct process_vm *vm)
 {
-	int i;
-	ihk_rwspinlock_init(&vm->memory_range_lock);
-	ihk_mc_spinlock_init(&vm->page_table_lock);
+	return process_vm_init_body_result(vm, owner, asp,
+		ihk_mc_get_nr_numa_nodes(), process_vm_rwspin_init_bridge,
+		process_spin_init_bridge, process_vm_init_numa_log_bridge);
+}
 
-	ihk_atomic_set(&vm->refcount, 1);
-	vm->vm_range_tree = RB_ROOT;
-	vm->vm_range_numa_policy_tree = RB_ROOT;
-	vm->address_space = asp;
-	vm->proc = owner;
-	vm->exiting = 0;
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+static void *process_create_thread_alloc_pages_bridge(int npages,
+						      unsigned long flags)
+{
+	return _ihk_mc_alloc_aligned_pages_node(npages, PAGE_P2ALIGN, flags, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);
+}
 
-	memset(&vm->numa_mask, 0, sizeof(vm->numa_mask));
-	for (i = 0; i < ihk_mc_get_nr_numa_nodes(); ++i) {
-		if (i >= PROCESS_NUMA_MASK_BITS) {
-			kprintf("%s: error: NUMA id is larger than mask size!\n",
-				__FUNCTION__);
-			break;
-		}
-		set_bit(i, &vm->numa_mask[0]);
-	}
-	vm->numa_mem_policy = MPOL_DEFAULT;
+static void *process_create_thread_address_space_bridge(int nslots)
+{
+	return create_address_space(get_this_cpu_local_var()->resource_set, nslots);
+}
 
-	for (i = 0; i < VM_RANGE_CACHE_SIZE; ++i) {
-		vm->range_cache[i] = NULL;
-	}
-	vm->range_cache_ind = 0;
+static void process_create_thread_release_address_space_bridge(void *asp)
+{
+	release_address_space(asp);
+}
 
-#ifdef ENABLE_TOFU
-	ihk_mc_spinlock_init(&vm->tofu_stag_lock);
-	for (i = 0; i < TOFU_STAG_HASH_SIZE; ++i) {
-		INIT_LIST_HEAD(&vm->tofu_stag_hash[i]);
-	}
-#endif
+static int process_create_thread_init_process_bridge(void *proc, void *parent)
+{
+	init_process(proc, parent);
 	return 0;
 }
+
+static int process_create_thread_init_vm_bridge(void *owner, void *asp,
+						void *vm)
+{
+	return init_process_vm(owner, asp, vm);
+}
+
+static void process_create_thread_init_user_bridge(void *thread,
+		unsigned long stack_top, unsigned long user_pc,
+		unsigned long user_sp)
+{
+	struct thread *t = thread;
+
+	ihk_mc_init_user_process(&t->ctx, &t->uctx, (void *)stack_top,
+				 user_pc, user_sp);
+}
+#endif
 
 struct thread *create_thread(unsigned long user_pc,
 		unsigned long *__cpu_set, size_t cpu_set_size)
 {
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+	return process_create_thread_body_result(user_pc,
+			(unsigned long)__cpu_set, cpu_set_size * BITS_PER_BYTE,
+			KERNEL_STACK_NR_PAGES, sizeof(struct thread),
+			sizeof(struct process), sizeof(struct process_vm),
+			IHK_MC_AP_NOWAIT, KERNEL_STACK_NR_PAGES * PAGE_SIZE,
+			CPU_SETSIZE, num_processors, SCHED_NORMAL,
+			SS_DISABLE, ihk_mc_get_processor_id(),
+			get_this_cpu_local_var()->resource_set->pid1,
+			__builtin_offsetof(struct process, pid),
+			__builtin_offsetof(struct thread, refcount),
+			__builtin_offsetof(struct thread, hash_list),
+			__builtin_offsetof(struct thread, siblings_list),
+			__builtin_offsetof(struct thread, cpu_set),
+			__builtin_offsetof(struct thread, sched_policy),
+			__builtin_offsetof(struct thread, sigcommon),
+			__builtin_offsetof(struct thread, sigpendinglock),
+			__builtin_offsetof(struct thread, sigpending),
+			__builtin_offsetof(struct thread, sigstack),
+			__builtin_offsetof(stack_t, ss_sp),
+			__builtin_offsetof(stack_t, ss_flags),
+			__builtin_offsetof(stack_t, ss_size),
+			__builtin_offsetof(struct thread, vm),
+			__builtin_offsetof(struct thread, proc),
+			__builtin_offsetof(struct process, cpu_set),
+			__builtin_offsetof(struct process, vm),
+			__builtin_offsetof(struct process, main_thread),
+			__builtin_offsetof(struct process_vm, address_space),
+			__builtin_offsetof(struct address_space, cpu_set),
+			__builtin_offsetof(struct address_space, cpu_set_lock),
+			__builtin_offsetof(struct thread, exit_status),
+			__builtin_offsetof(struct thread, spin_sleep_lock),
+			__builtin_offsetof(struct thread, spin_sleep),
+			sizeof(struct sig_common),
+			__builtin_offsetof(struct sig_common, use),
+			__builtin_offsetof(struct sig_common, lock),
+			__builtin_offsetof(struct sig_common, sigpending),
+			process_create_thread_alloc_pages_bridge,
+			process_alloc_bridge, process_optional_free_bridge,
+			process_create_thread_address_space_bridge,
+			process_create_thread_release_address_space_bridge,
+			process_create_thread_init_process_bridge,
+			process_create_thread_init_vm_bridge,
+			process_create_thread_init_user_bridge,
+			process_default_ncpus_bridge, process_create_cpu_log_bridge,
+			process_rwlock_init_bridge, process_spin_init_bridge,
+			process_spin_lock_bridge, process_spin_unlock_bridge,
+			process_free_thread_pages_bridge);
+#else
 	struct thread *thread;
 	struct process *proc;
 	struct process_vm *vm = NULL;
 	struct address_space *asp = NULL;
-	int cpu;
-	int cpu_set_empty = 1;
 
-	thread = ihk_mc_alloc_pages(KERNEL_STACK_NR_PAGES, IHK_MC_AP_NOWAIT);
+	thread = _ihk_mc_alloc_aligned_pages_node(KERNEL_STACK_NR_PAGES, PAGE_P2ALIGN, IHK_MC_AP_NOWAIT, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);
 	if (!thread)
 		return NULL;
-	memset(thread, 0, sizeof(struct thread));
-	ihk_atomic_set(&thread->refcount, 2);
-	INIT_LIST_HEAD(&thread->hash_list);
-	INIT_LIST_HEAD(&thread->siblings_list);
-	proc = kmalloc(sizeof(struct process), IHK_MC_AP_NOWAIT);
-	vm = kmalloc(sizeof(struct process_vm), IHK_MC_AP_NOWAIT);
-	asp = create_address_space(cpu_local_var(resource_set), 1);
+	if (process_thread_alloc_init_body_result(thread, sizeof(struct thread),
+			__builtin_offsetof(struct thread, refcount),
+			__builtin_offsetof(struct thread, hash_list),
+			__builtin_offsetof(struct thread, siblings_list),
+			NULL) < 0)
+		goto err_thread;
+	proc = kmalloc_tracked(sizeof(struct process), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
+	vm = kmalloc_tracked(sizeof(struct process_vm), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
+	asp = create_address_space(get_this_cpu_local_var()->resource_set, 1);
 	if (!proc || !vm || !asp)
 		goto err;
-	memset(proc, 0, sizeof(struct process));
-	memset(vm, 0, sizeof(struct process_vm));
-	init_process(proc, cpu_local_var(resource_set)->pid1);
+	if (process_allocated_object_zero_body_result(proc, sizeof(*proc)) < 0)
+		goto err;
+	if (process_allocated_object_zero_body_result(vm, sizeof(*vm)) < 0)
+		goto err;
+	init_process(proc, get_this_cpu_local_var()->resource_set->pid1);
 
-	/* Use requested CPU cores */
-	for_each_set_bit(cpu, __cpu_set, cpu_set_size * BITS_PER_BYTE) {
-		if (!process_create_cpu_allowed_result(cpu, num_processors)) {
-			kprintf("%s: invalid CPU requested in initial cpu_set\n",
-				__FUNCTION__);
-			goto err;
-		}
+	if (process_create_cpu_sets_body_result((unsigned long)__cpu_set,
+			cpu_set_size * BITS_PER_BYTE,
+			(unsigned long)&thread->cpu_set,
+			(unsigned long)&proc->cpu_set, CPU_SETSIZE,
+			num_processors, proc->pid, process_default_ncpus_bridge,
+			process_create_cpu_log_bridge) < 0)
+		goto err;
 
-		dkprintf("%s: pid: %d, CPU: %d\n",
-			__FUNCTION__, proc->pid, cpu); 
-		CPU_SET(cpu, &thread->cpu_set);
-		CPU_SET(cpu, &proc->cpu_set);
-		cpu_set_empty = 0;
-	}
+	if (process_thread_sched_default_body_result(thread,
+			__builtin_offsetof(struct thread, sched_policy),
+			SCHED_NORMAL) < 0)
+		goto err;
 
-	/* Default allows all cores */
-	if (process_create_use_default_cpu_set_result(cpu_set_empty)) {
-		struct ihk_mc_cpu_info *infop;
-		int i;
-
-		infop = ihk_mc_get_cpu_info();
-		for (i = 0; i < infop->ncpus; ++i) {
-			CPU_SET(i, &thread->cpu_set);
-			CPU_SET(i, &proc->cpu_set);
-		}
-	}
-
-	thread->sched_policy = SCHED_NORMAL;
-
-	thread->sigcommon = kmalloc(sizeof(struct sig_common),
-	                            IHK_MC_AP_NOWAIT);
+	thread->sigcommon = process_sigcommon_alloc_init_body_result(
+		sizeof(struct sig_common), IHK_MC_AP_NOWAIT,
+		__builtin_offsetof(struct sig_common, use),
+		__builtin_offsetof(struct sig_common, lock),
+		__builtin_offsetof(struct sig_common, sigpending),
+		process_alloc_bridge, process_optional_free_bridge,
+		NULL, process_rwlock_init_bridge);
 	if (!thread->sigcommon) {
 		goto err;
 	}
-	memset(thread->sigcommon, '\0', sizeof(struct sig_common));
 
 	dkprintf("fork(): sigshared\n");
 
-	ihk_atomic_set(&thread->sigcommon->use, 1);
-	mcs_rwlock_init(&thread->sigcommon->lock);
-	INIT_LIST_HEAD(&thread->sigcommon->sigpending);
+	process_thread_sigpending_init_body_result(thread,
+		__builtin_offsetof(struct thread, sigpendinglock),
+		__builtin_offsetof(struct thread, sigpending),
+		process_rwlock_init_bridge);
 
-	mcs_rwlock_init(&thread->sigpendinglock);
-	INIT_LIST_HEAD(&thread->sigpending);
-
-	thread->sigstack.ss_sp = NULL;
-	thread->sigstack.ss_flags = SS_DISABLE;
-	thread->sigstack.ss_size = 0;
+	if (process_thread_sigstack_disable_body_result(thread,
+			__builtin_offsetof(struct thread, sigstack),
+			__builtin_offsetof(stack_t, ss_sp),
+			__builtin_offsetof(stack_t, ss_flags),
+			__builtin_offsetof(stack_t, ss_size), SS_DISABLE) < 0)
+		goto err;
 
 	ihk_mc_init_user_process(&thread->ctx, &thread->uctx, ((char *)thread) +
 	                       KERNEL_STACK_NR_PAGES * PAGE_SIZE, user_pc, 0);
 
-	thread->vm = vm;
-	thread->proc = proc;
-	proc->vm = vm;
-	proc->main_thread = thread;
+	if (process_create_thread_link_state_body_result(thread, proc, vm,
+			__builtin_offsetof(struct thread, vm),
+			__builtin_offsetof(struct thread, proc),
+			__builtin_offsetof(struct process, vm),
+			__builtin_offsetof(struct process, main_thread)) < 0)
+		goto err;
 
 	if(init_process_vm(proc, asp, vm) != 0){
 		goto err;
 	}
-	thread->exit_status = -1;
+	if (process_thread_exit_status_init_body_result(thread,
+			__builtin_offsetof(struct thread, exit_status), -1) < 0)
+		goto err;
 
-	cpu_set(ihk_mc_get_processor_id(), &thread->vm->address_space->cpu_set,
-			&thread->vm->address_space->cpu_set_lock);
+	process_cpu_set_update_body_result(
+		(unsigned long)&thread->vm->address_space->cpu_set,
+		(unsigned long)&thread->vm->address_space->cpu_set_lock,
+		-1, ihk_mc_get_processor_id(), num_processors,
+		process_spin_lock_bridge, process_spin_unlock_bridge);
 
-	ihk_mc_spinlock_init(&thread->spin_sleep_lock);
-	thread->spin_sleep = 0;
+	if (process_thread_spin_sleep_init_body_result(thread,
+			__builtin_offsetof(struct thread, spin_sleep_lock),
+			__builtin_offsetof(struct thread, spin_sleep),
+			process_spin_init_bridge) < 0)
+		goto err;
 
 	return thread;
 
+err_thread:
+	process_thread_action_result(thread, process_free_thread_pages_bridge);
+	return NULL;
+
 err:
 	if(proc)
-		kfree(proc);
+		process_free_callback_result(proc, process_optional_free_bridge);
 	if(vm)
-		kfree(vm);
+		process_free_callback_result(vm, process_optional_free_bridge);
 	if(asp)
 		release_address_space(asp);
 	if(thread->sigcommon)
-		kfree(thread->sigcommon);
-	ihk_mc_free_pages(thread, KERNEL_STACK_NR_PAGES);
+		process_free_callback_result(thread->sigcommon,
+			process_optional_free_bridge);
+	process_thread_action_result(thread, process_free_thread_pages_bridge);
 
 	return NULL;
+#endif
 }
 
 struct thread *
@@ -401,19 +868,22 @@ clone_thread(struct thread *org, unsigned long pc, unsigned long sp,
 	struct address_space *asp = NULL;
 	struct cpu_local_var *v = get_this_cpu_local_var();
 
-	if ((thread = ihk_mc_alloc_pages(KERNEL_STACK_NR_PAGES,
-					IHK_MC_AP_NOWAIT)) == NULL) {
+	if ((thread = _ihk_mc_alloc_aligned_pages_node(KERNEL_STACK_NR_PAGES, PAGE_P2ALIGN, IHK_MC_AP_NOWAIT, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__)) == NULL) {
 		return NULL;
 	}
 
-	memset(thread, 0, sizeof(struct thread));
-	INIT_LIST_HEAD(&thread->hash_list);
-	INIT_LIST_HEAD(&thread->siblings_list);
-	ihk_atomic_set(&thread->refcount, 2);
-	memcpy(&thread->cpu_set, &org->cpu_set, sizeof(thread->cpu_set));
+	if (process_thread_alloc_init_body_result(thread, sizeof(struct thread),
+			__builtin_offsetof(struct thread, refcount),
+			__builtin_offsetof(struct thread, hash_list),
+			__builtin_offsetof(struct thread, siblings_list),
+			NULL) < 0)
+		goto free_thread;
 
-	/* New thread is in kernel until jumping to enter_user_mode */
-	thread->in_kernel = org->in_kernel;
+	if (process_clone_thread_base_state_body_result(thread, org,
+			__builtin_offsetof(struct thread, cpu_set),
+			sizeof(thread->cpu_set),
+			__builtin_offsetof(struct thread, in_kernel)) < 0)
+		goto free_thread;
 
 	/* NOTE: sp is the user mode stack! */
 	ihk_mc_init_user_process(&thread->ctx, &thread->uctx, ((char *)thread) +
@@ -428,98 +898,143 @@ clone_thread(struct thread *org, unsigned long pc, unsigned long sp,
 	}
 	arch_clone_thread(org, pc, sp, thread);
 
-	memcpy(thread->uctx, org->uctx, sizeof(*org->uctx));
-	ihk_mc_modify_user_context(thread->uctx, IHK_UCR_STACK_POINTER, sp);
-	ihk_mc_modify_user_context(thread->uctx, IHK_UCR_PROGRAM_COUNTER, pc);
+	if (process_clone_user_context_body_result(thread, org,
+			__builtin_offsetof(struct thread, uctx),
+			sizeof(*org->uctx), IHK_UCR_STACK_POINTER, sp,
+			IHK_UCR_PROGRAM_COUNTER, pc,
+			process_user_context_modify_bridge) < 0)
+		goto free_fp_regs;
 
-	thread->sched_policy = org->sched_policy;
-	thread->sched_param.sched_priority = org->sched_param.sched_priority;
+	if (process_clone_thread_sched_state_body_result(thread, org,
+			__builtin_offsetof(struct thread, sched_policy),
+			__builtin_offsetof(struct thread,
+					   sched_param.sched_priority)) < 0)
+		goto free_fp_regs;
 
 	/* clone VM */
 	if (process_clone_shares_vm_result(clone_flags)) {
 		proc = org->proc;
-		thread->vm = org->vm;
-		thread->proc = proc;
+		if (process_clone_thread_shared_vm_state_body_result(thread, proc,
+				org->vm, __builtin_offsetof(struct thread, vm),
+				__builtin_offsetof(struct thread, proc)) < 0)
+			goto free_fp_regs;
 
-		thread->sigstack.ss_sp = NULL;
-		thread->sigstack.ss_flags = SS_DISABLE;
-		thread->sigstack.ss_size = 0;
+		if (process_thread_sigstack_disable_body_result(thread,
+				__builtin_offsetof(struct thread, sigstack),
+				__builtin_offsetof(stack_t, ss_sp),
+				__builtin_offsetof(stack_t, ss_flags),
+				__builtin_offsetof(stack_t, ss_size),
+				SS_DISABLE) < 0)
+			goto free_fp_regs;
 	}
 	/* fork() */
 	else {
-		proc = kmalloc(sizeof(struct process), IHK_MC_AP_NOWAIT);
+		proc = kmalloc_tracked(sizeof(struct process), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 		if(!proc)
 			goto free_fp_regs;
-		memset(proc, '\0', sizeof(struct process));
+		if (process_allocated_object_zero_body_result(proc,
+				sizeof(*proc)) < 0)
+			goto free_fork_process_proc;
 		init_process(proc, org->proc);
 #ifdef PROFILE_ENABLE
-		proc->profile = org->proc->profile;
+		if (process_clone_fork_profile_body_result(proc, org->proc,
+				__builtin_offsetof(struct process, profile)) < 0)
+			goto free_fork_process_proc;
 #endif
-		proc->termsig = termsig;
-		asp = create_address_space(cpu_local_var(resource_set), 1);
+		if (process_clone_fork_process_termsig_body_result(proc,
+				__builtin_offsetof(struct process, termsig),
+				termsig) < 0)
+			goto free_fork_process_proc;
+		asp = create_address_space(get_this_cpu_local_var()->resource_set, 1);
 		if (!asp) {
 			goto free_fork_process_proc;
 		}
-		proc->vm = kmalloc(sizeof(struct process_vm), IHK_MC_AP_NOWAIT);
+		proc->vm = kmalloc_tracked(sizeof(struct process_vm), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 		if (!proc->vm) {
 			goto free_fork_process_asp;
 		}
-		memset(proc->vm, '\0', sizeof(struct process_vm));
+		if (process_allocated_object_zero_body_result(proc->vm,
+				sizeof(*proc->vm)) < 0)
+			goto free_fork_process_vm;
 
-		proc->saved_cmdline_len = org->proc->saved_cmdline_len;
-		proc->saved_cmdline = kmalloc(proc->saved_cmdline_len,
-					      IHK_MC_AP_NOWAIT);
-		if (!proc->saved_cmdline) {
+		if (process_clone_fork_saved_cmdline_body_result(proc, org->proc,
+				__builtin_offsetof(struct process, saved_cmdline_len),
+				__builtin_offsetof(struct process, saved_cmdline),
+				IHK_MC_AP_NOWAIT, process_alloc_bridge) != 0) {
 			goto free_fork_process_vm;
 		}
-		memcpy(proc->saved_cmdline, org->proc->saved_cmdline,
-		       proc->saved_cmdline_len);
 
 		dkprintf("fork(): init_process_vm()\n");
 		if (init_process_vm(proc, asp, proc->vm) != 0) {
 			goto free_fork_process_cmdline;
 		}
-		memcpy(&proc->vm->numa_mask, &org->vm->numa_mask,
-				sizeof(proc->vm->numa_mask));
-		proc->vm->numa_mem_policy =
-			org->vm->numa_mem_policy;
+		if (process_clone_fork_vm_policy_body_result(proc->vm, org->vm,
+				__builtin_offsetof(struct process_vm, numa_mask),
+				sizeof(proc->vm->numa_mask),
+				__builtin_offsetof(struct process_vm,
+						   numa_mem_policy),
+				__builtin_offsetof(struct process_vm, region),
+				sizeof(struct vm_regions)) < 0)
+			goto free_fork_process_cmdline;
 
-		thread->proc = proc;
-		thread->vm = proc->vm;
-		proc->main_thread = thread;
-
-		memcpy(&proc->vm->region, &org->vm->region, sizeof(struct vm_regions));
+		if (process_create_thread_link_state_body_result(thread, proc,
+				proc->vm, __builtin_offsetof(struct thread, vm),
+				__builtin_offsetof(struct thread, proc),
+				__builtin_offsetof(struct process, vm),
+				__builtin_offsetof(struct process, main_thread)) < 0)
+			goto free_fork_process_cmdline;
 
 		dkprintf("fork(): copy_user_ranges()\n");
 		/* Copy user-space mappings.
 		 * TODO: do this with COW later? */
-		v->on_fork_vm = proc->vm;
+		if (process_clone_on_fork_vm_body_result(v,
+				__builtin_offsetof(struct cpu_local_var,
+						   on_fork_vm),
+				proc->vm) < 0)
+			goto free_fork_process_cmdline;
 		if (copy_user_ranges(proc->vm, org->vm) != 0) {
-			v->on_fork_vm = NULL;
+			process_clone_on_fork_vm_body_result(v,
+				__builtin_offsetof(struct cpu_local_var,
+						   on_fork_vm),
+				NULL);
 			goto free_fork_process_cmdline;
 		}
-		v->on_fork_vm = NULL;
+		process_clone_on_fork_vm_body_result(v,
+			__builtin_offsetof(struct cpu_local_var, on_fork_vm),
+			NULL);
 
 		/* Copy mckfd list
 		   FIXME: Replace list manipulation with list_add() etc. */
-		long irqstate = ihk_mc_spinlock_lock(&proc->mckfd_lock);
+		unsigned long irqstate = process_spin_lock_result(
+			(unsigned long)&proc->mckfd_lock,
+			process_spin_lock_bridge);
 		struct mckfd *cur;
 		for (cur = org->proc->mckfd; cur; cur = cur->next) {
-			struct mckfd *mckfd = kmalloc(sizeof(struct mckfd), IHK_MC_AP_NOWAIT);
+			struct mckfd *mckfd = kmalloc_tracked(sizeof(struct mckfd), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 			if(!mckfd) {
-				ihk_mc_spinlock_unlock(&proc->mckfd_lock,
-							irqstate);
+				process_spin_unlock_result(
+					(unsigned long)&proc->mckfd_lock,
+					irqstate, process_spin_unlock_bridge);
 				goto free_fork_process_mckfd;
 			}
-			memcpy(mckfd, cur, sizeof(struct mckfd));
+			if (process_mckfd_copy_body_result(mckfd, cur,
+					sizeof(struct mckfd)) < 0) {
+				kfree_tracked(mckfd, __FILE__, __LINE__);
+				process_spin_unlock_result(
+					(unsigned long)&proc->mckfd_lock,
+					irqstate, process_spin_unlock_bridge);
+				goto free_fork_process_mckfd;
+			}
 			process_mckfd_push_head_result(&proc->mckfd, mckfd);
 
 			if (process_mckfd_should_dup_result(
 				    (unsigned long)mckfd->dup_cb)) {
-				mckfd->dup_cb(mckfd, NULL);
+				process_mckfd_dup_result(mckfd,
+					(process_mckfd_dup_fn_t)mckfd->dup_cb);
 			}
 		}
-		ihk_mc_spinlock_unlock(&proc->mckfd_lock, irqstate);
+		process_spin_unlock_result((unsigned long)&proc->mckfd_lock,
+			irqstate, process_spin_unlock_bridge);
 
 		process_clone_copy_vm_thread_state_result(thread->vm, org->vm,
 			__builtin_offsetof(struct process_vm, vdso_addr),
@@ -532,40 +1047,78 @@ clone_thread(struct thread *org, unsigned long pc, unsigned long sp,
 
 	/* clone signal handlers */
 	if (process_clone_shares_sighand_result(clone_flags)) {
-		thread->sigcommon = org->sigcommon;
-		ihk_atomic_inc(&org->sigcommon->use);
+		if (process_clone_sigcommon_share_body_result(thread, org,
+				__builtin_offsetof(struct thread, sigcommon),
+				__builtin_offsetof(struct sig_common, use),
+				NULL) < 0) {
+			if (process_clone_shares_vm_result(clone_flags)) {
+				goto free_clone_process;
+			}
+			goto free_fork_process_mckfd;
+		}
 	}
 	/* copy signal handlers (i.e., fork()) */
 	else {
 		dkprintf("fork(): sigcommon\n");
-		thread->sigcommon = kmalloc(sizeof(struct sig_common),
-		                             IHK_MC_AP_NOWAIT);
+		thread->sigcommon = process_sigcommon_alloc_init_body_result(
+			sizeof(struct sig_common), IHK_MC_AP_NOWAIT,
+			__builtin_offsetof(struct sig_common, use),
+			__builtin_offsetof(struct sig_common, lock),
+			__builtin_offsetof(struct sig_common, sigpending),
+			process_alloc_bridge, process_optional_free_bridge,
+			NULL, process_rwlock_init_bridge);
 		if (!thread->sigcommon) {
 			if (process_clone_shares_vm_result(clone_flags)) {
 				goto free_clone_process;
 			}
 			goto free_fork_process_mckfd;
 		}
-		memset(thread->sigcommon, '\0', sizeof(struct sig_common));
 
 		dkprintf("fork(): sigshared\n");
 
-		memcpy(thread->sigcommon->action, org->sigcommon->action,
-		       sizeof(struct k_sigaction) * _NSIG);
-		ihk_atomic_set(&thread->sigcommon->use, 1);
-		mcs_rwlock_init(&thread->sigcommon->lock);
-		INIT_LIST_HEAD(&thread->sigcommon->sigpending);
+		if (process_clone_sigcommon_action_copy_body_result(
+				thread->sigcommon, org->sigcommon,
+				__builtin_offsetof(struct sig_common, action),
+				sizeof(struct k_sigaction) * _NSIG) < 0) {
+			if (process_clone_shares_vm_result(clone_flags)) {
+				goto free_clone_process;
+			}
+			goto free_fork_process_mckfd;
+		}
 		// TODO: copy signalfd
 	}
-	mcs_rwlock_init(&thread->sigpendinglock);
-	INIT_LIST_HEAD(&thread->sigpending);
-	thread->sigmask = org->sigmask;
+	process_thread_sigpending_init_body_result(thread,
+		__builtin_offsetof(struct thread, sigpendinglock),
+		__builtin_offsetof(struct thread, sigpending),
+		process_rwlock_init_bridge);
+	if (process_thread_sigmask_copy_body_result(thread, org,
+			__builtin_offsetof(struct thread, sigmask),
+			sizeof(thread->sigmask)) < 0) {
+		if (process_clone_shares_vm_result(clone_flags)) {
+			goto free_clone_process;
+		}
+		goto free_fork_process_mckfd;
+	}
 
-	ihk_mc_spinlock_init(&thread->spin_sleep_lock);
-	thread->spin_sleep = 0;
+	if (process_thread_spin_sleep_init_body_result(thread,
+			__builtin_offsetof(struct thread, spin_sleep_lock),
+			__builtin_offsetof(struct thread, spin_sleep),
+			process_spin_init_bridge) < 0) {
+		if (process_clone_shares_vm_result(clone_flags)) {
+			goto free_clone_process;
+		}
+		goto free_fork_process_mckfd;
+	}
 
 #ifdef PROFILE_ENABLE
-	thread->profile = org->profile | proc->profile;
+	if (process_clone_profile_state_body_result(thread, org, proc,
+			__builtin_offsetof(struct thread, profile),
+			__builtin_offsetof(struct process, profile)) < 0) {
+		if (process_clone_shares_vm_result(clone_flags)) {
+			goto free_clone_process;
+		}
+		goto free_fork_process_mckfd;
+	}
 #endif
 
 	return thread;
@@ -583,48 +1136,94 @@ free_clone_process:
 	 */
 free_fork_process_mckfd:
 	{
-		long irqstate = ihk_mc_spinlock_lock(&proc->mckfd_lock);
-		struct mckfd *cur;
+		unsigned long irqstate = process_spin_lock_result(
+			(unsigned long)&proc->mckfd_lock,
+			process_spin_lock_bridge);
 
-		while ((cur = process_mckfd_pop_head_result(&proc->mckfd))) {
-			kfree(cur);
-		}
-		ihk_mc_spinlock_unlock(&proc->mckfd_lock, irqstate);
+		process_mckfd_drain_free_result(&proc->mckfd,
+			__builtin_offsetof(struct mckfd, next),
+			process_mckfd_free_bridge);
+		process_spin_unlock_result((unsigned long)&proc->mckfd_lock,
+			irqstate, process_spin_unlock_bridge);
 	}
-	free_all_process_memory_range(proc->vm);
+	process_vm_action_result(proc->vm, process_free_all_ranges_bridge);
 free_fork_process_cmdline:
-	kfree(proc->saved_cmdline);
+	process_free_callback_result(proc->saved_cmdline,
+		process_optional_free_bridge);
 free_fork_process_vm:
-	kfree(proc->vm);
+	process_free_callback_result(proc->vm, process_optional_free_bridge);
 free_fork_process_asp:
-	ihk_mc_pt_destroy(asp->page_table);
-	kfree(asp);
+	process_pt_destroy_result(asp->page_table, process_pt_destroy_bridge);
+	process_free_callback_result(asp, process_optional_free_bridge);
 free_fork_process_proc:
-	kfree(proc);
+	process_free_callback_result(proc, process_optional_free_bridge);
 
 	/*
 	 * free fp_regs
 	 */
 free_fp_regs:
-	release_fp_regs(thread);
+	process_release_fp_regs_result(thread, release_fp_regs);
 
 	/*
 	 * free thread
 	 */
 free_thread:
-	free_thread_pages(thread);
+	process_thread_action_result(thread, process_free_thread_pages_bridge);
 	return NULL;
 }
 
 int
 ptrace_traceme(void)
 {
-	int error = 0;
-	struct thread *thread = cpu_local_var(current);
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+	struct thread *thread = get_this_cpu_local_var()->current;
 	struct process *proc = thread->proc;
 	struct process *parent = proc->parent;
 	struct mcs_rwlock_node child_lock;
-	struct resource_set *resource_set = cpu_local_var(resource_set);
+	struct resource_set *resource_set = get_this_cpu_local_var()->resource_set;
+	struct process *pid1 = resource_set->pid1;
+	static const struct process_ptrace_traceme_offsets offsets = {
+		.thread_proc_offset = __builtin_offsetof(struct thread, proc),
+		.thread_report_proc_offset =
+			__builtin_offsetof(struct thread, report_proc),
+		.thread_report_siblings_list_offset =
+			__builtin_offsetof(struct thread, report_siblings_list),
+		.thread_ptrace_offset =
+			__builtin_offsetof(struct thread, ptrace),
+		.thread_ptrace_debugreg_offset =
+			__builtin_offsetof(struct thread, ptrace_debugreg),
+		.proc_pid_offset = __builtin_offsetof(struct process, pid),
+		.proc_parent_offset =
+			__builtin_offsetof(struct process, parent),
+		.proc_main_thread_offset =
+			__builtin_offsetof(struct process, main_thread),
+		.proc_children_lock_offset =
+			__builtin_offsetof(struct process, children_lock),
+		.proc_threads_lock_offset =
+			__builtin_offsetof(struct process, threads_lock),
+		.proc_ptraced_siblings_list_offset =
+			__builtin_offsetof(struct process, ptraced_siblings_list),
+		.proc_ptraced_children_list_offset =
+			__builtin_offsetof(struct process, ptraced_children_list),
+		.proc_report_threads_list_offset =
+			__builtin_offsetof(struct process, report_threads_list),
+	};
+
+	return process_ptrace_traceme_body_result(thread, proc, parent, pid1,
+			&offsets, &child_lock,
+			process_ptrace_mcs_lock_noirq_bridge,
+			process_ptrace_mcs_unlock_noirq_bridge,
+			process_ptrace_alloc_debugreg_bridge,
+			process_ptrace_clear_single_step_bridge,
+			process_ptrace_hold_thread_bridge,
+			process_ptrace_traceme_log_bridge);
+#else
+	int error = 0;
+	struct thread *thread = get_this_cpu_local_var()->current;
+	struct process *proc = thread->proc;
+	struct process *parent = proc->parent;
+	struct mcs_rwlock_node child_lock;
+	struct resource_set *resource_set = get_this_cpu_local_var()->resource_set;
 	struct process *pid1 = resource_set->pid1;
 
 	dkprintf("ptrace_traceme,pid=%d,proc->parent=%p\n", proc->pid, proc->parent);
@@ -668,6 +1267,7 @@ ptrace_traceme(void)
 
 	dkprintf("ptrace_traceme,returning,error=%d\n", error);
 	return error;
+#endif
 }
 
 struct copy_args {
@@ -684,7 +1284,7 @@ static int copy_user_pte(void *arg0, page_table_t src_pt, pte_t *src_ptep, void 
 	struct copy_args * const args = arg0;
 	int error;
 	intptr_t src_phys;
-	unsigned long src_lphys;
+	unsigned long src_lphys = 0;
 	void *src_kvirt;
 	size_t pgsize = (size_t)1 << pgshift;
 	int npages;
@@ -728,8 +1328,7 @@ static int copy_user_pte(void *arg0, page_table_t src_pt, pte_t *src_ptep, void 
 		dkprintf("copy_user_pte(): page size: %d\n", pgsize);
 
 		npages = pgsize / PAGE_SIZE;
-		virt = ihk_mc_alloc_aligned_pages_user(npages, pgalign,
-		                                       IHK_MC_AP_NOWAIT, (uintptr_t)pgaddr);
+		virt = _ihk_mc_alloc_aligned_pages_node(npages, pgalign, IHK_MC_AP_NOWAIT, -1, IHK_MC_PG_USER, (uintptr_t)pgaddr, __FILE__, __LINE__);
 		if (!virt) {
 			kprintf("ERROR: copy_user_pte() allocating new page\n");
 			error = -ENOMEM;
@@ -749,11 +1348,18 @@ static int copy_user_pte(void *arg0, page_table_t src_pt, pte_t *src_ptep, void 
 			src_kvirt = ihk_mc_map_virtual(src_lphys, 1, attr);
 		}
 
+		if (process_copy_user_pte_buffer_body_result(virt, src_kvirt,
+				pgsize, args->new_vrflag & VR_WIPEONFORK) < 0) {
+			error = -EINVAL;
+			if (!is_mckernel) {
+				ihk_mc_unmap_virtual(src_kvirt, 1);
+				ihk_mc_unmap_memory(NULL, src_lphys, pgsize);
+			}
+			goto out;
+		}
 		if (args->new_vrflag & VR_WIPEONFORK) {
-			memset(virt, 0, pgsize);
 			dkprintf("%s(): memset OK\n", __func__);
 		} else {
-			memcpy(virt, src_kvirt, pgsize);
 			dkprintf("%s(): memcpy OK\n", __func__);
 		}
 
@@ -778,136 +1384,154 @@ static int copy_user_pte(void *arg0, page_table_t src_pt, pte_t *src_ptep, void 
 
 out:
 	if (virt) {
-		ihk_mc_free_pages(virt, npages);
+		_ihk_mc_free_pages(virt, npages, IHK_MC_PG_KERNEL, __FILE__, __LINE__);
 	}
 	return error;
 }
 
+static struct vm_range *process_add_range_alloc_bridge(unsigned long size);
+static void process_add_range_free_bridge(struct vm_range *range);
+static int process_add_range_insert_bridge(struct process_vm *vm,
+					   struct vm_range *range);
+static int process_visit_pte_range_bridge(void *page_table,
+		unsigned long start, unsigned long end, int pgshift,
+		int flags, void *visit_fn, void *arg);
+static int process_memory_range_free_bridge(struct process_vm *vm,
+					    struct vm_range *range);
+
+static struct vm_range *process_copy_range_lookup_bridge(struct process_vm *vm,
+		unsigned long start, unsigned long end)
+{
+	return lookup_process_memory_range(vm, start, end);
+}
+
+static void process_copy_user_ranges_log_bridge(struct process_vm *orgvm,
+		struct vm_range *range, long fault_addr)
+{
+	kprintf("ERROR: copy_user_ranges() "
+			"(%p,%lx-%lx %lx,%lx):get pgsize failed\n",
+			orgvm, range->start, range->end, range->flag,
+			fault_addr);
+}
+
 static int copy_user_ranges(struct process_vm *vm, struct process_vm *orgvm)
 {
-	int error;
-	struct vm_range *src_range;
-	struct vm_range *range;
-	struct vm_range *last_insert;
 	struct copy_args args;
 
-	ihk_rwspinlock_read_lock_noirq(&orgvm->memory_range_lock);
+	return process_copy_user_ranges_body_result(vm, orgvm,
+			sizeof(struct vm_range), IHK_MC_AP_NOWAIT, &args,
+			__builtin_offsetof(struct copy_args, new_vm),
+			__builtin_offsetof(struct copy_args, new_vrflag),
+			__builtin_offsetof(struct copy_args, range),
+			__builtin_offsetof(struct copy_args, fault_addr),
+			&copy_user_pte, VPTEF_SKIP_NULL,
+			process_rw_read_lock_bridge,
+			process_rw_read_unlock_bridge,
+			process_copy_range_lookup_bridge,
+			next_process_memory_range,
+			process_add_range_alloc_bridge,
+			process_add_range_free_bridge,
+			process_add_range_insert_bridge,
+			process_visit_pte_range_bridge,
+			process_memory_range_free_bridge,
+			process_copy_user_ranges_log_bridge);
+}
 
-	/* Iterate original process' vm_range list and take a copy one-by-one */
-	last_insert = NULL;
-	src_range = NULL;
-	for (;;) {
-		if (!src_range) {
-			src_range = lookup_process_memory_range(orgvm, 0, -1);
-		}
-		else {
-			src_range = next_process_memory_range(orgvm, src_range);
-		}
-		if (!src_range) {
-			break;
-		}
+static unsigned long process_update_page_table_attr_bridge(unsigned long flag,
+		unsigned long fault, void *ptep)
+{
+	return arch_vrflag_to_ptattr(flag, fault, ptep);
+}
 
-		if(src_range->flag & VR_DONTFORK)
-			continue;
+static int process_update_page_table_set_range_bridge(void *page_table,
+		struct process_vm *vm, unsigned long start, unsigned long end,
+		unsigned long phys, unsigned long attr, int pgshift,
+		struct vm_range *range, int flags)
+{
+	return ihk_mc_pt_set_range(page_table, vm, (void *)start, (void *)end,
+			phys, attr, pgshift, range, flags);
+}
 
-		range = kmalloc(sizeof(struct vm_range), IHK_MC_AP_NOWAIT);
-		if (!range) {
-			goto err_rollback;
-		}
-
-		RB_CLEAR_NODE(&range->vm_rb_node);
-		range->start = src_range->start;
-		range->end = src_range->end;
-		range->flag = src_range->flag;
-		range->memobj = src_range->memobj;
-		range->objoff = src_range->objoff;
-		range->pgshift = src_range->pgshift;
-		range->private_data = src_range->private_data;
-		range->straight_start = src_range->straight_start;
-
-		if (range->memobj) {
-			memobj_ref(range->memobj);
-		}
-
-		vm_range_insert(vm, range);
-		last_insert = src_range;
-
-		/* Copy actual mappings */
-		args.new_vrflag = range->flag;
-		args.new_vm = vm;
-		args.fault_addr = -1;
-		args.range = range;
-		
-		error = visit_pte_range(orgvm->address_space->page_table,
-				(void *)range->start, (void *)range->end,
-				range->pgshift, VPTEF_SKIP_NULL,
-				&copy_user_pte, &args);
-		if (error) {
-			if (args.fault_addr != -1) {
-				kprintf("ERROR: copy_user_ranges() "
-						"(%p,%lx-%lx %lx,%lx):"
-						"get pgsize failed\n", orgvm,
-						range->start, range->end,
-						range->flag, args.fault_addr);
-			}
-			goto err_rollback;
-		}
-		// memory_stat_rss_add() is called in child-node, i.e. copy_user_pte()
-	}
-
-	ihk_rwspinlock_read_unlock_noirq(&orgvm->memory_range_lock);
-
-	return 0;
-
-err_rollback:
-	if (last_insert) {
-		src_range = lookup_process_memory_range(orgvm, 0, -1);
-		while (src_range) {
-			struct vm_range *dest_range;
-
-			if (src_range->flag & VR_DONTFORK)
-				continue;
-
-
-			dest_range = lookup_process_memory_range(vm,
-							src_range->start,
-							src_range->end);
-			if (dest_range) {
-				free_process_memory_range(vm, dest_range);
-			}
-			if (src_range == last_insert) {
-				break;
-			}
-			src_range = next_process_memory_range(orgvm, src_range);
-		}
-	}
-
-	ihk_rwspinlock_read_unlock_noirq(&orgvm->memory_range_lock);
-	return -1;
+static void process_update_page_table_log_bridge(int error)
+{
+	kprintf("update_process_page_table:ihk_mc_pt_set_range failed. %d\n",
+		error);
 }
 
 int update_process_page_table(struct process_vm *vm,
                           struct vm_range *range, uint64_t phys,
 			  enum ihk_mc_pt_attribute flag)
 {
-	int error;
-	unsigned long flags;
-	enum ihk_mc_pt_attribute attr;
+	return process_update_page_table_public_result(vm, range, phys, flag,
+		process_update_page_table_attr_bridge,
+		process_spin_lock_bridge, process_spin_unlock_bridge,
+		process_update_page_table_set_range_bridge,
+		process_update_page_table_log_bridge);
+}
 
-	attr = arch_vrflag_to_ptattr(range->flag, PF_POPULATE, NULL);
-	flags = ihk_mc_spinlock_lock(&vm->page_table_lock);
-	error = ihk_mc_pt_set_range(vm->address_space->page_table, vm,
-								(void *)range->start, (void *)range->end, phys, attr,
-								range->pgshift, range, 0);
-	if (error) {
-		kprintf("update_process_page_table:ihk_mc_pt_set_range failed. %d\n", error);
-		goto out;
+static int process_split_shm_lookup_page_bridge(struct memobj *obj, long off,
+		int p2align, uintptr_t *physp, unsigned long *pflag)
+{
+	return memobj_lookup_page(obj, off, p2align, physp, pflag);
+}
+
+static void *process_split_shm_phys_to_page_bridge(unsigned long phys)
+{
+	return phys_to_page(phys);
+}
+
+static int process_split_shm_update_page_bridge(struct memobj *obj,
+		void *page_table, void *page, void *vaddr)
+{
+	return memobj_update_page(obj, page_table, page, vaddr);
+}
+
+static struct vm_range *process_split_range_alloc_bridge(unsigned long size,
+		unsigned long flags)
+{
+	return kmalloc_tracked(size, flags, __FILE__, __LINE__);
+}
+
+static void process_split_range_alloc_log_bridge(struct process_vm *vm,
+		struct vm_range *range, unsigned long addr, void *splitp)
+{
+	ekprintf("split_process_memory_range(%p,%lx-%lx,%lx,%p):"
+			"kmalloc failed\n",
+			vm, range->start, range->end, addr, splitp);
+}
+
+static void process_split_range_publish_log_bridge(int error)
+{
+	kprintf("%s: ERROR: could not insert range: %d\n",
+		"split_process_memory_range", error);
+}
+
+static int process_split_range_pt_split_bridge(void *page_table,
+		struct process_vm *vm, struct vm_range *range, void *addr)
+{
+	return ihk_mc_pt_split(page_table, vm, range, addr);
+}
+
+static void process_split_range_pt_log_bridge(int error)
+{
+	ekprintf("split_process_memory_range:"
+			"ihk_mc_pt_split failed. %d\n", error);
+}
+
+static void process_split_shm_log_bridge(int event, int error)
+{
+	switch (event) {
+	case PROCESS_SPLIT_SHM_LOG_LOOKUP_FAILED:
+		ekprintf("%s: memobj_lookup_page failed. %d\n",
+			 "split_process_memory_range", error);
+		break;
+	case PROCESS_SPLIT_SHM_LOG_UPDATE_FAILED:
+		ekprintf("%s: memobj_update_page failed. %d\n",
+			 "split_process_memory_range", error);
+		break;
+	default:
+		break;
 	}
-	// memory_stat_rss_add() is called in ihk_mc_pt_set_range()
-	error = 0;
-out:
-	ihk_mc_spinlock_unlock(&vm->page_table_lock, flags);
-	return error;
 }
 
 int split_process_memory_range(struct process_vm *vm, struct vm_range *range,
@@ -919,61 +1543,28 @@ int split_process_memory_range(struct process_vm *vm, struct vm_range *range,
 	dkprintf("split_process_memory_range(%p,%lx-%lx,%lx,%p)\n",
 			vm, range->start, range->end, addr, splitp);
 
-	range->pgshift = process_split_pgshift_result(range->pgshift, addr);
-
-	error = ihk_mc_pt_split(vm->address_space->page_table, vm,
-			range, (void *)addr);
-	if (error) {
-		ekprintf("split_process_memory_range:"
-				"ihk_mc_pt_split failed. %d\n", error);
+	error = process_split_range_pt_body_result(vm, range, addr,
+			process_split_range_pt_split_bridge,
+			process_split_range_pt_log_bridge);
+	if (error)
 		goto out;
-	}
 	// memory_stat_rss_add() is called in child-node, i.e. ihk_mc_pt_split() to deal with L3->L2 case
 
-	if (range->memobj && range->memobj->flags & MF_SHM) {
-		/* Target range is shared memory */
-		uintptr_t _phys = 0;
-		struct page *page = NULL;
-		unsigned long page_mask;
-
-		/* Lookup the page split target */
-		error = memobj_lookup_page(range->memobj,
-				range->objoff + addr - range->start,
-				0, &_phys, NULL);
-		if (error && error != -ENOENT) {
-			ekprintf("%s: memobj_lookup_page failed. %d\n",
-					__func__, error);
-			goto out;
-		}
-		page = phys_to_page(_phys);
-
-		if (page) {
-			page_mask = ~((1UL << page->pgshift) - 1);
-			/* Update existing page */
-			error = memobj_update_page(range->memobj,
-				vm->address_space->page_table, page,
-				(void *)(addr & page_mask));
-			if (error) {
-				ekprintf("%s: memobj_update_page failed. %d\n",
-						__func__, error);
-				goto out;
-			}
-		}
-	}
-
-	newrange = kmalloc(sizeof(struct vm_range), IHK_MC_AP_NOWAIT);
-	if (!newrange) {
-		ekprintf("split_process_memory_range(%p,%lx-%lx,%lx,%p):"
-				"kmalloc failed\n",
-				vm, range->start, range->end, addr, splitp);
-		error = -ENOMEM;
+	error = process_split_shm_update_body_result(vm, range, addr,
+			__builtin_offsetof(struct page, pgshift),
+			process_split_shm_lookup_page_bridge,
+			process_split_shm_phys_to_page_bridge,
+			process_split_shm_update_page_bridge,
+			process_split_shm_log_bridge);
+	if (error)
 		goto out;
-	}
 
-	if (!process_split_range_init_result(range, newrange, addr)) {
-		error = -EINVAL;
+	newrange = process_split_range_alloc_init_body_result(vm, range, addr,
+			splitp, sizeof(struct vm_range), IHK_MC_AP_NOWAIT,
+			&error, process_split_range_alloc_bridge,
+			process_split_range_alloc_log_bridge);
+	if (error)
 		goto out;
-	}
 
 #ifdef ENABLE_TOFU
 	INIT_LIST_HEAD(&newrange->tofu_stag_list);
@@ -990,22 +1581,11 @@ int split_process_memory_range(struct process_vm *vm, struct vm_range *range,
 	}
 #endif
 
-	if (range->memobj) {
-		memobj_ref(range->memobj);
-	}
-
-	process_split_range_commit_result(range, addr);
-
-	error = vm_range_insert(vm, newrange);
-	if (error) {
-		kprintf("%s: ERROR: could not insert range: %d\n",
-			__FUNCTION__, error);
+	error = process_split_range_publish_body_result(vm, range, newrange,
+			addr, splitp, NULL, vm_range_insert,
+			process_split_range_publish_log_bridge);
+	if (error)
 		return error;
-	}
-
-	if (splitp != NULL) {
-		*splitp = newrange;
-	}
 
 out:
 	dkprintf("split_process_memory_range(%p,%lx-%lx,%lx,%p): %d %p %lx-%lx\n",
@@ -1013,6 +1593,36 @@ out:
 			error, newrange,
 			newrange? newrange->start: 0, newrange? newrange->end: 0);
 	return error;
+}
+
+#ifdef ENABLE_TOFU
+static int process_join_range_tofu_bridge(struct process_vm *vm,
+		struct vm_range *surviving, struct vm_range *merging)
+{
+	/* Move Tofu stag range entries */
+	if (vm->proc->enable_tofu) {
+		struct tofu_stag_range *tsr, *next;
+
+		ihk_mc_spinlock_lock_noirq(&vm->tofu_stag_lock);
+		for (tsr = ((typeof(*tsr) *)((char *)((&merging->tofu_stag_list)->next) - offsetof(typeof(*tsr), list))), next = ((typeof(*tsr) *)((char *)(tsr->list.next) - offsetof(typeof(*tsr), list))); &tsr->list != (&merging->tofu_stag_list); tsr = next, next = ((typeof(*next) *)((char *)(next->list.next) - offsetof(typeof(*next), list)))) {
+			list_del(&tsr->list);
+			list_add_tail(&tsr->list, &surviving->tofu_stag_list);
+			dkprintf("%s: stag: %d @ %p:%lu moved in VM range merge\n",
+					__func__,
+					tsr->stag,
+					tsr->start,
+					(unsigned long)(tsr->end - tsr->start));
+		}
+		ihk_mc_spinlock_unlock_noirq(&vm->tofu_stag_lock);
+	}
+
+	return 0;
+}
+#endif
+
+static void process_range_kfree_bridge(struct vm_range *range)
+{
+	kfree_tracked(range, __FILE__, __LINE__);
 }
 
 int join_process_memory_range(struct process_vm *vm,
@@ -1024,320 +1634,232 @@ int join_process_memory_range(struct process_vm *vm,
 			vm, surviving->start, surviving->end,
 			merging->start, merging->end);
 
-	error = process_join_range_prepare_result(surviving, merging);
-	if (error)
-		goto out;
-
-	if (merging->memobj) {
-		memobj_unref(merging->memobj);
-	}
-	rb_erase(&merging->vm_rb_node, &vm->vm_range_tree);
-	process_range_cache_replace_result(vm->range_cache,
-			VM_RANGE_CACHE_SIZE, merging, surviving);
-
+	error = process_join_range_body_result(vm, &vm->vm_range_tree,
+			vm->range_cache, VM_RANGE_CACHE_SIZE, surviving,
+			merging, NULL,
+			process_range_kfree_bridge,
 #ifdef ENABLE_TOFU
-	/* Move Tofu stag range entries */
-	if (vm->proc->enable_tofu) {
-		struct tofu_stag_range *tsr, *next;
-
-		ihk_mc_spinlock_lock_noirq(&vm->tofu_stag_lock);
-		list_for_each_entry_safe(tsr, next,
-				&merging->tofu_stag_list, list) {
-
-			list_del(&tsr->list);
-			list_add_tail(&tsr->list, &surviving->tofu_stag_list);
-			dkprintf("%s: stag: %d @ %p:%lu moved in VM range merge\n",
-					__func__,
-					tsr->stag,
-					tsr->start,
-					(unsigned long)(tsr->end - tsr->start));
-		}
-		ihk_mc_spinlock_unlock_noirq(&vm->tofu_stag_lock);
-	}
+			process_join_range_tofu_bridge
+#else
+			NULL
 #endif
-
-	kfree(merging);
-
-	error = 0;
-out:
+			);
 	dkprintf("join_process_memory_range(%p,%lx-%lx,%p): %d\n",
 			vm, surviving->start, surviving->end, merging, error);
 	return error;
 }
 
+static int process_free_range_page_size_bridge(size_t current, size_t *nextp)
+{
+	return arch_get_smaller_page_size(NULL, current, nextp, NULL);
+}
+
+static void *process_free_range_phys_to_virt_bridge(unsigned long phys)
+{
+	return phys_to_virt(phys);
+}
+
+static void process_free_range_pages_bridge(void *addr, unsigned long pages)
+{
+	_ihk_mc_free_pages(addr, pages, IHK_MC_PG_KERNEL, __FILE__, __LINE__);
+}
+
+static int process_free_range_clear_main_bridge(struct process_vm *vm,
+		unsigned long start, unsigned long end)
+{
+	int error;
+
+	ihk_mc_spinlock_lock_noirq(&vm->page_table_lock);
+	error = ihk_mc_pt_clear_range(vm->address_space->page_table, vm,
+			(void *)start, (void *)end);
+	ihk_mc_spinlock_unlock_noirq(&vm->page_table_lock);
+
+	return error;
+}
+
+static void process_free_range_noirq_lock_bridge(unsigned long lock_addr)
+{
+	ihk_mc_spinlock_lock_noirq((ihk_spinlock_t *)lock_addr);
+}
+
+static void process_free_range_noirq_unlock_bridge(unsigned long lock_addr)
+{
+	ihk_mc_spinlock_unlock_noirq((ihk_spinlock_t *)lock_addr);
+}
+
+static int process_free_range_pt_free_bridge(void *page_table,
+		struct process_vm *vm, unsigned long start, unsigned long end,
+		void *memobj)
+{
+	return ihk_mc_pt_free_range(page_table, vm, (void *)start, (void *)end,
+			memobj);
+}
+
+static int process_free_range_pt_clear_bridge(void *page_table,
+		struct process_vm *vm, unsigned long start, unsigned long end)
+{
+	return ihk_mc_pt_clear_range(page_table, vm, (void *)start,
+			(void *)end);
+}
+
+#ifdef ENABLE_TOFU
+static int process_free_range_tofu_remove_bridge(struct process_vm *vm,
+		struct vm_range *range)
+{
+	extern int tofu_stag_range_remove_overlapping(struct process_vm *vm,
+			struct vm_range *range);
+
+	return tofu_stag_range_remove_overlapping(vm, range);
+}
+#endif
+
+static void process_free_range_log_bridge(int event, struct process_vm *vm,
+		struct vm_range *range, unsigned long start, unsigned long end,
+		int error)
+{
+	switch (event) {
+	case PROCESS_FREE_BODY_LOG_PLAN_FAILED:
+		kprintf("free_process_memory_range:"
+				"arch_get_smaller_page_size failed. %d\n",
+				error);
+		break;
+	case PROCESS_FREE_BODY_LOG_PT_FREE_FAILED:
+		ekprintf("free_process_memory_range(%p,%lx-%lx):"
+				"ihk_mc_pt_free_range(%lx-%lx,%p) failed. %d\n",
+				vm, range->start, range->end, start, end,
+				range->memobj, error);
+		break;
+	case PROCESS_FREE_BODY_LOG_PT_CLEAR_FAILED:
+		ekprintf("free_process_memory_range(%p,%lx-%lx):"
+				"ihk_mc_pt_clear_range(%lx-%lx) failed. %d\n",
+				vm, range->start, range->end, start, end, error);
+		break;
+	case PROCESS_FREE_BODY_LOG_TOFU_REMOVED:
+		dkprintf("%s: removed %d Tofu stag entries for range 0x%lx:%lu\n",
+				__func__, error, start, end - start);
+		break;
+	case PROCESS_FREE_BODY_LOG_FINALIZE_FAILED:
+		ekprintf("free_process_memory_range(%p,%lx-%lx):"
+				"finalize failed. %d\n", vm, start, end, error);
+		break;
+	case PROCESS_FREE_BODY_LOG_DONE:
+		dkprintf("free_process_memory_range(%p,%lx-%lx): 0\n",
+				vm, start, end);
+		break;
+	}
+}
+
 static int free_process_memory_range(struct process_vm *vm,
 					struct vm_range *range)
 {
-	const intptr_t start0 = range->start;
-	const intptr_t end0 = range->end;
-	int error;
-	intptr_t start;
-	intptr_t end;
-	struct vm_range *neighbor;
-	intptr_t lpstart;
-	intptr_t lpend;
-	size_t pgsize;
-
 	dkprintf("free_process_memory_range(%p, 0x%lx - 0x%lx)\n",
 			vm, range->start, range->end);
-
-	start = range->start;
-	end = range->end;
-
-	/* No regular page table manipulation for straight mappings */
-	if (range->straight_start || ((void *)start == vm->proc->straight_va))
-		goto straight_out;
-
-	if (!(range->flag & (VR_REMOTE | VR_IO_NOCACHE | VR_RESERVED))) {
-		neighbor = previous_process_memory_range(vm, range);
-		pgsize = -1;
-		for (;;) {
-			error = arch_get_smaller_page_size(
-					NULL, pgsize, &pgsize, NULL);
-			if (error) {
-				kprintf("free_process_memory_range:"
-						"arch_get_smaller_page_size failed."
-						" %d\n", error);
-				break;
-			}
-			lpstart = start & ~(pgsize - 1);
-			if (!neighbor || (neighbor->end <= lpstart)) {
-				start = lpstart;
-				break;
-			}
-		}
-		neighbor = next_process_memory_range(vm, range);
-		pgsize = -1;
-		for (;;) {
-			error = arch_get_smaller_page_size(
-					NULL, pgsize, &pgsize, NULL);
-			if (error) {
-				kprintf("free_process_memory_range:"
-						"arch_get_smaller_page_size failed."
-						" %d\n", error);
-				break;
-			}
-			lpend = (end + pgsize - 1) & ~(pgsize - 1);
-			if (!neighbor || (lpend <= neighbor->start)) {
-				end = lpend;
-				break;
-			}
-		}
-
-		dkprintf("%s: vm=%p,range=%p,%lx-%lx\n", __FUNCTION__, vm, range, range->start, range->end);
-		
-		ihk_mc_spinlock_lock_noirq(&vm->page_table_lock);
-		if (range->memobj) {
-			memobj_ref(range->memobj);
-		}
-
-		if (range->memobj && range->memobj->flags & MF_HUGETLBFS) {
-			error = ihk_mc_pt_clear_range(vm->address_space->page_table,
-					vm, (void *)start, (void *)end);
-		} else {
-			error = ihk_mc_pt_free_range(vm->address_space->page_table,
-					vm, (void *)start, (void *)end, range->memobj);
-		}
-		if (range->memobj) {
-			memobj_unref(range->memobj);
-		}
-		ihk_mc_spinlock_unlock_noirq(&vm->page_table_lock);
-		if (error && (error != -ENOENT)) {
-			ekprintf("free_process_memory_range(%p,%lx-%lx):"
-					"ihk_mc_pt_free_range(%lx-%lx,%p) failed. %d\n",
-					vm, start0, end0, start, end, range->memobj, error);
-			/* through */
-		}
-		// memory_stat_rss_sub() is called downstream, i.e. ihk_mc_pt_free_range() to deal with empty PTE
-	}
-	else {
-		// memory_stat_rss_sub() isn't called because free_physical is set to zero in clear_range()
-		dkprintf("%s,memory_stat_rss_sub() isn't called, VR_REMOTE | VR_IO_NOCACHE | VR_RESERVED case, %lx-%lx\n", __FUNCTION__, start, end);
-		ihk_mc_spinlock_lock_noirq(&vm->page_table_lock);
-		error = ihk_mc_pt_clear_range(vm->address_space->page_table, vm,
-				(void *)start, (void *)end);
-		ihk_mc_spinlock_unlock_noirq(&vm->page_table_lock);
-		if (error && (error != -ENOENT)) {
-			ekprintf("free_process_memory_range(%p,%lx-%lx):"
-					"ihk_mc_pt_clear_range(%lx-%lx) failed. %d\n",
-					vm, start0, end0, start, end, error);
-			/* through */
-		}
-	}
-
-	if (range->memobj) {
-		memobj_unref(range->memobj);
-	}
-
-straight_out:
-
+	return process_free_memory_range_body_result(vm, range,
+			(unsigned long)vm->proc->straight_va,
+			&vm->proc->straight_len, vm->proc->straight_pa,
 #ifdef ENABLE_TOFU
-	if (vm->proc->enable_tofu) {
-		int entries;
-		extern int tofu_stag_range_remove_overlapping(struct process_vm *vm,
-				struct vm_range *range);
-
-		entries = tofu_stag_range_remove_overlapping(vm, range);
-		if (entries > 0) {
-			dkprintf("%s: removed %d Tofu stag entries for range 0x%lx:%lu\n",
-				__func__,
-				entries,
-				range->start,
-				range->end - range->start);
-		}
-	}
+			vm->proc->enable_tofu,
+#else
+			0,
 #endif
+			process_free_range_page_size_bridge,
+			process_free_range_noirq_lock_bridge,
+			process_free_range_noirq_unlock_bridge,
+			NULL, NULL,
+			process_free_range_pt_free_bridge,
+			process_free_range_pt_clear_bridge,
+#ifdef ENABLE_TOFU
+			process_free_range_tofu_remove_bridge,
+#else
+			NULL,
+#endif
+			process_free_range_phys_to_virt_bridge,
+			process_free_range_pages_bridge,
+			process_free_range_clear_main_bridge,
+			process_range_kfree_bridge, process_free_range_log_bridge);
+}
 
-	rb_erase(&range->vm_rb_node, &vm->vm_range_tree);
-	process_range_cache_replace_result(vm->range_cache,
-			VM_RANGE_CACHE_SIZE, range, NULL);
+static int process_memory_range_free_bridge(struct process_vm *vm,
+					    struct vm_range *range)
+{
+	return free_process_memory_range(vm, range);
+}
 
-	/* For straight ranges just free physical memory */
-	if (range->straight_start) {
-		ihk_mc_free_pages(phys_to_virt(vm->proc->straight_pa +
-					(range->straight_start - (unsigned long)vm->proc->straight_va)),
-				(range->end - range->start) >> PAGE_SHIFT);
+static void process_memory_range_free_log_bridge(struct process_vm *vm,
+						 struct vm_range *range,
+						 int error)
+{
+	ekprintf("free_process_memory(%p):"
+			"free range failed. %lx-%lx %d\n",
+			vm, range->start, range->end, error);
+}
 
-		dkprintf("%s: straight range 0x%lx @ straight 0x%lx (phys: 0x%lx)"
-				" physical memory freed\n",
-				__FUNCTION__, range->start, range->straight_start,
-				vm->proc->straight_pa +
-				(range->straight_start - (unsigned long)vm->proc->straight_va));
+static void process_flush_memory_log_bridge(struct process_vm *vm,
+					    struct vm_range *range,
+					    int error)
+{
+	ekprintf("flush_process_memory(%p):"
+			"free range failed. %lx-%lx %d\n",
+			vm, range->start, range->end, error);
+}
+
+static int process_remove_range_split_bridge(struct process_vm *vm,
+					     struct vm_range *range,
+					     unsigned long addr,
+					     struct vm_range **splitp)
+{
+	return split_process_memory_range(vm, range, addr, splitp);
+}
+
+static void process_remove_range_xpmem_bridge(struct process_vm *vm,
+					      struct vm_range *range)
+{
+	xpmem_remove_process_memory_range(vm, range);
+}
+
+static void process_remove_range_log_bridge(int event, struct process_vm *vm,
+					    unsigned long start,
+					    unsigned long end,
+					    struct vm_range *range,
+					    int error)
+{
+	switch (event) {
+	case PROCESS_REMOVE_RANGE_LOG_NO_STRAIGHT:
+		kprintf("%s: WARNING: no straight mapping range found for 0x%lx\n",
+				"remove_process_memory_range", start);
+		break;
+	case PROCESS_REMOVE_RANGE_LOG_CONVERTED:
+		dkprintf("%s: straight range converted from 0x%lx:%lu -> 0x%lx:%lu\n",
+				"remove_process_memory_range",
+				range ? range->straight_start : start,
+				end - start, start, end - start);
+		break;
+	case PROCESS_REMOVE_RANGE_LOG_SPLIT_FAILED:
+		ekprintf("remove_process_memory_range(%p,%lx,%lx):"
+				"split failed %d\n", vm, start, end, error);
+		break;
+	case PROCESS_REMOVE_RANGE_LOG_FREE_FAILED:
+		ekprintf("remove_process_memory_range(%p,%lx,%lx):"
+				"free failed %d\n", vm, start, end, error);
+		break;
+	case PROCESS_REMOVE_RANGE_LOG_DONE:
+		dkprintf("remove_process_memory_range(%p,%lx,%lx): 0 %d\n",
+				vm, start, end, error);
+		break;
 	}
-	/* For the main straight mapping, free page tables */
-	else if (range->start == (unsigned long)vm->proc->straight_va &&
-			range->end == ((unsigned long)vm->proc->straight_va +
-				vm->proc->straight_len)) {
-		ihk_mc_spinlock_lock_noirq(&vm->page_table_lock);
-		error = ihk_mc_pt_clear_range(vm->address_space->page_table, vm,
-				(void *)start, (void *)end);
-		ihk_mc_spinlock_unlock_noirq(&vm->page_table_lock);
-
-		dkprintf("%s: main straight mapping 0x%lx unmapped\n",
-				__FUNCTION__, vm->proc->straight_va);
-		vm->proc->straight_len = 0;
-	}
-
-	kfree(range);
-
-	dkprintf("free_process_memory_range(%p,%lx-%lx): 0\n",
-			vm, start0, end0);
-	return 0;
 }
 
 int remove_process_memory_range(struct process_vm *vm,
 		unsigned long start, unsigned long end, int *ro_freedp)
 {
-	struct vm_range *range, *next;
-	int error;
-	int ro_freed = 0;
-
 	dkprintf("remove_process_memory_range(%p,%lx,%lx)\n",
 			vm, start, end);
-
-	/*
-	 * Convert to real virtual address for straight ranges,
-	 * but not for the main straight mapping
-	 */
-	if (vm->proc->straight_va &&
-			start >= (unsigned long)vm->proc->straight_va &&
-			end <= ((unsigned long)vm->proc->straight_va +
-				vm->proc->straight_len) &&
-			!(start == (unsigned long)vm->proc->straight_va &&
-				end == ((unsigned long)vm->proc->straight_va +
-					vm->proc->straight_len))) {
-		struct vm_range *range_iter;
-		struct vm_range *range = NULL;
-		unsigned long len = end - start;
-
-		range_iter = lookup_process_memory_range(vm, 0, -1);
-
-		while (range_iter) {
-			if (range_iter->straight_start &&
-					start >= range_iter->straight_start &&
-					start < (range_iter->straight_start +
-						(range_iter->end - range_iter->start))) {
-				range = range_iter;
-				break;
-			}
-
-			range_iter = next_process_memory_range(vm, range_iter);
-		}
-
-		if (!range) {
-			kprintf("%s: WARNING: no straight mapping range found for 0x%lx\n",
-					__FUNCTION__, start);
-			return 0;
-		}
-
-		dkprintf("%s: straight range converted from 0x%lx:%lu -> 0x%lx:%lu\n",
-				__FUNCTION__,
-				start, len,
-				range->start + (start - range->straight_start), len);
-
-		start = range->start + (start - range->straight_start);
-		end = start + len;
-	}
-
-	next = lookup_process_memory_range(vm, start, end);
-	while ((range = next) && range->start < end) {
-		int split_start;
-		int split_end;
-		int mark_ro_freed;
-		int remove_xpmem;
-
-		next = next_process_memory_range(vm, range);
-		process_remove_range_step_result(range->start, range->end,
-				start, end, range->flag,
-				(unsigned long)range->private_data,
-				&split_start, &split_end, &mark_ro_freed,
-				&remove_xpmem);
-
-		if (split_start) {
-			error = split_process_memory_range(vm,
-					range, start, &range);
-			if (error) {
-				ekprintf("remove_process_memory_range(%p,%lx,%lx):"
-						"split failed %d\n",
-						vm, start, end, error);
-				return error;
-			}
-		}
-
-		if (split_end) {
-			error = split_process_memory_range(vm,
-					range, end, NULL);
-			if (error) {
-				ekprintf("remove_process_memory_range(%p,%lx,%lx):"
-						"split failed %d\n",
-						vm, start, end, error);
-				return error;
-			}
-		}
-
-		if (mark_ro_freed) {
-			ro_freed = 1;
-		}
-
-		if (remove_xpmem) {
-			xpmem_remove_process_memory_range(vm, range);
-		}
-
-		error = free_process_memory_range(vm, range);
-		if (error) {
-			ekprintf("remove_process_memory_range(%p,%lx,%lx):"
-					"free failed %d\n",
-					vm, start, end, error);
-			return error;
-		}
-	}
-
-	if (ro_freedp) {
-		*ro_freedp = ro_freed;
-	}
-	dkprintf("remove_process_memory_range(%p,%lx,%lx): 0 %d\n",
-			vm, start, end, ro_freed);
-	return 0;
+	return process_remove_memory_range_body_result(vm, start, end,
+			ro_freedp, (unsigned long)vm->proc->straight_va,
+			vm->proc->straight_len, process_remove_range_split_bridge,
+			process_remove_range_xpmem_bridge,
+			process_memory_range_free_bridge,
+			process_remove_range_log_bridge);
 }
 
 static void vm_range_insert_log_bridge(int event, struct process_vm *vm,
@@ -1367,6 +1889,59 @@ static int vm_range_insert(struct process_vm *vm, struct vm_range *newrange)
 			vm_range_insert_log_bridge, vm_range_insert_dump_bridge);
 }
 
+static void process_range_public_log_bridge(int event, struct process_vm *vm,
+					    struct vm_range *range,
+					    unsigned long start,
+					    unsigned long end, int error)
+{
+	switch (event) {
+	case PROCESS_RANGE_PUBLIC_LOG_LOOKUP_ENTER:
+		dkprintf("lookup_process_memory_range(%p,%lx,%lx)\n",
+				vm, start, end);
+		break;
+	case PROCESS_RANGE_PUBLIC_LOG_LOOKUP_EXIT:
+		dkprintf("lookup_process_memory_range(%p,%lx,%lx): %p %lx-%lx\n",
+				vm, start, end, range,
+				range ? range->start : 0,
+				range ? range->end : 0);
+		break;
+	case PROCESS_RANGE_PUBLIC_LOG_NEXT_ENTER:
+		dkprintf("next_process_memory_range(%p,%lx-%lx)\n",
+				vm, start, end);
+		break;
+	case PROCESS_RANGE_PUBLIC_LOG_NEXT_EXIT:
+		dkprintf("next_process_memory_range(%p,%lx-%lx): %p %lx-%lx\n",
+				vm, start, end, range,
+				range ? range->start : 0,
+				range ? range->end : 0);
+		break;
+	case PROCESS_RANGE_PUBLIC_LOG_PREVIOUS_ENTER:
+		dkprintf("previous_process_memory_range(%p,%lx-%lx)\n",
+				vm, start, end);
+		break;
+	case PROCESS_RANGE_PUBLIC_LOG_PREVIOUS_EXIT:
+		dkprintf("previous_process_memory_range(%p,%lx-%lx): %p %lx-%lx\n",
+				vm, start, end, range,
+				range ? range->start : 0,
+				range ? range->end : 0);
+		break;
+	case PROCESS_RANGE_PUBLIC_LOG_EXTEND_ENTER:
+		dkprintf("exntend_up_process_memory_range(%p,%p %#lx-%#lx,%#lx)\n",
+				vm, range,
+				range ? range->start : 0,
+				range ? range->end : 0, end);
+		break;
+	case PROCESS_RANGE_PUBLIC_LOG_EXTEND_EXIT:
+		dkprintf("exntend_up_process_memory_range(%p,%p %#lx-%#lx,%#lx):%d\n",
+				vm, range,
+				range ? range->start : 0,
+				range ? range->end : 0, end, error);
+		break;
+	default:
+		break;
+	}
+}
+
 /* Parallel memset implementation on top of general
  * SMP funcution call facility */
 struct memset_smp_req {
@@ -1375,57 +1950,73 @@ struct memset_smp_req {
 	int val;
 };
 
+static void *process_memset_smp_phys_to_virt_bridge(unsigned long phys)
+{
+	return phys_to_virt(phys);
+}
+
+static void process_memset_smp_memset_bridge(void *addr, int value, size_t len)
+{
+	memset(addr, value, len);
+}
+
+static void process_memset_smp_log_bridge(int event, int cpu_index,
+		int nr_cpus, unsigned long phys, size_t len,
+		unsigned long start, unsigned long end)
+{
+	switch (event) {
+	case 1:
+		dkprintf("%s: cpu_index: %d, nr_cpus: %d, phys: 0x%lx, "
+				"len: %lu, p_s: 0x%lx, p_e: 0x%lx\n",
+				"memset_smp_handler", cpu_index, nr_cpus,
+				phys, len, start, end);
+		break;
+	}
+}
+
 int memset_smp_handler(int cpu_index, int nr_cpus, void *arg)
 {
 	struct memset_smp_req *req =
 		(struct memset_smp_req *)arg;
-	size_t len = req->len / nr_cpus;
 
-	if (!len) {
-		/* First core clears all */
-		if (!cpu_index) {
-			memset((void *)phys_to_virt(req->phys), req->val, req->len);
-		}
-	}
-	else {
-		/* Divide and clear */
-		unsigned long p_s = req->phys + (cpu_index * len);
-		unsigned long p_e = p_s + len;
-		if (cpu_index == nr_cpus - 1) {
-			p_e = req->phys + req->len;
-		}
+	return process_memset_smp_handler_body_result(cpu_index, nr_cpus,
+			req->phys, req->len, req->val,
+			process_memset_smp_phys_to_virt_bridge,
+			process_memset_smp_memset_bridge,
+			process_memset_smp_log_bridge);
+}
 
-		memset((void *)phys_to_virt(p_s), req->val, p_e - p_s);
-		dkprintf("%s: cpu_index: %d, nr_cpus: %d, phys: 0x%lx, "
-				"len: %lu, p_s: 0x%lx, p_e: 0x%lx\n",
-				__FUNCTION__, cpu_index, nr_cpus,
-				req->phys, req->len,
-				p_s, p_e);
-	}
+static unsigned long process_memset_smp_virt_to_phys_bridge(void *addr)
+{
+	return virt_to_phys(addr);
+}
 
-	return 0;
+static int process_memset_smp_call_bridge(void *cpu_set, void *handler,
+		void *arg)
+{
+	return smp_call_func((cpu_set_t *)cpu_set, (smp_func_t)handler, arg);
 }
 
 void *memset_smp(cpu_set_t *cpu_set, void *s, int c, size_t n)
 {
-	struct memset_smp_req req = {
-		.phys = virt_to_phys(s),
-		.len = n,
-		.val = c,
-	};
+	struct memset_smp_req req;
 
-	smp_call_func(cpu_set, memset_smp_handler, &req);
+	(void)process_memset_smp_body_result(cpu_set, s, c, n,
+			&req.phys, &req.len, &req.val,
+			memset_smp_handler, &req,
+			process_memset_smp_virt_to_phys_bridge,
+			process_memset_smp_call_bridge);
 	return NULL;
 }
 
 static struct vm_range *process_add_range_alloc_bridge(unsigned long size)
 {
-	return kmalloc(size, IHK_MC_AP_NOWAIT);
+	return kmalloc_tracked(size, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 }
 
 static void process_add_range_free_bridge(struct vm_range *range)
 {
-	kfree(range);
+	kfree_tracked(range, __FILE__, __LINE__);
 }
 
 static int process_add_range_insert_bridge(struct process_vm *vm,
@@ -1485,6 +2076,10 @@ static void process_add_range_log_bridge(int event, int rc,
 		dkprintf("%s: range: 0x%lx - 0x%lx is demand paging\n",
 				"add_process_memory_range", start, end);
 		break;
+	case PROCESS_ADD_RANGE_LOG_BOUNDS_FAILED:
+		kprintf("%s: error: range %lx - %lx is not in user available area\n",
+				"add_process_memory_range", start, end);
+		break;
 	default:
 		break;
 	}
@@ -1497,211 +2092,92 @@ int add_process_memory_range(struct process_vm *vm,
 		int pgshift, void *private_data, struct vm_range **rp)
 {
 	dkprintf("%s: start=%lx,end=%lx,phys=%lx,flag=%lx\n", __FUNCTION__, start, end, phys, flag);
-	int rc;
-
-	rc = process_add_range_bounds_result(vm->region.user_start,
-			vm->region.user_end, start, end);
-	if (rc) {
-		kprintf("%s: error: range %lx - %lx is not in user available area\n",
-				__FUNCTION__,
-				start, end, vm->region.user_start,
-				vm->region.user_end);
-		return rc;
-	}
-
-	return process_add_range_orchestrate_result(vm, sizeof(struct vm_range),
-			start, end, phys, flag, memobj, offset, pgshift,
-			private_data, rp, process_add_range_alloc_bridge,
-			process_add_range_free_bridge,
+	return process_add_range_public_body_result(vm, sizeof(struct vm_range),
+			vm->region.user_start, vm->region.user_end, start, end,
+			phys, flag, memobj, offset, pgshift, private_data, rp,
+			process_add_range_alloc_bridge, process_add_range_free_bridge,
 			process_add_range_insert_bridge,
 			process_add_range_update_bridge,
 			process_add_range_remove_bridge,
 			process_add_range_mark_xpmem_bridge,
-			process_add_range_memclear_bridge,
-			process_add_range_log_bridge);
+			process_add_range_memclear_bridge, process_add_range_log_bridge);
 }
 
 struct vm_range *lookup_process_memory_range(
 		struct process_vm *vm, uintptr_t start, uintptr_t end)
 {
-	int i;
-	struct vm_range *range = NULL, *match = NULL;
-	struct rb_root *root = &vm->vm_range_tree;
-	struct rb_node *node = root->rb_node;
-
-	dkprintf("lookup_process_memory_range(%p,%lx,%lx)\n", vm, start, end);
-
-	if (end <= start) {
-		goto out;
-	}
-
-	for (i = 0; i < VM_RANGE_CACHE_SIZE; ++i) {
-		int c_i = (i + vm->range_cache_ind) % VM_RANGE_CACHE_SIZE;
-		if (!vm->range_cache[c_i])
-			continue;
-
-		if (process_range_cache_hit_result(vm->range_cache[c_i]->start,
-			vm->range_cache[c_i]->end, start, end))
-			return vm->range_cache[c_i];
-	}
-
-	while (node) {
-		int relation;
-
-		range = rb_entry(node, struct vm_range, vm_rb_node);
-		relation = process_lookup_range_relation_result(start, end,
-				range->start, range->end);
-		if (relation < -1) {
-			/* We have a match, but we need to try left to
-			 * return the first possible match */
-			match = range;
-			node = node->rb_left;
-		} else if (relation < 0) {
-			node = node->rb_left;
-		} else if (relation > 0) {
-			node = node->rb_right;
-		} else {
-			match = range;
-			break;
-		}
-	}
-
-	if (match && end > match->start) {
-		process_range_cache_store_result(vm->range_cache,
-				VM_RANGE_CACHE_SIZE, &vm->range_cache_ind,
-				match);
-	}
-
-out:
-	dkprintf("lookup_process_memory_range(%p,%lx,%lx): %p %lx-%lx\n",
-			vm, start, end, match,
-			match? match->start: 0, match? match->end: 0);
-	return match;
+	return process_lookup_memory_range_public_result(vm, start, end,
+			process_range_public_log_bridge);
 }
 
 struct vm_range *next_process_memory_range(
 		struct process_vm *vm, struct vm_range *range)
 {
-	struct vm_range *next;
-	struct rb_node *node;
-
-	dkprintf("next_process_memory_range(%p,%lx-%lx)\n",
-			vm, range->start, range->end);
-
-	node = rb_next(&range->vm_rb_node);
-	if (node)
-		next = rb_entry(node, struct vm_range, vm_rb_node);
-	else
-		next = NULL;
-
-	dkprintf("next_process_memory_range(%p,%lx-%lx): %p %lx-%lx\n",
-			vm, range->start, range->end, next,
-			next? next->start: 0, next? next->end: 0);
-	return next;
+	return process_next_memory_range_public_result(vm, range,
+			process_range_public_log_bridge);
 }
 
 struct vm_range *previous_process_memory_range(
 		struct process_vm *vm, struct vm_range *range)
 {
-	struct vm_range *prev;
-	struct rb_node *node;
-
-	dkprintf("previous_process_memory_range(%p,%lx-%lx)\n",
-			vm, range->start, range->end);
-
-	node = rb_prev(&range->vm_rb_node);
-	if (node)
-		prev = rb_entry(node, struct vm_range, vm_rb_node);
-	else
-		prev = NULL;
-
-	dkprintf("previous_process_memory_range(%p,%lx-%lx): %p %lx-%lx\n",
-			vm, range->start, range->end, prev,
-			prev? prev->start: 0, prev? prev->end: 0);
-	return prev;
+	return process_previous_memory_range_public_result(vm, range,
+			process_range_public_log_bridge);
 }
 
 int extend_up_process_memory_range(struct process_vm *vm,
 		struct vm_range *range, uintptr_t newend)
 {
-	int error;
-	struct vm_range *next;
+	return process_extend_up_public_result(vm, range, newend,
+			process_range_public_log_bridge);
+}
 
-	dkprintf("exntend_up_process_memory_range(%p,%p %#lx-%#lx,%#lx)\n",
-			vm, range, range->start, range->end, newend);
-	next = next_process_memory_range(vm ,range);
-	error = process_extend_up_result(range->end, vm->region.user_end,
-			next != NULL, next ? next->start : 0, newend);
-	if (error)
-		goto out;
+static unsigned long process_change_prot_attr_bridge(unsigned long flag,
+		unsigned long fault, void *ptep)
+{
+	return arch_vrflag_to_ptattr(flag, fault, ptep);
+}
 
-	process_range_end_commit_result(range, newend);
+static int process_change_prot_pt_change_bridge(void *page_table,
+		unsigned long start, unsigned long end,
+		unsigned long clrattr, unsigned long setattr)
+{
+	return ihk_mc_pt_change_attr_range(page_table, (void *)start,
+			(void *)end, clrattr, setattr);
+}
 
-out:
-	dkprintf("exntend_up_process_memory_range(%p,%p %#lx-%#lx,%#lx):%d\n",
-			vm, range, range->start, range->end, newend, error);
-	return error;
+static void process_change_prot_public_log_bridge(int event,
+		struct process_vm *vm, struct vm_range *range,
+		unsigned long protflag, int error)
+{
+	switch (event) {
+	case PROCESS_CHANGE_PROT_PUBLIC_LOG_ENTER:
+		dkprintf("change_prot_process_memory_range(%p,%lx-%lx,%lx)\n",
+				vm, range ? range->start : 0,
+				range ? range->end : 0, protflag);
+		break;
+	case PROCESS_CHANGE_PROT_PUBLIC_LOG_ERROR:
+		ekprintf("change_prot_process_memory_range(%p,%lx-%lx,%lx):"
+				"ihk_mc_pt_change_attr_range failed: %d\n",
+				vm, range ? range->start : 0,
+				range ? range->end : 0, protflag, error);
+		break;
+	case PROCESS_CHANGE_PROT_PUBLIC_LOG_EXIT:
+		dkprintf("change_prot_process_memory_range(%p,%lx-%lx,%lx): %d\n",
+				vm, range ? range->start : 0,
+				range ? range->end : 0, protflag, error);
+		break;
+	}
 }
 
 int change_prot_process_memory_range(struct process_vm *vm,
 		struct vm_range *range, unsigned long protflag)
 {
-	unsigned long newflag;
-	int error;
-	enum ihk_mc_pt_attribute oldattr;
-	enum ihk_mc_pt_attribute newattr;
-	unsigned long clrattr;
-	unsigned long setattr;
-
-	dkprintf("change_prot_process_memory_range(%p,%lx-%lx,%lx)\n",
-			vm, range->start, range->end, protflag);
-
-	newflag = process_change_prot_newflag_result(range->flag, protflag);
-	if (range->flag == newflag) {
-		/* nothing to do */
-		error = 0;
-		goto out;
-	}
-
-	oldattr = arch_vrflag_to_ptattr(range->flag, PF_POPULATE, NULL);
-	newattr = arch_vrflag_to_ptattr(newflag, PF_POPULATE, NULL);
-
-	process_attr_delta_result(oldattr, newattr, &clrattr, &setattr);
-
-	/*
-	 * If this is a file mapping don't set any new prot write.
-	 * We need to keep the page table read-only to trigger a page
-	 * fault for copy-on-write later on
-	 */
-	if (range->memobj && (range->flag & VR_PRIVATE) &&
-	    !(range->memobj->flags & MF_HUGETLBFS)) {
-		setattr = process_private_file_setattr_result(1, range->flag,
-				range->memobj->flags, setattr);
-		if (!clrattr && !setattr) {
-			process_range_flag_commit_result(range, newflag);
-			error = 0;
-			goto out;
-		}
-	}
-
-	ihk_mc_spinlock_lock_noirq(&vm->page_table_lock);
-	error = ihk_mc_pt_change_attr_range(vm->address_space->page_table,
-			(void *)range->start, (void *)range->end,
-			clrattr, setattr);
-	ihk_mc_spinlock_unlock_noirq(&vm->page_table_lock);
-	if (error && (error != -ENOENT)) {
-		ekprintf("change_prot_process_memory_range(%p,%lx-%lx,%lx):"
-				"ihk_mc_pt_change_attr_range failed: %d\n",
-				vm, range->start, range->end, protflag, error);
-		goto out;
-	}
-
-	process_range_flag_commit_result(range, newflag);
-	error = 0;
-out:
-	dkprintf("change_prot_process_memory_range(%p,%lx-%lx,%lx): %d\n",
-			vm, range->start, range->end, protflag, error);
-	return error;
+	return process_change_prot_public_result(vm, range, protflag,
+			process_change_prot_attr_bridge,
+			process_sched_noirq_lock_bridge,
+			process_sched_noirq_unlock_bridge,
+			process_change_prot_pt_change_bridge,
+			process_change_prot_public_log_bridge);
 }
 
 struct rfp_args {
@@ -1742,7 +2218,7 @@ static int remap_one_page(void *arg0, page_table_t pt, pte_t *ptep,
 
 	page = phys_to_page(phys);
 	if (page && page_unmap(page)) {
-		ihk_mc_free_pages_user(phys_to_virt(phys), pgsize/PAGE_SIZE);
+		_ihk_mc_free_pages(phys_to_virt(phys), pgsize/PAGE_SIZE, IHK_MC_PG_USER, __FILE__, __LINE__);
 		dkprintf("%lx-,%s: calling memory_stat_rss_sub(),size=%ld,pgsize=%ld\n", phys, __FUNCTION__, pgsize, pgsize);
 		rusage_memory_stat_sub(args->memobj, pgsize, pgsize); 
 	}
@@ -1754,43 +2230,51 @@ out:
 	return error;
 }
 
+static int process_visit_pte_range_bridge(void *page_table,
+		unsigned long start, unsigned long end, int pgshift,
+		int flags, void *visit_fn, void *arg)
+{
+	return visit_pte_range(page_table, (void *)start, (void *)end,
+			pgshift, flags,
+			(int (*)(void *, page_table_t, pte_t *, void *, int))
+			visit_fn, arg);
+}
+
+static void process_remap_range_log_bridge(int event, struct process_vm *vm,
+		struct vm_range *range, unsigned long start, unsigned long end,
+		long off, int old_pgshift, int error)
+{
+	switch (event) {
+	case PROCESS_REMAP_RANGE_LOG_PGSHIFT:
+		ekprintf("%s: pgshift is too big (%d)  failed:%d\n",
+				"remap_process_memory_range", old_pgshift, error);
+		break;
+	case PROCESS_REMAP_RANGE_LOG_VISIT_FAILED:
+		ekprintf("remap_process_memory_range(%p,%p,%#lx,%#lx,%#lx):"
+				"visit pte failed %d\n",
+				vm, range, start, end, off, error);
+		break;
+	}
+}
+
 int remap_process_memory_range(struct process_vm *vm, struct vm_range *range,
 		uintptr_t start, uintptr_t end, off_t off)
 {
 	struct rfp_args args;
 	int error;
-	unsigned int retval;
 
 	dkprintf("remap_process_memory_range(%p,%p,%#lx,%#lx,%#lx)\n",
 			vm, range, start, end, off);
-	ihk_mc_spinlock_lock_noirq(&vm->page_table_lock);
-	memobj_ref(range->memobj);
-
 	args.start = start;
 	args.off = off;
 	args.memobj = range->memobj;
 
-	retval = __sync_val_compare_and_swap(&range->pgshift, 0, PAGE_SHIFT);
-	if (retval != 0 && retval != PAGE_SHIFT) {
-		error = -E2BIG;
-		ekprintf("%s: pgshift is too big (%d)  failed:%d\n", __func__, retval, error);
-		goto out;
-	}
-		
-	error = visit_pte_range(vm->address_space->page_table, (void *)start,
-			(void *)end, range->pgshift, VPTEF_DEFAULT,
-			&remap_one_page, &args);
-	if (error) {
-		ekprintf("remap_process_memory_range(%p,%p,%#lx,%#lx,%#lx):"
-				"visit pte failed %d\n",
-				vm, range, start, end, off, error);
-		goto out;
-	}
-
-	error = 0;
-out:
-	memobj_unref(range->memobj);
-	ihk_mc_spinlock_unlock_noirq(&vm->page_table_lock);
+	error = process_remap_memory_range_body_result(vm, range, start, end,
+			off, &args, remap_one_page,
+			process_free_range_noirq_lock_bridge,
+			process_free_range_noirq_unlock_bridge,
+			process_visit_pte_range_bridge,
+			process_remap_range_log_bridge);
 	dkprintf("remap_process_memory_range(%p,%p,%#lx,%#lx,%#lx):%d\n",
 			vm, range, start, end, off, error);
 	return error;
@@ -1841,6 +2325,42 @@ out:
 	return error;
 }
 
+static void process_sync_range_log_bridge(struct process_vm *vm,
+		struct vm_range *range, unsigned long start, unsigned long end,
+		int error)
+{
+	ekprintf("sync_process_memory_range(%p,%p,%#lx,%#lx):"
+			"visit failed%d\n", vm, range, start, end, error);
+}
+
+static void *process_lookup_pte_bridge(void *page_table, unsigned long addr,
+		int pgshift, size_t *pgsizep)
+{
+	return ihk_mc_pt_lookup_pte(page_table, (void *)addr, pgshift, NULL,
+			pgsizep, NULL);
+}
+
+static int process_pte_is_contiguous_bridge(void *ptep)
+{
+	return pte_is_contiguous((pte_t *)ptep);
+}
+
+static int process_page_is_contiguous_head_bridge(void *ptep, size_t pgsize)
+{
+	return page_is_contiguous_head((pte_t *)ptep, pgsize);
+}
+
+static int process_page_is_contiguous_tail_bridge(void *ptep, size_t pgsize)
+{
+	return page_is_contiguous_tail((pte_t *)ptep, pgsize);
+}
+
+static int process_split_contiguous_pages_bridge(void *ptep, size_t pgsize,
+		unsigned int memobj_flags)
+{
+	return split_contiguous_pages((pte_t *)ptep, pgsize, memobj_flags);
+}
+
 int sync_process_memory_range(struct process_vm *vm, struct vm_range *range,
 		uintptr_t start, uintptr_t end)
 {
@@ -1851,102 +2371,130 @@ int sync_process_memory_range(struct process_vm *vm, struct vm_range *range,
 			vm, range, start, end);
 	args.memobj = range->memobj;
 
-	ihk_mc_spinlock_lock_noirq(&vm->page_table_lock);
-
-	if (!(range->memobj->flags & MF_ZEROFILL)) {
-		memobj_ref(range->memobj);
-	}
-
-	error = visit_pte_range(vm->address_space->page_table, (void *)start,
-			(void *)end, range->pgshift, VPTEF_SKIP_NULL,
-			&sync_one_page, &args);
-
-	if (!(range->memobj->flags & MF_ZEROFILL)) {
-		memobj_unref(range->memobj);
-	}
-
-	ihk_mc_spinlock_unlock_noirq(&vm->page_table_lock);
-	if (error) {
-		ekprintf("sync_process_memory_range(%p,%p,%#lx,%#lx):"
-				"visit failed%d\n",
-				vm, range, start, end, error);
-		goto out;
-	}
-out:
+	error = process_sync_memory_range_body_result(vm, range, start, end,
+			&args, sync_one_page,
+			process_free_range_noirq_lock_bridge,
+			process_free_range_noirq_unlock_bridge,
+			process_visit_pte_range_bridge,
+			process_sync_range_log_bridge);
 	dkprintf("sync_process_memory_range(%p,%p,%#lx,%#lx):%d\n",
 			vm, range, start, end, error);
 	return error;
+}
+
+static void process_invalidate_range_log_bridge(struct process_vm *vm,
+		struct vm_range *range, unsigned long start, unsigned long end,
+		int error)
+{
+	ekprintf("invalidate_process_memory_range(%p,%p,%#lx,%#lx):"
+			"visit failed%d\n", vm, range, start, end, error);
 }
 
 struct invalidate_args {
 	struct vm_range *range;
 };
 
+static int process_pte_is_null_bridge(void *ptep)
+{
+	return pte_is_null((pte_t *)ptep);
+}
+
+static int process_pte_is_fileoff_bridge(void *ptep, size_t pgsize)
+{
+	return pte_is_fileoff((pte_t *)ptep, pgsize);
+}
+
+static uintptr_t process_pte_get_phys_bridge(void *ptep)
+{
+	return pte_get_phys((pte_t *)ptep);
+}
+
+static void *process_phys_to_page_bridge(uintptr_t phys)
+{
+	return phys_to_page(phys);
+}
+
+static long process_page_offset_bridge(void *page)
+{
+	return ((struct page *)page)->offset;
+}
+
+static void process_pte_make_fileoff_bridge(long off, size_t pgsize,
+					    void *ptep)
+{
+	pte_make_fileoff(off, 0, pgsize, (pte_t *)ptep);
+}
+
+static void process_pte_xchg_bridge(void *ptep, void *valp)
+{
+	pte_xchg((pte_t *)ptep, (pte_t *)valp);
+}
+
+static void process_flush_tlb_single_bridge(unsigned long addr)
+{
+	flush_tlb_single(addr);
+}
+
+static int process_pgsize_to_tbllv_bridge(size_t pgsize)
+{
+	return pgsize_to_tbllv(pgsize);
+}
+
+static size_t process_tbllv_to_contpgsize_bridge(int level)
+{
+	return tbllv_to_contpgsize(level);
+}
+
+static int process_page_unmap_bridge(void *page)
+{
+	return page_unmap(page);
+}
+
+static void process_panic_bridge(const char *message)
+{
+	panic(message);
+}
+
+static int process_memobj_invalidate_page_bridge(struct memobj *memobj,
+						 uintptr_t phys,
+						 size_t pgsize)
+{
+	return memobj_invalidate_page(memobj, phys, pgsize);
+}
+
+static void process_invalidate_one_page_log_bridge(void *arg0,
+		void *page_table, void *ptep, unsigned long pte_value,
+		void *pgaddr, int pgshift, int error)
+{
+	ekprintf("invalidate_one_page(%p,%p,%p %#lx,%p,%d):"
+			"invalidate failed. %d\n",
+			arg0, page_table, ptep, pte_value, pgaddr, pgshift,
+			error);
+}
+
 static int invalidate_one_page(void *arg0, page_table_t pt, pte_t *ptep,
 		void *pgaddr, int pgshift)
 {
-	struct invalidate_args *args = arg0;
-	struct vm_range *range = args->range;
-	const size_t pgsize = (size_t)1 << pgshift;
 	int error;
-	uintptr_t phys;
-	struct page *page;
-	off_t linear_off;
-	pte_t apte = PTE_NULL;
-	size_t memobj_pgsize;
 
 	dkprintf("invalidate_one_page(%p,%p,%p %#lx,%p,%d)\n",
 			arg0, pt, ptep, *ptep, pgaddr, pgshift);
-	if (pte_is_null(ptep) || pte_is_fileoff(ptep, pgsize)) {
-		error = 0;
-		goto out;
-	}
-
-	phys = pte_get_phys(ptep);
-	page = phys_to_page(phys);
-	linear_off = range->objoff + ((uintptr_t)pgaddr - range->start);
-
-	if (page) {
-		if (page->offset != linear_off) {
-			pte_make_fileoff(page->offset, 0, pgsize,
-					 &apte);
-		}
-	}
-
-	pte_xchg(ptep, &apte);
-	flush_tlb_single((uintptr_t)pgaddr);	/* XXX: TLB flush */
-
-	/* Contiguous PTE head invalidates memobj->pgshift-sized
-	 * memory for other members
-	 */
-	if (pte_is_contiguous(&apte)) {
-		if (page_is_contiguous_head(ptep, pgsize)) {
-			int level = pgsize_to_tbllv(pgsize);
-
-			memobj_pgsize = tbllv_to_contpgsize(level);
-		} else {
-			error = 0;
-			goto out;
-		}
-	} else {
-		memobj_pgsize = pgsize;
-	}
-
-	if (page && page_unmap(page)) {
-		panic("invalidate_one_page");
-	}
-
-	error = memobj_invalidate_page(range->memobj, phys, memobj_pgsize);
-	if (error) {
-		ekprintf("invalidate_one_page(%p,%p,%p %#lx,%p,%d):"
-				"invalidate failed. %d\n",
-				arg0, pt, ptep, *ptep, pgaddr, pgshift, error);
-		goto out;
-	}
+	error = process_invalidate_one_page_body_result(arg0, pt, ptep,
+			pgaddr, pgshift, process_pte_is_null_bridge,
+			process_pte_is_fileoff_bridge,
+			process_pte_get_phys_bridge, process_phys_to_page_bridge,
+			process_page_offset_bridge,
+			process_pte_make_fileoff_bridge, process_pte_xchg_bridge,
+			process_flush_tlb_single_bridge,
+			process_pte_is_contiguous_bridge,
+			process_page_is_contiguous_head_bridge,
+			process_pgsize_to_tbllv_bridge,
+			process_tbllv_to_contpgsize_bridge,
+			process_page_unmap_bridge, process_panic_bridge,
+			process_memobj_invalidate_page_bridge,
+			process_invalidate_one_page_log_bridge);
 	// memory_stat_rss_sub() is called in downstream, i.e. shmobj_invalidate_page()
 
-	error = 0;
-out:
 	dkprintf("invalidate_one_page(%p,%p,%p %#lx,%p,%d):%d\n",
 			arg0, pt, ptep, *ptep, pgaddr, pgshift, error);
 	return error;
@@ -1957,77 +2505,25 @@ int invalidate_process_memory_range(struct process_vm *vm,
 {
 	int error;
 	struct invalidate_args args;
-	pte_t *ptep;
-	size_t pgsize;
 
 	dkprintf("invalidate_process_memory_range(%p,%p,%#lx,%#lx)\n",
 			vm, range, start, end);
 	args.range = range;
 
-	ihk_mc_spinlock_lock_noirq(&vm->page_table_lock);
-	memobj_ref(range->memobj);
-
-	ptep = ihk_mc_pt_lookup_pte(vm->address_space->page_table,
-				    (void *)start, 0, NULL,
-				    &pgsize, NULL);
-	if (ptep && pte_is_contiguous(ptep)) {
-		if (!page_is_contiguous_head(ptep, pgsize)) {
-			// start pte is not contiguous head
-			error = split_contiguous_pages(ptep, pgsize,
-					range->memobj ?
-					range->memobj->flags : 0);
-			if (error) {
-				ihk_spinlock_t *page_table_lock;
-
-				memobj_unref(range->memobj);
-				page_table_lock = &vm->page_table_lock;
-				ihk_mc_spinlock_unlock_noirq(page_table_lock);
-				goto out;
-			}
-		}
-	}
-
-	ptep = ihk_mc_pt_lookup_pte(vm->address_space->page_table,
-				    (void *)end - 1, 0, NULL,
-				    &pgsize, NULL);
-	if (ptep && pte_is_contiguous(ptep)) {
-		if (!page_is_contiguous_tail(ptep, pgsize)) {
-			// end pte is not contiguous tail
-			error = split_contiguous_pages(ptep, pgsize,
-					range->memobj ?
-					range->memobj->flags : 0);
-			if (error) {
-				ihk_spinlock_t *page_table_lock;
-
-				memobj_unref(range->memobj);
-				page_table_lock = &vm->page_table_lock;
-				ihk_mc_spinlock_unlock_noirq(page_table_lock);
-				goto out;
-			}
-		}
-	}
-
-	if (range->memobj->flags & MF_SHM) {
-		error = ihk_mc_pt_free_range(vm->address_space->page_table,
-					     vm, (void *)start, (void *)end,
-					     range->memobj);
-	} else {
-		error = visit_pte_range(vm->address_space->page_table,
-					(void *)start, (void *)end,
-					range->pgshift, VPTEF_SKIP_NULL,
-					&invalidate_one_page, &args);
-	}
-	memobj_unref(range->memobj);
-	ihk_mc_spinlock_unlock_noirq(&vm->page_table_lock);
-	if (error) {
-		ekprintf("invalidate_process_memory_range(%p,%p,%#lx,%#lx):"
-				"visit failed%d\n",
-				vm, range, start, end, error);
-		goto out;
-	}
+	error = process_invalidate_memory_range_body_result(vm, range, start,
+			end, &args, invalidate_one_page,
+			process_free_range_noirq_lock_bridge,
+			process_free_range_noirq_unlock_bridge,
+			process_lookup_pte_bridge,
+			process_pte_is_contiguous_bridge,
+			process_page_is_contiguous_head_bridge,
+			process_page_is_contiguous_tail_bridge,
+			process_split_contiguous_pages_bridge,
+			process_free_range_pt_free_bridge,
+			process_visit_pte_range_bridge,
+			process_invalidate_range_log_bridge);
 	// memory_stat_rss_sub() is called downstream, i.e. invalidate_one_page() to deal with empty PTEs
-	
-out:
+
 	dkprintf("invalidate_process_memory_range(%p,%p,%#lx,%#lx):%d\n",
 			vm, range, start, end, error);
 	return error;
@@ -2049,7 +2545,7 @@ int page_fault_process_memory_range(struct process_vm *vm,
 	int private_range, patching_to_rdonly;
 	int devfile_or_hugetlbfs_or_premap, regfile_or_shm;
 
-	if (cpu_local_var(current)->profile) {
+	if (get_this_cpu_local_var()->current->profile) {
 		dkprintf("%s: 0x%lx @ %s\n",
 				__func__, fault_addr,
 				range->memobj && range->memobj->path ?
@@ -2128,9 +2624,8 @@ int page_fault_process_memory_range(struct process_vm *vm,
 
 retry:
 			npages = pgsize / PAGE_SIZE;
-			virt = ihk_mc_alloc_aligned_pages_user(npages, p2align,
-					IHK_MC_AP_NOWAIT |
-					((range->flag & VR_AP_USER) ? IHK_MC_AP_USER : 0), fault_addr);
+			virt = _ihk_mc_alloc_aligned_pages_node(npages, p2align, IHK_MC_AP_NOWAIT |
+					((range->flag & VR_AP_USER) ? IHK_MC_AP_USER : 0), -1, IHK_MC_PG_USER, fault_addr, __FILE__, __LINE__);
 			if (!virt && !range->pgshift && (pgsize != PAGE_SIZE)) {
 				error = arch_get_smaller_page_size(NULL, pgsize, &pgsize, &p2align);
 				if (error) {
@@ -2201,8 +2696,7 @@ retry:
 			}
 
 			npages = pgsize / PAGE_SIZE;
-			virt = ihk_mc_alloc_aligned_pages_user(npages, p2align,
-			                                      IHK_MC_AP_NOWAIT, fault_addr);
+			virt = _ihk_mc_alloc_aligned_pages_node(npages, p2align, IHK_MC_AP_NOWAIT, -1, IHK_MC_PG_USER, fault_addr, __FILE__, __LINE__);
 			if (!virt) {
 				error = -ENOMEM;
 				kprintf("page_fault_process_memory_range(%p,%lx-%lx %lx,%lx,%lx):cannot allocate copy page. %d\n", vm, range->start, range->end, range->flag, fault_addr, reason, error);
@@ -2294,453 +2788,237 @@ out:
 	return error;
 }
 
+static int process_zeroobj_match_bridge(void *memobj)
+{
+	struct memobj *obj;
+
+	if (zeroobj_create(&obj)) {
+		panic("DPFP: zeroobj_crate");
+	}
+	return memobj == obj;
+}
+
+static int process_normal_fault_range_bridge(struct process_vm *vm,
+					     struct vm_range *range,
+					     unsigned long fault_addr,
+					     unsigned long reason)
+{
+	return page_fault_process_memory_range(vm, range, fault_addr, reason);
+}
+
+static int process_xpmem_fault_range_bridge(struct process_vm *vm,
+					    struct vm_range *range,
+					    unsigned long fault_addr,
+					    unsigned long reason)
+{
+	return xpmem_fault_process_memory_range(vm, range, fault_addr, reason);
+}
+
 static int do_page_fault_process_vm(struct process_vm *vm, void *fault_addr0, uint64_t reason)
 {
-	int error;
-	const uintptr_t fault_addr = (uintptr_t)fault_addr0;
-	struct vm_range *range = NULL;
-	struct thread *thread = cpu_local_var(current);
-	int locked = 0;
+	struct thread *thread = get_this_cpu_local_var()->current;
 
-	dkprintf("[%d]do_page_fault_process_vm(%p,%lx,%lx)\n",
-			ihk_mc_get_processor_id(), vm, fault_addr0, reason);
-	
-	/* grow stack */
-	if (fault_addr >= thread->vm->region.stack_start &&
-	    fault_addr < thread->vm->region.stack_end) {
-		range = lookup_process_memory_range(vm,
-						    thread->vm->region.stack_end - 1,
-						    thread->vm->region.stack_end);
-		if (range == NULL) {
-			error = -EFAULT;
-			ekprintf("%s: vm: %p, addr: %p, reason: %lx):"
-				 "stack not found: %d\n",
-				 __func__, vm, fault_addr0, reason, error);
-			goto out;
-		}
+	return process_do_page_fault_vm_body_result(vm, thread->vm,
+			(uintptr_t)fault_addr0, reason, ihk_mc_get_processor_id(),
+			process_rw_read_lock_bridge,
+			process_rw_read_unlock_bridge,
+			process_rw_write_lock_bridge,
+			process_rw_write_unlock_bridge,
+			process_zeroobj_match_bridge,
+			process_normal_fault_range_bridge,
+			process_xpmem_fault_range_bridge);
+}
 
-		/* don't grow if replaced with hugetlbfs */
-		if (range->memobj) {
-			goto skip;
-		}
+static int process_do_page_fault_process_vm_bridge(struct process_vm *vm,
+						   unsigned long fault_addr,
+						   unsigned long reason)
+{
+	return do_page_fault_process_vm(vm, (void *)fault_addr, reason);
+}
 
-		if (fault_addr >= range->start) {
-			goto skip;
-		}
-
-		if (thread->vm->is_memory_range_lock_taken == -1 ||
-		    thread->vm->is_memory_range_lock_taken !=
-		    ihk_mc_get_processor_id()) {
-			ihk_rwspinlock_write_lock_noirq(&vm->memory_range_lock);
-			locked = 1;
-		}
-
-		process_range_stack_start_commit_result(range, fault_addr,
-				range->pgshift);
-
-		if (locked) {
-			ihk_rwspinlock_write_unlock_noirq(&vm->memory_range_lock);
-			locked = 0;
-		}
-
-		dkprintf("%s: addr: %lx, reason: %lx, range: %lx-%lx:"
-			 "stack found\n",
-			 __func__, (unsigned long)fault_addr, reason,
-			 range->start, range->end);
-	}
-skip:
-
-	if (thread->vm->is_memory_range_lock_taken == -1 ||
-			thread->vm->is_memory_range_lock_taken != ihk_mc_get_processor_id()) {
-		ihk_rwspinlock_read_lock_noirq(&vm->memory_range_lock);
-		locked = 1;
-	} else {
-		dkprintf("%s: INFO: skip locking of memory_range_lock,pid=%d,tid=%d\n",
-			 __func__, thread->proc->pid, thread->tid);
-	}	
-
-	if (vm->exiting) {
-		error = -ECANCELED;
-		goto out;
-	}
-
-	if (!range) {
-		range = lookup_process_memory_range(vm, fault_addr,
-						    fault_addr+1);
-		if (range == NULL) {
-			error = -EFAULT;
-			dkprintf("%s: vm: %p, addr: %p, reason: %lx):"
-				 "out of range: %d\n",
-				 __func__, vm, fault_addr0, reason, error);
-			goto out;
-		}
-	}
-
-	if (((range->flag & VR_PROT_MASK) == VR_PROT_NONE)
-			|| (((reason & PF_WRITE) && !(reason & PF_PATCH))
-				&& !(range->flag & VR_PROT_WRITE))
-			|| ((reason & PF_INSTR)
-				&& !(range->flag & VR_PROT_EXEC))) {
-		error = -EFAULT;
-		dkprintf("[%d]do_page_fault_process_vm(%p,%lx,%lx):"
-				"access denied. %d\n",
-				ihk_mc_get_processor_id(), vm,
-				fault_addr0, reason, error);
-		kprintf("%s: reason: %s%s%s%s%s%s%s\n", __FUNCTION__,
-			(reason & PF_PROT) ? "PF_PROT " : "",
-			(reason & PF_WRITE) ? "PF_WRITE " : "",
-			(reason & PF_USER) ? "PF_USER " : "",
-			(reason & PF_RSVD) ? "PF_RSVD " : "",
-			(reason & PF_INSTR) ? "PF_INSTR " : "",
-			(reason & PF_PATCH) ? "PF_PATCH " : "",
-			(reason & PF_POPULATE) ? "PF_POPULATE " : "");
-		kprintf("%s: range->flag & (%s%s%s)\n", __FUNCTION__,
-			(range->flag & VR_PROT_READ) ? "VR_PROT_READ " : "",
-			(range->flag & VR_PROT_WRITE) ? "VR_PROT_WRITE " : "",
-			(range->flag & VR_PROT_EXEC) ? "VR_PROT_EXEC " : "");
-		if (((range->flag & VR_PROT_MASK) == VR_PROT_NONE))
-			kprintf("if (((range->flag & VR_PROT_MASK) == VR_PROT_NONE))\n");
-		if (((reason & PF_WRITE) && !(reason & PF_PATCH)))
-			kprintf("if (((reason & PF_WRITE) && !(reason & PF_PATCH)))\n");
-		if (!(range->flag & VR_PROT_WRITE)) {
-			kprintf("if (!(range->flag & VR_PROT_WRITE))\n");
-			//kprintf("setting VR_PROT_WRITE\n");
-			//range->flag |= VR_PROT_WRITE;
-			//goto cont;
-		}
-		if ((reason & PF_INSTR) && !(range->flag & VR_PROT_EXEC)) {
-			kprintf("if ((reason & PF_INSTR) && !(range->flag & VR_PROT_EXEC))\n");
-			//kprintf("setting VR_PROT_EXEC\n");
-			//range->flag |= VR_PROT_EXEC;
-			//goto cont;
-		}
-		goto out;
-	}
-
-	/*
-	 * Fix for #284
-	 * Symptom: read() writes data onto the zero page by the following sequence.
-	 * (1) A process performs mmap(MAP_PRIVATE|MAP_ANONYMOUS)
-	 * (2) The process loads data from the VM range to cause a PF
-	 *     to make the PTE point to the zero page.
-	 * (3) The process performs write() using the VM range as the source
-         *     to cause a PF on the Linux side to make the PTE point to the zero page.
-         *     Note that we can't make the PTE read-only because [mckernel] pseudo
-	 *     file covering the range is created with O_RDWR.
-	 * (4) The process stores data to the VM range to cause another PF to perform
-         *     copy-on-write.
-	 * (5) The process performs read() using the VM range as the destination.
-         *     However, no PF and hence copy-on-write occurs because of (3).
-	 *
-	 * In the case of the above sequence,
-	 * copy-on-write pages was mapped at (2). And their physical pages
-	 * were informed to mcctrl/mcexec at (3). However, page remapping
-	 * at (4) was not informed to mcctrl/mcexec, and the data read at (5)
-	 * was transferred to old pages which had been mapped at (2).
-	 */
-	if ((range->flag & VR_PRIVATE) && range->memobj) {
-		struct memobj *obj;
-
-		if (zeroobj_create(&obj)) {
-			panic("DPFP: zeroobj_crate");
-		}
-
-		if (range->memobj == obj) {
-			reason |= PF_POPULATE;
-		}
-	}
-
-	if (!range->private_data) {
-		error = page_fault_process_memory_range(vm, range, fault_addr, reason);
-	}
-	else {
-		error = xpmem_fault_process_memory_range(vm, range, fault_addr, reason);
-	}
-	if (error == -ERESTART) {
-		goto out;
-	}
-	if (error) {
-		dkprintf("[%d]do_page_fault_process_vm(%p,%lx,%lx):"
-				"fault range failed. %d\n",
-				ihk_mc_get_processor_id(), vm,
-				fault_addr0, reason, error);
-		goto out;
-	}
-
-	error = 0;
-out:
-	if (locked) {
-		ihk_rwspinlock_read_unlock_noirq(&vm->memory_range_lock);
-	}
-	dkprintf("[%d]do_page_fault_process_vm(%p,%lx,%lx): %d\n",
-			ihk_mc_get_processor_id(), vm, fault_addr0,
-			reason, error);
-	return error;
+static void process_pgio_dispatch_bridge(void *fp, void *arg)
+{
+	((pgio_func_t *)fp)(arg);
 }
 
 int page_fault_process_vm(struct process_vm *fault_vm, void *fault_addr, uint64_t reason)
 {
-	int error;
-	struct thread *thread = cpu_local_var(current);
+	struct thread *thread = get_this_cpu_local_var()->current;
 
-	for (;;) {
-		error = do_page_fault_process_vm(fault_vm, fault_addr, reason);
-		if (error != -ERESTART) {
-			break;
-		}
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+	return process_page_fault_vm_public_result(fault_vm, thread->vm,
+			(uintptr_t)fault_addr, reason, ihk_mc_get_processor_id(),
+			thread, __builtin_offsetof(struct thread, pgio_fp),
+			__builtin_offsetof(struct thread, pgio_arg),
+			process_rw_read_lock_bridge,
+			process_rw_read_unlock_bridge,
+			process_rw_write_lock_bridge,
+			process_rw_write_unlock_bridge,
+			process_zeroobj_match_bridge,
+			process_normal_fault_range_bridge,
+			process_xpmem_fault_range_bridge,
+			preempt_enable, preempt_disable,
+			process_pgio_dispatch_bridge);
+#else
+	return process_page_fault_vm_retry_body_result(fault_vm,
+			(uintptr_t)fault_addr, reason, thread,
+			__builtin_offsetof(struct thread, pgio_fp),
+			__builtin_offsetof(struct thread, pgio_arg),
+			process_do_page_fault_process_vm_bridge,
+			preempt_enable, preempt_disable,
+			process_pgio_dispatch_bridge);
+#endif
+}
 
-		preempt_enable();
-		if (thread->pgio_fp) {
-			(*thread->pgio_fp)(thread->pgio_arg);
-			thread->pgio_fp = NULL;
-		}
-		preempt_disable();
+static void *process_init_stack_alloc_aligned_bridge(int npages, int p2align,
+		unsigned long flags, unsigned long virt_addr)
+{
+	return _ihk_mc_alloc_aligned_pages_node(npages, p2align, flags, -1, IHK_MC_PG_USER, virt_addr, __FILE__, __LINE__);
+}
+
+static void process_init_stack_free_pages_bridge(void *addr, int npages)
+{
+	_ihk_mc_free_pages(addr, npages, IHK_MC_PG_USER, __FILE__, __LINE__);
+}
+
+static int process_init_stack_add_range_bridge(struct process_vm *vm,
+		unsigned long start, unsigned long end, unsigned long phys,
+		unsigned long flag, int pgshift, struct vm_range **rangep)
+{
+	struct vm_range *range = NULL;
+	int rc;
+
+	rc = add_process_memory_range(vm, start, end, phys, flag, NULL, 0,
+			pgshift, NULL, &range);
+	if (rangep)
+		*rangep = range;
+	return rc;
+}
+
+static unsigned long process_init_stack_virt_to_phys_bridge(void *addr)
+{
+	return virt_to_phys(addr);
+}
+
+static unsigned long process_init_stack_attr_bridge(unsigned long flag,
+		unsigned long fault, void *ptep)
+{
+	return arch_vrflag_to_ptattr(flag, fault, ptep);
+}
+
+static int process_init_stack_pt_set_range_bridge(void *page_table,
+		struct process_vm *vm, unsigned long start, unsigned long end,
+		unsigned long phys, unsigned long attr, int pgshift,
+		struct vm_range *range, int flags)
+{
+	return ihk_mc_pt_set_range(page_table, vm, (void *)start, (void *)end,
+			phys, attr, pgshift, range, flags);
+}
+
+static unsigned long process_init_stack_hwcap_bridge(void)
+{
+	return arch_get_hwcap();
+}
+
+static void process_init_stack_modify_context_bridge(void *uctx, int reg,
+		unsigned long value)
+{
+	ihk_mc_modify_user_context(uctx, reg, value);
+}
+
+static void process_init_stack_log_bridge(int event,
+		const unsigned long *args)
+{
+	const unsigned long arg0 = args ? args[0] : 0;
+	const unsigned long arg1 = args ? args[1] : 0;
+	const unsigned long arg2 = args ? args[2] : 0;
+	const unsigned long arg3 = args ? args[3] : 0;
+	const unsigned long arg4 = args ? args[4] : 0;
+	const unsigned long arg5 = args ? args[5] : 0;
+	const unsigned long arg6 = args ? args[6] : 0;
+	const unsigned long arg7 = args ? args[7] : 0;
+	const unsigned long arg8 = args ? args[8] : 0;
+	const unsigned long arg9 = args ? args[9] : 0;
+	const unsigned long arg10 = args ? args[10] : 0;
+	const unsigned long arg11 = args ? args[11] : 0;
+
+	switch (event) {
+	case PROCESS_INIT_STACK_LOG_SIZE:
+		dkprintf("%s: stack_premap: %lu, rlim_cur: %lu, minsz: %lu, size: %lu, maxsz: %lx\n",
+				"init_process_stack", arg0, arg1, arg2, arg3,
+				arg4);
+		break;
+	case PROCESS_INIT_STACK_LOG_AP_USER:
+		dkprintf("%s: max size: %lu, mapped size: %lu %s\n",
+				"init_process_stack", arg0, arg1,
+				arg2 ? "(IHK_MC_AP_USER)" : "");
+		break;
+	case PROCESS_INIT_STACK_LOG_ALLOC_FAILED:
+		kprintf("%s: error: couldn't allocate initial stack\n",
+				"init_process_stack");
+		break;
+	case PROCESS_INIT_STACK_LOG_ADD_FAILED:
+		kprintf("%s: error addding process memory range: %d\n",
+				"init_process_stack", (int)arg0);
+		break;
+	case PROCESS_INIT_STACK_LOG_PT_FAILED:
+		kprintf("init_process_stack:set range %lx-%lx %lx failed. %d\n",
+				arg0, arg1, arg2, (int)arg3);
+		break;
+	case PROCESS_INIT_STACK_LOG_AUXV:
+		kprintf("mcexec_v10: auxv pid=%d tid=%d entry=0x%lx base=0x%lx phdr=0x%lx vdso=0x%lx pagesz=%lu at_random=0x%lx stack_top=0x%lx argc=%d envc=%d\n",
+				(int)arg0, (int)arg1, arg2, arg3, arg4,
+				arg5, arg6, arg7, arg8, (int)arg9,
+				(int)arg10);
+		break;
+	case PROCESS_INIT_STACK_LOG_SIZE_MISMATCH:
+		kprintf("%s: WARNING: stack_populated_size mismatch (is AUXV_LEN up-to-date?): &p[s_ind]: %lu, computed: %lu\n",
+				"init_process_stack", arg0, arg1);
+		break;
+	case PROCESS_INIT_STACK_LOG_ALIGN_MISMATCH:
+		kprintf("%s: WARNING: stack alignment mismatch\n",
+				"init_process_stack");
+		break;
+	case PROCESS_INIT_STACK_LOG_INITIAL:
+		kprintf("mcexec_v10: initial_stack pid=%d tid=%d sp=0x%lx argc_slot=%lu argv0_slot=0x%lx argv_null=0x%lx env0_slot=0x%lx env_null=0x%lx aux0_tag=0x%lx aux0_val=0x%lx\n",
+				(int)arg0, (int)arg1, arg2, arg3, arg4,
+				arg5, arg6, arg7, arg8, arg9);
+		break;
+	default:
+		(void)arg11;
+		break;
 	}
-
-	return error;
 }
 
 int init_process_stack(struct thread *thread, struct program_load_desc *pn,
                         unsigned long at_base, int argc, char **argv,
                         int envc, char **env)
 {
-	int s_ind = 0;
-	int arg_ind;
-	unsigned long size;
-	unsigned long end;
-	unsigned long start;
-	int rc;
-	unsigned long vrflag;
-	char *stack;
-	int error;
-	unsigned long *p;
-	unsigned long maxsz;
-	unsigned long minsz;
-	unsigned long at_rand;
-	struct process *proc = thread->proc;
-	unsigned long ap_flag;
-	unsigned long ap_hwcap;
-	struct vm_range *range;
-	int stack_populated_size = 0;
-	int stack_align_padding = 0;
-	unsigned long user_sp;
-	int argv_null_i;
-	int env0_i;
-	int env_null_i;
-	int aux0_i;
-
-	/* Create stack range */
-	end = STACK_TOP(&thread->vm->region) & USER_STACK_PAGE_MASK;
-	minsz = (pn->stack_premap + USER_STACK_PREPAGE_SIZE - 1) &
-		USER_STACK_PAGE_MASK;
-	maxsz = (end - thread->vm->region.map_start) / 2;
-	size = proc->rlimit[MCK_RLIMIT_STACK].rlim_cur;
-	if (size > maxsz) {
-		size = maxsz;
-	}
-	else if (size < minsz) {
-		size = minsz;
-	}
-	size = (size + USER_STACK_PREPAGE_SIZE - 1) & USER_STACK_PAGE_MASK;
-	dkprintf("%s: stack_premap: %lu, rlim_cur: %lu, minsz: %lu, size: %lu, maxsz: %lx\n",
-		 __func__, pn->stack_premap,
-		 proc->rlimit[MCK_RLIMIT_STACK].rlim_cur,
-		 minsz, size, maxsz);
-	start = (end - minsz) & USER_STACK_PAGE_MASK;
-
-	/* Apply user allocation policy to stacks */
-	/* TODO: make threshold kernel or mcexec argument */
-	ap_flag = (minsz >= proc->mpol_threshold &&
-		!(proc->mpol_flags & MPOL_NO_STACK)) ? IHK_MC_AP_USER : 0;
-	dkprintf("%s: max size: %lu, mapped size: %lu %s\n",
-			__FUNCTION__, size, minsz,
-			ap_flag ? "(IHK_MC_AP_USER)" : "");
+	unsigned long stack_alloc_size_override = 0;
 
 #ifdef ENABLE_FUGAKU_HACKS
 	/*
-	 * XXX: Fugaku: Fujitsu's runtime remaps the stack
-	 * using hugetlbfs so don't bother allocating too much here..
+	 * XXX: Fugaku: Fujitsu's runtime remaps the stack using hugetlbfs, so
+	 * don't bother allocating too much here.
 	 */
-	minsz = 8*1024*1024;
+	stack_alloc_size_override = 8 * 1024 * 1024;
 #endif
 
-	stack = ihk_mc_alloc_aligned_pages_user(minsz >> PAGE_SHIFT,
-						USER_STACK_PAGE_P2ALIGN,
-						IHK_MC_AP_NOWAIT | ap_flag,
-						start);
-
-	if (!stack) {
-		kprintf("%s: error: couldn't allocate initial stack\n",
-				__FUNCTION__);
-		return -ENOMEM;
-	}
-
-	memset(stack, 0, minsz);
-
-	vrflag = VR_STACK | VR_DEMAND_PAGING | VR_PRIVATE;
-	vrflag |= ((ap_flag & IHK_MC_AP_USER) ? VR_AP_USER : 0);
-	vrflag |= PROT_TO_VR_FLAG(pn->stack_prot);
-	vrflag |= VR_MAXPROT_READ | VR_MAXPROT_WRITE | VR_MAXPROT_EXEC;
-#define	NOPHYS	((uintptr_t)-1)
-	if ((rc = add_process_memory_range(thread->vm, start, end, NOPHYS,
-			vrflag, NULL, 0, USER_STACK_PAGE_SHIFT,
-			NULL, &range)) != 0) {
-		ihk_mc_free_pages_user(stack, minsz >> PAGE_SHIFT);
-		kprintf("%s: error addding process memory range: %d\n", rc);
-		return rc;
-	}
-
-	/* Map physical pages for initial stack frame */
-	error = ihk_mc_pt_set_range(thread->vm->address_space->page_table,
-				    thread->vm, (void *)(end - minsz),
-				    (void *)end, virt_to_phys(stack),
-				    arch_vrflag_to_ptattr(vrflag, PF_POPULATE,
-							  NULL),
-				    USER_STACK_PAGE_SHIFT, range, 0);
-	if (error) {
-		kprintf("init_process_stack:"
-				"set range %lx-%lx %lx failed. %d\n",
-				(end-minsz), end, stack, error);
-		ihk_mc_free_pages_user(stack, minsz >> PAGE_SHIFT);
-		return error;
-	}
-
-	/* Pre-compute populated size so that we can align stack
-	 * and verify the size at the end */
-	stack_align_padding = 0;
-	stack_populated_size = 16 /* Random */ +
-		AUXV_LEN * sizeof(unsigned long) /* AUXV */ +
-		(argc + 2) * sizeof(unsigned long) /* args + term NULL + argc */ +
-		(envc + 1) * sizeof(unsigned long); /* envs + term NULL */
-
-	/* set up initial stack frame */
-	p = (unsigned long *)(stack + minsz);
-	s_ind = -1;
-
-	/* Align stack to 64 bytes */
-	while ((unsigned long)(stack + minsz -
-				stack_populated_size - stack_align_padding) & (0x40L - 1)) {
-		s_ind--;
-		stack_align_padding += sizeof(unsigned long);
-	}
-
-	/* "random" 16 bytes on the very top */
-	p[s_ind--] = 0x010101011;
-	p[s_ind--] = 0x010101011;
-	at_rand = end + (s_ind + 1) * sizeof(unsigned long);
-
-	/* auxiliary vector */
-	/* If you add/delete entires, please increase/decrease
-	   AUXV_LEN in include/process.h. */
-	p[s_ind--] = 0;     /* AT_NULL */
-	p[s_ind--] = 0;
-	p[s_ind--] = (argc > 0) ? (unsigned long)argv[0] : 0UL; /* AT_EXECFN */
-	p[s_ind--] = (argc > 0) ? AT_EXECFN : AT_IGNORE;
-	p[s_ind--] = 0; /* AT_HWCAP2 */
-	p[s_ind--] = AT_HWCAP2;
-	ap_hwcap = arch_get_hwcap();
-	p[s_ind--] = ap_hwcap; /* AT_HWCAP */
-	p[s_ind--] = ap_hwcap ? AT_HWCAP : AT_IGNORE;
-	p[s_ind--] = 0; /* AT_SECURE */
-	p[s_ind--] = AT_SECURE;
-	p[s_ind--] = proc->egid; /* AT_EGID */
-	p[s_ind--] = AT_EGID;
-	p[s_ind--] = proc->rgid; /* AT_GID */
-	p[s_ind--] = AT_GID;
-	p[s_ind--] = proc->euid; /* AT_EUID */
-	p[s_ind--] = AT_EUID;
-	p[s_ind--] = proc->ruid; /* AT_UID */
-	p[s_ind--] = AT_UID;
-	p[s_ind--] = pn->at_entry; /* AT_ENTRY */
-	p[s_ind--] = AT_ENTRY;
-	p[s_ind--] = 0; /* AT_FLAGS */
-	p[s_ind--] = AT_FLAGS;
-	p[s_ind--] = at_base; /* AT_BASE */
-	p[s_ind--] = AT_BASE;
-	p[s_ind--] = pn->at_phnum; /* AT_PHNUM */
-	p[s_ind--] = AT_PHNUM;
-	p[s_ind--] = pn->at_phent;  /* AT_PHENT */
-	p[s_ind--] = AT_PHENT;
-	p[s_ind--] = pn->at_phdr;  /* AT_PHDR */
-	p[s_ind--] = AT_PHDR;
-	p[s_ind--] = PAGE_SIZE; /* AT_PAGESZ */
-	p[s_ind--] = AT_PAGESZ;
-	p[s_ind--] = pn->at_clktck; /* AT_CLKTCK */
-	p[s_ind--] = AT_CLKTCK;
-	p[s_ind--] = at_rand; /* AT_RANDOM */
-	p[s_ind--] = AT_RANDOM;
-#ifndef AT_SYSINFO_EHDR
-#define AT_SYSINFO_EHDR AT_IGNORE
-#endif
-	p[s_ind--] = (long)(thread->vm->vdso_addr);
-	p[s_ind--] = (thread->vm->vdso_addr)? AT_SYSINFO_EHDR: AT_IGNORE;
-	kprintf("mcexec_v10: auxv pid=%d tid=%d entry=0x%lx base=0x%lx phdr=0x%lx vdso=0x%lx pagesz=%lu at_random=0x%lx stack_top=0x%lx argc=%d envc=%d\n",
-		proc ? proc->pid : -1,
-		thread ? thread->tid : -1,
-		pn->at_entry,
-		at_base,
-		pn->at_phdr,
-		(unsigned long)thread->vm->vdso_addr,
-		(unsigned long)PAGE_SIZE,
-		at_rand,
-		end,
-		argc,
-		envc);
-
-	/* Save auxiliary vector for later use. */
-	memcpy(proc->saved_auxv, &p[s_ind + 1], sizeof(proc->saved_auxv));
-
-	p[s_ind--] = 0;     /* envp terminating NULL */
-	/* envp */
-	for (arg_ind = envc - 1; arg_ind > -1; --arg_ind) {
-		p[s_ind--] = (unsigned long)env[arg_ind];
-	}
-
-	p[s_ind--] = 0; /* argv terminating NULL */
-	/* argv */
-	for (arg_ind = argc - 1; arg_ind > -1; --arg_ind) {
-		p[s_ind--] = (unsigned long)argv[arg_ind];
-	}
-	/* argc */
-	p[s_ind] = argc;
-
-	if (((void *)&p[s_ind] != (void *)stack + minsz -
-				stack_populated_size - stack_align_padding)) {
-		kprintf("%s: WARNING: stack_populated_size mismatch (is AUXV_LEN up-to-date?): "
-				"&p[s_ind]: %lu, computed: %lu\n",
-				__FUNCTION__,
-				(unsigned long)&p[s_ind],
-				(unsigned long)stack + minsz -
-					stack_populated_size - stack_align_padding);
-	}
-
-	if ((unsigned long)&p[s_ind] & (0x40L - 1)) {
-		kprintf("%s: WARNING: stack alignment mismatch\n", __FUNCTION__);
-	}
-
-	user_sp = end + sizeof(unsigned long) * s_ind;
-	argv_null_i = s_ind + argc + 1;
-	env0_i = argv_null_i + 1;
-	env_null_i = env0_i + envc;
-	aux0_i = env_null_i + 1;
-	kprintf("mcexec_v10: initial_stack pid=%d tid=%d sp=0x%lx argc_slot=%lu argv0_slot=0x%lx argv_null=0x%lx env0_slot=0x%lx env_null=0x%lx aux0_tag=0x%lx aux0_val=0x%lx\n",
-		proc ? proc->pid : -1,
-		thread ? thread->tid : -1,
-		user_sp,
-		p[s_ind],
-		argc > 0 ? p[s_ind + 1] : 0UL,
-		p[argv_null_i],
-		envc > 0 ? p[env0_i] : 0UL,
-		p[env_null_i],
-		p[aux0_i],
-		p[aux0_i + 1]);
-
-	ihk_mc_modify_user_context(thread->uctx, IHK_UCR_STACK_POINTER,
-	                           user_sp);
-	thread->vm->region.stack_end = end;
-	thread->vm->region.stack_start = (end - size) & USER_STACK_PAGE_MASK;
-
-	return 0;
+	return process_init_stack_body_result(thread, pn, at_base, argc, argv,
+			envc, env, PAGE_SIZE, PAGE_SHIFT, USER_STACK_PAGE_MASK,
+			USER_STACK_PAGE_SHIFT, USER_STACK_PREPAGE_SIZE,
+			stack_alloc_size_override, USER_STACK_PAGE_P2ALIGN,
+			IHK_MC_AP_NOWAIT, IHK_MC_AP_USER, MPOL_NO_STACK,
+			IHK_UCR_STACK_POINTER, PF_POPULATE,
+			process_init_stack_alloc_aligned_bridge,
+			process_init_stack_free_pages_bridge,
+			process_init_stack_add_range_bridge,
+			process_init_stack_virt_to_phys_bridge,
+			process_init_stack_attr_bridge,
+			process_init_stack_pt_set_range_bridge,
+			process_init_stack_hwcap_bridge,
+			process_init_stack_modify_context_bridge,
+			process_init_stack_log_bridge);
 }
 
 
@@ -2786,12 +3064,9 @@ unsigned long extend_process_region(struct process_vm *vm,
 		p = 0;
 	}
 	else {
-		p = ihk_mc_alloc_aligned_pages_user(
-				npages, align_p2align,
-				IHK_MC_AP_NOWAIT |
+		p = _ihk_mc_alloc_aligned_pages_node(npages, align_p2align, IHK_MC_AP_NOWAIT |
 				(!(vm->proc->mpol_flags & MPOL_NO_HEAP) ?
-				 IHK_MC_AP_USER : 0),
-				end_allocated);
+				 IHK_MC_AP_USER : 0), -1, IHK_MC_PG_USER, end_allocated, __FILE__, __LINE__);
 
 		if (!p) {
 			dkprintf("%s: warning: failed to allocate %d contiguous pages "
@@ -2806,7 +3081,7 @@ unsigned long extend_process_region(struct process_vm *vm,
 	if ((rc = add_process_memory_range(vm, end_allocated, new_end_allocated,
 					(p == 0 ? 0 : virt_to_phys(p)), flag, NULL, 0,
 					align_shift, NULL, NULL)) != 0) {
-		ihk_mc_free_pages_user(p, npages);
+		_ihk_mc_free_pages(p, npages, IHK_MC_PG_USER, __FILE__, __LINE__);
 		return end_allocated;
 	}
 	// memory_stat_rss_add() is called in add_process_memory_range()
@@ -2818,123 +3093,120 @@ unsigned long extend_process_region(struct process_vm *vm,
 }
 
 // Original version retained because dcfa (src/mccmd/client/ibmic/main.c) calls this
+static int process_remove_region_clear_bridge(void *page_table,
+					      struct process_vm *vm,
+					      unsigned long start,
+					      unsigned long end);
+static void process_remove_region_log_bridge(struct process_vm *vm,
+					     unsigned long start,
+					     unsigned long end);
+
 int remove_process_region(struct process_vm *vm,
                           unsigned long start, unsigned long end)
 {
-	int rc = process_remove_region_alignment_result(start, end);
+	return process_remove_region_body_result(vm, start, end,
+		process_free_range_noirq_lock_bridge,
+		process_free_range_noirq_unlock_bridge,
+		process_remove_region_clear_bridge,
+		process_remove_region_log_bridge);
+}
 
-	if (rc)
-		return rc;
-
-	ihk_mc_spinlock_lock_noirq(&vm->page_table_lock);
+static int process_remove_region_clear_bridge(void *page_table,
+					      struct process_vm *vm,
+					      unsigned long start,
+					      unsigned long end)
+{
 	/* We defer freeing to the time of exit */
 	// XXX: check error
-	ihk_mc_pt_clear_range(vm->address_space->page_table, vm,
-			(void *)start, (void *)end);
-	ihk_mc_spinlock_unlock_noirq(&vm->page_table_lock);
+	return ihk_mc_pt_clear_range(page_table, vm, (void *)start,
+				     (void *)end);
+}
 
+static void process_remove_region_log_bridge(struct process_vm *vm,
+					     unsigned long start,
+					     unsigned long end)
+{
 	// memory_stat_rss_sub() isn't called because this execution path is no loger reached
 	dkprintf("%s: memory_stat_rss_sub() isn't called,start=%lx,end=%lx\n", __FUNCTION__, start, end);
-
-	return 0;
 }
 
 void flush_process_memory(struct process_vm *vm)
 {
-	struct vm_range *range;
-	struct rb_node *node, *next = rb_first(&vm->vm_range_tree);
-	int error;
-
 	dkprintf("flush_process_memory(%p)\n", vm);
-	ihk_rwspinlock_write_lock_noirq(&vm->memory_range_lock);
-	/* Let concurrent page faults know the VM will be gone */
-	vm->exiting = 1;
-	while ((node = next)) {
-		range = rb_entry(node, struct vm_range, vm_rb_node);
-		next = rb_next(node);
-
-		if (range->memobj) {
-			// XXX: temporary of temporary
-			error = free_process_memory_range(vm, range);
-			if (error) {
-				ekprintf("flush_process_memory(%p):"
-						"free range failed. %lx-%lx %d\n",
-						vm, range->start, range->end, error);
-				/* through */
-			}
-		}
-	}
-	ihk_rwspinlock_write_unlock_noirq(&vm->memory_range_lock);
+	process_flush_memory_body_result(vm,
+		process_rw_write_lock_bridge, process_rw_write_unlock_bridge,
+		process_memory_range_free_bridge, process_flush_memory_log_bridge);
 	dkprintf("flush_process_memory(%p):\n", vm);
-	return;
 }
 
 void free_process_memory_ranges(struct process_vm *vm)
 {
-	int error;
-	struct vm_range *range;
-	struct rb_node *node, *next = rb_first(&vm->vm_range_tree);
-
 	if (vm == NULL) {
 		return;
 	}
 
-	ihk_rwspinlock_write_lock_noirq(&vm->memory_range_lock);
-	while ((node = next)) {
-		range = rb_entry(node, struct vm_range, vm_rb_node);
-		next = rb_next(node);
-
-		error = free_process_memory_range(vm, range);
-		if (error) {
-			ekprintf("free_process_memory(%p):"
-					"free range failed. %lx-%lx %d\n",
-					vm, range->start, range->end, error);
-			/* through */
-		}
-	}
-	ihk_rwspinlock_write_unlock_noirq(&vm->memory_range_lock);
+	process_free_all_memory_ranges_body_result(vm,
+		process_rw_write_lock_bridge, process_rw_write_unlock_bridge,
+		process_memory_range_free_bridge,
+		process_memory_range_free_log_bridge);
 }
 
 static void free_thread_pages(struct thread *thread)
 {
-	ihk_mc_free_pages(thread, KERNEL_STACK_NR_PAGES);
+	_ihk_mc_free_pages(thread, KERNEL_STACK_NR_PAGES, IHK_MC_PG_KERNEL, __FILE__, __LINE__);
+}
+
+static void process_free_thread_pages_bridge(void *thread)
+{
+	free_thread_pages(thread);
 }
 
 void
 hold_process(struct process *proc)
 {
-	ihk_atomic_inc(&proc->refcount);
+	process_ref_hold_body_result(proc,
+		__builtin_offsetof(struct process, refcount),
+		NULL);
 }
 
-void
-release_process(struct process *proc)
+static void *process_current_resource_set_bridge(void)
 {
-	struct process *parent;
+	return get_this_cpu_local_var()->resource_set;
+}
+
+static void process_release_hash_detach_bridge(void *resource_set_arg,
+					       void *proc_arg)
+{
+	struct resource_set *resource_set = resource_set_arg;
+	struct process *proc = proc_arg;
 	struct mcs_rwlock_node_irqsave lock;
-	struct resource_set *rset;
 
-	if (!process_ref_release_should_destroy_result(
-		    ihk_atomic_dec_and_test(&proc->refcount))) {
-		return;
-	}
-
-	rset = cpu_local_var(resource_set);
 	if (process_list_is_linked_result(&proc->hash_list)) {
-		struct process_hash *phash = rset->process_hash;
+		struct process_hash *phash = resource_set->process_hash;
 		int hash = process_hash(proc->pid);
 
 		mcs_rwlock_writer_lock(&phash->lock[hash], &lock);
 		process_list_detach_result(&proc->hash_list);
 		mcs_rwlock_writer_unlock(&phash->lock[hash], &lock);
 	}
+}
 
-	parent = proc->parent;
+static void process_release_sibling_detach_bridge(void *proc_arg)
+{
+	struct process *proc = proc_arg;
+	struct process *parent = proc->parent;
+	struct mcs_rwlock_node_irqsave lock;
+
 	mcs_rwlock_writer_lock(&parent->children_lock, &lock);
 	process_list_detach_result(&proc->siblings_list);
 	mcs_rwlock_writer_unlock(&parent->children_lock, &lock);
+}
 
-	if (proc->tids) kfree(proc->tids);
+static void process_release_profile_bridge(void *proc_arg)
+{
 #ifdef PROFILE_ENABLE
+	struct process *proc = proc_arg;
+
 	if (proc->profile) {
 		if (proc->nr_processes) {
 			profile_accumulate_and_print_job_events(proc);
@@ -2944,22 +3216,16 @@ release_process(struct process *proc)
 		}
 	}
 	profile_dealloc_proc_events(proc);
-#endif // PROFILE_ENABLE
-	free_thread_pages(proc->main_thread);
+#else
+	(void)proc_arg;
+#endif
+}
 
-	{
-		long irqstate = ihk_mc_spinlock_lock(&proc->mckfd_lock);
-		struct mckfd *cur;
+static void process_release_final_cleanup_bridge(void *resource_set_arg)
+{
+	struct resource_set *rset = resource_set_arg;
+	struct mcs_rwlock_node_irqsave lock;
 
-		while ((cur = process_mckfd_pop_head_result(&proc->mckfd))) {
-			kfree(cur);
-		}
-		ihk_mc_spinlock_unlock(&proc->mckfd_lock, irqstate);
-	}
-
-	kfree(proc);
-
-	/* no process left */
 	mcs_rwlock_reader_lock(&rset->pid1->children_lock, &lock);
 	if (list_empty(&rset->pid1->children_list)) {
 #ifdef ENABLE_TOFU
@@ -2973,145 +3239,169 @@ release_process(struct process *proc)
 }
 
 void
+release_process(struct process *proc)
+{
+	process_release_process_body_result(proc,
+		__builtin_offsetof(struct process, refcount),
+		__builtin_offsetof(struct process, tids),
+		__builtin_offsetof(struct process, main_thread),
+		__builtin_offsetof(struct process, mckfd),
+		__builtin_offsetof(struct process, mckfd_lock),
+		__builtin_offsetof(struct mckfd, next),
+		NULL,
+		process_current_resource_set_bridge,
+		process_release_hash_detach_bridge,
+		process_release_sibling_detach_bridge,
+		process_release_profile_bridge,
+		process_free_thread_pages_bridge,
+		process_spin_lock_bridge,
+		process_spin_unlock_bridge,
+		process_mckfd_free_bridge,
+		process_optional_free_bridge,
+		process_release_final_cleanup_bridge);
+}
+
+void
 hold_process_vm(struct process_vm *vm)
 {
-	ihk_atomic_inc(&vm->refcount);
+	process_ref_hold_body_result(vm,
+		__builtin_offsetof(struct process_vm, refcount),
+		NULL);
+}
+
+static void process_detach_address_space_bridge(void *address_space, int pid)
+{
+	detach_address_space(address_space, pid);
+}
+
+static void process_release_process_bridge(void *proc)
+{
+	release_process(proc);
+}
+
+static void process_populate_warn_bridge(struct process_vm *vm,
+					 unsigned long addr,
+					 unsigned long reason,
+					 unsigned long off,
+					 size_t len, int error)
+{
+	ekprintf("%s: WARNING: page_fault_process_vm(): vm: %p, "
+			"addr: %lx, reason: %lx, off: %lu, len: %lu returns %d\n",
+			"populate_process_memory", vm, addr, reason, off, len,
+			error);
+}
+
+static int process_page_fault_process_vm_bridge(struct process_vm *vm,
+						unsigned long addr,
+						unsigned long reason)
+{
+	return page_fault_process_vm(vm, (void *)addr, reason);
 }
 
 void
 free_all_process_memory_range(struct process_vm *vm)
 {
-	struct vm_range *range;
-	struct rb_node *node, *next = rb_first(&vm->vm_range_tree);
-	int error;
-
-	ihk_rwspinlock_write_lock_noirq(&vm->memory_range_lock);
-	while ((node = next)) {
-		range = rb_entry(node, struct vm_range, vm_rb_node);
-		next = rb_next(node);
-
-		error = free_process_memory_range(vm, range);
-		if (error) {
-			ekprintf("free_process_memory(%p):"
-					"free range failed. %lx-%lx %d\n",
-					vm, range->start, range->end, error);
-			/* through */
-		}
-	}
-	ihk_rwspinlock_write_unlock_noirq(&vm->memory_range_lock);
+	process_free_all_memory_ranges_body_result(vm,
+		process_rw_write_lock_bridge, process_rw_write_unlock_bridge,
+		process_memory_range_free_bridge,
+		process_memory_range_free_log_bridge);
 }
 
 void
 release_process_vm(struct process_vm *vm)
 {
-	struct process *proc = vm->proc;
-	struct vm_range_numa_policy *policy;
-	struct rb_node *node;
-
-	if (!process_ref_release_should_destroy_result(
-		    ihk_atomic_dec_and_test(&vm->refcount))) {
-		return;
-	}
-
-	{
-		long irqstate;
-		struct mckfd *fdp;
-
-		irqstate = ihk_mc_spinlock_lock(&proc->mckfd_lock);
-		for (fdp = proc->mckfd; fdp; fdp = fdp->next) {
-			if (process_release_mckfd_should_close_result(
-				    (unsigned long)fdp->close_cb)) {
-				fdp->close_cb(fdp, NULL);
-			}
-		}
-		ihk_mc_spinlock_unlock(&proc->mckfd_lock, irqstate);
-	}
-
-	if (process_release_vm_should_run_free_cb_result(
-		    (unsigned long)vm->free_cb))
-		vm->free_cb(vm, vm->opt);
-
-	flush_nfo_tlb_mm(vm);
-	free_all_process_memory_range(vm);
-
-	detach_address_space(vm->address_space, vm->proc->pid);
-	proc->vm = NULL;
-	release_process(proc);
-
-	while ((node = rb_first(&vm->vm_range_numa_policy_tree))) {
-		policy = rb_entry(node, struct vm_range_numa_policy,
-				  policy_rb_node);
-		rb_erase(&policy->policy_rb_node,
-			 &vm->vm_range_numa_policy_tree);
-		kfree(policy);
-	}
-
-	kfree(vm);
+	process_release_vm_body_result(vm,
+		__builtin_offsetof(struct process_vm, refcount),
+		__builtin_offsetof(struct process_vm, proc),
+		__builtin_offsetof(struct process, mckfd),
+		__builtin_offsetof(struct process, mckfd_lock),
+		__builtin_offsetof(struct mckfd, next),
+		__builtin_offsetof(struct mckfd, close_cb),
+		__builtin_offsetof(struct process_vm, free_cb),
+		__builtin_offsetof(struct process_vm, opt),
+		__builtin_offsetof(struct process_vm, address_space),
+		__builtin_offsetof(struct process, pid),
+		__builtin_offsetof(struct process, vm),
+		__builtin_offsetof(struct process_vm,
+				   vm_range_numa_policy_tree),
+		__builtin_offsetof(struct vm_range_numa_policy,
+				   policy_rb_node),
+		NULL,
+		process_spin_lock_bridge,
+		process_spin_unlock_bridge,
+		process_flush_vm_bridge,
+		process_free_all_ranges_bridge,
+		process_detach_address_space_bridge,
+		process_release_process_bridge,
+		process_policy_free_bridge,
+		process_free_vm_bridge);
 }
 
 int populate_process_memory(struct process_vm *vm, void *start, size_t len)
 {
-	int error;
 	const int reason = PF_USER | PF_POPULATE;
-	uintptr_t end;
-	uintptr_t addr;
 
-	end = (uintptr_t)start + len;
-	preempt_disable();
-	for (addr = (uintptr_t)start; addr < end; addr += PAGE_SIZE) {
-		error = page_fault_process_vm(vm, (void *)addr, reason);
-		if (error) {
-			ekprintf("%s: WARNING: page_fault_process_vm(): vm: %p, "
-					"addr: %lx, reason: %lx, off: %lu, len: %lu returns %d\n",
-					__FUNCTION__, vm, addr, reason,
-					((void *)addr - start), len, error);
-			goto out;
-		}
-	}
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+	struct thread *thread = get_this_cpu_local_var()->current;
 
-	error = 0;
-out:
-	preempt_enable();
-	return error;
+	return process_populate_memory_public_result(vm, thread->vm,
+			(uintptr_t)start, len, PAGE_SIZE, reason,
+			ihk_mc_get_processor_id(), thread,
+			__builtin_offsetof(struct thread, pgio_fp),
+			__builtin_offsetof(struct thread, pgio_arg),
+			process_rw_read_lock_bridge,
+			process_rw_read_unlock_bridge,
+			process_rw_write_lock_bridge,
+			process_rw_write_unlock_bridge,
+			process_zeroobj_match_bridge,
+			process_normal_fault_range_bridge,
+			process_xpmem_fault_range_bridge,
+			preempt_disable, preempt_enable,
+			process_pgio_dispatch_bridge,
+			process_populate_warn_bridge);
+#else
+	return process_populate_memory_body_result(vm, (uintptr_t)start, len,
+			PAGE_SIZE, reason, process_page_fault_process_vm_bridge,
+			preempt_disable, preempt_enable,
+			process_populate_warn_bridge);
+#endif
+}
+
+static void process_hold_thread_warn_bridge(void *thread_arg)
+{
+	struct thread *thread = thread_arg;
+
+	kprintf("hold_thread: WARNING: already exited process,tid=%d\n",
+		thread->tid);
 }
 
 int hold_thread(struct thread *thread)
 {
-	if (process_hold_thread_warn_exited_result(thread->status)) {
-		kprintf("hold_thread: WARNING: already exited process,tid=%d\n",
-			thread->tid);
-	}
+	process_hold_thread_body_result(thread,
+		__builtin_offsetof(struct thread, status),
+		__builtin_offsetof(struct thread, refcount),
+		NULL, process_hold_thread_warn_bridge);
 
-	ihk_atomic_inc(&thread->refcount);
 	return 0;
 }
 
 void
 hold_sigcommon(struct sig_common *sigcommon)
 {
-	ihk_atomic_inc(&sigcommon->use);
+	process_ref_hold_body_result(sigcommon,
+		__builtin_offsetof(struct sig_common, use),
+		NULL);
 }
 
 void
 release_sigcommon(struct sig_common *sigcommon)
 {
-	struct sig_pending *pending;
-
-	if (!process_sigcommon_release_should_destroy_result(
-		    ihk_atomic_dec_and_test(&sigcommon->use))) {
-		return;
-	}
-
-	if (process_sigpending_cleanup_needed_result(
-		    list_empty(&sigcommon->sigpending))) {
-		while ((pending = process_sigpending_pop_front_result(
-				&sigcommon->sigpending,
-				__builtin_offsetof(struct sig_pending,
-						   list)))) {
-			kfree(pending);
-		}
-	}
-	kfree(sigcommon);
+	process_release_sigcommon_public_body_result(sigcommon,
+		__builtin_offsetof(struct sig_common, use),
+		__builtin_offsetof(struct sig_common, sigpending),
+		__builtin_offsetof(struct sig_pending, list),
+		NULL,
+		process_optional_free_bridge);
 }
 
 /*
@@ -3119,59 +3409,28 @@ release_sigcommon(struct sig_common *sigcommon)
  * NOTE: threads_lock must be held.
  */
 void __release_tid(struct process *proc, struct thread *thread) {
-	int i;
-
-	if (!proc->tids) {
-		return;
-	}
-
-	i = process_tid_index_for_thread_result(proc->tids, proc->nr_tids,
-						sizeof(proc->tids[0]),
-						__builtin_offsetof(
-							struct mcexec_tid,
-							thread),
-						(unsigned long)thread);
-	if (process_tid_index_found_result(i) &&
-	    process_tid_release_slot_result(proc->tids, i,
-					    sizeof(proc->tids[0]),
-					    __builtin_offsetof(
-						    struct mcexec_tid,
-						    thread))) {
-		dkprintf("%s: tid %d has been released by %p\n",
-			__FUNCTION__, thread->tid, thread);
-	}
+	process_release_tid_body_result(proc->tids, proc->nr_tids,
+		sizeof(proc->tids[0]),
+		__builtin_offsetof(struct mcexec_tid, thread),
+		thread, thread->tid, process_release_tid_log_bridge);
 }
 
 /* Replace tid specified by thread with tid specified by new_tid */
 void __find_and_replace_tid(struct process *proc, struct thread *thread, int new_tid) {
-	int i = process_tid_index_for_thread_result(
-		proc->tids, proc->nr_tids, sizeof(proc->tids[0]),
+	process_replace_tid_body_result(proc->tids, proc->nr_tids,
+		sizeof(proc->tids[0]),
+		__builtin_offsetof(struct mcexec_tid, tid),
 		__builtin_offsetof(struct mcexec_tid, thread),
-		(unsigned long)thread);
-
-	if (process_tid_index_found_result(i) &&
-	    process_tid_replace_slot_result(proc->tids, i,
-					    sizeof(proc->tids[0]),
-					    __builtin_offsetof(
-						    struct mcexec_tid, tid),
-					    __builtin_offsetof(
-						    struct mcexec_tid,
-						    thread),
-					    new_tid)) {
-		dkprintf("%s: tid %d (thread %p) has been relaced with tid %d\n",
-				__FUNCTION__, thread->tid, thread, new_tid);
-	}
+		thread, thread->tid, new_tid, process_replace_tid_log_bridge);
 }
 
-void destroy_thread(struct thread *thread)
+static void process_destroy_thread_hash_detach_bridge(void *thread_arg)
 {
-	struct sig_pending *pending;
-	struct mcs_rwlock_node_irqsave lock, updatelock;
-	struct process *proc = thread->proc;
-	struct timespec ats;
+	struct thread *thread = thread_arg;
+	struct mcs_rwlock_node_irqsave lock;
 
 	if (process_list_is_linked_result(&thread->hash_list)) {
-		struct resource_set *resource_set = cpu_local_var(resource_set);
+		struct resource_set *resource_set = get_this_cpu_local_var()->resource_set;
 		int hash = thread_hash(thread->tid);
 
 		mcs_rwlock_writer_lock(&resource_set->thread_hash->lock[hash],
@@ -3180,6 +3439,14 @@ void destroy_thread(struct thread *thread)
 		mcs_rwlock_writer_unlock(&resource_set->thread_hash->lock[hash],
 					&lock);
 	}
+}
+
+static void process_destroy_thread_time_account_bridge(void *thread_arg)
+{
+	struct thread *thread = thread_arg;
+	struct process *proc = thread->proc;
+	struct mcs_rwlock_node_irqsave updatelock;
+	struct timespec ats;
 
 	mcs_rwlock_writer_lock(&proc->update_lock, &updatelock);
 	tsc_to_ts(thread->system_tsc, &ats);
@@ -3187,106 +3454,102 @@ void destroy_thread(struct thread *thread)
 	tsc_to_ts(thread->user_tsc, &ats);
 	ts_add(&thread->proc->utime, &ats);
 	mcs_rwlock_writer_unlock(&proc->update_lock, &updatelock);
+}
 
-	mcs_rwlock_writer_lock(&proc->threads_lock, &lock);
-	process_list_detach_result(&thread->siblings_list);
-	switch (process_destroy_thread_tid_action_result(proc->tids != NULL,
-							thread == proc->main_thread,
-							thread->uti_state)) {
-	case 2:
-		__find_and_replace_tid(proc, thread, thread->uti_refill_tid);
-		break;
-	case 1:
-		__release_tid(proc, thread);
-		break;
-	default:
-		break;
-	}
+static void process_destroy_thread_release_tid_bridge(void *proc_arg,
+						      void *thread_arg)
+{
+	__release_tid(proc_arg, thread_arg);
+}
 
-	cpu_clear(thread->cpu_id, &thread->vm->address_space->cpu_set,
-	          &thread->vm->address_space->cpu_set_lock);
-	if (process_sigpending_cleanup_needed_result(
-		    list_empty(&thread->sigpending))) {
-		while ((pending = process_sigpending_pop_front_result(
-				&thread->sigpending,
-				__builtin_offsetof(struct sig_pending,
-						   list)))) {
-			kfree(pending);
-		}
-	}
+static void process_destroy_thread_replace_tid_bridge(void *proc_arg,
+						      void *thread_arg,
+						      int new_tid)
+{
+	__find_and_replace_tid(proc_arg, thread_arg, new_tid);
+}
 
-	if (process_optional_ptr_should_free_result(
-		    (unsigned long)thread->ptrace_debugreg)) {
-		kfree(thread->ptrace_debugreg);
-	}
-	if (process_optional_ptr_should_free_result(
-		    (unsigned long)thread->ptrace_recvsig)) {
-		kfree(thread->ptrace_recvsig);
-	}
-	if (process_optional_ptr_should_free_result(
-		    (unsigned long)thread->ptrace_sendsig)) {
-		kfree(thread->ptrace_sendsig);
-	}
-	if (process_optional_ptr_should_free_result(
-		    (unsigned long)thread->fp_regs)) {
-		release_fp_regs(thread);
-	}
-	kfree(thread->coredump_regs);
+static void process_release_sigcommon_bridge(void *sigcommon)
+{
+	release_sigcommon(sigcommon);
+}
 
-	release_sigcommon(thread->sigcommon);
+void destroy_thread(struct thread *thread)
+{
+	struct mcs_rwlock_node_irqsave lock;
 
-	if (process_thread_should_free_pages_result(thread == proc->main_thread))
-		free_thread_pages(thread);
-	mcs_rwlock_writer_unlock(&proc->threads_lock, &lock);
+	process_destroy_thread_body_result(thread,
+		__builtin_offsetof(struct thread, proc),
+		__builtin_offsetof(struct thread, vm),
+		__builtin_offsetof(struct thread, cpu_id),
+		__builtin_offsetof(struct thread, siblings_list),
+		__builtin_offsetof(struct thread, uti_state),
+		__builtin_offsetof(struct thread, uti_refill_tid),
+		__builtin_offsetof(struct thread, sigpending),
+		__builtin_offsetof(struct thread, sigcommon),
+		__builtin_offsetof(struct process, threads_lock),
+		__builtin_offsetof(struct process, tids),
+		__builtin_offsetof(struct process, main_thread),
+		__builtin_offsetof(struct process_vm, address_space),
+		__builtin_offsetof(struct address_space, cpu_set),
+		__builtin_offsetof(struct address_space, cpu_set_lock),
+		__builtin_offsetof(struct sig_pending, list),
+		__builtin_offsetof(struct thread, ptrace_debugreg),
+		__builtin_offsetof(struct thread, ptrace_recvsig),
+		__builtin_offsetof(struct thread, ptrace_sendsig),
+		__builtin_offsetof(struct thread, fp_regs),
+		__builtin_offsetof(struct thread, coredump_regs),
+		num_processors, &lock,
+		process_mcs_writer_lock_bridge,
+		process_mcs_writer_unlock_bridge,
+		process_destroy_thread_hash_detach_bridge,
+		process_destroy_thread_time_account_bridge,
+		process_destroy_thread_release_tid_bridge,
+		process_destroy_thread_replace_tid_bridge,
+		process_spin_lock_bridge,
+		process_spin_unlock_bridge,
+		process_optional_free_bridge,
+		release_fp_regs,
+		process_release_sigcommon_bridge,
+		process_free_thread_pages_bridge);
 }
 
 void release_thread(struct thread *thread)
 {
-	struct process_vm *vm;
-
-	if (!process_ref_release_should_destroy_result(
-		    ihk_atomic_dec_and_test(&thread->refcount))) {
-		return;
-	}
-
-	vm = thread->vm;
-
-#ifdef PROFILE_ENABLE
-	profile_accumulate_events(thread, thread->proc);
-	//profile_print_thread_stats(thread);
-	profile_dealloc_thread_events(thread);
-#endif // PROFILE_ENABLE
-	procfs_delete_thread(thread);
-	destroy_thread(thread);
-
-	release_process_vm(vm);
+	process_release_thread_body_result(thread,
+		__builtin_offsetof(struct thread, refcount),
+		__builtin_offsetof(struct thread, vm),
+		__builtin_offsetof(struct thread, proc),
+		NULL,
+		process_release_thread_profile_bridge,
+		process_procfs_delete_thread_bridge,
+		process_destroy_thread_bridge,
+		process_release_vm_bridge);
 }
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void cpu_set(int cpu, cpu_set_t *cpu_set, ihk_spinlock_t *lock)
 {
-	unsigned long flags;
-	flags = ihk_mc_spinlock_lock(lock);
-	CPU_SET(cpu, cpu_set);
-	ihk_mc_spinlock_unlock(lock, flags);
+	process_cpu_set_public_result(cpu, (unsigned long)cpu_set,
+		(unsigned long)lock, CPU_SETSIZE,
+		process_spin_lock_bridge, process_spin_unlock_bridge);
 }
 
 void cpu_clear(int cpu, cpu_set_t *cpu_set, ihk_spinlock_t *lock)
 {
-	unsigned long flags;
-	flags = ihk_mc_spinlock_lock(lock);
-	CPU_CLR(cpu, cpu_set);
-	ihk_mc_spinlock_unlock(lock, flags);
+	process_cpu_clear_public_result(cpu, (unsigned long)cpu_set,
+		(unsigned long)lock, CPU_SETSIZE,
+		process_spin_lock_bridge, process_spin_unlock_bridge);
 }
 
 void cpu_clear_and_set(int c_cpu, int s_cpu,
 	cpu_set_t *cpu_set, ihk_spinlock_t *lock)
 {
-	unsigned long flags;
-	flags = ihk_mc_spinlock_lock(lock);
-	CPU_CLR(c_cpu, cpu_set);
-	CPU_SET(s_cpu, cpu_set);
-	ihk_mc_spinlock_unlock(lock, flags);
+	process_cpu_clear_and_set_public_result(c_cpu, s_cpu,
+		(unsigned long)cpu_set, (unsigned long)lock, CPU_SETSIZE,
+		process_spin_lock_bridge, process_spin_unlock_bridge);
 }
+#endif
 
 
 static void do_migrate(void);
@@ -3299,17 +3562,17 @@ static void idle(void)
 	/* Release runq_lock before starting the idle loop.
 	 * See comments at release_runq_lock().
 	 */
-	ihk_mc_spinlock_unlock(&(cpu_local_var(runq_lock)),
-			cpu_local_var(runq_irqstate));
+	ihk_mc_spinlock_unlock(&(get_this_cpu_local_var()->runq_lock),
+			get_this_cpu_local_var()->runq_irqstate);
 
 	if(v->status == CPU_STATUS_RUNNING)
 		v->status = CPU_STATUS_IDLE;
 	cpu_enable_interrupt();
 
 	while (1) {
-		cpu_local_var(current)->status = PS_STOPPED;
+		get_this_cpu_local_var()->current->status = PS_STOPPED;
 		schedule();
-		cpu_local_var(current)->status = PS_RUNNING;
+		get_this_cpu_local_var()->current->status = PS_RUNNING;
 		cpu_disable_interrupt();
 
 		/* See if we need to migrate a process somewhere */
@@ -3343,7 +3606,7 @@ static void idle(void)
 			struct thread *t;
 
 			s = ihk_mc_spinlock_lock(&v->runq_lock);
-			list_for_each_entry(t, &v->runq, sched_list) {
+			for (t = ((typeof(*t) *)((char *)((&v->runq)->next) - offsetof(typeof(*t), sched_list))); &t->sched_list != (&v->runq); t = ((typeof(*t) *)((char *)(t->sched_list.next) - offsetof(typeof(*t), sched_list)))) {
 				if (t->status == PS_RUNNING) {
 					v->status = CPU_STATUS_RUNNING;
 					break;
@@ -3357,11 +3620,11 @@ static void idle(void)
 			kmalloc_consolidate_free_list();
 			ihk_numa_zero_free_pages(ihk_mc_get_numa_node_by_distance(0));
 			monitor->status = IHK_OS_MONITOR_IDLE;
-			cpu_local_var(current)->status = PS_INTERRUPTIBLE;
+			get_this_cpu_local_var()->current->status = PS_INTERRUPTIBLE;
 			cpu_safe_halt();
 			monitor->status = IHK_OS_MONITOR_KERNEL;
 			monitor->counter++;
-			cpu_local_var(current)->status = PS_RUNNING;
+			get_this_cpu_local_var()->current->status = PS_RUNNING;
 		}
 		else {
 			cpu_enable_interrupt();
@@ -3369,148 +3632,70 @@ static void idle(void)
 	}
 }
 
+static int process_init_process_public_bridge(void *proc, void *parent)
+{
+	init_process(proc, parent);
+	return 0;
+}
+
+static void process_sched_init_context_bridge(void *thread_arg)
+{
+	struct thread *thread = thread_arg;
+
+	ihk_mc_init_context(&thread->ctx, NULL, idle);
+}
+
+static int process_sched_save_fp_bridge(void *thread)
+{
+	return save_fp_regs(thread);
+}
+
+static void process_sched_timer_init_bridge(int cpu)
+{
+#ifdef TIMER_CPU_ID
+	if (cpu == TIMER_CPU_ID) {
+		init_timers();
+		wake_timers_loop();
+	}
+#else
+	(void)cpu;
+#endif
+}
+
 struct resource_set *
 new_resource_set()
 {
-	struct resource_set *res;
-	struct process_hash *phash;
-	struct thread_hash *thash;
-	struct process *pid1;
-	int i;
-	int hash;
-
-	res = kmalloc(sizeof(struct resource_set), IHK_MC_AP_NOWAIT);
-	phash = kmalloc(sizeof(struct process_hash), IHK_MC_AP_NOWAIT);
-	thash = kmalloc(sizeof(struct thread_hash), IHK_MC_AP_NOWAIT);
-	pid1 = kmalloc(sizeof(struct process), IHK_MC_AP_NOWAIT);
-
-	if(!res || !phash || !thash || !pid1){
-		if(res)
-			kfree(res);
-		if(phash)
-			kfree(phash);
-		if(thash)
-			kfree(thash);
-		if(pid1)
-			kfree(pid1);
-		return NULL;
-	}
-
-	memset(res, '\0', sizeof(struct resource_set));
-	memset(phash, '\0', sizeof(struct process_hash));
-	memset(thash, '\0', sizeof(struct thread_hash));
-	memset(pid1, '\0', sizeof(struct process));
-
-	INIT_LIST_HEAD(&res->phys_mem_list);
-	mcs_rwlock_init(&res->phys_mem_lock);
-	mcs_rwlock_init(&res->cpu_set_lock);
-
-	for(i = 0; i < HASH_SIZE; i++){
-		INIT_LIST_HEAD(&phash->list[i]);
-		mcs_rwlock_init(&phash->lock[i]);
-	}
-	res->process_hash = phash;
-
-	for(i = 0; i < HASH_SIZE; i++){
-		INIT_LIST_HEAD(&thash->list[i]);
-		mcs_rwlock_init(&thash->lock[i]);
-	}
-	res->thread_hash = thash;
-
-	init_process(pid1, pid1);
-	pid1->pid = 1;
-	hash = process_hash(1);
-	process_list_add_tail_result(&pid1->hash_list, &phash->list[hash]);
-	res->pid1 = pid1;
-
-	return res;
+	return process_new_resource_set_body_result(sizeof(struct resource_set),
+		sizeof(struct process_hash), sizeof(struct thread_hash),
+		sizeof(struct process), IHK_MC_AP_NOWAIT, HASH_SIZE, 1,
+		process_alloc_bridge, process_optional_free_bridge,
+		process_init_process_public_bridge, process_rwlock_init_bridge);
 }
 
 void
 proc_init()
 {
 	struct resource_set *res = new_resource_set();
-	int i;
 
-	if(!res){
+	if (!res ||
+	    process_proc_init_body_result(res, &resource_set_list,
+			(unsigned long)&resource_set_lock, num_processors,
+			CPU_SETSIZE, 2, IHK_MC_AP_NOWAIT,
+			process_alloc_bridge, process_rwlock_init_bridge) < 0) {
 		panic("no mem for resource_set");
 	}
-	INIT_LIST_HEAD(&resource_set_list);
-	mcs_rwlock_init(&resource_set_lock);
-	for(i = 0; i < num_processors; i++){
-		CPU_SET(i, &res->cpu_set);
-	}
-	// TODO: setup for phys mem
-	res->path = kmalloc(2, IHK_MC_AP_NOWAIT);
-	if(!res->path){
-		panic("no mem for resource_set");
-	}
-	res->path[0] = '/';
-	res->path[0] = '\0';
-	process_list_add_tail_result(&res->list, &resource_set_list);
 }
 
 void sched_init(void)
 {
-	struct thread *idle_thread = &cpu_local_var(idle);
-	struct resource_set *res;
-
-	res = list_first_entry(&resource_set_list, struct resource_set, list);
-	cpu_local_var(resource_set) = res;
-
-	memset(idle_thread, 0, sizeof(struct thread));
-	memset(&cpu_local_var(idle_vm), 0, sizeof(struct process_vm));
-	memset(&cpu_local_var(idle_proc), 0, sizeof(struct process));
-
-	idle_thread->vm = &cpu_local_var(idle_vm);
-	idle_thread->vm->address_space = &cpu_local_var(idle_asp);
-	idle_thread->proc = &cpu_local_var(idle_proc);
-	init_process(idle_thread->proc, NULL);
-	cpu_local_var(idle_proc).nohost = 1;
-	idle_thread->proc->vm = &cpu_local_var(idle_vm);
-	process_list_add_tail_result(&idle_thread->siblings_list,
-				     &idle_thread->proc->children_list);
-
-	ihk_mc_init_context(&idle_thread->ctx, NULL, idle);
-	ihk_rwspinlock_init(&idle_thread->vm->memory_range_lock);
-	idle_thread->vm->vm_range_tree = RB_ROOT;
-	idle_thread->vm->vm_range_numa_policy_tree = RB_ROOT;
-	idle_thread->proc->pid = 0;
-	idle_thread->tid = ihk_mc_get_processor_id();
-
-	INIT_LIST_HEAD(&cpu_local_var(runq));
-	cpu_local_var(runq_len) = 0;
-	ihk_mc_spinlock_init(&cpu_local_var(runq_lock));
-
-	INIT_LIST_HEAD(&cpu_local_var(migq));
-	ihk_mc_spinlock_init(&cpu_local_var(migq_lock));
-
-	// to save default fpregs
-	save_fp_regs(idle_thread);
-
-#ifdef TIMER_CPU_ID
-	if (ihk_mc_get_processor_id() == TIMER_CPU_ID) {
-		init_timers();
-		wake_timers_loop();
-	}
-#endif
-}
-
-static void double_rq_lock(struct cpu_local_var *v1, struct cpu_local_var *v2, unsigned long *irqstate)
-{
-	if (v1 < v2) {
-		*irqstate = ihk_mc_spinlock_lock(&v1->runq_lock);
-		ihk_mc_spinlock_lock_noirq(&v2->runq_lock);
-	} else {
-		*irqstate = ihk_mc_spinlock_lock(&v2->runq_lock);
-		ihk_mc_spinlock_lock_noirq(&v1->runq_lock);
-	}
-}
-
-static void double_rq_unlock(struct cpu_local_var *v1, struct cpu_local_var *v2, unsigned long irqstate)
-{
-	ihk_mc_spinlock_unlock_noirq(&v1->runq_lock);
-	ihk_mc_spinlock_unlock(&v2->runq_lock, irqstate);
+	if (process_sched_init_body_result((unsigned long)get_this_cpu_local_var(),
+			&resource_set_list, ihk_mc_get_processor_id(),
+			process_init_process_public_bridge,
+			process_vm_rwspin_init_bridge, process_spin_init_bridge,
+			process_sched_init_context_bridge,
+			process_sched_save_fp_bridge,
+			process_sched_timer_init_bridge) < 0)
+		panic("failed to initialize idle process state");
 }
 
 struct migrate_request {
@@ -3519,123 +3704,291 @@ struct migrate_request {
 	struct waitq wq;
 };
 
+static const struct sched_migrate_offsets process_sched_migrate_offsets = {
+	.req_list_offset = __builtin_offsetof(struct migrate_request, list),
+	.req_thread_offset = __builtin_offsetof(struct migrate_request, thread),
+	.req_wq_offset = __builtin_offsetof(struct migrate_request, wq),
+	.thread_cpu_id_offset = __builtin_offsetof(struct thread, cpu_id),
+	.thread_tid_offset = __builtin_offsetof(struct thread, tid),
+	.cpu_migq_lock_offset =
+		__builtin_offsetof(struct cpu_local_var, migq_lock),
+	.cpu_migq_offset = __builtin_offsetof(struct cpu_local_var, migq),
+	.cpu_runq_lock_offset =
+		__builtin_offsetof(struct cpu_local_var, runq_lock),
+	.cpu_flags_offset = __builtin_offsetof(struct cpu_local_var, flags),
+	.cpu_status_offset = __builtin_offsetof(struct cpu_local_var, status),
+};
+
+static const struct sched_do_migrate_offsets process_sched_do_migrate_offsets = {
+	.req_list_offset = __builtin_offsetof(struct migrate_request, list),
+	.req_thread_offset = __builtin_offsetof(struct migrate_request, thread),
+	.req_wq_offset = __builtin_offsetof(struct migrate_request, wq),
+	.thread_cpu_id_offset = __builtin_offsetof(struct thread, cpu_id),
+	.thread_tid_offset = __builtin_offsetof(struct thread, tid),
+	.thread_cpu_set_offset = __builtin_offsetof(struct thread, cpu_set),
+	.thread_sched_list_offset =
+		__builtin_offsetof(struct thread, sched_list),
+	.thread_vm_offset = __builtin_offsetof(struct thread, vm),
+	.vm_address_space_offset =
+		__builtin_offsetof(struct process_vm, address_space),
+	.address_space_cpu_set_offset =
+		__builtin_offsetof(struct address_space, cpu_set),
+	.address_space_cpu_set_lock_offset =
+		__builtin_offsetof(struct address_space, cpu_set_lock),
+	.cpu_migq_lock_offset =
+		__builtin_offsetof(struct cpu_local_var, migq_lock),
+	.cpu_migq_offset = __builtin_offsetof(struct cpu_local_var, migq),
+	.cpu_runq_lock_offset =
+		__builtin_offsetof(struct cpu_local_var, runq_lock),
+	.cpu_runq_offset = __builtin_offsetof(struct cpu_local_var, runq),
+	.cpu_runq_len_offset =
+		__builtin_offsetof(struct cpu_local_var, runq_len),
+	.cpu_flags_offset = __builtin_offsetof(struct cpu_local_var, flags),
+};
+
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+static const struct sched_runqueue_offsets process_sched_runqueue_offsets = {
+	.thread_cpu_id_offset = __builtin_offsetof(struct thread, cpu_id),
+	.thread_tid_offset = __builtin_offsetof(struct thread, tid),
+	.thread_status_offset = __builtin_offsetof(struct thread, status),
+	.thread_spin_sleep_lock_offset =
+		__builtin_offsetof(struct thread, spin_sleep_lock),
+	.thread_spin_sleep_offset = __builtin_offsetof(struct thread, spin_sleep),
+	.thread_sched_list_offset = __builtin_offsetof(struct thread, sched_list),
+	.thread_sigpending_offset = __builtin_offsetof(struct thread, sigpending),
+	.thread_sigcommon_offset = __builtin_offsetof(struct thread, sigcommon),
+	.sigcommon_sigpending_offset =
+		__builtin_offsetof(struct sig_common, sigpending),
+	.thread_proc_offset = __builtin_offsetof(struct thread, proc),
+	.thread_mod_clone_offset = __builtin_offsetof(struct thread, mod_clone),
+	.proc_pid_offset = __builtin_offsetof(struct process, pid),
+	.proc_status_offset = __builtin_offsetof(struct process, status),
+	.proc_update_lock_offset = __builtin_offsetof(struct process, update_lock),
+	.proc_clone_count_offset = __builtin_offsetof(struct process, clone_count),
+	.cpu_runq_lock_offset =
+		__builtin_offsetof(struct cpu_local_var, runq_lock),
+	.cpu_runq_irqstate_offset =
+		__builtin_offsetof(struct cpu_local_var, runq_irqstate),
+	.cpu_current_offset = __builtin_offsetof(struct cpu_local_var, current),
+	.cpu_prevpid_offset = __builtin_offsetof(struct cpu_local_var, prevpid),
+	.cpu_runq_offset = __builtin_offsetof(struct cpu_local_var, runq),
+	.cpu_runq_len_offset = __builtin_offsetof(struct cpu_local_var, runq_len),
+	.cpu_runq_reserved_offset =
+		__builtin_offsetof(struct cpu_local_var, runq_reserved),
+	.cpu_flags_offset = __builtin_offsetof(struct cpu_local_var, flags),
+	.cpu_status_offset = __builtin_offsetof(struct cpu_local_var, status),
+	.cpu_in_interrupt_offset =
+		__builtin_offsetof(struct cpu_local_var, in_interrupt),
+	.cpu_nr_ctx_switches_offset =
+		__builtin_offsetof(struct cpu_local_var, nr_ctx_switches),
+};
+
+static void process_sched_rwlock_bridge(unsigned long lock_addr,
+					unsigned long node_addr)
+{
+	mcs_rwlock_writer_lock_noirq((mcs_rwlock_lock_t *)lock_addr,
+				     (struct mcs_rwlock_node *)node_addr);
+}
+
+static void process_sched_rwunlock_bridge(unsigned long lock_addr,
+					  unsigned long node_addr)
+{
+	mcs_rwlock_writer_unlock_noirq((mcs_rwlock_lock_t *)lock_addr,
+				       (struct mcs_rwlock_node *)node_addr);
+}
+
+static void process_sched_status_set_bridge(unsigned long status_addr,
+					    int status)
+{
+	xchg4((int *)status_addr, status);
+}
+
+static void process_sched_set_timer_bridge(int runq_locked)
+{
+	set_timer(runq_locked);
+}
+
+static void process_sched_runq_log_bridge(int event, unsigned long arg0,
+					  unsigned long arg1, int arg2,
+					  int arg3)
+{
+	switch (event) {
+	case SCHED_RUNQ_LOG_NO_MIGRATION_IRQ:
+		kprintf("no migration in IRQ context\n");
+		break;
+	case SCHED_RUNQ_LOG_WAKE_ENTRY:
+		dkprintf("%s: proc->pid=%d, valid_states=%08x, "
+			"proc->status=%08x, proc->cpu_id=%d,my cpu_id=%d\n",
+			"__sched_wakeup_thread", arg2, arg3,
+			((struct thread *)arg0)->status,
+			((struct thread *)arg0)->cpu_id,
+			ihk_mc_get_processor_id());
+		(void)arg1;
+		break;
+	case SCHED_RUNQ_LOG_SPIN_WAKEUP:
+		dkprintf("%s: spin wakeup: cpu_id: %d\n",
+			 "__sched_wakeup_thread", arg2);
+		break;
+	case SCHED_RUNQ_LOG_REMOTE_IPI:
+		dkprintf("%s: issuing IPI, thread->cpu_id=%d\n",
+			 "__sched_wakeup_thread", arg2);
+		(void)arg0;
+		(void)arg1;
+		(void)arg3;
+		break;
+	case SCHED_RUNQ_LOG_RUNQ_ADD:
+		dkprintf("runq_add_proc(): tid %d added to CPU[%d]'s runq\n",
+			 arg2, arg3);
+		(void)arg0;
+		(void)arg1;
+		break;
+	case SCHED_RUNQ_LOG_IDLE_HALT:
+		dkprintf("%s: idle_halt -> schedule()\n",
+			 "spin_sleep_or_schedule");
+		(void)arg0;
+		(void)arg1;
+		(void)arg2;
+		(void)arg3;
+		break;
+	case SCHED_RUNQ_LOG_LOST_WAKEUP:
+		dkprintf("%s: caught a lost wake-up!\n",
+			 "spin_sleep_or_schedule");
+		(void)arg0;
+		(void)arg1;
+		(void)arg2;
+		(void)arg3;
+		break;
+	case SCHED_RUNQ_LOG_SPIN_WOKEN:
+		dkprintf("%s: woken while spinning, cpu: %d, do_schedule: %d\n",
+			 "spin_sleep_or_schedule", ihk_ikc_get_processor_id(),
+			 arg3);
+		(void)arg0;
+		(void)arg1;
+		(void)arg2;
+		break;
+	case SCHED_RUNQ_LOG_SLEEP_WOKEN:
+		dkprintf("%s: woken while sleeping, cpu: %d\n",
+			 "spin_sleep_or_schedule", ihk_ikc_get_processor_id());
+		(void)arg0;
+		(void)arg1;
+		(void)arg2;
+		(void)arg3;
+		break;
+	case SCHED_RUNQ_LOG_NO_PREEMPT:
+		kprintf("%s: WARNING can't schedule() while no preemption, cnt: %d\n",
+			"schedule", arg2);
+		(void)arg0;
+		(void)arg1;
+		(void)arg3;
+		break;
+	case SCHED_RUNQ_LOG_CLONE_COUNT:
+		dkprintf("%s: clone_count is %d\n", "runq_add_thread", arg2);
+		(void)arg0;
+		(void)arg1;
+		(void)arg3;
+		break;
+	default:
+		break;
+	}
+}
+
+static unsigned long process_sched_irq_save_bridge(void)
+{
+	return cpu_disable_interrupt_save();
+}
+
+static void process_sched_irq_restore_bridge(unsigned long irqstate)
+{
+	cpu_restore_interrupt(irqstate);
+}
+
+static void process_sched_zero_free_bridge(void)
+{
+	ihk_numa_zero_free_pages(ihk_mc_get_numa_node_by_distance(0));
+}
+
+static void process_sched_pause_bridge(void)
+{
+	cpu_pause();
+}
+
+static int process_sched_has_signal_bridge(unsigned long thread_addr)
+{
+	return hassigpending((struct thread *)thread_addr) != NULL;
+}
+
+static void process_sched_reset_cputime_bridge(void)
+{
+	reset_cputime();
+}
+
+static void process_sched_procfs_create_thread_bridge(unsigned long thread_addr)
+{
+	procfs_create_thread((struct thread *)thread_addr);
+}
+
+static int process_sched_counter_inc_bridge(unsigned long counter_addr)
+{
+	return __sync_add_and_fetch((int *)counter_addr, 1);
+}
+
+static void process_sched_counter_dec_bridge(unsigned long counter_addr)
+{
+	__sync_fetch_and_sub((unsigned long *)counter_addr, 1);
+}
+
+static void process_sched_rusage_threads_inc_bridge(void)
+{
+	rusage_num_threads_inc();
+}
+
+static void process_sched_rusage_debug_bridge(void)
+{
+#ifdef RUSAGE_DEBUG
+	if (rusage.num_threads == 1) {
+		int i;
+
+		kprintf("total_memory_usage=%ld\n", rusage.total_memory_usage);
+		for (i = 0; i < IHK_MAX_NUM_PGSIZES; i++) {
+			kprintf("memory_stat_rss[%d]=%ld\n", i,
+				rusage.memory_stat_rss[i]);
+		}
+		for (i = 0; i < IHK_MAX_NUM_PGSIZES; i++) {
+			kprintf("memory_stat_mapped_file[%d]=%ld\n", i,
+				rusage.memory_stat_mapped_file[i]);
+		}
+	}
+#endif
+}
+#endif
+
 static void do_migrate(void)
 {
 	int cur_cpu_id = ihk_mc_get_processor_id();
 	struct cpu_local_var *cur_v = get_cpu_local_var(cur_cpu_id);
-	struct migrate_request *req, *tmp;
-	unsigned long irqstate = 0;
 
-	irqstate = ihk_mc_spinlock_lock(&cur_v->migq_lock);
-	list_for_each_entry_safe(req, tmp, &cur_v->migq, list) {
-		int cpu_id;
-		int old_cpu_id;
-		struct cpu_local_var *v;
-		struct thread *thread;
-		int clear_old_cpu = 1;
-
-		/* 0. check if migration is necessary */
-		process_list_detach_result(&req->list);
-		if (req->thread->cpu_id != cur_cpu_id) /* already not here */
-			goto ack;
-		if (CPU_ISSET(cur_cpu_id, &req->thread->cpu_set)) /* good affinity */
-			goto ack;
-
-		/* 1. select CPU */
-		for (cpu_id = 0; cpu_id < CPU_SETSIZE; cpu_id++)
-			if (CPU_ISSET(cpu_id, &req->thread->cpu_set))
-				break;
-		if (CPU_SETSIZE == cpu_id) /* empty affinity (bug?) */
-			goto ack;
-
-		/* 2. migrate thread */
-		v = get_cpu_local_var(cpu_id);
-		double_rq_lock(cur_v, v, &irqstate);
-		process_list_detach_counted_result(&req->thread->sched_list,
-						   &cur_v->runq_len);
-		old_cpu_id = req->thread->cpu_id;
-		req->thread->cpu_id = cpu_id;
-		process_list_add_tail_counted_result(&req->thread->sched_list,
-						     &v->runq, &v->runq_len);
-
-		/* Find out whether there is another thread of the same process
-		 * on the source CPU */
-		list_for_each_entry(thread, &(cur_v->runq), sched_list) {
-			if (thread->vm && thread->vm == req->thread->vm) {
-				clear_old_cpu = 0;
-				break;
-			}
-		}
-
-		/* Update cpu_set of the VM for remote TLB invalidation */
-		if (clear_old_cpu) {
-			cpu_clear_and_set(old_cpu_id, cpu_id,
-					&req->thread->vm->address_space->cpu_set,
-					&req->thread->vm->address_space->cpu_set_lock);
-		}
-		else {
-			cpu_set(cpu_id,
-					&req->thread->vm->address_space->cpu_set,
-					&req->thread->vm->address_space->cpu_set_lock);
-
-		}
-
-		dkprintf("%s: migrated TID %d from CPU %d to CPU %d\n",
-			__FUNCTION__, req->thread->tid, old_cpu_id, cpu_id);
-
-		v->flags |= CPU_FLAG_NEED_RESCHED;
-		/* Kick scheduler on target CPU */
-		ihk_mc_interrupt_cpu(cpu_id, ihk_mc_get_vector(IHK_GV_IKC));
-
-		waitq_wakeup(&req->wq);
-		double_rq_unlock(cur_v, v, irqstate);
-		continue;
-ack:
-		waitq_wakeup(&req->wq);
-	}
-	ihk_mc_spinlock_unlock(&cur_v->migq_lock, irqstate);
+	sched_do_migrate_body_result(cur_cpu_id, (unsigned long)cur_v,
+			CPU_SETSIZE, CPU_FLAG_NEED_RESCHED, IHK_GV_IKC,
+			&process_sched_do_migrate_offsets,
+			process_spin_lock_bridge, process_spin_unlock_bridge,
+			process_sched_noirq_lock_bridge,
+			process_sched_noirq_unlock_bridge,
+			process_sched_cpu_local_bridge,
+			process_sched_waitq_wakeup_bridge,
+			process_sched_vector_bridge, process_sched_interrupt_bridge,
+			process_sched_do_migrate_log_bridge);
 }
 
 void set_timer(int runq_locked)
 {
 	struct cpu_local_var *v = get_this_cpu_local_var();
-	struct thread *thread;
-	int num_running = 0;
-	unsigned long irqstate;
 
-	if (!time_sharing) {
-		return;
-	}
-
-	if (!runq_locked) {
-		irqstate = ihk_mc_spinlock_lock(&(v->runq_lock));
-	}
-
-	list_for_each_entry(thread, &v->runq, sched_list) {
-		if (thread->status != PS_RUNNING && !thread->spin_sleep) {
-			continue;
-		}
-		num_running++;
-	}
-
-	/* Toggle timesharing if CPU core is oversubscribed */
-	if (num_running > 1 || v->current->itimer_enabled ||
-	    !list_empty(&v->backlog_list)) {
-		if (!cpu_local_var(timer_enabled)) {
-			lapic_timer_enable(1000000);
-			cpu_local_var(timer_enabled) = 1;
-		}
-	}
-	else {
-		if (cpu_local_var(timer_enabled)) {
-			lapic_timer_disable();
-			cpu_local_var(timer_enabled) = 0;
-		}
-	}
-
-	if (!runq_locked) {
-		ihk_mc_spinlock_unlock(&(v->runq_lock), irqstate);
-	}
+	timer_set_timer_body_result((unsigned long)v, time_sharing, runq_locked,
+			&process_timer_runtime_offsets,
+			process_timer_spin_lock_bridge,
+			process_timer_spin_unlock_bridge,
+			process_timer_lapic_enable_bridge,
+			process_timer_lapic_disable_bridge);
 }
 
 /*
@@ -3646,7 +3999,26 @@ void set_timer(int runq_locked)
  */
 void spin_sleep_or_schedule(void)
 {
-	struct thread *thread = cpu_local_var(current);
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+	sched_spin_sleep_or_schedule_body_result(
+			(unsigned long)get_this_cpu_local_var()->current,
+			(unsigned long)get_this_cpu_local_var(),
+			ihk_ikc_get_processor_id(), idle_halt,
+			CPU_FLAG_NEED_RESCHED,
+			&process_sched_runqueue_offsets,
+			process_sched_irq_save_bridge,
+			process_sched_irq_restore_bridge,
+			process_spin_lock_bridge,
+			process_spin_unlock_bridge,
+			process_sched_noirq_lock_bridge,
+			process_sched_noirq_unlock_bridge,
+			process_sched_schedule_bridge,
+			process_sched_zero_free_bridge,
+			process_sched_pause_bridge,
+			process_sched_has_signal_bridge,
+			process_sched_runq_log_bridge);
+#else
+	struct thread *thread = get_this_cpu_local_var()->current;
 	struct cpu_local_var *v;
 	int do_schedule = 0;
 	int woken = 0;
@@ -3721,21 +4093,152 @@ out_schedule:
 	schedule();
 	dkprintf("%s: woken while sleeping, cpu: %d\n",
 		 __func__, ihk_ikc_get_processor_id());
+#endif
 }
 
 void schedule(void)
 {
 	struct cpu_local_var *v;
-	struct thread *next, *prev, *thread, *tmp = NULL;
+	struct thread *next, *prev, *thread = NULL, *tmp = NULL;
 	int switch_ctx = 0;
 	struct thread *last;
 	int prevpid;
 	unsigned long irqstate = 0;
 	static int mcexec_v10_scheduler_logs;
 
-	if (ihk_atomic_read(&cpu_local_var(no_preempt))) {
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+	struct sched_schedule_result schedule_result;
+	int action;
+
+	(void)thread;
+	(void)tmp;
+	(void)switch_ctx;
+	(void)irqstate;
+
+	action = sched_schedule_prepare_body_result(
+			(unsigned long)get_this_cpu_local_var(),
+			(unsigned long)&get_this_cpu_local_var()->idle,
+			ihk_atomic_read(&get_this_cpu_local_var()->no_preempt),
+			CPU_FLAG_NEED_RESCHED, CPU_FLAG_NEED_MIGRATE,
+			PS_RUNNING, PS_INTERRUPTIBLE, PS_EXITED,
+			SPAWNING_TO_REMOTE, CPU_STATUS_IDLE,
+			CPU_STATUS_RESERVED, &process_sched_runqueue_offsets,
+			&schedule_result, process_sched_irq_save_bridge,
+			process_sched_irq_restore_bridge,
+			process_sched_noirq_lock_bridge,
+			process_sched_noirq_unlock_bridge,
+			process_sched_set_timer_bridge,
+			process_sched_reset_cputime_bridge,
+			process_sched_has_signal_bridge,
+			process_sched_runq_log_bridge);
+	if (action != SCHED_SCHEDULE_ACTION_SWITCH) {
+		return;
+	}
+
+	v = (struct cpu_local_var *)schedule_result.cpu_addr;
+	prev = (struct thread *)schedule_result.prev_thread_addr;
+	next = (struct thread *)schedule_result.next_thread_addr;
+	prevpid = schedule_result.prevpid;
+
+	dkprintf("%s: %d => %d [ctx sws: %lu]\n",
+			__func__,
+			prev ? prev->tid : 0, next ? next->tid : 0,
+			get_this_cpu_local_var()->nr_ctx_switches);
+	if (next && next != &get_this_cpu_local_var()->idle &&
+	    mcexec_v10_scheduler_logs < 32) {
+		kprintf("mcexec_v10: scheduler switch cpu=%d %d=>%d pid=%d rip=0x%lx sp=0x%lx status=%d runq_len=%d\n",
+			ihk_mc_get_processor_id(),
+			prev ? prev->tid : -1, next->tid,
+			next->proc ? next->proc->pid : -1,
+			next->uctx ? ihk_mc_syscall_pc(next->uctx) : 0UL,
+			next->uctx ? ihk_mc_syscall_sp(next->uctx) : 0UL,
+			next->status, v->runq_len);
+		mcexec_v10_scheduler_logs++;
+	}
+
+	if (prev && prev->ptrace_debugreg) {
+		save_debugreg(prev->ptrace_debugreg);
+		if (next->ptrace_debugreg == NULL) {
+			clear_debugreg();
+		}
+	}
+	if (next->ptrace_debugreg) {
+		restore_debugreg(next->ptrace_debugreg);
+	}
+
+	/* Take care of floating point registers except for idle process */
+	/* Not to save fp_regs when the process ends */
+	if (prev && (prev != &get_this_cpu_local_var()->idle
+			&& prev->status != PS_EXITED)) {
+		save_fp_regs(prev);
+	}
+
+	if (next != &get_this_cpu_local_var()->idle) {
+		restore_fp_regs(next);
+	}
+
+	if (prev && prev->vm->address_space->page_table !=
+			next->vm->address_space->page_table)
+		ihk_mc_load_page_table(next->vm->address_space->page_table);
+
+	/*
+	 * Unless switching to a thread in the same process,
+	 * to the idle thread, or to the same process that ran
+	 * before the idle, clear the instruction cache.
+	 */
+	if ((prev && prev->proc != next->proc) &&
+			next != &get_this_cpu_local_var()->idle &&
+			(prevpid != next->proc->pid ||
+				prev != &get_this_cpu_local_var()->idle)) {
+		arch_flush_icache_all();
+	}
+
+	last = arch_switch_context(prev, next);
+
+	/*
+	 * We must hold the lock throughout the context switch, otherwise
+	 * an IRQ could deschedule this process between page table loading and
+	 * context switching and leave the execution in an inconsistent state.
+	 * Since we may be migrated to another core meanwhile, we refer
+	 * directly to cpu_local_var.
+	 */
+	ihk_mc_spinlock_unlock_noirq(&(get_this_cpu_local_var()->runq_lock));
+	cpu_restore_interrupt(get_this_cpu_local_var()->runq_irqstate);
+
+	if ((last != NULL) && (last->status == PS_EXITED)) {
+		v->prevpid = 0;
+		arch_flush_icache_all();
+		release_thread(last);
+		rusage_num_threads_dec();
+#ifdef RUSAGE_DEBUG
+		if (rusage.num_threads == 0) {
+			int i;
+
+			kprintf("total_memory_usage=%ld\n",
+				rusage.total_memory_usage);
+			for (i = 0; i < IHK_MAX_NUM_PGSIZES; i++) {
+				kprintf("memory_stat_rss[%d]=%ld\n", i,
+					rusage.memory_stat_rss[i]);
+			}
+			for (i = 0; i < IHK_MAX_NUM_PGSIZES; i++) {
+				kprintf(
+				   "memory_stat_mapped_file[%d]=%ld\n",
+				    i,
+				    rusage.memory_stat_mapped_file[i]);
+			}
+		}
+#endif
+	}
+
+	/* Have we migrated to another core meanwhile? */
+	if (v != get_this_cpu_local_var()) {
+		v = get_this_cpu_local_var();
+	}
+	return;
+#else
+	if (ihk_atomic_read(&get_this_cpu_local_var()->no_preempt)) {
 		kprintf("%s: WARNING can't schedule() while no preemption, cnt: %d\n",
-			__func__, ihk_atomic_read(&cpu_local_var(no_preempt)));
+			__func__, ihk_atomic_read(&get_this_cpu_local_var()->no_preempt));
 
 		irqstate = cpu_disable_interrupt_save();
 		ihk_mc_spinlock_lock_noirq(
@@ -3751,7 +4254,7 @@ void schedule(void)
 
 	irqstate = cpu_disable_interrupt_save();
 	ihk_mc_spinlock_lock_noirq(&(get_this_cpu_local_var()->runq_lock));
-	cpu_local_var(runq_irqstate) = irqstate;
+	get_this_cpu_local_var()->runq_irqstate = irqstate;
 	v = get_this_cpu_local_var();
 
 	next = NULL;
@@ -3759,7 +4262,7 @@ void schedule(void)
 	prevpid = v->prevpid;
 	
 	/* All runnable processes are on the runqueue */
-	if (prev && prev != &cpu_local_var(idle)) {
+	if (prev && prev != &get_this_cpu_local_var()->idle) {
 		process_list_detach_counted_result(&prev->sched_list,
 						   &v->runq_len);
 
@@ -3775,10 +4278,10 @@ void schedule(void)
 	   because it always resumes from just after ihk_mc_switch_context() call. See #1029 */
 	if (v->flags & CPU_FLAG_NEED_MIGRATE ||
 	    (prev && prev->status == PS_EXITED)) {
-		next = &cpu_local_var(idle);
+		next = &get_this_cpu_local_var()->idle;
 	} else {
 		/* Pick a new running process or one that has a pending signal */
-		list_for_each_entry_safe(thread, tmp, &(v->runq), sched_list) {
+		for (thread = ((typeof(*thread) *)((char *)((&(v->runq))->next) - offsetof(typeof(*thread), sched_list))), tmp = ((typeof(*thread) *)((char *)(thread->sched_list.next) - offsetof(typeof(*thread), sched_list))); &thread->sched_list != (&(v->runq)); thread = tmp, tmp = ((typeof(*tmp) *)((char *)(tmp->sched_list.next) - offsetof(typeof(*tmp), sched_list)))) {
 			if (thread->status == PS_RUNNING &&
 			    thread->mod_clone == SPAWNING_TO_REMOTE){
 				next = thread;
@@ -3793,7 +4296,7 @@ void schedule(void)
 
 		/* No process? Run idle.. */
 		if (!next) {
-			next = &cpu_local_var(idle);
+			next = &get_this_cpu_local_var()->idle;
 			v->status = v->runq_len? CPU_STATUS_RESERVED: CPU_STATUS_IDLE;
 		}
 	}
@@ -3809,12 +4312,12 @@ void schedule(void)
 	set_timer(1);
 
 	if (switch_ctx) {
-		++cpu_local_var(nr_ctx_switches);
+		++get_this_cpu_local_var()->nr_ctx_switches;
 		dkprintf("%s: %d => %d [ctx sws: %lu]\n",
 				__func__,
 				prev ? prev->tid : 0, next ? next->tid : 0,
-				cpu_local_var(nr_ctx_switches));
-		if (next && next != &cpu_local_var(idle) &&
+				get_this_cpu_local_var()->nr_ctx_switches);
+		if (next && next != &get_this_cpu_local_var()->idle &&
 		    mcexec_v10_scheduler_logs < 32) {
 			kprintf("mcexec_v10: scheduler switch cpu=%d %d=>%d pid=%d rip=0x%lx sp=0x%lx status=%d runq_len=%d\n",
 				ihk_mc_get_processor_id(),
@@ -3838,12 +4341,12 @@ void schedule(void)
 
 		/* Take care of floating point registers except for idle process */
 		/* Not to save fp_regs when the process ends */
-		if (prev && (prev != &cpu_local_var(idle)
+		if (prev && (prev != &get_this_cpu_local_var()->idle
 				&& prev->status != PS_EXITED)) {
 			save_fp_regs(prev);
 		}
 
-		if (next != &cpu_local_var(idle)) {
+		if (next != &get_this_cpu_local_var()->idle) {
 			restore_fp_regs(next);
 		}
 
@@ -3857,9 +4360,9 @@ void schedule(void)
 		 * before the idle, clear the instruction cache.
 		 */
 		if ((prev && prev->proc != next->proc) &&
-				next != &cpu_local_var(idle) &&
+				next != &get_this_cpu_local_var()->idle &&
 				(prevpid != next->proc->pid ||
-					prev != &cpu_local_var(idle))) {
+					prev != &get_this_cpu_local_var()->idle)) {
 			arch_flush_icache_all();
 		}
 
@@ -3872,8 +4375,8 @@ void schedule(void)
 		 * Since we may be migrated to another core meanwhile, we refer
 		 * directly to cpu_local_var.
 		 */
-		ihk_mc_spinlock_unlock_noirq(&(cpu_local_var(runq_lock)));
-		cpu_restore_interrupt(cpu_local_var(runq_irqstate));
+		ihk_mc_spinlock_unlock_noirq(&(get_this_cpu_local_var()->runq_lock));
+		cpu_restore_interrupt(get_this_cpu_local_var()->runq_irqstate);
 
 		if ((last != NULL) && (last->status == PS_EXITED)) {
 			v->prevpid = 0;
@@ -3906,14 +4409,24 @@ void schedule(void)
 		}
 	}
 	else {
-		ihk_mc_spinlock_unlock_noirq(&(cpu_local_var(runq_lock)));
-		cpu_restore_interrupt(cpu_local_var(runq_irqstate));
+		ihk_mc_spinlock_unlock_noirq(&(get_this_cpu_local_var()->runq_lock));
+		cpu_restore_interrupt(get_this_cpu_local_var()->runq_irqstate);
 	}
+#endif
 }
 
 void
 release_cpuid(int cpuid)
 {
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+	sched_release_cpuid_body_result(cpuid,
+			(unsigned long)get_cpu_local_var(cpuid),
+			(unsigned long)&runq_reservation_lock,
+			CPU_STATUS_IDLE, &process_sched_runqueue_offsets,
+			process_spin_lock_bridge, process_spin_unlock_bridge,
+			process_sched_noirq_lock_bridge,
+			process_sched_noirq_unlock_bridge);
+#else
 	unsigned long irqstate;
     struct cpu_local_var *v = get_cpu_local_var(cpuid);
     irqstate = ihk_mc_spinlock_lock(&runq_reservation_lock);
@@ -3923,10 +4436,20 @@ release_cpuid(int cpuid)
 	__sync_fetch_and_sub(&v->runq_reserved, 1);
     ihk_mc_spinlock_unlock_noirq(&(v->runq_lock));
     ihk_mc_spinlock_unlock(&runq_reservation_lock, irqstate);
+#endif
 }
 
 void check_need_resched(void)
 {
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+	sched_check_need_resched_body_result(
+			(unsigned long)get_this_cpu_local_var(),
+			CPU_FLAG_NEED_RESCHED, CPU_FLAG_NEED_MIGRATE,
+			&process_sched_runqueue_offsets,
+			process_spin_lock_bridge, process_spin_unlock_bridge,
+			process_sched_schedule_bridge,
+			process_sched_runq_log_bridge);
+#else
 	unsigned long irqstate;
 	struct cpu_local_var *v = get_this_cpu_local_var();
 	irqstate = ihk_mc_spinlock_lock(&v->runq_lock);
@@ -3943,11 +4466,30 @@ void check_need_resched(void)
 	else {
 		ihk_mc_spinlock_unlock(&v->runq_lock, irqstate);
 	}
+#endif
 }
 
 int __sched_wakeup_thread(struct thread *thread,
 		int valid_states, int runq_locked)
 {
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+	struct mcs_rwlock_node updatelock;
+
+	return sched_wakeup_thread_body_result((unsigned long)thread,
+			(unsigned long)get_cpu_local_var(thread->cpu_id),
+			(unsigned long)&updatelock, ihk_mc_get_processor_id(),
+			valid_states, runq_locked, PS_RUNNING, PS_EXITED,
+			CPU_FLAG_NEED_RESCHED, IHK_GV_IKC,
+			&process_sched_runqueue_offsets,
+			process_spin_lock_bridge, process_spin_unlock_bridge,
+			process_sched_rwlock_bridge,
+			process_sched_rwunlock_bridge,
+			process_sched_status_set_bridge,
+			process_sched_set_timer_bridge,
+			process_sched_vector_bridge,
+			process_sched_interrupt_bridge,
+			process_sched_runq_log_bridge);
+#else
 	int status;
 	unsigned long irqstate;
 	struct cpu_local_var *v = get_cpu_local_var(thread->cpu_id);
@@ -4006,6 +4548,7 @@ int __sched_wakeup_thread(struct thread *thread,
 	}
 
 	return status;
+#endif
 }
 
 int sched_wakeup_thread_locked(struct thread *thread, int valid_states)
@@ -4040,9 +4583,10 @@ int sched_wakeup_thread(struct thread *thread, int valid_states)
 void sched_request_migrate(int cpu_id, struct thread *thread)
 {
 	struct cpu_local_var *v = get_cpu_local_var(cpu_id);
-	struct migrate_request req = { .thread = thread };
-	unsigned long irqstate;
-	DECLARE_WAITQ_ENTRY_LOCKED(entry, cpu_local_var(current));
+	struct migrate_request req;
+	waitq_entry_t entry;
+
+	waitq_init_locked_entry(&entry, get_this_cpu_local_var()->current);
 
 	/*
 	 * NOTES:
@@ -4052,33 +4596,33 @@ void sched_request_migrate(int cpu_id, struct thread *thread)
 	 *   may deschedule this thread and leave it hanging in
 	 *   uninterruptible state forever.
 	 */
-	irqstate = ihk_mc_spinlock_lock(&v->migq_lock);
-	waitq_init(&req.wq);
-	waitq_prepare_to_wait(&req.wq, &entry, PS_UNINTERRUPTIBLE);
-
-	process_list_add_tail_result(&req.list, &v->migq);
-
-	ihk_mc_spinlock_lock_noirq(&v->runq_lock);
-	v->flags |= CPU_FLAG_NEED_RESCHED | CPU_FLAG_NEED_MIGRATE;
-	v->status = CPU_STATUS_RUNNING;
-	ihk_mc_spinlock_unlock_noirq(&v->runq_lock);
-
-	if (cpu_id != ihk_mc_get_processor_id()) {
-		/* Kick scheduler */
-		ihk_mc_interrupt_cpu(thread->cpu_id,
-				ihk_mc_get_vector(IHK_GV_IKC));
-	}
-	dkprintf("%s: tid: %d -> cpu: %d\n",
-			__FUNCTION__, thread->tid, cpu_id);
-	ihk_mc_spinlock_unlock(&v->migq_lock, irqstate);
-
-	schedule();
-	waitq_finish_wait(&req.wq, &entry);
+	sched_request_migrate_body_result(cpu_id, (unsigned long)v,
+			(unsigned long)&req, (unsigned long)&entry,
+			(unsigned long)thread, ihk_mc_get_processor_id(),
+			PS_UNINTERRUPTIBLE, CPU_FLAG_NEED_RESCHED,
+			CPU_FLAG_NEED_MIGRATE, CPU_STATUS_RUNNING, IHK_GV_IKC,
+			&process_sched_migrate_offsets,
+			process_spin_lock_bridge, process_spin_unlock_bridge,
+			process_sched_noirq_lock_bridge,
+			process_sched_noirq_unlock_bridge,
+			process_sched_waitq_init_bridge,
+			process_sched_waitq_prepare_bridge,
+			process_sched_waitq_finish_bridge,
+			process_sched_vector_bridge, process_sched_interrupt_bridge,
+			process_sched_schedule_bridge,
+			process_sched_migrate_log_bridge);
 }
 
 /* Runq lock must be held here */
 void __runq_add_thread(struct thread *thread, int cpu_id)
 {
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+	sched_runq_add_thread_locked_result((unsigned long)thread,
+			(unsigned long)get_cpu_local_var(cpu_id), cpu_id,
+			CPU_FLAG_NEED_RESCHED, CPU_STATUS_RUNNING,
+			&process_sched_runqueue_offsets,
+			process_sched_runq_log_bridge);
+#else
 	struct cpu_local_var *v = get_cpu_local_var(cpu_id);
 	process_list_add_tail_counted_result(&thread->sched_list, &v->runq,
 					     &v->runq_len);
@@ -4089,10 +4633,29 @@ void __runq_add_thread(struct thread *thread, int cpu_id)
 
 	dkprintf("runq_add_proc(): tid %d added to CPU[%d]'s runq\n", 
              thread->tid, cpu_id);
+#endif
 }
 
 void runq_add_thread(struct thread *thread, int cpu_id)
 {
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+	sched_runq_add_thread_body_result((unsigned long)thread,
+		(unsigned long)get_cpu_local_var(cpu_id),
+		(unsigned long)&runq_reservation_lock, cpu_id,
+		ihk_mc_get_processor_id(), CPU_FLAG_NEED_RESCHED,
+		CPU_STATUS_RUNNING, IHK_GV_IKC, &process_sched_runqueue_offsets,
+		process_spin_lock_bridge, process_spin_unlock_bridge,
+		process_sched_noirq_lock_bridge,
+		process_sched_noirq_unlock_bridge,
+		process_sched_counter_dec_bridge,
+		process_sched_procfs_create_thread_bridge,
+		process_sched_counter_inc_bridge,
+		process_sched_rusage_threads_inc_bridge,
+		process_sched_rusage_debug_bridge,
+		process_sched_vector_bridge,
+		process_sched_interrupt_bridge,
+		process_sched_runq_log_bridge);
+#else
 	struct cpu_local_var *v = get_cpu_local_var(cpu_id);
 	unsigned long irqstate;
 	irqstate = ihk_mc_spinlock_lock(&runq_reservation_lock);
@@ -4125,11 +4688,18 @@ void runq_add_thread(struct thread *thread, int cpu_id)
 		ihk_mc_interrupt_cpu(thread->cpu_id,
 				ihk_mc_get_vector(IHK_GV_IKC));
 	}
+#endif
 }
 
 /* NOTE: shouldn't remove a running process! */
 void runq_del_thread(struct thread *thread, int cpu_id)
 {
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+	sched_runq_del_thread_body_result((unsigned long)thread,
+			(unsigned long)get_cpu_local_var(cpu_id),
+			CPU_STATUS_IDLE, &process_sched_runqueue_offsets,
+			process_spin_lock_bridge, process_spin_unlock_bridge);
+#else
 	struct cpu_local_var *v = get_cpu_local_var(cpu_id);
 	unsigned long irqstate;
 
@@ -4140,40 +4710,22 @@ void runq_del_thread(struct thread *thread, int cpu_id)
 		get_cpu_local_var(cpu_id)->status = CPU_STATUS_IDLE;
 
 	ihk_mc_spinlock_unlock(&(v->runq_lock), irqstate);
+#endif
 }
 
 struct thread *
 find_thread(int pid, int tid)
 {
-	struct thread *thread;
-	struct thread_hash *thash = cpu_local_var(resource_set)->thread_hash;
+	struct thread_hash *thash = get_this_cpu_local_var()->resource_set->thread_hash;
 	int hash = thread_hash(tid);
 	struct mcs_rwlock_node_irqsave lock;
 
-	if(tid <= 0)
-		return NULL;
-	mcs_rwlock_reader_lock(&thash->lock[hash], &lock);
-retry:
-	list_for_each_entry(thread, &thash->list[hash], hash_list){
-		if(thread->tid == tid){
-			if (pid <= 0 ||
-			    thread->proc->pid == pid) {
-				hold_thread(thread);
-				mcs_rwlock_reader_unlock(&thash->lock[hash],
-							 &lock);
-				return thread;
-			}
-		}
-	}
-	/* If no thread with pid == tid was found, then we may be looking for a
-	 * specific thread (not the main thread of the process), try to find it
-	 * based on tid only */
-	if (pid > 0 && pid == tid) {
-		pid = 0;
-		goto retry;
-	}
-	mcs_rwlock_reader_unlock(&thash->lock[hash], &lock);
-	return NULL;
+	return process_find_thread_body_result(&thash->list[hash],
+		(unsigned long)&thash->lock[hash], &lock, pid, tid,
+		&process_find_thread_offsets,
+		process_mcs_reader_lock_bridge,
+		process_mcs_reader_unlock_bridge,
+		process_hold_thread_bridge);
 }
 
 void
@@ -4187,32 +4739,27 @@ thread_unlock(struct thread *thread)
 struct process *
 find_process(int pid, struct mcs_rwlock_node_irqsave *lock)
 {
-	struct process *proc;
-	struct process_hash *phash = cpu_local_var(resource_set)->process_hash;
+	struct process_hash *phash = get_this_cpu_local_var()->resource_set->process_hash;
 	int hash = process_hash(pid);
 
-	if(pid <= 0)
-		return NULL;
-	mcs_rwlock_reader_lock(&phash->lock[hash], lock);
-	list_for_each_entry(proc, &phash->list[hash], hash_list){
-		if(proc->pid == pid){
-			return proc;
-		}
-	}
-	mcs_rwlock_reader_unlock(&phash->lock[hash], lock);
-	return NULL;
+	return process_find_process_body_result(&phash->list[hash],
+		(unsigned long)&phash->lock[hash], lock, pid,
+		&process_find_process_offsets,
+		process_mcs_reader_lock_bridge,
+		process_mcs_reader_unlock_bridge);
 }
 
 void
 process_unlock(struct process *proc, struct mcs_rwlock_node_irqsave *lock)
 {
-	struct process_hash *phash = cpu_local_var(resource_set)->process_hash;
+	struct process_hash *phash = get_this_cpu_local_var()->resource_set->process_hash;
 	int hash;
 
-	if(!proc)
+	if (!proc)
 		return;
 	hash = process_hash(proc->pid);
-	mcs_rwlock_reader_unlock(&phash->lock[hash], lock);
+	process_unlock_found_process_result(proc, (unsigned long)&phash->lock[hash],
+		lock, process_mcs_reader_unlock_bridge);
 }
 
 void
@@ -4222,7 +4769,7 @@ debug_log(unsigned long arg)
 	struct thread *t;
 	int i;
 	struct mcs_rwlock_node_irqsave lock;
-	struct resource_set *rset = cpu_local_var(resource_set);
+	struct resource_set *rset = get_this_cpu_local_var()->resource_set;
 	struct process_hash *phash = rset->process_hash;
 	struct thread_hash *thash = rset->thread_hash;
 	struct process *pid1 = rset->pid1;
@@ -4232,7 +4779,7 @@ debug_log(unsigned long arg)
 	    case 1:
 		for(i = 0; i < HASH_SIZE; i++){
 			__mcs_rwlock_reader_lock(&phash->lock[i], &lock);
-			list_for_each_entry(p, &phash->list[i], hash_list){
+			for (p = ((typeof(*p) *)((char *)((&phash->list[i])->next) - offsetof(typeof(*p), hash_list))); &p->hash_list != (&phash->list[i]); p = ((typeof(*p) *)((char *)(p->hash_list.next) - offsetof(typeof(*p), hash_list)))){
 				if (p == pid1)
 					continue;
 				found++;
@@ -4247,7 +4794,7 @@ debug_log(unsigned long arg)
 	    case 2:
 		for(i = 0; i < HASH_SIZE; i++){
 			__mcs_rwlock_reader_lock(&thash->lock[i], &lock);
-			list_for_each_entry(t, &thash->list[i], hash_list){
+			for (t = ((typeof(*t) *)((char *)((&thash->list[i])->next) - offsetof(typeof(*t), hash_list))); &t->hash_list != (&thash->list[i]); t = ((typeof(*t) *)((char *)(t->hash_list.next) - offsetof(typeof(*t), hash_list)))){
 				found++;
 				kprintf("cpu=%d pid=%d tid=%d status=%d "
 					"offload=%d ref=%d ptrace=%08x\n",
@@ -4261,7 +4808,7 @@ debug_log(unsigned long arg)
 		break;
 	    case 3:
 		for(i = 0; i < HASH_SIZE; i++){
-			list_for_each_entry(p, &phash->list[i], hash_list){
+			for (p = ((typeof(*p) *)((char *)((&phash->list[i])->next) - offsetof(typeof(*p), hash_list))); &p->hash_list != (&phash->list[i]); p = ((typeof(*p) *)((char *)(p->hash_list.next) - offsetof(typeof(*p), hash_list)))){
 				if (p == pid1)
 					continue;
 				found++;
@@ -4273,7 +4820,7 @@ debug_log(unsigned long arg)
 		break;
 	    case 4:
 		for(i = 0; i < HASH_SIZE; i++){
-			list_for_each_entry(t, &thash->list[i], hash_list){
+			for (t = ((typeof(*t) *)((char *)((&thash->list[i])->next) - offsetof(typeof(*t), hash_list))); &t->hash_list != (&thash->list[i]); t = ((typeof(*t) *)((char *)(t->hash_list.next) - offsetof(typeof(*t), hash_list)))){
 				found++;
 				kprintf("cpu=%d pid=%d tid=%d status=%d\n",
 				        t->cpu_id, t->proc->pid, t->tid,
@@ -4285,51 +4832,16 @@ debug_log(unsigned long arg)
 	}
 }
 
-int access_ok(struct process_vm *vm, int type, uintptr_t addr, size_t len) {
-	struct vm_range *range, *next;
-	int first = true;
-	int rc;
+static void process_access_ok_log_bridge(struct process_vm *vm, int type,
+		unsigned long addr, size_t len, int rc)
+{
+	kprintf("%s: refusing access for request 0x%llx-0x%llx %zu, type=%d, rc=%d\n",
+		"access_ok", (unsigned long long)addr,
+		(unsigned long long)(addr + len), len, type, rc);
+}
 
-	range = lookup_process_memory_range(vm, addr, addr + len);
-
-	rc = process_access_initial_result(range != NULL,
-			range ? range->start : 0, addr);
-	if (rc) {
-		kprintf("%s: No VM range at 0x%llx, refusing access\n",
-			__FUNCTION__, addr);
-		return rc;
-	}
-	do {
-		if (first) {
-			first = false;
-		} else {
-			next = next_process_memory_range(vm, range);
-			rc = process_access_adjacent_result(range->end,
-					next != NULL, next ? next->start : 0);
-			if (rc && !next) {
-				kprintf("%s: No VM range after 0x%llx, but checking until 0x%llx. Refusing access\n",
-					__FUNCTION__, range->end, addr + len);
-				return rc;
-			}
-			if (rc) {
-				kprintf("%s: 0x%llx - 0x%llx and 0x%llx - 0x%llx are not adjacent (request was %0x%llx-0x%llx %zu)\n",
-					__FUNCTION__, range->start, range->end,
-					next->start, next->end,
-					addr, addr+len, len);
-				return rc;
-			}
-			range = next;
-		}
-
-		rc = process_access_permission_result(type, range->flag);
-		if (rc) {
-			kprintf("%s: 0x%llx - 0x%llx does not have prot %s (request was %0x%llx-0x%llx %zu)\n",
-				__FUNCTION__, range->start, range->end,
-				type == VERIFY_WRITE ? "write" : "ready",
-				addr, addr+len, len);
-			return rc;
-		}
-	} while (addr + len > range->end);
-
-	return 0;
+int access_ok(struct process_vm *vm, int type, uintptr_t addr, size_t len)
+{
+	return process_access_ok_public_result(vm, type, addr, len,
+			process_access_ok_log_bridge);
 }

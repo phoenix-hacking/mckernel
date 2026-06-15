@@ -18,6 +18,11 @@ struct arm_pmu cpu_pmu;
 extern int ihk_param_pmu_irq_affi[CONFIG_SMP_MAX_CORES];
 extern int ihk_param_nr_pmu_irq_affi;
 
+int is_sampling_event(struct mc_perf_event *event)
+{
+	return event->attr.sample_period != 0;
+}
+
 int arm64_init_perfctr(void)
 {
 	int ret;
@@ -34,7 +39,7 @@ int arm64_init_perfctr(void)
 	cpu_info = ihk_mc_get_cpu_info();
 	pages = (sizeof(struct per_cpu_arm_pmu) * cpu_info->ncpus +
 		 PAGE_SIZE - 1) >> PAGE_SHIFT;
-	cpu_pmu.per_cpu = ihk_mc_alloc_pages(pages, IHK_MC_AP_NOWAIT);
+	cpu_pmu.per_cpu = _ihk_mc_alloc_aligned_pages_node(pages, PAGE_P2ALIGN, IHK_MC_AP_NOWAIT, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);
 	if (cpu_pmu.per_cpu == NULL) {
 		return -ENOMEM;
 	}

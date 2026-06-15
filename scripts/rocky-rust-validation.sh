@@ -17,6 +17,10 @@ Options:
   --skip-rust           Do not install or switch Rust nightly.
   --skip-ihk-patch      Do not apply the local IHK compatibility patch.
   --module-load-smoke   After build, load/unload Rust-linked IHK modules.
+  --skip-source-retirement-audit
+                        Skip the active rust-source-retirement.txt coverage gate.
+  --source-retirement-final
+                        Enforce final C/header retirement gates after build.
   --boot-only           After install, boot McKernel and check kmsg; skip workloads.
   --boot-smoke          After install, boot McKernel and run mcexec smoke tests.
   --yes                 Allow boot validation without an interactive confirmation.
@@ -60,6 +64,8 @@ DO_INSTALL=1
 BOOT_ONLY=0
 BOOT_SMOKE=0
 MODULE_LOAD_SMOKE=0
+SOURCE_RETIREMENT_AUDIT=1
+SOURCE_RETIREMENT_FINAL=0
 ASSUME_YES=0
 
 while [ "$#" -gt 0 ]; do
@@ -82,6 +88,15 @@ while [ "$#" -gt 0 ]; do
 			;;
 		--module-load-smoke)
 			MODULE_LOAD_SMOKE=1
+			shift
+			;;
+		--skip-source-retirement-audit)
+			SOURCE_RETIREMENT_AUDIT=0
+			shift
+			;;
+		--source-retirement-final)
+			SOURCE_RETIREMENT_AUDIT=1
+			SOURCE_RETIREMENT_FINAL=1
 			shift
 			;;
 		--boot-only)
@@ -286,6 +301,8 @@ configure_and_build() {
 	rm -rf "$BUILD_DIR"
 	cmake -S "$ROOT_DIR" \
 		-B "$BUILD_DIR" \
+		-Wno-dev \
+		-DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
 		-DBUILD_TARGET=smp-x86 \
 		-DENABLE_RUST_KERNEL=ON \
 		-DCMAKE_INSTALL_PREFIX="$PREFIX" \
@@ -297,6 +314,56 @@ configure_and_build() {
 		mcexec eclair mcinspect sched_yield ldump2mcdump mcstat \
 		ihkconfig ihkosctl ihkmond \
 		-j"$JOBS"
+
+	check_rust_kernel_context_no_simd
+}
+
+source_retirement_audit() {
+	say "Auditing strict Rust source retirement tracker"
+
+	local args=(
+		--repo "$ROOT_DIR"
+		--tracker "$ROOT_DIR/rust-source-retirement.txt"
+		--build-dir "$BUILD_DIR"
+		--fail-on-retired-compiled-c
+	)
+
+	if [ "$SOURCE_RETIREMENT_FINAL" -eq 1 ]; then
+		args+=(
+			--fail-on-unretired
+			--fail-on-executable-headers
+			--fail-on-compiled-c
+		)
+	fi
+
+	"$ROOT_DIR/scripts/rust-source-retirement-audit.py" "${args[@]}"
+}
+
+check_rust_kernel_context_no_simd() {
+	say "Checking Rust kernel-context objects for SIMD instructions"
+	need_cmd objdump
+
+	local obj
+	for obj in \
+		"$BUILD_DIR/kernel/rust/mckernel_rust.o" \
+		"$BUILD_DIR/ihk/linux/core/rust/core_helpers.o" \
+		"$BUILD_DIR/ihk/linux/driver/smp/rust/smp_driver_helpers.o" \
+		"$BUILD_DIR/executer/kernel/mcctrl/rust/mcctrl_helpers.o"
+	do
+		if [ ! -f "$obj" ]; then
+			echo "error: missing Rust kernel-context object: $obj" >&2
+			exit 1
+		fi
+
+		local hits
+		hits="$(objdump -d "$obj" |
+			grep -Ei '%(xmm|ymm|zmm|mm)[0-9]|[[:space:]](movaps|movups|movdqa|movdqu|xorps|xorpd|pshuf[^[:space:]]*|padd[^[:space:]]*|pand[^[:space:]]*|pxor|popcnt|xsave[^[:space:]]*|fxsave[^[:space:]]*)[[:space:]]' || true)"
+		if [ -n "$hits" ]; then
+			echo "error: SIMD-like instructions found in Rust kernel-context object: $obj" >&2
+			printf '%s\n' "$hits" | head -n 20 >&2
+			exit 1
+		fi
+	done
 }
 
 install_artifacts() {
@@ -656,6 +723,10 @@ fi
 
 update_submodules
 configure_and_build
+
+if [ "$SOURCE_RETIREMENT_AUDIT" -eq 1 ]; then
+	source_retirement_audit
+fi
 
 if [ "$MODULE_LOAD_SMOKE" -eq 1 ]; then
 	module_load_smoke

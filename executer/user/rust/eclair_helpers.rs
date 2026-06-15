@@ -1,6 +1,13 @@
+#![feature(c_variadic)]
 #![no_std]
 
+use core::ffi::{c_int, c_ulong, c_void};
 use core::panic::PanicInfo;
+
+#[no_mangle]
+pub unsafe extern "C" fn eclair_dprintf(_fmt: *const u8, _args: ...) -> i32 {
+    0
+}
 
 const PS_RUNNING: i32 = 0x01;
 const PS_INTERRUPTIBLE: i32 = 0x02;
@@ -37,6 +44,124 @@ const ECLAIR_CMD_THREAD_ALIVE: i32 = 17;
 const ECLAIR_CMD_QFTHREADINFO: i32 = 18;
 const ECLAIR_CMD_QSTHREADINFO: i32 = 19;
 const ECLAIR_CMD_QTHREAD_EXTRA_INFO: i32 = 20;
+
+const ECLAIR_PACKET_STEP_NONE: i32 = 0;
+const ECLAIR_PACKET_STEP_INTERRUPT: i32 = 1;
+const ECLAIR_PACKET_STEP_READY: i32 = 2;
+const ECLAIR_PACKET_STEP_BAD: i32 = 3;
+const ECLAIR_PACKET_STEP_ERROR: i32 = 4;
+const ECLAIR_REMOTE_ACTION_NONE: i32 = 0;
+const ECLAIR_REMOTE_ACTION_NMI: i32 = 1;
+const ECLAIR_REMOTE_ACTION_CONTINUE: i32 = 2;
+const ECLAIR_PURE_COMMAND_NOT_HANDLED: isize = -1;
+const ECLAIR_PURE_COMMAND_PARSE_ERROR: isize = -2;
+const ECLAIR_PURE_COMMAND_INVALID_TID: isize = -3;
+const ECLAIR_PURE_COMMAND_BUFFER_ERROR: isize = -4;
+const BFD_OBJECT: c_int = 1;
+
+#[repr(C)]
+pub struct EclairThreadInfo {
+    next: *mut EclairThreadInfo,
+    status: i32,
+    pid: i32,
+    tid: i32,
+    cpu: i32,
+    lcpu: i32,
+    idle: i32,
+    process: usize,
+    clv: usize,
+    arch_clv: usize,
+}
+
+#[repr(C)]
+pub struct EclairOptions {
+    cpu: u8,
+    help: u8,
+    kernel_path: *mut u8,
+    dump_path: *mut u8,
+    log_path: *mut u8,
+    interactive: c_int,
+    os_id: c_int,
+    mcos_fd: c_int,
+    print_idle: c_int,
+}
+
+#[repr(C)]
+struct DumpMemChunk {
+    addr: c_ulong,
+    size: c_ulong,
+}
+
+#[repr(C)]
+struct DumpMemChunksHeader {
+    nr_chunks: c_int,
+    kernel_base: c_ulong,
+    phys_start: c_ulong,
+}
+
+#[repr(C)]
+struct DumpArgs {
+    cmd: c_int,
+    level: u32,
+    start: isize,
+    size: isize,
+    buf: *mut c_void,
+    spare: [*mut c_void; 4],
+}
+
+unsafe extern "C" {
+    static mut nsyms: isize;
+    static mut symtab: *mut *mut BfdSymbol;
+    static mut opt: EclairOptions;
+    static mut symbfd: *mut c_void;
+    static mut dumpbfd: *mut c_void;
+    static mut mem_chunks: *mut DumpMemChunksHeader;
+    fn virt_to_phys(va: usize) -> usize;
+    fn ioctl(fd: c_int, request: c_ulong, ...) -> c_int;
+    fn perror(s: *const u8);
+    fn malloc(size: usize) -> *mut c_void;
+    fn bfd_openr(filename: *const u8, target: *const u8) -> *mut c_void;
+    fn bfd_check_format(abfd: *mut c_void, format: c_int) -> c_int;
+    fn eclair_bfd_get_symtab_upper_bound_bridge(abfd: *mut c_void) -> isize;
+    fn eclair_bfd_canonicalize_symtab_bridge(
+        abfd: *mut c_void,
+        location: *mut *mut BfdSymbol,
+    ) -> isize;
+    fn bfd_get_section_by_name(abfd: *mut c_void, name: *const u8) -> *mut c_void;
+    fn bfd_get_section_contents(
+        abfd: *mut c_void,
+        section: *mut c_void,
+        location: *mut c_void,
+        offset: isize,
+        count: usize,
+    ) -> c_int;
+    fn bfd_perror(message: *const u8);
+    fn printf(fmt: *const u8, ...) -> i32;
+    fn fprintf(stream: *mut c_void, fmt: *const u8, ...) -> i32;
+    fn kill(pid: i32, sig: i32) -> i32;
+    static mut stderr: *mut c_void;
+    static mut gdbpid: i32;
+}
+
+#[repr(C)]
+struct BfdSection {
+    name: *const u8,
+    id: u32,
+    index: u32,
+    next: *mut BfdSection,
+    prev: *mut BfdSection,
+    flags: u32,
+    vma: usize,
+}
+
+#[repr(C)]
+struct BfdSymbol {
+    the_bfd: *mut c_void,
+    name: *const u8,
+    value: usize,
+    flags: u32,
+    section: *mut BfdSection,
+}
 
 fn is_space(byte: u8) -> bool {
     matches!(byte, b' ' | b'\t' | b'\n' | b'\r' | 0x0b | 0x0c)
@@ -200,6 +325,332 @@ unsafe fn finish_cstr(buf: *mut u8, pos: usize, buf_size: usize) {
     unsafe {
         *buf.add(term) = 0;
     }
+}
+
+const ECLAIR_NOSYMBOL: usize = usize::MAX;
+const ECLAIR_NOPHYS: usize = usize::MAX;
+const PHYSMEM_NAME_SIZE: usize = 32;
+const IHK_OS_DUMP: c_ulong = 0x112a06;
+const DUMP_NMI: c_int = 1;
+const DUMP_READ: c_int = 3;
+const DUMP_NMI_CONT: c_int = 10;
+const SIGINT_CONST: i32 = 2;
+
+#[no_mangle]
+pub unsafe extern "C" fn lookup_symbol(name: *mut u8) -> usize {
+    let Some(needle) = (unsafe { cstr_bytes(name as *const u8) }) else {
+        return ECLAIR_NOSYMBOL;
+    };
+
+    let count = unsafe {
+        if nsyms < 0 || symtab.is_null() {
+            return ECLAIR_NOSYMBOL;
+        }
+        nsyms as usize
+    };
+    let mut idx = 0usize;
+    while idx < count {
+        let symbol = unsafe { *symtab.add(idx) };
+        if !symbol.is_null() {
+            let sym_name = unsafe { (*symbol).name };
+            if let Some(candidate) = unsafe { cstr_bytes(sym_name) } {
+                if bytes_eq(candidate, needle) {
+                    let section = unsafe { (*symbol).section };
+                    if !section.is_null() {
+                        return unsafe { (*section).vma.wrapping_add((*symbol).value) };
+                    }
+                }
+            }
+        }
+        idx += 1;
+    }
+
+    ECLAIR_NOSYMBOL
+}
+
+unsafe fn dump_mem_chunk_at(chunks: *mut DumpMemChunksHeader, idx: usize) -> *const DumpMemChunk {
+    unsafe {
+        (chunks as *const u8)
+            .add(core::mem::size_of::<DumpMemChunksHeader>())
+            .cast::<DumpMemChunk>()
+            .add(idx)
+    }
+}
+
+unsafe fn read_physmem(pa: usize, buf: *mut c_void, size: usize) -> c_int {
+    let chunks = unsafe { mem_chunks };
+    let mut chunk_index = 0usize;
+    let mut found = false;
+    let mut offset = 0isize;
+
+    if !chunks.is_null() {
+        let nr_chunks = unsafe { (*chunks).nr_chunks };
+        if nr_chunks > 0 {
+            while chunk_index < nr_chunks as usize {
+                let chunk = unsafe { dump_mem_chunk_at(chunks, chunk_index) };
+                let addr = unsafe { (*chunk).addr as usize };
+                let chunk_size = unsafe { (*chunk).size as usize };
+                if addr <= pa && pa.wrapping_add(size) <= addr.wrapping_add(chunk_size) {
+                    offset = pa.wrapping_sub(addr) as isize;
+                    found = true;
+                    break;
+                }
+                chunk_index += 1;
+            }
+        }
+    }
+
+    if !found {
+        let mut line = [0u8; 96];
+        let n = unsafe { eclair_read_physmem_invalid_result(line.as_mut_ptr(), line.len(), pa) };
+        if n >= 0 {
+            unsafe {
+                printf(b"%s\n\0".as_ptr(), line.as_ptr());
+            }
+        } else {
+            unsafe {
+                printf(b"read_physmem: invalid addr 0x%lx\n\0".as_ptr(), pa);
+            }
+        }
+        return 1;
+    }
+
+    let mut physmem_name = [0u8; PHYSMEM_NAME_SIZE];
+    unsafe {
+        eclair_physmem_name_result(physmem_name.as_mut_ptr(), chunk_index as c_int);
+    }
+
+    let dump = unsafe { dumpbfd };
+    let section = unsafe { bfd_get_section_by_name(dump, physmem_name.as_ptr()) };
+    if section.is_null() {
+        unsafe {
+            bfd_perror(b"read_physmem:bfd_get_section_by_name(physmem)\0".as_ptr());
+        }
+        return 1;
+    }
+
+    let ok = unsafe { bfd_get_section_contents(dump, section, buf, offset, size) };
+    if ok == 0 {
+        unsafe {
+            bfd_perror(b"read_physmem:bfd_get_section_contents\0".as_ptr());
+        }
+        return 1;
+    }
+
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn read_mem(va: usize, buf: *mut c_void, size: usize) -> c_int {
+    let pa = unsafe { virt_to_phys(va) };
+    if pa == ECLAIR_NOPHYS {
+        return 1;
+    }
+
+    let error = if unsafe { opt.interactive } != 0 {
+        let mut args = DumpArgs {
+            cmd: DUMP_READ,
+            level: 0,
+            start: pa as isize,
+            size: size as isize,
+            buf,
+            spare: [core::ptr::null_mut(); 4],
+        };
+        unsafe { ioctl(opt.mcos_fd, IHK_OS_DUMP, &mut args as *mut DumpArgs) }
+    } else {
+        unsafe { read_physmem(pa, buf, size) }
+    };
+
+    if error != 0 {
+        unsafe {
+            perror(b"read_mem:read_physmem\0".as_ptr());
+        }
+        return 1;
+    }
+
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn read_64(va: usize, buf: *mut c_void) -> i32 {
+    unsafe { read_mem(va, buf, core::mem::size_of::<u64>()) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn read_32(va: usize, buf: *mut c_void) -> i32 {
+    unsafe { read_mem(va, buf, core::mem::size_of::<u32>()) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn read_symbol_64(name: *mut u8, buf: *mut c_void) -> i32 {
+    let va = unsafe { lookup_symbol(name) };
+    if va == ECLAIR_NOSYMBOL {
+        let mut line = [0u8; 128];
+        let n = unsafe {
+            eclair_lookup_failed_result(
+                line.as_mut_ptr(),
+                line.len(),
+                b"read_symbol_64\0".as_ptr(),
+                name as *const u8,
+            )
+        };
+        if n >= 0 {
+            unsafe {
+                printf(b"%s\n\0".as_ptr(), line.as_ptr());
+            }
+        } else {
+            unsafe {
+                printf(
+                    b"read_symbol_64(%s):lookup_symbol failed\n\0".as_ptr(),
+                    name as *const u8,
+                );
+            }
+        }
+        return 1;
+    }
+
+    let error = unsafe { read_64(va, buf) };
+    if error != 0 {
+        unsafe {
+            printf(
+                b"read_symbol_64(%s):read_64(%#lx) failed\0".as_ptr(),
+                name as *const u8,
+                va,
+            );
+        }
+        return 1;
+    }
+
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn print_bin(
+    buf: *mut u8,
+    buf_size: usize,
+    data: *mut c_void,
+    size: usize,
+) -> isize {
+    unsafe { eclair_print_bin_result(buf, buf_size, data as *const u8, size) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn intr_handler(_dummy: i32) {
+    let pid = unsafe { gdbpid };
+    unsafe {
+        kill(pid, SIGINT_CONST);
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn print_usage() {
+    let mut line = [0u8; 128];
+    let n = unsafe { eclair_usage_result(line.as_mut_ptr(), line.len()) };
+    if n >= 0 {
+        unsafe {
+            fprintf(stderr, b"%s\n\0".as_ptr(), line.as_ptr());
+        }
+    } else {
+        unsafe {
+            fprintf(
+                stderr,
+                b"usage: eclair [-ch] [-d <mcdump>] [-k <kernel.img>]\n\0".as_ptr(),
+            );
+        }
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn apply_remote_action(action: i32, continue_error: *const u8) -> i32 {
+    let cmd = match action {
+        ECLAIR_REMOTE_ACTION_NONE => return 0,
+        ECLAIR_REMOTE_ACTION_NMI => DUMP_NMI,
+        ECLAIR_REMOTE_ACTION_CONTINUE => DUMP_NMI_CONT,
+        _ => return -1,
+    };
+
+    let mut args = DumpArgs {
+        cmd,
+        level: 0,
+        start: 0,
+        size: 0,
+        buf: core::ptr::null_mut(),
+        spare: [core::ptr::null_mut(); 4],
+    };
+    let error = unsafe { ioctl(opt.mcos_fd, IHK_OS_DUMP, &mut args as *mut DumpArgs) };
+    if error != 0 {
+        let message = if action == ECLAIR_REMOTE_ACTION_NMI || continue_error.is_null() {
+            b"DUMP_NMI\0".as_ptr()
+        } else {
+            continue_error
+        };
+        unsafe {
+            perror(message);
+        }
+        return error;
+    }
+
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn setup_symbols(fname: *mut u8) -> c_int {
+    let abfd = unsafe { bfd_openr(fname as *const u8, core::ptr::null()) };
+    unsafe {
+        symbfd = abfd;
+    }
+    if abfd.is_null() {
+        unsafe {
+            bfd_perror(b"bfd_openr\0".as_ptr());
+        }
+        return 1;
+    }
+
+    if unsafe { bfd_check_format(abfd, BFD_OBJECT) } == 0 {
+        unsafe {
+            bfd_perror(b"bfd_check_format\0".as_ptr());
+        }
+        return 1;
+    }
+
+    let needs = unsafe { eclair_bfd_get_symtab_upper_bound_bridge(abfd) };
+    if needs < 0 {
+        unsafe {
+            bfd_perror(b"bfd_get_symtab_upper_bound\0".as_ptr());
+        }
+        return 1;
+    }
+
+    if needs == 0 {
+        unsafe {
+            printf(b"no symbols\n\0".as_ptr());
+        }
+        return 1;
+    }
+
+    let table = unsafe { malloc(needs as usize) } as *mut *mut BfdSymbol;
+    if table.is_null() {
+        unsafe {
+            perror(b"malloc\0".as_ptr());
+        }
+        return 1;
+    }
+    unsafe {
+        symtab = table;
+    }
+
+    let count = unsafe { eclair_bfd_canonicalize_symtab_bridge(abfd, table) };
+    if count < 0 {
+        unsafe {
+            bfd_perror(b"bfd_canonicalize_symtab\0".as_ptr());
+        }
+        return 1;
+    }
+    unsafe {
+        nsyms = count;
+    }
+
+    0
 }
 
 unsafe fn write_i32_decimal(buf: *mut u8, pos: &mut usize, value: i32) {
@@ -427,11 +878,7 @@ pub unsafe extern "C" fn eclair_parse_i32_result(arg: *const u8) -> i32 {
         byte = unsafe { *ptr };
     }
 
-    if neg {
-        value.saturating_neg()
-    } else {
-        value
-    }
+    if neg { value.saturating_neg() } else { value }
 }
 
 #[no_mangle]
@@ -586,10 +1033,168 @@ pub unsafe extern "C" fn eclair_interrupt_command_result(buf: *mut u8, buf_size:
     unsafe {
         finish_cstr(buf, pos, buf_size);
     }
-    if ok {
-        pos as isize
-    } else {
-        -1
+    if ok { pos as isize } else { -1 }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn eclair_packet_step_result(
+    input: i32,
+    interactive: i32,
+    mode: *mut i32,
+    sum: *mut u8,
+    check: *mut u8,
+    lbuf: *mut u8,
+    lbuf_size: usize,
+    lpos: *mut usize,
+    cbuf: *mut u8,
+    cbuf_size: usize,
+) -> i32 {
+    if mode.is_null()
+        || sum.is_null()
+        || check.is_null()
+        || lbuf.is_null()
+        || lpos.is_null()
+        || cbuf.is_null()
+        || lbuf_size == 0
+        || cbuf_size < 3
+    {
+        return ECLAIR_PACKET_STEP_ERROR;
+    }
+
+    let byte = input as u8;
+    let state = unsafe { *mode };
+    match state {
+        0 => {
+            if byte == b'$' {
+                unsafe {
+                    *mode = 1;
+                    *sum = 0;
+                    *lpos = 0;
+                    *lbuf = 0;
+                }
+            } else if interactive != 0 && byte == 0x03 {
+                let mut pos = 0usize;
+                let ok = unsafe { write_lit_checked(lbuf, &mut pos, lbuf_size, b"Ctrl-C\0") };
+                unsafe {
+                    finish_cstr(lbuf, pos, lbuf_size);
+                    *lpos = pos;
+                    *mode = 0;
+                }
+                if ok {
+                    return ECLAIR_PACKET_STEP_INTERRUPT;
+                }
+                return ECLAIR_PACKET_STEP_ERROR;
+            }
+            ECLAIR_PACKET_STEP_NONE
+        }
+        1 => {
+            if byte == b'#' {
+                let pos = unsafe { *lpos };
+                unsafe {
+                    finish_cstr(lbuf, pos, lbuf_size);
+                    *mode = 2;
+                }
+                return ECLAIR_PACKET_STEP_NONE;
+            }
+
+            let pos = unsafe { *lpos };
+            if pos + 1 >= lbuf_size {
+                unsafe {
+                    *mode = 0;
+                    finish_cstr(lbuf, pos, lbuf_size);
+                }
+                return ECLAIR_PACKET_STEP_ERROR;
+            }
+            unsafe {
+                *sum = (*sum).wrapping_add(byte);
+                *lbuf.add(pos) = byte;
+                *lpos = pos + 1;
+                finish_cstr(lbuf, pos + 1, lbuf_size);
+            }
+            ECLAIR_PACKET_STEP_NONE
+        }
+        2 => {
+            unsafe {
+                *cbuf = byte;
+                *mode = 3;
+            }
+            ECLAIR_PACKET_STEP_NONE
+        }
+        3 => {
+            unsafe {
+                *cbuf.add(1) = byte;
+                *cbuf.add(2) = 0;
+            }
+            let parsed = unsafe { eclair_parse_packet_checksum_result(cbuf, check) };
+            unsafe {
+                *mode = 0;
+            }
+            if parsed != 0 || unsafe { *check != *sum } {
+                ECLAIR_PACKET_STEP_BAD
+            } else {
+                ECLAIR_PACKET_STEP_READY
+            }
+        }
+        _ => {
+            unsafe {
+                *mode = 0;
+            }
+            ECLAIR_PACKET_STEP_NONE
+        }
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn eclair_remote_command_plan_result(
+    cmd_kind: i32,
+    interactive: i32,
+    remote_running: i32,
+    action: *mut i32,
+    next_remote_running: *mut i32,
+    set_done: *mut i32,
+) -> i32 {
+    if action.is_null() || next_remote_running.is_null() || set_done.is_null() {
+        return -1;
+    }
+
+    unsafe {
+        *action = ECLAIR_REMOTE_ACTION_NONE;
+        *next_remote_running = remote_running;
+        *set_done = 0;
+    }
+
+    match cmd_kind {
+        ECLAIR_CMD_VCTRLC | ECLAIR_CMD_CTRLC => {
+            if interactive != 0 && remote_running != 0 {
+                unsafe {
+                    *action = ECLAIR_REMOTE_ACTION_NMI;
+                    *next_remote_running = 0;
+                }
+            }
+            0
+        }
+        ECLAIR_CMD_CONTINUE => {
+            if interactive != 0 && remote_running == 0 {
+                unsafe {
+                    *action = ECLAIR_REMOTE_ACTION_CONTINUE;
+                    *next_remote_running = 1;
+                }
+            }
+            0
+        }
+        ECLAIR_CMD_DETACH => {
+            unsafe {
+                *set_done = 1;
+            }
+            if interactive != 0 && remote_running == 0 {
+                unsafe {
+                    *action = ECLAIR_REMOTE_ACTION_CONTINUE;
+                    *next_remote_running = 1;
+                }
+            }
+            0
+        }
+        _ => -1,
     }
 }
 
@@ -788,11 +1393,7 @@ pub unsafe extern "C" fn eclair_simple_response_result(
     unsafe {
         finish_cstr(buf, pos, buf_size);
     }
-    if ok {
-        pos as isize
-    } else {
-        -1
-    }
+    if ok { pos as isize } else { -1 }
 }
 
 #[no_mangle]
@@ -813,11 +1414,7 @@ pub unsafe extern "C" fn eclair_gdb_target_result(
     unsafe {
         finish_cstr(buf, pos, buf_size);
     }
-    if ok {
-        pos as isize
-    } else {
-        -1
-    }
+    if ok { pos as isize } else { -1 }
 }
 
 #[no_mangle]
@@ -841,11 +1438,7 @@ pub unsafe extern "C" fn eclair_packet_frame_result(
     unsafe {
         finish_cstr(buf, pos, buf_size);
     }
-    if ok {
-        pos as isize
-    } else {
-        -1
-    }
+    if ok { pos as isize } else { -1 }
 }
 
 #[no_mangle]
@@ -872,11 +1465,7 @@ pub unsafe extern "C" fn eclair_banner_result(
     unsafe {
         finish_cstr(buf, pos, buf_size);
     }
-    if ok {
-        pos as isize
-    } else {
-        -1
-    }
+    if ok { pos as isize } else { -1 }
 }
 
 #[no_mangle]
@@ -897,11 +1486,7 @@ pub unsafe extern "C" fn eclair_usage_result(buf: *mut u8, buf_size: usize) -> i
     unsafe {
         finish_cstr(buf, pos, buf_size);
     }
-    if ok {
-        pos as isize
-    } else {
-        -1
-    }
+    if ok { pos as isize } else { -1 }
 }
 
 #[no_mangle]
@@ -930,11 +1515,7 @@ pub unsafe extern "C" fn eclair_open_mcos_error_result(
     unsafe {
         finish_cstr(buf, pos, buf_size);
     }
-    if ok {
-        pos as isize
-    } else {
-        -1
-    }
+    if ok { pos as isize } else { -1 }
 }
 
 #[no_mangle]
@@ -955,11 +1536,7 @@ pub unsafe extern "C" fn eclair_read_physmem_invalid_result(
     unsafe {
         finish_cstr(buf, pos, buf_size);
     }
-    if ok {
-        pos as isize
-    } else {
-        -1
-    }
+    if ok { pos as isize } else { -1 }
 }
 
 #[no_mangle]
@@ -983,11 +1560,7 @@ pub unsafe extern "C" fn eclair_lookup_failed_result(
     unsafe {
         finish_cstr(buf, pos, buf_size);
     }
-    if ok {
-        pos as isize
-    } else {
-        -1
-    }
+    if ok { pos as isize } else { -1 }
 }
 
 #[no_mangle]
@@ -1051,11 +1624,7 @@ pub unsafe extern "C" fn eclair_thread_extra_info_result(
     unsafe {
         finish_cstr(buf, pos, buf_size);
     }
-    if ok {
-        pos as isize
-    } else {
-        -1
-    }
+    if ok { pos as isize } else { -1 }
 }
 
 #[no_mangle]
@@ -1115,11 +1684,7 @@ pub unsafe extern "C" fn eclair_static_response_result(
     unsafe {
         finish_cstr(buf, pos, buf_size);
     }
-    if ok {
-        pos as isize
-    } else {
-        -1
-    }
+    if ok { pos as isize } else { -1 }
 }
 
 #[no_mangle]
@@ -1144,10 +1709,314 @@ pub unsafe extern "C" fn eclair_thread_list_entry_result(
     unsafe {
         finish_cstr(buf, pos, buf_size);
     }
-    if ok {
-        pos as isize
-    } else {
-        -1
+    if ok { pos as isize } else { -1 }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn eclair_thread_lookup_result(
+    head: *mut EclairThreadInfo,
+    tid: i32,
+) -> *mut EclairThreadInfo {
+    let mut current = head;
+    while !current.is_null() {
+        if unsafe { (*current).tid } == tid {
+            return current;
+        }
+        current = unsafe { (*current).next };
+    }
+    core::ptr::null_mut()
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn eclair_thread_list_result(
+    buf: *mut u8,
+    buf_size: usize,
+    head: *mut EclairThreadInfo,
+) -> isize {
+    if buf.is_null() || buf_size == 0 {
+        return -1;
+    }
+
+    let mut pos = 0usize;
+    let mut first = true;
+    let mut current = head;
+    while !current.is_null() {
+        let tid = unsafe { (*current).tid as u32 as usize };
+        let ok = unsafe {
+            write_byte_checked(buf, &mut pos, buf_size, if first { b'm' } else { b',' })
+                && write_hex_usize_checked(buf, &mut pos, buf_size, tid)
+        };
+        if !ok {
+            unsafe {
+                finish_cstr(buf, pos, buf_size);
+            }
+            return -1;
+        }
+        first = false;
+        current = unsafe { (*current).next };
+    }
+
+    unsafe {
+        finish_cstr(buf, pos, buf_size);
+    }
+    pos as isize
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn eclair_thread_extra_info_hex_result(
+    buf: *mut u8,
+    buf_size: usize,
+    head: *mut EclairThreadInfo,
+    tid: i32,
+) -> isize {
+    if buf.is_null() || buf_size == 0 {
+        return -1;
+    }
+
+    let thread = unsafe { eclair_thread_lookup_result(head, tid) };
+    if thread.is_null() {
+        unsafe {
+            finish_cstr(buf, 0, buf_size);
+        }
+        return -2;
+    }
+
+    let thread_ref = unsafe { &*thread };
+    let mut info = [0u8; 64];
+    if unsafe {
+        eclair_thread_extra_info_result(
+            info.as_mut_ptr(),
+            info.len(),
+            thread_ref.pid,
+            thread_ref.status,
+            thread_ref.idle,
+            thread_ref.lcpu,
+            thread_ref.cpu,
+        )
+    } < 0
+    {
+        unsafe {
+            finish_cstr(buf, 0, buf_size);
+        }
+        return -1;
+    }
+
+    let mut pos = 0usize;
+    let mut idx = 0usize;
+    while idx < info.len() {
+        let byte = unsafe { *info.as_ptr().add(idx) };
+        if byte == 0 {
+            break;
+        }
+        if !unsafe { write_hex_byte_checked(buf, &mut pos, buf_size, byte) } {
+            unsafe {
+                finish_cstr(buf, pos, buf_size);
+            }
+            return -1;
+        }
+        idx += 1;
+    }
+
+    unsafe {
+        finish_cstr(buf, pos, buf_size);
+    }
+    pos as isize
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn eclair_pure_command_response_result(
+    cmd: *const u8,
+    cmd_kind: i32,
+    buf: *mut u8,
+    buf_size: usize,
+    head: *mut EclairThreadInfo,
+    current_thread_slot: *mut *mut EclairThreadInfo,
+    interactive: i32,
+    remote_running: i32,
+    map_kernel_start: usize,
+    arch: *const u8,
+    error_tid: *mut i32,
+    error_kind: *mut i32,
+) -> isize {
+    if buf.is_null() || buf_size == 0 {
+        return ECLAIR_PURE_COMMAND_BUFFER_ERROR;
+    }
+    if !error_tid.is_null() {
+        unsafe {
+            *error_tid = 0;
+        }
+    }
+    if !error_kind.is_null() {
+        unsafe {
+            *error_kind = cmd_kind;
+        }
+    }
+
+    match cmd_kind {
+        ECLAIR_CMD_QSUPPORTED
+        | ECLAIR_CMD_HC
+        | ECLAIR_CMD_VCONT_QUERY
+        | ECLAIR_CMD_STOP_QUERY
+        | ECLAIR_CMD_QATTACHED
+        | ECLAIR_CMD_TARGET_XML
+        | ECLAIR_CMD_QTSTATUS
+        | ECLAIR_CMD_MEMORY_MAP
+        | ECLAIR_CMD_QSTHREADINFO => {}
+        ECLAIR_CMD_QC => {
+            if current_thread_slot.is_null() || unsafe { (*current_thread_slot).is_null() } {
+                return ECLAIR_PURE_COMMAND_NOT_HANDLED;
+            }
+        }
+        ECLAIR_CMD_QFTHREADINFO => {
+            if interactive != 0 {
+                return ECLAIR_PURE_COMMAND_NOT_HANDLED;
+            }
+        }
+        ECLAIR_CMD_HG | ECLAIR_CMD_THREAD_ALIVE | ECLAIR_CMD_QTHREAD_EXTRA_INFO => {}
+        _ => return ECLAIR_PURE_COMMAND_NOT_HANDLED,
+    }
+
+    if cmd_kind == ECLAIR_CMD_HG {
+        if current_thread_slot.is_null() {
+            return ECLAIR_PURE_COMMAND_NOT_HANDLED;
+        }
+        let Some(bytes) = (unsafe { cstr_bytes(cmd) }) else {
+            return ECLAIR_PURE_COMMAND_PARSE_ERROR;
+        };
+        let Some((tid, _end)) = parse_hex_usize_prefix(subslice(bytes, 2, bytes.len())) else {
+            return ECLAIR_PURE_COMMAND_PARSE_ERROR;
+        };
+        let tid = tid as i32;
+        if tid != 0 {
+            let thread = unsafe { eclair_thread_lookup_result(head, tid) };
+            if thread.is_null() {
+                if !error_tid.is_null() {
+                    unsafe {
+                        *error_tid = tid;
+                    }
+                }
+                return ECLAIR_PURE_COMMAND_INVALID_TID;
+            }
+            unsafe {
+                *current_thread_slot = thread;
+            }
+        }
+        let n = unsafe {
+            eclair_simple_response_result(buf, buf_size, ECLAIR_CMD_HG, interactive, remote_running)
+        };
+        return if n < 0 {
+            ECLAIR_PURE_COMMAND_BUFFER_ERROR
+        } else {
+            n
+        };
+    }
+
+    if cmd_kind == ECLAIR_CMD_THREAD_ALIVE {
+        let Some(bytes) = (unsafe { cstr_bytes(cmd) }) else {
+            return ECLAIR_PURE_COMMAND_PARSE_ERROR;
+        };
+        let Some((tid, _end)) = parse_hex_usize_prefix(subslice(bytes, 1, bytes.len())) else {
+            return ECLAIR_PURE_COMMAND_PARSE_ERROR;
+        };
+        let tid = tid as i32;
+        if unsafe { eclair_thread_lookup_result(head, tid) }.is_null() {
+            if !error_tid.is_null() {
+                unsafe {
+                    *error_tid = tid;
+                }
+            }
+            return ECLAIR_PURE_COMMAND_INVALID_TID;
+        }
+        let n = unsafe {
+            eclair_simple_response_result(
+                buf,
+                buf_size,
+                ECLAIR_CMD_THREAD_ALIVE,
+                interactive,
+                remote_running,
+            )
+        };
+        return if n < 0 {
+            ECLAIR_PURE_COMMAND_BUFFER_ERROR
+        } else {
+            n
+        };
+    }
+
+    if cmd_kind == ECLAIR_CMD_QTHREAD_EXTRA_INFO {
+        let Some(bytes) = (unsafe { cstr_bytes(cmd) }) else {
+            return ECLAIR_PURE_COMMAND_PARSE_ERROR;
+        };
+        let Some((tid, _end)) = parse_hex_usize_prefix(subslice(bytes, 17, bytes.len())) else {
+            return ECLAIR_PURE_COMMAND_PARSE_ERROR;
+        };
+        let tid = tid as i32;
+        let n = unsafe { eclair_thread_extra_info_hex_result(buf, buf_size, head, tid) };
+        if n == -2 {
+            if !error_tid.is_null() {
+                unsafe {
+                    *error_tid = tid;
+                }
+            }
+            return ECLAIR_PURE_COMMAND_INVALID_TID;
+        }
+        return if n < 0 {
+            ECLAIR_PURE_COMMAND_BUFFER_ERROR
+        } else {
+            n
+        };
+    }
+
+    if cmd_kind == ECLAIR_CMD_QFTHREADINFO {
+        let n = unsafe { eclair_thread_list_result(buf, buf_size, head) };
+        return if n < 0 {
+            ECLAIR_PURE_COMMAND_BUFFER_ERROR
+        } else {
+            n
+        };
+    }
+
+    match cmd_kind {
+        ECLAIR_CMD_HC | ECLAIR_CMD_VCONT_QUERY | ECLAIR_CMD_STOP_QUERY => {
+            let n = unsafe {
+                eclair_simple_response_result(buf, buf_size, cmd_kind, interactive, remote_running)
+            };
+            if n < 0 {
+                ECLAIR_PURE_COMMAND_BUFFER_ERROR
+            } else {
+                n
+            }
+        }
+        ECLAIR_CMD_QSUPPORTED
+        | ECLAIR_CMD_QC
+        | ECLAIR_CMD_QATTACHED
+        | ECLAIR_CMD_TARGET_XML
+        | ECLAIR_CMD_QTSTATUS
+        | ECLAIR_CMD_MEMORY_MAP
+        | ECLAIR_CMD_QSTHREADINFO => {
+            let current_tid =
+                if current_thread_slot.is_null() || unsafe { (*current_thread_slot).is_null() } {
+                    0
+                } else {
+                    unsafe { (**current_thread_slot).tid }
+                };
+            let n = unsafe {
+                eclair_static_response_result(
+                    buf,
+                    buf_size,
+                    cmd_kind,
+                    current_tid,
+                    map_kernel_start,
+                    arch,
+                )
+            };
+            if n < 0 {
+                ECLAIR_PURE_COMMAND_BUFFER_ERROR
+            } else {
+                n
+            }
+        }
+        _ => ECLAIR_PURE_COMMAND_NOT_HANDLED,
     }
 }
 

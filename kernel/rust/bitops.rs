@@ -1,6 +1,8 @@
+use core::ffi::c_void;
 use core::ptr::read_volatile;
+use core::sync::atomic::{AtomicU32, Ordering};
 
-use crate::abi::CULong;
+use crate::abi::{CInt, CULong};
 
 const BITS_PER_LONG: CULong = 64;
 const BITS_PER_LONG_USIZE: usize = 64;
@@ -13,6 +15,26 @@ unsafe fn read_word(addr: *const CULong, word: CULong) -> CULong {
 #[inline(always)]
 fn bitop_word(bit: CULong) -> CULong {
     bit / BITS_PER_LONG
+}
+
+#[no_mangle]
+pub extern "C" fn ihk_bit_word(nr: CULong) -> CULong {
+    bitop_word(nr)
+}
+
+#[no_mangle]
+pub extern "C" fn ihk_align_mask(x: CULong, mask: CULong) -> CULong {
+    x.wrapping_add(mask) & !mask
+}
+
+#[no_mangle]
+pub extern "C" fn ihk_align(x: CULong, align: CULong) -> CULong {
+    ihk_align_mask(x, align.wrapping_sub(1))
+}
+
+#[no_mangle]
+pub extern "C" fn ihk_is_aligned(x: CULong, align: CULong) -> CInt {
+    ((x & align.wrapping_sub(1)) == 0) as CInt
 }
 
 #[inline(always)]
@@ -67,6 +89,69 @@ fn __ffs_word(mut word: CULong) -> CULong {
     }
 
     num
+}
+
+#[no_mangle]
+pub extern "C" fn fls(x: CInt) -> CInt {
+    let value = x as u32;
+    if value == 0 {
+        0
+    } else {
+        (32 - value.leading_zeros()) as CInt
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn ffs(x: CInt) -> CInt {
+    let value = x as u32;
+    if value == 0 {
+        0
+    } else {
+        (value.trailing_zeros() + 1) as CInt
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn __ffs(word: CULong) -> CULong {
+    __ffs_word(word)
+}
+
+#[no_mangle]
+pub extern "C" fn ffz(word: CULong) -> CULong {
+    __ffs_word(!word)
+}
+
+#[inline(always)]
+unsafe fn atomic_bit_word(addr: *mut CULong, nr: CInt) -> *mut AtomicU32 {
+    (addr as *mut AtomicU32).offset((nr >> 5) as isize)
+}
+
+#[inline(always)]
+fn bit32_mask(nr: CInt) -> u32 {
+    1u32 << ((nr & 31) as u32)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn set_bit(nr: CInt, addr: *mut CULong) {
+    let word = unsafe { &*atomic_bit_word(addr, nr) };
+    word.fetch_or(bit32_mask(nr), Ordering::SeqCst);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn clear_bit(nr: CInt, addr: *mut CULong) {
+    let word = unsafe { &*atomic_bit_word(addr, nr) };
+    word.fetch_and(!bit32_mask(nr), Ordering::SeqCst);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn test_bit(nr: CInt, addr: *const c_void) -> CInt {
+    let words = addr as *const u32;
+    let word = unsafe { read_volatile(words.offset((nr >> 5) as isize)) };
+    if (word & bit32_mask(nr)) != 0 {
+        1
+    } else {
+        0
+    }
 }
 
 #[no_mangle]
@@ -269,4 +354,9 @@ pub extern "C" fn __sw_hweight64(w: u64) -> CULong {
     res = res + (res >> 8);
     res = res + (res >> 16);
     (res + (res >> 32)) & 0x0000_0000_0000_00ff
+}
+
+#[no_mangle]
+pub extern "C" fn hweight_long(w: CULong) -> CULong {
+    __sw_hweight64(w)
 }

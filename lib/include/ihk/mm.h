@@ -121,43 +121,21 @@ void ihk_mc_clean_micpa(void);
 
 void *_ihk_mc_alloc_aligned_pages_node(int npages, int p2align,
 	ihk_mc_ap_flag flag, int node, int is_user, uintptr_t virt_addr, char *file, int line);
-#define ihk_mc_alloc_aligned_pages_node(npages, p2align, flag, node) ({\
-void *r = _ihk_mc_alloc_aligned_pages_node(npages, p2align, flag, node, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);\
-r;\
-})
-#define ihk_mc_alloc_aligned_pages_node_user(npages, p2align, flag, node, virt_addr) ({\
-void *r = _ihk_mc_alloc_aligned_pages_node(npages, p2align, flag, node, IHK_MC_PG_USER, virt_addr, __FILE__, __LINE__);\
-r;\
-})
-
-#define ihk_mc_alloc_aligned_pages(npages, p2align, flag) ({\
-void *r = _ihk_mc_alloc_aligned_pages_node(npages, p2align, flag, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);\
-r;\
-})
-
-#define ihk_mc_alloc_aligned_pages_user(npages, p2align, flag, virt_addr) ({\
-void *r = _ihk_mc_alloc_aligned_pages_node(npages, p2align, flag, -1, IHK_MC_PG_USER, virt_addr, __FILE__, __LINE__);\
-r;\
-})
-
-#define ihk_mc_alloc_pages(npages, flag) ({\
-void *r = _ihk_mc_alloc_aligned_pages_node(npages, PAGE_P2ALIGN, flag, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);\
-r;\
-})
-
-#define ihk_mc_alloc_pages_user(npages, flag, virt_addr) ({\
-void *r = _ihk_mc_alloc_aligned_pages_node(npages, PAGE_P2ALIGN, flag, -1, IHK_MC_PG_USER, virt_addr, __FILE__, __LINE__);\
-r;\
-})
+void *ihk_mc_alloc_aligned_pages_node(int npages, int p2align,
+	ihk_mc_ap_flag flag, int node);
+void *ihk_mc_alloc_aligned_pages_node_user(int npages, int p2align,
+	ihk_mc_ap_flag flag, int node, uintptr_t virt_addr);
+void *ihk_mc_alloc_aligned_pages(int npages, int p2align,
+	ihk_mc_ap_flag flag);
+void *ihk_mc_alloc_aligned_pages_user(int npages, int p2align,
+	ihk_mc_ap_flag flag, uintptr_t virt_addr);
+void *ihk_mc_alloc_pages(int npages, ihk_mc_ap_flag flag);
+void *ihk_mc_alloc_pages_user(int npages, ihk_mc_ap_flag flag,
+	uintptr_t virt_addr);
 
 void _ihk_mc_free_pages(void *ptr, int npages, int is_user, char *file, int line);
-#define ihk_mc_free_pages(p, npages) ({\
-_ihk_mc_free_pages(p, npages, IHK_MC_PG_KERNEL, __FILE__, __LINE__);\
-})
-
-#define ihk_mc_free_pages_user(p, npages) ({\
-_ihk_mc_free_pages(p, npages, IHK_MC_PG_USER, __FILE__, __LINE__);\
-})
+void ihk_mc_free_pages(void *ptr, int npages);
+void ihk_mc_free_pages_user(void *ptr, int npages);
 
 void *ihk_mc_allocate(int size, int flag);
 void ihk_mc_free(void *p);
@@ -274,10 +252,6 @@ void ihk_mc_query_mem_free_page(void *dump_page_set);
 int ihk_mc_chk_page_address(pte_t mem_addr);
 int ihk_mc_get_mem_user_page(void *arg0, page_table_t pt, pte_t *ptep, void *pgaddr, int pgshift);
 
-#ifndef unlikely
-#define unlikely(x) __builtin_expect(!!(x), 0)
-#endif
-
 extern int zero_at_free;
 
 /*
@@ -290,76 +264,10 @@ struct ihk_mc_page_cache_header {
 	struct ihk_mc_page_cache_header *next;
 };
 
-
-static inline void ihk_mc_page_cache_free(
-	struct ihk_mc_page_cache_header *cache, void *page)
-{
-	struct ihk_mc_page_cache_header *current = NULL;
-	struct ihk_mc_page_cache_header *new =
-		(struct ihk_mc_page_cache_header *)page;
-
-	if (unlikely(!page))
-		return;
-
-retry:
-	current = cache->next;
-	new->next = current;
-
-	if (!__sync_bool_compare_and_swap(&cache->next, current, new)) {
-		goto retry;
-	}
-}
-
-static inline void ihk_mc_page_cache_prealloc(
-	struct ihk_mc_page_cache_header *cache,
-	int nr_pages,
-	int nr_elem)
-{
-	int i;
-
-	if (unlikely(cache->next))
-		return;
-
-	for (i = 0; i < nr_elem; ++i) {
-		void *pages;
-
-		pages = ihk_mc_alloc_pages(nr_pages, IHK_MC_AP_NOWAIT);
-
-		if (!pages) {
-			kprintf("%s: ERROR: allocating pages..\n", __func__);
-			continue;
-		}
-
-		ihk_mc_page_cache_free(cache, pages);
-	}
-}
-
-static inline void *ihk_mc_page_cache_alloc(
-	struct ihk_mc_page_cache_header *cache,
-	int nr_pages)
-{
-	register struct ihk_mc_page_cache_header *first, *next;
-
-retry:
-	next = NULL;
-	first = cache->next;
-
-	if (first) {
-		next = first->next;
-
-		if (!__sync_bool_compare_and_swap(&cache->next,
-					first, next)) {
-			goto retry;
-		}
-	}
-	else {
-		kprintf("%s: calling pre-alloc for 0x%lx...\n", __func__, cache);
-
-		ihk_mc_page_cache_prealloc(cache, nr_pages, 256);
-		goto retry;
-	}
-
-	return (void *)first;
-}
+void ihk_mc_page_cache_free(struct ihk_mc_page_cache_header *cache, void *page);
+void ihk_mc_page_cache_prealloc(struct ihk_mc_page_cache_header *cache,
+		int nr_pages, int nr_elem);
+void *ihk_mc_page_cache_alloc(struct ihk_mc_page_cache_header *cache,
+		int nr_pages);
 
 #endif

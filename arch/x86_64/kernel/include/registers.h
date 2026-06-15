@@ -61,116 +61,21 @@
 #define MSR_IA32_XSS			0xda0
 
 
-#define CVAL(event, mask) \
-        ((((event) & 0xf00) << 24) | ((mask) << 8) | ((event) & 0xff))
-#define CVAL2(event, mask, inv, count)    \
-        ((((event) & 0xf00) << 24) | ((mask) << 8) | ((event) & 0xff) | \
-         ((inv & 1) << 23) | ((count & 0xff) << 24))
-
 /* AMD */
 #define MSR_PERF_CTL_0 0xc0010000
 #define MSR_PERF_CTR_0 0xc0010004
 
-static inline unsigned long xgetbv(unsigned int index)
-{
-	unsigned int low, high;
-
-	asm volatile("xgetbv" : "=a" (low), "=d" (high) : "c" (index));
-
-	return low | ((unsigned long)high << 32);
-}
-
-static inline void xsetbv(unsigned int index, unsigned long val)
-{
-	unsigned int low, high;
-
-	low = val;
-	high = val >> 32;
-
-	asm volatile("xsetbv" : : "a" (low), "d" (high), "c" (index));
-}
-
-static inline void wrmsr(unsigned int idx, unsigned long value)
-{
-	unsigned int high, low;
-
-	high = value >> 32;
-	low = value & 0xffffffffU;
-
-	asm volatile("wrmsr" : : "c" (idx), "a" (low), "d" (high) : "memory");
-}
-
-static inline unsigned long rdpmc(unsigned int counter)
-{
-	unsigned int high, low;
-
-	asm volatile("rdpmc" : "=a" (low), "=d" (high) : "c" (counter));
-
-	return (unsigned long)high << 32 | low;
-}
-
-static inline unsigned long rdmsr(unsigned int index)
-{
-	unsigned int high, low;
-
-	asm volatile("rdmsr" : "=a" (low), "=d" (high) : "c" (index));
-
-	return (unsigned long)high << 32 | low;
-}
-
-static inline unsigned long rdtsc(void)
-{
-	unsigned int high, low;
-
-	asm volatile("rdtsc" : "=a" (low), "=d" (high));
-
-	return (unsigned long)high << 32 | low;
-}
-
-static inline void set_perfctl(int counter, int event, int mask)
-{
-	unsigned long value;
-
-	value = ((unsigned long)(event & 0x700) << 32)
-		| (event & 0xff) | ((mask & 0xff) << 8) | (1 << 18)
-		 | (1 << 17);
-
-	wrmsr(MSR_PERF_CTL_0 + counter, value);
-}
-
-static inline void start_perfctr(int counter)
-{
-	unsigned long value;
-
-	value = rdmsr(MSR_PERF_CTL_0 + counter);
-	value |= (1 << 22);
-	wrmsr(MSR_PERF_CTL_0 + counter, value);
-}
-static inline void stop_perfctr(int counter)
-{
-	unsigned long value;
-
-	value = rdmsr(MSR_PERF_CTL_0 + counter);
-	value &= ~(1 << 22);
-	wrmsr(MSR_PERF_CTL_0 + counter, value);
-}
-
-static inline void clear_perfctl(int counter)
-{
-	wrmsr(MSR_PERF_CTL_0 + counter, 0);
-}
-
-static inline void set_perfctr(int counter, unsigned long value)
-{
-	wrmsr(MSR_PERF_CTR_0 + counter, value);
-}
-
-static inline unsigned long read_perfctr(int counter)
-{
-	return rdpmc(counter);
-}
-
-#define ihk_mc_mb()   asm volatile("mfence" : : : "memory");
+unsigned long CVAL(unsigned int event, unsigned int mask);
+unsigned long CVAL2(unsigned int event, unsigned int mask,
+		unsigned int inv, unsigned int count);
+unsigned long xgetbv(unsigned int index);
+void xsetbv(unsigned int index, unsigned long val);
+void wrmsr(unsigned int idx, unsigned long value);
+unsigned long rdpmc(unsigned int counter);
+unsigned long rdmsr(unsigned int index);
+unsigned long rdtsc(void);
+void ihk_mc_mb(void);
+unsigned long REGS_GET_STACK_POINTER(const void *regs);
 
 struct x86_desc_ptr {
         uint16_t size;
@@ -224,8 +129,6 @@ struct x86_sregs {
 	unsigned long fs;
 	unsigned long gs;
 };
-
-#define	REGS_GET_STACK_POINTER(regs)	(((struct x86_regs *)regs)->rsp)
 
 /*
  * Page fault error code bits:

@@ -1,18 +1,25 @@
-use core::ffi::c_void;
+use core::ffi::{c_char, c_void};
+use core::mem::MaybeUninit;
 use core::mem::{align_of, offset_of, size_of};
 use core::ptr::{null_mut, read_volatile, write_volatile};
-use core::sync::atomic::{compiler_fence, AtomicI32, AtomicPtr, Ordering};
+use core::sync::atomic::{AtomicI32, AtomicPtr, Ordering, compiler_fence};
 
-use crate::abi::{CInt, CULong, IkcScdPacket, IkcScdPacketTraditional};
+use crate::abi::{
+    CInt, CULong, CpuLocalVar, IkcScdPacket, IkcScdPacketTraditional, Process, Thread,
+};
 use crate::rbtree::{
-    rb_erase, rb_first, rb_insert_color, rb_link_node, rb_next, rb_prev, rb_replace_node, RbNode,
-    RbRoot,
+    RbNode, RbRoot, rb_erase, rb_first, rb_insert_color, rb_link_node, rb_next, rb_prev,
+    rb_replace_node,
 };
 
 const PAGE_SHIFT: CULong = 12;
 const PAGE_SIZE: CULong = 1 << PAGE_SHIFT;
+const PAGE_P2ALIGN: CInt = 0;
 const EINVAL: CInt = 22;
 const ENOMEM: CInt = 12;
+const IHK_MC_AP_CRITICAL: CInt = 0x000001;
+const IHK_MC_AP_NOWAIT: CInt = 0x000002;
+const IHK_MC_PG_KERNEL: CInt = 0;
 const IHK_NUMA_FREE_DIRECT: CInt = 0;
 const IHK_NUMA_FREE_DEFERRED: CInt = 1;
 const IHK_NUMA_FREE_IGNORED: CInt = 2;
@@ -32,7 +39,39 @@ const IHK_NUMA_FREE_LOG_SEND_OK: CInt = 6;
 const IHK_NUMA_FREE_LOG_UNEXPECTED: CInt = 7;
 const IHK_NUMA_FREE_LOG_CPU_CACHE_OK: CInt = 8;
 const IHK_NUMA_FREE_LOG_CPU_CACHE_FAILED: CInt = 9;
+const PAGEALLOC_ZERO_LOG_BEGIN: CInt = 1;
+const PAGEALLOC_ZERO_LOG_DONE: CInt = 2;
 const SCD_MSG_SYSCALL_ONESIDE: CInt = 0x4;
+const NR_MOVE_PAGES: CULong = 279;
+
+const PAGE_ALLOC_FILE: &[u8] = b"kernel/rust/page_alloc.rs\0";
+const PAGEALLOC_INIT_FAIL_FMT: &[u8] =
+    b"IHK: failed to allocate page-allocator-desc (%lx, %lx, %lx)\n\0";
+const PAGEALLOC_FREE_ERR_FMT: &[u8] = b"%s: double-freeing page 0x%lx\n\0";
+const PAGEALLOC_FREE_NAME: &[u8] = b"ihk_pagealloc_free\0";
+const PANIC_MSG: &[u8] = b"panic\0";
+const ZERO_BEGIN_FMT: &[u8] = b"zeroing free memory... \0";
+const ZERO_DONE_FMT: &[u8] = b"\nzeroing done\n\0";
+const NUMA_ADD_ERR_FMT: &[u8] = b"%s: ERROR: adding 0x%lx:%lu\n\0";
+const NUMA_ADD_NAME: &[u8] = b"ihk_numa_add_free_pages\0";
+const NUMA_FREE_NAME: &[u8] = b"ihk_numa_free_pages\0";
+const NUMA_FREE_DIRECT_ERR_FMT: &[u8] = b"%s: ERROR: freeing 0x%lx:%lu\n\0";
+const NUMA_FREE_DEFER_ERR_FMT: &[u8] = b"%s: ERROR: deferring free 0x%lx:%lu\n\0";
+const NUMA_FREE_SEND_WARN_FMT: &[u8] =
+    b"%s: WARNING: failed to send memory clear send IKC req..\n\0";
+const NUMA_FREE_UNEXPECTED_FMT: &[u8] =
+    b"%s: ERROR: unexpected Rust free action %d for 0x%lx:%lu\n\0";
+const NUMA_FREE_CACHE_ERR_FMT: &[u8] = b"%s: ERROR: freeing 0x%lx:%lu to CPU local cache\n\0";
+const PAGE_CACHE_PREALLOC_NAME: &[u8] = b"ihk_mc_page_cache_prealloc\0";
+const PAGE_CACHE_ALLOC_NAME: &[u8] = b"ihk_mc_page_cache_alloc\0";
+const PAGE_CACHE_PREALLOC_ERR_FMT: &[u8] = b"%s: ERROR: allocating pages..\n\0";
+const PAGE_CACHE_ALLOC_RETRY_FMT: &[u8] = b"%s: calling pre-alloc for 0x%lx...\n\0";
+
+#[no_mangle]
+pub static mut zero_at_free: CInt = 1;
+
+#[no_mangle]
+pub static mut deferred_zero_at_free: CInt = 1;
 
 type PageAllocIrqSaveFn = unsafe extern "C" fn() -> CULong;
 type PageAllocIrqRestoreFn = unsafe extern "C" fn(CULong);
@@ -45,6 +84,9 @@ type PageAllocZeroSendFn = unsafe extern "C" fn(CULong) -> CInt;
 type PageAllocAllocLogFn = unsafe extern "C" fn(CInt, CULong, CULong, CInt, CInt);
 type PageAllocAddFreeLogFn = unsafe extern "C" fn(CInt, CULong, CULong, CULong, CInt);
 type PageAllocFreeLogFn = unsafe extern "C" fn(CInt, CULong, CULong, CInt, CInt, CInt);
+type PageAllocInitFailLogFn = unsafe extern "C" fn(CULong, CULong, CULong);
+type PageAllocFreeErrorFn = unsafe extern "C" fn(CULong);
+type PageAllocZeroLogFn = unsafe extern "C" fn(CInt);
 
 #[repr(C)]
 #[derive(Clone, Copy)]
@@ -66,6 +108,11 @@ struct ListHead {
 #[repr(C)]
 struct IhkAtomic {
     counter: CInt,
+}
+
+#[repr(C)]
+pub(crate) struct IhkMcPageCacheHeader {
+    next: *mut IhkMcPageCacheHeader,
 }
 
 #[repr(C, align(64))]
@@ -134,6 +181,9 @@ const _: () = {
     assert!(size_of::<IhkAtomic>() == 4);
     assert!(align_of::<IhkAtomic>() == 4);
     assert!(offset_of!(IhkAtomic, counter) == 0);
+    assert!(size_of::<IhkMcPageCacheHeader>() == 8);
+    assert!(align_of::<IhkMcPageCacheHeader>() == 8);
+    assert!(offset_of!(IhkMcPageCacheHeader, next) == 0);
     assert!(size_of::<McsLockNode>() == 64);
     assert!(align_of::<McsLockNode>() == 64);
     assert!(offset_of!(McsLockNode, locked) == 0);
@@ -170,11 +220,155 @@ const _: () = {
 };
 
 unsafe extern "C" {
-    static zero_at_free: CInt;
+    static mut cpu_local_var_initialized: CInt;
 
     fn phys_to_virt(p: CULong) -> *mut c_void;
     fn ihk_mc_get_nr_numa_nodes() -> CInt;
     fn ihk_mc_get_numa_node_by_distance(i: CInt) -> *mut IhkMcNumaNode;
+    fn _ihk_mc_alloc_aligned_pages_node(
+        npages: CInt,
+        p2align: CInt,
+        flag: CULong,
+        node: CInt,
+        is_user: CInt,
+        virt_addr: CULong,
+        file: *mut c_char,
+        line: CInt,
+    ) -> *mut c_void;
+    fn _ihk_mc_free_pages(
+        ptr: *mut c_void,
+        npages: CInt,
+        is_user: CInt,
+        file: *mut c_char,
+        line: CInt,
+    );
+    fn mcs_lock_init(lock: *mut McsLockNode);
+    fn mcs_lock_lock(lock: *mut McsLockNode, node: *mut McsLockNode);
+    fn mcs_lock_unlock(lock: *mut McsLockNode, node: *mut McsLockNode);
+    fn kprintf(format: *const c_char, ...) -> CInt;
+    #[link_name = "panic"]
+    fn kernel_panic(message: *const c_char) -> !;
+    fn ihk_mc_get_processor_id() -> CInt;
+    fn get_cpu_local_var(id: CInt) -> *mut CpuLocalVar;
+    #[cfg(enable_per_cpu_alloc_cache)]
+    fn cpu_disable_interrupt_save() -> CULong;
+    #[cfg(enable_per_cpu_alloc_cache)]
+    fn cpu_restore_interrupt(flags: CULong);
+    fn ihk_ikc_send(channel: *mut c_void, packet: *mut IkcScdPacket, flags: CInt) -> CInt;
+}
+
+#[inline(always)]
+fn file_ptr() -> *mut c_char {
+    PAGE_ALLOC_FILE.as_ptr() as *mut c_char
+}
+
+#[inline(always)]
+unsafe fn page_cache_next_slot(
+    cache: *mut IhkMcPageCacheHeader,
+) -> &'static AtomicPtr<IhkMcPageCacheHeader> {
+    unsafe { AtomicPtr::from_ptr(&raw mut (*cache).next) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_page_cache_free(
+    cache: *mut IhkMcPageCacheHeader,
+    page: *mut c_void,
+) {
+    if page.is_null() {
+        return;
+    }
+
+    let new = page.cast::<IhkMcPageCacheHeader>();
+    let slot = unsafe { page_cache_next_slot(cache) };
+
+    loop {
+        let current = slot.load(Ordering::SeqCst);
+        unsafe {
+            (*new).next = current;
+        }
+
+        if slot
+            .compare_exchange(current, new, Ordering::SeqCst, Ordering::SeqCst)
+            .is_ok()
+        {
+            return;
+        }
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_page_cache_prealloc(
+    cache: *mut IhkMcPageCacheHeader,
+    nr_pages: CInt,
+    nr_elem: CInt,
+) {
+    let slot = unsafe { page_cache_next_slot(cache) };
+    if !slot.load(Ordering::SeqCst).is_null() {
+        return;
+    }
+
+    let mut i = 0;
+    while i < nr_elem {
+        let pages = unsafe {
+            _ihk_mc_alloc_aligned_pages_node(
+                nr_pages,
+                PAGE_P2ALIGN,
+                IHK_MC_AP_NOWAIT as CULong,
+                -1,
+                IHK_MC_PG_KERNEL,
+                CULong::MAX,
+                file_ptr(),
+                line!() as CInt,
+            )
+        };
+
+        if pages.is_null() {
+            unsafe {
+                kprintf(
+                    PAGE_CACHE_PREALLOC_ERR_FMT.as_ptr().cast(),
+                    PAGE_CACHE_PREALLOC_NAME.as_ptr(),
+                );
+            }
+        } else {
+            unsafe {
+                ihk_mc_page_cache_free(cache, pages);
+            }
+        }
+
+        i += 1;
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_page_cache_alloc(
+    cache: *mut IhkMcPageCacheHeader,
+    nr_pages: CInt,
+) -> *mut c_void {
+    let slot = unsafe { page_cache_next_slot(cache) };
+
+    loop {
+        let first = slot.load(Ordering::SeqCst);
+
+        if first.is_null() {
+            unsafe {
+                kprintf(
+                    PAGE_CACHE_ALLOC_RETRY_FMT.as_ptr().cast(),
+                    PAGE_CACHE_ALLOC_NAME.as_ptr(),
+                    cache as CULong,
+                );
+                ihk_mc_page_cache_prealloc(cache, nr_pages, 256);
+            }
+            continue;
+        }
+
+        let next = unsafe { (*first).next };
+        if slot
+            .compare_exchange(first, next, Ordering::SeqCst, Ordering::SeqCst)
+            .is_ok()
+        {
+            return first.cast::<c_void>();
+        }
+    }
 }
 
 #[inline(always)]
@@ -2190,4 +2384,638 @@ pub unsafe extern "C" fn __ihk_pagealloc_zero_free_pages_locked_result(
     __ihk_pagealloc_zero_free_pages_nolock(desc);
     unlock(lock_addr, lock_node_addr);
     1
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn pagealloc_public_init_result(
+    start: CULong,
+    size: CULong,
+    unit: CULong,
+    initial: *mut c_void,
+    pdescsize: *mut CULong,
+    desc_struct_size: CULong,
+    alloc_flag: CInt,
+    page_size: CULong,
+    lock_offset: CULong,
+    alloc_pages_fn: Option<PageAllocAllocPagesFn>,
+    lock_init_fn: Option<PageAllocMcsLockInitFn>,
+    init_fail_log_fn: Option<PageAllocInitFailLogFn>,
+) -> *mut c_void {
+    let mut status: CInt = 0;
+    let desc = pagealloc_init_result(
+        start,
+        size,
+        unit,
+        initial,
+        pdescsize,
+        desc_struct_size,
+        alloc_flag,
+        page_size,
+        lock_offset,
+        alloc_pages_fn,
+        lock_init_fn,
+        &mut status,
+    );
+
+    if desc.is_null() && status == -ENOMEM {
+        if let Some(log) = init_fail_log_fn {
+            log(start, size, unit);
+        }
+    }
+
+    desc.cast::<c_void>()
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn pagealloc_public_alloc_result(
+    desc: *mut c_void,
+    npages: CInt,
+    p2align: CInt,
+    lock_offset: CULong,
+    lock_node_addr: CULong,
+    lock_fn: Option<PageAllocMcsLockFn>,
+    unlock_fn: Option<PageAllocMcsUnlockFn>,
+) -> CULong {
+    __ihk_pagealloc_alloc_locked_result(
+        desc.cast::<IhkPageAllocatorDesc>(),
+        npages,
+        p2align,
+        lock_offset,
+        lock_node_addr,
+        lock_fn,
+        unlock_fn,
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn pagealloc_public_reserve_result(
+    desc: *mut c_void,
+    start: CULong,
+    end: CULong,
+    lock_offset: CULong,
+    lock_node_addr: CULong,
+    lock_fn: Option<PageAllocMcsLockFn>,
+    unlock_fn: Option<PageAllocMcsUnlockFn>,
+) -> CInt {
+    __ihk_pagealloc_reserve_locked_result(
+        desc.cast::<IhkPageAllocatorDesc>(),
+        start,
+        end,
+        lock_offset,
+        lock_node_addr,
+        lock_fn,
+        unlock_fn,
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn pagealloc_public_free_result(
+    desc: *mut c_void,
+    address: CULong,
+    npages: CInt,
+    lock_offset: CULong,
+    lock_node_addr: CULong,
+    lock_fn: Option<PageAllocMcsLockFn>,
+    unlock_fn: Option<PageAllocMcsUnlockFn>,
+    error_fn: Option<PageAllocFreeErrorFn>,
+) -> CInt {
+    let mut bad_address = address;
+    let rc = __ihk_pagealloc_free_locked_result(
+        desc.cast::<IhkPageAllocatorDesc>(),
+        address,
+        npages,
+        &mut bad_address,
+        lock_offset,
+        lock_node_addr,
+        lock_fn,
+        unlock_fn,
+    );
+
+    if rc != 0 {
+        if let Some(error) = error_fn {
+            error(bad_address);
+        }
+    }
+
+    rc
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn pagealloc_public_count_result(
+    desc: *mut c_void,
+    lock_offset: CULong,
+    lock_node_addr: CULong,
+    lock_fn: Option<PageAllocMcsLockFn>,
+    unlock_fn: Option<PageAllocMcsUnlockFn>,
+) -> CULong {
+    __ihk_pagealloc_count_locked_result(
+        desc.cast::<IhkPageAllocatorDesc>(),
+        lock_offset,
+        lock_node_addr,
+        lock_fn,
+        unlock_fn,
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn pagealloc_public_query_free_result(
+    desc: *mut c_void,
+    lock_offset: CULong,
+    lock_node_addr: CULong,
+    lock_fn: Option<PageAllocMcsLockFn>,
+    unlock_fn: Option<PageAllocMcsUnlockFn>,
+) -> CInt {
+    __ihk_pagealloc_query_free_locked_result(
+        desc.cast::<IhkPageAllocatorDesc>(),
+        lock_offset,
+        lock_node_addr,
+        lock_fn,
+        unlock_fn,
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn pagealloc_public_zero_free_pages_result(
+    desc: *mut c_void,
+    lock_offset: CULong,
+    lock_node_addr: CULong,
+    lock_fn: Option<PageAllocMcsLockFn>,
+    unlock_fn: Option<PageAllocMcsUnlockFn>,
+    log_fn: Option<PageAllocZeroLogFn>,
+) -> CInt {
+    if let Some(log) = log_fn {
+        log(PAGEALLOC_ZERO_LOG_BEGIN);
+    }
+
+    let rc = __ihk_pagealloc_zero_free_pages_locked_result(
+        desc.cast::<IhkPageAllocatorDesc>(),
+        lock_offset,
+        lock_node_addr,
+        lock_fn,
+        unlock_fn,
+    );
+
+    if let Some(log) = log_fn {
+        log(PAGEALLOC_ZERO_LOG_DONE);
+    }
+
+    rc
+}
+
+unsafe extern "C" fn page_alloc_alloc_pages_bridge(npages: CInt, flag: CInt) -> *mut c_void {
+    unsafe {
+        _ihk_mc_alloc_aligned_pages_node(
+            npages,
+            PAGE_P2ALIGN,
+            flag as CULong,
+            -1,
+            IHK_MC_PG_KERNEL,
+            CULong::MAX,
+            file_ptr(),
+            line!() as CInt,
+        )
+    }
+}
+
+unsafe extern "C" fn page_alloc_free_pages_bridge(ptr: *mut c_void, npages: CInt) {
+    unsafe {
+        _ihk_mc_free_pages(ptr, npages, IHK_MC_PG_KERNEL, file_ptr(), line!() as CInt);
+    }
+}
+
+unsafe extern "C" fn page_alloc_mcs_lock_init_bridge(lock_addr: CULong) {
+    unsafe {
+        mcs_lock_init(lock_addr as *mut McsLockNode);
+    }
+}
+
+unsafe extern "C" fn page_alloc_mcs_lock_bridge(lock_addr: CULong, lock_node_addr: CULong) {
+    unsafe {
+        mcs_lock_lock(
+            lock_addr as *mut McsLockNode,
+            lock_node_addr as *mut McsLockNode,
+        );
+    }
+}
+
+unsafe extern "C" fn page_alloc_mcs_unlock_bridge(lock_addr: CULong, lock_node_addr: CULong) {
+    unsafe {
+        mcs_lock_unlock(
+            lock_addr as *mut McsLockNode,
+            lock_node_addr as *mut McsLockNode,
+        );
+    }
+}
+
+unsafe extern "C" fn pagealloc_init_fail_log_bridge(start: CULong, size: CULong, unit: CULong) {
+    unsafe {
+        kprintf(PAGEALLOC_INIT_FAIL_FMT.as_ptr().cast(), start, size, unit);
+    }
+}
+
+unsafe extern "C" fn pagealloc_free_error_bridge(bad_address: CULong) {
+    unsafe {
+        kprintf(
+            PAGEALLOC_FREE_ERR_FMT.as_ptr().cast(),
+            PAGEALLOC_FREE_NAME.as_ptr(),
+            bad_address,
+        );
+        kernel_panic(PANIC_MSG.as_ptr().cast());
+    }
+}
+
+unsafe extern "C" fn pagealloc_zero_log_bridge(event: CInt) {
+    unsafe {
+        match event {
+            PAGEALLOC_ZERO_LOG_BEGIN => {
+                kprintf(ZERO_BEGIN_FMT.as_ptr().cast());
+            }
+            PAGEALLOC_ZERO_LOG_DONE => {
+                kprintf(ZERO_DONE_FMT.as_ptr().cast());
+            }
+            _ => {}
+        }
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn __ihk_pagealloc_init(
+    start: CULong,
+    size: CULong,
+    unit: CULong,
+    initial: *mut c_void,
+    pdescsize: *mut CULong,
+) -> *mut c_void {
+    unsafe {
+        pagealloc_public_init_result(
+            start,
+            size,
+            unit,
+            initial,
+            pdescsize,
+            size_of::<IhkPageAllocatorDesc>() as CULong,
+            IHK_MC_AP_CRITICAL,
+            PAGE_SIZE,
+            offset_of!(IhkPageAllocatorDesc, lock) as CULong,
+            Some(page_alloc_alloc_pages_bridge),
+            Some(page_alloc_mcs_lock_init_bridge),
+            Some(pagealloc_init_fail_log_bridge),
+        )
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_pagealloc_init(
+    start: CULong,
+    size: CULong,
+    unit: CULong,
+) -> *mut c_void {
+    unsafe { __ihk_pagealloc_init(start, size, unit, null_mut(), null_mut()) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_pagealloc_destroy(desc: *mut c_void) {
+    unsafe {
+        pagealloc_destroy_result(
+            desc.cast::<IhkPageAllocatorDesc>(),
+            Some(page_alloc_free_pages_bridge),
+        );
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_pagealloc_alloc(
+    desc: *mut c_void,
+    npages: CInt,
+    p2align: CInt,
+) -> CULong {
+    let mut node = MaybeUninit::<McsLockNode>::uninit();
+    unsafe {
+        pagealloc_public_alloc_result(
+            desc,
+            npages,
+            p2align,
+            offset_of!(IhkPageAllocatorDesc, lock) as CULong,
+            node.as_mut_ptr() as CULong,
+            Some(page_alloc_mcs_lock_bridge),
+            Some(page_alloc_mcs_unlock_bridge),
+        )
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_pagealloc_reserve(desc: *mut c_void, start: CULong, end: CULong) {
+    let mut node = MaybeUninit::<McsLockNode>::uninit();
+    unsafe {
+        pagealloc_public_reserve_result(
+            desc,
+            start,
+            end,
+            offset_of!(IhkPageAllocatorDesc, lock) as CULong,
+            node.as_mut_ptr() as CULong,
+            Some(page_alloc_mcs_lock_bridge),
+            Some(page_alloc_mcs_unlock_bridge),
+        );
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_pagealloc_free(desc: *mut c_void, address: CULong, npages: CInt) {
+    let mut node = MaybeUninit::<McsLockNode>::uninit();
+    unsafe {
+        pagealloc_public_free_result(
+            desc,
+            address,
+            npages,
+            offset_of!(IhkPageAllocatorDesc, lock) as CULong,
+            node.as_mut_ptr() as CULong,
+            Some(page_alloc_mcs_lock_bridge),
+            Some(page_alloc_mcs_unlock_bridge),
+            Some(pagealloc_free_error_bridge),
+        );
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_pagealloc_count(desc: *mut c_void) -> CULong {
+    let mut node = MaybeUninit::<McsLockNode>::uninit();
+    unsafe {
+        pagealloc_public_count_result(
+            desc,
+            offset_of!(IhkPageAllocatorDesc, lock) as CULong,
+            node.as_mut_ptr() as CULong,
+            Some(page_alloc_mcs_lock_bridge),
+            Some(page_alloc_mcs_unlock_bridge),
+        )
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_pagealloc_query_free(desc: *mut c_void) -> CInt {
+    let mut node = MaybeUninit::<McsLockNode>::uninit();
+    unsafe {
+        pagealloc_public_query_free_result(
+            desc,
+            offset_of!(IhkPageAllocatorDesc, lock) as CULong,
+            node.as_mut_ptr() as CULong,
+            Some(page_alloc_mcs_lock_bridge),
+            Some(page_alloc_mcs_unlock_bridge),
+        )
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn __ihk_pagealloc_zero_free_pages(desc: *mut c_void) {
+    let mut node = MaybeUninit::<McsLockNode>::uninit();
+    unsafe {
+        pagealloc_public_zero_free_pages_result(
+            desc,
+            offset_of!(IhkPageAllocatorDesc, lock) as CULong,
+            node.as_mut_ptr() as CULong,
+            Some(page_alloc_mcs_lock_bridge),
+            Some(page_alloc_mcs_unlock_bridge),
+            Some(pagealloc_zero_log_bridge),
+        );
+    }
+}
+
+unsafe extern "C" fn page_alloc_add_free_log_bridge(
+    event: CInt,
+    _node_addr: CULong,
+    addr: CULong,
+    size: CULong,
+    _rc: CInt,
+) {
+    if event == IHK_NUMA_ADD_FREE_LOG_ERROR {
+        unsafe {
+            kprintf(
+                NUMA_ADD_ERR_FMT.as_ptr().cast(),
+                NUMA_ADD_NAME.as_ptr(),
+                addr,
+                size,
+            );
+        }
+    }
+}
+
+unsafe extern "C" fn page_alloc_alloc_log_bridge(
+    _event: CInt,
+    _node_addr: CULong,
+    _addr: CULong,
+    _npages: CInt,
+    _source: CInt,
+) {
+}
+
+unsafe extern "C" fn page_alloc_zero_send_bridge(packet_addr: CULong) -> CInt {
+    unsafe {
+        let local = get_cpu_local_var(ihk_mc_get_processor_id());
+        if local.is_null() {
+            return -EINVAL;
+        }
+        ihk_ikc_send((*local).ikc2linux, packet_addr as *mut IkcScdPacket, 0)
+    }
+}
+
+unsafe extern "C" fn page_alloc_free_log_bridge(
+    event: CInt,
+    _node_addr: CULong,
+    addr: CULong,
+    npages: CInt,
+    _zero_at_free_value: CInt,
+    detail: CInt,
+) {
+    unsafe {
+        match event {
+            IHK_NUMA_FREE_LOG_DIRECT_ERROR => {
+                kprintf(
+                    NUMA_FREE_DIRECT_ERR_FMT.as_ptr().cast(),
+                    NUMA_FREE_NAME.as_ptr(),
+                    addr,
+                    (npages as CULong) << PAGE_SHIFT,
+                );
+            }
+            IHK_NUMA_FREE_LOG_DEFER_ERROR => {
+                kprintf(
+                    NUMA_FREE_DEFER_ERR_FMT.as_ptr().cast(),
+                    NUMA_FREE_NAME.as_ptr(),
+                    addr,
+                    (npages as CULong) << PAGE_SHIFT,
+                );
+            }
+            IHK_NUMA_FREE_LOG_SEND_FAIL => {
+                kprintf(
+                    NUMA_FREE_SEND_WARN_FMT.as_ptr().cast(),
+                    NUMA_FREE_NAME.as_ptr(),
+                );
+            }
+            IHK_NUMA_FREE_LOG_UNEXPECTED => {
+                kprintf(
+                    NUMA_FREE_UNEXPECTED_FMT.as_ptr().cast(),
+                    NUMA_FREE_NAME.as_ptr(),
+                    detail,
+                    addr,
+                    (npages as CULong) << PAGE_SHIFT,
+                );
+            }
+            IHK_NUMA_FREE_LOG_CPU_CACHE_FAILED => {
+                kprintf(
+                    NUMA_FREE_CACHE_ERR_FMT.as_ptr().cast(),
+                    NUMA_FREE_NAME.as_ptr(),
+                    addr,
+                    (npages as CULong) << PAGE_SHIFT,
+                );
+            }
+            _ => {}
+        }
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_numa_add_free_pages(
+    node: *mut IhkMcNumaNode,
+    addr: CULong,
+    size: CULong,
+) -> CInt {
+    unsafe {
+        ihk_numa_add_free_pages_result(node, addr, size, Some(page_alloc_add_free_log_bridge))
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn __ihk_numa_zero_free_pages(
+    node: *mut IhkMcNumaNode,
+    nr_pages: CInt,
+) -> CInt {
+    unsafe { __ihk_numa_zero_free_pages_dispatch(node, nr_pages) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_numa_zero_free_pages(node: *mut IhkMcNumaNode) {
+    unsafe {
+        ihk_numa_zero_free_pages_result(node);
+    }
+}
+
+#[inline(always)]
+unsafe fn allocator_cache_root(cpu_initialized: CInt) -> *mut RbRoot {
+    if cpu_initialized == 0 {
+        return null_mut();
+    }
+
+    #[cfg(enable_per_cpu_alloc_cache)]
+    {
+        let local = get_cpu_local_var(ihk_mc_get_processor_id());
+        if local.is_null() {
+            return null_mut();
+        }
+        return (&raw mut (*local).free_chunks).cast::<RbRoot>();
+    }
+
+    #[cfg(not(enable_per_cpu_alloc_cache))]
+    {
+        null_mut()
+    }
+}
+
+#[inline(always)]
+fn allocator_irq_save_fn() -> Option<PageAllocIrqSaveFn> {
+    #[cfg(enable_per_cpu_alloc_cache)]
+    {
+        Some(cpu_disable_interrupt_save)
+    }
+
+    #[cfg(not(enable_per_cpu_alloc_cache))]
+    {
+        None
+    }
+}
+
+#[inline(always)]
+fn allocator_irq_restore_fn() -> Option<PageAllocIrqRestoreFn> {
+    #[cfg(enable_per_cpu_alloc_cache)]
+    {
+        Some(cpu_restore_interrupt)
+    }
+
+    #[cfg(not(enable_per_cpu_alloc_cache))]
+    {
+        None
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_numa_alloc_pages(
+    node: *mut IhkMcNumaNode,
+    npages: CInt,
+    p2align: CInt,
+) -> CULong {
+    let mut mcs_node = MaybeUninit::<McsLockNode>::uninit();
+    let cpu_initialized = unsafe { cpu_local_var_initialized };
+    let cache_root = unsafe { allocator_cache_root(cpu_initialized) };
+
+    unsafe {
+        ihk_numa_alloc_pages_result(
+            node,
+            cpu_initialized,
+            cache_root,
+            npages,
+            p2align,
+            offset_of!(IhkMcNumaNode, lock) as CULong,
+            mcs_node.as_mut_ptr() as CULong,
+            allocator_irq_save_fn(),
+            allocator_irq_restore_fn(),
+            Some(page_alloc_mcs_lock_bridge),
+            Some(page_alloc_mcs_unlock_bridge),
+            Some(page_alloc_alloc_log_bridge),
+        )
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_numa_free_pages(node: *mut IhkMcNumaNode, addr: CULong, npages: CInt) {
+    let mut mcs_node = MaybeUninit::<McsLockNode>::uninit();
+    let mut packet = MaybeUninit::<IkcScdPacket>::uninit();
+    let cpu_initialized = unsafe { cpu_local_var_initialized };
+    let cache_root = unsafe { allocator_cache_root(cpu_initialized) };
+    let mut current_thread = null_mut::<Thread>();
+    let mut idle_thread = null_mut::<Thread>();
+
+    if cpu_initialized != 0 {
+        unsafe {
+            let local = get_cpu_local_var(ihk_mc_get_processor_id());
+            if !local.is_null() {
+                current_thread = (*local).current;
+                idle_thread = &raw mut (*local).idle;
+            }
+        }
+    }
+
+    unsafe {
+        ihk_numa_free_pages_result(
+            node,
+            addr,
+            npages,
+            deferred_zero_at_free,
+            zero_at_free,
+            packet.as_mut_ptr(),
+            cpu_initialized,
+            cache_root,
+            current_thread as CULong,
+            idle_thread as CULong,
+            offset_of!(Thread, proc) as CULong,
+            offset_of!(Process, nohost) as CULong,
+            offset_of!(Process, pid) as CULong,
+            ihk_mc_get_processor_id(),
+            NR_MOVE_PAGES,
+            offset_of!(IhkMcNumaNode, lock) as CULong,
+            mcs_node.as_mut_ptr() as CULong,
+            allocator_irq_save_fn(),
+            allocator_irq_restore_fn(),
+            Some(page_alloc_mcs_lock_bridge),
+            Some(page_alloc_mcs_unlock_bridge),
+            Some(page_alloc_zero_send_bridge),
+            Some(page_alloc_free_log_bridge),
+        );
+    }
 }

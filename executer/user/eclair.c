@@ -25,7 +25,17 @@
 #include <signal.h>
 #include <errno.h>
 
+#if !defined(ECLAIR_RUST_HELPERS) && !defined(DEBUG)
+int eclair_dprintf(const char *fmt, ...)
+{
+	(void)fmt;
+
+	return 0;
+}
+#endif
+
 #ifdef ECLAIR_RUST_HELPERS
+struct thread_info;
 extern int eclair_parse_i32_result(const char *arg);
 extern int eclair_physmem_name_result(char *path, int index);
 extern int eclair_mcos_path_result(char *path, int index);
@@ -63,11 +73,38 @@ extern unsigned char eclair_response_checksum_result(const char *payload);
 extern int eclair_parse_packet_checksum_result(const char *hex,
 		uint8_t *out);
 extern ssize_t eclair_interrupt_command_result(char *buf, size_t buf_size);
+extern int eclair_packet_step_result(int input, int interactive,
+		int *mode, uint8_t *sum, uint8_t *check,
+		char *lbuf, size_t lbuf_size, size_t *lpos,
+		char *cbuf, size_t cbuf_size);
+extern int eclair_remote_command_plan_result(int cmd_kind, int interactive,
+		int remote_running, int *action, int *next_remote_running,
+		int *set_done);
+extern int apply_remote_action(int action, const char *continue_error);
+long eclair_bfd_get_symtab_upper_bound_bridge(bfd *abfd);
+long eclair_bfd_canonicalize_symtab_bridge(bfd *abfd, asymbol **location);
 extern ssize_t eclair_static_response_result(char *buf, size_t buf_size,
 		int cmd_kind, int current_tid, uintptr_t map_kernel_start,
 		const char *arch);
 extern ssize_t eclair_thread_list_entry_result(char *buf, size_t buf_size,
 		int first, int tid);
+extern struct thread_info *eclair_thread_lookup_result(
+		struct thread_info *head, int tid);
+extern ssize_t eclair_thread_list_result(char *buf, size_t buf_size,
+		struct thread_info *head);
+extern ssize_t eclair_thread_extra_info_hex_result(char *buf,
+		size_t buf_size, struct thread_info *head, int tid);
+extern ssize_t eclair_pure_command_response_result(const char *cmd,
+		int cmd_kind, char *buf, size_t buf_size,
+		struct thread_info *head, struct thread_info **current_thread,
+		int interactive, int remote_running,
+		uintptr_t map_kernel_start, const char *arch,
+		int *error_tid, int *error_kind);
+int read_64(uintptr_t va, void *buf);
+int read_32(uintptr_t va, void *buf);
+int setup_symbols(char *fname);
+void intr_handler(int dummy);
+void print_usage(void);
 enum {
 	ECLAIR_CMD_QSUPPORTED = 1,
 	ECLAIR_CMD_HG = 2,
@@ -89,6 +126,24 @@ enum {
 	ECLAIR_CMD_QFTHREADINFO = 18,
 	ECLAIR_CMD_QSTHREADINFO = 19,
 	ECLAIR_CMD_QTHREAD_EXTRA_INFO = 20,
+};
+enum {
+	ECLAIR_PURE_COMMAND_NOT_HANDLED = -1,
+	ECLAIR_PURE_COMMAND_PARSE_ERROR = -2,
+	ECLAIR_PURE_COMMAND_INVALID_TID = -3,
+	ECLAIR_PURE_COMMAND_BUFFER_ERROR = -4,
+};
+enum {
+	ECLAIR_PACKET_STEP_NONE = 0,
+	ECLAIR_PACKET_STEP_INTERRUPT = 1,
+	ECLAIR_PACKET_STEP_READY = 2,
+	ECLAIR_PACKET_STEP_BAD = 3,
+	ECLAIR_PACKET_STEP_ERROR = 4,
+};
+enum {
+	ECLAIR_REMOTE_ACTION_NONE = 0,
+	ECLAIR_REMOTE_ACTION_NMI = 1,
+	ECLAIR_REMOTE_ACTION_CONTINUE = 2,
 };
 #define ECLAIR_COMMAND_KIND(kind, fallback) (cmd_kind == (kind))
 #define ECLAIR_RESPONSE_LEFT(res, rbp, res_size) \
@@ -139,21 +194,42 @@ unsigned long PHYS_OFFSET;
 /* Virtual address where McKernel is mapped to */
 unsigned long MAP_KERNEL_START;
 
-static struct options opt;
+#ifdef ECLAIR_RUST_HELPERS
+#define ECLAIR_RUST_VISIBLE
+#else
+#define ECLAIR_RUST_VISIBLE static
+#endif
+
+ECLAIR_RUST_VISIBLE struct options opt;
 static volatile int f_done = 0;
-static bfd *symbfd = NULL;
-static bfd *dumpbfd = NULL;
+ECLAIR_RUST_VISIBLE bfd *symbfd = NULL;
+ECLAIR_RUST_VISIBLE bfd *dumpbfd = NULL;
 static asection *dumpscn = NULL;
-static dump_mem_chunks_t *mem_chunks;
+ECLAIR_RUST_VISIBLE dump_mem_chunks_t *mem_chunks;
 static int num_processors = -1;
-static asymbol **symtab = NULL;
-static ssize_t nsyms;
+asymbol **symtab = NULL;
+ssize_t nsyms;
 uintptr_t kernel_base;
 static struct thread_info *tihead = NULL;
 static struct thread_info **titailp = &tihead;
 static struct thread_info *curr_thread = NULL;
 static int remote_running;
 
+#undef ECLAIR_RUST_VISIBLE
+
+#ifdef ECLAIR_RUST_HELPERS
+long eclair_bfd_get_symtab_upper_bound_bridge(bfd *abfd)
+{
+	return bfd_get_symtab_upper_bound(abfd);
+}
+
+long eclair_bfd_canonicalize_symtab_bridge(bfd *abfd, asymbol **location)
+{
+	return bfd_canonicalize_symtab(abfd, location);
+}
+#endif
+
+#ifndef ECLAIR_RUST_HELPERS
 uintptr_t lookup_symbol(char *name)
 {
 	int i;
@@ -165,7 +241,9 @@ uintptr_t lookup_symbol(char *name)
 	}
 	return NOSYMBOL;
 } /* lookup_symbol() */
+#endif
 
+#ifndef ECLAIR_RUST_HELPERS
 static int read_physmem(uintptr_t pa, void *buf, size_t size)
 {
 	off_t off;
@@ -257,7 +335,9 @@ int read_mem(uintptr_t va, void *buf, size_t size)
 
 	return 0;
 } /* read_mem() */
+#endif
 
+#ifndef ECLAIR_RUST_HELPERS
 int read_64(uintptr_t va, void *buf)
 {
 	return read_mem(va, buf, sizeof(uint64_t));
@@ -295,6 +375,7 @@ int read_symbol_64(char *name, void *buf)
 
 	return 0;
 } /* read_symbol_64() */
+#endif
 
 enum {
 	/* cpu_local_var */
@@ -620,6 +701,7 @@ static int setup_threads(void) {
 	return 0;
 } /* setup_threads() */
 
+#ifndef ECLAIR_RUST_HELPERS
 static int setup_symbols(char *fname) {
 	ssize_t needs;
 	bfd_boolean ok;
@@ -662,6 +744,7 @@ static int setup_symbols(char *fname) {
 
 	return 0;
 } /* setup_symbols() */
+#endif
 
 static int setup_dump_interactive(void)
 {
@@ -788,10 +871,8 @@ static int setup_dump(char *fname) {
 	return 0;
 } /* setup_dump() */
 
+#ifndef ECLAIR_RUST_HELPERS
 static ssize_t print_hex(char *buf, size_t buf_size, char *str) {
-#ifdef ECLAIR_RUST_HELPERS
-	return eclair_print_hex_result(buf, buf_size, str);
-#else
 
 	char *p;
 	char *q;
@@ -810,13 +891,11 @@ static ssize_t print_hex(char *buf, size_t buf_size, char *str) {
 	*q = '\0';
 
 	return (q - buf);
-#endif
 } /* print_hex() */
+#endif
 
+#ifndef ECLAIR_RUST_HELPERS
 ssize_t print_bin(char *buf, size_t buf_size, void *data, size_t size) {
-#ifdef ECLAIR_RUST_HELPERS
-	return eclair_print_bin_result(buf, buf_size, data, size);
-#else
 	uint8_t *p;
 	char *q;
 	int i;
@@ -837,8 +916,8 @@ ssize_t print_bin(char *buf, size_t buf_size, void *data, size_t size) {
 	*q = '\0';
 
 	return (q - buf);
-#endif
 } /* print_bin() */
+#endif
 
 static void command(const char *cmd, char *res, size_t res_size) {
 	const char *p;
@@ -855,6 +934,44 @@ static void command(const char *cmd, char *res, size_t res_size) {
 		dprintf("query: %s\n", p);
 #ifdef ECLAIR_RUST_HELPERS
 		cmd_kind = eclair_gdb_command_kind_result(p, opt.interactive);
+		{
+			ssize_t n;
+			int error_tid = 0;
+			int error_kind = cmd_kind;
+
+			n = eclair_pure_command_response_result(p, cmd_kind,
+					rbp, ECLAIR_RESPONSE_LEFT(res, rbp,
+						res_size),
+					tihead, &curr_thread, opt.interactive,
+					remote_running, MAP_KERNEL_START, ARCH,
+					&error_tid, &error_kind);
+			if (n >= 0) {
+				rbp += n;
+				break;
+			}
+			if (n == ECLAIR_PURE_COMMAND_PARSE_ERROR) {
+				if (error_kind == ECLAIR_CMD_HG) {
+					printf("cannot parse 'Hg' cmd: \"%s\"\n",
+							p + 2);
+				}
+				else if (error_kind == ECLAIR_CMD_THREAD_ALIVE) {
+					printf("cannot parse 'T' cmd: \"%s\"\n",
+							p + 1);
+				}
+				else if (error_kind == ECLAIR_CMD_QTHREAD_EXTRA_INFO) {
+					printf("cannot parse 'qThreadExtraInfo' cmd: \"%s\"\n",
+							p + 17);
+				}
+				break;
+			}
+			if (n == ECLAIR_PURE_COMMAND_INVALID_TID) {
+				printf("invalid tid %#x\n", error_tid);
+				break;
+			}
+			if (n == ECLAIR_PURE_COMMAND_BUFFER_ERROR) {
+				break;
+			}
+		}
 #endif
 		if (ECLAIR_COMMAND_KIND(ECLAIR_CMD_QSUPPORTED,
 					!strncmp(p, "qSupported", 10))) {
@@ -892,11 +1009,15 @@ static void command(const char *cmd, char *res, size_t res_size) {
 				break;
 			}
 			if (tid) {
+#ifdef ECLAIR_RUST_HELPERS
+				ti = eclair_thread_lookup_result(tihead, tid);
+#else
 				for (ti = tihead; ti; ti = ti->next) {
 					if (ti->tid == tid) {
 						break;
 					}
 				}
+#endif
 				if (!ti) {
 					printf("invalid tid %#x\n", tid);
 					break;
@@ -940,6 +1061,24 @@ static void command(const char *cmd, char *res, size_t res_size) {
 		}
 		else if (ECLAIR_COMMAND_KIND(ECLAIR_CMD_VCTRLC,
 					opt.interactive && !strcmp(p, "vCtrlC"))) {
+#ifdef ECLAIR_RUST_HELPERS
+			int remote_action;
+			int next_remote_running;
+			int set_done;
+
+			if (eclair_remote_command_plan_result(ECLAIR_CMD_VCTRLC,
+						opt.interactive, remote_running,
+						&remote_action,
+						&next_remote_running,
+						&set_done)) {
+				break;
+			}
+			if (apply_remote_action(remote_action,
+						"DUMP_NMI_CONT for continue")) {
+				break;
+			}
+			remote_running = next_remote_running;
+#else
 			if (remote_running) {
 				dumpargs_t args;
 				args.cmd = DUMP_NMI;
@@ -952,6 +1091,7 @@ static void command(const char *cmd, char *res, size_t res_size) {
 
 				remote_running = 0;
 			}
+#endif
 #ifdef ECLAIR_RUST_HELPERS
 			{
 				ssize_t n;
@@ -972,6 +1112,24 @@ static void command(const char *cmd, char *res, size_t res_size) {
 		}
 		else if (ECLAIR_COMMAND_KIND(ECLAIR_CMD_CTRLC,
 					opt.interactive && !strcmp(p, "Ctrl-C"))) {
+#ifdef ECLAIR_RUST_HELPERS
+			int remote_action;
+			int next_remote_running;
+			int set_done;
+
+			if (eclair_remote_command_plan_result(ECLAIR_CMD_CTRLC,
+						opt.interactive, remote_running,
+						&remote_action,
+						&next_remote_running,
+						&set_done)) {
+				break;
+			}
+			if (apply_remote_action(remote_action,
+						"DUMP_NMI_CONT for continue")) {
+				break;
+			}
+			remote_running = next_remote_running;
+#else
 			if (remote_running) {
 				dumpargs_t args;
 				args.cmd = DUMP_NMI;
@@ -984,6 +1142,7 @@ static void command(const char *cmd, char *res, size_t res_size) {
 
 				remote_running = 0;
 			}
+#endif
 #ifdef ECLAIR_RUST_HELPERS
 			{
 				ssize_t n;
@@ -1023,6 +1182,33 @@ static void command(const char *cmd, char *res, size_t res_size) {
 		}
 		else if (ECLAIR_COMMAND_KIND(ECLAIR_CMD_CONTINUE,
 					!strcmp(p, "c"))) {
+#ifdef ECLAIR_RUST_HELPERS
+			int remote_action;
+			int next_remote_running;
+			int set_done;
+			ssize_t n;
+
+			if (eclair_remote_command_plan_result(ECLAIR_CMD_CONTINUE,
+						opt.interactive, remote_running,
+						&remote_action,
+						&next_remote_running,
+						&set_done)) {
+				break;
+			}
+			if (apply_remote_action(remote_action,
+						"DUMP_NMI_CONT for continue")) {
+				break;
+			}
+			remote_running = next_remote_running;
+			n = eclair_simple_response_result(rbp,
+					ECLAIR_RESPONSE_LEFT(res, rbp, res_size),
+					ECLAIR_CMD_CONTINUE,
+					opt.interactive, remote_running);
+			if (n < 0) {
+				break;
+			}
+			rbp += n;
+#else
 			if (opt.interactive) {
 				if (!remote_running) {
 					dumpargs_t args;
@@ -1056,22 +1242,9 @@ static void command(const char *cmd, char *res, size_t res_size) {
 #endif
 			}
 			else {
-#ifdef ECLAIR_RUST_HELPERS
-				ssize_t n;
-
-				n = eclair_simple_response_result(rbp,
-						ECLAIR_RESPONSE_LEFT(res, rbp,
-							res_size),
-						ECLAIR_CMD_CONTINUE,
-						opt.interactive, remote_running);
-				if (n < 0) {
-					break;
-				}
-				rbp += n;
-#else
 				rbp += sprintf(rbp, "S02");
-#endif
 			}
+#endif
 		}
 		else if (ECLAIR_COMMAND_KIND(ECLAIR_CMD_STOP_QUERY,
 					opt.interactive && !strcmp(p, "?"))) {
@@ -1174,6 +1347,24 @@ static void command(const char *cmd, char *res, size_t res_size) {
 		}
 		else if (ECLAIR_COMMAND_KIND(ECLAIR_CMD_DETACH,
 					!strcmp(p, "D"))) {
+#ifdef ECLAIR_RUST_HELPERS
+			int remote_action;
+			int next_remote_running;
+			int set_done;
+
+			if (eclair_remote_command_plan_result(ECLAIR_CMD_DETACH,
+						opt.interactive, remote_running,
+						&remote_action,
+						&next_remote_running,
+						&set_done)) {
+				break;
+			}
+			if (apply_remote_action(remote_action,
+						"DUMP_NMI_CONT for continue")) {
+				break;
+			}
+			remote_running = next_remote_running;
+#else
 			if (opt.interactive && !remote_running) {
 				dumpargs_t args;
 				args.cmd = DUMP_NMI_CONT;
@@ -1186,6 +1377,7 @@ static void command(const char *cmd, char *res, size_t res_size) {
 
 				remote_running = 1;
 			}
+#endif
 #ifdef ECLAIR_RUST_HELPERS
 			{
 				ssize_t n;
@@ -1203,7 +1395,11 @@ static void command(const char *cmd, char *res, size_t res_size) {
 #else
 			rbp += sprintf(rbp, "OK");
 #endif
+#ifdef ECLAIR_RUST_HELPERS
+			f_done = set_done;
+#else
 			f_done = 1;
+#endif
 		}
 		else if (ECLAIR_COMMAND_KIND(ECLAIR_CMD_REGS,
 					!strcmp(p, "g"))) {
@@ -1353,11 +1549,15 @@ static void command(const char *cmd, char *res, size_t res_size) {
 				printf("cannot parse 'T' cmd: \"%s\"\n", p);
 				break;
 			}
+#ifdef ECLAIR_RUST_HELPERS
+			ti = eclair_thread_lookup_result(tihead, tid);
+#else
 			for (ti = tihead; ti; ti = ti->next) {
 				if (ti->tid == tid) {
 					break;
 				}
 			}
+#endif
 			if (!ti) {
 				printf("invalid tid %#x\n", tid);
 				break;
@@ -1377,9 +1577,10 @@ static void command(const char *cmd, char *res, size_t res_size) {
 		}
 		else if (ECLAIR_COMMAND_KIND(ECLAIR_CMD_QFTHREADINFO,
 					!strcmp(p, "qfThreadInfo"))) {
-			struct thread_info *ti;
 #ifdef ECLAIR_RUST_HELPERS
-			int write_error = 0;
+			ssize_t n;
+#else
+			struct thread_info *ti;
 #endif
 
 			if (opt.interactive) {
@@ -1390,31 +1591,22 @@ static void command(const char *cmd, char *res, size_t res_size) {
 				}
 			}
 
-			for (ti = tihead; ti; ti = ti->next) {
 #ifdef ECLAIR_RUST_HELPERS
-				ssize_t n;
-
-				n = eclair_thread_list_entry_result(rbp,
-						ECLAIR_RESPONSE_LEFT(res, rbp,
-							res_size),
-						ti == tihead, ti->tid);
-				if (n < 0) {
-					write_error = 1;
-					break;
-				}
-				rbp += n;
+			n = eclair_thread_list_result(rbp,
+					ECLAIR_RESPONSE_LEFT(res, rbp, res_size),
+					tihead);
+			if (n < 0) {
+				break;
+			}
+			rbp += n;
 #else
+			for (ti = tihead; ti; ti = ti->next) {
 				if (ti == tihead) {
 					rbp += sprintf(rbp, "m%x", ti->tid);
 				}
 				else {
 					rbp += sprintf(rbp, ",%x", ti->tid);
 				}
-#endif
-			}
-#ifdef ECLAIR_RUST_HELPERS
-			if (write_error) {
-				break;
 			}
 #endif
 		}
@@ -1440,9 +1632,9 @@ static void command(const char *cmd, char *res, size_t res_size) {
 					!strncmp(p, "qThreadExtraInfo,", 17))) {
 			int n;
 			int tid;
+#ifndef ECLAIR_RUST_HELPERS
 			struct thread_info *ti;
 			char buf[64];
-#ifndef ECLAIR_RUST_HELPERS
 			char *q;
 #endif
 
@@ -1456,6 +1648,19 @@ static void command(const char *cmd, char *res, size_t res_size) {
 				printf("cannot parse 'qThreadExtraInfo' cmd: \"%s\"\n", p);
 				break;
 			}
+#ifdef ECLAIR_RUST_HELPERS
+			n = eclair_thread_extra_info_hex_result(rbp,
+					ECLAIR_RESPONSE_LEFT(res, rbp, res_size),
+					tihead, tid);
+			if (n == -2) {
+				printf("invalid tid %#x\n", tid);
+				break;
+			}
+			if (n < 0) {
+				break;
+			}
+			rbp += n;
+#else
 			for (ti = tihead; ti; ti = ti->next) {
 				if (ti->tid == tid) {
 					break;
@@ -1465,13 +1670,6 @@ static void command(const char *cmd, char *res, size_t res_size) {
 				printf("invalid tid %#x\n", tid);
 				break;
 			}
-#ifdef ECLAIR_RUST_HELPERS
-			if (eclair_thread_extra_info_result(buf, sizeof(buf),
-						ti->pid, ti->status, ti->idle,
-						ti->lcpu, ti->cpu) < 0) {
-				break;
-			}
-#else
 			q = buf;
 			q += sprintf(q, "PID %d, ", ti->pid);
 			if (ti->status & PS_RUNNING) {
@@ -1502,8 +1700,8 @@ static void command(const char *cmd, char *res, size_t res_size) {
 			else {
 				q += sprintf(q, "status=%#x", ti->status);
 			}
-#endif
 			rbp += print_hex(rbp, res_size, buf);
+#endif
 		}
 	} while (0);
 
@@ -1592,10 +1790,12 @@ static FILE *ifp = NULL;
 static FILE *ofp = NULL;
 pid_t gdbpid;
 
+#ifndef ECLAIR_RUST_HELPERS
 void intr_handler(int dummy)
 {
 	kill(gdbpid, SIGINT);
 }
+#endif
 
 
 static int start_gdb(void) {
@@ -1668,17 +1868,12 @@ static int start_gdb(void) {
 	return 0;
 } /* start_gdb() */
 
+#ifndef ECLAIR_RUST_HELPERS
 static void print_usage(void) {
-#ifdef ECLAIR_RUST_HELPERS
-	char line[128];
-
-	if (eclair_usage_result(line, sizeof(line)) >= 0)
-		fprintf(stderr, "%s\n", line);
-	else
-#endif
 	fprintf(stderr, "usage: eclair [-ch] [-d <mcdump>] [-k <kernel.img>]\n");
 	return;
 } /* print_usage() */
+#endif
 
 int main(int argc, char *argv[]) {
 	int c;
@@ -1691,9 +1886,10 @@ int main(int argc, char *argv[]) {
 	static char cbuf[3];
 #ifdef ECLAIR_RUST_HELPERS
 	static char framebuf[9000];
+	size_t lpos = 0;
 #endif
-	char *lbp;
 #ifndef ECLAIR_RUST_HELPERS
+	char *lbp;
 	char *p;
 #endif
 
@@ -1752,13 +1948,41 @@ int main(int argc, char *argv[]) {
 
 	mode = 0;
 	sum = 0;
+#ifndef ECLAIR_RUST_HELPERS
 	lbp = NULL;
+#endif
 	while (!f_done) {
 		c = fgetc(ifp);
 		if (c < 0) {
 			break;
 		}
 
+#ifdef ECLAIR_RUST_HELPERS
+		switch (eclair_packet_step_result(c, opt.interactive,
+					&mode, &sum, &check, lbuf,
+					sizeof(lbuf), &lpos, cbuf,
+					sizeof(cbuf))) {
+		case ECLAIR_PACKET_STEP_INTERRUPT:
+		case ECLAIR_PACKET_STEP_READY:
+			fputc('+', ofp);
+			command(lbuf, rbuf, sizeof(rbuf));
+			sum = eclair_response_checksum_result(rbuf);
+			if (eclair_packet_frame_result(framebuf, sizeof(framebuf),
+						rbuf) < 0) {
+				goto main_loop_done;
+			}
+			fprintf(ofp, "%s", framebuf);
+			fflush(ofp);
+			continue;
+		case ECLAIR_PACKET_STEP_BAD:
+			fputc('-', ofp);
+			continue;
+		case ECLAIR_PACKET_STEP_ERROR:
+			goto main_loop_done;
+		default:
+			continue;
+		}
+#else
 		if (mode == 0) {
 			if (c == '$') {
 				mode = 1;
@@ -1854,7 +2078,11 @@ int main(int argc, char *argv[]) {
 			fflush(ofp);
 			continue;
 		}
+#endif
 	}
+#ifdef ECLAIR_RUST_HELPERS
+main_loop_done:
+#endif
 
 	return 0;
 } /* main() */

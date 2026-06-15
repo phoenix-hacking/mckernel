@@ -7,6 +7,7 @@
 #include <kmalloc.h>
 #include <memory.h>
 #include <uio.h>
+#include <bitops.h>
 #include <lwk/compiler.h>
 #include <hwcap.h>
 #include <string.h>
@@ -166,19 +167,19 @@ static inline long user_regset_copyout_zero(unsigned int *pos,
 			memset(*kbuf, 0, copy);
 			*kbuf += copy;
 		} else {
-			tmp = kmalloc(copy, IHK_MC_AP_NOWAIT);
+			tmp = kmalloc_tracked(copy, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 			if (tmp == NULL) {
 				return -ENOMEM;
 			}
 			memset(tmp, 0, copy);
 
 			if (copy_to_user(*ubuf, tmp, copy)) {
-				kfree(tmp);
+				kfree_tracked(tmp, __FILE__, __LINE__);
 				return -EFAULT;
 			} else {
 				*ubuf += copy;
 			}
-			kfree(tmp);
+			kfree_tracked(tmp, __FILE__, __LINE__);
 		}
 		*pos += copy;
 		*count -= copy;
@@ -630,7 +631,7 @@ static void sve_init_header_from_thread(struct user_sve_header *header,
 
 static unsigned int sve_size_from_header(struct user_sve_header const *header)
 {
-	return ALIGN(header->size, SVE_VQ_BYTES);
+	return ihk_align(header->size, SVE_VQ_BYTES);
 }
 
 static unsigned int sve_get_size(struct thread *target,
@@ -1027,4 +1028,3 @@ arch_ptrace(long request, int pid, long addr, long data)
 {
 	return -EIO;
 }
-

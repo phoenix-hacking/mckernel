@@ -20,7 +20,7 @@
 	(((read_cpuid(ID_AA64MMFR0_EL1) & 0xf0) >> 2) + 8)
 
 #define MAX_CTX_NR		(1UL << MAX_ASID_BITS)
-DECLARE_BITMAP(mmu_context_bmap, MAX_CTX_NR) = { 1 };	/* context number 0 reserved. */
+unsigned long mmu_context_bmap[(((MAX_CTX_NR) + BITS_PER_LONG - 1) / BITS_PER_LONG)] = { 1 };	/* context number 0 reserved. */
 
 /* cpu_asid lock */
 static ihk_spinlock_t cpu_asid_lock = SPIN_LOCK_UNLOCKED;

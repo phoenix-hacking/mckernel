@@ -40,6 +40,21 @@ extern unsigned long mcstat_memory_max_result(unsigned long kmem_max_usage,
 		unsigned long user_max_usage);
 extern const char *mcstat_monstatus_result(int status);
 extern const char *mcstat_os_status_result(int status);
+extern int mcstat_statistics_header_result(char *buf, size_t buf_size,
+		const char *unit);
+extern int mcstat_status_line_result(char *buf, size_t buf_size,
+		const char *status);
+extern int mcstat_osusage_header_result(char *buf, size_t buf_size);
+extern int mcstat_cpu_usage_line_result(char *buf, size_t buf_size, int cpu,
+		const char *status, long counter);
+extern int mcstat_cpuacct_line_result(char *buf, size_t buf_size, int cpu,
+		long usage);
+extern int mcstat_usage_line_result(char *buf, size_t buf_size);
+extern int mcstat_main_plan_result(int sflag, int cflag, int optind,
+		int argc, const char *delay_arg, const char *count_arg,
+		int *delay, int *count);
+extern int mcstat_loop_control_result(int once, int *count,
+		unsigned char *show);
 #else
 static unsigned long mcstat_memory_scale_result(unsigned long max_usage)
 {
@@ -60,6 +75,18 @@ static int mcstat_parse_i32_result(const char *arg)
 {
 	return atoi(arg);
 }
+#endif
+
+enum {
+	MCSTAT_MODE_STATS = 0,
+	MCSTAT_MODE_CPU = 1,
+	MCSTAT_MODE_STATUS = 2,
+};
+#ifdef MCSTAT_RUST_HELPERS
+enum {
+	MCSTAT_LOOP_DONE = 1,
+	MCSTAT_LOOP_REPRINT = 2,
+};
 #endif
 
 struct my_rusage {
@@ -86,6 +113,14 @@ static void	mcosusage(int idx, int once, int delay, int count);
 static void
 usage()
 {
+#ifdef MCSTAT_RUST_HELPERS
+	char line[64];
+
+	if (mcstat_usage_line_result(line, sizeof(line)) >= 0) {
+		fputs(line, stderr);
+		return;
+	}
+#endif
     fprintf(stderr, "Usage: mcstat [-h|-n|-s] [delay [count]]\n");
 }
 
@@ -100,6 +135,7 @@ main(int argc, char **argv)
     int		once = 0;	/* header is shown once */
     int		delay = 0;	/* delay in second */
     int		count = 1;	/* */
+    int		mode = MCSTAT_MODE_STATS;
 
     if (argc > 1) {
         while ((opt = getopt(argc, argv, "chns")) != -1) {
@@ -115,6 +151,7 @@ main(int argc, char **argv)
 	    }
 	}
     }
+#ifndef MCSTAT_RUST_HELPERS
 	if (optind < argc) { /* interval */
 	delay = mcstat_parse_i32_result(argv[optind]);
 	if (optind + 1 < argc) { /* count */
@@ -123,12 +160,26 @@ main(int argc, char **argv)
 	    count = -1; /* inifi */
 	}
     }
+#endif
 
+#ifdef MCSTAT_RUST_HELPERS
+	mode = mcstat_main_plan_result(sflag, cflag, optind, argc,
+			optind < argc ? argv[optind] : NULL,
+			optind + 1 < argc ? argv[optind + 1] : NULL,
+			&delay, &count);
+#else
 	if (sflag) {
+		mode = MCSTAT_MODE_STATUS;
+	} else if (cflag) {
+		mode = MCSTAT_MODE_CPU;
+	}
+#endif
+
+	if (mode == MCSTAT_MODE_STATUS) {
 		if ((rc = mcstatus(idx, delay, count)) < 0) {
 			goto out;
 		}
-	} else if (cflag) {
+	} else if (mode == MCSTAT_MODE_CPU) {
 		mcosusage(idx, once, delay, count);
 	} else {
 		mcstatistics(idx, once, delay, count);
@@ -157,6 +208,14 @@ devopen(int idx)
 static void
 statistics_header(const char *unit)
 {
+#ifdef MCSTAT_RUST_HELPERS
+	char line[160];
+
+	if (mcstat_statistics_header_result(line, sizeof(line), unit) >= 0) {
+		fputs(line, stdout);
+		return;
+	}
+#endif
     printf("------- memory (%s) ------- ------- tsc ------ --- thread ---\n",
 	   unit);
     printf("    total  current      max    system     user current max\n");
@@ -272,6 +331,23 @@ mcstatistics(int idx, int once, int delay, int count)
 	       CONV_UNIT(rbuf.memory_max_usage),
 	       rbuf.rusage.cpuacct_stat_system, rbuf.rusage.cpuacct_stat_user,
 	       rbuf.rusage.num_threads, rbuf.rusage.max_num_threads);
+#ifdef MCSTAT_RUST_HELPERS
+	{
+	int action = mcstat_loop_control_result(once, &count, &show);
+
+	if (action & MCSTAT_LOOP_DONE) {
+	    break;
+	}
+	sleep(delay);
+	if (mygetrusage(idx, &rbuf) < 0) {
+	    printf("Device is now invisible.\n");
+	    break;
+	}
+	if (action & MCSTAT_LOOP_REPRINT) {
+	    statistics_header(unit);
+	}
+	}
+#else
 	if (count > 0 && --count == 0) break;
 	sleep(delay);
 	if (mygetrusage(idx, &rbuf) < 0) {
@@ -284,6 +360,7 @@ mcstatistics(int idx, int once, int delay, int count)
 		statistics_header(unit);
 	    }
 	}
+#endif
     }
 /*
 	?? /1000000
@@ -293,6 +370,15 @@ mcstatistics(int idx, int once, int delay, int count)
 	printf("cpuacct_usage = %x\n", rbuf.rusage.cpuacct_usage);
 */
 	for (i = 0; i < rbuf.rusage.max_num_threads; i++) {
+#ifdef MCSTAT_RUST_HELPERS
+		char line[96];
+
+		if (mcstat_cpuacct_line_result(line, sizeof(line), i,
+				rbuf.rusage.cpuacct_usage_percpu[i]) >= 0) {
+			fputs(line, stdout);
+			continue;
+		}
+#endif
 		printf("cpuacct_usage_percpu[%d] = %ld\n",
 		       i, rbuf.rusage.cpuacct_usage_percpu[i]);
 	}
@@ -329,6 +415,9 @@ static int
 mcstatus(int idx, int delay, int count)
 {
 	int fd = -1, rc = 0;
+#ifdef MCSTAT_RUST_HELPERS
+	unsigned char show = 0;
+#endif
 
 	for (;;) {
 		if ((fd = devopen(idx)) == -1) {
@@ -355,13 +444,34 @@ mcstatus(int idx, int delay, int count)
 			break;
 		}
 
+#ifdef MCSTAT_RUST_HELPERS
+		{
+		char line[96];
+		const char *status = mcstat_os_status_result(rc) ? : "Unknown";
+
+		if (mcstat_status_line_result(line, sizeof(line),
+				status) >= 0) {
+			fputs(line, stdout);
+		} else {
+			printf("McKernel status: %s\n", status);
+		}
+		}
+#else
 		printf("McKernel status: %s\n",
 		       mcstat_os_status_result(rc) ? : "Unknown");
+#endif
 
 next:
+#ifdef MCSTAT_RUST_HELPERS
+		if (mcstat_loop_control_result(1, &count, &show) &
+				MCSTAT_LOOP_DONE) {
+			break;
+		}
+#else
 		if (count > 0 && --count == 0) {
 			break;
 		}
+#endif
 		sleep(delay);
 	}
 
@@ -397,6 +507,14 @@ monstatus(int status)
 static void
 osusage_header()
 {
+#ifdef MCSTAT_RUST_HELPERS
+	char line[64];
+
+	if (mcstat_osusage_header_result(line, sizeof(line)) >= 0) {
+		fputs(line, stdout);
+		return;
+	}
+#endif
     printf("--cpu-- --status-- --count--\n");
 }
 
@@ -424,10 +542,31 @@ mcosusage(int idx, int once, int delay, int count)
 		break;
 	    }
 	    for (i = 0; i < ncpus; i++) {
+#ifdef MCSTAT_RUST_HELPERS
+		char line[80];
+		const char *status = monstatus(mon[i].status);
+
+		if (mcstat_cpu_usage_line_result(line, sizeof(line), i,
+				status, mon[i].counter) >= 0) {
+			fputs(line, stdout);
+			continue;
+		}
+#endif
 		printf("%6d: %10s %9ld\n",
 		       i, monstatus(mon[i].status), mon[i].counter);
 	    }
 	}
+#ifdef MCSTAT_RUST_HELPERS
+	{
+	int action = mcstat_loop_control_result(once, &count, &show);
+
+	if (action & MCSTAT_LOOP_DONE) break;
+	sleep(delay);
+	if (action & MCSTAT_LOOP_REPRINT) {
+	    osusage_header();
+	}
+	}
+#else
 	if (count > 0 && --count == 0) break;
 	sleep(delay);
 	if (!once) {
@@ -436,5 +575,6 @@ mcosusage(int idx, int once, int delay, int count)
 		osusage_header();
 	    }
 	}
+#endif
     }
 }

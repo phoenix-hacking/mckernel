@@ -44,6 +44,48 @@ static void mc_plist_check_head(struct mc_plist_head *head)
 # define mc_plist_check_head(h)	do { } while (0)
 #endif
 
+void mc_plist_head_init(struct mc_plist_head *head, _ihk_spinlock_t *lock)
+{
+	INIT_LIST_HEAD(&head->prio_list);
+	INIT_LIST_HEAD(&head->node_list);
+#ifdef CONFIG_DEBUG_PI_LIST
+	head->spinlock = lock;
+	head->rawlock = NULL;
+#endif
+}
+
+void mc_plist_head_init_raw(struct mc_plist_head *head, _ihk_spinlock_t *lock)
+{
+	INIT_LIST_HEAD(&head->prio_list);
+	INIT_LIST_HEAD(&head->node_list);
+#ifdef CONFIG_DEBUG_PI_LIST
+	head->rawlock = lock;
+	head->spinlock = NULL;
+#endif
+}
+
+void mc_plist_node_init(struct mc_plist_node *node, int prio)
+{
+	node->prio = prio;
+	mc_plist_head_init(&node->plist, NULL);
+}
+
+int mc_plist_head_empty(const struct mc_plist_head *head)
+{
+	return list_empty(&head->node_list);
+}
+
+int mc_plist_node_empty(const struct mc_plist_node *node)
+{
+	return mc_plist_head_empty(&node->plist);
+}
+
+struct mc_plist_node *mc_plist_first(const struct mc_plist_head *head)
+{
+	return list_entry(head->node_list.next,
+			struct mc_plist_node, plist.node_list);
+}
+
 /**
  * plist_add - add @node to @head
  *

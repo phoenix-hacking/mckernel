@@ -154,6 +154,13 @@ void *memcpy(void *dest, const void *src, size_t n)
 	return dest;
 }
 
+#ifdef ARCH_FAST_MEMCPY
+void *__inline_memcpy(void *to, const void *from, size_t n)
+{
+	return memcpy(to, from, n);
+}
+#endif
+
 void *memcpy_long(void *dest, const void *src, size_t n)
 {
 	const unsigned long *p1 = src;
@@ -167,6 +174,33 @@ void *memcpy_long(void *dest, const void *src, size_t n)
 
 	return dest;
 }
+
+#ifdef ARCH_FAST_MEMSET
+void *__inline_memset(void *s, unsigned long c, size_t count)
+{
+	unsigned char *p = s;
+	unsigned int word = (unsigned int)c;
+
+	while (count >= 4) {
+		p[0] = word;
+		p[1] = word >> 8;
+		p[2] = word >> 16;
+		p[3] = word >> 24;
+		p += 4;
+		count -= 4;
+	}
+	if (count >= 2) {
+		p[0] = word;
+		p[1] = word >> 8;
+		p += 2;
+		count -= 2;
+	}
+	if (count)
+		p[0] = word;
+
+	return s;
+}
+#endif
 
 #ifndef ARCH_FAST_MEMSET
 void *memset(void *s, int c, size_t n)
@@ -234,6 +268,51 @@ int memcmp(const void *s1, const void *s2, size_t n)
  * returns the total length of the flat string and updates flat to
  * point to the beginning.
  */
+#ifdef MCKERNEL_RUST_STRING_CORE
+typedef long (*string_flatten_getlong_fn_t)(long *dest, const long *src);
+typedef int (*string_flatten_strlen_user_fn_t)(const char *src);
+typedef int (*string_flatten_strcpy_from_user_fn_t)(char *dst,
+						    const char *src);
+typedef void *(*string_flatten_alloc_fn_t)(size_t size,
+					   unsigned long flags);
+
+extern int flatten_strings_from_user_body_result(
+		char *pre_strings, char **strings, char **flat,
+		unsigned long alloc_flags,
+		string_flatten_getlong_fn_t getlong_fn,
+		string_flatten_strlen_user_fn_t strlen_user_fn,
+		string_flatten_strcpy_from_user_fn_t strcpy_from_user_fn,
+		string_flatten_alloc_fn_t alloc_fn);
+
+static long string_flatten_getlong_bridge(long *dest, const long *src)
+{
+	return getlong_user(dest, src);
+}
+
+static int string_flatten_strlen_user_bridge(const char *src)
+{
+	return strlen_user(src);
+}
+
+static int string_flatten_strcpy_from_user_bridge(char *dst, const char *src)
+{
+	return strcpy_from_user(dst, src);
+}
+
+static void *string_flatten_alloc_bridge(size_t size, unsigned long flags)
+{
+	return kmalloc_tracked(size, flags, __FILE__, __LINE__);
+}
+
+int flatten_strings_from_user(char *pre_strings, char **strings, char **flat)
+{
+	return flatten_strings_from_user_body_result(pre_strings, strings, flat,
+			IHK_MC_AP_NOWAIT, string_flatten_getlong_bridge,
+			string_flatten_strlen_user_bridge,
+			string_flatten_strcpy_from_user_bridge,
+			string_flatten_alloc_bridge);
+}
+#else
 int flatten_strings_from_user(char *pre_strings, char **strings, char **flat)
 {
 	int full_len, len, i;
@@ -249,7 +328,7 @@ int flatten_strings_from_user(char *pre_strings, char **strings, char **flat)
 	/* When strings is NULL, make array one NULL */
 	if (!strings) {
 		full_len = sizeof(long) + sizeof(char *);
-		_flat = kmalloc(full_len, IHK_MC_AP_NOWAIT);
+		_flat = kmalloc_tracked(full_len, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 		if (!_flat) {
 			return -ENOMEM;
 		}
@@ -300,7 +379,7 @@ int flatten_strings_from_user(char *pre_strings, char **strings, char **flat)
 
 	full_len = (full_len + sizeof(long) - 1) & ~(sizeof(long) - 1);
 
-	_flat = kmalloc(full_len, IHK_MC_AP_NOWAIT);
+	_flat = kmalloc_tracked(full_len, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 	if (!_flat) {
 		return -ENOMEM;
 	}
@@ -340,3 +419,4 @@ int flatten_strings_from_user(char *pre_strings, char **strings, char **flat)
 		memset(p, 0, full_len - len);
 	return len;
 }
+#endif /* MCKERNEL_RUST_STRING_CORE */

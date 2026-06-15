@@ -68,7 +68,7 @@ void *ihk_mc_allocate(int size, int flag)
 		kprintf("%s: error, kmalloc not yet initialized\n", __FUNCTION__);
 		return NULL;
 	}
-	return kmalloc(size, IHK_MC_AP_NOWAIT);
+	return kmalloc_tracked(size, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 }
 
 void ihk_mc_free(void *p)
@@ -77,7 +77,7 @@ void ihk_mc_free(void *p)
 		kprintf("%s: error, kmalloc not yet initialized\n", __FUNCTION__);
 		return;
 	}
-	kfree(p);
+	kfree_tracked(p, __FILE__, __LINE__);
 }
 
 void *get_last_early_heap(void)
@@ -921,7 +921,7 @@ static inline void setup_middle_level(translation_table_t *tt, unsigned long bas
 
 		// ページテーブルを確保して初期化
 		if (ptl_null(ptr, level))  {
-			next_tt = ihk_mc_alloc_pages(1, IHK_MC_AP_CRITICAL);
+			next_tt = _ihk_mc_alloc_aligned_pages_node(1, PAGE_P2ALIGN, IHK_MC_AP_CRITICAL, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);
 			next = virt_to_phys(next_tt);
 			memset(next_tt, 0, PAGE_SIZE);
 		} else {
@@ -1014,7 +1014,7 @@ static void init_normal_area(struct page_table *pt)
 
 static translation_table_t* __alloc_new_tt(ihk_mc_ap_flag ap_flag)
 {
-	translation_table_t* newtt = ihk_mc_alloc_pages(1, ap_flag);
+	translation_table_t* newtt = _ihk_mc_alloc_aligned_pages_node(1, PAGE_P2ALIGN, ap_flag, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);
 
 	if(newtt)
 		memset(newtt, 0, PAGE_SIZE);
@@ -1545,14 +1545,14 @@ struct page_table *ihk_mc_pt_create(ihk_mc_ap_flag ap_flag)
 	translation_table_t* tt;
 
 	// allocate page_table
-	pt = (struct page_table*)kmalloc(sizeof(*pt), ap_flag);
+	pt = (struct page_table*)kmalloc_tracked(sizeof(*pt), ap_flag, __FILE__, __LINE__);
 	if (pt == NULL) {
 		return NULL;
 	}
 	// allocate translation_table
-	tt = ihk_mc_alloc_pages(1, ap_flag);  //call __alloc_new_tt()?
+	tt = _ihk_mc_alloc_aligned_pages_node(1, PAGE_P2ALIGN, ap_flag, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);  //call __alloc_new_tt()?
 	if (tt == NULL) {
-		kfree(pt);
+		kfree_tracked(pt, __FILE__, __LINE__);
 		return NULL;
 	}
 	// initialize
@@ -1599,7 +1599,7 @@ static void destroy_page_table(int level, translation_table_t* tt)
 		}
 	}
 
-	ihk_mc_free_pages(tt, 1);
+	_ihk_mc_free_pages(tt, 1, IHK_MC_PG_KERNEL, __FILE__, __LINE__);
 	return;
 }
 
@@ -1611,7 +1611,7 @@ void ihk_mc_pt_destroy(struct page_table *pt)
 	tt = get_translation_table(pt);
 	destroy_page_table(level, tt);
 	free_mmu_context(pt);
-	kfree(pt);
+	kfree_tracked(pt, __FILE__, __LINE__);
 	return;
 }
 
@@ -2241,8 +2241,7 @@ static void unmap_free_stat(struct page *page, unsigned long phys,
 			    size_t free_size, const char *func)
 {
 	if (!page || page_unmap(page)) {
-		ihk_mc_free_pages_user(phys_to_virt(phys),
-				       free_size >> PAGE_SHIFT);
+		_ihk_mc_free_pages(phys_to_virt(phys), free_size >> PAGE_SHIFT, IHK_MC_PG_USER, __FILE__, __LINE__);
 		dkprintf("%lx-,%s: memory_stat_rss_sub(),phys=%lx,size=%ld,pgsize=%ld\n",
 			 phys, func, phys, free_size, free_size);
 		memory_stat_rss_sub(free_size, free_size);
@@ -2292,7 +2291,7 @@ static int clear_kernel_range_l1(void *args0, pte_t *ptep, uint64_t base,
 
 	if (args->free_physical) {
 		phys = ptl1_phys(&old);
-		ihk_mc_free_pages(phys_to_virt(phys), clear_size >> PAGE_SHIFT);
+		_ihk_mc_free_pages(phys_to_virt(phys), clear_size >> PAGE_SHIFT, IHK_MC_PG_KERNEL, __FILE__, __LINE__);
 	}
 
 	return 0;
@@ -2371,7 +2370,7 @@ static int clear_kernel_range_middle(void *args0, pte_t *ptep, uint64_t base,
 
 		if (args->free_physical) {
 			phys = ptl_phys(&old, level);
-			ihk_mc_free_pages(phys_to_virt(phys), clear_size >> PAGE_SHIFT);
+			_ihk_mc_free_pages(phys_to_virt(phys), clear_size >> PAGE_SHIFT, IHK_MC_PG_KERNEL, __FILE__, __LINE__);
 		}
 
 		return 0;
@@ -2387,7 +2386,7 @@ static int clear_kernel_range_middle(void *args0, pte_t *ptep, uint64_t base,
 		if ((start <= base) && ((base + tbl.pgsize) <= end)) {
 			ptl_clear(ptep, level);
 			arch_flush_tlb_single(0, base);
-			ihk_mc_free_pages(tt, 1);
+			_ihk_mc_free_pages(tt, 1, IHK_MC_PG_KERNEL, __FILE__, __LINE__);
 		}
 	}
 
@@ -2593,7 +2592,7 @@ static int clear_range_middle(void *args0, pte_t *ptep, uint64_t base,
 	if ((start <= base) && ((base + tbl.pgsize) <= end)) {
 		ptl_clear(ptep, level);
 		arch_flush_tlb_single(get_address_space_id(args->vm->address_space->page_table), base);
-		ihk_mc_free_pages(tt, 1);
+		_ihk_mc_free_pages(tt, 1, IHK_MC_PG_KERNEL, __FILE__, __LINE__);
 	}
 
 	return 0;
@@ -3180,7 +3179,7 @@ retry:
 	error = 0;
 out:
 	if (tt_pa) {
-		ihk_mc_free_pages(phys_to_virt((unsigned long)tt_pa), 1);
+		_ihk_mc_free_pages(phys_to_virt((unsigned long)tt_pa), 1, IHK_MC_PG_KERNEL, __FILE__, __LINE__);
 	}
 	dkprintf("set_range_middle(%lx,%lx,%lx,%d): %d %lx\n",
 		 base, start, end, level, error, *ptep);
