@@ -161,7 +161,11 @@ unsigned long timespec_to_jiffy(const struct timespec *ats)
 	return ats->tv_sec * 100 + ats->tv_nsec / 10000000;
 }
 #endif
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+unsigned long uti_desc; /* Address of struct uti_desc object in syscall_intercept.c */
+#else
 static unsigned long uti_desc; /* Address of struct uti_desc object in syscall_intercept.c */
+#endif
 
 #if defined(MCKERNEL_SYSCALL_POLICY_HELPERS_TEST_EXPORT)
 #define SYSCALL_POLICY_HELPER_PROTO
@@ -6573,6 +6577,7 @@ long sys_brk(int n, ihk_mc_user_context_t *ctx)
 			brk_log_bridge);
 }
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_getpid(int n, ihk_mc_user_context_t *ctx)
 {
 	return syscall_getpid_body_result(get_this_cpu_local_var()->current,
@@ -6587,6 +6592,7 @@ long sys_getppid(int n, ihk_mc_user_context_t *ctx)
 			__builtin_offsetof(struct process, ppid_parent),
 			__builtin_offsetof(struct process, pid));
 }
+#endif
 
 static int settid(struct thread *thread, int nr_tids, int *tids)
 {
@@ -6609,11 +6615,13 @@ static int settid(struct thread *thread, int nr_tids, int *tids)
 	return ret;
 }
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_gettid(int n, ihk_mc_user_context_t *ctx)
 {
 	return syscall_gettid_body_result(get_this_cpu_local_var()->current,
 			__builtin_offsetof(struct thread, tid));
 }
+#endif
 
 extern void ptrace_report_signal(struct thread *thread, int sig);
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
@@ -19364,6 +19372,14 @@ syscall_forward_context_bridge(int syscall_nr, void *ctx)
 			(ihk_mc_user_context_t *)ctx);
 }
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+long
+syscall_policy_forward_context_bridge(int syscall_nr, void *ctx)
+{
+	return syscall_forward_context_bridge(syscall_nr, ctx);
+}
+#endif
+
 static long
 syscall_mckfd_lock_bridge(void *lock)
 {
@@ -24551,10 +24567,12 @@ syscall_get_numa_id_bridge(void)
 	return ihk_mc_get_numa_id();
 }
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_get_cpu_id(int n, ihk_mc_user_context_t *ctx)
 {
 	return syscall_get_cpu_id_body_result(syscall_get_processor_id_bridge);
 }
+#endif
 
 static const struct syscall_itimer_offsets syscall_itimer_offsets = {
 	.thread_itimer_enabled_offset =
@@ -24611,6 +24629,15 @@ syscall_do_syscall2_bridge(int syscall_nr, unsigned long arg0,
 	request.args[1] = arg1;
 	return do_syscall(&request, ihk_mc_get_processor_id());
 }
+
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+long
+syscall_policy_do_syscall2_bridge(int syscall_nr, unsigned long arg0,
+		unsigned long arg1)
+{
+	return syscall_do_syscall2_bridge(syscall_nr, arg0, arg1);
+}
+#endif
 
 static long
 syscall_do_syscall3_bridge(int syscall_nr, unsigned long arg0,
@@ -26324,10 +26351,12 @@ long sys_util_indicate_clone(int n, ihk_mc_user_context_t *ctx)
 			syscall_mckfd_free_bridge);
 }
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_get_system(int n, ihk_mc_user_context_t *ctx)
 {
 	return get_system_body_result();
 }
+#endif
 
 /*
  * swapoout(const char *filename, void *workarea, size_t size)
@@ -26349,6 +26378,7 @@ long sys_swapout(int n, ihk_mc_user_context_t *ctx)
 			do_pageout, do_pagein, syscall_forward_context_bridge);
 }
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_linux_mlock(int n, ihk_mc_user_context_t *ctx)
 {
 	const uintptr_t addr = ihk_mc_syscall_arg0(ctx);
@@ -26358,12 +26388,23 @@ long sys_linux_mlock(int n, ihk_mc_user_context_t *ctx)
 	return linux_mlock_body_result(addr, len, 802,
 			syscall_do_syscall2_bridge);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+void
+syscall_linux_mlock_log_bridge(unsigned long addr, unsigned long len)
+{
+	kprintf("linux_mlock: %p %ld\n", (void *)addr, len);
+}
+#endif
+
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_linux_spawn(int n, ihk_mc_user_context_t *ctx)
 {
 	return linux_spawn_body_result(__NR_linux_spawn, ctx,
 			syscall_forward_context_bridge);
 }
+#endif
 
 long sys_suspend_threads(int n, ihk_mc_user_context_t *ctx)
 {
@@ -26395,6 +26436,7 @@ long sys_resume_threads(int n, ihk_mc_user_context_t *ctx)
 			syscall_cpu_pause_bridge);
 }
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 long sys_util_register_desc(int n, ihk_mc_user_context_t *ctx)
 {
 	struct thread *thread = get_this_cpu_local_var()->current;
@@ -26403,6 +26445,16 @@ long sys_util_register_desc(int n, ihk_mc_user_context_t *ctx)
 	dkprintf("%s: tid=%d,uti_desc=%lx\n", __FUNCTION__, thread->tid, desc);
 	return util_register_desc_body_result(desc, &uti_desc);
 }
+#endif
+
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+void
+syscall_util_register_desc_log_bridge(int tid, unsigned long desc)
+{
+	dkprintf("%s: tid=%d,uti_desc=%lx\n", "sys_util_register_desc",
+			tid, desc);
+}
+#endif
 
 void
 reset_cputime()

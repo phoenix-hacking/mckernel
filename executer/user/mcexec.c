@@ -567,6 +567,9 @@ void mcexec_join_all_threads_body(void);
 void mcexec_kill_thread_body(unsigned long tid, unsigned long sig,
 		struct thread_data_s *my_thread);
 long mcexec_do_generic_syscall_body(struct syscall_wait_desc *w);
+long mcexec_util_thread_body(struct thread_data_s *my_thread,
+		unsigned long rp_rctx, int remote_tid, unsigned long pattr,
+		unsigned long uti_info, unsigned long uti_desc_arg);
 int mcexec_get_thp_disable_body(void);
 void mcexec_numa_local_body(unsigned long *localset,
 		unsigned long *nodemask, int nonlocal);
@@ -4938,7 +4941,9 @@ do_generic_syscall(
 }
 #endif
 
+#ifndef MCEXEC_RUST_HELPERS
 static struct uti_desc *uti_desc;
+#endif
 
 #ifdef MCEXEC_RUST_HELPERS
 #define kill_thread(tid, sig, my_thread) \
@@ -5228,6 +5233,93 @@ void mcexec_clone_sem_destroy_bridge(void *fs)
 }
 #endif
 
+#ifdef MCEXEC_RUST_HELPERS
+static long util_thread(struct thread_data_s *my_thread,
+		unsigned long rp_rctx, int remote_tid, unsigned long pattr,
+		unsigned long uti_info, unsigned long _uti_desc)
+{
+	return mcexec_util_thread_body(my_thread, rp_rctx, remote_tid, pattr,
+			uti_info, _uti_desc);
+}
+
+void mcexec_util_thread_missing_desc_bridge(void)
+{
+	printf("%s: ERROR: uti_desc not found. Add --enable-uti option to mcexec.\n",
+	       "util_thread");
+}
+
+void mcexec_util_thread_desc_log_bridge(void *desc)
+{
+	__dprintf("%s: uti_desc=%p\n", "util_thread", desc);
+}
+
+void mcexec_util_thread_barrier_init_bridge(void)
+{
+	pthread_barrier_init(&uti_init_ready, NULL, 2);
+}
+
+int mcexec_util_thread_create_worker_bridge(struct thread_data_s **tp_out)
+{
+	return create_worker_thread(tp_out, &uti_init_ready);
+}
+
+void mcexec_util_thread_worker_error_bridge(int rc)
+{
+	printf("%s: Error: create_worker_thread failed (%d)\n",
+	       "util_thread", rc);
+}
+
+void mcexec_util_thread_barrier_wait_bridge(void)
+{
+	pthread_barrier_wait(&uti_init_ready);
+}
+
+void mcexec_util_thread_worker_tid_log_bridge(int tid)
+{
+	__dprintf("%s: worker tid: %d\n", "util_thread", tid);
+}
+
+void mcexec_util_thread_intercept_warning_bridge(int rc)
+{
+	fprintf(stderr, "%s: WARNING: syscall_intercept returned %x\n",
+		"util_thread", rc);
+}
+
+void mcexec_util_thread_get_ctx_error_bridge(int error)
+{
+	fprintf(stderr, "%s: Error: MCEXEC_UP_UTI_GET_CTX failed (%d)\n",
+		"util_thread", error);
+}
+
+void mcexec_util_thread_param_large_bridge(void)
+{
+	fprintf(stderr, "%s: ERROR: param is too large\n", "util_thread");
+}
+
+void mcexec_util_thread_attr_error_bridge(int error)
+{
+	fprintf(stderr, "%s: error: MCEXEC_UP_UTI_ATTR: %s\n",
+		"util_thread", strerror(error));
+}
+
+int mcexec_util_thread_switch_ctx_bridge(struct uti_switch_ctx_desc *desc,
+		void *lctx, void *rctx)
+{
+	return switch_ctx(fd, MCEXEC_UP_UTI_SWITCH_CTX, desc, lctx, rctx);
+}
+
+void mcexec_util_thread_switch_failed_bridge(int rc)
+{
+	fprintf(stderr, "%s: ERROR switch_ctx failed (%d)\n",
+		"util_thread", rc);
+}
+
+void mcexec_util_thread_switch_returned_bridge(int rc)
+{
+	fprintf(stderr, "%s: ERROR: Returned from switch_ctx (%d)\n",
+		"util_thread", rc);
+}
+#else
 static long util_thread(struct thread_data_s *my_thread,
 		unsigned long rp_rctx, int remote_tid, unsigned long pattr,
 		unsigned long uti_info, unsigned long _uti_desc)
@@ -5327,6 +5419,7 @@ static long util_thread(struct thread_data_s *my_thread,
 out:
 	return rc;
 }
+#endif
 
 #ifdef MCEXEC_RUST_HELPERS
 long mcexec_sched_setaffinity_util_bridge(struct thread_data_s *my_thread,

@@ -45,6 +45,24 @@ extern size_t mck_crash_kmsg_first_part_result(int head, int tail, int len);
 typedef int (*mck_crash_read_string_fn_t)(ulong addr, char *buf, int len);
 extern int mck_crash_kmsg_read_body_result(ulong kmsg_buf_str, int head,
 		int tail, int len, char *msg, mck_crash_read_string_fn_t read_fn);
+typedef int (*mck_crash_read_i32_fn_t)(ulong addr, int *out);
+typedef char *(*mck_crash_getbuf_fn_t)(int len);
+typedef void (*mck_crash_freebuf_fn_t)(char *buf);
+typedef void (*mck_crash_write_string_fn_t)(const char *msg);
+typedef void (*mck_crash_register_extension_fn_t)(void *command_table);
+extern int mck_crash_cmd_mckmsg_body_result(ulong kmsg_buf,
+		long kmsg_buf_str_offset, long kmsg_buf_head_offset,
+		long kmsg_buf_tail_offset, long kmsg_buf_len_offset,
+		mck_crash_read_i32_fn_t read_i32_fn,
+		mck_crash_getbuf_fn_t getbuf_fn,
+		mck_crash_freebuf_fn_t freebuf_fn,
+		mck_crash_read_string_fn_t read_string_fn,
+		mck_crash_write_string_fn_t write_string_fn);
+extern int mck_crash_cmd_mcinfo_body_result(ulong linux_page_offset,
+		mck_crash_write_string_fn_t write_string_fn);
+extern int mck_crash_extension_init_body_result(void *command_table,
+		mck_crash_register_extension_fn_t register_fn);
+extern int mck_crash_extension_fini_body_result(void);
 extern const char *mck_crash_thread_comm_result(const char *saved_cmdline,
 		int is_idle);
 extern int mck_crash_mcps_line_result(char *buf, size_t buf_size,
@@ -1968,20 +1986,68 @@ static char *help_mcvtop[] = {
 
 /* mckmsg */
 
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+static int
+mck_crash_read_i32_bridge(ulong addr, int *out)
+{
+	return mcreadmem(addr, KVADDR, out, sizeof(*out), "kmsg_buf field",
+			RETURN_ON_ERROR);
+}
+
+static char *
+mck_crash_getbuf_bridge(int len)
+{
+	return GETBUF(len);
+}
+
+static void
+mck_crash_freebuf_bridge(char *buf)
+{
+	FREEBUF(buf);
+}
+
+static void
+mck_crash_write_string_bridge(const char *msg)
+{
+	fprintf(fp, "%s", msg);
+}
+
+static void
+mck_crash_register_extension_bridge(void *table)
+{
+	register_extension((struct command_table_entry *)table);
+}
+#endif
+
 static void
 cmd_mckmsg(void)
 {
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	int rc;
+#else
 	int kmsg_buf_head, kmsg_buf_tail, kmsg_buf_len;
 	ulong kmsg_buf_str;
-#ifndef MCKERNEL_CRASH_RUST_HELPERS
 	size_t part;
-#endif
 	char *msg;
+#endif
 
 	if (!mck_loaded)
 		error(FATAL, "You must run mcsymbols first");
 	mckernel_refresh_symbols(1);
 
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	rc = mck_crash_cmd_mckmsg_body_result(MCK_SYMBOL(kmsg_buf),
+			MCK_MEMBER_OFFSET(kmsg_buf_str),
+			MCK_MEMBER_OFFSET(kmsg_buf_head),
+			MCK_MEMBER_OFFSET(kmsg_buf_tail),
+			MCK_MEMBER_OFFSET(kmsg_buf_len),
+			mck_crash_read_i32_bridge, mck_crash_getbuf_bridge,
+			mck_crash_freebuf_bridge, read_string,
+			mck_crash_write_string_bridge);
+	if (rc < 0)
+		error(FATAL, "could not read kmsg buf\n");
+	return;
+#else
 	kmsg_buf_str = MCK_SYMBOL(kmsg_buf) + MCK_MEMBER_OFFSET(kmsg_buf_str);
 	if (!mcreadmem(MCK_SYMBOL(kmsg_buf) + MCK_MEMBER_OFFSET(kmsg_buf_head),
 		     KVADDR, &kmsg_buf_head, sizeof(kmsg_buf_head),
@@ -2016,6 +2082,7 @@ cmd_mckmsg(void)
 
 	fprintf(fp, "%s", msg);
 	FREEBUF(msg);
+#endif
 }
 
 static char *help_mckmsg[] = {
@@ -2058,6 +2125,11 @@ static char *help_mcinfo[] = {
 static void
 cmd_mcinfo(void)
 {
+#if defined(MCKERNEL_CRASH_RUST_HELPERS) && defined(x86)
+	mck_crash_cmd_mcinfo_body_result(LINUX_PAGE_OFFSET,
+			mck_crash_write_string_bridge);
+	return;
+#endif
 #ifdef x86
 	fprintf(fp, "LINUX_PAGE_OFFSET: 0x%lx\n", LINUX_PAGE_OFFSET);
 #endif
@@ -2096,10 +2168,18 @@ static struct command_table_entry command_table[] = {
 void __attribute__((constructor))
 mckernel_init(void)
 {
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	mck_crash_extension_init_body_result(command_table,
+			mck_crash_register_extension_bridge);
+#else
 	register_extension(command_table);
+#endif
 }
 
 void __attribute__((destructor))
 mckernel_fini(void)
 {
+#ifdef MCKERNEL_CRASH_RUST_HELPERS
+	mck_crash_extension_fini_body_result();
+#endif
 }

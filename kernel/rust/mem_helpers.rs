@@ -4,13 +4,13 @@ use core::ptr::{null_mut, write_bytes, write_volatile};
 use core::sync::atomic::{AtomicI32, AtomicI64, AtomicPtr, AtomicU64, Ordering};
 
 use crate::abi::{
-    AbiListHead, AddressSpace, CInt, CLong, CPU_SET_WORDS, CULong, CpuLocalVar, IHK_MAX_NUM_CPUS,
-    IHK_MAX_NUM_NUMA_NODES, IHK_MAX_NUM_PGSIZES, IhkAtomic, IhkAtomic64, IhkCpuInfo, IhkSpinlock,
-    KmallocCacheHeader, KmallocHeader, McsLockNode, Memobj, OffT, Process, ProcessVm, RusagePercpu,
-    SizeT, TlbFlushEntry, VmRange,
+    AbiListHead, AddressSpace, CInt, CLong, CULong, CpuLocalVar, IhkAtomic, IhkAtomic64,
+    IhkCpuInfo, IhkSpinlock, KmallocCacheHeader, KmallocHeader, McsLockNode, Memobj, OffT, Process,
+    ProcessVm, RusagePercpu, SizeT, TlbFlushEntry, VmRange, CPU_SET_WORDS, IHK_MAX_NUM_CPUS,
+    IHK_MAX_NUM_NUMA_NODES, IHK_MAX_NUM_PGSIZES,
 };
 use crate::llist::{LListHead, LListNode};
-use crate::rbtree::{RbNode, RbRoot, rb_first_safe, rb_next_safe};
+use crate::rbtree::{rb_first_safe, rb_next_safe, RbNode, RbRoot};
 use crate::string::{strcmp, strcpy, strlen, strstr};
 
 unsafe extern "C" {
@@ -19,7 +19,6 @@ unsafe extern "C" {
 
     fn early_alloc_pages(nr_pages: CInt) -> *mut c_void;
     fn early_alloc_invalidate();
-    fn pagealloc_track_init();
     fn ihk_mc_get_nr_memory_chunks() -> CInt;
     fn ihk_mc_get_memory_chunk(
         id: CInt,
@@ -36,21 +35,94 @@ unsafe extern "C" {
     fn kmalloc_cache_alloc_bridge(size: SizeT, flag: CULong) -> *mut c_void;
     fn kmalloc_cache_log(event: CInt, ptr: *mut c_void);
     fn eventfd(type_: CInt);
-    fn _ihk_mc_alloc_aligned_pages_node(
+    fn mem_pagealloc_track_base_alloc_bridge(
         npages: CInt,
         p2align: CInt,
         flag: CULong,
         node: CInt,
         is_user: CInt,
         virt_addr: CULong,
+    ) -> *mut c_void;
+    fn mem_pagealloc_track_base_free_bridge(ptr: *mut c_void, npages: CInt, is_user: CInt);
+    fn mem_pagealloc_track_meta_alloc_bridge(size: CInt, flag: CULong) -> *mut c_void;
+    fn mem_pagealloc_track_meta_free_bridge(ptr: *mut c_void);
+    fn mem_pagealloc_track_lock_bridge(lock_addr: CULong) -> CULong;
+    fn mem_pagealloc_track_unlock_bridge(lock_addr: CULong, irqflags: CULong);
+    fn mem_pagealloc_track_noirq_lock_bridge(lock_addr: CULong);
+    fn mem_pagealloc_track_noirq_unlock_bridge(lock_addr: CULong);
+    fn mem_pagealloc_track_spin_init_bridge(lock_addr: CULong);
+    fn mem_pagealloc_track_log_bridge(
+        event: CInt,
+        ptr: *mut c_void,
         file: *mut i8,
         line: CInt,
-    ) -> *mut c_void;
-    fn _ihk_mc_free_pages(ptr: *mut c_void, npages: CInt, is_user: CInt, file: *mut i8, line: CInt);
-    fn _kmalloc(size: CInt, flag: CULong, file: *mut i8, line: CInt) -> *mut c_void;
-    fn _kfree(ptr: *mut c_void, file: *mut i8, line: CInt);
+        npages: CInt,
+    );
+    fn mem_pagealloc_invalid_free_bridge(ptr: *mut c_void, file: *mut i8, line: CInt);
+    fn mem_pagealloc_invalid_size_bridge(
+        ptr: *mut c_void,
+        npages: CInt,
+        alloc_npages: CInt,
+        file: *mut i8,
+        line: CInt,
+    );
+    fn mem_pagealloc_leak_log_bridge(
+        event: CInt,
+        ptr: *mut c_void,
+        file: *mut i8,
+        line: CInt,
+        size: CInt,
+        count: CInt,
+        runcount: CInt,
+    );
+    fn mem_kmalloc_track_base_alloc_bridge(size: CInt, flag: CULong) -> *mut c_void;
+    fn mem_kmalloc_track_base_free_bridge(ptr: *mut c_void);
+    fn mem_kmalloc_track_lock_bridge(lock_addr: CULong) -> CULong;
+    fn mem_kmalloc_track_unlock_bridge(lock_addr: CULong, irqflags: CULong);
+    fn mem_kmalloc_track_spin_init_bridge(lock_addr: CULong);
+    fn mem_kmalloc_track_log_bridge(
+        event: CInt,
+        ptr: *mut c_void,
+        file: *mut i8,
+        line: CInt,
+        size: CInt,
+    );
+    fn mem_kmalloc_invalid_free_bridge(ptr: *mut c_void, file: *mut i8, line: CInt);
+    fn mem_kmalloc_leak_log_bridge(
+        event: CInt,
+        ptr: *mut c_void,
+        file: *mut i8,
+        line: CInt,
+        size: CInt,
+        count: CInt,
+        runcount: CInt,
+    );
 
     static mut sysctl_overcommit_memory: CInt;
+    #[link_name = "memdebug"]
+    static mut MEMDEBUG: *mut i8;
+    #[link_name = "pagealloc_track_hash"]
+    static mut PAGEALLOC_TRACK_HASH: [AbiListHead; PAGEALLOC_TRACK_HASH_SIZE];
+    #[link_name = "pagealloc_track_hash_locks"]
+    static mut PAGEALLOC_TRACK_HASH_LOCKS: [IhkSpinlock; PAGEALLOC_TRACK_HASH_SIZE];
+    #[link_name = "pagealloc_addr_hash"]
+    static mut PAGEALLOC_ADDR_HASH: [AbiListHead; PAGEALLOC_TRACK_HASH_SIZE];
+    #[link_name = "pagealloc_addr_hash_locks"]
+    static mut PAGEALLOC_ADDR_HASH_LOCKS: [IhkSpinlock; PAGEALLOC_TRACK_HASH_SIZE];
+    #[link_name = "pagealloc_track_initialized"]
+    static mut PAGEALLOC_TRACK_INITIALIZED: CInt;
+    #[link_name = "pagealloc_runcount"]
+    static mut PAGEALLOC_RUNCOUNT: CInt;
+    #[link_name = "kmalloc_track_hash"]
+    static mut KMALLOC_TRACK_HASH: [AbiListHead; KMALLOC_TRACK_HASH_SIZE];
+    #[link_name = "kmalloc_track_hash_locks"]
+    static mut KMALLOC_TRACK_HASH_LOCKS: [IhkSpinlock; KMALLOC_TRACK_HASH_SIZE];
+    #[link_name = "kmalloc_addr_hash"]
+    static mut KMALLOC_ADDR_HASH: [AbiListHead; KMALLOC_TRACK_HASH_SIZE];
+    #[link_name = "kmalloc_addr_hash_locks"]
+    static mut KMALLOC_ADDR_HASH_LOCKS: [IhkSpinlock; KMALLOC_TRACK_HASH_SIZE];
+    #[link_name = "kmalloc_runcount"]
+    static mut KMALLOC_RUNCOUNT: CInt;
 }
 
 const KMALLOC_FRONT_MAGIC: u32 = 0x5c5c5c5c;
@@ -313,6 +385,7 @@ type MemPageallocNoirqUnlockFn = unsafe extern "C" fn(CULong);
 type MemTrackLeakLogFn = unsafe extern "C" fn(CInt, *mut c_void, *mut i8, CInt, CInt, CInt, CInt);
 
 const KMALLOC_TRACK_HASH_MASK: CInt = 255;
+const KMALLOC_TRACK_HASH_SIZE: usize = (KMALLOC_TRACK_HASH_MASK as usize) + 1;
 const KMALLOC_TRACK_LOG_ENTRY_ALLOC_FAILED: CInt = 1;
 const KMALLOC_TRACK_LOG_FILE_ALLOC_FAILED: CInt = 2;
 const KMALLOC_TRACK_LOG_ENTRY_ADDED: CInt = 3;
@@ -324,6 +397,7 @@ const KMALLOC_CACHE_LOG_NO_CACHE: CInt = 1;
 const KMALLOC_CACHE_LOG_ALLOC_FAILED: CInt = 2;
 const KMALLOC_CACHE_LOG_PREALLOC: CInt = 3;
 const PAGEALLOC_TRACK_HASH_MASK: CInt = 255;
+const PAGEALLOC_TRACK_HASH_SIZE: usize = (PAGEALLOC_TRACK_HASH_MASK as usize) + 1;
 const PAGEALLOC_TRACK_LOG_ENTRY_ALLOC_FAILED: CInt = 1;
 const PAGEALLOC_TRACK_LOG_FILE_ALLOC_FAILED: CInt = 2;
 const PAGEALLOC_TRACK_LOG_ENTRY_ADDED: CInt = 3;
@@ -3117,6 +3191,84 @@ pub unsafe extern "C" fn ___ihk_mc_alloc_pages(
     mem_pa_alloc_pages_result(MEM_PA_OPS, npages, flag, is_user, Some(early_alloc_pages))
 }
 
+#[inline(always)]
+unsafe fn pagealloc_track_hash_ptr() -> *mut AbiListHead {
+    (&raw mut PAGEALLOC_TRACK_HASH).cast::<AbiListHead>()
+}
+
+#[inline(always)]
+unsafe fn pagealloc_track_locks_ptr() -> *mut IhkSpinlock {
+    (&raw mut PAGEALLOC_TRACK_HASH_LOCKS).cast::<IhkSpinlock>()
+}
+
+#[inline(always)]
+unsafe fn pagealloc_addr_hash_ptr() -> *mut AbiListHead {
+    (&raw mut PAGEALLOC_ADDR_HASH).cast::<AbiListHead>()
+}
+
+#[inline(always)]
+unsafe fn pagealloc_addr_locks_ptr() -> *mut IhkSpinlock {
+    (&raw mut PAGEALLOC_ADDR_HASH_LOCKS).cast::<IhkSpinlock>()
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn pagealloc_track_init() {
+    let _ = mem_track_hashes_init_result(
+        &raw mut PAGEALLOC_TRACK_INITIALIZED,
+        pagealloc_track_hash_ptr(),
+        pagealloc_track_locks_ptr(),
+        pagealloc_addr_hash_ptr(),
+        pagealloc_addr_locks_ptr(),
+        PAGEALLOC_TRACK_HASH_SIZE as CInt,
+        Some(mem_pagealloc_track_spin_init_bridge),
+    );
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn __pagealloc_track_find_entry(
+    file: *mut i8,
+    line: CInt,
+) -> *mut PageallocTrackEntry {
+    pagealloc_track_find_entry_result(file, line, pagealloc_track_hash_ptr())
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn _ihk_mc_alloc_aligned_pages_node(
+    npages: CInt,
+    p2align: CInt,
+    flag: CULong,
+    node: CInt,
+    is_user: CInt,
+    virt_addr: CULong,
+    file: *mut i8,
+    line: CInt,
+) -> *mut c_void {
+    pagealloc_track_alloc_result(
+        npages,
+        p2align,
+        flag,
+        node,
+        is_user,
+        virt_addr,
+        file,
+        line,
+        MEMDEBUG,
+        PAGEALLOC_TRACK_INITIALIZED,
+        pagealloc_track_hash_ptr(),
+        pagealloc_track_locks_ptr(),
+        pagealloc_addr_hash_ptr(),
+        pagealloc_addr_locks_ptr(),
+        PAGEALLOC_RUNCOUNT,
+        Some(mem_pagealloc_track_base_alloc_bridge),
+        Some(mem_pagealloc_track_meta_alloc_bridge),
+        Some(mem_pagealloc_track_meta_free_bridge),
+        Some(mem_pagealloc_track_lock_bridge),
+        Some(mem_pagealloc_track_unlock_bridge),
+        Some(mem_pagealloc_track_spin_init_bridge),
+        Some(mem_pagealloc_track_log_bridge),
+    )
+}
+
 fn ihk_mm_wrapper_file() -> *mut i8 {
     IHK_MM_WRAPPER_FILE.as_ptr() as *mut i8
 }
@@ -3317,6 +3469,54 @@ pub unsafe extern "C" fn ___ihk_mc_free_pages(ptr: *mut c_void, npages: CInt, is
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn _ihk_mc_free_pages(
+    ptr: *mut c_void,
+    npages: CInt,
+    is_user: CInt,
+    file: *mut i8,
+    line: CInt,
+) {
+    let _ = pagealloc_track_free_result(
+        ptr,
+        npages,
+        is_user,
+        file,
+        line,
+        MEMDEBUG,
+        PAGEALLOC_TRACK_INITIALIZED,
+        pagealloc_track_hash_ptr(),
+        pagealloc_track_locks_ptr(),
+        pagealloc_addr_hash_ptr(),
+        pagealloc_addr_locks_ptr(),
+        Some(mem_pagealloc_track_base_free_bridge),
+        Some(mem_pagealloc_track_meta_alloc_bridge),
+        Some(mem_pagealloc_track_meta_free_bridge),
+        Some(mem_pagealloc_track_lock_bridge),
+        Some(mem_pagealloc_track_unlock_bridge),
+        Some(mem_pagealloc_track_noirq_lock_bridge),
+        Some(mem_pagealloc_track_noirq_unlock_bridge),
+        Some(mem_pagealloc_invalid_free_bridge),
+        Some(mem_pagealloc_invalid_size_bridge),
+        Some(mem_pagealloc_track_log_bridge),
+    );
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn pagealloc_memcheck() {
+    let _ = pagealloc_memcheck_result(
+        pagealloc_track_hash_ptr(),
+        pagealloc_track_locks_ptr(),
+        &raw mut PAGEALLOC_RUNCOUNT,
+        PAGEALLOC_TRACK_HASH_SIZE as CInt,
+        Some(mem_pagealloc_track_lock_bridge),
+        Some(mem_pagealloc_track_unlock_bridge),
+        Some(mem_pagealloc_track_noirq_lock_bridge),
+        Some(mem_pagealloc_track_noirq_unlock_bridge),
+        Some(mem_pagealloc_leak_log_bridge),
+    );
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn ihk_mc_free_pages(ptr: *mut c_void, npages: CInt) {
     _ihk_mc_free_pages(
         ptr,
@@ -3340,6 +3540,96 @@ pub unsafe extern "C" fn ihk_mc_free_pages_user(ptr: *mut c_void, npages: CInt) 
 
 fn kmalloc_wrapper_file() -> *mut i8 {
     KMALLOC_WRAPPER_FILE.as_ptr() as *mut i8
+}
+
+#[inline(always)]
+unsafe fn kmalloc_track_hash_ptr() -> *mut AbiListHead {
+    (&raw mut KMALLOC_TRACK_HASH).cast::<AbiListHead>()
+}
+
+#[inline(always)]
+unsafe fn kmalloc_track_locks_ptr() -> *mut IhkSpinlock {
+    (&raw mut KMALLOC_TRACK_HASH_LOCKS).cast::<IhkSpinlock>()
+}
+
+#[inline(always)]
+unsafe fn kmalloc_addr_hash_ptr() -> *mut AbiListHead {
+    (&raw mut KMALLOC_ADDR_HASH).cast::<AbiListHead>()
+}
+
+#[inline(always)]
+unsafe fn kmalloc_addr_locks_ptr() -> *mut IhkSpinlock {
+    (&raw mut KMALLOC_ADDR_HASH_LOCKS).cast::<IhkSpinlock>()
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn __kmalloc_track_find_entry(
+    size: CInt,
+    file: *mut i8,
+    line: CInt,
+) -> *mut KmallocTrackEntry {
+    kmalloc_track_find_entry_result(size, file, line, kmalloc_track_hash_ptr())
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn _kmalloc(
+    size: CInt,
+    flag: CULong,
+    file: *mut i8,
+    line: CInt,
+) -> *mut c_void {
+    kmalloc_track_alloc_result(
+        size,
+        flag,
+        file,
+        line,
+        MEMDEBUG,
+        kmalloc_track_hash_ptr(),
+        kmalloc_track_locks_ptr(),
+        kmalloc_addr_hash_ptr(),
+        kmalloc_addr_locks_ptr(),
+        KMALLOC_RUNCOUNT,
+        Some(mem_kmalloc_track_base_alloc_bridge),
+        Some(mem_kmalloc_track_base_free_bridge),
+        Some(mem_kmalloc_track_lock_bridge),
+        Some(mem_kmalloc_track_unlock_bridge),
+        Some(mem_kmalloc_track_spin_init_bridge),
+        Some(mem_kmalloc_track_log_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn _kfree(ptr: *mut c_void, file: *mut i8, line: CInt) {
+    let _ = kmalloc_track_free_result(
+        ptr,
+        file,
+        line,
+        MEMDEBUG,
+        kmalloc_track_hash_ptr(),
+        kmalloc_track_locks_ptr(),
+        kmalloc_addr_hash_ptr(),
+        kmalloc_addr_locks_ptr(),
+        Some(mem_kmalloc_track_base_free_bridge),
+        Some(mem_kmalloc_track_lock_bridge),
+        Some(mem_kmalloc_track_unlock_bridge),
+        Some(mem_kmalloc_invalid_free_bridge),
+        Some(mem_kmalloc_track_log_bridge),
+    );
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn kmalloc_memcheck() {
+    let _ = kmalloc_memcheck_result(
+        kmalloc_track_hash_ptr(),
+        kmalloc_track_locks_ptr(),
+        &raw mut KMALLOC_RUNCOUNT,
+        KMALLOC_TRACK_HASH_SIZE as CInt,
+        Some(mem_kmalloc_track_lock_bridge),
+        Some(mem_kmalloc_track_unlock_bridge),
+        Some(mem_pagealloc_track_noirq_lock_bridge),
+        Some(mem_pagealloc_track_noirq_unlock_bridge),
+        Some(mem_kmalloc_leak_log_bridge),
+    );
 }
 
 unsafe fn kmalloc_no_preempt_counter() -> CInt {

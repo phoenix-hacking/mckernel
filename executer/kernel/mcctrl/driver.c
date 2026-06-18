@@ -1090,10 +1090,25 @@ extern void mcctrl_tofu_hijack_release_handlers(void);
 extern void mcctrl_tofu_restore_release_handlers(void);
 #endif
 
+#ifdef MCCTRL_RUST_HELPERS
+static long mcctrl_driver_control_bridge(unsigned long os,
+		unsigned int request, unsigned long arg, unsigned long file)
+{
+	return __mcctrl_control((ihk_os_t)os, request, arg,
+			(struct file *)file);
+}
+#endif
+
 static long mcctrl_ioctl(ihk_os_t os, unsigned int request, void *priv,
                          unsigned long arg, struct file *file)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	(void)priv;
+	return mcctrl_driver_ioctl_body_result((unsigned long)os, request,
+			arg, (unsigned long)file, mcctrl_driver_control_bridge);
+#else
 	return __mcctrl_control(os, request, arg, file);
+#endif
 }
 
 static struct ihk_os_user_call_handler mcctrl_uchs[] = {
@@ -1153,9 +1168,26 @@ static struct ihk_os_user_call mcctrl_uc[OS_MAX_MINOR];
 
 static ihk_os_t os[OS_MAX_MINOR];
 
+#ifdef MCCTRL_RUST_HELPERS
+static void *mcctrl_driver_get_os_slot_bridge(int index)
+{
+	return os[index];
+}
+
+static void mcctrl_driver_set_os_slot_bridge(int index, void *value)
+{
+	os[index] = (ihk_os_t)value;
+}
+#endif
+
 ihk_os_t osnum_to_os(int n)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return (ihk_os_t)mcctrl_driver_osnum_to_os_body_result(
+			n, mcctrl_driver_get_os_slot_bridge);
+#else
 	return os[n];
+#endif
 }
 
 #ifdef MCCTRL_RUST_HELPERS
@@ -1493,8 +1525,148 @@ int mcctrl_binfmt_dispatch_bridge(struct linux_binprm *bprm, void *file)
 #endif
 
 /* OS event notifier implementation */
+#ifdef MCCTRL_RUST_HELPERS
+static void *mcctrl_driver_find_os_bridge(int index)
+{
+	return ihk_host_find_os(index, NULL);
+}
+
+static int mcctrl_driver_prepare_channels_bridge(void *os)
+{
+	return prepare_ikc_channels((ihk_os_t)os);
+}
+
+static void mcctrl_driver_destroy_channels_bridge(void *os)
+{
+	destroy_ikc_channels((ihk_os_t)os);
+}
+
+static void mcctrl_driver_copy_user_call_proto_bridge(int index)
+{
+	memcpy(mcctrl_uc + index, &mcctrl_uc_proto, sizeof mcctrl_uc_proto);
+}
+
+static int mcctrl_driver_set_kernel_handlers_bridge(void *os)
+{
+	return ihk_os_set_kernel_call_handlers((ihk_os_t)os,
+			&mcctrl_kernel_handlers);
+}
+
+static void mcctrl_driver_clear_kernel_handlers_bridge(void *os)
+{
+	ihk_os_clear_kernel_call_handlers((ihk_os_t)os);
+}
+
+static int mcctrl_driver_register_user_handlers_bridge(void *os, int index)
+{
+	return ihk_os_register_user_call_handlers((ihk_os_t)os,
+			mcctrl_uc + index);
+}
+
+static void mcctrl_driver_unregister_user_handlers_bridge(void *os, int index)
+{
+	ihk_os_unregister_user_call_handlers((ihk_os_t)os,
+			mcctrl_uc + index);
+}
+
+static void mcctrl_driver_procfs_init_bridge(int index)
+{
+	procfs_init(index);
+}
+
+static void mcctrl_driver_procfs_exit_bridge(int index)
+{
+	procfs_exit(index);
+}
+
+static void mcctrl_driver_pager_cleanup_bridge(void)
+{
+	pager_cleanup();
+}
+
+static void mcctrl_driver_sysfs_cleanup_bridge(void *os)
+{
+	sysfsm_cleanup((ihk_os_t)os);
+}
+
+static void mcctrl_driver_free_topology_info_bridge(void *os)
+{
+	free_topology_info((ihk_os_t)os);
+}
+
+static void mcctrl_driver_log_bridge(int stage, int index)
+{
+	switch (stage) {
+	case 0:
+		printk("mcctrl: error: OS ID %d couldn't be found\n", index);
+		break;
+	case 1:
+		printk("mcctrl: error: preparing IKC channels for OS %d\n",
+				index);
+		break;
+	case 2:
+		printk("mcctrl: error: setting kernel callbacks for OS %d\n",
+				index);
+		break;
+	case 3:
+		printk("mcctrl: error: registering callbacks for OS %d\n",
+				index);
+		break;
+	case 4:
+		printk("mcctrl: OS ID %d boot event handled\n", index);
+		break;
+	case 5:
+		printk("mcctrl: OS ID %d shutdown event handled\n", index);
+		break;
+	case 6:
+		printk("mcctrl: error: registering OS notifier\n");
+		break;
+	case 7:
+		printk("mcctrl: initialized successfully.\n");
+		break;
+	case 8:
+		printk("mcctrl: warning: failed to deregister OS notifier??\n");
+		break;
+	case 9:
+		printk("mcctrl: unregistered.\n");
+		break;
+	}
+}
+
+static const struct mcctrl_driver_boot_ops mcctrl_driver_boot_ops = {
+	.find_os = mcctrl_driver_find_os_bridge,
+	.set_os = mcctrl_driver_set_os_slot_bridge,
+	.prepare_channels = mcctrl_driver_prepare_channels_bridge,
+	.copy_user_call_proto = mcctrl_driver_copy_user_call_proto_bridge,
+	.set_kernel_handlers = mcctrl_driver_set_kernel_handlers_bridge,
+	.register_user_handlers = mcctrl_driver_register_user_handlers_bridge,
+	.procfs_init = mcctrl_driver_procfs_init_bridge,
+	.clear_kernel_handlers = mcctrl_driver_clear_kernel_handlers_bridge,
+	.destroy_channels = mcctrl_driver_destroy_channels_bridge,
+	.log = mcctrl_driver_log_bridge,
+};
+
+static const struct mcctrl_driver_shutdown_ops mcctrl_driver_shutdown_ops = {
+	.get_os = mcctrl_driver_get_os_slot_bridge,
+	.set_os = mcctrl_driver_set_os_slot_bridge,
+	.pager_cleanup = mcctrl_driver_pager_cleanup_bridge,
+	.sysfs_cleanup = mcctrl_driver_sysfs_cleanup_bridge,
+	.free_topology_info = mcctrl_driver_free_topology_info_bridge,
+	.unregister_user_handlers =
+		mcctrl_driver_unregister_user_handlers_bridge,
+	.clear_kernel_handlers = mcctrl_driver_clear_kernel_handlers_bridge,
+	.destroy_channels = mcctrl_driver_destroy_channels_bridge,
+	.procfs_exit = mcctrl_driver_procfs_exit_bridge,
+	.log = mcctrl_driver_log_bridge,
+};
+#endif
+
 int mcctrl_os_boot_notifier(int os_index)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_driver_boot_notifier_body_result(
+			os_index, &mcctrl_driver_boot_ops);
+#else
 	int	rc;
 
 	os[os_index] = ihk_host_find_os(os_index, NULL);
@@ -1536,10 +1708,15 @@ error_cleanup_channels:
 
 	os[os_index] = NULL;
 	return rc;
+#endif
 }
 
 int mcctrl_os_shutdown_notifier(int os_index)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_driver_shutdown_notifier_body_result(
+			os_index, &mcctrl_driver_shutdown_ops);
+#else
 	if (os[os_index]) {
 		pager_cleanup();
 		sysfsm_cleanup(os[os_index]);
@@ -1554,16 +1731,22 @@ int mcctrl_os_shutdown_notifier(int os_index)
 
 	printk("mcctrl: OS ID %d shutdown event handled\n", os_index);
 	return 0;
+#endif
 }
 
 int mcctrl_os_alive()
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_driver_os_alive_body_result(
+			OS_MAX_MINOR, mcctrl_driver_get_os_slot_bridge);
+#else
 	int i;
 
 	for (i = 0; i < OS_MAX_MINOR; i++)
 		if (os[i])
 			return i;
 	return -1;
+#endif
 }
 
 static struct ihk_os_notifier_ops mcctrl_os_notifier_ops = {
@@ -1594,8 +1777,168 @@ void (*mcctrl_zap_page_range)(struct vm_area_struct *vma,
 
 struct inode_operations *mcctrl_hugetlbfs_inode_operations;
 
+#ifdef MCCTRL_RUST_HELPERS
+static void *mcctrl_driver_lookup_mount_bridge(void)
+{
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,17,0)
+	return (void *)kallsyms_lookup_name("ksys_mount");
+#else
+	void *symbol = (void *)kallsyms_lookup_name("sys_mount");
+#if defined(CONFIG_X86_64_SMP)
+	if (!symbol)
+		symbol = (void *)kallsyms_lookup_name("__x64_sys_mount");
+#endif
+	return symbol;
+#endif
+}
+
+static void mcctrl_driver_set_mount_bridge(void *symbol)
+{
+	mcctrl_sys_mount = symbol;
+}
+
+static void *mcctrl_driver_lookup_umount_bridge(void)
+{
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,17,0)
+	return (void *)kallsyms_lookup_name("ksys_umount");
+#else
+	void *symbol = (void *)kallsyms_lookup_name("sys_umount");
+#if defined(CONFIG_X86_64_SMP)
+	if (!symbol)
+		symbol = (void *)kallsyms_lookup_name("__x64_sys_umount");
+#endif
+	return symbol;
+#endif
+}
+
+static void mcctrl_driver_set_umount_bridge(void *symbol)
+{
+	mcctrl_sys_umount = symbol;
+}
+
+static void *mcctrl_driver_lookup_unshare_bridge(void)
+{
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,17,0)
+	return (void *)kallsyms_lookup_name("ksys_unshare");
+#else
+	void *symbol = (void *)kallsyms_lookup_name("sys_unshare");
+#if defined(CONFIG_X86_64_SMP)
+	if (!symbol)
+		symbol = (void *)kallsyms_lookup_name("__x64_sys_unshare");
+#endif
+	return symbol;
+#endif
+}
+
+static void mcctrl_driver_set_unshare_bridge(void *symbol)
+{
+	mcctrl_sys_unshare = symbol;
+}
+
+static void *mcctrl_driver_lookup_sched_setaffinity_bridge(void)
+{
+	return (void *)kallsyms_lookup_name("sched_setaffinity");
+}
+
+static void mcctrl_driver_set_sched_setaffinity_bridge(void *symbol)
+{
+	mcctrl_sched_setaffinity = symbol;
+}
+
+static void *mcctrl_driver_lookup_sched_setscheduler_nocheck_bridge(void)
+{
+	return (void *)kallsyms_lookup_name("sched_setscheduler_nocheck");
+}
+
+static void mcctrl_driver_set_sched_setscheduler_nocheck_bridge(void *symbol)
+{
+	mcctrl_sched_setscheduler_nocheck = symbol;
+}
+
+static void *mcctrl_driver_lookup_readlinkat_bridge(void)
+{
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,17,0)
+	return (void *)kallsyms_lookup_name("do_readlinkat");
+#else
+	void *symbol = (void *)kallsyms_lookup_name("sys_readlinkat");
+#if defined(CONFIG_X86_64_SMP)
+	if (!symbol)
+		symbol = (void *)kallsyms_lookup_name("__x64_sys_readlinkat");
+#endif
+	return symbol;
+#endif
+}
+
+static void mcctrl_driver_set_readlinkat_bridge(void *symbol)
+{
+	mcctrl_sys_readlinkat = symbol;
+}
+
+static void *mcctrl_driver_lookup_zap_page_range_bridge(void)
+{
+	return (void *)kallsyms_lookup_name("zap_page_range");
+}
+
+static void mcctrl_driver_set_zap_page_range_bridge(void *symbol)
+{
+	mcctrl_zap_page_range = symbol;
+}
+
+static void *mcctrl_driver_lookup_hugetlbfs_inode_operations_bridge(void)
+{
+	return (void *)kallsyms_lookup_name("hugetlbfs_inode_operations");
+}
+
+static void mcctrl_driver_set_hugetlbfs_inode_operations_bridge(void *symbol)
+{
+	mcctrl_hugetlbfs_inode_operations = symbol;
+}
+
+static int mcctrl_driver_warn_missing_symbol_bridge(void *symbol)
+{
+	return WARN_ON(!symbol);
+}
+
+static int mcctrl_driver_arch_symbols_init_bridge(void)
+{
+	return arch_symbols_init();
+}
+
+static const struct mcctrl_driver_symbols_ops mcctrl_driver_symbols_ops = {
+	.lookup_mount = mcctrl_driver_lookup_mount_bridge,
+	.set_mount = mcctrl_driver_set_mount_bridge,
+	.lookup_umount = mcctrl_driver_lookup_umount_bridge,
+	.set_umount = mcctrl_driver_set_umount_bridge,
+	.lookup_unshare = mcctrl_driver_lookup_unshare_bridge,
+	.set_unshare = mcctrl_driver_set_unshare_bridge,
+	.lookup_sched_setaffinity =
+		mcctrl_driver_lookup_sched_setaffinity_bridge,
+	.set_sched_setaffinity =
+		mcctrl_driver_set_sched_setaffinity_bridge,
+	.lookup_sched_setscheduler_nocheck =
+		mcctrl_driver_lookup_sched_setscheduler_nocheck_bridge,
+	.set_sched_setscheduler_nocheck =
+		mcctrl_driver_set_sched_setscheduler_nocheck_bridge,
+	.lookup_readlinkat = mcctrl_driver_lookup_readlinkat_bridge,
+	.set_readlinkat = mcctrl_driver_set_readlinkat_bridge,
+	.lookup_zap_page_range =
+		mcctrl_driver_lookup_zap_page_range_bridge,
+	.set_zap_page_range = mcctrl_driver_set_zap_page_range_bridge,
+	.lookup_hugetlbfs_inode_operations =
+		mcctrl_driver_lookup_hugetlbfs_inode_operations_bridge,
+	.set_hugetlbfs_inode_operations =
+		mcctrl_driver_set_hugetlbfs_inode_operations_bridge,
+	.warn_missing = mcctrl_driver_warn_missing_symbol_bridge,
+	.arch_symbols_init = mcctrl_driver_arch_symbols_init_bridge,
+};
+#endif
+
 static int symbols_init(void)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_driver_symbols_init_body_result(
+			&mcctrl_driver_symbols_ops);
+#else
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4,17,0)
 	mcctrl_sys_mount = (void *) kallsyms_lookup_name("ksys_mount");
 #else
@@ -1669,10 +2012,90 @@ static int symbols_init(void)
 		return -EFAULT;
 
 	return arch_symbols_init();
+#endif
 }
+
+#ifdef MCCTRL_RUST_HELPERS
+static void mcctrl_driver_syscall_init_bridge(void)
+{
+#ifndef DO_USER_MODE
+	mcctrl_syscall_init();
+#endif
+}
+
+static void mcctrl_driver_binfmt_init_bridge(void)
+{
+	binfmt_mcexec_init();
+}
+
+static void mcctrl_driver_binfmt_exit_bridge(void)
+{
+	binfmt_mcexec_exit();
+}
+
+static void mcctrl_driver_tofu_hash_init_bridge(void)
+{
+#ifdef ENABLE_TOFU
+	mcctrl_file_to_pidfd_hash_init();
+#endif
+}
+
+static void mcctrl_driver_tofu_hijack_bridge(void)
+{
+#ifdef ENABLE_TOFU
+	mcctrl_tofu_hijack_release_handlers();
+#endif
+}
+
+static void mcctrl_driver_tofu_restore_bridge(void)
+{
+#ifdef ENABLE_TOFU
+	mcctrl_tofu_restore_release_handlers();
+#endif
+}
+
+static int mcctrl_driver_symbols_init_bridge(void)
+{
+	return symbols_init();
+}
+
+static int mcctrl_driver_register_notifier_bridge(void)
+{
+	return ihk_host_register_os_notifier(&mcctrl_os_notifier);
+}
+
+static int mcctrl_driver_deregister_notifier_bridge(void)
+{
+	return ihk_host_deregister_os_notifier(&mcctrl_os_notifier);
+}
+
+static void mcctrl_driver_uti_finalize_bridge(void)
+{
+	uti_attr_finalize();
+}
+
+static const struct mcctrl_driver_module_ops mcctrl_driver_module_ops = {
+	.syscall_init = mcctrl_driver_syscall_init_bridge,
+	.set_os = mcctrl_driver_set_os_slot_bridge,
+	.binfmt_init = mcctrl_driver_binfmt_init_bridge,
+	.tofu_hash_init = mcctrl_driver_tofu_hash_init_bridge,
+	.symbols_init = mcctrl_driver_symbols_init_bridge,
+	.tofu_hijack = mcctrl_driver_tofu_hijack_bridge,
+	.register_notifier = mcctrl_driver_register_notifier_bridge,
+	.binfmt_exit = mcctrl_driver_binfmt_exit_bridge,
+	.deregister_notifier = mcctrl_driver_deregister_notifier_bridge,
+	.uti_finalize = mcctrl_driver_uti_finalize_bridge,
+	.tofu_restore = mcctrl_driver_tofu_restore_bridge,
+	.log = mcctrl_driver_log_bridge,
+};
+#endif
 
 static int __init mcctrl_init(void)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_driver_init_body_result(
+			OS_MAX_MINOR, &mcctrl_driver_module_ops);
+#else
 	int ret = 0;
 	int i;
 
@@ -1708,10 +2131,14 @@ error:
 	binfmt_mcexec_exit();
 
 	return ret;
+#endif
 }
 
 static void __exit mcctrl_exit(void)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_driver_exit_body_result(&mcctrl_driver_module_ops);
+#else
 	if (ihk_host_deregister_os_notifier(&mcctrl_os_notifier) != 0) {
 		printk("mcctrl: warning: failed to deregister OS notifier??\n");
 	}
@@ -1723,6 +2150,7 @@ static void __exit mcctrl_exit(void)
 #endif
 
 	printk("mcctrl: unregistered.\n");
+#endif
 }
 
 MODULE_LICENSE("GPL v2");

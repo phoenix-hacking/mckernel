@@ -14,6 +14,7 @@ const PTATTR_DIRTY: CULong = 0x40;
 const PTATTR_UNCACHABLE: CULong = 0x10000;
 const PTATTR_FOR_USER: CULong = 0x20000;
 const PTATTR_WRITE_COMBINED: CULong = 0x40000;
+const PTATTR_NO_EXECUTE: CULong = 0x8000000000000000;
 const VR_PRIVATE: CULong = 0x2000;
 const PF_PROT: CULong = 1;
 const PF_WRITE: CULong = 1 << 1;
@@ -41,8 +42,11 @@ const PTL3_SIZE: CULong = 1 << PTL3_SHIFT;
 const PTL4_SIZE: CULong = 1 << PTL4_SHIFT;
 const PAGE_MASK: CULong = !(PTL1_SIZE - 1);
 const LARGE_PAGE_MASK: CULong = !((1 << LARGE_PAGE_SHIFT) - 1);
+const AP_TRAMPOLINE_SIZE: CULong = 0x2000;
 const PT_PHYSMASK: CULong = (((1 as CULong) << 52) - 1) & PAGE_MASK;
 const KERNEL_BASE: CULong = 0xffff000000000000;
+const MAP_ST_START: CULong = 0xffff800000000000;
+const MAP_FIXED_START: CULong = 0xffff860000000000;
 const PM_STATUS_OFFSET: u32 = 61;
 const PM_PSHIFT_OFFSET: u32 = 55;
 const PM_PFRAME_MASK: CULong = ((1 as CULong) << PM_PSHIFT_OFFSET) - 1;
@@ -153,6 +157,11 @@ const X86_INIT_LINUX_LOG_NO_CHUNK: CInt = 5;
 const X86_INIT_LINUX_LOG_BAD_CHUNK: CInt = 6;
 const X86_INIT_LINUX_LOG_CHUNK_RANGE: CInt = 7;
 const X86_INIT_LINUX_LOG_CHUNK_SET_FAILED: CInt = 8;
+const IHK_MC_GMA_MAP_START: CInt = 0;
+const IHK_MC_GMA_MAP_END: CInt = 1;
+const X86_INIT_LINUX_FULL_MAP_END: CULong = 0x20000000000;
+const VSYSCALL_ADDR: CULong = 0xffffffffff600000;
+const SAFE_KERNEL_MAP: &[u8; 16] = b"safe_kernel_map\0";
 const X86_ADDR_LOG_KERNEL: CInt = 1;
 const X86_ADDR_LOG_STRAIGHT: CInt = 2;
 const X86_PT_PRINT_LOG_TABLE: CInt = 1;
@@ -162,6 +171,8 @@ const X86_PT_PRINT_LOG_LARGE: CInt = 4;
 
 unsafe extern "C" {
     fn get_this_cpu_local_var() -> *mut CpuLocalVar;
+    fn x86_addr_init_pt_loaded_bridge() -> CInt;
+    fn x86_addr_log_bridge(event: CInt, value: CULong);
     fn x86_user_page_fault_bridge(vm: *mut c_void, addr: *mut c_void, reason: CULong) -> CInt;
     fn x86_user_verify_bridge(vm: *mut c_void, addr: *mut c_void, size: CULong) -> CInt;
     fn x86_user_vtop_bridge(pt: *mut c_void, virt: *const c_void, phys: *mut CULong) -> CInt;
@@ -171,6 +182,89 @@ unsafe extern "C" {
     fn x86_user_phys_to_virt_bridge(phys: CULong) -> *mut c_void;
     fn x86_user_copy_log_bridge(event: CInt, vm: *mut c_void, a: CULong, b: CULong, error: CInt);
     fn x86_user_map_kernel_start_bridge() -> CULong;
+    fn x86_pt_virt_to_phys_bridge(addr: *mut c_void) -> CULong;
+    fn x86_arch_mem_virt_to_phys_bridge(addr: *mut c_void) -> CULong;
+    fn x86_arch_mem_phys_to_virt_bridge(phys: CULong) -> *mut c_void;
+    fn x86_early_alloc_panic_bridge(reason: CInt);
+    fn x86_early_alloc_last_page_slot_bridge() -> *mut *mut c_void;
+    fn x86_early_alloc_end_bridge() -> CULong;
+    fn x86_bootstrap_mem_end_bridge() -> CULong;
+    fn x86_early_alloc_invalidate_bridge();
+    fn x86_kmalloc_bridge(size: CInt, flag: CInt) -> *mut c_void;
+    fn x86_kmalloc_initialized_bridge() -> CInt;
+    fn x86_kfree_bridge(ptr: *mut c_void);
+    fn x86_mem_log_bridge(event: CInt);
+    fn x86_page_table_init_pt_bridge() -> *mut c_void;
+    fn x86_page_table_boot_pt_bridge() -> *mut c_void;
+    fn x86_load_page_table_panic_bridge();
+    fn x86_check_available_page_size_bridge(event: CInt);
+    fn x86_init_page_table_alloc_bridge(nr_pages: CInt, flag: CInt) -> *mut c_void;
+    fn x86_init_page_table_spin_init_bridge(lock: *mut c_void);
+    fn x86_init_page_table_normal_bridge(pt: *mut c_void);
+    fn x86_init_page_table_linux_bridge(pt: *mut c_void);
+    fn x86_init_page_table_fixed_bridge(pt: *mut c_void);
+    fn x86_init_page_table_text_bridge(pt: *mut c_void);
+    fn x86_init_page_table_vsyscall_bridge(pt: *mut c_void);
+    fn x86_init_page_table_low_bridge(pt: *mut c_void);
+    fn x86_init_page_table_load_bridge(pt: *mut c_void);
+    fn x86_init_page_table_log_bridge(event: CInt, pt: *mut c_void);
+    fn x86_init_page_table_panic_bridge(reason: CInt);
+    fn x86_init_page_table_init_pt_slot_bridge() -> *mut *mut c_void;
+    fn x86_init_page_table_boot_pt_slot_bridge() -> *mut *mut c_void;
+    fn x86_init_page_table_loaded_slot_bridge() -> *mut CInt;
+    fn x86_init_page_table_lock_bridge() -> *mut c_void;
+    fn x86_init_page_table_size_bridge() -> SizeT;
+    fn x86_map_fixed_area_init_pt_bridge() -> *mut c_void;
+    fn x86_map_fixed_area_fixed_virt_slot_bridge() -> *mut CULong;
+    fn x86_map_fixed_area_log_bridge(phys: CULong, size: CULong, virt: CULong);
+    fn x86_pt_set_page_bridge(pt: *mut c_void, virt: CULong, phys: CULong, attr: CULong) -> CInt;
+    fn x86_move_flush_tlb_bridge();
+    fn x86_init_normal_get_memory_address_bridge(type_: CInt, arg: CInt) -> CULong;
+    fn x86_init_normal_set_large_bridge(
+        pt: *mut c_void,
+        virt: CULong,
+        phys: CULong,
+        attr: CULong,
+    ) -> CInt;
+    fn x86_init_normal_log_bridge(event: CInt, a: CULong, b: CULong, c: CULong);
+    fn x86_init_normal_panic_bridge();
+    fn x86_init_linux_find_command_line_bridge(name: *mut i8) -> *mut i8;
+    fn x86_init_linux_get_nr_memory_chunks_bridge() -> CInt;
+    fn x86_init_linux_get_memory_chunk_bridge(
+        id: CInt,
+        start: *mut CULong,
+        end: *mut CULong,
+        numa_id: *mut CInt,
+    ) -> CInt;
+    fn x86_init_linux_log_bridge(
+        event: CInt,
+        a: CULong,
+        b: CULong,
+        c: CULong,
+        d: CULong,
+        error: CInt,
+    );
+    fn x86_init_linux_panic_bridge();
+    fn x86_init_text_log_bridge(event: CInt, a: CULong, b: CULong, c: CULong);
+    fn x86_init_text_map_kernel_start_bridge() -> CULong;
+    fn x86_init_text_end_bridge() -> CULong;
+    fn x86_init_text_panic_bridge();
+    fn x86_init_low_panic_bridge();
+    fn x86_init_fixed_panic_bridge();
+    fn x86_init_vsyscall_page_bridge() -> *mut c_void;
+    fn x86_init_vsyscall_panic_bridge();
+    fn x86_reserve_arch_pages_bridge(start: CULong, end: CULong, cb: X86ReservePagesCbFn);
+    fn x86_reserve_arch_pages_panic_bridge();
+    #[link_name = "attr_mask"]
+    static mut X86_ATTR_MASK: CULong;
+    #[link_name = "_head"]
+    static mut X86_HEAD: u8;
+    #[link_name = "ap_trampoline"]
+    static mut X86_AP_TRAMPOLINE: CULong;
+    #[link_name = "linux_page_offset_base"]
+    static mut LINUX_PAGE_OFFSET_BASE: CULong;
+    #[link_name = "x86_kernel_phys_base"]
+    static mut X86_KERNEL_PHYS_BASE: CULong;
 }
 
 #[no_mangle]
@@ -257,6 +351,40 @@ pub unsafe extern "C" fn x86_get_last_early_heap_body_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn early_alloc_pages(nr_pages: CInt) -> *mut c_void {
+    let last_page_slot = unsafe { x86_early_alloc_last_page_slot_bridge() };
+    let end_addr = unsafe { x86_early_alloc_end_bridge() };
+    let bootstrap_end = unsafe { x86_bootstrap_mem_end_bridge() };
+
+    unsafe {
+        x86_early_alloc_pages_body_result(
+            last_page_slot,
+            end_addr,
+            bootstrap_end,
+            nr_pages,
+            Some(x86_arch_mem_virt_to_phys_bridge),
+            Some(x86_arch_mem_phys_to_virt_bridge),
+            Some(x86_early_alloc_panic_bridge),
+        )
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn early_alloc_invalidate() {
+    let last_page_slot = unsafe { x86_early_alloc_last_page_slot_bridge() };
+    unsafe {
+        x86_early_alloc_invalidate_bridge();
+        let _ = x86_early_alloc_invalidate_body_result(last_page_slot);
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn get_last_early_heap() -> *mut c_void {
+    let last_page_slot = unsafe { x86_early_alloc_last_page_slot_bridge() };
+    unsafe { x86_get_last_early_heap_body_result(last_page_slot) }
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn x86_check_available_page_size_body_result(
     use_1gb_page_slot: *mut CInt,
     cpuid_edx_fn: Option<X86MemCpuidEdxFn>,
@@ -290,6 +418,16 @@ pub unsafe extern "C" fn x86_enable_ptattr_no_execute_body_result(
     let attr = read_volatile(attr_mask_slot) | no_execute_attr;
     write_volatile(attr_mask_slot, attr);
     0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn enable_ptattr_no_execute() {
+    unsafe {
+        let _ = x86_enable_ptattr_no_execute_body_result(
+            core::ptr::addr_of_mut!(X86_ATTR_MASK),
+            PTATTR_NO_EXECUTE,
+        );
+    }
 }
 
 #[no_mangle]
@@ -330,6 +468,36 @@ pub unsafe extern "C" fn x86_ihk_mc_free_body_result(
     };
     kfree_cb(ptr);
     0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_allocate(size: CInt, flag: CInt) -> *mut c_void {
+    let _ = flag;
+    let kmalloc_initialized = unsafe { x86_kmalloc_initialized_bridge() };
+
+    unsafe {
+        x86_ihk_mc_allocate_body_result(
+            kmalloc_initialized,
+            size,
+            IHK_MC_AP_NOWAIT,
+            Some(x86_kmalloc_bridge),
+            Some(x86_mem_log_bridge),
+        )
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_free(ptr: *mut c_void) {
+    let kmalloc_initialized = unsafe { x86_kmalloc_initialized_bridge() };
+
+    unsafe {
+        let _ = x86_ihk_mc_free_body_result(
+            kmalloc_initialized,
+            ptr,
+            Some(x86_kfree_bridge),
+            Some(x86_mem_log_bridge),
+        );
+    }
 }
 
 #[no_mangle]
@@ -510,6 +678,35 @@ pub unsafe extern "C" fn x86_init_page_table_body_result(
         log(1, init_pt);
     }
     0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn init_page_table() {
+    let ret = unsafe {
+        x86_init_page_table_body_result(
+            x86_init_page_table_init_pt_slot_bridge(),
+            x86_init_page_table_boot_pt_slot_bridge(),
+            x86_init_page_table_loaded_slot_bridge(),
+            x86_init_page_table_lock_bridge(),
+            x86_init_page_table_size_bridge(),
+            IHK_MC_AP_CRITICAL,
+            Some(x86_check_available_page_size_bridge),
+            Some(x86_init_page_table_alloc_bridge),
+            Some(x86_init_page_table_spin_init_bridge),
+            Some(x86_init_page_table_normal_bridge),
+            Some(x86_init_page_table_linux_bridge),
+            Some(x86_init_page_table_fixed_bridge),
+            Some(x86_init_page_table_text_bridge),
+            Some(x86_init_page_table_vsyscall_bridge),
+            Some(x86_init_page_table_low_bridge),
+            Some(x86_init_page_table_load_bridge),
+            Some(x86_init_page_table_log_bridge),
+            Some(x86_init_page_table_panic_bridge),
+        )
+    };
+    if ret != 0 {
+        unsafe { x86_init_page_table_panic_bridge(0) };
+    }
 }
 
 type X86WalkPteCallback =
@@ -4100,6 +4297,13 @@ pub unsafe extern "C" fn x86_flush_tlb_result() {
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn flush_tlb() {
+    unsafe {
+        x86_flush_tlb_result();
+    }
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn x86_flush_tlb_single_body_result(
     addr: CULong,
     invlpg_fn: Option<X86InvlpgFn>,
@@ -4123,6 +4327,13 @@ pub unsafe extern "C" fn x86_flush_tlb_single_result(addr: CULong) {
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn flush_tlb_single(addr: CULong) {
+    unsafe {
+        x86_flush_tlb_single_result(addr);
+    }
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn x86_load_page_table_body_result(
     pt: *mut c_void,
     init_pt: *mut c_void,
@@ -4142,6 +4353,40 @@ pub unsafe extern "C" fn x86_load_page_table_body_result(
         load_cr3(pt_addr);
     }
     0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn load_page_table(pt: *mut c_void) {
+    let ret = unsafe {
+        x86_load_page_table_body_result(
+            pt,
+            x86_page_table_init_pt_bridge(),
+            Some(x86_pt_virt_to_phys_bridge),
+            Some(x86_load_cr3_result),
+        )
+    };
+    if ret != 0 {
+        unsafe {
+            x86_load_page_table_panic_bridge();
+        }
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_load_page_table(pt: *mut c_void) {
+    unsafe {
+        load_page_table(pt);
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn get_init_page_table() -> *mut c_void {
+    unsafe { x86_page_table_init_pt_bridge() }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn get_boot_page_table() -> *mut c_void {
+    unsafe { x86_page_table_boot_pt_bridge() }
 }
 
 #[no_mangle]
@@ -4191,6 +4436,32 @@ pub unsafe extern "C" fn x86_map_fixed_area_body_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn map_fixed_area(
+    phys: CULong,
+    size: CULong,
+    uncachable: CULong,
+) -> *mut c_void {
+    let init_pt = unsafe { x86_map_fixed_area_init_pt_bridge() };
+    let fixed_virtp = unsafe { x86_map_fixed_area_fixed_virt_slot_bridge() };
+    if !fixed_virtp.is_null() {
+        unsafe {
+            x86_map_fixed_area_log_bridge(phys, size, *fixed_virtp);
+        }
+    }
+    unsafe {
+        x86_map_fixed_area_body_result(
+            init_pt,
+            fixed_virtp,
+            phys,
+            size,
+            (uncachable != 0) as CInt,
+            Some(x86_pt_set_page_bridge),
+            Some(x86_move_flush_tlb_bridge),
+        )
+    }
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn x86_init_normal_area_body_result(
     pt: *mut c_void,
     map_st_start: CULong,
@@ -4230,6 +4501,28 @@ pub unsafe extern "C" fn x86_init_normal_area_body_result(
     }
 
     0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_init_normal_area_public(pt: *mut c_void) {
+    let ret = unsafe {
+        x86_init_normal_area_body_result(
+            pt,
+            MAP_ST_START,
+            PTL2_SIZE,
+            PTATTR_WRITABLE,
+            IHK_MC_GMA_MAP_START,
+            IHK_MC_GMA_MAP_END,
+            Some(x86_init_normal_get_memory_address_bridge),
+            Some(x86_init_normal_set_large_bridge),
+            Some(x86_init_normal_log_bridge),
+        )
+    };
+    if ret != 0 {
+        unsafe {
+            x86_init_normal_panic_bridge();
+        }
+    }
 }
 
 #[no_mangle]
@@ -4281,6 +4574,29 @@ pub unsafe extern "C" fn x86_init_text_area_body_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn init_text_area(pt: *mut c_void) {
+    let ret = unsafe {
+        x86_init_text_area_body_result(
+            pt,
+            x86_init_text_map_kernel_start_bridge(),
+            x86_init_text_end_bridge(),
+            PTL2_SIZE,
+            LARGE_PAGE_SHIFT,
+            LARGE_PAGE_MASK,
+            X86_KERNEL_PHYS_BASE,
+            PTATTR_WRITABLE,
+            Some(x86_init_normal_set_large_bridge),
+            Some(x86_init_text_log_bridge),
+        )
+    };
+    if ret != 0 {
+        unsafe {
+            x86_init_text_panic_bridge();
+        }
+    }
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn x86_init_fixed_area_body_result(
     fixed_virtp: *mut CULong,
     map_fixed_start: CULong,
@@ -4293,6 +4609,22 @@ pub unsafe extern "C" fn x86_init_fixed_area_body_result(
         *fixed_virtp = map_fixed_start;
     }
     0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_init_fixed_area_public(pt: *mut c_void) {
+    let _ = pt;
+    let ret = unsafe {
+        x86_init_fixed_area_body_result(
+            x86_map_fixed_area_fixed_virt_slot_bridge(),
+            MAP_FIXED_START,
+        )
+    };
+    if ret != 0 {
+        unsafe {
+            x86_init_fixed_panic_bridge();
+        }
+    }
 }
 
 #[no_mangle]
@@ -4316,6 +4648,23 @@ pub unsafe extern "C" fn x86_init_low_area_body_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn init_low_area(pt: *mut c_void) {
+    let ret = unsafe {
+        x86_init_low_area_body_result(
+            pt,
+            PTATTR_NO_EXECUTE,
+            PTATTR_WRITABLE,
+            Some(x86_init_normal_set_large_bridge),
+        )
+    };
+    if ret != 0 {
+        unsafe {
+            x86_init_low_panic_bridge();
+        }
+    }
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn x86_init_vsyscall_area_body_result(
     pt: *mut c_void,
     vsyscall_addr: CULong,
@@ -4333,6 +4682,25 @@ pub unsafe extern "C" fn x86_init_vsyscall_area_body_result(
 
     let phys = unsafe { virt_to_phys(vsyscall_page) };
     unsafe { set_page(pt, vsyscall_addr, phys, attr) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_init_vsyscall_area_public(pt: *mut c_void) {
+    let ret = unsafe {
+        x86_init_vsyscall_area_body_result(
+            pt,
+            VSYSCALL_ADDR,
+            x86_init_vsyscall_page_bridge(),
+            PTATTR_ACTIVE | PTATTR_FOR_USER,
+            Some(x86_pt_virt_to_phys_bridge),
+            Some(x86_pt_set_page_bridge),
+        )
+    };
+    if ret != 0 {
+        unsafe {
+            x86_init_vsyscall_panic_bridge();
+        }
+    }
 }
 
 #[no_mangle]
@@ -4449,6 +4817,30 @@ pub unsafe extern "C" fn x86_init_linux_kernel_mapping_body_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn x86_init_linux_kernel_mapping_public(pt: *mut c_void) {
+    let ret = unsafe {
+        x86_init_linux_kernel_mapping_body_result(
+            pt,
+            LINUX_PAGE_OFFSET_BASE,
+            PTL2_SIZE,
+            PTATTR_WRITABLE,
+            X86_INIT_LINUX_FULL_MAP_END,
+            SAFE_KERNEL_MAP.as_ptr() as *mut i8,
+            Some(x86_init_linux_find_command_line_bridge),
+            Some(x86_init_linux_get_nr_memory_chunks_bridge),
+            Some(x86_init_linux_get_memory_chunk_bridge),
+            Some(x86_init_normal_set_large_bridge),
+            Some(x86_init_linux_log_bridge),
+        )
+    };
+    if ret != 0 {
+        unsafe {
+            x86_init_linux_panic_bridge();
+        }
+    }
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn x86_virt_to_phys_body_result(
     va: CULong,
     map_kernel_start: CULong,
@@ -4498,6 +4890,29 @@ pub unsafe extern "C" fn x86_phys_to_virt_body_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn virt_to_phys(v: *mut c_void) -> CULong {
+    x86_virt_to_phys_body_result(
+        v as CULong,
+        x86_user_map_kernel_start_bridge(),
+        X86_KERNEL_PHYS_BASE,
+        LINUX_PAGE_OFFSET_BASE,
+        MAP_FIXED_START,
+        MAP_ST_START,
+        Some(x86_addr_log_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn phys_to_virt(p: CULong) -> *mut c_void {
+    x86_phys_to_virt_body_result(
+        p,
+        x86_addr_init_pt_loaded_bridge(),
+        MAP_ST_START,
+        LINUX_PAGE_OFFSET_BASE,
+    )
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn x86_reserve_arch_pages_body_result(
     pa_allocator: *mut c_void,
     start: CULong,
@@ -4538,6 +4953,31 @@ pub unsafe extern "C" fn x86_reserve_arch_pages_body_result(
     }
 
     0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_reserve_arch_pages(
+    pa_allocator: *mut c_void,
+    start: CULong,
+    end: CULong,
+    cb: Option<X86ReservePagesCbFn>,
+) {
+    let ret = x86_reserve_arch_pages_body_result(
+        pa_allocator,
+        start,
+        end,
+        core::ptr::addr_of_mut!(X86_HEAD).cast::<c_void>(),
+        get_last_early_heap(),
+        X86_AP_TRAMPOLINE,
+        AP_TRAMPOLINE_SIZE,
+        PTL1_SIZE,
+        Some(x86_pt_virt_to_phys_bridge),
+        cb,
+        Some(x86_reserve_arch_pages_bridge),
+    );
+    if ret != 0 {
+        x86_reserve_arch_pages_panic_bridge();
+    }
 }
 
 #[no_mangle]

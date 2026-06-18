@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdbool.h>
+#include <string.h>
 
 struct fake_smp_os_info_offsets;
 struct fake_smp_special_addr_offsets;
@@ -127,6 +128,99 @@ extern int ihk_core_os_shutdown_result(void *os, int flag,
 		int (*os_shutdown_fn)(void *os, int flag),
 		int (*release_kmsg_fn)(void *container),
 		void (*log_fn)(int event, int value));
+extern int ihk_core_os_set_kargs_body_result(void *os, void *kbuf,
+		int (*call_fn)(void *os, void *kbuf));
+extern int ihk_core_os_dump_body_result(void *os, void *args,
+		int (*call_fn)(void *os, void *args));
+extern long ihk_core_host_os_write_body_result(void *os,
+		const void *buf, unsigned long size, long long *off,
+		unsigned long max_size,
+		void *(*alloc_fn)(unsigned long size),
+		unsigned long (*copy_from_user_fn)(void *dst, const void *src,
+			unsigned long size),
+		int (*load_memory_fn)(void *os, void *buf, unsigned long size,
+			unsigned long offset),
+		void (*free_fn)(void *ptr));
+extern long ihk_core_host_device_io_body_result(void *dev, void *buf,
+		unsigned long size, long long *off, int mode,
+		unsigned long (*map_memory_fn)(void *dev, unsigned long off,
+			unsigned long size),
+		void *(*map_virtual_fn)(void *dev, unsigned long pa,
+			unsigned long size),
+		unsigned long (*copy_to_user_fn)(void *dst, const void *src,
+			unsigned long size),
+		unsigned long (*copy_from_user_fn)(void *dst, const void *src,
+			unsigned long size),
+		void (*unmap_virtual_fn)(void *dev, void *va,
+			unsigned long size));
+extern int ihk_core_os_status_body_result(void *os,
+		int (*status_fn)(void *os));
+extern int ihk_core_os_freeze_body_result(void *os,
+		int (*status_fn)(void *os), int (*freeze_fn)(void *os),
+		void (*log_fn)(int event, int value));
+extern int ihk_core_os_thaw_body_result(void *os,
+		int (*status_fn)(void *os),
+		int (*wait_for_status_fn)(void *os, int status,
+			int sleepable, int timeout),
+		int (*thaw_fn)(void *os), void (*log_fn)(int event, int value));
+extern int ihk_core_os_get_usage_body_result(void *os, void *buf,
+		void (*setup_monitor_fn)(void *os),
+		int (*copy_to_user_fn)(void *dst, const void *src,
+			unsigned long size));
+extern int ihk_core_os_get_cpu_usage_body_result(void *os, void *buf,
+		void (*setup_monitor_fn)(void *os),
+		int (*copy_to_user_fn)(void *dst, const void *src,
+			unsigned long size));
+extern int ihk_core_os_read_kaddr_body_result(void *os, void *desc,
+		int (*vtop_fn)(void *os, unsigned long kaddr,
+			unsigned long *phys),
+		const void *(*phys_to_virt_fn)(unsigned long phys),
+		int (*copy_to_user_fn)(void *dst, const void *src,
+			unsigned long size));
+extern int ihk_core_read_kmsg_body_result(unsigned long kmsg_buf_addr,
+		char *buf, int shift, unsigned long lock_offset,
+		unsigned long tail_offset, unsigned long len_offset,
+		unsigned long head_offset, unsigned long str_offset,
+		unsigned long (*irq_save_fn)(void),
+		void (*irq_restore_fn)(unsigned long flags),
+		void (*cpu_relax_fn)(void));
+extern int ihk_core_clear_kmsg_body_result(unsigned long kmsg_buf_addr,
+		unsigned long lock_offset, unsigned long tail_offset,
+		unsigned long head_offset, unsigned long str_offset,
+		unsigned long str_len, unsigned long (*irq_save_fn)(void),
+		void (*irq_restore_fn)(unsigned long flags),
+		void (*cpu_relax_fn)(void));
+extern int ihk_core_os_read_kmsg_body_result(void *os, void *buf,
+		void *(*alloc_fn)(unsigned long size),
+		int (*read_kmsg_fn)(void *kmsg_buf, char *buf, int shift),
+		int (*copy_to_user_fn)(void *dst, const void *src,
+			unsigned long size),
+		void (*free_fn)(void *ptr));
+extern int ihk_core_os_clear_kmsg_body_result(void *os,
+		unsigned long lock_offset, unsigned long tail_offset,
+		unsigned long head_offset, unsigned long str_offset,
+		unsigned long str_len, unsigned long (*irq_save_fn)(void),
+		void (*irq_restore_fn)(unsigned long flags),
+		void (*cpu_relax_fn)(void));
+extern int ihk_core_device_get_kmsg_buf_body_result(void *desc,
+		unsigned long (*kmsg_lock_fn)(void),
+		void *(*kmsg_find_fn)(int os_index),
+		void (*kmsg_inc_fn)(void *container),
+		void (*kmsg_unlock_fn)(unsigned long flags),
+		unsigned long (*copy_from_user_fn)(void *dst, const void *src,
+			unsigned long size),
+		int (*copy_to_user_fn)(void *dst, const void *src,
+			unsigned long size));
+extern int ihk_core_device_read_kmsg_buf_body_result(void *desc,
+		void *(*alloc_fn)(unsigned long size),
+		int (*read_kmsg_fn)(void *kmsg_buf, char *buf, int shift),
+		unsigned long (*copy_from_user_fn)(void *dst, const void *src,
+			unsigned long size),
+		int (*copy_to_user_fn)(void *dst, const void *src,
+			unsigned long size),
+		void (*free_fn)(void *ptr));
+extern int ihk_core_device_release_kmsg_buf_body_result(void *handle,
+		int (*release_kmsg_fn)(void *container));
 extern int arch_symbols_init(void);
 extern int reserve_user_space(void *usrdata, unsigned long *startp,
 		unsigned long *endp);
@@ -221,6 +315,27 @@ extern unsigned long ihk_core_kmsg_find_by_os_index_reverse_result(
 		unsigned long head_addr, unsigned long list_offset,
 		unsigned long os_index_offset, int os_index);
 extern int ihk_core_dma_request_result(void *channel, void *request);
+extern int ihk_core_os_debug_request_body_result(void *os,
+		unsigned int request, unsigned long arg,
+		int (*present_fn)(void *os),
+		int (*call_fn)(void *os, unsigned int request,
+			unsigned long arg));
+extern int ihk_core_device_debug_request_body_result(void *dev,
+		unsigned int request, unsigned long arg,
+		int (*present_fn)(void *dev),
+		int (*call_fn)(void *dev, unsigned int request,
+			unsigned long arg));
+extern int ihk_core_os_resource_body_result(void *os, void *resource,
+		int op, unsigned long first, unsigned long second,
+		int (*alloc_resource_fn)(void *os, void *resource));
+extern int ihk_core_device_get_buildid_body_result(void *user_addr,
+		const char *buildid, unsigned long buildid_len,
+		int (*copy_to_user_fn)(void *dst, const void *src,
+			unsigned long size));
+extern int ihk_core_device_op_body_result(void *dev, int op,
+		unsigned long arg,
+		int (*present_fn)(void *dev, int op),
+		int (*call_fn)(void *dev, int op, unsigned long arg));
 extern long ihk_core_os_ioctl_call_aux_result(void *os,
 		unsigned int request, unsigned long arg, void *file);
 extern int ihk_core_os_register_user_call_handlers_result(void *os,
@@ -402,6 +517,28 @@ extern int ihk_smp_set_mode_body_result(unsigned long ihk_os,
 #define LOAD_FILE_NONE 0
 #define LOAD_FILE_DIRECT 1
 #define LOAD_FILE_MEM 2
+#define RESOURCE_FLAG_CPU_SPECIFIED 0x1
+#define RESOURCE_FLAG_MEM_SPECIFIED 0x2
+#define OS_RESOURCE_ALLOC_MEM 1
+#define OS_RESOURCE_ALLOC_CPU 2
+#define OS_RESOURCE_RESERVE_CPU 3
+#define OS_RESOURCE_RESERVE_MEM 4
+#define DEVICE_IO_READ 1
+#define DEVICE_IO_WRITE 2
+#define HOST_KMSG_ALLOC_SIZE ((4UL << 20) - 4096)
+#define OS_FREEZE_LOG_INVALID 1
+#define OS_THAW_LOG_INVALID 1
+#define OS_THAW_LOG_WAIT_FROZEN 2
+#define OS_THAW_LOG_WAIT_TIMEOUT 3
+#define READ_KADDR_PHYS 1
+#define DEVICE_OP_RESERVE_CPU 1
+#define DEVICE_OP_RELEASE_CPU 2
+#define DEVICE_OP_RESERVE_MEM 3
+#define DEVICE_OP_RELEASE_MEM 4
+#define DEVICE_OP_RELEASE_MEM_PARTIAL 5
+#define DEVICE_OP_GET_NUM_CPUS 6
+#define DEVICE_OP_QUERY_CPU 7
+#define DEVICE_OP_QUERY_MEM 8
 #define OS_STATUS_NOT_BOOTED 0
 #define OS_STATUS_LOADING 1
 #define OS_STATUS_BOOTING 2
@@ -520,6 +657,21 @@ struct fake_smp_host_os {
 struct fake_smp_status_object {
 	int lock;
 	int status;
+};
+
+struct fake_ihk_resource {
+	int flags;
+	int cpu_cores;
+	unsigned long mem_size;
+	unsigned long mem_start;
+	int cores[4];
+};
+
+struct fake_os_read_kaddr_desc {
+	unsigned long kaddr;
+	unsigned long len;
+	void *ubuf;
+	int flags;
 };
 
 struct fake_ihk_mem_region {
@@ -644,6 +796,17 @@ struct fake_kmsg_container {
 	int count;
 	void *kmsg_buf;
 	unsigned int order;
+};
+
+struct fake_device_get_kmsg_buf_desc {
+	int os_index;
+	void *handle;
+};
+
+struct fake_device_read_kmsg_buf_desc {
+	void *handle;
+	int shift;
+	char *buf;
 };
 
 struct fake_os_data {
@@ -1043,9 +1206,533 @@ static int fake_sysfs_cpu_mapping[] = { 4, 2, 7 };
 static int fake_sysfs_cpu_hw_ids[] = { 40, 20, 70 };
 static int fake_sysfs_numa_mapping[] = { 1, 3 };
 static void *fake_sysfs_usrdata = (void *)0x1000;
+static void *host_driver_fake_os = (void *)0x8800;
+static void *host_driver_fake_dev = (void *)0x8900;
+static int host_debug_present_value;
+static int host_os_debug_present_calls;
+static int host_os_debug_call_calls;
+static int host_device_debug_present_calls;
+static int host_device_debug_call_calls;
+static unsigned int host_debug_last_request;
+static unsigned long host_debug_last_arg;
+static void *host_debug_last_ptr;
+static int host_debug_ret;
+static int host_copy_to_user_calls;
+static int host_copy_to_user_fail;
+static void *host_copy_to_user_dst;
+static const void *host_copy_to_user_src;
+static unsigned long host_copy_to_user_size;
+static int host_os_resource_calls;
+static int host_os_resource_ret;
+static void *host_os_resource_last_os;
+static int host_os_resource_flags;
+static int host_os_resource_cpu_cores;
+static unsigned long host_os_resource_mem_size;
+static unsigned long host_os_resource_mem_start;
+static int host_os_resource_core0;
+static int host_os_resource_core1;
+static int host_device_op_present_calls;
+static int host_device_op_call_calls;
+static int host_device_op_present_value[9];
+static int host_device_op_ret[9];
+static int host_device_op_last_op;
+static unsigned long host_device_op_last_arg;
+static void *host_device_op_last_dev;
+static int host_os_buffer_calls;
+static int host_os_buffer_ret;
+static void *host_os_buffer_last_os;
+static void *host_os_buffer_last_arg;
+static int host_alloc_calls;
+static int host_alloc_fail;
+static unsigned long host_alloc_size;
+static unsigned char host_alloc_storage[128];
+static int host_free_calls;
+static void *host_free_last_ptr;
+static int host_copy_from_count_calls;
+static unsigned long host_copy_from_not_copied;
+static const void *host_copy_from_src;
+static void *host_copy_from_dst;
+static unsigned long host_copy_from_size;
+static int host_copy_to_count_calls;
+static unsigned long host_copy_to_not_copied;
+static const void *host_copy_to_src;
+static void *host_copy_to_dst;
+static unsigned long host_copy_to_size;
+static int host_os_load_memory_calls;
+static int host_os_load_memory_ret;
+static void *host_os_load_memory_last_os;
+static void *host_os_load_memory_last_buf;
+static unsigned long host_os_load_memory_last_size;
+static unsigned long host_os_load_memory_last_offset;
+static int host_device_map_memory_calls;
+static unsigned long host_device_map_memory_ret;
+static unsigned long host_device_map_memory_last_off;
+static unsigned long host_device_map_memory_last_size;
+static int host_device_map_virtual_calls;
+static int host_device_map_virtual_fail;
+static unsigned long host_device_map_virtual_last_pa;
+static unsigned long host_device_map_virtual_last_size;
+static unsigned char host_device_va[128];
+static int host_device_unmap_virtual_calls;
+static void *host_device_unmap_virtual_last_va;
+static unsigned long host_device_unmap_virtual_last_size;
+static int host_os_status_calls;
+static int host_os_status_ret;
+static int host_os_simple_calls;
+static int host_os_simple_ret;
+static int host_os_wait_calls;
+static int host_os_wait_ret;
+static int host_os_wait_status;
+static int host_os_wait_sleepable;
+static int host_os_wait_timeout;
+static int host_os_log_calls;
+static int host_os_last_log_event;
+static int host_os_last_log_value;
+static int host_setup_monitor_calls;
+static int host_setup_monitor_publish;
+static struct fake_smp_monitor *host_setup_monitor_value;
+static int host_os_vtop_calls;
+static int host_os_vtop_ret;
+static unsigned long host_os_vtop_last_kaddr;
+static unsigned long host_os_vtop_phys;
+static int host_phys_to_virt_calls;
+static unsigned long host_phys_to_virt_last_phys;
+static unsigned char host_phys_to_virt_storage[64];
+static int host_irq_save_calls;
+static int host_irq_restore_calls;
+static unsigned long host_irq_restore_last_flags;
+static int host_cpu_relax_calls;
+static int host_kmsg_alloc_calls;
+static int host_kmsg_alloc_fail;
+static unsigned long host_kmsg_alloc_size;
+static unsigned char host_kmsg_alloc_storage[64];
+static int host_kmsg_free_calls;
+static void *host_kmsg_free_last_ptr;
+static int host_read_kmsg_calls;
+static int host_read_kmsg_ret;
+static void *host_read_kmsg_last_buf;
+static int host_read_kmsg_last_shift;
+static void *host_read_kmsg_last_kmsg;
+static int host_release_kmsg_calls;
+static int host_release_kmsg_ret;
+static void *host_release_kmsg_last_handle;
 
 static void require_line(int condition, int line);
 #define require(condition) require_line((condition), __LINE__)
+
+static void reset_host_driver_wrapper_state(void)
+{
+	int i;
+
+	host_debug_present_value = 1;
+	host_os_debug_present_calls = 0;
+	host_os_debug_call_calls = 0;
+	host_device_debug_present_calls = 0;
+	host_device_debug_call_calls = 0;
+	host_debug_last_request = 0;
+	host_debug_last_arg = 0;
+	host_debug_last_ptr = NULL;
+	host_debug_ret = 321;
+	host_copy_to_user_calls = 0;
+	host_copy_to_user_fail = 0;
+	host_copy_to_user_dst = NULL;
+	host_copy_to_user_src = NULL;
+	host_copy_to_user_size = 0;
+	host_os_resource_calls = 0;
+	host_os_resource_ret = 777;
+	host_os_resource_last_os = NULL;
+	host_os_resource_flags = -1;
+	host_os_resource_cpu_cores = -1;
+	host_os_resource_mem_size = 0;
+	host_os_resource_mem_start = 0;
+	host_os_resource_core0 = -1;
+	host_os_resource_core1 = -1;
+	host_device_op_present_calls = 0;
+	host_device_op_call_calls = 0;
+	host_device_op_last_op = 0;
+	host_device_op_last_arg = 0;
+	host_device_op_last_dev = NULL;
+	host_os_buffer_calls = 0;
+	host_os_buffer_ret = 731;
+	host_os_buffer_last_os = NULL;
+	host_os_buffer_last_arg = NULL;
+	host_alloc_calls = 0;
+	host_alloc_fail = 0;
+	host_alloc_size = 0;
+	memset(host_alloc_storage, 0, sizeof(host_alloc_storage));
+	host_free_calls = 0;
+	host_free_last_ptr = NULL;
+	host_copy_from_count_calls = 0;
+	host_copy_from_not_copied = 0;
+	host_copy_from_src = NULL;
+	host_copy_from_dst = NULL;
+	host_copy_from_size = 0;
+	host_copy_to_count_calls = 0;
+	host_copy_to_not_copied = 0;
+	host_copy_to_src = NULL;
+	host_copy_to_dst = NULL;
+	host_copy_to_size = 0;
+	host_os_load_memory_calls = 0;
+	host_os_load_memory_ret = 0;
+	host_os_load_memory_last_os = NULL;
+	host_os_load_memory_last_buf = NULL;
+	host_os_load_memory_last_size = 0;
+	host_os_load_memory_last_offset = 0;
+	host_device_map_memory_calls = 0;
+	host_device_map_memory_ret = 0x9000UL;
+	host_device_map_memory_last_off = 0;
+	host_device_map_memory_last_size = 0;
+	host_device_map_virtual_calls = 0;
+	host_device_map_virtual_fail = 0;
+	host_device_map_virtual_last_pa = 0;
+	host_device_map_virtual_last_size = 0;
+	memset(host_device_va, 0, sizeof(host_device_va));
+	host_device_unmap_virtual_calls = 0;
+	host_device_unmap_virtual_last_va = NULL;
+	host_device_unmap_virtual_last_size = 0;
+	host_os_status_calls = 0;
+	host_os_status_ret = OS_STATUS_RUNNING;
+	host_os_simple_calls = 0;
+	host_os_simple_ret = 0;
+	host_os_wait_calls = 0;
+	host_os_wait_ret = 0;
+	host_os_wait_status = 0;
+	host_os_wait_sleepable = 0;
+	host_os_wait_timeout = 0;
+	host_os_log_calls = 0;
+	host_os_last_log_event = 0;
+	host_os_last_log_value = 0;
+	host_setup_monitor_calls = 0;
+	host_setup_monitor_publish = 1;
+	host_setup_monitor_value = NULL;
+	host_os_vtop_calls = 0;
+	host_os_vtop_ret = 0;
+	host_os_vtop_last_kaddr = 0;
+	host_os_vtop_phys = 0x40;
+	host_phys_to_virt_calls = 0;
+	host_phys_to_virt_last_phys = 0;
+	memset(host_phys_to_virt_storage, 0, sizeof(host_phys_to_virt_storage));
+	host_irq_save_calls = 0;
+	host_irq_restore_calls = 0;
+	host_irq_restore_last_flags = 0;
+	host_cpu_relax_calls = 0;
+	host_kmsg_alloc_calls = 0;
+	host_kmsg_alloc_fail = 0;
+	host_kmsg_alloc_size = 0;
+	memset(host_kmsg_alloc_storage, 0, sizeof(host_kmsg_alloc_storage));
+	host_kmsg_free_calls = 0;
+	host_kmsg_free_last_ptr = NULL;
+	host_read_kmsg_calls = 0;
+	host_read_kmsg_ret = 5;
+	host_read_kmsg_last_buf = NULL;
+	host_read_kmsg_last_shift = -1;
+	host_read_kmsg_last_kmsg = NULL;
+	host_release_kmsg_calls = 0;
+	host_release_kmsg_ret = 0;
+	host_release_kmsg_last_handle = NULL;
+	for (i = 0; i < 9; i++) {
+		host_device_op_present_value[i] = i > 0;
+		host_device_op_ret[i] = 200 + i;
+	}
+}
+
+static int fake_os_debug_present(void *os)
+{
+	require(os == host_driver_fake_os);
+	host_os_debug_present_calls++;
+	return host_debug_present_value;
+}
+
+static int fake_os_debug_call(void *os, unsigned int request,
+		unsigned long arg)
+{
+	require(os == host_driver_fake_os);
+	host_os_debug_call_calls++;
+	host_debug_last_ptr = os;
+	host_debug_last_request = request;
+	host_debug_last_arg = arg;
+	return host_debug_ret;
+}
+
+static int fake_device_debug_present(void *dev)
+{
+	require(dev == host_driver_fake_dev);
+	host_device_debug_present_calls++;
+	return host_debug_present_value;
+}
+
+static int fake_device_debug_call(void *dev, unsigned int request,
+		unsigned long arg)
+{
+	require(dev == host_driver_fake_dev);
+	host_device_debug_call_calls++;
+	host_debug_last_ptr = dev;
+	host_debug_last_request = request;
+	host_debug_last_arg = arg;
+	return host_debug_ret;
+}
+
+static int fake_host_copy_to_user(void *dst, const void *src,
+		unsigned long size)
+{
+	host_copy_to_user_calls++;
+	host_copy_to_user_dst = dst;
+	host_copy_to_user_src = src;
+	host_copy_to_user_size = size;
+	if (host_copy_to_user_fail)
+		return 1;
+	memcpy(dst, src, size);
+	return 0;
+}
+
+static int fake_os_alloc_resource(void *os, void *resource)
+{
+	struct fake_ihk_resource *res = resource;
+
+	require(os == host_driver_fake_os);
+	host_os_resource_calls++;
+	host_os_resource_last_os = os;
+	host_os_resource_flags = res->flags;
+	host_os_resource_cpu_cores = res->cpu_cores;
+	host_os_resource_mem_size = res->mem_size;
+	host_os_resource_mem_start = res->mem_start;
+	if ((res->flags & RESOURCE_FLAG_CPU_SPECIFIED) && res->cpu_cores > 0) {
+		host_os_resource_core0 = res->cores[0];
+		if (res->cpu_cores > 1)
+			host_os_resource_core1 = res->cores[1];
+	}
+	return host_os_resource_ret;
+}
+
+static int fake_device_op_present(void *dev, int op)
+{
+	require(dev == host_driver_fake_dev);
+	host_device_op_present_calls++;
+	host_device_op_last_dev = dev;
+	host_device_op_last_op = op;
+	if (op < 1 || op >= 9)
+		return 0;
+	return host_device_op_present_value[op];
+}
+
+static int fake_device_op_call(void *dev, int op, unsigned long arg)
+{
+	require(dev == host_driver_fake_dev);
+	host_device_op_call_calls++;
+	host_device_op_last_dev = dev;
+	host_device_op_last_op = op;
+	host_device_op_last_arg = arg;
+	if (op < 1 || op >= 9)
+		return -99;
+	return host_device_op_ret[op];
+}
+
+static int fake_os_buffer_call(void *os, void *arg)
+{
+	require(os == host_driver_fake_os);
+	host_os_buffer_calls++;
+	host_os_buffer_last_os = os;
+	host_os_buffer_last_arg = arg;
+	return host_os_buffer_ret;
+}
+
+static void *fake_host_alloc(unsigned long size)
+{
+	host_alloc_calls++;
+	host_alloc_size = size;
+	if (host_alloc_fail)
+		return NULL;
+	require(size <= sizeof(host_alloc_storage));
+	return host_alloc_storage;
+}
+
+static void fake_host_free(void *ptr)
+{
+	host_free_calls++;
+	host_free_last_ptr = ptr;
+	require(ptr == host_alloc_storage);
+}
+
+static unsigned long fake_host_irq_save(void)
+{
+	host_irq_save_calls++;
+	return 0x88;
+}
+
+static void fake_host_irq_restore(unsigned long flags)
+{
+	host_irq_restore_calls++;
+	host_irq_restore_last_flags = flags;
+}
+
+static void fake_host_cpu_relax(void)
+{
+	host_cpu_relax_calls++;
+}
+
+static void *fake_host_kmsg_alloc(unsigned long size)
+{
+	host_kmsg_alloc_calls++;
+	host_kmsg_alloc_size = size;
+	if (host_kmsg_alloc_fail)
+		return NULL;
+	require(size == HOST_KMSG_ALLOC_SIZE);
+	return host_kmsg_alloc_storage;
+}
+
+static void fake_host_kmsg_free(void *ptr)
+{
+	host_kmsg_free_calls++;
+	host_kmsg_free_last_ptr = ptr;
+	require(ptr == host_kmsg_alloc_storage);
+}
+
+static int fake_host_read_kmsg(void *kmsg_buf, char *buf, int shift)
+{
+	host_read_kmsg_calls++;
+	host_read_kmsg_last_kmsg = kmsg_buf;
+	host_read_kmsg_last_buf = buf;
+	host_read_kmsg_last_shift = shift;
+	memcpy(buf, "kmsg!", 5);
+	return host_read_kmsg_ret;
+}
+
+static int fake_host_release_kmsg(void *handle)
+{
+	host_release_kmsg_calls++;
+	host_release_kmsg_last_handle = handle;
+	return host_release_kmsg_ret;
+}
+
+static unsigned long fake_host_copy_from_count(void *dst, const void *src,
+		unsigned long size)
+{
+	unsigned long copied = size - host_copy_from_not_copied;
+
+	host_copy_from_count_calls++;
+	host_copy_from_dst = dst;
+	host_copy_from_src = src;
+	host_copy_from_size = size;
+	require(host_copy_from_not_copied <= size);
+	memcpy(dst, src, copied);
+	return host_copy_from_not_copied;
+}
+
+static unsigned long fake_host_copy_to_count(void *dst, const void *src,
+		unsigned long size)
+{
+	unsigned long copied = size - host_copy_to_not_copied;
+
+	host_copy_to_count_calls++;
+	host_copy_to_dst = dst;
+	host_copy_to_src = src;
+	host_copy_to_size = size;
+	require(host_copy_to_not_copied <= size);
+	memcpy(dst, src, copied);
+	return host_copy_to_not_copied;
+}
+
+static int fake_host_os_load_memory(void *os, void *buf,
+		unsigned long size, unsigned long offset)
+{
+	require(os == host_driver_fake_os);
+	host_os_load_memory_calls++;
+	host_os_load_memory_last_os = os;
+	host_os_load_memory_last_buf = buf;
+	host_os_load_memory_last_size = size;
+	host_os_load_memory_last_offset = offset;
+	return host_os_load_memory_ret;
+}
+
+static unsigned long fake_host_device_map_memory(void *dev,
+		unsigned long off, unsigned long size)
+{
+	require(dev == host_driver_fake_dev);
+	host_device_map_memory_calls++;
+	host_device_map_memory_last_off = off;
+	host_device_map_memory_last_size = size;
+	return host_device_map_memory_ret;
+}
+
+static void *fake_host_device_map_virtual(void *dev, unsigned long pa,
+		unsigned long size)
+{
+	require(dev == host_driver_fake_dev);
+	host_device_map_virtual_calls++;
+	host_device_map_virtual_last_pa = pa;
+	host_device_map_virtual_last_size = size;
+	require(size <= sizeof(host_device_va));
+	if (host_device_map_virtual_fail)
+		return NULL;
+	return host_device_va;
+}
+
+static void fake_host_device_unmap_virtual(void *dev, void *va,
+		unsigned long size)
+{
+	require(dev == host_driver_fake_dev);
+	require(va == host_device_va);
+	host_device_unmap_virtual_calls++;
+	host_device_unmap_virtual_last_va = va;
+	host_device_unmap_virtual_last_size = size;
+}
+
+static int fake_host_os_status(void *os)
+{
+	require(os == host_driver_fake_os || os != NULL);
+	host_os_status_calls++;
+	return host_os_status_ret;
+}
+
+static int fake_host_os_simple(void *os)
+{
+	require(os == host_driver_fake_os || os != NULL);
+	host_os_simple_calls++;
+	return host_os_simple_ret;
+}
+
+static int fake_host_os_wait(void *os, int status, int sleepable, int timeout)
+{
+	require(os == host_driver_fake_os || os != NULL);
+	host_os_wait_calls++;
+	host_os_wait_status = status;
+	host_os_wait_sleepable = sleepable;
+	host_os_wait_timeout = timeout;
+	return host_os_wait_ret;
+}
+
+static void fake_host_os_log(int event, int value)
+{
+	host_os_log_calls++;
+	host_os_last_log_event = event;
+	host_os_last_log_value = value;
+}
+
+static void fake_host_setup_monitor(void *os)
+{
+	struct fake_smp_host_os *host_os = os;
+
+	host_setup_monitor_calls++;
+	if (host_setup_monitor_publish)
+		host_os->monitor = host_setup_monitor_value;
+}
+
+static int fake_host_os_vtop(void *os, unsigned long kaddr,
+		unsigned long *phys)
+{
+	require(os == host_driver_fake_os);
+	host_os_vtop_calls++;
+	host_os_vtop_last_kaddr = kaddr;
+	*phys = host_os_vtop_phys;
+	return host_os_vtop_ret;
+}
+
+static const void *fake_host_phys_to_virt(unsigned long phys)
+{
+	host_phys_to_virt_calls++;
+	host_phys_to_virt_last_phys = phys;
+	return host_phys_to_virt_storage;
+}
 
 void mcctrl_cpumap_clear_bridge(void *mask)
 {
@@ -4060,6 +4747,682 @@ int main(void)
 			fake_notifier_down, fake_notifier_up,
 			fake_notifier_log) == -512);
 	require(notifier_up_calls == 5);
+
+	{
+		struct fake_ihk_resource resource;
+		struct fake_ihk_resource cpu_resource;
+
+		reset_host_driver_wrapper_state();
+		host_os_resource_ret = 701;
+		memset(&resource, 0xff, sizeof(resource));
+		require(ihk_core_os_resource_body_result(host_driver_fake_os,
+				&resource, OS_RESOURCE_ALLOC_MEM, 0x12340UL, 0,
+				fake_os_alloc_resource) == 701);
+		require(host_os_resource_calls == 1);
+		require(host_os_resource_last_os == host_driver_fake_os);
+		require(host_os_resource_flags == 0);
+		require(host_os_resource_cpu_cores == 0);
+		require(host_os_resource_mem_size == 0x12340UL);
+		require(host_os_resource_mem_start == 0);
+
+		reset_host_driver_wrapper_state();
+		host_os_resource_ret = 702;
+		memset(&resource, 0xff, sizeof(resource));
+		require(ihk_core_os_resource_body_result(host_driver_fake_os,
+				&resource, OS_RESOURCE_ALLOC_CPU, 7, 0,
+				fake_os_alloc_resource) == 702);
+		require(host_os_resource_calls == 1);
+		require(host_os_resource_flags == 0);
+		require(host_os_resource_cpu_cores == 7);
+		require(host_os_resource_mem_size == 0);
+		require(host_os_resource_mem_start == 0);
+
+		reset_host_driver_wrapper_state();
+		host_os_resource_ret = 703;
+		memset(&cpu_resource, 0xff, sizeof(cpu_resource));
+		cpu_resource.cores[0] = 11;
+		cpu_resource.cores[1] = 22;
+		require(ihk_core_os_resource_body_result(host_driver_fake_os,
+				&cpu_resource, OS_RESOURCE_RESERVE_CPU,
+				2, 0, fake_os_alloc_resource) == 703);
+		require(host_os_resource_calls == 1);
+		require(host_os_resource_flags == RESOURCE_FLAG_CPU_SPECIFIED);
+		require(host_os_resource_cpu_cores == 2);
+		require(host_os_resource_mem_size == 0);
+		require(host_os_resource_mem_start == 0);
+		require(host_os_resource_core0 == 11);
+		require(host_os_resource_core1 == 22);
+
+		reset_host_driver_wrapper_state();
+		host_os_resource_ret = 704;
+		memset(&resource, 0xff, sizeof(resource));
+		require(ihk_core_os_resource_body_result(host_driver_fake_os,
+				&resource, OS_RESOURCE_RESERVE_MEM,
+				0x500000UL, 0x8000UL,
+				fake_os_alloc_resource) == 704);
+		require(host_os_resource_calls == 1);
+		require(host_os_resource_flags == RESOURCE_FLAG_MEM_SPECIFIED);
+		require(host_os_resource_cpu_cores == 0);
+		require(host_os_resource_mem_start == 0x500000UL);
+		require(host_os_resource_mem_size == 0x8000UL);
+
+		require(ihk_core_os_resource_body_result(NULL, &resource,
+				OS_RESOURCE_ALLOC_MEM, 1, 0,
+				fake_os_alloc_resource) == -22);
+		require(ihk_core_os_resource_body_result(host_driver_fake_os,
+				NULL, OS_RESOURCE_ALLOC_MEM, 1, 0,
+				fake_os_alloc_resource) == -22);
+		require(ihk_core_os_resource_body_result(host_driver_fake_os,
+				&resource, 99, 1, 0,
+				fake_os_alloc_resource) == -22);
+		require(ihk_core_os_resource_body_result(host_driver_fake_os,
+				&resource, OS_RESOURCE_ALLOC_MEM, 1, 0,
+				NULL) == -22);
+	}
+
+	{
+		char kbuf[] = "console=ttyS0";
+		int dump_args = 41;
+		char user_src[] = "abcdefgh";
+		char user_dst[16];
+		long long off;
+
+		reset_host_driver_wrapper_state();
+		host_os_buffer_ret = 741;
+		require(ihk_core_os_set_kargs_body_result(host_driver_fake_os,
+				kbuf, fake_os_buffer_call) == 741);
+		require(host_os_buffer_calls == 1);
+		require(host_os_buffer_last_os == host_driver_fake_os);
+		require(host_os_buffer_last_arg == kbuf);
+		require(ihk_core_os_set_kargs_body_result(NULL, kbuf,
+				fake_os_buffer_call) == -22);
+		require(ihk_core_os_set_kargs_body_result(host_driver_fake_os,
+				NULL, fake_os_buffer_call) == -22);
+		require(ihk_core_os_set_kargs_body_result(host_driver_fake_os,
+				kbuf, NULL) == -22);
+
+		reset_host_driver_wrapper_state();
+		host_os_buffer_ret = -5;
+		require(ihk_core_os_dump_body_result(host_driver_fake_os,
+				&dump_args, fake_os_buffer_call) == -5);
+		require(host_os_buffer_calls == 1);
+		require(host_os_buffer_last_arg == &dump_args);
+		require(ihk_core_os_dump_body_result(host_driver_fake_os,
+				NULL, fake_os_buffer_call) == -22);
+
+		reset_host_driver_wrapper_state();
+		off = 9;
+		require(ihk_core_host_os_write_body_result(host_driver_fake_os,
+				user_src, 8, &off, 16, fake_host_alloc,
+				fake_host_copy_from_count,
+				fake_host_os_load_memory,
+				fake_host_free) == 8);
+		require(host_alloc_calls == 1);
+		require(host_alloc_size == 8);
+		require(host_copy_from_count_calls == 1);
+		require(host_os_load_memory_calls == 1);
+		require(host_os_load_memory_last_buf == host_alloc_storage);
+		require(host_os_load_memory_last_size == 8);
+		require(host_os_load_memory_last_offset == 9);
+		require(memcmp(host_alloc_storage, user_src, 8) == 0);
+		require(host_free_calls == 1);
+		require(off == 17);
+
+		reset_host_driver_wrapper_state();
+		off = 3;
+		require(ihk_core_host_os_write_body_result(host_driver_fake_os,
+				user_src, 17, &off, 16, fake_host_alloc,
+				fake_host_copy_from_count,
+				fake_host_os_load_memory,
+				fake_host_free) == -7);
+		require(host_alloc_calls == 0);
+		require(off == 3);
+
+		reset_host_driver_wrapper_state();
+		host_alloc_fail = 1;
+		off = 3;
+		require(ihk_core_host_os_write_body_result(host_driver_fake_os,
+				user_src, 8, &off, 16, fake_host_alloc,
+				fake_host_copy_from_count,
+				fake_host_os_load_memory,
+				fake_host_free) == -12);
+		require(host_alloc_calls == 1);
+		require(host_free_calls == 0);
+		require(off == 3);
+
+		reset_host_driver_wrapper_state();
+		host_copy_from_not_copied = 2;
+		off = 3;
+		require(ihk_core_host_os_write_body_result(host_driver_fake_os,
+				user_src, 8, &off, 16, fake_host_alloc,
+				fake_host_copy_from_count,
+				fake_host_os_load_memory,
+				fake_host_free) == -14);
+		require(host_copy_from_count_calls == 1);
+		require(host_os_load_memory_calls == 0);
+		require(host_free_calls == 1);
+		require(off == 3);
+
+		reset_host_driver_wrapper_state();
+		host_os_load_memory_ret = -33;
+		off = 3;
+		require(ihk_core_host_os_write_body_result(host_driver_fake_os,
+				user_src, 8, &off, 16, fake_host_alloc,
+				fake_host_copy_from_count,
+				fake_host_os_load_memory,
+				fake_host_free) == -33);
+		require(host_free_calls == 1);
+		require(off == 3);
+
+		reset_host_driver_wrapper_state();
+		memcpy(host_device_va, "read-data", 9);
+		memset(user_dst, 0, sizeof(user_dst));
+		off = 4;
+		require(ihk_core_host_device_io_body_result(
+				host_driver_fake_dev, user_dst, 9, &off,
+				DEVICE_IO_READ, fake_host_device_map_memory,
+				fake_host_device_map_virtual,
+				fake_host_copy_to_count,
+				fake_host_copy_from_count,
+				fake_host_device_unmap_virtual) == 9);
+		require(host_device_map_memory_calls == 1);
+		require(host_device_map_memory_last_off == 4);
+		require(host_device_map_virtual_calls == 1);
+		require(host_device_map_virtual_last_pa == 0x9000UL);
+		require(host_copy_to_count_calls == 1);
+		require(memcmp(user_dst, "read-data", 9) == 0);
+		require(host_device_unmap_virtual_calls == 1);
+		require(off == 13);
+
+		reset_host_driver_wrapper_state();
+		off = 10;
+		host_copy_from_not_copied = 3;
+		require(ihk_core_host_device_io_body_result(
+				host_driver_fake_dev, user_src, 8, &off,
+				DEVICE_IO_WRITE, fake_host_device_map_memory,
+				fake_host_device_map_virtual,
+				fake_host_copy_to_count,
+				fake_host_copy_from_count,
+				fake_host_device_unmap_virtual) == 5);
+		require(host_copy_from_count_calls == 1);
+		require(memcmp(host_device_va, user_src, 5) == 0);
+		require(host_device_unmap_virtual_calls == 1);
+		require(off == 15);
+
+		reset_host_driver_wrapper_state();
+		host_device_map_memory_ret = 0;
+		off = 10;
+		require(ihk_core_host_device_io_body_result(
+				host_driver_fake_dev, user_src, 8, &off,
+				DEVICE_IO_WRITE, fake_host_device_map_memory,
+				fake_host_device_map_virtual,
+				fake_host_copy_to_count,
+				fake_host_copy_from_count,
+				fake_host_device_unmap_virtual) == -22);
+		require(host_device_map_virtual_calls == 0);
+		require(host_device_unmap_virtual_calls == 0);
+		require(off == 10);
+
+		reset_host_driver_wrapper_state();
+		host_device_map_virtual_fail = 1;
+		off = 10;
+		require(ihk_core_host_device_io_body_result(
+				host_driver_fake_dev, user_src, 8, &off,
+				DEVICE_IO_WRITE, fake_host_device_map_memory,
+				fake_host_device_map_virtual,
+				fake_host_copy_to_count,
+				fake_host_copy_from_count,
+				fake_host_device_unmap_virtual) == -12);
+		require(host_device_unmap_virtual_calls == 0);
+		require(off == 10);
+
+		reset_host_driver_wrapper_state();
+		off = 10;
+		require(ihk_core_host_device_io_body_result(
+				host_driver_fake_dev, user_dst, 4, &off,
+				DEVICE_IO_READ, fake_host_device_map_memory,
+				fake_host_device_map_virtual,
+				NULL, fake_host_copy_from_count,
+				fake_host_device_unmap_virtual) == -22);
+		require(host_device_unmap_virtual_calls == 1);
+		require(off == 10);
+	}
+
+	{
+		struct fake_smp_host_os host_os;
+		struct fake_smp_monitor monitor;
+		char usage_dst[1200];
+		char read_dst[16];
+		char kmsg_out[16];
+		char kmsg_user[16];
+		struct fake_os_read_kaddr_desc read_desc;
+		struct fake_device_get_kmsg_buf_desc get_kmsg_desc;
+		struct fake_device_read_kmsg_buf_desc read_kmsg_desc;
+
+		reset_host_driver_wrapper_state();
+		host_os_status_ret = OS_STATUS_RUNNING;
+		require(ihk_core_os_status_body_result(host_driver_fake_os,
+				fake_host_os_status) == OS_STATUS_RUNNING);
+		require(host_os_status_calls == 1);
+
+		reset_host_driver_wrapper_state();
+		host_os_status_ret = OS_STATUS_RUNNING;
+		host_os_simple_ret = 812;
+		require(ihk_core_os_freeze_body_result(host_driver_fake_os,
+				fake_host_os_status, fake_host_os_simple,
+				fake_host_os_log) == 812);
+		require(host_os_status_calls == 1);
+		require(host_os_simple_calls == 1);
+		require(host_os_log_calls == 0);
+
+		reset_host_driver_wrapper_state();
+		host_os_status_ret = OS_STATUS_FROZEN;
+		require(ihk_core_os_freeze_body_result(host_driver_fake_os,
+				fake_host_os_status, fake_host_os_simple,
+				fake_host_os_log) == -16);
+		require(host_os_simple_calls == 0);
+		require(host_os_log_calls == 0);
+
+		reset_host_driver_wrapper_state();
+		host_os_status_ret = OS_STATUS_READY;
+		require(ihk_core_os_freeze_body_result(host_driver_fake_os,
+				fake_host_os_status, fake_host_os_simple,
+				fake_host_os_log) == -22);
+		require(host_os_simple_calls == 0);
+		require(host_os_log_calls == 1);
+		require(host_os_last_log_event == OS_FREEZE_LOG_INVALID);
+		require(host_os_last_log_value == OS_STATUS_READY);
+
+		reset_host_driver_wrapper_state();
+		host_os_status_ret = OS_STATUS_FREEZING;
+		host_os_simple_ret = 813;
+		require(ihk_core_os_thaw_body_result(host_driver_fake_os,
+				fake_host_os_status, fake_host_os_wait,
+				fake_host_os_simple, fake_host_os_log) == 813);
+		require(host_os_wait_calls == 1);
+		require(host_os_wait_status == OS_STATUS_FROZEN);
+		require(host_os_wait_sleepable == 0);
+		require(host_os_wait_timeout == 100);
+		require(host_os_simple_calls == 1);
+		require(host_os_log_calls == 1);
+		require(host_os_last_log_event == OS_THAW_LOG_WAIT_FROZEN);
+
+		reset_host_driver_wrapper_state();
+		host_os_status_ret = OS_STATUS_FREEZING;
+		host_os_wait_ret = -1;
+		require(ihk_core_os_thaw_body_result(host_driver_fake_os,
+				fake_host_os_status, fake_host_os_wait,
+				fake_host_os_simple, fake_host_os_log) == 0);
+		require(host_os_wait_calls == 1);
+		require(host_os_log_calls == 2);
+		require(host_os_last_log_event == OS_THAW_LOG_WAIT_TIMEOUT);
+
+		reset_host_driver_wrapper_state();
+		host_os_status_ret = OS_STATUS_READY;
+		require(ihk_core_os_thaw_body_result(host_driver_fake_os,
+				fake_host_os_status, fake_host_os_wait,
+				fake_host_os_simple, fake_host_os_log) == -22);
+		require(host_os_wait_calls == 0);
+		require(host_os_simple_calls == 0);
+		require(host_os_last_log_event == OS_THAW_LOG_INVALID);
+
+		reset_host_driver_wrapper_state();
+		memset(&host_os, 0, sizeof(host_os));
+		memset(&monitor, 0, sizeof(monitor));
+		monitor.num_processors = 2;
+		monitor.cpu[0].status = 11;
+		monitor.cpu[1].status = 22;
+		host_setup_monitor_value = &monitor;
+		memset(usage_dst, 0, sizeof(usage_dst));
+		require(ihk_core_os_get_usage_body_result(&host_os,
+				usage_dst, fake_host_setup_monitor,
+				fake_host_copy_to_user) == 0);
+		require(host_setup_monitor_calls == 1);
+		require(host_copy_to_user_calls == 1);
+		require(host_copy_to_user_src == &monitor);
+		require(host_copy_to_user_size ==
+				offsetof(struct fake_smp_monitor, cpu));
+		require(((struct fake_smp_monitor *)usage_dst)->num_processors == 2);
+
+		reset_host_driver_wrapper_state();
+		memset(&host_os, 0, sizeof(host_os));
+		host_setup_monitor_value = &monitor;
+		memset(usage_dst, 0, sizeof(usage_dst));
+		require(ihk_core_os_get_cpu_usage_body_result(&host_os,
+				usage_dst, fake_host_setup_monitor,
+				fake_host_copy_to_user) == 0);
+		require(host_copy_to_user_src == monitor.cpu);
+		require(host_copy_to_user_size ==
+				sizeof(struct fake_smp_monitor_cpu) * 2);
+		require(((struct fake_smp_monitor_cpu *)usage_dst)[1].status == 22);
+
+		reset_host_driver_wrapper_state();
+		memset(&host_os, 0, sizeof(host_os));
+		host_setup_monitor_publish = 0;
+		require(ihk_core_os_get_usage_body_result(&host_os,
+				usage_dst, fake_host_setup_monitor,
+				fake_host_copy_to_user) == -38);
+		require(host_copy_to_user_calls == 0);
+
+		reset_host_driver_wrapper_state();
+		memset(&host_os, 0, sizeof(host_os));
+		host_setup_monitor_value = &monitor;
+		host_copy_to_user_fail = 1;
+		require(ihk_core_os_get_cpu_usage_body_result(&host_os,
+				usage_dst, fake_host_setup_monitor,
+				fake_host_copy_to_user) == -14);
+
+		reset_host_driver_wrapper_state();
+		memcpy(host_phys_to_virt_storage, "kernel", 6);
+		memset(read_dst, 0, sizeof(read_dst));
+		read_desc.kaddr = 0x30;
+		read_desc.len = 6;
+		read_desc.ubuf = read_dst;
+		read_desc.flags = READ_KADDR_PHYS;
+		require(ihk_core_os_read_kaddr_body_result(host_driver_fake_os,
+				&read_desc, fake_host_os_vtop,
+				fake_host_phys_to_virt,
+				fake_host_copy_to_user) == 0);
+		require(host_os_vtop_calls == 0);
+		require(host_phys_to_virt_last_phys == 0x30);
+		require(memcmp(read_dst, "kernel", 6) == 0);
+
+		reset_host_driver_wrapper_state();
+		memcpy(host_phys_to_virt_storage, "virtio", 6);
+		memset(read_dst, 0, sizeof(read_dst));
+		host_os_vtop_phys = 0x44;
+		read_desc.kaddr = 0x1234;
+		read_desc.len = 6;
+		read_desc.ubuf = read_dst;
+		read_desc.flags = 0;
+		require(ihk_core_os_read_kaddr_body_result(host_driver_fake_os,
+				&read_desc, fake_host_os_vtop,
+				fake_host_phys_to_virt,
+				fake_host_copy_to_user) == 0);
+		require(host_os_vtop_calls == 1);
+		require(host_os_vtop_last_kaddr == 0x1234);
+		require(host_phys_to_virt_last_phys == 0x44);
+		require(memcmp(read_dst, "virtio", 6) == 0);
+
+		reset_host_driver_wrapper_state();
+		host_os_vtop_ret = -1;
+		read_desc.flags = 0;
+		require(ihk_core_os_read_kaddr_body_result(host_driver_fake_os,
+				&read_desc, fake_host_os_vtop,
+				fake_host_phys_to_virt,
+				fake_host_copy_to_user) == -14);
+		require(host_phys_to_virt_calls == 0);
+
+		reset_host_driver_wrapper_state();
+		memset(&fake_kmsg, 0, sizeof(fake_kmsg));
+		fake_kmsg.len = sizeof(fake_kmsg.str);
+		fake_kmsg.head = 6;
+		fake_kmsg.tail = 3;
+		memcpy(fake_kmsg.str, "abc", 3);
+		memcpy(fake_kmsg.str + 6, "xy", 2);
+		memset(kmsg_out, 0, sizeof(kmsg_out));
+		require(ihk_core_read_kmsg_body_result((unsigned long)&fake_kmsg,
+				kmsg_out, 1,
+				offsetof(struct fake_kmsg_buf, lock),
+				offsetof(struct fake_kmsg_buf, tail),
+				offsetof(struct fake_kmsg_buf, len),
+				offsetof(struct fake_kmsg_buf, head),
+				offsetof(struct fake_kmsg_buf, str),
+				fake_host_irq_save, fake_host_irq_restore,
+				fake_host_cpu_relax) == 5);
+		require(memcmp(kmsg_out, "xyabc", 5) == 0);
+		require(fake_kmsg.head == 3);
+		require(fake_kmsg.lock == 0);
+		require(host_irq_save_calls == 1);
+		require(host_irq_restore_calls == 1);
+		require(host_irq_restore_last_flags == 0x88);
+
+		reset_host_driver_wrapper_state();
+		memset(&fake_kmsg, 'q', sizeof(fake_kmsg));
+		fake_kmsg.lock = 0;
+		fake_kmsg.len = sizeof(fake_kmsg.str);
+		fake_kmsg.head = 2;
+		fake_kmsg.tail = 5;
+		require(ihk_core_clear_kmsg_body_result(
+				(unsigned long)&fake_kmsg,
+				offsetof(struct fake_kmsg_buf, lock),
+				offsetof(struct fake_kmsg_buf, tail),
+				offsetof(struct fake_kmsg_buf, head),
+				offsetof(struct fake_kmsg_buf, str),
+				sizeof(fake_kmsg.str),
+				fake_host_irq_save, fake_host_irq_restore,
+				fake_host_cpu_relax) == 0);
+		require(fake_kmsg.lock == 0);
+		require(fake_kmsg.head == 0);
+		require(fake_kmsg.tail == 0);
+		require(bytes_are_zero(fake_kmsg.str, sizeof(fake_kmsg.str)));
+
+		reset_host_driver_wrapper_state();
+		memset(os_backing, 0, sizeof(os_backing));
+		memset(kmsg_user, 0, sizeof(kmsg_user));
+		fake_cont.kmsg_buf = &fake_kmsg;
+		*(void **)(os_backing + OS_OFF_KMSG_CONTAINER) = &fake_cont;
+		require(ihk_core_os_read_kmsg_body_result(os_backing,
+				kmsg_user, fake_host_kmsg_alloc,
+				fake_host_read_kmsg, fake_host_copy_to_user,
+				fake_host_kmsg_free) == 5);
+		require(host_kmsg_alloc_calls == 1);
+		require(host_kmsg_alloc_size == HOST_KMSG_ALLOC_SIZE);
+		require(host_read_kmsg_calls == 1);
+		require(host_read_kmsg_last_kmsg == &fake_kmsg);
+		require(host_read_kmsg_last_shift == 0);
+		require(memcmp(kmsg_user, "kmsg!", 5) == 0);
+		require(host_kmsg_free_calls == 1);
+
+		reset_host_driver_wrapper_state();
+		host_kmsg_alloc_fail = 1;
+		require(ihk_core_os_read_kmsg_body_result(os_backing,
+				kmsg_user, fake_host_kmsg_alloc,
+				fake_host_read_kmsg, fake_host_copy_to_user,
+				fake_host_kmsg_free) == -12);
+		require(host_read_kmsg_calls == 0);
+		require(host_kmsg_free_calls == 0);
+
+		reset_host_driver_wrapper_state();
+		memset(&fake_kmsg, 'z', sizeof(fake_kmsg));
+		fake_kmsg.lock = 0;
+		fake_kmsg.len = sizeof(fake_kmsg.str);
+		fake_kmsg.head = 3;
+		fake_kmsg.tail = 6;
+		require(ihk_core_os_clear_kmsg_body_result(os_backing,
+				offsetof(struct fake_kmsg_buf, lock),
+				offsetof(struct fake_kmsg_buf, tail),
+				offsetof(struct fake_kmsg_buf, head),
+				offsetof(struct fake_kmsg_buf, str),
+				sizeof(fake_kmsg.str),
+				fake_host_irq_save, fake_host_irq_restore,
+				fake_host_cpu_relax) == 0);
+		require(fake_kmsg.head == 0);
+		require(fake_kmsg.tail == 0);
+		require(bytes_are_zero(fake_kmsg.str, sizeof(fake_kmsg.str)));
+
+		reset_host_driver_wrapper_state();
+		reset_fake_boot();
+		fake_boot_kmsg_container = &fake_cont;
+		get_kmsg_desc.os_index = 4;
+		get_kmsg_desc.handle = NULL;
+		require(ihk_core_device_get_kmsg_buf_body_result(
+				&get_kmsg_desc, fake_boot_kmsg_lock,
+				fake_boot_kmsg_find, fake_boot_kmsg_inc,
+				fake_boot_kmsg_unlock,
+				fake_host_copy_from_count,
+				fake_host_copy_to_user) == 0);
+		require(boot_kmsg_find_last_index == 4);
+		require(boot_kmsg_inc_calls == 1);
+		require(get_kmsg_desc.handle == &fake_cont);
+
+		reset_host_driver_wrapper_state();
+		reset_fake_boot();
+		fake_boot_find_miss = 1;
+		get_kmsg_desc.os_index = 8;
+		require(ihk_core_device_get_kmsg_buf_body_result(
+				&get_kmsg_desc, fake_boot_kmsg_lock,
+				fake_boot_kmsg_find, fake_boot_kmsg_inc,
+				fake_boot_kmsg_unlock,
+				fake_host_copy_from_count,
+				fake_host_copy_to_user) == -2);
+		require(boot_kmsg_inc_calls == 0);
+
+		reset_host_driver_wrapper_state();
+		memset(kmsg_user, 0, sizeof(kmsg_user));
+		fake_cont.kmsg_buf = &fake_kmsg;
+		read_kmsg_desc.handle = &fake_cont;
+		read_kmsg_desc.shift = 1;
+		read_kmsg_desc.buf = kmsg_user;
+		require(ihk_core_device_read_kmsg_buf_body_result(
+				&read_kmsg_desc, fake_host_kmsg_alloc,
+				fake_host_read_kmsg, fake_host_copy_from_count,
+				fake_host_copy_to_user,
+				fake_host_kmsg_free) == 5);
+		require(host_read_kmsg_last_kmsg == &fake_kmsg);
+		require(host_read_kmsg_last_shift == 1);
+		require(memcmp(kmsg_user, "kmsg!", 5) == 0);
+		require(host_kmsg_free_calls == 1);
+
+		reset_host_driver_wrapper_state();
+		host_read_kmsg_ret = -7;
+		require(ihk_core_device_read_kmsg_buf_body_result(
+				&read_kmsg_desc, fake_host_kmsg_alloc,
+				fake_host_read_kmsg, fake_host_copy_from_count,
+				fake_host_copy_to_user,
+				fake_host_kmsg_free) == -7);
+		require(host_copy_to_user_calls == 0);
+		require(host_kmsg_free_calls == 1);
+
+		reset_host_driver_wrapper_state();
+		host_release_kmsg_ret = -6;
+		require(ihk_core_device_release_kmsg_buf_body_result(
+				&fake_cont, fake_host_release_kmsg) == -6);
+		require(host_release_kmsg_calls == 1);
+		require(host_release_kmsg_last_handle == &fake_cont);
+	}
+
+	reset_host_driver_wrapper_state();
+	host_debug_ret = 331;
+	require(ihk_core_os_debug_request_body_result(host_driver_fake_os,
+			0x122a01, 0xabcUL, fake_os_debug_present,
+			fake_os_debug_call) == 331);
+	require(host_os_debug_present_calls == 1);
+	require(host_os_debug_call_calls == 1);
+	require(host_debug_last_ptr == host_driver_fake_os);
+	require(host_debug_last_request == 0x122a01);
+	require(host_debug_last_arg == 0xabcUL);
+	host_debug_present_value = 0;
+	require(ihk_core_os_debug_request_body_result(host_driver_fake_os,
+			0x122a02, 0xdefUL, fake_os_debug_present,
+			fake_os_debug_call) == -22);
+	require(host_os_debug_present_calls == 2);
+	require(host_os_debug_call_calls == 1);
+	require(ihk_core_os_debug_request_body_result(NULL, 0x122a02,
+			0, fake_os_debug_present, fake_os_debug_call) == -22);
+	require(ihk_core_os_debug_request_body_result(host_driver_fake_os,
+			0x122a02, 0, NULL, fake_os_debug_call) == -22);
+
+	reset_host_driver_wrapper_state();
+	host_debug_ret = 654;
+	require(ihk_core_device_debug_request_body_result(host_driver_fake_dev,
+			0x122901, 0xaceUL, fake_device_debug_present,
+			fake_device_debug_call) == 654);
+	require(host_device_debug_present_calls == 1);
+	require(host_device_debug_call_calls == 1);
+	require(host_debug_last_ptr == host_driver_fake_dev);
+	require(host_debug_last_request == 0x122901);
+	require(host_debug_last_arg == 0xaceUL);
+	host_debug_present_value = 0;
+	require(ihk_core_device_debug_request_body_result(host_driver_fake_dev,
+			0x122902, 0, fake_device_debug_present,
+			fake_device_debug_call) == -22);
+	require(host_device_debug_present_calls == 2);
+	require(host_device_debug_call_calls == 1);
+	require(ihk_core_device_debug_request_body_result(NULL, 0x122902,
+			0, fake_device_debug_present,
+			fake_device_debug_call) == -22);
+	require(ihk_core_device_debug_request_body_result(host_driver_fake_dev,
+			0x122902, 0, fake_device_debug_present, NULL) == -22);
+
+	{
+		char buildid_buf[16] = { 0 };
+		const char buildid[] = "BUILD42";
+
+		reset_host_driver_wrapper_state();
+		require(ihk_core_device_get_buildid_body_result(buildid_buf,
+				buildid, sizeof(buildid),
+				fake_host_copy_to_user) == 0);
+		require(host_copy_to_user_calls == 1);
+		require(host_copy_to_user_dst == buildid_buf);
+		require(host_copy_to_user_src == buildid);
+		require(host_copy_to_user_size == sizeof(buildid));
+		require(memcmp(buildid_buf, buildid, sizeof(buildid)) == 0);
+		host_copy_to_user_fail = 1;
+		require(ihk_core_device_get_buildid_body_result(buildid_buf,
+				buildid, sizeof(buildid),
+				fake_host_copy_to_user) == -14);
+		require(ihk_core_device_get_buildid_body_result(NULL, buildid,
+				sizeof(buildid), fake_host_copy_to_user) == -22);
+		require(ihk_core_device_get_buildid_body_result(buildid_buf,
+				NULL, sizeof(buildid), fake_host_copy_to_user) == -22);
+		require(ihk_core_device_get_buildid_body_result(buildid_buf,
+				buildid, 0, fake_host_copy_to_user) == -22);
+		require(ihk_core_device_get_buildid_body_result(buildid_buf,
+				buildid, sizeof(buildid), NULL) == -22);
+	}
+
+	{
+		int op;
+		const int device_ops[] = {
+			DEVICE_OP_RESERVE_CPU,
+			DEVICE_OP_RELEASE_CPU,
+			DEVICE_OP_RESERVE_MEM,
+			DEVICE_OP_RELEASE_MEM,
+			DEVICE_OP_RELEASE_MEM_PARTIAL,
+			DEVICE_OP_GET_NUM_CPUS,
+			DEVICE_OP_QUERY_CPU,
+			DEVICE_OP_QUERY_MEM,
+		};
+
+		for (op = 0; op < (int)(sizeof(device_ops) /
+				sizeof(device_ops[0])); op++) {
+			int id = device_ops[op];
+			unsigned long arg = 0xabc0UL + id;
+
+			reset_host_driver_wrapper_state();
+			host_device_op_ret[id] = 300 + id;
+			require(ihk_core_device_op_body_result(
+					host_driver_fake_dev, id, arg,
+					fake_device_op_present,
+					fake_device_op_call) == 300 + id);
+			require(host_device_op_present_calls == 1);
+			require(host_device_op_call_calls == 1);
+			require(host_device_op_last_dev == host_driver_fake_dev);
+			require(host_device_op_last_op == id);
+			require(host_device_op_last_arg == arg);
+		}
+		reset_host_driver_wrapper_state();
+		host_device_op_present_value[DEVICE_OP_QUERY_MEM] = 0;
+		require(ihk_core_device_op_body_result(host_driver_fake_dev,
+				DEVICE_OP_QUERY_MEM, 0x77,
+				fake_device_op_present,
+				fake_device_op_call) == -1);
+		require(host_device_op_present_calls == 1);
+		require(host_device_op_call_calls == 0);
+		require(ihk_core_device_op_body_result(NULL, DEVICE_OP_QUERY_MEM,
+				0, fake_device_op_present,
+				fake_device_op_call) == -1);
+		require(ihk_core_device_op_body_result(host_driver_fake_dev, 99,
+				0, fake_device_op_present,
+				fake_device_op_call) == -1);
+		require(ihk_core_device_op_body_result(host_driver_fake_dev,
+				DEVICE_OP_QUERY_MEM, 0, NULL,
+				fake_device_op_call) == -22);
+		require(ihk_core_device_op_body_result(host_driver_fake_dev,
+				DEVICE_OP_QUERY_MEM, 0, fake_device_op_present,
+				NULL) == -22);
+	}
 
 	xchg_value = 7;
 	require(xchg4(&xchg_value, 9) == 7);

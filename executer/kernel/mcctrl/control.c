@@ -462,6 +462,42 @@ int mcctrl_ikc_set_recv_cpu(ihk_os_t os, int cpu);
 int syscall_backward(struct mcctrl_usrdata *, int, unsigned long, unsigned long,
                      unsigned long, unsigned long, unsigned long,
                      unsigned long, unsigned long *);
+long mcctrl_perf_num(ihk_os_t os, unsigned long arg);
+long mcctrl_perf_disable(ihk_os_t os);
+
+#ifdef MCCTRL_RUST_HELPERS
+static int mcctrl_control_copy_from_user_bridge(void *dst, const void *src,
+						unsigned long size);
+static int mcctrl_control_copy_to_user_bridge(void *dst, const void *src,
+					      unsigned long size);
+static void *mcctrl_control_os_to_dev_bridge(unsigned long os);
+static unsigned long mcctrl_control_map_memory_bridge(void *dev,
+						      unsigned long phys,
+						      unsigned long size);
+static void *mcctrl_control_map_virtual_bridge(void *dev,
+					       unsigned long phys,
+					       unsigned long size);
+static void mcctrl_control_unmap_virtual_bridge(void *dev, void *virt,
+						unsigned long size);
+static void mcctrl_control_unmap_memory_bridge(void *dev, unsigned long phys,
+					       unsigned long size);
+static void mcctrl_control_transfer_image_log_bridge(int stage);
+static void mcctrl_control_load_syscall_log_bridge(void *rpm,
+						   unsigned long size);
+static void mcctrl_control_return_syscall_bridge(unsigned long os, void *ppd,
+						 void *packet, long ret,
+						 int tid);
+static void mcctrl_control_release_packet_bridge(void *packet);
+static void mcctrl_control_ret_syscall_log_bridge(int stage, int pid, int tid);
+static unsigned long mcctrl_control_usrdata_os_bridge(void *usrdata);
+static int mcctrl_control_ptd_tid_bridge(void *ptd);
+static int mcctrl_control_ptd_refcount_bridge(void *ptd);
+static void mcctrl_control_terminate_thread_log_bridge(int stage, int pid,
+						       int tid, void *ptr,
+						       int value);
+static unsigned long mcctrl_control_current_task_ulong_bridge(void);
+static void mcctrl_control_uti_get_ctx_log_bridge(int stage);
+#endif
 
 struct mcos_handler_info {
 	int pid;
@@ -627,6 +663,19 @@ free_out:
 
 int mcexec_transfer_image(ihk_os_t os, struct remote_transfer *__user upt)
 {
+#if defined(MCCTRL_RUST_HELPERS) && !defined(CONFIG_MIC)
+	return mcctrl_control_transfer_image_body_result(
+		(unsigned long)os, upt, sizeof(struct remote_transfer),
+		MCEXEC_UP_TRANSFER_TO_REMOTE, MCEXEC_UP_TRANSFER_FROM_REMOTE,
+		mcctrl_control_copy_from_user_bridge,
+		mcctrl_control_copy_to_user_bridge,
+		mcctrl_control_os_to_dev_bridge,
+		mcctrl_control_map_memory_bridge,
+		mcctrl_control_map_virtual_bridge,
+		mcctrl_control_unmap_virtual_bridge,
+		mcctrl_control_unmap_memory_bridge,
+		mcctrl_control_transfer_image_log_bridge);
+#else
 	struct remote_transfer pt;
 	unsigned long phys, ret = 0;
 	void *rpm;
@@ -715,6 +764,7 @@ int mcexec_transfer_image(ihk_os_t os, struct remote_transfer *__user upt)
 	free_page((unsigned long)p);
 
 	return 0;
+#endif
 #endif
 }
 
@@ -962,6 +1012,318 @@ static void mcctrl_control_request_cpu_result_log_bridge(unsigned long os,
 #endif
 		"mcctrl_get_request_os_cpu", os, cpu);
 }
+
+static int mcctrl_control_copy_from_user_bridge(void *dst, const void *src,
+						unsigned long size)
+{
+	return copy_from_user(dst, src, size);
+}
+
+static int mcctrl_control_copy_to_user_bridge(void *dst, const void *src,
+					      unsigned long size)
+{
+	return copy_to_user(dst, src, size);
+}
+
+static void *mcctrl_control_os_to_dev_bridge(unsigned long os)
+{
+	return ihk_os_to_dev((ihk_os_t)os);
+}
+
+static unsigned long mcctrl_control_map_memory_bridge(void *dev,
+						      unsigned long phys,
+						      unsigned long size)
+{
+	return ihk_device_map_memory((ihk_device_t)dev, phys, size);
+}
+
+static void *mcctrl_control_map_virtual_bridge(void *dev,
+					       unsigned long phys,
+					       unsigned long size)
+{
+	return ihk_device_map_virtual((ihk_device_t)dev, phys, size, NULL, 0);
+}
+
+static void mcctrl_control_unmap_virtual_bridge(void *dev, void *virt,
+						unsigned long size)
+{
+	ihk_device_unmap_virtual((ihk_device_t)dev, virt, size);
+}
+
+static void mcctrl_control_unmap_memory_bridge(void *dev, unsigned long phys,
+					       unsigned long size)
+{
+	ihk_device_unmap_memory((ihk_device_t)dev, phys, size);
+}
+
+static void mcctrl_control_transfer_image_log_bridge(int stage)
+{
+	if (stage == 0) {
+		pr_err("%s(): error: invalid remote address\n",
+		       "mcexec_transfer_image");
+	} else if (stage == 1) {
+		printk("mcexec_transfer_image(): ERROR: invalid direction\n");
+	}
+}
+
+static void mcctrl_control_load_syscall_log_bridge(void *rpm,
+						   unsigned long size)
+{
+	dprintk("mcexec_load_syscall: %s (desc.size: %d)\n",
+		(char *)rpm, (int)size);
+}
+
+static void *mcctrl_control_alloc_page_bridge(void)
+{
+	return (void *)__get_free_page(GFP_KERNEL);
+}
+
+static void mcctrl_control_free_page_bridge(void *ptr)
+{
+	free_page((unsigned long)ptr);
+}
+
+static long mcctrl_control_strncpy_from_user_bridge(void *dst,
+						    const void *src,
+						    unsigned long size)
+{
+	return strncpy_from_user(dst, src, size);
+}
+
+static int mcctrl_control_get_order_bridge(unsigned long size)
+{
+	return get_order(size);
+}
+
+static unsigned long mcctrl_control_alloc_pages_bridge(int order)
+{
+	return __get_free_pages(GFP_KERNEL, order);
+}
+
+static void mcctrl_control_free_pages_bridge(unsigned long addr, int order)
+{
+	free_pages(addr, order);
+}
+
+static unsigned long mcctrl_control_virt_to_phys_generic_bridge(void *ptr)
+{
+	return virt_to_phys(ptr);
+}
+
+static unsigned long mcctrl_control_phys_to_virt_bridge(unsigned long phys)
+{
+	return (unsigned long)phys_to_virt(phys);
+}
+
+static void *mcctrl_control_prepare_creds_bridge(void)
+{
+	return prepare_creds();
+}
+
+static void mcctrl_control_cap_raise_admin_bridge(void *cred)
+{
+	cap_raise(((struct cred *)cred)->cap_effective, CAP_SYS_ADMIN);
+}
+
+static const void *mcctrl_control_override_creds_bridge(void *cred)
+{
+	return override_creds((struct cred *)cred);
+}
+
+static void mcctrl_control_revert_creds_bridge(const void *cred)
+{
+	revert_creds((const struct cred *)cred);
+}
+
+static void mcctrl_control_put_cred_bridge(void *cred)
+{
+	put_cred((const struct cred *)cred);
+}
+
+static int mcctrl_control_mount_bridge(char *dev_name, char *dir_name,
+				       char *type_name, unsigned long flags,
+				       void *data)
+{
+	return mcctrl_sys_mount(dev_name, dir_name, type_name, flags, data);
+}
+
+static int mcctrl_control_umount_bridge(char *dir_name, int flags)
+{
+	return mcctrl_sys_umount(dir_name, flags);
+}
+
+static int mcctrl_control_unshare_bridge(unsigned long flags)
+{
+	return mcctrl_sys_unshare(flags);
+}
+
+static long mcctrl_control_clear_pte_range_bridge(unsigned long start,
+						  unsigned long len)
+{
+	return mcctrl_clear_pte_range(start, len);
+}
+
+static void mcctrl_control_perf_set_num_bridge(void *usrdata,
+					       unsigned long value)
+{
+	((struct mcctrl_usrdata *)usrdata)->perf_event_num = value;
+}
+
+static int mcctrl_control_perf_event_num_bridge(void *usrdata)
+{
+	return ((struct mcctrl_usrdata *)usrdata)->perf_event_num;
+}
+
+static void mcctrl_control_perf_num_log_bridge(int stage)
+{
+	if (stage == 0)
+		pr_err("%s: error: mcctrl_usrdata not found\n", "mcctrl_perf_num");
+}
+
+static void mcctrl_control_perf_log_bridge(int stage)
+{
+	switch (stage) {
+	case 0:
+		pr_err("%s: error: mcctrl_usrdata not found\n", "mcctrl_perf");
+		break;
+	case 1:
+		pr_err("%s: error: cannot get cpu info\n", "mcctrl_perf");
+		break;
+	case 2:
+		printk("%s: error: copying read_value to user\n",
+		       "mcctrl_perf_get");
+		break;
+	}
+}
+
+static void *
+mcctrl_control_perf_alloc_set_desc_bridge(const void *arg, int index,
+					  unsigned int target_cntr,
+					  int *error)
+{
+	const struct ihk_perf_event_attr __user *attrs = arg;
+	struct perf_ctrl_desc *perf_desc;
+	struct ihk_perf_event_attr attr;
+
+	if (copy_from_user(&attr, &attrs[index], sizeof(attr))) {
+		pr_err("%s: error: copying ihk_perf_event_attr from user\n",
+		       "mcctrl_perf_set");
+		*error = -EINVAL;
+		return NULL;
+	}
+
+	perf_desc = kmalloc(sizeof(struct perf_ctrl_desc), GFP_KERNEL);
+	if (!perf_desc) {
+		*error = -ENOMEM;
+		return NULL;
+	}
+
+	memset(perf_desc, '\0', sizeof(struct perf_ctrl_desc));
+	perf_desc->ctrl_type = PERF_CTRL_SET;
+	perf_desc->err = 0;
+	perf_desc->target_cntr = target_cntr;
+	perf_desc->config = attr.config;
+	perf_desc->exclude_kernel = attr.exclude_kernel;
+	perf_desc->exclude_user = attr.exclude_user;
+	*error = 0;
+	return perf_desc;
+}
+
+static void mcctrl_control_perf_init_get_desc_bridge(void *desc,
+						    unsigned int target_cntr)
+{
+	struct perf_ctrl_desc *perf_desc = desc;
+
+	memset(perf_desc, '\0', sizeof(struct perf_ctrl_desc));
+	perf_desc->ctrl_type = PERF_CTRL_GET;
+	perf_desc->err = 0;
+	perf_desc->target_cntr = target_cntr;
+}
+
+static void mcctrl_control_perf_init_mask_desc_bridge(void *desc, int ctrl_type,
+						     unsigned long cntr_mask)
+{
+	struct perf_ctrl_desc *perf_desc = desc;
+
+	memset(perf_desc, '\0', sizeof(struct perf_ctrl_desc));
+	perf_desc->ctrl_type = ctrl_type;
+	perf_desc->err = 0;
+	perf_desc->target_cntr_mask = cntr_mask;
+}
+
+static int mcctrl_control_perf_send_wait_bridge(unsigned long os, int cpu,
+						void *desc, long timeout,
+						int *need_free)
+{
+	struct ikc_scd_packet isp;
+	int ret;
+
+	memset(&isp, '\0', sizeof(struct ikc_scd_packet));
+	isp.msg = SCD_MSG_PERF_CTRL;
+	isp.arg = virt_to_phys(desc);
+
+	ret = mcctrl_ikc_send_wait((ihk_os_t)os, cpu, &isp, timeout, NULL,
+				   need_free, 1, desc);
+	if (ret < 0)
+		pr_warn("%s: mcctrl_ikc_send_wait ret=%d\n",
+			"mcctrl_perf", ret);
+	return ret;
+}
+
+static int mcctrl_control_perf_desc_err_bridge(void *desc)
+{
+	return ((struct perf_ctrl_desc *)desc)->err;
+}
+
+static unsigned long mcctrl_control_perf_desc_read_value_bridge(void *desc)
+{
+	return ((struct perf_ctrl_desc *)desc)->read_value;
+}
+
+static long mcctrl_control_perf_disable_bridge(unsigned long os)
+{
+	return mcctrl_perf_disable((ihk_os_t)os);
+}
+
+static long mcctrl_control_perf_num_zero_bridge(unsigned long os)
+{
+	return mcctrl_perf_num((ihk_os_t)os, 0);
+}
+
+static void *mcctrl_control_getrusage_bridge(unsigned long os)
+{
+	return ihk_os_get_rusage((ihk_os_t)os);
+}
+
+static void *mcctrl_control_getrusage_alloc_bridge(unsigned long size)
+{
+	void *ptr = kmalloc(size, GFP_KERNEL);
+
+	if (ptr)
+		memset(ptr, 0, size);
+	return ptr;
+}
+
+static void mcctrl_control_getrusage_log_bridge(int stage,
+						unsigned long size,
+						unsigned long max_size)
+{
+	switch (stage) {
+	case 0:
+		printk("%s: copy_from_user failed\n", "mcctrl_getrusage");
+		break;
+	case 1:
+		printk("%s: kmalloc failed\n", "mcctrl_getrusage");
+		break;
+	case 2:
+		printk("%s: desc.size_rusage=%ld > sizeof(struct mckernel_rusage)=%ld\n",
+		       "mcctrl_getrusage", size, max_size);
+		break;
+	case 3:
+		printk("%s: copy_to_user failed\n", "mcctrl_getrusage");
+		break;
+	}
+}
 #endif
 
 static long mcexec_debug_log(ihk_os_t os, unsigned long arg)
@@ -1027,8 +1389,146 @@ static void release_handler(ihk_os_t os, void *param)
 			__FUNCTION__, info);
 }
 
+#ifdef MCCTRL_RUST_HELPERS
+static void *mcctrl_control_new_info_bridge(unsigned long os, void *file)
+{
+	return new_mcos_handler_info((ihk_os_t)os, file);
+}
+
+static void mcctrl_control_set_info_pid_bridge(void *info, int pid)
+{
+	((struct mcos_handler_info *)info)->pid = pid;
+}
+
+static void mcctrl_control_register_release_bridge(void *file, void *info)
+{
+	ihk_os_register_release_handler((struct file *)file, release_handler,
+					info);
+}
+
+static void mcctrl_control_set_private_bridge(void *file, void *info)
+{
+	ihk_os_set_mcos_private_data((struct file *)file, info);
+}
+
+static void *mcctrl_control_private_data_bridge(void *file)
+{
+	return ihk_os_get_mcos_private_data((struct file *)file);
+}
+
+static int mcctrl_control_desc_cpu_bridge(void *desc)
+{
+	return ((struct program_load_desc *)desc)->cpu;
+}
+
+static int mcctrl_control_desc_pid_bridge(void *desc)
+{
+	return ((struct program_load_desc *)desc)->pid;
+}
+
+static unsigned long mcctrl_control_desc_user_start_bridge(void *desc)
+{
+	return ((struct program_load_desc *)desc)->user_start;
+}
+
+static unsigned long mcctrl_control_desc_user_end_bridge(void *desc)
+{
+	return ((struct program_load_desc *)desc)->user_end;
+}
+
+static unsigned long mcctrl_control_desc_rprocess_bridge(void *desc)
+{
+	return ((struct program_load_desc *)desc)->rprocess;
+}
+
+static unsigned long mcctrl_control_info_prepare_thread_bridge(void *info)
+{
+	return ((struct mcos_handler_info *)info)->prepare_thread;
+}
+
+static void mcctrl_control_set_start_info_bridge(
+	void *info, int pid, int cpu, unsigned long user_start,
+	unsigned long user_end, unsigned long prepare_thread)
+{
+	struct mcos_handler_info *mcos = info;
+
+	mcos->pid = pid;
+	mcos->cpu = cpu;
+	mcos->user_start = user_start;
+	mcos->user_end = user_end;
+	mcos->prepare_thread = prepare_thread;
+}
+
+static void mcctrl_control_set_recv_cpu_bridge(unsigned long os, int cpu)
+{
+	mcctrl_ikc_set_recv_cpu((ihk_os_t)os, cpu);
+}
+
+static void mcctrl_control_set_last_thread_exec_bridge(void *usrdata,
+						      unsigned long cpu)
+{
+	((struct mcctrl_usrdata *)usrdata)->last_thread_exec = cpu;
+}
+
+static int mcctrl_control_send_schedule_bridge(unsigned long os, int cpu,
+					       unsigned long rprocess)
+{
+	struct ikc_scd_packet isp;
+
+	isp.msg = SCD_MSG_SCHEDULE_PROCESS;
+	isp.ref = cpu;
+	isp.arg = rprocess;
+
+	return mcctrl_ikc_send((ihk_os_t)os, cpu, &isp);
+}
+
+static void mcctrl_control_clear_prepare_thread_bridge(void *info)
+{
+	((struct mcos_handler_info *)info)->prepare_thread = 0;
+}
+
+static void mcctrl_control_start_image_log_bridge(int stage, int ret)
+{
+	switch (stage) {
+	case 0:
+		pr_err("%s: error: mcctrl_usrdata not found\n",
+		       "mcexec_start_image");
+		break;
+	case 1:
+		printk("%s: error: allocating program_load_desc\n",
+		       "mcexec_start_image");
+		break;
+	case 2:
+		printk("%s: error: sending IKC msg\n", "mcexec_start_image");
+		break;
+	}
+	(void)ret;
+}
+
+static void mcctrl_control_send_signal_log_bridge(int stage, int ret)
+{
+	switch (stage) {
+	case 0:
+		pr_err("%s: error: mcctrl_usrdata not found\n",
+		       "mcexec_send_signal");
+		break;
+	case 1:
+		printk("mcexec_send_signal: mcctrl_ikc_send ret=%d\n", ret);
+		break;
+	}
+}
+#endif
+
 static long mcexec_newprocess(ihk_os_t os, struct file *file)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_control_newprocess_body_result(
+		(unsigned long)os, file, mcctrl_control_current_pid_bridge,
+		mcctrl_control_new_info_bridge,
+		mcctrl_control_set_info_pid_bridge,
+		mcctrl_control_register_release_bridge,
+		mcctrl_control_set_private_bridge);
+#else
 	struct mcos_handler_info *info;
 
 	info = new_mcos_handler_info(os, file);
@@ -1039,12 +1539,38 @@ static long mcexec_newprocess(ihk_os_t os, struct file *file)
 	ihk_os_register_release_handler(file, release_handler, info);
 	ihk_os_set_mcos_private_data(file, info);
 	return 0;
+#endif
 }
 
 static long mcexec_start_image(ihk_os_t os,
                                struct program_load_desc * __user udesc,
                                struct file *file)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_control_start_image_body_result(
+		(unsigned long)os, udesc, file,
+		sizeof(struct program_load_desc),
+		mcctrl_control_copy_from_user_bridge,
+		mcctrl_control_cpu_register_alloc_bridge,
+		mcctrl_control_cpu_register_free_bridge,
+		mcctrl_control_get_usrdata_bridge,
+		mcctrl_control_private_data_bridge,
+		mcctrl_control_new_info_bridge,
+		mcctrl_control_desc_cpu_bridge,
+		mcctrl_control_desc_pid_bridge,
+		mcctrl_control_desc_user_start_bridge,
+		mcctrl_control_desc_user_end_bridge,
+		mcctrl_control_desc_rprocess_bridge,
+		mcctrl_control_info_prepare_thread_bridge,
+		mcctrl_control_set_start_info_bridge,
+		mcctrl_control_register_release_bridge,
+		mcctrl_control_set_private_bridge,
+		mcctrl_control_set_recv_cpu_bridge,
+		mcctrl_control_set_last_thread_exec_bridge,
+		mcctrl_control_send_schedule_bridge,
+		mcctrl_control_clear_prepare_thread_bridge,
+		mcctrl_control_start_image_log_bridge);
+#else
 	struct program_load_desc *desc;
 	struct ikc_scd_packet isp;
 	struct mcctrl_channel *c;
@@ -1106,6 +1632,7 @@ static long mcexec_start_image(ihk_os_t os,
 out:
 	kfree(desc);
 	return ret;
+#endif
 }
 
 static DECLARE_WAIT_QUEUE_HEAD(signalq);
@@ -1116,6 +1643,18 @@ struct mcctrl_signal_desc {
 
 static long mcexec_send_signal(ihk_os_t os, struct signal_desc *sigparam)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_control_send_signal_body_result(
+		(unsigned long)os, sigparam, sizeof(struct signal_desc),
+		sizeof(struct mcctrl_signal_desc),
+		mcctrl_control_copy_from_user_bridge,
+		mcctrl_control_cpu_register_alloc_bridge,
+		mcctrl_control_cpu_register_free_bridge,
+		mcctrl_control_get_usrdata_bridge,
+		mcctrl_control_virt_to_phys_bridge,
+		mcctrl_control_cpu_register_send_wait_bridge,
+		mcctrl_control_send_signal_log_bridge);
+#else
 	struct ikc_scd_packet isp;
 	struct mcctrl_channel *c;
 	struct mcctrl_usrdata *usrdata = ihk_host_os_get_usrdata(os);
@@ -1162,6 +1701,7 @@ static long mcexec_send_signal(ihk_os_t os, struct signal_desc *sigparam)
 
 	kfree(desc);
 	return 0;
+#endif
 }
 
 static long mcexec_get_cpu(ihk_os_t os)
@@ -2255,6 +2795,15 @@ put_ppd_out:
 
 long mcexec_pin_region(ihk_os_t os, unsigned long *__user arg)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	(void)os;
+	return mcctrl_control_pin_region_body_result(
+		arg, 16, PAGE_SHIFT, mcctrl_control_copy_from_user_bridge,
+		mcctrl_control_get_order_bridge,
+		mcctrl_control_alloc_pages_bridge,
+		mcctrl_control_virt_to_phys_generic_bridge,
+		mcctrl_control_copy_to_user_bridge);
+#else
 	struct prepare_dma_desc desc;
 	int pin_shift = 16;
 	int order;
@@ -2280,10 +2829,19 @@ long mcexec_pin_region(ihk_os_t os, unsigned long *__user arg)
 		return -EFAULT;
 	}
 	return 0;
+#endif
 }
 
 long mcexec_free_region(ihk_os_t os, unsigned long *__user arg)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	(void)os;
+	return mcctrl_control_free_region_body_result(
+		arg, 16, PAGE_SHIFT, mcctrl_control_copy_from_user_bridge,
+		mcctrl_control_get_order_bridge,
+		mcctrl_control_phys_to_virt_bridge,
+		mcctrl_control_free_pages_bridge);
+#else
 	struct free_dma_desc desc;
 	int pin_shift = 16;
 	int order;
@@ -2301,10 +2859,23 @@ long mcexec_free_region(ihk_os_t os, unsigned long *__user arg)
 		free_pages((unsigned long)phys_to_virt(desc.pa), order);
 	}
 	return 0;
+#endif
 }
 
 long mcexec_load_syscall(ihk_os_t os, struct syscall_load_desc *__user arg)
 {
+#if defined(MCCTRL_RUST_HELPERS) && !defined(CONFIG_MIC)
+	return mcctrl_control_load_syscall_body_result(
+		(unsigned long)os, arg, sizeof(struct syscall_load_desc),
+		mcctrl_control_copy_from_user_bridge,
+		mcctrl_control_copy_to_user_bridge,
+		mcctrl_control_os_to_dev_bridge,
+		mcctrl_control_map_memory_bridge,
+		mcctrl_control_map_virtual_bridge,
+		mcctrl_control_unmap_virtual_bridge,
+		mcctrl_control_unmap_memory_bridge,
+		mcctrl_control_load_syscall_log_bridge);
+#else
 	struct syscall_load_desc desc;
 	unsigned long phys;
 	void *rpm;
@@ -2335,10 +2906,33 @@ long mcexec_load_syscall(ihk_os_t os, struct syscall_load_desc *__user arg)
 	ihk_device_unmap_memory(ihk_os_to_dev(os), phys, desc.size);	
 
 	return 0;
+#endif
 }
 
 long mcexec_ret_syscall(ihk_os_t os, struct syscall_ret_desc *__user arg)
 {
+#if defined(MCCTRL_RUST_HELPERS) && !defined(CONFIG_MIC)
+	return mcctrl_control_ret_syscall_body_result(
+		(unsigned long)os, arg, sizeof(struct syscall_ret_desc),
+		mcctrl_control_copy_from_user_bridge,
+		mcctrl_control_get_usrdata_bridge,
+		mcctrl_control_current_pid_bridge,
+		mcctrl_control_current_tid_bridge,
+		mcctrl_control_current_task_bridge,
+		mcctrl_control_get_ppd_bridge,
+		mcctrl_control_put_ppd_bridge,
+		mcctrl_control_get_ptd_bridge,
+		mcctrl_control_put_ptd_bridge,
+		mcctrl_control_ptd_data_bridge,
+		mcctrl_control_os_to_dev_bridge,
+		mcctrl_control_map_memory_bridge,
+		mcctrl_control_map_virtual_bridge,
+		mcctrl_control_unmap_virtual_bridge,
+		mcctrl_control_unmap_memory_bridge,
+		mcctrl_control_return_syscall_bridge,
+		mcctrl_control_release_packet_bridge,
+		mcctrl_control_ret_syscall_log_bridge);
+#else
 	struct syscall_ret_desc ret;
 	struct ikc_scd_packet *packet;
 	struct mcctrl_usrdata *usrdata = ihk_host_os_get_usrdata(os);
@@ -2421,6 +3015,7 @@ out:
  no_ptd:
 	mcctrl_put_per_proc_data(ppd);
 	return error;
+#endif
 }
 
 LIST_HEAD(mckernel_exec_files);
@@ -2434,16 +3029,200 @@ struct mckernel_exec_file {
 	struct list_head list;
 };
 
+#ifdef MCCTRL_RUST_HELPERS
+static void mcctrl_control_return_syscall_bridge(unsigned long os, void *ppd,
+						 void *packet, long ret,
+						 int tid)
+{
+	__return_syscall((ihk_os_t)os, ppd, packet, ret, tid);
+}
+
+static void mcctrl_control_release_packet_bridge(void *packet)
+{
+	ihk_ikc_release_packet((struct ihk_ikc_free_packet *)packet);
+}
+
+static void mcctrl_control_ret_syscall_log_bridge(int stage, int pid, int tid)
+{
+	switch (stage) {
+	case 0:
+		pr_err("%s: error: mcctrl_usrdata not found\n",
+		       "mcexec_ret_syscall");
+		break;
+	case 1:
+		kprintf("%s: ERROR: no per-process structure for PID %d??\n",
+			"mcexec_ret_syscall", pid);
+		break;
+	case 2:
+		printk("%s: ERROR: mcctrl_get_per_thread_data failed\n",
+		       "mcexec_ret_syscall");
+		break;
+	case 3:
+		kprintf("%s: ERROR: no packet registered for TID %d\n",
+			"mcexec_ret_syscall", tid);
+		break;
+	}
+}
+
+static unsigned long mcctrl_control_usrdata_os_bridge(void *usrdata)
+{
+	return (unsigned long)((struct mcctrl_usrdata *)usrdata)->os;
+}
+
+static int mcctrl_control_ptd_tid_bridge(void *ptd)
+{
+	return ((struct mcctrl_per_thread_data *)ptd)->tid;
+}
+
+static int mcctrl_control_ptd_refcount_bridge(void *ptd)
+{
+	return atomic_read(&((struct mcctrl_per_thread_data *)ptd)->refcount);
+}
+
+static void mcctrl_control_terminate_thread_log_bridge(int stage, int pid,
+						       int tid, void *ptr,
+						       int value)
+{
+	switch (stage) {
+	case 0:
+		pr_err("%s: error: mcctrl_usrdata not found\n",
+		       "mcexec_terminate_thread_unsafe");
+		break;
+	case 1:
+		kprintf("%s: ERROR: no per-process structure for PID %d??\n",
+			"mcexec_terminate_thread_unsafe", pid);
+		break;
+	case 2:
+		printk("%s: ERROR: mcctrl_get_per_thread_data failed\n",
+		       "mcexec_terminate_thread_unsafe");
+		break;
+	case 3:
+		printk("%s: ERROR: ptd->tid(%d) != tid(%d)\n",
+		       "mcexec_terminate_thread_unsafe", value, tid);
+		break;
+	case 4:
+		pr_ptd("get", tid, (struct mcctrl_per_thread_data *)ptr);
+		break;
+	case 5:
+		kprintf("%s: ERROR: no packet registered for TID %d\n",
+			"mcexec_terminate_thread_unsafe", tid);
+		break;
+	case 6:
+		pr_ptd("put", tid, (struct mcctrl_per_thread_data *)ptr);
+		break;
+	case 7:
+		printk("%s: WARNING: ptd->refcount != 1 but %d\n",
+		       "mcexec_terminate_thread_unsafe", value);
+		break;
+	case 8:
+		pr_ppd("put", task_pid_vnr(current),
+		       (struct mcctrl_per_proc_data *)ptr);
+		break;
+	}
+}
+
+static unsigned long mcctrl_control_current_task_ulong_bridge(void)
+{
+	return (unsigned long)current;
+}
+
+static void mcctrl_control_uti_get_ctx_log_bridge(int stage)
+{
+	(void)stage;
+}
+
+static int mcctrl_control_os_index_bridge(unsigned long os)
+{
+	return ihk_host_os_get_index((ihk_os_t)os);
+}
+
+static int mcctrl_control_drop_exec_bridge(unsigned long os, int pid)
+{
+	struct mckernel_exec_file *mcef = NULL;
+	int found = 0;
+
+	down(&mckernel_exec_file_lock);
+	list_for_each_entry(mcef, &mckernel_exec_files, list) {
+		if (mcef->os == (ihk_os_t)os && mcef->pid == pid) {
+			allow_write_access(mcef->fp);
+			fput(mcef->fp);
+			list_del(&mcef->list);
+			kfree(mcef);
+			found = 1;
+			dprintk("%d close_exec dropped executable \n",
+				(int)task_tgid_vnr(current));
+			break;
+		}
+	}
+	up(&mckernel_exec_file_lock);
+
+	return found;
+}
+#endif
+
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3,5,0)
 #define GUIDVAL(x) (x)
 #else
 #define GUIDVAL(x) ((x).val)
 #endif
 
+#ifdef MCCTRL_RUST_HELPERS
+static int mcctrl_control_current_uid_bridge(void)
+{
+	return GUIDVAL(current_uid());
+}
+
+static int mcctrl_control_current_euid_bridge(void)
+{
+	return GUIDVAL(current_euid());
+}
+
+static int mcctrl_control_current_suid_bridge(void)
+{
+	return GUIDVAL(current_suid());
+}
+
+static int mcctrl_control_current_fsuid_bridge(void)
+{
+	return GUIDVAL(current_fsuid());
+}
+
+static int mcctrl_control_current_gid_bridge(void)
+{
+	return GUIDVAL(current_gid());
+}
+
+static int mcctrl_control_current_egid_bridge(void)
+{
+	return GUIDVAL(current_egid());
+}
+
+static int mcctrl_control_current_sgid_bridge(void)
+{
+	return GUIDVAL(current_sgid());
+}
+
+static int mcctrl_control_current_fsgid_bridge(void)
+{
+	return GUIDVAL(current_fsgid());
+}
+#endif
 
 int
 mcexec_getcred(unsigned long phys)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_control_getcred_body_result(
+		phys, mcctrl_control_phys_to_virt_bridge,
+		mcctrl_control_current_uid_bridge,
+		mcctrl_control_current_euid_bridge,
+		mcctrl_control_current_suid_bridge,
+		mcctrl_control_current_fsuid_bridge,
+		mcctrl_control_current_gid_bridge,
+		mcctrl_control_current_egid_bridge,
+		mcctrl_control_current_sgid_bridge,
+		mcctrl_control_current_fsgid_bridge);
+#else
 	int	*virt = phys_to_virt(phys);
 
 	virt[0] = GUIDVAL(current_uid());
@@ -2455,11 +3234,24 @@ mcexec_getcred(unsigned long phys)
 	virt[6] = GUIDVAL(current_sgid());
 	virt[7] = GUIDVAL(current_fsgid());
 	return 0;
+#endif
 }
 
 int
 mcexec_getcredv(int __user *virt)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_control_getcredv_body_result(
+		virt, mcctrl_control_copy_to_user_bridge,
+		mcctrl_control_current_uid_bridge,
+		mcctrl_control_current_euid_bridge,
+		mcctrl_control_current_suid_bridge,
+		mcctrl_control_current_fsuid_bridge,
+		mcctrl_control_current_gid_bridge,
+		mcctrl_control_current_egid_bridge,
+		mcctrl_control_current_sgid_bridge,
+		mcctrl_control_current_fsgid_bridge);
+#else
 	int	wk[8];
 
 	wk[0] = GUIDVAL(current_uid());
@@ -2473,6 +3265,7 @@ mcexec_getcredv(int __user *virt)
 	if(copy_to_user(virt, wk, sizeof(int) * 8))
 		return -EFAULT;
 	return 0;
+#endif
 }
 
 int mcexec_create_per_process_data(ihk_os_t os,
@@ -2559,8 +3352,35 @@ int mcexec_create_per_process_data(ihk_os_t os,
 	return 0;
 }
 
+#ifdef MCCTRL_RUST_HELPERS
+static void mcctrl_control_destroy_ppd_log_bridge(int stage, int pid, void *ppd)
+{
+	switch (stage) {
+	case 0:
+		pr_warn("%s: warning: mcctrl_usrdata not found\n",
+			"mcexec_destroy_per_process_data");
+		break;
+	case 1:
+		pr_ppd("put", task_pid_vnr(current),
+		       (struct mcctrl_per_proc_data *)ppd);
+		break;
+	case 2:
+		printk("WARNING: no per process data for PID %d ?\n",
+		       task_tgid_vnr(current));
+		break;
+	}
+	(void)pid;
+}
+#endif
+
 int mcexec_destroy_per_process_data(ihk_os_t os, int pid)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_control_destroy_ppd_body_result(
+		(unsigned long)os, pid, mcctrl_control_get_usrdata_bridge,
+		mcctrl_control_get_ppd_bridge, mcctrl_control_put_ppd_bridge,
+		mcctrl_control_destroy_ppd_log_bridge);
+#else
 	struct mcctrl_usrdata *usrdata = ihk_host_os_get_usrdata(os);
 	struct mcctrl_per_proc_data *ppd = NULL;
 
@@ -2588,6 +3408,7 @@ int mcexec_destroy_per_process_data(ihk_os_t os, int pid)
 	}
 
 	return 0;
+#endif
 }
 
 
@@ -2687,6 +3508,11 @@ out:
 
 int mcexec_close_exec(ihk_os_t os, int pid)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_control_close_exec_body_result(
+		(unsigned long)os, pid, mcctrl_control_os_index_bridge,
+		mcctrl_control_drop_exec_bridge);
+#else
 	struct mckernel_exec_file *mcef = NULL;
 	int found = 0;
 	int os_ind = ihk_host_os_get_index(os);	
@@ -2711,10 +3537,20 @@ int mcexec_close_exec(ihk_os_t os, int pid)
 	up(&mckernel_exec_file_lock);
 
 	return (found ? 0 : EINVAL);
+#endif
 }
 
 long mcexec_strncpy_from_user(ihk_os_t os, struct strncpy_from_user_desc * __user arg)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	(void)os;
+	return mcctrl_control_strncpy_from_user_body_result(
+		arg, PAGE_SIZE, mcctrl_control_copy_from_user_bridge,
+		mcctrl_control_copy_to_user_bridge,
+		mcctrl_control_alloc_page_bridge,
+		mcctrl_control_free_page_bridge,
+		mcctrl_control_strncpy_from_user_bridge);
+#else
 	struct strncpy_from_user_desc desc;
 	void *buf;
 	void *dest;
@@ -2763,10 +3599,21 @@ long mcexec_strncpy_from_user(ihk_os_t os, struct strncpy_from_user_desc * __use
 		return -EFAULT;
 	}
 	return 0;
+#endif
 }
 
 long mcexec_sys_mount(struct sys_mount_desc *__user arg)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_control_sys_mount_body_result(
+		arg, mcctrl_control_copy_from_user_bridge,
+		mcctrl_control_prepare_creds_bridge,
+		mcctrl_control_cap_raise_admin_bridge,
+		mcctrl_control_override_creds_bridge,
+		mcctrl_control_mount_bridge,
+		mcctrl_control_revert_creds_bridge,
+		mcctrl_control_put_cred_bridge);
+#else
 	struct sys_mount_desc desc;
 	struct cred *promoted;
 	const struct cred *original;
@@ -2790,10 +3637,21 @@ long mcexec_sys_mount(struct sys_mount_desc *__user arg)
 	put_cred(promoted);
 
 	return ret;
+#endif
 }
 
 long mcexec_sys_umount(struct sys_mount_desc *__user arg)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_control_sys_umount_body_result(
+		arg, MNT_FORCE, mcctrl_control_copy_from_user_bridge,
+		mcctrl_control_prepare_creds_bridge,
+		mcctrl_control_cap_raise_admin_bridge,
+		mcctrl_control_override_creds_bridge,
+		mcctrl_control_umount_bridge,
+		mcctrl_control_revert_creds_bridge,
+		mcctrl_control_put_cred_bridge);
+#else
 	struct sys_umount_desc desc;
 	struct cred *promoted;
 	const struct cred *original;
@@ -2816,10 +3674,21 @@ long mcexec_sys_umount(struct sys_mount_desc *__user arg)
 	put_cred(promoted);
 
 	return ret;
+#endif
 }
 
 long mcexec_sys_unshare(struct sys_unshare_desc *__user arg)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_control_sys_unshare_body_result(
+		arg, mcctrl_control_copy_from_user_bridge,
+		mcctrl_control_prepare_creds_bridge,
+		mcctrl_control_cap_raise_admin_bridge,
+		mcctrl_control_override_creds_bridge,
+		mcctrl_control_unshare_bridge,
+		mcctrl_control_revert_creds_bridge,
+		mcctrl_control_put_cred_bridge);
+#else
 	struct sys_unshare_desc desc;
 	struct cred *promoted;
 	const struct cred *original;
@@ -2842,12 +3711,20 @@ long mcexec_sys_unshare(struct sys_unshare_desc *__user arg)
 	put_cred(promoted);
 
 	return ret;
+#endif
 }
 
 static DECLARE_WAIT_QUEUE_HEAD(perfctrlq);
 
 long mcctrl_perf_num(ihk_os_t os, unsigned long arg)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_control_perf_num_body_result(
+		(unsigned long)os, arg, mcctrl_control_validate_os_bridge,
+		mcctrl_control_get_usrdata_bridge,
+		mcctrl_control_perf_set_num_bridge,
+		mcctrl_control_perf_num_log_bridge);
+#else
 	struct mcctrl_usrdata *usrdata;
 
 	if (!os || ihk_host_validate_os(os)) {
@@ -2864,6 +3741,7 @@ long mcctrl_perf_num(ihk_os_t os, unsigned long arg)
 	usrdata->perf_event_num = arg;
 
 	return 0;
+#endif
 }
 
 struct mcctrl_perf_ctrl_desc {
@@ -2877,6 +3755,22 @@ struct mcctrl_perf_ctrl_desc {
  */
 long mcctrl_perf_set(ihk_os_t os, struct ihk_perf_event_attr *__user arg)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_control_perf_set_body_result(
+		(unsigned long)os, arg, ARCH_PERF_COUNTER_START,
+		sizeof(struct perf_ctrl_desc),
+		mcctrl_control_validate_os_bridge,
+		mcctrl_control_get_usrdata_bridge,
+		mcctrl_control_perf_event_num_bridge,
+		mcctrl_control_get_cpu_info_bridge,
+		mcctrl_control_cpu_info_n_cpus_bridge,
+		mcctrl_control_cpu_register_free_bridge,
+		mcctrl_control_perf_alloc_set_desc_bridge,
+		mcctrl_control_perf_send_wait_bridge,
+		mcctrl_control_perf_desc_err_bridge,
+		mcctrl_control_perf_set_num_bridge,
+		mcctrl_control_perf_log_bridge);
+#else
 	struct mcctrl_usrdata *usrdata = NULL;
 	struct ikc_scd_packet isp;
 	struct perf_ctrl_desc *perf_desc;
@@ -2958,10 +3852,29 @@ long mcctrl_perf_set(ihk_os_t os, struct ihk_perf_event_attr *__user arg)
 	usrdata->perf_event_num = num_registered;
 
 	return num_registered;
+#endif
 }
 
 long mcctrl_perf_get(ihk_os_t os, unsigned long *__user arg)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_control_perf_get_body_result(
+		(unsigned long)os, arg, ARCH_PERF_COUNTER_START,
+		sizeof(struct perf_ctrl_desc), sizeof(unsigned long),
+		mcctrl_control_validate_os_bridge,
+		mcctrl_control_get_usrdata_bridge,
+		mcctrl_control_perf_event_num_bridge,
+		mcctrl_control_get_cpu_info_bridge,
+		mcctrl_control_cpu_info_n_cpus_bridge,
+		mcctrl_control_cpu_register_alloc_bridge,
+		mcctrl_control_cpu_register_free_bridge,
+		mcctrl_control_perf_init_get_desc_bridge,
+		mcctrl_control_perf_send_wait_bridge,
+		mcctrl_control_perf_desc_err_bridge,
+		mcctrl_control_perf_desc_read_value_bridge,
+		mcctrl_control_copy_to_user_bridge,
+		mcctrl_control_perf_log_bridge);
+#else
 	struct mcctrl_usrdata *usrdata = NULL;
 	struct ikc_scd_packet isp;
 	struct perf_ctrl_desc *perf_desc;
@@ -3027,10 +3940,27 @@ long mcctrl_perf_get(ihk_os_t os, unsigned long *__user arg)
 	}
 
 	return 0;
+#endif
 }
 
 long mcctrl_perf_enable(ihk_os_t os)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_control_perf_enable_disable_body_result(
+		(unsigned long)os, PERF_CTRL_ENABLE, ARCH_PERF_COUNTER_START,
+		sizeof(struct perf_ctrl_desc),
+		mcctrl_control_validate_os_bridge,
+		mcctrl_control_get_usrdata_bridge,
+		mcctrl_control_perf_event_num_bridge,
+		mcctrl_control_get_cpu_info_bridge,
+		mcctrl_control_cpu_info_n_cpus_bridge,
+		mcctrl_control_cpu_register_alloc_bridge,
+		mcctrl_control_cpu_register_free_bridge,
+		mcctrl_control_perf_init_mask_desc_bridge,
+		mcctrl_control_perf_send_wait_bridge,
+		mcctrl_control_perf_desc_err_bridge,
+		mcctrl_control_perf_log_bridge);
+#else
 	struct mcctrl_usrdata *usrdata = NULL;
 	struct ikc_scd_packet isp;
 	struct perf_ctrl_desc *perf_desc;
@@ -3094,10 +4024,27 @@ long mcctrl_perf_enable(ihk_os_t os)
 	kfree(perf_desc);
 
 	return 0;
+#endif
 }
 
 long mcctrl_perf_disable(ihk_os_t os)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_control_perf_enable_disable_body_result(
+		(unsigned long)os, PERF_CTRL_DISABLE,
+		ARCH_PERF_COUNTER_START, sizeof(struct perf_ctrl_desc),
+		mcctrl_control_validate_os_bridge,
+		mcctrl_control_get_usrdata_bridge,
+		mcctrl_control_perf_event_num_bridge,
+		mcctrl_control_get_cpu_info_bridge,
+		mcctrl_control_cpu_info_n_cpus_bridge,
+		mcctrl_control_cpu_register_alloc_bridge,
+		mcctrl_control_cpu_register_free_bridge,
+		mcctrl_control_perf_init_mask_desc_bridge,
+		mcctrl_control_perf_send_wait_bridge,
+		mcctrl_control_perf_desc_err_bridge,
+		mcctrl_control_perf_log_bridge);
+#else
 	struct mcctrl_usrdata *usrdata = NULL;
 	struct ikc_scd_packet isp;
 	struct perf_ctrl_desc *perf_desc;
@@ -3159,18 +4106,39 @@ long mcctrl_perf_disable(ihk_os_t os)
 	kfree(perf_desc);
 
 	return 0;
+#endif
 }
 
 long mcctrl_perf_destroy(ihk_os_t os)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_control_perf_destroy_body_result(
+		(unsigned long)os, mcctrl_control_perf_disable_bridge,
+		mcctrl_control_perf_num_zero_bridge);
+#else
 	mcctrl_perf_disable(os);
 	mcctrl_perf_num(os, 0);
 	return 0;
+#endif
 }
 
 /* Compose LWK-specific rusage structure */
 long mcctrl_getrusage(ihk_os_t ihk_os, struct mcctrl_ioctl_getrusage_desc *__user _desc)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_control_getrusage_body_result(
+		(unsigned long)ihk_os, _desc,
+		sizeof(struct mcctrl_ioctl_getrusage_desc),
+		sizeof(struct ihk_os_rusage), IHK_MAX_NUM_PGSIZES,
+		IHK_MAX_NUM_NUMA_NODES, IHK_MAX_NUM_CPUS,
+		mcctrl_control_validate_os_bridge,
+		mcctrl_control_getrusage_bridge,
+		mcctrl_control_copy_from_user_bridge,
+		mcctrl_control_copy_to_user_bridge,
+		mcctrl_control_getrusage_alloc_bridge,
+		mcctrl_control_cpu_register_free_bridge,
+		mcctrl_control_getrusage_log_bridge);
+#else
 	struct mcctrl_ioctl_getrusage_desc desc;
 	struct rusage_global *rusage_global = ihk_os_get_rusage(ihk_os);
 	struct ihk_os_rusage *rusage = NULL;
@@ -3243,6 +4211,7 @@ long mcctrl_getrusage(ihk_os_t ihk_os, struct mcctrl_ioctl_getrusage_desc *__use
 	}
 
 	return ret;
+#endif
 }
 
 extern void *get_user_sp(void);
@@ -3254,6 +4223,20 @@ extern unsigned long get_rsp_ctx(void *ctx);
 
 long mcexec_uti_get_ctx(ihk_os_t os, struct uti_get_ctx_desc __user *udesc)
 {
+#if defined(MCCTRL_RUST_HELPERS) && !defined(CONFIG_MIC)
+	return mcctrl_control_uti_get_ctx_body_result(
+		(unsigned long)os, udesc, sizeof(struct uti_get_ctx_desc),
+		sizeof(struct uti_ctx), offsetof(struct uti_get_ctx_desc, key),
+		mcctrl_control_copy_from_user_bridge,
+		mcctrl_control_copy_to_user_bridge,
+		mcctrl_control_os_to_dev_bridge,
+		mcctrl_control_map_memory_bridge,
+		mcctrl_control_map_virtual_bridge,
+		mcctrl_control_unmap_virtual_bridge,
+		mcctrl_control_unmap_memory_bridge,
+		mcctrl_control_current_task_ulong_bridge,
+		mcctrl_control_uti_get_ctx_log_bridge);
+#else
 	struct uti_get_ctx_desc desc;
 	unsigned long phys;
 	struct uti_ctx *rctx;
@@ -3292,6 +4275,7 @@ long mcexec_uti_get_ctx(ihk_os_t os, struct uti_get_ctx_desc __user *udesc)
 	ihk_device_unmap_memory(ihk_os_to_dev(os), phys, sizeof(struct uti_ctx));
  out:
 	return rc;
+#endif
 }
 
 long mcctrl_switch_ctx(ihk_os_t os, struct uti_switch_ctx_desc __user *udesc,
@@ -3389,6 +4373,24 @@ mcexec_sig_thread(ihk_os_t os, unsigned long arg, struct file *file)
 
 static long mcexec_terminate_thread_unsafe(ihk_os_t os, int pid, int tid, long code, struct task_struct *tsk)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	dprintk("%s: target pid=%d,tid=%d,code=%lx,task=%p\n", __FUNCTION__, pid, tid, code, tsk);
+
+	return mcctrl_control_terminate_thread_unsafe_body_result(
+		(unsigned long)os, pid, tid, code, tsk,
+		mcctrl_control_get_usrdata_bridge,
+		mcctrl_control_usrdata_os_bridge,
+		mcctrl_control_get_ppd_bridge,
+		mcctrl_control_put_ppd_bridge,
+		mcctrl_control_get_ptd_bridge,
+		mcctrl_control_put_ptd_bridge,
+		mcctrl_control_ptd_tid_bridge,
+		mcctrl_control_ptd_data_bridge,
+		mcctrl_control_ptd_refcount_bridge,
+		mcctrl_control_return_syscall_bridge,
+		mcctrl_control_release_packet_bridge,
+		mcctrl_control_terminate_thread_log_bridge);
+#else
 	struct ikc_scd_packet *packet;
 	struct mcctrl_usrdata *usrdata = ihk_host_os_get_usrdata(os);
 	struct mcctrl_per_proc_data *ppd;
@@ -3450,6 +4452,7 @@ static long mcexec_terminate_thread_unsafe(ihk_os_t os, int pid, int tid, long c
 	pr_ppd("put", task_pid_vnr(current), ppd);
  no_ppd:
 	return 0;
+#endif
 }
 
 static long
@@ -3498,6 +4501,11 @@ mcexec_terminate_thread(ihk_os_t os, struct terminate_thread_desc * __user arg)
 
 static long mcexec_release_user_space(struct release_user_space_desc *__user arg)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_control_release_user_space_body_result(
+		arg, mcctrl_control_copy_from_user_bridge,
+		mcctrl_control_clear_pte_range_bridge);
+#else
 	struct release_user_space_desc desc;
 
 	if (copy_from_user(&desc, arg, sizeof(desc))) {
@@ -3510,6 +4518,7 @@ static long mcexec_release_user_space(struct release_user_space_desc *__user arg
 					      desc.user_start, desc.user_end));
 #else
 	return release_user_space(desc.user_start, desc.user_end - desc.user_start);
+#endif
 #endif
 }
 

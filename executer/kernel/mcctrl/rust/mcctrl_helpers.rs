@@ -43,10 +43,13 @@ const MCEXEC_UP_GET_NUM_POOL_THREADS: c_uint = 0x30a0_2926;
 const MCEXEC_UP_UTI_ATTR: c_uint = 0x30a0_2927;
 const MCEXEC_UP_RELEASE_USER_SPACE: c_uint = 0x30a0_2928;
 const MCEXEC_UP_DEBUG_LOG: c_uint = 0x4000_0000;
+const SCD_MSG_SEND_SIGNAL: c_int = 0x7;
 const SCD_MSG_DEBUG_LOG: c_int = 0x20;
 const SCD_MSG_CPU_RW_REG: c_int = 0x52;
 const SCD_MSG_SYSCALL_ONESIDE: c_int = 0x4;
+const SCD_MSG_REMOTE_PAGE_FAULT: c_int = 0x18;
 const MCCTRL_OS_CPU_READ_REGISTER: c_int = 0;
+const MCCTRL_OS_MAX_MINOR: c_int = 64;
 const MCCTRL_IKC_INIT_LAST_CHANNEL_PORT: c_int = 502;
 const NR_CLOSE: c_ulong = 3;
 const NR_MMAP: c_ulong = 9;
@@ -58,6 +61,14 @@ const NR_MOVE_PAGES: c_ulong = 279;
 const NR_COREDUMP: c_ulong = 999;
 const SCHED_CHECK_SAME_OWNER_VALUE: c_ulong = 0x01;
 const SCHED_CHECK_ROOT_VALUE: c_ulong = 0x02;
+const PAGER_REQ_CREATE: c_ulong = 0x0001;
+const PAGER_REQ_RELEASE: c_ulong = 0x0002;
+const PAGER_REQ_READ: c_ulong = 0x0003;
+const PAGER_REQ_WRITE: c_ulong = 0x0004;
+const PAGER_REQ_MAP: c_ulong = 0x0005;
+const PAGER_REQ_PFN: c_ulong = 0x0006;
+const PAGER_REQ_UNMAP: c_ulong = 0x0007;
+const PAGER_REQ_MLOCK_LIST: c_ulong = 0x0008;
 const SYSFS_SPECIAL_OPS_MIN: c_long = 1;
 const SYSFS_SPECIAL_OPS_MAX: c_long = 1000;
 const ETIME: c_int = 62;
@@ -66,14 +77,18 @@ const EINVAL: c_int = 22;
 const EINTR: c_int = 4;
 const ENOSPC: c_int = 28;
 const ENOENT: c_int = 2;
+const ENOTDIR: c_int = 20;
 const ENAMETOOLONG: c_int = 36;
 const EFAULT: c_int = 14;
+const EAGAIN: c_int = 11;
 const ENOEXEC: c_int = 8;
 const ENOMEM: c_int = 12;
 const ENOSYS: c_int = 38;
 const EIO: c_int = 5;
+const ETIMEDOUT: c_int = 110;
 const ERESTART: c_int = 85;
 const ERESTARTSYS: c_int = 512;
+const EBUSY: c_int = 16;
 const FUTEX_WAIT: c_int = 0;
 const FUTEX_WAKE: c_int = 1;
 const FUTEX_REQUEUE: c_int = 3;
@@ -85,6 +100,7 @@ const FUTEX_WAIT_REQUEUE_PI: c_int = 11;
 const FUTEX_CMD_MASK: c_int = 0x7f;
 const FUTEX_PRIVATE_FLAG: c_int = 128;
 const FUTEX_CLOCK_REALTIME: c_int = 256;
+const FUTEX_BITSET_MATCH_ANY: u32 = !0u32;
 const FUTEX_OP_SET_VALUE: c_int = 0;
 const FUTEX_OP_ADD_VALUE: c_int = 1;
 const FUTEX_OP_OR_VALUE: c_int = 2;
@@ -139,6 +155,9 @@ const SYSFS_SNOOPING_OPS_PB_VALUE: usize = 7;
 const SYSFS_SNOOPING_OPS_U32K_VALUE: usize = 8;
 const SYSFS_NODE_DISTANCE_S_SIZE: usize = 1024;
 const SYSFS_ERRNO_MAX: usize = 4095;
+const IHK_MAX_NUM_PGSIZES: usize = 8;
+const IHK_MAX_NUM_NUMA_NODES: usize = 1024;
+const IHK_MAX_NUM_CPUS: usize = 1024;
 
 #[repr(C)]
 struct ListHead {
@@ -174,6 +193,54 @@ pub struct McctrlVdso {
     pvti_virt: *mut c_void,
     pvti_phys: c_long,
     vgtod_virt: *mut c_void,
+}
+
+#[repr(C)]
+struct McctrlIoctlGetrusageDesc {
+    rusage: *mut c_void,
+    size_rusage: c_ulong,
+}
+
+#[repr(C)]
+struct RusagePercpu {
+    user_tsc: c_ulong,
+    system_tsc: c_ulong,
+}
+
+#[repr(C)]
+struct RusageGlobal {
+    memory_stat_rss: [c_long; IHK_MAX_NUM_PGSIZES],
+    memory_stat_mapped_file: [c_long; IHK_MAX_NUM_PGSIZES],
+    rss_current: c_long,
+    memory_max_usage: c_ulong,
+    max_num_threads: c_ulong,
+    num_threads: c_ulong,
+    memory_kmem_usage: c_ulong,
+    memory_kmem_max_usage: c_ulong,
+    memory_numa_stat: [c_ulong; IHK_MAX_NUM_NUMA_NODES],
+    cpu: [RusagePercpu; IHK_MAX_NUM_CPUS],
+    total_memory: c_ulong,
+    total_memory_usage: c_ulong,
+    total_memory_max_usage: c_ulong,
+    num_numa_nodes: c_ulong,
+    num_processors: c_ulong,
+    ns_per_tsc: c_ulong,
+}
+
+#[repr(C)]
+struct IhkOsRusage {
+    memory_stat_rss: [c_ulong; IHK_MAX_NUM_PGSIZES],
+    memory_stat_mapped_file: [c_ulong; IHK_MAX_NUM_PGSIZES],
+    memory_max_usage: c_ulong,
+    memory_kmem_usage: c_ulong,
+    memory_kmem_max_usage: c_ulong,
+    memory_numa_stat: [c_ulong; IHK_MAX_NUM_NUMA_NODES],
+    cpuacct_stat_system: c_ulong,
+    cpuacct_stat_user: c_ulong,
+    cpuacct_usage: c_ulong,
+    cpuacct_usage_percpu: [c_ulong; IHK_MAX_NUM_CPUS],
+    num_threads: c_int,
+    max_num_threads: c_int,
 }
 
 #[repr(C)]
@@ -270,6 +337,76 @@ struct SysfsmBitmapParam {
     ptr: *mut c_void,
 }
 
+#[repr(C)]
+#[derive(Clone, Copy)]
+struct PrepareDmaDesc {
+    size: c_ulong,
+    pa: c_ulong,
+}
+
+#[repr(C)]
+#[derive(Clone, Copy)]
+struct FreeDmaDesc {
+    pa: c_ulong,
+    size: c_ulong,
+}
+
+#[repr(C)]
+#[derive(Clone, Copy)]
+struct SysMountDesc {
+    dev_name: *mut c_char,
+    dir_name: *mut c_char,
+    type_name: *mut c_char,
+    flags: c_ulong,
+    data: *mut c_void,
+}
+
+#[repr(C)]
+#[derive(Clone, Copy)]
+struct SysUmountDesc {
+    dir_name: *mut c_char,
+}
+
+#[repr(C)]
+#[derive(Clone, Copy)]
+struct SysUnshareDesc {
+    unshare_flags: c_ulong,
+}
+
+#[repr(C)]
+#[derive(Clone, Copy)]
+struct RemoteTransfer {
+    rphys: c_ulong,
+    userp: *mut c_void,
+    size: c_ulong,
+    direction: c_char,
+}
+
+#[repr(C)]
+#[derive(Clone, Copy)]
+struct SyscallLoadDesc {
+    cpu: c_ulong,
+    src: c_ulong,
+    dest: c_ulong,
+    size: c_ulong,
+}
+
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct StrncpyFromUserDesc {
+    dest: *mut c_void,
+    src: *mut c_void,
+    n: c_ulong,
+    result: c_long,
+}
+
+#[repr(C)]
+#[derive(Clone, Copy)]
+struct ReleaseUserSpaceDesc {
+    user_start: c_ulong,
+    user_end: c_ulong,
+}
+
 static mut VDSO_IMAGE_64: *mut c_void = null_mut();
 static mut MCCTRL_VVAR_PAGE: *mut c_void = null_mut();
 static mut HPET_ADDRESS: *mut c_long = null_mut();
@@ -318,6 +455,29 @@ const _: () = {
     assert!(size_of::<McctrlRefcount>() == 4);
     assert!(align_of::<McctrlRefcount>() == 4);
     assert!(offset_of!(McctrlRefcount, refs) == 0);
+    assert!(size_of::<PrepareDmaDesc>() == 16);
+    assert!(offset_of!(PrepareDmaDesc, pa) == 8);
+    assert!(size_of::<FreeDmaDesc>() == 16);
+    assert!(offset_of!(FreeDmaDesc, size) == 8);
+    assert!(size_of::<SysMountDesc>() == 40);
+    assert!(offset_of!(SysMountDesc, flags) == 24);
+    assert!(offset_of!(SysMountDesc, data) == 32);
+    assert!(size_of::<SysUmountDesc>() == 8);
+    assert!(size_of::<SysUnshareDesc>() == 8);
+    assert!(size_of::<RemoteTransfer>() == 32);
+    assert!(offset_of!(RemoteTransfer, userp) == 8);
+    assert!(offset_of!(RemoteTransfer, size) == 16);
+    assert!(offset_of!(RemoteTransfer, direction) == 24);
+    assert!(size_of::<SyscallLoadDesc>() == 32);
+    assert!(offset_of!(SyscallLoadDesc, src) == 8);
+    assert!(offset_of!(SyscallLoadDesc, dest) == 16);
+    assert!(offset_of!(SyscallLoadDesc, size) == 24);
+    assert!(size_of::<StrncpyFromUserDesc>() == 32);
+    assert!(offset_of!(StrncpyFromUserDesc, src) == 8);
+    assert!(offset_of!(StrncpyFromUserDesc, n) == 16);
+    assert!(offset_of!(StrncpyFromUserDesc, result) == 24);
+    assert!(size_of::<ReleaseUserSpaceDesc>() == 16);
+    assert!(offset_of!(ReleaseUserSpaceDesc, user_end) == 8);
 };
 
 unsafe extern "C" {
@@ -1711,8 +1871,7 @@ type McctrlControlCpuRegDoneLogFn =
 type McctrlControlValidateOsFn = unsafe extern "C" fn(os: c_ulong) -> c_int;
 type McctrlControlCurrentIntFn = unsafe extern "C" fn() -> c_int;
 type McctrlControlCurrentTaskFn = unsafe extern "C" fn() -> *mut c_void;
-type McctrlControlGetPpdFn =
-    unsafe extern "C" fn(usrdata: *mut c_void, pid: c_int) -> *mut c_void;
+type McctrlControlGetPpdFn = unsafe extern "C" fn(usrdata: *mut c_void, pid: c_int) -> *mut c_void;
 type McctrlControlGetPtdFn =
     unsafe extern "C" fn(ppd: *mut c_void, task: *mut c_void) -> *mut c_void;
 type McctrlControlPutFn = unsafe extern "C" fn(ptr: *mut c_void);
@@ -1724,6 +1883,117 @@ type McctrlControlRequestCpuErrorLogFn =
 type McctrlControlRequestCpuPtdLogFn =
     unsafe extern "C" fn(stage: c_int, tid: c_int, ptd: *mut c_void);
 type McctrlControlRequestCpuResultLogFn = unsafe extern "C" fn(os: c_ulong, cpu: c_int);
+type McctrlControlCopyUserFn =
+    unsafe extern "C" fn(dst: *mut c_void, src: *const c_void, size: c_ulong) -> c_int;
+type McctrlControlOsToDevFn = unsafe extern "C" fn(os: c_ulong) -> *mut c_void;
+type McctrlControlMapMemoryFn =
+    unsafe extern "C" fn(dev: *mut c_void, phys: c_ulong, size: c_ulong) -> c_ulong;
+type McctrlControlMapVirtualFn =
+    unsafe extern "C" fn(dev: *mut c_void, phys: c_ulong, size: c_ulong) -> *mut c_void;
+type McctrlControlUnmapVirtualFn =
+    unsafe extern "C" fn(dev: *mut c_void, virt: *mut c_void, size: c_ulong);
+type McctrlControlUnmapMemoryFn =
+    unsafe extern "C" fn(dev: *mut c_void, phys: c_ulong, size: c_ulong);
+type McctrlControlTransferLogFn = unsafe extern "C" fn(stage: c_int);
+type McctrlControlLoadLogFn = unsafe extern "C" fn(rpm: *mut c_void, size: c_ulong);
+type McctrlControlCredValueFn = unsafe extern "C" fn() -> c_int;
+type McctrlControlAllocPageFn = unsafe extern "C" fn() -> *mut c_void;
+type McctrlControlFreePageFn = unsafe extern "C" fn(ptr: *mut c_void);
+type McctrlControlStrncpyFromUserFn =
+    unsafe extern "C" fn(dst: *mut c_void, src: *const c_void, size: c_ulong) -> c_long;
+type McctrlControlDropExecFn = unsafe extern "C" fn(os: c_ulong, pid: c_int) -> c_int;
+type McctrlControlDestroyPpdLogFn =
+    unsafe extern "C" fn(stage: c_int, pid: c_int, ppd: *mut c_void);
+type McctrlControlNewInfoFn = unsafe extern "C" fn(os: c_ulong, file: *mut c_void) -> *mut c_void;
+type McctrlControlSetInfoPidFn = unsafe extern "C" fn(info: *mut c_void, pid: c_int);
+type McctrlControlRegisterReleaseFn = unsafe extern "C" fn(file: *mut c_void, info: *mut c_void);
+type McctrlControlSetPrivateFn = unsafe extern "C" fn(file: *mut c_void, info: *mut c_void);
+type McctrlControlFilePtrFn = unsafe extern "C" fn(file: *mut c_void) -> *mut c_void;
+type McctrlControlDescIntFn = unsafe extern "C" fn(desc: *mut c_void) -> c_int;
+type McctrlControlDescUlongFn = unsafe extern "C" fn(desc: *mut c_void) -> c_ulong;
+type McctrlControlInfoUlongFn = unsafe extern "C" fn(info: *mut c_void) -> c_ulong;
+type McctrlControlSetStartInfoFn = unsafe extern "C" fn(
+    info: *mut c_void,
+    pid: c_int,
+    cpu: c_int,
+    user_start: c_ulong,
+    user_end: c_ulong,
+    prepare_thread: c_ulong,
+);
+type McctrlControlPtrUlongFn = unsafe extern "C" fn(ptr: *mut c_void, value: c_ulong);
+type McctrlControlOsCpuVoidFn = unsafe extern "C" fn(os: c_ulong, cpu: c_int);
+type McctrlControlScheduleSendFn =
+    unsafe extern "C" fn(os: c_ulong, cpu: c_int, rprocess: c_ulong) -> c_int;
+type McctrlControlStartLogFn = unsafe extern "C" fn(stage: c_int, ret: c_int);
+type McctrlControlSignalLogFn = unsafe extern "C" fn(stage: c_int, ret: c_int);
+type McctrlControlReturnSyscallFn = unsafe extern "C" fn(
+    os: c_ulong,
+    ppd: *mut c_void,
+    packet: *mut c_void,
+    ret: c_long,
+    tid: c_int,
+);
+type McctrlControlRetSyscallLogFn = unsafe extern "C" fn(stage: c_int, pid: c_int, tid: c_int);
+type McctrlControlTerminateThreadLogFn =
+    unsafe extern "C" fn(stage: c_int, pid: c_int, tid: c_int, ptr: *mut c_void, value: c_int);
+type McctrlControlCurrentUlongFn = unsafe extern "C" fn() -> c_ulong;
+type McctrlControlUtiLogFn = unsafe extern "C" fn(stage: c_int);
+type McctrlControlGetOrderFn = unsafe extern "C" fn(size: c_ulong) -> c_int;
+type McctrlControlAllocPagesFn = unsafe extern "C" fn(order: c_int) -> c_ulong;
+type McctrlControlFreePagesFn = unsafe extern "C" fn(addr: c_ulong, order: c_int);
+type McctrlControlPhysToVirtFn = unsafe extern "C" fn(phys: c_ulong) -> c_ulong;
+type McctrlControlPrepareCredsFn = unsafe extern "C" fn() -> *mut c_void;
+type McctrlControlCapRaiseAdminFn = unsafe extern "C" fn(cred: *mut c_void);
+type McctrlControlOverrideCredsFn = unsafe extern "C" fn(cred: *mut c_void) -> *const c_void;
+type McctrlControlRevertCredsFn = unsafe extern "C" fn(cred: *const c_void);
+type McctrlControlMountFn = unsafe extern "C" fn(
+    dev_name: *mut c_char,
+    dir_name: *mut c_char,
+    type_name: *mut c_char,
+    flags: c_ulong,
+    data: *mut c_void,
+) -> c_int;
+type McctrlControlUmountFn = unsafe extern "C" fn(dir_name: *mut c_char, flags: c_int) -> c_int;
+type McctrlControlUnshareFn = unsafe extern "C" fn(flags: c_ulong) -> c_int;
+type McctrlControlClearPteRangeFn = unsafe extern "C" fn(start: c_ulong, len: c_ulong) -> c_long;
+type McctrlControlPerfSetNumFn = unsafe extern "C" fn(usrdata: *mut c_void, value: c_ulong);
+type McctrlControlPerfEventNumFn = unsafe extern "C" fn(usrdata: *mut c_void) -> c_int;
+type McctrlControlPerfAllocSetDescFn = unsafe extern "C" fn(
+    arg: *const c_void,
+    index: c_int,
+    target_cntr: c_uint,
+    error: *mut c_int,
+) -> *mut c_void;
+type McctrlControlPerfInitDescFn = unsafe extern "C" fn(desc: *mut c_void, target_cntr: c_uint);
+type McctrlControlPerfInitMaskDescFn =
+    unsafe extern "C" fn(desc: *mut c_void, ctrl_type: c_int, cntr_mask: c_ulong);
+type McctrlControlPerfSendWaitFn = unsafe extern "C" fn(
+    os: c_ulong,
+    cpu: c_int,
+    desc: *mut c_void,
+    timeout: c_long,
+    need_free: *mut c_int,
+) -> c_int;
+type McctrlControlPerfDescErrFn = unsafe extern "C" fn(desc: *mut c_void) -> c_int;
+type McctrlControlPerfDescReadValueFn = unsafe extern "C" fn(desc: *mut c_void) -> c_ulong;
+type McctrlControlLongFn = unsafe extern "C" fn(os: c_ulong) -> c_long;
+type McctrlControlGetrusageLogFn =
+    unsafe extern "C" fn(stage: c_int, size: c_ulong, max_size: c_ulong);
+type McctrlDriverControlFn =
+    unsafe extern "C" fn(os: c_ulong, request: c_uint, arg: c_ulong, file: c_ulong) -> c_long;
+type McctrlDriverOsGetFn = unsafe extern "C" fn(index: c_int) -> *mut c_void;
+type McctrlDriverOsSetFn = unsafe extern "C" fn(index: c_int, os: *mut c_void);
+type McctrlDriverVoidFn = unsafe extern "C" fn();
+type McctrlDriverIntFn = unsafe extern "C" fn() -> c_int;
+type McctrlDriverOsIntFn = unsafe extern "C" fn(os: *mut c_void) -> c_int;
+type McctrlDriverOsVoidFn = unsafe extern "C" fn(os: *mut c_void);
+type McctrlDriverIndexVoidFn = unsafe extern "C" fn(index: c_int);
+type McctrlDriverOsIndexIntFn = unsafe extern "C" fn(os: *mut c_void, index: c_int) -> c_int;
+type McctrlDriverOsIndexVoidFn = unsafe extern "C" fn(os: *mut c_void, index: c_int);
+type McctrlDriverLogFn = unsafe extern "C" fn(stage: c_int, index: c_int);
+type McctrlDriverLookupFn = unsafe extern "C" fn() -> *mut c_void;
+type McctrlDriverPublishFn = unsafe extern "C" fn(ptr: *mut c_void);
+type McctrlDriverWarnMissingFn = unsafe extern "C" fn(ptr: *mut c_void) -> c_int;
 
 #[repr(C)]
 pub struct McctrlControlDispatchOps {
@@ -1941,6 +2211,365 @@ pub struct McctrlInKernelSyscallOps {
     tofu_close: Option<McctrlInKernelReqFn>,
     return_syscall: Option<McctrlInKernelReturnFn>,
     release_packet: Option<McctrlInKernelReleaseFn>,
+}
+
+type McctrlPagerCreateFn =
+    unsafe extern "C" fn(os: c_ulong, fd: c_int, result_pa: c_ulong) -> c_long;
+type McctrlPagerReleaseFn =
+    unsafe extern "C" fn(os: c_ulong, handle: c_ulong, sref: c_ulong) -> c_long;
+type McctrlPagerIoFn = unsafe extern "C" fn(
+    os: c_ulong,
+    handle: c_ulong,
+    off: c_ulong,
+    size: c_ulong,
+    rpa: c_ulong,
+) -> c_long;
+type McctrlPagerMapFn = unsafe extern "C" fn(
+    os: c_ulong,
+    fd: c_int,
+    len: c_ulong,
+    off: c_ulong,
+    result_rpa: c_ulong,
+    prot_and_flags: c_int,
+) -> c_long;
+type McctrlPagerPfnFn =
+    unsafe extern "C" fn(os: c_ulong, handle: c_ulong, off: c_ulong, ppfn_rpa: c_ulong) -> c_long;
+type McctrlPagerUnmapFn = unsafe extern "C" fn(os: c_ulong, handle: c_ulong) -> c_long;
+type McctrlPagerMlockListFn = unsafe extern "C" fn(
+    os: c_ulong,
+    start: c_ulong,
+    end: c_ulong,
+    addr: c_ulong,
+    nent: c_int,
+) -> c_long;
+type McctrlPagerUnknownFn = unsafe extern "C" fn(request: c_ulong, ret: c_long);
+
+#[repr(C)]
+pub struct McctrlPagerCallOps {
+    create: Option<McctrlPagerCreateFn>,
+    release: Option<McctrlPagerReleaseFn>,
+    read: Option<McctrlPagerIoFn>,
+    write: Option<McctrlPagerIoFn>,
+    map: Option<McctrlPagerMapFn>,
+    pfn: Option<McctrlPagerPfnFn>,
+    unmap: Option<McctrlPagerUnmapFn>,
+    mlock_list: Option<McctrlPagerMlockListFn>,
+    unknown: Option<McctrlPagerUnknownFn>,
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_pager_call_irq_body_result(
+    os: c_ulong,
+    req: *mut McctrlSyscallRequest,
+    ops: *const McctrlPagerCallOps,
+) -> c_long {
+    if req.is_null() || ops.is_null() {
+        return -(EINVAL as c_long);
+    }
+
+    let ops = &*ops;
+    match (*req).args[0] {
+        PAGER_REQ_RELEASE => {
+            let Some(release) = ops.release else {
+                return -(EINVAL as c_long);
+            };
+            release(os, (*req).args[1], (*req).args[2])
+        }
+        _ => -(ENOSYS as c_long),
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_pager_call_body_result(
+    os: c_ulong,
+    req: *mut McctrlSyscallRequest,
+    ops: *const McctrlPagerCallOps,
+) -> c_long {
+    if req.is_null() || ops.is_null() {
+        return -(EINVAL as c_long);
+    }
+
+    let ops = &*ops;
+    let args = (*req).args;
+    match args[0] {
+        PAGER_REQ_CREATE => {
+            let Some(create) = ops.create else {
+                return -(EINVAL as c_long);
+            };
+            create(os, args[1] as c_int, args[2])
+        }
+        PAGER_REQ_READ => {
+            let Some(read) = ops.read else {
+                return -(EINVAL as c_long);
+            };
+            read(os, args[1], args[2], args[3], args[4])
+        }
+        PAGER_REQ_WRITE => {
+            let Some(write) = ops.write else {
+                return -(EINVAL as c_long);
+            };
+            write(os, args[1], args[2], args[3], args[4])
+        }
+        PAGER_REQ_MAP => {
+            let Some(map) = ops.map else {
+                return -(EINVAL as c_long);
+            };
+            map(
+                os,
+                args[1] as c_int,
+                args[2],
+                args[3],
+                args[4],
+                args[5] as c_int,
+            )
+        }
+        PAGER_REQ_PFN => {
+            let Some(pfn) = ops.pfn else {
+                return -(EINVAL as c_long);
+            };
+            pfn(os, args[1], args[2], args[3])
+        }
+        PAGER_REQ_UNMAP => {
+            let Some(unmap) = ops.unmap else {
+                return -(EINVAL as c_long);
+            };
+            unmap(os, args[1])
+        }
+        PAGER_REQ_MLOCK_LIST => {
+            let Some(mlock_list) = ops.mlock_list else {
+                return -(EINVAL as c_long);
+            };
+            mlock_list(os, args[1], args[2], args[3], args[4] as c_int)
+        }
+        _ => {
+            let ret = -(ENOSYS as c_long);
+            if let Some(unknown) = ops.unknown {
+                unknown(args[0], ret);
+            }
+            ret
+        }
+    }
+}
+
+type McctrlRemotePageFaultSendFn =
+    unsafe extern "C" fn(os: c_ulong, cpu: c_int, packet: *mut McctrlIkcScdPacket) -> c_int;
+type McctrlRemotePageFaultLogFn = unsafe extern "C" fn(
+    stage: c_int,
+    pid: c_int,
+    error: c_int,
+    fault_addr: c_ulong,
+    reason: c_ulong,
+);
+type McctrlUserSpaceLockFn = unsafe extern "C" fn();
+type McctrlUserSpaceFindVmaFn = unsafe extern "C" fn(addr: c_ulong) -> *mut c_void;
+type McctrlUserSpaceVmaUlongFn = unsafe extern "C" fn(vma: *mut c_void) -> c_ulong;
+type McctrlUserSpaceVmaVoidFn = unsafe extern "C" fn(vma: *mut c_void);
+type McctrlUserSpaceVmaZapFn =
+    unsafe extern "C" fn(vma: *mut c_void, addr: c_ulong, len: c_ulong) -> c_int;
+type McctrlUserSpaceVmaZapRangeFn =
+    unsafe extern "C" fn(vma: *mut c_void, addr: c_ulong, len: c_ulong);
+type McctrlUserSpaceMunmapFn = unsafe extern "C" fn(addr: c_ulong, len: c_ulong) -> c_int;
+type McctrlUserSpaceErrorLogFn = unsafe extern "C" fn(error: c_int);
+
+#[repr(C)]
+pub struct McctrlClearPteRangeOps {
+    read_lock: Option<McctrlUserSpaceLockFn>,
+    read_unlock: Option<McctrlUserSpaceLockFn>,
+    find_vma: Option<McctrlUserSpaceFindVmaFn>,
+    vma_start: Option<McctrlUserSpaceVmaUlongFn>,
+    vma_end: Option<McctrlUserSpaceVmaUlongFn>,
+    vma_flags: Option<McctrlUserSpaceVmaUlongFn>,
+    set_rw_exec: Option<McctrlUserSpaceVmaVoidFn>,
+    zap_vma_ptes: Option<McctrlUserSpaceVmaZapFn>,
+    zap_page_range: Option<McctrlUserSpaceVmaZapRangeFn>,
+}
+
+#[repr(C)]
+pub struct McctrlUserSpaceReleaseOps {
+    find_vma: Option<McctrlUserSpaceFindVmaFn>,
+    vma_start: Option<McctrlUserSpaceVmaUlongFn>,
+    vma_end: Option<McctrlUserSpaceVmaUlongFn>,
+    munmap: Option<McctrlUserSpaceMunmapFn>,
+    log_error: Option<McctrlUserSpaceErrorLogFn>,
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_remote_page_fault_body_result(
+    os: c_ulong,
+    fault_addr: *mut c_void,
+    reason: c_ulong,
+    packet: *mut McctrlIkcScdPacket,
+    send_wait: Option<McctrlRemotePageFaultSendFn>,
+    log_event: Option<McctrlRemotePageFaultLogFn>,
+) -> c_int {
+    let Some(send_wait) = send_wait else {
+        return -EINVAL;
+    };
+    if packet.is_null() {
+        return -EINVAL;
+    }
+
+    let rpf = &mut (*packet).body.remote_page_fault;
+    (*packet).msg = SCD_MSG_REMOTE_PAGE_FAULT;
+    rpf.fault_address = fault_addr as c_ulong;
+    rpf.fault_reason = reason;
+
+    if let Some(log_event) = log_event {
+        log_event(0, rpf.fault_tid, 0, fault_addr as c_ulong, reason);
+    }
+
+    let error = send_wait(os, rpf.target_cpu, packet);
+    if error < 0 {
+        if let Some(log_event) = log_event {
+            log_event(1, rpf.fault_tid, error, fault_addr as c_ulong, reason);
+        }
+    }
+    if let Some(log_event) = log_event {
+        log_event(2, rpf.fault_tid, error, fault_addr as c_ulong, reason);
+    }
+
+    error
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_clear_pte_range_body_result(
+    start: c_ulong,
+    len: c_ulong,
+    vm_pfnmap: c_ulong,
+    legacy_zap: c_int,
+    ops: *const McctrlClearPteRangeOps,
+) -> c_int {
+    if ops.is_null() {
+        return -EINVAL;
+    }
+
+    let ops = &*ops;
+    let (
+        Some(read_lock),
+        Some(read_unlock),
+        Some(find_vma),
+        Some(vma_start),
+        Some(vma_end),
+        Some(vma_flags),
+        Some(set_rw_exec),
+        Some(zap_vma_ptes),
+        Some(zap_page_range),
+    ) = (
+        ops.read_lock,
+        ops.read_unlock,
+        ops.find_vma,
+        ops.vma_start,
+        ops.vma_end,
+        ops.vma_flags,
+        ops.set_rw_exec,
+        ops.zap_vma_ptes,
+        ops.zap_page_range,
+    )
+    else {
+        return -EINVAL;
+    };
+
+    let limit = start.wrapping_add(len);
+    let mut addr = start;
+    let mut ret = 0;
+
+    read_lock();
+    while addr < limit {
+        let vma = find_vma(addr);
+        if vma.is_null() {
+            break;
+        }
+
+        let start_vma = vma_start(vma);
+        if addr < start_vma {
+            addr = start_vma;
+        }
+
+        let end_vma = vma_end(vma);
+        let mut end = limit;
+        if end_vma < end {
+            end = end_vma;
+        }
+
+        if addr < end {
+            let span = end.wrapping_sub(addr);
+
+            if legacy_zap != 0 {
+                set_rw_exec(vma);
+                let mut error = zap_vma_ptes(vma, addr, span);
+                if error != 0 {
+                    zap_page_range(vma, addr, span);
+                    error = 0;
+                }
+                if ret == 0 {
+                    ret = error;
+                }
+            } else if addr < start_vma
+                || addr.wrapping_add(span) > end_vma
+                || (vma_flags(vma) & vm_pfnmap) == 0
+            {
+                zap_page_range(vma, addr, span);
+            } else {
+                set_rw_exec(vma);
+                zap_vma_ptes(vma, addr, span);
+            }
+        }
+
+        addr = end;
+    }
+    read_unlock();
+
+    ret
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_user_space_release_body_result(
+    start: c_ulong,
+    len: c_ulong,
+    ops: *const McctrlUserSpaceReleaseOps,
+) -> c_int {
+    if ops.is_null() {
+        return -EINVAL;
+    }
+
+    let ops = &*ops;
+    let (Some(find_vma), Some(vma_start), Some(vma_end), Some(munmap)) =
+        (ops.find_vma, ops.vma_start, ops.vma_end, ops.munmap)
+    else {
+        return -EINVAL;
+    };
+
+    let limit = start.wrapping_add(len);
+    let mut addr = start;
+    let mut ret = 0;
+
+    while addr < limit {
+        let vma = find_vma(addr);
+        if vma.is_null() {
+            break;
+        }
+
+        let start_vma = vma_start(vma);
+        if addr < start_vma {
+            addr = start_vma;
+        }
+
+        let end = vma_end(vma);
+        if addr < end {
+            let error = munmap(addr, end.wrapping_sub(addr));
+            if error != 0 {
+                if let Some(log_error) = ops.log_error {
+                    log_error(error);
+                }
+            }
+            if ret == 0 {
+                ret = error;
+            }
+        }
+        addr = end;
+    }
+
+    ret
 }
 
 unsafe fn mcctrl_set_ret_out(ret_out: *mut c_long, ret: c_long) {
@@ -2313,6 +2942,2336 @@ pub unsafe extern "C" fn mcctrl_control_get_request_os_cpu_body_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn mcctrl_control_transfer_image_body_result(
+    os: c_ulong,
+    arg: *const c_void,
+    desc_size: c_ulong,
+    to_remote: c_int,
+    from_remote: c_int,
+    copy_from_user: Option<McctrlControlCopyUserFn>,
+    copy_to_user: Option<McctrlControlCopyUserFn>,
+    os_to_dev: Option<McctrlControlOsToDevFn>,
+    map_memory: Option<McctrlControlMapMemoryFn>,
+    map_virtual: Option<McctrlControlMapVirtualFn>,
+    unmap_virtual: Option<McctrlControlUnmapVirtualFn>,
+    unmap_memory: Option<McctrlControlUnmapMemoryFn>,
+    log_error: Option<McctrlControlTransferLogFn>,
+) -> c_long {
+    let (
+        Some(copy_from_user),
+        Some(copy_to_user),
+        Some(os_to_dev),
+        Some(map_memory),
+        Some(map_virtual),
+        Some(unmap_virtual),
+        Some(unmap_memory),
+        Some(log_error),
+    ) = (
+        copy_from_user,
+        copy_to_user,
+        os_to_dev,
+        map_memory,
+        map_virtual,
+        unmap_virtual,
+        unmap_memory,
+        log_error,
+    )
+    else {
+        return -EINVAL as c_long;
+    };
+
+    if arg.is_null() || desc_size != size_of::<RemoteTransfer>() as c_ulong {
+        return -EINVAL as c_long;
+    }
+
+    let mut desc = MaybeUninit::<RemoteTransfer>::uninit();
+    if copy_from_user(desc.as_mut_ptr().cast::<c_void>(), arg, desc_size) != 0 {
+        return -EFAULT as c_long;
+    }
+    let desc = desc.assume_init();
+
+    let phys = map_memory(os_to_dev(os), desc.rphys, desc.size);
+    let rpm = map_virtual(os_to_dev(os), phys, desc.size);
+    if rpm.is_null() {
+        log_error(0);
+        return -EFAULT as c_long;
+    }
+
+    let ret = if desc.direction as c_int == to_remote {
+        if copy_from_user(rpm, desc.userp.cast_const(), desc.size) != 0 {
+            -EFAULT as c_long
+        } else {
+            0
+        }
+    } else if desc.direction as c_int == from_remote {
+        if copy_to_user(desc.userp, rpm.cast_const(), desc.size) != 0 {
+            -EFAULT as c_long
+        } else {
+            0
+        }
+    } else {
+        log_error(1);
+        -EINVAL as c_long
+    };
+
+    unmap_virtual(os_to_dev(os), rpm, desc.size);
+    unmap_memory(os_to_dev(os), phys, desc.size);
+    ret
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_control_load_syscall_body_result(
+    os: c_ulong,
+    arg: *const c_void,
+    desc_size: c_ulong,
+    copy_from_user: Option<McctrlControlCopyUserFn>,
+    copy_to_user: Option<McctrlControlCopyUserFn>,
+    os_to_dev: Option<McctrlControlOsToDevFn>,
+    map_memory: Option<McctrlControlMapMemoryFn>,
+    map_virtual: Option<McctrlControlMapVirtualFn>,
+    unmap_virtual: Option<McctrlControlUnmapVirtualFn>,
+    unmap_memory: Option<McctrlControlUnmapMemoryFn>,
+    log_map: Option<McctrlControlLoadLogFn>,
+) -> c_long {
+    let (
+        Some(copy_from_user),
+        Some(copy_to_user),
+        Some(os_to_dev),
+        Some(map_memory),
+        Some(map_virtual),
+        Some(unmap_virtual),
+        Some(unmap_memory),
+        Some(log_map),
+    ) = (
+        copy_from_user,
+        copy_to_user,
+        os_to_dev,
+        map_memory,
+        map_virtual,
+        unmap_virtual,
+        unmap_memory,
+        log_map,
+    )
+    else {
+        return -EINVAL as c_long;
+    };
+
+    if arg.is_null() || desc_size != size_of::<SyscallLoadDesc>() as c_ulong {
+        return -EINVAL as c_long;
+    }
+
+    let mut desc = MaybeUninit::<SyscallLoadDesc>::uninit();
+    if copy_from_user(desc.as_mut_ptr().cast::<c_void>(), arg, desc_size) != 0 {
+        return -EFAULT as c_long;
+    }
+    let desc = desc.assume_init();
+
+    let phys = map_memory(os_to_dev(os), desc.src, desc.size);
+    let rpm = map_virtual(os_to_dev(os), phys, desc.size);
+    log_map(rpm, desc.size);
+
+    if copy_to_user(desc.dest as *mut c_void, rpm.cast_const(), desc.size) != 0 {
+        return -EFAULT as c_long;
+    }
+
+    unmap_virtual(os_to_dev(os), rpm, desc.size);
+    unmap_memory(os_to_dev(os), phys, desc.size);
+    0
+}
+
+unsafe fn mcctrl_control_fill_cred_values(
+    out: *mut c_int,
+    current_uid: McctrlControlCredValueFn,
+    current_euid: McctrlControlCredValueFn,
+    current_suid: McctrlControlCredValueFn,
+    current_fsuid: McctrlControlCredValueFn,
+    current_gid: McctrlControlCredValueFn,
+    current_egid: McctrlControlCredValueFn,
+    current_sgid: McctrlControlCredValueFn,
+    current_fsgid: McctrlControlCredValueFn,
+) {
+    *out.add(0) = current_uid();
+    *out.add(1) = current_euid();
+    *out.add(2) = current_suid();
+    *out.add(3) = current_fsuid();
+    *out.add(4) = current_gid();
+    *out.add(5) = current_egid();
+    *out.add(6) = current_sgid();
+    *out.add(7) = current_fsgid();
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_control_getcred_body_result(
+    phys: c_ulong,
+    phys_to_virt: Option<McctrlControlPhysToVirtFn>,
+    current_uid: Option<McctrlControlCredValueFn>,
+    current_euid: Option<McctrlControlCredValueFn>,
+    current_suid: Option<McctrlControlCredValueFn>,
+    current_fsuid: Option<McctrlControlCredValueFn>,
+    current_gid: Option<McctrlControlCredValueFn>,
+    current_egid: Option<McctrlControlCredValueFn>,
+    current_sgid: Option<McctrlControlCredValueFn>,
+    current_fsgid: Option<McctrlControlCredValueFn>,
+) -> c_int {
+    let (
+        Some(phys_to_virt),
+        Some(current_uid),
+        Some(current_euid),
+        Some(current_suid),
+        Some(current_fsuid),
+        Some(current_gid),
+        Some(current_egid),
+        Some(current_sgid),
+        Some(current_fsgid),
+    ) = (
+        phys_to_virt,
+        current_uid,
+        current_euid,
+        current_suid,
+        current_fsuid,
+        current_gid,
+        current_egid,
+        current_sgid,
+        current_fsgid,
+    )
+    else {
+        return -EINVAL;
+    };
+
+    let out = phys_to_virt(phys) as *mut c_int;
+    mcctrl_control_fill_cred_values(
+        out,
+        current_uid,
+        current_euid,
+        current_suid,
+        current_fsuid,
+        current_gid,
+        current_egid,
+        current_sgid,
+        current_fsgid,
+    );
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_control_getcredv_body_result(
+    virt: *mut c_int,
+    copy_to_user: Option<McctrlControlCopyUserFn>,
+    current_uid: Option<McctrlControlCredValueFn>,
+    current_euid: Option<McctrlControlCredValueFn>,
+    current_suid: Option<McctrlControlCredValueFn>,
+    current_fsuid: Option<McctrlControlCredValueFn>,
+    current_gid: Option<McctrlControlCredValueFn>,
+    current_egid: Option<McctrlControlCredValueFn>,
+    current_sgid: Option<McctrlControlCredValueFn>,
+    current_fsgid: Option<McctrlControlCredValueFn>,
+) -> c_int {
+    let (
+        Some(copy_to_user),
+        Some(current_uid),
+        Some(current_euid),
+        Some(current_suid),
+        Some(current_fsuid),
+        Some(current_gid),
+        Some(current_egid),
+        Some(current_sgid),
+        Some(current_fsgid),
+    ) = (
+        copy_to_user,
+        current_uid,
+        current_euid,
+        current_suid,
+        current_fsuid,
+        current_gid,
+        current_egid,
+        current_sgid,
+        current_fsgid,
+    )
+    else {
+        return -EINVAL;
+    };
+
+    let mut values = [0 as c_int; 8];
+    mcctrl_control_fill_cred_values(
+        values.as_mut_ptr(),
+        current_uid,
+        current_euid,
+        current_suid,
+        current_fsuid,
+        current_gid,
+        current_egid,
+        current_sgid,
+        current_fsgid,
+    );
+
+    if copy_to_user(
+        virt.cast::<c_void>(),
+        values.as_ptr().cast::<c_void>(),
+        size_of::<[c_int; 8]>() as c_ulong,
+    ) != 0
+    {
+        return -EFAULT;
+    }
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_control_strncpy_from_user_body_result(
+    arg: *mut StrncpyFromUserDesc,
+    page_size: c_ulong,
+    copy_from_user: Option<McctrlControlCopyUserFn>,
+    copy_to_user: Option<McctrlControlCopyUserFn>,
+    alloc_page: Option<McctrlControlAllocPageFn>,
+    free_page: Option<McctrlControlFreePageFn>,
+    strncpy_from_user: Option<McctrlControlStrncpyFromUserFn>,
+) -> c_long {
+    let (
+        Some(copy_from_user),
+        Some(copy_to_user),
+        Some(alloc_page),
+        Some(free_page),
+        Some(strncpy_from_user),
+    ) = (
+        copy_from_user,
+        copy_to_user,
+        alloc_page,
+        free_page,
+        strncpy_from_user,
+    )
+    else {
+        return -EINVAL as c_long;
+    };
+
+    if arg.is_null() || page_size == 0 {
+        return -EFAULT as c_long;
+    }
+
+    let mut desc = MaybeUninit::<StrncpyFromUserDesc>::uninit();
+    if copy_from_user(
+        desc.as_mut_ptr().cast::<c_void>(),
+        arg.cast::<c_void>(),
+        size_of::<StrncpyFromUserDesc>() as c_ulong,
+    ) != 0
+    {
+        return -EFAULT as c_long;
+    }
+    let mut desc = desc.assume_init();
+
+    let buf = alloc_page();
+    if buf.is_null() {
+        return -ENOMEM as c_long;
+    }
+
+    let mut dest = desc.dest;
+    let mut src = desc.src;
+    let mut remain = desc.n;
+    let mut want: c_long = 0;
+    let mut copied: c_long = 0;
+
+    while remain > 0 && want == copied {
+        let chunk = if remain > page_size {
+            page_size
+        } else {
+            remain
+        };
+        want = chunk as c_long;
+        copied = strncpy_from_user(buf, src.cast_const(), chunk);
+        if copied == want {
+            if copy_to_user(dest, buf.cast_const(), copied as c_ulong) != 0 {
+                copied = -EFAULT as c_long;
+            }
+        } else if copied >= 0
+            && copy_to_user(dest, buf.cast_const(), (copied as c_ulong).wrapping_add(1)) != 0
+        {
+            copied = -EFAULT as c_long;
+        }
+
+        if copied >= 0 {
+            let advanced = copied as usize;
+            dest = dest.add(advanced);
+            src = src.add(advanced);
+            remain = remain.wrapping_sub(copied as c_ulong);
+        }
+    }
+
+    desc.result = if copied >= 0 {
+        desc.n.wrapping_sub(remain) as c_long
+    } else {
+        copied
+    };
+    free_page(buf);
+
+    if copy_to_user(
+        arg.cast::<c_void>(),
+        (&desc as *const StrncpyFromUserDesc).cast::<c_void>(),
+        size_of::<StrncpyFromUserDesc>() as c_ulong,
+    ) != 0
+    {
+        return -EFAULT as c_long;
+    }
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_control_destroy_ppd_body_result(
+    os: c_ulong,
+    pid: c_int,
+    get_usrdata: Option<McctrlControlGetPtrFn>,
+    get_ppd: Option<McctrlControlGetPpdFn>,
+    put_ppd: Option<McctrlControlPutFn>,
+    log_event: Option<McctrlControlDestroyPpdLogFn>,
+) -> c_int {
+    let (Some(get_usrdata), Some(get_ppd), Some(put_ppd), Some(log_event)) =
+        (get_usrdata, get_ppd, put_ppd, log_event)
+    else {
+        return -EINVAL;
+    };
+
+    let usrdata = get_usrdata(os);
+    if usrdata.is_null() {
+        log_event(0, pid, null_mut());
+        return 0;
+    }
+
+    let ppd = get_ppd(usrdata, pid);
+    if ppd.is_null() {
+        log_event(2, pid, null_mut());
+        return 0;
+    }
+
+    put_ppd(ppd);
+    log_event(1, pid, ppd);
+    put_ppd(ppd);
+    log_event(1, pid, ppd);
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_control_close_exec_body_result(
+    os: c_ulong,
+    pid: c_int,
+    os_index: Option<McctrlControlValidateOsFn>,
+    drop_exec: Option<McctrlControlDropExecFn>,
+) -> c_int {
+    let (Some(os_index), Some(drop_exec)) = (os_index, drop_exec) else {
+        return -EINVAL;
+    };
+
+    if os_index(os) < 0 {
+        return EINVAL;
+    }
+
+    if drop_exec(os, pid) != 0 {
+        0
+    } else {
+        EINVAL
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_control_newprocess_body_result(
+    os: c_ulong,
+    file: *mut c_void,
+    current_pid: Option<McctrlControlCurrentIntFn>,
+    new_info: Option<McctrlControlNewInfoFn>,
+    set_info_pid: Option<McctrlControlSetInfoPidFn>,
+    register_release: Option<McctrlControlRegisterReleaseFn>,
+    set_private: Option<McctrlControlSetPrivateFn>,
+) -> c_long {
+    let (
+        Some(current_pid),
+        Some(new_info),
+        Some(set_info_pid),
+        Some(register_release),
+        Some(set_private),
+    ) = (
+        current_pid,
+        new_info,
+        set_info_pid,
+        register_release,
+        set_private,
+    )
+    else {
+        return -EINVAL as c_long;
+    };
+
+    let info = new_info(os, file);
+    if info.is_null() {
+        return -ENOMEM as c_long;
+    }
+
+    set_info_pid(info, current_pid());
+    register_release(file, info);
+    set_private(file, info);
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_control_start_image_body_result(
+    os: c_ulong,
+    udesc: *const c_void,
+    file: *mut c_void,
+    desc_size: c_ulong,
+    copy_from_user: Option<McctrlControlCopyUserFn>,
+    alloc_desc: Option<McctrlControlAllocFn>,
+    free_desc: Option<McctrlControlFreeFn>,
+    get_usrdata: Option<McctrlControlGetPtrFn>,
+    get_private: Option<McctrlControlFilePtrFn>,
+    new_info: Option<McctrlControlNewInfoFn>,
+    desc_cpu: Option<McctrlControlDescIntFn>,
+    desc_pid: Option<McctrlControlDescIntFn>,
+    desc_user_start: Option<McctrlControlDescUlongFn>,
+    desc_user_end: Option<McctrlControlDescUlongFn>,
+    desc_rprocess: Option<McctrlControlDescUlongFn>,
+    info_prepare_thread: Option<McctrlControlInfoUlongFn>,
+    set_start_info: Option<McctrlControlSetStartInfoFn>,
+    register_release: Option<McctrlControlRegisterReleaseFn>,
+    set_private: Option<McctrlControlSetPrivateFn>,
+    set_recv_cpu: Option<McctrlControlOsCpuVoidFn>,
+    set_last_thread_exec: Option<McctrlControlPtrUlongFn>,
+    send_schedule: Option<McctrlControlScheduleSendFn>,
+    clear_prepare_thread: Option<McctrlControlPutFn>,
+    log_event: Option<McctrlControlStartLogFn>,
+) -> c_long {
+    let (
+        Some(copy_from_user),
+        Some(alloc_desc),
+        Some(free_desc),
+        Some(get_usrdata),
+        Some(get_private),
+        Some(new_info),
+        Some(desc_cpu),
+        Some(desc_pid),
+        Some(desc_user_start),
+        Some(desc_user_end),
+        Some(desc_rprocess),
+        Some(info_prepare_thread),
+        Some(set_start_info),
+        Some(register_release),
+        Some(set_private),
+        Some(set_recv_cpu),
+        Some(set_last_thread_exec),
+        Some(send_schedule),
+        Some(clear_prepare_thread),
+        Some(log_event),
+    ) = (
+        copy_from_user,
+        alloc_desc,
+        free_desc,
+        get_usrdata,
+        get_private,
+        new_info,
+        desc_cpu,
+        desc_pid,
+        desc_user_start,
+        desc_user_end,
+        desc_rprocess,
+        info_prepare_thread,
+        set_start_info,
+        register_release,
+        set_private,
+        set_recv_cpu,
+        set_last_thread_exec,
+        send_schedule,
+        clear_prepare_thread,
+        log_event,
+    )
+    else {
+        return -EINVAL as c_long;
+    };
+
+    if udesc.is_null() || desc_size == 0 {
+        return -EFAULT as c_long;
+    }
+
+    let usrdata = get_usrdata(os);
+    if usrdata.is_null() {
+        log_event(0, 0);
+        return -EINVAL as c_long;
+    }
+
+    let desc = alloc_desc(desc_size);
+    if desc.is_null() {
+        log_event(1, 0);
+        return -ENOMEM as c_long;
+    }
+
+    if copy_from_user(desc, udesc, desc_size) != 0 {
+        free_desc(desc);
+        return -EFAULT as c_long;
+    }
+
+    let prev_info = get_private(file);
+    let info = new_info(os, file);
+    if info.is_null() {
+        free_desc(desc);
+        return -ENOMEM as c_long;
+    }
+
+    let cpu = desc_cpu(desc);
+    let pid = desc_pid(desc);
+    let prepare_thread = info_prepare_thread(prev_info);
+    set_start_info(
+        info,
+        pid,
+        cpu,
+        desc_user_start(desc),
+        desc_user_end(desc),
+        prepare_thread,
+    );
+    register_release(file, info);
+    set_private(file, info);
+
+    set_recv_cpu(os, cpu);
+    set_last_thread_exec(usrdata, cpu as c_ulong);
+
+    let ret = send_schedule(os, cpu, desc_rprocess(desc)) as c_long;
+    if ret < 0 {
+        log_event(2, ret as c_int);
+    } else {
+        clear_prepare_thread(info);
+    }
+
+    free_desc(desc);
+    ret
+}
+
+#[repr(C)]
+#[derive(Clone, Copy)]
+struct McctrlSignalDesc {
+    cpu: c_int,
+    pid: c_int,
+    tid: c_int,
+    sig: c_int,
+    info: [u8; 128],
+}
+
+#[repr(C)]
+struct McctrlSignal {
+    cond: c_int,
+    sig: c_int,
+    pid: c_int,
+    tid: c_int,
+    info: [u8; 128],
+}
+
+#[repr(C)]
+struct McctrlControlSignalDesc {
+    msig: McctrlSignal,
+}
+
+#[repr(C)]
+#[derive(Clone, Copy)]
+struct SyscallRetDesc {
+    cpu: c_long,
+    ret: c_long,
+    src: c_ulong,
+    dest: c_ulong,
+    size: c_ulong,
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_control_ret_syscall_body_result(
+    os: c_ulong,
+    arg: *const c_void,
+    desc_size: c_ulong,
+    copy_from_user: Option<McctrlControlCopyUserFn>,
+    get_usrdata: Option<McctrlControlGetPtrFn>,
+    current_pid: Option<McctrlControlCurrentIntFn>,
+    current_tid: Option<McctrlControlCurrentIntFn>,
+    current_task: Option<McctrlControlCurrentTaskFn>,
+    get_ppd: Option<McctrlControlGetPpdFn>,
+    put_ppd: Option<McctrlControlPutFn>,
+    get_ptd: Option<McctrlControlGetPtdFn>,
+    put_ptd: Option<McctrlControlPutFn>,
+    ptd_data: Option<McctrlControlPtrFieldFn>,
+    os_to_dev: Option<McctrlControlOsToDevFn>,
+    map_memory: Option<McctrlControlMapMemoryFn>,
+    map_virtual: Option<McctrlControlMapVirtualFn>,
+    unmap_virtual: Option<McctrlControlUnmapVirtualFn>,
+    unmap_memory: Option<McctrlControlUnmapMemoryFn>,
+    return_syscall: Option<McctrlControlReturnSyscallFn>,
+    release_packet: Option<McctrlControlPutFn>,
+    log_event: Option<McctrlControlRetSyscallLogFn>,
+) -> c_long {
+    let (
+        Some(copy_from_user),
+        Some(get_usrdata),
+        Some(current_pid),
+        Some(current_tid),
+        Some(current_task),
+        Some(get_ppd),
+        Some(put_ppd),
+        Some(get_ptd),
+        Some(put_ptd),
+        Some(ptd_data),
+        Some(os_to_dev),
+        Some(map_memory),
+        Some(map_virtual),
+        Some(unmap_virtual),
+        Some(unmap_memory),
+        Some(return_syscall),
+        Some(release_packet),
+        Some(log_event),
+    ) = (
+        copy_from_user,
+        get_usrdata,
+        current_pid,
+        current_tid,
+        current_task,
+        get_ppd,
+        put_ppd,
+        get_ptd,
+        put_ptd,
+        ptd_data,
+        os_to_dev,
+        map_memory,
+        map_virtual,
+        unmap_virtual,
+        unmap_memory,
+        return_syscall,
+        release_packet,
+        log_event,
+    )
+    else {
+        return -EINVAL as c_long;
+    };
+
+    if arg.is_null() || desc_size as usize != size_of::<SyscallRetDesc>() {
+        return -EFAULT as c_long;
+    }
+
+    let usrdata = get_usrdata(os);
+    if usrdata.is_null() {
+        log_event(0, 0, 0);
+        return -EINVAL as c_long;
+    }
+
+    let mut ret_desc = MaybeUninit::<SyscallRetDesc>::uninit();
+    if copy_from_user(ret_desc.as_mut_ptr().cast::<c_void>(), arg, desc_size) != 0 {
+        return -EFAULT as c_long;
+    }
+    let ret_desc = ret_desc.assume_init();
+
+    let pid = current_pid();
+    let ppd = get_ppd(usrdata, pid);
+    if ppd.is_null() {
+        log_event(1, pid, 0);
+        return -EINVAL as c_long;
+    }
+
+    let task = current_task();
+    let ptd = get_ptd(ppd, task);
+    if ptd.is_null() {
+        log_event(2, pid, current_tid());
+        put_ppd(ppd);
+        return -EINVAL as c_long;
+    }
+
+    let tid = current_tid();
+    let packet = ptd_data(ptd);
+    if packet.is_null() {
+        log_event(3, pid, tid);
+        put_ptd(ptd);
+        put_ptd(ptd);
+        put_ppd(ppd);
+        return -EINVAL as c_long;
+    }
+
+    let mut error = 0 as c_long;
+    if ret_desc.size > 0 {
+        let dev = os_to_dev(os);
+        let phys = map_memory(dev, ret_desc.dest, ret_desc.size);
+        let rpm = map_virtual(dev, phys, ret_desc.size);
+        if copy_from_user(rpm, ret_desc.src as *const c_void, ret_desc.size) != 0 {
+            error = -EFAULT as c_long;
+        } else {
+            unmap_virtual(dev, rpm, ret_desc.size);
+            unmap_memory(dev, phys, ret_desc.size);
+        }
+    }
+
+    if error == 0 {
+        return_syscall(os, ppd, packet, ret_desc.ret, tid);
+    }
+    release_packet(packet);
+    put_ptd(ptd);
+    put_ptd(ptd);
+    put_ppd(ppd);
+    error
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_control_terminate_thread_unsafe_body_result(
+    os: c_ulong,
+    pid: c_int,
+    tid: c_int,
+    code: c_long,
+    task: *mut c_void,
+    get_usrdata: Option<McctrlControlGetPtrFn>,
+    usrdata_os: Option<McctrlControlInfoUlongFn>,
+    get_ppd: Option<McctrlControlGetPpdFn>,
+    put_ppd: Option<McctrlControlPutFn>,
+    get_ptd: Option<McctrlControlGetPtdFn>,
+    put_ptd: Option<McctrlControlPutFn>,
+    ptd_tid: Option<McctrlControlPtrIntFn>,
+    ptd_data: Option<McctrlControlPtrFieldFn>,
+    ptd_refcount: Option<McctrlControlPtrIntFn>,
+    return_syscall: Option<McctrlControlReturnSyscallFn>,
+    release_packet: Option<McctrlControlPutFn>,
+    log_event: Option<McctrlControlTerminateThreadLogFn>,
+) -> c_long {
+    let (
+        Some(get_usrdata),
+        Some(usrdata_os),
+        Some(get_ppd),
+        Some(put_ppd),
+        Some(get_ptd),
+        Some(put_ptd),
+        Some(ptd_tid),
+        Some(ptd_data),
+        Some(ptd_refcount),
+        Some(return_syscall),
+        Some(release_packet),
+        Some(log_event),
+    ) = (
+        get_usrdata,
+        usrdata_os,
+        get_ppd,
+        put_ppd,
+        get_ptd,
+        put_ptd,
+        ptd_tid,
+        ptd_data,
+        ptd_refcount,
+        return_syscall,
+        release_packet,
+        log_event,
+    )
+    else {
+        return -EINVAL as c_long;
+    };
+
+    let usrdata = get_usrdata(os);
+    if usrdata.is_null() {
+        log_event(0, pid, tid, core::ptr::null_mut(), 0);
+        return 0;
+    }
+
+    let ppd = get_ppd(usrdata, pid);
+    if ppd.is_null() {
+        log_event(1, pid, tid, core::ptr::null_mut(), 0);
+        return 0;
+    }
+
+    let ptd = get_ptd(ppd, task);
+    if ptd.is_null() {
+        log_event(2, pid, tid, core::ptr::null_mut(), 0);
+        put_ppd(ppd);
+        log_event(8, pid, tid, ppd, 0);
+        put_ppd(ppd);
+        log_event(8, pid, tid, ppd, 0);
+        return 0;
+    }
+
+    let actual_tid = ptd_tid(ptd);
+    if actual_tid != tid {
+        log_event(3, pid, tid, ptd, actual_tid);
+        put_ppd(ppd);
+        log_event(8, pid, tid, ppd, 0);
+        put_ppd(ppd);
+        log_event(8, pid, tid, ppd, 0);
+        return 0;
+    }
+    log_event(4, pid, tid, ptd, 0);
+
+    let packet = ptd_data(ptd);
+    if packet.is_null() {
+        log_event(5, pid, tid, core::ptr::null_mut(), 0);
+        put_ppd(ppd);
+        log_event(8, pid, tid, ppd, 0);
+        put_ppd(ppd);
+        log_event(8, pid, tid, ppd, 0);
+        return 0;
+    }
+
+    return_syscall(usrdata_os(usrdata), ppd, packet, code, tid);
+    release_packet(packet);
+
+    put_ptd(ptd);
+    log_event(6, pid, tid, ptd, 0);
+    put_ptd(ptd);
+    log_event(6, pid, tid, ptd, 0);
+
+    let refcount = ptd_refcount(ptd);
+    if refcount != 1 {
+        log_event(7, pid, tid, ptd, refcount);
+    }
+
+    put_ptd(ptd);
+    log_event(6, pid, tid, ptd, 0);
+    put_ppd(ppd);
+    log_event(8, pid, tid, ppd, 0);
+    put_ppd(ppd);
+    log_event(8, pid, tid, ppd, 0);
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_control_send_signal_body_result(
+    os: c_ulong,
+    sigparam: *const c_void,
+    sig_size: c_ulong,
+    desc_size: c_ulong,
+    copy_from_user: Option<McctrlControlCopyUserFn>,
+    alloc_desc: Option<McctrlControlAllocFn>,
+    free_desc: Option<McctrlControlFreeFn>,
+    get_usrdata: Option<McctrlControlGetPtrFn>,
+    virt_to_phys: Option<McctrlControlVirtToPhysFn>,
+    send_wait: Option<McctrlControlCpuRegSendWaitFn>,
+    log_event: Option<McctrlControlSignalLogFn>,
+) -> c_long {
+    let (
+        Some(copy_from_user),
+        Some(alloc_desc),
+        Some(free_desc),
+        Some(get_usrdata),
+        Some(virt_to_phys),
+        Some(send_wait),
+        Some(log_event),
+    ) = (
+        copy_from_user,
+        alloc_desc,
+        free_desc,
+        get_usrdata,
+        virt_to_phys,
+        send_wait,
+        log_event,
+    )
+    else {
+        return -EINVAL as c_long;
+    };
+
+    if sigparam.is_null()
+        || sig_size as usize != size_of::<McctrlSignalDesc>()
+        || desc_size as usize != size_of::<McctrlControlSignalDesc>()
+    {
+        return -EFAULT as c_long;
+    }
+
+    let usrdata = get_usrdata(os);
+    if usrdata.is_null() {
+        log_event(0, 0);
+        return -EINVAL as c_long;
+    }
+
+    let mut sig = MaybeUninit::<McctrlSignalDesc>::uninit();
+    if copy_from_user(sig.as_mut_ptr().cast::<c_void>(), sigparam, sig_size) != 0 {
+        return -EFAULT as c_long;
+    }
+    let sig = sig.assume_init_ref();
+
+    let desc = alloc_desc(desc_size);
+    if desc.is_null() {
+        return -ENOMEM as c_long;
+    }
+    mcctrl_zero_bytes(desc.cast::<u8>(), desc_size as usize);
+
+    let signal_desc = desc.cast::<McctrlControlSignalDesc>();
+    (*signal_desc).msig.sig = sig.sig;
+    (*signal_desc).msig.pid = sig.pid;
+    (*signal_desc).msig.tid = sig.tid;
+    for i in 0..128 {
+        (*signal_desc).msig.info[i] = sig.info[i];
+    }
+
+    let msig = core::ptr::addr_of_mut!((*signal_desc).msig).cast::<c_void>();
+    let mut packet = MaybeUninit::<McctrlIkcScdPacket>::zeroed();
+    let packet = packet.assume_init_mut();
+    packet.msg = SCD_MSG_SEND_SIGNAL;
+    packet.body.traditional.ref_ = sig.cpu;
+    packet.body.traditional.pid = sig.pid;
+    packet.body.traditional.arg = virt_to_phys(msig);
+
+    let mut do_free = 0;
+    let rc = send_wait(os, sig.cpu, packet, -1000, &mut do_free, desc);
+    if rc < 0 {
+        log_event(1, rc);
+        if do_free != 0 {
+            free_desc(desc);
+        }
+        return rc as c_long;
+    }
+
+    free_desc(desc);
+    0
+}
+
+#[repr(C)]
+#[derive(Clone, Copy)]
+struct UtiGetCtxDesc {
+    rp_rctx: c_ulong,
+    rctx: *mut c_void,
+    lctx: *mut c_void,
+    uti_refill_tid: c_int,
+    key: c_ulong,
+}
+
+#[repr(C)]
+struct UtiCtx {
+    ctx: [u8; 4096],
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_control_uti_get_ctx_body_result(
+    os: c_ulong,
+    udesc: *mut c_void,
+    desc_size: c_ulong,
+    ctx_size: c_ulong,
+    key_offset: c_ulong,
+    copy_from_user: Option<McctrlControlCopyUserFn>,
+    copy_to_user: Option<McctrlControlCopyUserFn>,
+    os_to_dev: Option<McctrlControlOsToDevFn>,
+    map_memory: Option<McctrlControlMapMemoryFn>,
+    map_virtual: Option<McctrlControlMapVirtualFn>,
+    unmap_virtual: Option<McctrlControlUnmapVirtualFn>,
+    unmap_memory: Option<McctrlControlUnmapMemoryFn>,
+    current_key: Option<McctrlControlCurrentUlongFn>,
+    log_event: Option<McctrlControlUtiLogFn>,
+) -> c_long {
+    let (
+        Some(copy_from_user),
+        Some(copy_to_user),
+        Some(os_to_dev),
+        Some(map_memory),
+        Some(map_virtual),
+        Some(unmap_virtual),
+        Some(unmap_memory),
+        Some(current_key),
+        Some(log_event),
+    ) = (
+        copy_from_user,
+        copy_to_user,
+        os_to_dev,
+        map_memory,
+        map_virtual,
+        unmap_virtual,
+        unmap_memory,
+        current_key,
+        log_event,
+    )
+    else {
+        return -EINVAL as c_long;
+    };
+
+    if udesc.is_null()
+        || desc_size as usize != size_of::<UtiGetCtxDesc>()
+        || ctx_size as usize != size_of::<UtiCtx>()
+    {
+        return -EFAULT as c_long;
+    }
+
+    let mut desc = MaybeUninit::<UtiGetCtxDesc>::uninit();
+    if copy_from_user(
+        desc.as_mut_ptr().cast::<c_void>(),
+        udesc.cast_const(),
+        desc_size,
+    ) != 0
+    {
+        log_event(0);
+        return -EFAULT as c_long;
+    }
+    let desc = desc.assume_init();
+
+    let dev = os_to_dev(os);
+    let phys = map_memory(dev, desc.rp_rctx, ctx_size);
+    let rctx = map_virtual(dev, phys, ctx_size) as *mut UtiCtx;
+    let mut rc = 0 as c_long;
+    if copy_to_user(desc.rctx, rctx.cast::<c_void>().cast_const(), ctx_size) != 0 {
+        rc = -EFAULT as c_long;
+    } else {
+        let key = current_key();
+        let key_dst = (udesc as *mut u8).add(key_offset as usize).cast::<c_void>();
+        if copy_to_user(
+            key_dst,
+            core::ptr::addr_of!(key).cast::<c_void>(),
+            size_of::<c_ulong>() as c_ulong,
+        ) != 0
+        {
+            rc = -EFAULT as c_long;
+        } else {
+            (*rctx).ctx[0] = desc.uti_refill_tid as u8;
+            (*rctx).ctx[1] = (desc.uti_refill_tid >> 8) as u8;
+            (*rctx).ctx[2] = (desc.uti_refill_tid >> 16) as u8;
+            (*rctx).ctx[3] = (desc.uti_refill_tid >> 24) as u8;
+        }
+    }
+
+    unmap_virtual(dev, rctx.cast::<c_void>(), ctx_size);
+    unmap_memory(dev, phys, ctx_size);
+    rc
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_control_pin_region_body_result(
+    arg: *const c_void,
+    pin_shift: c_int,
+    page_shift: c_int,
+    copy_from_user: Option<McctrlControlCopyUserFn>,
+    get_order: Option<McctrlControlGetOrderFn>,
+    alloc_pages: Option<McctrlControlAllocPagesFn>,
+    virt_to_phys: Option<McctrlControlVirtToPhysFn>,
+    copy_to_user: Option<McctrlControlCopyUserFn>,
+) -> c_long {
+    let (
+        Some(copy_from_user),
+        Some(get_order),
+        Some(alloc_pages),
+        Some(virt_to_phys),
+        Some(copy_to_user),
+    ) = (
+        copy_from_user,
+        get_order,
+        alloc_pages,
+        virt_to_phys,
+        copy_to_user,
+    )
+    else {
+        return -EINVAL as c_long;
+    };
+
+    if arg.is_null() {
+        return -EFAULT as c_long;
+    }
+
+    let mut desc = MaybeUninit::<PrepareDmaDesc>::uninit();
+    if copy_from_user(
+        desc.as_mut_ptr().cast::<c_void>(),
+        arg,
+        size_of::<PrepareDmaDesc>() as c_ulong,
+    ) != 0
+    {
+        return -EFAULT as c_long;
+    }
+    let desc = desc.assume_init();
+
+    let mut order = pin_shift.wrapping_sub(page_shift);
+    if desc.size > 0 {
+        order = get_order(desc.size);
+    }
+
+    let virt = alloc_pages(order);
+    if virt == 0 {
+        return -ENOMEM as c_long;
+    }
+
+    let phys = virt_to_phys(virt as *mut c_void);
+    if copy_to_user(
+        desc.pa as *mut c_void,
+        core::ptr::addr_of!(phys).cast::<c_void>(),
+        size_of::<c_ulong>() as c_ulong,
+    ) != 0
+    {
+        return -EFAULT as c_long;
+    }
+
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_control_free_region_body_result(
+    arg: *const c_void,
+    pin_shift: c_int,
+    page_shift: c_int,
+    copy_from_user: Option<McctrlControlCopyUserFn>,
+    get_order: Option<McctrlControlGetOrderFn>,
+    phys_to_virt: Option<McctrlControlPhysToVirtFn>,
+    free_pages: Option<McctrlControlFreePagesFn>,
+) -> c_long {
+    let (Some(copy_from_user), Some(get_order), Some(phys_to_virt), Some(free_pages)) =
+        (copy_from_user, get_order, phys_to_virt, free_pages)
+    else {
+        return -EINVAL as c_long;
+    };
+
+    if arg.is_null() {
+        return -EFAULT as c_long;
+    }
+
+    let mut desc = MaybeUninit::<FreeDmaDesc>::uninit();
+    if copy_from_user(
+        desc.as_mut_ptr().cast::<c_void>(),
+        arg,
+        size_of::<FreeDmaDesc>() as c_ulong,
+    ) != 0
+    {
+        return -EFAULT as c_long;
+    }
+    let desc = desc.assume_init();
+
+    let mut order = pin_shift.wrapping_sub(page_shift);
+    if desc.size > 0 {
+        order = get_order(desc.size);
+    }
+
+    if desc.pa > 0 {
+        free_pages(phys_to_virt(desc.pa), order);
+    }
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_control_sys_mount_body_result(
+    arg: *const c_void,
+    copy_from_user: Option<McctrlControlCopyUserFn>,
+    prepare_creds: Option<McctrlControlPrepareCredsFn>,
+    cap_raise_admin: Option<McctrlControlCapRaiseAdminFn>,
+    override_creds: Option<McctrlControlOverrideCredsFn>,
+    mount: Option<McctrlControlMountFn>,
+    revert_creds: Option<McctrlControlRevertCredsFn>,
+    put_cred: Option<McctrlControlPutFn>,
+) -> c_long {
+    let (
+        Some(copy_from_user),
+        Some(prepare_creds),
+        Some(cap_raise_admin),
+        Some(override_creds),
+        Some(mount),
+        Some(revert_creds),
+        Some(put_cred),
+    ) = (
+        copy_from_user,
+        prepare_creds,
+        cap_raise_admin,
+        override_creds,
+        mount,
+        revert_creds,
+        put_cred,
+    )
+    else {
+        return -EINVAL as c_long;
+    };
+
+    if arg.is_null() {
+        return -EFAULT as c_long;
+    }
+
+    let mut desc = MaybeUninit::<SysMountDesc>::uninit();
+    if copy_from_user(
+        desc.as_mut_ptr().cast::<c_void>(),
+        arg,
+        size_of::<SysMountDesc>() as c_ulong,
+    ) != 0
+    {
+        return -EFAULT as c_long;
+    }
+    let desc = desc.assume_init();
+
+    let promoted = prepare_creds();
+    if promoted.is_null() {
+        return -ENOMEM as c_long;
+    }
+    cap_raise_admin(promoted);
+    let original = override_creds(promoted);
+    let ret = mount(
+        desc.dev_name,
+        desc.dir_name,
+        desc.type_name,
+        desc.flags,
+        desc.data,
+    );
+    revert_creds(original);
+    put_cred(promoted);
+    ret as c_long
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_control_sys_umount_body_result(
+    arg: *const c_void,
+    force: c_int,
+    copy_from_user: Option<McctrlControlCopyUserFn>,
+    prepare_creds: Option<McctrlControlPrepareCredsFn>,
+    cap_raise_admin: Option<McctrlControlCapRaiseAdminFn>,
+    override_creds: Option<McctrlControlOverrideCredsFn>,
+    umount: Option<McctrlControlUmountFn>,
+    revert_creds: Option<McctrlControlRevertCredsFn>,
+    put_cred: Option<McctrlControlPutFn>,
+) -> c_long {
+    let (
+        Some(copy_from_user),
+        Some(prepare_creds),
+        Some(cap_raise_admin),
+        Some(override_creds),
+        Some(umount),
+        Some(revert_creds),
+        Some(put_cred),
+    ) = (
+        copy_from_user,
+        prepare_creds,
+        cap_raise_admin,
+        override_creds,
+        umount,
+        revert_creds,
+        put_cred,
+    )
+    else {
+        return -EINVAL as c_long;
+    };
+
+    if arg.is_null() {
+        return -EFAULT as c_long;
+    }
+
+    let mut desc = MaybeUninit::<SysUmountDesc>::uninit();
+    if copy_from_user(
+        desc.as_mut_ptr().cast::<c_void>(),
+        arg,
+        size_of::<SysUmountDesc>() as c_ulong,
+    ) != 0
+    {
+        return -EFAULT as c_long;
+    }
+    let desc = desc.assume_init();
+
+    let promoted = prepare_creds();
+    if promoted.is_null() {
+        return -ENOMEM as c_long;
+    }
+    cap_raise_admin(promoted);
+    let original = override_creds(promoted);
+    let ret = umount(desc.dir_name, force);
+    revert_creds(original);
+    put_cred(promoted);
+    ret as c_long
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_control_sys_unshare_body_result(
+    arg: *const c_void,
+    copy_from_user: Option<McctrlControlCopyUserFn>,
+    prepare_creds: Option<McctrlControlPrepareCredsFn>,
+    cap_raise_admin: Option<McctrlControlCapRaiseAdminFn>,
+    override_creds: Option<McctrlControlOverrideCredsFn>,
+    unshare: Option<McctrlControlUnshareFn>,
+    revert_creds: Option<McctrlControlRevertCredsFn>,
+    put_cred: Option<McctrlControlPutFn>,
+) -> c_long {
+    let (
+        Some(copy_from_user),
+        Some(prepare_creds),
+        Some(cap_raise_admin),
+        Some(override_creds),
+        Some(unshare),
+        Some(revert_creds),
+        Some(put_cred),
+    ) = (
+        copy_from_user,
+        prepare_creds,
+        cap_raise_admin,
+        override_creds,
+        unshare,
+        revert_creds,
+        put_cred,
+    )
+    else {
+        return -EINVAL as c_long;
+    };
+
+    if arg.is_null() {
+        return -EFAULT as c_long;
+    }
+
+    let mut desc = MaybeUninit::<SysUnshareDesc>::uninit();
+    if copy_from_user(
+        desc.as_mut_ptr().cast::<c_void>(),
+        arg,
+        size_of::<SysUnshareDesc>() as c_ulong,
+    ) != 0
+    {
+        return -EFAULT as c_long;
+    }
+    let desc = desc.assume_init();
+
+    let promoted = prepare_creds();
+    if promoted.is_null() {
+        return -ENOMEM as c_long;
+    }
+    cap_raise_admin(promoted);
+    let original = override_creds(promoted);
+    let ret = unshare(desc.unshare_flags);
+    revert_creds(original);
+    put_cred(promoted);
+    ret as c_long
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_control_release_user_space_body_result(
+    arg: *const c_void,
+    copy_from_user: Option<McctrlControlCopyUserFn>,
+    clear_pte_range: Option<McctrlControlClearPteRangeFn>,
+) -> c_long {
+    let (Some(copy_from_user), Some(clear_pte_range)) = (copy_from_user, clear_pte_range) else {
+        return -EINVAL as c_long;
+    };
+
+    if arg.is_null() {
+        return -EFAULT as c_long;
+    }
+
+    let mut desc = MaybeUninit::<ReleaseUserSpaceDesc>::uninit();
+    if copy_from_user(
+        desc.as_mut_ptr().cast::<c_void>(),
+        arg,
+        size_of::<ReleaseUserSpaceDesc>() as c_ulong,
+    ) != 0
+    {
+        return -EFAULT as c_long;
+    }
+    let desc = desc.assume_init();
+    clear_pte_range(
+        desc.user_start,
+        mcctrl_release_user_space_len_result(desc.user_start, desc.user_end),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_control_perf_num_body_result(
+    os: c_ulong,
+    value: c_ulong,
+    validate_os: Option<McctrlControlValidateOsFn>,
+    get_usrdata: Option<McctrlControlGetPtrFn>,
+    set_perf_event_num: Option<McctrlControlPerfSetNumFn>,
+    log_error: Option<McctrlControlLogFn>,
+) -> c_long {
+    let (Some(validate_os), Some(get_usrdata), Some(set_perf_event_num), Some(log_error)) =
+        (validate_os, get_usrdata, set_perf_event_num, log_error)
+    else {
+        return -EINVAL as c_long;
+    };
+
+    if os == 0 || validate_os(os) != 0 {
+        return -EINVAL as c_long;
+    }
+
+    let usrdata = get_usrdata(os);
+    if usrdata.is_null() {
+        log_error(0);
+        return -EINVAL as c_long;
+    }
+
+    set_perf_event_num(usrdata, value);
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_control_perf_set_body_result(
+    os: c_ulong,
+    arg: *const c_void,
+    counter_start: c_uint,
+    desc_size: c_ulong,
+    validate_os: Option<McctrlControlValidateOsFn>,
+    get_usrdata: Option<McctrlControlGetPtrFn>,
+    get_perf_event_num: Option<McctrlControlPerfEventNumFn>,
+    get_cpu_info: Option<McctrlControlGetPtrFn>,
+    cpu_info_n_cpus: Option<McctrlControlPtrIntFn>,
+    free_desc: Option<McctrlControlFreeFn>,
+    alloc_set_desc: Option<McctrlControlPerfAllocSetDescFn>,
+    send_wait: Option<McctrlControlPerfSendWaitFn>,
+    desc_err: Option<McctrlControlPerfDescErrFn>,
+    set_perf_event_num: Option<McctrlControlPerfSetNumFn>,
+    log_error: Option<McctrlControlLogFn>,
+) -> c_long {
+    let (
+        Some(validate_os),
+        Some(get_usrdata),
+        Some(get_perf_event_num),
+        Some(get_cpu_info),
+        Some(cpu_info_n_cpus),
+        Some(free_desc),
+        Some(alloc_set_desc),
+        Some(send_wait),
+        Some(desc_err),
+        Some(set_perf_event_num),
+        Some(log_error),
+    ) = (
+        validate_os,
+        get_usrdata,
+        get_perf_event_num,
+        get_cpu_info,
+        cpu_info_n_cpus,
+        free_desc,
+        alloc_set_desc,
+        send_wait,
+        desc_err,
+        set_perf_event_num,
+        log_error,
+    )
+    else {
+        return -EINVAL as c_long;
+    };
+
+    if os == 0 || arg.is_null() || desc_size == 0 || validate_os(os) != 0 {
+        return -EINVAL as c_long;
+    }
+
+    let usrdata = get_usrdata(os);
+    if usrdata.is_null() {
+        log_error(0);
+        return -EINVAL as c_long;
+    }
+
+    let info = get_cpu_info(os);
+    if info.is_null() {
+        log_error(1);
+        return -EINVAL as c_long;
+    }
+    let n_cpus = cpu_info_n_cpus(info);
+
+    let mut num_registered = 0 as c_long;
+    let event_num = get_perf_event_num(usrdata);
+    let mut i = 0;
+    while i < event_num {
+        let mut error = 0;
+        let desc = alloc_set_desc(arg, i, counter_start.wrapping_add(i as c_uint), &mut error);
+        if desc.is_null() {
+            return if error != 0 {
+                error as c_long
+            } else {
+                -ENOMEM as c_long
+            };
+        }
+
+        let mut err = 0;
+        let mut j = 0;
+        while j < n_cpus {
+            let mut need_free = 0;
+            let ret = send_wait(os, j, desc, 10000, &mut need_free);
+            if ret < 0 {
+                if need_free != 0 {
+                    free_desc(desc);
+                }
+                return ret as c_long;
+            }
+
+            err = desc_err(desc);
+            if err != 0 {
+                break;
+            }
+            j += 1;
+        }
+
+        if err == 0 {
+            num_registered = num_registered.wrapping_add(1);
+        }
+        free_desc(desc);
+        i += 1;
+    }
+
+    set_perf_event_num(usrdata, num_registered as c_ulong);
+    num_registered
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_control_perf_get_body_result(
+    os: c_ulong,
+    arg: *mut c_void,
+    counter_start: c_uint,
+    desc_size: c_ulong,
+    value_size: c_ulong,
+    validate_os: Option<McctrlControlValidateOsFn>,
+    get_usrdata: Option<McctrlControlGetPtrFn>,
+    get_perf_event_num: Option<McctrlControlPerfEventNumFn>,
+    get_cpu_info: Option<McctrlControlGetPtrFn>,
+    cpu_info_n_cpus: Option<McctrlControlPtrIntFn>,
+    alloc_desc: Option<McctrlControlAllocFn>,
+    free_desc: Option<McctrlControlFreeFn>,
+    init_desc: Option<McctrlControlPerfInitDescFn>,
+    send_wait: Option<McctrlControlPerfSendWaitFn>,
+    desc_err: Option<McctrlControlPerfDescErrFn>,
+    desc_read_value: Option<McctrlControlPerfDescReadValueFn>,
+    copy_to_user: Option<McctrlControlCopyUserFn>,
+    log_error: Option<McctrlControlLogFn>,
+) -> c_long {
+    let (
+        Some(validate_os),
+        Some(get_usrdata),
+        Some(get_perf_event_num),
+        Some(get_cpu_info),
+        Some(cpu_info_n_cpus),
+        Some(alloc_desc),
+        Some(free_desc),
+        Some(init_desc),
+        Some(send_wait),
+        Some(desc_err),
+        Some(desc_read_value),
+        Some(copy_to_user),
+        Some(log_error),
+    ) = (
+        validate_os,
+        get_usrdata,
+        get_perf_event_num,
+        get_cpu_info,
+        cpu_info_n_cpus,
+        alloc_desc,
+        free_desc,
+        init_desc,
+        send_wait,
+        desc_err,
+        desc_read_value,
+        copy_to_user,
+        log_error,
+    )
+    else {
+        return -EINVAL as c_long;
+    };
+
+    if os == 0 || arg.is_null() || desc_size == 0 || value_size == 0 || validate_os(os) != 0 {
+        return -EINVAL as c_long;
+    }
+
+    let usrdata = get_usrdata(os);
+    if usrdata.is_null() {
+        log_error(0);
+        return -EINVAL as c_long;
+    }
+
+    let info = get_cpu_info(os);
+    if info.is_null() {
+        return -EINVAL as c_long;
+    }
+    let n_cpus = cpu_info_n_cpus(info);
+    if n_cpus < 1 {
+        return -EINVAL as c_long;
+    }
+
+    let event_num = get_perf_event_num(usrdata);
+    let mut i = 0;
+    while i < event_num {
+        let desc = alloc_desc(desc_size);
+        if desc.is_null() {
+            return -ENOMEM as c_long;
+        }
+        init_desc(desc, counter_start.wrapping_add(i as c_uint));
+
+        let mut value_sum = 0 as c_ulong;
+        let mut j = 0;
+        while j < n_cpus {
+            let mut need_free = 0;
+            let ret = send_wait(os, j, desc, 10000, &mut need_free);
+            if ret < 0 {
+                if need_free != 0 {
+                    free_desc(desc);
+                }
+                return ret as c_long;
+            }
+
+            if desc_err(desc) == 0 {
+                value_sum = value_sum.wrapping_add(desc_read_value(desc));
+            }
+            j += 1;
+        }
+        free_desc(desc);
+
+        let dst = (arg as *mut u8).add((i as usize).wrapping_mul(value_size as usize));
+        if copy_to_user(
+            dst.cast::<c_void>(),
+            core::ptr::addr_of!(value_sum).cast::<c_void>(),
+            value_size,
+        ) != 0
+        {
+            log_error(2);
+            return -EINVAL as c_long;
+        }
+        i += 1;
+    }
+
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_control_perf_enable_disable_body_result(
+    os: c_ulong,
+    ctrl_type: c_int,
+    counter_start: c_uint,
+    desc_size: c_ulong,
+    validate_os: Option<McctrlControlValidateOsFn>,
+    get_usrdata: Option<McctrlControlGetPtrFn>,
+    get_perf_event_num: Option<McctrlControlPerfEventNumFn>,
+    get_cpu_info: Option<McctrlControlGetPtrFn>,
+    cpu_info_n_cpus: Option<McctrlControlPtrIntFn>,
+    alloc_desc: Option<McctrlControlAllocFn>,
+    free_desc: Option<McctrlControlFreeFn>,
+    init_mask_desc: Option<McctrlControlPerfInitMaskDescFn>,
+    send_wait: Option<McctrlControlPerfSendWaitFn>,
+    desc_err: Option<McctrlControlPerfDescErrFn>,
+    log_error: Option<McctrlControlLogFn>,
+) -> c_long {
+    let (
+        Some(validate_os),
+        Some(get_usrdata),
+        Some(get_perf_event_num),
+        Some(get_cpu_info),
+        Some(cpu_info_n_cpus),
+        Some(alloc_desc),
+        Some(free_desc),
+        Some(init_mask_desc),
+        Some(send_wait),
+        Some(desc_err),
+        Some(log_error),
+    ) = (
+        validate_os,
+        get_usrdata,
+        get_perf_event_num,
+        get_cpu_info,
+        cpu_info_n_cpus,
+        alloc_desc,
+        free_desc,
+        init_mask_desc,
+        send_wait,
+        desc_err,
+        log_error,
+    )
+    else {
+        return -EINVAL as c_long;
+    };
+
+    if os == 0 || desc_size == 0 || validate_os(os) != 0 {
+        return -EINVAL as c_long;
+    }
+
+    let usrdata = get_usrdata(os);
+    if usrdata.is_null() {
+        log_error(0);
+        return -EINVAL as c_long;
+    }
+
+    let mut cntr_mask = 0 as c_ulong;
+    let event_num = get_perf_event_num(usrdata);
+    let mut i = 0;
+    while i < event_num {
+        cntr_mask |= 1u64.wrapping_shl(counter_start.wrapping_add(i as c_uint) as u32) as c_ulong;
+        i += 1;
+    }
+
+    let desc = alloc_desc(desc_size);
+    if desc.is_null() {
+        return -ENOMEM as c_long;
+    }
+    init_mask_desc(desc, ctrl_type, cntr_mask);
+
+    let info = get_cpu_info(os);
+    if info.is_null() {
+        free_desc(desc);
+        return -EINVAL as c_long;
+    }
+    let n_cpus = cpu_info_n_cpus(info);
+    if n_cpus < 1 {
+        free_desc(desc);
+        return -EINVAL as c_long;
+    }
+
+    let mut j = 0;
+    while j < n_cpus {
+        let mut need_free = 0;
+        let ret = send_wait(os, j, desc, 0, &mut need_free);
+        if ret < 0 {
+            if need_free != 0 {
+                free_desc(desc);
+            }
+            return -EINVAL as c_long;
+        }
+
+        let err = desc_err(desc);
+        if err < 0 {
+            free_desc(desc);
+            return err as c_long;
+        }
+        j += 1;
+    }
+
+    free_desc(desc);
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_control_getrusage_body_result(
+    os: c_ulong,
+    arg: *const c_void,
+    desc_size: c_ulong,
+    rusage_size: c_ulong,
+    max_pgsizes: c_ulong,
+    max_numa_nodes: c_ulong,
+    max_cpus: c_ulong,
+    validate_os: Option<McctrlControlValidateOsFn>,
+    get_rusage: Option<McctrlControlGetPtrFn>,
+    copy_from_user: Option<McctrlControlCopyUserFn>,
+    copy_to_user: Option<McctrlControlCopyUserFn>,
+    alloc_rusage: Option<McctrlControlAllocFn>,
+    free_rusage: Option<McctrlControlFreeFn>,
+    log_error: Option<McctrlControlGetrusageLogFn>,
+) -> c_long {
+    let (
+        Some(validate_os),
+        Some(get_rusage),
+        Some(copy_from_user),
+        Some(copy_to_user),
+        Some(alloc_rusage),
+        Some(free_rusage),
+        Some(log_error),
+    ) = (
+        validate_os,
+        get_rusage,
+        copy_from_user,
+        copy_to_user,
+        alloc_rusage,
+        free_rusage,
+        log_error,
+    )
+    else {
+        return -EINVAL as c_long;
+    };
+
+    if arg.is_null()
+        || desc_size != size_of::<McctrlIoctlGetrusageDesc>() as c_ulong
+        || rusage_size != size_of::<IhkOsRusage>() as c_ulong
+        || max_pgsizes != IHK_MAX_NUM_PGSIZES as c_ulong
+        || max_numa_nodes != IHK_MAX_NUM_NUMA_NODES as c_ulong
+        || max_cpus != IHK_MAX_NUM_CPUS as c_ulong
+    {
+        return -EINVAL as c_long;
+    }
+
+    let rusage_global_ptr = get_rusage(os);
+    if os == 0 || validate_os(os) != 0 {
+        return -EINVAL as c_long;
+    }
+
+    if rusage_global_ptr.is_null() {
+        return -EINVAL as c_long;
+    }
+    let rusage_global = &*(rusage_global_ptr.cast::<RusageGlobal>());
+
+    let mut desc = MaybeUninit::<McctrlIoctlGetrusageDesc>::uninit();
+    let copy_ret = copy_from_user(desc.as_mut_ptr().cast::<c_void>(), arg, desc_size);
+    if copy_ret != 0 {
+        log_error(0, 0, 0);
+        return copy_ret as c_long;
+    }
+    let desc = desc.assume_init();
+
+    let rusage_ptr = alloc_rusage(rusage_size);
+    if rusage_ptr.is_null() {
+        log_error(1, 0, 0);
+        return -ENOMEM as c_long;
+    }
+    let rusage = &mut *(rusage_ptr.cast::<IhkOsRusage>());
+
+    let mut i = 0usize;
+    while i < IHK_MAX_NUM_PGSIZES {
+        rusage.memory_stat_rss[i] = rusage_global.memory_stat_rss[i] as c_ulong;
+        rusage.memory_stat_mapped_file[i] = rusage_global.memory_stat_mapped_file[i] as c_ulong;
+        i += 1;
+    }
+    rusage.memory_max_usage = rusage_global.memory_max_usage;
+    rusage.memory_kmem_usage = rusage_global.memory_kmem_usage;
+    rusage.memory_kmem_max_usage = rusage_global.memory_kmem_max_usage;
+
+    i = 0;
+    let numa_nodes = core::cmp::min(
+        rusage_global.num_numa_nodes as usize,
+        IHK_MAX_NUM_NUMA_NODES,
+    );
+    while i < numa_nodes {
+        rusage.memory_numa_stat[i] = rusage_global.memory_numa_stat[i];
+        i += 1;
+    }
+
+    let mut ut = 0 as c_ulong;
+    let mut st = 0 as c_ulong;
+    i = 0;
+    let cpus = core::cmp::min(rusage_global.num_processors as usize, IHK_MAX_NUM_CPUS);
+    while i < cpus {
+        let wt = rusage_global.cpu[i]
+            .user_tsc
+            .wrapping_mul(rusage_global.ns_per_tsc)
+            / 1000;
+        ut = ut.wrapping_add(wt);
+        st = st.wrapping_add(
+            rusage_global.cpu[i]
+                .system_tsc
+                .wrapping_mul(rusage_global.ns_per_tsc)
+                / 1000,
+        );
+        rusage.cpuacct_usage_percpu[i] = wt;
+        i += 1;
+    }
+    rusage.cpuacct_stat_system = st.wrapping_add(10_000_000 - 1) / 10_000_000;
+    rusage.cpuacct_stat_user = ut.wrapping_add(10_000_000 - 1) / 10_000_000;
+    rusage.cpuacct_usage = ut;
+    rusage.num_threads = rusage_global.num_threads as c_int;
+    rusage.max_num_threads = rusage_global.max_num_threads as c_int;
+
+    if desc.size_rusage > rusage_size {
+        log_error(2, desc.size_rusage, rusage_size);
+        free_rusage(rusage_ptr);
+        return -EINVAL as c_long;
+    }
+
+    let copy_ret = copy_to_user(desc.rusage, rusage_ptr, desc.size_rusage);
+    if copy_ret != 0 {
+        log_error(3, 0, 0);
+        free_rusage(rusage_ptr);
+        return copy_ret as c_long;
+    }
+
+    free_rusage(rusage_ptr);
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_control_perf_destroy_body_result(
+    os: c_ulong,
+    perf_disable: Option<McctrlControlLongFn>,
+    perf_num_zero: Option<McctrlControlLongFn>,
+) -> c_long {
+    let (Some(perf_disable), Some(perf_num_zero)) = (perf_disable, perf_num_zero) else {
+        return -EINVAL as c_long;
+    };
+
+    perf_disable(os);
+    perf_num_zero(os);
+    0
+}
+
+#[repr(C)]
+pub struct McctrlDriverBootOps {
+    find_os: Option<McctrlDriverOsGetFn>,
+    set_os: Option<McctrlDriverOsSetFn>,
+    prepare_channels: Option<McctrlDriverOsIntFn>,
+    copy_user_call_proto: Option<McctrlDriverIndexVoidFn>,
+    set_kernel_handlers: Option<McctrlDriverOsIntFn>,
+    register_user_handlers: Option<McctrlDriverOsIndexIntFn>,
+    procfs_init: Option<McctrlDriverIndexVoidFn>,
+    clear_kernel_handlers: Option<McctrlDriverOsVoidFn>,
+    destroy_channels: Option<McctrlDriverOsVoidFn>,
+    log: Option<McctrlDriverLogFn>,
+}
+
+#[repr(C)]
+pub struct McctrlDriverShutdownOps {
+    get_os: Option<McctrlDriverOsGetFn>,
+    set_os: Option<McctrlDriverOsSetFn>,
+    pager_cleanup: Option<McctrlDriverVoidFn>,
+    sysfs_cleanup: Option<McctrlDriverOsVoidFn>,
+    free_topology_info: Option<McctrlDriverOsVoidFn>,
+    unregister_user_handlers: Option<McctrlDriverOsIndexVoidFn>,
+    clear_kernel_handlers: Option<McctrlDriverOsVoidFn>,
+    destroy_channels: Option<McctrlDriverOsVoidFn>,
+    procfs_exit: Option<McctrlDriverIndexVoidFn>,
+    log: Option<McctrlDriverLogFn>,
+}
+
+#[repr(C)]
+pub struct McctrlDriverSymbolsOps {
+    lookup_mount: Option<McctrlDriverLookupFn>,
+    set_mount: Option<McctrlDriverPublishFn>,
+    lookup_umount: Option<McctrlDriverLookupFn>,
+    set_umount: Option<McctrlDriverPublishFn>,
+    lookup_unshare: Option<McctrlDriverLookupFn>,
+    set_unshare: Option<McctrlDriverPublishFn>,
+    lookup_sched_setaffinity: Option<McctrlDriverLookupFn>,
+    set_sched_setaffinity: Option<McctrlDriverPublishFn>,
+    lookup_sched_setscheduler_nocheck: Option<McctrlDriverLookupFn>,
+    set_sched_setscheduler_nocheck: Option<McctrlDriverPublishFn>,
+    lookup_readlinkat: Option<McctrlDriverLookupFn>,
+    set_readlinkat: Option<McctrlDriverPublishFn>,
+    lookup_zap_page_range: Option<McctrlDriverLookupFn>,
+    set_zap_page_range: Option<McctrlDriverPublishFn>,
+    lookup_hugetlbfs_inode_operations: Option<McctrlDriverLookupFn>,
+    set_hugetlbfs_inode_operations: Option<McctrlDriverPublishFn>,
+    warn_missing: Option<McctrlDriverWarnMissingFn>,
+    arch_symbols_init: Option<McctrlDriverIntFn>,
+}
+
+#[repr(C)]
+pub struct McctrlDriverModuleOps {
+    syscall_init: Option<McctrlDriverVoidFn>,
+    set_os: Option<McctrlDriverOsSetFn>,
+    binfmt_init: Option<McctrlDriverVoidFn>,
+    tofu_hash_init: Option<McctrlDriverVoidFn>,
+    symbols_init: Option<McctrlDriverIntFn>,
+    tofu_hijack: Option<McctrlDriverVoidFn>,
+    register_notifier: Option<McctrlDriverIntFn>,
+    binfmt_exit: Option<McctrlDriverVoidFn>,
+    deregister_notifier: Option<McctrlDriverIntFn>,
+    uti_finalize: Option<McctrlDriverVoidFn>,
+    tofu_restore: Option<McctrlDriverVoidFn>,
+    log: Option<McctrlDriverLogFn>,
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_driver_ioctl_body_result(
+    os: c_ulong,
+    request: c_uint,
+    arg: c_ulong,
+    file: c_ulong,
+    dispatch: Option<McctrlDriverControlFn>,
+) -> c_long {
+    let Some(dispatch) = dispatch else {
+        return -(EINVAL as c_long);
+    };
+    dispatch(os, request, arg, file)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_driver_osnum_to_os_body_result(
+    index: c_int,
+    get_os: Option<McctrlDriverOsGetFn>,
+) -> c_ulong {
+    let Some(get_os) = get_os else {
+        return 0;
+    };
+    get_os(index) as c_ulong
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_driver_os_alive_body_result(
+    limit: c_int,
+    get_os: Option<McctrlDriverOsGetFn>,
+) -> c_int {
+    let Some(get_os) = get_os else {
+        return -1;
+    };
+    let limit = if limit <= 0 {
+        MCCTRL_OS_MAX_MINOR
+    } else {
+        limit
+    };
+    let mut index = 0;
+    while index < limit {
+        if !get_os(index).is_null() {
+            return index;
+        }
+        index += 1;
+    }
+    -1
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_driver_boot_notifier_body_result(
+    os_index: c_int,
+    ops: *const McctrlDriverBootOps,
+) -> c_int {
+    if ops.is_null() {
+        return -EINVAL;
+    }
+    let ops = &*ops;
+    let (
+        Some(find_os),
+        Some(set_os),
+        Some(prepare_channels),
+        Some(copy_user_call_proto),
+        Some(set_kernel_handlers),
+        Some(register_user_handlers),
+        Some(procfs_init),
+        Some(clear_kernel_handlers),
+        Some(destroy_channels),
+        Some(log),
+    ) = (
+        ops.find_os,
+        ops.set_os,
+        ops.prepare_channels,
+        ops.copy_user_call_proto,
+        ops.set_kernel_handlers,
+        ops.register_user_handlers,
+        ops.procfs_init,
+        ops.clear_kernel_handlers,
+        ops.destroy_channels,
+        ops.log,
+    )
+    else {
+        return -EINVAL;
+    };
+
+    let os = find_os(os_index);
+    set_os(os_index, os);
+    if os.is_null() {
+        log(0, os_index);
+        return -EINVAL;
+    }
+
+    if prepare_channels(os) != 0 {
+        log(1, os_index);
+        set_os(os_index, null_mut());
+        return -EFAULT;
+    }
+
+    copy_user_call_proto(os_index);
+
+    let mut ret = set_kernel_handlers(os);
+    if ret < 0 {
+        log(2, os_index);
+        destroy_channels(os);
+        set_os(os_index, null_mut());
+        return ret;
+    }
+
+    ret = register_user_handlers(os, os_index);
+    if ret < 0 {
+        log(3, os_index);
+        clear_kernel_handlers(os);
+        destroy_channels(os);
+        set_os(os_index, null_mut());
+        return ret;
+    }
+
+    procfs_init(os_index);
+    log(4, os_index);
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_driver_shutdown_notifier_body_result(
+    os_index: c_int,
+    ops: *const McctrlDriverShutdownOps,
+) -> c_int {
+    if ops.is_null() {
+        return -EINVAL;
+    }
+    let ops = &*ops;
+    let (
+        Some(get_os),
+        Some(set_os),
+        Some(pager_cleanup),
+        Some(sysfs_cleanup),
+        Some(free_topology_info),
+        Some(unregister_user_handlers),
+        Some(clear_kernel_handlers),
+        Some(destroy_channels),
+        Some(procfs_exit),
+        Some(log),
+    ) = (
+        ops.get_os,
+        ops.set_os,
+        ops.pager_cleanup,
+        ops.sysfs_cleanup,
+        ops.free_topology_info,
+        ops.unregister_user_handlers,
+        ops.clear_kernel_handlers,
+        ops.destroy_channels,
+        ops.procfs_exit,
+        ops.log,
+    )
+    else {
+        return -EINVAL;
+    };
+
+    let os = get_os(os_index);
+    if !os.is_null() {
+        pager_cleanup();
+        sysfs_cleanup(os);
+        free_topology_info(os);
+        unregister_user_handlers(os, os_index);
+        clear_kernel_handlers(os);
+        destroy_channels(os);
+        procfs_exit(os_index);
+    }
+
+    set_os(os_index, null_mut());
+    log(5, os_index);
+    0
+}
+
+unsafe fn mcctrl_driver_publish_required_symbol(
+    lookup: Option<McctrlDriverLookupFn>,
+    publish: Option<McctrlDriverPublishFn>,
+    warn_missing: unsafe extern "C" fn(ptr: *mut c_void) -> c_int,
+) -> c_int {
+    let (Some(lookup), Some(publish)) = (lookup, publish) else {
+        return -EINVAL;
+    };
+    let ptr = lookup();
+    publish(ptr);
+    if warn_missing(ptr) != 0 {
+        return -EFAULT;
+    }
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_driver_symbols_init_body_result(
+    ops: *const McctrlDriverSymbolsOps,
+) -> c_int {
+    if ops.is_null() {
+        return -EINVAL;
+    }
+    let ops = &*ops;
+    let Some(warn_missing) = ops.warn_missing else {
+        return -EINVAL;
+    };
+
+    let ret = mcctrl_driver_publish_required_symbol(ops.lookup_mount, ops.set_mount, warn_missing);
+    if ret != 0 {
+        return ret;
+    }
+    let ret =
+        mcctrl_driver_publish_required_symbol(ops.lookup_umount, ops.set_umount, warn_missing);
+    if ret != 0 {
+        return ret;
+    }
+    let ret =
+        mcctrl_driver_publish_required_symbol(ops.lookup_unshare, ops.set_unshare, warn_missing);
+    if ret != 0 {
+        return ret;
+    }
+    let ret = mcctrl_driver_publish_required_symbol(
+        ops.lookup_sched_setaffinity,
+        ops.set_sched_setaffinity,
+        warn_missing,
+    );
+    if ret != 0 {
+        return ret;
+    }
+    let ret = mcctrl_driver_publish_required_symbol(
+        ops.lookup_sched_setscheduler_nocheck,
+        ops.set_sched_setscheduler_nocheck,
+        warn_missing,
+    );
+    if ret != 0 {
+        return ret;
+    }
+    let ret = mcctrl_driver_publish_required_symbol(
+        ops.lookup_readlinkat,
+        ops.set_readlinkat,
+        warn_missing,
+    );
+    if ret != 0 {
+        return ret;
+    }
+    let ret = mcctrl_driver_publish_required_symbol(
+        ops.lookup_zap_page_range,
+        ops.set_zap_page_range,
+        warn_missing,
+    );
+    if ret != 0 {
+        return ret;
+    }
+    let ret = mcctrl_driver_publish_required_symbol(
+        ops.lookup_hugetlbfs_inode_operations,
+        ops.set_hugetlbfs_inode_operations,
+        warn_missing,
+    );
+    if ret != 0 {
+        return ret;
+    }
+
+    let Some(arch_symbols_init) = ops.arch_symbols_init else {
+        return -EINVAL;
+    };
+    arch_symbols_init()
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_driver_init_body_result(
+    os_limit: c_int,
+    ops: *const McctrlDriverModuleOps,
+) -> c_int {
+    if ops.is_null() {
+        return -EINVAL;
+    }
+    let ops = &*ops;
+    let (
+        Some(syscall_init),
+        Some(set_os),
+        Some(binfmt_init),
+        Some(tofu_hash_init),
+        Some(symbols_init),
+        Some(tofu_hijack),
+        Some(register_notifier),
+        Some(binfmt_exit),
+        Some(log),
+    ) = (
+        ops.syscall_init,
+        ops.set_os,
+        ops.binfmt_init,
+        ops.tofu_hash_init,
+        ops.symbols_init,
+        ops.tofu_hijack,
+        ops.register_notifier,
+        ops.binfmt_exit,
+        ops.log,
+    )
+    else {
+        return -EINVAL;
+    };
+
+    syscall_init();
+    let limit = if os_limit <= 0 {
+        MCCTRL_OS_MAX_MINOR
+    } else {
+        os_limit
+    };
+    let mut index = 0;
+    while index < limit {
+        set_os(index, null_mut());
+        index += 1;
+    }
+
+    binfmt_init();
+    tofu_hash_init();
+
+    let mut ret = symbols_init();
+    if ret != 0 {
+        binfmt_exit();
+        return ret;
+    }
+
+    tofu_hijack();
+
+    ret = register_notifier();
+    if ret != 0 {
+        log(6, -1);
+        binfmt_exit();
+        return ret;
+    }
+
+    log(7, -1);
+    ret
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_driver_exit_body_result(ops: *const McctrlDriverModuleOps) {
+    if ops.is_null() {
+        return;
+    }
+    let ops = &*ops;
+    let (
+        Some(deregister_notifier),
+        Some(binfmt_exit),
+        Some(uti_finalize),
+        Some(tofu_restore),
+        Some(log),
+    ) = (
+        ops.deregister_notifier,
+        ops.binfmt_exit,
+        ops.uti_finalize,
+        ops.tofu_restore,
+        ops.log,
+    )
+    else {
+        return;
+    };
+
+    if deregister_notifier() != 0 {
+        log(8, -1);
+    }
+    binfmt_exit();
+    uti_finalize();
+    tofu_restore();
+    log(9, -1);
+}
+
+#[no_mangle]
 pub extern "C" fn mcctrl_ikc_free_addrs_owner_result(free_addrs_count: c_int) -> c_int {
     (free_addrs_count != 0) as c_int
 }
@@ -2510,10 +5469,59 @@ type McctrlProcfsUnmapMemoryFn =
     Option<unsafe extern "C" fn(dev: *mut c_void, phys: c_ulong, size: c_ulong)>;
 type McctrlProcfsUnknownWorkFn = Option<unsafe extern "C" fn(msg: c_int, pid: c_int, arg: c_ulong)>;
 type McctrlProcfsFreeWorkFn = Option<unsafe extern "C" fn(work: *mut c_void)>;
+type McctrlProcfsEntryNameFn = Option<unsafe extern "C" fn(entry: *const c_void) -> *const c_char>;
+type McctrlProcfsEntryParentFn = Option<unsafe extern "C" fn(entry: *const c_void) -> *mut c_void>;
+type McctrlProcfsEntryModeFn = Option<unsafe extern "C" fn(entry: *const c_void) -> c_uint>;
+type McctrlProcfsEntryFopsFn = Option<unsafe extern "C" fn(entry: *const c_void) -> *const c_void>;
+type McctrlProcfsEntryNextFn =
+    Option<unsafe extern "C" fn(entry: *const c_void, size: c_ulong) -> *const c_void>;
+type McctrlProcfsAddEntryWithIdsFn = Option<
+    unsafe extern "C" fn(
+        parent: *mut c_void,
+        name: *const c_char,
+        mode: c_uint,
+        fops: *const c_void,
+        uid: *const c_void,
+        gid: *const c_void,
+    ),
+>;
+type McctrlProcfsFirstEntryFn = Option<unsafe extern "C" fn(parent: *mut c_void) -> *mut c_void>;
+type McctrlProcfsNextEntryFn =
+    Option<unsafe extern "C" fn(parent: *mut c_void, entry: *mut c_void) -> *mut c_void>;
+type McctrlProcfsFindVpidFn = Option<unsafe extern "C" fn(pid: c_int) -> *mut c_void>;
+type McctrlProcfsPidTaskFn =
+    Option<unsafe extern "C" fn(pid: *mut c_void, type_: c_int) -> *mut c_void>;
+type McctrlProcfsTaskCredFn = Option<unsafe extern "C" fn(task: *mut c_void) -> *mut c_void>;
 type McctrlProcfsFormatNameFn =
     Option<unsafe extern "C" fn(buf: *mut c_char, buflen: c_ulong, value: c_int) -> c_int>;
 type McctrlProcfsFindEntryFn =
     Option<unsafe extern "C" fn(parent: *mut c_void, name: *const c_char) -> *mut c_void>;
+type McctrlProcfsAllocEntryFn = Option<unsafe extern "C" fn(size: c_ulong) -> *mut c_void>;
+type McctrlProcfsInitEntryFn =
+    Option<unsafe extern "C" fn(entry: *mut c_void, name: *const c_char)>;
+type McctrlProcfsCreatePdeFn = Option<
+    unsafe extern "C" fn(
+        parent: *mut c_void,
+        name: *const c_char,
+        mode: c_uint,
+        uid: *const c_void,
+        gid: *const c_void,
+        opaque: *const c_void,
+        entry: *mut c_void,
+    ) -> *mut c_void,
+>;
+type McctrlProcfsCommitEntryFn = Option<
+    unsafe extern "C" fn(
+        entry: *mut c_void,
+        parent: *mut c_void,
+        pde: *mut c_void,
+        uid: *const c_void,
+        gid: *const c_void,
+    ),
+>;
+type McctrlProcfsEntryLogFn = Option<unsafe extern "C" fn(name: *const c_char)>;
+type McctrlProcfsEntryVoidFn = Option<unsafe extern "C" fn(entry: *mut c_void)>;
+type McctrlProcfsEntryDataFn = Option<unsafe extern "C" fn(entry: *mut c_void) -> *mut c_void>;
 type McctrlProcfsAddEntryFn = Option<
     unsafe extern "C" fn(parent: *mut c_void, name: *const c_char, mode: c_int) -> *mut c_void,
 >;
@@ -2683,6 +5691,17 @@ pub struct McctrlSysfsReqUnlinkParam {
     busy: c_int,
 }
 
+#[repr(C)]
+pub struct McctrlSysfsReqSetupParam {
+    error: c_int,
+    padding: c_int,
+    buf_rpa: c_long,
+    bufsize: c_long,
+    padding3: [c_char; 1024],
+    padding2: c_int,
+    busy: c_int,
+}
+
 type McctrlSysfsWorkAllocFn =
     Option<unsafe extern "C" fn(size: usize) -> *mut McctrlSysfsWorkPrefix>;
 type McctrlSysfsWorkInitScheduleFn = Option<unsafe extern "C" fn(work: *mut McctrlSysfsWorkPrefix)>;
@@ -2695,6 +5714,8 @@ type McctrlSysfsReleaseResponseFn =
 type McctrlSysfsUnknownWorkFn =
     Option<unsafe extern "C" fn(msg: c_int, os: *mut c_void, arg1: c_long, arg2: c_long)>;
 type McctrlSysfsFreeWorkFn = Option<unsafe extern "C" fn(work: *mut c_void)>;
+type McctrlSysfsGetReqFn = Option<unsafe extern "C" fn(node: *mut c_void) -> *mut c_void>;
+type McctrlSysfsCompleteReqFn = Option<unsafe extern "C" fn(req: *mut c_void, result: c_long)>;
 type McctrlSysfsLocalAllocFn = Option<unsafe extern "C" fn(size: usize) -> *mut c_void>;
 type McctrlSysfsLocalCopyFn =
     Option<unsafe extern "C" fn(dst: *mut c_void, src: *const c_void, size: usize)>;
@@ -2731,6 +5752,42 @@ type McctrlSysfsSendFn = Option<
     ) -> c_int,
 >;
 type McctrlSysfsReqResultFn = Option<unsafe extern "C" fn(req: *mut c_void) -> c_long>;
+type McctrlSysfsBitmapFormatFn = Option<
+    unsafe extern "C" fn(buf: *mut c_void, bufsize: usize, ptr: *mut c_void, nbits: c_int) -> usize,
+>;
+type McctrlSysfsNodeNameFn = Option<unsafe extern "C" fn(node: *mut c_void) -> *const c_char>;
+type McctrlSysfsNodePtrFn = Option<unsafe extern "C" fn(node: *mut c_void) -> *mut c_void>;
+type McctrlSysfsNodeNextFn =
+    Option<unsafe extern "C" fn(parent: *mut c_void, node: *mut c_void) -> *mut c_void>;
+type McctrlSysfsErrPtrFn = Option<unsafe extern "C" fn(error: c_int) -> *mut c_void>;
+type McctrlSysfsOsToDevFn = Option<unsafe extern "C" fn(os: *mut c_void) -> *mut c_void>;
+type McctrlSysfsMapMemoryFn =
+    Option<unsafe extern "C" fn(dev: *mut c_void, rpa: c_ulong, size: usize) -> c_ulong>;
+type McctrlSysfsMapVirtualFn =
+    Option<unsafe extern "C" fn(dev: *mut c_void, pa: c_ulong, size: usize) -> *mut c_void>;
+type McctrlSysfsUnmapVirtualFn =
+    Option<unsafe extern "C" fn(dev: *mut c_void, virt: *mut c_void, size: usize)>;
+type McctrlSysfsUnmapMemoryFn =
+    Option<unsafe extern "C" fn(dev: *mut c_void, pa: c_ulong, size: usize)>;
+type McctrlSysfsWmbFn = Option<unsafe extern "C" fn()>;
+type McctrlSysfsReqSetupLocalFn = Option<
+    unsafe extern "C" fn(
+        os: *mut c_void,
+        buf: *mut c_void,
+        buf_pa: c_ulong,
+        bufsize: usize,
+    ) -> c_int,
+>;
+type McctrlSysfsReqCreateLocalFn =
+    Option<unsafe extern "C" fn(os: *mut c_void, param: *mut McctrlSysfsReqCreateParam) -> c_int>;
+type McctrlSysfsReqMkdirLocalFn =
+    Option<unsafe extern "C" fn(os: *mut c_void, param: *mut McctrlSysfsReqMkdirParam) -> c_int>;
+type McctrlSysfsReqSymlinkLocalFn =
+    Option<unsafe extern "C" fn(os: *mut c_void, param: *mut McctrlSysfsReqSymlinkParam) -> c_int>;
+type McctrlSysfsReqLookupLocalFn =
+    Option<unsafe extern "C" fn(os: *mut c_void, param: *mut McctrlSysfsReqLookupParam) -> c_int>;
+type McctrlSysfsReqUnlinkLocalFn =
+    Option<unsafe extern "C" fn(os: *mut c_void, param: *mut McctrlSysfsReqUnlinkParam) -> c_int>;
 
 const MCCTRL_SYSFS_REMOTE_STAGE_OK: c_int = 0;
 const MCCTRL_SYSFS_REMOTE_STAGE_NOT_INIT: c_int = 1;
@@ -3293,6 +6350,291 @@ pub unsafe extern "C" fn mcctrl_procfs_exe_link_body_result(
     }
     unlock();
     0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_procfs_getpath_body_result(
+    entry: *mut c_void,
+    buf: *mut c_char,
+    bufsize: c_ulong,
+    entry_name: McctrlProcfsEntryNameFn,
+    entry_parent: McctrlProcfsEntryParentFn,
+) -> *mut c_char {
+    if entry.is_null() || buf.is_null() || bufsize == 0 {
+        return null_mut();
+    }
+
+    let (Some(entry_name), Some(entry_parent)) = (entry_name, entry_parent) else {
+        return null_mut();
+    };
+
+    let mut current = entry.cast::<c_void>();
+    let mut write_at = buf.add(bufsize as usize - 1);
+    write_volatile(write_at, NUL);
+    loop {
+        let name = entry_name(current.cast::<c_void>());
+        if name.is_null() {
+            return null_mut();
+        }
+
+        let len = c_strlen(name);
+        write_at = write_at.sub(len);
+        for offset in 0..len {
+            write_volatile(write_at.add(offset), read_volatile(name.add(offset)));
+        }
+
+        current = entry_parent(current.cast::<c_void>());
+        if current.is_null() {
+            return write_at;
+        }
+
+        write_at = write_at.sub(1);
+        write_volatile(write_at, b'/' as c_char);
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_procfs_add_entries_body_result(
+    parent: *mut c_void,
+    entries: *const c_void,
+    entry_size: c_ulong,
+    uid: *const c_void,
+    gid: *const c_void,
+    entry_name: McctrlProcfsEntryNameFn,
+    entry_mode: McctrlProcfsEntryModeFn,
+    entry_fops: McctrlProcfsEntryFopsFn,
+    entry_next: McctrlProcfsEntryNextFn,
+    add_entry: McctrlProcfsAddEntryWithIdsFn,
+) -> c_long {
+    if entries.is_null() || entry_size == 0 {
+        return -EINVAL as c_long;
+    }
+
+    let (Some(entry_name), Some(entry_mode), Some(entry_fops), Some(entry_next)) =
+        (entry_name, entry_mode, entry_fops, entry_next)
+    else {
+        return -EINVAL as c_long;
+    };
+    let Some(add_entry) = add_entry else {
+        return -EINVAL as c_long;
+    };
+
+    let mut entry = entries;
+    let mut count = 0 as c_long;
+    loop {
+        let name = entry_name(entry);
+        if name.is_null() {
+            return count;
+        }
+
+        add_entry(parent, name, entry_mode(entry), entry_fops(entry), uid, gid);
+        count = count.wrapping_add(1);
+        entry = entry_next(entry, entry_size);
+        if entry.is_null() {
+            return -EINVAL as c_long;
+        }
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_procfs_find_entry_body_result(
+    parent: *mut c_void,
+    name: *const c_char,
+    first_entry: McctrlProcfsFirstEntryFn,
+    next_entry: McctrlProcfsNextEntryFn,
+    entry_name: McctrlProcfsEntryNameFn,
+) -> *mut c_void {
+    if name.is_null() {
+        return null_mut();
+    }
+
+    let (Some(first_entry), Some(next_entry), Some(entry_name)) =
+        (first_entry, next_entry, entry_name)
+    else {
+        return null_mut();
+    };
+
+    let mut entry = first_entry(parent);
+    while !entry.is_null() {
+        if c_streq(entry_name(entry), name) {
+            return entry;
+        }
+        entry = next_entry(parent, entry);
+    }
+    null_mut()
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_procfs_add_entry_body_result(
+    parent: *mut c_void,
+    name: *const c_char,
+    mode: c_uint,
+    uid: *const c_void,
+    gid: *const c_void,
+    opaque: *const c_void,
+    entry_size: c_ulong,
+    find_entry: McctrlProcfsFindEntryFn,
+    delete_entry: McctrlProcfsDeleteEntryFn,
+    alloc_entry: McctrlProcfsAllocEntryFn,
+    init_entry: McctrlProcfsInitEntryFn,
+    create_pde: McctrlProcfsCreatePdeFn,
+    commit_entry: McctrlProcfsCommitEntryFn,
+    free_entry: McctrlProcfsEntryVoidFn,
+    alloc_failed: McctrlProcfsLogFn,
+    create_failed: McctrlProcfsEntryLogFn,
+) -> *mut c_void {
+    if name.is_null() || entry_size == 0 {
+        return null_mut();
+    }
+
+    let (
+        Some(find_entry),
+        Some(delete_entry),
+        Some(alloc_entry),
+        Some(init_entry),
+        Some(create_pde),
+        Some(commit_entry),
+        Some(free_entry),
+        Some(alloc_failed),
+        Some(create_failed),
+    ) = (
+        find_entry,
+        delete_entry,
+        alloc_entry,
+        init_entry,
+        create_pde,
+        commit_entry,
+        free_entry,
+        alloc_failed,
+        create_failed,
+    )
+    else {
+        return null_mut();
+    };
+
+    let existing = find_entry(parent, name);
+    if !existing.is_null() {
+        delete_entry(existing);
+    }
+
+    let size = entry_size
+        .wrapping_add(c_strlen(name) as c_ulong)
+        .wrapping_add(1);
+    let entry = alloc_entry(size);
+    if entry.is_null() {
+        alloc_failed();
+        return null_mut();
+    }
+
+    init_entry(entry, name);
+    let pde = create_pde(parent, name, mode, uid, gid, opaque, entry);
+    if pde.is_null() {
+        create_failed(name);
+        free_entry(entry);
+        return null_mut();
+    }
+
+    commit_entry(entry, parent, pde, uid, gid);
+    entry
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_procfs_delete_entries_body_result(
+    top: *mut c_void,
+    first_child: McctrlProcfsFirstEntryFn,
+    delete_entry: McctrlProcfsDeleteEntryFn,
+    unlink_entry: McctrlProcfsEntryVoidFn,
+    remove_proc: McctrlProcfsEntryVoidFn,
+    entry_data: McctrlProcfsEntryDataFn,
+    free_ptr: McctrlProcfsEntryVoidFn,
+) -> c_int {
+    if top.is_null() {
+        return -EINVAL;
+    }
+
+    let (
+        Some(first_child),
+        Some(delete_entry),
+        Some(unlink_entry),
+        Some(remove_proc),
+        Some(entry_data),
+        Some(free_ptr),
+    ) = (
+        first_child,
+        delete_entry,
+        unlink_entry,
+        remove_proc,
+        entry_data,
+        free_ptr,
+    )
+    else {
+        return -EINVAL;
+    };
+
+    unlink_entry(top);
+    loop {
+        let child = first_child(top);
+        if child.is_null() {
+            break;
+        }
+        delete_entry(child);
+    }
+
+    remove_proc(top);
+    let data = entry_data(top);
+    if !data.is_null() {
+        free_ptr(data);
+    }
+    free_ptr(top);
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_procfs_get_pid_cred_body_result(
+    pid: c_int,
+    pid_type: c_int,
+    rcu_lock: McctrlProcfsLockFn,
+    rcu_unlock: McctrlProcfsLockFn,
+    find_vpid: McctrlProcfsFindVpidFn,
+    pid_task: McctrlProcfsPidTaskFn,
+    task_cred: McctrlProcfsTaskCredFn,
+) -> *mut c_void {
+    if pid <= 0 {
+        return null_mut();
+    }
+
+    let (Some(rcu_lock), Some(rcu_unlock), Some(find_vpid), Some(pid_task), Some(task_cred)) =
+        (rcu_lock, rcu_unlock, find_vpid, pid_task, task_cred)
+    else {
+        return null_mut();
+    };
+
+    rcu_lock();
+    let task = pid_task(find_vpid(pid), pid_type);
+    rcu_unlock();
+    if task.is_null() {
+        return null_mut();
+    }
+    task_cred(task)
+}
+
+unsafe fn c_streq(left: *const c_char, right: *const c_char) -> bool {
+    if left.is_null() || right.is_null() {
+        return false;
+    }
+
+    let mut offset = 0usize;
+    loop {
+        let l = read_volatile(left.add(offset));
+        let r = read_volatile(right.add(offset));
+        if l != r {
+            return false;
+        }
+        if l == NUL {
+            return true;
+        }
+        offset += 1;
+    }
 }
 
 unsafe fn c_strlen(ptr: *const c_char) -> usize {
@@ -4123,6 +7465,26 @@ pub unsafe extern "C" fn mcctrl_sysfs_work_main_body_result(
     ret
 }
 
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_sysfs_resp_body_result(
+    node: *mut c_void,
+    result: c_long,
+    get_req: McctrlSysfsGetReqFn,
+    complete_req: McctrlSysfsCompleteReqFn,
+) -> c_int {
+    let (Some(get_req), Some(complete_req)) = (get_req, complete_req) else {
+        return -EINVAL;
+    };
+
+    let req = get_req(node);
+    if req.is_null() {
+        return -EINVAL;
+    }
+
+    complete_req(req, result);
+    0
+}
+
 #[inline(always)]
 unsafe fn mcctrl_sysfs_remote_stage(stage_out: *mut c_int, stage: c_int) {
     if !stage_out.is_null() {
@@ -4412,6 +7774,55 @@ fn mcctrl_sysfs_special_kind(client_ops: c_long) -> c_int {
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn mcctrl_sysfs_lookup_i_body_result(
+    dirp: *mut c_void,
+    name: *const c_char,
+    snt_dir: c_int,
+    get_node_type: McctrlSysfsNodeTypeFn,
+    get_node_name: McctrlSysfsNodeNameFn,
+    first_child: McctrlSysfsNodePtrFn,
+    next_child: McctrlSysfsNodeNextFn,
+    err_ptr: McctrlSysfsErrPtrFn,
+) -> *mut c_void {
+    let (
+        Some(get_node_type),
+        Some(get_node_name),
+        Some(first_child),
+        Some(next_child),
+        Some(err_ptr),
+    ) = (
+        get_node_type,
+        get_node_name,
+        first_child,
+        next_child,
+        err_ptr,
+    )
+    else {
+        return null_mut();
+    };
+
+    if dirp.is_null() || name.is_null() {
+        return err_ptr(-EINVAL);
+    }
+    if get_node_type(dirp) != snt_dir {
+        return err_ptr(-ENOTDIR);
+    }
+    if read_volatile(name) == NUL {
+        return err_ptr(-ENOENT);
+    }
+
+    let mut node = first_child(dirp);
+    while !node.is_null() {
+        if c_streq(get_node_name(node), name) {
+            return node;
+        }
+        node = next_child(dirp, node);
+    }
+
+    err_ptr(-ENOENT)
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn mcctrl_sysfs_local_show_body_result(
     instance: *mut c_void,
     buf: *mut c_void,
@@ -4499,6 +7910,176 @@ pub unsafe extern "C" fn mcctrl_sysfs_local_release_body_result(
     if let Some(release) = (*client_ops).release {
         release(client_ops, get_client_instance(instance) as *mut c_void);
     }
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_sysfs_show_body_result(
+    node: *mut c_void,
+    buf: *mut c_void,
+    page_size: usize,
+    get_server_ops: McctrlSysfsNodeLongFn,
+) -> isize {
+    let Some(get_server_ops) = get_server_ops else {
+        return -(EINVAL as isize);
+    };
+
+    let server_ops = get_server_ops(node) as *mut SysfsmOps;
+    if server_ops.is_null() {
+        return -(ENOSPC as isize);
+    }
+
+    match (*server_ops).show {
+        Some(show) => show(server_ops, node, buf, page_size),
+        None => -(ENOSPC as isize),
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_sysfs_store_body_result(
+    node: *mut c_void,
+    buf: *const c_void,
+    bufsize: usize,
+    get_server_ops: McctrlSysfsNodeLongFn,
+) -> isize {
+    let Some(get_server_ops) = get_server_ops else {
+        return -(EINVAL as isize);
+    };
+
+    let server_ops = get_server_ops(node) as *mut SysfsmOps;
+    if server_ops.is_null() {
+        return -(ENOSPC as isize);
+    }
+
+    match (*server_ops).store {
+        Some(store) => store(server_ops, node, buf, bufsize),
+        None => -(ENOSPC as isize),
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_sysfs_release_body_result(
+    node: *mut c_void,
+    get_server_ops: McctrlSysfsNodeLongFn,
+) -> c_int {
+    let Some(get_server_ops) = get_server_ops else {
+        return -EINVAL;
+    };
+
+    let server_ops = get_server_ops(node) as *mut SysfsmOps;
+    if server_ops.is_null() {
+        return 0;
+    }
+
+    if let Some(release) = (*server_ops).release {
+        release(server_ops, node);
+    }
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_sysfs_snooping_show_i32_body_result(
+    instance: *mut c_void,
+    buf: *mut c_void,
+    bufsize: usize,
+) -> isize {
+    snprintf(
+        buf.cast::<c_char>(),
+        bufsize,
+        b"%d\n\0".as_ptr().cast(),
+        *(instance.cast::<c_int>()),
+    ) as isize
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_sysfs_snooping_show_i64_body_result(
+    instance: *mut c_void,
+    buf: *mut c_void,
+    bufsize: usize,
+) -> isize {
+    snprintf(
+        buf.cast::<c_char>(),
+        bufsize,
+        b"%ld\n\0".as_ptr().cast(),
+        *(instance.cast::<c_long>()),
+    ) as isize
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_sysfs_snooping_show_u32_body_result(
+    instance: *mut c_void,
+    buf: *mut c_void,
+    bufsize: usize,
+) -> isize {
+    snprintf(
+        buf.cast::<c_char>(),
+        bufsize,
+        b"%u\n\0".as_ptr().cast(),
+        *(instance.cast::<c_uint>()),
+    ) as isize
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_sysfs_snooping_show_u64_body_result(
+    instance: *mut c_void,
+    buf: *mut c_void,
+    bufsize: usize,
+) -> isize {
+    snprintf(
+        buf.cast::<c_char>(),
+        bufsize,
+        b"%lu\n\0".as_ptr().cast(),
+        *(instance.cast::<c_ulong>()),
+    ) as isize
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_sysfs_snooping_show_string_body_result(
+    instance: *mut c_void,
+    buf: *mut c_void,
+    bufsize: usize,
+) -> isize {
+    snprintf(
+        buf.cast::<c_char>(),
+        bufsize,
+        b"%s\n\0".as_ptr().cast(),
+        instance.cast::<c_char>(),
+    ) as isize
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_sysfs_snooping_show_u32k_body_result(
+    instance: *mut c_void,
+    buf: *mut c_void,
+    bufsize: usize,
+) -> isize {
+    snprintf(
+        buf.cast::<c_char>(),
+        bufsize,
+        b"%uK\n\0".as_ptr().cast(),
+        *(instance.cast::<c_uint>()) >> 10,
+    ) as isize
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_sysfs_snooping_show_bitmap_body_result(
+    instance: *mut c_void,
+    buf: *mut c_void,
+    bufsize: usize,
+    format: McctrlSysfsBitmapFormatFn,
+) -> isize {
+    let Some(format) = format else {
+        return -(EINVAL as isize);
+    };
+    let param = instance.cast::<SysfsmBitmapParam>();
+    let ret = format(buf, bufsize, (*param).ptr, (*param).nbits);
+    if ret < bufsize.wrapping_sub(1) {
+        let tail = buf.cast::<c_char>().add(ret);
+        let tail_size = bufsize.wrapping_sub(ret);
+        snprintf(tail, tail_size, b"\n\0".as_ptr().cast());
+        return ret.wrapping_add(1) as isize;
+    }
+
     0
 }
 
@@ -4678,6 +8259,342 @@ pub unsafe extern "C" fn mcctrl_sysfs_unlinkf_post_path_body_result(
     unlink_local(os, param)
 }
 
+unsafe fn mcctrl_sysfs_req_publish(
+    error: *mut c_int,
+    busy: *mut c_int,
+    result: c_int,
+    wmb: unsafe extern "C" fn(),
+) {
+    *error = result;
+    wmb();
+    *busy = 0;
+}
+
+#[allow(clippy::too_many_arguments)]
+unsafe fn mcctrl_sysfs_req_map_param<T>(
+    os: *mut c_void,
+    param_rpa: c_ulong,
+    param_size: usize,
+    os_to_dev: McctrlSysfsOsToDevFn,
+    map_memory: McctrlSysfsMapMemoryFn,
+    map_virtual: McctrlSysfsMapVirtualFn,
+) -> Result<(*mut c_void, c_ulong, *mut T), c_int> {
+    let (Some(os_to_dev), Some(map_memory), Some(map_virtual)) =
+        (os_to_dev, map_memory, map_virtual)
+    else {
+        return Err(-EINVAL);
+    };
+    if param_size == 0 || param_size < size_of::<T>() {
+        return Err(-EINVAL);
+    }
+
+    let dev = os_to_dev(os);
+    if dev.is_null() {
+        return Err(-EINVAL);
+    }
+    let param_pa = map_memory(dev, param_rpa, param_size);
+    let param = map_virtual(dev, param_pa, param_size).cast::<T>();
+    if param.is_null() {
+        return Err(-EINVAL);
+    }
+
+    Ok((dev, param_pa, param))
+}
+
+#[allow(clippy::too_many_arguments)]
+unsafe fn mcctrl_sysfs_req_common_body_result<T>(
+    os: *mut c_void,
+    param_rpa: c_ulong,
+    param_size: usize,
+    os_to_dev: McctrlSysfsOsToDevFn,
+    map_memory: McctrlSysfsMapMemoryFn,
+    map_virtual: McctrlSysfsMapVirtualFn,
+    unmap_virtual: McctrlSysfsUnmapVirtualFn,
+    unmap_memory: McctrlSysfsUnmapMemoryFn,
+    local: Option<unsafe extern "C" fn(*mut c_void, *mut T) -> c_int>,
+    wmb: McctrlSysfsWmbFn,
+    error_ptr: unsafe fn(*mut T) -> *mut c_int,
+    busy_ptr: unsafe fn(*mut T) -> *mut c_int,
+) -> c_int {
+    let (Some(unmap_virtual), Some(unmap_memory), Some(local), Some(wmb)) =
+        (unmap_virtual, unmap_memory, local, wmb)
+    else {
+        return -EINVAL;
+    };
+
+    let (dev, param_pa, param) = match mcctrl_sysfs_req_map_param::<T>(
+        os,
+        param_rpa,
+        param_size,
+        os_to_dev,
+        map_memory,
+        map_virtual,
+    ) {
+        Ok(mapped) => mapped,
+        Err(error) => return error,
+    };
+
+    let error = local(os, param);
+    mcctrl_sysfs_req_publish(error_ptr(param), busy_ptr(param), error, wmb);
+    unmap_virtual(dev, param.cast::<c_void>(), param_size);
+    unmap_memory(dev, param_pa, param_size);
+    error
+}
+
+unsafe fn mcctrl_sysfs_req_create_error(param: *mut McctrlSysfsReqCreateParam) -> *mut c_int {
+    &mut (*param).error
+}
+
+unsafe fn mcctrl_sysfs_req_create_busy(param: *mut McctrlSysfsReqCreateParam) -> *mut c_int {
+    &mut (*param).busy
+}
+
+unsafe fn mcctrl_sysfs_req_mkdir_error(param: *mut McctrlSysfsReqMkdirParam) -> *mut c_int {
+    &mut (*param).error
+}
+
+unsafe fn mcctrl_sysfs_req_mkdir_busy(param: *mut McctrlSysfsReqMkdirParam) -> *mut c_int {
+    &mut (*param).busy
+}
+
+unsafe fn mcctrl_sysfs_req_symlink_error(param: *mut McctrlSysfsReqSymlinkParam) -> *mut c_int {
+    &mut (*param).error
+}
+
+unsafe fn mcctrl_sysfs_req_symlink_busy(param: *mut McctrlSysfsReqSymlinkParam) -> *mut c_int {
+    &mut (*param).busy
+}
+
+unsafe fn mcctrl_sysfs_req_lookup_error(param: *mut McctrlSysfsReqLookupParam) -> *mut c_int {
+    &mut (*param).error
+}
+
+unsafe fn mcctrl_sysfs_req_lookup_busy(param: *mut McctrlSysfsReqLookupParam) -> *mut c_int {
+    &mut (*param).busy
+}
+
+unsafe fn mcctrl_sysfs_req_unlink_error(param: *mut McctrlSysfsReqUnlinkParam) -> *mut c_int {
+    &mut (*param).error
+}
+
+unsafe fn mcctrl_sysfs_req_unlink_busy(param: *mut McctrlSysfsReqUnlinkParam) -> *mut c_int {
+    &mut (*param).busy
+}
+
+#[no_mangle]
+#[allow(clippy::too_many_arguments)]
+pub unsafe extern "C" fn mcctrl_sysfs_req_setup_body_result(
+    os: *mut c_void,
+    param_rpa: c_ulong,
+    param_size: usize,
+    os_to_dev: McctrlSysfsOsToDevFn,
+    map_memory: McctrlSysfsMapMemoryFn,
+    map_virtual: McctrlSysfsMapVirtualFn,
+    unmap_virtual: McctrlSysfsUnmapVirtualFn,
+    unmap_memory: McctrlSysfsUnmapMemoryFn,
+    setup_local: McctrlSysfsReqSetupLocalFn,
+    wmb: McctrlSysfsWmbFn,
+) -> c_int {
+    let (Some(unmap_virtual), Some(unmap_memory), Some(setup_local), Some(wmb)) =
+        (unmap_virtual, unmap_memory, setup_local, wmb)
+    else {
+        return -EINVAL;
+    };
+
+    let (dev, param_pa, param) = match mcctrl_sysfs_req_map_param::<McctrlSysfsReqSetupParam>(
+        os,
+        param_rpa,
+        param_size,
+        os_to_dev,
+        map_memory,
+        map_virtual,
+    ) {
+        Ok(mapped) => mapped,
+        Err(error) => return error,
+    };
+    let Some(map_memory) = map_memory else {
+        unmap_virtual(dev, param.cast::<c_void>(), param_size);
+        unmap_memory(dev, param_pa, param_size);
+        return -EINVAL;
+    };
+    let Some(map_virtual) = map_virtual else {
+        unmap_virtual(dev, param.cast::<c_void>(), param_size);
+        unmap_memory(dev, param_pa, param_size);
+        return -EINVAL;
+    };
+
+    let bufsize = (*param).bufsize as usize;
+    let buf_pa = map_memory(dev, (*param).buf_rpa as c_ulong, bufsize);
+    let buf = map_virtual(dev, buf_pa, bufsize);
+    let error = if buf.is_null() {
+        -EINVAL
+    } else {
+        setup_local(os, buf, buf_pa, bufsize)
+    };
+
+    mcctrl_sysfs_req_publish(&mut (*param).error, &mut (*param).busy, error, wmb);
+
+    if error != 0 {
+        if !buf.is_null() {
+            unmap_virtual(dev, buf, bufsize);
+        }
+        unmap_memory(dev, buf_pa, bufsize);
+    }
+    unmap_virtual(dev, param.cast::<c_void>(), param_size);
+    unmap_memory(dev, param_pa, param_size);
+    error
+}
+
+#[no_mangle]
+#[allow(clippy::too_many_arguments)]
+pub unsafe extern "C" fn mcctrl_sysfs_req_create_body_result(
+    os: *mut c_void,
+    param_rpa: c_ulong,
+    param_size: usize,
+    os_to_dev: McctrlSysfsOsToDevFn,
+    map_memory: McctrlSysfsMapMemoryFn,
+    map_virtual: McctrlSysfsMapVirtualFn,
+    unmap_virtual: McctrlSysfsUnmapVirtualFn,
+    unmap_memory: McctrlSysfsUnmapMemoryFn,
+    create_local: McctrlSysfsReqCreateLocalFn,
+    wmb: McctrlSysfsWmbFn,
+) -> c_int {
+    mcctrl_sysfs_req_common_body_result(
+        os,
+        param_rpa,
+        param_size,
+        os_to_dev,
+        map_memory,
+        map_virtual,
+        unmap_virtual,
+        unmap_memory,
+        create_local,
+        wmb,
+        mcctrl_sysfs_req_create_error,
+        mcctrl_sysfs_req_create_busy,
+    )
+}
+
+#[no_mangle]
+#[allow(clippy::too_many_arguments)]
+pub unsafe extern "C" fn mcctrl_sysfs_req_mkdir_body_result(
+    os: *mut c_void,
+    param_rpa: c_ulong,
+    param_size: usize,
+    os_to_dev: McctrlSysfsOsToDevFn,
+    map_memory: McctrlSysfsMapMemoryFn,
+    map_virtual: McctrlSysfsMapVirtualFn,
+    unmap_virtual: McctrlSysfsUnmapVirtualFn,
+    unmap_memory: McctrlSysfsUnmapMemoryFn,
+    mkdir_local: McctrlSysfsReqMkdirLocalFn,
+    wmb: McctrlSysfsWmbFn,
+) -> c_int {
+    mcctrl_sysfs_req_common_body_result(
+        os,
+        param_rpa,
+        param_size,
+        os_to_dev,
+        map_memory,
+        map_virtual,
+        unmap_virtual,
+        unmap_memory,
+        mkdir_local,
+        wmb,
+        mcctrl_sysfs_req_mkdir_error,
+        mcctrl_sysfs_req_mkdir_busy,
+    )
+}
+
+#[no_mangle]
+#[allow(clippy::too_many_arguments)]
+pub unsafe extern "C" fn mcctrl_sysfs_req_symlink_body_result(
+    os: *mut c_void,
+    param_rpa: c_ulong,
+    param_size: usize,
+    os_to_dev: McctrlSysfsOsToDevFn,
+    map_memory: McctrlSysfsMapMemoryFn,
+    map_virtual: McctrlSysfsMapVirtualFn,
+    unmap_virtual: McctrlSysfsUnmapVirtualFn,
+    unmap_memory: McctrlSysfsUnmapMemoryFn,
+    symlink_local: McctrlSysfsReqSymlinkLocalFn,
+    wmb: McctrlSysfsWmbFn,
+) -> c_int {
+    mcctrl_sysfs_req_common_body_result(
+        os,
+        param_rpa,
+        param_size,
+        os_to_dev,
+        map_memory,
+        map_virtual,
+        unmap_virtual,
+        unmap_memory,
+        symlink_local,
+        wmb,
+        mcctrl_sysfs_req_symlink_error,
+        mcctrl_sysfs_req_symlink_busy,
+    )
+}
+
+#[no_mangle]
+#[allow(clippy::too_many_arguments)]
+pub unsafe extern "C" fn mcctrl_sysfs_req_lookup_body_result(
+    os: *mut c_void,
+    param_rpa: c_ulong,
+    param_size: usize,
+    os_to_dev: McctrlSysfsOsToDevFn,
+    map_memory: McctrlSysfsMapMemoryFn,
+    map_virtual: McctrlSysfsMapVirtualFn,
+    unmap_virtual: McctrlSysfsUnmapVirtualFn,
+    unmap_memory: McctrlSysfsUnmapMemoryFn,
+    lookup_local: McctrlSysfsReqLookupLocalFn,
+    wmb: McctrlSysfsWmbFn,
+) -> c_int {
+    mcctrl_sysfs_req_common_body_result(
+        os,
+        param_rpa,
+        param_size,
+        os_to_dev,
+        map_memory,
+        map_virtual,
+        unmap_virtual,
+        unmap_memory,
+        lookup_local,
+        wmb,
+        mcctrl_sysfs_req_lookup_error,
+        mcctrl_sysfs_req_lookup_busy,
+    )
+}
+
+#[no_mangle]
+#[allow(clippy::too_many_arguments)]
+pub unsafe extern "C" fn mcctrl_sysfs_req_unlink_body_result(
+    os: *mut c_void,
+    param_rpa: c_ulong,
+    param_size: usize,
+    os_to_dev: McctrlSysfsOsToDevFn,
+    map_memory: McctrlSysfsMapMemoryFn,
+    map_virtual: McctrlSysfsMapVirtualFn,
+    unmap_virtual: McctrlSysfsUnmapVirtualFn,
+    unmap_memory: McctrlSysfsUnmapMemoryFn,
+    unlink_local: McctrlSysfsReqUnlinkLocalFn,
+    wmb: McctrlSysfsWmbFn,
+) -> c_int {
+    mcctrl_sysfs_req_common_body_result(
+        os,
+        param_rpa,
+        param_size,
+        os_to_dev,
+        map_memory,
+        map_virtual,
+        unmap_virtual,
+        unmap_memory,
+        unlink_local,
+        wmb,
+        mcctrl_sysfs_req_unlink_error,
+        mcctrl_sysfs_req_unlink_busy,
+    )
+}
+
 type IkcPacketHandler =
     Option<unsafe extern "C" fn(*mut c_void, *mut c_void, *mut c_void) -> c_int>;
 type IkcConnectHandler = Option<unsafe extern "C" fn(*mut c_void) -> c_int>;
@@ -4690,7 +8607,7 @@ struct McctrlIhkIkcPacketHeader {
 
 #[repr(C)]
 #[derive(Clone, Copy)]
-struct McctrlSyscallRequest {
+pub struct McctrlSyscallRequest {
     rtid: c_int,
     ttid: c_int,
     valid: c_ulong,
@@ -4855,7 +8772,6 @@ unsafe extern "C" {
     #[link_name = "panic"]
     fn kernel_panic(fmt: *const c_char, ...) -> !;
     fn snprintf(buf: *mut c_char, size: usize, fmt: *const c_char, ...) -> c_int;
-    fn memset(dest: *mut c_void, value: c_int, size: usize) -> *mut c_void;
     fn sysfsm_createf(
         os: *mut c_void,
         ops: *mut SysfsmOps,
@@ -5007,8 +8923,16 @@ unsafe fn mcctrl_ikc_packet_eventfd_type(packet: *mut McctrlIkcScdPacket) -> c_i
     unsafe { (*packet).body.eventfd_type }
 }
 
+unsafe fn mcctrl_zero_bytes(ptr: *mut u8, len: usize) {
+    let mut offset = 0;
+    while offset < len {
+        unsafe { write_volatile(ptr.add(offset), 0) };
+        offset += 1;
+    }
+}
+
 unsafe fn zero_mcctrl_ikc_packet(packet: *mut McctrlIkcScdPacket) {
-    unsafe { core::ptr::write_bytes(packet.cast::<u8>(), 0, size_of::<McctrlIkcScdPacket>()) };
+    unsafe { mcctrl_zero_bytes(packet.cast::<u8>(), size_of::<McctrlIkcScdPacket>()) };
 }
 
 unsafe fn mcctrl_ikc_desc_put(desc: *mut c_void, usrdata: *mut c_void, free_addrs: c_int) {
@@ -5862,9 +9786,8 @@ pub unsafe extern "C" fn setup_local_snooping_files(os: *mut c_void) {
 
     let cpu_online = unsafe { mcctrl_sysfs_cpu_online_bridge(udp) };
     unsafe {
-        memset(
-            cpu_online.cast::<c_void>(),
-            0,
+        mcctrl_zero_bytes(
+            cpu_online.cast::<u8>(),
             mcctrl_sysfs_cpu_online_size_bridge(),
         );
         mcctrl_fill_sequential_bitset(
@@ -6489,7 +10412,10 @@ unsafe fn setup_node_files(udp: *mut c_void) -> c_int {
 
     let numa_online = unsafe { mcctrl_sysfs_numa_online_bridge(udp) };
     unsafe {
-        memset(numa_online, 0, mcctrl_sysfs_numa_online_size_bridge());
+        mcctrl_zero_bytes(
+            numa_online.cast::<u8>(),
+            mcctrl_sysfs_numa_online_size_bridge(),
+        );
     }
     let mut node_id = 0;
     let count = unsafe { mcctrl_usrdata_numa_count_bridge(udp) };
@@ -7135,6 +11061,885 @@ type McctrlRbLinkFn = Option<
 type McctrlRbInsertColorFn =
     Option<unsafe extern "C" fn(node: *mut McctrlRbNode, root: *mut McctrlRbRoot)>;
 type McctrlCacheFreeFn = Option<unsafe extern "C" fn(ptr: *mut c_void)>;
+type McctrlFutexWaitFn = Option<
+    unsafe extern "C" fn(
+        uaddr: *mut u32,
+        fshared: c_int,
+        val: u32,
+        timeout: u64,
+        bitset: u32,
+        clockrt: c_int,
+        uti_info: *mut c_void,
+    ) -> c_int,
+>;
+type McctrlFutexWakeFn = Option<
+    unsafe extern "C" fn(
+        uaddr: *mut u32,
+        fshared: c_int,
+        nr_wake: c_int,
+        bitset: u32,
+        uti_info: *mut c_void,
+    ) -> c_int,
+>;
+type McctrlFutexRequeueFn = Option<
+    unsafe extern "C" fn(
+        uaddr1: *mut u32,
+        fshared: c_int,
+        uaddr2: *mut u32,
+        nr_wake: c_int,
+        nr_requeue: c_int,
+        cmpval: *mut u32,
+        requeue_pi: c_int,
+        uti_info: *mut c_void,
+    ) -> c_int,
+>;
+type McctrlFutexWakeOpFn = Option<
+    unsafe extern "C" fn(
+        uaddr1: *mut u32,
+        fshared: c_int,
+        uaddr2: *mut u32,
+        nr_wake: c_int,
+        nr_wake2: c_int,
+        op: c_int,
+        uti_info: *mut c_void,
+    ) -> c_int,
+>;
+type McctrlFutexWarnFn = Option<unsafe extern "C" fn(cmd: c_int)>;
+type McctrlFutexInfoPtrFn = Option<unsafe extern "C" fn(uti_info: *mut c_void) -> *mut c_void>;
+type McctrlFutexCurrentCpuFn = Option<unsafe extern "C" fn() -> c_int>;
+type McctrlFutexPrepareWaitQFn =
+    Option<unsafe extern "C" fn(q: *mut c_void, bitset: u32, resp: *mut c_void, linux_cpu: c_int)>;
+type McctrlFutexWaitSetupFn = Option<
+    unsafe extern "C" fn(
+        uaddr: *mut u32,
+        val: u32,
+        fshared: c_int,
+        q: *mut c_void,
+        hb: *mut *mut c_void,
+        uti_info: *mut c_void,
+    ) -> c_int,
+>;
+type McctrlFutexWaitQueueFn = Option<
+    unsafe extern "C" fn(
+        hb: *mut c_void,
+        q: *mut c_void,
+        timeout: u64,
+        uti_info: *mut c_void,
+    ) -> i64,
+>;
+type McctrlFutexUnqueueFn = Option<unsafe extern "C" fn(q: *mut c_void) -> c_int>;
+type McctrlFutexPutQKeyFn = Option<unsafe extern "C" fn(fshared: c_int, q: *mut c_void)>;
+type McctrlFutexWaitLogFn = Option<unsafe extern "C" fn(stage: c_int, uti_info: *mut c_void)>;
+type McctrlFutexGetKeyFn = Option<
+    unsafe extern "C" fn(uaddr: c_ulong, fshared: c_int, key_addr: c_ulong, ctx: c_ulong) -> c_int,
+>;
+type McctrlFutexHashKeyFn =
+    Option<unsafe extern "C" fn(key_addr: c_ulong, queue_addr: c_ulong) -> c_ulong>;
+type McctrlFutexWakeLockFn = Option<unsafe extern "C" fn(lock_addr: c_ulong) -> c_ulong>;
+type McctrlFutexWakeUnlockFn = Option<unsafe extern "C" fn(lock_addr: c_ulong, flags: c_ulong)>;
+type McctrlFutexHbLockFn = Option<unsafe extern "C" fn(lock_addr: c_ulong)>;
+type McctrlFutexHbUnlockFn = Option<unsafe extern "C" fn(lock_addr: c_ulong)>;
+type McctrlFutexPutKeyFn = Option<unsafe extern "C" fn(fshared: c_int, key_addr: c_ulong)>;
+type McctrlFutexWakeEntryFn = Option<unsafe extern "C" fn(q_addr: c_ulong, ctx_addr: c_ulong)>;
+type McctrlFutexAtomicOpFn = Option<unsafe extern "C" fn(op: c_int, uaddr: c_ulong) -> c_int>;
+type McctrlFutexGetValueFn =
+    Option<unsafe extern "C" fn(value_addr: c_ulong, uaddr: c_ulong) -> c_int>;
+type McctrlFutexDropKeyRefsFn = Option<unsafe extern "C" fn(key_addr: c_ulong)>;
+type McctrlFutexRequeueEntryFn = Option<unsafe extern "C" fn(q_addr: c_ulong, ctx_addr: c_ulong)>;
+type McctrlSyscallPtdAllocFn = Option<unsafe extern "C" fn(size: usize) -> *mut c_void>;
+type McctrlSyscallPtdFreeFn = Option<unsafe extern "C" fn(ptr: *mut c_void)>;
+type McctrlSyscallPtdLockFn = Option<unsafe extern "C" fn(lock: *mut c_void) -> c_ulong>;
+type McctrlSyscallPtdUnlockFn = Option<unsafe extern "C" fn(lock: *mut c_void, flags: c_ulong)>;
+type McctrlSyscallPtdLogFn =
+    Option<unsafe extern "C" fn(stage: c_int, value: c_int, ptd: *mut c_void)>;
+type McctrlSyscallPidfdAllocFn = Option<unsafe extern "C" fn(size: usize) -> *mut c_void>;
+type McctrlSyscallPidfdFreeFn = Option<unsafe extern "C" fn(ptr: *mut c_void)>;
+type McctrlSyscallPidfdLockInitFn = Option<unsafe extern "C" fn(lock: *mut c_void)>;
+type McctrlSyscallPidfdLockFn = Option<unsafe extern "C" fn(lock: *mut c_void) -> c_ulong>;
+type McctrlSyscallPidfdUnlockFn = Option<unsafe extern "C" fn(lock: *mut c_void, flags: c_ulong)>;
+type McctrlSyscallPidfdLogFn =
+    Option<unsafe extern "C" fn(stage: c_int, filp: *mut c_void, pid: c_int, fd: c_int)>;
+type McctrlSyscallPagerLockFn = Option<unsafe extern "C" fn(lock: *mut c_void) -> c_ulong>;
+type McctrlSyscallPagerUnlockFn = Option<unsafe extern "C" fn(lock: *mut c_void, flags: c_ulong)>;
+type McctrlSyscallPagerPredicateFn = Option<unsafe extern "C" fn() -> c_int>;
+type McctrlSyscallPagerSemDownFn = Option<unsafe extern "C" fn(sem: *mut c_void) -> c_int>;
+type McctrlSyscallPagerSemUpFn = Option<unsafe extern "C" fn(sem: *mut c_void)>;
+type McctrlSyscallPagerPtrFn = Option<unsafe extern "C" fn(ptr: *mut c_void)>;
+type McctrlSyscallPagerLogFn =
+    Option<unsafe extern "C" fn(stage: c_int, pager: *mut c_void, value: c_int)>;
+
+#[repr(C)]
+pub struct McctrlSyscallPtdOffsets {
+    ppd_thread_hash: usize,
+    ppd_thread_lock: usize,
+    ptd_ppd: usize,
+    ptd_hash: usize,
+    ptd_task: usize,
+    ptd_data: usize,
+    ptd_tid: usize,
+    ptd_refcount: usize,
+    list_head_size: usize,
+    rwlock_size: usize,
+}
+
+#[repr(C)]
+pub struct McctrlSyscallPidfdOffsets {
+    entry_filp: usize,
+    entry_os: usize,
+    entry_group_leader: usize,
+    entry_pid: usize,
+    entry_fd: usize,
+    entry_hash: usize,
+    entry_tofu_dev_path: usize,
+    entry_pde_data: usize,
+    list_head_size: usize,
+    tofu_dev_path_size: usize,
+}
+
+#[repr(C)]
+pub struct McctrlSyscallPagerOffsets {
+    ppd_devobj_pager_list: usize,
+    ppd_devobj_pager_lock: usize,
+    pager_list: usize,
+    pager_rofile: usize,
+    pager_rwfile: usize,
+}
+
+unsafe fn mcctrl_syscall_ptd_hash(task: *mut c_void, mask: c_int) -> usize {
+    ((task as usize) >> 4) & (mask as usize)
+}
+
+unsafe fn mcctrl_syscall_ptd_link(
+    ptd: *mut c_void,
+    offsets: &McctrlSyscallPtdOffsets,
+) -> *mut ListHead {
+    ptd.cast::<u8>().add(offsets.ptd_hash).cast::<ListHead>()
+}
+
+unsafe fn mcctrl_syscall_ptd_field<T>(ptd: *mut c_void, offset: usize) -> *mut T {
+    ptd.cast::<u8>().add(offset).cast::<T>()
+}
+
+unsafe fn mcctrl_syscall_ppd_hash_head(
+    ppd: *mut c_void,
+    hash: usize,
+    offsets: &McctrlSyscallPtdOffsets,
+) -> *mut ListHead {
+    ppd.cast::<u8>()
+        .add(offsets.ppd_thread_hash)
+        .add(hash.wrapping_mul(offsets.list_head_size))
+        .cast::<ListHead>()
+}
+
+unsafe fn mcctrl_syscall_ppd_hash_lock(
+    ppd: *mut c_void,
+    hash: usize,
+    offsets: &McctrlSyscallPtdOffsets,
+) -> *mut c_void {
+    ppd.cast::<u8>()
+        .add(offsets.ppd_thread_lock)
+        .add(hash.wrapping_mul(offsets.rwlock_size))
+        .cast::<c_void>()
+}
+
+unsafe fn mcctrl_syscall_find_ptd_by_task(
+    head: *mut ListHead,
+    task: *mut c_void,
+    offsets: &McctrlSyscallPtdOffsets,
+) -> *mut c_void {
+    if head.is_null() {
+        return null_mut();
+    }
+
+    let mut link = read_volatile(&(*head).next);
+    while link != head {
+        let ptd = link.cast::<u8>().sub(offsets.ptd_hash).cast::<c_void>();
+        let ptd_task = *mcctrl_syscall_ptd_field::<*mut c_void>(ptd, offsets.ptd_task);
+        if ptd_task == task {
+            return ptd;
+        }
+        link = read_volatile(&(*link).next);
+    }
+
+    null_mut()
+}
+
+unsafe fn mcctrl_syscall_log_ptd(
+    log: McctrlSyscallPtdLogFn,
+    stage: c_int,
+    value: c_int,
+    ptd: *mut c_void,
+) {
+    if let Some(log) = log {
+        log(stage, value, ptd);
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn mcctrl_syscall_ptd_hash_result(task: *mut c_void, mask: c_int) -> c_int {
+    unsafe { mcctrl_syscall_ptd_hash(task, mask) as c_int }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_syscall_put_ptd_unsafe_body_result(
+    ptd: *mut c_void,
+    offsets: *const McctrlSyscallPtdOffsets,
+    free_fn: McctrlSyscallPtdFreeFn,
+    log: McctrlSyscallPtdLogFn,
+) -> c_int {
+    let Some(free_fn) = free_fn else {
+        return -EINVAL;
+    };
+    if ptd.is_null() || offsets.is_null() {
+        return -EINVAL;
+    }
+    let offsets = &*offsets;
+    let refcount = atomic_i32_at(ptd as usize, offsets.ptd_refcount);
+    let old = refcount.fetch_sub(1, Ordering::SeqCst);
+    let new = old.wrapping_sub(1);
+
+    if new != 0 {
+        if new < 0 {
+            mcctrl_syscall_log_ptd(log, 0, new, ptd);
+        }
+        return 0;
+    }
+
+    list_del_link(
+        read_volatile(&(*mcctrl_syscall_ptd_link(ptd, offsets)).prev),
+        read_volatile(&(*mcctrl_syscall_ptd_link(ptd, offsets)).next),
+    );
+    free_fn(ptd);
+    1
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_syscall_put_ptd_body_result(
+    ptd: *mut c_void,
+    mask: c_int,
+    offsets: *const McctrlSyscallPtdOffsets,
+    free_fn: McctrlSyscallPtdFreeFn,
+    write_lock: McctrlSyscallPtdLockFn,
+    write_unlock: McctrlSyscallPtdUnlockFn,
+    log: McctrlSyscallPtdLogFn,
+) -> c_int {
+    let (Some(write_lock), Some(write_unlock)) = (write_lock, write_unlock) else {
+        return -EINVAL;
+    };
+    if ptd.is_null() || offsets.is_null() {
+        return -EINVAL;
+    }
+
+    let offsets = &*offsets;
+    let ppd = *mcctrl_syscall_ptd_field::<*mut c_void>(ptd, offsets.ptd_ppd);
+    let task = *mcctrl_syscall_ptd_field::<*mut c_void>(ptd, offsets.ptd_task);
+    if ppd.is_null() {
+        return -EINVAL;
+    }
+
+    let hash = mcctrl_syscall_ptd_hash(task, mask);
+    let head = mcctrl_syscall_ppd_hash_head(ppd, hash, offsets);
+    let lock = mcctrl_syscall_ppd_hash_lock(ppd, hash, offsets);
+    let flags = write_lock(lock);
+    let found = mcctrl_syscall_find_ptd_by_task(head, task, offsets);
+    let ret = if found.is_null() {
+        mcctrl_syscall_log_ptd(log, 1, 0, ptd);
+        -ENOENT
+    } else {
+        mcctrl_syscall_put_ptd_unsafe_body_result(found, offsets, free_fn, log)
+    };
+    write_unlock(lock, flags);
+    ret
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_syscall_add_ptd_body_result(
+    ppd: *mut c_void,
+    data: *mut c_void,
+    current_task: *mut c_void,
+    tid: c_int,
+    ptd_size: usize,
+    mask: c_int,
+    offsets: *const McctrlSyscallPtdOffsets,
+    alloc_fn: McctrlSyscallPtdAllocFn,
+    free_fn: McctrlSyscallPtdFreeFn,
+    write_lock: McctrlSyscallPtdLockFn,
+    write_unlock: McctrlSyscallPtdUnlockFn,
+    log: McctrlSyscallPtdLogFn,
+) -> c_int {
+    let (Some(alloc_fn), Some(free_fn), Some(write_lock), Some(write_unlock)) =
+        (alloc_fn, free_fn, write_lock, write_unlock)
+    else {
+        return -EINVAL;
+    };
+    if ppd.is_null() || offsets.is_null() || ptd_size == 0 {
+        return -EINVAL;
+    }
+
+    let offsets = &*offsets;
+    let ptd_alloc = alloc_fn(ptd_size);
+    if ptd_alloc.is_null() {
+        mcctrl_syscall_log_ptd(log, 2, tid, null_mut());
+        return -ENOMEM;
+    }
+    mcctrl_zero_bytes(ptd_alloc.cast::<u8>(), ptd_size);
+
+    let hash = mcctrl_syscall_ptd_hash(current_task, mask);
+    let head = mcctrl_syscall_ppd_hash_head(ppd, hash, offsets);
+    let lock = mcctrl_syscall_ppd_hash_lock(ppd, hash, offsets);
+    let flags = write_lock(lock);
+    let existing = mcctrl_syscall_find_ptd_by_task(head, current_task, offsets);
+    let ret = if !existing.is_null() {
+        mcctrl_syscall_log_ptd(log, 3, tid, existing);
+        free_fn(ptd_alloc);
+        -EBUSY
+    } else {
+        *mcctrl_syscall_ptd_field::<*mut c_void>(ptd_alloc, offsets.ptd_ppd) = ppd;
+        *mcctrl_syscall_ptd_field::<*mut c_void>(ptd_alloc, offsets.ptd_task) = current_task;
+        *mcctrl_syscall_ptd_field::<*mut c_void>(ptd_alloc, offsets.ptd_data) = data;
+        *mcctrl_syscall_ptd_field::<c_int>(ptd_alloc, offsets.ptd_tid) = tid;
+        atomic_i32_at(ptd_alloc as usize, offsets.ptd_refcount).store(1, Ordering::SeqCst);
+        list_add_tail_link(mcctrl_syscall_ptd_link(ptd_alloc, offsets), head);
+        0
+    };
+    write_unlock(lock, flags);
+    ret
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_syscall_get_ptd_body_result(
+    ppd: *mut c_void,
+    task: *mut c_void,
+    mask: c_int,
+    offsets: *const McctrlSyscallPtdOffsets,
+    read_lock: McctrlSyscallPtdLockFn,
+    read_unlock: McctrlSyscallPtdUnlockFn,
+    log: McctrlSyscallPtdLogFn,
+) -> *mut c_void {
+    let (Some(read_lock), Some(read_unlock)) = (read_lock, read_unlock) else {
+        return null_mut();
+    };
+    if ppd.is_null() || offsets.is_null() {
+        return null_mut();
+    }
+
+    let offsets = &*offsets;
+    let hash = mcctrl_syscall_ptd_hash(task, mask);
+    let head = mcctrl_syscall_ppd_hash_head(ppd, hash, offsets);
+    let lock = mcctrl_syscall_ppd_hash_lock(ppd, hash, offsets);
+    let flags = read_lock(lock);
+    let ptd = mcctrl_syscall_find_ptd_by_task(head, task, offsets);
+    let ret = if ptd.is_null() {
+        null_mut()
+    } else {
+        let refcount = atomic_i32_at(ptd as usize, offsets.ptd_refcount);
+        let current = refcount.load(Ordering::SeqCst);
+        if current <= 0 {
+            mcctrl_syscall_log_ptd(log, 4, current, ptd);
+            null_mut()
+        } else {
+            refcount.fetch_add(1, Ordering::SeqCst);
+            ptd
+        }
+    };
+    read_unlock(lock, flags);
+    ret
+}
+
+unsafe fn mcctrl_syscall_pidfd_hash(filp: *mut c_void, mask: c_ulong) -> usize {
+    mcctrl_ptr_hash_result(filp as c_ulong, mask) as usize
+}
+
+unsafe fn mcctrl_syscall_pidfd_head(
+    table: *mut c_void,
+    hash: usize,
+    offsets: &McctrlSyscallPidfdOffsets,
+) -> *mut ListHead {
+    table
+        .cast::<u8>()
+        .add(hash.wrapping_mul(offsets.list_head_size))
+        .cast::<ListHead>()
+}
+
+unsafe fn mcctrl_syscall_pidfd_link(
+    entry: *mut c_void,
+    offsets: &McctrlSyscallPidfdOffsets,
+) -> *mut ListHead {
+    entry
+        .cast::<u8>()
+        .add(offsets.entry_hash)
+        .cast::<ListHead>()
+}
+
+unsafe fn mcctrl_syscall_pidfd_field<T>(entry: *mut c_void, offset: usize) -> *mut T {
+    entry.cast::<u8>().add(offset).cast::<T>()
+}
+
+unsafe fn mcctrl_syscall_pidfd_find_filp(
+    head: *mut ListHead,
+    filp: *mut c_void,
+    offsets: &McctrlSyscallPidfdOffsets,
+) -> *mut c_void {
+    if head.is_null() {
+        return null_mut();
+    }
+
+    let mut link = read_volatile(&(*head).next);
+    while link != head {
+        let entry = link.cast::<u8>().sub(offsets.entry_hash).cast::<c_void>();
+        let entry_filp = *mcctrl_syscall_pidfd_field::<*mut c_void>(entry, offsets.entry_filp);
+        if mcctrl_ptr_eq_result(entry_filp as c_ulong, filp as c_ulong) != 0 {
+            return entry;
+        }
+        link = read_volatile(&(*link).next);
+    }
+
+    null_mut()
+}
+
+unsafe fn mcctrl_syscall_pidfd_find_lookup(
+    head: *mut ListHead,
+    filp: *mut c_void,
+    group_leader: *mut c_void,
+    offsets: &McctrlSyscallPidfdOffsets,
+) -> *mut c_void {
+    if head.is_null() {
+        return null_mut();
+    }
+
+    let mut link = read_volatile(&(*head).next);
+    while link != head {
+        let entry = link.cast::<u8>().sub(offsets.entry_hash).cast::<c_void>();
+        let entry_filp = *mcctrl_syscall_pidfd_field::<*mut c_void>(entry, offsets.entry_filp);
+        let entry_group =
+            *mcctrl_syscall_pidfd_field::<*mut c_void>(entry, offsets.entry_group_leader);
+        if mcctrl_file_to_pidfd_lookup_match_result(
+            entry_filp as c_ulong,
+            filp as c_ulong,
+            entry_group as c_ulong,
+            group_leader as c_ulong,
+        ) != 0
+        {
+            return entry;
+        }
+        link = read_volatile(&(*link).next);
+    }
+
+    null_mut()
+}
+
+unsafe fn mcctrl_syscall_pidfd_find_remove(
+    head: *mut ListHead,
+    filp: *mut c_void,
+    os: c_ulong,
+    group_leader: *mut c_void,
+    fd: c_int,
+    offsets: &McctrlSyscallPidfdOffsets,
+) -> *mut c_void {
+    if head.is_null() {
+        return null_mut();
+    }
+
+    let mut link = read_volatile(&(*head).next);
+    while link != head {
+        let entry = link.cast::<u8>().sub(offsets.entry_hash).cast::<c_void>();
+        let entry_filp = *mcctrl_syscall_pidfd_field::<*mut c_void>(entry, offsets.entry_filp);
+        let entry_os = *mcctrl_syscall_pidfd_field::<c_ulong>(entry, offsets.entry_os);
+        let entry_group =
+            *mcctrl_syscall_pidfd_field::<*mut c_void>(entry, offsets.entry_group_leader);
+        let entry_fd = *mcctrl_syscall_pidfd_field::<c_int>(entry, offsets.entry_fd);
+        if mcctrl_file_to_pidfd_remove_match_result(
+            entry_filp as c_ulong,
+            filp as c_ulong,
+            entry_os,
+            os,
+            entry_group as c_ulong,
+            group_leader as c_ulong,
+            entry_fd,
+            fd,
+        ) != 0
+        {
+            return entry;
+        }
+        link = read_volatile(&(*link).next);
+    }
+
+    null_mut()
+}
+
+unsafe fn mcctrl_syscall_pidfd_log(
+    log: McctrlSyscallPidfdLogFn,
+    stage: c_int,
+    filp: *mut c_void,
+    pid: c_int,
+    fd: c_int,
+) {
+    if let Some(log) = log {
+        log(stage, filp, pid, fd);
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_syscall_pidfd_hash_init_body_result(
+    table: *mut c_void,
+    hash_size: usize,
+    list_head_size: usize,
+    lock: *mut c_void,
+    lock_init: McctrlSyscallPidfdLockInitFn,
+) -> c_int {
+    let Some(lock_init) = lock_init else {
+        return -EINVAL;
+    };
+    if table.is_null() || lock.is_null() || hash_size == 0 || list_head_size == 0 {
+        return -EINVAL;
+    }
+
+    lock_init(lock);
+    for index in 0..hash_size {
+        let head = table
+            .cast::<u8>()
+            .add(index.wrapping_mul(list_head_size))
+            .cast::<ListHead>();
+        list_head_init(head);
+    }
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_syscall_pidfd_hash_insert_body_result(
+    table: *mut c_void,
+    lock: *mut c_void,
+    filp: *mut c_void,
+    os: c_ulong,
+    pid: c_int,
+    group_leader: *mut c_void,
+    fd: c_int,
+    path: *const c_char,
+    pde_data: *mut c_void,
+    entry_size: usize,
+    mask: c_ulong,
+    offsets: *const McctrlSyscallPidfdOffsets,
+    alloc_fn: McctrlSyscallPidfdAllocFn,
+    free_fn: McctrlSyscallPidfdFreeFn,
+    lock_fn: McctrlSyscallPidfdLockFn,
+    unlock_fn: McctrlSyscallPidfdUnlockFn,
+    log: McctrlSyscallPidfdLogFn,
+) -> c_int {
+    let (Some(alloc_fn), Some(free_fn), Some(lock_fn), Some(unlock_fn)) =
+        (alloc_fn, free_fn, lock_fn, unlock_fn)
+    else {
+        return -EINVAL;
+    };
+    if table.is_null() || lock.is_null() || offsets.is_null() || entry_size == 0 {
+        return -EINVAL;
+    }
+
+    let offsets = &*offsets;
+    let entry = alloc_fn(entry_size);
+    if entry.is_null() {
+        return -ENOMEM;
+    }
+    mcctrl_zero_bytes(entry.cast::<u8>(), entry_size);
+    *mcctrl_syscall_pidfd_field::<*mut c_void>(entry, offsets.entry_filp) = filp;
+    *mcctrl_syscall_pidfd_field::<c_ulong>(entry, offsets.entry_os) = os;
+    *mcctrl_syscall_pidfd_field::<*mut c_void>(entry, offsets.entry_group_leader) = group_leader;
+    *mcctrl_syscall_pidfd_field::<c_int>(entry, offsets.entry_pid) = pid;
+    *mcctrl_syscall_pidfd_field::<c_int>(entry, offsets.entry_fd) = fd;
+    *mcctrl_syscall_pidfd_field::<*mut c_void>(entry, offsets.entry_pde_data) = pde_data;
+    mcctrl_tofu_dev_name_copy_result(
+        mcctrl_syscall_pidfd_field::<c_char>(entry, offsets.entry_tofu_dev_path),
+        offsets.tofu_dev_path_size,
+        path,
+    );
+
+    let hash = mcctrl_syscall_pidfd_hash(filp, mask);
+    let head = mcctrl_syscall_pidfd_head(table, hash, offsets);
+    let flags = lock_fn(lock);
+    let existing = mcctrl_syscall_pidfd_find_filp(head, filp, offsets);
+    let ret = if existing.is_null() {
+        list_add_tail_link(mcctrl_syscall_pidfd_link(entry, offsets), head);
+        mcctrl_syscall_pidfd_log(log, 1, filp, pid, fd);
+        0
+    } else {
+        mcctrl_syscall_pidfd_log(log, 0, filp, pid, fd);
+        free_fn(entry);
+        -EBUSY
+    };
+    unlock_fn(lock, flags);
+    ret
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_syscall_pidfd_hash_lookup_body_result(
+    table: *mut c_void,
+    lock: *mut c_void,
+    filp: *mut c_void,
+    group_leader: *mut c_void,
+    mask: c_ulong,
+    offsets: *const McctrlSyscallPidfdOffsets,
+    lock_fn: McctrlSyscallPidfdLockFn,
+    unlock_fn: McctrlSyscallPidfdUnlockFn,
+    log: McctrlSyscallPidfdLogFn,
+) -> *mut c_void {
+    let (Some(lock_fn), Some(unlock_fn)) = (lock_fn, unlock_fn) else {
+        return null_mut();
+    };
+    if table.is_null() || lock.is_null() || offsets.is_null() {
+        return null_mut();
+    }
+
+    let offsets = &*offsets;
+    let hash = mcctrl_syscall_pidfd_hash(filp, mask);
+    let head = mcctrl_syscall_pidfd_head(table, hash, offsets);
+    let flags = lock_fn(lock);
+    let entry = mcctrl_syscall_pidfd_find_lookup(head, filp, group_leader, offsets);
+    if !entry.is_null() {
+        let pid = *mcctrl_syscall_pidfd_field::<c_int>(entry, offsets.entry_pid);
+        let fd = *mcctrl_syscall_pidfd_field::<c_int>(entry, offsets.entry_fd);
+        mcctrl_syscall_pidfd_log(log, 2, filp, pid, fd);
+    }
+    unlock_fn(lock, flags);
+    entry
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_syscall_pidfd_hash_remove_body_result(
+    table: *mut c_void,
+    lock: *mut c_void,
+    filp: *mut c_void,
+    os: c_ulong,
+    group_leader: *mut c_void,
+    fd: c_int,
+    mask: c_ulong,
+    offsets: *const McctrlSyscallPidfdOffsets,
+    free_fn: McctrlSyscallPidfdFreeFn,
+    lock_fn: McctrlSyscallPidfdLockFn,
+    unlock_fn: McctrlSyscallPidfdUnlockFn,
+    log: McctrlSyscallPidfdLogFn,
+) -> c_int {
+    let (Some(free_fn), Some(lock_fn), Some(unlock_fn)) = (free_fn, lock_fn, unlock_fn) else {
+        return -EINVAL;
+    };
+    if table.is_null() || lock.is_null() || offsets.is_null() {
+        return -EINVAL;
+    }
+
+    let offsets = &*offsets;
+    let hash = mcctrl_syscall_pidfd_hash(filp, mask);
+    let head = mcctrl_syscall_pidfd_head(table, hash, offsets);
+    let flags = lock_fn(lock);
+    let entry = mcctrl_syscall_pidfd_find_remove(head, filp, os, group_leader, fd, offsets);
+    let ret = if entry.is_null() {
+        mcctrl_syscall_pidfd_log(log, 4, filp, 0, fd);
+        -ENOENT
+    } else {
+        let pid = *mcctrl_syscall_pidfd_field::<c_int>(entry, offsets.entry_pid);
+        list_del_link(
+            read_volatile(&(*mcctrl_syscall_pidfd_link(entry, offsets)).prev),
+            read_volatile(&(*mcctrl_syscall_pidfd_link(entry, offsets)).next),
+        );
+        mcctrl_syscall_pidfd_log(log, 3, filp, pid, fd);
+        free_fn(entry);
+        0
+    };
+    unlock_fn(lock, flags);
+    ret
+}
+
+unsafe fn mcctrl_syscall_pager_ppd_head(
+    ppd: *mut c_void,
+    offsets: &McctrlSyscallPagerOffsets,
+) -> *mut ListHead {
+    ppd.cast::<u8>()
+        .add(offsets.ppd_devobj_pager_list)
+        .cast::<ListHead>()
+}
+
+unsafe fn mcctrl_syscall_pager_ppd_lock(
+    ppd: *mut c_void,
+    offsets: &McctrlSyscallPagerOffsets,
+) -> *mut c_void {
+    ppd.cast::<u8>()
+        .add(offsets.ppd_devobj_pager_lock)
+        .cast::<c_void>()
+}
+
+unsafe fn mcctrl_syscall_pager_field<T>(pager: *mut c_void, offset: usize) -> *mut T {
+    pager.cast::<u8>().add(offset).cast::<T>()
+}
+
+unsafe fn mcctrl_syscall_pager_log(
+    log: McctrlSyscallPagerLogFn,
+    stage: c_int,
+    pager: *mut c_void,
+    value: c_int,
+) {
+    if let Some(log) = log {
+        log(stage, pager, value);
+    }
+}
+
+unsafe fn mcctrl_syscall_pager_drain(
+    head: *mut ListHead,
+    offsets: &McctrlSyscallPagerOffsets,
+    release_files: bool,
+    fput_fn: McctrlSyscallPagerPtrFn,
+    free_fn: unsafe extern "C" fn(*mut c_void),
+    log: McctrlSyscallPagerLogFn,
+    stage: c_int,
+) -> c_int {
+    if head.is_null() {
+        return 0;
+    }
+
+    let mut count = 0;
+    while read_volatile(&(*head).next) != head {
+        let link = read_volatile(&(*head).next);
+        let pager = link.cast::<u8>().sub(offsets.pager_list).cast::<c_void>();
+        list_del_link(read_volatile(&(*link).prev), read_volatile(&(*link).next));
+        if release_files {
+            if let Some(fput_fn) = fput_fn {
+                let rofile =
+                    *mcctrl_syscall_pager_field::<*mut c_void>(pager, offsets.pager_rofile);
+                let rwfile =
+                    *mcctrl_syscall_pager_field::<*mut c_void>(pager, offsets.pager_rwfile);
+                if !rofile.is_null() {
+                    fput_fn(rofile);
+                }
+                if !rwfile.is_null() {
+                    fput_fn(rwfile);
+                }
+            }
+        }
+        mcctrl_syscall_pager_log(log, stage, pager, count);
+        free_fn(pager);
+        count += 1;
+    }
+    count
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_syscall_pager_add_process_body_result(
+    nr_processes: *mut c_int,
+    lock: *mut c_void,
+    lock_fn: McctrlSyscallPagerLockFn,
+    unlock_fn: McctrlSyscallPagerUnlockFn,
+) -> c_int {
+    let (Some(lock_fn), Some(unlock_fn)) = (lock_fn, unlock_fn) else {
+        return -EINVAL;
+    };
+    if nr_processes.is_null() || lock.is_null() {
+        return -EINVAL;
+    }
+
+    let flags = lock_fn(lock);
+    *nr_processes = (*nr_processes).wrapping_add(1);
+    let ret = *nr_processes;
+    unlock_fn(lock, flags);
+    ret
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_syscall_pager_remove_process_body_result(
+    ppd: *mut c_void,
+    nr_processes: *mut c_int,
+    pager_lock: *mut c_void,
+    offsets: *const McctrlSyscallPagerOffsets,
+    in_atomic_fn: McctrlSyscallPagerPredicateFn,
+    in_interrupt_fn: McctrlSyscallPagerPredicateFn,
+    down_fn: McctrlSyscallPagerSemDownFn,
+    up_fn: McctrlSyscallPagerSemUpFn,
+    free_fn: McctrlSyscallPagerPtrFn,
+    lock_fn: McctrlSyscallPagerLockFn,
+    unlock_fn: McctrlSyscallPagerUnlockFn,
+    log: McctrlSyscallPagerLogFn,
+) -> c_int {
+    let (
+        Some(in_atomic_fn),
+        Some(in_interrupt_fn),
+        Some(down_fn),
+        Some(up_fn),
+        Some(free_fn),
+        Some(lock_fn),
+        Some(unlock_fn),
+    ) = (
+        in_atomic_fn,
+        in_interrupt_fn,
+        down_fn,
+        up_fn,
+        free_fn,
+        lock_fn,
+        unlock_fn,
+    )
+    else {
+        return -EINVAL;
+    };
+    if ppd.is_null() || nr_processes.is_null() || pager_lock.is_null() || offsets.is_null() {
+        return -EINVAL;
+    }
+    let offsets = &*offsets;
+
+    if in_atomic_fn() != 0 || in_interrupt_fn() != 0 {
+        mcctrl_syscall_pager_log(log, 0, null_mut(), 0);
+        return -EINVAL;
+    }
+
+    let sem = mcctrl_syscall_pager_ppd_lock(ppd, offsets);
+    let error = down_fn(sem);
+    if error != 0 {
+        return error;
+    }
+    let freed = mcctrl_syscall_pager_drain(
+        mcctrl_syscall_pager_ppd_head(ppd, offsets),
+        offsets,
+        false,
+        None,
+        free_fn,
+        log,
+        1,
+    );
+    up_fn(sem);
+
+    let flags = lock_fn(pager_lock);
+    *nr_processes = (*nr_processes).wrapping_sub(1);
+    let remaining = *nr_processes;
+    unlock_fn(pager_lock, flags);
+    mcctrl_syscall_pager_log(log, 3, null_mut(), freed);
+    remaining
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcctrl_syscall_pager_cleanup_body_result(
+    pager_list: *mut c_void,
+    pager_lock: *mut c_void,
+    offsets: *const McctrlSyscallPagerOffsets,
+    fput_fn: McctrlSyscallPagerPtrFn,
+    free_fn: McctrlSyscallPagerPtrFn,
+    lock_fn: McctrlSyscallPagerLockFn,
+    unlock_fn: McctrlSyscallPagerUnlockFn,
+    log: McctrlSyscallPagerLogFn,
+) -> c_int {
+    let (Some(free_fn), Some(lock_fn), Some(unlock_fn)) = (free_fn, lock_fn, unlock_fn) else {
+        return -EINVAL;
+    };
+    if pager_list.is_null() || pager_lock.is_null() || offsets.is_null() {
+        return -EINVAL;
+    }
+
+    let offsets = &*offsets;
+    let flags = lock_fn(pager_lock);
+    let count = mcctrl_syscall_pager_drain(
+        pager_list.cast::<ListHead>(),
+        offsets,
+        true,
+        fput_fn,
+        free_fn,
+        log,
+        2,
+    );
+    unlock_fn(pager_lock, flags);
+    count
+}
 
 #[no_mangle]
 pub unsafe extern "C" fn mcctrl_rva_to_rpa_cache_search_body_result(
@@ -7222,6 +12027,711 @@ pub unsafe extern "C" fn mcctrl_futex_remove_process_body_result(
     }
 
     0
+}
+
+#[no_mangle]
+#[allow(clippy::too_many_arguments)]
+pub unsafe extern "C" fn mcctrl_futex_dispatch_body_result(
+    uaddr: *mut u32,
+    op: c_int,
+    val: u32,
+    timeout: u64,
+    uaddr2: *mut u32,
+    val2: u32,
+    val3: u32,
+    fshared: c_int,
+    uti_info: *mut c_void,
+    wait: McctrlFutexWaitFn,
+    wake: McctrlFutexWakeFn,
+    requeue: McctrlFutexRequeueFn,
+    wake_op: McctrlFutexWakeOpFn,
+    warn: McctrlFutexWarnFn,
+) -> c_int {
+    let cmd = mcctrl_futex_cmd_result(op);
+    let clockrt = mcctrl_futex_clock_realtime_result(op);
+
+    if clockrt != 0 && mcctrl_futex_realtime_cmd_valid_result(cmd) == 0 {
+        return -ENOSYS;
+    }
+
+    match cmd {
+        FUTEX_WAIT => match wait {
+            Some(wait) => wait(
+                uaddr,
+                fshared,
+                val,
+                timeout,
+                FUTEX_BITSET_MATCH_ANY as u32,
+                clockrt,
+                uti_info,
+            ),
+            None => -EINVAL,
+        },
+        FUTEX_WAIT_BITSET => match wait {
+            Some(wait) => wait(uaddr, fshared, val, timeout, val3, clockrt, uti_info),
+            None => -EINVAL,
+        },
+        FUTEX_WAKE => match wake {
+            Some(wake) => wake(
+                uaddr,
+                fshared,
+                val as c_int,
+                FUTEX_BITSET_MATCH_ANY as u32,
+                uti_info,
+            ),
+            None => -EINVAL,
+        },
+        FUTEX_WAKE_BITSET => match wake {
+            Some(wake) => wake(uaddr, fshared, val as c_int, val3, uti_info),
+            None => -EINVAL,
+        },
+        FUTEX_REQUEUE | FUTEX_CMP_REQUEUE => match requeue {
+            Some(requeue) => requeue(
+                uaddr,
+                fshared,
+                uaddr2,
+                val as c_int,
+                val2 as c_int,
+                null_mut(),
+                0,
+                uti_info,
+            ),
+            None => -EINVAL,
+        },
+        FUTEX_WAKE_OP => match wake_op {
+            Some(wake_op) => wake_op(
+                uaddr,
+                fshared,
+                uaddr2,
+                val as c_int,
+                val2 as c_int,
+                val3 as c_int,
+                uti_info,
+            ),
+            None => -EINVAL,
+        },
+        _ => {
+            if let Some(warn) = warn {
+                warn(cmd);
+            }
+            -ENOSYS
+        }
+    }
+}
+
+#[no_mangle]
+#[allow(clippy::too_many_arguments)]
+pub unsafe extern "C" fn mcctrl_futex_wait_body_result(
+    uaddr: *mut u32,
+    fshared: c_int,
+    val: u32,
+    timeout: u64,
+    bitset: u32,
+    uti_info: *mut c_void,
+    get_q: McctrlFutexInfoPtrFn,
+    get_resp: McctrlFutexInfoPtrFn,
+    get_cpu: McctrlFutexCurrentCpuFn,
+    prepare_q: McctrlFutexPrepareWaitQFn,
+    wait_setup: McctrlFutexWaitSetupFn,
+    wait_queue: McctrlFutexWaitQueueFn,
+    unqueue: McctrlFutexUnqueueFn,
+    put_q_key: McctrlFutexPutQKeyFn,
+    log_event: McctrlFutexWaitLogFn,
+) -> c_int {
+    if bitset == 0 {
+        return -EINVAL;
+    }
+
+    let (
+        Some(get_q),
+        Some(get_resp),
+        Some(get_cpu),
+        Some(prepare_q),
+        Some(wait_setup),
+        Some(wait_queue),
+        Some(unqueue),
+        Some(put_q_key),
+    ) = (
+        get_q, get_resp, get_cpu, prepare_q, wait_setup, wait_queue, unqueue, put_q_key,
+    )
+    else {
+        return -EINVAL;
+    };
+
+    let q = get_q(uti_info);
+    if q.is_null() {
+        return -EINVAL;
+    }
+    prepare_q(q, bitset, get_resp(uti_info), get_cpu());
+
+    loop {
+        let mut hb: *mut c_void = null_mut();
+        let mut ret = wait_setup(uaddr, val, fshared, q, &mut hb, uti_info);
+        if ret != 0 {
+            return ret;
+        }
+
+        let time_remain = wait_queue(hb, q, timeout, uti_info);
+
+        ret = 0;
+        if unqueue(q) == 0 {
+            if let Some(log_event) = log_event {
+                log_event(0, uti_info);
+            }
+            put_q_key(fshared, q);
+            return ret;
+        }
+
+        ret = -ETIMEDOUT;
+        if timeout != 0 && time_remain == 0 {
+            if let Some(log_event) = log_event {
+                log_event(1, uti_info);
+            }
+            put_q_key(fshared, q);
+            return ret;
+        }
+
+        if time_remain == -(ERESTARTSYS as i64) {
+            ret = -EINTR;
+            if let Some(log_event) = log_event {
+                log_event(2, uti_info);
+            }
+            put_q_key(fshared, q);
+            return ret;
+        }
+
+        put_q_key(fshared, q);
+    }
+}
+
+#[inline(always)]
+unsafe fn mcctrl_futex_key_values(
+    key_addr: c_ulong,
+    key_word_offset: c_ulong,
+    key_ptr_offset: c_ulong,
+    key_offset_offset: c_ulong,
+) -> (c_ulong, c_ulong, c_int) {
+    (
+        read_volatile(key_addr.wrapping_add(key_word_offset) as *const c_ulong),
+        read_volatile(key_addr.wrapping_add(key_ptr_offset) as *const c_ulong),
+        read_volatile(key_addr.wrapping_add(key_offset_offset) as *const c_int),
+    )
+}
+
+#[allow(clippy::too_many_arguments)]
+unsafe fn mcctrl_futex_wake_scan_body(
+    chain_addr: c_ulong,
+    q_list_offset: c_ulong,
+    q_key_offset: c_ulong,
+    q_bitset_offset: c_ulong,
+    key_word_offset: c_ulong,
+    key_ptr_offset: c_ulong,
+    key_offset_offset: c_ulong,
+    target_word: c_ulong,
+    target_ptr: c_ulong,
+    target_offset: c_int,
+    requested_bitset: u32,
+    use_bitset: c_int,
+    nr_wake: c_int,
+    ctx_addr: c_ulong,
+    wake: unsafe extern "C" fn(q_addr: c_ulong, ctx_addr: c_ulong),
+) -> c_int {
+    if chain_addr == 0 {
+        return 0;
+    }
+
+    let head_node =
+        (chain_addr as usize).wrapping_add(offset_of!(McPlistHead, node_list)) as c_ulong;
+    let mut pos = read_volatile(head_node as *const c_ulong);
+    let mut woken = 0;
+
+    while pos != head_node {
+        let next = read_volatile(pos as *const c_ulong);
+        let q_addr = pos
+            .wrapping_sub(MC_PLIST_NODE_LIST_OFFSET as c_ulong)
+            .wrapping_sub(q_list_offset);
+        let key_addr = q_addr.wrapping_add(q_key_offset);
+        let (word, ptr, offset) =
+            mcctrl_futex_key_values(key_addr, key_word_offset, key_ptr_offset, key_offset_offset);
+
+        if word == target_word && ptr == target_ptr && offset == target_offset {
+            let bitset_matches = if use_bitset == 0 {
+                true
+            } else {
+                let waiter_bitset =
+                    read_volatile(q_addr.wrapping_add(q_bitset_offset) as *const u32);
+                (waiter_bitset & requested_bitset) != 0
+            };
+
+            if bitset_matches {
+                wake(q_addr, ctx_addr);
+                woken += 1;
+                if woken >= nr_wake {
+                    break;
+                }
+            }
+        }
+
+        pos = next;
+    }
+
+    woken
+}
+
+unsafe fn mcctrl_futex_double_lock_hb(
+    hb1_addr: c_ulong,
+    hb2_addr: c_ulong,
+    lock_offset: c_ulong,
+    lock: unsafe extern "C" fn(lock_addr: c_ulong),
+) {
+    if hb1_addr <= hb2_addr {
+        lock(hb1_addr.wrapping_add(lock_offset));
+        if hb1_addr < hb2_addr {
+            lock(hb2_addr.wrapping_add(lock_offset));
+        }
+    } else {
+        lock(hb2_addr.wrapping_add(lock_offset));
+        lock(hb1_addr.wrapping_add(lock_offset));
+    }
+}
+
+unsafe fn mcctrl_futex_double_unlock_hb(
+    hb1_addr: c_ulong,
+    hb2_addr: c_ulong,
+    lock_offset: c_ulong,
+    unlock: unsafe extern "C" fn(lock_addr: c_ulong),
+) {
+    unlock(hb1_addr.wrapping_add(lock_offset));
+    if hb1_addr != hb2_addr {
+        unlock(hb2_addr.wrapping_add(lock_offset));
+    }
+}
+
+#[no_mangle]
+#[allow(clippy::too_many_arguments)]
+pub unsafe extern "C" fn mcctrl_futex_wake_body_result(
+    uaddr: c_ulong,
+    fshared: c_int,
+    nr_wake: c_int,
+    bitset: u32,
+    key_addr: c_ulong,
+    futex_queue_addr: c_ulong,
+    ctx_addr: c_ulong,
+    hb_lock_offset: c_ulong,
+    hb_chain_offset: c_ulong,
+    q_list_offset: c_ulong,
+    q_key_offset: c_ulong,
+    q_bitset_offset: c_ulong,
+    key_word_offset: c_ulong,
+    key_ptr_offset: c_ulong,
+    key_offset_offset: c_ulong,
+    get_key: McctrlFutexGetKeyFn,
+    hash_key: McctrlFutexHashKeyFn,
+    lock: McctrlFutexWakeLockFn,
+    unlock: McctrlFutexWakeUnlockFn,
+    put_key: McctrlFutexPutKeyFn,
+    wake: McctrlFutexWakeEntryFn,
+) -> c_int {
+    let (Some(get_key), Some(hash_key), Some(lock), Some(unlock), Some(put_key), Some(wake)) =
+        (get_key, hash_key, lock, unlock, put_key, wake)
+    else {
+        return -EINVAL;
+    };
+    if key_addr == 0 || bitset == 0 {
+        return -EINVAL;
+    }
+
+    let ret = get_key(uaddr, fshared, key_addr, ctx_addr);
+    if ret != 0 {
+        return ret;
+    }
+
+    let hb_addr = hash_key(key_addr, futex_queue_addr);
+    if hb_addr == 0 {
+        put_key(fshared, key_addr);
+        return -EINVAL;
+    }
+
+    let (target_word, target_ptr, target_offset) =
+        mcctrl_futex_key_values(key_addr, key_word_offset, key_ptr_offset, key_offset_offset);
+    let lock_addr = hb_addr.wrapping_add(hb_lock_offset);
+    let flags = lock(lock_addr);
+    let ret = mcctrl_futex_wake_scan_body(
+        hb_addr.wrapping_add(hb_chain_offset),
+        q_list_offset,
+        q_key_offset,
+        q_bitset_offset,
+        key_word_offset,
+        key_ptr_offset,
+        key_offset_offset,
+        target_word,
+        target_ptr,
+        target_offset,
+        bitset,
+        1,
+        nr_wake,
+        ctx_addr,
+        wake,
+    );
+    unlock(lock_addr, flags);
+    put_key(fshared, key_addr);
+    ret
+}
+
+#[no_mangle]
+#[allow(clippy::too_many_arguments)]
+pub unsafe extern "C" fn mcctrl_futex_wake_op_body_result(
+    uaddr1: c_ulong,
+    fshared: c_int,
+    uaddr2: c_ulong,
+    nr_wake: c_int,
+    nr_wake2: c_int,
+    op: c_int,
+    key1_addr: c_ulong,
+    key2_addr: c_ulong,
+    futex_queue_addr: c_ulong,
+    ctx_addr: c_ulong,
+    hb_lock_offset: c_ulong,
+    hb_chain_offset: c_ulong,
+    q_list_offset: c_ulong,
+    q_key_offset: c_ulong,
+    q_bitset_offset: c_ulong,
+    key_word_offset: c_ulong,
+    key_ptr_offset: c_ulong,
+    key_offset_offset: c_ulong,
+    get_key: McctrlFutexGetKeyFn,
+    hash_key: McctrlFutexHashKeyFn,
+    lock: McctrlFutexHbLockFn,
+    unlock: McctrlFutexHbUnlockFn,
+    atomic_op: McctrlFutexAtomicOpFn,
+    put_key: McctrlFutexPutKeyFn,
+    wake: McctrlFutexWakeEntryFn,
+) -> c_int {
+    let (
+        Some(get_key),
+        Some(hash_key),
+        Some(lock),
+        Some(unlock),
+        Some(atomic_op),
+        Some(put_key),
+        Some(wake),
+    ) = (get_key, hash_key, lock, unlock, atomic_op, put_key, wake)
+    else {
+        return -EINVAL;
+    };
+    if key1_addr == 0 || key2_addr == 0 {
+        return -EINVAL;
+    }
+
+    loop {
+        let mut ret = get_key(uaddr1, fshared, key1_addr, ctx_addr);
+        if ret != 0 {
+            return ret;
+        }
+        ret = get_key(uaddr2, fshared, key2_addr, ctx_addr);
+        if ret != 0 {
+            put_key(fshared, key1_addr);
+            return ret;
+        }
+
+        let hb1_addr = hash_key(key1_addr, futex_queue_addr);
+        let hb2_addr = hash_key(key2_addr, futex_queue_addr);
+        if hb1_addr == 0 || hb2_addr == 0 {
+            put_key(fshared, key2_addr);
+            put_key(fshared, key1_addr);
+            return -EINVAL;
+        }
+
+        loop {
+            mcctrl_futex_double_lock_hb(hb1_addr, hb2_addr, hb_lock_offset, lock);
+            let op_ret = atomic_op(op, uaddr2);
+            if op_ret < 0 {
+                mcctrl_futex_double_unlock_hb(hb1_addr, hb2_addr, hb_lock_offset, unlock);
+                if op_ret != -EFAULT {
+                    put_key(fshared, key2_addr);
+                    put_key(fshared, key1_addr);
+                    return op_ret;
+                }
+                if fshared == 0 {
+                    continue;
+                }
+                put_key(fshared, key2_addr);
+                put_key(fshared, key1_addr);
+                break;
+            }
+
+            let (key1_word, key1_ptr, key1_offset) = mcctrl_futex_key_values(
+                key1_addr,
+                key_word_offset,
+                key_ptr_offset,
+                key_offset_offset,
+            );
+            ret = mcctrl_futex_wake_scan_body(
+                hb1_addr.wrapping_add(hb_chain_offset),
+                q_list_offset,
+                q_key_offset,
+                q_bitset_offset,
+                key_word_offset,
+                key_ptr_offset,
+                key_offset_offset,
+                key1_word,
+                key1_ptr,
+                key1_offset,
+                0,
+                0,
+                nr_wake,
+                ctx_addr,
+                wake,
+            );
+
+            if op_ret > 0 {
+                let (key2_word, key2_ptr, key2_offset) = mcctrl_futex_key_values(
+                    key2_addr,
+                    key_word_offset,
+                    key_ptr_offset,
+                    key_offset_offset,
+                );
+                ret += mcctrl_futex_wake_scan_body(
+                    hb2_addr.wrapping_add(hb_chain_offset),
+                    q_list_offset,
+                    q_key_offset,
+                    q_bitset_offset,
+                    key_word_offset,
+                    key_ptr_offset,
+                    key_offset_offset,
+                    key2_word,
+                    key2_ptr,
+                    key2_offset,
+                    0,
+                    0,
+                    nr_wake2,
+                    ctx_addr,
+                    wake,
+                );
+            }
+
+            mcctrl_futex_double_unlock_hb(hb1_addr, hb2_addr, hb_lock_offset, unlock);
+            put_key(fshared, key2_addr);
+            put_key(fshared, key1_addr);
+            return ret;
+        }
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+unsafe fn mcctrl_futex_requeue_scan_body(
+    chain_addr: c_ulong,
+    q_list_offset: c_ulong,
+    q_key_offset: c_ulong,
+    key_word_offset: c_ulong,
+    key_ptr_offset: c_ulong,
+    key_offset_offset: c_ulong,
+    target_word: c_ulong,
+    target_ptr: c_ulong,
+    target_offset: c_int,
+    nr_wake: c_int,
+    nr_requeue: c_int,
+    drop_countp: *mut c_int,
+    ctx_addr: c_ulong,
+    wake: unsafe extern "C" fn(q_addr: c_ulong, ctx_addr: c_ulong),
+    requeue: unsafe extern "C" fn(q_addr: c_ulong, ctx_addr: c_ulong),
+) -> c_int {
+    if !drop_countp.is_null() {
+        write_volatile(drop_countp, 0);
+    }
+    if chain_addr == 0 {
+        return 0;
+    }
+
+    let head_node =
+        (chain_addr as usize).wrapping_add(offset_of!(McPlistHead, node_list)) as c_ulong;
+    let mut pos = read_volatile(head_node as *const c_ulong);
+    let mut task_count = 0;
+    let mut drop_count = 0;
+
+    while pos != head_node {
+        if (task_count as i64 - nr_wake as i64) >= nr_requeue as i64 {
+            break;
+        }
+
+        let next = read_volatile(pos as *const c_ulong);
+        let q_addr = pos
+            .wrapping_sub(MC_PLIST_NODE_LIST_OFFSET as c_ulong)
+            .wrapping_sub(q_list_offset);
+        let key_addr = q_addr.wrapping_add(q_key_offset);
+        let (word, ptr, offset) =
+            mcctrl_futex_key_values(key_addr, key_word_offset, key_ptr_offset, key_offset_offset);
+
+        if word == target_word && ptr == target_ptr && offset == target_offset {
+            task_count += 1;
+            if task_count <= nr_wake {
+                wake(q_addr, ctx_addr);
+            } else {
+                requeue(q_addr, ctx_addr);
+                drop_count += 1;
+            }
+        }
+
+        pos = next;
+    }
+
+    if !drop_countp.is_null() {
+        write_volatile(drop_countp, drop_count);
+    }
+    task_count
+}
+
+#[no_mangle]
+#[allow(clippy::too_many_arguments)]
+pub unsafe extern "C" fn mcctrl_futex_requeue_body_result(
+    uaddr1: c_ulong,
+    fshared: c_int,
+    uaddr2: c_ulong,
+    nr_wake: c_int,
+    nr_requeue: c_int,
+    cmpval_addr: c_ulong,
+    key1_addr: c_ulong,
+    key2_addr: c_ulong,
+    ctx_addr: c_ulong,
+    futex_queue_addr: c_ulong,
+    hb_lock_offset: c_ulong,
+    hb_chain_offset: c_ulong,
+    q_list_offset: c_ulong,
+    q_key_offset: c_ulong,
+    key_word_offset: c_ulong,
+    key_ptr_offset: c_ulong,
+    key_offset_offset: c_ulong,
+    ctx_hb1_offset: c_ulong,
+    ctx_hb2_offset: c_ulong,
+    ctx_key2_offset: c_ulong,
+    get_key: McctrlFutexGetKeyFn,
+    hash_key: McctrlFutexHashKeyFn,
+    lock: McctrlFutexHbLockFn,
+    unlock: McctrlFutexHbUnlockFn,
+    get_value: McctrlFutexGetValueFn,
+    put_key: McctrlFutexPutKeyFn,
+    drop_key_refs: McctrlFutexDropKeyRefsFn,
+    wake: McctrlFutexRequeueEntryFn,
+    requeue: McctrlFutexRequeueEntryFn,
+) -> c_int {
+    let (
+        Some(get_key),
+        Some(hash_key),
+        Some(lock),
+        Some(unlock),
+        Some(put_key),
+        Some(drop_key_refs),
+        Some(wake),
+        Some(requeue),
+    ) = (
+        get_key,
+        hash_key,
+        lock,
+        unlock,
+        put_key,
+        drop_key_refs,
+        wake,
+        requeue,
+    )
+    else {
+        return -EINVAL;
+    };
+    if key1_addr == 0 || key2_addr == 0 || ctx_addr == 0 {
+        return -EINVAL;
+    }
+    if cmpval_addr != 0 && get_value.is_none() {
+        return -EINVAL;
+    }
+
+    let mut ret = get_key(uaddr1, fshared, key1_addr, ctx_addr);
+    if ret != 0 {
+        return ret;
+    }
+    ret = get_key(uaddr2, fshared, key2_addr, ctx_addr);
+    if ret != 0 {
+        put_key(fshared, key1_addr);
+        return ret;
+    }
+
+    let hb1_addr = hash_key(key1_addr, futex_queue_addr);
+    let hb2_addr = hash_key(key2_addr, futex_queue_addr);
+    if hb1_addr == 0 || hb2_addr == 0 {
+        put_key(fshared, key2_addr);
+        put_key(fshared, key1_addr);
+        return -EINVAL;
+    }
+
+    mcctrl_futex_double_lock_hb(hb1_addr, hb2_addr, hb_lock_offset, lock);
+
+    let mut task_count = 0;
+    let mut drop_count = 0;
+    let mut scan = true;
+    if cmpval_addr != 0 {
+        let Some(get_value) = get_value else {
+            mcctrl_futex_double_unlock_hb(hb1_addr, hb2_addr, hb_lock_offset, unlock);
+            put_key(fshared, key2_addr);
+            put_key(fshared, key1_addr);
+            return -EINVAL;
+        };
+        let mut curval = 0u32;
+        ret = get_value((&mut curval as *mut u32) as c_ulong, uaddr1);
+        if curval != read_volatile(cmpval_addr as *const u32) {
+            ret = -EAGAIN;
+            scan = false;
+        }
+    }
+
+    if scan {
+        write_volatile(
+            ctx_addr.wrapping_add(ctx_hb1_offset) as *mut c_ulong,
+            hb1_addr,
+        );
+        write_volatile(
+            ctx_addr.wrapping_add(ctx_hb2_offset) as *mut c_ulong,
+            hb2_addr,
+        );
+        write_volatile(
+            ctx_addr.wrapping_add(ctx_key2_offset) as *mut c_ulong,
+            key2_addr,
+        );
+        let (target_word, target_ptr, target_offset) = mcctrl_futex_key_values(
+            key1_addr,
+            key_word_offset,
+            key_ptr_offset,
+            key_offset_offset,
+        );
+        task_count = mcctrl_futex_requeue_scan_body(
+            hb1_addr.wrapping_add(hb_chain_offset),
+            q_list_offset,
+            q_key_offset,
+            key_word_offset,
+            key_ptr_offset,
+            key_offset_offset,
+            target_word,
+            target_ptr,
+            target_offset,
+            nr_wake,
+            nr_requeue,
+            &mut drop_count,
+            ctx_addr,
+            wake,
+            requeue,
+        );
+    }
+
+    mcctrl_futex_double_unlock_hb(hb1_addr, hb2_addr, hb_lock_offset, unlock);
+    while drop_count > 0 {
+        drop_key_refs(key1_addr);
+        drop_count -= 1;
+    }
+    put_key(fshared, key2_addr);
+    put_key(fshared, key1_addr);
+
+    if ret != 0 {
+        ret
+    } else {
+        task_count
+    }
 }
 
 #[no_mangle]

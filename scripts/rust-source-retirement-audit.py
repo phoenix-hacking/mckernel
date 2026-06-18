@@ -50,6 +50,8 @@ TEST_PREFIXES = (
 
 GENERATED_RE = re.compile(r"(^|/)(dwarf_names|.*generated.*)\.(c|h)$")
 TRACKER_ROW_RE = re.compile(r"^\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|")
+ALLOWLIST_SECTION_RE = re.compile(r"^Allowlisted n/a boundary justifications:\s*$")
+ALLOWLIST_ENTRY_RE = re.compile(r"^\s*-\s*`([^`]+)`:\s*(.+?)\s*$")
 FUNCTION_MACRO_RE = re.compile(r"^\s*#\s*define\s+[A-Za-z_][A-Za-z0-9_]*\(")
 INLINE_RE = re.compile(
     r"\b(static\s+(?:__always_inline\s+)?(?:inline|__inline__|__inline)\b|"
@@ -119,6 +121,48 @@ def parse_tracker(path):
                 continue
             rows[file_path] = TrackerRow(file_path, category, parsed)
     return rows, errors
+
+
+def parse_allowlist_justifications(path):
+    justifications = {}
+    errors = []
+    in_section = False
+    with path.open("r", encoding="utf-8") as fh:
+        for line_no, line in enumerate(fh, 1):
+            stripped = line.strip()
+            if ALLOWLIST_SECTION_RE.match(stripped):
+                in_section = True
+                continue
+            if not in_section:
+                continue
+            if stripped.startswith("Instructions for completing"):
+                break
+            if not stripped:
+                continue
+            match = ALLOWLIST_ENTRY_RE.match(line)
+            if not match:
+                errors.append("{}:{}: malformed n/a justification row".format(path, line_no))
+                continue
+            file_path, reason = match.groups()
+            file_path = file_path.strip()
+            reason = reason.strip()
+            if not (file_path.endswith(".c") or file_path.endswith(".h")):
+                errors.append(
+                    "{}:{}: n/a justification is not a C/header path: {}".format(
+                        path, line_no, file_path
+                    )
+                )
+                continue
+            if not reason:
+                errors.append("{}:{}: empty n/a justification: {}".format(path, line_no, file_path))
+                continue
+            if file_path in justifications:
+                errors.append(
+                    "{}:{}: duplicate n/a justification: {}".format(path, line_no, file_path)
+                )
+                continue
+            justifications[file_path] = reason
+    return justifications, errors
 
 
 def iter_in_scope_sources(repo, roots):
@@ -334,6 +378,7 @@ def main():
     parser.add_argument("--fail-on-executable-headers", action="store_true")
     parser.add_argument("--fail-on-compiled-c", action="store_true")
     parser.add_argument("--fail-on-retired-compiled-c", action="store_true")
+    parser.add_argument("--fail-on-unjustified-allowlist", action="store_true")
     parser.add_argument("--json", action="store_true", help="print machine-readable summary")
     args = parser.parse_args()
 
@@ -345,6 +390,8 @@ def main():
     build_dir = Path(args.build_dir).resolve() if args.build_dir else None
 
     tracker, errors = parse_tracker(tracker_path)
+    allowlist_justifications, allowlist_errors = parse_allowlist_justifications(tracker_path)
+    errors.extend(allowlist_errors)
     in_scope = sorted(set(iter_in_scope_sources(repo, roots)))
     scanned_set = set(in_scope)
 
@@ -365,6 +412,12 @@ def main():
             debt_rows.append(row)
         elif state == "allowlisted":
             allowlisted_rows.append(row)
+
+    tracked_allowlisted = {
+        path for path, row in tracker.items() if row_state(row) == "allowlisted"
+    }
+    unjustified_allowlist = sorted(tracked_allowlisted - set(allowlist_justifications))
+    stale_allowlist_justifications = sorted(set(allowlist_justifications) - tracked_allowlisted)
 
     header_hits = {}
     for rel in in_scope:
@@ -430,6 +483,18 @@ def main():
                 len(retired_compiled_c)
             )
         )
+    if args.fail_on_unjustified_allowlist and unjustified_allowlist:
+        errors.append(
+            "allowlisted n/a rows lack explicit justifications: {}".format(
+                len(unjustified_allowlist)
+            )
+        )
+    if args.fail_on_unjustified_allowlist and stale_allowlist_justifications:
+        errors.append(
+            "n/a justifications do not match allowlisted tracker rows: {}".format(
+                len(stale_allowlist_justifications)
+            )
+        )
     if category_debt:
         errors.append(
             "source-retirement debt remains in enforced categories: {}".format(
@@ -457,6 +522,9 @@ def main():
         "stale_tracker_rows": stale[:50],
         "debt_rows": len(debt_rows),
         "allowlisted_rows": len(allowlisted_rows),
+        "allowlist_justifications": len(allowlist_justifications),
+        "unjustified_allowlisted_rows": unjustified_allowlist[:50],
+        "stale_allowlist_justifications": stale_allowlist_justifications[:50],
         "headers_with_executable_logic": len(header_hits),
         "compiled_non_allowlisted_c": len(compiled_c),
         "compiled_retired_c": len(retired_compiled_c),
@@ -477,6 +545,7 @@ def main():
         print("  tracked existing files: {}".format(len(tracked_existing)))
         print("  tracked debt rows: {}".format(len(debt_rows)))
         print("  allowlisted rows: {}".format(len(allowlisted_rows)))
+        print("  allowlist justifications: {}".format(len(allowlist_justifications)))
         print("  headers with executable inline/macro logic: {}".format(len(header_hits)))
         if build_dir:
             print("  compiled non-allowlisted C sources: {}".format(len(compiled_c)))
@@ -492,6 +561,14 @@ def main():
             print("  debt examples:")
             for row in debt_rows[:20]:
                 print("    {} [{}] {:.1f}%".format(row.path, row.category, row.completion))
+        if unjustified_allowlist:
+            print("  unjustified n/a examples:")
+            for rel in unjustified_allowlist[:20]:
+                print("    {}".format(rel))
+        if stale_allowlist_justifications:
+            print("  stale n/a justification examples:")
+            for rel in stale_allowlist_justifications[:20]:
+                print("    {}".format(rel))
         if header_hits:
             print("  executable header examples:")
             for rel, hits in list(sorted(header_hits.items()))[:20]:

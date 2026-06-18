@@ -1,7 +1,8 @@
 #![no_std]
 
+use core::ffi::c_void;
 #[cfg(mckernel_crash_x86_64)]
-use core::ffi::{c_int, c_long, c_void};
+use core::ffi::{c_int, c_long};
 use core::panic::PanicInfo;
 
 const VR_STACK: usize = 0x1;
@@ -725,6 +726,11 @@ pub unsafe extern "C" fn mck_crash_kmsg_first_part_result(head: i32, tail: i32, 
 }
 
 type MckCrashReadStringFn = unsafe extern "C" fn(addr: usize, buf: *mut u8, len: i32) -> i32;
+type MckCrashReadI32Fn = unsafe extern "C" fn(addr: usize, out: *mut i32) -> i32;
+type MckCrashGetBufFn = unsafe extern "C" fn(len: i32) -> *mut u8;
+type MckCrashFreeBufFn = unsafe extern "C" fn(buf: *mut u8);
+type MckCrashWriteStringFn = unsafe extern "C" fn(msg: *const u8);
+type MckCrashRegisterExtensionFn = unsafe extern "C" fn(command_table: *mut c_void);
 
 #[no_mangle]
 pub unsafe extern "C" fn mck_crash_kmsg_read_body_result(
@@ -758,6 +764,133 @@ pub unsafe extern "C" fn mck_crash_kmsg_read_body_result(
     }
 
     1
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mck_crash_cmd_mckmsg_body_result(
+    kmsg_buf: usize,
+    kmsg_buf_str_offset: isize,
+    kmsg_buf_head_offset: isize,
+    kmsg_buf_tail_offset: isize,
+    kmsg_buf_len_offset: isize,
+    read_i32_fn: MckCrashReadI32Fn,
+    getbuf_fn: MckCrashGetBufFn,
+    freebuf_fn: MckCrashFreeBufFn,
+    read_string_fn: MckCrashReadStringFn,
+    write_string_fn: MckCrashWriteStringFn,
+) -> i32 {
+    if (read_i32_fn as usize) == 0
+        || (getbuf_fn as usize) == 0
+        || (freebuf_fn as usize) == 0
+        || (read_string_fn as usize) == 0
+        || (write_string_fn as usize) == 0
+    {
+        return -2;
+    }
+
+    let mut head = 0i32;
+    let mut tail = 0i32;
+    let mut len = 0i32;
+    if unsafe {
+        read_i32_fn(
+            kmsg_buf.wrapping_add(kmsg_buf_head_offset as usize),
+            &mut head,
+        )
+    } == 0
+        || unsafe {
+            read_i32_fn(
+                kmsg_buf.wrapping_add(kmsg_buf_tail_offset as usize),
+                &mut tail,
+            )
+        } == 0
+        || unsafe {
+            read_i32_fn(
+                kmsg_buf.wrapping_add(kmsg_buf_len_offset as usize),
+                &mut len,
+            )
+        } == 0
+    {
+        return 0;
+    }
+
+    if len <= 0 {
+        return -2;
+    }
+
+    let msg = unsafe { getbuf_fn(len) };
+    if msg.is_null() {
+        return -2;
+    }
+
+    let kmsg_buf_str = kmsg_buf.wrapping_add(kmsg_buf_str_offset as usize);
+    let read_ok = unsafe {
+        mck_crash_kmsg_read_body_result(kmsg_buf_str, head, tail, len, msg, read_string_fn)
+    };
+    if read_ok == 0 {
+        unsafe {
+            freebuf_fn(msg);
+        }
+        return -1;
+    }
+
+    unsafe {
+        write_string_fn(msg);
+        freebuf_fn(msg);
+    }
+    1
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mck_crash_cmd_mcinfo_body_result(
+    linux_page_offset: usize,
+    write_string_fn: Option<MckCrashWriteStringFn>,
+) -> i32 {
+    let Some(write_string_fn) = write_string_fn else {
+        return -2;
+    };
+
+    let mut buf = [0u8; 64];
+    let mut pos = 0usize;
+    let ok = unsafe {
+        write_lit_checked(
+            buf.as_mut_ptr(),
+            &mut pos,
+            buf.len(),
+            b"LINUX_PAGE_OFFSET: 0x\0".as_ptr(),
+        ) && write_usize_hex_checked(buf.as_mut_ptr(), &mut pos, buf.len(), linux_page_offset)
+            && write_byte_checked(buf.as_mut_ptr(), &mut pos, buf.len(), b'\n')
+    };
+    if !ok {
+        return -2;
+    }
+    unsafe {
+        finish_cstr_checked(buf.as_mut_ptr(), pos, buf.len());
+        write_string_fn(buf.as_ptr());
+    }
+    1
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mck_crash_extension_init_body_result(
+    command_table: *mut c_void,
+    register_fn: Option<MckCrashRegisterExtensionFn>,
+) -> i32 {
+    let Some(register_fn) = register_fn else {
+        return -2;
+    };
+    if command_table.is_null() {
+        return -2;
+    }
+
+    unsafe {
+        register_fn(command_table);
+    }
+    0
+}
+
+#[no_mangle]
+pub extern "C" fn mck_crash_extension_fini_body_result() -> i32 {
+    0
 }
 
 #[no_mangle]

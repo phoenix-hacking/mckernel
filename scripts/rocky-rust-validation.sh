@@ -333,6 +333,7 @@ source_retirement_audit() {
 			--fail-on-unretired
 			--fail-on-executable-headers
 			--fail-on-compiled-c
+			--fail-on-unjustified-allowlist
 		)
 	fi
 

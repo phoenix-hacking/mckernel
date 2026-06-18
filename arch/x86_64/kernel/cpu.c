@@ -569,10 +569,12 @@ int compare_and_swap(void *addr, unsigned long olddata, unsigned long newdata)
 void (*x86_issue_ipi)(unsigned int apicid, unsigned int low);
 int running_on_kvm(void);
 void smp_func_call_handler(void);
+#ifndef MCKERNEL_RUST_X86_CPU_HELPERS
 int ihk_mc_get_smp_handler_irq(void)
 {
 	return LOCAL_SMP_FUNC_CALL_VECTOR;
 }
+#endif
 
 void init_processors_local(int max_id);
 void assign_processor_id(void);
@@ -647,7 +649,7 @@ int no_turbo = 1; /* May be updated by early parsing of kargs */
 extern int num_processors; /* kernel/ap.c */
 struct pvclock_vsyscall_time_info *pvti = NULL;
 int pvti_npages;
-static long pvti_msr = -1;
+long pvti_msr = -1;
 
 
 static void init_idt(void)
@@ -926,6 +928,47 @@ extern int x86_pvclock_available_body_result(long *pvti_msr_slot,
 		long msr_old, void (*cpuid_fn)(unsigned long, unsigned long *,
 			unsigned long *, unsigned long *, unsigned long *),
 		void (*log_fn)(int));
+extern int x86_arch_setup_pvclock_body_result(
+		void **pvti_slot, int *pvti_npages_slot, int num_processors,
+		unsigned long pvti_entry_size, unsigned long page_size,
+		int page_p2align, unsigned long alloc_flag, int pg_kernel,
+		char *file, int line, int (*available_fn)(void),
+		void *(*alloc_fn)(int, int, unsigned long, int, int,
+			unsigned long, char *, int),
+		void (*log_fn)(int));
+extern int x86_arch_start_pvclock_body_result(
+		void *pvti_arg, long pvti_msr_arg, unsigned long pvti_entry_size,
+		unsigned long enable_bit, int (*current_cpu_fn)(void),
+		unsigned long (*virt_to_phys_fn)(void *),
+		void (*write_msr_fn)(int, unsigned long), void (*log_fn)(int));
+extern int x86_call_ap_func_body_result(int *cpu_boot_status_slot,
+		void (*next_func)(void));
+extern int x86_show_stack_body_result(unsigned long *sp,
+		unsigned long lower_bound, unsigned long upper_bound,
+		void (*log_fn)(unsigned long, unsigned long, unsigned long));
+extern int x86_arch_print_pre_interrupt_stack_body_result(
+		const void *regs, unsigned long error_offset,
+		unsigned long rsp_offset, unsigned long rip_offset,
+		unsigned long pf_user, unsigned long scan_window,
+		void (*log_fn)(int),
+		void (*print_stack_fn)(void *, unsigned long));
+extern int x86_arch_print_stack_body_result(void *rbp,
+		void (*log_fn)(int),
+		void (*print_stack_fn)(void *, unsigned long));
+extern int x86_print_user_context_body_result(const void *uctx,
+		void (*log_fn)(int, unsigned long, unsigned long,
+			unsigned long, unsigned long));
+extern int x86_arch_show_interrupt_context_body_result(const void *uctx,
+		unsigned long (*lock_fn)(void),
+		void (*unlock_fn)(unsigned long),
+		void (*log_fn)(int, unsigned long, unsigned long,
+			unsigned long, unsigned long));
+extern int x86_arch_save_panic_regs_body_result(
+		const void *regs, const void *current_ctx,
+		uint64_t *panic_regs, unsigned long *paniced_slot,
+		unsigned long user_end, unsigned long enter_user_mode_addr,
+		void (*log_fn)(int, unsigned long));
+extern int x86_arch_clear_panic_body_result(unsigned long *paniced_slot);
 extern int x86_arch_cpu_read_write_register_body_result(void *desc, int op,
 		int read_op, int write_op, unsigned long addr_offset,
 		unsigned long val_offset, unsigned long (*read_msr_fn)(int),
@@ -961,7 +1004,7 @@ x86_read_msr_bridge(int reg)
 	return rdmsr(reg);
 }
 
-static void
+void
 x86_write_msr_bridge(int reg, unsigned long value)
 {
 	wrmsr(reg, value);
@@ -971,6 +1014,27 @@ static void *
 x86_map_fixed_area_bridge(unsigned long phys, unsigned long size, int uncached)
 {
 	return map_fixed_area(phys, size, uncached);
+}
+
+void *
+x86_alloc_aligned_pages_node_bridge(int npages, int p2align,
+		unsigned long flag, int node, int is_user, unsigned long virt_addr,
+		char *file, int line)
+{
+	return _ihk_mc_alloc_aligned_pages_node(npages, p2align, flag, node,
+			is_user, virt_addr, file, line);
+}
+
+unsigned long
+x86_virt_to_phys_bridge(void *addr)
+{
+	return virt_to_phys(addr);
+}
+
+int
+x86_current_cpu_bridge(void)
+{
+	return ihk_mc_get_processor_id();
 }
 
 static int
@@ -999,7 +1063,7 @@ x86_cpuid_edx_bridge(unsigned long op, unsigned long *edxp)
 	*edxp = edx;
 }
 
-static void
+void
 x86_cpuid_leaf_bridge(unsigned long op, unsigned long *eaxp,
 		unsigned long *ebxp, unsigned long *ecxp,
 		unsigned long *edxp)
@@ -1059,6 +1123,10 @@ x86_cpu_ulong_log_bridge(int event, unsigned long value)
 		break;
 	case 2:
 		kprintf("# of cpus : %lu\n", value);
+		break;
+	case 15:
+		kprintf("arch_save_panic_regs: in user-space: %p\n",
+				(void *)value);
 		break;
 	}
 }
@@ -1379,6 +1447,12 @@ enum {
 
 #define PAT(x, y)	((uint64_t)PAT_ ## y << ((x)*8))
 
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+extern int x86_set_kstack_body_result(void *cpu_local,
+		unsigned long kernel_stack_offset,
+		unsigned long tss_rsp0_offset, unsigned long stack_pointer);
+#endif
+
 void init_pat(void)
 {
 #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
@@ -1435,11 +1509,20 @@ void init_pat(void)
 
 static void set_kstack(unsigned long ptr)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	x86_set_kstack_body_result(get_x86_this_cpu_local(),
+			__builtin_offsetof(struct x86_cpu_local_variables,
+				kernel_stack),
+			__builtin_offsetof(struct x86_cpu_local_variables,
+				tss.rsp0),
+			ptr);
+#else
 	struct x86_cpu_local_variables *v;
 
 	v = get_x86_this_cpu_local();
 	v->kernel_stack = ptr;
 	v->tss.rsp0 = ptr;
+#endif
 }
 
 static void init_smp_processor(void)
@@ -1527,9 +1610,25 @@ struct x86_thread_context_offsets {
 	unsigned long thread_tlsblock_base_offset;
 };
 
+struct x86_trace_enter_user_offsets {
+	unsigned long thread_tid_offset;
+	unsigned long thread_status_offset;
+	unsigned long thread_proc_offset;
+	unsigned long process_pid_offset;
+};
+
 extern int x86_init_context_body_result(ihk_mc_kernel_context_t *new_ctx,
 		void *stack_pointer, void *next_function,
 		void *(*stack_fn)(void));
+extern int x86_boot_cpu_body_result(void *trampoline_va,
+		const void *trampoline_code_data,
+		unsigned long trampoline_code_size, int cpuid, unsigned long pc,
+		unsigned long ap_trampoline, int *boot_status_slot,
+		void *setup_x86_ap_addr,
+		unsigned long (*boot_page_table_phys_fn)(void),
+		unsigned long (*cpu_kstack_fn)(int),
+		unsigned long (*transit_page_table_fn)(void),
+		void (*wakeup_fn)(int, unsigned long), void (*pause_fn)(void));
 extern int x86_init_user_process_body_result(
 		ihk_mc_kernel_context_t *ctx, ihk_mc_user_context_t **puctx,
 		void *stack_pointer, unsigned long new_pc,
@@ -1548,6 +1647,18 @@ extern int x86_syscall_handler_publish_result(unsigned long *slot,
 extern int x86_page_fault_handler_publish_result(unsigned long *slot,
 		void *handler);
 extern int x86_arch_noop_body_result(void);
+extern int x86_mcexec_v10_trace_enter_user_body_result(
+		const ihk_mc_user_context_t *regs, const struct thread *thread,
+		int *counter, int limit, int cpu,
+		const struct x86_trace_enter_user_offsets *offsets,
+		void (*log_fn)(int, int, int, unsigned long, unsigned long,
+			unsigned long, unsigned long, unsigned long, int));
+extern int x86_release_runq_lock_body_result(void *cpu_local,
+		unsigned long runq_lock_offset, unsigned long runq_irqstate_offset,
+		void (*unlock_fn)(void *, unsigned long));
+extern int x86_set_kstack_body_result(void *cpu_local,
+		unsigned long kernel_stack_offset,
+		unsigned long tss_rsp0_offset, unsigned long stack_pointer);
 extern int x86_delay_us_body_result(int us, void (*delay_fn)(int));
 extern int x86_tick_log_body_result(int event, void (*log_fn)(int));
 extern int x86_arch_set_special_register_result(int reg_type, int fs_type,
@@ -1568,6 +1679,13 @@ static const struct x86_thread_context_offsets x86_thread_context_offsets = {
 		__builtin_offsetof(struct thread, tlsblock_base),
 };
 
+static const struct x86_trace_enter_user_offsets x86_trace_enter_user_offsets = {
+	.thread_tid_offset = __builtin_offsetof(struct thread, tid),
+	.thread_status_offset = __builtin_offsetof(struct thread, status),
+	.thread_proc_offset = __builtin_offsetof(struct thread, proc),
+	.process_pid_offset = __builtin_offsetof(struct process, pid),
+};
+
 static void *x86_this_kstack_bridge(void)
 {
 	return get_x86_this_cpu_kstack();
@@ -1583,7 +1701,7 @@ static void x86_arch_delay_bridge(int us)
 	arch_delay(us);
 }
 
-static void x86_tick_log_bridge(int event)
+void x86_tick_log_bridge(int event)
 {
 	switch (event) {
 	case 1:
@@ -1598,7 +1716,7 @@ static void x86_tick_log_bridge(int event)
 	}
 }
 
-static void x86_pvclock_log_bridge(int event)
+void x86_pvclock_log_bridge(int event)
 {
 	switch (event) {
 	case 1:
@@ -1615,6 +1733,33 @@ static void x86_pvclock_log_bridge(int event)
 		break;
 	case 5:
 		dkprintf("is_pvclock_available(): false (not supported)\n");
+		break;
+	case 6:
+		dkprintf("arch_setup_pvclock()\n");
+		break;
+	case 7:
+		dkprintf("arch_setup_pvclock(): not supported\n");
+		break;
+	case 8:
+		ekprintf("arch_setup_pvclock: allocate_pages failed.\n");
+		break;
+	case 9:
+		dkprintf("arch_setup_pvclock(): ok\n");
+		break;
+	case 10:
+		dkprintf("arch_start_pvclock()\n");
+		break;
+	case 11:
+		dkprintf("arch_start_pvclock(): not supported\n");
+		break;
+	case 12:
+		dkprintf("arch_start_pvclock(): ok\n");
+		break;
+	case 13:
+		__kprintf("Pre-interrupt stack trace:\n");
+		break;
+	case 14:
+		__kprintf("Approximative stack trace:\n");
 		break;
 	}
 }
@@ -1782,11 +1927,20 @@ void setup_x86_phase2(void)
 
 static volatile int cpu_boot_status;
 
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+int *x86_cpu_boot_status_slot_bridge(void)
+{
+	return (int *)&cpu_boot_status;
+}
+
+void call_ap_func(void (*next_func)(void));
+#else
 void call_ap_func(void (*next_func)(void))
 {
 	cpu_boot_status = 1;
 	next_func();
 }
+#endif
 
 struct page_table *get_init_page_table(void);
 void setup_x86_ap(void (*next_func)(void))
@@ -1815,7 +1969,14 @@ void setup_x86_ap(void (*next_func)(void))
 
 void arch_show_interrupt_context(const void *reg);
 extern void tlb_flush_handler(int vector);
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+void x86_stack_frame_log_bridge(unsigned long ip, unsigned long sp,
+		unsigned long fp);
+#endif
 
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+void __show_stack(uintptr_t *sp);
+#else
 void __show_stack(uintptr_t *sp) {
 	while (((uintptr_t)sp >= 0xffff800000000000)
 			&& ((uintptr_t)sp <  0xffffffff80000000)) {
@@ -1829,11 +1990,16 @@ void __show_stack(uintptr_t *sp) {
 	}
 	return;
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+void show_context_stack(uintptr_t *rbp);
+#else
 void show_context_stack(uintptr_t *rbp) {
 	__show_stack(rbp);
 	return;
 }
+#endif
 
 #ifdef ENABLE_FUGAKU_HACKS
 void __show_context_stack(struct thread *thread,
@@ -2296,19 +2462,43 @@ extern unsigned long __page_fault_handler_address;
   @ assigns __page_fault_handler_address;
   @ ensures __page_fault_handler_address == h;
   @*/
+#ifndef MCKERNEL_RUST_X86_CPU_HELPERS
 void ihk_mc_set_page_fault_handler(void (*h)(void *, uint64_t, void *))
 {
-#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
-	x86_page_fault_handler_publish_result(&__page_fault_handler_address,
-			(void *)h);
-#else
 	__page_fault_handler_address = (unsigned long)h;
-#endif
 }
+#endif
 
 extern char trampoline_code_data[], trampoline_code_data_end[];
 struct page_table *get_boot_page_table(void);
 unsigned long get_transit_page_table(void);
+
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+static unsigned long x86_boot_page_table_phys_bridge(void)
+{
+	return virt_to_phys(get_boot_page_table());
+}
+
+static unsigned long x86_cpu_kstack_bridge(int cpuid)
+{
+	return (unsigned long)get_x86_cpu_local_kstack(cpuid);
+}
+
+static unsigned long x86_transit_page_table_bridge(void)
+{
+	return get_transit_page_table();
+}
+
+static void x86_wakeup_bridge(int cpuid, unsigned long trampoline)
+{
+	__x86_wakeup(cpuid, trampoline);
+}
+
+static void x86_cpu_pause_bridge(void)
+{
+	cpu_pause();
+}
+#endif
 
 /* reusable, but not reentrant */
 /*@
@@ -2324,6 +2514,14 @@ unsigned long get_transit_page_table(void);
   @*/
 void ihk_mc_boot_cpu(int cpuid, unsigned long pc)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	x86_boot_cpu_body_result(trampoline_va, trampoline_code_data,
+			trampoline_code_data_end - trampoline_code_data,
+			cpuid, pc, ap_trampoline, (int *)&cpu_boot_status,
+			(void *)setup_x86_ap, x86_boot_page_table_phys_bridge,
+			x86_cpu_kstack_bridge, x86_transit_page_table_bridge,
+			x86_wakeup_bridge, x86_cpu_pause_bridge);
+#else
 	unsigned long *p;
 
 	p = (unsigned long *)trampoline_va;
@@ -2348,6 +2546,7 @@ void ihk_mc_boot_cpu(int cpuid, unsigned long pc)
 	while (!cpu_boot_status) {
 		cpu_pause();
 	}
+#endif
 }
 
 /*@
@@ -2379,9 +2578,32 @@ void ihk_mc_init_context(ihk_mc_kernel_context_t *new_ctx,
 
 extern char enter_user_mode[];
 
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+static void x86_mcexec_v10_trace_log_bridge(int cpu, int pid, int tid,
+		unsigned long rip, unsigned long sp, unsigned long cs,
+		unsigned long ss, unsigned long rflags, int status)
+{
+	kprintf("mcexec_v10: enter_user cpu=%d pid=%d tid=%d rip=0x%lx sp=0x%lx cs=0x%lx ss=0x%lx rflags=0x%lx status=%d\n",
+		cpu, pid, tid, rip, sp, cs, ss, rflags, status);
+}
+
+static void x86_runq_unlock_bridge(void *lock, unsigned long irqstate)
+{
+	ihk_mc_spinlock_unlock((ihk_spinlock_t *)lock, irqstate);
+}
+#endif
+
 void mcexec_v10_trace_enter_user(struct x86_user_context *regs)
 {
 	static int mcexec_v10_enter_user_logs;
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	x86_mcexec_v10_trace_enter_user_body_result(regs,
+			get_this_cpu_local_var()->current,
+			&mcexec_v10_enter_user_logs, 32,
+			ihk_mc_get_processor_id(),
+			&x86_trace_enter_user_offsets,
+			x86_mcexec_v10_trace_log_bridge);
+#else
 	struct thread *thread = get_this_cpu_local_var()->current;
 
 	if (mcexec_v10_enter_user_logs >= 32) {
@@ -2399,6 +2621,7 @@ void mcexec_v10_trace_enter_user(struct x86_user_context *regs)
 		regs ? regs->gpr.rflags : 0UL,
 		thread ? thread->status : -1);
 	mcexec_v10_enter_user_logs++;
+#endif
 }
 
 /* 
@@ -2409,8 +2632,15 @@ void mcexec_v10_trace_enter_user(struct x86_user_context *regs)
  */
 void release_runq_lock(void)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	x86_release_runq_lock_body_result(get_this_cpu_local_var(),
+			__builtin_offsetof(struct cpu_local_var, runq_lock),
+			__builtin_offsetof(struct cpu_local_var, runq_irqstate),
+			x86_runq_unlock_bridge);
+#else
 	ihk_mc_spinlock_unlock(&(get_this_cpu_local_var()->runq_lock),
 			get_this_cpu_local_var()->runq_irqstate);
+#endif
 }
 
 /*@
@@ -2466,21 +2696,21 @@ void ihk_mc_init_user_process(ihk_mc_kernel_context_t *ctx,
   @   assigns uctx->gpr.rip;
   @   ensures uctx->gpr.rip == value;
   @*/
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+void ihk_mc_modify_user_context(ihk_mc_user_context_t *uctx,
+		enum ihk_mc_user_context_regtype reg, unsigned long value);
+#else
 void ihk_mc_modify_user_context(ihk_mc_user_context_t *uctx,
                                 enum ihk_mc_user_context_regtype reg,
                                 unsigned long value)
 {
-#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
-	x86_modify_user_context_result(uctx, reg, value,
-			IHK_UCR_STACK_POINTER, IHK_UCR_PROGRAM_COUNTER);
-#else
 	if (reg == IHK_UCR_STACK_POINTER) {
 		uctx->gpr.rsp = value;
 	} else if (reg == IHK_UCR_PROGRAM_COUNTER) {
 		uctx->gpr.rip = value;
 	}
-#endif
 }
+#endif
 
 #ifdef POSTK_DEBUG_ARCH_DEP_42 /* /proc/cpuinfo support added. */
 long ihk_mc_show_cpuinfo(char *buf, size_t buf_size, unsigned long read_off, int *eofp)
@@ -2490,21 +2720,75 @@ long ihk_mc_show_cpuinfo(char *buf, size_t buf_size, unsigned long read_off, int
 }
 #endif /* POSTK_DEBUG_ARCH_DEP_42 */
 
+#ifndef MCKERNEL_RUST_X86_CPU_HELPERS
 void arch_clone_thread(struct thread *othread, unsigned long pc,
 			unsigned long sp, struct thread *nthread)
 {
-#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
-	x86_arch_noop_body_result();
-#endif
 	return;
 }
+#endif
+
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+unsigned long x86_kprintf_lock_bridge(void)
+{
+	return kprintf_lock();
+}
+
+void x86_kprintf_unlock_bridge(unsigned long flags)
+{
+	kprintf_unlock(flags);
+}
+
+void x86_context_line_log_bridge(int event, unsigned long a,
+		unsigned long b, unsigned long c, unsigned long d)
+{
+	switch (event) {
+	case 1:
+		__kprintf("CS:RIP = %4lx:%16lx\n", a, b);
+		break;
+	case 2:
+		__kprintf("             RAX              RBX              RCX              RDX\n");
+		__kprintf("%16lx %16lx %16lx %16lx\n", a, b, c, d);
+		break;
+	case 3:
+		__kprintf("             RSI              RDI              RSP              RBP\n");
+		__kprintf("%16lx %16lx %16lx %16lx\n", a, b, c, d);
+		break;
+	case 4:
+		__kprintf("              R8               R9              R10              R11\n");
+		__kprintf("%16lx %16lx %16lx %16lx\n", a, b, c, d);
+		break;
+	case 5:
+		__kprintf("             R12              R13              R14              R15\n");
+		__kprintf("%16lx %16lx %16lx %16lx\n", a, b, c, d);
+		break;
+	case 6:
+		__kprintf("              CS               SS           RFLAGS            ERROR\n");
+		__kprintf("%16lx %16lx %16lx %16lx\n", a, b, c, d);
+		break;
+	case 20:
+		kprintf("CS:RIP = %04lx:%16lx\n", a, b);
+		break;
+	case 21:
+		kprintf("%16lx %16lx %16lx %16lx\n", a, b, c, d);
+		break;
+	case 22:
+		kprintf("%16lx %16lx %16lx\n", a, b, c);
+		break;
+	}
+}
+#endif
 
 void ihk_mc_print_user_context(ihk_mc_user_context_t *uctx)
 {
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	x86_print_user_context_body_result(uctx, x86_context_line_log_bridge);
+#else
 	kprintf("CS:RIP = %04lx:%16lx\n", uctx->gpr.cs, uctx->gpr.rip);
 	kprintf("%16lx %16lx %16lx %16lx\n%16lx %16lx %16lx\n",
 	        uctx->gpr.rax, uctx->gpr.rbx, uctx->gpr.rcx, uctx->gpr.rdx,
 	        uctx->gpr.rsi, uctx->gpr.rdi, uctx->gpr.rsp);
+#endif
 }
 
 /*@
@@ -2512,27 +2796,22 @@ void ihk_mc_print_user_context(ihk_mc_user_context_t *uctx)
   @ assigns __x86_syscall_handler;
   @ ensures __x86_syscall_handler == handler;
   @*/
+#ifndef MCKERNEL_RUST_X86_CPU_HELPERS
 void ihk_mc_set_syscall_handler(long (*handler)(int, ihk_mc_user_context_t *))
 {
-#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
-	x86_syscall_handler_publish_result((unsigned long *)&__x86_syscall_handler,
-			(void *)handler);
-#else
 	__x86_syscall_handler = handler;
-#endif
 }
+#endif
 
 /*@
   @ assigns \nothing;
   @*/
+#ifndef MCKERNEL_RUST_X86_CPU_HELPERS
 void ihk_mc_delay_us(int us)
 {
-#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
-	x86_delay_us_body_result(us, x86_arch_delay_bridge);
-#else
 	arch_delay(us);
-#endif
 }
+#endif
 
 void arch_show_extended_context(void)
 {
@@ -2585,6 +2864,22 @@ static void __print_stack(struct stack *rbp, unsigned long first) {
 	__kprintf("%s\n", buf);
 }
 
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+void x86_stack_frame_log_bridge(unsigned long ip, unsigned long sp,
+		unsigned long fp)
+{
+	kprintf("IP: %016lx, SP: %016lx, FP: %016lx\n", ip, sp, fp);
+}
+
+void x86_print_stack_bridge(void *rbp, unsigned long first)
+{
+	__print_stack(rbp, first);
+}
+#endif
+
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+void arch_print_pre_interrupt_stack(const struct x86_basic_regs *regs);
+#else
 void arch_print_pre_interrupt_stack(const struct x86_basic_regs *regs) {
 	struct stack *rbp;
 
@@ -2609,17 +2904,22 @@ void arch_print_pre_interrupt_stack(const struct x86_basic_regs *regs) {
 
 	__print_stack(rbp, regs->rip);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+void arch_print_stack(void);
+#else
 void arch_print_stack(void)
 {
 	struct stack *rbp;
 
-	__kprintf("Approximative stack trace:\n");
-
 	asm("mov %%rbp, %0" : "=r"(rbp) );
+
+	__kprintf("Approximative stack trace:\n");
 
 	__print_stack(rbp, 0);
 }
+#endif
 
 #ifdef ENABLE_FUGAKU_HACKS
 unsigned long arch_get_instruction_address(const void *reg)
@@ -2635,6 +2935,9 @@ unsigned long arch_get_instruction_address(const void *reg)
   @ requires \valid(reg);
   @ assigns \nothing;
   @*/
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+void arch_show_interrupt_context(const void *reg);
+#else
 void arch_show_interrupt_context(const void *reg)
 {
 	const struct x86_user_context *uctx = reg;
@@ -2668,6 +2971,7 @@ return;
 
 	kprintf_unlock(irqflags);
 }
+#endif
 
 void arch_cpu_stop(void)
 {
@@ -2685,24 +2989,12 @@ void arch_cpu_stop(void)
   @   ensures \result == -EINVAL;
   @*/
 #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
-static void x86_fs_write_bridge(unsigned long value)
-{
-	wrmsr(MSR_FS_BASE, value);
-}
-
-static unsigned long x86_fs_read_bridge(void)
-{
-	return rdmsr(MSR_FS_BASE);
-}
-#endif
-
+int ihk_mc_arch_set_special_register(enum ihk_asr_type type,
+                                     unsigned long value);
+#else
 int ihk_mc_arch_set_special_register(enum ihk_asr_type type,
                                      unsigned long value)
 {
-#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
-	return x86_arch_set_special_register_result(type, IHK_ASR_X86_FS,
-			value, x86_fs_write_bridge);
-#else
 	/* GS modification is not permitted */
 	switch (type) {
 	case IHK_ASR_X86_FS:
@@ -2711,8 +3003,8 @@ int ihk_mc_arch_set_special_register(enum ihk_asr_type type,
 	default:
 		return -EINVAL;
 	}
-#endif
 }
+#endif
 
 /*@
   @ behavior fs_base:
@@ -2723,13 +3015,13 @@ int ihk_mc_arch_set_special_register(enum ihk_asr_type type,
   @   assumes type != IHK_ASR_X86_FS;
   @   ensures \result == -EINVAL;
   @*/
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+int ihk_mc_arch_get_special_register(enum ihk_asr_type type,
+                                     unsigned long *value);
+#else
 int ihk_mc_arch_get_special_register(enum ihk_asr_type type,
                                      unsigned long *value)
 {
-#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
-	return x86_arch_get_special_register_result(type, IHK_ASR_X86_FS,
-			value, x86_fs_read_bridge);
-#else
 	/* GS modification is not permitted */
 	switch (type) {
 	case IHK_ASR_X86_FS:
@@ -2738,31 +3030,29 @@ int ihk_mc_arch_get_special_register(enum ihk_asr_type type,
 	default:
 		return -EINVAL;
 	}
-#endif
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+int ihk_mc_get_interrupt_id(int cpu);
+#else
 int ihk_mc_get_interrupt_id(int cpu)
 {
-#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
-	return x86_get_interrupt_id_result(cpu, x86_cpu_local_bridge,
-			__builtin_offsetof(struct x86_cpu_local_variables,
-				apic_id));
-#else
 	return get_x86_cpu_local_variable(cpu)->apic_id;
-#endif
 }
+#endif
 
 /*@
   @ requires \valid_cpuid(cpu);     // valid CPU logical ID
   @ ensures \result == 0
   @*/
 #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
-static void x86_issue_ipi_bridge(unsigned long apic_id, int vector)
+void x86_issue_ipi_bridge(unsigned long apic_id, int vector)
 {
 	x86_issue_ipi(apic_id, vector);
 }
 
-static void x86_interrupt_log_bridge(int event, int cpu, int vector)
+void x86_interrupt_log_bridge(int event, int cpu, int vector)
 {
 	if (event == 1) {
 		kprintf("%s: invalid CPU id: %d\n",
@@ -2775,15 +3065,11 @@ static void x86_interrupt_log_bridge(int event, int cpu, int vector)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+int ihk_mc_interrupt_cpu(int cpu, int vector);
+#else
 int ihk_mc_interrupt_cpu(int cpu, int vector)
 {
-#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
-	return x86_interrupt_cpu_result(cpu, vector, num_processors,
-			x86_cpu_local_bridge,
-			__builtin_offsetof(struct x86_cpu_local_variables,
-				apic_id),
-			x86_issue_ipi_bridge, x86_interrupt_log_bridge);
-#else
 	if (cpu < 0 || cpu >= num_processors) {
 		kprintf("%s: invalid CPU id: %d\n", __func__, cpu);
 		return -1;
@@ -2792,8 +3078,8 @@ int ihk_mc_interrupt_cpu(int cpu, int vector)
 
 	x86_issue_ipi(get_x86_cpu_local_variable(cpu)->apic_id, vector);
 	return 0;
-#endif
 }
+#endif
 
 struct thread *arch_switch_context(struct thread *prev, struct thread *next)
 {
@@ -3053,75 +3339,64 @@ ihk_mc_user_context_t *lookup_user_context(struct thread *thread)
 } /* lookup_user_context() */
 
 extern long do_arch_prctl(unsigned long code, unsigned long address);
+#ifndef MCKERNEL_RUST_X86_CPU_HELPERS
 void
 ihk_mc_init_user_tlsbase(ihk_mc_user_context_t *ctx,
                          unsigned long tls_base_addr)
 {
 	do_arch_prctl(ARCH_SET_FS, tls_base_addr);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_X86_CPU_HELPERS
 void arch_flush_icache_all(void)
 {
-#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
-	x86_arch_noop_body_result();
-#endif
 	return;
 }
+#endif
 
 /*@
   @ assigns \nothing;
   @*/
+#ifndef MCKERNEL_RUST_X86_CPU_HELPERS
 void init_tick(void)
 {
-#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
-	x86_tick_log_body_result(1, x86_tick_log_bridge);
-#else
 	dkprintf("init_tick():\n");
-#endif
 	return;
 }
+#else
+void init_tick(void);
+#endif
 
 /*@
   @ assigns \nothing;
   @*/
+#ifndef MCKERNEL_RUST_X86_CPU_HELPERS
 void init_delay(void)
 {
-#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
-	x86_tick_log_body_result(2, x86_tick_log_bridge);
-#else
 	dkprintf("init_delay():\n");
-#endif
 	return;
 }
+#else
+void init_delay(void);
+#endif
 
 /*@
   @ assigns \nothing;
   @*/
+#ifndef MCKERNEL_RUST_X86_CPU_HELPERS
 void sync_tick(void)
 {
-#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
-	x86_tick_log_body_result(3, x86_tick_log_bridge);
-#else
 	dkprintf("sync_tick():\n");
-#endif
 	return;
 }
+#else
+void sync_tick(void);
+#endif
 
+#ifndef MCKERNEL_RUST_X86_CPU_HELPERS
 static int is_pvclock_available(void)
 {
-#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
-#define KVM_CPUID_SIGNATURE 0x40000000
-#define KVM_CPUID_FEATURES 0x40000001
-#define KVM_FEATURE_CLOCKSOURCE2 3
-#define KVM_FEATURE_CLOCKSOURCE 0
-#define MSR_KVM_SYSTEM_TIME_NEW 0x4b564d01
-#define MSR_KVM_SYSTEM_TIME 0x12
-	return x86_pvclock_available_body_result(&pvti_msr,
-			KVM_CPUID_SIGNATURE, KVM_CPUID_FEATURES,
-			KVM_FEATURE_CLOCKSOURCE2, KVM_FEATURE_CLOCKSOURCE,
-			MSR_KVM_SYSTEM_TIME_NEW, MSR_KVM_SYSTEM_TIME,
-			x86_cpuid_leaf_bridge, x86_pvclock_log_bridge);
-#else
 	uint32_t eax;
 	uint32_t ebx;
 	uint32_t ecx;
@@ -3160,9 +3435,13 @@ static int is_pvclock_available(void)
 
 	dkprintf("is_pvclock_available(): false (not supported)\n");
 	return 0;
-#endif
 } /* is_pvclock_available() */
 
+#endif
+
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+int arch_setup_pvclock(void);
+#else
 int arch_setup_pvclock(void)
 {
 	size_t size;
@@ -3188,7 +3467,11 @@ int arch_setup_pvclock(void)
 	dkprintf("arch_setup_pvclock(): ok\n");
 	return 0;
 } /* arch_setup_pvclock() */
+#endif
 
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+void arch_start_pvclock(void);
+#else
 void arch_start_pvclock(void)
 {
 	int cpu;
@@ -3207,15 +3490,12 @@ void arch_start_pvclock(void)
 	dkprintf("arch_start_pvclock(): ok\n");
 	return;
 } /* arch_start_pvclock() */
+#endif
 
 #define KVM_CPUID_SIGNATURE	0x40000000
 
+#ifndef MCKERNEL_RUST_X86_CPU_HELPERS
 int running_on_kvm(void) {
-#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
-#define KVM_CPUID_SIGNATURE	0x40000000
-	return x86_running_on_kvm_body_result(KVM_CPUID_SIGNATURE,
-			x86_cpuid_leaf_bridge);
-#else
 	static const char signature[12] = "KVMKVMKVM\0\0";
 	const uint32_t *sigptr = (const uint32_t *)signature;
 	uint64_t op;
@@ -3232,8 +3512,8 @@ int running_on_kvm(void) {
 	}
 
 	return 0;
-#endif
 }
+#endif
 
 void
 mod_nmi_ctx(void *nmi_ctx, void (*func)())
@@ -3268,6 +3548,16 @@ void arch_save_panic_regs(void *irq_regs)
 		uint32_t fs;
 		uint32_t gs;
 	} *sregs;
+
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+	if (x86_arch_save_panic_regs_body_result(regs,
+				current ? &current->ctx : NULL,
+				x86v->panic_regs, &x86v->paniced, USER_END,
+				(unsigned long)enter_user_mode,
+				x86_cpu_ulong_log_bridge) == 0) {
+		return;
+	}
+#endif
 
 	/* Kernel space? */
 	if (regs->gpr.rip > USER_END) {
@@ -3330,6 +3620,9 @@ void arch_save_panic_regs(void *irq_regs)
 	x86v->paniced = 1;
 }
 
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+void arch_clear_panic(void);
+#else
 void arch_clear_panic(void)
 {
 	struct x86_cpu_local_variables *x86v =
@@ -3337,19 +3630,17 @@ void arch_clear_panic(void)
 
 	x86v->paniced = 0;
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+int arch_cpu_read_write_register(
+		struct ihk_os_cpu_register *desc,
+		enum mcctrl_os_cpu_operation op);
+#else
 int arch_cpu_read_write_register(
 		struct ihk_os_cpu_register *desc,
 		enum mcctrl_os_cpu_operation op)
 {
-#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
-	return x86_arch_cpu_read_write_register_body_result(desc, op,
-			MCCTRL_OS_CPU_READ_REGISTER,
-			MCCTRL_OS_CPU_WRITE_REGISTER,
-			__builtin_offsetof(struct ihk_os_cpu_register, addr),
-			__builtin_offsetof(struct ihk_os_cpu_register, val),
-			x86_read_msr_bridge, x86_write_msr_bridge);
-#else
 	if (op == MCCTRL_OS_CPU_READ_REGISTER) {
 		desc->val = rdmsr(desc->addr);
 	}
@@ -3361,8 +3652,8 @@ int arch_cpu_read_write_register(
 	}
 
 	return 0;
-#endif
 }
+#endif
 
 extern int nmi_mode;
 extern long freeze_thaw(void *nmi_ctx);

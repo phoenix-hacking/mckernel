@@ -76,8 +76,8 @@ extern struct rb_node *rb_preorder_dfs_search(const struct rb_root *,
 					      void *);
 
 int ihk_mc_chk_page_address(unsigned long mem_addr) { (void)mem_addr; return 0; }
-unsigned long virt_to_phys(void *v) { return (unsigned long)v; }
-void *phys_to_virt(unsigned long p) { return (void *)p; }
+__attribute__((weak)) unsigned long virt_to_phys(void *v) { return (unsigned long)v; }
+__attribute__((weak)) void *phys_to_virt(unsigned long p) { return (void *)p; }
 __attribute__((weak)) int zero_at_free = 1;
 
 struct item {
@@ -4008,7 +4008,14 @@ void early_alloc_invalidate(void)
 	lifecycle_early_invalidate_count++;
 }
 
+void x86_early_alloc_invalidate_bridge(void)
+{
+	lifecycle_early_invalidate_count++;
+}
+
 #ifndef MEM_INIT_C_FALLBACK
+extern int pagealloc_track_initialized;
+
 void pagealloc_track_init(void)
 {
 	lifecycle_track_init_count++;
@@ -6250,8 +6257,9 @@ static unsigned long mem_runtime_orchestration_digest(void)
 	alloc_page_calls = early_alloc_calls = free_page_calls = 0;
 	lifecycle_track_init_count = 0;
 	lifecycle_early_invalidate_count = 0;
+	pagealloc_track_initialized = 0;
 	ihk_mc_set_page_allocator(&ops);
-	require(lifecycle_track_init_count == 1);
+	require(pagealloc_track_initialized == 1);
 	require(lifecycle_early_invalidate_count == 1);
 	ptr = ___ihk_mc_alloc_aligned_pages_node(6, 3, 0x88, 4, 1,
 						 0xbeefUL);
@@ -6270,7 +6278,7 @@ static unsigned long mem_runtime_orchestration_digest(void)
 	require(free_page_is_user == 1);
 	alloc_page_calls = early_alloc_calls = free_page_calls = 0;
 	ihk_mc_set_page_allocator(NULL);
-	require(lifecycle_track_init_count == 2);
+	require(pagealloc_track_initialized == 1);
 	require(lifecycle_early_invalidate_count == 2);
 	ptr = ___ihk_mc_alloc_pages(2, 0x99, 0);
 	require(ptr == alloc_area + 128);
@@ -24093,6 +24101,72 @@ fake_forward_context(int syscall_nr, void *ctx)
 	if (fake_forward_context_thread)
 		fake_forward_context_seen_mask = fake_forward_context_thread->sigmask;
 	return fake_forward_context_rc;
+}
+
+struct fake_syscall_gpr {
+	unsigned long r15, r14, r13, r12, rbp, rbx, r11, r10;
+	unsigned long r9, r8, rax, rcx, rdx, rsi, rdi, orig_rax;
+	unsigned long rip, cs, rflags, rsp, ss;
+};
+
+struct fake_syscall_context {
+	unsigned long sr[6];
+	unsigned char is_gpr_valid;
+	unsigned char is_sr_valid;
+	unsigned char spare_flags6;
+	unsigned char spare_flags5;
+	unsigned char spare_flags4;
+	unsigned char spare_flags3;
+	unsigned char spare_flags2;
+	unsigned char spare_flags1;
+	struct fake_syscall_gpr gpr;
+};
+
+__attribute__((weak)) unsigned long uti_desc;
+static int fake_direct_mlock_log_calls;
+static unsigned long fake_direct_mlock_log_addr;
+static unsigned long fake_direct_mlock_log_len;
+static int fake_direct_register_log_calls;
+static unsigned long fake_direct_register_log_desc;
+
+__attribute__((weak)) void *get_this_cpu_local_var(void)
+{
+	return NULL;
+}
+
+__attribute__((weak)) int ihk_mc_get_processor_id(void)
+{
+	return 0;
+}
+
+__attribute__((weak)) long
+syscall_policy_do_syscall2_bridge(int syscall_nr,
+				  unsigned long arg0,
+				  unsigned long arg1)
+{
+	return fake_do_syscall2(syscall_nr, arg0, arg1);
+}
+
+__attribute__((weak)) long
+syscall_policy_forward_context_bridge(int syscall_nr, void *ctx)
+{
+	return fake_forward_context(syscall_nr, ctx);
+}
+
+__attribute__((weak)) void
+syscall_linux_mlock_log_bridge(unsigned long addr, unsigned long len)
+{
+	fake_direct_mlock_log_calls++;
+	fake_direct_mlock_log_addr = addr;
+	fake_direct_mlock_log_len = len;
+}
+
+__attribute__((weak)) void
+syscall_util_register_desc_log_bridge(int tid, unsigned long desc)
+{
+	fake_direct_register_log_calls++;
+	(void)tid;
+	fake_direct_register_log_desc = desc;
 }
 
 static unsigned long
@@ -43519,6 +43593,7 @@ cat > "${tmpdir}/xpmem_helpers_equiv.c" <<'EOF_XPMEM_HELPERS'
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stddef.h>
 #include <string.h>
 
 #define XPMEM_RDONLY 0x1
@@ -51992,6 +52067,7 @@ cat > "${tmpdir}/object_helpers_equiv.c" <<'EOF_OBJECT_HELPERS'
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stddef.h>
 #include <string.h>
 #include <sys/syscall.h>
 #include <sys/types.h>
@@ -69028,6 +69104,10 @@ extern struct rb_node *rb_next(const struct rb_node *);
 
 static unsigned char arena[ARENA_SIZE];
 
+#ifndef PAGE_ALLOC_USE_C
+extern unsigned long linux_page_offset_base;
+#endif
+
 void *phys_to_virt(unsigned long p)
 {
 	if (p < ARENA_BASE || p >= ARENA_BASE + ARENA_SIZE)
@@ -69293,6 +69373,9 @@ static unsigned long digest_tree(struct rb_root *root)
 	unsigned long digest = 0;
 	unsigned long a, b, c;
 
+#ifndef PAGE_ALLOC_USE_C
+	linux_page_offset_base = (unsigned long)arena - ARENA_BASE;
+#endif
 	memset(arena, 0xa5, sizeof(arena));
 
 	require(__page_alloc_rbtree_free_range(&root, ARENA_BASE, 4 * LOCAL_PAGE_SIZE) == 0);
@@ -69499,6 +69582,10 @@ extern void abort(void);
 
 static unsigned char initial_desc[4096] __attribute__((aligned(64)));
 static unsigned char page_arena[ARENA_SIZE];
+
+#ifdef MCKERNEL_RUST_PAGEALLOC_BITMAP
+extern unsigned long linux_page_offset_base;
+#endif
 
 int ihk_mc_chk_page_address(unsigned long mem_addr)
 {
@@ -71035,6 +71122,9 @@ int main(void)
 	void *desc;
 	unsigned long a, b, c, d;
 
+#ifdef MCKERNEL_RUST_PAGEALLOC_BITMAP
+	linux_page_offset_base = (unsigned long)page_arena - ARENA_BASE;
+#endif
 	memset(initial_desc, 0xcc, sizeof(initial_desc));
 	desc = __ihk_pagealloc_init(ARENA_BASE, 256 * LOCAL_PAGE_SIZE,
 				    LOCAL_PAGE_SIZE, initial_desc, &desc_pages);
@@ -97385,6 +97475,8 @@ cat > "${tmpdir}/mcexec_helpers_smoke.c" <<'EOF_MCEXEC_HELPERS'
 	#define AT_EMPTY_PATH 0x1000
 	#endif
 	#define MCEXEC_UP_SEND_SIGNAL 0x30a02906UL
+	#define MCEXEC_UP_UTI_GET_CTX 0x30a02920UL
+	#define MCEXEC_UP_UTI_ATTR 0x30a02927UL
 	#define MCEXEC_UP_SIG_THREAD 0x30a02922UL
 	#define MCEXEC_UP_SYSCALL_THREAD 0x30a02924UL
 #ifndef WEXITED
@@ -97462,6 +97554,41 @@ struct fake_syscall_struct {
 	unsigned long args[6];
 	unsigned long ret;
 	unsigned long uti_info;
+};
+
+struct fake_uti_desc {
+	char lctx[4096];
+	char rctx[4096];
+	int mck_tid;
+	unsigned long key;
+	int pid;
+	int tid;
+	unsigned long uti_info;
+	int fd;
+	struct fake_syscall_struct syscall_stack[16];
+	int syscall_stack_top;
+	long syscalls[512];
+	long syscalls2[512];
+	int start_syscall_intercept;
+};
+
+struct fake_uti_get_ctx_desc {
+	unsigned long rp_rctx;
+	void *rctx;
+	void *lctx;
+	int uti_refill_tid;
+	unsigned long key;
+};
+
+struct fake_uti_switch_ctx_desc {
+	void *rctx;
+	void *lctx;
+};
+
+struct fake_uti_attr_desc {
+	unsigned long phys_attr;
+	char *uti_cpu_set_str;
+	size_t uti_cpu_set_len;
 };
 
 struct fake_thread_data;
@@ -97548,6 +97675,12 @@ extern void act_setfsgid(struct fake_mcexec_syscall_wait_desc *w, int fd,
 			      int cpu);
 	extern long mcexec_do_generic_syscall_body(
 		struct fake_mcexec_syscall_wait_desc *w);
+	extern long mcexec_util_thread_body(struct fake_thread_data *my_thread,
+					    unsigned long rp_rctx,
+					    int remote_tid,
+					    unsigned long pattr,
+					    unsigned long uti_info,
+					    unsigned long uti_desc_arg);
 	extern void act_generic_syscall(struct fake_mcexec_syscall_wait_desc *w,
 					int fd, int cpu);
 extern void act_sched_setaffinity(struct fake_mcexec_syscall_wait_desc *w,
@@ -98054,6 +98187,45 @@ static unsigned long fake_sched_util_args[5];
 static long fake_sched_util_ret;
 static int fake_sched_invalid_count;
 static unsigned long fake_sched_invalid_pid;
+static int fake_util_missing_desc_count;
+static void *fake_util_desc_log_ptr;
+static int fake_util_barrier_init_count;
+static int fake_util_create_worker_count;
+static int fake_util_create_worker_ret;
+static struct fake_thread_data fake_util_worker;
+static int fake_util_worker_tid;
+static int fake_util_worker_error_count;
+static int fake_util_worker_error_rc;
+static int fake_util_barrier_wait_count;
+static int fake_util_worker_tid_log_count;
+static int fake_util_worker_tid_log_value;
+static int fake_util_syscall_888_count;
+static long fake_util_syscall_888_ret;
+static int fake_util_intercept_warning_count;
+static int fake_util_intercept_warning_rc;
+static int fake_util_get_ctx_count;
+static int fake_util_get_ctx_result;
+static int fake_util_get_ctx_errno;
+static unsigned long fake_util_get_ctx_key;
+static struct fake_uti_get_ctx_desc fake_util_get_ctx_desc;
+static int fake_util_get_ctx_error_count;
+static int fake_util_get_ctx_error_errno;
+static int fake_util_param_large_count;
+static int fake_util_attr_count;
+static int fake_util_attr_result;
+static int fake_util_attr_errno;
+static struct fake_uti_attr_desc fake_util_attr_desc;
+static int fake_util_attr_error_count;
+static int fake_util_attr_error_errno;
+static int fake_util_switch_count;
+static int fake_util_switch_ret;
+static struct fake_uti_switch_ctx_desc fake_util_switch_desc;
+static void *fake_util_switch_lctx;
+static void *fake_util_switch_rctx;
+static int fake_util_switch_failed_count;
+static int fake_util_switch_failed_rc;
+static int fake_util_switch_returned_count;
+static int fake_util_switch_returned_rc;
 static int fake_perf_event_open_count;
 static long fake_perf_event_open_ret;
 static int fake_clock_gettime_count;
@@ -99438,6 +99610,30 @@ int ioctl(int fd, unsigned long request, ...)
 	} else if (request == MCEXEC_UP_CLOSE_EXEC) {
 		fake_ioctl_close_exec_count++;
 		return fake_ioctl_close_exec_result;
+	} else if (request == MCEXEC_UP_UTI_GET_CTX) {
+		struct fake_uti_get_ctx_desc *desc =
+			(struct fake_uti_get_ctx_desc *)arg;
+
+		memcpy(&fake_util_get_ctx_desc, desc,
+		       sizeof(fake_util_get_ctx_desc));
+		fake_util_get_ctx_count++;
+		if (fake_util_get_ctx_result) {
+			errno = fake_util_get_ctx_errno;
+			return fake_util_get_ctx_result;
+		}
+		desc->key = fake_util_get_ctx_key;
+		return 0;
+	} else if (request == MCEXEC_UP_UTI_ATTR) {
+		struct fake_uti_attr_desc *desc =
+			(struct fake_uti_attr_desc *)arg;
+
+		memcpy(&fake_util_attr_desc, desc, sizeof(fake_util_attr_desc));
+		fake_util_attr_count++;
+		if (fake_util_attr_result) {
+			errno = fake_util_attr_errno;
+			return fake_util_attr_result;
+		}
+		return 0;
 	} else if (request == MCEXEC_UP_SIG_THREAD) {
 		if (fake_sig_thread_count >= (int)(sizeof(fake_sig_thread_arg) /
 						  sizeof(fake_sig_thread_arg[0]))) {
@@ -99521,6 +99717,10 @@ long syscall(long number, ...)
 	if (number == 234) {
 		errno = EINVAL;
 		return -1;
+	}
+	if (number == 888) {
+		fake_util_syscall_888_count++;
+		return fake_util_syscall_888_ret;
 	}
 
 	va_start(ap, number);
@@ -99770,6 +99970,137 @@ void mcexec_do_generic_syscall_done_bridge(unsigned long number, long ret)
 	fake_mcexec_generic_done_count++;
 	fake_mcexec_generic_done_number = number;
 	fake_mcexec_generic_done_ret = ret;
+}
+
+static void reset_fake_util_thread(void)
+{
+	fake_util_missing_desc_count = 0;
+	fake_util_desc_log_ptr = NULL;
+	fake_util_barrier_init_count = 0;
+	fake_util_create_worker_count = 0;
+	fake_util_create_worker_ret = 0;
+	memset(&fake_util_worker, 0, sizeof(fake_util_worker));
+	fake_util_worker_tid = 4321;
+	fake_util_worker_error_count = 0;
+	fake_util_worker_error_rc = 0;
+	fake_util_barrier_wait_count = 0;
+	fake_util_worker_tid_log_count = 0;
+	fake_util_worker_tid_log_value = 0;
+	fake_util_syscall_888_count = 0;
+	fake_util_syscall_888_ret = -1;
+	fake_util_intercept_warning_count = 0;
+	fake_util_intercept_warning_rc = 0;
+	fake_util_get_ctx_count = 0;
+	fake_util_get_ctx_result = 0;
+	fake_util_get_ctx_errno = 0;
+	fake_util_get_ctx_key = 0xabcdef0123456789UL;
+	memset(&fake_util_get_ctx_desc, 0, sizeof(fake_util_get_ctx_desc));
+	fake_util_get_ctx_error_count = 0;
+	fake_util_get_ctx_error_errno = 0;
+	fake_util_param_large_count = 0;
+	fake_util_attr_count = 0;
+	fake_util_attr_result = 0;
+	fake_util_attr_errno = 0;
+	memset(&fake_util_attr_desc, 0, sizeof(fake_util_attr_desc));
+	fake_util_attr_error_count = 0;
+	fake_util_attr_error_errno = 0;
+	fake_util_switch_count = 0;
+	fake_util_switch_ret = -22;
+	memset(&fake_util_switch_desc, 0, sizeof(fake_util_switch_desc));
+	fake_util_switch_lctx = NULL;
+	fake_util_switch_rctx = NULL;
+	fake_util_switch_failed_count = 0;
+	fake_util_switch_failed_rc = 0;
+	fake_util_switch_returned_count = 0;
+	fake_util_switch_returned_rc = 0;
+}
+
+void mcexec_util_thread_missing_desc_bridge(void)
+{
+	fake_util_missing_desc_count++;
+}
+
+void mcexec_util_thread_desc_log_bridge(void *desc)
+{
+	fake_util_desc_log_ptr = desc;
+}
+
+void mcexec_util_thread_barrier_init_bridge(void)
+{
+	fake_util_barrier_init_count++;
+}
+
+int mcexec_util_thread_create_worker_bridge(struct fake_thread_data **tp_out)
+{
+	fake_util_create_worker_count++;
+	if (fake_util_create_worker_ret)
+		return fake_util_create_worker_ret;
+	fake_util_worker.tid = fake_util_worker_tid;
+	if (tp_out)
+		*tp_out = &fake_util_worker;
+	return 0;
+}
+
+void mcexec_util_thread_worker_error_bridge(int rc)
+{
+	fake_util_worker_error_count++;
+	fake_util_worker_error_rc = rc;
+}
+
+void mcexec_util_thread_barrier_wait_bridge(void)
+{
+	fake_util_barrier_wait_count++;
+}
+
+void mcexec_util_thread_worker_tid_log_bridge(int tid)
+{
+	fake_util_worker_tid_log_count++;
+	fake_util_worker_tid_log_value = tid;
+}
+
+void mcexec_util_thread_intercept_warning_bridge(int rc)
+{
+	fake_util_intercept_warning_count++;
+	fake_util_intercept_warning_rc = rc;
+}
+
+void mcexec_util_thread_get_ctx_error_bridge(int errno_value)
+{
+	fake_util_get_ctx_error_count++;
+	fake_util_get_ctx_error_errno = errno_value;
+}
+
+void mcexec_util_thread_param_large_bridge(void)
+{
+	fake_util_param_large_count++;
+}
+
+void mcexec_util_thread_attr_error_bridge(int errno_value)
+{
+	fake_util_attr_error_count++;
+	fake_util_attr_error_errno = errno_value;
+}
+
+int mcexec_util_thread_switch_ctx_bridge(struct fake_uti_switch_ctx_desc *desc,
+					 void *lctx, void *rctx)
+{
+	fake_util_switch_count++;
+	memcpy(&fake_util_switch_desc, desc, sizeof(fake_util_switch_desc));
+	fake_util_switch_lctx = lctx;
+	fake_util_switch_rctx = rctx;
+	return fake_util_switch_ret;
+}
+
+void mcexec_util_thread_switch_failed_bridge(int rc)
+{
+	fake_util_switch_failed_count++;
+	fake_util_switch_failed_rc = rc;
+}
+
+void mcexec_util_thread_switch_returned_bridge(int rc)
+{
+	fake_util_switch_returned_count++;
+	fake_util_switch_returned_rc = rc;
 }
 
 long mcexec_sched_setaffinity_util_bridge(void *my_thread,
@@ -103398,6 +103729,144 @@ int main(void)
 			thread_data = saved_thread_data;
 		}
 
+	{
+		struct fake_uti_desc util_desc;
+		struct fake_thread_data util_thread_data;
+
+		memset(&util_thread_data, 0, sizeof(util_thread_data));
+
+		reset_fake_util_thread();
+		require(mcexec_util_thread_body(&util_thread_data, 0x1000, 77,
+						0, 0x2000, 0) == -EINVAL);
+		require(fake_util_missing_desc_count == 1);
+		require(fake_util_barrier_init_count == 0);
+
+		reset_fake_util_thread();
+		memset(&util_desc, 0, sizeof(util_desc));
+		fake_util_create_worker_ret = 17;
+		require(mcexec_util_thread_body(&util_thread_data, 0x1001, 78,
+						0, 0x2001,
+						(unsigned long)&util_desc) ==
+			-EINVAL);
+		require(fake_util_desc_log_ptr == &util_desc);
+		require(fake_util_barrier_init_count == 1);
+		require(fake_util_create_worker_count == 1);
+		require(fake_util_worker_error_count == 1);
+		require(fake_util_worker_error_rc == 17);
+		require(fake_util_barrier_wait_count == 0);
+		require(fake_util_get_ctx_count == 0);
+
+		reset_fake_util_thread();
+		memset(&util_desc, 0, sizeof(util_desc));
+		fd = 66;
+		page_size = 8192;
+		fake_util_get_ctx_result = -1;
+		fake_util_get_ctx_errno = EIO;
+		require(mcexec_util_thread_body(&util_thread_data, 0x1010, 79,
+						0, 0x2020,
+						(unsigned long)&util_desc) ==
+			-EIO);
+		require(util_desc.fd == 66);
+		require(fake_util_syscall_888_count == 1);
+		require(fake_util_get_ctx_count == 1);
+		require(fake_util_get_ctx_desc.rp_rctx == 0x1010);
+		require(fake_util_get_ctx_desc.rctx == util_desc.rctx);
+		require(fake_util_get_ctx_desc.lctx == util_desc.lctx);
+		require(fake_util_get_ctx_desc.uti_refill_tid == 4321);
+		require(fake_util_get_ctx_error_count == 1);
+		require(fake_util_get_ctx_error_errno == EIO);
+		require(util_desc.mck_tid == 0);
+		require(fake_util_switch_count == 0);
+
+		reset_fake_util_thread();
+		memset(&util_desc, 0, sizeof(util_desc));
+		fd = 67;
+		page_size = 1;
+		require(mcexec_util_thread_body(&util_thread_data, 0x1020, 80,
+						0, 0x2030,
+						(unsigned long)&util_desc) ==
+			-ENOMEM);
+		require(util_desc.key == fake_util_get_ctx_key);
+		require(util_desc.mck_tid == 80);
+		require(util_desc.pid == getpid());
+		require(util_desc.tid == 12345);
+		require(util_desc.uti_info == 0x2030);
+		require(fake_util_param_large_count == 1);
+		require(util_desc.start_syscall_intercept == 0);
+		require(fake_util_attr_count == 0);
+		require(fake_util_switch_count == 0);
+
+		reset_fake_util_thread();
+		memset(&util_desc, 0, sizeof(util_desc));
+		fd = 68;
+		page_size = 8192;
+		fake_util_attr_result = -1;
+		fake_util_attr_errno = EACCES;
+		require(setenv("UTI_CPU_SET", "0-3", 1) == 0);
+		require(mcexec_util_thread_body(&util_thread_data, 0x1030, 81,
+						0x4444, 0x2040,
+						(unsigned long)&util_desc) ==
+			-EACCES);
+		require(fake_util_attr_count == 1);
+		require(fake_util_attr_desc.phys_attr == 0x4444);
+		require(strcmp(fake_util_attr_desc.uti_cpu_set_str, "0-3") == 0);
+		require(fake_util_attr_desc.uti_cpu_set_len == strlen("0-3") + 1);
+		require(fake_util_attr_error_count == 1);
+		require(fake_util_attr_error_errno == EACCES);
+		require(util_desc.start_syscall_intercept == 0);
+		require(fake_util_switch_count == 0);
+
+		reset_fake_util_thread();
+		memset(&util_desc, 0, sizeof(util_desc));
+		fd = 69;
+		page_size = 8192;
+		fake_util_syscall_888_ret = 5;
+		fake_util_switch_ret = -22;
+		require(mcexec_util_thread_body(&util_thread_data, 0x1040, 82,
+						0x5555, 0x2050,
+						(unsigned long)&util_desc) ==
+			-22);
+		require(fake_util_intercept_warning_count == 1);
+		require(fake_util_intercept_warning_rc == 5);
+		require(fake_util_worker_tid_log_count == 1);
+		require(fake_util_worker_tid_log_value == 4321);
+		require(util_desc.fd == 69);
+		require(util_desc.mck_tid == 82);
+		require(util_desc.key == fake_util_get_ctx_key);
+		require(util_desc.pid == getpid());
+		require(util_desc.tid == 12345);
+		require(util_desc.uti_info == 0x2050);
+		require(util_desc.start_syscall_intercept == 1);
+		require(fake_util_switch_count == 1);
+		require(fake_util_switch_desc.rctx == util_desc.rctx);
+		require(fake_util_switch_desc.lctx == util_desc.lctx);
+		require(fake_util_switch_lctx == util_desc.lctx);
+		require(fake_util_switch_rctx == util_desc.rctx);
+		require(fake_util_switch_failed_count == 1);
+		require(fake_util_switch_failed_rc == -22);
+		require(fake_util_switch_returned_count == 0);
+
+		reset_fake_util_thread();
+		memset(&util_desc, 0, sizeof(util_desc));
+		fd = 70;
+		page_size = 8192;
+		fake_util_switch_ret = 0;
+		require(mcexec_util_thread_body(&util_thread_data, 0x1050, 83,
+						0, 0x2060,
+						(unsigned long)&util_desc) ==
+			-EINVAL);
+		require(fake_util_attr_count == 0);
+		require(fake_util_switch_returned_count == 1);
+		require(fake_util_switch_returned_rc == 0);
+		require(fake_util_switch_failed_count == 0);
+		require(unsetenv("UTI_CPU_SET") == 0);
+
+		mix(&digest, (unsigned long)(fake_util_get_ctx_count +
+					     fake_util_attr_count +
+					     fake_util_switch_count));
+		mix(&digest, util_desc.key);
+	}
+
 		memset(&sigwait, 0, sizeof(sigwait));
 		fake_sched_util_count = 0;
 	fake_sched_invalid_count = 0;
@@ -104521,8 +104990,10 @@ int main(void)
 EOF_X86_COREDUMP
 
 cat > "${tmpdir}/mcctrl_helpers_smoke.c" <<'EOF_MCCTRL_HELPERS'
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stddef.h>
 #include <string.h>
 
 #define SCD_MSG_PROCFS_TID_CREATE 0x44
@@ -104539,6 +105010,135 @@ cat > "${tmpdir}/mcctrl_helpers_smoke.c" <<'EOF_MCCTRL_HELPERS'
 #define SCD_MSG_SYSFS_REQ_RELEASE 0x3e
 #define SCD_MSG_SYSFS_RESP_RELEASE 0x3f
 #define SCD_MSG_SYSFS_REQ_SETUP 0x40
+
+struct futex_key {
+	unsigned long opaque[3];
+};
+
+struct list_head {
+	struct list_head *next;
+	struct list_head *prev;
+};
+
+struct plist_head {
+	struct list_head prio_list;
+	struct list_head node_list;
+};
+
+struct plist_node {
+	int prio;
+	struct plist_head plist;
+};
+
+struct fake_futex_q {
+	struct plist_node list;
+	void *task;
+	void *lock_ptr;
+	struct futex_key key;
+	struct futex_key *requeue_pi_key;
+	unsigned int bitset;
+	void *uti_futex_resp;
+	int linux_cpu;
+};
+
+struct fake_wake_body_bucket {
+	unsigned long pad;
+	unsigned long lock;
+	struct plist_head chain;
+};
+
+static void init_list_head(struct list_head *list)
+{
+	list->next = list;
+	list->prev = list;
+}
+
+static void plist_head_init(struct plist_head *head)
+{
+	init_list_head(&head->prio_list);
+	init_list_head(&head->node_list);
+}
+
+static void plist_node_init(struct plist_node *node, int prio)
+{
+	node->prio = prio;
+	plist_head_init(&node->plist);
+}
+
+static int plist_node_empty(const struct plist_node *node)
+{
+	return node->plist.node_list.next == &node->plist.node_list;
+}
+
+static void list_add_tail_local(struct list_head *entry,
+		struct list_head *head)
+{
+	struct list_head *prev = head->prev;
+
+	entry->next = head;
+	entry->prev = prev;
+	prev->next = entry;
+	head->prev = entry;
+}
+
+static void list_del_init_local(struct list_head *entry)
+{
+	entry->next->prev = entry->prev;
+	entry->prev->next = entry->next;
+	init_list_head(entry);
+}
+
+static void plist_add(struct plist_node *node, struct plist_head *head)
+{
+	list_add_tail_local(&node->plist.prio_list, &head->prio_list);
+	list_add_tail_local(&node->plist.node_list, &head->node_list);
+}
+
+static void futex_wake_mark_woken_result(unsigned long q_addr,
+		unsigned long list_offset, unsigned long node_plist_offset,
+		unsigned long lock_ptr_offset)
+{
+	struct plist_node *node =
+		(struct plist_node *)(q_addr + list_offset);
+
+	(void)node_plist_offset;
+	if (!plist_node_empty(node)) {
+		list_del_init_local(&node->plist.node_list);
+		list_del_init_local(&node->plist.prio_list);
+	}
+	*(void **)(q_addr + lock_ptr_offset) = NULL;
+}
+
+static int futex_requeue_move_result(unsigned long q_addr,
+		unsigned long list_offset, unsigned long lock_ptr_offset,
+		unsigned long source_chain_addr, unsigned long target_chain_addr,
+		unsigned long target_lock_addr, unsigned long debug_offset)
+{
+	struct plist_node *node =
+		(struct plist_node *)(q_addr + list_offset);
+	struct plist_head *target = (struct plist_head *)target_chain_addr;
+
+	(void)debug_offset;
+	if (source_chain_addr == target_chain_addr)
+		return 0;
+	list_del_init_local(&node->plist.node_list);
+	list_del_init_local(&node->plist.prio_list);
+	plist_add(node, target);
+	*(void **)(q_addr + lock_ptr_offset) = (void *)target_lock_addr;
+	return 1;
+}
+
+static int futex_requeue_key_update_result(unsigned long q_addr,
+		unsigned long key_offset, unsigned long key_addr,
+		unsigned long key_size, void (*key_refs)(unsigned long))
+{
+	if (!q_addr || !key_addr || !key_size || !key_refs)
+		return -22;
+	key_refs(key_addr);
+	memcpy((void *)(q_addr + key_offset), (void *)key_addr, key_size);
+	return 0;
+}
+
 #define SYSFS_PATH_MAX 1024
 #define SYSFS_SNOOPING_OPS_d32 ((void *)1)
 #define SYSFS_SNOOPING_OPS_d64 ((void *)2)
@@ -104549,9 +105149,12 @@ cat > "${tmpdir}/mcctrl_helpers_smoke.c" <<'EOF_MCCTRL_HELPERS'
 #define SYSFS_SNOOPING_OPS_pb ((void *)7)
 #define SYSFS_SNOOPING_OPS_u32K ((void *)8)
 #define SNT_FILE 1
+#define SNT_DIR 2
 #define PROCFS_DIR_MODE_0555 0040555
 #define MCEXEC_UP_PREPARE_IMAGE 0x30a02900UL
 #define MCEXEC_UP_TRANSFER 0x30a02901UL
+#define MCEXEC_UP_TRANSFER_TO_REMOTE 0
+#define MCEXEC_UP_TRANSFER_FROM_REMOTE 1
 #define MCEXEC_UP_START_IMAGE 0x30a02902UL
 #define MCEXEC_UP_WAIT_SYSCALL 0x30a02903UL
 #define MCEXEC_UP_RET_SYSCALL 0x30a02904UL
@@ -104580,6 +105183,7 @@ cat > "${tmpdir}/mcctrl_helpers_smoke.c" <<'EOF_MCCTRL_HELPERS'
 #define MCEXEC_UP_UTI_ATTR 0x30a02927UL
 #define MCEXEC_UP_RELEASE_USER_SPACE 0x30a02928UL
 #define MCEXEC_UP_DEBUG_LOG 0x40000000UL
+#define SCD_MSG_SEND_SIGNAL 0x7
 #define SCD_MSG_DEBUG_LOG 0x20
 #define SCD_MSG_CPU_RW_REG 0x52
 #define MCCTRL_OS_CPU_READ_REGISTER 0
@@ -104591,6 +105195,9 @@ cat > "${tmpdir}/mcctrl_helpers_smoke.c" <<'EOF_MCCTRL_HELPERS'
 #define IHK_OS_AUX_PERF_DISABLE 0x11290104UL
 #define IHK_OS_AUX_PERF_DESTROY 0x11290105UL
 #define IHK_OS_GETRUSAGE 0x11290106UL
+#define IHK_MAX_NUM_PGSIZES 8
+#define IHK_MAX_NUM_NUMA_NODES 1024
+#define IHK_MAX_NUM_CPUS 1024
 #define FAKE_NR_CLOSE 3UL
 #define FAKE_NR_MMAP 9UL
 #define FAKE_NR_MPROTECT 10UL
@@ -104601,6 +105208,33 @@ cat > "${tmpdir}/mcctrl_helpers_smoke.c" <<'EOF_MCCTRL_HELPERS'
 #define FAKE_NR_COREDUMP 999UL
 #define FAKE_SCHED_CHECK_SAME_OWNER 1UL
 #define FAKE_SCHED_CHECK_ROOT 2UL
+#define PAGER_REQ_CREATE 1UL
+#define PAGER_REQ_RELEASE 2UL
+#define PAGER_REQ_READ 3UL
+#define PAGER_REQ_WRITE 4UL
+#define PAGER_REQ_MAP 5UL
+#define PAGER_REQ_PFN 6UL
+#define PAGER_REQ_UNMAP 7UL
+#define PAGER_REQ_MLOCK_LIST 8UL
+#define SCD_MSG_REMOTE_PAGE_FAULT 0x18
+#define FAKE_VM_PFNMAP 0x400UL
+#define FUTEX_WAIT 0
+#define FUTEX_WAKE 1
+#define FUTEX_REQUEUE 3
+#define FUTEX_CMP_REQUEUE 4
+#define FUTEX_WAKE_OP 5
+#define FUTEX_WAIT_BITSET 9
+#define FUTEX_WAKE_BITSET 10
+#define FUTEX_WAIT_REQUEUE_PI 11
+#define FUTEX_CLOCK_REALTIME 256
+#define FUTEX_BITSET_MATCH_ANY 0xffffffffU
+#define EINVAL 22
+#define ENOSPC 28
+#define ENOSYS 38
+#define EINTR 4
+#define ETIMEDOUT 110
+#define ENOENT 2
+#define ENOTDIR 20
 
 struct mcctrl_procfs_work_prefix {
 	void *os;
@@ -104665,6 +105299,16 @@ struct mcctrl_sysfs_req_unlink_param {
 	int busy;
 };
 
+struct mcctrl_sysfs_req_setup_param {
+	int error;
+	int padding;
+	long buf_rpa;
+	long bufsize;
+	char padding3[SYSFS_PATH_MAX];
+	int padding2;
+	int busy;
+};
+
 struct mcctrl_sysfsm_bitmap_param {
 	int nbits;
 	int padding;
@@ -104701,6 +105345,86 @@ struct fake_rva_to_rpa_cache_node {
 	int freed;
 };
 
+struct fake_mcctrl_list_head {
+	struct fake_mcctrl_list_head *next;
+	struct fake_mcctrl_list_head *prev;
+};
+
+struct fake_mcctrl_ptd {
+	void *ppd;
+	struct fake_mcctrl_list_head hash;
+	void *task;
+	void *data;
+	int tid;
+	int refcount;
+};
+
+struct fake_mcctrl_ppd {
+	struct fake_mcctrl_list_head thread_hash[256];
+	unsigned char thread_lock[256];
+};
+
+struct fake_mcctrl_pidfd_entry {
+	void *filp;
+	unsigned long os;
+	void *group_leader;
+	int pid;
+	int fd;
+	struct fake_mcctrl_list_head hash;
+	char tofu_dev_path[128];
+	void *pde_data;
+};
+
+struct fake_mcctrl_pager {
+	struct fake_mcctrl_list_head list;
+	void *inode;
+	unsigned long ref;
+	void *rofile;
+	void *rwfile;
+	unsigned long map_uaddr;
+	unsigned long map_len;
+	unsigned long map_off;
+};
+
+struct fake_mcctrl_pager_ppd {
+	struct fake_mcctrl_list_head devobj_pager_list;
+	unsigned char devobj_pager_lock;
+};
+
+struct mcctrl_syscall_ptd_offsets {
+	unsigned long ppd_thread_hash;
+	unsigned long ppd_thread_lock;
+	unsigned long ptd_ppd;
+	unsigned long ptd_hash;
+	unsigned long ptd_task;
+	unsigned long ptd_data;
+	unsigned long ptd_tid;
+	unsigned long ptd_refcount;
+	unsigned long list_head_size;
+	unsigned long rwlock_size;
+};
+
+struct mcctrl_syscall_pidfd_offsets {
+	unsigned long entry_filp;
+	unsigned long entry_os;
+	unsigned long entry_group_leader;
+	unsigned long entry_pid;
+	unsigned long entry_fd;
+	unsigned long entry_hash;
+	unsigned long entry_tofu_dev_path;
+	unsigned long entry_pde_data;
+	unsigned long list_head_size;
+	unsigned long tofu_dev_path_size;
+};
+
+struct mcctrl_syscall_pager_offsets {
+	unsigned long ppd_devobj_pager_list;
+	unsigned long ppd_devobj_pager_lock;
+	unsigned long pager_list;
+	unsigned long pager_rofile;
+	unsigned long pager_rwfile;
+};
+
 typedef struct mcctrl_procfs_work_prefix *(*mcctrl_procfs_work_alloc_fn_t)(
 		unsigned long);
 typedef void (*mcctrl_procfs_work_init_schedule_fn_t)(
@@ -104723,6 +105447,31 @@ typedef int (*mcctrl_procfs_format_name_fn_t)(char *, unsigned long, int);
 typedef void *(*mcctrl_procfs_find_entry_fn_t)(void *, const char *);
 typedef void *(*mcctrl_procfs_add_entry_fn_t)(void *, const char *, int);
 typedef void (*mcctrl_procfs_set_osnum_fn_t)(void *, int);
+typedef const char *(*mcctrl_procfs_entry_name_fn_t)(const void *);
+typedef void *(*mcctrl_procfs_entry_parent_fn_t)(const void *);
+typedef unsigned int (*mcctrl_procfs_entry_mode_fn_t)(const void *);
+typedef const void *(*mcctrl_procfs_entry_fops_fn_t)(const void *);
+typedef const void *(*mcctrl_procfs_entry_next_fn_t)(const void *,
+		unsigned long);
+typedef void (*mcctrl_procfs_add_entry_with_ids_fn_t)(void *,
+		const char *, unsigned int, const void *, const void *,
+		const void *);
+typedef void *(*mcctrl_procfs_first_entry_fn_t)(void *);
+typedef void *(*mcctrl_procfs_next_entry_fn_t)(void *, void *);
+typedef void (*mcctrl_procfs_delete_entry_fn_t)(void *);
+typedef void *(*mcctrl_procfs_alloc_entry_fn_t)(unsigned long);
+typedef void (*mcctrl_procfs_init_entry_fn_t)(void *, const char *);
+typedef void *(*mcctrl_procfs_create_pde_fn_t)(void *, const char *,
+		unsigned int, const void *, const void *, const void *, void *);
+typedef void (*mcctrl_procfs_commit_entry_fn_t)(void *, void *, void *,
+		const void *, const void *);
+typedef void (*mcctrl_procfs_entry_log_fn_t)(const char *);
+typedef void (*mcctrl_procfs_entry_void_fn_t)(void *);
+typedef void *(*mcctrl_procfs_entry_data_fn_t)(void *);
+typedef void (*mcctrl_procfs_void_fn_t)(void);
+typedef void *(*mcctrl_procfs_find_vpid_fn_t)(int);
+typedef void *(*mcctrl_procfs_pid_task_fn_t)(void *, int);
+typedef void *(*mcctrl_procfs_task_cred_fn_t)(void *);
 typedef struct mcctrl_sysfs_work_prefix *(*mcctrl_sysfs_work_alloc_fn_t)(
 		unsigned long);
 typedef void (*mcctrl_sysfs_work_init_schedule_fn_t)(
@@ -104739,6 +105488,10 @@ typedef void (*mcctrl_sysfs_local_copy_fn_t)(void *, const void *,
 typedef void (*mcctrl_sysfs_unknown_ops_fn_t)(long);
 typedef long (*mcctrl_sysfs_node_long_fn_t)(void *);
 typedef int (*mcctrl_sysfs_node_type_fn_t)(void *);
+typedef const char *(*mcctrl_sysfs_node_name_fn_t)(void *);
+typedef void *(*mcctrl_sysfs_node_ptr_fn_t)(void *);
+typedef void *(*mcctrl_sysfs_node_next_fn_t)(void *, void *);
+typedef void *(*mcctrl_sysfs_err_ptr_fn_t)(int);
 typedef void (*mcctrl_sysfs_free_fn_t)(void *);
 typedef int (*mcctrl_sysfs_local_create_fn_t)(
 		void *, struct mcctrl_sysfs_req_create_param *);
@@ -104759,6 +105512,85 @@ typedef void (*mcctrl_sysfs_set_busy_fn_t)(void *, int);
 typedef int (*mcctrl_sysfs_send_fn_t)(void *, int, int, long, long, long,
 		int);
 typedef long (*mcctrl_sysfs_req_result_fn_t)(void *);
+typedef unsigned long (*mcctrl_sysfs_bitmap_format_fn_t)(void *,
+		unsigned long, void *, int);
+typedef void *(*mcctrl_sysfs_os_to_dev_fn_t)(void *);
+typedef unsigned long (*mcctrl_sysfs_map_memory_fn_t)(void *,
+		unsigned long, unsigned long);
+typedef void *(*mcctrl_sysfs_map_virtual_simple_fn_t)(void *,
+		unsigned long, unsigned long);
+typedef void (*mcctrl_sysfs_unmap_virtual_fn_t)(void *, void *,
+		unsigned long);
+typedef void (*mcctrl_sysfs_unmap_memory_fn_t)(void *, unsigned long,
+		unsigned long);
+typedef void (*mcctrl_sysfs_wmb_fn_t)(void);
+typedef int (*mcctrl_sysfs_req_setup_local_fn_t)(void *, void *,
+		unsigned long, unsigned long);
+typedef int (*mcctrl_sysfs_req_create_local_fn_t)(void *,
+		struct mcctrl_sysfs_req_create_param *);
+typedef int (*mcctrl_sysfs_req_mkdir_local_fn_t)(void *,
+		struct mcctrl_sysfs_req_mkdir_param *);
+typedef int (*mcctrl_sysfs_req_symlink_local_fn_t)(void *,
+		struct mcctrl_sysfs_req_symlink_param *);
+typedef int (*mcctrl_sysfs_req_lookup_local_fn_t)(void *,
+		struct mcctrl_sysfs_req_lookup_param *);
+typedef int (*mcctrl_sysfs_req_unlink_local_fn_t)(void *,
+		struct mcctrl_sysfs_req_unlink_param *);
+typedef int (*mcctrl_futex_wait_fn_t)(uint32_t *, int, uint32_t,
+		uint64_t, uint32_t, int, void *);
+typedef int (*mcctrl_futex_wake_fn_t)(uint32_t *, int, int, uint32_t,
+		void *);
+typedef int (*mcctrl_futex_requeue_fn_t)(uint32_t *, int, uint32_t *,
+		int, int, uint32_t *, int, void *);
+typedef int (*mcctrl_futex_wake_op_fn_t)(uint32_t *, int, uint32_t *,
+		int, int, int, void *);
+typedef void (*mcctrl_futex_warn_fn_t)(int);
+typedef void *(*mcctrl_futex_info_ptr_fn_t)(void *);
+typedef int (*mcctrl_futex_current_cpu_fn_t)(void);
+typedef void (*mcctrl_futex_prepare_wait_q_fn_t)(void *, uint32_t,
+		void *, int);
+typedef int (*mcctrl_futex_wait_setup_fn_t)(uint32_t *, uint32_t,
+		int, void *, void **, void *);
+typedef long long (*mcctrl_futex_wait_queue_fn_t)(void *, void *,
+		uint64_t, void *);
+typedef int (*mcctrl_futex_unqueue_fn_t)(void *);
+typedef void (*mcctrl_futex_put_q_key_fn_t)(int, void *);
+typedef void (*mcctrl_futex_wait_log_fn_t)(int, void *);
+typedef int (*mcctrl_futex_get_key_body_fn_t)(unsigned long, int,
+		unsigned long, unsigned long);
+typedef unsigned long (*mcctrl_futex_hash_key_fn_t)(unsigned long,
+		unsigned long);
+typedef unsigned long (*mcctrl_futex_wake_lock_fn_t)(unsigned long);
+typedef void (*mcctrl_futex_wake_unlock_fn_t)(unsigned long,
+		unsigned long);
+typedef void (*mcctrl_futex_hb_lock_fn_t)(unsigned long);
+typedef void (*mcctrl_futex_hb_unlock_fn_t)(unsigned long);
+typedef void (*mcctrl_futex_put_key_fn_t)(int, unsigned long);
+typedef void (*mcctrl_futex_wake_entry_fn_t)(unsigned long,
+		unsigned long);
+typedef int (*mcctrl_futex_atomic_op_fn_t)(int, unsigned long);
+typedef int (*mcctrl_futex_get_value_fn_t)(unsigned long, unsigned long);
+typedef void (*mcctrl_futex_drop_key_refs_fn_t)(unsigned long);
+typedef void (*mcctrl_futex_requeue_entry_fn_t)(unsigned long,
+		unsigned long);
+typedef void *(*mcctrl_syscall_ptd_alloc_fn_t)(unsigned long);
+typedef void (*mcctrl_syscall_ptd_free_fn_t)(void *);
+typedef unsigned long (*mcctrl_syscall_ptd_lock_fn_t)(void *);
+typedef void (*mcctrl_syscall_ptd_unlock_fn_t)(void *, unsigned long);
+typedef void (*mcctrl_syscall_ptd_log_fn_t)(int, int, void *);
+typedef void *(*mcctrl_syscall_pidfd_alloc_fn_t)(unsigned long);
+typedef void (*mcctrl_syscall_pidfd_free_fn_t)(void *);
+typedef void (*mcctrl_syscall_pidfd_lock_init_fn_t)(void *);
+typedef unsigned long (*mcctrl_syscall_pidfd_lock_fn_t)(void *);
+typedef void (*mcctrl_syscall_pidfd_unlock_fn_t)(void *, unsigned long);
+typedef void (*mcctrl_syscall_pidfd_log_fn_t)(int, void *, int, int);
+typedef unsigned long (*mcctrl_syscall_pager_lock_fn_t)(void *);
+typedef void (*mcctrl_syscall_pager_unlock_fn_t)(void *, unsigned long);
+typedef int (*mcctrl_syscall_pager_predicate_fn_t)(void);
+typedef int (*mcctrl_syscall_pager_sem_down_fn_t)(void *);
+typedef void (*mcctrl_syscall_pager_sem_up_fn_t)(void *);
+typedef void (*mcctrl_syscall_pager_ptr_fn_t)(void *);
+typedef void (*mcctrl_syscall_pager_log_fn_t)(int, void *, int);
 typedef long (*mcctrl_control_dispatch_fn_t)(unsigned long, unsigned long,
 		unsigned long);
 struct mcctrl_syscall_request {
@@ -104788,9 +105620,17 @@ struct mcctrl_ikc_scd_packet_cpu_rw {
 	void *resp;
 };
 
+struct mcctrl_ikc_scd_packet_remote_page_fault {
+	int target_cpu;
+	int fault_tid;
+	unsigned long fault_address;
+	unsigned long fault_reason;
+};
+
 union mcctrl_ikc_scd_packet_body {
 	struct mcctrl_ikc_scd_packet_traditional traditional;
 	struct mcctrl_ikc_scd_packet_cpu_rw cpu_rw;
+	struct mcctrl_ikc_scd_packet_remote_page_fault remote_page_fault;
 	unsigned char raw[104];
 };
 
@@ -104809,6 +105649,143 @@ struct ihk_os_cpu_register {
 	int sync;
 };
 
+struct prepare_dma_desc {
+	unsigned long size;
+	unsigned long pa;
+};
+
+struct free_dma_desc {
+	unsigned long pa;
+	unsigned long size;
+};
+
+struct sys_mount_desc {
+	char *dev_name;
+	char *dir_name;
+	char *type_name;
+	unsigned long flags;
+	void *data;
+};
+
+struct sys_umount_desc {
+	char *dir_name;
+};
+
+struct sys_unshare_desc {
+	unsigned long unshare_flags;
+};
+
+struct release_user_space_desc {
+	unsigned long user_start;
+	unsigned long user_end;
+};
+
+struct mcctrl_ioctl_getrusage_desc {
+	void *rusage;
+	unsigned long size_rusage;
+};
+
+struct fake_rusage_percpu {
+	unsigned long user_tsc;
+	unsigned long system_tsc;
+};
+
+struct fake_rusage_global {
+	long memory_stat_rss[IHK_MAX_NUM_PGSIZES];
+	long memory_stat_mapped_file[IHK_MAX_NUM_PGSIZES];
+	long rss_current;
+	unsigned long memory_max_usage;
+	unsigned long max_num_threads;
+	unsigned long num_threads;
+	unsigned long memory_kmem_usage;
+	unsigned long memory_kmem_max_usage;
+	unsigned long memory_numa_stat[IHK_MAX_NUM_NUMA_NODES];
+	struct fake_rusage_percpu cpu[IHK_MAX_NUM_CPUS];
+	unsigned long total_memory;
+	unsigned long total_memory_usage;
+	unsigned long total_memory_max_usage;
+	unsigned long num_numa_nodes;
+	unsigned long num_processors;
+	unsigned long ns_per_tsc;
+};
+
+struct fake_ihk_os_rusage {
+	unsigned long memory_stat_rss[IHK_MAX_NUM_PGSIZES];
+	unsigned long memory_stat_mapped_file[IHK_MAX_NUM_PGSIZES];
+	unsigned long memory_max_usage;
+	unsigned long memory_kmem_usage;
+	unsigned long memory_kmem_max_usage;
+	unsigned long memory_numa_stat[IHK_MAX_NUM_NUMA_NODES];
+	unsigned long cpuacct_stat_system;
+	unsigned long cpuacct_stat_user;
+	unsigned long cpuacct_usage;
+	unsigned long cpuacct_usage_percpu[IHK_MAX_NUM_CPUS];
+	int num_threads;
+	int max_num_threads;
+};
+
+#define PERF_CTRL_SET 0
+#define PERF_CTRL_GET 1
+#define PERF_CTRL_ENABLE 2
+#define PERF_CTRL_DISABLE 3
+
+struct ihk_perf_event_attr {
+	unsigned long config;
+	unsigned disabled:1;
+	unsigned pinned:1;
+	unsigned exclude_user:1;
+	unsigned exclude_kernel:1;
+	unsigned exclude_hv:1;
+	unsigned exclude_idle:1;
+};
+
+struct fake_control_perf_desc {
+	int ctrl_type;
+	int err;
+	unsigned int target_cntr;
+	unsigned long config;
+	unsigned long read_value;
+	unsigned long target_cntr_mask;
+	unsigned exclude_user;
+	unsigned exclude_kernel;
+};
+
+struct fake_control_remote_transfer {
+	unsigned long rphys;
+	void *userp;
+	unsigned long size;
+	char direction;
+};
+
+struct fake_control_syscall_load_desc {
+	unsigned long cpu;
+	unsigned long src;
+	unsigned long dest;
+	unsigned long size;
+};
+
+struct fake_control_syscall_ret_desc {
+	long cpu;
+	long ret;
+	unsigned long src;
+	unsigned long dest;
+	unsigned long size;
+};
+
+struct fake_control_uti_get_ctx_desc {
+	unsigned long rp_rctx;
+	void *rctx;
+	void *lctx;
+	int uti_refill_tid;
+	unsigned long key;
+};
+
+struct fake_user_vma {
+	unsigned long start;
+	unsigned long end;
+	unsigned long flags;
+};
+
 typedef int (*mcctrl_control_ikc_send_fn_t)(unsigned long, int,
 		struct mcctrl_ikc_scd_packet *);
 typedef void *(*mcctrl_control_get_ptr_fn_t)(unsigned long);
@@ -104818,6 +105795,71 @@ typedef void (*mcctrl_control_log_fn_t)(int);
 typedef void *(*mcctrl_control_alloc_fn_t)(unsigned long);
 typedef void (*mcctrl_control_free_fn_t)(void *);
 typedef unsigned long (*mcctrl_control_virt_to_phys_fn_t)(void *);
+typedef int (*mcctrl_control_copy_user_fn_t)(void *, const void *,
+		unsigned long);
+typedef void *(*mcctrl_control_os_to_dev_fn_t)(unsigned long);
+typedef unsigned long (*mcctrl_control_map_memory_fn_t)(void *,
+		unsigned long, unsigned long);
+typedef void *(*mcctrl_control_map_virtual_fn_t)(void *, unsigned long,
+		unsigned long);
+typedef void (*mcctrl_control_unmap_virtual_fn_t)(void *, void *,
+		unsigned long);
+typedef void (*mcctrl_control_unmap_memory_fn_t)(void *, unsigned long,
+		unsigned long);
+typedef void (*mcctrl_control_transfer_log_fn_t)(int);
+typedef void (*mcctrl_control_load_log_fn_t)(void *, unsigned long);
+typedef int (*mcctrl_control_cred_value_fn_t)(void);
+typedef void *(*mcctrl_control_alloc_page_fn_t)(void);
+typedef void (*mcctrl_control_free_page_fn_t)(void *);
+typedef long (*mcctrl_control_strncpy_from_user_fn_t)(void *, const void *,
+		unsigned long);
+typedef int (*mcctrl_control_drop_exec_fn_t)(unsigned long, int);
+typedef void (*mcctrl_control_destroy_ppd_log_fn_t)(int, int, void *);
+typedef void *(*mcctrl_control_new_info_fn_t)(unsigned long, void *);
+typedef void (*mcctrl_control_set_info_pid_fn_t)(void *, int);
+typedef void (*mcctrl_control_register_release_fn_t)(void *, void *);
+typedef void (*mcctrl_control_set_private_fn_t)(void *, void *);
+typedef void *(*mcctrl_control_file_ptr_fn_t)(void *);
+typedef int (*mcctrl_control_desc_int_fn_t)(void *);
+typedef unsigned long (*mcctrl_control_desc_ulong_fn_t)(void *);
+typedef unsigned long (*mcctrl_control_info_ulong_fn_t)(void *);
+typedef void (*mcctrl_control_set_start_info_fn_t)(
+		void *, int, int, unsigned long, unsigned long,
+		unsigned long);
+typedef void (*mcctrl_control_ptr_ulong_fn_t)(void *, unsigned long);
+typedef void (*mcctrl_control_os_cpu_void_fn_t)(unsigned long, int);
+typedef int (*mcctrl_control_schedule_send_fn_t)(
+		unsigned long, int, unsigned long);
+typedef void (*mcctrl_control_start_log_fn_t)(int, int);
+typedef void (*mcctrl_control_signal_log_fn_t)(int, int);
+typedef int (*mcctrl_control_get_order_fn_t)(unsigned long);
+typedef unsigned long (*mcctrl_control_alloc_pages_fn_t)(int);
+typedef void (*mcctrl_control_free_pages_fn_t)(unsigned long, int);
+typedef unsigned long (*mcctrl_control_phys_to_virt_fn_t)(unsigned long);
+typedef void *(*mcctrl_control_prepare_creds_fn_t)(void);
+typedef void (*mcctrl_control_cap_raise_admin_fn_t)(void *);
+typedef const void *(*mcctrl_control_override_creds_fn_t)(void *);
+typedef void (*mcctrl_control_revert_creds_fn_t)(const void *);
+typedef int (*mcctrl_control_mount_fn_t)(char *, char *, char *,
+		unsigned long, void *);
+typedef int (*mcctrl_control_umount_fn_t)(char *, int);
+typedef int (*mcctrl_control_unshare_fn_t)(unsigned long);
+typedef long (*mcctrl_control_clear_pte_range_fn_t)(unsigned long,
+		unsigned long);
+typedef void (*mcctrl_control_perf_set_num_fn_t)(void *, unsigned long);
+typedef int (*mcctrl_control_perf_event_num_fn_t)(void *);
+typedef void *(*mcctrl_control_perf_alloc_set_desc_fn_t)(
+		const void *, int, unsigned int, int *);
+typedef void (*mcctrl_control_perf_init_desc_fn_t)(void *, unsigned int);
+typedef void (*mcctrl_control_perf_init_mask_desc_fn_t)(
+		void *, int, unsigned long);
+typedef int (*mcctrl_control_perf_send_wait_fn_t)(unsigned long, int,
+		void *, long, int *);
+typedef int (*mcctrl_control_perf_desc_err_fn_t)(void *);
+typedef unsigned long (*mcctrl_control_perf_desc_read_value_fn_t)(void *);
+typedef long (*mcctrl_control_long_fn_t)(unsigned long);
+typedef void (*mcctrl_control_getrusage_log_fn_t)(
+		int, unsigned long, unsigned long);
 typedef int (*mcctrl_control_cpu_register_send_wait_fn_t)(
 		unsigned long, int, struct mcctrl_ikc_scd_packet *, long,
 		int *, void *);
@@ -104827,9 +105869,16 @@ typedef void (*mcctrl_control_cpu_register_done_log_fn_t)(
 typedef int (*mcctrl_control_validate_os_fn_t)(unsigned long);
 typedef int (*mcctrl_control_current_int_fn_t)(void);
 typedef void *(*mcctrl_control_current_task_fn_t)(void);
+typedef unsigned long (*mcctrl_control_current_ulong_fn_t)(void);
 typedef void *(*mcctrl_control_get_ppd_fn_t)(void *, int);
 typedef void *(*mcctrl_control_get_ptd_fn_t)(void *, void *);
 typedef void (*mcctrl_control_put_fn_t)(void *);
+typedef void (*mcctrl_control_return_syscall_fn_t)(
+		unsigned long, void *, void *, long, int);
+typedef void (*mcctrl_control_ret_syscall_log_fn_t)(int, int, int);
+typedef void (*mcctrl_control_terminate_thread_log_fn_t)(
+		int, int, int, void *, int);
+typedef void (*mcctrl_control_uti_log_fn_t)(int);
 typedef int (*mcctrl_control_packet_ref_fn_t)(void *);
 typedef int (*mcctrl_control_channel_read_cpu_fn_t)(void *, int);
 typedef void (*mcctrl_control_request_cpu_error_log_fn_t)(
@@ -104852,6 +105901,34 @@ typedef void (*mcctrl_in_kernel_return_fn_t)(unsigned long,
 		struct mcctrl_ikc_scd_packet *, long, int);
 typedef void (*mcctrl_in_kernel_release_fn_t)(
 		struct mcctrl_ikc_scd_packet *);
+typedef long (*mcctrl_pager_create_fn_t)(unsigned long, int,
+		unsigned long);
+typedef long (*mcctrl_pager_release_fn_t)(unsigned long, unsigned long,
+		unsigned long);
+typedef long (*mcctrl_pager_io_fn_t)(unsigned long, unsigned long,
+		unsigned long, unsigned long, unsigned long);
+typedef long (*mcctrl_pager_map_fn_t)(unsigned long, int, unsigned long,
+		unsigned long, unsigned long, int);
+typedef long (*mcctrl_pager_pfn_fn_t)(unsigned long, unsigned long,
+		unsigned long, unsigned long);
+typedef long (*mcctrl_pager_unmap_fn_t)(unsigned long, unsigned long);
+typedef long (*mcctrl_pager_mlock_list_fn_t)(unsigned long, unsigned long,
+		unsigned long, unsigned long, int);
+typedef void (*mcctrl_pager_unknown_fn_t)(unsigned long, long);
+typedef int (*mcctrl_remote_page_fault_send_fn_t)(unsigned long, int,
+		struct mcctrl_ikc_scd_packet *);
+typedef void (*mcctrl_remote_page_fault_log_fn_t)(int, int, int,
+		unsigned long, unsigned long);
+typedef void (*mcctrl_user_space_lock_fn_t)(void);
+typedef void *(*mcctrl_user_space_find_vma_fn_t)(unsigned long);
+typedef unsigned long (*mcctrl_user_space_vma_ulong_fn_t)(void *);
+typedef void (*mcctrl_user_space_vma_void_fn_t)(void *);
+typedef int (*mcctrl_user_space_vma_zap_fn_t)(void *, unsigned long,
+		unsigned long);
+typedef void (*mcctrl_user_space_vma_zap_range_fn_t)(void *,
+		unsigned long, unsigned long);
+typedef int (*mcctrl_user_space_munmap_fn_t)(unsigned long, unsigned long);
+typedef void (*mcctrl_user_space_error_log_fn_t)(int);
 
 struct mcctrl_in_kernel_syscall_ops {
 	mcctrl_in_kernel_req_fn_t pager_irq;
@@ -104865,6 +105942,38 @@ struct mcctrl_in_kernel_syscall_ops {
 	mcctrl_in_kernel_req_fn_t tofu_close;
 	mcctrl_in_kernel_return_fn_t return_syscall;
 	mcctrl_in_kernel_release_fn_t release_packet;
+};
+
+struct mcctrl_pager_call_ops {
+	mcctrl_pager_create_fn_t create;
+	mcctrl_pager_release_fn_t release;
+	mcctrl_pager_io_fn_t read;
+	mcctrl_pager_io_fn_t write;
+	mcctrl_pager_map_fn_t map;
+	mcctrl_pager_pfn_fn_t pfn;
+	mcctrl_pager_unmap_fn_t unmap;
+	mcctrl_pager_mlock_list_fn_t mlock_list;
+	mcctrl_pager_unknown_fn_t unknown;
+};
+
+struct mcctrl_clear_pte_range_ops {
+	mcctrl_user_space_lock_fn_t read_lock;
+	mcctrl_user_space_lock_fn_t read_unlock;
+	mcctrl_user_space_find_vma_fn_t find_vma;
+	mcctrl_user_space_vma_ulong_fn_t vma_start;
+	mcctrl_user_space_vma_ulong_fn_t vma_end;
+	mcctrl_user_space_vma_ulong_fn_t vma_flags;
+	mcctrl_user_space_vma_void_fn_t set_rw_exec;
+	mcctrl_user_space_vma_zap_fn_t zap_vma_ptes;
+	mcctrl_user_space_vma_zap_range_fn_t zap_page_range;
+};
+
+struct mcctrl_user_space_release_ops {
+	mcctrl_user_space_find_vma_fn_t find_vma;
+	mcctrl_user_space_vma_ulong_fn_t vma_start;
+	mcctrl_user_space_vma_ulong_fn_t vma_end;
+	mcctrl_user_space_munmap_fn_t munmap;
+	mcctrl_user_space_error_log_fn_t log_error;
 };
 
 struct mcctrl_control_dispatch_ops {
@@ -104907,6 +106016,84 @@ struct mcctrl_control_dispatch_ops {
 	mcctrl_control_dispatch_fn_t getrusage;
 };
 
+typedef long (*mcctrl_driver_control_fn_t)(unsigned long, unsigned int,
+		unsigned long, unsigned long);
+typedef void *(*mcctrl_driver_os_get_fn_t)(int);
+typedef void (*mcctrl_driver_os_set_fn_t)(int, void *);
+typedef void (*mcctrl_driver_void_fn_t)(void);
+typedef int (*mcctrl_driver_int_fn_t)(void);
+typedef int (*mcctrl_driver_os_int_fn_t)(void *);
+typedef void (*mcctrl_driver_os_void_fn_t)(void *);
+typedef void (*mcctrl_driver_index_void_fn_t)(int);
+typedef int (*mcctrl_driver_os_index_int_fn_t)(void *, int);
+typedef void (*mcctrl_driver_os_index_void_fn_t)(void *, int);
+typedef void (*mcctrl_driver_log_fn_t)(int, int);
+typedef void *(*mcctrl_driver_lookup_fn_t)(void);
+typedef void (*mcctrl_driver_publish_fn_t)(void *);
+typedef int (*mcctrl_driver_warn_missing_fn_t)(void *);
+
+struct mcctrl_driver_boot_ops {
+	mcctrl_driver_os_get_fn_t find_os;
+	mcctrl_driver_os_set_fn_t set_os;
+	mcctrl_driver_os_int_fn_t prepare_channels;
+	mcctrl_driver_index_void_fn_t copy_user_call_proto;
+	mcctrl_driver_os_int_fn_t set_kernel_handlers;
+	mcctrl_driver_os_index_int_fn_t register_user_handlers;
+	mcctrl_driver_index_void_fn_t procfs_init;
+	mcctrl_driver_os_void_fn_t clear_kernel_handlers;
+	mcctrl_driver_os_void_fn_t destroy_channels;
+	mcctrl_driver_log_fn_t log;
+};
+
+struct mcctrl_driver_shutdown_ops {
+	mcctrl_driver_os_get_fn_t get_os;
+	mcctrl_driver_os_set_fn_t set_os;
+	mcctrl_driver_void_fn_t pager_cleanup;
+	mcctrl_driver_os_void_fn_t sysfs_cleanup;
+	mcctrl_driver_os_void_fn_t free_topology_info;
+	mcctrl_driver_os_index_void_fn_t unregister_user_handlers;
+	mcctrl_driver_os_void_fn_t clear_kernel_handlers;
+	mcctrl_driver_os_void_fn_t destroy_channels;
+	mcctrl_driver_index_void_fn_t procfs_exit;
+	mcctrl_driver_log_fn_t log;
+};
+
+struct mcctrl_driver_symbols_ops {
+	mcctrl_driver_lookup_fn_t lookup_mount;
+	mcctrl_driver_publish_fn_t set_mount;
+	mcctrl_driver_lookup_fn_t lookup_umount;
+	mcctrl_driver_publish_fn_t set_umount;
+	mcctrl_driver_lookup_fn_t lookup_unshare;
+	mcctrl_driver_publish_fn_t set_unshare;
+	mcctrl_driver_lookup_fn_t lookup_sched_setaffinity;
+	mcctrl_driver_publish_fn_t set_sched_setaffinity;
+	mcctrl_driver_lookup_fn_t lookup_sched_setscheduler_nocheck;
+	mcctrl_driver_publish_fn_t set_sched_setscheduler_nocheck;
+	mcctrl_driver_lookup_fn_t lookup_readlinkat;
+	mcctrl_driver_publish_fn_t set_readlinkat;
+	mcctrl_driver_lookup_fn_t lookup_zap_page_range;
+	mcctrl_driver_publish_fn_t set_zap_page_range;
+	mcctrl_driver_lookup_fn_t lookup_hugetlbfs_inode_operations;
+	mcctrl_driver_publish_fn_t set_hugetlbfs_inode_operations;
+	mcctrl_driver_warn_missing_fn_t warn_missing;
+	mcctrl_driver_int_fn_t arch_symbols_init;
+};
+
+struct mcctrl_driver_module_ops {
+	mcctrl_driver_void_fn_t syscall_init;
+	mcctrl_driver_os_set_fn_t set_os;
+	mcctrl_driver_void_fn_t binfmt_init;
+	mcctrl_driver_void_fn_t tofu_hash_init;
+	mcctrl_driver_int_fn_t symbols_init;
+	mcctrl_driver_void_fn_t tofu_hijack;
+	mcctrl_driver_int_fn_t register_notifier;
+	mcctrl_driver_void_fn_t binfmt_exit;
+	mcctrl_driver_int_fn_t deregister_notifier;
+	mcctrl_driver_void_fn_t uti_finalize;
+	mcctrl_driver_void_fn_t tofu_restore;
+	mcctrl_driver_log_fn_t log;
+};
+
 extern int mcctrl_procfs_packet_handler_body_result(void *, int, int,
 		unsigned long, unsigned long, unsigned long,
 		mcctrl_procfs_work_alloc_fn_t,
@@ -104944,12 +106131,277 @@ extern int mcctrl_control_get_request_os_cpu_body_result(
 		mcctrl_control_request_cpu_error_log_fn_t,
 		mcctrl_control_request_cpu_ptd_log_fn_t,
 		mcctrl_control_request_cpu_result_log_fn_t);
+extern long mcctrl_control_pin_region_body_result(
+		const void *, int, int, mcctrl_control_copy_user_fn_t,
+		mcctrl_control_get_order_fn_t,
+		mcctrl_control_alloc_pages_fn_t,
+		mcctrl_control_virt_to_phys_fn_t,
+		mcctrl_control_copy_user_fn_t);
+extern long mcctrl_control_free_region_body_result(
+		const void *, int, int, mcctrl_control_copy_user_fn_t,
+		mcctrl_control_get_order_fn_t,
+		mcctrl_control_phys_to_virt_fn_t,
+		mcctrl_control_free_pages_fn_t);
+extern long mcctrl_control_sys_mount_body_result(
+		const void *, mcctrl_control_copy_user_fn_t,
+		mcctrl_control_prepare_creds_fn_t,
+		mcctrl_control_cap_raise_admin_fn_t,
+		mcctrl_control_override_creds_fn_t,
+		mcctrl_control_mount_fn_t,
+		mcctrl_control_revert_creds_fn_t, mcctrl_control_put_fn_t);
+extern long mcctrl_control_sys_umount_body_result(
+		const void *, int, mcctrl_control_copy_user_fn_t,
+		mcctrl_control_prepare_creds_fn_t,
+		mcctrl_control_cap_raise_admin_fn_t,
+		mcctrl_control_override_creds_fn_t,
+		mcctrl_control_umount_fn_t,
+		mcctrl_control_revert_creds_fn_t, mcctrl_control_put_fn_t);
+extern long mcctrl_control_sys_unshare_body_result(
+		const void *, mcctrl_control_copy_user_fn_t,
+		mcctrl_control_prepare_creds_fn_t,
+		mcctrl_control_cap_raise_admin_fn_t,
+		mcctrl_control_override_creds_fn_t,
+		mcctrl_control_unshare_fn_t,
+		mcctrl_control_revert_creds_fn_t, mcctrl_control_put_fn_t);
+extern long mcctrl_control_release_user_space_body_result(
+		const void *, mcctrl_control_copy_user_fn_t,
+		mcctrl_control_clear_pte_range_fn_t);
+extern long mcctrl_control_perf_num_body_result(
+		unsigned long, unsigned long, mcctrl_control_validate_os_fn_t,
+		mcctrl_control_get_ptr_fn_t,
+		mcctrl_control_perf_set_num_fn_t,
+		mcctrl_control_log_fn_t);
+extern long mcctrl_control_perf_destroy_body_result(
+		unsigned long, mcctrl_control_long_fn_t,
+		mcctrl_control_long_fn_t);
+extern long mcctrl_control_perf_set_body_result(
+		unsigned long, const void *, unsigned int, unsigned long,
+		mcctrl_control_validate_os_fn_t,
+		mcctrl_control_get_ptr_fn_t,
+		mcctrl_control_perf_event_num_fn_t,
+		mcctrl_control_get_ptr_fn_t,
+		mcctrl_control_ptr_int_fn_t,
+		mcctrl_control_free_fn_t,
+		mcctrl_control_perf_alloc_set_desc_fn_t,
+		mcctrl_control_perf_send_wait_fn_t,
+		mcctrl_control_perf_desc_err_fn_t,
+		mcctrl_control_perf_set_num_fn_t,
+		mcctrl_control_log_fn_t);
+extern long mcctrl_control_perf_get_body_result(
+		unsigned long, void *, unsigned int, unsigned long,
+		unsigned long, mcctrl_control_validate_os_fn_t,
+		mcctrl_control_get_ptr_fn_t,
+		mcctrl_control_perf_event_num_fn_t,
+		mcctrl_control_get_ptr_fn_t,
+		mcctrl_control_ptr_int_fn_t,
+		mcctrl_control_alloc_fn_t,
+		mcctrl_control_free_fn_t,
+		mcctrl_control_perf_init_desc_fn_t,
+		mcctrl_control_perf_send_wait_fn_t,
+		mcctrl_control_perf_desc_err_fn_t,
+		mcctrl_control_perf_desc_read_value_fn_t,
+		mcctrl_control_copy_user_fn_t,
+		mcctrl_control_log_fn_t);
+extern long mcctrl_control_perf_enable_disable_body_result(
+		unsigned long, int, unsigned int, unsigned long,
+		mcctrl_control_validate_os_fn_t,
+		mcctrl_control_get_ptr_fn_t,
+		mcctrl_control_perf_event_num_fn_t,
+		mcctrl_control_get_ptr_fn_t,
+		mcctrl_control_ptr_int_fn_t,
+		mcctrl_control_alloc_fn_t,
+		mcctrl_control_free_fn_t,
+		mcctrl_control_perf_init_mask_desc_fn_t,
+		mcctrl_control_perf_send_wait_fn_t,
+		mcctrl_control_perf_desc_err_fn_t,
+		mcctrl_control_log_fn_t);
+extern long mcctrl_control_getrusage_body_result(
+		unsigned long, const void *, unsigned long, unsigned long,
+		unsigned long, unsigned long, unsigned long,
+		mcctrl_control_validate_os_fn_t,
+		mcctrl_control_get_ptr_fn_t,
+		mcctrl_control_copy_user_fn_t,
+		mcctrl_control_copy_user_fn_t,
+		mcctrl_control_alloc_fn_t,
+		mcctrl_control_free_fn_t,
+		mcctrl_control_getrusage_log_fn_t);
+extern long mcctrl_control_transfer_image_body_result(
+		unsigned long, const void *, unsigned long, int, int,
+		mcctrl_control_copy_user_fn_t,
+		mcctrl_control_copy_user_fn_t,
+		mcctrl_control_os_to_dev_fn_t,
+		mcctrl_control_map_memory_fn_t,
+		mcctrl_control_map_virtual_fn_t,
+		mcctrl_control_unmap_virtual_fn_t,
+		mcctrl_control_unmap_memory_fn_t,
+		mcctrl_control_transfer_log_fn_t);
+extern long mcctrl_control_load_syscall_body_result(
+		unsigned long, const void *, unsigned long,
+		mcctrl_control_copy_user_fn_t,
+		mcctrl_control_copy_user_fn_t,
+		mcctrl_control_os_to_dev_fn_t,
+		mcctrl_control_map_memory_fn_t,
+		mcctrl_control_map_virtual_fn_t,
+		mcctrl_control_unmap_virtual_fn_t,
+		mcctrl_control_unmap_memory_fn_t,
+		mcctrl_control_load_log_fn_t);
+extern long mcctrl_control_ret_syscall_body_result(
+		unsigned long, const void *, unsigned long,
+		mcctrl_control_copy_user_fn_t,
+		mcctrl_control_get_ptr_fn_t,
+		mcctrl_control_current_int_fn_t,
+		mcctrl_control_current_int_fn_t,
+		mcctrl_control_current_task_fn_t,
+		mcctrl_control_get_ppd_fn_t,
+		mcctrl_control_put_fn_t,
+		mcctrl_control_get_ptd_fn_t,
+		mcctrl_control_put_fn_t,
+		mcctrl_control_ptr_field_fn_t,
+		mcctrl_control_os_to_dev_fn_t,
+		mcctrl_control_map_memory_fn_t,
+		mcctrl_control_map_virtual_fn_t,
+		mcctrl_control_unmap_virtual_fn_t,
+		mcctrl_control_unmap_memory_fn_t,
+		mcctrl_control_return_syscall_fn_t,
+		mcctrl_control_put_fn_t,
+		mcctrl_control_ret_syscall_log_fn_t);
+extern long mcctrl_control_terminate_thread_unsafe_body_result(
+		unsigned long, int, int, long, void *,
+		mcctrl_control_get_ptr_fn_t,
+		mcctrl_control_info_ulong_fn_t,
+		mcctrl_control_get_ppd_fn_t,
+		mcctrl_control_put_fn_t,
+		mcctrl_control_get_ptd_fn_t,
+		mcctrl_control_put_fn_t,
+		mcctrl_control_ptr_int_fn_t,
+		mcctrl_control_ptr_field_fn_t,
+		mcctrl_control_ptr_int_fn_t,
+		mcctrl_control_return_syscall_fn_t,
+		mcctrl_control_put_fn_t,
+		mcctrl_control_terminate_thread_log_fn_t);
+extern long mcctrl_control_uti_get_ctx_body_result(
+		unsigned long, void *, unsigned long, unsigned long,
+		unsigned long, mcctrl_control_copy_user_fn_t,
+		mcctrl_control_copy_user_fn_t,
+		mcctrl_control_os_to_dev_fn_t,
+		mcctrl_control_map_memory_fn_t,
+		mcctrl_control_map_virtual_fn_t,
+		mcctrl_control_unmap_virtual_fn_t,
+		mcctrl_control_unmap_memory_fn_t,
+		mcctrl_control_current_ulong_fn_t,
+		mcctrl_control_uti_log_fn_t);
+extern int mcctrl_control_getcred_body_result(
+		unsigned long, mcctrl_control_phys_to_virt_fn_t,
+		mcctrl_control_cred_value_fn_t,
+		mcctrl_control_cred_value_fn_t,
+		mcctrl_control_cred_value_fn_t,
+		mcctrl_control_cred_value_fn_t,
+		mcctrl_control_cred_value_fn_t,
+		mcctrl_control_cred_value_fn_t,
+		mcctrl_control_cred_value_fn_t,
+		mcctrl_control_cred_value_fn_t);
+extern int mcctrl_control_getcredv_body_result(
+		int *, mcctrl_control_copy_user_fn_t,
+		mcctrl_control_cred_value_fn_t,
+		mcctrl_control_cred_value_fn_t,
+		mcctrl_control_cred_value_fn_t,
+		mcctrl_control_cred_value_fn_t,
+		mcctrl_control_cred_value_fn_t,
+		mcctrl_control_cred_value_fn_t,
+		mcctrl_control_cred_value_fn_t,
+		mcctrl_control_cred_value_fn_t);
+struct mcctrl_control_strncpy_desc {
+	void *dest;
+	void *src;
+	unsigned long n;
+	long result;
+};
+extern long mcctrl_control_strncpy_from_user_body_result(
+		struct mcctrl_control_strncpy_desc *, unsigned long,
+		mcctrl_control_copy_user_fn_t,
+		mcctrl_control_copy_user_fn_t,
+		mcctrl_control_alloc_page_fn_t,
+		mcctrl_control_free_page_fn_t,
+		mcctrl_control_strncpy_from_user_fn_t);
+extern int mcctrl_control_destroy_ppd_body_result(
+		unsigned long, int, mcctrl_control_get_ptr_fn_t,
+		mcctrl_control_get_ppd_fn_t, mcctrl_control_put_fn_t,
+		mcctrl_control_destroy_ppd_log_fn_t);
+extern int mcctrl_control_close_exec_body_result(
+		unsigned long, int, mcctrl_control_validate_os_fn_t,
+		mcctrl_control_drop_exec_fn_t);
+extern long mcctrl_control_newprocess_body_result(
+		unsigned long, void *, mcctrl_control_current_int_fn_t,
+		mcctrl_control_new_info_fn_t,
+		mcctrl_control_set_info_pid_fn_t,
+		mcctrl_control_register_release_fn_t,
+		mcctrl_control_set_private_fn_t);
+extern long mcctrl_control_start_image_body_result(
+		unsigned long, const void *, void *, unsigned long,
+		mcctrl_control_copy_user_fn_t, mcctrl_control_alloc_fn_t,
+		mcctrl_control_free_fn_t, mcctrl_control_get_ptr_fn_t,
+		mcctrl_control_file_ptr_fn_t,
+		mcctrl_control_new_info_fn_t,
+		mcctrl_control_desc_int_fn_t,
+		mcctrl_control_desc_int_fn_t,
+		mcctrl_control_desc_ulong_fn_t,
+		mcctrl_control_desc_ulong_fn_t,
+		mcctrl_control_desc_ulong_fn_t,
+		mcctrl_control_info_ulong_fn_t,
+		mcctrl_control_set_start_info_fn_t,
+		mcctrl_control_register_release_fn_t,
+		mcctrl_control_set_private_fn_t,
+		mcctrl_control_os_cpu_void_fn_t,
+		mcctrl_control_ptr_ulong_fn_t,
+		mcctrl_control_schedule_send_fn_t,
+		mcctrl_control_put_fn_t,
+		mcctrl_control_start_log_fn_t);
+extern long mcctrl_control_send_signal_body_result(
+		unsigned long, const void *, unsigned long, unsigned long,
+		mcctrl_control_copy_user_fn_t, mcctrl_control_alloc_fn_t,
+		mcctrl_control_free_fn_t, mcctrl_control_get_ptr_fn_t,
+		mcctrl_control_virt_to_phys_fn_t,
+		mcctrl_control_cpu_register_send_wait_fn_t,
+		mcctrl_control_signal_log_fn_t);
+extern long mcctrl_driver_ioctl_body_result(unsigned long, unsigned int,
+		unsigned long, unsigned long, mcctrl_driver_control_fn_t);
+extern unsigned long mcctrl_driver_osnum_to_os_body_result(
+		int, mcctrl_driver_os_get_fn_t);
+extern int mcctrl_driver_os_alive_body_result(
+		int, mcctrl_driver_os_get_fn_t);
+extern int mcctrl_driver_boot_notifier_body_result(
+		int, const struct mcctrl_driver_boot_ops *);
+extern int mcctrl_driver_shutdown_notifier_body_result(
+		int, const struct mcctrl_driver_shutdown_ops *);
+extern int mcctrl_driver_symbols_init_body_result(
+		const struct mcctrl_driver_symbols_ops *);
+extern int mcctrl_driver_init_body_result(
+		int, const struct mcctrl_driver_module_ops *);
+extern void mcctrl_driver_exit_body_result(
+		const struct mcctrl_driver_module_ops *);
 extern int mcctrl_in_kernel_irq_syscall_body_result(
 		unsigned long, struct mcctrl_ikc_scd_packet *,
 		const struct mcctrl_in_kernel_syscall_ops *, long *);
 extern int mcctrl_in_kernel_syscall_body_result(
 		unsigned long, struct mcctrl_ikc_scd_packet *,
 		const struct mcctrl_in_kernel_syscall_ops *, long *);
+extern long mcctrl_pager_call_irq_body_result(
+		unsigned long, struct mcctrl_syscall_request *,
+		const struct mcctrl_pager_call_ops *);
+extern long mcctrl_pager_call_body_result(
+		unsigned long, struct mcctrl_syscall_request *,
+		const struct mcctrl_pager_call_ops *);
+extern int mcctrl_remote_page_fault_body_result(
+		unsigned long, void *, unsigned long,
+		struct mcctrl_ikc_scd_packet *,
+		mcctrl_remote_page_fault_send_fn_t,
+		mcctrl_remote_page_fault_log_fn_t);
+extern int mcctrl_clear_pte_range_body_result(
+		unsigned long, unsigned long, unsigned long, int,
+		const struct mcctrl_clear_pte_range_ops *);
+extern int mcctrl_user_space_release_body_result(
+		unsigned long, unsigned long,
+		const struct mcctrl_user_space_release_ops *);
 extern int mcctrl_procfs_work_main_body_result(
 		struct mcctrl_procfs_work_prefix *, unsigned long,
 		mcctrl_procfs_get_index_fn_t, mcctrl_procfs_entry_fn_t,
@@ -104958,6 +106410,41 @@ extern int mcctrl_procfs_work_main_body_result(
 		mcctrl_procfs_unmap_virtual_fn_t,
 		mcctrl_procfs_unmap_memory_fn_t, mcctrl_procfs_unknown_work_fn_t,
 		mcctrl_procfs_free_work_fn_t);
+extern char *mcctrl_procfs_getpath_body_result(
+		void *, char *, unsigned long, mcctrl_procfs_entry_name_fn_t,
+		mcctrl_procfs_entry_parent_fn_t);
+extern long mcctrl_procfs_add_entries_body_result(
+		void *, const void *, unsigned long, const void *,
+		const void *, mcctrl_procfs_entry_name_fn_t,
+		mcctrl_procfs_entry_mode_fn_t,
+		mcctrl_procfs_entry_fops_fn_t,
+		mcctrl_procfs_entry_next_fn_t,
+		mcctrl_procfs_add_entry_with_ids_fn_t);
+extern void *mcctrl_procfs_find_entry_body_result(
+		void *, const char *, mcctrl_procfs_first_entry_fn_t,
+		mcctrl_procfs_next_entry_fn_t,
+		mcctrl_procfs_entry_name_fn_t);
+extern void *mcctrl_procfs_add_entry_body_result(
+		void *, const char *, unsigned int, const void *, const void *,
+		const void *, unsigned long, mcctrl_procfs_find_entry_fn_t,
+		mcctrl_procfs_delete_entry_fn_t,
+		mcctrl_procfs_alloc_entry_fn_t,
+		mcctrl_procfs_init_entry_fn_t,
+		mcctrl_procfs_create_pde_fn_t,
+		mcctrl_procfs_commit_entry_fn_t,
+		mcctrl_procfs_entry_void_fn_t, mcctrl_procfs_void_fn_t,
+		mcctrl_procfs_entry_log_fn_t);
+extern int mcctrl_procfs_delete_entries_body_result(
+		void *, mcctrl_procfs_first_entry_fn_t,
+		mcctrl_procfs_delete_entry_fn_t,
+		mcctrl_procfs_entry_void_fn_t,
+		mcctrl_procfs_entry_void_fn_t,
+		mcctrl_procfs_entry_data_fn_t,
+		mcctrl_procfs_entry_void_fn_t);
+extern void *mcctrl_procfs_get_pid_cred_body_result(
+		int, int, mcctrl_procfs_void_fn_t, mcctrl_procfs_void_fn_t,
+		mcctrl_procfs_find_vpid_fn_t, mcctrl_procfs_pid_task_fn_t,
+		mcctrl_procfs_task_cred_fn_t);
 extern void *mcctrl_procfs_find_base_entry_body_result(
 		int, mcctrl_procfs_format_name_fn_t,
 		mcctrl_procfs_find_entry_fn_t);
@@ -105013,6 +106500,76 @@ extern int mcctrl_procfs_exe_link_body_result(
 		void *(*)(int, int), void *(*)(void *, const char *),
 		void (*)(void *, const char *), void (*)(void *, const char *));
 extern long mcctrl_procfs_lseek_body_result(long, long, int, long *);
+extern int mcctrl_syscall_ptd_hash_result(void *, int);
+extern int mcctrl_syscall_put_ptd_unsafe_body_result(
+		void *, const struct mcctrl_syscall_ptd_offsets *,
+		mcctrl_syscall_ptd_free_fn_t,
+		mcctrl_syscall_ptd_log_fn_t);
+extern int mcctrl_syscall_put_ptd_body_result(
+		void *, int, const struct mcctrl_syscall_ptd_offsets *,
+		mcctrl_syscall_ptd_free_fn_t,
+		mcctrl_syscall_ptd_lock_fn_t,
+		mcctrl_syscall_ptd_unlock_fn_t,
+		mcctrl_syscall_ptd_log_fn_t);
+extern int mcctrl_syscall_add_ptd_body_result(
+		void *, void *, void *, int, unsigned long, int,
+		const struct mcctrl_syscall_ptd_offsets *,
+		mcctrl_syscall_ptd_alloc_fn_t,
+		mcctrl_syscall_ptd_free_fn_t,
+		mcctrl_syscall_ptd_lock_fn_t,
+		mcctrl_syscall_ptd_unlock_fn_t,
+		mcctrl_syscall_ptd_log_fn_t);
+extern void *mcctrl_syscall_get_ptd_body_result(
+		void *, void *, int, const struct mcctrl_syscall_ptd_offsets *,
+		mcctrl_syscall_ptd_lock_fn_t,
+		mcctrl_syscall_ptd_unlock_fn_t,
+		mcctrl_syscall_ptd_log_fn_t);
+extern int mcctrl_syscall_pidfd_hash_init_body_result(
+		void *, unsigned long, unsigned long, void *,
+		mcctrl_syscall_pidfd_lock_init_fn_t);
+extern int mcctrl_syscall_pidfd_hash_insert_body_result(
+		void *, void *, void *, unsigned long, int, void *, int,
+		const char *, void *, unsigned long, unsigned long,
+		const struct mcctrl_syscall_pidfd_offsets *,
+		mcctrl_syscall_pidfd_alloc_fn_t,
+		mcctrl_syscall_pidfd_free_fn_t,
+		mcctrl_syscall_pidfd_lock_fn_t,
+		mcctrl_syscall_pidfd_unlock_fn_t,
+		mcctrl_syscall_pidfd_log_fn_t);
+extern void *mcctrl_syscall_pidfd_hash_lookup_body_result(
+		void *, void *, void *, void *, unsigned long,
+		const struct mcctrl_syscall_pidfd_offsets *,
+		mcctrl_syscall_pidfd_lock_fn_t,
+		mcctrl_syscall_pidfd_unlock_fn_t,
+		mcctrl_syscall_pidfd_log_fn_t);
+extern int mcctrl_syscall_pidfd_hash_remove_body_result(
+		void *, void *, void *, unsigned long, void *, int,
+		unsigned long, const struct mcctrl_syscall_pidfd_offsets *,
+		mcctrl_syscall_pidfd_free_fn_t,
+		mcctrl_syscall_pidfd_lock_fn_t,
+		mcctrl_syscall_pidfd_unlock_fn_t,
+		mcctrl_syscall_pidfd_log_fn_t);
+extern int mcctrl_syscall_pager_add_process_body_result(
+		int *, void *, mcctrl_syscall_pager_lock_fn_t,
+		mcctrl_syscall_pager_unlock_fn_t);
+extern int mcctrl_syscall_pager_remove_process_body_result(
+		void *, int *, void *,
+		const struct mcctrl_syscall_pager_offsets *,
+		mcctrl_syscall_pager_predicate_fn_t,
+		mcctrl_syscall_pager_predicate_fn_t,
+		mcctrl_syscall_pager_sem_down_fn_t,
+		mcctrl_syscall_pager_sem_up_fn_t,
+		mcctrl_syscall_pager_ptr_fn_t,
+		mcctrl_syscall_pager_lock_fn_t,
+		mcctrl_syscall_pager_unlock_fn_t,
+		mcctrl_syscall_pager_log_fn_t);
+extern int mcctrl_syscall_pager_cleanup_body_result(
+		void *, void *, const struct mcctrl_syscall_pager_offsets *,
+		mcctrl_syscall_pager_ptr_fn_t,
+		mcctrl_syscall_pager_ptr_fn_t,
+		mcctrl_syscall_pager_lock_fn_t,
+		mcctrl_syscall_pager_unlock_fn_t,
+		mcctrl_syscall_pager_log_fn_t);
 extern void *mcctrl_rva_to_rpa_cache_search_body_result(void *,
 		unsigned long);
 extern int mcctrl_rva_to_rpa_cache_insert_body_result(
@@ -105021,6 +106578,47 @@ extern int mcctrl_rva_to_rpa_cache_insert_body_result(
 extern int mcctrl_futex_remove_process_body_result(
 		void *, void *(*)(void *), void (*)(void *, void *),
 		void (*)(void *));
+extern int mcctrl_futex_dispatch_body_result(
+		uint32_t *, int, uint32_t, uint64_t, uint32_t *, uint32_t,
+		uint32_t, int, void *, mcctrl_futex_wait_fn_t,
+		mcctrl_futex_wake_fn_t, mcctrl_futex_requeue_fn_t,
+		mcctrl_futex_wake_op_fn_t, mcctrl_futex_warn_fn_t);
+extern int mcctrl_futex_wait_body_result(
+		uint32_t *, int, uint32_t, uint64_t, uint32_t, void *,
+		mcctrl_futex_info_ptr_fn_t, mcctrl_futex_info_ptr_fn_t,
+		mcctrl_futex_current_cpu_fn_t,
+		mcctrl_futex_prepare_wait_q_fn_t,
+		mcctrl_futex_wait_setup_fn_t,
+		mcctrl_futex_wait_queue_fn_t, mcctrl_futex_unqueue_fn_t,
+		mcctrl_futex_put_q_key_fn_t, mcctrl_futex_wait_log_fn_t);
+extern int mcctrl_futex_wake_body_result(
+		unsigned long, int, int, uint32_t, unsigned long,
+		unsigned long, unsigned long, unsigned long, unsigned long,
+		unsigned long, unsigned long, unsigned long, unsigned long,
+		unsigned long, unsigned long, mcctrl_futex_get_key_body_fn_t,
+		mcctrl_futex_hash_key_fn_t, mcctrl_futex_wake_lock_fn_t,
+		mcctrl_futex_wake_unlock_fn_t, mcctrl_futex_put_key_fn_t,
+		mcctrl_futex_wake_entry_fn_t);
+extern int mcctrl_futex_wake_op_body_result(
+		unsigned long, int, unsigned long, int, int, int,
+		unsigned long, unsigned long, unsigned long, unsigned long,
+		unsigned long, unsigned long, unsigned long, unsigned long,
+		unsigned long, unsigned long, unsigned long, unsigned long,
+		mcctrl_futex_get_key_body_fn_t,
+		mcctrl_futex_hash_key_fn_t, mcctrl_futex_hb_lock_fn_t,
+		mcctrl_futex_hb_unlock_fn_t, mcctrl_futex_atomic_op_fn_t,
+		mcctrl_futex_put_key_fn_t, mcctrl_futex_wake_entry_fn_t);
+extern int mcctrl_futex_requeue_body_result(
+		unsigned long, int, unsigned long, int, int, unsigned long,
+		unsigned long, unsigned long, unsigned long, unsigned long,
+		unsigned long, unsigned long, unsigned long, unsigned long,
+		unsigned long, unsigned long, unsigned long, unsigned long,
+		unsigned long, unsigned long, mcctrl_futex_get_key_body_fn_t,
+		mcctrl_futex_hash_key_fn_t, mcctrl_futex_hb_lock_fn_t,
+		mcctrl_futex_hb_unlock_fn_t, mcctrl_futex_get_value_fn_t,
+		mcctrl_futex_put_key_fn_t, mcctrl_futex_drop_key_refs_fn_t,
+		mcctrl_futex_requeue_entry_fn_t,
+		mcctrl_futex_requeue_entry_fn_t);
 extern int mcctrl_procfs_buff_open_body_result(
 		void *, void *, unsigned long, unsigned long, unsigned long,
 		int (*)(void *), void *(*)(int), void *(*)(unsigned long),
@@ -105081,6 +106679,8 @@ extern int mcctrl_sysfs_work_main_body_result(
 		mcctrl_sysfs_response_fn_t, mcctrl_sysfs_response_fn_t,
 		mcctrl_sysfs_release_response_fn_t,
 		mcctrl_sysfs_unknown_work_fn_t, mcctrl_sysfs_free_work_fn_t);
+extern int mcctrl_sysfs_resp_body_result(
+		void *, long, void *(*)(void *), void (*)(void *, long));
 extern long mcctrl_sysfs_remote_show_body_result(
 		void *, void *, unsigned long, void *, void *, void *,
 		void *, long, long, int *, mcctrl_sysfs_sem_down_fn_t,
@@ -105099,6 +106699,10 @@ extern int mcctrl_sysfs_remote_release_body_result(
 		int *, mcctrl_sysfs_sem_down_fn_t, mcctrl_sysfs_sem_up_fn_t,
 		mcctrl_sysfs_wait_ready_fn_t, mcctrl_sysfs_set_busy_fn_t,
 		mcctrl_sysfs_send_fn_t);
+extern void *mcctrl_sysfs_lookup_i_body_result(
+		void *, const char *, int, mcctrl_sysfs_node_type_fn_t,
+		mcctrl_sysfs_node_name_fn_t, mcctrl_sysfs_node_ptr_fn_t,
+		mcctrl_sysfs_node_next_fn_t, mcctrl_sysfs_err_ptr_fn_t);
 extern int mcctrl_sysfs_setup_special_local_create_body_result(
 		struct mcctrl_sysfs_req_create_param *, void * const *,
 		unsigned long, mcctrl_sysfs_local_alloc_fn_t,
@@ -105113,6 +106717,27 @@ extern long mcctrl_sysfs_local_store_body_result(
 extern int mcctrl_sysfs_local_release_body_result(
 		void *, int, mcctrl_sysfs_node_type_fn_t,
 		mcctrl_sysfs_node_long_fn_t, mcctrl_sysfs_node_long_fn_t);
+extern long mcctrl_sysfs_show_body_result(
+		void *, void *, unsigned long, mcctrl_sysfs_node_long_fn_t);
+extern long mcctrl_sysfs_store_body_result(
+		void *, const void *, unsigned long,
+		mcctrl_sysfs_node_long_fn_t);
+extern int mcctrl_sysfs_release_body_result(
+		void *, mcctrl_sysfs_node_long_fn_t);
+extern long mcctrl_sysfs_snooping_show_i32_body_result(
+		void *, void *, unsigned long);
+extern long mcctrl_sysfs_snooping_show_i64_body_result(
+		void *, void *, unsigned long);
+extern long mcctrl_sysfs_snooping_show_u32_body_result(
+		void *, void *, unsigned long);
+extern long mcctrl_sysfs_snooping_show_u64_body_result(
+		void *, void *, unsigned long);
+extern long mcctrl_sysfs_snooping_show_string_body_result(
+		void *, void *, unsigned long);
+extern long mcctrl_sysfs_snooping_show_u32k_body_result(
+		void *, void *, unsigned long);
+extern long mcctrl_sysfs_snooping_show_bitmap_body_result(
+		void *, void *, unsigned long, mcctrl_sysfs_bitmap_format_fn_t);
 extern int mcctrl_sysfs_cleanup_special_local_create_body_result(
 		void *, mcctrl_sysfs_free_fn_t);
 extern int mcctrl_sysfs_createf_post_path_body_result(
@@ -105135,6 +106760,60 @@ extern int mcctrl_sysfs_lookupf_post_path_body_result(
 extern int mcctrl_sysfs_unlinkf_post_path_body_result(
 		void *, struct mcctrl_sysfs_req_unlink_param *,
 		mcctrl_sysfs_local_unlink_fn_t);
+extern int mcctrl_sysfs_req_setup_body_result(
+		void *, unsigned long, unsigned long,
+		mcctrl_sysfs_os_to_dev_fn_t,
+		mcctrl_sysfs_map_memory_fn_t,
+		mcctrl_sysfs_map_virtual_simple_fn_t,
+		mcctrl_sysfs_unmap_virtual_fn_t,
+		mcctrl_sysfs_unmap_memory_fn_t,
+		mcctrl_sysfs_req_setup_local_fn_t,
+		mcctrl_sysfs_wmb_fn_t);
+extern int mcctrl_sysfs_req_create_body_result(
+		void *, unsigned long, unsigned long,
+		mcctrl_sysfs_os_to_dev_fn_t,
+		mcctrl_sysfs_map_memory_fn_t,
+		mcctrl_sysfs_map_virtual_simple_fn_t,
+		mcctrl_sysfs_unmap_virtual_fn_t,
+		mcctrl_sysfs_unmap_memory_fn_t,
+		mcctrl_sysfs_req_create_local_fn_t,
+		mcctrl_sysfs_wmb_fn_t);
+extern int mcctrl_sysfs_req_mkdir_body_result(
+		void *, unsigned long, unsigned long,
+		mcctrl_sysfs_os_to_dev_fn_t,
+		mcctrl_sysfs_map_memory_fn_t,
+		mcctrl_sysfs_map_virtual_simple_fn_t,
+		mcctrl_sysfs_unmap_virtual_fn_t,
+		mcctrl_sysfs_unmap_memory_fn_t,
+		mcctrl_sysfs_req_mkdir_local_fn_t,
+		mcctrl_sysfs_wmb_fn_t);
+extern int mcctrl_sysfs_req_symlink_body_result(
+		void *, unsigned long, unsigned long,
+		mcctrl_sysfs_os_to_dev_fn_t,
+		mcctrl_sysfs_map_memory_fn_t,
+		mcctrl_sysfs_map_virtual_simple_fn_t,
+		mcctrl_sysfs_unmap_virtual_fn_t,
+		mcctrl_sysfs_unmap_memory_fn_t,
+		mcctrl_sysfs_req_symlink_local_fn_t,
+		mcctrl_sysfs_wmb_fn_t);
+extern int mcctrl_sysfs_req_lookup_body_result(
+		void *, unsigned long, unsigned long,
+		mcctrl_sysfs_os_to_dev_fn_t,
+		mcctrl_sysfs_map_memory_fn_t,
+		mcctrl_sysfs_map_virtual_simple_fn_t,
+		mcctrl_sysfs_unmap_virtual_fn_t,
+		mcctrl_sysfs_unmap_memory_fn_t,
+		mcctrl_sysfs_req_lookup_local_fn_t,
+		mcctrl_sysfs_wmb_fn_t);
+extern int mcctrl_sysfs_req_unlink_body_result(
+		void *, unsigned long, unsigned long,
+		mcctrl_sysfs_os_to_dev_fn_t,
+		mcctrl_sysfs_map_memory_fn_t,
+		mcctrl_sysfs_map_virtual_simple_fn_t,
+		mcctrl_sysfs_unmap_virtual_fn_t,
+		mcctrl_sysfs_unmap_memory_fn_t,
+		mcctrl_sysfs_req_unlink_local_fn_t,
+		mcctrl_sysfs_wmb_fn_t);
 
 static void require(int cond)
 {
@@ -105255,6 +106934,19 @@ struct fake_procfs_buffer_page {
 	unsigned long size;
 	char buf[32];
 };
+struct fake_procfs_path_entry {
+	const char *name;
+	struct fake_procfs_path_entry *parent;
+};
+struct fake_procfs_entry_table {
+	const char *name;
+	unsigned int mode;
+	const void *fops;
+};
+struct fake_procfs_list_node {
+	const char *name;
+	struct fake_procfs_list_node *next;
+};
 static struct fake_procfs_file fake_procfs_file;
 static struct fake_procfs_buffer_info fake_procfs_info;
 static struct fake_procfs_read fake_procfs_read;
@@ -105295,6 +106987,58 @@ static unsigned long fake_procfs_request_pbuf;
 static int fake_procfs_read_timeout_calls;
 static int fake_procfs_read_no_usrdata_calls;
 static int fake_procfs_read_no_ppd_calls;
+static int fake_procfs_add_entries_calls;
+static void *fake_procfs_add_entries_parent;
+static const char *fake_procfs_add_entries_name;
+static unsigned int fake_procfs_add_entries_mode;
+static const void *fake_procfs_add_entries_fops;
+static const void *fake_procfs_add_entries_uid;
+static const void *fake_procfs_add_entries_gid;
+static int fake_procfs_entry_alloc_calls;
+static int fake_procfs_entry_alloc_fail;
+static unsigned long fake_procfs_entry_alloc_size;
+static int fake_procfs_entry_init_calls;
+static char fake_procfs_entry_init_name[32];
+static int fake_procfs_entry_create_calls;
+static int fake_procfs_entry_create_fail;
+static unsigned int fake_procfs_entry_create_mode;
+static const void *fake_procfs_entry_create_uid;
+static const void *fake_procfs_entry_create_gid;
+static const void *fake_procfs_entry_create_opaque;
+static void *fake_procfs_entry_create_entry;
+static int fake_procfs_entry_commit_calls;
+static void *fake_procfs_entry_commit_parent;
+static void *fake_procfs_entry_commit_pde;
+static const void *fake_procfs_entry_commit_uid;
+static const void *fake_procfs_entry_commit_gid;
+static int fake_procfs_entry_free_calls;
+static void *fake_procfs_entry_free_last;
+static int fake_procfs_entry_alloc_failed_calls;
+static int fake_procfs_entry_create_failed_calls;
+static char fake_procfs_entry_create_failed_name[32];
+static int fake_procfs_delete_lifecycle_child_present;
+static int fake_procfs_delete_lifecycle_first_calls;
+static int fake_procfs_delete_lifecycle_unlink_calls;
+static int fake_procfs_delete_lifecycle_remove_calls;
+static int fake_procfs_delete_lifecycle_data_calls;
+static int fake_procfs_delete_lifecycle_free_calls;
+static void *fake_procfs_delete_lifecycle_freed[4];
+static int fake_procfs_lifecycle_entry;
+static int fake_procfs_lifecycle_pde;
+static int fake_procfs_lifecycle_data;
+static int fake_procfs_first_child_calls;
+static int fake_procfs_next_child_calls;
+static int fake_procfs_entry_name_calls;
+static int fake_procfs_rcu_lock_calls;
+static int fake_procfs_rcu_unlock_calls;
+static int fake_procfs_find_vpid_calls;
+static int fake_procfs_pid_task_calls;
+static int fake_procfs_task_cred_calls;
+static int fake_procfs_pid_task_missing;
+static int fake_procfs_last_pid_type;
+static int fake_procfs_pid_token;
+static int fake_procfs_task_token;
+static int fake_procfs_cred_token;
 static int fake_procfs_read_map_memory_calls;
 static int fake_procfs_read_map_virtual_calls;
 static int fake_procfs_read_unmap_virtual_calls;
@@ -105419,6 +107163,95 @@ static void *fake_sysfs_local_cleanup_ops;
 static void *fake_sysfs_local_cleanup_instance;
 static int fake_sysfs_local_setup_failed_calls;
 static int fake_sysfs_local_setup_failed_error;
+static int fake_sysfs_req_os_to_dev_calls;
+static void *fake_sysfs_req_last_os;
+static int fake_sysfs_req_map_memory_calls;
+static int fake_sysfs_req_map_virtual_calls;
+static int fake_sysfs_req_unmap_virtual_calls;
+static int fake_sysfs_req_unmap_memory_calls;
+static int fake_sysfs_req_wmb_calls;
+static int fake_sysfs_req_setup_local_calls;
+static int fake_sysfs_req_setup_local_ret;
+static void *fake_sysfs_req_setup_os;
+static void *fake_sysfs_req_setup_buf;
+static unsigned long fake_sysfs_req_setup_buf_pa;
+static unsigned long fake_sysfs_req_setup_bufsize;
+static unsigned long fake_sysfs_req_last_rpa;
+static unsigned long fake_sysfs_req_last_pa;
+static unsigned long fake_sysfs_req_last_size;
+static void *fake_sysfs_req_last_virt;
+static int fake_sysfs_req_fail_virtual_on_call;
+struct fake_sysfs_resp_req {
+	long result;
+	int complete_calls;
+};
+struct fake_sysfs_lookup_node {
+	const char *name;
+	int type;
+	struct fake_sysfs_lookup_node *first_child;
+	struct fake_sysfs_lookup_node *next_sibling;
+};
+static struct fake_sysfs_resp_req fake_sysfs_resp_req;
+static int fake_sysfs_resp_get_req_calls;
+static int fake_sysfs_resp_complete_calls;
+static int fake_sysfs_lookup_type_calls;
+static int fake_sysfs_lookup_name_calls;
+static int fake_sysfs_lookup_first_calls;
+static int fake_sysfs_lookup_next_calls;
+static int fake_sysfs_lookup_err_calls;
+static int fake_sysfs_lookup_last_error;
+static int fake_sysfs_bitmap_format_calls;
+static void *fake_sysfs_bitmap_last_ptr;
+static int fake_sysfs_bitmap_last_nbits;
+static unsigned long fake_sysfs_bitmap_last_size;
+struct fake_mcctrl_futex_wait_q {
+	uint32_t bitset;
+	void *resp;
+	int linux_cpu;
+};
+struct fake_mcctrl_futex_uti {
+	struct fake_mcctrl_futex_wait_q *q;
+	void *resp;
+};
+struct fake_mcctrl_futex_dispatch_trace {
+	int wait_calls;
+	int wake_calls;
+	int requeue_calls;
+	int wake_op_calls;
+	int warn_calls;
+	uint32_t *uaddr;
+	uint32_t *uaddr2;
+	uint32_t val;
+	uint32_t val2;
+	uint32_t val3;
+	uint32_t cmpval;
+	uint64_t timeout;
+	int fshared;
+	int clockrt;
+	int warn_cmd;
+	void *uti_info;
+};
+static struct fake_mcctrl_futex_wait_q fake_mcctrl_futex_q;
+static struct fake_mcctrl_futex_uti fake_mcctrl_futex_uti;
+static struct fake_mcctrl_futex_dispatch_trace fake_mcctrl_futex_dispatch;
+static int fake_mcctrl_futex_prepare_calls;
+static int fake_mcctrl_futex_cpu;
+static int fake_mcctrl_futex_setup_calls;
+static int fake_mcctrl_futex_setup_ret[4];
+static int fake_mcctrl_futex_queue_calls;
+static long long fake_mcctrl_futex_queue_ret[4];
+static int fake_mcctrl_futex_unqueue_calls;
+static int fake_mcctrl_futex_unqueue_ret[4];
+static int fake_mcctrl_futex_put_key_calls;
+static int fake_mcctrl_futex_last_put_fshared;
+static void *fake_mcctrl_futex_last_put_q;
+static int fake_mcctrl_futex_log_calls;
+static int fake_mcctrl_futex_log_stage[4];
+static uint32_t *fake_mcctrl_futex_last_uaddr;
+static uint32_t fake_mcctrl_futex_last_val;
+static uint64_t fake_mcctrl_futex_last_timeout;
+static void *fake_mcctrl_futex_last_hb;
+static int fake_mcctrl_futex_hb;
 static int fake_control_calls;
 static int fake_control_last_id;
 static unsigned long fake_control_last_os;
@@ -105502,6 +107335,12 @@ static void *fake_control_put_ptd_seen;
 static struct mcctrl_ikc_scd_packet fake_control_request_packet;
 static int fake_control_packet_missing;
 static int fake_control_ptd_data_calls;
+static int fake_control_ptd_tid_calls;
+static int fake_control_ptd_tid_value;
+static int fake_control_ptd_refcount_calls;
+static int fake_control_ptd_refcount_value;
+static int fake_control_usrdata_os_calls;
+static unsigned long fake_control_usrdata_os_value;
 static int fake_control_packet_ref_calls;
 static int fake_control_channel_read_cpu_calls;
 static int fake_control_channel_read_cpu_result;
@@ -105524,6 +107363,359 @@ static int fake_control_request_release_order;
 static int fake_control_request_put_ptd_order;
 static int fake_control_request_log_ptd_put_order;
 static int fake_control_request_put_ppd_order;
+static int fake_control_copy_from_calls;
+static int fake_control_copy_from_fail;
+static int fake_control_copy_from_fail_at;
+static const void *fake_control_copy_from_src;
+static void *fake_control_copy_from_dst;
+static unsigned long fake_control_copy_from_size;
+static int fake_control_copy_to_calls;
+static int fake_control_copy_to_fail;
+static int fake_control_copy_to_fail_at;
+static const void *fake_control_copy_to_src;
+static void *fake_control_copy_to_dst;
+static unsigned long fake_control_copy_to_size;
+static const void *fake_control_copy_to_src_history[4];
+static void *fake_control_copy_to_dst_history[4];
+static unsigned long fake_control_copy_to_size_history[4];
+static int fake_control_get_order_calls;
+static unsigned long fake_control_get_order_size;
+static int fake_control_get_order_result;
+static int fake_control_alloc_pages_calls;
+static int fake_control_alloc_pages_order;
+static unsigned long fake_control_alloc_pages_result;
+static int fake_control_free_pages_calls;
+static unsigned long fake_control_free_pages_addr;
+static int fake_control_free_pages_order;
+static int fake_control_region_virt_to_phys_calls;
+static void *fake_control_region_virt_to_phys_ptr;
+static unsigned long fake_control_region_virt_to_phys_result;
+static int fake_control_region_phys_to_virt_calls;
+static unsigned long fake_control_region_phys_to_virt_phys;
+static unsigned long fake_control_region_phys_to_virt_result;
+static int fake_control_cred_token;
+static int fake_control_original_cred_token;
+static int fake_control_cred_order;
+static int fake_control_prepare_creds_calls;
+static int fake_control_prepare_creds_fail;
+static int fake_control_prepare_creds_order;
+static int fake_control_cap_raise_calls;
+static int fake_control_cap_raise_order;
+static int fake_control_override_creds_calls;
+static int fake_control_override_creds_order;
+static int fake_control_revert_creds_calls;
+static int fake_control_revert_creds_order;
+static int fake_control_put_cred_calls;
+static int fake_control_put_cred_order;
+static int fake_control_mount_calls;
+static int fake_control_mount_ret;
+static int fake_control_mount_order;
+static char *fake_control_mount_dev;
+static char *fake_control_mount_dir;
+static char *fake_control_mount_type;
+static unsigned long fake_control_mount_flags;
+static void *fake_control_mount_data;
+static int fake_control_umount_calls;
+static int fake_control_umount_ret;
+static int fake_control_umount_order;
+static char *fake_control_umount_dir;
+static int fake_control_umount_flags;
+static int fake_control_unshare_calls;
+static int fake_control_unshare_ret;
+static int fake_control_unshare_order;
+static unsigned long fake_control_unshare_flags;
+static int fake_control_clear_pte_calls;
+static unsigned long fake_control_clear_pte_start;
+static unsigned long fake_control_clear_pte_len;
+static long fake_control_clear_pte_ret;
+static int fake_control_perf_set_num_calls;
+static void *fake_control_perf_set_num_usrdata;
+static unsigned long fake_control_perf_set_num_value;
+static int fake_control_perf_event_num;
+static struct ihk_perf_event_attr fake_control_perf_attrs[4];
+static struct fake_control_perf_desc fake_control_perf_descs[4];
+static unsigned long fake_control_perf_user_values[4];
+static int fake_control_perf_event_num_calls;
+static int fake_control_perf_alloc_set_calls;
+static int fake_control_perf_alloc_set_fail_index;
+static int fake_control_perf_copy_fail_index;
+static int fake_control_perf_alloc_desc_calls;
+static unsigned long fake_control_perf_alloc_desc_size;
+static int fake_control_perf_alloc_desc_fail;
+static int fake_control_perf_free_calls;
+static void *fake_control_perf_freed_desc;
+static int fake_control_perf_init_get_calls;
+static int fake_control_perf_init_mask_calls;
+static int fake_control_perf_init_mask_type;
+static unsigned long fake_control_perf_init_mask_value;
+static int fake_control_perf_send_calls;
+static unsigned long fake_control_perf_send_os;
+static int fake_control_perf_send_cpu;
+static long fake_control_perf_send_timeout;
+static int fake_control_perf_send_ret;
+static int fake_control_perf_send_fail_call;
+static int fake_control_perf_send_need_free;
+static int fake_control_perf_desc_err_calls;
+static int fake_control_perf_desc_err_value;
+static int fake_control_perf_desc_err_after_cpu;
+static int fake_control_perf_desc_read_calls;
+static int fake_control_perf_copyout_fail;
+static int fake_control_perf_log_calls;
+static int fake_control_perf_log_stage;
+static int fake_control_perf_disable_calls;
+static unsigned long fake_control_perf_disable_os;
+static long fake_control_perf_disable_ret;
+static int fake_control_perf_num_zero_calls;
+static unsigned long fake_control_perf_num_zero_os;
+static long fake_control_perf_num_zero_ret;
+static struct fake_rusage_global fake_control_rusage_global;
+static struct mcctrl_ioctl_getrusage_desc fake_control_rusage_desc;
+static struct fake_ihk_os_rusage fake_control_rusage_user_out;
+static struct fake_ihk_os_rusage fake_control_rusage_alloc_out;
+static int fake_control_getrusage_calls;
+static unsigned long fake_control_getrusage_os;
+static int fake_control_getrusage_alloc_calls;
+static unsigned long fake_control_getrusage_alloc_size;
+static int fake_control_getrusage_alloc_fail;
+static int fake_control_getrusage_free_calls;
+static void *fake_control_getrusage_freed;
+static int fake_control_getrusage_log_calls;
+static int fake_control_getrusage_log_stage;
+static unsigned long fake_control_getrusage_log_size;
+static unsigned long fake_control_getrusage_log_max;
+static struct fake_control_remote_transfer fake_control_transfer_desc;
+static struct fake_control_syscall_load_desc fake_control_load_desc;
+static struct fake_control_syscall_ret_desc fake_control_ret_desc;
+static struct fake_control_uti_get_ctx_desc fake_control_uti_desc;
+static unsigned char fake_control_user_buf[64];
+static unsigned char fake_control_remote_buf[64];
+static unsigned char fake_control_uti_remote_ctx[4096];
+static unsigned char fake_control_uti_user_ctx[4096];
+static int fake_control_os_to_dev_calls;
+static unsigned long fake_control_os_to_dev_os;
+static int fake_control_map_memory_calls;
+static unsigned long fake_control_map_memory_phys;
+static unsigned long fake_control_map_memory_size;
+static int fake_control_map_virtual_calls;
+static unsigned long fake_control_map_virtual_phys;
+static unsigned long fake_control_map_virtual_size;
+static int fake_control_map_virtual_fail;
+static int fake_control_unmap_virtual_calls;
+static void *fake_control_unmap_virtual_ptr;
+static unsigned long fake_control_unmap_virtual_size;
+static int fake_control_unmap_memory_calls;
+static unsigned long fake_control_unmap_memory_phys;
+static unsigned long fake_control_unmap_memory_size;
+static int fake_control_transfer_log_calls;
+static int fake_control_transfer_log_stage;
+static int fake_control_load_log_calls;
+static void *fake_control_load_log_rpm;
+static unsigned long fake_control_load_log_size;
+static int fake_control_return_syscall_calls;
+static unsigned long fake_control_return_syscall_os;
+static void *fake_control_return_syscall_ppd;
+static void *fake_control_return_syscall_packet;
+static long fake_control_return_syscall_ret;
+static int fake_control_return_syscall_tid;
+static int fake_control_release_packet_calls;
+static void *fake_control_release_packet_seen;
+static int fake_control_release_packet_order;
+static int fake_control_ret_log_calls;
+static int fake_control_ret_log_stage[4];
+static int fake_control_ret_log_pid[4];
+static int fake_control_ret_log_tid[4];
+static int fake_control_terminate_log_calls;
+static int fake_control_terminate_log_stage[8];
+static int fake_control_terminate_log_pid[8];
+static int fake_control_terminate_log_tid[8];
+static void *fake_control_terminate_log_ptr[8];
+static int fake_control_terminate_log_value[8];
+static int fake_control_current_key_calls;
+static unsigned long fake_control_current_key_value;
+static int fake_control_uti_log_calls;
+static int fake_control_uti_log_stage[4];
+static int fake_control_cred_values[8];
+static int fake_control_cred_calls[8];
+static int fake_control_cred_kernel_values[8];
+static int fake_control_cred_phys_to_virt_calls;
+static unsigned long fake_control_cred_phys_to_virt_phys;
+static unsigned char fake_control_strncpy_page[4096];
+static int fake_control_strncpy_alloc_calls;
+static int fake_control_strncpy_alloc_fail;
+static int fake_control_strncpy_free_calls;
+static void *fake_control_strncpy_freed;
+static int fake_control_strncpy_calls;
+static long fake_control_strncpy_ret[4];
+static unsigned long fake_control_strncpy_want[4];
+static const void *fake_control_strncpy_src[4];
+static int fake_control_strncpy_copy_to_calls;
+static int fake_control_strncpy_fail_data_copy;
+static int fake_control_strncpy_fail_desc_copy;
+static void *fake_control_strncpy_desc_arg;
+static int fake_control_destroy_log_calls;
+static int fake_control_destroy_log_stage[4];
+static int fake_control_destroy_log_pid[4];
+static void *fake_control_destroy_log_ppd[4];
+static int fake_control_drop_exec_calls;
+static int fake_control_drop_exec_ret;
+static unsigned long fake_control_drop_exec_os;
+static int fake_control_drop_exec_pid;
+struct fake_control_new_info {
+	int pid;
+};
+static struct fake_control_new_info fake_control_new_info_token;
+static int fake_control_new_info_calls;
+static int fake_control_new_info_fail;
+static unsigned long fake_control_new_info_os;
+static void *fake_control_new_info_file;
+static int fake_control_set_info_pid_calls;
+static int fake_control_set_info_pid_value;
+static int fake_control_register_release_calls;
+static void *fake_control_register_release_file;
+static void *fake_control_register_release_info;
+static int fake_control_set_private_calls;
+static void *fake_control_set_private_file;
+static void *fake_control_set_private_info;
+struct fake_control_start_desc {
+	int cpu;
+	int pid;
+	unsigned long user_start;
+	unsigned long user_end;
+	unsigned long rprocess;
+};
+struct fake_control_start_info {
+	int pid;
+	int cpu;
+	unsigned long user_start;
+	unsigned long user_end;
+	unsigned long prepare_thread;
+};
+static struct fake_control_start_desc fake_control_start_user_desc;
+static struct fake_control_start_desc fake_control_start_local_desc;
+static struct fake_control_start_info fake_control_start_prev_info;
+static struct fake_control_start_info fake_control_start_new_info;
+static int fake_control_start_alloc_calls;
+static int fake_control_start_alloc_fail;
+static unsigned long fake_control_start_alloc_size;
+static int fake_control_start_free_calls;
+static void *fake_control_start_freed;
+static int fake_control_start_get_private_calls;
+static void *fake_control_start_private_file;
+static int fake_control_start_new_info_calls;
+static int fake_control_start_new_info_fail;
+static unsigned long fake_control_start_new_info_os;
+static void *fake_control_start_new_info_file;
+static int fake_control_start_set_info_calls;
+static unsigned long fake_control_start_set_info_prepare_thread;
+static int fake_control_start_info_prepare_calls;
+static int fake_control_start_set_recv_calls;
+static unsigned long fake_control_start_set_recv_os;
+static int fake_control_start_set_recv_cpu;
+static int fake_control_start_set_last_calls;
+static void *fake_control_start_set_last_usrdata;
+static unsigned long fake_control_start_set_last_cpu;
+static int fake_control_start_send_calls;
+static int fake_control_start_send_ret;
+static unsigned long fake_control_start_send_os;
+static int fake_control_start_send_cpu;
+static unsigned long fake_control_start_send_rprocess;
+static int fake_control_start_clear_calls;
+static int fake_control_start_log_calls;
+static int fake_control_start_log_stage[4];
+static int fake_control_start_log_ret[4];
+struct fake_control_signal_desc {
+	int cpu;
+	int pid;
+	int tid;
+	int sig;
+	unsigned char info[128];
+};
+struct fake_control_signal {
+	int cond;
+	int sig;
+	int pid;
+	int tid;
+	unsigned char info[128];
+};
+struct fake_control_signal_wrapper {
+	struct fake_control_signal msig;
+};
+static struct fake_control_signal_desc fake_control_signal_user_desc;
+static struct fake_control_signal_wrapper fake_control_signal_local_desc;
+static int fake_control_signal_alloc_calls;
+static int fake_control_signal_alloc_fail;
+static unsigned long fake_control_signal_alloc_size;
+static int fake_control_signal_free_calls;
+static void *fake_control_signal_freed;
+static int fake_control_signal_vtop_calls;
+static void *fake_control_signal_vtop_ptr;
+static unsigned long fake_control_signal_vtop_result;
+static int fake_control_signal_send_calls;
+static int fake_control_signal_send_ret;
+static int fake_control_signal_send_do_free;
+static unsigned long fake_control_signal_send_os;
+static int fake_control_signal_send_cpu;
+static int fake_control_signal_send_msg;
+static int fake_control_signal_send_ref;
+static int fake_control_signal_send_pid;
+static unsigned long fake_control_signal_send_arg;
+static long fake_control_signal_send_timeout;
+static void *fake_control_signal_send_desc;
+static int fake_control_signal_log_calls;
+static int fake_control_signal_log_stage[4];
+static int fake_control_signal_log_ret[4];
+static void *fake_driver_os_slots[64];
+static void *fake_driver_find_result;
+static int fake_driver_control_calls;
+static unsigned int fake_driver_control_request;
+static unsigned long fake_driver_control_os;
+static unsigned long fake_driver_control_arg;
+static unsigned long fake_driver_control_file;
+static int fake_driver_get_os_calls;
+static int fake_driver_set_os_calls;
+static int fake_driver_last_index;
+static void *fake_driver_last_os;
+static int fake_driver_prepare_calls;
+static int fake_driver_prepare_ret;
+static int fake_driver_copy_proto_calls;
+static int fake_driver_set_kernel_calls;
+static int fake_driver_set_kernel_ret;
+static int fake_driver_register_user_calls;
+static int fake_driver_register_user_ret;
+static int fake_driver_procfs_init_calls;
+static int fake_driver_clear_kernel_calls;
+static int fake_driver_destroy_calls;
+static int fake_driver_pager_cleanup_calls;
+static int fake_driver_sysfs_cleanup_calls;
+static int fake_driver_free_topology_calls;
+static int fake_driver_unregister_user_calls;
+static int fake_driver_procfs_exit_calls;
+static int fake_driver_log_stage;
+static int fake_driver_log_index;
+static int fake_driver_log_calls;
+static int fake_driver_lookup_calls;
+static int fake_driver_publish_calls;
+static int fake_driver_warn_calls;
+static int fake_driver_arch_calls;
+static int fake_driver_arch_ret;
+static int fake_driver_symbol_missing;
+static void *fake_driver_symbol_values[8];
+static void *fake_driver_published_symbols[8];
+static int fake_driver_syscall_init_calls;
+static int fake_driver_binfmt_init_calls;
+static int fake_driver_tofu_hash_calls;
+static int fake_driver_symbols_init_calls;
+static int fake_driver_symbols_init_ret;
+static int fake_driver_tofu_hijack_calls;
+static int fake_driver_register_notifier_calls;
+static int fake_driver_register_notifier_ret;
+static int fake_driver_binfmt_exit_calls;
+static int fake_driver_deregister_notifier_calls;
+static int fake_driver_deregister_notifier_ret;
+static int fake_driver_uti_finalize_calls;
+static int fake_driver_tofu_restore_calls;
+static char fake_driver_order[64];
+static int fake_driver_order_len;
 static int fake_in_kernel_pager_irq_calls;
 static int fake_in_kernel_pager_calls;
 static int fake_in_kernel_clear_calls;
@@ -105552,6 +107744,59 @@ static long fake_in_kernel_remap_ret;
 static long fake_in_kernel_writecore_ret;
 static long fake_in_kernel_sched_same_ret;
 static long fake_in_kernel_sched_root_ret;
+static int fake_pager_create_calls;
+static int fake_pager_release_calls;
+static int fake_pager_read_calls;
+static int fake_pager_write_calls;
+static int fake_pager_map_calls;
+static int fake_pager_pfn_calls;
+static int fake_pager_unmap_calls;
+static int fake_pager_mlock_calls;
+static int fake_pager_unknown_calls;
+static unsigned long fake_pager_last_os;
+static unsigned long fake_pager_last_request;
+static unsigned long fake_pager_last_arg1;
+static unsigned long fake_pager_last_arg2;
+static unsigned long fake_pager_last_arg3;
+static unsigned long fake_pager_last_arg4;
+static unsigned long fake_pager_last_arg5;
+static int fake_pager_last_int;
+static long fake_pager_create_ret;
+static long fake_pager_release_ret;
+static long fake_pager_read_ret;
+static long fake_pager_write_ret;
+static long fake_pager_map_ret;
+static long fake_pager_pfn_ret;
+static long fake_pager_unmap_ret;
+static long fake_pager_mlock_ret;
+static int fake_remote_pf_send_calls;
+static int fake_remote_pf_log_calls;
+static int fake_remote_pf_last_stage;
+static int fake_remote_pf_last_cpu;
+static int fake_remote_pf_last_pid;
+static int fake_remote_pf_last_error;
+static unsigned long fake_remote_pf_last_os;
+static unsigned long fake_remote_pf_last_addr;
+static unsigned long fake_remote_pf_last_reason;
+static struct mcctrl_ikc_scd_packet *fake_remote_pf_last_packet;
+static int fake_remote_pf_send_ret;
+static struct fake_user_vma fake_user_vmas[4];
+static int fake_user_vma_count;
+static int fake_user_space_lock_calls;
+static int fake_user_space_unlock_calls;
+static int fake_user_space_find_calls;
+static unsigned long fake_user_space_last_find;
+static int fake_user_space_set_rw_calls;
+static int fake_user_space_zap_ptes_calls;
+static int fake_user_space_zap_range_calls;
+static int fake_user_space_munmap_calls;
+static int fake_user_space_log_calls;
+static int fake_user_space_zap_ptes_ret;
+static int fake_user_space_munmap_ret;
+static unsigned long fake_user_space_last_start;
+static unsigned long fake_user_space_last_len;
+static unsigned long fake_user_space_munmap_total;
+static int fake_user_space_last_error;
 
 #define FAKE_CONTROL_DISPATCHES(_) \
 	_(prepare_image, 1, MCEXEC_UP_PREPARE_IMAGE) \
@@ -105812,6 +108057,27 @@ static void *fake_control_ptd_data(void *ptd)
 	return &fake_control_request_packet;
 }
 
+static int fake_control_ptd_tid(void *ptd)
+{
+	require(ptd == &fake_control_ptd_token);
+	fake_control_ptd_tid_calls++;
+	return fake_control_ptd_tid_value;
+}
+
+static int fake_control_ptd_refcount(void *ptd)
+{
+	require(ptd == &fake_control_ptd_token);
+	fake_control_ptd_refcount_calls++;
+	return fake_control_ptd_refcount_value;
+}
+
+static unsigned long fake_control_usrdata_os(void *usrdata)
+{
+	require(usrdata == &fake_control_usrdata_token);
+	fake_control_usrdata_os_calls++;
+	return fake_control_usrdata_os_value;
+}
+
 static int fake_control_packet_ref(void *packet)
 {
 	struct mcctrl_ikc_scd_packet *p = packet;
@@ -105876,6 +108142,1384 @@ static int fake_control_request_cpu_call(unsigned long os, int *ret_cpu)
 		fake_control_request_cpu_ptd_log,
 		fake_control_request_cpu_result_log);
 }
+
+static int fake_control_copy_from_user(void *dst, const void *src,
+		unsigned long size)
+{
+	fake_control_copy_from_calls++;
+	fake_control_copy_from_dst = dst;
+	fake_control_copy_from_src = src;
+	fake_control_copy_from_size = size;
+	if (fake_control_copy_from_fail ||
+			(fake_control_copy_from_fail_at > 0 &&
+			 fake_control_copy_from_calls == fake_control_copy_from_fail_at))
+		return -1;
+	memcpy(dst, src, size);
+	return 0;
+}
+
+static int fake_control_copy_to_user(void *dst, const void *src,
+		unsigned long size)
+{
+	fake_control_copy_to_calls++;
+	fake_control_copy_to_dst = dst;
+	fake_control_copy_to_src = src;
+	fake_control_copy_to_size = size;
+	if (fake_control_copy_to_calls <=
+			(int)(sizeof(fake_control_copy_to_dst_history) /
+			      sizeof(fake_control_copy_to_dst_history[0]))) {
+		int index = fake_control_copy_to_calls - 1;
+
+		fake_control_copy_to_dst_history[index] = dst;
+		fake_control_copy_to_src_history[index] = src;
+		fake_control_copy_to_size_history[index] = size;
+	}
+	if (fake_control_copy_to_fail ||
+			(fake_control_copy_to_fail_at > 0 &&
+			 fake_control_copy_to_calls == fake_control_copy_to_fail_at))
+		return -1;
+	memcpy(dst, src, size);
+	return 0;
+}
+
+static int fake_control_get_order(unsigned long size)
+{
+	fake_control_get_order_calls++;
+	fake_control_get_order_size = size;
+	return fake_control_get_order_result;
+}
+
+static unsigned long fake_control_alloc_pages(int order)
+{
+	fake_control_alloc_pages_calls++;
+	fake_control_alloc_pages_order = order;
+	return fake_control_alloc_pages_result;
+}
+
+static void fake_control_free_pages(unsigned long addr, int order)
+{
+	fake_control_free_pages_calls++;
+	fake_control_free_pages_addr = addr;
+	fake_control_free_pages_order = order;
+}
+
+static unsigned long fake_control_region_virt_to_phys(void *ptr)
+{
+	fake_control_region_virt_to_phys_calls++;
+	fake_control_region_virt_to_phys_ptr = ptr;
+	return fake_control_region_virt_to_phys_result;
+}
+
+static unsigned long fake_control_region_phys_to_virt(unsigned long phys)
+{
+	fake_control_region_phys_to_virt_calls++;
+	fake_control_region_phys_to_virt_phys = phys;
+	return fake_control_region_phys_to_virt_result;
+}
+
+static void *fake_control_prepare_creds(void)
+{
+	fake_control_prepare_creds_calls++;
+	if (fake_control_prepare_creds_fail)
+		return NULL;
+	fake_control_prepare_creds_order = ++fake_control_cred_order;
+	return &fake_control_cred_token;
+}
+
+static void fake_control_cap_raise_admin(void *cred)
+{
+	require(cred == &fake_control_cred_token);
+	fake_control_cap_raise_calls++;
+	fake_control_cap_raise_order = ++fake_control_cred_order;
+}
+
+static const void *fake_control_override_creds(void *cred)
+{
+	require(cred == &fake_control_cred_token);
+	fake_control_override_creds_calls++;
+	fake_control_override_creds_order = ++fake_control_cred_order;
+	return &fake_control_original_cred_token;
+}
+
+static void fake_control_revert_creds(const void *cred)
+{
+	require(cred == &fake_control_original_cred_token);
+	fake_control_revert_creds_calls++;
+	fake_control_revert_creds_order = ++fake_control_cred_order;
+}
+
+static void fake_control_put_cred(void *cred)
+{
+	require(cred == &fake_control_cred_token);
+	fake_control_put_cred_calls++;
+	fake_control_put_cred_order = ++fake_control_cred_order;
+}
+
+static int fake_control_mount(char *dev_name, char *dir_name,
+		char *type_name, unsigned long flags, void *data)
+{
+	fake_control_mount_calls++;
+	fake_control_mount_order = ++fake_control_cred_order;
+	fake_control_mount_dev = dev_name;
+	fake_control_mount_dir = dir_name;
+	fake_control_mount_type = type_name;
+	fake_control_mount_flags = flags;
+	fake_control_mount_data = data;
+	return fake_control_mount_ret;
+}
+
+static int fake_control_umount(char *dir_name, int flags)
+{
+	fake_control_umount_calls++;
+	fake_control_umount_order = ++fake_control_cred_order;
+	fake_control_umount_dir = dir_name;
+	fake_control_umount_flags = flags;
+	return fake_control_umount_ret;
+}
+
+static int fake_control_unshare(unsigned long flags)
+{
+	fake_control_unshare_calls++;
+	fake_control_unshare_order = ++fake_control_cred_order;
+	fake_control_unshare_flags = flags;
+	return fake_control_unshare_ret;
+}
+
+static long fake_control_clear_pte_range(unsigned long start,
+		unsigned long len)
+{
+	fake_control_clear_pte_calls++;
+	fake_control_clear_pte_start = start;
+	fake_control_clear_pte_len = len;
+	return fake_control_clear_pte_ret;
+}
+
+static void fake_control_perf_set_num(void *usrdata, unsigned long value)
+{
+	require(usrdata == &fake_control_usrdata_token);
+	fake_control_perf_set_num_calls++;
+	fake_control_perf_set_num_usrdata = usrdata;
+	fake_control_perf_set_num_value = value;
+}
+
+static int fake_control_perf_event_num_fn(void *usrdata)
+{
+	require(usrdata == &fake_control_usrdata_token);
+	fake_control_perf_event_num_calls++;
+	return fake_control_perf_event_num;
+}
+
+static void *fake_control_perf_alloc_set_desc(const void *arg, int index,
+		unsigned int target_cntr, int *error)
+{
+	const struct ihk_perf_event_attr *attrs = arg;
+	struct fake_control_perf_desc *desc;
+
+	fake_control_perf_alloc_set_calls++;
+	if (index == fake_control_perf_copy_fail_index) {
+		*error = -22;
+		return NULL;
+	}
+	if (index == fake_control_perf_alloc_set_fail_index) {
+		*error = -12;
+		return NULL;
+	}
+
+	desc = &fake_control_perf_descs[index];
+	memset(desc, 0, sizeof(*desc));
+	desc->ctrl_type = PERF_CTRL_SET;
+	desc->target_cntr = target_cntr;
+	desc->config = attrs[index].config;
+	desc->exclude_user = attrs[index].exclude_user;
+	desc->exclude_kernel = attrs[index].exclude_kernel;
+	*error = 0;
+	return desc;
+}
+
+static void *fake_control_perf_alloc_desc(unsigned long size)
+{
+	fake_control_perf_alloc_desc_calls++;
+	fake_control_perf_alloc_desc_size = size;
+	if (fake_control_perf_alloc_desc_fail)
+		return NULL;
+	memset(&fake_control_perf_descs[0], 0, sizeof(fake_control_perf_descs[0]));
+	return &fake_control_perf_descs[0];
+}
+
+static void fake_control_perf_free_desc(void *desc)
+{
+	fake_control_perf_free_calls++;
+	fake_control_perf_freed_desc = desc;
+}
+
+static void fake_control_perf_init_get_desc(void *desc,
+		unsigned int target_cntr)
+{
+	struct fake_control_perf_desc *perf_desc = desc;
+
+	fake_control_perf_init_get_calls++;
+	memset(perf_desc, 0, sizeof(*perf_desc));
+	perf_desc->ctrl_type = PERF_CTRL_GET;
+	perf_desc->target_cntr = target_cntr;
+}
+
+static void fake_control_perf_init_mask_desc(void *desc, int ctrl_type,
+		unsigned long cntr_mask)
+{
+	struct fake_control_perf_desc *perf_desc = desc;
+
+	fake_control_perf_init_mask_calls++;
+	fake_control_perf_init_mask_type = ctrl_type;
+	fake_control_perf_init_mask_value = cntr_mask;
+	memset(perf_desc, 0, sizeof(*perf_desc));
+	perf_desc->ctrl_type = ctrl_type;
+	perf_desc->target_cntr_mask = cntr_mask;
+}
+
+static int fake_control_perf_send_wait(unsigned long os, int cpu, void *desc,
+		long timeout, int *need_free)
+{
+	struct fake_control_perf_desc *perf_desc = desc;
+
+	fake_control_perf_send_calls++;
+	fake_control_perf_send_os = os;
+	fake_control_perf_send_cpu = cpu;
+	fake_control_perf_send_timeout = timeout;
+	*need_free = fake_control_perf_send_need_free;
+	if (fake_control_perf_send_calls == fake_control_perf_send_fail_call)
+		return fake_control_perf_send_ret;
+
+	if (fake_control_perf_desc_err_after_cpu == cpu)
+		perf_desc->err = fake_control_perf_desc_err_value;
+	else
+		perf_desc->err = 0;
+	perf_desc->read_value = 10 + cpu + fake_control_perf_send_calls;
+	return 0;
+}
+
+static int fake_control_perf_desc_err(void *desc)
+{
+	fake_control_perf_desc_err_calls++;
+	return ((struct fake_control_perf_desc *)desc)->err;
+}
+
+static unsigned long fake_control_perf_desc_read_value(void *desc)
+{
+	fake_control_perf_desc_read_calls++;
+	return ((struct fake_control_perf_desc *)desc)->read_value;
+}
+
+static int fake_control_perf_copy_to_user(void *dst, const void *src,
+		unsigned long size)
+{
+	fake_control_copy_to_calls++;
+	fake_control_copy_to_dst = dst;
+	fake_control_copy_to_src = src;
+	fake_control_copy_to_size = size;
+	if (fake_control_perf_copyout_fail)
+		return -1;
+	memcpy(dst, src, size);
+	return 0;
+}
+
+static void fake_control_perf_log(int stage)
+{
+	fake_control_perf_log_calls++;
+	fake_control_perf_log_stage = stage;
+}
+
+static long fake_control_perf_destroy_disable(unsigned long os)
+{
+	fake_control_perf_disable_calls++;
+	fake_control_perf_disable_os = os;
+	return fake_control_perf_disable_ret;
+}
+
+static long fake_control_perf_num_zero(unsigned long os)
+{
+	fake_control_perf_num_zero_calls++;
+	fake_control_perf_num_zero_os = os;
+	return fake_control_perf_num_zero_ret;
+}
+
+static void *fake_control_getrusage_global(unsigned long os)
+{
+	fake_control_getrusage_calls++;
+	fake_control_getrusage_os = os;
+	return &fake_control_rusage_global;
+}
+
+static void *fake_control_getrusage_alloc(unsigned long size)
+{
+	fake_control_getrusage_alloc_calls++;
+	fake_control_getrusage_alloc_size = size;
+	if (fake_control_getrusage_alloc_fail)
+		return NULL;
+	memset(&fake_control_rusage_alloc_out, 0,
+			sizeof(fake_control_rusage_alloc_out));
+	return &fake_control_rusage_alloc_out;
+}
+
+static void fake_control_getrusage_free(void *ptr)
+{
+	fake_control_getrusage_free_calls++;
+	fake_control_getrusage_freed = ptr;
+}
+
+static void fake_control_getrusage_log(int stage, unsigned long size,
+		unsigned long max_size)
+{
+	fake_control_getrusage_log_calls++;
+	fake_control_getrusage_log_stage = stage;
+	fake_control_getrusage_log_size = size;
+	fake_control_getrusage_log_max = max_size;
+}
+
+static long fake_control_getrusage_call(unsigned long os)
+{
+	return mcctrl_control_getrusage_body_result(
+		os, &fake_control_rusage_desc,
+		sizeof(struct mcctrl_ioctl_getrusage_desc),
+		sizeof(struct fake_ihk_os_rusage), IHK_MAX_NUM_PGSIZES,
+		IHK_MAX_NUM_NUMA_NODES, IHK_MAX_NUM_CPUS,
+		fake_control_validate_os, fake_control_getrusage_global,
+		fake_control_copy_from_user, fake_control_copy_to_user,
+		fake_control_getrusage_alloc, fake_control_getrusage_free,
+		fake_control_getrusage_log);
+}
+
+static void *fake_control_os_to_dev(unsigned long os)
+{
+	fake_control_os_to_dev_calls++;
+	fake_control_os_to_dev_os = os;
+	return (void *)0x1234abcdUL;
+}
+
+static unsigned long fake_control_map_memory(void *dev, unsigned long phys,
+		unsigned long size)
+{
+	require(dev == (void *)0x1234abcdUL);
+	fake_control_map_memory_calls++;
+	fake_control_map_memory_phys = phys;
+	fake_control_map_memory_size = size;
+	return phys + 0x1000UL;
+}
+
+static void *fake_control_map_virtual(void *dev, unsigned long phys,
+		unsigned long size)
+{
+	require(dev == (void *)0x1234abcdUL);
+	fake_control_map_virtual_calls++;
+	fake_control_map_virtual_phys = phys;
+	fake_control_map_virtual_size = size;
+	if (fake_control_map_virtual_fail)
+		return NULL;
+	if (size > sizeof(fake_control_remote_buf))
+		return fake_control_uti_remote_ctx;
+	return fake_control_remote_buf;
+}
+
+static void fake_control_unmap_virtual(void *dev, void *virt,
+		unsigned long size)
+{
+	require(dev == (void *)0x1234abcdUL);
+	fake_control_unmap_virtual_calls++;
+	fake_control_unmap_virtual_ptr = virt;
+	fake_control_unmap_virtual_size = size;
+}
+
+static void fake_control_unmap_memory(void *dev, unsigned long phys,
+		unsigned long size)
+{
+	require(dev == (void *)0x1234abcdUL);
+	fake_control_unmap_memory_calls++;
+	fake_control_unmap_memory_phys = phys;
+	fake_control_unmap_memory_size = size;
+}
+
+static void fake_control_transfer_log(int stage)
+{
+	fake_control_transfer_log_calls++;
+	fake_control_transfer_log_stage = stage;
+}
+
+static void fake_control_load_log(void *rpm, unsigned long size)
+{
+	fake_control_load_log_calls++;
+	fake_control_load_log_rpm = rpm;
+	fake_control_load_log_size = size;
+}
+
+static long fake_control_transfer_call(unsigned long os)
+{
+	return mcctrl_control_transfer_image_body_result(
+		os, &fake_control_transfer_desc,
+		sizeof(struct fake_control_remote_transfer),
+		MCEXEC_UP_TRANSFER_TO_REMOTE, MCEXEC_UP_TRANSFER_FROM_REMOTE,
+		fake_control_copy_from_user, fake_control_copy_to_user,
+		fake_control_os_to_dev, fake_control_map_memory,
+		fake_control_map_virtual, fake_control_unmap_virtual,
+		fake_control_unmap_memory, fake_control_transfer_log);
+}
+
+static long fake_control_load_call(unsigned long os)
+{
+	return mcctrl_control_load_syscall_body_result(
+		os, &fake_control_load_desc,
+		sizeof(struct fake_control_syscall_load_desc),
+		fake_control_copy_from_user, fake_control_copy_to_user,
+		fake_control_os_to_dev, fake_control_map_memory,
+		fake_control_map_virtual, fake_control_unmap_virtual,
+		fake_control_unmap_memory, fake_control_load_log);
+}
+
+static void fake_control_return_syscall(unsigned long os, void *ppd,
+		void *packet, long ret, int tid)
+{
+	require(ppd == &fake_control_ppd_token);
+	require(packet == &fake_control_request_packet);
+	fake_control_return_syscall_calls++;
+	fake_control_return_syscall_os = os;
+	fake_control_return_syscall_ppd = ppd;
+	fake_control_return_syscall_packet = packet;
+	fake_control_return_syscall_ret = ret;
+	fake_control_return_syscall_tid = tid;
+}
+
+static void fake_control_release_packet(void *packet)
+{
+	require(packet == &fake_control_request_packet);
+	fake_control_release_packet_calls++;
+	fake_control_release_packet_seen = packet;
+	fake_control_release_packet_order =
+		++fake_control_request_release_order;
+}
+
+static void fake_control_ret_syscall_log(int stage, int pid, int tid)
+{
+	int index = fake_control_ret_log_calls++;
+
+	require(index < 4);
+	fake_control_ret_log_stage[index] = stage;
+	fake_control_ret_log_pid[index] = pid;
+	fake_control_ret_log_tid[index] = tid;
+}
+
+static void fake_control_terminate_thread_log(int stage, int pid, int tid,
+		void *ptr, int value)
+{
+	int index = fake_control_terminate_log_calls++;
+
+	require(index < 8);
+	fake_control_terminate_log_stage[index] = stage;
+	fake_control_terminate_log_pid[index] = pid;
+	fake_control_terminate_log_tid[index] = tid;
+	fake_control_terminate_log_ptr[index] = ptr;
+	fake_control_terminate_log_value[index] = value;
+}
+
+static long fake_control_ret_syscall_call(unsigned long os)
+{
+	return mcctrl_control_ret_syscall_body_result(
+		os, &fake_control_ret_desc,
+		sizeof(struct fake_control_syscall_ret_desc),
+		fake_control_copy_from_user, fake_control_get_usrdata,
+		fake_control_current_pid, fake_control_current_tid,
+		fake_control_current_task, fake_control_get_ppd,
+		fake_control_put_ppd, fake_control_get_ptd,
+		fake_control_put_ptd, fake_control_ptd_data,
+		fake_control_os_to_dev, fake_control_map_memory,
+		fake_control_map_virtual, fake_control_unmap_virtual,
+		fake_control_unmap_memory, fake_control_return_syscall,
+		fake_control_release_packet, fake_control_ret_syscall_log);
+}
+
+static long fake_control_terminate_thread_call(unsigned long os, int pid,
+		int tid, long code)
+{
+	return mcctrl_control_terminate_thread_unsafe_body_result(
+		os, pid, tid, code, &fake_control_task_token,
+		fake_control_get_usrdata, fake_control_usrdata_os,
+		fake_control_get_ppd, fake_control_put_ppd,
+		fake_control_get_ptd, fake_control_put_ptd,
+		fake_control_ptd_tid, fake_control_ptd_data,
+		fake_control_ptd_refcount, fake_control_return_syscall,
+		fake_control_release_packet,
+		fake_control_terminate_thread_log);
+}
+
+static unsigned long fake_control_current_key(void)
+{
+	fake_control_current_key_calls++;
+	return fake_control_current_key_value;
+}
+
+static void fake_control_uti_log(int stage)
+{
+	int index = fake_control_uti_log_calls++;
+
+	require(index < 4);
+	fake_control_uti_log_stage[index] = stage;
+}
+
+static long fake_control_uti_get_ctx_call(unsigned long os)
+{
+	return mcctrl_control_uti_get_ctx_body_result(
+		os, &fake_control_uti_desc,
+		sizeof(struct fake_control_uti_get_ctx_desc),
+		sizeof(fake_control_uti_remote_ctx),
+		offsetof(struct fake_control_uti_get_ctx_desc, key),
+		fake_control_copy_from_user, fake_control_copy_to_user,
+		fake_control_os_to_dev, fake_control_map_memory,
+		fake_control_map_virtual, fake_control_unmap_virtual,
+		fake_control_unmap_memory, fake_control_current_key,
+		fake_control_uti_log);
+}
+
+static unsigned long fake_control_cred_phys_to_virt(unsigned long phys)
+{
+	fake_control_cred_phys_to_virt_calls++;
+	fake_control_cred_phys_to_virt_phys = phys;
+	return (unsigned long)fake_control_cred_kernel_values;
+}
+
+#define DEFINE_FAKE_CONTROL_CRED_VALUE(name, index) \
+static int fake_control_current_##name(void) \
+{ \
+	fake_control_cred_calls[index]++; \
+	return fake_control_cred_values[index]; \
+}
+DEFINE_FAKE_CONTROL_CRED_VALUE(uid, 0)
+DEFINE_FAKE_CONTROL_CRED_VALUE(euid, 1)
+DEFINE_FAKE_CONTROL_CRED_VALUE(suid, 2)
+DEFINE_FAKE_CONTROL_CRED_VALUE(fsuid, 3)
+DEFINE_FAKE_CONTROL_CRED_VALUE(gid, 4)
+DEFINE_FAKE_CONTROL_CRED_VALUE(egid, 5)
+DEFINE_FAKE_CONTROL_CRED_VALUE(sgid, 6)
+DEFINE_FAKE_CONTROL_CRED_VALUE(fsgid, 7)
+#undef DEFINE_FAKE_CONTROL_CRED_VALUE
+
+static int fake_control_getcred_call(unsigned long phys)
+{
+	return mcctrl_control_getcred_body_result(
+		phys, fake_control_cred_phys_to_virt,
+		fake_control_current_uid, fake_control_current_euid,
+		fake_control_current_suid, fake_control_current_fsuid,
+		fake_control_current_gid, fake_control_current_egid,
+		fake_control_current_sgid, fake_control_current_fsgid);
+}
+
+static int fake_control_getcredv_call(int *virt)
+{
+	return mcctrl_control_getcredv_body_result(
+		virt, fake_control_copy_to_user,
+		fake_control_current_uid, fake_control_current_euid,
+		fake_control_current_suid, fake_control_current_fsuid,
+		fake_control_current_gid, fake_control_current_egid,
+		fake_control_current_sgid, fake_control_current_fsgid);
+}
+
+static void *fake_control_strncpy_alloc_page(void)
+{
+	fake_control_strncpy_alloc_calls++;
+	if (fake_control_strncpy_alloc_fail)
+		return NULL;
+	memset(fake_control_strncpy_page, 0, sizeof(fake_control_strncpy_page));
+	return fake_control_strncpy_page;
+}
+
+static void fake_control_strncpy_free_page(void *ptr)
+{
+	fake_control_strncpy_free_calls++;
+	fake_control_strncpy_freed = ptr;
+}
+
+static long fake_control_strncpy_user_copy(void *dst, const void *src,
+		unsigned long size)
+{
+	int index = fake_control_strncpy_calls++;
+	long ret;
+	unsigned long bytes;
+
+	require(index < 4);
+	fake_control_strncpy_src[index] = src;
+	fake_control_strncpy_want[index] = size;
+	ret = fake_control_strncpy_ret[index];
+	if (ret < 0)
+		return ret;
+	bytes = (ret == (long)size) ? size : (unsigned long)ret + 1;
+	memset(dst, 'a' + index, bytes);
+	if (ret != (long)size)
+		((char *)dst)[ret] = '\0';
+	return ret;
+}
+
+static int fake_control_strncpy_copy_to_user(void *dst, const void *src,
+		unsigned long size)
+{
+	fake_control_strncpy_copy_to_calls++;
+	if (dst == fake_control_strncpy_desc_arg) {
+		if (fake_control_strncpy_fail_desc_copy)
+			return -1;
+	} else if (fake_control_strncpy_fail_data_copy) {
+		return -1;
+	}
+	memcpy(dst, src, size);
+	return 0;
+}
+
+static long fake_control_strncpy_call(
+		struct mcctrl_control_strncpy_desc *desc,
+		unsigned long page_size)
+{
+	fake_control_strncpy_desc_arg = desc;
+	return mcctrl_control_strncpy_from_user_body_result(
+		desc, page_size, fake_control_copy_from_user,
+		fake_control_strncpy_copy_to_user,
+		fake_control_strncpy_alloc_page,
+		fake_control_strncpy_free_page,
+		fake_control_strncpy_user_copy);
+}
+
+static void fake_control_destroy_ppd_log(int stage, int pid, void *ppd)
+{
+	int index = fake_control_destroy_log_calls++;
+
+	require(index < 4);
+	fake_control_destroy_log_stage[index] = stage;
+	fake_control_destroy_log_pid[index] = pid;
+	fake_control_destroy_log_ppd[index] = ppd;
+}
+
+static int fake_control_destroy_ppd_call(unsigned long os, int pid)
+{
+	return mcctrl_control_destroy_ppd_body_result(
+		os, pid, fake_control_get_usrdata, fake_control_get_ppd,
+		fake_control_put_ppd, fake_control_destroy_ppd_log);
+}
+
+static int fake_control_drop_exec(unsigned long os, int pid)
+{
+	fake_control_drop_exec_calls++;
+	fake_control_drop_exec_os = os;
+	fake_control_drop_exec_pid = pid;
+	return fake_control_drop_exec_ret;
+}
+
+static int fake_control_close_exec_call(unsigned long os, int pid)
+{
+	return mcctrl_control_close_exec_body_result(
+		os, pid, fake_control_validate_os, fake_control_drop_exec);
+}
+
+static void *fake_control_new_info(unsigned long os, void *file)
+{
+	fake_control_new_info_calls++;
+	fake_control_new_info_os = os;
+	fake_control_new_info_file = file;
+	if (fake_control_new_info_fail)
+		return NULL;
+	return &fake_control_new_info_token;
+}
+
+static void fake_control_set_info_pid(void *info, int pid)
+{
+	fake_control_set_info_pid_calls++;
+	fake_control_set_info_pid_value = pid;
+	((struct fake_control_new_info *)info)->pid = pid;
+}
+
+static void fake_control_register_release(void *file, void *info)
+{
+	fake_control_register_release_calls++;
+	fake_control_register_release_file = file;
+	fake_control_register_release_info = info;
+}
+
+static void fake_control_set_private(void *file, void *info)
+{
+	fake_control_set_private_calls++;
+	fake_control_set_private_file = file;
+	fake_control_set_private_info = info;
+}
+
+static long fake_control_newprocess_call(unsigned long os, void *file)
+{
+	return mcctrl_control_newprocess_body_result(
+		os, file, fake_control_current_pid, fake_control_new_info,
+		fake_control_set_info_pid, fake_control_register_release,
+		fake_control_set_private);
+}
+
+static void *fake_control_start_alloc(unsigned long size)
+{
+	fake_control_start_alloc_calls++;
+	fake_control_start_alloc_size = size;
+	if (fake_control_start_alloc_fail)
+		return NULL;
+	memset(&fake_control_start_local_desc, 0,
+			sizeof(fake_control_start_local_desc));
+	return &fake_control_start_local_desc;
+}
+
+static void fake_control_start_free(void *ptr)
+{
+	fake_control_start_free_calls++;
+	fake_control_start_freed = ptr;
+}
+
+static void *fake_control_start_get_private(void *file)
+{
+	fake_control_start_get_private_calls++;
+	fake_control_start_private_file = file;
+	return &fake_control_start_prev_info;
+}
+
+static void *fake_control_start_new_info_alloc(unsigned long os, void *file)
+{
+	fake_control_start_new_info_calls++;
+	fake_control_start_new_info_os = os;
+	fake_control_start_new_info_file = file;
+	if (fake_control_start_new_info_fail)
+		return NULL;
+	return &fake_control_start_new_info;
+}
+
+static int fake_control_start_desc_cpu(void *desc)
+{
+	require(desc == &fake_control_start_local_desc);
+	return ((struct fake_control_start_desc *)desc)->cpu;
+}
+
+static int fake_control_start_desc_pid(void *desc)
+{
+	require(desc == &fake_control_start_local_desc);
+	return ((struct fake_control_start_desc *)desc)->pid;
+}
+
+static unsigned long fake_control_start_desc_user_start(void *desc)
+{
+	require(desc == &fake_control_start_local_desc);
+	return ((struct fake_control_start_desc *)desc)->user_start;
+}
+
+static unsigned long fake_control_start_desc_user_end(void *desc)
+{
+	require(desc == &fake_control_start_local_desc);
+	return ((struct fake_control_start_desc *)desc)->user_end;
+}
+
+static unsigned long fake_control_start_desc_rprocess(void *desc)
+{
+	require(desc == &fake_control_start_local_desc);
+	return ((struct fake_control_start_desc *)desc)->rprocess;
+}
+
+static unsigned long fake_control_start_info_prepare(void *info)
+{
+	require(info == &fake_control_start_prev_info);
+	fake_control_start_info_prepare_calls++;
+	return ((struct fake_control_start_info *)info)->prepare_thread;
+}
+
+static void fake_control_start_set_info(void *info, int pid, int cpu,
+		unsigned long user_start, unsigned long user_end,
+		unsigned long prepare_thread)
+{
+	struct fake_control_start_info *start = info;
+
+	require(info == &fake_control_start_new_info);
+	fake_control_start_set_info_calls++;
+	fake_control_start_set_info_prepare_thread = prepare_thread;
+	start->pid = pid;
+	start->cpu = cpu;
+	start->user_start = user_start;
+	start->user_end = user_end;
+	start->prepare_thread = prepare_thread;
+}
+
+static void fake_control_start_set_recv(unsigned long os, int cpu)
+{
+	fake_control_start_set_recv_calls++;
+	fake_control_start_set_recv_os = os;
+	fake_control_start_set_recv_cpu = cpu;
+}
+
+static void fake_control_start_set_last(void *usrdata, unsigned long cpu)
+{
+	require(usrdata == &fake_control_usrdata_token);
+	fake_control_start_set_last_calls++;
+	fake_control_start_set_last_usrdata = usrdata;
+	fake_control_start_set_last_cpu = cpu;
+}
+
+static int fake_control_start_send(unsigned long os, int cpu,
+		unsigned long rprocess)
+{
+	fake_control_start_send_calls++;
+	fake_control_start_send_os = os;
+	fake_control_start_send_cpu = cpu;
+	fake_control_start_send_rprocess = rprocess;
+	return fake_control_start_send_ret;
+}
+
+static void fake_control_start_clear(void *info)
+{
+	require(info == &fake_control_start_new_info);
+	fake_control_start_clear_calls++;
+	((struct fake_control_start_info *)info)->prepare_thread = 0;
+}
+
+static void fake_control_start_log(int stage, int ret)
+{
+	int index = fake_control_start_log_calls++;
+
+	require(index < 4);
+	fake_control_start_log_stage[index] = stage;
+	fake_control_start_log_ret[index] = ret;
+}
+
+static long fake_control_start_image_call(unsigned long os, void *file)
+{
+	return mcctrl_control_start_image_body_result(
+		os, &fake_control_start_user_desc, file,
+		sizeof(fake_control_start_user_desc),
+		fake_control_copy_from_user, fake_control_start_alloc,
+		fake_control_start_free, fake_control_get_usrdata,
+		fake_control_start_get_private,
+		fake_control_start_new_info_alloc, fake_control_start_desc_cpu,
+		fake_control_start_desc_pid,
+		fake_control_start_desc_user_start,
+		fake_control_start_desc_user_end,
+		fake_control_start_desc_rprocess,
+		fake_control_start_info_prepare,
+		fake_control_start_set_info,
+		fake_control_register_release,
+		fake_control_set_private,
+		fake_control_start_set_recv,
+		fake_control_start_set_last,
+		fake_control_start_send,
+		fake_control_start_clear,
+		fake_control_start_log);
+}
+
+static void *fake_control_signal_alloc(unsigned long size)
+{
+	fake_control_signal_alloc_calls++;
+	fake_control_signal_alloc_size = size;
+	if (fake_control_signal_alloc_fail)
+		return NULL;
+	memset(&fake_control_signal_local_desc, 0,
+			sizeof(fake_control_signal_local_desc));
+	return &fake_control_signal_local_desc;
+}
+
+static void fake_control_signal_free(void *ptr)
+{
+	fake_control_signal_free_calls++;
+	fake_control_signal_freed = ptr;
+}
+
+static unsigned long fake_control_signal_vtop(void *ptr)
+{
+	require(ptr == &fake_control_signal_local_desc.msig);
+	fake_control_signal_vtop_calls++;
+	fake_control_signal_vtop_ptr = ptr;
+	return fake_control_signal_vtop_result;
+}
+
+static int fake_control_signal_send_wait(unsigned long os, int cpu,
+		struct mcctrl_ikc_scd_packet *packet, long timeout,
+		int *do_free, void *desc)
+{
+	require(desc == &fake_control_signal_local_desc);
+	fake_control_signal_send_calls++;
+	fake_control_signal_send_os = os;
+	fake_control_signal_send_cpu = cpu;
+	fake_control_signal_send_msg = packet->msg;
+	fake_control_signal_send_ref = packet->body.traditional.ref;
+	fake_control_signal_send_pid = packet->body.traditional.pid;
+	fake_control_signal_send_arg = packet->body.traditional.arg;
+	fake_control_signal_send_timeout = timeout;
+	fake_control_signal_send_desc = desc;
+	*do_free = fake_control_signal_send_do_free;
+	return fake_control_signal_send_ret;
+}
+
+static void fake_control_signal_log(int stage, int ret)
+{
+	int index = fake_control_signal_log_calls++;
+
+	require(index < 4);
+	fake_control_signal_log_stage[index] = stage;
+	fake_control_signal_log_ret[index] = ret;
+}
+
+static long fake_control_send_signal_call(unsigned long os)
+{
+	return mcctrl_control_send_signal_body_result(
+		os, &fake_control_signal_user_desc,
+		sizeof(fake_control_signal_user_desc),
+		sizeof(fake_control_signal_local_desc),
+		fake_control_copy_from_user, fake_control_signal_alloc,
+		fake_control_signal_free, fake_control_get_usrdata,
+		fake_control_signal_vtop, fake_control_signal_send_wait,
+		fake_control_signal_log);
+}
+
+static long fake_control_pin_region_call(const struct prepare_dma_desc *desc)
+{
+	return mcctrl_control_pin_region_body_result(
+		desc, 16, 12, fake_control_copy_from_user,
+		fake_control_get_order, fake_control_alloc_pages,
+		fake_control_region_virt_to_phys,
+		fake_control_copy_to_user);
+}
+
+static long fake_control_free_region_call(const struct free_dma_desc *desc)
+{
+	return mcctrl_control_free_region_body_result(
+		desc, 16, 12, fake_control_copy_from_user,
+		fake_control_get_order, fake_control_region_phys_to_virt,
+		fake_control_free_pages);
+}
+
+static long fake_control_sys_mount_call(const struct sys_mount_desc *desc)
+{
+	return mcctrl_control_sys_mount_body_result(
+		desc, fake_control_copy_from_user,
+		fake_control_prepare_creds,
+		fake_control_cap_raise_admin,
+		fake_control_override_creds, fake_control_mount,
+		fake_control_revert_creds, fake_control_put_cred);
+}
+
+static long fake_control_sys_umount_call(const struct sys_umount_desc *desc,
+		int force)
+{
+	return mcctrl_control_sys_umount_body_result(
+		desc, force, fake_control_copy_from_user,
+		fake_control_prepare_creds,
+		fake_control_cap_raise_admin,
+		fake_control_override_creds, fake_control_umount,
+		fake_control_revert_creds, fake_control_put_cred);
+}
+
+static long fake_control_sys_unshare_call(
+		const struct sys_unshare_desc *desc)
+{
+	return mcctrl_control_sys_unshare_body_result(
+		desc, fake_control_copy_from_user,
+		fake_control_prepare_creds,
+		fake_control_cap_raise_admin,
+		fake_control_override_creds, fake_control_unshare,
+		fake_control_revert_creds, fake_control_put_cred);
+}
+
+static long fake_control_release_user_space_call(
+		const struct release_user_space_desc *desc)
+{
+	return mcctrl_control_release_user_space_body_result(
+		desc, fake_control_copy_from_user,
+		fake_control_clear_pte_range);
+}
+
+static long fake_control_perf_num_call(unsigned long os, unsigned long value)
+{
+	return mcctrl_control_perf_num_body_result(
+		os, value, fake_control_validate_os,
+		fake_control_get_usrdata, fake_control_perf_set_num,
+		fake_control_log_error);
+}
+
+static long fake_control_perf_destroy_call(unsigned long os)
+{
+	return mcctrl_control_perf_destroy_body_result(
+		os, fake_control_perf_destroy_disable,
+		fake_control_perf_num_zero);
+}
+
+static long fake_control_perf_set_call(unsigned long os)
+{
+	return mcctrl_control_perf_set_body_result(
+		os, fake_control_perf_attrs, 0, sizeof(struct fake_control_perf_desc),
+		fake_control_validate_os, fake_control_get_usrdata,
+		fake_control_perf_event_num_fn, fake_control_get_cpu_info,
+		fake_control_cpu_info_n_cpus, fake_control_perf_free_desc,
+		fake_control_perf_alloc_set_desc, fake_control_perf_send_wait,
+		fake_control_perf_desc_err, fake_control_perf_set_num,
+		fake_control_perf_log);
+}
+
+static long fake_control_perf_get_call(unsigned long os)
+{
+	return mcctrl_control_perf_get_body_result(
+		os, fake_control_perf_user_values, 0,
+		sizeof(struct fake_control_perf_desc), sizeof(unsigned long),
+		fake_control_validate_os, fake_control_get_usrdata,
+		fake_control_perf_event_num_fn, fake_control_get_cpu_info,
+		fake_control_cpu_info_n_cpus, fake_control_perf_alloc_desc,
+		fake_control_perf_free_desc, fake_control_perf_init_get_desc,
+		fake_control_perf_send_wait, fake_control_perf_desc_err,
+		fake_control_perf_desc_read_value,
+		fake_control_perf_copy_to_user, fake_control_perf_log);
+}
+
+static long fake_control_perf_enable_disable_call(unsigned long os,
+		int ctrl_type)
+{
+	return mcctrl_control_perf_enable_disable_body_result(
+		os, ctrl_type, 0, sizeof(struct fake_control_perf_desc),
+		fake_control_validate_os, fake_control_get_usrdata,
+		fake_control_perf_event_num_fn, fake_control_get_cpu_info,
+		fake_control_cpu_info_n_cpus, fake_control_perf_alloc_desc,
+		fake_control_perf_free_desc,
+		fake_control_perf_init_mask_desc,
+		fake_control_perf_send_wait, fake_control_perf_desc_err,
+		fake_control_perf_log);
+}
+
+static void fake_driver_note(char code)
+{
+	if (fake_driver_order_len < (int)sizeof(fake_driver_order) - 1) {
+		fake_driver_order[fake_driver_order_len++] = code;
+		fake_driver_order[fake_driver_order_len] = '\0';
+	}
+}
+
+static void reset_fake_driver(void)
+{
+	memset(fake_driver_os_slots, 0, sizeof(fake_driver_os_slots));
+	memset(fake_driver_symbol_values, 0, sizeof(fake_driver_symbol_values));
+	memset(fake_driver_published_symbols, 0,
+			sizeof(fake_driver_published_symbols));
+	for (int i = 0; i < 8; i++)
+		fake_driver_symbol_values[i] =
+			(void *)(0xd000UL + (unsigned long)i * 0x100UL);
+	fake_driver_find_result = (void *)0xb007UL;
+	fake_driver_control_calls = 0;
+	fake_driver_control_request = 0;
+	fake_driver_control_os = 0;
+	fake_driver_control_arg = 0;
+	fake_driver_control_file = 0;
+	fake_driver_get_os_calls = 0;
+	fake_driver_set_os_calls = 0;
+	fake_driver_last_index = -1;
+	fake_driver_last_os = NULL;
+	fake_driver_prepare_calls = 0;
+	fake_driver_prepare_ret = 0;
+	fake_driver_copy_proto_calls = 0;
+	fake_driver_set_kernel_calls = 0;
+	fake_driver_set_kernel_ret = 0;
+	fake_driver_register_user_calls = 0;
+	fake_driver_register_user_ret = 0;
+	fake_driver_procfs_init_calls = 0;
+	fake_driver_clear_kernel_calls = 0;
+	fake_driver_destroy_calls = 0;
+	fake_driver_pager_cleanup_calls = 0;
+	fake_driver_sysfs_cleanup_calls = 0;
+	fake_driver_free_topology_calls = 0;
+	fake_driver_unregister_user_calls = 0;
+	fake_driver_procfs_exit_calls = 0;
+	fake_driver_log_stage = -1;
+	fake_driver_log_index = -1;
+	fake_driver_log_calls = 0;
+	fake_driver_lookup_calls = 0;
+	fake_driver_publish_calls = 0;
+	fake_driver_warn_calls = 0;
+	fake_driver_arch_calls = 0;
+	fake_driver_arch_ret = 0;
+	fake_driver_symbol_missing = -1;
+	fake_driver_syscall_init_calls = 0;
+	fake_driver_binfmt_init_calls = 0;
+	fake_driver_tofu_hash_calls = 0;
+	fake_driver_symbols_init_calls = 0;
+	fake_driver_symbols_init_ret = 0;
+	fake_driver_tofu_hijack_calls = 0;
+	fake_driver_register_notifier_calls = 0;
+	fake_driver_register_notifier_ret = 0;
+	fake_driver_binfmt_exit_calls = 0;
+	fake_driver_deregister_notifier_calls = 0;
+	fake_driver_deregister_notifier_ret = 0;
+	fake_driver_uti_finalize_calls = 0;
+	fake_driver_tofu_restore_calls = 0;
+	memset(fake_driver_order, 0, sizeof(fake_driver_order));
+	fake_driver_order_len = 0;
+}
+
+static long fake_driver_control(unsigned long os, unsigned int request,
+		unsigned long arg, unsigned long file)
+{
+	fake_driver_control_calls++;
+	fake_driver_control_os = os;
+	fake_driver_control_request = request;
+	fake_driver_control_arg = arg;
+	fake_driver_control_file = file;
+	return 0x660000L + request;
+}
+
+static void *fake_driver_get_os(int index)
+{
+	fake_driver_get_os_calls++;
+	fake_driver_last_index = index;
+	return fake_driver_os_slots[index];
+}
+
+static void fake_driver_set_os(int index, void *os)
+{
+	fake_driver_set_os_calls++;
+	fake_driver_last_index = index;
+	fake_driver_last_os = os;
+	fake_driver_os_slots[index] = os;
+}
+
+static void *fake_driver_find_os(int index)
+{
+	fake_driver_last_index = index;
+	return fake_driver_find_result;
+}
+
+static int fake_driver_prepare_channels(void *os)
+{
+	require(os == fake_driver_find_result);
+	fake_driver_prepare_calls++;
+	return fake_driver_prepare_ret;
+}
+
+static void fake_driver_copy_user_call_proto(int index)
+{
+	fake_driver_copy_proto_calls++;
+	fake_driver_last_index = index;
+}
+
+static int fake_driver_set_kernel_handlers(void *os)
+{
+	require(os == fake_driver_find_result);
+	fake_driver_set_kernel_calls++;
+	return fake_driver_set_kernel_ret;
+}
+
+static int fake_driver_register_user_handlers(void *os, int index)
+{
+	require(os == fake_driver_find_result);
+	fake_driver_register_user_calls++;
+	fake_driver_last_index = index;
+	return fake_driver_register_user_ret;
+}
+
+static void fake_driver_procfs_init(int index)
+{
+	fake_driver_procfs_init_calls++;
+	fake_driver_last_index = index;
+}
+
+static void fake_driver_clear_kernel_handlers(void *os)
+{
+	require(os == fake_driver_find_result);
+	fake_driver_clear_kernel_calls++;
+}
+
+static void fake_driver_destroy_channels(void *os)
+{
+	require(os == fake_driver_find_result);
+	fake_driver_destroy_calls++;
+}
+
+static void fake_driver_pager_cleanup(void)
+{
+	fake_driver_pager_cleanup_calls++;
+}
+
+static void fake_driver_sysfs_cleanup(void *os)
+{
+	require(os == fake_driver_find_result);
+	fake_driver_sysfs_cleanup_calls++;
+}
+
+static void fake_driver_free_topology_info(void *os)
+{
+	require(os == fake_driver_find_result);
+	fake_driver_free_topology_calls++;
+}
+
+static void fake_driver_unregister_user_handlers(void *os, int index)
+{
+	require(os == fake_driver_find_result);
+	fake_driver_unregister_user_calls++;
+	fake_driver_last_index = index;
+}
+
+static void fake_driver_procfs_exit(int index)
+{
+	fake_driver_procfs_exit_calls++;
+	fake_driver_last_index = index;
+}
+
+static void fake_driver_log(int stage, int index)
+{
+	fake_driver_log_calls++;
+	fake_driver_log_stage = stage;
+	fake_driver_log_index = index;
+}
+
+#define DEFINE_FAKE_DRIVER_LOOKUP(id) \
+static void *fake_driver_lookup_##id(void) \
+{ \
+	fake_driver_lookup_calls++; \
+	if (fake_driver_symbol_missing == id) \
+		return NULL; \
+	return fake_driver_symbol_values[id]; \
+} \
+static void fake_driver_publish_##id(void *ptr) \
+{ \
+	fake_driver_publish_calls++; \
+	fake_driver_published_symbols[id] = ptr; \
+}
+DEFINE_FAKE_DRIVER_LOOKUP(0)
+DEFINE_FAKE_DRIVER_LOOKUP(1)
+DEFINE_FAKE_DRIVER_LOOKUP(2)
+DEFINE_FAKE_DRIVER_LOOKUP(3)
+DEFINE_FAKE_DRIVER_LOOKUP(4)
+DEFINE_FAKE_DRIVER_LOOKUP(5)
+DEFINE_FAKE_DRIVER_LOOKUP(6)
+DEFINE_FAKE_DRIVER_LOOKUP(7)
+
+static int fake_driver_warn_missing(void *ptr)
+{
+	fake_driver_warn_calls++;
+	return ptr == NULL;
+}
+
+static int fake_driver_arch_symbols_init(void)
+{
+	fake_driver_arch_calls++;
+	return fake_driver_arch_ret;
+}
+
+static const struct mcctrl_driver_boot_ops fake_driver_boot_ops = {
+	.find_os = fake_driver_find_os,
+	.set_os = fake_driver_set_os,
+	.prepare_channels = fake_driver_prepare_channels,
+	.copy_user_call_proto = fake_driver_copy_user_call_proto,
+	.set_kernel_handlers = fake_driver_set_kernel_handlers,
+	.register_user_handlers = fake_driver_register_user_handlers,
+	.procfs_init = fake_driver_procfs_init,
+	.clear_kernel_handlers = fake_driver_clear_kernel_handlers,
+	.destroy_channels = fake_driver_destroy_channels,
+	.log = fake_driver_log,
+};
+
+static const struct mcctrl_driver_shutdown_ops fake_driver_shutdown_ops = {
+	.get_os = fake_driver_get_os,
+	.set_os = fake_driver_set_os,
+	.pager_cleanup = fake_driver_pager_cleanup,
+	.sysfs_cleanup = fake_driver_sysfs_cleanup,
+	.free_topology_info = fake_driver_free_topology_info,
+	.unregister_user_handlers = fake_driver_unregister_user_handlers,
+	.clear_kernel_handlers = fake_driver_clear_kernel_handlers,
+	.destroy_channels = fake_driver_destroy_channels,
+	.procfs_exit = fake_driver_procfs_exit,
+	.log = fake_driver_log,
+};
+
+static const struct mcctrl_driver_symbols_ops fake_driver_symbols_ops = {
+	.lookup_mount = fake_driver_lookup_0,
+	.set_mount = fake_driver_publish_0,
+	.lookup_umount = fake_driver_lookup_1,
+	.set_umount = fake_driver_publish_1,
+	.lookup_unshare = fake_driver_lookup_2,
+	.set_unshare = fake_driver_publish_2,
+	.lookup_sched_setaffinity = fake_driver_lookup_3,
+	.set_sched_setaffinity = fake_driver_publish_3,
+	.lookup_sched_setscheduler_nocheck = fake_driver_lookup_4,
+	.set_sched_setscheduler_nocheck = fake_driver_publish_4,
+	.lookup_readlinkat = fake_driver_lookup_5,
+	.set_readlinkat = fake_driver_publish_5,
+	.lookup_zap_page_range = fake_driver_lookup_6,
+	.set_zap_page_range = fake_driver_publish_6,
+	.lookup_hugetlbfs_inode_operations = fake_driver_lookup_7,
+	.set_hugetlbfs_inode_operations = fake_driver_publish_7,
+	.warn_missing = fake_driver_warn_missing,
+	.arch_symbols_init = fake_driver_arch_symbols_init,
+};
+
+static void fake_driver_syscall_init(void)
+{
+	fake_driver_syscall_init_calls++;
+	fake_driver_note('s');
+}
+
+static void fake_driver_binfmt_init(void)
+{
+	fake_driver_binfmt_init_calls++;
+	fake_driver_note('b');
+}
+
+static void fake_driver_tofu_hash_init(void)
+{
+	fake_driver_tofu_hash_calls++;
+	fake_driver_note('h');
+}
+
+static int fake_driver_symbols_init(void)
+{
+	fake_driver_symbols_init_calls++;
+	fake_driver_note('y');
+	return fake_driver_symbols_init_ret;
+}
+
+static void fake_driver_tofu_hijack(void)
+{
+	fake_driver_tofu_hijack_calls++;
+	fake_driver_note('j');
+}
+
+static int fake_driver_register_notifier(void)
+{
+	fake_driver_register_notifier_calls++;
+	fake_driver_note('r');
+	return fake_driver_register_notifier_ret;
+}
+
+static void fake_driver_binfmt_exit(void)
+{
+	fake_driver_binfmt_exit_calls++;
+	fake_driver_note('x');
+}
+
+static int fake_driver_deregister_notifier(void)
+{
+	fake_driver_deregister_notifier_calls++;
+	fake_driver_note('d');
+	return fake_driver_deregister_notifier_ret;
+}
+
+static void fake_driver_uti_finalize(void)
+{
+	fake_driver_uti_finalize_calls++;
+	fake_driver_note('u');
+}
+
+static void fake_driver_tofu_restore(void)
+{
+	fake_driver_tofu_restore_calls++;
+	fake_driver_note('t');
+}
+
+static const struct mcctrl_driver_module_ops fake_driver_module_ops = {
+	.syscall_init = fake_driver_syscall_init,
+	.set_os = fake_driver_set_os,
+	.binfmt_init = fake_driver_binfmt_init,
+	.tofu_hash_init = fake_driver_tofu_hash_init,
+	.symbols_init = fake_driver_symbols_init,
+	.tofu_hijack = fake_driver_tofu_hijack,
+	.register_notifier = fake_driver_register_notifier,
+	.binfmt_exit = fake_driver_binfmt_exit,
+	.deregister_notifier = fake_driver_deregister_notifier,
+	.uti_finalize = fake_driver_uti_finalize,
+	.tofu_restore = fake_driver_tofu_restore,
+	.log = fake_driver_log,
+};
 
 static void reset_fake_in_kernel(void)
 {
@@ -106026,6 +109670,302 @@ static const struct mcctrl_in_kernel_syscall_ops fake_in_kernel_ops = {
 	.release_packet = fake_in_kernel_release,
 };
 
+static void reset_fake_pager(void)
+{
+	fake_pager_create_calls = 0;
+	fake_pager_release_calls = 0;
+	fake_pager_read_calls = 0;
+	fake_pager_write_calls = 0;
+	fake_pager_map_calls = 0;
+	fake_pager_pfn_calls = 0;
+	fake_pager_unmap_calls = 0;
+	fake_pager_mlock_calls = 0;
+	fake_pager_unknown_calls = 0;
+	fake_pager_last_os = 0;
+	fake_pager_last_request = 0;
+	fake_pager_last_arg1 = 0;
+	fake_pager_last_arg2 = 0;
+	fake_pager_last_arg3 = 0;
+	fake_pager_last_arg4 = 0;
+	fake_pager_last_arg5 = 0;
+	fake_pager_last_int = 0;
+	fake_pager_create_ret = 0x8101;
+	fake_pager_release_ret = 0x8102;
+	fake_pager_read_ret = 0x8103;
+	fake_pager_write_ret = 0x8104;
+	fake_pager_map_ret = 0x8105;
+	fake_pager_pfn_ret = 0x8106;
+	fake_pager_unmap_ret = 0x8107;
+	fake_pager_mlock_ret = 0x8108;
+}
+
+static void fake_pager_prepare_req(struct mcctrl_syscall_request *req,
+		unsigned long request)
+{
+	memset(req, 0, sizeof(*req));
+	req->args[0] = request;
+}
+
+static long fake_pager_create(unsigned long os, int fd,
+		unsigned long result_pa)
+{
+	fake_pager_create_calls++;
+	fake_pager_last_os = os;
+	fake_pager_last_arg1 = (unsigned long)fd;
+	fake_pager_last_arg2 = result_pa;
+	return fake_pager_create_ret;
+}
+
+static long fake_pager_release(unsigned long os, unsigned long handle,
+		unsigned long sref)
+{
+	fake_pager_release_calls++;
+	fake_pager_last_os = os;
+	fake_pager_last_arg1 = handle;
+	fake_pager_last_arg2 = sref;
+	return fake_pager_release_ret;
+}
+
+static long fake_pager_read(unsigned long os, unsigned long handle,
+		unsigned long off, unsigned long size, unsigned long rpa)
+{
+	fake_pager_read_calls++;
+	fake_pager_last_os = os;
+	fake_pager_last_arg1 = handle;
+	fake_pager_last_arg2 = off;
+	fake_pager_last_arg3 = size;
+	fake_pager_last_arg4 = rpa;
+	return fake_pager_read_ret;
+}
+
+static long fake_pager_write(unsigned long os, unsigned long handle,
+		unsigned long off, unsigned long size, unsigned long rpa)
+{
+	fake_pager_write_calls++;
+	fake_pager_last_os = os;
+	fake_pager_last_arg1 = handle;
+	fake_pager_last_arg2 = off;
+	fake_pager_last_arg3 = size;
+	fake_pager_last_arg4 = rpa;
+	return fake_pager_write_ret;
+}
+
+static long fake_pager_map(unsigned long os, int fd, unsigned long len,
+		unsigned long off, unsigned long result_rpa, int prot)
+{
+	fake_pager_map_calls++;
+	fake_pager_last_os = os;
+	fake_pager_last_arg1 = (unsigned long)fd;
+	fake_pager_last_arg2 = len;
+	fake_pager_last_arg3 = off;
+	fake_pager_last_arg4 = result_rpa;
+	fake_pager_last_int = prot;
+	return fake_pager_map_ret;
+}
+
+static long fake_pager_pfn(unsigned long os, unsigned long handle,
+		unsigned long off, unsigned long ppfn_rpa)
+{
+	fake_pager_pfn_calls++;
+	fake_pager_last_os = os;
+	fake_pager_last_arg1 = handle;
+	fake_pager_last_arg2 = off;
+	fake_pager_last_arg3 = ppfn_rpa;
+	return fake_pager_pfn_ret;
+}
+
+static long fake_pager_unmap(unsigned long os, unsigned long handle)
+{
+	fake_pager_unmap_calls++;
+	fake_pager_last_os = os;
+	fake_pager_last_arg1 = handle;
+	return fake_pager_unmap_ret;
+}
+
+static long fake_pager_mlock_list(unsigned long os, unsigned long start,
+		unsigned long end, unsigned long addr, int nent)
+{
+	fake_pager_mlock_calls++;
+	fake_pager_last_os = os;
+	fake_pager_last_arg1 = start;
+	fake_pager_last_arg2 = end;
+	fake_pager_last_arg3 = addr;
+	fake_pager_last_int = nent;
+	return fake_pager_mlock_ret;
+}
+
+static void fake_pager_unknown(unsigned long request, long ret)
+{
+	fake_pager_unknown_calls++;
+	fake_pager_last_request = request;
+	fake_pager_last_arg1 = (unsigned long)ret;
+}
+
+static const struct mcctrl_pager_call_ops fake_pager_ops = {
+	.create = fake_pager_create,
+	.release = fake_pager_release,
+	.read = fake_pager_read,
+	.write = fake_pager_write,
+	.map = fake_pager_map,
+	.pfn = fake_pager_pfn,
+	.unmap = fake_pager_unmap,
+	.mlock_list = fake_pager_mlock_list,
+	.unknown = fake_pager_unknown,
+};
+
+static void reset_fake_remote_pf(void)
+{
+	fake_remote_pf_send_calls = 0;
+	fake_remote_pf_log_calls = 0;
+	fake_remote_pf_last_stage = 0;
+	fake_remote_pf_last_cpu = 0;
+	fake_remote_pf_last_pid = 0;
+	fake_remote_pf_last_error = 0;
+	fake_remote_pf_last_os = 0;
+	fake_remote_pf_last_addr = 0;
+	fake_remote_pf_last_reason = 0;
+	fake_remote_pf_last_packet = NULL;
+	fake_remote_pf_send_ret = 0;
+}
+
+static int fake_remote_pf_send(unsigned long os, int cpu,
+		struct mcctrl_ikc_scd_packet *packet)
+{
+	fake_remote_pf_send_calls++;
+	fake_remote_pf_last_os = os;
+	fake_remote_pf_last_cpu = cpu;
+	fake_remote_pf_last_packet = packet;
+	return fake_remote_pf_send_ret;
+}
+
+static void fake_remote_pf_log(int stage, int pid, int error,
+		unsigned long fault_addr, unsigned long reason)
+{
+	fake_remote_pf_log_calls++;
+	fake_remote_pf_last_stage = stage;
+	fake_remote_pf_last_pid = pid;
+	fake_remote_pf_last_error = error;
+	fake_remote_pf_last_addr = fault_addr;
+	fake_remote_pf_last_reason = reason;
+}
+
+static void reset_fake_user_space(void)
+{
+	memset(fake_user_vmas, 0, sizeof(fake_user_vmas));
+	fake_user_vma_count = 0;
+	fake_user_space_lock_calls = 0;
+	fake_user_space_unlock_calls = 0;
+	fake_user_space_find_calls = 0;
+	fake_user_space_last_find = 0;
+	fake_user_space_set_rw_calls = 0;
+	fake_user_space_zap_ptes_calls = 0;
+	fake_user_space_zap_range_calls = 0;
+	fake_user_space_munmap_calls = 0;
+	fake_user_space_log_calls = 0;
+	fake_user_space_zap_ptes_ret = 0;
+	fake_user_space_munmap_ret = 0;
+	fake_user_space_last_start = 0;
+	fake_user_space_last_len = 0;
+	fake_user_space_munmap_total = 0;
+	fake_user_space_last_error = 0;
+}
+
+static void fake_user_space_read_lock(void)
+{
+	fake_user_space_lock_calls++;
+}
+
+static void fake_user_space_read_unlock(void)
+{
+	fake_user_space_unlock_calls++;
+}
+
+static void *fake_user_space_find_vma(unsigned long addr)
+{
+	fake_user_space_find_calls++;
+	fake_user_space_last_find = addr;
+	for (int i = 0; i < fake_user_vma_count; i++) {
+		if (fake_user_vmas[i].end > addr)
+			return &fake_user_vmas[i];
+	}
+	return NULL;
+}
+
+static unsigned long fake_user_space_vma_start(void *vma)
+{
+	return ((struct fake_user_vma *)vma)->start;
+}
+
+static unsigned long fake_user_space_vma_end(void *vma)
+{
+	return ((struct fake_user_vma *)vma)->end;
+}
+
+static unsigned long fake_user_space_vma_flags(void *vma)
+{
+	return ((struct fake_user_vma *)vma)->flags;
+}
+
+static void fake_user_space_set_rw_exec(void *vma)
+{
+	(void)vma;
+	fake_user_space_set_rw_calls++;
+}
+
+static int fake_user_space_zap_vma_ptes(void *vma, unsigned long addr,
+		unsigned long len)
+{
+	(void)vma;
+	fake_user_space_zap_ptes_calls++;
+	fake_user_space_last_start = addr;
+	fake_user_space_last_len = len;
+	return fake_user_space_zap_ptes_ret;
+}
+
+static void fake_user_space_zap_page_range(void *vma, unsigned long addr,
+		unsigned long len)
+{
+	(void)vma;
+	fake_user_space_zap_range_calls++;
+	fake_user_space_last_start = addr;
+	fake_user_space_last_len = len;
+}
+
+static int fake_user_space_munmap(unsigned long addr, unsigned long len)
+{
+	fake_user_space_munmap_calls++;
+	fake_user_space_last_start = addr;
+	fake_user_space_last_len = len;
+	fake_user_space_munmap_total += len;
+	return fake_user_space_munmap_ret;
+}
+
+static void fake_user_space_log_error(int error)
+{
+	fake_user_space_log_calls++;
+	fake_user_space_last_error = error;
+}
+
+static const struct mcctrl_clear_pte_range_ops fake_clear_pte_ops = {
+	.read_lock = fake_user_space_read_lock,
+	.read_unlock = fake_user_space_read_unlock,
+	.find_vma = fake_user_space_find_vma,
+	.vma_start = fake_user_space_vma_start,
+	.vma_end = fake_user_space_vma_end,
+	.vma_flags = fake_user_space_vma_flags,
+	.set_rw_exec = fake_user_space_set_rw_exec,
+	.zap_vma_ptes = fake_user_space_zap_vma_ptes,
+	.zap_page_range = fake_user_space_zap_page_range,
+};
+
+static const struct mcctrl_user_space_release_ops fake_release_space_ops = {
+	.find_vma = fake_user_space_find_vma,
+	.vma_start = fake_user_space_vma_start,
+	.vma_end = fake_user_space_vma_end,
+	.munmap = fake_user_space_munmap,
+	.log_error = fake_user_space_log_error,
+};
+
 static void reset_fake_work(void)
 {
 	memset(&fake_work, 0, sizeof(fake_work));
@@ -106141,6 +110081,58 @@ static void reset_fake_work(void)
 	fake_procfs_read_timeout_calls = 0;
 	fake_procfs_read_no_usrdata_calls = 0;
 	fake_procfs_read_no_ppd_calls = 0;
+	fake_procfs_add_entries_calls = 0;
+	fake_procfs_add_entries_parent = NULL;
+	fake_procfs_add_entries_name = NULL;
+	fake_procfs_add_entries_mode = 0;
+	fake_procfs_add_entries_fops = NULL;
+	fake_procfs_add_entries_uid = NULL;
+	fake_procfs_add_entries_gid = NULL;
+	fake_procfs_entry_alloc_calls = 0;
+	fake_procfs_entry_alloc_fail = 0;
+	fake_procfs_entry_alloc_size = 0;
+	fake_procfs_entry_init_calls = 0;
+	memset(fake_procfs_entry_init_name, 0,
+	       sizeof(fake_procfs_entry_init_name));
+	fake_procfs_entry_create_calls = 0;
+	fake_procfs_entry_create_fail = 0;
+	fake_procfs_entry_create_mode = 0;
+	fake_procfs_entry_create_uid = NULL;
+	fake_procfs_entry_create_gid = NULL;
+	fake_procfs_entry_create_opaque = NULL;
+	fake_procfs_entry_create_entry = NULL;
+	fake_procfs_entry_commit_calls = 0;
+	fake_procfs_entry_commit_parent = NULL;
+	fake_procfs_entry_commit_pde = NULL;
+	fake_procfs_entry_commit_uid = NULL;
+	fake_procfs_entry_commit_gid = NULL;
+	fake_procfs_entry_free_calls = 0;
+	fake_procfs_entry_free_last = NULL;
+	fake_procfs_entry_alloc_failed_calls = 0;
+	fake_procfs_entry_create_failed_calls = 0;
+	memset(fake_procfs_entry_create_failed_name, 0,
+	       sizeof(fake_procfs_entry_create_failed_name));
+	fake_procfs_delete_lifecycle_child_present = 0;
+	fake_procfs_delete_lifecycle_first_calls = 0;
+	fake_procfs_delete_lifecycle_unlink_calls = 0;
+	fake_procfs_delete_lifecycle_remove_calls = 0;
+	fake_procfs_delete_lifecycle_data_calls = 0;
+	fake_procfs_delete_lifecycle_free_calls = 0;
+	memset(fake_procfs_delete_lifecycle_freed, 0,
+	       sizeof(fake_procfs_delete_lifecycle_freed));
+	fake_procfs_first_child_calls = 0;
+	fake_procfs_next_child_calls = 0;
+	fake_procfs_entry_name_calls = 0;
+	fake_procfs_rcu_lock_calls = 0;
+	fake_procfs_rcu_unlock_calls = 0;
+	fake_procfs_find_vpid_calls = 0;
+	fake_procfs_pid_task_calls = 0;
+	fake_procfs_task_cred_calls = 0;
+	fake_procfs_pid_task_missing = 0;
+	fake_procfs_last_pid_type = -1;
+	fake_procfs_pid_token = 0x706964;
+	fake_procfs_task_token = 0x7461736b;
+	fake_procfs_cred_token = 0x63726564;
 	fake_procfs_read_map_memory_calls = 0;
 	fake_procfs_read_map_virtual_calls = 0;
 	fake_procfs_read_unmap_virtual_calls = 0;
@@ -106263,6 +110255,64 @@ static void reset_fake_work(void)
 	fake_sysfs_local_cleanup_instance = NULL;
 	fake_sysfs_local_setup_failed_calls = 0;
 	fake_sysfs_local_setup_failed_error = 0;
+	fake_sysfs_req_os_to_dev_calls = 0;
+	fake_sysfs_req_last_os = NULL;
+	fake_sysfs_req_map_memory_calls = 0;
+	fake_sysfs_req_map_virtual_calls = 0;
+	fake_sysfs_req_unmap_virtual_calls = 0;
+	fake_sysfs_req_unmap_memory_calls = 0;
+	fake_sysfs_req_wmb_calls = 0;
+	fake_sysfs_req_setup_local_calls = 0;
+	fake_sysfs_req_setup_local_ret = 0;
+	fake_sysfs_req_setup_os = NULL;
+	fake_sysfs_req_setup_buf = NULL;
+	fake_sysfs_req_setup_buf_pa = 0;
+	fake_sysfs_req_setup_bufsize = 0;
+	fake_sysfs_req_last_rpa = 0;
+	fake_sysfs_req_last_pa = 0;
+	fake_sysfs_req_last_size = 0;
+	fake_sysfs_req_last_virt = NULL;
+	fake_sysfs_req_fail_virtual_on_call = 0;
+	memset(&fake_sysfs_resp_req, 0, sizeof(fake_sysfs_resp_req));
+	fake_sysfs_resp_get_req_calls = 0;
+	fake_sysfs_resp_complete_calls = 0;
+	fake_sysfs_lookup_type_calls = 0;
+	fake_sysfs_lookup_name_calls = 0;
+	fake_sysfs_lookup_first_calls = 0;
+	fake_sysfs_lookup_next_calls = 0;
+	fake_sysfs_lookup_err_calls = 0;
+	fake_sysfs_lookup_last_error = 0;
+	fake_sysfs_bitmap_format_calls = 0;
+	fake_sysfs_bitmap_last_ptr = NULL;
+	fake_sysfs_bitmap_last_nbits = 0;
+	fake_sysfs_bitmap_last_size = 0;
+	memset(&fake_mcctrl_futex_q, 0, sizeof(fake_mcctrl_futex_q));
+	memset(&fake_mcctrl_futex_uti, 0, sizeof(fake_mcctrl_futex_uti));
+	memset(&fake_mcctrl_futex_dispatch, 0,
+			sizeof(fake_mcctrl_futex_dispatch));
+	fake_mcctrl_futex_dispatch.warn_cmd = -1;
+	fake_mcctrl_futex_prepare_calls = 0;
+	fake_mcctrl_futex_cpu = 7;
+	fake_mcctrl_futex_setup_calls = 0;
+	memset(fake_mcctrl_futex_setup_ret, 0,
+			sizeof(fake_mcctrl_futex_setup_ret));
+	fake_mcctrl_futex_queue_calls = 0;
+	memset(fake_mcctrl_futex_queue_ret, 0,
+			sizeof(fake_mcctrl_futex_queue_ret));
+	fake_mcctrl_futex_unqueue_calls = 0;
+	memset(fake_mcctrl_futex_unqueue_ret, 0,
+			sizeof(fake_mcctrl_futex_unqueue_ret));
+	fake_mcctrl_futex_put_key_calls = 0;
+	fake_mcctrl_futex_last_put_fshared = -1;
+	fake_mcctrl_futex_last_put_q = NULL;
+	fake_mcctrl_futex_log_calls = 0;
+	memset(fake_mcctrl_futex_log_stage, 0,
+			sizeof(fake_mcctrl_futex_log_stage));
+	fake_mcctrl_futex_last_uaddr = NULL;
+	fake_mcctrl_futex_last_val = 0;
+	fake_mcctrl_futex_last_timeout = 0;
+	fake_mcctrl_futex_last_hb = NULL;
+	fake_mcctrl_futex_hb = 0x46555458;
 	fake_control_calls = 0;
 	fake_control_last_id = 0;
 	fake_control_last_os = 0;
@@ -106349,6 +110399,12 @@ static void reset_fake_work(void)
 	fake_control_request_packet.body.traditional.ref = 3;
 	fake_control_packet_missing = 0;
 	fake_control_ptd_data_calls = 0;
+	fake_control_ptd_tid_calls = 0;
+	fake_control_ptd_tid_value = 3579;
+	fake_control_ptd_refcount_calls = 0;
+	fake_control_ptd_refcount_value = 1;
+	fake_control_usrdata_os_calls = 0;
+	fake_control_usrdata_os_value = 0x55440000UL;
 	fake_control_packet_ref_calls = 0;
 	fake_control_channel_read_cpu_calls = 0;
 	fake_control_channel_read_cpu_result = 6;
@@ -106371,6 +110427,359 @@ static void reset_fake_work(void)
 	fake_control_request_put_ptd_order = 0;
 	fake_control_request_log_ptd_put_order = 0;
 	fake_control_request_put_ppd_order = 0;
+	fake_control_copy_from_calls = 0;
+	fake_control_copy_from_fail = 0;
+	fake_control_copy_from_fail_at = 0;
+	fake_control_copy_from_src = NULL;
+	fake_control_copy_from_dst = NULL;
+	fake_control_copy_from_size = 0;
+	fake_control_copy_to_calls = 0;
+	fake_control_copy_to_fail = 0;
+	fake_control_copy_to_fail_at = 0;
+	fake_control_copy_to_src = NULL;
+	fake_control_copy_to_dst = NULL;
+	fake_control_copy_to_size = 0;
+	memset(fake_control_copy_to_src_history, 0,
+			sizeof(fake_control_copy_to_src_history));
+	memset(fake_control_copy_to_dst_history, 0,
+			sizeof(fake_control_copy_to_dst_history));
+	memset(fake_control_copy_to_size_history, 0,
+			sizeof(fake_control_copy_to_size_history));
+	fake_control_get_order_calls = 0;
+	fake_control_get_order_size = 0;
+	fake_control_get_order_result = 3;
+	fake_control_alloc_pages_calls = 0;
+	fake_control_alloc_pages_order = -1;
+	fake_control_alloc_pages_result = 0x100000UL;
+	fake_control_free_pages_calls = 0;
+	fake_control_free_pages_addr = 0;
+	fake_control_free_pages_order = -1;
+	fake_control_region_virt_to_phys_calls = 0;
+	fake_control_region_virt_to_phys_ptr = NULL;
+	fake_control_region_virt_to_phys_result = 0x200000UL;
+	fake_control_region_phys_to_virt_calls = 0;
+	fake_control_region_phys_to_virt_phys = 0;
+	fake_control_region_phys_to_virt_result = 0x300000UL;
+	fake_control_cred_token = 0x43524544;
+	fake_control_original_cred_token = 0x4f435245;
+	fake_control_cred_order = 0;
+	fake_control_prepare_creds_calls = 0;
+	fake_control_prepare_creds_fail = 0;
+	fake_control_prepare_creds_order = 0;
+	fake_control_cap_raise_calls = 0;
+	fake_control_cap_raise_order = 0;
+	fake_control_override_creds_calls = 0;
+	fake_control_override_creds_order = 0;
+	fake_control_revert_creds_calls = 0;
+	fake_control_revert_creds_order = 0;
+	fake_control_put_cred_calls = 0;
+	fake_control_put_cred_order = 0;
+	fake_control_mount_calls = 0;
+	fake_control_mount_ret = 0;
+	fake_control_mount_order = 0;
+	fake_control_mount_dev = NULL;
+	fake_control_mount_dir = NULL;
+	fake_control_mount_type = NULL;
+	fake_control_mount_flags = 0;
+	fake_control_mount_data = NULL;
+	fake_control_umount_calls = 0;
+	fake_control_umount_ret = 0;
+	fake_control_umount_order = 0;
+	fake_control_umount_dir = NULL;
+	fake_control_umount_flags = 0;
+	fake_control_unshare_calls = 0;
+	fake_control_unshare_ret = 0;
+	fake_control_unshare_order = 0;
+	fake_control_unshare_flags = 0;
+	fake_control_clear_pte_calls = 0;
+	fake_control_clear_pte_start = 0;
+	fake_control_clear_pte_len = 0;
+	fake_control_clear_pte_ret = 0;
+	fake_control_perf_set_num_calls = 0;
+	fake_control_perf_set_num_usrdata = NULL;
+	fake_control_perf_set_num_value = 0;
+	fake_control_perf_event_num = 2;
+	memset(fake_control_perf_attrs, 0, sizeof(fake_control_perf_attrs));
+	memset(fake_control_perf_descs, 0, sizeof(fake_control_perf_descs));
+	memset(fake_control_perf_user_values, 0, sizeof(fake_control_perf_user_values));
+	fake_control_perf_attrs[0].config = 0x101UL;
+	fake_control_perf_attrs[0].exclude_user = 1;
+	fake_control_perf_attrs[1].config = 0x202UL;
+	fake_control_perf_attrs[1].exclude_kernel = 1;
+	fake_control_perf_event_num_calls = 0;
+	fake_control_perf_alloc_set_calls = 0;
+	fake_control_perf_alloc_set_fail_index = -1;
+	fake_control_perf_copy_fail_index = -1;
+	fake_control_perf_alloc_desc_calls = 0;
+	fake_control_perf_alloc_desc_size = 0;
+	fake_control_perf_alloc_desc_fail = 0;
+	fake_control_perf_free_calls = 0;
+	fake_control_perf_freed_desc = NULL;
+	fake_control_perf_init_get_calls = 0;
+	fake_control_perf_init_mask_calls = 0;
+	fake_control_perf_init_mask_type = -1;
+	fake_control_perf_init_mask_value = 0;
+	fake_control_perf_send_calls = 0;
+	fake_control_perf_send_os = 0;
+	fake_control_perf_send_cpu = -1;
+	fake_control_perf_send_timeout = 0;
+	fake_control_perf_send_ret = 0;
+	fake_control_perf_send_fail_call = -1;
+	fake_control_perf_send_need_free = 1;
+	fake_control_perf_desc_err_calls = 0;
+	fake_control_perf_desc_err_value = 0;
+	fake_control_perf_desc_err_after_cpu = -1;
+	fake_control_perf_desc_read_calls = 0;
+	fake_control_perf_copyout_fail = 0;
+	fake_control_perf_log_calls = 0;
+	fake_control_perf_log_stage = -1;
+	fake_control_perf_disable_calls = 0;
+	fake_control_perf_disable_os = 0;
+	fake_control_perf_disable_ret = -5;
+	fake_control_perf_num_zero_calls = 0;
+	fake_control_perf_num_zero_os = 0;
+	fake_control_perf_num_zero_ret = -6;
+	memset(&fake_control_rusage_global, 0,
+			sizeof(fake_control_rusage_global));
+	memset(&fake_control_rusage_desc, 0,
+			sizeof(fake_control_rusage_desc));
+	memset(&fake_control_rusage_user_out, 0,
+			sizeof(fake_control_rusage_user_out));
+	memset(&fake_control_rusage_alloc_out, 0,
+			sizeof(fake_control_rusage_alloc_out));
+	fake_control_rusage_global.memory_stat_rss[0] = 11;
+	fake_control_rusage_global.memory_stat_rss[1] = -2;
+	fake_control_rusage_global.memory_stat_mapped_file[0] = 13;
+	fake_control_rusage_global.memory_stat_mapped_file[1] = 17;
+	fake_control_rusage_global.memory_max_usage = 1000;
+	fake_control_rusage_global.memory_kmem_usage = 55;
+	fake_control_rusage_global.memory_kmem_max_usage = 66;
+	fake_control_rusage_global.num_numa_nodes = 3;
+	fake_control_rusage_global.memory_numa_stat[0] = 101;
+	fake_control_rusage_global.memory_numa_stat[1] = 202;
+	fake_control_rusage_global.memory_numa_stat[2] = 303;
+	fake_control_rusage_global.num_processors = 2;
+	fake_control_rusage_global.ns_per_tsc = 2000;
+	fake_control_rusage_global.cpu[0].user_tsc = 100;
+	fake_control_rusage_global.cpu[0].system_tsc = 50;
+	fake_control_rusage_global.cpu[1].user_tsc = 3;
+	fake_control_rusage_global.cpu[1].system_tsc = 4;
+	fake_control_rusage_global.num_threads = 5;
+	fake_control_rusage_global.max_num_threads = 9;
+	fake_control_rusage_desc.rusage = &fake_control_rusage_user_out;
+	fake_control_rusage_desc.size_rusage =
+		sizeof(fake_control_rusage_user_out);
+	fake_control_getrusage_calls = 0;
+	fake_control_getrusage_os = 0;
+	fake_control_getrusage_alloc_calls = 0;
+	fake_control_getrusage_alloc_size = 0;
+	fake_control_getrusage_alloc_fail = 0;
+	fake_control_getrusage_free_calls = 0;
+	fake_control_getrusage_freed = NULL;
+	fake_control_getrusage_log_calls = 0;
+	fake_control_getrusage_log_stage = -1;
+	fake_control_getrusage_log_size = 0;
+	fake_control_getrusage_log_max = 0;
+	memset(&fake_control_transfer_desc, 0,
+			sizeof(fake_control_transfer_desc));
+	memset(&fake_control_load_desc, 0, sizeof(fake_control_load_desc));
+	memset(&fake_control_ret_desc, 0, sizeof(fake_control_ret_desc));
+	memset(&fake_control_uti_desc, 0, sizeof(fake_control_uti_desc));
+	memset(fake_control_user_buf, 0x5a, sizeof(fake_control_user_buf));
+	memset(fake_control_remote_buf, 0xa5, sizeof(fake_control_remote_buf));
+	for (unsigned long i = 0; i < sizeof(fake_control_uti_remote_ctx); i++)
+		fake_control_uti_remote_ctx[i] = (unsigned char)(i & 0xffU);
+	memset(fake_control_uti_user_ctx, 0xa5,
+			sizeof(fake_control_uti_user_ctx));
+	memcpy(fake_control_user_buf, "transfer-source", 16);
+	memcpy(fake_control_remote_buf, "remote-source", 14);
+	fake_control_transfer_desc.rphys = 0x8800UL;
+	fake_control_transfer_desc.userp = fake_control_user_buf;
+	fake_control_transfer_desc.size = 16;
+	fake_control_transfer_desc.direction = MCEXEC_UP_TRANSFER_TO_REMOTE;
+	fake_control_load_desc.cpu = 3;
+	fake_control_load_desc.src = 0x9900UL;
+	fake_control_load_desc.dest = (unsigned long)fake_control_user_buf;
+	fake_control_load_desc.size = 14;
+	fake_control_ret_desc.cpu = 3;
+	fake_control_ret_desc.ret = -37;
+	fake_control_ret_desc.src = (unsigned long)fake_control_user_buf;
+	fake_control_ret_desc.dest = 0x8a00UL;
+	fake_control_ret_desc.size = 16;
+	fake_control_uti_desc.rp_rctx = 0xb000UL;
+	fake_control_uti_desc.rctx = fake_control_uti_user_ctx;
+	fake_control_uti_desc.lctx = (void *)0xc000UL;
+	fake_control_uti_desc.uti_refill_tid = 0x12345678;
+	fake_control_uti_desc.key = 0;
+	fake_control_os_to_dev_calls = 0;
+	fake_control_os_to_dev_os = 0;
+	fake_control_map_memory_calls = 0;
+	fake_control_map_memory_phys = 0;
+	fake_control_map_memory_size = 0;
+	fake_control_map_virtual_calls = 0;
+	fake_control_map_virtual_phys = 0;
+	fake_control_map_virtual_size = 0;
+	fake_control_map_virtual_fail = 0;
+	fake_control_unmap_virtual_calls = 0;
+	fake_control_unmap_virtual_ptr = NULL;
+	fake_control_unmap_virtual_size = 0;
+	fake_control_unmap_memory_calls = 0;
+	fake_control_unmap_memory_phys = 0;
+	fake_control_unmap_memory_size = 0;
+	fake_control_transfer_log_calls = 0;
+	fake_control_transfer_log_stage = -1;
+	fake_control_load_log_calls = 0;
+	fake_control_load_log_rpm = NULL;
+	fake_control_load_log_size = 0;
+	fake_control_return_syscall_calls = 0;
+	fake_control_return_syscall_os = 0;
+	fake_control_return_syscall_ppd = NULL;
+	fake_control_return_syscall_packet = NULL;
+	fake_control_return_syscall_ret = 0;
+	fake_control_return_syscall_tid = 0;
+	fake_control_release_packet_calls = 0;
+	fake_control_release_packet_seen = NULL;
+	fake_control_release_packet_order = 0;
+	fake_control_ret_log_calls = 0;
+	memset(fake_control_ret_log_stage, 0,
+			sizeof(fake_control_ret_log_stage));
+	memset(fake_control_ret_log_pid, 0,
+			sizeof(fake_control_ret_log_pid));
+	memset(fake_control_ret_log_tid, 0,
+			sizeof(fake_control_ret_log_tid));
+	fake_control_terminate_log_calls = 0;
+	memset(fake_control_terminate_log_stage, 0,
+			sizeof(fake_control_terminate_log_stage));
+	memset(fake_control_terminate_log_pid, 0,
+			sizeof(fake_control_terminate_log_pid));
+	memset(fake_control_terminate_log_tid, 0,
+			sizeof(fake_control_terminate_log_tid));
+	memset(fake_control_terminate_log_ptr, 0,
+			sizeof(fake_control_terminate_log_ptr));
+	memset(fake_control_terminate_log_value, 0,
+			sizeof(fake_control_terminate_log_value));
+	fake_control_current_key_calls = 0;
+	fake_control_current_key_value = 0xf00dcafe12345678UL;
+	fake_control_uti_log_calls = 0;
+	memset(fake_control_uti_log_stage, 0,
+			sizeof(fake_control_uti_log_stage));
+	for (int i = 0; i < 8; i++) {
+		fake_control_cred_values[i] = 1000 + i;
+		fake_control_cred_calls[i] = 0;
+		fake_control_cred_kernel_values[i] = 0;
+	}
+	fake_control_cred_phys_to_virt_calls = 0;
+	fake_control_cred_phys_to_virt_phys = 0;
+	memset(fake_control_strncpy_page, 0, sizeof(fake_control_strncpy_page));
+	fake_control_strncpy_alloc_calls = 0;
+	fake_control_strncpy_alloc_fail = 0;
+	fake_control_strncpy_free_calls = 0;
+	fake_control_strncpy_freed = NULL;
+	fake_control_strncpy_calls = 0;
+	fake_control_strncpy_ret[0] = 0;
+	fake_control_strncpy_ret[1] = 0;
+	fake_control_strncpy_ret[2] = 0;
+	fake_control_strncpy_ret[3] = 0;
+	memset(fake_control_strncpy_want, 0,
+			sizeof(fake_control_strncpy_want));
+	memset(fake_control_strncpy_src, 0,
+			sizeof(fake_control_strncpy_src));
+	fake_control_strncpy_copy_to_calls = 0;
+	fake_control_strncpy_fail_data_copy = 0;
+	fake_control_strncpy_fail_desc_copy = 0;
+	fake_control_strncpy_desc_arg = NULL;
+	fake_control_destroy_log_calls = 0;
+	memset(fake_control_destroy_log_stage, 0,
+			sizeof(fake_control_destroy_log_stage));
+	memset(fake_control_destroy_log_pid, 0,
+			sizeof(fake_control_destroy_log_pid));
+	memset(fake_control_destroy_log_ppd, 0,
+			sizeof(fake_control_destroy_log_ppd));
+	fake_control_drop_exec_calls = 0;
+	fake_control_drop_exec_ret = 1;
+	fake_control_drop_exec_os = 0;
+	fake_control_drop_exec_pid = 0;
+	memset(&fake_control_new_info_token, 0,
+			sizeof(fake_control_new_info_token));
+	fake_control_new_info_calls = 0;
+	fake_control_new_info_fail = 0;
+	fake_control_new_info_os = 0;
+	fake_control_new_info_file = NULL;
+	fake_control_set_info_pid_calls = 0;
+	fake_control_set_info_pid_value = 0;
+	fake_control_register_release_calls = 0;
+	fake_control_register_release_file = NULL;
+	fake_control_register_release_info = NULL;
+	fake_control_set_private_calls = 0;
+	fake_control_set_private_file = NULL;
+	fake_control_set_private_info = NULL;
+	memset(&fake_control_start_user_desc, 0,
+			sizeof(fake_control_start_user_desc));
+	memset(&fake_control_start_local_desc, 0,
+			sizeof(fake_control_start_local_desc));
+	memset(&fake_control_start_prev_info, 0,
+			sizeof(fake_control_start_prev_info));
+	memset(&fake_control_start_new_info, 0,
+			sizeof(fake_control_start_new_info));
+	fake_control_start_alloc_calls = 0;
+	fake_control_start_alloc_fail = 0;
+	fake_control_start_alloc_size = 0;
+	fake_control_start_free_calls = 0;
+	fake_control_start_freed = NULL;
+	fake_control_start_get_private_calls = 0;
+	fake_control_start_private_file = NULL;
+	fake_control_start_new_info_calls = 0;
+	fake_control_start_new_info_fail = 0;
+	fake_control_start_new_info_os = 0;
+	fake_control_start_new_info_file = NULL;
+	fake_control_start_set_info_calls = 0;
+	fake_control_start_set_info_prepare_thread = 0;
+	fake_control_start_info_prepare_calls = 0;
+	fake_control_start_set_recv_calls = 0;
+	fake_control_start_set_recv_os = 0;
+	fake_control_start_set_recv_cpu = -1;
+	fake_control_start_set_last_calls = 0;
+	fake_control_start_set_last_usrdata = NULL;
+	fake_control_start_set_last_cpu = 0;
+	fake_control_start_send_calls = 0;
+	fake_control_start_send_ret = 0;
+	fake_control_start_send_os = 0;
+	fake_control_start_send_cpu = -1;
+	fake_control_start_send_rprocess = 0;
+	fake_control_start_clear_calls = 0;
+	fake_control_start_log_calls = 0;
+	memset(fake_control_start_log_stage, 0,
+			sizeof(fake_control_start_log_stage));
+	memset(fake_control_start_log_ret, 0,
+			sizeof(fake_control_start_log_ret));
+	memset(&fake_control_signal_user_desc, 0,
+			sizeof(fake_control_signal_user_desc));
+	memset(&fake_control_signal_local_desc, 0,
+			sizeof(fake_control_signal_local_desc));
+	fake_control_signal_alloc_calls = 0;
+	fake_control_signal_alloc_fail = 0;
+	fake_control_signal_alloc_size = 0;
+	fake_control_signal_free_calls = 0;
+	fake_control_signal_freed = NULL;
+	fake_control_signal_vtop_calls = 0;
+	fake_control_signal_vtop_ptr = NULL;
+	fake_control_signal_vtop_result = 0x51510000UL;
+	fake_control_signal_send_calls = 0;
+	fake_control_signal_send_ret = 0;
+	fake_control_signal_send_do_free = 1;
+	fake_control_signal_send_os = 0;
+	fake_control_signal_send_cpu = -1;
+	fake_control_signal_send_msg = 0;
+	fake_control_signal_send_ref = -1;
+	fake_control_signal_send_pid = 0;
+	fake_control_signal_send_arg = 0;
+	fake_control_signal_send_timeout = 0;
+	fake_control_signal_send_desc = NULL;
+	fake_control_signal_log_calls = 0;
+	memset(fake_control_signal_log_stage, 0,
+			sizeof(fake_control_signal_log_stage));
+	memset(fake_control_signal_log_ret, 0,
+			sizeof(fake_control_signal_log_ret));
 }
 
 static struct mcctrl_procfs_work_prefix *fake_alloc(unsigned long size)
@@ -106692,6 +111101,209 @@ static void fake_procfs_add_task_exe_links(void *parent, const char *path)
 	fake_procfs_last_parent = parent;
 	snprintf(fake_procfs_last_path, sizeof(fake_procfs_last_path), "%s",
 		 path);
+}
+
+static const char *fake_procfs_path_name(const void *entry)
+{
+	return ((const struct fake_procfs_path_entry *)entry)->name;
+}
+
+static void *fake_procfs_path_parent(const void *entry)
+{
+	return ((const struct fake_procfs_path_entry *)entry)->parent;
+}
+
+static const char *fake_procfs_entry_table_name(const void *entry)
+{
+	return ((const struct fake_procfs_entry_table *)entry)->name;
+}
+
+static unsigned int fake_procfs_entry_table_mode(const void *entry)
+{
+	return ((const struct fake_procfs_entry_table *)entry)->mode;
+}
+
+static const void *fake_procfs_entry_table_fops(const void *entry)
+{
+	return ((const struct fake_procfs_entry_table *)entry)->fops;
+}
+
+static const void *fake_procfs_entry_table_next(const void *entry,
+		unsigned long size)
+{
+	return (const char *)entry + size;
+}
+
+static void fake_procfs_add_entry_with_ids(void *parent, const char *name,
+		unsigned int mode, const void *fops, const void *uid,
+		const void *gid)
+{
+	fake_procfs_add_entries_calls++;
+	fake_procfs_add_entries_parent = parent;
+	fake_procfs_add_entries_name = name;
+	fake_procfs_add_entries_mode = mode;
+	fake_procfs_add_entries_fops = fops;
+	fake_procfs_add_entries_uid = uid;
+	fake_procfs_add_entries_gid = gid;
+}
+
+static void *fake_procfs_entry_alloc(unsigned long size)
+{
+	fake_procfs_entry_alloc_calls++;
+	fake_procfs_entry_alloc_size = size;
+	if (fake_procfs_entry_alloc_fail)
+		return NULL;
+	return &fake_procfs_lifecycle_entry;
+}
+
+static void fake_procfs_entry_init(void *entry, const char *name)
+{
+	fake_procfs_entry_init_calls++;
+	require(entry == &fake_procfs_lifecycle_entry);
+	snprintf(fake_procfs_entry_init_name, sizeof(fake_procfs_entry_init_name),
+		 "%s", name);
+}
+
+static void *fake_procfs_entry_create_pde(void *parent, const char *name,
+		unsigned int mode, const void *uid, const void *gid,
+		const void *opaque, void *entry)
+{
+	fake_procfs_entry_create_calls++;
+	fake_procfs_last_parent = parent;
+	snprintf(fake_procfs_last_name, sizeof(fake_procfs_last_name), "%s",
+		 name);
+	fake_procfs_entry_create_mode = mode;
+	fake_procfs_entry_create_uid = uid;
+	fake_procfs_entry_create_gid = gid;
+	fake_procfs_entry_create_opaque = opaque;
+	fake_procfs_entry_create_entry = entry;
+	if (fake_procfs_entry_create_fail)
+		return NULL;
+	return &fake_procfs_lifecycle_pde;
+}
+
+static void fake_procfs_entry_commit(void *entry, void *parent, void *pde,
+		const void *uid, const void *gid)
+{
+	fake_procfs_entry_commit_calls++;
+	require(entry == &fake_procfs_lifecycle_entry);
+	fake_procfs_entry_commit_parent = parent;
+	fake_procfs_entry_commit_pde = pde;
+	fake_procfs_entry_commit_uid = uid;
+	fake_procfs_entry_commit_gid = gid;
+}
+
+static void fake_procfs_entry_free(void *entry)
+{
+	if (fake_procfs_entry_free_calls <
+			(int)(sizeof(fake_procfs_delete_lifecycle_freed) /
+			      sizeof(fake_procfs_delete_lifecycle_freed[0])))
+		fake_procfs_delete_lifecycle_freed[
+			fake_procfs_entry_free_calls] = entry;
+	fake_procfs_entry_free_calls++;
+	fake_procfs_entry_free_last = entry;
+}
+
+static void fake_procfs_entry_alloc_failed(void)
+{
+	fake_procfs_entry_alloc_failed_calls++;
+}
+
+static void fake_procfs_entry_create_failed(const char *name)
+{
+	fake_procfs_entry_create_failed_calls++;
+	snprintf(fake_procfs_entry_create_failed_name,
+		 sizeof(fake_procfs_entry_create_failed_name), "%s", name);
+}
+
+static void *fake_procfs_delete_lifecycle_first_child(void *parent)
+{
+	fake_procfs_delete_lifecycle_first_calls++;
+	require(parent == &fake_procfs_lifecycle_entry);
+	if (fake_procfs_delete_lifecycle_child_present)
+		return &fake_procfs_task_entry;
+	return NULL;
+}
+
+static void fake_procfs_delete_lifecycle_delete(void *entry)
+{
+	fake_procfs_delete_entry_calls++;
+	fake_procfs_deleted_entry = entry;
+	fake_procfs_delete_lifecycle_child_present = 0;
+}
+
+static void fake_procfs_delete_lifecycle_unlink(void *entry)
+{
+	fake_procfs_delete_lifecycle_unlink_calls++;
+	require(entry == &fake_procfs_lifecycle_entry);
+}
+
+static void fake_procfs_delete_lifecycle_remove(void *entry)
+{
+	fake_procfs_delete_lifecycle_remove_calls++;
+	require(entry == &fake_procfs_lifecycle_entry);
+}
+
+static void *fake_procfs_delete_lifecycle_data(void *entry)
+{
+	fake_procfs_delete_lifecycle_data_calls++;
+	require(entry == &fake_procfs_lifecycle_entry);
+	return &fake_procfs_lifecycle_data;
+}
+
+static void *fake_procfs_first_child(void *parent)
+{
+	fake_procfs_first_child_calls++;
+	return parent;
+}
+
+static void *fake_procfs_next_child(void *parent, void *entry)
+{
+	struct fake_procfs_list_node *node = entry;
+
+	(void)parent;
+	fake_procfs_next_child_calls++;
+	return node->next;
+}
+
+static const char *fake_procfs_list_node_name(const void *entry)
+{
+	fake_procfs_entry_name_calls++;
+	return ((const struct fake_procfs_list_node *)entry)->name;
+}
+
+static void fake_procfs_rcu_read_lock(void)
+{
+	fake_procfs_rcu_lock_calls++;
+}
+
+static void fake_procfs_rcu_read_unlock(void)
+{
+	fake_procfs_rcu_unlock_calls++;
+}
+
+static void *fake_procfs_find_vpid(int pid)
+{
+	fake_procfs_find_vpid_calls++;
+	fake_procfs_last_pid = pid;
+	return &fake_procfs_pid_token;
+}
+
+static void *fake_procfs_pid_task(void *pid, int type)
+{
+	require(pid == &fake_procfs_pid_token);
+	fake_procfs_pid_task_calls++;
+	fake_procfs_last_pid_type = type;
+	if (fake_procfs_pid_task_missing)
+		return NULL;
+	return &fake_procfs_task_token;
+}
+
+static void *fake_procfs_task_cred(void *task)
+{
+	require(task == &fake_procfs_task_token);
+	fake_procfs_task_cred_calls++;
+	return &fake_procfs_cred_token;
 }
 
 static int fake_procfs_entry_osnum(void *entry)
@@ -107366,6 +111978,38 @@ static int fake_sysfs_node_type(void *node)
 	return ((struct mcctrl_sysfs_local_node *)node)->type;
 }
 
+static int fake_sysfs_lookup_node_type(void *node)
+{
+	fake_sysfs_lookup_type_calls++;
+	return ((struct fake_sysfs_lookup_node *)node)->type;
+}
+
+static const char *fake_sysfs_lookup_node_name(void *node)
+{
+	fake_sysfs_lookup_name_calls++;
+	return ((struct fake_sysfs_lookup_node *)node)->name;
+}
+
+static void *fake_sysfs_lookup_first_child(void *node)
+{
+	fake_sysfs_lookup_first_calls++;
+	return ((struct fake_sysfs_lookup_node *)node)->first_child;
+}
+
+static void *fake_sysfs_lookup_next_child(void *parent, void *node)
+{
+	(void)parent;
+	fake_sysfs_lookup_next_calls++;
+	return ((struct fake_sysfs_lookup_node *)node)->next_sibling;
+}
+
+static void *fake_sysfs_lookup_err_ptr(int error)
+{
+	fake_sysfs_lookup_err_calls++;
+	fake_sysfs_lookup_last_error = error;
+	return (void *)(intptr_t)error;
+}
+
 static ssize_t fake_sysfs_client_show(struct mcctrl_sysfsm_ops *ops,
 		void *instance, void *buf, size_t bufsize)
 {
@@ -107400,6 +112044,403 @@ static void fake_sysfs_local_free(void *ptr)
 {
 	fake_sysfs_local_free_calls++;
 	fake_sysfs_local_last_instance = ptr;
+}
+
+static void *fake_sysfs_resp_get_req(void *node)
+{
+	require(node == &fake_sysfs_local_node);
+	fake_sysfs_resp_get_req_calls++;
+	return &fake_sysfs_resp_req;
+}
+
+static void *fake_sysfs_resp_get_null_req(void *node)
+{
+	require(node == &fake_sysfs_local_node);
+	fake_sysfs_resp_get_req_calls++;
+	return NULL;
+}
+
+static void fake_sysfs_resp_complete_req(void *req, long result)
+{
+	require(req == &fake_sysfs_resp_req);
+	fake_sysfs_resp_complete_calls++;
+	fake_sysfs_resp_req.complete_calls++;
+	fake_sysfs_resp_req.result = result;
+}
+
+static unsigned long fake_sysfs_bitmap_format(void *buf, unsigned long size,
+		void *ptr, int nbits)
+{
+	int ret;
+
+	fake_sysfs_bitmap_format_calls++;
+	fake_sysfs_bitmap_last_ptr = ptr;
+	fake_sysfs_bitmap_last_nbits = nbits;
+	fake_sysfs_bitmap_last_size = size;
+	ret = snprintf(buf, size, "bits:%d:%lx", nbits, (unsigned long)ptr);
+	return ret < 0 ? 0 : (unsigned long)ret;
+}
+
+static int fake_mcctrl_futex_wait(uint32_t *uaddr, int fshared,
+		uint32_t val, uint64_t timeout, uint32_t bitset,
+		int clockrt, void *uti_info)
+{
+	fake_mcctrl_futex_dispatch.wait_calls++;
+	fake_mcctrl_futex_dispatch.uaddr = uaddr;
+	fake_mcctrl_futex_dispatch.val = val;
+	fake_mcctrl_futex_dispatch.val3 = bitset;
+	fake_mcctrl_futex_dispatch.timeout = timeout;
+	fake_mcctrl_futex_dispatch.fshared = fshared;
+	fake_mcctrl_futex_dispatch.clockrt = clockrt;
+	fake_mcctrl_futex_dispatch.uti_info = uti_info;
+	return 100 + (int)(bitset & 0xffU) + clockrt;
+}
+
+static int fake_mcctrl_futex_wake(uint32_t *uaddr, int fshared,
+		int nr_wake, uint32_t bitset, void *uti_info)
+{
+	fake_mcctrl_futex_dispatch.wake_calls++;
+	fake_mcctrl_futex_dispatch.uaddr = uaddr;
+	fake_mcctrl_futex_dispatch.val = (uint32_t)nr_wake;
+	fake_mcctrl_futex_dispatch.val3 = bitset;
+	fake_mcctrl_futex_dispatch.fshared = fshared;
+	fake_mcctrl_futex_dispatch.uti_info = uti_info;
+	return 200 + (int)(bitset & 0xffU);
+}
+
+static int fake_mcctrl_futex_requeue(uint32_t *uaddr1, int fshared,
+		uint32_t *uaddr2, int nr_wake, int nr_requeue,
+		uint32_t *cmpval, int requeue_pi, void *uti_info)
+{
+	fake_mcctrl_futex_dispatch.requeue_calls++;
+	fake_mcctrl_futex_dispatch.uaddr = uaddr1;
+	fake_mcctrl_futex_dispatch.uaddr2 = uaddr2;
+	fake_mcctrl_futex_dispatch.val = (uint32_t)nr_wake;
+	fake_mcctrl_futex_dispatch.val2 = (uint32_t)nr_requeue;
+	fake_mcctrl_futex_dispatch.cmpval = cmpval ? *cmpval : 0;
+	fake_mcctrl_futex_dispatch.val3 = (uint32_t)requeue_pi;
+	fake_mcctrl_futex_dispatch.fshared = fshared;
+	fake_mcctrl_futex_dispatch.uti_info = uti_info;
+	return 300 + nr_wake + nr_requeue + requeue_pi;
+}
+
+static int fake_mcctrl_futex_wake_op(uint32_t *uaddr1, int fshared,
+		uint32_t *uaddr2, int nr_wake, int nr_wake2, int op,
+		void *uti_info)
+{
+	fake_mcctrl_futex_dispatch.wake_op_calls++;
+	fake_mcctrl_futex_dispatch.uaddr = uaddr1;
+	fake_mcctrl_futex_dispatch.uaddr2 = uaddr2;
+	fake_mcctrl_futex_dispatch.val = (uint32_t)nr_wake;
+	fake_mcctrl_futex_dispatch.val2 = (uint32_t)nr_wake2;
+	fake_mcctrl_futex_dispatch.val3 = (uint32_t)op;
+	fake_mcctrl_futex_dispatch.fshared = fshared;
+	fake_mcctrl_futex_dispatch.uti_info = uti_info;
+	return 400 + nr_wake + nr_wake2 + op;
+}
+
+static void fake_mcctrl_futex_warn(int cmd)
+{
+	fake_mcctrl_futex_dispatch.warn_calls++;
+	fake_mcctrl_futex_dispatch.warn_cmd = cmd;
+}
+
+static void *fake_mcctrl_futex_get_q(void *uti_info)
+{
+	return ((struct fake_mcctrl_futex_uti *)uti_info)->q;
+}
+
+static void *fake_mcctrl_futex_get_resp(void *uti_info)
+{
+	return ((struct fake_mcctrl_futex_uti *)uti_info)->resp;
+}
+
+static int fake_mcctrl_futex_get_cpu(void)
+{
+	return fake_mcctrl_futex_cpu;
+}
+
+static void fake_mcctrl_futex_prepare_q(void *q, uint32_t bitset,
+		void *resp, int linux_cpu)
+{
+	struct fake_mcctrl_futex_wait_q *waitq = q;
+
+	fake_mcctrl_futex_prepare_calls++;
+	waitq->bitset = bitset;
+	waitq->resp = resp;
+	waitq->linux_cpu = linux_cpu;
+}
+
+static int fake_mcctrl_futex_wait_setup(uint32_t *uaddr, uint32_t val,
+		int fshared, void *q, void **hb, void *uti_info)
+{
+	int index = fake_mcctrl_futex_setup_calls++;
+
+	require(q == &fake_mcctrl_futex_q);
+	require(uti_info == &fake_mcctrl_futex_uti);
+	fake_mcctrl_futex_last_uaddr = uaddr;
+	fake_mcctrl_futex_last_val = val;
+	fake_mcctrl_futex_last_put_fshared = fshared;
+	fake_mcctrl_futex_last_hb = &fake_mcctrl_futex_hb;
+	*hb = &fake_mcctrl_futex_hb;
+	return fake_mcctrl_futex_setup_ret[index];
+}
+
+static long long fake_mcctrl_futex_wait_queue(void *hb, void *q,
+		uint64_t timeout, void *uti_info)
+{
+	int index = fake_mcctrl_futex_queue_calls++;
+
+	require(hb == &fake_mcctrl_futex_hb);
+	require(q == &fake_mcctrl_futex_q);
+	require(uti_info == &fake_mcctrl_futex_uti);
+	fake_mcctrl_futex_last_timeout = timeout;
+	return fake_mcctrl_futex_queue_ret[index];
+}
+
+static int fake_mcctrl_futex_unqueue(void *q)
+{
+	int index = fake_mcctrl_futex_unqueue_calls++;
+
+	require(q == &fake_mcctrl_futex_q);
+	return fake_mcctrl_futex_unqueue_ret[index];
+}
+
+static void fake_mcctrl_futex_put_q_key(int fshared, void *q)
+{
+	require(q == &fake_mcctrl_futex_q);
+	fake_mcctrl_futex_put_key_calls++;
+	fake_mcctrl_futex_last_put_fshared = fshared;
+	fake_mcctrl_futex_last_put_q = q;
+}
+
+static void fake_mcctrl_futex_log_event(int stage, void *uti_info)
+{
+	require(uti_info == &fake_mcctrl_futex_uti);
+	if (fake_mcctrl_futex_log_calls < 4)
+		fake_mcctrl_futex_log_stage[fake_mcctrl_futex_log_calls] =
+			stage;
+	fake_mcctrl_futex_log_calls++;
+}
+
+struct fake_mcctrl_futex_requeue_ctx {
+	struct fake_wake_body_bucket *hb1;
+	struct fake_wake_body_bucket *hb2;
+	struct futex_key *key2;
+	void *uti_info;
+};
+
+static struct fake_wake_body_bucket *fake_mcctrl_body_source_bucket;
+static struct fake_wake_body_bucket *fake_mcctrl_body_target_bucket;
+static int fake_mcctrl_body_get_key_calls;
+static int fake_mcctrl_body_hash_calls;
+static int fake_mcctrl_body_wake_lock_calls;
+static int fake_mcctrl_body_wake_unlock_calls;
+static int fake_mcctrl_body_hb_lock_calls;
+static int fake_mcctrl_body_hb_unlock_calls;
+static int fake_mcctrl_body_put_key_calls;
+static int fake_mcctrl_body_wake_calls;
+static int fake_mcctrl_body_requeue_calls;
+static int fake_mcctrl_body_atomic_calls;
+static int fake_mcctrl_body_get_value_calls;
+static int fake_mcctrl_body_drop_key_calls;
+static int fake_mcctrl_body_key_ref_calls;
+static int fake_mcctrl_body_get_key2_ret;
+static int fake_mcctrl_body_atomic_seq[4];
+static int fake_mcctrl_body_wake_log[8];
+static int fake_mcctrl_body_requeue_log[8];
+static unsigned int fake_mcctrl_body_curval;
+static unsigned long fake_mcctrl_body_last_lock;
+static unsigned long fake_mcctrl_body_last_irqstate;
+static unsigned long fake_mcctrl_body_put_key_log[8];
+
+static void fake_mcctrl_body_reset(void)
+{
+	fake_mcctrl_body_source_bucket = NULL;
+	fake_mcctrl_body_target_bucket = NULL;
+	fake_mcctrl_body_get_key_calls = 0;
+	fake_mcctrl_body_hash_calls = 0;
+	fake_mcctrl_body_wake_lock_calls = 0;
+	fake_mcctrl_body_wake_unlock_calls = 0;
+	fake_mcctrl_body_hb_lock_calls = 0;
+	fake_mcctrl_body_hb_unlock_calls = 0;
+	fake_mcctrl_body_put_key_calls = 0;
+	fake_mcctrl_body_wake_calls = 0;
+	fake_mcctrl_body_requeue_calls = 0;
+	fake_mcctrl_body_atomic_calls = 0;
+	fake_mcctrl_body_get_value_calls = 0;
+	fake_mcctrl_body_drop_key_calls = 0;
+	fake_mcctrl_body_key_ref_calls = 0;
+	fake_mcctrl_body_get_key2_ret = 0;
+	fake_mcctrl_body_curval = 0;
+	fake_mcctrl_body_last_lock = 0;
+	fake_mcctrl_body_last_irqstate = 0;
+	memset(fake_mcctrl_body_atomic_seq, 0,
+			sizeof(fake_mcctrl_body_atomic_seq));
+	memset(fake_mcctrl_body_wake_log, 0,
+			sizeof(fake_mcctrl_body_wake_log));
+	memset(fake_mcctrl_body_requeue_log, 0,
+			sizeof(fake_mcctrl_body_requeue_log));
+	memset(fake_mcctrl_body_put_key_log, 0,
+			sizeof(fake_mcctrl_body_put_key_log));
+}
+
+static int fake_mcctrl_body_get_key(unsigned long uaddr, int fshared,
+		unsigned long key_addr, unsigned long ctx_addr)
+{
+	struct futex_key *key = (struct futex_key *)key_addr;
+
+	require(ctx_addr != 0);
+	require(fshared == 1);
+	fake_mcctrl_body_get_key_calls++;
+	if (uaddr == 0x505000UL || uaddr == 0x7000UL ||
+			uaddr == 0x1000UL) {
+		key->opaque[0] = 0x1111UL;
+		key->opaque[1] = 0x2222UL;
+		key->opaque[2] = 0x10UL;
+		return 0;
+	}
+	require(uaddr == 0x8000UL || uaddr == 0x2000UL);
+	if (fake_mcctrl_body_get_key2_ret)
+		return fake_mcctrl_body_get_key2_ret;
+	key->opaque[0] = 0x3333UL;
+	key->opaque[1] = 0x4444UL;
+	key->opaque[2] = 0x20UL;
+	return 0;
+}
+
+static unsigned long fake_mcctrl_body_hash_key(unsigned long key_addr,
+		unsigned long queue_addr)
+{
+	struct futex_key *key = (struct futex_key *)key_addr;
+
+	require(queue_addr == 0xfeedbabeUL);
+	fake_mcctrl_body_hash_calls++;
+	if (key->opaque[0] == 0x1111UL)
+		return (unsigned long)fake_mcctrl_body_source_bucket;
+	require(key->opaque[0] == 0x3333UL);
+	return (unsigned long)fake_mcctrl_body_target_bucket;
+}
+
+static unsigned long fake_mcctrl_body_wake_lock(unsigned long lock_addr)
+{
+	fake_mcctrl_body_wake_lock_calls++;
+	fake_mcctrl_body_last_lock = lock_addr;
+	return lock_addr ^ 0x13579bdfUL;
+}
+
+static void fake_mcctrl_body_wake_unlock(unsigned long lock_addr,
+		unsigned long irqstate)
+{
+	fake_mcctrl_body_wake_unlock_calls++;
+	fake_mcctrl_body_last_lock = lock_addr;
+	fake_mcctrl_body_last_irqstate = irqstate;
+}
+
+static void fake_mcctrl_body_hb_lock(unsigned long lock_addr)
+{
+	fake_mcctrl_body_hb_lock_calls++;
+	fake_mcctrl_body_last_lock = lock_addr;
+}
+
+static void fake_mcctrl_body_hb_unlock(unsigned long lock_addr)
+{
+	fake_mcctrl_body_hb_unlock_calls++;
+	fake_mcctrl_body_last_lock = lock_addr;
+}
+
+static void fake_mcctrl_body_put_key(int fshared, unsigned long key_addr)
+{
+	require(fshared == 1);
+	require(fake_mcctrl_body_put_key_calls < 8);
+	fake_mcctrl_body_put_key_log[fake_mcctrl_body_put_key_calls++] =
+		key_addr;
+}
+
+static void fake_mcctrl_body_wake_entry(unsigned long q_addr,
+		unsigned long ctx_addr)
+{
+	struct fake_futex_q *q = (struct fake_futex_q *)q_addr;
+
+	require(ctx_addr == (unsigned long)&fake_mcctrl_futex_uti);
+	require(fake_mcctrl_body_wake_calls < 8);
+	fake_mcctrl_body_wake_log[fake_mcctrl_body_wake_calls++] =
+		q->linux_cpu;
+	futex_wake_mark_woken_result(q_addr,
+		offsetof(struct fake_futex_q, list),
+		offsetof(struct plist_node, plist),
+		offsetof(struct fake_futex_q, lock_ptr));
+}
+
+static int fake_mcctrl_body_atomic_op(int op, unsigned long uaddr)
+{
+	require(op == 0x5a);
+	require(uaddr == 0x8000UL);
+	require(fake_mcctrl_body_atomic_calls < 4);
+	return fake_mcctrl_body_atomic_seq[fake_mcctrl_body_atomic_calls++];
+}
+
+static int fake_mcctrl_body_get_value(unsigned long value_addr,
+		unsigned long uaddr)
+{
+	require(uaddr == 0x1000UL);
+	fake_mcctrl_body_get_value_calls++;
+	*(unsigned int *)value_addr = fake_mcctrl_body_curval;
+	return 0;
+}
+
+static void fake_mcctrl_body_drop_key_refs(unsigned long key_addr)
+{
+	require(key_addr != 0);
+	fake_mcctrl_body_drop_key_calls++;
+}
+
+static void fake_mcctrl_body_key_ref(unsigned long key_addr)
+{
+	require(key_addr != 0);
+	fake_mcctrl_body_key_ref_calls++;
+}
+
+static void fake_mcctrl_body_requeue_wake(unsigned long q_addr,
+		unsigned long ctx_addr)
+{
+	struct fake_futex_q *q = (struct fake_futex_q *)q_addr;
+	struct fake_mcctrl_futex_requeue_ctx *ctx =
+		(struct fake_mcctrl_futex_requeue_ctx *)ctx_addr;
+
+	require(ctx->uti_info == &fake_mcctrl_futex_uti);
+	require(fake_mcctrl_body_wake_calls < 8);
+	fake_mcctrl_body_wake_log[fake_mcctrl_body_wake_calls++] =
+		q->linux_cpu;
+	futex_wake_mark_woken_result(q_addr,
+		offsetof(struct fake_futex_q, list),
+		offsetof(struct plist_node, plist),
+		offsetof(struct fake_futex_q, lock_ptr));
+}
+
+static void fake_mcctrl_body_requeue_move(unsigned long q_addr,
+		unsigned long ctx_addr)
+{
+	struct fake_futex_q *q = (struct fake_futex_q *)q_addr;
+	struct fake_mcctrl_futex_requeue_ctx *ctx =
+		(struct fake_mcctrl_futex_requeue_ctx *)ctx_addr;
+
+	require(ctx->hb1 == fake_mcctrl_body_source_bucket);
+	require(ctx->hb2 == fake_mcctrl_body_target_bucket);
+	require(ctx->key2 != NULL);
+	require(fake_mcctrl_body_requeue_calls < 8);
+	fake_mcctrl_body_requeue_log[fake_mcctrl_body_requeue_calls++] =
+		q->linux_cpu;
+	futex_requeue_move_result(q_addr,
+		offsetof(struct fake_futex_q, list),
+		offsetof(struct fake_futex_q, lock_ptr),
+		(unsigned long)&ctx->hb1->chain,
+		(unsigned long)&ctx->hb2->chain,
+		(unsigned long)&ctx->hb2->lock, 0);
+	futex_requeue_key_update_result(q_addr,
+		offsetof(struct fake_futex_q, key),
+		(unsigned long)ctx->key2, sizeof(*ctx->key2),
+		fake_mcctrl_body_key_ref);
 }
 
 static int fake_sysfs_local_create(void *os,
@@ -107451,6 +112492,72 @@ static int fake_sysfs_local_unlink(void *os,
 	return fake_sysfs_local_unlink_ret;
 }
 
+static void *fake_sysfs_req_os_to_dev(void *os)
+{
+	fake_sysfs_req_os_to_dev_calls++;
+	fake_sysfs_req_last_os = os;
+	return (void *)0x5359534653524551UL;
+}
+
+static unsigned long fake_sysfs_req_map_memory(void *dev, unsigned long rpa,
+		unsigned long size)
+{
+	require(dev == (void *)0x5359534653524551UL);
+	fake_sysfs_req_map_memory_calls++;
+	fake_sysfs_req_last_rpa = rpa;
+	fake_sysfs_req_last_pa = rpa + 0x100000UL;
+	fake_sysfs_req_last_size = size;
+	return fake_sysfs_req_last_pa;
+}
+
+static void *fake_sysfs_req_map_virtual(void *dev, unsigned long pa,
+		unsigned long size)
+{
+	require(dev == (void *)0x5359534653524551UL);
+	fake_sysfs_req_map_virtual_calls++;
+	fake_sysfs_req_last_pa = pa;
+	fake_sysfs_req_last_size = size;
+	if (fake_sysfs_req_fail_virtual_on_call ==
+			fake_sysfs_req_map_virtual_calls)
+		return NULL;
+	fake_sysfs_req_last_virt = (void *)(uintptr_t)(pa - 0x100000UL);
+	return fake_sysfs_req_last_virt;
+}
+
+static void fake_sysfs_req_unmap_virtual(void *dev, void *virt,
+		unsigned long size)
+{
+	require(dev == (void *)0x5359534653524551UL);
+	fake_sysfs_req_unmap_virtual_calls++;
+	fake_sysfs_req_last_virt = virt;
+	fake_sysfs_req_last_size = size;
+}
+
+static void fake_sysfs_req_unmap_memory(void *dev, unsigned long pa,
+		unsigned long size)
+{
+	require(dev == (void *)0x5359534653524551UL);
+	fake_sysfs_req_unmap_memory_calls++;
+	fake_sysfs_req_last_pa = pa;
+	fake_sysfs_req_last_size = size;
+}
+
+static void fake_sysfs_req_wmb(void)
+{
+	fake_sysfs_req_wmb_calls++;
+}
+
+static int fake_sysfs_req_setup_local(void *os, void *buf,
+		unsigned long buf_pa, unsigned long bufsize)
+{
+	fake_sysfs_req_setup_local_calls++;
+	fake_sysfs_req_setup_os = os;
+	fake_sysfs_req_setup_buf = buf;
+	fake_sysfs_req_setup_buf_pa = buf_pa;
+	fake_sysfs_req_setup_bufsize = bufsize;
+	return fake_sysfs_req_setup_local_ret;
+}
+
 static void fake_sysfs_local_cleanup_special(void *ops, void *instance)
 {
 	fake_sysfs_local_cleanup_calls++;
@@ -107462,6 +112569,342 @@ static void fake_sysfs_local_setup_failed(int error)
 {
 	fake_sysfs_local_setup_failed_calls++;
 	fake_sysfs_local_setup_failed_error = error;
+}
+
+static struct fake_mcctrl_ptd fake_ptd_pool[8];
+static int fake_ptd_alloc_calls;
+static int fake_ptd_alloc_fail;
+static unsigned long fake_ptd_alloc_size;
+static int fake_ptd_free_calls;
+static void *fake_ptd_freed[8];
+static int fake_ptd_write_lock_calls;
+static int fake_ptd_write_unlock_calls;
+static int fake_ptd_read_lock_calls;
+static int fake_ptd_read_unlock_calls;
+static void *fake_ptd_last_lock;
+static unsigned long fake_ptd_last_flags;
+static int fake_ptd_log_calls;
+static int fake_ptd_log_stage[8];
+static int fake_ptd_log_value[8];
+static void *fake_ptd_log_ptr[8];
+
+static const struct mcctrl_syscall_ptd_offsets fake_ptd_offsets = {
+	.ppd_thread_hash = offsetof(struct fake_mcctrl_ppd, thread_hash),
+	.ppd_thread_lock = offsetof(struct fake_mcctrl_ppd, thread_lock),
+	.ptd_ppd = offsetof(struct fake_mcctrl_ptd, ppd),
+	.ptd_hash = offsetof(struct fake_mcctrl_ptd, hash),
+	.ptd_task = offsetof(struct fake_mcctrl_ptd, task),
+	.ptd_data = offsetof(struct fake_mcctrl_ptd, data),
+	.ptd_tid = offsetof(struct fake_mcctrl_ptd, tid),
+	.ptd_refcount = offsetof(struct fake_mcctrl_ptd, refcount),
+	.list_head_size = sizeof(struct fake_mcctrl_list_head),
+	.rwlock_size = sizeof(unsigned char),
+};
+
+static void fake_list_head_init(struct fake_mcctrl_list_head *head)
+{
+	head->next = head;
+	head->prev = head;
+}
+
+static int fake_list_empty(struct fake_mcctrl_list_head *head)
+{
+	return head->next == head && head->prev == head;
+}
+
+static void fake_ptd_reset(struct fake_mcctrl_ppd *ppd)
+{
+	memset(fake_ptd_pool, 0, sizeof(fake_ptd_pool));
+	fake_ptd_alloc_calls = 0;
+	fake_ptd_alloc_fail = 0;
+	fake_ptd_alloc_size = 0;
+	fake_ptd_free_calls = 0;
+	memset(fake_ptd_freed, 0, sizeof(fake_ptd_freed));
+	fake_ptd_write_lock_calls = 0;
+	fake_ptd_write_unlock_calls = 0;
+	fake_ptd_read_lock_calls = 0;
+	fake_ptd_read_unlock_calls = 0;
+	fake_ptd_last_lock = NULL;
+	fake_ptd_last_flags = 0;
+	fake_ptd_log_calls = 0;
+	memset(fake_ptd_log_stage, 0, sizeof(fake_ptd_log_stage));
+	memset(fake_ptd_log_value, 0, sizeof(fake_ptd_log_value));
+	memset(fake_ptd_log_ptr, 0, sizeof(fake_ptd_log_ptr));
+	memset(ppd, 0, sizeof(*ppd));
+	for (int i = 0; i < 256; i++)
+		fake_list_head_init(&ppd->thread_hash[i]);
+}
+
+static void *fake_ptd_alloc(unsigned long size)
+{
+	fake_ptd_alloc_size = size;
+	if (fake_ptd_alloc_fail)
+		return NULL;
+	return &fake_ptd_pool[fake_ptd_alloc_calls++];
+}
+
+static void fake_ptd_free(void *ptr)
+{
+	fake_ptd_freed[fake_ptd_free_calls++] = ptr;
+}
+
+static unsigned long fake_ptd_write_lock(void *lock)
+{
+	fake_ptd_write_lock_calls++;
+	fake_ptd_last_lock = lock;
+	return 0xabc000UL + fake_ptd_write_lock_calls;
+}
+
+static void fake_ptd_write_unlock(void *lock, unsigned long flags)
+{
+	require(lock == fake_ptd_last_lock);
+	fake_ptd_write_unlock_calls++;
+	fake_ptd_last_flags = flags;
+}
+
+static unsigned long fake_ptd_read_lock(void *lock)
+{
+	fake_ptd_read_lock_calls++;
+	fake_ptd_last_lock = lock;
+	return 0xdef000UL + fake_ptd_read_lock_calls;
+}
+
+static void fake_ptd_read_unlock(void *lock, unsigned long flags)
+{
+	require(lock == fake_ptd_last_lock);
+	fake_ptd_read_unlock_calls++;
+	fake_ptd_last_flags = flags;
+}
+
+static void fake_ptd_log(int stage, int value, void *ptd)
+{
+	fake_ptd_log_stage[fake_ptd_log_calls] = stage;
+	fake_ptd_log_value[fake_ptd_log_calls] = value;
+	fake_ptd_log_ptr[fake_ptd_log_calls] = ptd;
+	fake_ptd_log_calls++;
+}
+
+static struct fake_mcctrl_list_head fake_pidfd_table[16];
+static unsigned char fake_pidfd_lock_obj;
+static struct fake_mcctrl_pidfd_entry fake_pidfd_pool[8];
+static int fake_pidfd_alloc_calls;
+static int fake_pidfd_alloc_fail;
+static unsigned long fake_pidfd_alloc_size;
+static int fake_pidfd_free_calls;
+static void *fake_pidfd_freed[8];
+static int fake_pidfd_lock_init_calls;
+static int fake_pidfd_lock_calls;
+static int fake_pidfd_unlock_calls;
+static void *fake_pidfd_last_lock;
+static unsigned long fake_pidfd_last_flags;
+static int fake_pidfd_log_calls;
+static int fake_pidfd_log_stage[8];
+static void *fake_pidfd_log_filp[8];
+static int fake_pidfd_log_pid[8];
+static int fake_pidfd_log_fd[8];
+
+static const struct mcctrl_syscall_pidfd_offsets fake_pidfd_offsets = {
+	.entry_filp = offsetof(struct fake_mcctrl_pidfd_entry, filp),
+	.entry_os = offsetof(struct fake_mcctrl_pidfd_entry, os),
+	.entry_group_leader =
+		offsetof(struct fake_mcctrl_pidfd_entry, group_leader),
+	.entry_pid = offsetof(struct fake_mcctrl_pidfd_entry, pid),
+	.entry_fd = offsetof(struct fake_mcctrl_pidfd_entry, fd),
+	.entry_hash = offsetof(struct fake_mcctrl_pidfd_entry, hash),
+	.entry_tofu_dev_path =
+		offsetof(struct fake_mcctrl_pidfd_entry, tofu_dev_path),
+	.entry_pde_data = offsetof(struct fake_mcctrl_pidfd_entry, pde_data),
+	.list_head_size = sizeof(struct fake_mcctrl_list_head),
+	.tofu_dev_path_size =
+		sizeof(((struct fake_mcctrl_pidfd_entry *)0)->tofu_dev_path),
+};
+
+static void fake_pidfd_reset(void)
+{
+	memset(fake_pidfd_table, 0, sizeof(fake_pidfd_table));
+	memset(fake_pidfd_pool, 0, sizeof(fake_pidfd_pool));
+	fake_pidfd_lock_obj = 0;
+	fake_pidfd_alloc_calls = 0;
+	fake_pidfd_alloc_fail = 0;
+	fake_pidfd_alloc_size = 0;
+	fake_pidfd_free_calls = 0;
+	memset(fake_pidfd_freed, 0, sizeof(fake_pidfd_freed));
+	fake_pidfd_lock_init_calls = 0;
+	fake_pidfd_lock_calls = 0;
+	fake_pidfd_unlock_calls = 0;
+	fake_pidfd_last_lock = NULL;
+	fake_pidfd_last_flags = 0;
+	fake_pidfd_log_calls = 0;
+	memset(fake_pidfd_log_stage, 0, sizeof(fake_pidfd_log_stage));
+	memset(fake_pidfd_log_filp, 0, sizeof(fake_pidfd_log_filp));
+	memset(fake_pidfd_log_pid, 0, sizeof(fake_pidfd_log_pid));
+	memset(fake_pidfd_log_fd, 0, sizeof(fake_pidfd_log_fd));
+}
+
+static void *fake_pidfd_alloc(unsigned long size)
+{
+	fake_pidfd_alloc_size = size;
+	if (fake_pidfd_alloc_fail)
+		return NULL;
+	return &fake_pidfd_pool[fake_pidfd_alloc_calls++];
+}
+
+static void fake_pidfd_free(void *ptr)
+{
+	fake_pidfd_freed[fake_pidfd_free_calls++] = ptr;
+}
+
+static void fake_pidfd_lock_init(void *lock)
+{
+	require(lock == &fake_pidfd_lock_obj);
+	fake_pidfd_lock_init_calls++;
+	*(unsigned char *)lock = 1;
+}
+
+static unsigned long fake_pidfd_lock(void *lock)
+{
+	require(lock == &fake_pidfd_lock_obj);
+	fake_pidfd_lock_calls++;
+	fake_pidfd_last_lock = lock;
+	return 0xbeef000UL + fake_pidfd_lock_calls;
+}
+
+static void fake_pidfd_unlock(void *lock, unsigned long flags)
+{
+	require(lock == fake_pidfd_last_lock);
+	fake_pidfd_unlock_calls++;
+	fake_pidfd_last_flags = flags;
+}
+
+static void fake_pidfd_log(int stage, void *filp, int pid, int fd)
+{
+	fake_pidfd_log_stage[fake_pidfd_log_calls] = stage;
+	fake_pidfd_log_filp[fake_pidfd_log_calls] = filp;
+	fake_pidfd_log_pid[fake_pidfd_log_calls] = pid;
+	fake_pidfd_log_fd[fake_pidfd_log_calls] = fd;
+	fake_pidfd_log_calls++;
+}
+
+static struct fake_mcctrl_pager fake_pager_pool[8];
+static struct fake_mcctrl_list_head fake_pager_global_list;
+static unsigned char fake_pager_lock_obj;
+static int fake_pager_lock_calls;
+static int fake_pager_unlock_calls;
+static void *fake_pager_last_lock;
+static unsigned long fake_pager_last_flags;
+static int fake_pager_in_atomic_value;
+static int fake_pager_in_interrupt_value;
+static int fake_pager_down_calls;
+static int fake_pager_down_ret;
+static int fake_pager_up_calls;
+static void *fake_pager_fput_ptrs[8];
+static int fake_pager_fput_calls;
+static void *fake_pager_freed[8];
+static int fake_pager_free_calls;
+static int fake_pager_log_calls;
+static int fake_pager_log_stage[8];
+static void *fake_pager_log_ptr[8];
+static int fake_pager_log_value[8];
+
+static const struct mcctrl_syscall_pager_offsets fake_pager_offsets = {
+	.ppd_devobj_pager_list =
+		offsetof(struct fake_mcctrl_pager_ppd, devobj_pager_list),
+	.ppd_devobj_pager_lock =
+		offsetof(struct fake_mcctrl_pager_ppd, devobj_pager_lock),
+	.pager_list = offsetof(struct fake_mcctrl_pager, list),
+	.pager_rofile = offsetof(struct fake_mcctrl_pager, rofile),
+	.pager_rwfile = offsetof(struct fake_mcctrl_pager, rwfile),
+};
+
+static void fake_list_add_tail(struct fake_mcctrl_list_head *entry,
+		struct fake_mcctrl_list_head *head)
+{
+	entry->next = head;
+	entry->prev = head->prev;
+	head->prev->next = entry;
+	head->prev = entry;
+}
+
+static void fake_pager_reset(struct fake_mcctrl_pager_ppd *ppd)
+{
+	memset(fake_pager_pool, 0, sizeof(fake_pager_pool));
+	fake_list_head_init(&fake_pager_global_list);
+	fake_pager_lock_obj = 0;
+	fake_pager_lock_calls = 0;
+	fake_pager_unlock_calls = 0;
+	fake_pager_last_lock = NULL;
+	fake_pager_last_flags = 0;
+	fake_pager_in_atomic_value = 0;
+	fake_pager_in_interrupt_value = 0;
+	fake_pager_down_calls = 0;
+	fake_pager_down_ret = 0;
+	fake_pager_up_calls = 0;
+	memset(fake_pager_fput_ptrs, 0, sizeof(fake_pager_fput_ptrs));
+	fake_pager_fput_calls = 0;
+	memset(fake_pager_freed, 0, sizeof(fake_pager_freed));
+	fake_pager_free_calls = 0;
+	fake_pager_log_calls = 0;
+	memset(fake_pager_log_stage, 0, sizeof(fake_pager_log_stage));
+	memset(fake_pager_log_ptr, 0, sizeof(fake_pager_log_ptr));
+	memset(fake_pager_log_value, 0, sizeof(fake_pager_log_value));
+	memset(ppd, 0, sizeof(*ppd));
+	fake_list_head_init(&ppd->devobj_pager_list);
+}
+
+static unsigned long fake_pager_lock(void *lock)
+{
+	require(lock == &fake_pager_lock_obj);
+	fake_pager_lock_calls++;
+	fake_pager_last_lock = lock;
+	return 0xca11000UL + fake_pager_lock_calls;
+}
+
+static void fake_pager_unlock(void *lock, unsigned long flags)
+{
+	require(lock == fake_pager_last_lock);
+	fake_pager_unlock_calls++;
+	fake_pager_last_flags = flags;
+}
+
+static int fake_pager_in_atomic(void)
+{
+	return fake_pager_in_atomic_value;
+}
+
+static int fake_pager_in_interrupt(void)
+{
+	return fake_pager_in_interrupt_value;
+}
+
+static int fake_pager_down(void *sem)
+{
+	require(sem != NULL);
+	fake_pager_down_calls++;
+	return fake_pager_down_ret;
+}
+
+static void fake_pager_up(void *sem)
+{
+	require(sem != NULL);
+	fake_pager_up_calls++;
+}
+
+static void fake_pager_fput(void *ptr)
+{
+	fake_pager_fput_ptrs[fake_pager_fput_calls++] = ptr;
+}
+
+static void fake_pager_free(void *ptr)
+{
+	fake_pager_freed[fake_pager_free_calls++] = ptr;
+}
+
+static void fake_pager_log(int stage, void *pager, int value)
+{
+	fake_pager_log_stage[fake_pager_log_calls] = stage;
+	fake_pager_log_ptr[fake_pager_log_calls] = pager;
+	fake_pager_log_value[fake_pager_log_calls] = value;
+	fake_pager_log_calls++;
 }
 
 static int fake_futex_cache_link_calls;
@@ -107528,6 +112971,362 @@ int main(void)
 	void *procfs_result;
 
 	{
+		struct fake_mcctrl_ppd ppd;
+		struct fake_mcctrl_ptd *ptd;
+		void *task = (void *)0x1010UL;
+		void *data = (void *)0xdada0001UL;
+		int hash;
+		int ret;
+
+		fake_ptd_reset(&ppd);
+		hash = mcctrl_syscall_ptd_hash_result(task, 255);
+		require(hash == 1);
+		ret = mcctrl_syscall_add_ptd_body_result(
+			&ppd, data, task, 101, sizeof(*ptd), 255,
+			&fake_ptd_offsets, fake_ptd_alloc, fake_ptd_free,
+			fake_ptd_write_lock, fake_ptd_write_unlock,
+			fake_ptd_log);
+		require(ret == 0);
+		require(fake_ptd_alloc_calls == 1);
+		require(fake_ptd_alloc_size == sizeof(*ptd));
+		require(fake_ptd_write_lock_calls == 1);
+		require(fake_ptd_write_unlock_calls == 1);
+		ptd = &fake_ptd_pool[0];
+		require(ptd->ppd == &ppd);
+		require(ptd->task == task);
+		require(ptd->data == data);
+		require(ptd->tid == 101);
+		require(ptd->refcount == 1);
+		require(ppd.thread_hash[hash].next == &ptd->hash);
+		require(ppd.thread_hash[hash].prev == &ptd->hash);
+		require(fake_ptd_log_calls == 0);
+
+		require(mcctrl_syscall_get_ptd_body_result(
+			&ppd, task, 255, &fake_ptd_offsets,
+			fake_ptd_read_lock, fake_ptd_read_unlock,
+			fake_ptd_log) == ptd);
+		require(ptd->refcount == 2);
+		require(fake_ptd_read_lock_calls == 1);
+		require(fake_ptd_read_unlock_calls == 1);
+
+		require(mcctrl_syscall_put_ptd_body_result(
+			ptd, 255, &fake_ptd_offsets, fake_ptd_free,
+			fake_ptd_write_lock, fake_ptd_write_unlock,
+			fake_ptd_log) == 0);
+		require(ptd->refcount == 1);
+		require(fake_ptd_free_calls == 0);
+		require(mcctrl_syscall_put_ptd_body_result(
+			ptd, 255, &fake_ptd_offsets, fake_ptd_free,
+			fake_ptd_write_lock, fake_ptd_write_unlock,
+			fake_ptd_log) == 1);
+		require(fake_ptd_free_calls == 1);
+		require(fake_ptd_freed[0] == ptd);
+		require(fake_list_empty(&ppd.thread_hash[hash]));
+		mix_signed(&digest, hash);
+		mix_signed(&digest, fake_ptd_write_unlock_calls);
+	}
+
+	{
+		struct fake_mcctrl_ppd ppd;
+		struct fake_mcctrl_ptd stray;
+		void *task = (void *)0x2020UL;
+		int ret;
+
+		fake_ptd_reset(&ppd);
+		ret = mcctrl_syscall_add_ptd_body_result(
+			&ppd, (void *)0xabcdUL, task, 202,
+			sizeof(struct fake_mcctrl_ptd), 255,
+			&fake_ptd_offsets, fake_ptd_alloc, fake_ptd_free,
+			fake_ptd_write_lock, fake_ptd_write_unlock,
+			fake_ptd_log);
+		require(ret == 0);
+		ret = mcctrl_syscall_add_ptd_body_result(
+			&ppd, (void *)0xeeeeUL, task, 202,
+			sizeof(struct fake_mcctrl_ptd), 255,
+			&fake_ptd_offsets, fake_ptd_alloc, fake_ptd_free,
+			fake_ptd_write_lock, fake_ptd_write_unlock,
+			fake_ptd_log);
+		require(ret == -16);
+		require(fake_ptd_alloc_calls == 2);
+		require(fake_ptd_free_calls == 1);
+		require(fake_ptd_freed[0] == &fake_ptd_pool[1]);
+		require(fake_ptd_log_calls == 1);
+		require(fake_ptd_log_stage[0] == 3);
+		require(fake_ptd_log_value[0] == 202);
+		mix_signed(&digest, fake_ptd_log_stage[0]);
+
+		fake_ptd_reset(&ppd);
+		memset(&stray, 0, sizeof(stray));
+		stray.ppd = &ppd;
+		stray.task = task;
+		stray.refcount = 1;
+		fake_list_head_init(&stray.hash);
+		ret = mcctrl_syscall_put_ptd_body_result(
+			&stray, 255, &fake_ptd_offsets, fake_ptd_free,
+			fake_ptd_write_lock, fake_ptd_write_unlock,
+			fake_ptd_log);
+		require(ret == -2);
+		require(fake_ptd_log_calls == 1);
+		require(fake_ptd_log_stage[0] == 1);
+		require(fake_ptd_free_calls == 0);
+		mix_signed(&digest, ret);
+	}
+
+	{
+		struct fake_mcctrl_ppd ppd;
+		struct fake_mcctrl_ptd stray;
+		void *task = (void *)0x3030UL;
+
+		fake_ptd_reset(&ppd);
+		require(mcctrl_syscall_add_ptd_body_result(
+			&ppd, (void *)0x303000UL, task, 303,
+			sizeof(struct fake_mcctrl_ptd), 255,
+			&fake_ptd_offsets, fake_ptd_alloc, fake_ptd_free,
+			fake_ptd_write_lock, fake_ptd_write_unlock,
+			fake_ptd_log) == 0);
+		fake_ptd_pool[0].refcount = 0;
+		require(mcctrl_syscall_get_ptd_body_result(
+			&ppd, task, 255, &fake_ptd_offsets,
+			fake_ptd_read_lock, fake_ptd_read_unlock,
+			fake_ptd_log) == NULL);
+		require(fake_ptd_log_calls == 1);
+		require(fake_ptd_log_stage[0] == 4);
+		require(fake_ptd_log_value[0] == 0);
+		mix_signed(&digest, fake_ptd_log_stage[0]);
+
+		fake_ptd_reset(&ppd);
+		memset(&stray, 0, sizeof(stray));
+		stray.refcount = 0;
+		fake_list_head_init(&stray.hash);
+		require(mcctrl_syscall_put_ptd_unsafe_body_result(
+			&stray, &fake_ptd_offsets, fake_ptd_free,
+			fake_ptd_log) == 0);
+		require(stray.refcount == -1);
+		require(fake_ptd_log_calls == 1);
+		require(fake_ptd_log_stage[0] == 0);
+		require(fake_ptd_log_value[0] == -1);
+
+		require(mcctrl_syscall_add_ptd_body_result(
+			&ppd, NULL, task, 303,
+			sizeof(struct fake_mcctrl_ptd), 255,
+			&fake_ptd_offsets, NULL, fake_ptd_free,
+			fake_ptd_write_lock, fake_ptd_write_unlock,
+			fake_ptd_log) == -22);
+		require(mcctrl_syscall_get_ptd_body_result(
+			&ppd, task, 255, &fake_ptd_offsets,
+			NULL, fake_ptd_read_unlock, fake_ptd_log) == NULL);
+		mix_signed(&digest, stray.refcount);
+	}
+
+	{
+		void *filp = (void *)0x1234UL;
+		void *group = (void *)0x5678UL;
+		void *pde_data = (void *)0x9abcUL;
+		struct fake_mcctrl_pidfd_entry *entry;
+		int hash = ((unsigned long)filp) & 15;
+		int ret;
+
+		fake_pidfd_reset();
+		require(mcctrl_syscall_pidfd_hash_init_body_result(
+			fake_pidfd_table, 16, sizeof(fake_pidfd_table[0]),
+			&fake_pidfd_lock_obj, fake_pidfd_lock_init) == 0);
+		require(fake_pidfd_lock_init_calls == 1);
+		require(fake_pidfd_lock_obj == 1);
+		for (int i = 0; i < 16; i++)
+			require(fake_list_empty(&fake_pidfd_table[i]));
+
+		ret = mcctrl_syscall_pidfd_hash_insert_body_result(
+			fake_pidfd_table, &fake_pidfd_lock_obj, filp,
+			0xfeed0001UL, 321, group, 7,
+			"/proc/tofu/dev/tni1cq2", pde_data, sizeof(*entry), 15,
+			&fake_pidfd_offsets, fake_pidfd_alloc, fake_pidfd_free,
+			fake_pidfd_lock, fake_pidfd_unlock, fake_pidfd_log);
+		require(ret == 0);
+		require(fake_pidfd_alloc_calls == 1);
+		require(fake_pidfd_alloc_size == sizeof(*entry));
+		require(fake_pidfd_lock_calls == 1);
+		require(fake_pidfd_unlock_calls == 1);
+		entry = &fake_pidfd_pool[0];
+		require(entry->filp == filp);
+		require(entry->os == 0xfeed0001UL);
+		require(entry->group_leader == group);
+		require(entry->pid == 321);
+		require(entry->fd == 7);
+		require(entry->pde_data == pde_data);
+		require(strcmp(entry->tofu_dev_path, "tni1cq2") == 0);
+		require(fake_pidfd_table[hash].next == &entry->hash);
+		require(fake_pidfd_table[hash].prev == &entry->hash);
+		require(fake_pidfd_log_calls == 1);
+		require(fake_pidfd_log_stage[0] == 1);
+
+		require(mcctrl_syscall_pidfd_hash_lookup_body_result(
+			fake_pidfd_table, &fake_pidfd_lock_obj, filp, group, 15,
+			&fake_pidfd_offsets, fake_pidfd_lock,
+			fake_pidfd_unlock, fake_pidfd_log) == entry);
+		require(fake_pidfd_log_calls == 2);
+		require(fake_pidfd_log_stage[1] == 2);
+		require(fake_pidfd_log_pid[1] == 321);
+
+		ret = mcctrl_syscall_pidfd_hash_insert_body_result(
+			fake_pidfd_table, &fake_pidfd_lock_obj, filp,
+			0xfeed0001UL, 654, group, 8,
+			"/proc/tofu/dev/tni9cq9", pde_data, sizeof(*entry), 15,
+			&fake_pidfd_offsets, fake_pidfd_alloc, fake_pidfd_free,
+			fake_pidfd_lock, fake_pidfd_unlock, fake_pidfd_log);
+		require(ret == -16);
+		require(fake_pidfd_alloc_calls == 2);
+		require(fake_pidfd_free_calls == 1);
+		require(fake_pidfd_freed[0] == &fake_pidfd_pool[1]);
+		require(fake_pidfd_log_calls == 3);
+		require(fake_pidfd_log_stage[2] == 0);
+		require(fake_pidfd_log_pid[2] == 654);
+
+		ret = mcctrl_syscall_pidfd_hash_remove_body_result(
+			fake_pidfd_table, &fake_pidfd_lock_obj, filp,
+			0xfeed0001UL, group, 7, 15, &fake_pidfd_offsets,
+			fake_pidfd_free, fake_pidfd_lock,
+			fake_pidfd_unlock, fake_pidfd_log);
+		require(ret == 0);
+		require(fake_pidfd_free_calls == 2);
+		require(fake_pidfd_freed[1] == entry);
+		require(fake_list_empty(&fake_pidfd_table[hash]));
+		require(fake_pidfd_log_calls == 4);
+		require(fake_pidfd_log_stage[3] == 3);
+
+		ret = mcctrl_syscall_pidfd_hash_remove_body_result(
+			fake_pidfd_table, &fake_pidfd_lock_obj, filp,
+			0xfeed0001UL, group, 7, 15, &fake_pidfd_offsets,
+			fake_pidfd_free, fake_pidfd_lock,
+			fake_pidfd_unlock, fake_pidfd_log);
+		require(ret == -2);
+		require(fake_pidfd_free_calls == 2);
+		require(fake_pidfd_log_calls == 5);
+		require(fake_pidfd_log_stage[4] == 4);
+
+		require(mcctrl_syscall_pidfd_hash_init_body_result(
+			fake_pidfd_table, 16, sizeof(fake_pidfd_table[0]),
+			&fake_pidfd_lock_obj, NULL) == -22);
+		fake_pidfd_alloc_fail = 1;
+		require(mcctrl_syscall_pidfd_hash_insert_body_result(
+			fake_pidfd_table, &fake_pidfd_lock_obj, filp,
+			0xfeed0001UL, 321, group, 7,
+			"/proc/tofu/dev/tni1cq2", pde_data, sizeof(*entry), 15,
+			&fake_pidfd_offsets, fake_pidfd_alloc, fake_pidfd_free,
+			fake_pidfd_lock, fake_pidfd_unlock, fake_pidfd_log) == -12);
+		require(mcctrl_syscall_pidfd_hash_lookup_body_result(
+			fake_pidfd_table, &fake_pidfd_lock_obj, filp, group, 15,
+			&fake_pidfd_offsets, NULL,
+			fake_pidfd_unlock, fake_pidfd_log) == NULL);
+		mix_signed(&digest, hash);
+		mix_signed(&digest, fake_pidfd_log_stage[4]);
+		mix_signed(&digest, fake_pidfd_free_calls);
+	}
+
+	{
+		struct fake_mcctrl_pager_ppd ppd;
+		int nr_processes = 2;
+		int ret;
+
+		fake_pager_reset(&ppd);
+		ret = mcctrl_syscall_pager_add_process_body_result(
+			&nr_processes, &fake_pager_lock_obj,
+			fake_pager_lock, fake_pager_unlock);
+		require(ret == 3);
+		require(nr_processes == 3);
+		require(fake_pager_lock_calls == 1);
+		require(fake_pager_unlock_calls == 1);
+
+		fake_list_add_tail(&fake_pager_pool[0].list,
+			&ppd.devobj_pager_list);
+		fake_list_add_tail(&fake_pager_pool[1].list,
+			&ppd.devobj_pager_list);
+		ret = mcctrl_syscall_pager_remove_process_body_result(
+			&ppd, &nr_processes, &fake_pager_lock_obj,
+			&fake_pager_offsets, fake_pager_in_atomic,
+			fake_pager_in_interrupt, fake_pager_down, fake_pager_up,
+			fake_pager_free, fake_pager_lock, fake_pager_unlock,
+			fake_pager_log);
+		require(ret == 2);
+		require(nr_processes == 2);
+		require(fake_pager_down_calls == 1);
+		require(fake_pager_up_calls == 1);
+		require(fake_pager_free_calls == 2);
+		require(fake_pager_freed[0] == &fake_pager_pool[0]);
+		require(fake_pager_freed[1] == &fake_pager_pool[1]);
+		require(fake_list_empty(&ppd.devobj_pager_list));
+		require(fake_pager_log_calls == 3);
+		require(fake_pager_log_stage[0] == 1);
+		require(fake_pager_log_stage[1] == 1);
+		require(fake_pager_log_stage[2] == 3);
+
+		fake_pager_reset(&ppd);
+		nr_processes = 4;
+		fake_pager_in_atomic_value = 1;
+		ret = mcctrl_syscall_pager_remove_process_body_result(
+			&ppd, &nr_processes, &fake_pager_lock_obj,
+			&fake_pager_offsets, fake_pager_in_atomic,
+			fake_pager_in_interrupt, fake_pager_down, fake_pager_up,
+			fake_pager_free, fake_pager_lock, fake_pager_unlock,
+			fake_pager_log);
+		require(ret == -22);
+		require(nr_processes == 4);
+		require(fake_pager_down_calls == 0);
+		require(fake_pager_log_calls == 1);
+		require(fake_pager_log_stage[0] == 0);
+
+		fake_pager_reset(&ppd);
+		nr_processes = 4;
+		fake_pager_down_ret = -4;
+		ret = mcctrl_syscall_pager_remove_process_body_result(
+			&ppd, &nr_processes, &fake_pager_lock_obj,
+			&fake_pager_offsets, fake_pager_in_atomic,
+			fake_pager_in_interrupt, fake_pager_down, fake_pager_up,
+			fake_pager_free, fake_pager_lock, fake_pager_unlock,
+			fake_pager_log);
+		require(ret == -4);
+		require(nr_processes == 4);
+		require(fake_pager_down_calls == 1);
+		require(fake_pager_up_calls == 0);
+
+		fake_pager_reset(&ppd);
+		fake_pager_pool[0].rofile = (void *)0x1111UL;
+		fake_pager_pool[0].rwfile = (void *)0x2222UL;
+		fake_pager_pool[1].rwfile = (void *)0x3333UL;
+		fake_list_add_tail(&fake_pager_pool[0].list,
+			&fake_pager_global_list);
+		fake_list_add_tail(&fake_pager_pool[1].list,
+			&fake_pager_global_list);
+		ret = mcctrl_syscall_pager_cleanup_body_result(
+			&fake_pager_global_list, &fake_pager_lock_obj,
+			&fake_pager_offsets, fake_pager_fput, fake_pager_free,
+			fake_pager_lock, fake_pager_unlock, fake_pager_log);
+		require(ret == 2);
+		require(fake_pager_fput_calls == 3);
+		require(fake_pager_fput_ptrs[0] == (void *)0x1111UL);
+		require(fake_pager_fput_ptrs[1] == (void *)0x2222UL);
+		require(fake_pager_fput_ptrs[2] == (void *)0x3333UL);
+		require(fake_pager_free_calls == 2);
+		require(fake_pager_freed[0] == &fake_pager_pool[0]);
+		require(fake_pager_freed[1] == &fake_pager_pool[1]);
+		require(fake_list_empty(&fake_pager_global_list));
+		require(fake_pager_log_calls == 2);
+		require(fake_pager_log_stage[0] == 2);
+		require(fake_pager_log_stage[1] == 2);
+
+		require(mcctrl_syscall_pager_add_process_body_result(
+			&nr_processes, &fake_pager_lock_obj,
+			NULL, fake_pager_unlock) == -22);
+		require(mcctrl_syscall_pager_cleanup_body_result(
+			&fake_pager_global_list, &fake_pager_lock_obj,
+			&fake_pager_offsets, fake_pager_fput, NULL,
+			fake_pager_lock, fake_pager_unlock,
+			fake_pager_log) == -22);
+		mix_signed(&digest, nr_processes);
+		mix_signed(&digest, fake_pager_fput_calls);
+		mix_signed(&digest, fake_pager_log_stage[1]);
+	}
+
+	{
 		struct mcctrl_rb_root root = { NULL };
 		struct fake_rva_to_rpa_cache_node nodes[4];
 
@@ -107582,6 +113381,437 @@ int main(void)
 		require(fake_futex_cache_erase_calls == 2);
 		require(fake_futex_cache_free_calls == 2);
 		mix_signed(&digest, fake_futex_cache_free_calls);
+	}
+
+	{
+		uint32_t uaddr = 0;
+		uint32_t uaddr2 = 0;
+		int ret;
+
+		reset_fake_work();
+		ret = mcctrl_futex_dispatch_body_result(
+			&uaddr, FUTEX_WAIT, 0x22, 0x3333, &uaddr2,
+			0x44, 0x55, 1, &fake_mcctrl_futex_uti,
+			fake_mcctrl_futex_wait, fake_mcctrl_futex_wake,
+			fake_mcctrl_futex_requeue, fake_mcctrl_futex_wake_op,
+			fake_mcctrl_futex_warn);
+		require(ret == 100 + (int)(FUTEX_BITSET_MATCH_ANY & 0xffU));
+		require(fake_mcctrl_futex_dispatch.wait_calls == 1);
+		require(fake_mcctrl_futex_dispatch.val3 ==
+				FUTEX_BITSET_MATCH_ANY);
+		require(fake_mcctrl_futex_dispatch.clockrt == 0);
+		mix_signed(&digest, ret);
+		mix(&digest, fake_mcctrl_futex_dispatch.val3);
+
+		reset_fake_work();
+		ret = mcctrl_futex_dispatch_body_result(
+			&uaddr, FUTEX_WAIT_BITSET | FUTEX_CLOCK_REALTIME,
+			0x23, 0x3334, &uaddr2, 0x45, 0x5a, 0,
+			&fake_mcctrl_futex_uti, fake_mcctrl_futex_wait,
+			fake_mcctrl_futex_wake, fake_mcctrl_futex_requeue,
+			fake_mcctrl_futex_wake_op, fake_mcctrl_futex_warn);
+		require(ret == 100 + 0x5a + 1);
+		require(fake_mcctrl_futex_dispatch.wait_calls == 1);
+		require(fake_mcctrl_futex_dispatch.clockrt == 1);
+		require(fake_mcctrl_futex_dispatch.fshared == 0);
+		mix_signed(&digest, ret);
+		mix_signed(&digest, fake_mcctrl_futex_dispatch.clockrt);
+
+		reset_fake_work();
+		ret = mcctrl_futex_dispatch_body_result(
+			&uaddr, FUTEX_WAKE, 0x24, 0x3335, &uaddr2,
+			0x46, 0x57, 1, &fake_mcctrl_futex_uti,
+			fake_mcctrl_futex_wait, fake_mcctrl_futex_wake,
+			fake_mcctrl_futex_requeue, fake_mcctrl_futex_wake_op,
+			fake_mcctrl_futex_warn);
+		require(ret == 200 + (int)(FUTEX_BITSET_MATCH_ANY & 0xffU));
+		require(fake_mcctrl_futex_dispatch.wake_calls == 1);
+		require(fake_mcctrl_futex_dispatch.val3 ==
+				FUTEX_BITSET_MATCH_ANY);
+		mix_signed(&digest, ret);
+
+		reset_fake_work();
+		ret = mcctrl_futex_dispatch_body_result(
+			&uaddr, FUTEX_CMP_REQUEUE, 2, 0x3336, &uaddr2,
+			3, 0x58, 1, &fake_mcctrl_futex_uti,
+			fake_mcctrl_futex_wait, fake_mcctrl_futex_wake,
+			fake_mcctrl_futex_requeue, fake_mcctrl_futex_wake_op,
+			fake_mcctrl_futex_warn);
+		require(ret == 305);
+		require(fake_mcctrl_futex_dispatch.requeue_calls == 1);
+		require(fake_mcctrl_futex_dispatch.uaddr2 == &uaddr2);
+		require(fake_mcctrl_futex_dispatch.cmpval == 0);
+		mix_signed(&digest, ret);
+
+		reset_fake_work();
+		ret = mcctrl_futex_dispatch_body_result(
+			&uaddr, FUTEX_WAKE_OP, 4, 0x3337, &uaddr2,
+			5, 6, 0, &fake_mcctrl_futex_uti,
+			fake_mcctrl_futex_wait, fake_mcctrl_futex_wake,
+			fake_mcctrl_futex_requeue, fake_mcctrl_futex_wake_op,
+			fake_mcctrl_futex_warn);
+		require(ret == 415);
+		require(fake_mcctrl_futex_dispatch.wake_op_calls == 1);
+		require(fake_mcctrl_futex_dispatch.val3 == 6);
+		mix_signed(&digest, ret);
+
+		reset_fake_work();
+		ret = mcctrl_futex_dispatch_body_result(
+			&uaddr, FUTEX_WAKE | FUTEX_CLOCK_REALTIME, 0, 0,
+			&uaddr2, 0, 0, 0, &fake_mcctrl_futex_uti,
+			fake_mcctrl_futex_wait, fake_mcctrl_futex_wake,
+			fake_mcctrl_futex_requeue, fake_mcctrl_futex_wake_op,
+			fake_mcctrl_futex_warn);
+		require(ret == -ENOSYS);
+		require(fake_mcctrl_futex_dispatch.warn_calls == 0);
+		mix_signed(&digest, ret);
+
+		reset_fake_work();
+		ret = mcctrl_futex_dispatch_body_result(
+			&uaddr, FUTEX_WAIT_REQUEUE_PI, 0, 0, &uaddr2,
+			0, 0, 0, &fake_mcctrl_futex_uti,
+			fake_mcctrl_futex_wait, fake_mcctrl_futex_wake,
+			fake_mcctrl_futex_requeue, fake_mcctrl_futex_wake_op,
+			fake_mcctrl_futex_warn);
+		require(ret == -ENOSYS);
+		require(fake_mcctrl_futex_dispatch.warn_calls == 1);
+		require(fake_mcctrl_futex_dispatch.warn_cmd ==
+				FUTEX_WAIT_REQUEUE_PI);
+		mix_signed(&digest, fake_mcctrl_futex_dispatch.warn_cmd);
+	}
+
+	{
+		uint32_t uaddr = 0;
+		int ret;
+
+		reset_fake_work();
+		fake_mcctrl_futex_uti.q = &fake_mcctrl_futex_q;
+		fake_mcctrl_futex_uti.resp = (void *)0x51525354UL;
+		ret = mcctrl_futex_wait_body_result(
+			&uaddr, 1, 0x66, 0, 0, &fake_mcctrl_futex_uti,
+			fake_mcctrl_futex_get_q, fake_mcctrl_futex_get_resp,
+			fake_mcctrl_futex_get_cpu, fake_mcctrl_futex_prepare_q,
+			fake_mcctrl_futex_wait_setup,
+			fake_mcctrl_futex_wait_queue,
+			fake_mcctrl_futex_unqueue,
+			fake_mcctrl_futex_put_q_key,
+			fake_mcctrl_futex_log_event);
+		require(ret == -EINVAL);
+		require(fake_mcctrl_futex_prepare_calls == 0);
+		mix_signed(&digest, ret);
+
+		reset_fake_work();
+		fake_mcctrl_futex_uti.q = &fake_mcctrl_futex_q;
+		fake_mcctrl_futex_uti.resp = (void *)0x51525354UL;
+		fake_mcctrl_futex_setup_ret[0] = -7;
+		ret = mcctrl_futex_wait_body_result(
+			&uaddr, 1, 0x67, 0, 0x77, &fake_mcctrl_futex_uti,
+			fake_mcctrl_futex_get_q, fake_mcctrl_futex_get_resp,
+			fake_mcctrl_futex_get_cpu, fake_mcctrl_futex_prepare_q,
+			fake_mcctrl_futex_wait_setup,
+			fake_mcctrl_futex_wait_queue,
+			fake_mcctrl_futex_unqueue,
+			fake_mcctrl_futex_put_q_key,
+			fake_mcctrl_futex_log_event);
+		require(ret == -7);
+		require(fake_mcctrl_futex_prepare_calls == 1);
+		require(fake_mcctrl_futex_q.bitset == 0x77);
+		require(fake_mcctrl_futex_q.resp == (void *)0x51525354UL);
+		require(fake_mcctrl_futex_q.linux_cpu == 7);
+		require(fake_mcctrl_futex_setup_calls == 1);
+		require(fake_mcctrl_futex_queue_calls == 0);
+		require(fake_mcctrl_futex_put_key_calls == 0);
+		mix_signed(&digest, ret);
+
+		reset_fake_work();
+		fake_mcctrl_futex_uti.q = &fake_mcctrl_futex_q;
+		fake_mcctrl_futex_uti.resp = (void *)0x61626364UL;
+		fake_mcctrl_futex_unqueue_ret[0] = 0;
+		ret = mcctrl_futex_wait_body_result(
+			&uaddr, 1, 0x68, 0, 0x78, &fake_mcctrl_futex_uti,
+			fake_mcctrl_futex_get_q, fake_mcctrl_futex_get_resp,
+			fake_mcctrl_futex_get_cpu, fake_mcctrl_futex_prepare_q,
+			fake_mcctrl_futex_wait_setup,
+			fake_mcctrl_futex_wait_queue,
+			fake_mcctrl_futex_unqueue,
+			fake_mcctrl_futex_put_q_key,
+			fake_mcctrl_futex_log_event);
+		require(ret == 0);
+		require(fake_mcctrl_futex_queue_calls == 1);
+		require(fake_mcctrl_futex_put_key_calls == 1);
+		require(fake_mcctrl_futex_log_calls == 1);
+		require(fake_mcctrl_futex_log_stage[0] == 0);
+		require(fake_mcctrl_futex_last_put_q == &fake_mcctrl_futex_q);
+		mix_signed(&digest, fake_mcctrl_futex_log_stage[0]);
+
+		reset_fake_work();
+		fake_mcctrl_futex_uti.q = &fake_mcctrl_futex_q;
+		fake_mcctrl_futex_unqueue_ret[0] = 1;
+		fake_mcctrl_futex_queue_ret[0] = 0;
+		ret = mcctrl_futex_wait_body_result(
+			&uaddr, 1, 0x69, 99, 0x79, &fake_mcctrl_futex_uti,
+			fake_mcctrl_futex_get_q, fake_mcctrl_futex_get_resp,
+			fake_mcctrl_futex_get_cpu, fake_mcctrl_futex_prepare_q,
+			fake_mcctrl_futex_wait_setup,
+			fake_mcctrl_futex_wait_queue,
+			fake_mcctrl_futex_unqueue,
+			fake_mcctrl_futex_put_q_key,
+			fake_mcctrl_futex_log_event);
+		require(ret == -ETIMEDOUT);
+		require(fake_mcctrl_futex_log_stage[0] == 1);
+		require(fake_mcctrl_futex_last_timeout == 99);
+		mix_signed(&digest, ret);
+
+		reset_fake_work();
+		fake_mcctrl_futex_uti.q = &fake_mcctrl_futex_q;
+		fake_mcctrl_futex_unqueue_ret[0] = 1;
+		fake_mcctrl_futex_queue_ret[0] = -512;
+		ret = mcctrl_futex_wait_body_result(
+			&uaddr, 1, 0x6a, 0, 0x7a, &fake_mcctrl_futex_uti,
+			fake_mcctrl_futex_get_q, fake_mcctrl_futex_get_resp,
+			fake_mcctrl_futex_get_cpu, fake_mcctrl_futex_prepare_q,
+			fake_mcctrl_futex_wait_setup,
+			fake_mcctrl_futex_wait_queue,
+			fake_mcctrl_futex_unqueue,
+			fake_mcctrl_futex_put_q_key,
+			fake_mcctrl_futex_log_event);
+		require(ret == -EINTR);
+		require(fake_mcctrl_futex_log_stage[0] == 2);
+		mix_signed(&digest, ret);
+
+		reset_fake_work();
+		fake_mcctrl_futex_uti.q = &fake_mcctrl_futex_q;
+		fake_mcctrl_futex_unqueue_ret[0] = 1;
+		fake_mcctrl_futex_queue_ret[0] = 5;
+		fake_mcctrl_futex_setup_ret[1] = -6;
+		ret = mcctrl_futex_wait_body_result(
+			&uaddr, 1, 0x6b, 0, 0x7b, &fake_mcctrl_futex_uti,
+			fake_mcctrl_futex_get_q, fake_mcctrl_futex_get_resp,
+			fake_mcctrl_futex_get_cpu, fake_mcctrl_futex_prepare_q,
+			fake_mcctrl_futex_wait_setup,
+			fake_mcctrl_futex_wait_queue,
+			fake_mcctrl_futex_unqueue,
+			fake_mcctrl_futex_put_q_key,
+			fake_mcctrl_futex_log_event);
+		require(ret == -6);
+		require(fake_mcctrl_futex_setup_calls == 2);
+		require(fake_mcctrl_futex_put_key_calls == 1);
+		mix_signed(&digest, fake_mcctrl_futex_setup_calls);
+	}
+
+	{
+		struct fake_wake_body_bucket bucket = { 0 };
+		struct fake_futex_q first = { 0 };
+		struct fake_futex_q second = { 0 };
+		struct fake_futex_q third = { 0 };
+		struct futex_key key = { { 0 } };
+		int ret;
+
+		plist_head_init(&bucket.chain);
+		bucket.lock = 0x51525354UL;
+		plist_node_init(&first.list, 1);
+		plist_node_init(&second.list, 2);
+		plist_node_init(&third.list, 3);
+		first.lock_ptr = (void *)0x1111UL;
+		second.lock_ptr = (void *)0x2222UL;
+		third.lock_ptr = (void *)0x3333UL;
+		first.key.opaque[0] = second.key.opaque[0] = 0x1111UL;
+		first.key.opaque[1] = second.key.opaque[1] = 0x2222UL;
+		first.key.opaque[2] = second.key.opaque[2] = 0x10UL;
+		third.key.opaque[0] = 0x3333UL;
+		third.key.opaque[1] = 0x4444UL;
+		third.key.opaque[2] = 0x20UL;
+		first.bitset = 0x1;
+		second.bitset = 0x4;
+		third.bitset = 0x1;
+		first.linux_cpu = 11;
+		second.linux_cpu = 22;
+		third.linux_cpu = 33;
+		plist_add(&first.list, &bucket.chain);
+		plist_add(&second.list, &bucket.chain);
+		plist_add(&third.list, &bucket.chain);
+
+		fake_mcctrl_body_reset();
+		fake_mcctrl_body_source_bucket = &bucket;
+		ret = mcctrl_futex_wake_body_result(0x505000UL, 1, 1,
+			0x1, (unsigned long)&key, 0xfeedbabeUL,
+			(unsigned long)&fake_mcctrl_futex_uti,
+			offsetof(struct fake_wake_body_bucket, lock),
+			offsetof(struct fake_wake_body_bucket, chain),
+			offsetof(struct fake_futex_q, list),
+			offsetof(struct fake_futex_q, key),
+			offsetof(struct fake_futex_q, bitset),
+			offsetof(struct futex_key, opaque[0]),
+			offsetof(struct futex_key, opaque[1]),
+			offsetof(struct futex_key, opaque[2]),
+			fake_mcctrl_body_get_key,
+			fake_mcctrl_body_hash_key,
+			fake_mcctrl_body_wake_lock,
+			fake_mcctrl_body_wake_unlock,
+			fake_mcctrl_body_put_key,
+			fake_mcctrl_body_wake_entry);
+		require(ret == 1);
+		require(fake_mcctrl_body_get_key_calls == 1);
+		require(fake_mcctrl_body_hash_calls == 1);
+		require(fake_mcctrl_body_wake_lock_calls == 1);
+		require(fake_mcctrl_body_wake_unlock_calls == 1);
+		require(fake_mcctrl_body_put_key_calls == 1);
+		require(fake_mcctrl_body_wake_log[0] == 11);
+		require(plist_node_empty(&first.list));
+		require(!plist_node_empty(&second.list));
+		mix_signed(&digest, ret);
+		mix_signed(&digest, fake_mcctrl_body_wake_log[0]);
+		mix(&digest, fake_mcctrl_body_last_irqstate);
+	}
+
+	{
+		struct fake_wake_body_bucket source = { 0 };
+		struct fake_wake_body_bucket target = { 0 };
+		struct fake_futex_q first = { 0 };
+		struct fake_futex_q second = { 0 };
+		struct futex_key key1 = { { 0 } };
+		struct futex_key key2 = { { 0 } };
+		int ret;
+
+		plist_head_init(&source.chain);
+		plist_head_init(&target.chain);
+		source.lock = 0x61626364UL;
+		target.lock = 0x71727374UL;
+		plist_node_init(&first.list, 1);
+		plist_node_init(&second.list, 2);
+		first.lock_ptr = (void *)0x1111UL;
+		second.lock_ptr = (void *)0x2222UL;
+		first.key.opaque[0] = 0x1111UL;
+		first.key.opaque[1] = 0x2222UL;
+		first.key.opaque[2] = 0x10UL;
+		second.key.opaque[0] = 0x3333UL;
+		second.key.opaque[1] = 0x4444UL;
+		second.key.opaque[2] = 0x20UL;
+		first.linux_cpu = 44;
+		second.linux_cpu = 55;
+		plist_add(&first.list, &source.chain);
+		plist_add(&second.list, &target.chain);
+
+		fake_mcctrl_body_reset();
+		fake_mcctrl_body_source_bucket = &source;
+		fake_mcctrl_body_target_bucket = &target;
+		fake_mcctrl_body_atomic_seq[0] = 1;
+		ret = mcctrl_futex_wake_op_body_result(0x7000UL, 1,
+			0x8000UL, 1, 1, 0x5a, (unsigned long)&key1,
+			(unsigned long)&key2, 0xfeedbabeUL,
+			(unsigned long)&fake_mcctrl_futex_uti,
+			offsetof(struct fake_wake_body_bucket, lock),
+			offsetof(struct fake_wake_body_bucket, chain),
+			offsetof(struct fake_futex_q, list),
+			offsetof(struct fake_futex_q, key),
+			offsetof(struct fake_futex_q, bitset),
+			offsetof(struct futex_key, opaque[0]),
+			offsetof(struct futex_key, opaque[1]),
+			offsetof(struct futex_key, opaque[2]),
+			fake_mcctrl_body_get_key,
+			fake_mcctrl_body_hash_key,
+			fake_mcctrl_body_hb_lock,
+			fake_mcctrl_body_hb_unlock,
+			fake_mcctrl_body_atomic_op,
+			fake_mcctrl_body_put_key,
+			fake_mcctrl_body_wake_entry);
+		require(ret == 2);
+		require(fake_mcctrl_body_hb_lock_calls == 2);
+		require(fake_mcctrl_body_hb_unlock_calls == 2);
+		require(fake_mcctrl_body_atomic_calls == 1);
+		require(fake_mcctrl_body_put_key_calls == 2);
+		require(fake_mcctrl_body_wake_log[0] == 44);
+		require(fake_mcctrl_body_wake_log[1] == 55);
+		require(plist_node_empty(&first.list));
+		require(plist_node_empty(&second.list));
+		mix_signed(&digest, ret);
+		mix_signed(&digest, fake_mcctrl_body_wake_log[1]);
+	}
+
+	{
+		struct fake_wake_body_bucket source = { 0 };
+		struct fake_wake_body_bucket target = { 0 };
+		struct fake_futex_q first = { 0 };
+		struct fake_futex_q second = { 0 };
+		struct fake_futex_q third = { 0 };
+		struct futex_key key1 = { { 0 } };
+		struct futex_key key2 = { { 0 } };
+		struct fake_mcctrl_futex_requeue_ctx ctx = {
+			.uti_info = &fake_mcctrl_futex_uti,
+		};
+		unsigned int cmpval = 0x12345678U;
+		int ret;
+
+		plist_head_init(&source.chain);
+		plist_head_init(&target.chain);
+		source.lock = 0x81828384UL;
+		target.lock = 0x91929394UL;
+		plist_node_init(&first.list, 1);
+		plist_node_init(&second.list, 2);
+		plist_node_init(&third.list, 3);
+		first.lock_ptr = (void *)&source.lock;
+		second.lock_ptr = (void *)&source.lock;
+		third.lock_ptr = (void *)&source.lock;
+		first.key.opaque[0] = second.key.opaque[0] =
+			third.key.opaque[0] = 0x1111UL;
+		first.key.opaque[1] = second.key.opaque[1] =
+			third.key.opaque[1] = 0x2222UL;
+		first.key.opaque[2] = second.key.opaque[2] =
+			third.key.opaque[2] = 0x10UL;
+		first.linux_cpu = 66;
+		second.linux_cpu = 77;
+		third.linux_cpu = 88;
+		plist_add(&first.list, &source.chain);
+		plist_add(&second.list, &source.chain);
+		plist_add(&third.list, &source.chain);
+
+		fake_mcctrl_body_reset();
+		fake_mcctrl_body_source_bucket = &source;
+		fake_mcctrl_body_target_bucket = &target;
+		fake_mcctrl_body_curval = cmpval;
+		ret = mcctrl_futex_requeue_body_result(0x1000UL, 1,
+			0x2000UL, 1, 2, (unsigned long)&cmpval,
+			(unsigned long)&key1, (unsigned long)&key2,
+			(unsigned long)&ctx, 0xfeedbabeUL,
+			offsetof(struct fake_wake_body_bucket, lock),
+			offsetof(struct fake_wake_body_bucket, chain),
+			offsetof(struct fake_futex_q, list),
+			offsetof(struct fake_futex_q, key),
+			offsetof(struct futex_key, opaque[0]),
+			offsetof(struct futex_key, opaque[1]),
+			offsetof(struct futex_key, opaque[2]),
+			offsetof(struct fake_mcctrl_futex_requeue_ctx, hb1),
+			offsetof(struct fake_mcctrl_futex_requeue_ctx, hb2),
+			offsetof(struct fake_mcctrl_futex_requeue_ctx, key2),
+			fake_mcctrl_body_get_key,
+			fake_mcctrl_body_hash_key,
+			fake_mcctrl_body_hb_lock,
+			fake_mcctrl_body_hb_unlock,
+			fake_mcctrl_body_get_value,
+			fake_mcctrl_body_put_key,
+			fake_mcctrl_body_drop_key_refs,
+			fake_mcctrl_body_requeue_wake,
+			fake_mcctrl_body_requeue_move);
+		require(ret == 3);
+		require(fake_mcctrl_body_get_value_calls == 1);
+		require(fake_mcctrl_body_wake_calls == 1);
+		require(fake_mcctrl_body_requeue_calls == 2);
+		require(fake_mcctrl_body_drop_key_calls == 2);
+		require(fake_mcctrl_body_key_ref_calls == 2);
+		require(fake_mcctrl_body_wake_log[0] == 66);
+		require(fake_mcctrl_body_requeue_log[0] == 77);
+		require(fake_mcctrl_body_requeue_log[1] == 88);
+		require(ctx.hb1 == &source);
+		require(ctx.hb2 == &target);
+		require(ctx.key2 == &key2);
+		require(plist_node_empty(&first.list));
+		require(second.lock_ptr == &target.lock);
+		require(third.lock_ptr == &target.lock);
+		require(second.key.opaque[0] == key2.opaque[0]);
+		require(third.key.opaque[1] == key2.opaque[1]);
+		mix_signed(&digest, ret);
+		mix_signed(&digest, fake_mcctrl_body_requeue_log[1]);
+		mix_signed(&digest, fake_mcctrl_body_drop_key_calls);
 	}
 
 	{
@@ -108043,6 +114273,1283 @@ int main(void)
 	}
 
 	reset_fake_work();
+	{
+		struct prepare_dma_desc desc;
+		unsigned long user_pa = 0;
+
+		desc.size = 0x6000UL;
+		desc.pa = (unsigned long)&user_pa;
+		fake_control_get_order_result = 5;
+		fake_control_alloc_pages_result = 0x12345000UL;
+		fake_control_region_virt_to_phys_result = 0x54321000UL;
+		require(fake_control_pin_region_call(&desc) == 0);
+		require(fake_control_copy_from_calls == 1);
+		require(fake_control_copy_from_size == sizeof(desc));
+		require(fake_control_get_order_calls == 1);
+		require(fake_control_get_order_size == desc.size);
+		require(fake_control_alloc_pages_calls == 1);
+		require(fake_control_alloc_pages_order == 5);
+		require(fake_control_region_virt_to_phys_calls == 1);
+		require(fake_control_region_virt_to_phys_ptr ==
+				(void *)0x12345000UL);
+		require(fake_control_copy_to_calls == 1);
+		require(fake_control_copy_to_dst == &user_pa);
+		require(fake_control_copy_to_size == sizeof(user_pa));
+		require(user_pa == 0x54321000UL);
+		mix(&digest, user_pa);
+	}
+
+	reset_fake_work();
+	{
+		struct prepare_dma_desc desc;
+
+		desc.size = 0x1000UL;
+		desc.pa = 0;
+		fake_control_copy_from_fail = 1;
+		require(fake_control_pin_region_call(&desc) == -14);
+		require(fake_control_copy_from_calls == 1);
+		require(fake_control_alloc_pages_calls == 0);
+	}
+
+	reset_fake_work();
+	{
+		struct prepare_dma_desc desc;
+
+		desc.size = 0;
+		desc.pa = 0x1000UL;
+		fake_control_alloc_pages_result = 0;
+		require(fake_control_pin_region_call(&desc) == -12);
+		require(fake_control_get_order_calls == 0);
+		require(fake_control_alloc_pages_order == 4);
+		require(fake_control_copy_to_calls == 0);
+	}
+
+	reset_fake_work();
+	{
+		struct prepare_dma_desc desc;
+		unsigned long user_pa = 0;
+
+		desc.size = 0x2000UL;
+		desc.pa = (unsigned long)&user_pa;
+		fake_control_copy_to_fail = 1;
+		require(fake_control_pin_region_call(&desc) == -14);
+		require(fake_control_alloc_pages_calls == 1);
+		require(fake_control_region_virt_to_phys_calls == 1);
+		require(user_pa == 0);
+	}
+
+	reset_fake_work();
+	require(mcctrl_control_pin_region_body_result(
+		NULL, 16, 12, NULL, fake_control_get_order,
+		fake_control_alloc_pages, fake_control_region_virt_to_phys,
+		fake_control_copy_to_user) == -22);
+	require(fake_control_copy_from_calls == 0);
+
+	reset_fake_work();
+	{
+		struct free_dma_desc desc;
+
+		desc.pa = 0xfeed0000UL;
+		desc.size = 0x8000UL;
+		fake_control_get_order_result = 6;
+		fake_control_region_phys_to_virt_result = 0xbeef0000UL;
+		require(fake_control_free_region_call(&desc) == 0);
+		require(fake_control_copy_from_calls == 1);
+		require(fake_control_get_order_calls == 1);
+		require(fake_control_region_phys_to_virt_calls == 1);
+		require(fake_control_region_phys_to_virt_phys == desc.pa);
+		require(fake_control_free_pages_calls == 1);
+		require(fake_control_free_pages_addr == 0xbeef0000UL);
+		require(fake_control_free_pages_order == 6);
+		mix(&digest, fake_control_free_pages_addr);
+	}
+
+	reset_fake_work();
+	{
+		struct free_dma_desc desc;
+
+		desc.pa = 0;
+		desc.size = 0;
+		require(fake_control_free_region_call(&desc) == 0);
+		require(fake_control_get_order_calls == 0);
+		require(fake_control_region_phys_to_virt_calls == 0);
+		require(fake_control_free_pages_calls == 0);
+	}
+
+	reset_fake_work();
+	{
+		struct sys_mount_desc desc;
+		char dev[] = "dev0";
+		char dir[] = "/mnt";
+		char type[] = "mck";
+		int data = 0x64617461;
+
+		desc.dev_name = dev;
+		desc.dir_name = dir;
+		desc.type_name = type;
+		desc.flags = 0x123UL;
+		desc.data = &data;
+		fake_control_mount_ret = -37;
+		require(fake_control_sys_mount_call(&desc) == -37);
+		require(fake_control_copy_from_calls == 1);
+		require(fake_control_copy_from_size == sizeof(desc));
+		require(fake_control_prepare_creds_calls == 1);
+		require(fake_control_cap_raise_calls == 1);
+		require(fake_control_override_creds_calls == 1);
+		require(fake_control_mount_calls == 1);
+		require(fake_control_mount_dev == dev);
+		require(fake_control_mount_dir == dir);
+		require(fake_control_mount_type == type);
+		require(fake_control_mount_flags == 0x123UL);
+		require(fake_control_mount_data == &data);
+		require(fake_control_revert_creds_calls == 1);
+		require(fake_control_put_cred_calls == 1);
+		require(fake_control_prepare_creds_order == 1);
+		require(fake_control_cap_raise_order == 2);
+		require(fake_control_override_creds_order == 3);
+		require(fake_control_mount_order == 4);
+		require(fake_control_revert_creds_order == 5);
+		require(fake_control_put_cred_order == 6);
+		mix_signed(&digest, fake_control_mount_ret);
+	}
+
+	reset_fake_work();
+	{
+		struct sys_mount_desc desc;
+
+		memset(&desc, 0, sizeof(desc));
+		fake_control_copy_from_fail = 1;
+		require(fake_control_sys_mount_call(&desc) == -14);
+		require(fake_control_copy_from_calls == 1);
+		require(fake_control_prepare_creds_calls == 0);
+	}
+
+	reset_fake_work();
+	{
+		struct sys_mount_desc desc;
+
+		memset(&desc, 0, sizeof(desc));
+		fake_control_prepare_creds_fail = 1;
+		require(fake_control_sys_mount_call(&desc) == -12);
+		require(fake_control_prepare_creds_calls == 1);
+		require(fake_control_cap_raise_calls == 0);
+		require(fake_control_put_cred_calls == 0);
+	}
+
+	reset_fake_work();
+	{
+		struct sys_umount_desc desc;
+		char dir[] = "/mnt";
+
+		desc.dir_name = dir;
+		fake_control_umount_ret = -16;
+		require(fake_control_sys_umount_call(&desc, 1) == -16);
+		require(fake_control_umount_calls == 1);
+		require(fake_control_umount_dir == dir);
+		require(fake_control_umount_flags == 1);
+		require(fake_control_umount_order == 4);
+		require(fake_control_put_cred_order == 6);
+		mix_signed(&digest, fake_control_umount_ret);
+	}
+
+	reset_fake_work();
+	{
+		struct sys_unshare_desc desc;
+
+		desc.unshare_flags = 0x7fUL;
+		fake_control_unshare_ret = -33;
+		require(fake_control_sys_unshare_call(&desc) == -33);
+		require(fake_control_unshare_calls == 1);
+		require(fake_control_unshare_flags == 0x7fUL);
+		require(fake_control_unshare_order == 4);
+		require(fake_control_put_cred_order == 6);
+		mix_signed(&digest, fake_control_unshare_ret);
+	}
+
+	reset_fake_work();
+	{
+		struct release_user_space_desc desc;
+
+		desc.user_start = 0x4000UL;
+		desc.user_end = 0x4c00UL;
+		fake_control_clear_pte_ret = -44;
+		require(fake_control_release_user_space_call(&desc) == -44);
+		require(fake_control_copy_from_calls == 1);
+		require(fake_control_clear_pte_calls == 1);
+		require(fake_control_clear_pte_start == 0x4000UL);
+		require(fake_control_clear_pte_len == 0xc00UL);
+		mix(&digest, fake_control_clear_pte_len);
+	}
+
+	reset_fake_work();
+	{
+		struct release_user_space_desc desc;
+
+		memset(&desc, 0, sizeof(desc));
+		fake_control_copy_from_fail = 1;
+		require(fake_control_release_user_space_call(&desc) == -14);
+		require(fake_control_clear_pte_calls == 0);
+	}
+
+	reset_fake_work();
+	require(fake_control_perf_num_call(0x6100UL, 42) == 0);
+	require(fake_control_validate_os_calls == 1);
+	require(fake_control_validate_os_seen == 0x6100UL);
+	require(fake_control_get_usrdata_calls == 1);
+	require(fake_control_perf_set_num_calls == 1);
+	require(fake_control_perf_set_num_usrdata ==
+			&fake_control_usrdata_token);
+	require(fake_control_perf_set_num_value == 42);
+	mix(&digest, fake_control_perf_set_num_value);
+
+	reset_fake_work();
+	fake_control_validate_os_ret = -1;
+	require(fake_control_perf_num_call(0x6101UL, 11) == -22);
+	require(fake_control_validate_os_calls == 1);
+	require(fake_control_get_usrdata_calls == 0);
+	require(fake_control_perf_set_num_calls == 0);
+
+	reset_fake_work();
+	fake_control_usrdata_missing = 1;
+	require(fake_control_perf_num_call(0x6102UL, 12) == -22);
+	require(fake_control_log_calls == 1);
+	require(fake_control_log_stage == 0);
+	require(fake_control_perf_set_num_calls == 0);
+
+	reset_fake_work();
+	require(fake_control_perf_num_call(0, 12) == -22);
+	require(fake_control_validate_os_calls == 0);
+	require(fake_control_get_usrdata_calls == 0);
+
+	reset_fake_work();
+	require(fake_control_perf_set_call(0x6300UL) == 2);
+	require(fake_control_validate_os_calls == 1);
+	require(fake_control_get_usrdata_calls == 1);
+	require(fake_control_get_cpu_info_calls == 1);
+	require(fake_control_cpu_count_calls == 1);
+	require(fake_control_perf_event_num_calls == 1);
+	require(fake_control_perf_alloc_set_calls == 2);
+	require(fake_control_perf_send_calls == 8);
+	require(fake_control_perf_free_calls == 2);
+	require(fake_control_perf_set_num_calls == 1);
+	require(fake_control_perf_set_num_value == 2);
+	require(fake_control_perf_descs[0].ctrl_type == PERF_CTRL_SET);
+	require(fake_control_perf_descs[0].target_cntr == 0);
+	require(fake_control_perf_descs[0].config == 0x101UL);
+	require(fake_control_perf_descs[0].exclude_user == 1);
+	require(fake_control_perf_descs[1].target_cntr == 1);
+	require(fake_control_perf_descs[1].exclude_kernel == 1);
+	mix_signed(&digest, fake_control_perf_send_calls);
+	mix(&digest, fake_control_perf_descs[1].config);
+
+	reset_fake_work();
+	fake_control_perf_copy_fail_index = 0;
+	require(fake_control_perf_set_call(0x6301UL) == -22);
+	require(fake_control_perf_alloc_set_calls == 1);
+	require(fake_control_perf_send_calls == 0);
+	require(fake_control_perf_free_calls == 0);
+
+	reset_fake_work();
+	fake_control_perf_send_fail_call = 2;
+	fake_control_perf_send_ret = -19;
+	fake_control_perf_send_need_free = 1;
+	require(fake_control_perf_set_call(0x6302UL) == -19);
+	require(fake_control_perf_send_calls == 2);
+	require(fake_control_perf_free_calls == 1);
+
+	reset_fake_work();
+	require(fake_control_perf_get_call(0x6400UL) == 0);
+	require(fake_control_perf_alloc_desc_calls == 2);
+	require(fake_control_perf_init_get_calls == 2);
+	require(fake_control_perf_send_calls == 8);
+	require(fake_control_perf_desc_read_calls == 8);
+	require(fake_control_copy_to_calls == 2);
+	require(fake_control_perf_user_values[0] == 56);
+	require(fake_control_perf_user_values[1] == 72);
+	mix(&digest, fake_control_perf_user_values[0]);
+	mix(&digest, fake_control_perf_user_values[1]);
+
+	reset_fake_work();
+	fake_control_perf_copyout_fail = 1;
+	require(fake_control_perf_get_call(0x6401UL) == -22);
+	require(fake_control_perf_log_calls == 1);
+	require(fake_control_perf_log_stage == 2);
+	require(fake_control_perf_free_calls == 1);
+
+	reset_fake_work();
+	require(fake_control_perf_enable_disable_call(
+		0x6500UL, PERF_CTRL_ENABLE) == 0);
+	require(fake_control_perf_init_mask_calls == 1);
+	require(fake_control_perf_init_mask_type == PERF_CTRL_ENABLE);
+	require(fake_control_perf_init_mask_value == 3);
+	require(fake_control_perf_send_calls == 4);
+	require(fake_control_perf_free_calls == 1);
+	mix(&digest, fake_control_perf_init_mask_value);
+
+	reset_fake_work();
+	require(fake_control_perf_enable_disable_call(
+		0x6501UL, PERF_CTRL_DISABLE) == 0);
+	require(fake_control_perf_init_mask_type == PERF_CTRL_DISABLE);
+	require(fake_control_perf_send_calls == 4);
+
+	reset_fake_work();
+	fake_control_perf_send_fail_call = 1;
+	fake_control_perf_send_ret = -19;
+	fake_control_perf_send_need_free = 1;
+	require(fake_control_perf_enable_disable_call(
+		0x6502UL, PERF_CTRL_ENABLE) == -22);
+	require(fake_control_perf_send_calls == 1);
+	require(fake_control_perf_free_calls == 1);
+
+	reset_fake_work();
+	fake_control_perf_desc_err_after_cpu = 1;
+	fake_control_perf_desc_err_value = -7;
+	require(fake_control_perf_enable_disable_call(
+		0x6503UL, PERF_CTRL_ENABLE) == -7);
+	require(fake_control_perf_send_calls == 2);
+	require(fake_control_perf_free_calls == 1);
+
+	reset_fake_work();
+	require(fake_control_perf_destroy_call(0x6200UL) == 0);
+	require(fake_control_perf_disable_calls == 1);
+	require(fake_control_perf_disable_os == 0x6200UL);
+	require(fake_control_perf_num_zero_calls == 1);
+	require(fake_control_perf_num_zero_os == 0x6200UL);
+	mix_signed(&digest, fake_control_perf_disable_calls);
+
+	reset_fake_work();
+	require(mcctrl_control_perf_destroy_body_result(
+		0x6201UL, NULL, fake_control_perf_num_zero) == -22);
+	require(fake_control_perf_disable_calls == 0);
+	require(fake_control_perf_num_zero_calls == 0);
+
+	reset_fake_work();
+	require(fake_control_getrusage_call(0x7200UL) == 0);
+	require(fake_control_getrusage_calls == 1);
+	require(fake_control_getrusage_os == 0x7200UL);
+	require(fake_control_validate_os_calls == 1);
+	require(fake_control_copy_from_calls == 1);
+	require(fake_control_copy_from_size ==
+			sizeof(struct mcctrl_ioctl_getrusage_desc));
+	require(fake_control_getrusage_alloc_calls == 1);
+	require(fake_control_getrusage_alloc_size ==
+			sizeof(struct fake_ihk_os_rusage));
+	require(fake_control_copy_to_calls == 1);
+	require(fake_control_copy_to_size == sizeof(fake_control_rusage_user_out));
+	require(fake_control_getrusage_free_calls == 1);
+	require(fake_control_rusage_user_out.memory_stat_rss[0] == 11);
+	require(fake_control_rusage_user_out.memory_stat_rss[1] == ~1UL);
+	require(fake_control_rusage_user_out.memory_stat_mapped_file[1] == 17);
+	require(fake_control_rusage_user_out.memory_max_usage == 1000);
+	require(fake_control_rusage_user_out.memory_kmem_usage == 55);
+	require(fake_control_rusage_user_out.memory_kmem_max_usage == 66);
+	require(fake_control_rusage_user_out.memory_numa_stat[2] == 303);
+	require(fake_control_rusage_user_out.cpuacct_usage_percpu[0] == 200);
+	require(fake_control_rusage_user_out.cpuacct_usage_percpu[1] == 6);
+	require(fake_control_rusage_user_out.cpuacct_usage == 206);
+	require(fake_control_rusage_user_out.cpuacct_stat_user == 1);
+	require(fake_control_rusage_user_out.cpuacct_stat_system == 1);
+	require(fake_control_rusage_user_out.num_threads == 5);
+	require(fake_control_rusage_user_out.max_num_threads == 9);
+	mix(&digest, fake_control_rusage_user_out.cpuacct_usage);
+	mix(&digest, fake_control_rusage_user_out.memory_numa_stat[2]);
+
+	reset_fake_work();
+	fake_control_validate_os_ret = -1;
+	require(fake_control_getrusage_call(0x7201UL) == -22);
+	require(fake_control_getrusage_calls == 1);
+	require(fake_control_copy_from_calls == 0);
+	require(fake_control_getrusage_alloc_calls == 0);
+	mix_signed(&digest, fake_control_validate_os_ret);
+
+	reset_fake_work();
+	fake_control_copy_from_fail = 1;
+	require(fake_control_getrusage_call(0x7202UL) == -1);
+	require(fake_control_getrusage_log_calls == 1);
+	require(fake_control_getrusage_log_stage == 0);
+	require(fake_control_getrusage_alloc_calls == 0);
+	mix_signed(&digest, fake_control_getrusage_log_stage);
+
+	reset_fake_work();
+	fake_control_getrusage_alloc_fail = 1;
+	require(fake_control_getrusage_call(0x7203UL) == -12);
+	require(fake_control_getrusage_log_stage == 1);
+	require(fake_control_getrusage_free_calls == 0);
+	mix_signed(&digest, fake_control_getrusage_log_stage);
+
+	reset_fake_work();
+	fake_control_rusage_desc.size_rusage =
+		sizeof(fake_control_rusage_user_out) + 1;
+	require(fake_control_getrusage_call(0x7204UL) == -22);
+	require(fake_control_getrusage_log_stage == 2);
+	require(fake_control_getrusage_log_size ==
+			sizeof(fake_control_rusage_user_out) + 1);
+	require(fake_control_getrusage_log_max ==
+			sizeof(fake_control_rusage_user_out));
+	require(fake_control_getrusage_free_calls == 1);
+	require(fake_control_copy_to_calls == 0);
+	mix(&digest, fake_control_getrusage_log_size);
+
+	reset_fake_work();
+	fake_control_copy_to_fail = 1;
+	require(fake_control_getrusage_call(0x7205UL) == -1);
+	require(fake_control_getrusage_log_stage == 3);
+	require(fake_control_getrusage_free_calls == 1);
+	mix_signed(&digest, fake_control_getrusage_log_stage);
+
+	reset_fake_work();
+	require(fake_control_transfer_call(0x7300UL) == 0);
+	require(fake_control_copy_from_calls == 2);
+	require(fake_control_copy_to_calls == 0);
+	require(fake_control_os_to_dev_calls == 4);
+	require(fake_control_map_memory_calls == 1);
+	require(fake_control_map_memory_phys == 0x8800UL);
+	require(fake_control_map_memory_size == 16);
+	require(fake_control_map_virtual_calls == 1);
+	require(fake_control_map_virtual_phys == 0x9800UL);
+	require(fake_control_unmap_virtual_calls == 1);
+	require(fake_control_unmap_virtual_ptr == fake_control_remote_buf);
+	require(fake_control_unmap_memory_calls == 1);
+	require(!memcmp(fake_control_remote_buf, fake_control_user_buf, 16));
+	mix(&digest, fake_control_map_virtual_phys);
+
+	reset_fake_work();
+	fake_control_transfer_desc.direction = MCEXEC_UP_TRANSFER_FROM_REMOTE;
+	require(fake_control_transfer_call(0x7301UL) == 0);
+	require(fake_control_copy_from_calls == 1);
+	require(fake_control_copy_to_calls == 1);
+	require(!memcmp(fake_control_user_buf, "remote-source", 14));
+	mix(&digest, fake_control_copy_to_size);
+
+	reset_fake_work();
+	fake_control_transfer_desc.direction = 9;
+	require(fake_control_transfer_call(0x7302UL) == -22);
+	require(fake_control_transfer_log_calls == 1);
+	require(fake_control_transfer_log_stage == 1);
+	require(fake_control_unmap_virtual_calls == 1);
+	require(fake_control_unmap_memory_calls == 1);
+	mix_signed(&digest, fake_control_transfer_log_stage);
+
+	reset_fake_work();
+	fake_control_map_virtual_fail = 1;
+	require(fake_control_transfer_call(0x7303UL) == -14);
+	require(fake_control_transfer_log_calls == 1);
+	require(fake_control_transfer_log_stage == 0);
+	require(fake_control_unmap_virtual_calls == 0);
+	require(fake_control_unmap_memory_calls == 0);
+	mix_signed(&digest, fake_control_transfer_log_stage);
+
+	reset_fake_work();
+	require(fake_control_load_call(0x7400UL) == 0);
+	require(fake_control_copy_from_calls == 1);
+	require(fake_control_copy_to_calls == 1);
+	require(fake_control_load_log_calls == 1);
+	require(fake_control_load_log_rpm == fake_control_remote_buf);
+	require(fake_control_load_log_size == 14);
+	require(fake_control_map_memory_phys == 0x9900UL);
+	require(fake_control_map_virtual_phys == 0xa900UL);
+	require(fake_control_unmap_virtual_calls == 1);
+	require(fake_control_unmap_memory_calls == 1);
+	require(!memcmp(fake_control_user_buf, "remote-source", 14));
+	mix(&digest, fake_control_load_log_size);
+
+	reset_fake_work();
+	fake_control_copy_to_fail = 1;
+	require(fake_control_load_call(0x7401UL) == -14);
+	require(fake_control_load_log_calls == 1);
+	require(fake_control_unmap_virtual_calls == 0);
+	require(fake_control_unmap_memory_calls == 0);
+	mix_signed(&digest, fake_control_copy_to_fail);
+
+	reset_fake_work();
+	require(fake_control_ret_syscall_call(0x7410UL) == 0);
+	require(fake_control_get_usrdata_calls == 1);
+	require(fake_control_copy_from_calls == 2);
+	require(fake_control_copy_from_src == fake_control_user_buf);
+	require(fake_control_copy_from_size == 16);
+	require(fake_control_current_pid_calls == 1);
+	require(fake_control_get_ppd_calls == 1);
+	require(fake_control_current_task_calls == 1);
+	require(fake_control_get_ptd_calls == 1);
+	require(fake_control_current_tid_calls == 1);
+	require(fake_control_ptd_data_calls == 1);
+	require(fake_control_os_to_dev_calls == 1);
+	require(fake_control_map_memory_calls == 1);
+	require(fake_control_map_memory_phys == 0x8a00UL);
+	require(fake_control_map_virtual_calls == 1);
+	require(fake_control_map_virtual_phys == 0x9a00UL);
+	require(fake_control_unmap_virtual_calls == 1);
+	require(fake_control_unmap_memory_calls == 1);
+	require(!memcmp(fake_control_remote_buf, fake_control_user_buf, 16));
+	require(fake_control_return_syscall_calls == 1);
+	require(fake_control_return_syscall_os == 0x7410UL);
+	require(fake_control_return_syscall_ppd == &fake_control_ppd_token);
+	require(fake_control_return_syscall_packet ==
+			&fake_control_request_packet);
+	require(fake_control_return_syscall_ret == -37);
+	require(fake_control_return_syscall_tid ==
+			fake_control_current_tid_value);
+	require(fake_control_release_packet_calls == 1);
+	require(fake_control_put_ptd_calls == 2);
+	require(fake_control_put_ppd_calls == 1);
+	require(fake_control_release_packet_order == 1);
+	require(fake_control_request_put_ptd_order == 3);
+	require(fake_control_request_put_ppd_order == 4);
+	mix_signed(&digest, fake_control_return_syscall_ret);
+	mix_signed(&digest, fake_control_release_packet_order);
+
+	reset_fake_work();
+	fake_control_usrdata_missing = 1;
+	require(fake_control_ret_syscall_call(0x7411UL) == -22);
+	require(fake_control_get_usrdata_calls == 1);
+	require(fake_control_copy_from_calls == 0);
+	require(fake_control_ret_log_calls == 1);
+	require(fake_control_ret_log_stage[0] == 0);
+	require(fake_control_ret_log_pid[0] == 0);
+	require(fake_control_ret_log_tid[0] == 0);
+	require(fake_control_get_ppd_calls == 0);
+	mix_signed(&digest, fake_control_ret_log_stage[0]);
+
+	reset_fake_work();
+	fake_control_copy_from_fail = 1;
+	require(fake_control_ret_syscall_call(0x7412UL) == -14);
+	require(fake_control_get_usrdata_calls == 1);
+	require(fake_control_copy_from_calls == 1);
+	require(fake_control_get_ppd_calls == 0);
+	require(fake_control_release_packet_calls == 0);
+
+	reset_fake_work();
+	fake_control_missing_ppd = 1;
+	require(fake_control_ret_syscall_call(0x7413UL) == -22);
+	require(fake_control_current_pid_calls == 1);
+	require(fake_control_get_ppd_calls == 1);
+	require(fake_control_ret_log_calls == 1);
+	require(fake_control_ret_log_stage[0] == 1);
+	require(fake_control_ret_log_pid[0] ==
+			fake_control_current_pid_value);
+	require(fake_control_get_ptd_calls == 0);
+	require(fake_control_put_ppd_calls == 0);
+	mix_signed(&digest, fake_control_ret_log_stage[0]);
+
+	reset_fake_work();
+	fake_control_missing_ptd = 1;
+	require(fake_control_ret_syscall_call(0x7414UL) == -22);
+	require(fake_control_get_ptd_calls == 1);
+	require(fake_control_ret_log_calls == 1);
+	require(fake_control_ret_log_stage[0] == 2);
+	require(fake_control_ret_log_tid[0] ==
+			fake_control_current_tid_value);
+	require(fake_control_put_ppd_calls == 1);
+	require(fake_control_put_ptd_calls == 0);
+	mix_signed(&digest, fake_control_ret_log_stage[0]);
+
+	reset_fake_work();
+	fake_control_packet_missing = 1;
+	require(fake_control_ret_syscall_call(0x7415UL) == -22);
+	require(fake_control_ptd_data_calls == 1);
+	require(fake_control_ret_log_calls == 1);
+	require(fake_control_ret_log_stage[0] == 3);
+	require(fake_control_release_packet_calls == 0);
+	require(fake_control_put_ptd_calls == 2);
+	require(fake_control_put_ppd_calls == 1);
+	require(fake_control_request_put_ptd_order == 2);
+	require(fake_control_request_put_ppd_order == 3);
+	mix_signed(&digest, fake_control_ret_log_stage[0]);
+
+	reset_fake_work();
+	fake_control_copy_from_fail_at = 2;
+	require(fake_control_ret_syscall_call(0x7416UL) == -14);
+	require(fake_control_copy_from_calls == 2);
+	require(fake_control_map_memory_calls == 1);
+	require(fake_control_map_virtual_calls == 1);
+	require(fake_control_unmap_virtual_calls == 0);
+	require(fake_control_unmap_memory_calls == 0);
+	require(fake_control_return_syscall_calls == 0);
+	require(fake_control_release_packet_calls == 1);
+	require(fake_control_put_ptd_calls == 2);
+	require(fake_control_put_ppd_calls == 1);
+	mix_signed(&digest, fake_control_copy_from_fail_at);
+
+	reset_fake_work();
+	require(fake_control_terminate_thread_call(0x7417UL, 2468, 3579,
+			-99) == 0);
+	require(fake_control_get_usrdata_calls == 1);
+	require(fake_control_last_os == 0x7417UL);
+	require(fake_control_get_ppd_calls == 1);
+	require(fake_control_get_ppd_pid == 2468);
+	require(fake_control_get_ptd_calls == 1);
+	require(fake_control_get_ptd_task == &fake_control_task_token);
+	require(fake_control_ptd_tid_calls == 1);
+	require(fake_control_ptd_data_calls == 1);
+	require(fake_control_usrdata_os_calls == 1);
+	require(fake_control_return_syscall_calls == 1);
+	require(fake_control_return_syscall_os ==
+			fake_control_usrdata_os_value);
+	require(fake_control_return_syscall_ret == -99);
+	require(fake_control_return_syscall_tid == 3579);
+	require(fake_control_release_packet_calls == 1);
+	require(fake_control_ptd_refcount_calls == 1);
+	require(fake_control_put_ptd_calls == 3);
+	require(fake_control_put_ppd_calls == 2);
+	require(fake_control_release_packet_order == 1);
+	require(fake_control_request_put_ptd_order == 4);
+	require(fake_control_request_put_ppd_order == 6);
+	require(fake_control_terminate_log_calls == 6);
+	require(fake_control_terminate_log_stage[0] == 4);
+	require(fake_control_terminate_log_stage[1] == 6);
+	require(fake_control_terminate_log_stage[2] == 6);
+	require(fake_control_terminate_log_stage[3] == 6);
+	require(fake_control_terminate_log_stage[4] == 8);
+	require(fake_control_terminate_log_stage[5] == 8);
+	mix_signed(&digest, fake_control_request_put_ppd_order);
+	mix_signed(&digest, fake_control_return_syscall_ret);
+
+	reset_fake_work();
+	fake_control_usrdata_missing = 1;
+	require(fake_control_terminate_thread_call(0x7418UL, 2468, 3579,
+			-98) == 0);
+	require(fake_control_get_usrdata_calls == 1);
+	require(fake_control_get_ppd_calls == 0);
+	require(fake_control_put_ppd_calls == 0);
+	require(fake_control_terminate_log_calls == 1);
+	require(fake_control_terminate_log_stage[0] == 0);
+	mix_signed(&digest, fake_control_terminate_log_stage[0]);
+
+	reset_fake_work();
+	fake_control_missing_ppd = 1;
+	require(fake_control_terminate_thread_call(0x7419UL, 2468, 3579,
+			-97) == 0);
+	require(fake_control_get_ppd_calls == 1);
+	require(fake_control_get_ptd_calls == 0);
+	require(fake_control_put_ppd_calls == 0);
+	require(fake_control_terminate_log_calls == 1);
+	require(fake_control_terminate_log_stage[0] == 1);
+	require(fake_control_terminate_log_pid[0] == 2468);
+	mix_signed(&digest, fake_control_terminate_log_stage[0]);
+
+	reset_fake_work();
+	fake_control_missing_ptd = 1;
+	require(fake_control_terminate_thread_call(0x741aUL, 2468, 3579,
+			-96) == 0);
+	require(fake_control_get_ptd_calls == 1);
+	require(fake_control_ptd_tid_calls == 0);
+	require(fake_control_put_ptd_calls == 0);
+	require(fake_control_put_ppd_calls == 2);
+	require(fake_control_terminate_log_calls == 3);
+	require(fake_control_terminate_log_stage[0] == 2);
+	require(fake_control_terminate_log_stage[1] == 8);
+	require(fake_control_terminate_log_stage[2] == 8);
+	mix_signed(&digest, fake_control_terminate_log_stage[0]);
+
+	reset_fake_work();
+	fake_control_ptd_tid_value = 3580;
+	require(fake_control_terminate_thread_call(0x741bUL, 2468, 3579,
+			-95) == 0);
+	require(fake_control_ptd_tid_calls == 1);
+	require(fake_control_ptd_data_calls == 0);
+	require(fake_control_put_ptd_calls == 0);
+	require(fake_control_put_ppd_calls == 2);
+	require(fake_control_terminate_log_calls == 3);
+	require(fake_control_terminate_log_stage[0] == 3);
+	require(fake_control_terminate_log_value[0] == 3580);
+	mix_signed(&digest, fake_control_terminate_log_value[0]);
+
+	reset_fake_work();
+	fake_control_packet_missing = 1;
+	require(fake_control_terminate_thread_call(0x741cUL, 2468, 3579,
+			-94) == 0);
+	require(fake_control_ptd_tid_calls == 1);
+	require(fake_control_ptd_data_calls == 1);
+	require(fake_control_return_syscall_calls == 0);
+	require(fake_control_release_packet_calls == 0);
+	require(fake_control_put_ptd_calls == 0);
+	require(fake_control_put_ppd_calls == 2);
+	require(fake_control_terminate_log_calls == 4);
+	require(fake_control_terminate_log_stage[0] == 4);
+	require(fake_control_terminate_log_stage[1] == 5);
+	require(fake_control_terminate_log_stage[2] == 8);
+	require(fake_control_terminate_log_stage[3] == 8);
+	mix_signed(&digest, fake_control_terminate_log_stage[1]);
+
+	reset_fake_work();
+	fake_control_ptd_refcount_value = 4;
+	require(fake_control_terminate_thread_call(0x741dUL, 2468, 3579,
+			-93) == 0);
+	require(fake_control_ptd_refcount_calls == 1);
+	require(fake_control_terminate_log_calls == 7);
+	require(fake_control_terminate_log_stage[3] == 7);
+	require(fake_control_terminate_log_value[3] == 4);
+	require(fake_control_put_ptd_calls == 3);
+	require(fake_control_put_ppd_calls == 2);
+	mix_signed(&digest, fake_control_terminate_log_value[3]);
+
+	reset_fake_work();
+	require(fake_control_uti_get_ctx_call(0x7420UL) == 0);
+	require(fake_control_copy_from_calls == 1);
+	require(fake_control_copy_from_src == &fake_control_uti_desc);
+	require(fake_control_copy_from_size ==
+			sizeof(struct fake_control_uti_get_ctx_desc));
+	require(fake_control_os_to_dev_calls == 1);
+	require(fake_control_map_memory_calls == 1);
+	require(fake_control_map_memory_phys == 0xb000UL);
+	require(fake_control_map_memory_size == sizeof(fake_control_uti_remote_ctx));
+	require(fake_control_map_virtual_calls == 1);
+	require(fake_control_map_virtual_phys == 0xc000UL);
+	require(fake_control_copy_to_calls == 2);
+	require(fake_control_copy_to_dst_history[0] ==
+			fake_control_uti_user_ctx);
+	require(fake_control_copy_to_size_history[0] ==
+			sizeof(fake_control_uti_remote_ctx));
+	require(fake_control_copy_to_dst_history[1] ==
+			&fake_control_uti_desc.key);
+	require(fake_control_copy_to_size_history[1] ==
+			sizeof(unsigned long));
+	require(fake_control_current_key_calls == 1);
+	require(fake_control_uti_desc.key == 0xf00dcafe12345678UL);
+	require(fake_control_uti_user_ctx[0] == 0);
+	require(fake_control_uti_user_ctx[1] == 1);
+	require(fake_control_uti_user_ctx[2] == 2);
+	require(fake_control_uti_user_ctx[3] == 3);
+	require(!memcmp(fake_control_uti_user_ctx + sizeof(int),
+			fake_control_uti_remote_ctx + sizeof(int),
+			sizeof(fake_control_uti_remote_ctx) - sizeof(int)));
+	require(*(int *)fake_control_uti_remote_ctx == 0x12345678);
+	require(fake_control_unmap_virtual_calls == 1);
+	require(fake_control_unmap_memory_calls == 1);
+	mix(&digest, fake_control_uti_desc.key);
+	mix_signed(&digest, *(int *)fake_control_uti_remote_ctx);
+
+	reset_fake_work();
+	fake_control_copy_from_fail = 1;
+	require(fake_control_uti_get_ctx_call(0x7421UL) == -14);
+	require(fake_control_uti_log_calls == 1);
+	require(fake_control_uti_log_stage[0] == 0);
+	require(fake_control_map_memory_calls == 0);
+	mix_signed(&digest, fake_control_uti_log_stage[0]);
+
+	reset_fake_work();
+	fake_control_copy_to_fail_at = 1;
+	require(fake_control_uti_get_ctx_call(0x7422UL) == -14);
+	require(fake_control_copy_to_calls == 1);
+	require(fake_control_current_key_calls == 0);
+	require(fake_control_unmap_virtual_calls == 1);
+	require(fake_control_unmap_memory_calls == 1);
+
+	reset_fake_work();
+	fake_control_copy_to_fail_at = 2;
+	require(fake_control_uti_get_ctx_call(0x7423UL) == -14);
+	require(fake_control_copy_to_calls == 2);
+	require(fake_control_current_key_calls == 1);
+	require(fake_control_uti_desc.key == 0);
+	require(fake_control_unmap_virtual_calls == 1);
+	require(fake_control_unmap_memory_calls == 1);
+	mix_signed(&digest, fake_control_copy_to_fail_at);
+
+	reset_fake_work();
+	require(fake_control_getcred_call(0x7500UL) == 0);
+	require(fake_control_cred_phys_to_virt_calls == 1);
+	require(fake_control_cred_phys_to_virt_phys == 0x7500UL);
+	for (int i = 0; i < 8; i++) {
+		require(fake_control_cred_calls[i] == 1);
+		require(fake_control_cred_kernel_values[i] == 1000 + i);
+	}
+	mix_signed(&digest, fake_control_cred_kernel_values[0]);
+	mix_signed(&digest, fake_control_cred_kernel_values[7]);
+
+	reset_fake_work();
+	{
+		int user_cred[8] = { 0 };
+
+		require(fake_control_getcredv_call(user_cred) == 0);
+		require(fake_control_copy_to_calls == 1);
+		require(fake_control_copy_to_dst == user_cred);
+		require(fake_control_copy_to_size == sizeof(user_cred));
+		for (int i = 0; i < 8; i++) {
+			require(fake_control_cred_calls[i] == 1);
+			require(user_cred[i] == 1000 + i);
+		}
+		mix_signed(&digest, user_cred[3]);
+		mix_signed(&digest, user_cred[6]);
+	}
+
+	reset_fake_work();
+	{
+		int user_cred[8] = { 0 };
+
+		fake_control_copy_to_fail = 1;
+		require(fake_control_getcredv_call(user_cred) == -14);
+		require(fake_control_copy_to_calls == 1);
+		require(user_cred[0] == 0);
+		mix_signed(&digest, fake_control_copy_to_fail);
+	}
+
+	reset_fake_work();
+	require(mcctrl_control_getcred_body_result(
+		0x7501UL, NULL, fake_control_current_uid,
+		fake_control_current_euid, fake_control_current_suid,
+		fake_control_current_fsuid, fake_control_current_gid,
+		fake_control_current_egid, fake_control_current_sgid,
+		fake_control_current_fsgid) == -22);
+	require(fake_control_cred_phys_to_virt_calls == 0);
+
+	reset_fake_work();
+	require(mcctrl_control_getcredv_body_result(
+		fake_control_cred_kernel_values, fake_control_copy_to_user,
+		NULL, fake_control_current_euid, fake_control_current_suid,
+		fake_control_current_fsuid, fake_control_current_gid,
+		fake_control_current_egid, fake_control_current_sgid,
+		fake_control_current_fsgid) == -22);
+	require(fake_control_copy_to_calls == 0);
+
+	reset_fake_work();
+	{
+		struct mcctrl_control_strncpy_desc desc;
+		char dest[32] = { 0 };
+		char src[32] = "abcdef";
+
+		desc.dest = dest;
+		desc.src = src;
+		desc.n = 6;
+		desc.result = -1;
+		fake_control_strncpy_ret[0] = 6;
+		require(fake_control_strncpy_call(&desc, 4096) == 0);
+		require(fake_control_copy_from_calls == 1);
+		require(fake_control_strncpy_alloc_calls == 1);
+		require(fake_control_strncpy_calls == 1);
+		require(fake_control_strncpy_want[0] == 6);
+		require(fake_control_strncpy_src[0] == src);
+		require(fake_control_strncpy_copy_to_calls == 2);
+		require(fake_control_strncpy_free_calls == 1);
+		require(fake_control_strncpy_freed == fake_control_strncpy_page);
+		require(desc.result == 6);
+		require(!memcmp(dest, "aaaaaa", 6));
+		mix_signed(&digest, desc.result);
+	}
+
+	reset_fake_work();
+	{
+		struct mcctrl_control_strncpy_desc desc;
+		char dest[32] = { 0 };
+		char src[32] = "abcdef";
+
+		desc.dest = dest;
+		desc.src = src;
+		desc.n = 10;
+		desc.result = -1;
+		fake_control_strncpy_ret[0] = 3;
+		require(fake_control_strncpy_call(&desc, 4096) == 0);
+		require(fake_control_strncpy_copy_to_calls == 2);
+		require(desc.result == 3);
+		require(dest[0] == 'a');
+		require(dest[3] == '\0');
+		mix_signed(&digest, desc.result);
+	}
+
+	reset_fake_work();
+	{
+		struct mcctrl_control_strncpy_desc desc;
+		char dest[32] = { 0 };
+		char src[32] = "abcdef";
+
+		desc.dest = dest;
+		desc.src = src;
+		desc.n = 10;
+		desc.result = 0;
+		fake_control_strncpy_ret[0] = 5;
+		fake_control_strncpy_fail_data_copy = 1;
+		require(fake_control_strncpy_call(&desc, 4096) == 0);
+		require(fake_control_strncpy_copy_to_calls == 2);
+		require(desc.result == -14);
+		require(dest[0] == 0);
+		mix_signed(&digest, desc.result);
+	}
+
+	reset_fake_work();
+	{
+		struct mcctrl_control_strncpy_desc desc;
+		char dest[32] = { 0 };
+		char src[32] = "abcdef";
+
+		desc.dest = dest;
+		desc.src = src;
+		desc.n = 10;
+		desc.result = 0;
+		fake_control_strncpy_ret[0] = -5;
+		require(fake_control_strncpy_call(&desc, 4096) == 0);
+		require(fake_control_strncpy_copy_to_calls == 1);
+		require(desc.result == -5);
+		mix_signed(&digest, desc.result);
+	}
+
+	reset_fake_work();
+	{
+		struct mcctrl_control_strncpy_desc desc;
+		char dest[32] = { 0 };
+
+		memset(&desc, 0, sizeof(desc));
+		desc.dest = dest;
+		fake_control_copy_from_fail = 1;
+		require(fake_control_strncpy_call(&desc, 4096) == -14);
+		require(fake_control_strncpy_alloc_calls == 0);
+	}
+
+	reset_fake_work();
+	{
+		struct mcctrl_control_strncpy_desc desc;
+		char dest[32] = { 0 };
+
+		memset(&desc, 0, sizeof(desc));
+		desc.dest = dest;
+		fake_control_strncpy_alloc_fail = 1;
+		require(fake_control_strncpy_call(&desc, 4096) == -12);
+		require(fake_control_strncpy_alloc_calls == 1);
+		require(fake_control_strncpy_free_calls == 0);
+	}
+
+	reset_fake_work();
+	{
+		struct mcctrl_control_strncpy_desc desc;
+		char dest[32] = { 0 };
+		char src[32] = "abcdef";
+
+		desc.dest = dest;
+		desc.src = src;
+		desc.n = 6;
+		desc.result = 0;
+		fake_control_strncpy_ret[0] = 2;
+		fake_control_strncpy_fail_desc_copy = 1;
+		require(fake_control_strncpy_call(&desc, 4096) == -14);
+		require(fake_control_strncpy_free_calls == 1);
+		require(desc.result == 0);
+	}
+
+	reset_fake_work();
+	require(fake_control_destroy_ppd_call(0x7600UL, 1234) == 0);
+	require(fake_control_get_usrdata_calls == 1);
+	require(fake_control_get_ppd_calls == 1);
+	require(fake_control_get_ppd_pid == 1234);
+	require(fake_control_put_ppd_calls == 2);
+	require(fake_control_put_ppd_seen == &fake_control_ppd_token);
+	require(fake_control_destroy_log_calls == 2);
+	require(fake_control_destroy_log_stage[0] == 1);
+	require(fake_control_destroy_log_stage[1] == 1);
+	require(fake_control_destroy_log_ppd[0] == &fake_control_ppd_token);
+	mix_signed(&digest, fake_control_put_ppd_calls);
+
+	reset_fake_work();
+	fake_control_usrdata_missing = 1;
+	require(fake_control_destroy_ppd_call(0x7601UL, 1235) == 0);
+	require(fake_control_get_ppd_calls == 0);
+	require(fake_control_put_ppd_calls == 0);
+	require(fake_control_destroy_log_calls == 1);
+	require(fake_control_destroy_log_stage[0] == 0);
+	require(fake_control_destroy_log_pid[0] == 1235);
+	mix_signed(&digest, fake_control_destroy_log_stage[0]);
+
+	reset_fake_work();
+	fake_control_missing_ppd = 1;
+	require(fake_control_destroy_ppd_call(0x7602UL, 1236) == 0);
+	require(fake_control_get_ppd_calls == 1);
+	require(fake_control_put_ppd_calls == 0);
+	require(fake_control_destroy_log_calls == 1);
+	require(fake_control_destroy_log_stage[0] == 2);
+	mix_signed(&digest, fake_control_destroy_log_stage[0]);
+
+	reset_fake_work();
+	require(mcctrl_control_destroy_ppd_body_result(
+		0x7603UL, 1237, NULL, fake_control_get_ppd,
+		fake_control_put_ppd, fake_control_destroy_ppd_log) == -22);
+	require(fake_control_get_ppd_calls == 0);
+
+	reset_fake_work();
+	require(fake_control_close_exec_call(0x7700UL, 41) == 0);
+	require(fake_control_validate_os_calls == 1);
+	require(fake_control_validate_os_seen == 0x7700UL);
+	require(fake_control_drop_exec_calls == 1);
+	require(fake_control_drop_exec_os == 0x7700UL);
+	require(fake_control_drop_exec_pid == 41);
+	mix_signed(&digest, fake_control_drop_exec_pid);
+
+	reset_fake_work();
+	fake_control_drop_exec_ret = 0;
+	require(fake_control_close_exec_call(0x7701UL, 42) == 22);
+	require(fake_control_drop_exec_calls == 1);
+	mix_signed(&digest, fake_control_drop_exec_ret);
+
+	reset_fake_work();
+	fake_control_validate_os_ret = -1;
+	require(fake_control_close_exec_call(0x7702UL, 43) == 22);
+	require(fake_control_validate_os_calls == 1);
+	require(fake_control_drop_exec_calls == 0);
+
+	reset_fake_work();
+	require(mcctrl_control_close_exec_body_result(
+		0x7703UL, 44, NULL, fake_control_drop_exec) == -22);
+	require(fake_control_drop_exec_calls == 0);
+
+	reset_fake_work();
+	{
+		int fake_file;
+
+		require(fake_control_newprocess_call(0x7800UL,
+			&fake_file) == 0);
+		require(fake_control_new_info_calls == 1);
+		require(fake_control_new_info_os == 0x7800UL);
+		require(fake_control_new_info_file == &fake_file);
+		require(fake_control_current_pid_calls == 1);
+		require(fake_control_set_info_pid_calls == 1);
+		require(fake_control_set_info_pid_value ==
+				fake_control_current_pid_value);
+		require(fake_control_new_info_token.pid ==
+				fake_control_current_pid_value);
+		require(fake_control_register_release_calls == 1);
+		require(fake_control_register_release_file == &fake_file);
+		require(fake_control_register_release_info ==
+				&fake_control_new_info_token);
+		require(fake_control_set_private_calls == 1);
+		require(fake_control_set_private_file == &fake_file);
+		require(fake_control_set_private_info ==
+				&fake_control_new_info_token);
+		mix_signed(&digest, fake_control_new_info_token.pid);
+	}
+
+	reset_fake_work();
+	fake_control_new_info_fail = 1;
+	require(fake_control_newprocess_call(0x7801UL,
+		(void *)0xbeefUL) == -12);
+	require(fake_control_new_info_calls == 1);
+	require(fake_control_current_pid_calls == 0);
+	require(fake_control_register_release_calls == 0);
+	require(fake_control_set_private_calls == 0);
+
+	reset_fake_work();
+	require(mcctrl_control_newprocess_body_result(
+		0x7802UL, (void *)0xbeefUL, NULL, fake_control_new_info,
+		fake_control_set_info_pid, fake_control_register_release,
+		fake_control_set_private) == -22);
+	require(fake_control_new_info_calls == 0);
+
+	reset_fake_work();
+	{
+		int fake_file;
+
+		fake_control_start_user_desc.cpu = 6;
+		fake_control_start_user_desc.pid = 4321;
+		fake_control_start_user_desc.user_start = 0x1000UL;
+		fake_control_start_user_desc.user_end = 0x9000UL;
+		fake_control_start_user_desc.rprocess = 0xbeefcafeUL;
+		fake_control_start_prev_info.prepare_thread = 0x12345678UL;
+		require(fake_control_start_image_call(0x7900UL,
+			&fake_file) == 0);
+		require(fake_control_get_usrdata_calls == 1);
+		require(fake_control_last_os == 0x7900UL);
+		require(fake_control_start_alloc_calls == 1);
+		require(fake_control_start_alloc_size ==
+				sizeof(fake_control_start_user_desc));
+		require(fake_control_copy_from_calls == 1);
+		require(fake_control_copy_from_src ==
+				&fake_control_start_user_desc);
+		require(fake_control_copy_from_dst ==
+				&fake_control_start_local_desc);
+		require(fake_control_copy_from_size ==
+				sizeof(fake_control_start_user_desc));
+		require(fake_control_start_get_private_calls == 1);
+		require(fake_control_start_private_file == &fake_file);
+		require(fake_control_start_new_info_calls == 1);
+		require(fake_control_start_new_info_os == 0x7900UL);
+		require(fake_control_start_new_info_file == &fake_file);
+		require(fake_control_start_info_prepare_calls == 1);
+		require(fake_control_start_set_info_calls == 1);
+		require(fake_control_start_new_info.pid == 4321);
+		require(fake_control_start_new_info.cpu == 6);
+		require(fake_control_start_new_info.user_start == 0x1000UL);
+		require(fake_control_start_new_info.user_end == 0x9000UL);
+		require(fake_control_start_set_info_prepare_thread ==
+				0x12345678UL);
+		require(fake_control_register_release_calls == 1);
+		require(fake_control_register_release_file == &fake_file);
+		require(fake_control_register_release_info ==
+				&fake_control_start_new_info);
+		require(fake_control_set_private_calls == 1);
+		require(fake_control_set_private_file == &fake_file);
+		require(fake_control_set_private_info ==
+				&fake_control_start_new_info);
+		require(fake_control_start_set_recv_calls == 1);
+		require(fake_control_start_set_recv_os == 0x7900UL);
+		require(fake_control_start_set_recv_cpu == 6);
+		require(fake_control_start_set_last_calls == 1);
+		require(fake_control_start_set_last_usrdata ==
+				&fake_control_usrdata_token);
+		require(fake_control_start_set_last_cpu == 6);
+		require(fake_control_start_send_calls == 1);
+		require(fake_control_start_send_os == 0x7900UL);
+		require(fake_control_start_send_cpu == 6);
+		require(fake_control_start_send_rprocess == 0xbeefcafeUL);
+		require(fake_control_start_clear_calls == 1);
+		require(fake_control_start_new_info.prepare_thread == 0);
+		require(fake_control_start_free_calls == 1);
+		require(fake_control_start_freed == &fake_control_start_local_desc);
+		require(fake_control_start_log_calls == 0);
+		mix_signed(&digest, fake_control_start_new_info.pid);
+		mix(&digest, fake_control_start_send_rprocess);
+	}
+
+	reset_fake_work();
+	fake_control_usrdata_missing = 1;
+	require(fake_control_start_image_call(0x7901UL,
+		(void *)0xc001UL) == -22);
+	require(fake_control_get_usrdata_calls == 1);
+	require(fake_control_start_alloc_calls == 0);
+	require(fake_control_start_log_calls == 1);
+	require(fake_control_start_log_stage[0] == 0);
+	mix_signed(&digest, fake_control_start_log_stage[0]);
+
+	reset_fake_work();
+	fake_control_start_alloc_fail = 1;
+	require(fake_control_start_image_call(0x7902UL,
+		(void *)0xc002UL) == -12);
+	require(fake_control_start_alloc_calls == 1);
+	require(fake_control_copy_from_calls == 0);
+	require(fake_control_start_free_calls == 0);
+	require(fake_control_start_log_calls == 1);
+	require(fake_control_start_log_stage[0] == 1);
+	mix_signed(&digest, fake_control_start_log_stage[0]);
+
+	reset_fake_work();
+	fake_control_copy_from_fail = 1;
+	require(fake_control_start_image_call(0x7903UL,
+		(void *)0xc003UL) == -14);
+	require(fake_control_start_alloc_calls == 1);
+	require(fake_control_copy_from_calls == 1);
+	require(fake_control_start_free_calls == 1);
+	require(fake_control_start_new_info_calls == 0);
+	require(fake_control_start_send_calls == 0);
+
+	reset_fake_work();
+	fake_control_start_user_desc.cpu = 2;
+	fake_control_start_new_info_fail = 1;
+	require(fake_control_start_image_call(0x7904UL,
+		(void *)0xc004UL) == -12);
+	require(fake_control_start_get_private_calls == 1);
+	require(fake_control_start_new_info_calls == 1);
+	require(fake_control_start_free_calls == 1);
+	require(fake_control_register_release_calls == 0);
+	require(fake_control_start_send_calls == 0);
+
+	reset_fake_work();
+	fake_control_start_user_desc.cpu = 3;
+	fake_control_start_user_desc.pid = 9876;
+	fake_control_start_user_desc.user_start = 0x2200UL;
+	fake_control_start_user_desc.user_end = 0x3300UL;
+	fake_control_start_user_desc.rprocess = 0xabcddcbaUL;
+	fake_control_start_prev_info.prepare_thread = 0x55667788UL;
+	fake_control_start_send_ret = -5;
+	require(fake_control_start_image_call(0x7905UL,
+		(void *)0xc005UL) == -5);
+	require(fake_control_start_set_info_prepare_thread == 0x55667788UL);
+	require(fake_control_start_clear_calls == 0);
+	require(fake_control_start_new_info.prepare_thread == 0x55667788UL);
+	require(fake_control_start_log_calls == 1);
+	require(fake_control_start_log_stage[0] == 2);
+	require(fake_control_start_log_ret[0] == -5);
+	require(fake_control_start_free_calls == 1);
+	mix_signed(&digest, fake_control_start_log_ret[0]);
+
+	reset_fake_work();
+	for (int i = 0; i < 128; i++)
+		fake_control_signal_user_desc.info[i] = (unsigned char)(i + 7);
+	fake_control_signal_user_desc.cpu = 4;
+	fake_control_signal_user_desc.pid = 24680;
+	fake_control_signal_user_desc.tid = 13579;
+	fake_control_signal_user_desc.sig = 12;
+	require(fake_control_send_signal_call(0x7a00UL) == 0);
+	require(fake_control_get_usrdata_calls == 1);
+	require(fake_control_last_os == 0x7a00UL);
+	require(fake_control_copy_from_calls == 1);
+	require(fake_control_copy_from_src == &fake_control_signal_user_desc);
+	require(fake_control_copy_from_size ==
+			sizeof(fake_control_signal_user_desc));
+	require(fake_control_signal_alloc_calls == 1);
+	require(fake_control_signal_alloc_size ==
+			sizeof(fake_control_signal_local_desc));
+	require(fake_control_signal_local_desc.msig.cond == 0);
+	require(fake_control_signal_local_desc.msig.sig == 12);
+	require(fake_control_signal_local_desc.msig.pid == 24680);
+	require(fake_control_signal_local_desc.msig.tid == 13579);
+	require(memcmp(fake_control_signal_local_desc.msig.info,
+			fake_control_signal_user_desc.info, 128) == 0);
+	require(fake_control_signal_vtop_calls == 1);
+	require(fake_control_signal_vtop_ptr ==
+			&fake_control_signal_local_desc.msig);
+	require(fake_control_signal_send_calls == 1);
+	require(fake_control_signal_send_os == 0x7a00UL);
+	require(fake_control_signal_send_cpu == 4);
+	require(fake_control_signal_send_msg == SCD_MSG_SEND_SIGNAL);
+	require(fake_control_signal_send_ref == 4);
+	require(fake_control_signal_send_pid == 24680);
+	require(fake_control_signal_send_arg == fake_control_signal_vtop_result);
+	require(fake_control_signal_send_timeout == -1000);
+	require(fake_control_signal_send_desc ==
+			&fake_control_signal_local_desc);
+	require(fake_control_signal_free_calls == 1);
+	require(fake_control_signal_freed == &fake_control_signal_local_desc);
+	require(fake_control_signal_log_calls == 0);
+	mix_signed(&digest, fake_control_signal_local_desc.msig.sig);
+	mix(&digest, fake_control_signal_send_arg);
+
+	reset_fake_work();
+	fake_control_usrdata_missing = 1;
+	require(fake_control_send_signal_call(0x7a01UL) == -22);
+	require(fake_control_get_usrdata_calls == 1);
+	require(fake_control_copy_from_calls == 0);
+	require(fake_control_signal_alloc_calls == 0);
+	require(fake_control_signal_log_calls == 1);
+	require(fake_control_signal_log_stage[0] == 0);
+
+	reset_fake_work();
+	fake_control_copy_from_fail = 1;
+	require(fake_control_send_signal_call(0x7a02UL) == -14);
+	require(fake_control_copy_from_calls == 1);
+	require(fake_control_signal_alloc_calls == 0);
+	require(fake_control_signal_send_calls == 0);
+
+	reset_fake_work();
+	fake_control_signal_alloc_fail = 1;
+	require(fake_control_send_signal_call(0x7a03UL) == -12);
+	require(fake_control_copy_from_calls == 1);
+	require(fake_control_signal_alloc_calls == 1);
+	require(fake_control_signal_send_calls == 0);
+	require(fake_control_signal_free_calls == 0);
+
+	reset_fake_work();
+	fake_control_signal_user_desc.cpu = 2;
+	fake_control_signal_user_desc.pid = 12345;
+	fake_control_signal_user_desc.tid = 54321;
+	fake_control_signal_user_desc.sig = 15;
+	fake_control_signal_send_ret = -9;
+	fake_control_signal_send_do_free = 1;
+	require(fake_control_send_signal_call(0x7a04UL) == -9);
+	require(fake_control_signal_send_calls == 1);
+	require(fake_control_signal_free_calls == 1);
+	require(fake_control_signal_log_calls == 1);
+	require(fake_control_signal_log_stage[0] == 1);
+	require(fake_control_signal_log_ret[0] == -9);
+
+	reset_fake_work();
+	fake_control_signal_user_desc.cpu = 1;
+	fake_control_signal_user_desc.pid = 543;
+	fake_control_signal_user_desc.tid = 654;
+	fake_control_signal_user_desc.sig = 9;
+	fake_control_signal_send_ret = -11;
+	fake_control_signal_send_do_free = 0;
+	require(fake_control_send_signal_call(0x7a05UL) == -11);
+	require(fake_control_signal_send_calls == 1);
+	require(fake_control_signal_free_calls == 0);
+	require(fake_control_signal_log_calls == 1);
+	require(fake_control_signal_log_ret[0] == -11);
+	mix_signed(&digest, fake_control_signal_log_ret[0]);
+
+	reset_fake_work();
 	mix_signed(&digest, mcctrl_procfs_packet_handler_body_result(
 		(void *)0xabc0, SCD_MSG_PROCFS_TID_CREATE, 321, 654,
 		0xfeed0000UL, sizeof(fake_work), fake_alloc,
@@ -108447,6 +115954,312 @@ int main(void)
 	require(fake_procfs_last_parent == &fake_procfs_pid_entry);
 	require(!strcmp(fake_procfs_last_path, "/bin/app"));
 	mix_signed(&digest, fake_procfs_add_task_exe_links_calls);
+
+	{
+		struct fake_procfs_path_entry base = { "mcos9", NULL };
+		struct fake_procfs_path_entry pid = { "123", &base };
+		struct fake_procfs_path_entry task = { "task", &pid };
+		struct fake_procfs_path_entry tid = { "456", &task };
+		char path[64];
+		char *start;
+
+		reset_fake_work();
+		memset(path, 0x5a, sizeof(path));
+		start = mcctrl_procfs_getpath_body_result(
+			&tid, path, sizeof(path), fake_procfs_path_name,
+			fake_procfs_path_parent);
+		require(start != NULL);
+		require(start >= path && start < path + sizeof(path));
+		require(!strcmp(start, "mcos9/123/task/456"));
+		require(path[sizeof(path) - 1] == '\0');
+		mix(&digest, (unsigned long)(start - path));
+		mix(&digest, strlen(start));
+
+		require(mcctrl_procfs_getpath_body_result(
+			NULL, path, sizeof(path), fake_procfs_path_name,
+			fake_procfs_path_parent) == NULL);
+		require(mcctrl_procfs_getpath_body_result(
+			&tid, path, 0, fake_procfs_path_name,
+			fake_procfs_path_parent) == NULL);
+		require(mcctrl_procfs_getpath_body_result(
+			&tid, path, sizeof(path), NULL,
+			fake_procfs_path_parent) == NULL);
+	}
+
+	{
+		struct fake_procfs_entry_table entries[] = {
+			{ "stat", 0444, (void *)0x1111UL },
+			{ "mem", 0600, (void *)0x2222UL },
+			{ NULL, 0, NULL },
+		};
+		int uid = 77;
+		int gid = 88;
+		long count;
+
+		reset_fake_work();
+		count = mcctrl_procfs_add_entries_body_result(
+			(void *)0xabc0UL, entries, sizeof(entries[0]), &uid,
+			&gid, fake_procfs_entry_table_name,
+			fake_procfs_entry_table_mode,
+			fake_procfs_entry_table_fops,
+			fake_procfs_entry_table_next,
+			fake_procfs_add_entry_with_ids);
+		require(count == 2);
+		require(fake_procfs_add_entries_calls == 2);
+		require(fake_procfs_add_entries_parent == (void *)0xabc0UL);
+		require(fake_procfs_add_entries_name == entries[1].name);
+		require(fake_procfs_add_entries_mode == 0600);
+		require(fake_procfs_add_entries_fops == (void *)0x2222UL);
+		require(fake_procfs_add_entries_uid == &uid);
+		require(fake_procfs_add_entries_gid == &gid);
+		mix_signed(&digest, count);
+		mix_signed(&digest, fake_procfs_add_entries_calls);
+
+		reset_fake_work();
+		require(mcctrl_procfs_add_entries_body_result(
+			(void *)0xabc0UL, NULL, sizeof(entries[0]), &uid,
+			&gid, fake_procfs_entry_table_name,
+			fake_procfs_entry_table_mode,
+			fake_procfs_entry_table_fops,
+			fake_procfs_entry_table_next,
+			fake_procfs_add_entry_with_ids) == -22);
+		require(fake_procfs_add_entries_calls == 0);
+
+			require(mcctrl_procfs_add_entries_body_result(
+				(void *)0xabc0UL, entries, sizeof(entries[0]), &uid,
+				&gid, fake_procfs_entry_table_name, NULL,
+				fake_procfs_entry_table_fops,
+				fake_procfs_entry_table_next,
+				fake_procfs_add_entry_with_ids) == -22);
+		}
+
+		{
+			int uid = 101;
+			int gid = 202;
+			void *entry;
+
+			reset_fake_work();
+			fake_procfs_missing_pid = 1;
+			entry = mcctrl_procfs_add_entry_body_result(
+				&fake_procfs_base_entry, "leaf", 0600, &uid,
+				&gid, (void *)0x5555UL, 24,
+				fake_procfs_find_entry, fake_procfs_delete_entry,
+				fake_procfs_entry_alloc, fake_procfs_entry_init,
+				fake_procfs_entry_create_pde,
+				fake_procfs_entry_commit,
+				fake_procfs_entry_free,
+				fake_procfs_entry_alloc_failed,
+				fake_procfs_entry_create_failed);
+			require(entry == &fake_procfs_lifecycle_entry);
+			require(fake_procfs_find_calls == 1);
+			require(fake_procfs_delete_entry_calls == 0);
+			require(fake_procfs_entry_alloc_calls == 1);
+			require(fake_procfs_entry_alloc_size == 29);
+			require(fake_procfs_entry_init_calls == 1);
+			require(!strcmp(fake_procfs_entry_init_name, "leaf"));
+			require(fake_procfs_entry_create_calls == 1);
+			require(fake_procfs_entry_create_mode == 0600);
+			require(fake_procfs_entry_create_uid == &uid);
+			require(fake_procfs_entry_create_gid == &gid);
+			require(fake_procfs_entry_create_opaque == (void *)0x5555UL);
+			require(fake_procfs_entry_create_entry ==
+				&fake_procfs_lifecycle_entry);
+			require(fake_procfs_entry_commit_calls == 1);
+			require(fake_procfs_entry_commit_parent ==
+				&fake_procfs_base_entry);
+			require(fake_procfs_entry_commit_pde ==
+				&fake_procfs_lifecycle_pde);
+			require(fake_procfs_entry_commit_uid == &uid);
+			require(fake_procfs_entry_commit_gid == &gid);
+			require(fake_procfs_entry_free_calls == 0);
+			mix_signed(&digest, fake_procfs_entry_alloc_size);
+			mix_signed(&digest, fake_procfs_entry_commit_calls);
+
+			reset_fake_work();
+			entry = mcctrl_procfs_add_entry_body_result(
+				&fake_procfs_base_entry, "leaf", 0444, &uid,
+				&gid, NULL, 24, fake_procfs_find_entry,
+				fake_procfs_delete_entry,
+				fake_procfs_entry_alloc, fake_procfs_entry_init,
+				fake_procfs_entry_create_pde,
+				fake_procfs_entry_commit,
+				fake_procfs_entry_free,
+				fake_procfs_entry_alloc_failed,
+				fake_procfs_entry_create_failed);
+			require(entry == &fake_procfs_lifecycle_entry);
+			require(fake_procfs_delete_entry_calls == 1);
+			require(fake_procfs_deleted_entry == &fake_procfs_pid_entry);
+			mix_signed(&digest, fake_procfs_delete_entry_calls);
+
+			reset_fake_work();
+			fake_procfs_missing_pid = 1;
+			fake_procfs_entry_alloc_fail = 1;
+			entry = mcctrl_procfs_add_entry_body_result(
+				&fake_procfs_base_entry, "leaf", 0444, &uid,
+				&gid, NULL, 24, fake_procfs_find_entry,
+				fake_procfs_delete_entry,
+				fake_procfs_entry_alloc, fake_procfs_entry_init,
+				fake_procfs_entry_create_pde,
+				fake_procfs_entry_commit,
+				fake_procfs_entry_free,
+				fake_procfs_entry_alloc_failed,
+				fake_procfs_entry_create_failed);
+			require(entry == NULL);
+			require(fake_procfs_entry_alloc_failed_calls == 1);
+			require(fake_procfs_entry_init_calls == 0);
+			require(fake_procfs_entry_create_calls == 0);
+			require(fake_procfs_entry_free_calls == 0);
+
+			reset_fake_work();
+			fake_procfs_missing_pid = 1;
+			fake_procfs_entry_create_fail = 1;
+			entry = mcctrl_procfs_add_entry_body_result(
+				&fake_procfs_base_entry, "leaf", 0444, &uid,
+				&gid, NULL, 24, fake_procfs_find_entry,
+				fake_procfs_delete_entry,
+				fake_procfs_entry_alloc, fake_procfs_entry_init,
+				fake_procfs_entry_create_pde,
+				fake_procfs_entry_commit,
+				fake_procfs_entry_free,
+				fake_procfs_entry_alloc_failed,
+				fake_procfs_entry_create_failed);
+			require(entry == NULL);
+			require(fake_procfs_entry_create_failed_calls == 1);
+			require(!strcmp(fake_procfs_entry_create_failed_name,
+				"leaf"));
+			require(fake_procfs_entry_free_calls == 1);
+			require(fake_procfs_entry_free_last ==
+				&fake_procfs_lifecycle_entry);
+			require(fake_procfs_entry_commit_calls == 0);
+
+			reset_fake_work();
+			require(mcctrl_procfs_add_entry_body_result(
+				&fake_procfs_base_entry, "leaf", 0444, &uid,
+				&gid, NULL, 24, NULL, fake_procfs_delete_entry,
+				fake_procfs_entry_alloc, fake_procfs_entry_init,
+				fake_procfs_entry_create_pde,
+				fake_procfs_entry_commit,
+				fake_procfs_entry_free,
+				fake_procfs_entry_alloc_failed,
+				fake_procfs_entry_create_failed) == NULL);
+			require(fake_procfs_find_calls == 0);
+		}
+
+		{
+			int ret;
+
+			reset_fake_work();
+			fake_procfs_delete_lifecycle_child_present = 1;
+			ret = mcctrl_procfs_delete_entries_body_result(
+				&fake_procfs_lifecycle_entry,
+				fake_procfs_delete_lifecycle_first_child,
+				fake_procfs_delete_lifecycle_delete,
+				fake_procfs_delete_lifecycle_unlink,
+				fake_procfs_delete_lifecycle_remove,
+				fake_procfs_delete_lifecycle_data,
+				fake_procfs_entry_free);
+			require(ret == 0);
+			require(fake_procfs_delete_lifecycle_unlink_calls == 1);
+			require(fake_procfs_delete_lifecycle_first_calls == 2);
+			require(fake_procfs_delete_entry_calls == 1);
+			require(fake_procfs_deleted_entry == &fake_procfs_task_entry);
+			require(fake_procfs_delete_lifecycle_remove_calls == 1);
+			require(fake_procfs_delete_lifecycle_data_calls == 1);
+			require(fake_procfs_entry_free_calls == 2);
+			require(fake_procfs_delete_lifecycle_freed[0] ==
+				&fake_procfs_lifecycle_data);
+			require(fake_procfs_delete_lifecycle_freed[1] ==
+				&fake_procfs_lifecycle_entry);
+			mix_signed(&digest, ret);
+			mix_signed(&digest, fake_procfs_entry_free_calls);
+
+			reset_fake_work();
+			require(mcctrl_procfs_delete_entries_body_result(
+				&fake_procfs_lifecycle_entry, NULL,
+				fake_procfs_delete_lifecycle_delete,
+				fake_procfs_delete_lifecycle_unlink,
+				fake_procfs_delete_lifecycle_remove,
+				fake_procfs_delete_lifecycle_data,
+				fake_procfs_entry_free) == -22);
+			require(fake_procfs_delete_lifecycle_unlink_calls == 0);
+		}
+
+		{
+			struct fake_procfs_list_node exe = { "exe", NULL };
+			struct fake_procfs_list_node task = { "task", &exe };
+		struct fake_procfs_list_node stat = { "stat", &task };
+		void *entry;
+
+		reset_fake_work();
+		entry = mcctrl_procfs_find_entry_body_result(
+			&stat, "task", fake_procfs_first_child,
+			fake_procfs_next_child, fake_procfs_list_node_name);
+		require(entry == &task);
+		require(fake_procfs_first_child_calls == 1);
+		require(fake_procfs_entry_name_calls == 2);
+		require(fake_procfs_next_child_calls == 1);
+		mix_signed(&digest, fake_procfs_entry_name_calls);
+
+		reset_fake_work();
+		entry = mcctrl_procfs_find_entry_body_result(
+			&stat, "missing", fake_procfs_first_child,
+			fake_procfs_next_child, fake_procfs_list_node_name);
+		require(entry == NULL);
+		require(fake_procfs_entry_name_calls == 3);
+		require(fake_procfs_next_child_calls == 3);
+		mix_signed(&digest, fake_procfs_next_child_calls);
+
+		reset_fake_work();
+		entry = mcctrl_procfs_find_entry_body_result(
+			&stat, "task", fake_procfs_first_child, NULL,
+			fake_procfs_list_node_name);
+		require(entry == NULL);
+		require(fake_procfs_first_child_calls == 0);
+	}
+
+	reset_fake_work();
+	procfs_result = mcctrl_procfs_get_pid_cred_body_result(
+		4321, 0, fake_procfs_rcu_read_lock,
+		fake_procfs_rcu_read_unlock, fake_procfs_find_vpid,
+		fake_procfs_pid_task, fake_procfs_task_cred);
+	require(procfs_result == &fake_procfs_cred_token);
+	require(fake_procfs_rcu_lock_calls == 1);
+	require(fake_procfs_rcu_unlock_calls == 1);
+	require(fake_procfs_find_vpid_calls == 1);
+	require(fake_procfs_pid_task_calls == 1);
+	require(fake_procfs_task_cred_calls == 1);
+	require(fake_procfs_last_pid == 4321);
+	require(fake_procfs_last_pid_type == 0);
+	mix_signed(&digest, fake_procfs_task_cred_calls);
+
+	reset_fake_work();
+	procfs_result = mcctrl_procfs_get_pid_cred_body_result(
+		0, 0, fake_procfs_rcu_read_lock,
+		fake_procfs_rcu_read_unlock, fake_procfs_find_vpid,
+		fake_procfs_pid_task, fake_procfs_task_cred);
+	require(procfs_result == NULL);
+	require(fake_procfs_rcu_lock_calls == 0);
+	require(fake_procfs_find_vpid_calls == 0);
+
+	reset_fake_work();
+	fake_procfs_pid_task_missing = 1;
+	procfs_result = mcctrl_procfs_get_pid_cred_body_result(
+		4321, 0, fake_procfs_rcu_read_lock,
+		fake_procfs_rcu_read_unlock, fake_procfs_find_vpid,
+		fake_procfs_pid_task, fake_procfs_task_cred);
+	require(procfs_result == NULL);
+	require(fake_procfs_rcu_lock_calls == 1);
+	require(fake_procfs_rcu_unlock_calls == 1);
+	require(fake_procfs_task_cred_calls == 0);
+	mix_signed(&digest, fake_procfs_pid_task_missing);
+
+	reset_fake_work();
+	procfs_result = mcctrl_procfs_get_pid_cred_body_result(
+		4321, 0, fake_procfs_rcu_read_lock, NULL,
+		fake_procfs_find_vpid, fake_procfs_pid_task,
+		fake_procfs_task_cred);
+	require(procfs_result == NULL);
+	require(fake_procfs_rcu_lock_calls == 0);
 
 	{
 		long new_pos = 99;
@@ -109429,12 +117242,95 @@ int main(void)
 		fake_sysfs_resp_show, fake_sysfs_resp_store,
 		fake_sysfs_resp_release, fake_sysfs_unknown_work,
 		fake_sysfs_free_work));
-	require(fake_sysfs_free_calls == 1);
-	mix_signed(&digest, fake_sysfs_free_calls);
+		require(fake_sysfs_free_calls == 1);
+		mix_signed(&digest, fake_sysfs_free_calls);
 
-	reset_fake_work();
-	{
-		char buf[32];
+		{
+			struct fake_sysfs_lookup_node leaf2 = {
+				.name = "needle",
+				.type = SNT_FILE,
+			};
+			struct fake_sysfs_lookup_node leaf1 = {
+				.name = "other",
+				.type = SNT_FILE,
+				.next_sibling = &leaf2,
+			};
+			struct fake_sysfs_lookup_node dir = {
+				.name = "dir",
+				.type = SNT_DIR,
+				.first_child = &leaf1,
+			};
+			struct fake_sysfs_lookup_node file = {
+				.name = "file",
+				.type = SNT_FILE,
+			};
+			void *result;
+
+			reset_fake_work();
+			result = mcctrl_sysfs_lookup_i_body_result(
+				&dir, "needle", SNT_DIR, fake_sysfs_lookup_node_type,
+				fake_sysfs_lookup_node_name,
+				fake_sysfs_lookup_first_child,
+				fake_sysfs_lookup_next_child,
+				fake_sysfs_lookup_err_ptr);
+			require(result == &leaf2);
+			require(fake_sysfs_lookup_type_calls == 1);
+			require(fake_sysfs_lookup_first_calls == 1);
+			require(fake_sysfs_lookup_name_calls == 2);
+			require(fake_sysfs_lookup_next_calls == 1);
+			require(fake_sysfs_lookup_err_calls == 0);
+			mix_signed(&digest, fake_sysfs_lookup_name_calls);
+
+			reset_fake_work();
+			result = mcctrl_sysfs_lookup_i_body_result(
+				&dir, "missing", SNT_DIR,
+				fake_sysfs_lookup_node_type,
+				fake_sysfs_lookup_node_name,
+				fake_sysfs_lookup_first_child,
+				fake_sysfs_lookup_next_child,
+				fake_sysfs_lookup_err_ptr);
+			require(result == (void *)(intptr_t)-ENOENT);
+			require(fake_sysfs_lookup_err_calls == 1);
+			require(fake_sysfs_lookup_last_error == -ENOENT);
+			require(fake_sysfs_lookup_next_calls == 2);
+			mix_signed(&digest, fake_sysfs_lookup_last_error);
+
+			reset_fake_work();
+			result = mcctrl_sysfs_lookup_i_body_result(
+				&dir, "", SNT_DIR, fake_sysfs_lookup_node_type,
+				fake_sysfs_lookup_node_name,
+				fake_sysfs_lookup_first_child,
+				fake_sysfs_lookup_next_child,
+				fake_sysfs_lookup_err_ptr);
+			require(result == (void *)(intptr_t)-ENOENT);
+			require(fake_sysfs_lookup_first_calls == 0);
+			require(fake_sysfs_lookup_last_error == -ENOENT);
+
+			reset_fake_work();
+			result = mcctrl_sysfs_lookup_i_body_result(
+				&file, "needle", SNT_DIR,
+				fake_sysfs_lookup_node_type,
+				fake_sysfs_lookup_node_name,
+				fake_sysfs_lookup_first_child,
+				fake_sysfs_lookup_next_child,
+				fake_sysfs_lookup_err_ptr);
+			require(result == (void *)(intptr_t)-ENOTDIR);
+			require(fake_sysfs_lookup_first_calls == 0);
+			require(fake_sysfs_lookup_last_error == -ENOTDIR);
+
+			reset_fake_work();
+			require(mcctrl_sysfs_lookup_i_body_result(
+				&dir, "needle", SNT_DIR, NULL,
+				fake_sysfs_lookup_node_name,
+				fake_sysfs_lookup_first_child,
+				fake_sysfs_lookup_next_child,
+				fake_sysfs_lookup_err_ptr) == NULL);
+			require(fake_sysfs_lookup_type_calls == 0);
+		}
+
+		reset_fake_work();
+		{
+			char buf[32];
 		fake_sysfs_client_ops.show = fake_sysfs_client_show;
 		fake_sysfs_local_node.client_ops = (long)&fake_sysfs_client_ops;
 		fake_sysfs_local_node.client_instance = 0x77770000L;
@@ -109499,6 +117395,137 @@ int main(void)
 		&fake_sysfs_local_node, SNT_FILE, fake_sysfs_node_type,
 		fake_sysfs_node_client_ops, fake_sysfs_node_client_instance));
 	require(fake_sysfs_local_release_calls == 0);
+
+	reset_fake_work();
+	fake_sysfs_resp_req.result = -1;
+	mix_signed(&digest, mcctrl_sysfs_resp_body_result(
+		&fake_sysfs_local_node, 0x1234, fake_sysfs_resp_get_req,
+		fake_sysfs_resp_complete_req));
+	require(fake_sysfs_resp_get_req_calls == 1);
+	require(fake_sysfs_resp_complete_calls == 1);
+	require(fake_sysfs_resp_req.complete_calls == 1);
+	require(fake_sysfs_resp_req.result == 0x1234);
+	mix_signed(&digest, fake_sysfs_resp_req.result);
+
+	reset_fake_work();
+	require(mcctrl_sysfs_resp_body_result(
+		&fake_sysfs_local_node, 0x1234, fake_sysfs_resp_get_null_req,
+		fake_sysfs_resp_complete_req) == -EINVAL);
+	require(fake_sysfs_resp_get_req_calls == 1);
+	require(fake_sysfs_resp_complete_calls == 0);
+
+	reset_fake_work();
+	{
+		char buf[32];
+
+		fake_sysfs_client_ops.show = fake_sysfs_client_show;
+		fake_sysfs_local_node.client_ops = (long)&fake_sysfs_client_ops;
+		mix_signed(&digest, mcctrl_sysfs_show_body_result(
+			&fake_sysfs_local_node, buf, 4096,
+			fake_sysfs_node_client_ops));
+		require(fake_sysfs_local_show_calls == 1);
+		require(fake_sysfs_local_last_instance ==
+				&fake_sysfs_local_node);
+		require(fake_sysfs_local_last_buf == buf);
+		require(fake_sysfs_local_last_size == 4096);
+		mix_signed(&digest, fake_sysfs_local_show_calls);
+	}
+
+	reset_fake_work();
+	{
+		char buf[32];
+
+		fake_sysfs_client_ops.store = fake_sysfs_client_store;
+		fake_sysfs_local_node.client_ops = (long)&fake_sysfs_client_ops;
+		mix_signed(&digest, mcctrl_sysfs_store_body_result(
+			&fake_sysfs_local_node, buf, 7,
+			fake_sysfs_node_client_ops));
+		require(fake_sysfs_local_store_calls == 1);
+		require(fake_sysfs_local_last_instance ==
+				&fake_sysfs_local_node);
+		require(fake_sysfs_local_last_buf == buf);
+		require(fake_sysfs_local_last_size == 7);
+		mix_signed(&digest, fake_sysfs_local_store_calls);
+	}
+
+	reset_fake_work();
+	fake_sysfs_client_ops.release = fake_sysfs_client_release;
+	fake_sysfs_local_node.client_ops = (long)&fake_sysfs_client_ops;
+	mix_signed(&digest, mcctrl_sysfs_release_body_result(
+		&fake_sysfs_local_node, fake_sysfs_node_client_ops));
+	require(fake_sysfs_local_release_calls == 1);
+	require(fake_sysfs_local_last_instance == &fake_sysfs_local_node);
+	mix_signed(&digest, fake_sysfs_local_release_calls);
+
+	reset_fake_work();
+	require(mcctrl_sysfs_show_body_result(&fake_sysfs_local_node,
+			NULL, 0, fake_sysfs_node_client_ops) == -ENOSPC);
+	require(mcctrl_sysfs_store_body_result(&fake_sysfs_local_node,
+			NULL, 0, fake_sysfs_node_client_ops) == -ENOSPC);
+	require(mcctrl_sysfs_release_body_result(&fake_sysfs_local_node,
+			fake_sysfs_node_client_ops) == 0);
+
+	reset_fake_work();
+	{
+		char buf[64];
+		int i32 = -42;
+		long i64 = -4200000000L;
+		unsigned int u32 = 1234;
+		unsigned long u64 = 1234567890123UL;
+		char str[] = "mcctrl";
+		unsigned int pages = 4096;
+		struct mcctrl_sysfsm_bitmap_param bitmap = {
+			.nbits = 12,
+			.ptr = (void *)0x1234UL,
+		};
+		long ret;
+
+		ret = mcctrl_sysfs_snooping_show_i32_body_result(
+			&i32, buf, sizeof(buf));
+		require(ret == (long)strlen("-42\n"));
+		require(!strcmp(buf, "-42\n"));
+		mix_signed(&digest, ret);
+
+		ret = mcctrl_sysfs_snooping_show_i64_body_result(
+			&i64, buf, sizeof(buf));
+		require(ret == (long)strlen("-4200000000\n"));
+		require(!strcmp(buf, "-4200000000\n"));
+		mix_signed(&digest, ret);
+
+		ret = mcctrl_sysfs_snooping_show_u32_body_result(
+			&u32, buf, sizeof(buf));
+		require(ret == (long)strlen("1234\n"));
+		require(!strcmp(buf, "1234\n"));
+		mix_signed(&digest, ret);
+
+		ret = mcctrl_sysfs_snooping_show_u64_body_result(
+			&u64, buf, sizeof(buf));
+		require(ret == (long)strlen("1234567890123\n"));
+		require(!strcmp(buf, "1234567890123\n"));
+		mix_signed(&digest, ret);
+
+		ret = mcctrl_sysfs_snooping_show_string_body_result(
+			str, buf, sizeof(buf));
+		require(ret == (long)strlen("mcctrl\n"));
+		require(!strcmp(buf, "mcctrl\n"));
+		mix_signed(&digest, ret);
+
+		ret = mcctrl_sysfs_snooping_show_u32k_body_result(
+			&pages, buf, sizeof(buf));
+		require(ret == (long)strlen("4K\n"));
+		require(!strcmp(buf, "4K\n"));
+		mix_signed(&digest, ret);
+
+		ret = mcctrl_sysfs_snooping_show_bitmap_body_result(
+			&bitmap, buf, sizeof(buf), fake_sysfs_bitmap_format);
+		require(ret == (long)strlen("bits:12:1234\n"));
+		require(!strcmp(buf, "bits:12:1234\n"));
+		require(fake_sysfs_bitmap_format_calls == 1);
+		require(fake_sysfs_bitmap_last_ptr == (void *)0x1234UL);
+		require(fake_sysfs_bitmap_last_nbits == 12);
+		require(fake_sysfs_bitmap_last_size == sizeof(buf));
+		mix_signed(&digest, ret);
+	}
 
 	reset_fake_work();
 	mix_signed(&digest,
@@ -109777,6 +117804,192 @@ int main(void)
 		(struct mcctrl_sysfs_req_unlink_param *)0x1UL, NULL));
 
 	reset_fake_work();
+	{
+		struct mcctrl_sysfs_req_setup_param param = {
+			.buf_rpa = (long)(uintptr_t)fake_sysfs_remote_kernel_buf,
+			.bufsize = 64,
+			.busy = 1,
+		};
+		mix_signed(&digest, mcctrl_sysfs_req_setup_body_result(
+			(void *)0x51535100UL, (unsigned long)(uintptr_t)&param,
+			sizeof(param), fake_sysfs_req_os_to_dev,
+			fake_sysfs_req_map_memory, fake_sysfs_req_map_virtual,
+			fake_sysfs_req_unmap_virtual,
+			fake_sysfs_req_unmap_memory,
+			fake_sysfs_req_setup_local, fake_sysfs_req_wmb));
+		require(fake_sysfs_req_os_to_dev_calls == 1);
+		require(fake_sysfs_req_map_memory_calls == 2);
+		require(fake_sysfs_req_map_virtual_calls == 2);
+		require(fake_sysfs_req_setup_local_calls == 1);
+		require(fake_sysfs_req_setup_os == (void *)0x51535100UL);
+		require(fake_sysfs_req_setup_buf == fake_sysfs_remote_kernel_buf);
+		require(fake_sysfs_req_setup_buf_pa ==
+			(unsigned long)(uintptr_t)fake_sysfs_remote_kernel_buf +
+			0x100000UL);
+		require(fake_sysfs_req_setup_bufsize == 64);
+		require(param.error == 0);
+		require(param.busy == 0);
+		require(fake_sysfs_req_wmb_calls == 1);
+		require(fake_sysfs_req_unmap_virtual_calls == 1);
+		require(fake_sysfs_req_unmap_memory_calls == 1);
+		mix_signed(&digest, fake_sysfs_req_setup_local_calls);
+	}
+
+	reset_fake_work();
+	{
+		struct mcctrl_sysfs_req_setup_param param = {
+			.buf_rpa = (long)(uintptr_t)fake_sysfs_remote_kernel_buf,
+			.bufsize = 32,
+			.busy = 1,
+		};
+		fake_sysfs_req_setup_local_ret = -5;
+		mix_signed(&digest, mcctrl_sysfs_req_setup_body_result(
+			(void *)0x51535101UL, (unsigned long)(uintptr_t)&param,
+			sizeof(param), fake_sysfs_req_os_to_dev,
+			fake_sysfs_req_map_memory, fake_sysfs_req_map_virtual,
+			fake_sysfs_req_unmap_virtual,
+			fake_sysfs_req_unmap_memory,
+			fake_sysfs_req_setup_local, fake_sysfs_req_wmb));
+		require(param.error == -5);
+		require(param.busy == 0);
+		require(fake_sysfs_req_wmb_calls == 1);
+		require(fake_sysfs_req_unmap_virtual_calls == 2);
+		require(fake_sysfs_req_unmap_memory_calls == 2);
+		mix_signed(&digest, param.error);
+	}
+
+	reset_fake_work();
+	{
+		struct mcctrl_sysfs_req_create_param param = {
+			.mode = 0644,
+			.busy = 1,
+		};
+		mix_signed(&digest, mcctrl_sysfs_req_create_body_result(
+			(void *)0x43524551UL, (unsigned long)(uintptr_t)&param,
+			sizeof(param), fake_sysfs_req_os_to_dev,
+			fake_sysfs_req_map_memory, fake_sysfs_req_map_virtual,
+			fake_sysfs_req_unmap_virtual,
+			fake_sysfs_req_unmap_memory,
+			fake_sysfs_local_create, fake_sysfs_req_wmb));
+		require(fake_sysfs_local_create_calls == 1);
+		require(fake_sysfs_local_create_os == (void *)0x43524551UL);
+		require(fake_sysfs_local_create_param == &param);
+		require(param.error == 0);
+		require(param.busy == 0);
+		require(fake_sysfs_req_wmb_calls == 1);
+		require(fake_sysfs_req_unmap_virtual_calls == 1);
+		require(fake_sysfs_req_unmap_memory_calls == 1);
+		mix_signed(&digest, fake_sysfs_local_create_calls);
+	}
+
+	reset_fake_work();
+	{
+		struct mcctrl_sysfs_req_mkdir_param param = {
+			.busy = 1,
+		};
+		mix_signed(&digest, mcctrl_sysfs_req_mkdir_body_result(
+			(void *)0x4d4b5251UL, (unsigned long)(uintptr_t)&param,
+			sizeof(param), fake_sysfs_req_os_to_dev,
+			fake_sysfs_req_map_memory, fake_sysfs_req_map_virtual,
+			fake_sysfs_req_unmap_virtual,
+			fake_sysfs_req_unmap_memory,
+			fake_sysfs_local_mkdir, fake_sysfs_req_wmb));
+		require(fake_sysfs_local_mkdir_calls == 1);
+		require(fake_sysfs_local_mkdir_os == (void *)0x4d4b5251UL);
+		require(fake_sysfs_local_mkdir_param == &param);
+		require(param.handle == 0x6d6b646972UL);
+		require(param.error == 0);
+		require(param.busy == 0);
+		require(fake_sysfs_req_wmb_calls == 1);
+		mix(&digest, param.handle);
+	}
+
+	reset_fake_work();
+	{
+		struct mcctrl_sysfs_req_symlink_param param = {
+			.target = 0xabcdefUL,
+			.busy = 1,
+		};
+		fake_sysfs_local_symlink_ret = -17;
+		mix_signed(&digest, mcctrl_sysfs_req_symlink_body_result(
+			(void *)0x53594d51UL, (unsigned long)(uintptr_t)&param,
+			sizeof(param), fake_sysfs_req_os_to_dev,
+			fake_sysfs_req_map_memory, fake_sysfs_req_map_virtual,
+			fake_sysfs_req_unmap_virtual,
+			fake_sysfs_req_unmap_memory,
+			fake_sysfs_local_symlink, fake_sysfs_req_wmb));
+		require(fake_sysfs_local_symlink_calls == 1);
+		require(fake_sysfs_local_symlink_os == (void *)0x53594d51UL);
+		require(fake_sysfs_local_symlink_param == &param);
+		require(param.error == -17);
+		require(param.busy == 0);
+		require(fake_sysfs_req_wmb_calls == 1);
+		mix_signed(&digest, param.error);
+	}
+
+	reset_fake_work();
+	{
+		struct mcctrl_sysfs_req_lookup_param param = {
+			.busy = 1,
+		};
+		mix_signed(&digest, mcctrl_sysfs_req_lookup_body_result(
+			(void *)0x4c4b5551UL, (unsigned long)(uintptr_t)&param,
+			sizeof(param), fake_sysfs_req_os_to_dev,
+			fake_sysfs_req_map_memory, fake_sysfs_req_map_virtual,
+			fake_sysfs_req_unmap_virtual,
+			fake_sysfs_req_unmap_memory,
+			fake_sysfs_local_lookup, fake_sysfs_req_wmb));
+		require(fake_sysfs_local_lookup_calls == 1);
+		require(fake_sysfs_local_lookup_os == (void *)0x4c4b5551UL);
+		require(fake_sysfs_local_lookup_param == &param);
+		require(param.handle == 0x6c6f6f6bUL);
+		require(param.error == 0);
+		require(param.busy == 0);
+		mix(&digest, param.handle);
+	}
+
+	reset_fake_work();
+	{
+		struct mcctrl_sysfs_req_unlink_param param = {
+			.flags = 3,
+			.busy = 1,
+		};
+		fake_sysfs_local_unlink_ret = -39;
+		mix_signed(&digest, mcctrl_sysfs_req_unlink_body_result(
+			(void *)0x554e4c51UL, (unsigned long)(uintptr_t)&param,
+			sizeof(param), fake_sysfs_req_os_to_dev,
+			fake_sysfs_req_map_memory, fake_sysfs_req_map_virtual,
+			fake_sysfs_req_unmap_virtual,
+			fake_sysfs_req_unmap_memory,
+			fake_sysfs_local_unlink, fake_sysfs_req_wmb));
+		require(fake_sysfs_local_unlink_calls == 1);
+		require(fake_sysfs_local_unlink_os == (void *)0x554e4c51UL);
+		require(fake_sysfs_local_unlink_param == &param);
+		require(param.error == -39);
+		require(param.busy == 0);
+		require(fake_sysfs_req_wmb_calls == 1);
+		mix_signed(&digest, param.error);
+	}
+
+	reset_fake_work();
+	{
+		struct mcctrl_sysfs_req_create_param param = {
+			.busy = 1,
+		};
+		mix_signed(&digest, mcctrl_sysfs_req_create_body_result(
+			(void *)0x43524e55UL, (unsigned long)(uintptr_t)&param,
+			sizeof(param), fake_sysfs_req_os_to_dev,
+			fake_sysfs_req_map_memory, fake_sysfs_req_map_virtual,
+			fake_sysfs_req_unmap_virtual,
+			fake_sysfs_req_unmap_memory,
+			NULL, fake_sysfs_req_wmb));
+		require(fake_sysfs_local_create_calls == 0);
+		require(fake_sysfs_req_map_memory_calls == 0);
+		require(param.busy == 1);
+		mix_signed(&digest, param.busy);
+	}
+
+	reset_fake_work();
 	for (int i = 1; i < 9; ++i)
 		fake_sysfs_local_ops_table[i] =
 			(void *)(0xabc000UL + (unsigned long)i * 0x10UL);
@@ -109941,6 +118154,190 @@ int main(void)
 		require(fake_sysfs_local_copy_calls == 0);
 		mix(&digest, param.client_ops);
 	}
+
+	reset_fake_driver();
+	require(mcctrl_driver_ioctl_body_result(0x1100, 0x22, 0x3300,
+			0x4400, fake_driver_control) == 0x660022L);
+	require(fake_driver_control_calls == 1);
+	require(fake_driver_control_os == 0x1100);
+	require(fake_driver_control_request == 0x22);
+	require(fake_driver_control_arg == 0x3300);
+	require(fake_driver_control_file == 0x4400);
+	require(mcctrl_driver_ioctl_body_result(0, 0, 0, 0, NULL) == -22);
+	mix_signed(&digest, fake_driver_control_calls);
+
+	reset_fake_driver();
+	fake_driver_os_slots[3] = (void *)0x330033UL;
+	fake_driver_os_slots[7] = (void *)0x770077UL;
+	require(mcctrl_driver_osnum_to_os_body_result(
+			3, fake_driver_get_os) == 0x330033UL);
+	require(fake_driver_get_os_calls == 1);
+	require(mcctrl_driver_os_alive_body_result(
+			8, fake_driver_get_os) == 3);
+	fake_driver_os_slots[3] = NULL;
+	require(mcctrl_driver_os_alive_body_result(
+			8, fake_driver_get_os) == 7);
+	fake_driver_os_slots[7] = NULL;
+	require(mcctrl_driver_os_alive_body_result(
+			8, fake_driver_get_os) == -1);
+	require(mcctrl_driver_os_alive_body_result(8, NULL) == -1);
+	mix_signed(&digest, fake_driver_last_index);
+
+	reset_fake_driver();
+	require(mcctrl_driver_boot_notifier_body_result(
+			5, &fake_driver_boot_ops) == 0);
+	require(fake_driver_os_slots[5] == fake_driver_find_result);
+	require(fake_driver_prepare_calls == 1);
+	require(fake_driver_copy_proto_calls == 1);
+	require(fake_driver_set_kernel_calls == 1);
+	require(fake_driver_register_user_calls == 1);
+	require(fake_driver_procfs_init_calls == 1);
+	require(fake_driver_clear_kernel_calls == 0);
+	require(fake_driver_destroy_calls == 0);
+	require(fake_driver_log_stage == 4);
+	require(fake_driver_log_index == 5);
+	mix_signed(&digest, fake_driver_procfs_init_calls);
+
+	reset_fake_driver();
+	fake_driver_find_result = NULL;
+	require(mcctrl_driver_boot_notifier_body_result(
+			6, &fake_driver_boot_ops) == -22);
+	require(fake_driver_prepare_calls == 0);
+	require(fake_driver_log_stage == 0);
+	require(fake_driver_os_slots[6] == NULL);
+	mix_signed(&digest, fake_driver_log_stage);
+
+	reset_fake_driver();
+	fake_driver_prepare_ret = -9;
+	require(mcctrl_driver_boot_notifier_body_result(
+			7, &fake_driver_boot_ops) == -14);
+	require(fake_driver_prepare_calls == 1);
+	require(fake_driver_destroy_calls == 0);
+	require(fake_driver_os_slots[7] == NULL);
+	require(fake_driver_log_stage == 1);
+	mix_signed(&digest, fake_driver_prepare_ret);
+
+	reset_fake_driver();
+	fake_driver_set_kernel_ret = -5;
+	require(mcctrl_driver_boot_notifier_body_result(
+			8, &fake_driver_boot_ops) == -5);
+	require(fake_driver_set_kernel_calls == 1);
+	require(fake_driver_register_user_calls == 0);
+	require(fake_driver_clear_kernel_calls == 0);
+	require(fake_driver_destroy_calls == 1);
+	require(fake_driver_os_slots[8] == NULL);
+	require(fake_driver_log_stage == 2);
+	mix_signed(&digest, fake_driver_destroy_calls);
+
+	reset_fake_driver();
+	fake_driver_register_user_ret = -6;
+	require(mcctrl_driver_boot_notifier_body_result(
+			9, &fake_driver_boot_ops) == -6);
+	require(fake_driver_register_user_calls == 1);
+	require(fake_driver_clear_kernel_calls == 1);
+	require(fake_driver_destroy_calls == 1);
+	require(fake_driver_os_slots[9] == NULL);
+	require(fake_driver_log_stage == 3);
+	mix_signed(&digest, fake_driver_clear_kernel_calls);
+
+	reset_fake_driver();
+	fake_driver_os_slots[4] = fake_driver_find_result;
+	require(mcctrl_driver_shutdown_notifier_body_result(
+			4, &fake_driver_shutdown_ops) == 0);
+	require(fake_driver_pager_cleanup_calls == 1);
+	require(fake_driver_sysfs_cleanup_calls == 1);
+	require(fake_driver_free_topology_calls == 1);
+	require(fake_driver_unregister_user_calls == 1);
+	require(fake_driver_clear_kernel_calls == 1);
+	require(fake_driver_destroy_calls == 1);
+	require(fake_driver_procfs_exit_calls == 1);
+	require(fake_driver_os_slots[4] == NULL);
+	require(fake_driver_log_stage == 5);
+	mix_signed(&digest, fake_driver_unregister_user_calls);
+
+	reset_fake_driver();
+	require(mcctrl_driver_shutdown_notifier_body_result(
+			4, &fake_driver_shutdown_ops) == 0);
+	require(fake_driver_pager_cleanup_calls == 0);
+	require(fake_driver_set_os_calls == 1);
+	require(fake_driver_log_stage == 5);
+	mix_signed(&digest, fake_driver_set_os_calls);
+
+	reset_fake_driver();
+	require(mcctrl_driver_symbols_init_body_result(
+			&fake_driver_symbols_ops) == 0);
+	require(fake_driver_lookup_calls == 8);
+	require(fake_driver_publish_calls == 8);
+	require(fake_driver_warn_calls == 8);
+	require(fake_driver_arch_calls == 1);
+	for (int i = 0; i < 8; i++)
+		require(fake_driver_published_symbols[i] ==
+				fake_driver_symbol_values[i]);
+	mix_signed(&digest, fake_driver_arch_calls);
+
+	reset_fake_driver();
+	fake_driver_symbol_missing = 2;
+	require(mcctrl_driver_symbols_init_body_result(
+			&fake_driver_symbols_ops) == -14);
+	require(fake_driver_lookup_calls == 3);
+	require(fake_driver_publish_calls == 3);
+	require(fake_driver_warn_calls == 3);
+	require(fake_driver_arch_calls == 0);
+	mix_signed(&digest, fake_driver_warn_calls);
+
+	reset_fake_driver();
+	fake_driver_arch_ret = -17;
+	require(mcctrl_driver_symbols_init_body_result(
+			&fake_driver_symbols_ops) == -17);
+	require(fake_driver_lookup_calls == 8);
+	require(fake_driver_arch_calls == 1);
+	mix_signed(&digest, fake_driver_arch_ret);
+
+	reset_fake_driver();
+	require(mcctrl_driver_init_body_result(
+			4, &fake_driver_module_ops) == 0);
+	require(fake_driver_syscall_init_calls == 1);
+	require(fake_driver_set_os_calls == 4);
+	require(fake_driver_binfmt_init_calls == 1);
+	require(fake_driver_tofu_hash_calls == 1);
+	require(fake_driver_symbols_init_calls == 1);
+	require(fake_driver_tofu_hijack_calls == 1);
+	require(fake_driver_register_notifier_calls == 1);
+	require(fake_driver_binfmt_exit_calls == 0);
+	require(!strcmp(fake_driver_order, "sbhyjr"));
+	require(fake_driver_log_stage == 7);
+	mix_signed(&digest, fake_driver_set_os_calls);
+
+	reset_fake_driver();
+	fake_driver_symbols_init_ret = -11;
+	require(mcctrl_driver_init_body_result(
+			4, &fake_driver_module_ops) == -11);
+	require(fake_driver_register_notifier_calls == 0);
+	require(fake_driver_binfmt_exit_calls == 1);
+	require(!strcmp(fake_driver_order, "sbhyx"));
+	mix_signed(&digest, fake_driver_symbols_init_ret);
+
+	reset_fake_driver();
+	fake_driver_register_notifier_ret = -13;
+	require(mcctrl_driver_init_body_result(
+			4, &fake_driver_module_ops) == -13);
+	require(fake_driver_tofu_hijack_calls == 1);
+	require(fake_driver_binfmt_exit_calls == 1);
+	require(fake_driver_log_stage == 6);
+	require(!strcmp(fake_driver_order, "sbhyjrx"));
+	mix_signed(&digest, fake_driver_register_notifier_ret);
+
+	reset_fake_driver();
+	fake_driver_deregister_notifier_ret = -1;
+	mcctrl_driver_exit_body_result(&fake_driver_module_ops);
+	require(fake_driver_deregister_notifier_calls == 1);
+	require(fake_driver_binfmt_exit_calls == 1);
+	require(fake_driver_uti_finalize_calls == 1);
+	require(fake_driver_tofu_restore_calls == 1);
+	require(fake_driver_log_calls == 2);
+	require(fake_driver_log_stage == 9);
+	require(!strcmp(fake_driver_order, "dxut"));
+	mix_signed(&digest, fake_driver_log_calls);
 
 	{
 		struct mcctrl_ikc_scd_packet packet;
@@ -110150,6 +118547,296 @@ int main(void)
 		require(mcctrl_in_kernel_irq_syscall_body_result(0x515012UL,
 			&packet, NULL, &ret_out) == -22);
 		mix_signed(&digest, fake_in_kernel_release_calls);
+	}
+
+	{
+		struct mcctrl_syscall_request req;
+		struct mcctrl_pager_call_ops missing_ops = fake_pager_ops;
+
+		reset_fake_pager();
+		fake_pager_prepare_req(&req, PAGER_REQ_CREATE);
+		req.args[1] = 17;
+		req.args[2] = 0xc001UL;
+		require(mcctrl_pager_call_body_result(
+			0x616000UL, &req, &fake_pager_ops) ==
+			fake_pager_create_ret);
+		require(fake_pager_create_calls == 1);
+		require(fake_pager_last_os == 0x616000UL);
+		require(fake_pager_last_arg1 == 17);
+		require(fake_pager_last_arg2 == 0xc001UL);
+		mix_signed(&digest, fake_pager_create_ret);
+
+		reset_fake_pager();
+		fake_pager_prepare_req(&req, PAGER_REQ_RELEASE);
+		req.args[1] = 0xabcUL;
+		req.args[2] = 9;
+		require(mcctrl_pager_call_irq_body_result(
+			0x616001UL, &req, &fake_pager_ops) ==
+			fake_pager_release_ret);
+		require(fake_pager_release_calls == 1);
+		require(fake_pager_last_os == 0x616001UL);
+		require(fake_pager_last_arg1 == 0xabcUL);
+		require(fake_pager_last_arg2 == 9);
+		mix_signed(&digest, fake_pager_release_ret);
+
+		reset_fake_pager();
+		fake_pager_prepare_req(&req, PAGER_REQ_READ);
+		req.args[1] = 0x10UL;
+		req.args[2] = 0x20UL;
+		req.args[3] = 0x30UL;
+		req.args[4] = 0x40UL;
+		require(mcctrl_pager_call_body_result(
+			0x616002UL, &req, &fake_pager_ops) ==
+			fake_pager_read_ret);
+		require(fake_pager_read_calls == 1);
+		require(fake_pager_last_arg1 == 0x10UL);
+		require(fake_pager_last_arg2 == 0x20UL);
+		require(fake_pager_last_arg3 == 0x30UL);
+		require(fake_pager_last_arg4 == 0x40UL);
+		mix_signed(&digest, fake_pager_read_ret);
+
+		reset_fake_pager();
+		fake_pager_prepare_req(&req, PAGER_REQ_WRITE);
+		req.args[1] = 0x11UL;
+		req.args[2] = 0x22UL;
+		req.args[3] = 0x33UL;
+		req.args[4] = 0x44UL;
+		require(mcctrl_pager_call_body_result(
+			0x616003UL, &req, &fake_pager_ops) ==
+			fake_pager_write_ret);
+		require(fake_pager_write_calls == 1);
+		require(fake_pager_last_arg1 == 0x11UL);
+		require(fake_pager_last_arg4 == 0x44UL);
+		mix_signed(&digest, fake_pager_write_ret);
+
+		reset_fake_pager();
+		fake_pager_prepare_req(&req, PAGER_REQ_MAP);
+		req.args[1] = 19;
+		req.args[2] = 0x2000UL;
+		req.args[3] = 0x3000UL;
+		req.args[4] = 0x4000UL;
+		req.args[5] = 7;
+		require(mcctrl_pager_call_body_result(
+			0x616004UL, &req, &fake_pager_ops) ==
+			fake_pager_map_ret);
+		require(fake_pager_map_calls == 1);
+		require(fake_pager_last_arg1 == 19);
+		require(fake_pager_last_arg2 == 0x2000UL);
+		require(fake_pager_last_arg3 == 0x3000UL);
+		require(fake_pager_last_arg4 == 0x4000UL);
+		require(fake_pager_last_int == 7);
+		mix_signed(&digest, fake_pager_map_ret);
+
+		reset_fake_pager();
+		fake_pager_prepare_req(&req, PAGER_REQ_PFN);
+		req.args[1] = 0x55UL;
+		req.args[2] = 0x66UL;
+		req.args[3] = 0x77UL;
+		require(mcctrl_pager_call_body_result(
+			0x616005UL, &req, &fake_pager_ops) ==
+			fake_pager_pfn_ret);
+		require(fake_pager_pfn_calls == 1);
+		require(fake_pager_last_arg3 == 0x77UL);
+		mix_signed(&digest, fake_pager_pfn_ret);
+
+		reset_fake_pager();
+		fake_pager_prepare_req(&req, PAGER_REQ_UNMAP);
+		req.args[1] = 0x88UL;
+		require(mcctrl_pager_call_body_result(
+			0x616006UL, &req, &fake_pager_ops) ==
+			fake_pager_unmap_ret);
+		require(fake_pager_unmap_calls == 1);
+		require(fake_pager_last_arg1 == 0x88UL);
+		mix_signed(&digest, fake_pager_unmap_ret);
+
+		reset_fake_pager();
+		fake_pager_prepare_req(&req, PAGER_REQ_MLOCK_LIST);
+		req.args[1] = 0x100UL;
+		req.args[2] = 0x200UL;
+		req.args[3] = 0x300UL;
+		req.args[4] = 4;
+		require(mcctrl_pager_call_body_result(
+			0x616007UL, &req, &fake_pager_ops) ==
+			fake_pager_mlock_ret);
+		require(fake_pager_mlock_calls == 1);
+		require(fake_pager_last_arg1 == 0x100UL);
+		require(fake_pager_last_arg2 == 0x200UL);
+		require(fake_pager_last_arg3 == 0x300UL);
+		require(fake_pager_last_int == 4);
+		mix_signed(&digest, fake_pager_mlock_ret);
+
+		reset_fake_pager();
+		fake_pager_prepare_req(&req, 0x999UL);
+		require(mcctrl_pager_call_body_result(
+			0x616008UL, &req, &fake_pager_ops) == -38);
+		require(fake_pager_unknown_calls == 1);
+		require(fake_pager_last_request == 0x999UL);
+		require((long)fake_pager_last_arg1 == -38);
+		require(mcctrl_pager_call_irq_body_result(
+			0x616009UL, &req, &fake_pager_ops) == -38);
+		require(fake_pager_unknown_calls == 1);
+		mix_signed(&digest, fake_pager_unknown_calls);
+
+		missing_ops.map = NULL;
+		fake_pager_prepare_req(&req, PAGER_REQ_MAP);
+		require(mcctrl_pager_call_body_result(
+			0x61600aUL, &req, &missing_ops) == -22);
+		require(mcctrl_pager_call_body_result(
+			0x61600bUL, NULL, &fake_pager_ops) == -22);
+		require(mcctrl_pager_call_body_result(
+			0x61600cUL, &req, NULL) == -22);
+		require(mcctrl_pager_call_irq_body_result(
+			0x61600dUL, NULL, &fake_pager_ops) == -22);
+		require(mcctrl_pager_call_irq_body_result(
+			0x61600eUL, &req, NULL) == -22);
+		mix_signed(&digest, fake_pager_map_calls);
+	}
+
+	{
+		struct mcctrl_ikc_scd_packet packet;
+
+		reset_fake_remote_pf();
+		memset(&packet, 0, sizeof(packet));
+		packet.body.remote_page_fault.target_cpu = 6;
+		packet.body.remote_page_fault.fault_tid = 44;
+		require(mcctrl_remote_page_fault_body_result(
+			0x717000UL, (void *)0xdead000UL, 2, &packet,
+			fake_remote_pf_send, fake_remote_pf_log) == 0);
+		require(packet.msg == SCD_MSG_REMOTE_PAGE_FAULT);
+		require(packet.body.remote_page_fault.fault_address ==
+			0xdead000UL);
+		require(packet.body.remote_page_fault.fault_reason == 2);
+		require(fake_remote_pf_send_calls == 1);
+		require(fake_remote_pf_last_os == 0x717000UL);
+		require(fake_remote_pf_last_cpu == 6);
+		require(fake_remote_pf_last_packet == &packet);
+		require(fake_remote_pf_log_calls == 2);
+		require(fake_remote_pf_last_stage == 2);
+		require(fake_remote_pf_last_pid == 44);
+		require(fake_remote_pf_last_addr == 0xdead000UL);
+		require(fake_remote_pf_last_reason == 2);
+		mix_signed(&digest, fake_remote_pf_log_calls);
+
+		reset_fake_remote_pf();
+		memset(&packet, 0, sizeof(packet));
+		packet.body.remote_page_fault.target_cpu = 7;
+		packet.body.remote_page_fault.fault_tid = 45;
+		fake_remote_pf_send_ret = -5;
+		require(mcctrl_remote_page_fault_body_result(
+			0x717001UL, (void *)0xbeef000UL, 3, &packet,
+			fake_remote_pf_send, fake_remote_pf_log) == -5);
+		require(fake_remote_pf_send_calls == 1);
+		require(fake_remote_pf_log_calls == 3);
+		require(fake_remote_pf_last_stage == 2);
+		require(fake_remote_pf_last_error == -5);
+		require(fake_remote_pf_last_cpu == 7);
+		mix_signed(&digest, fake_remote_pf_last_error);
+
+		require(mcctrl_remote_page_fault_body_result(
+			0x717002UL, (void *)0, 0, NULL,
+			fake_remote_pf_send, fake_remote_pf_log) == -22);
+		require(mcctrl_remote_page_fault_body_result(
+			0x717003UL, (void *)0, 0, &packet,
+			NULL, fake_remote_pf_log) == -22);
+		mix_signed(&digest, fake_remote_pf_send_calls);
+	}
+
+	{
+		struct mcctrl_clear_pte_range_ops missing_clear_ops =
+			fake_clear_pte_ops;
+
+		reset_fake_user_space();
+		fake_user_vmas[0].start = 0x1000UL;
+		fake_user_vmas[0].end = 0x1800UL;
+		fake_user_vmas[0].flags = FAKE_VM_PFNMAP;
+		fake_user_vmas[1].start = 0x2000UL;
+		fake_user_vmas[1].end = 0x2800UL;
+		fake_user_vmas[1].flags = 0;
+		fake_user_vma_count = 2;
+		require(mcctrl_clear_pte_range_body_result(0x800UL, 0x2000UL,
+			FAKE_VM_PFNMAP, 0, &fake_clear_pte_ops) == 0);
+		require(fake_user_space_lock_calls == 1);
+		require(fake_user_space_unlock_calls == 1);
+		require(fake_user_space_find_calls == 2);
+		require(fake_user_space_set_rw_calls == 1);
+		require(fake_user_space_zap_ptes_calls == 1);
+		require(fake_user_space_zap_range_calls == 1);
+		require(fake_user_space_last_start == 0x2000UL);
+		require(fake_user_space_last_len == 0x800UL);
+		mix_signed(&digest, fake_user_space_zap_range_calls);
+		mix(&digest, fake_user_space_last_len);
+
+		reset_fake_user_space();
+		fake_user_vmas[0].start = 0x3000UL;
+		fake_user_vmas[0].end = 0x3800UL;
+		fake_user_vmas[0].flags = 0;
+		fake_user_vma_count = 1;
+		fake_user_space_zap_ptes_ret = -12;
+		require(mcctrl_clear_pte_range_body_result(0x3000UL, 0x800UL,
+			FAKE_VM_PFNMAP, 1, &fake_clear_pte_ops) == 0);
+		require(fake_user_space_set_rw_calls == 1);
+		require(fake_user_space_zap_ptes_calls == 1);
+		require(fake_user_space_zap_range_calls == 1);
+		require(fake_user_space_last_start == 0x3000UL);
+		require(fake_user_space_last_len == 0x800UL);
+		mix_signed(&digest, fake_user_space_zap_ptes_ret);
+
+		reset_fake_user_space();
+		require(mcctrl_clear_pte_range_body_result(0x5000UL, 0x900UL,
+			FAKE_VM_PFNMAP, 0, &fake_clear_pte_ops) == 0);
+		require(fake_user_space_lock_calls == 1);
+		require(fake_user_space_unlock_calls == 1);
+		require(fake_user_space_find_calls == 1);
+		require(fake_user_space_zap_ptes_calls == 0);
+		require(fake_user_space_zap_range_calls == 0);
+		mix_signed(&digest, fake_user_space_find_calls);
+
+		missing_clear_ops.find_vma = NULL;
+		require(mcctrl_clear_pte_range_body_result(0x6000UL, 0x100UL,
+			FAKE_VM_PFNMAP, 0, &missing_clear_ops) == -22);
+		require(mcctrl_clear_pte_range_body_result(0x6000UL, 0x100UL,
+			FAKE_VM_PFNMAP, 0, NULL) == -22);
+		mix_signed(&digest, fake_user_space_lock_calls);
+	}
+
+	{
+		struct mcctrl_user_space_release_ops missing_release_ops =
+			fake_release_space_ops;
+
+		reset_fake_user_space();
+		fake_user_vmas[0].start = 0x1000UL;
+		fake_user_vmas[0].end = 0x1800UL;
+		fake_user_vmas[1].start = 0x2000UL;
+		fake_user_vmas[1].end = 0x2800UL;
+		fake_user_vma_count = 2;
+		require(mcctrl_user_space_release_body_result(0x800UL,
+			0x3000UL, &fake_release_space_ops) == 0);
+		require(fake_user_space_find_calls == 3);
+		require(fake_user_space_munmap_calls == 2);
+		require(fake_user_space_munmap_total == 0x1000UL);
+		require(fake_user_space_last_start == 0x2000UL);
+		require(fake_user_space_last_len == 0x800UL);
+		require(fake_user_space_log_calls == 0);
+		mix(&digest, fake_user_space_munmap_total);
+
+		reset_fake_user_space();
+		fake_user_vmas[0].start = 0x4000UL;
+		fake_user_vmas[0].end = 0x4800UL;
+		fake_user_vma_count = 1;
+		fake_user_space_munmap_ret = -33;
+		require(mcctrl_user_space_release_body_result(0x4000UL,
+			0x800UL, &fake_release_space_ops) == -33);
+		require(fake_user_space_munmap_calls == 1);
+		require(fake_user_space_log_calls == 1);
+		require(fake_user_space_last_error == -33);
+		mix_signed(&digest, fake_user_space_last_error);
+
+		missing_release_ops.munmap = NULL;
+		require(mcctrl_user_space_release_body_result(0x5000UL,
+			0x100UL, &missing_release_ops) == -22);
+		require(mcctrl_user_space_release_body_result(0x5000UL,
+			0x100UL, NULL) == -22);
+		mix_signed(&digest, fake_user_space_log_calls);
 	}
 
 	printf("mcctrl_helpers ok digest=%llx\n", digest);
@@ -111015,6 +119702,19 @@ extern size_t mck_crash_kmsg_first_part_result(int head, int tail, int len);
 extern int mck_crash_kmsg_read_body_result(unsigned long kmsg_buf_str,
 		int head, int tail, int len, char *msg,
 		int (*read_fn)(unsigned long, char *, int));
+extern int mck_crash_cmd_mckmsg_body_result(unsigned long kmsg_buf,
+		long kmsg_buf_str_offset, long kmsg_buf_head_offset,
+		long kmsg_buf_tail_offset, long kmsg_buf_len_offset,
+		int (*read_i32_fn)(unsigned long, int *),
+		char *(*getbuf_fn)(int),
+		void (*freebuf_fn)(char *),
+		int (*read_string_fn)(unsigned long, char *, int),
+		void (*write_string_fn)(const char *));
+extern int mck_crash_cmd_mcinfo_body_result(unsigned long linux_page_offset,
+		void (*write_string_fn)(const char *));
+extern int mck_crash_extension_init_body_result(void *command_table,
+		void (*register_fn)(void *));
+extern int mck_crash_extension_fini_body_result(void);
 extern const char *mck_crash_thread_comm_result(const char *saved_cmdline,
 		int is_idle);
 extern int mck_crash_mcps_line_result(char *buf, size_t buf_size,
@@ -111110,6 +119810,17 @@ static int fake_kmsg_fail_call;
 static const char fake_kmsg_ring[] = "ABCDEFGHIJ";
 static unsigned long fake_kmsg_addr[4];
 static int fake_kmsg_len[4];
+static int fake_cmd_kmsg_read_i32_calls;
+static int fake_cmd_kmsg_read_i32_fail_addr;
+static int fake_cmd_kmsg_alloc_calls;
+static int fake_cmd_kmsg_alloc_fail;
+static int fake_cmd_kmsg_free_calls;
+static int fake_cmd_kmsg_write_calls;
+static int fake_cmd_kmsg_alloc_len;
+static char fake_cmd_kmsg_msg[64];
+static char fake_cmd_kmsg_written[64];
+static int fake_extension_register_calls;
+static void *fake_extension_register_table;
 
 static int fake_kmsg_read(unsigned long addr, char *buf, int len)
 {
@@ -111135,6 +119846,67 @@ static void reset_fake_kmsg(int fail_call)
 	fake_kmsg_fail_call = fail_call;
 	memset(fake_kmsg_addr, 0, sizeof(fake_kmsg_addr));
 	memset(fake_kmsg_len, 0, sizeof(fake_kmsg_len));
+}
+
+static void reset_fake_cmd_kmsg(void)
+{
+	fake_cmd_kmsg_read_i32_calls = 0;
+	fake_cmd_kmsg_read_i32_fail_addr = 0;
+	fake_cmd_kmsg_alloc_calls = 0;
+	fake_cmd_kmsg_alloc_fail = 0;
+	fake_cmd_kmsg_free_calls = 0;
+	fake_cmd_kmsg_write_calls = 0;
+	fake_cmd_kmsg_alloc_len = 0;
+	memset(fake_cmd_kmsg_msg, 0, sizeof(fake_cmd_kmsg_msg));
+	memset(fake_cmd_kmsg_written, 0, sizeof(fake_cmd_kmsg_written));
+}
+
+static int fake_cmd_kmsg_read_i32(unsigned long addr, int *out)
+{
+	fake_cmd_kmsg_read_i32_calls++;
+	if ((int)addr == fake_cmd_kmsg_read_i32_fail_addr)
+		return 0;
+	if (addr == 0x1020) {
+		*out = 8;
+		return 1;
+	}
+	if (addr == 0x1024) {
+		*out = 3;
+		return 1;
+	}
+	if (addr == 0x1028) {
+		*out = 10;
+		return 1;
+	}
+	return 0;
+}
+
+static char *fake_cmd_kmsg_getbuf(int len)
+{
+	fake_cmd_kmsg_alloc_calls++;
+	fake_cmd_kmsg_alloc_len = len;
+	if (fake_cmd_kmsg_alloc_fail)
+		return NULL;
+	return fake_cmd_kmsg_msg;
+}
+
+static void fake_cmd_kmsg_freebuf(char *buf)
+{
+	if (buf != fake_cmd_kmsg_msg)
+		exit(2);
+	fake_cmd_kmsg_free_calls++;
+}
+
+static void fake_cmd_kmsg_write_string(const char *msg)
+{
+	fake_cmd_kmsg_write_calls++;
+	strncpy(fake_cmd_kmsg_written, msg, sizeof(fake_cmd_kmsg_written) - 1);
+}
+
+static void fake_register_extension(void *table)
+{
+	fake_extension_register_calls++;
+	fake_extension_register_table = table;
 }
 
 static int fake_context_read_ulong_calls;
@@ -111348,6 +120120,68 @@ int main(void)
 	require(mck_crash_kmsg_read_body_result(0x1000, 8, 3, 10, buf,
 			fake_kmsg_read) == 0);
 	require(fake_kmsg_read_calls == 2);
+	reset_fake_kmsg(-1);
+	reset_fake_cmd_kmsg();
+	require(mck_crash_cmd_mckmsg_body_result(0x1000, 0, 0x20, 0x24,
+			0x28, fake_cmd_kmsg_read_i32, fake_cmd_kmsg_getbuf,
+			fake_cmd_kmsg_freebuf, fake_kmsg_read,
+			fake_cmd_kmsg_write_string) == 1);
+	require(fake_cmd_kmsg_read_i32_calls == 3);
+	require(fake_cmd_kmsg_alloc_calls == 1);
+	require(fake_cmd_kmsg_alloc_len == 10);
+	require(fake_kmsg_read_calls == 2);
+	require(fake_cmd_kmsg_write_calls == 1);
+	require(!strcmp(fake_cmd_kmsg_written, "IJABC"));
+	require(fake_cmd_kmsg_free_calls == 1);
+	reset_fake_kmsg(-1);
+	reset_fake_cmd_kmsg();
+	fake_cmd_kmsg_read_i32_fail_addr = 0x1024;
+	require(mck_crash_cmd_mckmsg_body_result(0x1000, 0, 0x20, 0x24,
+			0x28, fake_cmd_kmsg_read_i32, fake_cmd_kmsg_getbuf,
+			fake_cmd_kmsg_freebuf, fake_kmsg_read,
+			fake_cmd_kmsg_write_string) == 0);
+	require(fake_cmd_kmsg_read_i32_calls == 2);
+	require(fake_cmd_kmsg_alloc_calls == 0);
+	reset_fake_kmsg(0);
+	reset_fake_cmd_kmsg();
+	require(mck_crash_cmd_mckmsg_body_result(0x1000, 0, 0x20, 0x24,
+			0x28, fake_cmd_kmsg_read_i32, fake_cmd_kmsg_getbuf,
+			fake_cmd_kmsg_freebuf, fake_kmsg_read,
+			fake_cmd_kmsg_write_string) == -1);
+	require(fake_cmd_kmsg_free_calls == 1);
+	require(fake_cmd_kmsg_write_calls == 0);
+	reset_fake_kmsg(-1);
+	reset_fake_cmd_kmsg();
+	fake_cmd_kmsg_alloc_fail = 1;
+	require(mck_crash_cmd_mckmsg_body_result(0x1000, 0, 0x20, 0x24,
+			0x28, fake_cmd_kmsg_read_i32, fake_cmd_kmsg_getbuf,
+			fake_cmd_kmsg_freebuf, fake_kmsg_read,
+			fake_cmd_kmsg_write_string) == -2);
+	require(fake_cmd_kmsg_free_calls == 0);
+	reset_fake_cmd_kmsg();
+	require(mck_crash_cmd_mcinfo_body_result(0xffff888000000000UL,
+			fake_cmd_kmsg_write_string) == 1);
+	require(fake_cmd_kmsg_write_calls == 1);
+	require(!strcmp(fake_cmd_kmsg_written,
+			"LINUX_PAGE_OFFSET: 0xffff888000000000\n"));
+	require(mck_crash_cmd_mcinfo_body_result(0, NULL) == -2);
+	mix(&digest, (unsigned long)strlen(fake_cmd_kmsg_written));
+	{
+		int fake_command_table;
+
+		fake_extension_register_calls = 0;
+		fake_extension_register_table = NULL;
+		require(mck_crash_extension_init_body_result(&fake_command_table,
+				fake_register_extension) == 0);
+		require(fake_extension_register_calls == 1);
+		require(fake_extension_register_table == &fake_command_table);
+		require(mck_crash_extension_init_body_result(NULL,
+				fake_register_extension) == -2);
+		require(mck_crash_extension_init_body_result(&fake_command_table,
+				NULL) == -2);
+		require(mck_crash_extension_fini_body_result() == 0);
+		mix(&digest, (unsigned long)fake_extension_register_calls);
+	}
 	mix(&digest, (unsigned long)fake_kmsg_read_calls);
 	require(!strcmp(mck_crash_thread_comm_result("/sbin/init", 0), "init"));
 	require(!strcmp(mck_crash_thread_comm_result(NULL, 1), "idle"));
@@ -111663,6 +120497,63 @@ extern int init_bfd_symbols(char *fname);
 extern void ihk_read_kernel(unsigned long addr, unsigned long len, void *buf,
 		int flags);
 extern int find_proc(void *dbg, int pid, unsigned long *rproc);
+extern int mcinspect_init_globals_body_result(
+		unsigned long mck_num_processors_addr,
+		unsigned long clv_addr,
+		unsigned long cpu_local_var_size,
+		unsigned long clv_runq,
+		unsigned long clv_idle,
+		unsigned long clv_current,
+		unsigned long thread_tid,
+		unsigned long thread_proc,
+		unsigned long thread_status,
+		unsigned long thread_sched_list,
+		unsigned long process_pid,
+		unsigned long process_saved_cmdline,
+		unsigned long process_saved_cmdline_len,
+		unsigned long process_vm,
+		unsigned long vm_address_space,
+		unsigned long address_space_page_table);
+extern int mcinspect_mcvtop_body_result(void *dbg, int pid,
+		unsigned long vtop_addr,
+		int (*find_proc_fn)(void *, int, unsigned long *),
+		void (*get_swapper_page_table_fn)(void *, unsigned long *),
+		void (*read_usize_fn)(unsigned long, unsigned long *),
+		void (*print_init_pt_fn)(unsigned long));
+extern int mcinspect_mcps_body_result(
+		void (*read_usize_fn)(unsigned long, unsigned long *),
+		void (*print_thread_fn)(int, unsigned long, unsigned long, int));
+extern int mcinspect_main_body_result(char **argv, int help,
+		char *kernel_path, int ps, int vtop, int pid,
+		unsigned long vtop_addr, void (*usage_fn)(char **),
+		int (*init_bfd_symbols_fn)(char *),
+		int (*open_readonly_fn)(const char *),
+		int (*dwarf_init_fn)(int, void **, void **),
+		void (*init_globals_fn)(void *),
+		int (*mcps_fn)(void *),
+		int (*mcvtop_fn)(void *, int, unsigned long),
+		int (*dwarf_finish_fn)(void *, void **),
+		int (*close_fn)(int));
+extern int mcinspect_option_body_result(int opt, char *optarg,
+		char **kernel_path_out, unsigned long *vtop_addr_out,
+		int *pid_out, char **argv, void (*usage_fn)(char **));
+extern int mcinspect_option_loop_body_result(int argc, char **argv,
+		const char *shortopts, const void *longopts,
+		char **kernel_path_out, unsigned long *vtop_addr_out,
+		int *pid_out,
+		int (*getopt_long_fn)(int, char **, const char *, const void *,
+			char **),
+		void (*usage_fn)(char **));
+extern int mcinspect_main_entry_result(int argc, char **argv,
+		const char *shortopts, const void *longopts,
+		int (*getopt_long_fn)(int, char **, const char *, const void *,
+			char **),
+		void (*usage_fn)(char **), int (*init_bfd_symbols_fn)(char *),
+		int (*open_readonly_fn)(const char *),
+		int (*dwarf_init_fn)(int, void **, void **),
+		void (*init_globals_fn)(void *), int (*mcps_fn)(void *),
+		int (*mcvtop_fn)(void *, int, unsigned long),
+		int (*dwarf_finish_fn)(void *, void **), int (*close_fn)(int));
 extern int dup(int oldfd);
 extern int dup2(int oldfd, int newfd);
 extern int close(int fd);
@@ -111673,11 +120564,14 @@ extern int close(int fd);
 #define MCINSPECT_MAIN_NO_ACTION 3
 #define IHK_OS_READ_KADDR 0x112a39
 
-static void require(int cond)
+static void require_line(int cond, int line)
 {
-	if (!cond)
+	if (!cond) {
+		fprintf(stderr, "mcinspect_helpers require failed at line %d\n", line);
 		exit(2);
+	}
 }
+#define require(cond) require_line((cond), __LINE__)
 
 static void mix(unsigned long *digest, unsigned long value)
 {
@@ -111713,14 +120607,29 @@ static unsigned long ioctl_seen_kaddr;
 static unsigned long ioctl_seen_len;
 static int ioctl_seen_flags;
 static char bfd_openr_name[64];
+int debug = 7;
 int mcfd = 55;
+int help = 8;
+int ps = 9;
+int vtop = 10;
+int pid = 11;
+unsigned long vtop_addr = 12;
 int nr_cpus = 2;
 unsigned long clv = 0x1000;
 unsigned long clv_size = 0x100;
 unsigned long clv_runq_offset = 0x20;
+unsigned long clv_idle_offset = 0x28;
+unsigned long clv_current_offset = 0x30;
+unsigned long thread_tid_offset = 0x4;
 unsigned long thread_sched_list_offset = 0x8;
 unsigned long thread_proc_offset = 0x30;
+unsigned long thread_status_offset = 0x34;
 unsigned long process_pid_offset = 0x10;
+unsigned long process_vm_offset = 0x18;
+unsigned long process_saved_cmdline_offset = 0x20;
+unsigned long process_saved_cmdline_len_offset = 0x28;
+unsigned long vm_address_space_offset = 0x38;
+unsigned long address_space_page_table_offset = 0x40;
 void *symbfd = NULL;
 static struct mcinspect_bfd_section mcinspect_symbol_sections[] = {
 	{ .vma = 0x1000 },
@@ -111776,6 +120685,10 @@ long mcinspect_bfd_canonicalize_symtab_bridge(void *abfd,
 
 static unsigned long fake_kernel_read_ulong(unsigned long addr)
 {
+	if (addr == 0x5000)
+		return 0x6000;
+	if (addr == 0x5010)
+		return 0x1000;
 	if (addr == 0x1020)
 		return 0x2008;
 	if (addr == 0x2008)
@@ -111789,9 +120702,312 @@ static unsigned long fake_kernel_read_ulong(unsigned long addr)
 
 static int fake_kernel_read_int(unsigned long addr)
 {
+	if (addr == 0x6000)
+		return 2;
 	if (addr == 0x3010)
 		return 42;
 	return -1;
+}
+
+static int fake_mcvtop_find_calls;
+static void *fake_mcvtop_find_dbg;
+static int fake_mcvtop_find_pid;
+static int fake_mcvtop_find_ret;
+static unsigned long fake_mcvtop_find_proc;
+static int fake_mcvtop_get_calls;
+static void *fake_mcvtop_get_dbg;
+static int fake_mcvtop_read_calls;
+static unsigned long fake_mcvtop_read_addr[4];
+static int fake_mcvtop_print_calls;
+static unsigned long fake_mcvtop_print_value;
+static int fake_mcps_read_calls;
+static int fake_mcps_print_calls;
+static int fake_mcps_print_cpu[8];
+static unsigned long fake_mcps_print_thread[8];
+static unsigned long fake_mcps_print_idle[8];
+static int fake_mcps_print_active[8];
+static int fake_main_usage_calls;
+static char *fake_main_usage_argv0;
+static int fake_main_init_bfd_calls;
+static char fake_main_init_bfd_name[64];
+static int fake_main_init_bfd_ret;
+static int fake_main_open_calls;
+static const char *fake_main_open_path[4];
+static int fake_main_open_fail_stage;
+static int fake_main_dwarf_init_calls;
+static int fake_main_dwarf_init_fd;
+static int fake_main_dwarf_init_ret;
+static int fake_main_init_globals_calls;
+static void *fake_main_init_globals_dbg;
+static int fake_main_mcps_calls;
+static void *fake_main_mcps_dbg;
+static int fake_main_mcvtop_calls;
+static void *fake_main_mcvtop_dbg;
+static int fake_main_mcvtop_pid;
+static unsigned long fake_main_mcvtop_addr;
+static int fake_main_dwarf_finish_calls;
+static void *fake_main_dwarf_finish_dbg;
+static int fake_main_close_calls;
+static int fake_main_close_fd[4];
+static int fake_option_loop_calls;
+static int fake_option_loop_opts[8];
+static char *fake_option_loop_args[8];
+static int fake_option_loop_set_help[8];
+static int fake_option_loop_set_ps[8];
+static int fake_option_loop_set_vtop[8];
+static int fake_option_loop_set_debug[8];
+static int fake_option_loop_argc;
+static char **fake_option_loop_argv;
+static const char *fake_option_loop_shortopts;
+static const void *fake_option_loop_longopts;
+
+static void reset_fake_mcvtop(void)
+{
+	fake_mcvtop_find_calls = 0;
+	fake_mcvtop_find_dbg = NULL;
+	fake_mcvtop_find_pid = 0;
+	fake_mcvtop_find_ret = 0;
+	fake_mcvtop_find_proc = 0x7000;
+	fake_mcvtop_get_calls = 0;
+	fake_mcvtop_get_dbg = NULL;
+	fake_mcvtop_read_calls = 0;
+	memset(fake_mcvtop_read_addr, 0, sizeof(fake_mcvtop_read_addr));
+	fake_mcvtop_print_calls = 0;
+	fake_mcvtop_print_value = 0;
+}
+
+static int fake_mcvtop_find_proc_cb(void *dbg, int pid,
+		unsigned long *rproc)
+{
+	fake_mcvtop_find_calls++;
+	fake_mcvtop_find_dbg = dbg;
+	fake_mcvtop_find_pid = pid;
+	if (fake_mcvtop_find_ret < 0)
+		return fake_mcvtop_find_ret;
+	*rproc = fake_mcvtop_find_proc;
+	return 0;
+}
+
+static void fake_mcvtop_get_swapper_cb(void *dbg, unsigned long *out)
+{
+	fake_mcvtop_get_calls++;
+	fake_mcvtop_get_dbg = dbg;
+	*out = 0x9000;
+}
+
+static void fake_mcvtop_read_usize_cb(unsigned long addr, unsigned long *out)
+{
+	if (fake_mcvtop_read_calls < 4)
+		fake_mcvtop_read_addr[fake_mcvtop_read_calls] = addr;
+	fake_mcvtop_read_calls++;
+	if (addr == 0x7018)
+		*out = 0x8000;
+	else if (addr == 0x8038)
+		*out = 0x8100;
+	else if (addr == 0x8140)
+		*out = 0x8200;
+	else
+		*out = 0;
+}
+
+static void fake_mcvtop_print_init_pt_cb(unsigned long init_pt)
+{
+	fake_mcvtop_print_calls++;
+	fake_mcvtop_print_value = init_pt;
+}
+
+static void reset_fake_mcps(void)
+{
+	fake_mcps_read_calls = 0;
+	fake_mcps_print_calls = 0;
+	memset(fake_mcps_print_cpu, 0, sizeof(fake_mcps_print_cpu));
+	memset(fake_mcps_print_thread, 0, sizeof(fake_mcps_print_thread));
+	memset(fake_mcps_print_idle, 0, sizeof(fake_mcps_print_idle));
+	memset(fake_mcps_print_active, 0, sizeof(fake_mcps_print_active));
+}
+
+static void fake_mcps_read_usize_cb(unsigned long addr, unsigned long *out)
+{
+	fake_mcps_read_calls++;
+	if (addr == 0x1030)
+		*out = 0x2000;
+	else if (addr == 0x1020)
+		*out = 0x2008;
+	else if (addr == 0x2008)
+		*out = 0x1020;
+	else if (addr == 0x1130)
+		*out = 0x1128;
+	else if (addr == 0x1120)
+		*out = 0x3008;
+	else if (addr == 0x3008)
+		*out = 0x3108;
+	else if (addr == 0x3108)
+		*out = 0x1120;
+	else
+		*out = 0;
+}
+
+static void fake_mcps_print_thread_cb(int cpu, unsigned long thread,
+		unsigned long idle, int active)
+{
+	int idx = fake_mcps_print_calls++;
+
+	if (idx < 8) {
+		fake_mcps_print_cpu[idx] = cpu;
+		fake_mcps_print_thread[idx] = thread;
+		fake_mcps_print_idle[idx] = idle;
+		fake_mcps_print_active[idx] = active;
+	}
+}
+
+static void reset_fake_main(void)
+{
+	fake_main_usage_calls = 0;
+	fake_main_usage_argv0 = NULL;
+	fake_main_init_bfd_calls = 0;
+	memset(fake_main_init_bfd_name, 0, sizeof(fake_main_init_bfd_name));
+	fake_main_init_bfd_ret = 0;
+	fake_main_open_calls = 0;
+	memset(fake_main_open_path, 0, sizeof(fake_main_open_path));
+	fake_main_open_fail_stage = 0;
+	fake_main_dwarf_init_calls = 0;
+	fake_main_dwarf_init_fd = 0;
+	fake_main_dwarf_init_ret = 0;
+	fake_main_init_globals_calls = 0;
+	fake_main_init_globals_dbg = NULL;
+	fake_main_mcps_calls = 0;
+	fake_main_mcps_dbg = NULL;
+	fake_main_mcvtop_calls = 0;
+	fake_main_mcvtop_dbg = NULL;
+	fake_main_mcvtop_pid = 0;
+	fake_main_mcvtop_addr = 0;
+	fake_main_dwarf_finish_calls = 0;
+	fake_main_dwarf_finish_dbg = NULL;
+	fake_main_close_calls = 0;
+	memset(fake_main_close_fd, 0, sizeof(fake_main_close_fd));
+	mcfd = -1;
+}
+
+static void fake_main_usage_cb(char **argv)
+{
+	fake_main_usage_calls++;
+	fake_main_usage_argv0 = argv ? argv[0] : NULL;
+}
+
+static int fake_main_init_bfd_cb(char *fname)
+{
+	fake_main_init_bfd_calls++;
+	if (fname)
+		strncpy(fake_main_init_bfd_name, fname,
+				sizeof(fake_main_init_bfd_name) - 1);
+	return fake_main_init_bfd_ret;
+}
+
+static int fake_main_open_cb(const char *path)
+{
+	int call = ++fake_main_open_calls;
+
+	if (call <= 4)
+		fake_main_open_path[call - 1] = path;
+	if (fake_main_open_fail_stage == call)
+		return -1;
+	return call == 1 ? 77 : 88;
+}
+
+static int fake_main_dwarf_init_cb(int fd, void **dbg, void **error)
+{
+	fake_main_dwarf_init_calls++;
+	fake_main_dwarf_init_fd = fd;
+	if (dbg)
+		*dbg = (void *)0xabcdef00UL;
+	if (error)
+		*error = (void *)0x98760000UL;
+	return fake_main_dwarf_init_ret;
+}
+
+static void fake_main_init_globals_cb(void *dbg)
+{
+	fake_main_init_globals_calls++;
+	fake_main_init_globals_dbg = dbg;
+}
+
+static int fake_main_mcps_cb(void *dbg)
+{
+	fake_main_mcps_calls++;
+	fake_main_mcps_dbg = dbg;
+	return 0;
+}
+
+static int fake_main_mcvtop_cb(void *dbg, int pid, unsigned long addr)
+{
+	fake_main_mcvtop_calls++;
+	fake_main_mcvtop_dbg = dbg;
+	fake_main_mcvtop_pid = pid;
+	fake_main_mcvtop_addr = addr;
+	return 0;
+}
+
+static int fake_main_dwarf_finish_cb(void *dbg, void **error)
+{
+	(void)error;
+	fake_main_dwarf_finish_calls++;
+	fake_main_dwarf_finish_dbg = dbg;
+	return 0;
+}
+
+static int fake_main_close_cb(int fd)
+{
+	int idx = fake_main_close_calls++;
+
+	if (idx < 4)
+		fake_main_close_fd[idx] = fd;
+	return 0;
+}
+
+static void reset_fake_option_loop(void)
+{
+	int i;
+
+	fake_option_loop_calls = 0;
+	fake_option_loop_argc = 0;
+	fake_option_loop_argv = NULL;
+	fake_option_loop_shortopts = NULL;
+	fake_option_loop_longopts = NULL;
+	for (i = 0; i < 8; i++) {
+		fake_option_loop_opts[i] = -1;
+		fake_option_loop_args[i] = NULL;
+		fake_option_loop_set_help[i] = 0;
+		fake_option_loop_set_ps[i] = 0;
+		fake_option_loop_set_vtop[i] = 0;
+		fake_option_loop_set_debug[i] = 0;
+	}
+}
+
+static int fake_option_loop_getopt(int argc, char **argv,
+		const char *shortopts, const void *longopts, char **optarg_out)
+{
+	int idx = fake_option_loop_calls++;
+
+	fake_option_loop_argc = argc;
+	fake_option_loop_argv = argv;
+	fake_option_loop_shortopts = shortopts;
+	fake_option_loop_longopts = longopts;
+	if (idx >= 8) {
+		if (optarg_out)
+			*optarg_out = NULL;
+		return -1;
+	}
+	if (fake_option_loop_set_help[idx])
+		help = fake_option_loop_set_help[idx];
+	if (fake_option_loop_set_ps[idx])
+		ps = fake_option_loop_set_ps[idx];
+	if (fake_option_loop_set_vtop[idx])
+		vtop = fake_option_loop_set_vtop[idx];
+	if (fake_option_loop_set_debug[idx])
+		debug = fake_option_loop_set_debug[idx];
+	if (optarg_out)
+		*optarg_out = fake_option_loop_args[idx];
+	return fake_option_loop_opts[idx];
 }
 
 int ioctl(int fd, unsigned long request, void *arg)
@@ -111862,6 +121078,9 @@ int main(void)
 	unsigned long digest = 0x6d63696e73706563UL;
 	char buf[1024];
 	char *argv[] = { "/tmp/mcinspect", NULL };
+	char *parsed_kernel_path = NULL;
+	unsigned long parsed_vtop_addr = 0;
+	int parsed_pid = 0;
 	unsigned long read_value = 0;
 	unsigned long found_proc = 0;
 	int rc;
@@ -111882,6 +121101,68 @@ int main(void)
 			MCINSPECT_MAIN_NO_ACTION);
 	require(mcinspect_main_preflight_action_result(0, "kernel.img", 1, 0) ==
 			MCINSPECT_MAIN_CONTINUE);
+	require(mcinspect_option_body_result('k', "kernel.img",
+			&parsed_kernel_path, &parsed_vtop_addr, &parsed_pid, argv,
+			fake_main_usage_cb) == 0);
+	require(parsed_kernel_path && !strcmp(parsed_kernel_path, "kernel.img"));
+	parsed_vtop_addr = 0;
+	require(mcinspect_option_body_result('v', "0x1234",
+			&parsed_kernel_path, &parsed_vtop_addr, &parsed_pid, argv,
+			fake_main_usage_cb) == 0);
+	require(parsed_vtop_addr == 0x1234);
+	parsed_pid = 0;
+	require(mcinspect_option_body_result('p', "-42",
+			&parsed_kernel_path, &parsed_vtop_addr, &parsed_pid, argv,
+			fake_main_usage_cb) == 0);
+	require(parsed_pid == -42);
+	reset_fake_main();
+	require(mcinspect_option_body_result('v', "not-hex",
+			&parsed_kernel_path, &parsed_vtop_addr, &parsed_pid, argv,
+			fake_main_usage_cb) == -1);
+	require(fake_main_usage_calls == 1);
+	require(mcinspect_option_body_result('k', "kernel.img",
+			NULL, &parsed_vtop_addr, &parsed_pid, argv,
+			fake_main_usage_cb) == -22);
+	reset_fake_option_loop();
+	parsed_kernel_path = NULL;
+	parsed_vtop_addr = 0;
+	parsed_pid = 0;
+	fake_option_loop_opts[0] = 'k';
+	fake_option_loop_args[0] = "loop.img";
+	fake_option_loop_opts[1] = 'v';
+	fake_option_loop_args[1] = "0x3456";
+	fake_option_loop_opts[2] = 'p';
+	fake_option_loop_args[2] = "321";
+	fake_option_loop_opts[3] = -1;
+	require(mcinspect_option_loop_body_result(3, argv, "+k:v:p:",
+			(void *)0xfeedUL, &parsed_kernel_path, &parsed_vtop_addr,
+			&parsed_pid, fake_option_loop_getopt,
+			fake_main_usage_cb) == 0);
+	require(fake_option_loop_calls == 4);
+	require(fake_option_loop_argc == 3 && fake_option_loop_argv == argv);
+	require(fake_option_loop_shortopts &&
+			!strcmp(fake_option_loop_shortopts, "+k:v:p:"));
+	require(fake_option_loop_longopts == (void *)0xfeedUL);
+	require(parsed_kernel_path && !strcmp(parsed_kernel_path, "loop.img"));
+	require(parsed_vtop_addr == 0x3456);
+	require(parsed_pid == 321);
+	reset_fake_main();
+	reset_fake_option_loop();
+	fake_option_loop_opts[0] = 'v';
+	fake_option_loop_args[0] = "not-hex";
+	fake_option_loop_opts[1] = -1;
+	require(mcinspect_option_loop_body_result(2, argv, "+k:v:p:",
+			NULL, &parsed_kernel_path, &parsed_vtop_addr, &parsed_pid,
+			fake_option_loop_getopt, fake_main_usage_cb) == -1);
+	require(fake_option_loop_calls == 1);
+	require(fake_main_usage_calls == 1);
+	require(mcinspect_option_loop_body_result(2, argv, "+k:v:p:",
+			NULL, &parsed_kernel_path, &parsed_vtop_addr, &parsed_pid,
+			NULL, fake_main_usage_cb) == -22);
+	require(mcinspect_option_loop_body_result(2, argv, "+k:v:p:",
+			NULL, NULL, &parsed_vtop_addr, &parsed_pid,
+			fake_option_loop_getopt, fake_main_usage_cb) == -22);
+	mcfd = 55;
 
 	memset(buf, 0, sizeof(buf));
 	rc = mcinspect_ps_header_result(buf, sizeof(buf));
@@ -111928,10 +121209,261 @@ int main(void)
 	mix(&digest, read_value);
 	mix(&digest, ioctl_seen_kaddr);
 	mix(&digest, (unsigned long)rc);
+	require(mcinspect_init_globals_body_result(0x5000, 0x5010, 0x100,
+			0x20, 0x28, 0x30, 0x4, 0x30, 0x34, 0x8,
+			0x10, 0x20, 0x28, 0x18, 0x38, 0x40) == 0);
+	require(nr_cpus == 2);
+	require(clv == 0x1000);
+	require(clv_size == 0x100);
+	require(clv_runq_offset == 0x20);
+	require(clv_idle_offset == 0x28);
+	require(clv_current_offset == 0x30);
+	require(thread_tid_offset == 0x4);
+	require(thread_sched_list_offset == 0x8);
+	require(thread_proc_offset == 0x30);
+	require(thread_status_offset == 0x34);
+	require(process_pid_offset == 0x10);
+	require(process_saved_cmdline_offset == 0x20);
+	require(process_saved_cmdline_len_offset == 0x28);
+	require(process_vm_offset == 0x18);
+	require(vm_address_space_offset == 0x38);
+	require(address_space_page_table_offset == 0x40);
+	mix(&digest, (unsigned long)nr_cpus);
+	mix(&digest, clv_current_offset);
 	require(find_proc(NULL, 42, &found_proc) == 0);
 	require(found_proc == 0x3000);
 	require(find_proc(NULL, 7, &found_proc) == -1);
 	mix(&digest, found_proc);
+
+	reset_fake_mcvtop();
+	require(mcinspect_mcvtop_body_result((void *)0x1234, 99, 0xbeef,
+			fake_mcvtop_find_proc_cb, fake_mcvtop_get_swapper_cb,
+			fake_mcvtop_read_usize_cb,
+			fake_mcvtop_print_init_pt_cb) == 0);
+	require(fake_mcvtop_find_calls == 1 &&
+			fake_mcvtop_find_dbg == (void *)0x1234 &&
+			fake_mcvtop_find_pid == 99);
+	require(fake_mcvtop_get_calls == 1 && fake_mcvtop_print_calls == 1 &&
+			fake_mcvtop_get_dbg == (void *)0x1234 &&
+			fake_mcvtop_print_value == 0x9000);
+	require(fake_mcvtop_read_calls == 3);
+	require(fake_mcvtop_read_addr[0] == 0x7018 &&
+			fake_mcvtop_read_addr[1] == 0x8038 &&
+			fake_mcvtop_read_addr[2] == 0x8140);
+	reset_fake_mcvtop();
+	require(mcinspect_mcvtop_body_result(NULL, 0, 0,
+			fake_mcvtop_find_proc_cb, fake_mcvtop_get_swapper_cb,
+			fake_mcvtop_read_usize_cb,
+			fake_mcvtop_print_init_pt_cb) == 0);
+	require(fake_mcvtop_find_calls == 0 && fake_mcvtop_get_calls == 1 &&
+			fake_mcvtop_print_calls == 1 &&
+			fake_mcvtop_read_calls == 0);
+	reset_fake_mcvtop();
+	fake_mcvtop_find_ret = -1;
+	require(mcinspect_mcvtop_body_result(NULL, 99, 0,
+			fake_mcvtop_find_proc_cb, fake_mcvtop_get_swapper_cb,
+			fake_mcvtop_read_usize_cb,
+			fake_mcvtop_print_init_pt_cb) == -1);
+	require(fake_mcvtop_get_calls == 0 && fake_mcvtop_print_calls == 0 &&
+			fake_mcvtop_read_calls == 0);
+	require(mcinspect_mcvtop_body_result(NULL, 99, 0, NULL,
+			fake_mcvtop_get_swapper_cb, fake_mcvtop_read_usize_cb,
+			fake_mcvtop_print_init_pt_cb) == -22);
+	mix(&digest, fake_mcvtop_read_addr[2]);
+
+	reset_fake_mcps();
+	require(mcinspect_mcps_body_result(fake_mcps_read_usize_cb,
+			fake_mcps_print_thread_cb) == 0);
+	require(fake_mcps_read_calls == 7);
+	require(fake_mcps_print_calls == 5);
+	require(fake_mcps_print_cpu[0] == 0 &&
+			fake_mcps_print_thread[0] == 0x2000 &&
+			fake_mcps_print_idle[0] == 0x1028 &&
+			fake_mcps_print_active[0] == 1);
+	require(fake_mcps_print_cpu[1] == 0 &&
+			fake_mcps_print_thread[1] == 0x1028 &&
+			fake_mcps_print_idle[1] == 0x1028 &&
+			fake_mcps_print_active[1] == 0);
+	require(fake_mcps_print_cpu[2] == 1 &&
+			fake_mcps_print_thread[2] == 0x1128 &&
+			fake_mcps_print_idle[2] == 0x1128 &&
+			fake_mcps_print_active[2] == 1);
+	require(fake_mcps_print_cpu[3] == 1 &&
+			fake_mcps_print_thread[3] == 0x3000 &&
+			fake_mcps_print_idle[3] == 0x1128 &&
+			fake_mcps_print_active[3] == 0);
+	require(fake_mcps_print_cpu[4] == 1 &&
+			fake_mcps_print_thread[4] == 0x3100 &&
+			fake_mcps_print_idle[4] == 0x1128 &&
+			fake_mcps_print_active[4] == 0);
+	require(mcinspect_mcps_body_result(NULL,
+			fake_mcps_print_thread_cb) == -22);
+	mix(&digest, (unsigned long)fake_mcps_print_calls);
+
+	reset_fake_main();
+	rc = mcinspect_main_body_result(argv, 0, "kernel.img", 1, 1, 123,
+			0xdeadbeefUL, fake_main_usage_cb,
+			fake_main_init_bfd_cb, fake_main_open_cb,
+			fake_main_dwarf_init_cb, fake_main_init_globals_cb,
+			fake_main_mcps_cb, fake_main_mcvtop_cb,
+			fake_main_dwarf_finish_cb, fake_main_close_cb);
+	require(rc == 0);
+	require(fake_main_usage_calls == 0);
+	require(fake_main_init_bfd_calls == 1);
+	require(!strcmp(fake_main_init_bfd_name, "kernel.img"));
+	require(fake_main_open_calls == 2);
+	require(!strcmp(fake_main_open_path[0], "/dev/mcos0"));
+	require(!strcmp(fake_main_open_path[1], "kernel.img"));
+	require(mcfd == 77);
+	require(fake_main_dwarf_init_calls == 1);
+	require(fake_main_dwarf_init_fd == 88);
+	require(fake_main_init_globals_calls == 1 &&
+			fake_main_init_globals_dbg == (void *)0xabcdef00UL);
+	require(fake_main_mcps_calls == 1 &&
+			fake_main_mcps_dbg == (void *)0xabcdef00UL);
+	require(fake_main_mcvtop_calls == 1 &&
+			fake_main_mcvtop_dbg == (void *)0xabcdef00UL &&
+			fake_main_mcvtop_pid == 123 &&
+			fake_main_mcvtop_addr == 0xdeadbeefUL);
+	require(fake_main_dwarf_finish_calls == 1 &&
+			fake_main_dwarf_finish_dbg == (void *)0xabcdef00UL);
+	require(fake_main_close_calls == 2 &&
+			fake_main_close_fd[0] == 88 &&
+			fake_main_close_fd[1] == 77);
+	mix(&digest, (unsigned long)fake_main_close_calls);
+	mix(&digest, fake_main_mcvtop_addr);
+
+	reset_fake_main();
+	rc = mcinspect_main_body_result(argv, 1, NULL, 0, 0, 0, 0,
+			fake_main_usage_cb, fake_main_init_bfd_cb,
+			fake_main_open_cb, fake_main_dwarf_init_cb,
+			fake_main_init_globals_cb, fake_main_mcps_cb,
+			fake_main_mcvtop_cb, fake_main_dwarf_finish_cb,
+			fake_main_close_cb);
+	require(rc == 0 && fake_main_usage_calls == 1 &&
+			fake_main_usage_argv0 == argv[0] &&
+			fake_main_init_bfd_calls == 0);
+
+	reset_fake_main();
+	rc = mcinspect_main_body_result(argv, 0, NULL, 1, 0, 0, 0,
+			fake_main_usage_cb, fake_main_init_bfd_cb,
+			fake_main_open_cb, fake_main_dwarf_init_cb,
+			fake_main_init_globals_cb, fake_main_mcps_cb,
+			fake_main_mcvtop_cb, fake_main_dwarf_finish_cb,
+			fake_main_close_cb);
+	require(rc == 1 && fake_main_usage_calls == 1 &&
+			fake_main_init_bfd_calls == 0);
+
+	reset_fake_main();
+	fake_main_init_bfd_ret = -1;
+	rc = mcinspect_main_body_result(argv, 0, "kernel.img", 1, 0, 0, 0,
+			fake_main_usage_cb, fake_main_init_bfd_cb,
+			fake_main_open_cb, fake_main_dwarf_init_cb,
+			fake_main_init_globals_cb, fake_main_mcps_cb,
+			fake_main_mcvtop_cb, fake_main_dwarf_finish_cb,
+			fake_main_close_cb);
+	require(rc == 1 && fake_main_init_bfd_calls == 1 &&
+			fake_main_open_calls == 0);
+
+	reset_fake_main();
+	fake_main_open_fail_stage = 1;
+	rc = mcinspect_main_body_result(argv, 0, "kernel.img", 1, 0, 0, 0,
+			fake_main_usage_cb, fake_main_init_bfd_cb,
+			fake_main_open_cb, fake_main_dwarf_init_cb,
+			fake_main_init_globals_cb, fake_main_mcps_cb,
+			fake_main_mcvtop_cb, fake_main_dwarf_finish_cb,
+			fake_main_close_cb);
+	require(rc == 1 && fake_main_open_calls == 1 &&
+			fake_main_dwarf_init_calls == 0);
+
+	reset_fake_main();
+	fake_main_open_fail_stage = 2;
+	rc = mcinspect_main_body_result(argv, 0, "kernel.img", 1, 0, 0, 0,
+			fake_main_usage_cb, fake_main_init_bfd_cb,
+			fake_main_open_cb, fake_main_dwarf_init_cb,
+			fake_main_init_globals_cb, fake_main_mcps_cb,
+			fake_main_mcvtop_cb, fake_main_dwarf_finish_cb,
+			fake_main_close_cb);
+	require(rc == 1 && fake_main_open_calls == 2 &&
+			fake_main_dwarf_init_calls == 0);
+
+	reset_fake_main();
+	fake_main_dwarf_init_ret = -1;
+	rc = mcinspect_main_body_result(argv, 0, "kernel.img", 1, 0, 0, 0,
+			fake_main_usage_cb, fake_main_init_bfd_cb,
+			fake_main_open_cb, fake_main_dwarf_init_cb,
+			fake_main_init_globals_cb, fake_main_mcps_cb,
+			fake_main_mcvtop_cb, fake_main_dwarf_finish_cb,
+			fake_main_close_cb);
+	require(rc == 1 && fake_main_dwarf_init_calls == 1 &&
+			fake_main_init_globals_calls == 0);
+	require(mcinspect_main_body_result(argv, 0, "kernel.img", 1, 0, 0, 0,
+			NULL, fake_main_init_bfd_cb, fake_main_open_cb,
+			fake_main_dwarf_init_cb, fake_main_init_globals_cb,
+			fake_main_mcps_cb, fake_main_mcvtop_cb,
+			fake_main_dwarf_finish_cb, fake_main_close_cb) == -22);
+
+	reset_fake_main();
+	reset_fake_option_loop();
+	debug = 77;
+	mcfd = 66;
+	help = 55;
+	ps = 44;
+	vtop = 33;
+	pid = 22;
+	vtop_addr = 11;
+	fake_option_loop_opts[0] = 'k';
+	fake_option_loop_args[0] = "entry.img";
+	fake_option_loop_opts[1] = 0;
+	fake_option_loop_set_vtop[1] = 1;
+	fake_option_loop_opts[2] = 'v';
+	fake_option_loop_args[2] = "0x4444";
+	fake_option_loop_opts[3] = 'p';
+	fake_option_loop_args[3] = "654";
+	fake_option_loop_opts[4] = -1;
+	rc = mcinspect_main_entry_result(5, argv, "+k:v:p:", (void *)0xbeefUL,
+			fake_option_loop_getopt, fake_main_usage_cb,
+			fake_main_init_bfd_cb, fake_main_open_cb,
+			fake_main_dwarf_init_cb, fake_main_init_globals_cb,
+			fake_main_mcps_cb, fake_main_mcvtop_cb,
+			fake_main_dwarf_finish_cb, fake_main_close_cb);
+	require(rc == 0);
+	require(fake_option_loop_calls == 5);
+	require(fake_option_loop_argc == 5 && fake_option_loop_argv == argv);
+	require(fake_option_loop_shortopts &&
+			!strcmp(fake_option_loop_shortopts, "+k:v:p:"));
+	require(fake_option_loop_longopts == (void *)0xbeefUL);
+	require(debug == 0 && help == 0 && ps == 0 && vtop == 1);
+	require(pid == 654 && vtop_addr == 0x4444);
+	require(fake_main_init_bfd_calls == 1 &&
+			!strcmp(fake_main_init_bfd_name, "entry.img"));
+	require(fake_main_mcps_calls == 0 && fake_main_mcvtop_calls == 1);
+	require(fake_main_mcvtop_pid == 654 &&
+			fake_main_mcvtop_addr == 0x4444);
+	require(fake_main_close_calls == 2 && mcfd == 77);
+	mix(&digest, (unsigned long)fake_option_loop_calls);
+	mix(&digest, vtop_addr);
+
+	reset_fake_main();
+	reset_fake_option_loop();
+	fake_option_loop_opts[0] = 'v';
+	fake_option_loop_args[0] = "not-hex";
+	fake_option_loop_opts[1] = -1;
+	rc = mcinspect_main_entry_result(2, argv, "+k:v:p:", NULL,
+			fake_option_loop_getopt, fake_main_usage_cb,
+			fake_main_init_bfd_cb, fake_main_open_cb,
+			fake_main_dwarf_init_cb, fake_main_init_globals_cb,
+			fake_main_mcps_cb, fake_main_mcvtop_cb,
+			fake_main_dwarf_finish_cb, fake_main_close_cb);
+	require(rc == 1 && fake_option_loop_calls == 1);
+	require(fake_main_usage_calls == 1 && fake_main_init_bfd_calls == 0);
+	require(mcfd == -1);
+	require(mcinspect_main_entry_result(1, argv, "+k:v:p:", NULL,
+			NULL, fake_main_usage_cb, fake_main_init_bfd_cb,
+			fake_main_open_cb, fake_main_dwarf_init_cb,
+			fake_main_init_globals_cb, fake_main_mcps_cb,
+			fake_main_mcvtop_cb, fake_main_dwarf_finish_cb,
+			fake_main_close_cb) == -22);
 
 	memset(buf, 0, sizeof(buf));
 	rc = mcinspect_invalid_va_error_result(buf, sizeof(buf));
@@ -112050,6 +121582,11 @@ struct ihk_mem_req {
 	int timeout;
 };
 
+struct ihk_cpu_req {
+	int *cpus;
+	int num_cpus;
+};
+
 struct ihk_ikc_cpu_map {
 	int src_cpu;
 	int dst_cpu;
@@ -112058,6 +121595,11 @@ struct ihk_ikc_cpu_map {
 struct ihk_os_ioctl_eventfd_desc {
 	int fd;
 	int type;
+};
+
+struct mcctrl_ioctl_getrusage_desc {
+	void *rusage;
+	size_t size_rusage;
 };
 
 extern int ihkconfig_action_result(const char *action);
@@ -112179,11 +121721,93 @@ extern int ihklib_meminfo_line_value_result(const char *line,
 extern int ihklib_mem_chunks_publish_result(unsigned long *result,
 		int num_numa_nodes, const struct ihk_mem_chunk *chunks,
 		int num_chunks);
+extern int ihklib_device_readable_body_result(int index, int os_device,
+		int (*access_fn)(const char *), int (*errno_fn)(void));
+extern int ihklib_device_open_body_result(int index, int os_device,
+		int (*access_fn)(const char *), int (*open_fn)(const char *),
+		int (*errno_fn)(void));
 extern int ihklib_mem_req_fill_result(unsigned long *sizes, int *numa_ids,
 		const struct ihk_mem_chunk *chunks, int num_chunks,
 		int use_all_size, unsigned long *total_out);
 extern int ihklib_cpu_req_bind_result(int **req_cpus_out,
 		int *req_num_cpus_out, int *cpus, int num_cpus);
+extern int ihklib_os_cpu_request_body_result(int index, int *cpus,
+		int num_cpus, unsigned long request, int max_cpus,
+		int (*readable_fn)(int), int (*open_fn)(int),
+		int (*ioctl_fn)(int, unsigned long, unsigned long),
+		int (*close_fn)(int), int (*errno_fn)(void),
+		int *readable_ret_out, int *validate_ret_out,
+		int *open_ret_out, int *ioctl_ret_out);
+extern int ihklib_os_query_cpu_body_result(int index, int *cpus,
+		int num_cpus, unsigned long count_request,
+		unsigned long query_request, int max_cpus,
+		int (*readable_fn)(int), int (*open_fn)(int),
+		int (*count_ioctl_fn)(int, unsigned long),
+		int (*query_ioctl_fn)(int, unsigned long, unsigned long),
+		int (*close_fn)(int), int (*errno_fn)(void),
+		int *readable_ret_out, int *validate_ret_out,
+		int *open_ret_out, int *count_ret_out,
+		int *query_ret_out);
+extern int ihklib_os_mem_request_body_result(int index,
+		struct ihk_mem_chunk *mem_chunks, int num_mem_chunks,
+		unsigned long request, int max_chunks,
+		int (*readable_fn)(int), int (*open_fn)(int),
+		int (*ioctl_fn)(int, unsigned long, unsigned long),
+		int (*close_fn)(int), int (*errno_fn)(void),
+		int *readable_ret_out, int *validate_ret_out,
+		int *stage_out, int *open_ret_out,
+		int *ioctl_ret_out);
+extern int ihklib_os_query_mem_body_result(int index,
+		struct ihk_mem_chunk *mem_chunks, int num_mem_chunks,
+		unsigned long count_request, unsigned long query_request,
+		int max_chunks, int (*readable_fn)(int),
+		int (*count_fn)(int), int (*open_fn)(int),
+		int (*ioctl_fn)(int, unsigned long, unsigned long),
+		int (*close_fn)(int), int (*errno_fn)(void),
+		int *readable_ret_out, int *validate_ret_out,
+		int *count_ret_out, int *stage_out, int *open_ret_out,
+		int *ioctl_ret_out, int *publish_ret_out);
+extern int ihklib_os_release_mem_body_result(int index,
+		struct ihk_mem_chunk *mem_chunks, int num_mem_chunks,
+		unsigned long release_request, int max_chunks,
+		int (*readable_fn)(int), int (*count_fn)(int),
+		int (*query_fn)(int, struct ihk_mem_chunk *, int),
+		int (*open_fn)(int),
+		int (*ioctl_fn)(int, unsigned long, unsigned long),
+		int (*close_fn)(int), int (*errno_fn)(void),
+		int *readable_ret_out, int *validate_ret_out,
+		int *count_ret_out, int *query_ret_out, int *stage_out,
+		int *open_ret_out, int *ioctl_ret_out);
+extern int ihklib_cpu_string_dispatch_body_result(int index,
+		char *list, int (*dispatch_fn)(int, int *, int));
+extern int ihklib_mem_string_dispatch_body_result(int index,
+		char *list,
+		int (*dispatch_fn)(int, struct ihk_mem_chunk *, int));
+extern int ihklib_ikc_string_dispatch_body_result(int index,
+		char *list,
+		int (*dispatch_fn)(int, struct ihk_ikc_cpu_map *, int));
+extern int ihklib_env_value_callback_body_result(int index,
+		const char *envp, int num_env, const char *key,
+		int (*callback_fn)(int, char *, char *), char *err_msg);
+extern int ihklib_reserve_mem_conf_str_body_result(int dev_index,
+		const char *envp, int num_env,
+		int (*reserve_mem_conf_fn)(int, int, void *));
+extern int ihklib_os_kargs_str_body_result(int os_index,
+		const char *envp, int num_env, char *default_kargs,
+		int (*kargs_fn)(int, char *));
+extern int ihklib_os_assign_cpu_all_body_result(int index, int *stage_out,
+		int (*get_count_fn)(int), int (*query_fn)(int, int *, int),
+		int (*assign_fn)(int, int *, int));
+extern int ihklib_os_assign_mem_all_body_result(int index, int *stage_out,
+		int (*get_count_fn)(int),
+		int (*query_fn)(int, struct ihk_mem_chunk *, int),
+		int (*assign_fn)(int, struct ihk_mem_chunk *, int));
+extern int ihklib_os_release_cpu_all_body_result(int index,
+		int (*get_count_fn)(int), int (*query_fn)(int, int *, int),
+		int (*release_fn)(int, int *, int));
+extern int ihklib_release_cpu_all_body_result(int index, int *stage_out,
+		int (*get_count_fn)(int), int (*query_fn)(int, int *, int),
+		int (*release_fn)(int, int *, int));
 extern int ihklib_count_match_result(int actual, int requested);
 extern int ihklib_positive_count_or_result(int count,
 		int nonpositive_result);
@@ -112197,11 +121821,24 @@ extern int ihklib_kmsg_validate_result(const void *kmsg, ssize_t size,
 		ssize_t expected_size);
 extern int ihklib_rusage_validate_result(const void *rusage,
 		size_t size, size_t expected_size);
+extern int ihklib_os_getrusage_body_result(int index, void *rusage,
+		size_t size_rusage, size_t expected_size,
+		unsigned long request, int (*open_fn)(int),
+		int (*ioctl_fn)(int, unsigned long, unsigned long),
+		int (*close_fn)(int), int (*errno_fn)(void),
+		int *open_ret_out, int *ioctl_ret_out);
 extern int ihklib_perf_attr_validate_result(const void *attr);
 extern int ihklib_perf_event_count_validate_result(int count);
 extern int ihklib_mcos_name_index_result(const char *name, int *index_out);
 extern int ihklib_destroy_os_retry_result(int ioctl_ret, int errno_value,
 		int ebusy_errno, int *ret_out);
+extern int ihklib_destroy_os_body_result(int dev_index, int os_index,
+		unsigned long request, int ebusy_errno, int max_retries,
+		unsigned int retry_usec, int (*open_fn)(int),
+		int (*ioctl_fn)(int, unsigned long, unsigned long),
+		int (*close_fn)(int), int (*errno_fn)(void),
+		int (*sleep_fn)(unsigned int), int *open_ret_out,
+		int *ioctl_ret_out, int *attempts_out);
 extern int ihklib_os_boot_final_result(int raw_status);
 extern int ihklib_mem_chunks_from_req_result(struct ihk_mem_chunk *chunks,
 		const unsigned long *sizes, const int *numa_ids,
@@ -112212,6 +121849,12 @@ extern int ihklib_ikc_map_from_req_result(struct ihk_ikc_cpu_map *map,
 		const int *src_cpus, const int *dst_cpus, int num_cpus);
 extern int ihklib_os_set_next_result(const unsigned long *os_set,
 		int n, int start);
+extern int ihklib_os_set_ioctl_loop_body_result(
+		const unsigned long *os_set, int n, unsigned long request,
+		int (*open_fn)(int), int (*ioctl_fn)(int, unsigned long),
+		int (*close_fn)(int), int (*errno_fn)(void),
+		int *open_ret_out, int *ioctl_ret_out, int *processed_out,
+		int *failed_index_out);
 extern int ihklib_create_os_apply_mem_conf_body_result(char **name,
 		char **value, int num_env, int dev_index,
 		int (*reserve_mem_conf_fn)(int, int, void *));
@@ -112223,6 +121866,15 @@ extern int ihklib_create_os_apply_ikc_kargs_body_result(char **name,
 		char **value, int num_env, int os_index, char *default_kargs,
 		char **kargs_out, char *err_msg,
 		int (*set_ikc_map_fn)(int, char *, char *));
+extern int ihklib_create_os_preclean_body_result(int dev_index,
+		struct ihk_mem_chunk *mem_chunks, char *err_msg,
+		int *stage_out, int (*get_cpu_count_fn)(int),
+		int (*release_cpu_all_fn)(int, char *),
+		int (*get_mem_count_fn)(int),
+		int (*release_mem_fn)(int, struct ihk_mem_chunk *, int));
+extern int ihklib_create_os_load_kargs_body_result(int os_index,
+		char *kernel_image, char *kargs, int *stage_out,
+		int (*load_fn)(int, char *), int (*kargs_fn)(int, char *));
 extern int ihkconfig_usage_result(char *buf, size_t buf_size,
 		const char *program);
 extern int ihkosctl_usage_result(char *buf, size_t buf_size,
@@ -112258,6 +121910,16 @@ enum {
 	IHKLIB_VALIDATE_ZERO_NOOP = 1,
 	IHKLIB_VALIDATE_NULL_ONLY_NONZERO = 0,
 	IHKLIB_VALIDATE_NULL_ALWAYS = 1,
+	IHKLIB_ALL_STAGE_COUNT = 1,
+	IHKLIB_ALL_STAGE_QUERY = 2,
+	IHKLIB_ALL_STAGE_ACTION = 3,
+	IHKLIB_ALL_STAGE_EMPTY = 4,
+	IHKLIB_CREATE_STAGE_GET_CPUS = 1,
+	IHKLIB_CREATE_STAGE_RELEASE_CPUS = 2,
+	IHKLIB_CREATE_STAGE_GET_MEM = 3,
+	IHKLIB_CREATE_STAGE_RELEASE_MEM = 4,
+	IHKLIB_CREATE_STAGE_LOAD = 5,
+	IHKLIB_CREATE_STAGE_KARGS = 6,
 	IHK_RESERVE_MEM_TIMEOUT = 5,
 };
 
@@ -112266,6 +121928,8 @@ static int last_fd;
 static int last_closed_fd;
 static int fake_open_ret = 77;
 static int fake_open_calls;
+static int fake_open_index_trace[16];
+static int fake_open_index_count;
 static int fake_close_calls;
 static int fake_callback_index;
 static int fake_ioctl_ret;
@@ -112274,19 +121938,44 @@ static int fake_errno_value = EIO;
 static int fake_errno_calls;
 static unsigned long fake_ioctl_request;
 static unsigned long fake_ioctl_arg;
+static int fake_ioctl_count_override = INT_MIN;
 static int fake_ioctl_num_ret;
 static int fake_ioctl_set_ret;
+static int fake_cpu_req_num;
+static int fake_cpu_req_first;
+static int fake_cpu_req_second;
+static int fake_mem_req_num;
+static unsigned long fake_mem_req_first_size;
+static unsigned long fake_mem_req_second_size;
+static int fake_mem_req_first_numa;
+static int fake_mem_req_second_numa;
 static int fake_eventfd_ret = 120;
 static int fake_eventfd_calls;
 static unsigned int fake_eventfd_initval;
 static int fake_eventfd_flags;
 static int fake_eventfd_desc_fd;
 static int fake_eventfd_desc_type;
+static void *fake_rusage_desc_ptr;
+static size_t fake_rusage_desc_size;
 static int fake_sleep_calls;
 static unsigned int fake_sleep_usec;
+static int fake_access_ret;
+static int fake_access_calls;
+static int fake_readable_ret;
+static int fake_readable_calls;
+static int fake_readable_index;
+static int fake_open_path_ret = 160;
+static int fake_open_path_calls;
+static char fake_last_path[128];
 static int fake_status_seq[64];
 static int fake_status_len;
 static int fake_status_pos;
+static int fake_ioctl_ulong_seq[64];
+static int fake_ioctl_ulong_len;
+static int fake_ioctl_ulong_pos;
+static int fake_errno_seq[64];
+static int fake_errno_len;
+static int fake_errno_pos;
 static int fake_query_mem_chunks = 7;
 static int fake_create_os_ret;
 static int fake_create_os_mem_conf_calls;
@@ -112303,6 +121992,41 @@ static char *fake_create_os_ikc_list;
 static char *fake_create_os_last_err;
 static char fake_create_os_order[16];
 static int fake_create_os_order_len;
+static int fake_dispatch_calls;
+static int fake_dispatch_index;
+static int fake_dispatch_count;
+static int fake_dispatch_cpus[8];
+static struct ihk_mem_chunk fake_dispatch_chunks[8];
+static struct ihk_ikc_cpu_map fake_dispatch_maps[8];
+static char *fake_dispatch_kargs;
+static char *fake_dispatch_err;
+static char fake_dispatch_string[128];
+static int fake_dispatch_ret;
+static int fake_all_count_ret;
+static int fake_all_mem_count_ret;
+static int fake_all_query_ret;
+static int fake_all_action_ret;
+static int fake_all_count_calls;
+static int fake_all_mem_count_calls;
+static int fake_all_query_calls;
+static int fake_all_action_calls;
+static int fake_all_count_index;
+static int fake_all_mem_count_index;
+static int fake_all_query_index;
+static int fake_all_action_index;
+static int fake_all_query_count;
+static int fake_all_action_count;
+static char *fake_all_err;
+static int fake_all_cpus[8];
+static struct ihk_mem_chunk fake_all_chunks[8];
+static int fake_char_load_ret;
+static int fake_char_kargs_ret;
+static int fake_char_load_calls;
+static int fake_char_kargs_calls;
+static int fake_char_load_index;
+static int fake_char_kargs_index;
+static char *fake_char_load_arg;
+static char *fake_char_kargs_arg;
 
 int close(int fd)
 {
@@ -112312,6 +122036,10 @@ int close(int fd)
 
 static int fake_open_callback(int index)
 {
+	if (fake_open_index_count < (int)(sizeof(fake_open_index_trace) /
+			sizeof(fake_open_index_trace[0])))
+		fake_open_index_trace[fake_open_index_count] = index;
+	fake_open_index_count++;
 	fake_open_calls++;
 	fake_callback_index = index;
 	return fake_open_ret;
@@ -112329,6 +122057,8 @@ static int fake_ioctl_noarg_callback(int fd, unsigned long request)
 	fake_ioctl_calls++;
 	last_fd = fd;
 	fake_ioctl_request = request;
+	if (request == 0x112a38 && fake_ioctl_count_override != INT_MIN)
+		return fake_ioctl_count_override;
 	if (request == 0x112a14 && fake_status_len > 0) {
 		int idx = fake_status_pos;
 
@@ -112351,6 +122081,13 @@ static int fake_ioctl_ulong_callback(int fd, unsigned long request,
 		return fake_ioctl_num_ret;
 	if (request == 0x11290101)
 		return fake_ioctl_set_ret;
+	if (request == 0x11290106) {
+		struct mcctrl_ioctl_getrusage_desc *desc;
+
+		desc = (struct mcctrl_ioctl_getrusage_desc *)arg;
+		fake_rusage_desc_ptr = desc->rusage;
+		fake_rusage_desc_size = desc->size_rusage;
+	}
 	if (request == 0x112a15) {
 		struct ihk_os_ioctl_eventfd_desc *desc;
 
@@ -112358,11 +122095,50 @@ static int fake_ioctl_ulong_callback(int fd, unsigned long request,
 		fake_eventfd_desc_fd = desc->fd;
 		fake_eventfd_desc_type = desc->type;
 	}
+	if (request == 0x112a22 || request == 0x112a23 ||
+			request == 0x112a26) {
+		struct ihk_cpu_req *req;
+
+		req = (struct ihk_cpu_req *)arg;
+		fake_cpu_req_num = req->num_cpus;
+		fake_cpu_req_first = req->num_cpus > 0 ? req->cpus[0] : -1;
+		fake_cpu_req_second = req->num_cpus > 1 ? req->cpus[1] : -1;
+	}
+	if (request == 0x112a24 || request == 0x112a25) {
+		struct ihk_mem_req *req;
+
+		req = (struct ihk_mem_req *)arg;
+		fake_mem_req_num = req->num_chunks;
+		fake_mem_req_first_size =
+			req->num_chunks > 0 ? req->sizes[0] : 0;
+		fake_mem_req_second_size =
+			req->num_chunks > 1 ? req->sizes[1] : 0;
+		fake_mem_req_first_numa =
+			req->num_chunks > 0 ? req->numa_ids[0] : -1;
+		fake_mem_req_second_numa =
+			req->num_chunks > 1 ? req->numa_ids[1] : -1;
+	}
+	if (request == 0x112901 && fake_ioctl_ulong_len > 0) {
+		int idx = fake_ioctl_ulong_pos;
+
+		if (idx >= fake_ioctl_ulong_len)
+			idx = fake_ioctl_ulong_len - 1;
+		fake_ioctl_ulong_pos++;
+		return fake_ioctl_ulong_seq[idx];
+	}
 	if (request == 0x112907 || request == 0x112a27) {
 		struct ihk_mem_req *req;
 
 		req = (struct ihk_mem_req *)arg;
 		req->num_chunks = fake_query_mem_chunks;
+		if (req->sizes && req->numa_ids && req->num_chunks > 0) {
+			req->sizes[0] = 16384;
+			req->numa_ids[0] = 2;
+		}
+		if (req->sizes && req->numa_ids && req->num_chunks > 1) {
+			req->sizes[1] = 32768;
+			req->numa_ids[1] = 3;
+		}
 	}
 	return fake_ioctl_ret;
 }
@@ -112382,8 +122158,40 @@ static int fake_sleep_callback(unsigned int usec)
 	return 0;
 }
 
+static int fake_access_callback(const char *path)
+{
+	fake_access_calls++;
+	strncpy(fake_last_path, path, sizeof(fake_last_path) - 1);
+	fake_last_path[sizeof(fake_last_path) - 1] = '\0';
+	return fake_access_ret;
+}
+
+static int fake_open_path_callback(const char *path)
+{
+	fake_open_path_calls++;
+	strncpy(fake_last_path, path, sizeof(fake_last_path) - 1);
+	fake_last_path[sizeof(fake_last_path) - 1] = '\0';
+	return fake_open_path_ret;
+}
+
+static int fake_readable_callback(int index)
+{
+	fake_readable_calls++;
+	fake_readable_index = index;
+	return fake_readable_ret;
+}
+
 static int fake_errno_callback(void)
 {
+	if (fake_errno_len > 0) {
+		int idx = fake_errno_pos;
+
+		if (idx >= fake_errno_len)
+			idx = fake_errno_len - 1;
+		fake_errno_pos++;
+		fake_errno_calls++;
+		return fake_errno_seq[idx];
+	}
 	fake_errno_calls++;
 	return fake_errno_value;
 }
@@ -112467,6 +122275,204 @@ static int fake_create_os_ikc_callback(int index, char *list, char *err_msg)
 	return fake_create_os_ret;
 }
 
+static void fake_dispatch_reset(void)
+{
+	fake_dispatch_calls = 0;
+	fake_dispatch_index = -1;
+	fake_dispatch_count = -1;
+	fake_dispatch_kargs = NULL;
+	fake_dispatch_err = NULL;
+	fake_dispatch_ret = 0;
+	memset(fake_dispatch_cpus, 0, sizeof(fake_dispatch_cpus));
+	memset(fake_dispatch_chunks, 0, sizeof(fake_dispatch_chunks));
+	memset(fake_dispatch_maps, 0, sizeof(fake_dispatch_maps));
+	memset(fake_dispatch_string, 0, sizeof(fake_dispatch_string));
+}
+
+static int fake_cpu_dispatch_callback(int index, int *cpus, int num_cpus)
+{
+	int i;
+
+	fake_dispatch_calls++;
+	fake_dispatch_index = index;
+	fake_dispatch_count = num_cpus;
+	for (i = 0; i < num_cpus && i < 8; i++)
+		fake_dispatch_cpus[i] = cpus[i];
+	return fake_dispatch_ret;
+}
+
+static int fake_mem_dispatch_callback(int index, struct ihk_mem_chunk *chunks,
+		int num_chunks)
+{
+	int i;
+
+	fake_dispatch_calls++;
+	fake_dispatch_index = index;
+	fake_dispatch_count = num_chunks;
+	for (i = 0; i < num_chunks && i < 8; i++)
+		fake_dispatch_chunks[i] = chunks[i];
+	return fake_dispatch_ret;
+}
+
+static int fake_ikc_dispatch_callback(int index, struct ihk_ikc_cpu_map *maps,
+		int num_maps)
+{
+	int i;
+
+	fake_dispatch_calls++;
+	fake_dispatch_index = index;
+	fake_dispatch_count = num_maps;
+	for (i = 0; i < num_maps && i < 8; i++)
+		fake_dispatch_maps[i] = maps[i];
+	return fake_dispatch_ret;
+}
+
+static int fake_kargs_dispatch_callback(int index, char *kargs)
+{
+	fake_dispatch_calls++;
+	fake_dispatch_index = index;
+	fake_dispatch_kargs = kargs;
+	if (kargs)
+		snprintf(fake_dispatch_string, sizeof(fake_dispatch_string),
+				"%s", kargs);
+	return fake_dispatch_ret;
+}
+
+static int fake_env_string_dispatch_callback(int index, char *value,
+		char *err_msg)
+{
+	fake_dispatch_calls++;
+	fake_dispatch_index = index;
+	fake_dispatch_err = err_msg;
+	if (value)
+		snprintf(fake_dispatch_string, sizeof(fake_dispatch_string),
+				"%s", value);
+	return fake_dispatch_ret;
+}
+
+static void fake_all_reset(void)
+{
+	fake_all_count_ret = 0;
+	fake_all_mem_count_ret = 0;
+	fake_all_query_ret = 0;
+	fake_all_action_ret = 0;
+	fake_all_count_calls = 0;
+	fake_all_mem_count_calls = 0;
+	fake_all_query_calls = 0;
+	fake_all_action_calls = 0;
+	fake_all_count_index = -1;
+	fake_all_mem_count_index = -1;
+	fake_all_query_index = -1;
+	fake_all_action_index = -1;
+	fake_all_query_count = -1;
+	fake_all_action_count = -1;
+	fake_all_err = NULL;
+	memset(fake_all_cpus, 0, sizeof(fake_all_cpus));
+	memset(fake_all_chunks, 0, sizeof(fake_all_chunks));
+}
+
+static int fake_all_count_callback(int index)
+{
+	fake_all_count_calls++;
+	fake_all_count_index = index;
+	return fake_all_count_ret;
+}
+
+static int fake_all_mem_count_callback(int index)
+{
+	fake_all_mem_count_calls++;
+	fake_all_mem_count_index = index;
+	return fake_all_mem_count_ret;
+}
+
+static int fake_cpu_all_query_callback(int index, int *cpus, int num_cpus)
+{
+	int i;
+
+	fake_all_query_calls++;
+	fake_all_query_index = index;
+	fake_all_query_count = num_cpus;
+	for (i = 0; i < num_cpus && i < 8; i++)
+		cpus[i] = 20 + i;
+	return fake_all_query_ret;
+}
+
+static int fake_cpu_all_action_callback(int index, int *cpus, int num_cpus)
+{
+	int i;
+
+	fake_all_action_calls++;
+	fake_all_action_index = index;
+	fake_all_action_count = num_cpus;
+	for (i = 0; i < num_cpus && i < 8; i++)
+		fake_all_cpus[i] = cpus[i];
+	return fake_all_action_ret;
+}
+
+static int fake_mem_all_query_callback(int index,
+		struct ihk_mem_chunk *chunks, int num_chunks)
+{
+	int i;
+
+	fake_all_query_calls++;
+	fake_all_query_index = index;
+	fake_all_query_count = num_chunks;
+	for (i = 0; i < num_chunks && i < 8; i++) {
+		chunks[i].size = 0x1000UL * (i + 1);
+		chunks[i].numa_node_number = 4 + i;
+	}
+	return fake_all_query_ret;
+}
+
+static int fake_mem_all_action_callback(int index,
+		struct ihk_mem_chunk *chunks, int num_chunks)
+{
+	int i;
+
+	fake_all_action_calls++;
+	fake_all_action_index = index;
+	fake_all_action_count = num_chunks;
+	for (i = 0; i < num_chunks && i < 8; i++)
+		fake_all_chunks[i] = chunks[i];
+	return fake_all_action_ret;
+}
+
+static int fake_release_cpu_all_callback(int index, char *err_msg)
+{
+	fake_all_action_calls++;
+	fake_all_action_index = index;
+	fake_all_err = err_msg;
+	return fake_all_action_ret;
+}
+
+static void fake_char_reset(void)
+{
+	fake_char_load_ret = 0;
+	fake_char_kargs_ret = 0;
+	fake_char_load_calls = 0;
+	fake_char_kargs_calls = 0;
+	fake_char_load_index = -1;
+	fake_char_kargs_index = -1;
+	fake_char_load_arg = NULL;
+	fake_char_kargs_arg = NULL;
+}
+
+static int fake_char_load_callback(int index, char *arg)
+{
+	fake_char_load_calls++;
+	fake_char_load_index = index;
+	fake_char_load_arg = arg;
+	return fake_char_load_ret;
+}
+
+static int fake_char_kargs_callback(int index, char *arg)
+{
+	fake_char_kargs_calls++;
+	fake_char_kargs_index = index;
+	fake_char_kargs_arg = arg;
+	return fake_char_kargs_ret;
+}
+
 static void require(int cond)
 {
 	if (!cond)
@@ -112540,6 +122546,10 @@ int main(void)
 	int shaped_ret;
 	int open_ret;
 	int ioctl_ret;
+	int readable_ret;
+	int validate_ret;
+	int count_ret;
+	int query_ret;
 	int num_ret;
 	int set_ret;
 	int chunks_ret;
@@ -112547,6 +122557,9 @@ int main(void)
 	int boot_ret;
 	int status_ret;
 	int polls;
+	int failed_index;
+	int stage;
+	int publish_ret;
 	char ikc_map[8] = { 0 };
 	char dummy_buf[16] = { 0 };
 	char image_name[] = "/tmp/kernel.img";
@@ -112567,6 +122580,14 @@ int main(void)
 	char env_kargs_second_value[] = "hidos final";
 	char env_other_value[] = "ignored";
 	char env_default_kargs[] = "hidos default";
+	char env_wrapper_block[] =
+		"OTHER=ignored\0IHK_CPUS=0-2\0IHK_MEM=1G@0\0"
+		"IHK_IKC_MAP=0-1:3+4:5\0IHK_KARGS=hidos wrapped\0";
+	char env_mem_conf_block[] =
+		"IHK_RESERVE_MEM_TIMEOUT=123\0OTHER=ignored\0";
+	char env_bad_mem_conf_block[] =
+		"IHK_RESERVE_MEM_TIMEOUT=12x\0";
+	char env_no_kargs_block[] = "OTHER=ignored\0";
 	char create_os_err[64] = { 0 };
 	char *create_os_names[6];
 	char *create_os_values[6];
@@ -112730,6 +122751,106 @@ int main(void)
 			NULL) == -22);
 	mix(&digest, (unsigned long)shaped_ret);
 
+	fake_open_ret = 124;
+	fake_open_calls = 0;
+	fake_close_calls = 0;
+	fake_ioctl_calls = 0;
+	fake_errno_calls = 0;
+	fake_sleep_calls = 0;
+	fake_ioctl_ulong_seq[0] = 0;
+	fake_ioctl_ulong_len = 1;
+	fake_ioctl_ulong_pos = 0;
+	fake_errno_len = 0;
+	open_ret = 0;
+	ioctl_ret = 99;
+	polls = 0;
+	require(ihklib_destroy_os_body_result(3, 9, 0x112901, EBUSY,
+			5, 10000, fake_open_callback,
+			fake_ioctl_ulong_callback, fake_close_callback,
+			fake_errno_callback, fake_sleep_callback, &open_ret,
+			&ioctl_ret, &polls) == 0);
+	require(open_ret == 124 && ioctl_ret == 0 && polls == 1);
+	require(fake_callback_index == 3 && last_fd == 124 &&
+			fake_ioctl_request == 0x112901 && fake_ioctl_arg == 9);
+	require(fake_close_calls == 1 && fake_errno_calls == 0 &&
+			fake_sleep_calls == 0);
+
+	fake_open_ret = 125;
+	fake_close_calls = 0;
+	fake_ioctl_calls = 0;
+	fake_errno_calls = 0;
+	fake_sleep_calls = 0;
+	fake_ioctl_ulong_seq[0] = -1;
+	fake_ioctl_ulong_seq[1] = -1;
+	fake_ioctl_ulong_seq[2] = 0;
+	fake_ioctl_ulong_len = 3;
+	fake_ioctl_ulong_pos = 0;
+	fake_errno_seq[0] = EBUSY;
+	fake_errno_seq[1] = EBUSY;
+	fake_errno_len = 2;
+	fake_errno_pos = 0;
+	require(ihklib_destroy_os_body_result(4, 10, 0x112901, EBUSY,
+			5, 10000, fake_open_callback,
+			fake_ioctl_ulong_callback, fake_close_callback,
+			fake_errno_callback, fake_sleep_callback, &open_ret,
+			&ioctl_ret, &polls) == 0);
+	require(open_ret == 125 && ioctl_ret == 0 && polls == 3);
+	require(fake_ioctl_calls == 3 && fake_errno_calls == 2 &&
+			fake_sleep_calls == 2 && fake_sleep_usec == 10000 &&
+			fake_close_calls == 1);
+
+	fake_open_ret = 126;
+	fake_close_calls = 0;
+	fake_ioctl_calls = 0;
+	fake_errno_calls = 0;
+	fake_sleep_calls = 0;
+	fake_ioctl_ulong_seq[0] = -1;
+	fake_ioctl_ulong_len = 1;
+	fake_ioctl_ulong_pos = 0;
+	fake_errno_seq[0] = EIO;
+	fake_errno_len = 1;
+	fake_errno_pos = 0;
+	require(ihklib_destroy_os_body_result(5, 11, 0x112901, EBUSY,
+			5, 10000, fake_open_callback,
+			fake_ioctl_ulong_callback, fake_close_callback,
+			fake_errno_callback, fake_sleep_callback, &open_ret,
+			&ioctl_ret, &polls) == -EIO);
+	require(open_ret == 126 && ioctl_ret == -1 && polls == 1);
+	require(fake_errno_calls == 1 && fake_sleep_calls == 0 &&
+			fake_close_calls == 1);
+
+	fake_open_ret = 127;
+	fake_close_calls = 0;
+	fake_ioctl_calls = 0;
+	fake_errno_calls = 0;
+	fake_sleep_calls = 0;
+	fake_ioctl_ulong_seq[0] = -1;
+	fake_ioctl_ulong_seq[1] = -1;
+	fake_ioctl_ulong_len = 2;
+	fake_ioctl_ulong_pos = 0;
+	fake_errno_seq[0] = EBUSY;
+	fake_errno_seq[1] = EBUSY;
+	fake_errno_len = 2;
+	fake_errno_pos = 0;
+	require(ihklib_destroy_os_body_result(6, 12, 0x112901, EBUSY,
+			2, 10000, fake_open_callback,
+			fake_ioctl_ulong_callback, fake_close_callback,
+			fake_errno_callback, fake_sleep_callback, &open_ret,
+			&ioctl_ret, &polls) == -EBUSY);
+	require(open_ret == 127 && ioctl_ret == -1 && polls == 2);
+	require(fake_errno_calls == 2 && fake_sleep_calls == 2 &&
+			fake_close_calls == 1);
+	require(ihklib_destroy_os_body_result(1, 1, 0x112901, EBUSY,
+			5, 10000, NULL, fake_ioctl_ulong_callback,
+			fake_close_callback, fake_errno_callback,
+			fake_sleep_callback, &open_ret, &ioctl_ret,
+			&polls) == -EINVAL);
+	fake_ioctl_ulong_len = 0;
+	fake_ioctl_ulong_pos = 0;
+	fake_errno_len = 0;
+	fake_errno_pos = 0;
+	mix(&digest, (unsigned long)polls ^ (unsigned long)ioctl_ret);
+
 	require(ihklib_eventfd_type_valid_result(IHK_OS_EVENTFD_TYPE_OOM) == 1);
 	require(ihklib_eventfd_type_valid_result(IHK_OS_EVENTFD_TYPE_STATUS) == 1);
 	require(ihklib_eventfd_type_valid_result(IHK_OS_EVENTFD_TYPE_KMSG) == 1);
@@ -112785,6 +122906,597 @@ int main(void)
 			NULL, 2) == -14);
 	require(ihklib_cpu_req_bind_result(&req_cpus, &req_num_cpus,
 			cpus, -1) == -22);
+
+	fake_readable_ret = 0;
+	fake_readable_calls = 0;
+	fake_readable_index = -1;
+	fake_open_ret = 170;
+	fake_open_calls = 0;
+	fake_close_calls = 0;
+	fake_ioctl_calls = 0;
+	fake_errno_calls = 0;
+	fake_ioctl_ret = 0;
+	fake_cpu_req_num = -1;
+	fake_cpu_req_first = -1;
+	fake_cpu_req_second = -1;
+	readable_ret = -99;
+	validate_ret = -99;
+	open_ret = -99;
+	ioctl_ret = -99;
+	require(ihklib_os_cpu_request_body_result(71, cpus, 2, 0x112a22,
+			1024, fake_readable_callback, fake_open_callback,
+			fake_ioctl_ulong_callback, fake_close_callback,
+			fake_errno_callback, &readable_ret, &validate_ret,
+			&open_ret, &ioctl_ret) == 0);
+	require(readable_ret == 0 && validate_ret == 0 &&
+			open_ret == 170 && ioctl_ret == 0);
+	require(fake_readable_calls == 1 && fake_readable_index == 71);
+	require(fake_open_calls == 1 && fake_callback_index == 71);
+	require(fake_ioctl_calls == 1 && fake_close_calls == 1 &&
+			fake_errno_calls == 0);
+	require(fake_ioctl_request == 0x112a22 && fake_cpu_req_num == 2);
+	require(fake_cpu_req_first == 1 && fake_cpu_req_second == 3);
+
+	fake_readable_calls = 0;
+	fake_open_calls = 0;
+	fake_ioctl_calls = 0;
+	readable_ret = -99;
+	validate_ret = -99;
+	open_ret = -99;
+	ioctl_ret = -99;
+	require(ihklib_os_cpu_request_body_result(72, NULL, 0, 0x112a23,
+			1024, fake_readable_callback, fake_open_callback,
+			fake_ioctl_ulong_callback, fake_close_callback,
+			fake_errno_callback, &readable_ret, &validate_ret,
+			&open_ret, &ioctl_ret) == 0);
+	require(readable_ret == 0 && validate_ret == 1 &&
+			open_ret == -1 && ioctl_ret == 0);
+	require(fake_readable_calls == 1 && fake_open_calls == 0 &&
+			fake_ioctl_calls == 0);
+
+	fake_readable_ret = -EACCES;
+	fake_readable_calls = 0;
+	open_ret = -99;
+	require(ihklib_os_cpu_request_body_result(73, cpus, 2, 0x112a22,
+			1024, fake_readable_callback, fake_open_callback,
+			fake_ioctl_ulong_callback, fake_close_callback,
+			fake_errno_callback, &readable_ret, &validate_ret,
+			&open_ret, &ioctl_ret) == -EACCES);
+	require(readable_ret == -EACCES && open_ret == -1);
+	require(fake_readable_calls == 1 && fake_open_calls == 0);
+	fake_readable_ret = 0;
+
+	fake_open_calls = 0;
+	readable_ret = -99;
+	validate_ret = -99;
+	require(ihklib_os_cpu_request_body_result(74, NULL, 2, 0x112a22,
+			1024, fake_readable_callback, fake_open_callback,
+			fake_ioctl_ulong_callback, fake_close_callback,
+			fake_errno_callback, &readable_ret, &validate_ret,
+			&open_ret, &ioctl_ret) == -EFAULT);
+	require(readable_ret == 0 && validate_ret == -EFAULT &&
+			fake_open_calls == 0);
+
+	fake_open_ret = -5;
+	fake_open_calls = 0;
+	fake_ioctl_calls = 0;
+	fake_close_calls = 0;
+	open_ret = -99;
+	require(ihklib_os_cpu_request_body_result(75, cpus, 2, 0x112a22,
+			1024, fake_readable_callback, fake_open_callback,
+			fake_ioctl_ulong_callback, fake_close_callback,
+			fake_errno_callback, &readable_ret, &validate_ret,
+			&open_ret, &ioctl_ret) == -5);
+	require(open_ret == -5 && fake_ioctl_calls == 0 &&
+			fake_close_calls == 0);
+
+	fake_open_ret = 171;
+	fake_ioctl_ret = -1;
+	fake_errno_value = EIO;
+	fake_errno_calls = 0;
+	fake_close_calls = 0;
+	ioctl_ret = -99;
+	require(ihklib_os_cpu_request_body_result(76, cpus, 2, 0x112a23,
+			1024, fake_readable_callback, fake_open_callback,
+			fake_ioctl_ulong_callback, fake_close_callback,
+			fake_errno_callback, &readable_ret, &validate_ret,
+			&open_ret, &ioctl_ret) == -EIO);
+	require(open_ret == 171 && ioctl_ret == -1 &&
+			fake_ioctl_request == 0x112a23);
+	require(fake_errno_calls == 1 && fake_close_calls == 1);
+	fake_ioctl_ret = 0;
+	fake_errno_value = EIO;
+	mix(&digest, (unsigned long)(fake_cpu_req_num ^ fake_cpu_req_first ^
+			fake_cpu_req_second ^ fake_ioctl_request));
+
+	fake_readable_ret = 0;
+	fake_readable_calls = 0;
+	fake_open_ret = 172;
+	fake_open_calls = 0;
+	fake_close_calls = 0;
+	fake_ioctl_calls = 0;
+	fake_errno_calls = 0;
+	fake_ioctl_count_override = 2;
+	fake_ioctl_ret = 0;
+	fake_cpu_req_num = -1;
+	fake_cpu_req_first = -1;
+	fake_cpu_req_second = -1;
+	readable_ret = -99;
+	validate_ret = -99;
+	open_ret = -99;
+	count_ret = -99;
+	query_ret = -99;
+	require(ihklib_os_query_cpu_body_result(77, cpus, 2, 0x112a38,
+			0x112a26, 1024, fake_readable_callback,
+			fake_open_callback, fake_ioctl_noarg_callback,
+			fake_ioctl_ulong_callback, fake_close_callback,
+			fake_errno_callback, &readable_ret, &validate_ret,
+			&open_ret, &count_ret, &query_ret) == 0);
+	require(readable_ret == 0 && validate_ret == 0 &&
+			open_ret == 172 && count_ret == 2 && query_ret == 0);
+	require(fake_ioctl_calls == 2 && fake_close_calls == 1 &&
+			fake_errno_calls == 0);
+	require(fake_ioctl_request == 0x112a26 && fake_cpu_req_num == 2);
+	require(fake_cpu_req_first == 1 && fake_cpu_req_second == 3);
+
+	fake_open_ret = 173;
+	fake_open_calls = 0;
+	fake_close_calls = 0;
+	fake_ioctl_calls = 0;
+	fake_ioctl_count_override = 0;
+	count_ret = -99;
+	query_ret = -99;
+	require(ihklib_os_query_cpu_body_result(78, NULL, 0, 0x112a38,
+			0x112a26, 1024, fake_readable_callback,
+			fake_open_callback, fake_ioctl_noarg_callback,
+			fake_ioctl_ulong_callback, fake_close_callback,
+			fake_errno_callback, &readable_ret, &validate_ret,
+			&open_ret, &count_ret, &query_ret) == 0);
+	require(open_ret == 173 && count_ret == 0 && query_ret == 0);
+	require(fake_ioctl_calls == 1 && fake_close_calls == 1);
+
+	fake_open_ret = 174;
+	fake_close_calls = 0;
+	fake_ioctl_calls = 0;
+	fake_ioctl_count_override = 1;
+	count_ret = -99;
+	require(ihklib_os_query_cpu_body_result(79, cpus, 2, 0x112a38,
+			0x112a26, 1024, fake_readable_callback,
+			fake_open_callback, fake_ioctl_noarg_callback,
+			fake_ioctl_ulong_callback, fake_close_callback,
+			fake_errno_callback, &readable_ret, &validate_ret,
+			&open_ret, &count_ret, &query_ret) == -EINVAL);
+	require(count_ret == 1 && fake_ioctl_calls == 1 &&
+			fake_close_calls == 1);
+
+	fake_open_ret = 175;
+	fake_close_calls = 0;
+	fake_ioctl_calls = 0;
+	fake_errno_calls = 0;
+	fake_ioctl_count_override = -1;
+	fake_errno_value = EIO;
+	count_ret = -99;
+	require(ihklib_os_query_cpu_body_result(80, cpus, 2, 0x112a38,
+			0x112a26, 1024, fake_readable_callback,
+			fake_open_callback, fake_ioctl_noarg_callback,
+			fake_ioctl_ulong_callback, fake_close_callback,
+			fake_errno_callback, &readable_ret, &validate_ret,
+			&open_ret, &count_ret, &query_ret) == -EIO);
+	require(count_ret == -1 && fake_errno_calls == 1 &&
+			fake_close_calls == 1);
+
+	fake_open_ret = 176;
+	fake_close_calls = 0;
+	fake_ioctl_calls = 0;
+	fake_errno_calls = 0;
+	fake_ioctl_count_override = 2;
+	fake_ioctl_ret = -1;
+	query_ret = -99;
+	require(ihklib_os_query_cpu_body_result(81, cpus, 2, 0x112a38,
+			0x112a26, 1024, fake_readable_callback,
+			fake_open_callback, fake_ioctl_noarg_callback,
+			fake_ioctl_ulong_callback, fake_close_callback,
+			fake_errno_callback, &readable_ret, &validate_ret,
+			&open_ret, &count_ret, &query_ret) == -EIO);
+	require(count_ret == 2 && query_ret == -1 &&
+			fake_errno_calls == 1 && fake_close_calls == 1);
+	fake_ioctl_count_override = INT_MIN;
+	fake_ioctl_ret = 0;
+	fake_errno_value = EIO;
+	mix(&digest, (unsigned long)(count_ret ^ query_ret ^
+			fake_ioctl_calls));
+
+	fake_readable_ret = 0;
+	fake_readable_calls = 0;
+	fake_open_ret = 177;
+	fake_open_calls = 0;
+	fake_close_calls = 0;
+	fake_ioctl_calls = 0;
+	fake_errno_calls = 0;
+	fake_ioctl_ret = 0;
+	fake_mem_req_num = -1;
+	fake_mem_req_first_size = 0;
+	fake_mem_req_second_size = 0;
+	fake_mem_req_first_numa = -1;
+	fake_mem_req_second_numa = -1;
+	readable_ret = -99;
+	validate_ret = -99;
+	stage = -99;
+	open_ret = -99;
+	ioctl_ret = -99;
+	require(ihklib_os_mem_request_body_result(82, chunks, 2, 0x112a24,
+			1024, fake_readable_callback, fake_open_callback,
+			fake_ioctl_ulong_callback, fake_close_callback,
+			fake_errno_callback, &readable_ret, &validate_ret,
+			&stage, &open_ret, &ioctl_ret) == 0);
+	require(readable_ret == 0 && validate_ret == 0 && stage == 0);
+	require(open_ret == 177 && ioctl_ret == 0);
+	require(fake_ioctl_calls == 1 && fake_close_calls == 1 &&
+			fake_errno_calls == 0);
+	require(fake_mem_req_num == 2);
+	require(fake_mem_req_first_size == 4096 &&
+			fake_mem_req_second_size == 8192);
+	require(fake_mem_req_first_numa == 1 && fake_mem_req_second_numa == 0);
+
+	fake_open_calls = 0;
+	fake_ioctl_calls = 0;
+	readable_ret = -99;
+	validate_ret = -99;
+	stage = -99;
+	open_ret = -99;
+	ioctl_ret = -99;
+	require(ihklib_os_mem_request_body_result(83, NULL, 0, 0x112a24,
+			1024, fake_readable_callback, fake_open_callback,
+			fake_ioctl_ulong_callback, fake_close_callback,
+			fake_errno_callback, &readable_ret, &validate_ret,
+			&stage, &open_ret, &ioctl_ret) == 0);
+	require(readable_ret == 0 && validate_ret == 1 && stage == 0);
+	require(open_ret == -1 && ioctl_ret == 0);
+	require(fake_open_calls == 0 && fake_ioctl_calls == 0);
+
+	fake_open_calls = 0;
+	readable_ret = -99;
+	validate_ret = -99;
+	require(ihklib_os_mem_request_body_result(84, NULL, 2, 0x112a24,
+			1024, fake_readable_callback, fake_open_callback,
+			fake_ioctl_ulong_callback, fake_close_callback,
+			fake_errno_callback, &readable_ret, &validate_ret,
+			&stage, &open_ret, &ioctl_ret) == -EFAULT);
+	require(readable_ret == 0 && validate_ret == -EFAULT &&
+			fake_open_calls == 0);
+
+	fake_open_ret = -6;
+	fake_open_calls = 0;
+	fake_ioctl_calls = 0;
+	fake_close_calls = 0;
+	open_ret = -99;
+	require(ihklib_os_mem_request_body_result(85, chunks, 2, 0x112a24,
+			1024, fake_readable_callback, fake_open_callback,
+			fake_ioctl_ulong_callback, fake_close_callback,
+			fake_errno_callback, &readable_ret, &validate_ret,
+			&stage, &open_ret, &ioctl_ret) == -6);
+	require(open_ret == -6 && fake_ioctl_calls == 0 &&
+			fake_close_calls == 0);
+
+	fake_open_ret = 178;
+	fake_ioctl_ret = -1;
+	fake_errno_value = EIO;
+	fake_errno_calls = 0;
+	fake_close_calls = 0;
+	ioctl_ret = -99;
+	require(ihklib_os_mem_request_body_result(86, chunks, 2, 0x112a24,
+			1024, fake_readable_callback, fake_open_callback,
+			fake_ioctl_ulong_callback, fake_close_callback,
+			fake_errno_callback, &readable_ret, &validate_ret,
+			&stage, &open_ret, &ioctl_ret) == -EIO);
+	require(open_ret == 178 && ioctl_ret == -1 &&
+			fake_errno_calls == 1 && fake_close_calls == 1);
+	fake_ioctl_ret = 0;
+	fake_errno_value = EIO;
+	mix(&digest, fake_mem_req_first_size ^ fake_mem_req_second_size ^
+			(unsigned long)fake_mem_req_num);
+
+	memset(copy_chunks, 0, sizeof(copy_chunks));
+	fake_all_reset();
+	fake_all_count_ret = 2;
+	fake_readable_ret = 0;
+	fake_readable_calls = 0;
+	fake_open_ret = 179;
+	fake_open_calls = 0;
+	fake_close_calls = 0;
+	fake_ioctl_calls = 0;
+	fake_errno_calls = 0;
+	fake_ioctl_ret = 0;
+	fake_query_mem_chunks = 2;
+	readable_ret = -99;
+	validate_ret = -99;
+	count_ret = -99;
+	stage = -99;
+	open_ret = -99;
+	ioctl_ret = -99;
+	publish_ret = -99;
+	require(ihklib_os_query_mem_body_result(87, copy_chunks, 2,
+			0x112a27, 0x112a27, 1024, fake_readable_callback,
+			fake_all_count_callback, fake_open_callback,
+			fake_ioctl_ulong_callback, fake_close_callback,
+			fake_errno_callback, &readable_ret, &validate_ret,
+			&count_ret, &stage, &open_ret, &ioctl_ret,
+			&publish_ret) == 0);
+	require(readable_ret == 0 && validate_ret == 0 && count_ret == 2 &&
+			stage == 0 && open_ret == 179 && ioctl_ret == 0 &&
+			publish_ret == 0);
+	require(fake_all_count_calls == 1 && fake_all_count_index == 87);
+	require(fake_ioctl_calls == 1 && fake_close_calls == 1 &&
+			fake_errno_calls == 0 && fake_ioctl_request == 0x112a27);
+	require(copy_chunks[0].size == 16384 &&
+			copy_chunks[0].numa_node_number == 2);
+	require(copy_chunks[1].size == 32768 &&
+			copy_chunks[1].numa_node_number == 3);
+
+	fake_all_reset();
+	fake_all_count_ret = 0;
+	fake_open_calls = 0;
+	fake_ioctl_calls = 0;
+	readable_ret = -99;
+	validate_ret = -99;
+	count_ret = -99;
+	open_ret = -99;
+	ioctl_ret = -99;
+	publish_ret = -99;
+	require(ihklib_os_query_mem_body_result(88, NULL, 0, 0x112a27,
+			0x112a27, 1024, fake_readable_callback,
+			fake_all_count_callback, fake_open_callback,
+			fake_ioctl_ulong_callback, fake_close_callback,
+			fake_errno_callback, &readable_ret, &validate_ret,
+			&count_ret, &stage, &open_ret, &ioctl_ret,
+			&publish_ret) == 0);
+	require(readable_ret == 0 && validate_ret == 0 && count_ret == 0);
+	require(open_ret == -1 && ioctl_ret == 0 && publish_ret == 0);
+	require(fake_open_calls == 0 && fake_ioctl_calls == 0);
+
+	fake_all_reset();
+	fake_all_count_ret = 1;
+	fake_open_calls = 0;
+	count_ret = -99;
+	require(ihklib_os_query_mem_body_result(89, copy_chunks, 2,
+			0x112a27, 0x112a27, 1024, fake_readable_callback,
+			fake_all_count_callback, fake_open_callback,
+			fake_ioctl_ulong_callback, fake_close_callback,
+			fake_errno_callback, &readable_ret, &validate_ret,
+			&count_ret, &stage, &open_ret, &ioctl_ret,
+			&publish_ret) == -EINVAL);
+	require(count_ret == 1 && fake_open_calls == 0);
+
+	fake_all_reset();
+	fake_all_count_ret = -EIO;
+	fake_open_calls = 0;
+	count_ret = -99;
+	require(ihklib_os_query_mem_body_result(90, copy_chunks, 2,
+			0x112a27, 0x112a27, 1024, fake_readable_callback,
+			fake_all_count_callback, fake_open_callback,
+			fake_ioctl_ulong_callback, fake_close_callback,
+			fake_errno_callback, &readable_ret, &validate_ret,
+			&count_ret, &stage, &open_ret, &ioctl_ret,
+			&publish_ret) == -EIO);
+	require(count_ret == -EIO && fake_open_calls == 0);
+
+	fake_all_reset();
+	fake_open_calls = 0;
+	validate_ret = -99;
+	require(ihklib_os_query_mem_body_result(91, NULL, 2, 0x112a27,
+			0x112a27, 1024, fake_readable_callback,
+			fake_all_count_callback, fake_open_callback,
+			fake_ioctl_ulong_callback, fake_close_callback,
+			fake_errno_callback, &readable_ret, &validate_ret,
+			&count_ret, &stage, &open_ret, &ioctl_ret,
+			&publish_ret) == -EFAULT);
+	require(validate_ret == -EFAULT && fake_all_count_calls == 0 &&
+			fake_open_calls == 0);
+
+	fake_all_reset();
+	fake_all_count_ret = 2;
+	fake_open_ret = -7;
+	fake_open_calls = 0;
+	fake_ioctl_calls = 0;
+	fake_close_calls = 0;
+	open_ret = -99;
+	require(ihklib_os_query_mem_body_result(92, copy_chunks, 2,
+			0x112a27, 0x112a27, 1024, fake_readable_callback,
+			fake_all_count_callback, fake_open_callback,
+			fake_ioctl_ulong_callback, fake_close_callback,
+			fake_errno_callback, &readable_ret, &validate_ret,
+			&count_ret, &stage, &open_ret, &ioctl_ret,
+			&publish_ret) == -7);
+	require(open_ret == -7 && fake_ioctl_calls == 0 &&
+			fake_close_calls == 0);
+
+	fake_open_ret = 180;
+	fake_ioctl_ret = -1;
+	fake_errno_value = EIO;
+	fake_errno_calls = 0;
+	fake_close_calls = 0;
+	ioctl_ret = -99;
+	require(ihklib_os_query_mem_body_result(93, copy_chunks, 2,
+			0x112a27, 0x112a27, 1024, fake_readable_callback,
+			fake_all_count_callback, fake_open_callback,
+			fake_ioctl_ulong_callback, fake_close_callback,
+			fake_errno_callback, &readable_ret, &validate_ret,
+			&count_ret, &stage, &open_ret, &ioctl_ret,
+			&publish_ret) == -EIO);
+	require(open_ret == 180 && ioctl_ret == -1 &&
+			fake_errno_calls == 1 && fake_close_calls == 1);
+	fake_ioctl_ret = 0;
+	fake_errno_value = EIO;
+	mix(&digest, copy_chunks[0].size ^ copy_chunks[1].size ^
+			(unsigned long)count_ret);
+
+	fake_all_reset();
+	fake_readable_ret = 0;
+	fake_readable_calls = 0;
+	fake_open_ret = 181;
+	fake_open_calls = 0;
+	fake_close_calls = 0;
+	fake_ioctl_calls = 0;
+	fake_errno_calls = 0;
+	fake_ioctl_ret = 0;
+	fake_mem_req_num = -1;
+	fake_mem_req_first_size = 0;
+	fake_mem_req_second_size = 0;
+	fake_mem_req_first_numa = -1;
+	fake_mem_req_second_numa = -1;
+	readable_ret = -99;
+	validate_ret = -99;
+	count_ret = -99;
+	query_ret = -99;
+	stage = -99;
+	open_ret = -99;
+	ioctl_ret = -99;
+	require(ihklib_os_release_mem_body_result(94, chunks, 2, 0x112a25,
+			1024, fake_readable_callback, fake_all_count_callback,
+			fake_mem_all_query_callback, fake_open_callback,
+			fake_ioctl_ulong_callback, fake_close_callback,
+			fake_errno_callback, &readable_ret, &validate_ret,
+			&count_ret, &query_ret, &stage, &open_ret,
+			&ioctl_ret) == 0);
+	require(readable_ret == 0 && validate_ret == 0 && count_ret == 0 &&
+			query_ret == 0 && stage == 0);
+	require(open_ret == 181 && ioctl_ret == 0);
+	require(fake_all_count_calls == 0 && fake_all_query_calls == 0);
+	require(fake_ioctl_calls == 1 && fake_close_calls == 1 &&
+			fake_errno_calls == 0 && fake_ioctl_request == 0x112a25);
+	require(fake_mem_req_num == 2 && fake_mem_req_first_size == 4096 &&
+			fake_mem_req_second_size == 8192);
+	require(fake_mem_req_first_numa == 1 && fake_mem_req_second_numa == 0);
+
+	fake_open_calls = 0;
+	fake_ioctl_calls = 0;
+	readable_ret = -99;
+	validate_ret = -99;
+	stage = -99;
+	open_ret = -99;
+	require(ihklib_os_release_mem_body_result(95, NULL, 0, 0x112a25,
+			1024, fake_readable_callback, fake_all_count_callback,
+			fake_mem_all_query_callback, fake_open_callback,
+			fake_ioctl_ulong_callback, fake_close_callback,
+			fake_errno_callback, &readable_ret, &validate_ret,
+			&count_ret, &query_ret, &stage, &open_ret,
+			&ioctl_ret) == 0);
+	require(readable_ret == 0 && validate_ret == 1 && stage == 0 &&
+			open_ret == -1);
+	require(fake_open_calls == 0 && fake_ioctl_calls == 0);
+
+	validate_ret = -99;
+	fake_all_reset();
+	require(ihklib_os_release_mem_body_result(96, NULL, 2, 0x112a25,
+			1024, fake_readable_callback, fake_all_count_callback,
+			fake_mem_all_query_callback, fake_open_callback,
+			fake_ioctl_ulong_callback, fake_close_callback,
+			fake_errno_callback, &readable_ret, &validate_ret,
+			&count_ret, &query_ret, &stage, &open_ret,
+			&ioctl_ret) == -EFAULT);
+	require(validate_ret == -EFAULT && fake_all_count_calls == 0);
+
+	bad_chunks[0].size = ULONG_MAX;
+	bad_chunks[0].numa_node_number = 0;
+	fake_all_reset();
+	fake_all_count_ret = 2;
+	fake_all_query_ret = 0;
+	fake_open_ret = 182;
+	fake_open_calls = 0;
+	fake_close_calls = 0;
+	fake_ioctl_calls = 0;
+	fake_errno_calls = 0;
+	fake_ioctl_ret = 0;
+	fake_mem_req_num = -1;
+	fake_mem_req_first_size = 0;
+	fake_mem_req_second_size = 0;
+	fake_mem_req_first_numa = -1;
+	fake_mem_req_second_numa = -1;
+	count_ret = -99;
+	query_ret = -99;
+	stage = -99;
+	require(ihklib_os_release_mem_body_result(97, bad_chunks, 1,
+			0x112a25, 1024, fake_readable_callback,
+			fake_all_count_callback, fake_mem_all_query_callback,
+			fake_open_callback, fake_ioctl_ulong_callback,
+			fake_close_callback, fake_errno_callback,
+			&readable_ret, &validate_ret, &count_ret, &query_ret,
+			&stage, &open_ret, &ioctl_ret) == 0);
+	require(count_ret == 2 && query_ret == 0 && stage == 0);
+	require(fake_all_count_calls == 1 && fake_all_count_index == 97);
+	require(fake_all_query_calls == 1 && fake_all_query_index == 97 &&
+			fake_all_query_count == 2);
+	require(fake_mem_req_num == 2 && fake_mem_req_first_size == 0x1000 &&
+			fake_mem_req_second_size == 0x2000);
+	require(fake_mem_req_first_numa == 4 && fake_mem_req_second_numa == 5);
+
+	fake_all_reset();
+	fake_all_count_ret = 0;
+	fake_open_calls = 0;
+	stage = -99;
+	count_ret = -99;
+	require(ihklib_os_release_mem_body_result(98, bad_chunks, 1,
+			0x112a25, 1024, fake_readable_callback,
+			fake_all_count_callback, fake_mem_all_query_callback,
+			fake_open_callback, fake_ioctl_ulong_callback,
+			fake_close_callback, fake_errno_callback,
+			&readable_ret, &validate_ret, &count_ret, &query_ret,
+			&stage, &open_ret, &ioctl_ret) == -EINVAL);
+	require(count_ret == 0 && stage == 5 && fake_open_calls == 0);
+
+	fake_all_reset();
+	fake_all_count_ret = 2;
+	fake_all_query_ret = -5;
+	fake_open_calls = 0;
+	query_ret = -99;
+	stage = -99;
+	require(ihklib_os_release_mem_body_result(99, bad_chunks, 1,
+			0x112a25, 1024, fake_readable_callback,
+			fake_all_count_callback, fake_mem_all_query_callback,
+			fake_open_callback, fake_ioctl_ulong_callback,
+			fake_close_callback, fake_errno_callback,
+			&readable_ret, &validate_ret, &count_ret, &query_ret,
+			&stage, &open_ret, &ioctl_ret) == -5);
+	require(query_ret == -5 && stage == 0 && fake_open_calls == 0);
+
+	fake_all_reset();
+	fake_open_ret = -8;
+	fake_open_calls = 0;
+	fake_ioctl_calls = 0;
+	fake_close_calls = 0;
+	open_ret = -99;
+	require(ihklib_os_release_mem_body_result(100, chunks, 2,
+			0x112a25, 1024, fake_readable_callback,
+			fake_all_count_callback, fake_mem_all_query_callback,
+			fake_open_callback, fake_ioctl_ulong_callback,
+			fake_close_callback, fake_errno_callback,
+			&readable_ret, &validate_ret, &count_ret, &query_ret,
+			&stage, &open_ret, &ioctl_ret) == -8);
+	require(open_ret == -8 && fake_ioctl_calls == 0 &&
+			fake_close_calls == 0);
+
+	fake_open_ret = 183;
+	fake_ioctl_ret = -1;
+	fake_errno_value = EIO;
+	fake_errno_calls = 0;
+	fake_close_calls = 0;
+	ioctl_ret = -99;
+	require(ihklib_os_release_mem_body_result(101, chunks, 2,
+			0x112a25, 1024, fake_readable_callback,
+			fake_all_count_callback, fake_mem_all_query_callback,
+			fake_open_callback, fake_ioctl_ulong_callback,
+			fake_close_callback, fake_errno_callback,
+			&readable_ret, &validate_ret, &count_ret, &query_ret,
+			&stage, &open_ret, &ioctl_ret) == -EIO);
+	require(open_ret == 183 && ioctl_ret == -1 &&
+			fake_errno_calls == 1 && fake_close_calls == 1);
+	fake_ioctl_ret = 0;
+	fake_errno_value = EIO;
+	bad_chunks[0].size = 1024;
+	bad_chunks[0].numa_node_number = 2;
+	mix(&digest, fake_mem_req_first_size ^ fake_mem_req_second_size ^
+			(unsigned long)fake_mem_req_first_numa);
+
 	require(ihklib_count_match_result(2, 2) == 0);
 	require(ihklib_count_match_result(2, 3) == -22);
 	require(ihklib_positive_count_or_result(4, -22) == 4);
@@ -112812,6 +123524,66 @@ int main(void)
 			sizeof(dummy_buf)) == -EFAULT);
 	require(ihklib_rusage_validate_result(dummy_buf, sizeof(dummy_buf) - 1,
 			sizeof(dummy_buf)) == -EINVAL);
+
+	fake_open_ret = 130;
+	fake_open_calls = 0;
+	fake_close_calls = 0;
+	fake_ioctl_calls = 0;
+	fake_errno_calls = 0;
+	fake_ioctl_ret = 0;
+	fake_rusage_desc_ptr = NULL;
+	fake_rusage_desc_size = 0;
+	open_ret = 0;
+	ioctl_ret = 99;
+	require(ihklib_os_getrusage_body_result(36, dummy_buf,
+			sizeof(dummy_buf), sizeof(dummy_buf), 0x11290106,
+			fake_open_callback, fake_ioctl_ulong_callback,
+			fake_close_callback, fake_errno_callback,
+			&open_ret, &ioctl_ret) == 0);
+	require(open_ret == 130 && ioctl_ret == 0);
+	require(fake_callback_index == 36 && fake_ioctl_request == 0x11290106);
+	require(fake_rusage_desc_ptr == dummy_buf &&
+			fake_rusage_desc_size == sizeof(dummy_buf));
+	require(fake_ioctl_calls == 1 && fake_close_calls == 1 &&
+			fake_errno_calls == 0);
+	require(ihklib_os_getrusage_body_result(36, NULL,
+			sizeof(dummy_buf), sizeof(dummy_buf), 0x11290106,
+			fake_open_callback, fake_ioctl_ulong_callback,
+			fake_close_callback, fake_errno_callback,
+			&open_ret, &ioctl_ret) == -EFAULT);
+	require(open_ret == -1 && ioctl_ret == 0);
+	require(ihklib_os_getrusage_body_result(36, dummy_buf,
+			sizeof(dummy_buf) - 1, sizeof(dummy_buf), 0x11290106,
+			fake_open_callback, fake_ioctl_ulong_callback,
+			fake_close_callback, fake_errno_callback,
+			&open_ret, &ioctl_ret) == -EINVAL);
+	fake_open_ret = -8;
+	fake_open_calls = 0;
+	fake_close_calls = 0;
+	require(ihklib_os_getrusage_body_result(37, dummy_buf,
+			sizeof(dummy_buf), sizeof(dummy_buf), 0x11290106,
+			fake_open_callback, fake_ioctl_ulong_callback,
+			fake_close_callback, fake_errno_callback,
+			&open_ret, &ioctl_ret) == -8);
+	require(open_ret == -8 && fake_open_calls == 1 &&
+			fake_close_calls == 0);
+	fake_open_ret = 131;
+	fake_close_calls = 0;
+	fake_ioctl_calls = 0;
+	fake_errno_calls = 0;
+	fake_ioctl_ret = -1;
+	fake_errno_value = EIO;
+	require(ihklib_os_getrusage_body_result(38, dummy_buf,
+			sizeof(dummy_buf), sizeof(dummy_buf), 0x11290106,
+			fake_open_callback, fake_ioctl_ulong_callback,
+			fake_close_callback, fake_errno_callback,
+			&open_ret, &ioctl_ret) == -EIO);
+	require(open_ret == 131 && ioctl_ret == -1);
+	require(fake_ioctl_calls == 1 && fake_errno_calls == 1 &&
+			fake_close_calls == 1);
+	fake_ioctl_ret = 0;
+	mix(&digest, (unsigned long)fake_rusage_desc_size);
+
 	require(ihklib_perf_attr_validate_result(dummy_buf) == 0);
 	require(ihklib_perf_attr_validate_result(NULL) == -EFAULT);
 	require(ihklib_perf_event_count_validate_result(1) == 0);
@@ -113558,6 +124330,51 @@ int main(void)
 	require(ihklib_mem_chunks_publish_result(NULL, 2, chunks, 2) == -22);
 	mix(&digest, mem_results[0] ^ mem_results[1]);
 
+	fake_access_ret = 0;
+	fake_access_calls = 0;
+	fake_open_path_calls = 0;
+	fake_errno_calls = 0;
+	memset(fake_last_path, 0, sizeof(fake_last_path));
+	require(ihklib_device_readable_body_result(2, 0,
+			fake_access_callback, fake_errno_callback) == 0);
+	require(fake_access_calls == 1 && fake_open_path_calls == 0);
+	require(!strcmp(fake_last_path, "/dev/mcd2"));
+	require(fake_errno_calls == 0);
+
+	fake_access_ret = -1;
+	fake_errno_value = EACCES;
+	fake_errno_calls = 0;
+	require(ihklib_device_readable_body_result(3, 1,
+			fake_access_callback, fake_errno_callback) == -EACCES);
+	require(fake_access_calls == 2);
+	require(!strcmp(fake_last_path, "/dev/mcos3"));
+	require(fake_errno_calls == 1);
+
+	fake_access_ret = 0;
+	fake_open_path_ret = 161;
+	fake_access_calls = 0;
+	fake_open_path_calls = 0;
+	fake_errno_calls = 0;
+	require(ihklib_device_open_body_result(4, 0, fake_access_callback,
+			fake_open_path_callback, fake_errno_callback) == 161);
+	require(fake_access_calls == 1 && fake_open_path_calls == 1);
+	require(!strcmp(fake_last_path, "/dev/mcd4"));
+	require(fake_errno_calls == 0);
+
+	fake_open_path_ret = -1;
+	fake_errno_value = ENOENT;
+	fake_errno_calls = 0;
+	require(ihklib_device_open_body_result(5, 1, fake_access_callback,
+			fake_open_path_callback, fake_errno_callback) == -ENOENT);
+	require(fake_access_calls == 2 && fake_open_path_calls == 2);
+	require(!strcmp(fake_last_path, "/dev/mcos5"));
+	require(fake_errno_calls == 1);
+	require(ihklib_device_readable_body_result(1, 0, NULL,
+			fake_errno_callback) == -EINVAL);
+	require(ihklib_device_open_body_result(1, 0, fake_access_callback,
+			NULL, fake_errno_callback) == -EINVAL);
+	mix(&digest, (unsigned long)fake_open_path_calls);
+
 	memset(req_sizes, 0, sizeof(req_sizes));
 	memset(req_numa, 0, sizeof(req_numa));
 	total = 999;
@@ -113616,6 +124433,269 @@ int main(void)
 	require(ihklib_os_set_next_result(NULL, 10, 0) == -14);
 	require(ihklib_os_set_next_result(os_set, 0, 0) == -22);
 	mix(&digest, (unsigned long)ihklib_os_set_next_result(os_set, 130, 64));
+
+	fake_open_ret = 128;
+	fake_open_calls = 0;
+	fake_open_index_count = 0;
+	fake_close_calls = 0;
+	fake_ioctl_calls = 0;
+	fake_errno_calls = 0;
+	fake_ioctl_ret = 0;
+	open_ret = 0;
+	ioctl_ret = 99;
+	polls = 0;
+	failed_index = 99;
+	require(ihklib_os_set_ioctl_loop_body_result(os_set, 66,
+			0x112a30, fake_open_callback,
+			fake_ioctl_noarg_callback, fake_close_callback,
+			fake_errno_callback, &open_ret, &ioctl_ret,
+			&polls, &failed_index) == 0);
+	require(open_ret == 128 && ioctl_ret == 0 && polls == 3);
+	require(failed_index == -1 && fake_open_calls == 3 &&
+			fake_close_calls == 3 && fake_ioctl_calls == 3 &&
+			fake_errno_calls == 0);
+	require(fake_open_index_trace[0] == 3 &&
+			fake_open_index_trace[1] == 63 &&
+			fake_open_index_trace[2] == 65);
+	require(fake_ioctl_request == 0x112a30);
+
+	fake_open_ret = -7;
+	fake_open_calls = 0;
+	fake_open_index_count = 0;
+	fake_close_calls = 0;
+	fake_ioctl_calls = 0;
+	failed_index = -1;
+	require(ihklib_os_set_ioctl_loop_body_result(os_set, 66,
+			0x112a31, fake_open_callback,
+			fake_ioctl_noarg_callback, fake_close_callback,
+			fake_errno_callback, &open_ret, &ioctl_ret,
+			&polls, &failed_index) == -7);
+	require(open_ret == -7 && failed_index == 3);
+	require(fake_open_calls == 1 && fake_ioctl_calls == 0 &&
+			fake_close_calls == 0);
+
+	fake_open_ret = 129;
+	fake_open_calls = 0;
+	fake_open_index_count = 0;
+	fake_close_calls = 0;
+	fake_ioctl_calls = 0;
+	fake_errno_calls = 0;
+	fake_ioctl_ret = -1;
+	fake_errno_value = EIO;
+	failed_index = -1;
+	require(ihklib_os_set_ioctl_loop_body_result(os_set, 66,
+			0x112a31, fake_open_callback,
+			fake_ioctl_noarg_callback, fake_close_callback,
+			fake_errno_callback, &open_ret, &ioctl_ret,
+			&polls, &failed_index) == -EIO);
+	require(open_ret == 129 && ioctl_ret == -1 && failed_index == 3);
+	require(fake_open_calls == 1 && fake_ioctl_calls == 1 &&
+			fake_errno_calls == 1 && fake_close_calls == 1);
+
+	fake_ioctl_ret = 0;
+	require(ihklib_os_set_ioctl_loop_body_result(os_set, 0,
+			0x112a30, fake_open_callback,
+			fake_ioctl_noarg_callback, fake_close_callback,
+			fake_errno_callback, &open_ret, &ioctl_ret,
+			&polls, &failed_index) == -EINVAL);
+	require(ihklib_os_set_ioctl_loop_body_result(NULL, 66,
+			0x112a30, fake_open_callback,
+			fake_ioctl_noarg_callback, fake_close_callback,
+			fake_errno_callback, &open_ret, &ioctl_ret,
+			&polls, &failed_index) == -EFAULT);
+	mix(&digest, (unsigned long)polls ^ (unsigned long)fake_open_index_count);
+
+	fake_dispatch_reset();
+	require(ihklib_cpu_string_dispatch_body_result(40, "1-3",
+			fake_cpu_dispatch_callback) == 0);
+	require(fake_dispatch_calls == 1 && fake_dispatch_index == 40);
+	require(fake_dispatch_count == 3);
+	require(fake_dispatch_cpus[0] == 1 && fake_dispatch_cpus[1] == 2 &&
+			fake_dispatch_cpus[2] == 3);
+	require(ihklib_cpu_string_dispatch_body_result(40, "1-x",
+			fake_cpu_dispatch_callback) == -EINVAL);
+	require(ihklib_cpu_string_dispatch_body_result(40, "1",
+			NULL) == -EINVAL);
+
+	fake_dispatch_reset();
+	require(ihklib_mem_string_dispatch_body_result(41, "2M@1,all@0",
+			fake_mem_dispatch_callback) == 0);
+	require(fake_dispatch_calls == 1 && fake_dispatch_index == 41);
+	require(fake_dispatch_count == 2);
+	require(fake_dispatch_chunks[0].size == 2097152UL);
+	require(fake_dispatch_chunks[0].numa_node_number == 1);
+	require(fake_dispatch_chunks[1].size == ULONG_MAX);
+	require(fake_dispatch_chunks[1].numa_node_number == 0);
+	require(ihklib_mem_string_dispatch_body_result(41, "1G@x",
+			fake_mem_dispatch_callback) == -EINVAL);
+
+	fake_dispatch_reset();
+	require(ihklib_ikc_string_dispatch_body_result(42, "0-1:3+4:5",
+			fake_ikc_dispatch_callback) == 0);
+	require(fake_dispatch_calls == 1 && fake_dispatch_index == 42);
+	require(fake_dispatch_count == 3);
+	require(fake_dispatch_maps[0].src_cpu == 0 &&
+			fake_dispatch_maps[0].dst_cpu == 3);
+	require(fake_dispatch_maps[1].src_cpu == 1 &&
+			fake_dispatch_maps[1].dst_cpu == 3);
+	require(fake_dispatch_maps[2].src_cpu == 4 &&
+			fake_dispatch_maps[2].dst_cpu == 5);
+	require(ihklib_ikc_string_dispatch_body_result(42, "0-1",
+			fake_ikc_dispatch_callback) == -EINVAL);
+
+	fake_dispatch_reset();
+	require(ihklib_env_value_callback_body_result(43,
+			env_wrapper_block, 5, "IHK_CPUS",
+			fake_env_string_dispatch_callback, create_os_err) == 0);
+	require(fake_dispatch_calls == 1 && fake_dispatch_index == 43);
+	require(fake_dispatch_err == create_os_err);
+	require(!strcmp(fake_dispatch_string, "0-2"));
+	fake_dispatch_reset();
+	require(ihklib_env_value_callback_body_result(43,
+			env_wrapper_block, 5, "MISSING",
+			fake_env_string_dispatch_callback, create_os_err) == 0);
+	require(fake_dispatch_calls == 0);
+	fake_dispatch_reset();
+	fake_dispatch_ret = -6;
+	require(ihklib_env_value_callback_body_result(43,
+			env_wrapper_block, 5, "IHK_MEM",
+			fake_env_string_dispatch_callback, create_os_err) == -6);
+	require(fake_dispatch_calls == 1);
+
+	fake_create_os_reset();
+	require(ihklib_reserve_mem_conf_str_body_result(44,
+			env_mem_conf_block, 2,
+			fake_create_os_mem_conf_callback) == 0);
+	require(fake_create_os_mem_conf_calls == 1);
+	require(fake_create_os_mem_conf_index == 44);
+	require(fake_create_os_mem_conf_key == IHK_RESERVE_MEM_TIMEOUT);
+	require(fake_create_os_mem_conf_value == 123);
+	require(ihklib_reserve_mem_conf_str_body_result(44,
+			env_bad_mem_conf_block, 1,
+			fake_create_os_mem_conf_callback) == -EINVAL);
+
+	fake_dispatch_reset();
+	require(ihklib_os_kargs_str_body_result(45, env_wrapper_block, 5,
+			env_default_kargs, fake_kargs_dispatch_callback) == 0);
+	require(fake_dispatch_calls == 1 && fake_dispatch_index == 45);
+	require(!strcmp(fake_dispatch_string, "hidos wrapped"));
+	fake_dispatch_reset();
+	require(ihklib_os_kargs_str_body_result(46, env_no_kargs_block, 1,
+			env_default_kargs, fake_kargs_dispatch_callback) == 0);
+	require(fake_dispatch_calls == 1 && fake_dispatch_index == 46);
+	require(!strcmp(fake_dispatch_string, env_default_kargs));
+
+	fake_all_reset();
+	fake_all_count_ret = 3;
+	stage = -1;
+	require(ihklib_os_assign_cpu_all_body_result(50, &stage,
+			fake_all_count_callback, fake_cpu_all_query_callback,
+			fake_cpu_all_action_callback) == 0);
+	require(stage == 0 && fake_all_count_calls == 1);
+	require(fake_all_count_index == 50 && fake_all_query_index == 50);
+	require(fake_all_action_index == 50 && fake_all_action_count == 3);
+	require(fake_all_cpus[0] == 20 && fake_all_cpus[1] == 21 &&
+			fake_all_cpus[2] == 22);
+	fake_all_reset();
+	fake_all_count_ret = -5;
+	stage = -1;
+	require(ihklib_os_assign_cpu_all_body_result(51, &stage,
+			fake_all_count_callback, fake_cpu_all_query_callback,
+			fake_cpu_all_action_callback) == -5);
+	require(stage == IHKLIB_ALL_STAGE_COUNT);
+	require(fake_all_query_calls == 0 && fake_all_action_calls == 0);
+	fake_all_reset();
+	fake_all_count_ret = 0;
+	stage = -1;
+	require(ihklib_os_assign_cpu_all_body_result(52, &stage,
+			fake_all_count_callback, fake_cpu_all_query_callback,
+			fake_cpu_all_action_callback) == -EINVAL);
+	require(stage == IHKLIB_ALL_STAGE_EMPTY);
+	fake_all_reset();
+	fake_all_count_ret = 2;
+	fake_all_query_ret = -6;
+	stage = -1;
+	require(ihklib_os_assign_cpu_all_body_result(53, &stage,
+			fake_all_count_callback, fake_cpu_all_query_callback,
+			fake_cpu_all_action_callback) == -6);
+	require(stage == IHKLIB_ALL_STAGE_QUERY &&
+			fake_all_action_calls == 0);
+	fake_all_reset();
+	fake_all_count_ret = 2;
+	fake_all_action_ret = -7;
+	stage = -1;
+	require(ihklib_os_assign_cpu_all_body_result(54, &stage,
+			fake_all_count_callback, fake_cpu_all_query_callback,
+			fake_cpu_all_action_callback) == -7);
+	require(stage == IHKLIB_ALL_STAGE_ACTION &&
+			fake_all_action_calls == 1);
+
+	fake_all_reset();
+	fake_all_count_ret = 0;
+	require(ihklib_os_release_cpu_all_body_result(55,
+			fake_all_count_callback, fake_cpu_all_query_callback,
+			fake_cpu_all_action_callback) == 0);
+	require(fake_all_query_calls == 0 && fake_all_action_calls == 0);
+	fake_all_reset();
+	fake_all_count_ret = 2;
+	require(ihklib_os_release_cpu_all_body_result(56,
+			fake_all_count_callback, fake_cpu_all_query_callback,
+			fake_cpu_all_action_callback) == 0);
+	require(fake_all_action_count == 2 && fake_all_cpus[1] == 21);
+	fake_all_reset();
+	fake_all_count_ret = 2;
+	stage = -1;
+	require(ihklib_release_cpu_all_body_result(57, &stage,
+			fake_all_count_callback, fake_cpu_all_query_callback,
+			fake_cpu_all_action_callback) == 0);
+	require(stage == 0 && fake_all_action_index == 57);
+	fake_all_reset();
+	fake_all_count_ret = 0;
+	stage = -1;
+	require(ihklib_release_cpu_all_body_result(58, &stage,
+			fake_all_count_callback, fake_cpu_all_query_callback,
+			fake_cpu_all_action_callback) == 0);
+	require(stage == 0 && fake_all_action_calls == 0);
+
+	fake_all_reset();
+	fake_all_count_ret = 2;
+	stage = -1;
+	require(ihklib_os_assign_mem_all_body_result(59, &stage,
+			fake_all_count_callback, fake_mem_all_query_callback,
+			fake_mem_all_action_callback) == 0);
+	require(stage == 0 && fake_all_count_index == 0);
+	require(fake_all_query_index == 59 && fake_all_action_index == 59);
+	require(fake_all_chunks[0].size == 0x1000UL &&
+			fake_all_chunks[0].numa_node_number == 4);
+	require(fake_all_chunks[1].size == 0x2000UL &&
+			fake_all_chunks[1].numa_node_number == 5);
+	fake_all_reset();
+	fake_all_count_ret = 0;
+	stage = -1;
+	require(ihklib_os_assign_mem_all_body_result(60, &stage,
+			fake_all_count_callback, fake_mem_all_query_callback,
+			fake_mem_all_action_callback) == -EINVAL);
+	require(stage == IHKLIB_ALL_STAGE_EMPTY);
+	fake_all_reset();
+	fake_all_count_ret = 2;
+	fake_all_query_ret = -8;
+	stage = -1;
+	require(ihklib_os_assign_mem_all_body_result(61, &stage,
+			fake_all_count_callback, fake_mem_all_query_callback,
+			fake_mem_all_action_callback) == -8);
+	require(stage == IHKLIB_ALL_STAGE_QUERY &&
+			fake_all_action_calls == 0);
+	fake_all_reset();
+	fake_all_count_ret = 2;
+	fake_all_action_ret = -9;
+	stage = -1;
+	require(ihklib_os_assign_mem_all_body_result(62, &stage,
+			fake_all_count_callback, fake_mem_all_query_callback,
+			fake_mem_all_action_callback) == -9);
+	require(stage == IHKLIB_ALL_STAGE_ACTION);
+	mix(&digest, (unsigned long)(fake_dispatch_count ^
+			fake_create_os_mem_conf_value ^
+			fake_all_action_count));
 
 	create_os_names[0] = env_conf_timeout;
 	create_os_names[1] = env_cpus_name;
@@ -113708,8 +124788,97 @@ int main(void)
 			env_default_kargs, &kargs_result, create_os_err,
 			fake_create_os_ikc_callback) == 0);
 	require(kargs_result == env_default_kargs);
+
+	fake_all_reset();
+	fake_all_count_ret = 2;
+	fake_all_mem_count_ret = 1;
+	stage = -1;
+	require(ihklib_create_os_preclean_body_result(63, chunks,
+			create_os_err, &stage, fake_all_count_callback,
+			fake_release_cpu_all_callback,
+			fake_all_mem_count_callback,
+			fake_mem_all_action_callback) == 0);
+	require(stage == 0 && fake_all_count_index == 63);
+	require(fake_all_mem_count_index == 63);
+	require(fake_all_action_calls == 2 && fake_all_err == create_os_err);
+	require(fake_all_chunks[0].size == chunks[0].size &&
+			fake_all_chunks[0].numa_node_number ==
+			chunks[0].numa_node_number);
+	fake_all_reset();
+	fake_all_count_ret = -3;
+	stage = -1;
+	require(ihklib_create_os_preclean_body_result(64, chunks,
+			create_os_err, &stage, fake_all_count_callback,
+			fake_release_cpu_all_callback,
+			fake_all_mem_count_callback,
+			fake_mem_all_action_callback) == -3);
+	require(stage == IHKLIB_CREATE_STAGE_GET_CPUS);
+	require(fake_all_mem_count_calls == 0);
+	fake_all_reset();
+	fake_all_count_ret = 1;
+	fake_all_action_ret = -4;
+	stage = -1;
+	require(ihklib_create_os_preclean_body_result(65, chunks,
+			create_os_err, &stage, fake_all_count_callback,
+			fake_release_cpu_all_callback,
+			fake_all_mem_count_callback,
+			fake_mem_all_action_callback) == -4);
+	require(stage == IHKLIB_CREATE_STAGE_RELEASE_CPUS);
+	require(fake_all_mem_count_calls == 0);
+	fake_all_reset();
+	fake_all_count_ret = 0;
+	fake_all_mem_count_ret = -5;
+	stage = -1;
+	require(ihklib_create_os_preclean_body_result(66, chunks,
+			create_os_err, &stage, fake_all_count_callback,
+			fake_release_cpu_all_callback,
+			fake_all_mem_count_callback,
+			fake_mem_all_action_callback) == -5);
+	require(stage == IHKLIB_CREATE_STAGE_GET_MEM);
+	fake_all_reset();
+	fake_all_count_ret = 0;
+	fake_all_mem_count_ret = 1;
+	fake_all_action_ret = -6;
+	stage = -1;
+	require(ihklib_create_os_preclean_body_result(67, chunks,
+			create_os_err, &stage, fake_all_count_callback,
+			fake_release_cpu_all_callback,
+			fake_all_mem_count_callback,
+			fake_mem_all_action_callback) == -6);
+	require(stage == IHKLIB_CREATE_STAGE_RELEASE_MEM);
+
+	fake_char_reset();
+	stage = -1;
+	require(ihklib_create_os_load_kargs_body_result(68,
+			image_name, valid_kargs, &stage,
+			fake_char_load_callback,
+			fake_char_kargs_callback) == 0);
+	require(stage == 0 && fake_char_load_calls == 1 &&
+			fake_char_kargs_calls == 1);
+	require(fake_char_load_index == 68 && fake_char_kargs_index == 68);
+	require(fake_char_load_arg == image_name &&
+			fake_char_kargs_arg == valid_kargs);
+	fake_char_reset();
+	fake_char_load_ret = -7;
+	stage = -1;
+	require(ihklib_create_os_load_kargs_body_result(69,
+			image_name, valid_kargs, &stage,
+			fake_char_load_callback,
+			fake_char_kargs_callback) == -7);
+	require(stage == IHKLIB_CREATE_STAGE_LOAD);
+	require(fake_char_load_calls == 1 && fake_char_kargs_calls == 0);
+	fake_char_reset();
+	fake_char_kargs_ret = -8;
+	stage = -1;
+	require(ihklib_create_os_load_kargs_body_result(70,
+			image_name, valid_kargs, &stage,
+			fake_char_load_callback,
+			fake_char_kargs_callback) == -8);
+	require(stage == IHKLIB_CREATE_STAGE_KARGS);
+	require(fake_char_load_calls == 1 && fake_char_kargs_calls == 1);
 	mix(&digest, (unsigned long)(fake_create_os_mem_conf_value ^
-			fake_create_os_last_index));
+			fake_create_os_last_index ^ fake_all_action_calls ^
+			fake_char_kargs_calls));
 
 	last_index = -1;
 	ret = ihkconfig_dispatch_action_result(1, 7, -1, &cfg_ops,
@@ -113835,6 +125004,262 @@ int main(void)
 }
 EOF_IHKLIB_HELPERS
 
+cat > "${tmpdir}/ihk_core_helpers_smoke.c" <<'EOF_IHK_CORE_HELPERS'
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#define EINVAL 22
+
+struct list_head {
+	struct list_head *next;
+	struct list_head *prev;
+};
+
+struct fake_atomic {
+	int counter;
+};
+
+struct fake_kmsg_container {
+	struct list_head list;
+	int os_index;
+	struct fake_atomic count;
+	void *kmsg_buf;
+	unsigned int order;
+};
+
+extern int ihk_core_delete_kmsg_buf_body_result(
+	void *container,
+	void (*free_pages_fn)(void *kmsg_buf, unsigned int order),
+	void (*list_del_fn)(void *entry),
+	void (*free_container_fn)(void *container),
+	void (*log_fn)(int event, void *container, int value));
+extern int ihk_core_release_kmsg_buf_body_result(
+	void *container, int (*count_read_fn)(void *container),
+	unsigned long (*lock_fn)(void),
+	int (*count_dec_return_fn)(void *container),
+	void (*delete_fn)(void *container),
+	void (*unlock_fn)(unsigned long flags),
+	void (*log_fn)(int event, void *container, int value));
+
+static int free_pages_calls;
+static void *free_pages_buf;
+static unsigned int free_pages_order;
+static int list_del_calls;
+static void *list_del_entry;
+static int free_container_calls;
+static void *free_container_arg;
+static int log_count;
+static int log_events[8];
+static int log_values[8];
+static int lock_calls;
+static int unlock_calls;
+static unsigned long unlock_flags;
+static int delete_calls;
+static void *delete_arg;
+static int sequence;
+static int free_pages_seq;
+static int log1_seq;
+static int list_del_seq;
+static int free_container_seq;
+static int log2_seq;
+static int lock_seq;
+static int dec_seq;
+static int delete_seq;
+static int unlock_seq;
+
+static void require(int cond)
+{
+	if (!cond)
+		exit(2);
+}
+
+static void mix(unsigned long *digest, unsigned long value)
+{
+	*digest ^= value + 0x9e3779b97f4a7c15UL + (*digest << 6) +
+		(*digest >> 2);
+}
+
+static void reset_core_trace(void)
+{
+	free_pages_calls = 0;
+	free_pages_buf = NULL;
+	free_pages_order = 0;
+	list_del_calls = 0;
+	list_del_entry = NULL;
+	free_container_calls = 0;
+	free_container_arg = NULL;
+	log_count = 0;
+	for (int i = 0; i < 8; i++) {
+		log_events[i] = 0;
+		log_values[i] = 0;
+	}
+	lock_calls = 0;
+	unlock_calls = 0;
+	unlock_flags = 0;
+	delete_calls = 0;
+	delete_arg = NULL;
+	sequence = 0;
+	free_pages_seq = 0;
+	log1_seq = 0;
+	list_del_seq = 0;
+	free_container_seq = 0;
+	log2_seq = 0;
+	lock_seq = 0;
+	dec_seq = 0;
+	delete_seq = 0;
+	unlock_seq = 0;
+}
+
+static void fake_free_pages(void *kmsg_buf, unsigned int order)
+{
+	free_pages_calls++;
+	free_pages_buf = kmsg_buf;
+	free_pages_order = order;
+	free_pages_seq = ++sequence;
+}
+
+static void fake_list_del(void *entry)
+{
+	list_del_calls++;
+	list_del_entry = entry;
+	list_del_seq = ++sequence;
+}
+
+static void fake_free_container(void *container)
+{
+	free_container_calls++;
+	free_container_arg = container;
+	free_container_seq = ++sequence;
+}
+
+static void fake_log(int event, void *container, int value)
+{
+	(void)container;
+	if (log_count < 8) {
+		log_events[log_count] = event;
+		log_values[log_count] = value;
+	}
+	log_count++;
+	if (event == 1)
+		log1_seq = ++sequence;
+	else if (event == 2)
+		log2_seq = ++sequence;
+	else
+		sequence++;
+}
+
+static int fake_count_read(void *container)
+{
+	return ((struct fake_kmsg_container *)container)->count.counter;
+}
+
+static unsigned long fake_lock(void)
+{
+	lock_calls++;
+	lock_seq = ++sequence;
+	return 0x55667788UL;
+}
+
+static int fake_count_dec_return(void *container)
+{
+	struct fake_kmsg_container *cont = container;
+
+	cont->count.counter--;
+	dec_seq = ++sequence;
+	return cont->count.counter;
+}
+
+static void fake_delete(void *container)
+{
+	delete_calls++;
+	delete_arg = container;
+	delete_seq = ++sequence;
+}
+
+static void fake_unlock(unsigned long flags)
+{
+	unlock_calls++;
+	unlock_flags = flags;
+	unlock_seq = ++sequence;
+}
+
+int main(void)
+{
+	struct fake_kmsg_container cont = { 0 };
+	unsigned long digest = 0x69686b636f7265UL;
+	char kmsg[16];
+
+	cont.kmsg_buf = kmsg;
+	cont.order = 3;
+	reset_core_trace();
+	require(ihk_core_delete_kmsg_buf_body_result(&cont,
+			fake_free_pages, fake_list_del, fake_free_container,
+			fake_log) == 1);
+	require(free_pages_calls == 1 && free_pages_buf == kmsg);
+	require(free_pages_order == 3);
+	require(list_del_calls == 1 && list_del_entry == &cont.list);
+	require(free_container_calls == 1 && free_container_arg == &cont);
+	require(log_count == 2 && log_events[0] == 1 && log_events[1] == 2);
+	require(free_pages_seq < log1_seq && log1_seq < list_del_seq);
+	require(list_del_seq < free_container_seq && free_container_seq < log2_seq);
+	mix(&digest, free_pages_order);
+	mix(&digest, (unsigned long)log_count);
+
+	reset_core_trace();
+	require(ihk_core_delete_kmsg_buf_body_result(NULL,
+			fake_free_pages, fake_list_del, fake_free_container,
+			fake_log) == 0);
+	require(free_pages_calls == 0 && log_count == 0);
+
+	cont.count.counter = 2;
+	reset_core_trace();
+	require(ihk_core_release_kmsg_buf_body_result(&cont,
+			fake_count_read, fake_lock, fake_count_dec_return,
+			fake_delete, fake_unlock, fake_log) == 0);
+	require(cont.count.counter == 1);
+	require(lock_calls == 1 && unlock_calls == 1);
+	require(delete_calls == 0);
+	require(lock_seq < dec_seq && dec_seq < unlock_seq);
+	require(unlock_flags == 0x55667788UL);
+	mix(&digest, (unsigned long)cont.count.counter);
+
+	cont.count.counter = 1;
+	reset_core_trace();
+	require(ihk_core_release_kmsg_buf_body_result(&cont,
+			fake_count_read, fake_lock, fake_count_dec_return,
+			fake_delete, fake_unlock, fake_log) == 0);
+	require(cont.count.counter == 0);
+	require(delete_calls == 1 && delete_arg == &cont);
+	require(lock_seq < dec_seq && dec_seq < delete_seq);
+	require(delete_seq < unlock_seq);
+	mix(&digest, (unsigned long)delete_calls);
+
+	cont.count.counter = 0;
+	reset_core_trace();
+	require(ihk_core_release_kmsg_buf_body_result(&cont,
+			fake_count_read, fake_lock, fake_count_dec_return,
+			fake_delete, fake_unlock, fake_log) == -EINVAL);
+	require(lock_calls == 0 && delete_calls == 0);
+	require(log_count == 1 && log_events[0] == 3 &&
+		log_values[0] == -EINVAL);
+	mix(&digest, (unsigned long)log_events[0]);
+
+	require(ihk_core_release_kmsg_buf_body_result(NULL,
+			fake_count_read, fake_lock, fake_count_dec_return,
+			fake_delete, fake_unlock, fake_log) == -EINVAL);
+	require(ihk_core_release_kmsg_buf_body_result(&cont,
+			NULL, fake_lock, fake_count_dec_return, fake_delete,
+			fake_unlock, fake_log) == -EINVAL);
+	require(ihk_core_delete_kmsg_buf_body_result(&cont,
+			NULL, fake_list_del, fake_free_container,
+			fake_log) == -EINVAL);
+
+	printf("ihk_core_helpers ok digest=%016lx\n", digest);
+	return 0;
+}
+EOF_IHK_CORE_HELPERS
+
 cat > "${tmpdir}/smp_chunk_helpers_equiv.c" <<'EOF_SMP_CHUNK_HELPERS'
 #include <stddef.h>
 #include <stdint.h>
@@ -113866,8 +125291,30 @@ struct chunk {
 };
 
 #define ENOMEM 12
+#define EACCES 13
+#define E2BIG 7
+#define EFAULT 14
+#define EIO 5
+#define ENOENT 2
+#define EBUSY 16
+#define EINVAL 22
+#define ENOSPC 28
+#define ENOSYS 38
 #define ENAMETOOLONG 36
 #define FAKE_CPUMASK_WORDS 4
+#define BUILTIN_OS_STATUS_INITIAL 0
+#define BUILTIN_OS_STATUS_LOADING 1
+#define BUILTIN_OS_STATUS_HUNGUP 5
+#define IHK_SMP_CPU_NONE 0
+#define IHK_SMP_CPU_ONLINE 1
+#define IHK_SMP_CPU_AVAILABLE 2
+#define IHK_SMP_CPU_ASSIGNED 3
+#define IHK_SMP_CPU_TO_OFFLINE 4
+#define IHK_SMP_CPU_OFFLINED 5
+#define IHK_SMP_CPU_TO_ONLINE 6
+#define IHK_OS_DEBUG_START 0x122a00U
+#define SMP_IRQ_LIST_POISON1 0x00100129UL
+#define SMP_IRQ_LIST_POISON2 0x00200229UL
 
 struct fake_cache_topology {
 	struct list_head chain;
@@ -113902,6 +125349,84 @@ struct fake_node_topology {
 	unsigned long cpumap[FAKE_CPUMASK_WORDS];
 };
 
+struct fake_smp_cpu {
+	int id;
+	int hw_id;
+	int status;
+	int padding;
+	unsigned long os;
+	int ikc_map_cpu;
+};
+
+struct fake_builtin_device_data {
+	unsigned long lock;
+	unsigned long ihk_dev;
+	int status;
+};
+
+struct ihk_cpu_req {
+	int *cpus;
+	int num_cpus;
+};
+
+struct ihk_ikc_req {
+	int *src_cpus;
+	int *dst_cpus;
+	int num_cpus;
+};
+
+struct ihk_mem_req {
+	size_t *sizes;
+	int *numa_ids;
+	int num_chunks;
+	int min_chunk_size;
+	int max_size_ratio_all;
+	int timeout;
+};
+
+struct fake_mem_chunk {
+	struct list_head chain;
+	size_t size;
+	int numa_id;
+};
+
+struct fake_os_mem_chunk {
+	struct list_head list;
+	uintptr_t addr;
+	size_t size;
+	void *os;
+	int numa_id;
+};
+
+struct fake_interrupt_handler {
+	struct list_head list;
+	void (*func)(unsigned long os, unsigned long os_priv,
+		     unsigned long priv);
+	void *priv;
+	unsigned long os;
+	void *os_priv;
+};
+
+struct fake_perf_param {
+	unsigned int nr_extra_regs;
+	unsigned long hw_event_map[3];
+	unsigned long hw_cache_event_ids[2][2][2];
+	unsigned long hw_cache_extra_regs[2][2][2];
+	unsigned int ereg_event[4];
+	unsigned int ereg_msr[4];
+	unsigned long ereg_valid_mask[4];
+	int ereg_idx[4];
+};
+
+struct fake_extra_reg {
+	unsigned int event;
+	unsigned int msr;
+	unsigned long config_mask;
+	unsigned long valid_mask;
+	int idx;
+	int extra_msr_access;
+};
+
 struct ihk_smp_collect_cache_topology_offsets {
 	unsigned long cpu_cache_topology_list;
 	unsigned long cache_chain;
@@ -113932,6 +125457,224 @@ struct ihk_smp_collect_node_topology_offsets {
 	unsigned long node_chain;
 	unsigned long node_number;
 	unsigned long cpumap;
+};
+
+struct ihk_smp_arch_symbol_slots {
+	unsigned long *real_mode_header;
+	unsigned long *vector_irq;
+	unsigned long *lapic_get_maxlvt;
+	unsigned long *irq_desc_tree;
+	unsigned long *get_uv_system_type;
+	unsigned long *init_deasserted;
+	unsigned long *alloc_desc;
+	unsigned long *default_send_ipi_dest_field;
+	unsigned long *init_level4_pgt;
+	unsigned long *used_vectors;
+};
+
+struct ihk_smp_symbol_slots {
+	unsigned long *ioremap_page_range;
+	unsigned long *vmap_area_lock;
+	unsigned long *vmap_area_root;
+	unsigned long *insert_vmap_area;
+	unsigned long *free_vmap_area_old;
+	unsigned long *alloc_vmap_area;
+	unsigned long *free_vmap_area_new;
+	unsigned long *unmap_kernel_range_noflush;
+	unsigned long *raised_list;
+	unsigned long *hstates;
+	unsigned long *default_hstate_idx;
+};
+
+struct fake_mem_info {
+	int n_available;
+	int n_fixed;
+	int n_mappable;
+	void *available;
+	void *fixed;
+	void *mappable;
+	int n_numa_nodes;
+	void *numa_mapping;
+};
+
+struct fake_cpu_info {
+	int n_cpus;
+	void *mapping;
+};
+
+struct fake_os_data {
+	int lock;
+	void *dev;
+	struct fake_mem_info mem_info;
+	struct fake_cpu_info cpu_info;
+	char kernel_args[32];
+	int nr_numa_nodes;
+	int nr_cpus;
+	int cpu_mapping[8];
+	int bootstrap_numa_id;
+	void *boot_pt;
+	int status;
+	int cpu_ikc_mapped;
+	unsigned long mem_start;
+	unsigned long mem_end;
+	unsigned long boot_rip;
+};
+
+struct fake_trampoline_os {
+	void *param;
+	unsigned long boot_rip;
+};
+
+struct fake_trampoline_param {
+	unsigned long linux_kernel_pgt_phys;
+	unsigned long page_offset_base;
+	void *ihk_ikc_cpu_raised_list[8];
+	void *ikc_irq_work_func;
+	unsigned int ihk_ikc_irq;
+	unsigned int ihk_ikc_irq_apicids[8];
+};
+
+struct fake_trampoline_header {
+	unsigned long reserved;
+	unsigned long page_table;
+	unsigned long next_ip;
+	unsigned long stack_ptr;
+	unsigned long notify_address;
+};
+
+struct fake_startup_os {
+	void *boot_pt;
+	unsigned long bootstrap_mem_end;
+	unsigned long boot_rip;
+};
+
+struct fake_device_data {
+	int lock;
+	void *ihk_dev;
+	int status;
+};
+
+struct fake_register_os_data {
+	char *name;
+	void *ops;
+	void *priv;
+	int flag;
+};
+
+struct ihk_smp_control_offsets {
+	unsigned long os_lock;
+	unsigned long os_dev;
+	unsigned long os_mem_info;
+	unsigned long os_cpu_info;
+	unsigned long os_kernel_args;
+	unsigned long os_nr_numa_nodes;
+	unsigned long os_nr_cpus;
+	unsigned long os_bootstrap_numa_id;
+	unsigned long os_boot_pt;
+	unsigned long os_status;
+	unsigned long mem_info_n_numa_nodes;
+	unsigned long regdata_priv;
+	unsigned long dev_status;
+	unsigned long os_cpu_mapping;
+	unsigned long os_mem_start;
+	unsigned long os_mem_end;
+	unsigned long os_boot_rip;
+};
+
+struct ihk_smp_cpu_req_offsets {
+	unsigned long cpus;
+	unsigned long num_cpus;
+};
+
+struct ihk_smp_ikc_req_offsets {
+	unsigned long src_cpus;
+	unsigned long dst_cpus;
+	unsigned long num_cpus;
+};
+
+struct ihk_smp_set_ikc_map_offsets {
+	unsigned long os_lock;
+	unsigned long os_status;
+	unsigned long os_cpu_ikc_mapped;
+	unsigned long req_src_cpus;
+	unsigned long req_dst_cpus;
+	unsigned long req_num_cpus;
+	unsigned long cpu_status;
+	unsigned long cpu_os;
+	unsigned long cpu_ikc_map_cpu;
+};
+
+struct ihk_smp_mem_req_offsets {
+	unsigned long sizes;
+	unsigned long numa_ids;
+	unsigned long num_chunks;
+	unsigned long min_chunk_size;
+	unsigned long max_size_ratio_all;
+};
+
+struct ihk_smp_mem_query_offsets {
+	unsigned long list_next;
+	unsigned long entry_list;
+	unsigned long entry_size;
+	unsigned long entry_numa_id;
+	unsigned long entry_os;
+};
+
+struct ihk_smp_map_virtual_list_offsets {
+	unsigned long list_next;
+	unsigned long entry_list;
+	unsigned long entry_addr;
+	unsigned long entry_size;
+};
+
+struct ihk_smp_setup_trampoline_offsets {
+	unsigned long os_param;
+	unsigned long os_boot_rip;
+	unsigned long param_ihk_ikc_irq_apicids;
+	unsigned long param_ihk_ikc_irq_apicid_stride;
+	unsigned long param_ihk_ikc_cpu_raised_list;
+	unsigned long param_ihk_ikc_cpu_raised_list_stride;
+	unsigned long param_ikc_irq_work_func;
+	unsigned long param_ihk_ikc_irq;
+	unsigned long param_page_offset_base;
+	unsigned long param_linux_kernel_pgt_phys;
+	unsigned long header_page_table;
+	unsigned long header_next_ip;
+	unsigned long header_notify_address;
+};
+
+struct ihk_smp_setup_startup_offsets {
+	unsigned long os_boot_pt;
+	unsigned long os_bootstrap_mem_end;
+	unsigned long os_boot_rip;
+};
+
+struct ihk_smp_topology_lookup_offsets {
+	unsigned long list_next;
+	unsigned long cpu_chain;
+	unsigned long cpu_cpu_number;
+	unsigned long cpu_hw_id;
+	unsigned long node_chain;
+	unsigned long node_node_number;
+};
+
+struct ihk_smp_free_info_offsets {
+	unsigned long list_next;
+	unsigned long cpu_chain;
+	unsigned long cpu_cache_topology_list;
+	unsigned long cache_chain;
+	unsigned long cache_type;
+	unsigned long cache_size_str;
+	unsigned long node_chain;
+};
+
+struct ihk_smp_interrupt_handler_offsets {
+	unsigned long list_next;
+	unsigned long handler_list;
+	unsigned long handler_func;
+	unsigned long handler_priv;
+	unsigned long handler_os;
+	unsigned long handler_os_priv;
 };
 
 extern void rb_insert_color(struct rb_node *node, struct rb_root *root);
@@ -113980,6 +125723,439 @@ extern int ihk_smp_collect_node_topology_body_result(
 	int (*read_node_cpumap_fn)(void *, int, int),
 	void (*list_add_fn)(void *, void *),
 	void (*log_fn)(int, int));
+extern int ihk_smp_collect_topology_body_result(
+	int (*next_cpu_fn)(int),
+	int (*collect_cpu_fn)(int),
+	int (*next_node_fn)(int),
+	int (*collect_node_fn)(int),
+	void (*log_fn)(int, int));
+extern int ihk_smp_arch_symbols_init_body_result(
+	const struct ihk_smp_arch_symbol_slots *slots,
+	unsigned long (*lookup_fn)(const char *),
+	int (*warn_fn)(int));
+extern int ihk_smp_symbols_init_body_result(
+	const struct ihk_smp_symbol_slots *slots, int use_old_vmap_api,
+	int use_linux_work_irq, unsigned long (*lookup_fn)(const char *),
+	int (*warn_fn)(int));
+extern int ihk_smp_os_notify_hungup_body_result(
+	unsigned long os, const struct ihk_smp_control_offsets *offsets,
+	unsigned long (*lock_fn)(unsigned long),
+	void (*unlock_fn)(unsigned long, unsigned long));
+extern unsigned long ihk_smp_os_get_memory_info_body_result(
+	unsigned long os, const struct ihk_smp_control_offsets *offsets);
+extern unsigned long ihk_smp_os_get_cpu_info_body_result(
+	unsigned long os, const struct ihk_smp_control_offsets *offsets);
+extern int ihk_smp_os_get_num_numa_nodes_body_result(
+	unsigned long os, const struct ihk_smp_control_offsets *offsets);
+extern int ihk_smp_os_get_num_cpus_body_result(
+	unsigned long os, const struct ihk_smp_control_offsets *offsets);
+extern int ihk_smp_os_set_kargs_body_result(
+	unsigned long os, const char *args,
+	const struct ihk_smp_control_offsets *offsets,
+	unsigned long kernel_args_len,
+	unsigned long (*lock_fn)(unsigned long),
+	void (*unlock_fn)(unsigned long, unsigned long),
+	void (*log_fn)(int, const char *));
+extern long ihk_smp_os_debug_request_body_result(
+	unsigned long ihk_os, unsigned long priv_data, unsigned int req,
+	unsigned long arg, unsigned int start_req,
+	int (*issue_interrupt_fn)(unsigned long, unsigned long, int, int));
+extern int ihk_smp_os_freeze_thaw_body_result(
+	unsigned long ihk_os, unsigned long priv_data, int mode,
+	int (*send_multi_intr_fn)(unsigned long, unsigned long, int));
+extern int ihk_smp_create_os_body_result(
+	unsigned long device_data, unsigned long ihk_os, unsigned long regdata,
+	unsigned long builtin_regdata,
+	const struct ihk_smp_control_offsets *offsets,
+	unsigned long regdata_size, unsigned long os_size,
+	void *(*alloc_fn)(unsigned long),
+	void (*spin_init_fn)(unsigned long),
+	void (*log_fn)(int));
+extern int ihk_smp_destroy_os_body_result(
+	unsigned long os_priv, void (*free_fn)(unsigned long));
+extern long ihk_smp_device_debug_request_body_result(void);
+extern unsigned long ihk_smp_get_dma_channel_body_result(
+	unsigned long dev, unsigned long priv_data, int channel);
+extern int ihk_smp_unmap_virtual_body_result(
+	unsigned long virt, void (*unmap_fn)(unsigned long));
+extern void ihk_smp_direct_unmap_virtual_body_result(
+	unsigned long virt, unsigned long page_size,
+	void (*flush_fn)(unsigned long, unsigned long));
+extern unsigned long ihk_smp_map_virtual_body_result(
+	unsigned long ihk_dev, unsigned long phys, unsigned long size,
+	unsigned long virt, int flags,
+	unsigned long (*direct_map_fn)(unsigned long, unsigned long),
+	unsigned long (*host_map_fn)(unsigned long, unsigned long,
+				     unsigned long, unsigned long, int),
+	void (*log_fn)(int, unsigned long, unsigned long));
+extern unsigned long ihk_smp_direct_map_virtual_body_result(
+	unsigned long list_head, unsigned long phys, unsigned long size,
+	const struct ihk_smp_map_virtual_list_offsets *offsets,
+	unsigned long (*phys_to_virt_fn)(unsigned long));
+extern int ihk_smp_get_buildid_body_result(
+	unsigned long user_addr, const char *buildid, unsigned long buildid_len,
+	int (*copy_to_user_fn)(unsigned long, const void *, unsigned long));
+extern int ihk_smp_os_vtop_body_result(
+	unsigned long bootstrap_mem_start, unsigned long virt,
+	unsigned long *phys, unsigned long map_start, unsigned long map_end,
+	unsigned long large_page, unsigned long large_page_mask,
+	unsigned long (*virt_to_phys_fn)(unsigned long),
+	void (*log_fn)(int, unsigned long, unsigned long));
+extern int ihk_smp_os_load_mem_body_result(
+	unsigned long os, int has_cpu, unsigned long mem_start,
+	unsigned long mem_end, const char *buf, unsigned long size,
+	long offset, const struct ihk_smp_control_offsets *offsets,
+	unsigned long page_size, unsigned long page_mask,
+	unsigned long (*lock_fn)(unsigned long),
+	void (*unlock_fn)(unsigned long, unsigned long),
+	unsigned long (*map_fn)(unsigned long, unsigned long),
+	void (*copy_fn)(unsigned long, const char *, unsigned long),
+	void (*unmap_fn)(unsigned long),
+	void (*log_fn)(int, unsigned long, unsigned long,
+		       unsigned long, unsigned long));
+extern int ihk_smp_interrupt_cpu_valid_result(int cpu, int nr_cpus);
+extern unsigned long ihk_smp_adjust_entry_body_result(unsigned long entry,
+						      unsigned long phys);
+extern unsigned long ihk_smp_identity_map_memory_body_result(
+	unsigned long remote_phys);
+extern int ihk_smp_identity_unmap_memory_body_result(void);
+extern int ihk_smp_arch_dcache_flush_body_result(unsigned long addr,
+						 unsigned long len);
+extern int ihk_smp_setup_warm_reset_vector_body_result(
+	unsigned long start_eip, unsigned long trampoline_phys_high,
+	unsigned long trampoline_phys_low,
+	unsigned long (*lock_fn)(void),
+	void (*cmos_write_fn)(unsigned char, unsigned char),
+	void (*unlock_fn)(unsigned long), void (*flush_tlb_fn)(void),
+	void (*write_word_fn)(unsigned long, unsigned short));
+extern int ihk_smp_setup_trampoline_body_result(
+	unsigned long os, int nr_cpu_ids,
+	const struct ihk_smp_setup_trampoline_offsets *offsets,
+	int linux_work_irq_enabled, unsigned int linux_work_irq_vector,
+	unsigned int smp_irq, unsigned long page_offset_base,
+	unsigned long init_level4_pgt, unsigned long linux_kernel_pgt_phys,
+	int using_linux_trampoline, unsigned long trampoline_va,
+	unsigned long linux_trampoline_backup, unsigned long trampoline_data,
+	unsigned long trampoline_size, unsigned long ident_page_table,
+	unsigned long param_phys, unsigned long ikc_irq_work_func,
+	unsigned int (*apicid_fn)(int),
+	unsigned long (*raised_list_phys_fn)(int),
+	void (*log_fn)(int, unsigned long, unsigned long));
+extern int ihk_smp_os_setup_startup_body_result(
+	unsigned long os, unsigned long phys, unsigned long entry,
+	const struct ihk_smp_setup_startup_offsets *offsets,
+	unsigned long identity_len, unsigned long large_page,
+	unsigned long large_page_mask, unsigned long map_st_start,
+	unsigned long map_kernel_start, unsigned long kernel_map_len,
+	unsigned long page_size, unsigned int ptl2_shift,
+	unsigned long startup_data, unsigned long startup_data_len,
+	unsigned long trampoline_phys, unsigned long (*alloc_page_fn)(void),
+	unsigned long (*page_phys_fn)(unsigned long),
+	int (*map_kernel_fn)(unsigned long, unsigned long, unsigned long),
+	unsigned long (*map_virtual_fn)(unsigned long, unsigned long),
+	void (*unmap_virtual_fn)(unsigned long),
+	void (*log_fn)(int));
+extern int ihk_smp_arch_init_trampoline_body_result(
+	unsigned long preallocated_phys, unsigned long page_size,
+	unsigned int trampoline_order, int max_attempts,
+	unsigned long trampoline_size, unsigned long trampoline_limit,
+	unsigned long (*linux_trampoline_phys_fn)(void),
+	unsigned long *trampoline_page_slot,
+	unsigned long *trampoline_phys_slot,
+	unsigned long *trampoline_va_slot,
+	int *using_linux_trampoline_slot,
+	unsigned long (*ioremap_fn)(unsigned long, unsigned long),
+	unsigned long (*alloc_fn)(void),
+	unsigned long (*page_phys_fn)(unsigned long),
+	unsigned long (*page_virt_fn)(unsigned long),
+	void (*free_fn)(unsigned long, unsigned int),
+	unsigned long (*direct_virt_fn)(unsigned long),
+	void (*log_fn)(int, unsigned long));
+extern int ihk_smp_arch_init_linux_work_tail_body_result(
+	int linux_work_irq_vector, int (*init_ident_page_table_fn)(void),
+	int (*collect_topology_fn)(void), void (*log_fn)(int, int));
+extern int ihk_smp_init_ident_page_table_body_result(
+	unsigned long maxmem, unsigned long page_size, unsigned int pud_shift,
+	unsigned int pmd_shift, int ptrs_per_pud, int ptrs_per_pmd,
+	unsigned long first_level_flags, unsigned long leaf_flags,
+	unsigned long *ident_page_table_slot,
+	unsigned long *ident_page_table_virt_slot,
+	int *ident_npages_order_slot,
+	unsigned long (*alloc_pages_fn)(unsigned int),
+	unsigned long (*page_phys_fn)(unsigned long),
+	unsigned long (*page_virt_fn)(unsigned long),
+	void (*zero_fn)(unsigned long, unsigned long),
+	void (*log_fn)(int, unsigned long, unsigned long));
+extern int ihk_smp_reset_cpu_body_result(
+	int phys_apicid, int apic_esr, unsigned int assert_init_value,
+	unsigned int deassert_init_value, void (*preempt_disable_fn)(void),
+	void (*preempt_enable_fn)(void), int (*get_maxlvt_fn)(void),
+	int (*apic_integrated_fn)(int),
+	void (*apic_write_fn)(int, unsigned int),
+	unsigned int (*apic_read_fn)(int),
+	void (*icr_write_fn)(unsigned int, int),
+	unsigned long (*wait_icr_idle_fn)(void),
+	void (*delay_fn)(unsigned long), void (*log_fn)(int, int));
+extern int ihk_smp_wakeup_secondary_cpu_via_init_body_result(
+	int phys_apicid, unsigned long start_eip, int apic_esr,
+	unsigned int assert_init_value, unsigned int deassert_init_value,
+	unsigned int startup_value, int (*get_maxlvt_fn)(void),
+	int (*apic_integrated_fn)(int),
+	void (*apic_write_fn)(int, unsigned int),
+	unsigned int (*apic_read_fn)(int),
+	void (*icr_write_fn)(unsigned int, int),
+	unsigned long (*wait_icr_idle_fn)(void),
+	void (*mdelay_fn)(unsigned long),
+	void (*udelay_fn)(unsigned long), void (*barrier_fn)(void),
+	void (*init_deasserted_fn)(void),
+	void (*log_fn)(int, unsigned long));
+extern int ihk_smp_wakeup_secondary_cpu_body_result(
+	int apicid, unsigned long start_eip, int boot_cpu_physical_apicid,
+	int apic_esr, void (*clear_init_deasserted_fn)(void),
+	int (*non_unique_apic_fn)(void),
+	void (*setup_warm_reset_vector_fn)(unsigned long),
+	int (*apic_integrated_fn)(int),
+	void (*apic_write_fn)(int, unsigned int),
+	unsigned int (*apic_read_fn)(int),
+	int (*apic_wakeup_available_fn)(void),
+	int (*apic_wakeup_fn)(int, unsigned long),
+	void (*preempt_disable_fn)(void),
+	int (*via_init_fn)(int, unsigned long),
+	void (*preempt_enable_fn)(void), void (*log_fn)(int));
+extern int ihk_smp_arch_exit_body_result(
+	unsigned long trampoline_page, int using_linux_trampoline,
+	unsigned long trampoline_va, unsigned int trampoline_order,
+	unsigned long ident_page_table_virt, unsigned int ident_npages_order,
+	void (*free_trampoline_fn)(unsigned long, unsigned int),
+	void (*unmap_fn)(unsigned long),
+	void (*free_pages_fn)(unsigned long, unsigned int));
+extern unsigned long ihk_smp_calc_ns_per_tsc_body_result(
+	int invariant_tsc, unsigned int ratio, unsigned long tsc_khz);
+extern unsigned long ihk_smp_x2apic_is_enabled_body_result(
+	unsigned long msr);
+extern int ihk_smp_vector_entry_used_result(unsigned long entry,
+					    unsigned long unused);
+extern int ihk_smp_vector_set_needed_result(unsigned long entry,
+					    unsigned long unused);
+extern unsigned long ihk_smp_vector_release_value_result(
+	unsigned long unused);
+extern int ihk_smp_os_issue_interrupt_body_result(
+	int cpu, int nr_cpus, const int *hw_ids, int vector,
+	int apic_dest_physical,
+	unsigned long (*irq_save_fn)(void),
+	void (*irq_restore_fn)(unsigned long),
+	int (*x2apic_enabled_fn)(void),
+	void (*x2apic_write_fn)(int, int),
+	void (*legacy_ipi_fn)(int, int, int));
+extern int ihk_smp_os_broadcast_interrupt_body_result(
+	unsigned long ihk_os, unsigned long priv_data, int mode, int nr_cpus,
+	const int *hw_ids, int x2apic_vector, int legacy_vector,
+	int apic_dest_physical, int wrap_irq, int wait_x2apic,
+	int (*set_mode_fn)(unsigned long, unsigned long, int),
+	unsigned long (*irq_save_fn)(void),
+	void (*irq_restore_fn)(unsigned long),
+	int (*x2apic_enabled_fn)(void),
+	void (*x2apic_wait_fn)(void),
+	void (*x2apic_write_fn)(int, int),
+	void (*legacy_ipi_fn)(int, int, int));
+extern int ihk_smp_check_ikc_map_body_result(void);
+extern int ihk_smp_ikc_irq_work_body_result(
+	int (*handler_fn)(int, void *));
+extern int ihk_smp_init_body_result(
+	unsigned long free_list_head, unsigned long used_list_head,
+	unsigned long list_next_offset, int ihk_cores, int present_cpus,
+	unsigned long cpus, int cpu_count, unsigned long cpu_stride,
+	unsigned long status_offset, int online_status,
+	void (*zero_fn)(unsigned long, unsigned long),
+	int (*online_cpu_fn)(unsigned long, void (*)(unsigned long, int)),
+	int (*arch_init_fn)(void), unsigned long fake_chunks,
+	unsigned long fake_chunks_size, void (*log_fn)(int));
+extern int ihk_smp_exit_body_result(
+	unsigned long cpus, int cpu_count, unsigned long cpu_stride,
+	unsigned long cpu_id_offset, unsigned long cpu_hw_id_offset,
+	unsigned long cpu_status_offset, unsigned long free_list_head,
+	void (*arch_exit_fn)(void), int (*reset_cpu_fn)(int),
+	int (*online_cpu_fn)(int), int (*free_list_fn)(unsigned long),
+	void (*free_info_fn)(void), void (*log_fn)(int, int));
+extern int ihk_smp_module_init_body_result(
+	unsigned long builtin_data, unsigned long ihk_dev_offset,
+	unsigned long lock_offset, unsigned long reg_data,
+	int (*symbols_init_fn)(void), int (*arch_symbols_init_fn)(void),
+	void (*spin_lock_init_fn)(unsigned long),
+	unsigned long (*register_device_fn)(unsigned long),
+	void (*log_fn)(int));
+extern int ihk_smp_module_exit_body_result(
+	unsigned long builtin_data, unsigned long ihk_dev_offset,
+	void (*unregister_device_fn)(unsigned long), void (*log_fn)(int));
+extern int ihk_smp_os_register_handler_body_result(
+	unsigned long os, unsigned long os_priv, unsigned long handler,
+	unsigned long list_head,
+	const struct ihk_smp_interrupt_handler_offsets *offsets);
+extern int ihk_smp_os_unregister_handler_body_result(
+	unsigned long handler,
+	const struct ihk_smp_interrupt_handler_offsets *offsets,
+	unsigned long poison_next, unsigned long poison_prev);
+extern int ihk_smp_irq_call_handlers_body_result(
+	unsigned long list_head,
+	const struct ihk_smp_interrupt_handler_offsets *offsets,
+	int irq_handled, void (*log_no_handler_fn)(void));
+struct ihk_smp_perf_offsets {
+	unsigned long nr_extra_regs;
+	unsigned long hw_event_map;
+	unsigned long hw_cache_event_ids;
+	unsigned long hw_cache_extra_regs;
+	unsigned long ereg_event;
+	unsigned long ereg_msr;
+	unsigned long ereg_valid_mask;
+	unsigned long ereg_idx;
+	unsigned long extra_event;
+	unsigned long extra_msr;
+	unsigned long extra_valid_mask;
+	unsigned long extra_idx;
+	unsigned long extra_stride;
+};
+extern int ihk_smp_arch_get_perf_event_map_body_result(
+	unsigned long param, unsigned long extra_regs,
+	unsigned long hw_event_map, unsigned long hw_cache_event_ids,
+	unsigned long hw_cache_extra_regs,
+	const struct ihk_smp_perf_offsets *offsets,
+	unsigned long max_extra_regs, unsigned long hw_event_map_bytes,
+	unsigned long hw_cache_event_ids_bytes,
+	unsigned long hw_cache_extra_regs_bytes,
+	void (*log_fn)(int, int));
+extern int ihk_smp_device_get_num_cpus_body_result(
+	const void *cpus, int cpu_count, unsigned long stride,
+	unsigned long status_offset, int available_status);
+extern int ihk_smp_device_query_cpu_body_result(
+	unsigned long user_arg, unsigned long req_scratch,
+	unsigned long req_size,
+	const struct ihk_smp_cpu_req_offsets *req_offsets,
+	const void *cpus, int cpu_count, unsigned long cpu_stride,
+	unsigned long cpu_status_offset, int available_status,
+	unsigned long int_size, int max_cpus,
+	int (*copy_from_user_fn)(void *, unsigned long, unsigned long),
+	int (*copy_to_user_fn)(unsigned long, const void *, unsigned long),
+	void *(*alloc_fn)(unsigned long),
+	void (*free_fn)(unsigned long),
+	void (*log_fn)(int, int, int));
+extern int ihk_smp_os_query_cpu_body_result(
+	unsigned long os, unsigned long user_arg, unsigned long req_scratch,
+	unsigned long req_size,
+	const struct ihk_smp_cpu_req_offsets *req_offsets,
+	const struct ihk_smp_control_offsets *os_offsets,
+	unsigned long int_size, int max_cpus,
+	int (*copy_from_user_fn)(void *, unsigned long, unsigned long),
+	int (*copy_to_user_fn)(unsigned long, const void *, unsigned long),
+	void *(*alloc_fn)(unsigned long),
+	void (*free_fn)(unsigned long),
+	void (*log_fn)(int, int, int));
+extern int ihk_smp_os_get_ikc_map_body_result(
+	unsigned long ihk_os, unsigned long user_arg,
+	unsigned long req_scratch, unsigned long req_size,
+	const struct ihk_smp_ikc_req_offsets *req_offsets,
+	const void *cpus, int cpu_count, unsigned long cpu_stride,
+	unsigned long cpu_status_offset, unsigned long cpu_os_offset,
+	unsigned long cpu_ikc_offset, int assigned_status,
+	unsigned long int_size, int max_cpus,
+	int (*copy_from_user_fn)(void *, unsigned long, unsigned long),
+	int (*copy_to_user_fn)(unsigned long, const void *, unsigned long),
+	void *(*alloc_fn)(unsigned long),
+	void (*free_fn)(unsigned long),
+	void (*log_fn)(int, int, int));
+extern int ihk_smp_os_set_ikc_map_body_result(
+	unsigned long ihk_os, unsigned long os, unsigned long user_arg,
+	unsigned long req_scratch, unsigned long req_size,
+	char *req_string, long req_string_len,
+	const struct ihk_smp_set_ikc_map_offsets *offsets,
+	void *cpus, int cpu_count, unsigned long cpu_stride,
+	int assigned_status, int initial_status, unsigned long int_size,
+	int max_cpus,
+	int (*copy_from_user_fn)(void *, unsigned long, unsigned long),
+	void *(*alloc_fn)(unsigned long),
+	void (*free_fn)(unsigned long),
+	unsigned long (*lock_fn)(unsigned long),
+	void (*unlock_fn)(unsigned long, unsigned long),
+	int (*cpu_present_fn)(int),
+	int (*cpu_online_fn)(int),
+	int (*check_ikc_map_fn)(unsigned long),
+	void (*log_fn)(int, int, int));
+extern int ihk_smp_query_mem_body_result(
+	unsigned long list_head, unsigned long target_os, int filter_os,
+	int require_exact, const unsigned long *fake_chunks,
+	unsigned long fake_count, unsigned long user_arg,
+	unsigned long req_scratch, unsigned long req_size,
+	const struct ihk_smp_mem_req_offsets *req_offsets,
+	const struct ihk_smp_mem_query_offsets *query_offsets,
+	unsigned long size_elem, unsigned long int_size,
+	int (*copy_from_user_fn)(void *, unsigned long, unsigned long),
+	int (*copy_to_user_fn)(unsigned long, const void *, unsigned long),
+	void *(*alloc_fn)(unsigned long),
+	void (*free_fn)(unsigned long),
+	void (*log_fn)(int, int, int));
+extern unsigned long ihk_smp_get_cpu_topology_body_result(
+	unsigned long list_head, int hw_id,
+	const struct ihk_smp_topology_lookup_offsets *offsets);
+extern unsigned long ihk_smp_get_node_topology_body_result(
+	unsigned long list_head, int node, int nr_nodes,
+	unsigned long einval_ptr,
+	const struct ihk_smp_topology_lookup_offsets *offsets);
+extern int ihk_smp_linux_cpu_to_hw_id_body_result(
+	unsigned long list_head, int cpu,
+	const struct ihk_smp_topology_lookup_offsets *offsets);
+extern int ihk_smp_free_info_body_result(
+	unsigned long cpu_list_head, unsigned long node_list_head,
+	const struct ihk_smp_free_info_offsets *offsets,
+	void (*list_del_fn)(unsigned long), void (*free_fn)(unsigned long),
+	void (*log_fn)(int));
+extern int ihk_smp_read_long_body_result(
+	unsigned long valuep, char *fmt, unsigned long va_list,
+	unsigned long page_size, unsigned long (*alloc_page_fn)(void),
+	int (*read_file_fn)(unsigned long, unsigned long, char *,
+			    unsigned long),
+	int (*parse_long_fn)(unsigned long, unsigned long),
+	void (*free_pages_fn)(unsigned long),
+	void (*log_fn)(int, unsigned long, char *, int));
+extern int ihk_smp_read_bitmap_body_result(
+	unsigned long map, int nbits, char *fmt, unsigned long va_list,
+	unsigned long page_size, unsigned long (*alloc_page_fn)(void),
+	int (*read_file_fn)(unsigned long, unsigned long, char *,
+			    unsigned long),
+	int (*bitmap_parse_fn)(unsigned long, unsigned long, unsigned long,
+			       int),
+	void (*free_pages_fn)(unsigned long),
+	void (*log_fn)(int, unsigned long, int, char *, int));
+extern int ihk_smp_read_string_body_result(
+	unsigned long valuep, char *fmt, unsigned long va_list,
+	unsigned long page_size, unsigned long (*alloc_page_fn)(void),
+	int (*read_file_fn)(unsigned long, unsigned long, char *,
+			    unsigned long),
+	unsigned long (*kstrdup_fn)(unsigned long),
+	void (*kfree_fn)(unsigned long),
+	void (*free_pages_fn)(unsigned long),
+	void (*log_fn)(int, unsigned long, char *, int));
+extern int ihk_smp_file_readable_body_result(
+	char *fmt, unsigned long va_list, unsigned long path_max,
+	void *(*alloc_fn)(unsigned long),
+	int (*vsnprintf_fn)(char *, unsigned long, char *, unsigned long),
+	unsigned long (*open_fn)(char *),
+	void (*close_fn)(unsigned long),
+	void (*free_fn)(unsigned long),
+	void (*log_fn)(int, int));
+extern int ihk_smp_read_file_body_result(
+	unsigned long buf, unsigned long size, char *fmt, unsigned long va_list,
+	unsigned long path_max, void *(*alloc_fn)(unsigned long),
+	int (*vsnprintf_fn)(char *, unsigned long, char *, unsigned long),
+	unsigned long (*open_fn)(char *, unsigned long),
+	long (*kernel_read_fn)(unsigned long, unsigned long, unsigned long),
+	int (*close_fn)(unsigned long),
+	void (*free_fn)(unsigned long),
+	void (*log_fn)(int, unsigned long, unsigned long, char *, int));
+extern int ihk_smp_write_cpu_sys_file_body_result(
+	int cpu_id, const char *val, char *path, size_t path_size,
+	unsigned long (*open_fn)(char *, unsigned long),
+	long (*write_fn)(unsigned long, const char *, unsigned long),
+	int (*close_fn)(unsigned long),
+	void (*log_fn)(int, const char *, int));
 
 #define container_of(ptr, type, member) \
 	((type *)((char *)(ptr) - offsetof(type, member)))
@@ -114051,6 +126227,11 @@ int ihk_smp_cpu_sysfs_prefix_result(char *buf, long len, int cpu)
 	return snprintf(buf, len, "/sys/devices/system/cpu/cpu%d", cpu);
 }
 
+int ihk_smp_cpu_online_path_result(char *buf, long len, int cpu)
+{
+	return snprintf(buf, len, "/sys/devices/system/cpu/cpu%d/online", cpu);
+}
+
 int ihk_smp_snprintf_overflow_result(int n, int limit)
 {
 	return n >= limit;
@@ -114059,6 +126240,256 @@ int ihk_smp_snprintf_overflow_result(int n, int limit)
 long ihk_smp_cache_size_bytes_result(long size_kb)
 {
 	return size_kb * 1024;
+}
+
+int ihk_smp_ikc_irq_work_body_result(int (*handler_fn)(int, void *))
+{
+	if (!handler_fn)
+		return -EINVAL;
+	return handler_fn(0, NULL);
+}
+
+static void smp_init_model_list_head(struct list_head *head)
+{
+	head->next = head;
+	head->prev = head;
+}
+
+static void smp_init_model_mark_online(unsigned long ctx, int cpu)
+{
+	struct {
+		unsigned long cpus;
+		int cpu_count;
+		unsigned long cpu_stride;
+		unsigned long status_offset;
+		int online_status;
+	} *cpu_ctx = (void *)ctx;
+	char *entry;
+
+	if (!cpu_ctx || cpu < 0 || cpu >= cpu_ctx->cpu_count)
+		return;
+
+	entry = (char *)cpu_ctx->cpus + (cpu_ctx->cpu_stride * cpu);
+	*(int *)(entry + cpu_ctx->status_offset) = cpu_ctx->online_status;
+}
+
+int ihk_smp_init_body_result(
+	unsigned long free_list_head, unsigned long used_list_head,
+	unsigned long list_next_offset, int ihk_cores, int present_cpus,
+	unsigned long cpus, int cpu_count, unsigned long cpu_stride,
+	unsigned long status_offset, int online_status,
+	void (*zero_fn)(unsigned long, unsigned long),
+	int (*online_cpu_fn)(unsigned long, void (*)(unsigned long, int)),
+	int (*arch_init_fn)(void), unsigned long fake_chunks,
+	unsigned long fake_chunks_size, void (*log_fn)(int))
+{
+	struct {
+		unsigned long cpus;
+		int cpu_count;
+		unsigned long cpu_stride;
+		unsigned long status_offset;
+		int online_status;
+	} cpu_ctx;
+	int ret;
+
+	(void)list_next_offset;
+	if (!free_list_head || !used_list_head || !cpus || cpu_count < 0)
+		return -EINVAL;
+
+	smp_init_model_list_head((struct list_head *)free_list_head);
+	smp_init_model_list_head((struct list_head *)used_list_head);
+
+	if (ihk_cores && ihk_cores > present_cpus - 1) {
+		if (log_fn)
+			log_fn(present_cpus);
+		return EINVAL;
+	}
+
+	if (zero_fn)
+		zero_fn(cpus, cpu_stride * (unsigned long)cpu_count);
+
+	cpu_ctx.cpus = cpus;
+	cpu_ctx.cpu_count = cpu_count;
+	cpu_ctx.cpu_stride = cpu_stride;
+	cpu_ctx.status_offset = status_offset;
+	cpu_ctx.online_status = online_status;
+	if (online_cpu_fn)
+		(void)online_cpu_fn((unsigned long)&cpu_ctx,
+				    smp_init_model_mark_online);
+
+	ret = arch_init_fn ? arch_init_fn() : 0;
+
+	if (fake_chunks && fake_chunks_size && zero_fn)
+		zero_fn(fake_chunks, fake_chunks_size);
+
+	return ret;
+}
+
+int ihk_smp_exit_body_result(
+	unsigned long cpus, int cpu_count, unsigned long cpu_stride,
+	unsigned long cpu_id_offset, unsigned long cpu_hw_id_offset,
+	unsigned long cpu_status_offset, unsigned long free_list_head,
+	void (*arch_exit_fn)(void), int (*reset_cpu_fn)(int),
+	int (*online_cpu_fn)(int), int (*free_list_fn)(unsigned long),
+	void (*free_info_fn)(void), void (*log_fn)(int, int))
+{
+	int cpu;
+	int ret = 0;
+
+	if (!cpus || cpu_count < 0 || !free_list_head || !arch_exit_fn ||
+	    !reset_cpu_fn || !online_cpu_fn || !free_list_fn || !free_info_fn)
+		return -EINVAL;
+
+	arch_exit_fn();
+
+	for (cpu = 0; cpu < cpu_count; cpu++) {
+		char *entry = (char *)cpus + cpu_stride * (unsigned long)cpu;
+		int status = *(int *)(entry + cpu_status_offset);
+		int hw_id;
+
+		if (status == IHK_SMP_CPU_ONLINE || status == IHK_SMP_CPU_NONE)
+			continue;
+
+		hw_id = *(int *)(entry + cpu_hw_id_offset);
+		ret = reset_cpu_fn(hw_id);
+		if (online_cpu_fn(cpu) == 0 && log_fn) {
+			int id = *(int *)(entry + cpu_id_offset);
+			log_fn(id, hw_id);
+		}
+	}
+
+	(void)free_list_fn(free_list_head);
+	free_info_fn();
+	return ret;
+}
+
+int ihk_smp_module_init_body_result(
+	unsigned long builtin_data, unsigned long ihk_dev_offset,
+	unsigned long lock_offset, unsigned long reg_data,
+	int (*symbols_init_fn)(void), int (*arch_symbols_init_fn)(void),
+	void (*spin_lock_init_fn)(unsigned long),
+	unsigned long (*register_device_fn)(unsigned long),
+	void (*log_fn)(int))
+{
+	unsigned long ihkd;
+	int ret;
+
+	if (!builtin_data || !reg_data || !symbols_init_fn ||
+	    !arch_symbols_init_fn || !spin_lock_init_fn ||
+	    !register_device_fn)
+		return -EINVAL;
+
+	if (log_fn)
+		log_fn(0);
+
+	ret = symbols_init_fn();
+	if (ret)
+		return ret;
+
+	ret = arch_symbols_init_fn();
+	if (ret)
+		return ret;
+
+	spin_lock_init_fn(builtin_data + lock_offset);
+
+	ihkd = register_device_fn(reg_data);
+	if (!ihkd) {
+		if (log_fn)
+			log_fn(1);
+		return -ENOMEM;
+	}
+
+	*(unsigned long *)(builtin_data + ihk_dev_offset) = ihkd;
+	return 0;
+}
+
+int ihk_smp_module_exit_body_result(
+	unsigned long builtin_data, unsigned long ihk_dev_offset,
+	void (*unregister_device_fn)(unsigned long), void (*log_fn)(int))
+{
+	if (!builtin_data || !unregister_device_fn)
+		return -EINVAL;
+
+	if (log_fn)
+		log_fn(2);
+
+	unregister_device_fn(*(unsigned long *)(builtin_data + ihk_dev_offset));
+	return 0;
+}
+
+int ihk_smp_os_register_handler_body_result(
+	unsigned long os, unsigned long os_priv, unsigned long handler,
+	unsigned long list_head,
+	const struct ihk_smp_interrupt_handler_offsets *offsets)
+{
+	char *h = (char *)handler;
+	struct list_head *node;
+	struct list_head *head;
+
+	if (!handler || !list_head || !offsets)
+		return -EINVAL;
+
+	*(unsigned long *)(h + offsets->handler_os) = os;
+	*(unsigned long *)(h + offsets->handler_os_priv) = os_priv;
+	node = (struct list_head *)(h + offsets->handler_list);
+	head = (struct list_head *)list_head;
+	node->next = head;
+	node->prev = head->prev;
+	head->prev->next = node;
+	head->prev = node;
+	return 0;
+}
+
+int ihk_smp_os_unregister_handler_body_result(
+	unsigned long handler,
+	const struct ihk_smp_interrupt_handler_offsets *offsets,
+	unsigned long poison_next, unsigned long poison_prev)
+{
+	char *h = (char *)handler;
+	struct list_head *node;
+
+	if (!handler || !offsets)
+		return -EINVAL;
+
+	node = (struct list_head *)(h + offsets->handler_list);
+	node->next->prev = node->prev;
+	node->prev->next = node->next;
+	node->next = (struct list_head *)poison_next;
+	node->prev = (struct list_head *)poison_prev;
+	return 0;
+}
+
+int ihk_smp_irq_call_handlers_body_result(
+	unsigned long list_head,
+	const struct ihk_smp_interrupt_handler_offsets *offsets,
+	int irq_handled, void (*log_no_handler_fn)(void))
+{
+	struct list_head *head;
+	struct list_head *node;
+	int found = 0;
+
+	if (!list_head || !offsets)
+		return -EINVAL;
+
+	head = (struct list_head *)list_head;
+	for (node = head->next; node && node != head; node = node->next) {
+		char *handler = (char *)node - offsets->handler_list;
+		void (*func)(unsigned long, unsigned long, unsigned long) =
+			*(void (**)(unsigned long, unsigned long, unsigned long))
+			 (handler + offsets->handler_func);
+
+		if (func) {
+			func(*(unsigned long *)(handler + offsets->handler_os),
+			     *(unsigned long *)(handler + offsets->handler_os_priv),
+			     *(unsigned long *)(handler + offsets->handler_priv));
+			found = 1;
+		}
+	}
+
+	if (!found && log_no_handler_fn)
+		log_no_handler_fn();
+
+	return irq_handled;
 }
 
 int ihk_smp_collect_cache_topology_body_result(
@@ -114350,6 +126781,2758 @@ int ihk_smp_collect_node_topology_body_result(
 	return 0;
 }
 
+int ihk_smp_collect_topology_body_result(
+	int (*next_cpu_fn)(int),
+	int (*collect_cpu_fn)(int),
+	int (*next_node_fn)(int),
+	int (*collect_node_fn)(int),
+	void (*log_fn)(int, int))
+{
+	int cpu;
+	int node;
+	int error;
+
+	if (!next_cpu_fn || !collect_cpu_fn || !next_node_fn ||
+	    !collect_node_fn)
+		return -EINVAL;
+
+	if (log_fn)
+		log_fn(23, 0);
+
+	for (cpu = next_cpu_fn(-1); cpu >= 0; cpu = next_cpu_fn(cpu)) {
+		error = collect_cpu_fn(cpu);
+		if (error) {
+			if (log_fn) {
+				log_fn(24, error);
+				log_fn(26, error);
+			}
+			return error;
+		}
+	}
+
+	for (node = next_node_fn(-1); node >= 0; node = next_node_fn(node)) {
+		error = collect_node_fn(node);
+		if (error) {
+			if (log_fn) {
+				log_fn(25, error);
+				log_fn(26, error);
+			}
+			return error;
+		}
+	}
+
+	if (log_fn)
+		log_fn(26, 0);
+	return 0;
+}
+
+static unsigned long smp_arch_lookup_symbol(unsigned long (*lookup_fn)(const char *),
+					    const char *name)
+{
+	return lookup_fn ? lookup_fn(name) : 0;
+}
+
+static int smp_arch_warn_failed(int (*warn_fn)(int), int failed)
+{
+	return warn_fn ? warn_fn(failed) : failed;
+}
+
+static int smp_arch_publish_required_symbol(unsigned long *slot,
+					    const char *name,
+					    unsigned long (*lookup_fn)(const char *),
+					    int (*warn_fn)(int))
+{
+	unsigned long value = smp_arch_lookup_symbol(lookup_fn, name);
+
+	if (slot)
+		*slot = value;
+	return smp_arch_warn_failed(warn_fn, value == 0) ? -EFAULT : 0;
+}
+
+static int smp_arch_publish_required_symbol_with_fallback(unsigned long *slot,
+							  const char *primary,
+							  const char *fallback,
+							  unsigned long (*lookup_fn)(const char *),
+							  int (*warn_fn)(int))
+{
+	unsigned long value = smp_arch_lookup_symbol(lookup_fn, primary);
+
+	if (!value)
+		value = smp_arch_lookup_symbol(lookup_fn, fallback);
+	if (slot)
+		*slot = value;
+	return smp_arch_warn_failed(warn_fn, value == 0) ? -EFAULT : 0;
+}
+
+int ihk_smp_arch_symbols_init_body_result(
+	const struct ihk_smp_arch_symbol_slots *slots,
+	unsigned long (*lookup_fn)(const char *),
+	int (*warn_fn)(int))
+{
+	if (!slots || !lookup_fn)
+		return -22;
+	if (smp_arch_publish_required_symbol(slots->real_mode_header,
+			"real_mode_header", lookup_fn, warn_fn))
+		return -EFAULT;
+	if (smp_arch_publish_required_symbol(slots->vector_irq,
+			"vector_irq", lookup_fn, warn_fn))
+		return -EFAULT;
+	if (smp_arch_publish_required_symbol(slots->lapic_get_maxlvt,
+			"lapic_get_maxlvt", lookup_fn, warn_fn))
+		return -EFAULT;
+	if (smp_arch_publish_required_symbol(slots->irq_desc_tree,
+			"irq_desc_tree", lookup_fn, warn_fn))
+		return -EFAULT;
+	if (smp_arch_publish_required_symbol(slots->get_uv_system_type,
+			"get_uv_system_type", lookup_fn, warn_fn))
+		return -EFAULT;
+	if (slots->init_deasserted &&
+	    smp_arch_publish_required_symbol(slots->init_deasserted,
+			"init_deasserted", lookup_fn, warn_fn))
+		return -EFAULT;
+	if (smp_arch_publish_required_symbol(slots->alloc_desc,
+			"alloc_desc", lookup_fn, warn_fn))
+		return -EFAULT;
+	if (slots->default_send_ipi_dest_field &&
+	    smp_arch_publish_required_symbol(slots->default_send_ipi_dest_field,
+			"__default_send_IPI_dest_field", lookup_fn, warn_fn))
+		return -EFAULT;
+	if (smp_arch_publish_required_symbol_with_fallback(slots->init_level4_pgt,
+			"init_top_pgt", "init_level4_pgt", lookup_fn, warn_fn))
+		return -EFAULT;
+	if (smp_arch_publish_required_symbol_with_fallback(slots->used_vectors,
+			"system_vectors", "used_vectors", lookup_fn, warn_fn))
+		return -EFAULT;
+	return 0;
+}
+
+int ihk_smp_symbols_init_body_result(
+	const struct ihk_smp_symbol_slots *slots, int use_old_vmap_api,
+	int use_linux_work_irq, unsigned long (*lookup_fn)(const char *),
+	int (*warn_fn)(int))
+{
+	if (!slots || !lookup_fn)
+		return -EINVAL;
+	if (smp_arch_publish_required_symbol(slots->ioremap_page_range,
+			"ioremap_page_range", lookup_fn, warn_fn))
+		return -EFAULT;
+	if (use_old_vmap_api) {
+		if (smp_arch_publish_required_symbol(slots->vmap_area_lock,
+				"vmap_area_lock", lookup_fn, warn_fn))
+			return -EFAULT;
+		if (smp_arch_publish_required_symbol(slots->vmap_area_root,
+				"vmap_area_root", lookup_fn, warn_fn))
+			return -EFAULT;
+		if (smp_arch_publish_required_symbol(slots->insert_vmap_area,
+				"__insert_vmap_area", lookup_fn, warn_fn))
+			return -EFAULT;
+		if (smp_arch_publish_required_symbol(slots->free_vmap_area_old,
+				"__free_vmap_area", lookup_fn, warn_fn))
+			return -EFAULT;
+	} else {
+		if (smp_arch_publish_required_symbol(slots->alloc_vmap_area,
+				"alloc_vmap_area", lookup_fn, warn_fn))
+			return -EFAULT;
+		if (smp_arch_publish_required_symbol_with_fallback(
+				slots->free_vmap_area_new, "free_vmap_area",
+				"free_vmap_area_noflush", lookup_fn, warn_fn))
+			return -EFAULT;
+	}
+	if (smp_arch_publish_required_symbol(slots->unmap_kernel_range_noflush,
+			"unmap_kernel_range_noflush", lookup_fn, warn_fn))
+		return -EFAULT;
+	if (use_linux_work_irq &&
+	    smp_arch_publish_required_symbol(slots->raised_list,
+			"raised_list", lookup_fn, warn_fn))
+		return -EFAULT;
+	if (smp_arch_publish_required_symbol(slots->hstates,
+			"hstates", lookup_fn, warn_fn))
+		return -EFAULT;
+	if (smp_arch_publish_required_symbol(slots->default_hstate_idx,
+			"default_hstate_idx", lookup_fn, warn_fn))
+		return -EFAULT;
+	return 0;
+}
+
+static void smp_lock_status_model(unsigned long object,
+				  unsigned long lock_offset,
+				  unsigned long status_offset, int status,
+				  unsigned long (*lock_fn)(unsigned long),
+				  void (*unlock_fn)(unsigned long,
+						    unsigned long))
+{
+	unsigned long lock_addr = object + lock_offset;
+	unsigned long flags = lock_fn ? lock_fn(lock_addr) : 0;
+
+	*(int *)(object + status_offset) = status;
+	if (unlock_fn)
+		unlock_fn(lock_addr, flags);
+}
+
+int ihk_smp_os_notify_hungup_body_result(
+	unsigned long os, const struct ihk_smp_control_offsets *offsets,
+	unsigned long (*lock_fn)(unsigned long),
+	void (*unlock_fn)(unsigned long, unsigned long))
+{
+	if (!os || !offsets)
+		return -EINVAL;
+	smp_lock_status_model(os, offsets->os_lock, offsets->os_status,
+			      BUILTIN_OS_STATUS_HUNGUP, lock_fn, unlock_fn);
+	return 0;
+}
+
+unsigned long ihk_smp_os_get_memory_info_body_result(
+	unsigned long os, const struct ihk_smp_control_offsets *offsets)
+{
+	return (!os || !offsets) ? 0 : os + offsets->os_mem_info;
+}
+
+unsigned long ihk_smp_os_get_cpu_info_body_result(
+	unsigned long os, const struct ihk_smp_control_offsets *offsets)
+{
+	return (!os || !offsets) ? 0 : os + offsets->os_cpu_info;
+}
+
+int ihk_smp_os_get_num_numa_nodes_body_result(
+	unsigned long os, const struct ihk_smp_control_offsets *offsets)
+{
+	if (!os || !offsets)
+		return -EINVAL;
+	return *(int *)(os + offsets->os_mem_info +
+			offsets->mem_info_n_numa_nodes);
+}
+
+int ihk_smp_os_get_num_cpus_body_result(
+	unsigned long os, const struct ihk_smp_control_offsets *offsets)
+{
+	if (!os || !offsets)
+		return -EINVAL;
+	return *(int *)(os + offsets->os_nr_cpus);
+}
+
+static void smp_strncpy_kernel_args_model(char *dst, const char *src,
+					  size_t len)
+{
+	size_t i;
+	int copied_nul = 0;
+
+	if (!len)
+		return;
+	for (i = 0; i + 1 < len; i++) {
+		char value;
+		if (copied_nul) {
+			value = 0;
+		} else {
+			value = src[i];
+			if (value == '\0')
+				copied_nul = 1;
+		}
+		dst[i] = value;
+	}
+	dst[len - 1] = '\0';
+}
+
+int ihk_smp_os_set_kargs_body_result(
+	unsigned long os, const char *args,
+	const struct ihk_smp_control_offsets *offsets,
+	unsigned long kernel_args_len,
+	unsigned long (*lock_fn)(unsigned long),
+	void (*unlock_fn)(unsigned long, unsigned long),
+	void (*log_fn)(int, const char *))
+{
+	unsigned long lock_addr;
+	unsigned long flags;
+	char *kernel_args;
+
+	if (!os || !args || !offsets)
+		return -EINVAL;
+	lock_addr = os + offsets->os_lock;
+	flags = lock_fn ? lock_fn(lock_addr) : 0;
+	if (*(int *)(os + offsets->os_status) != BUILTIN_OS_STATUS_INITIAL) {
+		if (unlock_fn)
+			unlock_fn(lock_addr, flags);
+		if (log_fn)
+			log_fn(1, NULL);
+		return -EBUSY;
+	}
+	*(int *)(os + offsets->os_status) = BUILTIN_OS_STATUS_LOADING;
+	if (unlock_fn)
+		unlock_fn(lock_addr, flags);
+
+	kernel_args = (char *)(os + offsets->os_kernel_args);
+	smp_strncpy_kernel_args_model(kernel_args, args, kernel_args_len);
+	if (log_fn)
+		log_fn(2, kernel_args);
+	smp_lock_status_model(os, offsets->os_lock, offsets->os_status,
+			      BUILTIN_OS_STATUS_INITIAL, lock_fn, unlock_fn);
+	return 0;
+}
+
+long ihk_smp_os_debug_request_body_result(
+	unsigned long ihk_os, unsigned long priv_data, unsigned int req,
+	unsigned long arg, unsigned int start_req,
+	int (*issue_interrupt_fn)(unsigned long, unsigned long, int, int))
+{
+	if (req == start_req) {
+		if (issue_interrupt_fn)
+			issue_interrupt_fn(ihk_os, priv_data, (int)(arg >> 8),
+					   (int)(arg & 0xff));
+		return 0;
+	}
+	return -EINVAL;
+}
+
+int ihk_smp_os_freeze_thaw_body_result(
+	unsigned long ihk_os, unsigned long priv_data, int mode,
+	int (*send_multi_intr_fn)(unsigned long, unsigned long, int))
+{
+	if (send_multi_intr_fn)
+		send_multi_intr_fn(ihk_os, priv_data, mode);
+	return 0;
+}
+
+int ihk_smp_create_os_body_result(
+	unsigned long device_data, unsigned long ihk_os, unsigned long regdata,
+	unsigned long builtin_regdata,
+	const struct ihk_smp_control_offsets *offsets,
+	unsigned long regdata_size, unsigned long os_size,
+	void *(*alloc_fn)(unsigned long),
+	void (*spin_init_fn)(unsigned long),
+	void (*log_fn)(int))
+{
+	unsigned char *dst = (unsigned char *)regdata;
+	const unsigned char *src = (const unsigned char *)builtin_regdata;
+	unsigned long os;
+	unsigned long i;
+
+	(void)ihk_os;
+	if (!device_data || !regdata || !builtin_regdata || !offsets)
+		return -EFAULT;
+	if (!alloc_fn)
+		return -ENOMEM;
+	for (i = 0; i < regdata_size; i++)
+		dst[i] = src[i];
+	os = (unsigned long)alloc_fn(os_size);
+	if (!os) {
+		*(int *)(device_data + offsets->dev_status) = 0;
+		if (log_fn)
+			log_fn(1);
+		return -ENOMEM;
+	}
+	if (spin_init_fn)
+		spin_init_fn(os + offsets->os_lock);
+	*(unsigned long *)(os + offsets->os_dev) = device_data;
+	*(unsigned long *)(regdata + offsets->regdata_priv) = os;
+	*(int *)(os + offsets->os_bootstrap_numa_id) = -1;
+	*(unsigned long *)(os + offsets->os_boot_pt) = 0;
+	return 0;
+}
+
+int ihk_smp_destroy_os_body_result(
+	unsigned long os_priv, void (*free_fn)(unsigned long))
+{
+	if (free_fn)
+		free_fn(os_priv);
+	return 0;
+}
+
+long ihk_smp_device_debug_request_body_result(void)
+{
+	return -EINVAL;
+}
+
+unsigned long ihk_smp_get_dma_channel_body_result(
+	unsigned long dev, unsigned long priv_data, int channel)
+{
+	(void)dev;
+	(void)priv_data;
+	(void)channel;
+	return 0;
+}
+
+int ihk_smp_unmap_virtual_body_result(
+	unsigned long virt, void (*unmap_fn)(unsigned long))
+{
+	if (unmap_fn)
+		unmap_fn(virt);
+	return 0;
+}
+
+void ihk_smp_direct_unmap_virtual_body_result(
+	unsigned long virt, unsigned long page_size,
+	void (*flush_fn)(unsigned long, unsigned long))
+{
+	if (flush_fn)
+		flush_fn(virt, page_size);
+}
+
+unsigned long ihk_smp_map_virtual_body_result(
+	unsigned long ihk_dev, unsigned long phys, unsigned long size,
+	unsigned long virt, int flags,
+	unsigned long (*direct_map_fn)(unsigned long, unsigned long),
+	unsigned long (*host_map_fn)(unsigned long, unsigned long,
+				     unsigned long, unsigned long, int),
+	void (*log_fn)(int, unsigned long, unsigned long))
+{
+	unsigned long mapped;
+
+	if (!virt) {
+		mapped = direct_map_fn ? direct_map_fn(phys, size) : 0;
+		if (!mapped && log_fn)
+			log_fn(1, phys, size);
+		return mapped;
+	}
+	return host_map_fn ? host_map_fn(ihk_dev, phys, virt, size, flags) : 0;
+}
+
+unsigned long ihk_smp_direct_map_virtual_body_result(
+	unsigned long list_head, unsigned long phys, unsigned long size,
+	const struct ihk_smp_map_virtual_list_offsets *offsets,
+	unsigned long (*phys_to_virt_fn)(unsigned long))
+{
+	unsigned long node;
+
+	if (!list_head || !offsets || !phys_to_virt_fn)
+		return 0;
+
+	node = *(unsigned long *)(list_head + offsets->list_next);
+	while (node && node != list_head) {
+		unsigned long entry = node - offsets->entry_list;
+		unsigned long start =
+			*(unsigned long *)(entry + offsets->entry_addr);
+		unsigned long chunk_size =
+			*(unsigned long *)(entry + offsets->entry_size);
+
+		if (phys >= start && phys + size <= start + chunk_size) {
+			unsigned long base = phys_to_virt_fn(start);
+
+			if (!base)
+				return 0;
+			return base + (phys - start);
+		}
+		node = *(unsigned long *)(node + offsets->list_next);
+	}
+
+	return 0;
+}
+
+int ihk_smp_get_buildid_body_result(
+	unsigned long user_addr, const char *buildid, unsigned long buildid_len,
+	int (*copy_to_user_fn)(unsigned long, const void *, unsigned long))
+{
+	if (!user_addr || !buildid || !copy_to_user_fn)
+		return -EFAULT;
+	if (copy_to_user_fn(user_addr, buildid, buildid_len))
+		return -EFAULT;
+	return 0;
+}
+
+int ihk_smp_kernel_virt_in_map_result(
+	unsigned long virt, unsigned long map_start, unsigned long map_end)
+{
+	return virt > map_start && virt < map_end;
+}
+
+unsigned long ihk_smp_bootstrap_base_phys_result(
+	unsigned long bootstrap_start, unsigned long large_page,
+	unsigned long large_page_mask)
+{
+	return (bootstrap_start + large_page * 2 - 1) & large_page_mask;
+}
+
+unsigned long ihk_smp_kernel_vtop_result(
+	unsigned long base_phys, unsigned long virt, unsigned long map_start)
+{
+	return base_phys + (virt - map_start);
+}
+
+int ihk_smp_os_vtop_body_result(
+	unsigned long bootstrap_mem_start, unsigned long virt,
+	unsigned long *phys, unsigned long map_start, unsigned long map_end,
+	unsigned long large_page, unsigned long large_page_mask,
+	unsigned long (*virt_to_phys_fn)(unsigned long),
+	void (*log_fn)(int, unsigned long, unsigned long))
+{
+	if (!phys)
+		return -EINVAL;
+	if (ihk_smp_kernel_virt_in_map_result(virt, map_start, map_end)) {
+		unsigned long base =
+			ihk_smp_bootstrap_base_phys_result(bootstrap_mem_start,
+							   large_page,
+							   large_page_mask);
+		*phys = ihk_smp_kernel_vtop_result(base, virt, map_start);
+		if (log_fn)
+			log_fn(1, virt, *phys);
+	} else {
+		*phys = virt_to_phys_fn ? virt_to_phys_fn(virt) : 0;
+		if (log_fn)
+			log_fn(2, virt, *phys);
+	}
+	return 0;
+}
+
+int ihk_smp_ready_to_load_result(
+	int has_cpu, unsigned long mem_start, unsigned long mem_end)
+{
+	return has_cpu && mem_end >= mem_start;
+}
+
+int ihk_smp_load_too_big_result(
+	unsigned long mem_start, unsigned long size, unsigned long mem_end)
+{
+	return mem_start + size > mem_end;
+}
+
+unsigned long ihk_smp_load_mem_phys_result(
+	unsigned long offset, unsigned long page_mask)
+{
+	return offset & page_mask;
+}
+
+unsigned long ihk_smp_load_mem_page_offset_result(
+	unsigned long offset, unsigned long phys)
+{
+	return offset - phys;
+}
+
+unsigned long ihk_smp_load_mem_copy_len_result(
+	unsigned long offset, unsigned long size, unsigned long page_size)
+{
+	unsigned long page_offset = offset & (page_size - 1);
+
+	return page_offset + size > page_size ? page_size - page_offset : size;
+}
+
+unsigned long ihk_smp_next_page_offset_result(
+	unsigned long offset, unsigned long page_size)
+{
+	return offset + page_size;
+}
+
+static void smp_lock_status_model(unsigned long object,
+				  unsigned long lock_offset,
+				  unsigned long status_offset, int status,
+				  unsigned long (*lock_fn)(unsigned long),
+				  void (*unlock_fn)(unsigned long,
+						    unsigned long));
+
+int ihk_smp_os_load_mem_body_result(
+	unsigned long os, int has_cpu, unsigned long mem_start,
+	unsigned long mem_end, const char *buf, unsigned long size,
+	long offset, const struct ihk_smp_control_offsets *offsets,
+	unsigned long page_size, unsigned long page_mask,
+	unsigned long (*lock_fn)(unsigned long),
+	void (*unlock_fn)(unsigned long, unsigned long),
+	unsigned long (*map_fn)(unsigned long, unsigned long),
+	void (*copy_fn)(unsigned long, const char *, unsigned long),
+	void (*unmap_fn)(unsigned long),
+	void (*log_fn)(int, unsigned long, unsigned long,
+		       unsigned long, unsigned long))
+{
+	unsigned long lock_addr;
+	unsigned long flags;
+	unsigned long remaining;
+	unsigned long source_offset;
+	unsigned long phys;
+
+	if (!os || !buf || !offsets || !page_size)
+		return -EINVAL;
+	if (!ihk_smp_ready_to_load_result(has_cpu, mem_start, mem_end)) {
+		if (log_fn)
+			log_fn(1, 0, 0, 0, 0);
+		return -EINVAL;
+	}
+	if (ihk_smp_load_too_big_result(mem_start, size, mem_end)) {
+		if (log_fn)
+			log_fn(2, 0, 0, 0, 0);
+		return -E2BIG;
+	}
+
+	lock_addr = os + offsets->os_lock;
+	flags = lock_fn ? lock_fn(lock_addr) : 0;
+	if (*(int *)(os + offsets->os_status) != BUILTIN_OS_STATUS_INITIAL) {
+		if (unlock_fn)
+			unlock_fn(lock_addr, flags);
+		if (log_fn)
+			log_fn(3, 0, 0, 0, 0);
+		return -EBUSY;
+	}
+	*(int *)(os + offsets->os_status) = BUILTIN_OS_STATUS_LOADING;
+	if (unlock_fn)
+		unlock_fn(lock_addr, flags);
+
+	remaining = size;
+	source_offset = (unsigned long)offset + mem_start;
+	phys = ihk_smp_load_mem_phys_result(source_offset, page_mask);
+	source_offset = ihk_smp_load_mem_page_offset_result(source_offset, phys);
+
+	while (remaining > 0) {
+		unsigned long virt = map_fn ? map_fn(phys, page_size) : 0;
+		unsigned long to_read;
+
+		if (!virt) {
+			if (log_fn)
+				log_fn(4, phys, 0, 0, 0);
+			smp_lock_status_model(os, offsets->os_lock,
+					      offsets->os_status,
+					      BUILTIN_OS_STATUS_INITIAL,
+					      lock_fn, unlock_fn);
+			return -ENOMEM;
+		}
+
+		to_read = ihk_smp_load_mem_copy_len_result(source_offset,
+							   remaining,
+							   page_size);
+		if (log_fn)
+			log_fn(5, virt, phys, source_offset, to_read);
+		if (copy_fn)
+			copy_fn(virt, buf + source_offset, to_read);
+		source_offset += to_read;
+		remaining -= to_read;
+		if (unmap_fn)
+			unmap_fn(virt);
+		phys = ihk_smp_next_page_offset_result(phys, page_size);
+	}
+
+	*(unsigned long *)(os + offsets->os_boot_rip) = mem_start;
+	smp_lock_status_model(os, offsets->os_lock, offsets->os_status,
+			      BUILTIN_OS_STATUS_INITIAL, lock_fn, unlock_fn);
+	return 0;
+}
+
+int ihk_smp_interrupt_cpu_valid_result(int cpu, int nr_cpus)
+{
+	return cpu >= 0 && cpu < nr_cpus;
+}
+
+unsigned long ihk_smp_adjust_entry_body_result(unsigned long entry,
+					       unsigned long phys)
+{
+	(void)phys;
+	return entry;
+}
+
+unsigned long ihk_smp_identity_map_memory_body_result(unsigned long remote_phys)
+{
+	return remote_phys;
+}
+
+int ihk_smp_identity_unmap_memory_body_result(void)
+{
+	return 0;
+}
+
+int ihk_smp_arch_dcache_flush_body_result(unsigned long addr,
+					  unsigned long len)
+{
+	(void)addr;
+	(void)len;
+	return 0;
+}
+
+int ihk_smp_setup_warm_reset_vector_body_result(
+	unsigned long start_eip, unsigned long trampoline_phys_high,
+	unsigned long trampoline_phys_low,
+	unsigned long (*lock_fn)(void),
+	void (*cmos_write_fn)(unsigned char, unsigned char),
+	void (*unlock_fn)(unsigned long), void (*flush_tlb_fn)(void),
+	void (*write_word_fn)(unsigned long, unsigned short))
+{
+	unsigned long flags = lock_fn ? lock_fn() : 0;
+
+	if (cmos_write_fn)
+		cmos_write_fn(0x0a, 0x0f);
+	if (unlock_fn)
+		unlock_fn(flags);
+	if (flush_tlb_fn)
+		flush_tlb_fn();
+	if (write_word_fn) {
+		write_word_fn(trampoline_phys_high, start_eip >> 4);
+		write_word_fn(trampoline_phys_low, start_eip & 0x0f);
+	}
+	return 0;
+}
+
+int ihk_smp_setup_trampoline_body_result(
+	unsigned long os, int nr_cpu_ids,
+	const struct ihk_smp_setup_trampoline_offsets *offsets,
+	int linux_work_irq_enabled, unsigned int linux_work_irq_vector,
+	unsigned int smp_irq, unsigned long page_offset_base,
+	unsigned long init_level4_pgt, unsigned long linux_kernel_pgt_phys,
+	int using_linux_trampoline, unsigned long trampoline_va,
+	unsigned long linux_trampoline_backup, unsigned long trampoline_data,
+	unsigned long trampoline_size, unsigned long ident_page_table,
+	unsigned long param_phys, unsigned long ikc_irq_work_func,
+	unsigned int (*apicid_fn)(int),
+	unsigned long (*raised_list_phys_fn)(int),
+	void (*log_fn)(int, unsigned long, unsigned long))
+{
+	unsigned long param;
+	int cpu;
+
+	if (!os || !offsets || !trampoline_va || !trampoline_data)
+		return -EINVAL;
+	if (nr_cpu_ids < 0)
+		return -EINVAL;
+
+	param = *(unsigned long *)(os + offsets->os_param);
+	if (!param)
+		return -EINVAL;
+
+	for (cpu = 0; cpu < nr_cpu_ids; cpu++) {
+		unsigned int apicid = apicid_fn ? apicid_fn(cpu) : 0;
+
+		*(unsigned int *)(param + offsets->param_ihk_ikc_irq_apicids +
+			cpu * offsets->param_ihk_ikc_irq_apicid_stride) =
+			apicid;
+		if (linux_work_irq_enabled) {
+			unsigned long raised_phys = raised_list_phys_fn ?
+				raised_list_phys_fn(cpu) : 0;
+
+			*(unsigned long *)(param +
+				offsets->param_ihk_ikc_cpu_raised_list +
+				cpu * offsets->param_ihk_ikc_cpu_raised_list_stride) =
+				raised_phys;
+		}
+	}
+
+	if (linux_work_irq_enabled) {
+		*(unsigned long *)(param + offsets->param_ikc_irq_work_func) =
+			ikc_irq_work_func;
+		*(unsigned int *)(param + offsets->param_ihk_ikc_irq) =
+			linux_work_irq_vector;
+	} else {
+		*(unsigned int *)(param + offsets->param_ihk_ikc_irq) =
+			smp_irq;
+	}
+
+	*(unsigned long *)(param + offsets->param_page_offset_base) =
+		page_offset_base;
+	*(unsigned long *)(param + offsets->param_linux_kernel_pgt_phys) =
+		linux_kernel_pgt_phys;
+	if (log_fn)
+		log_fn(1, init_level4_pgt, linux_kernel_pgt_phys);
+
+	if (using_linux_trampoline) {
+		if (!linux_trampoline_backup)
+			return -EINVAL;
+		memcpy((void *)linux_trampoline_backup, (void *)trampoline_va,
+		       trampoline_size);
+	}
+	memcpy((void *)trampoline_va, (void *)trampoline_data,
+	       trampoline_size);
+
+	*(unsigned long *)(trampoline_va + offsets->header_page_table) =
+		ident_page_table;
+	*(unsigned long *)(trampoline_va + offsets->header_next_ip) =
+		*(unsigned long *)(os + offsets->os_boot_rip);
+	*(unsigned long *)(trampoline_va + offsets->header_notify_address) =
+		param_phys;
+	return 0;
+}
+
+static int smp_setup_startup_map_range_model(
+	unsigned long page_table, unsigned long virt, unsigned long phys,
+	unsigned long len, unsigned long step,
+	int (*map_kernel_fn)(unsigned long, unsigned long, unsigned long),
+	void (*log_fn)(int), int log_event)
+{
+	unsigned long remaining = len;
+
+	if (!step || !map_kernel_fn)
+		return -EINVAL;
+	while (remaining > 0) {
+		if (map_kernel_fn(page_table, virt, phys) < 0) {
+			if (log_fn)
+				log_fn(log_event);
+			return -ENOMEM;
+		}
+		virt += step;
+		phys += step;
+		remaining = remaining > step ? remaining - step : 0;
+	}
+	return 0;
+}
+
+int ihk_smp_os_setup_startup_body_result(
+	unsigned long os, unsigned long phys, unsigned long entry,
+	const struct ihk_smp_setup_startup_offsets *offsets,
+	unsigned long identity_len, unsigned long large_page,
+	unsigned long large_page_mask, unsigned long map_st_start,
+	unsigned long map_kernel_start, unsigned long kernel_map_len,
+	unsigned long page_size, unsigned int ptl2_shift,
+	unsigned long startup_data, unsigned long startup_data_len,
+	unsigned long trampoline_phys, unsigned long (*alloc_page_fn)(void),
+	unsigned long (*page_phys_fn)(unsigned long),
+	int (*map_kernel_fn)(unsigned long, unsigned long, unsigned long),
+	unsigned long (*map_virtual_fn)(unsigned long, unsigned long),
+	void (*unmap_virtual_fn)(unsigned long),
+	void (*log_fn)(int))
+{
+	unsigned long boot_pt;
+	unsigned long bootstrap_mem_end;
+	unsigned long stack_p;
+	unsigned long startup_p;
+	unsigned long startup;
+	unsigned long boot_pt_phys;
+	int ret;
+
+	if (!os || !offsets || !startup_data || !page_size)
+		return -EINVAL;
+	boot_pt = alloc_page_fn ? alloc_page_fn() : 0;
+	if (!boot_pt) {
+		if (log_fn)
+			log_fn(1);
+		return -ENOMEM;
+	}
+	*(unsigned long *)(os + offsets->os_boot_pt) = boot_pt;
+
+	ret = smp_setup_startup_map_range_model(boot_pt, 0, 0,
+		identity_len, large_page, map_kernel_fn, log_fn, 2);
+	if (ret)
+		return ret;
+	ret = smp_setup_startup_map_range_model(boot_pt, map_st_start, 0,
+		identity_len, large_page, map_kernel_fn, log_fn, 3);
+	if (ret)
+		return ret;
+	ret = smp_setup_startup_map_range_model(boot_pt, map_kernel_start,
+		phys, kernel_map_len, large_page, map_kernel_fn, log_fn, 4);
+	if (ret)
+		return ret;
+
+	bootstrap_mem_end =
+		*(unsigned long *)(os + offsets->os_bootstrap_mem_end);
+	stack_p = bootstrap_mem_end - page_size;
+	startup_p = (bootstrap_mem_end & large_page_mask) -
+		(2UL << ptl2_shift);
+	startup = map_virtual_fn ? map_virtual_fn(startup_p, page_size) : 0;
+	if (!startup) {
+		if (log_fn)
+			log_fn(5);
+		return -ENOMEM;
+	}
+	memcpy((void *)startup, (void *)startup_data, startup_data_len);
+	boot_pt_phys = page_phys_fn ? page_phys_fn(boot_pt) : 0;
+	((unsigned long *)startup)[2] = boot_pt_phys;
+	((unsigned long *)startup)[3] = stack_p;
+	((unsigned long *)startup)[4] = phys;
+	((unsigned long *)startup)[5] = trampoline_phys;
+	((unsigned long *)startup)[6] = entry;
+	if (unmap_virtual_fn)
+		unmap_virtual_fn(startup);
+	*(unsigned long *)(os + offsets->os_boot_rip) = startup_p;
+	return 0;
+}
+
+int ihk_smp_arch_init_trampoline_body_result(
+	unsigned long preallocated_phys, unsigned long page_size,
+	unsigned int trampoline_order, int max_attempts,
+	unsigned long trampoline_size, unsigned long trampoline_limit,
+	unsigned long (*linux_trampoline_phys_fn)(void),
+	unsigned long *trampoline_page_slot,
+	unsigned long *trampoline_phys_slot,
+	unsigned long *trampoline_va_slot,
+	int *using_linux_trampoline_slot,
+	unsigned long (*ioremap_fn)(unsigned long, unsigned long),
+	unsigned long (*alloc_fn)(void),
+	unsigned long (*page_phys_fn)(unsigned long),
+	unsigned long (*page_virt_fn)(unsigned long),
+	void (*free_fn)(unsigned long, unsigned int),
+	unsigned long (*direct_virt_fn)(unsigned long),
+	void (*log_fn)(int, unsigned long))
+{
+	unsigned long bad_pages[64] = { 0 };
+	unsigned long page = 0;
+	unsigned long page_phys = 0;
+	unsigned long linux_trampoline_phys;
+	size_t attempts = 0;
+	size_t i;
+
+	if (!trampoline_page_slot || !trampoline_phys_slot ||
+	    !trampoline_va_slot || !using_linux_trampoline_slot ||
+	    !page_size || max_attempts <= 0 || max_attempts > 64)
+		return -EINVAL;
+
+	if (preallocated_phys) {
+		if (log_fn)
+			log_fn(1, preallocated_phys);
+		*trampoline_page_slot = 0;
+		*trampoline_phys_slot = preallocated_phys;
+		*trampoline_va_slot = ioremap_fn ?
+			ioremap_fn(preallocated_phys, page_size) : 0;
+		*using_linux_trampoline_slot = 0;
+		return 0;
+	}
+
+	while (attempts < (size_t)max_attempts) {
+		page = alloc_fn ? alloc_fn() : 0;
+		page_phys = page && page_phys_fn ? page_phys_fn(page) : 0;
+		if (page && page_phys + trampoline_size <= trampoline_limit)
+			break;
+		bad_pages[attempts] = page;
+		attempts++;
+	}
+
+	for (i = 0; i < (size_t)max_attempts; i++) {
+		if (bad_pages[i] && free_fn)
+			free_fn(bad_pages[i], trampoline_order);
+	}
+
+	page_phys = page && page_phys_fn ? page_phys_fn(page) : 0;
+	if (!page || page_phys + trampoline_size > trampoline_limit) {
+		linux_trampoline_phys = linux_trampoline_phys_fn ?
+			linux_trampoline_phys_fn() : 0;
+		*trampoline_page_slot = 0;
+		*using_linux_trampoline_slot = 1;
+		if (log_fn)
+			log_fn(2, linux_trampoline_phys);
+		*trampoline_phys_slot = linux_trampoline_phys;
+		*trampoline_va_slot = direct_virt_fn ?
+			direct_virt_fn(linux_trampoline_phys) : 0;
+	} else {
+		*trampoline_page_slot = page;
+		*using_linux_trampoline_slot = 0;
+		*trampoline_phys_slot = page_phys;
+		*trampoline_va_slot = page_virt_fn ? page_virt_fn(page) : 0;
+	}
+	if (log_fn)
+		log_fn(3, *trampoline_phys_slot);
+	return 0;
+}
+
+int ihk_smp_arch_init_linux_work_tail_body_result(
+	int linux_work_irq_vector, int (*init_ident_page_table_fn)(void),
+	int (*collect_topology_fn)(void), void (*log_fn)(int, int))
+{
+	int error;
+
+	if (log_fn)
+		log_fn(1, linux_work_irq_vector);
+	error = init_ident_page_table_fn ? init_ident_page_table_fn() : -EINVAL;
+	if (error) {
+		if (log_fn)
+			log_fn(2, error);
+		return error;
+	}
+	error = collect_topology_fn ? collect_topology_fn() : -EINVAL;
+	if (error) {
+		if (log_fn)
+			log_fn(3, error);
+		return error;
+	}
+	return 0;
+}
+
+int ihk_smp_init_ident_page_table_body_result(
+	unsigned long maxmem, unsigned long page_size, unsigned int pud_shift,
+	unsigned int pmd_shift, int ptrs_per_pud, int ptrs_per_pmd,
+	unsigned long first_level_flags, unsigned long leaf_flags,
+	unsigned long *ident_page_table_slot,
+	unsigned long *ident_page_table_virt_slot,
+	int *ident_npages_order_slot,
+	unsigned long (*alloc_pages_fn)(unsigned int),
+	unsigned long (*page_phys_fn)(unsigned long),
+	unsigned long (*page_virt_fn)(unsigned long),
+	void (*zero_fn)(unsigned long, unsigned long),
+	void (*log_fn)(int, unsigned long, unsigned long))
+{
+	const unsigned int bits = sizeof(unsigned long) * 8;
+	unsigned long pud_size = pud_shift < bits ? (1UL << pud_shift) : 0;
+	int ident_npages = pud_size ? (int)((maxmem + pud_size - 1) / pud_size) : 0;
+	unsigned long target = (unsigned long)ident_npages + 2;
+	int ident_npages_order = 0;
+	unsigned long ident_pages;
+	unsigned long ident_page_table;
+	unsigned long ident_page_table_virt;
+	unsigned long *table;
+	unsigned long *p;
+	int i;
+	int j;
+	int k;
+
+	if (!page_size || ptrs_per_pud < 0 || ptrs_per_pmd < 0 ||
+	    !ident_page_table_slot || !ident_page_table_virt_slot ||
+	    !ident_npages_order_slot)
+		return -EINVAL;
+
+	if (target) {
+		ident_npages_order =
+			(int)(bits - (unsigned int)__builtin_clzl(target)) - 1;
+		if ((2UL << ident_npages_order) != target)
+			ident_npages_order++;
+	}
+	if (log_fn)
+		log_fn(1, ident_npages, ident_npages_order);
+	*ident_npages_order_slot = ident_npages_order;
+
+	ident_pages = alloc_pages_fn ?
+		alloc_pages_fn((unsigned int)ident_npages_order) : 0;
+	if (!ident_pages) {
+		if (log_fn)
+			log_fn(2, ident_npages, ident_npages_order);
+		return ENOMEM;
+	}
+
+	ident_page_table = page_phys_fn ? page_phys_fn(ident_pages) : 0;
+	ident_page_table_virt = page_virt_fn ? page_virt_fn(ident_pages) : 0;
+	*ident_page_table_slot = ident_page_table;
+	*ident_page_table_virt_slot = ident_page_table_virt;
+	if (zero_fn)
+		zero_fn(ident_page_table_virt, ident_npages);
+
+	table = (unsigned long *)ident_page_table_virt;
+	table[0] = (ident_page_table + page_size) | first_level_flags;
+
+	p = table + (page_size / sizeof(*p));
+	for (i = 0; i < ptrs_per_pud; i++) {
+		if ((i >= 0 ? (1UL * (unsigned long)i << pud_shift) : 0) >= maxmem)
+			break;
+		*p = (ident_page_table + page_size * (2 + i)) |
+			first_level_flags;
+		p++;
+	}
+	if (i != ident_npages && log_fn)
+		log_fn(3, i, ident_npages);
+
+	p = table + (page_size * 2 / sizeof(*p));
+	for (j = 0; j < ident_npages; j++) {
+		for (k = 0; k < ptrs_per_pmd; k++) {
+			unsigned long physaddr =
+				((unsigned long)j << pud_shift) |
+				((unsigned long)k << pmd_shift);
+			if (physaddr >= maxmem)
+				break;
+			*p = physaddr | leaf_flags;
+			p++;
+		}
+	}
+
+	if (log_fn)
+		log_fn(4, ident_page_table, ident_page_table_virt);
+	return 0;
+}
+
+int ihk_smp_reset_cpu_body_result(
+	int phys_apicid, int apic_esr, unsigned int assert_init_value,
+	unsigned int deassert_init_value, void (*preempt_disable_fn)(void),
+	void (*preempt_enable_fn)(void), int (*get_maxlvt_fn)(void),
+	int (*apic_integrated_fn)(int),
+	void (*apic_write_fn)(int, unsigned int),
+	unsigned int (*apic_read_fn)(int),
+	void (*icr_write_fn)(unsigned int, int),
+	unsigned long (*wait_icr_idle_fn)(void),
+	void (*delay_fn)(unsigned long), void (*log_fn)(int, int))
+{
+	int maxlvt;
+	int integrated;
+
+	if (preempt_disable_fn)
+		preempt_disable_fn();
+	if (log_fn)
+		log_fn(1, phys_apicid);
+
+	maxlvt = get_maxlvt_fn ? get_maxlvt_fn() : 0;
+	integrated = apic_integrated_fn && apic_integrated_fn(phys_apicid);
+	if (integrated) {
+		if (maxlvt > 3 && apic_write_fn)
+			apic_write_fn(apic_esr, 0);
+		if (apic_read_fn)
+			(void)apic_read_fn(apic_esr);
+	}
+
+	if (log_fn)
+		log_fn(2, phys_apicid);
+	if (icr_write_fn)
+		icr_write_fn(assert_init_value, phys_apicid);
+	if (log_fn)
+		log_fn(3, phys_apicid);
+	if (wait_icr_idle_fn)
+		(void)wait_icr_idle_fn();
+	if (delay_fn)
+		delay_fn(10);
+	if (log_fn)
+		log_fn(4, phys_apicid);
+	if (icr_write_fn)
+		icr_write_fn(deassert_init_value, phys_apicid);
+	if (log_fn)
+		log_fn(5, phys_apicid);
+	if (wait_icr_idle_fn)
+		(void)wait_icr_idle_fn();
+	if (preempt_enable_fn)
+		preempt_enable_fn();
+
+	return 0;
+}
+
+int ihk_smp_wakeup_secondary_cpu_via_init_body_result(
+	int phys_apicid, unsigned long start_eip, int apic_esr,
+	unsigned int assert_init_value, unsigned int deassert_init_value,
+	unsigned int startup_value, int (*get_maxlvt_fn)(void),
+	int (*apic_integrated_fn)(int),
+	void (*apic_write_fn)(int, unsigned int),
+	unsigned int (*apic_read_fn)(int),
+	void (*icr_write_fn)(unsigned int, int),
+	unsigned long (*wait_icr_idle_fn)(void),
+	void (*mdelay_fn)(unsigned long),
+	void (*udelay_fn)(unsigned long), void (*barrier_fn)(void),
+	void (*init_deasserted_fn)(void),
+	void (*log_fn)(int, unsigned long))
+{
+	unsigned long send_status = 0;
+	unsigned long accept_status = 0;
+	int maxlvt;
+	int integrated;
+	int num_starts;
+	int j;
+
+	maxlvt = get_maxlvt_fn ? get_maxlvt_fn() : 0;
+	integrated = apic_integrated_fn && apic_integrated_fn(phys_apicid);
+
+	if (integrated) {
+		if (maxlvt > 3 && apic_write_fn)
+			apic_write_fn(apic_esr, 0);
+		if (apic_read_fn)
+			(void)apic_read_fn(apic_esr);
+	}
+
+	if (log_fn)
+		log_fn(1, 0);
+	if (icr_write_fn)
+		icr_write_fn(assert_init_value, phys_apicid);
+	if (log_fn)
+		log_fn(2, 0);
+	if (wait_icr_idle_fn)
+		send_status = wait_icr_idle_fn();
+	if (mdelay_fn)
+		mdelay_fn(10);
+	if (log_fn)
+		log_fn(3, 0);
+	if (icr_write_fn)
+		icr_write_fn(deassert_init_value, phys_apicid);
+	if (log_fn)
+		log_fn(2, 0);
+	if (wait_icr_idle_fn)
+		send_status = wait_icr_idle_fn();
+	if (barrier_fn)
+		barrier_fn();
+	if (init_deasserted_fn)
+		init_deasserted_fn();
+
+	num_starts = integrated ? 2 : 0;
+	if (log_fn)
+		log_fn(4, num_starts);
+
+	for (j = 1; j <= num_starts; j++) {
+		if (log_fn)
+			log_fn(5, j);
+		if (maxlvt > 3 && apic_write_fn)
+			apic_write_fn(apic_esr, 0);
+		if (apic_read_fn)
+			(void)apic_read_fn(apic_esr);
+		if (log_fn)
+			log_fn(6, 0);
+		if (icr_write_fn)
+			icr_write_fn((unsigned int)(startup_value |
+				      (start_eip >> 12)), phys_apicid);
+		if (udelay_fn)
+			udelay_fn(300);
+		if (log_fn) {
+			log_fn(7, 0);
+			log_fn(2, 0);
+		}
+		if (wait_icr_idle_fn)
+			send_status = wait_icr_idle_fn();
+		if (udelay_fn)
+			udelay_fn(200);
+		if (maxlvt > 3 && apic_write_fn)
+			apic_write_fn(apic_esr, 0);
+		if (apic_read_fn)
+			accept_status = apic_read_fn(apic_esr) & 0xef;
+		if (send_status || accept_status)
+			break;
+	}
+
+	if (log_fn) {
+		log_fn(8, 0);
+		if (send_status)
+			log_fn(9, send_status);
+		if (accept_status)
+			log_fn(10, accept_status);
+	}
+
+	return send_status | accept_status;
+}
+
+int ihk_smp_wakeup_secondary_cpu_body_result(
+	int apicid, unsigned long start_eip, int boot_cpu_physical_apicid,
+	int apic_esr, void (*clear_init_deasserted_fn)(void),
+	int (*non_unique_apic_fn)(void),
+	void (*setup_warm_reset_vector_fn)(unsigned long),
+	int (*apic_integrated_fn)(int),
+	void (*apic_write_fn)(int, unsigned int),
+	unsigned int (*apic_read_fn)(int),
+	int (*apic_wakeup_available_fn)(void),
+	int (*apic_wakeup_fn)(int, unsigned long),
+	void (*preempt_disable_fn)(void),
+	int (*via_init_fn)(int, unsigned long),
+	void (*preempt_enable_fn)(void), void (*log_fn)(int))
+{
+	int non_unique_apic;
+	int apic_wakeup_available;
+	int ret;
+
+	if (clear_init_deasserted_fn)
+		clear_init_deasserted_fn();
+
+	non_unique_apic = non_unique_apic_fn && non_unique_apic_fn();
+	if (!non_unique_apic) {
+		if (log_fn)
+			log_fn(1);
+		if (setup_warm_reset_vector_fn)
+			setup_warm_reset_vector_fn(start_eip);
+		if (apic_integrated_fn &&
+		    apic_integrated_fn(boot_cpu_physical_apicid)) {
+			if (apic_write_fn)
+				apic_write_fn(apic_esr, 0);
+			if (apic_read_fn)
+				(void)apic_read_fn(apic_esr);
+		}
+	}
+
+	apic_wakeup_available = apic_wakeup_available_fn &&
+		apic_wakeup_available_fn();
+	if (apic_wakeup_available) {
+		if (log_fn)
+			log_fn(2);
+		return apic_wakeup_fn ? apic_wakeup_fn(apicid, start_eip) :
+			-ENOSYS;
+	}
+
+	if (log_fn)
+		log_fn(3);
+	if (preempt_disable_fn)
+		preempt_disable_fn();
+	ret = via_init_fn ? via_init_fn(apicid, start_eip) : -ENOSYS;
+	if (preempt_enable_fn)
+		preempt_enable_fn();
+	return ret;
+}
+
+int ihk_smp_arch_exit_body_result(
+	unsigned long trampoline_page, int using_linux_trampoline,
+	unsigned long trampoline_va, unsigned int trampoline_order,
+	unsigned long ident_page_table_virt, unsigned int ident_npages_order,
+	void (*free_trampoline_fn)(unsigned long, unsigned int),
+	void (*unmap_fn)(unsigned long),
+	void (*free_pages_fn)(unsigned long, unsigned int))
+{
+	if (trampoline_page) {
+		if (free_trampoline_fn)
+			free_trampoline_fn(trampoline_page, trampoline_order);
+	} else if (!using_linux_trampoline) {
+		if (unmap_fn)
+			unmap_fn(trampoline_va);
+	}
+
+	if (ident_npages_order && free_pages_fn)
+		free_pages_fn(ident_page_table_virt, ident_npages_order);
+
+	return 0;
+}
+
+unsigned long ihk_smp_calc_ns_per_tsc_body_result(int invariant_tsc,
+						  unsigned int ratio,
+						  unsigned long tsc_khz)
+{
+	if (invariant_tsc && ratio)
+		return 10000UL / ratio;
+	return 1000000000UL / tsc_khz;
+}
+
+unsigned long ihk_smp_x2apic_is_enabled_body_result(unsigned long msr)
+{
+	return msr & (1UL << 10);
+}
+
+int ihk_smp_vector_entry_used_result(unsigned long entry,
+				     unsigned long unused)
+{
+	return entry != unused;
+}
+
+int ihk_smp_vector_set_needed_result(unsigned long entry,
+				     unsigned long unused)
+{
+	return entry == unused;
+}
+
+unsigned long ihk_smp_vector_release_value_result(unsigned long unused)
+{
+	return unused;
+}
+
+int ihk_smp_os_issue_interrupt_body_result(
+	int cpu, int nr_cpus, const int *hw_ids, int vector,
+	int apic_dest_physical,
+	unsigned long (*irq_save_fn)(void),
+	void (*irq_restore_fn)(unsigned long),
+	int (*x2apic_enabled_fn)(void),
+	void (*x2apic_write_fn)(int, int),
+	void (*legacy_ipi_fn)(int, int, int))
+{
+	unsigned long flags;
+	int hw_id;
+
+	if (!ihk_smp_interrupt_cpu_valid_result(cpu, nr_cpus) || !hw_ids)
+		return -EINVAL;
+
+	flags = irq_save_fn ? irq_save_fn() : 0;
+	hw_id = hw_ids[cpu];
+	if (x2apic_enabled_fn && x2apic_enabled_fn()) {
+		if (x2apic_write_fn)
+			x2apic_write_fn(vector, hw_id);
+	} else if (legacy_ipi_fn) {
+		legacy_ipi_fn(hw_id, vector, apic_dest_physical);
+	}
+	if (irq_restore_fn)
+		irq_restore_fn(flags);
+	return -EINVAL;
+}
+
+int ihk_smp_os_broadcast_interrupt_body_result(
+	unsigned long ihk_os, unsigned long priv_data, int mode, int nr_cpus,
+	const int *hw_ids, int x2apic_vector, int legacy_vector,
+	int apic_dest_physical, int wrap_irq, int wait_x2apic,
+	int (*set_mode_fn)(unsigned long, unsigned long, int),
+	unsigned long (*irq_save_fn)(void),
+	void (*irq_restore_fn)(unsigned long),
+	int (*x2apic_enabled_fn)(void),
+	void (*x2apic_wait_fn)(void),
+	void (*x2apic_write_fn)(int, int),
+	void (*legacy_ipi_fn)(int, int, int))
+{
+	unsigned long flags = 0;
+	int x2apic_enabled;
+	int ret;
+	int i;
+
+	if (nr_cpus < 0 || !hw_ids)
+		return -EINVAL;
+
+	if (set_mode_fn) {
+		ret = set_mode_fn(ihk_os, priv_data, mode);
+		if (ret)
+			return ret;
+	}
+
+	if (wrap_irq && irq_save_fn)
+		flags = irq_save_fn();
+
+	x2apic_enabled = x2apic_enabled_fn && x2apic_enabled_fn();
+	for (i = 0; i < nr_cpus; i++) {
+		if (x2apic_enabled) {
+			if (wait_x2apic && x2apic_wait_fn)
+				x2apic_wait_fn();
+			if (x2apic_write_fn)
+				x2apic_write_fn(x2apic_vector, hw_ids[i]);
+		} else if (legacy_ipi_fn) {
+			legacy_ipi_fn(hw_ids[i], legacy_vector,
+				      apic_dest_physical);
+		}
+	}
+
+	if (wrap_irq && irq_restore_fn)
+		irq_restore_fn(flags);
+
+	return 0;
+}
+
+int ihk_smp_check_ikc_map_body_result(void)
+{
+	return 0;
+}
+
+int ihk_smp_arch_get_perf_event_map_body_result(
+	unsigned long param, unsigned long extra_regs,
+	unsigned long hw_event_map, unsigned long hw_cache_event_ids,
+	unsigned long hw_cache_extra_regs,
+	const struct ihk_smp_perf_offsets *offsets,
+	unsigned long max_extra_regs, unsigned long hw_event_map_bytes,
+	unsigned long hw_cache_event_ids_bytes,
+	unsigned long hw_cache_extra_regs_bytes,
+	void (*log_fn)(int, int))
+{
+	unsigned long er = extra_regs;
+	unsigned long er_cnt = 0;
+
+	if (!param || !offsets)
+		return -EINVAL;
+
+	while (er && *(unsigned int *)(er + offsets->extra_msr)) {
+		if (er_cnt >= max_extra_regs) {
+			if (log_fn)
+				log_fn(1, (int)(er_cnt + 1));
+			return -EINVAL;
+		}
+
+		*(unsigned int *)(param + offsets->ereg_event +
+				er_cnt * sizeof(unsigned int)) =
+			*(unsigned int *)(er + offsets->extra_event);
+		*(unsigned int *)(param + offsets->ereg_msr +
+				er_cnt * sizeof(unsigned int)) =
+			*(unsigned int *)(er + offsets->extra_msr);
+		*(unsigned long *)(param + offsets->ereg_valid_mask +
+				er_cnt * sizeof(unsigned long)) =
+			*(unsigned long *)(er + offsets->extra_valid_mask);
+		*(int *)(param + offsets->ereg_idx + er_cnt * sizeof(int)) =
+			*(int *)(er + offsets->extra_idx);
+
+		er_cnt++;
+		er += offsets->extra_stride;
+	}
+
+	*(unsigned int *)(param + offsets->nr_extra_regs) =
+		(unsigned int)er_cnt;
+
+	if (hw_event_map_bytes) {
+		if (!hw_event_map)
+			return -EINVAL;
+		memcpy((void *)(param + offsets->hw_event_map),
+				(void *)hw_event_map, hw_event_map_bytes);
+	}
+	if (hw_cache_event_ids_bytes) {
+		if (!hw_cache_event_ids)
+			return -EINVAL;
+		memcpy((void *)(param + offsets->hw_cache_event_ids),
+				(void *)hw_cache_event_ids,
+				hw_cache_event_ids_bytes);
+	}
+	if (hw_cache_extra_regs_bytes) {
+		if (!hw_cache_extra_regs)
+			return -EINVAL;
+		memcpy((void *)(param + offsets->hw_cache_extra_regs),
+				(void *)hw_cache_extra_regs,
+				hw_cache_extra_regs_bytes);
+	}
+
+	return 0;
+}
+
+int ihk_smp_device_get_num_cpus_body_result(
+	const void *cpus, int cpu_count, unsigned long stride,
+	unsigned long status_offset, int available_status)
+{
+	int num_cpus = 0;
+	int i;
+
+	if (!cpus || cpu_count < 0 || !stride)
+		return -EINVAL;
+	for (i = 0; i < cpu_count; i++) {
+		const char *base = cpus;
+		const int *status = (const int *)(base + i * stride +
+						  status_offset);
+		if (*status == available_status)
+			num_cpus++;
+	}
+	return num_cpus;
+}
+
+static void smp_query_cpu_log_model(void (*log_fn)(int, int, int),
+				    int event, int requested, int actual)
+{
+	if (log_fn)
+		log_fn(event, requested, actual);
+}
+
+static int smp_query_cpu_copy_request_model(
+	unsigned long user_arg, unsigned long req_scratch,
+	unsigned long req_size,
+	const struct ihk_smp_cpu_req_offsets *req_offsets,
+	int max_cpus,
+	int (*copy_from_user_fn)(void *, unsigned long, unsigned long),
+	int *req_num_cpus_out, unsigned long *req_cpus_out,
+	void (*log_fn)(int, int, int))
+{
+	struct ihk_cpu_req *req;
+
+	if (!user_arg || !req_scratch || !req_offsets || !req_size ||
+	    !copy_from_user_fn) {
+		smp_query_cpu_log_model(log_fn, 1, 0, 0);
+		return -EFAULT;
+	}
+	if (copy_from_user_fn((void *)req_scratch, user_arg, req_size)) {
+		smp_query_cpu_log_model(log_fn, 1, 0, 0);
+		return -EFAULT;
+	}
+	req = (struct ihk_cpu_req *)req_scratch;
+	*req_cpus_out = *(unsigned long *)((char *)req + req_offsets->cpus);
+	*req_num_cpus_out = *(int *)((char *)req + req_offsets->num_cpus);
+	if (*req_num_cpus_out < 0 || *req_num_cpus_out > max_cpus ||
+	    (*req_num_cpus_out > 0 && !*req_cpus_out)) {
+		smp_query_cpu_log_model(log_fn, 2, *req_num_cpus_out,
+					*req_num_cpus_out);
+		return -EINVAL;
+	}
+	return 0;
+}
+
+static void *smp_query_cpu_alloc_model(int req_num_cpus,
+				       unsigned long int_size,
+				       void *(*alloc_fn)(unsigned long),
+				       void (*log_fn)(int, int, int),
+				       int *ret)
+{
+	void *ptr;
+
+	*ret = 0;
+	if (!int_size) {
+		*ret = -EINVAL;
+		return NULL;
+	}
+	if (!req_num_cpus)
+		return NULL;
+	if (!alloc_fn) {
+		smp_query_cpu_log_model(log_fn, 4, req_num_cpus, 0);
+		*ret = -ENOMEM;
+		return NULL;
+	}
+	ptr = alloc_fn((unsigned long)req_num_cpus * int_size);
+	if (!ptr) {
+		smp_query_cpu_log_model(log_fn, 4, req_num_cpus, 0);
+		*ret = -ENOMEM;
+	}
+	return ptr;
+}
+
+static int smp_query_cpu_copy_results_model(
+	unsigned long user_arg, unsigned long req_cpus, int req_num_cpus,
+	const struct ihk_smp_cpu_req_offsets *req_offsets, void *res_cpus,
+	unsigned long int_size,
+	int (*copy_to_user_fn)(unsigned long, const void *, unsigned long),
+	void (*log_fn)(int, int, int))
+{
+	if (!copy_to_user_fn) {
+		smp_query_cpu_log_model(log_fn, 7, req_num_cpus, 0);
+		return -EFAULT;
+	}
+	if (req_num_cpus > 0 &&
+	    copy_to_user_fn(req_cpus, res_cpus,
+			    (unsigned long)req_num_cpus * int_size)) {
+		smp_query_cpu_log_model(log_fn, 6, req_num_cpus, 0);
+		return -EFAULT;
+	}
+	if (copy_to_user_fn(user_arg + req_offsets->num_cpus,
+			    &req_num_cpus, int_size)) {
+		smp_query_cpu_log_model(log_fn, 7, req_num_cpus, 0);
+		return -EFAULT;
+	}
+	return 0;
+}
+
+int ihk_smp_device_query_cpu_body_result(
+	unsigned long user_arg, unsigned long req_scratch,
+	unsigned long req_size,
+	const struct ihk_smp_cpu_req_offsets *req_offsets,
+	const void *cpus, int cpu_count, unsigned long cpu_stride,
+	unsigned long cpu_status_offset, int available_status,
+	unsigned long int_size, int max_cpus,
+	int (*copy_from_user_fn)(void *, unsigned long, unsigned long),
+	int (*copy_to_user_fn)(unsigned long, const void *, unsigned long),
+	void *(*alloc_fn)(unsigned long),
+	void (*free_fn)(unsigned long),
+	void (*log_fn)(int, int, int))
+{
+	int req_num_cpus, actual, ret = 0;
+	unsigned long req_cpus;
+	int *res_cpus;
+
+	ret = smp_query_cpu_copy_request_model(user_arg, req_scratch,
+			req_size, req_offsets, max_cpus, copy_from_user_fn,
+			&req_num_cpus, &req_cpus, log_fn);
+	if (ret)
+		return ret;
+	actual = ihk_smp_device_get_num_cpus_body_result(cpus, cpu_count,
+			cpu_stride, cpu_status_offset, available_status);
+	if (actual != req_num_cpus) {
+		smp_query_cpu_log_model(log_fn, 3, req_num_cpus, actual);
+		return -EINVAL;
+	}
+	res_cpus = smp_query_cpu_alloc_model(req_num_cpus, int_size,
+			alloc_fn, log_fn, &ret);
+	if (ret)
+		return ret;
+	if (req_num_cpus > 0) {
+		int i, pos = 0;
+		const char *base = cpus;
+		for (i = 0; i < cpu_count; i++) {
+			const int *status = (const int *)(base +
+				i * cpu_stride + cpu_status_offset);
+			if (*status == available_status)
+				res_cpus[pos++] = i;
+		}
+		if (pos > req_num_cpus) {
+			smp_query_cpu_log_model(log_fn, 5, req_num_cpus, pos);
+			ret = -EINVAL;
+			goto out;
+		}
+	}
+	ret = smp_query_cpu_copy_results_model(user_arg, req_cpus,
+			req_num_cpus, req_offsets, res_cpus, int_size,
+			copy_to_user_fn, log_fn);
+out:
+	if (res_cpus && free_fn)
+		free_fn((unsigned long)res_cpus);
+	return ret;
+}
+
+int ihk_smp_os_query_cpu_body_result(
+	unsigned long os, unsigned long user_arg, unsigned long req_scratch,
+	unsigned long req_size,
+	const struct ihk_smp_cpu_req_offsets *req_offsets,
+	const struct ihk_smp_control_offsets *os_offsets,
+	unsigned long int_size, int max_cpus,
+	int (*copy_from_user_fn)(void *, unsigned long, unsigned long),
+	int (*copy_to_user_fn)(unsigned long, const void *, unsigned long),
+	void *(*alloc_fn)(unsigned long),
+	void (*free_fn)(unsigned long),
+	void (*log_fn)(int, int, int))
+{
+	int req_num_cpus, actual, ret = 0;
+	unsigned long req_cpus;
+	int *res_cpus;
+
+	if (!os || !os_offsets)
+		return -EINVAL;
+	ret = smp_query_cpu_copy_request_model(user_arg, req_scratch,
+			req_size, req_offsets, max_cpus, copy_from_user_fn,
+			&req_num_cpus, &req_cpus, log_fn);
+	if (ret)
+		return ret;
+	actual = *(int *)(os + os_offsets->os_nr_cpus);
+	if (actual != req_num_cpus) {
+		smp_query_cpu_log_model(log_fn, 3, req_num_cpus, actual);
+		return -EINVAL;
+	}
+	res_cpus = smp_query_cpu_alloc_model(req_num_cpus, int_size,
+			alloc_fn, log_fn, &ret);
+	if (ret)
+		return ret;
+	if (req_num_cpus > 0) {
+		memcpy(res_cpus, (void *)(os + os_offsets->os_cpu_mapping),
+		       (unsigned long)actual * int_size);
+	}
+	ret = smp_query_cpu_copy_results_model(user_arg, req_cpus,
+			req_num_cpus, req_offsets, res_cpus, int_size,
+			copy_to_user_fn, log_fn);
+	if (res_cpus && free_fn)
+		free_fn((unsigned long)res_cpus);
+	return ret;
+}
+
+int ihk_smp_os_get_ikc_map_body_result(
+	unsigned long ihk_os, unsigned long user_arg,
+	unsigned long req_scratch, unsigned long req_size,
+	const struct ihk_smp_ikc_req_offsets *req_offsets,
+	const void *cpus, int cpu_count, unsigned long cpu_stride,
+	unsigned long cpu_status_offset, unsigned long cpu_os_offset,
+	unsigned long cpu_ikc_offset, int assigned_status,
+	unsigned long int_size, int max_cpus,
+	int (*copy_from_user_fn)(void *, unsigned long, unsigned long),
+	int (*copy_to_user_fn)(unsigned long, const void *, unsigned long),
+	void *(*alloc_fn)(unsigned long),
+	void (*free_fn)(unsigned long),
+	void (*log_fn)(int, int, int))
+{
+	unsigned long req_src_cpus, req_dst_cpus;
+	int req_num_cpus;
+	int *res_src_cpus = NULL;
+	int *res_dst_cpus = NULL;
+	int idx = 0;
+	int ret = 0;
+	int i;
+
+	if (!user_arg || !req_scratch || !req_offsets || !req_size ||
+	    !copy_from_user_fn) {
+		smp_query_cpu_log_model(log_fn, 1, 0, 0);
+		return -EFAULT;
+	}
+	if (copy_from_user_fn((void *)req_scratch, user_arg, req_size)) {
+		smp_query_cpu_log_model(log_fn, 1, 0, 0);
+		return -EFAULT;
+	}
+	req_src_cpus = *(unsigned long *)(req_scratch + req_offsets->src_cpus);
+	req_dst_cpus = *(unsigned long *)(req_scratch + req_offsets->dst_cpus);
+	req_num_cpus = *(int *)(req_scratch + req_offsets->num_cpus);
+	if (req_num_cpus < 0 || req_num_cpus > max_cpus ||
+	    (req_num_cpus > 0 && (!req_src_cpus || !req_dst_cpus))) {
+		smp_query_cpu_log_model(log_fn, 2, 0, req_num_cpus);
+		return -EINVAL;
+	}
+	if (!int_size)
+		return -EINVAL;
+	if (req_num_cpus > 0) {
+		unsigned long bytes = (unsigned long)req_num_cpus * int_size;
+
+		if (!alloc_fn) {
+			smp_query_cpu_log_model(log_fn, 3, req_num_cpus, 0);
+			return -ENOMEM;
+		}
+		res_src_cpus = alloc_fn(bytes);
+		if (!res_src_cpus) {
+			smp_query_cpu_log_model(log_fn, 3, req_num_cpus, 0);
+			return -ENOMEM;
+		}
+		res_dst_cpus = alloc_fn(bytes);
+		if (!res_dst_cpus) {
+			smp_query_cpu_log_model(log_fn, 4, req_num_cpus, 0);
+			ret = -ENOMEM;
+			goto out;
+		}
+		if (copy_from_user_fn(res_src_cpus, req_src_cpus, bytes)) {
+			smp_query_cpu_log_model(log_fn, 5, req_num_cpus, 0);
+			ret = -EFAULT;
+			goto out;
+		}
+		if (copy_from_user_fn(res_dst_cpus, req_dst_cpus, bytes)) {
+			smp_query_cpu_log_model(log_fn, 6, req_num_cpus, 0);
+			ret = -EFAULT;
+			goto out;
+		}
+	}
+	if (!cpus || cpu_count < 0 || cpu_stride == 0) {
+		smp_query_cpu_log_model(log_fn, 7, req_num_cpus, idx);
+		ret = -EINVAL;
+		goto out;
+	}
+	for (i = 0; i < cpu_count; i++) {
+		const char *base = (const char *)cpus + (unsigned long)i * cpu_stride;
+		int status = *(const int *)(base + cpu_status_offset);
+		unsigned long os = *(const unsigned long *)(base + cpu_os_offset);
+		int dst = *(const int *)(base + cpu_ikc_offset);
+
+		if (status != assigned_status || os != ihk_os)
+			continue;
+		if (idx >= req_num_cpus) {
+			idx++;
+			smp_query_cpu_log_model(log_fn, 7, req_num_cpus, idx);
+			ret = -EINVAL;
+			goto out;
+		}
+		res_src_cpus[idx] = i;
+		res_dst_cpus[idx] = dst;
+		idx++;
+	}
+	if (!copy_to_user_fn) {
+		smp_query_cpu_log_model(log_fn, 10, idx, 0);
+		ret = -EFAULT;
+		goto out;
+	}
+	if (idx > 0) {
+		unsigned long bytes = (unsigned long)idx * int_size;
+
+		if (copy_to_user_fn(req_src_cpus, res_src_cpus, bytes)) {
+			smp_query_cpu_log_model(log_fn, 8, idx, 0);
+			ret = -EFAULT;
+			goto out;
+		}
+		if (copy_to_user_fn(req_dst_cpus, res_dst_cpus, bytes)) {
+			smp_query_cpu_log_model(log_fn, 9, idx, 0);
+			ret = -EFAULT;
+			goto out;
+		}
+	}
+	if (copy_to_user_fn(user_arg + req_offsets->num_cpus, &idx, int_size)) {
+		smp_query_cpu_log_model(log_fn, 10, idx, 0);
+		ret = -EFAULT;
+	}
+
+out:
+	if (res_src_cpus && free_fn)
+		free_fn((unsigned long)res_src_cpus);
+	if (res_dst_cpus && free_fn)
+		free_fn((unsigned long)res_dst_cpus);
+	return ret;
+}
+
+static int smp_ikc_req_policy_model(int num_cpus, int has_src_cpus,
+				    int has_dst_cpus, int max_cpus)
+{
+	if (num_cpus < 0 || num_cpus > max_cpus)
+		return 1;
+	if (num_cpus > 0 && (!has_src_cpus || !has_dst_cpus))
+		return 2;
+	return 0;
+}
+
+static int smp_ikc_pair_bounds_model(
+	const int *src_cpus, const int *dst_cpus, int num_cpus, int limit,
+	int *invalid_is_dst, int *invalid_cpu)
+{
+	int i;
+
+	if (invalid_is_dst)
+		*invalid_is_dst = 0;
+	if (invalid_cpu)
+		*invalid_cpu = -1;
+	if (num_cpus < 0 || limit < 0 ||
+	    (num_cpus > 0 && (!src_cpus || !dst_cpus)))
+		return -EINVAL;
+	for (i = 0; i < num_cpus; i++) {
+		if (src_cpus[i] < 0 || src_cpus[i] >= limit) {
+			if (invalid_is_dst)
+				*invalid_is_dst = 0;
+			if (invalid_cpu)
+				*invalid_cpu = src_cpus[i];
+			return -EINVAL;
+		}
+		if (dst_cpus[i] < 0 || dst_cpus[i] >= limit) {
+			if (invalid_is_dst)
+				*invalid_is_dst = 1;
+			if (invalid_cpu)
+				*invalid_cpu = dst_cpus[i];
+			return -EINVAL;
+		}
+	}
+	return 0;
+}
+
+static int smp_cpu_is_assigned_model(int status)
+{
+	return status == IHK_SMP_CPU_ASSIGNED;
+}
+
+static int smp_cpu_assigned_to_os_model(int status, int same_os)
+{
+	return status == IHK_SMP_CPU_ASSIGNED && same_os;
+}
+
+static void smp_set_ikc_out_model(
+	unsigned long ihk_os, unsigned long os, void *cpus, int cpu_count,
+	unsigned long cpu_stride,
+	const struct ihk_smp_set_ikc_map_offsets *offsets,
+	int assigned_status, int *req_src_cpus, int *req_dst_cpus,
+	void (*free_fn)(unsigned long))
+{
+	int i;
+
+	if (*(int *)(os + offsets->os_cpu_ikc_mapped) != 1) {
+		for (i = 0; i < cpu_count; i++) {
+			char *base = (char *)cpus + (unsigned long)i * cpu_stride;
+			int status = *(int *)(base + offsets->cpu_status);
+			unsigned long cpu_os =
+				*(unsigned long *)(base + offsets->cpu_os);
+
+			if (status != assigned_status ||
+			    !smp_cpu_assigned_to_os_model(status,
+							  cpu_os == ihk_os))
+				continue;
+			*(int *)(base + offsets->cpu_ikc_map_cpu) = 0;
+		}
+	}
+	if (req_src_cpus && free_fn)
+		free_fn((unsigned long)req_src_cpus);
+	if (req_dst_cpus && free_fn)
+		free_fn((unsigned long)req_dst_cpus);
+}
+
+int ihk_smp_os_set_ikc_map_body_result(
+	unsigned long ihk_os, unsigned long os, unsigned long user_arg,
+	unsigned long req_scratch, unsigned long req_size,
+	char *req_string, long req_string_len,
+	const struct ihk_smp_set_ikc_map_offsets *offsets,
+	void *cpus, int cpu_count, unsigned long cpu_stride,
+	int assigned_status, int initial_status, unsigned long int_size,
+	int max_cpus,
+	int (*copy_from_user_fn)(void *, unsigned long, unsigned long),
+	void *(*alloc_fn)(unsigned long),
+	void (*free_fn)(unsigned long),
+	unsigned long (*lock_fn)(unsigned long),
+	void (*unlock_fn)(unsigned long, unsigned long),
+	int (*cpu_present_fn)(int),
+	int (*cpu_online_fn)(int),
+	int (*check_ikc_map_fn)(unsigned long),
+	void (*log_fn)(int, int, int))
+{
+	unsigned long req_src_user, req_dst_user;
+	int req_num_cpus;
+	int *req_src_cpus = NULL;
+	int *req_dst_cpus = NULL;
+	int invalid_is_dst = 0;
+	int invalid_cpu = -1;
+	unsigned long flags = 0;
+	int ret = 0;
+	int reason;
+	int i;
+
+	if (!ihk_os || !os || !req_scratch || !req_size || !offsets) {
+		smp_query_cpu_log_model(log_fn, 1, 0, 0);
+		return -EFAULT;
+	}
+	if (cpu_count < max_cpus || cpu_stride == 0 || !cpus || !int_size) {
+		smp_query_cpu_log_model(log_fn, 8, 0, max_cpus);
+		return -EINVAL;
+	}
+	if (!copy_from_user_fn || !user_arg ||
+	    copy_from_user_fn((void *)req_scratch, user_arg, req_size)) {
+		smp_query_cpu_log_model(log_fn, 1, 0, 0);
+		smp_set_ikc_out_model(ihk_os, os, cpus, max_cpus,
+				      cpu_stride, offsets, assigned_status,
+				      NULL, NULL, free_fn);
+		return -EFAULT;
+	}
+
+	req_src_user = *(unsigned long *)(req_scratch + offsets->req_src_cpus);
+	req_dst_user = *(unsigned long *)(req_scratch + offsets->req_dst_cpus);
+	req_num_cpus = *(int *)(req_scratch + offsets->req_num_cpus);
+	reason = smp_ikc_req_policy_model(req_num_cpus, req_src_user != 0,
+					  req_dst_user != 0, max_cpus);
+	if (reason) {
+		smp_query_cpu_log_model(log_fn, 2, reason, req_num_cpus);
+		smp_set_ikc_out_model(ihk_os, os, cpus, max_cpus,
+				      cpu_stride, offsets, assigned_status,
+				      NULL, NULL, free_fn);
+		return -EINVAL;
+	}
+
+	if (lock_fn)
+		flags = lock_fn(os + offsets->os_lock);
+	if (*(int *)(os + offsets->os_status) != initial_status) {
+		if (unlock_fn)
+			unlock_fn(os + offsets->os_lock, flags);
+		smp_set_ikc_out_model(ihk_os, os, cpus, max_cpus,
+				      cpu_stride, offsets, assigned_status,
+				      NULL, NULL, free_fn);
+		return -EBUSY;
+	}
+	if (unlock_fn)
+		unlock_fn(os + offsets->os_lock, flags);
+
+	if (req_num_cpus > 0) {
+		unsigned long bytes = (unsigned long)req_num_cpus * int_size;
+
+		if (!alloc_fn) {
+			smp_query_cpu_log_model(log_fn, 3, req_num_cpus, 0);
+			smp_set_ikc_out_model(ihk_os, os, cpus, max_cpus,
+					      cpu_stride, offsets,
+					      assigned_status, NULL, NULL,
+					      free_fn);
+			return -ENOMEM;
+		}
+		req_src_cpus = alloc_fn(bytes);
+		if (!req_src_cpus) {
+			smp_query_cpu_log_model(log_fn, 3, req_num_cpus, 0);
+			smp_set_ikc_out_model(ihk_os, os, cpus, max_cpus,
+					      cpu_stride, offsets,
+					      assigned_status, NULL, NULL,
+					      free_fn);
+			return -ENOMEM;
+		}
+		if (copy_from_user_fn(req_src_cpus, req_src_user, bytes)) {
+			smp_query_cpu_log_model(log_fn, 4, req_num_cpus, 0);
+			ret = -EFAULT;
+			goto out;
+		}
+		req_dst_cpus = alloc_fn(bytes);
+		if (!req_dst_cpus) {
+			smp_query_cpu_log_model(log_fn, 5, req_num_cpus, 0);
+			ret = -ENOMEM;
+			goto out;
+		}
+		if (copy_from_user_fn(req_dst_cpus, req_dst_user, bytes)) {
+			smp_query_cpu_log_model(log_fn, 6, req_num_cpus, 0);
+			ret = -EFAULT;
+			goto out;
+		}
+	}
+
+	if (req_string && req_string_len > 0)
+		req_string[0] = '\0';
+
+	if (smp_ikc_pair_bounds_model(req_src_cpus, req_dst_cpus,
+				      req_num_cpus, max_cpus,
+				      &invalid_is_dst, &invalid_cpu)) {
+		smp_query_cpu_log_model(log_fn, 8, invalid_is_dst,
+					invalid_cpu);
+		ret = -EINVAL;
+		goto out;
+	}
+
+	for (i = 0; i < req_num_cpus; i++) {
+		int src_cpu = req_src_cpus[i];
+		int dst_cpu = req_dst_cpus[i];
+		char *src = (char *)cpus + (unsigned long)src_cpu * cpu_stride;
+		char *dst = (char *)cpus + (unsigned long)dst_cpu * cpu_stride;
+
+		smp_query_cpu_log_model(log_fn, 9, src_cpu, dst_cpu);
+		if (!smp_cpu_is_assigned_model(
+			    *(int *)(src + offsets->cpu_status))) {
+			smp_query_cpu_log_model(log_fn, 10, src_cpu, 0);
+			ret = -EINVAL;
+			goto out;
+		}
+		if (smp_cpu_is_assigned_model(
+			    *(int *)(dst + offsets->cpu_status))) {
+			smp_query_cpu_log_model(log_fn, 11, dst_cpu, 0);
+			ret = -EINVAL;
+			goto out;
+		}
+		if (cpu_present_fn && !cpu_present_fn(dst_cpu)) {
+			smp_query_cpu_log_model(log_fn, 12, dst_cpu, 0);
+			ret = -EINVAL;
+			goto out;
+		}
+		if (cpu_online_fn && !cpu_online_fn(dst_cpu)) {
+			smp_query_cpu_log_model(log_fn, 13, dst_cpu, 0);
+			ret = -EINVAL;
+			goto out;
+		}
+		*(int *)(src + offsets->cpu_ikc_map_cpu) = dst_cpu;
+	}
+
+	if (check_ikc_map_fn && check_ikc_map_fn(ihk_os) == 0)
+		*(int *)(os + offsets->os_cpu_ikc_mapped) = 1;
+
+	for (i = 0; i < max_cpus; i++) {
+		char *base = (char *)cpus + (unsigned long)i * cpu_stride;
+		int status = *(int *)(base + offsets->cpu_status);
+		unsigned long cpu_os = *(unsigned long *)(base + offsets->cpu_os);
+
+		if (!smp_cpu_assigned_to_os_model(status, cpu_os == ihk_os))
+			continue;
+		smp_query_cpu_log_model(log_fn, 14, i,
+			*(int *)(base + offsets->cpu_ikc_map_cpu));
+	}
+
+out:
+	smp_set_ikc_out_model(ihk_os, os, cpus, max_cpus, cpu_stride,
+			      offsets, assigned_status, req_src_cpus,
+			      req_dst_cpus, free_fn);
+	return ret;
+}
+
+static int smp_validate_mem_req_model(const struct ihk_mem_req *req)
+{
+	if (req->num_chunks < 0)
+		return -EINVAL;
+	if (req->num_chunks > 0 && (!req->sizes || !req->numa_ids))
+		return -EINVAL;
+	if (req->min_chunk_size < 0)
+		return -EINVAL;
+	if (req->max_size_ratio_all < 0 || req->max_size_ratio_all > 100)
+		return -EINVAL;
+	return 0;
+}
+
+static int smp_query_mem_copy_request_model(
+	unsigned long user_arg, unsigned long req_scratch,
+	unsigned long req_size,
+	const struct ihk_smp_mem_req_offsets *req_offsets,
+	int (*copy_from_user_fn)(void *, unsigned long, unsigned long),
+	size_t **req_sizes_out, int **req_numa_ids_out,
+	int *req_num_chunks_out, void (*log_fn)(int, int, int))
+{
+	struct ihk_mem_req *req;
+
+	if (!user_arg || !req_scratch || !req_size || !req_offsets ||
+	    !copy_from_user_fn) {
+		smp_query_cpu_log_model(log_fn, 1, 0, 0);
+		return -EFAULT;
+	}
+	if (copy_from_user_fn((void *)req_scratch, user_arg, req_size)) {
+		smp_query_cpu_log_model(log_fn, 1, 0, 0);
+		return -EFAULT;
+	}
+	req = (struct ihk_mem_req *)req_scratch;
+	*req_sizes_out = *(size_t **)((char *)req + req_offsets->sizes);
+	*req_numa_ids_out = *(int **)((char *)req + req_offsets->numa_ids);
+	*req_num_chunks_out =
+		*(int *)((char *)req + req_offsets->num_chunks);
+	if (smp_validate_mem_req_model(req)) {
+		smp_query_cpu_log_model(log_fn, 2, *req_num_chunks_out, 0);
+		return -EINVAL;
+	}
+	return 0;
+}
+
+static int smp_query_mem_entry_matches_model(
+	unsigned long entry, const struct ihk_smp_mem_query_offsets *offsets,
+	int filter_os, unsigned long target_os)
+{
+	if (!filter_os)
+		return 1;
+	return *(unsigned long *)(entry + offsets->entry_os) == target_os;
+}
+
+static int smp_query_mem_count_entries_model(
+	unsigned long list_head,
+	const struct ihk_smp_mem_query_offsets *offsets,
+	int filter_os, unsigned long target_os,
+	const unsigned long *fake_chunks, unsigned long fake_count)
+{
+	int count = 0;
+	unsigned long node;
+	unsigned long i;
+
+	if (list_head) {
+		node = *(unsigned long *)(list_head + offsets->list_next);
+		while (node && node != list_head) {
+			unsigned long entry = node - offsets->entry_list;
+			if (smp_query_mem_entry_matches_model(entry, offsets,
+							      filter_os,
+							      target_os))
+				count++;
+			node = *(unsigned long *)(node + offsets->list_next);
+		}
+	}
+	for (i = 0; fake_chunks && i < fake_count; i++) {
+		if (fake_chunks[i])
+			count++;
+	}
+	return count;
+}
+
+static void *smp_query_mem_alloc_array_model(
+	int count, unsigned long elem_size, int event,
+	void *(*alloc_fn)(unsigned long), void (*log_fn)(int, int, int),
+	int *ret)
+{
+	void *ptr;
+
+	*ret = 0;
+	if (!elem_size) {
+		*ret = -EINVAL;
+		return NULL;
+	}
+	if (count <= 0)
+		return NULL;
+	if (!alloc_fn) {
+		smp_query_cpu_log_model(log_fn, event, count, 0);
+		*ret = -ENOMEM;
+		return NULL;
+	}
+	ptr = alloc_fn((unsigned long)count * elem_size);
+	if (!ptr) {
+		smp_query_cpu_log_model(log_fn, event, count, 0);
+		*ret = -ENOMEM;
+	}
+	return ptr;
+}
+
+static int smp_query_mem_collect_entries_model(
+	unsigned long list_head,
+	const struct ihk_smp_mem_query_offsets *offsets,
+	int filter_os, unsigned long target_os,
+	const unsigned long *fake_chunks, unsigned long fake_count,
+	size_t *size_out, int *numa_out)
+{
+	int idx = 0;
+	unsigned long node;
+	unsigned long i;
+
+	if (list_head) {
+		node = *(unsigned long *)(list_head + offsets->list_next);
+		while (node && node != list_head) {
+			unsigned long entry = node - offsets->entry_list;
+			if (smp_query_mem_entry_matches_model(entry, offsets,
+							      filter_os,
+							      target_os)) {
+				size_out[idx] =
+					*(size_t *)(entry + offsets->entry_size);
+				numa_out[idx] =
+					*(int *)(entry + offsets->entry_numa_id);
+				idx++;
+			}
+			node = *(unsigned long *)(node + offsets->list_next);
+		}
+	}
+	for (i = 0; fake_chunks && i < fake_count; i++) {
+		if (fake_chunks[i]) {
+			size_out[idx] = fake_chunks[i];
+			numa_out[idx] = (int)i;
+			idx++;
+		}
+	}
+	return idx;
+}
+
+static int smp_query_mem_copy_results_model(
+	unsigned long user_arg, size_t *req_sizes, int *req_numa_ids,
+	const struct ihk_smp_mem_req_offsets *req_offsets,
+	size_t *size_out, int *numa_out, int count,
+	unsigned long size_elem, unsigned long int_size,
+	int (*copy_to_user_fn)(unsigned long, const void *, unsigned long),
+	void (*log_fn)(int, int, int))
+{
+	if (!copy_to_user_fn) {
+		smp_query_cpu_log_model(log_fn, 8, count, 0);
+		return -EFAULT;
+	}
+	if (count > 0 && size_out && numa_out) {
+		if (copy_to_user_fn((unsigned long)req_sizes, size_out,
+				    (unsigned long)count * size_elem)) {
+			smp_query_cpu_log_model(log_fn, 6, count, 0);
+			return -EFAULT;
+		}
+		if (copy_to_user_fn((unsigned long)req_numa_ids, numa_out,
+				    (unsigned long)count * int_size)) {
+			smp_query_cpu_log_model(log_fn, 7, count, 0);
+			return -EFAULT;
+		}
+	}
+	if (copy_to_user_fn(user_arg + req_offsets->num_chunks, &count,
+			    int_size)) {
+		smp_query_cpu_log_model(log_fn, 8, count, 0);
+		return -EFAULT;
+	}
+	return 0;
+}
+
+int ihk_smp_query_mem_body_result(
+	unsigned long list_head, unsigned long target_os, int filter_os,
+	int require_exact, const unsigned long *fake_chunks,
+	unsigned long fake_count, unsigned long user_arg,
+	unsigned long req_scratch, unsigned long req_size,
+	const struct ihk_smp_mem_req_offsets *req_offsets,
+	const struct ihk_smp_mem_query_offsets *query_offsets,
+	unsigned long size_elem, unsigned long int_size,
+	int (*copy_from_user_fn)(void *, unsigned long, unsigned long),
+	int (*copy_to_user_fn)(unsigned long, const void *, unsigned long),
+	void *(*alloc_fn)(unsigned long),
+	void (*free_fn)(unsigned long),
+	void (*log_fn)(int, int, int))
+{
+	size_t *req_sizes;
+	int *req_numa_ids;
+	int req_num_chunks;
+	int actual, out_count, idx, ret;
+	size_t *size_out;
+	int *numa_out;
+
+	if (!query_offsets || !req_offsets)
+		return -EINVAL;
+	ret = smp_query_mem_copy_request_model(user_arg, req_scratch,
+			req_size, req_offsets, copy_from_user_fn, &req_sizes,
+			&req_numa_ids, &req_num_chunks, log_fn);
+	if (ret)
+		return ret;
+	actual = smp_query_mem_count_entries_model(list_head, query_offsets,
+			filter_os, target_os, fake_chunks, fake_count);
+	if (req_num_chunks == 0)
+		return smp_query_mem_copy_results_model(user_arg, req_sizes,
+				req_numa_ids, req_offsets, NULL, NULL, actual,
+				size_elem, int_size, copy_to_user_fn, log_fn);
+	if (require_exact && actual != req_num_chunks) {
+		smp_query_cpu_log_model(log_fn, 3, req_num_chunks, actual);
+		return -EINVAL;
+	}
+	out_count = require_exact ? req_num_chunks : actual;
+	size_out = smp_query_mem_alloc_array_model(out_count, size_elem, 4,
+			alloc_fn, log_fn, &ret);
+	if (ret)
+		return ret;
+	numa_out = smp_query_mem_alloc_array_model(out_count, int_size, 5,
+			alloc_fn, log_fn, &ret);
+	if (ret) {
+		if (size_out && free_fn)
+			free_fn((unsigned long)size_out);
+		return ret;
+	}
+	idx = out_count > 0 ? smp_query_mem_collect_entries_model(list_head,
+			query_offsets, filter_os, target_os, fake_chunks,
+			fake_count, size_out, numa_out) : 0;
+	ret = smp_query_mem_copy_results_model(user_arg, req_sizes,
+			req_numa_ids, req_offsets, size_out, numa_out, idx,
+			size_elem, int_size, copy_to_user_fn, log_fn);
+	if (size_out && free_fn)
+		free_fn((unsigned long)size_out);
+	if (numa_out && free_fn)
+		free_fn((unsigned long)numa_out);
+	return ret;
+}
+
+static unsigned long smp_lookup_list_next(
+	unsigned long entry,
+	const struct ihk_smp_topology_lookup_offsets *offsets)
+{
+	return *(unsigned long *)(entry + offsets->list_next);
+}
+
+unsigned long ihk_smp_get_cpu_topology_body_result(
+	unsigned long list_head, int hw_id,
+	const struct ihk_smp_topology_lookup_offsets *offsets)
+{
+	unsigned long entry;
+
+	if (!list_head || !offsets)
+		return 0;
+	for (entry = smp_lookup_list_next(list_head, offsets);
+	     entry && entry != list_head;
+	     entry = smp_lookup_list_next(entry, offsets)) {
+		unsigned long topo = entry - offsets->cpu_chain;
+		if (*(int *)(topo + offsets->cpu_hw_id) == hw_id)
+			return topo;
+	}
+	return 0;
+}
+
+unsigned long ihk_smp_get_node_topology_body_result(
+	unsigned long list_head, int node, int nr_nodes,
+	unsigned long einval_ptr,
+	const struct ihk_smp_topology_lookup_offsets *offsets)
+{
+	unsigned long entry;
+
+	if (!list_head || !offsets)
+		return 0;
+	if (node >= nr_nodes)
+		return einval_ptr;
+	for (entry = smp_lookup_list_next(list_head, offsets);
+	     entry && entry != list_head;
+	     entry = smp_lookup_list_next(entry, offsets)) {
+		unsigned long topo = entry - offsets->node_chain;
+		if (*(int *)(topo + offsets->node_node_number) == node)
+			return topo;
+	}
+	return 0;
+}
+
+int ihk_smp_linux_cpu_to_hw_id_body_result(
+	unsigned long list_head, int cpu,
+	const struct ihk_smp_topology_lookup_offsets *offsets)
+{
+	unsigned long entry;
+
+	if (!list_head || !offsets)
+		return -1;
+	for (entry = smp_lookup_list_next(list_head, offsets);
+	     entry && entry != list_head;
+	     entry = smp_lookup_list_next(entry, offsets)) {
+		unsigned long topo = entry - offsets->cpu_chain;
+		if (*(int *)(topo + offsets->cpu_cpu_number) == cpu)
+			return *(int *)(topo + offsets->cpu_hw_id);
+	}
+	return -1;
+}
+
+static void smp_free_info_log_model(void (*log_fn)(int), int event)
+{
+	if (log_fn)
+		log_fn(event);
+}
+
+static void smp_free_info_drain_cache_model(
+	unsigned long cache_list_head,
+	const struct ihk_smp_free_info_offsets *offsets,
+	void (*list_del_fn)(unsigned long),
+	void (*free_fn)(unsigned long))
+{
+	unsigned long cache_node;
+
+	for (cache_node = *(unsigned long *)(cache_list_head +
+					     offsets->list_next);
+	     cache_node && cache_node != cache_list_head;) {
+		unsigned long next_cache =
+			*(unsigned long *)(cache_node + offsets->list_next);
+		unsigned long cache = cache_node - offsets->cache_chain;
+
+		list_del_fn(cache_node);
+		free_fn(*(unsigned long *)(cache + offsets->cache_type));
+		free_fn(*(unsigned long *)(cache + offsets->cache_size_str));
+		free_fn(cache);
+		cache_node = next_cache;
+	}
+}
+
+int ihk_smp_free_info_body_result(
+	unsigned long cpu_list_head, unsigned long node_list_head,
+	const struct ihk_smp_free_info_offsets *offsets,
+	void (*list_del_fn)(unsigned long), void (*free_fn)(unsigned long),
+	void (*log_fn)(int))
+{
+	unsigned long cpu_node;
+	unsigned long node_node;
+
+	if (!cpu_list_head || !node_list_head || !offsets ||
+	    !list_del_fn || !free_fn)
+		return -EINVAL;
+
+	smp_free_info_log_model(log_fn, 0);
+	for (cpu_node = *(unsigned long *)(cpu_list_head + offsets->list_next);
+	     cpu_node && cpu_node != cpu_list_head;) {
+		unsigned long next_cpu =
+			*(unsigned long *)(cpu_node + offsets->list_next);
+		unsigned long cpu = cpu_node - offsets->cpu_chain;
+
+		list_del_fn(cpu_node);
+		smp_free_info_drain_cache_model(
+			cpu + offsets->cpu_cache_topology_list, offsets,
+			list_del_fn, free_fn);
+		free_fn(cpu);
+		cpu_node = next_cpu;
+	}
+
+	for (node_node = *(unsigned long *)(node_list_head + offsets->list_next);
+	     node_node && node_node != node_list_head;) {
+		unsigned long next_node =
+			*(unsigned long *)(node_node + offsets->list_next);
+
+		list_del_fn(node_node);
+		free_fn(node_node - offsets->node_chain);
+		node_node = next_node;
+	}
+	smp_free_info_log_model(log_fn, 1);
+	return 0;
+}
+
+static void smp_read_long_log_model(
+	void (*log_fn)(int, unsigned long, char *, int), int event,
+	unsigned long valuep, char *fmt, int error)
+{
+	if (log_fn)
+		log_fn(event, valuep, fmt, error);
+}
+
+int ihk_smp_read_long_body_result(
+	unsigned long valuep, char *fmt, unsigned long va_list,
+	unsigned long page_size, unsigned long (*alloc_page_fn)(void),
+	int (*read_file_fn)(unsigned long, unsigned long, char *,
+			    unsigned long),
+	int (*parse_long_fn)(unsigned long, unsigned long),
+	void (*free_pages_fn)(unsigned long),
+	void (*log_fn)(int, unsigned long, char *, int))
+{
+	unsigned long buf;
+	int error;
+
+	if (!valuep || !fmt || !page_size || !alloc_page_fn ||
+	    !read_file_fn || !parse_long_fn || !free_pages_fn)
+		return -EINVAL;
+
+	smp_read_long_log_model(log_fn, 0, valuep, fmt, 0);
+	buf = alloc_page_fn();
+	if (!buf) {
+		error = -ENOMEM;
+		smp_read_long_log_model(log_fn, 1, valuep, fmt, error);
+		goto out;
+	}
+
+	error = read_file_fn(buf, page_size, fmt, va_list);
+	if (error) {
+		smp_read_long_log_model(log_fn, 2, valuep, fmt, error);
+		goto out;
+	}
+
+	if (parse_long_fn(buf, valuep) != 1) {
+		error = -EIO;
+		smp_read_long_log_model(log_fn, 3, valuep, fmt, error);
+		goto out;
+	}
+
+	error = 0;
+out:
+	free_pages_fn(buf);
+	smp_read_long_log_model(log_fn, 4, valuep, fmt, error);
+	return error;
+}
+
+static void smp_read_bitmap_log_model(
+	void (*log_fn)(int, unsigned long, int, char *, int), int event,
+	unsigned long map, int nbits, char *fmt, int error)
+{
+	if (log_fn)
+		log_fn(event, map, nbits, fmt, error);
+}
+
+int ihk_smp_read_bitmap_body_result(
+	unsigned long map, int nbits, char *fmt, unsigned long va_list,
+	unsigned long page_size, unsigned long (*alloc_page_fn)(void),
+	int (*read_file_fn)(unsigned long, unsigned long, char *,
+			    unsigned long),
+	int (*bitmap_parse_fn)(unsigned long, unsigned long, unsigned long,
+			       int),
+	void (*free_pages_fn)(unsigned long),
+	void (*log_fn)(int, unsigned long, int, char *, int))
+{
+	unsigned long buf;
+	int error;
+
+	if (!map || nbits < 0 || !fmt || !page_size || !alloc_page_fn ||
+	    !read_file_fn || !bitmap_parse_fn || !free_pages_fn)
+		return -EINVAL;
+
+	smp_read_bitmap_log_model(log_fn, 0, map, nbits, fmt, 0);
+	buf = alloc_page_fn();
+	if (!buf) {
+		error = -ENOMEM;
+		smp_read_bitmap_log_model(log_fn, 1, map, nbits, fmt, error);
+		goto out;
+	}
+
+	error = read_file_fn(buf, page_size, fmt, va_list);
+	if (error) {
+		smp_read_bitmap_log_model(log_fn, 2, map, nbits, fmt, error);
+		goto out;
+	}
+
+	error = bitmap_parse_fn(buf, page_size, map, nbits);
+	if (error) {
+		smp_read_bitmap_log_model(log_fn, 3, map, nbits, fmt, error);
+		goto out;
+	}
+
+	error = 0;
+out:
+	free_pages_fn(buf);
+	smp_read_bitmap_log_model(log_fn, 4, map, nbits, fmt, error);
+	return error;
+}
+
+static void smp_read_string_log_model(
+	void (*log_fn)(int, unsigned long, char *, int), int event,
+	unsigned long valuep, char *fmt, int error)
+{
+	if (log_fn)
+		log_fn(event, valuep, fmt, error);
+}
+
+static void smp_trim_trailing_newline_model(char *buf)
+{
+	size_t len;
+
+	if (!buf)
+		return;
+	len = strlen(buf);
+	if (len && buf[len - 1] == '\n')
+		buf[len - 1] = '\0';
+}
+
+int ihk_smp_read_string_body_result(
+	unsigned long valuep, char *fmt, unsigned long va_list,
+	unsigned long page_size, unsigned long (*alloc_page_fn)(void),
+	int (*read_file_fn)(unsigned long, unsigned long, char *,
+			    unsigned long),
+	unsigned long (*kstrdup_fn)(unsigned long),
+	void (*kfree_fn)(unsigned long),
+	void (*free_pages_fn)(unsigned long),
+	void (*log_fn)(int, unsigned long, char *, int))
+{
+	unsigned long buf;
+	unsigned long p = 0;
+	int error;
+
+	if (!valuep || !fmt || !page_size || !alloc_page_fn ||
+	    !read_file_fn || !kstrdup_fn || !kfree_fn || !free_pages_fn)
+		return -EINVAL;
+
+	smp_read_string_log_model(log_fn, 0, valuep, fmt, 0);
+	buf = alloc_page_fn();
+	if (!buf) {
+		error = -ENOMEM;
+		smp_read_string_log_model(log_fn, 1, valuep, fmt, error);
+		goto out;
+	}
+
+	error = read_file_fn(buf, page_size, fmt, va_list);
+	if (error) {
+		smp_read_string_log_model(log_fn, 2, valuep, fmt, error);
+		goto out;
+	}
+
+	p = kstrdup_fn(buf);
+	if (!p) {
+		error = -ENOMEM;
+		smp_read_string_log_model(log_fn, 3, valuep, fmt, error);
+		goto out;
+	}
+
+	smp_trim_trailing_newline_model((char *)p);
+	*(unsigned long *)valuep = p;
+	p = 0;
+	error = 0;
+out:
+	kfree_fn(p);
+	free_pages_fn(buf);
+	smp_read_string_log_model(log_fn, 4, valuep, fmt, error);
+	return error;
+}
+
+int ihk_smp_file_readable_body_result(
+	char *fmt, unsigned long va_list, unsigned long path_max,
+	void *(*alloc_fn)(unsigned long),
+	int (*vsnprintf_fn)(char *, unsigned long, char *, unsigned long),
+	unsigned long (*open_fn)(char *),
+	void (*close_fn)(unsigned long),
+	void (*free_fn)(unsigned long),
+	void (*log_fn)(int, int))
+{
+	char *filename;
+	unsigned long fp;
+	int ret;
+	int n;
+
+	if (!fmt || !path_max || !alloc_fn || !vsnprintf_fn ||
+	    !open_fn || !close_fn || !free_fn)
+		return 0;
+
+	filename = alloc_fn(path_max);
+	if (!filename) {
+		if (log_fn)
+			log_fn(1, -ENOMEM);
+		ret = 0;
+		goto out;
+	}
+
+	n = vsnprintf_fn(filename, path_max, fmt, va_list);
+	if (n >= (int)path_max) {
+		if (log_fn)
+			log_fn(2, -ENAMETOOLONG);
+		ret = 0;
+		goto out;
+	}
+
+	fp = open_fn(filename);
+	if (!fp) {
+		ret = 0;
+		goto out;
+	}
+
+	close_fn(fp);
+	ret = 1;
+
+out:
+	free_fn((unsigned long)filename);
+	return ret;
+}
+
+static void smp_read_file_log_model(
+	void (*log_fn)(int, unsigned long, unsigned long, char *, int),
+	int event, unsigned long buf, unsigned long size, char *fmt, int error)
+{
+	if (log_fn)
+		log_fn(event, buf, size, fmt, error);
+}
+
+int ihk_smp_read_file_body_result(
+	unsigned long buf, unsigned long size, char *fmt, unsigned long va_list,
+	unsigned long path_max, void *(*alloc_fn)(unsigned long),
+	int (*vsnprintf_fn)(char *, unsigned long, char *, unsigned long),
+	unsigned long (*open_fn)(char *, unsigned long),
+	long (*kernel_read_fn)(unsigned long, unsigned long, unsigned long),
+	int (*close_fn)(unsigned long),
+	void (*free_fn)(unsigned long),
+	void (*log_fn)(int, unsigned long, unsigned long, char *, int))
+{
+	char *filename;
+	unsigned long fp = 0;
+	int error;
+	int n;
+
+	if (!buf || !size || !fmt || !path_max || !alloc_fn ||
+	    !vsnprintf_fn || !open_fn || !kernel_read_fn || !close_fn ||
+	    !free_fn)
+		return -EINVAL;
+
+	smp_read_file_log_model(log_fn, 0, buf, size, fmt, 0);
+	filename = alloc_fn(path_max);
+	if (!filename) {
+		error = -ENOMEM;
+		smp_read_file_log_model(log_fn, 1, buf, size, fmt, error);
+		goto out;
+	}
+
+	n = vsnprintf_fn(filename, path_max, fmt, va_list);
+	if (n >= (int)path_max) {
+		error = -ENAMETOOLONG;
+		smp_read_file_log_model(log_fn, 2, buf, size, fmt, error);
+		goto out;
+	}
+
+	error = 0;
+	fp = open_fn(filename, (unsigned long)&error);
+	if (!fp) {
+		smp_read_file_log_model(log_fn, 3, buf, size, fmt, error);
+		goto out;
+	}
+
+	{
+		long ss = kernel_read_fn(fp, buf, size);
+
+		if (ss < 0) {
+			error = (int)ss;
+			smp_read_file_log_model(log_fn, 4, buf, size, fmt,
+						error);
+			goto out;
+		}
+		if ((unsigned long)ss >= size) {
+			error = -ENOSPC;
+			smp_read_file_log_model(log_fn, 5, buf, size, fmt,
+						error);
+			goto out;
+		}
+		*(char *)(buf + (unsigned long)ss) = '\0';
+	}
+
+	error = 0;
+out:
+	if (fp) {
+		int er = close_fn(fp);
+
+		if (er)
+			smp_read_file_log_model(log_fn, 6, buf, size, fmt, er);
+	}
+	free_fn((unsigned long)filename);
+	smp_read_file_log_model(log_fn, 7, buf, size, fmt, error);
+	return error;
+}
+
+static void smp_write_cpu_sys_file_log_model(
+	void (*log_fn)(int, const char *, int), int event, const char *path,
+	int error)
+{
+	if (log_fn)
+		log_fn(event, path, error);
+}
+
+int ihk_smp_write_cpu_sys_file_body_result(
+	int cpu_id, const char *val, char *path, size_t path_size,
+	unsigned long (*open_fn)(char *, unsigned long),
+	long (*write_fn)(unsigned long, const char *, unsigned long),
+	int (*close_fn)(unsigned long),
+	void (*log_fn)(int, const char *, int))
+{
+	unsigned long fp;
+	int open_error = 0;
+	long written;
+	int n;
+
+	if (!val || !path || !path_size || path_size > 2147483647UL ||
+	    !open_fn || !write_fn || !close_fn)
+		return -EINVAL;
+
+	n = ihk_smp_cpu_online_path_result(path, (long)path_size, cpu_id);
+	if (n < 0 || ihk_smp_snprintf_overflow_result(n, (int)path_size)) {
+		smp_write_cpu_sys_file_log_model(log_fn, 1, path, n);
+		return -1;
+	}
+
+	fp = open_fn(path, (unsigned long)&open_error);
+	if (!fp) {
+		smp_write_cpu_sys_file_log_model(log_fn, 2, path, open_error);
+		return -1;
+	}
+
+	written = write_fn(fp, val, 1);
+	if (written != 1) {
+		close_fn(fp);
+		smp_write_cpu_sys_file_log_model(log_fn, 3, path,
+						 (int)written);
+		return -1;
+	}
+
+	close_fn(fp);
+	return 0;
+}
+
 static size_t smp_max_size_mem_chunk_body(struct rb_root *root)
 {
 	size_t max = 0;
@@ -114540,6 +129723,454 @@ static const struct ihk_smp_collect_node_topology_offsets node_topo_offsets = {
 	.cpumap = offsetof(struct fake_node_topology, cpumap),
 };
 
+static const struct ihk_smp_topology_lookup_offsets topo_lookup_offsets = {
+	.list_next = offsetof(struct list_head, next),
+	.cpu_chain = offsetof(struct fake_cpu_topology, chain),
+	.cpu_cpu_number = offsetof(struct fake_cpu_topology, cpu_number),
+	.cpu_hw_id = offsetof(struct fake_cpu_topology, hw_id),
+	.node_chain = offsetof(struct fake_node_topology, chain),
+	.node_node_number = offsetof(struct fake_node_topology, node_number),
+};
+static const struct ihk_smp_free_info_offsets free_info_offsets = {
+	.list_next = offsetof(struct list_head, next),
+	.cpu_chain = offsetof(struct fake_cpu_topology, chain),
+	.cpu_cache_topology_list =
+		offsetof(struct fake_cpu_topology, cache_topology_list),
+	.cache_chain = offsetof(struct fake_cache_topology, chain),
+	.cache_type = offsetof(struct fake_cache_topology, type),
+	.cache_size_str = offsetof(struct fake_cache_topology, size_str),
+	.node_chain = offsetof(struct fake_node_topology, chain),
+};
+
+static const struct ihk_smp_interrupt_handler_offsets irq_handler_offsets = {
+	.list_next = offsetof(struct list_head, next),
+	.handler_list = offsetof(struct fake_interrupt_handler, list),
+	.handler_func = offsetof(struct fake_interrupt_handler, func),
+	.handler_priv = offsetof(struct fake_interrupt_handler, priv),
+	.handler_os = offsetof(struct fake_interrupt_handler, os),
+	.handler_os_priv = offsetof(struct fake_interrupt_handler, os_priv),
+};
+
+static const struct ihk_smp_perf_offsets perf_offsets = {
+	.nr_extra_regs = offsetof(struct fake_perf_param, nr_extra_regs),
+	.hw_event_map = offsetof(struct fake_perf_param, hw_event_map),
+	.hw_cache_event_ids =
+		offsetof(struct fake_perf_param, hw_cache_event_ids),
+	.hw_cache_extra_regs =
+		offsetof(struct fake_perf_param, hw_cache_extra_regs),
+	.ereg_event = offsetof(struct fake_perf_param, ereg_event),
+	.ereg_msr = offsetof(struct fake_perf_param, ereg_msr),
+	.ereg_valid_mask = offsetof(struct fake_perf_param, ereg_valid_mask),
+	.ereg_idx = offsetof(struct fake_perf_param, ereg_idx),
+	.extra_event = offsetof(struct fake_extra_reg, event),
+	.extra_msr = offsetof(struct fake_extra_reg, msr),
+	.extra_valid_mask = offsetof(struct fake_extra_reg, valid_mask),
+	.extra_idx = offsetof(struct fake_extra_reg, idx),
+	.extra_stride = sizeof(struct fake_extra_reg),
+};
+
+static const struct ihk_smp_control_offsets control_offsets = {
+	.os_lock = offsetof(struct fake_os_data, lock),
+	.os_dev = offsetof(struct fake_os_data, dev),
+	.os_mem_info = offsetof(struct fake_os_data, mem_info),
+	.os_cpu_info = offsetof(struct fake_os_data, cpu_info),
+	.os_kernel_args = offsetof(struct fake_os_data, kernel_args),
+	.os_nr_numa_nodes = offsetof(struct fake_os_data, nr_numa_nodes),
+	.os_nr_cpus = offsetof(struct fake_os_data, nr_cpus),
+	.os_bootstrap_numa_id = offsetof(struct fake_os_data,
+					 bootstrap_numa_id),
+	.os_boot_pt = offsetof(struct fake_os_data, boot_pt),
+	.os_status = offsetof(struct fake_os_data, status),
+	.mem_info_n_numa_nodes = offsetof(struct fake_mem_info,
+					  n_numa_nodes),
+	.regdata_priv = offsetof(struct fake_register_os_data, priv),
+	.dev_status = offsetof(struct fake_device_data, status),
+	.os_cpu_mapping = offsetof(struct fake_os_data, cpu_mapping),
+	.os_mem_start = offsetof(struct fake_os_data, mem_start),
+	.os_mem_end = offsetof(struct fake_os_data, mem_end),
+	.os_boot_rip = offsetof(struct fake_os_data, boot_rip),
+};
+
+static const struct ihk_smp_setup_trampoline_offsets setup_trampoline_offsets = {
+	.os_param = offsetof(struct fake_trampoline_os, param),
+	.os_boot_rip = offsetof(struct fake_trampoline_os, boot_rip),
+	.param_ihk_ikc_irq_apicids =
+		offsetof(struct fake_trampoline_param, ihk_ikc_irq_apicids),
+	.param_ihk_ikc_irq_apicid_stride =
+		sizeof(((struct fake_trampoline_param *)0)->ihk_ikc_irq_apicids[0]),
+	.param_ihk_ikc_cpu_raised_list =
+		offsetof(struct fake_trampoline_param, ihk_ikc_cpu_raised_list),
+	.param_ihk_ikc_cpu_raised_list_stride =
+		sizeof(((struct fake_trampoline_param *)0)->ihk_ikc_cpu_raised_list[0]),
+	.param_ikc_irq_work_func =
+		offsetof(struct fake_trampoline_param, ikc_irq_work_func),
+	.param_ihk_ikc_irq = offsetof(struct fake_trampoline_param, ihk_ikc_irq),
+	.param_page_offset_base =
+		offsetof(struct fake_trampoline_param, page_offset_base),
+	.param_linux_kernel_pgt_phys =
+		offsetof(struct fake_trampoline_param, linux_kernel_pgt_phys),
+	.header_page_table = offsetof(struct fake_trampoline_header, page_table),
+	.header_next_ip = offsetof(struct fake_trampoline_header, next_ip),
+	.header_notify_address =
+		offsetof(struct fake_trampoline_header, notify_address),
+};
+
+static const struct ihk_smp_setup_startup_offsets setup_startup_offsets = {
+	.os_boot_pt = offsetof(struct fake_startup_os, boot_pt),
+	.os_bootstrap_mem_end =
+		offsetof(struct fake_startup_os, bootstrap_mem_end),
+	.os_boot_rip = offsetof(struct fake_startup_os, boot_rip),
+};
+
+static const struct ihk_smp_cpu_req_offsets cpu_req_offsets = {
+	.cpus = offsetof(struct ihk_cpu_req, cpus),
+	.num_cpus = offsetof(struct ihk_cpu_req, num_cpus),
+};
+
+static const struct ihk_smp_ikc_req_offsets ikc_req_offsets = {
+	.src_cpus = offsetof(struct ihk_ikc_req, src_cpus),
+	.dst_cpus = offsetof(struct ihk_ikc_req, dst_cpus),
+	.num_cpus = offsetof(struct ihk_ikc_req, num_cpus),
+};
+
+static const struct ihk_smp_set_ikc_map_offsets set_ikc_offsets = {
+	.os_lock = offsetof(struct fake_os_data, lock),
+	.os_status = offsetof(struct fake_os_data, status),
+	.os_cpu_ikc_mapped = offsetof(struct fake_os_data, cpu_ikc_mapped),
+	.req_src_cpus = offsetof(struct ihk_ikc_req, src_cpus),
+	.req_dst_cpus = offsetof(struct ihk_ikc_req, dst_cpus),
+	.req_num_cpus = offsetof(struct ihk_ikc_req, num_cpus),
+	.cpu_status = offsetof(struct fake_smp_cpu, status),
+	.cpu_os = offsetof(struct fake_smp_cpu, os),
+	.cpu_ikc_map_cpu = offsetof(struct fake_smp_cpu, ikc_map_cpu),
+};
+
+static const struct ihk_smp_mem_req_offsets mem_req_offsets = {
+	.sizes = offsetof(struct ihk_mem_req, sizes),
+	.numa_ids = offsetof(struct ihk_mem_req, numa_ids),
+	.num_chunks = offsetof(struct ihk_mem_req, num_chunks),
+	.min_chunk_size = offsetof(struct ihk_mem_req, min_chunk_size),
+	.max_size_ratio_all = offsetof(struct ihk_mem_req, max_size_ratio_all),
+};
+
+static const struct ihk_smp_mem_query_offsets free_mem_query_offsets = {
+	.list_next = offsetof(struct list_head, next),
+	.entry_list = offsetof(struct fake_mem_chunk, chain),
+	.entry_size = offsetof(struct fake_mem_chunk, size),
+	.entry_numa_id = offsetof(struct fake_mem_chunk, numa_id),
+	.entry_os = 0,
+};
+
+static const struct ihk_smp_mem_query_offsets os_mem_query_offsets = {
+	.list_next = offsetof(struct list_head, next),
+	.entry_list = offsetof(struct fake_os_mem_chunk, list),
+	.entry_size = offsetof(struct fake_os_mem_chunk, size),
+	.entry_numa_id = offsetof(struct fake_os_mem_chunk, numa_id),
+	.entry_os = offsetof(struct fake_os_mem_chunk, os),
+};
+
+static const struct ihk_smp_map_virtual_list_offsets map_virtual_offsets = {
+	.list_next = offsetof(struct list_head, next),
+	.entry_list = offsetof(struct fake_os_mem_chunk, list),
+	.entry_addr = offsetof(struct fake_os_mem_chunk, addr),
+	.entry_size = offsetof(struct fake_os_mem_chunk, size),
+};
+
+static int control_lock_calls;
+static int control_unlock_calls;
+static int control_spin_init_calls;
+static unsigned long control_last_lock;
+static unsigned long control_last_unlock;
+static int control_log_event;
+static const char *control_log_args;
+static int control_issue_calls;
+static unsigned long control_issue_os;
+static unsigned long control_issue_priv;
+static int control_issue_cpu;
+static int control_issue_vector;
+static int control_send_calls;
+static int control_send_mode;
+static int control_set_mode_calls;
+static int control_set_mode_fail;
+static unsigned long control_set_mode_os;
+static unsigned long control_set_mode_priv;
+static int control_set_mode_mode;
+static unsigned long control_unmap_virt;
+static int control_unmap_calls;
+static int control_flush_calls;
+static unsigned long control_flush_virt;
+static unsigned long control_flush_size;
+static unsigned long control_map_result_base;
+static int control_map_calls;
+static int control_map_fail_at;
+static unsigned long control_map_phys[4];
+static unsigned long control_map_size[4];
+static int control_host_map_calls;
+static unsigned long control_host_map_dev;
+static unsigned long control_host_map_phys;
+static unsigned long control_host_map_virt;
+static unsigned long control_host_map_size;
+static int control_host_map_flags;
+static int control_map_log_event;
+static unsigned long control_map_log_phys;
+static unsigned long control_map_log_size;
+static int control_phys_to_virt_calls;
+static unsigned long control_phys_to_virt_phys;
+static int control_vtop_calls;
+static unsigned long control_vtop_arg;
+static int control_vtop_log_event;
+static unsigned long control_vtop_log_virt;
+static unsigned long control_vtop_log_phys;
+static int control_load_copy_calls;
+static unsigned long control_load_copy_dst[4];
+static unsigned long control_load_copy_size[4];
+static char control_load_pages[2][4096];
+static int control_load_log_event;
+static unsigned long control_load_log_a;
+static unsigned long control_load_log_b;
+static unsigned long control_load_log_c;
+static unsigned long control_load_log_d;
+static int control_irq_save_calls;
+static int control_irq_restore_calls;
+static unsigned long control_irq_restore_flags;
+static int control_x2apic_enabled;
+static int control_x2apic_enabled_calls;
+static int control_x2apic_wait_calls;
+static int control_x2apic_write_calls;
+static int control_x2apic_vector;
+static int control_x2apic_hw_id;
+static int control_legacy_ipi_calls;
+static int control_legacy_hw_id;
+static int control_legacy_vector;
+static int control_legacy_dest;
+static int control_perf_log_calls;
+static int control_perf_log_event;
+static int control_perf_log_value;
+static int control_irq_work_calls;
+static int control_irq_work_irq;
+static void *control_irq_work_data;
+static int control_irq_work_ret;
+static int irq_handler_calls;
+static unsigned long irq_handler_os[4];
+static unsigned long irq_handler_os_priv[4];
+static unsigned long irq_handler_priv[4];
+static int irq_no_handler_log_calls;
+static int control_free_calls;
+static int control_create_log_event;
+static int control_alloc_fail;
+static void *control_last_alloc;
+static int smp_copy_to_calls;
+static int smp_copy_to_fail;
+static int smp_copy_from_calls;
+static int smp_copy_from_fail;
+static int smp_alloc_calls;
+static int smp_alloc_fail;
+static int smp_free_calls;
+static int smp_query_log_event;
+static int smp_query_log_requested;
+static int smp_query_log_actual;
+static int smp_set_ikc_log_event;
+static int smp_set_ikc_log_value0;
+static int smp_set_ikc_log_value1;
+static int smp_set_ikc_route_count;
+static int smp_set_ikc_route_cpu[8];
+static int smp_set_ikc_route_dst[8];
+static int smp_cpu_present_mask[8];
+static int smp_cpu_online_mask[8];
+static int smp_check_ikc_calls;
+static int smp_check_ikc_result;
+static int smp_init_zero_calls;
+static unsigned long smp_init_zero_ptr[4];
+static unsigned long smp_init_zero_size[4];
+static int smp_init_online_count;
+static int smp_init_online_cpus[8];
+static int smp_init_for_each_calls;
+static int smp_init_arch_calls;
+static int smp_init_arch_ret;
+static int smp_init_log_present;
+static int smp_exit_arch_calls;
+static int smp_exit_reset_calls;
+static int smp_exit_reset_hw_id[8];
+static int smp_exit_reset_ret[8];
+static int smp_exit_online_calls;
+static int smp_exit_online_cpu[8];
+static int smp_exit_online_ret[8];
+static int smp_exit_free_list_calls;
+static unsigned long smp_exit_free_list_arg;
+static int smp_exit_free_info_calls;
+static int smp_exit_log_calls;
+static int smp_exit_log_cpu_id[8];
+static int smp_exit_log_hw_id[8];
+static int smp_module_symbols_calls;
+static int smp_module_symbols_ret;
+static int smp_module_arch_symbols_calls;
+static int smp_module_arch_symbols_ret;
+static int smp_module_lock_init_calls;
+static unsigned long smp_module_lock_arg;
+static int smp_module_register_calls;
+static unsigned long smp_module_register_arg;
+static unsigned long smp_module_register_ret;
+static int smp_module_unregister_calls;
+static unsigned long smp_module_unregister_arg;
+static int smp_module_log_count;
+static int smp_module_log_event[8];
+static int reset_event_seq;
+static int reset_preempt_disable_calls;
+static int reset_preempt_enable_calls;
+static int reset_preempt_disable_event;
+static int reset_preempt_enable_event;
+static int reset_get_maxlvt_calls;
+static int reset_get_maxlvt_event;
+static int reset_maxlvt;
+static int reset_integrated;
+static int reset_integrated_calls;
+static int reset_integrated_event;
+static int reset_integrated_phys;
+static int reset_apic_write_count;
+static int reset_apic_write_event[8];
+static int reset_apic_write_regs[8];
+static unsigned int reset_apic_write_values[8];
+static int reset_apic_read_count;
+static int reset_apic_read_event[8];
+static int reset_apic_read_regs[8];
+static unsigned int reset_apic_read_value;
+static int reset_icr_write_count;
+static int reset_icr_write_event[8];
+static unsigned int reset_icr_write_values[8];
+static int reset_icr_write_phys[8];
+static int reset_wait_count;
+static int reset_wait_event[8];
+static unsigned long reset_wait_value;
+static unsigned long reset_wait_values[8];
+static int reset_wait_use_sequence;
+static int reset_delay_count;
+static int reset_delay_event;
+static unsigned long reset_delay_msecs;
+static int reset_udelay_count;
+static int reset_udelay_event[8];
+static unsigned long reset_udelay_usecs[8];
+static int reset_barrier_calls;
+static int reset_barrier_event;
+static int reset_init_deasserted_calls;
+static int reset_init_deasserted_event;
+static int wakeup_non_unique;
+static int wakeup_non_unique_calls;
+static int wakeup_non_unique_event;
+static int wakeup_setup_calls;
+static int wakeup_setup_event;
+static unsigned long wakeup_setup_start_eip;
+static int wakeup_apic_available;
+static int wakeup_apic_available_calls;
+static int wakeup_apic_available_event;
+static int wakeup_apic_calls;
+static int wakeup_apic_event;
+static int wakeup_apic_apicid;
+static unsigned long wakeup_apic_start_eip;
+static int wakeup_apic_ret;
+static int wakeup_via_calls;
+static int wakeup_via_event;
+static int wakeup_via_apicid;
+static unsigned long wakeup_via_start_eip;
+static int wakeup_via_ret;
+static int wakeup_top_log_count;
+static int wakeup_top_log_event[8];
+static int warm_lock_calls;
+static int warm_lock_event;
+static unsigned long warm_lock_flags;
+static int warm_cmos_calls;
+static int warm_cmos_event;
+static unsigned char warm_cmos_value;
+static unsigned char warm_cmos_reg;
+static int warm_unlock_calls;
+static int warm_unlock_event;
+static unsigned long warm_unlock_flags;
+static int warm_flush_calls;
+static int warm_flush_event;
+static int warm_write_count;
+static int warm_write_event[4];
+static unsigned long warm_write_phys[4];
+static unsigned short warm_write_value[4];
+static int setup_apicid_calls;
+static int setup_raised_calls;
+static int setup_log_calls;
+static int setup_log_event;
+static unsigned long setup_log_value0;
+static unsigned long setup_log_value1;
+static int startup_alloc_calls;
+static unsigned long startup_alloc_result;
+static int startup_phys_calls;
+static unsigned long startup_last_phys_virt;
+static int startup_map_calls;
+static int startup_map_fail_at;
+static unsigned long startup_map_pt[16];
+static unsigned long startup_map_virt[16];
+static unsigned long startup_map_phys[16];
+static int startup_map_virtual_calls;
+static unsigned long startup_map_virtual_phys;
+static unsigned long startup_map_virtual_size;
+static unsigned long startup_map_virtual_result;
+static int startup_unmap_calls;
+static unsigned long startup_unmap_virt;
+static int startup_log_event;
+static int arch_init_ioremap_calls;
+static unsigned long arch_init_ioremap_phys;
+static unsigned long arch_init_ioremap_size;
+static int arch_init_alloc_calls;
+static unsigned long arch_init_alloc_sequence[8];
+static int arch_init_page_phys_calls;
+static unsigned long arch_init_page_phys_arg[16];
+static int arch_init_page_virt_calls;
+static unsigned long arch_init_page_virt_arg[16];
+static int arch_init_free_calls;
+static unsigned long arch_init_free_page[8];
+static unsigned int arch_init_free_order[8];
+static int arch_init_linux_phys_calls;
+static unsigned long arch_init_linux_phys;
+static int arch_init_direct_virt_calls;
+static unsigned long arch_init_direct_virt_phys;
+static int arch_init_log_count;
+static int arch_init_log_event[8];
+static unsigned long arch_init_log_value[8];
+static int arch_init_tail_ident_calls;
+static int arch_init_tail_ident_result;
+static int arch_init_tail_topology_calls;
+static int arch_init_tail_topology_result;
+static int arch_init_tail_log_count;
+static int arch_init_tail_log_event[8];
+static int arch_init_tail_log_value[8];
+static unsigned long ident_alloc_result;
+static int ident_alloc_calls;
+static unsigned int ident_alloc_order;
+static int ident_page_phys_calls;
+static unsigned long ident_page_phys_arg;
+static unsigned long ident_page_phys_result;
+static int ident_page_virt_calls;
+static unsigned long ident_page_virt_arg;
+static unsigned long ident_page_virt_result;
+static int ident_zero_calls;
+static unsigned long ident_zero_addr;
+static unsigned long ident_zero_len;
+static int ident_log_count;
+static int ident_log_event[8];
+static unsigned long ident_log_value0[8];
+static unsigned long ident_log_value1[8];
+static int reset_log_count;
+static int reset_log_event[16];
+static unsigned long reset_log_value[16];
+static int reset_log_phys[16];
+static int exit_event_seq;
+static int exit_free_trampoline_calls;
+static int exit_free_trampoline_event;
+static unsigned long exit_free_trampoline_page;
+static unsigned int exit_free_trampoline_order;
+static int exit_unmap_calls;
+static int exit_unmap_event;
+static unsigned long exit_unmap_virt;
+static int exit_free_pages_calls;
+static int exit_free_pages_event;
+static unsigned long exit_free_pages_addr;
+static unsigned int exit_free_pages_order;
+
 static int topo_alloc_fail_after = -1;
 static int topo_alloc_calls;
 static int topo_free_calls;
@@ -114552,6 +130183,143 @@ static int topo_collect_cache_calls;
 static int topo_collect_cache_fail_index = -1;
 static int topo_collect_cache_last_index = -1;
 static int topo_node_fail_error;
+static int topo_log_count;
+static int topo_log_events[8];
+static int topo_log_errors[8];
+static int topo_online_cpus[8];
+static int topo_online_cpu_count;
+static int topo_online_nodes[8];
+static int topo_online_node_count;
+static int topo_next_cpu_calls;
+static int topo_next_node_calls;
+static int topo_collect_cpu_calls;
+static int topo_collect_node_calls;
+static int topo_collected_cpus[8];
+static int topo_collected_nodes[8];
+static int topo_collect_cpu_fail_at;
+static int topo_collect_node_fail_at;
+static int free_info_list_del_calls;
+static int free_info_log_calls;
+static int free_info_log_events[4];
+static char read_long_page[4096];
+static int read_long_alloc_fail;
+static int read_long_alloc_calls;
+static int read_long_read_calls;
+static int read_long_read_result;
+static unsigned long read_long_read_buf;
+static unsigned long read_long_read_size;
+static char *read_long_read_fmt;
+static unsigned long read_long_read_va;
+static int read_long_parse_calls;
+static int read_long_parse_result;
+static long read_long_parse_value;
+static int read_long_free_calls;
+static unsigned long read_long_free_addr;
+static int read_long_log_calls;
+static int read_long_log_event[8];
+static int read_long_log_error[8];
+static unsigned long read_bitmap_map_words[4];
+static int read_bitmap_alloc_fail;
+static int read_bitmap_alloc_calls;
+static int read_bitmap_read_calls;
+static int read_bitmap_read_result;
+static unsigned long read_bitmap_read_buf;
+static unsigned long read_bitmap_read_size;
+static char *read_bitmap_read_fmt;
+static unsigned long read_bitmap_read_va;
+static int read_bitmap_parse_calls;
+static int read_bitmap_parse_result;
+static unsigned long read_bitmap_parse_buf;
+static unsigned long read_bitmap_parse_size;
+static unsigned long read_bitmap_parse_map;
+static int read_bitmap_parse_nbits;
+static int read_bitmap_free_calls;
+static unsigned long read_bitmap_free_addr;
+static int read_bitmap_log_calls;
+static int read_bitmap_log_event[8];
+static int read_bitmap_log_error[8];
+static char *read_string_value;
+static int read_string_alloc_fail;
+static int read_string_alloc_calls;
+static int read_string_read_calls;
+static int read_string_read_result;
+static unsigned long read_string_read_buf;
+static unsigned long read_string_read_size;
+static char *read_string_read_fmt;
+static unsigned long read_string_read_va;
+static int read_string_dup_calls;
+static int read_string_dup_fail;
+static unsigned long read_string_dup_buf;
+static int read_string_kfree_calls;
+static unsigned long read_string_kfree_addr;
+static int read_string_free_calls;
+static unsigned long read_string_free_addr;
+static int read_string_log_calls;
+static int read_string_log_event[8];
+static int read_string_log_error[8];
+static char file_readable_filename[128];
+static int file_readable_alloc_fail;
+static int file_readable_alloc_calls;
+static unsigned long file_readable_alloc_size;
+static int file_readable_vsnprintf_calls;
+static int file_readable_vsnprintf_result;
+static char *file_readable_vsnprintf_fmt;
+static unsigned long file_readable_vsnprintf_size;
+static unsigned long file_readable_vsnprintf_va;
+static int file_readable_open_calls;
+static int file_readable_open_fail;
+static char *file_readable_open_filename;
+static int file_readable_close_calls;
+static unsigned long file_readable_close_file;
+static int file_readable_free_calls;
+static unsigned long file_readable_free_addr;
+static int file_readable_log_calls;
+static int file_readable_log_event[4];
+static int file_readable_log_error[4];
+static char read_file_buf[32];
+static char read_file_filename[128];
+static int read_file_alloc_fail;
+static int read_file_alloc_calls;
+static unsigned long read_file_alloc_size;
+static int read_file_vsnprintf_calls;
+static int read_file_vsnprintf_result;
+static char *read_file_vsnprintf_fmt;
+static unsigned long read_file_vsnprintf_size;
+static unsigned long read_file_vsnprintf_va;
+static int read_file_open_calls;
+static int read_file_open_fail;
+static int read_file_open_error;
+static char *read_file_open_filename;
+static unsigned long read_file_open_errorp;
+static int read_file_kernel_read_calls;
+static long read_file_kernel_read_result;
+static unsigned long read_file_kernel_file;
+static unsigned long read_file_kernel_buf;
+static unsigned long read_file_kernel_size;
+static int read_file_close_calls;
+static int read_file_close_result;
+static unsigned long read_file_close_file;
+static int read_file_free_calls;
+static unsigned long read_file_free_addr;
+static int read_file_log_calls;
+static int read_file_log_event[8];
+static int read_file_log_error[8];
+static int write_cpu_open_calls;
+static int write_cpu_open_fail;
+static int write_cpu_open_error;
+static char *write_cpu_open_path;
+static unsigned long write_cpu_open_errorp;
+static int write_cpu_write_calls;
+static long write_cpu_write_result;
+static unsigned long write_cpu_write_file;
+static const char *write_cpu_write_buf;
+static unsigned long write_cpu_write_size;
+static int write_cpu_close_calls;
+static unsigned long write_cpu_close_file;
+static int write_cpu_log_calls;
+static int write_cpu_log_event[4];
+static int write_cpu_log_error[4];
+static const char *write_cpu_log_path[4];
 
 static void init_list_head(struct list_head *head)
 {
@@ -114562,6 +130330,27 @@ static void init_list_head(struct list_head *head)
 static int list_empty(const struct list_head *head)
 {
 	return head->next == head;
+}
+
+static void topo_list_add_tail(struct list_head *new, struct list_head *head)
+{
+	struct list_head *prev = head->prev;
+
+	new->next = head;
+	new->prev = prev;
+	prev->next = new;
+	head->prev = new;
+}
+
+static void topo_list_del(struct list_head *entry)
+{
+	struct list_head *prev = entry->prev;
+	struct list_head *next = entry->next;
+
+	next->prev = prev;
+	prev->next = next;
+	entry->next = (void *)0x00100129;
+	entry->prev = (void *)0x00200229;
 }
 
 static void *topo_alloc_common(size_t size, int zero)
@@ -114734,6 +130523,1254 @@ static void fake_topo_log(int event, int error)
 {
 	topo_log_event = event;
 	topo_log_error = error;
+	if (topo_log_count < (int)(sizeof(topo_log_events) /
+				   sizeof(topo_log_events[0]))) {
+		topo_log_events[topo_log_count] = event;
+		topo_log_errors[topo_log_count] = error;
+	}
+	topo_log_count++;
+}
+
+static void reset_cpu_trace(void)
+{
+	reset_event_seq = 0;
+	reset_preempt_disable_calls = 0;
+	reset_preempt_enable_calls = 0;
+	reset_preempt_disable_event = 0;
+	reset_preempt_enable_event = 0;
+	reset_get_maxlvt_calls = 0;
+	reset_get_maxlvt_event = 0;
+	reset_maxlvt = 0;
+	reset_integrated = 0;
+	reset_integrated_calls = 0;
+	reset_integrated_event = 0;
+	reset_integrated_phys = 0;
+	reset_apic_write_count = 0;
+	memset(reset_apic_write_event, 0, sizeof(reset_apic_write_event));
+	memset(reset_apic_write_regs, 0, sizeof(reset_apic_write_regs));
+	memset(reset_apic_write_values, 0, sizeof(reset_apic_write_values));
+	reset_apic_read_count = 0;
+	memset(reset_apic_read_event, 0, sizeof(reset_apic_read_event));
+	memset(reset_apic_read_regs, 0, sizeof(reset_apic_read_regs));
+	reset_apic_read_value = 0x5aU;
+	reset_icr_write_count = 0;
+	memset(reset_icr_write_event, 0, sizeof(reset_icr_write_event));
+	memset(reset_icr_write_values, 0, sizeof(reset_icr_write_values));
+	memset(reset_icr_write_phys, 0, sizeof(reset_icr_write_phys));
+	reset_wait_count = 0;
+	memset(reset_wait_event, 0, sizeof(reset_wait_event));
+	reset_wait_value = 0x6000UL;
+	memset(reset_wait_values, 0, sizeof(reset_wait_values));
+	reset_wait_use_sequence = 0;
+	reset_delay_count = 0;
+	reset_delay_event = 0;
+	reset_delay_msecs = 0;
+	reset_udelay_count = 0;
+	memset(reset_udelay_event, 0, sizeof(reset_udelay_event));
+	memset(reset_udelay_usecs, 0, sizeof(reset_udelay_usecs));
+	reset_barrier_calls = 0;
+	reset_barrier_event = 0;
+	reset_init_deasserted_calls = 0;
+	reset_init_deasserted_event = 0;
+	wakeup_non_unique = 0;
+	wakeup_non_unique_calls = 0;
+	wakeup_non_unique_event = 0;
+	wakeup_setup_calls = 0;
+	wakeup_setup_event = 0;
+	wakeup_setup_start_eip = 0;
+	wakeup_apic_available = 0;
+	wakeup_apic_available_calls = 0;
+	wakeup_apic_available_event = 0;
+	wakeup_apic_calls = 0;
+	wakeup_apic_event = 0;
+	wakeup_apic_apicid = 0;
+	wakeup_apic_start_eip = 0;
+	wakeup_apic_ret = 0;
+	wakeup_via_calls = 0;
+	wakeup_via_event = 0;
+	wakeup_via_apicid = 0;
+	wakeup_via_start_eip = 0;
+	wakeup_via_ret = 0;
+	wakeup_top_log_count = 0;
+	memset(wakeup_top_log_event, 0, sizeof(wakeup_top_log_event));
+	warm_lock_calls = 0;
+	warm_lock_event = 0;
+	warm_lock_flags = 0x123abcUL;
+	warm_cmos_calls = 0;
+	warm_cmos_event = 0;
+	warm_cmos_value = 0;
+	warm_cmos_reg = 0;
+	warm_unlock_calls = 0;
+	warm_unlock_event = 0;
+	warm_unlock_flags = 0;
+	warm_flush_calls = 0;
+	warm_flush_event = 0;
+	warm_write_count = 0;
+	memset(warm_write_event, 0, sizeof(warm_write_event));
+	memset(warm_write_phys, 0, sizeof(warm_write_phys));
+	memset(warm_write_value, 0, sizeof(warm_write_value));
+	setup_apicid_calls = 0;
+	setup_raised_calls = 0;
+	setup_log_calls = 0;
+	setup_log_event = 0;
+	setup_log_value0 = 0;
+	setup_log_value1 = 0;
+	startup_alloc_calls = 0;
+	startup_alloc_result = 0xabcdef000UL;
+	startup_phys_calls = 0;
+	startup_last_phys_virt = 0;
+	startup_map_calls = 0;
+	startup_map_fail_at = 0;
+	memset(startup_map_pt, 0, sizeof(startup_map_pt));
+	memset(startup_map_virt, 0, sizeof(startup_map_virt));
+	memset(startup_map_phys, 0, sizeof(startup_map_phys));
+	startup_map_virtual_calls = 0;
+	startup_map_virtual_phys = 0;
+	startup_map_virtual_size = 0;
+	startup_map_virtual_result = 0;
+	startup_unmap_calls = 0;
+	startup_unmap_virt = 0;
+	startup_log_event = 0;
+	arch_init_ioremap_calls = 0;
+	arch_init_ioremap_phys = 0;
+	arch_init_ioremap_size = 0;
+	arch_init_alloc_calls = 0;
+	memset(arch_init_alloc_sequence, 0, sizeof(arch_init_alloc_sequence));
+	arch_init_page_phys_calls = 0;
+	memset(arch_init_page_phys_arg, 0, sizeof(arch_init_page_phys_arg));
+	arch_init_page_virt_calls = 0;
+	memset(arch_init_page_virt_arg, 0, sizeof(arch_init_page_virt_arg));
+	arch_init_free_calls = 0;
+	memset(arch_init_free_page, 0, sizeof(arch_init_free_page));
+	memset(arch_init_free_order, 0, sizeof(arch_init_free_order));
+	arch_init_linux_phys_calls = 0;
+	arch_init_linux_phys = 0x9f000UL;
+	arch_init_direct_virt_calls = 0;
+	arch_init_direct_virt_phys = 0;
+	arch_init_log_count = 0;
+	memset(arch_init_log_event, 0, sizeof(arch_init_log_event));
+	memset(arch_init_log_value, 0, sizeof(arch_init_log_value));
+	arch_init_tail_ident_calls = 0;
+	arch_init_tail_ident_result = 0;
+	arch_init_tail_topology_calls = 0;
+	arch_init_tail_topology_result = 0;
+	arch_init_tail_log_count = 0;
+	memset(arch_init_tail_log_event, 0, sizeof(arch_init_tail_log_event));
+	memset(arch_init_tail_log_value, 0, sizeof(arch_init_tail_log_value));
+	ident_alloc_result = 0xabc0UL;
+	ident_alloc_calls = 0;
+	ident_alloc_order = 0;
+	ident_page_phys_calls = 0;
+	ident_page_phys_arg = 0;
+	ident_page_phys_result = 0x400000UL;
+	ident_page_virt_calls = 0;
+	ident_page_virt_arg = 0;
+	ident_page_virt_result = 0;
+	ident_zero_calls = 0;
+	ident_zero_addr = 0;
+	ident_zero_len = 0;
+	ident_log_count = 0;
+	memset(ident_log_event, 0, sizeof(ident_log_event));
+	memset(ident_log_value0, 0, sizeof(ident_log_value0));
+	memset(ident_log_value1, 0, sizeof(ident_log_value1));
+	reset_log_count = 0;
+	memset(reset_log_event, 0, sizeof(reset_log_event));
+	memset(reset_log_value, 0, sizeof(reset_log_value));
+	memset(reset_log_phys, 0, sizeof(reset_log_phys));
+}
+
+static void reset_arch_exit_trace(void)
+{
+	exit_event_seq = 0;
+	exit_free_trampoline_calls = 0;
+	exit_free_trampoline_event = 0;
+	exit_free_trampoline_page = 0;
+	exit_free_trampoline_order = 0;
+	exit_unmap_calls = 0;
+	exit_unmap_event = 0;
+	exit_unmap_virt = 0;
+	exit_free_pages_calls = 0;
+	exit_free_pages_event = 0;
+	exit_free_pages_addr = 0;
+	exit_free_pages_order = 0;
+}
+
+static void reset_control_trace(void)
+{
+	control_lock_calls = 0;
+	control_unlock_calls = 0;
+	control_spin_init_calls = 0;
+	control_last_lock = 0;
+	control_last_unlock = 0;
+	control_log_event = 0;
+	control_log_args = NULL;
+	control_issue_calls = 0;
+	control_issue_os = 0;
+	control_issue_priv = 0;
+	control_issue_cpu = 0;
+	control_issue_vector = 0;
+	control_send_calls = 0;
+	control_send_mode = 0;
+	control_set_mode_calls = 0;
+	control_set_mode_fail = 0;
+	control_set_mode_os = 0;
+	control_set_mode_priv = 0;
+	control_set_mode_mode = 0;
+	control_unmap_virt = 0;
+	control_unmap_calls = 0;
+	control_flush_calls = 0;
+	control_flush_virt = 0;
+	control_flush_size = 0;
+	control_map_result_base = 0;
+	control_map_calls = 0;
+	control_map_fail_at = 0;
+	memset(control_map_phys, 0, sizeof(control_map_phys));
+	memset(control_map_size, 0, sizeof(control_map_size));
+	control_host_map_calls = 0;
+	control_host_map_dev = 0;
+	control_host_map_phys = 0;
+	control_host_map_virt = 0;
+	control_host_map_size = 0;
+	control_host_map_flags = 0;
+	control_map_log_event = 0;
+	control_map_log_phys = 0;
+	control_map_log_size = 0;
+	control_phys_to_virt_calls = 0;
+	control_phys_to_virt_phys = 0;
+	control_vtop_calls = 0;
+	control_vtop_arg = 0;
+	control_vtop_log_event = 0;
+	control_vtop_log_virt = 0;
+	control_vtop_log_phys = 0;
+	control_load_copy_calls = 0;
+	memset(control_load_copy_dst, 0, sizeof(control_load_copy_dst));
+	memset(control_load_copy_size, 0, sizeof(control_load_copy_size));
+	memset(control_load_pages, 0, sizeof(control_load_pages));
+	control_load_log_event = 0;
+	control_load_log_a = 0;
+	control_load_log_b = 0;
+	control_load_log_c = 0;
+	control_load_log_d = 0;
+	control_irq_save_calls = 0;
+	control_irq_restore_calls = 0;
+	control_irq_restore_flags = 0;
+	control_x2apic_enabled = 0;
+	control_x2apic_enabled_calls = 0;
+	control_x2apic_wait_calls = 0;
+	control_x2apic_write_calls = 0;
+	control_x2apic_vector = 0;
+	control_x2apic_hw_id = 0;
+	control_legacy_ipi_calls = 0;
+	control_legacy_hw_id = 0;
+	control_legacy_vector = 0;
+	control_legacy_dest = 0;
+	control_perf_log_calls = 0;
+	control_perf_log_event = 0;
+	control_perf_log_value = 0;
+	control_irq_work_calls = 0;
+	control_irq_work_irq = 0;
+	control_irq_work_data = NULL;
+	control_irq_work_ret = 0;
+	control_free_calls = 0;
+	control_create_log_event = 0;
+	control_alloc_fail = 0;
+	control_last_alloc = NULL;
+	smp_copy_to_calls = 0;
+	smp_copy_to_fail = 0;
+	smp_copy_from_calls = 0;
+	smp_copy_from_fail = 0;
+	smp_alloc_calls = 0;
+	smp_alloc_fail = 0;
+	smp_free_calls = 0;
+	smp_query_log_event = 0;
+	smp_query_log_requested = 0;
+	smp_query_log_actual = 0;
+	smp_set_ikc_log_event = 0;
+	smp_set_ikc_log_value0 = 0;
+	smp_set_ikc_log_value1 = 0;
+	smp_set_ikc_route_count = 0;
+	memset(smp_set_ikc_route_cpu, 0, sizeof(smp_set_ikc_route_cpu));
+	memset(smp_set_ikc_route_dst, 0, sizeof(smp_set_ikc_route_dst));
+	memset(smp_cpu_present_mask, 0, sizeof(smp_cpu_present_mask));
+	memset(smp_cpu_online_mask, 0, sizeof(smp_cpu_online_mask));
+	smp_check_ikc_calls = 0;
+	smp_check_ikc_result = 0;
+	smp_init_zero_calls = 0;
+	memset(smp_init_zero_ptr, 0, sizeof(smp_init_zero_ptr));
+	memset(smp_init_zero_size, 0, sizeof(smp_init_zero_size));
+	smp_init_online_count = 0;
+	memset(smp_init_online_cpus, 0, sizeof(smp_init_online_cpus));
+	smp_init_for_each_calls = 0;
+	smp_init_arch_calls = 0;
+	smp_init_arch_ret = 0;
+	smp_init_log_present = 0;
+	smp_exit_arch_calls = 0;
+	smp_exit_reset_calls = 0;
+	memset(smp_exit_reset_hw_id, 0, sizeof(smp_exit_reset_hw_id));
+	memset(smp_exit_reset_ret, 0, sizeof(smp_exit_reset_ret));
+	smp_exit_online_calls = 0;
+	memset(smp_exit_online_cpu, 0, sizeof(smp_exit_online_cpu));
+	memset(smp_exit_online_ret, 0, sizeof(smp_exit_online_ret));
+	smp_exit_free_list_calls = 0;
+	smp_exit_free_list_arg = 0;
+	smp_exit_free_info_calls = 0;
+	smp_exit_log_calls = 0;
+	memset(smp_exit_log_cpu_id, 0, sizeof(smp_exit_log_cpu_id));
+	memset(smp_exit_log_hw_id, 0, sizeof(smp_exit_log_hw_id));
+	smp_module_symbols_calls = 0;
+	smp_module_symbols_ret = 0;
+	smp_module_arch_symbols_calls = 0;
+	smp_module_arch_symbols_ret = 0;
+	smp_module_lock_init_calls = 0;
+	smp_module_lock_arg = 0;
+	smp_module_register_calls = 0;
+	smp_module_register_arg = 0;
+	smp_module_register_ret = 0;
+	smp_module_unregister_calls = 0;
+	smp_module_unregister_arg = 0;
+	smp_module_log_count = 0;
+	memset(smp_module_log_event, 0, sizeof(smp_module_log_event));
+}
+
+static void fake_reset_preempt_disable(void)
+{
+	reset_preempt_disable_calls++;
+	reset_preempt_disable_event = ++reset_event_seq;
+}
+
+static void fake_reset_preempt_enable(void)
+{
+	reset_preempt_enable_calls++;
+	reset_preempt_enable_event = ++reset_event_seq;
+}
+
+static int fake_reset_get_maxlvt(void)
+{
+	reset_get_maxlvt_calls++;
+	reset_get_maxlvt_event = ++reset_event_seq;
+	return reset_maxlvt;
+}
+
+static int fake_reset_apic_integrated(int phys_apicid)
+{
+	reset_integrated_calls++;
+	reset_integrated_event = ++reset_event_seq;
+	reset_integrated_phys = phys_apicid;
+	return reset_integrated;
+}
+
+static void fake_reset_apic_write(int reg, unsigned int value)
+{
+	int idx = reset_apic_write_count;
+
+	if (idx < 8) {
+		reset_apic_write_event[idx] = ++reset_event_seq;
+		reset_apic_write_regs[idx] = reg;
+		reset_apic_write_values[idx] = value;
+	} else {
+		++reset_event_seq;
+	}
+	reset_apic_write_count++;
+}
+
+static unsigned int fake_reset_apic_read(int reg)
+{
+	int idx = reset_apic_read_count;
+
+	if (idx < 8) {
+		reset_apic_read_event[idx] = ++reset_event_seq;
+		reset_apic_read_regs[idx] = reg;
+	} else {
+		++reset_event_seq;
+	}
+	reset_apic_read_count++;
+	return reset_apic_read_value;
+}
+
+static void fake_reset_icr_write(unsigned int value, int phys_apicid)
+{
+	int idx = reset_icr_write_count;
+
+	if (idx < 8) {
+		reset_icr_write_event[idx] = ++reset_event_seq;
+		reset_icr_write_values[idx] = value;
+		reset_icr_write_phys[idx] = phys_apicid;
+	} else {
+		++reset_event_seq;
+	}
+	reset_icr_write_count++;
+}
+
+static unsigned long fake_reset_wait(void)
+{
+	int idx = reset_wait_count;
+	unsigned long value;
+
+	if (idx < 8)
+		reset_wait_event[idx] = ++reset_event_seq;
+	else
+		++reset_event_seq;
+	reset_wait_count++;
+	if (reset_wait_use_sequence && idx < 8)
+		value = reset_wait_values[idx];
+	else
+		value = reset_wait_value + (unsigned long)reset_wait_count;
+	return value;
+}
+
+static void fake_reset_delay(unsigned long msecs)
+{
+	reset_delay_count++;
+	reset_delay_event = ++reset_event_seq;
+	reset_delay_msecs = msecs;
+}
+
+static void fake_reset_udelay(unsigned long usecs)
+{
+	int idx = reset_udelay_count;
+
+	if (idx < 8) {
+		reset_udelay_event[idx] = ++reset_event_seq;
+		reset_udelay_usecs[idx] = usecs;
+	} else {
+		++reset_event_seq;
+	}
+	reset_udelay_count++;
+}
+
+static void fake_reset_barrier(void)
+{
+	reset_barrier_calls++;
+	reset_barrier_event = ++reset_event_seq;
+}
+
+static void fake_reset_init_deasserted(void)
+{
+	reset_init_deasserted_calls++;
+	reset_init_deasserted_event = ++reset_event_seq;
+}
+
+static void fake_reset_log(int event, int phys_apicid)
+{
+	int idx = reset_log_count;
+
+	if (idx < 8) {
+		reset_log_event[idx] = event;
+		reset_log_phys[idx] = phys_apicid;
+	}
+	reset_log_count++;
+}
+
+static void fake_wakeup_log(int event, unsigned long value)
+{
+	int idx = reset_log_count;
+
+	if (idx < 16) {
+		reset_log_event[idx] = event;
+		reset_log_value[idx] = value;
+	}
+	reset_log_count++;
+}
+
+static void fake_wakeup_clear_init_deasserted(void)
+{
+	reset_init_deasserted_calls++;
+	reset_init_deasserted_event = ++reset_event_seq;
+}
+
+static int fake_wakeup_non_unique_apic(void)
+{
+	wakeup_non_unique_calls++;
+	wakeup_non_unique_event = ++reset_event_seq;
+	return wakeup_non_unique;
+}
+
+static void fake_wakeup_setup_warm_reset_vector(unsigned long start_eip)
+{
+	wakeup_setup_calls++;
+	wakeup_setup_event = ++reset_event_seq;
+	wakeup_setup_start_eip = start_eip;
+}
+
+static int fake_wakeup_apic_available(void)
+{
+	wakeup_apic_available_calls++;
+	wakeup_apic_available_event = ++reset_event_seq;
+	return wakeup_apic_available;
+}
+
+static int fake_wakeup_apic(int apicid, unsigned long start_eip)
+{
+	wakeup_apic_calls++;
+	wakeup_apic_event = ++reset_event_seq;
+	wakeup_apic_apicid = apicid;
+	wakeup_apic_start_eip = start_eip;
+	return wakeup_apic_ret;
+}
+
+static int fake_wakeup_via_init(int apicid, unsigned long start_eip)
+{
+	wakeup_via_calls++;
+	wakeup_via_event = ++reset_event_seq;
+	wakeup_via_apicid = apicid;
+	wakeup_via_start_eip = start_eip;
+	return wakeup_via_ret;
+}
+
+static void fake_wakeup_top_log(int event)
+{
+	int idx = wakeup_top_log_count;
+
+	if (idx < 8)
+		wakeup_top_log_event[idx] = event;
+	wakeup_top_log_count++;
+}
+
+static unsigned long fake_warm_lock(void)
+{
+	warm_lock_calls++;
+	warm_lock_event = ++reset_event_seq;
+	return warm_lock_flags;
+}
+
+static void fake_warm_cmos_write(unsigned char value, unsigned char reg)
+{
+	warm_cmos_calls++;
+	warm_cmos_event = ++reset_event_seq;
+	warm_cmos_value = value;
+	warm_cmos_reg = reg;
+}
+
+static void fake_warm_unlock(unsigned long flags)
+{
+	warm_unlock_calls++;
+	warm_unlock_event = ++reset_event_seq;
+	warm_unlock_flags = flags;
+}
+
+static void fake_warm_flush_tlb(void)
+{
+	warm_flush_calls++;
+	warm_flush_event = ++reset_event_seq;
+}
+
+static void fake_warm_write_word(unsigned long phys, unsigned short value)
+{
+	int idx = warm_write_count;
+
+	if (idx < 4) {
+		warm_write_event[idx] = ++reset_event_seq;
+		warm_write_phys[idx] = phys;
+		warm_write_value[idx] = value;
+	} else {
+		++reset_event_seq;
+	}
+	warm_write_count++;
+}
+
+static unsigned int fake_setup_apicid(int cpu)
+{
+	setup_apicid_calls++;
+	return 0x80U + (unsigned int)cpu;
+}
+
+static unsigned long fake_setup_raised_list_phys(int cpu)
+{
+	setup_raised_calls++;
+	return 0x500000UL + (unsigned long)cpu * 0x1000UL;
+}
+
+static void fake_setup_log(int event, unsigned long value0,
+			   unsigned long value1)
+{
+	setup_log_calls++;
+	setup_log_event = event;
+	setup_log_value0 = value0;
+	setup_log_value1 = value1;
+}
+
+static unsigned long fake_startup_alloc_page(void)
+{
+	startup_alloc_calls++;
+	return startup_alloc_result;
+}
+
+static unsigned long fake_startup_page_phys(unsigned long virt)
+{
+	startup_phys_calls++;
+	startup_last_phys_virt = virt;
+	return virt + 0x10000000UL;
+}
+
+static int fake_startup_map_kernel(unsigned long page_table,
+				   unsigned long virt, unsigned long phys)
+{
+	int idx = startup_map_calls;
+
+	if (idx < 16) {
+		startup_map_pt[idx] = page_table;
+		startup_map_virt[idx] = virt;
+		startup_map_phys[idx] = phys;
+	}
+	startup_map_calls++;
+	if (startup_map_fail_at && startup_map_calls == startup_map_fail_at)
+		return -1;
+	return 0;
+}
+
+static unsigned long fake_startup_map_virtual(unsigned long phys,
+					      unsigned long size)
+{
+	startup_map_virtual_calls++;
+	startup_map_virtual_phys = phys;
+	startup_map_virtual_size = size;
+	return startup_map_virtual_result;
+}
+
+static void fake_startup_unmap_virtual(unsigned long virt)
+{
+	startup_unmap_calls++;
+	startup_unmap_virt = virt;
+}
+
+static void fake_startup_log(int event)
+{
+	startup_log_event = event;
+}
+
+static unsigned long fake_arch_init_ioremap(unsigned long phys,
+					    unsigned long size)
+{
+	arch_init_ioremap_calls++;
+	arch_init_ioremap_phys = phys;
+	arch_init_ioremap_size = size;
+	return phys + 0x100000UL;
+}
+
+static unsigned long fake_arch_init_alloc(void)
+{
+	unsigned long page = 0;
+
+	if (arch_init_alloc_calls < 8)
+		page = arch_init_alloc_sequence[arch_init_alloc_calls];
+	arch_init_alloc_calls++;
+	return page;
+}
+
+static unsigned long fake_arch_init_page_phys(unsigned long page)
+{
+	int idx = arch_init_page_phys_calls;
+
+	if (idx < 16)
+		arch_init_page_phys_arg[idx] = page;
+	arch_init_page_phys_calls++;
+	return page;
+}
+
+static unsigned long fake_arch_init_page_virt(unsigned long page)
+{
+	int idx = arch_init_page_virt_calls;
+
+	if (idx < 16)
+		arch_init_page_virt_arg[idx] = page;
+	arch_init_page_virt_calls++;
+	return page + 0x200000UL;
+}
+
+static void fake_arch_init_free(unsigned long page, unsigned int order)
+{
+	int idx = arch_init_free_calls;
+
+	if (idx < 8) {
+		arch_init_free_page[idx] = page;
+		arch_init_free_order[idx] = order;
+	}
+	arch_init_free_calls++;
+}
+
+static unsigned long fake_arch_init_linux_phys(void)
+{
+	arch_init_linux_phys_calls++;
+	return arch_init_linux_phys;
+}
+
+static unsigned long fake_arch_init_direct_virt(unsigned long phys)
+{
+	arch_init_direct_virt_calls++;
+	arch_init_direct_virt_phys = phys;
+	return phys + 0x300000UL;
+}
+
+static void fake_arch_init_log(int event, unsigned long value)
+{
+	int idx = arch_init_log_count;
+
+	if (idx < 8) {
+		arch_init_log_event[idx] = event;
+		arch_init_log_value[idx] = value;
+	}
+	arch_init_log_count++;
+}
+
+static int fake_arch_init_tail_ident(void)
+{
+	arch_init_tail_ident_calls++;
+	return arch_init_tail_ident_result;
+}
+
+static int fake_arch_init_tail_topology(void)
+{
+	arch_init_tail_topology_calls++;
+	return arch_init_tail_topology_result;
+}
+
+static void fake_arch_init_tail_log(int event, int value)
+{
+	int idx = arch_init_tail_log_count;
+
+	if (idx < 8) {
+		arch_init_tail_log_event[idx] = event;
+		arch_init_tail_log_value[idx] = value;
+	}
+	arch_init_tail_log_count++;
+}
+
+static unsigned long fake_ident_alloc(unsigned int order)
+{
+	ident_alloc_calls++;
+	ident_alloc_order = order;
+	return ident_alloc_result;
+}
+
+static unsigned long fake_ident_page_phys(unsigned long page)
+{
+	ident_page_phys_calls++;
+	ident_page_phys_arg = page;
+	return ident_page_phys_result;
+}
+
+static unsigned long fake_ident_page_virt(unsigned long page)
+{
+	ident_page_virt_calls++;
+	ident_page_virt_arg = page;
+	return ident_page_virt_result;
+}
+
+static void fake_ident_zero(unsigned long addr, unsigned long len)
+{
+	ident_zero_calls++;
+	ident_zero_addr = addr;
+	ident_zero_len = len;
+	memset((void *)addr, 0, len);
+}
+
+static void fake_ident_log(int event, unsigned long value0,
+			   unsigned long value1)
+{
+	int idx = ident_log_count;
+
+	if (idx < 8) {
+		ident_log_event[idx] = event;
+		ident_log_value0[idx] = value0;
+		ident_log_value1[idx] = value1;
+	}
+	ident_log_count++;
+}
+
+static void fake_exit_free_trampoline(unsigned long page, unsigned int order)
+{
+	exit_free_trampoline_calls++;
+	exit_free_trampoline_event = ++exit_event_seq;
+	exit_free_trampoline_page = page;
+	exit_free_trampoline_order = order;
+}
+
+static void fake_exit_unmap(unsigned long virt)
+{
+	exit_unmap_calls++;
+	exit_unmap_event = ++exit_event_seq;
+	exit_unmap_virt = virt;
+}
+
+static void fake_exit_free_pages(unsigned long addr, unsigned int order)
+{
+	exit_free_pages_calls++;
+	exit_free_pages_event = ++exit_event_seq;
+	exit_free_pages_addr = addr;
+	exit_free_pages_order = order;
+}
+
+static unsigned long fake_control_lock(unsigned long lock_addr)
+{
+	control_lock_calls++;
+	control_last_lock = lock_addr;
+	return 0x5a5aUL + (unsigned long)control_lock_calls;
+}
+
+static void fake_control_unlock(unsigned long lock_addr, unsigned long flags)
+{
+	control_unlock_calls++;
+	control_last_unlock = lock_addr ^ flags;
+}
+
+static void fake_control_log(int event, const char *args)
+{
+	control_log_event = event;
+	control_log_args = args;
+}
+
+static int fake_control_issue_interrupt(unsigned long os, unsigned long priv,
+					int cpu, int vector)
+{
+	control_issue_calls++;
+	control_issue_os = os;
+	control_issue_priv = priv;
+	control_issue_cpu = cpu;
+	control_issue_vector = vector;
+	return 0;
+}
+
+static int fake_control_send_multi_intr(unsigned long os, unsigned long priv,
+					int mode)
+{
+	(void)os;
+	(void)priv;
+	control_send_calls++;
+	control_send_mode = mode;
+	return 0;
+}
+
+static int fake_control_set_mode(unsigned long os, unsigned long priv,
+				 int mode)
+{
+	control_set_mode_calls++;
+	control_set_mode_os = os;
+	control_set_mode_priv = priv;
+	control_set_mode_mode = mode;
+	return control_set_mode_fail;
+}
+
+static void *fake_control_alloc(unsigned long size)
+{
+	if (control_alloc_fail)
+		return NULL;
+	control_last_alloc = calloc(1, size);
+	return control_last_alloc;
+}
+
+static void fake_control_spin_init(unsigned long lock_addr)
+{
+	(void)lock_addr;
+	control_spin_init_calls++;
+}
+
+static void fake_control_create_log(int event)
+{
+	control_create_log_event = event;
+}
+
+static void fake_control_free(unsigned long ptr)
+{
+	if (ptr)
+		control_free_calls++;
+	free((void *)ptr);
+}
+
+static void fake_control_unmap(unsigned long virt)
+{
+	control_unmap_calls++;
+	control_unmap_virt = virt;
+}
+
+static void fake_control_dcache_flush(unsigned long virt, unsigned long size)
+{
+	control_flush_calls++;
+	control_flush_virt = virt;
+	control_flush_size = size;
+}
+
+static unsigned long fake_control_direct_map(unsigned long phys,
+					     unsigned long size)
+{
+	int idx = control_map_calls;
+
+	control_map_calls++;
+	if (idx < 4) {
+		control_map_phys[idx] = phys;
+		control_map_size[idx] = size;
+	}
+	if (control_map_fail_at && control_map_calls == control_map_fail_at)
+		return 0;
+	return control_map_result_base + (unsigned long)idx * 4096UL;
+}
+
+static unsigned long fake_control_host_map(unsigned long dev,
+					   unsigned long phys,
+					   unsigned long virt,
+					   unsigned long size,
+					   int flags)
+{
+	control_host_map_calls++;
+	control_host_map_dev = dev;
+	control_host_map_phys = phys;
+	control_host_map_virt = virt;
+	control_host_map_size = size;
+	control_host_map_flags = flags;
+	return virt + 0x55;
+}
+
+static void fake_control_map_log(int event, unsigned long phys,
+				 unsigned long size)
+{
+	control_map_log_event = event;
+	control_map_log_phys = phys;
+	control_map_log_size = size;
+}
+
+static unsigned long fake_control_phys_to_virt(unsigned long phys)
+{
+	control_phys_to_virt_calls++;
+	control_phys_to_virt_phys = phys;
+	return phys + 0x10000000UL;
+}
+
+static unsigned long fake_control_vtop(unsigned long virt)
+{
+	control_vtop_calls++;
+	control_vtop_arg = virt;
+	return virt + 0x100000UL;
+}
+
+static void fake_control_vtop_log(int event, unsigned long virt,
+				  unsigned long phys)
+{
+	control_vtop_log_event = event;
+	control_vtop_log_virt = virt;
+	control_vtop_log_phys = phys;
+}
+
+static void fake_control_load_copy(unsigned long dst, const char *src,
+				   unsigned long size)
+{
+	int idx = control_load_copy_calls;
+
+	control_load_copy_calls++;
+	if (idx < 4) {
+		control_load_copy_dst[idx] = dst;
+		control_load_copy_size[idx] = size;
+	}
+	memcpy((void *)dst, src, size);
+}
+
+static void fake_control_load_log(int event, unsigned long a,
+				  unsigned long b, unsigned long c,
+				  unsigned long d)
+{
+	control_load_log_event = event;
+	control_load_log_a = a;
+	control_load_log_b = b;
+	control_load_log_c = c;
+	control_load_log_d = d;
+}
+
+static unsigned long fake_control_irq_save(void)
+{
+	control_irq_save_calls++;
+	return 0x5000UL + (unsigned long)control_irq_save_calls;
+}
+
+static void fake_control_irq_restore(unsigned long flags)
+{
+	control_irq_restore_calls++;
+	control_irq_restore_flags = flags;
+}
+
+static int fake_control_x2apic_enabled(void)
+{
+	control_x2apic_enabled_calls++;
+	return control_x2apic_enabled;
+}
+
+static void fake_control_x2apic_wait(void)
+{
+	control_x2apic_wait_calls++;
+}
+
+static void fake_control_x2apic_write(int vector, int hw_id)
+{
+	control_x2apic_write_calls++;
+	control_x2apic_vector = vector;
+	control_x2apic_hw_id = hw_id;
+}
+
+static void fake_control_legacy_ipi(int hw_id, int vector, int dest)
+{
+	control_legacy_ipi_calls++;
+	control_legacy_hw_id = hw_id;
+	control_legacy_vector = vector;
+	control_legacy_dest = dest;
+}
+
+static void fake_control_perf_log(int event, int value)
+{
+	control_perf_log_calls++;
+	control_perf_log_event = event;
+	control_perf_log_value = value;
+}
+
+static int fake_control_irq_work_handler(int irq, void *data)
+{
+	control_irq_work_calls++;
+	control_irq_work_irq = irq;
+	control_irq_work_data = data;
+	return control_irq_work_ret;
+}
+
+static void reset_irq_handler_trace(void)
+{
+	irq_handler_calls = 0;
+	memset(irq_handler_os, 0, sizeof(irq_handler_os));
+	memset(irq_handler_os_priv, 0, sizeof(irq_handler_os_priv));
+	memset(irq_handler_priv, 0, sizeof(irq_handler_priv));
+	irq_no_handler_log_calls = 0;
+}
+
+static void fake_irq_handler_func(unsigned long os, unsigned long os_priv,
+				  unsigned long priv)
+{
+	if (irq_handler_calls >=
+	    (int)(sizeof(irq_handler_os) / sizeof(irq_handler_os[0]))) {
+		fprintf(stderr, "irq handler trace overflow\n");
+		exit(1);
+	}
+	irq_handler_os[irq_handler_calls] = os;
+	irq_handler_os_priv[irq_handler_calls] = os_priv;
+	irq_handler_priv[irq_handler_calls] = priv;
+	irq_handler_calls++;
+}
+
+static void fake_irq_no_handler_log(void)
+{
+	irq_no_handler_log_calls++;
+}
+
+static int fake_smp_copy_to_user(unsigned long dst, const void *src,
+				 unsigned long size)
+{
+	smp_copy_to_calls++;
+	if (smp_copy_to_fail)
+		return 1;
+	memcpy((void *)dst, src, size);
+	return 0;
+}
+
+static int fake_smp_copy_from_user(void *dst, unsigned long src,
+				   unsigned long size)
+{
+	smp_copy_from_calls++;
+	if (smp_copy_from_fail)
+		return 1;
+	memcpy(dst, (void *)src, size);
+	return 0;
+}
+
+static void *fake_smp_alloc(unsigned long size)
+{
+	smp_alloc_calls++;
+	if (smp_alloc_fail)
+		return NULL;
+	return malloc(size);
+}
+
+static void fake_smp_free(unsigned long ptr)
+{
+	if (ptr)
+		smp_free_calls++;
+	free((void *)ptr);
+}
+
+static void fake_smp_query_log(int event, int requested, int actual)
+{
+	smp_query_log_event = event;
+	smp_query_log_requested = requested;
+	smp_query_log_actual = actual;
+}
+
+static int fake_smp_cpu_present(int cpu)
+{
+	if (cpu < 0 || cpu >= (int)(sizeof(smp_cpu_present_mask) /
+				   sizeof(smp_cpu_present_mask[0])))
+		return 0;
+	return smp_cpu_present_mask[cpu];
+}
+
+static int fake_smp_cpu_online(int cpu)
+{
+	if (cpu < 0 || cpu >= (int)(sizeof(smp_cpu_online_mask) /
+				   sizeof(smp_cpu_online_mask[0])))
+		return 0;
+	return smp_cpu_online_mask[cpu];
+}
+
+static int fake_smp_check_ikc_map(unsigned long ihk_os)
+{
+	(void)ihk_os;
+	smp_check_ikc_calls++;
+	return smp_check_ikc_result;
+}
+
+static void fake_smp_init_zero(unsigned long ptr, unsigned long size)
+{
+	int idx = smp_init_zero_calls;
+
+	if (idx < (int)(sizeof(smp_init_zero_ptr) /
+			sizeof(smp_init_zero_ptr[0]))) {
+		smp_init_zero_ptr[idx] = ptr;
+		smp_init_zero_size[idx] = size;
+	}
+	smp_init_zero_calls++;
+	memset((void *)ptr, 0, size);
+}
+
+static int fake_smp_init_for_each_online(
+	unsigned long ctx, void (*visit_fn)(unsigned long, int))
+{
+	int i;
+
+	smp_init_for_each_calls++;
+	if (!visit_fn)
+		return -EINVAL;
+	for (i = 0; i < smp_init_online_count; i++)
+		visit_fn(ctx, smp_init_online_cpus[i]);
+	return 0;
+}
+
+static int fake_smp_init_arch(void)
+{
+	smp_init_arch_calls++;
+	return smp_init_arch_ret;
+}
+
+static void fake_smp_init_log(int present_cpus)
+{
+	smp_init_log_present = present_cpus;
+}
+
+static void fake_smp_exit_arch(void)
+{
+	smp_exit_arch_calls++;
+}
+
+static int fake_smp_exit_reset_cpu(int hw_id)
+{
+	int idx = smp_exit_reset_calls;
+
+	if (idx < (int)(sizeof(smp_exit_reset_hw_id) /
+			sizeof(smp_exit_reset_hw_id[0]))) {
+		smp_exit_reset_hw_id[idx] = hw_id;
+	}
+	smp_exit_reset_calls++;
+	if (idx < (int)(sizeof(smp_exit_reset_ret) /
+			sizeof(smp_exit_reset_ret[0]))) {
+		return smp_exit_reset_ret[idx];
+	}
+	return 0;
+}
+
+static int fake_smp_exit_online_cpu(int cpu)
+{
+	int idx = smp_exit_online_calls;
+
+	if (idx < (int)(sizeof(smp_exit_online_cpu) /
+			sizeof(smp_exit_online_cpu[0]))) {
+		smp_exit_online_cpu[idx] = cpu;
+	}
+	smp_exit_online_calls++;
+	if (idx < (int)(sizeof(smp_exit_online_ret) /
+			sizeof(smp_exit_online_ret[0]))) {
+		return smp_exit_online_ret[idx];
+	}
+	return 0;
+}
+
+static int fake_smp_exit_free_list(unsigned long list_head)
+{
+	smp_exit_free_list_calls++;
+	smp_exit_free_list_arg = list_head;
+	return -123;
+}
+
+static void fake_smp_exit_free_info(void)
+{
+	smp_exit_free_info_calls++;
+}
+
+static void fake_smp_exit_log(int cpu_id, int hw_id)
+{
+	int idx = smp_exit_log_calls;
+
+	if (idx < (int)(sizeof(smp_exit_log_cpu_id) /
+			sizeof(smp_exit_log_cpu_id[0]))) {
+		smp_exit_log_cpu_id[idx] = cpu_id;
+		smp_exit_log_hw_id[idx] = hw_id;
+	}
+	smp_exit_log_calls++;
+}
+
+static int fake_smp_module_symbols_init(void)
+{
+	smp_module_symbols_calls++;
+	return smp_module_symbols_ret;
+}
+
+static int fake_smp_module_arch_symbols_init(void)
+{
+	smp_module_arch_symbols_calls++;
+	return smp_module_arch_symbols_ret;
+}
+
+static void fake_smp_module_spin_lock_init(unsigned long lock)
+{
+	smp_module_lock_init_calls++;
+	smp_module_lock_arg = lock;
+}
+
+static unsigned long fake_smp_module_register_device(unsigned long reg_data)
+{
+	smp_module_register_calls++;
+	smp_module_register_arg = reg_data;
+	return smp_module_register_ret;
+}
+
+static void fake_smp_module_unregister_device(unsigned long ihk_dev)
+{
+	smp_module_unregister_calls++;
+	smp_module_unregister_arg = ihk_dev;
+}
+
+static void fake_smp_module_log(int event)
+{
+	int idx = smp_module_log_count;
+
+	if (idx < (int)(sizeof(smp_module_log_event) /
+			sizeof(smp_module_log_event[0]))) {
+		smp_module_log_event[idx] = event;
+	}
+	smp_module_log_count++;
+}
+
+static void fake_smp_set_ikc_log(int event, int value0, int value1)
+{
+	smp_set_ikc_log_event = event;
+	smp_set_ikc_log_value0 = value0;
+	smp_set_ikc_log_value1 = value1;
+	if (event == 14 && smp_set_ikc_route_count <
+	    (int)(sizeof(smp_set_ikc_route_cpu) /
+		  sizeof(smp_set_ikc_route_cpu[0]))) {
+		smp_set_ikc_route_cpu[smp_set_ikc_route_count] = value0;
+		smp_set_ikc_route_dst[smp_set_ikc_route_count] = value1;
+		smp_set_ikc_route_count++;
+	}
 }
 
 static struct fake_cache_topology *first_fake_cache(
@@ -114772,10 +131809,576 @@ static void reset_topo_trace(struct fake_cpu_topology *cpu)
 	topo_fail_error = -5;
 	topo_log_event = 0;
 	topo_log_error = 0;
+	topo_log_count = 0;
+	memset(topo_log_events, 0, sizeof(topo_log_events));
+	memset(topo_log_errors, 0, sizeof(topo_log_errors));
 	topo_collect_cache_calls = 0;
 	topo_collect_cache_fail_index = -1;
 	topo_collect_cache_last_index = -1;
 	topo_node_fail_error = 0;
+	memset(topo_online_cpus, 0, sizeof(topo_online_cpus));
+	topo_online_cpu_count = 0;
+	memset(topo_online_nodes, 0, sizeof(topo_online_nodes));
+	topo_online_node_count = 0;
+	topo_next_cpu_calls = 0;
+	topo_next_node_calls = 0;
+	topo_collect_cpu_calls = 0;
+	topo_collect_node_calls = 0;
+	memset(topo_collected_cpus, 0, sizeof(topo_collected_cpus));
+	memset(topo_collected_nodes, 0, sizeof(topo_collected_nodes));
+	topo_collect_cpu_fail_at = -1;
+	topo_collect_node_fail_at = -1;
+	free_info_list_del_calls = 0;
+	free_info_log_calls = 0;
+	memset(free_info_log_events, 0, sizeof(free_info_log_events));
+	memset(read_long_page, 0, sizeof(read_long_page));
+	read_long_alloc_fail = 0;
+	read_long_alloc_calls = 0;
+	read_long_read_calls = 0;
+	read_long_read_result = 0;
+	read_long_read_buf = 0;
+	read_long_read_size = 0;
+	read_long_read_fmt = NULL;
+	read_long_read_va = 0;
+	read_long_parse_calls = 0;
+	read_long_parse_result = 1;
+	read_long_parse_value = 12345;
+	read_long_free_calls = 0;
+	read_long_free_addr = 0;
+	read_long_log_calls = 0;
+	memset(read_long_log_event, 0, sizeof(read_long_log_event));
+	memset(read_long_log_error, 0, sizeof(read_long_log_error));
+	memset(read_bitmap_map_words, 0, sizeof(read_bitmap_map_words));
+	read_bitmap_alloc_fail = 0;
+	read_bitmap_alloc_calls = 0;
+	read_bitmap_read_calls = 0;
+	read_bitmap_read_result = 0;
+	read_bitmap_read_buf = 0;
+	read_bitmap_read_size = 0;
+	read_bitmap_read_fmt = NULL;
+	read_bitmap_read_va = 0;
+	read_bitmap_parse_calls = 0;
+	read_bitmap_parse_result = 0;
+	read_bitmap_parse_buf = 0;
+	read_bitmap_parse_size = 0;
+	read_bitmap_parse_map = 0;
+	read_bitmap_parse_nbits = 0;
+	read_bitmap_free_calls = 0;
+	read_bitmap_free_addr = 0;
+	read_bitmap_log_calls = 0;
+	memset(read_bitmap_log_event, 0, sizeof(read_bitmap_log_event));
+	memset(read_bitmap_log_error, 0, sizeof(read_bitmap_log_error));
+	free(read_string_value);
+	read_string_value = NULL;
+	read_string_alloc_fail = 0;
+	read_string_alloc_calls = 0;
+	read_string_read_calls = 0;
+	read_string_read_result = 0;
+	read_string_read_buf = 0;
+	read_string_read_size = 0;
+	read_string_read_fmt = NULL;
+	read_string_read_va = 0;
+	read_string_dup_calls = 0;
+	read_string_dup_fail = 0;
+	read_string_dup_buf = 0;
+	read_string_kfree_calls = 0;
+	read_string_kfree_addr = 0;
+	read_string_free_calls = 0;
+	read_string_free_addr = 0;
+	read_string_log_calls = 0;
+	memset(read_string_log_event, 0, sizeof(read_string_log_event));
+	memset(read_string_log_error, 0, sizeof(read_string_log_error));
+	memset(file_readable_filename, 0, sizeof(file_readable_filename));
+	file_readable_alloc_fail = 0;
+	file_readable_alloc_calls = 0;
+	file_readable_alloc_size = 0;
+	file_readable_vsnprintf_calls = 0;
+	file_readable_vsnprintf_result = 12;
+	file_readable_vsnprintf_fmt = NULL;
+	file_readable_vsnprintf_size = 0;
+	file_readable_vsnprintf_va = 0;
+	file_readable_open_calls = 0;
+	file_readable_open_fail = 0;
+	file_readable_open_filename = NULL;
+	file_readable_close_calls = 0;
+	file_readable_close_file = 0;
+	file_readable_free_calls = 0;
+	file_readable_free_addr = 0;
+	file_readable_log_calls = 0;
+	memset(file_readable_log_event, 0, sizeof(file_readable_log_event));
+	memset(file_readable_log_error, 0, sizeof(file_readable_log_error));
+	memset(read_file_buf, 0, sizeof(read_file_buf));
+	memset(read_file_filename, 0, sizeof(read_file_filename));
+	read_file_alloc_fail = 0;
+	read_file_alloc_calls = 0;
+	read_file_alloc_size = 0;
+	read_file_vsnprintf_calls = 0;
+	read_file_vsnprintf_result = 14;
+	read_file_vsnprintf_fmt = NULL;
+	read_file_vsnprintf_size = 0;
+	read_file_vsnprintf_va = 0;
+	read_file_open_calls = 0;
+	read_file_open_fail = 0;
+	read_file_open_error = -ENOENT;
+	read_file_open_filename = NULL;
+	read_file_open_errorp = 0;
+	read_file_kernel_read_calls = 0;
+	read_file_kernel_read_result = 5;
+	read_file_kernel_file = 0;
+	read_file_kernel_buf = 0;
+	read_file_kernel_size = 0;
+	read_file_close_calls = 0;
+	read_file_close_result = 0;
+	read_file_close_file = 0;
+	read_file_free_calls = 0;
+	read_file_free_addr = 0;
+	read_file_log_calls = 0;
+	memset(read_file_log_event, 0, sizeof(read_file_log_event));
+	memset(read_file_log_error, 0, sizeof(read_file_log_error));
+	write_cpu_open_calls = 0;
+	write_cpu_open_fail = 0;
+	write_cpu_open_error = -EACCES;
+	write_cpu_open_path = NULL;
+	write_cpu_open_errorp = 0;
+	write_cpu_write_calls = 0;
+	write_cpu_write_result = 1;
+	write_cpu_write_file = 0;
+	write_cpu_write_buf = NULL;
+	write_cpu_write_size = 0;
+	write_cpu_close_calls = 0;
+	write_cpu_close_file = 0;
+	write_cpu_log_calls = 0;
+	memset(write_cpu_log_event, 0, sizeof(write_cpu_log_event));
+	memset(write_cpu_log_error, 0, sizeof(write_cpu_log_error));
+	memset(write_cpu_log_path, 0, sizeof(write_cpu_log_path));
+}
+
+static void fake_free_info_list_del(unsigned long node)
+{
+	free_info_list_del_calls++;
+	topo_list_del((struct list_head *)node);
+}
+
+static void fake_free_info_log(int event)
+{
+	if (free_info_log_calls >=
+	    (int)(sizeof(free_info_log_events) /
+		  sizeof(free_info_log_events[0]))) {
+		fprintf(stderr, "free_info log overflow\n");
+		exit(1);
+	}
+	free_info_log_events[free_info_log_calls++] = event;
+}
+
+static unsigned long fake_read_long_alloc_page(void)
+{
+	read_long_alloc_calls++;
+	if (read_long_alloc_fail)
+		return 0;
+	return (unsigned long)read_long_page;
+}
+
+static int fake_read_long_read_file(unsigned long buf, unsigned long size,
+				    char *fmt, unsigned long va_list)
+{
+	read_long_read_calls++;
+	read_long_read_buf = buf;
+	read_long_read_size = size;
+	read_long_read_fmt = fmt;
+	read_long_read_va = va_list;
+	if (!read_long_read_result)
+		strcpy((char *)buf, "12345\n");
+	return read_long_read_result;
+}
+
+static int fake_read_long_parse(unsigned long buf, unsigned long valuep)
+{
+	read_long_parse_calls++;
+	(void)buf;
+	if (read_long_parse_result == 1)
+		*(long *)valuep = read_long_parse_value;
+	return read_long_parse_result;
+}
+
+static void fake_read_long_free_pages(unsigned long addr)
+{
+	read_long_free_calls++;
+	read_long_free_addr = addr;
+}
+
+static void fake_read_long_log(int event, unsigned long valuep, char *fmt,
+			       int error)
+{
+	if (read_long_log_calls >=
+	    (int)(sizeof(read_long_log_event) /
+		  sizeof(read_long_log_event[0]))) {
+		fprintf(stderr, "read_long log overflow\n");
+		exit(1);
+	}
+	(void)valuep;
+	(void)fmt;
+	read_long_log_event[read_long_log_calls] = event;
+	read_long_log_error[read_long_log_calls] = error;
+	read_long_log_calls++;
+}
+
+static unsigned long fake_read_bitmap_alloc_page(void)
+{
+	read_bitmap_alloc_calls++;
+	if (read_bitmap_alloc_fail)
+		return 0;
+	return (unsigned long)read_long_page;
+}
+
+static int fake_read_bitmap_read_file(unsigned long buf, unsigned long size,
+				      char *fmt, unsigned long va_list)
+{
+	read_bitmap_read_calls++;
+	read_bitmap_read_buf = buf;
+	read_bitmap_read_size = size;
+	read_bitmap_read_fmt = fmt;
+	read_bitmap_read_va = va_list;
+	if (!read_bitmap_read_result)
+		strcpy((char *)buf, "0-3\n");
+	return read_bitmap_read_result;
+}
+
+static int fake_read_bitmap_parse(unsigned long buf, unsigned long size,
+				  unsigned long map, int nbits)
+{
+	read_bitmap_parse_calls++;
+	read_bitmap_parse_buf = buf;
+	read_bitmap_parse_size = size;
+	read_bitmap_parse_map = map;
+	read_bitmap_parse_nbits = nbits;
+	if (!read_bitmap_parse_result)
+		((unsigned long *)map)[0] = 0x0fUL;
+	return read_bitmap_parse_result;
+}
+
+static void fake_read_bitmap_free_pages(unsigned long addr)
+{
+	read_bitmap_free_calls++;
+	read_bitmap_free_addr = addr;
+}
+
+static void fake_read_bitmap_log(int event, unsigned long map, int nbits,
+				 char *fmt, int error)
+{
+	if (read_bitmap_log_calls >=
+	    (int)(sizeof(read_bitmap_log_event) /
+		  sizeof(read_bitmap_log_event[0]))) {
+		fprintf(stderr, "read_bitmap log overflow\n");
+		exit(1);
+	}
+	(void)map;
+	(void)nbits;
+	(void)fmt;
+	read_bitmap_log_event[read_bitmap_log_calls] = event;
+	read_bitmap_log_error[read_bitmap_log_calls] = error;
+	read_bitmap_log_calls++;
+}
+
+static unsigned long fake_read_string_alloc_page(void)
+{
+	read_string_alloc_calls++;
+	if (read_string_alloc_fail)
+		return 0;
+	return (unsigned long)read_long_page;
+}
+
+static int fake_read_string_read_file(unsigned long buf, unsigned long size,
+				      char *fmt, unsigned long va_list)
+{
+	read_string_read_calls++;
+	read_string_read_buf = buf;
+	read_string_read_size = size;
+	read_string_read_fmt = fmt;
+	read_string_read_va = va_list;
+	if (!read_string_read_result)
+		strcpy((char *)buf, "Cache line\n");
+	return read_string_read_result;
+}
+
+static unsigned long fake_read_string_dup(unsigned long buf)
+{
+	char *src = (char *)buf;
+	size_t len = strlen(src) + 1;
+	char *dst;
+
+	read_string_dup_calls++;
+	read_string_dup_buf = buf;
+	if (read_string_dup_fail)
+		return 0;
+	dst = malloc(len);
+	if (!dst)
+		return 0;
+	memcpy(dst, src, len);
+	return (unsigned long)dst;
+}
+
+static void fake_read_string_kfree(unsigned long addr)
+{
+	read_string_kfree_calls++;
+	read_string_kfree_addr = addr;
+	if (addr)
+		free((void *)addr);
+}
+
+static void fake_read_string_free_pages(unsigned long addr)
+{
+	read_string_free_calls++;
+	read_string_free_addr = addr;
+}
+
+static void fake_read_string_log(int event, unsigned long valuep, char *fmt,
+				 int error)
+{
+	if (read_string_log_calls >=
+	    (int)(sizeof(read_string_log_event) /
+		  sizeof(read_string_log_event[0]))) {
+		fprintf(stderr, "read_string log overflow\n");
+		exit(1);
+	}
+	(void)valuep;
+	(void)fmt;
+	read_string_log_event[read_string_log_calls] = event;
+	read_string_log_error[read_string_log_calls] = error;
+	read_string_log_calls++;
+}
+
+static void *fake_file_readable_alloc(unsigned long size)
+{
+	file_readable_alloc_calls++;
+	file_readable_alloc_size = size;
+	if (file_readable_alloc_fail)
+		return NULL;
+	if (size > sizeof(file_readable_filename)) {
+		fprintf(stderr, "file_readable allocation too large\n");
+		exit(1);
+	}
+	return file_readable_filename;
+}
+
+static int fake_file_readable_vsnprintf(char *buf, unsigned long size,
+					char *fmt, unsigned long va_list)
+{
+	file_readable_vsnprintf_calls++;
+	file_readable_vsnprintf_fmt = fmt;
+	file_readable_vsnprintf_size = size;
+	file_readable_vsnprintf_va = va_list;
+	if (file_readable_vsnprintf_result < (int)size)
+		strcpy(buf, "/tmp/readable");
+	return file_readable_vsnprintf_result;
+}
+
+static unsigned long fake_file_readable_open(char *filename)
+{
+	file_readable_open_calls++;
+	file_readable_open_filename = filename;
+	if (file_readable_open_fail)
+		return 0;
+	return 0x515100UL;
+}
+
+static void fake_file_readable_close(unsigned long file)
+{
+	file_readable_close_calls++;
+	file_readable_close_file = file;
+}
+
+static void fake_file_readable_free(unsigned long ptr)
+{
+	file_readable_free_calls++;
+	file_readable_free_addr = ptr;
+}
+
+static void fake_file_readable_log(int event, int error)
+{
+	if (file_readable_log_calls >=
+	    (int)(sizeof(file_readable_log_event) /
+		  sizeof(file_readable_log_event[0]))) {
+		fprintf(stderr, "file_readable log overflow\n");
+		exit(1);
+	}
+	file_readable_log_event[file_readable_log_calls] = event;
+	file_readable_log_error[file_readable_log_calls] = error;
+	file_readable_log_calls++;
+}
+
+static void *fake_read_file_alloc(unsigned long size)
+{
+	read_file_alloc_calls++;
+	read_file_alloc_size = size;
+	if (read_file_alloc_fail)
+		return NULL;
+	if (size > sizeof(read_file_filename)) {
+		fprintf(stderr, "read_file allocation too large\n");
+		exit(1);
+	}
+	return read_file_filename;
+}
+
+static int fake_read_file_vsnprintf(char *buf, unsigned long size,
+				    char *fmt, unsigned long va_list)
+{
+	read_file_vsnprintf_calls++;
+	read_file_vsnprintf_fmt = fmt;
+	read_file_vsnprintf_size = size;
+	read_file_vsnprintf_va = va_list;
+	if (read_file_vsnprintf_result < (int)size)
+		strcpy(buf, "/tmp/read_file");
+	return read_file_vsnprintf_result;
+}
+
+static unsigned long fake_read_file_open(char *filename,
+					 unsigned long errorp)
+{
+	read_file_open_calls++;
+	read_file_open_filename = filename;
+	read_file_open_errorp = errorp;
+	if (read_file_open_fail) {
+		*(int *)errorp = read_file_open_error;
+		return 0;
+	}
+	*(int *)errorp = 0;
+	return 0x525200UL;
+}
+
+static long fake_read_file_kernel_read(unsigned long file, unsigned long buf,
+				       unsigned long size)
+{
+	read_file_kernel_read_calls++;
+	read_file_kernel_file = file;
+	read_file_kernel_buf = buf;
+	read_file_kernel_size = size;
+	if (read_file_kernel_read_result >= 0 &&
+	    read_file_kernel_read_result < (long)size)
+		memcpy((void *)buf, "abcde",
+		       (size_t)read_file_kernel_read_result);
+	return read_file_kernel_read_result;
+}
+
+static int fake_read_file_close(unsigned long file)
+{
+	read_file_close_calls++;
+	read_file_close_file = file;
+	return read_file_close_result;
+}
+
+static void fake_read_file_free(unsigned long ptr)
+{
+	read_file_free_calls++;
+	read_file_free_addr = ptr;
+}
+
+static void fake_read_file_log(int event, unsigned long buf,
+			       unsigned long size, char *fmt, int error)
+{
+	if (read_file_log_calls >=
+	    (int)(sizeof(read_file_log_event) /
+		  sizeof(read_file_log_event[0]))) {
+		fprintf(stderr, "read_file log overflow\n");
+		exit(1);
+	}
+	(void)buf;
+	(void)size;
+	(void)fmt;
+	read_file_log_event[read_file_log_calls] = event;
+	read_file_log_error[read_file_log_calls] = error;
+	read_file_log_calls++;
+}
+
+static unsigned long fake_write_cpu_open(char *path, unsigned long errorp)
+{
+	write_cpu_open_calls++;
+	write_cpu_open_path = path;
+	write_cpu_open_errorp = errorp;
+	if (write_cpu_open_fail) {
+		*(int *)errorp = write_cpu_open_error;
+		return 0;
+	}
+	*(int *)errorp = 0;
+	return 0x616100UL;
+}
+
+static long fake_write_cpu_write(unsigned long file, const char *buf,
+				 unsigned long size)
+{
+	write_cpu_write_calls++;
+	write_cpu_write_file = file;
+	write_cpu_write_buf = buf;
+	write_cpu_write_size = size;
+	return write_cpu_write_result;
+}
+
+static int fake_write_cpu_close(unsigned long file)
+{
+	write_cpu_close_calls++;
+	write_cpu_close_file = file;
+	return 0;
+}
+
+static void fake_write_cpu_log(int event, const char *path, int error)
+{
+	if (write_cpu_log_calls >=
+	    (int)(sizeof(write_cpu_log_event) /
+		  sizeof(write_cpu_log_event[0]))) {
+		fprintf(stderr, "write_cpu log overflow\n");
+		exit(1);
+	}
+	write_cpu_log_event[write_cpu_log_calls] = event;
+	write_cpu_log_error[write_cpu_log_calls] = error;
+	write_cpu_log_path[write_cpu_log_calls] = path;
+	write_cpu_log_calls++;
+}
+
+static struct fake_cpu_topology *alloc_free_info_cpu(int cpu_number,
+						     struct list_head *head)
+{
+	struct fake_cpu_topology *cpu = fake_topo_zalloc(sizeof(*cpu));
+
+	if (!cpu) {
+		fprintf(stderr, "free_info cpu allocation failed\n");
+		exit(1);
+	}
+	init_list_head(&cpu->cache_topology_list);
+	cpu->cpu_number = cpu_number;
+	topo_list_add_tail(&cpu->chain, head);
+	return cpu;
+}
+
+static struct fake_cache_topology *alloc_free_info_cache(
+	struct fake_cpu_topology *cpu, const char *type, const char *size_str)
+{
+	struct fake_cache_topology *cache = fake_topo_zalloc(sizeof(*cache));
+
+	if (!cache) {
+		fprintf(stderr, "free_info cache allocation failed\n");
+		exit(1);
+	}
+	cache->type = topo_dup_string(type);
+	cache->size_str = topo_dup_string(size_str);
+	if (!cache->type || !cache->size_str) {
+		fprintf(stderr, "free_info cache string allocation failed\n");
+		exit(1);
+	}
+	topo_list_add_tail(&cache->chain, &cpu->cache_topology_list);
+	return cache;
+}
+
+static struct fake_node_topology *alloc_free_info_node(int node_number,
+						       struct list_head *head)
+{
+	struct fake_node_topology *node = fake_topo_zalloc(sizeof(*node));
+
+	if (!node) {
+		fprintf(stderr, "free_info node allocation failed\n");
+		exit(1);
+	}
+	node->node_number = node_number;
+	topo_list_add_tail(&node->chain, head);
+	return node;
 }
 
 static int run_collect_cache_topology(struct fake_cpu_topology *cpu,
@@ -114809,6 +132412,125 @@ static int run_collect_node_topology(int node, struct list_head *node_list)
 		fake_topo_log);
 }
 
+static int fake_topo_next_cpu(int previous)
+{
+	int i;
+
+	topo_next_cpu_calls++;
+	for (i = 0; i < topo_online_cpu_count; i++) {
+		if (topo_online_cpus[i] > previous)
+			return topo_online_cpus[i];
+	}
+	return -1;
+}
+
+static int fake_topo_next_node(int previous)
+{
+	int i;
+
+	topo_next_node_calls++;
+	for (i = 0; i < topo_online_node_count; i++) {
+		if (topo_online_nodes[i] > previous)
+			return topo_online_nodes[i];
+	}
+	return -1;
+}
+
+static int fake_topo_collect_cpu_index(int cpu)
+{
+	require(topo_collect_cpu_calls < (int)(sizeof(topo_collected_cpus) /
+					       sizeof(topo_collected_cpus[0])));
+	topo_collected_cpus[topo_collect_cpu_calls++] = cpu;
+	if (cpu == topo_collect_cpu_fail_at)
+		return topo_fail_error;
+	return 0;
+}
+
+static int fake_topo_collect_node_index(int node)
+{
+	require(topo_collect_node_calls < (int)(sizeof(topo_collected_nodes) /
+						sizeof(topo_collected_nodes[0])));
+	topo_collected_nodes[topo_collect_node_calls++] = node;
+	if (node == topo_collect_node_fail_at)
+		return topo_fail_error;
+	return 0;
+}
+
+static int run_collect_topology(void)
+{
+	return ihk_smp_collect_topology_body_result(
+		fake_topo_next_cpu, fake_topo_collect_cpu_index,
+		fake_topo_next_node, fake_topo_collect_node_index,
+		fake_topo_log);
+}
+
+static const char *arch_symbol_lookup_names[16];
+static int arch_symbol_lookup_calls;
+static int arch_symbol_warn_calls;
+static int arch_symbol_warn_failures;
+static const char *arch_symbol_missing_name;
+
+static void reset_arch_symbol_trace(const char *missing_name)
+{
+	memset(arch_symbol_lookup_names, 0, sizeof(arch_symbol_lookup_names));
+	arch_symbol_lookup_calls = 0;
+	arch_symbol_warn_calls = 0;
+	arch_symbol_warn_failures = 0;
+	arch_symbol_missing_name = missing_name;
+}
+
+static unsigned long fake_arch_symbol_lookup(const char *name)
+{
+	static const struct {
+		const char *name;
+		unsigned long value;
+	} values[] = {
+		{ "real_mode_header", 0x1000UL },
+		{ "vector_irq", 0x2000UL },
+		{ "lapic_get_maxlvt", 0x3000UL },
+		{ "irq_desc_tree", 0x4000UL },
+		{ "get_uv_system_type", 0x5000UL },
+		{ "init_deasserted", 0x6000UL },
+		{ "alloc_desc", 0x7000UL },
+		{ "__default_send_IPI_dest_field", 0x8000UL },
+		{ "init_level4_pgt", 0x9000UL },
+		{ "used_vectors", 0xa000UL },
+		{ "ioremap_page_range", 0xb100UL },
+		{ "vmap_area_lock", 0xb200UL },
+		{ "vmap_area_root", 0xb300UL },
+		{ "__insert_vmap_area", 0xb400UL },
+		{ "__free_vmap_area", 0xb500UL },
+		{ "alloc_vmap_area", 0xb600UL },
+		{ "free_vmap_area", 0xb700UL },
+		{ "free_vmap_area_noflush", 0xb701UL },
+		{ "unmap_kernel_range_noflush", 0xb800UL },
+		{ "raised_list", 0xb900UL },
+		{ "hstates", 0xba00UL },
+		{ "default_hstate_idx", 0xbb00UL },
+	};
+	size_t i;
+
+	require(arch_symbol_lookup_calls <
+			(int)(sizeof(arch_symbol_lookup_names) /
+			      sizeof(arch_symbol_lookup_names[0])));
+	arch_symbol_lookup_names[arch_symbol_lookup_calls++] = name;
+	if (arch_symbol_missing_name && !strcmp(name, arch_symbol_missing_name))
+		return 0;
+	for (i = 0; i < sizeof(values) / sizeof(values[0]); i++) {
+		if (!strcmp(name, values[i].name))
+			return values[i].value;
+	}
+	return 0;
+}
+
+static int fake_arch_symbol_warn(int condition)
+{
+	arch_symbol_warn_calls++;
+	if (condition)
+		arch_symbol_warn_failures++;
+	return condition;
+}
+
 int main(void)
 {
 	struct rb_root root = { NULL };
@@ -114819,7 +132541,2415 @@ int main(void)
 	struct fake_node_topology *node_added;
 	struct list_head cpu_list;
 	struct list_head node_list;
+	struct list_head lookup_cpu_list;
+	struct list_head lookup_node_list;
+	struct fake_cpu_topology lookup_cpus[2];
+	struct fake_node_topology lookup_nodes[2];
+	struct fake_smp_cpu fake_cpus[5];
+	unsigned long init_fake_chunks[2];
+	struct fake_builtin_device_data fake_builtin;
+	unsigned long fake_register_data = 0xabcdef1234UL;
+	struct ihk_cpu_req user_req;
+	struct ihk_cpu_req req_scratch;
+	struct ihk_mem_req mem_user_req;
+	struct ihk_mem_req mem_req_scratch;
+	int query_out[5];
+	struct ihk_ikc_req ikc_user_req;
+	struct ihk_ikc_req ikc_req_scratch;
+	int ikc_src_out[5];
+	int ikc_dst_out[5];
+	char ikc_req_string[128];
+	size_t mem_sizes_out[6];
+	int mem_numa_out[6];
+	struct list_head free_mem_list;
+	struct list_head os_mem_list;
+	struct fake_mem_chunk free_chunks[3];
+	struct fake_os_mem_chunk os_chunks[3];
+	struct list_head irq_head;
+	struct fake_interrupt_handler irq_handlers[3];
+	unsigned long fake_chunks[3];
+	long read_long_value;
+	char buildid_dst[16];
+	char load_src[8192];
+	unsigned long translated_phys = 0;
 	unsigned long digest = 0x736d706368756e6bUL;
+	unsigned long sym_real = 0;
+	unsigned long sym_vector = 0;
+	unsigned long sym_lapic = 0;
+	unsigned long sym_irq_desc = 0;
+	unsigned long sym_uv = 0;
+	unsigned long sym_deassert = 0;
+	unsigned long sym_alloc = 0;
+	unsigned long sym_default_ipi = 0;
+	unsigned long sym_init_pgt = 0;
+	unsigned long sym_vectors = 0;
+	unsigned long sym_ioremap = 0;
+	unsigned long sym_vmap_lock = 0;
+	unsigned long sym_vmap_root = 0;
+	unsigned long sym_insert_vmap = 0;
+	unsigned long sym_free_vmap_old = 0;
+	unsigned long sym_alloc_vmap = 0;
+	unsigned long sym_free_vmap_new = 0;
+	unsigned long sym_unmap_noflush = 0;
+	unsigned long sym_raised_list = 0;
+	unsigned long sym_hstates = 0;
+	unsigned long sym_default_hstate = 0;
+	struct fake_os_data control_os;
+	struct fake_device_data control_dev;
+	struct fake_register_os_data builtin_reg = {
+		.name = (char *)"builtinos",
+		.ops = (void *)0x12345678UL,
+		.priv = (void *)0xfeedUL,
+		.flag = 7,
+	};
+	struct fake_register_os_data out_reg;
+		struct fake_os_data *created_os;
+		int fill_i;
+		int irq_hw_ids[3] = { 101, 202, 303 };
+		struct fake_perf_param perf_param;
+		struct fake_extra_reg perf_extra_regs[5];
+		unsigned long perf_hw_event_map[3] = {
+			0x1010UL, 0x2020UL, 0x3030UL
+		};
+		unsigned long perf_cache_ids[2][2][2] = {
+			{ { 0x11UL, 0x12UL }, { 0x13UL, 0x14UL } },
+			{ { 0x21UL, 0x22UL }, { 0x23UL, 0x24UL } },
+		};
+		unsigned long perf_cache_extra[2][2][2] = {
+			{ { 0x31UL, 0x32UL }, { 0x33UL, 0x34UL } },
+			{ { 0x41UL, 0x42UL }, { 0x43UL, 0x44UL } },
+		};
+		const struct ihk_smp_arch_symbol_slots symbol_slots = {
+		.real_mode_header = &sym_real,
+		.vector_irq = &sym_vector,
+		.lapic_get_maxlvt = &sym_lapic,
+		.irq_desc_tree = &sym_irq_desc,
+		.get_uv_system_type = &sym_uv,
+		.init_deasserted = &sym_deassert,
+		.alloc_desc = &sym_alloc,
+		.default_send_ipi_dest_field = &sym_default_ipi,
+		.init_level4_pgt = &sym_init_pgt,
+		.used_vectors = &sym_vectors,
+	};
+	const struct ihk_smp_symbol_slots smp_symbol_slots = {
+		.ioremap_page_range = &sym_ioremap,
+		.vmap_area_lock = &sym_vmap_lock,
+		.vmap_area_root = &sym_vmap_root,
+		.insert_vmap_area = &sym_insert_vmap,
+		.free_vmap_area_old = &sym_free_vmap_old,
+		.alloc_vmap_area = &sym_alloc_vmap,
+		.free_vmap_area_new = &sym_free_vmap_new,
+		.unmap_kernel_range_noflush = &sym_unmap_noflush,
+		.raised_list = &sym_raised_list,
+		.hstates = &sym_hstates,
+		.default_hstate_idx = &sym_default_hstate,
+	};
+
+	memset(&control_os, 0, sizeof(control_os));
+	control_os.status = BUILTIN_OS_STATUS_INITIAL;
+	control_os.mem_info.n_numa_nodes = 6;
+	control_os.nr_cpus = 4;
+	reset_control_trace();
+	require(ihk_smp_os_notify_hungup_body_result((unsigned long)&control_os,
+			&control_offsets, fake_control_lock,
+			fake_control_unlock) == 0);
+	require(control_os.status == BUILTIN_OS_STATUS_HUNGUP);
+	require(control_lock_calls == 1);
+	require(control_unlock_calls == 1);
+	mix(&digest, (unsigned long)control_os.status);
+
+	require(ihk_smp_os_get_memory_info_body_result(
+			(unsigned long)&control_os, &control_offsets) ==
+		(unsigned long)&control_os.mem_info);
+	require(ihk_smp_os_get_cpu_info_body_result(
+			(unsigned long)&control_os, &control_offsets) ==
+		(unsigned long)&control_os.cpu_info);
+	require(ihk_smp_os_get_num_numa_nodes_body_result(
+			(unsigned long)&control_os, &control_offsets) == 6);
+	require(ihk_smp_os_get_num_cpus_body_result(
+			(unsigned long)&control_os, &control_offsets) == 4);
+	require(ihk_smp_os_get_num_cpus_body_result(0, &control_offsets) ==
+		-EINVAL);
+	mix(&digest, (unsigned long)control_os.nr_cpus);
+
+	memset(control_os.kernel_args, 0x7f, sizeof(control_os.kernel_args));
+	control_os.status = BUILTIN_OS_STATUS_INITIAL;
+	reset_control_trace();
+	require(ihk_smp_os_set_kargs_body_result((unsigned long)&control_os,
+			"root=/dev/null console=ttyS0 extra-overflow",
+			&control_offsets, sizeof(control_os.kernel_args),
+			fake_control_lock, fake_control_unlock,
+			fake_control_log) == 0);
+	require(control_os.status == BUILTIN_OS_STATUS_INITIAL);
+	require(control_lock_calls == 2);
+	require(control_unlock_calls == 2);
+	require(control_log_event == 2);
+	require(control_log_args == control_os.kernel_args);
+	require(control_os.kernel_args[sizeof(control_os.kernel_args) - 1] ==
+		'\0');
+	require(!strncmp(control_os.kernel_args, "root=/dev/null", 14));
+	mix(&digest, strlen(control_os.kernel_args));
+
+	control_os.status = BUILTIN_OS_STATUS_HUNGUP;
+	reset_control_trace();
+	require(ihk_smp_os_set_kargs_body_result((unsigned long)&control_os,
+			"ignored", &control_offsets,
+			sizeof(control_os.kernel_args), fake_control_lock,
+			fake_control_unlock, fake_control_log) == -EBUSY);
+	require(control_os.status == BUILTIN_OS_STATUS_HUNGUP);
+	require(control_lock_calls == 1);
+	require(control_log_event == 1);
+	mix(&digest, (unsigned long)control_log_event);
+
+	reset_control_trace();
+	require(ihk_smp_os_debug_request_body_result(0x11, 0x22,
+			IHK_OS_DEBUG_START, 0x1234, IHK_OS_DEBUG_START,
+			fake_control_issue_interrupt) == 0);
+	require(control_issue_calls == 1);
+	require(control_issue_os == 0x11);
+	require(control_issue_priv == 0x22);
+	require(control_issue_cpu == 0x12);
+	require(control_issue_vector == 0x34);
+	require(ihk_smp_os_debug_request_body_result(0x11, 0x22,
+			IHK_OS_DEBUG_START + 1, 0x1234,
+			IHK_OS_DEBUG_START,
+			fake_control_issue_interrupt) == -EINVAL);
+	mix(&digest, (unsigned long)control_issue_cpu);
+	mix(&digest, (unsigned long)control_issue_vector);
+
+	reset_control_trace();
+	require(ihk_smp_os_freeze_thaw_body_result(0x11, 0x22, 1,
+			fake_control_send_multi_intr) == 0);
+	require(control_send_calls == 1);
+	require(control_send_mode == 1);
+	require(ihk_smp_os_freeze_thaw_body_result(0x11, 0x22, 2,
+			fake_control_send_multi_intr) == 0);
+	require(control_send_calls == 2);
+	require(control_send_mode == 2);
+	mix(&digest, (unsigned long)control_send_calls);
+
+	memset(&control_dev, 0, sizeof(control_dev));
+	control_dev.status = 99;
+	memset(&out_reg, 0, sizeof(out_reg));
+	reset_control_trace();
+	require(ihk_smp_create_os_body_result((unsigned long)&control_dev,
+			0xabc, (unsigned long)&out_reg,
+			(unsigned long)&builtin_reg, &control_offsets,
+			sizeof(out_reg), sizeof(struct fake_os_data),
+			fake_control_alloc, fake_control_spin_init,
+			fake_control_create_log) == 0);
+	created_os = out_reg.priv;
+	require(created_os != NULL);
+	require(out_reg.name == builtin_reg.name);
+	require(out_reg.ops == builtin_reg.ops);
+	require(out_reg.flag == builtin_reg.flag);
+	require(created_os->dev == &control_dev);
+	require(created_os->bootstrap_numa_id == -1);
+	require(created_os->boot_pt == NULL);
+	require(control_spin_init_calls == 1);
+	mix(&digest, (unsigned long)(unsigned int)created_os->bootstrap_numa_id);
+	mix(&digest, (unsigned long)control_spin_init_calls);
+	require(ihk_smp_destroy_os_body_result((unsigned long)created_os,
+			fake_control_free) == 0);
+	require(control_free_calls == 1);
+
+	memset(&out_reg, 0, sizeof(out_reg));
+	control_dev.status = 77;
+	reset_control_trace();
+	control_alloc_fail = 1;
+	require(ihk_smp_create_os_body_result((unsigned long)&control_dev,
+			0xabc, (unsigned long)&out_reg,
+			(unsigned long)&builtin_reg, &control_offsets,
+			sizeof(out_reg), sizeof(struct fake_os_data),
+			fake_control_alloc, fake_control_spin_init,
+			fake_control_create_log) == -ENOMEM);
+	require(control_dev.status == 0);
+	require(out_reg.name == builtin_reg.name);
+	require(control_create_log_event == 1);
+	mix(&digest, (unsigned long)control_create_log_event);
+
+	reset_control_trace();
+	require(ihk_smp_device_debug_request_body_result() == -EINVAL);
+	require(ihk_smp_get_dma_channel_body_result(0x10UL, 0x20UL, 3) == 0);
+	require(ihk_smp_get_dma_channel_body_result(0, 0, -1) == 0);
+	require(ihk_smp_unmap_virtual_body_result(0xdeadbeefUL,
+			fake_control_unmap) == 0);
+	require(control_unmap_calls == 1);
+	require(control_unmap_virt == 0xdeadbeefUL);
+	mix(&digest, control_unmap_virt);
+	reset_control_trace();
+	ihk_smp_direct_unmap_virtual_body_result(
+		0xcafebabeUL, 4096UL, fake_control_dcache_flush);
+	require(control_flush_calls == 1);
+	require(control_flush_virt == 0xcafebabeUL);
+	require(control_flush_size == 4096UL);
+	ihk_smp_direct_unmap_virtual_body_result(0x1234UL, 8192UL, NULL);
+	require(control_flush_calls == 1);
+	mix(&digest, control_flush_virt);
+
+	reset_control_trace();
+	control_map_result_base = 0xabc000UL;
+	require(ihk_smp_map_virtual_body_result(0x11, 0x22000UL, 4096,
+			0, 0, fake_control_direct_map,
+			fake_control_host_map, fake_control_map_log) ==
+		0xabc000UL);
+	require(control_map_calls == 1);
+	require(control_map_phys[0] == 0x22000UL);
+	require(control_map_size[0] == 4096);
+	require(control_map_log_event == 0);
+	require(ihk_smp_map_virtual_body_result(0x11, 0x33000UL, 8192,
+			0x44000UL, 5, fake_control_direct_map,
+			fake_control_host_map, fake_control_map_log) ==
+		0x44055UL);
+	require(control_host_map_calls == 1);
+	require(control_host_map_dev == 0x11);
+	require(control_host_map_phys == 0x33000UL);
+	require(control_host_map_virt == 0x44000UL);
+	require(control_host_map_size == 8192);
+	require(control_host_map_flags == 5);
+	reset_control_trace();
+	control_map_fail_at = 1;
+	require(ihk_smp_map_virtual_body_result(0x11, 0x55000UL, 4096,
+			0, 0, fake_control_direct_map,
+			fake_control_host_map, fake_control_map_log) == 0);
+	require(control_map_log_event == 1);
+	require(control_map_log_phys == 0x55000UL);
+	mix(&digest, (unsigned long)control_host_map_flags);
+	mix(&digest, control_map_log_phys);
+
+	init_list_head(&os_mem_list);
+	memset(os_chunks, 0, sizeof(os_chunks));
+	os_chunks[0].addr = 0x100000UL;
+	os_chunks[0].size = 0x4000UL;
+	os_chunks[1].addr = 0x200000UL;
+	os_chunks[1].size = 0x1000UL;
+	fake_topo_list_add(&os_chunks[0].list, &os_mem_list);
+	fake_topo_list_add(&os_chunks[1].list, &os_mem_list);
+	reset_control_trace();
+	require(ihk_smp_direct_map_virtual_body_result(
+			(unsigned long)&os_mem_list, 0x200800UL, 0x100UL,
+			&map_virtual_offsets, fake_control_phys_to_virt) ==
+		0x10200800UL);
+	require(control_phys_to_virt_calls == 1);
+	require(control_phys_to_virt_phys == 0x200000UL);
+	reset_control_trace();
+	require(ihk_smp_direct_map_virtual_body_result(
+			(unsigned long)&os_mem_list, 0x101000UL, 0x2000UL,
+			&map_virtual_offsets, fake_control_phys_to_virt) ==
+		0x10101000UL);
+	require(control_phys_to_virt_calls == 1);
+	require(control_phys_to_virt_phys == 0x100000UL);
+	reset_control_trace();
+	require(ihk_smp_direct_map_virtual_body_result(
+			(unsigned long)&os_mem_list, 0x203000UL, 0x10UL,
+			&map_virtual_offsets, fake_control_phys_to_virt) == 0);
+	require(control_phys_to_virt_calls == 0);
+	require(ihk_smp_direct_map_virtual_body_result(
+			(unsigned long)&os_mem_list, 0x100000UL, 0x10UL,
+			&map_virtual_offsets, NULL) == 0);
+	mix(&digest, control_phys_to_virt_phys);
+
+	reset_control_trace();
+	require(ihk_smp_os_vtop_body_result(0x12345000UL, 0x401234UL,
+			&translated_phys, 0x400000UL, 0x500000UL,
+			0x200000UL, ~0x1fffffUL, fake_control_vtop,
+			fake_control_vtop_log) == 0);
+	require(translated_phys ==
+		((0x12345000UL + 0x3fffffUL) & ~0x1fffffUL) + 0x1234UL);
+	require(control_vtop_calls == 0);
+	require(control_vtop_log_event == 1);
+	require(control_vtop_log_phys == translated_phys);
+	require(ihk_smp_os_vtop_body_result(0x12345000UL, 0x700000UL,
+			&translated_phys, 0x400000UL, 0x500000UL,
+			0x200000UL, ~0x1fffffUL, fake_control_vtop,
+			fake_control_vtop_log) == 0);
+	require(translated_phys == 0x800000UL);
+	require(control_vtop_calls == 1);
+	require(control_vtop_arg == 0x700000UL);
+	require(control_vtop_log_event == 2);
+	mix(&digest, translated_phys);
+
+	for (fill_i = 0; fill_i < (int)sizeof(load_src); fill_i++)
+		load_src[fill_i] = (char)(fill_i * 17 + 3);
+	memset(&control_os, 0, sizeof(control_os));
+	control_os.status = BUILTIN_OS_STATUS_INITIAL;
+	control_os.mem_start = 0x1000UL;
+	control_os.mem_end = 0x4000UL;
+	reset_control_trace();
+	control_map_result_base = (unsigned long)control_load_pages[0];
+	require(ihk_smp_os_load_mem_body_result((unsigned long)&control_os,
+			1, control_os.mem_start, control_os.mem_end,
+			load_src, 5000, 128, &control_offsets, 4096,
+			~4095UL, fake_control_lock, fake_control_unlock,
+			fake_control_direct_map, fake_control_load_copy,
+			fake_control_unmap, fake_control_load_log) == 0);
+	require(control_os.status == BUILTIN_OS_STATUS_INITIAL);
+	require(control_os.boot_rip == control_os.mem_start);
+	require(control_lock_calls == 2);
+	require(control_unlock_calls == 2);
+	require(control_map_calls == 2);
+	require(control_map_phys[0] == 0x1000UL);
+	require(control_map_phys[1] == 0x2000UL);
+	require(control_load_copy_calls == 2);
+	require(control_load_copy_dst[0] ==
+		(unsigned long)control_load_pages[0]);
+	require(control_load_copy_dst[1] ==
+		(unsigned long)control_load_pages[1]);
+	require(control_load_copy_size[0] == 3968);
+	require(control_load_copy_size[1] == 1032);
+	require(!memcmp(control_load_pages[0], load_src + 128, 3968));
+	require(!memcmp(control_load_pages[1], load_src + 4096, 1032));
+	require(control_unmap_calls == 2);
+	require(control_load_log_event == 5);
+	require(control_load_log_b == 0x2000UL);
+	require(control_load_log_c == 4096);
+	require(control_load_log_d == 1032);
+	mix(&digest, control_os.boot_rip);
+	mix(&digest, (unsigned long)control_load_copy_calls);
+
+	reset_control_trace();
+	require(ihk_smp_os_load_mem_body_result((unsigned long)&control_os,
+			0, control_os.mem_start, control_os.mem_end,
+			load_src, 100, 0, &control_offsets, 4096,
+			~4095UL, fake_control_lock, fake_control_unlock,
+			fake_control_direct_map, fake_control_load_copy,
+			fake_control_unmap, fake_control_load_log) == -EINVAL);
+	require(control_load_log_event == 1);
+	reset_control_trace();
+	require(ihk_smp_os_load_mem_body_result((unsigned long)&control_os,
+			1, control_os.mem_start, 0x1100UL, load_src, 0x200,
+			0, &control_offsets, 4096, ~4095UL,
+			fake_control_lock, fake_control_unlock,
+			fake_control_direct_map, fake_control_load_copy,
+			fake_control_unmap, fake_control_load_log) == -E2BIG);
+	require(control_load_log_event == 2);
+	control_os.status = BUILTIN_OS_STATUS_HUNGUP;
+	reset_control_trace();
+	require(ihk_smp_os_load_mem_body_result((unsigned long)&control_os,
+			1, control_os.mem_start, control_os.mem_end,
+			load_src, 100, 0, &control_offsets, 4096,
+			~4095UL, fake_control_lock, fake_control_unlock,
+			fake_control_direct_map, fake_control_load_copy,
+			fake_control_unmap, fake_control_load_log) == -EBUSY);
+	require(control_os.status == BUILTIN_OS_STATUS_HUNGUP);
+	require(control_lock_calls == 1);
+	require(control_load_log_event == 3);
+	control_os.status = BUILTIN_OS_STATUS_INITIAL;
+	reset_control_trace();
+	control_map_fail_at = 1;
+	require(ihk_smp_os_load_mem_body_result((unsigned long)&control_os,
+			1, control_os.mem_start, control_os.mem_end,
+			load_src, 100, 0, &control_offsets, 4096,
+			~4095UL, fake_control_lock, fake_control_unlock,
+			fake_control_direct_map, fake_control_load_copy,
+			fake_control_unmap, fake_control_load_log) == -ENOMEM);
+	require(control_os.status == BUILTIN_OS_STATUS_INITIAL);
+	require(control_load_log_event == 4);
+	require(control_load_log_a == 0x1000UL);
+	mix(&digest, (unsigned long)control_load_log_event);
+
+	require(ihk_smp_adjust_entry_body_result(0x12345678UL,
+			0x900000UL) == 0x12345678UL);
+	require(ihk_smp_identity_map_memory_body_result(0xabcdef00UL) ==
+		0xabcdef00UL);
+	require(ihk_smp_identity_unmap_memory_body_result() == 0);
+	mix(&digest, ihk_smp_identity_map_memory_body_result(0x123000UL));
+	require(ihk_smp_arch_dcache_flush_body_result(0x11110000UL,
+			4096) == 0);
+	reset_cpu_trace();
+	require(ihk_smp_setup_warm_reset_vector_body_result(
+			0x12345abcUL, 0x467UL, 0x469UL,
+			fake_warm_lock, fake_warm_cmos_write,
+			fake_warm_unlock, fake_warm_flush_tlb,
+			fake_warm_write_word) == 0);
+	require(warm_lock_calls == 1);
+	require(warm_cmos_calls == 1);
+	require(warm_cmos_value == 0x0a);
+	require(warm_cmos_reg == 0x0f);
+	require(warm_unlock_calls == 1);
+	require(warm_unlock_flags == warm_lock_flags);
+	require(warm_flush_calls == 1);
+	require(warm_write_count == 2);
+	require(warm_write_phys[0] == 0x467UL);
+	require(warm_write_phys[1] == 0x469UL);
+	require(warm_write_value[0] ==
+		(unsigned short)(0x12345abcUL >> 4));
+	require(warm_write_value[1] ==
+		(unsigned short)(0x12345abcUL & 0x0f));
+	require(warm_lock_event < warm_cmos_event);
+	require(warm_cmos_event < warm_unlock_event);
+	require(warm_unlock_event < warm_flush_event);
+	require(warm_flush_event < warm_write_event[0]);
+	require(warm_write_event[0] < warm_write_event[1]);
+	mix(&digest, (unsigned long)warm_write_value[0]);
+	mix(&digest, (unsigned long)warm_write_value[1]);
+
+	{
+		struct fake_trampoline_param param;
+		struct fake_trampoline_os os;
+		struct fake_trampoline_header *header;
+		unsigned char trampoline[64];
+		unsigned char trampoline_data[64];
+		unsigned char backup[64];
+		int i;
+
+		reset_cpu_trace();
+		memset(&param, 0, sizeof(param));
+		memset(trampoline, 0xa5, sizeof(trampoline));
+		memset(trampoline_data, 0x5a, sizeof(trampoline_data));
+		memset(backup, 0, sizeof(backup));
+		os.param = &param;
+		os.boot_rip = 0x12345678000UL;
+		require(ihk_smp_setup_trampoline_body_result(
+				(unsigned long)&os, 3,
+				&setup_trampoline_offsets, 1, 0xf6U,
+				0x44U, 0xffff888000000000UL, 0x11110000UL,
+				0x22220000UL, 1, (unsigned long)trampoline,
+				(unsigned long)backup,
+				(unsigned long)trampoline_data,
+				sizeof(trampoline), 0x33330000UL,
+				0x44440000UL, 0x55550000UL,
+				fake_setup_apicid,
+				fake_setup_raised_list_phys,
+				fake_setup_log) == 0);
+		for (i = 0; i < 3; i++) {
+			require(param.ihk_ikc_irq_apicids[i] ==
+				(unsigned int)(0x80 + i));
+			require(param.ihk_ikc_cpu_raised_list[i] ==
+				(void *)(0x500000UL +
+					  (unsigned long)i * 0x1000UL));
+		}
+		require(setup_apicid_calls == 3);
+		require(setup_raised_calls == 3);
+		require(param.ikc_irq_work_func == (void *)0x55550000UL);
+		require(param.ihk_ikc_irq == 0xf6U);
+		require(param.page_offset_base == 0xffff888000000000UL);
+		require(param.linux_kernel_pgt_phys == 0x22220000UL);
+		require(setup_log_calls == 1 && setup_log_event == 1);
+		require(setup_log_value0 == 0x11110000UL);
+		require(setup_log_value1 == 0x22220000UL);
+		for (i = 0; i < (int)sizeof(backup); i++)
+			require(backup[i] == 0xa5);
+		require(memcmp(trampoline + sizeof(*header),
+			       trampoline_data + sizeof(*header),
+			       sizeof(trampoline) - sizeof(*header)) == 0);
+		header = (struct fake_trampoline_header *)trampoline;
+		require(header->page_table == 0x33330000UL);
+		require(header->next_ip == os.boot_rip);
+		require(header->notify_address == 0x44440000UL);
+		mix(&digest, header->page_table ^ header->next_ip);
+		mix(&digest, param.ihk_ikc_irq);
+	}
+
+	{
+		struct fake_trampoline_param param;
+		struct fake_trampoline_os os;
+		struct fake_trampoline_header *header;
+		unsigned char trampoline[64];
+		unsigned char trampoline_data[64];
+		unsigned char backup[64];
+
+		reset_cpu_trace();
+		memset(&param, 0, sizeof(param));
+		memset(trampoline, 0xcc, sizeof(trampoline));
+		memset(trampoline_data, 0x11, sizeof(trampoline_data));
+		memset(backup, 0xee, sizeof(backup));
+		os.param = &param;
+		os.boot_rip = 0x77770000UL;
+		require(ihk_smp_setup_trampoline_body_result(
+				(unsigned long)&os, 2,
+				&setup_trampoline_offsets, 0, 0xf6U,
+				0x45U, 0xffff800000000000UL, 0xaaaa0000UL,
+				0xbbbb0000UL, 0, (unsigned long)trampoline,
+				(unsigned long)backup,
+				(unsigned long)trampoline_data,
+				sizeof(trampoline), 0xcccc0000UL,
+				0xdddd0000UL, 0, fake_setup_apicid,
+				fake_setup_raised_list_phys,
+				fake_setup_log) == 0);
+		require(setup_apicid_calls == 2);
+		require(setup_raised_calls == 0);
+		require(param.ihk_ikc_irq == 0x45U);
+		require(param.ikc_irq_work_func == NULL);
+		require(param.ihk_ikc_cpu_raised_list[0] == NULL);
+		require(backup[0] == 0xee);
+		header = (struct fake_trampoline_header *)trampoline;
+		require(header->page_table == 0xcccc0000UL);
+		require(header->next_ip == os.boot_rip);
+		require(header->notify_address == 0xdddd0000UL);
+		require(memcmp(trampoline + sizeof(*header),
+			       trampoline_data + sizeof(*header),
+			       sizeof(trampoline) - sizeof(*header)) == 0);
+		mix(&digest, param.ihk_ikc_irq_apicids[1]);
+	}
+
+	{
+		struct fake_startup_os os;
+		unsigned long startup[8];
+		unsigned long startup_data_words[8] = {
+			0x10, 0x11, 0x12, 0x13,
+			0x14, 0x15, 0x16, 0x17,
+		};
+
+		reset_cpu_trace();
+		memset(&os, 0, sizeof(os));
+		memset(startup, 0, sizeof(startup));
+		os.bootstrap_mem_end = 0x100000UL;
+		startup_map_virtual_result = (unsigned long)startup;
+		require(ihk_smp_os_setup_startup_body_result(
+				(unsigned long)&os, 0x700000UL, 0x900000UL,
+				&setup_startup_offsets, 0x3000UL, 0x1000UL,
+				~0xfffUL, 0x80000000UL, 0xf0000000UL,
+				0x2000UL, 0x1000UL, 12,
+				(unsigned long)startup_data_words,
+				sizeof(startup_data_words), 0x600000UL,
+				fake_startup_alloc_page,
+				fake_startup_page_phys,
+				fake_startup_map_kernel,
+				fake_startup_map_virtual,
+				fake_startup_unmap_virtual,
+				fake_startup_log) == 0);
+		require(os.boot_pt == (void *)0xabcdef000UL);
+		require(startup_map_calls == 8);
+		require(startup_map_pt[0] == 0xabcdef000UL);
+		require(startup_map_virt[0] == 0);
+		require(startup_map_phys[0] == 0);
+		require(startup_map_virt[3] == 0x80000000UL);
+		require(startup_map_phys[3] == 0);
+		require(startup_map_virt[6] == 0xf0000000UL);
+		require(startup_map_phys[6] == 0x700000UL);
+		require(startup_map_virtual_calls == 1);
+		require(startup_map_virtual_phys == 0xfe000UL);
+		require(startup_map_virtual_size == 0x1000UL);
+		require(startup_phys_calls == 1);
+		require(startup_last_phys_virt == 0xabcdef000UL);
+		require(startup[0] == 0x10 && startup[1] == 0x11);
+		require(startup[2] == 0xaccdef000UL);
+		require(startup[3] == 0xff000UL);
+		require(startup[4] == 0x700000UL);
+		require(startup[5] == 0x600000UL);
+		require(startup[6] == 0x900000UL);
+		require(startup[7] == 0x17);
+		require(startup_unmap_calls == 1);
+		require(startup_unmap_virt == (unsigned long)startup);
+		require(os.boot_rip == 0xfe000UL);
+		require(startup_log_event == 0);
+		mix(&digest, os.boot_rip ^ startup[2] ^ startup[6]);
+	}
+
+	{
+		struct fake_startup_os os;
+		unsigned long startup_data_words[2] = { 0x1, 0x2 };
+
+		reset_cpu_trace();
+		memset(&os, 0, sizeof(os));
+		startup_alloc_result = 0;
+		require(ihk_smp_os_setup_startup_body_result(
+				(unsigned long)&os, 0x700000UL, 0x900000UL,
+				&setup_startup_offsets, 0x1000UL, 0x1000UL,
+				~0xfffUL, 0x80000000UL, 0xf0000000UL,
+				0x1000UL, 0x1000UL, 12,
+				(unsigned long)startup_data_words,
+				sizeof(startup_data_words), 0x600000UL,
+				fake_startup_alloc_page,
+				fake_startup_page_phys,
+				fake_startup_map_kernel,
+				fake_startup_map_virtual,
+				fake_startup_unmap_virtual,
+				fake_startup_log) == -ENOMEM);
+		require(startup_log_event == 1);
+		require(startup_map_calls == 0);
+
+		reset_cpu_trace();
+		memset(&os, 0, sizeof(os));
+		os.bootstrap_mem_end = 0x100000UL;
+		startup_map_fail_at = 2;
+		require(ihk_smp_os_setup_startup_body_result(
+				(unsigned long)&os, 0x700000UL, 0x900000UL,
+				&setup_startup_offsets, 0x3000UL, 0x1000UL,
+				~0xfffUL, 0x80000000UL, 0xf0000000UL,
+				0x1000UL, 0x1000UL, 12,
+				(unsigned long)startup_data_words,
+				sizeof(startup_data_words), 0x600000UL,
+				fake_startup_alloc_page,
+				fake_startup_page_phys,
+				fake_startup_map_kernel,
+				fake_startup_map_virtual,
+				fake_startup_unmap_virtual,
+				fake_startup_log) == -ENOMEM);
+		require(startup_log_event == 2);
+		require(startup_map_calls == 2);
+
+		reset_cpu_trace();
+		memset(&os, 0, sizeof(os));
+		os.bootstrap_mem_end = 0x100000UL;
+		startup_map_virtual_result = 0;
+		require(ihk_smp_os_setup_startup_body_result(
+				(unsigned long)&os, 0x700000UL, 0x900000UL,
+				&setup_startup_offsets, 0x1000UL, 0x1000UL,
+				~0xfffUL, 0x80000000UL, 0xf0000000UL,
+				0x1000UL, 0x1000UL, 12,
+				(unsigned long)startup_data_words,
+				sizeof(startup_data_words), 0x600000UL,
+				fake_startup_alloc_page,
+				fake_startup_page_phys,
+				fake_startup_map_kernel,
+				fake_startup_map_virtual,
+				fake_startup_unmap_virtual,
+				fake_startup_log) == -ENOMEM);
+		require(startup_log_event == 5);
+		require(startup_unmap_calls == 0);
+	}
+
+	{
+		unsigned long page = 0x5555UL;
+		unsigned long phys = 0;
+		unsigned long va = 0;
+		int using_linux = -1;
+
+		reset_cpu_trace();
+		require(ihk_smp_arch_init_trampoline_body_result(
+				0x70000UL, 0x1000UL, 2, 3, 0x1000UL,
+				0x100000UL, fake_arch_init_linux_phys,
+				&page, &phys, &va, &using_linux,
+				fake_arch_init_ioremap, fake_arch_init_alloc,
+				fake_arch_init_page_phys,
+				fake_arch_init_page_virt,
+				fake_arch_init_free,
+				fake_arch_init_direct_virt,
+				fake_arch_init_log) == 0);
+		require(page == 0);
+		require(phys == 0x70000UL);
+		require(va == 0x170000UL);
+		require(using_linux == 0);
+		require(arch_init_ioremap_calls == 1);
+		require(arch_init_ioremap_phys == 0x70000UL);
+		require(arch_init_ioremap_size == 0x1000UL);
+		require(arch_init_alloc_calls == 0);
+		require(arch_init_linux_phys_calls == 0);
+		require(arch_init_log_count == 1);
+		require(arch_init_log_event[0] == 1);
+		require(arch_init_log_value[0] == 0x70000UL);
+		mix(&digest, phys ^ va);
+	}
+
+	{
+		unsigned long page = 0;
+		unsigned long phys = 0;
+		unsigned long va = 0;
+		int using_linux = -1;
+
+		reset_cpu_trace();
+		arch_init_alloc_sequence[0] = 0x200000UL;
+		arch_init_alloc_sequence[1] = 0x70000UL;
+		require(ihk_smp_arch_init_trampoline_body_result(
+				0, 0x1000UL, 2, 3, 0x1000UL,
+				0x100000UL, fake_arch_init_linux_phys,
+				&page, &phys, &va, &using_linux,
+				fake_arch_init_ioremap, fake_arch_init_alloc,
+				fake_arch_init_page_phys,
+				fake_arch_init_page_virt,
+				fake_arch_init_free,
+				fake_arch_init_direct_virt,
+				fake_arch_init_log) == 0);
+		require(page == 0x70000UL);
+		require(phys == 0x70000UL);
+		require(va == 0x270000UL);
+		require(using_linux == 0);
+		require(arch_init_alloc_calls == 2);
+		require(arch_init_page_phys_calls == 3);
+		require(arch_init_page_phys_arg[0] == 0x200000UL);
+		require(arch_init_page_phys_arg[1] == 0x70000UL);
+		require(arch_init_page_phys_arg[2] == 0x70000UL);
+		require(arch_init_free_calls == 1);
+		require(arch_init_free_page[0] == 0x200000UL);
+		require(arch_init_free_order[0] == 2);
+		require(arch_init_page_virt_calls == 1);
+		require(arch_init_page_virt_arg[0] == 0x70000UL);
+		require(arch_init_linux_phys_calls == 0);
+		require(arch_init_direct_virt_calls == 0);
+		require(arch_init_log_count == 1);
+		require(arch_init_log_event[0] == 3);
+		require(arch_init_log_value[0] == 0x70000UL);
+		mix(&digest, page ^ arch_init_free_page[0]);
+	}
+
+	{
+		unsigned long page = 0x1234UL;
+		unsigned long phys = 0;
+		unsigned long va = 0;
+		int using_linux = 0;
+
+		reset_cpu_trace();
+		arch_init_alloc_sequence[0] = 0x200000UL;
+		arch_init_alloc_sequence[1] = 0;
+		arch_init_alloc_sequence[2] = 0x300000UL;
+		require(ihk_smp_arch_init_trampoline_body_result(
+				0, 0x1000UL, 2, 3, 0x1000UL,
+				0x100000UL, fake_arch_init_linux_phys,
+				&page, &phys, &va, &using_linux,
+				fake_arch_init_ioremap, fake_arch_init_alloc,
+				fake_arch_init_page_phys,
+				fake_arch_init_page_virt,
+				fake_arch_init_free,
+				fake_arch_init_direct_virt,
+				fake_arch_init_log) == 0);
+		require(page == 0);
+		require(phys == 0x9f000UL);
+		require(va == 0x39f000UL);
+		require(using_linux == 1);
+		require(arch_init_alloc_calls == 3);
+		require(arch_init_page_phys_calls == 3);
+		require(arch_init_free_calls == 2);
+		require(arch_init_free_page[0] == 0x200000UL);
+		require(arch_init_free_page[1] == 0x300000UL);
+		require(arch_init_linux_phys_calls == 1);
+		require(arch_init_direct_virt_calls == 1);
+		require(arch_init_direct_virt_phys == 0x9f000UL);
+		require(arch_init_log_count == 2);
+		require(arch_init_log_event[0] == 2);
+		require(arch_init_log_value[0] == 0x9f000UL);
+		require(arch_init_log_event[1] == 3);
+		require(arch_init_log_value[1] == 0x9f000UL);
+		mix(&digest, phys ^ va ^ (unsigned long)using_linux);
+	}
+
+	{
+		reset_cpu_trace();
+		require(ihk_smp_arch_init_linux_work_tail_body_result(
+				0xef, fake_arch_init_tail_ident,
+				fake_arch_init_tail_topology,
+				fake_arch_init_tail_log) == 0);
+		require(arch_init_tail_ident_calls == 1);
+		require(arch_init_tail_topology_calls == 1);
+		require(arch_init_tail_log_count == 1);
+		require(arch_init_tail_log_event[0] == 1);
+		require(arch_init_tail_log_value[0] == 0xef);
+		mix(&digest, arch_init_tail_log_value[0]);
+
+		reset_cpu_trace();
+		arch_init_tail_ident_result = -14;
+		require(ihk_smp_arch_init_linux_work_tail_body_result(
+				0xee, fake_arch_init_tail_ident,
+				fake_arch_init_tail_topology,
+				fake_arch_init_tail_log) == -14);
+		require(arch_init_tail_ident_calls == 1);
+		require(arch_init_tail_topology_calls == 0);
+		require(arch_init_tail_log_count == 2);
+		require(arch_init_tail_log_event[0] == 1);
+		require(arch_init_tail_log_event[1] == 2);
+		require(arch_init_tail_log_value[1] == -14);
+		mix(&digest, (unsigned long)arch_init_tail_log_value[1]);
+
+		reset_cpu_trace();
+		arch_init_tail_topology_result = -22;
+		require(ihk_smp_arch_init_linux_work_tail_body_result(
+				0xed, fake_arch_init_tail_ident,
+				fake_arch_init_tail_topology,
+				fake_arch_init_tail_log) == -22);
+		require(arch_init_tail_ident_calls == 1);
+		require(arch_init_tail_topology_calls == 1);
+		require(arch_init_tail_log_count == 2);
+		require(arch_init_tail_log_event[0] == 1);
+		require(arch_init_tail_log_event[1] == 3);
+		require(arch_init_tail_log_value[1] == -22);
+		mix(&digest, (unsigned long)arch_init_tail_log_value[1]);
+	}
+
+	{
+		unsigned long ident_table[64];
+		unsigned long ident_phys = 0;
+		unsigned long ident_virt = 0;
+		int ident_order = 0;
+
+		reset_cpu_trace();
+		memset(ident_table, 0xa5, sizeof(ident_table));
+		ident_page_virt_result = (unsigned long)ident_table;
+		require(ihk_smp_init_ident_page_table_body_result(
+				128, 64, 6, 3, 8, 8, 0x63, 0xe3,
+				&ident_phys, &ident_virt, &ident_order,
+				fake_ident_alloc, fake_ident_page_phys,
+				fake_ident_page_virt, fake_ident_zero,
+				fake_ident_log) == 0);
+		require(ident_alloc_calls == 1);
+		require(ident_alloc_order == 3);
+		require(ident_page_phys_calls == 1);
+		require(ident_page_phys_arg == 0xabc0UL);
+		require(ident_page_virt_calls == 1);
+		require(ident_page_virt_arg == 0xabc0UL);
+		require(ident_zero_calls == 1);
+		require(ident_zero_addr == (unsigned long)ident_table);
+		require(ident_zero_len == 2);
+		require(ident_phys == 0x400000UL);
+		require(ident_virt == (unsigned long)ident_table);
+		require(ident_order == 3);
+		require(ident_table[0] == 0x400063UL);
+		require(ident_table[8] == 0x4000e3UL);
+		require(ident_table[9] == 0x4000e3UL);
+		require(ident_table[16] == 0xe3UL);
+		require(ident_table[17] == 0xebUL);
+		require(ident_table[31] == 0xfbUL);
+		require(ident_log_count == 2);
+		require(ident_log_event[0] == 1);
+		require(ident_log_value0[0] == 2);
+		require(ident_log_value1[0] == 3);
+		require(ident_log_event[1] == 4);
+		require(ident_log_value0[1] == 0x400000UL);
+		require(ident_log_value1[1] == (unsigned long)ident_table);
+		mix(&digest, ident_table[0] ^ ident_table[31]);
+
+		reset_cpu_trace();
+		ident_alloc_result = 0;
+		require(ihk_smp_init_ident_page_table_body_result(
+				128, 64, 6, 3, 8, 8, 0x63, 0xe3,
+				&ident_phys, &ident_virt, &ident_order,
+				fake_ident_alloc, fake_ident_page_phys,
+				fake_ident_page_virt, fake_ident_zero,
+				fake_ident_log) == ENOMEM);
+		require(ident_alloc_calls == 1);
+		require(ident_page_phys_calls == 0);
+		require(ident_zero_calls == 0);
+		require(ident_log_count == 2);
+		require(ident_log_event[0] == 1);
+		require(ident_log_event[1] == 2);
+		mix(&digest, (unsigned long)ident_log_event[1]);
+
+		reset_cpu_trace();
+		memset(ident_table, 0, sizeof(ident_table));
+		ident_page_virt_result = (unsigned long)ident_table;
+		require(ihk_smp_init_ident_page_table_body_result(
+				128, 64, 6, 3, 1, 1, 0x63, 0xe3,
+				&ident_phys, &ident_virt, &ident_order,
+				fake_ident_alloc, fake_ident_page_phys,
+				fake_ident_page_virt, fake_ident_zero,
+				fake_ident_log) == 0);
+		require(ident_log_count == 3);
+		require(ident_log_event[1] == 3);
+		require(ident_log_value0[1] == 1);
+		require(ident_log_value1[1] == 2);
+		mix(&digest, ident_log_value0[1] ^ ident_log_value1[1]);
+	}
+
+	reset_cpu_trace();
+	reset_maxlvt = 4;
+	reset_integrated = 1;
+	require(ihk_smp_reset_cpu_body_result(7, 0x280, 0x4500,
+			0x500, fake_reset_preempt_disable,
+			fake_reset_preempt_enable, fake_reset_get_maxlvt,
+			fake_reset_apic_integrated, fake_reset_apic_write,
+			fake_reset_apic_read, fake_reset_icr_write,
+			fake_reset_wait, fake_reset_delay, fake_reset_log) == 0);
+	require(reset_preempt_disable_calls == 1);
+	require(reset_preempt_enable_calls == 1);
+	require(reset_get_maxlvt_calls == 1);
+	require(reset_integrated_calls == 1);
+	require(reset_integrated_phys == 7);
+	require(reset_apic_write_count == 1);
+	require(reset_apic_write_regs[0] == 0x280);
+	require(reset_apic_write_values[0] == 0);
+	require(reset_apic_read_count == 1);
+	require(reset_apic_read_regs[0] == 0x280);
+	require(reset_icr_write_count == 2);
+	require(reset_icr_write_values[0] == 0x4500);
+	require(reset_icr_write_values[1] == 0x500);
+	require(reset_icr_write_phys[0] == 7);
+	require(reset_icr_write_phys[1] == 7);
+	require(reset_wait_count == 2);
+	require(reset_delay_count == 1);
+	require(reset_delay_msecs == 10);
+	require(reset_log_count == 5);
+	require(reset_log_event[0] == 1 && reset_log_phys[0] == 7);
+	require(reset_log_event[4] == 5 && reset_log_phys[4] == 7);
+	require(reset_preempt_disable_event < reset_get_maxlvt_event);
+	require(reset_get_maxlvt_event < reset_integrated_event);
+	require(reset_integrated_event < reset_apic_write_event[0]);
+	require(reset_apic_write_event[0] < reset_apic_read_event[0]);
+	require(reset_apic_read_event[0] < reset_icr_write_event[0]);
+	require(reset_icr_write_event[0] < reset_wait_event[0]);
+	require(reset_wait_event[0] < reset_delay_event);
+	require(reset_delay_event < reset_icr_write_event[1]);
+	require(reset_icr_write_event[1] < reset_wait_event[1]);
+	require(reset_wait_event[1] < reset_preempt_enable_event);
+	mix(&digest, (unsigned long)reset_icr_write_values[0]);
+	mix(&digest, (unsigned long)reset_wait_count);
+
+	reset_cpu_trace();
+	reset_maxlvt = 3;
+	reset_integrated = 1;
+	require(ihk_smp_reset_cpu_body_result(5, 0x280, 0x4500,
+			0x500, fake_reset_preempt_disable,
+			fake_reset_preempt_enable, fake_reset_get_maxlvt,
+			fake_reset_apic_integrated, fake_reset_apic_write,
+			fake_reset_apic_read, fake_reset_icr_write,
+			fake_reset_wait, fake_reset_delay, fake_reset_log) == 0);
+	require(reset_apic_write_count == 0);
+	require(reset_apic_read_count == 1);
+	require(reset_icr_write_count == 2);
+	require(reset_preempt_enable_calls == 1);
+	mix(&digest, (unsigned long)reset_apic_read_count);
+
+	reset_cpu_trace();
+	reset_maxlvt = 4;
+	reset_integrated = 0;
+	require(ihk_smp_reset_cpu_body_result(4, 0x280, 0x4500,
+			0x500, fake_reset_preempt_disable,
+			fake_reset_preempt_enable, fake_reset_get_maxlvt,
+			fake_reset_apic_integrated, fake_reset_apic_write,
+			fake_reset_apic_read, fake_reset_icr_write,
+			fake_reset_wait, fake_reset_delay, fake_reset_log) == 0);
+	require(reset_apic_write_count == 0);
+	require(reset_apic_read_count == 0);
+	require(reset_icr_write_count == 2);
+	require(reset_wait_count == 2);
+	mix(&digest, (unsigned long)reset_apic_write_count);
+
+	reset_cpu_trace();
+	reset_maxlvt = 4;
+	reset_integrated = 1;
+	reset_apic_read_value = 0;
+	reset_wait_use_sequence = 1;
+	require(ihk_smp_wakeup_secondary_cpu_via_init_body_result(
+			7, 0x12345000UL, 0x280, 0x4500, 0x500, 0x600,
+			fake_reset_get_maxlvt, fake_reset_apic_integrated,
+			fake_reset_apic_write, fake_reset_apic_read,
+			fake_reset_icr_write, fake_reset_wait,
+			fake_reset_delay, fake_reset_udelay,
+			fake_reset_barrier, fake_reset_init_deasserted,
+			fake_wakeup_log) == 0);
+	require(reset_get_maxlvt_calls == 1);
+	require(reset_integrated_calls == 1);
+	require(reset_integrated_phys == 7);
+	require(reset_apic_write_count == 5);
+	require(reset_apic_read_count == 5);
+	require(reset_icr_write_count == 4);
+	require(reset_icr_write_values[0] == 0x4500);
+	require(reset_icr_write_values[1] == 0x500);
+	require(reset_icr_write_values[2] == (0x600 | 0x12345));
+	require(reset_icr_write_values[3] == (0x600 | 0x12345));
+	require(reset_icr_write_phys[2] == 7);
+	require(reset_wait_count == 4);
+	require(reset_delay_count == 1);
+	require(reset_delay_msecs == 10);
+	require(reset_udelay_count == 4);
+	require(reset_udelay_usecs[0] == 300);
+	require(reset_udelay_usecs[1] == 200);
+	require(reset_udelay_usecs[2] == 300);
+	require(reset_udelay_usecs[3] == 200);
+	require(reset_barrier_calls == 1);
+	require(reset_init_deasserted_calls == 1);
+	require(reset_log_count == 14);
+	require(reset_log_event[0] == 1);
+	require(reset_log_event[4] == 4 && reset_log_value[4] == 2);
+	require(reset_log_event[5] == 5 && reset_log_value[5] == 1);
+	require(reset_log_event[9] == 5 && reset_log_value[9] == 2);
+	require(reset_log_event[13] == 8);
+	require(reset_apic_read_event[0] < reset_icr_write_event[0]);
+	require(reset_icr_write_event[0] < reset_wait_event[0]);
+	require(reset_wait_event[0] < reset_delay_event);
+	require(reset_delay_event < reset_icr_write_event[1]);
+	require(reset_icr_write_event[1] < reset_wait_event[1]);
+	require(reset_wait_event[1] < reset_barrier_event);
+	require(reset_barrier_event < reset_init_deasserted_event);
+	require(reset_init_deasserted_event < reset_icr_write_event[2]);
+	require(reset_icr_write_event[2] < reset_udelay_event[0]);
+	require(reset_udelay_event[0] < reset_wait_event[2]);
+	require(reset_wait_event[2] < reset_udelay_event[1]);
+	require(reset_udelay_event[1] < reset_apic_read_event[2]);
+	require(reset_apic_read_event[2] < reset_icr_write_event[3]);
+	mix(&digest, (unsigned long)reset_icr_write_values[2]);
+	mix(&digest, (unsigned long)reset_udelay_count);
+
+	reset_cpu_trace();
+	reset_maxlvt = 4;
+	reset_integrated = 0;
+	reset_wait_use_sequence = 1;
+	require(ihk_smp_wakeup_secondary_cpu_via_init_body_result(
+			4, 0x100000UL, 0x280, 0x4500, 0x500, 0x600,
+			fake_reset_get_maxlvt, fake_reset_apic_integrated,
+			fake_reset_apic_write, fake_reset_apic_read,
+			fake_reset_icr_write, fake_reset_wait,
+			fake_reset_delay, fake_reset_udelay,
+			fake_reset_barrier, fake_reset_init_deasserted,
+			fake_wakeup_log) == 0);
+	require(reset_apic_write_count == 0);
+	require(reset_apic_read_count == 0);
+	require(reset_icr_write_count == 2);
+	require(reset_wait_count == 2);
+	require(reset_udelay_count == 0);
+	require(reset_barrier_calls == 1);
+	require(reset_init_deasserted_calls == 1);
+	require(reset_log_count == 6);
+	require(reset_log_event[4] == 4 && reset_log_value[4] == 0);
+	require(reset_log_event[5] == 8);
+	mix(&digest, (unsigned long)reset_log_count);
+
+	reset_cpu_trace();
+	reset_maxlvt = 4;
+	reset_integrated = 1;
+	reset_apic_read_value = 0;
+	reset_wait_use_sequence = 1;
+	reset_wait_values[2] = 0x40;
+	require(ihk_smp_wakeup_secondary_cpu_via_init_body_result(
+			8, 0x200000UL, 0x280, 0x4500, 0x500, 0x600,
+			fake_reset_get_maxlvt, fake_reset_apic_integrated,
+			fake_reset_apic_write, fake_reset_apic_read,
+			fake_reset_icr_write, fake_reset_wait,
+			fake_reset_delay, fake_reset_udelay,
+			fake_reset_barrier, fake_reset_init_deasserted,
+			fake_wakeup_log) == 0x40);
+	require(reset_icr_write_count == 3);
+	require(reset_wait_count == 3);
+	require(reset_udelay_count == 2);
+	require(reset_log_event[9] == 8);
+	require(reset_log_event[10] == 9 && reset_log_value[10] == 0x40);
+	mix(&digest, (unsigned long)reset_wait_values[2]);
+
+	reset_cpu_trace();
+	reset_maxlvt = 4;
+	reset_integrated = 1;
+	reset_apic_read_value = 0x2;
+	reset_wait_use_sequence = 1;
+	require(ihk_smp_wakeup_secondary_cpu_via_init_body_result(
+			9, 0x300000UL, 0x280, 0x4500, 0x500, 0x600,
+			fake_reset_get_maxlvt, fake_reset_apic_integrated,
+			fake_reset_apic_write, fake_reset_apic_read,
+			fake_reset_icr_write, fake_reset_wait,
+			fake_reset_delay, fake_reset_udelay,
+			fake_reset_barrier, fake_reset_init_deasserted,
+			fake_wakeup_log) == 0x2);
+	require(reset_icr_write_count == 3);
+	require(reset_wait_count == 3);
+	require(reset_apic_read_count == 3);
+	require(reset_log_event[9] == 8);
+	require(reset_log_event[10] == 10 && reset_log_value[10] == 0x2);
+	mix(&digest, (unsigned long)reset_apic_read_count);
+
+	reset_cpu_trace();
+	reset_integrated = 1;
+	wakeup_via_ret = -17;
+	require(ihk_smp_wakeup_secondary_cpu_body_result(
+			3, 0x444000UL, 99, 0x280,
+			fake_wakeup_clear_init_deasserted,
+			fake_wakeup_non_unique_apic,
+			fake_wakeup_setup_warm_reset_vector,
+			fake_reset_apic_integrated,
+			fake_reset_apic_write, fake_reset_apic_read,
+			fake_wakeup_apic_available, fake_wakeup_apic,
+			fake_reset_preempt_disable, fake_wakeup_via_init,
+			fake_reset_preempt_enable, fake_wakeup_top_log) == -17);
+	require(reset_init_deasserted_calls == 1);
+	require(wakeup_non_unique_calls == 1);
+	require(wakeup_setup_calls == 1);
+	require(wakeup_setup_start_eip == 0x444000UL);
+	require(reset_integrated_calls == 1);
+	require(reset_integrated_phys == 99);
+	require(reset_apic_write_count == 1);
+	require(reset_apic_read_count == 1);
+	require(wakeup_apic_available_calls == 1);
+	require(wakeup_apic_calls == 0);
+	require(reset_preempt_disable_calls == 1);
+	require(reset_preempt_enable_calls == 1);
+	require(wakeup_via_calls == 1);
+	require(wakeup_via_apicid == 3);
+	require(wakeup_via_start_eip == 0x444000UL);
+	require(wakeup_top_log_count == 2);
+	require(wakeup_top_log_event[0] == 1);
+	require(wakeup_top_log_event[1] == 3);
+	require(reset_init_deasserted_event < wakeup_non_unique_event);
+	require(wakeup_non_unique_event < wakeup_setup_event);
+	require(wakeup_setup_event < reset_integrated_event);
+	require(reset_integrated_event < reset_apic_write_event[0]);
+	require(reset_apic_write_event[0] < reset_apic_read_event[0]);
+	require(reset_apic_read_event[0] < wakeup_apic_available_event);
+	require(wakeup_apic_available_event < reset_preempt_disable_event);
+	require(reset_preempt_disable_event < wakeup_via_event);
+	require(wakeup_via_event < reset_preempt_enable_event);
+	mix(&digest, (unsigned long)wakeup_via_ret);
+	mix(&digest, wakeup_setup_start_eip);
+
+	reset_cpu_trace();
+	wakeup_non_unique = 1;
+	wakeup_apic_available = 1;
+	wakeup_apic_ret = 77;
+	require(ihk_smp_wakeup_secondary_cpu_body_result(
+			4, 0x555000UL, 98, 0x280,
+			fake_wakeup_clear_init_deasserted,
+			fake_wakeup_non_unique_apic,
+			fake_wakeup_setup_warm_reset_vector,
+			fake_reset_apic_integrated,
+			fake_reset_apic_write, fake_reset_apic_read,
+			fake_wakeup_apic_available, fake_wakeup_apic,
+			fake_reset_preempt_disable, fake_wakeup_via_init,
+			fake_reset_preempt_enable, fake_wakeup_top_log) == 77);
+	require(wakeup_setup_calls == 0);
+	require(reset_integrated_calls == 0);
+	require(reset_apic_write_count == 0);
+	require(reset_apic_read_count == 0);
+	require(wakeup_apic_available_calls == 1);
+	require(wakeup_apic_calls == 1);
+	require(wakeup_apic_apicid == 4);
+	require(wakeup_apic_start_eip == 0x555000UL);
+	require(wakeup_via_calls == 0);
+	require(reset_preempt_disable_calls == 0);
+	require(reset_preempt_enable_calls == 0);
+	require(wakeup_top_log_count == 1);
+	require(wakeup_top_log_event[0] == 2);
+	require(reset_init_deasserted_event < wakeup_non_unique_event);
+	require(wakeup_non_unique_event < wakeup_apic_available_event);
+	require(wakeup_apic_available_event < wakeup_apic_event);
+	mix(&digest, (unsigned long)wakeup_apic_ret);
+
+	reset_cpu_trace();
+	reset_integrated = 0;
+	wakeup_apic_available = 1;
+	wakeup_apic_ret = -5;
+	require(ihk_smp_wakeup_secondary_cpu_body_result(
+			5, 0x666000UL, 97, 0x280,
+			fake_wakeup_clear_init_deasserted,
+			fake_wakeup_non_unique_apic,
+			fake_wakeup_setup_warm_reset_vector,
+			fake_reset_apic_integrated,
+			fake_reset_apic_write, fake_reset_apic_read,
+			fake_wakeup_apic_available, fake_wakeup_apic,
+			fake_reset_preempt_disable, fake_wakeup_via_init,
+			fake_reset_preempt_enable, fake_wakeup_top_log) == -5);
+	require(wakeup_setup_calls == 1);
+	require(reset_integrated_calls == 1);
+	require(reset_integrated_phys == 97);
+	require(reset_apic_write_count == 0);
+	require(reset_apic_read_count == 0);
+	require(wakeup_apic_calls == 1);
+	require(wakeup_via_calls == 0);
+	require(reset_preempt_disable_calls == 0);
+	require(reset_preempt_enable_calls == 0);
+	require(wakeup_top_log_count == 2);
+	require(wakeup_top_log_event[0] == 1);
+	require(wakeup_top_log_event[1] == 2);
+	mix(&digest, (unsigned long)wakeup_apic_calls);
+
+	reset_arch_exit_trace();
+	require(ihk_smp_arch_exit_body_result(0x123400UL, 0,
+			0x567800UL, 2, 0x900000UL, 3,
+			fake_exit_free_trampoline, fake_exit_unmap,
+			fake_exit_free_pages) == 0);
+	require(exit_free_trampoline_calls == 1);
+	require(exit_free_trampoline_page == 0x123400UL);
+	require(exit_free_trampoline_order == 2);
+	require(exit_unmap_calls == 0);
+	require(exit_free_pages_calls == 1);
+	require(exit_free_pages_addr == 0x900000UL);
+	require(exit_free_pages_order == 3);
+	require(exit_free_trampoline_event < exit_free_pages_event);
+	mix(&digest, exit_free_trampoline_page);
+	mix(&digest, (unsigned long)exit_free_pages_order);
+
+	reset_arch_exit_trace();
+	require(ihk_smp_arch_exit_body_result(0, 1, 0x567800UL, 2,
+			0x900000UL, 0, fake_exit_free_trampoline,
+			fake_exit_unmap, fake_exit_free_pages) == 0);
+	require(exit_free_trampoline_calls == 0);
+	require(exit_unmap_calls == 0);
+	require(exit_free_pages_calls == 0);
+	mix(&digest, (unsigned long)exit_unmap_calls);
+
+	reset_arch_exit_trace();
+	require(ihk_smp_arch_exit_body_result(0, 0, 0x567800UL, 2,
+			0x900000UL, 1, fake_exit_free_trampoline,
+			fake_exit_unmap, fake_exit_free_pages) == 0);
+	require(exit_free_trampoline_calls == 0);
+	require(exit_unmap_calls == 1);
+	require(exit_unmap_virt == 0x567800UL);
+	require(exit_free_pages_calls == 1);
+	require(exit_free_pages_addr == 0x900000UL);
+	require(exit_free_pages_order == 1);
+	require(exit_unmap_event < exit_free_pages_event);
+	mix(&digest, exit_unmap_virt);
+	require(ihk_smp_calc_ns_per_tsc_body_result(1, 25, 1234567) ==
+		400);
+	require(ihk_smp_calc_ns_per_tsc_body_result(1, 0, 2500000) ==
+		400);
+	require(ihk_smp_calc_ns_per_tsc_body_result(0, 25, 2000000) ==
+		500);
+	require(ihk_smp_x2apic_is_enabled_body_result(1UL << 10) ==
+		(1UL << 10));
+	require(ihk_smp_x2apic_is_enabled_body_result(0x200UL) == 0);
+	require(ihk_smp_vector_entry_used_result(0x1234UL, 0) == 1);
+	require(ihk_smp_vector_entry_used_result(0, 0) == 0);
+	require(ihk_smp_vector_set_needed_result(0, 0) == 1);
+	require(ihk_smp_vector_set_needed_result(0x1234UL, 0) == 0);
+	require(ihk_smp_vector_release_value_result((unsigned long)-1) ==
+		(unsigned long)-1);
+	mix(&digest, ihk_smp_calc_ns_per_tsc_body_result(1, 25, 1234567));
+	mix(&digest, ihk_smp_x2apic_is_enabled_body_result(1UL << 10));
+
+	require(ihk_smp_interrupt_cpu_valid_result(1, 3) == 1);
+	require(ihk_smp_interrupt_cpu_valid_result(3, 3) == 0);
+	reset_control_trace();
+	require(ihk_smp_os_issue_interrupt_body_result(1, 3, irq_hw_ids,
+			0xf1, 7, fake_control_irq_save,
+			fake_control_irq_restore, fake_control_x2apic_enabled,
+			fake_control_x2apic_write, fake_control_legacy_ipi) ==
+		-EINVAL);
+	require(control_irq_save_calls == 1);
+	require(control_irq_restore_calls == 1);
+	require(control_irq_restore_flags == 0x5001UL);
+	require(control_x2apic_enabled_calls == 1);
+	require(control_x2apic_write_calls == 0);
+	require(control_legacy_ipi_calls == 1);
+	require(control_legacy_hw_id == 202);
+	require(control_legacy_vector == 0xf1);
+	require(control_legacy_dest == 7);
+	mix(&digest, (unsigned long)control_legacy_hw_id);
+	mix(&digest, (unsigned long)control_legacy_vector);
+
+	reset_control_trace();
+	control_x2apic_enabled = 1;
+	require(ihk_smp_os_issue_interrupt_body_result(2, 3, irq_hw_ids,
+			0xf2, 7, fake_control_irq_save,
+			fake_control_irq_restore, fake_control_x2apic_enabled,
+			fake_control_x2apic_write, fake_control_legacy_ipi) ==
+		-EINVAL);
+	require(control_irq_save_calls == 1);
+	require(control_irq_restore_calls == 1);
+	require(control_x2apic_enabled_calls == 1);
+	require(control_x2apic_write_calls == 1);
+	require(control_x2apic_hw_id == 303);
+	require(control_x2apic_vector == 0xf2);
+	require(control_legacy_ipi_calls == 0);
+	mix(&digest, (unsigned long)control_x2apic_hw_id);
+
+	reset_control_trace();
+	require(ihk_smp_os_issue_interrupt_body_result(3, 3, irq_hw_ids,
+			0xf3, 7, fake_control_irq_save,
+			fake_control_irq_restore, fake_control_x2apic_enabled,
+			fake_control_x2apic_write, fake_control_legacy_ipi) ==
+		-EINVAL);
+	require(control_irq_save_calls == 0);
+	require(control_irq_restore_calls == 0);
+	require(control_x2apic_write_calls == 0);
+	require(control_legacy_ipi_calls == 0);
+	require(ihk_smp_os_issue_interrupt_body_result(0, 3, NULL,
+			0xf4, 7, fake_control_irq_save,
+			fake_control_irq_restore, fake_control_x2apic_enabled,
+			fake_control_x2apic_write, fake_control_legacy_ipi) ==
+		-EINVAL);
+	require(control_irq_save_calls == 0);
+	mix(&digest, (unsigned long)control_irq_save_calls);
+
+	reset_control_trace();
+	require(ihk_smp_os_broadcast_interrupt_body_result(0x11, 0x22, 4,
+			3, irq_hw_ids, 0xaa, 0xbb, 7, 0, 1,
+			fake_control_set_mode, fake_control_irq_save,
+			fake_control_irq_restore, fake_control_x2apic_enabled,
+			fake_control_x2apic_wait, fake_control_x2apic_write,
+			fake_control_legacy_ipi) == 0);
+	require(control_set_mode_calls == 1);
+	require(control_set_mode_os == 0x11);
+	require(control_set_mode_priv == 0x22);
+	require(control_set_mode_mode == 4);
+	require(control_irq_save_calls == 0);
+	require(control_irq_restore_calls == 0);
+	require(control_x2apic_enabled_calls == 1);
+	require(control_x2apic_wait_calls == 0);
+	require(control_x2apic_write_calls == 0);
+	require(control_legacy_ipi_calls == 3);
+	require(control_legacy_hw_id == 303);
+	require(control_legacy_vector == 0xbb);
+	require(control_legacy_dest == 7);
+	mix(&digest, (unsigned long)control_legacy_ipi_calls);
+
+	reset_control_trace();
+	control_x2apic_enabled = 1;
+	require(ihk_smp_os_broadcast_interrupt_body_result(0x33, 0x44, 5,
+			3, irq_hw_ids, 0xcc, 0xdd, 7, 1, 1,
+			fake_control_set_mode, fake_control_irq_save,
+			fake_control_irq_restore, fake_control_x2apic_enabled,
+			fake_control_x2apic_wait, fake_control_x2apic_write,
+			fake_control_legacy_ipi) == 0);
+	require(control_set_mode_calls == 1);
+	require(control_set_mode_os == 0x33);
+	require(control_set_mode_priv == 0x44);
+	require(control_set_mode_mode == 5);
+	require(control_irq_save_calls == 1);
+	require(control_irq_restore_calls == 1);
+	require(control_irq_restore_flags == 0x5001UL);
+	require(control_x2apic_enabled_calls == 1);
+	require(control_x2apic_wait_calls == 3);
+	require(control_x2apic_write_calls == 3);
+	require(control_x2apic_hw_id == 303);
+	require(control_x2apic_vector == 0xcc);
+	require(control_legacy_ipi_calls == 0);
+	mix(&digest, (unsigned long)control_x2apic_wait_calls);
+
+	reset_control_trace();
+	control_set_mode_fail = -5;
+	require(ihk_smp_os_broadcast_interrupt_body_result(0x55, 0x66, 6,
+			3, irq_hw_ids, 0xee, 0xff, 7, 1, 1,
+			fake_control_set_mode, fake_control_irq_save,
+			fake_control_irq_restore, fake_control_x2apic_enabled,
+			fake_control_x2apic_wait, fake_control_x2apic_write,
+			fake_control_legacy_ipi) == -5);
+	require(control_set_mode_calls == 1);
+	require(control_irq_save_calls == 0);
+	require(control_x2apic_enabled_calls == 0);
+	require(control_x2apic_write_calls == 0);
+	require(control_legacy_ipi_calls == 0);
+	require(ihk_smp_os_broadcast_interrupt_body_result(0x55, 0x66, 6,
+			-1, irq_hw_ids, 0xee, 0xff, 7, 1, 1,
+			fake_control_set_mode, fake_control_irq_save,
+			fake_control_irq_restore, fake_control_x2apic_enabled,
+			fake_control_x2apic_wait, fake_control_x2apic_write,
+			fake_control_legacy_ipi) == -EINVAL);
+	require(control_set_mode_calls == 1);
+	require(ihk_smp_os_broadcast_interrupt_body_result(0x55, 0x66, 6,
+			3, NULL, 0xee, 0xff, 7, 1, 1,
+			fake_control_set_mode, fake_control_irq_save,
+			fake_control_irq_restore, fake_control_x2apic_enabled,
+			fake_control_x2apic_wait, fake_control_x2apic_write,
+			fake_control_legacy_ipi) == -EINVAL);
+	require(control_set_mode_calls == 1);
+	mix(&digest, (unsigned long)control_set_mode_calls);
+
+	require(ihk_smp_check_ikc_map_body_result() == 0);
+	reset_control_trace();
+	memset(fake_cpus, 0x5a, sizeof(fake_cpus));
+	init_fake_chunks[0] = 0xdeadbeefUL;
+	init_fake_chunks[1] = 0xcafebabeUL;
+	smp_init_online_count = 3;
+	smp_init_online_cpus[0] = 0;
+	smp_init_online_cpus[1] = 3;
+	smp_init_online_cpus[2] = 99;
+	smp_init_arch_ret = -7;
+	require(ihk_smp_init_body_result(
+			(unsigned long)&free_mem_list,
+			(unsigned long)&os_mem_list,
+			offsetof(struct list_head, next), 2, 6,
+			(unsigned long)fake_cpus, 5, sizeof(fake_cpus[0]),
+			offsetof(struct fake_smp_cpu, status), 88,
+			fake_smp_init_zero, fake_smp_init_for_each_online,
+			fake_smp_init_arch, (unsigned long)init_fake_chunks,
+			sizeof(init_fake_chunks), fake_smp_init_log) == -7);
+	require(free_mem_list.next == &free_mem_list);
+	require(free_mem_list.prev == &free_mem_list);
+	require(os_mem_list.next == &os_mem_list);
+	require(os_mem_list.prev == &os_mem_list);
+	require(smp_init_zero_calls == 2);
+	require(smp_init_zero_ptr[0] == (unsigned long)fake_cpus);
+	require(smp_init_zero_size[0] == sizeof(fake_cpus));
+	require(smp_init_zero_ptr[1] == (unsigned long)init_fake_chunks);
+	require(smp_init_zero_size[1] == sizeof(init_fake_chunks));
+	require(smp_init_for_each_calls == 1);
+	require(smp_init_arch_calls == 1);
+	require(fake_cpus[0].status == 88);
+	require(fake_cpus[1].status == 0);
+	require(fake_cpus[3].status == 88);
+	require(fake_cpus[4].status == 0);
+	require(init_fake_chunks[0] == 0);
+	require(init_fake_chunks[1] == 0);
+	mix(&digest, (unsigned long)fake_cpus[3].status);
+	reset_control_trace();
+	free_mem_list.next = NULL;
+	free_mem_list.prev = NULL;
+	os_mem_list.next = NULL;
+	os_mem_list.prev = NULL;
+	require(ihk_smp_init_body_result(
+			(unsigned long)&free_mem_list,
+			(unsigned long)&os_mem_list,
+			offsetof(struct list_head, next), 6, 4,
+			(unsigned long)fake_cpus, 5, sizeof(fake_cpus[0]),
+			offsetof(struct fake_smp_cpu, status), 88,
+			fake_smp_init_zero, fake_smp_init_for_each_online,
+			fake_smp_init_arch, 0, 0, fake_smp_init_log) ==
+		EINVAL);
+	require(free_mem_list.next == &free_mem_list);
+	require(os_mem_list.next == &os_mem_list);
+	require(smp_init_log_present == 4);
+	require(smp_init_zero_calls == 0);
+	require(smp_init_arch_calls == 0);
+	mix(&digest, (unsigned long)smp_init_log_present);
+
+	reset_control_trace();
+	memset(fake_cpus, 0, sizeof(fake_cpus));
+	init_list_head(&free_mem_list);
+	fake_cpus[0].id = 10;
+	fake_cpus[0].hw_id = 100;
+	fake_cpus[0].status = IHK_SMP_CPU_ONLINE;
+	fake_cpus[1].id = 11;
+	fake_cpus[1].hw_id = 101;
+	fake_cpus[1].status = IHK_SMP_CPU_TO_OFFLINE;
+	fake_cpus[2].id = 12;
+	fake_cpus[2].hw_id = 102;
+	fake_cpus[2].status = IHK_SMP_CPU_NONE;
+	fake_cpus[3].id = 13;
+	fake_cpus[3].hw_id = 103;
+	fake_cpus[3].status = IHK_SMP_CPU_OFFLINED;
+	smp_exit_reset_ret[0] = -5;
+	smp_exit_reset_ret[1] = 7;
+	smp_exit_online_ret[0] = 0;
+	smp_exit_online_ret[1] = 1;
+	require(ihk_smp_exit_body_result((unsigned long)fake_cpus, 5,
+			sizeof(fake_cpus[0]), offsetof(struct fake_smp_cpu, id),
+			offsetof(struct fake_smp_cpu, hw_id),
+			offsetof(struct fake_smp_cpu, status),
+			(unsigned long)&free_mem_list, fake_smp_exit_arch,
+			fake_smp_exit_reset_cpu, fake_smp_exit_online_cpu,
+			fake_smp_exit_free_list, fake_smp_exit_free_info,
+			fake_smp_exit_log) == 7);
+	require(smp_exit_arch_calls == 1);
+	require(smp_exit_reset_calls == 2);
+	require(smp_exit_reset_hw_id[0] == 101);
+	require(smp_exit_reset_hw_id[1] == 103);
+	require(smp_exit_online_calls == 2);
+	require(smp_exit_online_cpu[0] == 1);
+	require(smp_exit_online_cpu[1] == 3);
+	require(smp_exit_log_calls == 1);
+	require(smp_exit_log_cpu_id[0] == 11);
+	require(smp_exit_log_hw_id[0] == 101);
+	require(smp_exit_free_list_calls == 1);
+	require(smp_exit_free_list_arg == (unsigned long)&free_mem_list);
+	require(smp_exit_free_info_calls == 1);
+	mix(&digest, (unsigned long)smp_exit_reset_hw_id[1]);
+	mix(&digest, (unsigned long)smp_exit_log_hw_id[0]);
+	reset_control_trace();
+	require(ihk_smp_exit_body_result(0, 5, sizeof(fake_cpus[0]),
+			offsetof(struct fake_smp_cpu, id),
+			offsetof(struct fake_smp_cpu, hw_id),
+			offsetof(struct fake_smp_cpu, status),
+			(unsigned long)&free_mem_list, fake_smp_exit_arch,
+			fake_smp_exit_reset_cpu, fake_smp_exit_online_cpu,
+			fake_smp_exit_free_list, fake_smp_exit_free_info,
+			fake_smp_exit_log) == -EINVAL);
+	require(smp_exit_arch_calls == 0);
+
+	reset_control_trace();
+	memset(&fake_builtin, 0, sizeof(fake_builtin));
+	smp_module_register_ret = 0x987654321UL;
+	require(ihk_smp_module_init_body_result((unsigned long)&fake_builtin,
+			offsetof(struct fake_builtin_device_data, ihk_dev),
+			offsetof(struct fake_builtin_device_data, lock),
+			(unsigned long)&fake_register_data,
+			fake_smp_module_symbols_init,
+			fake_smp_module_arch_symbols_init,
+			fake_smp_module_spin_lock_init,
+			fake_smp_module_register_device,
+			fake_smp_module_log) == 0);
+	require(smp_module_log_count == 1);
+	require(smp_module_log_event[0] == 0);
+	require(smp_module_symbols_calls == 1);
+	require(smp_module_arch_symbols_calls == 1);
+	require(smp_module_lock_init_calls == 1);
+	require(smp_module_lock_arg ==
+		(unsigned long)&fake_builtin +
+		offsetof(struct fake_builtin_device_data, lock));
+	require(smp_module_register_calls == 1);
+	require(smp_module_register_arg == (unsigned long)&fake_register_data);
+	require(fake_builtin.ihk_dev == 0x987654321UL);
+	mix(&digest, fake_builtin.ihk_dev);
+	reset_control_trace();
+	smp_module_symbols_ret = -11;
+	require(ihk_smp_module_init_body_result((unsigned long)&fake_builtin,
+			offsetof(struct fake_builtin_device_data, ihk_dev),
+			offsetof(struct fake_builtin_device_data, lock),
+			(unsigned long)&fake_register_data,
+			fake_smp_module_symbols_init,
+			fake_smp_module_arch_symbols_init,
+			fake_smp_module_spin_lock_init,
+			fake_smp_module_register_device,
+			fake_smp_module_log) == -11);
+	require(smp_module_symbols_calls == 1);
+	require(smp_module_arch_symbols_calls == 0);
+	require(smp_module_register_calls == 0);
+	reset_control_trace();
+	smp_module_register_ret = 0;
+	require(ihk_smp_module_init_body_result((unsigned long)&fake_builtin,
+			offsetof(struct fake_builtin_device_data, ihk_dev),
+			offsetof(struct fake_builtin_device_data, lock),
+			(unsigned long)&fake_register_data,
+			fake_smp_module_symbols_init,
+			fake_smp_module_arch_symbols_init,
+			fake_smp_module_spin_lock_init,
+			fake_smp_module_register_device,
+			fake_smp_module_log) == -ENOMEM);
+	require(smp_module_register_calls == 1);
+	require(smp_module_log_count == 2);
+	require(smp_module_log_event[0] == 0);
+	require(smp_module_log_event[1] == 1);
+	mix(&digest, (unsigned long)smp_module_log_event[1]);
+	reset_control_trace();
+	fake_builtin.ihk_dev = 0x22223333UL;
+	require(ihk_smp_module_exit_body_result((unsigned long)&fake_builtin,
+			offsetof(struct fake_builtin_device_data, ihk_dev),
+			fake_smp_module_unregister_device,
+			fake_smp_module_log) == 0);
+	require(smp_module_log_count == 1);
+	require(smp_module_log_event[0] == 2);
+	require(smp_module_unregister_calls == 1);
+	require(smp_module_unregister_arg == 0x22223333UL);
+	require(ihk_smp_module_exit_body_result(0,
+			offsetof(struct fake_builtin_device_data, ihk_dev),
+			fake_smp_module_unregister_device,
+			fake_smp_module_log) == -EINVAL);
+	mix(&digest, smp_module_unregister_arg);
+
+	reset_control_trace();
+	control_irq_work_ret = 7;
+	require(ihk_smp_ikc_irq_work_body_result(
+			fake_control_irq_work_handler) == 7);
+	require(control_irq_work_calls == 1);
+	require(control_irq_work_irq == 0);
+	require(control_irq_work_data == NULL);
+	require(ihk_smp_ikc_irq_work_body_result(NULL) == -EINVAL);
+	require(control_irq_work_calls == 1);
+	mix(&digest, (unsigned long)control_irq_work_calls);
+
+	init_list_head(&irq_head);
+	memset(irq_handlers, 0, sizeof(irq_handlers));
+	irq_handlers[0].func = fake_irq_handler_func;
+	irq_handlers[0].priv = (void *)0x30UL;
+	irq_handlers[1].func = fake_irq_handler_func;
+	irq_handlers[1].priv = (void *)0x60UL;
+	require(ihk_smp_os_register_handler_body_result(
+			0x10UL, 0x20UL, (unsigned long)&irq_handlers[0],
+			(unsigned long)&irq_head, &irq_handler_offsets) == 0);
+	require(ihk_smp_os_register_handler_body_result(
+			0x40UL, 0x50UL, (unsigned long)&irq_handlers[1],
+			(unsigned long)&irq_head, &irq_handler_offsets) == 0);
+	require(irq_handlers[0].os == 0x10UL);
+	require(irq_handlers[0].os_priv == (void *)0x20UL);
+	require(irq_handlers[1].os == 0x40UL);
+	require(irq_handlers[1].os_priv == (void *)0x50UL);
+	reset_irq_handler_trace();
+	require(ihk_smp_irq_call_handlers_body_result((unsigned long)&irq_head,
+			&irq_handler_offsets, 1, fake_irq_no_handler_log) == 1);
+	require(irq_handler_calls == 2);
+	require(irq_handler_priv[0] == 0x30UL);
+	require(irq_handler_priv[1] == 0x60UL);
+	require(ihk_smp_os_unregister_handler_body_result(
+			(unsigned long)&irq_handlers[0], &irq_handler_offsets,
+			SMP_IRQ_LIST_POISON1, SMP_IRQ_LIST_POISON2) == 0);
+	require(irq_handlers[0].list.next ==
+			(struct list_head *)SMP_IRQ_LIST_POISON1);
+	require(irq_handlers[0].list.prev ==
+			(struct list_head *)SMP_IRQ_LIST_POISON2);
+	reset_irq_handler_trace();
+	require(ihk_smp_irq_call_handlers_body_result((unsigned long)&irq_head,
+			&irq_handler_offsets, 1, fake_irq_no_handler_log) == 1);
+	require(irq_handler_calls == 1);
+	require(irq_handler_priv[0] == 0x60UL);
+	require(ihk_smp_os_register_handler_body_result(
+			0, 0, 0, (unsigned long)&irq_head,
+			&irq_handler_offsets) == -EINVAL);
+	require(ihk_smp_os_unregister_handler_body_result(
+			0, &irq_handler_offsets, SMP_IRQ_LIST_POISON1,
+			SMP_IRQ_LIST_POISON2) == -EINVAL);
+	mix(&digest, irq_handler_priv[0]);
+
+	init_list_head(&irq_head);
+	memset(irq_handlers, 0, sizeof(irq_handlers));
+	irq_handlers[0].func = fake_irq_handler_func;
+	irq_handlers[0].os = 0x10UL;
+	irq_handlers[0].os_priv = (void *)0x20UL;
+	irq_handlers[0].priv = (void *)0x30UL;
+	irq_handlers[1].os = 0x40UL;
+	irq_handlers[1].os_priv = (void *)0x50UL;
+	irq_handlers[1].priv = (void *)0x60UL;
+	irq_handlers[2].func = fake_irq_handler_func;
+	irq_handlers[2].os = 0x100UL;
+	irq_handlers[2].os_priv = (void *)0x200UL;
+	irq_handlers[2].priv = (void *)0x300UL;
+	fake_topo_list_add(&irq_handlers[2].list, &irq_head);
+	fake_topo_list_add(&irq_handlers[1].list, &irq_head);
+	fake_topo_list_add(&irq_handlers[0].list, &irq_head);
+	reset_irq_handler_trace();
+	require(ihk_smp_irq_call_handlers_body_result((unsigned long)&irq_head,
+			&irq_handler_offsets, 1, fake_irq_no_handler_log) == 1);
+	require(irq_handler_calls == 2);
+	require(irq_handler_os[0] == 0x10UL);
+	require(irq_handler_os_priv[0] == 0x20UL);
+	require(irq_handler_priv[0] == 0x30UL);
+	require(irq_handler_os[1] == 0x100UL);
+	require(irq_handler_os_priv[1] == 0x200UL);
+	require(irq_handler_priv[1] == 0x300UL);
+	require(irq_no_handler_log_calls == 0);
+	mix(&digest, irq_handler_priv[1]);
+	init_list_head(&irq_head);
+	reset_irq_handler_trace();
+	require(ihk_smp_irq_call_handlers_body_result((unsigned long)&irq_head,
+			&irq_handler_offsets, 9, fake_irq_no_handler_log) == 9);
+	require(irq_handler_calls == 0);
+	require(irq_no_handler_log_calls == 1);
+	require(ihk_smp_irq_call_handlers_body_result(0, &irq_handler_offsets,
+			1, fake_irq_no_handler_log) == -EINVAL);
+	require(ihk_smp_irq_call_handlers_body_result((unsigned long)&irq_head,
+			NULL, 1, fake_irq_no_handler_log) == -EINVAL);
+	mix(&digest, (unsigned long)irq_handler_calls);
+	mix(&digest, (unsigned long)irq_no_handler_log_calls);
+
+	memset(&perf_param, 0, sizeof(perf_param));
+	memset(perf_extra_regs, 0, sizeof(perf_extra_regs));
+	perf_extra_regs[0].event = 0x1001U;
+	perf_extra_regs[0].msr = 0x2001U;
+	perf_extra_regs[0].valid_mask = 0x30010001UL;
+	perf_extra_regs[0].idx = 3;
+	perf_extra_regs[1].event = 0x1002U;
+	perf_extra_regs[1].msr = 0x2002U;
+	perf_extra_regs[1].valid_mask = 0x30020002UL;
+	perf_extra_regs[1].idx = 4;
+	reset_control_trace();
+	require(ihk_smp_arch_get_perf_event_map_body_result(
+			(unsigned long)&perf_param,
+			(unsigned long)perf_extra_regs,
+			(unsigned long)perf_hw_event_map,
+			(unsigned long)perf_cache_ids,
+			(unsigned long)perf_cache_extra, &perf_offsets, 4,
+			sizeof(perf_param.hw_event_map),
+			sizeof(perf_param.hw_cache_event_ids),
+			sizeof(perf_param.hw_cache_extra_regs),
+			fake_control_perf_log) == 0);
+	require(perf_param.nr_extra_regs == 2);
+	require(perf_param.ereg_event[0] == 0x1001U);
+	require(perf_param.ereg_msr[1] == 0x2002U);
+	require(perf_param.ereg_valid_mask[1] == 0x30020002UL);
+	require(perf_param.ereg_idx[1] == 4);
+	require(!memcmp(perf_param.hw_event_map, perf_hw_event_map,
+			sizeof(perf_hw_event_map)));
+	require(!memcmp(perf_param.hw_cache_event_ids, perf_cache_ids,
+			sizeof(perf_cache_ids)));
+	require(!memcmp(perf_param.hw_cache_extra_regs, perf_cache_extra,
+			sizeof(perf_cache_extra)));
+	require(control_perf_log_calls == 0);
+	mix(&digest, perf_param.hw_event_map[2]);
+	mix(&digest, perf_param.hw_cache_event_ids[1][1][1]);
+
+	memset(&perf_param, 0, sizeof(perf_param));
+	require(ihk_smp_arch_get_perf_event_map_body_result(
+			(unsigned long)&perf_param, 0, 0,
+			(unsigned long)perf_cache_ids,
+			(unsigned long)perf_cache_extra, &perf_offsets, 4,
+			sizeof(perf_param.hw_event_map),
+			sizeof(perf_param.hw_cache_event_ids),
+			sizeof(perf_param.hw_cache_extra_regs),
+			fake_control_perf_log) == -EINVAL);
+	memset(&perf_param, 0, sizeof(perf_param));
+	memset(perf_extra_regs, 0, sizeof(perf_extra_regs));
+	perf_extra_regs[0].msr = 0x1U;
+	perf_extra_regs[1].msr = 0x2U;
+	perf_extra_regs[2].msr = 0x3U;
+	reset_control_trace();
+	require(ihk_smp_arch_get_perf_event_map_body_result(
+			(unsigned long)&perf_param,
+			(unsigned long)perf_extra_regs,
+			(unsigned long)perf_hw_event_map,
+			(unsigned long)perf_cache_ids,
+			(unsigned long)perf_cache_extra, &perf_offsets, 2,
+			sizeof(perf_param.hw_event_map),
+			sizeof(perf_param.hw_cache_event_ids),
+			sizeof(perf_param.hw_cache_extra_regs),
+			fake_control_perf_log) == -EINVAL);
+	require(control_perf_log_calls == 1);
+	require(control_perf_log_event == 1);
+	require(control_perf_log_value == 3);
+	mix(&digest, (unsigned long)control_perf_log_value);
+
+	memset(buildid_dst, 0, sizeof(buildid_dst));
+	reset_control_trace();
+	require(ihk_smp_get_buildid_body_result((unsigned long)buildid_dst,
+			"build-123", sizeof("build-123"),
+			fake_smp_copy_to_user) == 0);
+	require(!strcmp(buildid_dst, "build-123"));
+	require(smp_copy_to_calls == 1);
+	smp_copy_to_fail = 1;
+	require(ihk_smp_get_buildid_body_result((unsigned long)buildid_dst,
+			"build-123", sizeof("build-123"),
+			fake_smp_copy_to_user) == -EFAULT);
+	require(smp_copy_to_calls == 2);
+	mix(&digest, (unsigned long)smp_copy_to_calls);
+
+	fake_cpus[0].status = IHK_SMP_CPU_AVAILABLE;
+	fake_cpus[1].status = 0;
+	fake_cpus[2].status = IHK_SMP_CPU_AVAILABLE;
+	fake_cpus[3].status = IHK_SMP_CPU_AVAILABLE;
+	fake_cpus[4].status = 3;
+	require(ihk_smp_device_get_num_cpus_body_result(fake_cpus, 5,
+			sizeof(fake_cpus[0]),
+			offsetof(struct fake_smp_cpu, status),
+			IHK_SMP_CPU_AVAILABLE) == 3);
+	mix(&digest, (unsigned long)fake_cpus[2].status);
+
+	memset(query_out, 0, sizeof(query_out));
+	user_req.cpus = query_out;
+	user_req.num_cpus = 3;
+	reset_control_trace();
+	require(ihk_smp_device_query_cpu_body_result(
+			(unsigned long)&user_req, (unsigned long)&req_scratch,
+			sizeof(req_scratch), &cpu_req_offsets, fake_cpus, 5,
+			sizeof(fake_cpus[0]),
+			offsetof(struct fake_smp_cpu, status),
+			IHK_SMP_CPU_AVAILABLE, sizeof(int), 8,
+			fake_smp_copy_from_user, fake_smp_copy_to_user,
+			fake_smp_alloc, fake_smp_free,
+			fake_smp_query_log) == 0);
+	require(query_out[0] == 0);
+	require(query_out[1] == 2);
+	require(query_out[2] == 3);
+	require(user_req.num_cpus == 3);
+	require(smp_copy_from_calls == 1);
+	require(smp_copy_to_calls == 2);
+	require(smp_alloc_calls == 1);
+	require(smp_free_calls == 1);
+	mix(&digest, (unsigned long)query_out[1]);
+	mix(&digest, (unsigned long)smp_copy_to_calls);
+
+	user_req.num_cpus = 2;
+	reset_control_trace();
+	require(ihk_smp_device_query_cpu_body_result(
+			(unsigned long)&user_req, (unsigned long)&req_scratch,
+			sizeof(req_scratch), &cpu_req_offsets, fake_cpus, 5,
+			sizeof(fake_cpus[0]),
+			offsetof(struct fake_smp_cpu, status),
+			IHK_SMP_CPU_AVAILABLE, sizeof(int), 8,
+			fake_smp_copy_from_user, fake_smp_copy_to_user,
+			fake_smp_alloc, fake_smp_free,
+			fake_smp_query_log) == -EINVAL);
+	require(smp_query_log_event == 3);
+	require(smp_query_log_requested == 2);
+	require(smp_query_log_actual == 3);
+	mix(&digest, (unsigned long)smp_query_log_actual);
+
+	user_req.num_cpus = 3;
+	reset_control_trace();
+	smp_copy_to_fail = 1;
+	require(ihk_smp_device_query_cpu_body_result(
+			(unsigned long)&user_req, (unsigned long)&req_scratch,
+			sizeof(req_scratch), &cpu_req_offsets, fake_cpus, 5,
+			sizeof(fake_cpus[0]),
+			offsetof(struct fake_smp_cpu, status),
+			IHK_SMP_CPU_AVAILABLE, sizeof(int), 8,
+			fake_smp_copy_from_user, fake_smp_copy_to_user,
+			fake_smp_alloc, fake_smp_free,
+			fake_smp_query_log) == -EFAULT);
+	require(smp_free_calls == 1);
+	require(smp_query_log_event == 6);
+	mix(&digest, (unsigned long)smp_query_log_event);
+
+	memset(query_out, 0, sizeof(query_out));
+	control_os.nr_cpus = 3;
+	control_os.cpu_mapping[0] = 7;
+	control_os.cpu_mapping[1] = 5;
+	control_os.cpu_mapping[2] = 8;
+	user_req.cpus = query_out;
+	user_req.num_cpus = 3;
+	reset_control_trace();
+	require(ihk_smp_os_query_cpu_body_result((unsigned long)&control_os,
+			(unsigned long)&user_req, (unsigned long)&req_scratch,
+			sizeof(req_scratch), &cpu_req_offsets,
+			&control_offsets, sizeof(int), 8,
+			fake_smp_copy_from_user, fake_smp_copy_to_user,
+			fake_smp_alloc, fake_smp_free,
+			fake_smp_query_log) == 0);
+	require(query_out[0] == 7);
+	require(query_out[1] == 5);
+	require(query_out[2] == 8);
+	require(smp_alloc_calls == 1);
+	require(smp_free_calls == 1);
+	mix(&digest, (unsigned long)query_out[0]);
+	mix(&digest, (unsigned long)query_out[2]);
+
+	user_req.num_cpus = 4;
+	reset_control_trace();
+	require(ihk_smp_os_query_cpu_body_result((unsigned long)&control_os,
+			(unsigned long)&user_req, (unsigned long)&req_scratch,
+			sizeof(req_scratch), &cpu_req_offsets,
+			&control_offsets, sizeof(int), 8,
+			fake_smp_copy_from_user, fake_smp_copy_to_user,
+			fake_smp_alloc, fake_smp_free,
+			fake_smp_query_log) == -EINVAL);
+	require(smp_query_log_event == 3);
+	require(smp_query_log_requested == 4);
+	require(smp_query_log_actual == 3);
+	mix(&digest, (unsigned long)smp_query_log_requested);
+
+	memset(fake_cpus, 0, sizeof(fake_cpus));
+	fake_cpus[0].status = IHK_SMP_CPU_ASSIGNED;
+	fake_cpus[0].os = 0xabcUL;
+	fake_cpus[0].ikc_map_cpu = 10;
+	fake_cpus[1].status = IHK_SMP_CPU_AVAILABLE;
+	fake_cpus[1].os = 0xabcUL;
+	fake_cpus[1].ikc_map_cpu = 11;
+	fake_cpus[2].status = IHK_SMP_CPU_ASSIGNED;
+	fake_cpus[2].os = 0xdefUL;
+	fake_cpus[2].ikc_map_cpu = 12;
+	fake_cpus[3].status = IHK_SMP_CPU_ASSIGNED;
+	fake_cpus[3].os = 0xabcUL;
+	fake_cpus[3].ikc_map_cpu = 13;
+	fake_cpus[4].status = IHK_SMP_CPU_ASSIGNED;
+	fake_cpus[4].os = 0xabcUL;
+	fake_cpus[4].ikc_map_cpu = 14;
+	memset(ikc_src_out, 0, sizeof(ikc_src_out));
+	memset(ikc_dst_out, 0, sizeof(ikc_dst_out));
+	ikc_user_req.src_cpus = ikc_src_out;
+	ikc_user_req.dst_cpus = ikc_dst_out;
+	ikc_user_req.num_cpus = 3;
+	reset_control_trace();
+	require(ihk_smp_os_get_ikc_map_body_result(
+			0xabcUL, (unsigned long)&ikc_user_req,
+			(unsigned long)&ikc_req_scratch,
+			sizeof(ikc_req_scratch), &ikc_req_offsets,
+			fake_cpus, 5, sizeof(fake_cpus[0]),
+			offsetof(struct fake_smp_cpu, status),
+			offsetof(struct fake_smp_cpu, os),
+			offsetof(struct fake_smp_cpu, ikc_map_cpu),
+			IHK_SMP_CPU_ASSIGNED, sizeof(int), 8,
+			fake_smp_copy_from_user, fake_smp_copy_to_user,
+			fake_smp_alloc, fake_smp_free,
+			fake_smp_query_log) == 0);
+	require(ikc_src_out[0] == 0);
+	require(ikc_dst_out[0] == 10);
+	require(ikc_src_out[1] == 3);
+	require(ikc_dst_out[1] == 13);
+	require(ikc_src_out[2] == 4);
+	require(ikc_dst_out[2] == 14);
+	require(ikc_user_req.num_cpus == 3);
+	require(smp_copy_from_calls == 3);
+	require(smp_copy_to_calls == 3);
+	require(smp_alloc_calls == 2);
+	require(smp_free_calls == 2);
+	mix(&digest, (unsigned long)ikc_dst_out[1]);
+	mix(&digest, (unsigned long)smp_copy_from_calls);
+
+	ikc_user_req.num_cpus = 2;
+	reset_control_trace();
+	require(ihk_smp_os_get_ikc_map_body_result(
+			0xabcUL, (unsigned long)&ikc_user_req,
+			(unsigned long)&ikc_req_scratch,
+			sizeof(ikc_req_scratch), &ikc_req_offsets,
+			fake_cpus, 5, sizeof(fake_cpus[0]),
+			offsetof(struct fake_smp_cpu, status),
+			offsetof(struct fake_smp_cpu, os),
+			offsetof(struct fake_smp_cpu, ikc_map_cpu),
+			IHK_SMP_CPU_ASSIGNED, sizeof(int), 8,
+			fake_smp_copy_from_user, fake_smp_copy_to_user,
+			fake_smp_alloc, fake_smp_free,
+			fake_smp_query_log) == -EINVAL);
+	require(smp_query_log_event == 7);
+	require(smp_query_log_requested == 2);
+	require(smp_query_log_actual == 3);
+	require(smp_free_calls == 2);
+	mix(&digest, (unsigned long)smp_query_log_actual);
+
+	ikc_user_req.num_cpus = 3;
+	reset_control_trace();
+	smp_copy_to_fail = 1;
+	require(ihk_smp_os_get_ikc_map_body_result(
+			0xabcUL, (unsigned long)&ikc_user_req,
+			(unsigned long)&ikc_req_scratch,
+			sizeof(ikc_req_scratch), &ikc_req_offsets,
+			fake_cpus, 5, sizeof(fake_cpus[0]),
+			offsetof(struct fake_smp_cpu, status),
+			offsetof(struct fake_smp_cpu, os),
+			offsetof(struct fake_smp_cpu, ikc_map_cpu),
+			IHK_SMP_CPU_ASSIGNED, sizeof(int), 8,
+			fake_smp_copy_from_user, fake_smp_copy_to_user,
+			fake_smp_alloc, fake_smp_free,
+			fake_smp_query_log) == -EFAULT);
+	require(smp_query_log_event == 8);
+	require(smp_free_calls == 2);
+	mix(&digest, (unsigned long)smp_query_log_event);
+
+	ikc_user_req.src_cpus = NULL;
+	ikc_user_req.dst_cpus = NULL;
+	ikc_user_req.num_cpus = 0;
+	reset_control_trace();
+	require(ihk_smp_os_get_ikc_map_body_result(
+			0x999UL, (unsigned long)&ikc_user_req,
+			(unsigned long)&ikc_req_scratch,
+			sizeof(ikc_req_scratch), &ikc_req_offsets,
+			fake_cpus, 5, sizeof(fake_cpus[0]),
+			offsetof(struct fake_smp_cpu, status),
+			offsetof(struct fake_smp_cpu, os),
+			offsetof(struct fake_smp_cpu, ikc_map_cpu),
+			IHK_SMP_CPU_ASSIGNED, sizeof(int), 8,
+			fake_smp_copy_from_user, fake_smp_copy_to_user,
+			fake_smp_alloc, fake_smp_free,
+			fake_smp_query_log) == 0);
+	require(ikc_user_req.num_cpus == 0);
+	require(smp_copy_from_calls == 1);
+	require(smp_copy_to_calls == 1);
+	require(smp_alloc_calls == 0);
+	require(smp_free_calls == 0);
+	mix(&digest, (unsigned long)smp_copy_to_calls);
+
+	memset(fake_cpus, 0, sizeof(fake_cpus));
+	fake_cpus[0].status = IHK_SMP_CPU_ASSIGNED;
+	fake_cpus[0].os = 0xabcUL;
+	fake_cpus[1].status = IHK_SMP_CPU_AVAILABLE;
+	fake_cpus[2].status = IHK_SMP_CPU_AVAILABLE;
+	fake_cpus[3].status = IHK_SMP_CPU_ASSIGNED;
+	fake_cpus[3].os = 0xabcUL;
+	fake_cpus[4].status = IHK_SMP_CPU_ASSIGNED;
+	fake_cpus[4].os = 0xabcUL;
+	ikc_src_out[0] = 0;
+	ikc_src_out[1] = 3;
+	ikc_dst_out[0] = 1;
+	ikc_dst_out[1] = 2;
+	ikc_user_req.src_cpus = ikc_src_out;
+	ikc_user_req.dst_cpus = ikc_dst_out;
+	ikc_user_req.num_cpus = 2;
+	control_os.status = BUILTIN_OS_STATUS_INITIAL;
+	control_os.cpu_ikc_mapped = 0;
+	reset_control_trace();
+	for (fill_i = 0; fill_i < 5; fill_i++) {
+		smp_cpu_present_mask[fill_i] = 1;
+		smp_cpu_online_mask[fill_i] = 1;
+	}
+	smp_check_ikc_result = 0;
+	require(ihk_smp_os_set_ikc_map_body_result(
+			0xabcUL, (unsigned long)&control_os,
+			(unsigned long)&ikc_user_req,
+			(unsigned long)&ikc_req_scratch,
+			sizeof(ikc_req_scratch), ikc_req_string,
+			sizeof(ikc_req_string), &set_ikc_offsets,
+			fake_cpus, 5, sizeof(fake_cpus[0]),
+			IHK_SMP_CPU_ASSIGNED, BUILTIN_OS_STATUS_INITIAL,
+			sizeof(int), 5, fake_smp_copy_from_user,
+			fake_smp_alloc, fake_smp_free, fake_control_lock,
+			fake_control_unlock, fake_smp_cpu_present,
+			fake_smp_cpu_online, fake_smp_check_ikc_map,
+			fake_smp_set_ikc_log) == 0);
+	require(fake_cpus[0].ikc_map_cpu == 1);
+	require(fake_cpus[3].ikc_map_cpu == 2);
+	require(fake_cpus[4].ikc_map_cpu == 0);
+	require(control_os.cpu_ikc_mapped == 1);
+	require(smp_copy_from_calls == 3);
+	require(smp_alloc_calls == 2);
+	require(smp_free_calls == 2);
+	require(control_lock_calls == 1);
+	require(control_unlock_calls == 1);
+	require(smp_check_ikc_calls == 1);
+	require(smp_set_ikc_route_count == 3);
+	require(smp_set_ikc_route_cpu[0] == 0);
+	require(smp_set_ikc_route_dst[0] == 1);
+	require(smp_set_ikc_route_cpu[1] == 3);
+	require(smp_set_ikc_route_dst[1] == 2);
+	mix(&digest, (unsigned long)smp_set_ikc_route_count);
+	mix(&digest, (unsigned long)fake_cpus[3].ikc_map_cpu);
+
+	fake_cpus[0].ikc_map_cpu = 1;
+	fake_cpus[3].ikc_map_cpu = 2;
+	control_os.status = BUILTIN_OS_STATUS_HUNGUP;
+	control_os.cpu_ikc_mapped = 0;
+	reset_control_trace();
+	require(ihk_smp_os_set_ikc_map_body_result(
+			0xabcUL, (unsigned long)&control_os,
+			(unsigned long)&ikc_user_req,
+			(unsigned long)&ikc_req_scratch,
+			sizeof(ikc_req_scratch), ikc_req_string,
+			sizeof(ikc_req_string), &set_ikc_offsets,
+			fake_cpus, 5, sizeof(fake_cpus[0]),
+			IHK_SMP_CPU_ASSIGNED, BUILTIN_OS_STATUS_INITIAL,
+			sizeof(int), 5, fake_smp_copy_from_user,
+			fake_smp_alloc, fake_smp_free, fake_control_lock,
+			fake_control_unlock, fake_smp_cpu_present,
+			fake_smp_cpu_online, fake_smp_check_ikc_map,
+			fake_smp_set_ikc_log) == -EBUSY);
+	require(control_lock_calls == 1);
+	require(control_unlock_calls == 1);
+	require(fake_cpus[0].ikc_map_cpu == 0);
+	require(fake_cpus[3].ikc_map_cpu == 0);
+	require(smp_alloc_calls == 0);
+	mix(&digest, (unsigned long)control_unlock_calls);
+
+	ikc_user_req.dst_cpus = NULL;
+	ikc_user_req.num_cpus = 1;
+	fake_cpus[0].ikc_map_cpu = 9;
+	control_os.status = BUILTIN_OS_STATUS_INITIAL;
+	control_os.cpu_ikc_mapped = 0;
+	reset_control_trace();
+	require(ihk_smp_os_set_ikc_map_body_result(
+			0xabcUL, (unsigned long)&control_os,
+			(unsigned long)&ikc_user_req,
+			(unsigned long)&ikc_req_scratch,
+			sizeof(ikc_req_scratch), ikc_req_string,
+			sizeof(ikc_req_string), &set_ikc_offsets,
+			fake_cpus, 5, sizeof(fake_cpus[0]),
+			IHK_SMP_CPU_ASSIGNED, BUILTIN_OS_STATUS_INITIAL,
+			sizeof(int), 5, fake_smp_copy_from_user,
+			fake_smp_alloc, fake_smp_free, fake_control_lock,
+			fake_control_unlock, fake_smp_cpu_present,
+			fake_smp_cpu_online, fake_smp_check_ikc_map,
+			fake_smp_set_ikc_log) == -EINVAL);
+	require(smp_set_ikc_log_event == 2);
+	require(smp_set_ikc_log_value0 == 2);
+	require(fake_cpus[0].ikc_map_cpu == 0);
+	require(smp_alloc_calls == 0);
+	mix(&digest, (unsigned long)smp_set_ikc_log_value0);
+
+	ikc_user_req.dst_cpus = ikc_dst_out;
+	ikc_user_req.num_cpus = 1;
+	ikc_src_out[0] = 1;
+	ikc_dst_out[0] = 2;
+	control_os.cpu_ikc_mapped = 0;
+	reset_control_trace();
+	for (fill_i = 0; fill_i < 5; fill_i++) {
+		smp_cpu_present_mask[fill_i] = 1;
+		smp_cpu_online_mask[fill_i] = 1;
+	}
+	require(ihk_smp_os_set_ikc_map_body_result(
+			0xabcUL, (unsigned long)&control_os,
+			(unsigned long)&ikc_user_req,
+			(unsigned long)&ikc_req_scratch,
+			sizeof(ikc_req_scratch), ikc_req_string,
+			sizeof(ikc_req_string), &set_ikc_offsets,
+			fake_cpus, 5, sizeof(fake_cpus[0]),
+			IHK_SMP_CPU_ASSIGNED, BUILTIN_OS_STATUS_INITIAL,
+			sizeof(int), 5, fake_smp_copy_from_user,
+			fake_smp_alloc, fake_smp_free, fake_control_lock,
+			fake_control_unlock, fake_smp_cpu_present,
+			fake_smp_cpu_online, fake_smp_check_ikc_map,
+			fake_smp_set_ikc_log) == -EINVAL);
+	require(smp_set_ikc_log_event == 10);
+	require(smp_set_ikc_log_value0 == 1);
+	require(smp_free_calls == 2);
+	mix(&digest, (unsigned long)smp_set_ikc_log_event);
+
+	ikc_src_out[0] = 0;
+	ikc_dst_out[0] = 3;
+	control_os.cpu_ikc_mapped = 0;
+	reset_control_trace();
+	for (fill_i = 0; fill_i < 5; fill_i++) {
+		smp_cpu_present_mask[fill_i] = 1;
+		smp_cpu_online_mask[fill_i] = 1;
+	}
+	require(ihk_smp_os_set_ikc_map_body_result(
+			0xabcUL, (unsigned long)&control_os,
+			(unsigned long)&ikc_user_req,
+			(unsigned long)&ikc_req_scratch,
+			sizeof(ikc_req_scratch), ikc_req_string,
+			sizeof(ikc_req_string), &set_ikc_offsets,
+			fake_cpus, 5, sizeof(fake_cpus[0]),
+			IHK_SMP_CPU_ASSIGNED, BUILTIN_OS_STATUS_INITIAL,
+			sizeof(int), 5, fake_smp_copy_from_user,
+			fake_smp_alloc, fake_smp_free, fake_control_lock,
+			fake_control_unlock, fake_smp_cpu_present,
+			fake_smp_cpu_online, fake_smp_check_ikc_map,
+			fake_smp_set_ikc_log) == -EINVAL);
+	require(smp_set_ikc_log_event == 11);
+	require(smp_set_ikc_log_value0 == 3);
+	require(fake_cpus[0].ikc_map_cpu == 0);
+	mix(&digest, (unsigned long)smp_set_ikc_log_value0);
+
+	ikc_dst_out[0] = 2;
+	control_os.cpu_ikc_mapped = 0;
+	reset_control_trace();
+	for (fill_i = 0; fill_i < 5; fill_i++) {
+		smp_cpu_present_mask[fill_i] = 1;
+		smp_cpu_online_mask[fill_i] = 1;
+	}
+	smp_cpu_present_mask[2] = 0;
+	require(ihk_smp_os_set_ikc_map_body_result(
+			0xabcUL, (unsigned long)&control_os,
+			(unsigned long)&ikc_user_req,
+			(unsigned long)&ikc_req_scratch,
+			sizeof(ikc_req_scratch), ikc_req_string,
+			sizeof(ikc_req_string), &set_ikc_offsets,
+			fake_cpus, 5, sizeof(fake_cpus[0]),
+			IHK_SMP_CPU_ASSIGNED, BUILTIN_OS_STATUS_INITIAL,
+			sizeof(int), 5, fake_smp_copy_from_user,
+			fake_smp_alloc, fake_smp_free, fake_control_lock,
+			fake_control_unlock, fake_smp_cpu_present,
+			fake_smp_cpu_online, fake_smp_check_ikc_map,
+			fake_smp_set_ikc_log) == -EINVAL);
+	require(smp_set_ikc_log_event == 12);
+	require(smp_set_ikc_log_value0 == 2);
+	mix(&digest, (unsigned long)smp_set_ikc_log_value0);
+
+	init_list_head(&free_mem_list);
+	memset(free_chunks, 0, sizeof(free_chunks));
+	free_chunks[0].size = 0x1000;
+	free_chunks[0].numa_id = 1;
+	free_chunks[1].size = 0x3000;
+	free_chunks[1].numa_id = 2;
+	fake_topo_list_add(&free_chunks[0].chain, &free_mem_list);
+	fake_topo_list_add(&free_chunks[1].chain, &free_mem_list);
+	memset(fake_chunks, 0, sizeof(fake_chunks));
+	fake_chunks[2] = 0x5000;
+	memset(&mem_user_req, 0, sizeof(mem_user_req));
+	memset(&mem_req_scratch, 0, sizeof(mem_req_scratch));
+	mem_user_req.num_chunks = 0;
+	reset_control_trace();
+	require(ihk_smp_query_mem_body_result((unsigned long)&free_mem_list,
+			0, 0, 0, fake_chunks, 3,
+			(unsigned long)&mem_user_req,
+			(unsigned long)&mem_req_scratch, sizeof(mem_req_scratch),
+			&mem_req_offsets, &free_mem_query_offsets, sizeof(size_t),
+			sizeof(int), fake_smp_copy_from_user,
+			fake_smp_copy_to_user, fake_smp_alloc, fake_smp_free,
+			fake_smp_query_log) == 0);
+	require(mem_user_req.num_chunks == 3);
+	require(smp_copy_from_calls == 1);
+	require(smp_copy_to_calls == 1);
+	require(smp_alloc_calls == 0);
+	mix(&digest, (unsigned long)mem_user_req.num_chunks);
+
+	memset(mem_sizes_out, 0, sizeof(mem_sizes_out));
+	memset(mem_numa_out, 0, sizeof(mem_numa_out));
+	mem_user_req.sizes = mem_sizes_out;
+	mem_user_req.numa_ids = mem_numa_out;
+	mem_user_req.num_chunks = 1;
+	reset_control_trace();
+	require(ihk_smp_query_mem_body_result((unsigned long)&free_mem_list,
+			0, 0, 0, fake_chunks, 3,
+			(unsigned long)&mem_user_req,
+			(unsigned long)&mem_req_scratch, sizeof(mem_req_scratch),
+			&mem_req_offsets, &free_mem_query_offsets, sizeof(size_t),
+			sizeof(int), fake_smp_copy_from_user,
+			fake_smp_copy_to_user, fake_smp_alloc, fake_smp_free,
+			fake_smp_query_log) == 0);
+	require(mem_user_req.num_chunks == 3);
+	require(mem_sizes_out[0] == 0x3000);
+	require(mem_numa_out[0] == 2);
+	require(mem_sizes_out[1] == 0x1000);
+	require(mem_numa_out[1] == 1);
+	require(mem_sizes_out[2] == 0x5000);
+	require(mem_numa_out[2] == 2);
+	require(smp_alloc_calls == 2);
+	require(smp_free_calls == 2);
+	mix(&digest, mem_sizes_out[0]);
+	mix(&digest, (unsigned long)mem_numa_out[2]);
+
+	reset_control_trace();
+	smp_copy_to_fail = 1;
+	require(ihk_smp_query_mem_body_result((unsigned long)&free_mem_list,
+			0, 0, 0, fake_chunks, 3,
+			(unsigned long)&mem_user_req,
+			(unsigned long)&mem_req_scratch, sizeof(mem_req_scratch),
+			&mem_req_offsets, &free_mem_query_offsets, sizeof(size_t),
+			sizeof(int), fake_smp_copy_from_user,
+			fake_smp_copy_to_user, fake_smp_alloc, fake_smp_free,
+			fake_smp_query_log) == -EFAULT);
+	require(smp_free_calls == 2);
+	require(smp_query_log_event == 6);
+	mix(&digest, (unsigned long)smp_query_log_event);
+
+	init_list_head(&os_mem_list);
+	memset(os_chunks, 0, sizeof(os_chunks));
+	os_chunks[0].size = 0x7000;
+	os_chunks[0].numa_id = 4;
+	os_chunks[0].os = &control_os;
+	os_chunks[1].size = 0x9000;
+	os_chunks[1].numa_id = 5;
+	os_chunks[1].os = (void *)0x4444UL;
+	os_chunks[2].size = 0xb000;
+	os_chunks[2].numa_id = 6;
+	os_chunks[2].os = &control_os;
+	fake_topo_list_add(&os_chunks[0].list, &os_mem_list);
+	fake_topo_list_add(&os_chunks[1].list, &os_mem_list);
+	fake_topo_list_add(&os_chunks[2].list, &os_mem_list);
+	memset(mem_sizes_out, 0, sizeof(mem_sizes_out));
+	memset(mem_numa_out, 0, sizeof(mem_numa_out));
+	mem_user_req.sizes = mem_sizes_out;
+	mem_user_req.numa_ids = mem_numa_out;
+	mem_user_req.num_chunks = 2;
+	reset_control_trace();
+	require(ihk_smp_query_mem_body_result((unsigned long)&os_mem_list,
+			(unsigned long)&control_os, 1, 1, NULL, 0,
+			(unsigned long)&mem_user_req,
+			(unsigned long)&mem_req_scratch, sizeof(mem_req_scratch),
+			&mem_req_offsets, &os_mem_query_offsets, sizeof(size_t),
+			sizeof(int), fake_smp_copy_from_user,
+			fake_smp_copy_to_user, fake_smp_alloc, fake_smp_free,
+			fake_smp_query_log) == 0);
+	require(mem_user_req.num_chunks == 2);
+	require(mem_sizes_out[0] == 0xb000);
+	require(mem_numa_out[0] == 6);
+	require(mem_sizes_out[1] == 0x7000);
+	require(mem_numa_out[1] == 4);
+	require(smp_alloc_calls == 2);
+	require(smp_free_calls == 2);
+	mix(&digest, mem_sizes_out[0]);
+	mix(&digest, (unsigned long)mem_numa_out[1]);
+
+	mem_user_req.num_chunks = 3;
+	reset_control_trace();
+	require(ihk_smp_query_mem_body_result((unsigned long)&os_mem_list,
+			(unsigned long)&control_os, 1, 1, NULL, 0,
+			(unsigned long)&mem_user_req,
+			(unsigned long)&mem_req_scratch, sizeof(mem_req_scratch),
+			&mem_req_offsets, &os_mem_query_offsets, sizeof(size_t),
+			sizeof(int), fake_smp_copy_from_user,
+			fake_smp_copy_to_user, fake_smp_alloc, fake_smp_free,
+			fake_smp_query_log) == -EINVAL);
+	require(smp_query_log_event == 3);
+	require(smp_query_log_requested == 3);
+	require(smp_query_log_actual == 2);
+	mix(&digest, (unsigned long)smp_query_log_actual);
+
+	reset_control_trace();
+	smp_alloc_fail = 1;
+	require(ihk_smp_query_mem_body_result((unsigned long)&os_mem_list,
+			(unsigned long)&control_os, 1, 1, NULL, 0,
+			(unsigned long)&mem_user_req,
+			(unsigned long)&mem_req_scratch, sizeof(mem_req_scratch),
+			&mem_req_offsets, &os_mem_query_offsets, sizeof(size_t),
+			sizeof(int), fake_smp_copy_from_user,
+			fake_smp_copy_to_user, fake_smp_alloc, fake_smp_free,
+			fake_smp_query_log) == -EINVAL);
+	require(smp_alloc_calls == 0);
+	mix(&digest, (unsigned long)smp_alloc_calls);
+
+	mem_user_req.num_chunks = 2;
+	reset_control_trace();
+	smp_alloc_fail = 1;
+	require(ihk_smp_query_mem_body_result((unsigned long)&os_mem_list,
+			(unsigned long)&control_os, 1, 1, NULL, 0,
+			(unsigned long)&mem_user_req,
+			(unsigned long)&mem_req_scratch, sizeof(mem_req_scratch),
+			&mem_req_offsets, &os_mem_query_offsets, sizeof(size_t),
+			sizeof(int), fake_smp_copy_from_user,
+			fake_smp_copy_to_user, fake_smp_alloc, fake_smp_free,
+			fake_smp_query_log) == -ENOMEM);
+	require(smp_alloc_calls == 1);
+	require(smp_query_log_event == 4);
+	mix(&digest, (unsigned long)smp_query_log_event);
+
+	memset(lookup_cpus, 0, sizeof(lookup_cpus));
+	memset(lookup_nodes, 0, sizeof(lookup_nodes));
+	init_list_head(&lookup_cpu_list);
+	init_list_head(&lookup_node_list);
+	lookup_cpus[0].cpu_number = 7;
+	lookup_cpus[0].hw_id = 70;
+	lookup_cpus[1].cpu_number = 9;
+	lookup_cpus[1].hw_id = 90;
+	fake_topo_list_add(&lookup_cpus[0].chain, &lookup_cpu_list);
+	fake_topo_list_add(&lookup_cpus[1].chain, &lookup_cpu_list);
+	lookup_nodes[0].node_number = 3;
+	lookup_nodes[1].node_number = 5;
+	fake_topo_list_add(&lookup_nodes[0].chain, &lookup_node_list);
+	fake_topo_list_add(&lookup_nodes[1].chain, &lookup_node_list);
+	require(ihk_smp_get_cpu_topology_body_result(
+			(unsigned long)&lookup_cpu_list, 70,
+			&topo_lookup_offsets) ==
+		(unsigned long)&lookup_cpus[0]);
+	require(ihk_smp_get_cpu_topology_body_result(
+			(unsigned long)&lookup_cpu_list, 1234,
+			&topo_lookup_offsets) == 0);
+	require(ihk_smp_get_node_topology_body_result(
+			(unsigned long)&lookup_node_list, 5, 8,
+			(unsigned long)-EINVAL, &topo_lookup_offsets) ==
+		(unsigned long)&lookup_nodes[1]);
+	require(ihk_smp_get_node_topology_body_result(
+			(unsigned long)&lookup_node_list, 9, 8,
+			(unsigned long)-EINVAL, &topo_lookup_offsets) ==
+		(unsigned long)-EINVAL);
+	require(ihk_smp_linux_cpu_to_hw_id_body_result(
+			(unsigned long)&lookup_cpu_list, 9,
+			&topo_lookup_offsets) == 90);
+	require(ihk_smp_linux_cpu_to_hw_id_body_result(
+			(unsigned long)&lookup_cpu_list, 99,
+			&topo_lookup_offsets) == -1);
+	mix(&digest, (unsigned long)lookup_cpus[1].hw_id);
+	mix(&digest, (unsigned long)lookup_nodes[1].node_number);
+
+	reset_arch_symbol_trace(NULL);
+	require(ihk_smp_arch_symbols_init_body_result(&symbol_slots,
+			fake_arch_symbol_lookup, fake_arch_symbol_warn) == 0);
+	require(sym_real == 0x1000UL);
+	require(sym_vector == 0x2000UL);
+	require(sym_lapic == 0x3000UL);
+	require(sym_irq_desc == 0x4000UL);
+	require(sym_uv == 0x5000UL);
+	require(sym_deassert == 0x6000UL);
+	require(sym_alloc == 0x7000UL);
+	require(sym_default_ipi == 0x8000UL);
+	require(sym_init_pgt == 0x9000UL);
+	require(sym_vectors == 0xa000UL);
+	require(arch_symbol_lookup_calls == 12);
+	require(!strcmp(arch_symbol_lookup_names[0], "real_mode_header"));
+	require(!strcmp(arch_symbol_lookup_names[8], "init_top_pgt"));
+	require(!strcmp(arch_symbol_lookup_names[9], "init_level4_pgt"));
+	require(!strcmp(arch_symbol_lookup_names[10], "system_vectors"));
+	require(!strcmp(arch_symbol_lookup_names[11], "used_vectors"));
+	require(arch_symbol_warn_calls == 10);
+	require(arch_symbol_warn_failures == 0);
+	mix(&digest, sym_real ^ sym_init_pgt ^ sym_vectors);
+
+	reset_arch_symbol_trace("alloc_desc");
+	sym_alloc = 0x7777UL;
+	require(ihk_smp_arch_symbols_init_body_result(&symbol_slots,
+			fake_arch_symbol_lookup, fake_arch_symbol_warn) ==
+			-EFAULT);
+	require(sym_alloc == 0);
+	require(arch_symbol_warn_calls == 7);
+	require(arch_symbol_warn_failures == 1);
+	mix(&digest, (unsigned long)arch_symbol_warn_calls);
+
+	require(ihk_smp_arch_symbols_init_body_result(NULL,
+			fake_arch_symbol_lookup, fake_arch_symbol_warn) == -22);
+	require(ihk_smp_arch_symbols_init_body_result(&symbol_slots,
+			NULL, fake_arch_symbol_warn) == -22);
+
+	reset_arch_symbol_trace(NULL);
+	sym_ioremap = sym_vmap_lock = sym_vmap_root = sym_insert_vmap = 0;
+	sym_free_vmap_old = sym_alloc_vmap = sym_free_vmap_new = 0;
+	sym_unmap_noflush = sym_raised_list = sym_hstates = 0;
+	sym_default_hstate = 0;
+	require(ihk_smp_symbols_init_body_result(&smp_symbol_slots, 1, 0,
+			fake_arch_symbol_lookup, fake_arch_symbol_warn) == 0);
+	require(sym_ioremap == 0xb100UL);
+	require(sym_vmap_lock == 0xb200UL);
+	require(sym_vmap_root == 0xb300UL);
+	require(sym_insert_vmap == 0xb400UL);
+	require(sym_free_vmap_old == 0xb500UL);
+	require(sym_alloc_vmap == 0);
+	require(sym_unmap_noflush == 0xb800UL);
+	require(sym_hstates == 0xba00UL);
+	require(sym_default_hstate == 0xbb00UL);
+	require(arch_symbol_lookup_calls == 8);
+	require(!strcmp(arch_symbol_lookup_names[0],
+			"ioremap_page_range"));
+	require(!strcmp(arch_symbol_lookup_names[4],
+			"__free_vmap_area"));
+	require(!strcmp(arch_symbol_lookup_names[7],
+			"default_hstate_idx"));
+	require(arch_symbol_warn_calls == 8);
+	require(arch_symbol_warn_failures == 0);
+	mix(&digest, sym_ioremap ^ sym_free_vmap_old ^ sym_default_hstate);
+
+	reset_arch_symbol_trace("free_vmap_area");
+	sym_alloc_vmap = sym_free_vmap_new = sym_unmap_noflush = 0;
+	sym_raised_list = sym_hstates = sym_default_hstate = 0;
+	require(ihk_smp_symbols_init_body_result(&smp_symbol_slots, 0, 1,
+			fake_arch_symbol_lookup, fake_arch_symbol_warn) == 0);
+	require(sym_alloc_vmap == 0xb600UL);
+	require(sym_free_vmap_new == 0xb701UL);
+	require(sym_unmap_noflush == 0xb800UL);
+	require(sym_raised_list == 0xb900UL);
+	require(sym_hstates == 0xba00UL);
+	require(sym_default_hstate == 0xbb00UL);
+	require(arch_symbol_lookup_calls == 8);
+	require(!strcmp(arch_symbol_lookup_names[1], "alloc_vmap_area"));
+	require(!strcmp(arch_symbol_lookup_names[2], "free_vmap_area"));
+	require(!strcmp(arch_symbol_lookup_names[3],
+			"free_vmap_area_noflush"));
+	require(!strcmp(arch_symbol_lookup_names[5], "raised_list"));
+	require(arch_symbol_warn_calls == 7);
+	require(arch_symbol_warn_failures == 0);
+	mix(&digest, sym_free_vmap_new ^ sym_raised_list);
+
+	reset_arch_symbol_trace("hstates");
+	sym_hstates = 0x7777UL;
+	require(ihk_smp_symbols_init_body_result(&smp_symbol_slots, 0, 0,
+			fake_arch_symbol_lookup, fake_arch_symbol_warn) ==
+			-EFAULT);
+	require(sym_hstates == 0);
+	require(arch_symbol_warn_calls == 5);
+	require(arch_symbol_warn_failures == 1);
+	mix(&digest, (unsigned long)arch_symbol_warn_calls);
+
+	require(ihk_smp_symbols_init_body_result(NULL, 0, 0,
+			fake_arch_symbol_lookup, fake_arch_symbol_warn) == -EINVAL);
+	require(ihk_smp_symbols_init_body_result(&smp_symbol_slots, 0, 0,
+			NULL, fake_arch_symbol_warn) == -EINVAL);
 
 	reset_topo_trace(&cpu_topo);
 	require(run_collect_cache_topology(&cpu_topo, 4) == 0);
@@ -114938,6 +135068,715 @@ int main(void)
 	require(topo_free_calls == 1);
 	mix(&digest, (unsigned long)(unsigned int)topo_log_error);
 	mix(&digest, (unsigned long)topo_free_calls);
+
+	reset_topo_trace(&cpu_topo);
+	topo_online_cpus[0] = 1;
+	topo_online_cpus[1] = 3;
+	topo_online_cpu_count = 2;
+	topo_online_nodes[0] = 0;
+	topo_online_nodes[1] = 2;
+	topo_online_node_count = 2;
+	require(run_collect_topology() == 0);
+	require(topo_next_cpu_calls == 3);
+	require(topo_next_node_calls == 3);
+	require(topo_collect_cpu_calls == 2);
+	require(topo_collected_cpus[0] == 1);
+	require(topo_collected_cpus[1] == 3);
+	require(topo_collect_node_calls == 2);
+	require(topo_collected_nodes[0] == 0);
+	require(topo_collected_nodes[1] == 2);
+	require(topo_log_count == 2);
+	require(topo_log_events[0] == 23);
+	require(topo_log_events[1] == 26);
+	require(topo_log_errors[1] == 0);
+	mix(&digest, (unsigned long)topo_collect_cpu_calls);
+	mix(&digest, (unsigned long)topo_collect_node_calls);
+
+	reset_topo_trace(&cpu_topo);
+	topo_online_cpus[0] = 2;
+	topo_online_cpus[1] = 5;
+	topo_online_cpu_count = 2;
+	topo_online_nodes[0] = 1;
+	topo_online_node_count = 1;
+	topo_collect_cpu_fail_at = 5;
+	topo_fail_error = -31;
+	require(run_collect_topology() == -31);
+	require(topo_collect_cpu_calls == 2);
+	require(topo_collected_cpus[1] == 5);
+	require(topo_collect_node_calls == 0);
+	require(topo_log_count == 3);
+	require(topo_log_events[0] == 23);
+	require(topo_log_events[1] == 24);
+	require(topo_log_events[2] == 26);
+	require(topo_log_errors[1] == -31);
+	require(topo_log_errors[2] == -31);
+	mix(&digest, (unsigned long)(unsigned int)topo_log_errors[2]);
+
+	reset_topo_trace(&cpu_topo);
+	topo_online_cpus[0] = 4;
+	topo_online_cpu_count = 1;
+	topo_online_nodes[0] = 0;
+	topo_online_nodes[1] = 3;
+	topo_online_node_count = 2;
+	topo_collect_node_fail_at = 3;
+	topo_fail_error = -32;
+	require(run_collect_topology() == -32);
+	require(topo_collect_cpu_calls == 1);
+	require(topo_collect_node_calls == 2);
+	require(topo_collected_nodes[1] == 3);
+	require(topo_log_count == 3);
+	require(topo_log_events[1] == 25);
+	require(topo_log_events[2] == 26);
+	require(topo_log_errors[1] == -32);
+	require(topo_log_errors[2] == -32);
+	mix(&digest, (unsigned long)(unsigned int)topo_log_errors[2]);
+
+	require(ihk_smp_collect_topology_body_result(
+			NULL, fake_topo_collect_cpu_index, fake_topo_next_node,
+			fake_topo_collect_node_index, fake_topo_log) == -EINVAL);
+	require(ihk_smp_collect_topology_body_result(
+			fake_topo_next_cpu, NULL, fake_topo_next_node,
+			fake_topo_collect_node_index, fake_topo_log) == -EINVAL);
+
+	reset_topo_trace(&cpu_topo);
+	init_list_head(&cpu_list);
+	init_list_head(&node_list);
+	cpu_added = alloc_free_info_cpu(11, &cpu_list);
+	alloc_free_info_cache(cpu_added, "Data", "32K");
+	alloc_free_info_cache(cpu_added, "Unified", "48K");
+	cpu_added = alloc_free_info_cpu(12, &cpu_list);
+	alloc_free_info_cache(cpu_added, "Instruction", "64K");
+	node_added = alloc_free_info_node(2, &node_list);
+	require(node_added != NULL);
+	node_added = alloc_free_info_node(3, &node_list);
+	require(node_added != NULL);
+	require(ihk_smp_free_info_body_result(
+			(unsigned long)&cpu_list, (unsigned long)&node_list,
+			&free_info_offsets, fake_free_info_list_del,
+			(void (*)(unsigned long))fake_topo_free,
+			fake_free_info_log) == 0);
+	require(list_empty(&cpu_list));
+	require(list_empty(&node_list));
+	require(free_info_list_del_calls == 7);
+	require(topo_free_calls == 13);
+	require(free_info_log_calls == 2);
+	require(free_info_log_events[0] == 0);
+	require(free_info_log_events[1] == 1);
+	mix(&digest, (unsigned long)free_info_list_del_calls);
+	mix(&digest, (unsigned long)topo_free_calls);
+
+	require(ihk_smp_free_info_body_result(0, (unsigned long)&node_list,
+			&free_info_offsets, fake_free_info_list_del,
+			(void (*)(unsigned long))fake_topo_free,
+			fake_free_info_log) == -EINVAL);
+	require(ihk_smp_free_info_body_result((unsigned long)&cpu_list,
+			(unsigned long)&node_list, &free_info_offsets, NULL,
+			(void (*)(unsigned long))fake_topo_free,
+			fake_free_info_log) == -EINVAL);
+
+	reset_topo_trace(&cpu_topo);
+	require(ihk_smp_file_readable_body_result(
+			(char *)"node%u", 0x333UL,
+			sizeof(file_readable_filename),
+			fake_file_readable_alloc,
+			fake_file_readable_vsnprintf,
+			fake_file_readable_open,
+			fake_file_readable_close,
+			fake_file_readable_free,
+			fake_file_readable_log) == 1);
+	require(file_readable_alloc_calls == 1);
+	require(file_readable_alloc_size == sizeof(file_readable_filename));
+	require(file_readable_vsnprintf_calls == 1);
+	require(!strcmp(file_readable_vsnprintf_fmt, "node%u"));
+	require(file_readable_vsnprintf_size == sizeof(file_readable_filename));
+	require(file_readable_vsnprintf_va == 0x333UL);
+	require(file_readable_open_calls == 1);
+	require(file_readable_open_filename == file_readable_filename);
+	require(file_readable_close_calls == 1);
+	require(file_readable_close_file == 0x515100UL);
+	require(file_readable_free_calls == 1);
+	require(file_readable_free_addr == (unsigned long)file_readable_filename);
+	require(file_readable_log_calls == 0);
+	mix(&digest, file_readable_close_file);
+	mix(&digest, file_readable_alloc_size);
+
+	reset_topo_trace(&cpu_topo);
+	file_readable_alloc_fail = 1;
+	require(ihk_smp_file_readable_body_result(
+			(char *)"node%u", 0x333UL,
+			sizeof(file_readable_filename),
+			fake_file_readable_alloc,
+			fake_file_readable_vsnprintf,
+			fake_file_readable_open,
+			fake_file_readable_close,
+			fake_file_readable_free,
+			fake_file_readable_log) == 0);
+	require(file_readable_vsnprintf_calls == 0);
+	require(file_readable_open_calls == 0);
+	require(file_readable_close_calls == 0);
+	require(file_readable_free_calls == 1);
+	require(file_readable_free_addr == 0);
+	require(file_readable_log_calls == 1);
+	require(file_readable_log_event[0] == 1);
+	require(file_readable_log_error[0] == -ENOMEM);
+	mix(&digest, (unsigned long)(unsigned int)file_readable_log_error[0]);
+
+	reset_topo_trace(&cpu_topo);
+	file_readable_vsnprintf_result = sizeof(file_readable_filename);
+	require(ihk_smp_file_readable_body_result(
+			(char *)"node%u", 0x333UL,
+			sizeof(file_readable_filename),
+			fake_file_readable_alloc,
+			fake_file_readable_vsnprintf,
+			fake_file_readable_open,
+			fake_file_readable_close,
+			fake_file_readable_free,
+			fake_file_readable_log) == 0);
+	require(file_readable_open_calls == 0);
+	require(file_readable_close_calls == 0);
+	require(file_readable_free_calls == 1);
+	require(file_readable_log_calls == 1);
+	require(file_readable_log_event[0] == 2);
+	require(file_readable_log_error[0] == -ENAMETOOLONG);
+	mix(&digest, (unsigned long)(unsigned int)file_readable_log_error[0]);
+
+	reset_topo_trace(&cpu_topo);
+	file_readable_open_fail = 1;
+	require(ihk_smp_file_readable_body_result(
+			(char *)"node%u", 0x333UL,
+			sizeof(file_readable_filename),
+			fake_file_readable_alloc,
+			fake_file_readable_vsnprintf,
+			fake_file_readable_open,
+			fake_file_readable_close,
+			fake_file_readable_free,
+			fake_file_readable_log) == 0);
+	require(file_readable_open_calls == 1);
+	require(file_readable_close_calls == 0);
+	require(file_readable_free_calls == 1);
+	require(file_readable_log_calls == 0);
+	mix(&digest, (unsigned long)file_readable_open_calls);
+
+	require(ihk_smp_file_readable_body_result(
+			NULL, 0x333UL, sizeof(file_readable_filename),
+			fake_file_readable_alloc,
+			fake_file_readable_vsnprintf,
+			fake_file_readable_open,
+			fake_file_readable_close,
+			fake_file_readable_free,
+			fake_file_readable_log) == 0);
+	require(ihk_smp_file_readable_body_result(
+			(char *)"node%u", 0x333UL,
+			sizeof(file_readable_filename), NULL,
+			fake_file_readable_vsnprintf,
+			fake_file_readable_open,
+			fake_file_readable_close,
+			fake_file_readable_free,
+			fake_file_readable_log) == 0);
+
+	reset_topo_trace(&cpu_topo);
+	require(ihk_smp_read_file_body_result(
+			(unsigned long)read_file_buf, sizeof(read_file_buf),
+			(char *)"node%u", 0x444UL, sizeof(read_file_filename),
+			fake_read_file_alloc, fake_read_file_vsnprintf,
+			fake_read_file_open, fake_read_file_kernel_read,
+			fake_read_file_close, fake_read_file_free,
+			fake_read_file_log) == 0);
+	require(!strcmp(read_file_buf, "abcde"));
+	require(read_file_alloc_calls == 1);
+	require(read_file_alloc_size == sizeof(read_file_filename));
+	require(read_file_vsnprintf_calls == 1);
+	require(!strcmp(read_file_vsnprintf_fmt, "node%u"));
+	require(read_file_vsnprintf_size == sizeof(read_file_filename));
+	require(read_file_vsnprintf_va == 0x444UL);
+	require(read_file_open_calls == 1);
+	require(read_file_open_filename == read_file_filename);
+	require(read_file_open_errorp != 0);
+	require(read_file_kernel_read_calls == 1);
+	require(read_file_kernel_file == 0x525200UL);
+	require(read_file_kernel_buf == (unsigned long)read_file_buf);
+	require(read_file_kernel_size == sizeof(read_file_buf));
+	require(read_file_close_calls == 1);
+	require(read_file_close_file == 0x525200UL);
+	require(read_file_free_calls == 1);
+	require(read_file_free_addr == (unsigned long)read_file_filename);
+	require(read_file_log_calls == 2);
+	require(read_file_log_event[0] == 0);
+	require(read_file_log_event[1] == 7);
+	require(read_file_log_error[1] == 0);
+	mix(&digest, (unsigned long)strlen(read_file_buf));
+	mix(&digest, read_file_kernel_file);
+
+	reset_topo_trace(&cpu_topo);
+	read_file_alloc_fail = 1;
+	require(ihk_smp_read_file_body_result(
+			(unsigned long)read_file_buf, sizeof(read_file_buf),
+			(char *)"node%u", 0x444UL, sizeof(read_file_filename),
+			fake_read_file_alloc, fake_read_file_vsnprintf,
+			fake_read_file_open, fake_read_file_kernel_read,
+			fake_read_file_close, fake_read_file_free,
+			fake_read_file_log) == -ENOMEM);
+	require(read_file_vsnprintf_calls == 0);
+	require(read_file_open_calls == 0);
+	require(read_file_kernel_read_calls == 0);
+	require(read_file_close_calls == 0);
+	require(read_file_free_calls == 1);
+	require(read_file_free_addr == 0);
+	require(read_file_log_event[1] == 1);
+	require(read_file_log_error[1] == -ENOMEM);
+	mix(&digest, (unsigned long)(unsigned int)read_file_log_error[1]);
+
+	reset_topo_trace(&cpu_topo);
+	read_file_vsnprintf_result = sizeof(read_file_filename);
+	require(ihk_smp_read_file_body_result(
+			(unsigned long)read_file_buf, sizeof(read_file_buf),
+			(char *)"node%u", 0x444UL, sizeof(read_file_filename),
+			fake_read_file_alloc, fake_read_file_vsnprintf,
+			fake_read_file_open, fake_read_file_kernel_read,
+			fake_read_file_close, fake_read_file_free,
+			fake_read_file_log) == -ENAMETOOLONG);
+	require(read_file_open_calls == 0);
+	require(read_file_kernel_read_calls == 0);
+	require(read_file_close_calls == 0);
+	require(read_file_free_calls == 1);
+	require(read_file_log_event[1] == 2);
+	require(read_file_log_error[1] == -ENAMETOOLONG);
+	mix(&digest, (unsigned long)(unsigned int)read_file_log_error[1]);
+
+	reset_topo_trace(&cpu_topo);
+	read_file_open_fail = 1;
+	read_file_open_error = -EACCES;
+	require(ihk_smp_read_file_body_result(
+			(unsigned long)read_file_buf, sizeof(read_file_buf),
+			(char *)"node%u", 0x444UL, sizeof(read_file_filename),
+			fake_read_file_alloc, fake_read_file_vsnprintf,
+			fake_read_file_open, fake_read_file_kernel_read,
+			fake_read_file_close, fake_read_file_free,
+			fake_read_file_log) == -EACCES);
+	require(read_file_open_calls == 1);
+	require(read_file_kernel_read_calls == 0);
+	require(read_file_close_calls == 0);
+	require(read_file_free_calls == 1);
+	require(read_file_log_event[1] == 3);
+	require(read_file_log_error[1] == -EACCES);
+	mix(&digest, (unsigned long)(unsigned int)read_file_log_error[1]);
+
+	reset_topo_trace(&cpu_topo);
+	read_file_kernel_read_result = -EFAULT;
+	require(ihk_smp_read_file_body_result(
+			(unsigned long)read_file_buf, sizeof(read_file_buf),
+			(char *)"node%u", 0x444UL, sizeof(read_file_filename),
+			fake_read_file_alloc, fake_read_file_vsnprintf,
+			fake_read_file_open, fake_read_file_kernel_read,
+			fake_read_file_close, fake_read_file_free,
+			fake_read_file_log) == -EFAULT);
+	require(read_file_kernel_read_calls == 1);
+	require(read_file_close_calls == 1);
+	require(read_file_free_calls == 1);
+	require(read_file_log_event[1] == 4);
+	require(read_file_log_error[1] == -EFAULT);
+	mix(&digest, (unsigned long)(unsigned int)read_file_log_error[1]);
+
+	reset_topo_trace(&cpu_topo);
+	read_file_kernel_read_result = sizeof(read_file_buf);
+	require(ihk_smp_read_file_body_result(
+			(unsigned long)read_file_buf, sizeof(read_file_buf),
+			(char *)"node%u", 0x444UL, sizeof(read_file_filename),
+			fake_read_file_alloc, fake_read_file_vsnprintf,
+			fake_read_file_open, fake_read_file_kernel_read,
+			fake_read_file_close, fake_read_file_free,
+			fake_read_file_log) == -ENOSPC);
+	require(read_file_kernel_read_calls == 1);
+	require(read_file_close_calls == 1);
+	require(read_file_free_calls == 1);
+	require(read_file_log_event[1] == 5);
+	require(read_file_log_error[1] == -ENOSPC);
+	mix(&digest, (unsigned long)(unsigned int)read_file_log_error[1]);
+
+	reset_topo_trace(&cpu_topo);
+	read_file_close_result = -EIO;
+	require(ihk_smp_read_file_body_result(
+			(unsigned long)read_file_buf, sizeof(read_file_buf),
+			(char *)"node%u", 0x444UL, sizeof(read_file_filename),
+			fake_read_file_alloc, fake_read_file_vsnprintf,
+			fake_read_file_open, fake_read_file_kernel_read,
+			fake_read_file_close, fake_read_file_free,
+			fake_read_file_log) == 0);
+	require(read_file_close_calls == 1);
+	require(read_file_log_calls == 3);
+	require(read_file_log_event[1] == 6);
+	require(read_file_log_error[1] == -EIO);
+	require(read_file_log_event[2] == 7);
+	require(read_file_log_error[2] == 0);
+	mix(&digest, (unsigned long)(unsigned int)read_file_log_error[1]);
+
+	require(ihk_smp_read_file_body_result(
+			0, sizeof(read_file_buf), (char *)"node%u", 0x444UL,
+			sizeof(read_file_filename), fake_read_file_alloc,
+			fake_read_file_vsnprintf, fake_read_file_open,
+			fake_read_file_kernel_read, fake_read_file_close,
+			fake_read_file_free, fake_read_file_log) == -EINVAL);
+	require(ihk_smp_read_file_body_result(
+			(unsigned long)read_file_buf, sizeof(read_file_buf),
+			(char *)"node%u", 0x444UL, sizeof(read_file_filename),
+			NULL, fake_read_file_vsnprintf, fake_read_file_open,
+			fake_read_file_kernel_read, fake_read_file_close,
+			fake_read_file_free, fake_read_file_log) == -EINVAL);
+
+	{
+		char path[128];
+
+		reset_topo_trace(&cpu_topo);
+		memset(path, 0, sizeof(path));
+		require(ihk_smp_write_cpu_sys_file_body_result(
+				7, "0", path, sizeof(path),
+				fake_write_cpu_open, fake_write_cpu_write,
+				fake_write_cpu_close, fake_write_cpu_log) == 0);
+		require(!strcmp(path,
+				"/sys/devices/system/cpu/cpu7/online"));
+		require(write_cpu_open_calls == 1);
+		require(write_cpu_open_path == path);
+		require(write_cpu_open_errorp != 0);
+		require(write_cpu_write_calls == 1);
+		require(write_cpu_write_file == 0x616100UL);
+		require(write_cpu_write_buf[0] == '0');
+		require(write_cpu_write_size == 1);
+		require(write_cpu_close_calls == 1);
+		require(write_cpu_close_file == 0x616100UL);
+		require(write_cpu_log_calls == 0);
+		mix(&digest, write_cpu_write_file);
+		mix(&digest, (unsigned long)strlen(path));
+
+		reset_topo_trace(&cpu_topo);
+		memset(path, 0, sizeof(path));
+		require(ihk_smp_write_cpu_sys_file_body_result(
+				12345, "1", path, 16, fake_write_cpu_open,
+				fake_write_cpu_write, fake_write_cpu_close,
+				fake_write_cpu_log) == -1);
+		require(write_cpu_open_calls == 0);
+		require(write_cpu_write_calls == 0);
+		require(write_cpu_close_calls == 0);
+		require(write_cpu_log_calls == 1);
+		require(write_cpu_log_event[0] == 1);
+		mix(&digest, (unsigned long)write_cpu_log_error[0]);
+
+		reset_topo_trace(&cpu_topo);
+		memset(path, 0, sizeof(path));
+		write_cpu_open_fail = 1;
+		write_cpu_open_error = -EACCES;
+		require(ihk_smp_write_cpu_sys_file_body_result(
+				8, "0", path, sizeof(path),
+				fake_write_cpu_open, fake_write_cpu_write,
+				fake_write_cpu_close, fake_write_cpu_log) == -1);
+		require(write_cpu_open_calls == 1);
+		require(write_cpu_write_calls == 0);
+		require(write_cpu_close_calls == 0);
+		require(write_cpu_log_calls == 1);
+		require(write_cpu_log_event[0] == 2);
+		require(write_cpu_log_error[0] == -EACCES);
+		require(write_cpu_log_path[0] == path);
+		mix(&digest, (unsigned long)(unsigned int)write_cpu_log_error[0]);
+
+		reset_topo_trace(&cpu_topo);
+		memset(path, 0, sizeof(path));
+		write_cpu_write_result = -EIO;
+		require(ihk_smp_write_cpu_sys_file_body_result(
+				9, "1", path, sizeof(path),
+				fake_write_cpu_open, fake_write_cpu_write,
+				fake_write_cpu_close, fake_write_cpu_log) == -1);
+		require(write_cpu_open_calls == 1);
+		require(write_cpu_write_calls == 1);
+		require(write_cpu_close_calls == 1);
+		require(write_cpu_log_calls == 1);
+		require(write_cpu_log_event[0] == 3);
+		require(write_cpu_log_error[0] == -EIO);
+		mix(&digest, (unsigned long)(unsigned int)write_cpu_log_error[0]);
+
+		require(ihk_smp_write_cpu_sys_file_body_result(
+				1, NULL, path, sizeof(path),
+				fake_write_cpu_open, fake_write_cpu_write,
+				fake_write_cpu_close, fake_write_cpu_log) == -EINVAL);
+		require(ihk_smp_write_cpu_sys_file_body_result(
+				1, "0", NULL, sizeof(path),
+				fake_write_cpu_open, fake_write_cpu_write,
+				fake_write_cpu_close, fake_write_cpu_log) == -EINVAL);
+		require(ihk_smp_write_cpu_sys_file_body_result(
+				1, "0", path, sizeof(path),
+				NULL, fake_write_cpu_write,
+				fake_write_cpu_close, fake_write_cpu_log) == -EINVAL);
+	}
+
+	reset_topo_trace(&cpu_topo);
+	read_long_value = 0;
+	require(ihk_smp_read_long_body_result(
+			(unsigned long)&read_long_value, (char *)"node%u",
+			0xfeedUL, sizeof(read_long_page),
+			fake_read_long_alloc_page, fake_read_long_read_file,
+			fake_read_long_parse, fake_read_long_free_pages,
+			fake_read_long_log) == 0);
+	require(read_long_value == 12345);
+	require(read_long_alloc_calls == 1);
+	require(read_long_read_calls == 1);
+	require(read_long_read_buf == (unsigned long)read_long_page);
+	require(read_long_read_size == sizeof(read_long_page));
+	require(!strcmp(read_long_read_fmt, "node%u"));
+	require(read_long_read_va == 0xfeedUL);
+	require(read_long_parse_calls == 1);
+	require(read_long_free_calls == 1);
+	require(read_long_free_addr == (unsigned long)read_long_page);
+	require(read_long_log_calls == 2);
+	require(read_long_log_event[0] == 0);
+	require(read_long_log_event[1] == 4);
+	require(read_long_log_error[1] == 0);
+	mix(&digest, (unsigned long)read_long_value);
+	mix(&digest, (unsigned long)read_long_read_size);
+
+	reset_topo_trace(&cpu_topo);
+	read_long_alloc_fail = 1;
+	require(ihk_smp_read_long_body_result(
+			(unsigned long)&read_long_value, (char *)"node%u",
+			0xfeedUL, sizeof(read_long_page),
+			fake_read_long_alloc_page, fake_read_long_read_file,
+			fake_read_long_parse, fake_read_long_free_pages,
+			fake_read_long_log) == -ENOMEM);
+	require(read_long_read_calls == 0);
+	require(read_long_parse_calls == 0);
+	require(read_long_free_calls == 1);
+	require(read_long_free_addr == 0);
+	require(read_long_log_calls == 3);
+	require(read_long_log_event[1] == 1);
+	require(read_long_log_error[1] == -ENOMEM);
+	mix(&digest, (unsigned long)(unsigned int)read_long_log_error[1]);
+
+	reset_topo_trace(&cpu_topo);
+	read_long_read_result = -EFAULT;
+	require(ihk_smp_read_long_body_result(
+			(unsigned long)&read_long_value, (char *)"node%u",
+			0xfeedUL, sizeof(read_long_page),
+			fake_read_long_alloc_page, fake_read_long_read_file,
+			fake_read_long_parse, fake_read_long_free_pages,
+			fake_read_long_log) == -EFAULT);
+	require(read_long_read_calls == 1);
+	require(read_long_parse_calls == 0);
+	require(read_long_free_calls == 1);
+	require(read_long_log_event[1] == 2);
+	require(read_long_log_error[1] == -EFAULT);
+	mix(&digest, (unsigned long)(unsigned int)read_long_log_error[1]);
+
+	reset_topo_trace(&cpu_topo);
+	read_long_parse_result = 0;
+	require(ihk_smp_read_long_body_result(
+			(unsigned long)&read_long_value, (char *)"node%u",
+			0xfeedUL, sizeof(read_long_page),
+			fake_read_long_alloc_page, fake_read_long_read_file,
+			fake_read_long_parse, fake_read_long_free_pages,
+			fake_read_long_log) == -EIO);
+	require(read_long_read_calls == 1);
+	require(read_long_parse_calls == 1);
+	require(read_long_free_calls == 1);
+	require(read_long_log_event[1] == 3);
+	require(read_long_log_error[1] == -EIO);
+	mix(&digest, (unsigned long)(unsigned int)read_long_log_error[1]);
+
+	require(ihk_smp_read_long_body_result(
+			0, (char *)"node%u", 0xfeedUL,
+			sizeof(read_long_page), fake_read_long_alloc_page,
+			fake_read_long_read_file, fake_read_long_parse,
+			fake_read_long_free_pages, fake_read_long_log) ==
+		-EINVAL);
+	require(ihk_smp_read_long_body_result(
+			(unsigned long)&read_long_value, (char *)"node%u",
+			0xfeedUL, sizeof(read_long_page), NULL,
+			fake_read_long_read_file, fake_read_long_parse,
+			fake_read_long_free_pages, fake_read_long_log) ==
+		-EINVAL);
+
+	reset_topo_trace(&cpu_topo);
+	require(ihk_smp_read_bitmap_body_result(
+			(unsigned long)read_bitmap_map_words, 128,
+			(char *)"node%u", 0xbeefUL, sizeof(read_long_page),
+			fake_read_bitmap_alloc_page,
+			fake_read_bitmap_read_file, fake_read_bitmap_parse,
+			fake_read_bitmap_free_pages, fake_read_bitmap_log) == 0);
+	require(read_bitmap_map_words[0] == 0x0fUL);
+	require(read_bitmap_alloc_calls == 1);
+	require(read_bitmap_read_calls == 1);
+	require(read_bitmap_read_buf == (unsigned long)read_long_page);
+	require(read_bitmap_read_size == sizeof(read_long_page));
+	require(!strcmp(read_bitmap_read_fmt, "node%u"));
+	require(read_bitmap_read_va == 0xbeefUL);
+	require(read_bitmap_parse_calls == 1);
+	require(read_bitmap_parse_buf == (unsigned long)read_long_page);
+	require(read_bitmap_parse_size == sizeof(read_long_page));
+	require(read_bitmap_parse_map == (unsigned long)read_bitmap_map_words);
+	require(read_bitmap_parse_nbits == 128);
+	require(read_bitmap_free_calls == 1);
+	require(read_bitmap_free_addr == (unsigned long)read_long_page);
+	require(read_bitmap_log_calls == 2);
+	require(read_bitmap_log_event[0] == 0);
+	require(read_bitmap_log_event[1] == 4);
+	require(read_bitmap_log_error[1] == 0);
+	mix(&digest, read_bitmap_map_words[0]);
+	mix(&digest, (unsigned long)read_bitmap_parse_nbits);
+
+	reset_topo_trace(&cpu_topo);
+	read_bitmap_alloc_fail = 1;
+	require(ihk_smp_read_bitmap_body_result(
+			(unsigned long)read_bitmap_map_words, 128,
+			(char *)"node%u", 0xbeefUL, sizeof(read_long_page),
+			fake_read_bitmap_alloc_page,
+			fake_read_bitmap_read_file, fake_read_bitmap_parse,
+			fake_read_bitmap_free_pages, fake_read_bitmap_log) ==
+		-ENOMEM);
+	require(read_bitmap_read_calls == 0);
+	require(read_bitmap_parse_calls == 0);
+	require(read_bitmap_free_calls == 1);
+	require(read_bitmap_free_addr == 0);
+	require(read_bitmap_log_event[1] == 1);
+	require(read_bitmap_log_error[1] == -ENOMEM);
+	mix(&digest, (unsigned long)(unsigned int)read_bitmap_log_error[1]);
+
+	reset_topo_trace(&cpu_topo);
+	read_bitmap_read_result = -EFAULT;
+	require(ihk_smp_read_bitmap_body_result(
+			(unsigned long)read_bitmap_map_words, 128,
+			(char *)"node%u", 0xbeefUL, sizeof(read_long_page),
+			fake_read_bitmap_alloc_page,
+			fake_read_bitmap_read_file, fake_read_bitmap_parse,
+			fake_read_bitmap_free_pages, fake_read_bitmap_log) ==
+		-EFAULT);
+	require(read_bitmap_read_calls == 1);
+	require(read_bitmap_parse_calls == 0);
+	require(read_bitmap_free_calls == 1);
+	require(read_bitmap_log_event[1] == 2);
+	require(read_bitmap_log_error[1] == -EFAULT);
+	mix(&digest, (unsigned long)(unsigned int)read_bitmap_log_error[1]);
+
+	reset_topo_trace(&cpu_topo);
+	read_bitmap_parse_result = -EINVAL;
+	require(ihk_smp_read_bitmap_body_result(
+			(unsigned long)read_bitmap_map_words, 128,
+			(char *)"node%u", 0xbeefUL, sizeof(read_long_page),
+			fake_read_bitmap_alloc_page,
+			fake_read_bitmap_read_file, fake_read_bitmap_parse,
+			fake_read_bitmap_free_pages, fake_read_bitmap_log) ==
+		-EINVAL);
+	require(read_bitmap_read_calls == 1);
+	require(read_bitmap_parse_calls == 1);
+	require(read_bitmap_free_calls == 1);
+	require(read_bitmap_log_event[1] == 3);
+	require(read_bitmap_log_error[1] == -EINVAL);
+	mix(&digest, (unsigned long)(unsigned int)read_bitmap_log_error[1]);
+
+	require(ihk_smp_read_bitmap_body_result(
+			0, 128, (char *)"node%u", 0xbeefUL,
+			sizeof(read_long_page), fake_read_bitmap_alloc_page,
+			fake_read_bitmap_read_file, fake_read_bitmap_parse,
+			fake_read_bitmap_free_pages, fake_read_bitmap_log) ==
+		-EINVAL);
+	require(ihk_smp_read_bitmap_body_result(
+			(unsigned long)read_bitmap_map_words, 128,
+			(char *)"node%u", 0xbeefUL, sizeof(read_long_page),
+			NULL, fake_read_bitmap_read_file,
+			fake_read_bitmap_parse, fake_read_bitmap_free_pages,
+			fake_read_bitmap_log) == -EINVAL);
+
+	reset_topo_trace(&cpu_topo);
+	read_string_value = NULL;
+	require(ihk_smp_read_string_body_result(
+			(unsigned long)&read_string_value, (char *)"node%u",
+			0xcafeUL, sizeof(read_long_page),
+			fake_read_string_alloc_page,
+			fake_read_string_read_file, fake_read_string_dup,
+			fake_read_string_kfree, fake_read_string_free_pages,
+			fake_read_string_log) == 0);
+	require(read_string_value != NULL);
+	require(!strcmp(read_string_value, "Cache line"));
+	require(read_string_alloc_calls == 1);
+	require(read_string_read_calls == 1);
+	require(read_string_read_buf == (unsigned long)read_long_page);
+	require(read_string_read_size == sizeof(read_long_page));
+	require(!strcmp(read_string_read_fmt, "node%u"));
+	require(read_string_read_va == 0xcafeUL);
+	require(read_string_dup_calls == 1);
+	require(read_string_dup_buf == (unsigned long)read_long_page);
+	require(read_string_kfree_calls == 1);
+	require(read_string_kfree_addr == 0);
+	require(read_string_free_calls == 1);
+	require(read_string_free_addr == (unsigned long)read_long_page);
+	require(read_string_log_calls == 2);
+	require(read_string_log_event[0] == 0);
+	require(read_string_log_event[1] == 4);
+	require(read_string_log_error[1] == 0);
+	mix(&digest, (unsigned long)strlen(read_string_value));
+	mix(&digest, (unsigned long)read_string_read_size);
+
+	reset_topo_trace(&cpu_topo);
+	read_string_alloc_fail = 1;
+	require(ihk_smp_read_string_body_result(
+			(unsigned long)&read_string_value, (char *)"node%u",
+			0xcafeUL, sizeof(read_long_page),
+			fake_read_string_alloc_page,
+			fake_read_string_read_file, fake_read_string_dup,
+			fake_read_string_kfree, fake_read_string_free_pages,
+			fake_read_string_log) == -ENOMEM);
+	require(read_string_read_calls == 0);
+	require(read_string_dup_calls == 0);
+	require(read_string_kfree_calls == 1);
+	require(read_string_kfree_addr == 0);
+	require(read_string_free_calls == 1);
+	require(read_string_free_addr == 0);
+	require(read_string_log_event[1] == 1);
+	require(read_string_log_error[1] == -ENOMEM);
+	mix(&digest, (unsigned long)(unsigned int)read_string_log_error[1]);
+
+	reset_topo_trace(&cpu_topo);
+	read_string_read_result = -EFAULT;
+	require(ihk_smp_read_string_body_result(
+			(unsigned long)&read_string_value, (char *)"node%u",
+			0xcafeUL, sizeof(read_long_page),
+			fake_read_string_alloc_page,
+			fake_read_string_read_file, fake_read_string_dup,
+			fake_read_string_kfree, fake_read_string_free_pages,
+			fake_read_string_log) == -EFAULT);
+	require(read_string_read_calls == 1);
+	require(read_string_dup_calls == 0);
+	require(read_string_kfree_calls == 1);
+	require(read_string_free_calls == 1);
+	require(read_string_log_event[1] == 2);
+	require(read_string_log_error[1] == -EFAULT);
+	mix(&digest, (unsigned long)(unsigned int)read_string_log_error[1]);
+
+	reset_topo_trace(&cpu_topo);
+	read_string_dup_fail = 1;
+	require(ihk_smp_read_string_body_result(
+			(unsigned long)&read_string_value, (char *)"node%u",
+			0xcafeUL, sizeof(read_long_page),
+			fake_read_string_alloc_page,
+			fake_read_string_read_file, fake_read_string_dup,
+			fake_read_string_kfree, fake_read_string_free_pages,
+			fake_read_string_log) == -ENOMEM);
+	require(read_string_read_calls == 1);
+	require(read_string_dup_calls == 1);
+	require(read_string_kfree_calls == 1);
+	require(read_string_free_calls == 1);
+	require(read_string_log_event[1] == 3);
+	require(read_string_log_error[1] == -ENOMEM);
+	mix(&digest, (unsigned long)(unsigned int)read_string_log_error[1]);
+
+	require(ihk_smp_read_string_body_result(
+			0, (char *)"node%u", 0xcafeUL,
+			sizeof(read_long_page), fake_read_string_alloc_page,
+			fake_read_string_read_file, fake_read_string_dup,
+			fake_read_string_kfree, fake_read_string_free_pages,
+			fake_read_string_log) == -EINVAL);
+	require(ihk_smp_read_string_body_result(
+			(unsigned long)&read_string_value, (char *)"node%u",
+			0xcafeUL, sizeof(read_long_page),
+			fake_read_string_alloc_page,
+			fake_read_string_read_file, NULL,
+			fake_read_string_kfree, fake_read_string_free_pages,
+			fake_read_string_log) == -EINVAL);
 
 	require(offsetof(struct chunk, chain) == 0);
 	require(offsetof(struct chunk, node) == sizeof(struct list_head));
@@ -115190,10 +136029,13 @@ cat > "${tmpdir}/x86_cpu_helpers_equiv.c" <<'EOF_X86_CPU_HELPERS'
 #include <string.h>
 
 #define EINVAL 22
+#define ENOMEM 12
 #define IHK_UCR_STACK_POINTER 1
 #define IHK_UCR_PROGRAM_COUNTER 2
 #define IHK_ASR_X86_FS 0
 #define IHK_ASR_X86_GS 1
+#define ARCH_SET_FS 0x1002UL
+#define RUST_CPU_LOCAL_CURRENT_OFFSET 7848UL
 #define MCCTRL_OS_CPU_READ_REGISTER 0
 #define MCCTRL_OS_CPU_WRITE_REGISTER 1
 #define PS_INTERRUPTIBLE 0x2
@@ -115242,9 +136084,40 @@ struct fake_thread {
 	unsigned long tlsblock_base;
 };
 
+struct fake_trace_process {
+	int pid;
+};
+
+struct fake_trace_thread {
+	int tid;
+	int status;
+	struct fake_trace_process *proc;
+};
+
+struct x86_trace_enter_user_offsets {
+	unsigned long thread_tid_offset;
+	unsigned long thread_status_offset;
+	unsigned long thread_proc_offset;
+	unsigned long process_pid_offset;
+};
+
+struct fake_runq_local {
+	unsigned long pad;
+	unsigned long runq_lock;
+	unsigned long runq_irqstate;
+};
+
+struct fake_kstack_local {
+	unsigned long pad;
+	unsigned long kernel_stack;
+	unsigned long tss_rsp0;
+};
+
 struct fake_cpu_local {
 	unsigned long processor_id;
 	unsigned long apic_id;
+	unsigned char pad_to_paniced[280 - 2 * sizeof(unsigned long)];
+	unsigned long paniced;
 };
 
 struct ihk_os_cpu_register {
@@ -115256,12 +136129,18 @@ struct ihk_os_cpu_register {
 
 extern int x86_init_context_body_result(struct x86_kregs *, void *, void *,
 					void *(*)(void));
+extern int x86_boot_cpu_body_result(
+	void *, const void *, unsigned long, int, unsigned long, unsigned long,
+	int *, void *, unsigned long (*)(void), unsigned long (*)(int),
+	unsigned long (*)(void), void (*)(int, unsigned long), void (*)(void));
 extern int x86_init_user_process_body_result(
 	struct x86_kregs *, struct x86_user_context **, void *,
 	unsigned long, unsigned long, unsigned long, unsigned long,
 	unsigned long, void *);
 extern int x86_modify_user_context_result(struct x86_user_context *, int,
 					  unsigned long, int, int);
+extern void ihk_mc_modify_user_context(struct x86_user_context *, int,
+				       unsigned long);
 extern struct x86_user_context *x86_lookup_user_context_body_result(
 	struct fake_thread *, struct fake_thread *, int,
 	const struct x86_thread_context_offsets *);
@@ -115340,6 +136219,50 @@ extern int x86_pvclock_available_body_result(
 	void (*)(unsigned long, unsigned long *, unsigned long *,
 		 unsigned long *, unsigned long *),
 	void (*)(int));
+extern int x86_arch_setup_pvclock_body_result(
+	void **, int *, int, unsigned long, unsigned long, int, unsigned long,
+	int, char *, int, int (*)(void),
+	void *(*)(int, int, unsigned long, int, int, unsigned long, char *, int),
+	void (*)(int));
+extern int x86_arch_start_pvclock_body_result(
+	void *, long, unsigned long, unsigned long, int (*)(void),
+	unsigned long (*)(void *), void (*)(int, unsigned long), void (*)(int));
+extern int x86_call_ap_func_body_result(int *, void (*)(void));
+extern void call_ap_func(void (*)(void));
+extern void __show_stack(unsigned long *);
+extern void show_context_stack(unsigned long *);
+extern int x86_show_stack_body_result(
+	unsigned long *, unsigned long, unsigned long,
+	void (*)(unsigned long, unsigned long, unsigned long));
+extern int x86_arch_print_pre_interrupt_stack_body_result(
+	const void *, unsigned long, unsigned long, unsigned long,
+	unsigned long, unsigned long, void (*)(int),
+	void (*)(void *, unsigned long));
+extern int x86_arch_print_stack_body_result(
+	void *, void (*)(int), void (*)(void *, unsigned long));
+extern int x86_print_user_context_body_result(
+	const struct x86_user_context *,
+	void (*)(int, unsigned long, unsigned long, unsigned long,
+		 unsigned long));
+extern int x86_arch_show_interrupt_context_body_result(
+	const struct x86_user_context *, unsigned long (*)(void),
+	void (*)(unsigned long),
+	void (*)(int, unsigned long, unsigned long, unsigned long,
+		 unsigned long));
+extern int x86_arch_save_panic_regs_body_result(
+	const struct x86_user_context *, const struct x86_kregs *,
+	unsigned long *, unsigned long *, unsigned long, unsigned long,
+	void (*)(int, unsigned long));
+extern int x86_arch_clear_panic_body_result(unsigned long *);
+extern int x86_mcexec_v10_trace_enter_user_body_result(
+	const struct x86_user_context *, const void *, int *, int, int,
+	const struct x86_trace_enter_user_offsets *,
+	void (*)(int, int, int, unsigned long, unsigned long, unsigned long,
+		 unsigned long, unsigned long, int));
+extern int x86_release_runq_lock_body_result(
+	void *, unsigned long, unsigned long, void (*)(void *, unsigned long));
+extern int x86_set_kstack_body_result(void *, unsigned long, unsigned long,
+				      unsigned long);
 extern int x86_arch_cpu_read_write_register_body_result(
 	void *, int, int, int, unsigned long, unsigned long,
 	unsigned long (*)(int), void (*)(int, unsigned long));
@@ -115360,6 +136283,24 @@ extern void smp_store_release_int(int *, int);
 extern unsigned long CVAL(unsigned int, unsigned int);
 extern unsigned long CVAL2(unsigned int, unsigned int, unsigned int,
 			   unsigned int);
+extern int ihk_mc_get_smp_handler_irq(void);
+extern int ihk_mc_get_interrupt_id(int);
+extern void ihk_mc_delay_us(int);
+extern void init_tick(void);
+extern void init_delay(void);
+extern void sync_tick(void);
+extern void arch_clone_thread(void *, unsigned long, unsigned long, void *);
+extern void arch_flush_icache_all(void);
+extern void ihk_mc_init_user_tlsbase(struct x86_user_context *,
+				     unsigned long);
+extern void ihk_mc_set_page_fault_handler(void *);
+extern void ihk_mc_set_syscall_handler(void *);
+extern void arch_clear_panic(void);
+extern void arch_show_interrupt_context(const void *);
+extern void arch_print_pre_interrupt_stack(const struct x86_basic_regs *);
+extern void arch_print_stack(void);
+extern int arch_setup_pvclock(void);
+extern void arch_start_pvclock(void);
 extern unsigned long ihk_mc_syscall_arg0(const struct x86_user_context *);
 extern unsigned long ihk_mc_syscall_arg1(const struct x86_user_context *);
 extern unsigned long ihk_mc_syscall_arg2(const struct x86_user_context *);
@@ -115378,8 +136319,120 @@ extern unsigned long ihk_mc_syscall_number(const struct x86_user_context *);
 extern unsigned long ihk_mc_syscall_pc(const struct x86_user_context *);
 extern unsigned long ihk_mc_syscall_sp(const struct x86_user_context *);
 extern unsigned long REGS_GET_STACK_POINTER(const void *);
+void arch_delay(int);
+
+static int arch_prctl_call_count;
+static unsigned long arch_prctl_last_code;
+static unsigned long arch_prctl_last_address;
+unsigned long __x86_syscall_handler;
+unsigned long __page_fault_handler_address;
+#ifndef USE_C_X86_CPU_MODEL
+extern void *clv;
+extern int cpu_local_var_initialized;
+static unsigned char rust_arch_prctl_cpu_local[8192]
+		__attribute__((aligned(64)));
+static unsigned char rust_arch_prctl_thread[8192]
+		__attribute__((aligned(64)));
+#endif
+
+long do_arch_prctl(unsigned long code, unsigned long address)
+{
+	arch_prctl_call_count++;
+	arch_prctl_last_code = code;
+	arch_prctl_last_address = address;
+	return -123;
+}
+
+int arch_prctl_set_register_bridge(int type, unsigned long value)
+{
+	arch_prctl_call_count++;
+	arch_prctl_last_code = type == IHK_ASR_X86_FS ? ARCH_SET_FS :
+		(unsigned long)type;
+	arch_prctl_last_address = value;
+	return -123;
+}
 
 #ifdef USE_C_X86_CPU_MODEL
+int ihk_mc_get_smp_handler_irq(void)
+{
+	return 0xf1;
+}
+
+void arch_clone_thread(void *othread, unsigned long pc, unsigned long sp,
+		       void *nthread)
+{
+	(void)othread;
+	(void)pc;
+	(void)sp;
+	(void)nthread;
+}
+
+void arch_flush_icache_all(void)
+{
+}
+
+void ihk_mc_init_user_tlsbase(struct x86_user_context *ctx,
+			      unsigned long tls_base_addr)
+{
+	(void)ctx;
+	do_arch_prctl(ARCH_SET_FS, tls_base_addr);
+}
+
+void ihk_mc_set_page_fault_handler(void *handler)
+{
+	__page_fault_handler_address = (unsigned long)handler;
+}
+
+void ihk_mc_set_syscall_handler(void *handler)
+{
+	__x86_syscall_handler = (unsigned long)handler;
+}
+
+void ihk_mc_delay_us(int us)
+{
+	arch_delay(us);
+}
+#endif
+
+#ifndef USE_C_X86_CPU_MODEL
+extern void *locals;
+#endif
+
+#ifdef USE_C_X86_CPU_MODEL
+int x86_boot_cpu_body_result(
+	void *trampoline_va, const void *trampoline_code_data,
+	unsigned long trampoline_code_size, int cpuid, unsigned long pc,
+	unsigned long ap_trampoline, int *boot_status_slot,
+	void *setup_x86_ap_addr, unsigned long (*boot_page_table_phys_fn)(void),
+	unsigned long (*cpu_kstack_fn)(int),
+	unsigned long (*transit_page_table_fn)(void),
+	void (*wakeup_fn)(int, unsigned long), void (*pause_fn)(void))
+{
+	unsigned long *p;
+	unsigned long boot_pt;
+	unsigned long transit_pt;
+
+	if (!trampoline_va || !trampoline_code_data || !boot_status_slot ||
+	    !setup_x86_ap_addr || !boot_page_table_phys_fn || !cpu_kstack_fn ||
+	    !transit_page_table_fn || !wakeup_fn || !pause_fn)
+		return -EINVAL;
+
+	p = trampoline_va;
+	memcpy(p, trampoline_code_data, trampoline_code_size);
+	boot_pt = boot_page_table_phys_fn();
+	p[1] = boot_pt;
+	p[2] = (unsigned long)setup_x86_ap_addr;
+	p[3] = pc;
+	p[4] = cpu_kstack_fn(cpuid);
+	transit_pt = transit_page_table_fn();
+	p[6] = transit_pt ? transit_pt : boot_pt;
+	*boot_status_slot = 0;
+	wakeup_fn(cpuid, ap_trampoline);
+	while (!*boot_status_slot)
+		pause_fn();
+	return 0;
+}
+
 int x86_init_context_body_result(struct x86_kregs *ctx, void *stack_pointer,
 				 void *next_function, void *(*stack_fn)(void))
 {
@@ -115451,6 +136504,14 @@ int x86_modify_user_context_result(struct x86_user_context *uctx, int reg,
 		return 1;
 	}
 	return 0;
+}
+
+void ihk_mc_modify_user_context(struct x86_user_context *uctx, int reg,
+				unsigned long value)
+{
+	(void)x86_modify_user_context_result(uctx, reg, value,
+					     IHK_UCR_STACK_POINTER,
+					     IHK_UCR_PROGRAM_COUNTER);
 }
 
 struct x86_user_context *x86_lookup_user_context_body_result(
@@ -115705,6 +136766,8 @@ int x86_delay_us_body_result(int us, void (*delay_fn)(int))
 	return 0;
 }
 
+static void fake_cpu_log(int event);
+
 int x86_tick_log_body_result(int event, void (*log_fn)(int))
 {
 	if (event < 1 || event > 3)
@@ -115713,6 +136776,28 @@ int x86_tick_log_body_result(int event, void (*log_fn)(int))
 		log_fn(event);
 	return 0;
 }
+
+#ifdef USE_C_X86_CPU_MODEL
+void init_tick(void)
+{
+	x86_tick_log_body_result(1, fake_cpu_log);
+}
+
+void init_delay(void)
+{
+	x86_tick_log_body_result(2, fake_cpu_log);
+}
+
+void sync_tick(void)
+{
+	x86_tick_log_body_result(3, fake_cpu_log);
+}
+#else
+void x86_tick_log_bridge(int event)
+{
+	fake_cpu_log(event);
+}
+#endif
 
 int x86_arch_set_special_register_result(int reg_type, int fs_type,
 					 unsigned long value,
@@ -116185,10 +137270,337 @@ int x86_pvclock_available_body_result(
 		log_fn(5);
 	return 0;
 }
+
+int x86_arch_setup_pvclock_body_result(
+	void **pvti_slot, int *pvti_npages_slot, int num_processors,
+	unsigned long pvti_entry_size, unsigned long page_size, int page_p2align,
+	unsigned long alloc_flag, int pg_kernel, char *file, int line,
+	int (*available_fn)(void),
+	void *(*alloc_fn)(int, int, unsigned long, int, int, unsigned long, char *,
+			  int),
+	void (*log_fn)(int))
+{
+	size_t size;
+	int npages;
+	void *pages;
+
+	if (!pvti_slot || !pvti_npages_slot || num_processors < 0 ||
+	    !pvti_entry_size || !page_size || !available_fn || !alloc_fn)
+		return -EINVAL;
+	if (log_fn)
+		log_fn(6);
+	if (!available_fn()) {
+		if (log_fn)
+			log_fn(7);
+		return 0;
+	}
+	size = (size_t)num_processors * pvti_entry_size;
+	npages = (int)((size + page_size - 1) / page_size);
+	*pvti_npages_slot = npages;
+	pages = alloc_fn(npages, page_p2align, alloc_flag, -1, pg_kernel,
+			 ~0UL, file, line);
+	*pvti_slot = pages;
+	if (!pages) {
+		if (log_fn)
+			log_fn(8);
+		return -ENOMEM;
+	}
+	memset(pages, 0, page_size * (unsigned long)npages);
+	if (log_fn)
+		log_fn(9);
+	return 0;
+}
+
+int x86_arch_start_pvclock_body_result(
+	void *pvti, long pvti_msr, unsigned long pvti_entry_size,
+	unsigned long enable_bit, int (*current_cpu_fn)(void),
+	unsigned long (*virt_to_phys_fn)(void *),
+	void (*write_msr_fn)(int, unsigned long), void (*log_fn)(int))
+{
+	int cpu;
+	void *entry;
+	unsigned long phys;
+
+	if (log_fn)
+		log_fn(10);
+	if (!pvti) {
+		if (log_fn)
+			log_fn(11);
+		return 0;
+	}
+	if (!pvti_entry_size || !current_cpu_fn || !virt_to_phys_fn ||
+	    !write_msr_fn)
+		return -EINVAL;
+	cpu = current_cpu_fn();
+	if (cpu < 0)
+		return -EINVAL;
+	entry = (char *)pvti + (unsigned long)cpu * pvti_entry_size;
+	phys = virt_to_phys_fn(entry);
+	write_msr_fn((int)pvti_msr, phys | enable_bit);
+	if (log_fn)
+		log_fn(12);
+	return 0;
+}
+
+int x86_call_ap_func_body_result(int *cpu_boot_status_slot,
+				 void (*next_func)(void))
+{
+	if (!cpu_boot_status_slot || !next_func)
+		return -EINVAL;
+	*cpu_boot_status_slot = 1;
+	next_func();
+	return 0;
+}
+
+int x86_show_stack_body_result(
+	unsigned long *sp, unsigned long lower_bound, unsigned long upper_bound,
+	void (*log_fn)(unsigned long, unsigned long, unsigned long))
+{
+	unsigned long fp;
+	unsigned long ip;
+
+	if (!log_fn)
+		return -EINVAL;
+	while ((unsigned long)sp >= lower_bound &&
+	       (unsigned long)sp < upper_bound) {
+		fp = sp[0];
+		ip = sp[1];
+		log_fn(ip, (unsigned long)sp, fp);
+		sp = (void *)fp;
+	}
+	return 0;
+}
+
+int x86_arch_print_pre_interrupt_stack_body_result(
+	const void *regs_arg, unsigned long error_offset,
+	unsigned long rsp_offset, unsigned long rip_offset,
+	unsigned long pf_user, unsigned long scan_window,
+	void (*log_fn)(int), void (*print_stack_fn)(void *, unsigned long))
+{
+	const char *regs = regs_arg;
+	unsigned long error;
+	unsigned long rip;
+	unsigned long *rbp;
+
+	if (!regs || !print_stack_fn)
+		return -EINVAL;
+	error = *(const unsigned long *)(regs + error_offset);
+	if (error & pf_user)
+		return 0;
+	if (log_fn)
+		log_fn(13);
+	rbp = (unsigned long *)*(const unsigned long *)(regs + rsp_offset);
+	while ((unsigned long)rbp > rbp[0] ||
+	       (unsigned long)rbp + scan_window < rbp[0])
+		rbp++;
+	rip = *(const unsigned long *)(regs + rip_offset);
+	print_stack_fn(rbp, rip);
+	return 0;
+}
+
+int x86_arch_print_stack_body_result(
+	void *rbp, void (*log_fn)(int),
+	void (*print_stack_fn)(void *, unsigned long))
+{
+	if (!print_stack_fn)
+		return -EINVAL;
+	if (log_fn)
+		log_fn(14);
+	print_stack_fn(rbp, 0);
+	return 0;
+}
+
+int x86_print_user_context_body_result(
+	const struct x86_user_context *uctx,
+	void (*log_fn)(int, unsigned long, unsigned long, unsigned long,
+		       unsigned long))
+{
+	const struct x86_basic_regs *regs;
+
+	if (!uctx || !log_fn)
+		return -EINVAL;
+	regs = &uctx->gpr;
+	log_fn(20, regs->cs, regs->rip, 0, 0);
+	log_fn(21, regs->rax, regs->rbx, regs->rcx, regs->rdx);
+	log_fn(22, regs->rsi, regs->rdi, regs->rsp, 0);
+	return 0;
+}
+
+int x86_arch_show_interrupt_context_body_result(
+	const struct x86_user_context *uctx, unsigned long (*lock_fn)(void),
+	void (*unlock_fn)(unsigned long),
+	void (*log_fn)(int, unsigned long, unsigned long, unsigned long,
+		       unsigned long))
+{
+	const struct x86_basic_regs *regs;
+	unsigned long irqflags;
+
+	if (!uctx || !lock_fn || !unlock_fn || !log_fn)
+		return -EINVAL;
+	regs = &uctx->gpr;
+	irqflags = lock_fn();
+	log_fn(1, regs->cs, regs->rip, 0, 0);
+	log_fn(2, regs->rax, regs->rbx, regs->rcx, regs->rdx);
+	log_fn(3, regs->rsi, regs->rdi, regs->rsp, regs->rbp);
+	log_fn(4, regs->r8, regs->r9, regs->r10, regs->r11);
+	log_fn(5, regs->r12, regs->r13, regs->r14, regs->r15);
+	log_fn(6, regs->cs, regs->ss, regs->rflags, regs->orig_rax);
+	unlock_fn(irqflags);
+	return 0;
+}
+
+int x86_arch_save_panic_regs_body_result(
+	const struct x86_user_context *regs, const struct x86_kregs *current_ctx,
+	unsigned long *panic_regs, unsigned long *paniced_slot,
+	unsigned long user_end, unsigned long enter_user_mode_addr,
+	void (*log_fn)(int, unsigned long))
+{
+	uint32_t *sregs;
+
+	if (!regs || !panic_regs || !paniced_slot)
+		return -EINVAL;
+
+	if (regs->gpr.rip > user_end) {
+		panic_regs[0] = regs->gpr.rax;
+		panic_regs[1] = regs->gpr.rbx;
+		panic_regs[2] = regs->gpr.rcx;
+		panic_regs[3] = regs->gpr.rdx;
+		panic_regs[4] = regs->gpr.rsi;
+		panic_regs[5] = regs->gpr.rdi;
+		panic_regs[6] = regs->gpr.rbp;
+		panic_regs[7] = regs->gpr.rsp;
+		panic_regs[8] = regs->gpr.r8;
+		panic_regs[9] = regs->gpr.r9;
+		panic_regs[10] = regs->gpr.r10;
+		panic_regs[11] = regs->gpr.r11;
+		panic_regs[12] = regs->gpr.r12;
+		panic_regs[13] = regs->gpr.r13;
+		panic_regs[14] = regs->gpr.r14;
+		panic_regs[15] = regs->gpr.r15;
+		panic_regs[16] = regs->gpr.rip;
+	} else {
+		if (!current_ctx || !log_fn)
+			return -EINVAL;
+		log_fn(15, regs->gpr.rip);
+		panic_regs[0] = 0;
+		panic_regs[1] = current_ctx->rbx;
+		panic_regs[2] = 0;
+		panic_regs[3] = 0;
+		panic_regs[4] = current_ctx->rsi;
+		panic_regs[5] = current_ctx->rdi;
+		panic_regs[6] = current_ctx->rbp;
+		panic_regs[7] = current_ctx->rsp;
+		panic_regs[8] = 0;
+		panic_regs[9] = 0;
+		panic_regs[10] = 0;
+		panic_regs[11] = 0;
+		panic_regs[12] = regs->gpr.r12;
+		panic_regs[13] = regs->gpr.r13;
+		panic_regs[14] = regs->gpr.r14;
+		panic_regs[15] = regs->gpr.r15;
+		panic_regs[16] = enter_user_mode_addr;
+	}
+
+	sregs = (uint32_t *)&panic_regs[17];
+	sregs[0] = regs->gpr.rflags;
+	sregs[1] = regs->gpr.cs;
+	sregs[2] = regs->gpr.ss;
+	sregs[3] = regs->sr.ds;
+	sregs[4] = regs->sr.es;
+	sregs[5] = regs->sr.fs;
+	sregs[6] = regs->sr.gs;
+	*paniced_slot = 1;
+	return 0;
+}
+
+int x86_arch_clear_panic_body_result(unsigned long *paniced_slot)
+{
+	if (!paniced_slot)
+		return -EINVAL;
+	*paniced_slot = 0;
+	return 0;
+}
+
+int x86_mcexec_v10_trace_enter_user_body_result(
+	const struct x86_user_context *regs, const void *thread_arg,
+	int *counter, int limit, int cpu,
+	const struct x86_trace_enter_user_offsets *offsets,
+	void (*log_fn)(int, int, int, unsigned long, unsigned long,
+		       unsigned long, unsigned long, unsigned long, int))
+{
+	const char *thread = thread_arg;
+	const char *proc;
+	int pid = -1;
+	int tid = -1;
+	int status = -1;
+	unsigned long rip = 0;
+	unsigned long rsp = 0;
+	unsigned long cs = 0;
+	unsigned long ss = 0;
+	unsigned long rflags = 0;
+
+	if (!counter || !offsets || !log_fn)
+		return -EINVAL;
+	if (*counter >= limit)
+		return 0;
+	if (thread) {
+		tid = *(const int *)(thread + offsets->thread_tid_offset);
+		status = *(const int *)(thread + offsets->thread_status_offset);
+		proc = *(const char * const *)(thread + offsets->thread_proc_offset);
+		if (proc)
+			pid = *(const int *)(proc + offsets->process_pid_offset);
+	}
+	if (regs) {
+		rip = regs->gpr.rip;
+		rsp = regs->gpr.rsp;
+		cs = regs->gpr.cs;
+		ss = regs->gpr.ss;
+		rflags = regs->gpr.rflags;
+	}
+	log_fn(cpu, pid, tid, rip, rsp, cs, ss, rflags, status);
+	(*counter)++;
+	return 1;
+}
+
+int x86_release_runq_lock_body_result(
+	void *cpu_local, unsigned long runq_lock_offset,
+	unsigned long runq_irqstate_offset,
+	void (*unlock_fn)(void *, unsigned long))
+{
+	char *base = cpu_local;
+	void *lock;
+	unsigned long irqstate;
+
+	if (!cpu_local || !unlock_fn)
+		return -EINVAL;
+	lock = base + runq_lock_offset;
+	irqstate = *(unsigned long *)(base + runq_irqstate_offset);
+	unlock_fn(lock, irqstate);
+	return 0;
+}
+
+int x86_set_kstack_body_result(void *cpu_local,
+			       unsigned long kernel_stack_offset,
+			       unsigned long tss_rsp0_offset,
+			       unsigned long stack_pointer)
+{
+	char *base = cpu_local;
+
+	if (!cpu_local)
+		return -EINVAL;
+	*(unsigned long *)(base + kernel_stack_offset) = stack_pointer;
+	*(unsigned long *)(base + tss_rsp0_offset) = stack_pointer;
+	return 0;
+}
 #endif
 
 static unsigned char fallback_stack[256];
 static struct fake_cpu_local cpu_locals[4];
+#ifndef USE_C_X86_CPU_MODEL
+static unsigned char rust_x86_local_area[4 * 4 * 4096]
+	__attribute__((aligned(4096)));
+#endif
+int num_processors;
 static unsigned long msr_value;
 static unsigned long written_msr;
 static int write_count;
@@ -116232,8 +137644,8 @@ static int cpuid_edx_count;
 static unsigned long platform_info_value;
 static unsigned long turbo_ratio_value;
 static unsigned long pat_msr_value;
-static int cpu_log_count;
-static int cpu_log_events[8];
+int cpu_log_count;
+int cpu_log_events[32];
 static int cpu_value_log_count;
 static int cpu_value_log_events[8];
 static int cpu_value_log_values[8];
@@ -116253,6 +137665,64 @@ static unsigned long cpuid_signature_ebx;
 static unsigned long cpuid_signature_ecx;
 static unsigned long cpuid_signature_edx;
 static unsigned long cpuid_features_eax;
+static unsigned char pvclock_pages[8192];
+static int pvclock_available_value;
+static int pvclock_alloc_count;
+static int pvclock_alloc_npages;
+static int pvclock_alloc_p2align;
+static unsigned long pvclock_alloc_flag;
+static int pvclock_alloc_is_user;
+static unsigned long pvclock_alloc_virt_addr;
+static char *pvclock_alloc_file;
+static int pvclock_alloc_line;
+static int pvclock_alloc_fail;
+struct pvclock_vsyscall_time_info {
+	long contents[64/sizeof(long)];
+};
+struct pvclock_vsyscall_time_info *pvti;
+int pvti_npages;
+long pvti_msr;
+static int current_cpu_value;
+static int virt_to_phys_count;
+static void *last_virt_to_phys_ptr;
+static unsigned long virt_to_phys_base;
+static int ap_next_count;
+static int public_call_ap_status;
+static int stack_frame_log_count;
+static unsigned long stack_frame_ips[8];
+static unsigned long stack_frame_sps[8];
+static unsigned long stack_frame_fps[8];
+static int stack_print_count;
+static void *stack_print_rbp;
+static unsigned long stack_print_first;
+static int context_log_count;
+static int context_log_events[16];
+static unsigned long context_log_a[16];
+static unsigned long context_log_b[16];
+static unsigned long context_log_c[16];
+static unsigned long context_log_d[16];
+static int context_lock_count;
+static int context_unlock_count;
+static unsigned long context_unlock_flags;
+static int trace_log_count;
+static int trace_cpu;
+static int trace_pid;
+static int trace_tid;
+static unsigned long trace_rip;
+static unsigned long trace_rsp;
+static unsigned long trace_cs;
+static unsigned long trace_ss;
+static unsigned long trace_rflags;
+static int trace_status;
+static int runq_unlock_count;
+static void *runq_unlock_lock;
+static unsigned long runq_unlock_irqstate;
+static int *boot_cpu_status_slot;
+static int boot_cpu_wakeup_count;
+static int boot_cpu_pause_count;
+static int boot_cpu_last_cpuid;
+static unsigned long boot_cpu_last_trampoline;
+static unsigned long boot_cpu_transit_value;
 
 static void require_line(int condition, int line)
 {
@@ -116292,6 +137762,53 @@ static void *fake_cpu_local(int cpu)
 	return &cpu_locals[cpu];
 }
 
+#ifdef USE_C_X86_CPU_MODEL
+int ihk_mc_get_interrupt_id(int cpu)
+{
+	return ((struct fake_cpu_local *)fake_cpu_local(cpu))->apic_id;
+}
+
+void arch_clear_panic(void)
+{
+	cpu_locals[0].paniced = 0;
+}
+#endif
+
+static void seed_public_interrupt_id_local(int cpu, unsigned long apic_id)
+{
+#ifdef USE_C_X86_CPU_MODEL
+	cpu_locals[cpu].apic_id = apic_id;
+#else
+	memset(rust_x86_local_area, 0, sizeof(rust_x86_local_area));
+	locals = rust_x86_local_area;
+	*(unsigned long *)(rust_x86_local_area +
+			(size_t)cpu * 4 * 4096 +
+			offsetof(struct fake_cpu_local, apic_id)) = apic_id;
+	#endif
+}
+
+static void seed_public_panic_local(unsigned long paniced)
+{
+#ifdef USE_C_X86_CPU_MODEL
+	cpu_locals[0].paniced = paniced;
+#else
+	memset(rust_x86_local_area, 0, sizeof(rust_x86_local_area));
+	locals = rust_x86_local_area;
+	*(unsigned long *)(rust_x86_local_area +
+			offsetof(struct fake_cpu_local, paniced)) = paniced;
+#endif
+}
+
+static unsigned long read_public_panic_local(void)
+{
+#ifdef USE_C_X86_CPU_MODEL
+	return cpu_locals[0].paniced;
+#else
+	return *(unsigned long *)(rust_x86_local_area +
+			offsetof(struct fake_cpu_local, paniced));
+#endif
+}
+
 static void fake_issue_ipi(unsigned long apic_id, int vector)
 {
 	last_apic_id = apic_id;
@@ -116305,6 +137822,25 @@ static void fake_interrupt_log(int event, int cpu, int vector)
 	mix(&log_digest, (unsigned long)(unsigned int)cpu);
 	mix(&log_digest, (unsigned long)(unsigned int)vector);
 }
+
+#ifdef USE_C_X86_CPU_MODEL
+int ihk_mc_interrupt_cpu(int cpu, int vector)
+{
+	return x86_interrupt_cpu_result(cpu, vector, num_processors,
+			fake_cpu_local, offsetof(struct fake_cpu_local, apic_id),
+			fake_issue_ipi, fake_interrupt_log);
+}
+#else
+void x86_issue_ipi_bridge(unsigned long apic_id, int vector)
+{
+	fake_issue_ipi(apic_id, vector);
+}
+
+void x86_interrupt_log_bridge(int event, int cpu, int vector)
+{
+	fake_interrupt_log(event, cpu, vector);
+}
+#endif
 
 static void reset_apic_trace(void)
 {
@@ -116329,6 +137865,48 @@ static void reset_apic_trace(void)
 	init_processors_arg = -1;
 	cpu_ulong_log_count = 0;
 	cpuid_leaf_count = 0;
+	pvclock_alloc_count = 0;
+	pvclock_alloc_npages = 0;
+	pvclock_alloc_p2align = 0;
+	pvclock_alloc_flag = 0;
+	pvclock_alloc_is_user = 0;
+	pvclock_alloc_virt_addr = 0;
+	pvclock_alloc_file = NULL;
+	pvclock_alloc_line = 0;
+	pvclock_alloc_fail = 0;
+	current_cpu_value = 0;
+	virt_to_phys_count = 0;
+	last_virt_to_phys_ptr = NULL;
+	virt_to_phys_base = 0;
+	ap_next_count = 0;
+	public_call_ap_status = 0;
+	stack_frame_log_count = 0;
+	stack_print_count = 0;
+	stack_print_rbp = NULL;
+	stack_print_first = 0;
+	context_log_count = 0;
+	context_lock_count = 0;
+	context_unlock_count = 0;
+	context_unlock_flags = 0;
+	trace_log_count = 0;
+	trace_cpu = 0;
+	trace_pid = 0;
+	trace_tid = 0;
+	trace_rip = 0;
+	trace_rsp = 0;
+	trace_cs = 0;
+	trace_ss = 0;
+	trace_rflags = 0;
+	trace_status = 0;
+	runq_unlock_count = 0;
+	runq_unlock_lock = NULL;
+	runq_unlock_irqstate = 0;
+	boot_cpu_status_slot = NULL;
+	boot_cpu_wakeup_count = 0;
+	boot_cpu_pause_count = 0;
+	boot_cpu_last_cpuid = -1;
+	boot_cpu_last_trampoline = 0;
+	boot_cpu_transit_value = 0;
 }
 
 static void fake_lapic_write(int reg, unsigned int value)
@@ -116431,10 +138009,84 @@ static void fake_cpu_log(int event)
 	cpu_log_count++;
 }
 
+static void fake_cpuid_leaf(unsigned long op, unsigned long *eaxp,
+			    unsigned long *ebxp, unsigned long *ecxp,
+			    unsigned long *edxp);
+static int fake_pvclock_available_body_bridge(void);
+static void *fake_alloc_aligned_pages_node(int npages, int p2align,
+					   unsigned long flag, int node,
+					   int is_user,
+					   unsigned long virt_addr, char *file,
+					   int line);
+static int fake_current_cpu(void);
+static unsigned long fake_virt_to_phys_ptr(void *ptr);
+static void fake_write_msr_reg(int reg, unsigned long value);
+
+#ifdef USE_C_X86_CPU_MODEL
+int arch_setup_pvclock(void)
+{
+	return x86_arch_setup_pvclock_body_result((void **)&pvti,
+			&pvti_npages, num_processors, sizeof(*pvti),
+			4096, 0, 0x000002UL, 0,
+			(char *)"arch/x86_64/kernel/cpu.c", 0,
+			fake_pvclock_available_body_bridge,
+			fake_alloc_aligned_pages_node, fake_cpu_log);
+}
+
+void arch_start_pvclock(void)
+{
+	x86_arch_start_pvclock_body_result(pvti, pvti_msr, sizeof(*pvti),
+			1, fake_current_cpu, fake_virt_to_phys_ptr,
+			fake_write_msr_reg, fake_cpu_log);
+}
+#else
+int x86_current_cpu_bridge(void)
+{
+	return fake_current_cpu();
+}
+
+unsigned long x86_virt_to_phys_bridge(void *addr)
+{
+	return fake_virt_to_phys_ptr(addr);
+}
+
+void x86_write_msr_bridge(int reg, unsigned long value)
+{
+	fake_write_msr_reg(reg, value);
+}
+
+void x86_cpuid_leaf_bridge(unsigned long op, unsigned long *eaxp,
+			   unsigned long *ebxp, unsigned long *ecxp,
+			   unsigned long *edxp)
+{
+	fake_cpuid_leaf(op, eaxp, ebxp, ecxp, edxp);
+}
+
+void *x86_alloc_aligned_pages_node_bridge(int npages, int p2align,
+					  unsigned long flag, int node,
+					  int is_user,
+					  unsigned long virt_addr,
+					  char *file, int line)
+{
+	return fake_alloc_aligned_pages_node(npages, p2align, flag, node,
+			is_user, virt_addr, file, line);
+}
+
+void x86_pvclock_log_bridge(int event)
+{
+	fake_cpu_log(event);
+}
+#endif
+
 static void fake_delay_us(int us)
 {
 	last_delay_us = us;
 	delay_count++;
+}
+
+void arch_delay(int us)
+{
+	fake_delay_us(us);
 }
 
 static void fake_cpu_value_log(int event, int value)
@@ -116502,9 +138154,234 @@ static void fake_cpuid_leaf(unsigned long op, unsigned long *eaxp,
 	}
 }
 
+static int fake_pvclock_available_body_bridge(void)
+{
+	return x86_pvclock_available_body_result(&pvti_msr, 0x40000000UL,
+			0x40000001UL, 3, 0, 0x4b564d01, 0x12,
+			fake_cpuid_leaf, fake_cpu_log);
+}
+
+static int fake_pvclock_available(void)
+{
+	return pvclock_available_value;
+}
+
+static void *fake_alloc_aligned_pages_node(int npages, int p2align,
+					   unsigned long flag, int node,
+					   int is_user,
+					   unsigned long virt_addr, char *file,
+					   int line)
+{
+	(void)node;
+	pvclock_alloc_count++;
+	pvclock_alloc_npages = npages;
+	pvclock_alloc_p2align = p2align;
+	pvclock_alloc_flag = flag;
+	pvclock_alloc_is_user = is_user;
+	pvclock_alloc_virt_addr = virt_addr;
+	pvclock_alloc_file = file;
+	pvclock_alloc_line = line;
+	memset(pvclock_pages, 0x5a, sizeof(pvclock_pages));
+	if (pvclock_alloc_fail)
+		return NULL;
+	return pvclock_pages;
+}
+
+static int fake_current_cpu(void)
+{
+	return current_cpu_value;
+}
+
+static unsigned long fake_virt_to_phys_ptr(void *ptr)
+{
+	virt_to_phys_count++;
+	last_virt_to_phys_ptr = ptr;
+	return virt_to_phys_base +
+		(unsigned long)((unsigned char *)ptr - pvclock_pages);
+}
+
 static void fake_next(void) {}
 static void fake_enter_user(void) {}
 static void fake_handler(void) {}
+
+static void fake_ap_next(void)
+{
+	ap_next_count++;
+}
+
+#ifdef USE_C_X86_CPU_MODEL
+void call_ap_func(void (*next_func)(void))
+{
+	x86_call_ap_func_body_result(&public_call_ap_status, next_func);
+}
+#else
+int *x86_cpu_boot_status_slot_bridge(void)
+{
+	return &public_call_ap_status;
+}
+#endif
+
+static void fake_stack_frame_log(unsigned long ip, unsigned long sp,
+				 unsigned long fp)
+{
+	stack_frame_ips[stack_frame_log_count] = ip;
+	stack_frame_sps[stack_frame_log_count] = sp;
+	stack_frame_fps[stack_frame_log_count] = fp;
+	stack_frame_log_count++;
+}
+
+static void fake_print_stack(void *rbp, unsigned long first)
+{
+	stack_print_count++;
+	stack_print_rbp = rbp;
+	stack_print_first = first;
+}
+
+#ifdef USE_C_X86_CPU_MODEL
+void __show_stack(unsigned long *sp)
+{
+	x86_show_stack_body_result(sp, 0xffff800000000000UL,
+			0xffffffff80000000UL, fake_stack_frame_log);
+}
+
+void show_context_stack(unsigned long *rbp)
+{
+	x86_show_stack_body_result(rbp, 0xffff800000000000UL,
+			0xffffffff80000000UL, fake_stack_frame_log);
+}
+
+void arch_print_pre_interrupt_stack(const struct x86_basic_regs *regs)
+{
+	x86_arch_print_pre_interrupt_stack_body_result(regs,
+			offsetof(struct x86_basic_regs, orig_rax),
+			offsetof(struct x86_basic_regs, rsp),
+			offsetof(struct x86_basic_regs, rip),
+			1UL << 2, 0x10000, fake_cpu_log,
+			fake_print_stack);
+}
+
+void arch_print_stack(void)
+{
+	void *rbp;
+
+	asm("mov %%rbp, %0" : "=r"(rbp) );
+	x86_arch_print_stack_body_result(rbp, fake_cpu_log,
+			fake_print_stack);
+}
+#else
+void x86_stack_frame_log_bridge(unsigned long ip, unsigned long sp,
+				unsigned long fp)
+{
+	fake_stack_frame_log(ip, sp, fp);
+}
+
+void x86_print_stack_bridge(void *rbp, unsigned long first)
+{
+	fake_print_stack(rbp, first);
+}
+#endif
+
+static unsigned long fake_context_lock(void)
+{
+	context_lock_count++;
+	return 0xfeedfaceUL;
+}
+
+static void fake_context_unlock(unsigned long flags)
+{
+	context_unlock_count++;
+	context_unlock_flags = flags;
+}
+
+static void fake_context_log(int event, unsigned long a, unsigned long b,
+			     unsigned long c, unsigned long d)
+{
+	context_log_events[context_log_count] = event;
+	context_log_a[context_log_count] = a;
+	context_log_b[context_log_count] = b;
+	context_log_c[context_log_count] = c;
+	context_log_d[context_log_count] = d;
+	context_log_count++;
+}
+
+#ifdef USE_C_X86_CPU_MODEL
+void arch_show_interrupt_context(const void *reg)
+{
+	x86_arch_show_interrupt_context_body_result(reg,
+			fake_context_lock, fake_context_unlock,
+			fake_context_log);
+}
+#else
+unsigned long x86_kprintf_lock_bridge(void)
+{
+	return fake_context_lock();
+}
+
+void x86_kprintf_unlock_bridge(unsigned long flags)
+{
+	fake_context_unlock(flags);
+}
+
+void x86_context_line_log_bridge(int event, unsigned long a, unsigned long b,
+				 unsigned long c, unsigned long d)
+{
+	fake_context_log(event, a, b, c, d);
+}
+#endif
+
+static void fake_trace_log(int cpu, int pid, int tid, unsigned long rip,
+			   unsigned long rsp, unsigned long cs,
+			   unsigned long ss, unsigned long rflags, int status)
+{
+	trace_log_count++;
+	trace_cpu = cpu;
+	trace_pid = pid;
+	trace_tid = tid;
+	trace_rip = rip;
+	trace_rsp = rsp;
+	trace_cs = cs;
+	trace_ss = ss;
+	trace_rflags = rflags;
+	trace_status = status;
+}
+
+static void fake_runq_unlock(void *lock, unsigned long irqstate)
+{
+	runq_unlock_count++;
+	runq_unlock_lock = lock;
+	runq_unlock_irqstate = irqstate;
+}
+
+static unsigned long fake_boot_pt_phys(void)
+{
+	return 0x12345000UL;
+}
+
+static unsigned long fake_cpu_kstack(int cpuid)
+{
+	return 0x80000000UL + (unsigned long)cpuid * 0x10000UL;
+}
+
+static unsigned long fake_transit_pt(void)
+{
+	return boot_cpu_transit_value;
+}
+
+static void fake_boot_wakeup(int cpuid, unsigned long trampoline)
+{
+	boot_cpu_wakeup_count++;
+	boot_cpu_last_cpuid = cpuid;
+	boot_cpu_last_trampoline = trampoline;
+	if (boot_cpu_status_slot)
+		*boot_cpu_status_slot = 1;
+}
+
+static void fake_boot_pause(void)
+{
+	boot_cpu_pause_count++;
+	if (boot_cpu_status_slot && boot_cpu_pause_count > 4)
+		*boot_cpu_status_slot = 1;
+}
 
 int main(void)
 {
@@ -116531,6 +138408,41 @@ int main(void)
 	void *load_ptr = &load_ulong;
 	unsigned long digest = 0x7838366370752121UL;
 	int ret;
+
+	reset_apic_trace();
+	{
+		unsigned long trampoline[8];
+		unsigned long code[8] = {
+			0xaa00, 0xaa01, 0xaa02, 0xaa03,
+			0xaa04, 0xaa05, 0xaa06, 0xaa07,
+		};
+		int boot_status = 99;
+
+		memset(trampoline, 0, sizeof(trampoline));
+		boot_cpu_status_slot = &boot_status;
+		boot_cpu_transit_value = 0;
+		ret = x86_boot_cpu_body_result(trampoline, code, sizeof(code),
+				3, 0x5555, 0x77770000, &boot_status,
+				fake_enter_user, fake_boot_pt_phys,
+				fake_cpu_kstack, fake_transit_pt,
+				fake_boot_wakeup, fake_boot_pause);
+		require(ret == 0 && boot_status == 1);
+		require(boot_cpu_wakeup_count == 1 && boot_cpu_pause_count == 0);
+		require(boot_cpu_last_cpuid == 3 &&
+			boot_cpu_last_trampoline == 0x77770000);
+		require(trampoline[0] == code[0] &&
+			trampoline[1] == 0x12345000UL &&
+			trampoline[2] == (unsigned long)fake_enter_user &&
+			trampoline[3] == 0x5555 &&
+			trampoline[4] == 0x80030000UL &&
+			trampoline[6] == 0x12345000UL);
+		require(x86_boot_cpu_body_result(NULL, code, sizeof(code), 3,
+				0x5555, 0x77770000, &boot_status,
+				fake_enter_user, fake_boot_pt_phys,
+				fake_cpu_kstack, fake_transit_pt,
+				fake_boot_wakeup, fake_boot_pause) == -EINVAL);
+		mix(&digest, trampoline[1] ^ trampoline[4] ^ trampoline[6]);
+	}
 
 	memset(stack, 0xa5, sizeof(stack));
 	memset(&ctx, 0x5a, sizeof(ctx));
@@ -116608,6 +138520,12 @@ int main(void)
 					     IHK_UCR_STACK_POINTER,
 					     IHK_UCR_PROGRAM_COUNTER);
 	require(ret == 0 && uctx->gpr.rip == 0x402000);
+	ihk_mc_modify_user_context(uctx, IHK_UCR_STACK_POINTER, 0x71000000);
+	require(uctx->gpr.rsp == 0x71000000);
+	ihk_mc_modify_user_context(uctx, IHK_UCR_PROGRAM_COUNTER, 0x403000);
+	require(uctx->gpr.rip == 0x403000);
+	ihk_mc_modify_user_context(uctx, 99, 0x66);
+	require(uctx->gpr.rip == 0x403000 && uctx->gpr.rsp == 0x71000000);
 	mix(&digest, uctx->gpr.rip ^ uctx->gpr.rsp);
 
 	memset(&user_ctx, 0, sizeof(user_ctx));
@@ -116646,6 +138564,10 @@ int main(void)
 	ret = x86_delay_us_body_result(42, fake_delay_us);
 	require(ret == 0 && delay_count == 1 && last_delay_us == 42);
 	require(x86_delay_us_body_result(1, NULL) == -EINVAL);
+	delay_count = 0;
+	last_delay_us = 0;
+	ihk_mc_delay_us(77);
+	require(delay_count == 1 && last_delay_us == 77);
 	ret = x86_tick_log_body_result(1, fake_cpu_log);
 	require(ret == 0 && cpu_log_count == 1 && cpu_log_events[0] == 1);
 	ret = x86_tick_log_body_result(2, fake_cpu_log);
@@ -116653,6 +138575,13 @@ int main(void)
 	ret = x86_tick_log_body_result(3, fake_cpu_log);
 	require(ret == 0 && cpu_log_count == 3 && cpu_log_events[2] == 3);
 	require(x86_tick_log_body_result(4, fake_cpu_log) == -EINVAL);
+	init_tick();
+	init_delay();
+	sync_tick();
+	require(cpu_log_count == 6);
+	require(cpu_log_events[3] == 1);
+	require(cpu_log_events[4] == 2);
+	require(cpu_log_events[5] == 3);
 	mix(&digest, (unsigned long)last_delay_us ^
 			(unsigned long)cpu_log_count ^
 			(unsigned long)(slot == (unsigned long)fake_handler));
@@ -116716,6 +138645,31 @@ int main(void)
 			((((0x123UL & 0xf00UL) << 24) | (0x45UL << 8) |
 			  (0x123UL & 0xffUL) | (1UL << 23) |
 			  (0xffUL << 24))));
+	require(ihk_mc_get_smp_handler_irq() == 0xf1);
+	arch_clone_thread((void *)0x11UL, 0x22UL, 0x33UL,
+			(void *)0x44UL);
+	arch_flush_icache_all();
+	arch_prctl_call_count = 0;
+#ifndef USE_C_X86_CPU_MODEL
+	memset(rust_arch_prctl_cpu_local, 0,
+	       sizeof(rust_arch_prctl_cpu_local));
+	memset(rust_arch_prctl_thread, 0, sizeof(rust_arch_prctl_thread));
+	clv = rust_arch_prctl_cpu_local;
+	cpu_local_var_initialized = 1;
+	*(void **)(rust_arch_prctl_cpu_local +
+		   RUST_CPU_LOCAL_CURRENT_OFFSET) = rust_arch_prctl_thread;
+#endif
+	ihk_mc_init_user_tlsbase(&user_ctx, 0x1234abcdUL);
+	require(arch_prctl_call_count == 1);
+	require(arch_prctl_last_code == ARCH_SET_FS);
+	require(arch_prctl_last_address == 0x1234abcdUL);
+	mix(&digest, arch_prctl_last_code ^ arch_prctl_last_address);
+	__page_fault_handler_address = 0;
+	ihk_mc_set_page_fault_handler(fake_handler);
+	require(__page_fault_handler_address == (unsigned long)fake_handler);
+	__x86_syscall_handler = 0;
+	ihk_mc_set_syscall_handler(fake_handler);
+	require(__x86_syscall_handler == (unsigned long)fake_handler);
 	mb();
 	rmb();
 	wmb();
@@ -116745,6 +138699,8 @@ int main(void)
 	}
 	require(x86_get_interrupt_id_result(2, fake_cpu_local,
 			offsetof(struct fake_cpu_local, apic_id)) == 0x82);
+	seed_public_interrupt_id_local(3, 0x8d);
+	require(ihk_mc_get_interrupt_id(3) == 0x8d);
 	log_digest = 0x696e7472757074UL;
 	ipi_count = 0;
 	ret = x86_interrupt_cpu_result(1, 0xf1, 4, fake_cpu_local,
@@ -116755,6 +138711,15 @@ int main(void)
 	ret = x86_interrupt_cpu_result(4, 0xf2, 4, fake_cpu_local,
 			offsetof(struct fake_cpu_local, apic_id),
 			fake_issue_ipi, fake_interrupt_log);
+	require(ret == -1 && ipi_count == 1);
+	num_processors = 4;
+	seed_public_interrupt_id_local(2, 0x8e);
+	ipi_count = 0;
+	log_digest = 0x7075626963697069UL;
+	ret = ihk_mc_interrupt_cpu(2, 0xf3);
+	require(ret == 0 && ipi_count == 1 && last_apic_id == 0x8e &&
+		last_vector == 0xf3);
+	ret = ihk_mc_interrupt_cpu(4, 0xf4);
 	require(ret == -1 && ipi_count == 1);
 	mix(&digest, last_apic_id ^ (unsigned long)(unsigned int)last_vector);
 	mix(&digest, log_digest);
@@ -117203,6 +139168,540 @@ int main(void)
 			(unsigned long)cpuid_leaf_count);
 	}
 
+	reset_apic_trace();
+	{
+		void *pvti_ptr = (void *)0x1234;
+		int npages = -1;
+
+		pvclock_available_value = 0;
+		ret = x86_arch_setup_pvclock_body_result(&pvti_ptr, &npages,
+				3, 64, 4096, 12, 0x40, 1, (char *)"cpu.c",
+				321, fake_pvclock_available,
+				fake_alloc_aligned_pages_node, fake_cpu_log);
+		require(ret == 0 && pvti_ptr == (void *)0x1234 &&
+			npages == -1 && pvclock_alloc_count == 0);
+		require(cpu_log_count == 2 && cpu_log_events[0] == 6 &&
+			cpu_log_events[1] == 7);
+		mix(&digest, (unsigned long)cpu_log_events[1]);
+	}
+
+	reset_apic_trace();
+	{
+		void *pvti_ptr = NULL;
+		int npages = -1;
+
+		pvclock_available_value = 1;
+		ret = x86_arch_setup_pvclock_body_result(&pvti_ptr, &npages,
+				3, 64, 4096, 12, 0x40, 1, (char *)"cpu.c",
+				321, fake_pvclock_available,
+				fake_alloc_aligned_pages_node, fake_cpu_log);
+		require(ret == 0 && pvti_ptr == pvclock_pages && npages == 1);
+		require(pvclock_alloc_count == 1 && pvclock_alloc_npages == 1 &&
+			pvclock_alloc_p2align == 12 &&
+			pvclock_alloc_flag == 0x40 &&
+			pvclock_alloc_is_user == 1 &&
+			pvclock_alloc_virt_addr == ~0UL &&
+			pvclock_alloc_file == (char *)"cpu.c" &&
+			pvclock_alloc_line == 321);
+		for (int i = 0; i < 4096; i++)
+			require(pvclock_pages[i] == 0);
+		require(cpu_log_count == 2 && cpu_log_events[0] == 6 &&
+			cpu_log_events[1] == 9);
+		mix(&digest, (unsigned long)npages ^ pvclock_alloc_flag);
+	}
+
+	reset_apic_trace();
+	{
+		void *pvti_ptr = (void *)0x1234;
+		int npages = -1;
+
+		pvclock_available_value = 1;
+		pvclock_alloc_fail = 1;
+		ret = x86_arch_setup_pvclock_body_result(&pvti_ptr, &npages,
+				3, 64, 4096, 12, 0x40, 1, (char *)"cpu.c",
+				321, fake_pvclock_available,
+				fake_alloc_aligned_pages_node, fake_cpu_log);
+		require(ret == -ENOMEM && pvti_ptr == NULL && npages == 1);
+		require(cpu_log_count == 2 && cpu_log_events[1] == 8);
+		mix(&digest, (unsigned long)(unsigned int)ret ^
+			(unsigned long)cpu_log_events[1]);
+	}
+
+	reset_apic_trace();
+	pvti = NULL;
+	pvti_npages = -1;
+	pvti_msr = -1;
+	num_processors = 3;
+	cpuid_signature_eax = 0x40000001UL;
+	cpuid_signature_ebx = 0x4b4d564bUL;
+	cpuid_signature_ecx = 0x564b4d56UL;
+	cpuid_signature_edx = 0x0000004dUL;
+	cpuid_features_eax = 1UL << 3;
+	ret = arch_setup_pvclock();
+	require(ret == 0 && pvti ==
+		(struct pvclock_vsyscall_time_info *)pvclock_pages);
+	require(pvti_npages == 1 && pvti_msr == 0x4b564d01);
+	require(cpuid_leaf_count == 2 && pvclock_alloc_count == 1);
+	require(pvclock_alloc_npages == 1 &&
+		pvclock_alloc_p2align == 0 &&
+		pvclock_alloc_flag == 0x000002UL &&
+		pvclock_alloc_is_user == 0 &&
+		pvclock_alloc_virt_addr == ~0UL &&
+		pvclock_alloc_file != NULL &&
+		pvclock_alloc_line == 0);
+	for (int i = 0; i < 4096; i++)
+		require(pvclock_pages[i] == 0);
+	require(cpu_log_count == 4 && cpu_log_events[0] == 6 &&
+		cpu_log_events[1] == 1 && cpu_log_events[2] == 3 &&
+		cpu_log_events[3] == 9);
+	mix(&digest, (unsigned long)pvti_npages ^ (unsigned long)pvti_msr ^
+		(unsigned long)cpu_log_events[3]);
+
+	reset_apic_trace();
+	ret = x86_arch_start_pvclock_body_result(NULL, 0x4b564d01, 64, 1,
+			fake_current_cpu, fake_virt_to_phys_ptr,
+			fake_write_msr_reg, fake_cpu_log);
+	require(ret == 0 && virt_to_phys_count == 0 && write_msr_count == 0);
+	require(cpu_log_count == 2 && cpu_log_events[0] == 10 &&
+		cpu_log_events[1] == 11);
+	mix(&digest, (unsigned long)cpu_log_events[1]);
+
+	reset_apic_trace();
+	current_cpu_value = 2;
+	virt_to_phys_base = 0x100000UL;
+	ret = x86_arch_start_pvclock_body_result(pvclock_pages, 0x4b564d01,
+			64, 1, fake_current_cpu, fake_virt_to_phys_ptr,
+			fake_write_msr_reg, fake_cpu_log);
+	require(ret == 0 && virt_to_phys_count == 1);
+	require(last_virt_to_phys_ptr == pvclock_pages + 128);
+	require(write_msr_count == 1 && write_msr_regs[0] == 0x4b564d01 &&
+		write_msr_values[0] == (0x100080UL | 1));
+	require(cpu_log_count == 2 && cpu_log_events[0] == 10 &&
+		cpu_log_events[1] == 12);
+	mix(&digest, write_msr_values[0] ^
+		(unsigned long)cpu_log_events[1]);
+	require(x86_arch_start_pvclock_body_result(pvclock_pages, 0x4b564d01,
+			64, 1, NULL, fake_virt_to_phys_ptr,
+			fake_write_msr_reg, fake_cpu_log) == -EINVAL);
+
+	reset_apic_trace();
+	pvti = (struct pvclock_vsyscall_time_info *)pvclock_pages;
+	pvti_msr = 0x4b564d01;
+	current_cpu_value = 3;
+	virt_to_phys_base = 0x200000UL;
+	arch_start_pvclock();
+	require(virt_to_phys_count == 1);
+	require(last_virt_to_phys_ptr == pvclock_pages + 3 * sizeof(*pvti));
+	require(write_msr_count == 1 && write_msr_regs[0] == 0x4b564d01 &&
+		write_msr_values[0] == (0x2000c0UL | 1));
+	require(cpu_log_count == 2 && cpu_log_events[0] == 10 &&
+		cpu_log_events[1] == 12);
+	mix(&digest, write_msr_values[0] ^
+		(unsigned long)cpu_log_events[1]);
+
+	reset_apic_trace();
+	{
+		int boot_status = 0;
+
+		ret = x86_call_ap_func_body_result(&boot_status, fake_ap_next);
+		require(ret == 0 && boot_status == 1 && ap_next_count == 1);
+		require(x86_call_ap_func_body_result(&boot_status, NULL) ==
+			-EINVAL);
+		mix(&digest, (unsigned long)boot_status ^
+			(unsigned long)ap_next_count);
+	}
+
+	reset_apic_trace();
+	call_ap_func(fake_ap_next);
+	require(public_call_ap_status == 1 && ap_next_count == 1);
+	mix(&digest, (unsigned long)public_call_ap_status ^
+		(unsigned long)ap_next_count);
+
+	reset_apic_trace();
+	{
+		unsigned long frames[4];
+		unsigned long lower;
+		unsigned long upper;
+
+		frames[0] = (unsigned long)&frames[2];
+		frames[1] = 0x1111222233334444UL;
+		frames[2] = 0;
+		frames[3] = 0x5555666677778888UL;
+		lower = (unsigned long)&frames[0] - 16;
+		upper = (unsigned long)&frames[4] + 16;
+		ret = x86_show_stack_body_result(frames, lower, upper,
+				fake_stack_frame_log);
+		require(ret == 0 && stack_frame_log_count == 2);
+		require(stack_frame_ips[0] == frames[1] &&
+			stack_frame_sps[0] == (unsigned long)&frames[0] &&
+			stack_frame_fps[0] == (unsigned long)&frames[2]);
+		require(stack_frame_ips[1] == frames[3] &&
+			stack_frame_sps[1] == (unsigned long)&frames[2] &&
+			stack_frame_fps[1] == 0);
+		require(x86_show_stack_body_result(frames, lower, upper, NULL) ==
+			-EINVAL);
+		mix(&digest, stack_frame_ips[0] ^ stack_frame_ips[1]);
+	}
+
+	reset_apic_trace();
+	{
+		unsigned long frames[4];
+
+		frames[0] = (unsigned long)&frames[2];
+		frames[1] = 0x9999aaaabbbbccccUL;
+		frames[2] = 0;
+		frames[3] = 0xddddeeeeffff0000UL;
+		__show_stack(frames);
+		show_context_stack(frames);
+		require(stack_frame_log_count == 0);
+		mix(&digest, 0x5a5a5a5a5a5a5a5aUL);
+	}
+
+	reset_apic_trace();
+	{
+		struct x86_basic_regs regs;
+		unsigned long frames[4];
+
+		memset(&regs, 0, sizeof(regs));
+		frames[0] = (unsigned long)&frames[2];
+		frames[1] = 0x2222;
+		frames[2] = 0;
+		frames[3] = 0x3333;
+		regs.rsp = (unsigned long)&frames[0];
+		regs.rip = 0x4444555566667777UL;
+		ret = x86_arch_print_pre_interrupt_stack_body_result(&regs,
+				offsetof(struct x86_basic_regs, orig_rax),
+				offsetof(struct x86_basic_regs, rsp),
+				offsetof(struct x86_basic_regs, rip),
+				1UL << 2, 0x10000, fake_cpu_log,
+				fake_print_stack);
+		require(ret == 0 && stack_print_count == 1 &&
+			stack_print_rbp == &frames[0] &&
+			stack_print_first == regs.rip);
+		require(cpu_log_count == 1 && cpu_log_events[0] == 13);
+		regs.orig_rax = 1UL << 2;
+		ret = x86_arch_print_pre_interrupt_stack_body_result(&regs,
+				offsetof(struct x86_basic_regs, orig_rax),
+				offsetof(struct x86_basic_regs, rsp),
+				offsetof(struct x86_basic_regs, rip),
+				1UL << 2, 0x10000, fake_cpu_log,
+				fake_print_stack);
+		require(ret == 0 && stack_print_count == 1);
+		mix(&digest, stack_print_first ^
+			(unsigned long)cpu_log_events[0]);
+	}
+
+	reset_apic_trace();
+	{
+		struct x86_basic_regs regs;
+		unsigned long frames[4];
+
+		memset(&regs, 0, sizeof(regs));
+		frames[0] = (unsigned long)&frames[2];
+		frames[1] = 0x1111;
+		frames[2] = 0;
+		frames[3] = 0x2222;
+		regs.rsp = (unsigned long)&frames[0];
+		regs.rip = 0x777788889999aaaaUL;
+		arch_print_pre_interrupt_stack(&regs);
+		require(stack_print_count == 1 && stack_print_rbp == &frames[0] &&
+			stack_print_first == regs.rip);
+		require(cpu_log_count == 1 && cpu_log_events[0] == 13);
+		regs.orig_rax = 1UL << 2;
+		arch_print_pre_interrupt_stack(&regs);
+		require(stack_print_count == 1 && cpu_log_count == 1);
+		mix(&digest, stack_print_first ^
+			(unsigned long)cpu_log_events[0]);
+	}
+
+	reset_apic_trace();
+	{
+		unsigned long frame[2] = { 0, 0x9999 };
+
+		ret = x86_arch_print_stack_body_result(frame, fake_cpu_log,
+				fake_print_stack);
+		require(ret == 0 && stack_print_count == 1 &&
+			stack_print_rbp == frame && stack_print_first == 0);
+		require(cpu_log_count == 1 && cpu_log_events[0] == 14);
+		require(x86_arch_print_stack_body_result(frame, fake_cpu_log,
+				NULL) == -EINVAL);
+		mix(&digest, (unsigned long)cpu_log_events[0]);
+	}
+
+	reset_apic_trace();
+	arch_print_stack();
+	require(stack_print_count == 1 && stack_print_rbp != NULL &&
+		stack_print_first == 0);
+	require(cpu_log_count == 1 && cpu_log_events[0] == 14);
+	mix(&digest, (unsigned long)cpu_log_events[0]);
+
+	reset_apic_trace();
+	memset(&user_ctx, 0, sizeof(user_ctx));
+	user_ctx.gpr.cs = 0x33;
+	user_ctx.gpr.rip = 0x4444;
+	user_ctx.gpr.rax = 0x1;
+	user_ctx.gpr.rbx = 0x2;
+	user_ctx.gpr.rcx = 0x3;
+	user_ctx.gpr.rdx = 0x4;
+	user_ctx.gpr.rsi = 0x5;
+	user_ctx.gpr.rdi = 0x6;
+	user_ctx.gpr.rsp = 0x7777;
+	ret = x86_print_user_context_body_result(&user_ctx, fake_context_log);
+	require(ret == 0 && context_log_count == 3);
+	require(context_log_events[0] == 20 && context_log_a[0] == 0x33 &&
+		context_log_b[0] == 0x4444);
+	require(context_log_events[1] == 21 && context_log_a[1] == 0x1 &&
+		context_log_b[1] == 0x2 && context_log_c[1] == 0x3 &&
+		context_log_d[1] == 0x4);
+	require(context_log_events[2] == 22 && context_log_a[2] == 0x5 &&
+		context_log_b[2] == 0x6 && context_log_c[2] == 0x7777);
+	require(x86_print_user_context_body_result(NULL, fake_context_log) ==
+		-EINVAL);
+	mix(&digest, context_log_b[0] ^ context_log_c[2]);
+
+	reset_apic_trace();
+	memset(&user_ctx, 0, sizeof(user_ctx));
+	user_ctx.gpr.r15 = 0x15;
+	user_ctx.gpr.r14 = 0x14;
+	user_ctx.gpr.r13 = 0x13;
+	user_ctx.gpr.r12 = 0x12;
+	user_ctx.gpr.rbp = 0xb0;
+	user_ctx.gpr.r11 = 0x11;
+	user_ctx.gpr.r10 = 0x10;
+	user_ctx.gpr.r9 = 0x9;
+	user_ctx.gpr.r8 = 0x8;
+	user_ctx.gpr.rax = 0xa;
+	user_ctx.gpr.rbx = 0xb;
+	user_ctx.gpr.rcx = 0xc;
+	user_ctx.gpr.rdx = 0xd;
+	user_ctx.gpr.rsi = 0xe;
+	user_ctx.gpr.rdi = 0xf;
+	user_ctx.gpr.orig_rax = 0xee;
+	user_ctx.gpr.rip = 0x12345678;
+	user_ctx.gpr.cs = 0x10;
+	user_ctx.gpr.rflags = 0x202;
+	user_ctx.gpr.rsp = 0x8888;
+	user_ctx.gpr.ss = 0x18;
+	ret = x86_arch_show_interrupt_context_body_result(&user_ctx,
+			fake_context_lock, fake_context_unlock,
+			fake_context_log);
+	require(ret == 0 && context_lock_count == 1 &&
+		context_unlock_count == 1 &&
+		context_unlock_flags == 0xfeedfaceUL);
+	require(context_log_count == 6);
+	require(context_log_events[0] == 1 && context_log_a[0] == 0x10 &&
+		context_log_b[0] == 0x12345678);
+	require(context_log_events[2] == 3 && context_log_a[2] == 0xe &&
+		context_log_b[2] == 0xf && context_log_c[2] == 0x8888 &&
+		context_log_d[2] == 0xb0);
+	require(context_log_events[5] == 6 && context_log_a[5] == 0x10 &&
+		context_log_b[5] == 0x18 && context_log_c[5] == 0x202 &&
+		context_log_d[5] == 0xee);
+	require(x86_arch_show_interrupt_context_body_result(&user_ctx,
+			NULL, fake_context_unlock, fake_context_log) == -EINVAL);
+	mix(&digest, context_log_d[5] ^ context_unlock_flags);
+
+	reset_apic_trace();
+	arch_show_interrupt_context(&user_ctx);
+	require(context_lock_count == 1 && context_unlock_count == 1 &&
+		context_unlock_flags == 0xfeedfaceUL);
+	require(context_log_count == 6);
+	require(context_log_events[0] == 1 && context_log_a[0] == 0x10 &&
+		context_log_b[0] == 0x12345678);
+	require(context_log_events[5] == 6 && context_log_a[5] == 0x10 &&
+		context_log_b[5] == 0x18 && context_log_c[5] == 0x202 &&
+		context_log_d[5] == 0xee);
+	mix(&digest, context_log_b[0] ^ context_log_d[5]);
+
+	reset_apic_trace();
+	{
+		unsigned long panic_regs[21];
+		unsigned long paniced = 0;
+		uint32_t *seg = (uint32_t *)&panic_regs[17];
+		struct x86_kregs panic_ctx;
+		const unsigned long user_end = 0x8000000000000000UL;
+
+		memset(panic_regs, 0xa5, sizeof(panic_regs));
+		memset(&user_ctx, 0, sizeof(user_ctx));
+		user_ctx.gpr.rax = 0xa0;
+		user_ctx.gpr.rbx = 0xb0;
+		user_ctx.gpr.rcx = 0xc0;
+		user_ctx.gpr.rdx = 0xd0;
+		user_ctx.gpr.rsi = 0xe0;
+		user_ctx.gpr.rdi = 0xf0;
+		user_ctx.gpr.rbp = 0xb00;
+		user_ctx.gpr.rsp = 0x5000;
+		user_ctx.gpr.r8 = 0x80;
+		user_ctx.gpr.r9 = 0x90;
+		user_ctx.gpr.r10 = 0x100;
+		user_ctx.gpr.r11 = 0x110;
+		user_ctx.gpr.r12 = 0x120;
+		user_ctx.gpr.r13 = 0x130;
+		user_ctx.gpr.r14 = 0x140;
+		user_ctx.gpr.r15 = 0x150;
+		user_ctx.gpr.rip = user_end + 0x1234;
+		user_ctx.gpr.cs = 0x10;
+		user_ctx.gpr.ss = 0x18;
+		user_ctx.gpr.rflags = 0x202;
+		user_ctx.sr.ds = 0x20;
+		user_ctx.sr.es = 0x28;
+		user_ctx.sr.fs = 0x30;
+		user_ctx.sr.gs = 0x38;
+
+		ret = x86_arch_save_panic_regs_body_result(&user_ctx, NULL,
+				panic_regs, &paniced, user_end, 0xfeedfaceUL,
+				fake_cpu_ulong_log);
+		require(ret == 0 && paniced == 1 && cpu_ulong_log_count == 0);
+		require(panic_regs[0] == 0xa0 && panic_regs[1] == 0xb0 &&
+			panic_regs[2] == 0xc0 && panic_regs[3] == 0xd0);
+		require(panic_regs[12] == 0x120 && panic_regs[15] == 0x150 &&
+			panic_regs[16] == user_end + 0x1234);
+		require(seg[0] == 0x202 && seg[1] == 0x10 &&
+			seg[2] == 0x18 && seg[3] == 0x20 &&
+			seg[4] == 0x28 && seg[5] == 0x30 &&
+			seg[6] == 0x38);
+
+		reset_apic_trace();
+		memset(panic_regs, 0, sizeof(panic_regs));
+		memset(&panic_ctx, 0, sizeof(panic_ctx));
+		paniced = 0;
+		panic_ctx.rbx = 0xabc1;
+		panic_ctx.rsi = 0xabc2;
+		panic_ctx.rdi = 0xabc3;
+		panic_ctx.rbp = 0xabc4;
+		panic_ctx.rsp = 0xabc5;
+		user_ctx.gpr.rip = 0x4444;
+		user_ctx.gpr.r12 = 0x7712;
+		user_ctx.gpr.r13 = 0x7713;
+		user_ctx.gpr.r14 = 0x7714;
+		user_ctx.gpr.r15 = 0x7715;
+
+		ret = x86_arch_save_panic_regs_body_result(&user_ctx,
+				&panic_ctx, panic_regs, &paniced, user_end,
+				0xfeedfaceUL, fake_cpu_ulong_log);
+		require(ret == 0 && paniced == 1 && cpu_ulong_log_count == 1);
+		require(cpu_ulong_log_events[0] == 15 &&
+			cpu_ulong_log_values[0] == 0x4444);
+		require(panic_regs[0] == 0 && panic_regs[1] == 0xabc1 &&
+			panic_regs[2] == 0 && panic_regs[3] == 0);
+		require(panic_regs[4] == 0xabc2 && panic_regs[5] == 0xabc3 &&
+			panic_regs[6] == 0xabc4 && panic_regs[7] == 0xabc5);
+		require(panic_regs[8] == 0 && panic_regs[11] == 0 &&
+			panic_regs[12] == 0x7712 && panic_regs[15] == 0x7715 &&
+			panic_regs[16] == 0xfeedfaceUL);
+		require(seg[0] == 0x202 && seg[1] == 0x10 &&
+			seg[2] == 0x18 && seg[3] == 0x20 &&
+			seg[4] == 0x28 && seg[5] == 0x30 &&
+			seg[6] == 0x38);
+		require(x86_arch_save_panic_regs_body_result(NULL, &panic_ctx,
+				panic_regs, &paniced, user_end, 0xfeedfaceUL,
+				fake_cpu_ulong_log) == -EINVAL);
+		require(x86_arch_save_panic_regs_body_result(&user_ctx, NULL,
+				panic_regs, &paniced, user_end, 0xfeedfaceUL,
+				fake_cpu_ulong_log) == -EINVAL);
+		require(x86_arch_save_panic_regs_body_result(&user_ctx,
+				&panic_ctx, panic_regs, &paniced, user_end,
+				0xfeedfaceUL, NULL) == -EINVAL);
+		paniced = 0xdeadbeefUL;
+		require(x86_arch_clear_panic_body_result(&paniced) == 0 &&
+			paniced == 0);
+		require(x86_arch_clear_panic_body_result(NULL) == -EINVAL);
+		seed_public_panic_local(0x12345678UL);
+		arch_clear_panic();
+		require(read_public_panic_local() == 0);
+		mix(&digest, panic_regs[1] ^ panic_regs[16] ^
+			(unsigned long)seg[6] ^ paniced);
+	}
+
+	reset_apic_trace();
+	{
+		struct x86_trace_enter_user_offsets trace_offsets = {
+			.thread_tid_offset =
+				offsetof(struct fake_trace_thread, tid),
+			.thread_status_offset =
+				offsetof(struct fake_trace_thread, status),
+			.thread_proc_offset =
+				offsetof(struct fake_trace_thread, proc),
+			.process_pid_offset =
+				offsetof(struct fake_trace_process, pid),
+		};
+		struct fake_trace_process proc = { .pid = 456 };
+		struct fake_trace_thread trace_thread = {
+			.tid = 789,
+			.status = 0x55,
+			.proc = &proc,
+		};
+		int trace_counter = 0;
+
+		user_ctx.gpr.rip = 0x1111;
+		user_ctx.gpr.rsp = 0x2222;
+		user_ctx.gpr.cs = 0x33;
+		user_ctx.gpr.ss = 0x44;
+		user_ctx.gpr.rflags = 0x202;
+		ret = x86_mcexec_v10_trace_enter_user_body_result(&user_ctx,
+				&trace_thread, &trace_counter, 32, 7,
+				&trace_offsets, fake_trace_log);
+		require(ret == 1 && trace_counter == 1 && trace_log_count == 1);
+		require(trace_cpu == 7 && trace_pid == 456 &&
+			trace_tid == 789 && trace_status == 0x55);
+		require(trace_rip == 0x1111 && trace_rsp == 0x2222 &&
+			trace_cs == 0x33 && trace_ss == 0x44 &&
+			trace_rflags == 0x202);
+		trace_counter = 32;
+		ret = x86_mcexec_v10_trace_enter_user_body_result(&user_ctx,
+				&trace_thread, &trace_counter, 32, 7,
+				&trace_offsets, fake_trace_log);
+		require(ret == 0 && trace_log_count == 1);
+		require(x86_mcexec_v10_trace_enter_user_body_result(&user_ctx,
+				&trace_thread, NULL, 32, 7, &trace_offsets,
+				fake_trace_log) == -EINVAL);
+		mix(&digest, trace_rip ^ (unsigned long)trace_pid);
+	}
+
+	reset_apic_trace();
+	{
+		struct fake_runq_local local = {
+			.pad = 0,
+			.runq_lock = 0xabc,
+			.runq_irqstate = 0x123456,
+		};
+
+		ret = x86_release_runq_lock_body_result(&local,
+				offsetof(struct fake_runq_local, runq_lock),
+				offsetof(struct fake_runq_local, runq_irqstate),
+				fake_runq_unlock);
+		require(ret == 0 && runq_unlock_count == 1);
+		require(runq_unlock_lock == &local.runq_lock &&
+			runq_unlock_irqstate == 0x123456);
+		require(x86_release_runq_lock_body_result(NULL,
+				offsetof(struct fake_runq_local, runq_lock),
+				offsetof(struct fake_runq_local, runq_irqstate),
+				fake_runq_unlock) == -EINVAL);
+		mix(&digest, runq_unlock_irqstate);
+	}
+
+	{
+		struct fake_kstack_local local = {
+			.pad = 0x11,
+			.kernel_stack = 0,
+			.tss_rsp0 = 0,
+		};
+
+		ret = x86_set_kstack_body_result(&local,
+				offsetof(struct fake_kstack_local, kernel_stack),
+				offsetof(struct fake_kstack_local, tss_rsp0),
+				0xdeadbeefcafef00dUL);
+		require(ret == 0);
+		require(local.kernel_stack == 0xdeadbeefcafef00dUL);
+		require(local.tss_rsp0 == 0xdeadbeefcafef00dUL);
+		require(local.pad == 0x11);
+		require(x86_set_kstack_body_result(NULL,
+				offsetof(struct fake_kstack_local, kernel_stack),
+				offsetof(struct fake_kstack_local, tss_rsp0),
+				0x1234) == -EINVAL);
+		mix(&digest, local.kernel_stack ^ local.tss_rsp0 ^ local.pad);
+	}
+
 	printf("x86_cpu_helpers ok digest=%016lx ipi=%d sr=%d\n",
 	       digest, ipi_count, user_ctx.is_sr_valid);
 	return 0;
@@ -117213,6 +139712,250 @@ cat > "${tmpdir}/rust_stubs.c" <<'EOF_STUBS'
 __attribute__((weak)) int ihk_mc_chk_page_address(unsigned long mem_addr) { (void)mem_addr; return 0; }
 __attribute__((weak)) unsigned long virt_to_phys(void *v) { return (unsigned long)v; }
 __attribute__((weak)) void *phys_to_virt(unsigned long p) { return (void *)p; }
+__attribute__((weak)) unsigned long linux_page_offset_base = 0xffff880000000000UL;
+__attribute__((weak)) unsigned long x86_kernel_phys_base = 0x200000UL;
+__attribute__((weak)) int x86_addr_init_pt_loaded_bridge(void) { return 1; }
+__attribute__((weak)) unsigned long x86_user_map_kernel_start_bridge(void)
+{
+	return 0xfffffffffe800000UL;
+}
+__attribute__((weak)) void x86_addr_log_bridge(int event, unsigned long value)
+{
+	(void)event;
+	(void)value;
+}
+struct rust_stub_mem_list_head {
+	struct rust_stub_mem_list_head *next;
+	struct rust_stub_mem_list_head *prev;
+};
+__attribute__((weak)) char *memdebug;
+__attribute__((weak)) struct rust_stub_mem_list_head pagealloc_track_hash[256];
+__attribute__((weak)) unsigned int pagealloc_track_hash_locks[256];
+__attribute__((weak)) struct rust_stub_mem_list_head pagealloc_addr_hash[256];
+__attribute__((weak)) unsigned int pagealloc_addr_hash_locks[256];
+__attribute__((weak)) int pagealloc_track_initialized;
+__attribute__((weak)) int pagealloc_runcount;
+__attribute__((weak)) struct rust_stub_mem_list_head kmalloc_track_hash[256];
+__attribute__((weak)) unsigned int kmalloc_track_hash_locks[256];
+__attribute__((weak)) struct rust_stub_mem_list_head kmalloc_addr_hash[256];
+__attribute__((weak)) unsigned int kmalloc_addr_hash_locks[256];
+__attribute__((weak)) int kmalloc_runcount;
+__attribute__((weak)) void mem_pagealloc_track_spin_init_bridge(unsigned long lock_addr)
+{
+	(void)lock_addr;
+}
+__attribute__((weak)) void mem_kmalloc_track_spin_init_bridge(unsigned long lock_addr)
+{
+	(void)lock_addr;
+}
+extern int rust_stub_page_alloc_calls;
+extern int rust_stub_page_alloc_npages[8];
+extern int rust_stub_page_alloc_p2align[8];
+extern unsigned long rust_stub_page_alloc_flags[8];
+extern int rust_stub_page_alloc_node[8];
+extern int rust_stub_page_alloc_is_user[8];
+extern unsigned long rust_stub_page_alloc_virt[8];
+extern void *rust_stub_page_alloc_result[8];
+__attribute__((weak)) void *mem_pagealloc_track_base_alloc_bridge(
+		int npages, int p2align, unsigned long flag, int node,
+		int is_user, unsigned long virt_addr)
+{
+	int idx = rust_stub_page_alloc_calls++;
+	void *result = __builtin_malloc((unsigned long)npages * 4096UL);
+
+	if (idx >= 0 && idx < 8) {
+		rust_stub_page_alloc_npages[idx] = npages;
+		rust_stub_page_alloc_p2align[idx] = p2align;
+		rust_stub_page_alloc_flags[idx] = flag;
+		rust_stub_page_alloc_node[idx] = node;
+		rust_stub_page_alloc_is_user[idx] = is_user;
+		rust_stub_page_alloc_virt[idx] = virt_addr;
+		rust_stub_page_alloc_result[idx] = result;
+	}
+	return result;
+}
+__attribute__((weak)) void mem_pagealloc_track_base_free_bridge(
+		void *ptr, int npages, int is_user)
+{
+	(void)npages;
+	(void)is_user;
+	__builtin_free(ptr);
+}
+__attribute__((weak)) void *mem_pagealloc_track_meta_alloc_bridge(
+		int size, unsigned long flag)
+{
+	(void)flag;
+	return __builtin_malloc((unsigned long)size);
+}
+__attribute__((weak)) void mem_pagealloc_track_meta_free_bridge(void *ptr)
+{
+	__builtin_free(ptr);
+}
+__attribute__((weak)) unsigned long mem_pagealloc_track_lock_bridge(
+		unsigned long lock_addr)
+{
+	(void)lock_addr;
+	return 0;
+}
+__attribute__((weak)) void mem_pagealloc_track_unlock_bridge(
+		unsigned long lock_addr, unsigned long irqflags)
+{
+	(void)lock_addr;
+	(void)irqflags;
+}
+__attribute__((weak)) void mem_pagealloc_track_noirq_lock_bridge(
+		unsigned long lock_addr)
+{
+	(void)lock_addr;
+}
+__attribute__((weak)) void mem_pagealloc_track_noirq_unlock_bridge(
+		unsigned long lock_addr)
+{
+	(void)lock_addr;
+}
+__attribute__((weak)) void mem_pagealloc_track_log_bridge(
+		int event, void *ptr, char *file, int line, int npages)
+{
+	(void)event;
+	(void)ptr;
+	(void)file;
+	(void)line;
+	(void)npages;
+}
+__attribute__((weak)) void mem_pagealloc_invalid_free_bridge(
+		void *ptr, char *file, int line)
+{
+	(void)ptr;
+	(void)file;
+	(void)line;
+}
+__attribute__((weak)) void mem_pagealloc_invalid_size_bridge(
+		void *ptr, int npages, int alloc_npages, char *file, int line)
+{
+	(void)ptr;
+	(void)npages;
+	(void)alloc_npages;
+	(void)file;
+	(void)line;
+}
+__attribute__((weak)) void mem_pagealloc_leak_log_bridge(
+		int event, void *ptr, char *file, int line, int size,
+		int count, int runcount)
+{
+	(void)event;
+	(void)ptr;
+	(void)file;
+	(void)line;
+	(void)size;
+	(void)count;
+	(void)runcount;
+}
+extern int rust_stub_kmalloc_calls;
+extern int rust_stub_kmalloc_size;
+extern int rust_stub_kmalloc_flags;
+extern char *rust_stub_kmalloc_file;
+extern int rust_stub_kmalloc_line;
+__attribute__((weak)) void *mem_kmalloc_track_base_alloc_bridge(
+		int size, unsigned long flag)
+{
+	rust_stub_kmalloc_calls++;
+	rust_stub_kmalloc_size = size;
+	rust_stub_kmalloc_flags = (int)flag;
+	rust_stub_kmalloc_file = 0;
+	rust_stub_kmalloc_line = 0;
+	return __builtin_malloc((unsigned long)size);
+}
+__attribute__((weak)) void mem_kmalloc_track_base_free_bridge(void *ptr)
+{
+	__builtin_free(ptr);
+}
+__attribute__((weak)) unsigned long mem_kmalloc_track_lock_bridge(
+		unsigned long lock_addr)
+{
+	(void)lock_addr;
+	return 0;
+}
+__attribute__((weak)) void mem_kmalloc_track_unlock_bridge(
+		unsigned long lock_addr, unsigned long irqflags)
+{
+	(void)lock_addr;
+	(void)irqflags;
+}
+__attribute__((weak)) void mem_kmalloc_track_log_bridge(
+		int event, void *ptr, char *file, int line, int size)
+{
+	(void)event;
+	(void)ptr;
+	(void)file;
+	(void)line;
+	(void)size;
+}
+__attribute__((weak)) void mem_kmalloc_invalid_free_bridge(
+		void *ptr, char *file, int line)
+{
+	(void)ptr;
+	(void)file;
+	(void)line;
+}
+__attribute__((weak)) void mem_kmalloc_leak_log_bridge(
+		int event, void *ptr, char *file, int line, int size,
+		int count, int runcount)
+{
+	(void)event;
+	(void)ptr;
+	(void)file;
+	(void)line;
+	(void)size;
+	(void)count;
+	(void)runcount;
+}
+__attribute__((weak)) long arch_syscall_forward_context_bridge(int syscall_nr,
+		void *ctx)
+{
+	(void)syscall_nr;
+	(void)ctx;
+	return -38;
+}
+__attribute__((weak)) int arch_prctl_set_register_bridge(int type,
+		unsigned long value)
+{
+	(void)type;
+	(void)value;
+	return 0;
+}
+__attribute__((weak)) int arch_prctl_get_register_bridge(int type,
+		unsigned long *addr)
+{
+	(void)type;
+	if (addr)
+		*addr = 0;
+	return 0;
+}
+__attribute__((weak)) void arch_prctl_log_bridge(int event, int cpu,
+		unsigned long value)
+{
+	(void)event;
+	(void)cpu;
+	(void)value;
+}
+__attribute__((weak)) int arch_do_shmget_bridge(long key, unsigned long size,
+		int shmflg)
+{
+	(void)key;
+	(void)size;
+	(void)shmflg;
+	return -38;
+}
+__attribute__((weak)) void arch_shmget_log_bridge(int event, long key,
+		unsigned long size, int shmflg, int shift, int result)
+{
+	(void)event;
+	(void)key;
+	(void)size;
+	(void)shmflg;
+	(void)shift;
+	(void)result;
+}
 __attribute__((weak)) int copy_to_user(void *dst, const void *src,
 		unsigned long size)
 {
@@ -117280,6 +140023,7 @@ __attribute__((weak)) void smp_store_release_int(int *p, int value)
 	arch_barrier();
 	*(volatile int *)p = value;
 }
+__attribute__((weak)) void arch_delay(int us) { (void)us; }
 __attribute__((weak)) void ihk_mc_delay_us(int us) { (void)us; }
 __attribute__((weak)) void set_timer(int runq_locked) { (void)runq_locked; }
 __attribute__((weak)) int ihk_ikc_send(void *channel, void *packet, int opt)
@@ -117453,9 +140197,70 @@ __attribute__((weak)) int ihk_mc_get_processor_id_equiv(void)
 }
 __attribute__((weak)) void init_tick(void) {}
 __attribute__((weak)) void sync_tick(void) {}
+extern int cpu_log_count __attribute__((weak));
+extern int cpu_log_events[] __attribute__((weak));
+__attribute__((weak)) void x86_tick_log_bridge(int event)
+{
+	if (&cpu_log_count && cpu_log_events) {
+		cpu_log_events[cpu_log_count] = event;
+		cpu_log_count++;
+	}
+}
 __attribute__((weak)) void kmalloc_init(void) {}
 __attribute__((weak)) void sched_init(void) {}
+__attribute__((weak)) int arch_setup_pvclock(void) { return 0; }
 __attribute__((weak)) void arch_start_pvclock(void) {}
+__attribute__((weak)) void *pvti;
+__attribute__((weak)) int pvti_npages;
+__attribute__((weak)) long pvti_msr;
+__attribute__((weak)) int x86_current_cpu_bridge(void)
+{
+	return 0;
+}
+__attribute__((weak)) unsigned long x86_virt_to_phys_bridge(void *addr)
+{
+	return (unsigned long)addr;
+}
+__attribute__((weak)) void x86_write_msr_bridge(int reg, unsigned long value)
+{
+	(void)reg;
+	(void)value;
+}
+__attribute__((weak)) void x86_cpuid_leaf_bridge(unsigned long op,
+		unsigned long *eaxp, unsigned long *ebxp,
+		unsigned long *ecxp, unsigned long *edxp)
+{
+	(void)op;
+	if (eaxp)
+		*eaxp = 0;
+	if (ebxp)
+		*ebxp = 0;
+	if (ecxp)
+		*ecxp = 0;
+	if (edxp)
+		*edxp = 0;
+}
+__attribute__((weak)) void *x86_alloc_aligned_pages_node_bridge(int npages,
+		int p2align, unsigned long flag, int node, int is_user,
+		unsigned long virt_addr, char *file, int line)
+{
+	(void)npages;
+	(void)p2align;
+	(void)flag;
+	(void)node;
+	(void)is_user;
+	(void)virt_addr;
+	(void)file;
+	(void)line;
+	return (void *)0;
+}
+__attribute__((weak)) void x86_pvclock_log_bridge(int event)
+{
+	if (&cpu_log_count && cpu_log_events) {
+		cpu_log_events[cpu_log_count] = event;
+		cpu_log_count++;
+	}
+}
 __attribute__((weak)) void arch_init(void) {}
 __attribute__((weak)) void arch_ready(void) {}
 __attribute__((weak)) void arch_setup_vdso(void) {}
@@ -117546,11 +140351,23 @@ __attribute__((weak)) int ihk_mc_interrupt_cpu(int cpu, int vector)
 	(void)vector;
 	return 0;
 }
+__attribute__((weak)) void x86_issue_ipi_bridge(unsigned long apic_id,
+		int vector)
+{
+	(void)apic_id;
+	(void)vector;
+}
+__attribute__((weak)) void x86_interrupt_log_bridge(int event, int cpu,
+		int vector)
+{
+	(void)event;
+	(void)cpu;
+	(void)vector;
+}
 static unsigned char rust_stub_alloc_buf[1048576];
 static unsigned long rust_stub_alloc_off;
-__attribute__((weak)) void *ihk_mc_allocate(int size, int flag)
+static void *rust_stub_alloc(int size)
 {
-	(void)flag;
 	unsigned long need;
 	unsigned long start;
 	unsigned long i;
@@ -117566,9 +140383,31 @@ __attribute__((weak)) void *ihk_mc_allocate(int size, int flag)
 	rust_stub_alloc_off = start + need;
 	return rust_stub_alloc_buf + start;
 }
+__attribute__((weak)) void *ihk_mc_allocate(int size, int flag)
+{
+	(void)flag;
+	return rust_stub_alloc(size);
+}
 __attribute__((weak)) void ihk_mc_free(void *ptr)
 {
 	(void)ptr;
+}
+void *x86_kmalloc_bridge(int size, int flag)
+{
+	(void)flag;
+	return rust_stub_alloc(size);
+}
+int x86_kmalloc_initialized_bridge(void)
+{
+	return 1;
+}
+void x86_kfree_bridge(void *ptr)
+{
+	(void)ptr;
+}
+void x86_mem_log_bridge(int event)
+{
+	(void)event;
 }
 __attribute__((weak)) int ihk_mc_get_vector(int type)
 {
@@ -117593,6 +140432,48 @@ __attribute__((weak)) void arch_cpu_stop(void) {}
 __attribute__((weak)) void arch_show_interrupt_context(const void *reg)
 {
 	(void)reg;
+}
+__attribute__((weak)) void arch_print_pre_interrupt_stack(
+		const struct x86_basic_regs *regs)
+{
+	(void)regs;
+}
+__attribute__((weak)) unsigned long x86_kprintf_lock_bridge(void)
+{
+	return 0;
+}
+__attribute__((weak)) void x86_kprintf_unlock_bridge(unsigned long flags)
+{
+	(void)flags;
+}
+__attribute__((weak)) void x86_context_line_log_bridge(int event,
+		unsigned long a, unsigned long b, unsigned long c,
+		unsigned long d)
+{
+	(void)event;
+	(void)a;
+	(void)b;
+	(void)c;
+	(void)d;
+}
+__attribute__((weak)) void x86_stack_frame_log_bridge(unsigned long ip,
+		unsigned long sp, unsigned long fp)
+{
+	(void)ip;
+	(void)sp;
+	(void)fp;
+}
+__attribute__((weak)) void x86_print_stack_bridge(void *rbp,
+		unsigned long first)
+{
+	(void)rbp;
+	(void)first;
+}
+__attribute__((weak)) int *x86_cpu_boot_status_slot_bridge(void)
+{
+	static int status;
+
+	return &status;
 }
 __attribute__((weak)) long getlong_user(long *dest, const long *src)
 {
@@ -118108,6 +140989,230 @@ __attribute__((weak)) void *early_alloc_pages(int nr_pages)
 	return 0;
 }
 __attribute__((weak)) void early_alloc_invalidate(void) {}
+static void *rust_stub_early_last_page;
+void **x86_early_alloc_last_page_slot_bridge(void)
+{
+	return &rust_stub_early_last_page;
+}
+unsigned long x86_early_alloc_end_bridge(void)
+{
+	return 0x100000UL;
+}
+unsigned long x86_bootstrap_mem_end_bridge(void)
+{
+	return 0x200000UL;
+}
+unsigned long x86_arch_mem_virt_to_phys_bridge(void *addr)
+{
+	return (unsigned long)addr;
+}
+void *x86_arch_mem_phys_to_virt_bridge(unsigned long phys)
+{
+	return (void *)phys;
+}
+void x86_early_alloc_panic_bridge(int reason)
+{
+	(void)reason;
+}
+__attribute__((weak)) void x86_early_alloc_invalidate_bridge(void) {}
+static unsigned char rust_stub_init_pt_pages[2][4096];
+static void *rust_stub_init_pt;
+static void *rust_stub_boot_pt;
+static int rust_stub_init_loaded;
+static int rust_stub_init_lock;
+static int rust_stub_init_alloc_calls;
+static unsigned char rust_stub_map_fixed_pt[4096];
+static unsigned long rust_stub_map_fixed_virt = 0x10000000UL;
+static unsigned char rust_stub_vsyscall_page[4096];
+void **x86_init_page_table_init_pt_slot_bridge(void)
+{
+	return &rust_stub_init_pt;
+}
+void **x86_init_page_table_boot_pt_slot_bridge(void)
+{
+	return &rust_stub_boot_pt;
+}
+int *x86_init_page_table_loaded_slot_bridge(void)
+{
+	return &rust_stub_init_loaded;
+}
+void *x86_init_page_table_lock_bridge(void)
+{
+	return &rust_stub_init_lock;
+}
+unsigned long x86_init_page_table_size_bridge(void)
+{
+	return 4096;
+}
+void x86_check_available_page_size_bridge(int event)
+{
+	(void)event;
+}
+void *x86_init_page_table_alloc_bridge(int nr_pages, int flag)
+{
+	int index = rust_stub_init_alloc_calls % 2;
+	(void)flag;
+	rust_stub_init_alloc_calls++;
+	if (nr_pages != 1)
+		return 0;
+	return rust_stub_init_pt_pages[index];
+}
+void x86_init_page_table_spin_init_bridge(void *lock)
+{
+	(void)lock;
+}
+void x86_init_page_table_normal_bridge(void *pt)
+{
+	((unsigned char *)pt)[0] = 0x11;
+}
+void x86_init_page_table_linux_bridge(void *pt)
+{
+	((unsigned char *)pt)[1] = 0x22;
+}
+void x86_init_page_table_fixed_bridge(void *pt)
+{
+	((unsigned char *)pt)[2] = 0x33;
+}
+void x86_init_page_table_text_bridge(void *pt)
+{
+	((unsigned char *)pt)[3] = 0x44;
+}
+void x86_init_page_table_vsyscall_bridge(void *pt)
+{
+	((unsigned char *)pt)[4] = 0x55;
+}
+void x86_init_page_table_low_bridge(void *pt)
+{
+	((unsigned char *)pt)[7] ^= 0x7f;
+}
+void x86_init_page_table_load_bridge(void *pt)
+{
+	(void)pt;
+}
+void x86_init_page_table_log_bridge(int event, void *pt)
+{
+	(void)event;
+	(void)pt;
+}
+void x86_init_page_table_panic_bridge(int reason)
+{
+	(void)reason;
+}
+unsigned long x86_init_normal_get_memory_address_bridge(int type, int arg)
+{
+	(void)arg;
+	return type ? 0x400000UL : 0x200000UL;
+}
+int x86_init_normal_set_large_bridge(void *pt, unsigned long virt,
+		unsigned long phys, unsigned long attr)
+{
+	(void)pt;
+	(void)virt;
+	(void)phys;
+	(void)attr;
+	return 0;
+}
+void x86_init_normal_log_bridge(int event, unsigned long a,
+		unsigned long b, unsigned long c)
+{
+	(void)event;
+	(void)a;
+	(void)b;
+	(void)c;
+}
+void x86_init_normal_panic_bridge(void)
+{
+}
+char *x86_init_linux_find_command_line_bridge(char *name)
+{
+	(void)name;
+	return 0;
+}
+int x86_init_linux_get_nr_memory_chunks_bridge(void)
+{
+	return 0;
+}
+int x86_init_linux_get_memory_chunk_bridge(int id, unsigned long *start,
+		unsigned long *end, int *numa_id)
+{
+	(void)id;
+	(void)start;
+	(void)end;
+	(void)numa_id;
+	return -1;
+}
+void x86_init_linux_log_bridge(int event, unsigned long a,
+		unsigned long b, unsigned long c, unsigned long d, int error)
+{
+	(void)event;
+	(void)a;
+	(void)b;
+	(void)c;
+	(void)d;
+	(void)error;
+}
+void x86_init_linux_panic_bridge(void)
+{
+}
+void x86_init_text_log_bridge(int event, unsigned long a,
+		unsigned long b, unsigned long c)
+{
+	(void)event;
+	(void)a;
+	(void)b;
+	(void)c;
+}
+unsigned long x86_init_text_map_kernel_start_bridge(void)
+{
+	return 0xfffffe0000000000UL;
+}
+unsigned long x86_init_text_end_bridge(void)
+{
+	return 0xfffffe0000200000UL;
+}
+void x86_init_text_panic_bridge(void)
+{
+}
+void x86_init_low_panic_bridge(void)
+{
+}
+void x86_init_fixed_panic_bridge(void)
+{
+}
+void *x86_init_vsyscall_page_bridge(void)
+{
+	return rust_stub_vsyscall_page;
+}
+void x86_init_vsyscall_panic_bridge(void)
+{
+}
+void *x86_map_fixed_area_init_pt_bridge(void)
+{
+	return rust_stub_map_fixed_pt;
+}
+unsigned long *x86_map_fixed_area_fixed_virt_slot_bridge(void)
+{
+	return &rust_stub_map_fixed_virt;
+}
+void x86_map_fixed_area_log_bridge(unsigned long phys,
+		unsigned long size, unsigned long virt)
+{
+	(void)phys;
+	(void)size;
+	(void)virt;
+}
+int x86_pt_set_page_bridge(void *pt, unsigned long virt,
+		unsigned long phys, unsigned long attr)
+{
+	(void)pt;
+	(void)virt;
+	(void)phys;
+	(void)attr;
+	return 0;
+}
+void x86_move_flush_tlb_bridge(void)
+{
+}
 __attribute__((weak)) void pagealloc_track_init(void) {}
 struct ihk_mc_numa_node;
 __attribute__((weak)) int ihk_mc_get_nr_numa_nodes(void) { return 0; }
@@ -118633,10 +141738,11 @@ mcctrl_allowed_undefined="${mcctrl_allowed_undefined%\)\$}|mcctrl_sysfs_saved_ca
 mcctrl_allowed_undefined="${mcctrl_allowed_undefined%\)\$}|mcctrl_sysfs_saved_cpu_next_cache_bridge|mcctrl_sysfs_saved_cpu_physical_package_id_bridge|mcctrl_sysfs_saved_cpu_thread_siblings_bridge|mcctrl_sysfs_saved_node_cpumap_bridge)$"
 mcctrl_allowed_undefined="${mcctrl_allowed_undefined%\)\$}|mcctrl_sysfs_usrdata_os_bridge|mcctrl_sysfs_warn_missing_usrdata_bridge)$"
 mcctrl_allowed_undefined="${mcctrl_allowed_undefined%\)\$}|ihk_host_os_get_usrdata|ihk_host_os_set_usrdata|ihk_host_validate_os|ihk_ikc_channel_set_cpu|ihk_ikc_destroy_channel|ihk_ikc_get_processor_id|ihk_ikc_listen_port|ihk_ikc_release_packet|ihk_ikc_send|ihk_os_eventfd|ihk_os_get_cpu_info|ihk_os_get_memory_info|mcctrl_futex_dispatch_bridge|mcctrl_futex_set_resp_bridge|mcctrl_futex_timeout_bridge|mcctrl_futex_wake|mcctrl_ikc_alloc_channels_bridge|mcctrl_ikc_alloc_ikc2linux_bridge|mcctrl_ikc_alloc_usrdata_bridge|mcctrl_ikc_channel_port_bridge|mcctrl_ikc_channel_remote_os_bridge|mcctrl_ikc_channel_send_read_cpu_bridge|mcctrl_ikc_channel_send_write_cpu_bridge|mcctrl_ikc_cpu_info_n_cpus_bridge|mcctrl_ikc_desc_cmpxchg_status_bridge|mcctrl_ikc_desc_err_bridge|mcctrl_ikc_desc_free_addr_bridge|mcctrl_ikc_desc_free_addrs_count_bridge|mcctrl_ikc_desc_free_at_put_bridge|mcctrl_ikc_desc_init_waitqueue_bridge|mcctrl_ikc_desc_list_add_bridge|mcctrl_ikc_desc_list_del_bridge|mcctrl_ikc_desc_refcount_dec_and_test_bridge|mcctrl_ikc_desc_refcount_set_bridge|mcctrl_ikc_desc_set_err_bridge|mcctrl_ikc_desc_set_free_addr_bridge|mcctrl_ikc_desc_set_free_addrs_count_bridge|mcctrl_ikc_desc_set_free_at_put_bridge|mcctrl_ikc_desc_set_status_bridge|mcctrl_ikc_desc_wake_bridge|mcctrl_ikc_drain_part_exec_list_bridge|mcctrl_ikc_drain_wakeup_descs_bridge|mcctrl_ikc_free_channels_bridge|mcctrl_ikc_free_ikc2linux_bridge|mcctrl_ikc_info_channel_bridge|mcctrl_ikc_info_set_packet_handler_bridge|mcctrl_ikc_kfree_bridge|mcctrl_ikc_kmalloc_atomic_bridge|mcctrl_ikc_log_alloc_channels_failed_bridge|mcctrl_ikc_log_alloc_ikc2linux_failed_bridge|mcctrl_ikc_log_alloc_usrdata_failed_bridge|mcctrl_ikc_log_desc_alloc_failed_bridge|mcctrl_ikc_log_invalid_cpu_count_bridge|mcctrl_ikc_log_invalid_linux_cpu_bridge|mcctrl_ikc_log_invalid_source_cpu_bridge|mcctrl_ikc_log_missing_cpu_mem_bridge|mcctrl_ikc_log_no_channel_bridge|mcctrl_ikc_log_os_missing_bridge|mcctrl_ikc_log_send_failed_bridge|mcctrl_ikc_log_unknown_packet_bridge|mcctrl_ikc_log_usrdata_missing_bridge|mcctrl_ikc_log_warn_packet_bridge|mcctrl_ikc_nr_cpu_ids_bridge|mcctrl_ikc_usrdata_channel_desc_bridge|mcctrl_ikc_usrdata_ikc2linux_desc_bridge|mcctrl_ikc_usrdata_init_sync_bridge|mcctrl_ikc_usrdata_num_channels_bridge|mcctrl_ikc_usrdata_set_channel_desc_bridge|mcctrl_ikc_usrdata_set_ikc2linux_desc_bridge|mcctrl_ikc_usrdata_set_info_bridge|mcctrl_ikc_wait_busy_bridge|mcctrl_ikc_wait_interruptible_bridge|mcctrl_ikc_wait_timeout_bridge|mcctrl_ikc_wakeup_desc_size_bridge|mcexec_syscall|procfsm_packet_handler|sysfsm_packet_handler)$"
+smp_allowed_undefined='^[[:space:]]+U (ihk_smp_calc_tsc_ratio_bridge|ihk_smp_tsc_khz_bridge|ihk_smp_x2apic_msr_bridge)$'
 
 check_module_rust_object "${tmpdir}/out/ihk_core_helpers.o" "${ihk_core_allowed_undefined}"
 check_module_rust_object "${tmpdir}/out/mcctrl_helpers.o" "${mcctrl_allowed_undefined}"
-check_module_rust_object "${tmpdir}/out/smp_driver_helpers.o"
+check_module_rust_object "${tmpdir}/out/smp_driver_helpers.o" "${smp_allowed_undefined}"
 
 cc "${tmpdir}/rbtree_equiv.c" "${tmpdir}/out/rbtree_c.o" -o "${tmpdir}/out/rbtree_c"
 cc -Wl,--gc-sections "${tmpdir}/rbtree_equiv.c" \
@@ -118890,6 +141996,9 @@ cc -Wl,--gc-sections -Wl,--allow-multiple-definition \
 	"${tmpdir}/out/ihk_core_helpers.o" "${tmpdir}/out/mcctrl_helpers.o" \
 	"${tmpdir}/out/smp_driver_helpers.o" \
 	-o "${tmpdir}/out/ihk_module_helpers_smoke"
+cc -Wl,--gc-sections "${tmpdir}/ihk_core_helpers_smoke.c" \
+	"${tmpdir}/out/ihk_core_helpers.o" \
+	-o "${tmpdir}/out/ihk_core_helpers_smoke"
 cc -Wl,--gc-sections "${tmpdir}/mcctrl_helpers_smoke.c" \
 	"${tmpdir}/out/mcctrl_helpers.o" \
 	-o "${tmpdir}/out/mcctrl_helpers_smoke"
@@ -118926,7 +142035,8 @@ cc -Wl,--gc-sections "${tmpdir}/refcount_helpers_equiv.c" \
 cc -Wl,--gc-sections -DUSE_C_X86_CPU_MODEL \
 	"${tmpdir}/x86_cpu_helpers_equiv.c" \
 	-o "${tmpdir}/out/x86_cpu_helpers_c"
-cc -Wl,--gc-sections "${tmpdir}/x86_cpu_helpers_equiv.c" \
+cc -Wl,--gc-sections -Wl,--allow-multiple-definition \
+	"${tmpdir}/x86_cpu_helpers_equiv.c" \
 	"${tmpdir}/rust_stubs.c" "${tmpdir}/out/mckernel_rust.o" \
 	-o "${tmpdir}/out/x86_cpu_helpers_rust"
 
@@ -119019,6 +142129,7 @@ cc -Wl,--gc-sections "${tmpdir}/x86_cpu_helpers_equiv.c" \
 	exit 1
 }
 "${tmpdir}/out/ihk_module_helpers_smoke" > "${tmpdir}/out/ihk_module_helpers_smoke.out"
+"${tmpdir}/out/ihk_core_helpers_smoke" > "${tmpdir}/out/ihk_core_helpers_smoke.out"
 "${tmpdir}/out/mcctrl_helpers_smoke" > "${tmpdir}/out/mcctrl_helpers_smoke.out"
 "${tmpdir}/out/smp_chunk_helpers_c" > "${tmpdir}/out/smp_chunk_helpers_c.out"
 "${tmpdir}/out/smp_chunk_helpers_rust" > "${tmpdir}/out/smp_chunk_helpers_rust.out"
@@ -119077,18 +142188,65 @@ diff -u "${tmpdir}/out/x86_cpu_helpers_c.out" "${tmpdir}/out/x86_cpu_helpers_rus
 
 nm -u "${tmpdir}/out/mckernel_rust.o" | tee "${tmpdir}/out/rust.undefined"
 nm -g "${tmpdir}/out/mckernel_rust.o" > "${tmpdir}/out/rust.global"
+nm -g "${tmpdir}/out/ihk_core_helpers.o" > "${tmpdir}/out/ihk_core_helpers.global"
 nm -g "${tmpdir}/out/mcexec_helpers.o" > "${tmpdir}/out/mcexec_helpers.global"
 nm -g "${tmpdir}/out/eclair_helpers.o" > "${tmpdir}/out/eclair_helpers.global"
+nm -g "${tmpdir}/out/mckernel_crash_helpers.o" > "${tmpdir}/out/mckernel_crash_helpers.global"
 nm -g "${tmpdir}/out/mcinspect_helpers.o" > "${tmpdir}/out/mcinspect_helpers.global"
 nm -g "${tmpdir}/out/mcctrl_helpers.o" > "${tmpdir}/out/mcctrl_helpers.global"
 nm -g "${tmpdir}/out/ihklib_helpers.o" > "${tmpdir}/out/ihklib_helpers.global"
 nm -g "${tmpdir}/out/smp_driver_helpers.o" > "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_core_os_debug_request_body_result$' "${tmpdir}/out/ihk_core_helpers.global"
+grep -Eq ' T ihk_core_device_debug_request_body_result$' "${tmpdir}/out/ihk_core_helpers.global"
+grep -Eq ' T ihk_core_os_resource_body_result$' "${tmpdir}/out/ihk_core_helpers.global"
+grep -Eq ' T ihk_core_os_set_kargs_body_result$' "${tmpdir}/out/ihk_core_helpers.global"
+grep -Eq ' T ihk_core_os_dump_body_result$' "${tmpdir}/out/ihk_core_helpers.global"
+grep -Eq ' T ihk_core_host_os_write_body_result$' "${tmpdir}/out/ihk_core_helpers.global"
+grep -Eq ' T ihk_core_host_device_io_body_result$' "${tmpdir}/out/ihk_core_helpers.global"
+grep -Eq ' T ihk_core_os_status_body_result$' "${tmpdir}/out/ihk_core_helpers.global"
+grep -Eq ' T ihk_core_os_freeze_body_result$' "${tmpdir}/out/ihk_core_helpers.global"
+grep -Eq ' T ihk_core_os_thaw_body_result$' "${tmpdir}/out/ihk_core_helpers.global"
+grep -Eq ' T ihk_core_os_get_usage_body_result$' "${tmpdir}/out/ihk_core_helpers.global"
+grep -Eq ' T ihk_core_os_get_cpu_usage_body_result$' "${tmpdir}/out/ihk_core_helpers.global"
+grep -Eq ' T ihk_core_os_read_kaddr_body_result$' "${tmpdir}/out/ihk_core_helpers.global"
+grep -Eq ' T ihk_core_read_kmsg_body_result$' "${tmpdir}/out/ihk_core_helpers.global"
+grep -Eq ' T ihk_core_clear_kmsg_body_result$' "${tmpdir}/out/ihk_core_helpers.global"
+grep -Eq ' T ihk_core_os_read_kmsg_body_result$' "${tmpdir}/out/ihk_core_helpers.global"
+grep -Eq ' T ihk_core_os_clear_kmsg_body_result$' "${tmpdir}/out/ihk_core_helpers.global"
+grep -Eq ' T ihk_core_device_get_kmsg_buf_body_result$' "${tmpdir}/out/ihk_core_helpers.global"
+grep -Eq ' T ihk_core_device_read_kmsg_buf_body_result$' "${tmpdir}/out/ihk_core_helpers.global"
+grep -Eq ' T ihk_core_device_release_kmsg_buf_body_result$' "${tmpdir}/out/ihk_core_helpers.global"
+grep -Eq ' T ihk_core_delete_kmsg_buf_body_result$' "${tmpdir}/out/ihk_core_helpers.global"
+grep -Eq ' T ihk_core_release_kmsg_buf_body_result$' "${tmpdir}/out/ihk_core_helpers.global"
+grep -Eq ' T ihk_core_device_get_buildid_body_result$' "${tmpdir}/out/ihk_core_helpers.global"
+grep -Eq ' T ihk_core_device_op_body_result$' "${tmpdir}/out/ihk_core_helpers.global"
 for sym in rdtsc read_tsc mb rmb wmb smp_mb smp_rmb smp_wmb arch_barrier \
 	smp_load_acquire_ulong smp_load_acquire_uint smp_load_acquire_int \
 	smp_load_acquire_ptr smp_store_release_ulong smp_store_release_uint \
 	smp_store_release_int \
 	CVAL CVAL2 xgetbv xsetbv wrmsr rdpmc rdmsr ihk_mc_mb \
-	REGS_GET_STACK_POINTER \
+	ihk_mc_get_smp_handler_irq \
+	ihk_mc_get_interrupt_id \
+	ihk_mc_interrupt_cpu \
+	ihk_mc_delay_us \
+	call_ap_func \
+	__show_stack show_context_stack \
+	arch_clone_thread arch_flush_icache_all \
+	ihk_mc_init_user_tlsbase \
+		ihk_mc_set_page_fault_handler \
+		ihk_mc_set_syscall_handler \
+		running_on_kvm \
+		ihk_mc_arch_set_special_register \
+		ihk_mc_arch_get_special_register \
+		arch_cpu_read_write_register \
+		arch_clear_panic \
+		arch_show_interrupt_context \
+		arch_print_pre_interrupt_stack \
+		arch_print_stack \
+		arch_setup_pvclock \
+		arch_start_pvclock \
+		ihk_mc_modify_user_context \
+		REGS_GET_STACK_POINTER \
 	ihk_mc_syscall_arg0 ihk_mc_syscall_arg1 ihk_mc_syscall_arg2 \
 	ihk_mc_syscall_arg3 ihk_mc_syscall_arg4 ihk_mc_syscall_arg5 \
 	ihk_mc_syscall_set_arg0 ihk_mc_syscall_set_arg1 \
@@ -119096,6 +142254,32 @@ for sym in rdtsc read_tsc mb rmb wmb smp_mb smp_rmb smp_wmb arch_barrier \
 	ihk_mc_syscall_set_arg4 ihk_mc_syscall_set_arg5 \
 	ihk_mc_syscall_ret ihk_mc_syscall_set_ret ihk_mc_syscall_number \
 	ihk_mc_syscall_pc ihk_mc_syscall_sp
+do
+	grep -Eq " T ${sym}$" "${tmpdir}/out/rust.global"
+done
+for sym in \
+	sys_getpid sys_getppid sys_gettid sys_get_cpu_id \
+	sys_get_system sys_linux_mlock sys_linux_spawn \
+	sys_util_register_desc add_process_memory_range split_process_memory_range \
+	join_process_memory_range \
+	lookup_process_memory_range \
+	next_process_memory_range previous_process_memory_range \
+	extend_up_process_memory_range change_prot_process_memory_range \
+	update_process_page_table \
+	access_ok remove_process_region remove_process_memory_range \
+	remap_process_memory_range sync_process_memory_range \
+	invalidate_process_memory_range invalidate_one_page \
+	page_fault_process_vm populate_process_memory \
+	ptrace_traceme \
+	chain_process chain_thread create_thread memset_smp memset_smp_handler \
+	find_thread find_process process_unlock \
+	create_address_space hold_address_space \
+	release_address_space detach_address_space \
+	init_process_vm new_resource_set proc_init hold_process hold_process_vm \
+	destroy_thread hold_sigcommon hold_thread release_sigcommon release_thread \
+	flush_process_memory free_process_memory_ranges \
+	free_all_process_memory_range release_process release_process_vm \
+	thread_unlock
 do
 	grep -Eq " T ${sym}$" "${tmpdir}/out/rust.global"
 done
@@ -119114,13 +142298,75 @@ grep -Eq ' T mcctrl_control_debug_log_body_result$' "${tmpdir}/out/mcctrl_helper
 grep -Eq ' T mcctrl_control_get_cpu_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
 grep -Eq ' T mcctrl_control_get_nodes_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
 grep -Eq ' T mcctrl_control_cpu_register_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_control_get_request_os_cpu_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_control_pin_region_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_control_free_region_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_control_sys_mount_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_control_sys_umount_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_control_sys_unshare_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_control_release_user_space_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_control_perf_num_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_control_perf_destroy_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_control_perf_set_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_control_perf_get_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_control_perf_enable_disable_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_control_getrusage_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_control_transfer_image_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_control_load_syscall_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_control_ret_syscall_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_control_terminate_thread_unsafe_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_control_uti_get_ctx_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_control_getcred_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_control_getcredv_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_control_strncpy_from_user_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_control_destroy_ppd_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_control_close_exec_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_control_newprocess_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_control_start_image_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_control_send_signal_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_driver_ioctl_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_driver_osnum_to_os_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_driver_os_alive_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_driver_boot_notifier_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_driver_shutdown_notifier_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_driver_symbols_init_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_driver_init_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_driver_exit_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
 grep -Eq ' T mcctrl_in_kernel_irq_syscall_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
 grep -Eq ' T mcctrl_in_kernel_syscall_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_pager_call_irq_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_pager_call_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_remote_page_fault_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_clear_pte_range_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_user_space_release_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
 grep -Eq ' T mcctrl_rva_to_rpa_cache_search_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
 grep -Eq ' T mcctrl_rva_to_rpa_cache_insert_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
 grep -Eq ' T mcctrl_futex_remove_process_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_futex_dispatch_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_futex_wait_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_futex_wake_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_futex_wake_op_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_futex_requeue_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_syscall_ptd_hash_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_syscall_put_ptd_unsafe_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_syscall_put_ptd_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_syscall_add_ptd_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_syscall_get_ptd_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_syscall_pidfd_hash_init_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_syscall_pidfd_hash_insert_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_syscall_pidfd_hash_lookup_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_syscall_pidfd_hash_remove_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_syscall_pager_add_process_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_syscall_pager_remove_process_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_syscall_pager_cleanup_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
 grep -Eq ' T mcctrl_procfs_packet_handler_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
 grep -Eq ' T mcctrl_procfs_work_main_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_procfs_getpath_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_procfs_add_entries_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_procfs_find_entry_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_procfs_add_entry_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_procfs_delete_entries_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_procfs_get_pid_cred_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
 grep -Eq ' T mcctrl_procfs_find_base_entry_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
 grep -Eq ' T mcctrl_procfs_find_pid_entry_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
 grep -Eq ' T mcctrl_procfs_find_tid_entry_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
@@ -119142,19 +142388,140 @@ grep -Eq ' T mcctrl_procfs_buff_release_body_result$' "${tmpdir}/out/mcctrl_help
 grep -Eq ' T mcctrl_procfs_buff_read_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
 grep -Eq ' T mcctrl_sysfs_packet_handler_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
 grep -Eq ' T mcctrl_sysfs_work_main_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_sysfs_resp_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
 grep -Eq ' T mcctrl_sysfs_remote_show_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
 grep -Eq ' T mcctrl_sysfs_remote_store_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
 grep -Eq ' T mcctrl_sysfs_remote_release_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_sysfs_lookup_i_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_sysfs_show_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_sysfs_store_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_sysfs_release_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_sysfs_snooping_show_i32_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_sysfs_snooping_show_i64_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_sysfs_snooping_show_u32_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_sysfs_snooping_show_u64_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_sysfs_snooping_show_string_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_sysfs_snooping_show_u32k_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_sysfs_snooping_show_bitmap_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_sysfs_req_setup_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_sysfs_req_create_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_sysfs_req_mkdir_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_sysfs_req_symlink_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_sysfs_req_lookup_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T mcctrl_sysfs_req_unlink_body_result$' "${tmpdir}/out/mcctrl_helpers.global"
+grep -Eq ' T ihklib_device_readable_body_result$' "${tmpdir}/out/ihklib_helpers.global"
+grep -Eq ' T ihklib_device_open_body_result$' "${tmpdir}/out/ihklib_helpers.global"
+grep -Eq ' T ihklib_destroy_os_body_result$' "${tmpdir}/out/ihklib_helpers.global"
 grep -Eq ' T ihklib_os_get_num_cpus_raw_body_result$' "${tmpdir}/out/ihklib_helpers.global"
 grep -Eq ' T ihklib_mem_chunk_count_body_result$' "${tmpdir}/out/ihklib_helpers.global"
 grep -Eq ' T ihklib_os_get_eventfd_body_result$' "${tmpdir}/out/ihklib_helpers.global"
 grep -Eq ' T ihklib_os_load_body_result$' "${tmpdir}/out/ihklib_helpers.global"
 grep -Eq ' T ihklib_os_kargs_body_result$' "${tmpdir}/out/ihklib_helpers.global"
 grep -Eq ' T ihklib_os_boot_body_result$' "${tmpdir}/out/ihklib_helpers.global"
+grep -Eq ' T ihklib_os_set_ioctl_loop_body_result$' "${tmpdir}/out/ihklib_helpers.global"
+grep -Eq ' T ihklib_os_getrusage_body_result$' "${tmpdir}/out/ihklib_helpers.global"
+grep -Eq ' T ihklib_os_cpu_request_body_result$' "${tmpdir}/out/ihklib_helpers.global"
+grep -Eq ' T ihklib_os_query_cpu_body_result$' "${tmpdir}/out/ihklib_helpers.global"
+grep -Eq ' T ihklib_os_mem_request_body_result$' "${tmpdir}/out/ihklib_helpers.global"
+grep -Eq ' T ihklib_os_query_mem_body_result$' "${tmpdir}/out/ihklib_helpers.global"
+grep -Eq ' T ihklib_os_release_mem_body_result$' "${tmpdir}/out/ihklib_helpers.global"
+grep -Eq ' T ihklib_cpu_string_dispatch_body_result$' "${tmpdir}/out/ihklib_helpers.global"
+grep -Eq ' T ihklib_mem_string_dispatch_body_result$' "${tmpdir}/out/ihklib_helpers.global"
+grep -Eq ' T ihklib_ikc_string_dispatch_body_result$' "${tmpdir}/out/ihklib_helpers.global"
+grep -Eq ' T ihklib_env_value_callback_body_result$' "${tmpdir}/out/ihklib_helpers.global"
+grep -Eq ' T ihklib_reserve_mem_conf_str_body_result$' "${tmpdir}/out/ihklib_helpers.global"
+grep -Eq ' T ihklib_os_kargs_str_body_result$' "${tmpdir}/out/ihklib_helpers.global"
+grep -Eq ' T ihklib_os_assign_cpu_all_body_result$' "${tmpdir}/out/ihklib_helpers.global"
+grep -Eq ' T ihklib_os_assign_mem_all_body_result$' "${tmpdir}/out/ihklib_helpers.global"
+grep -Eq ' T ihklib_os_release_cpu_all_body_result$' "${tmpdir}/out/ihklib_helpers.global"
+grep -Eq ' T ihklib_release_cpu_all_body_result$' "${tmpdir}/out/ihklib_helpers.global"
 grep -Eq ' T ihklib_create_os_apply_mem_conf_body_result$' "${tmpdir}/out/ihklib_helpers.global"
 grep -Eq ' T ihklib_create_os_reserve_resources_body_result$' "${tmpdir}/out/ihklib_helpers.global"
 grep -Eq ' T ihklib_create_os_apply_ikc_kargs_body_result$' "${tmpdir}/out/ihklib_helpers.global"
+grep -Eq ' T ihklib_create_os_preclean_body_result$' "${tmpdir}/out/ihklib_helpers.global"
+grep -Eq ' T ihklib_create_os_load_kargs_body_result$' "${tmpdir}/out/ihklib_helpers.global"
 grep -Eq ' T ihk_smp_query_status_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_arch_symbols_init_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_symbols_init_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_os_notify_hungup_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_os_get_memory_info_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_os_get_cpu_info_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_os_get_num_numa_nodes_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_os_get_num_cpus_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_os_set_kargs_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_os_debug_request_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_os_freeze_thaw_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_create_os_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_destroy_os_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_device_debug_request_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_get_dma_channel_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_unmap_virtual_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_direct_unmap_virtual_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_map_virtual_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_direct_map_virtual_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_os_vtop_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_os_load_mem_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_adjust_entry_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_adjust_entry$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_identity_map_memory_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_identity_unmap_memory_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_os_map_memory$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_os_unmap_memory$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_map_memory$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_unmap_memory$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_arch_dcache_flush_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_arch_dcache_flush$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_setup_trampoline_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_os_setup_startup_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_arch_init_trampoline_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_arch_init_linux_work_tail_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_init_ident_page_table_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_collect_topology_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_setup_warm_reset_vector_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_reset_cpu_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_wakeup_secondary_cpu_via_init_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_wakeup_secondary_cpu_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_arch_exit_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_calc_ns_per_tsc_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T calc_ns_per_tsc$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' U ihk_smp_calc_tsc_ratio_bridge$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' U ihk_smp_tsc_khz_bridge$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_x2apic_is_enabled_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T x2apic_is_enabled$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' U ihk_smp_x2apic_msr_bridge$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_vector_entry_used_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_vector_set_needed_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_vector_release_value_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_os_issue_interrupt_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_os_broadcast_interrupt_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_check_ikc_map_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_os_check_ikc_map$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_arch_get_perf_event_map_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_get_buildid_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_device_get_num_cpus_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_device_query_cpu_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_os_query_cpu_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_os_get_ikc_map_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_os_set_ikc_map_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_query_mem_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_get_cpu_topology_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_get_node_topology_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_free_info_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_read_long_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_read_bitmap_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_read_string_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_file_readable_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_read_file_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_write_cpu_sys_file_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_linux_cpu_to_hw_id_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_init_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_exit_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_module_init_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_module_exit_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_ikc_irq_work_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_os_register_handler_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_os_unregister_handler_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_irq_call_handlers_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T round_up$' "${tmpdir}/out/rust.global"
 grep -Eq ' T round_down$' "${tmpdir}/out/rust.global"
 for sym in STACK_TOP PM_STATUS PM_PSHIFT PM_PFRAME ALIGN_DOWN ALIGN_UP pte_xchg
@@ -119342,6 +142709,7 @@ grep -Eq ' T act_setgid$' "${tmpdir}/out/mcexec_helpers.global"
 grep -Eq ' T act_setfsgid$' "${tmpdir}/out/mcexec_helpers.global"
 grep -Eq ' T act_close$' "${tmpdir}/out/mcexec_helpers.global"
 grep -Eq ' T mcexec_do_generic_syscall_body$' "${tmpdir}/out/mcexec_helpers.global"
+grep -Eq ' T mcexec_util_thread_body$' "${tmpdir}/out/mcexec_helpers.global"
 grep -Eq ' T act_generic_syscall$' "${tmpdir}/out/mcexec_helpers.global"
 grep -Eq ' T act_sched_setaffinity$' "${tmpdir}/out/mcexec_helpers.global"
 grep -Eq ' T act_getdents$' "${tmpdir}/out/mcexec_helpers.global"
@@ -119425,10 +142793,20 @@ grep -Eq ' T read_32$' "${tmpdir}/out/eclair_helpers.global"
 grep -Eq ' T read_symbol_64$' "${tmpdir}/out/eclair_helpers.global"
 grep -Eq ' T print_bin$' "${tmpdir}/out/eclair_helpers.global"
 grep -Eq ' T intr_handler$' "${tmpdir}/out/eclair_helpers.global"
+grep -Eq ' T mck_crash_cmd_mcinfo_body_result$' "${tmpdir}/out/mckernel_crash_helpers.global"
+grep -Eq ' T mck_crash_extension_init_body_result$' "${tmpdir}/out/mckernel_crash_helpers.global"
+grep -Eq ' T mck_crash_extension_fini_body_result$' "${tmpdir}/out/mckernel_crash_helpers.global"
 grep -Eq ' T usage$' "${tmpdir}/out/mcinspect_helpers.global"
 grep -Eq ' T lookup_bfd_symbol$' "${tmpdir}/out/mcinspect_helpers.global"
 grep -Eq ' T init_bfd_symbols$' "${tmpdir}/out/mcinspect_helpers.global"
 grep -Eq ' T ihk_read_kernel$' "${tmpdir}/out/mcinspect_helpers.global"
+grep -Eq ' T mcinspect_init_globals_body_result$' "${tmpdir}/out/mcinspect_helpers.global"
+grep -Eq ' T mcinspect_mcvtop_body_result$' "${tmpdir}/out/mcinspect_helpers.global"
+grep -Eq ' T mcinspect_mcps_body_result$' "${tmpdir}/out/mcinspect_helpers.global"
+grep -Eq ' T mcinspect_main_body_result$' "${tmpdir}/out/mcinspect_helpers.global"
+grep -Eq ' T mcinspect_option_body_result$' "${tmpdir}/out/mcinspect_helpers.global"
+grep -Eq ' T mcinspect_option_loop_body_result$' "${tmpdir}/out/mcinspect_helpers.global"
+grep -Eq ' T mcinspect_main_entry_result$' "${tmpdir}/out/mcinspect_helpers.global"
 grep -Eq ' [DB] zero_at_free$' "${tmpdir}/out/rust.global"
 grep -Eq ' [DB] deferred_zero_at_free$' "${tmpdir}/out/rust.global"
 grep -Eq ' T __ihk_pagealloc_init$' "${tmpdir}/out/rust.global"
@@ -119445,9 +142823,35 @@ grep -Eq ' T __ihk_numa_zero_free_pages$' "${tmpdir}/out/rust.global"
 grep -Eq ' T ihk_numa_zero_free_pages$' "${tmpdir}/out/rust.global"
 grep -Eq ' T ihk_numa_alloc_pages$' "${tmpdir}/out/rust.global"
 grep -Eq ' T ihk_numa_free_pages$' "${tmpdir}/out/rust.global"
+grep -Eq ' T early_alloc_pages$' "${tmpdir}/out/rust.global"
+grep -Eq ' T early_alloc_invalidate$' "${tmpdir}/out/rust.global"
+grep -Eq ' T get_last_early_heap$' "${tmpdir}/out/rust.global"
+grep -Eq ' T ihk_mc_allocate$' "${tmpdir}/out/rust.global"
+grep -Eq ' T ihk_mc_free$' "${tmpdir}/out/rust.global"
+grep -Eq ' T ihk_mc_reserve_arch_pages$' "${tmpdir}/out/rust.global"
+grep -Eq ' T enable_ptattr_no_execute$' "${tmpdir}/out/rust.global"
+grep -Eq ' T flush_tlb$' "${tmpdir}/out/rust.global"
+grep -Eq ' T flush_tlb_single$' "${tmpdir}/out/rust.global"
+grep -Eq ' T load_page_table$' "${tmpdir}/out/rust.global"
+grep -Eq ' T ihk_mc_load_page_table$' "${tmpdir}/out/rust.global"
+grep -Eq ' T get_init_page_table$' "${tmpdir}/out/rust.global"
+grep -Eq ' T get_boot_page_table$' "${tmpdir}/out/rust.global"
+grep -Eq ' T init_page_table$' "${tmpdir}/out/rust.global"
+grep -Eq ' T map_fixed_area$' "${tmpdir}/out/rust.global"
+grep -Eq ' T init_text_area$' "${tmpdir}/out/rust.global"
+grep -Eq ' T init_low_area$' "${tmpdir}/out/rust.global"
+grep -Eq ' T x86_init_normal_area_public$' "${tmpdir}/out/rust.global"
+grep -Eq ' T x86_init_linux_kernel_mapping_public$' "${tmpdir}/out/rust.global"
+grep -Eq ' T x86_init_fixed_area_public$' "${tmpdir}/out/rust.global"
+grep -Eq ' T x86_init_vsyscall_area_public$' "${tmpdir}/out/rust.global"
 grep -Eq ' T cpu_set$' "${tmpdir}/out/rust.global"
 grep -Eq ' T cpu_clear$' "${tmpdir}/out/rust.global"
 grep -Eq ' T cpu_clear_and_set$' "${tmpdir}/out/rust.global"
+grep -Eq ' T sched_do_migrate_public$' "${tmpdir}/out/rust.global"
+grep -Eq ' T runq_del_thread$' "${tmpdir}/out/rust.global"
+grep -Eq ' T release_cpuid$' "${tmpdir}/out/rust.global"
+grep -Eq ' T check_need_resched$' "${tmpdir}/out/rust.global"
+grep -Eq ' T sched_init$' "${tmpdir}/out/rust.global"
 grep -Eq ' T copy_from_user$' "${tmpdir}/out/rust.global"
 grep -Eq ' T copy_to_user$' "${tmpdir}/out/rust.global"
 grep -Eq ' T strlen_user$' "${tmpdir}/out/rust.global"
@@ -119460,8 +142864,8 @@ grep -Eq ' T verify_process_vm$' "${tmpdir}/out/rust.global"
 grep -Eq ' T read_process_vm$' "${tmpdir}/out/rust.global"
 grep -Eq ' T write_process_vm$' "${tmpdir}/out/rust.global"
 grep -Eq ' T patch_process_vm$' "${tmpdir}/out/rust.global"
-grep -Eq 'U early_alloc_invalidate' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U early_alloc_pages' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U _head' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U ap_trampoline' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_chk_page_address' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_get_kargs' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_get_nr_numa_nodes' "${tmpdir}/out/rust.undefined"
@@ -119475,38 +142879,28 @@ grep -Eq 'U ihk_mc_pt_lookup_pte' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_pt_virt_to_pagemap' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_pt_virt_to_phys' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_pt_virt_to_phys_size' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U lookup_process_memory_range' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U next_process_memory_range' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U page_fault_process_vm' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U page_unmap' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U phys_to_virt' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U shmid_index' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U the_shm_info' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U virt_to_phys' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U pagealloc_track_init' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U attr_mask' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U __x86_syscall_handler' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U __freeze' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U __kfree' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U __kmalloc' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U __page_fault_handler_address' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U __start___verbose' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U __stop___verbose' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U add_process_memory_range' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U arch_cpu_stop' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U arch_cpu_read_write_register' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U arch_delay' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U arch_get_smaller_page_size' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U arch_init' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U arch_map_vdso' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U arch_print_stack' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U arch_ready' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U arch_set_mikc_queue' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U arch_setup_vdso' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U arch_start_pvclock' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U arch_show_interrupt_context' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U arch_vrflag_to_ptattr' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U allow_oversubscribe' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U begin_free_pages_pending' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U chain_process' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U chain_thread' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U cpu_disable_interrupt' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U cpu_disable_interrupt_save' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U cpu_enable_interrupt' "${tmpdir}/out/rust.undefined"
@@ -119515,46 +142909,36 @@ grep -Eq 'U cpu_halt' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U cpu_interrupt_disabled' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U cpu_pause' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U cpu_restore_interrupt' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U create_thread' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U debug_log' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U destroy_thread' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U do_kill' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U do_mmap' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U do_fork' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U done_init' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U eventfd' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U find_process' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U find_thread' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U finish_free_pages_pending' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U flush_tlb' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U flush_tlb_single' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U futex_atomic_access_ok_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U futex_atomic_cmpxchg_inatomic_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U futex_atomic_op_inuser_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U gettime_local_support' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U hassigpending' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U hold_process' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U hold_process_vm' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U hold_thread' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U idle_halt' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U ihk_mc_delay_us' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_boot_cpu' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_get_boot_time' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_get_cpu_info' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_get_ikc_cpu' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U ihk_mc_get_interrupt_id' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U ihk_mc_get_linux_default_huge_page_shift' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_get_ns_per_tsc' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_get_nr_linux_cores' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_get_osnum' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U ihk_mc_get_smp_handler_irq' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U ihk_mc_get_processor_id_equiv' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_init_ap' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U ihk_mc_interrupt_cpu' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_issue_ipi_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_interrupt_log_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_map_virtual' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U ihk_mc_modify_user_context' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_pt_clear_range' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_pt_set_pte' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_pt_set_range' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_set_dump_level' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U ihk_mc_set_syscall_handler' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_unmap_memory' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_unmap_virtual' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_set_monitor' "${tmpdir}/out/rust.undefined"
@@ -119565,53 +142949,255 @@ grep -Eq 'U mem_init' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U numa_sysfs_setup' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U obtain_clone_cpuid' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U page_fault_process_memory_range' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U proc_init' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_normal_fault_range_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_pgio_dispatch_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_xpmem_fault_range_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_zeroobj_match_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_populate_warn_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U process_cleanup_before_terminate' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U process_cleanup_fd' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U process_unlock' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U release_process' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U release_process_vm' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U release_thread' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_change_prot_attr_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_change_prot_pt_change_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_change_prot_public_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_access_ok_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_add_range_alloc_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_add_range_free_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_add_range_insert_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_add_range_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_add_range_mark_xpmem_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_add_range_memclear_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_add_range_remove_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_add_range_update_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_alloc_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_create_cpu_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_create_thread_address_space_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_create_thread_alloc_pages_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_create_thread_init_process_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_create_thread_init_user_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_create_thread_init_vm_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_create_thread_release_address_space_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_default_ncpus_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_detach_address_space_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_destroy_thread_hash_detach_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_destroy_thread_time_account_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_destroy_thread_release_tid_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_destroy_thread_replace_tid_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_destroy_thread_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_current_resource_set_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_flush_vm_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_free_all_ranges_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_free_thread_pages_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_free_vm_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_flush_memory_debug_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_flush_memory_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_free_range_noirq_lock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_free_range_noirq_unlock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_free_range_pt_free_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_hold_thread_warn_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_init_process_public_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_invalidate_one_page_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_invalidate_range_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_join_range_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_lookup_pte_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_memory_range_free_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_memory_range_free_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_memset_smp_call_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_memset_smp_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_memset_smp_memset_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_memset_smp_phys_to_virt_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_memset_smp_virt_to_phys_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_mckfd_free_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_mcs_writer_lock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_mcs_writer_unlock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_mcs_reader_lock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_mcs_reader_unlock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_ptrace_mcs_lock_noirq_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_ptrace_mcs_unlock_noirq_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_ptrace_alloc_debugreg_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_ptrace_clear_single_step_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_ptrace_hold_thread_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_ptrace_traceme_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_hold_thread_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_optional_free_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_policy_free_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_procfs_delete_thread_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_proc_init_panic_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_pt_create_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_pt_destroy_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_range_public_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_range_kfree_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_remove_range_split_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_remove_range_xpmem_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_remove_range_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_remove_region_clear_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_remove_region_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_remap_range_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_page_is_contiguous_head_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_page_is_contiguous_tail_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_page_offset_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_page_unmap_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_panic_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_pgsize_to_tbllv_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_phys_to_page_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_pte_get_phys_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_pte_is_contiguous_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_pte_is_fileoff_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_pte_is_null_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_pte_make_fileoff_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_pte_xchg_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_split_contiguous_pages_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_sync_range_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_tbllv_to_contpgsize_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_update_page_table_attr_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_update_page_table_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_update_page_table_set_range_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_visit_pte_range_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_release_address_space_action_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_release_final_cleanup_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_release_hash_detach_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_release_profile_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_release_process_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_release_sigcommon_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_release_sibling_detach_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_release_thread_profile_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_release_vm_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_rw_read_lock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_rw_read_unlock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_rw_write_lock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_rw_write_unlock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_rwlock_init_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_sched_cpu_local_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_sched_do_migrate_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_sched_init_context_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_sched_init_panic_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_sched_save_fp_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_sched_interrupt_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_sched_noirq_lock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_sched_noirq_unlock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_sched_runq_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_sched_schedule_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_sched_timer_init_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_sched_vector_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_sched_waitq_wakeup_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_spin_init_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_spin_lock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_spin_unlock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_vm_init_numa_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_vm_rwspin_init_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U resource_set_list' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U resource_set_lock' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U release_fp_regs' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U runq_reservation_lock' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U runq_add_thread' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U sched_wakeup_thread' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U sched_wakeup_thread_locked' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U schedule' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U sched_init' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U spin_sleep_or_schedule' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U _kmalloc' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U _kfree' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U arch_syscall_forward_context_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U arch_prctl_set_register_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U arch_prctl_get_register_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U arch_prctl_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U arch_do_shmget_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U arch_shmget_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U kmalloc_track_hash' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U kmalloc_track_hash_locks' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U kmalloc_addr_hash' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U kmalloc_addr_hash_locks' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U kmalloc_runcount' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U pagealloc_track_hash' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U pagealloc_track_hash_locks' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U pagealloc_addr_hash' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U pagealloc_addr_hash_locks' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U pagealloc_track_initialized' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U pagealloc_runcount' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U memdebug' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_pagealloc_track_base_alloc_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_pagealloc_track_base_free_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_pagealloc_track_meta_alloc_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_pagealloc_track_meta_free_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_pagealloc_track_lock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_pagealloc_track_unlock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_pagealloc_track_noirq_lock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_pagealloc_track_noirq_unlock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_pagealloc_track_spin_init_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_pagealloc_track_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_pagealloc_invalid_size_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_pagealloc_invalid_free_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_pagealloc_leak_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_kmalloc_track_base_alloc_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_kmalloc_track_base_free_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_kmalloc_track_lock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_kmalloc_track_unlock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_kmalloc_track_spin_init_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_kmalloc_track_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_kmalloc_invalid_free_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_kmalloc_leak_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U phys_to_page' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U phys_to_page_insert_hash' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U linux_page_offset_base' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_kernel_phys_base' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_addr_init_pt_loaded_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_addr_log_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U kmalloc_cache_alloc_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U kmalloc_cache_log' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U _ihk_mc_alloc_aligned_pages_node' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U _ihk_mc_free_pages' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U ihk_mc_allocate' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U ihk_mc_free' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_kmalloc_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_kmalloc_initialized_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_kfree_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_mem_log_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_get_vector' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_map_memory' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_register_interrupt_handler' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_unregister_interrupt_handler' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U init_delay' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U init_process_stack' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U init_tick' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U kmalloc_init' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U set_timer' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U sync_tick' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U pvti$' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U pvti_npages' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U pvti_msr' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_alloc_aligned_pages_node_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_cpuid_leaf_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_pvclock_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_current_cpu_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_context_line_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_cpu_boot_status_slot_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_kprintf_lock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_kprintf_unlock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_print_stack_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_stack_frame_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_tick_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_virt_to_phys_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_write_msr_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U phys_to_page' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U phys_to_page_insert_hash' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U syscall_generic_forwarding' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_linux_mlock_log_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U syscall_name' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_policy_do_syscall2_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_policy_forward_context_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_util_register_desc_log_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U sys_mlock' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U sys_munlock' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U syscall' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U time_sharing' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U sysctl_overcommit_memory' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U split_process_memory_range' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U remap_one_page' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_split_page_pgshift_offset_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_split_range_alloc_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_split_range_alloc_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_split_range_insert_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_split_range_pt_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_split_range_pt_split_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_split_range_public_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_split_range_publish_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_split_shm_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_split_shm_lookup_page_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_split_shm_phys_to_page_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_split_shm_update_page_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U sync_one_page' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U terminate_host' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U thread_unlock' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U boot_param' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_get_processor_id_equiv' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_ikc_arch_issue_host_ipi' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U map_fixed_area' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_user_page_fault_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_user_verify_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_user_vtop_bridge' "${tmpdir}/out/rust.undefined"
@@ -119621,8 +143207,61 @@ grep -Eq 'U x86_user_unmap_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_user_phys_to_virt_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_user_copy_log_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_user_map_kernel_start_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_arch_mem_virt_to_phys_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_arch_mem_phys_to_virt_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_early_alloc_panic_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_early_alloc_last_page_slot_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_early_alloc_end_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_bootstrap_mem_end_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_early_alloc_invalidate_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_pt_virt_to_phys_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_page_table_init_pt_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_page_table_boot_pt_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_load_page_table_panic_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_check_available_page_size_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_init_page_table_alloc_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_init_page_table_spin_init_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_init_page_table_normal_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_init_page_table_linux_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_init_page_table_fixed_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_init_page_table_text_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_init_page_table_vsyscall_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_init_page_table_low_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_init_page_table_load_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_init_page_table_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_init_page_table_panic_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_init_page_table_init_pt_slot_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_init_page_table_boot_pt_slot_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_init_page_table_loaded_slot_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_init_page_table_lock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_init_page_table_size_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_map_fixed_area_init_pt_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_map_fixed_area_fixed_virt_slot_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_map_fixed_area_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_pt_set_page_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_move_flush_tlb_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_init_normal_get_memory_address_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_init_normal_set_large_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_init_normal_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_init_normal_panic_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_init_linux_find_command_line_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_init_linux_get_nr_memory_chunks_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_init_linux_get_memory_chunk_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_init_linux_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_init_linux_panic_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_init_text_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_init_text_map_kernel_start_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_init_text_end_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_init_text_panic_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_init_low_panic_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_init_fixed_panic_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_init_vsyscall_page_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_init_vsyscall_panic_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_reserve_arch_pages_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_reserve_arch_pages_panic_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U xpmem_page_in_remote_on_attach' "${tmpdir}/out/rust.undefined"
-test "$(grep -c ' U ' "${tmpdir}/out/rust.undefined")" -eq 162
+grep -Eq 'U uti_desc' "${tmpdir}/out/rust.undefined"
+test "$(grep -c ' U ' "${tmpdir}/out/rust.undefined")" -eq 396
 
 for rust_kernel_context_obj in \
 	"${tmpdir}/out/mckernel_rust.o" \
@@ -119671,6 +143310,7 @@ cat "${tmpdir}/out/pagealloc_track_smoke.out"
 cat "${tmpdir}/out/mikc_smoke.out"
 cat "${tmpdir}/out/x86_coredump_smoke.out"
 cat "${tmpdir}/out/ihk_module_helpers_smoke.out"
+cat "${tmpdir}/out/ihk_core_helpers_smoke.out"
 cat "${tmpdir}/out/mcctrl_helpers_smoke.out"
 cat "${tmpdir}/out/smp_chunk_helpers_c.out"
 cat "${tmpdir}/out/mcexec_helpers_smoke.out"

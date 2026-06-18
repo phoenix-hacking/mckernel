@@ -108,9 +108,196 @@ struct procfs_list_entry {
 LIST_HEAD(procfs_file_list);
 MCCTRL_DEFINE_SEMAPHORE(procfs_file_list_lock);
 
+#ifdef MCCTRL_RUST_HELPERS
+static const char *
+mcctrl_procfs_list_name_bridge(const void *entry)
+{
+	return ((const struct procfs_list_entry *)entry)->name;
+}
+
+static void *
+mcctrl_procfs_list_parent_bridge(const void *entry)
+{
+	return ((const struct procfs_list_entry *)entry)->parent;
+}
+
+static void *
+mcctrl_procfs_first_child_bridge(void *parent)
+{
+	struct list_head *list;
+
+	if (parent)
+		list = &((struct procfs_list_entry *)parent)->children;
+	else
+		list = &procfs_file_list;
+	if (list_empty(list))
+		return NULL;
+	return list_first_entry(list, struct procfs_list_entry, list);
+}
+
+static void *
+mcctrl_procfs_next_child_bridge(void *parent, void *entry)
+{
+	struct list_head *list;
+	struct list_head *next = ((struct procfs_list_entry *)entry)->list.next;
+
+	if (parent)
+		list = &((struct procfs_list_entry *)parent)->children;
+	else
+		list = &procfs_file_list;
+	if (next == list)
+		return NULL;
+	return list_entry(next, struct procfs_list_entry, list);
+}
+
+static void *mcctrl_procfs_find_entry_bridge(void *parent, const char *name);
+static void mcctrl_procfs_delete_entry_bridge(void *entry);
+
+static void *
+mcctrl_procfs_alloc_entry_bridge(unsigned long size)
+{
+	return kmalloc(size, GFP_KERNEL);
+}
+
+static void
+mcctrl_procfs_init_entry_bridge(void *entry, const char *name)
+{
+	struct procfs_list_entry *e = entry;
+
+	memset(e, '\0', sizeof(*e));
+	INIT_LIST_HEAD(&e->children);
+	strcpy(e->name, name);
+}
+
+static void *
+mcctrl_procfs_create_pde_bridge(void *parent, const char *name,
+				unsigned int mode, const void *uid,
+				const void *gid, const void *opaque,
+				void *entry)
+{
+	struct procfs_list_entry *e = entry;
+	struct proc_dir_entry *pde;
+	struct proc_dir_entry *parent_pde = NULL;
+	int f_mode = mode & 0777;
+
+	if (parent)
+		parent_pde = ((struct procfs_list_entry *)parent)->entry;
+
+	if (mode & S_IFDIR) {
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
+		pde = proc_mkdir(name, parent_pde);
+#else
+		pde = proc_mkdir_data(name, f_mode, parent_pde, e);
+#endif
+	}
+	else if ((mode & S_IFLNK) == S_IFLNK) {
+		pde = proc_symlink(name, parent_pde, (char *)opaque);
+	}
+	else {
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 6, 0)
+		const struct proc_ops *fop;
+#else
+		const struct file_operations *fop;
+#endif
+
+		if(opaque)
+			fop = (typeof(fop))opaque;
+		else if(mode & S_IWUSR)
+			fop = &mckernel_forward;
+		else
+			fop = &mckernel_forward_ro;
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
+		pde = create_proc_entry(name, f_mode, parent_pde);
+		if(pde)
+			pde->proc_fops = fop;
+#else
+		pde = proc_create_data(name, f_mode, parent_pde, fop, e);
+		if(pde)
+			proc_set_user(pde, *(const kuid_t *)uid,
+				      *(const kgid_t *)gid);
+#endif
+	}
+
+	return pde;
+}
+
+static void
+mcctrl_procfs_commit_entry_bridge(void *entry, void *parent, void *pde,
+				  const void *uid, const void *gid)
+{
+	struct procfs_list_entry *e = entry;
+	struct procfs_list_entry *p = parent;
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
+	((struct proc_dir_entry *)pde)->uid = *(const kuid_t *)uid;
+	((struct proc_dir_entry *)pde)->gid = *(const kgid_t *)gid;
+	((struct proc_dir_entry *)pde)->data = e;
+#else
+	(void)uid;
+	(void)gid;
+#endif
+	if(p)
+		e->osnum = p->osnum;
+	e->entry = pde;
+	e->parent = p;
+	list_add(&(e->list), p ? &(p->children) : &procfs_file_list);
+}
+
+static void
+mcctrl_procfs_free_entry_bridge(void *entry)
+{
+	kfree(entry);
+}
+
+static void
+mcctrl_procfs_unlink_entry_bridge(void *entry)
+{
+	list_del(&((struct procfs_list_entry *)entry)->list);
+}
+
+static void
+mcctrl_procfs_remove_proc_entry_bridge(void *entry)
+{
+	struct procfs_list_entry *e = entry;
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
+	if (e->entry) {
+		e->entry->read_proc = NULL;
+		e->entry->data = NULL;
+	}
+#endif
+	remove_proc_entry(e->name, e->parent ? e->parent->entry : NULL);
+}
+
+static void *
+mcctrl_procfs_entry_data_bridge(void *entry)
+{
+	return ((struct procfs_list_entry *)entry)->data;
+}
+
+static void
+mcctrl_procfs_add_alloc_failed_bridge(void)
+{
+	kprintf("ERROR: not enough memory to create PROCFS entry.\n");
+}
+
+static void
+mcctrl_procfs_add_create_failed_bridge(const char *name)
+{
+	kprintf("ERROR: cannot create a PROCFS entry for %s.\n", name);
+}
+#endif
+
 static char *
 getpath(struct procfs_list_entry *e, char *buf, int bufsize)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_procfs_getpath_body_result(
+		e, buf, bufsize,
+		mcctrl_procfs_list_name_bridge,
+		mcctrl_procfs_list_parent_bridge);
+#else
 	char	*w = buf + bufsize - 1;
 
 	*w = '\0';
@@ -124,11 +311,18 @@ getpath(struct procfs_list_entry *e, char *buf, int bufsize)
 		w--;
 		*w = '/';
 	}
+#endif
 }
 
 static struct procfs_list_entry *
 find_procfs_entry(struct procfs_list_entry *parent, const char *name)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_procfs_find_entry_body_result(
+		parent, name, mcctrl_procfs_first_child_bridge,
+		mcctrl_procfs_next_child_bridge,
+		mcctrl_procfs_list_name_bridge);
+#else
 	struct list_head *list;
 	struct procfs_list_entry *e;
 
@@ -143,11 +337,21 @@ find_procfs_entry(struct procfs_list_entry *parent, const char *name)
 	}
 
 	return NULL;
+#endif
 }
 
 static void
 delete_procfs_entries(struct procfs_list_entry *top)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_procfs_delete_entries_body_result(
+		top, mcctrl_procfs_first_child_bridge,
+		mcctrl_procfs_delete_entry_bridge,
+		mcctrl_procfs_unlink_entry_bridge,
+		mcctrl_procfs_remove_proc_entry_bridge,
+		mcctrl_procfs_entry_data_bridge,
+		mcctrl_procfs_free_entry_bridge);
+#else
 	struct procfs_list_entry *e = NULL;
 	struct procfs_list_entry *n;
 
@@ -167,12 +371,26 @@ delete_procfs_entries(struct procfs_list_entry *top)
 	if(top->data)
 		kfree(top->data);
 	kfree(top);
+#endif
 }
 
 static struct procfs_list_entry *
 add_procfs_entry(struct procfs_list_entry *parent, const char *name, int mode,
                  kuid_t uid, kgid_t gid, const void *opaque)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_procfs_add_entry_body_result(
+		parent, name, mode, &uid, &gid, opaque, sizeof(*parent),
+		mcctrl_procfs_find_entry_bridge,
+		mcctrl_procfs_delete_entry_bridge,
+		mcctrl_procfs_alloc_entry_bridge,
+		mcctrl_procfs_init_entry_bridge,
+		mcctrl_procfs_create_pde_bridge,
+		mcctrl_procfs_commit_entry_bridge,
+		mcctrl_procfs_free_entry_bridge,
+		mcctrl_procfs_add_alloc_failed_bridge,
+		mcctrl_procfs_add_create_failed_bridge);
+#else
 	struct procfs_list_entry *e = find_procfs_entry(parent, name);
 	struct proc_dir_entry *pde;
 	struct proc_dir_entry *parent_pde = NULL;
@@ -246,22 +464,108 @@ add_procfs_entry(struct procfs_list_entry *parent, const char *name, int mode,
 	list_add(&(e->list), parent? &(parent->children): &procfs_file_list);
 
 	return e;
+#endif
 }
+
+#ifdef MCCTRL_RUST_HELPERS
+static const char *
+mcctrl_procfs_entry_table_name_bridge(const void *entry)
+{
+	return ((const struct procfs_entry *)entry)->name;
+}
+
+static unsigned int
+mcctrl_procfs_entry_table_mode_bridge(const void *entry)
+{
+	return ((const struct procfs_entry *)entry)->mode;
+}
+
+static const void *
+mcctrl_procfs_entry_table_fops_bridge(const void *entry)
+{
+	return ((const struct procfs_entry *)entry)->fops;
+}
+
+static const void *
+mcctrl_procfs_entry_table_next_bridge(const void *entry, unsigned long size)
+{
+	return (const char *)entry + size;
+}
+
+static void
+mcctrl_procfs_add_entry_with_ids_bridge(void *parent, const char *name,
+					unsigned int mode, const void *fops,
+					const void *uid, const void *gid)
+{
+	add_procfs_entry(parent, name, mode, *(const kuid_t *)uid,
+			 *(const kgid_t *)gid, fops);
+}
+#endif
 
 static void
 add_procfs_entries(struct procfs_list_entry *parent,
                    const struct procfs_entry *entries, kuid_t uid, kgid_t gid)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_procfs_add_entries_body_result(
+		parent, entries, sizeof(*entries), &uid, &gid,
+		mcctrl_procfs_entry_table_name_bridge,
+		mcctrl_procfs_entry_table_mode_bridge,
+		mcctrl_procfs_entry_table_fops_bridge,
+		mcctrl_procfs_entry_table_next_bridge,
+		mcctrl_procfs_add_entry_with_ids_bridge);
+#else
 	const struct procfs_entry *p;
 
 	for(p = entries; p->name; p++){
 		add_procfs_entry(parent, p->name, p->mode, uid, gid, p->fops);
 	}
+#endif
 }
+
+#ifdef MCCTRL_RUST_HELPERS
+static void
+mcctrl_procfs_rcu_read_lock_bridge(void)
+{
+	rcu_read_lock();
+}
+
+static void
+mcctrl_procfs_rcu_read_unlock_bridge(void)
+{
+	rcu_read_unlock();
+}
+
+static void *
+mcctrl_procfs_find_vpid_bridge(int pid)
+{
+	return find_vpid(pid);
+}
+
+static void *
+mcctrl_procfs_pid_task_bridge(void *pid, int type)
+{
+	return pid_task(pid, (enum pid_type)type);
+}
+
+static void *
+mcctrl_procfs_task_cred_bridge(void *task)
+{
+	return (void *)__task_cred((struct task_struct *)task);
+}
+#endif
 
 static const struct cred *
 get_pid_cred(int pid)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_procfs_get_pid_cred_body_result(
+		pid, PIDTYPE_PID, mcctrl_procfs_rcu_read_lock_bridge,
+		mcctrl_procfs_rcu_read_unlock_bridge,
+		mcctrl_procfs_find_vpid_bridge,
+		mcctrl_procfs_pid_task_bridge,
+		mcctrl_procfs_task_cred_bridge);
+#else
 	struct task_struct *task = NULL;
 
 	if (pid > 0) {
@@ -273,6 +577,7 @@ get_pid_cred(int pid)
 		}
 	}
 	return NULL;
+#endif
 }
 
 #ifdef MCCTRL_RUST_HELPERS

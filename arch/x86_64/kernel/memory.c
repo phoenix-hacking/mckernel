@@ -42,6 +42,12 @@ extern char _head[], _end[];
 extern unsigned long linux_page_offset_base;
 extern unsigned long x86_kernel_phys_base;
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+#define X86_MEMORY_PUBLIC_BRIDGE
+#else
+#define X86_MEMORY_PUBLIC_BRIDGE static
+#endif
+
 #ifndef MCKERNEL_RUST_PTE_HELPERS
 unsigned long STACK_TOP(const struct vm_regions *region)
 {
@@ -288,17 +294,17 @@ void arch_adjust_allocate_page_size(struct page_table *pt,
 }
 #endif
 
-static unsigned long x86_arch_mem_virt_to_phys_bridge(void *addr)
+X86_MEMORY_PUBLIC_BRIDGE unsigned long x86_arch_mem_virt_to_phys_bridge(void *addr)
 {
 	return virt_to_phys(addr);
 }
 
-static void *x86_arch_mem_phys_to_virt_bridge(unsigned long phys)
+X86_MEMORY_PUBLIC_BRIDGE void *x86_arch_mem_phys_to_virt_bridge(unsigned long phys)
 {
 	return phys_to_virt(phys);
 }
 
-static void x86_early_alloc_panic_bridge(int reason)
+X86_MEMORY_PUBLIC_BRIDGE void x86_early_alloc_panic_bridge(int reason)
 {
 	switch (reason) {
 	case 1:
@@ -308,6 +314,25 @@ static void x86_early_alloc_panic_bridge(int reason)
 		panic("Early allocator: Out of memory\n");
 		break;
 	}
+}
+
+X86_MEMORY_PUBLIC_BRIDGE void **x86_early_alloc_last_page_slot_bridge(void)
+{
+	return (void **)&last_page;
+}
+
+X86_MEMORY_PUBLIC_BRIDGE unsigned long x86_early_alloc_end_bridge(void)
+{
+	return (unsigned long)_end;
+}
+
+X86_MEMORY_PUBLIC_BRIDGE unsigned long x86_bootstrap_mem_end_bridge(void)
+{
+	return bootstrap_mem_end;
+}
+
+X86_MEMORY_PUBLIC_BRIDGE void x86_early_alloc_invalidate_bridge(void)
+{
 }
 
 static void x86_mem_cpuid_edx_bridge(unsigned long op, unsigned long *edxp)
@@ -327,7 +352,7 @@ static void x86_mem_log_int_bridge(int event, int value)
 	}
 }
 
-static void x86_mem_log_bridge(int event)
+X86_MEMORY_PUBLIC_BRIDGE void x86_mem_log_bridge(int event)
 {
 	switch (event) {
 	case 1:
@@ -341,17 +366,23 @@ static void x86_mem_log_bridge(int event)
 	}
 }
 
-static void *x86_kmalloc_bridge(int size, int flag)
+X86_MEMORY_PUBLIC_BRIDGE void *x86_kmalloc_bridge(int size, int flag)
 {
 	return kmalloc_tracked(size, flag, __FILE__, __LINE__);
 }
 
-static void x86_kfree_bridge(void *ptr)
+X86_MEMORY_PUBLIC_BRIDGE int x86_kmalloc_initialized_bridge(void)
+{
+	return get_this_cpu_local_var()->kmalloc_initialized;
+}
+
+X86_MEMORY_PUBLIC_BRIDGE void x86_kfree_bridge(void *ptr)
 {
 	kfree_tracked(ptr, __FILE__, __LINE__);
 }
 
 /* Arch specific early allocation routine */
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 void *early_alloc_pages(int nr_pages)
 {
 	return x86_early_alloc_pages_body_result((void **)&last_page,
@@ -365,7 +396,9 @@ void early_alloc_invalidate(void)
 {
 	x86_early_alloc_invalidate_body_result((void **)&last_page);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 void *ihk_mc_allocate(int size, int flag)
 {
 	(void)flag;
@@ -380,12 +413,16 @@ void ihk_mc_free(void *p)
 	x86_ihk_mc_free_body_result(get_this_cpu_local_var()->kmalloc_initialized,
 			p, x86_kfree_bridge, x86_mem_log_bridge);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 void *get_last_early_heap(void)
 {
 	return x86_get_last_early_heap_body_result((void **)&last_page);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 void flush_tlb(void)
 {
 	x86_flush_tlb_result();
@@ -395,6 +432,7 @@ void flush_tlb_single(unsigned long addr)
 {
 	x86_flush_tlb_single_result(addr);
 }
+#endif
 
 struct page_table {
 	pte_t entry[PT_ENTRIES];
@@ -405,8 +443,18 @@ static struct page_table *boot_pt;
 static int init_pt_loaded = 0;
 static ihk_spinlock_t init_pt_lock;
 
+void load_page_table(struct page_table *pt);
+void init_text_area(struct page_table *pt);
+void init_low_area(struct page_table *pt);
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+void x86_init_normal_area_public(void *pt);
+void x86_init_linux_kernel_mapping_public(void *pt);
+void x86_init_fixed_area_public(void *pt);
+void x86_init_vsyscall_area_public(void *pt);
+#endif
+
 static void *x86_pt_alloc_pages_bridge(int nr_pages, int ap_flag);
-static unsigned long x86_pt_virt_to_phys_bridge(void *addr);
+unsigned long x86_pt_virt_to_phys_bridge(void *addr);
 static void *x86_pt_phys_to_virt_bridge(unsigned long phys);
 static void x86_pt_free_pages_bridge(void *pt, int nr_pages);
 static void x86_pt_destroy_panic_bridge(int reason);
@@ -456,11 +504,13 @@ enum ihk_mc_pt_attribute attr_mask
 		| 0;
 #define	ATTR_MASK	attr_mask
 
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 void enable_ptattr_no_execute(void)
 {
 	x86_enable_ptattr_no_execute_body_result((unsigned long *)&attr_mask,
 			PTATTR_NO_EXECUTE);
 }
+#endif
 
 #if 0
 static unsigned long attr_to_l4attr(enum ihk_mc_pt_attribute attr)
@@ -679,12 +729,12 @@ static void *x86_pt_alloc_pages_bridge(int nr_pages, int ap_flag)
 	return _ihk_mc_alloc_aligned_pages_node(nr_pages, PAGE_P2ALIGN, (ihk_mc_ap_flag)ap_flag, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);
 }
 
-static unsigned long x86_pt_virt_to_phys_bridge(void *addr)
+unsigned long x86_pt_virt_to_phys_bridge(void *addr)
 {
 	return virt_to_phys(addr);
 }
 
-static int x86_pt_set_page_bridge(void *pt, unsigned long virt,
+X86_MEMORY_PUBLIC_BRIDGE int x86_pt_set_page_bridge(void *pt, unsigned long virt,
 		unsigned long phys, unsigned long attr)
 {
 	return __set_pt_page(pt, (void *)virt, phys, attr);
@@ -2016,7 +2066,7 @@ static int x86_move_visit_range_bridge(void *pt, unsigned long start,
 			arg);
 }
 
-static void x86_move_flush_tlb_bridge(void)
+X86_MEMORY_PUBLIC_BRIDGE void x86_move_flush_tlb_bridge(void)
 {
 	flush_tlb();
 }
@@ -2039,6 +2089,22 @@ int move_pte_range(page_table_t pt, struct process_vm *vm,
 	return error;
 }
 
+X86_MEMORY_PUBLIC_BRIDGE void *x86_page_table_init_pt_bridge(void)
+{
+	return init_pt;
+}
+
+X86_MEMORY_PUBLIC_BRIDGE void *x86_page_table_boot_pt_bridge(void)
+{
+	return boot_pt;
+}
+
+X86_MEMORY_PUBLIC_BRIDGE void x86_load_page_table_panic_bridge(void)
+{
+	panic("load_page_table: helper failed");
+}
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 void load_page_table(struct page_table *pt)
 {
 	int ret;
@@ -2063,8 +2129,30 @@ struct page_table *get_boot_page_table(void)
 {
 	return boot_pt;
 }
+#endif
 
 static unsigned long fixed_virt;
+
+X86_MEMORY_PUBLIC_BRIDGE void *x86_map_fixed_area_init_pt_bridge(void)
+{
+	return init_pt;
+}
+
+X86_MEMORY_PUBLIC_BRIDGE unsigned long *x86_map_fixed_area_fixed_virt_slot_bridge(void)
+{
+	return &fixed_virt;
+}
+
+X86_MEMORY_PUBLIC_BRIDGE void x86_map_fixed_area_log_bridge(unsigned long phys,
+		unsigned long size, unsigned long virt)
+{
+	dkprintf("map_fixed: phys: 0x%lx => 0x%lx (%d pages)\n",
+			phys & PAGE_MASK, (void *)virt,
+			(int)(((phys & (PAGE_SIZE - 1)) + size +
+				PAGE_SIZE - 1) >> PAGE_SHIFT));
+}
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 static void init_fixed_area(struct page_table *pt)
 {
 	int ret;
@@ -2074,21 +2162,27 @@ static void init_fixed_area(struct page_table *pt)
 	if (ret)
 		panic("init_fixed_area: helper failed");
 }
+#endif
 
-static unsigned long x86_init_normal_get_memory_address_bridge(int type,
+X86_MEMORY_PUBLIC_BRIDGE void x86_init_fixed_panic_bridge(void)
+{
+	panic("init_fixed_area: helper failed");
+}
+
+X86_MEMORY_PUBLIC_BRIDGE unsigned long x86_init_normal_get_memory_address_bridge(int type,
 		int arg)
 {
 	return ihk_mc_get_memory_address(type, arg);
 }
 
-static int x86_init_normal_set_large_bridge(void *pt, unsigned long virt,
+X86_MEMORY_PUBLIC_BRIDGE int x86_init_normal_set_large_bridge(void *pt, unsigned long virt,
 		unsigned long phys, unsigned long attr)
 {
 	return set_pt_large_page(pt, (void *)virt, phys,
 			(enum ihk_mc_pt_attribute)attr);
 }
 
-static void x86_init_normal_log_bridge(int event, unsigned long a,
+X86_MEMORY_PUBLIC_BRIDGE void x86_init_normal_log_bridge(int event, unsigned long a,
 		unsigned long b, unsigned long c)
 {
 	switch (event) {
@@ -2105,7 +2199,12 @@ static void x86_init_normal_log_bridge(int event, unsigned long a,
 	}
 }
 
-static void x86_init_text_log_bridge(int event, unsigned long a,
+X86_MEMORY_PUBLIC_BRIDGE void x86_init_normal_panic_bridge(void)
+{
+	panic("init_normal_area: helper failed");
+}
+
+X86_MEMORY_PUBLIC_BRIDGE void x86_init_text_log_bridge(int event, unsigned long a,
 		unsigned long b, unsigned long c)
 {
 	(void)b;
@@ -2123,6 +2222,27 @@ static void x86_init_text_log_bridge(int event, unsigned long a,
 	}
 }
 
+X86_MEMORY_PUBLIC_BRIDGE unsigned long x86_init_text_map_kernel_start_bridge(void)
+{
+	return MAP_KERNEL_START;
+}
+
+X86_MEMORY_PUBLIC_BRIDGE unsigned long x86_init_text_end_bridge(void)
+{
+	return (unsigned long)_end;
+}
+
+X86_MEMORY_PUBLIC_BRIDGE void x86_init_text_panic_bridge(void)
+{
+	panic("init_text_area: helper failed");
+}
+
+X86_MEMORY_PUBLIC_BRIDGE void x86_init_low_panic_bridge(void)
+{
+	panic("init_low_area: helper failed");
+}
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 static void init_normal_area(struct page_table *pt)
 {
 	int ret;
@@ -2136,26 +2256,27 @@ static void init_normal_area(struct page_table *pt)
 	if (ret)
 		panic("init_normal_area: helper failed");
 }
+#endif
 
 extern char *find_command_line(char *name);
 
-static char *x86_init_linux_find_command_line_bridge(char *name)
+X86_MEMORY_PUBLIC_BRIDGE char *x86_init_linux_find_command_line_bridge(char *name)
 {
 	return find_command_line(name);
 }
 
-static int x86_init_linux_get_nr_memory_chunks_bridge(void)
+X86_MEMORY_PUBLIC_BRIDGE int x86_init_linux_get_nr_memory_chunks_bridge(void)
 {
 	return ihk_mc_get_nr_memory_chunks();
 }
 
-static int x86_init_linux_get_memory_chunk_bridge(int id,
+X86_MEMORY_PUBLIC_BRIDGE int x86_init_linux_get_memory_chunk_bridge(int id,
 		unsigned long *start, unsigned long *end, int *numa_id)
 {
 	return ihk_mc_get_memory_chunk(id, start, end, numa_id);
 }
 
-static void x86_init_linux_log_bridge(int event, unsigned long a,
+X86_MEMORY_PUBLIC_BRIDGE void x86_init_linux_log_bridge(int event, unsigned long a,
 		unsigned long b, unsigned long c, unsigned long d, int error)
 {
 	switch (event) {
@@ -2195,6 +2316,12 @@ static void x86_init_linux_log_bridge(int event, unsigned long a,
 	(void)error;
 }
 
+X86_MEMORY_PUBLIC_BRIDGE void x86_init_linux_panic_bridge(void)
+{
+	panic("init_linux_kernel_mapping: helper failed");
+}
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 static void init_linux_kernel_mapping(struct page_table *pt)
 {
 	int ret;
@@ -2211,7 +2338,9 @@ static void init_linux_kernel_mapping(struct page_table *pt)
 	if (ret)
 		panic("init_linux_kernel_mapping: helper failed");
 }
+#endif
 
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 void init_text_area(struct page_table *pt)
 {
 	int ret;
@@ -2225,7 +2354,9 @@ void init_text_area(struct page_table *pt)
 	if (ret)
 		panic("init_text_area: helper failed");
 }
+#endif
 
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 void *map_fixed_area(unsigned long phys, unsigned long size, int uncachable)
 {
 	void *v = (void *)fixed_virt;
@@ -2241,7 +2372,9 @@ void *map_fixed_area(unsigned long phys, unsigned long size, int uncachable)
 			x86_move_flush_tlb_bridge);
 	return ret;
 }
+#endif
 
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 void init_low_area(struct page_table *pt)
 {
 	int ret;
@@ -2251,10 +2384,23 @@ void init_low_area(struct page_table *pt)
 	if (ret)
 		panic("init_low_area: helper failed");
 }
+#endif
 
+extern char vsyscall_page[];
+
+X86_MEMORY_PUBLIC_BRIDGE void *x86_init_vsyscall_page_bridge(void)
+{
+	return vsyscall_page;
+}
+
+X86_MEMORY_PUBLIC_BRIDGE void x86_init_vsyscall_panic_bridge(void)
+{
+	panic("init_vsyscall_area:__set_pt_page failed");
+}
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 static void init_vsyscall_area(struct page_table *pt)
 {
-	extern char vsyscall_page[];
 	int error;
 
 #define	VSYSCALL_ADDR	((void *)(0xffffffffff600000))
@@ -2268,59 +2414,76 @@ static void init_vsyscall_area(struct page_table *pt)
 
 	return;
 }
+#endif
 
-static void x86_check_available_page_size_bridge(int event)
+X86_MEMORY_PUBLIC_BRIDGE void x86_check_available_page_size_bridge(int event)
 {
 	(void)event;
 	check_available_page_size();
 }
 
-static void *x86_init_page_table_alloc_bridge(int nr_pages, int flag)
+X86_MEMORY_PUBLIC_BRIDGE void *x86_init_page_table_alloc_bridge(int nr_pages, int flag)
 {
 	return _ihk_mc_alloc_aligned_pages_node(nr_pages, PAGE_P2ALIGN, flag, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);
 }
 
-static void x86_init_page_table_spin_init_bridge(void *lock)
+X86_MEMORY_PUBLIC_BRIDGE void x86_init_page_table_spin_init_bridge(void *lock)
 {
 	ihk_mc_spinlock_init((ihk_spinlock_t *)lock);
 }
 
-static void x86_init_page_table_normal_bridge(void *pt)
+X86_MEMORY_PUBLIC_BRIDGE void x86_init_page_table_normal_bridge(void *pt)
 {
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+	x86_init_normal_area_public(pt);
+#else
 	init_normal_area((struct page_table *)pt);
+#endif
 }
 
-static void x86_init_page_table_linux_bridge(void *pt)
+X86_MEMORY_PUBLIC_BRIDGE void x86_init_page_table_linux_bridge(void *pt)
 {
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+	x86_init_linux_kernel_mapping_public(pt);
+#else
 	init_linux_kernel_mapping((struct page_table *)pt);
+#endif
 }
 
-static void x86_init_page_table_fixed_bridge(void *pt)
+X86_MEMORY_PUBLIC_BRIDGE void x86_init_page_table_fixed_bridge(void *pt)
 {
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+	x86_init_fixed_area_public(pt);
+#else
 	init_fixed_area((struct page_table *)pt);
+#endif
 }
 
-static void x86_init_page_table_text_bridge(void *pt)
+X86_MEMORY_PUBLIC_BRIDGE void x86_init_page_table_text_bridge(void *pt)
 {
 	init_text_area((struct page_table *)pt);
 }
 
-static void x86_init_page_table_vsyscall_bridge(void *pt)
+X86_MEMORY_PUBLIC_BRIDGE void x86_init_page_table_vsyscall_bridge(void *pt)
 {
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+	x86_init_vsyscall_area_public(pt);
+#else
 	init_vsyscall_area((struct page_table *)pt);
+#endif
 }
 
-static void x86_init_page_table_low_bridge(void *pt)
+X86_MEMORY_PUBLIC_BRIDGE void x86_init_page_table_low_bridge(void *pt)
 {
 	init_low_area((struct page_table *)pt);
 }
 
-static void x86_init_page_table_load_bridge(void *pt)
+X86_MEMORY_PUBLIC_BRIDGE void x86_init_page_table_load_bridge(void *pt)
 {
 	load_page_table((struct page_table *)pt);
 }
 
-static void x86_init_page_table_log_bridge(int event, void *pt)
+X86_MEMORY_PUBLIC_BRIDGE void x86_init_page_table_log_bridge(int event, void *pt)
 {
 	switch (event) {
 	case 1:
@@ -2329,7 +2492,7 @@ static void x86_init_page_table_log_bridge(int event, void *pt)
 	}
 }
 
-static void x86_init_page_table_panic_bridge(int reason)
+X86_MEMORY_PUBLIC_BRIDGE void x86_init_page_table_panic_bridge(int reason)
 {
 	switch (reason) {
 	case 3:
@@ -2346,6 +2509,32 @@ static void x86_init_page_table_panic_bridge(int reason)
 	}
 }
 
+X86_MEMORY_PUBLIC_BRIDGE void **x86_init_page_table_init_pt_slot_bridge(void)
+{
+	return (void **)&init_pt;
+}
+
+X86_MEMORY_PUBLIC_BRIDGE void **x86_init_page_table_boot_pt_slot_bridge(void)
+{
+	return (void **)&boot_pt;
+}
+
+X86_MEMORY_PUBLIC_BRIDGE int *x86_init_page_table_loaded_slot_bridge(void)
+{
+	return &init_pt_loaded;
+}
+
+X86_MEMORY_PUBLIC_BRIDGE void *x86_init_page_table_lock_bridge(void)
+{
+	return &init_pt_lock;
+}
+
+X86_MEMORY_PUBLIC_BRIDGE size_t x86_init_page_table_size_bridge(void)
+{
+	return sizeof(*init_pt);
+}
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 void init_page_table(void)
 {
 	int ret;
@@ -2368,12 +2557,13 @@ void init_page_table(void)
 	if (ret)
 		panic("init_page_table: helper failed");
 }
+#endif
 
 extern void __reserve_arch_pages(unsigned long, unsigned long,
 		void (*)(struct ihk_page_allocator_desc *, 
 			unsigned long, unsigned long, int));
 
-static void x86_reserve_arch_pages_bridge(unsigned long start,
+void x86_reserve_arch_pages_bridge(unsigned long start,
 		unsigned long end, x86_reserve_pages_cb_fn_t cb_fn)
 {
 	__reserve_arch_pages(start, end,
@@ -2381,6 +2571,12 @@ static void x86_reserve_arch_pages_bridge(unsigned long start,
 				unsigned long, unsigned long, int))cb_fn);
 }
 
+void x86_reserve_arch_pages_panic_bridge(void)
+{
+	panic("ihk_mc_reserve_arch_pages: helper failed");
+}
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 void ihk_mc_reserve_arch_pages(struct ihk_page_allocator_desc *pa_allocator,
 		unsigned long start, unsigned long end,
 		void (*cb)(struct ihk_page_allocator_desc *, 
@@ -2397,8 +2593,20 @@ void ihk_mc_reserve_arch_pages(struct ihk_page_allocator_desc *pa_allocator,
 	if (ret)
 		panic("ihk_mc_reserve_arch_pages: helper failed");
 }
+#endif
 
-static void x86_addr_log_bridge(int event, unsigned long value)
+#ifdef MCKERNEL_RUST_X86_USER_COPY_PUBLIC
+#define X86_ADDR_PUBLIC_BRIDGE
+#else
+#define X86_ADDR_PUBLIC_BRIDGE static
+#endif
+
+X86_ADDR_PUBLIC_BRIDGE int x86_addr_init_pt_loaded_bridge(void)
+{
+	return init_pt_loaded;
+}
+
+X86_ADDR_PUBLIC_BRIDGE void x86_addr_log_bridge(int event, unsigned long value)
 {
 	switch (event) {
 	case X86_ADDR_LOG_KERNEL:
@@ -2414,6 +2622,10 @@ static void x86_addr_log_bridge(int event, unsigned long value)
 	}
 }
 
+#ifdef MCKERNEL_RUST_X86_USER_COPY_PUBLIC
+extern unsigned long virt_to_phys(void *v);
+extern void *phys_to_virt(unsigned long p);
+#else
 unsigned long virt_to_phys(void *v)
 {
 	return x86_virt_to_phys_body_result((unsigned long)v,
@@ -2427,6 +2639,7 @@ void *phys_to_virt(unsigned long p)
 	return x86_phys_to_virt_body_result(p, init_pt_loaded,
 			MAP_ST_START, linux_page_offset_base);
 }
+#endif
 
 #ifdef MCKERNEL_RUST_X86_USER_COPY_PUBLIC
 #define X86_USER_COPY_BRIDGE

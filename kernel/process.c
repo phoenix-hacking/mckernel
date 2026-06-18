@@ -43,6 +43,12 @@
 #include <tofu/tofu_stag_range.h>
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+#define PROCESS_SCHED_PUBLIC_BRIDGE
+#else
+#define PROCESS_SCHED_PUBLIC_BRIDGE static
+#endif
+
 //#define DEBUG_PRINT_PROCESS
 
 #ifdef DEBUG_PRINT_PROCESS
@@ -132,79 +138,85 @@ extern void procfs_delete_thread(struct thread *);
 
 static int free_process_memory_range(struct process_vm *vm,
 					struct vm_range *range);
+struct address_space *create_address_space(struct resource_set *res, int n);
+void hold_address_space(struct address_space *asp);
+void detach_address_space(struct address_space *asp, int pid);
+int init_process_vm(struct process *owner, struct address_space *asp,
+		    struct process_vm *vm);
+struct resource_set *new_resource_set(void);
+void proc_init(void);
 static void free_thread_pages(struct thread *thread);
-static void process_free_thread_pages_bridge(void *thread);
+void process_free_thread_pages_bridge(void *thread);
+int update_process_page_table(struct process_vm *vm,
+			      struct vm_range *range, uint64_t phys,
+			      enum ihk_mc_pt_attribute flag);
+int split_process_memory_range(struct process_vm *vm, struct vm_range *range,
+			       uintptr_t addr, struct vm_range **splitp);
 
-static void process_mckfd_free_bridge(struct mckfd *fdp)
+void process_mckfd_free_bridge(struct mckfd *fdp)
 {
 	kfree_tracked(fdp, __FILE__, __LINE__);
 }
 
-static void process_mcs_writer_lock_bridge(unsigned long lock_addr, void *node)
+void process_mcs_writer_lock_bridge(unsigned long lock_addr, void *node)
 {
 	mcs_rwlock_writer_lock((struct mcs_rwlock_lock *)lock_addr,
 			       (struct mcs_rwlock_node_irqsave *)node);
 }
 
-static void process_mcs_writer_unlock_bridge(unsigned long lock_addr, void *node)
+void process_mcs_writer_unlock_bridge(unsigned long lock_addr, void *node)
 {
 	mcs_rwlock_writer_unlock((struct mcs_rwlock_lock *)lock_addr,
 				 (struct mcs_rwlock_node_irqsave *)node);
 }
 
-static void process_mcs_reader_lock_bridge(unsigned long lock_addr, void *node)
+void process_mcs_reader_lock_bridge(unsigned long lock_addr, void *node)
 {
 	mcs_rwlock_reader_lock((struct mcs_rwlock_lock *)lock_addr,
 			       (struct mcs_rwlock_node_irqsave *)node);
 }
 
-static void process_mcs_reader_unlock_bridge(unsigned long lock_addr, void *node)
+void process_mcs_reader_unlock_bridge(unsigned long lock_addr, void *node)
 {
 	mcs_rwlock_reader_unlock((struct mcs_rwlock_lock *)lock_addr,
 				 (struct mcs_rwlock_node_irqsave *)node);
 }
 
-static void process_hold_thread_bridge(void *thread)
+void process_hold_thread_bridge(void *thread)
 {
 	hold_thread((struct thread *)thread);
 }
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
-static void
-process_ptrace_mcs_lock_noirq_bridge(unsigned long lock_addr, void *node)
+void process_ptrace_mcs_lock_noirq_bridge(unsigned long lock_addr, void *node)
 {
 	mcs_rwlock_writer_lock_noirq((struct mcs_rwlock_lock *)lock_addr,
 				     (struct mcs_rwlock_node *)node);
 }
 
-static void
-process_ptrace_mcs_unlock_noirq_bridge(unsigned long lock_addr, void *node)
+void process_ptrace_mcs_unlock_noirq_bridge(unsigned long lock_addr, void *node)
 {
 	mcs_rwlock_writer_unlock_noirq((struct mcs_rwlock_lock *)lock_addr,
 				       (struct mcs_rwlock_node *)node);
 }
 
-static int
-process_ptrace_alloc_debugreg_bridge(void *thread)
+int process_ptrace_alloc_debugreg_bridge(void *thread)
 {
 	return alloc_debugreg((struct thread *)thread);
 }
 
-static void
-process_ptrace_clear_single_step_bridge(void *thread)
+void process_ptrace_clear_single_step_bridge(void *thread)
 {
 	clear_single_step((struct thread *)thread);
 }
 
-static void
-process_ptrace_hold_thread_bridge(void *thread)
+void process_ptrace_hold_thread_bridge(void *thread)
 {
 	hold_thread((struct thread *)thread);
 }
 
-static void
-process_ptrace_traceme_log_bridge(int event, int pid,
-				  unsigned long value, int error)
+void process_ptrace_traceme_log_bridge(int event, int pid,
+				       unsigned long value, int error)
 {
 	switch (event) {
 	case PROCESS_PTRACE_TRACEME_LOG_ENTER:
@@ -223,24 +235,24 @@ process_ptrace_traceme_log_bridge(int event, int pid,
 }
 #endif
 
-static void process_policy_free_bridge(void *policy)
+void process_policy_free_bridge(void *policy)
 {
 	kfree_tracked(policy, __FILE__, __LINE__);
 }
 
-static void process_optional_free_bridge(void *ptr)
+void process_optional_free_bridge(void *ptr)
 {
 	kfree_tracked(ptr, __FILE__, __LINE__);
 }
 
-static int process_default_ncpus_bridge(void)
+int process_default_ncpus_bridge(void)
 {
 	struct ihk_mc_cpu_info *infop = ihk_mc_get_cpu_info();
 
 	return infop ? infop->ncpus : -EINVAL;
 }
 
-static void process_create_cpu_log_bridge(int event, int pid, int cpu)
+void process_create_cpu_log_bridge(int event, int pid, int cpu)
 {
 	switch (event) {
 	case PROCESS_CREATE_CPU_LOG_INVALID:
@@ -256,12 +268,12 @@ static void process_create_cpu_log_bridge(int event, int pid, int cpu)
 	}
 }
 
-static void process_spin_init_bridge(unsigned long lock_addr)
+void process_spin_init_bridge(unsigned long lock_addr)
 {
 	ihk_mc_spinlock_init((ihk_spinlock_t *)lock_addr);
 }
 
-static void process_rwlock_init_bridge(unsigned long lock_addr)
+void process_rwlock_init_bridge(unsigned long lock_addr)
 {
 	mcs_rwlock_init((mcs_rwlock_lock_t *)lock_addr);
 }
@@ -284,65 +296,65 @@ static void process_mcs_lock_init_bridge(unsigned long lock_addr)
 }
 #endif
 
-static void process_vm_rwspin_init_bridge(unsigned long lock_addr)
+void process_vm_rwspin_init_bridge(unsigned long lock_addr)
 {
 	ihk_rwspinlock_init((ihk_rwspinlock_t *)lock_addr);
 }
 
-static void process_vm_init_numa_log_bridge(int numa_id)
+void process_vm_init_numa_log_bridge(int numa_id)
 {
 	kprintf("%s: error: NUMA id is larger than mask size!\n",
 		"init_process_vm");
 	(void)numa_id;
 }
 
-static void *process_alloc_bridge(unsigned long size, unsigned long flags)
+void *process_alloc_bridge(unsigned long size, unsigned long flags)
 {
 	return kmalloc_tracked(size, flags, __FILE__, __LINE__);
 }
 
-static void *process_pt_create_bridge(unsigned long flags)
+void *process_pt_create_bridge(unsigned long flags)
 {
 	return ihk_mc_pt_create(flags);
 }
 
-static unsigned long process_spin_lock_bridge(unsigned long lock_addr)
+unsigned long process_spin_lock_bridge(unsigned long lock_addr)
 {
 	return ihk_mc_spinlock_lock((ihk_spinlock_t *)lock_addr);
 }
 
-static void process_spin_unlock_bridge(unsigned long lock_addr,
-				       unsigned long irqstate)
+void process_spin_unlock_bridge(unsigned long lock_addr,
+				unsigned long irqstate)
 {
 	ihk_mc_spinlock_unlock((ihk_spinlock_t *)lock_addr, irqstate);
 }
 
-static void process_sched_noirq_lock_bridge(unsigned long lock_addr)
+void process_sched_noirq_lock_bridge(unsigned long lock_addr)
 {
 	ihk_mc_spinlock_lock_noirq((ihk_spinlock_t *)lock_addr);
 }
 
-static void process_sched_noirq_unlock_bridge(unsigned long lock_addr)
+void process_sched_noirq_unlock_bridge(unsigned long lock_addr)
 {
 	ihk_mc_spinlock_unlock_noirq((ihk_spinlock_t *)lock_addr);
 }
 
-static void process_rw_read_lock_bridge(unsigned long lock_addr)
+void process_rw_read_lock_bridge(unsigned long lock_addr)
 {
 	ihk_rwspinlock_read_lock_noirq((ihk_rwspinlock_t *)lock_addr);
 }
 
-static void process_rw_read_unlock_bridge(unsigned long lock_addr)
+void process_rw_read_unlock_bridge(unsigned long lock_addr)
 {
 	ihk_rwspinlock_read_unlock_noirq((ihk_rwspinlock_t *)lock_addr);
 }
 
-static void process_rw_write_lock_bridge(unsigned long lock_addr)
+void process_rw_write_lock_bridge(unsigned long lock_addr)
 {
 	ihk_rwspinlock_write_lock_noirq((ihk_rwspinlock_t *)lock_addr);
 }
 
-static void process_rw_write_unlock_bridge(unsigned long lock_addr)
+void process_rw_write_unlock_bridge(unsigned long lock_addr)
 {
 	ihk_rwspinlock_write_unlock_noirq((ihk_rwspinlock_t *)lock_addr);
 }
@@ -367,17 +379,17 @@ static void process_sched_waitq_finish_bridge(unsigned long waitq_addr,
 			  (waitq_entry_t *)entry_addr);
 }
 
-static int process_sched_vector_bridge(int vector_key)
+PROCESS_SCHED_PUBLIC_BRIDGE int process_sched_vector_bridge(int vector_key)
 {
 	return ihk_mc_get_vector(vector_key);
 }
 
-static void process_sched_interrupt_bridge(int cpu, int vector)
+PROCESS_SCHED_PUBLIC_BRIDGE void process_sched_interrupt_bridge(int cpu, int vector)
 {
 	ihk_mc_interrupt_cpu(cpu, vector);
 }
 
-static void process_sched_schedule_bridge(void)
+PROCESS_SCHED_PUBLIC_BRIDGE void process_sched_schedule_bridge(void)
 {
 	schedule();
 }
@@ -390,17 +402,17 @@ static void process_sched_migrate_log_bridge(unsigned long thread_addr,
 		 "sched_request_migrate", tid, cpu_id);
 }
 
-static unsigned long process_sched_cpu_local_bridge(int cpu_id)
+PROCESS_SCHED_PUBLIC_BRIDGE unsigned long process_sched_cpu_local_bridge(int cpu_id)
 {
 	return (unsigned long)get_cpu_local_var(cpu_id);
 }
 
-static void process_sched_waitq_wakeup_bridge(unsigned long waitq_addr)
+PROCESS_SCHED_PUBLIC_BRIDGE void process_sched_waitq_wakeup_bridge(unsigned long waitq_addr)
 {
 	waitq_wakeup((waitq_t *)waitq_addr);
 }
 
-static void process_sched_do_migrate_log_bridge(unsigned long thread_addr,
+PROCESS_SCHED_PUBLIC_BRIDGE void process_sched_do_migrate_log_bridge(unsigned long thread_addr,
 						int tid, int old_cpu_id,
 						int new_cpu_id)
 {
@@ -422,7 +434,7 @@ static void process_replace_tid_log_bridge(int tid, void *thread, int new_tid)
 		"__find_and_replace_tid", tid, thread, new_tid);
 }
 
-static void process_release_thread_profile_bridge(void *thread, void *proc)
+void process_release_thread_profile_bridge(void *thread, void *proc)
 {
 #ifdef PROFILE_ENABLE
 	profile_accumulate_events(thread, proc);
@@ -433,32 +445,32 @@ static void process_release_thread_profile_bridge(void *thread, void *proc)
 #endif
 }
 
-static void process_procfs_delete_thread_bridge(void *thread)
+void process_procfs_delete_thread_bridge(void *thread)
 {
 	procfs_delete_thread(thread);
 }
 
-static void process_destroy_thread_bridge(void *thread)
+void process_destroy_thread_bridge(void *thread)
 {
 	destroy_thread(thread);
 }
 
-static void process_release_vm_bridge(void *vm)
+void process_release_vm_bridge(void *vm)
 {
 	release_process_vm(vm);
 }
 
-static void process_flush_vm_bridge(void *vm)
+void process_flush_vm_bridge(void *vm)
 {
 	flush_nfo_tlb_mm(vm);
 }
 
-static void process_free_all_ranges_bridge(void *vm)
+void process_free_all_ranges_bridge(void *vm)
 {
 	free_all_process_memory_range(vm);
 }
 
-static void process_free_vm_bridge(void *vm)
+void process_free_vm_bridge(void *vm)
 {
 	kfree_tracked(vm, __FILE__, __LINE__);
 }
@@ -496,6 +508,7 @@ static const struct process_init_state_offsets process_init_state_offsets = {
 	.enable_uti_offset = __builtin_offsetof(struct process, enable_uti),
 };
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 static const struct process_find_thread_offsets process_find_thread_offsets = {
 	.thread_hash_list_offset = __builtin_offsetof(struct thread, hash_list),
 	.thread_tid_offset = __builtin_offsetof(struct thread, tid),
@@ -508,6 +521,7 @@ static const struct process_find_process_offsets process_find_process_offsets = 
 		__builtin_offsetof(struct process, hash_list),
 	.process_pid_offset = __builtin_offsetof(struct process, pid),
 };
+#endif
 
 void
 init_process(struct process *proc, struct process *parent)
@@ -547,6 +561,7 @@ init_process(struct process *proc, struct process *parent)
 #endif
 }
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void
 chain_process(struct process *proc)
 {
@@ -564,7 +579,9 @@ chain_process(struct process *proc)
 		process_mcs_writer_lock_bridge,
 		process_mcs_writer_unlock_bridge);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void
 chain_thread(struct thread *thread)
 {
@@ -584,7 +601,9 @@ chain_thread(struct thread *thread)
 		process_mcs_writer_lock_bridge,
 		process_mcs_writer_unlock_bridge, NULL);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 struct address_space *
 create_address_space(struct resource_set *res, int n)
 {
@@ -603,7 +622,9 @@ create_address_space(struct resource_set *res, int n)
 		NULL,
 		process_spin_init_bridge);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void
 hold_address_space(struct address_space *asp)
 {
@@ -611,12 +632,14 @@ hold_address_space(struct address_space *asp)
 		__builtin_offsetof(struct address_space, refcount),
 		NULL);
 }
+#endif
 
-static void process_pt_destroy_bridge(void *page_table)
+void process_pt_destroy_bridge(void *page_table)
 {
 	ihk_mc_pt_destroy(page_table);
 }
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void
 release_address_space(struct address_space *asp)
 {
@@ -629,12 +652,14 @@ release_address_space(struct address_space *asp)
 		process_pt_destroy_bridge,
 		process_optional_free_bridge);
 }
+#endif
 
-static void process_release_address_space_action_bridge(void *asp)
+void process_release_address_space_action_bridge(void *asp)
 {
 	release_address_space(asp);
 }
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void
 detach_address_space(struct address_space *asp, int pid)
 {
@@ -643,47 +668,61 @@ detach_address_space(struct address_space *asp, int pid)
 		__builtin_offsetof(struct address_space, nslots),
 		process_release_address_space_action_bridge);
 }
+#endif
 
-static int
+int process_init_process_public_bridge(void *proc, void *parent)
+{
+	init_process(proc, parent);
+	return 0;
+}
+
+void process_proc_init_panic_bridge(void)
+{
+	panic("no mem for resource_set");
+}
+
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
+int
 init_process_vm(struct process *owner, struct address_space *asp, struct process_vm *vm)
 {
 	return process_vm_init_body_result(vm, owner, asp,
 		ihk_mc_get_nr_numa_nodes(), process_vm_rwspin_init_bridge,
 		process_spin_init_bridge, process_vm_init_numa_log_bridge);
 }
+#endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
-static void *process_create_thread_alloc_pages_bridge(int npages,
-						      unsigned long flags)
+void *process_create_thread_alloc_pages_bridge(int npages,
+					      unsigned long flags)
 {
 	return _ihk_mc_alloc_aligned_pages_node(npages, PAGE_P2ALIGN, flags, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);
 }
 
-static void *process_create_thread_address_space_bridge(int nslots)
+void *process_create_thread_address_space_bridge(int nslots)
 {
 	return create_address_space(get_this_cpu_local_var()->resource_set, nslots);
 }
 
-static void process_create_thread_release_address_space_bridge(void *asp)
+void process_create_thread_release_address_space_bridge(void *asp)
 {
 	release_address_space(asp);
 }
 
-static int process_create_thread_init_process_bridge(void *proc, void *parent)
+int process_create_thread_init_process_bridge(void *proc, void *parent)
 {
 	init_process(proc, parent);
 	return 0;
 }
 
-static int process_create_thread_init_vm_bridge(void *owner, void *asp,
-						void *vm)
+int process_create_thread_init_vm_bridge(void *owner, void *asp,
+					void *vm)
 {
 	return init_process_vm(owner, asp, vm);
 }
 
-static void process_create_thread_init_user_bridge(void *thread,
-		unsigned long stack_top, unsigned long user_pc,
-		unsigned long user_sp)
+void process_create_thread_init_user_bridge(void *thread,
+	unsigned long stack_top, unsigned long user_pc,
+	unsigned long user_sp)
 {
 	struct thread *t = thread;
 
@@ -692,6 +731,7 @@ static void process_create_thread_init_user_bridge(void *thread,
 }
 #endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 struct thread *create_thread(unsigned long user_pc,
 		unsigned long *__cpu_set, size_t cpu_set_size)
 {
@@ -857,6 +897,7 @@ err:
 	return NULL;
 #endif
 }
+#endif
 
 struct thread *
 clone_thread(struct thread *org, unsigned long pc, unsigned long sp,
@@ -1172,6 +1213,7 @@ free_thread:
 	return NULL;
 }
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int
 ptrace_traceme(void)
 {
@@ -1269,6 +1311,7 @@ ptrace_traceme(void)
 	return error;
 #endif
 }
+#endif
 
 struct copy_args {
 	struct process_vm *new_vm;
@@ -1389,15 +1432,15 @@ out:
 	return error;
 }
 
-static struct vm_range *process_add_range_alloc_bridge(unsigned long size);
-static void process_add_range_free_bridge(struct vm_range *range);
-static int process_add_range_insert_bridge(struct process_vm *vm,
-					   struct vm_range *range);
-static int process_visit_pte_range_bridge(void *page_table,
-		unsigned long start, unsigned long end, int pgshift,
-		int flags, void *visit_fn, void *arg);
-static int process_memory_range_free_bridge(struct process_vm *vm,
-					    struct vm_range *range);
+struct vm_range *process_add_range_alloc_bridge(unsigned long size);
+void process_add_range_free_bridge(struct vm_range *range);
+int process_add_range_insert_bridge(struct process_vm *vm,
+				    struct vm_range *range);
+int process_visit_pte_range_bridge(void *page_table, unsigned long start,
+				   unsigned long end, int pgshift, int flags,
+				   void *visit_fn, void *arg);
+int process_memory_range_free_bridge(struct process_vm *vm,
+				     struct vm_range *range);
 
 static struct vm_range *process_copy_range_lookup_bridge(struct process_vm *vm,
 		unsigned long start, unsigned long end)
@@ -1437,13 +1480,13 @@ static int copy_user_ranges(struct process_vm *vm, struct process_vm *orgvm)
 			process_copy_user_ranges_log_bridge);
 }
 
-static unsigned long process_update_page_table_attr_bridge(unsigned long flag,
+unsigned long process_update_page_table_attr_bridge(unsigned long flag,
 		unsigned long fault, void *ptep)
 {
 	return arch_vrflag_to_ptattr(flag, fault, ptep);
 }
 
-static int process_update_page_table_set_range_bridge(void *page_table,
+int process_update_page_table_set_range_bridge(void *page_table,
 		struct process_vm *vm, unsigned long start, unsigned long end,
 		unsigned long phys, unsigned long attr, int pgshift,
 		struct vm_range *range, int flags)
@@ -1452,12 +1495,13 @@ static int process_update_page_table_set_range_bridge(void *page_table,
 			phys, attr, pgshift, range, flags);
 }
 
-static void process_update_page_table_log_bridge(int error)
+void process_update_page_table_log_bridge(int error)
 {
 	kprintf("update_process_page_table:ihk_mc_pt_set_range failed. %d\n",
 		error);
 }
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int update_process_page_table(struct process_vm *vm,
                           struct vm_range *range, uint64_t phys,
 			  enum ihk_mc_pt_attribute flag)
@@ -1468,31 +1512,32 @@ int update_process_page_table(struct process_vm *vm,
 		process_update_page_table_set_range_bridge,
 		process_update_page_table_log_bridge);
 }
+#endif
 
-static int process_split_shm_lookup_page_bridge(struct memobj *obj, long off,
+int process_split_shm_lookup_page_bridge(struct memobj *obj, long off,
 		int p2align, uintptr_t *physp, unsigned long *pflag)
 {
 	return memobj_lookup_page(obj, off, p2align, physp, pflag);
 }
 
-static void *process_split_shm_phys_to_page_bridge(unsigned long phys)
+void *process_split_shm_phys_to_page_bridge(unsigned long phys)
 {
 	return phys_to_page(phys);
 }
 
-static int process_split_shm_update_page_bridge(struct memobj *obj,
+int process_split_shm_update_page_bridge(struct memobj *obj,
 		void *page_table, void *page, void *vaddr)
 {
 	return memobj_update_page(obj, page_table, page, vaddr);
 }
 
-static struct vm_range *process_split_range_alloc_bridge(unsigned long size,
+struct vm_range *process_split_range_alloc_bridge(unsigned long size,
 		unsigned long flags)
 {
 	return kmalloc_tracked(size, flags, __FILE__, __LINE__);
 }
 
-static void process_split_range_alloc_log_bridge(struct process_vm *vm,
+void process_split_range_alloc_log_bridge(struct process_vm *vm,
 		struct vm_range *range, unsigned long addr, void *splitp)
 {
 	ekprintf("split_process_memory_range(%p,%lx-%lx,%lx,%p):"
@@ -1500,25 +1545,25 @@ static void process_split_range_alloc_log_bridge(struct process_vm *vm,
 			vm, range->start, range->end, addr, splitp);
 }
 
-static void process_split_range_publish_log_bridge(int error)
+void process_split_range_publish_log_bridge(int error)
 {
 	kprintf("%s: ERROR: could not insert range: %d\n",
 		"split_process_memory_range", error);
 }
 
-static int process_split_range_pt_split_bridge(void *page_table,
+int process_split_range_pt_split_bridge(void *page_table,
 		struct process_vm *vm, struct vm_range *range, void *addr)
 {
 	return ihk_mc_pt_split(page_table, vm, range, addr);
 }
 
-static void process_split_range_pt_log_bridge(int error)
+void process_split_range_pt_log_bridge(int error)
 {
 	ekprintf("split_process_memory_range:"
 			"ihk_mc_pt_split failed. %d\n", error);
 }
 
-static void process_split_shm_log_bridge(int event, int error)
+void process_split_shm_log_bridge(int event, int error)
 {
 	switch (event) {
 	case PROCESS_SPLIT_SHM_LOG_LOOKUP_FAILED:
@@ -1534,6 +1579,62 @@ static void process_split_shm_log_bridge(int event, int error)
 	}
 }
 
+unsigned long process_split_page_pgshift_offset_bridge(void)
+{
+	return __builtin_offsetof(struct page, pgshift);
+}
+
+int process_split_range_insert_bridge(struct process_vm *vm,
+		struct vm_range *range)
+{
+	return vm_range_insert(vm, range);
+}
+
+void process_split_range_public_log_bridge(int event, struct process_vm *vm,
+		struct vm_range *range, unsigned long addr,
+		struct vm_range **splitp, struct vm_range *newrange, int error)
+{
+	switch (event) {
+	case 1:
+		dkprintf("split_process_memory_range(%p,%lx-%lx,%lx,%p)\n",
+				vm, range->start, range->end, addr, splitp);
+		break;
+	case 2:
+		dkprintf("split_process_memory_range(%p,%lx-%lx,%lx,%p):"
+				" %d %p %lx-%lx\n",
+				vm, range->start, range->end, addr, splitp,
+				error, newrange,
+				newrange? newrange->start: 0,
+				newrange? newrange->end: 0);
+		break;
+	default:
+		break;
+	}
+}
+
+#ifdef ENABLE_TOFU
+void process_split_range_tofu_init_bridge(struct vm_range *range)
+{
+	INIT_LIST_HEAD(&range->tofu_stag_list);
+}
+
+void process_split_range_tofu_split_bridge(struct process_vm *vm,
+		struct vm_range *range_low, struct vm_range *range_high,
+		uintptr_t addr)
+{
+	extern int tofu_stag_split_vm_range_on_addr(struct process_vm *vm,
+			struct vm_range *range_low, struct vm_range *range_high,
+			uintptr_t addr);
+	int moved =
+		tofu_stag_split_vm_range_on_addr(vm, range_low, range_high, addr);
+	if (moved > 0) {
+		kprintf("%s: moved %d stag ranges\n",
+			"split_process_memory_range", moved);
+	}
+}
+#endif
+
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int split_process_memory_range(struct process_vm *vm, struct vm_range *range,
 		uintptr_t addr, struct vm_range **splitp)
 {
@@ -1594,9 +1695,10 @@ out:
 			newrange? newrange->start: 0, newrange? newrange->end: 0);
 	return error;
 }
+#endif
 
 #ifdef ENABLE_TOFU
-static int process_join_range_tofu_bridge(struct process_vm *vm,
+int process_join_range_tofu_bridge(struct process_vm *vm,
 		struct vm_range *surviving, struct vm_range *merging)
 {
 	/* Move Tofu stag range entries */
@@ -1620,19 +1722,36 @@ static int process_join_range_tofu_bridge(struct process_vm *vm,
 }
 #endif
 
-static void process_range_kfree_bridge(struct vm_range *range)
+void process_range_kfree_bridge(struct vm_range *range)
 {
 	kfree_tracked(range, __FILE__, __LINE__);
 }
 
+void process_join_range_log_bridge(int event, struct process_vm *vm,
+		struct vm_range *surviving, struct vm_range *merging, int error)
+{
+	switch (event) {
+	case 1:
+		dkprintf("join_process_memory_range(%p,%lx-%lx,%lx-%lx)\n",
+			vm, surviving->start, surviving->end,
+			merging->start, merging->end);
+		break;
+	case 2:
+		dkprintf("join_process_memory_range(%p,%lx-%lx,%p): %d\n",
+			vm, surviving->start, surviving->end, merging, error);
+		break;
+	default:
+		break;
+	}
+}
+
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int join_process_memory_range(struct process_vm *vm,
 		struct vm_range *surviving, struct vm_range *merging)
 {
 	int error;
 
-	dkprintf("join_process_memory_range(%p,%lx-%lx,%lx-%lx)\n",
-			vm, surviving->start, surviving->end,
-			merging->start, merging->end);
+	process_join_range_log_bridge(1, vm, surviving, merging, 0);
 
 	error = process_join_range_body_result(vm, &vm->vm_range_tree,
 			vm->range_cache, VM_RANGE_CACHE_SIZE, surviving,
@@ -1644,10 +1763,10 @@ int join_process_memory_range(struct process_vm *vm,
 			NULL
 #endif
 			);
-	dkprintf("join_process_memory_range(%p,%lx-%lx,%p): %d\n",
-			vm, surviving->start, surviving->end, merging, error);
+	process_join_range_log_bridge(2, vm, surviving, merging, error);
 	return error;
 }
+#endif
 
 static int process_free_range_page_size_bridge(size_t current, size_t *nextp)
 {
@@ -1677,17 +1796,17 @@ static int process_free_range_clear_main_bridge(struct process_vm *vm,
 	return error;
 }
 
-static void process_free_range_noirq_lock_bridge(unsigned long lock_addr)
+void process_free_range_noirq_lock_bridge(unsigned long lock_addr)
 {
 	ihk_mc_spinlock_lock_noirq((ihk_spinlock_t *)lock_addr);
 }
 
-static void process_free_range_noirq_unlock_bridge(unsigned long lock_addr)
+void process_free_range_noirq_unlock_bridge(unsigned long lock_addr)
 {
 	ihk_mc_spinlock_unlock_noirq((ihk_spinlock_t *)lock_addr);
 }
 
-static int process_free_range_pt_free_bridge(void *page_table,
+int process_free_range_pt_free_bridge(void *page_table,
 		struct process_vm *vm, unsigned long start, unsigned long end,
 		void *memobj)
 {
@@ -1779,49 +1898,58 @@ static int free_process_memory_range(struct process_vm *vm,
 			process_range_kfree_bridge, process_free_range_log_bridge);
 }
 
-static int process_memory_range_free_bridge(struct process_vm *vm,
-					    struct vm_range *range)
+int process_memory_range_free_bridge(struct process_vm *vm,
+				     struct vm_range *range)
 {
 	return free_process_memory_range(vm, range);
 }
 
-static void process_memory_range_free_log_bridge(struct process_vm *vm,
-						 struct vm_range *range,
-						 int error)
+void process_memory_range_free_log_bridge(struct process_vm *vm,
+					  struct vm_range *range,
+					  int error)
 {
 	ekprintf("free_process_memory(%p):"
 			"free range failed. %lx-%lx %d\n",
 			vm, range->start, range->end, error);
 }
 
-static void process_flush_memory_log_bridge(struct process_vm *vm,
-					    struct vm_range *range,
-					    int error)
+void process_flush_memory_log_bridge(struct process_vm *vm,
+				     struct vm_range *range,
+				     int error)
 {
 	ekprintf("flush_process_memory(%p):"
 			"free range failed. %lx-%lx %d\n",
 			vm, range->start, range->end, error);
 }
 
-static int process_remove_range_split_bridge(struct process_vm *vm,
-					     struct vm_range *range,
-					     unsigned long addr,
-					     struct vm_range **splitp)
+void process_flush_memory_debug_bridge(struct process_vm *vm, int event)
+{
+	if (event == 0) {
+		dkprintf("flush_process_memory(%p)\n", vm);
+	} else {
+		dkprintf("flush_process_memory(%p):\n", vm);
+	}
+}
+
+int process_remove_range_split_bridge(struct process_vm *vm,
+				      struct vm_range *range,
+				      unsigned long addr,
+				      struct vm_range **splitp)
 {
 	return split_process_memory_range(vm, range, addr, splitp);
 }
 
-static void process_remove_range_xpmem_bridge(struct process_vm *vm,
-					      struct vm_range *range)
+void process_remove_range_xpmem_bridge(struct process_vm *vm,
+				       struct vm_range *range)
 {
 	xpmem_remove_process_memory_range(vm, range);
 }
 
-static void process_remove_range_log_bridge(int event, struct process_vm *vm,
-					    unsigned long start,
-					    unsigned long end,
-					    struct vm_range *range,
-					    int error)
+void process_remove_range_log_bridge(int event, struct process_vm *vm,
+				     unsigned long start,
+				     unsigned long end,
+				     struct vm_range *range,
+				     int error)
 {
 	switch (event) {
 	case PROCESS_REMOVE_RANGE_LOG_NO_STRAIGHT:
@@ -1849,6 +1977,7 @@ static void process_remove_range_log_bridge(int event, struct process_vm *vm,
 	}
 }
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int remove_process_memory_range(struct process_vm *vm,
 		unsigned long start, unsigned long end, int *ro_freedp)
 {
@@ -1861,6 +1990,7 @@ int remove_process_memory_range(struct process_vm *vm,
 			process_memory_range_free_bridge,
 			process_remove_range_log_bridge);
 }
+#endif
 
 static void vm_range_insert_log_bridge(int event, struct process_vm *vm,
 				       struct vm_range *newrange,
@@ -1889,10 +2019,10 @@ static int vm_range_insert(struct process_vm *vm, struct vm_range *newrange)
 			vm_range_insert_log_bridge, vm_range_insert_dump_bridge);
 }
 
-static void process_range_public_log_bridge(int event, struct process_vm *vm,
-					    struct vm_range *range,
-					    unsigned long start,
-					    unsigned long end, int error)
+void process_range_public_log_bridge(int event, struct process_vm *vm,
+				     struct vm_range *range,
+				     unsigned long start,
+				     unsigned long end, int error)
 {
 	switch (event) {
 	case PROCESS_RANGE_PUBLIC_LOG_LOOKUP_ENTER:
@@ -1950,17 +2080,17 @@ struct memset_smp_req {
 	int val;
 };
 
-static void *process_memset_smp_phys_to_virt_bridge(unsigned long phys)
+void *process_memset_smp_phys_to_virt_bridge(unsigned long phys)
 {
 	return phys_to_virt(phys);
 }
 
-static void process_memset_smp_memset_bridge(void *addr, int value, size_t len)
+void process_memset_smp_memset_bridge(void *addr, int value, size_t len)
 {
 	memset(addr, value, len);
 }
 
-static void process_memset_smp_log_bridge(int event, int cpu_index,
+void process_memset_smp_log_bridge(int event, int cpu_index,
 		int nr_cpus, unsigned long phys, size_t len,
 		unsigned long start, unsigned long end)
 {
@@ -1974,6 +2104,7 @@ static void process_memset_smp_log_bridge(int event, int cpu_index,
 	}
 }
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int memset_smp_handler(int cpu_index, int nr_cpus, void *arg)
 {
 	struct memset_smp_req *req =
@@ -1985,18 +2116,20 @@ int memset_smp_handler(int cpu_index, int nr_cpus, void *arg)
 			process_memset_smp_memset_bridge,
 			process_memset_smp_log_bridge);
 }
+#endif
 
-static unsigned long process_memset_smp_virt_to_phys_bridge(void *addr)
+unsigned long process_memset_smp_virt_to_phys_bridge(void *addr)
 {
 	return virt_to_phys(addr);
 }
 
-static int process_memset_smp_call_bridge(void *cpu_set, void *handler,
+int process_memset_smp_call_bridge(void *cpu_set, void *handler,
 		void *arg)
 {
 	return smp_call_func((cpu_set_t *)cpu_set, (smp_func_t)handler, arg);
 }
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void *memset_smp(cpu_set_t *cpu_set, void *s, int c, size_t n)
 {
 	struct memset_smp_req req;
@@ -2008,45 +2141,46 @@ void *memset_smp(cpu_set_t *cpu_set, void *s, int c, size_t n)
 			process_memset_smp_call_bridge);
 	return NULL;
 }
+#endif
 
-static struct vm_range *process_add_range_alloc_bridge(unsigned long size)
+struct vm_range *process_add_range_alloc_bridge(unsigned long size)
 {
 	return kmalloc_tracked(size, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 }
 
-static void process_add_range_free_bridge(struct vm_range *range)
+void process_add_range_free_bridge(struct vm_range *range)
 {
 	kfree_tracked(range, __FILE__, __LINE__);
 }
 
-static int process_add_range_insert_bridge(struct process_vm *vm,
-					   struct vm_range *range)
+int process_add_range_insert_bridge(struct process_vm *vm,
+				    struct vm_range *range)
 {
 	return vm_range_insert(vm, range);
 }
 
-static int process_add_range_update_bridge(struct process_vm *vm,
-					   struct vm_range *range,
-					   unsigned long phys,
-					   unsigned long attr)
+int process_add_range_update_bridge(struct process_vm *vm,
+				    struct vm_range *range,
+				    unsigned long phys,
+				    unsigned long attr)
 {
 	return update_process_page_table(vm, range, phys, attr);
 }
 
-static void process_add_range_remove_bridge(struct process_vm *vm,
-					    unsigned long start,
-					    unsigned long end)
+void process_add_range_remove_bridge(struct process_vm *vm,
+				     unsigned long start,
+				     unsigned long end)
 {
 	remove_process_memory_range(vm, start, end, NULL);
 }
 
-static void process_add_range_mark_xpmem_bridge(struct vm_range *range)
+void process_add_range_mark_xpmem_bridge(struct vm_range *range)
 {
 	range->memobj->flags |= MF_XPMEM;
 }
 
-static void process_add_range_memclear_bridge(unsigned long phys,
-					      unsigned long bytes)
+void process_add_range_memclear_bridge(unsigned long phys,
+				       unsigned long bytes)
 {
 #ifdef ARCH_MEMCLEAR
 	memclear((void *)phys_to_virt(phys), bytes);
@@ -2055,9 +2189,9 @@ static void process_add_range_memclear_bridge(unsigned long phys,
 #endif
 }
 
-static void process_add_range_log_bridge(int event, int rc,
-					 unsigned long start,
-					 unsigned long end)
+void process_add_range_log_bridge(int event, int rc,
+				  unsigned long start,
+				  unsigned long end)
 {
 	switch (event) {
 	case PROCESS_ADD_RANGE_LOG_ALLOC_FAILED:
@@ -2085,6 +2219,7 @@ static void process_add_range_log_bridge(int event, int rc,
 	}
 }
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int add_process_memory_range(struct process_vm *vm,
 		unsigned long start, unsigned long end,
 		unsigned long phys, unsigned long flag,
@@ -2102,7 +2237,9 @@ int add_process_memory_range(struct process_vm *vm,
 			process_add_range_mark_xpmem_bridge,
 			process_add_range_memclear_bridge, process_add_range_log_bridge);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 struct vm_range *lookup_process_memory_range(
 		struct process_vm *vm, uintptr_t start, uintptr_t end)
 {
@@ -2130,14 +2267,15 @@ int extend_up_process_memory_range(struct process_vm *vm,
 	return process_extend_up_public_result(vm, range, newend,
 			process_range_public_log_bridge);
 }
+#endif
 
-static unsigned long process_change_prot_attr_bridge(unsigned long flag,
+unsigned long process_change_prot_attr_bridge(unsigned long flag,
 		unsigned long fault, void *ptep)
 {
 	return arch_vrflag_to_ptattr(flag, fault, ptep);
 }
 
-static int process_change_prot_pt_change_bridge(void *page_table,
+int process_change_prot_pt_change_bridge(void *page_table,
 		unsigned long start, unsigned long end,
 		unsigned long clrattr, unsigned long setattr)
 {
@@ -2145,7 +2283,7 @@ static int process_change_prot_pt_change_bridge(void *page_table,
 			(void *)end, clrattr, setattr);
 }
 
-static void process_change_prot_public_log_bridge(int event,
+void process_change_prot_public_log_bridge(int event,
 		struct process_vm *vm, struct vm_range *range,
 		unsigned long protflag, int error)
 {
@@ -2169,6 +2307,7 @@ static void process_change_prot_public_log_bridge(int event,
 	}
 }
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int change_prot_process_memory_range(struct process_vm *vm,
 		struct vm_range *range, unsigned long protflag)
 {
@@ -2179,6 +2318,7 @@ int change_prot_process_memory_range(struct process_vm *vm,
 			process_change_prot_pt_change_bridge,
 			process_change_prot_public_log_bridge);
 }
+#endif
 
 struct rfp_args {
 	off_t off;
@@ -2186,8 +2326,8 @@ struct rfp_args {
 	struct memobj *memobj;
 };
 
-static int remap_one_page(void *arg0, page_table_t pt, pte_t *ptep,
-		void *pgaddr, int pgshift)
+int remap_one_page(void *arg0, page_table_t pt, pte_t *ptep,
+		   void *pgaddr, int pgshift)
 {
 	struct rfp_args * const args = arg0;
 	const size_t pgsize = (size_t)1 << pgshift;
@@ -2230,9 +2370,9 @@ out:
 	return error;
 }
 
-static int process_visit_pte_range_bridge(void *page_table,
-		unsigned long start, unsigned long end, int pgshift,
-		int flags, void *visit_fn, void *arg)
+int process_visit_pte_range_bridge(void *page_table, unsigned long start,
+				   unsigned long end, int pgshift, int flags,
+				   void *visit_fn, void *arg)
 {
 	return visit_pte_range(page_table, (void *)start, (void *)end,
 			pgshift, flags,
@@ -2240,9 +2380,10 @@ static int process_visit_pte_range_bridge(void *page_table,
 			visit_fn, arg);
 }
 
-static void process_remap_range_log_bridge(int event, struct process_vm *vm,
-		struct vm_range *range, unsigned long start, unsigned long end,
-		long off, int old_pgshift, int error)
+void process_remap_range_log_bridge(int event, struct process_vm *vm,
+				    struct vm_range *range, unsigned long start,
+				    unsigned long end, long off,
+				    int old_pgshift, int error)
 {
 	switch (event) {
 	case PROCESS_REMAP_RANGE_LOG_PGSHIFT:
@@ -2257,6 +2398,7 @@ static void process_remap_range_log_bridge(int event, struct process_vm *vm,
 	}
 }
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int remap_process_memory_range(struct process_vm *vm, struct vm_range *range,
 		uintptr_t start, uintptr_t end, off_t off)
 {
@@ -2279,13 +2421,14 @@ int remap_process_memory_range(struct process_vm *vm, struct vm_range *range,
 			vm, range, start, end, off, error);
 	return error;
 }
+#endif
 
 struct sync_args {
 	struct memobj *memobj;
 };
 
-static int sync_one_page(void *arg0, page_table_t pt, pte_t *ptep,
-		void *pgaddr, int pgshift)
+int sync_one_page(void *arg0, page_table_t pt, pte_t *ptep,
+		  void *pgaddr, int pgshift)
 {
 	struct sync_args *args = arg0;
 	const size_t pgsize = (size_t)1 << pgshift;
@@ -2325,42 +2468,43 @@ out:
 	return error;
 }
 
-static void process_sync_range_log_bridge(struct process_vm *vm,
-		struct vm_range *range, unsigned long start, unsigned long end,
-		int error)
+void process_sync_range_log_bridge(struct process_vm *vm,
+				   struct vm_range *range, unsigned long start,
+				   unsigned long end, int error)
 {
 	ekprintf("sync_process_memory_range(%p,%p,%#lx,%#lx):"
 			"visit failed%d\n", vm, range, start, end, error);
 }
 
-static void *process_lookup_pte_bridge(void *page_table, unsigned long addr,
+void *process_lookup_pte_bridge(void *page_table, unsigned long addr,
 		int pgshift, size_t *pgsizep)
 {
 	return ihk_mc_pt_lookup_pte(page_table, (void *)addr, pgshift, NULL,
 			pgsizep, NULL);
 }
 
-static int process_pte_is_contiguous_bridge(void *ptep)
+int process_pte_is_contiguous_bridge(void *ptep)
 {
 	return pte_is_contiguous((pte_t *)ptep);
 }
 
-static int process_page_is_contiguous_head_bridge(void *ptep, size_t pgsize)
+int process_page_is_contiguous_head_bridge(void *ptep, size_t pgsize)
 {
 	return page_is_contiguous_head((pte_t *)ptep, pgsize);
 }
 
-static int process_page_is_contiguous_tail_bridge(void *ptep, size_t pgsize)
+int process_page_is_contiguous_tail_bridge(void *ptep, size_t pgsize)
 {
 	return page_is_contiguous_tail((pte_t *)ptep, pgsize);
 }
 
-static int process_split_contiguous_pages_bridge(void *ptep, size_t pgsize,
+int process_split_contiguous_pages_bridge(void *ptep, size_t pgsize,
 		unsigned int memobj_flags)
 {
 	return split_contiguous_pages((pte_t *)ptep, pgsize, memobj_flags);
 }
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int sync_process_memory_range(struct process_vm *vm, struct vm_range *range,
 		uintptr_t start, uintptr_t end)
 {
@@ -2381,8 +2525,9 @@ int sync_process_memory_range(struct process_vm *vm, struct vm_range *range,
 			vm, range, start, end, error);
 	return error;
 }
+#endif
 
-static void process_invalidate_range_log_bridge(struct process_vm *vm,
+void process_invalidate_range_log_bridge(struct process_vm *vm,
 		struct vm_range *range, unsigned long start, unsigned long end,
 		int error)
 {
@@ -2394,75 +2539,75 @@ struct invalidate_args {
 	struct vm_range *range;
 };
 
-static int process_pte_is_null_bridge(void *ptep)
+int process_pte_is_null_bridge(void *ptep)
 {
 	return pte_is_null((pte_t *)ptep);
 }
 
-static int process_pte_is_fileoff_bridge(void *ptep, size_t pgsize)
+int process_pte_is_fileoff_bridge(void *ptep, size_t pgsize)
 {
 	return pte_is_fileoff((pte_t *)ptep, pgsize);
 }
 
-static uintptr_t process_pte_get_phys_bridge(void *ptep)
+uintptr_t process_pte_get_phys_bridge(void *ptep)
 {
 	return pte_get_phys((pte_t *)ptep);
 }
 
-static void *process_phys_to_page_bridge(uintptr_t phys)
+void *process_phys_to_page_bridge(uintptr_t phys)
 {
 	return phys_to_page(phys);
 }
 
-static long process_page_offset_bridge(void *page)
+long process_page_offset_bridge(void *page)
 {
 	return ((struct page *)page)->offset;
 }
 
-static void process_pte_make_fileoff_bridge(long off, size_t pgsize,
+void process_pte_make_fileoff_bridge(long off, size_t pgsize,
 					    void *ptep)
 {
 	pte_make_fileoff(off, 0, pgsize, (pte_t *)ptep);
 }
 
-static void process_pte_xchg_bridge(void *ptep, void *valp)
+void process_pte_xchg_bridge(void *ptep, void *valp)
 {
 	pte_xchg((pte_t *)ptep, (pte_t *)valp);
 }
 
-static void process_flush_tlb_single_bridge(unsigned long addr)
+void process_flush_tlb_single_bridge(unsigned long addr)
 {
 	flush_tlb_single(addr);
 }
 
-static int process_pgsize_to_tbllv_bridge(size_t pgsize)
+int process_pgsize_to_tbllv_bridge(size_t pgsize)
 {
 	return pgsize_to_tbllv(pgsize);
 }
 
-static size_t process_tbllv_to_contpgsize_bridge(int level)
+size_t process_tbllv_to_contpgsize_bridge(int level)
 {
 	return tbllv_to_contpgsize(level);
 }
 
-static int process_page_unmap_bridge(void *page)
+int process_page_unmap_bridge(void *page)
 {
 	return page_unmap(page);
 }
 
-static void process_panic_bridge(const char *message)
+void process_panic_bridge(const char *message)
 {
 	panic(message);
 }
 
-static int process_memobj_invalidate_page_bridge(struct memobj *memobj,
+int process_memobj_invalidate_page_bridge(struct memobj *memobj,
 						 uintptr_t phys,
 						 size_t pgsize)
 {
 	return memobj_invalidate_page(memobj, phys, pgsize);
 }
 
-static void process_invalidate_one_page_log_bridge(void *arg0,
+void process_invalidate_one_page_log_bridge(void *arg0,
 		void *page_table, void *ptep, unsigned long pte_value,
 		void *pgaddr, int pgshift, int error)
 {
@@ -2472,7 +2617,8 @@ static void process_invalidate_one_page_log_bridge(void *arg0,
 			error);
 }
 
-static int invalidate_one_page(void *arg0, page_table_t pt, pte_t *ptep,
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
+int invalidate_one_page(void *arg0, page_table_t pt, pte_t *ptep,
 		void *pgaddr, int pgshift)
 {
 	int error;
@@ -2499,7 +2645,9 @@ static int invalidate_one_page(void *arg0, page_table_t pt, pte_t *ptep,
 			arg0, pt, ptep, *ptep, pgaddr, pgshift, error);
 	return error;
 }
+#endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int invalidate_process_memory_range(struct process_vm *vm,
 		struct vm_range *range, uintptr_t start, uintptr_t end)
 {
@@ -2528,6 +2676,7 @@ int invalidate_process_memory_range(struct process_vm *vm,
 			vm, range, start, end, error);
 	return error;
 }
+#endif
 
 int page_fault_process_memory_range(struct process_vm *vm,
 				    struct vm_range *range,
@@ -2788,7 +2937,7 @@ out:
 	return error;
 }
 
-static int process_zeroobj_match_bridge(void *memobj)
+int process_zeroobj_match_bridge(void *memobj)
 {
 	struct memobj *obj;
 
@@ -2798,18 +2947,18 @@ static int process_zeroobj_match_bridge(void *memobj)
 	return memobj == obj;
 }
 
-static int process_normal_fault_range_bridge(struct process_vm *vm,
-					     struct vm_range *range,
-					     unsigned long fault_addr,
-					     unsigned long reason)
+int process_normal_fault_range_bridge(struct process_vm *vm,
+				      struct vm_range *range,
+				      unsigned long fault_addr,
+				      unsigned long reason)
 {
 	return page_fault_process_memory_range(vm, range, fault_addr, reason);
 }
 
-static int process_xpmem_fault_range_bridge(struct process_vm *vm,
-					    struct vm_range *range,
-					    unsigned long fault_addr,
-					    unsigned long reason)
+int process_xpmem_fault_range_bridge(struct process_vm *vm,
+				     struct vm_range *range,
+				     unsigned long fault_addr,
+				     unsigned long reason)
 {
 	return xpmem_fault_process_memory_range(vm, range, fault_addr, reason);
 }
@@ -2836,30 +2985,16 @@ static int process_do_page_fault_process_vm_bridge(struct process_vm *vm,
 	return do_page_fault_process_vm(vm, (void *)fault_addr, reason);
 }
 
-static void process_pgio_dispatch_bridge(void *fp, void *arg)
+void process_pgio_dispatch_bridge(void *fp, void *arg)
 {
 	((pgio_func_t *)fp)(arg);
 }
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int page_fault_process_vm(struct process_vm *fault_vm, void *fault_addr, uint64_t reason)
 {
 	struct thread *thread = get_this_cpu_local_var()->current;
 
-#ifdef MCKERNEL_RUST_PROCESS_HELPERS
-	return process_page_fault_vm_public_result(fault_vm, thread->vm,
-			(uintptr_t)fault_addr, reason, ihk_mc_get_processor_id(),
-			thread, __builtin_offsetof(struct thread, pgio_fp),
-			__builtin_offsetof(struct thread, pgio_arg),
-			process_rw_read_lock_bridge,
-			process_rw_read_unlock_bridge,
-			process_rw_write_lock_bridge,
-			process_rw_write_unlock_bridge,
-			process_zeroobj_match_bridge,
-			process_normal_fault_range_bridge,
-			process_xpmem_fault_range_bridge,
-			preempt_enable, preempt_disable,
-			process_pgio_dispatch_bridge);
-#else
 	return process_page_fault_vm_retry_body_result(fault_vm,
 			(uintptr_t)fault_addr, reason, thread,
 			__builtin_offsetof(struct thread, pgio_fp),
@@ -2867,8 +3002,8 @@ int page_fault_process_vm(struct process_vm *fault_vm, void *fault_addr, uint64_
 			process_do_page_fault_process_vm_bridge,
 			preempt_enable, preempt_disable,
 			process_pgio_dispatch_bridge);
-#endif
 }
+#endif
 
 static void *process_init_stack_alloc_aligned_bridge(int npages, int p2align,
 		unsigned long flags, unsigned long virt_addr)
@@ -3093,14 +3228,15 @@ unsigned long extend_process_region(struct process_vm *vm,
 }
 
 // Original version retained because dcfa (src/mccmd/client/ibmic/main.c) calls this
-static int process_remove_region_clear_bridge(void *page_table,
-					      struct process_vm *vm,
-					      unsigned long start,
-					      unsigned long end);
-static void process_remove_region_log_bridge(struct process_vm *vm,
-					     unsigned long start,
-					     unsigned long end);
+int process_remove_region_clear_bridge(void *page_table,
+				       struct process_vm *vm,
+				       unsigned long start,
+				       unsigned long end);
+void process_remove_region_log_bridge(struct process_vm *vm,
+				      unsigned long start,
+				      unsigned long end);
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int remove_process_region(struct process_vm *vm,
                           unsigned long start, unsigned long end)
 {
@@ -3110,11 +3246,12 @@ int remove_process_region(struct process_vm *vm,
 		process_remove_region_clear_bridge,
 		process_remove_region_log_bridge);
 }
+#endif
 
-static int process_remove_region_clear_bridge(void *page_table,
-					      struct process_vm *vm,
-					      unsigned long start,
-					      unsigned long end)
+int process_remove_region_clear_bridge(void *page_table,
+				       struct process_vm *vm,
+				       unsigned long start,
+				       unsigned long end)
 {
 	/* We defer freeing to the time of exit */
 	// XXX: check error
@@ -3122,14 +3259,15 @@ static int process_remove_region_clear_bridge(void *page_table,
 				     (void *)end);
 }
 
-static void process_remove_region_log_bridge(struct process_vm *vm,
-					     unsigned long start,
-					     unsigned long end)
+void process_remove_region_log_bridge(struct process_vm *vm,
+				      unsigned long start,
+				      unsigned long end)
 {
 	// memory_stat_rss_sub() isn't called because this execution path is no loger reached
 	dkprintf("%s: memory_stat_rss_sub() isn't called,start=%lx,end=%lx\n", __FUNCTION__, start, end);
 }
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void flush_process_memory(struct process_vm *vm)
 {
 	dkprintf("flush_process_memory(%p)\n", vm);
@@ -3138,7 +3276,9 @@ void flush_process_memory(struct process_vm *vm)
 		process_memory_range_free_bridge, process_flush_memory_log_bridge);
 	dkprintf("flush_process_memory(%p):\n", vm);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void free_process_memory_ranges(struct process_vm *vm)
 {
 	if (vm == NULL) {
@@ -3150,17 +3290,19 @@ void free_process_memory_ranges(struct process_vm *vm)
 		process_memory_range_free_bridge,
 		process_memory_range_free_log_bridge);
 }
+#endif
 
 static void free_thread_pages(struct thread *thread)
 {
 	_ihk_mc_free_pages(thread, KERNEL_STACK_NR_PAGES, IHK_MC_PG_KERNEL, __FILE__, __LINE__);
 }
 
-static void process_free_thread_pages_bridge(void *thread)
+void process_free_thread_pages_bridge(void *thread)
 {
 	free_thread_pages(thread);
 }
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void
 hold_process(struct process *proc)
 {
@@ -3168,14 +3310,15 @@ hold_process(struct process *proc)
 		__builtin_offsetof(struct process, refcount),
 		NULL);
 }
+#endif
 
-static void *process_current_resource_set_bridge(void)
+void *process_current_resource_set_bridge(void)
 {
 	return get_this_cpu_local_var()->resource_set;
 }
 
-static void process_release_hash_detach_bridge(void *resource_set_arg,
-					       void *proc_arg)
+void process_release_hash_detach_bridge(void *resource_set_arg,
+					void *proc_arg)
 {
 	struct resource_set *resource_set = resource_set_arg;
 	struct process *proc = proc_arg;
@@ -3191,7 +3334,7 @@ static void process_release_hash_detach_bridge(void *resource_set_arg,
 	}
 }
 
-static void process_release_sibling_detach_bridge(void *proc_arg)
+void process_release_sibling_detach_bridge(void *proc_arg)
 {
 	struct process *proc = proc_arg;
 	struct process *parent = proc->parent;
@@ -3202,7 +3345,7 @@ static void process_release_sibling_detach_bridge(void *proc_arg)
 	mcs_rwlock_writer_unlock(&parent->children_lock, &lock);
 }
 
-static void process_release_profile_bridge(void *proc_arg)
+void process_release_profile_bridge(void *proc_arg)
 {
 #ifdef PROFILE_ENABLE
 	struct process *proc = proc_arg;
@@ -3221,7 +3364,7 @@ static void process_release_profile_bridge(void *proc_arg)
 #endif
 }
 
-static void process_release_final_cleanup_bridge(void *resource_set_arg)
+void process_release_final_cleanup_bridge(void *resource_set_arg)
 {
 	struct resource_set *rset = resource_set_arg;
 	struct mcs_rwlock_node_irqsave lock;
@@ -3238,6 +3381,7 @@ static void process_release_final_cleanup_bridge(void *resource_set_arg)
 	mcs_rwlock_reader_unlock(&rset->pid1->children_lock, &lock);
 }
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void
 release_process(struct process *proc)
 {
@@ -3260,7 +3404,9 @@ release_process(struct process *proc)
 		process_optional_free_bridge,
 		process_release_final_cleanup_bridge);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void
 hold_process_vm(struct process_vm *vm)
 {
@@ -3268,22 +3414,23 @@ hold_process_vm(struct process_vm *vm)
 		__builtin_offsetof(struct process_vm, refcount),
 		NULL);
 }
+#endif
 
-static void process_detach_address_space_bridge(void *address_space, int pid)
+void process_detach_address_space_bridge(void *address_space, int pid)
 {
 	detach_address_space(address_space, pid);
 }
 
-static void process_release_process_bridge(void *proc)
+void process_release_process_bridge(void *proc)
 {
 	release_process(proc);
 }
 
-static void process_populate_warn_bridge(struct process_vm *vm,
-					 unsigned long addr,
-					 unsigned long reason,
-					 unsigned long off,
-					 size_t len, int error)
+void process_populate_warn_bridge(struct process_vm *vm,
+				  unsigned long addr,
+				  unsigned long reason,
+				  unsigned long off,
+				  size_t len, int error)
 {
 	ekprintf("%s: WARNING: page_fault_process_vm(): vm: %p, "
 			"addr: %lx, reason: %lx, off: %lu, len: %lu returns %d\n",
@@ -3291,13 +3438,7 @@ static void process_populate_warn_bridge(struct process_vm *vm,
 			error);
 }
 
-static int process_page_fault_process_vm_bridge(struct process_vm *vm,
-						unsigned long addr,
-						unsigned long reason)
-{
-	return page_fault_process_vm(vm, (void *)addr, reason);
-}
-
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void
 free_all_process_memory_range(struct process_vm *vm)
 {
@@ -3306,9 +3447,10 @@ free_all_process_memory_range(struct process_vm *vm)
 		process_memory_range_free_bridge,
 		process_memory_range_free_log_bridge);
 }
+#endif
 
-void
-release_process_vm(struct process_vm *vm)
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
+void release_process_vm(struct process_vm *vm)
 {
 	process_release_vm_body_result(vm,
 		__builtin_offsetof(struct process_vm, refcount),
@@ -3336,38 +3478,28 @@ release_process_vm(struct process_vm *vm)
 		process_policy_free_bridge,
 		process_free_vm_bridge);
 }
+#endif
+
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
+static int process_page_fault_process_vm_bridge(struct process_vm *vm,
+						unsigned long addr,
+						unsigned long reason)
+{
+	return page_fault_process_vm(vm, (void *)addr, reason);
+}
 
 int populate_process_memory(struct process_vm *vm, void *start, size_t len)
 {
 	const int reason = PF_USER | PF_POPULATE;
 
-#ifdef MCKERNEL_RUST_PROCESS_HELPERS
-	struct thread *thread = get_this_cpu_local_var()->current;
-
-	return process_populate_memory_public_result(vm, thread->vm,
-			(uintptr_t)start, len, PAGE_SIZE, reason,
-			ihk_mc_get_processor_id(), thread,
-			__builtin_offsetof(struct thread, pgio_fp),
-			__builtin_offsetof(struct thread, pgio_arg),
-			process_rw_read_lock_bridge,
-			process_rw_read_unlock_bridge,
-			process_rw_write_lock_bridge,
-			process_rw_write_unlock_bridge,
-			process_zeroobj_match_bridge,
-			process_normal_fault_range_bridge,
-			process_xpmem_fault_range_bridge,
-			preempt_disable, preempt_enable,
-			process_pgio_dispatch_bridge,
-			process_populate_warn_bridge);
-#else
 	return process_populate_memory_body_result(vm, (uintptr_t)start, len,
 			PAGE_SIZE, reason, process_page_fault_process_vm_bridge,
 			preempt_disable, preempt_enable,
 			process_populate_warn_bridge);
-#endif
 }
+#endif
 
-static void process_hold_thread_warn_bridge(void *thread_arg)
+void process_hold_thread_warn_bridge(void *thread_arg)
 {
 	struct thread *thread = thread_arg;
 
@@ -3375,6 +3507,7 @@ static void process_hold_thread_warn_bridge(void *thread_arg)
 		thread->tid);
 }
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int hold_thread(struct thread *thread)
 {
 	process_hold_thread_body_result(thread,
@@ -3384,7 +3517,12 @@ int hold_thread(struct thread *thread)
 
 	return 0;
 }
+#endif
 
+void hold_sigcommon(struct sig_common *sigcommon);
+void release_sigcommon(struct sig_common *sigcommon);
+
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void
 hold_sigcommon(struct sig_common *sigcommon)
 {
@@ -3403,6 +3541,7 @@ release_sigcommon(struct sig_common *sigcommon)
 		NULL,
 		process_optional_free_bridge);
 }
+#endif
 
 /*
  * Release the TID from the process' TID set corresponding to this thread.
@@ -3424,7 +3563,7 @@ void __find_and_replace_tid(struct process *proc, struct thread *thread, int new
 		thread, thread->tid, new_tid, process_replace_tid_log_bridge);
 }
 
-static void process_destroy_thread_hash_detach_bridge(void *thread_arg)
+void process_destroy_thread_hash_detach_bridge(void *thread_arg)
 {
 	struct thread *thread = thread_arg;
 	struct mcs_rwlock_node_irqsave lock;
@@ -3441,7 +3580,7 @@ static void process_destroy_thread_hash_detach_bridge(void *thread_arg)
 	}
 }
 
-static void process_destroy_thread_time_account_bridge(void *thread_arg)
+void process_destroy_thread_time_account_bridge(void *thread_arg)
 {
 	struct thread *thread = thread_arg;
 	struct process *proc = thread->proc;
@@ -3456,24 +3595,25 @@ static void process_destroy_thread_time_account_bridge(void *thread_arg)
 	mcs_rwlock_writer_unlock(&proc->update_lock, &updatelock);
 }
 
-static void process_destroy_thread_release_tid_bridge(void *proc_arg,
-						      void *thread_arg)
+void process_destroy_thread_release_tid_bridge(void *proc_arg,
+					       void *thread_arg)
 {
 	__release_tid(proc_arg, thread_arg);
 }
 
-static void process_destroy_thread_replace_tid_bridge(void *proc_arg,
-						      void *thread_arg,
-						      int new_tid)
+void process_destroy_thread_replace_tid_bridge(void *proc_arg,
+					       void *thread_arg,
+					       int new_tid)
 {
 	__find_and_replace_tid(proc_arg, thread_arg, new_tid);
 }
 
-static void process_release_sigcommon_bridge(void *sigcommon)
+void process_release_sigcommon_bridge(void *sigcommon)
 {
 	release_sigcommon(sigcommon);
 }
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void destroy_thread(struct thread *thread)
 {
 	struct mcs_rwlock_node_irqsave lock;
@@ -3513,7 +3653,9 @@ void destroy_thread(struct thread *thread)
 		process_release_sigcommon_bridge,
 		process_free_thread_pages_bridge);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void release_thread(struct thread *thread)
 {
 	process_release_thread_body_result(thread,
@@ -3526,6 +3668,7 @@ void release_thread(struct thread *thread)
 		process_destroy_thread_bridge,
 		process_release_vm_bridge);
 }
+#endif
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void cpu_set(int cpu, cpu_set_t *cpu_set, ihk_spinlock_t *lock)
@@ -3552,7 +3695,11 @@ void cpu_clear_and_set(int c_cpu, int s_cpu,
 #endif
 
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void sched_do_migrate_public(void);
+#else
 static void do_migrate(void);
+#endif
 
 static void idle(void)
 {
@@ -3577,7 +3724,11 @@ static void idle(void)
 
 		/* See if we need to migrate a process somewhere */
 		if (v->flags & CPU_FLAG_NEED_MIGRATE) {
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+			sched_do_migrate_public();
+#else
 			do_migrate();
+#endif
 			v->flags &= ~CPU_FLAG_NEED_MIGRATE;
 		}
 
@@ -3632,25 +3783,19 @@ static void idle(void)
 	}
 }
 
-static int process_init_process_public_bridge(void *proc, void *parent)
-{
-	init_process(proc, parent);
-	return 0;
-}
-
-static void process_sched_init_context_bridge(void *thread_arg)
+void process_sched_init_context_bridge(void *thread_arg)
 {
 	struct thread *thread = thread_arg;
 
 	ihk_mc_init_context(&thread->ctx, NULL, idle);
 }
 
-static int process_sched_save_fp_bridge(void *thread)
+int process_sched_save_fp_bridge(void *thread)
 {
 	return save_fp_regs(thread);
 }
 
-static void process_sched_timer_init_bridge(int cpu)
+void process_sched_timer_init_bridge(int cpu)
 {
 #ifdef TIMER_CPU_ID
 	if (cpu == TIMER_CPU_ID) {
@@ -3662,6 +3807,12 @@ static void process_sched_timer_init_bridge(int cpu)
 #endif
 }
 
+void process_sched_init_panic_bridge(void)
+{
+	panic("failed to initialize idle process state");
+}
+
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 struct resource_set *
 new_resource_set()
 {
@@ -3671,7 +3822,9 @@ new_resource_set()
 		process_alloc_bridge, process_optional_free_bridge,
 		process_init_process_public_bridge, process_rwlock_init_bridge);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void
 proc_init()
 {
@@ -3685,7 +3838,9 @@ proc_init()
 		panic("no mem for resource_set");
 	}
 }
+#endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void sched_init(void)
 {
 	if (process_sched_init_body_result((unsigned long)get_this_cpu_local_var(),
@@ -3695,8 +3850,9 @@ void sched_init(void)
 			process_sched_init_context_bridge,
 			process_sched_save_fp_bridge,
 			process_sched_timer_init_bridge) < 0)
-		panic("failed to initialize idle process state");
+		process_sched_init_panic_bridge();
 }
+#endif
 
 struct migrate_request {
 	struct list_head list;
@@ -3719,6 +3875,7 @@ static const struct sched_migrate_offsets process_sched_migrate_offsets = {
 	.cpu_status_offset = __builtin_offsetof(struct cpu_local_var, status),
 };
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 static const struct sched_do_migrate_offsets process_sched_do_migrate_offsets = {
 	.req_list_offset = __builtin_offsetof(struct migrate_request, list),
 	.req_thread_offset = __builtin_offsetof(struct migrate_request, thread),
@@ -3745,6 +3902,7 @@ static const struct sched_do_migrate_offsets process_sched_do_migrate_offsets = 
 		__builtin_offsetof(struct cpu_local_var, runq_len),
 	.cpu_flags_offset = __builtin_offsetof(struct cpu_local_var, flags),
 };
+#endif
 
 #ifdef MCKERNEL_RUST_PROCESS_HELPERS
 static const struct sched_runqueue_offsets process_sched_runqueue_offsets = {
@@ -3808,7 +3966,8 @@ static void process_sched_set_timer_bridge(int runq_locked)
 	set_timer(runq_locked);
 }
 
-static void process_sched_runq_log_bridge(int event, unsigned long arg0,
+PROCESS_SCHED_PUBLIC_BRIDGE void process_sched_runq_log_bridge(int event,
+					  unsigned long arg0,
 					  unsigned long arg1, int arg2,
 					  int arg3)
 {
@@ -3962,6 +4121,7 @@ static void process_sched_rusage_debug_bridge(void)
 }
 #endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 static void do_migrate(void)
 {
 	int cur_cpu_id = ihk_mc_get_processor_id();
@@ -3978,6 +4138,7 @@ static void do_migrate(void)
 			process_sched_vector_bridge, process_sched_interrupt_bridge,
 			process_sched_do_migrate_log_bridge);
 }
+#endif
 
 void set_timer(int runq_locked)
 {
@@ -4415,41 +4576,25 @@ void schedule(void)
 #endif
 }
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void
 release_cpuid(int cpuid)
 {
-#ifdef MCKERNEL_RUST_PROCESS_HELPERS
-	sched_release_cpuid_body_result(cpuid,
-			(unsigned long)get_cpu_local_var(cpuid),
-			(unsigned long)&runq_reservation_lock,
-			CPU_STATUS_IDLE, &process_sched_runqueue_offsets,
-			process_spin_lock_bridge, process_spin_unlock_bridge,
-			process_sched_noirq_lock_bridge,
-			process_sched_noirq_unlock_bridge);
-#else
 	unsigned long irqstate;
-    struct cpu_local_var *v = get_cpu_local_var(cpuid);
-    irqstate = ihk_mc_spinlock_lock(&runq_reservation_lock);
-    ihk_mc_spinlock_lock_noirq(&(v->runq_lock));
+	struct cpu_local_var *v = get_cpu_local_var(cpuid);
+	irqstate = ihk_mc_spinlock_lock(&runq_reservation_lock);
+	ihk_mc_spinlock_lock_noirq(&(v->runq_lock));
 	if (!v->runq_len)
 		v->status = CPU_STATUS_IDLE;
 	__sync_fetch_and_sub(&v->runq_reserved, 1);
-    ihk_mc_spinlock_unlock_noirq(&(v->runq_lock));
-    ihk_mc_spinlock_unlock(&runq_reservation_lock, irqstate);
-#endif
+	ihk_mc_spinlock_unlock_noirq(&(v->runq_lock));
+	ihk_mc_spinlock_unlock(&runq_reservation_lock, irqstate);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void check_need_resched(void)
 {
-#ifdef MCKERNEL_RUST_PROCESS_HELPERS
-	sched_check_need_resched_body_result(
-			(unsigned long)get_this_cpu_local_var(),
-			CPU_FLAG_NEED_RESCHED, CPU_FLAG_NEED_MIGRATE,
-			&process_sched_runqueue_offsets,
-			process_spin_lock_bridge, process_spin_unlock_bridge,
-			process_sched_schedule_bridge,
-			process_sched_runq_log_bridge);
-#else
 	unsigned long irqstate;
 	struct cpu_local_var *v = get_this_cpu_local_var();
 	irqstate = ihk_mc_spinlock_lock(&v->runq_lock);
@@ -4466,8 +4611,8 @@ void check_need_resched(void)
 	else {
 		ihk_mc_spinlock_unlock(&v->runq_lock, irqstate);
 	}
-#endif
 }
+#endif
 
 int __sched_wakeup_thread(struct thread *thread,
 		int valid_states, int runq_locked)
@@ -4692,14 +4837,9 @@ void runq_add_thread(struct thread *thread, int cpu_id)
 }
 
 /* NOTE: shouldn't remove a running process! */
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void runq_del_thread(struct thread *thread, int cpu_id)
 {
-#ifdef MCKERNEL_RUST_PROCESS_HELPERS
-	sched_runq_del_thread_body_result((unsigned long)thread,
-			(unsigned long)get_cpu_local_var(cpu_id),
-			CPU_STATUS_IDLE, &process_sched_runqueue_offsets,
-			process_spin_lock_bridge, process_spin_unlock_bridge);
-#else
 	struct cpu_local_var *v = get_cpu_local_var(cpu_id);
 	unsigned long irqstate;
 
@@ -4710,9 +4850,10 @@ void runq_del_thread(struct thread *thread, int cpu_id)
 		get_cpu_local_var(cpu_id)->status = CPU_STATUS_IDLE;
 
 	ihk_mc_spinlock_unlock(&(v->runq_lock), irqstate);
-#endif
 }
+#endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 struct thread *
 find_thread(int pid, int tid)
 {
@@ -4727,7 +4868,9 @@ find_thread(int pid, int tid)
 		process_mcs_reader_unlock_bridge,
 		process_hold_thread_bridge);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void
 thread_unlock(struct thread *thread)
 {
@@ -4735,7 +4878,9 @@ thread_unlock(struct thread *thread)
 		return;
 	release_thread(thread);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 struct process *
 find_process(int pid, struct mcs_rwlock_node_irqsave *lock)
 {
@@ -4761,6 +4906,7 @@ process_unlock(struct process *proc, struct mcs_rwlock_node_irqsave *lock)
 	process_unlock_found_process_result(proc, (unsigned long)&phash->lock[hash],
 		lock, process_mcs_reader_unlock_bridge);
 }
+#endif
 
 void
 debug_log(unsigned long arg)
@@ -4832,7 +4978,7 @@ debug_log(unsigned long arg)
 	}
 }
 
-static void process_access_ok_log_bridge(struct process_vm *vm, int type,
+void process_access_ok_log_bridge(struct process_vm *vm, int type,
 		unsigned long addr, size_t len, int rc)
 {
 	kprintf("%s: refusing access for request 0x%llx-0x%llx %zu, type=%d, rc=%d\n",
@@ -4840,8 +4986,10 @@ static void process_access_ok_log_bridge(struct process_vm *vm, int type,
 		(unsigned long long)(addr + len), len, type, rc);
 }
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int access_ok(struct process_vm *vm, int type, uintptr_t addr, size_t len)
 {
 	return process_access_ok_public_result(vm, type, addr, len,
 			process_access_ok_log_bridge);
 }
+#endif

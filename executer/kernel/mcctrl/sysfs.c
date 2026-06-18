@@ -607,9 +607,58 @@ out:
 	return;
 } /* remote_release() */
 
+#ifdef MCCTRL_RUST_HELPERS
+static int mcctrl_sysfs_node_type_bridge(void *instance);
+
+static const char *
+mcctrl_sysfs_node_name_bridge(void *node)
+{
+	return ((struct sysfsm_node *)node)->name;
+}
+
+static void *
+mcctrl_sysfs_first_child_bridge(void *node)
+{
+	struct sysfsm_node *np = node;
+
+	if (list_empty(&np->children))
+		return NULL;
+	return list_first_entry(&np->children, struct sysfsm_node, chain);
+}
+
+static void *
+mcctrl_sysfs_next_child_bridge(void *parent, void *node)
+{
+	struct sysfsm_node *dirp = parent;
+	struct list_head *next = ((struct sysfsm_node *)node)->chain.next;
+
+	if (next == &dirp->children)
+		return NULL;
+	return list_entry(next, struct sysfsm_node, chain);
+}
+
+static void *
+mcctrl_sysfs_err_ptr_bridge(int error)
+{
+	return ERR_PTR(error);
+}
+#endif
+
 static struct sysfsm_node *
 lookup_i(struct sysfsm_node *dirp, const char *name)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	BUG_ON(!dirp);
+	BUG_ON(!name);
+	dprintk("mcctrl:lookup_i(%s,%s)\n", dirp->name, name);
+
+	return mcctrl_sysfs_lookup_i_body_result(
+		dirp, name, SNT_DIR, mcctrl_sysfs_node_type_bridge,
+		mcctrl_sysfs_node_name_bridge,
+		mcctrl_sysfs_first_child_bridge,
+		mcctrl_sysfs_next_child_bridge,
+		mcctrl_sysfs_err_ptr_bridge);
+#else
 	int error;
 	struct sysfsm_node *np;
 
@@ -653,6 +702,7 @@ out:
 	dprintk("mcctrl:lookup_i(%s,%s): %p %d\n",
 			dirp->name, name, np, error);
 	return np;
+#endif
 } /* lookup_i() */
 
 static struct sysfsm_node *
@@ -1834,9 +1884,205 @@ out:
 	return error;
 } /* setup_special_remote_create() */
 
+#ifdef MCCTRL_RUST_HELPERS
+static int
+mcctrl_sysfs_req_is_special_ops(void *ops)
+{
+	return (((long)SYSFS_SPECIAL_OPS_MIN <= (long)ops)
+			&& ((long)ops <= (long)SYSFS_SPECIAL_OPS_MAX));
+}
+
+static void *
+mcctrl_sysfs_req_os_to_dev_bridge(void *os)
+{
+	return ihk_os_to_dev(os);
+}
+
+static unsigned long
+mcctrl_sysfs_req_map_memory_bridge(void *dev, unsigned long rpa,
+		unsigned long size)
+{
+	return ihk_device_map_memory(dev, rpa, size);
+}
+
+static void *
+mcctrl_sysfs_req_map_virtual_bridge(void *dev, unsigned long pa,
+		unsigned long size)
+{
+	return ihk_device_map_virtual(dev, pa, size, NULL, 0);
+}
+
+static void
+mcctrl_sysfs_req_unmap_virtual_bridge(void *dev, void *virt,
+		unsigned long size)
+{
+	ihk_device_unmap_virtual(dev, virt, size);
+}
+
+static void
+mcctrl_sysfs_req_unmap_memory_bridge(void *dev, unsigned long pa,
+		unsigned long size)
+{
+	ihk_device_unmap_memory(dev, pa, size);
+}
+
+static void
+mcctrl_sysfs_req_wmb_bridge(void)
+{
+	wmb();
+}
+
+static int
+mcctrl_sysfs_req_setup_local_bridge(void *os, void *buf,
+		unsigned long buf_pa, unsigned long bufsize)
+{
+	return sysfsm_setup(os, buf, buf_pa, bufsize);
+}
+
+static int
+mcctrl_sysfs_req_create_local_bridge(void *os,
+		struct sysfs_req_create_param *param)
+{
+	ihk_device_t dev = ihk_os_to_dev(os);
+	struct mcctrl_usrdata *udp = ihk_host_os_get_usrdata(os);
+	struct sysfsm_ops *ops = &remote_ops;
+	long cinstance = param->client_instance;
+	struct sysfsm_node *np;
+	int error;
+	int special = mcctrl_sysfs_req_is_special_ops(
+			(void *)param->client_ops);
+
+	if (special) {
+		error = setup_special_remote_create(dev, param, &ops,
+				&cinstance);
+		if (error) {
+			return error;
+		}
+	}
+
+	if (!udp) {
+		pr_err("%s: error: mcctrl_usrdata not found\n", __func__);
+		return -EINVAL;
+	}
+
+	np = sysfsm_create(&udp->sysfsm_data, param->path, param->mode,
+			ops, param->client_ops, cinstance);
+	if (IS_ERR(np)) {
+		error = PTR_ERR(np);
+		if (special) {
+			cleanup_special_remote_create(ops, (void *)cinstance);
+		}
+		return error;
+	}
+
+	return 0;
+}
+
+static int
+mcctrl_sysfs_req_mkdir_local_bridge(void *os,
+		struct sysfs_req_mkdir_param *param)
+{
+	struct mcctrl_usrdata *udp = ihk_host_os_get_usrdata(os);
+	struct sysfsm_node *np;
+	int error;
+
+	if (!udp) {
+		pr_err("%s: error: mcctrl_usrdata not found\n", __func__);
+		return -EINVAL;
+	}
+
+	np = sysfsm_mkdir(&udp->sysfsm_data, param->path);
+	if (IS_ERR(np)) {
+		error = PTR_ERR(np);
+		return error;
+	}
+
+	param->handle = (long)np;
+	return 0;
+}
+
+static int
+mcctrl_sysfs_req_symlink_local_bridge(void *os,
+		struct sysfs_req_symlink_param *param)
+{
+	struct mcctrl_usrdata *udp = ihk_host_os_get_usrdata(os);
+	struct sysfsm_node *np;
+	int error;
+
+	if (!udp) {
+		pr_err("%s: error: mcctrl_usrdata not found\n", __func__);
+		return -EINVAL;
+	}
+
+	np = sysfsm_symlink(&udp->sysfsm_data, (void *)param->target,
+			param->path);
+	if (IS_ERR(np)) {
+		error = PTR_ERR(np);
+		return error;
+	}
+
+	return 0;
+}
+
+static int
+mcctrl_sysfs_req_lookup_local_bridge(void *os,
+		struct sysfs_req_lookup_param *param)
+{
+	struct mcctrl_usrdata *udp = ihk_host_os_get_usrdata(os);
+	struct sysfsm_node *np;
+	int error;
+
+	if (!udp) {
+		pr_err("%s: error: mcctrl_usrdata not found\n", __func__);
+		return -EINVAL;
+	}
+
+	np = sysfsm_lookup(&udp->sysfsm_data, param->path);
+	if (IS_ERR(np)) {
+		error = PTR_ERR(np);
+		return error;
+	}
+
+	param->handle = (long)np;
+	return 0;
+}
+
+static int
+mcctrl_sysfs_req_unlink_local_bridge(void *os,
+		struct sysfs_req_unlink_param *param)
+{
+	struct mcctrl_usrdata *udp = ihk_host_os_get_usrdata(os);
+	int error;
+
+	if (!udp) {
+		pr_err("%s: error: mcctrl_usrdata not found\n", __func__);
+		return -EINVAL;
+	}
+
+	error = sysfsm_unlink(&udp->sysfsm_data, param->path, param->flags);
+	if (error) {
+		return error;
+	}
+
+	return 0;
+}
+#endif
+
 static void
 sysfsm_req_setup(void *os, long param_rpa)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_sysfs_req_setup_body_result(os, param_rpa,
+			sizeof(struct sysfs_req_setup_param),
+			mcctrl_sysfs_req_os_to_dev_bridge,
+			mcctrl_sysfs_req_map_memory_bridge,
+			mcctrl_sysfs_req_map_virtual_bridge,
+			mcctrl_sysfs_req_unmap_virtual_bridge,
+			mcctrl_sysfs_req_unmap_memory_bridge,
+			mcctrl_sysfs_req_setup_local_bridge,
+			mcctrl_sysfs_req_wmb_bridge);
+	return;
+#else
 	int error;
 	ihk_device_t dev = ihk_os_to_dev(os);
 	long param_pa;
@@ -1863,11 +2109,24 @@ sysfsm_req_setup(void *os, long param_rpa)
 	ihk_device_unmap_virtual(dev, param, sizeof(*param));
 	ihk_device_unmap_memory(dev, param_pa, sizeof(*param));
 	return;
+#endif
 } /* sysfsm_req_setup() */
 
 static void
 sysfsm_req_create(void *os, long param_rpa)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_sysfs_req_create_body_result(os, param_rpa,
+			sizeof(struct sysfs_req_create_param),
+			mcctrl_sysfs_req_os_to_dev_bridge,
+			mcctrl_sysfs_req_map_memory_bridge,
+			mcctrl_sysfs_req_map_virtual_bridge,
+			mcctrl_sysfs_req_unmap_virtual_bridge,
+			mcctrl_sysfs_req_unmap_memory_bridge,
+			mcctrl_sysfs_req_create_local_bridge,
+			mcctrl_sysfs_req_wmb_bridge);
+	return;
+#else
 	int error;
 	ihk_device_t dev = ihk_os_to_dev(os);
 	long param_pa;
@@ -1916,11 +2175,24 @@ out:
 	ihk_device_unmap_virtual(dev, param, sizeof(*param));
 	ihk_device_unmap_memory(dev, param_pa, sizeof(*param));
 	return;
+#endif
 } /* sysfsm_req_create() */
 
 static void
 sysfsm_req_mkdir(void *os, long param_rpa)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_sysfs_req_mkdir_body_result(os, param_rpa,
+			sizeof(struct sysfs_req_mkdir_param),
+			mcctrl_sysfs_req_os_to_dev_bridge,
+			mcctrl_sysfs_req_map_memory_bridge,
+			mcctrl_sysfs_req_map_virtual_bridge,
+			mcctrl_sysfs_req_unmap_virtual_bridge,
+			mcctrl_sysfs_req_unmap_memory_bridge,
+			mcctrl_sysfs_req_mkdir_local_bridge,
+			mcctrl_sysfs_req_wmb_bridge);
+	return;
+#else
 	int error;
 	ihk_device_t dev = ihk_os_to_dev(os);
 	long param_pa;
@@ -1955,11 +2227,24 @@ out:
 	ihk_device_unmap_virtual(dev, param, sizeof(*param));
 	ihk_device_unmap_memory(dev, param_pa, sizeof(*param));
 	return;
+#endif
 } /* sysfsm_req_mkdir() */
 
 static void
 sysfsm_req_symlink(void *os, long param_rpa)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_sysfs_req_symlink_body_result(os, param_rpa,
+			sizeof(struct sysfs_req_symlink_param),
+			mcctrl_sysfs_req_os_to_dev_bridge,
+			mcctrl_sysfs_req_map_memory_bridge,
+			mcctrl_sysfs_req_map_virtual_bridge,
+			mcctrl_sysfs_req_unmap_virtual_bridge,
+			mcctrl_sysfs_req_unmap_memory_bridge,
+			mcctrl_sysfs_req_symlink_local_bridge,
+			mcctrl_sysfs_req_wmb_bridge);
+	return;
+#else
 	int error;
 	ihk_device_t dev = ihk_os_to_dev(os);
 	long param_pa;
@@ -1993,11 +2278,24 @@ out:
 	ihk_device_unmap_virtual(dev, param, sizeof(*param));
 	ihk_device_unmap_memory(dev, param_pa, sizeof(*param));
 	return;
+#endif
 } /* sysfsm_req_symlink() */
 
 static void
 sysfsm_req_lookup(void *os, long param_rpa)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_sysfs_req_lookup_body_result(os, param_rpa,
+			sizeof(struct sysfs_req_lookup_param),
+			mcctrl_sysfs_req_os_to_dev_bridge,
+			mcctrl_sysfs_req_map_memory_bridge,
+			mcctrl_sysfs_req_map_virtual_bridge,
+			mcctrl_sysfs_req_unmap_virtual_bridge,
+			mcctrl_sysfs_req_unmap_memory_bridge,
+			mcctrl_sysfs_req_lookup_local_bridge,
+			mcctrl_sysfs_req_wmb_bridge);
+	return;
+#else
 	int error;
 	ihk_device_t dev = ihk_os_to_dev(os);
 	long param_pa;
@@ -2032,11 +2330,24 @@ out:
 	ihk_device_unmap_virtual(dev, param, sizeof(*param));
 	ihk_device_unmap_memory(dev, param_pa, sizeof(*param));
 	return;
+#endif
 } /* sysfsm_req_lookup() */
 
 static void
 sysfsm_req_unlink(void *os, long param_rpa)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_sysfs_req_unlink_body_result(os, param_rpa,
+			sizeof(struct sysfs_req_unlink_param),
+			mcctrl_sysfs_req_os_to_dev_bridge,
+			mcctrl_sysfs_req_map_memory_bridge,
+			mcctrl_sysfs_req_map_virtual_bridge,
+			mcctrl_sysfs_req_unmap_virtual_bridge,
+			mcctrl_sysfs_req_unmap_memory_bridge,
+			mcctrl_sysfs_req_unlink_local_bridge,
+			mcctrl_sysfs_req_wmb_bridge);
+	return;
+#else
 	int error;
 	ihk_device_t dev = ihk_os_to_dev(os);
 	long param_pa;
@@ -2067,20 +2378,49 @@ out:
 	ihk_device_unmap_virtual(dev, param, sizeof(*param));
 	ihk_device_unmap_memory(dev, param_pa, sizeof(*param));
 	return;
+#endif
 } /* sysfsm_req_unlink() */
+
+#ifdef MCCTRL_RUST_HELPERS
+static void *
+mcctrl_sysfs_node_req_bridge(void *node)
+{
+	struct sysfsm_node *np = node;
+
+	return &np->sdp->sysfs_req;
+}
+
+static void
+mcctrl_sysfs_complete_req_bridge(void *req0, long result)
+{
+	struct sysfsm_req *req = req0;
+
+	req->lresult = result;
+	wmb();
+	req->busy = 0;
+	wake_up(&req->wq);
+}
+#endif
 
 static void
 sysfsm_resp_show(void *os, struct sysfsm_node *np, ssize_t ssize)
 {
+#ifndef MCCTRL_RUST_HELPERS
 	struct sysfsm_data *sdp = np->sdp;
 	struct sysfsm_req *req = &sdp->sysfs_req;
+#endif
 
 	dprintk("mcctrl:sysfsm_resp_show(%p,%s,%ld)\n", os, np->name, ssize);
 
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_sysfs_resp_body_result(np, ssize, mcctrl_sysfs_node_req_bridge,
+			mcctrl_sysfs_complete_req_bridge);
+#else
 	req->lresult = ssize;
 	wmb();
 	req->busy = 0;
 	wake_up(&req->wq);
+#endif
 
 	dprintk("mcctrl:sysfsm_resp_show(%p,%s,%ld):\n", os, np->name, ssize);
 	return;
@@ -2089,15 +2429,22 @@ sysfsm_resp_show(void *os, struct sysfsm_node *np, ssize_t ssize)
 static void
 sysfsm_resp_store(void *os, struct sysfsm_node *np, ssize_t ssize)
 {
+#ifndef MCCTRL_RUST_HELPERS
 	struct sysfsm_data *sdp = np->sdp;
 	struct sysfsm_req *req = &sdp->sysfs_req;
+#endif
 
 	dprintk("mcctrl:sysfsm_resp_store(%p,%s,%ld)\n", os, np->name, ssize);
 
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_sysfs_resp_body_result(np, ssize, mcctrl_sysfs_node_req_bridge,
+			mcctrl_sysfs_complete_req_bridge);
+#else
 	req->lresult = ssize;
 	wmb();
 	req->busy = 0;
 	wake_up(&req->wq);
+#endif
 
 	dprintk("mcctrl:sysfsm_resp_store(%p,%s,%ld):\n", os, np->name, ssize);
 	return;
@@ -2106,16 +2453,23 @@ sysfsm_resp_store(void *os, struct sysfsm_node *np, ssize_t ssize)
 static void
 sysfsm_resp_release(void *os, struct sysfsm_node *np, int error)
 {
+#ifndef MCCTRL_RUST_HELPERS
 	struct sysfsm_data *sdp = np->sdp;
 	struct sysfsm_req *req = &sdp->sysfs_req;
+#endif
 
 	dprintk("mcctrl:sysfsm_resp_release(%p,%p %s,%d)\n",
 			os, np, np->name, error);
 
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_sysfs_resp_body_result(np, error, mcctrl_sysfs_node_req_bridge,
+			mcctrl_sysfs_complete_req_bridge);
+#else
 	req->lresult = error;
 	wmb();
 	req->busy = 0;
 	wake_up(&req->wq);
+#endif
 
 	dprintk("mcctrl:sysfsm_resp_release(%p,%p,%d):\n", os, np, error);
 	return;
@@ -2272,9 +2626,37 @@ sysfsm_packet_handler(void *os, int msg, int err, long arg1, long arg2)
 	return;
 } /* sysfsm_packet_handler() */
 
+#ifdef MCCTRL_RUST_HELPERS
+static void *
+mcctrl_sysfs_attr_node_bridge(struct attribute *attr)
+{
+	return container_of(attr, struct sysfsm_node, attr);
+}
+
+static void *
+mcctrl_sysfs_kobj_node_bridge(struct kobject *kobj)
+{
+	return container_of(kobj, struct sysfsm_node, kobj);
+}
+
+static long
+mcctrl_sysfs_node_server_ops_bridge(void *node)
+{
+	struct sysfsm_node *np = node;
+
+	return (long)np->server_ops;
+}
+#endif
+
 static ssize_t
 sysfsm_show(struct kobject *kobj, struct attribute *attr, char *buf)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	(void)kobj;
+	return mcctrl_sysfs_show_body_result(
+			mcctrl_sysfs_attr_node_bridge(attr), buf, PAGE_SIZE,
+			mcctrl_sysfs_node_server_ops_bridge);
+#else
 	struct sysfsm_node *np = container_of(attr, struct sysfsm_node, attr);
 	ssize_t ssize;
 
@@ -2284,12 +2666,19 @@ sysfsm_show(struct kobject *kobj, struct attribute *attr, char *buf)
 	}
 
 	return ssize;
+#endif
 } /* sysfsm_show() */
 
 static ssize_t
 sysfsm_store(struct kobject *kobj, struct attribute *attr, const char *buf,
 		size_t bufsize)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	(void)kobj;
+	return mcctrl_sysfs_store_body_result(
+			mcctrl_sysfs_attr_node_bridge(attr), buf, bufsize,
+			mcctrl_sysfs_node_server_ops_bridge);
+#else
 	struct sysfsm_node *np = container_of(attr, struct sysfsm_node, attr);
 	ssize_t ssize;
 
@@ -2300,16 +2689,23 @@ sysfsm_store(struct kobject *kobj, struct attribute *attr, const char *buf,
 	}
 
 	return ssize;
+#endif
 } /* sysfsm_store() */
 
 static void
 sysfsm_release(struct kobject *kobj)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_sysfs_release_body_result(
+			mcctrl_sysfs_kobj_node_bridge(kobj),
+			mcctrl_sysfs_node_server_ops_bridge);
+#else
 	struct sysfsm_node *np = container_of(kobj, struct sysfsm_node, kobj);
 
 	if (np->server_ops && np->server_ops->release) {
 		(*np->server_ops->release)(np->server_ops, np);
 	}
+#endif
 
 	return;
 } /* sysfsm_release() */
@@ -2478,7 +2874,13 @@ static void cleanup_special_local_create(struct sysfsm_ops *ops, void *instance)
 /**** local int ****/
 static ssize_t snooping_local_show_d32(struct sysfsm_ops *ops, void *instance, void *buf, size_t bufsize)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	(void)ops;
+	return mcctrl_sysfs_snooping_show_i32_body_result(instance, buf,
+			bufsize);
+#else
 	return sprintf(buf, "%d\n", *(int *)instance);
+#endif
 } /* snooping_local_show_d32() */
 
 struct sysfsm_ops snooping_local_ops_d32 = {
@@ -2488,7 +2890,13 @@ struct sysfsm_ops snooping_local_ops_d32 = {
 /**** local long ****/
 static ssize_t snooping_local_show_d64(struct sysfsm_ops *ops, void *instance, void *buf, size_t bufsize)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	(void)ops;
+	return mcctrl_sysfs_snooping_show_i64_body_result(instance, buf,
+			bufsize);
+#else
 	return sprintf(buf, "%ld\n", *(long *)instance);
+#endif
 } /* snooping_local_show_d64() */
 
 struct sysfsm_ops snooping_local_ops_d64 = {
@@ -2498,7 +2906,13 @@ struct sysfsm_ops snooping_local_ops_d64 = {
 /**** local unsigned ****/
 static ssize_t snooping_local_show_u32(struct sysfsm_ops *ops, void *instance, void *buf, size_t bufsize)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	(void)ops;
+	return mcctrl_sysfs_snooping_show_u32_body_result(instance, buf,
+			bufsize);
+#else
 	return sprintf(buf, "%u\n", *(unsigned *)instance);
+#endif
 } /* snooping_local_show_u32() */
 
 struct sysfsm_ops snooping_local_ops_u32 = {
@@ -2508,7 +2922,13 @@ struct sysfsm_ops snooping_local_ops_u32 = {
 /**** local unsigned long ****/
 static ssize_t snooping_local_show_u64(struct sysfsm_ops *ops, void *instance, void *buf, size_t bufsize)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	(void)ops;
+	return mcctrl_sysfs_snooping_show_u64_body_result(instance, buf,
+			bufsize);
+#else
 	return sprintf(buf, "%lu\n", *(unsigned long *)instance);
+#endif
 } /* snooping_local_show_u64() */
 
 struct sysfsm_ops snooping_local_ops_u64 = {
@@ -2518,7 +2938,13 @@ struct sysfsm_ops snooping_local_ops_u64 = {
 /**** local string ****/
 static ssize_t snooping_local_show_s(struct sysfsm_ops *ops, void *instance, void *buf, size_t bufsize)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	(void)ops;
+	return mcctrl_sysfs_snooping_show_string_body_result(instance, buf,
+			bufsize);
+#else
 	return sprintf(buf, "%s\n", (char *)instance);
+#endif
 } /* snooping_local_show_s() */
 
 struct sysfsm_ops snooping_local_ops_s = {
@@ -2526,8 +2952,21 @@ struct sysfsm_ops snooping_local_ops_s = {
 };
 
 /**** local list ****/
+#ifdef MCCTRL_RUST_HELPERS
+static unsigned long mcctrl_sysfs_bitmap_scnlistprintf_bridge(void *buf,
+		unsigned long bufsize, void *ptr, int nbits)
+{
+	return bitmap_scnlistprintf(buf, bufsize, ptr, nbits);
+}
+#endif
+
 static ssize_t snooping_local_show_pbl(struct sysfsm_ops *ops, void *instance, void *buf, size_t bufsize)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	(void)ops;
+	return mcctrl_sysfs_snooping_show_bitmap_body_result(instance, buf,
+			bufsize, mcctrl_sysfs_bitmap_scnlistprintf_bridge);
+#else
 	size_t ret;
 	const struct sysfsm_bitmap_param *p = instance;
 
@@ -2538,6 +2977,7 @@ static ssize_t snooping_local_show_pbl(struct sysfsm_ops *ops, void *instance, v
 	}
 
 	return 0;
+#endif
 } /* snooping_local_show_pbl() */
 
 struct sysfsm_ops snooping_local_ops_pbl = {
@@ -2546,8 +2986,21 @@ struct sysfsm_ops snooping_local_ops_pbl = {
 };
 
 /**** local map ****/
+#ifdef MCCTRL_RUST_HELPERS
+static unsigned long mcctrl_sysfs_bitmap_scnprintf_bridge(void *buf,
+		unsigned long bufsize, void *ptr, int nbits)
+{
+	return bitmap_scnprintf(buf, bufsize, ptr, nbits);
+}
+#endif
+
 static ssize_t snooping_local_show_pb(struct sysfsm_ops *ops, void *instance, void *buf, size_t bufsize)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	(void)ops;
+	return mcctrl_sysfs_snooping_show_bitmap_body_result(instance, buf,
+			bufsize, mcctrl_sysfs_bitmap_scnprintf_bridge);
+#else
 	size_t ret;
 	const struct sysfsm_bitmap_param *p = instance;
 
@@ -2558,6 +3011,7 @@ static ssize_t snooping_local_show_pb(struct sysfsm_ops *ops, void *instance, vo
 	}
 
 	return 0;
+#endif
 } /* snooping_local_show_pb() */
 
 struct sysfsm_ops snooping_local_ops_pb = {
@@ -2568,7 +3022,13 @@ struct sysfsm_ops snooping_local_ops_pb = {
 /**** local K unsigned ****/
 static ssize_t snooping_local_show_u32K(struct sysfsm_ops *ops, void *instance, void *buf, size_t bufsize)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	(void)ops;
+	return mcctrl_sysfs_snooping_show_u32k_body_result(instance, buf,
+			bufsize);
+#else
 	return sprintf(buf, "%uK\n", (*(unsigned *)instance >> 10));
+#endif
 } /* snooping_local_show_u32K() */
 
 struct sysfsm_ops snooping_local_ops_u32K = {

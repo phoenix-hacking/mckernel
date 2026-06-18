@@ -1,7 +1,36 @@
+use core::mem::offset_of;
 use core::ptr::{read_volatile, write_volatile};
 use core::sync::atomic::{compiler_fence, AtomicI32, Ordering};
 
-use crate::abi::{CInt, CLong, CULong, SizeT, TimeSpec};
+use crate::abi::{
+    AbiListHead, AddressSpace, CInt, CLong, CULong, CpuLocalVar, IhkSpinlock, Process, ProcessVm,
+    SigCommon, SizeT, Thread, TimeSpec, Waitq, CPU_SET_MAX_CPUS,
+};
+
+unsafe extern "C" {
+    fn ihk_mc_get_processor_id() -> CInt;
+    fn process_sched_cpu_local_bridge(cpu_id: CInt) -> usize;
+    #[link_name = "process_spin_lock_bridge"]
+    fn process_spin_lock_bridge_c(lock_addr: CULong) -> CULong;
+    #[link_name = "process_spin_unlock_bridge"]
+    fn process_spin_unlock_bridge_c(lock_addr: CULong, irqstate: CULong);
+    #[link_name = "process_sched_noirq_lock_bridge"]
+    fn process_sched_noirq_lock_bridge_c(lock_addr: CULong);
+    #[link_name = "process_sched_noirq_unlock_bridge"]
+    fn process_sched_noirq_unlock_bridge_c(lock_addr: CULong);
+    fn process_sched_waitq_wakeup_bridge(waitq_addr: usize);
+    fn process_sched_vector_bridge(vector_key: CInt) -> CInt;
+    fn process_sched_interrupt_bridge(cpu: CInt, vector: CInt);
+    fn process_sched_schedule_bridge();
+    fn process_sched_runq_log_bridge(event: CInt, arg0: usize, arg1: usize, arg2: CInt, arg3: CInt);
+    static mut runq_reservation_lock: IhkSpinlock;
+    fn process_sched_do_migrate_log_bridge(
+        thread_addr: usize,
+        tid: CInt,
+        old_cpu_id: CInt,
+        new_cpu_id: CInt,
+    );
+}
 
 type FutexHbLockFn = unsafe extern "C" fn(usize);
 type FutexHbUnlockFn = unsafe extern "C" fn(usize);
@@ -150,6 +179,10 @@ const ERESTARTSYS: i64 = 512;
 const ENOSYS: CInt = 38;
 const EFAULT: CInt = 14;
 const PS_RUNNING: CInt = 0x1;
+const CPU_FLAG_NEED_RESCHED: u32 = 0x1;
+const CPU_FLAG_NEED_MIGRATE: u32 = 0x2;
+const CPU_STATUS_IDLE: CInt = 1;
+const IHK_GV_IKC: CInt = 1;
 const PLIST_NODE_PLIST_OFFSET: usize = 8;
 const PLIST_HEAD_NODE_LIST_OFFSET: usize = 16;
 const PLIST_NODE_LIST_OFFSET: usize = PLIST_NODE_PLIST_OFFSET + PLIST_HEAD_NODE_LIST_OFFSET;
@@ -219,6 +252,29 @@ pub struct SchedMigrateOffsets {
 }
 
 #[repr(C)]
+struct SchedMigrateRequest {
+    list: AbiListHead,
+    thread: *mut Thread,
+    wq: Waitq,
+}
+
+unsafe extern "C" fn sched_process_spin_lock_bridge(lock_addr: usize) -> CULong {
+    unsafe { process_spin_lock_bridge_c(lock_addr as CULong) }
+}
+
+unsafe extern "C" fn sched_process_spin_unlock_bridge(lock_addr: usize, irqstate: CULong) {
+    unsafe { process_spin_unlock_bridge_c(lock_addr as CULong, irqstate) }
+}
+
+unsafe extern "C" fn sched_process_noirq_lock_bridge(lock_addr: usize) {
+    unsafe { process_sched_noirq_lock_bridge_c(lock_addr as CULong) }
+}
+
+unsafe extern "C" fn sched_process_noirq_unlock_bridge(lock_addr: usize) {
+    unsafe { process_sched_noirq_unlock_bridge_c(lock_addr as CULong) }
+}
+
+#[repr(C)]
 pub struct SchedDoMigrateOffsets {
     pub req_list_offset: usize,
     pub req_thread_offset: usize,
@@ -267,6 +323,37 @@ pub struct SchedRunqueueOffsets {
     pub cpu_status_offset: usize,
     pub cpu_in_interrupt_offset: usize,
     pub cpu_nr_ctx_switches_offset: usize,
+}
+
+fn sched_runqueue_offsets() -> SchedRunqueueOffsets {
+    SchedRunqueueOffsets {
+        thread_cpu_id_offset: offset_of!(Thread, cpu_id),
+        thread_tid_offset: offset_of!(Thread, tid),
+        thread_status_offset: offset_of!(Thread, status),
+        thread_spin_sleep_lock_offset: offset_of!(Thread, spin_sleep_lock),
+        thread_spin_sleep_offset: offset_of!(Thread, spin_sleep),
+        thread_sched_list_offset: offset_of!(Thread, sched_list),
+        thread_sigpending_offset: offset_of!(Thread, sigpending),
+        thread_sigcommon_offset: offset_of!(Thread, sigcommon),
+        sigcommon_sigpending_offset: offset_of!(SigCommon, sigpending),
+        thread_proc_offset: offset_of!(Thread, proc),
+        thread_mod_clone_offset: offset_of!(Thread, mod_clone),
+        proc_pid_offset: offset_of!(Process, pid),
+        proc_status_offset: offset_of!(Process, status),
+        proc_update_lock_offset: offset_of!(Process, update_lock),
+        proc_clone_count_offset: offset_of!(Process, clone_count),
+        cpu_runq_lock_offset: offset_of!(CpuLocalVar, runq_lock),
+        cpu_runq_irqstate_offset: offset_of!(CpuLocalVar, runq_irqstate),
+        cpu_current_offset: offset_of!(CpuLocalVar, current),
+        cpu_prevpid_offset: offset_of!(CpuLocalVar, prevpid),
+        cpu_runq_offset: offset_of!(CpuLocalVar, runq),
+        cpu_runq_len_offset: offset_of!(CpuLocalVar, runq_len),
+        cpu_runq_reserved_offset: offset_of!(CpuLocalVar, runq_reserved),
+        cpu_flags_offset: offset_of!(CpuLocalVar, flags),
+        cpu_status_offset: offset_of!(CpuLocalVar, status),
+        cpu_in_interrupt_offset: offset_of!(CpuLocalVar, in_interrupt),
+        cpu_nr_ctx_switches_offset: offset_of!(CpuLocalVar, nr_ctx_switches),
+    }
 }
 
 #[repr(C)]
@@ -2092,6 +2179,51 @@ pub unsafe extern "C" fn sched_do_migrate_body_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn sched_do_migrate_public() {
+    let current_cpu_id = unsafe { ihk_mc_get_processor_id() };
+    let current_cpu_addr = unsafe { process_sched_cpu_local_bridge(current_cpu_id) };
+    let offsets = SchedDoMigrateOffsets {
+        req_list_offset: offset_of!(SchedMigrateRequest, list),
+        req_thread_offset: offset_of!(SchedMigrateRequest, thread),
+        req_wq_offset: offset_of!(SchedMigrateRequest, wq),
+        thread_cpu_id_offset: offset_of!(Thread, cpu_id),
+        thread_tid_offset: offset_of!(Thread, tid),
+        thread_cpu_set_offset: offset_of!(Thread, cpu_set),
+        thread_sched_list_offset: offset_of!(Thread, sched_list),
+        thread_vm_offset: offset_of!(Thread, vm),
+        vm_address_space_offset: offset_of!(ProcessVm, address_space),
+        address_space_cpu_set_offset: offset_of!(AddressSpace, cpu_set),
+        address_space_cpu_set_lock_offset: offset_of!(AddressSpace, cpu_set_lock),
+        cpu_migq_lock_offset: offset_of!(CpuLocalVar, migq_lock),
+        cpu_migq_offset: offset_of!(CpuLocalVar, migq),
+        cpu_runq_lock_offset: offset_of!(CpuLocalVar, runq_lock),
+        cpu_runq_offset: offset_of!(CpuLocalVar, runq),
+        cpu_runq_len_offset: offset_of!(CpuLocalVar, runq_len),
+        cpu_flags_offset: offset_of!(CpuLocalVar, flags),
+    };
+
+    let _ = unsafe {
+        sched_do_migrate_body_result(
+            current_cpu_id,
+            current_cpu_addr,
+            CPU_SET_MAX_CPUS as CInt,
+            CPU_FLAG_NEED_RESCHED,
+            IHK_GV_IKC,
+            &offsets,
+            Some(sched_process_spin_lock_bridge),
+            Some(sched_process_spin_unlock_bridge),
+            Some(sched_process_noirq_lock_bridge),
+            Some(sched_process_noirq_unlock_bridge),
+            Some(process_sched_cpu_local_bridge),
+            Some(process_sched_waitq_wakeup_bridge),
+            Some(process_sched_vector_bridge),
+            Some(process_sched_interrupt_bridge),
+            Some(process_sched_do_migrate_log_bridge),
+        )
+    };
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn sched_release_cpuid_body_result(
     _cpuid: CInt,
     cpu_addr: usize,
@@ -2138,6 +2270,27 @@ pub unsafe extern "C" fn sched_release_cpuid_body_result(
         unlock(reservation_lock_addr, irqstate);
     }
     0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn release_cpuid(cpuid: CInt) {
+    let cpu_addr = unsafe { process_sched_cpu_local_bridge(cpuid) };
+    let reservation_lock_addr =
+        core::ptr::addr_of_mut!(runq_reservation_lock) as *mut IhkSpinlock as usize;
+    let offsets = sched_runqueue_offsets();
+    let _ = unsafe {
+        sched_release_cpuid_body_result(
+            cpuid,
+            cpu_addr,
+            reservation_lock_addr,
+            CPU_STATUS_IDLE,
+            &offsets,
+            Some(sched_process_spin_lock_bridge),
+            Some(sched_process_spin_unlock_bridge),
+            Some(sched_process_noirq_lock_bridge),
+            Some(sched_process_noirq_unlock_bridge),
+        )
+    };
 }
 
 #[no_mangle]
@@ -2192,6 +2345,25 @@ pub unsafe extern "C" fn sched_check_need_resched_body_result(
         schedule();
     }
     1
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn check_need_resched() {
+    let cpu_id = unsafe { ihk_mc_get_processor_id() };
+    let cpu_addr = unsafe { process_sched_cpu_local_bridge(cpu_id) };
+    let offsets = sched_runqueue_offsets();
+    let _ = unsafe {
+        sched_check_need_resched_body_result(
+            cpu_addr,
+            CPU_FLAG_NEED_RESCHED,
+            CPU_FLAG_NEED_MIGRATE,
+            &offsets,
+            Some(sched_process_spin_lock_bridge),
+            Some(sched_process_spin_unlock_bridge),
+            Some(process_sched_schedule_bridge),
+            Some(process_sched_runq_log_bridge),
+        )
+    };
 }
 
 #[no_mangle]
@@ -2384,6 +2556,22 @@ pub unsafe extern "C" fn sched_runq_del_thread_body_result(
         unlock(runq_lock_addr, irqstate);
     }
     0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn runq_del_thread(thread: *mut Thread, cpu_id: CInt) {
+    let cpu_addr = unsafe { process_sched_cpu_local_bridge(cpu_id) };
+    let offsets = sched_runqueue_offsets();
+    let _ = unsafe {
+        sched_runq_del_thread_body_result(
+            thread as usize,
+            cpu_addr,
+            CPU_STATUS_IDLE,
+            &offsets,
+            Some(sched_process_spin_lock_bridge),
+            Some(sched_process_spin_unlock_bridge),
+        )
+    };
 }
 
 #[no_mangle]

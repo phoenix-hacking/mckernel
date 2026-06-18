@@ -1,23 +1,399 @@
 use core::ffi::c_void;
-use core::mem::{MaybeUninit, size_of};
+use core::mem::{offset_of, size_of, MaybeUninit};
 use core::ptr::{copy_nonoverlapping, null_mut, write_volatile};
 use core::sync::atomic::{AtomicI32, Ordering};
 
 use crate::abi::{
-    AUXV_LEN, AbiListHead, CInt, CLong, CPU_SET_MAX_CPUS, CULong, CpuLocalVar, CpuSet, IhkAtomic,
-    IhkSpinlock, Memobj, OffT, PROCESS_HASH_SIZE, PROCESS_NUMA_MASK_BITS, Process, ProcessHash,
-    ProcessVm, ProgramLoadDesc, ResourceSet, SizeT, Thread, ThreadHash, VM_RANGE_CACHE_SIZE,
-    VmRange,
+    AbiListHead, AddressSpace, CInt, CLong, CULong, CpuLocalVar, CpuSet, IhkAtomic, IhkSpinlock,
+    Mckfd, Memobj, OffT, Process, ProcessHash, ProcessVm, ProgramLoadDesc, ResourceSet, SigCommon,
+    SigPending, SigStack, SizeT, Thread, ThreadHash, VmRange, VmRangeNumaPolicy, AUXV_LEN,
+    CPU_SET_MAX_CPUS, PROCESS_HASH_SIZE, PROCESS_NUMA_MASK_BITS, VM_RANGE_CACHE_SIZE,
 };
+use crate::lock_helpers::McsRwlockNodeIrqsave;
 use crate::rbtree::{
-    RbNode, RbRoot, rb_erase, rb_first, rb_insert_color, rb_link_node, rb_next, rb_prev,
+    rb_erase, rb_first, rb_insert_color, rb_link_node, rb_next, rb_prev, RbNode, RbRoot,
 };
 
 unsafe extern "C" {
     fn __ihk_mc_spinlock_lock(lock: *mut IhkSpinlock) -> CULong;
     fn __ihk_mc_spinlock_unlock(lock: *mut IhkSpinlock, flags: CULong);
+    fn ihk_mc_get_nr_numa_nodes() -> CInt;
     fn memobj_ref(obj: *mut Memobj) -> CInt;
     fn memobj_unref(obj: *mut Memobj) -> CInt;
+    #[link_name = "num_processors"]
+    static mut PROCESS_NUM_PROCESSORS: CInt;
+    #[link_name = "resource_set_list"]
+    static mut PROCESS_RESOURCE_SET_LIST: AbiListHead;
+    #[link_name = "resource_set_lock"]
+    static mut PROCESS_RESOURCE_SET_LOCK: CULong;
+    fn get_this_cpu_local_var() -> *mut CpuLocalVar;
+    fn ihk_mc_get_processor_id() -> CInt;
+    fn process_alloc_bridge(size: CULong, flags: CULong) -> *mut c_void;
+    fn process_detach_address_space_bridge(address_space: *mut c_void, pid: CInt);
+    fn process_free_all_ranges_bridge(vm: *mut c_void);
+    fn process_free_vm_bridge(vm: *mut c_void);
+    fn process_flush_vm_bridge(vm: *mut c_void);
+    fn process_init_process_public_bridge(proc: *mut c_void, parent: *mut c_void) -> CInt;
+    fn process_hold_thread_warn_bridge(thread: *mut c_void);
+    fn process_optional_free_bridge(ptr: *mut c_void);
+    fn process_policy_free_bridge(policy: *mut c_void);
+    fn process_proc_init_panic_bridge();
+    fn process_procfs_delete_thread_bridge(thread: *mut c_void);
+    fn process_pt_create_bridge(flags: CULong) -> *mut c_void;
+    fn process_pt_destroy_bridge(page_table: *mut c_void);
+    fn process_destroy_thread_bridge(thread: *mut c_void);
+    fn process_release_address_space_action_bridge(asp: *mut c_void);
+    fn process_release_process_bridge(proc: *mut c_void);
+    fn process_current_resource_set_bridge() -> *mut c_void;
+    fn process_release_hash_detach_bridge(resource_set: *mut c_void, proc: *mut c_void);
+    fn process_release_sibling_detach_bridge(proc: *mut c_void);
+    fn process_release_profile_bridge(proc: *mut c_void);
+    fn process_release_final_cleanup_bridge(resource_set: *mut c_void);
+    fn process_free_thread_pages_bridge(thread: *mut c_void);
+    fn process_mckfd_free_bridge(fdp: *mut c_void);
+    fn process_mcs_writer_lock_bridge(lock_addr: CULong, node: *mut c_void);
+    fn process_mcs_writer_unlock_bridge(lock_addr: CULong, node: *mut c_void);
+    fn process_mcs_reader_lock_bridge(lock_addr: CULong, node: *mut c_void);
+    fn process_mcs_reader_unlock_bridge(lock_addr: CULong, node: *mut c_void);
+    fn process_ptrace_mcs_lock_noirq_bridge(lock_addr: CULong, node: *mut c_void);
+    fn process_ptrace_mcs_unlock_noirq_bridge(lock_addr: CULong, node: *mut c_void);
+    fn process_ptrace_alloc_debugreg_bridge(thread: *mut c_void) -> CInt;
+    fn process_ptrace_clear_single_step_bridge(thread: *mut c_void);
+    fn process_ptrace_hold_thread_bridge(thread: *mut c_void);
+    fn process_ptrace_traceme_log_bridge(event: CInt, pid: CInt, value: CULong, error: CInt);
+    fn process_hold_thread_bridge(thread: *mut c_void);
+    fn process_default_ncpus_bridge() -> CInt;
+    fn process_create_cpu_log_bridge(event: CInt, pid: CInt, cpu: CInt);
+    fn process_create_thread_alloc_pages_bridge(npages: CInt, flags: CULong) -> *mut c_void;
+    fn process_create_thread_address_space_bridge(nslots: CInt) -> *mut c_void;
+    fn process_create_thread_release_address_space_bridge(asp: *mut c_void);
+    fn process_create_thread_init_process_bridge(proc: *mut c_void, parent: *mut c_void) -> CInt;
+    fn process_create_thread_init_vm_bridge(
+        owner: *mut c_void,
+        asp: *mut c_void,
+        vm: *mut c_void,
+    ) -> CInt;
+    fn process_create_thread_init_user_bridge(
+        thread: *mut c_void,
+        stack_top: CULong,
+        user_pc: CULong,
+        user_sp: CULong,
+    );
+    fn process_memset_smp_phys_to_virt_bridge(phys: CULong) -> *mut c_void;
+    fn process_memset_smp_memset_bridge(addr: *mut c_void, value: CInt, len: SizeT);
+    fn process_memset_smp_log_bridge(
+        event: CInt,
+        cpu_index: CInt,
+        nr_cpus: CInt,
+        phys: CULong,
+        len: SizeT,
+        start: CULong,
+        end: CULong,
+    );
+    fn process_memset_smp_virt_to_phys_bridge(addr: *mut c_void) -> CULong;
+    fn process_memset_smp_call_bridge(
+        cpu_set: *mut c_void,
+        handler: *mut c_void,
+        arg: *mut c_void,
+    ) -> CInt;
+    fn process_destroy_thread_hash_detach_bridge(thread: *mut c_void);
+    fn process_destroy_thread_time_account_bridge(thread: *mut c_void);
+    fn process_destroy_thread_release_tid_bridge(proc: *mut c_void, thread: *mut c_void);
+    fn process_destroy_thread_replace_tid_bridge(
+        proc: *mut c_void,
+        thread: *mut c_void,
+        new_tid: CInt,
+    );
+    fn process_release_sigcommon_bridge(sigcommon: *mut c_void);
+    fn release_fp_regs(thread: *mut c_void);
+    fn process_release_thread_profile_bridge(thread: *mut c_void, proc: *mut c_void);
+    fn process_release_vm_bridge(vm: *mut c_void);
+    fn process_rw_read_lock_bridge(lock_addr: CULong);
+    fn process_rw_read_unlock_bridge(lock_addr: CULong);
+    fn process_rw_write_lock_bridge(lock_addr: CULong);
+    fn process_rw_write_unlock_bridge(lock_addr: CULong);
+    fn process_rwlock_init_bridge(lock_addr: CULong);
+    fn process_spin_init_bridge(lock_addr: CULong);
+    fn process_vm_init_numa_log_bridge(numa_id: CInt);
+    fn process_vm_rwspin_init_bridge(lock_addr: CULong);
+    fn process_sched_init_context_bridge(thread: *mut c_void);
+    fn process_sched_save_fp_bridge(thread: *mut c_void) -> CInt;
+    fn process_sched_timer_init_bridge(cpu: CInt);
+    fn process_sched_init_panic_bridge();
+    fn process_spin_lock_bridge(lock_addr: CULong) -> CULong;
+    fn process_spin_unlock_bridge(lock_addr: CULong, irqstate: CULong);
+    fn process_access_ok_log_bridge(
+        vm: *mut ProcessVm,
+        verify_type: CInt,
+        addr: CULong,
+        len: SizeT,
+        rc: CInt,
+    );
+    fn process_free_range_noirq_lock_bridge(lock_addr: CULong);
+    fn process_free_range_noirq_unlock_bridge(lock_addr: CULong);
+    fn process_remove_region_clear_bridge(
+        page_table: *mut c_void,
+        vm: *mut ProcessVm,
+        start: CULong,
+        end: CULong,
+    ) -> CInt;
+    fn process_remove_region_log_bridge(vm: *mut ProcessVm, start: CULong, end: CULong);
+    fn process_memory_range_free_bridge(vm: *mut c_void, range: *mut c_void) -> CInt;
+    fn process_remove_range_split_bridge(
+        vm: *mut ProcessVm,
+        range: *mut VmRange,
+        addr: CULong,
+        splitp: *mut *mut VmRange,
+    ) -> CInt;
+    fn process_remove_range_xpmem_bridge(vm: *mut ProcessVm, range: *mut VmRange);
+    fn process_remove_range_log_bridge(
+        event: CInt,
+        vm: *mut ProcessVm,
+        start: CULong,
+        end: CULong,
+        range: *mut VmRange,
+        error: CInt,
+    );
+    fn process_normal_fault_range_bridge(
+        vm: *mut ProcessVm,
+        range: *mut VmRange,
+        fault_addr: CULong,
+        reason: CULong,
+    ) -> CInt;
+    fn process_xpmem_fault_range_bridge(
+        vm: *mut ProcessVm,
+        range: *mut VmRange,
+        fault_addr: CULong,
+        reason: CULong,
+    ) -> CInt;
+    fn process_pgio_dispatch_bridge(fp: *mut c_void, arg: *mut c_void);
+    fn process_zeroobj_match_bridge(memobj: *mut c_void) -> CInt;
+    fn process_populate_warn_bridge(
+        vm: *mut ProcessVm,
+        addr: CULong,
+        reason: CULong,
+        off: CULong,
+        len: SizeT,
+        error: CInt,
+    );
+    fn preempt_enable();
+    fn preempt_disable();
+    fn remap_one_page(
+        arg0: *mut c_void,
+        page_table: *mut c_void,
+        ptep: *mut c_void,
+        pgaddr: *mut c_void,
+        pgshift: CInt,
+    ) -> CInt;
+    fn sync_one_page(
+        arg0: *mut c_void,
+        page_table: *mut c_void,
+        ptep: *mut c_void,
+        pgaddr: *mut c_void,
+        pgshift: CInt,
+    ) -> CInt;
+    fn process_visit_pte_range_bridge(
+        page_table: *mut c_void,
+        start: CULong,
+        end: CULong,
+        pgshift: CInt,
+        flags: CInt,
+        visit_fn: *mut c_void,
+        arg: *mut c_void,
+    ) -> CInt;
+    fn process_remap_range_log_bridge(
+        event: CInt,
+        vm: *mut ProcessVm,
+        range: *mut VmRange,
+        start: CULong,
+        end: CULong,
+        off: OffT,
+        old_pgshift: CInt,
+        error: CInt,
+    );
+    fn process_sync_range_log_bridge(
+        vm: *mut ProcessVm,
+        range: *mut VmRange,
+        start: CULong,
+        end: CULong,
+        error: CInt,
+    );
+    fn process_lookup_pte_bridge(
+        page_table: *mut c_void,
+        addr: CULong,
+        pgshift: CInt,
+        pgsizep: *mut SizeT,
+    ) -> *mut c_void;
+    fn process_pte_is_contiguous_bridge(ptep: *mut c_void) -> CInt;
+    fn process_page_is_contiguous_head_bridge(ptep: *mut c_void, pgsize: SizeT) -> CInt;
+    fn process_page_is_contiguous_tail_bridge(ptep: *mut c_void, pgsize: SizeT) -> CInt;
+    fn process_split_contiguous_pages_bridge(
+        ptep: *mut c_void,
+        pgsize: SizeT,
+        memobj_flags: u32,
+    ) -> CInt;
+    fn process_free_range_pt_free_bridge(
+        page_table: *mut c_void,
+        vm: *mut ProcessVm,
+        start: CULong,
+        end: CULong,
+        memobj: *mut c_void,
+    ) -> CInt;
+    fn process_invalidate_range_log_bridge(
+        vm: *mut ProcessVm,
+        range: *mut VmRange,
+        start: CULong,
+        end: CULong,
+        error: CInt,
+    );
+    fn process_pte_is_null_bridge(ptep: *mut c_void) -> CInt;
+    fn process_pte_is_fileoff_bridge(ptep: *mut c_void, pgsize: SizeT) -> CInt;
+    fn process_pte_get_phys_bridge(ptep: *mut c_void) -> CULong;
+    fn process_phys_to_page_bridge(phys: CULong) -> *mut c_void;
+    fn process_page_offset_bridge(page: *mut c_void) -> OffT;
+    fn process_pte_make_fileoff_bridge(off: OffT, pgsize: SizeT, ptep: *mut c_void);
+    fn process_pte_xchg_bridge(ptep: *mut c_void, valp: *mut c_void);
+    fn process_flush_tlb_single_bridge(addr: CULong);
+    fn process_pgsize_to_tbllv_bridge(pgsize: SizeT) -> CInt;
+    fn process_tbllv_to_contpgsize_bridge(level: CInt) -> SizeT;
+    fn process_page_unmap_bridge(page: *mut c_void) -> CInt;
+    fn process_panic_bridge(message: *const i8);
+    fn process_memobj_invalidate_page_bridge(
+        memobj: *mut Memobj,
+        phys: CULong,
+        pgsize: SizeT,
+    ) -> CInt;
+    fn process_invalidate_one_page_log_bridge(
+        arg0: *mut c_void,
+        page_table: *mut c_void,
+        ptep: *mut c_void,
+        pte_value: CULong,
+        pgaddr: *mut c_void,
+        pgshift: CInt,
+        error: CInt,
+    );
+    fn process_memory_range_free_log_bridge(vm: *mut c_void, range: *mut c_void, error: CInt);
+    fn process_flush_memory_log_bridge(vm: *mut c_void, range: *mut c_void, error: CInt);
+    fn process_flush_memory_debug_bridge(vm: *mut c_void, event: CInt);
+    fn process_range_public_log_bridge(
+        event: CInt,
+        vm: *mut c_void,
+        range: *mut VmRange,
+        start: CULong,
+        end: CULong,
+        error: CInt,
+    );
+    fn process_change_prot_attr_bridge(flag: CULong, fault: CULong, ptep: *mut c_void) -> CULong;
+    fn process_sched_noirq_lock_bridge(lock_addr: CULong);
+    fn process_sched_noirq_unlock_bridge(lock_addr: CULong);
+    fn process_change_prot_pt_change_bridge(
+        page_table: *mut c_void,
+        start: CULong,
+        end: CULong,
+        clrattr: CULong,
+        setattr: CULong,
+    ) -> CInt;
+    fn process_change_prot_public_log_bridge(
+        event: CInt,
+        vm: *mut c_void,
+        range: *mut VmRange,
+        protflag: CULong,
+        error: CInt,
+    );
+    fn process_update_page_table_attr_bridge(
+        flag: CULong,
+        fault: CULong,
+        ptep: *mut c_void,
+    ) -> CULong;
+    fn process_update_page_table_set_range_bridge(
+        page_table: *mut c_void,
+        vm: *mut ProcessVm,
+        start: CULong,
+        end: CULong,
+        phys: CULong,
+        attr: CULong,
+        pgshift: CInt,
+        range: *mut VmRange,
+        flags: CInt,
+    ) -> CInt;
+    fn process_update_page_table_log_bridge(error: CInt);
+    fn process_add_range_alloc_bridge(size: CULong) -> *mut VmRange;
+    fn process_add_range_free_bridge(range: *mut VmRange);
+    fn process_add_range_insert_bridge(vm: *mut c_void, range: *mut VmRange) -> CInt;
+    fn process_add_range_update_bridge(
+        vm: *mut c_void,
+        range: *mut VmRange,
+        phys: CULong,
+        attr: CULong,
+    ) -> CInt;
+    fn process_add_range_remove_bridge(vm: *mut c_void, start: CULong, end: CULong);
+    fn process_add_range_mark_xpmem_bridge(range: *mut VmRange);
+    fn process_add_range_memclear_bridge(phys: CULong, bytes: CULong);
+    fn process_add_range_log_bridge(event: CInt, rc: CInt, start: CULong, end: CULong);
+    fn process_split_range_pt_split_bridge(
+        page_table: *mut c_void,
+        vm: *mut ProcessVm,
+        range: *mut VmRange,
+        addr: *mut c_void,
+    ) -> CInt;
+    fn process_split_range_pt_log_bridge(error: CInt);
+    fn process_split_shm_lookup_page_bridge(
+        obj: *mut c_void,
+        off: OffT,
+        p2align: CInt,
+        physp: *mut CULong,
+        pflag: *mut CULong,
+    ) -> CInt;
+    fn process_split_shm_phys_to_page_bridge(phys: CULong) -> *mut c_void;
+    fn process_split_shm_update_page_bridge(
+        obj: *mut c_void,
+        page_table: *mut c_void,
+        page: *mut c_void,
+        vaddr: *mut c_void,
+    ) -> CInt;
+    fn process_split_shm_log_bridge(event: CInt, error: CInt);
+    fn process_split_page_pgshift_offset_bridge() -> CULong;
+    fn process_split_range_alloc_bridge(size: CULong, flags: CULong) -> *mut VmRange;
+    fn process_split_range_alloc_log_bridge(
+        vm: *mut ProcessVm,
+        range: *mut VmRange,
+        addr: CULong,
+        splitp: *mut c_void,
+    );
+    fn process_split_range_insert_bridge(vm: *mut c_void, range: *mut VmRange) -> CInt;
+    fn process_split_range_publish_log_bridge(error: CInt);
+    fn process_split_range_public_log_bridge(
+        event: CInt,
+        vm: *mut ProcessVm,
+        range: *mut VmRange,
+        addr: CULong,
+        splitp: *mut *mut VmRange,
+        newrange: *mut VmRange,
+        error: CInt,
+    );
+    #[cfg(enable_tofu)]
+    fn process_split_range_tofu_init_bridge(range: *mut VmRange);
+    #[cfg(enable_tofu)]
+    fn process_split_range_tofu_split_bridge(
+        vm: *mut ProcessVm,
+        range_low: *mut VmRange,
+        range_high: *mut VmRange,
+        addr: CULong,
+    );
+    fn process_range_kfree_bridge(range: *mut VmRange);
+    fn process_join_range_log_bridge(
+        event: CInt,
+        vm: *mut ProcessVm,
+        surviving: *mut VmRange,
+        merging: *mut VmRange,
+        error: CInt,
+    );
+    #[cfg(enable_tofu)]
+    fn process_join_range_tofu_bridge(
+        vm: *mut c_void,
+        surviving: *mut VmRange,
+        merging: *mut VmRange,
+    ) -> CInt;
 }
 
 const EINVAL: CInt = 22;
@@ -33,6 +409,7 @@ const ERESTART: CInt = 85;
 const PAGE_SIZE: CULong = 4096;
 const PAGE_SHIFT: CULong = 12;
 const PF_WRITE: CULong = 1 << 1;
+const PF_USER: CULong = 1 << 2;
 const PF_INSTR: CULong = 1 << 4;
 const PF_PATCH: CULong = 1 << 29;
 const PF_POPULATE: CULong = 1 << 30;
@@ -61,6 +438,12 @@ const WNOWAIT: CInt = 0x0100_0000;
 const LIST_POISON1: usize = 0x0010_0129;
 const LIST_POISON2: usize = 0x0020_0229;
 const MPOL_DEFAULT: CInt = 0;
+const IHK_MC_AP_NOWAIT: CULong = 0x0000_02;
+const CPU_SETSIZE: CInt = 1024;
+const BITS_PER_BYTE: CULong = 8;
+const KERNEL_STACK_NR_PAGES: CULong = 32;
+const SCHED_NORMAL: CInt = 0;
+const SS_DISABLE: CInt = 2;
 
 const VR_RESERVED: CULong = 0x2;
 const VR_STACK: CULong = 0x1;
@@ -115,6 +498,8 @@ const PROCESS_ADD_RANGE_MAP_SKIP: CInt = 0;
 const PROCESS_ADD_RANGE_MAP_UPDATE: CInt = 1;
 const PROCESS_ADD_RANGE_MAP_MARK_XPMEM: CInt = 2;
 const PROCESS_ADD_RANGE_MAP_DEMAND: CInt = 3;
+const PROCESS_JOIN_RANGE_LOG_START: CInt = 1;
+const PROCESS_JOIN_RANGE_LOG_DONE: CInt = 2;
 const PROCESS_ADD_RANGE_LOG_ALLOC_FAILED: CInt = 1;
 const PROCESS_ADD_RANGE_LOG_INSERT_FAILED: CInt = 2;
 const PROCESS_ADD_RANGE_LOG_PREP_FAILED: CInt = 3;
@@ -163,6 +548,8 @@ const PROCESS_INIT_STACK_LOG_ALIGN_MISMATCH: CInt = 8;
 const PROCESS_INIT_STACK_LOG_INITIAL: CInt = 9;
 const PROCESS_SPLIT_SHM_LOG_LOOKUP_FAILED: CInt = 1;
 const PROCESS_SPLIT_SHM_LOG_UPDATE_FAILED: CInt = 2;
+const PROCESS_SPLIT_RANGE_LOG_START: CInt = 1;
+const PROCESS_SPLIT_RANGE_LOG_DONE: CInt = 2;
 
 const PTATTR_ACTIVE: CULong = 0x01;
 const PTATTR_WRITABLE: CULong = 0x02;
@@ -378,6 +765,62 @@ type ProcessPhysToVirtFn = unsafe extern "C" fn(CULong) -> *mut c_void;
 type ProcessMemsetFn = unsafe extern "C" fn(*mut c_void, CInt, SizeT);
 type ProcessMemsetSmpLogFn = unsafe extern "C" fn(CInt, CInt, CInt, CULong, SizeT, CULong, CULong);
 type ProcessSmpCallFn = unsafe extern "C" fn(*mut c_void, *mut c_void, *mut c_void) -> CInt;
+
+#[repr(C)]
+struct ProcessMemsetSmpReq {
+    phys: CULong,
+    len: SizeT,
+    val: CInt,
+}
+
+#[repr(C, align(64))]
+struct McsRwlockNode {
+    count: IhkAtomic,
+    type_: i8,
+    locked: i8,
+    dmy1: i8,
+    dmy2: i8,
+    next: *mut McsRwlockNode,
+}
+
+const _: () = {
+    use core::mem::{align_of, size_of};
+
+    assert!(size_of::<McsRwlockNode>() == 64);
+    assert!(align_of::<McsRwlockNode>() == 64);
+    assert!(offset_of!(McsRwlockNode, count) == 0);
+    assert!(offset_of!(McsRwlockNode, type_) == 4);
+    assert!(offset_of!(McsRwlockNode, locked) == 5);
+    assert!(offset_of!(McsRwlockNode, dmy1) == 6);
+    assert!(offset_of!(McsRwlockNode, dmy2) == 7);
+    assert!(offset_of!(McsRwlockNode, next) == 8);
+};
+
+#[repr(C)]
+struct ProcessRemapArgs {
+    off: OffT,
+    start: CULong,
+    memobj: *mut Memobj,
+}
+
+#[repr(C)]
+struct ProcessSyncArgs {
+    memobj: *mut Memobj,
+}
+
+const _: () = {
+    use core::mem::{align_of, size_of};
+
+    assert!(size_of::<ProcessRemapArgs>() == 24);
+    assert!(align_of::<ProcessRemapArgs>() == 8);
+    assert!(offset_of!(ProcessRemapArgs, off) == 0);
+    assert!(offset_of!(ProcessRemapArgs, start) == 8);
+    assert!(offset_of!(ProcessRemapArgs, memobj) == 16);
+    assert!(size_of::<ProcessSyncArgs>() == 8);
+    assert!(align_of::<ProcessSyncArgs>() == 8);
+    assert!(offset_of!(ProcessSyncArgs, memobj) == 0);
+};
+
 type ProcessAttrFromVrflagFn = unsafe extern "C" fn(CULong, CULong, *mut c_void) -> CULong;
 type ProcessNoirqLockFn = unsafe extern "C" fn(CULong);
 type ProcessNoirqUnlockFn = unsafe extern "C" fn(CULong);
@@ -934,6 +1377,44 @@ pub unsafe extern "C" fn process_add_range_public_body_result(
         mark_xpmem_fn,
         memclear_fn,
         log_fn,
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn add_process_memory_range(
+    vm: *mut ProcessVm,
+    start: CULong,
+    end: CULong,
+    phys: CULong,
+    flag: CULong,
+    memobj: *mut c_void,
+    offset: OffT,
+    pgshift: CInt,
+    private_data: *mut c_void,
+    rp: *mut *mut VmRange,
+) -> CInt {
+    process_add_range_public_body_result(
+        vm.cast::<c_void>(),
+        core::mem::size_of::<VmRange>() as CULong,
+        (*vm).region.user_start,
+        (*vm).region.user_end,
+        start,
+        end,
+        phys,
+        flag,
+        memobj,
+        offset,
+        pgshift,
+        private_data,
+        rp,
+        Some(process_add_range_alloc_bridge),
+        Some(process_add_range_free_bridge),
+        Some(process_add_range_insert_bridge),
+        Some(process_add_range_update_bridge),
+        Some(process_add_range_remove_bridge),
+        Some(process_add_range_mark_xpmem_bridge),
+        Some(process_add_range_memclear_bridge),
+        Some(process_add_range_log_bridge),
     )
 }
 
@@ -1545,6 +2026,40 @@ pub unsafe extern "C" fn process_extend_up_public_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn lookup_process_memory_range(
+    vm: *mut ProcessVm,
+    start: CULong,
+    end: CULong,
+) -> *mut VmRange {
+    process_lookup_memory_range_public_result(vm, start, end, Some(process_range_public_log_bridge))
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn next_process_memory_range(
+    vm: *mut ProcessVm,
+    range: *mut VmRange,
+) -> *mut VmRange {
+    process_next_memory_range_public_result(vm, range, Some(process_range_public_log_bridge))
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn previous_process_memory_range(
+    vm: *mut ProcessVm,
+    range: *mut VmRange,
+) -> *mut VmRange {
+    process_previous_memory_range_public_result(vm, range, Some(process_range_public_log_bridge))
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn extend_up_process_memory_range(
+    vm: *mut ProcessVm,
+    range: *mut VmRange,
+    newend: CULong,
+) -> CInt {
+    process_extend_up_public_result(vm, range, newend, Some(process_range_public_log_bridge))
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn process_change_prot_body_result(
     vm: *mut ProcessVm,
     range: *mut VmRange,
@@ -1680,6 +2195,24 @@ pub unsafe extern "C" fn process_change_prot_public_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn change_prot_process_memory_range(
+    vm: *mut ProcessVm,
+    range: *mut VmRange,
+    protflag: CULong,
+) -> CInt {
+    process_change_prot_public_result(
+        vm,
+        range,
+        protflag,
+        Some(process_change_prot_attr_bridge),
+        Some(process_sched_noirq_lock_bridge),
+        Some(process_sched_noirq_unlock_bridge),
+        Some(process_change_prot_pt_change_bridge),
+        Some(process_change_prot_public_log_bridge),
+    )
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn process_update_page_table_body_result(
     vm: *mut ProcessVm,
     range: *mut VmRange,
@@ -1750,6 +2283,26 @@ pub unsafe extern "C" fn process_update_page_table_public_result(
         unlock_fn,
         pt_set_range_fn,
         log_fn,
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn update_process_page_table(
+    vm: *mut ProcessVm,
+    range: *mut VmRange,
+    phys: CULong,
+    flag: CULong,
+) -> CInt {
+    process_update_page_table_public_result(
+        vm,
+        range,
+        phys,
+        flag,
+        Some(process_update_page_table_attr_bridge),
+        Some(process_spin_lock_bridge),
+        Some(process_spin_unlock_bridge),
+        Some(process_update_page_table_set_range_bridge),
+        Some(process_update_page_table_log_bridge),
     )
 }
 
@@ -1826,6 +2379,22 @@ pub unsafe extern "C" fn process_access_ok_public_result(
         let _ = process_access_ok_log_result(vm, verify_type, addr, len, error, log_fn);
     }
     error
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn access_ok(
+    vm: *mut ProcessVm,
+    verify_type: CInt,
+    addr: CULong,
+    len: SizeT,
+) -> CInt {
+    process_access_ok_public_result(
+        vm,
+        verify_type,
+        addr,
+        len,
+        Some(process_access_ok_log_bridge),
+    )
 }
 
 #[inline(always)]
@@ -2139,6 +2708,36 @@ pub unsafe extern "C" fn process_page_fault_vm_public_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn page_fault_process_vm(
+    fault_vm: *mut ProcessVm,
+    fault_addr: *mut c_void,
+    reason: CULong,
+) -> CInt {
+    let thread = (*get_this_cpu_local_var()).current;
+
+    process_page_fault_vm_public_result(
+        fault_vm,
+        (*thread).vm,
+        fault_addr as CULong,
+        reason,
+        ihk_mc_get_processor_id(),
+        thread.cast::<c_void>(),
+        offset_of!(Thread, pgio_fp) as CULong,
+        offset_of!(Thread, pgio_arg) as CULong,
+        Some(process_rw_read_lock_bridge),
+        Some(process_rw_read_unlock_bridge),
+        Some(process_rw_write_lock_bridge),
+        Some(process_rw_write_unlock_bridge),
+        Some(process_zeroobj_match_bridge),
+        Some(process_normal_fault_range_bridge),
+        Some(process_xpmem_fault_range_bridge),
+        Some(preempt_enable),
+        Some(preempt_disable),
+        Some(process_pgio_dispatch_bridge),
+    )
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn process_page_fault_vm_retry_body_result(
     vm: *mut ProcessVm,
     fault_addr: CULong,
@@ -2296,6 +2895,39 @@ pub unsafe extern "C" fn process_populate_memory_public_result(
 
     let _ = process_preempt_result(preempt_enable_fn);
     0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn populate_process_memory(
+    vm: *mut ProcessVm,
+    start: *mut c_void,
+    len: SizeT,
+) -> CInt {
+    let thread = (*get_this_cpu_local_var()).current;
+
+    process_populate_memory_public_result(
+        vm,
+        (*thread).vm,
+        start as CULong,
+        len,
+        PAGE_SIZE,
+        PF_USER | PF_POPULATE,
+        ihk_mc_get_processor_id(),
+        thread.cast::<c_void>(),
+        offset_of!(Thread, pgio_fp) as CULong,
+        offset_of!(Thread, pgio_arg) as CULong,
+        Some(process_rw_read_lock_bridge),
+        Some(process_rw_read_unlock_bridge),
+        Some(process_rw_write_lock_bridge),
+        Some(process_rw_write_unlock_bridge),
+        Some(process_zeroobj_match_bridge),
+        Some(process_normal_fault_range_bridge),
+        Some(process_xpmem_fault_range_bridge),
+        Some(preempt_disable),
+        Some(preempt_enable),
+        Some(process_pgio_dispatch_bridge),
+        Some(process_populate_warn_bridge),
+    )
 }
 
 #[no_mangle]
@@ -2767,6 +3399,125 @@ pub unsafe extern "C" fn process_split_shm_update_body_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn split_process_memory_range(
+    vm: *mut ProcessVm,
+    range: *mut VmRange,
+    addr: CULong,
+    splitp: *mut *mut VmRange,
+) -> CInt {
+    let mut error;
+    let mut newrange = null_mut();
+
+    process_split_range_public_log_bridge(
+        PROCESS_SPLIT_RANGE_LOG_START,
+        vm,
+        range,
+        addr,
+        splitp,
+        null_mut(),
+        0,
+    );
+
+    error = process_split_range_pt_body_result(
+        vm,
+        range,
+        addr,
+        Some(process_split_range_pt_split_bridge),
+        Some(process_split_range_pt_log_bridge),
+    );
+    if error != 0 {
+        process_split_range_public_log_bridge(
+            PROCESS_SPLIT_RANGE_LOG_DONE,
+            vm,
+            range,
+            addr,
+            splitp,
+            newrange,
+            error,
+        );
+        return error;
+    }
+
+    error = process_split_shm_update_body_result(
+        vm,
+        range,
+        addr,
+        process_split_page_pgshift_offset_bridge(),
+        Some(process_split_shm_lookup_page_bridge),
+        Some(process_split_shm_phys_to_page_bridge),
+        Some(process_split_shm_update_page_bridge),
+        Some(process_split_shm_log_bridge),
+    );
+    if error != 0 {
+        process_split_range_public_log_bridge(
+            PROCESS_SPLIT_RANGE_LOG_DONE,
+            vm,
+            range,
+            addr,
+            splitp,
+            newrange,
+            error,
+        );
+        return error;
+    }
+
+    newrange = process_split_range_alloc_init_body_result(
+        vm,
+        range,
+        addr,
+        splitp.cast::<c_void>(),
+        size_of::<VmRange>() as CULong,
+        IHK_MC_AP_NOWAIT,
+        &raw mut error,
+        Some(process_split_range_alloc_bridge),
+        Some(process_split_range_alloc_log_bridge),
+    );
+    if error != 0 {
+        process_split_range_public_log_bridge(
+            PROCESS_SPLIT_RANGE_LOG_DONE,
+            vm,
+            range,
+            addr,
+            splitp,
+            newrange,
+            error,
+        );
+        return error;
+    }
+
+    #[cfg(enable_tofu)]
+    {
+        process_split_range_tofu_init_bridge(newrange);
+        process_split_range_tofu_split_bridge(vm, range, newrange, addr);
+    }
+
+    error = process_split_range_publish_body_result(
+        vm.cast::<c_void>(),
+        range,
+        newrange,
+        addr,
+        splitp,
+        None,
+        Some(process_split_range_insert_bridge),
+        Some(process_split_range_publish_log_bridge),
+    );
+    if error != 0 {
+        return error;
+    }
+
+    process_split_range_public_log_bridge(
+        PROCESS_SPLIT_RANGE_LOG_DONE,
+        vm,
+        range,
+        addr,
+        splitp,
+        newrange,
+        error,
+    );
+    error
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn process_join_range_prepare_result(
     surviving: *mut VmRange,
     merging: *const VmRange,
@@ -2861,6 +3612,33 @@ pub unsafe extern "C" fn process_join_range_body_result(
     }
 
     process_join_range_free_result(merging, free_fn)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn join_process_memory_range(
+    vm: *mut ProcessVm,
+    surviving: *mut VmRange,
+    merging: *mut VmRange,
+) -> CInt {
+    process_join_range_log_bridge(PROCESS_JOIN_RANGE_LOG_START, vm, surviving, merging, 0);
+    let cache = (&raw mut (*vm).range_cache).cast::<*mut c_void>();
+    #[cfg(enable_tofu)]
+    let tofu_fn: Option<ProcessJoinRangeTofuFn> = Some(process_join_range_tofu_bridge);
+    #[cfg(not(enable_tofu))]
+    let tofu_fn: Option<ProcessJoinRangeTofuFn> = None;
+    let error = process_join_range_body_result(
+        vm.cast::<c_void>(),
+        (&raw mut (*vm).vm_range_tree).cast::<RbRoot>(),
+        cache,
+        VM_RANGE_CACHE_SIZE as CInt,
+        surviving,
+        merging,
+        None,
+        Some(process_range_kfree_bridge),
+        tofu_fn,
+    );
+    process_join_range_log_bridge(PROCESS_JOIN_RANGE_LOG_DONE, vm, surviving, merging, error);
+    error
 }
 
 fn align_down(value: CULong, size: SizeT) -> CULong {
@@ -3407,6 +4185,34 @@ pub unsafe extern "C" fn process_sync_memory_range_body_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn sync_process_memory_range(
+    vm: *mut ProcessVm,
+    range: *mut VmRange,
+    start: CULong,
+    end: CULong,
+) -> CInt {
+    let memobj = if range.is_null() {
+        null_mut()
+    } else {
+        (*range).memobj.cast::<Memobj>()
+    };
+    let mut args = ProcessSyncArgs { memobj };
+
+    process_sync_memory_range_body_result(
+        vm,
+        range,
+        start,
+        end,
+        (&mut args as *mut ProcessSyncArgs).cast(),
+        sync_one_page as *mut c_void,
+        Some(process_free_range_noirq_lock_bridge),
+        Some(process_free_range_noirq_unlock_bridge),
+        Some(process_visit_pte_range_bridge),
+        Some(process_sync_range_log_bridge),
+    )
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn process_remap_memory_range_body_result(
     vm: *mut ProcessVm,
     range: *mut VmRange,
@@ -3488,6 +4294,36 @@ pub unsafe extern "C" fn process_remap_memory_range_body_result(
     let _ = process_memobj_unref_direct_result(memobj);
     let _ = process_noirq_unlock_result(lock_addr, unlock_fn);
     error
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn remap_process_memory_range(
+    vm: *mut ProcessVm,
+    range: *mut VmRange,
+    start: CULong,
+    end: CULong,
+    off: OffT,
+) -> CInt {
+    let memobj = if range.is_null() {
+        null_mut()
+    } else {
+        (*range).memobj.cast::<Memobj>()
+    };
+    let mut args = ProcessRemapArgs { off, start, memobj };
+
+    process_remap_memory_range_body_result(
+        vm,
+        range,
+        start,
+        end,
+        off,
+        (&mut args as *mut ProcessRemapArgs).cast(),
+        remap_one_page as *mut c_void,
+        Some(process_free_range_noirq_lock_bridge),
+        Some(process_free_range_noirq_unlock_bridge),
+        Some(process_visit_pte_range_bridge),
+        Some(process_remap_range_log_bridge),
+    )
 }
 
 #[no_mangle]
@@ -3721,6 +4557,68 @@ pub unsafe extern "C" fn process_invalidate_one_page_body_result(
     }
 
     error
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn invalidate_one_page(
+    arg0: *mut c_void,
+    page_table: *mut c_void,
+    ptep: *mut c_void,
+    pgaddr: *mut c_void,
+    pgshift: CInt,
+) -> CInt {
+    process_invalidate_one_page_body_result(
+        arg0,
+        page_table,
+        ptep,
+        pgaddr,
+        pgshift,
+        Some(process_pte_is_null_bridge),
+        Some(process_pte_is_fileoff_bridge),
+        Some(process_pte_get_phys_bridge),
+        Some(process_phys_to_page_bridge),
+        Some(process_page_offset_bridge),
+        Some(process_pte_make_fileoff_bridge),
+        Some(process_pte_xchg_bridge),
+        Some(process_flush_tlb_single_bridge),
+        Some(process_pte_is_contiguous_bridge),
+        Some(process_page_is_contiguous_head_bridge),
+        Some(process_pgsize_to_tbllv_bridge),
+        Some(process_tbllv_to_contpgsize_bridge),
+        Some(process_page_unmap_bridge),
+        Some(process_panic_bridge),
+        Some(process_memobj_invalidate_page_bridge),
+        Some(process_invalidate_one_page_log_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn invalidate_process_memory_range(
+    vm: *mut ProcessVm,
+    range: *mut VmRange,
+    start: CULong,
+    end: CULong,
+) -> CInt {
+    let mut args = range;
+
+    process_invalidate_memory_range_body_result(
+        vm,
+        range,
+        start,
+        end,
+        (&mut args as *mut *mut VmRange).cast(),
+        invalidate_one_page as *mut c_void,
+        Some(process_free_range_noirq_lock_bridge),
+        Some(process_free_range_noirq_unlock_bridge),
+        Some(process_lookup_pte_bridge),
+        Some(process_pte_is_contiguous_bridge),
+        Some(process_page_is_contiguous_head_bridge),
+        Some(process_page_is_contiguous_tail_bridge),
+        Some(process_split_contiguous_pages_bridge),
+        Some(process_free_range_pt_free_bridge),
+        Some(process_visit_pte_range_bridge),
+        Some(process_invalidate_range_log_bridge),
+    )
 }
 
 #[no_mangle]
@@ -4015,6 +4913,32 @@ pub unsafe extern "C" fn process_remove_memory_range_body_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn remove_process_memory_range(
+    vm: *mut ProcessVm,
+    start: CULong,
+    end: CULong,
+    ro_freedp: *mut CInt,
+) -> CInt {
+    if vm.is_null() || (*vm).proc.is_null() {
+        return -EINVAL;
+    }
+
+    let proc = (*vm).proc.cast::<Process>();
+    process_remove_memory_range_body_result(
+        vm,
+        start,
+        end,
+        ro_freedp,
+        (*proc).straight_va as CULong,
+        (*proc).straight_len,
+        Some(process_remove_range_split_bridge),
+        Some(process_remove_range_xpmem_bridge),
+        Some(process_memory_range_free_bridge),
+        Some(process_remove_range_log_bridge),
+    )
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn process_remove_region_body_result(
     vm: *mut ProcessVm,
     start: CULong,
@@ -4081,6 +5005,23 @@ pub unsafe extern "C" fn process_remove_region_log_result(
 
     log(vm, start, end);
     0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn remove_process_region(
+    vm: *mut ProcessVm,
+    start: CULong,
+    end: CULong,
+) -> CInt {
+    process_remove_region_body_result(
+        vm,
+        start,
+        end,
+        Some(process_free_range_noirq_lock_bridge),
+        Some(process_free_range_noirq_unlock_bridge),
+        Some(process_remove_region_clear_bridge),
+        Some(process_remove_region_log_bridge),
+    )
 }
 
 #[inline(always)]
@@ -4909,6 +5850,65 @@ pub unsafe extern "C" fn process_detach_address_space_public_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn create_address_space(
+    _res: *mut ResourceSet,
+    n: CInt,
+) -> *mut AddressSpace {
+    process_create_address_space_body_result(
+        n,
+        size_of::<AddressSpace>() as CULong,
+        size_of::<CInt>() as CULong,
+        IHK_MC_AP_NOWAIT,
+        offset_of!(AddressSpace, page_table) as CULong,
+        offset_of!(AddressSpace, refcount) as CULong,
+        offset_of!(AddressSpace, cpu_set) as CULong,
+        size_of::<CpuSet>() as CULong,
+        offset_of!(AddressSpace, cpu_set_lock) as CULong,
+        offset_of!(AddressSpace, nslots) as CULong,
+        Some(process_alloc_bridge),
+        Some(process_optional_free_bridge),
+        Some(process_pt_create_bridge),
+        None,
+        Some(process_spin_init_bridge),
+    )
+    .cast()
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn hold_address_space(asp: *mut AddressSpace) {
+    let _ = process_hold_address_space_public_result(
+        asp.cast(),
+        offset_of!(AddressSpace, refcount) as CULong,
+        None,
+    );
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn release_address_space(asp: *mut AddressSpace) {
+    let _ = process_release_address_space_public_result(
+        asp.cast(),
+        offset_of!(AddressSpace, refcount) as CULong,
+        offset_of!(AddressSpace, free_cb) as CULong,
+        offset_of!(AddressSpace, opt) as CULong,
+        offset_of!(AddressSpace, page_table) as CULong,
+        None,
+        Some(process_pt_destroy_bridge),
+        Some(process_optional_free_bridge),
+    );
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn detach_address_space(asp: *mut AddressSpace, pid: CInt) {
+    let _ = process_detach_address_space_public_result(
+        asp.cast(),
+        pid,
+        size_of::<AddressSpace>() as CULong,
+        offset_of!(AddressSpace, nslots) as CULong,
+        Some(process_release_address_space_action_bridge),
+    );
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn process_create_address_space_body_result(
     nslots: CInt,
     address_space_size: CULong,
@@ -5180,6 +6180,23 @@ pub unsafe extern "C" fn process_vm_init_body_result(
     0
 }
 
+#[no_mangle]
+pub unsafe extern "C" fn init_process_vm(
+    owner: *mut Process,
+    asp: *mut AddressSpace,
+    vm: *mut ProcessVm,
+) -> CInt {
+    process_vm_init_body_result(
+        vm,
+        owner.cast(),
+        asp.cast(),
+        ihk_mc_get_nr_numa_nodes(),
+        Some(process_vm_rwspin_init_bridge),
+        Some(process_spin_init_bridge),
+        Some(process_vm_init_numa_log_bridge),
+    )
+}
+
 unsafe fn process_new_resource_cleanup(
     res: *mut ResourceSet,
     phash: *mut ProcessHash,
@@ -5273,6 +6290,24 @@ pub unsafe extern "C" fn process_new_resource_set_body_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn new_resource_set() -> *mut ResourceSet {
+    process_new_resource_set_body_result(
+        size_of::<ResourceSet>() as CULong,
+        size_of::<ProcessHash>() as CULong,
+        size_of::<ThreadHash>() as CULong,
+        size_of::<Process>() as CULong,
+        IHK_MC_AP_NOWAIT,
+        HASH_SIZE,
+        1,
+        Some(process_alloc_bridge),
+        Some(process_optional_free_bridge),
+        Some(process_init_process_public_bridge),
+        Some(process_rwlock_init_bridge),
+    )
+    .cast()
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn process_memset_smp_handler_body_result(
     cpu_index: CInt,
     nr_cpus: CInt,
@@ -5345,6 +6380,53 @@ pub unsafe extern "C" fn process_memset_smp_body_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn memset_smp_handler(
+    cpu_index: CInt,
+    nr_cpus: CInt,
+    arg: *mut c_void,
+) -> CInt {
+    if arg.is_null() {
+        return -EINVAL;
+    }
+    let req = arg.cast::<ProcessMemsetSmpReq>();
+    process_memset_smp_handler_body_result(
+        cpu_index,
+        nr_cpus,
+        (*req).phys,
+        (*req).len,
+        (*req).val,
+        Some(process_memset_smp_phys_to_virt_bridge),
+        Some(process_memset_smp_memset_bridge),
+        Some(process_memset_smp_log_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn memset_smp(
+    cpu_set: *mut CpuSet,
+    s: *mut c_void,
+    c: CInt,
+    n: SizeT,
+) -> *mut c_void {
+    let mut req = MaybeUninit::<ProcessMemsetSmpReq>::uninit();
+    let reqp = req.as_mut_ptr();
+    let _ = process_memset_smp_body_result(
+        cpu_set.cast(),
+        s,
+        c,
+        n,
+        &raw mut (*reqp).phys,
+        &raw mut (*reqp).len,
+        &raw mut (*reqp).val,
+        memset_smp_handler as *const () as *mut c_void,
+        reqp.cast(),
+        Some(process_memset_smp_virt_to_phys_bridge),
+        Some(process_memset_smp_call_bridge),
+    );
+    s
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn process_proc_init_body_result(
     resource_set: *mut c_void,
     resource_set_list: *mut AbiListHead,
@@ -5384,6 +6466,26 @@ pub unsafe extern "C" fn process_proc_init_body_result(
     process_list_add_tail_result(&raw mut (*res).list, resource_set_list);
 
     0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn proc_init() {
+    let res = new_resource_set();
+    if res.is_null()
+        || process_proc_init_body_result(
+            res.cast(),
+            &raw mut PROCESS_RESOURCE_SET_LIST,
+            (&raw mut PROCESS_RESOURCE_SET_LOCK).cast::<c_void>() as CULong,
+            PROCESS_NUM_PROCESSORS,
+            CPU_SETSIZE,
+            2,
+            IHK_MC_AP_NOWAIT,
+            Some(process_alloc_bridge),
+            Some(process_rwlock_init_bridge),
+        ) < 0
+    {
+        process_proc_init_panic_bridge();
+    }
 }
 
 #[no_mangle]
@@ -5483,6 +6585,24 @@ pub unsafe extern "C" fn process_sched_init_body_result(
     let _ = save_fp_fn(idle_thread.cast());
     timer_init_fn(current_cpu);
     0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sched_init() {
+    if process_sched_init_body_result(
+        get_this_cpu_local_var() as CULong,
+        &raw mut PROCESS_RESOURCE_SET_LIST,
+        ihk_mc_get_processor_id(),
+        Some(process_init_process_public_bridge),
+        Some(process_vm_rwspin_init_bridge),
+        Some(process_spin_init_bridge),
+        Some(process_sched_init_context_bridge),
+        Some(process_sched_save_fp_bridge),
+        Some(process_sched_timer_init_bridge),
+    ) < 0
+    {
+        process_sched_init_panic_bridge();
+    }
 }
 
 #[no_mangle]
@@ -6300,7 +7420,11 @@ pub unsafe extern "C" fn process_copy_user_ranges_body_result(
     }
 
     let _ = process_noirq_unlock_result(lock_addr, Some(read_unlock));
-    if error == 0 { 0 } else { -1 }
+    if error == 0 {
+        0
+    } else {
+        -1
+    }
 }
 
 #[no_mangle]
@@ -6769,6 +7893,79 @@ pub unsafe extern "C" fn process_create_thread_body_result(
 
     let _ = vm_address_space_offset;
     thread
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn create_thread(
+    user_pc: CULong,
+    requested_cpu_set: *mut CULong,
+    cpu_set_size: SizeT,
+) -> *mut Thread {
+    let cpu_local = get_this_cpu_local_var();
+    let resource_set = (*cpu_local).resource_set;
+    let parent_process = (*resource_set).pid1;
+
+    process_create_thread_body_result(
+        user_pc,
+        requested_cpu_set as CULong,
+        (cpu_set_size as CULong).wrapping_mul(BITS_PER_BYTE),
+        KERNEL_STACK_NR_PAGES,
+        size_of::<Thread>() as CULong,
+        size_of::<Process>() as CULong,
+        size_of::<ProcessVm>() as CULong,
+        IHK_MC_AP_NOWAIT,
+        KERNEL_STACK_NR_PAGES * PAGE_SIZE,
+        CPU_SETSIZE,
+        PROCESS_NUM_PROCESSORS,
+        SCHED_NORMAL,
+        SS_DISABLE,
+        ihk_mc_get_processor_id(),
+        parent_process.cast(),
+        offset_of!(Process, pid) as CULong,
+        offset_of!(Thread, refcount) as CULong,
+        offset_of!(Thread, hash_list) as CULong,
+        offset_of!(Thread, siblings_list) as CULong,
+        offset_of!(Thread, cpu_set) as CULong,
+        offset_of!(Thread, sched_policy) as CULong,
+        offset_of!(Thread, sigcommon) as CULong,
+        offset_of!(Thread, sigpendinglock) as CULong,
+        offset_of!(Thread, sigpending) as CULong,
+        offset_of!(Thread, sigstack) as CULong,
+        offset_of!(SigStack, ss_sp) as CULong,
+        offset_of!(SigStack, ss_flags) as CULong,
+        offset_of!(SigStack, ss_size) as CULong,
+        offset_of!(Thread, vm) as CULong,
+        offset_of!(Thread, proc) as CULong,
+        offset_of!(Process, cpu_set) as CULong,
+        offset_of!(Process, vm) as CULong,
+        offset_of!(Process, main_thread) as CULong,
+        offset_of!(ProcessVm, address_space) as CULong,
+        offset_of!(AddressSpace, cpu_set) as CULong,
+        offset_of!(AddressSpace, cpu_set_lock) as CULong,
+        offset_of!(Thread, exit_status) as CULong,
+        offset_of!(Thread, spin_sleep_lock) as CULong,
+        offset_of!(Thread, spin_sleep) as CULong,
+        size_of::<SigCommon>() as CULong,
+        offset_of!(SigCommon, use_) as CULong,
+        offset_of!(SigCommon, lock) as CULong,
+        offset_of!(SigCommon, sigpending) as CULong,
+        Some(process_create_thread_alloc_pages_bridge),
+        Some(process_alloc_bridge),
+        Some(process_optional_free_bridge),
+        Some(process_create_thread_address_space_bridge),
+        Some(process_create_thread_release_address_space_bridge),
+        Some(process_create_thread_init_process_bridge),
+        Some(process_create_thread_init_vm_bridge),
+        Some(process_create_thread_init_user_bridge),
+        Some(process_default_ncpus_bridge),
+        Some(process_create_cpu_log_bridge),
+        Some(process_rwlock_init_bridge),
+        Some(process_spin_init_bridge),
+        Some(process_spin_lock_bridge),
+        Some(process_spin_unlock_bridge),
+        Some(process_free_thread_pages_bridge),
+    )
+    .cast()
 }
 
 #[no_mangle]
@@ -7482,6 +8679,54 @@ pub unsafe extern "C" fn process_ptrace_traceme_body_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn ptrace_traceme() -> CInt {
+    let cpu = get_this_cpu_local_var();
+    if cpu.is_null() || (*cpu).current.is_null() || (*cpu).resource_set.is_null() {
+        return -EFAULT;
+    }
+
+    let thread = (*cpu).current;
+    let proc = (*thread).proc;
+    let parent = if proc.is_null() {
+        null_mut()
+    } else {
+        (*proc).parent
+    };
+    let pid1 = (*(*cpu).resource_set).pid1;
+    let offsets = ProcessPtraceTracemeOffsets {
+        thread_proc_offset: offset_of!(Thread, proc) as CULong,
+        thread_report_proc_offset: offset_of!(Thread, report_proc) as CULong,
+        thread_report_siblings_list_offset: offset_of!(Thread, report_siblings_list) as CULong,
+        thread_ptrace_offset: offset_of!(Thread, ptrace) as CULong,
+        thread_ptrace_debugreg_offset: offset_of!(Thread, ptrace_debugreg) as CULong,
+        proc_pid_offset: offset_of!(Process, pid) as CULong,
+        proc_parent_offset: offset_of!(Process, parent) as CULong,
+        proc_main_thread_offset: offset_of!(Process, main_thread) as CULong,
+        proc_children_lock_offset: offset_of!(Process, children_lock) as CULong,
+        proc_threads_lock_offset: offset_of!(Process, threads_lock) as CULong,
+        proc_ptraced_siblings_list_offset: offset_of!(Process, ptraced_siblings_list) as CULong,
+        proc_ptraced_children_list_offset: offset_of!(Process, ptraced_children_list) as CULong,
+        proc_report_threads_list_offset: offset_of!(Process, report_threads_list) as CULong,
+    };
+    let mut child_lock = MaybeUninit::<McsRwlockNode>::uninit();
+
+    process_ptrace_traceme_body_result(
+        thread.cast(),
+        proc.cast(),
+        parent.cast(),
+        pid1.cast(),
+        &offsets,
+        child_lock.as_mut_ptr().cast(),
+        Some(process_ptrace_mcs_lock_noirq_bridge),
+        Some(process_ptrace_mcs_unlock_noirq_bridge),
+        Some(process_ptrace_alloc_debugreg_bridge),
+        Some(process_ptrace_clear_single_step_bridge),
+        Some(process_ptrace_hold_thread_bridge),
+        Some(process_ptrace_traceme_log_bridge),
+    )
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn process_ptrace_attach_thread_body_result(
     thread: *mut c_void,
     proc: *mut c_void,
@@ -8187,6 +9432,377 @@ pub unsafe extern "C" fn process_ref_hold_body_result(
         return rc;
     }
     1
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn hold_process(proc: *mut Process) {
+    let _ =
+        process_ref_hold_body_result(proc.cast(), offset_of!(Process, refcount) as CULong, None);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn hold_process_vm(vm: *mut ProcessVm) {
+    let _ =
+        process_ref_hold_body_result(vm.cast(), offset_of!(ProcessVm, refcount) as CULong, None);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn hold_sigcommon(sigcommon: *mut SigCommon) {
+    let _ = process_ref_hold_body_result(
+        sigcommon.cast(),
+        offset_of!(SigCommon, use_) as CULong,
+        None,
+    );
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn hold_thread(thread: *mut Thread) -> CInt {
+    let _ = process_hold_thread_body_result(
+        thread.cast(),
+        offset_of!(Thread, status) as CULong,
+        offset_of!(Thread, refcount) as CULong,
+        None,
+        Some(process_hold_thread_warn_bridge),
+    );
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn chain_process(proc: *mut Process) {
+    if proc.is_null() || (*proc).parent.is_null() {
+        return;
+    }
+
+    let cpu = get_this_cpu_local_var();
+    if cpu.is_null() || (*cpu).resource_set.is_null() {
+        return;
+    }
+    let phash = (*(*cpu).resource_set).process_hash;
+    if phash.is_null() {
+        return;
+    }
+    let hash = process_hash((*proc).pid);
+    if hash < 0 || hash as usize >= PROCESS_HASH_SIZE {
+        return;
+    }
+
+    let parent = (*proc).parent;
+    let mut lock = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
+    let _ = process_chain_process_body_result(
+        &raw mut (*proc).siblings_list,
+        &raw mut (*parent).children_list,
+        (&raw mut (*parent).children_lock) as *mut _ as CULong,
+        &raw mut (*proc).hash_list,
+        &raw mut (*phash).list[hash as usize],
+        (&raw mut (*phash).lock[hash as usize]) as *mut _ as CULong,
+        lock.as_mut_ptr().cast(),
+        Some(process_mcs_writer_lock_bridge),
+        Some(process_mcs_writer_unlock_bridge),
+    );
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn chain_thread(thread: *mut Thread) {
+    if thread.is_null() || (*thread).proc.is_null() || (*thread).vm.is_null() {
+        return;
+    }
+
+    let cpu = get_this_cpu_local_var();
+    if cpu.is_null() || (*cpu).resource_set.is_null() {
+        return;
+    }
+    let thash = (*(*cpu).resource_set).thread_hash;
+    if thash.is_null() {
+        return;
+    }
+    let hash = thread_hash((*thread).tid);
+    if hash < 0 || hash as usize >= PROCESS_HASH_SIZE {
+        return;
+    }
+
+    let proc = (*thread).proc;
+    let vm = (*thread).vm;
+    let mut lock = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
+    let _ = process_chain_thread_body_result(
+        &raw mut (*thread).siblings_list,
+        &raw mut (*proc).threads_list,
+        (&raw mut (*proc).threads_lock) as *mut _ as CULong,
+        &raw mut (*thread).hash_list,
+        &raw mut (*thash).list[hash as usize],
+        (&raw mut (*thash).lock[hash as usize]) as *mut _ as CULong,
+        vm.cast(),
+        offset_of!(ProcessVm, refcount) as CULong,
+        lock.as_mut_ptr().cast(),
+        Some(process_mcs_writer_lock_bridge),
+        Some(process_mcs_writer_unlock_bridge),
+        None,
+    );
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn destroy_thread(thread: *mut Thread) {
+    let mut lock = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
+    let _ = process_destroy_thread_body_result(
+        thread.cast(),
+        offset_of!(Thread, proc) as CULong,
+        offset_of!(Thread, vm) as CULong,
+        offset_of!(Thread, cpu_id) as CULong,
+        offset_of!(Thread, siblings_list) as CULong,
+        offset_of!(Thread, uti_state) as CULong,
+        offset_of!(Thread, uti_refill_tid) as CULong,
+        offset_of!(Thread, sigpending) as CULong,
+        offset_of!(Thread, sigcommon) as CULong,
+        offset_of!(Process, threads_lock) as CULong,
+        offset_of!(Process, tids) as CULong,
+        offset_of!(Process, main_thread) as CULong,
+        offset_of!(ProcessVm, address_space) as CULong,
+        offset_of!(AddressSpace, cpu_set) as CULong,
+        offset_of!(AddressSpace, cpu_set_lock) as CULong,
+        offset_of!(SigPending, list) as CULong,
+        offset_of!(Thread, ptrace_debugreg) as CULong,
+        offset_of!(Thread, ptrace_recvsig) as CULong,
+        offset_of!(Thread, ptrace_sendsig) as CULong,
+        offset_of!(Thread, fp_regs) as CULong,
+        offset_of!(Thread, coredump_regs) as CULong,
+        PROCESS_NUM_PROCESSORS,
+        lock.as_mut_ptr().cast(),
+        Some(process_mcs_writer_lock_bridge),
+        Some(process_mcs_writer_unlock_bridge),
+        Some(process_destroy_thread_hash_detach_bridge),
+        Some(process_destroy_thread_time_account_bridge),
+        Some(process_destroy_thread_release_tid_bridge),
+        Some(process_destroy_thread_replace_tid_bridge),
+        Some(process_spin_lock_bridge),
+        Some(process_spin_unlock_bridge),
+        Some(process_optional_free_bridge),
+        Some(release_fp_regs),
+        Some(process_release_sigcommon_bridge),
+        Some(process_free_thread_pages_bridge),
+    );
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn release_sigcommon(sigcommon: *mut SigCommon) {
+    let _ = process_release_sigcommon_public_body_result(
+        sigcommon.cast(),
+        offset_of!(SigCommon, use_) as CULong,
+        offset_of!(SigCommon, sigpending) as CULong,
+        offset_of!(SigPending, list) as CULong,
+        None,
+        Some(process_optional_free_bridge),
+    );
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn release_thread(thread: *mut Thread) {
+    let _ = process_release_thread_body_result(
+        thread.cast(),
+        offset_of!(Thread, refcount) as CULong,
+        offset_of!(Thread, vm) as CULong,
+        offset_of!(Thread, proc) as CULong,
+        None,
+        Some(process_release_thread_profile_bridge),
+        Some(process_procfs_delete_thread_bridge),
+        Some(process_destroy_thread_bridge),
+        Some(process_release_vm_bridge),
+    );
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn flush_process_memory(vm: *mut ProcessVm) {
+    process_flush_memory_debug_bridge(vm.cast(), 0);
+    let _ = process_flush_memory_body_result(
+        vm,
+        Some(process_rw_write_lock_bridge),
+        Some(process_rw_write_unlock_bridge),
+        Some(process_memory_range_free_bridge),
+        Some(process_flush_memory_log_bridge),
+    );
+    process_flush_memory_debug_bridge(vm.cast(), 1);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn free_process_memory_ranges(vm: *mut ProcessVm) {
+    let _ = process_free_all_memory_ranges_body_result(
+        vm,
+        Some(process_rw_write_lock_bridge),
+        Some(process_rw_write_unlock_bridge),
+        Some(process_memory_range_free_bridge),
+        Some(process_memory_range_free_log_bridge),
+    );
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn free_all_process_memory_range(vm: *mut ProcessVm) {
+    let _ = process_free_all_memory_ranges_body_result(
+        vm,
+        Some(process_rw_write_lock_bridge),
+        Some(process_rw_write_unlock_bridge),
+        Some(process_memory_range_free_bridge),
+        Some(process_memory_range_free_log_bridge),
+    );
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn release_process(proc: *mut Process) {
+    let _ = process_release_process_body_result(
+        proc.cast(),
+        offset_of!(Process, refcount) as CULong,
+        offset_of!(Process, tids) as CULong,
+        offset_of!(Process, main_thread) as CULong,
+        offset_of!(Process, mckfd) as CULong,
+        offset_of!(Process, mckfd_lock) as CULong,
+        offset_of!(Mckfd, next) as CULong,
+        None,
+        Some(process_current_resource_set_bridge),
+        Some(process_release_hash_detach_bridge),
+        Some(process_release_sibling_detach_bridge),
+        Some(process_release_profile_bridge),
+        Some(process_free_thread_pages_bridge),
+        Some(process_spin_lock_bridge),
+        Some(process_spin_unlock_bridge),
+        Some(process_mckfd_free_bridge),
+        Some(process_optional_free_bridge),
+        Some(process_release_final_cleanup_bridge),
+    );
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn release_process_vm(vm: *mut ProcessVm) {
+    let _ = process_release_vm_body_result(
+        vm.cast(),
+        offset_of!(ProcessVm, refcount) as CULong,
+        offset_of!(ProcessVm, proc) as CULong,
+        offset_of!(Process, mckfd) as CULong,
+        offset_of!(Process, mckfd_lock) as CULong,
+        offset_of!(Mckfd, next) as CULong,
+        offset_of!(Mckfd, close_cb) as CULong,
+        offset_of!(ProcessVm, free_cb) as CULong,
+        offset_of!(ProcessVm, opt) as CULong,
+        offset_of!(ProcessVm, address_space) as CULong,
+        offset_of!(Process, pid) as CULong,
+        offset_of!(Process, vm) as CULong,
+        offset_of!(ProcessVm, vm_range_numa_policy_tree) as CULong,
+        offset_of!(VmRangeNumaPolicy, policy_rb_node) as CULong,
+        None,
+        Some(process_spin_lock_bridge),
+        Some(process_spin_unlock_bridge),
+        Some(process_flush_vm_bridge),
+        Some(process_free_all_ranges_bridge),
+        Some(process_detach_address_space_bridge),
+        Some(process_release_process_bridge),
+        Some(process_policy_free_bridge),
+        Some(process_free_vm_bridge),
+    );
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn thread_unlock(thread: *mut Thread) {
+    if !thread.is_null() {
+        release_thread(thread);
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn find_thread(pid: CInt, tid: CInt) -> *mut Thread {
+    if tid <= 0 {
+        return null_mut();
+    }
+
+    let cpu = get_this_cpu_local_var();
+    if cpu.is_null() || (*cpu).resource_set.is_null() {
+        return null_mut();
+    }
+    let thash = (*(*cpu).resource_set).thread_hash;
+    if thash.is_null() {
+        return null_mut();
+    }
+    let hash = thread_hash(tid);
+    if hash < 0 || hash as usize >= PROCESS_HASH_SIZE {
+        return null_mut();
+    }
+
+    let mut lock = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
+    let offsets = ProcessFindThreadOffsets {
+        thread_hash_list_offset: offset_of!(Thread, hash_list) as CULong,
+        thread_tid_offset: offset_of!(Thread, tid) as CULong,
+        thread_proc_offset: offset_of!(Thread, proc) as CULong,
+        proc_pid_offset: offset_of!(Process, pid) as CULong,
+    };
+    process_find_thread_body_result(
+        &raw mut (*thash).list[hash as usize],
+        (&raw mut (*thash).lock[hash as usize]) as *mut _ as CULong,
+        lock.as_mut_ptr().cast(),
+        pid,
+        tid,
+        &offsets,
+        Some(process_mcs_reader_lock_bridge),
+        Some(process_mcs_reader_unlock_bridge),
+        Some(process_hold_thread_bridge),
+    )
+    .cast::<Thread>()
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn find_process(pid: CInt, lock: *mut McsRwlockNodeIrqsave) -> *mut Process {
+    if pid <= 0 || lock.is_null() {
+        return null_mut();
+    }
+
+    let cpu = get_this_cpu_local_var();
+    if cpu.is_null() || (*cpu).resource_set.is_null() {
+        return null_mut();
+    }
+    let phash = (*(*cpu).resource_set).process_hash;
+    if phash.is_null() {
+        return null_mut();
+    }
+    let hash = process_hash(pid);
+    if hash < 0 || hash as usize >= PROCESS_HASH_SIZE {
+        return null_mut();
+    }
+
+    let offsets = ProcessFindProcessOffsets {
+        process_hash_list_offset: offset_of!(Process, hash_list) as CULong,
+        process_pid_offset: offset_of!(Process, pid) as CULong,
+    };
+    process_find_process_body_result(
+        &raw mut (*phash).list[hash as usize],
+        (&raw mut (*phash).lock[hash as usize]) as *mut _ as CULong,
+        lock.cast(),
+        pid,
+        &offsets,
+        Some(process_mcs_reader_lock_bridge),
+        Some(process_mcs_reader_unlock_bridge),
+    )
+    .cast::<Process>()
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_unlock(proc: *mut Process, lock: *mut McsRwlockNodeIrqsave) {
+    if proc.is_null() || lock.is_null() {
+        return;
+    }
+
+    let cpu = get_this_cpu_local_var();
+    if cpu.is_null() || (*cpu).resource_set.is_null() {
+        return;
+    }
+    let phash = (*(*cpu).resource_set).process_hash;
+    if phash.is_null() {
+        return;
+    }
+    let hash = process_hash((*proc).pid);
+    if hash < 0 || hash as usize >= PROCESS_HASH_SIZE {
+        return;
+    }
+
+    let _ = process_unlock_found_process_result(
+        proc.cast(),
+        (&raw mut (*phash).lock[hash as usize]) as *mut _ as CULong,
+        lock.cast(),
+        Some(process_mcs_reader_unlock_bridge),
+    );
 }
 
 #[no_mangle]

@@ -1,14 +1,15 @@
 use core::ffi::c_void;
-use core::mem::{ManuallyDrop, MaybeUninit, size_of};
+use core::mem::{ManuallyDrop, MaybeUninit, offset_of, size_of};
 use core::ptr::{
     addr_of, addr_of_mut, copy_nonoverlapping, null_mut, read_volatile, write, write_volatile,
 };
 
 use crate::abi::{
     AbiListHead, CInt, CLong, CULong, ITimerVal, IkcScdPacket, IkcScdPacketTraditional, Iovec,
-    KSigAction, MovePagesSmpReq, PROCESS_NUMA_MASK_WORDS, ProcessVm, RUsage, SigAction, SigInfo,
-    SigInfoChild, SigInfoKill, SigStack, SizeT, SysInfo, SyscallRequest, SyscallResponse, TimeSpec,
-    TimeVal, TodData, VmRange, VmRangeNumaPolicy, X86UserContext,
+    CpuLocalVar, KSigAction, MovePagesSmpReq, PROCESS_NUMA_MASK_WORDS, Process, ProcessVm, RUsage,
+    SigAction, SigInfo, SigInfoChild, SigInfoKill, SigStack, SizeT, SysInfo, SyscallRequest,
+    SyscallResponse, Thread, TimeSpec, TimeVal, TodData, VmRange, VmRangeNumaPolicy,
+    X86UserContext,
 };
 
 const EINVAL: CInt = 22;
@@ -136,6 +137,9 @@ const PROCESS_VM_READ: CInt = 0;
 const PROCESS_VM_WRITE: CInt = 1;
 const PR_SET_THP_DISABLE: CInt = 41;
 const PR_GET_THP_DISABLE: CInt = 42;
+const SYS_PRCTL: CInt = 157;
+const SYS_LINUX_MLOCK: CInt = 802;
+const SYS_LINUX_SPAWN: CInt = 811;
 const ARCH_SET_GS: CULong = 0x1001;
 const ARCH_SET_FS: CULong = 0x1002;
 const ARCH_GET_FS: CULong = 0x1003;
@@ -160,7 +164,37 @@ const ARCH_MMAP_LOG_NOMEM: CInt = 4;
 const ARCH_MMAP_LOG_UNKNOWN_FLAGS: CInt = 5;
 
 unsafe extern "C" {
+    static mut uti_desc: CULong;
     static mut tod_data: TodData;
+    fn get_this_cpu_local_var() -> *mut CpuLocalVar;
+    fn ihk_mc_get_processor_id() -> CInt;
+    fn do_fork(
+        clone_flags: CInt,
+        newsp: CULong,
+        parent_tidptr: CULong,
+        child_tidptr: CULong,
+        tls: CULong,
+        pc: CULong,
+        sp: CULong,
+    ) -> CULong;
+    fn arch_syscall_forward_context_bridge(syscall_nr: CInt, ctx: *mut c_void) -> CLong;
+    fn arch_prctl_set_register_bridge(type_: CInt, value: CULong) -> CInt;
+    fn arch_prctl_get_register_bridge(type_: CInt, addr: *mut CULong) -> CInt;
+    fn arch_prctl_log_bridge(event: CInt, cpu: CInt, value: CULong);
+    fn ihk_mc_get_linux_default_huge_page_shift() -> CInt;
+    fn arch_do_shmget_bridge(key: CLong, size: SizeT, shmflg: CInt) -> CInt;
+    fn arch_shmget_log_bridge(
+        event: CInt,
+        key: CLong,
+        size: SizeT,
+        shmflg0: CInt,
+        error: CInt,
+        shmid: CInt,
+    );
+    fn syscall_policy_do_syscall2_bridge(syscall_nr: CInt, arg0: CULong, arg1: CULong) -> CLong;
+    fn syscall_policy_forward_context_bridge(syscall_nr: CInt, ctx: *mut c_void) -> CLong;
+    fn syscall_linux_mlock_log_bridge(addr: CULong, len: SizeT);
+    fn syscall_util_register_desc_log_bridge(tid: CInt, desc: CULong);
 }
 
 #[no_mangle]
@@ -10026,6 +10060,167 @@ pub unsafe extern "C" fn arch_shmget_body_result(
         log(ARCH_SHMGET_LOG_EXIT, key, size, shmflg0, 0, shmid);
     }
     shmid as CLong
+}
+
+unsafe fn current_thread_ptr() -> *mut Thread {
+    let cpu = get_this_cpu_local_var();
+    if cpu.is_null() {
+        null_mut()
+    } else {
+        (*cpu).current
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_prctl(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    let proc = if thread.is_null() {
+        null_mut()
+    } else {
+        (*thread).proc
+    };
+
+    prctl_body_result(
+        (*ctx).gpr.rdi as CInt,
+        (*ctx).gpr.rsi,
+        (*ctx).gpr.rdx,
+        (*ctx).gpr.r10,
+        (*ctx).gpr.r8,
+        proc.cast::<c_void>(),
+        offset_of!(Process, thp_disable),
+        SYS_PRCTL,
+        ctx.cast::<c_void>(),
+        Some(arch_syscall_forward_context_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_fork(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    arch_fork_body_result((*ctx).gpr.rip, (*ctx).gpr.rsp, Some(do_fork)) as CLong
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_vfork(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    arch_vfork_body_result((*ctx).gpr.rip, (*ctx).gpr.rsp, Some(do_fork)) as CLong
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_shmget(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    arch_shmget_body_result(
+        (*ctx).gpr.rdi as CLong,
+        (*ctx).gpr.rsi as SizeT,
+        (*ctx).gpr.rdx as CInt,
+        Some(ihk_mc_get_linux_default_huge_page_shift),
+        Some(arch_do_shmget_bridge),
+        Some(arch_shmget_log_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn do_arch_prctl(code: CULong, address: CULong) -> CLong {
+    arch_prctl_body_result(
+        code,
+        address,
+        current_thread_ptr().cast::<c_void>(),
+        offset_of!(Thread, tlsblock_base),
+        Some(ihk_mc_get_processor_id),
+        Some(arch_prctl_set_register_bridge),
+        Some(arch_prctl_get_register_bridge),
+        Some(arch_prctl_log_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_arch_prctl(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    do_arch_prctl((*ctx).gpr.rdi, (*ctx).gpr.rsi)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_getpid(_n: CInt, _ctx: *mut X86UserContext) -> CLong {
+    syscall_getpid_body_result(
+        current_thread_ptr().cast::<u8>(),
+        offset_of!(Thread, proc),
+        offset_of!(Process, pid),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_getppid(_n: CInt, _ctx: *mut X86UserContext) -> CLong {
+    syscall_getppid_body_result(
+        current_thread_ptr().cast::<u8>(),
+        offset_of!(Thread, proc),
+        offset_of!(Process, ppid_parent),
+        offset_of!(Process, pid),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_gettid(_n: CInt, _ctx: *mut X86UserContext) -> CLong {
+    syscall_gettid_body_result(current_thread_ptr().cast::<u8>(), offset_of!(Thread, tid))
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_get_cpu_id(_n: CInt, _ctx: *mut X86UserContext) -> CLong {
+    syscall_get_cpu_id_body_result(Some(ihk_mc_get_processor_id))
+}
+
+#[no_mangle]
+pub extern "C" fn sys_get_system(_n: CInt, _ctx: *mut X86UserContext) -> CLong {
+    get_system_body_result()
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_linux_mlock(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+
+    let addr = (*ctx).gpr.rdi;
+    let len = (*ctx).gpr.rsi as SizeT;
+    syscall_linux_mlock_log_bridge(addr, len);
+    linux_mlock_body_result(
+        addr,
+        len,
+        SYS_LINUX_MLOCK,
+        Some(syscall_policy_do_syscall2_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_linux_spawn(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    linux_spawn_body_result(
+        SYS_LINUX_SPAWN,
+        ctx.cast::<c_void>(),
+        Some(syscall_policy_forward_context_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_util_register_desc(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+
+    let desc = (*ctx).gpr.rdi;
+    let thread = current_thread_ptr();
+    let tid = if thread.is_null() { -1 } else { (*thread).tid };
+    syscall_util_register_desc_log_bridge(tid, desc);
+    util_register_desc_body_result(desc, addr_of_mut!(uti_desc))
 }
 
 #[no_mangle]

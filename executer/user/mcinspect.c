@@ -79,6 +79,85 @@ extern unsigned long mcinspect_thread_from_sched_list_result(
 		unsigned long thread_sched_list_offset);
 extern int mcinspect_mcvtop_should_lookup_proc_result(int pid);
 extern int mcinspect_vtop_has_process_result(unsigned long proc);
+extern int mcinspect_init_globals_body_result(
+		unsigned long mck_num_processors_addr,
+		unsigned long clv_addr,
+		unsigned long cpu_local_var_size,
+		unsigned long clv_runq,
+		unsigned long clv_idle,
+		unsigned long clv_current,
+		unsigned long thread_tid,
+		unsigned long thread_proc,
+		unsigned long thread_status,
+		unsigned long thread_sched_list,
+		unsigned long process_pid,
+		unsigned long process_saved_cmdline,
+		unsigned long process_saved_cmdline_len,
+		unsigned long process_vm,
+		unsigned long vm_address_space,
+		unsigned long address_space_page_table);
+typedef int (*mcinspect_find_proc_fn_t)(Dwarf_Debug dbg, int pid,
+		unsigned long *rproc);
+typedef void (*mcinspect_get_swapper_fn_t)(Dwarf_Debug dbg,
+		unsigned long *out);
+typedef void (*mcinspect_read_usize_fn_t)(unsigned long addr,
+		unsigned long *out);
+typedef void (*mcinspect_print_usize_fn_t)(unsigned long value);
+typedef void (*mcinspect_print_thread_fn_t)(int cpu, unsigned long thread,
+		unsigned long idle, int active);
+typedef void (*mcinspect_usage_fn_t)(char **argv);
+typedef int (*mcinspect_init_bfd_fn_t)(char *fname);
+typedef int (*mcinspect_open_readonly_fn_t)(const char *path);
+typedef int (*mcinspect_dwarf_init_fn_t)(int fd, Dwarf_Debug *dbg,
+		Dwarf_Error *error);
+typedef void (*mcinspect_init_globals_fn_t)(Dwarf_Debug dbg);
+typedef int (*mcinspect_dwarf_command_fn_t)(Dwarf_Debug dbg);
+typedef int (*mcinspect_mcvtop_fn_t)(Dwarf_Debug dbg, int pid,
+		unsigned long vtop_addr);
+typedef int (*mcinspect_dwarf_finish_fn_t)(Dwarf_Debug dbg,
+		Dwarf_Error *error);
+typedef int (*mcinspect_close_fn_t)(int fd);
+typedef int (*mcinspect_getopt_long_fn_t)(int argc, char **argv,
+		const char *shortopts, const void *longopts,
+		char **optarg_out);
+extern int mcinspect_mcvtop_body_result(Dwarf_Debug dbg, int pid,
+		unsigned long vtop_addr, mcinspect_find_proc_fn_t find_proc_fn,
+		mcinspect_get_swapper_fn_t get_swapper_page_table_fn,
+		mcinspect_read_usize_fn_t read_usize_fn,
+		mcinspect_print_usize_fn_t print_init_pt_fn);
+extern int mcinspect_mcps_body_result(mcinspect_read_usize_fn_t read_usize_fn,
+		mcinspect_print_thread_fn_t print_thread_fn);
+extern int mcinspect_main_body_result(char **argv, int help,
+		char *kernel_path, int ps, int vtop, int pid,
+		unsigned long vtop_addr, mcinspect_usage_fn_t usage_fn,
+		mcinspect_init_bfd_fn_t init_bfd_symbols_fn,
+		mcinspect_open_readonly_fn_t open_readonly_fn,
+		mcinspect_dwarf_init_fn_t dwarf_init_fn,
+		mcinspect_init_globals_fn_t init_globals_fn,
+		mcinspect_dwarf_command_fn_t mcps_fn,
+		mcinspect_mcvtop_fn_t mcvtop_fn,
+		mcinspect_dwarf_finish_fn_t dwarf_finish_fn,
+		mcinspect_close_fn_t close_fn);
+extern int mcinspect_option_body_result(int opt, char *optarg,
+		char **kernel_path_out, unsigned long *vtop_addr_out,
+		int *pid_out, char **argv, mcinspect_usage_fn_t usage_fn);
+extern int mcinspect_option_loop_body_result(int argc, char **argv,
+		const char *shortopts, const void *longopts,
+		char **kernel_path_out, unsigned long *vtop_addr_out,
+		int *pid_out, mcinspect_getopt_long_fn_t getopt_long_fn,
+		mcinspect_usage_fn_t usage_fn);
+extern int mcinspect_main_entry_result(int argc, char **argv,
+		const char *shortopts, const void *longopts,
+		mcinspect_getopt_long_fn_t getopt_long_fn,
+		mcinspect_usage_fn_t usage_fn,
+		mcinspect_init_bfd_fn_t init_bfd_symbols_fn,
+		mcinspect_open_readonly_fn_t open_readonly_fn,
+		mcinspect_dwarf_init_fn_t dwarf_init_fn,
+		mcinspect_init_globals_fn_t init_globals_fn,
+		mcinspect_dwarf_command_fn_t mcps_fn,
+		mcinspect_mcvtop_fn_t mcvtop_fn,
+		mcinspect_dwarf_finish_fn_t dwarf_finish_fn,
+		mcinspect_close_fn_t close_fn);
 long mcinspect_bfd_get_symtab_upper_bound_bridge(bfd *abfd);
 long mcinspect_bfd_canonicalize_symtab_bridge(bfd *abfd,
 		asymbol **location);
@@ -1172,6 +1251,25 @@ unsigned long address_space_page_table_offset;
 
 void init_globals(Dwarf_Debug dbg)
 {
+#ifdef MCINSPECT_RUST_HELPERS
+	mcinspect_init_globals_body_result(
+			DWARF_GET_VARIABLE_ADDRESS(mck_num_processors),
+			DWARF_GET_VARIABLE_ADDRESS(clv),
+			DWARF_GET_SIZE(cpu_local_var),
+			DWARF_GET_OFFSET_IN_STRUCT(cpu_local_var, runq),
+			DWARF_GET_OFFSET_IN_STRUCT(cpu_local_var, idle),
+			DWARF_GET_OFFSET_IN_STRUCT(cpu_local_var, current),
+			DWARF_GET_OFFSET_IN_STRUCT(thread, tid),
+			DWARF_GET_OFFSET_IN_STRUCT(thread, proc),
+			DWARF_GET_OFFSET_IN_STRUCT(thread, status),
+			DWARF_GET_OFFSET_IN_STRUCT(thread, sched_list),
+			DWARF_GET_OFFSET_IN_STRUCT(process, pid),
+			DWARF_GET_OFFSET_IN_STRUCT(process, saved_cmdline),
+			DWARF_GET_OFFSET_IN_STRUCT(process, saved_cmdline_len),
+			DWARF_GET_OFFSET_IN_STRUCT(process, vm),
+			DWARF_GET_OFFSET_IN_STRUCT(process_vm, address_space),
+			DWARF_GET_OFFSET_IN_STRUCT(address_space, page_table));
+#else
 	unsigned long num_processors_addr;
 
 	num_processors_addr = DWARF_GET_VARIABLE_ADDRESS(mck_num_processors);
@@ -1199,7 +1297,13 @@ void init_globals(Dwarf_Debug dbg)
 		DWARF_GET_OFFSET_IN_STRUCT(process_vm, address_space);
 	address_space_page_table_offset =
 		DWARF_GET_OFFSET_IN_STRUCT(address_space, page_table);
+#endif
 }
+
+#ifdef MCINSPECT_RUST_HELPERS
+static void mcinspect_read_usize_bridge(unsigned long addr,
+		unsigned long *out);
+#endif
 
 void print_thread(int cpu,
 		unsigned long thread,
@@ -1293,7 +1397,9 @@ void print_thread(int cpu,
 
 int mcps(Dwarf_Debug dbg)
 {
+#ifndef MCINSPECT_RUST_HELPERS
 	int cpu;
+#endif
 
 #ifdef MCINSPECT_RUST_HELPERS
 	{
@@ -1312,6 +1418,10 @@ int mcps(Dwarf_Debug dbg)
 	}
 #endif
 
+#ifdef MCINSPECT_RUST_HELPERS
+	return mcinspect_mcps_body_result(mcinspect_read_usize_bridge,
+			print_thread);
+#else
 	/* Iterate CPUs */
 	for (cpu = 0; cpu < nr_cpus; ++cpu) {
 		unsigned long per_cpu;
@@ -1356,6 +1466,7 @@ int mcps(Dwarf_Debug dbg)
 	}
 
 	return 0;
+#endif
 }
 
 #ifndef MCINSPECT_RUST_HELPERS
@@ -1437,17 +1548,27 @@ int print_pte_single(Dwarf_Debug dbg,
 #endif
 
 
+#ifdef MCINSPECT_RUST_HELPERS
+static void mcinspect_get_swapper_page_table_bridge(Dwarf_Debug dbg,
+		unsigned long *out);
+static void mcinspect_read_usize_bridge(unsigned long addr,
+		unsigned long *out);
+static void mcinspect_print_init_pt_bridge(unsigned long init_pt);
+#endif
+
 int mcvtop(Dwarf_Debug dbg, int pid, unsigned long vtop_addr)
 {
+#ifdef MCINSPECT_RUST_HELPERS
+	return mcinspect_mcvtop_body_result(dbg, pid, vtop_addr, find_proc,
+			mcinspect_get_swapper_page_table_bridge,
+			mcinspect_read_usize_bridge,
+			mcinspect_print_init_pt_bridge);
+#else
 	unsigned long proc = 0;
 	unsigned long init_pt;
 	unsigned long vm, ap, pt = 0;
 
-#ifdef MCINSPECT_RUST_HELPERS
-	if (mcinspect_mcvtop_should_lookup_proc_result(pid)) {
-#else
 	if (pid != 0) {
-#endif
 		if (find_proc(dbg, pid, &proc) < 0) {
 			fprintf(stderr, "%s: error: finding PID %d\n",
 				__func__, pid);
@@ -1458,18 +1579,35 @@ int mcvtop(Dwarf_Debug dbg, int pid, unsigned long vtop_addr)
 	get_pointer_symbol_val(swapper_page_table, &init_pt);
 	printf("%s: init_pt: 0x%lx\n", __func__, init_pt);
 
-#ifdef MCINSPECT_RUST_HELPERS
-	if (mcinspect_vtop_has_process_result(proc)) {
-#else
 	if (proc) {
-#endif
 		ihk_read_val(proc + process_vm_offset, &vm);
 		ihk_read_val(vm + vm_address_space_offset, &ap);
 		ihk_read_val(ap + address_space_page_table_offset, &pt);
 	}
 
 	return 0;
+#endif
 }
+
+#ifdef MCINSPECT_RUST_HELPERS
+static void
+mcinspect_get_swapper_page_table_bridge(Dwarf_Debug dbg, unsigned long *out)
+{
+	get_pointer_symbol_val(swapper_page_table, out);
+}
+
+static void
+mcinspect_read_usize_bridge(unsigned long addr, unsigned long *out)
+{
+	ihk_read_val(addr, out);
+}
+
+static void
+mcinspect_print_init_pt_bridge(unsigned long init_pt)
+{
+	printf("%s: init_pt: 0x%lx\n", "mcvtop", init_pt);
+}
+#endif
 
 
 int help;
@@ -1526,21 +1664,75 @@ struct option mcinspect_options[] = {
 };
 
 
+#ifdef MCINSPECT_RUST_HELPERS
+static int
+mcinspect_open_readonly_bridge(const char *path)
+{
+	return open(path, O_RDONLY);
+}
+
+static int
+mcinspect_dwarf_init_read_bridge(int fd, Dwarf_Debug *dbg,
+		Dwarf_Error *error)
+{
+	Dwarf_Handler errhand = 0;
+	Dwarf_Ptr errarg = 0;
+
+	return dwarf_init(fd, DW_DLC_READ, errhand, errarg, dbg, error) ==
+		DW_DLV_OK ? 0 : -1;
+}
+
+static void
+mcinspect_init_globals_bridge(Dwarf_Debug dbg)
+{
+	init_globals(dbg);
+}
+
+static int
+mcinspect_dwarf_finish_bridge(Dwarf_Debug dbg, Dwarf_Error *error)
+{
+	return dwarf_finish(dbg, error);
+}
+
+static int
+mcinspect_close_bridge(int fd)
+{
+	return close(fd);
+}
+
+static int
+mcinspect_getopt_long_bridge(int argc, char **argv, const char *shortopts,
+		const void *longopts, char **optarg_out)
+{
+	int opt = getopt_long(argc, argv, shortopts, longopts, NULL);
+
+	if (optarg_out)
+		*optarg_out = optarg;
+	return opt;
+}
+#endif
+
 int main(int argc, char **argv)
 {
+#ifndef MCINSPECT_RUST_HELPERS
 	Dwarf_Debug dbg = 0;
 	int dwarffd = -1;
 	int rc = DW_DLV_ERROR;
-	char *kernel_path = NULL;
 	Dwarf_Error error;
 	Dwarf_Handler errhand = 0;
 	Dwarf_Ptr errarg = 0;
 	int opt;
-#ifdef MCINSPECT_RUST_HELPERS
-	char mcos_path[64];
-	int preflight_action;
 #endif
 
+#ifdef MCINSPECT_RUST_HELPERS
+	return mcinspect_main_entry_result(argc, argv, "+k:v:p:",
+			mcinspect_options, mcinspect_getopt_long_bridge, usage,
+			init_bfd_symbols, mcinspect_open_readonly_bridge,
+			mcinspect_dwarf_init_read_bridge,
+			mcinspect_init_globals_bridge, mcps, mcvtop,
+			mcinspect_dwarf_finish_bridge, mcinspect_close_bridge);
+#else
+	char *kernel_path = NULL;
 	debug = 0;
 	mcfd = -1;
 	help = 0;
@@ -1557,22 +1749,6 @@ int main(int argc, char **argv)
 			break;
 
 		case 'v':
-#ifdef MCINSPECT_RUST_HELPERS
-			if (mcinspect_parse_vtop_addr_result(optarg,
-						&vtop_addr)) {
-				char line[128];
-
-				if (mcinspect_invalid_va_error_result(line,
-							sizeof(line)) >= 0) {
-					fputs(line, stderr);
-				}
-				else {
-					fprintf(stderr, "error: invalid VA? (expected format: 0xXXXX)\n\n");
-				}
-				usage(argv);
-				exit(1);
-			}
-#else
 			vtop_addr = strtoul(optarg, 0, 16);
 			if (vtop_addr == 0 ||
 					errno == EINVAL || errno == ERANGE) {
@@ -1580,139 +1756,51 @@ int main(int argc, char **argv)
 				usage(argv);
 				exit(1);
 			}
-#endif
 			break;
 
 		case 'p':
-#ifdef MCINSPECT_RUST_HELPERS
-			pid = mcinspect_parse_pid_result(optarg);
-#else
 			pid = atoi(optarg);
-#endif
 			break;
 		}
 	}
 
-#ifdef MCINSPECT_RUST_HELPERS
-	preflight_action = mcinspect_main_preflight_action_result(help,
-			kernel_path, ps, vtop);
-	if (preflight_action == MCINSPECT_MAIN_HELP) {
-#else
 	if (help) {
-#endif
 		usage(argv);
 		exit(0);
 	}
 
-#ifdef MCINSPECT_RUST_HELPERS
-	if (preflight_action == MCINSPECT_MAIN_MISSING_KERNEL) {
-#else
 	if (!kernel_path) {
-#endif
-#ifdef MCINSPECT_RUST_HELPERS
-		char line[128];
-
-		if (mcinspect_missing_kernel_error_result(line,
-					sizeof(line)) >= 0) {
-			fputs(line, stderr);
-		}
-		else
-#endif
-		{
-			fprintf(stderr, "error: you must specify the kernel image\n\n");
-		}
+		fprintf(stderr, "error: you must specify the kernel image\n\n");
 		usage(argv);
 		exit(1);
 	}
 
-#ifdef MCINSPECT_RUST_HELPERS
-	if (preflight_action == MCINSPECT_MAIN_NO_ACTION) {
-#else
 	if (!ps && !vtop) {
-#endif
-#ifdef MCINSPECT_RUST_HELPERS
-		char line[64];
-
-		if (mcinspect_pid_line_result(line, sizeof(line), pid) >= 0) {
-			fputs(line, stdout);
-		}
-		else
-#endif
-		{
-			printf("PID: %d\n", pid);
-		}
+		printf("PID: %d\n", pid);
 		usage(argv);
 		exit(1);
 	}
 
 	if (init_bfd_symbols(kernel_path) < 0) {
-#ifdef MCINSPECT_RUST_HELPERS
-		char line[1024];
-
-		if (mcinspect_elf_image_error_result(line, sizeof(line),
-					kernel_path) >= 0) {
-			fputs(line, stderr);
-		}
-		else
-#endif
-		{
-			fprintf(stderr, "error: accessing ELF image %s\n", kernel_path);
-		}
+		fprintf(stderr, "error: accessing ELF image %s\n", kernel_path);
 		exit(1);
 	}
 
-#ifdef MCINSPECT_RUST_HELPERS
-	mcinspect_mcos_path_result(mcos_path, 0);
-	mcfd = open(mcos_path, O_RDONLY);
-#else
 	mcfd = open("/dev/mcos0", O_RDONLY);
-#endif
 	if (mcfd < 0) {
-#ifdef MCINSPECT_RUST_HELPERS
-		char line[128];
-
-		if (mcinspect_open_os_device_error_result(line,
-					sizeof(line)) >= 0) {
-			fputs(line, stderr);
-		}
-		else
-#endif
-		{
-			fprintf(stderr, "error: opening IHK OS device file\n");
-		}
+		fprintf(stderr, "error: opening IHK OS device file\n");
 		exit(1);
 	}
 
 	dwarffd = open(kernel_path, O_RDONLY);
 	if (dwarffd < 0) {
-#ifdef MCINSPECT_RUST_HELPERS
-		char line[1024];
-
-		if (mcinspect_open_kernel_error_result(line, sizeof(line),
-					kernel_path) >= 0) {
-			fputs(line, stderr);
-		}
-		else
-#endif
-		{
-			fprintf(stderr, "error: opening %s\n", kernel_path);
-		}
+		fprintf(stderr, "error: opening %s\n", kernel_path);
 		exit(1);
 	}
 
 	rc = dwarf_init(dwarffd, DW_DLC_READ, errhand, errarg, &dbg, &error);
 	if (rc != DW_DLV_OK) {
-#ifdef MCINSPECT_RUST_HELPERS
-		char line[128];
-
-		if (mcinspect_dwarf_info_error_result(line, sizeof(line)) >= 0) {
-			fputs(line, stderr);
-		}
-		else
-#endif
-		{
-			fprintf(stderr, "error: accessing DWARF information\n");
-		}
+		fprintf(stderr, "error: accessing DWARF information\n");
 		exit(1);
 	}
 
@@ -1729,4 +1817,5 @@ int main(int argc, char **argv)
 	close(dwarffd);
 	close(mcfd);
 	return 0;
+#endif
 }

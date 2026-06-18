@@ -61,6 +61,8 @@ const MCEXEC_UP_STRNCPY_FROM_USER: c_ulong = 0x30a02908;
 const MCEXEC_UP_GET_CREDV: c_ulong = 0x30a0290b;
 const MCEXEC_UP_OPEN_EXEC: c_ulong = 0x30a02912;
 const MCEXEC_UP_CLOSE_EXEC: c_ulong = 0x30a02913;
+const MCEXEC_UP_UTI_GET_CTX: c_ulong = 0x30a02920;
+const MCEXEC_UP_UTI_ATTR: c_ulong = 0x30a02927;
 const MCEXEC_UP_SIG_THREAD: c_ulong = 0x30a02922;
 const MCEXEC_UP_SYSCALL_THREAD: c_ulong = 0x30a02924;
 const PATH_MAX: usize = 4096;
@@ -152,6 +154,7 @@ static PATH_ENV: &[u8] = b"PATH\0";
 static COKERNEL_EXEC_ROOT_ENV: &[u8] = b"COKERNEL_EXEC_ROOT\0";
 static PROC_SELF_EXE: &[u8] = b"/proc/self/exe";
 static MCKERNEL_LD_PRELOAD_ENV: &[u8] = b"MCKERNEL_LD_PRELOAD\0";
+static UTI_CPU_SET_ENV: &[u8] = b"UTI_CPU_SET\0";
 static LD_PRELOAD_ENVNAME_LITERAL: &[u8] = b"ld_preload_envname\0";
 static OBJDUMP_RPATH_PREFIX: &[u8] = b"objdump -x ";
 static OBJDUMP_RPATH_SUFFIX: &[u8] = b" | awk '/RPATH/ { print $2 }'";
@@ -526,6 +529,24 @@ unsafe extern "C" {
         uti_info: c_ulong,
         uti_desc: c_ulong,
     ) -> c_long;
+    fn mcexec_util_thread_missing_desc_bridge();
+    fn mcexec_util_thread_desc_log_bridge(desc: *mut c_void);
+    fn mcexec_util_thread_barrier_init_bridge();
+    fn mcexec_util_thread_create_worker_bridge(tp_out: *mut *mut McexecThreadData) -> c_int;
+    fn mcexec_util_thread_worker_error_bridge(rc: c_int);
+    fn mcexec_util_thread_barrier_wait_bridge();
+    fn mcexec_util_thread_worker_tid_log_bridge(tid: c_int);
+    fn mcexec_util_thread_intercept_warning_bridge(rc: c_int);
+    fn mcexec_util_thread_get_ctx_error_bridge(errno_value: c_int);
+    fn mcexec_util_thread_param_large_bridge();
+    fn mcexec_util_thread_attr_error_bridge(errno_value: c_int);
+    fn mcexec_util_thread_switch_ctx_bridge(
+        desc: *mut McexecUtiSwitchCtxDesc,
+        lctx: *mut c_void,
+        rctx: *mut c_void,
+    ) -> c_int;
+    fn mcexec_util_thread_switch_failed_bridge(rc: c_int);
+    fn mcexec_util_thread_switch_returned_bridge(rc: c_int);
     fn mcexec_sched_setaffinity_invalid_bridge(pid_arg: c_ulong);
     fn mcexec_perf_event_open_bridge() -> c_long;
     fn mcexec_clock_gettime_bridge(clock_id: c_int, tv: *mut McexecTimespec) -> c_long;
@@ -751,6 +772,45 @@ struct McexecSyscallStruct {
     args: [c_ulong; 6],
     ret: c_ulong,
     uti_info: c_ulong,
+}
+
+#[repr(C)]
+struct McexecUtiDesc {
+    lctx: [u8; 4096],
+    rctx: [u8; 4096],
+    mck_tid: c_int,
+    key: c_ulong,
+    pid: c_int,
+    tid: c_int,
+    uti_info: c_ulong,
+    fd: c_int,
+    syscall_stack: [McexecSyscallStruct; 16],
+    syscall_stack_top: c_int,
+    syscalls: [c_long; 512],
+    syscalls2: [c_long; 512],
+    start_syscall_intercept: c_int,
+}
+
+#[repr(C)]
+struct McexecUtiGetCtxDesc {
+    rp_rctx: c_ulong,
+    rctx: *mut c_void,
+    lctx: *mut c_void,
+    uti_refill_tid: c_int,
+    key: c_ulong,
+}
+
+#[repr(C)]
+struct McexecUtiSwitchCtxDesc {
+    rctx: *mut c_void,
+    lctx: *mut c_void,
+}
+
+#[repr(C)]
+struct McexecUtiAttrDesc {
+    phys_attr: c_ulong,
+    uti_cpu_set_str: *mut u8,
+    uti_cpu_set_len: usize,
 }
 
 #[repr(C)]
@@ -1068,7 +1128,11 @@ pub unsafe extern "C" fn init_worker_threads(_fd: c_int) -> c_int {
 #[no_mangle]
 pub unsafe extern "C" fn mcexec_get_thp_disable_body() -> c_int {
     let ret = unsafe { mcexec_get_thp_disable_prctl_bridge() };
-    if ret < 0 { 0 } else { ret }
+    if ret < 0 {
+        0
+    } else {
+        ret
+    }
 }
 
 unsafe fn signalfd_find(fd: c_int) -> (*mut McexecSigfd, *mut McexecSigfd) {
@@ -1287,6 +1351,132 @@ pub unsafe extern "C" fn mcexec_do_generic_syscall_body(w: *const McexecSyscallW
     let shaped = mcexec_errno_return_result(ret, unsafe { *__errno_location() });
     unsafe { mcexec_do_generic_syscall_done_bridge(number, shaped) };
     shaped
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcexec_util_thread_body(
+    _my_thread: *mut McexecThreadData,
+    rp_rctx: c_ulong,
+    remote_tid: c_int,
+    pattr: c_ulong,
+    uti_info: c_ulong,
+    uti_desc_arg: c_ulong,
+) -> c_long {
+    let uti_desc = uti_desc_arg as *mut McexecUtiDesc;
+    if uti_desc.is_null() {
+        unsafe { mcexec_util_thread_missing_desc_bridge() };
+        return -(EINVAL as c_long);
+    }
+    unsafe { mcexec_util_thread_desc_log_bridge(uti_desc as *mut c_void) };
+
+    unsafe { mcexec_util_thread_barrier_init_bridge() };
+    let mut tp: *mut McexecThreadData = core::ptr::null_mut();
+    let mut rc = unsafe { mcexec_util_thread_create_worker_bridge(&mut tp) };
+    if rc != 0 {
+        unsafe { mcexec_util_thread_worker_error_bridge(rc) };
+        return -(EINVAL as c_long);
+    }
+    unsafe { mcexec_util_thread_barrier_wait_bridge() };
+
+    let worker_tid = if tp.is_null() {
+        0
+    } else {
+        unsafe { (*tp).tid }
+    };
+    unsafe { mcexec_util_thread_worker_tid_log_bridge(worker_tid) };
+
+    unsafe {
+        (*uti_desc).fd = MCEXEC_FD;
+    }
+
+    rc = unsafe { syscall(888) as c_int };
+    if rc != -1 {
+        unsafe { mcexec_util_thread_intercept_warning_bridge(rc) };
+    }
+
+    let mut get_ctx_desc = McexecUtiGetCtxDesc {
+        rp_rctx,
+        rctx: unsafe { (*uti_desc).rctx.as_mut_ptr() as *mut c_void },
+        lctx: unsafe { (*uti_desc).lctx.as_mut_ptr() as *mut c_void },
+        uti_refill_tid: worker_tid,
+        key: 0,
+    };
+
+    rc = unsafe {
+        ioctl(
+            MCEXEC_FD,
+            MCEXEC_UP_UTI_GET_CTX,
+            &mut get_ctx_desc as *mut McexecUtiGetCtxDesc as c_ulong,
+        )
+    };
+    if rc != 0 {
+        let errno_value = unsafe { *__errno_location() };
+        unsafe { mcexec_util_thread_get_ctx_error_bridge(errno_value) };
+        return -(errno_value as c_long);
+    }
+
+    unsafe {
+        (*uti_desc).mck_tid = remote_tid;
+        (*uti_desc).key = get_ctx_desc.key;
+        (*uti_desc).pid = getpid();
+        (*uti_desc).tid = gettid();
+        (*uti_desc).uti_info = uti_info;
+    }
+
+    if core::mem::size_of::<McexecSyscallStruct>() * 11 > unsafe { MCEXEC_PAGE_SIZE as usize } {
+        unsafe { mcexec_util_thread_param_large_bridge() };
+        return -(ENOMEM as c_long);
+    }
+
+    if pattr != 0 {
+        let cpu_set = unsafe { getenv(UTI_CPU_SET_ENV.as_ptr()) };
+        let cpu_set_len = if cpu_set.is_null() {
+            0
+        } else {
+            unsafe { strlen(cpu_set as *const u8) + 1 }
+        };
+        let mut attr_desc = McexecUtiAttrDesc {
+            phys_attr: pattr,
+            uti_cpu_set_str: cpu_set,
+            uti_cpu_set_len: cpu_set_len,
+        };
+
+        rc = unsafe {
+            ioctl(
+                MCEXEC_FD,
+                MCEXEC_UP_UTI_ATTR,
+                &mut attr_desc as *mut McexecUtiAttrDesc as c_ulong,
+            )
+        };
+        if rc != 0 {
+            let errno_value = unsafe { *__errno_location() };
+            unsafe { mcexec_util_thread_attr_error_bridge(errno_value) };
+            return -(errno_value as c_long);
+        }
+    }
+
+    unsafe {
+        (*uti_desc).start_syscall_intercept = 1;
+    }
+
+    let mut switch_ctx_desc = McexecUtiSwitchCtxDesc {
+        rctx: unsafe { (*uti_desc).rctx.as_mut_ptr() as *mut c_void },
+        lctx: unsafe { (*uti_desc).lctx.as_mut_ptr() as *mut c_void },
+    };
+    rc = unsafe {
+        mcexec_util_thread_switch_ctx_bridge(
+            &mut switch_ctx_desc,
+            (*uti_desc).lctx.as_mut_ptr() as *mut c_void,
+            (*uti_desc).rctx.as_mut_ptr() as *mut c_void,
+        )
+    };
+    if rc < 0 {
+        unsafe { mcexec_util_thread_switch_failed_bridge(rc) };
+        return rc as c_long;
+    }
+
+    unsafe { mcexec_util_thread_switch_returned_bridge(rc) };
+    -(EINVAL as c_long)
 }
 
 #[no_mangle]
@@ -3675,7 +3865,11 @@ fn parse_decimal_segment(bytes: &[u8], mut idx: usize) -> Option<usize> {
     while idx < bytes.len() && byte_at(bytes, idx).is_ascii_digit() {
         idx += 1;
     }
-    if idx == first_digit { None } else { Some(idx) }
+    if idx == first_digit {
+        None
+    } else {
+        Some(idx)
+    }
 }
 
 fn parse_i32_segment(bytes: &[u8], mut idx: usize) -> Option<(i32, usize)> {
@@ -3739,7 +3933,11 @@ fn atol_prefix(bytes: &[u8]) -> i64 {
         idx += 1;
     }
 
-    if neg { value.saturating_neg() } else { value }
+    if neg {
+        value.saturating_neg()
+    } else {
+        value
+    }
 }
 
 fn atobytes_bytes(bytes: &[u8]) -> u64 {
@@ -3785,7 +3983,11 @@ fn atoi_segment(bytes: &[u8], start: usize, end: usize) -> i32 {
         idx += 1;
     }
 
-    if neg { value.saturating_neg() } else { value }
+    if neg {
+        value.saturating_neg()
+    } else {
+        value
+    }
 }
 
 fn next_comma_token(bytes: &[u8], cursor: &mut usize) -> Option<(usize, usize)> {
@@ -3859,7 +4061,11 @@ unsafe fn write_i32_decimal(dst: *mut u8, value: i32) -> usize {
             out = out.add(1);
         }
     }
-    if value < 0 { digits + 1 } else { digits }
+    if value < 0 {
+        digits + 1
+    } else {
+        digits
+    }
 }
 
 fn decimal_len_u64(mut value: u64) -> usize {
@@ -5241,7 +5447,11 @@ pub extern "C" fn mcexec_default_thread_count_result(
         omp_threads + 4
     } else if nr_processes > 0 && nr_processes < ncpu {
         let result = (ncpu / nr_processes) + 4;
-        if result == 0 { 2 } else { result }
+        if result == 0 {
+            2
+        } else {
+            result
+        }
     } else if nr_processes == ncpu {
         1
     } else {
@@ -6870,12 +7080,20 @@ pub extern "C" fn mcexec_close_plan_result(remote_fd: u64, mcos_fd: i32) -> i64 
 
 #[no_mangle]
 pub extern "C" fn mcexec_setfsuid_needs_cred_result(mode: u64) -> i32 {
-    if mode == 1 { 1 } else { 0 }
+    if mode == 1 {
+        1
+    } else {
+        0
+    }
 }
 
 #[no_mangle]
 pub extern "C" fn mcexec_sched_setaffinity_action_result(pid_arg: u64) -> i64 {
-    if pid_arg == 0 { 1 } else { -(EINVAL as i64) }
+    if pid_arg == 0 {
+        1
+    } else {
+        -(EINVAL as i64)
+    }
 }
 
 #[no_mangle]

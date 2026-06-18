@@ -341,7 +341,7 @@ extern int arch_process_vm_read_writev_body_result(int pid,
 		arch_process_vm_rw_memcpy_fn_t memcpy_fn,
 		arch_process_vm_rw_log_fn_t log_fn);
 
-static long
+long
 arch_syscall_forward_context_bridge(int syscall_nr, void *ctx)
 {
 	return syscall_generic_forwarding(syscall_nr, ctx);
@@ -656,19 +656,19 @@ arch_ptrace_thread_unlock_bridge(unsigned long thread_addr)
 	thread_unlock((struct thread *)thread_addr);
 }
 
-static int
+int
 arch_prctl_set_register_bridge(int type, unsigned long value)
 {
 	return ihk_mc_arch_set_special_register(type, value);
 }
 
-static int
+int
 arch_prctl_get_register_bridge(int type, unsigned long *addr)
 {
 	return ihk_mc_arch_get_special_register(type, addr);
 }
 
-static void
+void
 arch_prctl_log_bridge(int event, int cpu, unsigned long value)
 {
 	if (event == ARCH_SET_FS) {
@@ -690,13 +690,13 @@ arch_clone_reader_unlock_bridge(void *lock, void *node)
 			(struct mcs_rwlock_node_irqsave *)node);
 }
 
-static int
+int
 arch_do_shmget_bridge(long key, size_t size, int shmflg)
 {
 	return do_shmget((key_t)key, size, shmflg);
 }
 
-static void
+void
 arch_shmget_log_bridge(int event, long key, size_t size, int shmflg0,
 		int error, int shmid)
 {
@@ -855,6 +855,9 @@ int obtain_clone_cpuid(cpu_set_t *cpu_set, int use_last) {
     return min_cpu;
 }
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long sys_prctl(int n, ihk_mc_user_context_t *ctx);
+#else
 long sys_prctl(int n, ihk_mc_user_context_t *ctx)
 {
 	struct process *proc = get_this_cpu_local_var()->current->proc;
@@ -863,11 +866,6 @@ long sys_prctl(int n, ihk_mc_user_context_t *ctx)
 	unsigned long arg3 = (unsigned long)ihk_mc_syscall_arg2(ctx);
 	unsigned long arg4 = (unsigned long)ihk_mc_syscall_arg3(ctx);
 	unsigned long arg5 = (unsigned long)ihk_mc_syscall_arg4(ctx);
-#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
-	return prctl_body_result(option, arg2, arg3, arg4, arg5, proc,
-			offsetof(struct process, thp_disable), __NR_prctl, ctx,
-			arch_syscall_forward_context_bridge);
-#else
 	int ret = 0;
 
 	switch (option) {
@@ -890,8 +888,8 @@ long sys_prctl(int n, ihk_mc_user_context_t *ctx)
 	}
 
 	return ret;
-#endif
 }
+#endif
 
 struct sigsp {
 	unsigned long flags;
@@ -2602,36 +2600,32 @@ long sys_clone(int n, ihk_mc_user_context_t *ctx)
 #endif
 }
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long sys_fork(int n, ihk_mc_user_context_t *ctx);
+#else
 long sys_fork(int n, ihk_mc_user_context_t *ctx)
 {
-#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
-	return arch_fork_body_result(ihk_mc_syscall_pc(ctx),
-			ihk_mc_syscall_sp(ctx), do_fork);
-#else
 	return do_fork(SIGCHLD, 0, 0, 0, 0, ihk_mc_syscall_pc(ctx), ihk_mc_syscall_sp(ctx));
-#endif
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long sys_vfork(int n, ihk_mc_user_context_t *ctx);
+#else
 long sys_vfork(int n, ihk_mc_user_context_t *ctx)
 {
-#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
-	return arch_vfork_body_result(ihk_mc_syscall_pc(ctx),
-			ihk_mc_syscall_sp(ctx), do_fork);
-#else
 	return do_fork(CLONE_VFORK|SIGCHLD, 0, 0, 0, 0, ihk_mc_syscall_pc(ctx), ihk_mc_syscall_sp(ctx));
-#endif
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long sys_shmget(int n, ihk_mc_user_context_t *ctx);
+#else
 long sys_shmget(int n, ihk_mc_user_context_t *ctx)
 {
 	const key_t key = ihk_mc_syscall_arg0(ctx);
 	const size_t size = ihk_mc_syscall_arg1(ctx);
 	const int shmflg0 = ihk_mc_syscall_arg2(ctx);
-#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
-	return arch_shmget_body_result(key, size, shmflg0,
-			ihk_mc_get_linux_default_huge_page_shift,
-			arch_do_shmget_bridge, arch_shmget_log_bridge);
-#else
 	int shmid = -EINVAL;
 	int error;
 	int shmflg = shmflg0;
@@ -2660,17 +2654,14 @@ long sys_shmget(int n, ihk_mc_user_context_t *ctx)
 out:
 	dkprintf("shmget(%#lx,%#lx,%#x): %d %d\n", key, size, shmflg0, error, shmid);
 	return (error)?: shmid;
-#endif
 } /* sys_shmget() */
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long do_arch_prctl(unsigned long code, unsigned long address);
+#else
 long do_arch_prctl(unsigned long code, unsigned long address)
 {
-#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
-	return arch_prctl_body_result(code, address, get_this_cpu_local_var()->current,
-			offsetof(struct thread, tlsblock_base),
-			ihk_mc_get_processor_id, arch_prctl_set_register_bridge,
-			arch_prctl_get_register_bridge, arch_prctl_log_bridge);
-#else
 	int err = 0;
 	enum ihk_asr_type type;
 
@@ -2708,15 +2699,19 @@ long do_arch_prctl(unsigned long code, unsigned long address)
 	}
 
 	return err;
-#endif
 }
+#endif
 
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long sys_arch_prctl(int n, ihk_mc_user_context_t *ctx);
+#else
 long sys_arch_prctl(int n, ihk_mc_user_context_t *ctx)
 {
-	return do_arch_prctl(ihk_mc_syscall_arg0(ctx), 
+	return do_arch_prctl(ihk_mc_syscall_arg0(ctx),
 	                     ihk_mc_syscall_arg1(ctx));
 }
+#endif
 
 long sys_time(int n, ihk_mc_user_context_t *ctx)
 {

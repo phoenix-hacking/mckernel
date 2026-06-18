@@ -671,7 +671,11 @@ static struct ihk_mc_pa_ops *pa_ops;
 extern void *early_alloc_pages(int nr_pages);
 extern void early_alloc_invalidate(void);
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+char *memdebug = NULL;
+#else
 static char *memdebug = NULL;
+#endif
 
 #ifndef MCKERNEL_RUST_REFCOUNT_HELPERS
 void
@@ -2492,57 +2496,57 @@ extern int pagealloc_memcheck_result(struct list_head *track_hash,
 		mem_pagealloc_track_noirq_unlock_fn_t noirq_unlock_fn,
 		mem_track_leak_log_fn_t log_fn);
 
-static void *mem_pagealloc_track_base_alloc_bridge(int npages, int p2align,
+void *mem_pagealloc_track_base_alloc_bridge(int npages, int p2align,
 		ihk_mc_ap_flag flag, int node, int is_user, uintptr_t virt_addr)
 {
 	return ___ihk_mc_alloc_aligned_pages_node(npages, p2align, flag, node,
 			is_user, virt_addr);
 }
 
-static void mem_pagealloc_track_base_free_bridge(void *ptr, int npages,
+void mem_pagealloc_track_base_free_bridge(void *ptr, int npages,
 		int is_user)
 {
 	___ihk_mc_free_pages(ptr, npages, is_user);
 }
 
-static void *mem_pagealloc_track_meta_alloc_bridge(int size,
+void *mem_pagealloc_track_meta_alloc_bridge(int size,
 		ihk_mc_ap_flag flag)
 {
 	return ___kmalloc(size, flag);
 }
 
-static void mem_pagealloc_track_meta_free_bridge(void *ptr)
+void mem_pagealloc_track_meta_free_bridge(void *ptr)
 {
 	___kfree(ptr);
 }
 
-static unsigned long mem_pagealloc_track_lock_bridge(unsigned long lock_addr)
+unsigned long mem_pagealloc_track_lock_bridge(unsigned long lock_addr)
 {
 	return ihk_mc_spinlock_lock((ihk_spinlock_t *)lock_addr);
 }
 
-static void mem_pagealloc_track_unlock_bridge(unsigned long lock_addr,
+void mem_pagealloc_track_unlock_bridge(unsigned long lock_addr,
 		unsigned long irqflags)
 {
 	ihk_mc_spinlock_unlock((ihk_spinlock_t *)lock_addr, irqflags);
 }
 
-static void mem_pagealloc_track_noirq_lock_bridge(unsigned long lock_addr)
+void mem_pagealloc_track_noirq_lock_bridge(unsigned long lock_addr)
 {
 	ihk_mc_spinlock_lock_noirq((ihk_spinlock_t *)lock_addr);
 }
 
-static void mem_pagealloc_track_noirq_unlock_bridge(unsigned long lock_addr)
+void mem_pagealloc_track_noirq_unlock_bridge(unsigned long lock_addr)
 {
 	ihk_mc_spinlock_unlock_noirq((ihk_spinlock_t *)lock_addr);
 }
 
-static void mem_pagealloc_track_spin_init_bridge(unsigned long lock_addr)
+void mem_pagealloc_track_spin_init_bridge(unsigned long lock_addr)
 {
 	ihk_mc_spinlock_init((ihk_spinlock_t *)lock_addr);
 }
 
-static void mem_pagealloc_track_log_bridge(int event, void *ptr, char *file,
+void mem_pagealloc_track_log_bridge(int event, void *ptr, char *file,
 		int line, int npages)
 {
 	switch (event) {
@@ -2592,14 +2596,14 @@ static void mem_pagealloc_track_log_bridge(int event, void *ptr, char *file,
 	}
 }
 
-static void mem_pagealloc_invalid_free_bridge(void *ptr, char *file, int line)
+void mem_pagealloc_invalid_free_bridge(void *ptr, char *file, int line)
 {
 	kprintf("%s: ERROR: invalid deallocation for addr: 0x%lx @ %s:%d\n",
 			"_ihk_mc_free_pages", ptr, file, line);
 	panic("panic: invalid deallocation");
 }
 
-static void mem_pagealloc_invalid_size_bridge(void *ptr, int npages,
+void mem_pagealloc_invalid_size_bridge(void *ptr, int npages,
 		int alloc_npages, char *file, int line)
 {
 	kprintf("%s: ERROR: trying to deallocate %d pages"
@@ -2608,7 +2612,7 @@ static void mem_pagealloc_invalid_size_bridge(void *ptr, int npages,
 	panic("invalid deallocation");
 }
 
-static void mem_pagealloc_leak_log_bridge(int event, void *ptr, char *file,
+void mem_pagealloc_leak_log_bridge(int event, void *ptr, char *file,
 		int line, int size, int count, int runcount)
 {
 	(void)size;
@@ -2936,15 +2940,11 @@ int mem_query_mem_areas_result(int current_cpu, int nr_cpus, int dump_level,
 }
 #endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern void pagealloc_track_init(void);
+#else
 void pagealloc_track_init(void)
 {
-#ifdef MCKERNEL_RUST_MEM_HELPERS
-	mem_track_hashes_init_result(&pagealloc_track_initialized,
-			pagealloc_track_hash, pagealloc_track_hash_locks,
-			pagealloc_addr_hash, pagealloc_addr_hash_locks,
-			PAGEALLOC_TRACK_HASH_SIZE,
-			mem_pagealloc_track_spin_init_bridge);
-#else
 	if (!pagealloc_track_initialized) {
 		int i;
 
@@ -2956,17 +2956,17 @@ void pagealloc_track_init(void)
 			INIT_LIST_HEAD(&pagealloc_addr_hash[i]);
 		}
 	}
-#endif
 }
+#endif
 
 /* NOTE: Hash lock must be held */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct pagealloc_track_entry *__pagealloc_track_find_entry(
+		char *file, int line);
+#else
 struct pagealloc_track_entry *__pagealloc_track_find_entry(
 		char *file, int line)
 {
-#ifdef MCKERNEL_RUST_MEM_HELPERS
-	return pagealloc_track_find_entry_result(file, line,
-			pagealloc_track_hash);
-#else
 	struct pagealloc_track_entry *entry_iter, *entry = NULL;
 	int hash = (strlen(file) + line) & PAGEALLOC_TRACK_HASH_MASK;
 
@@ -2988,28 +2988,19 @@ struct pagealloc_track_entry *__pagealloc_track_find_entry(
 	}
 
 	return entry;
-#endif
 }
+#endif
 
 /* Top level routines called from macros */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern void *_ihk_mc_alloc_aligned_pages_node(int npages, int p2align,
+	ihk_mc_ap_flag flag, int node, int is_user, uintptr_t virt_addr,
+	char *file, int line);
+#else
 void *_ihk_mc_alloc_aligned_pages_node(int npages, int p2align,
 	ihk_mc_ap_flag flag, int node, int is_user, uintptr_t virt_addr,
 	char *file, int line)
 {
-#ifdef MCKERNEL_RUST_MEM_HELPERS
-	return pagealloc_track_alloc_result(npages, p2align, flag, node,
-			is_user, virt_addr, file, line, memdebug,
-			pagealloc_track_initialized, pagealloc_track_hash,
-			pagealloc_track_hash_locks, pagealloc_addr_hash,
-			pagealloc_addr_hash_locks, pagealloc_runcount,
-			mem_pagealloc_track_base_alloc_bridge,
-			mem_pagealloc_track_meta_alloc_bridge,
-			mem_pagealloc_track_meta_free_bridge,
-			mem_pagealloc_track_lock_bridge,
-			mem_pagealloc_track_unlock_bridge,
-			mem_pagealloc_track_spin_init_bridge,
-			mem_pagealloc_track_log_bridge);
-#else
 	unsigned long irqflags;
 	struct pagealloc_track_entry *entry;
 	struct pagealloc_track_addr_entry *addr_entry;
@@ -3085,28 +3076,16 @@ void *_ihk_mc_alloc_aligned_pages_node(int npages, int p2align,
 
 out:
 	return r;
-#endif
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern void _ihk_mc_free_pages(void *ptr, int npages, int is_user,
+                        char *file, int line);
+#else
 void _ihk_mc_free_pages(void *ptr, int npages, int is_user,
                         char *file, int line)
 {
-#ifdef MCKERNEL_RUST_MEM_HELPERS
-	pagealloc_track_free_result(ptr, npages, is_user, file, line,
-			memdebug, pagealloc_track_initialized,
-			pagealloc_track_hash, pagealloc_track_hash_locks,
-			pagealloc_addr_hash, pagealloc_addr_hash_locks,
-			mem_pagealloc_track_base_free_bridge,
-			mem_pagealloc_track_meta_alloc_bridge,
-			mem_pagealloc_track_meta_free_bridge,
-			mem_pagealloc_track_lock_bridge,
-			mem_pagealloc_track_unlock_bridge,
-			mem_pagealloc_track_noirq_lock_bridge,
-			mem_pagealloc_track_noirq_unlock_bridge,
-			mem_pagealloc_invalid_free_bridge,
-			mem_pagealloc_invalid_size_bridge,
-			mem_pagealloc_track_log_bridge);
-#else
 	unsigned long irqflags;
 	struct pagealloc_track_entry *entry;
 	struct pagealloc_track_addr_entry *addr_entry_iter, *addr_entry = NULL;
@@ -3275,8 +3254,8 @@ void _ihk_mc_free_pages(void *ptr, int npages, int is_user,
 
 out:
 	___ihk_mc_free_pages(ptr, npages, is_user);
-#endif
 }
+#endif
 
 #ifndef MCKERNEL_RUST_MEM_HELPERS
 void *ihk_mc_alloc_aligned_pages_node(int npages, int p2align,
@@ -3333,18 +3312,11 @@ void ihk_mc_free_pages_user(void *ptr, int npages)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern void pagealloc_memcheck(void);
+#else
 void pagealloc_memcheck(void)
 {
-#ifdef MCKERNEL_RUST_MEM_HELPERS
-	pagealloc_memcheck_result(pagealloc_track_hash,
-			pagealloc_track_hash_locks, &pagealloc_runcount,
-			PAGEALLOC_TRACK_HASH_SIZE,
-			mem_pagealloc_track_lock_bridge,
-			mem_pagealloc_track_unlock_bridge,
-			mem_pagealloc_track_noirq_lock_bridge,
-			mem_pagealloc_track_noirq_unlock_bridge,
-			mem_pagealloc_leak_log_bridge);
-#else
 	int i;
 	unsigned long irqflags;
 	struct pagealloc_track_entry *entry = NULL;
@@ -3386,8 +3358,8 @@ void pagealloc_memcheck(void)
 	}
 
 	++pagealloc_runcount;
-#endif
 }
+#endif
 
 
 
@@ -6187,33 +6159,33 @@ extern int mem_kmalloc_init_body_result(char **memdebug_slot,
 		mem_find_command_line_fn_t find_command_line_fn,
 		mem_kmalloc_track_spin_init_fn_t spin_init_fn);
 
-static void *mem_kmalloc_track_base_alloc_bridge(int size, ihk_mc_ap_flag flag)
+void *mem_kmalloc_track_base_alloc_bridge(int size, ihk_mc_ap_flag flag)
 {
 	return ___kmalloc(size, flag);
 }
 
-static void mem_kmalloc_track_base_free_bridge(void *ptr)
+void mem_kmalloc_track_base_free_bridge(void *ptr)
 {
 	___kfree(ptr);
 }
 
-static unsigned long mem_kmalloc_track_lock_bridge(unsigned long lock_addr)
+unsigned long mem_kmalloc_track_lock_bridge(unsigned long lock_addr)
 {
 	return ihk_mc_spinlock_lock((ihk_spinlock_t *)lock_addr);
 }
 
-static void mem_kmalloc_track_unlock_bridge(unsigned long lock_addr,
+void mem_kmalloc_track_unlock_bridge(unsigned long lock_addr,
 		unsigned long irqflags)
 {
 	ihk_mc_spinlock_unlock((ihk_spinlock_t *)lock_addr, irqflags);
 }
 
-static void mem_kmalloc_track_spin_init_bridge(unsigned long lock_addr)
+void mem_kmalloc_track_spin_init_bridge(unsigned long lock_addr)
 {
 	ihk_mc_spinlock_init((ihk_spinlock_t *)lock_addr);
 }
 
-static void mem_kmalloc_track_log_bridge(int event, void *ptr, char *file,
+void mem_kmalloc_track_log_bridge(int event, void *ptr, char *file,
 		int line, int size)
 {
 	switch (event) {
@@ -6245,14 +6217,14 @@ static void mem_kmalloc_track_log_bridge(int event, void *ptr, char *file,
 	}
 }
 
-static void mem_kmalloc_invalid_free_bridge(void *ptr, char *file, int line)
+void mem_kmalloc_invalid_free_bridge(void *ptr, char *file, int line)
 {
 	kprintf("%s: ERROR: kfree()ing invalid pointer at %s:%d\n",
 			"_kfree", file, line);
 	panic("panic");
 }
 
-static void mem_kmalloc_leak_log_bridge(int event, void *ptr, char *file,
+void mem_kmalloc_leak_log_bridge(int event, void *ptr, char *file,
 		int line, int size, int count, int runcount)
 {
 	switch (event) {
@@ -6316,13 +6288,13 @@ void kmalloc_init(void)
 }
 
 /* NOTE: Hash lock must be held */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern struct kmalloc_track_entry *__kmalloc_track_find_entry(
+		int size, char *file, int line);
+#else
 struct kmalloc_track_entry *__kmalloc_track_find_entry(
 		int size, char *file, int line)
 {
-#ifdef MCKERNEL_RUST_MEM_HELPERS
-	return kmalloc_track_find_entry_result(size, file, line,
-			kmalloc_track_hash);
-#else
 	struct kmalloc_track_entry *entry_iter, *entry = NULL;
 	int hash = (strlen(file) + line + size) & KMALLOC_TRACK_HASH_MASK;
 
@@ -6345,23 +6317,15 @@ struct kmalloc_track_entry *__kmalloc_track_find_entry(
 	}
 
 	return entry;
-#endif
 }
+#endif
 
 /* Top level routines called from macro */
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern void *_kmalloc(int size, ihk_mc_ap_flag flag, char *file, int line);
+#else
 void *_kmalloc(int size, ihk_mc_ap_flag flag, char *file, int line)
 {
-#ifdef MCKERNEL_RUST_MEM_HELPERS
-	return kmalloc_track_alloc_result(size, flag, file, line, memdebug,
-			kmalloc_track_hash, kmalloc_track_hash_locks,
-			kmalloc_addr_hash, kmalloc_addr_hash_locks,
-			kmalloc_runcount, mem_kmalloc_track_base_alloc_bridge,
-			mem_kmalloc_track_base_free_bridge,
-			mem_kmalloc_track_lock_bridge,
-			mem_kmalloc_track_unlock_bridge,
-			mem_kmalloc_track_spin_init_bridge,
-			mem_kmalloc_track_log_bridge);
-#else
 	unsigned long irqflags;
 	struct kmalloc_track_entry *entry;
 	struct kmalloc_track_addr_entry *addr_entry;
@@ -6438,21 +6402,14 @@ void *_kmalloc(int size, ihk_mc_ap_flag flag, char *file, int line)
 
 out:
 	return r;
-#endif
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern void _kfree(void *ptr, char *file, int line);
+#else
 void _kfree(void *ptr, char *file, int line)
 {
-#ifdef MCKERNEL_RUST_MEM_HELPERS
-	kmalloc_track_free_result(ptr, file, line, memdebug,
-			kmalloc_track_hash, kmalloc_track_hash_locks,
-			kmalloc_addr_hash, kmalloc_addr_hash_locks,
-			mem_kmalloc_track_base_free_bridge,
-			mem_kmalloc_track_lock_bridge,
-			mem_kmalloc_track_unlock_bridge,
-			mem_kmalloc_invalid_free_bridge,
-			mem_kmalloc_track_log_bridge);
-#else
 	unsigned long irqflags;
 	struct kmalloc_track_entry *entry;
 	struct kmalloc_track_addr_entry *addr_entry_iter, *addr_entry = NULL;
@@ -6515,8 +6472,8 @@ void _kfree(void *ptr, char *file, int line)
 
 out:
 	___kfree(ptr);
-#endif
 }
+#endif
 
 #ifndef MCKERNEL_RUST_MEM_HELPERS
 void *kmalloc_tracked(int size, ihk_mc_ap_flag flag, char *file, int line)
@@ -6548,17 +6505,11 @@ void kfree(void *ptr)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern void kmalloc_memcheck(void);
+#else
 void kmalloc_memcheck(void)
 {
-#ifdef MCKERNEL_RUST_MEM_HELPERS
-	kmalloc_memcheck_result(kmalloc_track_hash, kmalloc_track_hash_locks,
-			&kmalloc_runcount, KMALLOC_TRACK_HASH_SIZE,
-			mem_kmalloc_track_lock_bridge,
-			mem_kmalloc_track_unlock_bridge,
-			mem_pagealloc_track_noirq_lock_bridge,
-			mem_pagealloc_track_noirq_unlock_bridge,
-			mem_kmalloc_leak_log_bridge);
-#else
 	int i;
 	unsigned long irqflags;
 	struct kmalloc_track_entry *entry = NULL;
@@ -6602,8 +6553,8 @@ void kmalloc_memcheck(void)
 	}
 
 	++kmalloc_runcount;
-#endif
 }
+#endif
 
 /* Redirection routines registered in alloc structure */
 void *__kmalloc(int size, ihk_mc_ap_flag flag)

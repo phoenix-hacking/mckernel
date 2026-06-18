@@ -250,6 +250,94 @@ typedef void (*mcctrl_in_kernel_return_fn_t)(unsigned long os,
 					     struct ikc_scd_packet *packet,
 					     long ret, int stid);
 typedef void (*mcctrl_in_kernel_release_fn_t)(struct ikc_scd_packet *packet);
+typedef long (*mcctrl_pager_create_fn_t)(unsigned long os, int fd,
+					 unsigned long result_pa);
+typedef long (*mcctrl_pager_release_fn_t)(unsigned long os,
+					  unsigned long handle,
+					  unsigned long sref);
+typedef long (*mcctrl_pager_io_fn_t)(unsigned long os,
+				     unsigned long handle,
+				     unsigned long off,
+				     unsigned long size,
+				     unsigned long rpa);
+typedef long (*mcctrl_pager_map_fn_t)(unsigned long os, int fd,
+				      unsigned long len, unsigned long off,
+				      unsigned long result_rpa,
+				      int prot_and_flags);
+typedef long (*mcctrl_pager_pfn_fn_t)(unsigned long os,
+				      unsigned long handle,
+				      unsigned long off,
+				      unsigned long ppfn_rpa);
+typedef long (*mcctrl_pager_unmap_fn_t)(unsigned long os,
+					unsigned long handle);
+typedef long (*mcctrl_pager_mlock_list_fn_t)(unsigned long os,
+					     unsigned long start,
+					     unsigned long end,
+					     unsigned long addr,
+					     int nent);
+typedef void (*mcctrl_pager_unknown_fn_t)(unsigned long request, long ret);
+struct mcctrl_pager_call_ops {
+	mcctrl_pager_create_fn_t create;
+	mcctrl_pager_release_fn_t release;
+	mcctrl_pager_io_fn_t read;
+	mcctrl_pager_io_fn_t write;
+	mcctrl_pager_map_fn_t map;
+	mcctrl_pager_pfn_fn_t pfn;
+	mcctrl_pager_unmap_fn_t unmap;
+	mcctrl_pager_mlock_list_fn_t mlock_list;
+	mcctrl_pager_unknown_fn_t unknown;
+};
+long mcctrl_pager_call_irq_body_result(
+	unsigned long os, struct syscall_request *req,
+	const struct mcctrl_pager_call_ops *ops);
+long mcctrl_pager_call_body_result(
+	unsigned long os, struct syscall_request *req,
+	const struct mcctrl_pager_call_ops *ops);
+typedef int (*mcctrl_remote_page_fault_send_fn_t)(
+	unsigned long os, int cpu, struct ikc_scd_packet *packet);
+typedef void (*mcctrl_remote_page_fault_log_fn_t)(
+	int stage, int pid, int error, unsigned long fault_addr,
+	unsigned long reason);
+int mcctrl_remote_page_fault_body_result(
+	unsigned long os, void *fault_addr, unsigned long reason,
+	struct ikc_scd_packet *packet,
+	mcctrl_remote_page_fault_send_fn_t send_wait,
+	mcctrl_remote_page_fault_log_fn_t log_event);
+typedef void (*mcctrl_user_space_lock_fn_t)(void);
+typedef void *(*mcctrl_user_space_find_vma_fn_t)(unsigned long addr);
+typedef unsigned long (*mcctrl_user_space_vma_ulong_fn_t)(void *vma);
+typedef void (*mcctrl_user_space_vma_void_fn_t)(void *vma);
+typedef int (*mcctrl_user_space_vma_zap_fn_t)(
+	void *vma, unsigned long addr, unsigned long len);
+typedef void (*mcctrl_user_space_vma_zap_range_fn_t)(
+	void *vma, unsigned long addr, unsigned long len);
+typedef int (*mcctrl_user_space_munmap_fn_t)(
+	unsigned long addr, unsigned long len);
+typedef void (*mcctrl_user_space_error_log_fn_t)(int error);
+struct mcctrl_clear_pte_range_ops {
+	mcctrl_user_space_lock_fn_t read_lock;
+	mcctrl_user_space_lock_fn_t read_unlock;
+	mcctrl_user_space_find_vma_fn_t find_vma;
+	mcctrl_user_space_vma_ulong_fn_t vma_start;
+	mcctrl_user_space_vma_ulong_fn_t vma_end;
+	mcctrl_user_space_vma_ulong_fn_t vma_flags;
+	mcctrl_user_space_vma_void_fn_t set_rw_exec;
+	mcctrl_user_space_vma_zap_fn_t zap_vma_ptes;
+	mcctrl_user_space_vma_zap_range_fn_t zap_page_range;
+};
+int mcctrl_clear_pte_range_body_result(
+	unsigned long start, unsigned long len, unsigned long vm_pfnmap,
+	int legacy_zap, const struct mcctrl_clear_pte_range_ops *ops);
+struct mcctrl_user_space_release_ops {
+	mcctrl_user_space_find_vma_fn_t find_vma;
+	mcctrl_user_space_vma_ulong_fn_t vma_start;
+	mcctrl_user_space_vma_ulong_fn_t vma_end;
+	mcctrl_user_space_munmap_fn_t munmap;
+	mcctrl_user_space_error_log_fn_t log_error;
+};
+int mcctrl_user_space_release_body_result(
+	unsigned long start, unsigned long len,
+	const struct mcctrl_user_space_release_ops *ops);
 struct mcctrl_in_kernel_syscall_ops {
 	mcctrl_in_kernel_req_fn_t pager_irq;
 	mcctrl_in_kernel_req_fn_t pager;
@@ -323,6 +411,419 @@ int mcctrl_control_get_request_os_cpu_body_result(
 	mcctrl_control_request_cpu_error_log_fn_t log_error,
 	mcctrl_control_request_cpu_ptd_log_fn_t log_ptd,
 	mcctrl_control_request_cpu_result_log_fn_t log_result);
+typedef int (*mcctrl_control_copy_user_fn_t)(void *dst, const void *src,
+					     unsigned long size);
+typedef void *(*mcctrl_control_os_to_dev_fn_t)(unsigned long os);
+typedef unsigned long (*mcctrl_control_map_memory_fn_t)(void *dev,
+	unsigned long phys, unsigned long size);
+typedef void *(*mcctrl_control_map_virtual_fn_t)(void *dev,
+	unsigned long phys, unsigned long size);
+typedef void (*mcctrl_control_unmap_virtual_fn_t)(void *dev, void *virt,
+	unsigned long size);
+typedef void (*mcctrl_control_unmap_memory_fn_t)(void *dev,
+	unsigned long phys, unsigned long size);
+typedef void (*mcctrl_control_transfer_log_fn_t)(int stage);
+typedef void (*mcctrl_control_load_log_fn_t)(void *rpm, unsigned long size);
+typedef int (*mcctrl_control_cred_value_fn_t)(void);
+typedef void *(*mcctrl_control_alloc_page_fn_t)(void);
+typedef void (*mcctrl_control_free_page_fn_t)(void *ptr);
+typedef long (*mcctrl_control_strncpy_from_user_fn_t)(
+	void *dst, const void *src, unsigned long size);
+typedef int (*mcctrl_control_drop_exec_fn_t)(unsigned long os, int pid);
+typedef void (*mcctrl_control_destroy_ppd_log_fn_t)(
+	int stage, int pid, void *ppd);
+typedef void *(*mcctrl_control_new_info_fn_t)(unsigned long os, void *file);
+typedef void (*mcctrl_control_set_info_pid_fn_t)(void *info, int pid);
+typedef void (*mcctrl_control_register_release_fn_t)(void *file, void *info);
+typedef void (*mcctrl_control_set_private_fn_t)(void *file, void *info);
+typedef void *(*mcctrl_control_file_ptr_fn_t)(void *file);
+typedef int (*mcctrl_control_desc_int_fn_t)(void *desc);
+typedef unsigned long (*mcctrl_control_desc_ulong_fn_t)(void *desc);
+typedef unsigned long (*mcctrl_control_info_ulong_fn_t)(void *info);
+typedef void (*mcctrl_control_set_start_info_fn_t)(
+	void *info, int pid, int cpu, unsigned long user_start,
+	unsigned long user_end, unsigned long prepare_thread);
+typedef void (*mcctrl_control_ptr_ulong_fn_t)(void *ptr, unsigned long value);
+typedef void (*mcctrl_control_os_cpu_void_fn_t)(unsigned long os, int cpu);
+typedef int (*mcctrl_control_schedule_send_fn_t)(
+	unsigned long os, int cpu, unsigned long rprocess);
+typedef void (*mcctrl_control_start_log_fn_t)(int stage, int ret);
+typedef void (*mcctrl_control_signal_log_fn_t)(int stage, int ret);
+typedef void (*mcctrl_control_return_syscall_fn_t)(
+	unsigned long os, void *ppd, void *packet, long ret, int tid);
+typedef void (*mcctrl_control_ret_syscall_log_fn_t)(
+	int stage, int pid, int tid);
+typedef void (*mcctrl_control_terminate_thread_log_fn_t)(
+	int stage, int pid, int tid, void *ptr, int value);
+typedef unsigned long (*mcctrl_control_current_ulong_fn_t)(void);
+typedef void (*mcctrl_control_uti_log_fn_t)(int stage);
+typedef int (*mcctrl_control_get_order_fn_t)(unsigned long size);
+typedef unsigned long (*mcctrl_control_alloc_pages_fn_t)(int order);
+typedef void (*mcctrl_control_free_pages_fn_t)(unsigned long addr, int order);
+typedef unsigned long (*mcctrl_control_phys_to_virt_fn_t)(unsigned long phys);
+typedef void *(*mcctrl_control_prepare_creds_fn_t)(void);
+typedef void (*mcctrl_control_cap_raise_admin_fn_t)(void *cred);
+typedef const void *(*mcctrl_control_override_creds_fn_t)(void *cred);
+typedef void (*mcctrl_control_revert_creds_fn_t)(const void *cred);
+typedef int (*mcctrl_control_mount_fn_t)(char *dev_name, char *dir_name,
+					 char *type, unsigned long flags,
+					 void *data);
+typedef int (*mcctrl_control_umount_fn_t)(char *dir_name, int flags);
+typedef int (*mcctrl_control_unshare_fn_t)(unsigned long flags);
+typedef long (*mcctrl_control_clear_pte_range_fn_t)(unsigned long start,
+						    unsigned long len);
+typedef void (*mcctrl_control_perf_set_num_fn_t)(void *usrdata,
+						 unsigned long value);
+typedef int (*mcctrl_control_perf_event_num_fn_t)(void *usrdata);
+typedef void *(*mcctrl_control_perf_alloc_set_desc_fn_t)(
+	const void *arg, int index, unsigned int target_cntr, int *error);
+typedef void (*mcctrl_control_perf_init_desc_fn_t)(void *desc,
+						   unsigned int target_cntr);
+typedef void (*mcctrl_control_perf_init_mask_desc_fn_t)(
+	void *desc, int ctrl_type, unsigned long cntr_mask);
+typedef int (*mcctrl_control_perf_send_wait_fn_t)(unsigned long os, int cpu,
+						  void *desc, long timeout,
+						  int *need_free);
+typedef int (*mcctrl_control_perf_desc_err_fn_t)(void *desc);
+typedef unsigned long (*mcctrl_control_perf_desc_read_value_fn_t)(void *desc);
+typedef long (*mcctrl_control_long_fn_t)(unsigned long os);
+typedef void (*mcctrl_control_getrusage_log_fn_t)(
+	int stage, unsigned long size, unsigned long max_size);
+long mcctrl_control_transfer_image_body_result(
+	unsigned long os, const void *arg, unsigned long desc_size,
+	int to_remote, int from_remote,
+	mcctrl_control_copy_user_fn_t copy_from_user,
+	mcctrl_control_copy_user_fn_t copy_to_user,
+	mcctrl_control_os_to_dev_fn_t os_to_dev,
+	mcctrl_control_map_memory_fn_t map_memory,
+	mcctrl_control_map_virtual_fn_t map_virtual,
+	mcctrl_control_unmap_virtual_fn_t unmap_virtual,
+	mcctrl_control_unmap_memory_fn_t unmap_memory,
+	mcctrl_control_transfer_log_fn_t log_error);
+long mcctrl_control_load_syscall_body_result(
+	unsigned long os, const void *arg, unsigned long desc_size,
+	mcctrl_control_copy_user_fn_t copy_from_user,
+	mcctrl_control_copy_user_fn_t copy_to_user,
+	mcctrl_control_os_to_dev_fn_t os_to_dev,
+	mcctrl_control_map_memory_fn_t map_memory,
+	mcctrl_control_map_virtual_fn_t map_virtual,
+	mcctrl_control_unmap_virtual_fn_t unmap_virtual,
+	mcctrl_control_unmap_memory_fn_t unmap_memory,
+	mcctrl_control_load_log_fn_t log_map);
+int mcctrl_control_getcred_body_result(
+	unsigned long phys, mcctrl_control_phys_to_virt_fn_t phys_to_virt,
+	mcctrl_control_cred_value_fn_t current_uid,
+	mcctrl_control_cred_value_fn_t current_euid,
+	mcctrl_control_cred_value_fn_t current_suid,
+	mcctrl_control_cred_value_fn_t current_fsuid,
+	mcctrl_control_cred_value_fn_t current_gid,
+	mcctrl_control_cred_value_fn_t current_egid,
+	mcctrl_control_cred_value_fn_t current_sgid,
+	mcctrl_control_cred_value_fn_t current_fsgid);
+int mcctrl_control_getcredv_body_result(
+	int *virt, mcctrl_control_copy_user_fn_t copy_to_user,
+	mcctrl_control_cred_value_fn_t current_uid,
+	mcctrl_control_cred_value_fn_t current_euid,
+	mcctrl_control_cred_value_fn_t current_suid,
+	mcctrl_control_cred_value_fn_t current_fsuid,
+	mcctrl_control_cred_value_fn_t current_gid,
+	mcctrl_control_cred_value_fn_t current_egid,
+	mcctrl_control_cred_value_fn_t current_sgid,
+	mcctrl_control_cred_value_fn_t current_fsgid);
+long mcctrl_control_strncpy_from_user_body_result(
+	struct strncpy_from_user_desc *arg, unsigned long page_size,
+	mcctrl_control_copy_user_fn_t copy_from_user,
+	mcctrl_control_copy_user_fn_t copy_to_user,
+	mcctrl_control_alloc_page_fn_t alloc_page,
+	mcctrl_control_free_page_fn_t free_page,
+	mcctrl_control_strncpy_from_user_fn_t strncpy_from_user);
+int mcctrl_control_destroy_ppd_body_result(
+	unsigned long os, int pid, mcctrl_control_get_ptr_fn_t get_usrdata,
+	mcctrl_control_get_ppd_fn_t get_ppd, mcctrl_control_put_fn_t put_ppd,
+	mcctrl_control_destroy_ppd_log_fn_t log_event);
+int mcctrl_control_close_exec_body_result(
+	unsigned long os, int pid, mcctrl_control_validate_os_fn_t os_index,
+	mcctrl_control_drop_exec_fn_t drop_exec);
+long mcctrl_control_newprocess_body_result(
+	unsigned long os, void *file, mcctrl_control_current_int_fn_t current_pid,
+	mcctrl_control_new_info_fn_t new_info,
+	mcctrl_control_set_info_pid_fn_t set_info_pid,
+	mcctrl_control_register_release_fn_t register_release,
+	mcctrl_control_set_private_fn_t set_private);
+long mcctrl_control_start_image_body_result(
+	unsigned long os, const void *udesc, void *file,
+	unsigned long desc_size,
+	mcctrl_control_copy_user_fn_t copy_from_user,
+	mcctrl_control_alloc_fn_t alloc_desc,
+	mcctrl_control_free_fn_t free_desc,
+	mcctrl_control_get_ptr_fn_t get_usrdata,
+	mcctrl_control_file_ptr_fn_t get_private,
+	mcctrl_control_new_info_fn_t new_info,
+	mcctrl_control_desc_int_fn_t desc_cpu,
+	mcctrl_control_desc_int_fn_t desc_pid,
+	mcctrl_control_desc_ulong_fn_t desc_user_start,
+	mcctrl_control_desc_ulong_fn_t desc_user_end,
+	mcctrl_control_desc_ulong_fn_t desc_rprocess,
+	mcctrl_control_info_ulong_fn_t info_prepare_thread,
+	mcctrl_control_set_start_info_fn_t set_start_info,
+	mcctrl_control_register_release_fn_t register_release,
+	mcctrl_control_set_private_fn_t set_private,
+	mcctrl_control_os_cpu_void_fn_t set_recv_cpu,
+	mcctrl_control_ptr_ulong_fn_t set_last_thread_exec,
+	mcctrl_control_schedule_send_fn_t send_schedule,
+	mcctrl_control_put_fn_t clear_prepare_thread,
+	mcctrl_control_start_log_fn_t log_event);
+long mcctrl_control_send_signal_body_result(
+	unsigned long os, const void *sigparam, unsigned long sig_size,
+	unsigned long desc_size,
+	mcctrl_control_copy_user_fn_t copy_from_user,
+	mcctrl_control_alloc_fn_t alloc_desc,
+	mcctrl_control_free_fn_t free_desc,
+	mcctrl_control_get_ptr_fn_t get_usrdata,
+	mcctrl_control_virt_to_phys_fn_t virt_to_phys,
+	mcctrl_control_cpu_register_send_wait_fn_t send_wait,
+	mcctrl_control_signal_log_fn_t log_event);
+long mcctrl_control_ret_syscall_body_result(
+	unsigned long os, const void *arg, unsigned long desc_size,
+	mcctrl_control_copy_user_fn_t copy_from_user,
+	mcctrl_control_get_ptr_fn_t get_usrdata,
+	mcctrl_control_current_int_fn_t current_pid,
+	mcctrl_control_current_int_fn_t current_tid,
+	mcctrl_control_current_task_fn_t current_task,
+	mcctrl_control_get_ppd_fn_t get_ppd,
+	mcctrl_control_put_fn_t put_ppd,
+	mcctrl_control_get_ptd_fn_t get_ptd,
+	mcctrl_control_put_fn_t put_ptd,
+	mcctrl_control_ptr_field_fn_t ptd_data,
+	mcctrl_control_os_to_dev_fn_t os_to_dev,
+	mcctrl_control_map_memory_fn_t map_memory,
+	mcctrl_control_map_virtual_fn_t map_virtual,
+	mcctrl_control_unmap_virtual_fn_t unmap_virtual,
+	mcctrl_control_unmap_memory_fn_t unmap_memory,
+	mcctrl_control_return_syscall_fn_t return_syscall,
+	mcctrl_control_put_fn_t release_packet,
+	mcctrl_control_ret_syscall_log_fn_t log_event);
+long mcctrl_control_terminate_thread_unsafe_body_result(
+	unsigned long os, int pid, int tid, long code, void *task,
+	mcctrl_control_get_ptr_fn_t get_usrdata,
+	mcctrl_control_info_ulong_fn_t usrdata_os,
+	mcctrl_control_get_ppd_fn_t get_ppd,
+	mcctrl_control_put_fn_t put_ppd,
+	mcctrl_control_get_ptd_fn_t get_ptd,
+	mcctrl_control_put_fn_t put_ptd,
+	mcctrl_control_ptr_int_fn_t ptd_tid,
+	mcctrl_control_ptr_field_fn_t ptd_data,
+	mcctrl_control_ptr_int_fn_t ptd_refcount,
+	mcctrl_control_return_syscall_fn_t return_syscall,
+	mcctrl_control_put_fn_t release_packet,
+	mcctrl_control_terminate_thread_log_fn_t log_event);
+long mcctrl_control_uti_get_ctx_body_result(
+	unsigned long os, void *udesc, unsigned long desc_size,
+	unsigned long ctx_size, unsigned long key_offset,
+	mcctrl_control_copy_user_fn_t copy_from_user,
+	mcctrl_control_copy_user_fn_t copy_to_user,
+	mcctrl_control_os_to_dev_fn_t os_to_dev,
+	mcctrl_control_map_memory_fn_t map_memory,
+	mcctrl_control_map_virtual_fn_t map_virtual,
+	mcctrl_control_unmap_virtual_fn_t unmap_virtual,
+	mcctrl_control_unmap_memory_fn_t unmap_memory,
+	mcctrl_control_current_ulong_fn_t current_key,
+	mcctrl_control_uti_log_fn_t log_event);
+long mcctrl_control_pin_region_body_result(
+	const void *arg, int pin_shift, int page_shift,
+	mcctrl_control_copy_user_fn_t copy_from_user,
+	mcctrl_control_get_order_fn_t get_order,
+	mcctrl_control_alloc_pages_fn_t alloc_pages,
+	mcctrl_control_virt_to_phys_fn_t virt_to_phys,
+	mcctrl_control_copy_user_fn_t copy_to_user);
+long mcctrl_control_free_region_body_result(
+	const void *arg, int pin_shift, int page_shift,
+	mcctrl_control_copy_user_fn_t copy_from_user,
+	mcctrl_control_get_order_fn_t get_order,
+	mcctrl_control_phys_to_virt_fn_t phys_to_virt,
+	mcctrl_control_free_pages_fn_t free_pages);
+long mcctrl_control_sys_mount_body_result(
+	const void *arg, mcctrl_control_copy_user_fn_t copy_from_user,
+	mcctrl_control_prepare_creds_fn_t prepare_creds,
+	mcctrl_control_cap_raise_admin_fn_t cap_raise_admin,
+	mcctrl_control_override_creds_fn_t override_creds,
+	mcctrl_control_mount_fn_t mount,
+	mcctrl_control_revert_creds_fn_t revert_creds,
+	mcctrl_control_put_fn_t put_cred);
+long mcctrl_control_sys_umount_body_result(
+	const void *arg, int force,
+	mcctrl_control_copy_user_fn_t copy_from_user,
+	mcctrl_control_prepare_creds_fn_t prepare_creds,
+	mcctrl_control_cap_raise_admin_fn_t cap_raise_admin,
+	mcctrl_control_override_creds_fn_t override_creds,
+	mcctrl_control_umount_fn_t umount,
+	mcctrl_control_revert_creds_fn_t revert_creds,
+	mcctrl_control_put_fn_t put_cred);
+long mcctrl_control_sys_unshare_body_result(
+	const void *arg, mcctrl_control_copy_user_fn_t copy_from_user,
+	mcctrl_control_prepare_creds_fn_t prepare_creds,
+	mcctrl_control_cap_raise_admin_fn_t cap_raise_admin,
+	mcctrl_control_override_creds_fn_t override_creds,
+	mcctrl_control_unshare_fn_t unshare,
+	mcctrl_control_revert_creds_fn_t revert_creds,
+	mcctrl_control_put_fn_t put_cred);
+long mcctrl_control_release_user_space_body_result(
+	const void *arg, mcctrl_control_copy_user_fn_t copy_from_user,
+	mcctrl_control_clear_pte_range_fn_t clear_pte_range);
+long mcctrl_control_perf_num_body_result(
+	unsigned long os, unsigned long value,
+	mcctrl_control_validate_os_fn_t validate_os,
+	mcctrl_control_get_ptr_fn_t get_usrdata,
+	mcctrl_control_perf_set_num_fn_t set_perf_event_num,
+	mcctrl_control_log_fn_t log_error);
+long mcctrl_control_perf_destroy_body_result(
+	unsigned long os, mcctrl_control_long_fn_t perf_disable,
+	mcctrl_control_long_fn_t perf_num_zero);
+long mcctrl_control_perf_set_body_result(
+	unsigned long os, const void *arg, unsigned int counter_start,
+	unsigned long desc_size, mcctrl_control_validate_os_fn_t validate_os,
+	mcctrl_control_get_ptr_fn_t get_usrdata,
+	mcctrl_control_perf_event_num_fn_t get_perf_event_num,
+	mcctrl_control_get_ptr_fn_t get_cpu_info,
+	mcctrl_control_ptr_int_fn_t cpu_info_n_cpus,
+	mcctrl_control_free_fn_t free_desc,
+	mcctrl_control_perf_alloc_set_desc_fn_t alloc_set_desc,
+	mcctrl_control_perf_send_wait_fn_t send_wait,
+	mcctrl_control_perf_desc_err_fn_t desc_err,
+	mcctrl_control_perf_set_num_fn_t set_perf_event_num,
+	mcctrl_control_log_fn_t log_error);
+long mcctrl_control_perf_get_body_result(
+	unsigned long os, void *arg, unsigned int counter_start,
+	unsigned long desc_size, unsigned long value_size,
+	mcctrl_control_validate_os_fn_t validate_os,
+	mcctrl_control_get_ptr_fn_t get_usrdata,
+	mcctrl_control_perf_event_num_fn_t get_perf_event_num,
+	mcctrl_control_get_ptr_fn_t get_cpu_info,
+	mcctrl_control_ptr_int_fn_t cpu_info_n_cpus,
+	mcctrl_control_alloc_fn_t alloc_desc,
+	mcctrl_control_free_fn_t free_desc,
+	mcctrl_control_perf_init_desc_fn_t init_desc,
+	mcctrl_control_perf_send_wait_fn_t send_wait,
+	mcctrl_control_perf_desc_err_fn_t desc_err,
+	mcctrl_control_perf_desc_read_value_fn_t desc_read_value,
+	mcctrl_control_copy_user_fn_t copy_to_user,
+	mcctrl_control_log_fn_t log_error);
+long mcctrl_control_perf_enable_disable_body_result(
+	unsigned long os, int ctrl_type, unsigned int counter_start,
+	unsigned long desc_size, mcctrl_control_validate_os_fn_t validate_os,
+	mcctrl_control_get_ptr_fn_t get_usrdata,
+	mcctrl_control_perf_event_num_fn_t get_perf_event_num,
+	mcctrl_control_get_ptr_fn_t get_cpu_info,
+	mcctrl_control_ptr_int_fn_t cpu_info_n_cpus,
+	mcctrl_control_alloc_fn_t alloc_desc,
+	mcctrl_control_free_fn_t free_desc,
+	mcctrl_control_perf_init_mask_desc_fn_t init_mask_desc,
+	mcctrl_control_perf_send_wait_fn_t send_wait,
+	mcctrl_control_perf_desc_err_fn_t desc_err,
+	mcctrl_control_log_fn_t log_error);
+long mcctrl_control_getrusage_body_result(
+	unsigned long os, const void *arg, unsigned long desc_size,
+	unsigned long rusage_size, unsigned long max_pgsizes,
+	unsigned long max_numa_nodes, unsigned long max_cpus,
+	mcctrl_control_validate_os_fn_t validate_os,
+	mcctrl_control_get_ptr_fn_t get_rusage,
+	mcctrl_control_copy_user_fn_t copy_from_user,
+	mcctrl_control_copy_user_fn_t copy_to_user,
+	mcctrl_control_alloc_fn_t alloc_rusage,
+	mcctrl_control_free_fn_t free_rusage,
+	mcctrl_control_getrusage_log_fn_t log_error);
+typedef long (*mcctrl_driver_control_fn_t)(unsigned long os,
+					   unsigned int request,
+					   unsigned long arg,
+					   unsigned long file);
+typedef void *(*mcctrl_driver_os_get_fn_t)(int index);
+typedef void (*mcctrl_driver_os_set_fn_t)(int index, void *os);
+typedef void (*mcctrl_driver_void_fn_t)(void);
+typedef int (*mcctrl_driver_int_fn_t)(void);
+typedef int (*mcctrl_driver_os_int_fn_t)(void *os);
+typedef void (*mcctrl_driver_os_void_fn_t)(void *os);
+typedef void (*mcctrl_driver_index_void_fn_t)(int index);
+typedef int (*mcctrl_driver_os_index_int_fn_t)(void *os, int index);
+typedef void (*mcctrl_driver_os_index_void_fn_t)(void *os, int index);
+typedef void (*mcctrl_driver_log_fn_t)(int stage, int index);
+typedef void *(*mcctrl_driver_lookup_fn_t)(void);
+typedef void (*mcctrl_driver_publish_fn_t)(void *ptr);
+typedef int (*mcctrl_driver_warn_missing_fn_t)(void *ptr);
+struct mcctrl_driver_boot_ops {
+	mcctrl_driver_os_get_fn_t find_os;
+	mcctrl_driver_os_set_fn_t set_os;
+	mcctrl_driver_os_int_fn_t prepare_channels;
+	mcctrl_driver_index_void_fn_t copy_user_call_proto;
+	mcctrl_driver_os_int_fn_t set_kernel_handlers;
+	mcctrl_driver_os_index_int_fn_t register_user_handlers;
+	mcctrl_driver_index_void_fn_t procfs_init;
+	mcctrl_driver_os_void_fn_t clear_kernel_handlers;
+	mcctrl_driver_os_void_fn_t destroy_channels;
+	mcctrl_driver_log_fn_t log;
+};
+struct mcctrl_driver_shutdown_ops {
+	mcctrl_driver_os_get_fn_t get_os;
+	mcctrl_driver_os_set_fn_t set_os;
+	mcctrl_driver_void_fn_t pager_cleanup;
+	mcctrl_driver_os_void_fn_t sysfs_cleanup;
+	mcctrl_driver_os_void_fn_t free_topology_info;
+	mcctrl_driver_os_index_void_fn_t unregister_user_handlers;
+	mcctrl_driver_os_void_fn_t clear_kernel_handlers;
+	mcctrl_driver_os_void_fn_t destroy_channels;
+	mcctrl_driver_index_void_fn_t procfs_exit;
+	mcctrl_driver_log_fn_t log;
+};
+struct mcctrl_driver_symbols_ops {
+	mcctrl_driver_lookup_fn_t lookup_mount;
+	mcctrl_driver_publish_fn_t set_mount;
+	mcctrl_driver_lookup_fn_t lookup_umount;
+	mcctrl_driver_publish_fn_t set_umount;
+	mcctrl_driver_lookup_fn_t lookup_unshare;
+	mcctrl_driver_publish_fn_t set_unshare;
+	mcctrl_driver_lookup_fn_t lookup_sched_setaffinity;
+	mcctrl_driver_publish_fn_t set_sched_setaffinity;
+	mcctrl_driver_lookup_fn_t lookup_sched_setscheduler_nocheck;
+	mcctrl_driver_publish_fn_t set_sched_setscheduler_nocheck;
+	mcctrl_driver_lookup_fn_t lookup_readlinkat;
+	mcctrl_driver_publish_fn_t set_readlinkat;
+	mcctrl_driver_lookup_fn_t lookup_zap_page_range;
+	mcctrl_driver_publish_fn_t set_zap_page_range;
+	mcctrl_driver_lookup_fn_t lookup_hugetlbfs_inode_operations;
+	mcctrl_driver_publish_fn_t set_hugetlbfs_inode_operations;
+	mcctrl_driver_warn_missing_fn_t warn_missing;
+	mcctrl_driver_int_fn_t arch_symbols_init;
+};
+struct mcctrl_driver_module_ops {
+	mcctrl_driver_void_fn_t syscall_init;
+	mcctrl_driver_os_set_fn_t set_os;
+	mcctrl_driver_void_fn_t binfmt_init;
+	mcctrl_driver_void_fn_t tofu_hash_init;
+	mcctrl_driver_int_fn_t symbols_init;
+	mcctrl_driver_void_fn_t tofu_hijack;
+	mcctrl_driver_int_fn_t register_notifier;
+	mcctrl_driver_void_fn_t binfmt_exit;
+	mcctrl_driver_int_fn_t deregister_notifier;
+	mcctrl_driver_void_fn_t uti_finalize;
+	mcctrl_driver_void_fn_t tofu_restore;
+	mcctrl_driver_log_fn_t log;
+};
+long mcctrl_driver_ioctl_body_result(
+	unsigned long os, unsigned int request, unsigned long arg,
+	unsigned long file, mcctrl_driver_control_fn_t dispatch);
+unsigned long mcctrl_driver_osnum_to_os_body_result(
+	int index, mcctrl_driver_os_get_fn_t get_os);
+int mcctrl_driver_os_alive_body_result(
+	int limit, mcctrl_driver_os_get_fn_t get_os);
+int mcctrl_driver_boot_notifier_body_result(
+	int os_index, const struct mcctrl_driver_boot_ops *ops);
+int mcctrl_driver_shutdown_notifier_body_result(
+	int os_index, const struct mcctrl_driver_shutdown_ops *ops);
+int mcctrl_driver_symbols_init_body_result(
+	const struct mcctrl_driver_symbols_ops *ops);
+int mcctrl_driver_init_body_result(
+	int os_limit, const struct mcctrl_driver_module_ops *ops);
+void mcctrl_driver_exit_body_result(
+	const struct mcctrl_driver_module_ops *ops);
 int mcctrl_ikc_free_addrs_owner_result(int free_addrs_count);
 int mcctrl_ikc_desc_free_at_put_result(int allocated_internally);
 int mcctrl_ikc_wait_mode_result(long timeout);
@@ -383,6 +884,138 @@ int mcctrl_futex_realtime_cmd_valid_result(int cmd);
 int mcctrl_futex_wait_uses_timeout_result(int cmd);
 int mcctrl_futex_arg3_is_val2_result(int cmd);
 const char *mcctrl_futex_op_label_result(int cmd);
+struct mcctrl_syscall_ptd_offsets {
+	unsigned long ppd_thread_hash;
+	unsigned long ppd_thread_lock;
+	unsigned long ptd_ppd;
+	unsigned long ptd_hash;
+	unsigned long ptd_task;
+	unsigned long ptd_data;
+	unsigned long ptd_tid;
+	unsigned long ptd_refcount;
+	unsigned long list_head_size;
+	unsigned long rwlock_size;
+};
+typedef void *(*mcctrl_syscall_ptd_alloc_fn_t)(unsigned long size);
+typedef void (*mcctrl_syscall_ptd_free_fn_t)(void *ptr);
+typedef unsigned long (*mcctrl_syscall_ptd_lock_fn_t)(void *lock);
+typedef void (*mcctrl_syscall_ptd_unlock_fn_t)(void *lock,
+					       unsigned long flags);
+typedef void (*mcctrl_syscall_ptd_log_fn_t)(int stage, int value,
+					    void *ptd);
+int mcctrl_syscall_ptd_hash_result(void *task, int mask);
+int mcctrl_syscall_put_ptd_unsafe_body_result(
+	void *ptd, const struct mcctrl_syscall_ptd_offsets *offsets,
+	mcctrl_syscall_ptd_free_fn_t free_fn,
+	mcctrl_syscall_ptd_log_fn_t log);
+int mcctrl_syscall_put_ptd_body_result(
+	void *ptd, int mask, const struct mcctrl_syscall_ptd_offsets *offsets,
+	mcctrl_syscall_ptd_free_fn_t free_fn,
+	mcctrl_syscall_ptd_lock_fn_t write_lock,
+	mcctrl_syscall_ptd_unlock_fn_t write_unlock,
+	mcctrl_syscall_ptd_log_fn_t log);
+int mcctrl_syscall_add_ptd_body_result(
+	void *ppd, void *data, void *current_task, int tid,
+	unsigned long ptd_size, int mask,
+	const struct mcctrl_syscall_ptd_offsets *offsets,
+	mcctrl_syscall_ptd_alloc_fn_t alloc_fn,
+	mcctrl_syscall_ptd_free_fn_t free_fn,
+	mcctrl_syscall_ptd_lock_fn_t write_lock,
+	mcctrl_syscall_ptd_unlock_fn_t write_unlock,
+	mcctrl_syscall_ptd_log_fn_t log);
+void *mcctrl_syscall_get_ptd_body_result(
+	void *ppd, void *task, int mask,
+	const struct mcctrl_syscall_ptd_offsets *offsets,
+	mcctrl_syscall_ptd_lock_fn_t read_lock,
+	mcctrl_syscall_ptd_unlock_fn_t read_unlock,
+	mcctrl_syscall_ptd_log_fn_t log);
+struct mcctrl_syscall_pidfd_offsets {
+	unsigned long entry_filp;
+	unsigned long entry_os;
+	unsigned long entry_group_leader;
+	unsigned long entry_pid;
+	unsigned long entry_fd;
+	unsigned long entry_hash;
+	unsigned long entry_tofu_dev_path;
+	unsigned long entry_pde_data;
+	unsigned long list_head_size;
+	unsigned long tofu_dev_path_size;
+};
+typedef void *(*mcctrl_syscall_pidfd_alloc_fn_t)(unsigned long size);
+typedef void (*mcctrl_syscall_pidfd_free_fn_t)(void *ptr);
+typedef void (*mcctrl_syscall_pidfd_lock_init_fn_t)(void *lock);
+typedef unsigned long (*mcctrl_syscall_pidfd_lock_fn_t)(void *lock);
+typedef void (*mcctrl_syscall_pidfd_unlock_fn_t)(void *lock,
+						 unsigned long flags);
+typedef void (*mcctrl_syscall_pidfd_log_fn_t)(int stage, void *filp,
+					      int pid, int fd);
+int mcctrl_syscall_pidfd_hash_init_body_result(
+	void *table, unsigned long hash_size, unsigned long list_head_size,
+	void *lock, mcctrl_syscall_pidfd_lock_init_fn_t lock_init);
+int mcctrl_syscall_pidfd_hash_insert_body_result(
+	void *table, void *lock, void *filp, unsigned long os, int pid,
+	void *group_leader, int fd, const char *path, void *pde_data,
+	unsigned long entry_size, unsigned long mask,
+	const struct mcctrl_syscall_pidfd_offsets *offsets,
+	mcctrl_syscall_pidfd_alloc_fn_t alloc_fn,
+	mcctrl_syscall_pidfd_free_fn_t free_fn,
+	mcctrl_syscall_pidfd_lock_fn_t lock_fn,
+	mcctrl_syscall_pidfd_unlock_fn_t unlock_fn,
+	mcctrl_syscall_pidfd_log_fn_t log);
+void *mcctrl_syscall_pidfd_hash_lookup_body_result(
+	void *table, void *lock, void *filp, void *group_leader,
+	unsigned long mask,
+	const struct mcctrl_syscall_pidfd_offsets *offsets,
+	mcctrl_syscall_pidfd_lock_fn_t lock_fn,
+	mcctrl_syscall_pidfd_unlock_fn_t unlock_fn,
+	mcctrl_syscall_pidfd_log_fn_t log);
+int mcctrl_syscall_pidfd_hash_remove_body_result(
+	void *table, void *lock, void *filp, unsigned long os,
+	void *group_leader, int fd, unsigned long mask,
+	const struct mcctrl_syscall_pidfd_offsets *offsets,
+	mcctrl_syscall_pidfd_free_fn_t free_fn,
+	mcctrl_syscall_pidfd_lock_fn_t lock_fn,
+	mcctrl_syscall_pidfd_unlock_fn_t unlock_fn,
+	mcctrl_syscall_pidfd_log_fn_t log);
+struct mcctrl_syscall_pager_offsets {
+	unsigned long ppd_devobj_pager_list;
+	unsigned long ppd_devobj_pager_lock;
+	unsigned long pager_list;
+	unsigned long pager_rofile;
+	unsigned long pager_rwfile;
+};
+typedef unsigned long (*mcctrl_syscall_pager_lock_fn_t)(void *lock);
+typedef void (*mcctrl_syscall_pager_unlock_fn_t)(void *lock,
+						 unsigned long flags);
+typedef int (*mcctrl_syscall_pager_predicate_fn_t)(void);
+typedef int (*mcctrl_syscall_pager_sem_down_fn_t)(void *sem);
+typedef void (*mcctrl_syscall_pager_sem_up_fn_t)(void *sem);
+typedef void (*mcctrl_syscall_pager_ptr_fn_t)(void *ptr);
+typedef void (*mcctrl_syscall_pager_log_fn_t)(int stage, void *pager,
+					      int value);
+int mcctrl_syscall_pager_add_process_body_result(
+	int *nr_processes, void *lock,
+	mcctrl_syscall_pager_lock_fn_t lock_fn,
+	mcctrl_syscall_pager_unlock_fn_t unlock_fn);
+int mcctrl_syscall_pager_remove_process_body_result(
+	void *ppd, int *nr_processes, void *pager_lock,
+	const struct mcctrl_syscall_pager_offsets *offsets,
+	mcctrl_syscall_pager_predicate_fn_t in_atomic_fn,
+	mcctrl_syscall_pager_predicate_fn_t in_interrupt_fn,
+	mcctrl_syscall_pager_sem_down_fn_t down_fn,
+	mcctrl_syscall_pager_sem_up_fn_t up_fn,
+	mcctrl_syscall_pager_ptr_fn_t free_fn,
+	mcctrl_syscall_pager_lock_fn_t lock_fn,
+	mcctrl_syscall_pager_unlock_fn_t unlock_fn,
+	mcctrl_syscall_pager_log_fn_t log);
+int mcctrl_syscall_pager_cleanup_body_result(
+	void *pager_list, void *pager_lock,
+	const struct mcctrl_syscall_pager_offsets *offsets,
+	mcctrl_syscall_pager_ptr_fn_t fput_fn,
+	mcctrl_syscall_pager_ptr_fn_t free_fn,
+	mcctrl_syscall_pager_lock_fn_t lock_fn,
+	mcctrl_syscall_pager_unlock_fn_t unlock_fn,
+	mcctrl_syscall_pager_log_fn_t log);
 void *mcctrl_rva_to_rpa_cache_search_body_result(void *root,
 						 unsigned long rva);
 int mcctrl_rva_to_rpa_cache_insert_body_result(
@@ -392,6 +1025,120 @@ int mcctrl_rva_to_rpa_cache_insert_body_result(
 int mcctrl_futex_remove_process_body_result(
 	void *root, void *(*rb_first)(void *),
 	void (*rb_erase)(void *, void *), void (*free_node)(void *));
+typedef int (*mcctrl_futex_wait_fn_t)(u32 *uaddr, int fshared,
+				      u32 val, u64 timeout,
+				      u32 bitset, int clockrt,
+				      void *uti_info);
+typedef int (*mcctrl_futex_wake_fn_t)(u32 *uaddr, int fshared,
+				      int nr_wake, u32 bitset,
+				      void *uti_info);
+typedef int (*mcctrl_futex_requeue_fn_t)(u32 *uaddr1, int fshared,
+					 u32 *uaddr2, int nr_wake,
+					 int nr_requeue, u32 *cmpval,
+					 int requeue_pi, void *uti_info);
+typedef int (*mcctrl_futex_wake_op_fn_t)(u32 *uaddr1, int fshared,
+					 u32 *uaddr2, int nr_wake,
+					 int nr_wake2, int op,
+					 void *uti_info);
+typedef void (*mcctrl_futex_warn_fn_t)(int cmd);
+int mcctrl_futex_dispatch_body_result(
+	u32 *uaddr, int op, u32 val, u64 timeout,
+	u32 *uaddr2, u32 val2, u32 val3, int fshared,
+	void *uti_info, mcctrl_futex_wait_fn_t wait,
+	mcctrl_futex_wake_fn_t wake, mcctrl_futex_requeue_fn_t requeue,
+	mcctrl_futex_wake_op_fn_t wake_op, mcctrl_futex_warn_fn_t warn);
+typedef void *(*mcctrl_futex_info_ptr_fn_t)(void *uti_info);
+typedef int (*mcctrl_futex_current_cpu_fn_t)(void);
+typedef void (*mcctrl_futex_prepare_wait_q_fn_t)(void *q, u32 bitset,
+						void *resp, int linux_cpu);
+typedef int (*mcctrl_futex_wait_setup_fn_t)(u32 *uaddr, u32 val,
+					   int fshared, void *q, void **hb,
+					   void *uti_info);
+typedef s64 (*mcctrl_futex_wait_queue_fn_t)(void *hb, void *q, u64 timeout,
+					    void *uti_info);
+typedef int (*mcctrl_futex_unqueue_fn_t)(void *q);
+typedef void (*mcctrl_futex_put_q_key_fn_t)(int fshared, void *q);
+typedef void (*mcctrl_futex_wait_log_fn_t)(int stage, void *uti_info);
+int mcctrl_futex_wait_body_result(
+	u32 *uaddr, int fshared, u32 val, u64 timeout, u32 bitset,
+	void *uti_info, mcctrl_futex_info_ptr_fn_t get_q,
+	mcctrl_futex_info_ptr_fn_t get_resp,
+	mcctrl_futex_current_cpu_fn_t get_cpu,
+	mcctrl_futex_prepare_wait_q_fn_t prepare_q,
+	mcctrl_futex_wait_setup_fn_t wait_setup,
+	mcctrl_futex_wait_queue_fn_t wait_queue,
+	mcctrl_futex_unqueue_fn_t unqueue,
+	mcctrl_futex_put_q_key_fn_t put_q_key,
+	mcctrl_futex_wait_log_fn_t log_event);
+typedef int (*mcctrl_futex_get_key_fn_t)(unsigned long uaddr, int fshared,
+					 unsigned long key_addr,
+					 unsigned long ctx_addr);
+typedef unsigned long (*mcctrl_futex_hash_key_fn_t)(
+	unsigned long key_addr, unsigned long queue_addr);
+typedef unsigned long (*mcctrl_futex_wake_lock_fn_t)(unsigned long lock_addr);
+typedef void (*mcctrl_futex_wake_unlock_fn_t)(unsigned long lock_addr,
+					      unsigned long flags);
+typedef void (*mcctrl_futex_hb_lock_fn_t)(unsigned long lock_addr);
+typedef void (*mcctrl_futex_hb_unlock_fn_t)(unsigned long lock_addr);
+typedef void (*mcctrl_futex_put_key_fn_t)(int fshared,
+					  unsigned long key_addr);
+typedef void (*mcctrl_futex_wake_entry_fn_t)(unsigned long q_addr,
+					     unsigned long ctx_addr);
+typedef int (*mcctrl_futex_atomic_op_fn_t)(int op, unsigned long uaddr);
+typedef int (*mcctrl_futex_get_value_fn_t)(unsigned long value_addr,
+					   unsigned long uaddr);
+typedef void (*mcctrl_futex_drop_key_refs_fn_t)(unsigned long key_addr);
+typedef void (*mcctrl_futex_requeue_entry_fn_t)(unsigned long q_addr,
+						unsigned long ctx_addr);
+int mcctrl_futex_wake_body_result(
+	unsigned long uaddr, int fshared, int nr_wake, u32 bitset,
+	unsigned long key_addr, unsigned long futex_queue_addr,
+	unsigned long ctx_addr, unsigned long hb_lock_offset,
+	unsigned long hb_chain_offset, unsigned long q_list_offset,
+	unsigned long q_key_offset, unsigned long q_bitset_offset,
+	unsigned long key_word_offset, unsigned long key_ptr_offset,
+	unsigned long key_offset_offset,
+	mcctrl_futex_get_key_fn_t get_key,
+	mcctrl_futex_hash_key_fn_t hash_key,
+	mcctrl_futex_wake_lock_fn_t lock_fn,
+	mcctrl_futex_wake_unlock_fn_t unlock_fn,
+	mcctrl_futex_put_key_fn_t put_key,
+	mcctrl_futex_wake_entry_fn_t wake_fn);
+int mcctrl_futex_wake_op_body_result(
+	unsigned long uaddr1, int fshared, unsigned long uaddr2,
+	int nr_wake, int nr_wake2, int op, unsigned long key1_addr,
+	unsigned long key2_addr, unsigned long futex_queue_addr,
+	unsigned long ctx_addr, unsigned long hb_lock_offset,
+	unsigned long hb_chain_offset, unsigned long q_list_offset,
+	unsigned long q_key_offset, unsigned long q_bitset_offset,
+	unsigned long key_word_offset, unsigned long key_ptr_offset,
+	unsigned long key_offset_offset,
+	mcctrl_futex_get_key_fn_t get_key,
+	mcctrl_futex_hash_key_fn_t hash_key,
+	mcctrl_futex_hb_lock_fn_t lock_fn,
+	mcctrl_futex_hb_unlock_fn_t unlock_fn,
+	mcctrl_futex_atomic_op_fn_t atomic_op,
+	mcctrl_futex_put_key_fn_t put_key,
+	mcctrl_futex_wake_entry_fn_t wake_fn);
+int mcctrl_futex_requeue_body_result(
+	unsigned long uaddr1, int fshared, unsigned long uaddr2,
+	int nr_wake, int nr_requeue, unsigned long cmpval_addr,
+	unsigned long key1_addr, unsigned long key2_addr,
+	unsigned long ctx_addr, unsigned long futex_queue_addr,
+	unsigned long hb_lock_offset, unsigned long hb_chain_offset,
+	unsigned long q_list_offset, unsigned long q_key_offset,
+	unsigned long key_word_offset, unsigned long key_ptr_offset,
+	unsigned long key_offset_offset, unsigned long ctx_hb1_offset,
+	unsigned long ctx_hb2_offset, unsigned long ctx_key2_offset,
+	mcctrl_futex_get_key_fn_t get_key,
+	mcctrl_futex_hash_key_fn_t hash_key,
+	mcctrl_futex_hb_lock_fn_t lock_fn,
+	mcctrl_futex_hb_unlock_fn_t unlock_fn,
+	mcctrl_futex_get_value_fn_t get_value,
+	mcctrl_futex_put_key_fn_t put_key,
+	mcctrl_futex_drop_key_refs_fn_t drop_key_refs,
+	mcctrl_futex_requeue_entry_fn_t wake_fn,
+	mcctrl_futex_requeue_entry_fn_t requeue_fn);
 int mcctrl_procfs_packet_handler_body_result(void *os, int msg, int pid,
 					     unsigned long arg,
 					     unsigned long resp_pa,
@@ -399,6 +1146,79 @@ int mcctrl_procfs_packet_handler_body_result(void *os, int msg, int pid,
 					     void *(*alloc)(unsigned long),
 					     void (*init_schedule)(void *),
 					     void (*alloc_failed)(void));
+typedef const char *(*mcctrl_procfs_entry_name_fn_t)(const void *entry);
+typedef void *(*mcctrl_procfs_entry_parent_fn_t)(const void *entry);
+typedef unsigned int (*mcctrl_procfs_entry_mode_fn_t)(const void *entry);
+typedef const void *(*mcctrl_procfs_entry_fops_fn_t)(const void *entry);
+typedef const void *(*mcctrl_procfs_entry_next_fn_t)(const void *entry,
+						     unsigned long size);
+typedef void (*mcctrl_procfs_add_entry_with_ids_fn_t)(
+	void *parent, const char *name, unsigned int mode, const void *fops,
+	const void *uid, const void *gid);
+typedef void *(*mcctrl_procfs_first_entry_fn_t)(void *parent);
+typedef void *(*mcctrl_procfs_next_entry_fn_t)(void *parent, void *entry);
+typedef void *(*mcctrl_procfs_find_entry_fn_t)(void *parent,
+					       const char *name);
+typedef void (*mcctrl_procfs_delete_entry_fn_t)(void *entry);
+typedef void *(*mcctrl_procfs_alloc_entry_fn_t)(unsigned long size);
+typedef void (*mcctrl_procfs_init_entry_fn_t)(void *entry,
+					     const char *name);
+typedef void *(*mcctrl_procfs_create_pde_fn_t)(
+	void *parent, const char *name, unsigned int mode,
+	const void *uid, const void *gid, const void *opaque, void *entry);
+typedef void (*mcctrl_procfs_commit_entry_fn_t)(
+	void *entry, void *parent, void *pde, const void *uid,
+	const void *gid);
+typedef void (*mcctrl_procfs_entry_log_fn_t)(const char *name);
+typedef void (*mcctrl_procfs_entry_void_fn_t)(void *entry);
+typedef void *(*mcctrl_procfs_entry_data_fn_t)(void *entry);
+typedef void (*mcctrl_procfs_void_fn_t)(void);
+typedef void *(*mcctrl_procfs_find_vpid_fn_t)(int pid);
+typedef void *(*mcctrl_procfs_pid_task_fn_t)(void *pid, int type);
+typedef void *(*mcctrl_procfs_task_cred_fn_t)(void *task);
+char *mcctrl_procfs_getpath_body_result(
+	void *entry, char *buf, unsigned long bufsize,
+	mcctrl_procfs_entry_name_fn_t entry_name,
+	mcctrl_procfs_entry_parent_fn_t entry_parent);
+long mcctrl_procfs_add_entries_body_result(
+	void *parent, const void *entries, unsigned long entry_size,
+	const void *uid, const void *gid,
+	mcctrl_procfs_entry_name_fn_t entry_name,
+	mcctrl_procfs_entry_mode_fn_t entry_mode,
+	mcctrl_procfs_entry_fops_fn_t entry_fops,
+	mcctrl_procfs_entry_next_fn_t entry_next,
+	mcctrl_procfs_add_entry_with_ids_fn_t add_entry);
+void *mcctrl_procfs_find_entry_body_result(
+	void *parent, const char *name,
+	mcctrl_procfs_first_entry_fn_t first_entry,
+	mcctrl_procfs_next_entry_fn_t next_entry,
+	mcctrl_procfs_entry_name_fn_t entry_name);
+void *mcctrl_procfs_add_entry_body_result(
+	void *parent, const char *name, unsigned int mode,
+	const void *uid, const void *gid, const void *opaque,
+	unsigned long entry_size,
+	mcctrl_procfs_find_entry_fn_t find_entry,
+	mcctrl_procfs_delete_entry_fn_t delete_entry,
+	mcctrl_procfs_alloc_entry_fn_t alloc_entry,
+	mcctrl_procfs_init_entry_fn_t init_entry,
+	mcctrl_procfs_create_pde_fn_t create_pde,
+	mcctrl_procfs_commit_entry_fn_t commit_entry,
+	mcctrl_procfs_entry_void_fn_t free_entry,
+	mcctrl_procfs_void_fn_t alloc_failed,
+	mcctrl_procfs_entry_log_fn_t create_failed);
+int mcctrl_procfs_delete_entries_body_result(
+	void *top, mcctrl_procfs_first_entry_fn_t first_child,
+	mcctrl_procfs_delete_entry_fn_t delete_entry,
+	mcctrl_procfs_entry_void_fn_t unlink_entry,
+	mcctrl_procfs_entry_void_fn_t remove_proc,
+	mcctrl_procfs_entry_data_fn_t entry_data,
+	mcctrl_procfs_entry_void_fn_t free_ptr);
+void *mcctrl_procfs_get_pid_cred_body_result(
+	int pid, int pid_type, mcctrl_procfs_void_fn_t rcu_lock,
+	mcctrl_procfs_void_fn_t rcu_unlock,
+	mcctrl_procfs_find_vpid_fn_t find_vpid_fn,
+	mcctrl_procfs_pid_task_fn_t pid_task_fn,
+	mcctrl_procfs_task_cred_fn_t task_cred);
 void *mcctrl_procfs_find_base_entry_body_result(
 	int osnum, int (*format_mcos)(char *, unsigned long, int),
 	void *(*find_entry)(void *, const char *));
@@ -574,6 +1394,9 @@ long mcctrl_procfs_buff_read_body_result(
 					       void (*unknown_work)(int, void *,
 								    long, long),
 					       void (*free_work)(void *));
+	int mcctrl_sysfs_resp_body_result(
+		void *node, long result, void *(*get_req)(void *),
+		void (*complete_req)(void *, long));
 	long mcctrl_sysfs_remote_show_body_result(
 		void *node, void *buf, unsigned long bufsize,
 		void *sysfs_buf, void *sysfs_os, void *sem, void *req,
@@ -593,16 +1416,29 @@ long mcctrl_procfs_buff_read_body_result(
 		int (*send)(void *, int, int, long, long, long, int),
 		long (*req_lresult)(void *),
 		void (*copy)(void *, const void *, unsigned long));
-	int mcctrl_sysfs_remote_release_body_result(
-		void *node, int node_type, void *sysfs_buf, void *sysfs_os,
-		void *sem, void *req, long client_ops, long client_instance,
-		int snt_file, int *stage_out, int (*down)(void *),
-		void (*up)(void *), int (*wait_ready)(void *),
-		void (*set_busy)(void *, int),
-		int (*send)(void *, int, int, long, long, long, int));
-	long mcctrl_sysfs_local_show_body_result(
-		void *instance, void *buf, unsigned long bufsize,
-		unsigned long page_size,
+		int mcctrl_sysfs_remote_release_body_result(
+			void *node, int node_type, void *sysfs_buf, void *sysfs_os,
+			void *sem, void *req, long client_ops, long client_instance,
+			int snt_file, int *stage_out, int (*down)(void *),
+			void (*up)(void *), int (*wait_ready)(void *),
+			void (*set_busy)(void *, int),
+			int (*send)(void *, int, int, long, long, long, int));
+		typedef int (*mcctrl_sysfs_node_type_fn_t)(void *node);
+		typedef const char *(*mcctrl_sysfs_node_name_fn_t)(void *node);
+		typedef void *(*mcctrl_sysfs_node_ptr_fn_t)(void *node);
+		typedef void *(*mcctrl_sysfs_node_next_fn_t)(void *parent,
+							     void *node);
+		typedef void *(*mcctrl_sysfs_err_ptr_fn_t)(int error);
+		void *mcctrl_sysfs_lookup_i_body_result(
+			void *dirp, const char *name, int snt_dir,
+			mcctrl_sysfs_node_type_fn_t node_type,
+			mcctrl_sysfs_node_name_fn_t node_name,
+			mcctrl_sysfs_node_ptr_fn_t first_child,
+			mcctrl_sysfs_node_next_fn_t next_child,
+			mcctrl_sysfs_err_ptr_fn_t err_ptr);
+		long mcctrl_sysfs_local_show_body_result(
+			void *instance, void *buf, unsigned long bufsize,
+			unsigned long page_size,
 		long (*get_client_ops)(void *),
 		long (*get_client_instance)(void *));
 	long mcctrl_sysfs_local_store_body_result(
@@ -614,6 +1450,31 @@ long mcctrl_procfs_buff_read_body_result(
 		int (*get_node_type)(void *),
 		long (*get_client_ops)(void *),
 		long (*get_client_instance)(void *));
+	long mcctrl_sysfs_show_body_result(
+		void *node, void *buf, unsigned long page_size,
+		long (*get_server_ops)(void *));
+	long mcctrl_sysfs_store_body_result(
+		void *node, const void *buf, unsigned long bufsize,
+		long (*get_server_ops)(void *));
+	int mcctrl_sysfs_release_body_result(
+		void *node, long (*get_server_ops)(void *));
+	long mcctrl_sysfs_snooping_show_i32_body_result(
+		void *instance, void *buf, unsigned long bufsize);
+	long mcctrl_sysfs_snooping_show_i64_body_result(
+		void *instance, void *buf, unsigned long bufsize);
+	long mcctrl_sysfs_snooping_show_u32_body_result(
+		void *instance, void *buf, unsigned long bufsize);
+	long mcctrl_sysfs_snooping_show_u64_body_result(
+		void *instance, void *buf, unsigned long bufsize);
+	long mcctrl_sysfs_snooping_show_string_body_result(
+		void *instance, void *buf, unsigned long bufsize);
+	long mcctrl_sysfs_snooping_show_u32k_body_result(
+		void *instance, void *buf, unsigned long bufsize);
+	typedef unsigned long (*mcctrl_sysfs_bitmap_format_fn_t)(
+		void *buf, unsigned long bufsize, void *ptr, int nbits);
+	long mcctrl_sysfs_snooping_show_bitmap_body_result(
+		void *instance, void *buf, unsigned long bufsize,
+		mcctrl_sysfs_bitmap_format_fn_t format);
 	int mcctrl_sysfs_cleanup_special_local_create_body_result(
 		void *instance, void (*free)(void *));
 	int mcctrl_sysfs_setup_special_local_create_body_result(
@@ -650,6 +1511,83 @@ long mcctrl_procfs_buff_read_body_result(
 		void *os,
 		struct sysfs_req_unlink_param *param,
 		int (*unlink_local)(void *, struct sysfs_req_unlink_param *));
+	typedef void *(*mcctrl_sysfs_os_to_dev_fn_t)(void *os);
+	typedef unsigned long (*mcctrl_sysfs_map_memory_fn_t)(
+		void *dev, unsigned long rpa, unsigned long size);
+	typedef void *(*mcctrl_sysfs_map_virtual_fn_t)(
+		void *dev, unsigned long pa, unsigned long size);
+	typedef void (*mcctrl_sysfs_unmap_virtual_fn_t)(
+		void *dev, void *virt, unsigned long size);
+	typedef void (*mcctrl_sysfs_unmap_memory_fn_t)(
+		void *dev, unsigned long pa, unsigned long size);
+	typedef void (*mcctrl_sysfs_wmb_fn_t)(void);
+	typedef int (*mcctrl_sysfs_req_setup_local_fn_t)(
+		void *os, void *buf, unsigned long buf_pa,
+		unsigned long bufsize);
+	typedef int (*mcctrl_sysfs_req_create_local_fn_t)(
+		void *os, struct sysfs_req_create_param *param);
+	typedef int (*mcctrl_sysfs_req_mkdir_local_fn_t)(
+		void *os, struct sysfs_req_mkdir_param *param);
+	typedef int (*mcctrl_sysfs_req_symlink_local_fn_t)(
+		void *os, struct sysfs_req_symlink_param *param);
+	typedef int (*mcctrl_sysfs_req_lookup_local_fn_t)(
+		void *os, struct sysfs_req_lookup_param *param);
+	typedef int (*mcctrl_sysfs_req_unlink_local_fn_t)(
+		void *os, struct sysfs_req_unlink_param *param);
+	int mcctrl_sysfs_req_setup_body_result(
+		void *os, unsigned long param_rpa, unsigned long param_size,
+		mcctrl_sysfs_os_to_dev_fn_t os_to_dev,
+		mcctrl_sysfs_map_memory_fn_t map_memory,
+		mcctrl_sysfs_map_virtual_fn_t map_virtual,
+		mcctrl_sysfs_unmap_virtual_fn_t unmap_virtual,
+		mcctrl_sysfs_unmap_memory_fn_t unmap_memory,
+		mcctrl_sysfs_req_setup_local_fn_t setup_local,
+		mcctrl_sysfs_wmb_fn_t wmb);
+	int mcctrl_sysfs_req_create_body_result(
+		void *os, unsigned long param_rpa, unsigned long param_size,
+		mcctrl_sysfs_os_to_dev_fn_t os_to_dev,
+		mcctrl_sysfs_map_memory_fn_t map_memory,
+		mcctrl_sysfs_map_virtual_fn_t map_virtual,
+		mcctrl_sysfs_unmap_virtual_fn_t unmap_virtual,
+		mcctrl_sysfs_unmap_memory_fn_t unmap_memory,
+		mcctrl_sysfs_req_create_local_fn_t create_local,
+		mcctrl_sysfs_wmb_fn_t wmb);
+	int mcctrl_sysfs_req_mkdir_body_result(
+		void *os, unsigned long param_rpa, unsigned long param_size,
+		mcctrl_sysfs_os_to_dev_fn_t os_to_dev,
+		mcctrl_sysfs_map_memory_fn_t map_memory,
+		mcctrl_sysfs_map_virtual_fn_t map_virtual,
+		mcctrl_sysfs_unmap_virtual_fn_t unmap_virtual,
+		mcctrl_sysfs_unmap_memory_fn_t unmap_memory,
+		mcctrl_sysfs_req_mkdir_local_fn_t mkdir_local,
+		mcctrl_sysfs_wmb_fn_t wmb);
+	int mcctrl_sysfs_req_symlink_body_result(
+		void *os, unsigned long param_rpa, unsigned long param_size,
+		mcctrl_sysfs_os_to_dev_fn_t os_to_dev,
+		mcctrl_sysfs_map_memory_fn_t map_memory,
+		mcctrl_sysfs_map_virtual_fn_t map_virtual,
+		mcctrl_sysfs_unmap_virtual_fn_t unmap_virtual,
+		mcctrl_sysfs_unmap_memory_fn_t unmap_memory,
+		mcctrl_sysfs_req_symlink_local_fn_t symlink_local,
+		mcctrl_sysfs_wmb_fn_t wmb);
+	int mcctrl_sysfs_req_lookup_body_result(
+		void *os, unsigned long param_rpa, unsigned long param_size,
+		mcctrl_sysfs_os_to_dev_fn_t os_to_dev,
+		mcctrl_sysfs_map_memory_fn_t map_memory,
+		mcctrl_sysfs_map_virtual_fn_t map_virtual,
+		mcctrl_sysfs_unmap_virtual_fn_t unmap_virtual,
+		mcctrl_sysfs_unmap_memory_fn_t unmap_memory,
+		mcctrl_sysfs_req_lookup_local_fn_t lookup_local,
+		mcctrl_sysfs_wmb_fn_t wmb);
+	int mcctrl_sysfs_req_unlink_body_result(
+		void *os, unsigned long param_rpa, unsigned long param_size,
+		mcctrl_sysfs_os_to_dev_fn_t os_to_dev,
+		mcctrl_sysfs_map_memory_fn_t map_memory,
+		mcctrl_sysfs_map_virtual_fn_t map_virtual,
+		mcctrl_sysfs_unmap_virtual_fn_t unmap_virtual,
+		mcctrl_sysfs_unmap_memory_fn_t unmap_memory,
+		mcctrl_sysfs_req_unlink_local_fn_t unlink_local,
+		mcctrl_sysfs_wmb_fn_t wmb);
 
 	#endif /* MCCTRL_RUST_HELPERS */
 
