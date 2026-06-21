@@ -86,6 +86,7 @@ if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
 				-C opt-level=2
 				-C debuginfo=1
 				-C force-unwind-tables=no
+				--cfg mcinspect_full_body
 				--emit=obj=${MCINSPECT_RUST_OBJ}
 				"${CMAKE_CURRENT_SOURCE_DIR}/rust/mcinspect_helpers.rs"
 			DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/rust/mcinspect_helpers.rs"
@@ -95,6 +96,8 @@ if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
 		add_custom_target(mcinspect_rust_helpers DEPENDS "${MCINSPECT_RUST_OBJ}")
 		set_source_files_properties("${MCINSPECT_RUST_OBJ}"
 			PROPERTIES EXTERNAL_OBJECT TRUE GENERATED TRUE)
+		list(REMOVE_ITEM MCINSPECT_SRCS mcinspect.c)
+		list(APPEND MCINSPECT_SRCS mcinspect_bfd_shim.c)
 		list(APPEND MCINSPECT_SRCS "${MCINSPECT_RUST_OBJ}")
 	endif()
 endif()
@@ -134,6 +137,7 @@ if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
 				-C opt-level=2
 				-C debuginfo=1
 				-C force-unwind-tables=no
+				--cfg eclair_full_body
 				--emit=obj=${ECLAIR_RUST_OBJ}
 				"${CMAKE_CURRENT_SOURCE_DIR}/rust/eclair_helpers.rs"
 			DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/rust/eclair_helpers.rs"
@@ -163,7 +167,9 @@ if (ENABLE_RUST_USER_TOOLS AND "${ARCH}" STREQUAL "x86_64")
 			PROPERTIES EXTERNAL_OBJECT TRUE GENERATED TRUE)
 		set_source_files_properties("${ECLAIR_ARCH_RUST_OBJ}"
 			PROPERTIES EXTERNAL_OBJECT TRUE GENERATED TRUE)
+		list(REMOVE_ITEM ECLAIR_SRCS eclair.c)
 		list(REMOVE_ITEM ECLAIR_SRCS arch/${ARCH}/arch-eclair.c)
+		list(APPEND ECLAIR_SRCS eclair_bfd_shim.c)
 		list(APPEND ECLAIR_SRCS "${ECLAIR_RUST_OBJ}")
 		list(APPEND ECLAIR_SRCS "${ECLAIR_ARCH_RUST_OBJ}")
 	endif()

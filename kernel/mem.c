@@ -3824,7 +3824,7 @@ static void mem_free_in_allocator_bridge(void *va, int npages, int is_user)
 	__mckernel_free_pages_in_allocator(va, npages, is_user);
 }
 
-static struct list_head *mem_pending_free_pages_bridge(void)
+struct list_head *mem_pending_free_pages_bridge(void)
 {
 	return &get_this_cpu_local_var()->pending_free_pages;
 }
@@ -3862,55 +3862,40 @@ static void mckernel_free_pages(void *va, int npages, int is_user)
 }
 
 #ifdef MCKERNEL_RUST_MEM_HELPERS
-static void mem_begin_free_pages_pending_panic_bridge(void);
-static void mem_finish_free_pages_pending_panic_bridge(void);
-#endif
-
-void begin_free_pages_pending(void) {
-#ifdef MCKERNEL_RUST_MEM_HELPERS
-	mem_begin_free_pages_pending_public_body_result(
-			mem_pending_free_pages_bridge,
-			mem_begin_free_pages_pending_result,
-			mem_begin_free_pages_pending_panic_bridge);
+void mem_begin_free_pages_pending_panic_bridge(void);
+void mem_finish_free_pages_pending_panic_bridge(void);
 #else
+void begin_free_pages_pending(void) {
 	struct list_head *pendings = &get_this_cpu_local_var()->pending_free_pages;
 
 	if (pendings->next != NULL) {
 		panic("begin_free_pages_pending");
 	}
 	INIT_LIST_HEAD(pendings);
-#endif
 	return;
 }
+#endif
 
 #ifdef MCKERNEL_RUST_MEM_HELPERS
-static void mem_begin_free_pages_pending_panic_bridge(void)
+void mem_begin_free_pages_pending_panic_bridge(void)
 {
 	panic("begin_free_pages_pending");
 }
 
-static void mem_pending_free_bridge(unsigned long phys, int npages,
+void mem_pending_free_bridge(unsigned long phys, int npages,
 		int is_user)
 {
 	__mckernel_free_pages_in_allocator(phys_to_virt(phys), npages,
 			is_user);
 }
 
-static void mem_finish_free_pages_pending_panic_bridge(void)
+void mem_finish_free_pages_pending_panic_bridge(void)
 {
 	panic("free_pending_pages:not PM_PENDING_FREE");
 }
-#endif
-
+#else
 void finish_free_pages_pending(void)
 {
-#ifdef MCKERNEL_RUST_MEM_HELPERS
-	mem_finish_free_pages_pending_public_body_result(
-			mem_pending_free_pages_bridge,
-			mem_finish_free_pages_pending_result,
-			mem_pending_free_bridge,
-			mem_finish_free_pages_pending_panic_bridge);
-#else
 	struct list_head *pendings = &get_this_cpu_local_var()->pending_free_pages;
 	struct page *page;
 	struct page *next;
@@ -3930,9 +3915,9 @@ void finish_free_pages_pending(void)
 	}
 
 	pendings->next = pendings->prev = NULL;
-#endif
 	return;
 }
+#endif
 
 static struct ihk_mc_pa_ops allocator = {
 	.alloc_page = mckernel_allocate_aligned_pages_node,
@@ -5760,6 +5745,11 @@ void register_kmalloc(void)
 static struct ihk_page_allocator_desc *vmap_allocator;
 
 #ifdef MCKERNEL_RUST_MEM_HELPERS
+void *mem_vmap_allocator_bridge(void)
+{
+	return vmap_allocator;
+}
+
 static void *mem_vmap_init_bridge(unsigned long start, unsigned long size,
 		unsigned long unit)
 {
@@ -5772,35 +5762,35 @@ static int mem_pt_prepare_map_bridge(page_table_t pt, void *virt,
 	return ihk_mc_pt_prepare_map(pt, virt, size, flag);
 }
 
-static unsigned long mem_vmap_alloc_bridge(void *desc, int npages,
+unsigned long mem_vmap_alloc_bridge(void *desc, int npages,
 		int p2align)
 {
 	return ihk_pagealloc_alloc(desc, npages, p2align);
 }
 
-static void mem_vmap_free_bridge(void *desc, unsigned long address,
+void mem_vmap_free_bridge(void *desc, unsigned long address,
 		int npages)
 {
 	ihk_pagealloc_free(desc, address, npages);
 }
 
-static int mem_pt_set_page_bridge(page_table_t pt, void *virt,
+int mem_pt_set_page_bridge(page_table_t pt, void *virt,
 		unsigned long phys, enum ihk_mc_pt_attribute attr)
 {
 	return ihk_mc_pt_set_page(pt, virt, phys, attr);
 }
 
-static int mem_pt_clear_page_bridge(page_table_t pt, void *virt)
+int mem_pt_clear_page_bridge(page_table_t pt, void *virt)
 {
 	return ihk_mc_pt_clear_page(pt, virt);
 }
 
-static void mem_flush_tlb_single_bridge(unsigned long addr)
+void mem_flush_tlb_single_bridge(unsigned long addr)
 {
 	flush_tlb_single(addr);
 }
 
-static void mem_barrier_bridge(void)
+void mem_barrier_bridge(void)
 {
 	barrier();
 }
@@ -5822,15 +5812,13 @@ static void virtual_allocator_init(void)
 #endif
 }
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern void *ihk_mc_map_virtual(unsigned long phys, int npages,
+		enum ihk_mc_pt_attribute attr);
+#else
 void *ihk_mc_map_virtual(unsigned long phys, int npages,
                          enum ihk_mc_pt_attribute attr)
 {
-#ifdef MCKERNEL_RUST_MEM_HELPERS
-	return mem_map_virtual_body_result(vmap_allocator, phys, npages, attr,
-			mem_vmap_alloc_bridge, mem_pt_set_page_bridge,
-			mem_pt_clear_page_bridge, mem_vmap_free_bridge,
-			mem_flush_tlb_single_bridge, mem_barrier_bridge);
-#else
 	void *va;
 	unsigned long i, offset;
 
@@ -5859,16 +5847,14 @@ void *ihk_mc_map_virtual(unsigned long phys, int npages,
 	}
 	barrier();	/* Temporary fix for Thunder-X */
 	return (char *)va + offset;
-#endif
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+extern void ihk_mc_unmap_virtual(void *va, int npages);
+#else
 void ihk_mc_unmap_virtual(void *va, int npages)
 {
-#ifdef MCKERNEL_RUST_MEM_HELPERS
-	mem_unmap_virtual_body_result(vmap_allocator, va, npages,
-			mem_pt_clear_page_bridge, mem_flush_tlb_single_bridge,
-			mem_vmap_free_bridge);
-#else
 	unsigned long i;
 
 	va = (void *)((unsigned long)va & PAGE_MASK);
@@ -5878,8 +5864,8 @@ void ihk_mc_unmap_virtual(void *va, int npages)
 	}
 
 	ihk_pagealloc_free(vmap_allocator, (unsigned long)va, npages);
-#endif
 }
+#endif
 
 #ifdef ATTACHED_MIC
 /* moved from ihk_knc/manycore/mic/setup.c */
@@ -5974,25 +5960,94 @@ static void rusage_init()
 extern void monitor_init(void);
 
 #ifdef MCKERNEL_RUST_MEM_HELPERS
-static void mem_set_page_fault_handler_bridge(unsigned long handler)
+struct ihk_mc_pa_ops *mem_init_allocator_bridge(void)
+{
+	return &allocator;
+}
+
+unsigned long mem_init_page_fault_handler_bridge(void)
+{
+	return (unsigned long)page_fault_handler;
+}
+
+unsigned long mem_init_query_free_handler_bridge(void)
+{
+	return (unsigned long)&query_free_mem_handler;
+}
+
+int *mem_init_anon_on_demand_bridge(void)
+{
+	return &anon_on_demand;
+}
+
+int *mem_init_xpmem_remote_bridge(void)
+{
+	return &xpmem_page_in_remote_on_attach;
+}
+
+int *mem_init_hugetlbfs_on_demand_bridge(void)
+{
+#ifdef ENABLE_FUGAKU_HACKS
+	return &hugetlbfs_on_demand;
+#else
+	return NULL;
+#endif
+}
+
+void mem_monitor_init_bridge(void)
+{
+	monitor_init();
+}
+
+void mem_rusage_init_bridge(void)
+{
+	rusage_init();
+}
+
+void mem_numa_init_bridge(void)
+{
+	numa_init();
+}
+
+void mem_page_init_bridge(void)
+{
+	page_init();
+}
+
+void mem_virtual_allocator_init_bridge(void)
+{
+	virtual_allocator_init();
+}
+
+char *mem_find_command_line_bridge(char *name)
+{
+	return find_command_line(name);
+}
+
+void mem_numa_distances_init_bridge(void)
+{
+	numa_distances_init();
+}
+
+void mem_set_page_fault_handler_bridge(unsigned long handler)
 {
 	ihk_mc_set_page_fault_handler(
 			(void (*)(void *, uint64_t, void *))handler);
 }
 
-static int mem_get_vector_bridge(int type)
+int mem_get_vector_bridge(int type)
 {
 	return ihk_mc_get_vector((enum ihk_mc_gv_type)type);
 }
 
-static int mem_register_interrupt_handler_bridge(int vector,
+int mem_register_interrupt_handler_bridge(int vector,
 		unsigned long handler)
 {
 	return ihk_mc_register_interrupt_handler(vector,
 			(struct ihk_mc_interrupt_handler *)handler);
 }
 
-static void mem_init_log_bridge(int event)
+void mem_init_log_bridge(int event)
 {
 	switch (event) {
 	case MEM_INIT_LOG_ANON_ON_DEMAND:
@@ -6010,24 +6065,11 @@ static void mem_init_log_bridge(int event)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+void mem_init(void);
+#else
 void mem_init(void)
 {
-#ifdef MCKERNEL_RUST_MEM_HELPERS
-	mem_init_sequence_result(&allocator, (unsigned long)page_fault_handler,
-			(unsigned long)&query_free_mem_handler,
-			&anon_on_demand, &xpmem_page_in_remote_on_attach,
-#ifdef ENABLE_FUGAKU_HACKS
-			&hugetlbfs_on_demand,
-#else
-			NULL,
-#endif
-			monitor_init, rusage_init, numa_init,
-			ihk_mc_set_page_allocator,
-			mem_set_page_fault_handler_bridge, mem_get_vector_bridge,
-			mem_register_interrupt_handler_bridge, page_init,
-			virtual_allocator_init, find_command_line,
-			numa_distances_init, mem_init_log_bridge);
-#else
 	monitor_init();
 
 	/* It must precedes numa_init() because rusage.total_memory is initialized in numa_init() */
@@ -6071,8 +6113,8 @@ void mem_init(void)
 
 	/* Init distance vectors */
 	numa_distances_init();
-#endif
 }
+#endif
 
 #define KMALLOC_TRACK_HASH_SHIFT	(8)
 #define KMALLOC_TRACK_HASH_SIZE     (1 << KMALLOC_TRACK_HASH_SHIFT)
@@ -7035,13 +7077,41 @@ int is_mckernel_memory(unsigned long start, unsigned long end)
 #endif /* MCKERNEL_RUST_MEM_HELPERS */
 
 #ifdef MCKERNEL_RUST_MEM_HELPERS
-static void mem_dump_complete_log_bridge(void)
+int mem_num_processors_bridge(void)
+{
+	return num_processors;
+}
+
+int mem_dump_level_bridge(void)
+{
+	return ihk_mc_get_dump_level();
+}
+
+struct ihk_dump_page_set *mem_get_dump_page_set_bridge(void)
+{
+	return ihk_mc_get_dump_page_set();
+}
+
+struct ihk_dump_page *mem_get_dump_page_bridge(void)
+{
+	return ihk_mc_get_dump_page();
+}
+
+struct list_head *mem_process_hash_lists_bridge(void)
+{
+	struct resource_set *rset = get_this_cpu_local_var()->resource_set;
+	struct process_hash *phash = rset->process_hash;
+
+	return phash ? phash->list : NULL;
+}
+
+void mem_dump_complete_log_bridge(void)
 {
 	dkprintf("%s: IHK_DUMP_PAGE_SET_COMPLETED\n",
 			"ihk_mc_query_mem_areas");
 }
 
-static void mem_dump_warn_bridge(int kind, unsigned long map_count,
+void mem_dump_warn_bridge(int kind, unsigned long map_count,
 		unsigned long map_index, unsigned long map_start,
 		unsigned long map_end, unsigned long page_index)
 {
@@ -7059,42 +7129,39 @@ static void mem_dump_warn_bridge(int kind, unsigned long map_count,
 }
 
 #ifdef IHK_RBTREE_ALLOCATOR
-static unsigned long mem_dump_free_pages_bridge(int node)
+unsigned long mem_dump_free_pages_bridge(int node)
 {
 	return mem_dump_free_pages_public_result(memory_nodes, node,
 			ihk_mc_get_nr_numa_nodes);
 }
 
-static void *mem_dump_first_free_chunk_bridge(int node)
+void *mem_dump_first_free_chunk_bridge(int node)
 {
 	return mem_dump_first_free_chunk_public_result(memory_nodes, node,
 			ihk_mc_get_nr_numa_nodes);
 }
 
-static void *mem_dump_next_free_chunk_bridge(void *chunk)
+void *mem_dump_next_free_chunk_bridge(void *chunk)
 {
 	return mem_dump_next_free_chunk_result(chunk);
 }
 
-static unsigned long mem_dump_chunk_addr_bridge(void *chunk)
+unsigned long mem_dump_chunk_addr_bridge(void *chunk)
 {
 	return mem_dump_chunk_addr_result(chunk);
 }
 
-static unsigned long mem_dump_chunk_size_bridge(void *chunk)
+unsigned long mem_dump_chunk_size_bridge(void *chunk)
 {
 	return mem_dump_chunk_size_result(chunk);
 }
 #endif
 #endif
 
-void ihk_mc_query_mem_areas(void){
 #ifdef MCKERNEL_RUST_MEM_HELPERS
-	mem_query_mem_areas_result(ihk_mc_get_processor_id(), num_processors,
-			ihk_mc_get_dump_level(), ihk_mc_get_dump_page_set,
-			ihk_mc_get_dump_page, ihk_mc_query_mem_user_page,
-			ihk_mc_query_mem_free_page, mem_dump_complete_log_bridge);
+void ihk_mc_query_mem_areas(void);
 #else
+void ihk_mc_query_mem_areas(void){
 	int cpu_id;
 	struct ihk_dump_page_set *dump_page_set;
 	struct dump_pase_info dump_pase_info;
@@ -7125,10 +7192,10 @@ void ihk_mc_query_mem_areas(void){
 
 	dump_page_set->completion_flag = IHK_DUMP_PAGE_SET_COMPLETED;
 	dkprintf("%s: IHK_DUMP_PAGE_SET_COMPLETED\n", __func__);
-#endif
 
 	return;
 }
+#endif
 
 void ihk_mc_clear_dump_page_completion(void)
 {
@@ -7142,19 +7209,12 @@ void ihk_mc_clear_dump_page_completion(void)
 #endif
 }
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+void ihk_mc_query_mem_user_page(void *dump_pase_info);
+#else
 void ihk_mc_query_mem_user_page(void *dump_pase_info) {
-
 	struct resource_set *rset = get_this_cpu_local_var()->resource_set;
 	struct process_hash *phash = rset->process_hash;
-#ifdef MCKERNEL_RUST_MEM_HELPERS
-	mem_query_mem_user_page_result(phash ? phash->list : NULL, HASH_SIZE,
-			__builtin_offsetof(struct process, hash_list),
-			__builtin_offsetof(struct process, vm),
-			__builtin_offsetof(struct process_vm, address_space),
-			__builtin_offsetof(struct address_space, page_table),
-			USER_END, visit_pte_range_safe,
-			ihk_mc_get_mem_user_page, dump_pase_info);
-#else
 	struct process *p; 
 	struct process_vm *vm;
 	int i;
@@ -7173,22 +7233,15 @@ void ihk_mc_query_mem_user_page(void *dump_pase_info) {
 		}
 	}
 
-#endif
 	return;
 }
+#endif
 
+#ifdef MCKERNEL_RUST_MEM_HELPERS
+void ihk_mc_query_mem_free_page(void *dump_pase_info);
+#else
 void ihk_mc_query_mem_free_page(void *dump_pase_info) {
 #ifdef IHK_RBTREE_ALLOCATOR
-#ifdef MCKERNEL_RUST_MEM_HELPERS
-	mem_query_mem_free_page_public_result(
-			(struct dump_pase_info *)dump_pase_info,
-			ihk_mc_get_nr_numa_nodes, mem_dump_free_pages_bridge,
-			mem_dump_first_free_chunk_bridge,
-			mem_dump_next_free_chunk_bridge,
-			mem_dump_chunk_addr_bridge,
-			mem_dump_chunk_size_bridge,
-			mem_dump_warn_bridge);
-#else
 	struct free_chunk *chunk;
 	struct rb_node *node;
 	struct rb_root *free_chunks;
@@ -7259,9 +7312,9 @@ void ihk_mc_query_mem_free_page(void *dump_pase_info) {
 		}
 	}
 #endif
-#endif
 	return;
 }
+#endif
 
 int ihk_mc_chk_page_address(pte_t mem_addr){
 #ifdef MCKERNEL_RUST_MEM_HELPERS

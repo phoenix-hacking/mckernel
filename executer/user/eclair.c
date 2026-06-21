@@ -204,7 +204,9 @@ ECLAIR_RUST_VISIBLE struct options opt;
 static volatile int f_done = 0;
 ECLAIR_RUST_VISIBLE bfd *symbfd = NULL;
 ECLAIR_RUST_VISIBLE bfd *dumpbfd = NULL;
+#ifndef ECLAIR_RUST_HELPERS
 static asection *dumpscn = NULL;
+#endif
 ECLAIR_RUST_VISIBLE dump_mem_chunks_t *mem_chunks;
 static int num_processors = -1;
 asymbol **symtab = NULL;
@@ -213,9 +215,15 @@ uintptr_t kernel_base;
 static struct thread_info *tihead = NULL;
 static struct thread_info **titailp = &tihead;
 static struct thread_info *curr_thread = NULL;
-static int remote_running;
+ECLAIR_RUST_VISIBLE int remote_running;
 
 #undef ECLAIR_RUST_VISIBLE
+
+#ifdef ECLAIR_RUST_HELPERS
+#define ECLAIR_RUST_VISIBLE
+#else
+#define ECLAIR_RUST_VISIBLE static
+#endif
 
 #ifdef ECLAIR_RUST_HELPERS
 long eclair_bfd_get_symtab_upper_bound_bridge(bfd *abfd)
@@ -397,9 +405,10 @@ enum {
 
 	END_MARK,
 }; /* enum */
-static uintptr_t debug_constants[END_MARK+1];
+ECLAIR_RUST_VISIBLE uintptr_t debug_constants[END_MARK+1];
 #define K(name) (debug_constants[name])
 
+#ifndef ECLAIR_RUST_HELPERS
 static int setup_constants(void) {
 	int error;
 	uintptr_t va;
@@ -439,6 +448,9 @@ static int setup_constants(void) {
 
 	return 0;
 } /* setup_constants() */
+#endif
+
+#undef ECLAIR_RUST_VISIBLE
 
 static int setup_threads(void) {
 	int error;
@@ -746,6 +758,7 @@ static int setup_symbols(char *fname) {
 } /* setup_symbols() */
 #endif
 
+#ifndef ECLAIR_RUST_HELPERS
 static int setup_dump_interactive(void)
 {
 	int error;
@@ -800,8 +813,10 @@ static int setup_dump_interactive(void)
 
 	return 0;
 }
+#endif
 
 
+#ifndef ECLAIR_RUST_HELPERS
 static int setup_dump(char *fname) {
 	bfd_boolean ok;
 	long mem_size;
@@ -870,6 +885,7 @@ static int setup_dump(char *fname) {
 
 	return 0;
 } /* setup_dump() */
+#endif
 
 #ifndef ECLAIR_RUST_HELPERS
 static ssize_t print_hex(char *buf, size_t buf_size, char *str) {
@@ -1710,6 +1726,7 @@ static void command(const char *cmd, char *res, size_t res_size) {
 	return;
 } /* command() */
 
+#ifndef ECLAIR_RUST_HELPERS
 static void options(int argc, char *argv[]) {
 	memset(&opt, 0, sizeof(opt));
 	opt.kernel_path = "./mckernel.img";
@@ -1784,6 +1801,7 @@ static void options(int argc, char *argv[]) {
 
 	return;
 } /* options() */
+#endif
 
 static int sock = -1;
 static FILE *ifp = NULL;
@@ -1875,6 +1893,49 @@ static void print_usage(void) {
 } /* print_usage() */
 #endif
 
+#ifdef ECLAIR_RUST_HELPERS
+int eclair_setup_threads_bridge(void)
+{
+	return setup_threads();
+}
+
+int eclair_start_gdb_bridge(void)
+{
+	return start_gdb();
+}
+
+int eclair_main_done_bridge(void)
+{
+	return f_done;
+}
+
+int eclair_main_fgetc_bridge(void)
+{
+	return fgetc(ifp);
+}
+
+void eclair_main_fputc_bridge(int c)
+{
+	fputc(c, ofp);
+}
+
+void eclair_main_fprintf_bridge(const char *str)
+{
+	fprintf(ofp, "%s", str);
+}
+
+void eclair_main_fflush_bridge(void)
+{
+	fflush(ofp);
+}
+
+void eclair_command_bridge(const char *cmd, char *res, size_t res_size)
+{
+	command(cmd, res, res_size);
+}
+#endif
+
+#ifndef ECLAIR_RUST_HELPERS
 int main(int argc, char *argv[]) {
 	int c;
 	int error;
@@ -2086,3 +2147,4 @@ main_loop_done:
 
 	return 0;
 } /* main() */
+#endif

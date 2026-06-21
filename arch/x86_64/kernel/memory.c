@@ -453,11 +453,12 @@ void x86_init_fixed_area_public(void *pt);
 void x86_init_vsyscall_area_public(void *pt);
 #endif
 
-static void *x86_pt_alloc_pages_bridge(int nr_pages, int ap_flag);
+X86_MEMORY_PUBLIC_BRIDGE void *x86_pt_alloc_pages_bridge(int nr_pages, int ap_flag);
 unsigned long x86_pt_virt_to_phys_bridge(void *addr);
-static void *x86_pt_phys_to_virt_bridge(unsigned long phys);
-static void x86_pt_free_pages_bridge(void *pt, int nr_pages);
-static void x86_pt_destroy_panic_bridge(int reason);
+X86_MEMORY_PUBLIC_BRIDGE void *x86_pt_phys_to_virt_bridge(unsigned long phys);
+X86_MEMORY_PUBLIC_BRIDGE void x86_pt_free_pages_bridge(void *pt, int nr_pages);
+X86_MEMORY_PUBLIC_BRIDGE void x86_pt_destroy_panic_bridge(int reason);
+X86_MEMORY_PUBLIC_BRIDGE void x86_pt_destroy_helper_failed_panic_bridge(void);
 static void x86_pt_set_page_log_bridge(unsigned long virt);
 
 static int use_1gb_page = 0;
@@ -504,6 +505,11 @@ enum ihk_mc_pt_attribute attr_mask
 		| 0;
 #define	ATTR_MASK	attr_mask
 
+X86_MEMORY_PUBLIC_BRIDGE unsigned long x86_attr_mask_bridge(void)
+{
+	return ATTR_MASK;
+}
+
 #ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 void enable_ptattr_no_execute(void)
 {
@@ -549,10 +555,12 @@ static unsigned long attr_to_l1attr(enum ihk_mc_pt_attribute attr)
 		| ((uint64_t)(l1i) << PTL1_SHIFT)	\
 		)
 
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 void set_pte(pte_t *ppte, unsigned long phys, enum ihk_mc_pt_attribute attr)
 {
 	*ppte = x86_set_pte_value_result(phys, attr, ATTR_MASK);
 }
+#endif
 
 
 #if 0
@@ -646,6 +654,7 @@ static int __set_pt_page(struct page_table *pt, void *virt, unsigned long phys,
 	return ret;
 }
 
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 static int __clear_pt_page(struct page_table *pt, void *virt, int largepage)
 {
 	return x86_pt_clear_page_result(pt, init_pt, (unsigned long)virt,
@@ -673,8 +682,9 @@ int ihk_mc_pt_virt_to_phys(struct page_table *pt,
 {
 	return ihk_mc_pt_virt_to_phys_size(pt, virt, phys, NULL);
 }
+#endif
 
-static void x86_pt_print_log_bridge(int event, int level,
+X86_MEMORY_PUBLIC_BRIDGE void x86_pt_print_log_bridge(int event, int level,
 		unsigned long value, int index)
 {
 	switch (event) {
@@ -697,13 +707,23 @@ static void x86_pt_print_log_bridge(int event, int level,
 	}
 }
 
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 int ihk_mc_pt_print_pte(struct page_table *pt, void *virt)
 {
 	return x86_pt_print_pte_body_result(pt, init_pt, (unsigned long)virt,
 			x86_pt_virt_to_phys_bridge, x86_pt_phys_to_virt_bridge,
 			x86_pt_print_log_bridge);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+int set_pt_large_page(struct page_table *pt, void *virt, unsigned long phys,
+                      enum ihk_mc_pt_attribute attr);
+int ihk_mc_pt_set_large_page(page_table_t pt, void *virt,
+                       unsigned long phys, enum ihk_mc_pt_attribute attr);
+int ihk_mc_pt_set_page(page_table_t pt, void *virt,
+                       unsigned long phys, enum ihk_mc_pt_attribute attr);
+#else
 int set_pt_large_page(struct page_table *pt, void *virt, unsigned long phys,
                       enum ihk_mc_pt_attribute attr)
 {
@@ -723,8 +743,9 @@ int ihk_mc_pt_set_page(page_table_t pt, void *virt,
 {
 	return __set_pt_page(pt, virt, phys, attr | PTATTR_ACTIVE);
 }
+#endif
 
-static void *x86_pt_alloc_pages_bridge(int nr_pages, int ap_flag)
+X86_MEMORY_PUBLIC_BRIDGE void *x86_pt_alloc_pages_bridge(int nr_pages, int ap_flag)
 {
 	return _ihk_mc_alloc_aligned_pages_node(nr_pages, PAGE_P2ALIGN, (ihk_mc_ap_flag)ap_flag, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);
 }
@@ -740,6 +761,10 @@ X86_MEMORY_PUBLIC_BRIDGE int x86_pt_set_page_bridge(void *pt, unsigned long virt
 	return __set_pt_page(pt, (void *)virt, phys, attr);
 }
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+int ihk_mc_pt_prepare_map(page_table_t p, void *virt, unsigned long size,
+                          enum ihk_mc_pt_prepare_flag flag);
+#else
 int ihk_mc_pt_prepare_map(page_table_t p, void *virt, unsigned long size,
                           enum ihk_mc_pt_prepare_flag flag)
 {
@@ -748,7 +773,11 @@ int ihk_mc_pt_prepare_map(page_table_t p, void *virt, unsigned long size,
 			x86_pt_alloc_pages_bridge, x86_pt_virt_to_phys_bridge,
 			x86_pt_set_page_bridge);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+struct page_table *ihk_mc_pt_create(ihk_mc_ap_flag ap_flag);
+#else
 struct page_table *ihk_mc_pt_create(ihk_mc_ap_flag ap_flag)
 {
 	return x86_pt_create_result(init_pt, ap_flag, x86_pt_alloc_pages_bridge);
@@ -766,18 +795,19 @@ static void destroy_page_table(int level, struct page_table *pt)
 	}
 	return;
 }
+#endif
 
-static void *x86_pt_phys_to_virt_bridge(unsigned long phys)
+X86_MEMORY_PUBLIC_BRIDGE void *x86_pt_phys_to_virt_bridge(unsigned long phys)
 {
 	return phys_to_virt(phys);
 }
 
-static void x86_pt_free_pages_bridge(void *pt, int nr_pages)
+X86_MEMORY_PUBLIC_BRIDGE void x86_pt_free_pages_bridge(void *pt, int nr_pages)
 {
 	_ihk_mc_free_pages(pt, nr_pages, IHK_MC_PG_KERNEL, __FILE__, __LINE__);
 }
 
-static void x86_pt_destroy_panic_bridge(int reason)
+X86_MEMORY_PUBLIC_BRIDGE void x86_pt_destroy_panic_bridge(int reason)
 {
 	if (reason == X86_PT_DESTROY_PANIC_LEVEL) {
 		panic("destroy_page_table: level is out of range");
@@ -787,6 +817,12 @@ static void x86_pt_destroy_panic_bridge(int reason)
 	}
 }
 
+X86_MEMORY_PUBLIC_BRIDGE void x86_pt_destroy_helper_failed_panic_bridge(void)
+{
+	panic("destroy_page_table: helper failed");
+}
+
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 static void x86_pt_destroy_bridge(int level, void *pt)
 {
 	destroy_page_table(level, pt);
@@ -797,7 +833,14 @@ void ihk_mc_pt_destroy(struct page_table *pt)
 	x86_pt_destroy_root_result(pt, x86_pt_destroy_bridge);
 	return;
 }
+#else
+void ihk_mc_pt_destroy(struct page_table *pt);
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+int ihk_mc_pt_clear_page(page_table_t pt, void *virt);
+int ihk_mc_pt_clear_large_page(page_table_t pt, void *virt);
+#else
 int ihk_mc_pt_clear_page(page_table_t pt, void *virt)
 {
 	return __clear_pt_page(pt, virt, 0);
@@ -807,10 +850,21 @@ int ihk_mc_pt_clear_large_page(page_table_t pt, void *virt)
 {
 	return __clear_pt_page(pt, virt, 1);
 }
+#endif
 
 typedef int walk_pte_fn_t(void *args, pte_t *ptep, uint64_t base,
 		uint64_t start, uint64_t end);
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+int walk_pte_l1(struct page_table *pt, uint64_t base, uint64_t start,
+		uint64_t end, walk_pte_fn_t *funcp, void *args);
+int walk_pte_l2(struct page_table *pt, uint64_t base, uint64_t start,
+		uint64_t end, walk_pte_fn_t *funcp, void *args);
+int walk_pte_l3(struct page_table *pt, uint64_t base, uint64_t start,
+		uint64_t end, walk_pte_fn_t *funcp, void *args);
+int walk_pte_l4(struct page_table *pt, uint64_t base, uint64_t start,
+		uint64_t end, walk_pte_fn_t *funcp, void *args);
+#else
 static int walk_pte_l1(struct page_table *pt, uint64_t base, uint64_t start,
 		uint64_t end, walk_pte_fn_t *funcp, void *args)
 {
@@ -845,6 +899,7 @@ static int walk_pte_l4(struct page_table *pt, uint64_t base, uint64_t start,
 			0, PTL4_SHIFT, (x86_walk_pte_callback_t)funcp, args,
 			NULL, PT_PHYSMASK);
 }
+#endif
 
 static void *x86_split_alloc_new_pt_bridge(int nr_pages, int ap_flag)
 {
@@ -931,6 +986,44 @@ struct visit_pte_args {
 	void *arg;
 };
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+int visit_pte_l1(void *arg0, pte_t *ptep, uintptr_t base,
+		uintptr_t start, uintptr_t end);
+int x86_visit_walk_l1_bridge(void *pt, unsigned long base,
+		unsigned long start, unsigned long end, void *args);
+int visit_pte_l2(void *arg0, pte_t *ptep, uintptr_t base,
+		uintptr_t start, uintptr_t end);
+int x86_visit_walk_l2_bridge(void *pt, unsigned long base,
+		unsigned long start, unsigned long end, void *args);
+int visit_pte_l3(void *arg0, pte_t *ptep, uintptr_t base,
+		uintptr_t start, uintptr_t end);
+int x86_visit_walk_l3_bridge(void *pt, unsigned long base,
+		unsigned long start, unsigned long end, void *args);
+int visit_pte_l4(void *arg0, pte_t *ptep, uintptr_t base,
+		uintptr_t start, uintptr_t end);
+int x86_visit_walk_l4_bridge(void *pt, unsigned long base,
+		unsigned long start, unsigned long end, void *args);
+int visit_pte_range(page_table_t pt, void *start0, void *end0, int pgshift,
+		enum visit_pte_flag flags, pte_visitor_t *funcp, void *arg);
+int visit_pte_l1_safe(void *arg0, pte_t *ptep, uintptr_t base,
+		uintptr_t start, uintptr_t end);
+int x86_visit_walk_l1_safe_bridge(void *pt, unsigned long base,
+		unsigned long start, unsigned long end, void *args);
+int visit_pte_l2_safe(void *arg0, pte_t *ptep, uintptr_t base,
+		uintptr_t start, uintptr_t end);
+int x86_visit_walk_l2_safe_bridge(void *pt, unsigned long base,
+		unsigned long start, unsigned long end, void *args);
+int visit_pte_l3_safe(void *arg0, pte_t *ptep, uintptr_t base,
+		uintptr_t start, uintptr_t end);
+int x86_visit_walk_l3_safe_bridge(void *pt, unsigned long base,
+		unsigned long start, unsigned long end, void *args);
+int visit_pte_l4_safe(void *arg0, pte_t *ptep, uintptr_t base,
+		uintptr_t start, uintptr_t end);
+int x86_visit_walk_l4_safe_bridge(void *pt, unsigned long base,
+		unsigned long start, unsigned long end, void *args);
+int visit_pte_range_safe(page_table_t pt, void *start0, void *end0, int pgshift,
+		enum visit_pte_flag flags, pte_visitor_t *funcp, void *arg);
+#else
 static int visit_pte_l1(void *arg0, pte_t *ptep, uintptr_t base,
 		uintptr_t start, uintptr_t end)
 {
@@ -947,8 +1040,10 @@ static int x86_visit_walk_l1_bridge(void *pt, unsigned long base,
 {
 	return walk_pte_l1(pt, base, start, end, &visit_pte_l1, args);
 }
+#endif
 
-static void x86_visit_pte_log_bridge(int event, int level_shift)
+X86_MEMORY_PUBLIC_BRIDGE void x86_visit_pte_log_bridge(int event,
+		int level_shift)
 {
 	if (event != X86_VISIT_PTE_LOG_SPLIT) {
 		return;
@@ -967,6 +1062,7 @@ static void x86_visit_pte_log_bridge(int event, int level_shift)
 	}
 }
 
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 static int visit_pte_l2(void *arg0, pte_t *ptep, uintptr_t base,
 		uintptr_t start, uintptr_t end)
 {
@@ -1045,12 +1141,25 @@ int visit_pte_range(page_table_t pt, void *start0, void *end0, int pgshift,
 	return x86_visit_pte_range_dispatch_result(pt, start, end, &args,
 			x86_visit_walk_l4_bridge);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 static int x86_walk_page_address_check(unsigned long phys)
 {
 	return ihk_mc_chk_page_address(phys);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+int walk_pte_l1_safe(struct page_table *pt, uint64_t base, uint64_t start,
+		uint64_t end, walk_pte_fn_t *funcp, void *args);
+int walk_pte_l2_safe(struct page_table *pt, uint64_t base, uint64_t start,
+		uint64_t end, walk_pte_fn_t *funcp, void *args);
+int walk_pte_l3_safe(struct page_table *pt, uint64_t base, uint64_t start,
+		uint64_t end, walk_pte_fn_t *funcp, void *args);
+int walk_pte_l4_safe(struct page_table *pt, uint64_t base, uint64_t start,
+		uint64_t end, walk_pte_fn_t *funcp, void *args);
+#else
 static int walk_pte_l1_safe(struct page_table *pt, uint64_t base, uint64_t start,
 		uint64_t end, walk_pte_fn_t *funcp, void *args)
 {
@@ -1097,7 +1206,9 @@ static int walk_pte_l4_safe(struct page_table *pt, uint64_t base, uint64_t start
 			0, PTL4_SHIFT, (x86_walk_pte_callback_t)funcp, args,
 			x86_walk_page_address_check, PT_PHYSMASK);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_X86_MEMORY_PUBLIC
 static int visit_pte_l1_safe(void *arg0, pte_t *ptep, uintptr_t base,
 		uintptr_t start, uintptr_t end)
 {
@@ -1191,6 +1302,7 @@ int visit_pte_range_safe(page_table_t pt, void *start0, void *end0, int pgshift,
 	return x86_visit_pte_range_dispatch_result(pt, start, end, &args,
 			x86_visit_walk_l4_safe_bridge);
 }
+#endif
 
 struct clear_range_args {
 	int free_physical;
@@ -1985,6 +2097,23 @@ int ihk_mc_pt_split(page_table_t pt, struct process_vm *vm,
 			x86_pt_split_log_bridge);
 } /* ihk_mc_pt_split() */
 
+#ifdef MCKERNEL_RUST_X86_MEMORY_PUBLIC
+int x86_use_1gb_page_bridge(void)
+{
+	return use_1gb_page;
+}
+
+enum ihk_mc_pt_attribute x86_common_vrflag_to_ptattr_bridge(
+		unsigned long flag, uint64_t fault, pte_t *ptep)
+{
+	return common_vrflag_to_ptattr(flag, fault, ptep);
+}
+
+int arch_get_smaller_page_size(void *args, size_t cursize, size_t *newsizep,
+		int *p2alignp);
+enum ihk_mc_pt_attribute arch_vrflag_to_ptattr(unsigned long flag,
+		uint64_t fault, pte_t *ptep);
+#else
 int arch_get_smaller_page_size(void *args, size_t cursize, size_t *newsizep,
 		int *p2alignp)
 {
@@ -2003,6 +2132,7 @@ enum ihk_mc_pt_attribute arch_vrflag_to_ptattr(unsigned long flag, uint64_t faul
 	attr = common_vrflag_to_ptattr(flag, fault, ptep);
 	return x86_arch_vrflag_to_ptattr_result(flag, fault, attr);
 }
+#endif
 
 struct move_args {
 	uintptr_t src;

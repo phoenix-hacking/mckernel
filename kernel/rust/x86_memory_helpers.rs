@@ -183,8 +183,14 @@ unsafe extern "C" {
     fn x86_user_copy_log_bridge(event: CInt, vm: *mut c_void, a: CULong, b: CULong, error: CInt);
     fn x86_user_map_kernel_start_bridge() -> CULong;
     fn x86_pt_virt_to_phys_bridge(addr: *mut c_void) -> CULong;
+    fn x86_pt_phys_to_virt_bridge(phys: CULong) -> *mut c_void;
+    fn x86_pt_print_log_bridge(event: CInt, level: CInt, value: CULong, index: CInt);
     fn x86_arch_mem_virt_to_phys_bridge(addr: *mut c_void) -> CULong;
     fn x86_arch_mem_phys_to_virt_bridge(phys: CULong) -> *mut c_void;
+    fn x86_attr_mask_bridge() -> CULong;
+    fn x86_use_1gb_page_bridge() -> CInt;
+    fn x86_common_vrflag_to_ptattr_bridge(flag: CULong, fault: CULong, ptep: *mut CULong)
+        -> CULong;
     fn x86_early_alloc_panic_bridge(reason: CInt);
     fn x86_early_alloc_last_page_slot_bridge() -> *mut *mut c_void;
     fn x86_early_alloc_end_bridge() -> CULong;
@@ -197,6 +203,12 @@ unsafe extern "C" {
     fn x86_page_table_init_pt_bridge() -> *mut c_void;
     fn x86_page_table_boot_pt_bridge() -> *mut c_void;
     fn x86_load_page_table_panic_bridge();
+    fn ihk_mc_chk_page_address(phys: CULong) -> CInt;
+    fn x86_pt_alloc_pages_bridge(nr_pages: CInt, ap_flag: CInt) -> *mut c_void;
+    fn x86_pt_free_pages_bridge(pt: *mut c_void, nr_pages: CInt);
+    fn x86_pt_destroy_panic_bridge(reason: CInt);
+    fn x86_pt_destroy_helper_failed_panic_bridge();
+    fn x86_visit_pte_log_bridge(event: CInt, level_shift: CInt);
     fn x86_check_available_page_size_bridge(event: CInt);
     fn x86_init_page_table_alloc_bridge(nr_pages: CInt, flag: CInt) -> *mut c_void;
     fn x86_init_page_table_spin_init_bridge(lock: *mut c_void);
@@ -729,6 +741,16 @@ type X86PtSetPageLogFn = unsafe extern "C" fn(CULong);
 type X86PtSetPteLogFn =
     unsafe extern "C" fn(CInt, *mut c_void, *mut CULong, CULong, CULong, CULong, CInt, CULong);
 type X86PtSetPtePanicFn = unsafe extern "C" fn();
+
+#[repr(C)]
+struct X86VisitPteArgs {
+    pt: *mut c_void,
+    flags: CInt,
+    pgshift: CInt,
+    funcp: Option<X86VisitPteFn>,
+    arg: *mut c_void,
+}
+
 type X86SplitPhysToPageFn = unsafe extern "C" fn(CULong) -> *mut c_void;
 type X86SplitPageMapFn = unsafe extern "C" fn(*mut c_void);
 type X86SplitRssFn = unsafe extern "C" fn(SizeT, SizeT);
@@ -980,6 +1002,20 @@ pub unsafe extern "C" fn x86_pt_print_pte_body_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn ihk_mc_pt_print_pte(pt: *mut c_void, virt: *mut c_void) -> CInt {
+    unsafe {
+        x86_pt_print_pte_body_result(
+            pt,
+            x86_page_table_init_pt_bridge(),
+            virt as CULong,
+            Some(x86_pt_virt_to_phys_bridge),
+            Some(x86_pt_phys_to_virt_bridge),
+            Some(x86_pt_print_log_bridge),
+        )
+    }
+}
+
+#[no_mangle]
 pub extern "C" fn x86_attr_to_l3attr_result(attr: CULong, attr_mask: CULong) -> CULong {
     let result = attr & (attr_mask | PTATTR_LARGEPAGE);
 
@@ -1023,6 +1059,57 @@ pub extern "C" fn x86_set_pte_value_result(
     } else {
         phys | x86_attr_to_l1attr_result(attr, attr_mask)
     }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn set_pte(ppte: *mut CULong, phys: CULong, attr: CULong) {
+    unsafe {
+        *ppte = x86_set_pte_value_result(phys, attr, x86_attr_mask_bridge());
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn set_pt_large_page(
+    pt: *mut c_void,
+    virt: *mut c_void,
+    phys: CULong,
+    attr: CULong,
+) -> CInt {
+    unsafe {
+        x86_pt_set_page_bridge(
+            pt,
+            virt as CULong,
+            phys,
+            attr | PTATTR_LARGEPAGE | PTATTR_ACTIVE,
+        )
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_pt_set_large_page(
+    pt: *mut c_void,
+    virt: *mut c_void,
+    phys: CULong,
+    attr: CULong,
+) -> CInt {
+    unsafe {
+        x86_pt_set_page_bridge(
+            pt,
+            virt as CULong,
+            phys,
+            attr | PTATTR_LARGEPAGE | PTATTR_ACTIVE,
+        )
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_pt_set_page(
+    pt: *mut c_void,
+    virt: *mut c_void,
+    phys: CULong,
+    attr: CULong,
+) -> CInt {
+    unsafe { x86_pt_set_page_bridge(pt, virt as CULong, phys, attr | PTATTR_ACTIVE) }
 }
 
 #[no_mangle]
@@ -1853,6 +1940,32 @@ pub unsafe extern "C" fn x86_pt_clear_page_result(
         write_volatile(entries.add(l1idx), PTE_NULL);
     }
     0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_pt_clear_page(pt: *mut c_void, virt: *mut c_void) -> CInt {
+    unsafe {
+        x86_pt_clear_page_result(
+            pt,
+            x86_page_table_init_pt_bridge(),
+            virt as CULong,
+            0,
+            Some(x86_pt_phys_to_virt_bridge),
+        )
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_pt_clear_large_page(pt: *mut c_void, virt: *mut c_void) -> CInt {
+    unsafe {
+        x86_pt_clear_page_result(
+            pt,
+            x86_page_table_init_pt_bridge(),
+            virt as CULong,
+            1,
+            Some(x86_pt_phys_to_virt_bridge),
+        )
+    }
 }
 
 #[no_mangle]
@@ -4078,6 +4191,33 @@ pub extern "C" fn x86_arch_vrflag_to_ptattr_result(
     }
 }
 
+#[no_mangle]
+pub unsafe extern "C" fn arch_get_smaller_page_size(
+    _args: *mut c_void,
+    cursize: SizeT,
+    newsizep: *mut SizeT,
+    p2alignp: *mut CInt,
+) -> CInt {
+    unsafe {
+        x86_smaller_page_size_result(
+            cursize as CULong,
+            x86_use_1gb_page_bridge(),
+            newsizep.cast::<CULong>(),
+            p2alignp,
+        )
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn arch_vrflag_to_ptattr(
+    flag: CULong,
+    fault: CULong,
+    ptep: *mut CULong,
+) -> CULong {
+    let attr = unsafe { x86_common_vrflag_to_ptattr_bridge(flag, fault, ptep) };
+    x86_arch_vrflag_to_ptattr_result(flag, fault, attr)
+}
+
 fn x86_fileoff_flag(_pgsize: CULong) -> CULong {
     PFL_FILEOFF
 }
@@ -4387,6 +4527,46 @@ pub unsafe extern "C" fn get_init_page_table() -> *mut c_void {
 #[no_mangle]
 pub unsafe extern "C" fn get_boot_page_table() -> *mut c_void {
     unsafe { x86_page_table_boot_pt_bridge() }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_pt_virt_to_pagemap(pt: *mut c_void, virt: CULong) -> CULong {
+    unsafe {
+        x86_pt_virt_to_pagemap_result(
+            pt,
+            x86_page_table_init_pt_bridge(),
+            virt,
+            Some(x86_arch_mem_phys_to_virt_bridge),
+        )
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_pt_virt_to_phys_size(
+    pt: *mut c_void,
+    virt: *const c_void,
+    phys: *mut CULong,
+    size: *mut CULong,
+) -> CInt {
+    unsafe {
+        x86_pt_virt_to_phys_size_result(
+            pt,
+            x86_page_table_init_pt_bridge(),
+            virt as CULong,
+            phys,
+            size,
+            Some(x86_arch_mem_phys_to_virt_bridge),
+        )
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_pt_virt_to_phys(
+    pt: *mut c_void,
+    virt: *const c_void,
+    phys: *mut CULong,
+) -> CInt {
+    unsafe { ihk_mc_pt_virt_to_phys_size(pt, virt, phys, core::ptr::null_mut()) }
 }
 
 #[no_mangle]
@@ -5147,6 +5327,642 @@ pub unsafe extern "C" fn x86_pt_destroy_root_result(
         unsafe {
             destroy(4, pt);
         }
+    }
+}
+
+unsafe extern "C" fn x86_pt_destroy_public_bridge(level: CInt, pt: *mut c_void) {
+    let ret = unsafe {
+        x86_pt_destroy_table_result(
+            level,
+            pt,
+            Some(x86_pt_phys_to_virt_bridge),
+            Some(x86_pt_free_pages_bridge),
+            Some(x86_pt_destroy_panic_bridge),
+        )
+    };
+    if ret != 0 {
+        unsafe {
+            x86_pt_destroy_helper_failed_panic_bridge();
+        }
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_pt_create(ap_flag: CInt) -> *mut c_void {
+    unsafe {
+        x86_pt_create_result(
+            x86_page_table_init_pt_bridge(),
+            ap_flag,
+            Some(x86_pt_alloc_pages_bridge),
+        )
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_pt_destroy(pt: *mut c_void) {
+    unsafe {
+        x86_pt_destroy_root_result(pt, Some(x86_pt_destroy_public_bridge));
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_pt_prepare_map(
+    pt: *mut c_void,
+    virt: *mut c_void,
+    size: CULong,
+    flag: CInt,
+) -> CInt {
+    unsafe {
+        x86_pt_prepare_map_result(
+            pt,
+            x86_page_table_init_pt_bridge(),
+            virt as CULong,
+            size,
+            flag,
+            PTATTR_WRITABLE,
+            Some(x86_pt_alloc_pages_bridge),
+            Some(x86_pt_virt_to_phys_bridge),
+            Some(x86_pt_set_page_bridge),
+        )
+    }
+}
+
+unsafe fn x86_walk_pte_level_result(
+    pt: *mut c_void,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+    span: CULong,
+    shift: CInt,
+    funcp: Option<X86WalkPteCallback>,
+    args: *mut c_void,
+) -> CInt {
+    unsafe {
+        x86_walk_pte_range_result(
+            pt as CULong,
+            base,
+            start,
+            end,
+            span,
+            shift,
+            funcp,
+            args,
+            None,
+            PT_PHYSMASK,
+        )
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn walk_pte_l1(
+    pt: *mut c_void,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+    funcp: Option<X86WalkPteCallback>,
+    args: *mut c_void,
+) -> CInt {
+    unsafe { x86_walk_pte_level_result(pt, base, start, end, PTL2_SIZE, PTL1_SHIFT, funcp, args) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn walk_pte_l2(
+    pt: *mut c_void,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+    funcp: Option<X86WalkPteCallback>,
+    args: *mut c_void,
+) -> CInt {
+    unsafe { x86_walk_pte_level_result(pt, base, start, end, PTL3_SIZE, PTL2_SHIFT, funcp, args) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn walk_pte_l3(
+    pt: *mut c_void,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+    funcp: Option<X86WalkPteCallback>,
+    args: *mut c_void,
+) -> CInt {
+    unsafe { x86_walk_pte_level_result(pt, base, start, end, PTL4_SIZE, PTL3_SHIFT, funcp, args) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn walk_pte_l4(
+    pt: *mut c_void,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+    funcp: Option<X86WalkPteCallback>,
+    args: *mut c_void,
+) -> CInt {
+    unsafe { x86_walk_pte_level_result(pt, base, start, end, 0, PTL4_SHIFT, funcp, args) }
+}
+
+unsafe extern "C" fn x86_walk_page_address_check(phys: CULong) -> CInt {
+    unsafe { ihk_mc_chk_page_address(phys) }
+}
+
+unsafe fn x86_walk_pte_safe_level_result(
+    pt: *mut c_void,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+    span: CULong,
+    shift: CInt,
+    funcp: Option<X86WalkPteCallback>,
+    args: *mut c_void,
+) -> CInt {
+    if pt.is_null() {
+        return 0;
+    }
+
+    unsafe {
+        x86_walk_pte_range_result(
+            pt as CULong,
+            base,
+            start,
+            end,
+            span,
+            shift,
+            funcp,
+            args,
+            Some(x86_walk_page_address_check),
+            PT_PHYSMASK,
+        )
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn walk_pte_l1_safe(
+    pt: *mut c_void,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+    funcp: Option<X86WalkPteCallback>,
+    args: *mut c_void,
+) -> CInt {
+    unsafe {
+        x86_walk_pte_safe_level_result(pt, base, start, end, PTL2_SIZE, PTL1_SHIFT, funcp, args)
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn walk_pte_l2_safe(
+    pt: *mut c_void,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+    funcp: Option<X86WalkPteCallback>,
+    args: *mut c_void,
+) -> CInt {
+    unsafe {
+        x86_walk_pte_safe_level_result(pt, base, start, end, PTL3_SIZE, PTL2_SHIFT, funcp, args)
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn walk_pte_l3_safe(
+    pt: *mut c_void,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+    funcp: Option<X86WalkPteCallback>,
+    args: *mut c_void,
+) -> CInt {
+    unsafe {
+        x86_walk_pte_safe_level_result(pt, base, start, end, PTL4_SIZE, PTL3_SHIFT, funcp, args)
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn walk_pte_l4_safe(
+    pt: *mut c_void,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+    funcp: Option<X86WalkPteCallback>,
+    args: *mut c_void,
+) -> CInt {
+    unsafe { x86_walk_pte_safe_level_result(pt, base, start, end, 0, PTL4_SHIFT, funcp, args) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn visit_pte_l1(
+    arg0: *mut c_void,
+    ptep: *mut CULong,
+    base: CULong,
+    _start: CULong,
+    _end: CULong,
+) -> CInt {
+    if arg0.is_null() {
+        return -EINVAL;
+    }
+
+    let args = unsafe { &mut *(arg0 as *mut X86VisitPteArgs) };
+    unsafe {
+        x86_visit_pte_leaf_result(
+            args.arg,
+            args.pt,
+            ptep,
+            base,
+            args.flags & X86_VPTEF_SKIP_NULL,
+            PTL1_SHIFT,
+            args.funcp,
+        )
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_visit_walk_l1_bridge(
+    pt: *mut c_void,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+    args: *mut c_void,
+) -> CInt {
+    unsafe { walk_pte_l1(pt, base, start, end, Some(visit_pte_l1), args) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn visit_pte_l2(
+    arg0: *mut c_void,
+    ptep: *mut CULong,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+) -> CInt {
+    if arg0.is_null() {
+        return -EINVAL;
+    }
+
+    let args = unsafe { &mut *(arg0 as *mut X86VisitPteArgs) };
+    unsafe {
+        x86_visit_pte_level_result(
+            args.arg,
+            args.pt,
+            ptep,
+            base,
+            start,
+            end,
+            args.flags & X86_VPTEF_SKIP_NULL,
+            0,
+            args.pgshift,
+            PTL2_SIZE,
+            PTL2_SHIFT,
+            PFL2_SIZE,
+            0,
+            1,
+            1,
+            PFL2_PDIR_ATTR,
+            Some(x86_pt_alloc_pages_bridge),
+            Some(x86_pt_virt_to_phys_bridge),
+            Some(x86_pt_phys_to_virt_bridge),
+            Some(x86_visit_walk_l1_bridge),
+            arg0,
+            args.funcp,
+            Some(x86_visit_pte_log_bridge),
+        )
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_visit_walk_l2_bridge(
+    pt: *mut c_void,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+    args: *mut c_void,
+) -> CInt {
+    unsafe { walk_pte_l2(pt, base, start, end, Some(visit_pte_l2), args) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn visit_pte_l3(
+    arg0: *mut c_void,
+    ptep: *mut CULong,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+) -> CInt {
+    if arg0.is_null() {
+        return -EINVAL;
+    }
+
+    let args = unsafe { &mut *(arg0 as *mut X86VisitPteArgs) };
+    unsafe {
+        x86_visit_pte_level_result(
+            args.arg,
+            args.pt,
+            ptep,
+            base,
+            start,
+            end,
+            args.flags & X86_VPTEF_SKIP_NULL,
+            0,
+            args.pgshift,
+            PTL3_SIZE,
+            PTL3_SHIFT,
+            PFL2_SIZE,
+            0,
+            x86_use_1gb_page_bridge(),
+            1,
+            PFL3_PDIR_ATTR,
+            Some(x86_pt_alloc_pages_bridge),
+            Some(x86_pt_virt_to_phys_bridge),
+            Some(x86_pt_phys_to_virt_bridge),
+            Some(x86_visit_walk_l2_bridge),
+            arg0,
+            args.funcp,
+            Some(x86_visit_pte_log_bridge),
+        )
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_visit_walk_l3_bridge(
+    pt: *mut c_void,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+    args: *mut c_void,
+) -> CInt {
+    unsafe { walk_pte_l3(pt, base, start, end, Some(visit_pte_l3), args) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn visit_pte_l4(
+    arg0: *mut c_void,
+    ptep: *mut CULong,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+) -> CInt {
+    if arg0.is_null() {
+        return -EINVAL;
+    }
+
+    let args = unsafe { &mut *(arg0 as *mut X86VisitPteArgs) };
+    unsafe {
+        x86_visit_pte_root_result(
+            ptep,
+            base,
+            start,
+            end,
+            args.flags & X86_VPTEF_SKIP_NULL,
+            1,
+            PFL4_PDIR_ATTR,
+            Some(x86_pt_alloc_pages_bridge),
+            Some(x86_pt_virt_to_phys_bridge),
+            Some(x86_pt_phys_to_virt_bridge),
+            Some(x86_visit_walk_l3_bridge),
+            arg0,
+        )
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_visit_walk_l4_bridge(
+    pt: *mut c_void,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+    args: *mut c_void,
+) -> CInt {
+    unsafe { walk_pte_l4(pt, base, start, end, Some(visit_pte_l4), args) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn visit_pte_range(
+    pt: *mut c_void,
+    start0: *mut c_void,
+    end0: *mut c_void,
+    pgshift: CInt,
+    flags: CInt,
+    funcp: Option<X86VisitPteFn>,
+    arg: *mut c_void,
+) -> CInt {
+    let mut args = X86VisitPteArgs {
+        pt,
+        flags,
+        pgshift,
+        funcp,
+        arg,
+    };
+
+    unsafe {
+        x86_visit_pte_range_dispatch_result(
+            pt,
+            start0 as CULong,
+            end0 as CULong,
+            &mut args as *mut X86VisitPteArgs as *mut c_void,
+            Some(x86_visit_walk_l4_bridge),
+        )
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn visit_pte_l1_safe(
+    arg0: *mut c_void,
+    ptep: *mut CULong,
+    base: CULong,
+    _start: CULong,
+    _end: CULong,
+) -> CInt {
+    if arg0.is_null() {
+        return -EINVAL;
+    }
+
+    let args = unsafe { &mut *(arg0 as *mut X86VisitPteArgs) };
+    unsafe { x86_visit_pte_leaf_result(args.arg, args.pt, ptep, base, 1, PTL1_SHIFT, args.funcp) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_visit_walk_l1_safe_bridge(
+    pt: *mut c_void,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+    args: *mut c_void,
+) -> CInt {
+    unsafe { walk_pte_l1_safe(pt, base, start, end, Some(visit_pte_l1_safe), args) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn visit_pte_l2_safe(
+    arg0: *mut c_void,
+    ptep: *mut CULong,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+) -> CInt {
+    if arg0.is_null() {
+        return -EINVAL;
+    }
+
+    let args = unsafe { &mut *(arg0 as *mut X86VisitPteArgs) };
+    unsafe {
+        x86_visit_pte_level_result(
+            args.arg,
+            args.pt,
+            ptep,
+            base,
+            start,
+            end,
+            1,
+            1,
+            args.pgshift,
+            PTL2_SIZE,
+            PTL2_SHIFT,
+            PFL2_SIZE,
+            1,
+            1,
+            0,
+            PFL2_PDIR_ATTR,
+            Some(x86_pt_alloc_pages_bridge),
+            Some(x86_pt_virt_to_phys_bridge),
+            Some(x86_pt_phys_to_virt_bridge),
+            Some(x86_visit_walk_l1_safe_bridge),
+            arg0,
+            args.funcp,
+            Some(x86_visit_pte_log_bridge),
+        )
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_visit_walk_l2_safe_bridge(
+    pt: *mut c_void,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+    args: *mut c_void,
+) -> CInt {
+    unsafe { walk_pte_l2_safe(pt, base, start, end, Some(visit_pte_l2_safe), args) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn visit_pte_l3_safe(
+    arg0: *mut c_void,
+    ptep: *mut CULong,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+) -> CInt {
+    if arg0.is_null() {
+        return -EINVAL;
+    }
+
+    let args = unsafe { &mut *(arg0 as *mut X86VisitPteArgs) };
+    unsafe {
+        x86_visit_pte_level_result(
+            args.arg,
+            args.pt,
+            ptep,
+            base,
+            start,
+            end,
+            1,
+            1,
+            args.pgshift,
+            PTL3_SIZE,
+            PTL3_SHIFT,
+            PFL2_SIZE,
+            1,
+            x86_use_1gb_page_bridge(),
+            0,
+            PFL3_PDIR_ATTR,
+            Some(x86_pt_alloc_pages_bridge),
+            Some(x86_pt_virt_to_phys_bridge),
+            Some(x86_pt_phys_to_virt_bridge),
+            Some(x86_visit_walk_l2_safe_bridge),
+            arg0,
+            args.funcp,
+            Some(x86_visit_pte_log_bridge),
+        )
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_visit_walk_l3_safe_bridge(
+    pt: *mut c_void,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+    args: *mut c_void,
+) -> CInt {
+    unsafe { walk_pte_l3_safe(pt, base, start, end, Some(visit_pte_l3_safe), args) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn visit_pte_l4_safe(
+    arg0: *mut c_void,
+    ptep: *mut CULong,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+) -> CInt {
+    if arg0.is_null() {
+        return -EINVAL;
+    }
+
+    unsafe {
+        x86_visit_pte_root_result(
+            ptep,
+            base,
+            start,
+            end,
+            1,
+            0,
+            PFL4_PDIR_ATTR,
+            Some(x86_pt_alloc_pages_bridge),
+            Some(x86_pt_virt_to_phys_bridge),
+            Some(x86_pt_phys_to_virt_bridge),
+            Some(x86_visit_walk_l3_safe_bridge),
+            arg0,
+        )
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x86_visit_walk_l4_safe_bridge(
+    pt: *mut c_void,
+    base: CULong,
+    start: CULong,
+    end: CULong,
+    args: *mut c_void,
+) -> CInt {
+    unsafe { walk_pte_l4_safe(pt, base, start, end, Some(visit_pte_l4_safe), args) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn visit_pte_range_safe(
+    pt: *mut c_void,
+    start0: *mut c_void,
+    end0: *mut c_void,
+    pgshift: CInt,
+    flags: CInt,
+    funcp: Option<X86VisitPteFn>,
+    arg: *mut c_void,
+) -> CInt {
+    let mut args = X86VisitPteArgs {
+        pt,
+        flags,
+        pgshift,
+        funcp,
+        arg,
+    };
+
+    unsafe {
+        x86_visit_pte_range_dispatch_result(
+            pt,
+            start0 as CULong,
+            end0 as CULong,
+            &mut args as *mut X86VisitPteArgs as *mut c_void,
+            Some(x86_visit_walk_l4_safe_bridge),
+        )
     }
 }
 

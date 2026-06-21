@@ -2458,6 +2458,7 @@ cat > "${tmpdir}/mem_init_helpers_equiv.c" <<'EOF_MEM_INIT'
 #include <stddef.h>
 #include <stdint.h>
 #include <stdarg.h>
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -90736,6 +90737,7 @@ cat > "${tmpdir}/x86_memory_helpers_equiv.c" <<'EOF_X86_MEMORY_HELPERS'
 #define PF_POPULATE (1UL << 30)
 #define PF_PRESENT 0x01UL
 #define PF_SIZE 0x80UL
+#define VPTEF_SKIP_NULL 0x0001
 #define PTE_NULL 0UL
 #define PT_ENTRIES 512
 #define PT_PHYSMASK ((((1UL << 52) - 1)) & ~(4096UL - 1))
@@ -90846,8 +90848,22 @@ extern unsigned long x86_attr_to_l2attr_result(unsigned long, unsigned long);
 extern unsigned long x86_attr_to_l1attr_result(unsigned long, unsigned long);
 extern unsigned long x86_set_pte_value_result(unsigned long, unsigned long,
 					      unsigned long);
+extern void set_pte(unsigned long *, unsigned long, unsigned long)
+	__attribute__((weak));
+extern int set_pt_large_page(void *, void *, unsigned long, unsigned long)
+	__attribute__((weak));
+extern int ihk_mc_pt_set_large_page(void *, void *, unsigned long, unsigned long)
+	__attribute__((weak));
+extern int ihk_mc_pt_set_page(void *, void *, unsigned long, unsigned long)
+	__attribute__((weak));
 extern int x86_pt_set_pte_value_result(size_t, unsigned long, unsigned long,
 				       unsigned long, int, unsigned long *);
+extern int x86_rust_stub_pt_set_page_calls;
+extern int x86_rust_stub_pt_set_page_rc;
+extern void *x86_rust_stub_pt_set_page_pt;
+extern unsigned long x86_rust_stub_pt_set_page_virt;
+extern unsigned long x86_rust_stub_pt_set_page_phys;
+extern unsigned long x86_rust_stub_pt_set_page_attr;
 extern int x86_smaller_page_size_result(size_t, int, size_t *, int *);
 extern unsigned long x86_early_alloc_align_end_result(unsigned long);
 extern int x86_early_alloc_exhausted_result(unsigned long, unsigned long);
@@ -90883,6 +90899,11 @@ extern int x86_pt_print_pte_body_result(
 	void *, void *, unsigned long, unsigned long (*)(void *),
 	void *(*)(unsigned long),
 	void (*)(int, int, unsigned long, int));
+extern int ihk_mc_pt_print_pte(void *, void *) __attribute__((weak));
+extern void *(*x86_rust_stub_pt_phys_to_virt_override)(unsigned long);
+extern int x86_rust_stub_pt_print_log_count;
+extern int x86_rust_stub_pt_print_last_event;
+extern int x86_rust_stub_pt_print_last_level;
 extern void x86_pt_indices_result(unsigned long, int *, int *, int *, int *);
 extern void x86_walk_bounds_result(unsigned long, unsigned long,
 				   unsigned long, unsigned long, int,
@@ -90897,17 +90918,127 @@ extern int x86_walk_pte_range_result(unsigned long, unsigned long long,
 					      unsigned long long),
 				     void *, int (*)(unsigned long),
 				     unsigned long);
+extern int walk_pte_l1(void *, unsigned long long, unsigned long long,
+		       unsigned long long,
+		       int (*)(void *, unsigned long *, unsigned long long,
+				unsigned long long, unsigned long long),
+		       void *) __attribute__((weak));
+extern int walk_pte_l2(void *, unsigned long long, unsigned long long,
+		       unsigned long long,
+		       int (*)(void *, unsigned long *, unsigned long long,
+				unsigned long long, unsigned long long),
+		       void *) __attribute__((weak));
+extern int walk_pte_l3(void *, unsigned long long, unsigned long long,
+		       unsigned long long,
+		       int (*)(void *, unsigned long *, unsigned long long,
+				unsigned long long, unsigned long long),
+		       void *) __attribute__((weak));
+extern int walk_pte_l4(void *, unsigned long long, unsigned long long,
+		       unsigned long long,
+		       int (*)(void *, unsigned long *, unsigned long long,
+				unsigned long long, unsigned long long),
+		       void *) __attribute__((weak));
+extern int walk_pte_l1_safe(void *, unsigned long long, unsigned long long,
+			    unsigned long long,
+			    int (*)(void *, unsigned long *,
+				     unsigned long long, unsigned long long,
+				     unsigned long long),
+			    void *) __attribute__((weak));
+extern int walk_pte_l2_safe(void *, unsigned long long, unsigned long long,
+			    unsigned long long,
+			    int (*)(void *, unsigned long *,
+				     unsigned long long, unsigned long long,
+				     unsigned long long),
+			    void *) __attribute__((weak));
+extern int walk_pte_l3_safe(void *, unsigned long long, unsigned long long,
+			    unsigned long long,
+			    int (*)(void *, unsigned long *,
+				     unsigned long long, unsigned long long,
+				     unsigned long long),
+			    void *) __attribute__((weak));
+extern int walk_pte_l4_safe(void *, unsigned long long, unsigned long long,
+			    unsigned long long,
+			    int (*)(void *, unsigned long *,
+				     unsigned long long, unsigned long long,
+				     unsigned long long),
+			    void *) __attribute__((weak));
+extern int visit_pte_l1(void *, unsigned long *, unsigned long long,
+			unsigned long long, unsigned long long)
+	__attribute__((weak));
+extern int x86_visit_walk_l1_bridge(void *, unsigned long long,
+				    unsigned long long, unsigned long long,
+				    void *) __attribute__((weak));
+extern int visit_pte_l2(void *, unsigned long *, unsigned long long,
+			unsigned long long, unsigned long long)
+	__attribute__((weak));
+extern int x86_visit_walk_l2_bridge(void *, unsigned long long,
+				    unsigned long long, unsigned long long,
+				    void *) __attribute__((weak));
+extern int visit_pte_l3(void *, unsigned long *, unsigned long long,
+			unsigned long long, unsigned long long)
+	__attribute__((weak));
+extern int x86_visit_walk_l3_bridge(void *, unsigned long long,
+				    unsigned long long, unsigned long long,
+				    void *) __attribute__((weak));
+extern int visit_pte_l4(void *, unsigned long *, unsigned long long,
+			unsigned long long, unsigned long long)
+	__attribute__((weak));
+extern int x86_visit_walk_l4_bridge(void *, unsigned long long,
+				    unsigned long long, unsigned long long,
+				    void *) __attribute__((weak));
+extern int visit_pte_range(void *, void *, void *, int, int,
+			   int (*)(void *, void *, unsigned long *, void *,
+				    int),
+			   void *) __attribute__((weak));
+extern int visit_pte_l1_safe(void *, unsigned long *, unsigned long long,
+			     unsigned long long, unsigned long long)
+	__attribute__((weak));
+extern int x86_visit_walk_l1_safe_bridge(void *, unsigned long long,
+					 unsigned long long, unsigned long long,
+					 void *) __attribute__((weak));
+extern int visit_pte_l2_safe(void *, unsigned long *, unsigned long long,
+			     unsigned long long, unsigned long long)
+	__attribute__((weak));
+extern int x86_visit_walk_l2_safe_bridge(void *, unsigned long long,
+					 unsigned long long, unsigned long long,
+					 void *) __attribute__((weak));
+extern int visit_pte_l3_safe(void *, unsigned long *, unsigned long long,
+			     unsigned long long, unsigned long long)
+	__attribute__((weak));
+extern int x86_visit_walk_l3_safe_bridge(void *, unsigned long long,
+					 unsigned long long, unsigned long long,
+					 void *) __attribute__((weak));
+extern int visit_pte_l4_safe(void *, unsigned long *, unsigned long long,
+			     unsigned long long, unsigned long long)
+	__attribute__((weak));
+extern int x86_visit_walk_l4_safe_bridge(void *, unsigned long long,
+					 unsigned long long, unsigned long long,
+					 void *) __attribute__((weak));
+extern int visit_pte_range_safe(void *, void *, void *, int, int,
+				int (*)(void *, void *, unsigned long *,
+					 void *, int),
+				void *) __attribute__((weak));
 extern int x86_virt_to_phys_level_result(unsigned long, unsigned long, int,
 					 unsigned long, unsigned long *,
 					 unsigned long *);
-extern int x86_pt_virt_to_phys_size_result(void *, void *, unsigned long,
-					   unsigned long *, unsigned long *,
-					   void *(*)(unsigned long));
-extern uint64_t x86_pt_virt_to_pagemap_result(void *, void *, unsigned long,
-					      void *(*)(unsigned long));
-extern int x86_split_large_page_prepare_result(unsigned long, size_t,
-					       unsigned long *, size_t *,
-					       unsigned long *);
+	extern int x86_pt_virt_to_phys_size_result(void *, void *, unsigned long,
+						   unsigned long *, unsigned long *,
+						   void *(*)(unsigned long));
+	extern uint64_t x86_pt_virt_to_pagemap_result(void *, void *, unsigned long,
+						      void *(*)(unsigned long));
+	extern int ihk_mc_pt_virt_to_phys_size(void *, const void *,
+					       unsigned long *, unsigned long *)
+		__attribute__((weak));
+	extern int ihk_mc_pt_virt_to_phys(void *, const void *, unsigned long *)
+		__attribute__((weak));
+	extern uint64_t ihk_mc_pt_virt_to_pagemap(void *, unsigned long)
+		__attribute__((weak));
+	extern void *x86_rust_stub_init_pt_override __attribute__((weak));
+	extern void *(*x86_rust_stub_phys_to_virt_override)(unsigned long)
+		__attribute__((weak));
+	extern int x86_split_large_page_prepare_result(unsigned long, size_t,
+						       unsigned long *, size_t *,
+						       unsigned long *);
 extern unsigned long x86_split_large_page_next_entry_result(unsigned long,
 							    size_t);
 extern int x86_split_large_page_source_result(unsigned long, size_t,
@@ -90943,6 +91074,8 @@ extern unsigned long x86_clear_pt_page_aligned_addr_result(unsigned long, int);
 extern int x86_clear_pt_page_target_result(unsigned long, int, int *);
 extern int x86_pt_clear_page_result(void *, void *, unsigned long, int,
 				    void *(*)(unsigned long));
+extern int ihk_mc_pt_clear_page(void *, void *) __attribute__((weak));
+extern int ihk_mc_pt_clear_large_page(void *, void *) __attribute__((weak));
 extern int x86_visit_pte_action_result(unsigned long, int, unsigned long,
 				       unsigned long, unsigned long,
 				       unsigned long, int, int,
@@ -91376,12 +91509,16 @@ extern int x86_pt_destroy_table_result(int, void *,
 				       void (*)(void *, int),
 				       void (*)(int));
 extern void x86_pt_destroy_root_result(void *, void (*)(int, void *));
+extern void *ihk_mc_pt_create(int) __attribute__((weak));
+extern void ihk_mc_pt_destroy(void *) __attribute__((weak));
 extern int x86_pt_prepare_map_result(void *, void *, unsigned long,
 				     unsigned long, int, unsigned long,
 				     void *(*)(int, int),
 				     unsigned long (*)(void *),
 				     int (*)(void *, unsigned long,
 					     unsigned long, unsigned long));
+extern int ihk_mc_pt_prepare_map(void *, void *, unsigned long, int)
+	__attribute__((weak));
 extern int x86_pt_set_pte_body_result(void *, unsigned long *, size_t,
 				      unsigned long, unsigned long,
 				      unsigned long, int,
@@ -91837,11 +91974,34 @@ static void fake_pt_destroy_panic(int reason)
 	fake_pt_destroy_table_panic_reason = reason;
 }
 
+static int fake_pt_destroy_helper_failed_calls;
+
+void *x86_pt_alloc_pages_bridge(int nr_pages, int ap_flag)
+{
+	return fake_pt_alloc_pages(nr_pages, ap_flag);
+}
+
+void x86_pt_free_pages_bridge(void *pt, int nr_pages)
+{
+	fake_pt_destroy_free_pages(pt, nr_pages);
+}
+
+void x86_pt_destroy_panic_bridge(int reason)
+{
+	fake_pt_destroy_panic(reason);
+}
+
+void x86_pt_destroy_helper_failed_panic_bridge(void)
+{
+	fake_pt_destroy_helper_failed_calls++;
+}
+
 static void reset_fake_pt_destroy_table(void)
 {
 	fake_pt_destroy_table_phys_calls = 0;
 	fake_pt_destroy_table_free_calls = 0;
 	fake_pt_destroy_table_panic_reason = 0;
+	fake_pt_destroy_helper_failed_calls = 0;
 	memset(fake_pt_destroy_table_free_order, 0,
 		sizeof(fake_pt_destroy_table_free_order));
 	memset(fake_pt_destroy_table_free_npages, 0,
@@ -93474,6 +93634,24 @@ static void fake_visit_log(int event, int level_shift)
 	mix(&fake_visit_digest, (unsigned int)level_shift);
 }
 
+struct harness_visit_pte_args {
+	void *pt;
+	int flags;
+	int pgshift;
+	int (*funcp)(void *, void *, unsigned long *, void *, int);
+	void *arg;
+};
+
+int x86_use_1gb_page_bridge(void)
+{
+	return 1;
+}
+
+void x86_visit_pte_log_bridge(int event, int level_shift)
+{
+	fake_visit_log(event, level_shift);
+}
+
 int main(void)
 {
 	unsigned long digest = 0x5838364d454d484cUL;
@@ -93558,6 +93736,33 @@ int main(void)
 		require(fake_pt_print_last_level == 1);
 		mix(&digest, fake_pt_print_digest);
 
+		if (ihk_mc_pt_print_pte) {
+			reset_fake_pt_print();
+			fake_created_tables[0].entry[l4] =
+				fake_pt_virt_to_phys(&fake_created_tables[1]) |
+				0x1UL;
+			fake_created_tables[1].entry[l3] =
+				fake_pt_virt_to_phys(&fake_created_tables[2]) |
+				0x1UL;
+			fake_created_tables[2].entry[l2] =
+				fake_pt_virt_to_phys(&fake_created_tables[3]) |
+				0x1UL;
+			fake_created_tables[3].entry[l1] =
+				0x55555000UL | 0x1UL;
+			x86_rust_stub_pt_phys_to_virt_override =
+				fake_set_phys_to_virt;
+			x86_rust_stub_pt_print_log_count = 0;
+			x86_rust_stub_pt_print_last_event = 0;
+			x86_rust_stub_pt_print_last_level = 0;
+			require(ihk_mc_pt_print_pte(&fake_created_tables[0],
+					(void *)virt) == 0);
+			require(x86_rust_stub_pt_print_log_count == 8);
+			require(x86_rust_stub_pt_print_last_event ==
+					X86_PT_PRINT_LOG_ENTRY);
+			require(x86_rust_stub_pt_print_last_level == 1);
+			x86_rust_stub_pt_phys_to_virt_override = NULL;
+		}
+
 		reset_fake_pt_print();
 		fake_created_tables[0].entry[l4] =
 			fake_pt_virt_to_phys(&fake_created_tables[1]) | 0x1UL;
@@ -93611,6 +93816,54 @@ int main(void)
 		mix(&digest, x86_attr_to_l1attr_result(attrs[i], attr_mask));
 		mix(&digest, x86_set_pte_value_result(0x200000 + i * 0x1000,
 						      attrs[i], attr_mask));
+	}
+	if (set_pte) {
+		unsigned long slot = 0;
+		unsigned long expected = x86_set_pte_value_result(
+				0x12345000UL, PTATTR_WRITABLE | PTATTR_USER,
+				attr_mask);
+
+		set_pte(&slot, 0x12345000UL, PTATTR_WRITABLE | PTATTR_USER);
+		require(slot == expected);
+	}
+	if (set_pt_large_page && ihk_mc_pt_set_large_page &&
+			ihk_mc_pt_set_page) {
+		x86_rust_stub_pt_set_page_calls = 0;
+		x86_rust_stub_pt_set_page_rc = 0;
+		require(set_pt_large_page((void *)0x1111UL, (void *)0x2222UL,
+				0x33330000UL, PTATTR_USER) == 0);
+		require(x86_rust_stub_pt_set_page_calls == 1);
+		require(x86_rust_stub_pt_set_page_pt == (void *)0x1111UL);
+		require(x86_rust_stub_pt_set_page_virt == 0x2222UL);
+		require(x86_rust_stub_pt_set_page_phys == 0x33330000UL);
+		require(x86_rust_stub_pt_set_page_attr ==
+				(PTATTR_USER | PTATTR_LARGEPAGE |
+				PTATTR_ACTIVE));
+
+		x86_rust_stub_pt_set_page_calls = 0;
+		require(ihk_mc_pt_set_large_page((void *)0x4444UL,
+				(void *)0x5555UL, 0x66660000UL,
+				PTATTR_WRITABLE) == 0);
+		require(x86_rust_stub_pt_set_page_calls == 1);
+		require(x86_rust_stub_pt_set_page_pt == (void *)0x4444UL);
+		require(x86_rust_stub_pt_set_page_virt == 0x5555UL);
+		require(x86_rust_stub_pt_set_page_phys == 0x66660000UL);
+		require(x86_rust_stub_pt_set_page_attr ==
+				(PTATTR_WRITABLE | PTATTR_LARGEPAGE |
+				PTATTR_ACTIVE));
+
+		x86_rust_stub_pt_set_page_calls = 0;
+		x86_rust_stub_pt_set_page_rc = -5;
+		require(ihk_mc_pt_set_page((void *)0x7777UL,
+				(void *)0x8888UL, 0x99990000UL,
+				PTATTR_USER) == -5);
+		require(x86_rust_stub_pt_set_page_calls == 1);
+		require(x86_rust_stub_pt_set_page_pt == (void *)0x7777UL);
+		require(x86_rust_stub_pt_set_page_virt == 0x8888UL);
+		require(x86_rust_stub_pt_set_page_phys == 0x99990000UL);
+		require(x86_rust_stub_pt_set_page_attr ==
+				(PTATTR_USER | PTATTR_ACTIVE));
+		x86_rust_stub_pt_set_page_rc = 0;
 	}
 	size_t sizes[] = {
 		0, 1, 4096, 4097, 2UL * 1024 * 1024,
@@ -93760,6 +94013,79 @@ int main(void)
 			base, base + 0x1000, 2UL * 1024 * 1024, 12,
 			NULL, &trace, NULL, PT_PHYSMASK) == -2);
 		mix(&digest, 0x77616c6b646f6e65UL);
+
+		if (walk_pte_l1 && walk_pte_l2 && walk_pte_l3 &&
+				walk_pte_l4) {
+			trace.digest = 0x77616c6b6c6576UL;
+			trace.calls = 0;
+			trace.enoent_mode = 0;
+			trace.fail_after = 0;
+			trace.fail_error = 0;
+			ret = walk_pte_l1(pt, base, base + 0x1000,
+				base + 0x5000, fake_walk_pte_cb, &trace);
+			require(ret == 0);
+			require(trace.calls == 4);
+
+			trace.calls = 0;
+			ret = walk_pte_l2(pt, 0, PTL2_SIZE,
+				PTL2_SIZE * 4, fake_walk_pte_cb, &trace);
+			require(ret == 0);
+			require(trace.calls == 3);
+
+			trace.calls = 0;
+			ret = walk_pte_l3(pt, 0, PTL3_SIZE,
+				PTL3_SIZE * 3, fake_walk_pte_cb, &trace);
+			require(ret == 0);
+			require(trace.calls == 2);
+
+			trace.calls = 0;
+			ret = walk_pte_l4(pt, 0, 0,
+				(1UL << PTL4_SHIFT) * 2,
+				fake_walk_pte_cb, &trace);
+			require(ret == 0);
+			require(trace.calls == 2);
+			mix(&digest, trace.digest);
+			mix(&digest, 0x776c6b6c766cUL);
+		}
+
+		if (walk_pte_l1_safe && walk_pte_l2_safe &&
+				walk_pte_l3_safe && walk_pte_l4_safe) {
+			trace.digest = 0x73616665776c6bUL;
+			trace.calls = 0;
+			trace.enoent_mode = 0;
+			trace.fail_after = 0;
+			trace.fail_error = 0;
+			ret = walk_pte_l1_safe(pt, base, base + 0x1000,
+				base + 0x4000, fake_walk_pte_cb, &trace);
+			require(ret == 0);
+			require(trace.calls == 3);
+
+			trace.calls = 0;
+			ret = walk_pte_l2_safe(pt, 0, PTL2_SIZE,
+				PTL2_SIZE * 3, fake_walk_pte_cb, &trace);
+			require(ret == 0);
+			require(trace.calls == 2);
+
+			trace.calls = 0;
+			ret = walk_pte_l3_safe(pt, 0, PTL3_SIZE,
+				PTL3_SIZE * 2, fake_walk_pte_cb, &trace);
+			require(ret == 0);
+			require(trace.calls == 1);
+
+			trace.calls = 0;
+			ret = walk_pte_l4_safe(pt, 0, 0,
+				1UL << PTL4_SHIFT, fake_walk_pte_cb, &trace);
+			require(ret == 0);
+			require(trace.calls == 1);
+
+			require(walk_pte_l1_safe(NULL, base, base,
+				base + 0x1000, fake_walk_pte_cb, &trace) == 0);
+			require(walk_pte_l4_safe(NULL, 0, 0,
+				1UL << PTL4_SHIFT, fake_walk_pte_cb,
+				&trace) == 0);
+			mix(&digest, trace.digest);
+			mix(&digest, 0x73616665776c766cUL);
+		}
 	}
 	{
 		unsigned long entries[] = {
@@ -93958,13 +94284,62 @@ int main(void)
 			&fake_created_tables[0], NULL, virt,
 			fake_pt_destroy_phys_to_virt);
 		require(pagemap == PM_PSHIFT(PAGE_SHIFT));
-		require(x86_pt_virt_to_pagemap_result(
-			&fake_created_tables[0], NULL, virt, NULL) ==
-			PM_PSHIFT(PAGE_SHIFT));
-		mix(&digest, (unsigned long)pagemap);
-		mix(&digest, 0x706167656d6170UL);
-	}
-	{
+			require(x86_pt_virt_to_pagemap_result(
+				&fake_created_tables[0], NULL, virt, NULL) ==
+				PM_PSHIFT(PAGE_SHIFT));
+			mix(&digest, (unsigned long)pagemap);
+			mix(&digest, 0x706167656d6170UL);
+
+			if (ihk_mc_pt_virt_to_phys_size &&
+			    ihk_mc_pt_virt_to_phys &&
+			    ihk_mc_pt_virt_to_pagemap) {
+				unsigned long wrapper_phys = 0;
+				unsigned long wrapper_size = 0;
+				unsigned long wrapper_phys_short = 0;
+				uint64_t wrapper_pagemap;
+				int wrapper_ret;
+				int weak_stub_result;
+
+				reset_fake_pt_destroy_table();
+				fake_created_tables[0].entry[l4idx] =
+					fake_pt_destroy_phys(&fake_created_tables[1]) |
+					PF_PRESENT;
+				fake_created_tables[1].entry[l3idx] =
+					fake_pt_destroy_phys(&fake_created_tables[2]) |
+					PF_PRESENT;
+				fake_created_tables[2].entry[l2idx] =
+					fake_pt_destroy_phys(&fake_created_tables[3]) |
+					PF_PRESENT;
+				fake_created_tables[3].entry[l1idx] = entry;
+				x86_rust_stub_init_pt_override =
+					&fake_created_tables[0];
+				x86_rust_stub_phys_to_virt_override =
+					fake_pt_destroy_phys_to_virt;
+
+				wrapper_ret = ihk_mc_pt_virt_to_phys_size(NULL,
+					(void *)virt, &wrapper_phys,
+					&wrapper_size);
+				weak_stub_result = wrapper_ret == 0 &&
+					wrapper_phys == virt &&
+					wrapper_size == (1UL << PTL1_SHIFT);
+				if (!weak_stub_result) {
+					require(wrapper_ret == 0);
+					require(wrapper_size == (1UL << PTL1_SHIFT));
+					require(wrapper_phys == ((entry & PT_PHYSMASK) |
+						(virt & ((1UL << PTL1_SHIFT) - 1))));
+					require(ihk_mc_pt_virt_to_phys(NULL,
+						(void *)virt, &wrapper_phys_short) == 0);
+					require(wrapper_phys_short == wrapper_phys);
+					wrapper_pagemap = ihk_mc_pt_virt_to_pagemap(NULL,
+						virt);
+					require(wrapper_pagemap == expected);
+				}
+				x86_rust_stub_init_pt_override = NULL;
+				x86_rust_stub_phys_to_virt_override = NULL;
+				reset_fake_pt_destroy_table();
+			}
+		}
+		{
 		unsigned long virt = 0x123456789abcUL;
 		int l4idx = (virt >> PTL4_SHIFT) & (PT_ENTRIES - 1);
 		int l3idx = (virt >> PTL3_SHIFT) & (PT_ENTRIES - 1);
@@ -94059,6 +94434,48 @@ int main(void)
 		require(x86_pt_clear_page_result(&fake_created_tables[0], NULL,
 			virt, 0, NULL) == -22);
 		mix(&digest, 0x636c727074706167UL);
+	}
+	if (ihk_mc_pt_clear_page && ihk_mc_pt_clear_large_page) {
+		unsigned long virt = 0x123456789abcUL;
+		int l4idx = (virt >> PTL4_SHIFT) & (PT_ENTRIES - 1);
+		int l3idx = (virt >> PTL3_SHIFT) & (PT_ENTRIES - 1);
+		int l2idx = (virt >> PTL2_SHIFT) & (PT_ENTRIES - 1);
+		int l1idx = (virt >> PTL1_SHIFT) & (PT_ENTRIES - 1);
+
+		reset_fake_pt_destroy_table();
+		fake_created_tables[0].entry[l4idx] =
+			fake_pt_destroy_phys(&fake_created_tables[1]) |
+			PF_PRESENT;
+		fake_created_tables[1].entry[l3idx] =
+			fake_pt_destroy_phys(&fake_created_tables[2]) |
+			PF_PRESENT;
+		fake_created_tables[2].entry[l2idx] =
+			fake_pt_destroy_phys(&fake_created_tables[3]) |
+			PF_PRESENT;
+		fake_created_tables[3].entry[l1idx] =
+			0xfeedf000UL | PF_PRESENT;
+		x86_rust_stub_pt_phys_to_virt_override =
+			fake_pt_destroy_phys_to_virt;
+		require(ihk_mc_pt_clear_page(&fake_created_tables[0],
+			(void *)virt) == 0);
+		require(fake_pt_destroy_table_phys_calls == 3);
+		require(fake_created_tables[3].entry[l1idx] == 0);
+
+		reset_fake_pt_destroy_table();
+		fake_created_tables[0].entry[l4idx] =
+			fake_pt_destroy_phys(&fake_created_tables[1]) |
+			PF_PRESENT;
+		fake_created_tables[1].entry[l3idx] =
+			fake_pt_destroy_phys(&fake_created_tables[2]) |
+			PF_PRESENT;
+		fake_created_tables[2].entry[l2idx] =
+			0x40000000UL | PF_PRESENT | PF_SIZE;
+		require(ihk_mc_pt_clear_large_page(&fake_created_tables[0],
+			(void *)virt) == 0);
+		require(fake_pt_destroy_table_phys_calls == 2);
+		require(fake_created_tables[2].entry[l2idx] == 0);
+		x86_rust_stub_pt_phys_to_virt_override = NULL;
+		mix(&digest, 0x707562636c727074UL);
 	}
 	{
 		unsigned long virt = 0x123456789abcUL;
@@ -96147,6 +96564,54 @@ int main(void)
 			x86_pt_destroy_root_result(pt, NULL);
 			require(fake_pt_destroy_calls == 1);
 			mix(&digest, 0x70746c696665UL);
+
+			if (ihk_mc_pt_create && ihk_mc_pt_destroy) {
+				for (int i = 0; i < PT_ENTRIES; i++)
+					init.entry[i] = 0xa0000000UL +
+						(unsigned long)i;
+
+				x86_rust_stub_init_pt_override = &init;
+				fake_pt_alloc_count = 0;
+				fake_pt_alloc_fail = 0;
+				fake_pt_last_ap_flag = -1;
+				pt = ihk_mc_pt_create(12);
+				require(pt == &fake_created_tables[0]);
+				require(fake_pt_alloc_count == 1);
+				require(fake_pt_last_ap_flag == 12);
+				for (int i = 0; i < PT_ENTRIES / 2; i++)
+					require(pt->entry[i] == 0);
+				for (int i = PT_ENTRIES / 2; i < PT_ENTRIES; i++)
+					require(pt->entry[i] == init.entry[i]);
+				x86_rust_stub_init_pt_override = NULL;
+
+				reset_fake_pt_destroy_table();
+				fake_created_tables[0].entry[0] =
+					fake_pt_destroy_phys(&fake_created_tables[1]) |
+					PF_PRESENT;
+				fake_created_tables[0].entry[1] =
+					fake_pt_destroy_phys(&fake_created_tables[2]) |
+					PF_PRESENT | PF_SIZE;
+				fake_created_tables[0].entry[PT_ENTRIES / 2] =
+					0xbeef0000UL | PF_PRESENT;
+				fake_created_tables[1].entry[7] =
+					fake_pt_destroy_phys(&fake_created_tables[3]) |
+					PF_PRESENT;
+				x86_rust_stub_pt_phys_to_virt_override =
+					fake_pt_destroy_phys_to_virt;
+				ihk_mc_pt_destroy(&fake_created_tables[0]);
+				require(fake_created_tables[0].entry[PT_ENTRIES / 2] == 0);
+				require(fake_pt_destroy_table_phys_calls == 2);
+				require(fake_pt_destroy_table_free_calls == 3);
+				require(fake_pt_destroy_table_free_order[0] ==
+					&fake_created_tables[3]);
+				require(fake_pt_destroy_table_free_order[1] ==
+					&fake_created_tables[1]);
+				require(fake_pt_destroy_table_free_order[2] ==
+					&fake_created_tables[0]);
+				require(fake_pt_destroy_helper_failed_calls == 0);
+				x86_rust_stub_pt_phys_to_virt_override = NULL;
+				mix(&digest, 0x7074637264657374UL);
+			}
 		}
 		{
 			struct fake_page_table root = { 0 };
@@ -96364,6 +96829,41 @@ int main(void)
 				fake_pt_alloc_pages, fake_pt_virt_to_phys,
 				NULL) == -12);
 			mix(&digest, fake_pt_set_page_digest);
+
+			if (ihk_mc_pt_prepare_map) {
+				memset(&root, 0, sizeof(root));
+				memset(&init, 0, sizeof(init));
+				memset(fake_created_tables, 0,
+					sizeof(fake_created_tables));
+				x86_rust_stub_init_pt_override = &init;
+				fake_pt_alloc_count = 0;
+				fake_pt_alloc_fail = 0;
+				ret = ihk_mc_pt_prepare_map(&root, NULL,
+					1UL << 39, 0);
+				require(ret == 0);
+				require(fake_pt_alloc_count == 2);
+				require(root.entry[0] ==
+					((unsigned long)&fake_created_tables[0] |
+						0x07UL));
+				require(root.entry[1] ==
+					((unsigned long)&fake_created_tables[1] |
+						0x07UL));
+
+				x86_rust_stub_pt_set_page_calls = 0;
+				x86_rust_stub_pt_set_page_rc = 0;
+				ret = ihk_mc_pt_prepare_map(NULL,
+					(void *)0x4000UL, 0x3000, 1);
+				require(ret == 0);
+				require(x86_rust_stub_pt_set_page_calls == 3);
+				require(x86_rust_stub_pt_set_page_pt == &init);
+				require(x86_rust_stub_pt_set_page_virt ==
+					0x6000UL);
+				require(x86_rust_stub_pt_set_page_phys == 0);
+				require(x86_rust_stub_pt_set_page_attr ==
+					PTATTR_WRITABLE);
+				x86_rust_stub_init_pt_override = NULL;
+				mix(&digest, 0x707265706d6170UL);
+			}
 		}
 		{
 			struct fake_page_table pt = { 0 };
@@ -118965,8 +119465,12 @@ extern int read_32(uintptr_t va, void *buf);
 extern int read_symbol_64(char *name, void *buf);
 extern ssize_t print_bin(char *buf, size_t buf_size, void *data, size_t size);
 extern int setup_symbols(char *fname);
+extern int setup_dump_interactive(void);
+extern int setup_dump(char *fname);
+extern int setup_constants(void);
 extern void intr_handler(int dummy);
 extern void print_usage(void);
+extern void options(int argc, char **argv);
 
 #define PS_RUNNING 0x01
 #define PS_INTERRUPTIBLE 0x02
@@ -119048,28 +119552,43 @@ static uintptr_t virt_to_phys_va;
 static uintptr_t bfd_last_offset;
 static size_t bfd_last_size;
 static char bfd_last_name[32];
+static char bfd_section_names[8][32];
+static int bfd_section_count;
+static char eclair_bfd_fopen_name[64];
 static int ioctl_fd;
 static unsigned long ioctl_request;
 static int ioctl_cmd;
 static long ioctl_start;
 static long ioctl_size;
+static int ioctl_count;
+static int ioctl_cmds[8];
+static unsigned int ioctl_levels[8];
 static int kill_pid;
 static int kill_sig;
+static int arch_setup_constants_calls;
+static int arch_setup_constants_fd;
 static char eclair_bfd_openr_name[64];
-int gdbpid;
-struct eclair_options opt = {
-	.interactive = 0,
-	.mcos_fd = 77,
-};
+extern int gdbpid;
+extern unsigned long PHYS_OFFSET;
+extern unsigned long MAP_KERNEL_START;
+extern unsigned long kernel_base;
+extern uintptr_t debug_constants[12];
+extern int remote_running;
+extern struct eclair_options opt;
 static struct eclair_dump_mem_chunks eclair_mem_chunks = {
 	.nr_chunks = 2,
+	.kernel_base = 0xfeed0000UL,
+	.phys_start = 0x100000UL,
 	.chunks = {
 		{ .addr = 0x2000, .size = 0x1000 },
 		{ .addr = 0x5000, .size = 0x2000 },
 	},
 };
-struct eclair_dump_mem_chunks *mem_chunks = &eclair_mem_chunks;
-void *dumpbfd = (void *)0xfeedfaceUL;
+extern struct eclair_dump_mem_chunks *mem_chunks;
+extern void *dumpbfd;
+static void *eclair_dump_bfd = (void *)0xfeedfaceUL;
+static void *eclair_physchunks_section = (void *)0x1235UL;
+static void *eclair_physmem_section = (void *)0x1234UL;
 static struct eclair_bfd_section eclair_symbol_sections[] = {
 	{ .vma = 0x900 },
 	{ .vma = 0x1900 },
@@ -119079,15 +119598,17 @@ static struct eclair_bfd_symbol eclair_symbols[] = {
 	  .section = &eclair_symbol_sections[0] },
 	{ .name = "beta", .value = 0x700,
 	  .section = &eclair_symbol_sections[1] },
+	{ .name = "debug_constants", .value = 0x700,
+	  .section = &eclair_symbol_sections[0] },
 };
 static struct eclair_bfd_symbol *eclair_symtab_storage[] = {
 	&eclair_symbols[0],
 	&eclair_symbols[1],
+	&eclair_symbols[2],
 };
-struct eclair_bfd_symbol **symtab = eclair_symtab_storage;
-ssize_t nsyms = sizeof(eclair_symtab_storage) /
-	sizeof(eclair_symtab_storage[0]);
-void *symbfd;
+extern struct eclair_bfd_symbol **symtab;
+extern ssize_t nsyms;
+extern void *symbfd;
 
 void *bfd_openr(const char *name, const char *target)
 {
@@ -119100,7 +119621,27 @@ void *bfd_openr(const char *name, const char *target)
 
 int bfd_check_format(void *abfd, int format)
 {
-	return abfd == (void *)0xdecafbadUL && format == 1;
+	return (abfd == (void *)0xdecafbadUL || abfd == eclair_dump_bfd) &&
+		format == 1;
+}
+
+void *bfd_fopen(const char *name, const char *target, const char *mode,
+		int fd)
+{
+	(void)target;
+	(void)mode;
+	(void)fd;
+	strncpy(eclair_bfd_fopen_name, name,
+			sizeof(eclair_bfd_fopen_name) - 1);
+	eclair_bfd_fopen_name[sizeof(eclair_bfd_fopen_name) - 1] = '\0';
+	return eclair_dump_bfd;
+}
+
+int arch_setup_constants(int fd)
+{
+	arch_setup_constants_calls++;
+	arch_setup_constants_fd = fd;
+	return 0;
 }
 
 long eclair_bfd_get_symtab_upper_bound_bridge(void *abfd)
@@ -119115,6 +119656,7 @@ long eclair_bfd_canonicalize_symtab_bridge(void *abfd,
 	require(abfd == (void *)0xdecafbadUL);
 	location[0] = &eclair_symbols[0];
 	location[1] = &eclair_symbols[1];
+	location[2] = &eclair_symbols[2];
 	return sizeof(eclair_symtab_storage) / sizeof(eclair_symtab_storage[0]);
 }
 
@@ -119134,7 +119676,16 @@ void *bfd_get_section_by_name(void *abfd, const char *name)
 	}
 	strncpy(bfd_last_name, name, sizeof(bfd_last_name) - 1);
 	bfd_last_name[sizeof(bfd_last_name) - 1] = '\0';
-	return (void *)0x1234;
+	if (bfd_section_count >= 0 && bfd_section_count < 8) {
+		strncpy(bfd_section_names[bfd_section_count], name,
+				sizeof(bfd_section_names[0]) - 1);
+		bfd_section_names[bfd_section_count]
+			[sizeof(bfd_section_names[0]) - 1] = '\0';
+	}
+	bfd_section_count++;
+	if (!strcmp(name, "physchunks"))
+		return eclair_physchunks_section;
+	return eclair_physmem_section;
 }
 
 int bfd_get_section_contents(void *abfd, void *section, void *buf,
@@ -119142,14 +119693,28 @@ int bfd_get_section_contents(void *abfd, void *section, void *buf,
 {
 	uint64_t value64 = 0x8877665544332211ULL;
 	uint32_t value32 = 0xaabbccddU;
+	uintptr_t constants[12] = {
+		0x10, 0x20, 0x30, 0x40, 0x50, 0x60,
+		0x70, 0x80, 0x90, 0xa0, 0xb0, 0xc0,
+	};
 
-	if (abfd != dumpbfd || section != (void *)0x1234) {
+	if (abfd != dumpbfd) {
 		fprintf(stderr, "unexpected bfd content request\n");
 		return 0;
 	}
 	bfd_last_offset = offset;
 	bfd_last_size = size;
-	if (size == sizeof(value64)) {
+	if (section == eclair_physchunks_section) {
+		memcpy(buf, &eclair_mem_chunks, size);
+	}
+	else if (section != eclair_physmem_section) {
+		fprintf(stderr, "unexpected bfd section\n");
+		return 0;
+	}
+	else if (size == sizeof(constants)) {
+		memcpy(buf, constants, sizeof(constants));
+	}
+	else if (size == sizeof(value64)) {
 		memcpy(buf, &value64, sizeof(value64));
 	}
 	else if (size == sizeof(value32)) {
@@ -119182,8 +119747,20 @@ int ioctl(int fd, unsigned long request, ...)
 	ioctl_cmd = args->cmd;
 	ioctl_start = args->start;
 	ioctl_size = args->size;
-	if (args->size == (long)sizeof(value64))
+	if (ioctl_count >= 0 && ioctl_count < 8) {
+		ioctl_cmds[ioctl_count] = args->cmd;
+		ioctl_levels[ioctl_count] = args->level;
+	}
+	ioctl_count++;
+	if (args->cmd == 7) {
+		args->size = sizeof(eclair_mem_chunks);
+	}
+	else if (args->cmd == 8) {
+		memcpy(args->buf, &eclair_mem_chunks, sizeof(eclair_mem_chunks));
+	}
+	else if (args->size == (long)sizeof(value64) && args->buf) {
 		memcpy(args->buf, &value64, sizeof(value64));
+	}
 	return 0;
 }
 
@@ -119242,10 +119819,36 @@ int main(void)
 	uint8_t psum = 0;
 	uint8_t pcheck = 0;
 	int dbg_ret = eclair_dprintf("debug %d", 7);
+	char *options_argv[] = {
+		"eclair", "-c", "-l", "-k", "kernel.alt",
+		"-d", "dump.alt", "-o", "9",
+	};
 	ssize_t n;
+
+	gdbpid = 0;
+	PHYS_OFFSET = 0;
+	MAP_KERNEL_START = 0;
+	kernel_base = 0;
+	memset(debug_constants, 0, sizeof(uintptr_t) * 12);
+	remote_running = 123;
+	memset(&opt, 0, sizeof(opt));
+	opt.interactive = 0;
+	opt.mcos_fd = 77;
+	mem_chunks = &eclair_mem_chunks;
+	dumpbfd = eclair_dump_bfd;
+	symtab = eclair_symtab_storage;
+	nsyms = sizeof(eclair_symtab_storage) /
+		sizeof(eclair_symtab_storage[0]);
+	symbfd = NULL;
 
 	require(dbg_ret == 0);
 	require(eclair_parse_i32_result(" -42tail") == -42);
+	options(sizeof(options_argv) / sizeof(options_argv[0]), options_argv);
+	require(opt.cpu == 1 && opt.print_idle == 1 && opt.os_id == 9);
+	require(opt.help == 0 && opt.interactive == 0 && opt.mcos_fd == -1);
+	require(!strcmp(opt.kernel_path, "kernel.alt"));
+	require(!strcmp(opt.dump_path, "dump.alt"));
+	opt.mcos_fd = 77;
 	memset(buf, 0, sizeof(buf));
 	require(eclair_physmem_name_result(buf, 17) == 9);
 	require(!strcmp(buf, "physmem17"));
@@ -119265,7 +119868,33 @@ int main(void)
 	require(setup_symbols("kernel.img") == 0);
 	require(symbfd == (void *)0xdecafbadUL);
 	require(!strcmp(eclair_bfd_openr_name, "kernel.img"));
-	require(nsyms == 2);
+	require(nsyms == 3);
+	dumpbfd = NULL;
+	mem_chunks = NULL;
+	kernel_base = 0;
+	PHYS_OFFSET = 0;
+	bfd_section_count = 0;
+	memset(bfd_section_names, 0, sizeof(bfd_section_names));
+	require(setup_dump("ignored.dump") == 0);
+	require(dumpbfd == eclair_dump_bfd);
+	require(!strcmp(eclair_bfd_fopen_name, "dump.alt"));
+	require(bfd_section_count == 3);
+	require(!strcmp(bfd_section_names[0], "physchunks"));
+	require(!strcmp(bfd_section_names[1], "physmem0"));
+	require(!strcmp(bfd_section_names[2], "physmem1"));
+	require(mem_chunks != NULL);
+	require(mem_chunks->nr_chunks == 2);
+	require(kernel_base == 0xfeed0000UL);
+	require(PHYS_OFFSET == 0x100000UL);
+	memset(debug_constants, 0, sizeof(debug_constants));
+	arch_setup_constants_calls = 0;
+	require(setup_constants() == 0);
+	require(arch_setup_constants_calls == 1);
+	require(arch_setup_constants_fd == 77);
+	require(debug_constants[0] == 0x10);
+	require(debug_constants[1] == 0x20);
+	require(debug_constants[10] == 0xb0);
+	require(debug_constants[11] == 0xc0);
 	require(lookup_symbol("beta") == 0x2000);
 	require(lookup_symbol("missing") == UINTPTR_MAX);
 	require(read_64(0x4444, &value64) == 0);
@@ -119288,6 +119917,20 @@ int main(void)
 	require(bfd_last_offset == 0 &&
 			bfd_last_size == sizeof(value64));
 	require(read_mem(0xbad, &value64, sizeof(value64)) == 1);
+	ioctl_count = 0;
+	remote_running = 99;
+	mem_chunks = NULL;
+	require(setup_dump_interactive() == 0);
+	require(ioctl_count == 4);
+	require(ioctl_cmds[0] == 6 && ioctl_levels[0] == 0);
+	require(ioctl_cmds[1] == 1);
+	require(ioctl_cmds[2] == 7);
+	require(ioctl_cmds[3] == 8);
+	require(remote_running == 0);
+	require(mem_chunks != NULL);
+	require(mem_chunks->nr_chunks == 2);
+	require(kernel_base == 0xfeed0000UL);
+	require(PHYS_OFFSET == 0x100000UL);
 	opt.interactive = 1;
 	value64 = 0;
 	require(read_mem(0x6666, &value64, sizeof(value64)) == 0);
@@ -120554,6 +121197,8 @@ extern int mcinspect_main_entry_result(int argc, char **argv,
 		void (*init_globals_fn)(void *), int (*mcps_fn)(void *),
 		int (*mcvtop_fn)(void *, int, unsigned long),
 		int (*dwarf_finish_fn)(void *, void **), int (*close_fn)(int));
+extern int mcps(void *dbg);
+extern int mcvtop(void *dbg, int pid, unsigned long vtop_addr);
 extern int dup(int oldfd);
 extern int dup2(int oldfd, int newfd);
 extern int close(int fd);
@@ -120760,6 +121405,7 @@ static int fake_option_loop_argc;
 static char **fake_option_loop_argv;
 static const char *fake_option_loop_shortopts;
 static const void *fake_option_loop_longopts;
+static int fake_public_header_calls;
 
 static void reset_fake_mcvtop(void)
 {
@@ -120981,6 +121627,33 @@ static void reset_fake_option_loop(void)
 		fake_option_loop_set_vtop[i] = 0;
 		fake_option_loop_set_debug[i] = 0;
 	}
+}
+
+void mcinspect_print_ps_header_bridge(void)
+{
+	fake_public_header_calls++;
+}
+
+void mcinspect_read_usize_bridge(unsigned long addr, unsigned long *out)
+{
+	fake_mcps_read_usize_cb(addr, out);
+}
+
+void mcinspect_get_swapper_page_table_bridge(void *dbg,
+		unsigned long *out)
+{
+	fake_mcvtop_get_swapper_cb(dbg, out);
+}
+
+void mcinspect_print_init_pt_bridge(unsigned long init_pt)
+{
+	fake_mcvtop_print_init_pt_cb(init_pt);
+}
+
+void print_thread(int cpu, unsigned long thread, unsigned long idle,
+		int active)
+{
+	fake_mcps_print_thread_cb(cpu, thread, idle, active);
 }
 
 static int fake_option_loop_getopt(int argc, char **argv,
@@ -121299,6 +121972,22 @@ int main(void)
 	require(mcinspect_mcps_body_result(NULL,
 			fake_mcps_print_thread_cb) == -22);
 	mix(&digest, (unsigned long)fake_mcps_print_calls);
+
+	reset_fake_mcps();
+	fake_public_header_calls = 0;
+	require(mcps(NULL) == 0);
+	require(fake_public_header_calls == 0);
+	require(fake_mcps_read_calls == 7);
+	require(fake_mcps_print_calls == 5);
+	mix(&digest, (unsigned long)fake_mcps_read_calls);
+
+	reset_fake_mcvtop();
+	require(mcvtop((void *)0x4567, 0, 0x55) == 0);
+	require(fake_mcvtop_get_calls == 1 &&
+			fake_mcvtop_get_dbg == (void *)0x4567 &&
+			fake_mcvtop_print_calls == 1 &&
+			fake_mcvtop_read_calls == 0);
+	mix(&digest, fake_mcvtop_print_value);
 
 	reset_fake_main();
 	rc = mcinspect_main_body_result(argv, 0, "kernel.img", 1, 1, 123,
@@ -136231,6 +136920,9 @@ extern int x86_call_ap_func_body_result(int *, void (*)(void));
 extern void call_ap_func(void (*)(void));
 extern void __show_stack(unsigned long *);
 extern void show_context_stack(unsigned long *);
+extern void ihk_mc_boot_cpu(int, unsigned long);
+extern void mcexec_v10_trace_enter_user(struct x86_user_context *);
+extern void release_runq_lock(void);
 extern int x86_show_stack_body_result(
 	unsigned long *, unsigned long, unsigned long,
 	void (*)(unsigned long, unsigned long, unsigned long));
@@ -137723,6 +138415,14 @@ static int boot_cpu_pause_count;
 static int boot_cpu_last_cpuid;
 static unsigned long boot_cpu_last_trampoline;
 static unsigned long boot_cpu_transit_value;
+static unsigned long public_boot_trampoline[8];
+static unsigned long public_boot_code[8];
+static unsigned long public_boot_ap_trampoline;
+static void *public_boot_setup_ap;
+static struct x86_trace_enter_user_offsets public_trace_offsets;
+static const void *public_trace_thread;
+static int public_mcexec_v10_enter_user_logs;
+static struct fake_runq_local *public_runq_local;
 
 static void require_line(int condition, int line)
 {
@@ -137907,6 +138607,14 @@ static void reset_apic_trace(void)
 	boot_cpu_last_cpuid = -1;
 	boot_cpu_last_trampoline = 0;
 	boot_cpu_transit_value = 0;
+	memset(public_boot_trampoline, 0, sizeof(public_boot_trampoline));
+	memset(public_boot_code, 0, sizeof(public_boot_code));
+	public_boot_ap_trampoline = 0;
+	public_boot_setup_ap = NULL;
+	memset(&public_trace_offsets, 0, sizeof(public_trace_offsets));
+	public_trace_thread = NULL;
+	public_mcexec_v10_enter_user_logs = 0;
+	public_runq_local = NULL;
 }
 
 static void fake_lapic_write(int reg, unsigned int value)
@@ -138383,6 +139091,124 @@ static void fake_boot_pause(void)
 		*boot_cpu_status_slot = 1;
 }
 
+#ifdef USE_C_X86_CPU_MODEL
+void ihk_mc_boot_cpu(int cpuid, unsigned long pc)
+{
+	x86_boot_cpu_body_result(public_boot_trampoline,
+			public_boot_code, sizeof(public_boot_code),
+			cpuid, pc, public_boot_ap_trampoline,
+			&public_call_ap_status, public_boot_setup_ap,
+			fake_boot_pt_phys, fake_cpu_kstack,
+			fake_transit_pt, fake_boot_wakeup,
+			fake_boot_pause);
+}
+
+void mcexec_v10_trace_enter_user(struct x86_user_context *regs)
+{
+	x86_mcexec_v10_trace_enter_user_body_result(regs,
+			public_trace_thread,
+			&public_mcexec_v10_enter_user_logs, 32,
+			fake_current_cpu(), &public_trace_offsets,
+			fake_trace_log);
+}
+
+void release_runq_lock(void)
+{
+	x86_release_runq_lock_body_result(public_runq_local,
+			offsetof(struct fake_runq_local, runq_lock),
+			offsetof(struct fake_runq_local, runq_irqstate),
+			fake_runq_unlock);
+}
+#else
+void *x86_boot_trampoline_va_bridge(void)
+{
+	return public_boot_trampoline;
+}
+
+const void *x86_boot_trampoline_code_data_bridge(void)
+{
+	return public_boot_code;
+}
+
+unsigned long x86_boot_trampoline_code_size_bridge(void)
+{
+	return sizeof(public_boot_code);
+}
+
+unsigned long x86_boot_ap_trampoline_bridge(void)
+{
+	return public_boot_ap_trampoline;
+}
+
+void *x86_boot_setup_ap_bridge(void)
+{
+	return public_boot_setup_ap;
+}
+
+unsigned long x86_boot_page_table_phys_bridge(void)
+{
+	return fake_boot_pt_phys();
+}
+
+unsigned long x86_cpu_kstack_bridge(int cpuid)
+{
+	return fake_cpu_kstack(cpuid);
+}
+
+unsigned long x86_transit_page_table_bridge(void)
+{
+	return fake_transit_pt();
+}
+
+void x86_wakeup_bridge(int cpuid, unsigned long trampoline)
+{
+	fake_boot_wakeup(cpuid, trampoline);
+}
+
+void x86_cpu_pause_bridge(void)
+{
+	fake_boot_pause();
+}
+
+void *x86_current_thread_bridge(void)
+{
+	return (void *)public_trace_thread;
+}
+
+const struct x86_trace_enter_user_offsets *x86_trace_enter_user_offsets_bridge(void)
+{
+	return &public_trace_offsets;
+}
+
+void x86_mcexec_v10_trace_log_bridge(int cpu, int pid, int tid,
+				     unsigned long rip, unsigned long rsp,
+				     unsigned long cs, unsigned long ss,
+				     unsigned long rflags, int status)
+{
+	fake_trace_log(cpu, pid, tid, rip, rsp, cs, ss, rflags, status);
+}
+
+void *x86_this_cpu_local_var_bridge(void)
+{
+	return public_runq_local;
+}
+
+unsigned long x86_runq_lock_offset_bridge(void)
+{
+	return offsetof(struct fake_runq_local, runq_lock);
+}
+
+unsigned long x86_runq_irqstate_offset_bridge(void)
+{
+	return offsetof(struct fake_runq_local, runq_irqstate);
+}
+
+void x86_runq_unlock_bridge(void *lock, unsigned long irqstate)
+{
+	fake_runq_unlock(lock, irqstate);
+}
+#endif
+
 int main(void)
 {
 	struct x86_thread_context_offsets offsets = {
@@ -138442,6 +139268,39 @@ int main(void)
 				fake_cpu_kstack, fake_transit_pt,
 				fake_boot_wakeup, fake_boot_pause) == -EINVAL);
 		mix(&digest, trampoline[1] ^ trampoline[4] ^ trampoline[6]);
+	}
+
+	reset_apic_trace();
+	{
+		public_boot_code[0] = 0xbb00;
+		public_boot_code[1] = 0xbb01;
+		public_boot_code[2] = 0xbb02;
+		public_boot_code[3] = 0xbb03;
+		public_boot_code[4] = 0xbb04;
+		public_boot_code[5] = 0xbb05;
+		public_boot_code[6] = 0xbb06;
+		public_boot_code[7] = 0xbb07;
+		public_boot_ap_trampoline = 0x88880000UL;
+		public_boot_setup_ap = fake_enter_user;
+		public_call_ap_status = 99;
+		boot_cpu_status_slot = &public_call_ap_status;
+		boot_cpu_transit_value = 0x43210000UL;
+
+		ihk_mc_boot_cpu(4, 0x6666);
+		require(public_call_ap_status == 1);
+		require(boot_cpu_wakeup_count == 1 && boot_cpu_pause_count == 0);
+		require(boot_cpu_last_cpuid == 4 &&
+			boot_cpu_last_trampoline == 0x88880000UL);
+		require(public_boot_trampoline[0] == public_boot_code[0] &&
+			public_boot_trampoline[1] == 0x12345000UL &&
+			public_boot_trampoline[2] ==
+				(unsigned long)fake_enter_user &&
+			public_boot_trampoline[3] == 0x6666 &&
+			public_boot_trampoline[4] == 0x80040000UL &&
+			public_boot_trampoline[6] == 0x43210000UL);
+		mix(&digest, public_boot_trampoline[1] ^
+			public_boot_trampoline[4] ^
+			public_boot_trampoline[6]);
 	}
 
 	memset(stack, 0xa5, sizeof(stack));
@@ -139660,6 +140519,42 @@ int main(void)
 
 	reset_apic_trace();
 	{
+		struct fake_trace_process proc = { .pid = 654 };
+		struct fake_trace_thread trace_thread = {
+			.tid = 987,
+			.status = 0x66,
+			.proc = &proc,
+		};
+
+		public_trace_offsets.thread_tid_offset =
+			offsetof(struct fake_trace_thread, tid);
+		public_trace_offsets.thread_status_offset =
+			offsetof(struct fake_trace_thread, status);
+		public_trace_offsets.thread_proc_offset =
+			offsetof(struct fake_trace_thread, proc);
+		public_trace_offsets.process_pid_offset =
+			offsetof(struct fake_trace_process, pid);
+		public_trace_thread = &trace_thread;
+		current_cpu_value = 9;
+		user_ctx.gpr.rip = 0x7771;
+		user_ctx.gpr.rsp = 0x7772;
+		user_ctx.gpr.cs = 0x77;
+		user_ctx.gpr.ss = 0x88;
+		user_ctx.gpr.rflags = 0x246;
+
+		mcexec_v10_trace_enter_user(&user_ctx);
+		require(trace_log_count == 1 && trace_cpu == 9);
+		require(trace_pid == 654 && trace_tid == 987 &&
+			trace_status == 0x66);
+		require(trace_rip == 0x7771 && trace_rsp == 0x7772 &&
+			trace_cs == 0x77 && trace_ss == 0x88 &&
+			trace_rflags == 0x246);
+		mix(&digest, trace_rip ^ (unsigned long)trace_pid ^
+			(unsigned long)trace_cpu);
+	}
+
+	reset_apic_trace();
+	{
 		struct fake_runq_local local = {
 			.pad = 0,
 			.runq_lock = 0xabc,
@@ -139677,6 +140572,22 @@ int main(void)
 				offsetof(struct fake_runq_local, runq_lock),
 				offsetof(struct fake_runq_local, runq_irqstate),
 				fake_runq_unlock) == -EINVAL);
+		mix(&digest, runq_unlock_irqstate);
+	}
+
+	reset_apic_trace();
+	{
+		struct fake_runq_local local = {
+			.pad = 0,
+			.runq_lock = 0xdef,
+			.runq_irqstate = 0x654321,
+		};
+
+		public_runq_local = &local;
+		release_runq_lock();
+		require(runq_unlock_count == 1);
+		require(runq_unlock_lock == &local.runq_lock &&
+			runq_unlock_irqstate == 0x654321);
 		mix(&digest, runq_unlock_irqstate);
 	}
 
@@ -139956,6 +140867,367 @@ __attribute__((weak)) void arch_shmget_log_bridge(int event, long key,
 	(void)shift;
 	(void)result;
 }
+__attribute__((weak)) unsigned int tod_data_lock;
+__attribute__((weak)) void syscall_settimeofday_lock_bridge(void *lock)
+{
+	(void)lock;
+}
+__attribute__((weak)) void syscall_settimeofday_unlock_bridge(void *lock)
+{
+	(void)lock;
+}
+__attribute__((weak)) long syscall_atomic64_read_bridge(void *value)
+{
+	(void)value;
+	return 0;
+}
+__attribute__((weak)) void syscall_atomic64_inc_bridge(void *value)
+{
+	(void)value;
+}
+__attribute__((weak)) void syscall_wmb_bridge(void)
+{
+}
+__attribute__((weak)) void syscall_settimeofday_panic_bridge(void)
+{
+}
+__attribute__((weak)) void syscall_settimeofday_log_bridge(int event,
+		unsigned long utv, unsigned long utz, long sec, long nsec,
+		long error)
+{
+	(void)event;
+	(void)utv;
+	(void)utz;
+	(void)sec;
+	(void)nsec;
+	(void)error;
+}
+__attribute__((weak)) void syscall_swapout_log_bridge(const void *fname,
+		void *buf, unsigned long size, int flag)
+{
+	(void)fname;
+	(void)buf;
+	(void)size;
+	(void)flag;
+}
+__attribute__((weak)) long syscall_util_thread_bridge(void *arg)
+{
+	(void)arg;
+	return 0;
+}
+__attribute__((weak)) void syscall_util_indicate_clone_disabled_bridge(void)
+{
+}
+__attribute__((weak)) void syscall_mbind_entry_log_bridge(
+		unsigned long addr, unsigned long len, int mode,
+		unsigned long nodemask_addr, unsigned long flags)
+{
+	(void)addr;
+	(void)len;
+	(void)mode;
+	(void)nodemask_addr;
+	(void)flags;
+}
+__attribute__((weak)) void syscall_mbind_write_lock_bridge(void *lock)
+{
+	(void)lock;
+}
+__attribute__((weak)) void syscall_mbind_write_unlock_bridge(void *lock)
+{
+	(void)lock;
+}
+__attribute__((weak)) void *syscall_mbind_lookup_range_bridge(
+		void *vm, unsigned long start, unsigned long end)
+{
+	(void)vm;
+	(void)start;
+	(void)end;
+	return 0;
+}
+__attribute__((weak)) void *syscall_mbind_policy_search_bridge(
+		void *vm, unsigned long addr)
+{
+	(void)vm;
+	(void)addr;
+	return 0;
+}
+__attribute__((weak)) int syscall_mbind_clear_range_bridge(
+		void *vm, unsigned long start, unsigned long end)
+{
+	(void)vm;
+	(void)start;
+	(void)end;
+	return 0;
+}
+__attribute__((weak)) void *syscall_mbind_policy_alloc_bridge(
+		unsigned long size, unsigned long flags)
+{
+	(void)flags;
+	return __builtin_malloc(size ? size : 1);
+}
+__attribute__((weak)) void syscall_mbind_policy_rb_clear_bridge(
+		void *range_policy)
+{
+	(void)range_policy;
+}
+__attribute__((weak)) int syscall_mbind_policy_insert_bridge(
+		void *vm, void *range_policy)
+{
+	(void)vm;
+	(void)range_policy;
+	return 0;
+}
+__attribute__((weak)) void syscall_mbind_log_bridge(int event,
+		unsigned long arg0, unsigned long arg1, int arg2)
+{
+	(void)event;
+	(void)arg0;
+	(void)arg1;
+	(void)arg2;
+}
+__attribute__((weak)) void mprotect_flush_nfo_bridge(void)
+{
+}
+__attribute__((weak)) int remap_file_pages_callable_bridge(void *memobj)
+{
+	(void)memobj;
+	return 0;
+}
+__attribute__((weak)) int remap_file_pages_remap_bridge(void *vm,
+		void *range, unsigned long start, unsigned long end, long off)
+{
+	(void)vm;
+	(void)range;
+	(void)start;
+	(void)end;
+	(void)off;
+	return 0;
+}
+__attribute__((weak)) void remap_file_pages_clear_host_bridge(
+		unsigned long start, unsigned long size, int holding_lock)
+{
+	(void)start;
+	(void)size;
+	(void)holding_lock;
+}
+__attribute__((weak)) void remap_file_pages_log_bridge(const void *record)
+{
+	(void)record;
+}
+__attribute__((weak)) int mremap_extend_bridge(void *vm, void *range,
+		unsigned long newend)
+{
+	(void)vm;
+	(void)range;
+	(void)newend;
+	return 0;
+}
+__attribute__((weak)) int mremap_search_bridge(unsigned long size,
+		unsigned long pgshift, unsigned long *newstartp)
+{
+	(void)size;
+	(void)pgshift;
+	if (newstartp)
+		*newstartp = 0x30000UL;
+	return 0;
+}
+__attribute__((weak)) void mremap_memobj_ref_bridge(void *memobj)
+{
+	(void)memobj;
+}
+__attribute__((weak)) void mremap_memobj_unref_bridge(void *memobj)
+{
+	(void)memobj;
+}
+__attribute__((weak)) int mremap_add_range_bridge(void *vm,
+		unsigned long start, unsigned long end, long pgshift,
+		unsigned long flags, void *memobj, unsigned long objoff)
+{
+	(void)vm;
+	(void)start;
+	(void)end;
+	(void)pgshift;
+	(void)flags;
+	(void)memobj;
+	(void)objoff;
+	return 0;
+}
+__attribute__((weak)) void mremap_pte_lock_bridge(void *lock)
+{
+	(void)lock;
+}
+__attribute__((weak)) void mremap_pte_unlock_bridge(void *lock)
+{
+	(void)lock;
+}
+__attribute__((weak)) int mremap_move_pte_bridge(void *page_table,
+		void *vm, void *oldstart, void *newstart, unsigned long size,
+		void *range)
+{
+	(void)page_table;
+	(void)vm;
+	(void)oldstart;
+	(void)newstart;
+	(void)size;
+	(void)range;
+	return 0;
+}
+__attribute__((weak)) void mremap_log_bridge(const void *record)
+{
+	(void)record;
+}
+__attribute__((weak)) void msync_read_lock_bridge(void *lock)
+{
+	(void)lock;
+}
+__attribute__((weak)) void msync_read_unlock_bridge(void *lock)
+{
+	(void)lock;
+}
+__attribute__((weak)) void *msync_lookup_range_bridge(void *vm,
+		unsigned long start, unsigned long end)
+{
+	(void)vm;
+	(void)start;
+	(void)end;
+	return 0;
+}
+__attribute__((weak)) void *msync_next_range_bridge(void *vm, void *range)
+{
+	(void)vm;
+	(void)range;
+	return 0;
+}
+__attribute__((weak)) int msync_has_pager_bridge(void *memobj)
+{
+	(void)memobj;
+	return 0;
+}
+__attribute__((weak)) int msync_sync_range_bridge(void *vm, void *range,
+		unsigned long start, unsigned long end)
+{
+	(void)vm;
+	(void)range;
+	(void)start;
+	(void)end;
+	return 0;
+}
+__attribute__((weak)) int msync_invalidate_range_bridge(void *vm,
+		void *range, unsigned long start, unsigned long end)
+{
+	(void)vm;
+	(void)range;
+	(void)start;
+	(void)end;
+	return 0;
+}
+__attribute__((weak)) void msync_log_bridge(int event, unsigned long start,
+		unsigned long len, int flags, int error)
+{
+	(void)event;
+	(void)start;
+	(void)len;
+	(void)flags;
+	(void)error;
+}
+__attribute__((weak)) unsigned long process_spin_lock_bridge(
+		unsigned long lock_addr)
+{
+	(void)lock_addr;
+	return 0;
+}
+__attribute__((weak)) void process_spin_unlock_bridge(
+		unsigned long lock_addr, unsigned long irqstate)
+{
+	(void)lock_addr;
+	(void)irqstate;
+}
+__attribute__((weak)) void process_sched_noirq_lock_bridge(
+		unsigned long lock_addr)
+{
+	(void)lock_addr;
+}
+__attribute__((weak)) void process_sched_noirq_unlock_bridge(
+		unsigned long lock_addr)
+{
+	(void)lock_addr;
+}
+__attribute__((weak)) unsigned long process_sched_cpu_local_bridge(int cpu_id)
+{
+	(void)cpu_id;
+	return 0;
+}
+__attribute__((weak)) int process_sched_vector_bridge(int vector_key)
+{
+	return vector_key;
+}
+__attribute__((weak)) void process_sched_interrupt_bridge(int cpu, int vector)
+{
+	(void)cpu;
+	(void)vector;
+}
+__attribute__((weak)) void process_sched_runq_log_bridge(int event,
+		unsigned long arg0, unsigned long arg1, int arg2, int arg3)
+{
+	(void)event;
+	(void)arg0;
+	(void)arg1;
+	(void)arg2;
+	(void)arg3;
+}
+__attribute__((weak)) void process_sched_rwlock_bridge(
+		unsigned long lock_addr, unsigned long node_addr)
+{
+	(void)lock_addr;
+	(void)node_addr;
+}
+__attribute__((weak)) void process_sched_rwunlock_bridge(
+		unsigned long lock_addr, unsigned long node_addr)
+{
+	(void)lock_addr;
+	(void)node_addr;
+}
+__attribute__((weak)) void process_sched_status_set_bridge(
+		unsigned long status_addr, int status)
+{
+	if (status_addr)
+		*(int *)status_addr = status;
+}
+__attribute__((weak)) void process_sched_set_timer_bridge(int runq_locked)
+{
+	(void)runq_locked;
+}
+__attribute__((weak)) void process_sched_procfs_create_thread_bridge(
+		unsigned long thread_addr)
+{
+	(void)thread_addr;
+}
+__attribute__((weak)) int process_sched_counter_inc_bridge(
+		unsigned long counter_addr)
+{
+	if (!counter_addr)
+		return 0;
+	return __sync_add_and_fetch((int *)counter_addr, 1);
+}
+__attribute__((weak)) void process_sched_counter_dec_bridge(
+		unsigned long counter_addr)
+{
+	if (counter_addr)
+		__sync_fetch_and_sub((unsigned long *)counter_addr, 1);
+}
+__attribute__((weak)) void process_sched_rusage_threads_inc_bridge(void) {}
+__attribute__((weak)) void process_sched_rusage_debug_bridge(void) {}
+__attribute__((weak)) int waitq_sched_wakeup_thread_bridge(
+		void *thread, int state)
+{
+	return ((unsigned long)thread ^ (unsigned int)state) & 0x7fffffff;
+}
+__attribute__((weak)) int waitq_sched_wakeup_thread_locked_bridge(
+		void *thread, int state)
+{
+	return ((((unsigned long)thread) << 1) ^ (unsigned int)state) &
+	       0x7fffffff;
+}
 __attribute__((weak)) int copy_to_user(void *dst, const void *src,
 		unsigned long size)
 {
@@ -140221,6 +141493,17 @@ __attribute__((weak)) unsigned long x86_virt_to_phys_bridge(void *addr)
 {
 	return (unsigned long)addr;
 }
+__attribute__((weak)) void x86_lapic_write_bridge(int reg,
+		unsigned int value)
+{
+	(void)reg;
+	(void)value;
+}
+__attribute__((weak)) unsigned long x86_read_msr_bridge(int reg)
+{
+	(void)reg;
+	return 0;
+}
 __attribute__((weak)) void x86_write_msr_bridge(int reg, unsigned long value)
 {
 	(void)reg;
@@ -140274,6 +141557,27 @@ __attribute__((weak)) int idle_halt;
 __attribute__((weak)) int allow_oversubscribe;
 __attribute__((weak)) int time_sharing;
 __attribute__((weak)) int gettime_local_support;
+struct rust_stub_timespec {
+	long tv_sec;
+	long tv_nsec;
+};
+__attribute__((weak)) void syscall_gettime_bridge(void *ts)
+{
+	struct rust_stub_timespec *wts = ts;
+
+	if (wts) {
+		wts->tv_sec = 0;
+		wts->tv_nsec = 0;
+	}
+}
+__attribute__((weak)) long syscall_policy_do_syscall2_bridge(int syscall_nr,
+		unsigned long arg0, unsigned long arg1)
+{
+	(void)syscall_nr;
+	(void)arg0;
+	(void)arg1;
+	return -38;
+}
 __attribute__((weak)) void ihk_mc_set_syscall_handler(void *handler)
 {
 	(void)handler;
@@ -140474,6 +141778,87 @@ __attribute__((weak)) int *x86_cpu_boot_status_slot_bridge(void)
 	static int status;
 
 	return &status;
+}
+__attribute__((weak)) void *x86_boot_trampoline_va_bridge(void)
+{
+	return 0;
+}
+__attribute__((weak)) const void *x86_boot_trampoline_code_data_bridge(void)
+{
+	return 0;
+}
+__attribute__((weak)) unsigned long x86_boot_trampoline_code_size_bridge(void)
+{
+	return 0;
+}
+__attribute__((weak)) unsigned long x86_boot_ap_trampoline_bridge(void)
+{
+	return 0;
+}
+__attribute__((weak)) void *x86_boot_setup_ap_bridge(void)
+{
+	return 0;
+}
+__attribute__((weak)) unsigned long x86_boot_page_table_phys_bridge(void)
+{
+	return 0;
+}
+__attribute__((weak)) unsigned long x86_cpu_kstack_bridge(int cpuid)
+{
+	(void)cpuid;
+	return 0;
+}
+__attribute__((weak)) unsigned long x86_transit_page_table_bridge(void)
+{
+	return 0;
+}
+__attribute__((weak)) void x86_wakeup_bridge(int cpuid,
+		unsigned long trampoline)
+{
+	(void)cpuid;
+	(void)trampoline;
+}
+__attribute__((weak)) void x86_cpu_pause_bridge(void) {}
+__attribute__((weak)) void *x86_current_thread_bridge(void)
+{
+	return 0;
+}
+__attribute__((weak)) const void *x86_trace_enter_user_offsets_bridge(void)
+{
+	return 0;
+}
+__attribute__((weak)) void x86_mcexec_v10_trace_log_bridge(int cpu,
+		int pid, int tid, unsigned long rip, unsigned long sp,
+		unsigned long cs, unsigned long ss, unsigned long rflags,
+		int status)
+{
+	(void)cpu;
+	(void)pid;
+	(void)tid;
+	(void)rip;
+	(void)sp;
+	(void)cs;
+	(void)ss;
+	(void)rflags;
+	(void)status;
+}
+__attribute__((weak)) void *x86_this_cpu_local_var_bridge(void)
+{
+	return 0;
+}
+__attribute__((weak)) unsigned long x86_runq_lock_offset_bridge(void)
+{
+	return 0;
+}
+__attribute__((weak)) unsigned long x86_runq_irqstate_offset_bridge(void)
+{
+	return 0;
+}
+__attribute__((weak)) void x86_runq_unlock_bridge(void *lock,
+		unsigned long irqstate)
+{
+	(void)lock;
+	(void)irqstate;
 }
 __attribute__((weak)) long getlong_user(long *dest, const long *src)
 {
@@ -140848,6 +142233,15 @@ __attribute__((weak)) void send_procfs_answer(void *packet, int err)
 	(void)packet;
 	(void)err;
 }
+__attribute__((weak)) int do_process_vm_read_writev(int pid,
+		const void *local_iov, unsigned long liovcnt,
+		const void *remote_iov, unsigned long riovcnt,
+		unsigned long flags, int op)
+{
+	(void)local_iov;
+	(void)remote_iov;
+	return pid + (int)liovcnt + (int)riovcnt + (int)flags + op;
+}
 __attribute__((weak)) long sys_mlock(int n, struct rust_stub_user_context *ctx)
 {
 	(void)n;
@@ -140931,6 +142325,60 @@ __attribute__((weak)) unsigned long ihk_mc_map_memory(void *os,
 	return phys;
 }
 static unsigned char rust_stub_map_virtual_arena[4 * 1024 * 1024];
+__attribute__((weak)) void *mem_pending_free_pages_bridge(void)
+{
+	static unsigned long pending_free_pages[2];
+
+	return pending_free_pages;
+}
+__attribute__((weak)) void mem_begin_free_pages_pending_panic_bridge(void) {}
+__attribute__((weak)) void mem_pending_free_bridge(unsigned long phys,
+		int npages, int is_user)
+{
+	(void)phys;
+	(void)npages;
+	(void)is_user;
+}
+__attribute__((weak)) void mem_finish_free_pages_pending_panic_bridge(void) {}
+__attribute__((weak)) void *mem_vmap_allocator_bridge(void)
+{
+	return rust_stub_map_virtual_arena;
+}
+__attribute__((weak)) unsigned long mem_vmap_alloc_bridge(void *desc,
+		int npages, int p2align)
+{
+	(void)desc;
+	(void)npages;
+	(void)p2align;
+	return (unsigned long)rust_stub_map_virtual_arena;
+}
+__attribute__((weak)) void mem_vmap_free_bridge(void *desc,
+		unsigned long address, int npages)
+{
+	(void)desc;
+	(void)address;
+	(void)npages;
+}
+__attribute__((weak)) int mem_pt_set_page_bridge(void *pt, void *virt,
+		unsigned long phys, int attr)
+{
+	(void)pt;
+	(void)virt;
+	(void)phys;
+	(void)attr;
+	return 0;
+}
+__attribute__((weak)) int mem_pt_clear_page_bridge(void *pt, void *virt)
+{
+	(void)pt;
+	(void)virt;
+	return 0;
+}
+__attribute__((weak)) void mem_flush_tlb_single_bridge(unsigned long addr)
+{
+	(void)addr;
+}
+__attribute__((weak)) void mem_barrier_bridge(void) {}
 __attribute__((weak)) void *ihk_mc_map_virtual(unsigned long phys,
 		unsigned long size, unsigned long attr)
 {
@@ -141006,8 +142454,12 @@ unsigned long x86_arch_mem_virt_to_phys_bridge(void *addr)
 {
 	return (unsigned long)addr;
 }
+void *x86_rust_stub_init_pt_override;
+void *(*x86_rust_stub_phys_to_virt_override)(unsigned long);
 void *x86_arch_mem_phys_to_virt_bridge(unsigned long phys)
 {
+	if (x86_rust_stub_phys_to_virt_override)
+		return x86_rust_stub_phys_to_virt_override(phys);
 	return (void *)phys;
 }
 void x86_early_alloc_panic_bridge(int reason)
@@ -141028,9 +142480,18 @@ void **x86_init_page_table_init_pt_slot_bridge(void)
 {
 	return &rust_stub_init_pt;
 }
+void *x86_page_table_init_pt_bridge(void)
+{
+	return x86_rust_stub_init_pt_override ?
+		x86_rust_stub_init_pt_override : rust_stub_init_pt;
+}
 void **x86_init_page_table_boot_pt_slot_bridge(void)
 {
 	return &rust_stub_boot_pt;
+}
+void *x86_page_table_boot_pt_bridge(void)
+{
+	return rust_stub_boot_pt;
 }
 int *x86_init_page_table_loaded_slot_bridge(void)
 {
@@ -141201,14 +142662,44 @@ void x86_map_fixed_area_log_bridge(unsigned long phys,
 	(void)size;
 	(void)virt;
 }
+unsigned long x86_pt_virt_to_phys_bridge(void *addr)
+{
+	return (unsigned long)addr;
+}
+void *(*x86_rust_stub_pt_phys_to_virt_override)(unsigned long);
+void *x86_pt_phys_to_virt_bridge(unsigned long phys)
+{
+	if (x86_rust_stub_pt_phys_to_virt_override)
+		return x86_rust_stub_pt_phys_to_virt_override(phys);
+	return (void *)phys;
+}
+int x86_rust_stub_pt_print_log_count;
+int x86_rust_stub_pt_print_last_event;
+int x86_rust_stub_pt_print_last_level;
+void x86_pt_print_log_bridge(int event, int level,
+		unsigned long value, int index)
+{
+	(void)value;
+	(void)index;
+	x86_rust_stub_pt_print_log_count++;
+	x86_rust_stub_pt_print_last_event = event;
+	x86_rust_stub_pt_print_last_level = level;
+}
+int x86_rust_stub_pt_set_page_calls;
+int x86_rust_stub_pt_set_page_rc;
+void *x86_rust_stub_pt_set_page_pt;
+unsigned long x86_rust_stub_pt_set_page_virt;
+unsigned long x86_rust_stub_pt_set_page_phys;
+unsigned long x86_rust_stub_pt_set_page_attr;
 int x86_pt_set_page_bridge(void *pt, unsigned long virt,
 		unsigned long phys, unsigned long attr)
 {
-	(void)pt;
-	(void)virt;
-	(void)phys;
-	(void)attr;
-	return 0;
+	x86_rust_stub_pt_set_page_calls++;
+	x86_rust_stub_pt_set_page_pt = pt;
+	x86_rust_stub_pt_set_page_virt = virt;
+	x86_rust_stub_pt_set_page_phys = phys;
+	x86_rust_stub_pt_set_page_attr = attr;
+	return x86_rust_stub_pt_set_page_rc;
 }
 void x86_move_flush_tlb_bridge(void)
 {
@@ -141325,6 +142816,10 @@ unsigned long shmid_index[512];
 __attribute__((weak)) unsigned long attr_mask =
 	0x01UL | 0x02UL | 0x04UL | 0x40UL | (1UL << 11) |
 	0x8000000000000000UL;
+__attribute__((weak)) unsigned long x86_attr_mask_bridge(void)
+{
+	return attr_mask;
+}
 __attribute__((weak)) int zero_at_free = 1;
 __attribute__((weak)) char *syscall_name[2048];
 __attribute__((weak)) void xpmem_id_wrapper_bug_on(int condition)
@@ -141721,6 +143216,12 @@ check_module_rust_object()
 
 ihk_core_allowed_undefined='^[[:space:]]+U (ihk_core_ikc_free_pages_bridge|ihk_core_ikc_get_free_pages_bridge|ihk_core_ikc_get_processor_id_bridge|ihk_core_ikc_kfree_bridge|ihk_core_ikc_kmalloc_bridge|ihk_core_ikc_local_irq_restore_bridge|ihk_core_ikc_local_irq_save_bridge|ihk_core_ikc_register_interrupt_handler_bridge|ihk_core_ikc_smp_processor_id_bridge|ihk_core_ikc_spin_lock_init_bridge|ihk_core_ikc_spin_lock_irqsave_bridge|ihk_core_ikc_spin_unlock_irqrestore_bridge|ihk_core_ikc_unregister_interrupt_handler_bridge|ihk_core_ikc_virt_to_phys_bridge|ihk_core_ikc_wait_init_bridge|ihk_core_ikc_wait_master_bridge|ihk_core_ikc_wake_master_bridge|ihk_core_pagealloc_free_pages_bridge|ihk_core_pagealloc_get_free_pages_bridge|ihk_core_pagealloc_kfree_bridge|ihk_core_pagealloc_kzalloc_bridge|ihk_device_map_virtual|ihk_device_unmap_virtual|ihk_host_os_get_ikc_handler|ihk_ikc_call_master_packet_handler|ihk_ikc_get_listener_entry|ihk_ikc_get_listener_lock|ihk_ikc_get_master_wait_list|ihk_ikc_get_master_wait_lock|ihk_ikc_linux_get_os_from_work|ihk_ikc_linux_init_work_data|ihk_ikc_send_interrupt|ihk_os_get_ikc_channel_list|ihk_os_get_ikc_channel_lock|ihk_os_get_master_channel|ihk_os_get_regular_channel|ihk_os_get_unique_channel_id|ihk_os_map_memory|ihk_os_set_regular_channel|ihk_os_to_dev|ihk_os_unmap_memory|printk)$'
 ihk_core_allowed_undefined="${ihk_core_allowed_undefined%\)\$}|ihk_core_arch_master_handler_bridge|ihk_core_atomic_inc_return_bridge|ihk_core_device_map_memory_bridge|ihk_core_device_map_virtual_bridge|ihk_core_host_ikc_ready_failed_bridge|ihk_core_ikc_channel_alloc_bridge|ihk_core_ikc_channel_set_cpu_bridge|ihk_core_ikc_current_cpu_bridge|ihk_core_ikc_destroy_channel_bridge|ihk_core_ikc_enable_channel_bridge|ihk_core_ikc_init_master_desc_bridge|ihk_core_ikc_init_work_bridge|ihk_core_ikc_issue_interrupt_bridge|ihk_core_ikc_publish_master_queues_bridge|ihk_core_ikc_remote_os_bridge|ihk_core_ikc_schedule_work_on_bridge|ihk_core_ikc_send_bridge|ihk_core_ikc_send_read_cpu_bridge|ihk_core_ikc_system_exit_bridge|ihk_core_ikc_system_init_bridge|ihk_core_ikc_work_alloc_bridge|ihk_core_num_possible_cpus_bridge|ihk_core_os_get_special_address_bridge|ihk_core_os_wait_for_status_bridge)$"
+ihk_core_allowed_undefined="${ihk_core_allowed_undefined%\)\$}|ihk_core_boot_find_kmsg_bridge|ihk_core_boot_index_bridge|ihk_core_boot_kmsg_dec_bridge|ihk_core_boot_kmsg_inc_bridge|ihk_core_boot_kmsg_lock_bridge|ihk_core_boot_kmsg_unlock_bridge|ihk_core_boot_master_finalize_bridge|ihk_core_boot_master_init_bridge|ihk_core_boot_notifier_down_bridge|ihk_core_boot_notifier_up_bridge|ihk_core_boot_notify_bridge|ihk_core_boot_ops_bridge|ihk_core_boot_shutdown_bridge|ihk_core_notifier_log_bridge|ihk_core_os_notifiers_head_bridge|ihk_core_os_user_call_lock_bridge|ihk_core_os_user_call_unlock_bridge|ihk_core_shutdown_log_bridge|ihk_core_shutdown_notify_bridge|ihk_core_shutdown_release_kmsg_bridge|ihk_core_shutdown_send_nmi_delay_bridge|ihk_core_shutdown_status_bridge|ihk_core_shutdown_thaw_bridge|ihk_core_shutdown_wait_for_status_bridge)$"
+ihk_core_allowed_undefined="${ihk_core_allowed_undefined%\)\$}|ihk_core_page_mask_bridge|ihk_core_page_size_bridge|ihk_core_os_load_file_direct_bridge|ihk_core_os_load_memory_direct_bridge|ihk_core_os_register_handler_direct_bridge|ihk_core_os_unregister_handler_direct_bridge)$"
+ihk_core_allowed_undefined="${ihk_core_allowed_undefined%\)\$}|ihk_core_os_get_special_addr_direct_bridge|ihk_core_os_issue_interrupt_direct_bridge|ihk_core_os_map_memory_direct_bridge|ihk_core_os_send_nmi_direct_bridge|ihk_core_os_unmap_memory_direct_bridge|ihk_core_os_wait_for_status_direct_bridge)$"
+ihk_core_allowed_undefined="${ihk_core_allowed_undefined%\)\$}|ihk_core_device_map_memory_direct_bridge|ihk_core_device_map_virtual_direct_bridge|ihk_core_device_unmap_memory_direct_bridge|ihk_core_device_unmap_virtual_direct_bridge)$"
+ihk_core_allowed_undefined="${ihk_core_allowed_undefined%\)\$}|ihk_core_dev_data_invalid_bridge|ihk_core_dev_data_slot_bridge|ihk_core_os_data_lock_bridge|ihk_core_os_data_slot_bridge|ihk_core_os_data_unlock_bridge|ihk_core_os_max_minor_bridge|ihk_core_os_max_minor_current_bridge)$"
+ihk_core_allowed_undefined="${ihk_core_allowed_undefined%\)\$}|ihk_core_device_get_cpu_topology_direct_bridge|ihk_core_device_get_node_topology_direct_bridge|ihk_core_device_linux_cpu_to_hw_id_direct_bridge|ihk_core_os_get_cpu_info_direct_bridge|ihk_core_os_get_memory_info_direct_bridge|ihk_core_setup_rusage_bridge)$"
 mcctrl_allowed_undefined='^[[:space:]]+U (mcctrl_arch_copy_from_user_bridge|mcctrl_arch_device_map_memory_bridge|mcctrl_arch_device_map_virtual_bridge|mcctrl_arch_device_unmap_memory_bridge|mcctrl_arch_device_unmap_virtual_bridge|mcctrl_arch_first_vma_start_bridge|mcctrl_arch_get_user_sp_bridge|mcctrl_arch_is_err_value_bridge|mcctrl_arch_kallsyms_lookup_bridge|mcctrl_arch_mmap_write_lock_bridge|mcctrl_arch_mmap_write_unlock_bridge|mcctrl_arch_mutex_lock_reserve_bridge|mcctrl_arch_mutex_unlock_reserve_bridge|mcctrl_arch_os_to_dev_bridge|mcctrl_arch_pr_err_copy_from_user_bridge|mcctrl_arch_read_fs_base_bridge|mcctrl_arch_reserve_user_space_common_bridge|mcctrl_arch_restore_tls_bridge|mcctrl_arch_set_user_sp_bridge|mcctrl_arch_vdso_data_bridge|mcctrl_arch_vdso_size_bridge|mcctrl_arch_vgtod_virt_bridge|mcctrl_arch_virt_to_phys_bridge|mcctrl_arch_wmb_bridge|mcctrl_binfmt_alloc_atomic_bridge|mcctrl_binfmt_alloc_kernel_bridge|mcctrl_binfmt_argc_bridge|mcctrl_binfmt_buf_bridge|mcctrl_binfmt_change_interp_bridge|mcctrl_binfmt_copy_interp_bridge|mcctrl_binfmt_copy_mcexec_bridge|mcctrl_binfmt_dispatch_bridge|mcctrl_binfmt_envc_bridge|mcctrl_binfmt_free_bridge|mcctrl_binfmt_fput_bridge|mcctrl_binfmt_get_user_arg_page_bridge|mcctrl_binfmt_inc_argc_bridge|mcctrl_binfmt_insert_bridge|mcctrl_binfmt_kmap_atomic_bridge|mcctrl_binfmt_kunmap_atomic_bridge|mcctrl_binfmt_open_exec_bridge|mcctrl_binfmt_os_alive_bridge|mcctrl_binfmt_p_bridge|mcctrl_binfmt_path_bridge|mcctrl_binfmt_pr_alloc_pbuf_bridge|mcctrl_binfmt_ptr_is_err_bridge|mcctrl_binfmt_put_page_bridge|mcctrl_binfmt_remove_arg_zero_bridge|mcctrl_binfmt_unregister_bridge|mcctrl_futex_get_user_u32_bridge|mcctrl_futex_pagefault_disable_bridge|mcctrl_futex_pagefault_enable_bridge|mcctrl_preempt_disable_bridge|mcctrl_preempt_enable_bridge)$'
 mcctrl_allowed_undefined="${mcctrl_allowed_undefined%\)\$}|mcctrl_futex_atomic_access_ok_bridge|mcctrl_futex_atomic_cmpxchg_inatomic_bridge|mcctrl_futex_atomic_op_inuser_bridge)$"
 mcctrl_allowed_undefined="${mcctrl_allowed_undefined%\)\$}|mcctrl_cpumap_clear_bridge|mcctrl_cpumap_set_cpu_bridge|mcctrl_cpumap_test_cpu_bridge)$"
@@ -141739,6 +143240,38 @@ mcctrl_allowed_undefined="${mcctrl_allowed_undefined%\)\$}|mcctrl_sysfs_saved_cp
 mcctrl_allowed_undefined="${mcctrl_allowed_undefined%\)\$}|mcctrl_sysfs_usrdata_os_bridge|mcctrl_sysfs_warn_missing_usrdata_bridge)$"
 mcctrl_allowed_undefined="${mcctrl_allowed_undefined%\)\$}|ihk_host_os_get_usrdata|ihk_host_os_set_usrdata|ihk_host_validate_os|ihk_ikc_channel_set_cpu|ihk_ikc_destroy_channel|ihk_ikc_get_processor_id|ihk_ikc_listen_port|ihk_ikc_release_packet|ihk_ikc_send|ihk_os_eventfd|ihk_os_get_cpu_info|ihk_os_get_memory_info|mcctrl_futex_dispatch_bridge|mcctrl_futex_set_resp_bridge|mcctrl_futex_timeout_bridge|mcctrl_futex_wake|mcctrl_ikc_alloc_channels_bridge|mcctrl_ikc_alloc_ikc2linux_bridge|mcctrl_ikc_alloc_usrdata_bridge|mcctrl_ikc_channel_port_bridge|mcctrl_ikc_channel_remote_os_bridge|mcctrl_ikc_channel_send_read_cpu_bridge|mcctrl_ikc_channel_send_write_cpu_bridge|mcctrl_ikc_cpu_info_n_cpus_bridge|mcctrl_ikc_desc_cmpxchg_status_bridge|mcctrl_ikc_desc_err_bridge|mcctrl_ikc_desc_free_addr_bridge|mcctrl_ikc_desc_free_addrs_count_bridge|mcctrl_ikc_desc_free_at_put_bridge|mcctrl_ikc_desc_init_waitqueue_bridge|mcctrl_ikc_desc_list_add_bridge|mcctrl_ikc_desc_list_del_bridge|mcctrl_ikc_desc_refcount_dec_and_test_bridge|mcctrl_ikc_desc_refcount_set_bridge|mcctrl_ikc_desc_set_err_bridge|mcctrl_ikc_desc_set_free_addr_bridge|mcctrl_ikc_desc_set_free_addrs_count_bridge|mcctrl_ikc_desc_set_free_at_put_bridge|mcctrl_ikc_desc_set_status_bridge|mcctrl_ikc_desc_wake_bridge|mcctrl_ikc_drain_part_exec_list_bridge|mcctrl_ikc_drain_wakeup_descs_bridge|mcctrl_ikc_free_channels_bridge|mcctrl_ikc_free_ikc2linux_bridge|mcctrl_ikc_info_channel_bridge|mcctrl_ikc_info_set_packet_handler_bridge|mcctrl_ikc_kfree_bridge|mcctrl_ikc_kmalloc_atomic_bridge|mcctrl_ikc_log_alloc_channels_failed_bridge|mcctrl_ikc_log_alloc_ikc2linux_failed_bridge|mcctrl_ikc_log_alloc_usrdata_failed_bridge|mcctrl_ikc_log_desc_alloc_failed_bridge|mcctrl_ikc_log_invalid_cpu_count_bridge|mcctrl_ikc_log_invalid_linux_cpu_bridge|mcctrl_ikc_log_invalid_source_cpu_bridge|mcctrl_ikc_log_missing_cpu_mem_bridge|mcctrl_ikc_log_no_channel_bridge|mcctrl_ikc_log_os_missing_bridge|mcctrl_ikc_log_send_failed_bridge|mcctrl_ikc_log_unknown_packet_bridge|mcctrl_ikc_log_usrdata_missing_bridge|mcctrl_ikc_log_warn_packet_bridge|mcctrl_ikc_nr_cpu_ids_bridge|mcctrl_ikc_usrdata_channel_desc_bridge|mcctrl_ikc_usrdata_ikc2linux_desc_bridge|mcctrl_ikc_usrdata_init_sync_bridge|mcctrl_ikc_usrdata_num_channels_bridge|mcctrl_ikc_usrdata_set_channel_desc_bridge|mcctrl_ikc_usrdata_set_ikc2linux_desc_bridge|mcctrl_ikc_usrdata_set_info_bridge|mcctrl_ikc_wait_busy_bridge|mcctrl_ikc_wait_interruptible_bridge|mcctrl_ikc_wait_timeout_bridge|mcctrl_ikc_wakeup_desc_size_bridge|mcexec_syscall|procfsm_packet_handler|sysfsm_packet_handler)$"
 smp_allowed_undefined='^[[:space:]]+U (ihk_smp_calc_tsc_ratio_bridge|ihk_smp_tsc_khz_bridge|ihk_smp_x2apic_msr_bridge)$'
+smp_allowed_undefined="${smp_allowed_undefined%\)\$}|ihk_smp_builtin_interrupt_handlers_head_bridge|ihk_smp_control_offsets_bridge|ihk_smp_cpu_topology_list_head_bridge|ihk_smp_err_ptr_einval_bridge|ihk_smp_interrupt_handler_offsets_bridge|ihk_smp_irq_handled_bridge)$"
+smp_allowed_undefined="${smp_allowed_undefined%\)\$}|ihk_smp_irq_no_handler_log_bridge|ihk_smp_list_poison1_bridge|ihk_smp_list_poison2_bridge|ihk_smp_node_topology_list_head_bridge|ihk_smp_nr_node_ids_bridge|ihk_smp_spin_lock_irqsave_bridge|ihk_smp_spin_unlock_irqrestore_bridge|ihk_smp_topology_lookup_offsets_bridge)$"
+smp_allowed_undefined="${smp_allowed_undefined%\)\$}|ihk_smp_get_special_addr_bridge|ihk_smp_map_virtual_bridge|ihk_smp_os_map_memory_bridge|ihk_smp_page_size_bridge|ihk_smp_unmap_memory_bridge|ihk_smp_unmap_virtual_bridge)$"
+smp_allowed_undefined="${smp_allowed_undefined%\)\$}|ihk_smp_copy_from_user_bridge|ihk_smp_copy_to_user_bridge|ihk_smp_cpu_available_status_bridge|ihk_smp_cpu_req_offsets_bridge|ihk_smp_cpu_req_size_bridge|ihk_smp_cpu_status_offset_bridge|ihk_smp_cpu_stride_bridge|ihk_smp_cpus_bridge)$"
+smp_allowed_undefined="${smp_allowed_undefined%\)\$}|ihk_smp_device_query_cpu_log_bridge|ihk_smp_int_size_bridge|ihk_smp_kfree_bridge|ihk_smp_kmalloc_bridge|ihk_smp_max_cpus_bridge|ihk_smp_os_query_cpu_log_bridge)$"
+smp_allowed_undefined="${smp_allowed_undefined%\)\$}|ihk_smp_buildid_bridge|ihk_smp_buildid_size_bridge|ihk_smp_builtin_os_reg_data_bridge|ihk_smp_create_os_log_bridge|ihk_smp_debug_start_bridge|ihk_smp_issue_interrupt_bridge|ihk_smp_kernel_args_size_bridge)$"
+smp_allowed_undefined="${smp_allowed_undefined%\)\$}|ihk_smp_kzalloc_bridge|ihk_smp_os_data_size_bridge|ihk_smp_register_os_data_size_bridge|ihk_smp_send_multi_intr_bridge|ihk_smp_set_kargs_log_bridge|ihk_smp_spin_lock_init_bridge)$"
+smp_allowed_undefined="${smp_allowed_undefined%\)\$}|ihk_smp_cpu_assigned_status_bridge|ihk_smp_cpu_ikc_map_cpu_offset_bridge|ihk_smp_cpu_online_bridge|ihk_smp_cpu_os_offset_bridge|ihk_smp_cpu_present_bridge|ihk_smp_device_query_mem_log_bridge)$"
+smp_allowed_undefined="${smp_allowed_undefined%\)\$}|ihk_smp_fake_chunks_bridge|ihk_smp_fake_chunks_count_bridge|ihk_smp_free_mem_query_offsets_bridge|ihk_smp_ikc_req_offsets_bridge|ihk_smp_ikc_req_size_bridge|ihk_smp_mem_free_chunks_head_bridge)$"
+smp_allowed_undefined="${smp_allowed_undefined%\)\$}|ihk_smp_mem_req_offsets_bridge|ihk_smp_mem_req_size_bridge|ihk_smp_mem_used_chunks_head_bridge|ihk_smp_os_check_ikc_map_bridge|ihk_smp_os_get_ikc_map_log_bridge|ihk_smp_os_query_mem_log_bridge)$"
+smp_allowed_undefined="${smp_allowed_undefined%\)\$}|ihk_smp_os_set_ikc_map_log_bridge|ihk_smp_req_str_maxlen_bridge|ihk_smp_set_ikc_map_offsets_bridge|ihk_smp_size_t_size_bridge|ihk_smp_used_mem_query_offsets_bridge)$"
+smp_allowed_undefined="${smp_allowed_undefined%\)\$}|ihk_smp_apic_esr_bridge|ihk_smp_arch_exit_free_pages_bridge|ihk_smp_arch_exit_free_trampoline_bridge|ihk_smp_arch_exit_ident_npages_order_bridge|ihk_smp_arch_exit_ident_page_table_virt_bridge|ihk_smp_arch_exit_iounmap_bridge)$"
+smp_allowed_undefined="${smp_allowed_undefined%\)\$}|ihk_smp_arch_exit_trampoline_order_bridge|ihk_smp_arch_exit_trampoline_page_bridge|ihk_smp_arch_exit_trampoline_va_bridge|ihk_smp_arch_exit_using_linux_trampoline_bridge|ihk_smp_boot_cpu_physical_apicid_bridge)$"
+smp_allowed_undefined="${smp_allowed_undefined%\)\$}|ihk_smp_apic_assert_init_value_bridge|ihk_smp_apic_deassert_init_value_bridge|ihk_smp_preempt_disable_bridge|ihk_smp_preempt_enable_bridge|ihk_smp_reset_cpu_apic_integrated_bridge|ihk_smp_reset_cpu_apic_read_bridge)$"
+smp_allowed_undefined="${smp_allowed_undefined%\)\$}|ihk_smp_reset_cpu_apic_write_bridge|ihk_smp_reset_cpu_delay_bridge|ihk_smp_reset_cpu_get_maxlvt_bridge|ihk_smp_reset_cpu_icr_write_bridge|ihk_smp_reset_cpu_log_bridge|ihk_smp_reset_cpu_wait_bridge)$"
+smp_allowed_undefined="${smp_allowed_undefined%\)\$}|ihk_smp_wakeup_apic_wakeup_available_bridge|ihk_smp_wakeup_apic_wakeup_bridge|ihk_smp_wakeup_clear_init_deasserted_bridge|ihk_smp_wakeup_non_unique_apic_bridge)$"
+smp_allowed_undefined="${smp_allowed_undefined%\)\$}|ihk_smp_wakeup_setup_warm_reset_vector_bridge|ihk_smp_wakeup_top_log_bridge|ihk_smp_wakeup_via_init_bridge)$"
+smp_allowed_undefined="${smp_allowed_undefined%\)\$}|ihk_smp_perf_enabled_bridge|ihk_smp_perf_extra_reg_max_bridge|ihk_smp_perf_extra_regs_bridge|ihk_smp_perf_hw_cache_event_ids_bridge|ihk_smp_perf_hw_cache_event_ids_bytes_bridge)$"
+smp_allowed_undefined="${smp_allowed_undefined%\)\$}|ihk_smp_perf_hw_cache_extra_regs_bridge|ihk_smp_perf_hw_cache_extra_regs_bytes_bridge|ihk_smp_perf_hw_event_map_bridge|ihk_smp_perf_hw_event_map_bytes_bridge|ihk_smp_perf_log_bridge|ihk_smp_perf_offsets_bridge)$"
+smp_allowed_undefined="${smp_allowed_undefined%\)\$}|ihk_smp_query_status_initial_log_bridge|ihk_smp_query_status_log_bridge|ihk_smp_query_status_offsets_bridge|ihk_smp_query_status_restore_trampoline_bridge|ihk_smp_query_status_setup_monitor_bridge)$"
+smp_allowed_undefined="${smp_allowed_undefined%\)\$}|ihk_smp_os_param_status_bridge|ihk_smp_os_status_bridge|ihk_smp_setup_trampoline_apicid_bridge|ihk_smp_setup_trampoline_log_bridge|ihk_smp_setup_trampoline_offsets_bridge)$"
+smp_allowed_undefined="${smp_allowed_undefined%\)\$}|ihk_smp_ikc_irq_work_func_bridge|ihk_smp_ident_page_table_bridge|ihk_smp_init_level4_pgt_bridge|ihk_smp_linux_kernel_pgt_phys_bridge|ihk_smp_linux_trampoline_backup_bridge)$"
+smp_allowed_undefined="${smp_allowed_undefined%\)\$}|ihk_smp_linux_work_irq_enabled_bridge|ihk_smp_linux_work_irq_vector_bridge|ihk_smp_nr_cpu_ids_bridge|ihk_smp_os_param_phys_bridge|ihk_smp_page_offset_base_bridge)$"
+smp_allowed_undefined="${smp_allowed_undefined%\)\$}|ihk_smp_setup_trampoline_raised_list_phys_bridge|ihk_smp_smp_irq_bridge|ihk_smp_trampoline_data_bridge|ihk_smp_trampoline_size_bridge|ihk_smp_trampoline_va_bridge)$"
+smp_allowed_undefined="${smp_allowed_undefined%\)\$}|ihk_smp_using_linux_trampoline_bridge|ihk_smp_large_page_bridge|ihk_smp_large_page_mask_bridge|ihk_smp_map_kernel_start_bridge|ihk_smp_map_st_start_bridge)$"
+smp_allowed_undefined="${smp_allowed_undefined%\)\$}|ihk_smp_kernel_map_len_bridge|ihk_smp_ptl2_shift_bridge|ihk_smp_setup_startup_alloc_page_bridge|ihk_smp_setup_startup_identity_len_bridge|ihk_smp_setup_startup_log_bridge)$"
+smp_allowed_undefined="${smp_allowed_undefined%\)\$}|ihk_smp_setup_startup_map_kernel_bridge|ihk_smp_setup_startup_map_virtual_bridge|ihk_smp_setup_startup_offsets_bridge|ihk_smp_setup_startup_page_phys_bridge)$"
+smp_allowed_undefined="${smp_allowed_undefined%\)\$}|ihk_smp_setup_startup_unmap_virtual_bridge|ihk_smp_startup_data_bridge|ihk_smp_startup_data_len_bridge|ihk_smp_trampoline_phys_bridge)$"
+smp_allowed_undefined="${smp_allowed_undefined%\)\$}|ihk_smp_apic_dest_physical_bridge|ihk_smp_apic_dm_nmi_bridge|ihk_smp_legacy_ipi_bridge|ihk_smp_local_irq_restore_bridge|ihk_smp_local_irq_save_bridge)$"
+smp_allowed_undefined="${smp_allowed_undefined%\)\$}|ihk_smp_multi_intr_vector_bridge|ihk_smp_nmi_vector_bridge|ihk_smp_os_cpu_count_bridge|ihk_smp_os_hw_ids_bridge|ihk_smp_set_multi_intr_mode_bridge)$"
+smp_allowed_undefined="${smp_allowed_undefined%\)\$}|ihk_smp_set_nmi_mode_bridge|ihk_smp_x2apic_enabled_bridge|ihk_smp_x2apic_wait_bridge|ihk_smp_x2apic_write_bridge)$"
+smp_allowed_undefined="${smp_allowed_undefined%\)\$}|ihk_smp_dcache_flush_bridge|ihk_smp_map_virtual_list_offsets_bridge|ihk_smp_phys_to_virt_bridge|ihk_smp_rb_erase_bridge|ihk_smp_rb_insert_color_bridge|ihk_smp_rb_link_node_bridge|ihk_smp_rb_next_bridge|ihk_smp_rb_prev_bridge)$"
 
 check_module_rust_object "${tmpdir}/out/ihk_core_helpers.o" "${ihk_core_allowed_undefined}"
 check_module_rust_object "${tmpdir}/out/mcctrl_helpers.o" "${mcctrl_allowed_undefined}"
@@ -142220,17 +143753,38 @@ grep -Eq ' T ihk_core_delete_kmsg_buf_body_result$' "${tmpdir}/out/ihk_core_help
 grep -Eq ' T ihk_core_release_kmsg_buf_body_result$' "${tmpdir}/out/ihk_core_helpers.global"
 grep -Eq ' T ihk_core_device_get_buildid_body_result$' "${tmpdir}/out/ihk_core_helpers.global"
 grep -Eq ' T ihk_core_device_op_body_result$' "${tmpdir}/out/ihk_core_helpers.global"
+for sym in ihk_os_boot ihk_os_shutdown ihk_os_register_user_call_handlers \
+	ihk_os_unregister_user_call_handlers ihk_dma_request \
+	ihk_host_register_os_notifier ihk_host_deregister_os_notifier \
+	ihk_os_load_memory ihk_os_load_file \
+	ihk_os_register_interrupt_handler ihk_os_unregister_interrupt_handler \
+	ihk_os_wait_for_status ihk_os_get_special_address \
+	ihk_os_map_memory ihk_os_unmap_memory ihk_os_issue_interrupt \
+	ihk_os_send_nmi ihk_device_map_memory ihk_device_unmap_memory \
+	ihk_device_map_virtual ihk_device_unmap_virtual \
+	ihk_os_get_memory_info ihk_os_get_cpu_info ihk_os_get_rusage \
+	ihk_os_to_dev ihk_host_find_dev ihk_host_find_os \
+	ihk_host_validate_os ihk_host_os_set_usrdata \
+	ihk_host_os_get_usrdata ihk_host_os_get_index \
+	ihk_os_set_kernel_call_handlers ihk_os_clear_kernel_call_handlers \
+	ihk_os_get_linux_device ihk_device_get_cpu_topology \
+	ihk_device_get_node_topology ihk_device_linux_cpu_to_hw_id; do
+	grep -Eq " T ${sym}$" "${tmpdir}/out/ihk_core_helpers.global"
+done
 for sym in rdtsc read_tsc mb rmb wmb smp_mb smp_rmb smp_wmb arch_barrier \
 	smp_load_acquire_ulong smp_load_acquire_uint smp_load_acquire_int \
 	smp_load_acquire_ptr smp_store_release_ulong smp_store_release_uint \
 	smp_store_release_int \
 	CVAL CVAL2 xgetbv xsetbv wrmsr rdpmc rdmsr ihk_mc_mb \
+	lapic_timer_enable lapic_timer_disable lapic_ack x2apic_is_enabled \
 	ihk_mc_get_smp_handler_irq \
 	ihk_mc_get_interrupt_id \
 	ihk_mc_interrupt_cpu \
 	ihk_mc_delay_us \
 	call_ap_func \
 	__show_stack show_context_stack \
+	ihk_mc_boot_cpu \
+	mcexec_v10_trace_enter_user release_runq_lock \
 	arch_clone_thread arch_flush_icache_all \
 	ihk_mc_init_user_tlsbase \
 		ihk_mc_set_page_fault_handler \
@@ -142259,7 +143813,39 @@ do
 done
 for sym in \
 	sys_getpid sys_getppid sys_gettid sys_get_cpu_id \
-	sys_get_system sys_linux_mlock sys_linux_spawn \
+	sys_get_system sys_exit sys_exit_group sys_clone sys_wait4 sys_waitid \
+	sys_mmap sys_munmap sys_madvise sys_migrate_pages \
+	sys_remap_file_pages sys_mremap sys_msync \
+	sys_settimeofday sys_swapout sys_suspend_threads sys_resume_threads \
+	sys_util_migrate_inter_kernel sys_util_indicate_clone \
+	sys_brk sys_set_tid_address sys_set_robust_list sys_time \
+	sys_clock_gettime sys_gettimeofday sys_nanosleep sys_sched_yield \
+	sys_pause sys_getrusage \
+	sys_sched_setparam sys_sched_getparam \
+	sys_sched_setscheduler sys_sched_getscheduler \
+	sys_sched_get_priority_max \
+	sys_sched_get_priority_min sys_sched_rr_get_interval \
+	sys_sched_setaffinity sys_sched_getaffinity \
+	sys_setitimer sys_getitimer \
+	sys_epoll_pwait sys_ppoll sys_pselect6 \
+	sys_process_vm_writev sys_process_vm_readv \
+	sys_rt_sigprocmask sys_rt_sigpending sys_signalfd sys_signalfd4 \
+	sys_rt_sigqueueinfo sys_rt_sigsuspend sys_rt_sigaction \
+	sys_sigaltstack \
+	sys_kill sys_tgkill sys_tkill \
+	sys_setresuid sys_setreuid sys_setuid sys_setfsuid \
+	sys_setresgid sys_setregid sys_setgid sys_setfsgid \
+	sys_getuid sys_geteuid sys_getresuid \
+	sys_getgid sys_getegid sys_getresgid \
+	sys_read sys_ioctl sys_open sys_openat sys_close sys_fcntl \
+	sys_set_mempolicy sys_mbind sys_get_mempolicy \
+	sys_rt_sigreturn \
+	sys_times sys_setpgid sys_setrlimit sys_getrlimit sys_prlimit64 \
+	sys_sysinfo sys_mlock sys_munlock sys_mlockall sys_munlockall sys_getcpu \
+	arch_setup_vdso arch_map_vdso \
+	begin_free_pages_pending finish_free_pages_pending \
+	ihk_mc_map_virtual ihk_mc_unmap_virtual \
+	sys_linux_mlock sys_linux_spawn \
 	sys_util_register_desc add_process_memory_range split_process_memory_range \
 	join_process_memory_range \
 	lookup_process_memory_range \
@@ -142279,7 +143865,7 @@ for sym in \
 	destroy_thread hold_sigcommon hold_thread release_sigcommon release_thread \
 	flush_process_memory free_process_memory_ranges \
 	free_all_process_memory_range release_process release_process_vm \
-	thread_unlock
+	thread_unlock mem_init
 do
 	grep -Eq " T ${sym}$" "${tmpdir}/out/rust.global"
 done
@@ -142447,18 +144033,38 @@ grep -Eq ' T ihk_smp_os_notify_hungup_body_result$' "${tmpdir}/out/smp_driver_he
 grep -Eq ' T ihk_smp_os_get_memory_info_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_os_get_cpu_info_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_os_get_num_numa_nodes_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_os_notify_hungup$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_os_get_memory_info$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_os_get_cpu_info$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_os_get_num_numa_nodes$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_os_get_num_cpus_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_os_get_num_cpus$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_os_query_cpu$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_os_set_kargs_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_os_set_kargs$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_set_multi_intr_mode$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_set_nmi_mode$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_os_debug_request_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_os_debug_request$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_os_freeze_thaw_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_os_freeze$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_os_thaw$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_create_os_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_create_os$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_destroy_os_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_destroy_os$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_device_debug_request_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_debug_request$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_get_dma_channel_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_get_dma_channel$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_unmap_virtual_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_direct_unmap_virtual_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_unmap_virtual$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_map_virtual_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_direct_map_virtual_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_map_virtual$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_get_buildid_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_os_get_buildid$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_os_vtop_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_os_load_mem_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_adjust_entry_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
@@ -142473,15 +144079,20 @@ grep -Eq ' T ihk_smp_arch_dcache_flush_body_result$' "${tmpdir}/out/smp_driver_h
 grep -Eq ' T smp_ihk_arch_dcache_flush$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_setup_trampoline_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_os_setup_startup_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_setup_trampoline$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_os_setup_startup$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_arch_init_trampoline_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_arch_init_linux_work_tail_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_init_ident_page_table_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_collect_topology_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_setup_warm_reset_vector_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_reset_cpu_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T ihk_smp_reset_cpu$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_wakeup_secondary_cpu_via_init_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_wakeup_secondary_cpu_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_wakeup_secondary_cpu$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_arch_exit_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_arch_exit$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_calc_ns_per_tsc_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T calc_ns_per_tsc$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' U ihk_smp_calc_tsc_ratio_bridge$' "${tmpdir}/out/smp_driver_helpers.global"
@@ -142494,18 +144105,32 @@ grep -Eq ' T ihk_smp_vector_set_needed_result$' "${tmpdir}/out/smp_driver_helper
 grep -Eq ' T ihk_smp_vector_release_value_result$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_os_issue_interrupt_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_os_broadcast_interrupt_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_os_send_nmi$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_os_send_multi_intr$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_os_query_status$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_os_issue_interrupt$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_check_ikc_map_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T smp_ihk_os_check_ikc_map$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_arch_get_perf_event_map_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_arch_get_perf_event_map$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_get_buildid_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_device_get_num_cpus_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_get_num_cpus$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_device_query_cpu_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_query_cpu$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_os_query_cpu_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_os_get_ikc_map_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_os_get_ikc_map$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_os_set_ikc_map_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_os_set_ikc_map$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_query_mem_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_os_query_mem$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_query_mem$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T __mem_chunk_insert$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_get_cpu_topology_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_get_node_topology_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_get_cpu_topology$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_get_node_topology$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_free_info_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_read_long_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_read_bitmap_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
@@ -142514,14 +144139,19 @@ grep -Eq ' T ihk_smp_file_readable_body_result$' "${tmpdir}/out/smp_driver_helpe
 grep -Eq ' T ihk_smp_read_file_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_write_cpu_sys_file_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_linux_cpu_to_hw_id_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_linux_cpu_to_hw_id$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_init_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_exit_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_module_init_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_module_exit_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_ikc_irq_work_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_ikc_irq_work_func$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_os_register_handler_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_os_unregister_handler_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T ihk_smp_irq_call_handlers_body_result$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_os_register_handler$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_os_unregister_handler$' "${tmpdir}/out/smp_driver_helpers.global"
+grep -Eq ' T smp_ihk_irq_call_handlers$' "${tmpdir}/out/smp_driver_helpers.global"
 grep -Eq ' T round_up$' "${tmpdir}/out/rust.global"
 grep -Eq ' T round_down$' "${tmpdir}/out/rust.global"
 for sym in STACK_TOP PM_STATUS PM_PSHIFT PM_PFRAME ALIGN_DOWN ALIGN_UP pte_xchg
@@ -142788,11 +144418,30 @@ grep -Eq ' T print_usage$' "${tmpdir}/out/mcexec_helpers.global"
 grep -Eq ' T eclair_dprintf$' "${tmpdir}/out/eclair_helpers.global"
 grep -Eq ' T lookup_symbol$' "${tmpdir}/out/eclair_helpers.global"
 grep -Eq ' T setup_symbols$' "${tmpdir}/out/eclair_helpers.global"
+grep -Eq ' T setup_dump_interactive$' "${tmpdir}/out/eclair_helpers.global"
+grep -Eq ' T setup_dump$' "${tmpdir}/out/eclair_helpers.global"
+grep -Eq ' T setup_constants$' "${tmpdir}/out/eclair_helpers.global"
+grep -Eq ' T options$' "${tmpdir}/out/eclair_helpers.global"
 grep -Eq ' T read_64$' "${tmpdir}/out/eclair_helpers.global"
 grep -Eq ' T read_32$' "${tmpdir}/out/eclair_helpers.global"
 grep -Eq ' T read_symbol_64$' "${tmpdir}/out/eclair_helpers.global"
 grep -Eq ' T print_bin$' "${tmpdir}/out/eclair_helpers.global"
 grep -Eq ' T intr_handler$' "${tmpdir}/out/eclair_helpers.global"
+grep -Eq ' T setup_threads$' "${tmpdir}/out/eclair_helpers.global"
+grep -Eq ' T start_gdb$' "${tmpdir}/out/eclair_helpers.global"
+grep -Eq ' T command$' "${tmpdir}/out/eclair_helpers.global"
+grep -Eq ' [BD] opt$' "${tmpdir}/out/eclair_helpers.global"
+grep -Eq ' [BD] nsyms$' "${tmpdir}/out/eclair_helpers.global"
+grep -Eq ' [BD] symtab$' "${tmpdir}/out/eclair_helpers.global"
+grep -Eq ' [BD] symbfd$' "${tmpdir}/out/eclair_helpers.global"
+grep -Eq ' [BD] dumpbfd$' "${tmpdir}/out/eclair_helpers.global"
+grep -Eq ' [BD] mem_chunks$' "${tmpdir}/out/eclair_helpers.global"
+grep -Eq ' [BD] PHYS_OFFSET$' "${tmpdir}/out/eclair_helpers.global"
+grep -Eq ' [BD] MAP_KERNEL_START$' "${tmpdir}/out/eclair_helpers.global"
+grep -Eq ' [BD] kernel_base$' "${tmpdir}/out/eclair_helpers.global"
+grep -Eq ' [BD] debug_constants$' "${tmpdir}/out/eclair_helpers.global"
+grep -Eq ' [BD] remote_running$' "${tmpdir}/out/eclair_helpers.global"
+grep -Eq ' [BD] gdbpid$' "${tmpdir}/out/eclair_helpers.global"
 grep -Eq ' T mck_crash_cmd_mcinfo_body_result$' "${tmpdir}/out/mckernel_crash_helpers.global"
 grep -Eq ' T mck_crash_extension_init_body_result$' "${tmpdir}/out/mckernel_crash_helpers.global"
 grep -Eq ' T mck_crash_extension_fini_body_result$' "${tmpdir}/out/mckernel_crash_helpers.global"
@@ -142803,6 +144452,8 @@ grep -Eq ' T ihk_read_kernel$' "${tmpdir}/out/mcinspect_helpers.global"
 grep -Eq ' T mcinspect_init_globals_body_result$' "${tmpdir}/out/mcinspect_helpers.global"
 grep -Eq ' T mcinspect_mcvtop_body_result$' "${tmpdir}/out/mcinspect_helpers.global"
 grep -Eq ' T mcinspect_mcps_body_result$' "${tmpdir}/out/mcinspect_helpers.global"
+grep -Eq ' T mcps$' "${tmpdir}/out/mcinspect_helpers.global"
+grep -Eq ' T mcvtop$' "${tmpdir}/out/mcinspect_helpers.global"
 grep -Eq ' T mcinspect_main_body_result$' "${tmpdir}/out/mcinspect_helpers.global"
 grep -Eq ' T mcinspect_option_body_result$' "${tmpdir}/out/mcinspect_helpers.global"
 grep -Eq ' T mcinspect_option_loop_body_result$' "${tmpdir}/out/mcinspect_helpers.global"
@@ -142829,6 +144480,9 @@ grep -Eq ' T get_last_early_heap$' "${tmpdir}/out/rust.global"
 grep -Eq ' T ihk_mc_allocate$' "${tmpdir}/out/rust.global"
 grep -Eq ' T ihk_mc_free$' "${tmpdir}/out/rust.global"
 grep -Eq ' T ihk_mc_reserve_arch_pages$' "${tmpdir}/out/rust.global"
+grep -Eq ' T ihk_mc_query_mem_areas$' "${tmpdir}/out/rust.global"
+grep -Eq ' T ihk_mc_query_mem_user_page$' "${tmpdir}/out/rust.global"
+grep -Eq ' T ihk_mc_query_mem_free_page$' "${tmpdir}/out/rust.global"
 grep -Eq ' T enable_ptattr_no_execute$' "${tmpdir}/out/rust.global"
 grep -Eq ' T flush_tlb$' "${tmpdir}/out/rust.global"
 grep -Eq ' T flush_tlb_single$' "${tmpdir}/out/rust.global"
@@ -142844,12 +144498,103 @@ grep -Eq ' T x86_init_normal_area_public$' "${tmpdir}/out/rust.global"
 grep -Eq ' T x86_init_linux_kernel_mapping_public$' "${tmpdir}/out/rust.global"
 grep -Eq ' T x86_init_fixed_area_public$' "${tmpdir}/out/rust.global"
 grep -Eq ' T x86_init_vsyscall_area_public$' "${tmpdir}/out/rust.global"
+grep -Eq ' T arch_get_smaller_page_size$' "${tmpdir}/out/rust.global"
+grep -Eq ' T arch_vrflag_to_ptattr$' "${tmpdir}/out/rust.global"
+grep -Eq ' T ihk_mc_pt_print_pte$' "${tmpdir}/out/rust.global"
+grep -Eq ' T set_pte$' "${tmpdir}/out/rust.global"
+grep -Eq ' T set_pt_large_page$' "${tmpdir}/out/rust.global"
+grep -Eq ' T ihk_mc_pt_set_large_page$' "${tmpdir}/out/rust.global"
+grep -Eq ' T ihk_mc_pt_set_page$' "${tmpdir}/out/rust.global"
+grep -Eq ' T ihk_mc_pt_clear_page$' "${tmpdir}/out/rust.global"
+grep -Eq ' T ihk_mc_pt_clear_large_page$' "${tmpdir}/out/rust.global"
+grep -Eq ' T ihk_mc_pt_create$' "${tmpdir}/out/rust.global"
+grep -Eq ' T ihk_mc_pt_destroy$' "${tmpdir}/out/rust.global"
+grep -Eq ' T ihk_mc_pt_prepare_map$' "${tmpdir}/out/rust.global"
+grep -Eq ' T walk_pte_l1$' "${tmpdir}/out/rust.global"
+grep -Eq ' T walk_pte_l2$' "${tmpdir}/out/rust.global"
+grep -Eq ' T walk_pte_l3$' "${tmpdir}/out/rust.global"
+grep -Eq ' T walk_pte_l4$' "${tmpdir}/out/rust.global"
+grep -Eq ' T walk_pte_l1_safe$' "${tmpdir}/out/rust.global"
+grep -Eq ' T walk_pte_l2_safe$' "${tmpdir}/out/rust.global"
+grep -Eq ' T walk_pte_l3_safe$' "${tmpdir}/out/rust.global"
+grep -Eq ' T walk_pte_l4_safe$' "${tmpdir}/out/rust.global"
+grep -Eq ' T visit_pte_l1$' "${tmpdir}/out/rust.global"
+grep -Eq ' T x86_visit_walk_l1_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T visit_pte_l2$' "${tmpdir}/out/rust.global"
+grep -Eq ' T x86_visit_walk_l2_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T visit_pte_l3$' "${tmpdir}/out/rust.global"
+grep -Eq ' T x86_visit_walk_l3_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T visit_pte_l4$' "${tmpdir}/out/rust.global"
+grep -Eq ' T x86_visit_walk_l4_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T visit_pte_range$' "${tmpdir}/out/rust.global"
+grep -Eq ' T visit_pte_l1_safe$' "${tmpdir}/out/rust.global"
+grep -Eq ' T x86_visit_walk_l1_safe_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T visit_pte_l2_safe$' "${tmpdir}/out/rust.global"
+grep -Eq ' T x86_visit_walk_l2_safe_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T visit_pte_l3_safe$' "${tmpdir}/out/rust.global"
+grep -Eq ' T x86_visit_walk_l3_safe_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T visit_pte_l4_safe$' "${tmpdir}/out/rust.global"
+grep -Eq ' T x86_visit_walk_l4_safe_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T visit_pte_range_safe$' "${tmpdir}/out/rust.global"
+grep -Eq ' T get_xsave_size$' "${tmpdir}/out/rust.global"
+grep -Eq ' T get_xsave_mask$' "${tmpdir}/out/rust.global"
 grep -Eq ' T cpu_set$' "${tmpdir}/out/rust.global"
 grep -Eq ' T cpu_clear$' "${tmpdir}/out/rust.global"
 grep -Eq ' T cpu_clear_and_set$' "${tmpdir}/out/rust.global"
+grep -Eq ' T init_process$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_destroy_thread_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_detach_address_space_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_flush_vm_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_procfs_delete_thread_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_pt_create_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_mcs_lock_init_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_release_process_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_release_sigcommon_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_release_vm_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_rw_read_lock_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_rw_read_unlock_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_rw_write_lock_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_rw_write_unlock_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_rwlock_init_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_sched_counter_dec_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_sched_counter_inc_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_sched_cpu_local_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_sched_has_signal_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_sched_interrupt_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_sched_irq_restore_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_sched_irq_save_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_sched_init_panic_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_sched_noirq_lock_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_sched_noirq_unlock_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_sched_pause_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_sched_procfs_create_thread_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_sched_reset_cputime_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_sched_rusage_threads_inc_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_sched_rwlock_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_sched_rwunlock_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_sched_save_fp_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_sched_schedule_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_sched_set_timer_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_sched_status_set_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_sched_vector_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_sched_waitq_finish_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_sched_waitq_init_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_sched_waitq_prepare_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_sched_waitq_wakeup_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_sched_zero_free_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_spin_init_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_spin_lock_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_spin_unlock_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_waitq_init_bridge$' "${tmpdir}/out/rust.global"
+grep -Eq ' T process_vm_rwspin_init_bridge$' "${tmpdir}/out/rust.global"
 grep -Eq ' T sched_do_migrate_public$' "${tmpdir}/out/rust.global"
+grep -Eq ' T __runq_add_thread$' "${tmpdir}/out/rust.global"
+grep -Eq ' T runq_add_thread$' "${tmpdir}/out/rust.global"
 grep -Eq ' T runq_del_thread$' "${tmpdir}/out/rust.global"
 grep -Eq ' T release_cpuid$' "${tmpdir}/out/rust.global"
+grep -Eq ' T __sched_wakeup_thread$' "${tmpdir}/out/rust.global"
+grep -Eq ' T sched_wakeup_thread_locked$' "${tmpdir}/out/rust.global"
+grep -Eq ' T sched_wakeup_thread$' "${tmpdir}/out/rust.global"
 grep -Eq ' T check_need_resched$' "${tmpdir}/out/rust.global"
 grep -Eq ' T sched_init$' "${tmpdir}/out/rust.global"
 grep -Eq ' T copy_from_user$' "${tmpdir}/out/rust.global"
@@ -142864,6 +144609,9 @@ grep -Eq ' T verify_process_vm$' "${tmpdir}/out/rust.global"
 grep -Eq ' T read_process_vm$' "${tmpdir}/out/rust.global"
 grep -Eq ' T write_process_vm$' "${tmpdir}/out/rust.global"
 grep -Eq ' T patch_process_vm$' "${tmpdir}/out/rust.global"
+grep -Eq ' T ihk_mc_pt_virt_to_pagemap$' "${tmpdir}/out/rust.global"
+grep -Eq ' T ihk_mc_pt_virt_to_phys$' "${tmpdir}/out/rust.global"
+grep -Eq ' T ihk_mc_pt_virt_to_phys_size$' "${tmpdir}/out/rust.global"
 grep -Eq 'U _head' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ap_trampoline' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_chk_page_address' "${tmpdir}/out/rust.undefined"
@@ -142876,9 +144624,6 @@ grep -Eq 'U ihk_mc_get_memory_chunk' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_get_nr_memory_chunks' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_pt_free_range' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_pt_lookup_pte' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U ihk_mc_pt_virt_to_pagemap' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U ihk_mc_pt_virt_to_phys' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U ihk_mc_pt_virt_to_phys_size' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U page_unmap' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U shmid_index' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U the_shm_info' "${tmpdir}/out/rust.undefined"
@@ -142892,37 +144637,22 @@ grep -Eq 'U __start___verbose' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U __stop___verbose' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U arch_cpu_stop' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U arch_delay' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U arch_get_smaller_page_size' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U arch_init' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U arch_map_vdso' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U arch_ready' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U arch_set_mikc_queue' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U arch_setup_vdso' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U arch_vrflag_to_ptattr' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U allow_oversubscribe' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U begin_free_pages_pending' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U cpu_disable_interrupt' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U cpu_disable_interrupt_save' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U cpu_enable_interrupt' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U cpu_enable_interrupt_save' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U cpu_halt' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U cpu_interrupt_disabled' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U cpu_pause' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U cpu_restore_interrupt' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U debug_log' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U do_kill' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U do_mmap' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U do_fork' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U done_init' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U eventfd' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U finish_free_pages_pending' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U futex_atomic_access_ok_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U futex_atomic_cmpxchg_inatomic_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U futex_atomic_op_inuser_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U gettime_local_support' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U hassigpending' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U idle_halt' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U ihk_mc_boot_cpu' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_get_boot_time' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_get_cpu_info' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_get_ikc_cpu' "${tmpdir}/out/rust.undefined"
@@ -142934,13 +144664,11 @@ grep -Eq 'U ihk_mc_get_processor_id_equiv' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_init_ap' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_issue_ipi_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_interrupt_log_bridge' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U ihk_mc_map_virtual' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_pt_clear_range' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_pt_set_pte' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_pt_set_range' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_set_dump_level' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_mc_unmap_memory' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U ihk_mc_unmap_virtual' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_set_monitor' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_set_multi_intr_mode_addr' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U ihk_set_nmi_mode_addr' "${tmpdir}/out/rust.undefined"
@@ -142977,14 +144705,11 @@ grep -Eq 'U process_create_thread_init_user_bridge' "${tmpdir}/out/rust.undefine
 grep -Eq 'U process_create_thread_init_vm_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U process_create_thread_release_address_space_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U process_default_ncpus_bridge' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U process_detach_address_space_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U process_destroy_thread_hash_detach_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U process_destroy_thread_time_account_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U process_destroy_thread_release_tid_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U process_destroy_thread_replace_tid_bridge' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U process_destroy_thread_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U process_current_resource_set_bridge' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U process_flush_vm_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U process_free_all_ranges_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U process_free_thread_pages_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U process_free_vm_bridge' "${tmpdir}/out/rust.undefined"
@@ -143020,9 +144745,7 @@ grep -Eq 'U process_ptrace_traceme_log_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U process_hold_thread_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U process_optional_free_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U process_policy_free_bridge' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U process_procfs_delete_thread_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U process_proc_init_panic_bridge' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U process_pt_create_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U process_pt_destroy_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U process_range_public_log_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U process_range_kfree_bridge' "${tmpdir}/out/rust.undefined"
@@ -143056,49 +144779,108 @@ grep -Eq 'U process_release_address_space_action_bridge' "${tmpdir}/out/rust.und
 grep -Eq 'U process_release_final_cleanup_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U process_release_hash_detach_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U process_release_profile_bridge' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U process_release_process_bridge' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U process_release_sigcommon_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U process_release_sibling_detach_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U process_release_thread_profile_bridge' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U process_release_vm_bridge' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U process_rw_read_lock_bridge' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U process_rw_read_unlock_bridge' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U process_rw_write_lock_bridge' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U process_rw_write_unlock_bridge' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U process_rwlock_init_bridge' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U process_sched_cpu_local_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U process_sched_do_migrate_log_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U process_sched_init_context_bridge' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U process_sched_init_panic_bridge' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U process_sched_save_fp_bridge' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U process_sched_interrupt_bridge' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U process_sched_noirq_lock_bridge' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U process_sched_noirq_unlock_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U process_sched_runq_log_bridge' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U process_sched_schedule_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U process_sched_rusage_debug_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U process_sched_timer_init_bridge' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U process_sched_vector_bridge' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U process_sched_waitq_wakeup_bridge' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U process_spin_init_bridge' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U process_spin_lock_bridge' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U process_spin_unlock_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U process_vm_init_numa_log_bridge' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U process_vm_rwspin_init_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U resource_set_list' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U resource_set_lock' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U release_fp_regs' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U save_fp_regs' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U runq_reservation_lock' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U runq_add_thread' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U sched_wakeup_thread' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U sched_wakeup_thread_locked' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U waitq_sched_wakeup_thread_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U waitq_sched_wakeup_thread_locked_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U schedule' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U spin_sleep_or_schedule' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U time$' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U arch_copy_to_user_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U arch_copy_from_user_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U arch_rt_sigreturn_context_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U arch_rt_sigreturn_syscall_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U arch_rt_sigreturn_set_signal_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U arch_rt_sigreturn_check_signal_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U arch_rt_sigreturn_alloc_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U arch_rt_sigreturn_free_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U arch_rt_sigreturn_xrstor_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U arch_syscall_forward_context_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U arch_prctl_set_register_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U arch_prctl_get_register_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U arch_prctl_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U arch_clone_reader_lock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U arch_clone_reader_unlock_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U arch_do_shmget_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U arch_shmget_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U tod_data_lock' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_settimeofday_lock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_settimeofday_unlock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_atomic64_read_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_atomic64_inc_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_wmb_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_settimeofday_panic_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_settimeofday_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_swapout_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_util_thread_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_util_indicate_clone_disabled_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U arch_do_mmap_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U arch_mmap_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U arch_mmap_supported_flags_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U arch_mmap_ignored_flags_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U arch_mmap_error_flags_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U munmap_write_lock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U munmap_write_unlock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U munmap_do_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U munmap_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U brk_flush_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U brk_write_lock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U brk_write_unlock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U brk_extend_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U brk_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_copy_from_user_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_copy_to_user_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_copy_int_to_user_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_forward_rt_sigprocmask_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_pending_mask_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_signalfd_create_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_signalfd_publish_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_do_kill_thread_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_do_kill_current_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_kill_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_do_sigaction_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U do_setresuid' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U do_setresgid' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_mckfd_lock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_mckfd_unlock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_alloc_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_mckfd_free_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_tofu_ioctl_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_tofu_close_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_strlen_user_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_xpmem_open_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_xpmem_openat_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_tsc_to_ts_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_timespec_to_jiffy_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_ts_add_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_find_process_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_process_unlock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_do_prlimit64_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_get_processor_id_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_get_numa_id_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_mlockall_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_munlockall_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_madvise_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_migrate_pages_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U arch_vdso_state_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U vdso_get_vdso_info' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U vdso_map_global_pages' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U arch_vdso_setup_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U arch_vdso_add_range_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U arch_vdso_set_range_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U arch_vdso_map_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U arch_vdso_public_log_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U kmalloc_track_hash' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U kmalloc_track_hash_locks' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U kmalloc_addr_hash' "${tmpdir}/out/rust.undefined"
@@ -143111,6 +144893,19 @@ grep -Eq 'U pagealloc_addr_hash_locks' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U pagealloc_track_initialized' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U pagealloc_runcount' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U memdebug' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U ihk_mc_get_mem_user_page' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_num_processors_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_dump_level_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_get_dump_page_set_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_get_dump_page_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_process_hash_lists_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_dump_complete_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_dump_warn_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_dump_free_pages_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_dump_first_free_chunk_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_dump_next_free_chunk_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_dump_chunk_addr_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_dump_chunk_size_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U mem_pagealloc_track_base_alloc_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U mem_pagealloc_track_base_free_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U mem_pagealloc_track_meta_alloc_bridge' "${tmpdir}/out/rust.undefined"
@@ -143124,6 +144919,34 @@ grep -Eq 'U mem_pagealloc_track_log_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U mem_pagealloc_invalid_size_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U mem_pagealloc_invalid_free_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U mem_pagealloc_leak_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_pending_free_pages_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_begin_free_pages_pending_panic_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_pending_free_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_finish_free_pages_pending_panic_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_vmap_allocator_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_vmap_alloc_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_vmap_free_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_pt_set_page_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_pt_clear_page_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_flush_tlb_single_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_barrier_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_init_allocator_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_init_page_fault_handler_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_init_query_free_handler_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_init_anon_on_demand_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_init_xpmem_remote_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_init_hugetlbfs_on_demand_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_monitor_init_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_rusage_init_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_numa_init_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_set_page_fault_handler_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_get_vector_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_register_interrupt_handler_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_page_init_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_virtual_allocator_init_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_find_command_line_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_numa_distances_init_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mem_init_log_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U mem_kmalloc_track_base_alloc_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U mem_kmalloc_track_base_free_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U mem_kmalloc_track_lock_bridge' "${tmpdir}/out/rust.undefined"
@@ -143159,24 +144982,121 @@ grep -Eq 'U x86_cpuid_leaf_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_pvclock_log_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_current_cpu_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_context_line_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_boot_ap_trampoline_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_boot_page_table_phys_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_boot_setup_ap_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_boot_trampoline_code_data_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_boot_trampoline_code_size_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_boot_trampoline_va_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_cpu_kstack_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_cpu_pause_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_cpu_boot_status_slot_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_current_thread_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_kprintf_lock_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_kprintf_unlock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_mcexec_v10_trace_log_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_print_stack_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_runq_irqstate_offset_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_runq_lock_offset_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_runq_unlock_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_stack_frame_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_this_cpu_local_var_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_tick_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_trace_enter_user_offsets_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_transit_page_table_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_virt_to_phys_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_wakeup_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_lapic_write_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_read_msr_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_write_msr_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U cpu_halt' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U cpu_enable_interrupt' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U cpu_disable_interrupt' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U cpu_restore_interrupt' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U cpu_pause' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U cpu_disable_interrupt_save' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U cpu_enable_interrupt_save' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U cpu_interrupt_disabled' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U phys_to_page' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U phys_to_page_insert_hash' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U syscall_generic_forwarding' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_rdtsc_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_ns_per_tsc_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_has_sigpending_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_threads_reader_lock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_threads_reader_unlock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_interrupt_cpu_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_cpu_pause_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U syscall_linux_mlock_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U memlock_write_lock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U memlock_write_unlock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U memlock_lookup_range_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U memlock_next_range_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U memlock_split_range_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U memlock_join_range_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U memlock_populate_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U memlock_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mprotect_flush_nfo_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U remap_file_pages_callable_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U remap_file_pages_remap_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U remap_file_pages_clear_host_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U remap_file_pages_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mremap_extend_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mremap_search_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mremap_memobj_ref_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mremap_memobj_unref_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mremap_add_range_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mremap_pte_lock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mremap_pte_unlock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mremap_move_pte_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U mremap_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U msync_read_lock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U msync_read_unlock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U msync_lookup_range_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U msync_next_range_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U msync_has_pager_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U msync_sync_range_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U msync_invalidate_range_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U msync_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_mbind_entry_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_mbind_write_lock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_mbind_write_unlock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_mbind_lookup_range_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_mbind_policy_search_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_mbind_clear_range_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_mbind_policy_alloc_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_mbind_policy_rb_clear_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_mbind_policy_insert_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_mbind_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_set_mempolicy_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_get_mempolicy_read_lock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_get_mempolicy_read_unlock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_get_mempolicy_lookup_range_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_get_mempolicy_policy_search_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_get_mempolicy_lookup_node_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_get_mempolicy_log_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U syscall_name' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U syscall_policy_do_syscall2_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_policy_do_syscall3_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U syscall_policy_forward_context_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_sigsuspend_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_set_timer_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U syscall_util_register_desc_log_bridge' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U sys_mlock' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U sys_munlock' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U wait4_do_wait_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U do_process_vm_read_writev' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U exit_do_exit_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U exit_group_current_pid_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U exit_group_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U exit_group_terminate_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U sched_find_thread_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U sched_thread_unlock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U sched_apply_scheduler_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U sched_hold_thread_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U sched_release_thread_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U sched_request_migrate_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U sched_setparam_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U sched_yield_lock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U sched_yield_unlock_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U sched_yield_schedule_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U syscall' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U time_sharing' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U sysctl_overcommit_memory' "${tmpdir}/out/rust.undefined"
@@ -143215,6 +145135,13 @@ grep -Eq 'U x86_early_alloc_end_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_bootstrap_mem_end_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_early_alloc_invalidate_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_pt_virt_to_phys_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_pt_phys_to_virt_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_pt_print_log_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_pt_alloc_pages_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_pt_free_pages_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_pt_destroy_panic_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_pt_destroy_helper_failed_panic_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_visit_pte_log_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_page_table_init_pt_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_page_table_boot_pt_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_load_page_table_panic_bridge' "${tmpdir}/out/rust.undefined"
@@ -143259,9 +145186,14 @@ grep -Eq 'U x86_init_vsyscall_page_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_init_vsyscall_panic_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_reserve_arch_pages_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_reserve_arch_pages_panic_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_use_1gb_page_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_common_vrflag_to_ptattr_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_attr_mask_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_xsave_size_bridge' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U x86_xsave_mask_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U xpmem_page_in_remote_on_attach' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U uti_desc' "${tmpdir}/out/rust.undefined"
-test "$(grep -c ' U ' "${tmpdir}/out/rust.undefined")" -eq 396
+test "$(grep -c ' U ' "${tmpdir}/out/rust.undefined")" -eq 577
 
 for rust_kernel_context_obj in \
 	"${tmpdir}/out/mckernel_rust.o" \

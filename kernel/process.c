@@ -268,6 +268,11 @@ void process_create_cpu_log_bridge(int event, int pid, int cpu)
 	}
 }
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_spin_init_bridge(unsigned long lock_addr);
+void process_rwlock_init_bridge(unsigned long lock_addr);
+void process_waitq_init_bridge(unsigned long waitq_addr);
+#else
 void process_spin_init_bridge(unsigned long lock_addr)
 {
 	ihk_mc_spinlock_init((ihk_spinlock_t *)lock_addr);
@@ -278,10 +283,11 @@ void process_rwlock_init_bridge(unsigned long lock_addr)
 	mcs_rwlock_init((mcs_rwlock_lock_t *)lock_addr);
 }
 
-static void process_waitq_init_bridge(unsigned long waitq_addr)
+void process_waitq_init_bridge(unsigned long waitq_addr)
 {
 	waitq_init((waitq_t *)waitq_addr);
 }
+#endif
 
 static void process_user_context_modify_bridge(void *uctx, int reg,
 					       unsigned long value)
@@ -290,16 +296,24 @@ static void process_user_context_modify_bridge(void *uctx, int reg,
 }
 
 #ifdef PROFILE_ENABLE
-static void process_mcs_lock_init_bridge(unsigned long lock_addr)
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_mcs_lock_init_bridge(unsigned long lock_addr);
+#else
+void process_mcs_lock_init_bridge(unsigned long lock_addr)
 {
 	mcs_lock_init((mcs_lock_node_t *)lock_addr);
 }
 #endif
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_vm_rwspin_init_bridge(unsigned long lock_addr);
+#else
 void process_vm_rwspin_init_bridge(unsigned long lock_addr)
 {
 	ihk_rwspinlock_init((ihk_rwspinlock_t *)lock_addr);
 }
+#endif
 
 void process_vm_init_numa_log_bridge(int numa_id)
 {
@@ -313,6 +327,18 @@ void *process_alloc_bridge(unsigned long size, unsigned long flags)
 	return kmalloc_tracked(size, flags, __FILE__, __LINE__);
 }
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void *process_pt_create_bridge(unsigned long flags);
+unsigned long process_spin_lock_bridge(unsigned long lock_addr);
+void process_spin_unlock_bridge(unsigned long lock_addr,
+				unsigned long irqstate);
+void process_sched_noirq_lock_bridge(unsigned long lock_addr);
+void process_sched_noirq_unlock_bridge(unsigned long lock_addr);
+void process_rw_read_lock_bridge(unsigned long lock_addr);
+void process_rw_read_unlock_bridge(unsigned long lock_addr);
+void process_rw_write_lock_bridge(unsigned long lock_addr);
+void process_rw_write_unlock_bridge(unsigned long lock_addr);
+#else
 void *process_pt_create_bridge(unsigned long flags)
 {
 	return ihk_mc_pt_create(flags);
@@ -358,7 +384,16 @@ void process_rw_write_unlock_bridge(unsigned long lock_addr)
 {
 	ihk_rwspinlock_write_unlock_noirq((ihk_rwspinlock_t *)lock_addr);
 }
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_sched_waitq_init_bridge(unsigned long waitq_addr);
+void process_sched_waitq_prepare_bridge(unsigned long waitq_addr,
+					unsigned long entry_addr,
+					int status);
+void process_sched_waitq_finish_bridge(unsigned long waitq_addr,
+				       unsigned long entry_addr);
+#else
 static void process_sched_waitq_init_bridge(unsigned long waitq_addr)
 {
 	waitq_init((waitq_t *)waitq_addr);
@@ -378,21 +413,7 @@ static void process_sched_waitq_finish_bridge(unsigned long waitq_addr,
 	waitq_finish_wait((waitq_t *)waitq_addr,
 			  (waitq_entry_t *)entry_addr);
 }
-
-PROCESS_SCHED_PUBLIC_BRIDGE int process_sched_vector_bridge(int vector_key)
-{
-	return ihk_mc_get_vector(vector_key);
-}
-
-PROCESS_SCHED_PUBLIC_BRIDGE void process_sched_interrupt_bridge(int cpu, int vector)
-{
-	ihk_mc_interrupt_cpu(cpu, vector);
-}
-
-PROCESS_SCHED_PUBLIC_BRIDGE void process_sched_schedule_bridge(void)
-{
-	schedule();
-}
+#endif
 
 static void process_sched_migrate_log_bridge(unsigned long thread_addr,
 					     int tid, int cpu_id)
@@ -402,15 +423,38 @@ static void process_sched_migrate_log_bridge(unsigned long thread_addr,
 		 "sched_request_migrate", tid, cpu_id);
 }
 
-PROCESS_SCHED_PUBLIC_BRIDGE unsigned long process_sched_cpu_local_bridge(int cpu_id)
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_sched_vector_bridge(int vector_key);
+void process_sched_interrupt_bridge(int cpu, int vector);
+void process_sched_schedule_bridge(void);
+unsigned long process_sched_cpu_local_bridge(int cpu_id);
+void process_sched_waitq_wakeup_bridge(unsigned long waitq_addr);
+#else
+static int process_sched_vector_bridge(int vector_key)
+{
+	return ihk_mc_get_vector(vector_key);
+}
+
+static void process_sched_interrupt_bridge(int cpu, int vector)
+{
+	ihk_mc_interrupt_cpu(cpu, vector);
+}
+
+static void process_sched_schedule_bridge(void)
+{
+	schedule();
+}
+
+static unsigned long process_sched_cpu_local_bridge(int cpu_id)
 {
 	return (unsigned long)get_cpu_local_var(cpu_id);
 }
 
-PROCESS_SCHED_PUBLIC_BRIDGE void process_sched_waitq_wakeup_bridge(unsigned long waitq_addr)
+static void process_sched_waitq_wakeup_bridge(unsigned long waitq_addr)
 {
 	waitq_wakeup((waitq_t *)waitq_addr);
 }
+#endif
 
 PROCESS_SCHED_PUBLIC_BRIDGE void process_sched_do_migrate_log_bridge(unsigned long thread_addr,
 						int tid, int old_cpu_id,
@@ -445,6 +489,12 @@ void process_release_thread_profile_bridge(void *thread, void *proc)
 #endif
 }
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_procfs_delete_thread_bridge(void *thread);
+void process_destroy_thread_bridge(void *thread);
+void process_release_vm_bridge(void *vm);
+void process_flush_vm_bridge(void *vm);
+#else
 void process_procfs_delete_thread_bridge(void *thread)
 {
 	procfs_delete_thread(thread);
@@ -464,6 +514,7 @@ void process_flush_vm_bridge(void *vm)
 {
 	flush_nfo_tlb_mm(vm);
 }
+#endif
 
 void process_free_all_ranges_bridge(void *vm)
 {
@@ -483,6 +534,7 @@ int idle_halt = 0;
 int allow_oversubscribe = 0;
 int time_sharing = 1;
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 static const struct process_init_state_offsets process_init_state_offsets = {
 	.pid_offset = __builtin_offsetof(struct process, pid),
 	.status_offset = __builtin_offsetof(struct process, status),
@@ -508,7 +560,6 @@ static const struct process_init_state_offsets process_init_state_offsets = {
 	.enable_uti_offset = __builtin_offsetof(struct process, enable_uti),
 };
 
-#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 static const struct process_find_thread_offsets process_find_thread_offsets = {
 	.thread_hash_list_offset = __builtin_offsetof(struct thread, hash_list),
 	.thread_tid_offset = __builtin_offsetof(struct thread, tid),
@@ -523,6 +574,9 @@ static const struct process_find_process_offsets process_find_process_offsets = 
 };
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void init_process(struct process *proc, struct process *parent);
+#else
 void
 init_process(struct process *proc, struct process *parent)
 {
@@ -560,6 +614,7 @@ init_process(struct process *proc, struct process *parent)
 		panic("failed to initialize process profile state");
 #endif
 }
+#endif
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void
@@ -3416,6 +3471,10 @@ hold_process_vm(struct process_vm *vm)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_detach_address_space_bridge(void *address_space, int pid);
+void process_release_process_bridge(void *proc);
+#else
 void process_detach_address_space_bridge(void *address_space, int pid)
 {
 	detach_address_space(address_space, pid);
@@ -3425,6 +3484,7 @@ void process_release_process_bridge(void *proc)
 {
 	release_process(proc);
 }
+#endif
 
 void process_populate_warn_bridge(struct process_vm *vm,
 				  unsigned long addr,
@@ -3608,10 +3668,14 @@ void process_destroy_thread_replace_tid_bridge(void *proc_arg,
 	__find_and_replace_tid(proc_arg, thread_arg, new_tid);
 }
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_release_sigcommon_bridge(void *sigcommon);
+#else
 void process_release_sigcommon_bridge(void *sigcommon)
 {
 	release_sigcommon(sigcommon);
 }
+#endif
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 void destroy_thread(struct thread *thread)
@@ -3790,10 +3854,14 @@ void process_sched_init_context_bridge(void *thread_arg)
 	ihk_mc_init_context(&thread->ctx, NULL, idle);
 }
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int process_sched_save_fp_bridge(void *thread);
+#else
 int process_sched_save_fp_bridge(void *thread)
 {
 	return save_fp_regs(thread);
 }
+#endif
 
 void process_sched_timer_init_bridge(int cpu)
 {
@@ -3807,10 +3875,14 @@ void process_sched_timer_init_bridge(int cpu)
 #endif
 }
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_sched_init_panic_bridge(void);
+#else
 void process_sched_init_panic_bridge(void)
 {
 	panic("failed to initialize idle process state");
 }
+#endif
 
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS
 struct resource_set *
@@ -3941,30 +4013,25 @@ static const struct sched_runqueue_offsets process_sched_runqueue_offsets = {
 		__builtin_offsetof(struct cpu_local_var, nr_ctx_switches),
 };
 
-static void process_sched_rwlock_bridge(unsigned long lock_addr,
-					unsigned long node_addr)
-{
-	mcs_rwlock_writer_lock_noirq((mcs_rwlock_lock_t *)lock_addr,
-				     (struct mcs_rwlock_node *)node_addr);
-}
+void process_sched_rwlock_bridge(unsigned long lock_addr,
+				 unsigned long node_addr);
+void process_sched_rwunlock_bridge(unsigned long lock_addr,
+				   unsigned long node_addr);
 
-static void process_sched_rwunlock_bridge(unsigned long lock_addr,
-					  unsigned long node_addr)
-{
-	mcs_rwlock_writer_unlock_noirq((mcs_rwlock_lock_t *)lock_addr,
-				       (struct mcs_rwlock_node *)node_addr);
-}
-
-static void process_sched_status_set_bridge(unsigned long status_addr,
-					    int status)
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_sched_status_set_bridge(unsigned long status_addr, int status);
+void process_sched_set_timer_bridge(int runq_locked);
+#else
+void process_sched_status_set_bridge(unsigned long status_addr, int status)
 {
 	xchg4((int *)status_addr, status);
 }
 
-static void process_sched_set_timer_bridge(int runq_locked)
+void process_sched_set_timer_bridge(int runq_locked)
 {
 	set_timer(runq_locked);
 }
+#endif
 
 PROCESS_SCHED_PUBLIC_BRIDGE void process_sched_runq_log_bridge(int event,
 					  unsigned long arg0,
@@ -4051,57 +4118,37 @@ PROCESS_SCHED_PUBLIC_BRIDGE void process_sched_runq_log_bridge(int event,
 	}
 }
 
-static unsigned long process_sched_irq_save_bridge(void)
-{
-	return cpu_disable_interrupt_save();
-}
+unsigned long process_sched_irq_save_bridge(void);
+void process_sched_irq_restore_bridge(unsigned long irqstate);
+void process_sched_zero_free_bridge(void);
+void process_sched_pause_bridge(void);
+int process_sched_has_signal_bridge(unsigned long thread_addr);
+void process_sched_reset_cputime_bridge(void);
 
-static void process_sched_irq_restore_bridge(unsigned long irqstate)
-{
-	cpu_restore_interrupt(irqstate);
-}
-
-static void process_sched_zero_free_bridge(void)
-{
-	ihk_numa_zero_free_pages(ihk_mc_get_numa_node_by_distance(0));
-}
-
-static void process_sched_pause_bridge(void)
-{
-	cpu_pause();
-}
-
-static int process_sched_has_signal_bridge(unsigned long thread_addr)
-{
-	return hassigpending((struct thread *)thread_addr) != NULL;
-}
-
-static void process_sched_reset_cputime_bridge(void)
-{
-	reset_cputime();
-}
-
-static void process_sched_procfs_create_thread_bridge(unsigned long thread_addr)
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void process_sched_procfs_create_thread_bridge(unsigned long thread_addr);
+int process_sched_counter_inc_bridge(unsigned long counter_addr);
+void process_sched_counter_dec_bridge(unsigned long counter_addr);
+#else
+void process_sched_procfs_create_thread_bridge(unsigned long thread_addr)
 {
 	procfs_create_thread((struct thread *)thread_addr);
 }
 
-static int process_sched_counter_inc_bridge(unsigned long counter_addr)
+int process_sched_counter_inc_bridge(unsigned long counter_addr)
 {
 	return __sync_add_and_fetch((int *)counter_addr, 1);
 }
 
-static void process_sched_counter_dec_bridge(unsigned long counter_addr)
+void process_sched_counter_dec_bridge(unsigned long counter_addr)
 {
 	__sync_fetch_and_sub((unsigned long *)counter_addr, 1);
 }
+#endif
 
-static void process_sched_rusage_threads_inc_bridge(void)
-{
-	rusage_num_threads_inc();
-}
+void process_sched_rusage_threads_inc_bridge(void);
 
-static void process_sched_rusage_debug_bridge(void)
+void process_sched_rusage_debug_bridge(void)
 {
 #ifdef RUSAGE_DEBUG
 	if (rusage.num_threads == 1) {
@@ -4614,27 +4661,13 @@ void check_need_resched(void)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+int __sched_wakeup_thread(struct thread *thread,
+		int valid_states, int runq_locked);
+#else
 int __sched_wakeup_thread(struct thread *thread,
 		int valid_states, int runq_locked)
 {
-#ifdef MCKERNEL_RUST_PROCESS_HELPERS
-	struct mcs_rwlock_node updatelock;
-
-	return sched_wakeup_thread_body_result((unsigned long)thread,
-			(unsigned long)get_cpu_local_var(thread->cpu_id),
-			(unsigned long)&updatelock, ihk_mc_get_processor_id(),
-			valid_states, runq_locked, PS_RUNNING, PS_EXITED,
-			CPU_FLAG_NEED_RESCHED, IHK_GV_IKC,
-			&process_sched_runqueue_offsets,
-			process_spin_lock_bridge, process_spin_unlock_bridge,
-			process_sched_rwlock_bridge,
-			process_sched_rwunlock_bridge,
-			process_sched_status_set_bridge,
-			process_sched_set_timer_bridge,
-			process_sched_vector_bridge,
-			process_sched_interrupt_bridge,
-			process_sched_runq_log_bridge);
-#else
 	int status;
 	unsigned long irqstate;
 	struct cpu_local_var *v = get_cpu_local_var(thread->cpu_id);
@@ -4693,9 +4726,10 @@ int __sched_wakeup_thread(struct thread *thread,
 	}
 
 	return status;
-#endif
 }
+#endif
 
+#ifndef MCKERNEL_RUST_PROCESS_HELPERS
 int sched_wakeup_thread_locked(struct thread *thread, int valid_states)
 {
 	return __sched_wakeup_thread(thread, valid_states, 1);
@@ -4705,6 +4739,7 @@ int sched_wakeup_thread(struct thread *thread, int valid_states)
 {
 	return __sched_wakeup_thread(thread, valid_states, 0);
 }
+#endif
 
 
 /*
@@ -4759,15 +4794,11 @@ void sched_request_migrate(int cpu_id, struct thread *thread)
 }
 
 /* Runq lock must be held here */
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void __runq_add_thread(struct thread *thread, int cpu_id);
+#else
 void __runq_add_thread(struct thread *thread, int cpu_id)
 {
-#ifdef MCKERNEL_RUST_PROCESS_HELPERS
-	sched_runq_add_thread_locked_result((unsigned long)thread,
-			(unsigned long)get_cpu_local_var(cpu_id), cpu_id,
-			CPU_FLAG_NEED_RESCHED, CPU_STATUS_RUNNING,
-			&process_sched_runqueue_offsets,
-			process_sched_runq_log_bridge);
-#else
 	struct cpu_local_var *v = get_cpu_local_var(cpu_id);
 	process_list_add_tail_counted_result(&thread->sched_list, &v->runq,
 					     &v->runq_len);
@@ -4778,29 +4809,14 @@ void __runq_add_thread(struct thread *thread, int cpu_id)
 
 	dkprintf("runq_add_proc(): tid %d added to CPU[%d]'s runq\n", 
              thread->tid, cpu_id);
-#endif
 }
+#endif
 
+#ifdef MCKERNEL_RUST_PROCESS_HELPERS
+void runq_add_thread(struct thread *thread, int cpu_id);
+#else
 void runq_add_thread(struct thread *thread, int cpu_id)
 {
-#ifdef MCKERNEL_RUST_PROCESS_HELPERS
-	sched_runq_add_thread_body_result((unsigned long)thread,
-		(unsigned long)get_cpu_local_var(cpu_id),
-		(unsigned long)&runq_reservation_lock, cpu_id,
-		ihk_mc_get_processor_id(), CPU_FLAG_NEED_RESCHED,
-		CPU_STATUS_RUNNING, IHK_GV_IKC, &process_sched_runqueue_offsets,
-		process_spin_lock_bridge, process_spin_unlock_bridge,
-		process_sched_noirq_lock_bridge,
-		process_sched_noirq_unlock_bridge,
-		process_sched_counter_dec_bridge,
-		process_sched_procfs_create_thread_bridge,
-		process_sched_counter_inc_bridge,
-		process_sched_rusage_threads_inc_bridge,
-		process_sched_rusage_debug_bridge,
-		process_sched_vector_bridge,
-		process_sched_interrupt_bridge,
-		process_sched_runq_log_bridge);
-#else
 	struct cpu_local_var *v = get_cpu_local_var(cpu_id);
 	unsigned long irqstate;
 	irqstate = ihk_mc_spinlock_lock(&runq_reservation_lock);
@@ -4833,8 +4849,8 @@ void runq_add_thread(struct thread *thread, int cpu_id)
 		ihk_mc_interrupt_cpu(thread->cpu_id,
 				ihk_mc_get_vector(IHK_GV_IKC));
 	}
-#endif
 }
+#endif
 
 /* NOTE: shouldn't remove a running process! */
 #ifndef MCKERNEL_RUST_PROCESS_HELPERS

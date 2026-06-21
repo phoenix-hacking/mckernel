@@ -16,6 +16,8 @@ const LAPIC_TIMER_INITIAL: CInt = 0x380;
 const LAPIC_TIMER_DIVIDE: CInt = 0x3e0;
 const LAPIC_SPURIOUS: CInt = 0x0f0;
 const LAPIC_EOI: CInt = 0x0b0;
+const MSR_IA32_APIC_BASE: CInt = 0x1b;
+const X2APIC_ENABLE: CULong = 1 << 10;
 const LOCAL_TIMER_VECTOR: CUInt = 0xef;
 const LOCAL_PERF_VECTOR: CUInt = 0xf0;
 const LOCAL_SMP_FUNC_CALL_VECTOR: CInt = 0xf1;
@@ -94,6 +96,8 @@ type X86PrintStackFn = unsafe extern "C" fn(*mut c_void, CULong);
 extern "C" {
     fn arch_delay(us: CInt);
     fn do_arch_prctl(code: CULong, address: CULong) -> CLong;
+    fn x86_lapic_write_bridge(reg: CInt, value: CUInt);
+    fn x86_read_msr_bridge(reg: CInt) -> CULong;
     fn x86_issue_ipi_bridge(apic_id: CULong, vector: CInt);
     fn x86_interrupt_log_bridge(event: CInt, cpu: CInt, vector: CInt);
     fn x86_tick_log_bridge(event: CInt);
@@ -105,6 +109,8 @@ extern "C" {
         ecxp: *mut CULong,
         edxp: *mut CULong,
     );
+    fn x86_xsave_size_bridge() -> CInt;
+    fn x86_xsave_mask_bridge() -> CULong;
     fn x86_alloc_aligned_pages_node_bridge(
         npages: CInt,
         p2align: CInt,
@@ -124,6 +130,33 @@ extern "C" {
     fn x86_stack_frame_log_bridge(ip: CULong, sp: CULong, fp: CULong);
     fn x86_print_stack_bridge(rbp: *mut c_void, first: CULong);
     fn x86_cpu_boot_status_slot_bridge() -> *mut CInt;
+    fn x86_boot_trampoline_va_bridge() -> *mut c_void;
+    fn x86_boot_trampoline_code_data_bridge() -> *const u8;
+    fn x86_boot_trampoline_code_size_bridge() -> CULong;
+    fn x86_boot_ap_trampoline_bridge() -> CULong;
+    fn x86_boot_setup_ap_bridge() -> *mut c_void;
+    fn x86_boot_page_table_phys_bridge() -> CULong;
+    fn x86_cpu_kstack_bridge(cpu: CInt) -> CULong;
+    fn x86_transit_page_table_bridge() -> CULong;
+    fn x86_wakeup_bridge(cpu: CInt, trampoline: CULong);
+    fn x86_cpu_pause_bridge();
+    fn x86_current_thread_bridge() -> *mut c_void;
+    fn x86_trace_enter_user_offsets_bridge() -> *const X86TraceEnterUserOffsets;
+    fn x86_mcexec_v10_trace_log_bridge(
+        cpu: CInt,
+        pid: CInt,
+        tid: CInt,
+        rip: CULong,
+        sp: CULong,
+        cs: CULong,
+        ss: CULong,
+        rflags: CULong,
+        status: CInt,
+    );
+    fn x86_this_cpu_local_var_bridge() -> *mut c_void;
+    fn x86_runq_lock_offset_bridge() -> CULong;
+    fn x86_runq_irqstate_offset_bridge() -> CULong;
+    fn x86_runq_unlock_bridge(lock: *mut c_void, irqstate: CULong);
     static mut __x86_syscall_handler: CULong;
     static mut __page_fault_handler_address: CULong;
     #[link_name = "pvti"]
@@ -152,6 +185,16 @@ pub unsafe extern "C" fn rdtsc() -> CULong {
 #[no_mangle]
 pub unsafe extern "C" fn read_tsc() -> CULong {
     rdtsc()
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn get_xsave_size() -> CInt {
+    unsafe { x86_xsave_size_bridge() }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn get_xsave_mask() -> CULong {
+    unsafe { x86_xsave_mask_bridge() }
 }
 
 #[no_mangle]
@@ -200,6 +243,56 @@ pub unsafe extern "C" fn show_context_stack(rbp: *mut CULong) {
             STACK_LOWER_BOUND,
             STACK_UPPER_BOUND,
             Some(x86_stack_frame_log_bridge),
+        );
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_boot_cpu(cpuid: CInt, pc: CULong) {
+    unsafe {
+        x86_boot_cpu_body_result(
+            x86_boot_trampoline_va_bridge(),
+            x86_boot_trampoline_code_data_bridge(),
+            x86_boot_trampoline_code_size_bridge(),
+            cpuid,
+            pc,
+            x86_boot_ap_trampoline_bridge(),
+            x86_cpu_boot_status_slot_bridge(),
+            x86_boot_setup_ap_bridge(),
+            Some(x86_boot_page_table_phys_bridge),
+            Some(x86_cpu_kstack_bridge),
+            Some(x86_transit_page_table_bridge),
+            Some(x86_wakeup_bridge),
+            Some(x86_cpu_pause_bridge),
+        );
+    }
+}
+
+static mut X86_MEXEC_V10_ENTER_USER_LOGS: CInt = 0;
+
+#[no_mangle]
+pub unsafe extern "C" fn mcexec_v10_trace_enter_user(regs: *const X86UserContext) {
+    unsafe {
+        x86_mcexec_v10_trace_enter_user_body_result(
+            regs,
+            x86_current_thread_bridge(),
+            &raw mut X86_MEXEC_V10_ENTER_USER_LOGS,
+            32,
+            x86_current_cpu_bridge(),
+            x86_trace_enter_user_offsets_bridge(),
+            Some(x86_mcexec_v10_trace_log_bridge),
+        );
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn release_runq_lock() {
+    unsafe {
+        x86_release_runq_lock_body_result(
+            x86_this_cpu_local_var_bridge(),
+            x86_runq_lock_offset_bridge(),
+            x86_runq_irqstate_offset_bridge(),
+            Some(x86_runq_unlock_bridge),
         );
     }
 }
@@ -374,6 +467,81 @@ pub unsafe extern "C" fn rdmsr(index: CUInt) -> CULong {
 #[no_mangle]
 pub unsafe extern "C" fn ihk_mc_mb() {
     core::arch::asm!("mfence", options(nostack, preserves_flags));
+}
+
+#[cfg(not(mckernel_equivalence))]
+#[no_mangle]
+pub unsafe extern "C" fn cpu_halt() {
+    core::arch::asm!("hlt", options(nomem, nostack));
+}
+
+#[cfg(not(mckernel_equivalence))]
+#[no_mangle]
+pub unsafe extern "C" fn cpu_safe_halt() {
+    core::arch::asm!("sti; hlt", options(nomem, nostack));
+}
+
+#[cfg(not(mckernel_equivalence))]
+#[no_mangle]
+pub unsafe extern "C" fn cpu_enable_interrupt() {
+    core::arch::asm!("sti", options(nomem, nostack));
+}
+
+#[cfg(not(mckernel_equivalence))]
+#[no_mangle]
+pub unsafe extern "C" fn cpu_disable_interrupt() {
+    core::arch::asm!("cli", options(nomem, nostack));
+}
+
+#[cfg(not(mckernel_equivalence))]
+#[no_mangle]
+pub unsafe extern "C" fn cpu_restore_interrupt(flags: CULong) {
+    core::arch::asm!("push {flags}", "popfq", flags = in(reg) flags);
+}
+
+#[cfg(not(mckernel_equivalence))]
+#[no_mangle]
+pub unsafe extern "C" fn cpu_pause() {
+    core::arch::asm!("pause", options(nomem, nostack, preserves_flags));
+}
+
+#[cfg(not(mckernel_equivalence))]
+#[no_mangle]
+pub unsafe extern "C" fn cpu_disable_interrupt_save() -> CULong {
+    let flags: CULong;
+
+    core::arch::asm!("pushfq", "pop {flags}", "cli", flags = lateout(reg) flags);
+
+    flags
+}
+
+#[cfg(not(mckernel_equivalence))]
+#[no_mangle]
+pub unsafe extern "C" fn cpu_enable_interrupt_save() -> CULong {
+    let flags: CULong;
+
+    core::arch::asm!("pushfq", "pop {flags}", "sti", flags = lateout(reg) flags);
+
+    flags
+}
+
+#[cfg(not(mckernel_equivalence))]
+#[no_mangle]
+pub unsafe extern "C" fn cpu_interrupt_disabled() -> CInt {
+    let flags: CULong;
+
+    core::arch::asm!(
+        "pushfq",
+        "pop {flags}",
+        flags = lateout(reg) flags,
+        options(preserves_flags),
+    );
+
+    if flags & 0x200 == 0 {
+        1
+    } else {
+        0
+    }
 }
 
 #[no_mangle]
@@ -1347,6 +1515,11 @@ pub unsafe extern "C" fn x86_lapic_timer_enable_body_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn lapic_timer_enable(clocks: CUInt) {
+    let _ = x86_lapic_timer_enable_body_result(clocks, Some(x86_lapic_write_bridge));
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn x86_lapic_timer_disable_body_result(
     write_fn: Option<X86LapicWriteFn>,
 ) -> CInt {
@@ -1359,6 +1532,11 @@ pub unsafe extern "C" fn x86_lapic_timer_disable_body_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn lapic_timer_disable() {
+    let _ = x86_lapic_timer_disable_body_result(Some(x86_lapic_write_bridge));
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn x86_lapic_ack_body_result(write_fn: Option<X86LapicWriteFn>) -> CInt {
     let Some(write) = write_fn else {
         return -EINVAL;
@@ -1366,6 +1544,11 @@ pub unsafe extern "C" fn x86_lapic_ack_body_result(write_fn: Option<X86LapicWrit
 
     write(LAPIC_EOI, 0);
     0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn lapic_ack() {
+    let _ = x86_lapic_ack_body_result(Some(x86_lapic_write_bridge));
 }
 
 #[no_mangle]
@@ -1419,6 +1602,11 @@ pub unsafe extern "C" fn x86_apic_issue_ipi_body_result(
 #[no_mangle]
 pub extern "C" fn x86_x2apic_enabled_result(msr: CULong, enable_bit: CULong) -> CULong {
     msr & enable_bit
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn x2apic_is_enabled() -> CULong {
+    x86_x2apic_enabled_result(x86_read_msr_bridge(MSR_IA32_APIC_BASE), X2APIC_ENABLE)
 }
 
 #[no_mangle]

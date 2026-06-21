@@ -1,16 +1,20 @@
 use core::ffi::c_void;
-use core::mem::{ManuallyDrop, MaybeUninit, offset_of, size_of};
+use core::mem::{align_of, offset_of, size_of, ManuallyDrop, MaybeUninit};
 use core::ptr::{
     addr_of, addr_of_mut, copy_nonoverlapping, null_mut, read_volatile, write, write_volatile,
 };
 
 use crate::abi::{
-    AbiListHead, CInt, CLong, CULong, ITimerVal, IkcScdPacket, IkcScdPacketTraditional, Iovec,
-    CpuLocalVar, KSigAction, MovePagesSmpReq, PROCESS_NUMA_MASK_WORDS, Process, ProcessVm, RUsage,
-    SigAction, SigInfo, SigInfoChild, SigInfoKill, SigStack, SizeT, SysInfo, SyscallRequest,
-    SyscallResponse, Thread, TimeSpec, TimeVal, TodData, VmRange, VmRangeNumaPolicy,
-    X86UserContext,
+    AbiListHead, CInt, CLong, CULong, CpuLocalVar, CpuSet, I387FxsaveStruct, ITimerVal, IhkAtomic,
+    IhkOsCpuMonitor, IhkSpinlock, IkcScdPacket, IkcScdPacketTraditional, Iovec, KSigAction, Mckfd,
+    MovePagesSmpReq, Process, ProcessVm, RLimit, RUsage, SchedParam, SigAction, SigInfo,
+    SigInfoChild, SigInfoKill, SigSet, SigStack, SizeT, SysInfo, SyscallRequest, SyscallResponse,
+    Thread, TimeSpec, TimeVal, TodData, User, UserRegsStruct, UtiAttr, VmRange, VmRangeNumaPolicy,
+    VmRegions, X86UserContext, XsaveStruct, PROCESS_NUMA_MASK_WORDS,
 };
+use crate::lock_helpers::McsRwlockNodeIrqsave;
+use crate::mem_helpers::{rusage_check_overmap, rusage_get_free_memory, rusage_get_total_memory};
+use crate::sched_helpers::SchedSyscallOffsets;
 
 const EINVAL: CInt = 22;
 const ENOMEM: CInt = 12;
@@ -66,6 +70,7 @@ const PTATTR_ACTIVE: CULong = 0x01;
 const PTATTR_USER: CULong = 0x04;
 const PTATTR_NO_EXECUTE: CULong = 0x8000_0000_0000_0000;
 const PTATTR_UNCACHABLE: CULong = 0x10000;
+const IHK_MC_AP_NOWAIT: CULong = 0x000002;
 
 const MCL_CURRENT: CInt = 0x01;
 const MCL_FUTURE: CInt = 0x02;
@@ -133,13 +138,44 @@ const MINSIGSTKSZ: SizeT = 2048;
 const SS_DISABLE: CInt = 2;
 
 const IOV_MAX: CULong = 1024;
+const SYS_READ: CInt = 0;
+const SYS_OPEN: CInt = 2;
+const SYS_CLOSE: CInt = 3;
+const SYS_IOCTL: CInt = 16;
+const SYS_FCNTL: CInt = 72;
+const SYS_SETUID: CInt = 105;
+const SYS_SETGID: CInt = 106;
+const SYS_SETREUID: CInt = 113;
+const SYS_SETREGID: CInt = 114;
+const SYS_SETRESUID: CInt = 117;
+const SYS_SETRESGID: CInt = 119;
+const SYS_SETFSUID: CInt = 122;
+const SYS_SETFSGID: CInt = 123;
+const SYS_SCHED_SETPARAM: CInt = 142;
+const SYS_PSELECT6: CInt = 270;
+const SYS_PPOLL: CInt = 271;
+const SYS_EPOLL_PWAIT: CInt = 281;
+const SYS_SIGNALFD4: CInt = 289;
 const PROCESS_VM_READ: CInt = 0;
 const PROCESS_VM_WRITE: CInt = 1;
 const PR_SET_THP_DISABLE: CInt = 41;
 const PR_GET_THP_DISABLE: CInt = 42;
 const SYS_PRCTL: CInt = 157;
+const SYS_SETPGID: CInt = 109;
+const SYS_NANOSLEEP: CInt = 35;
+const SYS_GETITIMER: CInt = 36;
+const SYS_SETITIMER: CInt = 38;
+const SYS_GETTIMEOFDAY: CInt = 96;
+const SYS_TIME: CInt = 201;
+const SYS_SETTIMEOFDAY: CInt = 164;
+const SYS_CLOCK_GETTIME: CInt = 228;
+const SYS_OPENAT: CInt = 257;
+const SYS_SWAPOUT: CInt = 801;
 const SYS_LINUX_MLOCK: CInt = 802;
 const SYS_LINUX_SPAWN: CInt = 811;
+const IHK_OS_MONITOR_KERNEL_HEAVY: CInt = 4;
+const CPU_FLAG_NEED_RESCHED: u32 = 0x1;
+const MCK_RLIMIT_MEMLOCK: CInt = 6;
 const ARCH_SET_GS: CULong = 0x1001;
 const ARCH_SET_FS: CULong = 0x1002;
 const ARCH_GET_FS: CULong = 0x1003;
@@ -163,11 +199,16 @@ const ARCH_MMAP_LOG_INVALID: CInt = 3;
 const ARCH_MMAP_LOG_NOMEM: CInt = 4;
 const ARCH_MMAP_LOG_UNKNOWN_FLAGS: CInt = 5;
 
+static XPMEM_DEV_PATH: &[u8] = b"/dev/xpmem\0";
+
 unsafe extern "C" {
     static mut uti_desc: CULong;
     static mut tod_data: TodData;
+    static mut tod_data_lock: IhkSpinlock;
+    static mut gettime_local_support: CInt;
     fn get_this_cpu_local_var() -> *mut CpuLocalVar;
     fn ihk_mc_get_processor_id() -> CInt;
+    fn ihk_mc_get_nr_numa_nodes() -> CInt;
     fn do_fork(
         clone_flags: CInt,
         newsp: CULong,
@@ -177,10 +218,45 @@ unsafe extern "C" {
         pc: CULong,
         sp: CULong,
     ) -> CULong;
+    fn arch_copy_to_user_bridge(dst_addr: CULong, src: *const u8, bytes: SizeT) -> CLong;
+    fn arch_copy_from_user_bridge(dst: *mut u8, src_addr: CULong, bytes: SizeT) -> CLong;
+    fn arch_rt_sigreturn_context_bridge(
+        thread: *mut *mut Thread,
+        regs: *mut *mut X86UserContext,
+        xsave_size: *mut CInt,
+    );
+    fn arch_rt_sigreturn_syscall_bridge(num: CInt, regs: *mut c_void) -> CLong;
+    fn arch_rt_sigreturn_set_signal_bridge(sig: CInt, regs: *mut c_void, info: *const SigInfo);
+    fn arch_rt_sigreturn_check_signal_bridge(signum: CInt, regs: *mut c_void, num: CInt);
+    fn arch_rt_sigreturn_alloc_bridge(size: SizeT, flags: CULong) -> *mut c_void;
+    fn arch_rt_sigreturn_free_bridge(ptr: *mut c_void);
+    fn arch_rt_sigreturn_xrstor_bridge(fpregs: *mut c_void);
     fn arch_syscall_forward_context_bridge(syscall_nr: CInt, ctx: *mut c_void) -> CLong;
     fn arch_prctl_set_register_bridge(type_: CInt, value: CULong) -> CInt;
     fn arch_prctl_get_register_bridge(type_: CInt, addr: *mut CULong) -> CInt;
     fn arch_prctl_log_bridge(event: CInt, cpu: CInt, value: CULong);
+    fn arch_ptrace_lookup_user_context_bridge(thread: *mut c_void) -> *mut c_void;
+    fn arch_ptrace_alloc_bridge(size: SizeT, flags: CULong) -> *mut c_void;
+    fn arch_ptrace_user_log_bridge(event: CInt, value: CInt, result: CInt);
+    fn arch_ptrace_find_thread_bridge(tgid: CInt, tid: CInt) -> CULong;
+    fn arch_ptrace_thread_unlock_bridge(thread_addr: CULong);
+    fn arch_ptrace_read_user_bridge(thread_addr: CULong, addr: CLong, value: *mut CULong) -> CLong;
+    fn arch_ptrace_write_user_bridge(thread_addr: CULong, addr: CLong, value: CULong) -> CLong;
+    fn arch_ptrace_read_gpregs_bridge(thread_addr: CULong, regs: *mut u8) -> CLong;
+    fn arch_ptrace_write_gpregs_bridge(thread_addr: CULong, regs: *const u8) -> CLong;
+    fn arch_ptrace_xstate_copy_to_bridge(
+        thread_addr: CULong,
+        user_addr: CULong,
+        bytes: SizeT,
+    ) -> CLong;
+    fn arch_ptrace_xstate_copy_from_bridge(
+        thread_addr: CULong,
+        user_addr: CULong,
+        bytes: SizeT,
+    ) -> CLong;
+    fn arch_ptrace_regset_log_bridge(event: CInt, type_: CLong);
+    fn arch_clone_reader_lock_bridge(lock: *mut c_void, node: *mut c_void);
+    fn arch_clone_reader_unlock_bridge(lock: *mut c_void, node: *mut c_void);
     fn ihk_mc_get_linux_default_huge_page_shift() -> CInt;
     fn arch_do_shmget_bridge(key: CLong, size: SizeT, shmflg: CInt) -> CInt;
     fn arch_shmget_log_bridge(
@@ -191,10 +267,277 @@ unsafe extern "C" {
         error: CInt,
         shmid: CInt,
     );
+    fn arch_do_mmap_bridge(
+        addr: CULong,
+        len: SizeT,
+        prot: CInt,
+        flags: CInt,
+        fd: CInt,
+        off: CLong,
+        vrf0: CInt,
+        private_data: *mut c_void,
+    ) -> CLong;
+    fn arch_mmap_log_bridge(
+        event: CInt,
+        addr0: CULong,
+        len0: SizeT,
+        prot: CInt,
+        flags0: CInt,
+        fd: CInt,
+        off0: CLong,
+        error: CInt,
+        result_addr: CULong,
+        extra: CInt,
+    );
+    fn arch_mmap_supported_flags_bridge() -> CInt;
+    fn arch_mmap_ignored_flags_bridge() -> CInt;
+    fn arch_mmap_error_flags_bridge() -> CInt;
     fn syscall_policy_do_syscall2_bridge(syscall_nr: CInt, arg0: CULong, arg1: CULong) -> CLong;
+    fn syscall_policy_do_syscall3_bridge(
+        syscall_nr: CInt,
+        arg0: CULong,
+        arg1: CULong,
+        arg2: CULong,
+    ) -> CLong;
     fn syscall_policy_forward_context_bridge(syscall_nr: CInt, ctx: *mut c_void) -> CLong;
+    fn syscall_settimeofday_lock_bridge(lock: *mut c_void);
+    fn syscall_settimeofday_unlock_bridge(lock: *mut c_void);
+    fn syscall_atomic64_read_bridge(value: *mut c_void) -> CLong;
+    fn syscall_atomic64_inc_bridge(value: *mut c_void);
+    fn syscall_wmb_bridge();
+    fn syscall_settimeofday_panic_bridge();
+    fn syscall_settimeofday_log_bridge(
+        event: CInt,
+        utv: CULong,
+        utz: CULong,
+        sec: CLong,
+        nsec: CLong,
+        error: CLong,
+    );
+    fn do_pageout(filename: *const c_void, workarea: *mut c_void, size: SizeT, flag: CInt) -> CInt;
+    fn do_pagein(flag: CInt) -> CInt;
+    fn syscall_swapout_log_bridge(fname: *const c_void, buf: *mut c_void, size: SizeT, flag: CInt);
+    fn syscall_util_thread_bridge(arg: *mut c_void) -> CLong;
+    fn syscall_util_indicate_clone_disabled_bridge();
+    fn syscall_copy_to_user_bridge(dst_addr: CULong, src: *const u8, bytes: SizeT) -> CLong;
+    fn syscall_copy_from_user_bridge(dst: *mut u8, src_addr: CULong, bytes: SizeT) -> CLong;
+    fn syscall_copy_int_to_user_bridge(dst_addr: CULong, src: *const CInt) -> CLong;
+    fn syscall_forward_rt_sigprocmask_bridge(sigmask: CULong) -> CLong;
+    fn syscall_pending_mask_bridge(thread: *mut c_void) -> CULong;
+    fn syscall_signalfd_create_bridge(syscall_nr: CInt, flags: CInt) -> CLong;
+    fn syscall_signalfd_publish_bridge(
+        thread: *mut c_void,
+        fd: CInt,
+        maskp: *const CULong,
+        create: CInt,
+    ) -> CLong;
+    fn syscall_do_kill_thread_bridge(
+        thread: *mut c_void,
+        pid: CInt,
+        tid: CInt,
+        sig: CInt,
+        info: *const SigInfo,
+        ptracecont: CInt,
+    ) -> CLong;
+    fn syscall_do_kill_current_bridge(pid: CInt, sig: CInt, info: *const SigInfo) -> CLong;
+    fn syscall_kill_log_bridge(event: CInt, pid: CInt, sig: CInt, error: CInt);
+    fn syscall_do_sigaction_bridge(sig: CInt, act: *mut KSigAction, oact: *mut KSigAction) -> CInt;
+    fn do_setresuid();
+    fn do_setresgid();
+    fn syscall_mckfd_lock_bridge(lock: *mut c_void) -> CLong;
+    fn syscall_mckfd_unlock_bridge(lock: *mut c_void, irqstate: CLong);
+    fn syscall_alloc_bridge(size: SizeT, flags: CULong) -> *mut c_void;
+    fn syscall_mckfd_free_bridge(fdp: *mut c_void);
+    fn syscall_tofu_ioctl_bridge(
+        thread: *mut c_void,
+        fd: CInt,
+        cmd: CULong,
+        arg: CULong,
+        handled: *mut CInt,
+    ) -> CLong;
+    fn syscall_tofu_close_bridge(thread: *mut c_void, fd: CInt);
+    fn syscall_strlen_user_bridge(path: *const c_void) -> CLong;
+    fn syscall_xpmem_open_bridge(pathname: *const c_void, flags: CInt, ctx: *mut c_void) -> CLong;
+    fn syscall_xpmem_openat_bridge(pathname: *const c_void, flags: CInt, ctx: *mut c_void)
+        -> CLong;
+    fn syscall_tsc_to_ts_bridge(tsc: CULong, ts: *mut TimeSpec);
+    fn syscall_timespec_to_jiffy_bridge(ts: *const TimeSpec) -> CULong;
+    fn syscall_ts_add_bridge(dst: *mut TimeSpec, src: *const TimeSpec);
+    fn syscall_gettime_bridge(ts: *mut TimeSpec);
+    fn syscall_rdtsc_bridge() -> CULong;
+    fn syscall_ns_per_tsc_bridge() -> CULong;
+    fn syscall_has_sigpending_bridge(thread: *mut c_void) -> CInt;
+    fn syscall_threads_reader_lock_bridge(proc: *mut c_void, lock_arg: *mut c_void);
+    fn syscall_threads_reader_unlock_bridge(proc: *mut c_void, lock_arg: *mut c_void);
+    fn syscall_interrupt_cpu_bridge(cpu_id: CInt);
+    fn syscall_cpu_pause_bridge();
+    fn syscall_sigsuspend_bridge(thread: *mut c_void, set: *mut c_void) -> CLong;
+    fn syscall_set_timer_bridge(runq_locked: CInt);
+    fn syscall_find_process_bridge(pid: CInt, lock_arg: *mut c_void) -> *mut c_void;
+    fn syscall_process_unlock_bridge(proc: *mut c_void, lock_arg: *mut c_void);
+    fn syscall_do_prlimit64_bridge(
+        pid: CInt,
+        resource: CInt,
+        new_limit_addr: CULong,
+        old_limit_addr: CULong,
+    ) -> CLong;
+    fn syscall_get_processor_id_bridge() -> CInt;
+    fn syscall_get_numa_id_bridge() -> CInt;
+    fn syscall_mlockall_log_bridge(flags: CInt, error: CInt);
+    fn syscall_munlockall_log_bridge(value: CInt, error: CInt);
     fn syscall_linux_mlock_log_bridge(addr: CULong, len: SizeT);
+    fn memlock_write_lock_bridge(lock: *mut c_void);
+    fn memlock_write_unlock_bridge(lock: *mut c_void);
+    fn memlock_lookup_range_bridge(vm: *mut c_void, start: CULong, end: CULong) -> *mut c_void;
+    fn memlock_next_range_bridge(vm: *mut c_void, range: *mut c_void) -> *mut c_void;
+    fn memlock_split_range_bridge(
+        vm: *mut c_void,
+        range: *mut c_void,
+        addr: CULong,
+        new_range: *mut *mut c_void,
+    ) -> CInt;
+    fn memlock_join_range_bridge(vm: *mut c_void, left: *mut c_void, right: *mut c_void) -> CInt;
+    fn memlock_populate_bridge(vm: *mut c_void, start: CULong, len: SizeT) -> CInt;
+    fn memlock_log_bridge(record: *const MemlockLogRecord);
+    fn mprotect_flush_nfo_bridge();
+    fn remap_file_pages_callable_bridge(memobj: *mut c_void) -> CInt;
+    fn remap_file_pages_remap_bridge(
+        vm: *mut c_void,
+        range: *mut c_void,
+        start: CULong,
+        end: CULong,
+        off: CLong,
+    ) -> CInt;
+    fn remap_file_pages_clear_host_bridge(start: CULong, size: SizeT, holding_lock: CInt);
+    fn remap_file_pages_log_bridge(record: *const RemapFilePagesLogRecord);
+    fn mremap_extend_bridge(vm: *mut c_void, range: *mut c_void, newend: CULong) -> CInt;
+    fn mremap_search_bridge(size: SizeT, pgshift: CULong, newstartp: *mut CULong) -> CInt;
+    fn mremap_memobj_ref_bridge(memobj: *mut c_void);
+    fn mremap_memobj_unref_bridge(memobj: *mut c_void);
+    fn mremap_add_range_bridge(
+        vm: *mut c_void,
+        start: CULong,
+        end: CULong,
+        pgshift: CLong,
+        flags: CULong,
+        memobj: *mut c_void,
+        objoff: CULong,
+    ) -> CInt;
+    fn mremap_pte_lock_bridge(lock: *mut c_void);
+    fn mremap_pte_unlock_bridge(lock: *mut c_void);
+    fn mremap_move_pte_bridge(
+        page_table: *mut c_void,
+        vm: *mut c_void,
+        oldstart: *mut c_void,
+        newstart: *mut c_void,
+        size: SizeT,
+        range: *mut c_void,
+    ) -> CInt;
+    fn mremap_log_bridge(record: *const MremapLogRecord);
+    fn msync_read_lock_bridge(lock: *mut c_void);
+    fn msync_read_unlock_bridge(lock: *mut c_void);
+    fn msync_lookup_range_bridge(vm: *mut c_void, start: CULong, end: CULong) -> *mut c_void;
+    fn msync_next_range_bridge(vm: *mut c_void, range: *mut c_void) -> *mut c_void;
+    fn msync_has_pager_bridge(memobj: *mut c_void) -> CInt;
+    fn msync_sync_range_bridge(
+        vm: *mut c_void,
+        range: *mut c_void,
+        start: CULong,
+        end: CULong,
+    ) -> CInt;
+    fn msync_invalidate_range_bridge(
+        vm: *mut c_void,
+        range: *mut c_void,
+        start: CULong,
+        end: CULong,
+    ) -> CInt;
+    fn msync_log_bridge(event: CInt, start: CULong, len: SizeT, flags: CInt, error: CInt);
+    fn syscall_mbind_entry_log_bridge(
+        addr: CULong,
+        len: CULong,
+        mode: CInt,
+        nodemask_addr: CULong,
+        flags: CULong,
+    );
+    fn syscall_mbind_write_lock_bridge(lock: *mut c_void);
+    fn syscall_mbind_write_unlock_bridge(lock: *mut c_void);
+    fn syscall_mbind_lookup_range_bridge(
+        vm: *mut ProcessVm,
+        start: CULong,
+        end: CULong,
+    ) -> *mut VmRange;
+    fn syscall_mbind_policy_search_bridge(
+        vm: *mut ProcessVm,
+        addr: CULong,
+    ) -> *mut VmRangeNumaPolicy;
+    fn syscall_mbind_clear_range_bridge(vm: *mut ProcessVm, start: CULong, end: CULong) -> CInt;
+    fn syscall_mbind_policy_alloc_bridge(size: SizeT, flags: CULong) -> *mut c_void;
+    fn syscall_mbind_policy_rb_clear_bridge(range_policy: *mut VmRangeNumaPolicy);
+    fn syscall_mbind_policy_insert_bridge(
+        vm: *mut ProcessVm,
+        range_policy: *mut VmRangeNumaPolicy,
+    ) -> CInt;
+    fn syscall_mbind_log_bridge(event: CInt, arg0: CULong, arg1: CULong, arg2: CInt);
+    fn syscall_set_mempolicy_log_bridge(event: CInt, value: CInt, pid: CInt);
+    fn syscall_get_mempolicy_read_lock_bridge(lock: *mut c_void);
+    fn syscall_get_mempolicy_read_unlock_bridge(lock: *mut c_void);
+    fn syscall_get_mempolicy_lookup_range_bridge(
+        vm: *mut ProcessVm,
+        start: CULong,
+        end: CULong,
+    ) -> *mut VmRange;
+    fn syscall_get_mempolicy_policy_search_bridge(
+        vm: *mut ProcessVm,
+        addr: CULong,
+    ) -> *mut VmRangeNumaPolicy;
+    fn syscall_get_mempolicy_lookup_node_bridge(vm: *mut ProcessVm, addr: *mut c_void) -> CInt;
+    fn syscall_get_mempolicy_log_bridge(event: CInt, addr: CULong, value: CInt);
+    fn syscall_madvise_log_bridge(cpu: CInt, start: CULong, len: SizeT, advice: CInt);
+    fn syscall_migrate_pages_log_bridge();
     fn syscall_util_register_desc_log_bridge(tid: CInt, desc: CULong);
+    fn exit_do_exit_bridge(code: CInt);
+    fn exit_group_current_pid_bridge() -> CInt;
+    fn exit_group_log_bridge(pid: CInt);
+    fn exit_group_terminate_bridge(status: CInt, group: CInt);
+    fn munmap_write_lock_bridge(lock: *mut c_void);
+    fn munmap_write_unlock_bridge(lock: *mut c_void);
+    fn munmap_do_bridge(addr: *mut c_void, len: SizeT, holding_lock: CInt) -> CInt;
+    fn munmap_log_bridge(event: CInt, cpu: CInt, addr: CULong, len: SizeT, error: CInt);
+    fn brk_flush_bridge();
+    fn brk_write_lock_bridge(lock: *mut c_void);
+    fn brk_write_unlock_bridge(lock: *mut c_void);
+    fn brk_extend_bridge(
+        vm: *mut c_void,
+        old_end: CULong,
+        address: CULong,
+        vrflag: CULong,
+    ) -> CULong;
+    fn brk_log_bridge(event: CInt, cpu: CInt, brk_start: CULong, brk_end: CULong, value: CULong);
+    fn wait4_do_wait_bridge(
+        pid: CInt,
+        status: *mut CInt,
+        options: CInt,
+        usage: *mut RUsage,
+    ) -> CInt;
+    fn sched_find_thread_bridge(pid: CInt) -> usize;
+    fn sched_thread_unlock_bridge(thread_addr: usize);
+    fn sched_apply_scheduler_bridge(thread_addr: usize, policy: CInt, param_addr: usize) -> CInt;
+    fn sched_hold_thread_bridge(thread_addr: usize) -> CInt;
+    fn sched_release_thread_bridge(thread_addr: usize);
+    fn sched_request_migrate_bridge(cpu_id: CInt, thread_addr: usize);
+    fn sched_setparam_log_bridge(pid: CInt, uparam_addr: CULong);
+    fn sched_yield_lock_bridge(lock: *mut c_void) -> CLong;
+    fn sched_yield_unlock_bridge(lock: *mut c_void, irqstate: CLong);
+    fn sched_yield_schedule_bridge();
+    fn do_process_vm_read_writev(
+        pid: CInt,
+        local_iov: *const c_void,
+        liovcnt: CULong,
+        remote_iov: *const c_void,
+        riovcnt: CULong,
+        flags: CULong,
+        op: CInt,
+    ) -> CInt;
 }
 
 #[no_mangle]
@@ -939,6 +1282,27 @@ pub struct SyscallCputimeOffsets {
     pub proc_maxrss_children_offset: SizeT,
 }
 
+#[repr(C, align(64))]
+struct McsRwlockNode {
+    count: IhkAtomic,
+    type_: i8,
+    locked: i8,
+    dmy1: i8,
+    dmy2: i8,
+    next: *mut McsRwlockNode,
+}
+
+const _: () = {
+    assert!(size_of::<McsRwlockNode>() == 64);
+    assert!(align_of::<McsRwlockNode>() == 64);
+    assert!(offset_of!(McsRwlockNode, count) == 0);
+    assert!(offset_of!(McsRwlockNode, type_) == 4);
+    assert!(offset_of!(McsRwlockNode, locked) == 5);
+    assert!(offset_of!(McsRwlockNode, dmy1) == 6);
+    assert!(offset_of!(McsRwlockNode, dmy2) == 7);
+    assert!(offset_of!(McsRwlockNode, next) == 8);
+};
+
 #[repr(C)]
 pub struct SyscallItimerOffsets {
     pub thread_itimer_enabled_offset: SizeT,
@@ -1307,12 +1671,20 @@ pub extern "C" fn set_robust_list_body_result(len: SizeT) -> CLong {
 
 #[no_mangle]
 pub extern "C" fn tkill_tid_result(tid: CInt) -> CInt {
-    if tid <= 0 { -EINVAL } else { 0 }
+    if tid <= 0 {
+        -EINVAL
+    } else {
+        0
+    }
 }
 
 #[no_mangle]
 pub extern "C" fn tgkill_target_result(tgid: CInt, tid: CInt) -> CInt {
-    if tgid <= 0 || tid <= 0 { -EINVAL } else { 0 }
+    if tgid <= 0 || tid <= 0 {
+        -EINVAL
+    } else {
+        0
+    }
 }
 
 #[no_mangle]
@@ -1975,7 +2347,7 @@ pub unsafe extern "C" fn syscall_refresh_cred_fields_body_result(
 pub unsafe extern "C" fn syscall_times_body_result(
     thread: *mut u8,
     buf_addr: CULong,
-    gettime_local_support: CInt,
+    gettime_local_enabled: CInt,
     offsets: *const SyscallTimesOffsets,
     tsc_to_ts_fn: Option<SyscallTscToTsFn>,
     timespec_to_jiffy_fn: Option<SyscallTimespecToJiffyFn>,
@@ -2060,7 +2432,7 @@ pub unsafe extern "C" fn syscall_times_body_result(
         return -(EFAULT as CLong);
     }
 
-    if gettime_local_support != 0 {
+    if gettime_local_enabled != 0 {
         let Some(gettime) = gettime_fn else {
             return -(EINVAL as CLong);
         };
@@ -2394,17 +2766,29 @@ pub unsafe extern "C" fn syscall_nested_response_prepare_result(
 
 #[no_mangle]
 pub extern "C" fn setpgid_normalize_pid(current_pid: CInt, pid: CInt) -> CInt {
-    if pid == 0 { current_pid } else { pid }
+    if pid == 0 {
+        current_pid
+    } else {
+        pid
+    }
 }
 
 #[no_mangle]
 pub extern "C" fn setpgid_normalize_pgid(pid: CInt, pgid: CInt) -> CInt {
-    if pgid == 0 { pid } else { pgid }
+    if pgid == 0 {
+        pid
+    } else {
+        pgid
+    }
 }
 
 #[no_mangle]
 pub extern "C" fn setpgid_execed_result(execed: CInt) -> CInt {
-    if execed != 0 { -EACCES } else { 0 }
+    if execed != 0 {
+        -EACCES
+    } else {
+        0
+    }
 }
 
 #[no_mangle]
@@ -8011,7 +8395,11 @@ pub extern "C" fn itimer_which_result(which: CInt) -> CInt {
 
 #[no_mangle]
 pub extern "C" fn itimer_is_real(which: CInt) -> CInt {
-    if which == ITIMER_REAL { 1 } else { 0 }
+    if which == ITIMER_REAL {
+        1
+    } else {
+        0
+    }
 }
 
 #[no_mangle]
@@ -8808,7 +9196,11 @@ pub extern "C" fn signal_pending_interrupt_action_result(
 
 #[no_mangle]
 pub extern "C" fn rt_sigqueueinfo_pid_result(pid: CInt) -> CInt {
-    if pid <= 0 { -ESRCH } else { 0 }
+    if pid <= 0 {
+        -ESRCH
+    } else {
+        0
+    }
 }
 
 #[no_mangle]
@@ -9068,7 +9460,11 @@ pub extern "C" fn sigaltstack_validate(flags: CInt, size: SizeT) -> CInt {
 
 #[no_mangle]
 pub extern "C" fn sigaltstack_is_disable(flags: CInt) -> CInt {
-    if flags == SS_DISABLE { 1 } else { 0 }
+    if flags == SS_DISABLE {
+        1
+    } else {
+        0
+    }
 }
 
 #[no_mangle]
@@ -9141,7 +9537,11 @@ pub extern "C" fn process_vm_validate_args(
 
 #[no_mangle]
 pub extern "C" fn process_vm_op_is_write(op: CInt) -> CInt {
-    if op == PROCESS_VM_WRITE { 1 } else { 0 }
+    if op == PROCESS_VM_WRITE {
+        1
+    } else {
+        0
+    }
 }
 
 #[no_mangle]
@@ -10098,6 +10498,248 @@ pub unsafe extern "C" fn sys_prctl(_n: CInt, ctx: *mut X86UserContext) -> CLong 
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn sys_rt_sigreturn(_n: CInt, _ctx: *mut X86UserContext) -> CLong {
+    let mut thread: *mut Thread = null_mut();
+    let mut regs: *mut X86UserContext = null_mut();
+    let mut xsave_size: CInt = 0;
+
+    arch_rt_sigreturn_context_bridge(
+        addr_of_mut!(thread),
+        addr_of_mut!(regs),
+        addr_of_mut!(xsave_size),
+    );
+    if thread.is_null() || regs.is_null() {
+        return -(EFAULT as CLong);
+    }
+
+    arch_rt_sigreturn_body_result(
+        thread.cast::<u8>(),
+        regs,
+        offset_of!(Thread, sigmask),
+        offset_of!(Thread, sigstack),
+        size_of::<SigStack>(),
+        size_of::<RtSigreturnFrame>(),
+        xsave_size,
+        IHK_MC_AP_NOWAIT,
+        Some(arch_copy_from_user_bridge),
+        Some(arch_rt_sigreturn_syscall_bridge),
+        Some(arch_rt_sigreturn_set_signal_bridge),
+        Some(crate::sched_helpers::check_need_resched),
+        Some(arch_rt_sigreturn_check_signal_bridge),
+        Some(arch_rt_sigreturn_alloc_bridge),
+        Some(arch_rt_sigreturn_free_bridge),
+        Some(arch_rt_sigreturn_xrstor_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_times(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let offsets = SyscallTimesOffsets {
+        thread_proc_offset: offset_of!(Thread, proc),
+        thread_user_tsc_offset: offset_of!(Thread, user_tsc),
+        thread_system_tsc_offset: offset_of!(Thread, system_tsc),
+        proc_utime_offset: offset_of!(Process, utime),
+        proc_stime_offset: offset_of!(Process, stime),
+        proc_utime_children_offset: offset_of!(Process, utime_children),
+        proc_stime_children_offset: offset_of!(Process, stime_children),
+    };
+
+    syscall_times_body_result(
+        thread.cast::<u8>(),
+        (*ctx).gpr.rdi,
+        gettime_local_support,
+        addr_of!(offsets),
+        Some(syscall_tsc_to_ts_bridge),
+        Some(syscall_timespec_to_jiffy_bridge),
+        Some(syscall_ts_add_bridge),
+        Some(syscall_gettime_bridge),
+        Some(syscall_copy_to_user_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_setpgid(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let offsets = SyscallSetpgidOffsets {
+        thread_proc_offset: offset_of!(Thread, proc),
+        proc_pid_offset: offset_of!(Process, pid),
+        proc_pgid_offset: offset_of!(Process, pgid),
+        proc_execed_offset: offset_of!(Process, execed),
+    };
+    let mut lock = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
+
+    syscall_setpgid_body_result(
+        thread.cast::<u8>(),
+        (*ctx).gpr.rdi as CInt,
+        (*ctx).gpr.rsi as CInt,
+        SYS_SETPGID,
+        ctx.cast::<c_void>(),
+        addr_of!(offsets),
+        lock.as_mut_ptr().cast::<c_void>(),
+        Some(syscall_find_process_bridge),
+        Some(syscall_process_unlock_bridge),
+        Some(syscall_policy_forward_context_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_setrlimit(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    syscall_setrlimit_body_result(
+        (*ctx).gpr.rdi as CInt,
+        (*ctx).gpr.rsi,
+        Some(syscall_do_prlimit64_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_getrlimit(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    syscall_getrlimit_body_result(
+        (*ctx).gpr.rdi as CInt,
+        (*ctx).gpr.rsi,
+        Some(syscall_do_prlimit64_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_prlimit64(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    syscall_prlimit64_body_result(
+        (*ctx).gpr.rdi as CInt,
+        (*ctx).gpr.rsi as CInt,
+        (*ctx).gpr.rdx,
+        (*ctx).gpr.r10,
+        Some(syscall_do_prlimit64_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_sysinfo(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    syscall_sysinfo_body_result(
+        (*ctx).gpr.rdi,
+        rusage_get_total_memory(),
+        rusage_get_free_memory(),
+        Some(syscall_copy_to_user_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_mlockall(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let offsets = SyscallMlockallOffsets {
+        thread_proc_offset: offset_of!(Thread, proc),
+        proc_euid_offset: offset_of!(Process, euid),
+        proc_rlimit_offset: offset_of!(Process, rlimit),
+        rlimit_entry_size: size_of::<RLimit>(),
+        memlock_resource: MCK_RLIMIT_MEMLOCK,
+    };
+
+    syscall_mlockall_body_result(
+        thread.cast::<u8>(),
+        (*ctx).gpr.rdi as CInt,
+        addr_of!(offsets),
+        Some(syscall_mlockall_log_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_munlockall(_n: CInt, _ctx: *mut X86UserContext) -> CLong {
+    syscall_munlockall_body_result(Some(syscall_munlockall_log_bridge))
+}
+
+unsafe fn sys_memlock_common(
+    ctx: *mut X86UserContext,
+    op: CInt,
+    populate_fn: Option<MemlockPopulateFn>,
+) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() || (*thread).vm.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let vm = (*thread).vm;
+    let region = &(*vm).region;
+
+    memlock_body_result(
+        vm.cast::<c_void>(),
+        (&raw mut (*vm).memory_range_lock).cast::<c_void>(),
+        (*ctx).gpr.rdi,
+        (*ctx).gpr.rsi as SizeT,
+        region.user_start,
+        region.user_end,
+        op,
+        ihk_mc_get_processor_id(),
+        offset_of!(VmRange, start),
+        offset_of!(VmRange, end),
+        offset_of!(VmRange, flag),
+        offset_of!(VmRange, memobj),
+        Some(memlock_write_lock_bridge),
+        Some(memlock_write_unlock_bridge),
+        Some(memlock_lookup_range_bridge),
+        Some(memlock_next_range_bridge),
+        Some(memlock_split_range_bridge),
+        Some(memlock_join_range_bridge),
+        populate_fn,
+        Some(memlock_log_bridge),
+    ) as CLong
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_mlock(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    sys_memlock_common(ctx, MEMLOCK_OP_LOCK, Some(memlock_populate_bridge))
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_munlock(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    sys_memlock_common(ctx, MEMLOCK_OP_UNLOCK, None)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_getcpu(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    syscall_getcpu_body_result(
+        (*ctx).gpr.rdi,
+        (*ctx).gpr.rsi,
+        syscall_get_processor_id_bridge(),
+        syscall_get_numa_id_bridge(),
+        Some(syscall_copy_to_user_bridge),
+    )
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn sys_fork(_n: CInt, ctx: *mut X86UserContext) -> CLong {
     if ctx.is_null() {
         return -(EFAULT as CLong);
@@ -10111,6 +10753,66 @@ pub unsafe extern "C" fn sys_vfork(_n: CInt, ctx: *mut X86UserContext) -> CLong 
         return -(EFAULT as CLong);
     }
     arch_vfork_body_result((*ctx).gpr.rip, (*ctx).gpr.rsp, Some(do_fork)) as CLong
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_clone(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() || (*thread).proc.is_null() {
+        return -(EFAULT as CLong);
+    }
+
+    let mut lock_dump = MaybeUninit::<McsRwlockNodeIrqsave>::uninit();
+    arch_clone_body_result(
+        (*thread).proc.cast::<c_void>(),
+        offset_of!(Process, coredump_lock),
+        lock_dump.as_mut_ptr().cast::<c_void>(),
+        (*ctx).gpr.rdi as CInt,
+        (*ctx).gpr.rsi,
+        (*ctx).gpr.rdx,
+        (*ctx).gpr.r10,
+        (*ctx).gpr.r8,
+        (*ctx).gpr.rip,
+        (*ctx).gpr.rsp,
+        Some(arch_clone_reader_lock_bridge),
+        Some(arch_clone_reader_unlock_bridge),
+        Some(do_fork),
+    ) as CLong
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_wait4(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+
+    wait4_body_result(
+        (*ctx).gpr.rdi as CInt,
+        (*ctx).gpr.rsi,
+        (*ctx).gpr.rdx as CInt,
+        (*ctx).gpr.r10,
+        wait4_do_wait_bridge,
+        syscall_copy_to_user_bridge,
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_waitid(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+
+    waitid_body_result(
+        (*ctx).gpr.rdi as CInt,
+        (*ctx).gpr.rsi as CInt,
+        (*ctx).gpr.rdx,
+        (*ctx).gpr.r10 as CInt,
+        wait4_do_wait_bridge,
+        syscall_copy_to_user_bridge,
+    )
 }
 
 #[no_mangle]
@@ -10151,6 +10853,1045 @@ pub unsafe extern "C" fn sys_arch_prctl(_n: CInt, ctx: *mut X86UserContext) -> C
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn time() -> CLong {
+    if gettime_local_support != 0 || tod_data.clocks_per_sec != 0 {
+        let mut ts = TimeSpec {
+            tv_sec: 0,
+            tv_nsec: 0,
+        };
+        syscall_gettime_bridge(addr_of_mut!(ts));
+        return ts.tv_sec;
+    }
+
+    syscall_policy_do_syscall2_bridge(SYS_TIME, 0, 0)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn interrupt_from_user(regs0: *mut c_void) -> CInt {
+    let regs = regs0.cast::<X86UserContext>();
+    if (read_volatile(addr_of!((*regs).gpr.rsp)) & 0x8000_0000_0000_0000) == 0 {
+        1
+    } else {
+        0
+    }
+}
+
+#[repr(C)]
+struct TransUctx {
+    cond: CInt,
+    fregsize: CInt,
+    rax: CULong,
+    rbx: CULong,
+    rcx: CULong,
+    rdx: CULong,
+    rsi: CULong,
+    rdi: CULong,
+    rbp: CULong,
+    r8: CULong,
+    r9: CULong,
+    r10: CULong,
+    r11: CULong,
+    r12: CULong,
+    r13: CULong,
+    r14: CULong,
+    r15: CULong,
+    rflags: CULong,
+    rip: CULong,
+    rsp: CULong,
+    fs: CULong,
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn save_uctx(uctx: *mut c_void, regs: *mut X86UserContext) {
+    let ctx = uctx.cast::<TransUctx>();
+    let mut regs = regs;
+    if regs.is_null() {
+        arch_rt_sigreturn_context_bridge(null_mut(), addr_of_mut!(regs), null_mut());
+    }
+
+    write_volatile(addr_of_mut!((*ctx).cond), 0);
+    write_volatile(
+        addr_of_mut!((*ctx).rax),
+        read_volatile(addr_of!((*regs).gpr.rax)),
+    );
+    write_volatile(
+        addr_of_mut!((*ctx).rbx),
+        read_volatile(addr_of!((*regs).gpr.rbx)),
+    );
+    write_volatile(
+        addr_of_mut!((*ctx).rcx),
+        read_volatile(addr_of!((*regs).gpr.rcx)),
+    );
+    write_volatile(
+        addr_of_mut!((*ctx).rdx),
+        read_volatile(addr_of!((*regs).gpr.rdx)),
+    );
+    write_volatile(
+        addr_of_mut!((*ctx).rsi),
+        read_volatile(addr_of!((*regs).gpr.rsi)),
+    );
+    write_volatile(
+        addr_of_mut!((*ctx).rdi),
+        read_volatile(addr_of!((*regs).gpr.rdi)),
+    );
+    write_volatile(
+        addr_of_mut!((*ctx).rbp),
+        read_volatile(addr_of!((*regs).gpr.rbp)),
+    );
+    write_volatile(
+        addr_of_mut!((*ctx).r8),
+        read_volatile(addr_of!((*regs).gpr.r8)),
+    );
+    write_volatile(
+        addr_of_mut!((*ctx).r9),
+        read_volatile(addr_of!((*regs).gpr.r9)),
+    );
+    write_volatile(
+        addr_of_mut!((*ctx).r10),
+        read_volatile(addr_of!((*regs).gpr.r10)),
+    );
+    write_volatile(
+        addr_of_mut!((*ctx).r11),
+        read_volatile(addr_of!((*regs).gpr.r11)),
+    );
+    write_volatile(
+        addr_of_mut!((*ctx).r12),
+        read_volatile(addr_of!((*regs).gpr.r12)),
+    );
+    write_volatile(
+        addr_of_mut!((*ctx).r13),
+        read_volatile(addr_of!((*regs).gpr.r13)),
+    );
+    write_volatile(
+        addr_of_mut!((*ctx).r14),
+        read_volatile(addr_of!((*regs).gpr.r14)),
+    );
+    write_volatile(
+        addr_of_mut!((*ctx).r15),
+        read_volatile(addr_of!((*regs).gpr.r15)),
+    );
+    write_volatile(
+        addr_of_mut!((*ctx).rflags),
+        read_volatile(addr_of!((*regs).gpr.rflags)),
+    );
+    write_volatile(
+        addr_of_mut!((*ctx).rsp),
+        read_volatile(addr_of!((*regs).gpr.rsp)),
+    );
+    write_volatile(
+        addr_of_mut!((*ctx).rip),
+        read_volatile(addr_of!((*regs).gpr.rip)),
+    );
+    crate::x86_cpu_helpers::ihk_mc_arch_get_special_register(
+        IHK_ASR_X86_FS,
+        addr_of_mut!((*ctx).fs),
+    );
+    write_volatile(addr_of_mut!((*ctx).fregsize), 0);
+}
+
+#[no_mangle]
+pub extern "C" fn save_syscall_return_value(_num: CInt, _rc: CULong) {}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_time(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    arch_time_body_result(time(), (*ctx).gpr.rdi, Some(arch_copy_to_user_bridge))
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_clock_gettime(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let offsets = SyscallCputimeOffsets {
+        thread_proc_offset: offset_of!(Thread, proc),
+        thread_status_offset: offset_of!(Thread, status),
+        thread_in_kernel_offset: offset_of!(Thread, in_kernel),
+        thread_cpu_id_offset: offset_of!(Thread, cpu_id),
+        thread_times_update_offset: offset_of!(Thread, times_update),
+        thread_user_tsc_offset: offset_of!(Thread, user_tsc),
+        thread_system_tsc_offset: offset_of!(Thread, system_tsc),
+        thread_siblings_list_offset: offset_of!(Thread, siblings_list),
+        proc_threads_list_offset: offset_of!(Process, threads_list),
+        proc_utime_offset: offset_of!(Process, utime),
+        proc_stime_offset: offset_of!(Process, stime),
+        proc_utime_children_offset: offset_of!(Process, utime_children),
+        proc_stime_children_offset: offset_of!(Process, stime_children),
+        proc_maxrss_offset: offset_of!(Process, maxrss),
+        proc_maxrss_children_offset: offset_of!(Process, maxrss_children),
+    };
+    let mut lock = MaybeUninit::<McsRwlockNode>::uninit();
+
+    clock_gettime_body_result(
+        (*ctx).gpr.rdi as CInt,
+        (*ctx).gpr.rsi,
+        gettime_local_support,
+        SYS_CLOCK_GETTIME,
+        thread.cast::<u8>(),
+        tod_data.clocks_per_sec,
+        addr_of!(offsets),
+        Some(syscall_gettime_bridge),
+        Some(syscall_copy_to_user_bridge),
+        Some(syscall_policy_do_syscall2_bridge),
+        Some(syscall_threads_reader_lock_bridge),
+        Some(syscall_threads_reader_unlock_bridge),
+        lock.as_mut_ptr().cast::<c_void>(),
+        Some(syscall_interrupt_cpu_bridge),
+        Some(syscall_cpu_pause_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_gettimeofday(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    gettimeofday_body_result(
+        (*ctx).gpr.rdi,
+        (*ctx).gpr.rsi,
+        gettime_local_support,
+        SYS_GETTIMEOFDAY,
+        Some(syscall_gettime_bridge),
+        Some(syscall_copy_to_user_bridge),
+        Some(syscall_policy_do_syscall2_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_settimeofday(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+
+    settimeofday_body_result(
+        (*ctx).gpr.rdi,
+        (*ctx).gpr.rsi,
+        gettime_local_support,
+        tod_data.clocks_per_sec,
+        SYS_SETTIMEOFDAY,
+        ctx.cast::<c_void>(),
+        addr_of_mut!(tod_data_lock).cast::<c_void>(),
+        addr_of_mut!(tod_data.version).cast::<c_void>(),
+        addr_of_mut!(tod_data.origin),
+        Some(syscall_settimeofday_lock_bridge),
+        Some(syscall_settimeofday_unlock_bridge),
+        Some(syscall_copy_from_user_bridge),
+        Some(syscall_rdtsc_bridge),
+        Some(syscall_policy_forward_context_bridge),
+        Some(syscall_atomic64_read_bridge),
+        Some(syscall_atomic64_inc_bridge),
+        Some(syscall_wmb_bridge),
+        Some(syscall_settimeofday_panic_bridge),
+        Some(syscall_settimeofday_log_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_nanosleep(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let cpu = get_this_cpu_local_var();
+    if cpu.is_null() || (*cpu).current.is_null() || (*cpu).monitor.is_null() {
+        return -(EFAULT as CLong);
+    }
+
+    nanosleep_body_result(
+        (*ctx).gpr.rdi,
+        (*ctx).gpr.rsi,
+        gettime_local_support,
+        SYS_NANOSLEEP,
+        (*cpu).current.cast::<c_void>(),
+        (*cpu).monitor.cast::<u8>(),
+        offset_of!(IhkOsCpuMonitor, status),
+        IHK_OS_MONITOR_KERNEL_HEAVY,
+        Some(syscall_copy_from_user_bridge),
+        Some(syscall_copy_to_user_bridge),
+        Some(syscall_policy_do_syscall2_bridge),
+        Some(syscall_rdtsc_bridge),
+        Some(syscall_ns_per_tsc_bridge),
+        Some(syscall_has_sigpending_bridge),
+        Some(syscall_cpu_pause_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_sched_yield(_n: CInt, _ctx: *mut X86UserContext) -> CLong {
+    let cpu = get_this_cpu_local_var();
+    if cpu.is_null() {
+        return -(EFAULT as CLong);
+    }
+
+    sched_yield_body_result(
+        cpu.cast::<c_void>(),
+        offset_of!(CpuLocalVar, flags),
+        offset_of!(CpuLocalVar, runq_len),
+        offset_of!(CpuLocalVar, runq_lock),
+        CPU_FLAG_NEED_RESCHED,
+        Some(sched_yield_lock_bridge),
+        Some(sched_yield_unlock_bridge),
+        Some(sched_yield_schedule_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_pause(_n: CInt, _ctx: *mut X86UserContext) -> CLong {
+    pause_body_result(
+        current_thread_ptr().cast::<c_void>(),
+        offset_of!(Thread, sigmask),
+        Some(syscall_sigsuspend_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_getrusage(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let offsets = SyscallCputimeOffsets {
+        thread_proc_offset: offset_of!(Thread, proc),
+        thread_status_offset: offset_of!(Thread, status),
+        thread_in_kernel_offset: offset_of!(Thread, in_kernel),
+        thread_cpu_id_offset: offset_of!(Thread, cpu_id),
+        thread_times_update_offset: offset_of!(Thread, times_update),
+        thread_user_tsc_offset: offset_of!(Thread, user_tsc),
+        thread_system_tsc_offset: offset_of!(Thread, system_tsc),
+        thread_siblings_list_offset: offset_of!(Thread, siblings_list),
+        proc_threads_list_offset: offset_of!(Process, threads_list),
+        proc_utime_offset: offset_of!(Process, utime),
+        proc_stime_offset: offset_of!(Process, stime),
+        proc_utime_children_offset: offset_of!(Process, utime_children),
+        proc_stime_children_offset: offset_of!(Process, stime_children),
+        proc_maxrss_offset: offset_of!(Process, maxrss),
+        proc_maxrss_children_offset: offset_of!(Process, maxrss_children),
+    };
+    let mut lock = MaybeUninit::<McsRwlockNode>::uninit();
+
+    getrusage_body_result(
+        (*ctx).gpr.rdi as CInt,
+        (*ctx).gpr.rsi,
+        thread.cast::<u8>(),
+        tod_data.clocks_per_sec,
+        addr_of!(offsets),
+        Some(syscall_threads_reader_lock_bridge),
+        Some(syscall_threads_reader_unlock_bridge),
+        lock.as_mut_ptr().cast::<c_void>(),
+        Some(syscall_interrupt_cpu_bridge),
+        Some(syscall_cpu_pause_bridge),
+        Some(syscall_copy_to_user_bridge),
+    )
+}
+
+fn sched_syscall_offsets() -> SchedSyscallOffsets {
+    SchedSyscallOffsets {
+        thread_proc_offset: offset_of!(Thread, proc),
+        thread_sched_param_offset: offset_of!(Thread, sched_param),
+        thread_sched_policy_offset: offset_of!(Thread, sched_policy),
+        thread_cpu_id_offset: offset_of!(Thread, cpu_id),
+        thread_cpu_set_offset: offset_of!(Thread, cpu_set),
+        proc_pid_offset: offset_of!(Process, pid),
+        proc_ruid_offset: offset_of!(Process, ruid),
+        proc_euid_offset: offset_of!(Process, euid),
+        proc_cpu_set_offset: offset_of!(Process, cpu_set),
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_sched_setparam(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let pid = (*ctx).gpr.rdi as CInt;
+    let uparam = (*ctx).gpr.rsi;
+    sched_setparam_log_bridge(pid, uparam);
+    let mut param = MaybeUninit::<SchedParam>::uninit();
+    let offsets = sched_syscall_offsets();
+
+    crate::sched_helpers::sched_setparam_body_result(
+        pid,
+        uparam,
+        thread as usize,
+        param.as_mut_ptr() as usize,
+        size_of::<SchedParam>(),
+        addr_of!(offsets),
+        SYS_SCHED_SETPARAM,
+        Some(sched_find_thread_bridge),
+        Some(sched_thread_unlock_bridge),
+        Some(syscall_copy_from_user_bridge),
+        Some(syscall_policy_do_syscall2_bridge),
+        Some(sched_apply_scheduler_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_sched_getparam(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let offsets = sched_syscall_offsets();
+
+    crate::sched_helpers::sched_getparam_body_result(
+        (*ctx).gpr.rdi as CInt,
+        (*ctx).gpr.rsi,
+        thread as usize,
+        size_of::<SchedParam>(),
+        addr_of!(offsets),
+        Some(sched_find_thread_bridge),
+        Some(sched_thread_unlock_bridge),
+        Some(syscall_copy_to_user_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_sched_setscheduler(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let mut param = MaybeUninit::<SchedParam>::uninit();
+    let offsets = sched_syscall_offsets();
+
+    crate::sched_helpers::sched_setscheduler_body_result(
+        (*ctx).gpr.rdi as CInt,
+        (*ctx).gpr.rsi as CInt,
+        (*ctx).gpr.rdx,
+        thread as usize,
+        param.as_mut_ptr() as usize,
+        size_of::<SchedParam>(),
+        addr_of!(offsets),
+        SYS_SCHED_SETPARAM,
+        Some(sched_find_thread_bridge),
+        Some(sched_thread_unlock_bridge),
+        Some(syscall_copy_from_user_bridge),
+        Some(syscall_policy_do_syscall2_bridge),
+        Some(sched_apply_scheduler_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_sched_getscheduler(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let offsets = sched_syscall_offsets();
+
+    crate::sched_helpers::sched_getscheduler_body_result(
+        (*ctx).gpr.rdi as CInt,
+        thread as usize,
+        addr_of!(offsets),
+        Some(sched_find_thread_bridge),
+        Some(sched_thread_unlock_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_sched_get_priority_max(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    crate::sched_helpers::sched_get_priority_max_body_result((*ctx).gpr.rdi as CInt)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_sched_get_priority_min(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    crate::sched_helpers::sched_get_priority_min_body_result((*ctx).gpr.rdi as CInt)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_sched_rr_get_interval(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let offsets = sched_syscall_offsets();
+
+    crate::sched_helpers::sched_rr_get_interval_body_result(
+        (*ctx).gpr.rdi as CInt,
+        (*ctx).gpr.rsi,
+        thread as usize,
+        addr_of!(offsets),
+        Some(sched_find_thread_bridge),
+        Some(sched_thread_unlock_bridge),
+        Some(syscall_copy_to_user_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_sched_setaffinity(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let mut k_cpu_set = MaybeUninit::<CpuSet>::uninit();
+    let mut cpu_set = MaybeUninit::<CpuSet>::uninit();
+    let offsets = sched_syscall_offsets();
+    let nr_cpus = crate::ap::num_processors;
+
+    crate::sched_helpers::sched_setaffinity_body_result(
+        (*ctx).gpr.rdi as CInt,
+        (*ctx).gpr.rsi as SizeT,
+        (*ctx).gpr.rdx,
+        thread as usize,
+        k_cpu_set.as_mut_ptr() as usize,
+        cpu_set.as_mut_ptr() as usize,
+        size_of::<CpuSet>(),
+        nr_cpus,
+        addr_of!(offsets),
+        Some(sched_find_thread_bridge),
+        Some(sched_thread_unlock_bridge),
+        Some(sched_hold_thread_bridge),
+        Some(sched_release_thread_bridge),
+        Some(syscall_copy_from_user_bridge),
+        Some(sched_request_migrate_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_sched_getaffinity(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let offsets = sched_syscall_offsets();
+    let nr_cpus = crate::ap::num_processors;
+
+    crate::sched_helpers::sched_getaffinity_body_result(
+        (*ctx).gpr.rdi as CInt,
+        (*ctx).gpr.rsi as SizeT,
+        (*ctx).gpr.rdx,
+        thread as usize,
+        size_of::<CpuSet>(),
+        nr_cpus,
+        addr_of!(offsets),
+        Some(sched_find_thread_bridge),
+        Some(sched_thread_unlock_bridge),
+        Some(sched_hold_thread_bridge),
+        Some(sched_release_thread_bridge),
+        Some(syscall_copy_to_user_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_setitimer(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let offsets = SyscallItimerOffsets {
+        thread_itimer_enabled_offset: offset_of!(Thread, itimer_enabled),
+        thread_itimer_virtual_offset: offset_of!(Thread, itimer_virtual),
+        thread_itimer_prof_offset: offset_of!(Thread, itimer_prof),
+        thread_itimer_virtual_value_offset: offset_of!(Thread, itimer_virtual_value),
+        thread_itimer_prof_value_offset: offset_of!(Thread, itimer_prof_value),
+    };
+
+    setitimer_body_result(
+        (*ctx).gpr.rdi as CInt,
+        (*ctx).gpr.rsi,
+        (*ctx).gpr.rdx,
+        thread.cast::<c_void>(),
+        addr_of!(offsets),
+        SYS_SETITIMER,
+        Some(syscall_policy_do_syscall3_bridge),
+        Some(syscall_copy_from_user_bridge),
+        Some(syscall_copy_to_user_bridge),
+        Some(syscall_set_timer_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_getitimer(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let offsets = SyscallItimerOffsets {
+        thread_itimer_enabled_offset: offset_of!(Thread, itimer_enabled),
+        thread_itimer_virtual_offset: offset_of!(Thread, itimer_virtual),
+        thread_itimer_prof_offset: offset_of!(Thread, itimer_prof),
+        thread_itimer_virtual_value_offset: offset_of!(Thread, itimer_virtual_value),
+        thread_itimer_prof_value_offset: offset_of!(Thread, itimer_prof_value),
+    };
+
+    getitimer_body_result(
+        (*ctx).gpr.rdi as CInt,
+        (*ctx).gpr.rsi,
+        thread.cast::<c_void>(),
+        addr_of!(offsets),
+        SYS_GETITIMER,
+        Some(syscall_policy_do_syscall2_bridge),
+        Some(syscall_copy_to_user_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_epoll_pwait(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() {
+        return -(EFAULT as CLong);
+    }
+
+    syscall_temp_sigmask_body_result(
+        (*ctx).gpr.r8,
+        thread.cast::<c_void>(),
+        offset_of!(Thread, sigmask),
+        SYS_EPOLL_PWAIT,
+        ctx.cast::<c_void>(),
+        Some(syscall_copy_from_user_bridge),
+        Some(syscall_policy_forward_context_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_ppoll(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() {
+        return -(EFAULT as CLong);
+    }
+
+    syscall_temp_sigmask_body_result(
+        (*ctx).gpr.r10,
+        thread.cast::<c_void>(),
+        offset_of!(Thread, sigmask),
+        SYS_PPOLL,
+        ctx.cast::<c_void>(),
+        Some(syscall_copy_from_user_bridge),
+        Some(syscall_policy_forward_context_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_pselect6(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() {
+        return -(EFAULT as CLong);
+    }
+
+    pselect6_sigmask_body_result(
+        (*ctx).gpr.r9,
+        thread.cast::<c_void>(),
+        offset_of!(Thread, sigmask),
+        SYS_PSELECT6,
+        ctx.cast::<c_void>(),
+        Some(syscall_copy_from_user_bridge),
+        Some(syscall_policy_forward_context_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_rt_sigprocmask(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() {
+        return -(EFAULT as CLong);
+    }
+
+    rt_sigprocmask_body_result(
+        (*ctx).gpr.rdi as CInt,
+        (*ctx).gpr.rsi,
+        (*ctx).gpr.rdx,
+        (*ctx).gpr.r10 as SizeT,
+        size_of::<SigSet>(),
+        thread.cast::<u8>(),
+        offset_of!(Thread, sigmask),
+        Some(syscall_copy_from_user_bridge),
+        Some(syscall_copy_to_user_bridge),
+        Some(syscall_forward_rt_sigprocmask_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_rt_sigpending(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+
+    rt_sigpending_body_result(
+        (*ctx).gpr.rdi,
+        (*ctx).gpr.rsi as SizeT,
+        size_of::<SigSet>(),
+        current_thread_ptr().cast::<c_void>(),
+        Some(syscall_pending_mask_bridge),
+        Some(syscall_copy_to_user_bridge),
+    )
+}
+
+#[no_mangle]
+pub extern "C" fn sys_signalfd(_n: CInt, _ctx: *mut X86UserContext) -> CLong {
+    signalfd_body_result()
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_signalfd4(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+
+    signalfd4_body_result(
+        (*ctx).gpr.rdi as CInt,
+        (*ctx).gpr.rsi,
+        (*ctx).gpr.rdx as SizeT,
+        size_of::<SigSet>(),
+        (*ctx).gpr.r10 as CInt,
+        current_thread_ptr().cast::<c_void>(),
+        SYS_SIGNALFD4,
+        Some(syscall_copy_from_user_bridge),
+        Some(syscall_signalfd_create_bridge),
+        Some(syscall_signalfd_publish_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_rt_sigqueueinfo(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+
+    rt_sigqueueinfo_body_result(
+        (*ctx).gpr.rdi as CInt,
+        (*ctx).gpr.rsi as CInt,
+        (*ctx).gpr.rdx,
+        Some(syscall_copy_from_user_bridge),
+        Some(syscall_do_kill_current_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_rt_sigsuspend(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    let mut wset = MaybeUninit::<SigSet>::uninit();
+
+    rt_sigsuspend_body_result(
+        thread.cast::<c_void>(),
+        (*ctx).gpr.rdi,
+        (*ctx).gpr.rsi as SizeT,
+        size_of::<SigSet>(),
+        wset.as_mut_ptr().cast::<c_void>(),
+        Some(syscall_copy_from_user_bridge),
+        Some(syscall_sigsuspend_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_rt_sigaction(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+
+    rt_sigaction_body_result(
+        (*ctx).gpr.rdi as CInt,
+        (*ctx).gpr.rsi,
+        (*ctx).gpr.rdx,
+        (*ctx).gpr.r10 as SizeT,
+        size_of::<SigSet>(),
+        Some(syscall_copy_from_user_bridge),
+        Some(syscall_copy_to_user_bridge),
+        Some(syscall_do_sigaction_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_sigaltstack(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() {
+        return -(EFAULT as CLong);
+    }
+
+    sigaltstack_body_result(
+        thread.cast::<u8>(),
+        offset_of!(Thread, sigstack),
+        (*ctx).gpr.rdi,
+        (*ctx).gpr.rsi,
+        Some(syscall_copy_from_user_bridge),
+        Some(syscall_copy_to_user_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_kill(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let pid = (*ctx).gpr.rdi as CInt;
+    let sig = (*ctx).gpr.rsi as CInt;
+
+    syscall_kill_log_bridge(1, pid, sig, 0);
+    let error = syscall_kill_body_result(
+        thread.cast::<u8>(),
+        offset_of!(Thread, proc),
+        offset_of!(Process, pid),
+        pid,
+        sig,
+        Some(syscall_do_kill_thread_bridge),
+    ) as CInt;
+    syscall_kill_log_bridge(2, pid, sig, error);
+    error as CLong
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_tgkill(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() {
+        return -(EFAULT as CLong);
+    }
+
+    syscall_tgkill_body_result(
+        thread.cast::<u8>(),
+        offset_of!(Thread, proc),
+        offset_of!(Process, pid),
+        (*ctx).gpr.rdi as CInt,
+        (*ctx).gpr.rsi as CInt,
+        (*ctx).gpr.rdx as CInt,
+        Some(syscall_do_kill_thread_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_tkill(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() {
+        return -(EFAULT as CLong);
+    }
+
+    syscall_tkill_body_result(
+        thread.cast::<u8>(),
+        offset_of!(Thread, proc),
+        offset_of!(Process, pid),
+        (*ctx).gpr.rdi as CInt,
+        (*ctx).gpr.rsi as CInt,
+        Some(syscall_do_kill_thread_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_setresuid(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    syscall_forward_refresh_cred_body_result(
+        SYS_SETRESUID,
+        ctx.cast::<c_void>(),
+        Some(syscall_policy_forward_context_bridge),
+        Some(do_setresuid),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_setreuid(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    syscall_forward_refresh_cred_body_result(
+        SYS_SETREUID,
+        ctx.cast::<c_void>(),
+        Some(syscall_policy_forward_context_bridge),
+        Some(do_setresuid),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_setuid(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    syscall_forward_refresh_cred_body_result(
+        SYS_SETUID,
+        ctx.cast::<c_void>(),
+        Some(syscall_policy_forward_context_bridge),
+        Some(do_setresuid),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_setfsuid(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    syscall_setfsid_body_result(
+        (*ctx).gpr.rdi as CInt,
+        SYS_SETFSUID,
+        Some(syscall_policy_do_syscall2_bridge),
+        Some(do_setresuid),
+    ) as CLong
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_setresgid(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    syscall_forward_refresh_cred_body_result(
+        SYS_SETRESGID,
+        ctx.cast::<c_void>(),
+        Some(syscall_policy_forward_context_bridge),
+        Some(do_setresgid),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_setregid(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    syscall_forward_refresh_cred_body_result(
+        SYS_SETREGID,
+        ctx.cast::<c_void>(),
+        Some(syscall_policy_forward_context_bridge),
+        Some(do_setresgid),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_setgid(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    syscall_forward_refresh_cred_body_result(
+        SYS_SETGID,
+        ctx.cast::<c_void>(),
+        Some(syscall_policy_forward_context_bridge),
+        Some(do_setresgid),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_setfsgid(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    syscall_setfsid_body_result(
+        (*ctx).gpr.rdi as CInt,
+        SYS_SETFSGID,
+        Some(syscall_policy_do_syscall2_bridge),
+        Some(do_setresgid),
+    ) as CLong
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_getuid(_n: CInt, _ctx: *mut X86UserContext) -> CLong {
+    syscall_get_process_id_field_result(
+        current_thread_ptr().cast::<u8>(),
+        offset_of!(Thread, proc),
+        offset_of!(Process, ruid),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_geteuid(_n: CInt, _ctx: *mut X86UserContext) -> CLong {
+    syscall_get_process_id_field_result(
+        current_thread_ptr().cast::<u8>(),
+        offset_of!(Thread, proc),
+        offset_of!(Process, euid),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_getresuid(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    syscall_getresid_body_result(
+        current_thread_ptr().cast::<u8>(),
+        offset_of!(Thread, proc),
+        offset_of!(Process, ruid),
+        offset_of!(Process, euid),
+        offset_of!(Process, suid),
+        (*ctx).gpr.rdi,
+        (*ctx).gpr.rsi,
+        (*ctx).gpr.rdx,
+        syscall_copy_int_to_user_bridge,
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_getgid(_n: CInt, _ctx: *mut X86UserContext) -> CLong {
+    syscall_get_process_id_field_result(
+        current_thread_ptr().cast::<u8>(),
+        offset_of!(Thread, proc),
+        offset_of!(Process, rgid),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_getegid(_n: CInt, _ctx: *mut X86UserContext) -> CLong {
+    syscall_get_process_id_field_result(
+        current_thread_ptr().cast::<u8>(),
+        offset_of!(Thread, proc),
+        offset_of!(Process, egid),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_getresgid(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    syscall_getresid_body_result(
+        current_thread_ptr().cast::<u8>(),
+        offset_of!(Thread, proc),
+        offset_of!(Process, rgid),
+        offset_of!(Process, egid),
+        offset_of!(Process, sgid),
+        (*ctx).gpr.rdi,
+        (*ctx).gpr.rsi,
+        (*ctx).gpr.rdx,
+        syscall_copy_int_to_user_bridge,
+    )
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn sys_getpid(_n: CInt, _ctx: *mut X86UserContext) -> CLong {
     syscall_getpid_body_result(
         current_thread_ptr().cast::<u8>(),
@@ -10182,6 +11923,303 @@ pub unsafe extern "C" fn sys_get_cpu_id(_n: CInt, _ctx: *mut X86UserContext) -> 
 #[no_mangle]
 pub extern "C" fn sys_get_system(_n: CInt, _ctx: *mut X86UserContext) -> CLong {
     get_system_body_result()
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_madvise(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+
+    let start = (*ctx).gpr.rdi;
+    let len = (*ctx).gpr.rsi as SizeT;
+    let advice = (*ctx).gpr.rdx as CInt;
+    syscall_madvise_log_bridge(syscall_get_processor_id_bridge(), start, len, advice);
+    madvise_body_result(start, len, advice)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_migrate_pages(_n: CInt, _ctx: *mut X86UserContext) -> CLong {
+    syscall_migrate_pages_log_bridge();
+    migrate_pages_body_result()
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_set_mempolicy(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() || (*thread).vm.is_null() || (*thread).proc.is_null() {
+        return -(EFAULT as CLong);
+    }
+    set_mempolicy_body_result(
+        (*ctx).gpr.rdi as CInt,
+        (*ctx).gpr.rsi,
+        (*ctx).gpr.rdx,
+        (*thread).vm,
+        ihk_mc_get_nr_numa_nodes(),
+        (*(*thread).proc).pid,
+        Some(syscall_copy_from_user_bridge),
+        Some(syscall_set_mempolicy_log_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_mbind(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() || (*thread).vm.is_null() || (*thread).proc.is_null() {
+        return -(EFAULT as CLong);
+    }
+
+    let addr = (*ctx).gpr.rdi;
+    let len = (*ctx).gpr.rsi;
+    let mode = (*ctx).gpr.rdx as CInt;
+    let nodemask_addr = (*ctx).gpr.r10;
+    let maxnode = (*ctx).gpr.r8;
+    let flags = (*ctx).gpr.r9 as CInt;
+    syscall_mbind_entry_log_bridge(addr, len, mode, nodemask_addr, flags as CULong);
+
+    mbind_body_result(
+        addr,
+        len,
+        mode,
+        nodemask_addr,
+        maxnode,
+        flags,
+        (*thread).vm,
+        (!(*(*thread).proc).straight_va.is_null()) as CInt,
+        cfg!(enable_fugaku_hacks) as CInt,
+        ihk_mc_get_nr_numa_nodes(),
+        size_of::<VmRangeNumaPolicy>() as SizeT,
+        IHK_MC_AP_NOWAIT,
+        Some(syscall_copy_from_user_bridge),
+        Some(syscall_mbind_write_lock_bridge),
+        Some(syscall_mbind_write_unlock_bridge),
+        Some(syscall_mbind_lookup_range_bridge),
+        Some(syscall_mbind_policy_search_bridge),
+        Some(syscall_mbind_clear_range_bridge),
+        Some(syscall_mbind_policy_alloc_bridge),
+        Some(syscall_mbind_policy_rb_clear_bridge),
+        Some(syscall_mbind_policy_insert_bridge),
+        Some(syscall_mbind_log_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_remap_file_pages(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() || (*thread).vm.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let vm = (*thread).vm;
+
+    remap_file_pages_body_result(
+        vm.cast::<c_void>(),
+        (&raw mut (*vm).memory_range_lock).cast::<c_void>(),
+        (*ctx).gpr.rdi,
+        (*ctx).gpr.rsi as SizeT,
+        (*ctx).gpr.rdx as CInt,
+        (*ctx).gpr.r10 as SizeT,
+        (*ctx).gpr.r8 as CInt,
+        ihk_mc_get_processor_id(),
+        offset_of!(VmRange, start),
+        offset_of!(VmRange, end),
+        offset_of!(VmRange, flag),
+        offset_of!(VmRange, memobj),
+        Some(memlock_write_lock_bridge),
+        Some(memlock_write_unlock_bridge),
+        Some(memlock_lookup_range_bridge),
+        Some(remap_file_pages_callable_bridge),
+        Some(remap_file_pages_remap_bridge),
+        Some(remap_file_pages_clear_host_bridge),
+        Some(memlock_populate_bridge),
+        Some(mprotect_flush_nfo_bridge),
+        Some(remap_file_pages_log_bridge),
+    ) as CLong
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_mremap(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() || (*thread).vm.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let vm = (*thread).vm;
+    let proc = (*vm).proc.cast::<Process>();
+    if proc.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let page_table = if (*vm).address_space.is_null() {
+        null_mut()
+    } else {
+        (*(*vm).address_space).page_table
+    };
+
+    mremap_body_result(
+        vm.cast::<c_void>(),
+        (&raw mut (*vm).memory_range_lock).cast::<c_void>(),
+        (&raw mut (*vm).page_table_lock).cast::<c_void>(),
+        page_table,
+        (*ctx).gpr.rdi,
+        (*ctx).gpr.rsi as SizeT,
+        (*ctx).gpr.rdx as SizeT,
+        (*ctx).gpr.r10 as CInt,
+        (*ctx).gpr.r8,
+        (*vm).region.user_start,
+        (*vm).region.user_end,
+        (*proc).straight_va as CULong,
+        (*proc).straight_len,
+        offset_of!(VmRange, start),
+        offset_of!(VmRange, end),
+        offset_of!(VmRange, flag),
+        offset_of!(VmRange, pgshift),
+        offset_of!(VmRange, memobj),
+        offset_of!(VmRange, objoff),
+        Some(memlock_write_lock_bridge),
+        Some(memlock_write_unlock_bridge),
+        Some(memlock_lookup_range_bridge),
+        Some(mremap_extend_bridge),
+        Some(mprotect_flush_nfo_bridge),
+        Some(mremap_search_bridge),
+        Some(munmap_do_bridge),
+        Some(mremap_memobj_ref_bridge),
+        Some(mremap_memobj_unref_bridge),
+        Some(mremap_add_range_bridge),
+        Some(mremap_pte_lock_bridge),
+        Some(mremap_pte_unlock_bridge),
+        Some(memlock_split_range_bridge),
+        Some(mremap_move_pte_bridge),
+        Some(memlock_populate_bridge),
+        Some(mremap_log_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_msync(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() || (*thread).vm.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let vm = (*thread).vm;
+
+    msync_body_result(
+        vm.cast::<c_void>(),
+        (&raw mut (*vm).memory_range_lock).cast::<c_void>(),
+        (*ctx).gpr.rdi,
+        (*ctx).gpr.rsi as SizeT,
+        (*ctx).gpr.rdx as CInt,
+        offset_of!(VmRange, start),
+        offset_of!(VmRange, end),
+        offset_of!(VmRange, flag),
+        offset_of!(VmRange, memobj),
+        Some(msync_read_lock_bridge),
+        Some(msync_read_unlock_bridge),
+        Some(msync_lookup_range_bridge),
+        Some(msync_next_range_bridge),
+        Some(msync_has_pager_bridge),
+        Some(msync_sync_range_bridge),
+        Some(msync_invalidate_range_bridge),
+        Some(msync_log_bridge),
+    ) as CLong
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_get_mempolicy(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() || (*thread).vm.is_null() {
+        return -(EFAULT as CLong);
+    }
+    get_mempolicy_body_result(
+        (*ctx).gpr.rdi,
+        (*ctx).gpr.rsi,
+        (*ctx).gpr.rdx,
+        (*ctx).gpr.r10,
+        (*ctx).gpr.r8 as CInt,
+        (*thread).vm,
+        ihk_mc_get_nr_numa_nodes(),
+        Some(syscall_copy_to_user_bridge),
+        Some(syscall_get_mempolicy_lookup_node_bridge),
+        Some(syscall_get_mempolicy_read_lock_bridge),
+        Some(syscall_get_mempolicy_read_unlock_bridge),
+        Some(syscall_get_mempolicy_lookup_range_bridge),
+        Some(syscall_get_mempolicy_policy_search_bridge),
+        Some(syscall_get_mempolicy_log_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_process_vm_writev(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+
+    process_vm_rw_body_result(
+        (*ctx).gpr.rdi as CInt,
+        (*ctx).gpr.rsi as *const c_void,
+        (*ctx).gpr.rdx,
+        (*ctx).gpr.r10 as *const c_void,
+        (*ctx).gpr.r8,
+        (*ctx).gpr.r9,
+        PROCESS_VM_WRITE,
+        Some(do_process_vm_read_writev),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_process_vm_readv(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+
+    process_vm_rw_body_result(
+        (*ctx).gpr.rdi as CInt,
+        (*ctx).gpr.rsi as *const c_void,
+        (*ctx).gpr.rdx,
+        (*ctx).gpr.r10 as *const c_void,
+        (*ctx).gpr.r8,
+        (*ctx).gpr.r9,
+        PROCESS_VM_READ,
+        Some(do_process_vm_read_writev),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_exit(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+
+    exit_body_result((*ctx).gpr.rdi as CInt, Some(exit_do_exit_bridge))
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_exit_group(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+
+    exit_group_body_result(
+        (*ctx).gpr.rdi as CInt,
+        exit_group_current_pid_bridge(),
+        Some(exit_group_log_bridge),
+        Some(exit_group_terminate_bridge),
+    )
 }
 
 #[no_mangle]
@@ -10221,6 +12259,358 @@ pub unsafe extern "C" fn sys_util_register_desc(_n: CInt, ctx: *mut X86UserConte
     let tid = if thread.is_null() { -1 } else { (*thread).tid };
     syscall_util_register_desc_log_bridge(tid, desc);
     util_register_desc_body_result(desc, addr_of_mut!(uti_desc))
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_util_migrate_inter_kernel(
+    _n: CInt,
+    ctx: *mut X86UserContext,
+) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let mut kattr = MaybeUninit::<UtiAttr>::uninit();
+
+    util_migrate_inter_kernel_body_result(
+        (*ctx).gpr.rdi,
+        kattr.as_mut_ptr().cast::<c_void>(),
+        size_of::<UtiAttr>(),
+        Some(syscall_copy_from_user_bridge),
+        Some(syscall_util_thread_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_util_indicate_clone(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() {
+        return -(EFAULT as CLong);
+    }
+    if !(*thread).proc.is_null() && (*(*thread).proc).enable_uti == 0 {
+        syscall_util_indicate_clone_disabled_bridge();
+    }
+
+    util_indicate_clone_body_result(
+        thread.cast::<c_void>(),
+        (*ctx).gpr.rdi as CInt,
+        (*ctx).gpr.rsi,
+        size_of::<UtiAttr>(),
+        IHK_MC_AP_NOWAIT,
+        offset_of!(Thread, proc),
+        offset_of!(Process, enable_uti),
+        offset_of!(Thread, mod_clone),
+        offset_of!(Thread, mod_clone_arg),
+        Some(syscall_copy_from_user_bridge),
+        Some(syscall_mbind_policy_alloc_bridge),
+        Some(syscall_mckfd_free_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_swapout(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let filename = (*ctx).gpr.rdi as *const c_void;
+    let workarea = (*ctx).gpr.rsi as *mut c_void;
+    let size = (*ctx).gpr.rdx as SizeT;
+    let flag = (*ctx).gpr.r10 as CInt;
+    let mut linux_ctx = MaybeUninit::<X86UserContext>::uninit();
+
+    syscall_swapout_log_bridge(filename, workarea, size, flag);
+    swapout_body_result(
+        filename,
+        workarea,
+        size,
+        flag,
+        SYS_SWAPOUT,
+        linux_ctx.as_mut_ptr().cast::<c_void>(),
+        Some(do_pageout),
+        Some(do_pagein),
+        Some(syscall_policy_forward_context_bridge),
+    )
+}
+
+#[inline(always)]
+unsafe fn threads_signal_syscall(signal: CInt, wait_stopped: CInt) -> CLong {
+    let thread = current_thread_ptr();
+    if thread.is_null() {
+        return -(EFAULT as CLong);
+    }
+
+    threads_signal_body_result(
+        thread.cast::<c_void>(),
+        signal,
+        wait_stopped,
+        offset_of!(Thread, proc),
+        offset_of!(Process, pid),
+        offset_of!(Process, threads_list),
+        offset_of!(Thread, tid),
+        offset_of!(Thread, status),
+        offset_of!(Thread, siblings_list),
+        Some(syscall_do_kill_thread_bridge),
+        Some(syscall_cpu_pause_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_suspend_threads(_n: CInt, _ctx: *mut X86UserContext) -> CLong {
+    threads_signal_syscall(SIGSTOP, 1)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_resume_threads(_n: CInt, _ctx: *mut X86UserContext) -> CLong {
+    threads_signal_syscall(SIGCONT, 0)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_mmap(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() || (*thread).vm.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let region = &(*(*thread).vm).region;
+
+    arch_mmap_body_result(
+        (*ctx).gpr.rdi,
+        (*ctx).gpr.rsi as SizeT,
+        (*ctx).gpr.rdx as CInt,
+        (*ctx).gpr.r10 as CInt,
+        (*ctx).gpr.r8 as CInt,
+        (*ctx).gpr.r9 as CLong,
+        region.user_start,
+        region.user_end,
+        arch_mmap_supported_flags_bridge(),
+        arch_mmap_ignored_flags_bridge(),
+        arch_mmap_error_flags_bridge(),
+        Some(ihk_mc_get_linux_default_huge_page_shift),
+        Some(rusage_check_overmap),
+        Some(arch_do_mmap_bridge),
+        Some(arch_mmap_log_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_munmap(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() || (*thread).vm.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let vm = (*thread).vm;
+    let region = &(*vm).region;
+
+    munmap_body_result(
+        vm.cast::<c_void>(),
+        (&raw mut (*vm).memory_range_lock).cast::<c_void>(),
+        (*ctx).gpr.rdi,
+        (*ctx).gpr.rsi as SizeT,
+        region.user_start,
+        region.user_end,
+        ihk_mc_get_processor_id(),
+        Some(munmap_write_lock_bridge),
+        Some(munmap_write_unlock_bridge),
+        Some(munmap_do_bridge),
+        Some(munmap_log_bridge),
+    ) as CLong
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_brk(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() || (*thread).vm.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let vm = (*thread).vm;
+
+    brk_body_result(
+        vm.cast::<c_void>(),
+        (&raw mut (*vm).region).cast::<c_void>(),
+        (&raw mut (*vm).memory_range_lock).cast::<c_void>(),
+        (*ctx).gpr.rdi,
+        ihk_mc_get_processor_id(),
+        offset_of!(VmRegions, brk_start),
+        offset_of!(VmRegions, brk_end),
+        offset_of!(VmRegions, brk_end_allocated),
+        Some(brk_flush_bridge),
+        Some(brk_write_lock_bridge),
+        Some(brk_write_unlock_bridge),
+        Some(brk_extend_bridge),
+        Some(brk_log_bridge),
+    ) as CLong
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_set_tid_address(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let thread = current_thread_ptr();
+    if thread.is_null() {
+        return -(EFAULT as CLong);
+    }
+
+    syscall_set_tid_address_body_result(
+        thread.cast::<u8>(),
+        offset_of!(Thread, clear_child_tid),
+        offset_of!(Thread, proc),
+        offset_of!(Process, pid),
+        (*ctx).gpr.rdi as *mut CInt,
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_set_robust_list(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    set_robust_list_body_result((*ctx).gpr.rsi as SizeT)
+}
+
+fn syscall_mckfd_offsets() -> SyscallMckfdOffsets {
+    SyscallMckfdOffsets {
+        thread_proc_offset: offset_of!(Thread, proc),
+        proc_mckfd_lock_offset: offset_of!(Process, mckfd_lock),
+        proc_mckfd_offset: offset_of!(Process, mckfd),
+        mckfd_next_offset: offset_of!(Mckfd, next),
+        mckfd_fd_offset: offset_of!(Mckfd, fd),
+        mckfd_read_cb_offset: offset_of!(Mckfd, read_cb),
+        mckfd_ioctl_cb_offset: offset_of!(Mckfd, ioctl_cb),
+        mckfd_close_cb_offset: offset_of!(Mckfd, close_cb),
+        mckfd_fcntl_cb_offset: offset_of!(Mckfd, fcntl_cb),
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_read(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let offsets = syscall_mckfd_offsets();
+    syscall_read_body_result(
+        current_thread_ptr().cast::<c_void>(),
+        (*ctx).gpr.rdi as CInt,
+        SYS_READ,
+        ctx.cast::<c_void>(),
+        addr_of!(offsets),
+        Some(syscall_mckfd_lock_bridge),
+        Some(syscall_mckfd_unlock_bridge),
+        Some(syscall_policy_forward_context_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_ioctl(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let offsets = syscall_mckfd_offsets();
+    syscall_ioctl_body_result(
+        current_thread_ptr().cast::<c_void>(),
+        (*ctx).gpr.rdi as CInt,
+        (*ctx).gpr.rsi,
+        (*ctx).gpr.rdx,
+        SYS_IOCTL,
+        ctx.cast::<c_void>(),
+        addr_of!(offsets),
+        Some(syscall_mckfd_lock_bridge),
+        Some(syscall_mckfd_unlock_bridge),
+        Some(syscall_policy_forward_context_bridge),
+        Some(syscall_tofu_ioctl_bridge),
+    )
+}
+
+#[cfg(not(enable_tofu))]
+#[no_mangle]
+pub unsafe extern "C" fn sys_open(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    open_common_body_result(
+        (*ctx).gpr.rdi,
+        (*ctx).gpr.rsi as CInt,
+        SYS_OPEN,
+        ctx.cast::<c_void>(),
+        XPMEM_DEV_PATH.as_ptr().cast::<c_void>(),
+        IHK_MC_AP_NOWAIT,
+        Some(syscall_strlen_user_bridge),
+        Some(syscall_copy_from_user_bridge),
+        Some(syscall_alloc_bridge),
+        Some(syscall_mckfd_free_bridge),
+        Some(syscall_xpmem_open_bridge),
+        Some(syscall_policy_forward_context_bridge),
+    )
+}
+
+#[cfg(not(enable_tofu))]
+#[no_mangle]
+pub unsafe extern "C" fn sys_openat(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    open_common_body_result(
+        (*ctx).gpr.rsi,
+        (*ctx).gpr.rdx as CInt,
+        SYS_OPENAT,
+        ctx.cast::<c_void>(),
+        XPMEM_DEV_PATH.as_ptr().cast::<c_void>(),
+        IHK_MC_AP_NOWAIT,
+        Some(syscall_strlen_user_bridge),
+        Some(syscall_copy_from_user_bridge),
+        Some(syscall_alloc_bridge),
+        Some(syscall_mckfd_free_bridge),
+        Some(syscall_xpmem_openat_bridge),
+        Some(syscall_policy_forward_context_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_close(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let offsets = syscall_mckfd_offsets();
+    syscall_close_body_result(
+        current_thread_ptr().cast::<c_void>(),
+        (*ctx).gpr.rdi as CInt,
+        SYS_CLOSE,
+        ctx.cast::<c_void>(),
+        addr_of!(offsets),
+        Some(syscall_mckfd_lock_bridge),
+        Some(syscall_mckfd_unlock_bridge),
+        Some(syscall_policy_forward_context_bridge),
+        Some(syscall_tofu_close_bridge),
+        Some(syscall_mckfd_free_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn sys_fcntl(_n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EFAULT as CLong);
+    }
+    let offsets = syscall_mckfd_offsets();
+    syscall_fcntl_body_result(
+        current_thread_ptr().cast::<c_void>(),
+        (*ctx).gpr.rdi as CInt,
+        SYS_FCNTL,
+        ctx.cast::<c_void>(),
+        addr_of!(offsets),
+        Some(syscall_mckfd_lock_bridge),
+        Some(syscall_mckfd_unlock_bridge),
+        Some(syscall_policy_forward_context_bridge),
+    )
 }
 
 #[no_mangle]
@@ -10545,6 +12935,23 @@ pub struct ArchVdso {
     vgtod_virt: *mut c_void,
 }
 
+#[repr(C)]
+struct VsyscallClock {
+    vclock_mode: CInt,
+    cycle_last: CULong,
+    mask: CULong,
+    mult: u32,
+    shift: u32,
+}
+
+#[repr(C)]
+struct VsyscallGtodData {
+    seq: CInt,
+    clock: VsyscallClock,
+    wall_time_sec: CLong,
+    wall_time_snsec: CULong,
+}
+
 type ArchVdsoGetInfoFn = unsafe extern "C" fn() -> CInt;
 type ArchVdsoMapGlobalFn = unsafe extern "C" fn() -> CInt;
 type ArchVdsoSetupLogFn = unsafe extern "C" fn(CInt, CInt);
@@ -10562,6 +12969,44 @@ type ArchVdsoSetRangeFn = unsafe extern "C" fn(
 type ArchVdsoMapLogFn =
     unsafe extern "C" fn(CInt, CInt, *mut ProcessVm, CULong, CULong, CULong, CULong, CInt);
 
+unsafe extern "C" {
+    fn arch_vdso_state_bridge(
+        vdso: *mut *mut ArchVdso,
+        container_size: *mut *mut SizeT,
+        vdso_offset: *mut *mut isize,
+    );
+    fn vdso_get_vdso_info() -> CInt;
+    fn vdso_map_global_pages() -> CInt;
+    fn arch_vdso_setup_log_bridge(event: CInt, error: CInt);
+    fn arch_vdso_add_range_bridge(
+        vm: *mut ProcessVm,
+        start: CULong,
+        end: CULong,
+        flags: CULong,
+        range: *mut *mut VmRange,
+    ) -> CInt;
+    fn arch_vdso_set_range_bridge(
+        page_table: *mut c_void,
+        vm: *mut ProcessVm,
+        start: CULong,
+        end: CULong,
+        phys: CULong,
+        attr: CULong,
+        range: *mut VmRange,
+    ) -> CInt;
+    fn arch_vdso_map_log_bridge(
+        event: CInt,
+        error: CInt,
+        vm: *mut ProcessVm,
+        a: CULong,
+        b: CULong,
+        c: CULong,
+        d: CULong,
+        pages: CInt,
+    );
+    fn arch_vdso_public_log_bridge(event: CInt, error: CInt, enabled: CInt, vm: *mut ProcessVm);
+}
+
 const ARCH_VDSO_SETUP_LOG_GET_INFO_FAILED: CInt = 1;
 const ARCH_VDSO_SETUP_LOG_LOCAL_GETTIME_DISABLED: CInt = 2;
 const ARCH_VDSO_SETUP_LOG_VDSO_DISABLED: CInt = 3;
@@ -10571,6 +13016,186 @@ const ARCH_VDSO_MAP_LOG_ADD_VDSO_FAILED: CInt = 2;
 const ARCH_VDSO_MAP_LOG_MAPPED: CInt = 3;
 const ARCH_VDSO_MAP_LOG_SET_RANGE_FAILED: CInt = 4;
 const ARCH_VDSO_MAP_LOG_ADD_VVAR_FAILED: CInt = 5;
+const ARCH_VDSO_PUBLIC_LOG_SETUP_ENTER: CInt = 1;
+const ARCH_VDSO_PUBLIC_LOG_SETUP_EXIT: CInt = 2;
+const ARCH_VDSO_PUBLIC_LOG_MAP_ENTER: CInt = 3;
+const ARCH_VDSO_PUBLIC_LOG_MAP_EXIT: CInt = 4;
+
+unsafe fn arch_vdso_state() -> Result<(*mut ArchVdso, *mut SizeT, *mut isize), CInt> {
+    let mut vdso: *mut ArchVdso = null_mut();
+    let mut container_size: *mut SizeT = null_mut();
+    let mut vdso_offset: *mut isize = null_mut();
+
+    arch_vdso_state_bridge(
+        addr_of_mut!(vdso),
+        addr_of_mut!(container_size),
+        addr_of_mut!(vdso_offset),
+    );
+    if vdso.is_null() || container_size.is_null() || vdso_offset.is_null() {
+        return Err(-EFAULT);
+    }
+    Ok((vdso, container_size, vdso_offset))
+}
+
+unsafe fn arch_tod_version() -> CLong {
+    read_volatile(addr_of!(tod_data.version.counter64))
+}
+
+unsafe fn arch_time_add_tsc(ts: *mut TimeSpec, tsc: CULong) {
+    let mut delta = TimeSpec {
+        tv_sec: 0,
+        tv_nsec: 0,
+    };
+    tsc_to_ts(tsc, addr_of_mut!(delta));
+
+    let mut sec = read_volatile(addr_of!((*ts).tv_sec)).wrapping_add(delta.tv_sec);
+    let mut nsec = read_volatile(addr_of!((*ts).tv_nsec)).wrapping_add(delta.tv_nsec);
+    while nsec >= NS_PER_SEC {
+        nsec -= NS_PER_SEC;
+        sec = sec.wrapping_add(1);
+    }
+    write_volatile(addr_of_mut!((*ts).tv_sec), sec);
+    write_volatile(addr_of_mut!((*ts).tv_nsec), nsec);
+}
+
+unsafe fn calculate_time_from_tod_data(ts: *mut TimeSpec) {
+    if ts.is_null() {
+        return;
+    }
+
+    loop {
+        let ver = loop {
+            let candidate = arch_tod_version();
+            if (candidate & 1) == 0 {
+                break candidate;
+            }
+            syscall_cpu_pause_bridge();
+        };
+
+        crate::x86_cpu_helpers::rmb();
+        write_volatile(
+            addr_of_mut!((*ts).tv_sec),
+            read_volatile(addr_of!(tod_data.origin.tv_sec)),
+        );
+        write_volatile(
+            addr_of_mut!((*ts).tv_nsec),
+            read_volatile(addr_of!(tod_data.origin.tv_nsec)),
+        );
+        crate::x86_cpu_helpers::rmb();
+        if ver == arch_tod_version() {
+            break;
+        }
+    }
+
+    if tod_data.clocks_per_sec != 0 {
+        arch_time_add_tsc(ts, syscall_rdtsc_bridge());
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn calculate_time_from_tsc(ts: *mut TimeSpec) {
+    if ts.is_null() {
+        return;
+    }
+
+    let gtod = match arch_vdso_state() {
+        Ok((vdso, _, _)) => read_volatile(addr_of!((*vdso).vgtod_virt)).cast::<VsyscallGtodData>(),
+        Err(_) => null_mut(),
+    };
+    if gtod.is_null() {
+        calculate_time_from_tod_data(ts);
+        return;
+    }
+
+    let mut sec;
+    let mut nsec;
+    loop {
+        let seq = loop {
+            let candidate = read_volatile(addr_of!((*gtod).seq)) as CULong;
+            if (candidate & 1) == 0 {
+                break candidate;
+            }
+            syscall_cpu_pause_bridge();
+        };
+
+        crate::x86_cpu_helpers::rmb();
+        sec = read_volatile(addr_of!((*gtod).wall_time_sec));
+        nsec = read_volatile(addr_of!((*gtod).wall_time_snsec));
+        let cycle_last = read_volatile(addr_of!((*gtod).clock.cycle_last));
+        let mult = read_volatile(addr_of!((*gtod).clock.mult)) as CULong;
+        let shift = read_volatile(addr_of!((*gtod).clock.shift));
+        let delta = syscall_rdtsc_bridge().wrapping_sub(cycle_last);
+        nsec = nsec.wrapping_add(delta.wrapping_mul(mult));
+        nsec >>= shift;
+        let seq2 = read_volatile(addr_of!((*gtod).seq)) as CULong;
+        crate::x86_cpu_helpers::rmb();
+        if seq == seq2 {
+            break;
+        }
+    }
+
+    while nsec >= NS_PER_SEC as CULong {
+        nsec -= NS_PER_SEC as CULong;
+        sec = sec.wrapping_add(1);
+    }
+    write_volatile(addr_of_mut!((*ts).tv_sec), sec);
+    write_volatile(addr_of_mut!((*ts).tv_nsec), nsec as CLong);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn arch_setup_vdso() -> CInt {
+    arch_vdso_public_log_bridge(ARCH_VDSO_PUBLIC_LOG_SETUP_ENTER, 0, 0, null_mut());
+
+    let mut enabled = 0;
+    let error = match arch_vdso_state() {
+        Ok((vdso, container_size, vdso_offset)) => {
+            let result = arch_setup_vdso_body_result(
+                vdso,
+                container_size,
+                vdso_offset,
+                addr_of_mut!(gettime_local_support),
+                addr_of_mut!(tod_data.do_local).cast::<c_void>(),
+                Some(vdso_get_vdso_info),
+                Some(vdso_map_global_pages),
+                Some(arch_vdso_setup_log_bridge),
+            );
+            if *container_size > 0 {
+                enabled = 1;
+            }
+            result
+        }
+        Err(error) => error,
+    };
+
+    arch_vdso_public_log_bridge(ARCH_VDSO_PUBLIC_LOG_SETUP_EXIT, error, enabled, null_mut());
+    error
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn arch_map_vdso(vm: *mut ProcessVm) -> CInt {
+    arch_vdso_public_log_bridge(ARCH_VDSO_PUBLIC_LOG_MAP_ENTER, 0, 0, vm);
+
+    let error = if vm.is_null() || (*vm).address_space.is_null() {
+        -EFAULT
+    } else {
+        match arch_vdso_state() {
+            Ok((vdso, container_size, vdso_offset)) => arch_map_vdso_body_result(
+                vm,
+                (*(*vm).address_space).page_table,
+                vdso,
+                *container_size,
+                *vdso_offset,
+                Some(arch_vdso_add_range_bridge),
+                Some(arch_vdso_set_range_bridge),
+                Some(arch_vdso_map_log_bridge),
+            ),
+            Err(error) => error,
+        }
+    };
+
+    arch_vdso_public_log_bridge(ARCH_VDSO_PUBLIC_LOG_MAP_EXIT, error, 0, vm);
+    error
+}
 
 fn arch_vdso_container(vdso: &ArchVdso) -> (SizeT, isize) {
     let mut start: isize = 0;
@@ -10976,6 +13601,18 @@ unsafe fn c_bytes_eq(left: *const c_void, right: *const c_void, len: SizeT) -> b
     true
 }
 
+unsafe fn c_bytes_len(ptr: *const c_void) -> SizeT {
+    if ptr.is_null() {
+        return 0;
+    }
+    let bytes = ptr.cast::<u8>();
+    let mut len = 0;
+    while *bytes.add(len) != 0 {
+        len += 1;
+    }
+    len
+}
+
 #[no_mangle]
 pub unsafe extern "C" fn open_common_body_result(
     pathname_addr: CULong,
@@ -11021,7 +13658,9 @@ pub unsafe extern "C" fn open_common_body_result(
     };
     if copy_from(pathname.cast::<u8>(), pathname_addr, bytes) != 0 {
         rc = -(EFAULT as CLong);
-    } else if c_bytes_eq(pathname, xpmem_dev_path, bytes) {
+    } else if bytes == c_bytes_len(xpmem_dev_path).wrapping_add(1)
+        && c_bytes_eq(pathname, xpmem_dev_path, bytes)
+    {
         let Some(special_open) = special_open_fn else {
             if let Some(free) = free_fn {
                 free(pathname);
@@ -11940,6 +14579,37 @@ pub unsafe extern "C" fn arch_ptrace_read_user_body_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn ptrace_read_user(
+    thread: *mut Thread,
+    addr: CLong,
+    value: *mut CULong,
+) -> CLong {
+    let offsets = ArchPtraceUserOffsets {
+        thread_proc_offset: offset_of!(Thread, proc),
+        thread_ptrace_saved_uctx_valid_offset: offset_of!(Thread, ptrace_saved_uctx_valid),
+        thread_ptrace_saved_uctx_offset: offset_of!(Thread, ptrace_saved_uctx),
+        thread_ptrace_debugreg_offset: offset_of!(Thread, ptrace_debugreg),
+        proc_status_offset: offset_of!(Process, status),
+        uctx_sr_offset: offset_of!(X86UserContext, sr),
+        uctx_gpr_offset: offset_of!(X86UserContext, gpr),
+    };
+
+    arch_ptrace_read_user_body_result(
+        thread.cast::<c_void>(),
+        addr,
+        value,
+        size_of::<CULong>(),
+        size_of::<UserRegsStruct>(),
+        offset_of!(UserRegsStruct, fs_base),
+        offset_of!(User, u_debugreg),
+        offset_of!(User, u_debugreg) + size_of::<[CULong; 8]>(),
+        addr_of!(offsets),
+        Some(arch_ptrace_lookup_user_context_bridge),
+        Some(arch_ptrace_user_log_bridge),
+    )
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn arch_ptrace_write_user_body_result(
     thread: *mut c_void,
     addr: CLong,
@@ -12027,6 +14697,38 @@ pub unsafe extern "C" fn arch_ptrace_write_user_body_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn ptrace_write_user(
+    thread: *mut Thread,
+    addr: CLong,
+    value: CULong,
+) -> CLong {
+    let offsets = ArchPtraceUserOffsets {
+        thread_proc_offset: offset_of!(Thread, proc),
+        thread_ptrace_saved_uctx_valid_offset: offset_of!(Thread, ptrace_saved_uctx_valid),
+        thread_ptrace_saved_uctx_offset: offset_of!(Thread, ptrace_saved_uctx),
+        thread_ptrace_debugreg_offset: offset_of!(Thread, ptrace_debugreg),
+        proc_status_offset: offset_of!(Process, status),
+        uctx_sr_offset: offset_of!(X86UserContext, sr),
+        uctx_gpr_offset: offset_of!(X86UserContext, gpr),
+    };
+
+    arch_ptrace_write_user_body_result(
+        thread.cast::<c_void>(),
+        addr,
+        value,
+        size_of::<CULong>(),
+        size_of::<UserRegsStruct>(),
+        offset_of!(UserRegsStruct, fs_base),
+        offset_of!(UserRegsStruct, eflags),
+        offset_of!(User, u_debugreg),
+        offset_of!(User, u_debugreg) + size_of::<[CULong; 8]>(),
+        addr_of!(offsets),
+        Some(arch_ptrace_lookup_user_context_bridge),
+        Some(arch_ptrace_user_log_bridge),
+    )
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn arch_alloc_debugreg_body_result(
     thread: *mut c_void,
     debugreg_offset: SizeT,
@@ -12060,6 +14762,84 @@ pub unsafe extern "C" fn arch_alloc_debugreg_body_result(
     write_volatile(debugreg.add(6), DB6_RESERVED_SET);
     write_volatile(debugreg.add(7), DB7_RESERVED_SET);
     0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn alloc_debugreg(thread: *mut Thread) -> CLong {
+    arch_alloc_debugreg_body_result(
+        thread.cast::<c_void>(),
+        offset_of!(Thread, ptrace_debugreg),
+        size_of::<CULong>() * 8,
+        IHK_MC_AP_NOWAIT,
+        Some(arch_ptrace_alloc_bridge),
+        Some(arch_ptrace_user_log_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn arch_clear_single_step_body_result(thread: *mut Thread) {
+    if thread.is_null() {
+        return;
+    }
+    let uctx = read_volatile(&(*thread).uctx);
+    if uctx.is_null() {
+        return;
+    }
+    let rflagsp = addr_of_mut!((*uctx).gpr.rflags);
+    let mut rflags = read_volatile(rflagsp);
+    rflags &= !RFLAGS_TF;
+    write_volatile(rflagsp, rflags);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn clear_single_step(thread: *mut Thread) {
+    arch_clear_single_step_body_result(thread);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn arch_set_single_step_body_result(thread: *mut Thread) {
+    if thread.is_null() {
+        return;
+    }
+    let uctx = read_volatile(&(*thread).uctx);
+    if uctx.is_null() {
+        return;
+    }
+    let rflagsp = addr_of_mut!((*uctx).gpr.rflags);
+    let mut rflags = read_volatile(rflagsp);
+    rflags |= RFLAGS_TF;
+    write_volatile(rflagsp, rflags);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn set_single_step(thread: *mut Thread) {
+    arch_set_single_step_body_result(thread);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ptrace_read_gpregs(
+    thread: *mut Thread,
+    regs: *mut UserRegsStruct,
+) -> CLong {
+    arch_ptrace_read_gpregs_body_result(
+        thread as CULong,
+        regs.cast::<u8>(),
+        size_of::<UserRegsStruct>(),
+        Some(arch_ptrace_read_user_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ptrace_write_gpregs(
+    thread: *mut Thread,
+    regs: *const UserRegsStruct,
+) -> CLong {
+    arch_ptrace_write_gpregs_body_result(
+        thread as CULong,
+        regs.cast::<u8>(),
+        size_of::<UserRegsStruct>(),
+        Some(arch_ptrace_write_user_bridge),
+    )
 }
 
 #[no_mangle]
@@ -12123,6 +14903,83 @@ pub unsafe extern "C" fn arch_ptrace_fpregs_io_body_result(
         };
         unsafe { copy_to_user(user_addr, fp_i387 as *const u8, fp_i387_size) }
     }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ptrace_read_fpregs(thread: *mut Thread, fpregs: *mut c_void) -> CLong {
+    arch_ptrace_fpregs_io_body_result(
+        thread as CULong,
+        fpregs as CULong,
+        offset_of!(Thread, fp_regs),
+        offset_of!(XsaveStruct, i387),
+        size_of::<I387FxsaveStruct>(),
+        0,
+        Some(arch_copy_to_user_bridge),
+        Some(arch_copy_from_user_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ptrace_write_fpregs(thread: *mut Thread, fpregs: *mut c_void) -> CLong {
+    arch_ptrace_fpregs_io_body_result(
+        thread as CULong,
+        fpregs as CULong,
+        offset_of!(Thread, fp_regs),
+        offset_of!(XsaveStruct, i387),
+        size_of::<I387FxsaveStruct>(),
+        1,
+        Some(arch_copy_to_user_bridge),
+        Some(arch_copy_from_user_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ptrace_read_regset(
+    thread: *mut Thread,
+    type_: CLong,
+    iov: *mut Iovec,
+) -> CLong {
+    let mut regs = MaybeUninit::<UserRegsStruct>::uninit();
+
+    arch_ptrace_read_regset_body_result(
+        thread as CULong,
+        type_,
+        iov.cast::<u8>(),
+        regs.as_mut_ptr().cast::<u8>(),
+        size_of::<UserRegsStruct>(),
+        size_of::<XsaveStruct>(),
+        offset_of!(Iovec, iov_base),
+        offset_of!(Iovec, iov_len),
+        Some(arch_ptrace_read_gpregs_bridge),
+        Some(arch_copy_to_user_bridge),
+        Some(arch_ptrace_xstate_copy_to_bridge),
+        Some(arch_ptrace_regset_log_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ptrace_write_regset(
+    thread: *mut Thread,
+    type_: CLong,
+    iov: *mut Iovec,
+) -> CLong {
+    let mut regs = MaybeUninit::<UserRegsStruct>::uninit();
+
+    arch_ptrace_write_regset_body_result(
+        thread as CULong,
+        type_,
+        iov.cast::<u8>(),
+        regs.as_mut_ptr().cast::<u8>(),
+        size_of::<UserRegsStruct>(),
+        size_of::<XsaveStruct>(),
+        offset_of!(Iovec, iov_base),
+        offset_of!(Iovec, iov_len),
+        Some(arch_ptrace_read_gpregs_bridge),
+        Some(arch_ptrace_write_gpregs_bridge),
+        Some(arch_copy_from_user_bridge),
+        Some(arch_ptrace_xstate_copy_from_bridge),
+        Some(arch_ptrace_regset_log_bridge),
+    )
 }
 
 #[no_mangle]
@@ -13645,7 +16502,11 @@ pub extern "C" fn waitid_options_result(options: CInt) -> CInt {
 
 #[no_mangle]
 pub extern "C" fn wait_should_scan_process_result(options: CInt) -> CInt {
-    if (options & __WCLONE) == 0 { 1 } else { 0 }
+    if (options & __WCLONE) == 0 {
+        1
+    } else {
+        0
+    }
 }
 
 #[no_mangle]
@@ -13680,7 +16541,11 @@ pub extern "C" fn wait_process_pid_matches_result(
         return if parent_pgid == child_pgid { 1 } else { 0 };
     }
 
-    if pid == child_pid { 1 } else { 0 }
+    if pid == child_pid {
+        1
+    } else {
+        0
+    }
 }
 
 #[no_mangle]
@@ -13693,7 +16558,11 @@ pub extern "C" fn wait_thread_tid_matches_result(
         return 0;
     }
 
-    if tid == -1 || child_tid == tid { 1 } else { 0 }
+    if tid == -1 || child_tid == tid {
+        1
+    } else {
+        0
+    }
 }
 
 #[no_mangle]
@@ -13750,17 +16619,29 @@ pub extern "C" fn wait_continued_candidate_result(signal_flags: CInt, options: C
 
 #[no_mangle]
 pub extern "C" fn wait_reap_needed_result(options: CInt) -> CInt {
-    if (options & WNOWAIT) == 0 { 1 } else { 0 }
+    if (options & WNOWAIT) == 0 {
+        1
+    } else {
+        0
+    }
 }
 
 #[no_mangle]
 pub extern "C" fn wait_nohang_result(options: CInt) -> CInt {
-    if (options & WNOHANG) != 0 { 1 } else { 0 }
+    if (options & WNOHANG) != 0 {
+        1
+    } else {
+        0
+    }
 }
 
 #[no_mangle]
 pub extern "C" fn wait_empty_result(empty: CInt) -> CInt {
-    if empty != 0 { -ECHILD } else { 0 }
+    if empty != 0 {
+        -ECHILD
+    } else {
+        0
+    }
 }
 
 #[no_mangle]
@@ -15195,7 +18076,11 @@ pub unsafe extern "C" fn sched_yield_body_result(
 
 #[no_mangle]
 pub extern "C" fn thread_exit_signal_result(ptrace: CInt, termsig: CInt) -> CInt {
-    if ptrace != 0 { SIGCHLD } else { termsig }
+    if ptrace != 0 {
+        SIGCHLD
+    } else {
+        termsig
+    }
 }
 
 #[no_mangle]
@@ -16791,7 +19676,11 @@ pub extern "C" fn perf_event_open_validate_body_result(
         return -EINVAL;
     }
 
-    if unsupported { -ENOENT } else { 0 }
+    if unsupported {
+        -ENOENT
+    } else {
+        0
+    }
 }
 
 #[no_mangle]
@@ -17893,6 +20782,34 @@ pub extern "C" fn clone_pthread_marker_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn ptrace_arch_prctl(pid: CInt, code: CLong, addr: CLong) -> CLong {
+    let offsets = ArchPtraceUserOffsets {
+        thread_proc_offset: offset_of!(Thread, proc),
+        thread_ptrace_saved_uctx_valid_offset: offset_of!(Thread, ptrace_saved_uctx_valid),
+        thread_ptrace_saved_uctx_offset: offset_of!(Thread, ptrace_saved_uctx),
+        thread_ptrace_debugreg_offset: offset_of!(Thread, ptrace_debugreg),
+        proc_status_offset: offset_of!(Process, status),
+        uctx_sr_offset: offset_of!(X86UserContext, sr),
+        uctx_gpr_offset: offset_of!(X86UserContext, gpr),
+    };
+
+    arch_ptrace_prctl_body_result(
+        pid,
+        code,
+        addr,
+        size_of::<CULong>(),
+        offset_of!(UserRegsStruct, fs_base),
+        offset_of!(UserRegsStruct, gs_base),
+        addr_of!(offsets),
+        Some(arch_ptrace_find_thread_bridge),
+        Some(arch_ptrace_thread_unlock_bridge),
+        Some(arch_ptrace_read_user_bridge),
+        Some(arch_ptrace_write_user_bridge),
+        Some(arch_copy_to_user_bridge),
+    )
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn arch_ptrace_prctl_body_result(
     pid: CInt,
     code: CLong,
@@ -18713,7 +21630,11 @@ pub extern "C" fn futex_wait_timeout_needed_result(op: CInt, has_utime: CInt) ->
 
 #[no_mangle]
 pub extern "C" fn futex_timeout_is_absolute_result(op: CInt) -> CInt {
-    if op == FUTEX_WAIT_BITSET { 1 } else { 0 }
+    if op == FUTEX_WAIT_BITSET {
+        1
+    } else {
+        0
+    }
 }
 
 #[no_mangle]
@@ -19253,7 +22174,11 @@ pub extern "C" fn mmap_should_set_host_ro(flags: CInt, prot: CInt, anonymous_onl
         return 0;
     }
 
-    if (prot & PROT_WRITE) == 0 { 1 } else { 0 }
+    if (prot & PROT_WRITE) == 0 {
+        1
+    } else {
+        0
+    }
 }
 
 #[no_mangle]
@@ -19278,7 +22203,11 @@ pub unsafe extern "C" fn mmap_prot_denied_result(
         return 0;
     }
 
-    if denied == PROT_EXEC { -EPERM } else { -EACCES }
+    if denied == PROT_EXEC {
+        -EPERM
+    } else {
+        -EACCES
+    }
 }
 
 #[no_mangle]
@@ -19308,5 +22237,9 @@ pub extern "C" fn mmap_should_force_straight(
 
 #[no_mangle]
 pub extern "C" fn mmap_is_shared(flags: CInt) -> CInt {
-    if (flags & MAP_SHARED) != 0 { 1 } else { 0 }
+    if (flags & MAP_SHARED) != 0 {
+        1
+    } else {
+        0
+    }
 }

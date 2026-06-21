@@ -121,9 +121,39 @@ unsafe fn list_empty(head: *mut ListHead) -> bool {
 unsafe extern "C" {
     fn get_cpu_local_var_result(id: CInt) -> *mut CpuLocalVar;
     fn ihk_mc_get_processor_id() -> CInt;
+    #[cfg(not(mckernel_equivalence))]
     fn sched_wakeup_thread(thread: *mut c_void, valid_states: CInt) -> CInt;
+    #[cfg(not(mckernel_equivalence))]
     fn sched_wakeup_thread_locked(thread: *mut c_void, valid_states: CInt) -> CInt;
+    #[cfg(mckernel_equivalence)]
+    fn waitq_sched_wakeup_thread_bridge(thread: *mut c_void, valid_states: CInt) -> CInt;
+    #[cfg(mckernel_equivalence)]
+    fn waitq_sched_wakeup_thread_locked_bridge(thread: *mut c_void, valid_states: CInt) -> CInt;
     fn schedule();
+}
+
+#[inline(always)]
+unsafe fn waitq_sched_wakeup_thread(thread: *mut c_void, valid_states: CInt) -> CInt {
+    #[cfg(mckernel_equivalence)]
+    {
+        waitq_sched_wakeup_thread_bridge(thread, valid_states)
+    }
+    #[cfg(not(mckernel_equivalence))]
+    {
+        sched_wakeup_thread(thread, valid_states)
+    }
+}
+
+#[inline(always)]
+unsafe fn waitq_sched_wakeup_thread_locked(thread: *mut c_void, valid_states: CInt) -> CInt {
+    #[cfg(mckernel_equivalence)]
+    {
+        waitq_sched_wakeup_thread_locked_bridge(thread, valid_states)
+    }
+    #[cfg(not(mckernel_equivalence))]
+    {
+        sched_wakeup_thread_locked(thread, valid_states)
+    }
 }
 
 #[inline(always)]
@@ -140,7 +170,7 @@ pub unsafe extern "C" fn default_wake_function(
     _flags: CInt,
     _key: *mut c_void,
 ) -> CInt {
-    sched_wakeup_thread((*entry).private, PS_NORMAL)
+    waitq_sched_wakeup_thread((*entry).private, PS_NORMAL)
 }
 
 #[no_mangle]
@@ -150,7 +180,7 @@ pub unsafe extern "C" fn locked_wake_function(
     _flags: CInt,
     _key: *mut c_void,
 ) -> CInt {
-    sched_wakeup_thread_locked((*entry).private, PS_NORMAL)
+    waitq_sched_wakeup_thread_locked((*entry).private, PS_NORMAL)
 }
 
 #[no_mangle]

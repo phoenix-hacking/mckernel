@@ -22,7 +22,12 @@ Options:
   --source-retirement-final
                         Enforce final C/header retirement gates after build.
   --boot-only           After install, boot McKernel and check kmsg; skip workloads.
+                        Requires --unsafe-host-boot on the current host.
   --boot-smoke          After install, boot McKernel and run mcexec smoke tests.
+                        Requires --unsafe-host-boot on the current host.
+  --unsafe-host-boot    Allow boot validation on the current host. Prefer
+                        scripts/qemu-rocky-rust-validation.sh for recoverable
+                        early-boot validation.
   --yes                 Allow boot validation without an interactive confirmation.
   --prefix PATH         Install prefix. Default: /opt/mckernel-rust
   --build-dir PATH      CMake build directory. Default: /tmp/mckernel-rocky-rust
@@ -67,6 +72,7 @@ MODULE_LOAD_SMOKE=0
 SOURCE_RETIREMENT_AUDIT=1
 SOURCE_RETIREMENT_FINAL=0
 ASSUME_YES=0
+UNSAFE_HOST_BOOT=0
 
 while [ "$#" -gt 0 ]; do
 	case "$1" in
@@ -106,6 +112,10 @@ while [ "$#" -gt 0 ]; do
 			;;
 		--boot-smoke)
 			BOOT_SMOKE=1
+			shift
+			;;
+		--unsafe-host-boot)
+			UNSAFE_HOST_BOOT=1
 			shift
 			;;
 		--yes)
@@ -425,6 +435,20 @@ ensure_selinux_permissive_for_boot() {
 }
 
 confirm_boot_smoke() {
+	if [ "$UNSAFE_HOST_BOOT" -ne 1 ]; then
+		cat >&2 <<EOF
+error: refusing to boot McKernel on the current host.
+
+This path loads kernel modules, reserves CPU/memory, and can freeze or reboot
+the machine if early boot fails. Use the recoverable QEMU/KVM wrapper instead:
+
+  scripts/qemu-rocky-rust-validation.sh --image /path/to/rocky.qcow2 -- --boot-only
+
+To intentionally run this unsafe path on the current host, add --unsafe-host-boot.
+EOF
+		exit 2
+	fi
+
 	cat <<EOF
 
 About to load kernel modules, reserve CPU/memory, and boot McKernel inside this VM.

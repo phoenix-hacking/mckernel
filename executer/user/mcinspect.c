@@ -1301,7 +1301,7 @@ void init_globals(Dwarf_Debug dbg)
 }
 
 #ifdef MCINSPECT_RUST_HELPERS
-static void mcinspect_read_usize_bridge(unsigned long addr,
+void mcinspect_read_usize_bridge(unsigned long addr,
 		unsigned long *out);
 #endif
 
@@ -1395,33 +1395,17 @@ void print_thread(int cpu,
 		free(cmd_line);
 }
 
+#ifndef MCINSPECT_RUST_HELPERS
 int mcps(Dwarf_Debug dbg)
 {
-#ifndef MCINSPECT_RUST_HELPERS
 	int cpu;
-#endif
 
-#ifdef MCINSPECT_RUST_HELPERS
-	{
-	char header[128];
-
-	if (mcinspect_ps_header_result(header, sizeof(header)) >= 0) {
-		fputs(header, stdout);
-	} else
-#endif
 	{
 		printf("%3s %s%6s %6s %18s %2s %s\n",
 			"CPU", " ", "TID", "PID", "Thread", "ST", "exe");
 		printf("-----------------------------------------------\n");
 	}
-#ifdef MCINSPECT_RUST_HELPERS
-	}
-#endif
 
-#ifdef MCINSPECT_RUST_HELPERS
-	return mcinspect_mcps_body_result(mcinspect_read_usize_bridge,
-			print_thread);
-#else
 	/* Iterate CPUs */
 	for (cpu = 0; cpu < nr_cpus; ++cpu) {
 		unsigned long per_cpu;
@@ -1466,8 +1450,17 @@ int mcps(Dwarf_Debug dbg)
 	}
 
 	return 0;
-#endif
 }
+#else
+void mcinspect_print_ps_header_bridge(void)
+{
+	printf("%3s %s%6s %6s %18s %2s %s\n",
+		"CPU", " ", "TID", "PID", "Thread", "ST", "exe");
+	printf("-----------------------------------------------\n");
+}
+
+extern int mcps(Dwarf_Debug dbg);
+#endif
 
 #ifndef MCINSPECT_RUST_HELPERS
 int find_proc(Dwarf_Debug dbg, int pid, unsigned long *rproc)
@@ -1549,21 +1542,18 @@ int print_pte_single(Dwarf_Debug dbg,
 
 
 #ifdef MCINSPECT_RUST_HELPERS
-static void mcinspect_get_swapper_page_table_bridge(Dwarf_Debug dbg,
+void mcinspect_get_swapper_page_table_bridge(Dwarf_Debug dbg,
 		unsigned long *out);
-static void mcinspect_read_usize_bridge(unsigned long addr,
+void mcinspect_read_usize_bridge(unsigned long addr,
 		unsigned long *out);
-static void mcinspect_print_init_pt_bridge(unsigned long init_pt);
+void mcinspect_print_init_pt_bridge(unsigned long init_pt);
 #endif
 
+#ifdef MCINSPECT_RUST_HELPERS
+extern int mcvtop(Dwarf_Debug dbg, int pid, unsigned long vtop_addr);
+#else
 int mcvtop(Dwarf_Debug dbg, int pid, unsigned long vtop_addr)
 {
-#ifdef MCINSPECT_RUST_HELPERS
-	return mcinspect_mcvtop_body_result(dbg, pid, vtop_addr, find_proc,
-			mcinspect_get_swapper_page_table_bridge,
-			mcinspect_read_usize_bridge,
-			mcinspect_print_init_pt_bridge);
-#else
 	unsigned long proc = 0;
 	unsigned long init_pt;
 	unsigned long vm, ap, pt = 0;
@@ -1586,23 +1576,23 @@ int mcvtop(Dwarf_Debug dbg, int pid, unsigned long vtop_addr)
 	}
 
 	return 0;
-#endif
 }
+#endif
 
 #ifdef MCINSPECT_RUST_HELPERS
-static void
+void
 mcinspect_get_swapper_page_table_bridge(Dwarf_Debug dbg, unsigned long *out)
 {
 	get_pointer_symbol_val(swapper_page_table, out);
 }
 
-static void
+void
 mcinspect_read_usize_bridge(unsigned long addr, unsigned long *out)
 {
 	ihk_read_val(addr, out);
 }
 
-static void
+void
 mcinspect_print_init_pt_bridge(unsigned long init_pt)
 {
 	printf("%s: init_pt: 0x%lx\n", "mcvtop", init_pt);
@@ -1665,13 +1655,13 @@ struct option mcinspect_options[] = {
 
 
 #ifdef MCINSPECT_RUST_HELPERS
-static int
+int
 mcinspect_open_readonly_bridge(const char *path)
 {
 	return open(path, O_RDONLY);
 }
 
-static int
+int
 mcinspect_dwarf_init_read_bridge(int fd, Dwarf_Debug *dbg,
 		Dwarf_Error *error)
 {
@@ -1682,25 +1672,25 @@ mcinspect_dwarf_init_read_bridge(int fd, Dwarf_Debug *dbg,
 		DW_DLV_OK ? 0 : -1;
 }
 
-static void
+void
 mcinspect_init_globals_bridge(Dwarf_Debug dbg)
 {
 	init_globals(dbg);
 }
 
-static int
+int
 mcinspect_dwarf_finish_bridge(Dwarf_Debug dbg, Dwarf_Error *error)
 {
 	return dwarf_finish(dbg, error);
 }
 
-static int
+int
 mcinspect_close_bridge(int fd)
 {
 	return close(fd);
 }
 
-static int
+int
 mcinspect_getopt_long_bridge(int argc, char **argv, const char *shortopts,
 		const void *longopts, char **optarg_out)
 {
@@ -1712,6 +1702,7 @@ mcinspect_getopt_long_bridge(int argc, char **argv, const char *shortopts,
 }
 #endif
 
+#ifndef MCINSPECT_RUST_HELPERS
 int main(int argc, char **argv)
 {
 #ifndef MCINSPECT_RUST_HELPERS
@@ -1819,3 +1810,4 @@ int main(int argc, char **argv)
 	return 0;
 #endif
 }
+#endif

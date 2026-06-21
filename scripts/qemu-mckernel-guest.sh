@@ -25,16 +25,26 @@ Options:
   --timeout SEC         Guest SSH wait timeout. Default: 300
   --runtime SEC         Max time to let QEMU run after SSH/command. Default: 0
   --guest-cmd CMD       Command to run inside the guest after SSH is ready.
+  --guest-cmd-timeout SEC
+                        Watchdog for --guest-cmd. Default: 0 (disabled)
   --guest-cleanup-cmd CMD
                         Cleanup command to attempt inside the guest before
                         QEMU exits. Default: stop McKernel if installed.
+  --guest-cleanup-timeout SEC
+                        Watchdog for guest cleanup. Default: 30
   --ssh-key PATH        Existing private key to use for guest SSH. Default:
                         generate a temporary key in the log directory.
   --kernel PATH         Optional external kernel image to boot with QEMU.
   --initrd PATH         Optional external initramfs image to boot with QEMU.
   --append CMDLINE      Kernel command line used with --kernel.
+  --pause-at-reset      Start QEMU with CPUs paused at reset for first-instruction
+                        GDB/monitor inspection. Use with --gdb PORT.
+  --gdb PORT            Open a QEMU GDB stub on 127.0.0.1:PORT.
   --no-guest-cleanup    Do not attempt the guest cleanup command.
   --shared-dir PATH     Expose PATH read-only as 9p tag hostshare.
+  --stage-dir HOST:GUEST
+                        Copy HOST directory into GUEST after SSH is ready.
+                        May be specified more than once.
   --log-dir PATH        Log directory. Default: /tmp/mckernel-qemu-<timestamp>
   --keep-overlay        Keep the temporary qcow2 overlay after exit.
   --keep-running        Leave QEMU running after the command completes.
@@ -57,9 +67,12 @@ ACCEL_REQUEST=auto
 TIMEOUT=300
 RUNTIME=0
 GUEST_CMD=
+GUEST_CMD_TIMEOUT=0
 GUEST_CLEANUP=1
 GUEST_CLEANUP_CMD='if [ -x /opt/mckernel-rust/sbin/mcstop+release.sh ]; then sudo /opt/mckernel-rust/sbin/mcstop+release.sh -k || true; fi'
+GUEST_CLEANUP_TIMEOUT=30
 SHARED_DIR=
+STAGE_DIRS=()
 LOG_DIR="/tmp/mckernel-qemu-$(date +%Y%m%d-%H%M%S)"
 KEEP_OVERLAY=0
 KEEP_RUNNING=0
@@ -70,6 +83,8 @@ SSH_KEY_INPUT=
 KERNEL_IMAGE=
 INITRD_IMAGE=
 KERNEL_APPEND=
+PAUSE_AT_RESET=0
+GDB_PORT=
 
 while [ "$#" -gt 0 ]; do
 	case "$1" in
@@ -109,8 +124,16 @@ while [ "$#" -gt 0 ]; do
 			GUEST_CMD="${2:?missing value for --guest-cmd}"
 			shift 2
 			;;
+		--guest-cmd-timeout)
+			GUEST_CMD_TIMEOUT="${2:?missing value for --guest-cmd-timeout}"
+			shift 2
+			;;
 		--guest-cleanup-cmd)
 			GUEST_CLEANUP_CMD="${2:?missing value for --guest-cleanup-cmd}"
+			shift 2
+			;;
+		--guest-cleanup-timeout)
+			GUEST_CLEANUP_TIMEOUT="${2:?missing value for --guest-cleanup-timeout}"
 			shift 2
 			;;
 		--ssh-key)
@@ -129,12 +152,24 @@ while [ "$#" -gt 0 ]; do
 			KERNEL_APPEND="${2:?missing value for --append}"
 			shift 2
 			;;
+		--pause-at-reset)
+			PAUSE_AT_RESET=1
+			shift
+			;;
+		--gdb)
+			GDB_PORT="${2:?missing value for --gdb}"
+			shift 2
+			;;
 		--no-guest-cleanup)
 			GUEST_CLEANUP=0
 			shift
 			;;
 		--shared-dir)
 			SHARED_DIR="${2:?missing value for --shared-dir}"
+			shift 2
+			;;
+		--stage-dir)
+			STAGE_DIRS+=("${2:?missing value for --stage-dir}")
 			shift 2
 			;;
 		--log-dir)
@@ -207,6 +242,20 @@ if [ -n "$SHARED_DIR" ] && [ ! -d "$SHARED_DIR" ]; then
 	exit 1
 fi
 
+for stage_spec in "${STAGE_DIRS[@]}"; do
+	host_stage="${stage_spec%%:*}"
+	guest_stage="${stage_spec#*:}"
+	if [ "$host_stage" = "$stage_spec" ] || [ -z "$host_stage" ] ||
+		[ -z "$guest_stage" ]; then
+		echo "error: --stage-dir must be HOST:GUEST" >&2
+		exit 2
+	fi
+	if [ ! -d "$host_stage" ]; then
+		echo "error: staged host directory not found: $host_stage" >&2
+		exit 1
+	fi
+done
+
 if [ -n "$KERNEL_IMAGE" ] && [ ! -f "$KERNEL_IMAGE" ]; then
 	echo "error: kernel image not found: $KERNEL_IMAGE" >&2
 	exit 1
@@ -226,6 +275,8 @@ need_cmd qemu-system-x86_64
 need_cmd qemu-img
 need_cmd cloud-localds
 need_cmd ssh
+need_cmd tar
+need_cmd timeout
 if [ -z "$SSH_KEY_INPUT" ]; then
 	need_cmd ssh-keygen
 fi
@@ -238,6 +289,26 @@ case "$ACCEL_REQUEST" in
 		exit 2
 		;;
 esac
+
+require_uint() {
+	local name="$1"
+	local value="$2"
+
+	case "$value" in
+		''|*[!0-9]*)
+			echo "error: --${name} must be a non-negative integer number of seconds" >&2
+			exit 2
+			;;
+	esac
+}
+
+require_uint timeout "$TIMEOUT"
+require_uint runtime "$RUNTIME"
+require_uint guest-cmd-timeout "$GUEST_CMD_TIMEOUT"
+require_uint guest-cleanup-timeout "$GUEST_CLEANUP_TIMEOUT"
+if [ -n "$GDB_PORT" ]; then
+	require_uint gdb "$GDB_PORT"
+fi
 
 mkdir -p "$LOG_DIR"
 
@@ -255,12 +326,34 @@ SERIAL_LOG="$LOG_DIR/serial.log"
 GUEST_CMD_LOG="$LOG_DIR/guest-command.log"
 GUEST_CLEANUP_LOG="$LOG_DIR/guest-cleanup.log"
 
+print_serial_tail() {
+	if [ -f "$SERIAL_LOG" ]; then
+		echo "recent serial log:" >&2
+		tail -n 80 "$SERIAL_LOG" >&2 || true
+	fi
+}
+
+qemu_is_running() {
+	local pid
+
+	if [ ! -f "$PIDFILE" ]; then
+		return 0
+	fi
+	pid="$(cat "$PIDFILE" 2>/dev/null || true)"
+	if [ -z "$pid" ]; then
+		return 0
+	fi
+	kill -0 "$pid" 2>/dev/null
+}
+
 cleanup() {
 	local pid
 
 	if [ "$KEEP_RUNNING" -eq 0 ] && [ "$SSH_READY" -eq 1 ] &&
 		[ "$GUEST_CLEANUP" -eq 1 ]; then
-		ssh "${SSH_ARGS[@]}" "$GUEST_CLEANUP_CMD" >>"$GUEST_CLEANUP_LOG" 2>&1 || true
+		timeout --foreground "$GUEST_CLEANUP_TIMEOUT" \
+			ssh "${SSH_ARGS[@]}" "$GUEST_CLEANUP_CMD" \
+			>>"$GUEST_CLEANUP_LOG" 2>&1 || true
 	fi
 
 	if [ "$KEEP_RUNNING" -eq 0 ] && [ -f "$PIDFILE" ]; then
@@ -359,6 +452,13 @@ QEMU_ARGS=(
 	-nic "user,model=virtio-net-pci,hostfwd=tcp:127.0.0.1:${SSH_PORT}-:22"
 )
 
+if [ "$PAUSE_AT_RESET" -eq 1 ]; then
+	QEMU_ARGS+=(-S)
+fi
+if [ -n "$GDB_PORT" ]; then
+	QEMU_ARGS+=(-gdb "tcp:127.0.0.1:${GDB_PORT}")
+fi
+
 if [ -n "$SHARED_DIR" ]; then
 	QEMU_ARGS+=(
 		-virtfs "local,path=$SHARED_DIR,mount_tag=hostshare,security_model=none,readonly=on"
@@ -379,6 +479,12 @@ printf '%s\n' "Log directory: $LOG_DIR"
 printf '%s\n' "Serial log: $SERIAL_LOG"
 printf '%s\n' "Overlay: $OVERLAY"
 printf '%s\n' "QEMU accel: $ACCEL"
+if [ "$PAUSE_AT_RESET" -eq 1 ]; then
+	printf '%s\n' "QEMU pause-at-reset: enabled"
+fi
+if [ -n "$GDB_PORT" ]; then
+	printf '%s\n' "QEMU GDB stub: 127.0.0.1:$GDB_PORT"
+fi
 printf '%s' "QEMU command: "
 quote_cmd "${QEMU_ARGS[@]}"
 
@@ -406,9 +512,16 @@ SSH_ARGS=(
 say "Waiting for guest SSH"
 deadline=$((SECONDS + TIMEOUT))
 until ssh "${SSH_ARGS[@]}" true >/dev/null 2>&1; do
+	if ! qemu_is_running; then
+		echo "error: QEMU exited before guest SSH became ready" >&2
+		echo "serial log: $SERIAL_LOG" >&2
+		print_serial_tail
+		exit 1
+	fi
 	if [ "$SECONDS" -ge "$deadline" ]; then
 		echo "error: guest SSH did not become ready within ${TIMEOUT}s" >&2
 		echo "serial log: $SERIAL_LOG" >&2
+		print_serial_tail
 		exit 1
 	fi
 	sleep 2
@@ -417,15 +530,38 @@ done
 say "Guest SSH ready"
 SSH_READY=1
 
+for stage_spec in "${STAGE_DIRS[@]}"; do
+	host_stage="${stage_spec%%:*}"
+	guest_stage="${stage_spec#*:}"
+	remote_cmd="$(printf 'rm -rf %q && mkdir -p %q && tar -C %q -xf -' \
+		"$guest_stage" "$guest_stage" "$guest_stage")"
+
+	say "Staging $host_stage into guest:$guest_stage"
+	tar -C "$host_stage" -cf - . | ssh "${SSH_ARGS[@]}" "$remote_cmd"
+done
+
 if [ -n "$GUEST_CMD" ]; then
 	say "Running guest command"
 	set +e
-	ssh "${SSH_ARGS[@]}" "$GUEST_CMD" >"$GUEST_CMD_LOG" 2>&1
+	if [ "$GUEST_CMD_TIMEOUT" -gt 0 ]; then
+		timeout --foreground "$GUEST_CMD_TIMEOUT" \
+			ssh "${SSH_ARGS[@]}" "$GUEST_CMD" >"$GUEST_CMD_LOG" 2>&1
+	else
+		ssh "${SSH_ARGS[@]}" "$GUEST_CMD" >"$GUEST_CMD_LOG" 2>&1
+	fi
 	rc=$?
 	set -e
 	cat "$GUEST_CMD_LOG"
+	if [ "$rc" -eq 124 ] && [ "$GUEST_CMD_TIMEOUT" -gt 0 ]; then
+		echo "error: guest command exceeded the ${GUEST_CMD_TIMEOUT}s watchdog" >&2
+		echo "serial log: $SERIAL_LOG" >&2
+		print_serial_tail
+		exit "$rc"
+	fi
 	if [ "$rc" -ne 0 ]; then
 		echo "error: guest command failed with status $rc" >&2
+		echo "serial log: $SERIAL_LOG" >&2
+		print_serial_tail
 		exit "$rc"
 	fi
 fi

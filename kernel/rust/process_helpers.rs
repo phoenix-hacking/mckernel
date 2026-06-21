@@ -1,15 +1,17 @@
 use core::ffi::c_void;
 use core::mem::{offset_of, size_of, MaybeUninit};
 use core::ptr::{copy_nonoverlapping, null_mut, write_volatile};
-use core::sync::atomic::{AtomicI32, Ordering};
+use core::sync::atomic::{AtomicI32, AtomicUsize, Ordering};
 
 use crate::abi::{
     AbiListHead, AddressSpace, CInt, CLong, CULong, CpuLocalVar, CpuSet, IhkAtomic, IhkSpinlock,
-    Mckfd, Memobj, OffT, Process, ProcessHash, ProcessVm, ProgramLoadDesc, ResourceSet, SigCommon,
-    SigPending, SigStack, SizeT, Thread, ThreadHash, VmRange, VmRangeNumaPolicy, AUXV_LEN,
-    CPU_SET_MAX_CPUS, PROCESS_HASH_SIZE, PROCESS_NUMA_MASK_BITS, VM_RANGE_CACHE_SIZE,
+    Mckfd, McsRwlockLock, Memobj, OffT, Process, ProcessHash, ProcessVm, ProgramLoadDesc, RLimit,
+    ResourceSet, SigCommon, SigPending, SigStack, SizeT, Thread, ThreadHash, VmRange,
+    VmRangeNumaPolicy, Waitq, AUXV_LEN, CPU_SET_MAX_CPUS, MCK_RLIM_MAX, PROCESS_HASH_SIZE,
+    PROCESS_NUMA_MASK_BITS, VM_RANGE_CACHE_SIZE,
 };
 use crate::lock_helpers::McsRwlockNodeIrqsave;
+use crate::page_alloc::IhkMcNumaNode;
 use crate::rbtree::{
     rb_erase, rb_first, rb_insert_color, rb_link_node, rb_next, rb_prev, RbNode, RbRoot,
 };
@@ -17,6 +19,21 @@ use crate::rbtree::{
 unsafe extern "C" {
     fn __ihk_mc_spinlock_lock(lock: *mut IhkSpinlock) -> CULong;
     fn __ihk_mc_spinlock_unlock(lock: *mut IhkSpinlock, flags: CULong);
+    fn __ihk_mc_spinlock_lock_noirq(lock: *mut IhkSpinlock);
+    fn __ihk_mc_spinlock_unlock_noirq(lock: *mut IhkSpinlock);
+    fn ihk_mc_spinlock_init(lock: *mut IhkSpinlock);
+    fn ihk_rwspinlock_init(lock: *mut c_void);
+    fn ihk_rwspinlock_read_lock_noirq(lock: *mut c_void);
+    fn ihk_rwspinlock_read_unlock_noirq(lock: *mut c_void);
+    fn ihk_rwspinlock_write_lock_noirq(lock: *mut c_void);
+    fn ihk_rwspinlock_write_unlock_noirq(lock: *mut c_void);
+    fn ihk_mc_pt_create(flags: CULong) -> *mut c_void;
+    fn mcs_rwlock_init(lock: *mut McsRwlockLock);
+    fn __mcs_rwlock_writer_lock_noirq(lock: *mut McsRwlockLock, node: *mut c_void);
+    fn __mcs_rwlock_writer_unlock_noirq(lock: *mut McsRwlockLock, node: *mut c_void);
+    fn waitq_init(waitq: *mut Waitq);
+    fn waitq_prepare_to_wait(waitq: *mut Waitq, entry: *mut c_void, state: CInt);
+    fn waitq_finish_wait(waitq: *mut Waitq, entry: *mut c_void);
     fn ihk_mc_get_nr_numa_nodes() -> CInt;
     fn memobj_ref(obj: *mut Memobj) -> CInt;
     fn memobj_unref(obj: *mut Memobj) -> CInt;
@@ -28,22 +45,36 @@ unsafe extern "C" {
     static mut PROCESS_RESOURCE_SET_LOCK: CULong;
     fn get_this_cpu_local_var() -> *mut CpuLocalVar;
     fn ihk_mc_get_processor_id() -> CInt;
+    fn cpu_disable_interrupt_save() -> CULong;
+    fn cpu_restore_interrupt(flags: CULong);
+    fn ihk_mc_get_numa_node_by_distance(i: CInt) -> *mut IhkMcNumaNode;
+    fn ihk_numa_zero_free_pages(node: *mut IhkMcNumaNode);
+    fn cpu_pause();
+    fn ihk_mc_get_vector(vector_key: CInt) -> CInt;
+    fn ihk_mc_interrupt_cpu(cpu: CInt, vector: CInt) -> CInt;
+    fn schedule();
+    fn get_cpu_local_var(cpu_id: CInt) -> *mut CpuLocalVar;
+    fn waitq_wakeup(waitq: *mut Waitq);
+    fn hassigpending(thread: *mut Thread) -> *mut c_void;
+    fn reset_cputime();
+    fn rusage_num_threads_inc();
+    fn xchg4(ptr: *mut CInt, value: CInt) -> CInt;
+    fn set_timer(runq_locked: CInt);
+    fn procfs_create_thread(thread: *mut Thread);
+    fn procfs_delete_thread(thread: *mut Thread);
+    fn flush_nfo_tlb_mm(vm: *mut ProcessVm);
+    fn save_fp_regs(thread: *mut c_void) -> CInt;
+    fn panic(msg: *const i8) -> !;
     fn process_alloc_bridge(size: CULong, flags: CULong) -> *mut c_void;
-    fn process_detach_address_space_bridge(address_space: *mut c_void, pid: CInt);
     fn process_free_all_ranges_bridge(vm: *mut c_void);
     fn process_free_vm_bridge(vm: *mut c_void);
-    fn process_flush_vm_bridge(vm: *mut c_void);
     fn process_init_process_public_bridge(proc: *mut c_void, parent: *mut c_void) -> CInt;
     fn process_hold_thread_warn_bridge(thread: *mut c_void);
     fn process_optional_free_bridge(ptr: *mut c_void);
     fn process_policy_free_bridge(policy: *mut c_void);
     fn process_proc_init_panic_bridge();
-    fn process_procfs_delete_thread_bridge(thread: *mut c_void);
-    fn process_pt_create_bridge(flags: CULong) -> *mut c_void;
     fn process_pt_destroy_bridge(page_table: *mut c_void);
-    fn process_destroy_thread_bridge(thread: *mut c_void);
     fn process_release_address_space_action_bridge(asp: *mut c_void);
-    fn process_release_process_bridge(proc: *mut c_void);
     fn process_current_resource_set_bridge() -> *mut c_void;
     fn process_release_hash_detach_bridge(resource_set: *mut c_void, proc: *mut c_void);
     fn process_release_sibling_detach_bridge(proc: *mut c_void);
@@ -104,24 +135,11 @@ unsafe extern "C" {
         thread: *mut c_void,
         new_tid: CInt,
     );
-    fn process_release_sigcommon_bridge(sigcommon: *mut c_void);
     fn release_fp_regs(thread: *mut c_void);
     fn process_release_thread_profile_bridge(thread: *mut c_void, proc: *mut c_void);
-    fn process_release_vm_bridge(vm: *mut c_void);
-    fn process_rw_read_lock_bridge(lock_addr: CULong);
-    fn process_rw_read_unlock_bridge(lock_addr: CULong);
-    fn process_rw_write_lock_bridge(lock_addr: CULong);
-    fn process_rw_write_unlock_bridge(lock_addr: CULong);
-    fn process_rwlock_init_bridge(lock_addr: CULong);
-    fn process_spin_init_bridge(lock_addr: CULong);
     fn process_vm_init_numa_log_bridge(numa_id: CInt);
-    fn process_vm_rwspin_init_bridge(lock_addr: CULong);
     fn process_sched_init_context_bridge(thread: *mut c_void);
-    fn process_sched_save_fp_bridge(thread: *mut c_void) -> CInt;
     fn process_sched_timer_init_bridge(cpu: CInt);
-    fn process_sched_init_panic_bridge();
-    fn process_spin_lock_bridge(lock_addr: CULong) -> CULong;
-    fn process_spin_unlock_bridge(lock_addr: CULong, irqstate: CULong);
     fn process_access_ok_log_bridge(
         vm: *mut ProcessVm,
         verify_type: CInt,
@@ -284,8 +302,6 @@ unsafe extern "C" {
         error: CInt,
     );
     fn process_change_prot_attr_bridge(flag: CULong, fault: CULong, ptep: *mut c_void) -> CULong;
-    fn process_sched_noirq_lock_bridge(lock_addr: CULong);
-    fn process_sched_noirq_unlock_bridge(lock_addr: CULong);
     fn process_change_prot_pt_change_bridge(
         page_table: *mut c_void,
         start: CULong,
@@ -550,6 +566,8 @@ const PROCESS_SPLIT_SHM_LOG_LOOKUP_FAILED: CInt = 1;
 const PROCESS_SPLIT_SHM_LOG_UPDATE_FAILED: CInt = 2;
 const PROCESS_SPLIT_RANGE_LOG_START: CInt = 1;
 const PROCESS_SPLIT_RANGE_LOG_DONE: CInt = 2;
+const PROCESS_STATUS_RUNNING: CInt = 0x1;
+const PROCESS_SCHED_INIT_PANIC: &[u8] = b"failed to initialize idle process state\0";
 
 const PTATTR_ACTIVE: CULong = 0x01;
 const PTATTR_WRITABLE: CULong = 0x02;
@@ -5679,6 +5697,11 @@ pub unsafe extern "C" fn process_pt_create_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn process_pt_create_bridge(flags: CULong) -> *mut c_void {
+    ihk_mc_pt_create(flags)
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn process_pt_destroy_result(
     page_table: *mut c_void,
     pt_destroy_fn: Option<ProcessPtDestroyFn>,
@@ -5689,6 +5712,233 @@ pub unsafe extern "C" fn process_pt_destroy_result(
 
     pt_destroy(page_table);
     0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_procfs_delete_thread_bridge(thread: *mut c_void) {
+    procfs_delete_thread(thread.cast::<Thread>());
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_destroy_thread_bridge(thread: *mut c_void) {
+    destroy_thread(thread.cast::<Thread>());
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_release_vm_bridge(vm: *mut c_void) {
+    release_process_vm(vm.cast::<ProcessVm>());
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_flush_vm_bridge(vm: *mut c_void) {
+    flush_nfo_tlb_mm(vm.cast::<ProcessVm>());
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_detach_address_space_bridge(
+    address_space: *mut c_void,
+    pid: CInt,
+) {
+    detach_address_space(address_space.cast::<AddressSpace>(), pid);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_release_process_bridge(proc: *mut c_void) {
+    release_process(proc.cast::<Process>());
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_release_sigcommon_bridge(sigcommon: *mut c_void) {
+    release_sigcommon(sigcommon.cast::<SigCommon>());
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_sched_save_fp_bridge(thread: *mut c_void) -> CInt {
+    save_fp_regs(thread)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_sched_init_panic_bridge() {
+    panic(PROCESS_SCHED_INIT_PANIC.as_ptr().cast());
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_mcs_lock_init_bridge(lock_addr: CULong) {
+    crate::lock_helpers::mcs_lock_init(lock_addr as *mut crate::lock_helpers::McsLockNode);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_spin_lock_bridge(lock_addr: CULong) -> CULong {
+    __ihk_mc_spinlock_lock(lock_addr as *mut IhkSpinlock)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_spin_unlock_bridge(lock_addr: CULong, irqstate: CULong) {
+    __ihk_mc_spinlock_unlock(lock_addr as *mut IhkSpinlock, irqstate);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_sched_noirq_lock_bridge(lock_addr: CULong) {
+    __ihk_mc_spinlock_lock_noirq(lock_addr as *mut IhkSpinlock);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_sched_noirq_unlock_bridge(lock_addr: CULong) {
+    __ihk_mc_spinlock_unlock_noirq(lock_addr as *mut IhkSpinlock);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_sched_rwlock_bridge(lock_addr: CULong, node_addr: CULong) {
+    __mcs_rwlock_writer_lock_noirq(lock_addr as *mut McsRwlockLock, node_addr as *mut c_void);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_sched_rwunlock_bridge(lock_addr: CULong, node_addr: CULong) {
+    __mcs_rwlock_writer_unlock_noirq(lock_addr as *mut McsRwlockLock, node_addr as *mut c_void);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_sched_vector_bridge(vector_key: CInt) -> CInt {
+    ihk_mc_get_vector(vector_key)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_sched_interrupt_bridge(cpu: CInt, vector: CInt) {
+    ihk_mc_interrupt_cpu(cpu, vector);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_sched_schedule_bridge() {
+    schedule();
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_sched_cpu_local_bridge(cpu_id: CInt) -> CULong {
+    get_cpu_local_var(cpu_id) as CULong
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_sched_waitq_wakeup_bridge(waitq_addr: CULong) {
+    waitq_wakeup(waitq_addr as *mut Waitq);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_sched_waitq_init_bridge(waitq_addr: CULong) {
+    waitq_init(waitq_addr as *mut Waitq);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_sched_waitq_prepare_bridge(
+    waitq_addr: CULong,
+    entry_addr: CULong,
+    status: CInt,
+) {
+    waitq_prepare_to_wait(waitq_addr as *mut Waitq, entry_addr as *mut c_void, status);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_sched_waitq_finish_bridge(waitq_addr: CULong, entry_addr: CULong) {
+    waitq_finish_wait(waitq_addr as *mut Waitq, entry_addr as *mut c_void);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_sched_status_set_bridge(status_addr: CULong, status: CInt) {
+    xchg4(status_addr as *mut CInt, status);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_sched_set_timer_bridge(runq_locked: CInt) {
+    set_timer(runq_locked);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_sched_irq_save_bridge() -> CULong {
+    cpu_disable_interrupt_save()
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_sched_irq_restore_bridge(irqstate: CULong) {
+    cpu_restore_interrupt(irqstate);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_sched_zero_free_bridge() {
+    ihk_numa_zero_free_pages(ihk_mc_get_numa_node_by_distance(0));
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_sched_pause_bridge() {
+    cpu_pause();
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_sched_has_signal_bridge(thread_addr: CULong) -> CInt {
+    (!hassigpending(thread_addr as *mut Thread).is_null()) as CInt
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_sched_reset_cputime_bridge() {
+    reset_cputime();
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_sched_procfs_create_thread_bridge(thread_addr: CULong) {
+    procfs_create_thread(thread_addr as *mut Thread);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_sched_counter_inc_bridge(counter_addr: CULong) -> CInt {
+    (*(counter_addr as *mut AtomicI32)).fetch_add(1, Ordering::SeqCst) + 1
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_sched_counter_dec_bridge(counter_addr: CULong) {
+    (*(counter_addr as *mut AtomicUsize)).fetch_sub(1, Ordering::SeqCst);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_sched_rusage_threads_inc_bridge() {
+    rusage_num_threads_inc();
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_rw_read_lock_bridge(lock_addr: CULong) {
+    ihk_rwspinlock_read_lock_noirq(lock_addr as *mut c_void);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_rw_read_unlock_bridge(lock_addr: CULong) {
+    ihk_rwspinlock_read_unlock_noirq(lock_addr as *mut c_void);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_rw_write_lock_bridge(lock_addr: CULong) {
+    ihk_rwspinlock_write_lock_noirq(lock_addr as *mut c_void);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_rw_write_unlock_bridge(lock_addr: CULong) {
+    ihk_rwspinlock_write_unlock_noirq(lock_addr as *mut c_void);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_spin_init_bridge(lock_addr: CULong) {
+    ihk_mc_spinlock_init(lock_addr as *mut IhkSpinlock);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_rwlock_init_bridge(lock_addr: CULong) {
+    mcs_rwlock_init(lock_addr as *mut McsRwlockLock);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_waitq_init_bridge(waitq_addr: CULong) {
+    waitq_init(waitq_addr as *mut Waitq);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn process_vm_rwspin_init_bridge(lock_addr: CULong) {
+    ihk_rwspinlock_init(lock_addr as *mut c_void);
 }
 
 #[no_mangle]
@@ -6779,6 +7029,87 @@ pub unsafe extern "C" fn process_init_profile_body_result(
         null_mut(),
     );
     0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn init_process(proc: *mut Process, parent: *mut Process) {
+    let state_offsets = ProcessInitStateOffsets {
+        pid_offset: offset_of!(Process, pid) as CULong,
+        status_offset: offset_of!(Process, status) as CULong,
+        parent_offset: offset_of!(Process, parent) as CULong,
+        ppid_parent_offset: offset_of!(Process, ppid_parent) as CULong,
+        pgid_offset: offset_of!(Process, pgid) as CULong,
+        ruid_offset: offset_of!(Process, ruid) as CULong,
+        euid_offset: offset_of!(Process, euid) as CULong,
+        suid_offset: offset_of!(Process, suid) as CULong,
+        fsuid_offset: offset_of!(Process, fsuid) as CULong,
+        rgid_offset: offset_of!(Process, rgid) as CULong,
+        egid_offset: offset_of!(Process, egid) as CULong,
+        sgid_offset: offset_of!(Process, sgid) as CULong,
+        fsgid_offset: offset_of!(Process, fsgid) as CULong,
+        mpol_flags_offset: offset_of!(Process, mpol_flags) as CULong,
+        mpol_threshold_offset: offset_of!(Process, mpol_threshold) as CULong,
+        thp_disable_offset: offset_of!(Process, thp_disable) as CULong,
+        rlimit_offset: offset_of!(Process, rlimit) as CULong,
+        rlimit_size: size_of::<[RLimit; MCK_RLIM_MAX]>() as CULong,
+        cpu_set_offset: offset_of!(Process, cpu_set) as CULong,
+        cpu_set_size: size_of::<CpuSet>() as CULong,
+        enable_uti_offset: offset_of!(Process, enable_uti) as CULong,
+    };
+
+    if process_init_state_body_result(
+        proc.cast(),
+        parent.cast(),
+        &raw const state_offsets,
+        -1,
+        PROCESS_STATUS_RUNNING,
+    ) < 0
+    {
+        process_panic_bridge(b"failed to initialize process state\0".as_ptr().cast());
+    }
+
+    if process_init_links_body_result(
+        proc.cast(),
+        offset_of!(Process, hash_list) as CULong,
+        offset_of!(Process, siblings_list) as CULong,
+        offset_of!(Process, ptraced_siblings_list) as CULong,
+        offset_of!(Process, update_lock) as CULong,
+        offset_of!(Process, report_threads_list) as CULong,
+        offset_of!(Process, threads_list) as CULong,
+        offset_of!(Process, children_list) as CULong,
+        offset_of!(Process, ptraced_children_list) as CULong,
+        offset_of!(Process, threads_lock) as CULong,
+        offset_of!(Process, children_lock) as CULong,
+        offset_of!(Process, coredump_lock) as CULong,
+        offset_of!(Process, mckfd_lock) as CULong,
+        offset_of!(Process, waitpid_q) as CULong,
+        offset_of!(Process, refcount) as CULong,
+        offset_of!(Process, monitoring_event) as CULong,
+        Some(process_rwlock_init_bridge),
+        Some(process_spin_init_bridge),
+        Some(process_waitq_init_bridge),
+        None,
+    ) < 0
+    {
+        process_panic_bridge(b"failed to initialize process links\0".as_ptr().cast());
+    }
+
+    #[cfg(enable_profile)]
+    {
+        if process_init_profile_body_result(
+            proc.cast(),
+            offset_of!(Process, profile_lock) as CULong,
+            offset_of!(Process, profile_events) as CULong,
+            Some(process_mcs_lock_init_bridge),
+        ) < 0
+        {
+            process_panic_bridge(
+                b"failed to initialize process profile state\0"
+                    .as_ptr()
+                    .cast(),
+            );
+        }
+    }
 }
 
 #[no_mangle]

@@ -340,6 +340,8 @@ extern int arch_process_vm_read_writev_body_result(int pid,
 		arch_process_vm_rw_phys_to_virt_fn_t phys_to_virt_fn,
 		arch_process_vm_rw_memcpy_fn_t memcpy_fn,
 		arch_process_vm_rw_log_fn_t log_fn);
+extern void arch_clear_single_step_body_result(struct thread *thread);
+extern void arch_set_single_step_body_result(struct thread *thread);
 
 long
 arch_syscall_forward_context_bridge(int syscall_nr, void *ctx)
@@ -347,49 +349,49 @@ arch_syscall_forward_context_bridge(int syscall_nr, void *ctx)
 	return syscall_generic_forwarding(syscall_nr, ctx);
 }
 
-static long
+long
 arch_copy_to_user_bridge(unsigned long dst_addr, const void *src, size_t bytes)
 {
 	return copy_to_user((void *)dst_addr, src, bytes);
 }
 
-static long
+long
 arch_copy_from_user_bridge(void *dst, unsigned long src_addr, size_t bytes)
 {
 	return copy_from_user(dst, (void *)src_addr, bytes);
 }
 
-static long
+long
 arch_rt_sigreturn_syscall_bridge(int num, void *regs)
 {
 	return syscall(num, (ihk_mc_user_context_t *)regs);
 }
 
-static void
+void
 arch_rt_sigreturn_set_signal_bridge(int sig, void *regs, const void *info)
 {
 	set_signal(sig, regs, (struct siginfo *)info);
 }
 
-static void
+void
 arch_rt_sigreturn_check_signal_bridge(int signum, void *regs, int num)
 {
 	check_signal(signum, regs, num);
 }
 
-static void *
+void *
 arch_rt_sigreturn_alloc_bridge(size_t size, unsigned long flags)
 {
 	return kmalloc_tracked(size, flags, __FILE__, __LINE__);
 }
 
-static void
+void
 arch_rt_sigreturn_free_bridge(void *ptr)
 {
 	kfree_tracked(ptr, __FILE__, __LINE__);
 }
 
-static void
+void
 arch_rt_sigreturn_xrstor_bridge(void *fpregs)
 {
 	uint64_t xsave_mask = get_xsave_mask();
@@ -399,6 +401,30 @@ arch_rt_sigreturn_xrstor_bridge(void *fpregs)
 
 	asm volatile("xrstor %0" : : "m"(*kfpregs), "a"(low), "d"(high) : "memory");
 }
+
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+void
+arch_rt_sigreturn_context_bridge(struct thread **threadp,
+		struct x86_user_context **regsp, int *xsavesizep)
+{
+	struct x86_user_context *regs;
+
+	if (threadp) {
+		*threadp = get_this_cpu_local_var()->current;
+	}
+	if (xsavesizep) {
+		*xsavesizep = get_xsave_size();
+	}
+	if (regsp) {
+		asm ("movq %%gs:(%1),%0"
+				: "=r"(regs)
+				: "r"(offsetof(struct x86_cpu_local_variables,
+						tss.rsp0)));
+		--regs;
+		*regsp = regs;
+	}
+}
+#endif
 
 static void
 arch_ptrace_signal_lock_bridge(void *lock, void *node)
@@ -580,19 +606,6 @@ arch_process_vm_rw_log_bridge(const struct arch_process_vm_rw_log_record *record
 	}
 }
 
-static const struct arch_ptrace_user_offsets arch_ptrace_user_kernel_offsets = {
-	.thread_proc_offset = __builtin_offsetof(struct thread, proc),
-	.thread_ptrace_saved_uctx_valid_offset =
-		__builtin_offsetof(struct thread, ptrace_saved_uctx_valid),
-	.thread_ptrace_saved_uctx_offset =
-		__builtin_offsetof(struct thread, ptrace_saved_uctx),
-	.thread_ptrace_debugreg_offset =
-		__builtin_offsetof(struct thread, ptrace_debugreg),
-	.proc_status_offset = __builtin_offsetof(struct process, status),
-	.uctx_sr_offset = __builtin_offsetof(ihk_mc_user_context_t, sr),
-	.uctx_gpr_offset = __builtin_offsetof(ihk_mc_user_context_t, gpr),
-};
-
 static const struct arch_process_vm_rw_offsets arch_process_vm_rw_kernel_offsets = {
 	.thread_proc_offset = __builtin_offsetof(struct thread, proc),
 	.thread_vm_offset = __builtin_offsetof(struct thread, vm),
@@ -611,19 +624,19 @@ static const struct arch_process_vm_rw_offsets arch_process_vm_rw_kernel_offsets
 	.vm_range_flag_offset = __builtin_offsetof(struct vm_range, flag),
 };
 
-static void *
+void *
 arch_ptrace_lookup_user_context_bridge(void *thread)
 {
 	return lookup_user_context((struct thread *)thread);
 }
 
-static void *
+void *
 arch_ptrace_alloc_bridge(size_t size, unsigned long flags)
 {
 	return kmalloc_tracked(size, flags, __FILE__, __LINE__);
 }
 
-static void
+void
 arch_ptrace_user_log_bridge(int event, int value, int result)
 {
 	(void)result;
@@ -644,13 +657,13 @@ arch_ptrace_user_log_bridge(int event, int value, int result)
 	}
 }
 
-static unsigned long
+unsigned long
 arch_ptrace_find_thread_bridge(int tgid, int tid)
 {
 	return (unsigned long)find_thread(tgid, tid);
 }
 
-static void
+void
 arch_ptrace_thread_unlock_bridge(unsigned long thread_addr)
 {
 	thread_unlock((struct thread *)thread_addr);
@@ -676,14 +689,14 @@ arch_prctl_log_bridge(int event, int cpu, unsigned long value)
 	}
 }
 
-static void
+void
 arch_clone_reader_lock_bridge(void *lock, void *node)
 {
 	mcs_rwlock_reader_lock((mcs_rwlock_lock_t *)lock,
 			(struct mcs_rwlock_node_irqsave *)node);
 }
 
-static void
+void
 arch_clone_reader_unlock_bridge(void *lock, void *node)
 {
 	mcs_rwlock_reader_unlock((mcs_rwlock_lock_t *)lock,
@@ -709,14 +722,14 @@ arch_shmget_log_bridge(int event, long key, size_t size, int shmflg0,
 	}
 }
 
-static long
+long
 arch_do_mmap_bridge(unsigned long addr, size_t len, int prot, int flags,
 		int fd, long off, int vrf0, void *private_data)
 {
 	return do_mmap(addr, len, prot, flags, fd, off, vrf0, private_data);
 }
 
-static void
+void
 arch_mmap_log_bridge(int event, unsigned long addr0, size_t len0, int prot,
 		int flags0, int fd, long off0, int error,
 		unsigned long result_addr, int extra)
@@ -747,6 +760,44 @@ arch_mmap_log_bridge(int event, unsigned long addr0, size_t len0, int prot,
 				addr0, len0, prot, flags0, fd, off0, error,
 				result_addr);
 	}
+}
+
+int
+arch_mmap_supported_flags_bridge(void)
+{
+	return 0
+		| MAP_SHARED
+		| MAP_PRIVATE
+		| MAP_FIXED
+		| MAP_ANONYMOUS
+		| MAP_LOCKED
+		| MAP_POPULATE
+		| MAP_HUGETLB
+		| (0x3FU << MAP_HUGE_SHIFT);
+}
+
+int
+arch_mmap_ignored_flags_bridge(void)
+{
+	return 0
+#ifdef USE_NOCACHE_MMAP
+		| MAP_32BIT
+#endif
+		| MAP_DENYWRITE
+		| MAP_NORESERVE
+		| MAP_STACK;
+}
+
+int
+arch_mmap_error_flags_bridge(void)
+{
+	return 0
+#ifndef USE_NOCACHE_MMAP
+		| MAP_32BIT
+#endif
+		| MAP_GROWSDOWN
+		| MAP_EXECUTABLE
+		| MAP_NONBLOCK;
 }
 #endif
 
@@ -930,14 +981,15 @@ struct sigsp {
 	siginfo_t info;
 };
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long sys_rt_sigreturn(int n, ihk_mc_user_context_t *ctx);
+#else
 long sys_rt_sigreturn(int n, ihk_mc_user_context_t *ctx)
 {
 	struct thread *thread = get_this_cpu_local_var()->current;
 	struct x86_user_context *regs;
-#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 	struct sigsp ksigsp;
 	struct sigsp *sigsp;
-#endif
 	int xsavesize = get_xsave_size();
 
 	asm ("movq %%gs:(%1),%0"
@@ -945,21 +997,6 @@ long sys_rt_sigreturn(int n, ihk_mc_user_context_t *ctx)
 			: "r"(offsetof(struct x86_cpu_local_variables, tss.rsp0)));
 	--regs;
 
-#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
-	return arch_rt_sigreturn_body_result(thread, regs,
-			offsetof(struct thread, sigmask),
-			offsetof(struct thread, sigstack),
-			sizeof(thread->sigstack), sizeof(struct sigsp),
-			xsavesize, IHK_MC_AP_NOWAIT,
-			arch_copy_from_user_bridge,
-			arch_rt_sigreturn_syscall_bridge,
-			arch_rt_sigreturn_set_signal_bridge,
-			check_need_resched,
-			arch_rt_sigreturn_check_signal_bridge,
-			arch_rt_sigreturn_alloc_bridge,
-			arch_rt_sigreturn_free_bridge,
-			arch_rt_sigreturn_xrstor_bridge);
-#else
 	sigsp = (struct sigsp *)regs->gpr.rsp;
 	if(copy_from_user(&ksigsp, sigsp, sizeof ksigsp))
 		return -EFAULT;
@@ -1020,8 +1057,8 @@ long sys_rt_sigreturn(int n, ihk_mc_user_context_t *ctx)
 	}
 
 	return sigsp->sigrc;
-#endif
 }
+#endif
 
 extern struct cpu_local_var *clv;
 extern void interrupt_syscall(struct thread *, int sig);
@@ -1047,19 +1084,13 @@ ptrace_user_context(struct thread *thread)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long ptrace_read_user(struct thread *thread, long addr,
+		unsigned long *value);
+#else
 long
 ptrace_read_user(struct thread *thread, long addr, unsigned long *value)
 {
-#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
-	return arch_ptrace_read_user_body_result(thread, addr, value,
-			sizeof(*value), sizeof(struct user_regs_struct),
-			__builtin_offsetof(struct user_regs_struct, fs_base),
-			__builtin_offsetof(struct user, u_debugreg[0]),
-			__builtin_offsetof(struct user, u_debugreg[8]),
-			&arch_ptrace_user_kernel_offsets,
-			arch_ptrace_lookup_user_context_bridge,
-			arch_ptrace_user_log_bridge);
-#else
 	unsigned long *p;
 	struct x86_user_context *uctx;
 	size_t off;
@@ -1099,23 +1130,16 @@ ptrace_read_user(struct thread *thread, long addr, unsigned long *value)
 	dkprintf("ptrace_read_user,addr=%d\n", addr);
 	*value = 0;
 	return 0;
-#endif
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long ptrace_write_user(struct thread *thread, long addr,
+		unsigned long value);
+#else
 long
 ptrace_write_user(struct thread *thread, long addr, unsigned long value)
 {
-#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
-	return arch_ptrace_write_user_body_result(thread, addr, value,
-			sizeof(value), sizeof(struct user_regs_struct),
-			__builtin_offsetof(struct user_regs_struct, fs_base),
-			__builtin_offsetof(struct user_regs_struct, eflags),
-			__builtin_offsetof(struct user, u_debugreg[0]),
-			__builtin_offsetof(struct user, u_debugreg[8]),
-			&arch_ptrace_user_kernel_offsets,
-			arch_ptrace_lookup_user_context_bridge,
-			arch_ptrace_user_log_bridge);
-#else
 	unsigned long *p;
 	struct x86_user_context *uctx;
 	size_t off;
@@ -1167,19 +1191,15 @@ ptrace_write_user(struct thread *thread, long addr, unsigned long value)
 	/* SUCCESS others */
 	dkprintf("ptrace_write_user,addr=%d\n", addr);
 	return 0;
-#endif
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long alloc_debugreg(struct thread *thread);
+#else
 long
 alloc_debugreg(struct thread *thread)
 {
-#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
-	return arch_alloc_debugreg_body_result(thread,
-			__builtin_offsetof(struct thread, ptrace_debugreg),
-			sizeof(*thread->ptrace_debugreg) * 8,
-			IHK_MC_AP_NOWAIT, arch_ptrace_alloc_bridge,
-			arch_ptrace_user_log_bridge);
-#else
 	thread->ptrace_debugreg = kmalloc_tracked(sizeof(*thread->ptrace_debugreg) * 8, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 	if (thread->ptrace_debugreg == NULL) {
 		kprintf("alloc_debugreg: no memory.\n");
@@ -1189,8 +1209,8 @@ alloc_debugreg(struct thread *thread)
 	thread->ptrace_debugreg[6] = DB6_RESERVED_SET;
 	thread->ptrace_debugreg[7] = DB7_RESERVED_SET;
 	return 0;
-#endif
 }
+#endif
 
 void
 save_debugreg(unsigned long *debugreg)
@@ -1235,6 +1255,7 @@ clear_debugreg(void)
 	asm("mov %0, %%db7" ::"r" (r));
 }
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void clear_single_step(struct thread *thread)
 {
 	thread->uctx->gpr.rflags &= ~RFLAGS_TF;
@@ -1244,16 +1265,17 @@ void set_single_step(struct thread *thread)
 {
 	thread->uctx->gpr.rflags |= RFLAGS_TF;
 }
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
-static long
+long
 arch_ptrace_read_user_bridge(unsigned long thread_addr, long addr,
 		unsigned long *value)
 {
 	return ptrace_read_user((struct thread *)thread_addr, addr, value);
 }
 
-static long
+long
 arch_ptrace_write_user_bridge(unsigned long thread_addr, long addr,
 		unsigned long value)
 {
@@ -1261,47 +1283,36 @@ arch_ptrace_write_user_bridge(unsigned long thread_addr, long addr,
 }
 #endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long ptrace_read_fpregs(struct thread *thread, void *fpregs);
+extern long ptrace_write_fpregs(struct thread *thread, void *fpregs);
+#else
 long ptrace_read_fpregs(struct thread *thread, void *fpregs)
 {
-#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
-	return arch_ptrace_fpregs_io_body_result((unsigned long)thread,
-			(unsigned long)fpregs, offsetof(struct thread, fp_regs),
-			offsetof(fp_regs_struct, i387),
-			sizeof(struct i387_fxsave_struct), 0,
-			arch_copy_to_user_bridge, arch_copy_from_user_bridge);
-#else
 	if (thread->fp_regs == NULL) {
 		return -ENOMEM;
 	}
 	return copy_to_user(fpregs, &thread->fp_regs->i387,
 			sizeof(struct i387_fxsave_struct));
-#endif
 }
 
 long ptrace_write_fpregs(struct thread *thread, void *fpregs)
 {
-#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
-	return arch_ptrace_fpregs_io_body_result((unsigned long)thread,
-			(unsigned long)fpregs, offsetof(struct thread, fp_regs),
-			offsetof(fp_regs_struct, i387),
-			sizeof(struct i387_fxsave_struct), 1,
-			arch_copy_to_user_bridge, arch_copy_from_user_bridge);
-#else
 	if (thread->fp_regs == NULL) {
 		return -ENOMEM;
 	}
 	return copy_from_user(&thread->fp_regs->i387, fpregs, 
 			sizeof(struct i387_fxsave_struct));
-#endif
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long ptrace_read_gpregs(struct thread *thread,
+		struct user_regs_struct *regs);
+#else
 static long
 ptrace_read_gpregs(struct thread *thread, struct user_regs_struct *regs)
 {
-#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
-	return arch_ptrace_read_gpregs_body_result((unsigned long)thread,
-			regs, sizeof(*regs), arch_ptrace_read_user_bridge);
-#else
 	long addr;
 	unsigned long *p;
 	long rc = 0;
@@ -1317,16 +1328,16 @@ ptrace_read_gpregs(struct thread *thread, struct user_regs_struct *regs)
 	}
 
 	return rc;
-#endif
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long ptrace_write_gpregs(struct thread *thread,
+		const struct user_regs_struct *regs);
+#else
 static long ptrace_write_gpregs(struct thread *thread,
 		const struct user_regs_struct *regs)
 {
-#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
-	return arch_ptrace_write_gpregs_body_result((unsigned long)thread,
-			regs, sizeof(*regs), arch_ptrace_write_user_bridge);
-#else
 	long addr;
 	const unsigned long *p;
 	long rc = 0;
@@ -1341,23 +1352,23 @@ static long ptrace_write_gpregs(struct thread *thread,
 	}
 
 	return rc;
-#endif
 }
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
-static long
+long
 arch_ptrace_read_gpregs_bridge(unsigned long thread_addr, void *regs)
 {
 	return ptrace_read_gpregs((struct thread *)thread_addr, regs);
 }
 
-static long
+long
 arch_ptrace_write_gpregs_bridge(unsigned long thread_addr, const void *regs)
 {
 	return ptrace_write_gpregs((struct thread *)thread_addr, regs);
 }
 
-static long
+long
 arch_ptrace_xstate_copy_to_bridge(unsigned long thread_addr,
 		unsigned long user_addr, size_t bytes)
 {
@@ -1369,7 +1380,7 @@ arch_ptrace_xstate_copy_to_bridge(unsigned long thread_addr,
 	return copy_to_user((void *)user_addr, thread->fp_regs, bytes);
 }
 
-static long
+long
 arch_ptrace_xstate_copy_from_bridge(unsigned long thread_addr,
 		unsigned long user_addr, size_t bytes)
 {
@@ -1381,7 +1392,7 @@ arch_ptrace_xstate_copy_from_bridge(unsigned long thread_addr,
 	return copy_from_user(thread->fp_regs, (void *)user_addr, bytes);
 }
 
-static void
+void
 arch_ptrace_regset_log_bridge(int event, long type)
 {
 	if (event == 1) {
@@ -1393,20 +1404,12 @@ arch_ptrace_regset_log_bridge(int event, long type)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long ptrace_read_regset(struct thread *thread, long type,
+		struct iovec *iov);
+#else
 long ptrace_read_regset(struct thread *thread, long type, struct iovec *iov)
 {
-#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
-	struct user_regs_struct regs;
-
-	return arch_ptrace_read_regset_body_result((unsigned long)thread,
-			type, iov, &regs, sizeof(regs), sizeof(fp_regs_struct),
-			offsetof(struct iovec, iov_base),
-			offsetof(struct iovec, iov_len),
-			arch_ptrace_read_gpregs_bridge,
-			arch_copy_to_user_bridge,
-			arch_ptrace_xstate_copy_to_bridge,
-			arch_ptrace_regset_log_bridge);
-#else
 	long rc = -EINVAL;
 
 	switch (type) {
@@ -1436,24 +1439,15 @@ long ptrace_read_regset(struct thread *thread, long type, struct iovec *iov)
 		break;
 	}
 	return rc;
-#endif
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long ptrace_write_regset(struct thread *thread, long type,
+		struct iovec *iov);
+#else
 long ptrace_write_regset(struct thread *thread, long type, struct iovec *iov)
 {
-#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
-	struct user_regs_struct regs;
-
-	return arch_ptrace_write_regset_body_result((unsigned long)thread,
-			type, iov, &regs, sizeof(regs), sizeof(fp_regs_struct),
-			offsetof(struct iovec, iov_base),
-			offsetof(struct iovec, iov_len),
-			arch_ptrace_read_gpregs_bridge,
-			arch_ptrace_write_gpregs_bridge,
-			arch_copy_from_user_bridge,
-			arch_ptrace_xstate_copy_from_bridge,
-			arch_ptrace_regset_log_bridge);
-#else
 	long rc = -EINVAL;
 
 	switch (type) {
@@ -1486,8 +1480,8 @@ long ptrace_write_regset(struct thread *thread, long type, struct iovec *iov)
 		break;
 	}
 	return rc;
-#endif
 }
+#endif
 
 extern int coredump(struct thread *thread, void *regs, int sig);
 
@@ -1591,21 +1585,12 @@ void ptrace_report_signal(struct thread *thread, int sig)
 #endif
 }
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long ptrace_arch_prctl(int pid, long code, long addr);
+#else
 static long
 ptrace_arch_prctl(int pid, long code, long addr)
 {
-#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
-	return arch_ptrace_prctl_body_result(pid, code, addr,
-			sizeof(unsigned long),
-			__builtin_offsetof(struct user_regs_struct, fs_base),
-			__builtin_offsetof(struct user_regs_struct, gs_base),
-			&arch_ptrace_user_kernel_offsets,
-			arch_ptrace_find_thread_bridge,
-			arch_ptrace_thread_unlock_bridge,
-			arch_ptrace_read_user_bridge,
-			arch_ptrace_write_user_bridge,
-			arch_copy_to_user_bridge);
-#else
 	long rc = -EIO;
 	struct thread *child;
 
@@ -1654,8 +1639,8 @@ ptrace_arch_prctl(int pid, long code, long addr)
 	thread_unlock(child);
 
 	return rc;
-#endif
 }
+#endif
 
 long
 arch_ptrace(long request, int pid, long addr, long data)
@@ -2045,6 +2030,7 @@ out:
 	return restart;
 }
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 int
 interrupt_from_user(void *regs0)
 {
@@ -2052,12 +2038,15 @@ interrupt_from_user(void *regs0)
 
 	return !(regs->gpr.rsp & 0x8000000000000000);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void save_syscall_return_value(int num, unsigned long rc)
 {
 	/* Empty on x86 */
 	return;
 }
+#endif
 
 unsigned long
 do_kill(struct thread *thread, int pid, int tid, int sig, siginfo_t *info,
@@ -2407,6 +2396,9 @@ set_signal(int sig, void *regs0, siginfo_t *info)
 	do_kill(thread, thread->proc->pid, thread->tid, sig, info, 0);
 }
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long sys_mmap(int n, ihk_mc_user_context_t *ctx);
+#else
 long sys_mmap(int n, ihk_mc_user_context_t *ctx)
 {
 	const unsigned int supported_flags = 0
@@ -2444,14 +2436,6 @@ long sys_mmap(int n, ihk_mc_user_context_t *ctx)
 	const off_t off0 = ihk_mc_syscall_arg5(ctx);
 	struct thread *thread = get_this_cpu_local_var()->current;
 	struct vm_regions *region = &thread->vm->region;
-#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
-	return arch_mmap_body_result(addr0, len0, prot, flags0, fd, off0,
-			region->user_start, region->user_end, supported_flags,
-			ignored_flags, error_flags,
-			ihk_mc_get_linux_default_huge_page_shift,
-			rusage_check_overmap, arch_do_mmap_bridge,
-			arch_mmap_log_bridge);
-#else
 	int error;
 	uintptr_t addr = 0;
 	size_t len;
@@ -2569,23 +2553,17 @@ out:
 	dkprintf("sys_mmap(%lx,%lx,%x,%x,%d,%lx): %ld %lx\n",
 			addr0, len0, prot, flags0, fd, off0, error, addr);
 	return (!error)? addr: error;
-#endif
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long sys_clone(int n, ihk_mc_user_context_t *ctx);
+#else
 long sys_clone(int n, ihk_mc_user_context_t *ctx)
 {
 	struct process *proc = get_this_cpu_local_var()->current->proc;
 	struct mcs_rwlock_node_irqsave lock_dump;
 
-#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
-	return arch_clone_body_result(proc,
-			offsetof(struct process, coredump_lock), &lock_dump,
-			(int)ihk_mc_syscall_arg0(ctx), ihk_mc_syscall_arg1(ctx),
-			ihk_mc_syscall_arg2(ctx), ihk_mc_syscall_arg3(ctx),
-			ihk_mc_syscall_arg4(ctx), ihk_mc_syscall_pc(ctx),
-			ihk_mc_syscall_sp(ctx), arch_clone_reader_lock_bridge,
-			arch_clone_reader_unlock_bridge, do_fork);
-#else
 	unsigned long ret;
 	/* mutex coredump */
 	mcs_rwlock_reader_lock(&proc->coredump_lock, &lock_dump);
@@ -2597,8 +2575,8 @@ long sys_clone(int n, ihk_mc_user_context_t *ctx)
 
 	mcs_rwlock_reader_unlock(&proc->coredump_lock, &lock_dump);
 	return ret;
-#endif
 }
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 extern long sys_fork(int n, ihk_mc_user_context_t *ctx);
@@ -2713,24 +2691,23 @@ long sys_arch_prctl(int n, ihk_mc_user_context_t *ctx)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long sys_time(int n, ihk_mc_user_context_t *ctx);
+#else
 long sys_time(int n, ihk_mc_user_context_t *ctx)
 {
 	time_t now = time();
 	time_t *tloc = (time_t *)ihk_mc_syscall_arg0(ctx);
 
-#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
-	return arch_time_body_result(now, (unsigned long)tloc,
-			arch_copy_to_user_bridge);
-#else
 	if (tloc && copy_to_user(tloc, &now, sizeof(now))) {
 		return -EFAULT;
 	}
 
 	return now;
-#endif
 }
+#endif
 
-static int vdso_get_vdso_info(void)
+int vdso_get_vdso_info(void)
 {
 	int error;
 	struct ikc_scd_packet packet;
@@ -2768,7 +2745,7 @@ out:
 	return error;
 } /* vdso_get_vdso_info() */
 
-static int vdso_map_global_pages(void)
+int vdso_map_global_pages(void)
 {
 	int error;
 	enum ihk_mc_pt_attribute attr;
@@ -2820,18 +2797,13 @@ out:
 	return error;
 } /* vdso_map_global_pages() */
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void vdso_calc_container_size(void)
 {
-#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 	intptr_t start, end;
 	intptr_t s, e;
-#endif
 
 	dkprintf("vdso_calc_container_size()\n");
-#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
-	arch_vdso_calc_container_size_result(&vdso, &container_size,
-			&vdso_offset);
-#else
 	start = 0;
 	end = vdso.vdso_npages * PAGE_SIZE;
 
@@ -2875,10 +2847,10 @@ static void vdso_calc_container_size(void)
 	}
 
 	container_size = end - start;
-#endif
 	dkprintf("vdso_calc_container_size(): %#lx %#lx\n", container_size, vdso_offset);
 	return;
 } /* vdso_calc_container_size() */
+#endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 #define ARCH_VDSO_SETUP_LOG_GET_INFO_FAILED 1
@@ -2890,8 +2862,27 @@ static void vdso_calc_container_size(void)
 #define ARCH_VDSO_MAP_LOG_MAPPED 3
 #define ARCH_VDSO_MAP_LOG_SET_RANGE_FAILED 4
 #define ARCH_VDSO_MAP_LOG_ADD_VVAR_FAILED 5
+#define ARCH_VDSO_PUBLIC_LOG_SETUP_ENTER 1
+#define ARCH_VDSO_PUBLIC_LOG_SETUP_EXIT 2
+#define ARCH_VDSO_PUBLIC_LOG_MAP_ENTER 3
+#define ARCH_VDSO_PUBLIC_LOG_MAP_EXIT 4
 
-static void
+void
+arch_vdso_state_bridge(struct vdso **vdso_p, size_t **container_size_p,
+		ptrdiff_t **vdso_offset_p)
+{
+	if (vdso_p) {
+		*vdso_p = &vdso;
+	}
+	if (container_size_p) {
+		*container_size_p = &container_size;
+	}
+	if (vdso_offset_p) {
+		*vdso_offset_p = &vdso_offset;
+	}
+}
+
+void
 arch_vdso_setup_log_bridge(int event, int error)
 {
 	switch (event) {
@@ -2912,7 +2903,7 @@ arch_vdso_setup_log_bridge(int event, int error)
 	}
 }
 
-static int
+int
 arch_vdso_add_range_bridge(struct process_vm *vm, unsigned long start,
 		unsigned long end, unsigned long flags, struct vm_range **range)
 {
@@ -2920,7 +2911,7 @@ arch_vdso_add_range_bridge(struct process_vm *vm, unsigned long start,
 			PAGE_SHIFT, NULL, range);
 }
 
-static int
+int
 arch_vdso_set_range_bridge(page_table_t pt, struct process_vm *vm,
 		unsigned long start, unsigned long end, unsigned long phys,
 		unsigned long attr, struct vm_range *range)
@@ -2929,7 +2920,7 @@ arch_vdso_set_range_bridge(page_table_t pt, struct process_vm *vm,
 			(enum ihk_mc_pt_attribute)attr, 0, range, 0);
 }
 
-static void
+void
 arch_vdso_map_log_bridge(int event, int error, struct process_vm *vm,
 		unsigned long a, unsigned long b, unsigned long c,
 		unsigned long d, int pages)
@@ -2954,23 +2945,43 @@ arch_vdso_map_log_bridge(int event, int error, struct process_vm *vm,
 		break;
 	}
 }
+
+void
+arch_vdso_public_log_bridge(int event, int error, int enabled,
+		struct process_vm *vm)
+{
+	switch (event) {
+	case ARCH_VDSO_PUBLIC_LOG_SETUP_ENTER:
+		dkprintf("arch_setup_vdso()\n");
+		break;
+	case ARCH_VDSO_PUBLIC_LOG_SETUP_EXIT:
+		if (enabled) {
+			kprintf("vdso is enabled\n");
+		}
+		else {
+			kprintf("vdso is disabled\n");
+		}
+		dkprintf("arch_setup_vdso(): %d\n", error);
+		break;
+	case ARCH_VDSO_PUBLIC_LOG_MAP_ENTER:
+		dkprintf("arch_map_vdso()\n");
+		break;
+	case ARCH_VDSO_PUBLIC_LOG_MAP_EXIT:
+		dkprintf("arch_map_vdso(): %d %p\n", error,
+				vm ? vm->vdso_addr : NULL);
+		break;
+	}
+}
 #endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern int arch_setup_vdso(void);
+#else
 int arch_setup_vdso()
 {
 	int error;
 
 	dkprintf("arch_setup_vdso()\n");
-#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
-	error = arch_setup_vdso_body_result(&vdso, &container_size,
-			&vdso_offset, &gettime_local_support,
-			&tod_data.do_local, vdso_get_vdso_info,
-			vdso_map_global_pages, arch_vdso_setup_log_bridge);
-	if (!error && vdso.vdso_npages > 0) {
-		vdso_calc_container_size();
-	}
-	goto out;
-#else
 	error = vdso_get_vdso_info();
 	if (error) {
 		ekprintf("arch_setup_vdso: vdso_get_vdso_info failed. %d\n", error);
@@ -3003,7 +3014,6 @@ int arch_setup_vdso()
 	vdso_calc_container_size();
 
 	error = 0;
-#endif
 out:
 	if (container_size > 0) {
 		kprintf("vdso is enabled\n");
@@ -3014,12 +3024,15 @@ out:
 	dkprintf("arch_setup_vdso(): %d\n", error);
 	return error;
 } /* arch_setup_vdso() */
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern int arch_map_vdso(struct process_vm *vm);
+#else
 int arch_map_vdso(struct process_vm *vm)
 {
 	struct address_space *as = vm->address_space;
 	page_table_t pt = as->page_table;
-#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 	void *container;
 	void *s;
 	void *e;
@@ -3027,16 +3040,9 @@ int arch_map_vdso(struct process_vm *vm)
 	enum ihk_mc_pt_attribute attr;
 	int i;
 	struct vm_range *range;
-#endif
 	int error;
 
 	dkprintf("arch_map_vdso()\n");
-#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
-	error = arch_map_vdso_body_result(vm, pt, &vdso, container_size,
-			vdso_offset, arch_vdso_add_range_bridge,
-			arch_vdso_set_range_bridge, arch_vdso_map_log_bridge);
-	goto out;
-#else
 	if (container_size <= 0) {
 		/* vdso pages are not available */
 		dkprintf("arch_map_vdso(): not available\n");
@@ -3137,12 +3143,13 @@ int arch_map_vdso(struct process_vm *vm)
 	}
 
 	error = 0;
-#endif
 out:
 	dkprintf("arch_map_vdso(): %d %p\n", error, vm->vdso_addr);
 	return error;
 } /* arch_map_vdso() */
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 save_uctx(void *uctx, struct x86_user_context *regs)
 {
@@ -3199,6 +3206,7 @@ save_uctx(void *uctx, struct x86_user_context *regs)
 	ihk_mc_arch_get_special_register(IHK_ASR_X86_FS, &ctx->fs);
 	ctx->fregsize = 0;
 }
+#endif
 
 int do_process_vm_read_writev(int pid, 
 		const struct iovec *local_iov,
@@ -3871,6 +3879,7 @@ out:
 	return mpsr->phase_ret;
 }
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 time_t time(void) {
 	struct syscall_request sreq IHK_DMA_ALIGN;
 	struct timespec ats;
@@ -3888,7 +3897,9 @@ time_t time(void) {
 
 	return ret;
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void calculate_time_from_tod_data(struct timespec *ts)
 {
 	unsigned long ver;
@@ -3950,6 +3961,7 @@ void calculate_time_from_tsc(struct timespec *ts)
 		++ts->tv_sec;
 	}
 }
+#endif
 
 extern void ptrace_syscall_event(struct thread *thread);
 long arch_ptrace_syscall_event(struct thread *thread,

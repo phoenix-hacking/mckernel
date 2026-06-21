@@ -413,6 +413,22 @@ queue_unlock(struct futex_q *q, struct futex_hash_bucket *hb)
 	drop_futex_key_refs(&q->key);
 }
 
+#ifdef MCCTRL_RUST_HELPERS
+static unsigned long mcctrl_futex_queue_lock_bridge(unsigned long q_addr,
+		unsigned long queue_addr)
+{
+	return (unsigned long)queue_lock((struct futex_q *)q_addr,
+			(struct futex_hash_bucket *)queue_addr);
+}
+
+static void mcctrl_futex_queue_unlock_bridge(unsigned long q_addr,
+		unsigned long hb_addr)
+{
+	queue_unlock((struct futex_q *)q_addr,
+			(struct futex_hash_bucket *)hb_addr);
+}
+#endif
+
 /*
  * Express the locking dependencies for lockdep:
  */
@@ -494,6 +510,69 @@ static void mcctrl_futex_rb_insert_color_bridge(void *node, void *root)
 static void mcctrl_futex_cache_free_bridge(void *ptr)
 {
 	kfree(ptr);
+}
+
+static void mcctrl_futex_key_refs_bridge(unsigned long key_addr)
+{
+	get_futex_key_refs((union futex_key *)key_addr);
+}
+
+static void *mcctrl_futex_usrdata_bridge(void *os)
+{
+	return ihk_host_os_get_usrdata((ihk_os_t)os);
+}
+
+static int mcctrl_futex_current_pid_bridge(void)
+{
+	return task_tgid_vnr(current);
+}
+
+static void *mcctrl_futex_get_ppd_bridge(void *usrdata, int pid)
+{
+	return mcctrl_get_per_proc_data(usrdata, pid);
+}
+
+static void mcctrl_futex_put_ppd_bridge(void *ppd)
+{
+	mcctrl_put_per_proc_data((struct mcctrl_per_proc_data *)ppd);
+}
+
+static int mcctrl_futex_remote_fault_bridge(void *usrdata,
+		unsigned long fault_addr, uint64_t reason, void *ppd,
+		int tid, int cpu)
+{
+	return uti_remote_page_fault((struct mcctrl_usrdata *)usrdata,
+			(void *)fault_addr, reason,
+			(struct mcctrl_per_proc_data *)ppd, tid, cpu);
+}
+
+static void *mcctrl_futex_cache_alloc_bridge(void)
+{
+	return kmalloc(sizeof(struct rva_to_rpa_cache_node), GFP_KERNEL);
+}
+
+static void mcctrl_futex_key_log_bridge(int event, unsigned long value,
+		unsigned long aux)
+{
+	switch (event) {
+	case 1:
+		pr_err("%s: ERROR: mcctrl_usrdata not found\n", "get_futex_key");
+		break;
+	case 2:
+		pr_err("%s: ERROR: no per-process structure for PID %lu\n",
+				"get_futex_key", value);
+		break;
+	case 3:
+		pr_err("%s: ERROR: virt to phys translation failed (%lu)\n",
+				"get_futex_key", aux);
+		break;
+	case 4:
+		pr_err("%s: error: cache entry found, rva: %lx, rpa: %lx\n",
+				"get_futex_key", value, aux);
+		break;
+	default:
+		break;
+	}
 }
 #endif
 
@@ -597,6 +676,27 @@ static int
 get_futex_key(uint32_t *uaddr, int fshared, union futex_key *key,
 		struct uti_info *uti_info)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_futex_get_key_body_result((unsigned long)uaddr, fshared,
+			(unsigned long)key, (void *)uti_info->os,
+			(unsigned long)uti_info->vm, uti_info->tid,
+			uti_info->cpu,
+			offsetof(union futex_key, both.word),
+			offsetof(union futex_key, both.ptr),
+			offsetof(union futex_key, both.offset),
+			offsetof(struct mcctrl_per_proc_data, rpgtable),
+			offsetof(struct mcctrl_per_proc_data, rva_to_rpa_cache),
+			mcctrl_futex_key_refs_bridge,
+			mcctrl_futex_usrdata_bridge,
+			mcctrl_futex_current_pid_bridge,
+			mcctrl_futex_get_ppd_bridge,
+			mcctrl_futex_put_ppd_bridge,
+			mcctrl_futex_remote_fault_bridge,
+			mcctrl_futex_cache_alloc_bridge,
+			mcctrl_futex_rb_link_node_bridge,
+			mcctrl_futex_rb_insert_color_bridge,
+			mcctrl_futex_key_log_bridge);
+#else
 	unsigned long address = (unsigned long)uaddr;
 	unsigned long phys, pgsize;
 	void *mm = uti_info->vm;
@@ -701,7 +801,20 @@ put_out:
 
 out:
 	return ret;
+#endif
 }
+
+#ifdef MCCTRL_RUST_HELPERS
+static void mcctrl_futex_hb_lock_bridge(unsigned long lock_addr);
+static void mcctrl_futex_hb_unlock_bridge(unsigned long lock_addr);
+static void mcctrl_futex_drop_key_refs_bridge(unsigned long key_addr);
+static int mcctrl_futex_get_value_bridge(unsigned long value_addr,
+		unsigned long uaddr);
+static int mcctrl_futex_xchg_bridge(unsigned long addr, int value);
+static unsigned long mcctrl_futex_spin_lock_bridge(unsigned long lock_addr);
+static void mcctrl_futex_spin_unlock_bridge(unsigned long lock_addr,
+		unsigned long irqstate);
+#endif
 
 /**
  * queue_me() - Enqueue the futex_q on the futex_hash_bucket
@@ -718,6 +831,15 @@ out:
 static inline void queue_me(struct futex_q *q, struct futex_hash_bucket *hb,
 			struct uti_info *uti_info)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_futex_queue_me_body_result((unsigned long)q, (unsigned long)hb,
+			(unsigned long)uti_info->thread_va,
+			offsetof(struct futex_q, list),
+			offsetof(struct futex_q, task),
+			offsetof(struct futex_hash_bucket, lock),
+			offsetof(struct futex_hash_bucket, chain),
+			mcctrl_futex_hb_unlock_bridge);
+#else
 	int prio;
 
 	/*
@@ -739,6 +861,7 @@ static inline void queue_me(struct futex_q *q, struct futex_hash_bucket *hb,
 	mc_plist_add(&q->list, &hb->chain);
 	q->task = (void *)uti_info->thread_va;
 	ihk_mc_spinlock_unlock_noirq(&hb->lock);
+#endif
 }
 
 /**
@@ -754,6 +877,15 @@ static inline void queue_me(struct futex_q *q, struct futex_hash_bucket *hb,
  */
 static int unqueue_me(struct futex_q *q)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_futex_unqueue_me_body_result((unsigned long)q,
+			offsetof(struct futex_q, lock_ptr),
+			offsetof(struct futex_q, list),
+			offsetof(struct futex_q, key),
+			mcctrl_futex_hb_lock_bridge,
+			mcctrl_futex_hb_unlock_bridge,
+			mcctrl_futex_drop_key_refs_bridge);
+#else
 	_ihk_spinlock_t *lock_ptr;
 	int ret = 0;
 
@@ -788,6 +920,7 @@ retry:
 
 	drop_futex_key_refs(&q->key);
 	return ret;
+#endif
 }
 
 /*
@@ -801,6 +934,7 @@ static inline int match_futex(union futex_key *key1, union futex_key *key2)
 		&& key1->both.offset == key2->both.offset);
 }
 
+#ifndef MCCTRL_RUST_HELPERS
 /* Convert phys_addr to virt_addr on Linux */
 static void futex_q_p2v(struct futex_q *q)
 {
@@ -812,6 +946,7 @@ static void futex_q_p2v(struct futex_q *q)
 	q->runq_lock = (void *)phys_to_virt(q->runq_lock_pa);
 	q->clv_flags = (void *)phys_to_virt(q->clv_flags_pa);
 }
+#endif
 
 #define CPU_FLAG_NEED_RESCHED	0x1U
 #define CPU_FLAG_NEED_MIGRATE	0x2U
@@ -828,9 +963,47 @@ static void futex_q_p2v(struct futex_q *q)
 #define PS_DELAY_TRACED      0x400
 
 #define PS_NORMAL	(PS_INTERRUPTIBLE | PS_UNINTERRUPTIBLE)
+#ifdef MCCTRL_RUST_HELPERS
+static unsigned long mcctrl_futex_phys_to_virt_bridge(unsigned long phys)
+{
+	return (unsigned long)phys_to_virt(phys);
+}
+
+static void mcctrl_futex_issue_interrupt_bridge(void *os, int intr_id,
+		int vector)
+{
+	ihk_os_issue_interrupt((ihk_os_t)os, intr_id, vector);
+}
+#endif
+
 static int uti_sched_wakeup_thread(struct futex_q *q, int valid_states,
 		struct uti_info *uti_info)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_futex_wakeup_thread_body_result((unsigned long)q,
+			(void *)uti_info->os, valid_states,
+			offsetof(struct futex_q, th_spin_sleep),
+			offsetof(struct futex_q, th_status),
+			offsetof(struct futex_q, th_spin_sleep_lock),
+			offsetof(struct futex_q, proc_status),
+			offsetof(struct futex_q, proc_update_lock),
+			offsetof(struct futex_q, runq_lock),
+			offsetof(struct futex_q, clv_flags),
+			offsetof(struct futex_q, intr_id),
+			offsetof(struct futex_q, intr_vector),
+			offsetof(struct futex_q, th_spin_sleep_pa),
+			offsetof(struct futex_q, th_status_pa),
+			offsetof(struct futex_q, th_spin_sleep_lock_pa),
+			offsetof(struct futex_q, proc_status_pa),
+			offsetof(struct futex_q, proc_update_lock_pa),
+			offsetof(struct futex_q, runq_lock_pa),
+			offsetof(struct futex_q, clv_flags_pa),
+			mcctrl_futex_phys_to_virt_bridge,
+			mcctrl_futex_spin_lock_bridge,
+			mcctrl_futex_spin_unlock_bridge,
+			mcctrl_futex_xchg_bridge,
+			mcctrl_futex_issue_interrupt_bridge);
+#else
 	int status;
 	unsigned long irqstate;
 
@@ -878,14 +1051,44 @@ static int uti_sched_wakeup_thread(struct futex_q *q, int valid_states,
 	}
 
 	return status;
+#endif
 }
 
 /*
  * The hash bucket lock must be held when this is called.
  * Afterwards, the futex_q must not be accessed.
  */
+#ifdef MCCTRL_RUST_HELPERS
+static int mcctrl_futex_wake_mckernel_bridge(unsigned long q_addr,
+		unsigned long ctx_addr)
+{
+	return uti_sched_wakeup_thread((struct futex_q *)q_addr, PS_NORMAL,
+			(struct uti_info *)ctx_addr);
+}
+
+static void mcctrl_futex_wake_log_bridge(int event, unsigned long q_addr,
+		unsigned long ctx_addr)
+{
+	(void)q_addr;
+	(void)ctx_addr;
+	if (event == 1) {
+		pr_err("%s: ERROR: A Linux thread is waking up migrated-to-Linux thread\n",
+				"wake_futex");
+	}
+}
+#endif
+
 static void wake_futex(struct futex_q *q, struct uti_info *uti_info)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_futex_wake_entry_body_result((unsigned long)q,
+			(unsigned long)uti_info,
+			offsetof(struct futex_q, list),
+			offsetof(struct futex_q, lock_ptr),
+			offsetof(struct futex_q, uti_futex_resp),
+			mcctrl_futex_wake_mckernel_bridge,
+			mcctrl_futex_wake_log_bridge);
+#else
 	/*
 	 * We set q->lock_ptr = NULL _before_ we wake up the task. If
 	 * a non futex wake up happens on another CPU then the task
@@ -912,6 +1115,7 @@ static void wake_futex(struct futex_q *q, struct uti_info *uti_info)
 	 */
 	barrier();
 	q->lock_ptr = NULL;
+#endif
 }
 
 #ifdef MCCTRL_RUST_HELPERS
@@ -1043,9 +1247,55 @@ out:
  * time in case we are waken.
  */
 
+#ifdef MCCTRL_RUST_HELPERS
+static int mcctrl_futex_xchg_bridge(unsigned long addr, int value)
+{
+	return xchg4((int *)addr, value);
+}
+
+static unsigned long mcctrl_futex_spin_lock_bridge(unsigned long lock_addr)
+{
+	return ihk_mc_spinlock_lock((_ihk_spinlock_t *)lock_addr);
+}
+
+static void mcctrl_futex_spin_unlock_bridge(unsigned long lock_addr,
+		unsigned long irqstate)
+{
+	ihk_mc_spinlock_unlock((_ihk_spinlock_t *)lock_addr, irqstate);
+}
+
+static void mcctrl_futex_queue_me_bridge(unsigned long q_addr,
+		unsigned long hb_addr, unsigned long ctx_addr)
+{
+	queue_me((struct futex_q *)q_addr, (struct futex_hash_bucket *)hb_addr,
+			(struct uti_info *)ctx_addr);
+}
+
+static int64_t mcctrl_futex_wait_event_bridge(unsigned long resp_addr,
+		uint64_t timeout)
+{
+	return uti_wait_event((void *)resp_addr, timeout);
+}
+#endif
+
 static int64_t futex_wait_queue_me(struct futex_hash_bucket *hb, struct futex_q *q,
 				   uint64_t timeout, struct uti_info *uti_info)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_futex_wait_queue_me_body_result((unsigned long)hb,
+			(unsigned long)q, timeout, (unsigned long)uti_info,
+			(unsigned long)uti_info->status,
+			(unsigned long)uti_info->spin_sleep,
+			(unsigned long)uti_info->spin_sleep_lock,
+			uti_info->mc_idle_halt,
+			offsetof(struct futex_q, list),
+			offsetof(struct futex_q, uti_futex_resp),
+			mcctrl_futex_xchg_bridge,
+			mcctrl_futex_spin_lock_bridge,
+			mcctrl_futex_spin_unlock_bridge,
+			mcctrl_futex_queue_me_bridge,
+			mcctrl_futex_wait_event_bridge);
+#else
 	int64_t time_remain = 0;
 	unsigned long irqstate;
 
@@ -1095,6 +1345,7 @@ static int64_t futex_wait_queue_me(struct futex_hash_bucket *hb, struct futex_q 
 	*(int *)uti_info->spin_sleep = 0;
 
 	return time_remain;
+#endif
 }
 
 /**
@@ -1118,6 +1369,24 @@ static int futex_wait_setup(uint32_t __user *uaddr, uint32_t val, int fshared,
 			    struct futex_q *q, struct futex_hash_bucket **hb,
 			    struct uti_info *uti_info)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	unsigned long hb_addr = 0;
+	int ret;
+
+	ret = mcctrl_futex_wait_setup_body_result((unsigned long)uaddr, val,
+			fshared, (unsigned long)q, &hb_addr,
+			(unsigned long)uti_info,
+			(unsigned long)uti_info->futex_queue,
+			offsetof(struct futex_q, key),
+			sizeof(union futex_key),
+			mcctrl_futex_get_key_for_body_bridge,
+			mcctrl_futex_queue_lock_bridge,
+			mcctrl_futex_get_value_bridge,
+			mcctrl_futex_queue_unlock_bridge,
+			mcctrl_futex_put_key_bridge);
+	*hb = (struct futex_hash_bucket *)hb_addr;
+	return ret;
+#else
 	uint32_t uval;
 	int ret;
 
@@ -1161,6 +1430,7 @@ static int futex_wait_setup(uint32_t __user *uaddr, uint32_t val, int fshared,
 		put_futex_key(fshared, &q->key);
 
 	return ret;
+#endif
 }
 
 #ifdef MCCTRL_RUST_HELPERS
@@ -1334,6 +1604,18 @@ static inline
 void requeue_futex(struct futex_q *q, struct futex_hash_bucket *hb1,
 		   struct futex_hash_bucket *hb2, union futex_key *key2)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_futex_requeue_move_body_result((unsigned long)q,
+			(unsigned long)hb1, (unsigned long)hb2,
+			(unsigned long)key2,
+			offsetof(struct futex_q, list),
+			offsetof(struct futex_q, lock_ptr),
+			offsetof(struct futex_q, key),
+			offsetof(struct futex_hash_bucket, lock),
+			offsetof(struct futex_hash_bucket, chain),
+			sizeof(union futex_key),
+			mcctrl_futex_key_refs_bridge);
+#else
 
 	/*
 	 * If key1 and key2 hash to the same bucket, no need to
@@ -1349,6 +1631,7 @@ void requeue_futex(struct futex_q *q, struct futex_hash_bucket *hb1,
 	}
 	get_futex_key_refs(key2);
 	q->key = *key2;
+#endif
 }
 
 #ifdef MCCTRL_RUST_HELPERS

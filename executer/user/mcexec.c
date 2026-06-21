@@ -352,6 +352,8 @@ extern unsigned long mcexec_default_heap_extension_result(
 		unsigned long heap_extension, unsigned long page_size);
 extern int mcexec_default_thread_count_result(int nr_threads,
 		int omp_present, int omp_threads, int nr_processes, int ncpu);
+extern int mcexec_plan_process_threads_result(int *nr_processes,
+		int nr_threads, int ncpu, int *planned_threads);
 extern unsigned long mcexec_mpol_flags_result(int no_heap, int no_stack,
 		int no_bss, int shm_premap);
 extern int mcexec_ompi_mpol_policy_result(const char *mpol,
@@ -585,6 +587,36 @@ void mcexec_overlay_list_add_body(struct list_head *new, struct list_head *head)
 void mcexec_overlay_list_del_body(struct list_head *entry);
 int mcexec_mapped_proc_task_parent_exists_body(const char *mapped);
 int mcexec_dirent_is64_body(int sysnum, int getdents64);
+void mcexec_setup_dma_ppd_body(void);
+int mcexec_finish_main_image_body(struct program_load_desc *desc);
+void mcexec_apply_flib_affinity_body(void);
+int mcexec_apply_main_stack_body(struct program_load_desc *desc,
+		const char *env, long stack_max, long stack_premap,
+		rlim_t *rlim_cur, rlim_t *rlim_max);
+int mcexec_setup_cpu_topology_body(void);
+int mcexec_apply_partitioned_cpu_body(struct program_load_desc *desc,
+		int nr_processes, int *target_core, int no_bind_ikc_map);
+void mcexec_apply_desc_runtime_body(struct program_load_desc *desc,
+		int profile, int nr_processes, int mpol_no_heap,
+		int mpol_no_stack, int mpol_no_bss, int mpol_shm_premap,
+		unsigned long mpol_threshold, unsigned long heap_extension,
+		const char *mpol_bind_nodes, int mpol_default,
+		int mpol_interleave, int mpol_bind, int mpol_preferred,
+		int pld_mpol_max, int enable_uti, int uti_thread_rank,
+		int uti_use_last_cpu, int straight_map,
+		unsigned long straight_map_threshold, int enable_tofu,
+		unsigned long mcexec_flags);
+void mcexec_prepare_main_desc_body(struct program_load_desc *desc,
+		char **argv_tail, char **shebang_argv, int envs_len,
+		char *envs, int target_core, int enable_vdso_arg);
+void mcexec_collect_main_envs_body(void *extra_env_headp, int *envs_len,
+		char **envs);
+void mcexec_collect_default_envs_body(int *envs_len, char **envs);
+void mcexec_init_page_altroot_body(void);
+int mcexec_init_stack_limit_body(char **argv);
+int mcexec_post_option_setup_body(int new_mcosid, int enable_uti_arg);
+int mcexec_load_main_desc_body(char *path,
+		struct program_load_desc **desc_p, char ***shebang_argv_p);
 #endif
 
 #ifdef MCEXEC_RUST_HELPERS
@@ -825,6 +857,19 @@ struct program_load_desc *load_elf(FILE *fp, char **interp_pathp)
 #endif
 
 #ifdef MCEXEC_RUST_HELPERS
+unsigned long mcexec_main_page_size_bridge(void)
+{
+	return sysconf(_SC_PAGESIZE);
+}
+
+void mcexec_main_publish_page_altroot_bridge(unsigned long new_page_size,
+		const char *new_altroot)
+{
+	page_size = new_page_size;
+	page_mask = ~(page_size - 1);
+	altroot = (char *)new_altroot;
+}
+
 const char *mcexec_altroot_bridge(void)
 {
 	return altroot;
@@ -1846,6 +1891,41 @@ unsigned long dma_buf_pa;
 
 
 #ifdef MCEXEC_RUST_HELPERS
+void *mcexec_dma_mmap_bridge(void)
+{
+	return mmap(0, PIN_SIZE, PROT_READ | PROT_WRITE,
+			(MAP_ANONYMOUS | MAP_PRIVATE), -1, 0);
+}
+
+int mcexec_dma_mlock_bridge(void *buf)
+{
+	return mlock(buf, (size_t)PIN_SIZE);
+}
+
+void mcexec_dma_mmap_failed_bridge(void)
+{
+	__dprintf("error: allocating DMA area\n");
+	exit(1);
+}
+
+void mcexec_dma_mlock_failed_bridge(void)
+{
+	__dprintf("ERROR: locking dma_buf\n");
+	exit(1);
+}
+
+int mcexec_create_ppd_bridge(void)
+{
+	return ioctl(fd, MCEXEC_UP_CREATE_PPD, NULL);
+}
+
+void mcexec_create_ppd_failed_bridge(void)
+{
+	perror("creating mcctrl per-process structure");
+	close(fd);
+	exit(1);
+}
+
 void mcexec_print_flat_count_bridge(long count)
 {
 	__dprintf("counter: %ld\n", count);
@@ -2009,11 +2089,283 @@ void mcexec_numa_node_cpu_log_bridge(int cpu, int node)
 	__dprintf("%d belongs to node %d\n", cpu, node);
 }
 
+int mcexec_main_get_cpu_bridge(void)
+{
+	return ioctl(fd, MCEXEC_UP_GET_CPU, 0);
+}
+
+int mcexec_main_get_nodes_bridge(void)
+{
+	return ioctl(fd, MCEXEC_UP_GET_NODES, 0);
+}
+
+void mcexec_main_no_cpu_bridge(void)
+{
+	fprintf(stderr, "No CPU found.\n");
+}
+
+void mcexec_main_no_numa_node_bridge(void)
+{
+	fprintf(stderr, "No numa node found.\n");
+}
+
+size_t mcexec_main_cpu_alloc_size_bridge(int cpu_count)
+{
+	return CPU_ALLOC_SIZE(cpu_count);
+}
+
+void mcexec_main_alloc_nodes_error_bridge(void)
+{
+	fprintf(stderr, "Error allocating nodes cpu sets\n");
+}
+
+void mcexec_main_publish_topology_bridge(int cpu_count, int node_count,
+		size_t node_set_size, void *nodes)
+{
+	ncpu = cpu_count;
+	nnodes = node_count;
+	cpu_set_size = node_set_size;
+	numa_nodes = nodes;
+}
+
+void mcexec_main_numa_node_zero_bridge(void *nodes, size_t node_set_size,
+		int node_id)
+{
+	CPU_ZERO_S(node_set_size,
+			(cpu_set_t *)((char *)nodes + node_id * node_set_size));
+}
+
+int mcexec_main_node_cpu_exists_bridge(int node_id, int cpu)
+{
+	struct stat sb;
+	char buf[PATH_MAX];
+
+	snprintf(buf, PATH_MAX,
+			"/sys/class/mcos/mcos0/sys/devices/system/node/node%d/cpu%d",
+			node_id, cpu);
+	return stat(buf, &sb) == 0;
+}
+
+void mcexec_main_numa_node_set_cpu_bridge(void *nodes, size_t node_set_size,
+		int node_id, int cpu)
+{
+	CPU_SET_S(cpu, node_set_size,
+			(cpu_set_t *)((char *)nodes + node_id * node_set_size));
+}
+
+void mcexec_process_thread_plan_flib_log_bridge(int planned_nr_processes)
+{
+	__dprintf("%s: using FLIB_NUM_PROCESS_ON_NODE: %d\n",
+			"main", planned_nr_processes);
+}
+
+static cpu_set_t mcexec_partition_cpu_set_storage;
+
+int mcexec_partition_get_cpuset_bridge(struct program_load_desc *desc,
+		int nr_processes, int *target_core, int *process_rank,
+		int *mcexec_linux_numa, int *ikc_mapped)
+{
+	struct get_cpu_set_arg cpu_set_arg;
+
+	CPU_ZERO(&mcexec_partition_cpu_set_storage);
+
+	cpu_set_arg.req_cpu_list = NULL;
+	cpu_set_arg.req_cpu_list_len = 0;
+	cpu_set_arg.cpu_set = (void *)&desc->cpu_set;
+	cpu_set_arg.cpu_set_size = sizeof(desc->cpu_set);
+	cpu_set_arg.nr_processes = nr_processes;
+	cpu_set_arg.ppid = getppid();
+	cpu_set_arg.target_core = target_core;
+	cpu_set_arg.process_rank = process_rank;
+	cpu_set_arg.mcexec_linux_numa = mcexec_linux_numa;
+	cpu_set_arg.mcexec_cpu_set = &mcexec_partition_cpu_set_storage;
+	cpu_set_arg.mcexec_cpu_set_size =
+		sizeof(mcexec_partition_cpu_set_storage);
+	cpu_set_arg.ikc_mapped = ikc_mapped;
+
+	/* Fugaku specific: Fujitsu CPU binding */
+	if (getenv("FLIB_AFFINITY_ON_PROCESS")) {
+		cpu_set_arg.req_cpu_list =
+			getenv("FLIB_AFFINITY_ON_PROCESS");
+		cpu_set_arg.req_cpu_list_len =
+			strlen(cpu_set_arg.req_cpu_list) + 1;
+		__dprintf("%s: requesting CPUs: %s\n",
+			"main", cpu_set_arg.req_cpu_list);
+	}
+
+	return ioctl(fd, MCEXEC_UP_GET_CPUSET, (void *)&cpu_set_arg);
+}
+
+void mcexec_partition_get_cpuset_failed_bridge(void)
+{
+	perror("getting CPU set for partitioned execution");
+	close(fd);
+}
+
+void mcexec_partition_publish_cpu_rank_bridge(struct program_load_desc *desc,
+		int target_core, int process_rank)
+{
+	desc->cpu = target_core;
+	desc->process_rank = process_rank;
+}
+
+void mcexec_partition_publish_rank_bridge(struct program_load_desc *desc,
+		int process_rank)
+{
+	desc->process_rank = process_rank;
+}
+
+void mcexec_partition_rank_log_bridge(int process_rank, int target_core)
+{
+	__dprintf("%s: rank: %d, target CPU: %d\n",
+		"main", process_rank, target_core);
+}
+
+int mcexec_partition_sched_setaffinity_bridge(void)
+{
+	return sched_setaffinity(0, sizeof(mcexec_partition_cpu_set_storage),
+			&mcexec_partition_cpu_set_storage);
+}
+
+void mcexec_partition_sched_setaffinity_warning_bridge(void)
+{
+	__dprintf("WARNING: couldn't bind to mcexec_cpu_set\n");
+}
+
+void mcexec_partition_debug_ikc_binding_bridge(void)
+{
+#ifdef DEBUG
+	int i;
+
+	for (i = 0; i < numa_num_possible_cpus(); ++i) {
+		if (CPU_ISSET(i, &mcexec_partition_cpu_set_storage)) {
+			__dprintf("PID %d bound to CPU %d\n",
+				getpid(), i);
+		}
+	}
+#endif
+}
+
+int mcexec_partition_numa_run_bridge(int mcexec_linux_numa)
+{
+	return numa_run_on_node(mcexec_linux_numa);
+}
+
+void mcexec_partition_numa_run_warning_bridge(int mcexec_linux_numa)
+{
+	__dprintf("WARNING: couldn't bind to NUMA %d\n",
+			mcexec_linux_numa);
+}
+
+void mcexec_partition_debug_numa_binding_bridge(void)
+{
+#ifdef DEBUG
+	int i;
+	cpu_set_t cpuset;
+	char affinity[BUFSIZ];
+
+	CPU_ZERO(&cpuset);
+	if ((sched_getaffinity(0, sizeof(cpu_set_t), &cpuset)) != 0) {
+		perror("Error sched_getaffinity");
+		exit(1);
+	}
+
+	affinity[0] = '\0';
+	for (i = 0; i < 512; i++) {
+		if (CPU_ISSET(i, &cpuset) == 1) {
+			sprintf(affinity, "%s %d", affinity, i);
+		}
+	}
+	__dprintf("PID: %d affinity: %s\n",
+			getpid(), affinity);
+#endif
+}
+
 #define numa_local(localset, nodemask) \
 	mcexec_numa_local_body((unsigned long *)(localset), (nodemask), 0)
 #define numa_nonlocal(localset, nodemask) \
 	mcexec_numa_local_body((unsigned long *)(localset), (nodemask), 1)
 #define numa_all(nodemask) mcexec_numa_all_body(nodemask)
+
+void mcexec_desc_publish_mpol_base_bridge(struct program_load_desc *desc,
+		int profile_arg, int nr_processes_arg, unsigned long flags,
+		unsigned long threshold, unsigned long heap_ext,
+		int pld_mpol_max)
+{
+	desc->profile = profile_arg;
+	desc->nr_processes = nr_processes_arg;
+	desc->mpol_flags = flags;
+	desc->mpol_threshold = threshold;
+	desc->heap_extension = heap_ext;
+	desc->mpol_bind_mask = 0;
+	desc->mpol_mode = pld_mpol_max;
+}
+
+void mcexec_desc_apply_bind_nodes_bridge(struct program_load_desc *desc,
+		const char *nodes)
+{
+	struct bitmask *bind_mask;
+
+	bind_mask = numa_parse_nodestring_all(nodes);
+	if (bind_mask) {
+		int node;
+
+		for (node = 0; node <= numa_max_possible_node(); ++node) {
+			if (numa_bitmask_isbitset(bind_mask, node)) {
+				desc->mpol_bind_mask |= (1UL << node);
+			}
+		}
+	}
+}
+
+void mcexec_desc_ompi_policy_log_bridge(const char *mpol)
+{
+	__dprintf("OMPI_MCA_plm_ple_memory_allocation_policy: %s\n",
+		  mpol);
+}
+
+void mcexec_desc_apply_ompi_policy_bridge(struct program_load_desc *desc,
+		int mode, int nodemask_action)
+{
+	desc->mpol_mode = mode;
+	if (nodemask_action == 1) {
+		numa_local(desc->cpu_set, desc->mpol_nodemask);
+	}
+	else if (nodemask_action == 2) {
+		numa_nonlocal(desc->cpu_set, desc->mpol_nodemask);
+	}
+	else if (nodemask_action == 3) {
+		numa_all(desc->mpol_nodemask);
+	}
+}
+
+void mcexec_desc_mpol_log_bridge(const struct program_load_desc *desc)
+{
+	__dprintf("mpol_mode: %d, mpol_nodemask: %ld\n",
+		  desc->mpol_mode, desc->mpol_nodemask[0]);
+}
+
+void mcexec_desc_publish_runtime_flags_bridge(struct program_load_desc *desc,
+		int enable_uti_arg, int uti_thread_rank_arg,
+		int uti_use_last_cpu_arg, int thp_disable_arg,
+		int straight_map_arg, unsigned long straight_map_threshold_arg,
+		int enable_tofu_arg, unsigned long mcexec_flags_arg)
+{
+	desc->enable_uti = enable_uti_arg;
+	desc->uti_thread_rank = uti_thread_rank_arg;
+	desc->uti_use_last_cpu = uti_use_last_cpu_arg;
+	desc->thp_disable = thp_disable_arg;
+	desc->straight_map = straight_map_arg;
+	desc->straight_map_threshold = straight_map_threshold_arg;
+#ifdef ENABLE_TOFU
+	desc->enable_tofu = enable_tofu_arg;
+#else
+	(void)enable_tofu_arg;
+#endif
+	if (mcexec_flags_arg) {
+		desc->mcexec_flags = mcexec_flags_arg;
+	}
+}
 #else
 static inline void _numa_local(__cpu_set_unit *localset,
 			       unsigned long *nodemask, int nonlocal)
@@ -2533,6 +2885,25 @@ act_sigprocmask(struct syscall_wait_desc *w)
 #define MCEXEC_STACK_SIZE (10 * 1024 * 1024)	/* 10 MiB */
 
 #ifdef MCEXEC_RUST_HELPERS
+int mcexec_main_load_stack_rlimit_bridge(unsigned long *cur,
+		unsigned long *max)
+{
+	if (getrlimit(RLIMIT_STACK, &rlim_stack)) {
+		fprintf(stderr, "getrlimit failed\n");
+		return 1;
+	}
+	*cur = rlim_stack.rlim_cur;
+	*max = rlim_stack.rlim_max;
+	__dprintf("rlim_stack=%ld,%ld\n", rlim_stack.rlim_cur,
+			rlim_stack.rlim_max);
+	return 0;
+}
+
+void mcexec_main_reduce_stack_failed_bridge(void)
+{
+	fprintf(stderr, "Error: Failed to reduce stack.\n");
+}
+
 void mcexec_reduce_stack_newval_overflow_bridge(void)
 {
 	__eprintf("snprintf(%s):buffer overflow\n", rlimit_stack_envname);
@@ -2735,6 +3106,78 @@ void mcexec_execve2_image_transferred_bridge(void)
 void mcexec_execve2_close_exec_failed_bridge(int ret)
 {
 	fprintf(stderr, "error: MCEXEC_UP_CLOSE_EXEC failed with %d\n", ret);
+}
+
+void mcexec_main_prepare_image_failed_bridge(void)
+{
+	perror("prepare");
+	close(fd);
+}
+
+void mcexec_main_flush_bridge(void)
+{
+	fflush(stdout);
+	fflush(stderr);
+}
+
+int mcexec_main_cmd_servers_init_bridge(void)
+{
+#ifdef USE_SYSCALL_MOD_CALL
+	if(mc_cmd_server_init()){
+		fprintf(stderr, "Error: cmd server init failed\n");
+		return 1;
+	}
+
+#ifdef CMD_DCFA
+	if(ibmic_cmd_server_init()){
+		fprintf(stderr, "Error: Failed to initialize ibmic_cmd_server.\n");
+		return -1;
+	}
+#endif
+
+#ifdef CMD_DCFAMPI
+	if(dcfampi_cmd_server_init()){
+		fprintf(stderr, "Error: Failed to initialize dcfampi_cmd_server.\n");
+		return -1;
+	}
+#endif
+	__dprintf("mccmd server initialized\n");
+#endif
+
+	return 0;
+}
+
+void mcexec_main_worker_threads_failed_bridge(int error)
+{
+	fprintf(stderr, "%s: Error: creating worker threads: %s\n",
+			"main", strerror(-error));
+	close(fd);
+}
+
+void mcexec_main_start_image_failed_bridge(void)
+{
+	perror("exec");
+	close(fd);
+}
+
+void mcexec_flib_affinity_alloc_failed_bridge(void)
+{
+	fprintf(stderr, "error: allocating memory for "
+			"FLIB_AFFINITY_ON_PROCESS\n");
+	exit(EXIT_FAILURE);
+}
+
+void mcexec_flib_affinity_log_bridge(const char *old_affinity,
+		const char *new_affinity)
+{
+	__dprintf("FLIB_AFFINITY_ON_PROCESS: %s -> %s\n",
+			old_affinity, new_affinity);
+}
+
+void mcexec_main_stack_parse_failed_bridge(int parse_rc)
+{
+	fprintf(stderr, "Error: Failed to parse %s %d\n",
+			rlimit_stack_envname, parse_rc);
 }
 
 int mcexec_execve1_enable_vdso_bridge(void)
@@ -3011,6 +3454,19 @@ void mcexec_init_worker_threads_error_bridge(int ret)
 #define MCK_RLIMIT_SIGPENDING	14
 #define MCK_RLIMIT_STACK	15
 
+#ifdef MCEXEC_RUST_HELPERS
+void mcexec_main_stack_publish_bridge(struct program_load_desc *desc,
+		rlim_t cur, rlim_t max, long prem)
+{
+	desc->rlimit[MCK_RLIMIT_STACK].rlim_cur = cur;
+	desc->rlimit[MCK_RLIMIT_STACK].rlim_max = max;
+	desc->stack_premap = prem;
+	__dprintf("desc->rlimit[MCK_RLIMIT_STACK]=%ld,%ld\n",
+			desc->rlimit[MCK_RLIMIT_STACK].rlim_cur,
+			desc->rlimit[MCK_RLIMIT_STACK].rlim_max);
+}
+#endif
+
 static int rlimits[] = {
 #ifdef RLIMIT_AS
 	RLIMIT_AS,	MCK_RLIMIT_AS,
@@ -3061,6 +3517,33 @@ static int rlimits[] = {
 	RLIMIT_STACK,	MCK_RLIMIT_STACK,
 #endif
 };
+
+#ifdef MCEXEC_RUST_HELPERS
+void mcexec_desc_snapshot_rlimits_bridge(struct program_load_desc *desc)
+{
+	int i;
+
+	for (i = 0; i < sizeof(rlimits) / sizeof(int); i += 2) {
+		getrlimit(rlimits[i], &desc->rlimit[rlimits[i + 1]]);
+	}
+}
+
+void mcexec_desc_publish_env_bridge(struct program_load_desc *desc,
+		int envs_len, char *envs)
+{
+	desc->envs_len = envs_len;
+	desc->envs = envs;
+}
+
+void mcexec_desc_publish_args_cpu_bridge(struct program_load_desc *desc,
+		unsigned long args_len, char *args, int cpu, int vdso)
+{
+	desc->args_len = args_len;
+	desc->args = args;
+	desc->cpu = cpu;
+	desc->enable_vdso = vdso;
+}
+#endif
 
 char dev[64];
 
@@ -3380,6 +3863,232 @@ static struct option mcexec_options[] = {
 	{ NULL, 0, NULL, 0, },
 };
 
+#ifdef MCEXEC_RUST_HELPERS
+struct mcexec_main_state_ptrs {
+	int *nr_processes;
+	int *nr_threads;
+	unsigned long *mpol_threshold;
+	unsigned long *heap_extension;
+	unsigned long *straight_map_threshold;
+	long *stack_premap;
+	long *stack_max;
+	int *uti_thread_rank;
+	unsigned long *mcexec_flags;
+	char **mpol_bind_nodes;
+	int *enable_uti;
+	int *enable_vdso;
+	int *profile;
+	int *mpol_no_heap;
+	int *mpol_no_stack;
+	int *mpol_no_bss;
+	int *mpol_shm_premap;
+	int *no_bind_ikc_map;
+	int *straight_map;
+	int *uti_use_last_cpu;
+	int *enable_tofu;
+	rlim_t *rlim_cur;
+	rlim_t *rlim_max;
+};
+
+extern int mcexec_main_body(int argc, char **argv);
+
+void mcexec_main_publish_args_bridge(int argc, char **argv)
+{
+#ifdef USE_SYSCALL_MOD_CALL
+	__glob_argc = argc;
+	__glob_argv = argv;
+#endif
+}
+
+void mcexec_main_state_ptrs_bridge(struct mcexec_main_state_ptrs *state)
+{
+	memset(state, 0, sizeof(*state));
+	state->nr_processes = &nr_processes;
+	state->nr_threads = &nr_threads;
+	state->mpol_threshold = &mpol_threshold;
+	state->heap_extension = &heap_extension;
+	state->straight_map_threshold = &straight_map_threshold;
+	state->stack_premap = &stack_premap;
+	state->stack_max = &stack_max;
+	state->uti_thread_rank = &uti_thread_rank;
+	state->mcexec_flags = &mcexec_flags;
+	state->mpol_bind_nodes = &mpol_bind_nodes;
+	state->enable_uti = &enable_uti;
+	state->enable_vdso = &enable_vdso;
+	state->profile = &profile;
+	state->mpol_no_heap = &mpol_no_heap;
+	state->mpol_no_stack = &mpol_no_stack;
+	state->mpol_no_bss = &mpol_no_bss;
+	state->mpol_shm_premap = &mpol_shm_premap;
+	state->no_bind_ikc_map = &no_bind_ikc_map;
+	state->straight_map = &straight_map;
+	state->uti_use_last_cpu = &uti_use_last_cpu;
+#ifdef ENABLE_TOFU
+	state->enable_tofu = &enable_tofu;
+#endif
+	state->rlim_cur = &rlim_stack.rlim_cur;
+	state->rlim_max = &rlim_stack.rlim_max;
+}
+
+int mcexec_main_personality_bridge(char **argv)
+{
+	int persona;
+	int error;
+	char path[PATH_MAX];
+
+	/* Disable READ_IMPLIES_EXEC */
+	persona = personality(0xffffffff);
+	if (persona & READ_IMPLIES_EXEC) {
+		persona &= ~READ_IMPLIES_EXEC;
+		persona = personality(persona);
+	}
+
+	/* Disable address space layout randomization */
+	__dprintf("persona=%08x\n", persona);
+	if ((persona & (PER_LINUX | ADDR_NO_RANDOMIZE)) == 0) {
+		if (getenv("MCEXEC_ADDR_NO_RANDOMIZE")) {
+			__eprintf("personality() and then execv() failed\n");
+			return 1;
+		}
+
+		persona = personality(persona | PER_LINUX | ADDR_NO_RANDOMIZE);
+		if (persona == -1) {
+			__eprintf("personality failed, persona=%08x, strerror=%s\n",
+				  persona, strerror(errno));
+			return 1;
+		}
+
+		error = setenv("MCEXEC_ADDR_NO_RANDOMIZE", "1", 1);
+		if (error == -1) {
+			__eprintf("setenv failed\n");
+			return 1;
+		}
+
+		error = readlink("/proc/self/exe", path, sizeof(path));
+		if (error == -1) {
+			__eprintf("readlink failed: %m\n");
+			return 1;
+		}
+		if (error >= sizeof(path)) {
+			strcpy(path, "/proc/self/exe");
+		} else {
+			path[error] = '\0';
+		}
+
+		error = execv(path, argv);
+		if (error == -1) {
+			__eprintf("execv failed, error=%d,strerror=%s\n",
+				  error, strerror(errno));
+			return 1;
+		}
+	}
+
+	if (getenv("MCEXEC_ADDR_NO_RANDOMIZE")) {
+		error = unsetenv("MCEXEC_ADDR_NO_RANDOMIZE");
+		if (error == -1) {
+			__eprintf("unsetenv failed");
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
+int mcexec_main_next_option_bridge(int argc, char **argv)
+{
+#ifdef ADD_ENVS_OPTION
+	return getopt_long(argc, argv, "+c:n:t:M:h:e:s:m:u:S:f:",
+			   mcexec_options, NULL);
+#else
+	return getopt_long(argc, argv, "+c:n:t:M:h:s:m:u:S:f:",
+			   mcexec_options, NULL);
+#endif
+}
+
+char *mcexec_main_optarg_bridge(void)
+{
+	return optarg;
+}
+
+int mcexec_main_optind_bridge(void)
+{
+	return optind;
+}
+
+void mcexec_main_invalid_option_bridge(int opt, char **argv)
+{
+	switch (opt) {
+	case 'c':
+		fprintf(stderr, "error: -c: invalid target CPU\n");
+		break;
+	case 'n':
+		fprintf(stderr, "error: -n: invalid number of processes\n");
+		break;
+	case 't':
+		fprintf(stderr, "error: -t: invalid number of threads\n");
+		break;
+	default:
+		print_usage(argv);
+		break;
+	}
+	exit(EXIT_FAILURE);
+}
+
+void mcexec_main_stack_debug_bridge(long prem, long max)
+{
+	__dprintf("stack_premap=%ld,stack_max=%ld\n", prem, max);
+}
+
+void mcexec_main_thread_plan_error_bridge(void)
+{
+	fprintf(stderr, "error: nr_processes can't exceed nr. of CPUs\n");
+}
+
+int mcexec_main_bind_mount_bridge(void)
+{
+#ifdef MCEXEC_BIND_MOUNT
+	int error;
+
+	error = isunshare();
+	if (error == 0) {
+		struct sys_unshare_desc unshare_desc;
+		struct sys_mount_desc mount_desc;
+		struct sys_umount_desc umount_desc;
+
+		/* Unshare mount namespace */
+		memset(&unshare_desc, '\0', sizeof unshare_desc);
+		memset(&mount_desc, '\0', sizeof mount_desc);
+		unshare_desc.unshare_flags = CLONE_NEWNS;
+		if (ioctl(fd, MCEXEC_UP_SYS_UNSHARE,
+			(unsigned long)&unshare_desc) != 0) {
+			fprintf(stderr, "Error: Failed to unshare. (%s)\n",
+				strerror(errno));
+			return 1;
+		}
+
+		/* Privatize mount namespace */
+		mount_desc.dev_name = NULL;
+		mount_desc.dir_name = "/";
+		mount_desc.type = NULL;
+		mount_desc.flags = MS_PRIVATE | MS_REC;
+		mount_desc.data = NULL;
+		if (ioctl(fd, MCEXEC_UP_SYS_MOUNT,
+			(unsigned long)&mount_desc) != 0) {
+			fprintf(stderr, "Error: Failed to privatize mounts. (%s)\n",
+				strerror(errno));
+			return 1;
+		}
+
+		// bind_mount_recursive(<root>, <prefix>);
+		(void)umount_desc;
+	} else if (error == -1) {
+		return 1;
+	}
+#endif
+	return 0;
+}
+#endif
+
 #ifdef MCEXEC_BIND_MOUNT
 /* bind-mount files under <root>/<prefix> over <prefix> recursively */
 void bind_mount_recursive(const char *root, char *prefix)
@@ -3494,6 +4203,42 @@ void mcexec_join_all_threads_join_bridge(struct thread_data_s *tp)
 
 #ifdef MCEXEC_RUST_HELPERS
 #define opendev() mcexec_opendev_body()
+
+extern pthread_spinlock_t overlay_fd_lock;
+
+void mcexec_main_publish_mcosid_bridge(int new_mcosid)
+{
+	mcosid = new_mcosid;
+}
+
+int mcexec_main_uti_unavailable_bridge(int enable_uti_arg)
+{
+#ifndef ENABLE_UTI
+	if (enable_uti_arg) {
+		__eprintf("ERROR: uti is not available when not configured with --with-syscall_intercept=<path>\n");
+		return 1;
+	}
+#else
+	(void)enable_uti_arg;
+#endif
+	return 0;
+}
+
+void mcexec_main_overlay_lock_init_bridge(void)
+{
+	pthread_spin_init(&overlay_fd_lock, 0);
+}
+
+void mcexec_main_load_desc_error_bridge(const char *path, int ret)
+{
+	fprintf(stderr, "%s: could not load program: %s\n",
+		path, strerror(ret));
+}
+
+void mcexec_desc_clear_flags_bridge(struct program_load_desc *desc)
+{
+	desc->mcexec_flags = 0;
+}
 #else
 static int
 opendev()
@@ -3884,25 +4629,39 @@ static int get_thp_disable(void)
 
 pthread_spinlock_t overlay_fd_lock;
 
+#ifdef MCEXEC_RUST_HELPERS
+int main(int argc, char **argv)
+{
+	return mcexec_main_body(argc, argv);
+}
+#else
 int main(int argc, char **argv)
 {
 	int ret = 0;
 	struct program_load_desc *desc;
 	int envs_len;
 	char *envs;
+#ifndef MCEXEC_RUST_HELPERS
 	char *p;
-	int i;
+#endif
 	int error;
+#ifndef MCEXEC_RUST_HELPERS
+	int i;
 	unsigned long lcur;
 	unsigned long lmax;
+#endif
 	int target_core = 0;
 	int opt;
 	char **shebang_argv = NULL;
+#ifndef MCEXEC_RUST_HELPERS
 	char *shebang_argv_flat = NULL;
+#endif
 	int num = 0;
 	int persona;
 #ifdef ADD_ENVS_OPTION
+#ifndef MCEXEC_RUST_HELPERS
 	char **local_env = NULL;
+#endif
 	struct env_list_entry *extra_env = NULL;
 #endif /* ADD_ENVS_OPTION */
 
@@ -3911,6 +4670,9 @@ int main(int argc, char **argv)
 	__glob_argv = argv;
 #endif
 
+#ifdef MCEXEC_RUST_HELPERS
+	mcexec_init_page_altroot_body();
+#else
 	page_size = sysconf(_SC_PAGESIZE);
 	page_mask = ~(page_size - 1);
 
@@ -3918,6 +4680,7 @@ int main(int argc, char **argv)
 	if (!altroot) {
 		altroot = "/usr/linux-k1om-4.7/linux-k1om";
 	}
+#endif
 
 	/* Disable READ_IMPLIES_EXEC */
 	persona = personality(0xffffffff);
@@ -3955,6 +4718,11 @@ int main(int argc, char **argv)
 		CHKANDJUMP(error == -1, 1, "unsetenv failed");
 	}
 
+#ifdef MCEXEC_RUST_HELPERS
+	if (mcexec_init_stack_limit_body(argv)) {
+		return 1;
+	}
+#else
 	/* Inherit ulimit settings to McKernel process */
 	if (getrlimit(RLIMIT_STACK, &rlim_stack)) {
 		fprintf(stderr, "getrlimit failed\n");
@@ -3970,6 +4738,7 @@ int main(int argc, char **argv)
 		fprintf(stderr, "Error: Failed to reduce stack.\n");
 		return 1;
 	}
+#endif
 
 	/* Parse options ("+" denotes stop at the first non-option) */
 #ifdef MCEXEC_RUST_HELPERS
@@ -4165,6 +4934,11 @@ int main(int argc, char **argv)
 	}
 #endif
 
+#ifdef MCEXEC_RUST_HELPERS
+	if (mcexec_post_option_setup_body(num, enable_uti)) {
+		exit(EXIT_FAILURE);
+	}
+#else
 	mcosid = num;
 	if (opendev() == -1)
 		exit(EXIT_FAILURE);
@@ -4180,22 +4954,6 @@ int main(int argc, char **argv)
 
 	/* XXX: Fugaku: Fujitsu process placement fix */
 	if (getenv("FLIB_AFFINITY_ON_PROCESS")) {
-#ifdef MCEXEC_RUST_HELPERS
-		char *flib_aff;
-
-		flib_aff = mcexec_shift_flib_affinity_result(
-				getenv("FLIB_AFFINITY_ON_PROCESS"), 12);
-		if (!flib_aff) {
-			fprintf(stderr, "error: allocating memory for "
-					"FLIB_AFFINITY_ON_PROCESS\n");
-			exit(EXIT_FAILURE);
-		}
-
-		__dprintf("FLIB_AFFINITY_ON_PROCESS: %s -> %s\n",
-				getenv("FLIB_AFFINITY_ON_PROCESS"), flib_aff);
-		setenv("FLIB_AFFINITY_ON_PROCESS", flib_aff, 1);
-		free(flib_aff);
-#else
 		char *cpu_s;
 		int flib_size;
 		char *flib_aff_orig, *flib_aff;
@@ -4250,15 +5008,19 @@ int main(int argc, char **argv)
 		__dprintf("FLIB_AFFINITY_ON_PROCESS: %s -> %s\n",
 				getenv("FLIB_AFFINITY_ON_PROCESS"), flib_aff);
 		setenv("FLIB_AFFINITY_ON_PROCESS", flib_aff, 1);
-#endif
 	}
 
 	ld_preload_init();
+#endif
 
 #ifdef ADD_ENVS_OPTION
 #else /* ADD_ENVS_OPTION */
+#ifdef MCEXEC_RUST_HELPERS
+	mcexec_collect_default_envs_body(&envs_len, &envs);
+#else
 	/* Collect environment variables */
 	envs_len = flatten_strings(NULL, environ, &envs);
+#endif
 #endif /* ADD_ENVS_OPTION */
 
 #ifdef MCEXEC_BIND_MOUNT
@@ -4298,6 +5060,11 @@ int main(int argc, char **argv)
 	}
 #endif // MCEXEC_BIND_MOUNT
 
+#ifdef MCEXEC_RUST_HELPERS
+	if (mcexec_load_main_desc_body(argv[optind], &desc, &shebang_argv)) {
+		return 1;
+	}
+#else
 	/* fget executable as well */
 	if ((ret = load_elf_desc_shebang(argv[optind], &desc,
 					 &shebang_argv, 1 /* execvp */))) {
@@ -4307,8 +5074,12 @@ int main(int argc, char **argv)
 	}
 
 	desc->mcexec_flags = 0;
+#endif
 
 #ifdef ADD_ENVS_OPTION
+#ifdef MCEXEC_RUST_HELPERS
+	mcexec_collect_main_envs_body(&extra_env, &envs_len, &envs);
+#else
 	/* Collect environment variables */
 	for (i = 0; environ[i]; i++) {
 		add_env_list(&extra_env, environ[i]);
@@ -4319,8 +5090,13 @@ int main(int argc, char **argv)
 	local_env = NULL;
 	destroy_env_list(extra_env);
 	extra_env = NULL;
+#endif
 #endif /* ADD_ENVS_OPTION */
 
+#ifdef MCEXEC_RUST_HELPERS
+	mcexec_prepare_main_desc_body(desc, argv + optind, shebang_argv,
+			envs_len, envs, target_core, enable_vdso);
+#else
 	for(i = 0; i < sizeof(rlimits) / sizeof(int); i += 2)
 		getrlimit(rlimits[i], &desc->rlimit[rlimits[i + 1]]);
 	desc->envs_len = envs_len;
@@ -4338,23 +5114,18 @@ int main(int argc, char **argv)
 
 	desc->cpu = target_core;
 	desc->enable_vdso = enable_vdso;
+#endif
 
+#ifdef MCEXEC_RUST_HELPERS
+	if (mcexec_apply_main_stack_body(desc, getenv(rlimit_stack_envname),
+			stack_max, stack_premap, &rlim_stack.rlim_cur,
+			&rlim_stack.rlim_max)) {
+		return 1;
+	}
+#else
 	/* Restore the stack size when mcexec stack was shrinked */
 	p = getenv(rlimit_stack_envname);
 	if (p) {
-#ifdef MCEXEC_RUST_HELPERS
-		int parse_rc;
-
-		parse_rc = mcexec_parse_rlimit_stack_env_result(p,
-				&lcur, &lmax);
-		if (parse_rc) {
-			fprintf(stderr, "Error: Failed to parse %s %d\n",
-					rlimit_stack_envname, parse_rc);
-			return 1;
-		}
-		mcexec_apply_saved_stack_limit_result(lcur, lmax,
-				&rlim_stack.rlim_cur, &rlim_stack.rlim_max);
-#else
 		char *saveptr;
 		char *token;
 		errno = 0;
@@ -4396,27 +5167,27 @@ int main(int argc, char **argv)
 		if (lcur > rlim_stack.rlim_cur) {
 			rlim_stack.rlim_cur = lcur;
 		}
-#endif
 	}
 
 	/* Overwrite the max with <max> of "--stack-premap <premap>,<max>" */
-#ifdef MCEXEC_RUST_HELPERS
-	mcexec_apply_stack_max_result(stack_max, &rlim_stack.rlim_cur,
-			&rlim_stack.rlim_max);
-#else
 	if (stack_max != -1) {
 		rlim_stack.rlim_cur = stack_max;
 		if (rlim_stack.rlim_max != -1 && rlim_stack.rlim_max < rlim_stack.rlim_cur) {
 			rlim_stack.rlim_max = rlim_stack.rlim_cur;
 		}
 	}
-#endif
 
 	desc->rlimit[MCK_RLIMIT_STACK].rlim_cur = rlim_stack.rlim_cur;
 	desc->rlimit[MCK_RLIMIT_STACK].rlim_max = rlim_stack.rlim_max;
 	desc->stack_premap = stack_premap;
 	__dprintf("desc->rlimit[MCK_RLIMIT_STACK]=%ld,%ld\n", desc->rlimit[MCK_RLIMIT_STACK].rlim_cur, desc->rlimit[MCK_RLIMIT_STACK].rlim_max);
+#endif
 
+#ifdef MCEXEC_RUST_HELPERS
+	if (mcexec_setup_cpu_topology_body()) {
+		return 1;
+	}
+#else
 	ncpu = ioctl(fd, MCEXEC_UP_GET_CPU, 0);
 	if (ncpu <= 0) {
 		fprintf(stderr, "No CPU found.\n");
@@ -4448,7 +5219,15 @@ int main(int argc, char **argv)
 				CPU_SET_S(j, cpu_set_size, node);
 		}
 	}
+#endif
 
+#ifdef MCEXEC_RUST_HELPERS
+	if (mcexec_plan_process_threads_result(&nr_processes, nr_threads,
+			ncpu, &n_threads) < 0) {
+		fprintf(stderr, "error: nr_processes can't exceed nr. of CPUs\n");
+		return EINVAL;
+	}
+#else
 	/* Fugaku: use FLIB_NUM_PROCESS_ON_NODE if -n is not specified */
 	if (getenv("FLIB_NUM_PROCESS_ON_NODE") && nr_processes == 0) {
 		nr_processes = atoi(getenv("FLIB_NUM_PROCESS_ON_NODE"));
@@ -4462,28 +5241,13 @@ int main(int argc, char **argv)
 	}
 
 	if (nr_threads > 0) {
-#ifdef MCEXEC_RUST_HELPERS
-		n_threads = mcexec_default_thread_count_result(nr_threads,
-				0, 0, nr_processes, ncpu);
-#else
 		n_threads = nr_threads;
-#endif
 	}
 	else if (getenv("OMP_NUM_THREADS")) {
-#ifdef MCEXEC_RUST_HELPERS
-		n_threads = mcexec_default_thread_count_result(nr_threads,
-				1, atoi(getenv("OMP_NUM_THREADS")),
-				nr_processes, ncpu);
-#else
 		/* Leave some headroom for helper threads.. */
 		n_threads = atoi(getenv("OMP_NUM_THREADS")) + 4;
-#endif
 	}
 	else {
-#ifdef MCEXEC_RUST_HELPERS
-		n_threads = mcexec_default_thread_count_result(nr_threads,
-				0, 0, nr_processes, ncpu);
-#else
 		/*
 		 * When running with partitioned execution, do not allow
 		 * more threads then the corresponding number of CPUs.
@@ -4501,8 +5265,8 @@ int main(int argc, char **argv)
 		else {
 			n_threads = ncpu;
 		}
-#endif
 	}
+#endif
 
 	/* 
 	 * XXX: keep thread_data ncpu sized despite that there are only
@@ -4540,6 +5304,9 @@ int main(int argc, char **argv)
 	__dprintf("DMA Buffer: %lx, %p\n", dma_buf_pa, dma_buf);
 #endif
 
+#ifdef MCEXEC_RUST_HELPERS
+	mcexec_setup_dma_ppd_body();
+#else
 	dma_buf = mmap(0, PIN_SIZE, PROT_READ | PROT_WRITE, 
 	               (MAP_ANONYMOUS | MAP_PRIVATE), -1, 0);
 	if (dma_buf == (void *)-1) {
@@ -4559,7 +5326,14 @@ int main(int argc, char **argv)
 		close(fd);
 		exit(1);
 	}
+#endif
 
+#ifdef MCEXEC_RUST_HELPERS
+	if (mcexec_apply_partitioned_cpu_body(desc, nr_processes, &target_core,
+			no_bind_ikc_map)) {
+		return 1;
+	}
+#else
 	/* Partitioned execution, obtain CPU set */
 	if (!target_core && nr_processes > 0) {
 		struct get_cpu_set_arg cpu_set_arg;
@@ -4657,13 +5431,25 @@ int main(int argc, char **argv)
 #endif // DEBUG			
 		}
 	}
+#endif
 
+#ifdef MCEXEC_RUST_HELPERS
+	mcexec_apply_desc_runtime_body(desc, profile, nr_processes,
+			mpol_no_heap, mpol_no_stack, mpol_no_bss,
+			mpol_shm_premap, mpol_threshold, heap_extension,
+			mpol_bind_nodes, MPOL_DEFAULT, MPOL_INTERLEAVE,
+			MPOL_BIND, MPOL_PREFERRED, PLD_MPOL_MAX, enable_uti,
+			uti_thread_rank, uti_use_last_cpu, straight_map,
+			straight_map_threshold,
+#ifdef ENABLE_TOFU
+			enable_tofu,
+#else
+			0,
+#endif
+			mcexec_flags);
+#else
 	desc->profile = profile;
 	desc->nr_processes = nr_processes;
-#ifdef MCEXEC_RUST_HELPERS
-	desc->mpol_flags = mcexec_mpol_flags_result(mpol_no_heap,
-			mpol_no_stack, mpol_no_bss, mpol_shm_premap);
-#else
 	desc->mpol_flags = 0;
 	if (mpol_no_heap) {
 		desc->mpol_flags |= MPOL_NO_HEAP;
@@ -4680,7 +5466,6 @@ int main(int argc, char **argv)
 	if (mpol_shm_premap) {
 		desc->mpol_flags |= MPOL_SHM_PREMAP;
 	}
-#endif
 
 	desc->mpol_threshold = mpol_threshold;
 	desc->heap_extension = heap_extension;
@@ -4708,30 +5493,6 @@ int main(int argc, char **argv)
 		__dprintf("OMPI_MCA_plm_ple_memory_allocation_policy: %s\n",
 			  mpol);
 
-#ifdef MCEXEC_RUST_HELPERS
-		{
-			int mode;
-			int nodemask_action;
-
-			if (mcexec_ompi_mpol_policy_result(mpol,
-						MPOL_DEFAULT, MPOL_INTERLEAVE,
-						MPOL_BIND, MPOL_PREFERRED,
-						&mode, &nodemask_action)) {
-				desc->mpol_mode = mode;
-				if (nodemask_action == 1) {
-					numa_local(desc->cpu_set,
-							desc->mpol_nodemask);
-				}
-				else if (nodemask_action == 2) {
-					numa_nonlocal(desc->cpu_set,
-							desc->mpol_nodemask);
-				}
-				else if (nodemask_action == 3) {
-					numa_all(desc->mpol_nodemask);
-				}
-			}
-		}
-#else
 		if (!strncmp(mpol, "localalloc", 10)) {
 			/* MPOL_DEFAULT has the same effect as MPOL_LOCAL */
 			desc->mpol_mode = MPOL_DEFAULT;
@@ -4768,7 +5529,6 @@ int main(int argc, char **argv)
 			desc->mpol_mode = MPOL_PREFERRED;
 			numa_nonlocal(desc->cpu_set, desc->mpol_nodemask);
 		}
-#endif
 
 		__dprintf("mpol_mode: %d, mpol_nodemask: %ld\n",
 			  desc->mpol_mode, desc->mpol_nodemask[0]);
@@ -4792,7 +5552,11 @@ int main(int argc, char **argv)
 	if (mcexec_flags) {
 		desc->mcexec_flags = mcexec_flags;
 	}
+#endif
 
+#ifdef MCEXEC_RUST_HELPERS
+	ret = mcexec_finish_main_image_body(desc);
+#else
 	/* user_start and user_end are set by this call */
 	if (ioctl(fd, MCEXEC_UP_PREPARE_IMAGE, (unsigned long)desc) != 0) {
 		perror("prepare");
@@ -4859,9 +5623,11 @@ int main(int argc, char **argv)
 #if 1 /* debug : thread killed by exit_group() are still joinable? */
 	join_all_threads();
 #endif
+#endif
  fn_fail:
 	return ret;
 }
+#endif
 
 
 #ifndef MCEXEC_RUST_HELPERS

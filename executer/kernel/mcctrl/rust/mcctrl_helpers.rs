@@ -113,6 +113,12 @@ const FUTEX_OP_CMP_LT_VALUE: c_int = 2;
 const FUTEX_OP_CMP_LE_VALUE: c_int = 3;
 const FUTEX_OP_CMP_GT_VALUE: c_int = 4;
 const FUTEX_OP_CMP_GE_VALUE: c_int = 5;
+const FUT_OFF_MMSHARED_VALUE: c_ulong = 2;
+const MCCTRL_FUTEX_FAULT_POPULATE_WRITE_USER: u64 = (1u64 << 30) | (1u64 << 1) | (1u64 << 2);
+const MCCTRL_FUTEX_KEY_LOG_NO_USRDATA: c_int = 1;
+const MCCTRL_FUTEX_KEY_LOG_NO_PPD: c_int = 2;
+const MCCTRL_FUTEX_KEY_LOG_VTOP_FAILED: c_int = 3;
+const MCCTRL_FUTEX_KEY_LOG_CACHE_DUP: c_int = 4;
 const JHASH_GOLDEN_RATIO: u32 = 0x9e37_79b9;
 const FUTEX_WAIT_LABEL: &[u8] = b"FUTEX_WAIT\0";
 const FUTEX_WAIT_BITSET_LABEL: &[u8] = b"FUTEX_WAIT_BITSET\0";
@@ -11146,6 +11152,45 @@ type McctrlFutexGetValueFn =
     Option<unsafe extern "C" fn(value_addr: c_ulong, uaddr: c_ulong) -> c_int>;
 type McctrlFutexDropKeyRefsFn = Option<unsafe extern "C" fn(key_addr: c_ulong)>;
 type McctrlFutexRequeueEntryFn = Option<unsafe extern "C" fn(q_addr: c_ulong, ctx_addr: c_ulong)>;
+type McctrlFutexKeyRefsFn = Option<unsafe extern "C" fn(key_addr: c_ulong)>;
+type McctrlFutexUsrdataFn = Option<unsafe extern "C" fn(os: *mut c_void) -> *mut c_void>;
+type McctrlFutexCurrentPidFn = Option<unsafe extern "C" fn() -> c_int>;
+type McctrlFutexGetPpdFn =
+    Option<unsafe extern "C" fn(usrdata: *mut c_void, pid: c_int) -> *mut c_void>;
+type McctrlFutexPutPpdFn = Option<unsafe extern "C" fn(ppd: *mut c_void)>;
+type McctrlFutexRemoteFaultFn = Option<
+    unsafe extern "C" fn(
+        usrdata: *mut c_void,
+        fault_addr: c_ulong,
+        reason: u64,
+        ppd: *mut c_void,
+        tid: c_int,
+        cpu: c_int,
+    ) -> c_int,
+>;
+type McctrlFutexCacheAllocFn =
+    Option<unsafe extern "C" fn() -> *mut McctrlRvaToRpaCacheNode>;
+type McctrlFutexKeyLogFn =
+    Option<unsafe extern "C" fn(event: c_int, value: c_ulong, aux: c_ulong)>;
+type McctrlFutexWakeMckernelFn =
+    Option<unsafe extern "C" fn(q_addr: c_ulong, ctx_addr: c_ulong) -> c_int>;
+type McctrlFutexWakeLogFn =
+    Option<unsafe extern "C" fn(event: c_int, q_addr: c_ulong, ctx_addr: c_ulong)>;
+type McctrlFutexQueueLockFn =
+    Option<unsafe extern "C" fn(q_addr: c_ulong, queue_addr: c_ulong) -> c_ulong>;
+type McctrlFutexQueueUnlockFn =
+    Option<unsafe extern "C" fn(q_addr: c_ulong, hb_addr: c_ulong)>;
+type McctrlFutexXchgFn = Option<unsafe extern "C" fn(addr: c_ulong, value: c_int) -> c_int>;
+type McctrlFutexSpinLockFn = Option<unsafe extern "C" fn(lock_addr: c_ulong) -> c_ulong>;
+type McctrlFutexSpinUnlockFn =
+    Option<unsafe extern "C" fn(lock_addr: c_ulong, irqstate: c_ulong)>;
+type McctrlFutexQueueMeFn =
+    Option<unsafe extern "C" fn(q_addr: c_ulong, hb_addr: c_ulong, ctx_addr: c_ulong)>;
+type McctrlFutexWaitEventFn =
+    Option<unsafe extern "C" fn(resp_addr: c_ulong, timeout: u64) -> i64>;
+type McctrlFutexPhysToVirtFn = Option<unsafe extern "C" fn(phys: c_ulong) -> c_ulong>;
+type McctrlFutexIssueInterruptFn =
+    Option<unsafe extern "C" fn(os: *mut c_void, intr_id: c_int, vector: c_int)>;
 type McctrlSyscallPtdAllocFn = Option<unsafe extern "C" fn(size: usize) -> *mut c_void>;
 type McctrlSyscallPtdFreeFn = Option<unsafe extern "C" fn(ptr: *mut c_void)>;
 type McctrlSyscallPtdLockFn = Option<unsafe extern "C" fn(lock: *mut c_void) -> c_ulong>;
@@ -12001,6 +12046,531 @@ pub unsafe extern "C" fn mcctrl_rva_to_rpa_cache_insert_body_result(
     link_node(&raw mut (*cache_node).node, parent, link);
     insert_color(&raw mut (*cache_node).node, root);
     0
+}
+
+#[no_mangle]
+#[allow(clippy::too_many_arguments)]
+pub unsafe extern "C" fn mcctrl_futex_get_key_body_result(
+    uaddr: c_ulong,
+    fshared: c_int,
+    key_addr: c_ulong,
+    os: *mut c_void,
+    mm_addr: c_ulong,
+    tid: c_int,
+    cpu: c_int,
+    key_word_offset: c_ulong,
+    key_ptr_offset: c_ulong,
+    key_offset_offset: c_ulong,
+    ppd_rpgtable_offset: c_ulong,
+    ppd_cache_offset: c_ulong,
+    get_refs: McctrlFutexKeyRefsFn,
+    get_usrdata: McctrlFutexUsrdataFn,
+    current_pid: McctrlFutexCurrentPidFn,
+    get_ppd: McctrlFutexGetPpdFn,
+    put_ppd: McctrlFutexPutPpdFn,
+    remote_fault: McctrlFutexRemoteFaultFn,
+    alloc_cache: McctrlFutexCacheAllocFn,
+    link_node: McctrlRbLinkFn,
+    insert_color: McctrlRbInsertColorFn,
+    log: McctrlFutexKeyLogFn,
+) -> c_int {
+    let (
+        Some(get_refs),
+        Some(get_usrdata),
+        Some(current_pid),
+        Some(get_ppd),
+        Some(put_ppd),
+        Some(remote_fault),
+        Some(alloc_cache),
+        Some(link_node),
+        Some(insert_color),
+    ) = (
+        get_refs,
+        get_usrdata,
+        current_pid,
+        get_ppd,
+        put_ppd,
+        remote_fault,
+        alloc_cache,
+        link_node,
+        insert_color,
+    )
+    else {
+        return -EINVAL;
+    };
+    if key_addr == 0 {
+        return -EINVAL;
+    }
+
+    let mut offset = uaddr & (PAGE_SIZE - 1);
+    if (uaddr & ((size_of::<u32>() as c_ulong) - 1)) != 0 {
+        return -EINVAL;
+    }
+    let base = uaddr.wrapping_sub(offset);
+    write_volatile(
+        key_addr.wrapping_add(key_offset_offset) as *mut c_int,
+        offset as c_int,
+    );
+
+    if fshared == 0 {
+        write_volatile(key_addr.wrapping_add(key_word_offset) as *mut c_ulong, base);
+        write_volatile(key_addr.wrapping_add(key_ptr_offset) as *mut c_ulong, mm_addr);
+        get_refs(key_addr);
+        return 0;
+    }
+
+    offset |= FUT_OFF_MMSHARED_VALUE;
+    write_volatile(
+        key_addr.wrapping_add(key_offset_offset) as *mut c_int,
+        offset as c_int,
+    );
+
+    let usrdata = get_usrdata(os);
+    if usrdata.is_null() {
+        if let Some(log) = log {
+            log(MCCTRL_FUTEX_KEY_LOG_NO_USRDATA, 0, 0);
+        }
+        return -EINVAL;
+    }
+
+    let pid = current_pid();
+    let ppd = get_ppd(usrdata, pid);
+    if ppd.is_null() {
+        if let Some(log) = log {
+            log(MCCTRL_FUTEX_KEY_LOG_NO_PPD, pid as c_ulong, 0);
+        }
+        return -EINVAL;
+    }
+
+    let cache_root = (ppd as c_ulong).wrapping_add(ppd_cache_offset) as *mut McctrlRbRoot;
+    let mut phys = 0;
+    let cache_node = mcctrl_rva_to_rpa_cache_search_body_result(cache_root, uaddr);
+    if !cache_node.is_null() {
+        phys = read_volatile(&(*cache_node).rpa);
+    } else {
+        loop {
+            let rpgtable =
+                read_volatile((ppd as c_ulong).wrapping_add(ppd_rpgtable_offset) as *const c_ulong);
+            let mut pgsize = 0;
+            let translated = translate_rva_to_rpa(os, rpgtable, uaddr, &mut phys, &mut pgsize);
+            if translated == 0 {
+                break;
+            }
+
+            let faulted = remote_fault(
+                usrdata,
+                base,
+                MCCTRL_FUTEX_FAULT_POPULATE_WRITE_USER,
+                ppd,
+                tid,
+                cpu,
+            );
+            if faulted != 0 {
+                if let Some(log) = log {
+                    log(MCCTRL_FUTEX_KEY_LOG_VTOP_FAILED, uaddr, faulted as c_ulong);
+                }
+                put_ppd(ppd);
+                return -EFAULT;
+            }
+        }
+
+        let cache_node = alloc_cache();
+        if cache_node.is_null() {
+            put_ppd(ppd);
+            return -ENOMEM;
+        }
+        write_volatile(&mut (*cache_node).rva, uaddr);
+        write_volatile(&mut (*cache_node).rpa, phys);
+        let inserted = mcctrl_rva_to_rpa_cache_insert_body_result(
+            cache_root,
+            cache_node,
+            Some(link_node),
+            Some(insert_color),
+        );
+        if inserted != 0 {
+            if let Some(log) = log {
+                log(MCCTRL_FUTEX_KEY_LOG_CACHE_DUP, uaddr, phys);
+            }
+            put_ppd(ppd);
+            return inserted;
+        }
+    }
+
+    write_volatile(key_addr.wrapping_add(key_word_offset) as *mut c_ulong, 0);
+    write_volatile(key_addr.wrapping_add(key_ptr_offset) as *mut c_ulong, phys);
+    put_ppd(ppd);
+    0
+}
+
+#[no_mangle]
+#[allow(clippy::too_many_arguments)]
+pub unsafe extern "C" fn mcctrl_futex_queue_me_body_result(
+    q_addr: c_ulong,
+    hb_addr: c_ulong,
+    thread_addr: c_ulong,
+    q_list_offset: c_ulong,
+    q_task_offset: c_ulong,
+    hb_lock_offset: c_ulong,
+    hb_chain_offset: c_ulong,
+    unlock: McctrlFutexHbUnlockFn,
+) -> c_int {
+    let Some(unlock) = unlock else {
+        return -EINVAL;
+    };
+    if q_addr == 0 || hb_addr == 0 {
+        return -EINVAL;
+    }
+
+    let list = q_addr.wrapping_add(q_list_offset) as *mut McPlistNode;
+    mc_plist_node_init(list, 10);
+    mc_plist_add(
+        list,
+        hb_addr.wrapping_add(hb_chain_offset) as *mut McPlistHead,
+    );
+    write_volatile(
+        q_addr.wrapping_add(q_task_offset) as *mut c_ulong,
+        thread_addr,
+    );
+    unlock(hb_addr.wrapping_add(hb_lock_offset));
+    0
+}
+
+#[no_mangle]
+#[allow(clippy::too_many_arguments)]
+pub unsafe extern "C" fn mcctrl_futex_unqueue_me_body_result(
+    q_addr: c_ulong,
+    q_lock_ptr_offset: c_ulong,
+    q_list_offset: c_ulong,
+    q_key_offset: c_ulong,
+    lock: McctrlFutexHbLockFn,
+    unlock: McctrlFutexHbUnlockFn,
+    drop_key_refs: McctrlFutexDropKeyRefsFn,
+) -> c_int {
+    let (Some(lock), Some(unlock), Some(drop_key_refs)) = (lock, unlock, drop_key_refs) else {
+        return -EINVAL;
+    };
+    if q_addr == 0 {
+        return -EINVAL;
+    }
+
+    let mut ret = 0;
+    loop {
+        let lock_addr =
+            read_volatile(q_addr.wrapping_add(q_lock_ptr_offset) as *const c_ulong);
+        compiler_fence(Ordering::SeqCst);
+        if lock_addr == 0 {
+            break;
+        }
+
+        lock(lock_addr);
+        let current_lock =
+            read_volatile(q_addr.wrapping_add(q_lock_ptr_offset) as *const c_ulong);
+        if lock_addr != current_lock {
+            unlock(lock_addr);
+            continue;
+        }
+
+        let list = q_addr.wrapping_add(q_list_offset) as *mut McPlistNode;
+        mc_plist_del(list, &raw mut (*list).plist);
+        unlock(lock_addr);
+        ret = 1;
+        break;
+    }
+
+    drop_key_refs(q_addr.wrapping_add(q_key_offset));
+    ret
+}
+
+#[no_mangle]
+#[allow(clippy::too_many_arguments)]
+pub unsafe extern "C" fn mcctrl_futex_requeue_move_body_result(
+    q_addr: c_ulong,
+    hb1_addr: c_ulong,
+    hb2_addr: c_ulong,
+    key2_addr: c_ulong,
+    q_list_offset: c_ulong,
+    q_lock_ptr_offset: c_ulong,
+    q_key_offset: c_ulong,
+    hb_lock_offset: c_ulong,
+    hb_chain_offset: c_ulong,
+    key_size: c_ulong,
+    get_refs: McctrlFutexKeyRefsFn,
+) -> c_int {
+    let Some(get_refs) = get_refs else {
+        return -EINVAL;
+    };
+    if q_addr == 0 || hb1_addr == 0 || hb2_addr == 0 || key2_addr == 0 || key_size == 0 {
+        return -EINVAL;
+    }
+
+    let chain1 = hb1_addr.wrapping_add(hb_chain_offset);
+    let chain2 = hb2_addr.wrapping_add(hb_chain_offset);
+    let list = q_addr.wrapping_add(q_list_offset) as *mut McPlistNode;
+    if chain1 != chain2 {
+        mc_plist_del(list, chain1 as *mut McPlistHead);
+        mc_plist_add(list, chain2 as *mut McPlistHead);
+        write_volatile(
+            q_addr.wrapping_add(q_lock_ptr_offset) as *mut c_ulong,
+            hb2_addr.wrapping_add(hb_lock_offset),
+        );
+    }
+
+    get_refs(key2_addr);
+    let dst = q_addr.wrapping_add(q_key_offset) as *mut u8;
+    let src = key2_addr as *const u8;
+    let mut i = 0;
+    while i < key_size {
+        write_volatile(dst.add(i as usize), read_volatile(src.add(i as usize)));
+        i += 1;
+    }
+    0
+}
+
+#[no_mangle]
+#[allow(clippy::too_many_arguments)]
+pub unsafe extern "C" fn mcctrl_futex_wake_entry_body_result(
+    q_addr: c_ulong,
+    ctx_addr: c_ulong,
+    q_list_offset: c_ulong,
+    q_lock_ptr_offset: c_ulong,
+    q_uti_resp_offset: c_ulong,
+    wake_mckernel: McctrlFutexWakeMckernelFn,
+    log: McctrlFutexWakeLogFn,
+) -> c_int {
+    if q_addr == 0 {
+        return -EINVAL;
+    }
+
+    let list = q_addr.wrapping_add(q_list_offset) as *mut McPlistNode;
+    mc_plist_del(list, &raw mut (*list).plist);
+    let uti_resp = read_volatile(q_addr.wrapping_add(q_uti_resp_offset) as *const c_ulong);
+    let ret = if uti_resp != 0 {
+        if let Some(log) = log {
+            log(1, q_addr, ctx_addr);
+        }
+        -EINVAL
+    } else if let Some(wake_mckernel) = wake_mckernel {
+        wake_mckernel(q_addr, ctx_addr)
+    } else {
+        -EINVAL
+    };
+
+    compiler_fence(Ordering::SeqCst);
+    write_volatile(q_addr.wrapping_add(q_lock_ptr_offset) as *mut c_ulong, 0);
+    ret
+}
+
+#[no_mangle]
+#[allow(clippy::too_many_arguments)]
+pub unsafe extern "C" fn mcctrl_futex_wait_setup_body_result(
+    uaddr: c_ulong,
+    val: u32,
+    fshared: c_int,
+    q_addr: c_ulong,
+    hb_out: *mut c_ulong,
+    ctx_addr: c_ulong,
+    futex_queue_addr: c_ulong,
+    q_key_offset: c_ulong,
+    key_size: c_ulong,
+    get_key: McctrlFutexGetKeyFn,
+    queue_lock: McctrlFutexQueueLockFn,
+    get_value: McctrlFutexGetValueFn,
+    queue_unlock: McctrlFutexQueueUnlockFn,
+    put_key: McctrlFutexPutKeyFn,
+) -> c_int {
+    let (Some(get_key), Some(queue_lock), Some(get_value), Some(queue_unlock), Some(put_key)) =
+        (get_key, queue_lock, get_value, queue_unlock, put_key)
+    else {
+        return -EINVAL;
+    };
+    if q_addr == 0 || key_size == 0 {
+        return -EINVAL;
+    }
+
+    let key_addr = q_addr.wrapping_add(q_key_offset);
+    let mut i = 0;
+    while i < key_size {
+        write_volatile(key_addr.wrapping_add(i) as *mut u8, 0);
+        i += 1;
+    }
+
+    let mut ret = get_key(uaddr, fshared, key_addr, ctx_addr);
+    if ret != 0 {
+        return ret;
+    }
+
+    let hb_addr = queue_lock(q_addr, futex_queue_addr);
+    if !hb_out.is_null() {
+        write_volatile(hb_out, hb_addr);
+    }
+    let mut uval = 0u32;
+    ret = get_value((&mut uval as *mut u32) as c_ulong, uaddr);
+    if ret != 0 {
+        queue_unlock(q_addr, hb_addr);
+        put_key(fshared, key_addr);
+        return ret;
+    }
+
+    if uval != val {
+        queue_unlock(q_addr, hb_addr);
+        put_key(fshared, key_addr);
+        return -EAGAIN;
+    }
+
+    0
+}
+
+#[no_mangle]
+#[allow(clippy::too_many_arguments)]
+pub unsafe extern "C" fn mcctrl_futex_wait_queue_me_body_result(
+    hb_addr: c_ulong,
+    q_addr: c_ulong,
+    timeout: u64,
+    ctx_addr: c_ulong,
+    status_addr: c_ulong,
+    spin_sleep_addr: c_ulong,
+    spin_sleep_lock_addr: c_ulong,
+    mc_idle_halt: c_int,
+    q_list_offset: c_ulong,
+    q_uti_resp_offset: c_ulong,
+    xchg: McctrlFutexXchgFn,
+    spin_lock: McctrlFutexSpinLockFn,
+    spin_unlock: McctrlFutexSpinUnlockFn,
+    queue_me: McctrlFutexQueueMeFn,
+    wait_event: McctrlFutexWaitEventFn,
+) -> i64 {
+    let (Some(xchg), Some(spin_lock), Some(spin_unlock), Some(queue_me), Some(wait_event)) =
+        (xchg, spin_lock, spin_unlock, queue_me, wait_event)
+    else {
+        return -(EINVAL as i64);
+    };
+    if hb_addr == 0 || q_addr == 0 || status_addr == 0 || spin_sleep_addr == 0 {
+        return -(EINVAL as i64);
+    }
+
+    xchg(status_addr, 2);
+    if mc_idle_halt == 0 || timeout != 0 {
+        let irqstate = spin_lock(spin_sleep_lock_addr);
+        write_volatile(spin_sleep_addr as *mut c_int, 1);
+        spin_unlock(spin_sleep_lock_addr, irqstate);
+    }
+
+    queue_me(q_addr, hb_addr, ctx_addr);
+    let list = q_addr.wrapping_add(q_list_offset) as *const McPlistNode;
+    let mut time_remain = 0;
+    if mc_plist_node_empty(list) == 0 {
+        let resp = read_volatile(q_addr.wrapping_add(q_uti_resp_offset) as *const c_ulong);
+        time_remain = wait_event(resp, timeout);
+    }
+
+    write_volatile(status_addr as *mut c_int, 1);
+    write_volatile(spin_sleep_addr as *mut c_int, 0);
+    time_remain
+}
+
+#[no_mangle]
+#[allow(clippy::too_many_arguments)]
+pub unsafe extern "C" fn mcctrl_futex_wakeup_thread_body_result(
+    q_addr: c_ulong,
+    os: *mut c_void,
+    valid_states: c_int,
+    q_th_spin_sleep_offset: c_ulong,
+    q_th_status_offset: c_ulong,
+    q_th_spin_sleep_lock_offset: c_ulong,
+    q_proc_status_offset: c_ulong,
+    q_proc_update_lock_offset: c_ulong,
+    q_runq_lock_offset: c_ulong,
+    q_clv_flags_offset: c_ulong,
+    q_intr_id_offset: c_ulong,
+    q_intr_vector_offset: c_ulong,
+    q_th_spin_sleep_pa_offset: c_ulong,
+    q_th_status_pa_offset: c_ulong,
+    q_th_spin_sleep_lock_pa_offset: c_ulong,
+    q_proc_status_pa_offset: c_ulong,
+    q_proc_update_lock_pa_offset: c_ulong,
+    q_runq_lock_pa_offset: c_ulong,
+    q_clv_flags_pa_offset: c_ulong,
+    phys_to_virt: McctrlFutexPhysToVirtFn,
+    spin_lock: McctrlFutexSpinLockFn,
+    spin_unlock: McctrlFutexSpinUnlockFn,
+    xchg: McctrlFutexXchgFn,
+    issue_interrupt: McctrlFutexIssueInterruptFn,
+) -> c_int {
+    let (Some(phys_to_virt), Some(spin_lock), Some(spin_unlock), Some(xchg), Some(issue)) =
+        (phys_to_virt, spin_lock, spin_unlock, xchg, issue_interrupt)
+    else {
+        return -EINVAL;
+    };
+    if q_addr == 0 {
+        return -EINVAL;
+    }
+
+    let th_spin_sleep = phys_to_virt(read_volatile(
+        q_addr.wrapping_add(q_th_spin_sleep_pa_offset) as *const c_ulong,
+    ));
+    let th_status = phys_to_virt(read_volatile(
+        q_addr.wrapping_add(q_th_status_pa_offset) as *const c_ulong,
+    ));
+    let th_spin_sleep_lock = phys_to_virt(read_volatile(
+        q_addr.wrapping_add(q_th_spin_sleep_lock_pa_offset) as *const c_ulong,
+    ));
+    let proc_status = phys_to_virt(read_volatile(
+        q_addr.wrapping_add(q_proc_status_pa_offset) as *const c_ulong,
+    ));
+    let proc_update_lock = phys_to_virt(read_volatile(
+        q_addr.wrapping_add(q_proc_update_lock_pa_offset) as *const c_ulong,
+    ));
+    let runq_lock = phys_to_virt(read_volatile(
+        q_addr.wrapping_add(q_runq_lock_pa_offset) as *const c_ulong,
+    ));
+    let clv_flags = phys_to_virt(read_volatile(
+        q_addr.wrapping_add(q_clv_flags_pa_offset) as *const c_ulong,
+    ));
+
+    write_volatile(q_addr.wrapping_add(q_th_spin_sleep_offset) as *mut c_ulong, th_spin_sleep);
+    write_volatile(q_addr.wrapping_add(q_th_status_offset) as *mut c_ulong, th_status);
+    write_volatile(
+        q_addr.wrapping_add(q_th_spin_sleep_lock_offset) as *mut c_ulong,
+        th_spin_sleep_lock,
+    );
+    write_volatile(q_addr.wrapping_add(q_proc_status_offset) as *mut c_ulong, proc_status);
+    write_volatile(
+        q_addr.wrapping_add(q_proc_update_lock_offset) as *mut c_ulong,
+        proc_update_lock,
+    );
+    write_volatile(q_addr.wrapping_add(q_runq_lock_offset) as *mut c_ulong, runq_lock);
+    write_volatile(q_addr.wrapping_add(q_clv_flags_offset) as *mut c_ulong, clv_flags);
+
+    let mut status = -EINVAL;
+    let irqstate = spin_lock(th_spin_sleep_lock);
+    if read_volatile(th_spin_sleep as *const c_int) == 1 {
+        status = 0;
+    }
+    write_volatile(th_spin_sleep as *mut c_int, 0);
+    spin_unlock(th_spin_sleep_lock, irqstate);
+
+    let irqstate = spin_lock(runq_lock);
+    if read_volatile(th_status as *const c_int) & valid_states != 0 {
+        mcs_rwlock_writer_lock_noirq(proc_update_lock as *mut McctrlMcsRwlock);
+        if read_volatile(proc_status as *const c_int) != 0x10 {
+            write_volatile(proc_status as *mut c_int, 1);
+        }
+        mcs_rwlock_writer_unlock_noirq(proc_update_lock as *mut McctrlMcsRwlock);
+
+        xchg(th_status, 1);
+        status = 0;
+        let flags = read_volatile(clv_flags as *const c_uint);
+        write_volatile(clv_flags as *mut c_uint, flags | 0x1);
+    }
+    spin_unlock(runq_lock, irqstate);
+
+    if status == 0 {
+        let intr_id = read_volatile(q_addr.wrapping_add(q_intr_id_offset) as *const c_int);
+        let intr_vector = read_volatile(q_addr.wrapping_add(q_intr_vector_offset) as *const c_int);
+        issue(os, intr_id, intr_vector);
+    }
+
+    status
 }
 
 #[no_mangle]

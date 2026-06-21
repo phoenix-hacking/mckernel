@@ -1022,6 +1022,33 @@ int mcctrl_rva_to_rpa_cache_insert_body_result(
 	void *root, void *cache_node,
 	void (*link_node)(void *, void *, void *),
 	void (*insert_color)(void *, void *));
+typedef void (*mcctrl_futex_key_refs_fn_t)(unsigned long key_addr);
+typedef void *(*mcctrl_futex_usrdata_fn_t)(void *os);
+typedef int (*mcctrl_futex_current_pid_fn_t)(void);
+typedef void *(*mcctrl_futex_get_ppd_fn_t)(void *usrdata, int pid);
+typedef void (*mcctrl_futex_put_ppd_fn_t)(void *ppd);
+typedef int (*mcctrl_futex_remote_fault_fn_t)(
+	void *usrdata, unsigned long fault_addr, u64 reason, void *ppd,
+	int tid, int cpu);
+typedef void *(*mcctrl_futex_cache_alloc_fn_t)(void);
+typedef void (*mcctrl_futex_key_log_fn_t)(int event, unsigned long value,
+					  unsigned long aux);
+int mcctrl_futex_get_key_body_result(
+	unsigned long uaddr, int fshared, unsigned long key_addr, void *os,
+	unsigned long mm_addr, int tid, int cpu,
+	unsigned long key_word_offset, unsigned long key_ptr_offset,
+	unsigned long key_offset_offset, unsigned long ppd_rpgtable_offset,
+	unsigned long ppd_cache_offset,
+	mcctrl_futex_key_refs_fn_t get_refs,
+	mcctrl_futex_usrdata_fn_t get_usrdata,
+	mcctrl_futex_current_pid_fn_t current_pid,
+	mcctrl_futex_get_ppd_fn_t get_ppd,
+	mcctrl_futex_put_ppd_fn_t put_ppd,
+	mcctrl_futex_remote_fault_fn_t remote_fault,
+	mcctrl_futex_cache_alloc_fn_t alloc_cache,
+	void (*link_node)(void *, void *, void *),
+	void (*insert_color)(void *, void *),
+	mcctrl_futex_key_log_fn_t log);
 int mcctrl_futex_remove_process_body_result(
 	void *root, void *(*rb_first)(void *),
 	void (*rb_erase)(void *, void *), void (*free_node)(void *));
@@ -1090,6 +1117,90 @@ typedef int (*mcctrl_futex_get_value_fn_t)(unsigned long value_addr,
 typedef void (*mcctrl_futex_drop_key_refs_fn_t)(unsigned long key_addr);
 typedef void (*mcctrl_futex_requeue_entry_fn_t)(unsigned long q_addr,
 						unsigned long ctx_addr);
+int mcctrl_futex_queue_me_body_result(
+	unsigned long q_addr, unsigned long hb_addr, unsigned long thread_addr,
+	unsigned long q_list_offset, unsigned long q_task_offset,
+	unsigned long hb_lock_offset, unsigned long hb_chain_offset,
+	mcctrl_futex_hb_unlock_fn_t unlock);
+int mcctrl_futex_unqueue_me_body_result(
+	unsigned long q_addr, unsigned long q_lock_ptr_offset,
+	unsigned long q_list_offset, unsigned long q_key_offset,
+	mcctrl_futex_hb_lock_fn_t lock, mcctrl_futex_hb_unlock_fn_t unlock,
+	mcctrl_futex_drop_key_refs_fn_t drop_key_refs);
+int mcctrl_futex_requeue_move_body_result(
+	unsigned long q_addr, unsigned long hb1_addr, unsigned long hb2_addr,
+	unsigned long key2_addr, unsigned long q_list_offset,
+	unsigned long q_lock_ptr_offset, unsigned long q_key_offset,
+	unsigned long hb_lock_offset, unsigned long hb_chain_offset,
+	unsigned long key_size, mcctrl_futex_key_refs_fn_t get_refs);
+typedef int (*mcctrl_futex_wake_mckernel_fn_t)(unsigned long q_addr,
+					       unsigned long ctx_addr);
+typedef void (*mcctrl_futex_wake_log_fn_t)(int event, unsigned long q_addr,
+					   unsigned long ctx_addr);
+typedef unsigned long (*mcctrl_futex_queue_lock_fn_t)(unsigned long q_addr,
+						      unsigned long queue_addr);
+typedef void (*mcctrl_futex_queue_unlock_fn_t)(unsigned long q_addr,
+					       unsigned long hb_addr);
+typedef int (*mcctrl_futex_xchg_fn_t)(unsigned long addr, int value);
+typedef unsigned long (*mcctrl_futex_spin_lock_fn_t)(unsigned long lock_addr);
+typedef void (*mcctrl_futex_spin_unlock_fn_t)(unsigned long lock_addr,
+					      unsigned long irqstate);
+typedef void (*mcctrl_futex_queue_me_fn_t)(unsigned long q_addr,
+					   unsigned long hb_addr,
+					   unsigned long ctx_addr);
+typedef s64 (*mcctrl_futex_wait_event_fn_t)(unsigned long resp_addr,
+					    u64 timeout);
+typedef unsigned long (*mcctrl_futex_phys_to_virt_fn_t)(unsigned long phys);
+typedef void (*mcctrl_futex_issue_interrupt_fn_t)(void *os, int intr_id,
+						  int vector);
+int mcctrl_futex_wake_entry_body_result(
+	unsigned long q_addr, unsigned long ctx_addr,
+	unsigned long q_list_offset, unsigned long q_lock_ptr_offset,
+	unsigned long q_uti_resp_offset,
+	mcctrl_futex_wake_mckernel_fn_t wake_mckernel,
+	mcctrl_futex_wake_log_fn_t log);
+int mcctrl_futex_wait_setup_body_result(
+	unsigned long uaddr, u32 val, int fshared, unsigned long q_addr,
+	unsigned long *hb_out, unsigned long ctx_addr,
+	unsigned long futex_queue_addr, unsigned long q_key_offset,
+	unsigned long key_size, mcctrl_futex_get_key_fn_t get_key,
+	mcctrl_futex_queue_lock_fn_t queue_lock,
+	mcctrl_futex_get_value_fn_t get_value,
+	mcctrl_futex_queue_unlock_fn_t queue_unlock,
+	mcctrl_futex_put_key_fn_t put_key);
+s64 mcctrl_futex_wait_queue_me_body_result(
+	unsigned long hb_addr, unsigned long q_addr, u64 timeout,
+	unsigned long ctx_addr, unsigned long status_addr,
+	unsigned long spin_sleep_addr, unsigned long spin_sleep_lock_addr,
+	int mc_idle_halt, unsigned long q_list_offset,
+	unsigned long q_uti_resp_offset, mcctrl_futex_xchg_fn_t xchg,
+	mcctrl_futex_spin_lock_fn_t spin_lock,
+	mcctrl_futex_spin_unlock_fn_t spin_unlock,
+	mcctrl_futex_queue_me_fn_t queue_me,
+	mcctrl_futex_wait_event_fn_t wait_event);
+int mcctrl_futex_wakeup_thread_body_result(
+	unsigned long q_addr, void *os, int valid_states,
+	unsigned long q_th_spin_sleep_offset,
+	unsigned long q_th_status_offset,
+	unsigned long q_th_spin_sleep_lock_offset,
+	unsigned long q_proc_status_offset,
+	unsigned long q_proc_update_lock_offset,
+	unsigned long q_runq_lock_offset,
+	unsigned long q_clv_flags_offset,
+	unsigned long q_intr_id_offset,
+	unsigned long q_intr_vector_offset,
+	unsigned long q_th_spin_sleep_pa_offset,
+	unsigned long q_th_status_pa_offset,
+	unsigned long q_th_spin_sleep_lock_pa_offset,
+	unsigned long q_proc_status_pa_offset,
+	unsigned long q_proc_update_lock_pa_offset,
+	unsigned long q_runq_lock_pa_offset,
+	unsigned long q_clv_flags_pa_offset,
+	mcctrl_futex_phys_to_virt_fn_t phys_to_virt,
+	mcctrl_futex_spin_lock_fn_t spin_lock,
+	mcctrl_futex_spin_unlock_fn_t spin_unlock,
+	mcctrl_futex_xchg_fn_t xchg,
+	mcctrl_futex_issue_interrupt_fn_t issue_interrupt);
 int mcctrl_futex_wake_body_result(
 	unsigned long uaddr, int fshared, int nr_wake, u32 bitset,
 	unsigned long key_addr, unsigned long futex_queue_addr,

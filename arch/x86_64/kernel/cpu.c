@@ -763,6 +763,20 @@ void init_fpu(void)
 	}
 }
 
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+int x86_xsave_size_bridge(void)
+{
+	return xsave_size;
+}
+
+uint64_t x86_xsave_mask_bridge(void)
+{
+	return xsave_mask;
+}
+
+int get_xsave_size(void);
+uint64_t get_xsave_mask(void);
+#else
 int
 get_xsave_size()
 {
@@ -773,6 +787,7 @@ uint64_t get_xsave_mask()
 {
 	return xsave_mask;
 }
+#endif
 
 void reload_gdt(struct x86_desc_ptr *gdt_ptr)
 {
@@ -974,7 +989,7 @@ extern int x86_arch_cpu_read_write_register_body_result(void *desc, int op,
 		unsigned long val_offset, unsigned long (*read_msr_fn)(int),
 		void (*write_msr_fn)(int, unsigned long));
 
-static void
+void
 x86_lapic_write_bridge(int reg, unsigned int value)
 {
 	lapic_write(reg, value);
@@ -998,7 +1013,7 @@ x86_cpu_restore_interrupt_bridge(unsigned long flags)
 	cpu_restore_interrupt(flags);
 }
 
-static unsigned long
+unsigned long
 x86_read_msr_bridge(int reg)
 {
 	return rdmsr(reg);
@@ -1146,12 +1161,15 @@ x86_init_processors_local_bridge(int max_id)
 }
 #endif
 
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+void lapic_timer_enable(unsigned int clocks);
+void lapic_timer_disable(void);
+void lapic_ack(void);
+unsigned long x2apic_is_enabled(void);
+#else
 void
 lapic_timer_enable(unsigned int clocks)
 {
-#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
-	x86_lapic_timer_enable_body_result(clocks, x86_lapic_write_bridge);
-#else
 	unsigned int lvtt_value;
 
 	lapic_write(LAPIC_TIMER_INITIAL, clocks / APIC_DIVISOR);
@@ -1160,28 +1178,20 @@ lapic_timer_enable(unsigned int clocks)
 	/* initialize periodic timer */
 	lvtt_value = LOCAL_TIMER_VECTOR | APIC_LVT_TIMER_PERIODIC;
 	lapic_write(LAPIC_TIMER, lvtt_value);
-#endif
 }
 
 void
-lapic_timer_disable()
+lapic_timer_disable(void)
 {
-#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
-	x86_lapic_timer_disable_body_result(x86_lapic_write_bridge);
-#else
 	lapic_write(LAPIC_TIMER_INITIAL, 0);
-#endif
 }
 
 void
 lapic_ack(void)
 {
-#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
-	x86_lapic_ack_body_result(x86_lapic_write_bridge);
-#else
 	lapic_write(LAPIC_EOI, 0);
-#endif
 }
+#endif
 
 static void
 x2apic_wait_icr_idle(void)
@@ -1245,20 +1255,17 @@ apic_x86_issue_ipi(unsigned int apicid, unsigned int low)
 #endif
 }
 
+#ifndef MCKERNEL_RUST_X86_CPU_HELPERS
 unsigned long
 x2apic_is_enabled()
 {
-#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
-	return x86_x2apic_enabled_result(rdmsr(MSR_IA32_APIC_BASE),
-			X2APIC_ENABLE);
-#else
 	unsigned long msr;
 
 	msr = rdmsr(MSR_IA32_APIC_BASE);
 
 	return (msr & X2APIC_ENABLE);
-#endif
 }
+#endif
 
 #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
 static void
@@ -2323,10 +2330,12 @@ static void __x86_wakeup(int apicid, unsigned long ip)
   @ assigns \nothing;
   @ ensures \interrupt_disabled == 0;
   @*/
+#ifndef MCKERNEL_RUST_X86_CPU_HELPERS
 void cpu_halt(void)
 {
 	asm volatile("hlt");
 }
+#endif
 
 #ifdef ENABLE_FUGAKU_HACKS
 /*@
@@ -2343,28 +2352,34 @@ void cpu_halt_panic(void)
   @ assigns \nothing;
   @ ensures \interrupt_disabled == 0;
   @*/
+#ifndef MCKERNEL_RUST_X86_CPU_HELPERS
 void cpu_safe_halt(void)
 {
     asm volatile("sti; hlt");
 }
+#endif
 
 /*@
   @ assigns \nothing;
   @ ensures \interrupt_disabled == 0;
   @*/
+#ifndef MCKERNEL_RUST_X86_CPU_HELPERS
 void cpu_enable_interrupt(void)
 {
 	asm volatile("sti");
 }
+#endif
 
 /*@
   @ assigns \nothing;
   @ ensures \interrupt_disabled > 0;
   @*/
+#ifndef MCKERNEL_RUST_X86_CPU_HELPERS
 void cpu_disable_interrupt(void)
 {
 	asm volatile("cli");
 }
+#endif
 
 /*@
   @ assigns \nothing;
@@ -2375,18 +2390,22 @@ void cpu_disable_interrupt(void)
   @   assumes !(flags & RFLAGS_IF);
   @   ensures \interrupt_disabled > 0;
   @*/
+#ifndef MCKERNEL_RUST_X86_CPU_HELPERS
 void cpu_restore_interrupt(unsigned long flags)
 {
 	asm volatile("push %0; popf" : : "g"(flags) : "memory", "cc");
 }
+#endif
 
 /*@
   @ assigns \nothing;
   @*/
+#ifndef MCKERNEL_RUST_X86_CPU_HELPERS
 void cpu_pause(void)
 {
 	asm volatile("pause" ::: "memory");
 }
+#endif
 
 /*@
   @ assigns \nothing;
@@ -2398,6 +2417,7 @@ void cpu_pause(void)
   @   assumes \interrupt_disabled > 0;
   @   ensures !(\result & RFLAGS_IF);
   @*/
+#ifndef MCKERNEL_RUST_X86_CPU_HELPERS
 unsigned long cpu_disable_interrupt_save(void)
 {
 	unsigned long flags;
@@ -2406,7 +2426,9 @@ unsigned long cpu_disable_interrupt_save(void)
 
 	return flags;
 }
+#endif
 
+#ifndef MCKERNEL_RUST_X86_CPU_HELPERS
 unsigned long cpu_enable_interrupt_save(void)
 {
 	unsigned long flags;
@@ -2415,7 +2437,9 @@ unsigned long cpu_enable_interrupt_save(void)
 
 	return flags;
 }
+#endif
 
+#ifndef MCKERNEL_RUST_X86_CPU_HELPERS
 int cpu_interrupt_disabled(void)
 {
 	unsigned long flags;
@@ -2424,6 +2448,7 @@ int cpu_interrupt_disabled(void)
 
 	return !(flags & 0x200);
 }
+#endif
 
 /*@
   @ behavior valid_vector:
@@ -2474,27 +2499,52 @@ struct page_table *get_boot_page_table(void);
 unsigned long get_transit_page_table(void);
 
 #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
-static unsigned long x86_boot_page_table_phys_bridge(void)
+void *x86_boot_trampoline_va_bridge(void)
+{
+	return trampoline_va;
+}
+
+const void *x86_boot_trampoline_code_data_bridge(void)
+{
+	return trampoline_code_data;
+}
+
+unsigned long x86_boot_trampoline_code_size_bridge(void)
+{
+	return trampoline_code_data_end - trampoline_code_data;
+}
+
+unsigned long x86_boot_ap_trampoline_bridge(void)
+{
+	return ap_trampoline;
+}
+
+void *x86_boot_setup_ap_bridge(void)
+{
+	return (void *)setup_x86_ap;
+}
+
+unsigned long x86_boot_page_table_phys_bridge(void)
 {
 	return virt_to_phys(get_boot_page_table());
 }
 
-static unsigned long x86_cpu_kstack_bridge(int cpuid)
+unsigned long x86_cpu_kstack_bridge(int cpuid)
 {
 	return (unsigned long)get_x86_cpu_local_kstack(cpuid);
 }
 
-static unsigned long x86_transit_page_table_bridge(void)
+unsigned long x86_transit_page_table_bridge(void)
 {
 	return get_transit_page_table();
 }
 
-static void x86_wakeup_bridge(int cpuid, unsigned long trampoline)
+void x86_wakeup_bridge(int cpuid, unsigned long trampoline)
 {
 	__x86_wakeup(cpuid, trampoline);
 }
 
-static void x86_cpu_pause_bridge(void)
+void x86_cpu_pause_bridge(void)
 {
 	cpu_pause();
 }
@@ -2512,16 +2562,11 @@ static void x86_cpu_pause_bridge(void)
   @ assigns cpu_boot_status;
   @ ensures cpu_boot_status != 0;
   @*/
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+void ihk_mc_boot_cpu(int cpuid, unsigned long pc);
+#else
 void ihk_mc_boot_cpu(int cpuid, unsigned long pc)
 {
-#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
-	x86_boot_cpu_body_result(trampoline_va, trampoline_code_data,
-			trampoline_code_data_end - trampoline_code_data,
-			cpuid, pc, ap_trampoline, (int *)&cpu_boot_status,
-			(void *)setup_x86_ap, x86_boot_page_table_phys_bridge,
-			x86_cpu_kstack_bridge, x86_transit_page_table_bridge,
-			x86_wakeup_bridge, x86_cpu_pause_bridge);
-#else
 	unsigned long *p;
 
 	p = (unsigned long *)trampoline_va;
@@ -2546,8 +2591,8 @@ void ihk_mc_boot_cpu(int cpuid, unsigned long pc)
 	while (!cpu_boot_status) {
 		cpu_pause();
 	}
-#endif
 }
+#endif
 
 /*@
   @ requires \valid(new_ctx);
@@ -2579,7 +2624,32 @@ void ihk_mc_init_context(ihk_mc_kernel_context_t *new_ctx,
 extern char enter_user_mode[];
 
 #ifdef MCKERNEL_RUST_X86_CPU_HELPERS
-static void x86_mcexec_v10_trace_log_bridge(int cpu, int pid, int tid,
+const struct x86_trace_enter_user_offsets *x86_trace_enter_user_offsets_bridge(void)
+{
+	return &x86_trace_enter_user_offsets;
+}
+
+void *x86_current_thread_bridge(void)
+{
+	return get_this_cpu_local_var()->current;
+}
+
+void *x86_this_cpu_local_var_bridge(void)
+{
+	return get_this_cpu_local_var();
+}
+
+unsigned long x86_runq_lock_offset_bridge(void)
+{
+	return __builtin_offsetof(struct cpu_local_var, runq_lock);
+}
+
+unsigned long x86_runq_irqstate_offset_bridge(void)
+{
+	return __builtin_offsetof(struct cpu_local_var, runq_irqstate);
+}
+
+void x86_mcexec_v10_trace_log_bridge(int cpu, int pid, int tid,
 		unsigned long rip, unsigned long sp, unsigned long cs,
 		unsigned long ss, unsigned long rflags, int status)
 {
@@ -2587,23 +2657,18 @@ static void x86_mcexec_v10_trace_log_bridge(int cpu, int pid, int tid,
 		cpu, pid, tid, rip, sp, cs, ss, rflags, status);
 }
 
-static void x86_runq_unlock_bridge(void *lock, unsigned long irqstate)
+void x86_runq_unlock_bridge(void *lock, unsigned long irqstate)
 {
 	ihk_mc_spinlock_unlock((ihk_spinlock_t *)lock, irqstate);
 }
 #endif
 
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+void mcexec_v10_trace_enter_user(struct x86_user_context *regs);
+#else
 void mcexec_v10_trace_enter_user(struct x86_user_context *regs)
 {
 	static int mcexec_v10_enter_user_logs;
-#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
-	x86_mcexec_v10_trace_enter_user_body_result(regs,
-			get_this_cpu_local_var()->current,
-			&mcexec_v10_enter_user_logs, 32,
-			ihk_mc_get_processor_id(),
-			&x86_trace_enter_user_offsets,
-			x86_mcexec_v10_trace_log_bridge);
-#else
 	struct thread *thread = get_this_cpu_local_var()->current;
 
 	if (mcexec_v10_enter_user_logs >= 32) {
@@ -2621,8 +2686,8 @@ void mcexec_v10_trace_enter_user(struct x86_user_context *regs)
 		regs ? regs->gpr.rflags : 0UL,
 		thread ? thread->status : -1);
 	mcexec_v10_enter_user_logs++;
-#endif
 }
+#endif
 
 /* 
  * Release runq_lock before entering user space.
@@ -2630,18 +2695,15 @@ void mcexec_v10_trace_enter_user(struct x86_user_context *regs)
  * the context switch and when a new process is created it starts
  * execution in enter_user_mode, which in turn calls this function.
  */
+#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
+void release_runq_lock(void);
+#else
 void release_runq_lock(void)
 {
-#ifdef MCKERNEL_RUST_X86_CPU_HELPERS
-	x86_release_runq_lock_body_result(get_this_cpu_local_var(),
-			__builtin_offsetof(struct cpu_local_var, runq_lock),
-			__builtin_offsetof(struct cpu_local_var, runq_irqstate),
-			x86_runq_unlock_bridge);
-#else
 	ihk_mc_spinlock_unlock(&(get_this_cpu_local_var()->runq_lock),
 			get_this_cpu_local_var()->runq_irqstate);
-#endif
 }
+#endif
 
 /*@
   @ requires \valid(ctx);

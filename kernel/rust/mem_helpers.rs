@@ -7,7 +7,7 @@ use crate::abi::{
     AbiListHead, AddressSpace, CInt, CLong, CULong, CpuLocalVar, IhkAtomic, IhkAtomic64,
     IhkCpuInfo, IhkSpinlock, KmallocCacheHeader, KmallocHeader, McsLockNode, Memobj, OffT, Process,
     ProcessVm, RusagePercpu, SizeT, TlbFlushEntry, VmRange, CPU_SET_WORDS, IHK_MAX_NUM_CPUS,
-    IHK_MAX_NUM_NUMA_NODES, IHK_MAX_NUM_PGSIZES,
+    IHK_MAX_NUM_NUMA_NODES, IHK_MAX_NUM_PGSIZES, PROCESS_HASH_SIZE,
 };
 use crate::llist::{LListHead, LListNode};
 use crate::rbtree::{rb_first_safe, rb_next_safe, RbNode, RbRoot};
@@ -26,8 +26,44 @@ unsafe extern "C" {
         end: *mut CULong,
         numa_id: *mut CInt,
     ) -> CInt;
+    fn ihk_mc_get_nr_numa_nodes() -> CInt;
     fn ihk_get_kargs() -> *mut i8;
     fn ihk_mc_get_processor_id() -> CInt;
+    fn mem_num_processors_bridge() -> CInt;
+    fn mem_dump_level_bridge() -> CInt;
+    fn mem_get_dump_page_set_bridge() -> *mut IhkDumpPageSet;
+    fn mem_get_dump_page_bridge() -> *mut IhkDumpPage;
+    fn mem_process_hash_lists_bridge() -> *mut AbiListHead;
+    fn mem_dump_complete_log_bridge();
+    fn mem_dump_free_pages_bridge(node: CInt) -> CULong;
+    fn mem_dump_first_free_chunk_bridge(node: CInt) -> *mut c_void;
+    fn mem_dump_next_free_chunk_bridge(chunk: *mut c_void) -> *mut c_void;
+    fn mem_dump_chunk_addr_bridge(chunk: *mut c_void) -> CULong;
+    fn mem_dump_chunk_size_bridge(chunk: *mut c_void) -> CULong;
+    fn mem_dump_warn_bridge(
+        kind: CInt,
+        map_count: CULong,
+        map_index: CULong,
+        map_start: CULong,
+        map_end: CULong,
+        page_index: CULong,
+    );
+    fn visit_pte_range_safe(
+        pt: *mut c_void,
+        start: *mut c_void,
+        end: *mut c_void,
+        pgshift: CInt,
+        p2align: CInt,
+        visitor: Option<MemPteVisitorFn>,
+        arg: *mut c_void,
+    ) -> CInt;
+    fn ihk_mc_get_mem_user_page(
+        arg0: *mut c_void,
+        pt: *mut c_void,
+        ptep: *mut CULong,
+        pgaddr: *mut c_void,
+        pgshift: CInt,
+    ) -> CInt;
     fn get_this_cpu_local_var() -> *mut CpuLocalVar;
     #[allow(clashing_extern_declarations)]
     fn phys_to_page(phys: CULong) -> *mut MemPage;
@@ -75,6 +111,23 @@ unsafe extern "C" {
         count: CInt,
         runcount: CInt,
     );
+    fn mem_init_allocator_bridge() -> *mut IhkMcPaOps;
+    fn mem_init_page_fault_handler_bridge() -> CULong;
+    fn mem_init_query_free_handler_bridge() -> CULong;
+    fn mem_init_anon_on_demand_bridge() -> *mut CInt;
+    fn mem_init_xpmem_remote_bridge() -> *mut CInt;
+    fn mem_init_hugetlbfs_on_demand_bridge() -> *mut CInt;
+    fn mem_monitor_init_bridge();
+    fn mem_rusage_init_bridge();
+    fn mem_numa_init_bridge();
+    fn mem_set_page_fault_handler_bridge(handler: CULong);
+    fn mem_get_vector_bridge(type_: CInt) -> CInt;
+    fn mem_register_interrupt_handler_bridge(vector: CInt, handler: CULong) -> CInt;
+    fn mem_page_init_bridge();
+    fn mem_virtual_allocator_init_bridge();
+    fn mem_find_command_line_bridge(name: *mut i8) -> *mut i8;
+    fn mem_numa_distances_init_bridge();
+    fn mem_init_log_bridge(event: CInt);
     fn mem_kmalloc_track_base_alloc_bridge(size: CInt, flag: CULong) -> *mut c_void;
     fn mem_kmalloc_track_base_free_bridge(ptr: *mut c_void);
     fn mem_kmalloc_track_lock_bridge(lock_addr: CULong) -> CULong;
@@ -97,6 +150,18 @@ unsafe extern "C" {
         count: CInt,
         runcount: CInt,
     );
+    fn mem_pending_free_pages_bridge() -> *mut AbiListHead;
+    fn mem_begin_free_pages_pending_panic_bridge();
+    fn mem_pending_free_bridge(phys: CULong, npages: CInt, is_user: CInt);
+    fn mem_finish_free_pages_pending_panic_bridge();
+    fn mem_vmap_allocator_bridge() -> *mut c_void;
+    fn mem_vmap_alloc_bridge(desc: *mut c_void, npages: CInt, p2align: CInt) -> CULong;
+    fn mem_vmap_free_bridge(desc: *mut c_void, address: CULong, npages: CInt);
+    fn mem_pt_set_page_bridge(pt: *mut c_void, virt: *mut c_void, phys: CULong, attr: CInt)
+        -> CInt;
+    fn mem_pt_clear_page_bridge(pt: *mut c_void, virt: *mut c_void) -> CInt;
+    fn mem_flush_tlb_single_bridge(addr: CULong);
+    fn mem_barrier_bridge();
 
     static mut sysctl_overcommit_memory: CInt;
     #[link_name = "memdebug"]
@@ -409,6 +474,7 @@ const PAGEALLOC_TRACK_LOG_COVERING_FOUND: CInt = 8;
 const PAGEALLOC_TRACK_LOG_ADDR_NEXT_ADDED: CInt = 9;
 const PAGEALLOC_TRACK_LOG_ADDR_MODIFIED: CInt = 10;
 const MEM_TRACK_LEAK_DETAIL: CInt = 1;
+const X86_USER_END: CULong = 0x0000_8000_0000_0000;
 const MEM_TRACK_LEAK_SUMMARY: CInt = 2;
 
 #[repr(C)]
@@ -2493,6 +2559,34 @@ pub unsafe extern "C" fn mem_unmap_virtual_body_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn ihk_mc_map_virtual(phys: CULong, npages: CInt, attr: CInt) -> *mut c_void {
+    mem_map_virtual_body_result(
+        mem_vmap_allocator_bridge(),
+        phys,
+        npages,
+        attr,
+        Some(mem_vmap_alloc_bridge),
+        Some(mem_pt_set_page_bridge),
+        Some(mem_pt_clear_page_bridge),
+        Some(mem_vmap_free_bridge),
+        Some(mem_flush_tlb_single_bridge),
+        Some(mem_barrier_bridge),
+    )
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_unmap_virtual(va: *mut c_void, npages: CInt) {
+    let _ = mem_unmap_virtual_body_result(
+        mem_vmap_allocator_bridge(),
+        va,
+        npages,
+        Some(mem_pt_clear_page_bridge),
+        Some(mem_flush_tlb_single_bridge),
+        Some(mem_vmap_free_bridge),
+    );
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn mem_rusage_init_body_result(
     rusage: *mut RusageGlobal,
     rusage_size: CULong,
@@ -2698,6 +2792,30 @@ pub unsafe extern "C" fn mem_init_sequence_result(
 
     numa_distances_init();
     register_rc
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mem_init() {
+    let _ = mem_init_sequence_result(
+        mem_init_allocator_bridge(),
+        mem_init_page_fault_handler_bridge(),
+        mem_init_query_free_handler_bridge(),
+        mem_init_anon_on_demand_bridge(),
+        mem_init_xpmem_remote_bridge(),
+        mem_init_hugetlbfs_on_demand_bridge(),
+        Some(mem_monitor_init_bridge),
+        Some(mem_rusage_init_bridge),
+        Some(mem_numa_init_bridge),
+        Some(ihk_mc_set_page_allocator),
+        Some(mem_set_page_fault_handler_bridge),
+        Some(mem_get_vector_bridge),
+        Some(mem_register_interrupt_handler_bridge),
+        Some(mem_page_init_bridge),
+        Some(mem_virtual_allocator_init_bridge),
+        Some(mem_find_command_line_bridge),
+        Some(mem_numa_distances_init_bridge),
+        Some(mem_init_log_bridge),
+    );
 }
 
 #[no_mangle]
@@ -3751,6 +3869,15 @@ pub unsafe extern "C" fn mem_begin_free_pages_pending_public_body_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn begin_free_pages_pending() {
+    let _ = mem_begin_free_pages_pending_public_body_result(
+        Some(mem_pending_free_pages_bridge),
+        Some(mem_begin_free_pages_pending_result),
+        Some(mem_begin_free_pages_pending_panic_bridge),
+    );
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn mem_free_pages_pending_enqueue_result(
     page: *mut MemPage,
     pendings: *mut AbiListHead,
@@ -3864,6 +3991,16 @@ pub unsafe extern "C" fn mem_finish_free_pages_pending_public_body_result(
         }
     }
     ret
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn finish_free_pages_pending() {
+    let _ = mem_finish_free_pages_pending_public_body_result(
+        Some(mem_pending_free_pages_bridge),
+        Some(mem_finish_free_pages_pending_result),
+        Some(mem_pending_free_bridge),
+        Some(mem_finish_free_pages_pending_panic_bridge),
+    );
 }
 
 #[no_mangle]
@@ -5407,6 +5544,56 @@ pub unsafe extern "C" fn mem_query_mem_areas_result(
         log();
     }
     1
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_query_mem_areas() {
+    unsafe {
+        mem_query_mem_areas_result(
+            ihk_mc_get_processor_id(),
+            mem_num_processors_bridge(),
+            mem_dump_level_bridge(),
+            Some(mem_get_dump_page_set_bridge),
+            Some(mem_get_dump_page_bridge),
+            Some(ihk_mc_query_mem_user_page),
+            Some(ihk_mc_query_mem_free_page),
+            Some(mem_dump_complete_log_bridge),
+        );
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_query_mem_user_page(dump_pase_info: *mut c_void) {
+    unsafe {
+        mem_query_mem_user_page_result(
+            mem_process_hash_lists_bridge(),
+            PROCESS_HASH_SIZE as CInt,
+            offset_of!(Process, hash_list) as CULong,
+            offset_of!(Process, vm) as CULong,
+            offset_of!(ProcessVm, address_space) as CULong,
+            offset_of!(AddressSpace, page_table) as CULong,
+            X86_USER_END,
+            Some(visit_pte_range_safe),
+            Some(ihk_mc_get_mem_user_page),
+            dump_pase_info,
+        );
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn ihk_mc_query_mem_free_page(dump_pase_info: *mut c_void) {
+    unsafe {
+        mem_query_mem_free_page_public_result(
+            dump_pase_info.cast::<DumpPaseInfo>(),
+            Some(ihk_mc_get_nr_numa_nodes),
+            Some(mem_dump_free_pages_bridge),
+            Some(mem_dump_first_free_chunk_bridge),
+            Some(mem_dump_next_free_chunk_bridge),
+            Some(mem_dump_chunk_addr_bridge),
+            Some(mem_dump_chunk_size_bridge),
+            Some(mem_dump_warn_bridge),
+        );
+    }
 }
 
 #[no_mangle]

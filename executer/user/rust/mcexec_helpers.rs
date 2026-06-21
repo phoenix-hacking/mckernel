@@ -50,7 +50,9 @@ const SYS_PERF_EVENT_OPEN: c_long = 298;
 const MCEXEC_SWAPOUT_SYSCALL: c_long = 801;
 const MCEXEC_DEBUG_MLOCK_SYSCALL: c_long = 802;
 const MCEXEC_LINUX_SPAWN_SYSCALL: c_long = 811;
+const MCEXEC_UP_PREPARE_IMAGE: c_ulong = 0x30a02900;
 const MCEXEC_UP_TRANSFER: c_ulong = 0x30a02901;
+const MCEXEC_UP_START_IMAGE: c_ulong = 0x30a02902;
 const MCEXEC_UP_WAIT_SYSCALL: c_ulong = 0x30a02903;
 const MCEXEC_UP_TRANSFER_TO_REMOTE: u8 = 0;
 const MCEXEC_UP_TRANSFER_FROM_REMOTE: u8 = 1;
@@ -76,6 +78,11 @@ const MPOL_NO_HEAP: u64 = 0x01;
 const MPOL_NO_STACK: u64 = 0x02;
 const MPOL_NO_BSS: u64 = 0x04;
 const MPOL_SHM_PREMAP: u64 = 0x08;
+const MPOL_DEFAULT: c_int = 0;
+const MPOL_PREFERRED: c_int = 1;
+const MPOL_BIND: c_int = 2;
+const MPOL_INTERLEAVE: c_int = 3;
+const PLD_MPOL_MAX: c_int = 4;
 
 const MPOL_NODEMASK_NONE: i32 = 0;
 const MPOL_NODEMASK_LOCAL: i32 = 1;
@@ -153,8 +160,16 @@ static COKERNEL_PATH_ENV: &[u8] = b"COKERNEL_PATH\0";
 static PATH_ENV: &[u8] = b"PATH\0";
 static COKERNEL_EXEC_ROOT_ENV: &[u8] = b"COKERNEL_EXEC_ROOT\0";
 static PROC_SELF_EXE: &[u8] = b"/proc/self/exe";
+static MCKERNEL_RLIMIT_STACK_ENV: &[u8] = b"MCKERNEL_RLIMIT_STACK\0";
 static MCKERNEL_LD_PRELOAD_ENV: &[u8] = b"MCKERNEL_LD_PRELOAD\0";
 static UTI_CPU_SET_ENV: &[u8] = b"UTI_CPU_SET\0";
+static FLIB_AFFINITY_ON_PROCESS_ENV: &[u8] = b"FLIB_AFFINITY_ON_PROCESS\0";
+static FLIB_RANK_ON_NODE_ENV: &[u8] = b"FLIB_RANK_ON_NODE\0";
+static FLIB_NUM_PROCESS_ON_NODE_ENV: &[u8] = b"FLIB_NUM_PROCESS_ON_NODE\0";
+static OMP_NUM_THREADS_ENV: &[u8] = b"OMP_NUM_THREADS\0";
+static OMPI_MCA_PLE_MEMORY_POLICY_ENV: &[u8] = b"OMPI_MCA_plm_ple_memory_allocation_policy\0";
+static MCEXEC_ALT_ROOT_ENV: &[u8] = b"MCEXEC_ALT_ROOT\0";
+static MCEXEC_DEFAULT_ALTROOT: &[u8] = b"/usr/linux-k1om-4.7/linux-k1om\0";
 static LD_PRELOAD_ENVNAME_LITERAL: &[u8] = b"ld_preload_envname\0";
 static OBJDUMP_RPATH_PREFIX: &[u8] = b"objdump -x ";
 static OBJDUMP_RPATH_SUFFIX: &[u8] = b" | awk '/RPATH/ { print $2 }'";
@@ -179,8 +194,10 @@ const DIRENT64_NAME_OFFSET: usize =
     DIRENT64_RECLEN_OFFSET + core::mem::size_of::<u16>() + core::mem::size_of::<u8>();
 
 unsafe extern "C" {
+    static mut environ: *mut *mut u8;
     fn __errno_location() -> *mut c_int;
     fn getenv(name: *const u8) -> *mut u8;
+    fn setenv(name: *const u8, value: *const u8, overwrite: c_int) -> c_int;
     fn access(path: *const u8, mode: c_int) -> c_int;
     fn ioctl(fd: c_int, request: c_ulong, ...) -> c_int;
     fn perror(s: *const u8);
@@ -341,10 +358,88 @@ unsafe extern "C" {
     fn mcexec_init_worker_threads_create_bridge() -> c_int;
     fn mcexec_init_worker_threads_wait_bridge();
     fn mcexec_init_worker_threads_error_bridge(ret: c_int);
+    fn mcexec_process_thread_plan_flib_log_bridge(planned_nr_processes: c_int);
+    fn mcexec_dma_mmap_bridge() -> *mut c_void;
+    fn mcexec_dma_mlock_bridge(buf: *mut c_void) -> c_int;
+    fn mcexec_dma_mmap_failed_bridge() -> !;
+    fn mcexec_dma_mlock_failed_bridge() -> !;
+    fn mcexec_create_ppd_bridge() -> c_int;
+    fn mcexec_create_ppd_failed_bridge() -> !;
     fn mcexec_get_thp_disable_prctl_bridge() -> c_int;
     fn mcexec_numa_node_cpu_isset_bridge(node: c_int, cpu: c_int) -> c_int;
     fn mcexec_numa_local_cpu_log_bridge(cpu: c_int);
     fn mcexec_numa_node_cpu_log_bridge(cpu: c_int, node: c_int);
+    fn mcexec_main_get_cpu_bridge() -> c_int;
+    fn mcexec_main_get_nodes_bridge() -> c_int;
+    fn mcexec_main_no_cpu_bridge();
+    fn mcexec_main_no_numa_node_bridge();
+    fn mcexec_main_cpu_alloc_size_bridge(cpu_count: c_int) -> usize;
+    fn mcexec_main_alloc_nodes_error_bridge();
+    fn mcexec_main_publish_topology_bridge(
+        cpu_count: c_int,
+        node_count: c_int,
+        node_set_size: usize,
+        nodes: *mut c_void,
+    );
+    fn mcexec_main_numa_node_zero_bridge(nodes: *mut c_void, node_set_size: usize, node_id: c_int);
+    fn mcexec_main_node_cpu_exists_bridge(node_id: c_int, cpu: c_int) -> c_int;
+    fn mcexec_main_numa_node_set_cpu_bridge(
+        nodes: *mut c_void,
+        node_set_size: usize,
+        node_id: c_int,
+        cpu: c_int,
+    );
+    fn mcexec_partition_get_cpuset_bridge(
+        desc: *mut c_void,
+        nr_processes: c_int,
+        target_core: *mut c_int,
+        process_rank: *mut c_int,
+        mcexec_linux_numa: *mut c_int,
+        ikc_mapped: *mut c_int,
+    ) -> c_int;
+    fn mcexec_partition_get_cpuset_failed_bridge();
+    fn mcexec_partition_publish_cpu_rank_bridge(
+        desc: *mut c_void,
+        target_core: c_int,
+        process_rank: c_int,
+    );
+    fn mcexec_partition_publish_rank_bridge(desc: *mut c_void, process_rank: c_int);
+    fn mcexec_partition_rank_log_bridge(process_rank: c_int, target_core: c_int);
+    fn mcexec_partition_sched_setaffinity_bridge() -> c_int;
+    fn mcexec_partition_sched_setaffinity_warning_bridge();
+    fn mcexec_partition_debug_ikc_binding_bridge();
+    fn mcexec_partition_numa_run_bridge(mcexec_linux_numa: c_int) -> c_int;
+    fn mcexec_partition_numa_run_warning_bridge(mcexec_linux_numa: c_int);
+    fn mcexec_partition_debug_numa_binding_bridge();
+    fn mcexec_desc_publish_mpol_base_bridge(
+        desc: *mut c_void,
+        profile: c_int,
+        nr_processes: c_int,
+        flags: c_ulong,
+        threshold: c_ulong,
+        heap_extension: c_ulong,
+        pld_mpol_max: c_int,
+    );
+    fn mcexec_desc_apply_bind_nodes_bridge(desc: *mut c_void, nodes: *const u8);
+    fn mcexec_desc_ompi_policy_log_bridge(mpol: *const u8);
+    fn mcexec_desc_apply_ompi_policy_bridge(desc: *mut c_void, mode: c_int, nodemask_action: c_int);
+    fn mcexec_desc_mpol_log_bridge(desc: *const c_void);
+    fn mcexec_desc_publish_runtime_flags_bridge(
+        desc: *mut c_void,
+        enable_uti: c_int,
+        uti_thread_rank: c_int,
+        uti_use_last_cpu: c_int,
+        thp_disable: c_int,
+        straight_map: c_int,
+        straight_map_threshold: c_ulong,
+        enable_tofu: c_int,
+        mcexec_flags: c_ulong,
+    );
+    fn mcexec_main_publish_mcosid_bridge(new_mcosid: c_int);
+    fn mcexec_main_uti_unavailable_bridge(enable_uti: c_int) -> c_int;
+    fn mcexec_main_overlay_lock_init_bridge();
+    fn mcexec_main_load_desc_error_bridge(path: *const u8, ret: c_int);
+    fn mcexec_desc_clear_flags_bridge(desc: *mut c_void);
     fn mcexec_opendev_mcosid_bridge() -> c_int;
     fn mcexec_opendev_dev_bridge() -> *mut u8;
     fn mcexec_opendev_dev_size_bridge() -> usize;
@@ -381,6 +476,8 @@ unsafe extern "C" {
     fn mcexec_ld_preload_line_too_long_bridge();
     fn mcexec_ld_preload_setenv_failed_bridge();
     fn mcexec_ld_preload_debug_bridge(envbuf: *const u8);
+    fn mcexec_main_page_size_bridge() -> c_ulong;
+    fn mcexec_main_publish_page_altroot_bridge(page_size: c_ulong, altroot: *const u8);
     fn mcexec_create_worker_thread_alloc_bridge() -> *mut McexecThreadData;
     fn mcexec_create_worker_thread_alloc_error_bridge();
     fn mcexec_create_worker_thread_next_cpu_bridge() -> c_int;
@@ -595,6 +692,29 @@ unsafe extern "C" {
     fn mcexec_execve2_transfer_image_failed_bridge();
     fn mcexec_execve2_image_transferred_bridge();
     fn mcexec_execve2_close_exec_failed_bridge(ret: c_int);
+    fn mcexec_main_prepare_image_failed_bridge();
+    fn mcexec_main_flush_bridge();
+    fn mcexec_main_cmd_servers_init_bridge() -> c_int;
+    fn mcexec_main_worker_threads_failed_bridge(error: c_int);
+    fn mcexec_main_start_image_failed_bridge();
+    fn mcexec_flib_affinity_alloc_failed_bridge() -> !;
+    fn mcexec_flib_affinity_log_bridge(old_affinity: *const u8, new_affinity: *const u8);
+    fn mcexec_main_stack_parse_failed_bridge(parse_rc: c_int);
+    fn mcexec_main_stack_publish_bridge(
+        desc: *mut c_void,
+        cur: c_ulong,
+        max: c_ulong,
+        prem: c_long,
+    );
+    fn mcexec_desc_snapshot_rlimits_bridge(desc: *mut c_void);
+    fn mcexec_desc_publish_env_bridge(desc: *mut c_void, envs_len: c_int, envs: *mut u8);
+    fn mcexec_desc_publish_args_cpu_bridge(
+        desc: *mut c_void,
+        args_len: c_ulong,
+        args: *mut u8,
+        cpu: c_int,
+        vdso: c_int,
+    );
     fn mcexec_execve1_enable_vdso_bridge() -> c_int;
     fn mcexec_execve1_rlim_cur_bridge() -> c_ulong;
     fn mcexec_execve1_rlim_max_bridge() -> c_ulong;
@@ -612,6 +732,8 @@ unsafe extern "C" {
     fn mcexec_execve1_transfer_failed_bridge(filename: *const u8);
     fn mcexec_execve1_transfer_ok_bridge(filename: *const u8);
     fn mcexec_execve_invalid_phase_bridge();
+    fn mcexec_main_load_stack_rlimit_bridge(cur: *mut c_ulong, max: *mut c_ulong) -> c_int;
+    fn mcexec_main_reduce_stack_failed_bridge();
     fn mcexec_reduce_stack_newval_overflow_bridge();
     fn mcexec_reduce_stack_setenv_bridge(value: *const u8) -> c_int;
     fn mcexec_reduce_stack_setenv_failed_bridge();
@@ -631,6 +753,16 @@ unsafe extern "C" {
     fn mcexec_lookup_not_found_bridge(filename: *const u8);
     fn mcexec_lookup_success_bridge(path: *const u8);
     fn mcexec_add_env_list_invalid_bridge(add_string: *const u8);
+    fn mcexec_main_publish_args_bridge(argc: c_int, argv: *mut *mut u8);
+    fn mcexec_main_state_ptrs_bridge(state: *mut McexecMainStatePtrs);
+    fn mcexec_main_personality_bridge(argv: *mut *mut u8) -> c_int;
+    fn mcexec_main_next_option_bridge(argc: c_int, argv: *mut *mut u8) -> c_int;
+    fn mcexec_main_optarg_bridge() -> *mut u8;
+    fn mcexec_main_optind_bridge() -> c_int;
+    fn mcexec_main_invalid_option_bridge(opt: c_int, argv: *mut *mut u8);
+    fn mcexec_main_stack_debug_bridge(prem: c_long, max: c_long);
+    fn mcexec_main_thread_plan_error_bridge();
+    fn mcexec_main_bind_mount_bridge() -> c_int;
     fn exit(status: c_int) -> !;
 
     #[link_name = "fd"]
@@ -651,6 +783,33 @@ unsafe extern "C" {
     static mut MCEXEC_THREAD_DATA: *mut McexecThreadData;
     #[link_name = "fork_sync_top"]
     static mut MCEXEC_FORK_SYNC_TOP: *mut ForkSyncContainer;
+}
+
+#[repr(C)]
+struct McexecMainStatePtrs {
+    nr_processes: *mut c_int,
+    nr_threads: *mut c_int,
+    mpol_threshold: *mut c_ulong,
+    heap_extension: *mut c_ulong,
+    straight_map_threshold: *mut c_ulong,
+    stack_premap: *mut c_long,
+    stack_max: *mut c_long,
+    uti_thread_rank: *mut c_int,
+    mcexec_flags: *mut c_ulong,
+    mpol_bind_nodes: *mut *mut u8,
+    enable_uti: *mut c_int,
+    enable_vdso: *mut c_int,
+    profile: *mut c_int,
+    mpol_no_heap: *mut c_int,
+    mpol_no_stack: *mut c_int,
+    mpol_no_bss: *mut c_int,
+    mpol_shm_premap: *mut c_int,
+    no_bind_ikc_map: *mut c_int,
+    straight_map: *mut c_int,
+    uti_use_last_cpu: *mut c_int,
+    enable_tofu: *mut c_int,
+    rlim_cur: *mut c_ulong,
+    rlim_max: *mut c_ulong,
 }
 
 #[repr(C)]
@@ -1123,6 +1282,26 @@ pub unsafe extern "C" fn init_worker_threads(_fd: c_int) -> c_int {
 
     unsafe { mcexec_init_worker_threads_wait_bridge() };
     0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcexec_setup_dma_ppd_body() {
+    let mapped = unsafe { mcexec_dma_mmap_bridge() };
+    if mapped as isize == -1 {
+        unsafe { mcexec_dma_mmap_failed_bridge() };
+    }
+
+    unsafe {
+        MCEXEC_DMA_BUF = mapped as *mut u8;
+    }
+
+    if unsafe { mcexec_dma_mlock_bridge(mapped) } != 0 {
+        unsafe { mcexec_dma_mlock_failed_bridge() };
+    }
+
+    if unsafe { mcexec_create_ppd_bridge() } != 0 {
+        unsafe { mcexec_create_ppd_failed_bridge() };
+    }
 }
 
 #[no_mangle]
@@ -2188,6 +2367,47 @@ pub unsafe extern "C" fn act_execve_phase2(
     }
 
     unsafe { do_syscall_return(fd, cpu, 0, 0, 0, 0, 0) };
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcexec_finish_main_image_body(desc: *mut c_void) -> c_int {
+    if unsafe { ioctl(MCEXEC_FD, MCEXEC_UP_PREPARE_IMAGE, desc as c_ulong) } != 0 {
+        unsafe { mcexec_main_prepare_image_failed_bridge() };
+        return 1;
+    }
+
+    unsafe { print_desc(desc as *const c_void) };
+    if unsafe { transfer_image(MCEXEC_FD, desc) } < 0 {
+        unsafe { mcexec_execve2_transfer_image_failed_bridge() };
+        return -1;
+    }
+
+    let close_ret = unsafe { ioctl(MCEXEC_FD, MCEXEC_UP_CLOSE_EXEC, 0 as c_ulong) };
+    if close_ret != 0 {
+        unsafe { mcexec_execve2_close_exec_failed_bridge(close_ret) };
+        return 1;
+    }
+
+    unsafe { mcexec_main_flush_bridge() };
+    let cmd_rc = unsafe { mcexec_main_cmd_servers_init_bridge() };
+    if cmd_rc != 0 {
+        return cmd_rc;
+    }
+
+    unsafe { init_sigaction() };
+    let worker_rc = unsafe { init_worker_threads(MCEXEC_FD) };
+    if worker_rc != 0 {
+        unsafe { mcexec_main_worker_threads_failed_bridge(worker_rc) };
+        return 1;
+    }
+
+    if unsafe { ioctl(MCEXEC_FD, MCEXEC_UP_START_IMAGE, desc as c_ulong) } != 0 {
+        unsafe { mcexec_main_start_image_failed_bridge() };
+        return 1;
+    }
+
+    unsafe { mcexec_join_all_threads_body() };
     0
 }
 
@@ -3500,6 +3720,297 @@ pub struct EnvListEntry {
     next: *mut EnvListEntry,
 }
 
+unsafe fn main_read_i32(ptr: *mut c_int) -> c_int {
+    if ptr.is_null() {
+        0
+    } else {
+        unsafe { *ptr }
+    }
+}
+
+unsafe fn main_read_ulong(ptr: *mut c_ulong) -> c_ulong {
+    if ptr.is_null() {
+        0
+    } else {
+        unsafe { *ptr }
+    }
+}
+
+unsafe fn main_read_long(ptr: *mut c_long) -> c_long {
+    if ptr.is_null() {
+        0
+    } else {
+        unsafe { *ptr }
+    }
+}
+
+unsafe fn main_read_cstr_ptr(ptr: *mut *mut u8) -> *const u8 {
+    if ptr.is_null() {
+        core::ptr::null()
+    } else {
+        unsafe { *ptr as *const u8 }
+    }
+}
+
+unsafe fn main_write_ulong(ptr: *mut c_ulong, value: c_ulong) {
+    if !ptr.is_null() {
+        unsafe {
+            *ptr = value;
+        }
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcexec_main_body(argc: c_int, argv: *mut *mut u8) -> c_int {
+    let mut desc: *mut c_void = core::ptr::null_mut();
+    let mut envs_len: c_int = 0;
+    let mut envs: *mut u8 = core::ptr::null_mut();
+    let mut target_core: c_int = 0;
+    let mut shebang_argv: *mut *mut u8 = core::ptr::null_mut();
+    let mut mcosid: c_int = 0;
+    let mut extra_env: *mut EnvListEntry = core::ptr::null_mut();
+    let mut state: McexecMainStatePtrs = unsafe { core::mem::zeroed() };
+
+    unsafe {
+        mcexec_main_publish_args_bridge(argc, argv);
+        mcexec_init_page_altroot_body();
+    }
+
+    if unsafe { mcexec_main_personality_bridge(argv) } != 0 {
+        return 1;
+    }
+    if unsafe { mcexec_init_stack_limit_body(argv) } != 0 {
+        return 1;
+    }
+
+    unsafe {
+        mcexec_main_state_ptrs_bridge(&mut state);
+    }
+
+    loop {
+        let opt = unsafe { mcexec_main_next_option_bridge(argc, argv) };
+        if opt == -1 {
+            break;
+        }
+
+        match opt {
+            x if x == b'c' as c_int
+                || x == b'n' as c_int
+                || x == b't' as c_int
+                || x == b'M' as c_int
+                || x == b'h' as c_int
+                || x == b'S' as c_int
+                || x == b's' as c_int
+                || x == b'u' as c_int
+                || x == b'f' as c_int =>
+            {
+                let optarg = unsafe { mcexec_main_optarg_bridge() };
+                let rc = unsafe {
+                    mcexec_apply_option_result(
+                        opt,
+                        optarg as *const u8,
+                        &mut target_core,
+                        state.nr_processes,
+                        state.nr_threads,
+                        state.mpol_threshold,
+                        state.heap_extension,
+                        state.straight_map_threshold,
+                        state.stack_premap,
+                        state.stack_max,
+                        state.uti_thread_rank,
+                        state.mcexec_flags,
+                    )
+                };
+                if rc < 0 {
+                    unsafe { mcexec_main_invalid_option_bridge(opt, argv) };
+                    return 1;
+                }
+                if opt == b's' as c_int {
+                    unsafe {
+                        *__errno_location() = 0;
+                        mcexec_main_stack_debug_bridge(
+                            main_read_long(state.stack_premap),
+                            main_read_long(state.stack_max),
+                        );
+                    }
+                }
+            }
+            x if x == b'm' as c_int => {
+                if !state.mpol_bind_nodes.is_null() {
+                    unsafe {
+                        *state.mpol_bind_nodes = mcexec_main_optarg_bridge();
+                    }
+                }
+            }
+            x if x == b'e' as c_int => {
+                if unsafe { mcexec_print_usage_add_envs_bridge() } != 0 {
+                    let optarg = unsafe { mcexec_main_optarg_bridge() };
+                    unsafe {
+                        mcexec_add_env_list_body(&mut extra_env, optarg);
+                    }
+                } else {
+                    unsafe { mcexec_main_invalid_option_bridge(opt, argv) };
+                    return 1;
+                }
+            }
+            0 => {}
+            _ => {
+                unsafe { mcexec_main_invalid_option_bridge(opt, argv) };
+                return 1;
+            }
+        }
+    }
+
+    let mut optind = unsafe { mcexec_main_optind_bridge() };
+    let candidate = if !argv.is_null() && optind < argc {
+        unsafe { *argv.add(optind as usize) as *const u8 }
+    } else {
+        core::ptr::null()
+    };
+    let mut planned_heap_extension = unsafe { main_read_ulong(state.heap_extension) };
+    let mut planned_mcosid = mcosid;
+    let mut planned_optind = optind;
+    if unsafe {
+        mcexec_post_options_plan_result(
+            optind,
+            argc,
+            candidate,
+            main_read_ulong(state.heap_extension),
+            MCEXEC_PAGE_SIZE,
+            mcosid,
+            &mut planned_heap_extension,
+            &mut planned_mcosid,
+            &mut planned_optind,
+        )
+    } < 0
+    {
+        unsafe {
+            print_usage(argv);
+            exit(1);
+        }
+    }
+
+    unsafe {
+        main_write_ulong(state.heap_extension, planned_heap_extension);
+    }
+    mcosid = planned_mcosid;
+    optind = planned_optind;
+
+    if unsafe { mcexec_post_option_setup_body(mcosid, main_read_i32(state.enable_uti)) } != 0 {
+        unsafe { exit(1) };
+    }
+
+    let add_envs_option = unsafe { mcexec_print_usage_add_envs_bridge() };
+    if add_envs_option == 0 {
+        unsafe {
+            mcexec_collect_default_envs_body(&mut envs_len, &mut envs);
+        }
+    }
+
+    if unsafe { mcexec_main_bind_mount_bridge() } != 0 {
+        return 1;
+    }
+
+    let argv_tail = unsafe { argv.add(optind as usize) };
+    if unsafe { mcexec_load_main_desc_body(*argv_tail, &mut desc, &mut shebang_argv) } != 0 {
+        return 1;
+    }
+
+    if add_envs_option != 0 {
+        unsafe {
+            mcexec_collect_main_envs_body(&mut extra_env, &mut envs_len, &mut envs);
+        }
+    }
+
+    unsafe {
+        mcexec_prepare_main_desc_body(
+            desc,
+            argv_tail,
+            shebang_argv,
+            envs_len,
+            envs,
+            target_core,
+            main_read_i32(state.enable_vdso),
+        );
+    }
+
+    if unsafe {
+        mcexec_apply_main_stack_body(
+            desc,
+            getenv(MCKERNEL_RLIMIT_STACK_ENV.as_ptr()) as *const u8,
+            main_read_long(state.stack_max),
+            main_read_long(state.stack_premap),
+            state.rlim_cur,
+            state.rlim_max,
+        )
+    } != 0
+    {
+        return 1;
+    }
+
+    if unsafe { mcexec_setup_cpu_topology_body() } != 0 {
+        return 1;
+    }
+
+    if unsafe {
+        mcexec_plan_process_threads_result(
+            state.nr_processes,
+            main_read_i32(state.nr_threads),
+            MCEXEC_NCPU,
+            core::ptr::addr_of_mut!(MCEXEC_N_THREADS),
+        )
+    } < 0
+    {
+        unsafe { mcexec_main_thread_plan_error_bridge() };
+        return EINVAL;
+    }
+
+    unsafe {
+        mcexec_setup_dma_ppd_body();
+    }
+
+    if unsafe {
+        mcexec_apply_partitioned_cpu_body(
+            desc,
+            main_read_i32(state.nr_processes),
+            &mut target_core,
+            main_read_i32(state.no_bind_ikc_map),
+        )
+    } != 0
+    {
+        return 1;
+    }
+
+    unsafe {
+        mcexec_apply_desc_runtime_body(
+            desc,
+            main_read_i32(state.profile),
+            main_read_i32(state.nr_processes),
+            main_read_i32(state.mpol_no_heap),
+            main_read_i32(state.mpol_no_stack),
+            main_read_i32(state.mpol_no_bss),
+            main_read_i32(state.mpol_shm_premap),
+            main_read_ulong(state.mpol_threshold),
+            main_read_ulong(state.heap_extension),
+            main_read_cstr_ptr(state.mpol_bind_nodes),
+            MPOL_DEFAULT,
+            MPOL_INTERLEAVE,
+            MPOL_BIND,
+            MPOL_PREFERRED,
+            PLD_MPOL_MAX,
+            main_read_i32(state.enable_uti),
+            main_read_i32(state.uti_thread_rank),
+            main_read_i32(state.uti_use_last_cpu),
+            main_read_i32(state.straight_map),
+            main_read_ulong(state.straight_map_threshold),
+            main_read_i32(state.enable_tofu),
+            main_read_ulong(state.mcexec_flags),
+        );
+    }
+
+    unsafe { mcexec_finish_main_image_body(desc) }
+}
+
 #[repr(C)]
 pub struct McexecThreadData {
     next: *mut McexecThreadData,
@@ -3727,6 +4238,109 @@ pub unsafe extern "C" fn mcexec_numa_node_set_body(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn mcexec_setup_cpu_topology_body() -> c_int {
+    let cpu_count = unsafe { mcexec_main_get_cpu_bridge() };
+    if cpu_count <= 0 {
+        unsafe { mcexec_main_no_cpu_bridge() };
+        return 1;
+    }
+
+    let node_count = unsafe { mcexec_main_get_nodes_bridge() };
+    if node_count <= 0 {
+        unsafe { mcexec_main_no_numa_node_bridge() };
+        return 1;
+    }
+
+    let node_set_size = unsafe { mcexec_main_cpu_alloc_size_bridge(cpu_count) };
+    let alloc_size = node_set_size.wrapping_mul(node_count as usize);
+    let nodes = unsafe { malloc(alloc_size) as *mut c_void };
+    if nodes.is_null() {
+        unsafe { mcexec_main_alloc_nodes_error_bridge() };
+        return 1;
+    }
+
+    let mut node_id = 0;
+    while node_id < node_count {
+        unsafe { mcexec_main_numa_node_zero_bridge(nodes, node_set_size, node_id) };
+        let mut cpu = 0;
+        while cpu < cpu_count {
+            if unsafe { mcexec_main_node_cpu_exists_bridge(node_id, cpu) } != 0 {
+                unsafe { mcexec_main_numa_node_set_cpu_bridge(nodes, node_set_size, node_id, cpu) };
+            }
+            cpu += 1;
+        }
+        node_id += 1;
+    }
+
+    unsafe {
+        mcexec_main_publish_topology_bridge(cpu_count, node_count, node_set_size, nodes);
+    }
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcexec_apply_partitioned_cpu_body(
+    desc: *mut c_void,
+    nr_processes: c_int,
+    target_core: *mut c_int,
+    no_bind_ikc_map: c_int,
+) -> c_int {
+    if desc.is_null() || target_core.is_null() {
+        return 1;
+    }
+
+    if unsafe { *target_core } != 0 || nr_processes <= 0 {
+        return 0;
+    }
+
+    let mut mcexec_linux_numa = 0;
+    let mut ikc_mapped = 0;
+    let mut process_rank = -1;
+    if unsafe {
+        mcexec_partition_get_cpuset_bridge(
+            desc,
+            nr_processes,
+            target_core,
+            &mut process_rank,
+            &mut mcexec_linux_numa,
+            &mut ikc_mapped,
+        )
+    } != 0
+    {
+        unsafe { mcexec_partition_get_cpuset_failed_bridge() };
+        return 1;
+    }
+
+    let target = unsafe { *target_core };
+    unsafe {
+        mcexec_partition_publish_cpu_rank_bridge(desc, target, process_rank);
+    }
+
+    let rank_env = unsafe { getenv(FLIB_RANK_ON_NODE_ENV.as_ptr()) };
+    if !rank_env.is_null() {
+        process_rank = unsafe { strtol(rank_env as *const u8, core::ptr::null_mut(), 10) as c_int };
+        unsafe {
+            mcexec_partition_publish_rank_bridge(desc, process_rank);
+            mcexec_partition_rank_log_bridge(process_rank, target);
+        }
+    }
+
+    if ikc_mapped != 0 && no_bind_ikc_map == 0 {
+        if unsafe { mcexec_partition_sched_setaffinity_bridge() } < 0 {
+            unsafe { mcexec_partition_sched_setaffinity_warning_bridge() };
+        } else {
+            unsafe { mcexec_partition_debug_ikc_binding_bridge() };
+        }
+    } else if unsafe { mcexec_partition_numa_run_bridge(mcexec_linux_numa) } < 0 {
+        unsafe { mcexec_partition_numa_run_warning_bridge(mcexec_linux_numa) };
+    } else {
+        unsafe { mcexec_partition_debug_numa_binding_bridge() };
+    }
+
+    0
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn mcexec_numa_all_body(nodemask: *mut c_ulong) {
     unsafe {
         core::ptr::write_bytes(nodemask as *mut u8, 0, PLD_PROCESS_NUMA_MASK_BITS / 8);
@@ -3789,6 +4403,48 @@ pub unsafe extern "C" fn mcexec_opendev_body() -> c_int {
     }
 
     opened
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcexec_post_option_setup_body(
+    new_mcosid: c_int,
+    enable_uti: c_int,
+) -> c_int {
+    unsafe {
+        mcexec_main_publish_mcosid_bridge(new_mcosid);
+    }
+
+    if unsafe { mcexec_opendev_body() } == -1 {
+        return 1;
+    }
+
+    if unsafe { mcexec_main_uti_unavailable_bridge(enable_uti) } != 0 {
+        return 1;
+    }
+
+    unsafe {
+        mcexec_main_overlay_lock_init_bridge();
+        mcexec_apply_flib_affinity_body();
+        mcexec_ld_preload_init_body();
+    }
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcexec_load_main_desc_body(
+    path: *mut u8,
+    desc_p: *mut *mut c_void,
+    shebang_argv_p: *mut *mut *mut u8,
+) -> c_int {
+    let ret = unsafe { load_elf_desc_shebang(path, desc_p, shebang_argv_p, 1) };
+    if ret != 0 {
+        unsafe { mcexec_main_load_desc_error_bridge(path as *const u8, ret) };
+        return 1;
+    }
+
+    let desc = unsafe { *desc_p };
+    unsafe { mcexec_desc_clear_flags_bridge(desc) };
+    0
 }
 
 unsafe fn cstr_bytes<'a>(ptr: *const u8) -> &'a [u8] {
@@ -4110,6 +4766,27 @@ unsafe fn write_nul(dst: *mut u8) {
     unsafe {
         *dst = 0;
     }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcexec_init_stack_limit_body(argv: *mut *mut u8) -> c_int {
+    const MCEXEC_MAX_STACK_SIZE: u64 = 16 * 1024 * 1024;
+
+    let mut cur = 0u64;
+    let mut max = 0u64;
+    if unsafe { mcexec_main_load_stack_rlimit_bridge(&mut cur, &mut max) } != 0 {
+        return 1;
+    }
+
+    if cur > MCEXEC_MAX_STACK_SIZE {
+        unsafe {
+            mcexec_reduce_stack_body(cur, max, argv);
+            mcexec_main_reduce_stack_failed_bridge();
+        }
+        return 1;
+    }
+
+    0
 }
 
 #[no_mangle]
@@ -4977,6 +5654,62 @@ pub unsafe extern "C" fn mcexec_destroy_local_environ_result(local_env: *mut *mu
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn mcexec_collect_main_envs_body(
+    extra_env_headp: *mut *mut EnvListEntry,
+    envs_len: *mut c_int,
+    envs: *mut *mut u8,
+) {
+    if extra_env_headp.is_null() || envs_len.is_null() || envs.is_null() {
+        return;
+    }
+
+    let envp = unsafe { environ };
+    if !envp.is_null() {
+        let mut idx = 0usize;
+        while unsafe { !(*envp.add(idx)).is_null() } {
+            unsafe {
+                mcexec_add_env_list_body(extra_env_headp, *envp.add(idx));
+            }
+            idx += 1;
+        }
+    }
+
+    let local_env = unsafe { mcexec_create_local_environ_result(*extra_env_headp) };
+    let len = unsafe { flatten_strings(core::ptr::null_mut(), local_env, envs) };
+    unsafe {
+        *envs_len = len;
+        mcexec_destroy_local_environ_result(local_env);
+        mcexec_destroy_env_list_result(*extra_env_headp);
+        *extra_env_headp = core::ptr::null_mut();
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcexec_collect_default_envs_body(
+    envs_len: *mut c_int,
+    envs: *mut *mut u8,
+) {
+    if envs_len.is_null() || envs.is_null() {
+        return;
+    }
+
+    let len = unsafe { flatten_strings(core::ptr::null_mut(), environ, envs) };
+    unsafe {
+        *envs_len = len;
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcexec_init_page_altroot_body() {
+    let page_size = unsafe { mcexec_main_page_size_bridge() };
+    let mut altroot = unsafe { getenv(MCEXEC_ALT_ROOT_ENV.as_ptr()) };
+    if altroot.is_null() {
+        altroot = MCEXEC_DEFAULT_ALTROOT.as_ptr() as *mut u8;
+    }
+    unsafe { mcexec_main_publish_page_altroot_bridge(page_size, altroot as *const u8) };
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn mcexec_shift_flib_affinity_result(
     affinity: *const u8,
     shift: i32,
@@ -5027,6 +5760,29 @@ pub unsafe extern "C" fn mcexec_shift_flib_affinity_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn mcexec_apply_flib_affinity_body() {
+    let current = unsafe { getenv(FLIB_AFFINITY_ON_PROCESS_ENV.as_ptr()) };
+    if current.is_null() {
+        return;
+    }
+
+    let shifted = unsafe { mcexec_shift_flib_affinity_result(current as *const u8, 12) };
+    if shifted.is_null() {
+        unsafe { mcexec_flib_affinity_alloc_failed_bridge() };
+    }
+
+    unsafe {
+        mcexec_flib_affinity_log_bridge(current as *const u8, shifted as *const u8);
+        setenv(
+            FLIB_AFFINITY_ON_PROCESS_ENV.as_ptr(),
+            shifted as *const u8,
+            1,
+        );
+        free(shifted);
+    }
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn mcexec_parse_rlimit_stack_env_result(
     env: *const u8,
     cur: *mut u64,
@@ -5057,6 +5813,40 @@ pub unsafe extern "C" fn mcexec_parse_rlimit_stack_env_result(
     unsafe {
         *cur = cur_value;
         *max = max_value;
+    }
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcexec_apply_main_stack_body(
+    desc: *mut c_void,
+    env: *const u8,
+    stack_max: c_long,
+    stack_premap: c_long,
+    rlim_cur: *mut c_ulong,
+    rlim_max: *mut c_ulong,
+) -> c_int {
+    if rlim_cur.is_null() || rlim_max.is_null() {
+        return 1;
+    }
+
+    if !env.is_null() {
+        let mut saved_cur = 0u64;
+        let mut saved_max = 0u64;
+        let parse_rc =
+            unsafe { mcexec_parse_rlimit_stack_env_result(env, &mut saved_cur, &mut saved_max) };
+        if parse_rc != 0 {
+            unsafe { mcexec_main_stack_parse_failed_bridge(parse_rc) };
+            return 1;
+        }
+        unsafe {
+            mcexec_apply_saved_stack_limit_result(saved_cur, saved_max, rlim_cur, rlim_max);
+        }
+    }
+
+    unsafe {
+        mcexec_apply_stack_max_result(stack_max, rlim_cur, rlim_max);
+        mcexec_main_stack_publish_bridge(desc, *rlim_cur, *rlim_max, stack_premap);
     }
     0
 }
@@ -5202,6 +5992,47 @@ pub unsafe extern "C" fn flatten_strings(
     flat: *mut *mut u8,
 ) -> i32 {
     unsafe { mcexec_flatten_strings_result(pre_strings, strings, flat) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcexec_prepare_main_desc_body(
+    desc: *mut c_void,
+    argv_tail: *mut *mut u8,
+    shebang_argv: *mut *mut u8,
+    envs_len: c_int,
+    envs: *mut u8,
+    target_core: c_int,
+    enable_vdso: c_int,
+) {
+    if desc.is_null() {
+        return;
+    }
+
+    unsafe {
+        mcexec_desc_snapshot_rlimits_bridge(desc);
+        mcexec_desc_publish_env_bridge(desc, envs_len, envs);
+    }
+
+    let mut shebang_argv_flat: *mut u8 = core::ptr::null_mut();
+    if !shebang_argv.is_null() {
+        unsafe {
+            flatten_strings(core::ptr::null_mut(), shebang_argv, &mut shebang_argv_flat);
+        }
+    }
+
+    let mut args: *mut u8 = core::ptr::null_mut();
+    let args_len = unsafe { flatten_strings(shebang_argv_flat, argv_tail, &mut args) };
+    unsafe {
+        mcexec_desc_publish_args_cpu_bridge(
+            desc,
+            args_len as c_ulong,
+            args,
+            target_core,
+            enable_vdso,
+        );
+        free(shebang_argv as *mut u8);
+        free(shebang_argv_flat);
+    }
 }
 
 #[no_mangle]
@@ -5460,6 +6291,51 @@ pub extern "C" fn mcexec_default_thread_count_result(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn mcexec_plan_process_threads_result(
+    nr_processes: *mut c_int,
+    nr_threads: c_int,
+    ncpu: c_int,
+    planned_threads: *mut c_int,
+) -> c_int {
+    if nr_processes.is_null() || planned_threads.is_null() {
+        return -EINVAL;
+    }
+
+    let mut processes = unsafe { *nr_processes };
+    let flib_processes = unsafe { getenv(FLIB_NUM_PROCESS_ON_NODE_ENV.as_ptr()) };
+    if !flib_processes.is_null() && processes == 0 {
+        processes =
+            unsafe { strtol(flib_processes as *const u8, core::ptr::null_mut(), 10) as c_int };
+        unsafe {
+            *nr_processes = processes;
+            mcexec_process_thread_plan_flib_log_bridge(processes);
+        }
+    }
+
+    if processes > ncpu {
+        return -EINVAL;
+    }
+
+    let omp_threads = unsafe { getenv(OMP_NUM_THREADS_ENV.as_ptr()) };
+    let planned = if omp_threads.is_null() {
+        mcexec_default_thread_count_result(nr_threads, 0, 0, processes, ncpu)
+    } else {
+        mcexec_default_thread_count_result(
+            nr_threads,
+            1,
+            unsafe { strtol(omp_threads as *const u8, core::ptr::null_mut(), 10) as c_int },
+            processes,
+            ncpu,
+        )
+    };
+
+    unsafe {
+        *planned_threads = planned;
+    }
+    0
+}
+
+#[no_mangle]
 pub extern "C" fn mcexec_mpol_flags_result(
     no_heap: i32,
     no_stack: i32,
@@ -5524,6 +6400,91 @@ pub unsafe extern "C" fn mcexec_ompi_mpol_policy_result(
         *nodemask_action = action;
     }
     1
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn mcexec_apply_desc_runtime_body(
+    desc: *mut c_void,
+    profile: c_int,
+    nr_processes: c_int,
+    mpol_no_heap: c_int,
+    mpol_no_stack: c_int,
+    mpol_no_bss: c_int,
+    mpol_shm_premap: c_int,
+    mpol_threshold: c_ulong,
+    heap_extension: c_ulong,
+    mpol_bind_nodes: *const u8,
+    mpol_default: c_int,
+    mpol_interleave: c_int,
+    mpol_bind: c_int,
+    mpol_preferred: c_int,
+    pld_mpol_max: c_int,
+    enable_uti: c_int,
+    uti_thread_rank: c_int,
+    uti_use_last_cpu: c_int,
+    straight_map: c_int,
+    straight_map_threshold: c_ulong,
+    enable_tofu: c_int,
+    mcexec_flags: c_ulong,
+) {
+    if desc.is_null() {
+        return;
+    }
+
+    let flags = mcexec_mpol_flags_result(mpol_no_heap, mpol_no_stack, mpol_no_bss, mpol_shm_premap)
+        as c_ulong;
+    unsafe {
+        mcexec_desc_publish_mpol_base_bridge(
+            desc,
+            profile,
+            nr_processes,
+            flags,
+            mpol_threshold,
+            heap_extension,
+            pld_mpol_max,
+        );
+    }
+
+    if !mpol_bind_nodes.is_null() {
+        unsafe { mcexec_desc_apply_bind_nodes_bridge(desc, mpol_bind_nodes) };
+    } else {
+        let mpol = unsafe { getenv(OMPI_MCA_PLE_MEMORY_POLICY_ENV.as_ptr()) };
+        if !mpol.is_null() {
+            let mut mode = 0;
+            let mut nodemask_action = MPOL_NODEMASK_NONE;
+            unsafe { mcexec_desc_ompi_policy_log_bridge(mpol as *const u8) };
+            if unsafe {
+                mcexec_ompi_mpol_policy_result(
+                    mpol as *const u8,
+                    mpol_default,
+                    mpol_interleave,
+                    mpol_bind,
+                    mpol_preferred,
+                    &mut mode,
+                    &mut nodemask_action,
+                )
+            } != 0
+            {
+                unsafe { mcexec_desc_apply_ompi_policy_bridge(desc, mode, nodemask_action) };
+            }
+            unsafe { mcexec_desc_mpol_log_bridge(desc as *const c_void) };
+        }
+    }
+
+    let thp_disable = unsafe { mcexec_get_thp_disable_body() };
+    unsafe {
+        mcexec_desc_publish_runtime_flags_bridge(
+            desc,
+            enable_uti,
+            uti_thread_rank,
+            uti_use_last_cpu,
+            thp_disable,
+            straight_map,
+            straight_map_threshold,
+            enable_tofu,
+            mcexec_flags,
+        );
+    }
 }
 
 #[no_mangle]
