@@ -16,7 +16,8 @@ Options:
   --skip-deps           Do not install OS packages.
   --skip-rust           Do not install or switch Rust nightly.
   --skip-ihk-patch      Do not apply the local IHK compatibility patch.
-  --module-load-smoke   After build, load/unload Rust-linked IHK modules.
+  --module-load-smoke   After build, load/unload the C IHK host modules and
+                        Rust-linked mcctrl module.
   --skip-source-retirement-audit
                         Skip the active rust-source-retirement.txt coverage gate.
   --source-retirement-final
@@ -35,10 +36,17 @@ Options:
   --boot-cpus LIST      CPU list passed to mcreboot.sh -c. Default: 1
   --boot-mem SPEC       Memory passed to mcreboot.sh -m. Default: 512M@0
   --trampoline-phys PA  Expert-only: pass pre-reserved PA to mcreboot.sh.
+  --boot-timeout SEC    Wait for RUNNING state and Rust boot markers. Default: 60
   --smoke-timeout SEC   Watchdog for each V10 smoke command. Default: 8
   --trace-smoke         Run V10 smoke commands under strace when available.
   --verbose-smoke       Enable mcexec debug output and full smoke logs.
   -h, --help            Show this help.
+
+Environment overrides:
+  KERNEL_DIR            Host kernel build tree. Defaults to the running
+                        kernel's /lib/modules/.../build directory.
+  RUST_TOOLCHAIN        rustup name for the pinned compiler. Default:
+                        nightly-2026-02-19 (rustc c04308580).
 
 Examples:
   scripts/rocky-rust-validation.sh
@@ -55,8 +63,11 @@ BOOT_CPUS=1
 BOOT_MEM=512M@0
 TRAMPOLINE_PHYS="${IHK_TRAMPOLINE_PHYS:-}"
 SMOKE_TIMEOUT=8
+BOOT_TIMEOUT=60
 TRACE_SMOKE=0
 VERBOSE_SMOKE=0
+RUST_TOOLCHAIN="${RUST_TOOLCHAIN:-nightly-2026-02-19}"
+EXPECTED_RUSTC_VERSION='rustc 1.95.0-nightly (c04308580 2026-02-18)'
 SMOKE_LOG_TAIL_LINES="${SMOKE_LOG_TAIL_LINES:-80}"
 STRACE_TAIL_LINES="${STRACE_TAIL_LINES:-40}"
 DMESG_TAIL_LINES="${DMESG_TAIL_LINES:-40}"
@@ -73,6 +84,8 @@ SOURCE_RETIREMENT_AUDIT=1
 SOURCE_RETIREMENT_FINAL=0
 ASSUME_YES=0
 UNSAFE_HOST_BOOT=0
+BOOT_SHUTDOWN_NEEDED=0
+BOOT_RESTORE_SELINUX=0
 
 while [ "$#" -gt 0 ]; do
 	case "$1" in
@@ -146,6 +159,10 @@ while [ "$#" -gt 0 ]; do
 			TRAMPOLINE_PHYS="${2:?missing value for --trampoline-phys}"
 			shift 2
 			;;
+		--boot-timeout)
+			BOOT_TIMEOUT="${2:?missing value for --boot-timeout}"
+			shift 2
+			;;
 		--smoke-timeout)
 			SMOKE_TIMEOUT="${2:?missing value for --smoke-timeout}"
 			shift 2
@@ -170,6 +187,13 @@ while [ "$#" -gt 0 ]; do
 	esac
 done
 
+for numeric_option in "$JOBS" "$BOOT_TIMEOUT" "$SMOKE_TIMEOUT"; do
+	if [[ ! "$numeric_option" =~ ^[1-9][0-9]*$ ]]; then
+		echo "error: --jobs, --boot-timeout, and --smoke-timeout require positive integers." >&2
+		exit 2
+	fi
+done
+
 if [ "$(id -u)" -eq 0 ]; then
 	echo "error: run this script as a normal user, not root." >&2
 	echo "It uses sudo only for package install, cmake install, and boot commands." >&2
@@ -182,7 +206,9 @@ if [ "$DO_INSTALL" -eq 0 ] && [ "$BOOT_SMOKE" -eq 1 ]; then
 fi
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-KERNEL_DIR="/lib/modules/$(uname -r)/build"
+KERNEL_DIR="${KERNEL_DIR:-/lib/modules/$(uname -r)/build}"
+KERNEL_RELEASE=
+BOOT_DEVICE_OWNER="$(id -un)"
 
 say() {
 	printf '\n==> %s\n' "$*"
@@ -201,11 +227,13 @@ install_deps() {
 	sudo dnf config-manager --set-enabled powertools >/dev/null 2>&1 || \
 		sudo dnf config-manager --set-enabled crb >/dev/null 2>&1 || true
 
-		sudo dnf install -y \
-			gcc gcc-c++ make cmake git tar patch diffutils which curl \
-			"kernel-devel-$(uname -r)" "kernel-headers-$(uname -r)" \
-			elfutils-libelf-devel numactl-devel rpm-build binutils-devel systemd-devel \
-			zlib-devel openssl-devel bc bison flex perl dwarves lsof
+	sudo dnf install -y \
+		gcc gcc-c++ make cmake git tar patch diffutils which curl file findutils \
+		"kernel-devel-$(uname -r)" "kernel-headers-$(uname -r)" \
+		elfutils-libelf-devel numactl-devel rpm-build binutils-devel systemd-devel \
+		zlib-devel openssl-devel bc bison flex perl dwarves lsof gzip xz \
+		python3 pkgconf-pkg-config util-linux kmod procps-ng hostname \
+		libselinux-utils shadow-utils sudo
 }
 
 ensure_kernel_headers() {
@@ -221,6 +249,17 @@ ensure_kernel_headers() {
 		echo "error: $KERNEL_DIR does not look like a kernel build tree." >&2
 		exit 1
 	fi
+
+	if [ -s "$KERNEL_DIR/include/config/kernel.release" ]; then
+		KERNEL_RELEASE="$(tr -d '[:space:]' <"$KERNEL_DIR/include/config/kernel.release")"
+	else
+		KERNEL_RELEASE="$(make -s -C "$KERNEL_DIR" kernelrelease)"
+	fi
+	if [[ ! "$KERNEL_RELEASE" =~ ^[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+		echo "error: could not derive a valid kernel release from $KERNEL_DIR: $KERNEL_RELEASE" >&2
+		exit 1
+	fi
+	echo "Kernel build release: $KERNEL_RELEASE"
 }
 
 ensure_libuedev() {
@@ -255,15 +294,38 @@ ensure_rust() {
 	# shellcheck disable=SC1091
 	[ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
 
-	rustup toolchain install nightly
-	rustup default nightly
+	rustup toolchain install "$RUST_TOOLCHAIN" --profile minimal
+	export RUSTUP_TOOLCHAIN="$RUST_TOOLCHAIN"
 
-	if ! rustc --version | grep -q nightly; then
-		echo "error: rustc is not nightly after rustup setup." >&2
-		rustc --version >&2 || true
+	verify_rustc
+}
+
+verify_rustc() {
+	local actual
+	actual="$(rustc --version)"
+	if [ "$actual" != "$EXPECTED_RUSTC_VERSION" ]; then
+		echo "error: Rust validation requires the pinned compiler." >&2
+		echo "expected: $EXPECTED_RUSTC_VERSION" >&2
+		echo "actual:   $actual" >&2
 		exit 1
 	fi
-	rustc --version
+	echo "$actual"
+}
+
+record_environment() {
+	say "Recording Rocky/RHEL-family validation provenance"
+	cat /etc/os-release
+	uname -a
+	rustc -Vv
+	printf 'kernel_dir=%s\n' "$KERNEL_DIR"
+	printf 'kernel_release=%s\n' "$KERNEL_RELEASE"
+	printf 'boot_device_owner=%s\n' "$BOOT_DEVICE_OWNER"
+	if command -v rpm >/dev/null 2>&1; then
+		rpm -qf "$KERNEL_DIR/Makefile" ||
+			echo "Kernel build tree is not owned by an installed RPM: $KERNEL_DIR"
+	fi
+	git -C "$ROOT_DIR" rev-parse HEAD
+	git -C "$ROOT_DIR" submodule status --recursive
 }
 
 update_submodules() {
@@ -315,8 +377,26 @@ configure_and_build() {
 		-DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
 		-DBUILD_TARGET=smp-x86 \
 		-DENABLE_RUST_KERNEL=ON \
+		-DENABLE_RUST_IHK_MODULE_HELPERS=ON \
+		-DENABLE_RUST_USER_TOOLS=ON \
 		-DCMAKE_INSTALL_PREFIX="$PREFIX" \
+		-DUNAME_R="$KERNEL_RELEASE" \
 		-DKERNEL_DIR="$KERNEL_DIR"
+
+	local cache_uname
+	local cache_kernel_dir
+	cache_uname="$(awk -F= '$1 ~ /^UNAME_R:/ { value = $2 } END { print value }' \
+		"$BUILD_DIR/CMakeCache.txt")"
+	cache_kernel_dir="$(awk -F= '$1 ~ /^KERNEL_DIR:/ { value = $2 } END { print value }' \
+		"$BUILD_DIR/CMakeCache.txt")"
+	if [ "$cache_uname" != "$KERNEL_RELEASE" ] ||
+		[ "$cache_kernel_dir" != "$KERNEL_DIR" ]
+	then
+		echo "error: CMake kernel provenance does not match the selected build tree." >&2
+		echo "expected UNAME_R=$KERNEL_RELEASE KERNEL_DIR=$KERNEL_DIR" >&2
+		echo "cached   UNAME_R=$cache_uname KERNEL_DIR=$cache_kernel_dir" >&2
+		exit 1
+	fi
 
 	say "Building McKernel, host modules, and smoke-test user tools"
 	cmake --build "$BUILD_DIR" \
@@ -325,17 +405,31 @@ configure_and_build() {
 		ihkconfig ihkosctl ihkmond \
 		-j"$JOBS"
 
+	say "Building deterministic mcexec userspace workload"
+	"${CC:-cc}" -O2 -std=c11 -Wall -Wextra -Werror \
+		"$ROOT_DIR/scripts/smoke/mcexec-rust-smoke.c" \
+		-o "$BUILD_DIR/mcexec-rust-smoke"
+
 	check_rust_kernel_context_no_simd
+	check_rust_artifact_linkage
 }
 
 source_retirement_audit() {
-	say "Auditing strict Rust source retirement tracker"
+	say "Auditing Rust-selected tree with exact pinned-IHK C profile exemptions"
 
 	local args=(
 		--repo "$ROOT_DIR"
 		--tracker "$ROOT_DIR/rust-source-retirement.txt"
 		--build-dir "$BUILD_DIR"
 		--fail-on-retired-compiled-c
+		--fail-on-stale-tracker-row
+		--allow-stale-tracker-row ihk/linux/core/abi_checks.c
+		--allow-compiled-source ihk/ikc/linux.c
+		--allow-compiled-source ihk/ikc/master.c
+		--allow-compiled-source ihk/ikc/queue.c
+		--allow-compiled-source ihk/linux/core/mem_alloc.c
+		--allow-compiled-source ihk/linux/core/mikc.c
+		--allow-compiled-source ihk/linux/core/mm.c
 	)
 
 	if [ "$SOURCE_RETIREMENT_FINAL" -eq 1 ]; then
@@ -351,14 +445,12 @@ source_retirement_audit() {
 }
 
 check_rust_kernel_context_no_simd() {
-	say "Checking Rust kernel-context objects for SIMD instructions"
+	say "Checking recorded Rust kernel/module-context objects for SIMD instructions"
 	need_cmd objdump
 
 	local obj
 	for obj in \
 		"$BUILD_DIR/kernel/rust/mckernel_rust.o" \
-		"$BUILD_DIR/ihk/linux/core/rust/core_helpers.o" \
-		"$BUILD_DIR/ihk/linux/driver/smp/rust/smp_driver_helpers.o" \
 		"$BUILD_DIR/executer/kernel/mcctrl/rust/mcctrl_helpers.o"
 	do
 		if [ ! -f "$obj" ]; then
@@ -371,10 +463,160 @@ check_rust_kernel_context_no_simd() {
 			grep -Ei '%(xmm|ymm|zmm|mm)[0-9]|[[:space:]](movaps|movups|movdqa|movdqu|xorps|xorpd|pshuf[^[:space:]]*|padd[^[:space:]]*|pand[^[:space:]]*|pxor|popcnt|xsave[^[:space:]]*|fxsave[^[:space:]]*)[[:space:]]' || true)"
 		if [ -n "$hits" ]; then
 			echo "error: SIMD-like instructions found in Rust kernel-context object: $obj" >&2
-			printf '%s\n' "$hits" | head -n 20 >&2
+			printf '%s\n' "$hits" | awk 'NR <= 20' >&2
 			exit 1
 		fi
 	done
+
+	local source_obj
+	for source_obj in \
+		"ihk/linux/core/rust/core_helpers.rs|ihk/linux/core/rust/core_helpers.o" \
+		"ihk/linux/driver/smp/rust/smp_driver_helpers.rs|ihk/linux/driver/smp/rust/smp_driver_helpers.o"
+	do
+		local source_rel="${source_obj%%|*}"
+		local obj_rel="${source_obj#*|}"
+		if [ -f "$ROOT_DIR/$source_rel" ]; then
+			obj="$BUILD_DIR/$obj_rel"
+			if [ ! -f "$obj" ]; then
+				echo "error: Rust IHK source exists but its object is missing: $obj" >&2
+				exit 1
+			fi
+			local hits
+			hits="$(objdump -d "$obj" |
+				grep -Ei '%(xmm|ymm|zmm|mm)[0-9]|[[:space:]](movaps|movups|movdqa|movdqu|xorps|xorpd|pshuf[^[:space:]]*|padd[^[:space:]]*|pand[^[:space:]]*|pxor|popcnt|xsave[^[:space:]]*|fxsave[^[:space:]]*)[[:space:]]' || true)"
+			if [ -n "$hits" ]; then
+				echo "error: SIMD-like instructions found in Rust kernel-context object: $obj" >&2
+				printf '%s\n' "$hits" | awk 'NR <= 20' >&2
+				exit 1
+			fi
+		else
+			echo "Recorded pinned-IHK boundary is C: $source_rel is not present."
+		fi
+	done
+}
+
+require_defined_symbol() {
+	local file="$1"
+	local symbol="$2"
+
+	if [ ! -f "$file" ]; then
+		echo "error: missing artifact for symbol check: $file" >&2
+		exit 1
+	fi
+	if ! nm -g --defined-only "$file" |
+		awk -v want="$symbol" '$NF == want { found = 1 } END { exit found ? 0 : 1 }'
+	then
+		echo "error: $file does not define required Rust-path symbol: $symbol" >&2
+		exit 1
+	fi
+}
+
+require_undefined_symbol() {
+	local file="$1"
+	local symbol="$2"
+
+	if [ ! -f "$file" ]; then
+		echo "error: missing C shim object for import check: $file" >&2
+		exit 1
+	fi
+	if ! nm -g "$file" |
+		awk -v want="$symbol" '$(NF - 1) == "U" && $NF == want { found = 1 } END { exit found ? 0 : 1 }'
+	then
+		echo "error: $file does not import required Rust-path symbol: $symbol" >&2
+		exit 1
+	fi
+}
+
+normalize_hex() {
+	local value="${1#0x}"
+	value="$(printf '%s' "$value" | sed 's/^0*//')"
+	printf '0x%s\n' "${value:-0}"
+}
+
+check_rust_artifact_linkage() {
+	say "Checking Rust entry/linkage across McKernel, mcctrl, and mcexec"
+	need_cmd nm
+	need_cmd readelf
+
+	local rust_kernel="$BUILD_DIR/kernel/rust/mckernel_rust.o"
+	local image="$BUILD_DIR/kernel/mckernel.img"
+	local mcctrl_rust="$BUILD_DIR/executer/kernel/mcctrl/rust/mcctrl_helpers.o"
+	local mcctrl_ko="$BUILD_DIR/executer/kernel/mcctrl/mcctrl.ko"
+	local mcctrl_driver="$BUILD_DIR/executer/kernel/mcctrl/driver.o"
+	local mcctrl_control="$BUILD_DIR/executer/kernel/mcctrl/control.o"
+	local mcexec_rust="$BUILD_DIR/executer/user/rust/mcexec_helpers.o"
+	local mcexec_bin="$BUILD_DIR/executer/user/mcexec"
+	local mcexec_c="$BUILD_DIR/executer/user/CMakeFiles/mcexec.dir/mcexec.c.o"
+
+	local symbol
+	for symbol in arch_start main monitor_init \
+		init_host_ikc2linux init_host_ikc2mckernel \
+		prepare_process_ranges_args_envs mcexec_v10_trace_enter_user
+	do
+		require_defined_symbol "$rust_kernel" "$symbol"
+		require_defined_symbol "$image" "$symbol"
+	done
+	for symbol in mcctrl_driver_boot_notifier_body_result \
+		mcctrl_driver_init_body_result mcctrl_driver_exit_body_result \
+		mcctrl_control_dispatch_body_result \
+		mcctrl_control_transfer_image_body_result \
+		mcctrl_control_start_image_body_result \
+		mcctrl_control_ret_syscall_body_result prepare_ikc_channels
+	do
+		require_defined_symbol "$mcctrl_rust" "$symbol"
+		require_defined_symbol "$mcctrl_ko" "$symbol"
+	done
+	for symbol in mcexec_main_body mcexec_finish_main_image_body \
+		act_main_loop_body act_generic_syscall do_syscall_return
+	do
+		require_defined_symbol "$mcexec_rust" "$symbol"
+		require_defined_symbol "$mcexec_bin" "$symbol"
+	done
+
+	for symbol in mcctrl_driver_init_body_result mcctrl_driver_exit_body_result \
+		mcctrl_driver_boot_notifier_body_result prepare_ikc_channels
+	do
+		require_undefined_symbol "$mcctrl_driver" "$symbol"
+	done
+	for symbol in mcctrl_control_dispatch_body_result \
+		mcctrl_control_transfer_image_body_result \
+		mcctrl_control_start_image_body_result \
+		mcctrl_control_ret_syscall_body_result
+	do
+		require_undefined_symbol "$mcctrl_control" "$symbol"
+	done
+	require_undefined_symbol "$mcexec_c" mcexec_main_body
+	require_undefined_symbol "$mcexec_c" mcexec_finish_main_image_body
+
+	local elf_entry
+	local rust_entry
+	elf_entry="$(readelf -h "$image" |
+		awk '/Entry point address:/ { value = tolower($4) } END { if (value != "") print value }')"
+	rust_entry="$(nm -n "$image" |
+		awk '$NF == "arch_start" { value = "0x" tolower($1) } END { if (value != "") print value }')"
+	if [[ ! "$elf_entry" =~ ^0x[[:xdigit:]]+$ ]] ||
+		[[ ! "$rust_entry" =~ ^0x[[:xdigit:]]+$ ]]
+	then
+		echo "error: could not resolve McKernel ELF entry or Rust arch_start" >&2
+		exit 1
+	fi
+	elf_entry="$(normalize_hex "$elf_entry")"
+	rust_entry="$(normalize_hex "$rust_entry")"
+	if [ "$elf_entry" != "$rust_entry" ]; then
+		echo "error: McKernel ELF entry $elf_entry does not match Rust arch_start $rust_entry" >&2
+		exit 1
+	fi
+
+	local forbidden_source
+	for forbidden_source in kernel/init.c kernel/host.c kernel/host_helpers.c
+	do
+		if grep -Fq "$forbidden_source" "$BUILD_DIR/compile_commands.json"; then
+			echo "error: strict Rust image unexpectedly compiles $forbidden_source" >&2
+			exit 1
+		fi
+	done
+
+	echo "Rust linkage check: ELF arch_start, Rust main/host handoff, mcctrl, and mcexec bodies are linked."
 }
 
 install_artifacts() {
@@ -385,7 +627,7 @@ install_artifacts() {
 confirm_module_load_smoke() {
 	cat <<EOF
 
-About to load and unload Rust-linked IHK host modules from the build tree:
+About to load and unload C IHK host modules plus Rust-linked mcctrl from the build tree:
   ihk.ko, ihk-smp-x86_64.ko, mcctrl.ko
 
 This does not boot McKernel or reserve CPUs/memory, but it does execute kernel
@@ -432,6 +674,22 @@ ensure_selinux_permissive_for_boot() {
 
 	say "Temporarily setting SELinux permissive for McKernel boot validation"
 	sudo setenforce 0
+	BOOT_RESTORE_SELINUX=1
+}
+
+restore_selinux_after_boot() {
+	if [ "$BOOT_RESTORE_SELINUX" -eq 1 ]; then
+		say "Restoring SELinux enforcing mode"
+		sudo setenforce 1
+		BOOT_RESTORE_SELINUX=0
+	fi
+}
+
+boot_cleanup() {
+	if [ "$BOOT_SHUTDOWN_NEEDED" -eq 1 ]; then
+		sudo "$PREFIX/sbin/mcstop+release.sh" -k || true
+	fi
+	restore_selinux_after_boot || true
 }
 
 confirm_boot_smoke() {
@@ -479,7 +737,40 @@ EOF
 	fi
 }
 
+wait_for_mckernel_boot() {
+	local deadline=$((SECONDS + BOOT_TIMEOUT))
+	local status=UNKNOWN
+
+	while [ "$SECONDS" -lt "$deadline" ]; do
+		status="$(sudo "$PREFIX/sbin/ihkosctl" 0 get status 2>&1 || true)"
+		sudo "$PREFIX/sbin/ihkosctl" 0 kmsg >/tmp/mckernel.kmsg 2>/dev/null || true
+		if [ "$status" = RUNNING ] &&
+			grep -Fq "IHK/McKernel started." /tmp/mckernel.kmsg 2>/dev/null &&
+			grep -Fq "IHK/McKernel booted." /tmp/mckernel.kmsg 2>/dev/null
+		then
+			printf 'McKernel status: %s\n' "$status"
+			grep -F "IHK/McKernel started." /tmp/mckernel.kmsg
+			grep -F "IHK/McKernel booted." /tmp/mckernel.kmsg
+			return 0
+		fi
+		case "$status" in
+			PANIC|HUNGUP|SHUTDOWN)
+				echo "error: McKernel entered terminal status before boot completed: $status" >&2
+				return 1
+				;;
+		esac
+		sleep 1
+	done
+
+	echo "error: McKernel did not reach RUNNING with both Rust boot markers within ${BOOT_TIMEOUT}s; last status: $status" >&2
+	return 1
+}
+
 boot_smoke() {
+	BOOT_SHUTDOWN_NEEDED=0
+	BOOT_RESTORE_SELINUX=0
+	trap boot_cleanup EXIT
+
 	if [ "$(nproc)" -lt 2 ]; then
 		echo "error: boot smoke needs at least 2 vCPUs; CPU 0 stays with Linux and CPU $BOOT_CPUS goes to McKernel." >&2
 		exit 1
@@ -502,36 +793,34 @@ boot_smoke() {
 		exit 1
 	fi
 
+	BOOT_SHUTDOWN_NEEDED=1
 	if [ "$TRAMPOLINE_PHYS" != "" ]; then
 		say "Using reserved IHK trampoline page at $TRAMPOLINE_PHYS"
 		if ! sudo IHK_TRAMPOLINE_PHYS="$TRAMPOLINE_PHYS" \
-			"$PREFIX/sbin/mcreboot.sh" -c "$BOOT_CPUS" -m "$BOOT_MEM"; then
+			"$PREFIX/sbin/mcreboot.sh" -c "$BOOT_CPUS" -m "$BOOT_MEM" \
+			-o "$BOOT_DEVICE_OWNER"; then
 			dump_boot_failure_state
 			exit 1
 		fi
 	else
-		if ! sudo "$PREFIX/sbin/mcreboot.sh" -c "$BOOT_CPUS" -m "$BOOT_MEM"; then
+		if ! sudo "$PREFIX/sbin/mcreboot.sh" -c "$BOOT_CPUS" -m "$BOOT_MEM" \
+			-o "$BOOT_DEVICE_OWNER"; then
 			dump_boot_failure_state
 			exit 1
 		fi
 	fi
 
-	shutdown_needed=1
-	cleanup() {
-		if [ "${shutdown_needed:-0}" -eq 1 ]; then
-			sudo "$PREFIX/sbin/mcstop+release.sh" -k || true
-		fi
-	}
-	trap cleanup EXIT
-
 	say "Checking McKernel boot log"
-	sudo "$PREFIX/sbin/ihkosctl" 0 kmsg >/tmp/mckernel.kmsg
-	grep "IHK/McKernel booted" /tmp/mckernel.kmsg
+	if ! wait_for_mckernel_boot; then
+		dump_boot_failure_state
+		exit 1
+	fi
 
 	if [ "$BOOT_ONLY" -eq 1 ]; then
 		say "Boot-only check requested; skipping mcexec workloads"
 		sudo "$PREFIX/sbin/mcstop+release.sh"
-		shutdown_needed=0
+		BOOT_SHUTDOWN_NEEDED=0
+		restore_selinux_after_boot
 		trap - EXIT
 		return
 	fi
@@ -544,11 +833,38 @@ boot_smoke() {
 	if [ "$smoke_rc" -eq 124 ]; then
 		return "$smoke_rc"
 	fi
+	run_smoke_cmd "mcexec-rust-workload" \
+		"$PREFIX/bin/mcexec" "$BUILD_DIR/mcexec-rust-smoke"
+	if ! grep -Fxq \
+		'mckernel-rust-smoke: OK bytes=1048576 sum=133693440' \
+		/tmp/mckernel-mcexec-rust-workload.out; then
+		echo "error: deterministic mcexec workload output did not match." >&2
+		dump_smoke_failure_state "mcexec-rust-workload"
+		return 1
+	fi
 	run_smoke_cmd "mcstat" "$PREFIX/bin/mcstat"
+
+	say "Checking Rust userspace handoff and delegated-syscall markers"
+	sudo "$PREFIX/sbin/ihkosctl" 0 kmsg >/tmp/mckernel-after-smoke.kmsg
+	local marker
+	for marker in \
+		'mcexec_v10: prepared ' \
+		'mcexec_v10: schedule_process queued ' \
+		'mcexec_v10: enter_user ' \
+		'mcexec_v10: send_syscall ' \
+		'mcexec_v10: offload_return '
+	do
+		if ! grep -Fq "$marker" /tmp/mckernel-after-smoke.kmsg; then
+			echo "error: missing Rust-path runtime marker: $marker" >&2
+			dump_smoke_failure_state "rust-runtime-markers"
+			return 1
+		fi
+	done
 
 	say "Shutting down McKernel"
 	sudo "$PREFIX/sbin/mcstop+release.sh"
-	shutdown_needed=0
+	BOOT_SHUTDOWN_NEEDED=0
+	restore_selinux_after_boot
 	trap - EXIT
 
 	if [ "$smoke_rc" -ne 0 ]; then
@@ -736,17 +1052,21 @@ fi
 ensure_kernel_headers
 ensure_libuedev
 
+# Make a rustup-managed compiler visible even when --skip-rust forbids changing
+# the installed toolchains or default.
+# shellcheck disable=SC1091
+[ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
+
 if [ "$INSTALL_RUST" -eq 1 ]; then
 	ensure_rust
 else
 	need_cmd rustc
-	rustc --version | grep -q nightly || {
-		echo "error: ENABLE_RUST_KERNEL requires nightly rustc." >&2
-		exit 1
-	}
+	export RUSTUP_TOOLCHAIN="$RUST_TOOLCHAIN"
+	verify_rustc
 fi
 
 update_submodules
+record_environment
 configure_and_build
 
 if [ "$SOURCE_RETIREMENT_AUDIT" -eq 1 ]; then
@@ -766,6 +1086,6 @@ if [ "$BOOT_SMOKE" -eq 1 ]; then
 else
 	say "Build validation complete"
 	echo "Install prefix: $PREFIX"
-	echo "Run with --module-load-smoke --yes to load/unload Rust-linked IHK modules from the build tree."
+	echo "Run with --module-load-smoke --yes to load/unload C IHK host modules plus Rust-linked mcctrl."
 	echo "Run with --boot-smoke --yes after taking a VM snapshot to boot and run mcexec smoke tests."
 fi

@@ -1,0 +1,378 @@
+name: Rust x86_64 validation
+
+on:
+  pull_request:
+    branches: [development]
+  push:
+    branches: [development]
+  workflow_dispatch:
+    inputs:
+      validation_sha:
+        description: Exact 40-hex commit SHA to validate
+        required: true
+        type: string
+      boot_smoke:
+        description: Run protected QEMU/KVM boot and mcexec smoke
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+env:
+  BUILD_DIR: /tmp/mckernel-rocky-rust
+  RUST_TOOLCHAIN: nightly-2026-02-19
+  EXPECTED_RUSTC_VERSION: rustc 1.95.0-nightly (c04308580 2026-02-18)
+
+jobs:
+  rocky-build:
+    name: Rocky 8.10 Rust build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 330
+    concurrency:
+      group: rocky-rust-build-${{ github.event.pull_request.number || github.ref }}
+      cancel-in-progress: true
+    container:
+      image: rockylinux:8.10
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Install Rocky build prerequisites
+        run: |
+          set -euo pipefail
+          dnf -y install dnf-plugins-core
+          dnf config-manager --set-enabled powertools || \
+            dnf config-manager --set-enabled crb
+          dnf -y install \
+            bc binutils-devel bison cmake curl diffutils dwarves \
+            elfutils-libelf-devel file findutils flex gcc gcc-c++ git gzip \
+            hostname kernel-devel kernel-headers kmod libselinux-utils lsof make \
+            numactl-devel openssl-devel \
+            patch perl pkgconf-pkg-config procps-ng python3 rpm-build \
+            shadow-utils sudo systemd-devel tar util-linux which xz zlib-devel
+          dnf clean all
+
+      - name: Validate manual commit input
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        env:
+          VALIDATION_SHA: ${{ inputs.validation_sha }}
+        run: |
+          set -euo pipefail
+          [[ "$VALIDATION_SHA" =~ ^[0-9a-f]{40}$ ]] || {
+            echo 'validation_sha must be an exact 40-hex commit' >&2
+            exit 2
+          }
+
+      - name: Check out validation commit and submodules
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.validation_sha || github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          submodules: recursive
+          persist-credentials: false
+
+      - name: Verify manual checkout identity
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        env:
+          VALIDATION_SHA: ${{ inputs.validation_sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$VALIDATION_SHA"
+
+      - name: Prepare non-root validator and pinned nightly
+        run: |
+          set -euo pipefail
+          id validator >/dev/null 2>&1 || \
+            useradd --create-home --shell /bin/bash validator
+          chown -R validator:validator "$GITHUB_WORKSPACE"
+
+          kernel_dir="$(find /usr/src/kernels -mindepth 1 -maxdepth 1 \
+            -type d -print | sort -V | tail -n 1)"
+          test -n "$kernel_dir"
+          test -f "$kernel_dir/Makefile"
+          printf 'MCKERNEL_CI_KERNEL_DIR=%s\n' "$kernel_dir" >> "$GITHUB_ENV"
+
+          runuser -u validator -- env \
+            HOME=/home/validator \
+            RUSTUP_HOME=/home/validator/.rustup \
+            CARGO_HOME=/home/validator/.cargo \
+            PATH=/home/validator/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+            RUST_TOOLCHAIN="$RUST_TOOLCHAIN" \
+            EXPECTED_RUSTC_VERSION="$EXPECTED_RUSTC_VERSION" \
+            bash -c '
+              set -euo pipefail
+              curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs |
+                sh -s -- -y --profile minimal --default-toolchain "$RUST_TOOLCHAIN"
+              test "$(rustc --version)" = "$EXPECTED_RUSTC_VERSION"
+              rustc -Vv
+            '
+
+      - name: Record provenance and check development ancestry
+        run: |
+          set -euo pipefail
+          mkdir -p evidence
+          runuser -u validator -- env \
+            HOME=/home/validator \
+            PATH=/home/validator/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+            GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
+            MCKERNEL_CI_KERNEL_DIR="$MCKERNEL_CI_KERNEL_DIR" \
+            bash -c '
+              set -euo pipefail
+              cd "$GITHUB_WORKSPACE"
+              git fetch --no-tags origin \
+                development:refs/remotes/origin/development
+              git merge-base --is-ancestor origin/development HEAD
+              git diff --check origin/development...HEAD
+              {
+                echo "commit=$(git rev-parse HEAD)"
+                echo "kernel_dir=$MCKERNEL_CI_KERNEL_DIR"
+                cat /etc/os-release
+                uname -a
+                rustc -Vv
+                git submodule status --recursive
+              }
+            ' > evidence/environment.txt 2>&1
+          rpm -qa | sort > evidence/rocky-rpms.txt
+
+      - name: Build Rust McKernel, IHK modules, and mcexec
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          runuser -u validator -- env \
+            HOME=/home/validator \
+            RUSTUP_HOME=/home/validator/.rustup \
+            CARGO_HOME=/home/validator/.cargo \
+            PATH=/home/validator/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+            GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
+            KERNEL_DIR="$MCKERNEL_CI_KERNEL_DIR" \
+            bash -c '
+              cd "$GITHUB_WORKSPACE"
+              exec scripts/rocky-rust-validation.sh \
+                --build-only \
+                --skip-deps \
+                --skip-rust \
+                --jobs 2
+            ' 2>&1 | tee evidence/build.log
+
+      - name: Collect build evidence
+        if: ${{ always() }}
+        run: |
+          set +e
+          mkdir -p evidence
+          runuser -u validator -- env \
+            HOME=/home/validator \
+            GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
+            bash -c '
+              cd "$GITHUB_WORKSPACE"
+              git status --short --branch --ignore-submodules=none
+            ' > evidence/worktree.txt 2>&1
+
+          if test -d "$BUILD_DIR"; then
+            (
+              cd "$BUILD_DIR" || exit
+              find . -type f \
+                \( -name mckernel.img -o -name '*.ko' -o -name mcexec -o \
+                -name mcexec-rust-smoke \) \
+                -print0 | sort -z \
+                > "$GITHUB_WORKSPACE/evidence/build-products.list0"
+              xargs -0 -r sha256sum \
+                < "$GITHUB_WORKSPACE/evidence/build-products.list0" \
+                > "$GITHUB_WORKSPACE/evidence/build-products.sha256"
+              tar --null -czf \
+                "$GITHUB_WORKSPACE/evidence/build-products.tar.gz" \
+                --files-from="$GITHUB_WORKSPACE/evidence/build-products.list0"
+            )
+          fi
+
+      - name: Upload Rocky build evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: rocky-rust-build-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            evidence/
+            VALIDATION_PROGRESS.MD
+          if-no-files-found: error
+          retention-days: 30
+
+  boot-smoke:
+    name: Protected Rocky QEMU boot and mcexec
+    needs: rocky-build
+    if: >-
+      ${{ github.event_name == 'workflow_dispatch' &&
+          inputs.boot_smoke &&
+          github.ref == 'refs/heads/development' }}
+    runs-on: [self-hosted, linux, x64, kvm, mckernel-boot]
+    timeout-minutes: 300
+    environment: mckernel-boot
+    concurrency:
+      group: mckernel-boot
+      cancel-in-progress: false
+    env:
+      VALIDATION_SHA: ${{ inputs.validation_sha }}
+      ROCKY_IMAGE: ${{ vars.MCKERNEL_ROCKY_QCOW2 }}
+      ROCKY_IMAGE_SHA256: ${{ vars.MCKERNEL_ROCKY_QCOW2_SHA256 }}
+
+    steps:
+      - name: Check out trusted validation wrapper
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.sha }}
+          path: trusted
+          fetch-depth: 0
+          persist-credentials: false
+          clean: true
+
+      - name: Check out approved candidate and submodules
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ inputs.validation_sha }}
+          path: candidate
+          fetch-depth: 0
+          submodules: recursive
+          persist-credentials: false
+          clean: true
+
+      - name: Verify protected runner and immutable guest image
+        shell: bash
+        run: |
+          set -euo pipefail
+          BOOT_LOG_DIR="$RUNNER_TEMP/mckernel-boot-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          test ! -e "$BOOT_LOG_DIR"
+          test ! -L "$BOOT_LOG_DIR"
+          mkdir -m 700 -p "$BOOT_LOG_DIR/qemu"
+          [[ "$VALIDATION_SHA" =~ ^[0-9a-f]{40}$ ]] || {
+            echo 'validation_sha must be an exact 40-hex commit' >&2
+            exit 2
+          }
+          test "$(git -C candidate rev-parse HEAD)" = "$VALIDATION_SHA"
+          test "$(git -C trusted rev-parse HEAD)" = "$GITHUB_SHA"
+          git -C candidate fetch --no-tags origin \
+            development:refs/remotes/origin/development
+          git -C candidate merge-base --is-ancestor \
+            origin/development HEAD
+          test -n "$ROCKY_IMAGE"
+          test -n "$ROCKY_IMAGE_SHA256"
+          test -f "$ROCKY_IMAGE"
+          test -c /dev/kvm
+          test -r /dev/kvm
+          test -w /dev/kvm
+          printf '%s  %s\n' "$ROCKY_IMAGE_SHA256" "$ROCKY_IMAGE" |
+            sha256sum -c -
+          command -v qemu-system-x86_64
+          command -v qemu-img
+          command -v cloud-localds
+
+          if grep -Eq '^(ihk|ihk_smp_x86_64|mcctrl) ' /proc/modules; then
+            echo 'refusing to run: host IHK/McKernel modules are loaded' >&2
+            exit 1
+          fi
+
+          {
+            echo "candidate_commit=$(git -C candidate rev-parse HEAD)"
+            echo "trusted_runner_commit=$(git -C trusted rev-parse HEAD)"
+            echo "guest_image=$ROCKY_IMAGE"
+            echo "guest_sha256=$ROCKY_IMAGE_SHA256"
+            uname -a
+            qemu-system-x86_64 --version
+            qemu-img info --output=json "$ROCKY_IMAGE"
+          } > "$BOOT_LOG_DIR/host-environment.txt"
+
+      - name: Boot inside disposable Rocky guest and run mcexec
+        shell: bash
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          BOOT_LOG_DIR="$RUNNER_TEMP/mckernel-boot-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          # The unsafe-host opt-in is added by the wrapper inside the guest.
+          # This job never loads IHK or boots McKernel on the runner host.
+          trusted/scripts/qemu-rocky-rust-validation.sh \
+            --image "$ROCKY_IMAGE" \
+            --source-dir "$GITHUB_WORKSPACE/candidate" \
+            --accel kvm \
+            --memory 4096M \
+            --cpus 4 \
+            --ssh-timeout 900 \
+            --guest-timeout 14400 \
+            --log-dir "$BOOT_LOG_DIR/qemu" \
+            -- \
+            --boot-smoke \
+            --smoke-timeout 30 \
+            --verbose-smoke \
+            --jobs 2 \
+            --yes \
+            2>&1 | tee "$BOOT_LOG_DIR/run.log"
+
+      - name: Verify runner host stayed untouched
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          set -uo pipefail
+          BOOT_LOG_DIR="$RUNNER_TEMP/mckernel-boot-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          post_rc=0
+          if test -z "$ROCKY_IMAGE" || test -z "$ROCKY_IMAGE_SHA256"; then
+            echo 'protected Rocky image path/checksum is unset' >&2
+            post_rc=1
+          elif test ! -f "$ROCKY_IMAGE"; then
+            echo "protected Rocky image disappeared: $ROCKY_IMAGE" >&2
+            post_rc=1
+          else
+            printf '%s  %s\n' "$ROCKY_IMAGE_SHA256" "$ROCKY_IMAGE" |
+              sha256sum -c - || post_rc=1
+          fi
+
+          if grep -Eq '^(ihk|ihk_smp_x86_64|mcctrl) ' /proc/modules; then
+            echo 'host IHK/McKernel modules are loaded after guest validation' >&2
+            grep -E '^(ihk|ihk_smp_x86_64|mcctrl) ' /proc/modules >&2
+            post_rc=1
+          fi
+
+          if test -f "$BOOT_LOG_DIR/qemu/qemu.pid"; then
+            pid="$(cat "$BOOT_LOG_DIR/qemu/qemu.pid" 2>/dev/null || true)"
+            if test -n "$pid" && kill -0 "$pid" 2>/dev/null; then
+              echo "QEMU process $pid is still running after validation" >&2
+              qemu_pidfile_verified=0
+              mapfile -d '' -t qemu_argv < "/proc/$pid/cmdline" || true
+              for ((i = 0; i + 1 < ${#qemu_argv[@]}; i++)); do
+                if test "${qemu_argv[$i]}" = -pidfile &&
+                  test "${qemu_argv[$((i + 1))]}" = "$BOOT_LOG_DIR/qemu/qemu.pid"
+                then
+                  qemu_pidfile_verified=1
+                  break
+                fi
+              done
+              qemu_exe="$(basename "$(readlink "/proc/$pid/exe" 2>/dev/null || true)")"
+              if [[ "$qemu_exe" == qemu-system-x86_64* ]] &&
+                test "$qemu_pidfile_verified" -eq 1
+              then
+                kill "$pid" 2>/dev/null || true
+                for _ in {1..20}; do
+                  kill -0 "$pid" 2>/dev/null || break
+                  sleep 0.25
+                done
+                kill -9 "$pid" 2>/dev/null || true
+              else
+                echo 'refusing to kill PID because QEMU identity did not verify' >&2
+              fi
+              post_rc=1
+            fi
+          fi
+          exit "$post_rc"
+
+      - name: Upload boot evidence without ephemeral SSH keys
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: rocky-boot-${{ inputs.validation_sha }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/mckernel-boot-${{ github.run_id }}-${{ github.run_attempt }}/host-environment.txt
+            ${{ runner.temp }}/mckernel-boot-${{ github.run_id }}-${{ github.run_attempt }}/run.log
+            ${{ runner.temp }}/mckernel-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/serial.log
+            ${{ runner.temp }}/mckernel-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/guest-command.log
+            ${{ runner.temp }}/mckernel-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/guest-cleanup.log
+            candidate/VALIDATION_PROGRESS.MD
+          if-no-files-found: warn
+          retention-days: 30

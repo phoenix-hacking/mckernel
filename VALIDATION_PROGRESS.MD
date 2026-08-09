@@ -1,40 +1,82 @@
 # Rust x86_64 Validation Progress
 
-**Current completion: 25%**
+**Current completion: 35%**
 
-This file tracks evidence for pull request #1 (`codex/rocky-rust-validation`). The
-percentage is evidence-gated: it reaches 100% only after the Rust-enabled McKernel
-image boots on a Rocky/RHEL-family x86_64 host and `mcexec` successfully runs real
-userspace programs.
+This percentage is evidence-gated. It reaches 100% only after the current PR
+head builds on Rocky/RHEL-family x86_64, boots McKernel, runs real programs
+through `mcexec`, and shuts down cleanly.
 
 ## Completion gates
 
-| Gate | Weight | Status | Evidence |
+| Gate | Weight | Status | Current evidence |
 | --- | ---: | --- | --- |
-| Current PR/head and validation-scope audit | 5% | PASS | Draft PR #1 was audited at old head `95d8bdfd47d854f720f1487872b98d65438c3044`: non-mergeable, two validation files, and no workflow runs. The branch is now based on current `development`; this tracker was first published at head `77b81fb93b5251558cb58ffa7324b5aa4163ce9a`. |
-| Runner syntax, CLI, and failure-path checks | 5% | PASS | Fresh current-tree checks passed: `bash -n` on all three Rocky/QEMU runners, `--help` on all three runners, and the Rocky runner's unknown-option path returned the required status 2. |
-| IHK patch applicability and pinned-submodule compatibility | 5% | PASS | At pinned IHK `3114d9e7101ad52030eb3effa849a5c108972a1f`, forward check/apply, reverse check/apply, `git diff --check`, and clean-worktree verification passed. `git apply` reports one non-fatal blank-line warning in the patch; it will be removed with the compatibility update. |
-| Branch compatibility with current `development` | 10% | PASS | Merged current `development` (`7a779815cba07bacfeed5788acca31629e50a39a`) into the PR branch at GitHub head `6e08e1e6b749fbc90a74b0f09c5b6f4eaec8b951`; old validation files resolve to the current implementations. |
-| Rust toolchain and Rust kernel source checks | 10% | BLOCKED | The pinned IHK submodule lacks the Rust core/SMP sources referenced by the merged build and equivalence harness; recovery is in progress. |
-| Rocky/RHEL-family configure and complete build | 20% | PENDING | No current-head build transcript yet. |
-| IHK, `ihk-smp-x86_64`, and `mcctrl` host-module validation | 10% | PENDING | No module build/load evidence yet. |
-| Rust-enabled McKernel image load and boot | 15% | PENDING | No boot log proving the Rust-enabled image reached boot completion. |
-| `mcexec` plus real userspace programs | 10% | PENDING | `/bin/true`, identity/hostname, and compiled workload execution not yet proven. |
-| Reproducible CI/docs and final PR update | 10% | PENDING | No GitHub Actions runs and no exact end-to-end transcript. |
+| PR and scope audit | 5% | PASS | Draft PR #1 inspected; the recorded tree is pinned C IHK plus Rust McKernel, Rust-linked `mcctrl`, and Rust-linked `mcexec`. |
+| Runner checks | 5% | PASS | Shell syntax, help, invalid-option, numeric-option, and cleanup-regression checks pass. |
+| IHK compatibility | 5% | PASS | Forward check/apply, reverse check/apply, `git diff --check`, and clean pinned-IHK status pass at `3114d9e7101ad52030eb3effa849a5c108972a1f`. |
+| `development` compatibility | 10% | PASS | Current `development` commit `7a779815cba07bacfeed5788acca31629e50a39a` is merged; GitHub reports the draft PR mergeable. |
+| Rust source/toolchain | 10% | PASS | Exact pinned nightly compiles the three selected Rust objects; required symbols, no-SIMD scan, formatting, and variadic behavior checks pass. |
+| Rocky complete build | 20% | PENDING | Awaiting the first current-head hosted Rocky 8.10 transcript. |
+| Host modules | 10% | PENDING | No current-head load/unload or boot-created module evidence yet. |
+| McKernel boot | 15% | PENDING | No current-head `RUNNING` status plus both Rust boot markers yet. |
+| Real `mcexec` programs | 10% | PENDING | `/bin/true`, hostname, deterministic workload, `mcstat`, and Rust handoff markers remain unproved at runtime. |
+| CI evidence and PR report | 10% | IN PROGRESS | Workflow and reporting are implemented; no current-head Actions result or final runtime report yet. |
 
-## Required 100% evidence
+## Fresh commands and results
 
-- Clean checkout of the PR head with all pinned submodules.
-- Rust-enabled x86_64 image and Linux-side IHK/`mcctrl`/`mcexec` artifacts build.
-- Host modules load, CPUs and memory reserve, and McKernel boots.
-- Boot log identifies the expected McKernel/Rust path.
-- `mcexec /bin/true` succeeds and a compiled userspace workload produces checked output.
-- Shutdown/release succeeds and the host returns to a clean state.
-- Rocky/RHEL-family commands, versions, results, and any environmental limitations are recorded exactly.
-- The branch is compatible with current `development`, and automatic/static coverage runs in GitHub Actions where privileged boot is not available.
+```text
+bash -n scripts/rocky-rust-validation.sh \
+  scripts/qemu-rocky-rust-validation.sh \
+  scripts/qemu-mckernel-guest.sh \
+  scripts/ihk-module-load-smoke.sh
+result: PASS
 
-## Update log
+rustfmt +nightly-2026-02-19 --edition 2021 --check kernel/rust/numparse.rs
+result: PASS
 
-- 2026-08-08: Established 15% baseline from PR metadata and existing recorded checks. Runtime validation and current-branch compatibility remain unproven.
-- 2026-08-08: Advanced to 25% after merging current `development` into the PR branch and publishing the merge. Identified a concrete current-head blocker: pinned IHK commit `3114d9e7101ad52030eb3effa849a5c108972a1f` does not contain the Rust IHK core/SMP helper sources expected by the parent build and equivalence test.
-- 2026-08-08: Held at 25% while replacing recorded-only evidence with fresh checks. Exact successful command group: `bash -n scripts/{rocky-rust-validation.sh,qemu-rocky-rust-validation.sh,qemu-mckernel-guest.sh}`; each runner with `--help`; the Rocky runner with `--definitely-invalid` (expected status 2); then, from `ihk/`, compatibility-patch forward check/apply, reverse check/apply, `git diff --check`, and a clean-worktree assertion. Result: PASS. Script/patch SHA-256 values were `74c3e47d...`, `fd3bfc9...`, `df9c387...`, and `f4b6a46...`, respectively.
+actionlint -config-file .github/actionlint.yaml \
+  .github/workflows/rust-x86_64-validation.yml
+result: PASS (actionlint 1.7.12; all 10 embedded Bash blocks also pass `bash -n`)
+
+cc -O2 -std=c11 -Wall -Wextra -Werror \
+  scripts/smoke/mcexec-rust-smoke.c -o mcexec-rust-smoke
+./mcexec-rust-smoke
+result: mckernel-rust-smoke: OK bytes=1048576 sum=133693440
+
+git diff --check
+result: PASS
+```
+
+Pinned compiler: `rustc 1.95.0-nightly (c04308580 2026-02-18)` from
+`nightly-2026-02-19`. Production-flag object results:
+
+| Object | SHA-256 | Result |
+| --- | --- | --- |
+| `mckernel_rust.o` | `408fc2ef755ca0ad188e17d65497c3c24239ce0ce59b24a880833461353bf030` | Required entry/host symbols and no-SIMD gate pass. |
+| `mcctrl_helpers.o` | `91a4b57d63b4ed44c3ba0c2d1959accb86a9152646f454b0f15a788856ad54e4` | Required module/control symbols and no-SIMD gate pass. |
+| `mcexec_helpers.o` | `1bd472ba5fcacde678ffcb3983004d4e51faea7c6d0fcf0d51a8347fb59526ef` | Required main/image/syscall-loop symbols pass. |
+
+A focused native variadic harness resolved `snprintf` and `sscanf` to the Rust
+object and passed dynamic width/precision, promoted integer classes, pointer,
+`%n`, and scan-back cases with `numparse-va-smoke: OK`.
+
+## Remaining path to 100%
+
+1. Hosted Rocky build must produce `mckernel.img`, C `ihk.ko` and
+   `ihk-smp-x86_64.ko`, Rust-linked `mcctrl.ko`, Rust-linked `mcexec`, and the
+   deterministic workload while all linkage/audit gates pass.
+2. A protected disposable Rocky KVM guest must load the modules, reserve CPU
+   and memory, reach `RUNNING`, and contain `IHK/McKernel started.` plus
+   `IHK/McKernel booted.`.
+3. The guest must successfully run `/bin/true`, hostname, the deterministic
+   workload, and `mcstat` through `mcexec`; kmsg must contain `prepared`,
+   `schedule_process queued`, `enter_user`, `send_syscall`, and
+   `offload_return` markers.
+4. `mcstop+release.sh` must succeed, SELinux mode must be restored, QEMU must
+   exit, the backing image checksum must remain unchanged, and exact results
+   must be added to this file and PR #1.
+
+The protected boot lane additionally requires repository administrators to
+configure the `mckernel-boot` environment, a matching self-hosted KVM runner,
+and the two checksum-pinned Rocky image variables. The workflow cannot be
+manually dispatched until it exists on the default branch; staged YAML alone
+does not count as boot evidence.

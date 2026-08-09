@@ -12,7 +12,7 @@ modified, the host repo is staged into the guest overlay, serial output is
 logged, and a host-side watchdog terminates QEMU if the guest wedges.
 
 Default validation options:
-  --boot-only --yes
+  --boot-smoke --yes
 
 Common examples:
   scripts/qemu-rocky-rust-validation.sh --image rocky8.qcow2
@@ -20,6 +20,8 @@ Common examples:
 
 QEMU options:
   --image PATH              Required qcow2 backing image. Must not be a /dev path.
+  --source-dir PATH         Repository tree staged into the guest. Default: the
+                            repository containing this trusted wrapper.
   --accel MODE              auto, kvm, or tcg. Default: auto
   --ssh-port PORT           Host port forwarded to guest SSH. Default: 2222
   --memory SIZE             QEMU memory. Default: 4096M
@@ -39,6 +41,7 @@ USAGE
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 QEMU_RUNNER="$ROOT_DIR/scripts/qemu-mckernel-guest.sh"
+SOURCE_DIR="$ROOT_DIR"
 
 IMAGE=
 ACCEL=auto
@@ -59,6 +62,10 @@ while [ "$#" -gt 0 ]; do
 	case "$1" in
 		--image)
 			IMAGE="${2:?missing value for --image}"
+			shift 2
+			;;
+		--source-dir)
+			SOURCE_DIR="${2:?missing value for --source-dir}"
 			shift 2
 			;;
 		--accel)
@@ -133,8 +140,18 @@ if [ -z "$IMAGE" ]; then
 	exit 2
 fi
 
+if [ ! -d "$SOURCE_DIR" ]; then
+	echo "error: --source-dir is not a directory: $SOURCE_DIR" >&2
+	exit 2
+fi
+SOURCE_DIR="$(cd "$SOURCE_DIR" && pwd)"
+if [ ! -x "$SOURCE_DIR/scripts/rocky-rust-validation.sh" ]; then
+	echo "error: source tree is missing executable scripts/rocky-rust-validation.sh: $SOURCE_DIR" >&2
+	exit 2
+fi
+
 if [ "${#VALIDATION_ARGS[@]}" -eq 0 ]; then
-	VALIDATION_ARGS=(--boot-only --yes)
+	VALIDATION_ARGS=(--boot-smoke --yes)
 fi
 
 quote_args() {
@@ -180,7 +197,7 @@ qemu_args=(
 	--timeout "$SSH_TIMEOUT"
 	--guest-cmd-timeout "$GUEST_TIMEOUT"
 	--guest-cleanup-timeout 30
-	--stage-dir "$ROOT_DIR:/tmp/mckernel-hostshare"
+	--stage-dir "$SOURCE_DIR:/tmp/mckernel-hostshare"
 	--guest-cmd "$validation_cmd"
 )
 
