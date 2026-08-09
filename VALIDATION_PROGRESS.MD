@@ -6,6 +6,10 @@ This percentage is evidence-gated. It reaches 100% only after the current PR
 head builds on Rocky/RHEL-family x86_64, boots McKernel, runs real programs
 through `mcexec`, and shuts down cleanly.
 
+Here, 100% means every gate in this Rocky 8.10 x86_64 smoke plan has passed.
+It does not mean line/branch coverage, an all-Rust IHK stack, exhaustive kernel
+correctness, Arm64 coverage, or long-duration stress coverage.
+
 ## Completion gates
 
 | Gate | Weight | Status | Current evidence |
@@ -15,11 +19,11 @@ through `mcexec`, and shuts down cleanly.
 | IHK compatibility | 5% | PASS | Forward check/apply, reverse check/apply, `git diff --check`, and clean pinned-IHK status pass at `3114d9e7101ad52030eb3effa849a5c108972a1f`. |
 | `development` compatibility | 10% | PASS | Current `development` commit `7a779815cba07bacfeed5788acca31629e50a39a` is merged; GitHub reports the draft PR mergeable. |
 | Rust source/toolchain | 10% | PASS | Exact pinned nightly compiles the three selected Rust objects; required symbols, no-SIMD scan, formatting, and variadic behavior checks pass. |
-| Rocky complete build | 20% | PASS | Run `31290918282` built every requested artifact on Rocky 8.10 and passed the pinned compiler, no-SIMD, Rust linkage, and exact pinned-IHK source-profile audit gates. |
+| Rocky complete build | 20% | PASS | Runs `31290918282` and `31296009940` built every requested artifact on Rocky 8.10 and passed the pinned compiler, no-SIMD, Rust linkage, and exact pinned-IHK source-profile audit gates. |
 | Host modules | 10% | PENDING | No current-head load/unload evidence or necessarily successful module use during McKernel boot yet. |
 | McKernel boot | 15% | PENDING | No current-head `RUNNING` status plus both Rust boot markers yet. |
 | Real `mcexec` programs | 10% | PENDING | `/bin/true`, hostname, deterministic workload, `mcstat`, and Rust handoff markers remain unproved at runtime. |
-| CI evidence and PR report | 10% | IN PROGRESS | Runs `31288159829`, `31288499526`, and `31290334197` exposed and recorded three validation-harness blockers; clean shutdown, SELinux restoration, QEMU/backing-image checks, and the final PR report remain pending. |
+| CI evidence and PR report | 10% | IN PROGRESS | Runs through `31296009940` exposed and recorded the build, image-format, and guest-launch boundaries; live module use, clean shutdown/restoration, and the final PR report remain pending. |
 
 The first hosted attempt earned no completion credit. Workflow run
 `31288159829` (job `93180630285`) failed during container initialization after
@@ -116,6 +120,51 @@ boot or networking failure without another 900-second blind wait. It earns no
 credit until the hosted guest reaches SSH and the full runtime chain passes on
 the published head.
 
+The fifth workflow run, `31296009940` at
+`5cdb2040ccadd4745ba8b8fbf0cb119d88b952cd`, passed the Rocky build again.
+Its first hosted attempt failed in ephemeral KVM preparation before image
+download; rerunning the failed job reached QEMU. Attempt 2 job `93201600353`
+verified the dated Rocky image, started four KVM vCPUs, completed QMP
+`query-status`/`query-cpus-fast`, and captured 1,512 serial bytes. SeaBIOS then
+reported:
+
+```text
+Booting from Hard Disk...
+Boot failed: not a bootable disk
+...
+No bootable device.
+```
+
+SSH expired after 900 seconds and no guest command ran. Evidence artifact
+`9033351686` has digest
+`sha256:7a67687d8c63f2cc06c6e23edf5d93903fbeba2c3763a0580f2c18b02dfd7c20`.
+The backing image still matched SHA-256
+`e56066c58606191e96184de9a9183a3af33c59bcbd8740d8b10ca054a7a89c14`,
+the overlay was removed, and the verified QEMU process exited. No module,
+boot, userspace, or cleanup-restoration credit is awarded.
+
+The failure was an overlay-construction bug, not a Rocky image defect. QEMU
+8.2.2's JSON `qemu-img info` output lists a nested child with
+`"format": "file"` before the top-level `"format": "qcow2"`. The wrapper's
+first-match `sed` therefore passed `-F file` when creating the overlay, making
+QEMU expose the qcow2 container bytes as raw guest sectors. The corrected
+parser reads the anchored top-level human `file format:` field and fails closed
+if it is absent. Against the exact pinned image, the resulting overlay reports
+`backing-filename-format: qcow2`, its first 4 MiB of virtual disk content
+byte-match the backing image, and a bounded QEMU 8.2.2 TCG probe reaches GRUB
+and the Rocky 4.18.0-553 kernel. This is focused harness evidence only; the
+published hosted retry remains authoritative and completion remains 55%.
+
+Before that retry, the candidate was hardened against false-positive runtime
+results. It now proves the assigned CPU and memory exactly match the request
+and that no IHK reserve remains, rechecks `RUNNING` after all workloads, scans
+the final McKernel kmsg for fatal signatures, and verifies IRQ affinities,
+temporary irqbalance state, and validation processes after shutdown. Raw
+McKernel kmsg, Linux dmesg, resource, package/repository, toolchain, and runtime
+artifact-hash evidence is copied out of the guest and independently verified
+by SHA-256 on the hosted runner. These checks earn no percentage until the
+complete published-head workflow passes.
+
 ## Fresh commands and results
 
 ```text
@@ -139,6 +188,10 @@ result: expected exit 2; invalid disposable-disk size rejected before QEMU
 scripts/qemu-mckernel-guest.sh \
   --image unused --disk-size invalid
 result: expected exit 2; invalid disposable-disk size rejected before image or QEMU probing
+
+scripts/qemu-mckernel-guest.sh \
+  --image unused --guest-evidence-dir relative
+result: expected exit 2; non-absolute guest evidence path rejected before QEMU
 
 GitHub Actions run 31288159829 at
   b54e69c6bc3309e8a719b645832c8c37cdc853e1
@@ -182,6 +235,35 @@ artifact: 9031891754
 artifact digest: sha256:77f1c829d349c8ec5bc9b7986063ed3964988b4d9838046dd9b9fe28fddf422a
 module load / McKernel boot / mcexec: NOT RUN
 completion: unchanged at 55%
+
+GitHub Actions run 31296009940, hosted attempt 1 job 93201346414, at
+  5cdb2040ccadd4745ba8b8fbf0cb119d88b952cd
+result: FAILURE in ephemeral KVM preparation before image download
+artifact: 9032991394
+artifact digest: sha256:bd4dde345fa1cc12b31366c2f26870a8bb58ad88537322488e1223f0faf1013a
+module load / McKernel boot / mcexec: NOT RUN
+completion: unchanged at 55%
+
+GitHub Actions run 31296009940, hosted attempt 2 job 93201600353, at
+  5cdb2040ccadd4745ba8b8fbf0cb119d88b952cd
+Rocky build: PASS
+QEMU/QMP: PASS through verified KVM process, four live vCPUs, and firmware serial
+result: FAILURE before SSH; SeaBIOS reported `No bootable device.`
+serial.log: 1512 bytes
+guest-command.log: not created
+backing image checksum: PASS; disposable overlay removed; QEMU exited
+artifact: 9033351686
+artifact digest: sha256:7a67687d8c63f2cc06c6e23edf5d93903fbeba2c3763a0580f2c18b02dfd7c20
+root cause: qemu-img JSON parser selected nested child format `file` instead
+            of top-level image format `qcow2`, producing an invalid overlay chain
+module load / McKernel boot / mcexec: NOT RUN
+completion: unchanged at 55%
+
+corrected overlay construction against the exact checksum-pinned Rocky image
+result: PASS; qemu-img reports `backing-filename-format: qcow2`; the first
+        4 MiB of overlay virtual content byte-match the base image; bounded
+        QEMU 8.2.2 TCG reaches GRUB and Rocky kernel 4.18.0-553
+completion: unchanged at 55% (local guest-boundary diagnosis only)
 
 checksum-pinned Rocky image under QEMU 8.2.2 TCG/q35/SeaBIOS with the original
   virtio seed command, bounded to 180s
@@ -255,16 +337,26 @@ object and passed dynamic width/precision, promoted integer classes, pointer,
 1. Hosted Rocky build must produce `mckernel.img`, C `ihk.ko` and
    `ihk-smp-x86_64.ko`, Rust-linked `mcctrl.ko`, Rust-linked `mcexec`, and the
    deterministic workload while all linkage/audit gates pass.
-2. A protected disposable Rocky KVM guest must load the modules, reserve CPU
-   and memory, reach `RUNNING`, and contain `IHK/McKernel started.` plus
-   `IHK/McKernel booted.`.
+2. The automatic same-repository hosted disposable Rocky KVM guest must load
+   the modules, reserve exactly the requested CPU and memory with no residual
+   reserve, reach `RUNNING`, and contain `IHK/McKernel started.` plus
+   `IHK/McKernel booted.`. The protected lane is not accepted as an equivalent
+   gate for this PR because it does not yet mirror every hosted assertion.
 3. The guest must successfully run `/bin/true`, hostname, and the deterministic
    workload through `mcexec`, then run host-side `mcstat`; kmsg must contain
    `prepared`, `schedule_process queued`, `enter_user`, `send_syscall`, and
    `offload_return` markers.
-4. `mcstop+release.sh` must succeed, SELinux mode must be restored, QEMU must
-   exit, the backing image checksum must remain unchanged, and exact results
-   must be added to this file and PR #1.
+4. After the workloads, status must still be `RUNNING` and the final McKernel
+   kmsg must have no fatal signature. `mcstop+release.sh` must succeed; SELinux,
+   CPU, swappiness, irqbalance, and IRQ affinities must be restored; modules,
+   devices, helper processes, and temporary runtime state must be absent; QEMU
+   must exit; the backing checksum must remain unchanged; and raw evidence plus
+   its SHA-256 manifest must be exported.
+5. Closeout uses two published checkpoints to avoid a self-referential report:
+   first a fully green runtime code head, then one documentation-only commit
+   recording that result and the runtime-relevant tree equivalence. The full
+   workflow must pass again on that exact final head. PR #1 then records the
+   final run, job, artifact, and digest without another repository commit.
 
 The same-repository PR workflow now has an automatic GitHub-hosted KVM lane. It
 downloads Rocky's dated 8.10 GenericCloud qcow2, verifies its published size
@@ -276,7 +368,7 @@ The protected self-hosted lane remains useful after merge, but additionally
 requires repository administrators to configure the `mckernel-boot`
 environment, runner labels, and two image variables. It cannot be manually
 dispatched until the workflow exists on the default branch and does not count
-as current evidence.
+as current evidence or as an alternative to the hosted PR gate.
 
 The next hosted checkpoint also makes the final cleanup gate explicit. The
 guest records its initial SELinux mode, requires successful
@@ -286,5 +378,7 @@ QEMU wrapper snapshots a startup PID only after verifying the executable and
 its exact pidfile argument; both graceful and forced cleanup re-verify that
 identity before every signal so a reused PID is never killed. The host then
 proves that process exited, rechecks the backing-image checksum, and requires
-removal of the disposable overlay.
+removal of the disposable overlay. Runtime evidence is retained for 90 days;
+the final PR report preserves its concise identifiers and digests after the
+artifact itself expires.
 These checks earn no percentage until they pass on a published head.

@@ -34,6 +34,9 @@ Options:
                         QEMU exits. Default: stop McKernel if installed.
   --guest-cleanup-timeout SEC
                         Watchdog for guest cleanup. Default: 30
+  --guest-evidence-dir PATH
+                        Copy this guest /tmp child into LOG_DIR/guest-evidence
+                        after --guest-cmd, including on command failure.
   --ssh-key PATH        Existing private key to use for guest SSH. Default:
                         generate a temporary key in the log directory.
   --kernel PATH         Optional external kernel image to boot with QEMU.
@@ -74,6 +77,7 @@ GUEST_CMD_TIMEOUT=0
 GUEST_CLEANUP=1
 GUEST_CLEANUP_CMD='if [ -x /opt/mckernel-rust/sbin/mcstop+release.sh ]; then sudo /opt/mckernel-rust/sbin/mcstop+release.sh -k || true; fi'
 GUEST_CLEANUP_TIMEOUT=30
+GUEST_EVIDENCE_DIR=
 SHARED_DIR=
 STAGE_DIRS=()
 LOG_DIR="/tmp/mckernel-qemu-$(date +%Y%m%d-%H%M%S)"
@@ -141,6 +145,10 @@ while [ "$#" -gt 0 ]; do
 			;;
 		--guest-cleanup-timeout)
 			GUEST_CLEANUP_TIMEOUT="${2:?missing value for --guest-cleanup-timeout}"
+			shift 2
+			;;
+		--guest-evidence-dir)
+			GUEST_EVIDENCE_DIR="${2:?missing value for --guest-evidence-dir}"
 			shift 2
 			;;
 		--ssh-key)
@@ -244,6 +252,13 @@ if [ -n "$DISK_SIZE" ] && [[ ! "$DISK_SIZE" =~ ^[1-9][0-9]*[KMGT]?$ ]]; then
 	exit 2
 fi
 
+if [ -n "$GUEST_EVIDENCE_DIR" ]; then
+	if [[ ! "$GUEST_EVIDENCE_DIR" =~ ^/tmp/[A-Za-z0-9][A-Za-z0-9._-]*$ ]]; then
+		echo 'error: --guest-evidence-dir must be one safe directory directly under /tmp' >&2
+		exit 2
+	fi
+fi
+
 if [ ! -f "$IMAGE" ]; then
 	echo "error: image not found: $IMAGE" >&2
 	exit 1
@@ -324,10 +339,11 @@ if [ -n "$GDB_PORT" ]; then
 fi
 mkdir -p "$LOG_DIR"
 
-BASE_FORMAT="$(qemu-img info --output=json "$IMAGE" |
-	sed -n 's/.*"format": *"\([^"]*\)".*/\1/p' | head -n1)"
+BASE_FORMAT="$(LC_ALL=C qemu-img info "$IMAGE" |
+	sed -n 's/^file format: //p' | head -n1)"
 if [ -z "$BASE_FORMAT" ]; then
-	BASE_FORMAT=qcow2
+	echo "error: could not determine backing image format: $IMAGE" >&2
+	exit 1
 fi
 
 OVERLAY="$LOG_DIR/guest-overlay.qcow2"
@@ -341,6 +357,9 @@ QMP_SOCKET="$LOG_DIR/qmp.sock"
 QMP_LOG="$LOG_DIR/qmp-status.jsonl"
 GUEST_CMD_LOG="$LOG_DIR/guest-command.log"
 GUEST_CLEANUP_LOG="$LOG_DIR/guest-cleanup.log"
+GUEST_EVIDENCE_ARCHIVE="$LOG_DIR/guest-evidence.tar"
+GUEST_EVIDENCE_ARCHIVE_SHA256="$LOG_DIR/guest-evidence.tar.sha256"
+GUEST_EVIDENCE_HOST_DIR="$LOG_DIR/guest-evidence"
 
 print_serial_tail() {
 	if [ -f "$SERIAL_LOG" ]; then
@@ -456,12 +475,75 @@ except Exception as error:
 PY
 }
 
+collect_guest_evidence() {
+	local archive_sha
+	local file_count
+	local remote_cmd
+
+	if [ -z "$GUEST_EVIDENCE_DIR" ]; then
+		return
+	fi
+	remote_cmd="$(printf 'test -d %q && test ! -L %q && tar -C %q -cf - .' \
+		"$GUEST_EVIDENCE_DIR" "$GUEST_EVIDENCE_DIR" \
+		"$GUEST_EVIDENCE_DIR")"
+	if ! timeout --signal=TERM --kill-after=5s "$GUEST_CLEANUP_TIMEOUT" \
+		ssh "${SSH_ARGS[@]}" "$remote_cmd" >"$GUEST_EVIDENCE_ARCHIVE"
+	then
+		echo "error: could not collect guest evidence directory: $GUEST_EVIDENCE_DIR" >&2
+		return 1
+	fi
+	if [ ! -s "$GUEST_EVIDENCE_ARCHIVE" ]; then
+		echo 'error: collected guest evidence archive is empty' >&2
+		return 1
+	fi
+	if ! mkdir -p "$GUEST_EVIDENCE_HOST_DIR"; then
+		echo 'error: could not create the host guest-evidence directory' >&2
+		return 1
+	fi
+	if ! tar --no-same-owner --no-same-permissions \
+		-C "$GUEST_EVIDENCE_HOST_DIR" -xf "$GUEST_EVIDENCE_ARCHIVE"
+	then
+		echo 'error: could not extract the guest evidence archive' >&2
+		return 1
+	fi
+	if [ ! -s "$GUEST_EVIDENCE_HOST_DIR/SHA256SUMS" ]; then
+		echo 'error: guest evidence is missing SHA256SUMS' >&2
+		return 1
+	fi
+	if ! (
+		cd "$GUEST_EVIDENCE_HOST_DIR"
+		sha256sum -c SHA256SUMS
+	); then
+		echo 'error: guest evidence SHA256SUMS verification failed' >&2
+		return 1
+	fi
+	if ! (
+		cd "$LOG_DIR"
+		sha256sum "$(basename "$GUEST_EVIDENCE_ARCHIVE")" \
+			>"$(basename "$GUEST_EVIDENCE_ARCHIVE_SHA256")"
+	)
+	then
+		echo 'error: could not hash the guest evidence archive' >&2
+		return 1
+	fi
+	file_count="$(find "$GUEST_EVIDENCE_HOST_DIR" -type f | wc -l)" || return 1
+	archive_sha="$(awk '{ print $1 }' "$GUEST_EVIDENCE_ARCHIVE_SHA256")" || return 1
+	if [[ ! "$file_count" =~ ^[1-9][0-9]*$ ]] ||
+		[[ ! "$archive_sha" =~ ^[0-9a-f]{64}$ ]]
+	then
+		echo 'error: invalid guest evidence count or archive digest' >&2
+		return 1
+	fi
+	printf 'guest-evidence: collected files=%s archive_sha256=%s\n' \
+		"$file_count" "$archive_sha"
+}
+
 cleanup() {
 	local pid
 
 	if [ "$KEEP_RUNNING" -eq 0 ] && [ "$SSH_READY" -eq 1 ] &&
 		[ "$GUEST_CLEANUP" -eq 1 ]; then
-		timeout --foreground "$GUEST_CLEANUP_TIMEOUT" \
+		timeout --signal=TERM --kill-after=5s "$GUEST_CLEANUP_TIMEOUT" \
 			ssh "${SSH_ARGS[@]}" "$GUEST_CLEANUP_CMD" \
 			>>"$GUEST_CLEANUP_LOG" 2>&1 || true
 	fi
@@ -610,6 +692,7 @@ printf '%s\n' "Serial log: $SERIAL_LOG"
 printf '%s\n' "QEMU startup log: $STARTUP_LOG"
 printf '%s\n' "QMP status log: $QMP_LOG"
 printf '%s\n' "Overlay: $OVERLAY"
+printf '%s\n' "Backing image format: $BASE_FORMAT"
 if [ -n "$DISK_SIZE" ]; then
 	printf '%s\n' "Overlay virtual size: $DISK_SIZE"
 fi
@@ -700,7 +783,17 @@ until ssh "${SSH_ARGS[@]}" true >/dev/null 2>&1; do
 		print_serial_tail
 		exit 1
 	fi
+	if grep -Fq 'No bootable device.' "$SERIAL_LOG" 2>/dev/null; then
+		record_qemu_process_sample firmware-boot-failure "$qemu_started_pid" || true
+		record_qmp_status firmware-boot-failure
+		echo 'error: guest firmware reported that no bootable device exists' >&2
+		echo "serial log: $SERIAL_LOG" >&2
+		print_serial_tail
+		exit 1
+	fi
 	if [ "$SECONDS" -ge "$deadline" ]; then
+		record_qemu_process_sample ssh-timeout "$qemu_started_pid" || true
+		record_qmp_status ssh-timeout
 		echo "error: guest SSH did not become ready within ${TIMEOUT}s" >&2
 		echo "serial log: $SERIAL_LOG" >&2
 		print_serial_tail
@@ -726,7 +819,7 @@ if [ -n "$GUEST_CMD" ]; then
 	say "Running guest command"
 	set +e
 	if [ "$GUEST_CMD_TIMEOUT" -gt 0 ]; then
-		timeout --foreground "$GUEST_CMD_TIMEOUT" \
+		timeout --signal=TERM --kill-after=5s "$GUEST_CMD_TIMEOUT" \
 			ssh "${SSH_ARGS[@]}" "$GUEST_CMD" >"$GUEST_CMD_LOG" 2>&1
 	else
 		ssh "${SSH_ARGS[@]}" "$GUEST_CMD" >"$GUEST_CMD_LOG" 2>&1
@@ -734,8 +827,12 @@ if [ -n "$GUEST_CMD" ]; then
 	rc=$?
 	set -e
 	cat "$GUEST_CMD_LOG"
-	if [ "$rc" -eq 124 ] && [ "$GUEST_CMD_TIMEOUT" -gt 0 ]; then
-		echo "error: guest command exceeded the ${GUEST_CMD_TIMEOUT}s watchdog" >&2
+	evidence_rc=0
+	collect_guest_evidence || evidence_rc=$?
+	if { [ "$rc" -eq 124 ] || [ "$rc" -eq 137 ]; } &&
+		[ "$GUEST_CMD_TIMEOUT" -gt 0 ]
+	then
+		echo "error: guest command exceeded the ${GUEST_CMD_TIMEOUT}s watchdog (status ${rc})" >&2
 		echo "serial log: $SERIAL_LOG" >&2
 		print_serial_tail
 		exit "$rc"
@@ -745,6 +842,10 @@ if [ -n "$GUEST_CMD" ]; then
 		echo "serial log: $SERIAL_LOG" >&2
 		print_serial_tail
 		exit "$rc"
+	fi
+	if [ "$evidence_rc" -ne 0 ]; then
+		echo "error: guest command passed but evidence collection failed with status $evidence_rc" >&2
+		exit "$evidence_rc"
 	fi
 fi
 

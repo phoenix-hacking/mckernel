@@ -243,10 +243,21 @@ jobs:
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' |
             sudo tee /etc/udev/rules.d/99-kvm4all.rules >/dev/null
           sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
-          test -c /dev/kvm
-          test -r /dev/kvm
-          test -w /dev/kvm
+          if ! sudo udevadm trigger --name-match=kvm; then
+            echo 'warning: udev could not retrigger kvm; checking the existing device directly' >&2
+          fi
+          if test ! -c /dev/kvm; then
+            echo '/dev/kvm is absent or is not a character device' >&2
+            ls -l /dev/kvm 2>/dev/null || true
+            exit 1
+          fi
+          if test ! -r /dev/kvm || test ! -w /dev/kvm; then
+            echo '/dev/kvm is not readable and writable after the udev rule' >&2
+            ls -l /dev/kvm >&2
+            exit 1
+          fi
+          echo 'kvm-host: ready'
+          ls -l /dev/kvm
           command -v qemu-system-x86_64
           command -v qemu-img
           command -v cloud-localds
@@ -321,7 +332,15 @@ jobs:
           set -uo pipefail
           hosted_boot_dir="$RUNNER_TEMP/mckernel-hosted-boot-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
           rocky_image="$hosted_boot_dir/$ROCKY_IMAGE_NAME"
+          mkdir -p "$hosted_boot_dir"
+          post_manifest="$hosted_boot_dir/post-validation.txt"
+          exec 3>&1 4>&2
+          exec >"$post_manifest" 2>&1
           post_rc=0
+
+          echo "run-id=$GITHUB_RUN_ID"
+          echo "run-attempt=$GITHUB_RUN_ATTEMPT"
+          echo "validation-head=$(git rev-parse HEAD 2>/dev/null || echo unavailable)"
 
           qemu_pid_is_owned() {
             local check_pid="$1"
@@ -365,6 +384,8 @@ jobs:
             echo 'host IHK/McKernel modules are loaded after guest validation' >&2
             grep -E '^(ihk|ihk_smp_x86_64|mcctrl) ' /proc/modules >&2
             post_rc=1
+          else
+            echo 'host IHK/McKernel modules after validation: none'
           fi
 
           if test -f "$hosted_boot_dir/qemu/guest-overlay.qcow2"; then
@@ -376,13 +397,23 @@ jobs:
           if test ! -s "$hosted_boot_dir/qemu/serial.log"; then
             echo 'missing or empty QEMU serial evidence' >&2
             post_rc=1
+          else
+            echo "serial-evidence: bytes=$(stat -c %s "$hosted_boot_dir/qemu/serial.log")"
           fi
           if test ! -s "$hosted_boot_dir/qemu/guest-command.log"; then
             echo 'missing or empty guest validation evidence' >&2
             post_rc=1
           else
             guest_log="$hosted_boot_dir/qemu/guest-command.log"
+            echo "guest-evidence: bytes=$(stat -c %s "$guest_log")"
             for marker in \
+              'McKernel status: RUNNING' \
+              'mcexec-true: OK' \
+              'mcexec-hostname: OK' \
+              'mcexec-hostname-absolute: OK' \
+              'mckernel-rust-smoke: OK bytes=1048576 sum=133693440' \
+              'mcexec-rust-workload: OK' \
+              'mcstat: OK' \
               'mcstop+release: OK' \
               'IHK/McKernel modules after shutdown: none' \
               'McKernel device nodes after shutdown: none' \
@@ -400,7 +431,107 @@ jobs:
               echo 'missing SELinux restoration evidence' >&2
               post_rc=1
             fi
+            for pattern in \
+              'IHK/McKernel started\.' \
+              'IHK/McKernel booted\.' \
+              '^\[[[:space:]]*[0-9]+\]:[[:space:]]+mcexec_v10: prepared ' \
+              '^\[[[:space:]]*[0-9]+\]:[[:space:]]+mcexec_v10: schedule_process queued ' \
+              '^\[[[:space:]]*[0-9]+\]:[[:space:]]+mcexec_v10: enter_user ' \
+              '^\[[[:space:]]*[0-9]+\]:[[:space:]]+mcexec_v10: send_syscall ' \
+              '^\[[[:space:]]*[0-9]+\]:[[:space:]]+mcexec_v10: offload_return ' \
+              '^McKernel deterministic-workload kmsg delta: lines=[0-9]+ sha256=[0-9a-f]{64}$' \
+              '^live-module: ihk ' \
+              '^live-module: ihk_smp_x86_64 ' \
+              '^live-module: mcctrl ' \
+              '^IHK remaining unassigned CPU reserves: ' \
+              '^IHK remaining unassigned memory reserves: ' \
+              '^McKernel assigned CPU evidence: .+' \
+              '^McKernel assigned memory evidence: .+' \
+              '^McKernel free-memory evidence: .+' \
+              '^McKernel requested CPU assignment: verified .+' \
+              '^McKernel requested memory assignment: verified .+' \
+              '^Runtime provenance manifest: files=[1-9][0-9]* sha256=[0-9a-f]{64}$' \
+              '^McKernel post-workload status: RUNNING$' \
+              '^McKernel post-workload fatal scan: clean lines=[0-9]+ sha256=[0-9a-f]{64}$' \
+              '^CPU online mask restored: ' \
+              '^vm\.swappiness restored: ' \
+              '^irqbalance state restored: (active|inactive|unavailable)$' \
+              '^IRQ affinity baseline restored: entries=[1-9][0-9]*$' \
+              '^McKernel temporary irqbalance state after shutdown: none$' \
+              '^McKernel validation processes after shutdown: none$' \
+              '^Linux dmesg delta fatal scan: clean ' \
+              '^===== BEGIN raw McKernel kmsg =====$' \
+              '^===== END raw McKernel kmsg =====$' \
+              '^===== BEGIN raw Linux dmesg delta =====$' \
+              '^===== END raw Linux dmesg delta =====$' \
+              '^Runtime raw evidence preserved: files=[1-9][0-9]* manifest_sha256=[0-9a-f]{64}$'
+            do
+              if ! grep -Eq "$pattern" "$guest_log"; then
+                echo "missing guest evidence pattern: $pattern" >&2
+                post_rc=1
+              fi
+            done
           fi
+
+          guest_evidence_dir="$hosted_boot_dir/qemu/guest-evidence"
+          guest_evidence_archive="$hosted_boot_dir/qemu/guest-evidence.tar"
+          guest_evidence_archive_sha="$hosted_boot_dir/qemu/guest-evidence.tar.sha256"
+          if test ! -s "$guest_evidence_archive" ||
+            test ! -s "$guest_evidence_archive_sha"
+          then
+            echo 'missing guest evidence archive or portable digest' >&2
+            post_rc=1
+          elif (
+            cd "$hosted_boot_dir/qemu" &&
+              sha256sum -c "$(basename "$guest_evidence_archive_sha")"
+          ); then
+            echo 'guest evidence archive digest: verified'
+          else
+            post_rc=1
+          fi
+          if test ! -s "$guest_evidence_dir/SHA256SUMS"; then
+            echo 'missing guest raw-evidence manifest' >&2
+            post_rc=1
+          elif (
+            cd "$guest_evidence_dir" && sha256sum -c SHA256SUMS
+          ); then
+            echo 'guest raw-evidence manifest: verified'
+          else
+            post_rc=1
+          fi
+          for evidence_file in \
+            runtime-environment.txt \
+            runtime-rpms.txt \
+            runtime-repositories.txt \
+            runtime-artifacts.sha256 \
+            linux-dmesg-before.log \
+            linux-dmesg-after.log \
+            linux-dmesg-delta.log \
+            mckernel-boot.kmsg \
+            mckernel-before-workload.kmsg \
+            mckernel-after-workload.kmsg \
+            mckernel-workload-delta.kmsg \
+            mckernel-final.kmsg \
+            linux-irq-affinity-before.tsv
+          do
+            if test ! -f "$guest_evidence_dir/$evidence_file"; then
+              echo "missing expected guest evidence file: $evidence_file" >&2
+              post_rc=1
+            fi
+          done
+          runtime_environment="$guest_evidence_dir/runtime-environment.txt"
+          expected_head="$(git rev-parse HEAD 2>/dev/null || true)"
+          for identity in \
+            "source_commit=$expected_head" \
+            'os_id=rocky' \
+            'os_version=8.10' \
+            'arch=x86_64'
+          do
+            if ! grep -Fxq "$identity" "$runtime_environment" 2>/dev/null; then
+              echo "missing or mismatched runtime identity: $identity" >&2
+              post_rc=1
+            fi
+          done
 
           pidfile="$hosted_boot_dir/qemu/qemu.pid"
           started_pidfile="$hosted_boot_dir/qemu/qemu-started.pid"
@@ -438,6 +569,17 @@ jobs:
           if test "$qemu_exit_ok" -eq 1; then
             echo 'qemu-exit: OK'
           fi
+          if test "$post_rc" -eq 0; then
+            echo 'hosted-post-validation: OK'
+          else
+            echo 'hosted-post-validation: FAILED'
+          fi
+          exec 1>&3 2>&4
+          if test ! -s "$post_manifest"; then
+            echo 'post-validation manifest is missing or empty' >&2
+            exit 1
+          fi
+          cat "$post_manifest"
           exit "$post_rc"
 
       - name: Upload hosted boot evidence without ephemeral SSH keys
@@ -448,6 +590,7 @@ jobs:
           path: |
             ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/CHECKSUM
             ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/host-environment.txt
+            ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/post-validation.txt
             ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/run.log
             ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/serial.log
             ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/qemu-started.pid
@@ -455,9 +598,12 @@ jobs:
             ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/qmp-status.jsonl
             ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/guest-command.log
             ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/guest-cleanup.log
+            ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/guest-evidence.tar
+            ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/guest-evidence.tar.sha256
+            ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/guest-evidence/
             VALIDATION_PROGRESS.MD
           if-no-files-found: warn
-          retention-days: 30
+          retention-days: 90
 
   boot-smoke:
     name: Protected Rocky QEMU boot and mcexec

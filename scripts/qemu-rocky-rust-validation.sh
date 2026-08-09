@@ -204,6 +204,7 @@ validation_cmd=$(
 		printf 'test "$root_avail" -ge 8589934592; '
 	fi
 	printf 'cd /tmp/mckernel-hostshare && '
+	printf 'export MCKERNEL_RUNTIME_EVIDENCE_DIR=/tmp/mckernel-validation-evidence; '
 	printf 'exec ./scripts/rocky-rust-validation.sh '
 	quote_args "${VALIDATION_ARGS[@]}"
 )
@@ -217,6 +218,7 @@ qemu_args=(
 	--timeout "$SSH_TIMEOUT"
 	--guest-cmd-timeout "$GUEST_TIMEOUT"
 	--guest-cleanup-timeout 30
+	--guest-evidence-dir /tmp/mckernel-validation-evidence
 	--stage-dir "$SOURCE_DIR:/tmp/mckernel-hostshare"
 	--guest-cmd "$validation_cmd"
 )
