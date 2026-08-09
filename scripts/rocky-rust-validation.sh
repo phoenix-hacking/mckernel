@@ -86,6 +86,7 @@ ASSUME_YES=0
 UNSAFE_HOST_BOOT=0
 BOOT_SHUTDOWN_NEEDED=0
 BOOT_RESTORE_SELINUX=0
+BOOT_INITIAL_SELINUX_MODE=unavailable
 
 while [ "$#" -gt 0 ]; do
 	case "$1" in
@@ -665,11 +666,22 @@ module_load_smoke() {
 
 ensure_selinux_permissive_for_boot() {
 	if ! command -v getenforce >/dev/null 2>&1; then
+		BOOT_INITIAL_SELINUX_MODE=unavailable
 		return
 	fi
 
 	local mode
 	mode="$(getenforce | tr '[:upper:]' '[:lower:]')"
+	case "$mode" in
+		enforcing|permissive|disabled)
+			;;
+		*)
+			echo "error: unexpected SELinux mode before boot: $mode" >&2
+			exit 1
+			;;
+	esac
+	BOOT_INITIAL_SELINUX_MODE="$mode"
+	printf 'SELinux mode before boot: %s\n' "$mode"
 	if [ "$mode" != "enforcing" ]; then
 		return
 	fi
@@ -683,6 +695,11 @@ ensure_selinux_permissive_for_boot() {
 	say "Temporarily setting SELinux permissive for McKernel boot validation"
 	sudo setenforce 0
 	BOOT_RESTORE_SELINUX=1
+	mode="$(getenforce | tr '[:upper:]' '[:lower:]')"
+	if [ "$mode" != "permissive" ]; then
+		echo "error: SELinux did not enter permissive mode: $mode" >&2
+		return 1
+	fi
 }
 
 restore_selinux_after_boot() {
@@ -691,6 +708,62 @@ restore_selinux_after_boot() {
 		sudo setenforce 1
 		BOOT_RESTORE_SELINUX=0
 	fi
+}
+
+verify_boot_cleanup() {
+	local current_selinux=unavailable
+	local modules_present=0
+	local devices_present=0
+	local attempt
+
+	if command -v getenforce >/dev/null 2>&1; then
+		current_selinux="$(getenforce | tr '[:upper:]' '[:lower:]')"
+	fi
+	if [ "$current_selinux" != "$BOOT_INITIAL_SELINUX_MODE" ]; then
+		echo "error: SELinux mode was not restored after boot validation." >&2
+		echo "initial=$BOOT_INITIAL_SELINUX_MODE current=$current_selinux" >&2
+		return 1
+	fi
+	printf 'SELinux mode restored: %s\n' "$current_selinux"
+	if [ ! -r /proc/modules ]; then
+		echo 'error: cannot verify unloaded modules because /proc/modules is unreadable.' >&2
+		return 1
+	fi
+
+	if command -v udevadm >/dev/null 2>&1; then
+		sudo udevadm settle --timeout=10 || true
+	fi
+	for attempt in {1..20}; do
+		modules_present=0
+		devices_present=0
+		if grep -Eq '^(ihk|ihk_smp_x86_64|mcctrl) ' /proc/modules; then
+			modules_present=1
+		fi
+		if compgen -G '/dev/mcd*' >/dev/null ||
+			compgen -G '/dev/mcos*' >/dev/null
+		then
+			devices_present=1
+		fi
+		if [ "$modules_present" -eq 0 ] && [ "$devices_present" -eq 0 ]; then
+			break
+		fi
+		sleep 0.25
+	done
+
+	if [ "$modules_present" -ne 0 ]; then
+		echo 'error: IHK/McKernel modules remain loaded after mcstop+release.' >&2
+		grep -E '^(ihk|ihk_smp_x86_64|mcctrl) ' /proc/modules >&2 || true
+		return 1
+	fi
+	echo 'IHK/McKernel modules after shutdown: none'
+	if [ "$devices_present" -ne 0 ]; then
+		echo 'error: McKernel device nodes remain after mcstop+release.' >&2
+		ls -l /dev/mcd* /dev/mcos* 2>/dev/null >&2 || true
+		return 1
+	fi
+	echo 'McKernel device nodes after shutdown: none'
+
+	echo 'guest-cleanup: OK'
 }
 
 boot_cleanup() {
@@ -777,6 +850,7 @@ wait_for_mckernel_boot() {
 boot_smoke() {
 	BOOT_SHUTDOWN_NEEDED=0
 	BOOT_RESTORE_SELINUX=0
+	BOOT_INITIAL_SELINUX_MODE=unavailable
 	trap boot_cleanup EXIT
 
 	if [ "$(nproc)" -lt 2 ]; then
@@ -784,6 +858,7 @@ boot_smoke() {
 		exit 1
 	fi
 	need_cmd setsid
+	need_cmd getenforce
 	if [ "$TRACE_SMOKE" -eq 1 ]; then
 		need_cmd strace
 	fi
@@ -827,8 +902,10 @@ boot_smoke() {
 	if [ "$BOOT_ONLY" -eq 1 ]; then
 		say "Boot-only check requested; skipping mcexec workloads"
 		sudo "$PREFIX/sbin/mcstop+release.sh"
-		BOOT_SHUTDOWN_NEEDED=0
+		echo 'mcstop+release: OK'
 		restore_selinux_after_boot
+		verify_boot_cleanup
+		BOOT_SHUTDOWN_NEEDED=0
 		trap - EXIT
 		return
 	fi
@@ -871,8 +948,10 @@ boot_smoke() {
 
 	say "Shutting down McKernel"
 	sudo "$PREFIX/sbin/mcstop+release.sh"
-	BOOT_SHUTDOWN_NEEDED=0
+	echo 'mcstop+release: OK'
 	restore_selinux_after_boot
+	verify_boot_cleanup
+	BOOT_SHUTDOWN_NEEDED=0
 	trap - EXIT
 
 	if [ "$smoke_rc" -ne 0 ]; then

@@ -323,15 +323,45 @@ jobs:
           rocky_image="$hosted_boot_dir/$ROCKY_IMAGE_NAME"
           post_rc=0
 
+          qemu_pid_is_owned() {
+            local check_pid="$1"
+            local expected_pidfile="$2"
+            local qemu_exe
+            local i
+            local -a qemu_argv=()
+
+            test -n "$check_pid" || return 1
+            kill -0 "$check_pid" 2>/dev/null || return 1
+            qemu_exe="$(basename "$(readlink "/proc/$check_pid/exe" 2>/dev/null || true)")"
+            [[ "$qemu_exe" == qemu-system-x86_64* ]] || return 1
+            mapfile -d '' -t qemu_argv < "/proc/$check_pid/cmdline" || return 1
+            for ((i = 0; i + 1 < ${#qemu_argv[@]}; i++)); do
+              if test "${qemu_argv[$i]}" = -pidfile &&
+                test "${qemu_argv[$((i + 1))]}" = "$expected_pidfile"
+              then
+                return 0
+              fi
+            done
+            return 1
+          }
+
           if test ! -f "$rocky_image"; then
             echo "Rocky backing image is missing: $rocky_image" >&2
             post_rc=1
           else
-            printf '%s  %s\n' "$ROCKY_IMAGE_SHA256" "$rocky_image" |
-              sha256sum -c - || post_rc=1
+            if printf '%s  %s\n' "$ROCKY_IMAGE_SHA256" "$rocky_image" |
+              sha256sum -c -
+            then
+              echo 'backing-image: unchanged'
+            else
+              post_rc=1
+            fi
           fi
 
-          if grep -Eq '^(ihk|ihk_smp_x86_64|mcctrl) ' /proc/modules; then
+          if test ! -r /proc/modules; then
+            echo 'host /proc/modules is unreadable after guest validation' >&2
+            post_rc=1
+          elif grep -Eq '^(ihk|ihk_smp_x86_64|mcctrl) ' /proc/modules; then
             echo 'host IHK/McKernel modules are loaded after guest validation' >&2
             grep -E '^(ihk|ihk_smp_x86_64|mcctrl) ' /proc/modules >&2
             post_rc=1
@@ -340,6 +370,8 @@ jobs:
           if test -f "$hosted_boot_dir/qemu/guest-overlay.qcow2"; then
             echo 'disposable guest overlay remains after validation' >&2
             post_rc=1
+          else
+            echo 'guest-overlay: removed'
           fi
           if test ! -s "$hosted_boot_dir/qemu/serial.log"; then
             echo 'missing or empty QEMU serial evidence' >&2
@@ -348,38 +380,63 @@ jobs:
           if test ! -s "$hosted_boot_dir/qemu/guest-command.log"; then
             echo 'missing or empty guest validation evidence' >&2
             post_rc=1
+          else
+            guest_log="$hosted_boot_dir/qemu/guest-command.log"
+            for marker in \
+              'mcstop+release: OK' \
+              'IHK/McKernel modules after shutdown: none' \
+              'McKernel device nodes after shutdown: none' \
+              'guest-cleanup: OK'
+            do
+              if ! grep -Fxq "$marker" "$guest_log"; then
+                echo "missing guest cleanup marker: $marker" >&2
+                post_rc=1
+              fi
+            done
+            if ! grep -Eq \
+              '^SELinux mode restored: (enforcing|permissive|disabled)$' \
+              "$guest_log"
+            then
+              echo 'missing SELinux restoration evidence' >&2
+              post_rc=1
+            fi
           fi
 
           pidfile="$hosted_boot_dir/qemu/qemu.pid"
-          if test -f "$pidfile"; then
-            pid="$(cat "$pidfile" 2>/dev/null || true)"
-            if test -n "$pid" && kill -0 "$pid" 2>/dev/null; then
-              echo "QEMU process $pid is still running after validation" >&2
-              qemu_pidfile_verified=0
-              mapfile -d '' -t qemu_argv < "/proc/$pid/cmdline" || true
-              for ((i = 0; i + 1 < ${#qemu_argv[@]}; i++)); do
-                if test "${qemu_argv[$i]}" = -pidfile &&
-                  test "${qemu_argv[$((i + 1))]}" = "$pidfile"
-                then
-                  qemu_pidfile_verified=1
-                  break
-                fi
-              done
-              qemu_exe="$(basename "$(readlink "/proc/$pid/exe" 2>/dev/null || true)")"
-              if [[ "$qemu_exe" == qemu-system-x86_64* ]] &&
-                test "$qemu_pidfile_verified" -eq 1
-              then
+          started_pidfile="$hosted_boot_dir/qemu/qemu-started.pid"
+          qemu_exit_ok=1
+          if test ! -s "$started_pidfile"; then
+            echo 'missing verified QEMU startup PID evidence' >&2
+            qemu_exit_ok=0
+            post_rc=1
+          else
+            pid="$(cat "$started_pidfile" 2>/dev/null || true)"
+            if [[ ! "$pid" =~ ^[0-9]+$ ]]; then
+              echo "invalid verified QEMU startup PID: $pid" >&2
+              qemu_exit_ok=0
+              post_rc=1
+            elif kill -0 "$pid" 2>/dev/null; then
+              if qemu_pid_is_owned "$pid" "$pidfile"; then
+                echo "QEMU process $pid is still running after validation" >&2
                 kill "$pid" 2>/dev/null || true
                 for _ in {1..20}; do
-                  kill -0 "$pid" 2>/dev/null || break
+                  qemu_pid_is_owned "$pid" "$pidfile" || break
                   sleep 0.25
                 done
-                kill -9 "$pid" 2>/dev/null || true
+                if qemu_pid_is_owned "$pid" "$pidfile"; then
+                  kill -9 "$pid" 2>/dev/null || true
+                elif kill -0 "$pid" 2>/dev/null; then
+                  echo "refusing to SIGKILL reused PID $pid" >&2
+                fi
+                qemu_exit_ok=0
+                post_rc=1
               else
-                echo 'refusing to kill PID because QEMU identity did not verify' >&2
+                echo "startup PID $pid was reused after QEMU exited"
               fi
-              post_rc=1
             fi
+          fi
+          if test "$qemu_exit_ok" -eq 1; then
+            echo 'qemu-exit: OK'
           fi
           exit "$post_rc"
 
@@ -393,6 +450,9 @@ jobs:
             ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/host-environment.txt
             ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/run.log
             ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/serial.log
+            ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/qemu-started.pid
+            ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/qemu-startup.log
+            ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/qmp-status.jsonl
             ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/guest-command.log
             ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/guest-cleanup.log
             VALIDATION_PROGRESS.MD
@@ -514,6 +574,28 @@ jobs:
           set -uo pipefail
           BOOT_LOG_DIR="$RUNNER_TEMP/mckernel-boot-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
           post_rc=0
+
+          qemu_pid_is_owned() {
+            local check_pid="$1"
+            local expected_pidfile="$2"
+            local qemu_exe
+            local i
+            local -a qemu_argv=()
+
+            test -n "$check_pid" || return 1
+            kill -0 "$check_pid" 2>/dev/null || return 1
+            qemu_exe="$(basename "$(readlink "/proc/$check_pid/exe" 2>/dev/null || true)")"
+            [[ "$qemu_exe" == qemu-system-x86_64* ]] || return 1
+            mapfile -d '' -t qemu_argv < "/proc/$check_pid/cmdline" || return 1
+            for ((i = 0; i + 1 < ${#qemu_argv[@]}; i++)); do
+              if test "${qemu_argv[$i]}" = -pidfile &&
+                test "${qemu_argv[$((i + 1))]}" = "$expected_pidfile"
+              then
+                return 0
+              fi
+            done
+            return 1
+          }
           if test -z "$ROCKY_IMAGE" || test -z "$ROCKY_IMAGE_SHA256"; then
             echo 'protected Rocky image path/checksum is unset' >&2
             post_rc=1
@@ -535,26 +617,17 @@ jobs:
             pid="$(cat "$BOOT_LOG_DIR/qemu/qemu.pid" 2>/dev/null || true)"
             if test -n "$pid" && kill -0 "$pid" 2>/dev/null; then
               echo "QEMU process $pid is still running after validation" >&2
-              qemu_pidfile_verified=0
-              mapfile -d '' -t qemu_argv < "/proc/$pid/cmdline" || true
-              for ((i = 0; i + 1 < ${#qemu_argv[@]}; i++)); do
-                if test "${qemu_argv[$i]}" = -pidfile &&
-                  test "${qemu_argv[$((i + 1))]}" = "$BOOT_LOG_DIR/qemu/qemu.pid"
-                then
-                  qemu_pidfile_verified=1
-                  break
-                fi
-              done
-              qemu_exe="$(basename "$(readlink "/proc/$pid/exe" 2>/dev/null || true)")"
-              if [[ "$qemu_exe" == qemu-system-x86_64* ]] &&
-                test "$qemu_pidfile_verified" -eq 1
-              then
+              if qemu_pid_is_owned "$pid" "$BOOT_LOG_DIR/qemu/qemu.pid"; then
                 kill "$pid" 2>/dev/null || true
                 for _ in {1..20}; do
-                  kill -0 "$pid" 2>/dev/null || break
+                  qemu_pid_is_owned "$pid" "$BOOT_LOG_DIR/qemu/qemu.pid" || break
                   sleep 0.25
                 done
-                kill -9 "$pid" 2>/dev/null || true
+                if qemu_pid_is_owned "$pid" "$BOOT_LOG_DIR/qemu/qemu.pid"; then
+                  kill -9 "$pid" 2>/dev/null || true
+                elif kill -0 "$pid" 2>/dev/null; then
+                  echo "refusing to SIGKILL reused PID $pid" >&2
+                fi
               else
                 echo 'refusing to kill PID because QEMU identity did not verify' >&2
               fi
@@ -572,6 +645,9 @@ jobs:
             ${{ runner.temp }}/mckernel-boot-${{ github.run_id }}-${{ github.run_attempt }}/host-environment.txt
             ${{ runner.temp }}/mckernel-boot-${{ github.run_id }}-${{ github.run_attempt }}/run.log
             ${{ runner.temp }}/mckernel-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/serial.log
+            ${{ runner.temp }}/mckernel-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/qemu-started.pid
+            ${{ runner.temp }}/mckernel-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/qemu-startup.log
+            ${{ runner.temp }}/mckernel-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/qmp-status.jsonl
             ${{ runner.temp }}/mckernel-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/guest-command.log
             ${{ runner.temp }}/mckernel-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/guest-cleanup.log
             candidate/VALIDATION_PROGRESS.MD

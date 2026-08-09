@@ -334,7 +334,11 @@ OVERLAY="$LOG_DIR/guest-overlay.qcow2"
 SEED="$LOG_DIR/seed.iso"
 SSH_KEY="$LOG_DIR/id_ed25519"
 PIDFILE="$LOG_DIR/qemu.pid"
+STARTED_PIDFILE="$LOG_DIR/qemu-started.pid"
 SERIAL_LOG="$LOG_DIR/serial.log"
+STARTUP_LOG="$LOG_DIR/qemu-startup.log"
+QMP_SOCKET="$LOG_DIR/qmp.sock"
+QMP_LOG="$LOG_DIR/qmp-status.jsonl"
 GUEST_CMD_LOG="$LOG_DIR/guest-command.log"
 GUEST_CLEANUP_LOG="$LOG_DIR/guest-cleanup.log"
 
@@ -383,6 +387,75 @@ qemu_is_running() {
 	qemu_pid_is_owned "$pid"
 }
 
+record_qemu_process_sample() {
+	local label="$1"
+	local pid="$2"
+	local process_state
+	local process_ticks
+	local serial_bytes=0
+
+	if [ -f "$SERIAL_LOG" ]; then
+		serial_bytes="$(stat -c %s "$SERIAL_LOG")"
+	fi
+	if ! qemu_pid_is_owned "$pid"; then
+		printf '%s pid=%s owned=no serial_bytes=%s\n' \
+			"$label" "$pid" "$serial_bytes" >>"$STARTUP_LOG"
+		return 1
+	fi
+	read -r process_state process_ticks < <(
+		awk '{ print $3, ($14 + $15) }' "/proc/$pid/stat"
+	)
+	printf '%s pid=%s owned=yes state=%s ticks=%s serial_bytes=%s\n' \
+		"$label" "$pid" "$process_state" "$process_ticks" "$serial_bytes" \
+		>>"$STARTUP_LOG"
+}
+
+record_qmp_status() {
+	local label="$1"
+
+	if ! command -v python3 >/dev/null 2>&1 || [ ! -S "$QMP_SOCKET" ]; then
+		printf '{"label":"%s","error":"QMP unavailable"}\n' "$label" \
+			>>"$QMP_LOG"
+		return 0
+	fi
+	python3 - "$QMP_SOCKET" "$label" >>"$QMP_LOG" 2>&1 <<'PY' || true
+import json
+import socket
+import sys
+
+socket_path, label = sys.argv[1:]
+try:
+    client = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+    client.settimeout(5)
+    client.connect(socket_path)
+    stream = client.makefile("rwb", buffering=0)
+
+    def read_response():
+        while True:
+            line = stream.readline()
+            if not line:
+                raise RuntimeError("QMP socket closed")
+            message = json.loads(line)
+            if "event" not in message:
+                return message
+
+    greeting = read_response()
+    print(json.dumps({"label": label, "greeting": greeting}, sort_keys=True))
+    for command in ("qmp_capabilities", "query-status", "query-cpus-fast"):
+        stream.write((json.dumps({"execute": command}) + "\r\n").encode())
+        print(json.dumps({
+            "label": label,
+            "command": command,
+            "response": read_response(),
+        }, sort_keys=True))
+except Exception as error:
+    print(json.dumps({
+        "label": label,
+        "error": f"{type(error).__name__}: {error}",
+    }, sort_keys=True))
+PY
+}
+
 cleanup() {
 	local pid
 
@@ -393,15 +466,22 @@ cleanup() {
 			>>"$GUEST_CLEANUP_LOG" 2>&1 || true
 	fi
 
-	if [ "$KEEP_RUNNING" -eq 0 ] && [ -f "$PIDFILE" ]; then
+	if [ "$KEEP_RUNNING" -eq 0 ]; then
 		pid="$(cat "$PIDFILE" 2>/dev/null || true)"
+		if [ -z "$pid" ]; then
+			pid="$(cat "$STARTED_PIDFILE" 2>/dev/null || true)"
+		fi
 		if qemu_pid_is_owned "$pid"; then
 			kill "$pid" 2>/dev/null || true
 			for _ in $(seq 1 20); do
-				kill -0 "$pid" 2>/dev/null || break
+				qemu_pid_is_owned "$pid" || break
 				sleep 0.2
 			done
-			kill -9 "$pid" 2>/dev/null || true
+			if qemu_pid_is_owned "$pid"; then
+				kill -9 "$pid" 2>/dev/null || true
+			elif [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null; then
+				echo "refusing to SIGKILL reused PID $pid" >&2
+			fi
 		elif [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null; then
 			echo "refusing to kill PID $pid because QEMU identity did not verify" >&2
 		fi
@@ -480,17 +560,25 @@ fi
 QEMU_ARGS=(
 	qemu-system-x86_64
 	-accel "$ACCEL"
-	-machine q35
+	# With graphics disabled SeaBIOS redirects its own output to ttyS0, so an
+	# empty serial log proves failure before the Rocky kernel console starts.
+	-machine q35,graphics=off
 	-cpu "$CPU_MODEL"
 	-smp "$CPUS"
 	-m "$MEMORY"
 	-no-reboot
 	-display none
 	-serial "file:$SERIAL_LOG"
+	-qmp "unix:$QMP_SOCKET,server=on,wait=off"
 	-pidfile "$PIDFILE"
 	-daemonize
-	-drive "if=virtio,file=$OVERLAY,format=qcow2,cache=unsafe"
-	-drive "if=virtio,file=$SEED,format=raw,media=cdrom,readonly=on"
+	-drive "if=none,id=rocky_os,file=$OVERLAY,format=qcow2,cache=unsafe"
+	-device "virtio-blk-pci,drive=rocky_os,bootindex=1"
+	# NoCloud only needs a CIDATA-labelled block device.  virtio-blk does not
+	# support non-disk devices, so expose the read-only seed as a disk rather
+	# than requesting an unsupported virtio CD-ROM.
+	-drive "if=none,id=cloud_seed,file=$SEED,format=raw,readonly=on"
+	-device "virtio-blk-pci,drive=cloud_seed,bootindex=2"
 	-nic "user,model=virtio-net-pci,hostfwd=tcp:127.0.0.1:${SSH_PORT}-:22"
 )
 
@@ -519,6 +607,8 @@ fi
 
 printf '%s\n' "Log directory: $LOG_DIR"
 printf '%s\n' "Serial log: $SERIAL_LOG"
+printf '%s\n' "QEMU startup log: $STARTUP_LOG"
+printf '%s\n' "QMP status log: $QMP_LOG"
 printf '%s\n' "Overlay: $OVERLAY"
 if [ -n "$DISK_SIZE" ]; then
 	printf '%s\n' "Overlay virtual size: $DISK_SIZE"
@@ -539,6 +629,53 @@ fi
 
 say "Starting guest"
 "${QEMU_ARGS[@]}"
+
+if [ ! -s "$PIDFILE" ]; then
+	echo "error: QEMU did not create a nonempty pidfile: $PIDFILE" >&2
+	exit 1
+fi
+qemu_started_pid="$(cat "$PIDFILE")"
+case "$qemu_started_pid" in
+	''|*[!0-9]*)
+		echo "error: QEMU wrote an invalid PID: $qemu_started_pid" >&2
+		exit 1
+		;;
+esac
+if ! qemu_pid_is_owned "$qemu_started_pid"; then
+	echo "error: started QEMU PID $qemu_started_pid failed identity verification" >&2
+	exit 1
+fi
+printf '%s\n' "$qemu_started_pid" >"$STARTED_PIDFILE"
+printf 'Verified QEMU startup PID: %s\n' "$qemu_started_pid"
+
+if [ "$PAUSE_AT_RESET" -eq 0 ]; then
+	record_qemu_process_sample start "$qemu_started_pid"
+	record_qmp_status start
+	for _ in $(seq 1 12); do
+		sleep 5
+		if ! qemu_pid_is_owned "$qemu_started_pid"; then
+			record_qemu_process_sample exited "$qemu_started_pid" || true
+			record_qmp_status exited
+			echo "error: guest exited before producing firmware serial output" >&2
+			print_serial_tail
+			exit 1
+		fi
+		if [ -s "$SERIAL_LOG" ]; then
+			break
+		fi
+	done
+	record_qemu_process_sample preflight "$qemu_started_pid"
+	record_qmp_status preflight
+	if [ ! -s "$SERIAL_LOG" ]; then
+		echo "error: guest produced no SeaBIOS/Rocky serial output within 60s" >&2
+		echo "startup diagnostics: $STARTUP_LOG" >&2
+		echo "QMP diagnostics: $QMP_LOG" >&2
+		exit 1
+	fi
+	printf 'QEMU firmware serial preflight: PASS\n'
+else
+	printf 'QEMU firmware serial preflight: skipped (pause-at-reset)\n'
+fi
 
 SSH_ARGS=(
 	-F /dev/null

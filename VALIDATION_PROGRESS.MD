@@ -1,6 +1,6 @@
 # Rust x86_64 Validation Progress
 
-**Current completion: 35%**
+**Current completion: 55%**
 
 This percentage is evidence-gated. It reaches 100% only after the current PR
 head builds on Rocky/RHEL-family x86_64, boots McKernel, runs real programs
@@ -15,7 +15,7 @@ through `mcexec`, and shuts down cleanly.
 | IHK compatibility | 5% | PASS | Forward check/apply, reverse check/apply, `git diff --check`, and clean pinned-IHK status pass at `3114d9e7101ad52030eb3effa849a5c108972a1f`. |
 | `development` compatibility | 10% | PASS | Current `development` commit `7a779815cba07bacfeed5788acca31629e50a39a` is merged; GitHub reports the draft PR mergeable. |
 | Rust source/toolchain | 10% | PASS | Exact pinned nightly compiles the three selected Rust objects; required symbols, no-SIMD scan, formatting, and variadic behavior checks pass. |
-| Rocky complete build | 20% | PENDING | Run `31290334197` compiled every requested target and passed Rust linkage, then exposed three omitted exact pinned-IHK C-boundary profile paths in the source-retirement audit. |
+| Rocky complete build | 20% | PASS | Run `31290918282` built every requested artifact on Rocky 8.10 and passed the pinned compiler, no-SIMD, Rust linkage, and exact pinned-IHK source-profile audit gates. |
 | Host modules | 10% | PENDING | No current-head load/unload evidence or necessarily successful module use during McKernel boot yet. |
 | McKernel boot | 15% | PENDING | No current-head `RUNNING` status plus both Rust boot markers yet. |
 | Real `mcexec` programs | 10% | PENDING | `/bin/true`, hostname, deterministic workload, `mcstat`, and Rust handoff markers remain unproved at runtime. |
@@ -77,8 +77,44 @@ existing exact IHK core/IKC exemptions. The audit still rejects an invalid,
 unused, or otherwise unlisted compiled source. Run `31290334197` uploaded
 artifact `9031218315` with digest
 `sha256:a4804e2aa270da0b4b15a65edf0d82bbc6c5bb044cd7b222e278ae7e29de50a7`.
-No completion credit is awarded until the corrected audit passes on a fresh
-Rocky run.
+No completion credit was awarded at that point; the fresh passing run is
+recorded below.
+
+The fourth hosted attempt, run `31290918282` at
+`dc14f5b161da0d21bfc1d92e3920d6199dcf2817`, passed the complete Rocky 8.10
+build lane. It built `mckernel.img`, `ihk.ko`, `ihk-smp-x86_64.ko`,
+Rust-linked `mcctrl.ko`, Rust-linked `mcexec`, and the deterministic workload;
+the recorded Rust objects passed no-SIMD checks, the final artifacts passed
+the Rust entry/handoff linkage checks, and the source-retirement audit accepted
+exactly the nine pinned-IHK profile exemptions with no residual compiled
+retired C. Artifact `9031569420` has digest
+`sha256:4cc10d0777bd1063f79c18269c1dd47285c88e12fa0b35b032d2ca107b080888`.
+This earns the 20% Rocky-build gate and moves current completion to 55%. The
+dependent hosted QEMU job `93189707196` completed with failure before any
+guest command ran: SSH did not become ready within 900 seconds and the serial
+log remained empty. The backing image still matched its pinned checksum and
+the evidence artifact was uploaded as `9031891754`, digest
+`sha256:77f1c829d349c8ec5bc9b7986063ed3964988b4d9838046dd9b9fe28fddf422a`.
+No host-module, McKernel-boot, or userspace credit is awarded, so completion
+remains 55%.
+
+The failed QEMU command exposed the NoCloud seed with
+`if=virtio,media=cdrom`. QEMU's virtio-blk device is disk-only and does not
+support CD-ROM devices. The next candidate exposes the CIDATA-labelled seed
+as a read-only virtio disk and explicitly boots the first hard disk. A bounded
+local TCG reproduction then proved that the exact checksum-pinned Rocky image,
+q35 machine, SeaBIOS, virtio system disk, and even the old seed syntax reach
+the Rocky 4.18.0-553 kernel and ttyS0. Therefore the unsupported seed media
+type is corrected but is not claimed as the cause of the hosted zero-byte
+serial log. The remaining differentiator is the hosted KVM/host-CPU path.
+
+The next candidate runs q35 with `graphics=off`, which redirects SeaBIOS and
+GRUB to the captured serial port. A 60-second preflight records verified QEMU
+PID state, CPU ticks, serial-byte growth, and QMP `query-status` plus
+`query-cpus-fast`. This will distinguish a KVM/vCPU stall from a later Rocky
+boot or networking failure without another 900-second blind wait. It earns no
+credit until the hosted guest reaches SSH and the full runtime chain passes on
+the published head.
 
 ## Fresh commands and results
 
@@ -122,6 +158,60 @@ artifact: 9031218315
 artifact digest: sha256:a4804e2aa270da0b4b15a65edf0d82bbc6c5bb044cd7b222e278ae7e29de50a7
 boot: SKIPPED because hosted-boot-smoke needs a successful rocky-build
 completion: unchanged at 35%
+
+GitHub Actions run 31290918282, Rocky build job 93187780126, at
+  dc14f5b161da0d21bfc1d92e3920d6199dcf2817
+result: PASS
+artifacts: mckernel.img, ihk.ko, ihk-smp-x86_64.ko, mcctrl.ko, mcexec,
+           deterministic workload, plus recorded build evidence
+gates: pinned Rocky/compiler PASS; development ancestry PASS; no-SIMD PASS;
+       Rust linkage PASS; exact pinned-IHK source profile PASS
+artifact: 9031569420
+artifact digest: sha256:4cc10d0777bd1063f79c18269c1dd47285c88e12fa0b35b032d2ca107b080888
+completion: 55%
+
+GitHub Actions run 31290918282, hosted QEMU job 93189707196, at
+  dc14f5b161da0d21bfc1d92e3920d6199dcf2817
+result: FAILURE before guest SSH or any guest command
+qemu: KVM/q35/host CPU, 4 vCPUs, 6144M, 24G disposable overlay
+error: guest SSH did not become ready within 900s
+serial.log: 0 bytes
+guest-command.log: not created
+backing image checksum: PASS
+artifact: 9031891754
+artifact digest: sha256:77f1c829d349c8ec5bc9b7986063ed3964988b4d9838046dd9b9fe28fddf422a
+module load / McKernel boot / mcexec: NOT RUN
+completion: unchanged at 55%
+
+checksum-pinned Rocky image under QEMU 8.2.2 TCG/q35/SeaBIOS with the original
+  virtio seed command, bounded to 180s
+result: PASS through firmware, GRUB, Rocky kernel, ttyS0 enablement, virtio
+        vda/vdb discovery, root UUID discovery, and root mount
+serial.log: 32544 bytes
+kernel: 4.18.0-553.el8_10.x86_64
+completion: unchanged at 55% (local guest-boundary diagnosis only)
+
+the same image with q35,graphics=off, bounded to 30s
+result: PASS; SeaBIOS, `Booting from Hard Disk`, GRUB, the Rocky kernel menu,
+        and its one-second countdown were captured on ttyS0
+serial.log: 2389 bytes
+completion: unchanged at 55% (diagnostic-harness proof only)
+
+scripts/qemu-mckernel-guest.sh --image <pinned-rocky-image> --accel tcg \
+  --memory 2048M --cpus 2 --disk-size 24G --timeout 300 \
+  --log-dir <fresh-temp-dir> --dry-run
+result: PASS; command contains q35,graphics=off, QMP, explicit bootindex=1 for
+        the Rocky OS disk, bootindex=2 for the read-only virtio seed disk, and
+        no conflicting global boot order or media=cdrom; disposable overlay
+        removed by the verified cleanup path
+
+the same updated wrapper without --dry-run in the Codex execution sandbox
+result: BLOCKED before firmware; this sandbox denies AF_UNIX socket creation,
+        so QEMU could not create the requested QMP socket (`EPERM`). A bounded
+        direct QEMU 8.2.2 parse/start check without QMP remained alive until its
+        three-second timeout with both explicit virtio-blk boot indexes. This
+        environment restriction earns no credit; the hosted Ubuntu runner is
+        the authoritative QMP/KVM/runtime gate.
 
 synthetic source-retirement build metadata containing the six existing
 pinned-IHK core/IKC C paths plus ihkconfig.c, ihkmond.c, and ihkosctl.c
@@ -187,3 +277,14 @@ requires repository administrators to configure the `mckernel-boot`
 environment, runner labels, and two image variables. It cannot be manually
 dispatched until the workflow exists on the default branch and does not count
 as current evidence.
+
+The next hosted checkpoint also makes the final cleanup gate explicit. The
+guest records its initial SELinux mode, requires successful
+`mcstop+release.sh`, restores and compares that mode, rejects any remaining
+IHK/McKernel modules or device nodes, and emits stable cleanup markers. The
+QEMU wrapper snapshots a startup PID only after verifying the executable and
+its exact pidfile argument; both graceful and forced cleanup re-verify that
+identity before every signal so a reused PID is never killed. The host then
+proves that process exited, rechecks the backing-image checksum, and requires
+removal of the disposable overlay.
+These checks earn no percentage until they pass on a published head.
