@@ -34,7 +34,7 @@ jobs:
       group: rocky-rust-build-${{ github.event.pull_request.number || github.ref }}
       cancel-in-progress: true
     container:
-      image: rockylinux:8.10
+      image: rockylinux/rockylinux:8.10@sha256:e8a49c5403b687db05d4d67333fa45808fbe74f36e683cec7abb1f7d0f2338c6
     defaults:
       run:
         shell: bash
@@ -43,6 +43,11 @@ jobs:
       - name: Install Rocky build prerequisites
         run: |
           set -euo pipefail
+          # The digest pins Rocky's published 8.10 multi-architecture image;
+          # refuse to build if the selected platform is not Rocky 8.10.
+          . /etc/os-release
+          test "$ID" = rocky
+          test "$VERSION_ID" = 8.10
           dnf -y install dnf-plugins-core
           dnf config-manager --set-enabled powertools || \
             dnf config-manager --set-enabled crb

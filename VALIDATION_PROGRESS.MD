@@ -15,11 +15,24 @@ through `mcexec`, and shuts down cleanly.
 | IHK compatibility | 5% | PASS | Forward check/apply, reverse check/apply, `git diff --check`, and clean pinned-IHK status pass at `3114d9e7101ad52030eb3effa849a5c108972a1f`. |
 | `development` compatibility | 10% | PASS | Current `development` commit `7a779815cba07bacfeed5788acca31629e50a39a` is merged; GitHub reports the draft PR mergeable. |
 | Rust source/toolchain | 10% | PASS | Exact pinned nightly compiles the three selected Rust objects; required symbols, no-SIMD scan, formatting, and variadic behavior checks pass. |
-| Rocky complete build | 20% | PENDING | Awaiting the first current-head hosted Rocky 8.10 transcript. |
+| Rocky complete build | 20% | PENDING | Actions run `31288159829` stopped before checkout because `rockylinux:8.10` does not exist; the corrected Rocky-owned 8.10 image is digest-pinned for the next run. |
 | Host modules | 10% | PENDING | No current-head load/unload or boot-created module evidence yet. |
 | McKernel boot | 15% | PENDING | No current-head `RUNNING` status plus both Rust boot markers yet. |
 | Real `mcexec` programs | 10% | PENDING | `/bin/true`, hostname, deterministic workload, `mcstat`, and Rust handoff markers remain unproved at runtime. |
-| CI evidence and PR report | 10% | IN PROGRESS | Workflow and reporting are implemented; no current-head Actions result or final runtime report yet. |
+| CI evidence and PR report | 10% | IN PROGRESS | The first hosted attempt failed at container initialization and produced no artifacts; the corrected current-head run and final runtime report remain pending. |
+
+The first hosted attempt earned no completion credit. Workflow run
+`31288159829` (job `93180630285`) failed during container initialization after
+three pull attempts with:
+
+```text
+manifest for rockylinux:8.10 not found: manifest unknown
+```
+
+No checkout or build command ran. The workflow now uses Rocky's own
+`rockylinux/rockylinux:8.10` image pinned to multi-architecture digest
+`sha256:e8a49c5403b687db05d4d67333fa45808fbe74f36e683cec7abb1f7d0f2338c6`
+and asserts `ID=rocky` plus `VERSION_ID=8.10` before installing packages.
 
 ## Fresh commands and results
 
@@ -36,6 +49,21 @@ result: PASS
 actionlint -config-file .github/actionlint.yaml \
   .github/workflows/rust-x86_64-validation.yml
 result: PASS (actionlint 1.7.12; all 10 embedded Bash blocks also pass `bash -n`)
+
+GitHub Actions run 31288159829 at
+  b54e69c6bc3309e8a719b645832c8c37cdc853e1
+result: FAILURE during `Initialize containers`
+command: docker pull rockylinux:8.10 (three attempts)
+error: manifest for rockylinux:8.10 not found: manifest unknown
+checkout/build/boot: SKIPPED
+artifacts: none
+completion: unchanged at 35%
+
+curl -fsSL \
+  https://hub.docker.com/v2/repositories/rockylinux/rockylinux/tags/8.10
+result: tag=8.10
+        digest=sha256:e8a49c5403b687db05d4d67333fa45808fbe74f36e683cec7abb1f7d0f2338c6
+        amd64=sha256:f5529992e67440c1a4ae7788244d4381c6909159a88eacd95b7523ae47ced82e
 
 cc -O2 -std=c11 -Wall -Wextra -Werror \
   scripts/smoke/mcexec-rust-smoke.c -o mcexec-rust-smoke
