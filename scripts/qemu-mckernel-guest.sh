@@ -362,7 +362,33 @@ GUEST_EVIDENCE_ARCHIVE_SHA256="$LOG_DIR/guest-evidence.tar.sha256"
 GUEST_EVIDENCE_HOST_DIR="$LOG_DIR/guest-evidence"
 
 print_serial_tail() {
+	local crash_end
+	local crash_line
+	local crash_match
+	local crash_start
+
 	if [ -f "$SERIAL_LOG" ]; then
+		# A kdump reboot can put hundreds of recovery-kernel lines after the
+		# original panic. Prefer the panic endpoint so the preceding BUG, RIP,
+		# and call trace remain visible in the CI log.
+		crash_match="$(LC_ALL=C grep -a -n -m1 -E \
+			'Kernel panic|not syncing:' "$SERIAL_LOG" 2>/dev/null || true)"
+		if [ -z "$crash_match" ]; then
+			crash_match="$(LC_ALL=C grep -a -n -m1 -E \
+				'BUG:|Oops:|general protection fault|Unable to handle kernel|#PF:|RIP:|Call Trace:' \
+				"$SERIAL_LOG" 2>/dev/null || true)"
+		fi
+		crash_line="${crash_match%%:*}"
+		case "$crash_line" in
+			''|*[!0-9]*)
+				;;
+			*)
+				crash_start=$((crash_line > 300 ? crash_line - 300 : 1))
+				crash_end=$((crash_line + 120))
+				echo "serial crash context (lines ${crash_start}-${crash_end}, panic at ${crash_line}):" >&2
+				LC_ALL=C sed -n "${crash_start},${crash_end}p" "$SERIAL_LOG" >&2 || true
+				;;
+		esac
 		echo "recent serial log:" >&2
 		tail -n 80 "$SERIAL_LOG" >&2 || true
 	fi
