@@ -15,11 +15,11 @@ through `mcexec`, and shuts down cleanly.
 | IHK compatibility | 5% | PASS | Forward check/apply, reverse check/apply, `git diff --check`, and clean pinned-IHK status pass at `3114d9e7101ad52030eb3effa849a5c108972a1f`. |
 | `development` compatibility | 10% | PASS | Current `development` commit `7a779815cba07bacfeed5788acca31629e50a39a` is merged; GitHub reports the draft PR mergeable. |
 | Rust source/toolchain | 10% | PASS | Exact pinned nightly compiles the three selected Rust objects; required symbols, no-SIMD scan, formatting, and variadic behavior checks pass. |
-| Rocky complete build | 20% | PENDING | Run `31288499526` compiled every requested target, then a false C-import assertion stopped validation before the source audit; the assertion is corrected for the next run. |
+| Rocky complete build | 20% | PENDING | Run `31290334197` compiled every requested target and passed Rust linkage, then exposed three omitted exact pinned-IHK C-boundary profile paths in the source-retirement audit. |
 | Host modules | 10% | PENDING | No current-head load/unload evidence or necessarily successful module use during McKernel boot yet. |
 | McKernel boot | 15% | PENDING | No current-head `RUNNING` status plus both Rust boot markers yet. |
 | Real `mcexec` programs | 10% | PENDING | `/bin/true`, hostname, deterministic workload, `mcstat`, and Rust handoff markers remain unproved at runtime. |
-| CI evidence and PR report | 10% | IN PROGRESS | Runs `31288159829` and `31288499526` exposed and recorded two validation blockers; clean shutdown, SELinux restoration, QEMU/backing-image checks, and the final PR report remain pending. |
+| CI evidence and PR report | 10% | IN PROGRESS | Runs `31288159829`, `31288499526`, and `31290334197` exposed and recorded three validation-harness blockers; clean shutdown, SELinux restoration, QEMU/backing-image checks, and the final PR report remain pending. |
 
 The first hosted attempt earned no completion credit. Workflow run
 `31288159829` (job `93180630285`) failed during container initialization after
@@ -55,6 +55,31 @@ No build completion credit is awarded until the corrected linkage gate and
 source audit pass together. Installation and runtime use are proved separately
 inside the disposable guest.
 
+The third hosted attempt, run `31290334197` at
+`c032b38c8df5691a206f60059843100bd26a9689`, passed Rocky initialization,
+dependency installation, recursive checkout, the pinned nightly check,
+development ancestry, all production builds, the kernel/module no-SIMD scan,
+and Rust linkage across McKernel, `mcctrl`, and `mcexec`. The source-retirement
+audit then found that the recorded, intentionally C IHK submodule built these
+three host utilities, each discovered through both `compile_commands.json` and
+CMake `build.make` metadata:
+
+```text
+ihk/linux/user/ihkconfig.c
+ihk/linux/user/ihkosctl.c
+ihk/linux/user/ihkmond.c
+```
+
+The parent tracker records later Rust full-body retirement work that is absent
+from pinned IHK commit `3114d9e7101ad52030eb3effa849a5c108972a1f`. The Rocky
+profile now names only those three additional C boundary paths, alongside its
+existing exact IHK core/IKC exemptions. The audit still rejects an invalid,
+unused, or otherwise unlisted compiled source. Run `31290334197` uploaded
+artifact `9031218315` with digest
+`sha256:a4804e2aa270da0b4b15a65edf0d82bbc6c5bb044cd7b222e278ae7e29de50a7`.
+No completion credit is awarded until the corrected audit passes on a fresh
+Rocky run.
+
 ## Fresh commands and results
 
 ```text
@@ -87,6 +112,25 @@ error: manifest for rockylinux:8.10 not found: manifest unknown
 checkout/build/boot: SKIPPED
 artifacts: none
 completion: unchanged at 35%
+
+GitHub Actions run 31290334197 at
+  c032b38c8df5691a206f60059843100bd26a9689
+result: FAILURE during the source-retirement audit after all builds and Rust linkage passed
+error: strict Rust build compiles retired source-retirement rows: 6
+unique paths: ihkconfig.c, ihkosctl.c, ihkmond.c from the pinned C IHK boundary
+artifact: 9031218315
+artifact digest: sha256:a4804e2aa270da0b4b15a65edf0d82bbc6c5bb044cd7b222e278ae7e29de50a7
+boot: SKIPPED because hosted-boot-smoke needs a successful rocky-build
+completion: unchanged at 35%
+
+synthetic source-retirement build metadata containing the six existing
+pinned-IHK core/IKC C paths plus ihkconfig.c, ihkmond.c, and ihkosctl.c
+result: PASS; compiled_non_allowlisted_c=0, compiled_retired_c=0,
+        compiled_source_profile_exemptions=9
+
+the same synthetic metadata plus unlisted retired kernel/init.c
+result: expected exit 1
+error: strict Rust build compiles retired source-retirement rows: 1
 
 curl -fsSL \
   https://hub.docker.com/v2/repositories/rockylinux/rockylinux/tags/8.10

@@ -430,6 +430,15 @@ source_retirement_audit() {
 		--allow-compiled-source ihk/linux/core/mem_alloc.c
 		--allow-compiled-source ihk/linux/core/mikc.c
 		--allow-compiled-source ihk/linux/core/mm.c
+		# The recorded IHK submodule is the intentionally C host boundary for
+		# this parent-repository validation profile.  Its standalone user tools
+		# do not contain the later, uncommitted Rust full-body sources recorded
+		# by the parent retirement tracker, so keep these exact paths visible as
+		# profile exemptions.  The audit rejects missing, unused, or additional
+		# compiled retired sources.
+		--allow-compiled-source ihk/linux/user/ihkconfig.c
+		--allow-compiled-source ihk/linux/user/ihkmond.c
+		--allow-compiled-source ihk/linux/user/ihkosctl.c
 	)
 
 	if [ "$SOURCE_RETIREMENT_FINAL" -eq 1 ]; then
