@@ -586,7 +586,6 @@ check_rust_artifact_linkage() {
 		require_undefined_symbol "$mcctrl_control" "$symbol"
 	done
 	require_undefined_symbol "$mcexec_c" mcexec_main_body
-	require_undefined_symbol "$mcexec_c" mcexec_finish_main_image_body
 
 	local elf_entry
 	local rust_entry

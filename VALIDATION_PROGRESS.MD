@@ -15,11 +15,11 @@ through `mcexec`, and shuts down cleanly.
 | IHK compatibility | 5% | PASS | Forward check/apply, reverse check/apply, `git diff --check`, and clean pinned-IHK status pass at `3114d9e7101ad52030eb3effa849a5c108972a1f`. |
 | `development` compatibility | 10% | PASS | Current `development` commit `7a779815cba07bacfeed5788acca31629e50a39a` is merged; GitHub reports the draft PR mergeable. |
 | Rust source/toolchain | 10% | PASS | Exact pinned nightly compiles the three selected Rust objects; required symbols, no-SIMD scan, formatting, and variadic behavior checks pass. |
-| Rocky complete build | 20% | PENDING | Actions run `31288159829` stopped before checkout because `rockylinux:8.10` does not exist; the corrected Rocky-owned 8.10 image is digest-pinned for the next run. |
-| Host modules | 10% | PENDING | No current-head load/unload or boot-created module evidence yet. |
+| Rocky complete build | 20% | PENDING | Run `31288499526` compiled every requested target, then a false C-import assertion stopped validation before the source audit; the assertion is corrected for the next run. |
+| Host modules | 10% | PENDING | No current-head load/unload evidence or necessarily successful module use during McKernel boot yet. |
 | McKernel boot | 15% | PENDING | No current-head `RUNNING` status plus both Rust boot markers yet. |
 | Real `mcexec` programs | 10% | PENDING | `/bin/true`, hostname, deterministic workload, `mcstat`, and Rust handoff markers remain unproved at runtime. |
-| CI evidence and PR report | 10% | IN PROGRESS | The first hosted attempt failed at container initialization and produced no artifacts; the corrected current-head run and final runtime report remain pending. |
+| CI evidence and PR report | 10% | IN PROGRESS | Runs `31288159829` and `31288499526` exposed and recorded two validation blockers; clean shutdown, SELinux restoration, QEMU/backing-image checks, and the final PR report remain pending. |
 
 The first hosted attempt earned no completion credit. Workflow run
 `31288159829` (job `93180630285`) failed during container initialization after
@@ -33,6 +33,27 @@ No checkout or build command ran. The workflow now uses Rocky's own
 `rockylinux/rockylinux:8.10` image pinned to multi-architecture digest
 `sha256:e8a49c5403b687db05d4d67333fa45808fbe74f36e683cec7abb1f7d0f2338c6`
 and asserts `ID=rocky` plus `VERSION_ID=8.10` before installing packages.
+
+The second hosted attempt, run `31288499526` at
+`df508bcbaf5867d50514dc7b156f918217439a03`, passed container initialization,
+dependency installation, recursive checkout, the exact nightly check, and
+development ancestry. It compiled all requested targets, including
+`mckernel.img`, the three host modules, `mcexec`, and the deterministic
+workload. The linkage gate then reported:
+
+```text
+error: .../mcexec.c.o does not import required Rust-path symbol:
+mcexec_finish_main_image_body
+```
+
+That expectation was wrong: the compiled C `main` shim imports only
+`mcexec_main_body`; Rust `mcexec_main_body` directly calls Rust
+`mcexec_finish_main_image_body`. Both Rust definitions remain mandatory in the
+Rust object and final binary. The run uploaded artifact `9030640799` with
+digest `sha256:bc9b0b3acbbde635b4160c928972e40b0c4114a7e7d543d116813e5019cc121d`.
+No build completion credit is awarded until the corrected linkage gate and
+source audit pass together. Installation and runtime use are proved separately
+inside the disposable guest.
 
 ## Fresh commands and results
 
@@ -48,7 +69,15 @@ result: PASS
 
 actionlint -config-file .github/actionlint.yaml \
   .github/workflows/rust-x86_64-validation.yml
-result: PASS (actionlint 1.7.12; all 10 embedded Bash blocks also pass `bash -n`)
+result: PASS (actionlint 1.7.12; all 14 embedded Bash blocks also pass `bash -n`)
+
+scripts/qemu-rocky-rust-validation.sh \
+  --image unused --disk-size invalid
+result: expected exit 2; invalid disposable-disk size rejected before QEMU
+
+scripts/qemu-mckernel-guest.sh \
+  --image unused --disk-size invalid
+result: expected exit 2; invalid disposable-disk size rejected before image or QEMU probing
 
 GitHub Actions run 31288159829 at
   b54e69c6bc3309e8a719b645832c8c37cdc853e1
@@ -95,16 +124,22 @@ object and passed dynamic width/precision, promoted integer classes, pointer,
 2. A protected disposable Rocky KVM guest must load the modules, reserve CPU
    and memory, reach `RUNNING`, and contain `IHK/McKernel started.` plus
    `IHK/McKernel booted.`.
-3. The guest must successfully run `/bin/true`, hostname, the deterministic
-   workload, and `mcstat` through `mcexec`; kmsg must contain `prepared`,
-   `schedule_process queued`, `enter_user`, `send_syscall`, and
+3. The guest must successfully run `/bin/true`, hostname, and the deterministic
+   workload through `mcexec`, then run host-side `mcstat`; kmsg must contain
+   `prepared`, `schedule_process queued`, `enter_user`, `send_syscall`, and
    `offload_return` markers.
 4. `mcstop+release.sh` must succeed, SELinux mode must be restored, QEMU must
    exit, the backing image checksum must remain unchanged, and exact results
    must be added to this file and PR #1.
 
-The protected boot lane additionally requires repository administrators to
-configure the `mckernel-boot` environment, a matching self-hosted KVM runner,
-and the two checksum-pinned Rocky image variables. The workflow cannot be
-manually dispatched until it exists on the default branch; staged YAML alone
-does not count as boot evidence.
+The same-repository PR workflow now has an automatic GitHub-hosted KVM lane. It
+downloads Rocky's dated 8.10 GenericCloud qcow2, verifies its published size
+and SHA-256, expands only a disposable overlay, performs the full build/boot
+inside that guest, and rechecks the untouched backing image and ephemeral host
+afterward. It must pass before any runtime percentage is awarded.
+
+The protected self-hosted lane remains useful after merge, but additionally
+requires repository administrators to configure the `mckernel-boot`
+environment, runner labels, and two image variables. It cannot be manually
+dispatched until the workflow exists on the default branch and does not count
+as current evidence.

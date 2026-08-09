@@ -21,6 +21,8 @@ Options:
   --ssh-port PORT       Host port forwarded to guest SSH. Default: 2222
   --memory SIZE         QEMU memory. Default: 4096M
   --cpus N              QEMU vCPU count. Default: 4
+  --disk-size SIZE      Expand the disposable overlay before boot, for example
+                        24G. Default: keep the backing image virtual size.
   --accel MODE          auto, kvm, or tcg. Default: auto
   --timeout SEC         Guest SSH wait timeout. Default: 300
   --runtime SEC         Max time to let QEMU run after SSH/command. Default: 0
@@ -63,6 +65,7 @@ USER_NAME=mcktest
 SSH_PORT=2222
 MEMORY=4096M
 CPUS=4
+DISK_SIZE=
 ACCEL_REQUEST=auto
 TIMEOUT=300
 RUNTIME=0
@@ -106,6 +109,10 @@ while [ "$#" -gt 0 ]; do
 			;;
 		--cpus)
 			CPUS="${2:?missing value for --cpus}"
+			shift 2
+			;;
+		--disk-size)
+			DISK_SIZE="${2:?missing value for --disk-size}"
 			shift 2
 			;;
 		--accel)
@@ -232,10 +239,16 @@ case "$IMAGE" in
 		;;
 esac
 
+if [ -n "$DISK_SIZE" ] && [[ ! "$DISK_SIZE" =~ ^[1-9][0-9]*[KMGT]?$ ]]; then
+	echo "error: --disk-size must be a positive byte count with an optional K, M, G, or T suffix" >&2
+	exit 2
+fi
+
 if [ ! -f "$IMAGE" ]; then
 	echo "error: image not found: $IMAGE" >&2
 	exit 1
 fi
+IMAGE="$(cd "$(dirname "$IMAGE")" && pwd)/$(basename "$IMAGE")"
 
 if [ -n "$SHARED_DIR" ] && [ ! -d "$SHARED_DIR" ]; then
 	echo "error: shared directory not found: $SHARED_DIR" >&2
@@ -309,7 +322,6 @@ require_uint guest-cleanup-timeout "$GUEST_CLEANUP_TIMEOUT"
 if [ -n "$GDB_PORT" ]; then
 	require_uint gdb "$GDB_PORT"
 fi
-
 mkdir -p "$LOG_DIR"
 
 BASE_FORMAT="$(qemu-img info --output=json "$IMAGE" |
@@ -333,17 +345,42 @@ print_serial_tail() {
 	fi
 }
 
+qemu_pid_is_owned() {
+	local pid="$1"
+	local qemu_exe
+	local pidfile_verified=0
+	local i
+	local -a qemu_argv=()
+
+	if [ -z "$pid" ] || ! kill -0 "$pid" 2>/dev/null; then
+		return 1
+	fi
+	qemu_exe="$(basename "$(readlink "/proc/$pid/exe" 2>/dev/null || true)")"
+	if [[ "$qemu_exe" != qemu-system-x86_64* ]]; then
+		return 1
+	fi
+	mapfile -d '' -t qemu_argv <"/proc/$pid/cmdline" || return 1
+	for ((i = 0; i + 1 < ${#qemu_argv[@]}; i++)); do
+		if [ "${qemu_argv[$i]}" = -pidfile ] &&
+			[ "${qemu_argv[$((i + 1))]}" = "$PIDFILE" ]; then
+			pidfile_verified=1
+			break
+		fi
+	done
+	[ "$pidfile_verified" -eq 1 ]
+}
+
 qemu_is_running() {
 	local pid
 
 	if [ ! -f "$PIDFILE" ]; then
-		return 0
+		return 1
 	fi
 	pid="$(cat "$PIDFILE" 2>/dev/null || true)"
 	if [ -z "$pid" ]; then
-		return 0
+		return 1
 	fi
-	kill -0 "$pid" 2>/dev/null
+	qemu_pid_is_owned "$pid"
 }
 
 cleanup() {
@@ -358,13 +395,15 @@ cleanup() {
 
 	if [ "$KEEP_RUNNING" -eq 0 ] && [ -f "$PIDFILE" ]; then
 		pid="$(cat "$PIDFILE" 2>/dev/null || true)"
-		if [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null; then
+		if qemu_pid_is_owned "$pid"; then
 			kill "$pid" 2>/dev/null || true
 			for _ in $(seq 1 20); do
 				kill -0 "$pid" 2>/dev/null || break
 				sleep 0.2
 			done
 			kill -9 "$pid" 2>/dev/null || true
+		elif [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null; then
+			echo "refusing to kill PID $pid because QEMU identity did not verify" >&2
 		fi
 	fi
 
@@ -376,6 +415,9 @@ trap cleanup EXIT
 
 say "Preparing disposable guest overlay"
 qemu-img create -f qcow2 -F "$BASE_FORMAT" -b "$IMAGE" "$OVERLAY" >/dev/null
+if [ -n "$DISK_SIZE" ]; then
+	qemu-img resize "$OVERLAY" "$DISK_SIZE" >/dev/null
+fi
 
 if [ -n "$SSH_KEY_INPUT" ]; then
 	if [ ! -f "$SSH_KEY_INPUT" ]; then
@@ -478,6 +520,9 @@ fi
 printf '%s\n' "Log directory: $LOG_DIR"
 printf '%s\n' "Serial log: $SERIAL_LOG"
 printf '%s\n' "Overlay: $OVERLAY"
+if [ -n "$DISK_SIZE" ]; then
+	printf '%s\n' "Overlay virtual size: $DISK_SIZE"
+fi
 printf '%s\n' "QEMU accel: $ACCEL"
 if [ "$PAUSE_AT_RESET" -eq 1 ]; then
 	printf '%s\n' "QEMU pause-at-reset: enabled"

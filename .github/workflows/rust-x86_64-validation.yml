@@ -203,6 +203,202 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
+  hosted-boot-smoke:
+    name: Hosted Rocky QEMU boot and mcexec
+    needs: rocky-build
+    if: >-
+      ${{ github.event_name == 'pull_request' &&
+          github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 330
+    concurrency:
+      group: hosted-rocky-boot-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
+    env:
+      ROCKY_IMAGE_NAME: Rocky-8-GenericCloud-Base-8.10-20240528.0.x86_64.qcow2
+      ROCKY_IMAGE_URL: https://download.rockylinux.org/pub/rocky/8.10/images/x86_64/Rocky-8-GenericCloud-Base-8.10-20240528.0.x86_64.qcow2
+      ROCKY_CHECKSUM_URL: https://download.rockylinux.org/pub/rocky/8.10/images/x86_64/CHECKSUM
+      ROCKY_IMAGE_SHA256: e56066c58606191e96184de9a9183a3af33c59bcbd8740d8b10ca054a7a89c14
+      ROCKY_IMAGE_BYTES: 2065760256
+
+    steps:
+      - name: Check out candidate and submodules
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          submodules: recursive
+          persist-credentials: false
+
+      - name: Prepare ephemeral KVM host
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y \
+            cloud-image-utils qemu-system-x86 qemu-utils
+
+          # GitHub-hosted Linux runners expose KVM. Apply GitHub's documented
+          # udev rule so this unprivileged, ephemeral job can open /dev/kvm.
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' |
+            sudo tee /etc/udev/rules.d/99-kvm4all.rules >/dev/null
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          test -c /dev/kvm
+          test -r /dev/kvm
+          test -w /dev/kvm
+          command -v qemu-system-x86_64
+          command -v qemu-img
+          command -v cloud-localds
+
+      - name: Download and verify Rocky 8.10 cloud image
+        shell: bash
+        run: |
+          set -euo pipefail
+          hosted_boot_dir="$RUNNER_TEMP/mckernel-hosted-boot-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          test ! -e "$hosted_boot_dir"
+          test ! -L "$hosted_boot_dir"
+          mkdir -m 700 -p "$hosted_boot_dir/qemu"
+          rocky_image="$hosted_boot_dir/$ROCKY_IMAGE_NAME"
+
+          curl --fail --location --retry 5 --retry-all-errors \
+            --output "$hosted_boot_dir/CHECKSUM" "$ROCKY_CHECKSUM_URL"
+          grep -Fx \
+            "SHA256 ($ROCKY_IMAGE_NAME) = $ROCKY_IMAGE_SHA256" \
+            "$hosted_boot_dir/CHECKSUM"
+          curl --fail --location --retry 5 --retry-all-errors \
+            --output "$rocky_image" "$ROCKY_IMAGE_URL"
+          test "$(stat -c %s "$rocky_image")" = "$ROCKY_IMAGE_BYTES"
+          printf '%s  %s\n' "$ROCKY_IMAGE_SHA256" "$rocky_image" |
+            sha256sum -c -
+          chmod a-w "$rocky_image"
+          qemu-img check "$rocky_image"
+
+          printf 'HOSTED_BOOT_DIR=%s\n' "$hosted_boot_dir" >> "$GITHUB_ENV"
+          printf 'ROCKY_IMAGE=%s\n' "$rocky_image" >> "$GITHUB_ENV"
+          {
+            echo "commit=$(git rev-parse HEAD)"
+            echo "guest_image_url=$ROCKY_IMAGE_URL"
+            echo "guest_image_bytes=$ROCKY_IMAGE_BYTES"
+            echo "guest_sha256=$ROCKY_IMAGE_SHA256"
+            uname -a
+            lscpu
+            df -h
+            qemu-system-x86_64 --version
+            qemu-img info --output=json "$rocky_image"
+          } > "$hosted_boot_dir/host-environment.txt"
+
+      - name: Boot disposable Rocky guest and run mcexec
+        shell: bash
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          # All module loading, CPU/memory reservation, McKernel boot, and
+          # mcexec workloads happen inside this disposable qcow2 overlay.
+          scripts/qemu-rocky-rust-validation.sh \
+            --image "$ROCKY_IMAGE" \
+            --source-dir "$GITHUB_WORKSPACE" \
+            --accel kvm \
+            --memory 6144M \
+            --cpus 4 \
+            --disk-size 24G \
+            --ssh-timeout 900 \
+            --guest-timeout 18000 \
+            --log-dir "$HOSTED_BOOT_DIR/qemu" \
+            -- \
+            --boot-smoke \
+            --boot-timeout 120 \
+            --smoke-timeout 60 \
+            --verbose-smoke \
+            --jobs 2 \
+            --yes \
+            2>&1 | tee "$HOSTED_BOOT_DIR/run.log"
+
+      - name: Verify ephemeral host and backing image
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          set -uo pipefail
+          hosted_boot_dir="$RUNNER_TEMP/mckernel-hosted-boot-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          rocky_image="$hosted_boot_dir/$ROCKY_IMAGE_NAME"
+          post_rc=0
+
+          if test ! -f "$rocky_image"; then
+            echo "Rocky backing image is missing: $rocky_image" >&2
+            post_rc=1
+          else
+            printf '%s  %s\n' "$ROCKY_IMAGE_SHA256" "$rocky_image" |
+              sha256sum -c - || post_rc=1
+          fi
+
+          if grep -Eq '^(ihk|ihk_smp_x86_64|mcctrl) ' /proc/modules; then
+            echo 'host IHK/McKernel modules are loaded after guest validation' >&2
+            grep -E '^(ihk|ihk_smp_x86_64|mcctrl) ' /proc/modules >&2
+            post_rc=1
+          fi
+
+          if test -f "$hosted_boot_dir/qemu/guest-overlay.qcow2"; then
+            echo 'disposable guest overlay remains after validation' >&2
+            post_rc=1
+          fi
+          if test ! -s "$hosted_boot_dir/qemu/serial.log"; then
+            echo 'missing or empty QEMU serial evidence' >&2
+            post_rc=1
+          fi
+          if test ! -s "$hosted_boot_dir/qemu/guest-command.log"; then
+            echo 'missing or empty guest validation evidence' >&2
+            post_rc=1
+          fi
+
+          pidfile="$hosted_boot_dir/qemu/qemu.pid"
+          if test -f "$pidfile"; then
+            pid="$(cat "$pidfile" 2>/dev/null || true)"
+            if test -n "$pid" && kill -0 "$pid" 2>/dev/null; then
+              echo "QEMU process $pid is still running after validation" >&2
+              qemu_pidfile_verified=0
+              mapfile -d '' -t qemu_argv < "/proc/$pid/cmdline" || true
+              for ((i = 0; i + 1 < ${#qemu_argv[@]}; i++)); do
+                if test "${qemu_argv[$i]}" = -pidfile &&
+                  test "${qemu_argv[$((i + 1))]}" = "$pidfile"
+                then
+                  qemu_pidfile_verified=1
+                  break
+                fi
+              done
+              qemu_exe="$(basename "$(readlink "/proc/$pid/exe" 2>/dev/null || true)")"
+              if [[ "$qemu_exe" == qemu-system-x86_64* ]] &&
+                test "$qemu_pidfile_verified" -eq 1
+              then
+                kill "$pid" 2>/dev/null || true
+                for _ in {1..20}; do
+                  kill -0 "$pid" 2>/dev/null || break
+                  sleep 0.25
+                done
+                kill -9 "$pid" 2>/dev/null || true
+              else
+                echo 'refusing to kill PID because QEMU identity did not verify' >&2
+              fi
+              post_rc=1
+            fi
+          fi
+          exit "$post_rc"
+
+      - name: Upload hosted boot evidence without ephemeral SSH keys
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: hosted-rocky-boot-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/CHECKSUM
+            ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/host-environment.txt
+            ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/run.log
+            ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/serial.log
+            ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/guest-command.log
+            ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/guest-cleanup.log
+            VALIDATION_PROGRESS.MD
+          if-no-files-found: warn
+          retention-days: 30
+
   boot-smoke:
     name: Protected Rocky QEMU boot and mcexec
     needs: rocky-build

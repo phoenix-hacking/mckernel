@@ -26,6 +26,8 @@ QEMU options:
   --ssh-port PORT           Host port forwarded to guest SSH. Default: 2222
   --memory SIZE             QEMU memory. Default: 4096M
   --cpus N                  QEMU vCPU count. Default: 4
+  --disk-size SIZE          Expand the disposable guest disk before boot, for
+                            example 24G. Default: backing image virtual size.
   --ssh-timeout SEC         Guest SSH wait timeout. Default: 300
   --guest-timeout SEC       Watchdog for the validation command. Default: 7200
   --log-dir PATH            QEMU log directory. Default: qemu runner default
@@ -48,6 +50,7 @@ ACCEL=auto
 SSH_PORT=2222
 MEMORY=4096M
 CPUS=4
+DISK_SIZE=
 SSH_TIMEOUT=300
 GUEST_TIMEOUT=7200
 LOG_DIR=
@@ -82,6 +85,10 @@ while [ "$#" -gt 0 ]; do
 			;;
 		--cpus)
 			CPUS="${2:?missing value for --cpus}"
+			shift 2
+			;;
+		--disk-size)
+			DISK_SIZE="${2:?missing value for --disk-size}"
 			shift 2
 			;;
 		--ssh-timeout)
@@ -149,6 +156,10 @@ if [ ! -x "$SOURCE_DIR/scripts/rocky-rust-validation.sh" ]; then
 	echo "error: source tree is missing executable scripts/rocky-rust-validation.sh: $SOURCE_DIR" >&2
 	exit 2
 fi
+if [ -n "$DISK_SIZE" ] && [[ ! "$DISK_SIZE" =~ ^[1-9][0-9]*[KMGT]?$ ]]; then
+	echo "error: --disk-size must be a positive byte count with an optional K, M, G, or T suffix" >&2
+	exit 2
+fi
 
 if [ "${#VALIDATION_ARGS[@]}" -eq 0 ]; then
 	VALIDATION_ARGS=(--boot-smoke --yes)
@@ -183,8 +194,17 @@ if ! has_validation_arg --yes; then
 fi
 
 validation_cmd=$(
+	printf 'set -euo pipefail; '
+	printf 'sudo cloud-init status --wait; '
+	printf '. /etc/os-release; '
+	printf 'test "$ID" = rocky; test "$VERSION_ID" = 8.10; '
+	printf 'test "$(uname -m)" = x86_64; test "$(nproc)" -ge 2; '
+	if [ -n "$DISK_SIZE" ]; then
+		printf 'root_avail="$(df -B1 --output=avail / | tail -n 1 | tr -d " ")"; '
+		printf 'test "$root_avail" -ge 8589934592; '
+	fi
 	printf 'cd /tmp/mckernel-hostshare && '
-	printf './scripts/rocky-rust-validation.sh '
+	printf 'exec ./scripts/rocky-rust-validation.sh '
 	quote_args "${VALIDATION_ARGS[@]}"
 )
 
@@ -200,6 +220,10 @@ qemu_args=(
 	--stage-dir "$SOURCE_DIR:/tmp/mckernel-hostshare"
 	--guest-cmd "$validation_cmd"
 )
+
+if [ -n "$DISK_SIZE" ]; then
+	qemu_args+=(--disk-size "$DISK_SIZE")
+fi
 
 if [ -n "$LOG_DIR" ]; then
 	qemu_args+=(--log-dir "$LOG_DIR")
