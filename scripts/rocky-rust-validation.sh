@@ -560,6 +560,22 @@ require_undefined_symbol() {
 	fi
 }
 
+reject_undefined_symbol() {
+	local file="$1"
+	local symbol="$2"
+
+	if [ ! -f "$file" ]; then
+		echo "error: missing final artifact for resolved-symbol check: $file" >&2
+		exit 1
+	fi
+	if nm -g "$file" |
+		awk -v want="$symbol" '$(NF - 1) == "U" && $NF == want { found = 1 } END { exit found ? 0 : 1 }'
+	then
+		echo "error: $file retains forbidden unresolved symbol: $symbol" >&2
+		exit 1
+	fi
+}
+
 normalize_hex() {
 	local value="${1#0x}"
 	value="$(printf '%s' "$value" | sed 's/^0*//')"
@@ -619,6 +635,10 @@ check_rust_artifact_linkage() {
 		require_undefined_symbol "$mcctrl_control" "$symbol"
 	done
 	require_undefined_symbol "$mcexec_c" mcexec_main_body
+	require_undefined_symbol "$mcctrl_rust" ihk_ikc_get_processor_id
+	require_defined_symbol "$mcctrl_driver" ihk_ikc_get_processor_id
+	require_defined_symbol "$mcctrl_ko" ihk_ikc_get_processor_id
+	reject_undefined_symbol "$mcctrl_ko" ihk_ikc_get_processor_id
 
 	local elf_entry
 	local rust_entry
@@ -1837,15 +1857,15 @@ boot_smoke() {
 
 	local smoke_rc=0
 
+	if ! capture_workload_kmsg_baseline; then
+		dump_smoke_failure_state 'pre-workload-kmsg'
+		return 1
+	fi
 	say "Running mcexec smoke commands"
 	run_smoke_cmd "mcexec-true" "$PREFIX/bin/mcexec" /bin/true
 	run_hostname_smoke || smoke_rc=$?
 	if [ "$smoke_rc" -eq 124 ]; then
 		return "$smoke_rc"
-	fi
-	if ! capture_workload_kmsg_baseline; then
-		dump_smoke_failure_state 'pre-workload-kmsg'
-		return 1
 	fi
 	run_smoke_cmd "mcexec-rust-workload" \
 		"$PREFIX/bin/mcexec" "$BUILD_DIR/mcexec-rust-smoke"
