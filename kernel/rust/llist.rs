@@ -1,4 +1,4 @@
-use core::ptr::{null_mut, read_volatile};
+use core::ptr::{null_mut, read_volatile, write_volatile};
 use core::sync::atomic::{AtomicPtr, Ordering};
 
 #[repr(C)]
@@ -28,6 +28,21 @@ unsafe fn head_first(head: *mut LListHead) -> &'static AtomicPtr<LListNode> {
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn init_llist_head(list: *mut LListHead) {
+    write_volatile(&mut (*list).first, null_mut());
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn llist_empty(head: *const LListHead) -> bool {
+    read_volatile(&(*head).first).is_null()
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn llist_next(node: *mut LListNode) -> *mut LListNode {
+    read_volatile(&(*node).next)
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn llist_add_batch(
     new_first: *mut LListNode,
     new_last: *mut LListNode,
@@ -43,6 +58,16 @@ pub unsafe extern "C" fn llist_add_batch(
             Err(actual) => first = actual,
         }
     }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn llist_add(new: *mut LListNode, head: *mut LListHead) -> bool {
+    llist_add_batch(new, new, head)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn llist_del_all(head: *mut LListHead) -> *mut LListNode {
+    head_first(head).swap(null_mut(), Ordering::SeqCst)
 }
 
 #[no_mangle]

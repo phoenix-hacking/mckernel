@@ -76,16 +76,7 @@
 #define PS_EXITED            0x10
 #define PS_STOPPED           0x20
 
-static inline int get_futex_value_locked(uint32_t *dest, uint32_t *from)
-{
-	int ret;
-
-	pagefault_disable();
-	ret = __get_user(*dest, from);
-	pagefault_enable();
-
-	return ret ? -EFAULT : 0;
-}
+int get_futex_value_locked(uint32_t *dest, uint32_t *from);
 
 union futex_key {
 	struct {

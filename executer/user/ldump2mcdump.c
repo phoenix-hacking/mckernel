@@ -1,13 +1,21 @@
 /* ldump2mcdump.c COPYRIGHT FUJITSU LIMITED 2017 */
 #include "../include/defs.h"      /* From the crash source top-level directory */
 #include <bfd.h>
+#include <limits.h>
 #include <pwd.h>
 #include <arch-ldump2mcdump.h>
 
+#ifdef EXECUTER_BFD_SET_SECTION_NEEDS_BFD
+#define mc_bfd_set_section_size(abfd, scn, size) \
+	bfd_set_section_size((abfd), (scn), (size))
+#define mc_bfd_set_section_flags(abfd, scn, flags) \
+	bfd_set_section_flags((abfd), (scn), (flags))
+#else
 #define mc_bfd_set_section_size(abfd, scn, size) \
 	bfd_set_section_size((scn), (size))
 #define mc_bfd_set_section_flags(abfd, scn, flags) \
 	bfd_set_section_flags((scn), (flags))
+#endif
 
 void ldump2mcdump_init(void);    /* constructor function */
 void ldump2mcdump_fini(void);    /* destructor function (optional) */
@@ -69,6 +77,113 @@ typedef struct dump_mem_chunks_s {
 
 #define PHYSMEM_NAME_SIZE 32
 
+#ifdef LDUMP2MCDUMP_RUST_HELPERS
+extern int ldump2_count_chunks_result(const unsigned long *map,
+				      unsigned long map_count);
+extern int ldump2_fill_chunks_result(struct dump_mem_chunk *chunks,
+				     unsigned long max_chunks,
+				     unsigned long start,
+				     const unsigned long *map,
+				     unsigned long map_count,
+				     int page_shift);
+extern int ldump2_physmem_name_result(char *buf, size_t buf_size, int index);
+#else
+static int ldump2_count_chunks_result(const unsigned long *map,
+				      unsigned long map_count)
+{
+	unsigned long bit_count = 0;
+	unsigned long j;
+	int chunks = 0;
+	int k;
+
+	if (!map && map_count)
+		return -1;
+
+	for (j = 0; j < map_count; j++) {
+		for (k = 0; k < 64; k++) {
+			if (((unsigned long)*(map + j) >> k) & 0x1) {
+				bit_count++;
+			} else if (bit_count) {
+				if (chunks == INT_MAX)
+					return -1;
+				chunks++;
+				bit_count = 0;
+			}
+		}
+	}
+
+	if (bit_count) {
+		if (chunks == INT_MAX)
+			return -1;
+		chunks++;
+	}
+
+	return chunks;
+}
+
+static int ldump2_fill_chunks_result(struct dump_mem_chunk *chunks,
+				     unsigned long max_chunks,
+				     unsigned long start,
+				     const unsigned long *map,
+				     unsigned long map_count,
+				     int page_shift)
+{
+	unsigned long map_start = 0;
+	unsigned long bit_count = 0;
+	unsigned long index = 0;
+	unsigned long j;
+	int k;
+
+	if ((!chunks && max_chunks) || (!map && map_count))
+		return -1;
+
+	for (j = 0; j < map_count; j++) {
+		for (k = 0; k < 64; k++) {
+			if (((unsigned long)*(map + j) >> k) & 0x1) {
+				if (!bit_count) {
+					map_start = start +
+						((unsigned long)j << (page_shift + 6));
+					map_start += ((unsigned long)k << page_shift);
+				}
+				bit_count++;
+			} else if (bit_count) {
+				if (index >= max_chunks)
+					return -1;
+				chunks[index].addr = map_start;
+				chunks[index].size = (bit_count << page_shift);
+				index++;
+				bit_count = 0;
+			}
+		}
+	}
+
+	if (bit_count) {
+		if (index >= max_chunks)
+			return -1;
+		chunks[index].addr = map_start;
+		chunks[index].size = (bit_count << page_shift);
+		index++;
+	}
+
+	if (index > INT_MAX)
+		return -1;
+	return (int)index;
+}
+
+static int ldump2_physmem_name_result(char *buf, size_t buf_size, int index)
+{
+	int ret;
+
+	if (!buf || !buf_size)
+		return -1;
+
+	ret = snprintf(buf, buf_size, "physmem%d", index);
+	if (ret < 0 || (size_t)ret >= buf_size)
+		return -1;
+	return ret;
+}
+#endif
+
 void cmd_ldump2mcdump(void)
 {
 	static char path[PATH_MAX];
@@ -101,8 +216,7 @@ void cmd_ldump2mcdump(void)
 	struct ihk_dump_page ihk_dump_page;
 	ulong *map_buf = NULL;
 	ulong map_size = 0;
-	int i,j,k,index,mem_num;
-	ulong map_start,bit_count;
+	int i,index,mem_num,chunk_count;
 	char *physmem_name_buf = NULL;
 	char physmem_name[PHYSMEM_NAME_SIZE];
 
@@ -142,22 +256,14 @@ void cmd_ldump2mcdump(void)
 			memset(map_buf,0x00,map_size);
 			readmem((ihk_dump_page_addr+sizeof(struct ihk_dump_page)),KVADDR,map_buf,map_size,"",FAULT_ON_ERROR);
 
-			for (j = 0, bit_count = 0; j < ihk_dump_page.map_count; j++) {
-				for ( k = 0; k < 64; k++) {
-					if (((ulong)*(map_buf+j) >> k) & 0x1) {
-						bit_count++;
-					} else {
-						if (bit_count) {
-							mem_num++;
-							bit_count = 0;
-						}
-					}
-				}
+			chunk_count = ldump2_count_chunks_result(
+					map_buf, ihk_dump_page.map_count);
+			if (chunk_count < 0 || chunk_count > INT_MAX - mem_num) {
+				fprintf(stderr, "counting dump memory chunks failed\n");
+				free(map_buf);
+				return;
 			}
-
-			if (bit_count) {
-				mem_num++;
-			}
+			mem_num += chunk_count;
 			free(map_buf);
 		} else {
 			perror("allocating mem buffer: ");
@@ -183,30 +289,18 @@ void cmd_ldump2mcdump(void)
 				memset(map_buf,0x00,map_size);
 				readmem((ihk_dump_page_addr+sizeof(struct ihk_dump_page)),KVADDR,map_buf,map_size,"",FAULT_ON_ERROR);
 
-				for (j = 0, bit_count = 0; j < ihk_dump_page.map_count; j++) {
-					for (k = 0; k < 64; k++) {
-						if (((ulong)*(map_buf+j) >> k) & 0x1) {
-							if (!bit_count) {
-								map_start = (unsigned long)(ihk_dump_page.start + ((unsigned long)j << (PAGE_SHIFT+6)));
-								map_start = map_start + ((unsigned long)k << PAGE_SHIFT);
-							}
-							bit_count++;
-						} else {
-							if (bit_count) {
-								mem_chunks->chunks[index].addr = map_start;
-								mem_chunks->chunks[index].size = (bit_count << PAGE_SHIFT);
-								index++;
-								bit_count = 0;
-							}
-						}
-					}
+				chunk_count = ldump2_fill_chunks_result(
+						&mem_chunks->chunks[index],
+						mem_num - index,
+						ihk_dump_page.start,
+						map_buf, ihk_dump_page.map_count,
+						PAGE_SHIFT);
+				if (chunk_count < 0 || chunk_count > mem_num - index) {
+					fprintf(stderr, "building dump memory chunks failed\n");
+					free(map_buf);
+					return;
 				}
-
-				if (bit_count) {
-					mem_chunks->chunks[index].addr = map_start;
-					mem_chunks->chunks[index].size = (bit_count << PAGE_SHIFT);
-					index++;
-				}
+				index += chunk_count;
 
 				ihk_dump_page_addr += (sizeof(struct ihk_dump_page)+(sizeof(unsigned long)*ihk_dump_page.map_count));
 				free(map_buf);
@@ -361,8 +455,16 @@ void cmd_ldump2mcdump(void)
 	for (i = 0; i < mem_chunks->nr_chunks; ++i) {
 
 		physmem_name_buf = malloc(PHYSMEM_NAME_SIZE);
+		if (!physmem_name_buf) {
+			perror("malloc");
+			return;
+		}
 		memset(physmem_name_buf,0,PHYSMEM_NAME_SIZE);
-		sprintf(physmem_name_buf, "physmem%d",i);
+		if (ldump2_physmem_name_result(physmem_name_buf,
+					PHYSMEM_NAME_SIZE, i) < 0) {
+			fprintf(stderr, "invalid physmem section name\n");
+			return;
+		}
 
 		/* Physical memory contents section */
 		scn = bfd_make_section_anyway(abfd, physmem_name_buf);
@@ -428,7 +530,11 @@ void cmd_ldump2mcdump(void)
 
 		phys_offset = 0;
 		memset(physmem_name,0,sizeof(physmem_name));
-		sprintf(physmem_name, "physmem%d",i);
+		if (ldump2_physmem_name_result(physmem_name,
+					sizeof(physmem_name), i) < 0) {
+			fprintf(stderr, "invalid physmem section name\n");
+			return;
+		}
 
 		scn = bfd_get_section_by_name(abfd, physmem_name);
 		if (!scn) {
@@ -485,4 +591,3 @@ char *help_ldump2mcdump[] = {
         "    crash>ldump2mcdump 0 -o /tmp/mcdump",
         NULL
 };
-

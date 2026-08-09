@@ -26,6 +26,7 @@
 #include <plist.h>
 #include <ihk/lock.h>
 
+#ifndef MCKERNEL_RUST_PLIST_CORE
 #ifdef CONFIG_DEBUG_PI_LIST
 
 static void plist_check_prev_next(struct list_head *t, struct list_head *p,
@@ -67,6 +68,47 @@ static void plist_check_head(struct plist_head *head)
 # define plist_check_head(h)	do { } while (0)
 #endif
 
+void plist_head_init(struct plist_head *head, ihk_spinlock_t *lock)
+{
+	INIT_LIST_HEAD(&head->prio_list);
+	INIT_LIST_HEAD(&head->node_list);
+#ifdef CONFIG_DEBUG_PI_LIST
+	head->spinlock = lock;
+	head->rawlock = NULL;
+#endif
+}
+
+void plist_head_init_raw(struct plist_head *head, ihk_spinlock_t *lock)
+{
+	INIT_LIST_HEAD(&head->prio_list);
+	INIT_LIST_HEAD(&head->node_list);
+#ifdef CONFIG_DEBUG_PI_LIST
+	head->rawlock = lock;
+	head->spinlock = NULL;
+#endif
+}
+
+void plist_node_init(struct plist_node *node, int prio)
+{
+	node->prio = prio;
+	plist_head_init(&node->plist, NULL);
+}
+
+int plist_head_empty(const struct plist_head *head)
+{
+	return list_empty(&head->node_list);
+}
+
+int plist_node_empty(const struct plist_node *node)
+{
+	return plist_head_empty(&node->plist);
+}
+
+struct plist_node *plist_first(const struct plist_head *head)
+{
+	return ((struct plist_node *)((char *)(head->node_list.next) - offsetof(struct plist_node, plist.node_list)));
+}
+
 /**
  * plist_add - add @node to @head
  *
@@ -82,12 +124,11 @@ void plist_add(struct plist_node *node, struct plist_head *head)
 	WARN_ON(!plist_node_empty(node));
 #endif	
 
-	list_for_each_entry(iter, &head->prio_list, plist.prio_list) {
+	for (iter = ((typeof(*iter) *)((char *)((&head->prio_list)->next) - offsetof(typeof(*iter), plist.prio_list))); &iter->plist.prio_list != (&head->prio_list); iter = ((typeof(*iter) *)((char *)(iter->plist.prio_list.next) - offsetof(typeof(*iter), plist.prio_list)))) {
 		if (node->prio < iter->prio)
 			goto lt_prio;
 		else if (node->prio == iter->prio) {
-			iter = list_entry(iter->plist.prio_list.next,
-					struct plist_node, plist.prio_list);
+			iter = ((struct plist_node *)((char *)(iter->plist.prio_list.next) - offsetof(struct plist_node, plist.prio_list)));
 			goto eq_prio;
 		}
 	}
@@ -121,3 +162,4 @@ void plist_del(struct plist_node *node, struct plist_head *head)
 
 	plist_check_head(head);
 }
+#endif /* MCKERNEL_RUST_PLIST_CORE */

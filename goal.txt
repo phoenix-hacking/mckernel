@@ -1,0 +1,153 @@
+› Awesome put this in full-port.txt with a plan to see it completed please and update AGENTS.md for
+  this as well. Also please make somethign that I can push to goal mode and complete it. All code
+  should be verified and QEMU and virtualization tools like KVM should be used to make sure that
+  everything is fully working please
+
+
+• Proposed Plan
+
+
+  # Full-Port Tracker And Completion Goal
+
+  ## Summary
+
+  - Create full-port.txt as the authoritative non-arm full-port tracker.
+  - Update AGENTS.md so future agents treat full-port.txt as the strict whole-repo completion tracker.
+  - Scope: x86_64/Rocky only; arm64 excluded; third-party/vendor/generated code excluded.
+  - Current full-port baseline: 32.5% complete, 67.5% remaining, based on mechanical McKernel-owned
+    implementation debt.
+
+  ## full-port.txt
+
+  Create /home/hgordon/mckernel/full-port.txt with:
+
+  McKernel Full Rust Port Tracker
+  Updated: 2026-06-01
+
+  Scope
+  ------------------------------------------------------------
+  Target: all McKernel-owned x86_64/Rocky implementation logic should be Rust-owned.
+  Arm64 is excluded. Third-party/vendor/generated code, public compatibility
+  headers, tests, and unavoidable assembly-adjacent code are excluded.
+
+  These percentages are mechanical full-port percentages from the ownership audit,
+  not the capped functional dashboard or strict sequencing score.
+
+  Current Full-Port Percentages
+  ------------------------------------------------------------
+  Overall non-arm full port: 32.5% complete, 67.5% left
+
+  Category                              Complete   Left
+  --------                              --------   ----
+  ABI/layout foundation                   100.0%    0.0%
+  Page allocator                           59.0%   41.0%
+  Scheduler/timers/wait/futex             56.4%   43.6%
+  Process/VM management                   46.0%   54.0%
+  x86_64 memory management                45.1%   54.9%
+  Shared primitives                       43.9%   56.1%
+  procfs/sysfs/xpmem/file objects         40.2%   59.8%
+  Syscall core                            35.5%   64.5%
+  Other in-scope kernel code              26.7%   73.3%
+  User tools                              22.9%   77.1%
+  host/IKC/mcctrl/IHK modules             12.4%   87.6%
+
+  Completion Plan
+  ------------------------------------------------------------
+  1. Finish the x86_64/Rocky standalone OS default path:
+     allocator/free lifetime, lock/list/refcount/atomic primitives, page-table/TLB
+     and user-copy primitives, process/thread/object lifecycle mutation,
+     scheduler/context-switch/wait/futex/signal side effects, syscall dispatch,
+     Linux-forwarding callbacks, and IKC/control-plane exchange.
+
+  2. Complete host/IHK/mcctrl ownership:
+     module-load, OS create/destroy, memory registration, IKC send/receive,
+     device lifecycle, kmsg/notifier/event paths, and mcctrl syscall/procfs/sysfs
+     command bodies.
+
+  3. Complete user tools:
+     mcexec, mcstat, mcinspect, eclair, crash helpers, dump helpers, ihkosctl,
+     ihkconfig, ihkmond, and smaller utilities while preserving CLI flags,
+     output formats, exit codes, config parsing, ioctl/protocol behavior, and
+     script compatibility.
+
+  4. Retire C fallbacks:
+     keep C fallback during validation, then remove McKernel-owned C fallback
+     bodies once Rust equivalence and runtime coverage prove the replacement.
+
+  5. Final gate:
+     remaining C must be limited to compatibility headers/wrappers, approved
+     external Linux interface glue, tests, generated/vendor code, or unavoidable
+     assembly-adjacent code.
+
+  Verification Requirements
+  ------------------------------------------------------------
+  Every completed slice must pass:
+  - Rust formatting/static checks.
+  - `kernel/rust/tests/run_equivalence.sh`.
+  - `scripts/rust-ownership-report.py --format markdown --top 25`.
+  - Rust-enabled kernel/control-plane/tool builds relevant to the touched area.
+  - C fallback build until that fallback is intentionally retired.
+  - Module-load smoke for IHK/mcctrl changes.
+  - QEMU/KVM validation for runtime-sensitive changes.
+
+  Runtime validation must use QEMU and virtualization tooling:
+  - Prefer KVM when available and verified for the run.
+  - Fall back to TCG only when KVM is unavailable.
+  - Do not run host reboot paths.
+  - Use guest-only McKernel boot/workload validation.
+  - Required runtime gates before final completion: Rocky QEMU boot smoke,
+    module load/unload, OS create/destroy, minimal user workloads, focused V11
+    regression, and stress coverage for memory faults, page tables, allocator
+    pressure, futex/wait, signals/ptrace, XPMEM, procfs/sysfs, IKC, and shutdown.
+
+  Stop on first validation failure and record the failing command, environment,
+  and short error summary in `kernel.log`.
+
+  ## AGENTS.md
+
+  Update the repository instructions with a short “Full-Port Tracker” section:
+
+  ## Full-Port Tracker
+
+  `full-port.txt` is the strict whole-repo x86_64/Rocky full Rust port tracker.
+  It excludes arm64, third-party/vendor/generated code, public compatibility
+  headers, tests, and unavoidable assembly-adjacent code.
+
+  Use `full-port.txt` for the final C-dependency retirement goal. Use
+  `migration.txt` for strict core sequencing history and `overview.txt` for the
+  functional dashboard. The current non-arm full-port baseline is 32.5% complete
+  and 67.5% remaining.
+
+  Every full-port movement must be verified. Runtime-sensitive work must use QEMU
+  and virtualization tooling, preferably KVM when available and verified. Do not
+  use host reboot paths. Stop on first validation failure and log the failing
+  command, environment, and short error summary in `kernel.log`.
+
+  Also add full-port.txt to any tracker references near migration.txt and
+  overview.txt.
+
+  ## Goal-Mode Objective
+
+  Use this objective for Goal Mode:
+
+  Complete the x86_64/Rocky McKernel full Rust port tracked by full-port.txt:
+  move all McKernel-owned non-arm implementation logic to Rust, retire required C
+  fallback bodies from the default implementation, preserve public ABI behavior,
+  exclude third-party/vendor/generated code and unavoidable assembly-adjacent
+  surfaces, and verify every slice with equivalence tests, Rust/C builds while
+  fallbacks remain, ownership gates, module-load smoke, and QEMU/KVM runtime
+  validation until full-port.txt reaches 100.0%.
+
+  ## Acceptance Criteria
+
+  - full-port.txt exists and is updated after each validated slice.
+  - AGENTS.md names full-port.txt as the strict whole-repo full-port tracker.
+  - scripts/rust-ownership-report.py --fail-on-c or an equivalent classified
+    gate passes for McKernel-owned non-arm implementation code.
+
+  - Default x86_64/Rocky kernel/control-plane/tool paths no longer require
+    McKernel-owned C implementation bodies.
+
+  - QEMU/KVM runtime validation passes for boot, module lifecycle, OS lifecycle,
+    workloads, regression, stress, IKC, and shutdown paths.
+

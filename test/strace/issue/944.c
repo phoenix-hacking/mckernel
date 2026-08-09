@@ -1,4 +1,5 @@
 #define __BSD_SOURCE
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -268,7 +269,7 @@ main(int argc, char **argv)
 				}
 				continue;
 			    case 3: // open in
-				if (num == SYS_open &&
+				if ((num == SYS_open || num == SYS_openat) &&
 				    ret == -ENOSYS) {
 					printf("#944-3 open in OK\n");
 					ok++;
@@ -279,7 +280,7 @@ main(int argc, char **argv)
 				}
 				continue;
 			    case 4: // open out
-				if (num == SYS_open &&
+				if ((num == SYS_open || num == SYS_openat) &&
 				    ret == -EISDIR) {
 					printf("#944-4 open out OK\n");
 					ok++;
@@ -339,5 +340,5 @@ main(int argc, char **argv)
 	}
 	printf("#944 test terminated ok=%d ng=%d\n", ok, ng);
 	fflush(stdout);
-	exit(0);
+	exit(ng ? 1 : 0);
 }

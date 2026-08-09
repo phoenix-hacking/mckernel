@@ -60,6 +60,7 @@ systemctl status irqbalance.service &>/dev/null && irqbalance_used="yes"
 
 turbo=""
 ihk_irq=""
+ihk_trampoline="${IHK_TRAMPOLINE_PHYS:-}"
 safe_kernel_map=""
 umask_old=`umask`
 idle_halt=""
@@ -294,8 +295,12 @@ if ! grep ihk_smp_@ARCH@ /proc/modules &>/dev/null; then
 	if [ "${ihk_irq}" != "" ]; then
 		IHK_IRQ_ARG="ihk_start_irq=${ihk_irq}"
 	fi
+	IHK_TRAMPOLINE_ARG=""
+	if [ "${ihk_trampoline}" != "" ]; then
+		IHK_TRAMPOLINE_ARG="ihk_trampoline=${ihk_trampoline}"
+	fi
 
-	if ! taskset -c 0 ${SUDO} insmod ${KMODDIR}/ihk-smp-@ARCH@.ko ${IHK_IRQ_ARG} ihk_ikc_irq_core=$ihk_ikc_irq_core 2>/dev/null; then
+	if ! taskset -c 0 ${SUDO} insmod ${KMODDIR}/ihk-smp-@ARCH@.ko ${IHK_IRQ_ARG} ${IHK_TRAMPOLINE_ARG} ihk_ikc_irq_core=$ihk_ikc_irq_core 2>/dev/null; then
 		echo "error: loading ihk-smp-@ARCH@" >&2
 		error_exit "ihk_loaded"
 	fi

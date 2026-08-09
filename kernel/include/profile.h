@@ -77,67 +77,22 @@ void profile_dealloc_proc_events(struct process *proc);
 #define __NR_profile                   PROFILE_EVENT_MAX
 
 /* Per-thread */
-static inline void mckernel_profile_thread_on(void)
-{
-	syscall(__NR_profile, PROF_ON);
-}
-
-static inline void mckernel_profile_thread_off(void)
-{
-	syscall(__NR_profile, PROF_OFF);
-}
-
-static inline void mckernel_profile_thread_print(void)
-{
-	syscall(__NR_profile, PROF_PRINT);
-}
-
-static inline void mckernel_profile_thread_print_off(void)
-{
-	syscall(__NR_profile, PROF_OFF | PROF_PRINT);
-}
+void mckernel_profile_thread_on(void);
+void mckernel_profile_thread_off(void);
+void mckernel_profile_thread_print(void);
+void mckernel_profile_thread_print_off(void);
 
 /* Per-process */
-static inline void mckernel_profile_process_on(void)
-{
-	syscall(__NR_profile, PROF_PROC | PROF_ON);
-}
-
-static inline void mckernel_profile_process_off(void)
-{
-	syscall(__NR_profile, PROF_PROC | PROF_OFF);
-}
-
-static inline void mckernel_profile_process_print(void)
-{
-	syscall(__NR_profile, PROF_PROC | PROF_PRINT);
-}
-
-static inline void mckernel_profile_process_print_off(void)
-{
-	syscall(__NR_profile, PROF_PROC | PROF_OFF | PROF_PRINT);
-}
+void mckernel_profile_process_on(void);
+void mckernel_profile_process_off(void);
+void mckernel_profile_process_print(void);
+void mckernel_profile_process_print_off(void);
 
 /* Per-job */
-static inline void mckernel_profile_job_on(void)
-{
-	syscall(__NR_profile, PROF_JOB | PROF_ON);
-}
-
-static inline void mckernel_profile_job_off(void)
-{
-	syscall(__NR_profile, PROF_JOB | PROF_OFF);
-}
-
-static inline void mckernel_profile_job_print(void)
-{
-	syscall(__NR_profile, PROF_JOB | PROF_PRINT);
-}
-
-static inline void mckernel_profile_job_print_off(void)
-{
-	syscall(__NR_profile, PROF_JOB | PROF_OFF | PROF_PRINT);
-}
+void mckernel_profile_job_on(void);
+void mckernel_profile_job_off(void);
+void mckernel_profile_job_print(void);
+void mckernel_profile_job_print_off(void);
 
 #endif // __KERNEL__
 #endif // PROFILE_ENABLE

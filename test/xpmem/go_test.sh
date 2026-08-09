@@ -3,34 +3,80 @@
 USELTP=0
 USEOSTEST=0
 
-XPMEM_DIR=$HOME/usr
-XPMEM_BUILD_DIR=/home/satoken/xpmem
+XPMEM_DIR=${XPMEM_DIR:-$HOME/usr}
+XPMEM_BUILD_DIR=${XPMEM_BUILD_DIR:-$HOME/xpmem}
+XPMEM_RUN_UPSTREAM=${XPMEM_RUN_UPSTREAM:-1}
+XPMEM_UPSTREAM_TIMEOUT=${XPMEM_UPSTREAM_TIMEOUT:-120}
+XPMEM_MODULE="${XPMEM_DIR}/lib/modules/$(uname -r)/xpmem.ko"
+xpmem_loaded_by_test=0
 
 . ../common.sh
+export MCEXEC
+set -e
 
-sudo insmod ${XPMEM_DIR}/lib/modules/`uname -r`/xpmem.ko
-sudo chmod og+rw /dev/xpmem
+cleanup_xpmem() {
+	if [ "$xpmem_loaded_by_test" -eq 1 ]; then
+		sudo rmmod xpmem || true
+	fi
+}
+trap cleanup_xpmem EXIT
+
+ensure_xpmem_device_node() {
+	if [ ! -e /dev/xpmem ]; then
+		if [ ! -r /sys/class/misc/xpmem/dev ]; then
+			echo "xpmem misc device is not registered under /sys/class/misc/xpmem" >&2
+			exit 77
+		fi
+
+		dev_id="$(cat /sys/class/misc/xpmem/dev)"
+		major="${dev_id%:*}"
+		minor="${dev_id#*:}"
+		sudo mknod /dev/xpmem c "${major}" "${minor}"
+	fi
+
+	sudo chmod og+rw /dev/xpmem
+}
+
+if [ ! -f "${XPMEM_MODULE}" ]; then
+	echo "xpmem.ko not found: ${XPMEM_MODULE}" >&2
+	exit 77
+fi
+if [ ! -d "${XPMEM_BUILD_DIR}/test" ]; then
+	echo "XPMEM userspace tests not found: ${XPMEM_BUILD_DIR}/test" >&2
+	exit 77
+fi
+
+if ! lsmod | awk '$1 == "xpmem" { found = 1 } END { exit found ? 0 : 1 }'; then
+	sudo insmod "${XPMEM_MODULE}"
+	xpmem_loaded_by_test=1
+fi
+ensure_xpmem_device_node
 
 echo "*** XPMEM_TESTSUITE start *******************************"
 cwd=`pwd`
-cd ${XPMEM_BUILD_DIR}/test
-${cwd}/mc_run.sh
-cd ${cwd}
+if [ "${XPMEM_RUN_UPSTREAM}" -eq 1 ]; then
+	cd "${XPMEM_BUILD_DIR}/test"
+	timeout "${XPMEM_UPSTREAM_TIMEOUT}" "${cwd}/mc_run.sh"
+	cd "${cwd}"
+else
+	echo "SKIP: upstream XPMEM test suite disabled by XPMEM_RUN_UPSTREAM=0"
+fi
 
 # xpmem basic test
-${MCEXEC} ./XTP_001
-${MCEXEC} ./XTP_002
-${MCEXEC} ./XTP_003
-${MCEXEC} ./XTP_004
-${MCEXEC} ./XTP_005
-${MCEXEC} ./XTP_006
+"${MCEXEC}" ./XTP_001
+"${MCEXEC}" ./XTP_002
+"${MCEXEC}" ./XTP_003
+"${MCEXEC}" ./XTP_004
+"${MCEXEC}" ./XTP_005
+"${MCEXEC}" ./XTP_006
 sleep 3
-${MCEXEC} ./XTP_007
+"${MCEXEC}" ./XTP_007
 
-${MCEXEC} ./XTP_901
-${MCEXEC} ./XTP_902
-${MCEXEC} ./XTP_903
-${MCEXEC} ./XTP_904
-${MCEXEC} ./XTP_905
+"${MCEXEC}" ./XTP_901
+"${MCEXEC}" ./XTP_902
+"${MCEXEC}" ./XTP_903
+"${MCEXEC}" ./XTP_904
+"${MCEXEC}" ./XTP_905
 
-sudo rmmod xpmem.ko
+cleanup_xpmem
+xpmem_loaded_by_test=0

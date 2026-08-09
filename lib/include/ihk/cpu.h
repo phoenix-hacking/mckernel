@@ -97,11 +97,7 @@ int ihk_mc_validate_event(unsigned long hw_config);
 int hw_perf_event_init(struct mc_perf_event *event);
 int ihk_mc_event_set_period(struct mc_perf_event *event);
 uint64_t ihk_mc_event_update(struct mc_perf_event *event);
-
-static inline int is_sampling_event(struct mc_perf_event *event)
-{
-	return event->attr.sample_period != 0;
-}
+int is_sampling_event(struct mc_perf_event *event);
 
 /* returns the 'prev' argument of the call that caused the switch to the context returned. */
 void *ihk_mc_switch_context(ihk_mc_kernel_context_t *old_ctx,

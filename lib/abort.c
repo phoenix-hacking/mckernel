@@ -11,7 +11,7 @@ void arch_cpu_stop(void);
 void panic(const char *msg)
 {
 	if (clv) {
-		struct ihk_os_cpu_monitor *monitor = cpu_local_var(monitor);
+		struct ihk_os_cpu_monitor *monitor = get_this_cpu_local_var()->monitor;
 		//kprintf("%s: calling eventfd\n", __FUNCTION__);
 		monitor->status = IHK_OS_MONITOR_PANIC;
 		eventfd(IHK_OS_EVENTFD_TYPE_STATUS);

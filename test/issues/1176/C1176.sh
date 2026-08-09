@@ -1,20 +1,32 @@
 #!/bin/sh
 
-USELTP=1
-USEOSTEST=1
+if [ "${LOCAL_ONLY:-0}" = 1 ]; then
+	USELTP=0
+	USEOSTEST=0
+else
+	USELTP=1
+	USEOSTEST=1
+fi
 
 . ../../common.sh
 
-"$MCEXEC" "$TESTMCK" -s getrusage -n 2 2>&1 | tee C1176T01.txt
-if grep "RESULT: you need check rusage value" C1176T01.txt > /dev/null 2>&1;then
-	echo "*** C1176T01: OK"
-else
-	echo "*** C1176T01: NG"
+if [ "${LOCAL_ONLY:-0}" != 1 ]; then
+	"$MCEXEC" "$TESTMCK" -s getrusage -n 2 2>&1 | tee C1176T01.txt
+	if grep "RESULT: you need check rusage value" C1176T01.txt > /dev/null 2>&1;then
+		echo "*** C1176T01: OK"
+	else
+		echo "*** C1176T01: NG"
+	fi
 fi
 
 "$MCEXEC" ./C1176T02
 "$MCEXEC" ./C1176T03
 "$MCEXEC" ./C1176T04
+
+if [ "${LOCAL_ONLY:-0}" = 1 ]; then
+	echo "*** C1176 external LTP/OSTEST cases skipped: LOCAL_ONLY=1"
+	exit 0
+fi
 
 for i in kill01:05 kill12:06 pause02:07 sigaction01:08 ; do
 	tp=`echo $i|sed 's/:.*//'`

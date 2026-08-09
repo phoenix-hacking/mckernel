@@ -120,7 +120,7 @@ void __ubsan_handle_type_mismatch(struct type_mismatch_data *data,
 	ubsan_prologue(&data->location);
 	if (!ptr) {
 		kprintf("%s: null pointer deref\n", __func__);
-	} else if (data->alignment && !IS_ALIGNED(ptr, data->alignment)) {
+	} else if (data->alignment && !ihk_is_aligned(ptr, data->alignment)) {
 		kprintf("%s: pointer %#16lx of type %s is not aligned at %#lx\n",
 			__func__, ptr, data->type->type_name, data->alignment);
 	} else {
@@ -223,4 +223,3 @@ void __ubsan_handle_load_invalid_value(struct invalid_value_data *data,
 	ubsan_prologue(&data->location);
 	kprintf("%s: %lx\n", __func__, val);
 }
-

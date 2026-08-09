@@ -189,7 +189,7 @@ struct ikc_scd_packet {
 };
 
 
-struct mcctrl_priv { 
+struct mcctrl_priv {
 	ihk_os_t os;
 	struct program_load_desc *desc;
 };
@@ -212,7 +212,7 @@ struct syscall_params {
 	struct syscall_response *response_va;
 	unsigned long post_pa;
 	struct syscall_post *post_va;
-	
+
 	unsigned long doorbell_pa;
 	unsigned long *doorbell_va;
 };
@@ -244,7 +244,7 @@ struct mcctrl_per_thread_data {
 
 #define MCCTRL_PER_THREAD_DATA_HASH_SHIFT 8
 #define MCCTRL_PER_THREAD_DATA_HASH_SIZE (1 << MCCTRL_PER_THREAD_DATA_HASH_SHIFT)
-#define MCCTRL_PER_THREAD_DATA_HASH_MASK (MCCTRL_PER_THREAD_DATA_HASH_SIZE - 1) 
+#define MCCTRL_PER_THREAD_DATA_HASH_MASK (MCCTRL_PER_THREAD_DATA_HASH_SIZE - 1)
 
 struct mcctrl_per_proc_data {
 	struct mcctrl_usrdata *ud;
@@ -292,11 +292,6 @@ struct sysfsm_data {
 	ihk_os_t sysfs_os;
 };
 
-static inline int sysfs_inited(struct sysfsm_data *sdp)
-{
-	return !!(sdp->sysfs_buf);
-} /* sysfs_inited() */
-
 struct cache_topology {
 	struct ihk_cache_topology *saved;
 	cpumask_t shared_cpu_map;
@@ -337,7 +332,7 @@ struct process_list_item {
 #define PE_LIST_MAXLEN 5
 
 struct mcctrl_part_exec {
-	struct mutex lock;	
+	struct mutex lock;
 	int nr_processes;
 	/* number of processes to let in / out the synchronization point */
 	int nr_processes_left;
@@ -459,7 +454,7 @@ void pager_cleanup(void);
 
 int __do_in_kernel_irq_syscall(ihk_os_t os, struct ikc_scd_packet *packet);
 int __do_in_kernel_syscall(ihk_os_t os, struct ikc_scd_packet *packet);
-int mcctrl_add_per_proc_data(struct mcctrl_usrdata *ud, int pid, 
+int mcctrl_add_per_proc_data(struct mcctrl_usrdata *ud, int pid,
 	struct mcctrl_per_proc_data *ppd);
 int mcctrl_delete_per_proc_data(struct mcctrl_usrdata *ud, int pid);
 struct mcctrl_per_proc_data *mcctrl_get_per_proc_data(
@@ -514,6 +509,11 @@ void procfs_exit(int osnum);
 void setup_sysfs_files(ihk_os_t os);
 void reply_get_cpu_mapping(long req_pa);
 void free_topology_info(ihk_os_t os);
+int mckernel_cpu_2_linux_cpu(struct mcctrl_usrdata *udp, int cpu_id);
+int mckernel_cpu_2_hw_id(struct mcctrl_usrdata *udp, int cpu_id);
+int linux_cpu_2_mckernel_cpu(struct mcctrl_usrdata *udp, int cpu_id);
+int mckernel_numa_2_linux_numa(struct mcctrl_usrdata *udp, int numa_id);
+int linux_numa_2_mckernel_numa(struct mcctrl_usrdata *udp, int numa_id);
 
 /* archdep.c */
 
@@ -535,7 +535,7 @@ struct get_cpu_mapping_req {
 };
 
 struct ihk_perf_event_attr{
-	unsigned long config; 
+	unsigned long config;
 	unsigned disabled:1;
 	unsigned pinned:1;
 	unsigned exclude_user:1;

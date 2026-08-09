@@ -13,10 +13,25 @@ main(int argc, char **argv)
 {
 	pid_t pid;
 	cpu_set_t cpuset;
+	cpu_set_t available;
 	int st;
+	int cpu;
 
+	if (sched_getaffinity(0, sizeof(available), &available)) {
+		fprintf(stderr, "*** C1176T04: NG\n");
+		exit(1);
+	}
 	CPU_ZERO(&cpuset);
-	CPU_SET(1, &cpuset);
+	for (cpu = 0; cpu < CPU_SETSIZE; cpu++) {
+		if (CPU_ISSET(cpu, &available)) {
+			CPU_SET(cpu, &cpuset);
+			break;
+		}
+	}
+	if (cpu == CPU_SETSIZE) {
+		fprintf(stderr, "*** C1176T04: NG\n");
+		exit(1);
+	}
 
 	if (!(pid = fork())) {
 		if (sched_setaffinity(0, sizeof(cpuset), &cpuset)) {

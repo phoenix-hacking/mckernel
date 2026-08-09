@@ -12,7 +12,20 @@
 #include <linux/highmem.h>
 #include <linux/version.h>
 #include <linux/mm.h>
+#if defined(__has_include)
+# if __has_include(<linux/rhelversion.h>)
+#  include <linux/rhelversion.h>
+# endif
+#endif
 #include "mcctrl.h"
+#include <mcctrl_rust.h>
+
+#if defined(RHEL_RELEASE_CODE) && defined(RHEL_RELEASE_VERSION)
+#define MCCTRL_RHEL_RELEASE_AT_LEAST(major, minor) \
+	(RHEL_RELEASE_CODE >= RHEL_RELEASE_VERSION(major, minor))
+#else
+#define MCCTRL_RHEL_RELEASE_AT_LEAST(major, minor) 0
+#endif
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 19, 0)
 #define MCCTRL_COPY_STRING_KERNEL(arg, bprm) copy_string_kernel((arg), (bprm))
@@ -20,31 +33,28 @@
 #define MCCTRL_COPY_STRING_KERNEL(arg, bprm) copy_strings_kernel(1, &(arg), (bprm))
 #endif
 
-static int pathcheck(const char *file, const char *list)
+#if MCCTRL_RHEL_RELEASE_AT_LEAST(8, 10) && \
+	LINUX_VERSION_CODE < KERNEL_VERSION(5, 19, 0)
+/*
+ * Rocky/RHEL 8.10 hides prepare_binprm() from external modules. This loader
+ * has already entered exec's binfmt path, so after swapping bprm->file to
+ * mcexec we only need to refresh the probe buffer for search_binary_handler().
+ */
+static int mcctrl_prepare_binprm(struct linux_binprm *bprm)
 {
-	const char *p;
-	const char *q;
-	const char *r;
-	int l;
+	loff_t pos = 0;
 
-	if(!*list)
-		return 1;
-	p = list;
-	do{
-		q = strchr(p, ':');
-		if(!q)
-			q = strchr(p, '\0');
-		for(r = q - 1; r >= p && *r == '/'; r--);
-		l = r - p + 1;
-
-		if(!strncmp(file, p, l) &&
-		   file[l] == '/')
-			return 1;
-
-		p = q + 1;
-	} while(*q);
-	return 0;
+	memset(bprm->buf, 0, BINPRM_BUF_SIZE);
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
+	return kernel_read(bprm->file, bprm->buf, BINPRM_BUF_SIZE, &pos);
+#else
+	return kernel_read(bprm->file, pos, bprm->buf, BINPRM_BUF_SIZE);
+#endif
 }
+#define MCCTRL_PREPARE_BINPRM(bprm) mcctrl_prepare_binprm(bprm)
+#else
+#define MCCTRL_PREPARE_BINPRM(bprm) prepare_binprm(bprm)
+#endif
 
 static int load_elf(struct linux_binprm *bprm
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3,8,0)
@@ -56,7 +66,6 @@ static int load_elf(struct linux_binprm *bprm
 	const
 #endif
 	char *wp;
-	char *cp;
 	struct file *file;
 	int rc;
 	struct elfhdr *elf_ex = (struct elfhdr *)bprm->buf;
@@ -107,11 +116,7 @@ static int load_elf(struct linux_binprm *bprm
 	if(!path || IS_ERR(path))
 		path = bprm->interp;
 
-	cp = strrchr(path, '/');
-	if(!cp ||
-	   !strcmp(cp, "/mcexec") ||
-	   !strcmp(cp, "/ihkosctl") ||
-	   !strcmp(cp, "/ihkconfig")) {
+	if (mcctrl_binfmt_skip_path(path)) {
 		kfree(pbuf);
 		return -ENOEXEC;
 	}
@@ -220,7 +225,7 @@ static int load_elf(struct linux_binprm *bprm
 	}
 
 	if(env_mcexec_wl)
-		rc = !pathcheck(path, env_mcexec_wl);
+		rc = !mcctrl_path_allowed(path, env_mcexec_wl);
 	else
 		rc = 1;
 
@@ -275,7 +280,7 @@ static int load_elf(struct linux_binprm *bprm
 	fput(bprm->file);
 	bprm->file = file;
 
-	rc = prepare_binprm(bprm);
+	rc = MCCTRL_PREPARE_BINPRM(bprm);
 	if (rc < 0){
 		kfree(pbuf);
 		return rc;

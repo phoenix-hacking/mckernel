@@ -1,17 +1,21 @@
 diff --git a/linux/core/host_driver.c b/linux/core/host_driver.c
-index 102345b..6fdf2ef 100644
+index 102345b..feebcb6 100644
 --- a/linux/core/host_driver.c
 +++ b/linux/core/host_driver.c
-@@ -34,6 +34,8 @@
+@@ -34,6 +34,12 @@
  #include <linux/version.h>
  #include <linux/cred.h>
  #include <linux/mutex.h>
 +#include <linux/semaphore.h>
-+#include <linux/panic_notifier.h>
++#if defined(__has_include)
++# if __has_include(<linux/panic_notifier.h>)
++#  include <linux/panic_notifier.h>
++# endif
++#endif
  #include <ihk/ihk_host_user.h>
  #include <ihk/ihk_host_driver.h>
  #include <asm/spinlock.h>
-@@ -58,6 +60,20 @@
+@@ -58,6 +64,20 @@
  #define DEV_DEV_NAME "mcd"
  #define OS_DEV_NAME  "mcos"
  
@@ -32,7 +36,7 @@ index 102345b..6fdf2ef 100644
  #define OS_DATA_INVALID ((void *)-1)
  #define DEV_DATA_INVALID ((void *)-1)
  
-@@ -74,7 +90,7 @@ static struct ihk_host_linux_os_data *os_data[OS_MAX_MINOR];
+@@ -74,7 +94,7 @@ static struct ihk_host_linux_os_data *os_data[OS_MAX_MINOR];
  static int os_max_minor = 0;
  
  static struct list_head ihk_os_notifiers;
@@ -41,7 +45,7 @@ index 102345b..6fdf2ef 100644
  
  static struct list_head ihk_kmsg_bufs;
  static spinlock_t ihk_kmsg_bufs_lock;
-@@ -1650,11 +1666,7 @@ static int __ihk_device_create_os(struct ihk_host_linux_device_data *data,
+@@ -1650,11 +1670,7 @@ static int __ihk_device_create_os(struct ihk_host_linux_device_data *data,
  		++kmsg_buf_order;
  
  	kmsg_buf_pages = alloc_pages_node(NUMA_NO_NODE,
@@ -54,7 +58,7 @@ index 102345b..6fdf2ef 100644
  					  __GFP_HIGH |
  					  __GFP_COMP | __GFP_NORETRY |
  					  __GFP_NOWARN | __GFP_ZERO,
-@@ -2205,7 +2217,7 @@ static int __init ihk_host_driver_init(void)
+@@ -2205,7 +2221,7 @@ static int __init ihk_host_driver_init(void)
  		goto ERR;
  	}
  	
@@ -63,7 +67,7 @@ index 102345b..6fdf2ef 100644
  	if (!mcd_class) {
  		printk(KERN_INFO "IHK: Cannot create mcd.\n");
  		goto ERR;
-@@ -2216,7 +2228,7 @@ static int __init ihk_host_driver_init(void)
+@@ -2216,7 +2232,7 @@ static int __init ihk_host_driver_init(void)
  		printk(KERN_INFO "IHK: Cannot allocate char device number.\n");
  		goto ERR;
  	}
@@ -72,23 +76,194 @@ index 102345b..6fdf2ef 100644
  	if (!mcos_class) {
  		printk(KERN_INFO "IHK: Cannot create mcos.\n");
  		goto ERR;
+diff --git a/linux/driver/smp/arch/x86_64/smp-arch-driver.c b/linux/driver/smp/arch/x86_64/smp-arch-driver.c
+index 8c9c996..64852bc 100644
+--- a/linux/driver/smp/arch/x86_64/smp-arch-driver.c
++++ b/linux/driver/smp/arch/x86_64/smp-arch-driver.c
+@@ -83,6 +83,8 @@ static int ihk_smp_irq_apicid = 0;
+ extern const char ihk_smp_trampoline_end[], ihk_smp_trampoline_data[];
+ #define IHK_SMP_TRAMPOLINE_SIZE \
+         roundup(ihk_smp_trampoline_end - ihk_smp_trampoline_data, PAGE_SIZE)
++#define IHK_SMP_TRAMPOLINE_ORDER 0
++#define IHK_SMP_TRAMPOLINE_LIMIT 0x100000UL
+ 
+ /* ----------------------------------------------- */
+ 
+@@ -130,6 +132,27 @@ static pgd_t *_init_level4_pgt;
+ 
+ static unsigned long *_used_vectors;
+ 
++static int ihk_uv_uses_non_unique_apic(void)
++{
++#if (!defined(RHEL_RELEASE_CODE) && LINUX_VERSION_CODE < KERNEL_VERSION(5, 9, 0)) || \
++	(defined(RHEL_RELEASE_CODE) && RHEL_RELEASE_CODE < RHEL_RELEASE_VERSION(8, 4))
++	return _get_uv_system_type() == UV_NON_UNIQUE_APIC;
++#else
++	return 0;
++#endif
++}
++
++static int ihk_smp_trampoline_page_usable(struct page *page)
++{
++	unsigned long phys;
++
++	if (!page)
++		return 0;
++
++	phys = page_to_phys(page);
++	return phys + IHK_SMP_TRAMPOLINE_SIZE <= IHK_SMP_TRAMPOLINE_LIMIT;
++}
++
+ int ihk_smp_arch_symbols_init(void)
+ {
+ 	_real_mode_header = (void *) kallsyms_lookup_name("real_mode_header");
+@@ -322,7 +345,7 @@ int smp_wakeup_secondary_cpu(int apicid, unsigned long start_eip)
+ 	atomic_set(_init_deasserted, 0);
+ #endif
+ 
+-	if (_get_uv_system_type() != UV_NON_UNIQUE_APIC) {
++	if (!ihk_uv_uses_non_unique_apic()) {
+ 		pr_debug("Setting warm reset code and vector.\n");
+ 
+ 		smpboot_setup_warm_reset_vector(start_eip);
+@@ -1218,15 +1241,16 @@ int smp_ihk_arch_init(void)
+ 
+ 		memset(bad_pages, 0, TRAMP_ATTEMPTS * sizeof(struct page *));
+ 
+-		/* Try to allocate trampoline page, it has to be under 1M so we can
+-		 * execute real-mode AP code. If allocation fails more than
+-		 * TRAMP_ATTEMPTS times, we will use Linux's one.
++		/* Try to allocate a trampoline page below 1M so we can execute
++		 * real-mode AP code. If allocation fails more than TRAMP_ATTEMPTS
++		 * times, we will use Linux's one.
+ 		 * NOTE: using Linux trampoline could potentially cause race
+ 		 * conditions with concurrent CPU onlining requests */
+ retry_trampoline:
+-		trampoline_page = alloc_pages(GFP_DMA | GFP_KERNEL, 1);
++		trampoline_page = alloc_pages(GFP_DMA | GFP_KERNEL,
++					      IHK_SMP_TRAMPOLINE_ORDER);
+ 		
+-		if (!trampoline_page || page_to_phys(trampoline_page) > 0xFF000) {
++		if (!ihk_smp_trampoline_page_usable(trampoline_page)) {
+ 			bad_pages[attempts] = trampoline_page;
+ 
+ 			if (++attempts < TRAMP_ATTEMPTS) {
+@@ -1240,11 +1264,13 @@ retry_trampoline:
+ 				continue;
+ 			}
+ 
+-			free_pages((unsigned long)pfn_to_kaddr(page_to_pfn(bad_pages[attempts])), 1);
++			free_pages((unsigned long)pfn_to_kaddr(page_to_pfn(bad_pages[attempts])),
++				   IHK_SMP_TRAMPOLINE_ORDER);
+ 		}
+ 
+ 		/* Couldn't allocate trampoline page, use Linux' one from real_header */
+-		if (!trampoline_page || page_to_phys(trampoline_page) > 0xFF000) {
++		if (!ihk_smp_trampoline_page_usable(trampoline_page)) {
++			trampoline_page = NULL;
+ 			using_linux_trampoline = 1;
+ 			printk("IHK-SMP: warning: allocating trampoline_page failed, using Linux'\n");
+ 			trampoline_phys = _real_mode_header->trampoline_start;
+@@ -1398,7 +1424,8 @@ error_free_irq:
+ 
+ error_free_trampoline:
+ 	if (trampoline_page) {
+-		free_pages((unsigned long)pfn_to_kaddr(page_to_pfn(trampoline_page)), 1);
++		free_pages((unsigned long)pfn_to_kaddr(page_to_pfn(trampoline_page)),
++			   IHK_SMP_TRAMPOLINE_ORDER);
+ 	}
+ 	else {
+ 		if (!using_linux_trampoline)
+@@ -1786,7 +1813,7 @@ void smp_ihk_arch_exit(void)
+ #endif // !IHK_IKC_USE_LINUX_WORK_IRQ
+ 	if (trampoline_page) {
+ 		free_pages((unsigned long)pfn_to_kaddr(page_to_pfn(trampoline_page)),
+-		           1);
++		           IHK_SMP_TRAMPOLINE_ORDER);
+ 	}
+ 	else {
+ 		if (!using_linux_trampoline)
+diff --git a/linux/driver/smp/smp-driver.c b/linux/driver/smp/smp-driver.c
+index 409d6b3..c422756 100644
+--- a/linux/driver/smp/smp-driver.c
++++ b/linux/driver/smp/smp-driver.c
+@@ -5412,6 +5412,9 @@ static int ihk_smp_symbols_init(void)
+ 		goto err;
+ 
+ 	ihk__free_vmap_area = (void *)kallsyms_lookup_name("free_vmap_area");
++	if (!ihk__free_vmap_area)
++		ihk__free_vmap_area =
++			(void *)kallsyms_lookup_name("free_vmap_area_noflush");
+ 	if (WARN_ON(!ihk__free_vmap_area))
+ 		goto err;
+ #endif
+diff --git a/linux/user/CMakeLists.txt b/linux/user/CMakeLists.txt
+index 817b5c1..4329a7e 100644
+--- a/linux/user/CMakeLists.txt
++++ b/linux/user/CMakeLists.txt
+@@ -4,6 +4,7 @@ include_directories(
+ 	"${PROJECT_BINARY_DIR}/linux/include"
+ 	"${PROJECT_BINARY_DIR}"
+ )
++include(CheckCSourceCompiles)
+ 
+ execute_process(COMMAND awk -F= "$1 == \"CONFIG_ARM64_64K_PAGES\" { print $2; exit; }" "${KERNEL_DIR}/.config"
+ 	OUTPUT_VARIABLE CONFIG_ARM64_64K_PAGES OUTPUT_STRIP_TRAILING_WHITESPACE)
+@@ -18,8 +19,25 @@ else()
+ endif()
+ message("PAGE_SIZE: ${PAGE_SIZE}")
+ 
++set(_ihk_saved_required_libraries "${CMAKE_REQUIRED_LIBRARIES}")
++set(CMAKE_REQUIRED_LIBRARIES ${LIBBFD} ${CMAKE_REQUIRED_LIBRARIES})
++check_c_source_compiles("
++#include <bfd.h>
++int main(void)
++{
++	bfd *abfd = 0;
++	asection *scn = 0;
++
++	return bfd_set_section_size(abfd, scn, 0) ? 0 : 1;
++}
++" IHK_BFD_SET_SECTION_NEEDS_BFD)
++set(CMAKE_REQUIRED_LIBRARIES "${_ihk_saved_required_libraries}")
++
+ add_library(ihklib SHARED ihklib.c)
+ target_compile_definitions(ihklib PRIVATE -DPAGE_SIZE=${PAGE_SIZE})
++if(IHK_BFD_SET_SECTION_NEEDS_BFD)
++	target_compile_definitions(ihklib PRIVATE -DIHK_BFD_SET_SECTION_NEEDS_BFD)
++endif()
+ SET_TARGET_PROPERTIES(ihklib PROPERTIES OUTPUT_NAME ihk)
+ target_link_libraries(ihklib ${LIBBFD})
+ 
+@@ -60,4 +78,3 @@ install(FILES "../include/ihk/ihklib.h"
+ install(FILES "../include/ihk/affinity.h"
+ 	DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/ihk")
+ 
+-
 diff --git a/linux/user/ihklib.c b/linux/user/ihklib.c
-index 3d99534..7ce501f 100644
+index 3d99534..0e7e501 100644
 --- a/linux/user/ihklib.c
 +++ b/linux/user/ihklib.c
-@@ -31,6 +31,11 @@
+@@ -31,6 +31,18 @@
  #include <ihk/ihklib.h>
  #include <ihk/ihklib_private.h>
  
++#ifdef IHK_BFD_SET_SECTION_NEEDS_BFD
++#define mc_bfd_set_section_size(abfd, scn, size) \
++	bfd_set_section_size((abfd), (scn), (size))
++#define mc_bfd_set_section_flags(abfd, scn, flags) \
++	bfd_set_section_flags((abfd), (scn), (flags))
++#else
 +#define mc_bfd_set_section_size(abfd, scn, size) \
 +	bfd_set_section_size((scn), (size))
 +#define mc_bfd_set_section_flags(abfd, scn, flags) \
 +	bfd_set_section_flags((scn), (flags))
++#endif
 +
  //#define DEBUG
  
  int __argc;
-@@ -3936,7 +3941,7 @@ int ihk_os_makedumpfile(int index, char *dump_file, int dump_level, int interact
+@@ -3936,7 +3948,7 @@ int ihk_os_makedumpfile(int index, char *dump_file, int dump_level, int interact
  			goto out;
  		}
  
@@ -97,7 +272,7 @@ index 3d99534..7ce501f 100644
  		if (!ok) {
  			ret = -EINVAL;
  			dprintf("%s: error: "
-@@ -3945,7 +3950,7 @@ int ihk_os_makedumpfile(int index, char *dump_file, int dump_level, int interact
+@@ -3945,7 +3957,7 @@ int ihk_os_makedumpfile(int index, char *dump_file, int dump_level, int interact
  			goto out;
  		}
  
@@ -106,7 +281,7 @@ index 3d99534..7ce501f 100644
  		if (!ok) {
  			ret = -EINVAL;
  			dprintf("%s: error: "
-@@ -3966,7 +3971,7 @@ int ihk_os_makedumpfile(int index, char *dump_file, int dump_level, int interact
+@@ -3966,7 +3978,7 @@ int ihk_os_makedumpfile(int index, char *dump_file, int dump_level, int interact
  			goto out;
  		}
  
@@ -115,7 +290,7 @@ index 3d99534..7ce501f 100644
  		if (!ok) {
  			ret = -EINVAL;
  			dprintf("%s: error: "
-@@ -3975,7 +3980,7 @@ int ihk_os_makedumpfile(int index, char *dump_file, int dump_level, int interact
+@@ -3975,7 +3987,7 @@ int ihk_os_makedumpfile(int index, char *dump_file, int dump_level, int interact
  			goto out;
  		}
  
@@ -124,7 +299,7 @@ index 3d99534..7ce501f 100644
  		if (!ok) {
  			ret = -EINVAL;
  			dprintf("%s: error: "
-@@ -3996,7 +4001,7 @@ int ihk_os_makedumpfile(int index, char *dump_file, int dump_level, int interact
+@@ -3996,7 +4008,7 @@ int ihk_os_makedumpfile(int index, char *dump_file, int dump_level, int interact
  			goto out;
  		}
  
@@ -133,7 +308,7 @@ index 3d99534..7ce501f 100644
  		if (!ok) {
  			ret = -EINVAL;
  			dprintf("%s: error: "
-@@ -4005,7 +4010,7 @@ int ihk_os_makedumpfile(int index, char *dump_file, int dump_level, int interact
+@@ -4005,7 +4017,7 @@ int ihk_os_makedumpfile(int index, char *dump_file, int dump_level, int interact
  			goto out;
  		}
  
@@ -142,7 +317,7 @@ index 3d99534..7ce501f 100644
  		if (!ok) {
  			ret = -EINVAL;
  			dprintf("%s: error: "
-@@ -4025,7 +4030,7 @@ int ihk_os_makedumpfile(int index, char *dump_file, int dump_level, int interact
+@@ -4025,7 +4037,7 @@ int ihk_os_makedumpfile(int index, char *dump_file, int dump_level, int interact
  		goto out;
  	}
  
@@ -151,7 +326,7 @@ index 3d99534..7ce501f 100644
  	if (!ok) {
  		ret = -EINVAL;
  		dprintf("%s: error: "
-@@ -4034,7 +4039,7 @@ int ihk_os_makedumpfile(int index, char *dump_file, int dump_level, int interact
+@@ -4034,7 +4046,7 @@ int ihk_os_makedumpfile(int index, char *dump_file, int dump_level, int interact
  		goto out;
  	}
  
@@ -160,7 +335,7 @@ index 3d99534..7ce501f 100644
  	if (!ok) {
  		ret = -EINVAL;
  		dprintf("%s: error: "
-@@ -4060,10 +4065,10 @@ int ihk_os_makedumpfile(int index, char *dump_file, int dump_level, int interact
+@@ -4060,10 +4072,10 @@ int ihk_os_makedumpfile(int index, char *dump_file, int dump_level, int interact
  		}
  
  		if (interactive) {
@@ -173,7 +348,7 @@ index 3d99534..7ce501f 100644
  		}
  		if (!ok) {
  			ret = -EINVAL;
-@@ -4073,7 +4078,7 @@ int ihk_os_makedumpfile(int index, char *dump_file, int dump_level, int interact
+@@ -4073,7 +4085,7 @@ int ihk_os_makedumpfile(int index, char *dump_file, int dump_level, int interact
  			goto out;
  		}
  

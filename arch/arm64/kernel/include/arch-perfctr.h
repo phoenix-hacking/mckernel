@@ -9,7 +9,7 @@
 struct per_cpu_arm_pmu {
 	int num_events;
 #define ARMV8_PMUV3_MAX_COMMON_EVENTS 0x40
-	DECLARE_BITMAP(pmceid_bitmap, ARMV8_PMUV3_MAX_COMMON_EVENTS);
+	unsigned long pmceid_bitmap[(((ARMV8_PMUV3_MAX_COMMON_EVENTS) + BITS_PER_LONG - 1) / BITS_PER_LONG)];
 };
 
 /* @ref.impl arch/arm64/include/asm/pmu.h */

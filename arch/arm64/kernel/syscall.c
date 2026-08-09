@@ -406,7 +406,7 @@ static int parse_user_sigframe(struct sigsp *sf)
 			if (size < sizeof(struct fpsimd_context))
 				goto invalid;
 
-			fpsimd_ctx = container_of(head, struct fpsimd_context, head);
+			fpsimd_ctx = ((struct fpsimd_context *)((char *)(head) - offsetof(struct fpsimd_context, head)));
 			break;
 
 		case ESR_MAGIC:
@@ -415,7 +415,7 @@ static int parse_user_sigframe(struct sigsp *sf)
 
 		case SVE_MAGIC: {
 			struct sve_context *sve_head =
-				container_of(head, struct sve_context, head);
+				((struct sve_context *)((char *)(head) - offsetof(struct sve_context, head)));
 
 			if (!(elf_hwcap & HWCAP_SVE))
 				goto invalid;
@@ -448,7 +448,7 @@ static int parse_user_sigframe(struct sigsp *sf)
 			/* Prevent looping/repeated parsing of extra_conext */
 			have_extra_context = 1;
 
-			kextra_data = kmalloc(extra_size + 15, IHK_MC_AP_NOWAIT);
+			kextra_data = kmalloc_tracked(extra_size + 15, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 			if (copy_from_user((char *)ALIGN_UP((unsigned long)kextra_data, 16), extra_data, extra_size)) {
 				goto invalid;
 			}
@@ -499,7 +499,7 @@ done:
 
 invalid:
 	if (kextra_data) {
-		kfree(kextra_data);
+		kfree_tracked(kextra_data, __FILE__, __LINE__);
 		kextra_data = NULL;
 	}
 	return err;
@@ -580,7 +580,7 @@ alloc_debugreg(struct thread *thread)
 
 	/* LOWER:  breakpoint register area. */
 	/* HIGHER: watchpoint register area. */
-	hws = kmalloc(sizeof(struct user_hwdebug_state) * 2, IHK_MC_AP_NOWAIT);
+	hws = kmalloc_tracked(sizeof(struct user_hwdebug_state) * 2, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 	if (hws == NULL) {
 		kprintf("alloc_debugreg: no memory.\n");
 		return -ENOMEM;
@@ -976,7 +976,7 @@ static int setup_rt_frame(int usig, unsigned long rc, int to_restart,
 
 	/* allocate kernel sigframe buffer */
 	kpages = (sigframe_size(&user) + PAGE_SIZE - 1) >> PAGE_SHIFT;
-	user.ksigframe = ihk_mc_alloc_pages(kpages, IHK_MC_AP_NOWAIT);
+	user.ksigframe = _ihk_mc_alloc_aligned_pages_node(kpages, PAGE_P2ALIGN, IHK_MC_AP_NOWAIT, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);
 
 	/* set kernel sigframe lowest addr */
 	kframe = user.ksigframe;
@@ -1090,7 +1090,7 @@ static int setup_rt_frame(int usig, unsigned long rc, int to_restart,
 	err = copy_to_user(user.usigframe, user.ksigframe, sigframe_size(&user));
 
 	/* free kernel sigframe buffer */
-	ihk_mc_free_pages(user.ksigframe, kpages);
+	_ihk_mc_free_pages(user.ksigframe, kpages, IHK_MC_PG_KERNEL, __FILE__, __LINE__);
 
 	return err;
 }
@@ -1143,7 +1143,7 @@ do_signal(unsigned long rc, void *regs0, struct thread *thread, struct sig_pendi
 	k = thread->sigcommon->action + sig - 1;
 
 	if(k->sa.sa_handler == SIG_IGN){
-		kfree(pending);
+		kfree_tracked(pending, __FILE__, __LINE__);
 		mcs_rwlock_writer_unlock(&thread->sigcommon->lock, &mcs_rw_node);
 		goto out;
 	}
@@ -1158,7 +1158,7 @@ do_signal(unsigned long rc, void *regs0, struct thread *thread, struct sig_pendi
 
 		if (setup_rt_frame(sig, rc, restart, syscallno, k, pending,
 				   regs, thread)) {
-			kfree(pending);
+			kfree_tracked(pending, __FILE__, __LINE__);
 			mcs_rwlock_writer_unlock(&thread->sigcommon->lock, &mcs_rw_node);
 			kprintf("do_signal,page_fault_thread_vm failed\n");
 			terminate(0, sig);
@@ -1172,7 +1172,7 @@ do_signal(unsigned long rc, void *regs0, struct thread *thread, struct sig_pendi
 
 		if(!(k->sa.sa_flags & SA_NODEFER))
 			thread->sigmask.__val[0] |= pending->sigmask.__val[0];
-		kfree(pending);
+		kfree_tracked(pending, __FILE__, __LINE__);
 		mcs_rwlock_writer_unlock(&thread->sigcommon->lock, &mcs_rw_node);
 
 		if (thread->ctx.thread->flags & (1 << TIF_SINGLESTEP)) {
@@ -1192,14 +1192,14 @@ do_signal(unsigned long rc, void *regs0, struct thread *thread, struct sig_pendi
 
 		if(ptraceflag){
 			if(thread->ptrace_recvsig)
-				kfree(thread->ptrace_recvsig);
+				kfree_tracked(thread->ptrace_recvsig, __FILE__, __LINE__);
 			thread->ptrace_recvsig = pending;
 			if(thread->ptrace_sendsig)
-				kfree(thread->ptrace_sendsig);
+				kfree_tracked(thread->ptrace_sendsig, __FILE__, __LINE__);
 			thread->ptrace_sendsig = NULL;
 		}
 		else
-			kfree(pending);
+			kfree_tracked(pending, __FILE__, __LINE__);
 		mcs_rwlock_writer_unlock(&thread->sigcommon->lock, &mcs_rw_node);
 		switch (sig) {
 		case SIGSTOP:
@@ -1295,8 +1295,7 @@ do_signal(unsigned long rc, void *regs0, struct thread *thread, struct sig_pendi
 		case SIGXFSZ:
 		core:
 			thread->coredump_regs =
-				kmalloc(sizeof(struct pt_regs),
-					IHK_MC_AP_NOWAIT);
+				kmalloc_tracked(sizeof(struct pt_regs), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 			if (!thread->coredump_regs) {
 				kprintf("%s: Out of memory\n", __func__);
 				goto skip;
@@ -1408,12 +1407,12 @@ do_kill(struct thread * thread, int pid, int tid, int sig, siginfo_t *info, int 
 				return -ESRCH;
 			pgid = thread->proc->pgid;
 		}
-		pids = kmalloc(sizeof(int) * num_processors, IHK_MC_AP_NOWAIT);
+		pids = kmalloc_tracked(sizeof(int) * num_processors, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 		if(!pids)
 			return -ENOMEM;
 		for(i = 0; i < HASH_SIZE; i++){
 			mcs_rwlock_reader_lock(&phash->lock[i], &slock);
-			list_for_each_entry(p, &phash->list[i], hash_list){
+			for (p = ((typeof(*p) *)((char *)((&phash->list[i])->next) - offsetof(typeof(*p), hash_list))); &p->hash_list != (&phash->list[i]); p = ((typeof(*p) *)((char *)(p->hash_list.next) - offsetof(typeof(*p), hash_list)))){
 				if(pgid != 1 && p->pgid != pgid)
 					continue;
 
@@ -1432,7 +1431,7 @@ do_kill(struct thread * thread, int pid, int tid, int sig, siginfo_t *info, int 
 		if(sendme)
 			rc = do_kill(thread, thread->proc->pid, -1, sig, info, ptracecont);
 
-		kfree(pids);
+		kfree_tracked(pids, __FILE__, __LINE__);
 		return rc;
 	}
 
@@ -1446,7 +1445,7 @@ do_kill(struct thread * thread, int pid, int tid, int sig, siginfo_t *info, int 
 		found = 0;
 		hash = process_hash(pid);
 		mcs_rwlock_reader_lock_noirq(&phash->lock[hash], &plock);
-		list_for_each_entry(tproc, &phash->list[hash], hash_list){
+		for (tproc = ((typeof(*tproc) *)((char *)((&phash->list[hash])->next) - offsetof(typeof(*tproc), hash_list))); &tproc->hash_list != (&phash->list[hash]); tproc = ((typeof(*tproc) *)((char *)(tproc->hash_list.next) - offsetof(typeof(*tproc), hash_list)))){
 			if(tproc->pid == pid){
 				found = 1;
 				break;
@@ -1463,7 +1462,7 @@ do_kill(struct thread * thread, int pid, int tid, int sig, siginfo_t *info, int 
 			goto done;
 		}
 		mcs_rwlock_reader_lock_noirq(&tproc->threads_lock, &lock);
-		list_for_each_entry(t, &tproc->threads_list, siblings_list){
+		for (t = ((typeof(*t) *)((char *)((&tproc->threads_list)->next) - offsetof(typeof(*t), siblings_list))); &t->siblings_list != (&tproc->threads_list); t = ((typeof(*t) *)((char *)(t->siblings_list.next) - offsetof(typeof(*t), siblings_list)))){
 			if(t->tid == pid || tthread == NULL){
 				if(t->status == PS_EXITED){
 					continue;
@@ -1497,7 +1496,7 @@ done:
 		found = 0;
 		hash = thread_hash(tid);
 		mcs_rwlock_reader_lock_noirq(&thash->lock[hash], &lock);
-		list_for_each_entry(tthread, &thash->list[hash], hash_list){
+		for (tthread = ((typeof(*tthread) *)((char *)((&thash->list[hash])->next) - offsetof(typeof(*tthread), hash_list))); &tthread->hash_list != (&thash->list[hash]); tthread = ((typeof(*tthread) *)((char *)(tthread->hash_list.next) - offsetof(typeof(*tthread), hash_list)))){
 			if(pid != -1 && tthread->proc->pid != pid){
 				continue;
 		}
@@ -1572,7 +1571,7 @@ done:
 	rc = 0;
 
 	if (sig < SIGRTMIN) { // SIGRTMIN - SIGRTMAX
-		list_for_each_entry(pending, head, list) {
+		for (pending = ((typeof(*pending) *)((char *)((head)->next) - offsetof(typeof(*pending), list))); &pending->list != (head); pending = ((typeof(*pending) *)((char *)(pending->list.next) - offsetof(typeof(*pending), list)))) {
 			if (pending->sigmask.__val[0] == mask &&
 			    pending->ptracecont == ptracecont)
 				break;
@@ -1582,7 +1581,7 @@ done:
 	}
 	if (pending == NULL) {
 		doint = 1;
-		pending = kmalloc(sizeof(struct sig_pending), IHK_MC_AP_NOWAIT);
+		pending = kmalloc_tracked(sizeof(struct sig_pending), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 		if (!pending) {
 			rc = -ENOMEM;
 		}
@@ -1761,7 +1760,7 @@ SYSCALL_DECLARE(mmap)
 		}
 		pgsize = (size_t)1 << ((flags >> MAP_HUGE_SHIFT) & 0x3F);
 		/* Round-up map length by pagesize */
-		len0 = ALIGN(len0, pgsize);
+		len0 = ihk_align(len0, pgsize);
 
 		if (rusage_check_overmap(len0,
 				(flags >> MAP_HUGE_SHIFT) & 0x3F)) {
@@ -2502,8 +2501,7 @@ pte_out:
 				}
 			}
 
-			dst = ihk_mc_alloc_aligned_pages_node(mpsr->nr_pages[i],
-					pgalign, IHK_MC_AP_USER, mpsr->nodes[i]);
+			dst = _ihk_mc_alloc_aligned_pages_node(mpsr->nr_pages[i], pgalign, IHK_MC_AP_USER, mpsr->nodes[i], IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);
 
 			if (!dst) {
 				mpsr->status[i] = -ENOMEM;
@@ -2547,9 +2545,7 @@ pte_out:
 				phys_to_virt(pte_get_phys(mpsr->ptep[i])),
 				mpsr->nr_pages[i] * PAGE_SIZE);
 
-		ihk_mc_free_pages(
-				phys_to_virt(pte_get_phys(mpsr->ptep[i])),
-				mpsr->nr_pages[i]);
+		_ihk_mc_free_pages(phys_to_virt(pte_get_phys(mpsr->ptep[i])), mpsr->nr_pages[i], IHK_MC_PG_KERNEL, __FILE__, __LINE__);
 
 		pte_update_phys(mpsr->ptep[i], mpsr->dst_phys[i]);
 
@@ -2593,7 +2589,14 @@ time_t time(void)
 
 SYSCALL_DECLARE(time)
 {
-	return time();
+	time_t now = time();
+	time_t *tloc = (time_t *)ihk_mc_syscall_arg0(ctx);
+
+	if (tloc && copy_to_user(tloc, &now, sizeof(now))) {
+		return -EFAULT;
+	}
+
+	return now;
 }
 
 void calculate_time_from_tsc(struct timespec *ts)

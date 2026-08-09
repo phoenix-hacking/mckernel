@@ -48,7 +48,19 @@ ifeq ($(shell /bin/ls /usr/include/crash/defs.h 2>/dev/null), /usr/include/crash
   INCDIR=/usr/include/crash
 endif
 
+RUSTC=$(shell command -v rustc 2>/dev/null)
+ifneq ($(RUSTC),)
+  RUST_OBJ=mckernel_crash_helpers.o
+  RUST_CFLAGS=-DMCKERNEL_CRASH_RUST_HELPERS
+  ifeq ($(TARGET),X86_64)
+    RUST_CFG=--cfg mckernel_crash_x86_64
+  endif
+endif
+
 all: mckernel.so
 
-mckernel.so: $(INCDIR)/defs.h mckernel.c
-	gcc -Wall -g -I$(INCDIR) -shared -rdynamic -o mckernel.so mckernel.c -fPIC -D$(TARGET) -DMAP_KERNEL_START=@MAP_KERNEL_START@UL $(TARGET_CFLAGS) $(GDB_FLAGS)
+mckernel_crash_helpers.o: rust/mckernel_crash_helpers.rs
+	$(RUSTC) $(RUST_CFG) --crate-name mckernel_crash_helpers --crate-type lib --edition=2021 -C panic=abort -C opt-level=2 -C debuginfo=1 -C relocation-model=pic -C force-unwind-tables=no --emit=obj=$@ $<
+
+mckernel.so: $(INCDIR)/defs.h mckernel.c $(RUST_OBJ)
+	gcc -Wall -g -I$(INCDIR) -shared -rdynamic -o mckernel.so mckernel.c $(RUST_OBJ) -fPIC -D$(TARGET) -DMAP_KERNEL_START=@MAP_KERNEL_START@UL $(TARGET_CFLAGS) $(GDB_FLAGS) $(RUST_CFLAGS)

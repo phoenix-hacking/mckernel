@@ -29,7 +29,9 @@
 #include <page.h>
 #include <mman.h>
 #include <init.h>
+#include <host_helpers.h>
 #include <kmalloc.h>
+#include <object_helpers.h>
 #include <sysfs.h>
 #include <ihk/perfctr.h>
 #include <rusage_private.h>
@@ -57,6 +59,244 @@ void check_mapping_for_proc(struct thread *thread, unsigned long addr)
 	}
 }
 
+static int host_prepare_add_range_raw_bridge(void *vm, unsigned long start,
+					     unsigned long end,
+					     unsigned long phys,
+					     unsigned long flag,
+					     int pgshift, void **rangep)
+{
+	struct vm_range *range = NULL;
+	int rc;
+
+	rc = add_process_memory_range((struct process_vm *)vm, start, end, phys,
+			flag, NULL, 0, pgshift, NULL, &range);
+	if (rangep)
+		*rangep = range;
+	return rc;
+}
+
+static int host_prepare_add_range_bridge(void *vm, unsigned long start,
+					 unsigned long end,
+					 unsigned long phys,
+					 unsigned long flag,
+					 int pgshift, void **rangep)
+{
+	return host_prepare_add_range_result(vm, start, end, phys, flag,
+			pgshift, rangep, host_prepare_add_range_raw_bridge);
+}
+
+static void *host_prepare_alloc_pages_user_raw_bridge(int npages,
+						      unsigned long flags,
+						      unsigned long virt_addr)
+{
+	return _ihk_mc_alloc_aligned_pages_node(npages, PAGE_P2ALIGN, flags, -1, IHK_MC_PG_USER, virt_addr, __FILE__, __LINE__);
+}
+
+static void *host_prepare_alloc_pages_user_bridge(int npages,
+						  unsigned long flags,
+						  unsigned long virt_addr)
+{
+	return host_prepare_alloc_pages_user_result(npages, flags, virt_addr,
+			host_prepare_alloc_pages_user_raw_bridge);
+}
+
+static void host_prepare_free_pages_user_raw_bridge(void *addr, int npages)
+{
+	_ihk_mc_free_pages(addr, npages, IHK_MC_PG_USER, __FILE__, __LINE__);
+}
+
+static void host_prepare_free_pages_user_bridge(void *addr, int npages)
+{
+	host_prepare_free_pages_user_result(addr, npages,
+			host_prepare_free_pages_user_raw_bridge);
+}
+
+static unsigned long host_prepare_virt_to_phys_raw_bridge(void *addr)
+{
+	return virt_to_phys(addr);
+}
+
+static unsigned long host_prepare_virt_to_phys_bridge(void *addr)
+{
+	return host_virt_to_phys_result(addr,
+			host_prepare_virt_to_phys_raw_bridge);
+}
+
+static unsigned long host_prepare_arch_vrflag_to_ptattr_raw_bridge(
+		unsigned long flag, unsigned long fault, void *ptep)
+{
+	return arch_vrflag_to_ptattr(flag, fault, ptep);
+}
+
+static unsigned long host_prepare_arch_vrflag_to_ptattr_bridge(
+		unsigned long flag, unsigned long fault, void *ptep)
+{
+	return host_arch_vrflag_to_ptattr_result(flag, fault, ptep,
+			host_prepare_arch_vrflag_to_ptattr_raw_bridge);
+}
+
+static int host_prepare_pt_set_range_raw_bridge(void *page_table, void *vm,
+						unsigned long start,
+						unsigned long end,
+						unsigned long phys,
+						unsigned long attr,
+						int pgshift, void *range,
+						int flags)
+{
+	return ihk_mc_pt_set_range(page_table, vm, (void *)start, (void *)end,
+			phys, attr, pgshift, range, flags);
+}
+
+static int host_prepare_pt_set_range_bridge(void *page_table, void *vm,
+					    unsigned long start,
+					    unsigned long end,
+					    unsigned long phys,
+					    unsigned long attr,
+					    int pgshift, void *range,
+					    int flags)
+{
+	return host_pt_set_range_result(page_table, vm, start, end, phys,
+			attr, pgshift, range, flags,
+			host_prepare_pt_set_range_raw_bridge);
+}
+
+static void host_prepare_modify_user_context_raw_bridge(void *uctx, int reg,
+							unsigned long value)
+{
+	ihk_mc_modify_user_context(uctx, reg, value);
+}
+
+static void host_prepare_modify_user_context_bridge(void *uctx, int reg,
+						    unsigned long value)
+{
+	host_modify_user_context_result(uctx, reg, value,
+			host_prepare_modify_user_context_raw_bridge);
+}
+
+static void host_prepare_ranges_log_raw_bridge(int event, unsigned long arg0,
+					       unsigned long arg1,
+					       unsigned long arg2)
+{
+	switch (event) {
+	case HOST_PREPARE_RANGES_LOG_AP_USER:
+		dkprintf("%s: section: %lu size: %lu pages -> IHK_MC_AP_USER\n",
+				__FUNCTION__, arg0, arg1);
+		break;
+	case HOST_PREPARE_RANGES_LOG_ADD_FAILED:
+		kprintf("ERROR: adding memory range for ELF section %lu\n",
+				arg0);
+		break;
+	case HOST_PREPARE_RANGES_LOG_ALLOC_FAILED:
+		kprintf("ERROR: alloc pages for ELF section %lu\n", arg0);
+		break;
+	case HOST_PREPARE_RANGES_LOG_PT_FAILED:
+		kprintf("%s: ihk_mc_pt_set_range failed. %lu\n",
+				__FUNCTION__, arg1);
+		break;
+	case HOST_PREPARE_RANGES_LOG_DATA_TOO_LARGE:
+		kprintf("%s: ERROR: data section is too large (end addr: %lx)\n",
+				__FUNCTION__, arg0);
+		break;
+	default:
+		(void)arg2;
+		break;
+	}
+}
+
+static void host_prepare_ranges_log_bridge(int event, unsigned long arg0,
+					   unsigned long arg1,
+					   unsigned long arg2)
+{
+	host_prepare_ranges_log_result(event, arg0, arg1, arg2,
+			host_prepare_ranges_log_raw_bridge);
+}
+
+static int host_prepare_arch_map_vdso_raw_bridge(void *vm)
+{
+	return arch_map_vdso((struct process_vm *)vm);
+}
+
+static int host_prepare_arch_map_vdso_bridge(void *vm)
+{
+	return host_arch_map_vdso_result(vm,
+			host_prepare_arch_map_vdso_raw_bridge);
+}
+
+static int host_prepare_init_stack_raw_bridge(void *thread,
+					      struct program_load_desc *pn,
+					      unsigned long at_base, int argc,
+					      char **argv, int envc, char **env)
+{
+	return init_process_stack((struct thread *)thread, pn, at_base, argc,
+			argv, envc, env);
+}
+
+static int host_prepare_init_stack_bridge(void *thread,
+					  struct program_load_desc *pn,
+					  unsigned long at_base, int argc,
+					  char **argv, int envc, char **env)
+{
+	return host_init_process_stack_result(thread, pn, at_base, argc, argv,
+			envc, env, host_prepare_init_stack_raw_bridge);
+}
+
+static void host_prepare_args_log_raw_bridge(int event, unsigned long arg0,
+					     unsigned long arg1,
+					     unsigned long arg2)
+{
+	switch (event) {
+	case HOST_PREPARE_ARGS_LOG_ALLOC_FAILED:
+		kprintf("ERROR: allocating pages for args/envs\n");
+		break;
+	case HOST_PREPARE_ARGS_LOG_ADD_FAILED:
+		kprintf("ERROR: adding memory range for args/envs\n");
+		break;
+	case HOST_PREPARE_ARGS_LOG_ARGS_MAP_FAILED:
+	case HOST_PREPARE_ARGS_LOG_ENVS_MAP_FAILED:
+		(void)arg0;
+		break;
+	case HOST_PREPARE_ARGS_LOG_CMDLINE_ALLOC_FAILED:
+		(void)arg0;
+		break;
+	case HOST_PREPARE_ARGS_LOG_VDSO_FAILED:
+		kprintf("ERROR: mapping vdso pages. %lu\n", arg0);
+		break;
+	case HOST_PREPARE_ARGS_LOG_INIT_STACK_FAILED:
+		kprintf("%s: error: init_process_stack failed with %lu\n",
+			__func__, arg0);
+		break;
+	case HOST_PREPARE_ARGS_LOG_CMDLINE:
+		dkprintf("%s: saved_cmdline: %s\n", __FUNCTION__,
+			(char *)arg0);
+		break;
+	default:
+		(void)arg1;
+		(void)arg2;
+		break;
+	}
+}
+
+static void host_prepare_args_log_bridge(int event, unsigned long arg0,
+					 unsigned long arg1,
+					 unsigned long arg2)
+{
+	host_prepare_args_log_result(event, arg0, arg1, arg2,
+			host_prepare_args_log_raw_bridge);
+}
+
+static unsigned long host_map_memory_bridge(void *os, unsigned long phys,
+					    unsigned long size);
+static void *host_prepare_map_virtual_bridge(unsigned long phys, int npages,
+					     unsigned long attr);
+static void host_unmap_virtual_bridge(void *addr, int npages);
+static void host_unmap_memory_bridge(void *os, unsigned long phys,
+				     unsigned long size);
+static void host_prepare_free_bridge(void *ptr);
+static void *host_prepare_alloc_bridge(unsigned long size, unsigned long flags);
+static void host_prepare_copy_long_bridge(void *dst, const void *src,
+					  unsigned long size);
+static void host_prepare_flush_tlb_bridge(void);
+
 /* 
  * Prepares the process ranges based on the ELF header described 
  * in program_load_desc and updates physical address in "p" so that
@@ -73,368 +313,52 @@ int prepare_process_ranges_args_envs(struct thread *thread,
 		char *args, int args_len,
 		char *envs, int envs_len) 
 {
-	char *args_envs, *args_envs_r;
-	unsigned long args_envs_p, args_envs_rp = 0, envs_offset;
-	unsigned long s, e, up;
-	char **argv;
-	int i, n, argc, envc, args_envs_npages = 0;
-	char **env;
-	int range_npages;
-	int argenv_page_count = 0;
-	void *up_v;
-	unsigned long addr;
-	unsigned long flags;
-	uintptr_t interp_obase = -1;
-	uintptr_t interp_nbase = -1;
-	size_t map_size;
 	struct process *proc = thread->proc;
-	struct process_vm *vm = proc->vm;
-	struct address_space *as = vm->address_space;
-	long aout_base;
+	unsigned long at_base = 0;
 	int error;
-	struct vm_range *range;
-	unsigned long ap_flags;
-	enum ihk_mc_pt_attribute ptattr;
+	int n;
 	
 	n = p->num_sections;
-
-	vm->region.data_start = ULONG_MAX;
-	aout_base = (pn->reloc)? vm->region.map_end: 0;
-	for (i = 0; i < n; i++) {
-		ap_flags = 0;
-		if (pn->sections[i].interp && (interp_nbase == (uintptr_t)-1)) {
-			interp_obase = pn->sections[i].vaddr;
-			interp_obase -= (interp_obase % pn->interp_align);
-			interp_nbase = vm->region.map_end;
-			interp_nbase = (interp_nbase + pn->interp_align - 1)
-				& ~(pn->interp_align - 1);
-		}
-
-		if (pn->sections[i].interp) {
-			pn->sections[i].vaddr -= interp_obase;
-			pn->sections[i].vaddr += interp_nbase;
-			p->sections[i].vaddr = pn->sections[i].vaddr;
-		}
-		else{
-			pn->sections[i].vaddr += aout_base;
-			p->sections[i].vaddr = pn->sections[i].vaddr;
-		}
-		s = (pn->sections[i].vaddr) & PAGE_MASK;
-		e = (pn->sections[i].vaddr + pn->sections[i].len
-				+ PAGE_SIZE - 1) & PAGE_MASK;
-		range_npages = ((pn->sections[i].vaddr - s) +
-			pn->sections[i].filesz + PAGE_SIZE - 1) >> PAGE_SHIFT;
-		flags = VR_NONE;
-		flags |= PROT_TO_VR_FLAG(pn->sections[i].prot);
-		flags |= VRFLAG_PROT_TO_MAXPROT(flags);
-		flags |= VR_DEMAND_PAGING;
-
-		/* Non-TEXT sections that are large respect user allocation policy
-		 * unless user explicitly requests otherwise */
-		if (i >= 1 && pn->sections[i].len >= pn->mpol_threshold &&
-				!(pn->mpol_flags & MPOL_NO_BSS)) {
-			dkprintf("%s: section: %d size: %d pages -> IHK_MC_AP_USER\n",
-					__FUNCTION__, i, range_npages);
-			ap_flags = IHK_MC_AP_USER;
-			flags |= VR_AP_USER;
-		}
-
-		if ((error = add_process_memory_range(vm, s, e, NOPHYS, flags, NULL, 0,
-					pn->sections[i].len > LARGE_PAGE_SIZE ?
-					LARGE_PAGE_SHIFT : PAGE_SHIFT,
-						      NULL, &range)) != 0) {
-			kprintf("ERROR: adding memory range for ELF section %i\n", i);
-			goto err;
-		}
-
-		if ((up_v = ihk_mc_alloc_pages_user(range_npages,
-						IHK_MC_AP_NOWAIT | ap_flags, s)) == NULL) {
-			kprintf("ERROR: alloc pages for ELF section %i\n", i);
-			error = -ENOMEM;
-			goto err;
-		}
-
-		up = virt_to_phys(up_v);
-
-		ptattr = arch_vrflag_to_ptattr(range->flag, PF_POPULATE, NULL);
-		error = ihk_mc_pt_set_range(vm->address_space->page_table, vm,
-									(void *)range->start,
-									(void *)range->start + (range_npages * PAGE_SIZE),
-									up, ptattr,
-									range->pgshift, range, 0);
-
-		if (error) {
-			kprintf("%s: ihk_mc_pt_set_range failed. %d\n",
-					__FUNCTION__, error);
-			ihk_mc_free_pages_user(up_v, range_npages);
-			goto err;
-		}
-
-		// memory_stat_rss_add() is called in ihk_mc_pt_set_range()
-
-		p->sections[i].remote_pa = up;
-
-		if (pn->sections[i].interp) {
-			vm->region.map_end = e;
-		}
-		else if (pn->sections[i].prot & PROT_EXEC) {
-			vm->region.text_start = s;
-			vm->region.text_end = e;
-		} 
-		else {
-			vm->region.data_start =
-				(s < vm->region.data_start ? 
-				 s : vm->region.data_start);
-			vm->region.data_end = 
-				(e > vm->region.data_end ? 
-				 e : vm->region.data_end);
-		}
-
-		if (aout_base) {
-			vm->region.map_end = e;
-		}
-	}
-
-	if (interp_nbase != (uintptr_t)-1) {
-		pn->entry -= interp_obase;
-		pn->entry += interp_nbase;
-		p->entry = pn->entry;
-		ihk_mc_modify_user_context(thread->uctx,
-		                           IHK_UCR_PROGRAM_COUNTER, 
-		                           pn->entry);
-	}
-
-	if (aout_base) {
-		pn->at_phdr += aout_base;
-		pn->at_entry += aout_base;
-	}
-
-	vm->region.map_start = vm->region.map_end = TASK_UNMAPPED_BASE;
-
-	vm->region.brk_start = vm->region.brk_end =
-		(vm->region.data_end + LARGE_PAGE_SIZE - 1) & LARGE_PAGE_MASK;
-
-	if (vm->region.brk_start >= vm->region.map_start) {
-		kprintf("%s: ERROR: data section is too large (end addr: %lx)\n",
-			__func__, vm->region.data_end);
-		error = -ENOMEM;
+	error = host_prepare_ranges_sections_result(thread, pn, p, &at_base,
+			PAGE_SIZE, PAGE_MASK, LARGE_PAGE_SIZE, LARGE_PAGE_MASK,
+			TASK_UNMAPPED_BASE, PAGE_SHIFT, LARGE_PAGE_SHIFT,
+			IHK_MC_AP_NOWAIT, IHK_MC_AP_USER, MPOL_NO_BSS,
+			PF_POPULATE, IHK_UCR_PROGRAM_COUNTER,
+			host_prepare_add_range_bridge,
+			host_prepare_alloc_pages_user_bridge,
+			host_prepare_free_pages_user_bridge,
+			host_prepare_virt_to_phys_bridge,
+			host_prepare_arch_vrflag_to_ptattr_bridge,
+			host_prepare_pt_set_range_bridge,
+			host_prepare_modify_user_context_bridge,
+			host_prepare_ranges_log_bridge);
+	if (error)
 		goto err;
-	}
 
-#if 0
-	{
-		void *heap;
-
-		dkprintf("%s: requested heap size: %lu\n",
-				__FUNCTION__, proc->heap_extension);
-		heap = ihk_mc_alloc_aligned_pages(proc->heap_extension >> PAGE_SHIFT,
-				LARGE_PAGE_P2ALIGN, IHK_MC_AP_NOWAIT |
-				(!(proc->mpol_flags & MPOL_NO_HEAP) ? IHK_MC_AP_USER : 0));
-
-		if (!heap) {
-			kprintf("%s: error: allocating heap\n", __FUNCTION__);
-			error = -ENOMEM;
-			goto err;
-		}
-
-		flags = VR_PROT_READ | VR_PROT_WRITE;
-		flags |= VRFLAG_PROT_TO_MAXPROT(flags);
-		if ((error = add_process_memory_range(vm, vm->region.brk_start,
-					vm->region.brk_start + proc->heap_extension,
-					virt_to_phys(heap),
-					flags, NULL, 0, LARGE_PAGE_P2ALIGN, NULL)) != 0) {
-			ihk_mc_free_pages(heap, proc->heap_extension >> PAGE_SHIFT);
-			kprintf("%s: error: adding memory range for heap\n", __FUNCTION__);
-			goto err;
-		}
-		// heap: Add when memory_stat_rss_add() is called in downstream, i.e. add_process_memory_range()
-
-		vm->region.brk_end_allocated = vm->region.brk_end +
-			proc->heap_extension;
-		dkprintf("%s: heap @ 0x%lx:%lu\n",
-				__FUNCTION__, vm->region.brk_start, proc->heap_extension);
-	}
-#else
-	vm->region.brk_end_allocated = vm->region.brk_end;
-#endif
-
-	/* Map, copy and update args and envs */
-	flags = VR_PROT_READ | VR_PROT_WRITE | VR_PRIVATE;
-	flags |= VRFLAG_PROT_TO_MAXPROT(flags);
-	if (!args) {
-		map_size = ((uintptr_t)p->args & (PAGE_SIZE - 1)) + p->args_len;
-		argenv_page_count += (map_size + PAGE_SIZE - 1) >> PAGE_SHIFT;
-	}
-	else {
-		argenv_page_count += (args_len + PAGE_SIZE - 1) >> PAGE_SHIFT;
-	}
-	if (!envs) {
-		map_size = ((uintptr_t)p->envs & (PAGE_SIZE - 1)) + p->envs_len;
-		argenv_page_count += (map_size + PAGE_SIZE - 1) >> PAGE_SHIFT;
-	}
-	else {
-		argenv_page_count += (envs_len + PAGE_SIZE - 1) >> PAGE_SHIFT;
-	}
-	addr = vm->region.map_start - PAGE_SIZE * argenv_page_count;
-	e = addr + PAGE_SIZE * argenv_page_count;
-
-	if ((args_envs = ihk_mc_alloc_pages_user(argenv_page_count,
-	                                        IHK_MC_AP_NOWAIT, -1)) == NULL){
-		kprintf("ERROR: allocating pages for args/envs\n");
-		error = -ENOMEM;
+	error = host_prepare_ranges_args_envs_result(thread, pn, p, attr,
+			args, args_len, envs, envs_len, at_base, PAGE_SIZE,
+			PAGE_MASK, PAGE_SHIFT, IHK_MC_AP_NOWAIT,
+			host_prepare_add_range_bridge,
+			host_prepare_alloc_pages_user_bridge,
+			host_prepare_free_pages_user_bridge,
+			host_prepare_virt_to_phys_bridge,
+			host_map_memory_bridge,
+			host_prepare_map_virtual_bridge,
+			host_unmap_virtual_bridge,
+			host_unmap_memory_bridge,
+			host_prepare_copy_long_bridge,
+			host_prepare_alloc_bridge,
+			host_prepare_free_bridge,
+			host_prepare_flush_tlb_bridge,
+			host_prepare_arch_map_vdso_bridge,
+			host_prepare_init_stack_bridge,
+			host_prepare_args_log_bridge);
+	if (error)
 		goto err;
-	}
-	args_envs_p = virt_to_phys(args_envs);
 
-	dkprintf("%s: args_envs: %d pages\n",
-			__func__, argenv_page_count);
-	if ((error = add_process_memory_range(vm, addr, e, args_envs_p,
-					      flags, NULL, 0, PAGE_SHIFT, NULL, NULL)) != 0){
-		ihk_mc_free_pages_user(args_envs, argenv_page_count);
-		kprintf("ERROR: adding memory range for args/envs\n");
-		goto err;
-	}
-	// memory_stat_rss_add() is called in downstream, i.e. add_process_memory_range()
-
-	dkprintf("args_envs mapping\n");
-
-	dkprintf("args: 0x%lX, args_len: %d\n", p->args, p->args_len);
-
-	/* Only map remote address if it wasn't specified as an argument */
-	if (!args) {
-		// Map in remote physical addr of args and copy it
-		map_size = ((uintptr_t)p->args & (PAGE_SIZE - 1)) + p->args_len;
-		args_envs_npages = (map_size + PAGE_SIZE - 1) >> PAGE_SHIFT;
-		dkprintf("args_envs_npages: %d\n", args_envs_npages);
-		args_envs_rp = ihk_mc_map_memory(NULL, 
-				(unsigned long)p->args, p->args_len);
-
-		dkprintf("args_envs_rp: 0x%lX\n", args_envs_rp);
-		if ((args_envs_r = (char *)ihk_mc_map_virtual(args_envs_rp, 
-						args_envs_npages, attr)) == NULL){
-			error = -EFAULT;
-			goto err;
-		}
-		dkprintf("args_envs_r: 0x%lX\n", args_envs_r);
-	}
-	else {
-		args_envs_r = args;
-		p->args_len = args_len;
-	}
-
-	dkprintf("args copy, nr: %d\n", *((long *)args_envs_r));
-
-	memcpy_long(args_envs, args_envs_r, p->args_len + sizeof(long) - 1);
-
-	/* Only unmap remote address if it wasn't specified as an argument */
-	if (!args) {
-		ihk_mc_unmap_virtual(args_envs_r, args_envs_npages);
-		ihk_mc_unmap_memory(NULL, args_envs_rp, p->args_len);
-	}
-	flush_tlb();
-
-	dkprintf("envs: 0x%lX, envs_len: %d\n", p->envs, p->envs_len);
-
-	/* Only map remote address if it wasn't specified as an argument */
-	if (!envs) {
-		// Map in remote physical addr of envs and copy it after args
-		map_size = ((uintptr_t)p->envs & (PAGE_SIZE - 1)) + p->envs_len;
-		args_envs_npages = (map_size + PAGE_SIZE - 1) >> PAGE_SHIFT;
-		dkprintf("args_envs_npages: %d\n", args_envs_npages);
-		args_envs_rp = ihk_mc_map_memory(NULL, (unsigned long)p->envs, 
-				p->envs_len);
-
-		dkprintf("args_envs_rp: 0x%lX\n", args_envs_rp);
-		
-		if ((args_envs_r = (char *)ihk_mc_map_virtual(args_envs_rp, 
-						args_envs_npages, attr)) == NULL) {
-			error = -EFAULT;
-			goto err;
-		}
-		dkprintf("args_envs_r: 0x%lX\n", args_envs_r);
-	}
-	else {
-		args_envs_r = envs;
-		p->envs_len = envs_len;
-	}
-
-	dkprintf("envs copy, nr: %d\n", *((long *)args_envs_r));
-
-	/* p->args_len is not necessarily long-aligned, even if the memory
-	 * below exists and is zeroed out - env must start aligned
-	 */
-	envs_offset = (p->args_len + sizeof(long) - 1) & ~(sizeof(long) - 1);
-
-	memcpy_long(args_envs + envs_offset, args_envs_r,
-		    p->envs_len + sizeof(long) - 1);
-
-	/* Only map remote address if it wasn't specified as an argument */
-	if (!envs) {
-		ihk_mc_unmap_virtual(args_envs_r, args_envs_npages);
-		ihk_mc_unmap_memory(NULL, args_envs_rp, p->envs_len);
-	}
-	flush_tlb();
-
-	// Update variables
-	argc = *((long *)(args_envs));
-	dkprintf("argc: %d\n", argc);
-	argv = (char **)(args_envs + (sizeof(long)));
-
-	if (proc->saved_cmdline) {
-		kfree(proc->saved_cmdline);
-		proc->saved_cmdline = NULL;
-		proc->saved_cmdline_len = 0;
-	}
-
-	proc->saved_cmdline_len = p->args_len - ((argc + 2) * sizeof(char **));
-	proc->saved_cmdline = kmalloc(proc->saved_cmdline_len,
-				      IHK_MC_AP_NOWAIT);
-	if (!proc->saved_cmdline) {
-		error = -ENOMEM;
-		goto err;
-	}
-
-	memcpy(proc->saved_cmdline,
-			(char *)args_envs + ((argc + 2) * sizeof(char **)),
-			proc->saved_cmdline_len);
-	dkprintf("%s: saved_cmdline: %s\n",
-			__FUNCTION__,
-			proc->saved_cmdline);
-
-	for (i = 0; i < argc; i++) {
-		// Process' address space!
-		argv[i] = (char *)addr + (unsigned long)argv[i];
-	}
-
-	envc = *((long *)(args_envs + envs_offset));
-	dkprintf("envc: %d\n", envc);
-
-	env = (char **)(args_envs + envs_offset + sizeof(long));
-	for (i = 0; i < envc; i++) {
-		env[i] = addr + envs_offset + env[i];
-	}
-
-	dkprintf("env OK\n");
-
-	if (pn->enable_vdso) {
-		error = arch_map_vdso(vm);
-		if (error) {
-			kprintf("ERROR: mapping vdso pages. %d\n", error);
-			goto err;
-		}
-	}
-	else {
-		vm->vdso_addr = NULL;
-	}
-
-	p->rprocess = (unsigned long)thread;
-	p->rpgtable = virt_to_phys(as->page_table);
-
-	if ((error = init_process_stack(thread, pn, argc, argv, envc, env)) != 0) {
-		kprintf("%s: error: init_process_stack failed with %d\n",
-			__func__, error);
-		goto err;
-	}
+	kprintf("mcexec_v10: prepared pid=%d thread=%p entry=0x%lx sp=0x%lx sections=%d\n",
+		proc->pid, thread, p->entry,
+		thread->uctx ? ihk_mc_syscall_sp(thread->uctx) : 0UL, n);
 
 	return 0;
 
@@ -444,199 +368,260 @@ err:
 }
 
 /*
- * Communication with host 
+ * Communication with host
  */
-static int process_msg_prepare_process(unsigned long rphys)
+static int host_prepare_monitor_status_raw_bridge(int cpu)
 {
-	unsigned long phys, sz;
-	struct program_load_desc *p, *pn;
-	int npages, n;
-	struct thread *thread;
-	struct process *proc;
-	struct process_vm *vm;
-	enum ihk_mc_pt_attribute attr;
-	struct cpu_local_var *clv;
-	int i;
+	struct cpu_local_var *clv = get_cpu_local_var(cpu);
 
-	for (i = 0; i < num_processors; i++) {
-		clv = get_cpu_local_var(i);
-		if (clv->monitor->status == IHK_OS_MONITOR_KERNEL_FREEZING ||
-		    clv->monitor->status == IHK_OS_MONITOR_KERNEL_FROZEN) {
-			return -EAGAIN;
-		}
-	}
-	attr = PTATTR_NO_EXECUTE | PTATTR_WRITABLE | PTATTR_FOR_USER;
+	return clv->monitor->status;
+}
 
-	sz = sizeof(struct program_load_desc)
-		+ sizeof(struct program_image_section) * 16;
-	npages = ((rphys + sz - 1) >> PAGE_SHIFT) - (rphys >> PAGE_SHIFT) + 1;
+static int host_prepare_monitor_status_bridge(int cpu)
+{
+	return host_monitor_status_result(cpu,
+			host_prepare_monitor_status_raw_bridge);
+}
 
-	phys = ihk_mc_map_memory(NULL, rphys, sz);
-	if((p = ihk_mc_map_virtual(phys, npages, attr)) == NULL){
-		ihk_mc_unmap_memory(NULL, phys, sz);
-		return -ENOMEM;
-	}
+static unsigned long host_map_memory_raw_bridge(void *os, unsigned long phys,
+						unsigned long size)
+{
+	return ihk_mc_map_memory(os, phys, size);
+}
 
-	if (p->magic != PLD_MAGIC) {
-		kprintf("%s: broken mcexec program_load_desc\n", __func__);
-		ihk_mc_unmap_virtual(p, npages);
-		ihk_mc_unmap_memory(NULL, phys, sz);
-		return -EFAULT;
-	}
+static unsigned long host_map_memory_bridge(void *os, unsigned long phys,
+					    unsigned long size)
+{
+	return host_map_memory_result(os, phys, size,
+			host_map_memory_raw_bridge);
+}
 
-	n = p->num_sections;
-	if (n > 16 || 0 >= n) {
-		kprintf("%s: ERROR: ELF sections other than 1 to 16 ??\n",
-			__FUNCTION__);
-		return -ENOMEM;
-	}
-	dkprintf("# of sections: %d\n", n);
+static void *host_prepare_map_virtual_raw_bridge(unsigned long phys, int npages,
+						 unsigned long attr)
+{
+	return ihk_mc_map_virtual(phys, npages,
+				(enum ihk_mc_pt_attribute)attr);
+}
 
-	if((pn = kmalloc(sizeof(struct program_load_desc) 
-					+ sizeof(struct program_image_section) * n,
-					IHK_MC_AP_NOWAIT)) == NULL){
-		ihk_mc_unmap_virtual(p, npages);
-		ihk_mc_unmap_memory(NULL, phys, sz);
-		return -ENOMEM;
-	}
-	memcpy_long(pn, p, sizeof(struct program_load_desc) 
-	            + sizeof(struct program_image_section) * n);
+static void *host_prepare_map_virtual_bridge(unsigned long phys, int npages,
+					     unsigned long attr)
+{
+	return host_prepare_map_virtual_result(phys, npages, attr,
+			host_prepare_map_virtual_raw_bridge);
+}
 
-	if ((thread = create_thread(p->entry,
-					(unsigned long *)&p->cpu_set,
-					sizeof(p->cpu_set))) == NULL) {
-		kfree(pn);
-		ihk_mc_unmap_virtual(p, npages);
-		ihk_mc_unmap_memory(NULL, phys, sz);
-		return -ENOMEM;
-	}
-	sprintf(thread->pthread_routine, "%s", "[main]");
-	proc = thread->proc;
-	vm = thread->vm;
+static void host_unmap_virtual_raw_bridge(void *addr, int npages)
+{
+	ihk_mc_unmap_virtual(addr, npages);
+}
 
-	proc->pid = pn->pid;
-	proc->vm->address_space->pids[0] = pn->pid;
-	proc->pgid = pn->pgid;
-	proc->ruid = pn->cred[0];
-	proc->euid = pn->cred[1];
-	proc->suid = pn->cred[2];
-	proc->fsuid = pn->cred[3];
-	proc->rgid = pn->cred[4];
-	proc->egid = pn->cred[5];
-	proc->sgid = pn->cred[6];
-	proc->fsgid = pn->cred[7];
-	proc->termsig = SIGCHLD;
-	proc->mpol_flags = pn->mpol_flags;
-	proc->mpol_threshold = pn->mpol_threshold;
-	proc->thp_disable = pn->thp_disable;
-	proc->nr_processes = pn->nr_processes;
-	proc->process_rank = pn->process_rank;
-	proc->heap_extension = pn->heap_extension;
+static void host_unmap_virtual_bridge(void *addr, int npages)
+{
+	host_unmap_virtual_result(addr, npages,
+			host_unmap_virtual_raw_bridge);
+}
 
-	/* Update NUMA binding policy if requested */
-	if (pn->mpol_bind_mask) {
-		int bit;
+static void host_unmap_memory_raw_bridge(void *os, unsigned long phys,
+					 unsigned long size)
+{
+	ihk_mc_unmap_memory(os, phys, size);
+}
 
-		memset(&vm->numa_mask, 0, sizeof(vm->numa_mask));
+static void host_unmap_memory_bridge(void *os, unsigned long phys,
+				     unsigned long size)
+{
+	host_unmap_memory_result(os, phys, size,
+			host_unmap_memory_raw_bridge);
+}
 
-		for_each_set_bit(bit, &pn->mpol_bind_mask,
-				sizeof(pn->mpol_bind_mask) * BITS_PER_BYTE) {
+static void host_prepare_free_raw_bridge(void *ptr)
+{
+	kfree_tracked(ptr, __FILE__, __LINE__);
+}
 
-			if (bit >= ihk_mc_get_nr_numa_nodes()) {
-				kprintf("%s: error: NUMA id %d is larger than mask size!\n",
-						__FUNCTION__, bit);
-				return -EINVAL;
-			}
+static void host_prepare_free_bridge(void *ptr)
+{
+	host_prepare_free_result(ptr, host_prepare_free_raw_bridge);
+}
 
-			set_bit(bit, &vm->numa_mask[0]);
-		}
-		vm->numa_mem_policy = MPOL_BIND;
-	}
-	else if (pn->mpol_mode != MPOL_MAX) {
-		int bit;
+static void *host_prepare_alloc_raw_bridge(unsigned long size, unsigned long flags)
+{
+	return kmalloc_tracked(size, flags, __FILE__, __LINE__);
+}
 
-		vm->numa_mem_policy = pn->mpol_mode;
+static void *host_prepare_alloc_bridge(unsigned long size, unsigned long flags)
+{
+	return host_prepare_alloc_result(size, flags,
+			host_prepare_alloc_raw_bridge);
+}
 
-		memset(&vm->numa_mask, 0, sizeof(vm->numa_mask));
+static void host_prepare_copy_long_raw_bridge(void *dst, const void *src,
+					      unsigned long size)
+{
+	memcpy_long(dst, src, size);
+}
 
-		for_each_set_bit(bit, pn->mpol_nodemask,
-				PLD_PROCESS_NUMA_MASK_BITS) {
-			if (bit >= ihk_mc_get_nr_numa_nodes()) {
-				kprintf("%s: error: NUMA id %d is larger than mask size!\n",
-						__func__, bit);
-				return -EINVAL;
-			}
-			set_bit(bit, &vm->numa_mask[0]);
-		}
+static void host_prepare_copy_long_bridge(void *dst, const void *src,
+					  unsigned long size)
+{
+	host_prepare_copy_long_result(dst, src, size,
+			host_prepare_copy_long_raw_bridge);
+}
 
-		dkprintf("%s: numa_mem_policy: %d, numa_mask: %ld\n",
-			 __func__, vm->numa_mem_policy, vm->numa_mask[0]);
-	}
+static void *host_prepare_create_thread_raw_bridge(unsigned long entry,
+						   unsigned long *cpu_set,
+						   unsigned long cpu_set_size)
+{
+	return create_thread(entry, cpu_set, cpu_set_size);
+}
 
-	proc->enable_uti = pn->enable_uti;
-	proc->uti_thread_rank = pn->uti_thread_rank;
-	proc->uti_use_last_cpu = pn->uti_use_last_cpu;
+static void *host_prepare_create_thread_bridge(unsigned long entry,
+					       unsigned long *cpu_set,
+					       unsigned long cpu_set_size)
+{
+	return host_create_thread_result(entry, cpu_set, cpu_set_size,
+			host_prepare_create_thread_raw_bridge);
+}
 
-	proc->straight_map = pn->straight_map;
-	proc->straight_map_threshold = pn->straight_map_threshold;
+static void host_prepare_destroy_thread_raw_bridge(void *thread)
+{
+	destroy_thread((struct thread *)thread);
+}
+
+static void host_prepare_destroy_thread_bridge(void *thread)
+{
+	host_destroy_thread_result(thread, host_prepare_destroy_thread_raw_bridge);
+}
+
+static int host_prepare_ranges_raw_bridge(void *thread,
+					  struct program_load_desc *pn,
+					  struct program_load_desc *p,
+					  unsigned long attr,
+					  char *args, int args_len,
+					  char *envs, int envs_len)
+{
+	return prepare_process_ranges_args_envs((struct thread *)thread, pn, p,
+			(enum ihk_mc_pt_attribute)attr, args, args_len, envs,
+			envs_len);
+}
+
+static int host_prepare_ranges_bridge(void *thread,
+				      struct program_load_desc *pn,
+				      struct program_load_desc *p,
+				      unsigned long attr,
+				      char *args, int args_len,
+				      char *envs, int envs_len)
+{
+	return host_prepare_ranges_result(thread, pn, p, attr, args, args_len,
+			envs, envs_len, host_prepare_ranges_raw_bridge);
+}
+
+static int host_prepare_nr_numa_nodes_raw_bridge(void)
+{
+	return ihk_mc_get_nr_numa_nodes();
+}
+
+static int host_prepare_nr_numa_nodes_bridge(void)
+{
+	return host_nr_numa_nodes_result(host_prepare_nr_numa_nodes_raw_bridge);
+}
+
+static void host_prepare_flush_tlb_raw_bridge(void)
+{
+	flush_tlb();
+}
+
+static void host_prepare_flush_tlb_bridge(void)
+{
+	host_flush_tlb_result(host_prepare_flush_tlb_raw_bridge);
+}
 
 #ifdef ENABLE_TOFU
-	proc->enable_tofu = pn->enable_tofu;
-	if (proc->enable_tofu) {
-		extern void tof_utofu_finalize(void);
+extern void tof_utofu_finalize(void);
 
-		tof_utofu_finalize();
-	}
+static void host_prepare_tofu_finalize_raw_bridge(void)
+{
+	tof_utofu_finalize();
+}
+
+static void host_prepare_tofu_finalize_bridge(void)
+{
+	host_tofu_finalize_result(host_prepare_tofu_finalize_raw_bridge);
+}
 #endif
 
-	proc->mcexec_flags = pn->mcexec_flags;
-	dkprintf("%s: PID: %d, flags: 0x%lx\n",
-		__func__, proc->pid, proc->mcexec_flags);
-
-#ifdef PROFILE_ENABLE
-	proc->profile = pn->profile;
-	thread->profile = pn->profile;
-#endif
-
-	vm->region.user_start = pn->user_start;
-	vm->region.user_end = pn->user_end;
-	if(vm->region.user_end > USER_END)
-		vm->region.user_end = USER_END;
-
-	/* map_start / map_end is used to track memory area
-	 * to which the program is loaded
-	 */
-	vm->region.map_start = vm->region.map_end = LD_TASK_UNMAPPED_BASE;
-
-	memcpy(proc->rlimit, pn->rlimit, sizeof(struct rlimit) * MCK_RLIM_MAX);
-	dkprintf("%s: rlim_cur: %ld, rlim_max: %ld, stack_premap: %ld\n",
-			__FUNCTION__,
-			proc->rlimit[MCK_RLIMIT_STACK].rlim_cur,
-			proc->rlimit[MCK_RLIMIT_STACK].rlim_max,
-			pn->stack_premap);
-
-	if (prepare_process_ranges_args_envs(thread, pn, p, attr, 
-				NULL, 0, NULL, 0) != 0) {
+static void host_prepare_process_log_raw_bridge(int event, unsigned long arg0,
+						unsigned long arg1,
+						unsigned long arg2)
+{
+	switch (event) {
+	case HOST_PREPARE_LOG_BROKEN_DESC:
+		kprintf("%s: broken mcexec program_load_desc\n", __func__);
+		break;
+	case HOST_PREPARE_LOG_INVALID_SECTIONS:
+		kprintf("%s: ERROR: ELF sections other than 1 to 16 ??\n",
+			__FUNCTION__);
+		break;
+	case HOST_PREPARE_LOG_NUM_SECTIONS:
+		dkprintf("# of sections: %lu\n", arg0);
+		break;
+	case HOST_PREPARE_LOG_NUMA_BIND_ERROR:
+	case HOST_PREPARE_LOG_NUMA_NODEMASK_ERROR:
+		kprintf("%s: error: NUMA id %lu is larger than mask size!\n",
+			__FUNCTION__, arg0);
+		break;
+	case HOST_PREPARE_LOG_NUMA_POLICY:
+		dkprintf("%s: numa_mem_policy: %lu, numa_mask: %lu\n",
+			 __func__, arg0, arg1);
+		break;
+	case HOST_PREPARE_LOG_PID_FLAGS:
+		dkprintf("%s: PID: %lu, flags: 0x%lx\n",
+			__func__, arg0, arg1);
+		break;
+	case HOST_PREPARE_LOG_RLIMIT:
+		dkprintf("%s: rlim_cur: %ld, rlim_max: %ld, stack_premap: %ld\n",
+				__FUNCTION__, arg0, arg1, arg2);
+		break;
+	case HOST_PREPARE_LOG_PREPARE_ERROR:
 		kprintf("error: preparing process ranges, args, envs, stack\n");
-		goto err;
+		break;
+	case HOST_PREPARE_LOG_NEW_PROCESS:
+		dkprintf("new process : %p [%lu] / table : %p\n",
+			(void *)arg0, arg1, (void *)arg2);
+		break;
 	}
+}
 
-	dkprintf("new process : %p [%d] / table : %p\n", proc, proc->pid,
-	        vm->address_space->page_table);
+static void host_prepare_process_log_bridge(int event, unsigned long arg0,
+					    unsigned long arg1,
+					    unsigned long arg2)
+{
+	host_prepare_process_log_result(event, arg0, arg1, arg2,
+			host_prepare_process_log_raw_bridge);
+}
 
-	kfree(pn);
-
-	ihk_mc_unmap_virtual(p, npages);
-	ihk_mc_unmap_memory(NULL, phys, sz);
-	flush_tlb();
-
-	return 0;
-err:
-	kfree(pn);
-	ihk_mc_unmap_virtual(p, npages);
-	ihk_mc_unmap_memory(NULL, phys, sz);
-	destroy_thread(thread);
-	return -ENOMEM;
+static int process_msg_prepare_process(unsigned long rphys)
+{
+	return host_prepare_process_body_result(rphys, num_processors,
+			PTATTR_NO_EXECUTE | PTATTR_WRITABLE | PTATTR_FOR_USER,
+			PAGE_SIZE, IHK_MC_AP_NOWAIT, USER_END,
+			LD_TASK_UNMAPPED_BASE, SIGCHLD, MPOL_MAX, MPOL_BIND,
+			host_prepare_monitor_status_bridge,
+			host_map_memory_bridge, host_prepare_map_virtual_bridge,
+			host_unmap_virtual_bridge, host_unmap_memory_bridge,
+			host_prepare_alloc_bridge, host_prepare_free_bridge,
+			host_prepare_copy_long_bridge,
+			host_prepare_create_thread_bridge,
+			host_prepare_destroy_thread_bridge,
+			host_prepare_ranges_bridge,
+			host_prepare_nr_numa_nodes_bridge,
+			host_prepare_flush_tlb_bridge,
+#ifdef ENABLE_TOFU
+			host_prepare_tofu_finalize_bridge,
+#else
+			NULL,
+#endif
+			host_prepare_process_log_bridge);
 }
 
 static void syscall_channel_send(struct ihk_ikc_channel_desc *c,
@@ -645,68 +630,744 @@ static void syscall_channel_send(struct ihk_ikc_channel_desc *c,
 	ihk_ikc_send(c, packet, 0);
 }
 
+static void host_ikc_packet_send_raw_bridge(void *channel,
+					    struct ikc_scd_packet *packet)
+{
+	syscall_channel_send((struct ihk_ikc_channel_desc *)channel, packet);
+}
+
+static void *host_map_virtual_raw_bridge(unsigned long phys, int npages, int attr)
+{
+	return ihk_mc_map_virtual(phys, npages,
+			(enum ihk_mc_pt_attribute)attr);
+}
+
+static void *host_map_virtual_bridge(unsigned long phys, int npages, int attr)
+{
+	return host_map_virtual_result(phys, npages, attr,
+			host_map_virtual_raw_bridge);
+}
+
+static int host_cpu_read_write_register_raw_bridge(void *desc, int op)
+{
+	return arch_cpu_read_write_register(
+			(struct ihk_os_cpu_register *)desc,
+			(enum mcctrl_os_cpu_operation)op);
+}
+
+static int host_cpu_read_write_register_bridge(void *desc, int op)
+{
+	return host_cpu_rw_register_result(desc, op,
+			host_cpu_read_write_register_raw_bridge);
+}
+
+static void host_cleanup_process_log_raw_bridge(int pid,
+						unsigned long thread_arg)
+{
+	dkprintf("SCD_MSG_CLEANUP_PROCESS pid=%d, thread=0x%llx\n",
+			pid, thread_arg);
+}
+
+static void host_cleanup_process_log_bridge(int pid, unsigned long thread_arg)
+{
+	host_cleanup_process_log_result(pid, thread_arg,
+			host_cleanup_process_log_raw_bridge);
+}
+
+static void host_terminate_host_raw_bridge(int pid, void *thread)
+{
+	terminate_host(pid, (struct thread *)thread);
+}
+
+static void host_terminate_host_bridge(int pid, void *thread)
+{
+	host_terminate_host_result(pid, thread,
+			host_terminate_host_raw_bridge);
+}
+
+static void host_cleanup_fd_log_raw_bridge(int pid, unsigned long fd, int err)
+{
+	dkprintf("SCD_MSG_CLEANUP_FD pid=%d, fd=%d -> err: %d\n",
+			pid, (int)fd, err);
+}
+
+static void host_cleanup_fd_log_bridge(int pid, unsigned long fd, int err)
+{
+	host_cleanup_fd_log_result(pid, fd, err,
+			host_cleanup_fd_log_raw_bridge);
+}
+
 extern unsigned long do_kill(struct thread *, int, int, int, struct siginfo *, int ptracecont);
 extern void debug_log(long);
 
+static unsigned long host_do_kill_raw_bridge(int pid, int tid, int sig,
+					     void *info)
+{
+	return do_kill(NULL, pid, tid, sig, (struct siginfo *)info, 0);
+}
+
+static unsigned long host_do_kill_bridge(int pid, int tid, int sig, void *info)
+{
+	return host_do_kill_result(pid, tid, sig, info,
+			host_do_kill_raw_bridge);
+}
+
+static void host_send_signal_log_raw_bridge(int pid, int tid, int sig, int rc)
+{
+#ifndef ENABLE_FUGAKU_HACKS
+	dkprintf("SCD_MSG_SEND_SIGNAL: do_kill(pid=%d, tid=%d, sig=%d)=%d\n",
+			pid, tid, sig, rc);
+#else
+	kprintf("SCD_MSG_SEND_SIGNAL: do_kill(pid=%d, tid=%d, sig=%d)=%d\n",
+			pid, tid, sig, rc);
+#endif
+}
+
+static void host_send_signal_log_bridge(int pid, int tid, int sig, int rc)
+{
+	host_send_signal_log_result(pid, tid, sig, rc,
+			host_send_signal_log_raw_bridge);
+}
+
+static void *host_find_thread_raw_bridge(int pid, int tid)
+{
+	return find_thread(pid, tid);
+}
+
+static void *host_find_thread_bridge(int pid, int tid)
+{
+	return host_find_thread_result(pid, tid, host_find_thread_raw_bridge);
+}
+
+static void host_wakeup_scd_waitq_raw_bridge(void *thread)
+{
+	waitq_wakeup(&((struct thread *)thread)->scd_wq);
+}
+
+static void host_wakeup_scd_waitq_bridge(void *thread)
+{
+	host_wakeup_thread_result(thread, host_wakeup_scd_waitq_raw_bridge);
+}
+
+static void host_thread_unlock_raw_bridge(void *thread)
+{
+	thread_unlock((struct thread *)thread);
+}
+
+static void host_thread_unlock_bridge(void *thread)
+{
+	host_thread_unlock_result(thread, host_thread_unlock_raw_bridge);
+}
+
+static void host_wake_syscall_log_raw_bridge(int tid, int found)
+{
+	if (!found) {
+		kprintf("%s: WARNING: no thread for SCD reply? TID: %d\n",
+			"syscall_packet_handler", tid);
+		return;
+	}
+
+	dkprintf("%s: SCD_MSG_WAKE_UP_SYSCALL_THREAD: waking up tid %d\n",
+		"syscall_packet_handler", tid);
+}
+
+static void host_wake_syscall_log_bridge(int tid, int found)
+{
+	host_wake_syscall_log_result(tid, found,
+			host_wake_syscall_log_raw_bridge);
+}
+
+static void host_debug_log_raw_bridge(unsigned long code)
+{
+	debug_log(code);
+}
+
+static void host_debug_log_bridge(unsigned long code)
+{
+	host_debug_log_result(code, host_debug_log_raw_bridge);
+}
+
+static void host_debug_log_print_raw_bridge(unsigned long code)
+{
+	dkprintf("SCD_MSG_DEBUG_LOG code=%lx\n", code);
+}
+
+static void host_debug_log_print_bridge(unsigned long code)
+{
+	host_debug_log_print_result(code, host_debug_log_print_raw_bridge);
+}
+
+static int host_thread_profile_enabled_raw_bridge(void *thread)
+{
+#ifdef PROFILE_ENABLE
+	return ((struct thread *)thread)->profile;
+#else
+	(void)thread;
+	return 0;
+#endif
+}
+
+static int host_thread_profile_enabled_bridge(void *thread)
+{
+	return host_thread_profile_enabled_result(thread,
+			host_thread_profile_enabled_raw_bridge);
+}
+
+static unsigned long host_timestamp_raw_bridge(void)
+{
+#ifdef PROFILE_ENABLE
+	return rdtsc();
+#else
+	return 0;
+#endif
+}
+
+static unsigned long host_timestamp_bridge(void)
+{
+	return host_timestamp_result(host_timestamp_raw_bridge);
+}
+
+static void host_preempt_disable_raw_bridge(void)
+{
+	preempt_disable();
+}
+
+static void host_preempt_disable_bridge(void)
+{
+	host_preempt_result(host_preempt_disable_raw_bridge);
+}
+
+static void host_preempt_enable_raw_bridge(void)
+{
+	preempt_enable();
+}
+
+static void host_preempt_enable_bridge(void)
+{
+	host_preempt_result(host_preempt_enable_raw_bridge);
+}
+
+static void host_remote_page_fault_process_raw_bridge(
+		void *thread, unsigned long fault_address,
+		unsigned long fault_reason)
+{
+	page_fault_process_vm(((struct thread *)thread)->vm,
+			      (void *)fault_address, fault_reason);
+}
+
+static void host_remote_page_fault_process_bridge(
+		void *thread, unsigned long fault_address,
+		unsigned long fault_reason)
+{
+	host_remote_page_fault_process_result(thread, fault_address,
+			fault_reason, host_remote_page_fault_process_raw_bridge);
+}
+
+static void host_remote_page_fault_profile_event_raw_bridge(
+		int event, unsigned long delta)
+{
+#ifdef PROFILE_ENABLE
+	profile_event_add((enum profile_event_type)event, delta);
+#else
+	(void)event;
+	(void)delta;
+#endif
+}
+
+static void host_remote_page_fault_profile_event_bridge(int event,
+							unsigned long delta)
+{
+	host_profile_event_result(event, delta,
+			host_remote_page_fault_profile_event_raw_bridge);
+}
+
+static void host_remote_page_fault_log_raw_bridge(
+		void *thread, unsigned long fault_address,
+		unsigned long fault_reason)
+{
+	dkprintf("remote page fault,pid=%d,va=%lx,reason=%lx\n",
+		 ((struct thread *)thread)->proc->pid, fault_address,
+		 fault_reason);
+}
+
+static void host_remote_page_fault_log_bridge(void *thread,
+					      unsigned long fault_address,
+					      unsigned long fault_reason)
+{
+	host_remote_page_fault_log_result(thread, fault_address, fault_reason,
+			host_remote_page_fault_log_raw_bridge);
+}
+
+static void *host_alloc_raw_bridge(unsigned long size, unsigned long flags)
+{
+	return kmalloc_tracked(size, flags, __FILE__, __LINE__);
+}
+
+static void *host_alloc_bridge(unsigned long size, unsigned long flags)
+{
+	return host_alloc_result(size, flags, host_alloc_raw_bridge);
+}
+
+static int host_ikc_connect_raw_bridge(struct ihk_ikc_connect_param *param)
+{
+	return ihk_ikc_connect(NULL, param);
+}
+
+static void host_delay_raw_bridge(unsigned long usec)
+{
+	ihk_mc_delay_us(usec);
+}
+
+static void host_set_current_ikc2linux_raw_bridge(void *channel)
+{
+	get_this_cpu_local_var()->ikc2linux =
+		(struct ihk_ikc_channel_desc *)channel;
+}
+
+static void host_set_regular_channel_raw_bridge(void *channel, int cpu)
+{
+	ihk_ikc_set_regular_channel(NULL,
+			(struct ihk_ikc_channel_desc *)channel, cpu);
+}
+
+static void host_panic_raw_bridge(void)
+{
+	panic("");
+}
+
+static void host_init_ikc2linux_log_raw_bridge(int event)
+{
+	switch (event) {
+	case HOST_INIT_IKC_LOG_ALLOC_ERROR:
+		kprintf("%s: error: allocating Linux channels\n",
+				"init_host_ikc2linux");
+		break;
+	case HOST_INIT_IKC_LOG_TRY_CONNECT:
+		dkprintf("(ikc2linux) Trying to connect host ...");
+		break;
+	case HOST_INIT_IKC_LOG_RETRY_DOT:
+		dkprintf(".");
+		break;
+	case HOST_INIT_IKC_LOG_CONNECTED:
+		dkprintf("connected.\n");
+		break;
+	}
+}
+
+static void host_init_ikc2mckernel_log_raw_bridge(int event)
+{
+	switch (event) {
+	case HOST_INIT_IKC_LOG_TRY_CONNECT:
+		dkprintf("(ikc2mckernel) Trying to connect host ...");
+		break;
+	case HOST_INIT_IKC_LOG_RETRY_DOT:
+		dkprintf(".");
+		break;
+	case HOST_INIT_IKC_LOG_CONNECTED:
+		dkprintf("connected.\n");
+		break;
+	}
+}
+
+static void host_packet_copy_raw_bridge(void *dst, struct ikc_scd_packet *src,
+					unsigned long size)
+{
+	memcpy(dst, src, size);
+}
+
+static void host_packet_copy_bridge(void *dst, struct ikc_scd_packet *src,
+				    unsigned long size)
+{
+	host_packet_copy_result(dst, src, size, host_packet_copy_raw_bridge);
+}
+
+static void host_remote_page_fault_defer_raw_bridge(
+		void *thread, void *arg, host_backlog_fn_t backlog_fn)
+{
+	((struct thread *)thread)->rpf_arg = arg;
+	((struct thread *)thread)->rpf_backlog = backlog_fn;
+}
+
+static void host_remote_page_fault_defer_bridge(void *thread, void *arg,
+						host_backlog_fn_t backlog_fn)
+{
+	host_remote_page_fault_defer_result(thread, arg, backlog_fn,
+			host_remote_page_fault_defer_raw_bridge);
+}
+
+static int host_sched_wakeup_thread_raw_bridge(void *thread, int valid_states)
+{
+	return sched_wakeup_thread((struct thread *)thread, valid_states);
+}
+
+static int host_sched_wakeup_thread_bridge(void *thread, int valid_states)
+{
+	return host_sched_wakeup_result(thread, valid_states,
+			host_sched_wakeup_thread_raw_bridge);
+}
+
+static void host_remote_page_fault_missing_log_raw_bridge(int tid)
+{
+	kprintf("%s: WARNING: no thread for remote pf %d\n", __func__, tid);
+}
+
+static void host_remote_page_fault_missing_log_bridge(int tid)
+{
+	host_remote_page_fault_missing_log_result(tid,
+			host_remote_page_fault_missing_log_raw_bridge);
+}
+
+static void *host_schedule_thread_proc_raw_bridge(void *thread)
+{
+	return ((struct thread *)thread)->proc;
+}
+
+static void *host_schedule_thread_proc_bridge(void *thread)
+{
+	return host_thread_proc_result(thread,
+			host_schedule_thread_proc_raw_bridge);
+}
+
+static int host_schedule_current_cpu_raw_bridge(void)
+{
+	return ihk_mc_get_processor_id();
+}
+
+static int host_schedule_current_cpu_bridge(void)
+{
+	return host_current_cpu_result(host_schedule_current_cpu_raw_bridge);
+}
+
+static int host_schedule_cpu_allowed_raw_bridge(void *thread, int cpuid)
+{
+	return CPU_ISSET(cpuid, &((struct thread *)thread)->cpu_set);
+}
+
+static int host_schedule_cpu_allowed_bridge(void *thread, int cpuid)
+{
+	return host_thread_cpu_allowed_result(thread, cpuid,
+			host_schedule_cpu_allowed_raw_bridge);
+}
+
+static int host_schedule_obtain_cpuid_raw_bridge(void *thread)
+{
+	return obtain_clone_cpuid(&((struct thread *)thread)->cpu_set, 0);
+}
+
+static int host_schedule_obtain_cpuid_bridge(void *thread)
+{
+	return host_thread_obtain_cpuid_result(thread,
+			host_schedule_obtain_cpuid_raw_bridge);
+}
+
+static int host_schedule_proc_pid_raw_bridge(void *proc)
+{
+	return ((struct process *)proc)->pid;
+}
+
+static int host_schedule_proc_pid_bridge(void *proc)
+{
+	return host_proc_pid_result(proc, host_schedule_proc_pid_raw_bridge);
+}
+
+static unsigned long host_schedule_thread_pc_raw_bridge(void *thread)
+{
+	struct thread *t = thread;
+
+	return t->uctx ? ihk_mc_syscall_pc(t->uctx) : 0UL;
+}
+
+static unsigned long host_schedule_thread_pc_bridge(void *thread)
+{
+	return host_thread_reg_result(thread, host_schedule_thread_pc_raw_bridge);
+}
+
+static unsigned long host_schedule_thread_sp_raw_bridge(void *thread)
+{
+	struct thread *t = thread;
+
+	return t->uctx ? ihk_mc_syscall_sp(t->uctx) : 0UL;
+}
+
+static unsigned long host_schedule_thread_sp_bridge(void *thread)
+{
+	return host_thread_reg_result(thread, host_schedule_thread_sp_raw_bridge);
+}
+
+static void host_schedule_invalid_log_raw_bridge(void *thread)
+{
+	kprintf("mcexec_v10: schedule_process invalid thread=%p\n", thread);
+}
+
+static void host_schedule_invalid_log_bridge(void *thread)
+{
+	host_schedule_invalid_log_result(thread,
+			host_schedule_invalid_log_raw_bridge);
+}
+
+static void host_schedule_received_log_raw_bridge(void *thread, int pid,
+						 unsigned long pc,
+						 unsigned long sp, int cpuid)
+{
+	kprintf("mcexec_v10: schedule_process received thread=%p pid=%d entry=0x%lx sp=0x%lx current_cpu=%d\n",
+		thread, pid, pc, sp, cpuid);
+}
+
+static void host_schedule_received_log_bridge(void *thread, int pid,
+					     unsigned long pc,
+					     unsigned long sp, int cpuid)
+{
+	host_schedule_received_log_result(thread, pid, pc, sp, cpuid,
+			host_schedule_received_log_raw_bridge);
+}
+
+static void host_schedule_no_cpu_log_raw_bridge(void)
+{
+	kprintf("No CPU available\n");
+}
+
+static void host_schedule_no_cpu_log_bridge(void)
+{
+	host_schedule_no_cpu_log_result(host_schedule_no_cpu_log_raw_bridge);
+}
+
+static void host_schedule_set_tid_raw_bridge(void *thread, int tid)
+{
+	((struct thread *)thread)->tid = tid;
+}
+
+static void host_schedule_set_tid_bridge(void *thread, int tid)
+{
+	host_thread_set_tid_result(thread, tid,
+			host_schedule_set_tid_raw_bridge);
+}
+
+static void host_schedule_set_proc_status_raw_bridge(void *proc, int status)
+{
+	((struct process *)proc)->status = status;
+}
+
+static void host_schedule_set_proc_status_bridge(void *proc, int status)
+{
+	host_status_set_result(proc, status,
+			host_schedule_set_proc_status_raw_bridge);
+}
+
+static void host_schedule_set_thread_status_raw_bridge(void *thread, int status)
+{
+	((struct thread *)thread)->status = status;
+}
+
+static void host_schedule_set_thread_status_bridge(void *thread, int status)
+{
+	host_status_set_result(thread, status,
+			host_schedule_set_thread_status_raw_bridge);
+}
+
+static void host_schedule_chain_thread_raw_bridge(void *thread)
+{
+	chain_thread(thread);
+}
+
+static void host_schedule_chain_thread_bridge(void *thread)
+{
+	host_chain_thread_result(thread, host_schedule_chain_thread_raw_bridge);
+}
+
+static void host_schedule_chain_process_raw_bridge(void *proc)
+{
+	chain_process(proc);
+}
+
+static void host_schedule_chain_process_bridge(void *proc)
+{
+	host_chain_process_result(proc, host_schedule_chain_process_raw_bridge);
+}
+
+static void host_schedule_runq_add_raw_bridge(void *thread, int cpuid)
+{
+	runq_add_thread(thread, cpuid);
+}
+
+static void host_schedule_runq_add_bridge(void *thread, int cpuid)
+{
+	host_runq_add_thread_result(thread, cpuid,
+			host_schedule_runq_add_raw_bridge);
+}
+
+static void host_schedule_queued_log_raw_bridge(int pid, int tid, int cpuid,
+						int status)
+{
+	kprintf("mcexec_v10: schedule_process queued pid=%d tid=%d cpu=%d status=%d\n",
+		pid, tid, cpuid, status);
+}
+
+static void host_schedule_queued_log_bridge(int pid, int tid, int cpuid,
+					    int status)
+{
+	host_schedule_queued_log_result(pid, tid, cpuid, status,
+			host_schedule_queued_log_raw_bridge);
+}
+
+static int host_perf_init_raw_bridge(int counter, unsigned int config, int mode)
+{
+	return host_perf_init_raw_result(counter, config, mode,
+			ihk_mc_perfctr_init_raw);
+}
+
+static int host_perf_stop_bridge(unsigned long counter_mask, int flags)
+{
+	return host_perf_stop_result(counter_mask, flags, ihk_mc_perfctr_stop);
+}
+
+static int host_perf_reset_bridge(int counter)
+{
+	return host_perf_reset_result(counter, ihk_mc_perfctr_reset);
+}
+
+static int host_perf_start_bridge(unsigned long counter_mask)
+{
+	return host_perf_start_result(counter_mask, ihk_mc_perfctr_start);
+}
+
+static unsigned long host_perf_read_bridge(int counter)
+{
+	return host_perf_read_result(counter, ihk_mc_perfctr_read);
+}
+
+static void host_perf_unexpected_ctrl_type_raw_bridge(void)
+{
+	kprintf("%s: SCD_MSG_PERF_CTRL unexpected ctrl_type\n", __FUNCTION__);
+}
+
+static void host_perf_unexpected_ctrl_type_bridge(void)
+{
+	host_perf_unexpected_result(host_perf_unexpected_ctrl_type_raw_bridge);
+}
+
+extern int process_cleanup_before_terminate(int pid);
+extern int process_cleanup_fd(int pid, int fd);
+
+static int host_cleanup_process_raw_bridge(int pid)
+{
+	return process_cleanup_before_terminate(pid);
+}
+
+static int host_cleanup_process_bridge(int pid)
+{
+	return host_cleanup_process_result(pid,
+			host_cleanup_process_raw_bridge);
+}
+
+static int host_cleanup_fd_raw_bridge(int pid, int fd)
+{
+	return process_cleanup_fd(pid, fd);
+}
+
+static int host_cleanup_fd_bridge(int pid, int fd)
+{
+	return host_cleanup_fd_result(pid, fd, host_cleanup_fd_raw_bridge);
+}
+
+static void host_init_channel_acked_log_print_bridge(void)
+{
+	dkprintf("SCD_MSG_INIT_CHANNEL_ACKED\n");
+}
+
+static void host_init_channel_acked_log_bridge(void)
+{
+	host_init_ack_log_result(host_init_channel_acked_log_print_bridge);
+}
+
+static void host_schedule_process_log_print_bridge(unsigned long arg)
+{
+	dkprintf("SCD_MSG_SCHEDULE_PROCESS: %lx\n", arg);
+}
+
+static void host_schedule_process_log_bridge(struct ikc_scd_packet *packet)
+{
+	host_schedule_process_log_result(packet,
+			host_schedule_process_log_print_bridge);
+}
+
+static int host_procfs_request_bridge(struct ikc_scd_packet *packet)
+{
+	return host_procfs_request_result(packet, process_procfs_request);
+}
+
+static void host_sysfs_packet_handler_bridge(void *channel, int msg, int err,
+					     long arg1, long arg2, long arg3)
+{
+	sysfss_packet_handler((struct ihk_ikc_channel_desc *)channel, msg, err,
+			      arg1, arg2, arg3);
+}
+
+static void host_sysfs_packet_bridge(void *channel, int msg, int err,
+				     long arg1, long arg2, long arg3)
+{
+	host_sysfs_packet_result(channel, msg, err, arg1, arg2, arg3,
+			host_sysfs_packet_handler_bridge);
+}
+
+static void host_unknown_packet_log_print_bridge(struct ikc_scd_packet *packet)
+{
+	kprintf("syscall_pakcet_handler:unknown message "
+			"(%d.%d.%d.%d.%d.%#lx)\n",
+			packet->msg, packet->ref, packet->osnum, packet->pid,
+			packet->err, packet->arg);
+}
+
+static void host_unknown_packet_log_bridge(struct ikc_scd_packet *packet)
+{
+	host_unknown_packet_log_result(packet,
+			host_unknown_packet_log_print_bridge);
+}
+
+static void host_release_packet_raw_bridge(struct ikc_scd_packet *packet)
+{
+	ihk_ikc_release_packet((struct ihk_ikc_free_packet *)packet);
+}
+
+static void host_release_packet_bridge(struct ikc_scd_packet *packet)
+{
+	host_release_packet_result(packet, host_release_packet_raw_bridge);
+}
+
+static void *host_current_ikc2linux_raw_bridge(void)
+{
+	return get_this_cpu_local_var()->ikc2linux;
+}
+
+static void *host_current_thread_raw_bridge(void)
+{
+	return get_this_cpu_local_var()->current;
+}
+
 void send_procfs_answer(struct ikc_scd_packet *packet, int err)
 {
-	struct ikc_scd_packet pckt;
-	struct ihk_ikc_channel_desc *resp_channel = cpu_local_var(ikc2linux);
-
-	pckt.msg = SCD_MSG_PROCFS_ANSWER;
-	pckt.ref = packet->ref;
-	pckt.arg = packet->arg;
-	pckt.err = err;
-	pckt.reply = packet->reply;
-	pckt.pid = packet->pid;
-	syscall_channel_send(resp_channel, &pckt);
+	host_procfs_answer_current_result(packet, err,
+			host_current_ikc2linux_raw_bridge,
+			host_ikc_packet_send_raw_bridge);
 }
 
 static void do_remote_page_fault(struct ikc_scd_packet *packet, int err)
 {
-	struct ikc_scd_packet pckt;
-	struct ihk_ikc_channel_desc *resp_channel = cpu_local_var(ikc2linux);
-	struct thread *thread = cpu_local_var(current);
-	unsigned long t_s = 0;
-
-	if (err) {
-		goto out_remote_pf;
-	}
-
+	int profile_event = 0;
 #ifdef PROFILE_ENABLE
-	/* We cannot use thread->profile_start_ts here because the
-	 * caller may be utilizing it already
-	 */
+	profile_event = PROFILE_remote_page_fault;
+#endif
 
-	if (thread->profile) {
-		t_s = rdtsc();
-	}
-#endif // PROFILE_ENABLE
-
-	dkprintf("remote page fault,pid=%d,va=%lx,reason=%x\n",
-		 thread->proc->pid, packet->fault_address,
-		 packet->fault_reason|PF_POPULATE);
-	preempt_disable();
-	pckt.err = page_fault_process_vm(thread->vm,
-				(void *)packet->fault_address,
-				packet->fault_reason|PF_POPULATE);
-	preempt_enable();
-
-#ifdef PROFILE_ENABLE
-	if (thread->profile) {
-		profile_event_add(PROFILE_remote_page_fault,
-				(rdtsc() - t_s));
-	}
-#endif // PROFILE_ENABLE
-
-out_remote_pf:
-	pckt.err = err;
-	pckt.msg = SCD_MSG_REMOTE_PAGE_FAULT_ANSWER;
-	pckt.ref = packet->ref;
-	pckt.arg = packet->arg;
-	pckt.reply = packet->reply;
-	pckt.pid = packet->pid;
-	syscall_channel_send(resp_channel, &pckt);
+	host_remote_page_fault_current_result(packet, err, PF_POPULATE,
+			profile_event, host_current_ikc2linux_raw_bridge,
+			host_current_thread_raw_bridge,
+			host_thread_profile_enabled_bridge,
+			host_timestamp_bridge,
+			host_preempt_disable_bridge,
+			host_remote_page_fault_process_bridge,
+			host_preempt_enable_bridge,
+			host_remote_page_fault_profile_event_bridge,
+			host_remote_page_fault_log_bridge,
+			host_ikc_packet_send_raw_bridge);
 }
 
 static void remote_page_fault(void *arg)
@@ -714,344 +1375,193 @@ static void remote_page_fault(void *arg)
 	do_remote_page_fault(arg, 0);
 }
 
-static int syscall_packet_handler(struct ihk_ikc_channel_desc *c,
-                                  void *__packet, void *ihk_os)
+static int host_prepare_process_raw_bridge(unsigned long rphys)
 {
-	struct ikc_scd_packet *packet = __packet;
-	struct ikc_scd_packet pckt;
-	struct ihk_os_cpu_register *cpu_desc;
-	struct ihk_ikc_channel_desc *resp_channel = cpu_local_var(ikc2linux);
-	int rc;
-	struct thread *thread;
-	struct process *proc;
-	struct mcctrl_signal {
-		int	cond;
-		int	sig;
-		int	pid;
-		int	tid;
-		struct siginfo	info;
-	} *sp, info;
-	unsigned long pp;
-	int cpuid;
-	int ret = 0;
-	struct perf_ctrl_desc *pcd;
-	unsigned int mode = 0;
+	return process_msg_prepare_process(rphys);
+}
 
-	switch (packet->msg) {
-	case SCD_MSG_INIT_CHANNEL_ACKED:
-		dkprintf("SCD_MSG_INIT_CHANNEL_ACKED\n");
-		ret = 0;
-		break;
+static int host_prepare_process_bridge(unsigned long rphys)
+{
+	return host_prepare_process_result(rphys,
+			host_prepare_process_raw_bridge);
+}
 
-	case SCD_MSG_PREPARE_PROCESS:
+static int host_prepare_process_request_bridge(void *response_channel,
+					       struct ikc_scd_packet *packet)
+{
+	return host_prepare_process_request_result(response_channel, packet,
+			host_prepare_process_bridge,
+			host_ikc_packet_send_raw_bridge);
+}
 
-		pckt.err = process_msg_prepare_process(packet->arg);
-		pckt.msg = SCD_MSG_PREPARE_PROCESS_ACKED;
-		pckt.reply = packet->reply;
-		pckt.ref = packet->ref;
-		pckt.arg = packet->arg;
-		syscall_channel_send(resp_channel, &pckt);
+static int host_schedule_process_request_bridge(struct ikc_scd_packet *packet)
+{
+	host_schedule_process_log_bridge(packet);
+	return host_schedule_process_request_result(packet,
+			host_schedule_thread_proc_bridge,
+			host_schedule_current_cpu_bridge,
+			host_schedule_cpu_allowed_bridge,
+			host_schedule_obtain_cpuid_bridge,
+			host_schedule_proc_pid_bridge,
+			host_schedule_thread_pc_bridge,
+			host_schedule_thread_sp_bridge,
+			host_schedule_invalid_log_bridge,
+			host_schedule_received_log_bridge,
+			host_schedule_no_cpu_log_bridge,
+			host_schedule_set_tid_bridge,
+			host_schedule_set_proc_status_bridge,
+			host_schedule_set_thread_status_bridge,
+			host_schedule_chain_thread_bridge,
+			host_schedule_chain_process_bridge,
+			host_schedule_runq_add_bridge,
+			host_schedule_queued_log_bridge, PS_RUNNING);
+}
 
-		ret = 0;
-		break;
+static int host_wake_syscall_thread_request_bridge(
+		struct ikc_scd_packet *packet)
+{
+	return host_wake_syscall_thread_request_result(packet,
+			host_find_thread_bridge,
+			host_wakeup_scd_waitq_bridge,
+			host_thread_unlock_bridge,
+			host_wake_syscall_log_bridge);
+}
 
-	case SCD_MSG_SCHEDULE_PROCESS:
-		thread = (struct thread *)packet->arg;
+static int host_remote_page_fault_request_bridge(struct ikc_scd_packet *packet,
+						 void *current_thread)
+{
+	return host_remote_page_fault_request_result(packet,
+			host_find_thread_bridge, current_thread,
+			do_remote_page_fault,
+			host_alloc_bridge, host_packet_copy_bridge,
+			host_remote_page_fault_defer_bridge,
+			host_sched_wakeup_thread_bridge,
+			host_thread_unlock_bridge,
+			host_remote_page_fault_missing_log_bridge,
+			remote_page_fault, sizeof(struct ikc_scd_packet),
+			IHK_MC_AP_NOWAIT, PS_INTERRUPTIBLE);
+}
 
-		cpuid = ihk_mc_get_processor_id();
-		if (!CPU_ISSET(cpuid, &thread->cpu_set)) {
-			cpuid = obtain_clone_cpuid(&thread->cpu_set, 0);
-			if (cpuid == -1) {
-				kprintf("No CPU available\n");
-				ret = -1;
-				break;
-			}
-		}
+static int host_send_signal_request_bridge(void *response_channel,
+					   struct ikc_scd_packet *packet)
+{
+	host_send_signal_request_result(response_channel, packet,
+			host_map_memory_bridge, host_map_virtual_bridge,
+			host_unmap_virtual_bridge, host_unmap_memory_bridge,
+			host_do_kill_bridge, host_send_signal_log_bridge,
+			host_ikc_packet_send_raw_bridge);
+	return 0;
+}
 
-		dkprintf("SCD_MSG_SCHEDULE_PROCESS: %lx\n", packet->arg);
-		proc = thread->proc;
-		thread->tid = proc->pid;
-		proc->status = PS_RUNNING;
-		thread->status = PS_RUNNING;
-		chain_thread(thread);
-		chain_process(proc);
-		runq_add_thread(thread, cpuid);
+static int host_cleanup_process_request_bridge(void *response_channel,
+					       struct ikc_scd_packet *packet)
+{
+	host_cleanup_process_request_result(response_channel, packet,
+			host_cleanup_process_bridge,
+			host_terminate_host_bridge,
+			host_cleanup_process_log_bridge,
+			host_ikc_packet_send_raw_bridge);
+	return 0;
+}
 
-		ret = 0;
-		break;
+static int host_cleanup_fd_request_bridge(void *response_channel,
+					  struct ikc_scd_packet *packet)
+{
+	host_cleanup_fd_request_result(response_channel, packet,
+			host_cleanup_fd_bridge, host_cleanup_fd_log_bridge,
+			host_ikc_packet_send_raw_bridge);
+	return 0;
+}
 
-	/*
-	 * Used for syscall offload reply message to explicitly schedule in
-	 * the waiting thread
-	 */
-	case SCD_MSG_WAKE_UP_SYSCALL_THREAD:
-		thread = find_thread(0, packet->ttid);
-		if (!thread) {
-			kprintf("%s: WARNING: no thread for SCD reply? TID: %d\n",
-				__FUNCTION__, packet->ttid);
-			ret = -EINVAL;
-			break;
-		}
+static int host_debug_log_request_bridge(struct ikc_scd_packet *packet)
+{
+	return host_debug_log_request_result(packet, host_debug_log_bridge,
+			host_debug_log_print_bridge);
+}
 
-		dkprintf("%s: SCD_MSG_WAKE_UP_SYSCALL_THREAD: waking up tid %d\n",
-			__FUNCTION__, packet->ttid);
-		waitq_wakeup(&thread->scd_wq);
-		thread_unlock(thread);
-		ret = 0;
-		break;
+static int host_perf_ctrl_request_bridge(void *response_channel,
+					 struct ikc_scd_packet *packet)
+{
+	return host_perf_ctrl_request_result(response_channel, packet,
+			host_map_memory_bridge, host_map_virtual_bridge,
+			host_unmap_virtual_bridge, host_unmap_memory_bridge,
+			host_perf_init_raw_bridge,
+			host_perf_stop_bridge, host_perf_reset_bridge,
+			host_perf_start_bridge, host_perf_read_bridge,
+			host_perf_unexpected_ctrl_type_bridge,
+			host_ikc_packet_send_raw_bridge);
+}
 
-	case SCD_MSG_REMOTE_PAGE_FAULT:
-		thread = find_thread(0, packet->fault_tid);
-		if (!thread) {
-			kprintf("%s: WARNING: no thread for remote pf %d\n",
-				__func__, packet->fault_tid);
-			do_remote_page_fault(packet, -EINVAL);
-			break;
-		}
+static int host_cpu_rw_reg_request_bridge(void *response_channel,
+					  struct ikc_scd_packet *packet)
+{
+	host_cpu_rw_reg_request_result(response_channel, packet,
+			host_map_memory_bridge, host_map_virtual_bridge,
+			host_unmap_virtual_bridge, host_unmap_memory_bridge,
+			host_cpu_read_write_register_bridge,
+			host_ikc_packet_send_raw_bridge);
+	return 0;
+}
 
-		if (thread == cpu_local_var(current)) {
-			do_remote_page_fault(packet, 0);
-		}
-		else {
-			thread->rpf_arg = kmalloc(sizeof(struct ikc_scd_packet),
-						  IHK_MC_AP_NOWAIT);
-			memcpy(thread->rpf_arg, packet,
-			       sizeof(struct ikc_scd_packet));
-			thread->rpf_backlog = remote_page_fault;
-			sched_wakeup_thread(thread, PS_INTERRUPTIBLE);
-		}
-		thread_unlock(thread);
-		break;
+static const struct host_scd_dispatch_ops host_scd_dispatch_ops = {
+	.init_ack_log_fn = host_init_channel_acked_log_bridge,
+	.prepare_process_fn = host_prepare_process_request_bridge,
+	.schedule_process_fn = host_schedule_process_request_bridge,
+	.wake_syscall_thread_fn = host_wake_syscall_thread_request_bridge,
+	.remote_page_fault_fn = host_remote_page_fault_request_bridge,
+	.send_signal_fn = host_send_signal_request_bridge,
+	.procfs_request_fn = host_procfs_request_bridge,
+	.cleanup_process_fn = host_cleanup_process_request_bridge,
+	.cleanup_fd_fn = host_cleanup_fd_request_bridge,
+	.debug_log_fn = host_debug_log_request_bridge,
+	.sysfs_packet_fn = host_sysfs_packet_bridge,
+	.perf_ctrl_fn = host_perf_ctrl_request_bridge,
+	.cpu_rw_reg_fn = host_cpu_rw_reg_request_bridge,
+	.unknown_packet_log_fn = host_unknown_packet_log_bridge,
+	.release_packet_fn = host_release_packet_bridge,
+};
 
-	case SCD_MSG_SEND_SIGNAL:
-		pp = ihk_mc_map_memory(NULL, packet->arg, sizeof(struct mcctrl_signal));
-		sp = (struct mcctrl_signal *)ihk_mc_map_virtual(pp, 1, PTATTR_WRITABLE | PTATTR_ACTIVE);
-		memcpy(&info, sp, sizeof(struct mcctrl_signal));
-		ihk_mc_unmap_virtual(sp, 1);
-		ihk_mc_unmap_memory(NULL, pp, sizeof(struct mcctrl_signal));
-		pckt.msg = SCD_MSG_SEND_SIGNAL_ACK;
-		pckt.err = 0;
-		pckt.ref = packet->ref;
-		pckt.arg = packet->arg;
-		pckt.reply = packet->reply;
-		syscall_channel_send(resp_channel, &pckt);
+static int syscall_packet_handler(struct ihk_ikc_channel_desc *c,
+	                                  void *__packet, void *ihk_os)
+{
+	int profile_event = 0;
 
-		rc = do_kill(NULL, info.pid, info.tid, info.sig, &info.info, 0);
-#ifndef ENABLE_FUGAKU_HACKS
-		dkprintf("SCD_MSG_SEND_SIGNAL: do_kill(pid=%d, tid=%d, sig=%d)=%d\n", info.pid, info.tid, info.sig, rc);
-#else
-		kprintf("SCD_MSG_SEND_SIGNAL: do_kill(pid=%d, tid=%d, sig=%d)=%d\n", info.pid, info.tid, info.sig, rc);
+#ifdef PROFILE_ENABLE
+	profile_event = PROFILE_remote_page_fault;
 #endif
-		ret = 0;
-		break;
 
-	case SCD_MSG_PROCFS_REQUEST:
-	case SCD_MSG_PROCFS_RELEASE:
-		process_procfs_request(packet);
-		ret = 0;
-		break;
-
-	case SCD_MSG_CLEANUP_PROCESS: {
-		extern int process_cleanup_before_terminate(int pid);
-		dkprintf("SCD_MSG_CLEANUP_PROCESS pid=%d, thread=0x%llx\n",
-				packet->pid, packet->arg);
-
-		pckt.msg = SCD_MSG_CLEANUP_PROCESS_RESP;
-		pckt.err = process_cleanup_before_terminate(packet->pid);
-		pckt.ref = packet->ref;
-		pckt.arg = packet->arg;
-		pckt.reply = packet->reply;
-		syscall_channel_send(resp_channel, &pckt);
-		terminate_host(packet->pid, (struct thread *)packet->arg);
-		ret = 0;
-		break;
-	}
-
-	case SCD_MSG_CLEANUP_FD: {
-		extern int process_cleanup_fd(int pid, int fd);
-		pckt.msg = SCD_MSG_CLEANUP_FD_RESP;
-		pckt.err = process_cleanup_fd(packet->pid, packet->arg);
-		dkprintf("SCD_MSG_CLEANUP_FD pid=%d, fd=%d -> err: %d\n",
-				packet->pid, packet->arg, pckt.err);
-
-		pckt.ref = packet->ref;
-		pckt.arg = packet->arg;
-		pckt.reply = packet->reply;
-		syscall_channel_send(resp_channel, &pckt);
-		ret = 0;
-		break;
-	}
-
-	case SCD_MSG_DEBUG_LOG:
-		dkprintf("SCD_MSG_DEBUG_LOG code=%lx\n", packet->arg);
-		debug_log(packet->arg);
-		ret = 0;
-		break;
-
-	case SCD_MSG_SYSFS_REQ_SHOW:
-	case SCD_MSG_SYSFS_REQ_STORE:
-	case SCD_MSG_SYSFS_REQ_RELEASE:
-		sysfss_packet_handler(c, packet->msg, packet->err,
-				packet->sysfs_arg1, packet->sysfs_arg2,
-				packet->sysfs_arg3);
-		ret = 0;
-		break;
-
-	case SCD_MSG_PERF_CTRL:
-		pp = ihk_mc_map_memory(NULL, packet->arg, sizeof(struct perf_ctrl_desc));
-		pcd = (struct perf_ctrl_desc *)ihk_mc_map_virtual(pp, 1, PTATTR_WRITABLE | PTATTR_ACTIVE);
-
-		switch (pcd->ctrl_type) {
-		case PERF_CTRL_SET:
-			if (!pcd->exclude_kernel) {
-				mode |= PERFCTR_KERNEL_MODE;
-			}
-			if (!pcd->exclude_user) {
-				mode |= PERFCTR_USER_MODE;
-			}
-
-			ret = ihk_mc_perfctr_init_raw(pcd->target_cntr, pcd->config, mode);
-			if (ret != 0) {
-				break;
-			}
-
-			ret = ihk_mc_perfctr_stop(1 << pcd->target_cntr, 0);
-			if (ret != 0) {
-				break;
-			}
-
-			ret = ihk_mc_perfctr_reset(pcd->target_cntr);
-			break;
-
-		case PERF_CTRL_ENABLE:
-			ret = ihk_mc_perfctr_start(pcd->target_cntr_mask);
-			break;
-			
-		case PERF_CTRL_DISABLE:
-			ret = ihk_mc_perfctr_stop(pcd->target_cntr_mask,
-					IHK_MC_PERFCTR_DISABLE_INTERRUPT);
-			break;
-
-		case PERF_CTRL_GET:
-			pcd->read_value = ihk_mc_perfctr_read(pcd->target_cntr);
-			break;
-			
-		default:
-			kprintf("%s: SCD_MSG_PERF_CTRL unexpected ctrl_type\n", __FUNCTION__);
-		}
-
-		ihk_mc_unmap_virtual(pcd, 1);
-		ihk_mc_unmap_memory(NULL, pp, sizeof(struct perf_ctrl_desc));
-
-		pckt.msg = SCD_MSG_PERF_ACK;
-		pckt.err = ret;
-		pckt.arg = packet->arg;
-		pckt.reply = packet->reply;
-		ihk_ikc_send(resp_channel, &pckt, 0);
-
-		break;
-
-	case SCD_MSG_CPU_RW_REG:
-		pp = ihk_mc_map_memory(NULL, packet->pdesc,
-				sizeof(struct ihk_os_cpu_register));
-		cpu_desc = (struct ihk_os_cpu_register *)ihk_mc_map_virtual(
-				pp, 1, PTATTR_WRITABLE | PTATTR_ACTIVE);
-
-		pckt.msg = SCD_MSG_CPU_RW_REG_RESP;
-		pckt.reply = packet->reply;
-		pckt.err = arch_cpu_read_write_register(cpu_desc, packet->op);
-
-		ihk_mc_unmap_virtual(cpu_desc, 1);
-		ihk_mc_unmap_memory(NULL, pp, sizeof(struct ihk_os_cpu_register));
-
-		ihk_ikc_send(resp_channel, &pckt, 0);
-		break;
-
-	default:
-		kprintf("syscall_pakcet_handler:unknown message "
-				"(%d.%d.%d.%d.%d.%#lx)\n",
-				packet->msg, packet->ref, packet->osnum,
-				packet->pid, packet->err, packet->arg);
-		ret = 0;
-		break;
-
-	}
-
-	ihk_ikc_release_packet((struct ihk_ikc_free_packet *)packet);
-	return ret;
+	return host_syscall_packet_handler_result(c, __packet, ihk_os,
+			&host_scd_dispatch_ops, host_current_ikc2linux_raw_bridge,
+			host_current_thread_raw_bridge, PF_POPULATE,
+			profile_event, sizeof(struct ikc_scd_packet),
+			IHK_MC_AP_NOWAIT, PS_INTERRUPTIBLE, PS_RUNNING);
 }
 
 static int dummy_packet_handler(struct ihk_ikc_channel_desc *c,
                                   void *__packet, void *__os)
 {
-	struct ikc_scd_packet *packet = __packet;
-	ihk_ikc_release_packet((struct ihk_ikc_free_packet *)packet);
-	return 0;
+	return host_dummy_packet_handler_result(c, __packet, __os,
+			host_release_packet_bridge);
 }
 
 void init_host_ikc2linux(int linux_cpu)
 {
-	struct ihk_ikc_connect_param param;
-	struct ihk_ikc_channel_desc *c;
-
-	/* Main thread allocates channel pointer table */
-	if (!ikc2linuxs) {
-		ikc2linuxs = kmalloc(sizeof(*ikc2linuxs) *
-				ihk_mc_get_nr_linux_cores(), IHK_MC_AP_NOWAIT);
-		if (!ikc2linuxs) {
-			kprintf("%s: error: allocating Linux channels\n", __FUNCTION__);
-			panic("");
-		}
-
-		memset(ikc2linuxs, 0, sizeof(*ikc2linuxs) *
-				ihk_mc_get_nr_linux_cores());
-	}
-
-	c = ikc2linuxs[linux_cpu];
-
-	if (!c) {
-		param.port = 503;
-		param.intr_cpu = linux_cpu;
-		param.pkt_size = sizeof(struct ikc_scd_packet);
-		param.queue_size = 4 * num_processors * sizeof(struct ikc_scd_packet);
-		if (param.queue_size < PAGE_SIZE * 4) {
-			param.queue_size = PAGE_SIZE * 4;
-		}
-		param.magic = 0x1129;
-		param.handler = dummy_packet_handler;
-
-		dkprintf("(ikc2linux) Trying to connect host ...");
-		while (ihk_ikc_connect(NULL, &param) != 0) {
-			dkprintf(".");
-			ihk_mc_delay_us(1000 * 1000);
-		}
-		dkprintf("connected.\n");
-
-		ikc2linuxs[linux_cpu] = param.channel;
-		c = param.channel;
-	}
-
-	get_this_cpu_local_var()->ikc2linux = c;
+	host_init_ikc2linux_public_result(linux_cpu, &ikc2linuxs,
+			ihk_mc_get_nr_linux_cores(), num_processors,
+			sizeof(struct ikc_scd_packet), PAGE_SIZE,
+			IHK_MC_AP_NOWAIT, host_alloc_raw_bridge,
+			host_ikc_connect_raw_bridge, host_delay_raw_bridge,
+			host_set_current_ikc2linux_raw_bridge,
+			dummy_packet_handler, host_init_ikc2linux_log_raw_bridge,
+			host_panic_raw_bridge);
 }
 
 void init_host_ikc2mckernel(void)
 {
-	struct ihk_ikc_connect_param param;
-
-	param.port = 501;
-	param.intr_cpu = -1;
-	param.pkt_size = sizeof(struct ikc_scd_packet);
-	param.queue_size = PAGE_SIZE * 4;
-	param.magic = 0x1329;
-	param.handler = syscall_packet_handler;
-
-	dkprintf("(ikc2mckernel) Trying to connect host ...");
-	while (ihk_ikc_connect(NULL, &param) != 0) {
-		dkprintf(".");
-		ihk_mc_delay_us(1000 * 1000);
-	}
-	dkprintf("connected.\n");
-
-	ihk_ikc_set_regular_channel(NULL, param.channel, ihk_ikc_get_processor_id());
+	host_init_ikc2mckernel_public_result(sizeof(struct ikc_scd_packet),
+			PAGE_SIZE, ihk_ikc_get_processor_id(),
+			syscall_packet_handler, host_ikc_connect_raw_bridge,
+			host_delay_raw_bridge, host_set_regular_channel_raw_bridge,
+			host_init_ikc2mckernel_log_raw_bridge,
+			host_panic_raw_bridge);
 }
-

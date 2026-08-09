@@ -21,6 +21,21 @@
 
 #include <llist.h>
 
+void init_llist_head(struct llist_head *list)
+{
+	list->first = NULL;
+}
+
+bool llist_empty(const struct llist_head *head)
+{
+	return ACCESS_ONCE(head->first) == NULL;
+}
+
+struct llist_node *llist_next(struct llist_node *node)
+{
+	return node->next;
+}
+
 
 /**
  * llist_add_batch - add several linked entries in batch
@@ -37,9 +52,20 @@ bool llist_add_batch(struct llist_node *new_first, struct llist_node *new_last,
 
 	do {
 		new_last->next = first = ACCESS_ONCE(head->first);
-	} while (cmpxchg(&head->first, first, new_first) != first);
+	} while (atomic_cmpxchg_ptr((void **)&head->first, first, new_first)
+		 != first);
 
 	return !first;
+}
+
+bool llist_add(struct llist_node *new, struct llist_head *head)
+{
+	return llist_add_batch(new, new, head);
+}
+
+struct llist_node *llist_del_all(struct llist_head *head)
+{
+	return atomic_xchg_ptr((void **)&head->first, NULL);
 }
 
 /**
@@ -60,13 +86,14 @@ struct llist_node *llist_del_first(struct llist_head *head)
 {
 	struct llist_node *entry, *old_entry, *next;
 
-	entry = smp_load_acquire(&head->first);
+	entry = smp_load_acquire_ptr((void *const *)&head->first);
 	for (;;) {
 		if (entry == NULL)
 			return NULL;
 		old_entry = entry;
 		next = READ_ONCE(entry->next);
-		entry = cmpxchg(&head->first, old_entry, next);
+		entry = atomic_cmpxchg_ptr((void **)&head->first,
+					   old_entry, next);
 		if (entry == old_entry)
 			break;
 	}

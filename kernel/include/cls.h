@@ -133,14 +133,7 @@ struct cpu_local_var {
 extern int cpu_local_var_initialized;
 
 struct cpu_local_var *get_cpu_local_var(int id);
-static struct cpu_local_var *get_this_cpu_local_var(void)
-{
-	return get_cpu_local_var(ihk_mc_get_processor_id());
-}
-
-#define cpu_local_var(name) get_this_cpu_local_var()->name
-
-#define cpu_local_var_with_override(name, clv_override) (clv_override ? clv_override->name : get_this_cpu_local_var()->name)
+struct cpu_local_var *get_this_cpu_local_var(void);
 
 int add_backlog(int (*func)(void *arg), void *arg);
 void do_backlog(void);

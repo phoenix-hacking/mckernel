@@ -22,6 +22,7 @@
 #include <process.h>
 #include <swapfmt.h>
 #include <ihk/debug.h>
+#include <object_helpers.h>
 
 #define O_RDONLY	00000000
 #define O_WRONLY	00000001
@@ -117,13 +118,13 @@ area_print(struct vm_regions *region)
 static int
 myalloc_init(struct swapinfo *si, void *p, size_t sz)
 {
-	extern SYSCALL_DECLARE(mlock);
+	extern long sys_mlock(int n, ihk_mc_user_context_t *ctx);
 	ihk_mc_user_context_t ctx0;
 	int	cc;
 
 	/* pin the buffer down in McKernel side */
-	ihk_mc_syscall_arg0(&ctx0) = (uintptr_t) p;
-	ihk_mc_syscall_arg1(&ctx0) = sz;
+	ihk_mc_syscall_set_arg0(&ctx0, (uintptr_t) p);
+	ihk_mc_syscall_set_arg1(&ctx0, sz);
 	cc = sys_mlock(__NR_mlock, &ctx0);
 	if (cc < 0) return cc;
 	/* init */
@@ -137,12 +138,12 @@ myalloc_init(struct swapinfo *si, void *p, size_t sz)
 void
 myalloc_finalize(struct swapinfo *si)
 {
-	extern SYSCALL_DECLARE(munlock);
+	extern long sys_munlock(int n, ihk_mc_user_context_t *ctx);
 	ihk_mc_user_context_t ctx0;
 
 	/* unpindown in McKernel side */
-	ihk_mc_syscall_arg0(&ctx0) = (uintptr_t) si->user_buf;
-	ihk_mc_syscall_arg1(&ctx0) = si->ubuf_size;
+	ihk_mc_syscall_set_arg0(&ctx0, (uintptr_t) si->user_buf);
+	ihk_mc_syscall_set_arg1(&ctx0, si->ubuf_size);
 	sys_munlock(__NR_munlock, &ctx0);
 }
 
@@ -151,9 +152,10 @@ myalloc(struct swapinfo *si, size_t sz)
 {
 	void	*p = NULL;
 
-	if ((si->ubuf_alloced + sz) < si->ubuf_size) {
+	if (pager_myalloc_fits_result(si->ubuf_alloced, sz, si->ubuf_size)) {
 		p = (void*) &((char*)si->user_buf)[si->ubuf_alloced];
-		si->ubuf_alloced += sz;
+		si->ubuf_alloced =
+			pager_myalloc_next_alloced_result(si->ubuf_alloced, sz);
 	}
 	return p;
 }
@@ -170,10 +172,10 @@ linux_open(char *fname, int flag, int mode)
 	ihk_mc_user_context_t ctx0;
 	int fd;
 
-	ihk_mc_syscall_arg0(&ctx0) = -100;		/* dirfd = AT_FDCWD */
-	ihk_mc_syscall_arg1(&ctx0) = (uintptr_t)fname;	/* pathname = fname */
-	ihk_mc_syscall_arg2(&ctx0) = flag;		/* flags = flag */
-	ihk_mc_syscall_arg3(&ctx0) = mode;		/* mode = mode */
+	ihk_mc_syscall_set_arg0(&ctx0, -100);		/* dirfd = AT_FDCWD */
+	ihk_mc_syscall_set_arg1(&ctx0, (uintptr_t)fname);	/* pathname = fname */
+	ihk_mc_syscall_set_arg2(&ctx0, flag);		/* flags = flag */
+	ihk_mc_syscall_set_arg3(&ctx0, mode);		/* mode = mode */
 	fd = syscall_generic_forwarding(__NR_openat, &ctx0);
 	return fd;
 }
@@ -183,9 +185,9 @@ linux_unlink(char *fname)
 {
 	ihk_mc_user_context_t ctx0;
 
-	ihk_mc_syscall_arg0(&ctx0) = -100;		/* dirfd = AT_FDCWD */
-	ihk_mc_syscall_arg1(&ctx0) = (uintptr_t)fname;	/* pathname = fname */
-	ihk_mc_syscall_arg2(&ctx0) = 0;			/* flags = 0 */
+	ihk_mc_syscall_set_arg0(&ctx0, -100);		/* dirfd = AT_FDCWD */
+	ihk_mc_syscall_set_arg1(&ctx0, (uintptr_t)fname);	/* pathname = fname */
+	ihk_mc_syscall_set_arg2(&ctx0, 0);			/* flags = 0 */
 	return syscall_generic_forwarding(__NR_unlinkat, &ctx0);
 }
 
@@ -196,26 +198,27 @@ linux_read(int fd, void *buf, size_t count)
 	ssize_t		sz;
 	size_t count0 = count;
 
-	ihk_mc_syscall_arg0(&ctx0) = fd;
+	ihk_mc_syscall_set_arg0(&ctx0, fd);
 	sz = 0;
 	for (;;) {
 		ssize_t sz0;
 
-		ihk_mc_syscall_arg1(&ctx0) = (uintptr_t) buf;
-		ihk_mc_syscall_arg2(&ctx0) = count;
+		ihk_mc_syscall_set_arg1(&ctx0, (uintptr_t) buf);
+		ihk_mc_syscall_set_arg2(&ctx0, count);
 		sz0 = syscall_generic_forwarding(__NR_read, &ctx0);
-		if (sz0 == -EINTR)
+		if (pager_linux_io_retry_result(sz0))
 			continue;
-		if (sz0 <= 0) {
-			if (sz == 0)
+		if (pager_linux_io_stop_result(sz0)) {
+			if (pager_linux_io_first_result(sz))
 				sz = sz0;
 			break;
 		}
-		sz += sz0;
-		if (sz == count0)
+		sz = pager_linux_io_advance_result(sz, sz0);
+		if (pager_linux_io_complete_result(sz, count0))
 			break;
-		count -= sz0;
-		buf = (char *)buf + sz0;
+		count = pager_linux_io_remaining_result(count, sz0);
+		buf = (void *)pager_linux_io_next_buf_result(
+			(uintptr_t)buf, sz0);
 	}
 	return sz;
 }
@@ -227,26 +230,27 @@ linux_write(int fd, void *buf, size_t count)
 	ssize_t		sz;
 	size_t count0 = count;
 
-	ihk_mc_syscall_arg0(&ctx0) = fd;
+	ihk_mc_syscall_set_arg0(&ctx0, fd);
 	sz = 0;
 	for (;;) {
 		ssize_t sz0;
 
-		ihk_mc_syscall_arg1(&ctx0) = (uintptr_t) buf;
-		ihk_mc_syscall_arg2(&ctx0) = count;
+		ihk_mc_syscall_set_arg1(&ctx0, (uintptr_t) buf);
+		ihk_mc_syscall_set_arg2(&ctx0, count);
 		sz0 = syscall_generic_forwarding(__NR_write, &ctx0);
-		if (sz0 == -EINTR)
+		if (pager_linux_io_retry_result(sz0))
 			continue;
-		if (sz0 <= 0) {
-			if (sz == 0)
+		if (pager_linux_io_stop_result(sz0)) {
+			if (pager_linux_io_first_result(sz))
 				sz = sz0;
 			break;
 		}
-		sz += sz0;
-		if (sz == count0)
+		sz = pager_linux_io_advance_result(sz, sz0);
+		if (pager_linux_io_complete_result(sz, count0))
 			break;
-		count -= sz0;
-		buf = (char *)buf + sz0;
+		count = pager_linux_io_remaining_result(count, sz0);
+		buf = (void *)pager_linux_io_next_buf_result(
+			(uintptr_t)buf, sz0);
 	}
 	return sz;
 }
@@ -257,9 +261,9 @@ linux_lseek(int fd, off_t off, int whence)
 	ihk_mc_user_context_t ctx0;
 	int		cc;
 
-	ihk_mc_syscall_arg0(&ctx0) = fd;
-	ihk_mc_syscall_arg1(&ctx0) = off;
-	ihk_mc_syscall_arg2(&ctx0) = whence;
+	ihk_mc_syscall_set_arg0(&ctx0, fd);
+	ihk_mc_syscall_set_arg1(&ctx0, off);
+	ihk_mc_syscall_set_arg2(&ctx0, whence);
 	cc = syscall_generic_forwarding(__NR_lseek, &ctx0);
 	return cc;
 }
@@ -270,7 +274,7 @@ linux_close(int fd)
 	ihk_mc_user_context_t ctx0;
 	int		cc;
 
-	ihk_mc_syscall_arg0(&ctx0) = fd;
+	ihk_mc_syscall_set_arg0(&ctx0, fd);
 	cc = syscall_generic_forwarding(__NR_close, &ctx0);
 	return cc;
 }
@@ -285,9 +289,9 @@ linux_munmap(void *addr, size_t len, int flag)
 	ihk_mc_user_context_t ctx0;
 	int		cc;
 
-	ihk_mc_syscall_arg0(&ctx0) = (uintptr_t) addr;
-	ihk_mc_syscall_arg1(&ctx0) = len;
-	ihk_mc_syscall_arg2(&ctx0) = flag;
+	ihk_mc_syscall_set_arg0(&ctx0, (uintptr_t) addr);
+	ihk_mc_syscall_set_arg1(&ctx0, len);
+	ihk_mc_syscall_set_arg2(&ctx0, flag);
 	cc = syscall_generic_forwarding(__NR_munmap, &ctx0);
 	return cc;
 }
@@ -317,8 +321,8 @@ pager_copy_from_user(void * dst, void * from, size_t size, struct process_vm *vm
 	unsigned long rphys;
 	int faulted = 0;
 
-	if (size > PAGE_SIZE) {
-		ret = -EFAULT;
+	ret = pager_copy_size_error_result(size);
+	if (ret) {
 		return ret;
 	}
 		
@@ -329,18 +333,15 @@ retry_lookup:
 
 	if (ret) {
 		uint64_t reason = PF_POPULATE | PF_WRITE | PF_USER;
-		void *addr= (void *)(((unsigned long)dst)& PAGE_MASK);
+		void *addr = (void *)pager_fault_addr_result((unsigned long)dst);
 
-		if (faulted) {
-			ret = -EFAULT;
-			return ret;
-		}
+		if (!pager_copy_fault_retry_result(faulted))
+			return -EFAULT;
 
 		ret = page_fault_process_vm(vm, addr, reason);
-		if (ret) {
-			ret = -EFAULT;
+		ret = pager_copy_fault_error_result(ret);
+		if (ret)
 			return ret;
-		}
 
 		faulted = 1;
 		goto retry_lookup;
@@ -360,8 +361,7 @@ pager_read(struct swapinfo *si, int fd, void *start, size_t size,struct process_
 	ssize_t		off, sz, rs;
 
 	for (off = 0; off < size; off += sz) {
-		sz = size - off;
-		sz = (sz > UDATA_BUFSIZE) ? UDATA_BUFSIZE : sz;
+		sz = pager_read_chunk_size_result(off, size);
 		rs = linux_read(fd, si->udata_buf, sz);
 		if (rs != sz) return rs;
 		
@@ -387,11 +387,11 @@ mlocklist_req(unsigned long start, unsigned long end, struct addrpair *addr, int
 	int		cc;
 
 #define PAGER_REQ_MLOCK_LIST	0x0008
-	ihk_mc_syscall_arg0(&ctx0) = PAGER_REQ_MLOCK_LIST;
-	ihk_mc_syscall_arg1(&ctx0) = start;
-	ihk_mc_syscall_arg2(&ctx0) = end;
-	ihk_mc_syscall_arg3(&ctx0) = (unsigned long) addr;
-	ihk_mc_syscall_arg4(&ctx0) = nent;
+	ihk_mc_syscall_set_arg0(&ctx0, PAGER_REQ_MLOCK_LIST);
+	ihk_mc_syscall_set_arg1(&ctx0, start);
+	ihk_mc_syscall_set_arg2(&ctx0, end);
+	ihk_mc_syscall_set_arg3(&ctx0, (unsigned long) addr);
+	ihk_mc_syscall_set_arg4(&ctx0, nent);
 	cc = syscall_generic_forwarding(__NR_mmap, &ctx0);
 	return cc;
 }
@@ -407,10 +407,10 @@ mlocklist_morereq(struct swapinfo *si, unsigned long *start)
 
 	dkprintf("mlocklist_morereq: start = %ld and = %ld\n",
 		went.pair[went.count].start, went.pair[went.count].end);
-	if (went.pair[went.count].start != (unsigned long) -1) {
+	if (!pager_mlock_more_result(went.pair[went.count].start)) {
 		return 0;
 	}
-	*start = went.pair[went.count].end;
+	*start = pager_mlock_next_start_result(went.pair[went.count].end);
 	return 1;
 }
 
@@ -455,9 +455,10 @@ arealist_get(struct swapinfo *si, struct addrpair **pair, struct arealist *area)
 {
 	struct areaent	*tmp,wtmp;
 	struct areaent	*tail = area->tail;
-	if (tail->count < MLOCKADDRS_SIZE - 1) { /* at least two entries are needed */
+	int room = pager_arealist_tail_room_result(tail->count);
+	if (room) { /* at least two entries are needed */
 		if (pair) *pair = &tail->pair[tail->count];
-		return MLOCKADDRS_SIZE - tail->count;
+		return room;
 	}
 	tmp = myalloc(si, sizeof(struct areaent));
 	if (tmp == NULL) {
@@ -477,9 +478,9 @@ arealist_update(int cnt, struct arealist *area)
 {
 	int i;
 	copy_from_user(&i, &(area->tail->count), sizeof(int));
-	i += cnt;
+	i = pager_arealist_count_add_result(i, cnt);
 	copy_to_user(&(area->tail->count), &i, sizeof(int));
-	area->count += cnt;
+	area->count = pager_arealist_count_add_result(area->count, cnt);
 }
 
 static int
@@ -512,13 +513,14 @@ arealist_preparewrite(struct arealist *areap, struct swap_areainfo *info,
 		int i;
 		copy_from_user(&went, ent, sizeof(struct areaent));
 		for (i = 0; i < went.count; i++, count++) {
-			ssize_t sz = went.pair[i].end - went.pair[i].start; 
+			ssize_t sz = pager_addrpair_size_result(
+					went.pair[i].start, went.pair[i].end);
 			copy_to_user(&(info[count].start), &(went.pair[i].start), sizeof(unsigned long));
 			copy_to_user(&(info[count].end), &(went.pair[i].end), sizeof(unsigned long));
 			copy_to_user(&(info[count].flag), &(went.pair[i].flag), sizeof(unsigned long));
 			if (flag) { /* position in file */
 				
-				pos = off + totsz;
+				pos = pager_file_pos_result(off, totsz);
 			} else { /* physical memory */
 				if (ihk_mc_pt_virt_to_phys(pt,
 						(void*) ent->pair[i].start,
@@ -539,8 +541,8 @@ arealist_write(int fd, struct swap_areainfo *info, int count)
 	ssize_t	       sz;
 
 	sz = linux_write(fd, info, sizeof(struct swap_areainfo)*count);
-	if (sz != sizeof(struct swap_areainfo)*count) return -1;
-	return 0;
+	return pager_arealist_write_result(sz, count,
+			sizeof(struct swap_areainfo));
 }
 
 static void
@@ -575,21 +577,26 @@ mlockcntnr_sethead(struct swapinfo *si)
 static int
 mlockcntnr_isempty(struct swapinfo *si)
 {
-	return si->mlock_container.from == si->mlock_area.tail
-		&& si->mlock_container.ccount == si->mlock_area.tail->count;
+	return pager_mlock_container_empty_result(
+		(uintptr_t)si->mlock_container.from,
+		(uintptr_t)si->mlock_area.tail,
+		si->mlock_container.ccount,
+		si->mlock_area.tail->count);
 }
 
 static int
 mlockcntnr_addrent(struct swapinfo *si, struct addrpair *laddr)
 {
-	if (si->mlock_container.ccount == si->mlock_container.cur->count) {
+	if (pager_mlock_needs_next_result(si->mlock_container.ccount,
+			si->mlock_container.cur->count)) {
 		struct areaent	*tmp = si->mlock_container.cur->next;
 		if (tmp == 0) return 0;
 		si->mlock_container.cur = tmp;
-		si->mlock_container.ccount = 1;
+		si->mlock_container.ccount = pager_mlock_reset_count_result();
 	}
 	*laddr = si->mlock_container.cur->pair[si->mlock_container.ccount - 1];
-	si->mlock_container.ccount++;
+	si->mlock_container.ccount =
+		pager_mlock_next_count_result(si->mlock_container.ccount);
 	return 1;
 }
 
@@ -645,7 +652,7 @@ debug_dump(char *msg, unsigned char *p)
 int
 do_pagein(int flag)
 {
-	struct thread		*thread = cpu_local_var(current);
+	struct thread		*thread = get_this_cpu_local_var()->current;
 	struct process_vm	*vm = thread->vm;
 	int		fd, i;
 	ssize_t		pos, sz, rs;
@@ -663,13 +670,14 @@ do_pagein(int flag)
 	 * in the physical memory area:
 	 *	swphdr, swap_info and mlock_info
 	 */
-	pos = sizeof(struct swap_header);
-	pos += sizeof(struct swap_areainfo)*si->swphdr->count_sarea;
-	pos += sizeof(struct swap_areainfo)*si->swphdr->count_marea;
+	pos = pager_pagein_data_pos_result(si->swphdr->count_sarea,
+			si->swphdr->count_marea, sizeof(struct swap_header),
+			sizeof(struct swap_areainfo));
 	rs = linux_lseek(fd, pos, SEEK_SET);
 	for (i = 0; i < si->swphdr->count_sarea; i++) {
 		extern int ihk_mc_pt_print_pte(struct page_table *pt, void *virt);
-		sz = si->swap_info[i].end - si->swap_info[i].start;
+		sz = pager_addrpair_size_result(si->swap_info[i].start,
+				si->swap_info[i].end);
 		dkprintf("pagein: %016lx:%016lx sz(%lx)\n", si->swap_info[i].start, si->swap_info[i].end, sz);
 		rs = pager_read(si, fd, (void*) si->swap_info[i].start, sz, vm);
 		if (rs != sz) goto err;
@@ -679,22 +687,22 @@ do_pagein(int flag)
 	print_region("after pagin", vm);
 	dkprintf("do_pagein: done, currss(%lx)\n", vm->currss);
 	vm->swapinfo = NULL;
-	kfree(si->swapfname);
-	kfree(si);
+	kfree_tracked(si->swapfname, __FILE__, __LINE__);
+	kfree_tracked(si, __FILE__, __LINE__);
 	return 0;
 err:
 	linux_close(fd);
 	ekprintf("pagein: read error: return(%lx) size(%lx)\n", rs, sz);
 	vm->swapinfo = NULL;
-	kfree(si->swapfname);
-	kfree(si);
+	kfree_tracked(si->swapfname, __FILE__, __LINE__);
+	kfree_tracked(si, __FILE__, __LINE__);
 	return -1;
 }
 
 int
 do_pageout(char *fname, void *buf, size_t size, int flag)
 {
-	struct thread		*thread = cpu_local_var(current);
+	struct thread		*thread = get_this_cpu_local_var()->current;
 	struct process_vm	*vm = thread->vm;
 	struct vm_regions	*region = &vm->region;
 	struct vm_range		*range, *next;
@@ -708,26 +716,25 @@ do_pageout(char *fname, void *buf, size_t size, int flag)
 	fd = -1;
 	dkprintf("do_pageout: buf(%p) size(%d) flag(%d) currss(%lx)\n",
 		 buf, size, flag, vm->currss);
-	if (IS_INVALID_USERADDRESS(fname, region)
-	    || IS_INVALID_USERADDRESS(buf, region)
-	    || IS_INVALID_LENGTH(size, region)) {
-		return -EINVAL;
-	}
-	if (!(si = kmalloc(sizeof(struct swapinfo), IHK_MC_AP_NOWAIT))) {
+	cc = pager_pageout_args_result((uintptr_t)fname, (uintptr_t)buf, size,
+			region->user_start, region->user_end);
+	if (cc)
+		return cc;
+	if (!(si = kmalloc_tracked(sizeof(struct swapinfo), IHK_MC_AP_NOWAIT, __FILE__, __LINE__))) {
 		ekprintf("do_pageout: Cannot allocate working memory in kmalloc\n");
 		return -ENOMEM;
 	}
 	memset(si, '\0', sizeof(struct swapinfo));
 	cc = myalloc_init(si, buf, size);
 	if (cc < 0) {
-		kfree(si);
+		kfree_tracked(si, __FILE__, __LINE__);
 		ekprintf("do_pageout: Cannot pin buf (%p) down\n", buf);
 		return cc;
 	}
 	si->udata_buf = myalloc(si, UDATA_BUFSIZE);
-	si->swapfname = kmalloc(strlen_user(fname) + 1, IHK_MC_AP_NOWAIT);
+	si->swapfname = kmalloc_tracked(strlen_user(fname) + 1, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 	if (si->swapfname == NULL) {
-		kfree(si);
+		kfree_tracked(si, __FILE__, __LINE__);
 		ekprintf("do_pageout: Cannot allocate working memory in kmalloc\n");
 		return -ENOMEM;
 	}
@@ -755,13 +762,12 @@ do_pageout(char *fname, void *buf, size_t size, int flag)
 	next = lookup_process_memory_range(vm, 0, -1);
 	while ((range = next)) {
 		next = next_process_memory_range(vm, range);
-		if (range->memobj != NULL) continue;
-		if (IS_TEXT(range->start, region)
-		    || IS_STACK(range->start, region)
-		    || IS_INVALID_USERADDRESS(range->start, region)
-		    || IS_READONLY(range->flag)
-		    || IS_NOTUSER(range->flag)) continue;
-		if (range->flag & VR_LOCKED) {
+		if (pager_skip_anon_range_result(!!range->memobj,
+				range->start, region->text_start,
+				region->stack_start, region->user_start,
+				region->user_end, range->flag))
+			continue;
+		if (pager_range_locked_result(range->flag)) {
 			/* this range is locked by McKernel */
 			cc = arealist_add(si, range->start, range->end,
 					  range->flag, &si->mlock_area);
@@ -822,12 +828,13 @@ do_pageout(char *fname, void *buf, size_t size, int flag)
 	copy_to_user(&(si->swphdr->count_marea), &(si->mlock_area.count), sizeof(unsigned int));
 	if ((cc = pager_write(fd, si->swphdr, sizeof(struct swap_header)))
 	    != sizeof(struct swap_header)) {
-		if (cc >= 0)
-			cc = -EIO;
+		cc = pager_io_short_result(cc);
 		goto err;
 	}
 	pos = linux_lseek(fd, 0, SEEK_CUR);
-	pos += sizeof(struct swap_areainfo)*(si->swap_area.count+si->mlock_area.count);
+	pos = pager_file_pos_result(pos,
+			sizeof(struct swap_areainfo) *
+			(si->swap_area.count + si->mlock_area.count));
 	cc = arealist_preparewrite(&si->swap_area, si->swap_info, pos, vm, 1);
 	if (cc != si->swap_area.count) {
 		ekprintf("do_pageout: ERROR file ent(%d) != list ent(%d) in swap_area\n",
@@ -845,14 +852,13 @@ do_pageout(char *fname, void *buf, size_t size, int flag)
 	for (i = 0; i < si->swap_area.count; i++) {
 		struct swap_areainfo sw_info;
 		copy_from_user(&sw_info, &(si->swap_info[i]), sizeof(struct swap_areainfo));
-		sz = sw_info.end - sw_info.start;
+		sz = pager_addrpair_size_result(sw_info.start, sw_info.end);
 		if ((cc = pager_write(fd, (void*) sw_info.start, sz)) != sz) {
-			if (cc >= 0)
-				cc = -EIO;
+			cc = pager_io_short_result(cc);
 			goto err;
 		}
 	}
-	if (flag & 0x04) {
+	if (pager_skip_physical_removal_result(flag)) {
 		kprintf("skipping physical memory removal\n");
 		goto free_exit;
 	}
@@ -881,7 +887,7 @@ do_pageout(char *fname, void *buf, size_t size, int flag)
 	for (i = 0; i < si->swap_area.count; i++) {
 		struct swap_areainfo sw_info;
 		copy_from_user(&sw_info, &(si->swap_info[i]), sizeof(struct swap_areainfo));
-		sz = sw_info.end - sw_info.start;
+		sz = pager_addrpair_size_result(sw_info.start, sw_info.end);
 		cc = linux_munmap((void*) sw_info.start, sz, 0);
 		if (cc < 0) {
 			kprintf("do_pageout: Cannot munmap: %lx len(%lx)\n",
@@ -897,14 +903,14 @@ nomem:
 	ekprintf("do_pageout: cannot allocate working memory\n");
 	cc = -ENOMEM;
 free_exit:
-	if (fd >= 0)
+	if (pager_fd_valid_result(fd))
 		linux_close(fd);
 	dkprintf("do_pageout: done, currss(%lx)\n", vm->currss);
 	arealist_free(&si->mlock_area); arealist_free(&si->swap_area); 
-	if (cc != 0) {
+	if (pager_should_unlink_swap_result(cc)) {
 		pager_unlink(si, si->swapfname);
-		kfree(si->swapfname);
-		kfree(si);
+		kfree_tracked(si->swapfname, __FILE__, __LINE__);
+		kfree_tracked(si, __FILE__, __LINE__);
 	}
 	else {
 		vm->swapinfo = si;

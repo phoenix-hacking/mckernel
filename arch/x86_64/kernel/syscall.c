@@ -34,7 +34,9 @@
 #include <bitops.h>
 #include <rusage_private.h>
 #include <memory.h>
+#include <arch-memory-helpers.h>
 #include <ihk/debug.h>
+#include <elfcore.h>
 
 void terminate_mcexec(int, int);
 extern long do_sigaction(int sig, struct k_sigaction *act, struct k_sigaction *oact);
@@ -43,6 +45,761 @@ extern unsigned long do_fork(int, unsigned long, unsigned long, unsigned long,
 	unsigned long, unsigned long, unsigned long);
 extern int get_xsave_size();
 extern uint64_t get_xsave_mask();
+extern void save_debugreg(unsigned long *debugreg);
+extern ihk_mc_user_context_t *lookup_user_context(struct thread *thread);
+typedef long (*syscall_forward_context_fn_t)(int syscall_nr, void *ctx);
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+typedef long (*syscall_copy_to_user_fn_t)(unsigned long dst_addr,
+		const void *src, size_t bytes);
+typedef long (*arch_rt_sigreturn_copy_from_user_fn_t)(void *dst,
+		unsigned long src_addr, size_t bytes);
+typedef long (*arch_rt_sigreturn_syscall_fn_t)(int num, void *regs);
+typedef void (*arch_rt_sigreturn_set_signal_fn_t)(int sig, void *regs,
+		const void *info);
+typedef void (*arch_rt_sigreturn_void_fn_t)(void);
+typedef void (*arch_rt_sigreturn_check_signal_fn_t)(int signum, void *regs,
+		int num);
+typedef void *(*arch_rt_sigreturn_alloc_fn_t)(size_t size,
+		unsigned long flags);
+typedef void (*arch_rt_sigreturn_free_fn_t)(void *ptr);
+typedef void (*arch_rt_sigreturn_xrstor_fn_t)(void *fpregs);
+extern long prctl_body_result(int option, unsigned long arg2,
+		unsigned long arg3, unsigned long arg4, unsigned long arg5,
+		void *proc, size_t thp_disable_offset, int syscall_nr, void *ctx,
+		syscall_forward_context_fn_t forward_fn);
+typedef int (*arch_prctl_set_register_fn_t)(int type, unsigned long value);
+typedef int (*arch_prctl_get_register_fn_t)(int type, unsigned long *addr);
+typedef void (*arch_prctl_log_fn_t)(int event, int cpu, unsigned long value);
+typedef void (*arch_clone_lock_fn_t)(void *lock, void *node);
+typedef unsigned long (*arch_do_fork_fn_t)(int clone_flags,
+		unsigned long newsp, unsigned long parent_tidptr,
+		unsigned long child_tidptr, unsigned long tls,
+		unsigned long pc, unsigned long sp);
+typedef int (*arch_shmget_default_huge_shift_fn_t)(void);
+typedef int (*arch_do_shmget_fn_t)(long key, size_t size, int shmflg);
+typedef void (*arch_shmget_log_fn_t)(int event, long key, size_t size,
+		int shmflg0, int error, int shmid);
+typedef int (*arch_mmap_default_huge_shift_fn_t)(void);
+typedef int (*arch_mmap_overmap_fn_t)(size_t len, int pgshift);
+typedef long (*arch_do_mmap_fn_t)(unsigned long addr, size_t len, int prot,
+		int flags, int fd, long off, int vrf0, void *private_data);
+typedef void (*arch_mmap_log_fn_t)(int event, unsigned long addr0,
+		size_t len0, int prot, int flags0, int fd, long off0,
+		int error, unsigned long result_addr, int extra);
+struct vdso;
+typedef int (*arch_vdso_get_info_fn_t)(void);
+typedef int (*arch_vdso_map_global_fn_t)(void);
+typedef void (*arch_vdso_setup_log_fn_t)(int event, int error);
+typedef int (*arch_vdso_add_range_fn_t)(struct process_vm *vm,
+		unsigned long start, unsigned long end, unsigned long flags,
+		struct vm_range **range);
+typedef int (*arch_vdso_set_range_fn_t)(page_table_t pt,
+		struct process_vm *vm, unsigned long start, unsigned long end,
+		unsigned long phys, unsigned long attr, struct vm_range *range);
+typedef void (*arch_vdso_map_log_fn_t)(int event, int error,
+		struct process_vm *vm, unsigned long a, unsigned long b,
+		unsigned long c, unsigned long d, int pages);
+typedef long (*arch_ptrace_read_user_word_fn_t)(unsigned long thread_addr,
+		long addr, unsigned long *value);
+typedef long (*arch_ptrace_write_user_word_fn_t)(unsigned long thread_addr,
+		long addr, unsigned long value);
+typedef unsigned long (*arch_ptrace_find_thread_fn_t)(int tgid, int tid);
+typedef void *(*arch_ptrace_lookup_user_context_fn_t)(void *thread);
+typedef void *(*arch_ptrace_alloc_fn_t)(size_t size, unsigned long flags);
+typedef long (*arch_ptrace_gpregs_read_fn_t)(unsigned long thread_addr,
+		void *regs);
+typedef long (*arch_ptrace_gpregs_write_fn_t)(unsigned long thread_addr,
+		const void *regs);
+typedef long (*arch_ptrace_copy_from_user_fn_t)(void *dst,
+		unsigned long src_addr, size_t bytes);
+typedef long (*arch_ptrace_xstate_io_fn_t)(unsigned long thread_addr,
+		unsigned long user_addr, size_t bytes);
+typedef void (*arch_ptrace_regset_log_fn_t)(int event, long type);
+typedef void (*arch_ptrace_signal_lock_fn_t)(void *lock, void *node);
+typedef void (*arch_ptrace_save_debugreg_fn_t)(void *debugreg);
+typedef void (*arch_ptrace_waitq_wake_fn_t)(void *waitq);
+typedef long (*arch_ptrace_do_kill_fn_t)(void *thread, int pid, int tid,
+		int sig, const void *info, int ptracecont);
+typedef void (*arch_ptrace_void_fn_t)(void);
+typedef void (*arch_ptrace_log_fn_t)(int event, int value, int result);
+typedef void (*arch_ptrace_syscall_event_fn_t)(void *thread, int unused);
+extern void ptrace_syscall_event(struct thread *thread);
+typedef void (*arch_process_vm_rw_lock_fn_t)(void *vm);
+typedef struct vm_range *(*arch_process_vm_rw_lookup_range_fn_t)(void *vm,
+		unsigned long start, unsigned long end);
+typedef struct process *(*arch_process_vm_rw_find_process_fn_t)(int pid,
+		void *lock_node);
+typedef void (*arch_process_vm_rw_process_unlock_fn_t)(void *proc,
+		void *lock_node);
+typedef void (*arch_process_vm_rw_process_lock_fn_t)(void *proc,
+		void *lock_node);
+typedef void (*arch_process_vm_rw_vm_void_fn_t)(void *vm);
+typedef int (*arch_process_vm_rw_vtop_fn_t)(void *page_table,
+		unsigned long virt, unsigned long *phys, unsigned long *psize);
+typedef int (*arch_process_vm_rw_fault_fn_t)(void *vm, unsigned long addr,
+		unsigned long reason);
+typedef void *(*arch_process_vm_rw_phys_to_virt_fn_t)(unsigned long phys);
+typedef void (*arch_process_vm_rw_memcpy_fn_t)(void *dst, const void *src,
+		size_t bytes);
+struct arch_process_vm_rw_log_record {
+	int event;
+	int x;
+	int y;
+	int z;
+	unsigned long a;
+	unsigned long b;
+	unsigned long c;
+	unsigned long d;
+	unsigned long e;
+};
+typedef void (*arch_process_vm_rw_log_fn_t)(
+		const struct arch_process_vm_rw_log_record *record);
+struct arch_process_vm_rw_offsets {
+	size_t thread_proc_offset;
+	size_t thread_vm_offset;
+	size_t proc_vm_offset;
+	size_t proc_status_offset;
+	size_t proc_ruid_offset;
+	size_t proc_euid_offset;
+	size_t proc_suid_offset;
+	size_t proc_rgid_offset;
+	size_t proc_egid_offset;
+	size_t proc_sgid_offset;
+	size_t process_vm_address_space_offset;
+	size_t address_space_page_table_offset;
+	size_t vm_range_flag_offset;
+};
+struct ptrace_report_signal_offsets {
+	size_t thread_proc_offset;
+	size_t thread_tid_offset;
+	size_t thread_status_offset;
+	size_t thread_exit_status_offset;
+	size_t thread_signal_flags_offset;
+	size_t thread_ptrace_offset;
+	size_t thread_ptrace_debugreg_offset;
+	size_t thread_report_proc_offset;
+	size_t proc_pid_offset;
+	size_t proc_parent_offset;
+	size_t proc_main_thread_offset;
+	size_t proc_status_offset;
+	size_t proc_update_lock_offset;
+	size_t proc_waitpid_q_offset;
+};
+struct arch_ptrace_user_offsets {
+	size_t thread_proc_offset;
+	size_t thread_ptrace_saved_uctx_valid_offset;
+	size_t thread_ptrace_saved_uctx_offset;
+	size_t thread_ptrace_debugreg_offset;
+	size_t proc_status_offset;
+	size_t uctx_sr_offset;
+	size_t uctx_gpr_offset;
+};
+extern long arch_prctl_body_result(unsigned long code, unsigned long address,
+		void *thread, size_t tlsblock_base_offset,
+		int (*get_cpu_fn)(void),
+		arch_prctl_set_register_fn_t set_register_fn,
+		arch_prctl_get_register_fn_t get_register_fn,
+		arch_prctl_log_fn_t log_fn);
+extern unsigned long arch_clone_body_result(void *proc,
+		size_t coredump_lock_offset, void *lock_node, int clone_flags,
+		unsigned long newsp, unsigned long parent_tidptr,
+		unsigned long child_tidptr, unsigned long tls, unsigned long pc,
+		unsigned long sp, arch_clone_lock_fn_t lock_fn,
+		arch_clone_lock_fn_t unlock_fn, arch_do_fork_fn_t fork_fn);
+extern unsigned long arch_fork_body_result(unsigned long pc, unsigned long sp,
+		arch_do_fork_fn_t fork_fn);
+extern unsigned long arch_vfork_body_result(unsigned long pc, unsigned long sp,
+		arch_do_fork_fn_t fork_fn);
+extern long arch_rt_sigreturn_body_result(void *thread, void *regs,
+		size_t sigmask_offset, size_t sigstack_offset,
+		size_t sigstack_size, size_t frame_size, int xsave_size,
+		unsigned long nowait_flag,
+		arch_rt_sigreturn_copy_from_user_fn_t copy_from_fn,
+		arch_rt_sigreturn_syscall_fn_t syscall_fn,
+		arch_rt_sigreturn_set_signal_fn_t set_signal_fn,
+		arch_rt_sigreturn_void_fn_t check_need_resched_fn,
+		arch_rt_sigreturn_check_signal_fn_t check_signal_fn,
+		arch_rt_sigreturn_alloc_fn_t alloc_fn,
+		arch_rt_sigreturn_free_fn_t free_fn,
+		arch_rt_sigreturn_xrstor_fn_t xrstor_fn);
+extern long arch_time_body_result(long now, unsigned long tloc_addr,
+		syscall_copy_to_user_fn_t copy_to_fn);
+extern long arch_shmget_body_result(long key, size_t size, int shmflg0,
+		arch_shmget_default_huge_shift_fn_t default_huge_shift_fn,
+		arch_do_shmget_fn_t do_shmget_fn,
+		arch_shmget_log_fn_t log_fn);
+extern long arch_mmap_body_result(unsigned long addr0, size_t len0,
+		int prot, int flags0, int fd, long off0,
+		unsigned long user_start, unsigned long user_end,
+		int supported_flags, int ignored_flags, int error_flags,
+		arch_mmap_default_huge_shift_fn_t default_huge_shift_fn,
+		arch_mmap_overmap_fn_t overmap_fn,
+		arch_do_mmap_fn_t do_mmap_fn, arch_mmap_log_fn_t log_fn);
+extern int arch_vdso_calc_container_size_result(const struct vdso *vdso,
+		size_t *container_size, ptrdiff_t *vdso_offset);
+extern int arch_setup_vdso_body_result(struct vdso *vdso,
+		size_t *container_size, ptrdiff_t *vdso_offset,
+		int *gettime_local_supportp, void *tod_do_local,
+		arch_vdso_get_info_fn_t get_info_fn,
+		arch_vdso_map_global_fn_t map_global_fn,
+		arch_vdso_setup_log_fn_t log_fn);
+extern int arch_map_vdso_body_result(struct process_vm *vm, page_table_t pt,
+		const struct vdso *vdso, size_t container_size,
+		ptrdiff_t vdso_offset, arch_vdso_add_range_fn_t add_range_fn,
+		arch_vdso_set_range_fn_t set_range_fn,
+		arch_vdso_map_log_fn_t log_fn);
+extern long arch_ptrace_read_gpregs_body_result(unsigned long thread_addr,
+		void *regs, size_t regs_size,
+		arch_ptrace_read_user_word_fn_t read_fn);
+extern long arch_ptrace_write_gpregs_body_result(unsigned long thread_addr,
+		const void *regs, size_t regs_size,
+		arch_ptrace_write_user_word_fn_t write_fn);
+extern long arch_ptrace_fpregs_io_body_result(unsigned long thread_addr,
+		unsigned long user_addr, size_t fp_regs_offset,
+		size_t fp_i387_offset, size_t fp_i387_size, int is_write,
+		syscall_copy_to_user_fn_t copy_to_fn,
+		arch_ptrace_copy_from_user_fn_t copy_from_fn);
+extern long arch_ptrace_read_regset_body_result(unsigned long thread_addr,
+		long type, struct iovec *iov, void *scratch,
+		size_t user_regs_size, size_t xstate_size,
+		size_t iov_base_offset, size_t iov_len_offset,
+		arch_ptrace_gpregs_read_fn_t read_gpregs_fn,
+		syscall_copy_to_user_fn_t copy_to_fn,
+		arch_ptrace_xstate_io_fn_t xstate_copy_to_fn,
+		arch_ptrace_regset_log_fn_t log_fn);
+extern long arch_ptrace_write_regset_body_result(unsigned long thread_addr,
+		long type, struct iovec *iov, void *scratch,
+		size_t user_regs_size, size_t xstate_size,
+		size_t iov_base_offset, size_t iov_len_offset,
+		arch_ptrace_gpregs_read_fn_t read_gpregs_fn,
+		arch_ptrace_gpregs_write_fn_t write_gpregs_fn,
+		arch_ptrace_copy_from_user_fn_t copy_from_fn,
+		arch_ptrace_xstate_io_fn_t xstate_copy_from_fn,
+		arch_ptrace_regset_log_fn_t log_fn);
+extern long arch_ptrace_read_user_body_result(void *thread, long addr,
+		unsigned long *value, size_t word_size,
+		size_t user_regs_size, size_t user_regs_fs_base_offset,
+		size_t user_debugreg_start_offset,
+		size_t user_debugreg_end_offset,
+		const struct arch_ptrace_user_offsets *offsets,
+		arch_ptrace_lookup_user_context_fn_t lookup_fn,
+		arch_ptrace_log_fn_t log_fn);
+extern long arch_ptrace_write_user_body_result(void *thread, long addr,
+		unsigned long value, size_t word_size, size_t user_regs_size,
+		size_t user_regs_fs_base_offset,
+		size_t user_regs_eflags_offset,
+		size_t user_debugreg_start_offset,
+		size_t user_debugreg_end_offset,
+		const struct arch_ptrace_user_offsets *offsets,
+		arch_ptrace_lookup_user_context_fn_t lookup_fn,
+		arch_ptrace_log_fn_t log_fn);
+extern long arch_alloc_debugreg_body_result(void *thread,
+		size_t debugreg_offset, size_t alloc_size,
+		unsigned long alloc_flags, arch_ptrace_alloc_fn_t alloc_fn,
+		arch_ptrace_log_fn_t log_fn);
+extern long arch_ptrace_prctl_body_result(int pid, long code, long addr,
+		size_t word_size, size_t user_regs_fs_base_offset,
+		size_t user_regs_gs_base_offset,
+		const struct arch_ptrace_user_offsets *offsets,
+		arch_ptrace_find_thread_fn_t find_fn,
+		void (*unlock_fn)(unsigned long thread_addr),
+		arch_ptrace_read_user_word_fn_t read_user_fn,
+		arch_ptrace_write_user_word_fn_t write_user_fn,
+		syscall_copy_to_user_fn_t copy_to_fn);
+extern int ptrace_report_signal_body_result(void *thread, int sig,
+		void *current_thread,
+		const struct ptrace_report_signal_offsets *offsets,
+		void *lock_node,
+		arch_ptrace_signal_lock_fn_t lock_fn,
+		arch_ptrace_signal_lock_fn_t unlock_fn,
+		arch_ptrace_save_debugreg_fn_t save_debugreg_fn,
+		arch_ptrace_waitq_wake_fn_t wake_fn,
+		arch_ptrace_do_kill_fn_t do_kill_fn,
+		arch_ptrace_void_fn_t schedule_fn,
+		arch_ptrace_log_fn_t log_fn);
+extern long arch_ptrace_syscall_event_body_result(void *thread, void *ctx,
+		long setret, size_t syscall_ret_offset,
+		arch_ptrace_syscall_event_fn_t event_fn);
+extern int arch_process_vm_read_writev_body_result(int pid,
+		const struct iovec *local_iov, unsigned long liovcnt,
+		const struct iovec *remote_iov, unsigned long riovcnt,
+		unsigned long flags, int op, void *lthread,
+		void *find_lock_node, void *update_lock_node,
+		const struct arch_process_vm_rw_offsets *offsets,
+		arch_process_vm_rw_lock_fn_t vm_read_lock_fn,
+		arch_process_vm_rw_lock_fn_t vm_read_unlock_fn,
+		arch_process_vm_rw_lookup_range_fn_t lookup_range_fn,
+		arch_process_vm_rw_find_process_fn_t find_process_fn,
+		arch_process_vm_rw_process_unlock_fn_t process_unlock_fn,
+		arch_process_vm_rw_process_lock_fn_t update_lock_fn,
+		arch_process_vm_rw_process_lock_fn_t update_unlock_fn,
+		arch_process_vm_rw_vm_void_fn_t hold_vm_fn,
+		arch_process_vm_rw_vm_void_fn_t release_vm_fn,
+		arch_process_vm_rw_vtop_fn_t vtop_fn,
+		arch_process_vm_rw_fault_fn_t page_fault_fn,
+		arch_process_vm_rw_phys_to_virt_fn_t phys_to_virt_fn,
+		arch_process_vm_rw_memcpy_fn_t memcpy_fn,
+		arch_process_vm_rw_log_fn_t log_fn);
+extern void arch_clear_single_step_body_result(struct thread *thread);
+extern void arch_set_single_step_body_result(struct thread *thread);
+
+long
+arch_syscall_forward_context_bridge(int syscall_nr, void *ctx)
+{
+	return syscall_generic_forwarding(syscall_nr, ctx);
+}
+
+long
+arch_copy_to_user_bridge(unsigned long dst_addr, const void *src, size_t bytes)
+{
+	return copy_to_user((void *)dst_addr, src, bytes);
+}
+
+long
+arch_copy_from_user_bridge(void *dst, unsigned long src_addr, size_t bytes)
+{
+	return copy_from_user(dst, (void *)src_addr, bytes);
+}
+
+long
+arch_rt_sigreturn_syscall_bridge(int num, void *regs)
+{
+	return syscall(num, (ihk_mc_user_context_t *)regs);
+}
+
+void
+arch_rt_sigreturn_set_signal_bridge(int sig, void *regs, const void *info)
+{
+	set_signal(sig, regs, (struct siginfo *)info);
+}
+
+void
+arch_rt_sigreturn_check_signal_bridge(int signum, void *regs, int num)
+{
+	check_signal(signum, regs, num);
+}
+
+void *
+arch_rt_sigreturn_alloc_bridge(size_t size, unsigned long flags)
+{
+	return kmalloc_tracked(size, flags, __FILE__, __LINE__);
+}
+
+void
+arch_rt_sigreturn_free_bridge(void *ptr)
+{
+	kfree_tracked(ptr, __FILE__, __LINE__);
+}
+
+void
+arch_rt_sigreturn_xrstor_bridge(void *fpregs)
+{
+	uint64_t xsave_mask = get_xsave_mask();
+	unsigned int low = (unsigned int)xsave_mask;
+	unsigned int high = (unsigned int)(xsave_mask >> 32);
+	struct xsave_struct *kfpregs = fpregs;
+
+	asm volatile("xrstor %0" : : "m"(*kfpregs), "a"(low), "d"(high) : "memory");
+}
+
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+void
+arch_rt_sigreturn_context_bridge(struct thread **threadp,
+		struct x86_user_context **regsp, int *xsavesizep)
+{
+	struct x86_user_context *regs;
+
+	if (threadp) {
+		*threadp = get_this_cpu_local_var()->current;
+	}
+	if (xsavesizep) {
+		*xsavesizep = get_xsave_size();
+	}
+	if (regsp) {
+		asm ("movq %%gs:(%1),%0"
+				: "=r"(regs)
+				: "r"(offsetof(struct x86_cpu_local_variables,
+						tss.rsp0)));
+		--regs;
+		*regsp = regs;
+	}
+}
+#endif
+
+static void
+arch_ptrace_signal_lock_bridge(void *lock, void *node)
+{
+	mcs_rwlock_writer_lock((struct mcs_rwlock_lock *)lock,
+			(struct mcs_rwlock_node_irqsave *)node);
+}
+
+static void
+arch_ptrace_signal_unlock_bridge(void *lock, void *node)
+{
+	mcs_rwlock_writer_unlock((struct mcs_rwlock_lock *)lock,
+			(struct mcs_rwlock_node_irqsave *)node);
+}
+
+static void
+arch_ptrace_save_debugreg_bridge(void *debugreg)
+{
+	save_debugreg((unsigned long *)debugreg);
+}
+
+static void
+arch_ptrace_waitq_wake_bridge(void *waitq)
+{
+	waitq_wakeup((waitq_t *)waitq);
+}
+
+static long
+arch_ptrace_do_kill_bridge(void *thread, int pid, int tid, int sig,
+		const void *info, int ptracecont)
+{
+	return do_kill((struct thread *)thread, pid, tid, sig,
+			(struct siginfo *)info, ptracecont);
+}
+
+static void
+arch_ptrace_schedule_bridge(void)
+{
+	schedule();
+}
+
+static void
+arch_ptrace_signal_log_bridge(int event, int value, int result)
+{
+	if (event == 8) {
+		dkprintf("ptrace_report_signal, tid=%d, pid=%d\n",
+				value, result);
+	}
+	else if (event == 9) {
+		dkprintf("ptrace_report_signal,sleeping\n");
+	}
+	else if (event == 10) {
+		dkprintf("ptrace_report_signal,wake up\n");
+	}
+}
+
+static void
+arch_ptrace_syscall_event_bridge(void *thread, int unused)
+{
+	(void)unused;
+	ptrace_syscall_event((struct thread *)thread);
+}
+
+static void
+arch_process_vm_rw_read_lock_bridge(void *vm)
+{
+	ihk_rwspinlock_read_lock_noirq(
+			&((struct process_vm *)vm)->memory_range_lock);
+}
+
+static void
+arch_process_vm_rw_read_unlock_bridge(void *vm)
+{
+	ihk_rwspinlock_read_unlock_noirq(
+			&((struct process_vm *)vm)->memory_range_lock);
+}
+
+static struct vm_range *
+arch_process_vm_rw_lookup_range_bridge(void *vm, unsigned long start,
+		unsigned long end)
+{
+	return lookup_process_memory_range((struct process_vm *)vm, start, end);
+}
+
+static struct process *
+arch_process_vm_rw_find_process_bridge(int pid, void *lock_node)
+{
+	return find_process(pid, (struct mcs_rwlock_node_irqsave *)lock_node);
+}
+
+static void
+arch_process_vm_rw_process_unlock_bridge(void *proc, void *lock_node)
+{
+	process_unlock((struct process *)proc,
+			(struct mcs_rwlock_node_irqsave *)lock_node);
+}
+
+static void
+arch_process_vm_rw_update_lock_bridge(void *proc, void *lock_node)
+{
+	mcs_rwlock_reader_lock_noirq(&((struct process *)proc)->update_lock,
+			(struct mcs_rwlock_node *)lock_node);
+}
+
+static void
+arch_process_vm_rw_update_unlock_bridge(void *proc, void *lock_node)
+{
+	mcs_rwlock_reader_unlock_noirq(&((struct process *)proc)->update_lock,
+			(struct mcs_rwlock_node *)lock_node);
+}
+
+static void
+arch_process_vm_rw_hold_vm_bridge(void *vm)
+{
+	hold_process_vm((struct process_vm *)vm);
+}
+
+static void
+arch_process_vm_rw_release_vm_bridge(void *vm)
+{
+	release_process_vm((struct process_vm *)vm);
+}
+
+static int
+arch_process_vm_rw_vtop_bridge(void *page_table, unsigned long virt,
+		unsigned long *phys, unsigned long *psize)
+{
+	return ihk_mc_pt_virt_to_phys_size((struct page_table *)page_table,
+			(const void *)virt, phys, psize);
+}
+
+static int
+arch_process_vm_rw_page_fault_bridge(void *vm, unsigned long addr,
+		unsigned long reason)
+{
+	return page_fault_process_vm((struct process_vm *)vm, (void *)addr,
+			reason);
+}
+
+static void *
+arch_process_vm_rw_phys_to_virt_bridge(unsigned long phys)
+{
+	return phys_to_virt(phys);
+}
+
+static void
+arch_process_vm_rw_memcpy_bridge(void *dst, const void *src, size_t bytes)
+{
+	fast_memcpy(dst, src, bytes);
+}
+
+static void
+arch_process_vm_rw_log_bridge(const struct arch_process_vm_rw_log_record *record)
+{
+	switch (record->event) {
+	case 1:
+		dkprintf("local_iov[%d].iov_base: 0x%lx, len: %lu\n",
+				record->x, record->a, record->b);
+		break;
+	case 2:
+		dkprintf("remote_iov[%d].iov_base: 0x%lx, len: %lu\n",
+				record->x, record->a, record->b);
+		break;
+	case 3:
+		dkprintf("pid %d found, doing %s: liovcnt: %d, riovcnt: %d \n",
+				record->x, (record->y == PROCESS_VM_READ) ?
+				"PROCESS_VM_READ" : "PROCESS_VM_WRITE",
+				(int)record->a, (int)record->b);
+		break;
+	case 4:
+		dkprintf("local_iov[%d]: 0x%lx %s remote_iov[%d]: 0x%lx, %lu copied, psize: %lu, rpage_left: %lu\n",
+				record->x, record->a,
+				(record->z == PROCESS_VM_READ) ? "<-" : "->",
+				record->y, record->b, record->c, record->d,
+				record->e);
+		break;
+	default:
+		break;
+	}
+}
+
+static const struct arch_process_vm_rw_offsets arch_process_vm_rw_kernel_offsets = {
+	.thread_proc_offset = __builtin_offsetof(struct thread, proc),
+	.thread_vm_offset = __builtin_offsetof(struct thread, vm),
+	.proc_vm_offset = __builtin_offsetof(struct process, vm),
+	.proc_status_offset = __builtin_offsetof(struct process, status),
+	.proc_ruid_offset = __builtin_offsetof(struct process, ruid),
+	.proc_euid_offset = __builtin_offsetof(struct process, euid),
+	.proc_suid_offset = __builtin_offsetof(struct process, suid),
+	.proc_rgid_offset = __builtin_offsetof(struct process, rgid),
+	.proc_egid_offset = __builtin_offsetof(struct process, egid),
+	.proc_sgid_offset = __builtin_offsetof(struct process, sgid),
+	.process_vm_address_space_offset =
+		__builtin_offsetof(struct process_vm, address_space),
+	.address_space_page_table_offset =
+		__builtin_offsetof(struct address_space, page_table),
+	.vm_range_flag_offset = __builtin_offsetof(struct vm_range, flag),
+};
+
+void *
+arch_ptrace_lookup_user_context_bridge(void *thread)
+{
+	return lookup_user_context((struct thread *)thread);
+}
+
+void *
+arch_ptrace_alloc_bridge(size_t size, unsigned long flags)
+{
+	return kmalloc_tracked(size, flags, __FILE__, __LINE__);
+}
+
+void
+arch_ptrace_user_log_bridge(int event, int value, int result)
+{
+	(void)result;
+	if (event == 3) {
+		kprintf("ptrace_read_user: missing ptrace_debugreg\n");
+	}
+	else if (event == 4) {
+		dkprintf("ptrace_read_user,addr=%d\n", value);
+	}
+	else if (event == 5) {
+		kprintf("ptrace_write_user: missing ptrace_debugreg\n");
+	}
+	else if (event == 6) {
+		dkprintf("ptrace_write_user,addr=%d\n", value);
+	}
+	else if (event == 7) {
+		kprintf("alloc_debugreg: no memory.\n");
+	}
+}
+
+unsigned long
+arch_ptrace_find_thread_bridge(int tgid, int tid)
+{
+	return (unsigned long)find_thread(tgid, tid);
+}
+
+void
+arch_ptrace_thread_unlock_bridge(unsigned long thread_addr)
+{
+	thread_unlock((struct thread *)thread_addr);
+}
+
+int
+arch_prctl_set_register_bridge(int type, unsigned long value)
+{
+	return ihk_mc_arch_set_special_register(type, value);
+}
+
+int
+arch_prctl_get_register_bridge(int type, unsigned long *addr)
+{
+	return ihk_mc_arch_get_special_register(type, addr);
+}
+
+void
+arch_prctl_log_bridge(int event, int cpu, unsigned long value)
+{
+	if (event == ARCH_SET_FS) {
+		dkprintf("[%d] arch_prctl: ARCH_SET_FS: 0x%lX\n", cpu, value);
+	}
+}
+
+void
+arch_clone_reader_lock_bridge(void *lock, void *node)
+{
+	mcs_rwlock_reader_lock((mcs_rwlock_lock_t *)lock,
+			(struct mcs_rwlock_node_irqsave *)node);
+}
+
+void
+arch_clone_reader_unlock_bridge(void *lock, void *node)
+{
+	mcs_rwlock_reader_unlock((mcs_rwlock_lock_t *)lock,
+			(struct mcs_rwlock_node_irqsave *)node);
+}
+
+int
+arch_do_shmget_bridge(long key, size_t size, int shmflg)
+{
+	return do_shmget((key_t)key, size, shmflg);
+}
+
+void
+arch_shmget_log_bridge(int event, long key, size_t size, int shmflg0,
+		int error, int shmid)
+{
+	if (event == 1) {
+		dkprintf("shmget(%#lx,%#lx,%#x)\n", key, size, shmflg0);
+	}
+	else if (event == 2) {
+		dkprintf("shmget(%#lx,%#lx,%#x): %d %d\n",
+				key, size, shmflg0, error, shmid);
+	}
+}
+
+long
+arch_do_mmap_bridge(unsigned long addr, size_t len, int prot, int flags,
+		int fd, long off, int vrf0, void *private_data)
+{
+	return do_mmap(addr, len, prot, flags, fd, off, vrf0, private_data);
+}
+
+void
+arch_mmap_log_bridge(int event, unsigned long addr0, size_t len0, int prot,
+		int flags0, int fd, long off0, int error,
+		unsigned long result_addr, int extra)
+{
+	if (event == 1) {
+		dkprintf("sys_mmap(%lx,%lx,%x,%x,%d,%lx)\n",
+				addr0, len0, prot, flags0, fd, off0);
+	}
+	else if (event == 2) {
+		ekprintf("sys_mmap(%lx,%lx,%x,%x,%x,%lx):"
+				"not supported page size.\n",
+				addr0, len0, prot, flags0, fd, off0);
+	}
+	else if (event == 3) {
+		ekprintf("sys_mmap(%lx,%lx,%x,%x,%x,%lx):EINVAL\n",
+				addr0, len0, prot, flags0, fd, off0);
+	}
+	else if (event == 4) {
+		ekprintf("sys_mmap(%lx,%lx,%x,%x,%x,%lx):ENOMEM\n",
+				addr0, len0, prot, flags0, fd, off0);
+	}
+	else if (event == 5) {
+		ekprintf("sys_mmap(%lx,%lx,%x,%x,%x,%lx):unknown flags %x\n",
+				addr0, len0, prot, flags0, fd, off0, extra);
+	}
+	else if (event == 6) {
+		dkprintf("sys_mmap(%lx,%lx,%x,%x,%d,%lx): %ld %lx\n",
+				addr0, len0, prot, flags0, fd, off0, error,
+				result_addr);
+	}
+}
+
+int
+arch_mmap_supported_flags_bridge(void)
+{
+	return 0
+		| MAP_SHARED
+		| MAP_PRIVATE
+		| MAP_FIXED
+		| MAP_ANONYMOUS
+		| MAP_LOCKED
+		| MAP_POPULATE
+		| MAP_HUGETLB
+		| (0x3FU << MAP_HUGE_SHIFT);
+}
+
+int
+arch_mmap_ignored_flags_bridge(void)
+{
+	return 0
+#ifdef USE_NOCACHE_MMAP
+		| MAP_32BIT
+#endif
+		| MAP_DENYWRITE
+		| MAP_NORESERVE
+		| MAP_STACK;
+}
+
+int
+arch_mmap_error_flags_bridge(void)
+{
+	return 0
+#ifndef USE_NOCACHE_MMAP
+		| MAP_32BIT
+#endif
+		| MAP_GROWSDOWN
+		| MAP_EXECUTABLE
+		| MAP_NONBLOCK;
+}
+#endif
 
 //#define DEBUG_PRINT_SC
 
@@ -149,9 +906,12 @@ int obtain_clone_cpuid(cpu_set_t *cpu_set, int use_last) {
     return min_cpu;
 }
 
-SYSCALL_DECLARE(prctl)
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long sys_prctl(int n, ihk_mc_user_context_t *ctx);
+#else
+long sys_prctl(int n, ihk_mc_user_context_t *ctx)
 {
-	struct process *proc = cpu_local_var(current)->proc;
+	struct process *proc = get_this_cpu_local_var()->current->proc;
 	int option = (int)ihk_mc_syscall_arg0(ctx);
 	unsigned long arg2 = (unsigned long)ihk_mc_syscall_arg1(ctx);
 	unsigned long arg3 = (unsigned long)ihk_mc_syscall_arg2(ctx);
@@ -180,6 +940,7 @@ SYSCALL_DECLARE(prctl)
 
 	return ret;
 }
+#endif
 
 struct sigsp {
 	unsigned long flags;
@@ -220,9 +981,12 @@ struct sigsp {
 	siginfo_t info;
 };
 
-SYSCALL_DECLARE(rt_sigreturn)
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long sys_rt_sigreturn(int n, ihk_mc_user_context_t *ctx);
+#else
+long sys_rt_sigreturn(int n, ihk_mc_user_context_t *ctx)
 {
-	struct thread *thread = cpu_local_var(current);
+	struct thread *thread = get_this_cpu_local_var()->current;
 	struct x86_user_context *regs;
 	struct sigsp ksigsp;
 	struct sigsp *sigsp;
@@ -275,7 +1039,7 @@ SYSCALL_DECLARE(rt_sigreturn)
 	}
 
 	if(ksigsp.fpregs && xsavesize){
-		void *fpregs = kmalloc(xsavesize + 64, IHK_MC_AP_NOWAIT);
+		void *fpregs = kmalloc_tracked(xsavesize + 64, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 
 		if(fpregs){
 			uint64_t xsave_mask = get_xsave_mask();
@@ -288,12 +1052,13 @@ SYSCALL_DECLARE(rt_sigreturn)
 			if(copy_from_user(kfpregs, ksigsp.fpregs, xsavesize))
 				return -EFAULT;
 			asm volatile("xrstor %0" : : "m"(*kfpregs), "a"(low), "d"(high) : "memory");
-			kfree(fpregs);
+			kfree_tracked(fpregs, __FILE__, __LINE__);
 		}
 	}
 
 	return sigsp->sigrc;
 }
+#endif
 
 extern struct cpu_local_var *clv;
 extern void interrupt_syscall(struct thread *, int sig);
@@ -308,8 +1073,21 @@ extern int num_processors;
 #define DB7_RESERVED_MASK (0xffffffff0000dc00UL)
 #define DB7_RESERVED_SET (0x400UL)
 
-extern ihk_mc_user_context_t *lookup_user_context(struct thread *thread);
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+static struct x86_user_context *
+ptrace_user_context(struct thread *thread)
+{
+	if (thread->ptrace_saved_uctx_valid) {
+		return &thread->ptrace_saved_uctx;
+	}
+	return lookup_user_context(thread);
+}
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long ptrace_read_user(struct thread *thread, long addr,
+		unsigned long *value);
+#else
 long
 ptrace_read_user(struct thread *thread, long addr, unsigned long *value)
 {
@@ -321,7 +1099,7 @@ ptrace_read_user(struct thread *thread, long addr, unsigned long *value)
 		return -EIO;
 	}
 	else if (addr < sizeof(struct user_regs_struct)) {
-		uctx = lookup_user_context(thread);
+		uctx = ptrace_user_context(thread);
 		if (!uctx) {
 			return -EIO;
 		}
@@ -353,7 +1131,12 @@ ptrace_read_user(struct thread *thread, long addr, unsigned long *value)
 	*value = 0;
 	return 0;
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long ptrace_write_user(struct thread *thread, long addr,
+		unsigned long value);
+#else
 long
 ptrace_write_user(struct thread *thread, long addr, unsigned long value)
 {
@@ -365,7 +1148,7 @@ ptrace_write_user(struct thread *thread, long addr, unsigned long value)
 		return -EIO;
 	}
 	else if (addr < sizeof(struct user_regs_struct)) {
-		uctx = lookup_user_context(thread);
+		uctx = ptrace_user_context(thread);
 		if (!uctx) {
 			return -EIO;
 		}
@@ -409,11 +1192,15 @@ ptrace_write_user(struct thread *thread, long addr, unsigned long value)
 	dkprintf("ptrace_write_user,addr=%d\n", addr);
 	return 0;
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long alloc_debugreg(struct thread *thread);
+#else
 long
 alloc_debugreg(struct thread *thread)
 {
-	thread->ptrace_debugreg = kmalloc(sizeof(*thread->ptrace_debugreg) * 8, IHK_MC_AP_NOWAIT);
+	thread->ptrace_debugreg = kmalloc_tracked(sizeof(*thread->ptrace_debugreg) * 8, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 	if (thread->ptrace_debugreg == NULL) {
 		kprintf("alloc_debugreg: no memory.\n");
 		return -ENOMEM;
@@ -423,6 +1210,7 @@ alloc_debugreg(struct thread *thread)
 	thread->ptrace_debugreg[7] = DB7_RESERVED_SET;
 	return 0;
 }
+#endif
 
 void
 save_debugreg(unsigned long *debugreg)
@@ -467,6 +1255,7 @@ clear_debugreg(void)
 	asm("mov %0, %%db7" ::"r" (r));
 }
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void clear_single_step(struct thread *thread)
 {
 	thread->uctx->gpr.rflags &= ~RFLAGS_TF;
@@ -476,7 +1265,28 @@ void set_single_step(struct thread *thread)
 {
 	thread->uctx->gpr.rflags |= RFLAGS_TF;
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+long
+arch_ptrace_read_user_bridge(unsigned long thread_addr, long addr,
+		unsigned long *value)
+{
+	return ptrace_read_user((struct thread *)thread_addr, addr, value);
+}
+
+long
+arch_ptrace_write_user_bridge(unsigned long thread_addr, long addr,
+		unsigned long value)
+{
+	return ptrace_write_user((struct thread *)thread_addr, addr, value);
+}
+#endif
+
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long ptrace_read_fpregs(struct thread *thread, void *fpregs);
+extern long ptrace_write_fpregs(struct thread *thread, void *fpregs);
+#else
 long ptrace_read_fpregs(struct thread *thread, void *fpregs)
 {
 	if (thread->fp_regs == NULL) {
@@ -494,12 +1304,127 @@ long ptrace_write_fpregs(struct thread *thread, void *fpregs)
 	return copy_from_user(&thread->fp_regs->i387, fpregs, 
 			sizeof(struct i387_fxsave_struct));
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long ptrace_read_gpregs(struct thread *thread,
+		struct user_regs_struct *regs);
+#else
+static long
+ptrace_read_gpregs(struct thread *thread, struct user_regs_struct *regs)
+{
+	long addr;
+	unsigned long *p;
+	long rc = 0;
+
+	memset(regs, '\0', sizeof(*regs));
+	for (addr = 0, p = (unsigned long *)regs;
+			addr < sizeof(*regs);
+			addr += sizeof(*p), p++) {
+		rc = ptrace_read_user(thread, addr, p);
+		if (rc) {
+			break;
+		}
+	}
+
+	return rc;
+}
+#endif
+
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long ptrace_write_gpregs(struct thread *thread,
+		const struct user_regs_struct *regs);
+#else
+static long ptrace_write_gpregs(struct thread *thread,
+		const struct user_regs_struct *regs)
+{
+	long addr;
+	const unsigned long *p;
+	long rc = 0;
+
+	for (addr = 0, p = (const unsigned long *)regs;
+			addr < sizeof(*regs);
+			addr += sizeof(*p), p++) {
+		rc = ptrace_write_user(thread, addr, *p);
+		if (rc) {
+			break;
+		}
+	}
+
+	return rc;
+}
+#endif
+
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+long
+arch_ptrace_read_gpregs_bridge(unsigned long thread_addr, void *regs)
+{
+	return ptrace_read_gpregs((struct thread *)thread_addr, regs);
+}
+
+long
+arch_ptrace_write_gpregs_bridge(unsigned long thread_addr, const void *regs)
+{
+	return ptrace_write_gpregs((struct thread *)thread_addr, regs);
+}
+
+long
+arch_ptrace_xstate_copy_to_bridge(unsigned long thread_addr,
+		unsigned long user_addr, size_t bytes)
+{
+	struct thread *thread = (struct thread *)thread_addr;
+
+	if (thread->fp_regs == NULL) {
+		return -ENOMEM;
+	}
+	return copy_to_user((void *)user_addr, thread->fp_regs, bytes);
+}
+
+long
+arch_ptrace_xstate_copy_from_bridge(unsigned long thread_addr,
+		unsigned long user_addr, size_t bytes)
+{
+	struct thread *thread = (struct thread *)thread_addr;
+
+	if (thread->fp_regs == NULL) {
+		return -ENOMEM;
+	}
+	return copy_from_user(thread->fp_regs, (void *)user_addr, bytes);
+}
+
+void
+arch_ptrace_regset_log_bridge(int event, long type)
+{
+	if (event == 1) {
+		kprintf("ptrace_read_regset: not supported type 0x%x\n", type);
+	}
+	else if (event == 2) {
+		kprintf("ptrace_write_regset: not supported type 0x%x\n", type);
+	}
+}
+#endif
+
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long ptrace_read_regset(struct thread *thread, long type,
+		struct iovec *iov);
+#else
 long ptrace_read_regset(struct thread *thread, long type, struct iovec *iov)
 {
 	long rc = -EINVAL;
 
 	switch (type) {
+	case NT_PRSTATUS: {
+		struct user_regs_struct regs;
+
+		if (iov->iov_len > sizeof(regs)) {
+			iov->iov_len = sizeof(regs);
+		}
+		rc = ptrace_read_gpregs(thread, &regs);
+		if (rc == 0) {
+			rc = copy_to_user(iov->iov_base, &regs, iov->iov_len);
+		}
+		break;
+	}
 	case NT_X86_XSTATE:
 		if (thread->fp_regs == NULL) {
 			return -ENOMEM;
@@ -515,12 +1440,32 @@ long ptrace_read_regset(struct thread *thread, long type, struct iovec *iov)
 	}
 	return rc;
 }
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long ptrace_write_regset(struct thread *thread, long type,
+		struct iovec *iov);
+#else
 long ptrace_write_regset(struct thread *thread, long type, struct iovec *iov)
 {
 	long rc = -EINVAL;
 
 	switch (type) {
+	case NT_PRSTATUS: {
+		struct user_regs_struct regs;
+
+		if (iov->iov_len > sizeof(regs)) {
+			iov->iov_len = sizeof(regs);
+		}
+		rc = ptrace_read_gpregs(thread, &regs);
+		if (rc == 0) {
+			rc = copy_from_user(&regs, iov->iov_base, iov->iov_len);
+		}
+		if (rc == 0) {
+			rc = ptrace_write_gpregs(thread, &regs);
+		}
+		break;
+	}
 	case NT_X86_XSTATE:
 		if (thread->fp_regs == NULL) {
 			return -ENOMEM;
@@ -536,14 +1481,56 @@ long ptrace_write_regset(struct thread *thread, long type, struct iovec *iov)
 	}
 	return rc;
 }
+#endif
 
 extern int coredump(struct thread *thread, void *regs, int sig);
 
 void ptrace_report_signal(struct thread *thread, int sig)
 {
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+	static const struct ptrace_report_signal_offsets offsets = {
+		.thread_proc_offset = __builtin_offsetof(struct thread, proc),
+		.thread_tid_offset = __builtin_offsetof(struct thread, tid),
+		.thread_status_offset =
+			__builtin_offsetof(struct thread, status),
+		.thread_exit_status_offset =
+			__builtin_offsetof(struct thread, exit_status),
+		.thread_signal_flags_offset =
+			__builtin_offsetof(struct thread, signal_flags),
+		.thread_ptrace_offset =
+			__builtin_offsetof(struct thread, ptrace),
+		.thread_ptrace_debugreg_offset =
+			__builtin_offsetof(struct thread, ptrace_debugreg),
+		.thread_report_proc_offset =
+			__builtin_offsetof(struct thread, report_proc),
+		.proc_pid_offset = __builtin_offsetof(struct process, pid),
+		.proc_parent_offset =
+			__builtin_offsetof(struct process, parent),
+		.proc_main_thread_offset =
+			__builtin_offsetof(struct process, main_thread),
+		.proc_status_offset =
+			__builtin_offsetof(struct process, status),
+		.proc_update_lock_offset =
+			__builtin_offsetof(struct process, update_lock),
+		.proc_waitpid_q_offset =
+			__builtin_offsetof(struct process, waitpid_q),
+	};
+	struct mcs_rwlock_node_irqsave lock;
+
+	ptrace_report_signal_body_result(thread, sig,
+			get_this_cpu_local_var()->current, &offsets, &lock,
+			arch_ptrace_signal_lock_bridge,
+			arch_ptrace_signal_unlock_bridge,
+			arch_ptrace_save_debugreg_bridge,
+			arch_ptrace_waitq_wake_bridge,
+			arch_ptrace_do_kill_bridge,
+			arch_ptrace_schedule_bridge,
+			arch_ptrace_signal_log_bridge);
+#else
 	struct mcs_rwlock_node_irqsave lock;
 	struct process *proc = thread->proc;
 	int parent_pid;
+	int wake_parent = 0;
 	struct siginfo info;
 
 	dkprintf("ptrace_report_signal, tid=%d, pid=%d\n", thread->tid, thread->proc->pid);
@@ -568,7 +1555,10 @@ void ptrace_report_signal(struct thread *thread, int sig)
 	}
 
 	if (thread == proc->main_thread) {
-		proc->status = PS_DELAY_TRACED;
+		/* Avoid delayed wakeup from the context-switch path while
+		 * schedule() still holds the runqueue lock. */
+		proc->status = PS_TRACED;
+		wake_parent = 1;
 		parent_pid = proc->parent->pid;
 	}
 	else {
@@ -577,19 +1567,27 @@ void ptrace_report_signal(struct thread *thread, int sig)
 	}
 	mcs_rwlock_writer_unlock(&proc->update_lock, &lock);
 
+	if (wake_parent) {
+		waitq_wakeup(&proc->parent->waitpid_q);
+	}
+
 	memset(&info, '\0', sizeof info);
 	info.si_signo = SIGCHLD;
 	info.si_code = CLD_TRAPPED;
 	info._sifields._sigchld.si_pid = thread->tid;
 	info._sifields._sigchld.si_status = thread->exit_status;
-	do_kill(cpu_local_var(current), parent_pid, -1, SIGCHLD, &info, 0);
+	do_kill(get_this_cpu_local_var()->current, parent_pid, -1, SIGCHLD, &info, 0);
 
 	dkprintf("ptrace_report_signal,sleeping\n");
 	/* Sleep */
 	schedule();
 	dkprintf("ptrace_report_signal,wake up\n");
+#endif
 }
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long ptrace_arch_prctl(int pid, long code, long addr);
+#else
 static long
 ptrace_arch_prctl(int pid, long code, long addr)
 {
@@ -642,6 +1640,7 @@ ptrace_arch_prctl(int pid, long code, long addr)
 
 	return rc;
 }
+#endif
 
 long
 arch_ptrace(long request, int pid, long addr, long data)
@@ -706,10 +1705,20 @@ do_signal(unsigned long rc, void *regs0, struct thread *thread, struct sig_pendi
 	struct mcs_rwlock_node_irqsave mcs_rw_node;
 	int restart = 0;
 	int ret;
+	static int mcexec_v10_signal_logs;
+	static int mcexec_v10_signal_pid = -1;
+	int pid;
+	unsigned long si_addr;
 
 	for(w = pending->sigmask.__val[0], sig = 0; w; sig++, w >>= 1);
 	dkprintf("do_signal(): tid=%d, pid=%d, sig=%d\n", thread->tid, proc->pid, sig);
 	orgsig = sig;
+	si_addr = (unsigned long)pending->info._sifields._sigfault.si_addr;
+	pid = proc ? proc->pid : -1;
+	if (pid != mcexec_v10_signal_pid) {
+		mcexec_v10_signal_pid = pid;
+		mcexec_v10_signal_logs = 0;
+	}
 
 	if ((thread->ptrace & PT_TRACED) &&
 	    pending->ptracecont == 0 &&
@@ -732,7 +1741,7 @@ do_signal(unsigned long rc, void *regs0, struct thread *thread, struct sig_pendi
 	k = thread->sigcommon->action + sig - 1;
 
 	if(k->sa.sa_handler == SIG_IGN){
-		kfree(pending);
+		kfree_tracked(pending, __FILE__, __LINE__);
 		mcs_rwlock_writer_unlock(&thread->sigcommon->lock, &mcs_rw_node);
 		goto out;
 	}
@@ -790,12 +1799,12 @@ do_signal(unsigned long rc, void *regs0, struct thread *thread, struct sig_pendi
 			uint64_t xsave_mask = get_xsave_mask();
 			unsigned int low = (unsigned int)xsave_mask;
 			unsigned int high = (unsigned int)(xsave_mask >> 32);
-			void *_kfpregs = kmalloc(xsavesize + 64, IHK_MC_AP_NOWAIT);
+			void *_kfpregs = kmalloc_tracked(xsavesize + 64, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 			struct xsave_struct *kfpregs;
 
 			if(!_kfpregs){
-				kfree(pending);
-				kfree(_kfpregs);
+				kfree_tracked(pending, __FILE__, __LINE__);
+				kfree_tracked(_kfpregs, __FILE__, __LINE__);
 				kprintf("do_signal,no space available\n");
 				terminate(0, sig);
 				goto out;
@@ -804,19 +1813,19 @@ do_signal(unsigned long rc, void *regs0, struct thread *thread, struct sig_pendi
 			memset(kfpregs, '\0', xsavesize);
 			asm volatile("xsave %0" : : "m"(*kfpregs), "a"(low), "d"(high) : "memory");
 			if(copy_to_user((void *)fpregs, kfpregs, xsavesize)){
-				kfree(pending);
-				kfree(_kfpregs);
+				kfree_tracked(pending, __FILE__, __LINE__);
+				kfree_tracked(_kfpregs, __FILE__, __LINE__);
 				kprintf("do_signal,write_process_vm failed\n");
 				terminate(0, sig);
 				goto out;
 			}
 			ksigsp.fpregs = (void *)fpregs;
-			kfree(_kfpregs);
+			kfree_tracked(_kfpregs, __FILE__, __LINE__);
 		}
 		memcpy(&ksigsp.info, &pending->info, sizeof(siginfo_t));
 
 		if(copy_to_user(sigsp, &ksigsp, sizeof ksigsp)){
-			kfree(pending);
+			kfree_tracked(pending, __FILE__, __LINE__);
 			mcs_rwlock_writer_unlock(&thread->sigcommon->lock, &mcs_rw_node);
 			kprintf("do_signal,write_process_vm failed\n");
 			terminate(0, sig);
@@ -826,6 +1835,17 @@ do_signal(unsigned long rc, void *regs0, struct thread *thread, struct sig_pendi
 		usp = (unsigned long *)sigsp;
 		usp--;
 		*usp = (unsigned long)k->sa.sa_restorer;
+		if (mcexec_v10_signal_logs < 64) {
+			kprintf("mcexec_v10: signal_handler pid=%d tid=%d sig=%d handler=0x%lx restorer=0x%lx old_rip=0x%lx old_sp=0x%lx new_sp=0x%lx si_addr=0x%lx\n",
+				pid, thread ? thread->tid : -1, sig,
+				(unsigned long)k->sa.sa_handler,
+				(unsigned long)k->sa.sa_restorer,
+				regs->gpr.rip,
+				regs->gpr.rsp,
+				(unsigned long)usp,
+				si_addr);
+			mcexec_v10_signal_logs++;
+		}
 
 		regs->gpr.rdi = (unsigned long)sig;
 		regs->gpr.rsi = (unsigned long)&sigsp->info;
@@ -840,7 +1860,7 @@ do_signal(unsigned long rc, void *regs0, struct thread *thread, struct sig_pendi
 
 		if(!(k->sa.sa_flags & SA_NODEFER))
 			thread->sigmask.__val[0] |= pending->sigmask.__val[0];
-		kfree(pending);
+		kfree_tracked(pending, __FILE__, __LINE__);
 		mcs_rwlock_writer_unlock(&thread->sigcommon->lock, &mcs_rw_node);
 		if(regs->gpr.rflags & RFLAGS_TF){
 			struct siginfo info;
@@ -860,14 +1880,14 @@ do_signal(unsigned long rc, void *regs0, struct thread *thread, struct sig_pendi
 
 		if(ptraceflag){
 			if(thread->ptrace_recvsig)
-				kfree(thread->ptrace_recvsig);
+				kfree_tracked(thread->ptrace_recvsig, __FILE__, __LINE__);
 			thread->ptrace_recvsig = pending;
 			if(thread->ptrace_sendsig)
-				kfree(thread->ptrace_sendsig);
+				kfree_tracked(thread->ptrace_sendsig, __FILE__, __LINE__);
 			thread->ptrace_sendsig = NULL;
 		}
 		else
-			kfree(pending);
+			kfree_tracked(pending, __FILE__, __LINE__);
 		mcs_rwlock_writer_unlock(&thread->sigcommon->lock, &mcs_rw_node);
 		switch (sig) {
 		case SIGSTOP:
@@ -962,9 +1982,16 @@ do_signal(unsigned long rc, void *regs0, struct thread *thread, struct sig_pendi
 		case SIGXCPU:
 		case SIGXFSZ:
 		core:
+			if (mcexec_v10_signal_logs < 64) {
+				kprintf("mcexec_v10: signal_default pid=%d tid=%d sig=%d rip=0x%lx sp=0x%lx si_addr=0x%lx\n",
+					pid, thread ? thread->tid : -1, sig,
+					regs->gpr.rip,
+					regs->gpr.rsp,
+					si_addr);
+				mcexec_v10_signal_logs++;
+			}
 			thread->coredump_regs =
-				kmalloc(sizeof(struct x86_user_context),
-					IHK_MC_AP_NOWAIT);
+				kmalloc_tracked(sizeof(struct x86_user_context), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 			if (!thread->coredump_regs) {
 				kprintf("%s: Out of memory\n", __func__);
 				goto skip;
@@ -1003,6 +2030,7 @@ out:
 	return restart;
 }
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 int
 interrupt_from_user(void *regs0)
 {
@@ -1010,12 +2038,15 @@ interrupt_from_user(void *regs0)
 
 	return !(regs->gpr.rsp & 0x8000000000000000);
 }
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void save_syscall_return_value(int num, unsigned long rc)
 {
 	/* Empty on x86 */
 	return;
 }
+#endif
 
 unsigned long
 do_kill(struct thread *thread, int pid, int tid, int sig, siginfo_t *info,
@@ -1036,7 +2067,7 @@ do_kill(struct thread *thread, int pid, int tid, int sig, siginfo_t *info,
 	int doint;
 	int found = 0;
 	siginfo_t info0;
-	struct resource_set *rset = cpu_local_var(resource_set);
+	struct resource_set *rset = get_this_cpu_local_var()->resource_set;
 	int hash;
 	struct thread_hash *thash = rset->thread_hash;
 	struct process_hash *phash = rset->process_hash;
@@ -1072,7 +2103,7 @@ do_kill(struct thread *thread, int pid, int tid, int sig, siginfo_t *info,
 		// Count nr of pids
 		for(i = 0; i < HASH_SIZE; i++){
 			mcs_rwlock_reader_lock(&phash->lock[i], &slock);
-			list_for_each_entry(p, &phash->list[i], hash_list){
+			for (p = ((typeof(*p) *)((char *)((&phash->list[i])->next) - offsetof(typeof(*p), hash_list))); &p->hash_list != (&phash->list[i]); p = ((typeof(*p) *)((char *)(p->hash_list.next) - offsetof(typeof(*p), hash_list)))){
 				if(pgid != 1 && p->pgid != pgid)
 					continue;
 
@@ -1087,7 +2118,7 @@ do_kill(struct thread *thread, int pid, int tid, int sig, siginfo_t *info,
 		}
 
 		if (nr_pids) {
-			pids = kmalloc(sizeof(int) * nr_pids, IHK_MC_AP_NOWAIT);
+			pids = kmalloc_tracked(sizeof(int) * nr_pids, IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 			if(!pids)
 				return -ENOMEM;
 		}
@@ -1104,7 +2135,7 @@ do_kill(struct thread *thread, int pid, int tid, int sig, siginfo_t *info,
 				break;
 			}
 			mcs_rwlock_reader_lock(&phash->lock[i], &slock);
-			list_for_each_entry(p, &phash->list[i], hash_list){
+			for (p = ((typeof(*p) *)((char *)((&phash->list[i])->next) - offsetof(typeof(*p), hash_list))); &p->hash_list != (&phash->list[i]); p = ((typeof(*p) *)((char *)(p->hash_list.next) - offsetof(typeof(*p), hash_list)))){
 				if(pgid != 1 && p->pgid != pgid)
 					continue;
 
@@ -1127,7 +2158,7 @@ sendme:
 		if(sendme)
 			rc = do_kill(thread, thread->proc->pid, -1, sig, info, ptracecont);
 
-		kfree(pids);
+		kfree_tracked(pids, __FILE__, __LINE__);
 		return rc;
 	}
 
@@ -1141,7 +2172,7 @@ sendme:
 		found = 0;
 		hash = process_hash(pid);
 		mcs_rwlock_reader_lock_noirq(&phash->lock[hash], &plock);
-		list_for_each_entry(tproc, &phash->list[hash], hash_list){
+		for (tproc = ((typeof(*tproc) *)((char *)((&phash->list[hash])->next) - offsetof(typeof(*tproc), hash_list))); &tproc->hash_list != (&phash->list[hash]); tproc = ((typeof(*tproc) *)((char *)(tproc->hash_list.next) - offsetof(typeof(*tproc), hash_list)))){
 			if(tproc->pid == pid){
 				found = 1;
 				break;
@@ -1158,7 +2189,7 @@ sendme:
 			goto done;
 		}
 		mcs_rwlock_reader_lock_noirq(&tproc->threads_lock, &lock);
-		list_for_each_entry(t, &tproc->threads_list, siblings_list){
+		for (t = ((typeof(*t) *)((char *)((&tproc->threads_list)->next) - offsetof(typeof(*t), siblings_list))); &t->siblings_list != (&tproc->threads_list); t = ((typeof(*t) *)((char *)(t->siblings_list.next) - offsetof(typeof(*t), siblings_list)))){
 			if(t->tid == pid || tthread == NULL){
 				if(t->status == PS_EXITED){
 					continue;
@@ -1192,7 +2223,7 @@ done:
 		found = 0;
 		hash = thread_hash(tid);
 		mcs_rwlock_reader_lock_noirq(&thash->lock[hash], &lock);
-		list_for_each_entry(tthread, &thash->list[hash], hash_list){
+		for (tthread = ((typeof(*tthread) *)((char *)((&thash->list[hash])->next) - offsetof(typeof(*tthread), hash_list))); &tthread->hash_list != (&thash->list[hash]); tthread = ((typeof(*tthread) *)((char *)(tthread->hash_list.next) - offsetof(typeof(*tthread), hash_list)))){
 			if(pid != -1 && tthread->proc->pid != pid){
 				continue;
 			}
@@ -1267,7 +2298,7 @@ done:
 	rc = 0;
 
 	if (sig < 33) { // SIGRTMIN - SIGRTMAX
-		list_for_each_entry(pending, head, list) {
+		for (pending = ((typeof(*pending) *)((char *)((head)->next) - offsetof(typeof(*pending), list))); &pending->list != (head); pending = ((typeof(*pending) *)((char *)(pending->list.next) - offsetof(typeof(*pending), list)))) {
 			if (pending->sigmask.__val[0] == mask &&
 			    pending->ptracecont == ptracecont)
 				break;
@@ -1277,7 +2308,7 @@ done:
 	}
 	if (pending == NULL) {
 		doint = 1;
-		pending = kmalloc(sizeof(struct sig_pending), IHK_MC_AP_NOWAIT);
+		pending = kmalloc_tracked(sizeof(struct sig_pending), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 		if (!pending) {
 			rc = -ENOMEM;
 		}
@@ -1348,7 +2379,7 @@ void
 set_signal(int sig, void *regs0, siginfo_t *info)
 {
 	struct x86_user_context *regs = regs0;
-	struct thread *thread = cpu_local_var(current);
+	struct thread *thread = get_this_cpu_local_var()->current;
 
 	if (thread == NULL || thread->proc->pid == 0)
 		return;
@@ -1365,7 +2396,10 @@ set_signal(int sig, void *regs0, siginfo_t *info)
 	do_kill(thread, thread->proc->pid, thread->tid, sig, info, 0);
 }
 
-SYSCALL_DECLARE(mmap)
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long sys_mmap(int n, ihk_mc_user_context_t *ctx);
+#else
+long sys_mmap(int n, ihk_mc_user_context_t *ctx)
 {
 	const unsigned int supported_flags = 0
 		| MAP_SHARED		// 01
@@ -1400,7 +2434,7 @@ SYSCALL_DECLARE(mmap)
 	const int flags0 = ihk_mc_syscall_arg3(ctx);
 	const int fd = ihk_mc_syscall_arg4(ctx);
 	const off_t off0 = ihk_mc_syscall_arg5(ctx);
-	struct thread *thread = cpu_local_var(current);
+	struct thread *thread = get_this_cpu_local_var()->current;
 	struct vm_regions *region = &thread->vm->region;
 	int error;
 	uintptr_t addr = 0;
@@ -1461,7 +2495,7 @@ SYSCALL_DECLARE(mmap)
 
 		pgsize = (size_t)1 << ((flags >> MAP_HUGE_SHIFT) & 0x3F);
 		/* Round-up map length by pagesize */
-		len0 = ALIGN(len0, pgsize);
+		len0 = ihk_align(len0, pgsize);
 
 		if (rusage_check_overmap(len0,
 				(flags >> MAP_HUGE_SHIFT) & 0x3F)) {
@@ -1520,13 +2554,17 @@ out:
 			addr0, len0, prot, flags0, fd, off0, error, addr);
 	return (!error)? addr: error;
 }
+#endif
 
-SYSCALL_DECLARE(clone)
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long sys_clone(int n, ihk_mc_user_context_t *ctx);
+#else
+long sys_clone(int n, ihk_mc_user_context_t *ctx)
 {
-	struct process *proc = cpu_local_var(current)->proc;
+	struct process *proc = get_this_cpu_local_var()->current->proc;
 	struct mcs_rwlock_node_irqsave lock_dump;
-	unsigned long ret;
 
+	unsigned long ret;
 	/* mutex coredump */
 	mcs_rwlock_reader_lock(&proc->coredump_lock, &lock_dump);
 
@@ -1538,18 +2576,30 @@ SYSCALL_DECLARE(clone)
 	mcs_rwlock_reader_unlock(&proc->coredump_lock, &lock_dump);
 	return ret;
 }
+#endif
 
-SYSCALL_DECLARE(fork)
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long sys_fork(int n, ihk_mc_user_context_t *ctx);
+#else
+long sys_fork(int n, ihk_mc_user_context_t *ctx)
 {
 	return do_fork(SIGCHLD, 0, 0, 0, 0, ihk_mc_syscall_pc(ctx), ihk_mc_syscall_sp(ctx));
 }
+#endif
 
-SYSCALL_DECLARE(vfork)
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long sys_vfork(int n, ihk_mc_user_context_t *ctx);
+#else
+long sys_vfork(int n, ihk_mc_user_context_t *ctx)
 {
 	return do_fork(CLONE_VFORK|SIGCHLD, 0, 0, 0, 0, ihk_mc_syscall_pc(ctx), ihk_mc_syscall_sp(ctx));
 }
+#endif
 
-SYSCALL_DECLARE(shmget)
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long sys_shmget(int n, ihk_mc_user_context_t *ctx);
+#else
+long sys_shmget(int n, ihk_mc_user_context_t *ctx)
 {
 	const key_t key = ihk_mc_syscall_arg0(ctx);
 	const size_t size = ihk_mc_syscall_arg1(ctx);
@@ -1583,7 +2633,11 @@ out:
 	dkprintf("shmget(%#lx,%#lx,%#x): %d %d\n", key, size, shmflg0, error, shmid);
 	return (error)?: shmid;
 } /* sys_shmget() */
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long do_arch_prctl(unsigned long code, unsigned long address);
+#else
 long do_arch_prctl(unsigned long code, unsigned long address)
 {
 	int err = 0;
@@ -1607,7 +2661,7 @@ long do_arch_prctl(unsigned long code, unsigned long address)
 		case ARCH_SET_FS:
 			dkprintf("[%d] arch_prctl: ARCH_SET_FS: 0x%lX\n",
 			        ihk_mc_get_processor_id(), address);
-			cpu_local_var(current)->tlsblock_base = address;
+			get_this_cpu_local_var()->current->tlsblock_base = address;
 			err = ihk_mc_arch_set_special_register(type, address);
 			break;
 		case ARCH_SET_GS:
@@ -1624,32 +2678,53 @@ long do_arch_prctl(unsigned long code, unsigned long address)
 
 	return err;
 }
+#endif
 
 
-SYSCALL_DECLARE(arch_prctl)
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long sys_arch_prctl(int n, ihk_mc_user_context_t *ctx);
+#else
+long sys_arch_prctl(int n, ihk_mc_user_context_t *ctx)
 {
-	return do_arch_prctl(ihk_mc_syscall_arg0(ctx), 
+	return do_arch_prctl(ihk_mc_syscall_arg0(ctx),
 	                     ihk_mc_syscall_arg1(ctx));
 }
+#endif
 
-SYSCALL_DECLARE(time)
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern long sys_time(int n, ihk_mc_user_context_t *ctx);
+#else
+long sys_time(int n, ihk_mc_user_context_t *ctx)
 {
-	return time();
-}
+	time_t now = time();
+	time_t *tloc = (time_t *)ihk_mc_syscall_arg0(ctx);
 
-static int vdso_get_vdso_info(void)
+	if (tloc && copy_to_user(tloc, &now, sizeof(now))) {
+		return -EFAULT;
+	}
+
+	return now;
+}
+#endif
+
+int vdso_get_vdso_info(void)
 {
 	int error;
 	struct ikc_scd_packet packet;
-	struct ihk_ikc_channel_desc *ch = cpu_local_var(ikc2linux);
+	struct ihk_ikc_channel_desc *ch = get_this_cpu_local_var()->ikc2linux;
 
 	dkprintf("vdso_get_vdso_info()\n");
 	memset(&vdso, '\0', sizeof vdso);
 	vdso.busy = 1;
 	vdso.vdso_npages = 0;
 
-	packet.msg = SCD_MSG_GET_VDSO_INFO;
-	packet.arg = virt_to_phys(&vdso);
+	error = x86_vdso_packet_prepare_result(&packet, SCD_MSG_GET_VDSO_INFO,
+			virt_to_phys(&vdso));
+	if (error) {
+		ekprintf("vdso_get_vdso_info: packet prepare failed. %d\n",
+				error);
+		goto out;
+	}
 
 	error = ihk_ikc_send(ch, &packet, 0);
 	if (error) {
@@ -1670,7 +2745,7 @@ out:
 	return error;
 } /* vdso_get_vdso_info() */
 
-static int vdso_map_global_pages(void)
+int vdso_map_global_pages(void)
 {
 	int error;
 	enum ihk_mc_pt_attribute attr;
@@ -1722,6 +2797,7 @@ out:
 	return error;
 } /* vdso_map_global_pages() */
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 static void vdso_calc_container_size(void)
 {
 	intptr_t start, end;
@@ -1774,7 +2850,133 @@ static void vdso_calc_container_size(void)
 	dkprintf("vdso_calc_container_size(): %#lx %#lx\n", container_size, vdso_offset);
 	return;
 } /* vdso_calc_container_size() */
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#define ARCH_VDSO_SETUP_LOG_GET_INFO_FAILED 1
+#define ARCH_VDSO_SETUP_LOG_LOCAL_GETTIME_DISABLED 2
+#define ARCH_VDSO_SETUP_LOG_VDSO_DISABLED 3
+#define ARCH_VDSO_SETUP_LOG_MAP_GLOBAL_FAILED 4
+#define ARCH_VDSO_MAP_LOG_NOT_AVAILABLE 1
+#define ARCH_VDSO_MAP_LOG_ADD_VDSO_FAILED 2
+#define ARCH_VDSO_MAP_LOG_MAPPED 3
+#define ARCH_VDSO_MAP_LOG_SET_RANGE_FAILED 4
+#define ARCH_VDSO_MAP_LOG_ADD_VVAR_FAILED 5
+#define ARCH_VDSO_PUBLIC_LOG_SETUP_ENTER 1
+#define ARCH_VDSO_PUBLIC_LOG_SETUP_EXIT 2
+#define ARCH_VDSO_PUBLIC_LOG_MAP_ENTER 3
+#define ARCH_VDSO_PUBLIC_LOG_MAP_EXIT 4
+
+void
+arch_vdso_state_bridge(struct vdso **vdso_p, size_t **container_size_p,
+		ptrdiff_t **vdso_offset_p)
+{
+	if (vdso_p) {
+		*vdso_p = &vdso;
+	}
+	if (container_size_p) {
+		*container_size_p = &container_size;
+	}
+	if (vdso_offset_p) {
+		*vdso_offset_p = &vdso_offset;
+	}
+}
+
+void
+arch_vdso_setup_log_bridge(int event, int error)
+{
+	switch (event) {
+	case ARCH_VDSO_SETUP_LOG_GET_INFO_FAILED:
+		ekprintf("arch_setup_vdso: vdso_get_vdso_info failed. %d\n",
+				error);
+		break;
+	case ARCH_VDSO_SETUP_LOG_LOCAL_GETTIME_DISABLED:
+		kprintf("x86 local gettime disabled: host vgtod data unavailable\n");
+		break;
+	case ARCH_VDSO_SETUP_LOG_VDSO_DISABLED:
+		kprintf("vdso disabled: host vgtod data unavailable\n");
+		break;
+	case ARCH_VDSO_SETUP_LOG_MAP_GLOBAL_FAILED:
+		ekprintf("arch_setup_vdso: vdso_map_global_pages failed. %d\n",
+				error);
+		break;
+	}
+}
+
+int
+arch_vdso_add_range_bridge(struct process_vm *vm, unsigned long start,
+		unsigned long end, unsigned long flags, struct vm_range **range)
+{
+	return add_process_memory_range(vm, start, end, NOPHYS, flags, NULL, 0,
+			PAGE_SHIFT, NULL, range);
+}
+
+int
+arch_vdso_set_range_bridge(page_table_t pt, struct process_vm *vm,
+		unsigned long start, unsigned long end, unsigned long phys,
+		unsigned long attr, struct vm_range *range)
+{
+	return ihk_mc_pt_set_range(pt, vm, (void *)start, (void *)end, phys,
+			(enum ihk_mc_pt_attribute)attr, 0, range, 0);
+}
+
+void
+arch_vdso_map_log_bridge(int event, int error, struct process_vm *vm,
+		unsigned long a, unsigned long b, unsigned long c,
+		unsigned long d, int pages)
+{
+	switch (event) {
+	case ARCH_VDSO_MAP_LOG_NOT_AVAILABLE:
+		dkprintf("arch_map_vdso(): not available\n");
+		break;
+	case ARCH_VDSO_MAP_LOG_ADD_VDSO_FAILED:
+		ekprintf("ERROR: adding memory range for vdso. %d\n", error);
+		break;
+	case ARCH_VDSO_MAP_LOG_MAPPED:
+		kprintf("mcexec_v10: vdso_map pid=%d container=0x%lx vdso=0x%lx vdso_end=0x%lx offset=0x%lx size=0x%lx pages=%d\n",
+			vm && vm->proc ? vm->proc->pid : -1, a, b, c,
+			(unsigned long)vdso_offset, d, pages);
+		break;
+	case ARCH_VDSO_MAP_LOG_SET_RANGE_FAILED:
+		ekprintf("ihk_mc_pt_set_range failed. %d\n", error);
+		break;
+	case ARCH_VDSO_MAP_LOG_ADD_VVAR_FAILED:
+		ekprintf("ERROR: adding memory range for vvar. %d\n", error);
+		break;
+	}
+}
+
+void
+arch_vdso_public_log_bridge(int event, int error, int enabled,
+		struct process_vm *vm)
+{
+	switch (event) {
+	case ARCH_VDSO_PUBLIC_LOG_SETUP_ENTER:
+		dkprintf("arch_setup_vdso()\n");
+		break;
+	case ARCH_VDSO_PUBLIC_LOG_SETUP_EXIT:
+		if (enabled) {
+			kprintf("vdso is enabled\n");
+		}
+		else {
+			kprintf("vdso is disabled\n");
+		}
+		dkprintf("arch_setup_vdso(): %d\n", error);
+		break;
+	case ARCH_VDSO_PUBLIC_LOG_MAP_ENTER:
+		dkprintf("arch_map_vdso()\n");
+		break;
+	case ARCH_VDSO_PUBLIC_LOG_MAP_EXIT:
+		dkprintf("arch_map_vdso(): %d %p\n", error,
+				vm ? vm->vdso_addr : NULL);
+		break;
+	}
+}
+#endif
+
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern int arch_setup_vdso(void);
+#else
 int arch_setup_vdso()
 {
 	int error;
@@ -1784,6 +2986,18 @@ int arch_setup_vdso()
 	if (error) {
 		ekprintf("arch_setup_vdso: vdso_get_vdso_info failed. %d\n", error);
 		goto out;
+	}
+
+	if (gettime_local_support && !vdso.vgtod_virt) {
+		kprintf("x86 local gettime disabled: host vgtod data unavailable\n");
+		gettime_local_support = 0;
+		tod_data.do_local = 0;
+	}
+	if (!vdso.vgtod_virt && vdso.vdso_npages > 0) {
+		kprintf("vdso disabled: host vgtod data unavailable\n");
+		vdso.vdso_npages = 0;
+		container_size = 0;
+		vdso_offset = 0;
 	}
 
 	if (vdso.vdso_npages <= 0) {
@@ -1810,7 +3024,11 @@ out:
 	dkprintf("arch_setup_vdso(): %d\n", error);
 	return error;
 } /* arch_setup_vdso() */
+#endif
 
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+extern int arch_map_vdso(struct process_vm *vm);
+#else
 int arch_map_vdso(struct process_vm *vm)
 {
 	struct address_space *as = vm->address_space;
@@ -1820,9 +3038,9 @@ int arch_map_vdso(struct process_vm *vm)
 	void *e;
 	unsigned long vrflags;
 	enum ihk_mc_pt_attribute attr;
-	int error;
 	int i;
 	struct vm_range *range;
+	int error;
 
 	dkprintf("arch_map_vdso()\n");
 	if (container_size <= 0) {
@@ -1847,6 +3065,14 @@ int arch_map_vdso(struct process_vm *vm)
 		goto out;
 	}
 	vm->vdso_addr = s;
+	kprintf("mcexec_v10: vdso_map pid=%d container=0x%lx vdso=0x%lx vdso_end=0x%lx offset=0x%lx size=0x%lx pages=%d\n",
+		vm && vm->proc ? vm->proc->pid : -1,
+		(unsigned long)container,
+		(unsigned long)vm->vdso_addr,
+		(unsigned long)e,
+		(unsigned long)vdso_offset,
+		(unsigned long)container_size,
+		vdso.vdso_npages);
 
 	attr = PTATTR_ACTIVE | PTATTR_USER;
 	for (i = 0; i < vdso.vdso_npages; ++i) {
@@ -1921,7 +3147,9 @@ out:
 	dkprintf("arch_map_vdso(): %d %p\n", error, vm->vdso_addr);
 	return error;
 } /* arch_map_vdso() */
+#endif
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 void
 save_uctx(void *uctx, struct x86_user_context *regs)
 {
@@ -1978,6 +3206,7 @@ save_uctx(void *uctx, struct x86_user_context *regs)
 	ihk_mc_arch_get_special_register(IHK_ASR_X86_FS, &ctx->fs);
 	ctx->fregsize = 0;
 }
+#endif
 
 int do_process_vm_read_writev(int pid, 
 		const struct iovec *local_iov,
@@ -1987,6 +3216,29 @@ int do_process_vm_read_writev(int pid,
 		unsigned long flags,
 		int op)
 {
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+	struct mcs_rwlock_node_irqsave lock;
+	struct mcs_rwlock_node update_lock;
+
+	return arch_process_vm_read_writev_body_result(pid, local_iov,
+			liovcnt, remote_iov, riovcnt, flags, op,
+			get_this_cpu_local_var()->current, &lock, &update_lock,
+			&arch_process_vm_rw_kernel_offsets,
+			arch_process_vm_rw_read_lock_bridge,
+			arch_process_vm_rw_read_unlock_bridge,
+			arch_process_vm_rw_lookup_range_bridge,
+			arch_process_vm_rw_find_process_bridge,
+			arch_process_vm_rw_process_unlock_bridge,
+			arch_process_vm_rw_update_lock_bridge,
+			arch_process_vm_rw_update_unlock_bridge,
+			arch_process_vm_rw_hold_vm_bridge,
+			arch_process_vm_rw_release_vm_bridge,
+			arch_process_vm_rw_vtop_bridge,
+			arch_process_vm_rw_page_fault_bridge,
+			arch_process_vm_rw_phys_to_virt_bridge,
+			arch_process_vm_rw_memcpy_bridge,
+			arch_process_vm_rw_log_bridge);
+#else
 	int ret = -EINVAL;	
 	int li, ri;
 	int pli, pri;
@@ -1994,7 +3246,7 @@ int do_process_vm_read_writev(int pid,
 	size_t llen = 0, rlen = 0;
 	size_t copied = 0;
 	size_t to_copy;
-	struct thread *lthread = cpu_local_var(current);
+	struct thread *lthread = get_this_cpu_local_var()->current;
 	struct process *rproc;
 	struct process *lproc = lthread->proc;
 	struct process_vm *rvm = NULL;
@@ -2270,6 +3522,7 @@ out:
 	if(rvm)
 		release_process_vm(rvm);
 	return ret;
+#endif
 }
 
 int move_pages_smp_handler(int cpu_index, int nr_cpus, void *arg)
@@ -2289,9 +3542,9 @@ int move_pages_smp_handler(int cpu_index, int nr_cpus, void *arg)
 	}
 
 	/* Load target process' PT so that we can access user-space */
-	save_pt = cpu_local_var(current) == &cpu_local_var(idle) ?
+	save_pt = get_this_cpu_local_var()->current == &get_this_cpu_local_var()->idle ?
 		get_init_page_table() :
-		cpu_local_var(current)->vm->address_space->page_table;
+		get_this_cpu_local_var()->current->vm->address_space->page_table;
 
 	if (save_pt != vm->address_space->page_table) {
 		ihk_mc_load_page_table(vm->address_space->page_table);
@@ -2552,8 +3805,7 @@ pte_out:
 					pgalign = PTL2_SHIFT - PTL1_SHIFT;
 			}
 
-			dst = ihk_mc_alloc_aligned_pages_node(mpsr->nr_pages[i],
-					pgalign, IHK_MC_AP_USER, mpsr->nodes[i]);
+			dst = _ihk_mc_alloc_aligned_pages_node(mpsr->nr_pages[i], pgalign, IHK_MC_AP_USER, mpsr->nodes[i], IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);
 
 			if (!dst) {
 				mpsr->status[i] = -ENOMEM;
@@ -2597,9 +3849,7 @@ pte_out:
 				phys_to_virt(pte_get_phys(mpsr->ptep[i])),
 				mpsr->nr_pages[i] * PAGE_SIZE);
 
-		ihk_mc_free_pages(
-				phys_to_virt(pte_get_phys(mpsr->ptep[i])),
-				mpsr->nr_pages[i]);
+		_ihk_mc_free_pages(phys_to_virt(pte_get_phys(mpsr->ptep[i])), mpsr->nr_pages[i], IHK_MC_PG_KERNEL, __FILE__, __LINE__);
 
 		pte_update_phys(mpsr->ptep[i], mpsr->dst_phys[i]);
 
@@ -2611,7 +3861,7 @@ pte_out:
 
 	/* XXX: do a separate SMP call with only CPUs running threads
 	 * of this process? */
-	if (cpu_local_var(current)->proc == mpsr->proc) {
+	if (get_this_cpu_local_var()->current->proc == mpsr->proc) {
 		/* Invalidate all TLBs */
 		for (i = 0; i < mpsr->count; i++) {
 			if (!mpsr->dst_phys[i])
@@ -2629,12 +3879,13 @@ out:
 	return mpsr->phase_ret;
 }
 
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 time_t time(void) {
 	struct syscall_request sreq IHK_DMA_ALIGN;
 	struct timespec ats;
 	time_t ret = 0;
 
-	if (gettime_local_support) {
+	if (gettime_local_support || tod_data.clocks_per_sec) {
 		calculate_time_from_tsc(&ats);
 		ret = ats.tv_sec;
 	}
@@ -2646,6 +3897,31 @@ time_t time(void) {
 
 	return ret;
 }
+#endif
+
+#ifndef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+static void calculate_time_from_tod_data(struct timespec *ts)
+{
+	unsigned long ver;
+	struct timespec delta;
+
+	do {
+		while ((ver = ihk_atomic64_read(&tod_data.version)) & 1) {
+			cpu_pause();
+		}
+
+		rmb();
+		*ts = tod_data.origin;
+		rmb();
+	} while (ver != ihk_atomic64_read(&tod_data.version));
+
+	if (!tod_data.clocks_per_sec) {
+		return;
+	}
+
+	tsc_to_ts(rdtsc(), &delta);
+	ts_add(ts, &delta);
+}
 
 void calculate_time_from_tsc(struct timespec *ts)
 {
@@ -2654,6 +3930,11 @@ void calculate_time_from_tsc(struct timespec *ts)
 	unsigned long ns;
 	unsigned long delta;
 	struct vsyscall_gtod_data *gtod = vdso.vgtod_virt;
+
+	if (!gtod) {
+		calculate_time_from_tod_data(ts);
+		return;
+	}
 
 	do {
 		for (;;) {
@@ -2680,13 +3961,20 @@ void calculate_time_from_tsc(struct timespec *ts)
 		++ts->tv_sec;
 	}
 }
+#endif
 
 extern void ptrace_syscall_event(struct thread *thread);
 long arch_ptrace_syscall_event(struct thread *thread,
 				ihk_mc_user_context_t *ctx, long setret)
 {
-	ihk_mc_syscall_ret(ctx) = setret;
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+	return arch_ptrace_syscall_event_body_result(thread, ctx, setret,
+			__builtin_offsetof(ihk_mc_user_context_t, gpr.rax),
+			arch_ptrace_syscall_event_bridge);
+#else
+	ihk_mc_syscall_set_ret(ctx, setret);
 	ptrace_syscall_event(thread);
 	return ihk_mc_syscall_ret(ctx);
+#endif
 }
 /*** End of File ***/

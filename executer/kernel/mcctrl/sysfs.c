@@ -16,11 +16,29 @@
 #include <linux/version.h>
 #include <linux/interrupt.h>
 #include "mcctrl.h"
+#include "mcctrl_rust.h"
 #include "sysfs_msg.h"
 
 #define dprintk(...) do { if (0) printk(__VA_ARGS__); } while (0)
 #define wprintk(...) do { if (1) printk(KERN_WARNING __VA_ARGS__); } while (0)
 #define eprintk(...) do { if (1) printk(KERN_ERR __VA_ARGS__); } while (0)
+
+#ifndef MCCTRL_RUST_HELPERS
+int
+is_special_sysfs_ops(void *ops)
+{
+	return (((long)SYSFS_SPECIAL_OPS_MIN <= (long)ops)
+			&& ((long)ops <= (long)SYSFS_SPECIAL_OPS_MAX));
+}
+#endif
+
+#ifndef MCCTRL_RUST_HELPERS
+static int
+mcctrl_sysfs_inited_result(unsigned long sysfs_buf)
+{
+	return !!sysfs_buf;
+}
+#endif
 
 enum {
 	/* sysfsm_node.type */
@@ -62,6 +80,10 @@ struct sysfs_work {
 	struct work_struct work;
 }; /* struct sysfs_work */
 
+#ifdef MCCTRL_RUST_HELPERS
+static void sysfsm_work_main(struct work_struct *work0);
+#endif
+
 static struct sysfs_ops the_ops;
 static struct kobj_type the_ktype;
 static struct sysfsm_ops remote_ops;
@@ -81,9 +103,177 @@ bitmap_scnlistprintf(char *buf, unsigned buflen, const unsigned long *maskp, int
 } /* bitmap_scnlistprintf() */
 #endif
 
+#ifdef MCCTRL_RUST_HELPERS
+enum {
+	MCCTRL_SYSFS_REMOTE_STAGE_OK = 0,
+	MCCTRL_SYSFS_REMOTE_STAGE_NOT_INIT = 1,
+	MCCTRL_SYSFS_REMOTE_STAGE_DOWN = 2,
+	MCCTRL_SYSFS_REMOTE_STAGE_WAIT0 = 3,
+	MCCTRL_SYSFS_REMOTE_STAGE_TOO_LARGE = 4,
+	MCCTRL_SYSFS_REMOTE_STAGE_SEND = 5,
+	MCCTRL_SYSFS_REMOTE_STAGE_WAIT = 6,
+	MCCTRL_SYSFS_REMOTE_STAGE_RESULT = 7,
+};
+
+static int
+mcctrl_sysfs_down_bridge(void *sem)
+{
+	return down_interruptible(sem);
+}
+
+static void
+mcctrl_sysfs_up_bridge(void *sem)
+{
+	up(sem);
+}
+
+static int
+mcctrl_sysfs_wait_ready_bridge(void *req0)
+{
+	struct sysfsm_req *req = req0;
+
+	return wait_event_interruptible(req->wq, !req->busy);
+}
+
+static void
+mcctrl_sysfs_set_busy_bridge(void *req0, int busy)
+{
+	struct sysfsm_req *req = req0;
+
+	req->busy = busy;
+}
+
+static int
+mcctrl_sysfs_send_bridge(void *os, int cpu, int msg, long arg1, long arg2,
+			 long arg3, int err)
+{
+	struct ikc_scd_packet packet;
+
+	packet.msg = msg;
+	packet.sysfs_arg1 = arg1;
+	packet.sysfs_arg2 = arg2;
+	packet.sysfs_arg3 = arg3;
+	packet.err = err;
+	return mcctrl_ikc_send(os, cpu, &packet);
+}
+
+static long
+mcctrl_sysfs_req_lresult_bridge(void *req0)
+{
+	struct sysfsm_req *req = req0;
+
+	return req->lresult;
+}
+
+static void
+mcctrl_sysfs_copy_bridge(void *dst, const void *src, unsigned long size)
+{
+	memcpy(dst, src, size);
+}
+
+static void
+mcctrl_sysfs_remote_show_stage_log(int stage, long error, unsigned long size)
+{
+	switch (stage) {
+	case MCCTRL_SYSFS_REMOTE_STAGE_NOT_INIT:
+		eprintk("mcctrl:remote_show:not initialized. %ld\n", error);
+		break;
+	case MCCTRL_SYSFS_REMOTE_STAGE_DOWN:
+		eprintk("mcctrl:remote_show:down failed. %ld\n", error);
+		break;
+	case MCCTRL_SYSFS_REMOTE_STAGE_WAIT0:
+		eprintk("mcctrl:remote_show:wait_event_interruptible0 failed. %ld\n",
+				error);
+		break;
+	case MCCTRL_SYSFS_REMOTE_STAGE_SEND:
+		eprintk("mcctrl:remote_show:mcctrl_ikc_send failed. %ld\n",
+				error);
+		break;
+	case MCCTRL_SYSFS_REMOTE_STAGE_WAIT:
+		eprintk("mcctrl:remote_show:wait_event_interruptible failed. %ld\n",
+				error);
+		break;
+	case MCCTRL_SYSFS_REMOTE_STAGE_RESULT:
+		eprintk("mcctrl:remote_show:SCD_MSG_SYSFS_REQ_SHOW failed. %ld\n",
+				error);
+		break;
+	default:
+		break;
+	}
+	(void)size;
+}
+
+static void
+mcctrl_sysfs_remote_store_stage_log(int stage, long error, unsigned long size)
+{
+	switch (stage) {
+	case MCCTRL_SYSFS_REMOTE_STAGE_NOT_INIT:
+		eprintk("mcctrl:remote_store:not initialized. %ld\n", error);
+		break;
+	case MCCTRL_SYSFS_REMOTE_STAGE_DOWN:
+		eprintk("mcctrl:remote_store:down failed. %ld\n", error);
+		break;
+	case MCCTRL_SYSFS_REMOTE_STAGE_WAIT0:
+		eprintk("mcctrl:remote_store:wait_event_interruptible0 failed. %ld\n",
+				error);
+		break;
+	case MCCTRL_SYSFS_REMOTE_STAGE_TOO_LARGE:
+		eprintk("mcctrl:remote_store:too large size %#lx. %ld\n",
+				size, error);
+		break;
+	case MCCTRL_SYSFS_REMOTE_STAGE_SEND:
+		eprintk("mcctrl:remote_store:mcctrl_ikc_send failed. %ld\n",
+				error);
+		break;
+	case MCCTRL_SYSFS_REMOTE_STAGE_WAIT:
+		eprintk("mcctrl:remote_store:wait_event_interruptible failed. %ld\n",
+				error);
+		break;
+	case MCCTRL_SYSFS_REMOTE_STAGE_RESULT:
+		eprintk("mcctrl:remote_store:SCD_MSG_SYSFS_REQ_STORE failed. %ld\n",
+				error);
+		break;
+	default:
+		break;
+	}
+}
+
+static void
+mcctrl_sysfs_remote_release_stage_log(int stage, long error)
+{
+	switch (stage) {
+	case MCCTRL_SYSFS_REMOTE_STAGE_DOWN:
+		eprintk("mcctrl:remote_release:down failed. %ld\n", error);
+		break;
+	case MCCTRL_SYSFS_REMOTE_STAGE_WAIT0:
+		eprintk("mcctrl:remote_release:wait_event_interruptible0 failed. %ld\n",
+				error);
+		break;
+	case MCCTRL_SYSFS_REMOTE_STAGE_SEND:
+		eprintk("mcctrl:remote_release:mcctrl_ikc_send failed. %ld\n",
+				error);
+		break;
+	case MCCTRL_SYSFS_REMOTE_STAGE_WAIT:
+		eprintk("mcctrl:remote_release:wait_event_interruptible failed. %ld\n",
+				error);
+		break;
+	default:
+		break;
+	}
+}
+#endif
+
 static ssize_t
 remote_show(struct sysfsm_ops *ops, void *instance, void *buf, size_t bufsize)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	int error;
+	int stage = MCCTRL_SYSFS_REMOTE_STAGE_OK;
+	struct sysfsm_node *np = instance;
+	ssize_t ssize;
+	struct sysfsm_data *sdp;
+	struct sysfsm_req *req;
+#else
 	int error;
 	struct semaphore *held_sem = NULL;
 	struct ikc_scd_packet packet;
@@ -91,6 +281,7 @@ remote_show(struct sysfsm_ops *ops, void *instance, void *buf, size_t bufsize)
 	ssize_t ssize = -EIO;
 	struct sysfsm_data *sdp;
 	struct sysfsm_req *req;
+#endif
 
 	dprintk("mcctrl:remote_show(%p,%p,%p,%#lx)\n",
 			ops, instance, buf, bufsize);
@@ -98,7 +289,19 @@ remote_show(struct sysfsm_ops *ops, void *instance, void *buf, size_t bufsize)
 	sdp = np->sdp;
 	req = &sdp->sysfs_req;
 
-	if (!sysfs_inited(sdp)) {
+#ifdef MCCTRL_RUST_HELPERS
+	ssize = mcctrl_sysfs_remote_show_body_result(np, buf, bufsize,
+			sdp->sysfs_buf, sdp->sysfs_os, &sdp->sysfs_io_sem, req,
+			np->client_ops, np->client_instance, &stage,
+			mcctrl_sysfs_down_bridge, mcctrl_sysfs_up_bridge,
+			mcctrl_sysfs_wait_ready_bridge,
+			mcctrl_sysfs_set_busy_bridge, mcctrl_sysfs_send_bridge,
+			mcctrl_sysfs_req_lresult_bridge,
+			mcctrl_sysfs_copy_bridge);
+	error = (ssize < 0) ? ssize : 0;
+	mcctrl_sysfs_remote_show_stage_log(stage, error, bufsize);
+#else
+	if (!mcctrl_sysfs_inited_result((unsigned long)sdp->sysfs_buf)) {
 		/* emulate EOF */
 		error = 0;
 		ssize = 0;
@@ -161,6 +364,7 @@ out:
 	if (held_sem) {
 		up(held_sem);
 	}
+#endif
 	if (error) {
 		eprintk("mcctrl:remote_show(%p,%p,%p,%#lx): %d\n",
 				ops, instance, buf, bufsize, error);
@@ -175,6 +379,14 @@ static ssize_t
 remote_store(struct sysfsm_ops *ops, void *instance, const void *buf,
 		size_t bufsize)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	int error;
+	int stage = MCCTRL_SYSFS_REMOTE_STAGE_OK;
+	struct sysfsm_node *np = instance;
+	ssize_t ssize;
+	struct sysfsm_data *sdp;
+	struct sysfsm_req *req;
+#else
 	int error;
 	struct semaphore *held_sem = NULL;
 	struct ikc_scd_packet packet;
@@ -182,6 +394,7 @@ remote_store(struct sysfsm_ops *ops, void *instance, const void *buf,
 	ssize_t ssize = -EIO;
 	struct sysfsm_data *sdp;
 	struct sysfsm_req *req;
+#endif
 
 	dprintk("mcctrl:remote_store(%p,%p,%p,%#lx)\n",
 			ops, instance, buf, bufsize);
@@ -189,7 +402,19 @@ remote_store(struct sysfsm_ops *ops, void *instance, const void *buf,
 	sdp = np->sdp;
 	req = &sdp->sysfs_req;
 
-	if (!sysfs_inited(sdp)) {
+#ifdef MCCTRL_RUST_HELPERS
+	ssize = mcctrl_sysfs_remote_store_body_result(np, buf, bufsize,
+			sdp->sysfs_buf, sdp->sysfs_bufsize, sdp->sysfs_os,
+			&sdp->sysfs_io_sem, req, np->client_ops,
+			np->client_instance, &stage, mcctrl_sysfs_down_bridge,
+			mcctrl_sysfs_up_bridge, mcctrl_sysfs_wait_ready_bridge,
+			mcctrl_sysfs_set_busy_bridge, mcctrl_sysfs_send_bridge,
+			mcctrl_sysfs_req_lresult_bridge,
+			mcctrl_sysfs_copy_bridge);
+	error = (ssize < 0) ? ssize : 0;
+	mcctrl_sysfs_remote_store_stage_log(stage, error, bufsize);
+#else
+	if (!mcctrl_sysfs_inited_result((unsigned long)sdp->sysfs_buf)) {
 		/* emulate EOF */
 		error = -ENOSPC;
 		eprintk("mcctrl:remote_store:not initialized. %d\n", error);
@@ -257,6 +482,7 @@ out:
 	if (held_sem) {
 		up(held_sem);
 	}
+#endif
 	if (error) {
 		eprintk("mcctrl:remote_store(%p,%p,%p,%#lx): %d\n",
 				ops, instance, buf, bufsize, error);
@@ -301,17 +527,32 @@ static void
 remote_release(struct sysfsm_ops *ops, void *instance)
 {
 	int error;
-	struct sysfsm_node *np = instance;
+#ifdef MCCTRL_RUST_HELPERS
+	int stage = MCCTRL_SYSFS_REMOTE_STAGE_OK;
+#else
 	struct semaphore *held_sem = NULL;
+	struct ikc_scd_packet packet;
+#endif
+	struct sysfsm_node *np = instance;
 	struct sysfsm_data *sdp;
 	struct sysfsm_req *req;
-	struct ikc_scd_packet packet;
 
 	dprintk("mcctrl:remote_release(%p,%p)\n", ops, instance);
 
 	sdp = np->sdp;
 	req = &sdp->sysfs_req;
-	if ((np->type == SNT_FILE) && np->client_ops && sysfs_inited(sdp)) {
+#ifdef MCCTRL_RUST_HELPERS
+	error = mcctrl_sysfs_remote_release_body_result(np, np->type,
+			sdp->sysfs_buf, sdp->sysfs_os, &sdp->sysfs_io_sem,
+			req, np->client_ops, np->client_instance, SNT_FILE,
+			&stage, mcctrl_sysfs_down_bridge,
+			mcctrl_sysfs_up_bridge,
+			mcctrl_sysfs_wait_ready_bridge,
+			mcctrl_sysfs_set_busy_bridge, mcctrl_sysfs_send_bridge);
+	mcctrl_sysfs_remote_release_stage_log(stage, error);
+#else
+	if ((np->type == SNT_FILE) && np->client_ops &&
+			mcctrl_sysfs_inited_result((unsigned long)sdp->sysfs_buf)) {
 		error = down_interruptible(&sdp->sysfs_io_sem);
 		if (error) {
 			eprintk("mcctrl:remote_release:down failed. %d\n",
@@ -357,6 +598,7 @@ out:
 	if (held_sem) {
 		up(held_sem);
 	}
+#endif
 	if (error) {
 		eprintk("mcctrl:remote_release(%p,%p): %d\n",
 				ops, instance, error);
@@ -365,9 +607,58 @@ out:
 	return;
 } /* remote_release() */
 
+#ifdef MCCTRL_RUST_HELPERS
+static int mcctrl_sysfs_node_type_bridge(void *instance);
+
+static const char *
+mcctrl_sysfs_node_name_bridge(void *node)
+{
+	return ((struct sysfsm_node *)node)->name;
+}
+
+static void *
+mcctrl_sysfs_first_child_bridge(void *node)
+{
+	struct sysfsm_node *np = node;
+
+	if (list_empty(&np->children))
+		return NULL;
+	return list_first_entry(&np->children, struct sysfsm_node, chain);
+}
+
+static void *
+mcctrl_sysfs_next_child_bridge(void *parent, void *node)
+{
+	struct sysfsm_node *dirp = parent;
+	struct list_head *next = ((struct sysfsm_node *)node)->chain.next;
+
+	if (next == &dirp->children)
+		return NULL;
+	return list_entry(next, struct sysfsm_node, chain);
+}
+
+static void *
+mcctrl_sysfs_err_ptr_bridge(int error)
+{
+	return ERR_PTR(error);
+}
+#endif
+
 static struct sysfsm_node *
 lookup_i(struct sysfsm_node *dirp, const char *name)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	BUG_ON(!dirp);
+	BUG_ON(!name);
+	dprintk("mcctrl:lookup_i(%s,%s)\n", dirp->name, name);
+
+	return mcctrl_sysfs_lookup_i_body_result(
+		dirp, name, SNT_DIR, mcctrl_sysfs_node_type_bridge,
+		mcctrl_sysfs_node_name_bridge,
+		mcctrl_sysfs_first_child_bridge,
+		mcctrl_sysfs_next_child_bridge,
+		mcctrl_sysfs_err_ptr_bridge);
+#else
 	int error;
 	struct sysfsm_node *np;
 
@@ -411,6 +702,7 @@ out:
 	dprintk("mcctrl:lookup_i(%s,%s): %p %d\n",
 			dirp->name, name, np, error);
 	return np;
+#endif
 } /* lookup_i() */
 
 static struct sysfsm_node *
@@ -1592,9 +1884,205 @@ out:
 	return error;
 } /* setup_special_remote_create() */
 
+#ifdef MCCTRL_RUST_HELPERS
+static int
+mcctrl_sysfs_req_is_special_ops(void *ops)
+{
+	return (((long)SYSFS_SPECIAL_OPS_MIN <= (long)ops)
+			&& ((long)ops <= (long)SYSFS_SPECIAL_OPS_MAX));
+}
+
+static void *
+mcctrl_sysfs_req_os_to_dev_bridge(void *os)
+{
+	return ihk_os_to_dev(os);
+}
+
+static unsigned long
+mcctrl_sysfs_req_map_memory_bridge(void *dev, unsigned long rpa,
+		unsigned long size)
+{
+	return ihk_device_map_memory(dev, rpa, size);
+}
+
+static void *
+mcctrl_sysfs_req_map_virtual_bridge(void *dev, unsigned long pa,
+		unsigned long size)
+{
+	return ihk_device_map_virtual(dev, pa, size, NULL, 0);
+}
+
+static void
+mcctrl_sysfs_req_unmap_virtual_bridge(void *dev, void *virt,
+		unsigned long size)
+{
+	ihk_device_unmap_virtual(dev, virt, size);
+}
+
+static void
+mcctrl_sysfs_req_unmap_memory_bridge(void *dev, unsigned long pa,
+		unsigned long size)
+{
+	ihk_device_unmap_memory(dev, pa, size);
+}
+
+static void
+mcctrl_sysfs_req_wmb_bridge(void)
+{
+	wmb();
+}
+
+static int
+mcctrl_sysfs_req_setup_local_bridge(void *os, void *buf,
+		unsigned long buf_pa, unsigned long bufsize)
+{
+	return sysfsm_setup(os, buf, buf_pa, bufsize);
+}
+
+static int
+mcctrl_sysfs_req_create_local_bridge(void *os,
+		struct sysfs_req_create_param *param)
+{
+	ihk_device_t dev = ihk_os_to_dev(os);
+	struct mcctrl_usrdata *udp = ihk_host_os_get_usrdata(os);
+	struct sysfsm_ops *ops = &remote_ops;
+	long cinstance = param->client_instance;
+	struct sysfsm_node *np;
+	int error;
+	int special = mcctrl_sysfs_req_is_special_ops(
+			(void *)param->client_ops);
+
+	if (special) {
+		error = setup_special_remote_create(dev, param, &ops,
+				&cinstance);
+		if (error) {
+			return error;
+		}
+	}
+
+	if (!udp) {
+		pr_err("%s: error: mcctrl_usrdata not found\n", __func__);
+		return -EINVAL;
+	}
+
+	np = sysfsm_create(&udp->sysfsm_data, param->path, param->mode,
+			ops, param->client_ops, cinstance);
+	if (IS_ERR(np)) {
+		error = PTR_ERR(np);
+		if (special) {
+			cleanup_special_remote_create(ops, (void *)cinstance);
+		}
+		return error;
+	}
+
+	return 0;
+}
+
+static int
+mcctrl_sysfs_req_mkdir_local_bridge(void *os,
+		struct sysfs_req_mkdir_param *param)
+{
+	struct mcctrl_usrdata *udp = ihk_host_os_get_usrdata(os);
+	struct sysfsm_node *np;
+	int error;
+
+	if (!udp) {
+		pr_err("%s: error: mcctrl_usrdata not found\n", __func__);
+		return -EINVAL;
+	}
+
+	np = sysfsm_mkdir(&udp->sysfsm_data, param->path);
+	if (IS_ERR(np)) {
+		error = PTR_ERR(np);
+		return error;
+	}
+
+	param->handle = (long)np;
+	return 0;
+}
+
+static int
+mcctrl_sysfs_req_symlink_local_bridge(void *os,
+		struct sysfs_req_symlink_param *param)
+{
+	struct mcctrl_usrdata *udp = ihk_host_os_get_usrdata(os);
+	struct sysfsm_node *np;
+	int error;
+
+	if (!udp) {
+		pr_err("%s: error: mcctrl_usrdata not found\n", __func__);
+		return -EINVAL;
+	}
+
+	np = sysfsm_symlink(&udp->sysfsm_data, (void *)param->target,
+			param->path);
+	if (IS_ERR(np)) {
+		error = PTR_ERR(np);
+		return error;
+	}
+
+	return 0;
+}
+
+static int
+mcctrl_sysfs_req_lookup_local_bridge(void *os,
+		struct sysfs_req_lookup_param *param)
+{
+	struct mcctrl_usrdata *udp = ihk_host_os_get_usrdata(os);
+	struct sysfsm_node *np;
+	int error;
+
+	if (!udp) {
+		pr_err("%s: error: mcctrl_usrdata not found\n", __func__);
+		return -EINVAL;
+	}
+
+	np = sysfsm_lookup(&udp->sysfsm_data, param->path);
+	if (IS_ERR(np)) {
+		error = PTR_ERR(np);
+		return error;
+	}
+
+	param->handle = (long)np;
+	return 0;
+}
+
+static int
+mcctrl_sysfs_req_unlink_local_bridge(void *os,
+		struct sysfs_req_unlink_param *param)
+{
+	struct mcctrl_usrdata *udp = ihk_host_os_get_usrdata(os);
+	int error;
+
+	if (!udp) {
+		pr_err("%s: error: mcctrl_usrdata not found\n", __func__);
+		return -EINVAL;
+	}
+
+	error = sysfsm_unlink(&udp->sysfsm_data, param->path, param->flags);
+	if (error) {
+		return error;
+	}
+
+	return 0;
+}
+#endif
+
 static void
 sysfsm_req_setup(void *os, long param_rpa)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_sysfs_req_setup_body_result(os, param_rpa,
+			sizeof(struct sysfs_req_setup_param),
+			mcctrl_sysfs_req_os_to_dev_bridge,
+			mcctrl_sysfs_req_map_memory_bridge,
+			mcctrl_sysfs_req_map_virtual_bridge,
+			mcctrl_sysfs_req_unmap_virtual_bridge,
+			mcctrl_sysfs_req_unmap_memory_bridge,
+			mcctrl_sysfs_req_setup_local_bridge,
+			mcctrl_sysfs_req_wmb_bridge);
+	return;
+#else
 	int error;
 	ihk_device_t dev = ihk_os_to_dev(os);
 	long param_pa;
@@ -1621,11 +2109,24 @@ sysfsm_req_setup(void *os, long param_rpa)
 	ihk_device_unmap_virtual(dev, param, sizeof(*param));
 	ihk_device_unmap_memory(dev, param_pa, sizeof(*param));
 	return;
+#endif
 } /* sysfsm_req_setup() */
 
 static void
 sysfsm_req_create(void *os, long param_rpa)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_sysfs_req_create_body_result(os, param_rpa,
+			sizeof(struct sysfs_req_create_param),
+			mcctrl_sysfs_req_os_to_dev_bridge,
+			mcctrl_sysfs_req_map_memory_bridge,
+			mcctrl_sysfs_req_map_virtual_bridge,
+			mcctrl_sysfs_req_unmap_virtual_bridge,
+			mcctrl_sysfs_req_unmap_memory_bridge,
+			mcctrl_sysfs_req_create_local_bridge,
+			mcctrl_sysfs_req_wmb_bridge);
+	return;
+#else
 	int error;
 	ihk_device_t dev = ihk_os_to_dev(os);
 	long param_pa;
@@ -1674,11 +2175,24 @@ out:
 	ihk_device_unmap_virtual(dev, param, sizeof(*param));
 	ihk_device_unmap_memory(dev, param_pa, sizeof(*param));
 	return;
+#endif
 } /* sysfsm_req_create() */
 
 static void
 sysfsm_req_mkdir(void *os, long param_rpa)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_sysfs_req_mkdir_body_result(os, param_rpa,
+			sizeof(struct sysfs_req_mkdir_param),
+			mcctrl_sysfs_req_os_to_dev_bridge,
+			mcctrl_sysfs_req_map_memory_bridge,
+			mcctrl_sysfs_req_map_virtual_bridge,
+			mcctrl_sysfs_req_unmap_virtual_bridge,
+			mcctrl_sysfs_req_unmap_memory_bridge,
+			mcctrl_sysfs_req_mkdir_local_bridge,
+			mcctrl_sysfs_req_wmb_bridge);
+	return;
+#else
 	int error;
 	ihk_device_t dev = ihk_os_to_dev(os);
 	long param_pa;
@@ -1713,11 +2227,24 @@ out:
 	ihk_device_unmap_virtual(dev, param, sizeof(*param));
 	ihk_device_unmap_memory(dev, param_pa, sizeof(*param));
 	return;
+#endif
 } /* sysfsm_req_mkdir() */
 
 static void
 sysfsm_req_symlink(void *os, long param_rpa)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_sysfs_req_symlink_body_result(os, param_rpa,
+			sizeof(struct sysfs_req_symlink_param),
+			mcctrl_sysfs_req_os_to_dev_bridge,
+			mcctrl_sysfs_req_map_memory_bridge,
+			mcctrl_sysfs_req_map_virtual_bridge,
+			mcctrl_sysfs_req_unmap_virtual_bridge,
+			mcctrl_sysfs_req_unmap_memory_bridge,
+			mcctrl_sysfs_req_symlink_local_bridge,
+			mcctrl_sysfs_req_wmb_bridge);
+	return;
+#else
 	int error;
 	ihk_device_t dev = ihk_os_to_dev(os);
 	long param_pa;
@@ -1751,11 +2278,24 @@ out:
 	ihk_device_unmap_virtual(dev, param, sizeof(*param));
 	ihk_device_unmap_memory(dev, param_pa, sizeof(*param));
 	return;
+#endif
 } /* sysfsm_req_symlink() */
 
 static void
 sysfsm_req_lookup(void *os, long param_rpa)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_sysfs_req_lookup_body_result(os, param_rpa,
+			sizeof(struct sysfs_req_lookup_param),
+			mcctrl_sysfs_req_os_to_dev_bridge,
+			mcctrl_sysfs_req_map_memory_bridge,
+			mcctrl_sysfs_req_map_virtual_bridge,
+			mcctrl_sysfs_req_unmap_virtual_bridge,
+			mcctrl_sysfs_req_unmap_memory_bridge,
+			mcctrl_sysfs_req_lookup_local_bridge,
+			mcctrl_sysfs_req_wmb_bridge);
+	return;
+#else
 	int error;
 	ihk_device_t dev = ihk_os_to_dev(os);
 	long param_pa;
@@ -1790,11 +2330,24 @@ out:
 	ihk_device_unmap_virtual(dev, param, sizeof(*param));
 	ihk_device_unmap_memory(dev, param_pa, sizeof(*param));
 	return;
+#endif
 } /* sysfsm_req_lookup() */
 
 static void
 sysfsm_req_unlink(void *os, long param_rpa)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_sysfs_req_unlink_body_result(os, param_rpa,
+			sizeof(struct sysfs_req_unlink_param),
+			mcctrl_sysfs_req_os_to_dev_bridge,
+			mcctrl_sysfs_req_map_memory_bridge,
+			mcctrl_sysfs_req_map_virtual_bridge,
+			mcctrl_sysfs_req_unmap_virtual_bridge,
+			mcctrl_sysfs_req_unmap_memory_bridge,
+			mcctrl_sysfs_req_unlink_local_bridge,
+			mcctrl_sysfs_req_wmb_bridge);
+	return;
+#else
 	int error;
 	ihk_device_t dev = ihk_os_to_dev(os);
 	long param_pa;
@@ -1825,20 +2378,49 @@ out:
 	ihk_device_unmap_virtual(dev, param, sizeof(*param));
 	ihk_device_unmap_memory(dev, param_pa, sizeof(*param));
 	return;
+#endif
 } /* sysfsm_req_unlink() */
+
+#ifdef MCCTRL_RUST_HELPERS
+static void *
+mcctrl_sysfs_node_req_bridge(void *node)
+{
+	struct sysfsm_node *np = node;
+
+	return &np->sdp->sysfs_req;
+}
+
+static void
+mcctrl_sysfs_complete_req_bridge(void *req0, long result)
+{
+	struct sysfsm_req *req = req0;
+
+	req->lresult = result;
+	wmb();
+	req->busy = 0;
+	wake_up(&req->wq);
+}
+#endif
 
 static void
 sysfsm_resp_show(void *os, struct sysfsm_node *np, ssize_t ssize)
 {
+#ifndef MCCTRL_RUST_HELPERS
 	struct sysfsm_data *sdp = np->sdp;
 	struct sysfsm_req *req = &sdp->sysfs_req;
+#endif
 
 	dprintk("mcctrl:sysfsm_resp_show(%p,%s,%ld)\n", os, np->name, ssize);
 
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_sysfs_resp_body_result(np, ssize, mcctrl_sysfs_node_req_bridge,
+			mcctrl_sysfs_complete_req_bridge);
+#else
 	req->lresult = ssize;
 	wmb();
 	req->busy = 0;
 	wake_up(&req->wq);
+#endif
 
 	dprintk("mcctrl:sysfsm_resp_show(%p,%s,%ld):\n", os, np->name, ssize);
 	return;
@@ -1847,15 +2429,22 @@ sysfsm_resp_show(void *os, struct sysfsm_node *np, ssize_t ssize)
 static void
 sysfsm_resp_store(void *os, struct sysfsm_node *np, ssize_t ssize)
 {
+#ifndef MCCTRL_RUST_HELPERS
 	struct sysfsm_data *sdp = np->sdp;
 	struct sysfsm_req *req = &sdp->sysfs_req;
+#endif
 
 	dprintk("mcctrl:sysfsm_resp_store(%p,%s,%ld)\n", os, np->name, ssize);
 
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_sysfs_resp_body_result(np, ssize, mcctrl_sysfs_node_req_bridge,
+			mcctrl_sysfs_complete_req_bridge);
+#else
 	req->lresult = ssize;
 	wmb();
 	req->busy = 0;
 	wake_up(&req->wq);
+#endif
 
 	dprintk("mcctrl:sysfsm_resp_store(%p,%s,%ld):\n", os, np->name, ssize);
 	return;
@@ -1864,26 +2453,97 @@ sysfsm_resp_store(void *os, struct sysfsm_node *np, ssize_t ssize)
 static void
 sysfsm_resp_release(void *os, struct sysfsm_node *np, int error)
 {
+#ifndef MCCTRL_RUST_HELPERS
 	struct sysfsm_data *sdp = np->sdp;
 	struct sysfsm_req *req = &sdp->sysfs_req;
+#endif
 
 	dprintk("mcctrl:sysfsm_resp_release(%p,%p %s,%d)\n",
 			os, np, np->name, error);
 
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_sysfs_resp_body_result(np, error, mcctrl_sysfs_node_req_bridge,
+			mcctrl_sysfs_complete_req_bridge);
+#else
 	req->lresult = error;
 	wmb();
 	req->busy = 0;
 	wake_up(&req->wq);
+#endif
 
 	dprintk("mcctrl:sysfsm_resp_release(%p,%p,%d):\n", os, np, error);
 	return;
 } /* sysfsm_resp_release() */
+
+#ifdef MCCTRL_RUST_HELPERS
+static void *
+mcctrl_sysfs_work_alloc_bridge(unsigned long size)
+{
+	return kzalloc(size, GFP_ATOMIC);
+}
+
+static void
+mcctrl_sysfs_work_init_schedule_bridge(void *work0)
+{
+	struct sysfs_work *work = work0;
+
+	INIT_WORK(&work->work, &sysfsm_work_main);
+	schedule_work(&work->work);
+}
+
+static void
+mcctrl_sysfs_work_alloc_failed_bridge(void)
+{
+	eprintk("mcctrl:sysfsm_packet_handler:kzalloc failed\n");
+}
+
+static void
+mcctrl_sysfs_unknown_work_bridge(int msg, void *os, long arg1, long arg2)
+{
+	wprintk("mcctrl:sysfsm_work_main:unknown work (%d,%p,%#lx,%#lx)\n",
+			msg, os, arg1, arg2);
+}
+
+static void
+mcctrl_sysfs_resp_show_bridge(void *os, void *np, long ssize)
+{
+	sysfsm_resp_show(os, np, ssize);
+}
+
+static void
+mcctrl_sysfs_resp_store_bridge(void *os, void *np, long ssize)
+{
+	sysfsm_resp_store(os, np, ssize);
+}
+
+static void
+mcctrl_sysfs_resp_release_bridge(void *os, void *np, int error)
+{
+	sysfsm_resp_release(os, np, error);
+}
+
+static void
+mcctrl_sysfs_free_work_bridge(void *work)
+{
+	kfree(work);
+}
+#endif
 
 static void
 sysfsm_work_main(struct work_struct *work0)
 {
 	struct sysfs_work *work = container_of(work0, struct sysfs_work, work);
 
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_sysfs_work_main_body_result(work,
+			sysfsm_req_setup, sysfsm_req_create, sysfsm_req_mkdir,
+			sysfsm_req_symlink, sysfsm_req_lookup,
+			sysfsm_req_unlink, mcctrl_sysfs_resp_show_bridge,
+			mcctrl_sysfs_resp_store_bridge,
+			mcctrl_sysfs_resp_release_bridge,
+			mcctrl_sysfs_unknown_work_bridge,
+			mcctrl_sysfs_free_work_bridge);
+#else
 	switch (work->msg) {
 		case SCD_MSG_SYSFS_REQ_SETUP:
 			sysfsm_req_setup(work->os, work->arg1);
@@ -1932,12 +2592,20 @@ sysfsm_work_main(struct work_struct *work0)
 	}
 
 	kfree(work);
+#endif
 	return;
 } /* sysfsm_work_main() */
 
 void
 sysfsm_packet_handler(void *os, int msg, int err, long arg1, long arg2)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_sysfs_packet_handler_body_result(os, msg, err, arg1, arg2,
+			sizeof(struct sysfs_work),
+			mcctrl_sysfs_work_alloc_bridge,
+			mcctrl_sysfs_work_init_schedule_bridge,
+			mcctrl_sysfs_work_alloc_failed_bridge);
+#else
 	struct sysfs_work *work = NULL;
 
 	work = kzalloc(sizeof(*work), GFP_ATOMIC);
@@ -1954,12 +2622,41 @@ sysfsm_packet_handler(void *os, int msg, int err, long arg1, long arg2)
 	INIT_WORK(&work->work, &sysfsm_work_main);
 
 	schedule_work(&work->work);
+#endif
 	return;
 } /* sysfsm_packet_handler() */
+
+#ifdef MCCTRL_RUST_HELPERS
+static void *
+mcctrl_sysfs_attr_node_bridge(struct attribute *attr)
+{
+	return container_of(attr, struct sysfsm_node, attr);
+}
+
+static void *
+mcctrl_sysfs_kobj_node_bridge(struct kobject *kobj)
+{
+	return container_of(kobj, struct sysfsm_node, kobj);
+}
+
+static long
+mcctrl_sysfs_node_server_ops_bridge(void *node)
+{
+	struct sysfsm_node *np = node;
+
+	return (long)np->server_ops;
+}
+#endif
 
 static ssize_t
 sysfsm_show(struct kobject *kobj, struct attribute *attr, char *buf)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	(void)kobj;
+	return mcctrl_sysfs_show_body_result(
+			mcctrl_sysfs_attr_node_bridge(attr), buf, PAGE_SIZE,
+			mcctrl_sysfs_node_server_ops_bridge);
+#else
 	struct sysfsm_node *np = container_of(attr, struct sysfsm_node, attr);
 	ssize_t ssize;
 
@@ -1969,12 +2666,19 @@ sysfsm_show(struct kobject *kobj, struct attribute *attr, char *buf)
 	}
 
 	return ssize;
+#endif
 } /* sysfsm_show() */
 
 static ssize_t
 sysfsm_store(struct kobject *kobj, struct attribute *attr, const char *buf,
 		size_t bufsize)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	(void)kobj;
+	return mcctrl_sysfs_store_body_result(
+			mcctrl_sysfs_attr_node_bridge(attr), buf, bufsize,
+			mcctrl_sysfs_node_server_ops_bridge);
+#else
 	struct sysfsm_node *np = container_of(attr, struct sysfsm_node, attr);
 	ssize_t ssize;
 
@@ -1985,16 +2689,23 @@ sysfsm_store(struct kobject *kobj, struct attribute *attr, const char *buf,
 	}
 
 	return ssize;
+#endif
 } /* sysfsm_store() */
 
 static void
 sysfsm_release(struct kobject *kobj)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_sysfs_release_body_result(
+			mcctrl_sysfs_kobj_node_bridge(kobj),
+			mcctrl_sysfs_node_server_ops_bridge);
+#else
 	struct sysfsm_node *np = container_of(kobj, struct sysfsm_node, kobj);
 
 	if (np->server_ops && np->server_ops->release) {
 		(*np->server_ops->release)(np->server_ops, np);
 	}
+#endif
 
 	return;
 } /* sysfsm_release() */
@@ -2015,15 +2726,56 @@ static struct sysfsm_ops remote_ops = {
 	.release = &remote_release,
 };
 
+#ifdef MCCTRL_RUST_HELPERS
+static long
+mcctrl_sysfs_node_client_ops_bridge(void *instance)
+{
+	struct sysfsm_node *np = instance;
+
+	return np->client_ops;
+}
+
+static long
+mcctrl_sysfs_node_client_instance_bridge(void *instance)
+{
+	struct sysfsm_node *np = instance;
+
+	return np->client_instance;
+}
+
+static int
+mcctrl_sysfs_node_type_bridge(void *instance)
+{
+	struct sysfsm_node *np = instance;
+
+	return np->type;
+}
+
+static void
+mcctrl_sysfs_free_bridge(void *ptr)
+{
+	kfree(ptr);
+}
+#endif
+
 static ssize_t
 local_show(struct sysfsm_ops *ops, void *instance, void *buf, size_t bufsize)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	ssize_t ssize;
+#else
 	struct sysfsm_node *np = instance;
 	struct sysfsm_ops *client_ops;
 	ssize_t ssize;
+#endif
 
 	dprintk("mcctrl:local_show(%p,%p,%p,%#lx)\n",
 			ops, instance, buf, bufsize);
+#ifdef MCCTRL_RUST_HELPERS
+	ssize = mcctrl_sysfs_local_show_body_result(instance, buf, bufsize,
+			PAGE_SIZE, mcctrl_sysfs_node_client_ops_bridge,
+			mcctrl_sysfs_node_client_instance_bridge);
+#else
 	client_ops = (void *)np->client_ops;
 
 	ssize = -ENOSPC;
@@ -2031,6 +2783,7 @@ local_show(struct sysfsm_ops *ops, void *instance, void *buf, size_t bufsize)
 		ssize = (*client_ops->show)(client_ops,
 				(void *)np->client_instance, buf, PAGE_SIZE);
 	}
+#endif
 
 	dprintk("mcctrl:local_show(%p,%p,%p,%#lx): %ld\n",
 			ops, instance, buf, bufsize, ssize);
@@ -2041,12 +2794,21 @@ static ssize_t
 local_store(struct sysfsm_ops *ops, void *instance, const void *buf,
 		size_t bufsize)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	ssize_t ssize;
+#else
 	struct sysfsm_node *np = instance;
 	struct sysfsm_ops *client_ops;
 	ssize_t ssize;
+#endif
 
 	dprintk("mcctrl:local_store(%p,%p,%p,%#lx)\n",
 			ops, instance, buf, bufsize);
+#ifdef MCCTRL_RUST_HELPERS
+	ssize = mcctrl_sysfs_local_store_body_result(instance, buf, bufsize,
+			mcctrl_sysfs_node_client_ops_bridge,
+			mcctrl_sysfs_node_client_instance_bridge);
+#else
 	client_ops = (void *)np->client_ops;
 
 	ssize = -ENOSPC;
@@ -2054,6 +2816,7 @@ local_store(struct sysfsm_ops *ops, void *instance, const void *buf,
 		ssize = (*client_ops->store)(client_ops,
 				(void *)np->client_instance, buf, bufsize);
 	}
+#endif
 
 	dprintk("mcctrl:local_store(%p,%p,%p,%#lx): %ld\n",
 			ops, instance, buf, bufsize, ssize);
@@ -2063,16 +2826,25 @@ local_store(struct sysfsm_ops *ops, void *instance, const void *buf,
 static void
 local_release(struct sysfsm_ops *ops, void *instance)
 {
+#ifndef MCCTRL_RUST_HELPERS
 	struct sysfsm_node *np = instance;
 	struct sysfsm_ops *client_ops;
+#endif
 
 	dprintk("mcctrl:local_release(%p,%p)\n", ops, instance);
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_sysfs_local_release_body_result(instance, SNT_FILE,
+			mcctrl_sysfs_node_type_bridge,
+			mcctrl_sysfs_node_client_ops_bridge,
+			mcctrl_sysfs_node_client_instance_bridge);
+#else
 	client_ops = (void *)np->client_ops;
 
 	if ((np->type == SNT_FILE) && client_ops && client_ops->release) {
 		(*client_ops->release)(client_ops,
 				(void *)np->client_instance);
 	}
+#endif
 
 	dprintk("mcctrl:local_release(%p,%p):\n", ops, instance);
 	return;
@@ -2089,7 +2861,12 @@ static struct sysfsm_ops local_ops = {
  */
 static void cleanup_special_local_create(struct sysfsm_ops *ops, void *instance)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_sysfs_cleanup_special_local_create_body_result(instance,
+			mcctrl_sysfs_free_bridge);
+#else
 	kfree(instance);
+#endif
 	return;
 } /* cleanup_special_local_create() */
 
@@ -2097,7 +2874,13 @@ static void cleanup_special_local_create(struct sysfsm_ops *ops, void *instance)
 /**** local int ****/
 static ssize_t snooping_local_show_d32(struct sysfsm_ops *ops, void *instance, void *buf, size_t bufsize)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	(void)ops;
+	return mcctrl_sysfs_snooping_show_i32_body_result(instance, buf,
+			bufsize);
+#else
 	return sprintf(buf, "%d\n", *(int *)instance);
+#endif
 } /* snooping_local_show_d32() */
 
 struct sysfsm_ops snooping_local_ops_d32 = {
@@ -2107,7 +2890,13 @@ struct sysfsm_ops snooping_local_ops_d32 = {
 /**** local long ****/
 static ssize_t snooping_local_show_d64(struct sysfsm_ops *ops, void *instance, void *buf, size_t bufsize)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	(void)ops;
+	return mcctrl_sysfs_snooping_show_i64_body_result(instance, buf,
+			bufsize);
+#else
 	return sprintf(buf, "%ld\n", *(long *)instance);
+#endif
 } /* snooping_local_show_d64() */
 
 struct sysfsm_ops snooping_local_ops_d64 = {
@@ -2117,7 +2906,13 @@ struct sysfsm_ops snooping_local_ops_d64 = {
 /**** local unsigned ****/
 static ssize_t snooping_local_show_u32(struct sysfsm_ops *ops, void *instance, void *buf, size_t bufsize)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	(void)ops;
+	return mcctrl_sysfs_snooping_show_u32_body_result(instance, buf,
+			bufsize);
+#else
 	return sprintf(buf, "%u\n", *(unsigned *)instance);
+#endif
 } /* snooping_local_show_u32() */
 
 struct sysfsm_ops snooping_local_ops_u32 = {
@@ -2127,7 +2922,13 @@ struct sysfsm_ops snooping_local_ops_u32 = {
 /**** local unsigned long ****/
 static ssize_t snooping_local_show_u64(struct sysfsm_ops *ops, void *instance, void *buf, size_t bufsize)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	(void)ops;
+	return mcctrl_sysfs_snooping_show_u64_body_result(instance, buf,
+			bufsize);
+#else
 	return sprintf(buf, "%lu\n", *(unsigned long *)instance);
+#endif
 } /* snooping_local_show_u64() */
 
 struct sysfsm_ops snooping_local_ops_u64 = {
@@ -2137,7 +2938,13 @@ struct sysfsm_ops snooping_local_ops_u64 = {
 /**** local string ****/
 static ssize_t snooping_local_show_s(struct sysfsm_ops *ops, void *instance, void *buf, size_t bufsize)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	(void)ops;
+	return mcctrl_sysfs_snooping_show_string_body_result(instance, buf,
+			bufsize);
+#else
 	return sprintf(buf, "%s\n", (char *)instance);
+#endif
 } /* snooping_local_show_s() */
 
 struct sysfsm_ops snooping_local_ops_s = {
@@ -2145,8 +2952,21 @@ struct sysfsm_ops snooping_local_ops_s = {
 };
 
 /**** local list ****/
+#ifdef MCCTRL_RUST_HELPERS
+static unsigned long mcctrl_sysfs_bitmap_scnlistprintf_bridge(void *buf,
+		unsigned long bufsize, void *ptr, int nbits)
+{
+	return bitmap_scnlistprintf(buf, bufsize, ptr, nbits);
+}
+#endif
+
 static ssize_t snooping_local_show_pbl(struct sysfsm_ops *ops, void *instance, void *buf, size_t bufsize)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	(void)ops;
+	return mcctrl_sysfs_snooping_show_bitmap_body_result(instance, buf,
+			bufsize, mcctrl_sysfs_bitmap_scnlistprintf_bridge);
+#else
 	size_t ret;
 	const struct sysfsm_bitmap_param *p = instance;
 
@@ -2157,6 +2977,7 @@ static ssize_t snooping_local_show_pbl(struct sysfsm_ops *ops, void *instance, v
 	}
 
 	return 0;
+#endif
 } /* snooping_local_show_pbl() */
 
 struct sysfsm_ops snooping_local_ops_pbl = {
@@ -2165,8 +2986,21 @@ struct sysfsm_ops snooping_local_ops_pbl = {
 };
 
 /**** local map ****/
+#ifdef MCCTRL_RUST_HELPERS
+static unsigned long mcctrl_sysfs_bitmap_scnprintf_bridge(void *buf,
+		unsigned long bufsize, void *ptr, int nbits)
+{
+	return bitmap_scnprintf(buf, bufsize, ptr, nbits);
+}
+#endif
+
 static ssize_t snooping_local_show_pb(struct sysfsm_ops *ops, void *instance, void *buf, size_t bufsize)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	(void)ops;
+	return mcctrl_sysfs_snooping_show_bitmap_body_result(instance, buf,
+			bufsize, mcctrl_sysfs_bitmap_scnprintf_bridge);
+#else
 	size_t ret;
 	const struct sysfsm_bitmap_param *p = instance;
 
@@ -2177,6 +3011,7 @@ static ssize_t snooping_local_show_pb(struct sysfsm_ops *ops, void *instance, vo
 	}
 
 	return 0;
+#endif
 } /* snooping_local_show_pb() */
 
 struct sysfsm_ops snooping_local_ops_pb = {
@@ -2187,7 +3022,13 @@ struct sysfsm_ops snooping_local_ops_pb = {
 /**** local K unsigned ****/
 static ssize_t snooping_local_show_u32K(struct sysfsm_ops *ops, void *instance, void *buf, size_t bufsize)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	(void)ops;
+	return mcctrl_sysfs_snooping_show_u32k_body_result(instance, buf,
+			bufsize);
+#else
 	return sprintf(buf, "%uK\n", (*(unsigned *)instance >> 10));
+#endif
 } /* snooping_local_show_u32K() */
 
 struct sysfsm_ops snooping_local_ops_u32K = {
@@ -2205,6 +3046,35 @@ struct sysfsm_ops * const local_snooping_ops_table[] = {
 	[(long)SYSFS_SNOOPING_OPS_u32K] = &snooping_local_ops_u32K,
 };
 
+#ifdef MCCTRL_RUST_HELPERS
+static void *
+mcctrl_sysfs_local_alloc_bridge(unsigned long size)
+{
+	return kmalloc(size, GFP_KERNEL);
+}
+
+static void
+mcctrl_sysfs_local_copy_bridge(void *dst, const void *src, unsigned long size)
+{
+	memcpy(dst, src, size);
+}
+
+static void
+mcctrl_sysfs_unknown_local_ops_bridge(long client_ops)
+{
+	eprintk("mcctrl:setup_special_local_create:unknown ops %#lx\n",
+			client_ops);
+}
+#endif
+
+#ifdef MCCTRL_RUST_HELPERS
+static void
+mcctrl_sysfs_setup_special_failed_bridge(int error)
+{
+	eprintk("mcctrl:sysfsm_createf:setup_special_local_create failed. %d\n",
+			error);
+}
+#else
 static int setup_special_local_create(struct sysfs_req_create_param *param)
 {
 	struct sysfsm_bitmap_param *p = NULL;
@@ -2236,18 +3106,150 @@ static int setup_special_local_create(struct sysfs_req_create_param *param)
 	eprintk("mcctrl:setup_special_local_create:unknown ops %#lx\n", param->client_ops);
 	return -EINVAL;
 } /* setup_special_local_create() */
+#endif
+
+#ifdef MCCTRL_RUST_HELPERS
+static int
+mcctrl_sysfs_local_create_bridge(void *os, struct sysfs_req_create_param *param)
+{
+	struct mcctrl_usrdata *udp = ihk_host_os_get_usrdata(os);
+	struct sysfsm_node *np;
+	int error;
+
+	if (!udp) {
+		pr_err("%s: error: mcctrl_usrdata not found\n", __func__);
+		return -EINVAL;
+	}
+
+	np = sysfsm_create(&udp->sysfsm_data, param->path, param->mode,
+			&local_ops, param->client_ops, param->client_instance);
+	if (IS_ERR(np)) {
+		error = PTR_ERR(np);
+		eprintk("mcctrl:sysfsm_createf:sysfsm_create failed. %d\n",
+				error);
+		return error;
+	}
+
+	return 0;
+}
+
+static void
+mcctrl_sysfs_cleanup_special_local_create_bridge(void *ops, void *instance)
+{
+	cleanup_special_local_create((struct sysfsm_ops *)ops, instance);
+}
+
+static int
+mcctrl_sysfs_mkdir_local_bridge(void *os, struct sysfs_req_mkdir_param *param)
+{
+	struct mcctrl_usrdata *udp = ihk_host_os_get_usrdata(os);
+	struct sysfsm_node *np;
+	int error;
+
+	if (!udp) {
+		pr_err("%s: error: mcctrl_usrdata not found\n", __func__);
+		return -EINVAL;
+	}
+
+	np = sysfsm_mkdir(&udp->sysfsm_data, param->path);
+	if (IS_ERR(np)) {
+		error = PTR_ERR(np);
+		eprintk("mcctrl:sysfsm_mkdirf:sysfsm_mkdir failed. %d\n",
+				error);
+		return error;
+	}
+
+	param->handle = (long)np;
+	return 0;
+}
+
+static int
+mcctrl_sysfs_symlink_local_bridge(void *os,
+		struct sysfs_req_symlink_param *param)
+{
+	struct mcctrl_usrdata *udp = ihk_host_os_get_usrdata(os);
+	struct sysfsm_node *np;
+	int error;
+
+	if (!udp) {
+		pr_err("%s: error: mcctrl_usrdata not found\n", __func__);
+		return -EINVAL;
+	}
+
+	np = sysfsm_symlink(&udp->sysfsm_data, (void *)param->target,
+			param->path);
+	if (IS_ERR(np)) {
+		error = PTR_ERR(np);
+		eprintk("mcctrl:sysfsm_symlinkf:sysfsm_symlink failed. %d\n",
+				error);
+		return error;
+	}
+
+	return 0;
+}
+
+static int
+mcctrl_sysfs_lookup_local_bridge(void *os,
+		struct sysfs_req_lookup_param *param)
+{
+	struct mcctrl_usrdata *udp = ihk_host_os_get_usrdata(os);
+	struct sysfsm_node *np;
+	int error;
+
+	if (!udp) {
+		pr_err("%s: error: mcctrl_usrdata not found\n", __func__);
+		return -EINVAL;
+	}
+
+	np = sysfsm_lookup(&udp->sysfsm_data, param->path);
+	if (IS_ERR(np)) {
+		error = PTR_ERR(np);
+		eprintk("mcctrl:sysfsm_lookupf:sysfsm_lookup failed. %d\n",
+				error);
+		return error;
+	}
+
+	param->handle = (long)np;
+	return 0;
+}
+
+static int
+mcctrl_sysfs_unlink_local_bridge(void *os,
+		struct sysfs_req_unlink_param *param)
+{
+	struct mcctrl_usrdata *udp = ihk_host_os_get_usrdata(os);
+	int error;
+
+	if (!udp) {
+		pr_err("%s: error: mcctrl_usrdata not found\n", __func__);
+		return -EINVAL;
+	}
+
+	error = sysfsm_unlink(&udp->sysfsm_data, param->path, param->flags);
+	if (error) {
+		eprintk("mcctrl:sysfsm_unlinkf:sysfsm_unlink failed. %d\n",
+				error);
+		return error;
+	}
+
+	return 0;
+}
+
+#endif
 
 int
 sysfsm_createf(ihk_os_t os, struct sysfsm_ops *ops, void *instance, int mode,
 		const char *fmt, ...)
 {
 	int error;
+#ifndef MCCTRL_RUST_HELPERS
 	struct mcctrl_usrdata *udp = ihk_host_os_get_usrdata(os);
+	struct sysfsm_node *np;
+	char special = 0;
+#endif
 	va_list ap;
 	ssize_t n;
 	struct sysfs_req_create_param *param = NULL;
-	struct sysfsm_node *np;
-	char special = 0;
 
 	dprintk("mcctrl:sysfsm_createf(%p,%p,%p,%#o,%s,...)\n",
 			os, ops, instance, mode, fmt);
@@ -2267,19 +3269,30 @@ sysfsm_createf(ihk_os_t os, struct sysfsm_ops *ops, void *instance, int mode,
 	va_start(ap, fmt);
 	n = vsnprintf(param->path, sizeof(param->path), fmt, ap);
 	va_end(ap);
-	if (n >= sizeof(param->path)) {
-		error = -ENAMETOOLONG;
+	error = mcctrl_sysfs_path_error(param->path, n, sizeof(param->path));
+	if (error == -ENAMETOOLONG) {
 		eprintk("mcctrl:sysfsm_createf:vsnprintf failed. %d\n", error);
 		goto out;
 	}
 	dprintk("mcctrl:sysfsm_createf:path %s\n", param->path);
-	if (param->path[0] != '/') {
-		error = -ENOENT;
+	if (error == -ENOENT) {
 		eprintk("mcctrl:sysfsm_createf:not an absolute path. %d\n",
 				error);
 		goto out;
 	}
 
+#ifdef MCCTRL_RUST_HELPERS
+	error = mcctrl_sysfs_createf_post_path_body_result(os, param,
+			(void * const *)local_snooping_ops_table,
+			sizeof(struct sysfsm_bitmap_param),
+			mcctrl_sysfs_local_alloc_bridge,
+			mcctrl_sysfs_local_copy_bridge,
+			mcctrl_sysfs_unknown_local_ops_bridge,
+			mcctrl_sysfs_local_create_bridge,
+			mcctrl_sysfs_cleanup_special_local_create_bridge,
+			mcctrl_sysfs_setup_special_failed_bridge);
+	goto out;
+#else
 	if (is_special_sysfs_ops((void *)param->client_ops)) {
 		error = setup_special_local_create(param);
 		if (error) {
@@ -2305,10 +3318,13 @@ sysfsm_createf(ihk_os_t os, struct sysfsm_ops *ops, void *instance, int mode,
 	}
 
 	error = 0;
+#endif
 out:
+#ifndef MCCTRL_RUST_HELPERS
 	if (error && special) {
 		cleanup_special_local_create((void *)param->client_ops, (void *)param->client_instance);
 	}
+#endif
 	free_page((uintptr_t)param);
 	if (error) {
 		eprintk("mcctrl:sysfsm_createf(%p,%p,%p,%#o,%s,...): %d\n",
@@ -2323,11 +3339,13 @@ int
 sysfsm_mkdirf(ihk_os_t os, sysfs_handle_t *dirhp, const char *fmt, ...)
 {
 	int error;
+#ifndef MCCTRL_RUST_HELPERS
 	struct mcctrl_usrdata *udp = ihk_host_os_get_usrdata(os);
+	struct sysfsm_node *np;
+#endif
 	struct sysfs_req_mkdir_param *param = NULL;
 	va_list ap;
 	int n;
-	struct sysfsm_node *np;
 
 	dprintk("mcctrl:sysfsm_mkdirf(%p,%p,%s,...)\n", os, dirhp, fmt);
 
@@ -2342,19 +3360,26 @@ sysfsm_mkdirf(ihk_os_t os, sysfs_handle_t *dirhp, const char *fmt, ...)
 	va_start(ap, fmt);
 	n = vsnprintf(param->path, sizeof(param->path), fmt, ap);
 	va_end(ap);
-	if (n >= sizeof(param->path)) {
-		error = -ENAMETOOLONG;
+	error = mcctrl_sysfs_path_error(param->path, n, sizeof(param->path));
+	if (error == -ENAMETOOLONG) {
 		eprintk("mcctrl:sysfsm_mkdirf:vsnprintf failed. %d\n", error);
 		goto out;
 	}
 	dprintk("mcctrl:sysfsm_mkdirf:path %s\n", param->path);
-	if (param->path[0] != '/') {
-		error = -ENOENT;
+	if (error == -ENOENT) {
 		eprintk("mcctrl:sysfsm_mkdirf:not an absolute path. %d\n",
 				error);
 		goto out;
 	}
 
+#ifdef MCCTRL_RUST_HELPERS
+	error = mcctrl_sysfs_mkdirf_post_path_body_result(os, param,
+			mcctrl_sysfs_mkdir_local_bridge);
+	if (!error && dirhp) {
+		dirhp->handle = param->handle;
+	}
+	goto out;
+#else
 	if (!udp) {
 		pr_err("%s: error: mcctrl_usrdata not found\n",
 			 __func__);
@@ -2374,6 +3399,7 @@ sysfsm_mkdirf(ihk_os_t os, sysfs_handle_t *dirhp, const char *fmt, ...)
 	if (dirhp) {
 		dirhp->handle = (long)np;
 	}
+#endif
 
 out:
 	free_page((uintptr_t)param);
@@ -2390,11 +3416,13 @@ int
 sysfsm_symlinkf(ihk_os_t os, sysfs_handle_t targeth, const char *fmt, ...)
 {
 	int error;
+#ifndef MCCTRL_RUST_HELPERS
 	struct mcctrl_usrdata *udp = ihk_host_os_get_usrdata(os);
+	struct sysfsm_node *np;
+#endif
 	struct sysfs_req_symlink_param *param = NULL;
 	va_list ap;
 	int n;
-	struct sysfsm_node *np;
 
 	dprintk("mcctrl:sysfsm_symlinkf(%p,%#lx,%s,...)\n",
 			os, targeth.handle, fmt);
@@ -2410,19 +3438,24 @@ sysfsm_symlinkf(ihk_os_t os, sysfs_handle_t targeth, const char *fmt, ...)
 	va_start(ap, fmt);
 	n = vsnprintf(param->path, sizeof(param->path), fmt, ap);
 	va_end(ap);
-	if (n >= sizeof(param->path)) {
-		error = -ENAMETOOLONG;
+	error = mcctrl_sysfs_path_error(param->path, n, sizeof(param->path));
+	if (error == -ENAMETOOLONG) {
 		eprintk("mcctrl:sysfsm_symlinkf:vsnprintf failed. %d\n", error);
 		goto out;
 	}
 	dprintk("mcctrl:sysfsm_symlinkf:path %s\n", param->path);
-	if (param->path[0] != '/') {
-		error = -ENOENT;
+	if (error == -ENOENT) {
 		eprintk("mcctrl:sysfsm_symlinkf:not an absolute path. %d\n",
 				error);
 		goto out;
 	}
 
+#ifdef MCCTRL_RUST_HELPERS
+	param->target = targeth.handle;
+	error = mcctrl_sysfs_symlinkf_post_path_body_result(os, param,
+			mcctrl_sysfs_symlink_local_bridge);
+	goto out;
+#else
 	if (!udp) {
 		pr_err("%s: error: mcctrl_usrdata not found\n",
 			 __func__);
@@ -2440,6 +3473,7 @@ sysfsm_symlinkf(ihk_os_t os, sysfs_handle_t targeth, const char *fmt, ...)
 	}
 
 	error = 0;
+#endif
 out:
 	free_page((uintptr_t)param);
 	if (error) {
@@ -2455,11 +3489,13 @@ int
 sysfsm_lookupf(ihk_os_t os, sysfs_handle_t *objhp, const char *fmt, ...)
 {
 	int error;
+#ifndef MCCTRL_RUST_HELPERS
 	struct mcctrl_usrdata *udp = ihk_host_os_get_usrdata(os);
+	struct sysfsm_node *np;
+#endif
 	struct sysfs_req_lookup_param *param = NULL;
 	va_list ap;
 	int n;
-	struct sysfsm_node *np;
 
 	dprintk("mcctrl:sysfsm_lookupf(%p,%p,%s,...)\n", os, objhp, fmt);
 
@@ -2474,19 +3510,26 @@ sysfsm_lookupf(ihk_os_t os, sysfs_handle_t *objhp, const char *fmt, ...)
 	va_start(ap, fmt);
 	n = vsnprintf(param->path, sizeof(param->path), fmt, ap);
 	va_end(ap);
-	if (n >= sizeof(param->path)) {
-		error = -ENAMETOOLONG;
+	error = mcctrl_sysfs_path_error(param->path, n, sizeof(param->path));
+	if (error == -ENAMETOOLONG) {
 		eprintk("mcctrl:sysfsm_lookupf:vsnprintf failed. %d\n", error);
 		goto out;
 	}
 	dprintk("mcctrl:sysfsm_lookupf:path %s\n", param->path);
-	if (param->path[0] != '/') {
-		error = -ENOENT;
+	if (error == -ENOENT) {
 		eprintk("mcctrl:sysfsm_lookupf:not an absolute path. %d\n",
 				error);
 		goto out;
 	}
 
+#ifdef MCCTRL_RUST_HELPERS
+	error = mcctrl_sysfs_lookupf_post_path_body_result(os, param,
+			mcctrl_sysfs_lookup_local_bridge);
+	if (!error && objhp) {
+		objhp->handle = param->handle;
+	}
+	goto out;
+#else
 	if (!udp) {
 		pr_err("%s: error: mcctrl_usrdata not found\n",
 			 __func__);
@@ -2506,6 +3549,7 @@ sysfsm_lookupf(ihk_os_t os, sysfs_handle_t *objhp, const char *fmt, ...)
 	if (objhp) {
 		objhp->handle = (long)np;
 	}
+#endif
 
 out:
 	free_page((uintptr_t)param);
@@ -2522,7 +3566,9 @@ int
 sysfsm_unlinkf(ihk_os_t os, int flags, const char *fmt, ...)
 {
 	int error;
+#ifndef MCCTRL_RUST_HELPERS
 	struct mcctrl_usrdata *udp = ihk_host_os_get_usrdata(os);
+#endif
 	struct sysfs_req_unlink_param *param = NULL;
 	va_list ap;
 	int n;
@@ -2540,19 +3586,24 @@ sysfsm_unlinkf(ihk_os_t os, int flags, const char *fmt, ...)
 	va_start(ap, fmt);
 	n = vsnprintf(param->path, sizeof(param->path), fmt, ap);
 	va_end(ap);
-	if (n >= sizeof(param->path)) {
-		error = -ENAMETOOLONG;
+	error = mcctrl_sysfs_path_error(param->path, n, sizeof(param->path));
+	if (error == -ENAMETOOLONG) {
 		eprintk("mcctrl:sysfsm_unlinkf:vsnprintf failed. %d\n", error);
 		goto out;
 	}
 	dprintk("mcctrl:sysfsm_unlinkf:path %s\n", param->path);
-	if (param->path[0] != '/') {
-		error = -ENOENT;
+	if (error == -ENOENT) {
 		eprintk("mcctrl:sysfsm_unlinkf:not an absolute path. %d\n",
 				error);
 		goto out;
 	}
 
+#ifdef MCCTRL_RUST_HELPERS
+	param->flags = flags;
+	error = mcctrl_sysfs_unlinkf_post_path_body_result(os, param,
+			mcctrl_sysfs_unlink_local_bridge);
+	goto out;
+#else
 	if (!udp) {
 		pr_err("%s: error: mcctrl_usrdata not found\n",
 			 __func__);
@@ -2568,6 +3619,7 @@ sysfsm_unlinkf(ihk_os_t os, int flags, const char *fmt, ...)
 	}
 
 	error = 0;
+#endif
 out:
 	free_page((uintptr_t)param);
 	if (error) {

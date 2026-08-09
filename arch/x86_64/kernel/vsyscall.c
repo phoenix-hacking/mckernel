@@ -26,9 +26,9 @@ extern int vsyscall_gettimeofday(struct timeval *tv, void *tz)
 	__attribute__ ((section (".vsyscall.gettimeofday")));
 
 struct tod_data_s tod_data
-		__attribute__ ((section(".vsyscall.gettimeofday.data"))) = {
+	__attribute__ ((section(".vsyscall.gettimeofday.data"))) = {
 	.do_local =	0,
-	.version =	IHK_ATOMIC64_INIT(0),
+	.version =	{ .counter64 = 0 },
 };
 
 int vsyscall_gettimeofday(struct timeval *tv, void *tz)

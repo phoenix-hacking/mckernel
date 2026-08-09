@@ -194,6 +194,8 @@ enter_user_mode:
 		call	utilthr_migrate
 		movq	$0,  %rdi
 		call	set_cputime
+		movq	%rsp, %rdi
+		callq	mcexec_v10_trace_enter_user
 		POP_ALL_REGS
 		addq	$8, %rsp
 		iretq

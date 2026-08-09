@@ -28,6 +28,7 @@
 #include <linux/slab.h>
 #include <linux/string.h>
 #include <linux/interrupt.h>
+#include <mcctrl_rust.h>
 #include "mcctrl.h"
 #ifdef ATTACHED_MIC
 #include <sysdeps/mic/mic/micconst.h>
@@ -138,7 +139,7 @@ int mcctrl_ikc_send_wait(ihk_os_t os, int cpu, struct ikc_scd_packet *pisp,
 		return -EINVAL;
 	}
 
-	if (free_addrs_count)
+	if (mcctrl_ikc_free_addrs_owner(free_addrs_count))
 		*do_frees = 1;
 
 	if (alloc_desc)
@@ -159,9 +160,7 @@ int mcctrl_ikc_send_wait(ihk_os_t os, int cpu, struct ikc_scd_packet *pisp,
 	desc->free_addrs_count = free_addrs_count;
 
 	/* Only free at put time if allocated internally */
-	desc->free_at_put = 0;
-	if (alloc_desc)
-		desc->free_at_put = 1;
+	desc->free_at_put = mcctrl_ikc_desc_free_at_put(alloc_desc);
 
 	init_waitqueue_head(&desc->wq);
 
@@ -186,16 +185,18 @@ int mcctrl_ikc_send_wait(ihk_os_t os, int cpu, struct ikc_scd_packet *pisp,
 		return ret;
 	}
 
-	if (timeout) {
+	switch (mcctrl_ikc_wait_mode(timeout)) {
+	case -1:
 		/*
 		 * Negative timeout indicates busy waiting, which can be used
 		 * in situations where wait_event_interruptible_XXX() would
 		 * fail, e.g., in a signal handler, at the time the process
 		 * is being killed, etc.
 		 */
-		if (timeout < 0) {
+		{
 			unsigned long timeout_jiffies =
-				jiffies + msecs_to_jiffies(timeout * -1);
+				jiffies + msecs_to_jiffies(
+					mcctrl_ikc_busy_timeout_msecs(timeout));
 			ret = -ETIME;
 
 			while (time_before(jiffies, timeout_jiffies)) {
@@ -206,12 +207,14 @@ int mcctrl_ikc_send_wait(ihk_os_t os, int cpu, struct ikc_scd_packet *pisp,
 				}
 			}
 		}
-		else {
-			ret = wait_event_interruptible_timeout(desc->wq,
-					desc->status, msecs_to_jiffies(timeout));
-		}
-	} else {
+		break;
+	case 1:
+		ret = wait_event_interruptible_timeout(desc->wq,
+				desc->status, msecs_to_jiffies(timeout));
+		break;
+	default:
 		ret = wait_event_interruptible(desc->wq, desc->status);
+		break;
 	}
 
 	/*
@@ -223,7 +226,7 @@ int mcctrl_ikc_send_wait(ihk_os_t os, int cpu, struct ikc_scd_packet *pisp,
 
 		if (do_frees)
 			*do_frees = 0;
-		return ret < 0 ? ret : -ETIME;
+		return mcctrl_ikc_wait_abort_return(ret);
 	}
 
 	ret = READ_ONCE(desc->err);
@@ -313,7 +316,7 @@ out:
 	 * SCD_MSG_SYSCALL_ONESIDE holds the packet and frees is it
 	 * mcexec_ret_syscall(), for the rest, free it here.
 	 */
-	if (msg != SCD_MSG_SYSCALL_ONESIDE) {
+	if (mcctrl_ikc_release_packet_after_handler(msg)) {
 		ihk_ikc_release_packet((struct ihk_ikc_free_packet *)__packet);
 	}
 	return ret;
@@ -335,12 +338,12 @@ int mcctrl_ikc_send(ihk_os_t os, int cpu, struct ikc_scd_packet *pisp)
 		return -EINVAL;
 	}
 
-	if (cpu < 0) {
+	if (!mcctrl_ikc_cpu_nonnegative(cpu)) {
 		return -EINVAL;
 	}
 
 	usrdata = ihk_host_os_get_usrdata(os);
-	if (!usrdata || cpu >= usrdata->num_channels ||
+	if (!usrdata || !mcctrl_ikc_cpu_index_valid(cpu, usrdata->num_channels) ||
 	    !usrdata->channels[cpu].c) {
 		return -EINVAL;
 	}
@@ -357,7 +360,7 @@ int mcctrl_ikc_send_msg(ihk_os_t os, int cpu, int msg, int ref, unsigned long ar
 	}
 
 	usrdata = ihk_host_os_get_usrdata(os);
-	if (!usrdata || cpu < 0 || cpu >= usrdata->num_channels ||
+	if (!usrdata || !mcctrl_ikc_cpu_index_valid(cpu, usrdata->num_channels) ||
 	    !usrdata->channels[cpu].c) {
 		return -EINVAL;
 	}
@@ -397,7 +400,7 @@ int mcctrl_ikc_is_valid_thread(ihk_os_t os, int cpu)
 	}
 
 	usrdata = ihk_host_os_get_usrdata(os);
-	if (!usrdata || cpu < 0 || cpu >= usrdata->num_channels ||
+	if (!usrdata || !mcctrl_ikc_cpu_index_valid(cpu, usrdata->num_channels) ||
 	    !usrdata->channels[cpu].c) {
 		return 0;
 	} else {
@@ -422,7 +425,7 @@ static void mcctrl_ikc_init(ihk_os_t os, int cpu, unsigned long rphys, struct ih
 		return;
 	}
 
-	if (c->port == 502) {
+	if (mcctrl_ikc_init_uses_last_channel(c->port)) {
 		pmc = usrdata->channels + usrdata->num_channels - 1;
 	} else {
 		pmc = usrdata->channels + cpu;
@@ -454,7 +457,7 @@ static int connect_handler_ikc2linux(struct ihk_ikc_channel_info *param)
 
 	c = param->channel;
 	linux_cpu = c->send.queue->write_cpu;
-	if (linux_cpu > nr_cpu_ids) {
+	if (!mcctrl_ikc_linux_cpu_valid(linux_cpu, nr_cpu_ids)) {
 		kprintf("%s: invalid Linux CPU id %d\n",
 				__FUNCTION__, linux_cpu);
 		return -1;
@@ -482,7 +485,7 @@ static int connect_handler_ikc2mckernel(struct ihk_ikc_channel_info *param)
 	c = param->channel;
 	mck_cpu = c->send.queue->read_cpu;
 
-	if (mck_cpu < 0 || mck_cpu >= usrdata->num_channels) {
+	if (!mcctrl_ikc_cpu_index_valid(mck_cpu, usrdata->num_channels)) {
 		kprintf("Invalid connect source processor: %d\n", mck_cpu);
 		return 1;
 	}
@@ -534,7 +537,7 @@ int prepare_ikc_channels(ihk_os_t os)
 		goto error;
 	}
 
-	if (usrdata->cpu_info->n_cpus < 1) {
+	if (!mcctrl_ikc_cpu_count_valid(usrdata->cpu_info->n_cpus)) {
 		printk("%s: Error: # of cpu is invalid.\n", __FUNCTION__);
 		ret = -EINVAL;
 		goto error;

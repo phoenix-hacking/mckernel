@@ -41,17 +41,25 @@ struct x86_user_context {
 };
 typedef struct x86_user_context ihk_mc_user_context_t;
 
-#define ihk_mc_syscall_arg0(uc) (uc)->gpr.rdi
-#define ihk_mc_syscall_arg1(uc) (uc)->gpr.rsi
-#define ihk_mc_syscall_arg2(uc) (uc)->gpr.rdx
-#define ihk_mc_syscall_arg3(uc) (uc)->gpr.r10
-#define ihk_mc_syscall_arg4(uc) (uc)->gpr.r8
-#define ihk_mc_syscall_arg5(uc) (uc)->gpr.r9
+unsigned long ihk_mc_syscall_arg0(const ihk_mc_user_context_t *uc);
+unsigned long ihk_mc_syscall_arg1(const ihk_mc_user_context_t *uc);
+unsigned long ihk_mc_syscall_arg2(const ihk_mc_user_context_t *uc);
+unsigned long ihk_mc_syscall_arg3(const ihk_mc_user_context_t *uc);
+unsigned long ihk_mc_syscall_arg4(const ihk_mc_user_context_t *uc);
+unsigned long ihk_mc_syscall_arg5(const ihk_mc_user_context_t *uc);
 
-#define ihk_mc_syscall_ret(uc)  (uc)->gpr.rax
-#define ihk_mc_syscall_number(uc)  (uc)->gpr.orig_rax
+void ihk_mc_syscall_set_arg0(ihk_mc_user_context_t *uc, unsigned long value);
+void ihk_mc_syscall_set_arg1(ihk_mc_user_context_t *uc, unsigned long value);
+void ihk_mc_syscall_set_arg2(ihk_mc_user_context_t *uc, unsigned long value);
+void ihk_mc_syscall_set_arg3(ihk_mc_user_context_t *uc, unsigned long value);
+void ihk_mc_syscall_set_arg4(ihk_mc_user_context_t *uc, unsigned long value);
+void ihk_mc_syscall_set_arg5(ihk_mc_user_context_t *uc, unsigned long value);
 
-#define ihk_mc_syscall_pc(uc)   (uc)->gpr.rip
-#define ihk_mc_syscall_sp(uc)   (uc)->gpr.rsp
+unsigned long ihk_mc_syscall_ret(const ihk_mc_user_context_t *uc);
+void ihk_mc_syscall_set_ret(ihk_mc_user_context_t *uc, unsigned long value);
+unsigned long ihk_mc_syscall_number(const ihk_mc_user_context_t *uc);
+
+unsigned long ihk_mc_syscall_pc(const ihk_mc_user_context_t *uc);
+unsigned long ihk_mc_syscall_sp(const ihk_mc_user_context_t *uc);
 
 #endif

@@ -361,59 +361,170 @@ struct syscall_post {
 	unsigned long v[8];
 };
 
-#define SYSCALL_DECLARE(name) long sys_##name(int n, ihk_mc_user_context_t *ctx)
-#define SYSCALL_HEADER struct syscall_request request IHK_DMA_ALIGN; \
-	request.number = n
-#define SYSCALL_ARG_D(n)    request.args[n] = ihk_mc_syscall_arg##n(ctx)
-#define SYSCALL_ARG_MO(n) \
-	do { \
-	unsigned long __phys; \
-	if (ihk_mc_pt_virt_to_phys(cpu_local_var(current)->vm->page_table, \
-	                           (void *)ihk_mc_syscall_arg##n(ctx),\
-	                           &__phys)) { \
-		return -EFAULT; \
-	}\
-	request.args[n] = __phys; \
-	} while(0)
-#define SYSCALL_ARG_MI(n) \
-	do { \
-	unsigned long __phys; \
-	if (ihk_mc_pt_virt_to_phys(cpu_local_var(current)->vm->page_table, \
-	                           (void *)ihk_mc_syscall_arg##n(ctx),\
-	                           &__phys)) { \
-		return -EFAULT; \
-	}\
-	request.args[n] = __phys; \
-	} while(0)
-
-
-#define SYSCALL_ARGS_1(a0)          SYSCALL_ARG_##a0(0)
-#define SYSCALL_ARGS_2(a0, a1)      SYSCALL_ARG_##a0(0); SYSCALL_ARG_##a1(1)
-#define SYSCALL_ARGS_3(a0, a1, a2)  SYSCALL_ARG_##a0(0); SYSCALL_ARG_##a1(1); \
-	                            SYSCALL_ARG_##a2(2)
-#define SYSCALL_ARGS_4(a0, a1, a2, a3) \
-	SYSCALL_ARG_##a0(0); SYSCALL_ARG_##a1(1); \
-	SYSCALL_ARG_##a2(2); SYSCALL_ARG_##a3(3)
-#define SYSCALL_ARGS_6(a0, a1, a2, a3, a4, a5) \
-	SYSCALL_ARG_##a0(0); SYSCALL_ARG_##a1(1); \
-	SYSCALL_ARG_##a2(2); SYSCALL_ARG_##a3(3); \
-	SYSCALL_ARG_##a4(4); SYSCALL_ARG_##a5(5);
-
-#define SYSCALL_FOOTER return do_syscall(&request, ihk_mc_get_processor_id())
-
 extern long do_syscall(struct syscall_request *req, int cpu);
 int obtain_clone_cpuid(cpu_set_t *cpu_set, int use_last);
 extern long syscall_generic_forwarding(int n, ihk_mc_user_context_t *ctx);
 
-#define DECLARATOR(number,name)		__NR_##name = number,
-#define	SYSCALL_HANDLED(number,name)	DECLARATOR(number,name)
-#define	SYSCALL_DELEGATED(number,name)	DECLARATOR(number,name)
 enum {
-#include <syscall_list.h>
+	__NR_read = 0,
+	__NR_write = 1,
+	__NR_open = 2,
+	__NR_close = 3,
+	__NR_stat = 4,
+	__NR_fstat = 5,
+	__NR_poll = 7,
+	__NR_lseek = 8,
+	__NR_mmap = 9,
+	__NR_mprotect = 10,
+	__NR_munmap = 11,
+	__NR_brk = 12,
+	__NR_rt_sigaction = 13,
+	__NR_rt_sigprocmask = 14,
+	__NR_rt_sigreturn = 15,
+	__NR_ioctl = 16,
+	__NR_pread64 = 17,
+	__NR_pwrite64 = 18,
+	__NR_writev = 20,
+	__NR_access = 21,
+	__NR_select = 23,
+	__NR_sched_yield = 24,
+	__NR_mremap = 25,
+	__NR_msync = 26,
+	__NR_mincore = 27,
+	__NR_madvise = 28,
+	__NR_shmget = 29,
+	__NR_shmat = 30,
+	__NR_shmctl = 31,
+	__NR_pause = 34,
+	__NR_nanosleep = 35,
+	__NR_getitimer = 36,
+	__NR_setitimer = 38,
+	__NR_getpid = 39,
+	__NR_clone = 56,
+	__NR_fork = 57,
+	__NR_vfork = 58,
+	__NR_execve = 59,
+	__NR_exit = 60,
+	__NR_wait4 = 61,
+	__NR_kill = 62,
+	__NR_uname = 63,
+	__NR_semop = 65,
+	__NR_shmdt = 67,
+	__NR_msgsnd = 69,
+	__NR_msgrcv = 70,
+	__NR_fcntl = 72,
+	__NR_getcwd = 79,
+	__NR_unlink = 87,
+	__NR_readlink = 89,
+	__NR_gettimeofday = 96,
+	__NR_getrlimit = 97,
+	__NR_getrusage = 98,
+	__NR_sysinfo = 99,
+	__NR_times = 100,
+	__NR_ptrace = 101,
+	__NR_getuid = 102,
+	__NR_getgid = 104,
+	__NR_setuid = 105,
+	__NR_setgid = 106,
+	__NR_geteuid = 107,
+	__NR_getegid = 108,
+	__NR_setpgid = 109,
+	__NR_getppid = 110,
+	__NR_getpgrp = 111,
+	__NR_setreuid = 113,
+	__NR_setregid = 114,
+	__NR_setresuid = 117,
+	__NR_getresuid = 118,
+	__NR_setresgid = 119,
+	__NR_getresgid = 120,
+	__NR_setfsuid = 122,
+	__NR_setfsgid = 123,
+	__NR_rt_sigpending = 127,
+	__NR_rt_sigtimedwait = 128,
+	__NR_rt_sigqueueinfo = 129,
+	__NR_rt_sigsuspend = 130,
+	__NR_sigaltstack = 131,
+	__NR_sched_setparam = 142,
+	__NR_sched_getparam = 143,
+	__NR_sched_setscheduler = 144,
+	__NR_sched_getscheduler = 145,
+	__NR_sched_get_priority_max = 146,
+	__NR_sched_get_priority_min = 147,
+	__NR_sched_rr_get_interval = 148,
+	__NR_mlock = 149,
+	__NR_munlock = 150,
+	__NR_mlockall = 151,
+	__NR_munlockall = 152,
+	__NR_prctl = 157,
+	__NR_arch_prctl = 158,
+	__NR_setrlimit = 160,
+	__NR_settimeofday = 164,
+	__NR_gettid = 186,
+	__NR_tkill = 200,
+	__NR_time = 201,
+	__NR_futex = 202,
+	__NR_sched_setaffinity = 203,
+	__NR_sched_getaffinity = 204,
+	__NR_io_getevents = 208,
+	__NR_remap_file_pages = 216,
+	__NR_getdents64 = 217,
+	__NR_set_tid_address = 218,
+	__NR_semtimedop = 220,
+	__NR_clock_gettime = 228,
+	__NR_clock_nanosleep = 230,
+	__NR_exit_group = 231,
+	__NR_epoll_wait = 232,
+	__NR_tgkill = 234,
+	__NR_mbind = 237,
+	__NR_set_mempolicy = 238,
+	__NR_get_mempolicy = 239,
+	__NR_waitid = 247,
+	__NR_migrate_pages = 256,
+	__NR_openat = 257,
+	__NR_mkdirat = 258,
+	__NR_mknodat = 259,
+	__NR_fchownat = 260,
+	__NR_futimesat = 261,
+	__NR_newfstatat = 262,
+	__NR_unlinkat = 263,
+	__NR_renameat = 264,
+	__NR_linkat = 265,
+	__NR_symlinkat = 266,
+	__NR_readlinkat = 267,
+	__NR_fchmodat = 268,
+	__NR_faccessat = 269,
+	__NR_pselect6 = 270,
+	__NR_ppoll = 271,
+	__NR_set_robust_list = 273,
+	__NR_move_pages = 279,
+	__NR_epoll_pwait = 281,
+	__NR_signalfd = 282,
+	__NR_signalfd4 = 289,
+#ifdef ENABLE_PERF
+	__NR_perf_event_open = 298,
+#endif
+	__NR_prlimit64 = 302,
+#ifdef DCFA_KMOD
+	__NR_mod_call = 303,
+#endif
+	__NR_getcpu = 309,
+	__NR_process_vm_readv = 310,
+	__NR_process_vm_writev = 311,
+	__NR_execveat = 322,
+	__NR_get_cpu_id = 700,
+#ifdef PROFILE_ENABLE
+	__NR_profile = PROFILE_EVENT_MAX,
+#endif
+	__NR_util_migrate_inter_kernel = 730,
+	__NR_util_indicate_clone = 731,
+	__NR_get_system = 732,
+	__NR_util_register_desc = 733,
+	__NR_swapout = 801,
+	__NR_linux_mlock = 802,
+	__NR_suspend_threads = 803,
+	__NR_resume_threads = 804,
+	__NR_linux_spawn = 811,
 };
-#undef	DECLARATOR
-#undef	SYSCALL_HANDLED
-#undef	SYSCALL_DELEGATED
 
 #define	__NR_coredump 999	/* pseudo syscall for coredump */
 struct coretable {		/* table entry for a core chunk */
@@ -498,33 +609,9 @@ struct tod_data_s {
 };
 extern struct tod_data_s tod_data;	/* residing in arch-dependent file */
 
-static inline void tsc_to_ts(unsigned long tsc, struct timespec *ts)
-{
-	time_t sec_delta;
-	long ns_delta;
-
-	sec_delta = tsc / tod_data.clocks_per_sec;
-	ns_delta = NS_PER_SEC * (tsc % tod_data.clocks_per_sec)
-	           / tod_data.clocks_per_sec;
-	/* calc. of ns_delta overflows if clocks_per_sec exceeds 18.44 GHz */
-
-	ts->tv_sec = sec_delta;
-	ts->tv_nsec = ns_delta;
-	if (ts->tv_nsec >= NS_PER_SEC) {
-		ts->tv_nsec -= NS_PER_SEC;
-		++ts->tv_sec;
-	}
-}
-
-static inline unsigned long timeval_to_jiffy(const struct timeval *ats)
-{
-	return ats->tv_sec * 100 + ats->tv_usec / 10000;
-}
-
-static inline unsigned long timespec_to_jiffy(const struct timespec *ats)
-{
-	return ats->tv_sec * 100 + ats->tv_nsec / 10000000;
-}
+void tsc_to_ts(unsigned long tsc, struct timespec *ts);
+unsigned long timeval_to_jiffy(const struct timeval *ats);
+unsigned long timespec_to_jiffy(const struct timespec *ats);
 
 void reset_cputime(void);
 enum set_cputime_mode {

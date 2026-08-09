@@ -58,9 +58,9 @@
 #define VR_XPMEM	   0x40000000
 #define VR_WIPEONFORK	   0x80000000
 
-#define	PROT_TO_VR_FLAG(prot)	(((unsigned long)(prot) << 16) & VR_PROT_MASK)
-#define	VRFLAG_PROT_TO_MAXPROT(vrflag)	(((vrflag) & VR_PROT_MASK) << 4)
-#define	VRFLAG_MAXPROT_TO_PROT(vrflag)	(((vrflag) & VR_MAXPROT_MASK) >> 4)
+unsigned long PROT_TO_VR_FLAG(unsigned long prot);
+unsigned long VRFLAG_PROT_TO_MAXPROT(unsigned long vrflag);
+unsigned long VRFLAG_MAXPROT_TO_PROT(unsigned long vrflag);
 
 // struct process.status, struct thread.status
 #define PS_RUNNING           0x1
@@ -153,23 +153,22 @@
 #define P_PGID 2
 
 /* If WIFEXITED(STATUS), the low-order 8 bits of the status.  */
-#define	__WEXITSTATUS(status)	(((status) & 0xff00) >> 8)
+int __WEXITSTATUS(int status);
 
 /* If WIFSIGNALED(STATUS), the terminating signal.  */
-#define	__WTERMSIG(status)	((status) & 0x7f)
+int __WTERMSIG(int status);
 
 /* If WIFSTOPPED(STATUS), the signal that stopped the child.  */
-#define	__WSTOPSIG(status)	__WEXITSTATUS(status)
+int __WSTOPSIG(int status);
 
 /* Nonzero if STATUS indicates normal termination.  */
-#define	__WIFEXITED(status)	(__WTERMSIG(status) == 0)
+int __WIFEXITED(int status);
 
 /* Nonzero if STATUS indicates termination by a signal.  */
-#define __WIFSIGNALED(status) \
-  (((signed char) (((status) & 0x7f) + 1) >> 1) > 0)
+int __WIFSIGNALED(int status);
 
 /* Nonzero if STATUS indicates the child is stopped.  */
-#define	__WIFSTOPPED(status)	(((status) & 0xff) == 0x7f)
+int __WIFSTOPPED(int status);
 #ifdef ATTACHED_MIC
 //#define USE_LARGE_PAGES
 #endif
@@ -292,17 +291,8 @@ struct process_hash {
 	mcs_rwlock_lock_t		lock[HASH_SIZE];
 };
 
-static inline int
-process_hash(int pid)
-{
-	return pid % HASH_SIZE;
-}
-
-static inline int
-thread_hash(int tid)
-{
-	return tid % HASH_SIZE;
-}
+int process_hash(int pid);
+int thread_hash(int tid);
 
 struct thread_hash {
 	struct list_head	list[HASH_SIZE];
@@ -385,7 +375,7 @@ struct user
 	unsigned long int  u_debugreg [8];
 };
 
-#define	AUXV_LEN	20
+#define	AUXV_LEN	38
 
 struct vm_range {
 	struct rb_node vm_rb_node;
@@ -405,7 +395,7 @@ struct vm_range {
 struct vm_range_numa_policy {
 	struct rb_node policy_rb_node;
 	unsigned long start, end;
-	DECLARE_BITMAP(numa_mask, PROCESS_NUMA_MASK_BITS);
+	unsigned long numa_mask[(((PROCESS_NUMA_MASK_BITS) + BITS_PER_LONG - 1) / BITS_PER_LONG)];
 	int numa_mem_policy;
 	int il_prev;
 };
@@ -689,6 +679,8 @@ struct thread {
 	 * PTRACE_GETEVENTMSG will get from here.
 	 */
 	unsigned long ptrace_eventmsg;
+	ihk_mc_user_context_t ptrace_saved_uctx;
+	int ptrace_saved_uctx_valid;
 
 	ihk_atomic_t refcount;
 
@@ -802,7 +794,7 @@ struct process_vm {
 	int exiting;
 
 	long currss;
-	DECLARE_BITMAP(numa_mask, PROCESS_NUMA_MASK_BITS);
+	unsigned long numa_mask[(((PROCESS_NUMA_MASK_BITS) + BITS_PER_LONG - 1) / BITS_PER_LONG)];
 	int numa_mem_policy;
 	int il_prev;
 	/* Protected by memory_range_lock */
@@ -818,17 +810,8 @@ struct process_vm {
 #endif
 };
 
-static inline int has_cap_ipc_lock(struct thread *th)
-{
-	/* CAP_IPC_LOCK (= 14) */
-	return !(th->proc->euid);
-}
-
-static inline int has_cap_sys_admin(struct thread *th)
-{
-	/* CAP_SYS_ADMIN (= 21) */
-	return !(th->proc->euid);
-}
+int has_cap_ipc_lock(struct thread *th);
+int has_cap_sys_admin(struct thread *th);
 
 void hold_address_space(struct address_space *);
 void release_address_space(struct address_space *);
@@ -886,7 +869,7 @@ int remove_process_region(struct process_vm *vm,
                           unsigned long start, unsigned long end);
 struct program_load_desc;
 int init_process_stack(struct thread *thread, struct program_load_desc *pn,
-                        int argc, char **argv, 
+                        unsigned long at_base, int argc, char **argv,
                         int envc, char **env);
 unsigned long extend_process_region(struct process_vm *vm,
 		unsigned long end_allocated,

@@ -23,7 +23,7 @@
 #ifdef CONFIG_ARM64_SVE
 
 /* Set of available vector lengths, as vq_to_bit(vq): */
-static DECLARE_BITMAP(sve_vq_map, SVE_VQ_MAX);
+static unsigned long sve_vq_map[(((SVE_VQ_MAX) + BITS_PER_LONG - 1) / BITS_PER_LONG)];
 
 /* Maximum supported vector length across all CPUs (initially poisoned) */
 int sve_max_vl = -1;
@@ -78,7 +78,7 @@ static unsigned int find_supported_vector_length(unsigned int vl)
 	return sve_vl_from_vq(bit_to_vq(bit));
 }
 
-static void sve_probe_vqs(DECLARE_BITMAP(map, SVE_VQ_MAX))
+static void sve_probe_vqs(unsigned long map[(((SVE_VQ_MAX) + BITS_PER_LONG - 1) / BITS_PER_LONG)])
 {
 	unsigned int vq, vl;
 	unsigned long zcr;
@@ -114,7 +114,7 @@ size_t sve_state_size(struct thread const *thread)
 void sve_free(struct thread *thread)
 {
 	if (thread->ctx.thread->sve_state) {
-		kfree(thread->ctx.thread->sve_state);
+		kfree_tracked(thread->ctx.thread->sve_state, __FILE__, __LINE__);
 		thread->ctx.thread->sve_state = NULL;
 	}
 }
@@ -126,7 +126,7 @@ int sve_alloc(struct thread *thread)
 	}
 
 	thread->ctx.thread->sve_state =
-		kmalloc(sve_state_size(thread), IHK_MC_AP_NOWAIT);
+		kmalloc_tracked(sve_state_size(thread), IHK_MC_AP_NOWAIT, __FILE__, __LINE__);
 	if (thread->ctx.thread->sve_state == NULL) {
 		return -ENOMEM;
 	}
@@ -141,7 +141,7 @@ static int get_nr_threads(struct process *proc)
 	int nr_threads = 0;
 
 	mcs_rwlock_reader_lock(&proc->threads_lock, &lock);
-	list_for_each_entry(child, &proc->threads_list, siblings_list){
+	for (child = ((typeof(*child) *)((char *)((&proc->threads_list)->next) - offsetof(typeof(*child), siblings_list))); &child->siblings_list != (&proc->threads_list); child = ((typeof(*child) *)((char *)(child->siblings_list.next) - offsetof(typeof(*child), siblings_list)))){
 		nr_threads++;
 	}
 	mcs_rwlock_reader_unlock(&proc->threads_lock, &lock);

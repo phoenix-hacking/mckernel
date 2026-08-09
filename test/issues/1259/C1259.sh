@@ -3,8 +3,9 @@
 USELTP=0
 USEOSTEST=0
 
-XPMEM_DIR=$HOME/usr
-XPMEM_BUILD_DIR=/home/satoken/xpmem
+XPMEM_DIR=${XPMEM_DIR:-$HOME/usr}
+XPMEM_BUILD_DIR=${XPMEM_BUILD_DIR:-$HOME/xpmem}
+xpmem_loaded_by_test=0
 
 arch=`uname -p`
 if [ -f "./${arch}_config" ]; then
@@ -16,8 +17,36 @@ fi
 
 . ../../common.sh
 
-sudo insmod ${XPMEM_DIR}/lib/modules/`uname -r`/xpmem.ko
-sudo chmod og+rw /dev/xpmem
+if [ ! -f "${XPMEM_DIR}/lib/modules/`uname -r`/xpmem.ko" ]; then
+	echo "xpmem.ko not found under ${XPMEM_DIR}/lib/modules/`uname -r`" >&2
+	exit 77
+fi
+if [ ! -d "${XPMEM_BUILD_DIR}/test" ]; then
+	echo "XPMEM userspace tests not found: ${XPMEM_BUILD_DIR}/test" >&2
+	exit 77
+fi
+
+ensure_xpmem_device_node() {
+	if [ ! -e /dev/xpmem ]; then
+		if [ ! -r /sys/class/misc/xpmem/dev ]; then
+			echo "xpmem misc device is not registered under /sys/class/misc/xpmem" >&2
+			exit 77
+		fi
+
+		dev_id="$(cat /sys/class/misc/xpmem/dev)"
+		major="${dev_id%:*}"
+		minor="${dev_id#*:}"
+		sudo mknod /dev/xpmem c "${major}" "${minor}"
+	fi
+
+	sudo chmod og+rw /dev/xpmem
+}
+
+if ! lsmod | awk '$1 == "xpmem" { found = 1 } END { exit found ? 0 : 1 }'; then
+	sudo insmod ${XPMEM_DIR}/lib/modules/`uname -r`/xpmem.ko
+	xpmem_loaded_by_test=1
+fi
+ensure_xpmem_device_node
 
 issue=1259
 tid=01
@@ -187,4 +216,6 @@ ${MCEXEC} ./XTP_009
 ${MCEXEC} ./XTP_010
 ${MCEXEC} ./XTP_011
 
-sudo rmmod xpmem.ko
+if [ "${xpmem_loaded_by_test}" -eq 1 ]; then
+	sudo rmmod xpmem.ko
+fi

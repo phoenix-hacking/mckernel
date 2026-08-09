@@ -8,7 +8,7 @@ rm -f check.log
 $MCEXEC strace  -e trace=process -f -o check.log ./test2
 
 awk 'BEGIN{st=0;ng=0; ok=0; print "*** test2 start"}
-/execve/{
+/^(\[pid [0-9]+\] +)?execve/{
 	st++
 	if ($0 ~/ = 0$/) {
 		print "test2-" st " execve OK"
@@ -19,7 +19,7 @@ awk 'BEGIN{st=0;ng=0; ok=0; print "*** test2 start"}
 		ng++
 	}
 }
-/clone/{
+/^(\[pid [0-9]+\] +)?clone/{
 	st++
 	if ($0 ~/ = [1-9][0-9]*$/) {
 		print "test2-" st " fork OK"
@@ -30,7 +30,7 @@ awk 'BEGIN{st=0;ng=0; ok=0; print "*** test2 start"}
 		ng++
 	}
 }
-/wait4/{
+/^(\[pid [0-9]+\] +)?wait4/{
 	st++
 	if ($0 ~/ = [1-9][0-9]*$/) {
 		print "test2-" st " wait OK"
@@ -56,5 +56,7 @@ END {
 	printf("*** test2 end ok=%d ng=%d\n", ok, ng)
 	exit(ng)
 }' check.log
+rc=$?
 
 rm -f check.log test2
+exit $rc

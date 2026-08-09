@@ -14,25 +14,30 @@
 # MCREBOOT and MCSTOP can be set to 0/empty to not run the action at start
 
 
-# Unfortunately, there is no standard way to get sourced file's path
-# use bash-specific feature.
-TEST_BASE=$(dirname "${BASH_SOURCE[0]}")
+# Use bash-specific metadata because this file is sourced by test scripts.
+TEST_BASE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
 if [ -f "$HOME/.mck_test_config" ]; then
         . "$HOME/.mck_test_config"
+elif [ -f "$TEST_BASE/mck_test_config.sample" ]; then
+	. "$TEST_BASE/mck_test_config.sample"
 elif [ -f "$TEST_BASE/../mck_test_config.sample" ]; then
 	. "$TEST_BASE/../mck_test_config.sample"
 fi
 
+: "${MCK_DIR:=/opt/mckernel-rust}"
+: "${BIN:=$MCK_DIR/bin}"
+: "${SBIN:=$MCK_DIR/sbin}"
+: "${BOOTPARAM:=-c 1 -m 512M@0}"
 
-if [[ -z "$BIN" ]]; then
+if [[ -z "${BIN:-}" ]]; then
 	if [ -f ../../../config.h ]; then
 		BIN=$(awk -F\" '/^#define BINDIR/ { print $2; exit }' \
 			  "$TEST_BASE/../config.h")
 	fi
 fi
 
-if [[ -z "$SBIN" ]]; then
+if [[ -z "${SBIN:-}" ]]; then
 	if [ -f ../../../Makefile ]; then
 		SBIN=$(awk -F\" '/^#define SBINDIR/ { print $2; exit }' \
 			  "$TEST_BASE/../config.h")

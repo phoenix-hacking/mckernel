@@ -31,7 +31,8 @@ int arch_setup_constants(int mcos_fd);
 #ifdef DEBUG
 #define dprintf printf
 #else
-#define dprintf(...) do {} while (0)
+int eclair_dprintf(const char *fmt, ...);
+#define dprintf eclair_dprintf
 #endif
 
 #endif	/* HEADER_USER_COMMON_ECLAIR_H */

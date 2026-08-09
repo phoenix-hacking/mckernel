@@ -28,7 +28,7 @@ void init_processors_local(int max_id)
 	}
 
 	/* allocate one more for alignment */
-	locals = ihk_mc_alloc_pages(npages, IHK_MC_AP_CRITICAL);
+	locals = _ihk_mc_alloc_aligned_pages_node(npages, PAGE_P2ALIGN, IHK_MC_AP_CRITICAL, -1, IHK_MC_PG_KERNEL, -1, __FILE__, __LINE__);
 	if (locals == NULL) {
 		panic("idle kernel stack allocation failed.");
 	}

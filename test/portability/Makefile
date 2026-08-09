@@ -1,5 +1,5 @@
 CC=gcc
-MCEXEC=/home/satoken/ppos/bin/mcexec
+MCEXEC ?= /opt/mckernel-rust/bin/mcexec
 TARGET=futex_wake_op unhandled_page_fault
 all:: $(TARGET)
 

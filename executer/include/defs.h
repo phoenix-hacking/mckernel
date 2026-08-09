@@ -55,16 +55,11 @@
 #include <snappy-c.h>
 #endif
 
-#ifndef ATTRIBUTE_UNUSED
-#define ATTRIBUTE_UNUSED __attribute__ ((__unused__))
-#endif
-
 #undef TRUE
 #undef FALSE
 
 #define TRUE  (1)
 #define FALSE (0)
-#define STR(x)	#x
 #ifndef offsetof
 #  define offsetof(TYPE, MEMBER) ((ulong)&((TYPE *)0)->MEMBER)
 #endif
@@ -166,20 +161,6 @@ static inline int string_exists(char *s) { return (s ? TRUE : FALSE); }
 	(strcmp((char *)(A), (char *)(B)) == 0))
 #define STRNEQ(A, B)     (string_exists((char *)A) && string_exists((char *)B) && \
         (strncmp((char *)(A), (char *)(B), strlen((char *)(B))) == 0))
-#define BZERO(S, N)      (memset(S, NULLCHAR, N))
-#define BCOPY(S, D, C)   (memcpy(D, S, C))
-#define BNEG(S, N)       (memset(S, 0xff, N))
-#define BEEP()           fprintf(stderr, "%c", 0x7)
-#define LASTCHAR(s)      (s[strlen(s)-1])
-#define FIRSTCHAR(s)     (s[0])
-#define QUOTED_STRING(s) ((FIRSTCHAR(s) == '"') && (LASTCHAR(s) == '"'))
-#define SINGLE_QUOTED_STRING(s) ((FIRSTCHAR(s) == '\'') && (LASTCHAR(s) == '\''))
-#define PATHEQ(A, B)     ((A) && (B) && (pathcmp((char *)(A), (char *)(B)) == 0))
-
-#ifdef roundup
-#undef roundup
-#endif
-#define roundup(x, y)  ((((x)+((y)-1))/(y))*(y))
 
 typedef uint64_t physaddr_t;
 

@@ -1,6 +1,10 @@
 #!/bin/sh
 
-USELTP=1
+if [ "${SKIP_LTP:-0}" = 1 ]; then
+	USELTP=0
+else
+	USELTP=1
+fi
 USEOSTEST=0
 
 . ../../common.sh
@@ -21,9 +25,14 @@ else
 fi
 echo ""
 
+if [ "${SKIP_LTP:-0}" = 1 ]; then
+	echo "*** LTP time tests skipped: SKIP_LTP=1"
+	exit 0
+fi
+
 tid=001
 echo "*** LT_$tid start *******************************"
-$BINDIR/mcexec $LTPDIR/bin/time01 2>&1 | tee ./LT_${tid}.txt
+$BINDIR/mcexec $LTPBIN/time01 2>&1 | tee ./LT_${tid}.txt
 ok=`grep TPASS LT_${tid}.txt | wc -l`
 ng=`grep TFAIL LT_${tid}.txt | wc -l`
 if [ $ng = 0 ]; then
@@ -35,7 +44,7 @@ echo ""
 
 tid=002
 echo "*** LT_$tid start *******************************"
-$BINDIR/mcexec $LTPDIR/bin/time02 2>&1 | tee ./LT_${tid}.txt
+$BINDIR/mcexec $LTPBIN/time02 2>&1 | tee ./LT_${tid}.txt
 ok=`grep TPASS LT_${tid}.txt | wc -l`
 ng=`grep TFAIL LT_${tid}.txt | wc -l`
 if [ $ng = 0 ]; then
@@ -47,7 +56,7 @@ echo ""
 
 tid=003
 echo "*** LT_$tid start *******************************"
-$BINDIR/mcexec $LTPDIR/bin/gettimeofday01 2>&1 | tee ./LT_${tid}.txt
+$BINDIR/mcexec $LTPBIN/gettimeofday01 2>&1 | tee ./LT_${tid}.txt
 ok=`grep TPASS LT_${tid}.txt | wc -l`
 ng=`grep TFAIL LT_${tid}.txt | wc -l`
 if [ $ng = 0 ]; then
@@ -59,7 +68,7 @@ echo ""
 
 tid=004
 echo "*** LT_$tid start *******************************"
-$BINDIR/mcexec $LTPDIR/bin/gettimeofday02 2>&1 | tee ./LT_${tid}.txt
+$BINDIR/mcexec $LTPBIN/gettimeofday02 2>&1 | tee ./LT_${tid}.txt
 ok=`grep PASS LT_${tid}.txt | wc -l`
 ng=`grep TFAIL LT_${tid}.txt | wc -l`
 if [ $ng = 0 ]; then
@@ -68,4 +77,3 @@ else
     echo "*** LT_$tid: FAILED (ok:$ok, ng:$ng)"
 fi
 echo ""
-

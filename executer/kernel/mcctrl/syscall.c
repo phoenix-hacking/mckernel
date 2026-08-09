@@ -49,6 +49,20 @@
 #include <linux/rbtree.h>
 #include <linux/llist.h>
 #include <linux/version.h>
+#if defined(__has_include)
+# if __has_include(<linux/rhelversion.h>)
+#  include <linux/rhelversion.h>
+# endif
+#endif
+#if defined(RHEL_RELEASE_CODE) && defined(RHEL_RELEASE_VERSION)
+#define MCCTRL_RHEL_RELEASE_AT_LEAST(major, minor) \
+	(RHEL_RELEASE_CODE >= RHEL_RELEASE_VERSION(major, minor))
+#define MCCTRL_RHEL_RELEASE_BEFORE(major, minor) \
+	(RHEL_RELEASE_CODE < RHEL_RELEASE_VERSION(major, minor))
+#else
+#define MCCTRL_RHEL_RELEASE_AT_LEAST(major, minor) 0
+#define MCCTRL_RHEL_RELEASE_BEFORE(major, minor) 0
+#endif
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0)
 #include <linux/mmap_lock.h>
 #endif
@@ -57,10 +71,11 @@
 #include <asm/io.h>
 #include "config.h"
 #include "mcctrl.h"
+#include <mcctrl_rust.h>
 #include <archdeps.h>
 #include <asm/pgtable.h>
 
-#define ALIGN_WAIT_BUF(z)   (((z + 63) >> 6) << 6)
+#define ALIGN_WAIT_BUF(z)   mcctrl_align_wait_buf(z)
 
 //#define SC_DEBUG
 
@@ -88,10 +103,12 @@
 #define MCCTRL_VM_FLAGS_SET(vma, flags) ((vma)->vm_flags |= (flags))
 #endif
 
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 5, 0)
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 5, 0) || \
+	(MCCTRL_RHEL_RELEASE_AT_LEAST(8, 10) && \
+	 MCCTRL_RHEL_RELEASE_BEFORE(9, 0))
 #define MCCTRL_HANDLE_MM_FAULT(vma, addr, flags) handle_mm_fault((vma), (addr), (flags), NULL)
 #elif LINUX_VERSION_CODE >= KERNEL_VERSION(4, 8, 0) || \
-	(defined(RHEL_RELEASE_CODE) && RHEL_RELEASE_CODE >= RHEL_RELEASE_VERSION(7, 5))
+	MCCTRL_RHEL_RELEASE_AT_LEAST(7, 5)
 #define MCCTRL_HANDLE_MM_FAULT(vma, addr, flags) handle_mm_fault((vma), (addr), (flags))
 #else
 #define MCCTRL_HANDLE_MM_FAULT(vma, addr, flags) handle_mm_fault(current->mm, (vma), (addr), (flags))
@@ -109,6 +126,167 @@
 #define pr_ppd(msg, tid, ppd) do { printk("%s: " msg ",tid=%d,refc=%d\n", __FUNCTION__, tid, atomic_read(&ppd->refcount)); } while(0)
 #else
 #define pr_ppd(msg, tid, ppd) do { } while(0)
+#endif
+
+#ifdef MCCTRL_RUST_HELPERS
+static const struct mcctrl_syscall_ptd_offsets mcctrl_syscall_ptd_offsets = {
+	.ppd_thread_hash = offsetof(struct mcctrl_per_proc_data,
+				    per_thread_data_hash),
+	.ppd_thread_lock = offsetof(struct mcctrl_per_proc_data,
+				    per_thread_data_hash_lock),
+	.ptd_ppd = offsetof(struct mcctrl_per_thread_data, ppd),
+	.ptd_hash = offsetof(struct mcctrl_per_thread_data, hash),
+	.ptd_task = offsetof(struct mcctrl_per_thread_data, task),
+	.ptd_data = offsetof(struct mcctrl_per_thread_data, data),
+	.ptd_tid = offsetof(struct mcctrl_per_thread_data, tid),
+	.ptd_refcount = offsetof(struct mcctrl_per_thread_data, refcount),
+	.list_head_size = sizeof(struct list_head),
+	.rwlock_size = sizeof(rwlock_t),
+};
+
+static void *mcctrl_syscall_ptd_alloc_bridge(unsigned long size)
+{
+	return kmalloc(size, GFP_ATOMIC);
+}
+
+static void mcctrl_syscall_ptd_free_bridge(void *ptr)
+{
+	kfree(ptr);
+}
+
+static unsigned long mcctrl_syscall_ptd_write_lock_bridge(void *lock)
+{
+	unsigned long flags;
+
+	write_lock_irqsave((rwlock_t *)lock, flags);
+	return flags;
+}
+
+static void mcctrl_syscall_ptd_write_unlock_bridge(void *lock,
+						   unsigned long flags)
+{
+	write_unlock_irqrestore((rwlock_t *)lock, flags);
+}
+
+static unsigned long mcctrl_syscall_ptd_read_lock_bridge(void *lock)
+{
+	unsigned long flags;
+
+	read_lock_irqsave((rwlock_t *)lock, flags);
+	return flags;
+}
+
+static void mcctrl_syscall_ptd_read_unlock_bridge(void *lock,
+						  unsigned long flags)
+{
+	read_unlock_irqrestore((rwlock_t *)lock, flags);
+}
+
+static void mcctrl_syscall_ptd_log_bridge(int stage, int value, void *ptd)
+{
+	switch (stage) {
+	case 0:
+		printk("%s: ERROR: invalid refcount=%d\n",
+		       "mcctrl_put_per_thread_data_unsafe", value);
+		break;
+	case 1:
+		printk("%s: ERROR: ptd not found\n",
+		       "mcctrl_put_per_thread_data");
+		break;
+	case 2:
+		kprintf("%s: error allocate per thread data\n",
+			"mcctrl_add_per_thread_data");
+		break;
+	case 3:
+		kprintf("%s: WARNING: ptd of tid: %d exists\n",
+			"mcctrl_add_per_thread_data", value);
+		break;
+	case 4:
+		printk("%s: ERROR: use-after-free detected (%d)",
+		       "mcctrl_get_per_thread_data", value);
+		break;
+	default:
+		break;
+	}
+	(void)ptd;
+}
+#endif
+
+#if defined(MCCTRL_RUST_HELPERS) && defined(ENABLE_TOFU)
+static const struct mcctrl_syscall_pidfd_offsets
+mcctrl_syscall_pidfd_offsets = {
+	.entry_filp = offsetof(struct mcctrl_file_to_pidfd, filp),
+	.entry_os = offsetof(struct mcctrl_file_to_pidfd, os),
+	.entry_group_leader = offsetof(struct mcctrl_file_to_pidfd,
+				       group_leader),
+	.entry_pid = offsetof(struct mcctrl_file_to_pidfd, pid),
+	.entry_fd = offsetof(struct mcctrl_file_to_pidfd, fd),
+	.entry_hash = offsetof(struct mcctrl_file_to_pidfd, hash),
+	.entry_tofu_dev_path = offsetof(struct mcctrl_file_to_pidfd,
+					tofu_dev_path),
+	.entry_pde_data = offsetof(struct mcctrl_file_to_pidfd, pde_data),
+	.list_head_size = sizeof(struct list_head),
+	.tofu_dev_path_size =
+		sizeof(((struct mcctrl_file_to_pidfd *)0)->tofu_dev_path),
+};
+
+static void *mcctrl_syscall_pidfd_alloc_bridge(unsigned long size)
+{
+	return kmalloc(size, GFP_ATOMIC);
+}
+
+static void mcctrl_syscall_pidfd_free_bridge(void *ptr)
+{
+	kfree(ptr);
+}
+
+static void mcctrl_syscall_pidfd_lock_init_bridge(void *lock)
+{
+	spin_lock_init((spinlock_t *)lock);
+}
+
+static unsigned long mcctrl_syscall_pidfd_lock_bridge(void *lock)
+{
+	unsigned long flags;
+
+	spin_lock_irqsave((spinlock_t *)lock, flags);
+	return flags;
+}
+
+static void mcctrl_syscall_pidfd_unlock_bridge(void *lock,
+					       unsigned long flags)
+{
+	spin_unlock_irqrestore((spinlock_t *)lock, flags);
+}
+
+static void mcctrl_syscall_pidfd_log_bridge(int stage, void *filp,
+					    int pid, int fd)
+{
+	switch (stage) {
+	case 0:
+		printk("%s: WARNING: filp: %p, pid: %d, fd: %d exists\n",
+		       "mcctrl_file_to_pidfd_hash_insert", filp, pid, fd);
+		break;
+	case 1:
+		dprintk("%s: filp: %p, pid: %d, fd: %d added\n",
+			"mcctrl_file_to_pidfd_hash_insert", filp, pid, fd);
+		break;
+	case 2:
+		dprintk("%s: filp: %p, pid: %d, fd: %d found\n",
+			"mcctrl_file_to_pidfd_hash_lookup", filp, pid, fd);
+		break;
+	case 3:
+		dprintk("%s: filp: %p, pid: %d, fd: %d removed\n",
+			"mcctrl_file_to_pidfd_hash_remove", filp, pid, fd);
+		break;
+	case 4:
+		dprintk("%s: filp: %p, pid: %d, fd: %d couldn't be found\n",
+			"mcctrl_file_to_pidfd_hash_remove", filp, pid, fd);
+		break;
+	default:
+		break;
+	}
+}
 #endif
 
 static long pager_call_irq(ihk_os_t os, struct syscall_request *req);
@@ -129,6 +307,12 @@ static void print_dma_lastreq(void)
 
 void mcctrl_put_per_thread_data_unsafe(struct mcctrl_per_thread_data *ptd)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_syscall_put_ptd_unsafe_body_result(
+		ptd, &mcctrl_syscall_ptd_offsets,
+		mcctrl_syscall_ptd_free_bridge,
+		mcctrl_syscall_ptd_log_bridge);
+#else
 	if (!atomic_dec_and_test(&ptd->refcount)) {
 		int ret = atomic_read(&ptd->refcount);
 		if (ret < 0) {
@@ -139,10 +323,20 @@ void mcctrl_put_per_thread_data_unsafe(struct mcctrl_per_thread_data *ptd)
 
 	list_del(&ptd->hash);
 	kfree(ptd);
+#endif
 }
 
 void mcctrl_put_per_thread_data(struct mcctrl_per_thread_data* _ptd)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_syscall_put_ptd_body_result(
+		_ptd, MCCTRL_PER_THREAD_DATA_HASH_MASK,
+		&mcctrl_syscall_ptd_offsets,
+		mcctrl_syscall_ptd_free_bridge,
+		mcctrl_syscall_ptd_write_lock_bridge,
+		mcctrl_syscall_ptd_write_unlock_bridge,
+		mcctrl_syscall_ptd_log_bridge);
+#else
 	struct mcctrl_per_proc_data *ppd = _ptd->ppd;
 	struct mcctrl_per_thread_data *ptd_iter, *ptd = NULL;
 	int hash = (((uint64_t)_ptd->task >> 4) & MCCTRL_PER_THREAD_DATA_HASH_MASK);
@@ -163,13 +357,26 @@ void mcctrl_put_per_thread_data(struct mcctrl_per_thread_data* _ptd)
 	}
 
 	mcctrl_put_per_thread_data_unsafe(ptd);
-	
+
 out:
 	write_unlock_irqrestore(&ppd->per_thread_data_hash_lock[hash], flags);
+#endif
 }
 
 int mcctrl_add_per_thread_data(struct mcctrl_per_proc_data *ppd, void *data)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_syscall_add_ptd_body_result(
+		ppd, data, current, task_pid_vnr(current),
+		sizeof(struct mcctrl_per_thread_data),
+		MCCTRL_PER_THREAD_DATA_HASH_MASK,
+		&mcctrl_syscall_ptd_offsets,
+		mcctrl_syscall_ptd_alloc_bridge,
+		mcctrl_syscall_ptd_free_bridge,
+		mcctrl_syscall_ptd_write_lock_bridge,
+		mcctrl_syscall_ptd_write_unlock_bridge,
+		mcctrl_syscall_ptd_log_bridge);
+#else
 	struct mcctrl_per_thread_data *ptd_iter, *ptd = NULL;
 	struct mcctrl_per_thread_data *ptd_alloc = NULL;
 	int hash = (((uint64_t)current >> 4) & MCCTRL_PER_THREAD_DATA_HASH_MASK);
@@ -183,7 +390,7 @@ int mcctrl_add_per_thread_data(struct mcctrl_per_proc_data *ppd, void *data)
 		goto out_noalloc;
 	}
 	memset(ptd_alloc, 0, sizeof(struct mcctrl_per_thread_data));
-	
+
 	/* Check if data for this thread exists and add if not */
 	write_lock_irqsave(&ppd->per_thread_data_hash_lock[hash], flags);
 	list_for_each_entry(ptd_iter, &ppd->per_thread_data_hash[hash], hash) {
@@ -206,17 +413,26 @@ int mcctrl_add_per_thread_data(struct mcctrl_per_proc_data *ppd, void *data)
 	ptd->tid = task_pid_vnr(current);
 	ptd->data = data;
 	atomic_set(&ptd->refcount, 1);
-	list_add_tail(&ptd->hash, &ppd->per_thread_data_hash[hash]); 
+	list_add_tail(&ptd->hash, &ppd->per_thread_data_hash[hash]);
 
  out:
 	write_unlock_irqrestore(&ppd->per_thread_data_hash_lock[hash], flags);
  out_noalloc:
 	return ret;
+#endif
 }
 
 struct mcctrl_per_thread_data *mcctrl_get_per_thread_data(struct mcctrl_per_proc_data *ppd,
 							  struct task_struct *task)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_syscall_get_ptd_body_result(
+		ppd, task, MCCTRL_PER_THREAD_DATA_HASH_MASK,
+		&mcctrl_syscall_ptd_offsets,
+		mcctrl_syscall_ptd_read_lock_bridge,
+		mcctrl_syscall_ptd_read_unlock_bridge,
+		mcctrl_syscall_ptd_log_bridge);
+#else
 	struct mcctrl_per_thread_data *ptd_iter, *ptd = NULL;
 	int hash = (((uint64_t)task >> 4) & MCCTRL_PER_THREAD_DATA_HASH_MASK);
 	unsigned long flags;
@@ -243,6 +459,7 @@ struct mcctrl_per_thread_data *mcctrl_get_per_thread_data(struct mcctrl_per_proc
  out:
 	read_unlock_irqrestore(&ppd->per_thread_data_hash_lock[hash], flags);
 	return ptd;
+#endif
 }
 
 static int __notify_syscall_requester(ihk_os_t os, struct ikc_scd_packet *packet,
@@ -341,7 +558,7 @@ long syscall_backward(struct mcctrl_usrdata *usrdata, int num,
 	ppd = mcctrl_get_per_proc_data(usrdata, task_tgid_vnr(current));
 
 	if (!ppd) {
-		kprintf("%s: ERROR: no per-process structure for PID %d??\n", 
+		kprintf("%s: ERROR: no per-process structure for PID %d??\n",
 			__func__, task_tgid_vnr(current));
 		syscall_ret = -EINVAL;
 		goto no_ppd;
@@ -365,9 +582,9 @@ long syscall_backward(struct mcctrl_usrdata *usrdata, int num,
 	req = &packet->req;
 
 	/* Map response structure */
-	phys = ihk_device_map_memory(ihk_os_to_dev(usrdata->os), 
+	phys = ihk_device_map_memory(ihk_os_to_dev(usrdata->os),
 			packet->resp_pa, sizeof(*resp));
-	resp = ihk_device_map_virtual(ihk_os_to_dev(usrdata->os), 
+	resp = ihk_device_map_virtual(ihk_os_to_dev(usrdata->os),
 			phys, sizeof(*resp), NULL, 0);
 
 retry_alloc:
@@ -409,11 +626,11 @@ retry_alloc:
 
 	retry = 0;
  retry_offload:
-	dprintk("%s: tid: %d, syscall: %d SLEEPING\n", 
+	dprintk("%s: tid: %d, syscall: %d SLEEPING\n",
 			__FUNCTION__, task_pid_vnr(current), num);
 	/* wait for response */
 	syscall_ret = wait_event_interruptible(wqhln->wq_syscall, wqhln->req);
-	
+
 	/* debug */
 	if (syscall_ret == -ERESTARTSYS) {
 		printk("%s: INFO: interrupted by signal\n", __FUNCTION__);
@@ -453,9 +670,9 @@ retry_alloc:
 		free_packet = packet;
 		req = &packet->req;
 
-		phys2 = ihk_device_map_memory(ihk_os_to_dev(usrdata->os), 
+		phys2 = ihk_device_map_memory(ihk_os_to_dev(usrdata->os),
 				packet->resp_pa, sizeof(*resp));
-		resp2 = ihk_device_map_virtual(ihk_os_to_dev(usrdata->os), 
+		resp2 = ihk_device_map_virtual(ihk_os_to_dev(usrdata->os),
 				phys2, sizeof(*resp), NULL, 0);
 
 		if (resp != resp2) {
@@ -520,12 +737,27 @@ extern struct host_thread *host_threads;
 extern rwlock_t host_thread_lock;
 #endif
 
+#ifdef MCCTRL_RUST_HELPERS
+static int mcctrl_remote_page_fault_send_wait_bridge(
+	unsigned long os, int cpu, struct ikc_scd_packet *packet);
+static void mcctrl_remote_page_fault_log_bridge(
+	int stage, int pid, int error, unsigned long fault_addr,
+	unsigned long reason);
+#endif
+
 int remote_page_fault(struct mcctrl_usrdata *usrdata, void *fault_addr,
 		      uint64_t reason, struct mcctrl_per_proc_data *ppd,
 		      struct ikc_scd_packet *packet)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	(void)ppd;
+	return mcctrl_remote_page_fault_body_result(
+		(unsigned long)usrdata->os, fault_addr, reason, packet,
+		mcctrl_remote_page_fault_send_wait_bridge,
+		mcctrl_remote_page_fault_log_bridge);
+#else
 	int error;
-	
+
 	dprintk("%s: tid: %d, fault_addr: %p, reason: %lu\n",
 			__FUNCTION__, task_pid_vnr(current), fault_addr, (unsigned long)reason);
 
@@ -546,7 +778,39 @@ int remote_page_fault(struct mcctrl_usrdata *usrdata, void *fault_addr,
 		__func__, task_pid_vnr(current), fault_addr,
 		(unsigned long)reason, error);
 	return error;
+#endif
 }
+
+#ifdef MCCTRL_RUST_HELPERS
+static int mcctrl_remote_page_fault_send_wait_bridge(
+	unsigned long os, int cpu, struct ikc_scd_packet *packet)
+{
+	return mcctrl_ikc_send_wait((ihk_os_t)os, cpu, packet,
+				    0, NULL, NULL, 0);
+}
+
+static void mcctrl_remote_page_fault_log_bridge(
+	int stage, int pid, int error, unsigned long fault_addr,
+	unsigned long reason)
+{
+	switch (stage) {
+	case 0:
+		dprintk("%s: tid: %d, fault_addr: %p, reason: %lu\n",
+			"remote_page_fault", task_pid_vnr(current),
+			(void *)fault_addr, reason);
+		break;
+	case 1:
+		pr_warn("%s: WARNING: failed to request remote page fault PID %d: %d\n",
+			__func__, pid, error);
+		break;
+	case 2:
+		dprintk("%s: tid: %d, fault_addr: %p, reason: %lu, error: %d\n",
+			"remote_page_fault", task_pid_vnr(current),
+			(void *)fault_addr, reason, error);
+		break;
+	}
+}
+#endif
 
 /*
  * By remap_pfn_range(), VM_PFN_AT_MMAP may be raised.
@@ -563,7 +827,7 @@ int remote_page_fault(struct mcctrl_usrdata *usrdata, void *fault_addr,
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 11, 0)
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 17, 0) || \
-	(defined(RHEL_RELEASE_CODE) && RHEL_RELEASE_CODE >= RHEL_RELEASE_VERSION(8, 2))
+	MCCTRL_RHEL_RELEASE_AT_LEAST(8, 2)
 static vm_fault_t rus_vm_fault(struct vm_fault *vmf)
 #else
 static int rus_vm_fault(struct vm_fault *vmf)
@@ -840,8 +1104,91 @@ static struct list_head pager_list = LIST_HEAD_INIT(pager_list);
 
 int pager_nr_processes = 0;
 
+#ifdef MCCTRL_RUST_HELPERS
+static const struct mcctrl_syscall_pager_offsets mcctrl_syscall_pager_offsets = {
+	.ppd_devobj_pager_list = offsetof(struct mcctrl_per_proc_data,
+					  devobj_pager_list),
+	.ppd_devobj_pager_lock = offsetof(struct mcctrl_per_proc_data,
+					  devobj_pager_lock),
+	.pager_list = offsetof(struct pager, list),
+	.pager_rofile = offsetof(struct pager, rofile),
+	.pager_rwfile = offsetof(struct pager, rwfile),
+};
+
+static unsigned long mcctrl_syscall_pager_lock_bridge(void *lock)
+{
+	unsigned long flags;
+
+	spin_lock_irqsave((spinlock_t *)lock, flags);
+	return flags;
+}
+
+static void mcctrl_syscall_pager_unlock_bridge(void *lock,
+					       unsigned long flags)
+{
+	spin_unlock_irqrestore((spinlock_t *)lock, flags);
+}
+
+static int mcctrl_syscall_pager_in_atomic_bridge(void)
+{
+	return in_atomic();
+}
+
+static int mcctrl_syscall_pager_in_interrupt_bridge(void)
+{
+	return in_interrupt();
+}
+
+static int mcctrl_syscall_pager_down_bridge(void *sem)
+{
+	return down_interruptible((struct semaphore *)sem);
+}
+
+static void mcctrl_syscall_pager_up_bridge(void *sem)
+{
+	up((struct semaphore *)sem);
+}
+
+static void mcctrl_syscall_pager_free_bridge(void *ptr)
+{
+	kfree(ptr);
+}
+
+static void mcctrl_syscall_pager_fput_bridge(void *ptr)
+{
+	fput((struct file *)ptr);
+}
+
+static void mcctrl_syscall_pager_log_bridge(int stage, void *pager,
+					    int value)
+{
+	switch (stage) {
+	case 0:
+		printk("%s: WARNING: shouldn't be called in IRQ context..\n",
+		       "pager_remove_process");
+		break;
+	case 1:
+		dprintk("%s: devobj pager 0x%p removed\n",
+			"pager_remove_process", pager);
+		break;
+	case 2:
+		dprintk("%s: pager 0x%p removed\n", "pager_cleanup", pager);
+		break;
+	default:
+		break;
+	}
+	(void)value;
+}
+#endif
+
 void pager_add_process(void)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_syscall_pager_add_process_body_result(
+		&pager_nr_processes, &pager_lock,
+		mcctrl_syscall_pager_lock_bridge,
+		mcctrl_syscall_pager_unlock_bridge);
+#else
 	unsigned long flags;
 
 	spin_lock_irqsave(&pager_lock, flags);
@@ -849,10 +1196,24 @@ void pager_add_process(void)
 	++pager_nr_processes;
 
 	spin_unlock_irqrestore(&pager_lock, flags);
+#endif
 }
 
 void pager_remove_process(struct mcctrl_per_proc_data *ppd)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_syscall_pager_remove_process_body_result(
+		ppd, &pager_nr_processes, &pager_lock,
+		&mcctrl_syscall_pager_offsets,
+		mcctrl_syscall_pager_in_atomic_bridge,
+		mcctrl_syscall_pager_in_interrupt_bridge,
+		mcctrl_syscall_pager_down_bridge,
+		mcctrl_syscall_pager_up_bridge,
+		mcctrl_syscall_pager_free_bridge,
+		mcctrl_syscall_pager_lock_bridge,
+		mcctrl_syscall_pager_unlock_bridge,
+		mcctrl_syscall_pager_log_bridge);
+#else
 	int error;
 	struct pager *pager_next, *pager;
 	unsigned long flags;
@@ -883,10 +1244,20 @@ void pager_remove_process(struct mcctrl_per_proc_data *ppd)
 	spin_lock_irqsave(&pager_lock, flags);
 	--pager_nr_processes;
 	spin_unlock_irqrestore(&pager_lock, flags);
+#endif
 }
 
 void pager_cleanup(void)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_syscall_pager_cleanup_body_result(
+		&pager_list, &pager_lock, &mcctrl_syscall_pager_offsets,
+		mcctrl_syscall_pager_fput_bridge,
+		mcctrl_syscall_pager_free_bridge,
+		mcctrl_syscall_pager_lock_bridge,
+		mcctrl_syscall_pager_unlock_bridge,
+		mcctrl_syscall_pager_log_bridge);
+#else
 	unsigned long flags;
 	struct pager *pager_next, *pager;
 
@@ -908,6 +1279,7 @@ void pager_cleanup(void)
 	}
 
 	spin_unlock_irqrestore(&pager_lock, flags);
+#endif
 }
 
 struct pager_create_result {
@@ -986,9 +1358,8 @@ static int pager_req_create(ihk_os_t os, int fd, uintptr_t result_pa)
 		printk("pager_req_create(%d,%lx):vfs_stat failed. %d\n", fd, (long)result_pa, error);
 		goto out;
 	}
-	if (S_ISCHR(st.mode) && (MAJOR(st.rdev) == 1) &&
-			(MINOR(st.rdev) == 1 ||   // /dev/mem
-			 MINOR(st.rdev) == 5)) {  // /dev/zero
+	if (S_ISCHR(st.mode) &&
+			mcctrl_special_char_device(MAJOR(st.rdev), MINOR(st.rdev))) {
 		/* treat memory devices and zero devices as regular files */
 	}
 	else if (S_ISCHR(st.mode) && (MAJOR(st.rdev) == 1)) {
@@ -1017,10 +1388,7 @@ static int pager_req_create(ihk_os_t os, int fd, uintptr_t result_pa)
 		if (pathbuf) {
 			fullpath = d_path(&file->f_path, pathbuf, PATH_MAX);
 			if (!IS_ERR(fullpath)) {
-				if (!strncmp("/tmp/ompi.", fullpath, 10) ||
-						!strncmp("/dev/shm/", fullpath, 9) ||
-						(!strncmp("/var/opt/FJSVtcs/ple/daemonif/",
-							fullpath, 30) && !strstr(fullpath, "dstore_sm.lock"))) {
+				if (mcctrl_pager_treat_as_device_path(fullpath)) {
 					printk("%s: treating %s as a device file..\n",
 						__func__, fullpath);
 					kfree(pathbuf);
@@ -1041,11 +1409,11 @@ static int pager_req_create(ihk_os_t os, int fd, uintptr_t result_pa)
 		goto out;
 	}
 
-	if (!strcmp(inode->i_sb->s_type->name, "tmpfs")) {
+	if (mcctrl_fs_is_tmpfs(inode->i_sb->s_type->name)) {
 		mf_flags = MF_IS_REMOVABLE;
 	}
 
-	if (!strcmp(inode->i_sb->s_type->name, "proc")) {
+	if (mcctrl_fs_is_proc(inode->i_sb->s_type->name)) {
 		error = -ESRCH;
 		goto out;
 	}
@@ -1253,8 +1621,7 @@ static int pager_req_read(ihk_os_t os, uintptr_t handle, off_t off, size_t size,
 
 	major = MAJOR(file->f_mapping->host->i_rdev);
 	minor = MINOR(file->f_mapping->host->i_rdev);
-	if ((major == 1 && minor == 1) || // /dev/mem
-		(major == 1 && minor == 5)) { // /dev/zero
+	if (mcctrl_special_char_device(major, minor)) {
 		/* Nothing to check */
 	}
 	else {
@@ -1454,11 +1821,11 @@ static int pager_req_map(ihk_os_t os, int fd, size_t len, off_t off,
 	}
 
 	maxprot = 0;
-	if ((file->f_mode & FMODE_READ) && 
+	if ((file->f_mode & FMODE_READ) &&
 			(prot_and_flags ? (prot_and_flags & PROT_READ) : 1)) {
 		maxprot |= PROT_READ;
 	}
-	if ((file->f_mode & FMODE_WRITE) && 
+	if ((file->f_mode & FMODE_WRITE) &&
 			(prot_and_flags ? (prot_and_flags & PROT_WRITE) : 1)) {
 		maxprot |= PROT_WRITE;
 	}
@@ -1480,10 +1847,7 @@ static int pager_req_map(ihk_os_t os, int fd, size_t len, off_t off,
 		if (pathbuf) {
 			fullpath = d_path(&file->f_path, pathbuf, PATH_MAX);
 			if (!IS_ERR(fullpath)) {
-				if (!strncmp("/tmp/ompi.", fullpath, 10) ||
-						!strncmp("/dev/shm/", fullpath, 9) ||
-						!strncmp("/var/opt/FJSVtcs/ple/daemonif/",
-							fullpath, 30)) {
+				if (mcctrl_pager_should_populate_path(fullpath)) {
 					dprintk("%s: pre-populating %s..\n",
 						__func__, fullpath);
 					prot_and_flags |= MAP_POPULATE;
@@ -1496,7 +1860,7 @@ static int pager_req_map(ihk_os_t os, int fd, size_t len, off_t off,
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3,5,0)
 	MCCTRL_MMAP_WRITE_LOCK(current->mm);
 
-	va = do_mmap_pgoff(file, ANY_WHERE, len, maxprot, 
+	va = do_mmap_pgoff(file, ANY_WHERE, len, maxprot,
 			prot_and_flags, pgoff);
 
 	MCCTRL_MMAP_WRITE_UNLOCK(current->mm);
@@ -1520,8 +1884,8 @@ static int pager_req_map(ihk_os_t os, int fd, size_t len, off_t off,
 	pager->map_uaddr = va;
 	pager->map_len = len;
 	pager->map_off = off;
-	
-	dprintk("pager_req_map(%s): 0x%lx - 0x%lx (len: %lu), map_off: %lu\n", 
+
+	dprintk("pager_req_map(%s): 0x%lx - 0x%lx (len: %lu), map_off: %lu\n",
 			file->f_dentry->d_name.name, va, va + len, len, off);
 
 	phys = ihk_device_map_memory(dev, result_rpa, sizeof(*resp));
@@ -1603,7 +1967,7 @@ static int pager_req_pfn(ihk_os_t os, uintptr_t handle, off_t off, uintptr_t ppf
 	pfn = PFN_VALID;	/* Use "not present" as the default setting */
 
 	MCCTRL_MMAP_READ_LOCK(current->mm);
-retry:	
+retry:
 	pgd = pgd_offset(current->mm, va);
 	if (!pgd_none(*pgd) && !pgd_bad(*pgd) && pgd_present(*pgd)) {
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 12, 0) && defined(CONFIG_X86_64_SMP)
@@ -1625,7 +1989,8 @@ retry:
 						pfn |= PFN_VALID | PFN_PRESENT;
 
 						/* Check if mapping is write-combined */
-						if (pte_is_write_combined(*pte)) {
+						if (mcctrl_pte_is_write_combined_result(
+								pte_flags(*pte))) {
 							pfn |= PFN_WRITE_COMBINED;
 						}
 					}
@@ -1649,7 +2014,7 @@ retry:
 
 		vma = find_vma(current->mm, va);
 		if (!vma || (va < vma->vm_start)) {
-			printk("%s: couldn't find VMA for va %lx\n", __FUNCTION__, va); 
+			printk("%s: couldn't find VMA for va %lx\n", __FUNCTION__, va);
 			error = -EINVAL;
 			goto out_release;
 		}
@@ -1812,8 +2177,97 @@ full:
 #define	PAGER_REQ_PFN		0x0006
 #define	PAGER_REQ_UNMAP		0x0007
 #define PAGER_REQ_MLOCK_LIST	0x0008
+
+#ifdef MCCTRL_RUST_HELPERS
+static long mcctrl_pager_req_create_bridge(unsigned long os, int fd,
+					   unsigned long result_pa)
+{
+	return pager_req_create((ihk_os_t)os, fd, result_pa);
+}
+
+static long mcctrl_pager_req_release_bridge(unsigned long os,
+					    unsigned long handle,
+					    unsigned long sref)
+{
+	return pager_req_release((ihk_os_t)os, handle, sref);
+}
+
+static long mcctrl_pager_req_read_bridge(unsigned long os,
+					 unsigned long handle,
+					 unsigned long off,
+					 unsigned long size,
+					 unsigned long rpa)
+{
+	return pager_req_read((ihk_os_t)os, handle, off, size, rpa);
+}
+
+static long mcctrl_pager_req_write_bridge(unsigned long os,
+					  unsigned long handle,
+					  unsigned long off,
+					  unsigned long size,
+					  unsigned long rpa)
+{
+	return pager_req_write((ihk_os_t)os, handle, off, size, rpa);
+}
+
+static long mcctrl_pager_req_map_bridge(unsigned long os, int fd,
+					unsigned long len,
+					unsigned long off,
+					unsigned long result_rpa,
+					int prot_and_flags)
+{
+	return pager_req_map((ihk_os_t)os, fd, len, off, result_rpa,
+			     prot_and_flags);
+}
+
+static long mcctrl_pager_req_pfn_bridge(unsigned long os,
+					unsigned long handle,
+					unsigned long off,
+					unsigned long ppfn_rpa)
+{
+	return pager_req_pfn((ihk_os_t)os, handle, off, ppfn_rpa);
+}
+
+static long mcctrl_pager_req_unmap_bridge(unsigned long os,
+					  unsigned long handle)
+{
+	return pager_req_unmap((ihk_os_t)os, handle);
+}
+
+static long mcctrl_pager_req_mlock_list_bridge(unsigned long os,
+					       unsigned long start,
+					       unsigned long end,
+					       unsigned long addr,
+					       int nent)
+{
+	return pager_req_mlock_list((ihk_os_t)os, start, end,
+				    (void *)addr, nent);
+}
+
+static void mcctrl_pager_unknown_bridge(unsigned long request, long ret)
+{
+	printk("pager_call(%#lx):unknown req %ld\n", request, ret);
+}
+
+static const struct mcctrl_pager_call_ops mcctrl_pager_call_ops = {
+	.create = mcctrl_pager_req_create_bridge,
+	.release = mcctrl_pager_req_release_bridge,
+	.read = mcctrl_pager_req_read_bridge,
+	.write = mcctrl_pager_req_write_bridge,
+	.map = mcctrl_pager_req_map_bridge,
+	.pfn = mcctrl_pager_req_pfn_bridge,
+	.unmap = mcctrl_pager_req_unmap_bridge,
+	.mlock_list = mcctrl_pager_req_mlock_list_bridge,
+	.unknown = mcctrl_pager_unknown_bridge,
+};
+#endif
+
 static long pager_call_irq(ihk_os_t os, struct syscall_request *req)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_pager_call_irq_body_result(
+		(unsigned long)os, req, &mcctrl_pager_call_ops);
+#else
 	long ret = -ENOSYS;
 
 	switch (req->args[0]) {
@@ -1823,10 +2277,20 @@ static long pager_call_irq(ihk_os_t os, struct syscall_request *req)
 	}
 
 	return ret;
+#endif
 }
 
 static long pager_call(ihk_os_t os, struct syscall_request *req)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	long ret;
+
+	dprintk("pager_call(%#lx)\n", req->args[0]);
+	ret = mcctrl_pager_call_body_result(
+		(unsigned long)os, req, &mcctrl_pager_call_ops);
+	dprintk("pager_call(%#lx): %ld\n", req->args[0], ret);
+	return ret;
+#else
 	long ret;
 
 	dprintk("pager_call(%#lx)\n", req->args[0]);
@@ -1869,6 +2333,7 @@ static long pager_call(ihk_os_t os, struct syscall_request *req)
 
 	dprintk("pager_call(%#lx): %ld\n", req->args[0], ret);
 	return ret;
+#endif
 }
 
 #ifdef ENABLE_TOFU
@@ -1877,23 +2342,42 @@ spinlock_t mcctrl_file_to_pidfd_hash_lock;
 
 void mcctrl_file_to_pidfd_hash_init(void)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	mcctrl_syscall_pidfd_hash_init_body_result(
+		mcctrl_file_to_pidfd_hash, MCCTRL_FILE_2_PIDFD_HASH_SIZE,
+		sizeof(struct list_head), &mcctrl_file_to_pidfd_hash_lock,
+		mcctrl_syscall_pidfd_lock_init_bridge);
+#else
 	int hash;
+
 	spin_lock_init(&mcctrl_file_to_pidfd_hash_lock);
 
 	for (hash = 0; hash < MCCTRL_FILE_2_PIDFD_HASH_SIZE; ++hash) {
 		INIT_LIST_HEAD(&mcctrl_file_to_pidfd_hash[hash]);
 	}
+#endif
 }
 
 int mcctrl_file_to_pidfd_hash_insert(struct file *filp,
 	ihk_os_t os, int pid, struct task_struct *group_leader, int fd,
 	char *path, void *pde_data)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_syscall_pidfd_hash_insert_body_result(
+		mcctrl_file_to_pidfd_hash, &mcctrl_file_to_pidfd_hash_lock,
+		filp, (unsigned long)os, pid, group_leader, fd, path, pde_data,
+		sizeof(struct mcctrl_file_to_pidfd),
+		MCCTRL_FILE_2_PIDFD_HASH_MASK, &mcctrl_syscall_pidfd_offsets,
+		mcctrl_syscall_pidfd_alloc_bridge,
+		mcctrl_syscall_pidfd_free_bridge,
+		mcctrl_syscall_pidfd_lock_bridge,
+		mcctrl_syscall_pidfd_unlock_bridge,
+		mcctrl_syscall_pidfd_log_bridge);
+#else
 	unsigned long irqflags;
 	struct mcctrl_file_to_pidfd *file2pidfd_iter;
 	struct mcctrl_file_to_pidfd *file2pidfd;
-	int hash = (int)((unsigned long)filp &
-			(unsigned long)MCCTRL_FILE_2_PIDFD_HASH_MASK);
+	int hash = mcctrl_ptr_hash(filp, MCCTRL_FILE_2_PIDFD_HASH_MASK);
 	int ret = 0;
 
 	file2pidfd = kmalloc(sizeof(*file2pidfd), GFP_ATOMIC);
@@ -1906,13 +2390,14 @@ int mcctrl_file_to_pidfd_hash_insert(struct file *filp,
 	file2pidfd->group_leader = group_leader;
 	file2pidfd->fd = fd;
 	/* Only copy the name under /proc/tofu/dev/ */
-	strncpy(file2pidfd->tofu_dev_path, path + 15, 128);
+	mcctrl_tofu_dev_name_copy(file2pidfd->tofu_dev_path,
+				  sizeof(file2pidfd->tofu_dev_path), path);
 	file2pidfd->pde_data = pde_data;
 
 	spin_lock_irqsave(&mcctrl_file_to_pidfd_hash_lock, irqflags);
 	list_for_each_entry(file2pidfd_iter,
 			&mcctrl_file_to_pidfd_hash[hash], hash) {
-		if (file2pidfd_iter->filp == filp) {
+		if (mcctrl_ptr_eq(file2pidfd_iter->filp, filp)) {
 			printk("%s: WARNING: filp: %p, pid: %d, fd: %d exists\n",
 					__func__, filp, pid, fd);
 			ret = -EBUSY;
@@ -1932,6 +2417,7 @@ free_out:
 	kfree(file2pidfd);
 	spin_unlock_irqrestore(&mcctrl_file_to_pidfd_hash_lock, irqflags);
 	return ret;
+#endif
 }
 
 /*
@@ -1942,17 +2428,26 @@ free_out:
 struct mcctrl_file_to_pidfd *mcctrl_file_to_pidfd_hash_lookup(
 	struct file *filp, struct task_struct *group_leader)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_syscall_pidfd_hash_lookup_body_result(
+		mcctrl_file_to_pidfd_hash, &mcctrl_file_to_pidfd_hash_lock,
+		filp, group_leader, MCCTRL_FILE_2_PIDFD_HASH_MASK,
+		&mcctrl_syscall_pidfd_offsets,
+		mcctrl_syscall_pidfd_lock_bridge,
+		mcctrl_syscall_pidfd_unlock_bridge,
+		mcctrl_syscall_pidfd_log_bridge);
+#else
 	unsigned long irqflags;
 	struct mcctrl_file_to_pidfd *file2pidfd_iter;
 	struct mcctrl_file_to_pidfd *file2pidfd = NULL;
-	int hash = (int)((unsigned long)filp &
-			(unsigned long)MCCTRL_FILE_2_PIDFD_HASH_MASK);
+	int hash = mcctrl_ptr_hash(filp, MCCTRL_FILE_2_PIDFD_HASH_MASK);
 
 	spin_lock_irqsave(&mcctrl_file_to_pidfd_hash_lock, irqflags);
 	list_for_each_entry(file2pidfd_iter,
 			&mcctrl_file_to_pidfd_hash[hash], hash) {
-		if (file2pidfd_iter->filp == filp && 
-				file2pidfd_iter->group_leader == group_leader) {
+		if (mcctrl_file_to_pidfd_lookup_match(
+			    file2pidfd_iter->filp, filp,
+			    file2pidfd_iter->group_leader, group_leader)) {
 			file2pidfd = file2pidfd_iter;
 			dprintk("%s: filp: %p, pid: %d, fd: %d found\n",
 					__func__, filp, file2pidfd->pid, file2pidfd->fd);
@@ -1963,30 +2458,34 @@ struct mcctrl_file_to_pidfd *mcctrl_file_to_pidfd_hash_lookup(
 	spin_unlock_irqrestore(&mcctrl_file_to_pidfd_hash_lock, irqflags);
 
 	return file2pidfd;
+#endif
 }
 
 int mcctrl_file_to_pidfd_hash_remove(struct file *filp,
 	ihk_os_t os, struct task_struct *group_leader, int fd)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_syscall_pidfd_hash_remove_body_result(
+		mcctrl_file_to_pidfd_hash, &mcctrl_file_to_pidfd_hash_lock,
+		filp, (unsigned long)os, group_leader, fd,
+		MCCTRL_FILE_2_PIDFD_HASH_MASK, &mcctrl_syscall_pidfd_offsets,
+		mcctrl_syscall_pidfd_free_bridge,
+		mcctrl_syscall_pidfd_lock_bridge,
+		mcctrl_syscall_pidfd_unlock_bridge,
+		mcctrl_syscall_pidfd_log_bridge);
+#else
 	unsigned long irqflags;
 	struct mcctrl_file_to_pidfd *file2pidfd_iter;
-	int hash = (int)((unsigned long)filp &
-			(unsigned long)MCCTRL_FILE_2_PIDFD_HASH_MASK);
+	int hash = mcctrl_ptr_hash(filp, MCCTRL_FILE_2_PIDFD_HASH_MASK);
 	int ret = 0;
 
 	spin_lock_irqsave(&mcctrl_file_to_pidfd_hash_lock, irqflags);
 	list_for_each_entry(file2pidfd_iter,
 			&mcctrl_file_to_pidfd_hash[hash], hash) {
-		if (file2pidfd_iter->filp != filp)
-			continue;
-
-		if (file2pidfd_iter->os != os)
-			continue;
-
-		if (file2pidfd_iter->group_leader != group_leader)
-			continue;
-
-		if (file2pidfd_iter->fd != fd)
+		if (!mcctrl_file_to_pidfd_remove_match(
+			    file2pidfd_iter->filp, filp, file2pidfd_iter->os,
+			    os, file2pidfd_iter->group_leader, group_leader,
+			    file2pidfd_iter->fd, fd))
 			continue;
 
 		list_del(&file2pidfd_iter->hash);
@@ -2003,6 +2502,7 @@ int mcctrl_file_to_pidfd_hash_remove(struct file *filp,
 unlock_out:
 	spin_unlock_irqrestore(&mcctrl_file_to_pidfd_hash_lock, irqflags);
 	return ret;
+#endif
 }
 #endif
 
@@ -2064,7 +2564,7 @@ void __return_syscall(ihk_os_t os, struct mcctrl_per_proc_data *ppd,
 				goto out_free_open;
 			}
 
-			if (!strncmp("/proc/tofu/dev/", fullpath, 15)) {
+			if (mcctrl_tofu_dev_path(fullpath)) {
 				res->pde_data = PDE_DATA(file_inode(f.file));
 				dprintk("%s: fd: %d, path: %s, PDE_DATA: 0x%lx\n",
 						__func__,
@@ -2116,8 +2616,8 @@ out_fdput_open:
 			}
 
 			/* Looking for /proc/tofu/dev/tniXcqY pattern */
-			__ret = sscanf(fullpath, "/proc/tofu/dev/tni%dcq%d", &tni, &cq);
-			if (__ret == 2) {
+			__ret = mcctrl_tofu_cq_path_parse(fullpath, &tni, &cq);
+			if (__ret) {
 				extern long __mcctrl_tof_utofu_unlocked_ioctl_cq(void *pde_data,
 						unsigned int cmd, unsigned long arg);
 
@@ -2196,8 +2696,107 @@ out:
 	return (IS_ERR_VALUE(map))? (int)map: 0;
 }
 
+#ifdef MCCTRL_RUST_HELPERS
+static void mcctrl_user_space_read_lock_bridge(void)
+{
+	MCCTRL_MMAP_READ_LOCK(current->mm);
+}
+
+static void mcctrl_user_space_read_unlock_bridge(void)
+{
+	MCCTRL_MMAP_READ_UNLOCK(current->mm);
+}
+
+static void *mcctrl_user_space_find_vma_bridge(unsigned long addr)
+{
+	return find_vma(current->mm, addr);
+}
+
+static unsigned long mcctrl_user_space_vma_start_bridge(void *vma)
+{
+	return ((struct vm_area_struct *)vma)->vm_start;
+}
+
+static unsigned long mcctrl_user_space_vma_end_bridge(void *vma)
+{
+	return ((struct vm_area_struct *)vma)->vm_end;
+}
+
+static unsigned long mcctrl_user_space_vma_flags_bridge(void *vma)
+{
+	return ((struct vm_area_struct *)vma)->vm_flags;
+}
+
+static void mcctrl_user_space_set_rw_exec_bridge(void *vma)
+{
+	MCCTRL_VM_FLAGS_SET((struct vm_area_struct *)vma,
+			    VM_READ | VM_WRITE | VM_EXEC);
+}
+
+static int mcctrl_user_space_zap_vma_ptes_bridge(void *vma,
+		unsigned long addr, unsigned long len)
+{
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 18, 0)
+	return zap_vma_ptes((struct vm_area_struct *)vma, addr, len);
+#else
+	zap_vma_ptes((struct vm_area_struct *)vma, addr, len);
+	return 0;
+#endif
+}
+
+static void mcctrl_user_space_zap_page_range_bridge(void *vma,
+		unsigned long addr, unsigned long len)
+{
+	mcctrl_zap_page_range((struct vm_area_struct *)vma, addr, len, NULL);
+}
+
+static int mcctrl_user_space_munmap_bridge(unsigned long addr,
+		unsigned long len)
+{
+	return vm_munmap(addr, len);
+}
+
+static void mcctrl_user_space_release_log_bridge(int error)
+{
+	printk("%s: ERROR: vm_munmap failed (%d)\n",
+	       "release_user_space", error);
+}
+
+static const struct mcctrl_clear_pte_range_ops
+mcctrl_clear_pte_range_ops = {
+	.read_lock = mcctrl_user_space_read_lock_bridge,
+	.read_unlock = mcctrl_user_space_read_unlock_bridge,
+	.find_vma = mcctrl_user_space_find_vma_bridge,
+	.vma_start = mcctrl_user_space_vma_start_bridge,
+	.vma_end = mcctrl_user_space_vma_end_bridge,
+	.vma_flags = mcctrl_user_space_vma_flags_bridge,
+	.set_rw_exec = mcctrl_user_space_set_rw_exec_bridge,
+	.zap_vma_ptes = mcctrl_user_space_zap_vma_ptes_bridge,
+	.zap_page_range = mcctrl_user_space_zap_page_range_bridge,
+};
+
+static const struct mcctrl_user_space_release_ops
+mcctrl_user_space_release_ops = {
+	.find_vma = mcctrl_user_space_find_vma_bridge,
+	.vma_start = mcctrl_user_space_vma_start_bridge,
+	.vma_end = mcctrl_user_space_vma_end_bridge,
+	.munmap = mcctrl_user_space_munmap_bridge,
+	.log_error = mcctrl_user_space_release_log_bridge,
+};
+#endif
+
 int mcctrl_clear_pte_range(uintptr_t start, uintptr_t len)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_clear_pte_range_body_result(
+		start, len, VM_PFNMAP,
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 18, 0)
+		1,
+#else
+		0,
+#endif
+		&mcctrl_clear_pte_range_ops);
+#else
 	struct mm_struct *mm = current->mm;
 	struct vm_area_struct *vma;
 	uintptr_t addr;
@@ -2254,10 +2853,15 @@ int mcctrl_clear_pte_range(uintptr_t start, uintptr_t len)
 	}
 	MCCTRL_MMAP_READ_UNLOCK(mm);
 	return ret;
+#endif
 }
 
 int release_user_space(uintptr_t start, uintptr_t len)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_user_space_release_body_result(
+		start, len, &mcctrl_user_space_release_ops);
+#else
 	struct mm_struct *mm = current->mm;
 	struct vm_area_struct *vma;
 	uintptr_t addr;
@@ -2291,6 +2895,7 @@ int release_user_space(uintptr_t start, uintptr_t len)
 	}
 	//up_read(&mm->mmap_sem);
 	return ret;
+#endif
 }
 
 /**
@@ -2343,10 +2948,10 @@ static int writecore(ihk_os_t os, unsigned long rcoretable, int chunks,
 	ihk_device_unmap_virtual(dev, cmdline, cmdline_len);
 	ihk_device_unmap_memory(dev, cmdline_phys, cmdline_len);
 
-	/* Every Linux documentation insists we should not 
-	 * open a file in the kernel module, but our karma 
-	 * leads us here. Precisely, Here we emulate the core 
-	 * dump routine of the Linux kernel in linux/fs/exec.c. 
+	/* Every Linux documentation insists we should not
+	 * open a file in the kernel module, but our karma
+	 * leads us here. Precisely, Here we emulate the core
+	 * dump routine of the Linux kernel in linux/fs/exec.c.
 	 * So we have a legitimate reason to do this.
 	 */
 	file = filp_open(fn, O_CREAT | O_RDWR | O_LARGEFILE | O_TRUNC, 0600);
@@ -2354,7 +2959,7 @@ static int writecore(ihk_os_t os, unsigned long rcoretable, int chunks,
 		dprintk("cannot open core file\n");
 		error = PTR_ERR(file);
 		goto fail;
-	}			
+	}
 
 	/* first we map the chunk table */
 	tablesize = sizeof(struct coretable) * chunks;
@@ -2382,11 +2987,11 @@ static int writecore(ihk_os_t os, unsigned long rcoretable, int chunks,
 				file->f_pos += ret;
 #endif
 			} else {
-				dprintk("cannot map physical memory(%lx) to virtual memory.\n", 
+				dprintk("cannot map physical memory(%lx) to virtual memory.\n",
 					phys);
 				ihk_device_unmap_memory(dev, phys, size);
 				break;
-			}			
+			}
 			/* unmap the chunk */
 			ihk_device_unmap_virtual(dev, pt, size);
 			ihk_device_unmap_memory(dev, phys, size);
@@ -2426,8 +3031,147 @@ fail:
 #define SCHED_CHECK_SAME_OWNER        0x01
 #define SCHED_CHECK_ROOT              0x02
 
+#ifdef MCCTRL_RUST_HELPERS
+void mcctrl_zero_mckernel_pages(unsigned long arg);
+
+static long mcctrl_in_kernel_pager_irq_bridge(unsigned long os,
+		struct syscall_request *req)
+{
+	return pager_call_irq((ihk_os_t)os, req);
+}
+
+static long mcctrl_in_kernel_pager_bridge(unsigned long os,
+		struct syscall_request *req)
+{
+	return pager_call((ihk_os_t)os, req);
+}
+
+static long mcctrl_in_kernel_clear_pte_bridge(unsigned long start,
+		unsigned long len)
+{
+	return mcctrl_clear_pte_range(start, len);
+}
+
+static long mcctrl_in_kernel_remap_bridge(unsigned long start,
+		unsigned long len, int prot)
+{
+	return remap_user_space(start, len, prot);
+}
+
+static void mcctrl_in_kernel_zero_pages_bridge(unsigned long arg)
+{
+	mcctrl_zero_mckernel_pages(arg);
+}
+
+static long mcctrl_in_kernel_writecore_bridge(unsigned long os,
+		unsigned long rcoretable, int chunks, unsigned long offset,
+		unsigned long filename)
+{
+	return writecore((ihk_os_t)os, rcoretable, chunks, offset, filename);
+}
+
+static long mcctrl_in_kernel_sched_same_owner_bridge(int pid)
+{
+	const struct cred *cred = current_cred();
+	const struct cred *pcred;
+	struct task_struct *p;
+	bool match;
+
+	rcu_read_lock();
+	p = pid_task(find_get_pid(pid), PIDTYPE_PID);
+	if (!p) {
+		rcu_read_unlock();
+		return -ESRCH;
+	}
+	rcu_read_unlock();
+
+	rcu_read_lock();
+	pcred = __task_cred(p);
+#if LINUX_VERSION_CODE > KERNEL_VERSION(3,4,0)
+	match = (uid_eq(cred->euid, pcred->euid) ||
+			uid_eq(cred->euid, pcred->uid));
+#else
+	match = ((cred->euid == pcred->euid) ||
+			(cred->euid == pcred->uid));
+#endif
+	rcu_read_unlock();
+
+	return match ? 0 : -EPERM;
+}
+
+static long mcctrl_in_kernel_sched_root_bridge(int unused)
+{
+	const struct cred *cred = current_cred();
+	bool match;
+
+	(void)unused;
+#if LINUX_VERSION_CODE > KERNEL_VERSION(3,4,0)
+	match = uid_eq(cred->euid, GLOBAL_ROOT_UID);
+#else
+	match = (cred->euid == 0);
+#endif
+	return match ? 0 : -EPERM;
+}
+
+#ifdef ENABLE_TOFU
+static long mcctrl_in_kernel_tofu_close_bridge(unsigned long os,
+		struct syscall_request *req)
+{
+	struct fd f;
+	int fd;
+
+	fd = (int)req->args[0];
+	if (fd > 2) {
+		f = fdget(fd);
+		if (f.file) {
+			mcctrl_file_to_pidfd_hash_remove(f.file, (ihk_os_t)os,
+					current->group_leader, fd);
+			fdput(f);
+		}
+	}
+
+	return 0;
+}
+#endif
+
+static void mcctrl_in_kernel_return_bridge(unsigned long os,
+		struct ikc_scd_packet *packet, long ret, int stid)
+{
+	__return_syscall((ihk_os_t)os, NULL, packet, ret, stid);
+}
+
+static void mcctrl_in_kernel_release_packet_bridge(
+		struct ikc_scd_packet *packet)
+{
+	ihk_ikc_release_packet((struct ihk_ikc_free_packet *)packet);
+}
+
+static const struct mcctrl_in_kernel_syscall_ops
+mcctrl_in_kernel_syscall_ops = {
+	.pager_irq = mcctrl_in_kernel_pager_irq_bridge,
+	.pager = mcctrl_in_kernel_pager_bridge,
+	.clear_pte = mcctrl_in_kernel_clear_pte_bridge,
+	.remap = mcctrl_in_kernel_remap_bridge,
+	.zero_pages = mcctrl_in_kernel_zero_pages_bridge,
+	.writecore = mcctrl_in_kernel_writecore_bridge,
+	.sched_same_owner = mcctrl_in_kernel_sched_same_owner_bridge,
+	.sched_root = mcctrl_in_kernel_sched_root_bridge,
+#ifdef ENABLE_TOFU
+	.tofu_close = mcctrl_in_kernel_tofu_close_bridge,
+#else
+	.tofu_close = NULL,
+#endif
+	.return_syscall = mcctrl_in_kernel_return_bridge,
+	.release_packet = mcctrl_in_kernel_release_packet_bridge,
+};
+#endif
+
 int __do_in_kernel_irq_syscall(ihk_os_t os, struct ikc_scd_packet *packet)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	return mcctrl_in_kernel_irq_syscall_body_result((unsigned long)os,
+			packet, &mcctrl_in_kernel_syscall_ops, NULL);
+#else
 	struct syscall_request *sc = &packet->req;
 	int ret;
 
@@ -2445,6 +3189,7 @@ int __do_in_kernel_irq_syscall(ihk_os_t os, struct ikc_scd_packet *packet)
 	__return_syscall(os, NULL, packet, ret, 0);
 
 	return 0;
+#endif
 }
 
 /*
@@ -2503,6 +3248,36 @@ struct ihk_mc_numa_node {
 
 void mcctrl_zero_mckernel_pages(unsigned long arg)
 {
+#ifdef MCCTRL_RUST_HELPERS
+	struct ihk_mc_numa_node *node =
+		(struct ihk_mc_numa_node *)arg;
+	unsigned long addr;
+	unsigned long size;
+
+	while (mcctrl_zero_mckernel_pages_step_result(
+			(unsigned long)node,
+			offsetof(struct ihk_mc_numa_node, to_zero_list),
+			offsetof(struct ihk_mc_numa_node, zeroed_list),
+			offsetof(struct ihk_mc_numa_node, nr_to_zero_pages),
+			offsetof(struct free_chunk, addr),
+			offsetof(struct free_chunk, size),
+			offsetof(struct free_chunk, list),
+			sizeof(struct free_chunk),
+			(unsigned long)phys_to_virt(0),
+			PAGE_SHIFT,
+			&addr,
+			&size)) {
+		dprintk("%s: zeroed %lu pages @ McKernel NUMA %d (chunk: 0x%lx:%lu)\n",
+				__func__,
+				size >> PAGE_SHIFT,
+				node->id,
+				addr, size);
+	}
+
+	mcctrl_zero_mckernel_pages_finish_result(
+			(unsigned long)node,
+			offsetof(struct ihk_mc_numa_node, zeroing_workers));
+#else
 	struct llist_node *llnode;
 	struct ihk_mc_numa_node *node =
 		(struct ihk_mc_numa_node *)arg;
@@ -2531,6 +3306,7 @@ void mcctrl_zero_mckernel_pages(unsigned long arg)
 	}
 
 	atomic_dec(&node->zeroing_workers);
+#endif
 }
 
 
@@ -2541,6 +3317,14 @@ int __do_in_kernel_syscall(ihk_os_t os, struct ikc_scd_packet *packet)
 	long ret = -1;
 
 	dprintk("%s: system call: %lx\n", __FUNCTION__, sc->args[0]);
+#ifdef MCCTRL_RUST_HELPERS
+	(void)sc;
+	error = mcctrl_in_kernel_syscall_body_result((unsigned long)os,
+			packet, &mcctrl_in_kernel_syscall_ops, &ret);
+	dprintk("%s: system call: %ld, args[0]: %lx, error: %d, ret: %ld\n",
+		__FUNCTION__, sc->number, sc->args[0], error, ret);
+	return error;
+#else
 	switch (sc->number) {
 #ifdef ENABLE_TOFU
 	case __NR_close: {
@@ -2585,7 +3369,7 @@ int __do_in_kernel_syscall(ihk_os_t os, struct ikc_scd_packet *packet)
 		goto out_no_syscall_return;
 
 	case __NR_exit_group: {
-	
+
 		/* Make sure the user space handler will be called as well */
 		error = -ENOSYS;
 		goto out;
@@ -2595,18 +3379,18 @@ int __do_in_kernel_syscall(ihk_os_t os, struct ikc_scd_packet *packet)
 		ret = writecore(os, sc->args[1], sc->args[0], sc->args[2],
 				sc->args[3]);
 		break;
-	
+
 	case __NR_sched_setparam: {
 
 		switch (sc->args[0]) {
-			
+
 			case SCHED_CHECK_SAME_OWNER: {
 				const struct cred *cred = current_cred();
 				const struct cred *pcred;
 				bool match;
 				struct task_struct *p;
 				int pid = sc->args[1];
-				
+
 				rcu_read_lock();
 				p = pid_task(find_get_pid(pid), PIDTYPE_PID);
 				if (!p) {
@@ -2626,21 +3410,21 @@ int __do_in_kernel_syscall(ihk_os_t os, struct ikc_scd_packet *packet)
 						(cred->euid == pcred->uid));
 #endif
 				rcu_read_unlock();
-				
+
 				if (match) {
 					ret = 0;
 				}
 				else {
 					ret = -EPERM;
 				}
-				
+
 				break;
 			}
 
 			case SCHED_CHECK_ROOT: {
 				const struct cred *cred = current_cred();
 				bool match;
-				
+
 #if LINUX_VERSION_CODE > KERNEL_VERSION(3,4,0)
 				match = uid_eq(cred->euid, GLOBAL_ROOT_UID);
 #else
@@ -2652,11 +3436,11 @@ int __do_in_kernel_syscall(ihk_os_t os, struct ikc_scd_packet *packet)
 				else {
 					ret = -EPERM;
 				}
-				
+
 				break;
 			}
 		}
-			
+
 sched_setparam_out:
 		break;
 	}
@@ -2674,7 +3458,8 @@ out_no_syscall_return:
 
 	error = 0;
 out:
-	dprintk("%s: system call: %ld, args[0]: %lx, error: %d, ret: %ld\n", 
+	dprintk("%s: system call: %ld, args[0]: %lx, error: %d, ret: %ld\n",
 		__FUNCTION__, sc->number, sc->args[0], error, ret);
 	return error;
+#endif
 }

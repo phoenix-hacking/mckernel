@@ -1,6 +1,194 @@
 /* bitops.c COPYRIGHT FUJITSU LIMITED 2015-2016 */
 #include <bitops.h>
 
+#ifndef MCKERNEL_RUST_BITOPS
+
+#ifdef __x86_64__
+int
+fls(int x)
+{
+	int r;
+
+	asm("bsrl %1,%0\n\t"
+	    "jnz 1f\n\t"
+	    "movl $-1,%0\n"
+	    "1:" : "=r" (r) : "rm" (x));
+
+	return r + 1;
+}
+
+int
+ffs(int x)
+{
+	int r;
+
+	asm("bsfl %1,%0\n\t"
+	    "jnz 1f\n\t"
+	    "movl $-1,%0\n"
+	    "1:" : "=r" (r) : "rm" (x));
+	return r + 1;
+}
+
+unsigned long
+__ffs(unsigned long word)
+{
+	asm("bsf %1,%0"
+		: "=r" (word)
+		: "rm" (word));
+	return word;
+}
+
+unsigned long
+ffz(unsigned long word)
+{
+	asm("bsf %1,%0"
+		: "=r" (word)
+		: "r" (~word));
+	return word;
+}
+
+#define X86_BITOP_ADDR (*(volatile long *)addr)
+
+void
+set_bit(int nr, volatile unsigned long *addr)
+{
+	asm volatile("lock; btsl %1,%0"
+		     : "+m" (X86_BITOP_ADDR)
+		     : "Ir" (nr)
+		     : "memory");
+}
+
+void
+clear_bit(int nr, volatile unsigned long *addr)
+{
+	asm volatile("lock; btrl %1,%0"
+		     : "+m" (X86_BITOP_ADDR)
+		     : "Ir" (nr)
+		     : "memory");
+}
+#else
+int
+fls(int x)
+{
+	unsigned int value = (unsigned int)x;
+	int r = 32;
+
+	if (!value)
+		return 0;
+
+	if (!(value & 0xffff0000u)) {
+		value <<= 16;
+		r -= 16;
+	}
+	if (!(value & 0xff000000u)) {
+		value <<= 8;
+		r -= 8;
+	}
+	if (!(value & 0xf0000000u)) {
+		value <<= 4;
+		r -= 4;
+	}
+	if (!(value & 0xc0000000u)) {
+		value <<= 2;
+		r -= 2;
+	}
+	if (!(value & 0x80000000u)) {
+		value <<= 1;
+		r -= 1;
+	}
+	return r;
+}
+
+unsigned long
+__ffs(unsigned long word)
+{
+	int num = 0;
+
+	if (BITS_PER_LONG == 64) {
+		if ((word & 0xffffffff) == 0) {
+			num += 32;
+			word >>= 32;
+		}
+	}
+
+	if ((word & 0xffff) == 0) {
+		num += 16;
+		word >>= 16;
+	}
+	if ((word & 0xff) == 0) {
+		num += 8;
+		word >>= 8;
+	}
+	if ((word & 0xf) == 0) {
+		num += 4;
+		word >>= 4;
+	}
+	if ((word & 0x3) == 0) {
+		num += 2;
+		word >>= 2;
+	}
+	if ((word & 0x1) == 0)
+		num += 1;
+	return num;
+}
+
+unsigned long
+ffz(unsigned long word)
+{
+	return __ffs(~word);
+}
+
+void
+set_bit(int nr, volatile unsigned long *addr)
+{
+	unsigned long mask = (1UL << (nr % BITS_PER_LONG));
+	unsigned long *p = ((unsigned long *)addr) + (nr / BITS_PER_LONG);
+
+	*p |= mask;
+}
+
+void
+clear_bit(int nr, volatile unsigned long *addr)
+{
+	unsigned long mask = (1UL << (nr % BITS_PER_LONG));
+	unsigned long *p = ((unsigned long *)addr) + (nr / BITS_PER_LONG);
+
+	*p &= ~mask;
+}
+#endif
+
+int
+test_bit(int nr, const void *addr)
+{
+	const uint32_t *p = (const uint32_t *)addr;
+
+	return ((1UL << (nr & 31)) & (p[nr >> 5])) != 0;
+}
+
+unsigned long
+ihk_bit_word(unsigned long nr)
+{
+	return nr / BITS_PER_LONG;
+}
+
+unsigned long
+ihk_align_mask(unsigned long x, unsigned long mask)
+{
+	return (x + mask) & ~mask;
+}
+
+unsigned long
+ihk_align(unsigned long x, unsigned long a)
+{
+	return ihk_align_mask(x, a - 1);
+}
+
+int
+ihk_is_aligned(unsigned long x, unsigned long a)
+{
+	return (x & (a - 1)) == 0;
+}
+
 #define BITOP_WORD(nr)		((nr) / BITS_PER_LONG)
 
 /*
@@ -49,7 +237,7 @@ found_middle:
  * This implementation of find_{first,next}_zero_bit was stolen from
  * Linus' asm-alpha/bitops.h.
  */
-unsigned long find_next_zero_bit(const unsigned long *addr, 
+unsigned long find_next_zero_bit(const unsigned long *addr,
 		unsigned long size, unsigned long offset)
 {
 	const unsigned long *p = addr + BITOP_WORD(offset);
@@ -91,7 +279,7 @@ found_middle:
 /*
  * Find the first set bit in a memory region.
  */
-unsigned long find_first_bit(const unsigned long *addr, 
+unsigned long find_first_bit(const unsigned long *addr,
 		unsigned long size)
 {
 	const unsigned long *p = addr;
@@ -117,7 +305,7 @@ found:
 /*
  * Find the first cleared bit in a memory region.
  */
-unsigned long find_first_zero_bit(const unsigned long *addr, 
+unsigned long find_first_zero_bit(const unsigned long *addr,
 		unsigned long size)
 {
 	const unsigned long *p = addr;
@@ -195,3 +383,9 @@ unsigned long __sw_hweight64(uint64_t w)
 #endif
 }
 
+unsigned long hweight_long(unsigned long w)
+{
+	return sizeof(w) == 4 ? __sw_hweight32(w) : __sw_hweight64(w);
+}
+
+#endif /* MCKERNEL_RUST_BITOPS */

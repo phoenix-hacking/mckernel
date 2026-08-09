@@ -73,14 +73,8 @@
 #define FUTEX_OP_CMP_GE		5	/* if (oldval >= CMPARG) wake */
 // @}
 
-/* FUTEX_WAKE_OP will perform atomically
-   int oldval = *(int *)UADDR2;
-   *(int *)UADDR2 = oldval OP OPARG;
-   if (oldval CMP CMPARG)
-     wake UADDR2;  */
-#define FUTEX_OP(op, oparg, cmp, cmparg) \
-  (((op & 0xf) << 28) | ((cmp & 0xf) << 24)		\
-   | ((oparg & 0xfff) << 12) | (cmparg & 0xfff))
+/* FUTEX_WAKE_OP encoder. */
+int FUTEX_OP(int op, int oparg, int cmp, int cmparg);
 
 /*
  * bitset with all bits set for the FUTEX_xxx_BITSET OPs to request a
@@ -128,13 +122,7 @@
 
 struct process_vm;
 
-static inline int get_futex_value_locked(uint32_t *dest, uint32_t *from)
-{
-
-	*dest = *(volatile uint32_t *)from;
-
-	return 0;
-}
+int get_futex_value_locked(uint32_t *dest, uint32_t *from);
 
 /*
  * Hash buckets are shared by all the futex_keys that hash to the same

@@ -90,17 +90,8 @@ struct shmlock_user {
 
 extern ihk_spinlock_t shmlock_users_lock_body;
 
-static inline void shmlock_users_lock(void)
-{
-	ihk_mc_spinlock_lock_noirq(&shmlock_users_lock_body);
-	return;
-}
-
-static inline void shmlock_users_unlock(void)
-{
-	ihk_mc_spinlock_unlock_noirq(&shmlock_users_lock_body);
-	return;
-}
+void shmlock_users_lock(void);
+void shmlock_users_unlock(void);
 
 void shmobj_list_lock(void);
 void shmobj_list_unlock(void);

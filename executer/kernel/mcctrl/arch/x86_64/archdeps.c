@@ -2,6 +2,11 @@
 #include <linux/version.h>
 #include <linux/kallsyms.h>
 #include <linux/uaccess.h>
+#if defined(__has_include)
+# if __has_include(<linux/rhelversion.h>)
+#  include <linux/rhelversion.h>
+# endif
+#endif
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0)
 #include <linux/mmap_lock.h>
 #endif
@@ -10,7 +15,15 @@
 #include "config.h"
 #include "../../mcctrl.h"
 
-#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 3, 0)
+#if defined(RHEL_RELEASE_CODE) && defined(RHEL_RELEASE_VERSION)
+#define MCCTRL_RHEL_RELEASE_AT_LEAST(major, minor) \
+	(RHEL_RELEASE_CODE >= RHEL_RELEASE_VERSION(major, minor))
+#else
+#define MCCTRL_RHEL_RELEASE_AT_LEAST(major, minor) 0
+#endif
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 3, 0) && \
+	!MCCTRL_RHEL_RELEASE_AT_LEAST(8, 10)
 #define MCCTRL_VGTOD_VIRT ((void *)&VVAR(vsyscall_gtod_data))
 #else
 #define MCCTRL_VGTOD_VIRT NULL
@@ -385,11 +398,25 @@ out:
 	return error;
 }
 
-#define PFN_WRITE_COMBINED _PAGE_PWT
-static inline bool pte_is_write_combined(pte_t pte)
+#ifndef MCCTRL_RUST_HELPERS
+int
+mcctrl_pte_is_write_combined_result(unsigned long flags)
 {
-	return ((pte_flags(pte) & _PAGE_PWT) && !(pte_flags(pte) & _PAGE_PCD));
+	return ((flags & _PAGE_PWT) && !(flags & _PAGE_PCD));
 }
+
+int
+xchg4(int *ptr, int x)
+{
+	int old = x;
+
+	asm volatile("xchgl %k0,%1"
+			: "=r" (old)
+			: "m" (*ptr), "0" (old)
+			: "memory");
+	return old;
+}
+#endif
 
 /*
  * The assembler switch_ctx is save/load registers in the context.
