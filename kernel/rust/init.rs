@@ -265,9 +265,13 @@ unsafe fn time_init() {
 
 #[no_mangle]
 pub unsafe extern "C" fn monitor_init() {
+    unsafe {
+        crate::x86_setup::early_phase(b'6');
+    }
     let cpu_info = unsafe { ihk_mc_get_cpu_info() };
     if cpu_info.is_null() {
         unsafe {
+            crate::x86_setup::early_panic();
             kernel_panic(cstr(b"PANIC: in monitor_init() ihk_mc_cpu_info is NULL.\0"));
         }
     }
@@ -276,6 +280,9 @@ pub unsafe extern "C" fn monitor_init() {
         size_of::<crate::abi::IhkOsCpuMonitor>() * unsafe { (*cpu_info).ncpus as usize },
     );
     let pages = ((bytes + PAGE_SIZE - 1) >> PAGE_SHIFT) as CInt;
+    unsafe {
+        crate::x86_setup::early_phase(b'7');
+    }
     let monitor_ptr = unsafe {
         _ihk_mc_alloc_aligned_pages_node(
             pages,
@@ -290,11 +297,19 @@ pub unsafe extern "C" fn monitor_init() {
     }
     .cast::<IhkOsMonitor>();
     unsafe {
+        crate::x86_setup::early_phase(b'8');
+        if monitor_ptr.is_null() {
+            crate::x86_setup::early_panic();
+            kernel_panic(cstr(b"PANIC: monitor_init() allocation failed.\0"));
+        }
         write_bytes(monitor_ptr.cast::<u8>(), 0, pages as usize * PAGE_SIZE);
         (*monitor_ptr).num_processors = (*cpu_info).ncpus as CULong;
         monitor = monitor_ptr;
+        crate::x86_setup::early_phase(b'9');
         let phys = virt_to_phys(monitor_ptr.cast::<c_void>());
+        crate::x86_setup::early_phase(b'0');
         ihk_set_monitor(phys, bytes as CULong);
+        crate::x86_setup::early_phase(b'+');
     }
 }
 
