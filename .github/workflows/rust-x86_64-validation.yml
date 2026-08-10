@@ -243,7 +243,7 @@ jobs:
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' |
             sudo tee /etc/udev/rules.d/99-kvm4all.rules >/dev/null
           sudo udevadm control --reload-rules
-          if ! sudo udevadm trigger --name-match=kvm; then
+          if ! sudo udevadm trigger --settle --name-match=kvm; then
             echo 'warning: udev could not retrigger kvm; checking the existing device directly' >&2
           fi
           if test ! -c /dev/kvm; then
