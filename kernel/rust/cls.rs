@@ -14,6 +14,7 @@ use crate::abi::{
 const ENOMEM: CInt = 12;
 const IHK_MC_AP_NOWAIT: CInt = 0x000002;
 const IHK_MC_AP_CRITICAL: CInt = 0x000001;
+const IHK_MC_PG_KERNEL: CInt = 0;
 const PAGE_SHIFT: usize = 12;
 const PAGE_SIZE: usize = 1 << PAGE_SHIFT;
 const CPU_FLAG_NEED_RESCHED: u32 = 0x1;
@@ -48,12 +49,12 @@ extern "C" {
     fn _kmalloc(size: CInt, flags: CInt, file: *mut c_char, line: CInt) -> *mut c_void;
     fn _kfree(ptr: *mut c_void, file: *mut c_char, line: CInt);
     fn _ihk_mc_alloc_aligned_pages_node(
-        size: CInt,
-        align: CInt,
-        flags: CULong,
-        zero: CInt,
+        npages: CInt,
+        p2align: CInt,
+        flag: CULong,
         node: CInt,
-        virt: CULong,
+        is_user: CInt,
+        virt_addr: CULong,
         file: *mut c_char,
         line: CInt,
     ) -> *mut c_void;
@@ -128,9 +129,9 @@ pub unsafe extern "C" fn cpu_local_var_init() {
         nr_pages as CInt,
         0,
         IHK_MC_AP_CRITICAL as CULong,
-        0,
         -1,
-        0,
+        IHK_MC_PG_KERNEL,
+        CULong::MAX,
         file_ptr(),
         line!() as CInt,
     )
