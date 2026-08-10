@@ -374,6 +374,11 @@ print_serial_tail() {
 		crash_match="$(LC_ALL=C grep -a -n -m1 -E \
 			'Kernel panic|not syncing:' "$SERIAL_LOG" 2>/dev/null || true)"
 		if [ -z "$crash_match" ]; then
+			crash_match="$(LC_ALL=C grep -a -n -m1 -F \
+				'IHK: OS does not become ready, kernel msg:' \
+				"$SERIAL_LOG" 2>/dev/null || true)"
+		fi
+		if [ -z "$crash_match" ]; then
 			crash_match="$(LC_ALL=C grep -a -n -m1 -E \
 				'BUG:|Oops:|general protection fault|Unable to handle kernel|#PF:|RIP:|Call Trace:' \
 				"$SERIAL_LOG" 2>/dev/null || true)"
@@ -384,8 +389,8 @@ print_serial_tail() {
 				;;
 			*)
 				crash_start=$((crash_line > 300 ? crash_line - 300 : 1))
-				crash_end=$((crash_line + 120))
-				echo "serial crash context (lines ${crash_start}-${crash_end}, panic at ${crash_line}):" >&2
+				crash_end=$((crash_line + 500))
+				echo "serial failure context (lines ${crash_start}-${crash_end}, marker at ${crash_line}):" >&2
 				LC_ALL=C sed -n "${crash_start},${crash_end}p" "$SERIAL_LOG" >&2 || true
 				;;
 		esac

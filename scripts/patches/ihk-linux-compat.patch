@@ -1,3 +1,16 @@
+diff --git a/linux/core/mikc.c b/linux/core/mikc.c
+--- a/linux/core/mikc.c
++++ b/linux/core/mikc.c
+@@ -57,7 +57,8 @@ struct ihk_ikc_channel_desc *ihk_host_ikc_init_first(ihk_os_t ihk_os,
+ 	ihk_ikc_system_init(ihk_os);
+ 	os->ikc_initialized = 1;
+ 
+-	if (ihk_os_wait_for_status(ihk_os, IHK_OS_STATUS_READY, 0, 600) == 0) {
++	/* This boot ioctl runs in process context, so let the status poll sleep. */
++	if (ihk_os_wait_for_status(ihk_os, IHK_OS_STATUS_READY, 1, 600) == 0) {
+ 		/* XXX: 
+ 		 * We assume this address is remote, 
+ 		 * but the local is possible... */
 diff --git a/linux/core/host_driver.c b/linux/core/host_driver.c
 index 102345b..feebcb6 100644
 --- a/linux/core/host_driver.c
@@ -187,7 +200,39 @@ diff --git a/linux/driver/smp/smp-driver.c b/linux/driver/smp/smp-driver.c
 index 409d6b3..c422756 100644
 --- a/linux/driver/smp/smp-driver.c
 +++ b/linux/driver/smp/smp-driver.c
-@@ -5412,6 +5412,9 @@ static int ihk_smp_symbols_init(void)
+@@ -1681,21 +1681,18 @@
+ static int smp_ihk_os_wait_for_status(ihk_os_t ihk_os, void *priv,
+                                       enum ihk_os_status status,
+                                       int sleepable, int timeout)
+ {
+ 	enum ihk_os_status s;
+-	if (sleepable) {
+-		/* TODO: Enable notification of status change, and wait */
+-		return -1;
+-	} else {
+-		/* Polling */
+-		while ((s = smp_ihk_os_query_status(ihk_os, priv)),
+-		       s != status && s < IHK_OS_STATUS_SHUTDOWN
+-		       && timeout > 0) {
++	while ((s = smp_ihk_os_query_status(ihk_os, priv)),
++	       s != status && s < IHK_OS_STATUS_SHUTDOWN
++	       && timeout > 0) {
++		if (sleepable)
++			msleep(100);
++		else
+ 			mdelay(100);
+-			dprintk("%s: waiting for: %d, status: %d\n",
+-				__FUNCTION__, status, s);
+-			timeout--;
+-		}
+-		return s == status ? 0 : -1;
++		dprintk("%s: waiting for: %d, status: %d\n",
++			__FUNCTION__, status, s);
++		timeout--;
+ 	}
++	return s == status ? 0 : -1;
+ }
+@@ -5412,6 +5409,9 @@ static int ihk_smp_symbols_init(void)
  		goto err;
  
  	ihk__free_vmap_area = (void *)kallsyms_lookup_name("free_vmap_area");
