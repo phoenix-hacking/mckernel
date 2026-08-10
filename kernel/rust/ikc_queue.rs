@@ -141,7 +141,7 @@ unsafe fn rem_u64_nonzero(value: u64, divisor: u64) -> u64 {
         "div {divisor}",
         divisor = in(reg) divisor,
         inlateout("rax") value => quotient,
-        lateout("rdx") remainder,
+        out("rdx") remainder,
         options(nostack),
     );
     let _ = quotient;
