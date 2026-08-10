@@ -1,6 +1,6 @@
 use core::ffi::{c_char, c_void};
 use core::mem::size_of;
-use core::ptr::{null_mut, write_bytes, write_volatile};
+use core::ptr::{null_mut, write_volatile};
 
 use crate::abi::{
     CInt, CLong, CULong, IhkOsMonitor, RusagePercpu, SysfsBitmapParam, SysfsOps, IHK_MAX_NUM_CPUS,
@@ -333,7 +333,12 @@ pub unsafe extern "C" fn monitor_init() {
         crate::x86_setup::early_phase(b'<');
         write_volatile(monitor_ptr.cast::<u8>().add(span - 1), 0);
         crate::x86_setup::early_phase(b'=');
-        write_bytes(monitor_ptr.cast::<u8>(), 0, span);
+        let raw_ptr = monitor_ptr.cast::<u8>();
+        let mut offset = 0usize;
+        while offset < span {
+            write_volatile(raw_ptr.add(offset), 0);
+            offset += 1;
+        }
         crate::x86_setup::early_phase(b'>');
         (*monitor_ptr).num_processors = (*cpu_info).ncpus as CULong;
         crate::x86_setup::early_phase(b'/');
