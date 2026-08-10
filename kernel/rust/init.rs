@@ -175,6 +175,7 @@ unsafe fn parse_kargs() {
 
     unsafe {
         kprintf(cstr(b"KCommand Line: %s\n\0"), ihk_get_kargs());
+        crate::x86_setup::early_phase(b'j');
     }
 
     let ptr = unsafe { find_command_line(key_dump_level.as_ptr().cast::<c_char>()) };
@@ -183,6 +184,7 @@ unsafe fn parse_kargs() {
     }
     unsafe {
         ihk_mc_set_dump_level(dump_level);
+        crate::x86_setup::early_phase(b'k');
     }
 
     if !unsafe { find_command_line(cstr(b"idle_halt\0")) }.is_null() {
@@ -190,17 +192,26 @@ unsafe fn parse_kargs() {
             idle_halt = 1;
         }
     }
+    unsafe {
+        crate::x86_setup::early_phase(b'l');
+    }
 
     if !unsafe { find_command_line(cstr(b"allow_oversubscribe\0")) }.is_null() {
         unsafe {
             allow_oversubscribe = 1;
         }
     }
+    unsafe {
+        crate::x86_setup::early_phase(b'm');
+    }
 
     if !unsafe { find_command_line(cstr(b"time_sharing\0")) }.is_null() {
         unsafe {
             time_sharing = 1;
         }
+    }
+    unsafe {
+        crate::x86_setup::early_phase(b'n');
     }
 }
 
@@ -306,16 +317,27 @@ unsafe fn uti_init() {}
 unsafe fn rest_init() {
     unsafe {
         handler_init();
+        crate::x86_setup::early_phase(b'M');
         ap_init();
+        crate::x86_setup::early_phase(b'N');
         cpu_local_var_init();
+        crate::x86_setup::early_phase(b'O');
         multi_intr_init();
+        crate::x86_setup::early_phase(b'P');
         nmi_init();
+        crate::x86_setup::early_phase(b'Q');
         uti_init();
+        crate::x86_setup::early_phase(b'R');
         time_init();
+        crate::x86_setup::early_phase(b'S');
         kmalloc_init();
+        crate::x86_setup::early_phase(b'T');
         ihk_ikc_master_init();
+        crate::x86_setup::early_phase(b'U');
         proc_init();
+        crate::x86_setup::early_phase(b'V');
         sched_init();
+        crate::x86_setup::early_phase(b'W');
     }
 }
 
@@ -497,11 +519,17 @@ unsafe fn post_init() {
 pub unsafe extern "C" fn main() -> CInt {
     unsafe {
         arch_init();
+        crate::x86_setup::early_phase(b'H');
         parse_kargs();
+        crate::x86_setup::early_phase(b'I');
         mem_init();
+        crate::x86_setup::early_phase(b'J');
         rest_init();
+        crate::x86_setup::early_phase(b'X');
         arch_ready();
+        crate::x86_setup::early_phase(b'Y');
         post_init();
+        crate::x86_setup::early_phase(b'Z');
         futex_init();
         done_init();
         kputs(cstr(b"IHK/McKernel booted.\n\0"));
