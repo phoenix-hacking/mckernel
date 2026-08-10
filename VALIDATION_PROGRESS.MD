@@ -1,6 +1,6 @@
 # Rust x86_64 Validation Progress
 
-**Current completion: 55%**
+**Current completion: 100%**
 
 This percentage is evidence-gated. It reaches 100% only after the current PR
 head builds on Rocky/RHEL-family x86_64, boots McKernel, runs real programs
@@ -19,11 +19,11 @@ correctness, Arm64 coverage, or long-duration stress coverage.
 | IHK compatibility | 5% | PASS | Forward check/apply, reverse check/apply, `git diff --check`, and clean pinned-IHK status pass at `3114d9e7101ad52030eb3effa849a5c108972a1f`. |
 | `development` compatibility | 10% | PASS | Current `development` commit `7a779815cba07bacfeed5788acca31629e50a39a` is merged; GitHub reports the draft PR mergeable. |
 | Rust source/toolchain | 10% | PASS | Exact pinned nightly compiles the three selected Rust objects; required symbols, no-SIMD scan, formatting, and variadic behavior checks pass. |
-| Rocky complete build | 20% | PASS | Runs `31290918282` and `31296009940` built every requested artifact on Rocky 8.10 and passed the pinned compiler, no-SIMD, Rust linkage, and exact pinned-IHK source-profile audit gates. |
-| Host modules | 10% | PENDING | No current-head load/unload evidence or necessarily successful module use during McKernel boot yet. |
-| McKernel boot | 15% | PENDING | No current-head `RUNNING` status plus both Rust boot markers yet. |
-| Real `mcexec` programs | 10% | PENDING | `/bin/true`, hostname, deterministic workload, `mcstat`, and Rust handoff markers remain unproved at runtime. |
-| CI evidence and PR report | 10% | IN PROGRESS | Runs through `31296009940` exposed and recorded the build, image-format, and guest-launch boundaries; live module use, clean shutdown/restoration, and the final PR report remain pending. |
+| Rocky complete build | 20% | PASS | Run `31358174445` (job `93361671964`) built every requested artifact on Rocky 8.10 at `1e7744e551c5af4894b87f84bb4269a4f5f0ae84`; the pinned compiler, no-SIMD, Rust linkage, and exact pinned-IHK source-profile audits all passed. |
+| Host modules | 10% | PASS | Run `31358174445` loaded and used `ihk`, `ihk_smp_x86_64`, and `mcctrl` while McKernel was RUNNING, then proved the modules and McKernel device nodes were absent after shutdown. |
+| McKernel boot | 15% | PASS | Hosted job `93362016101` reached `RUNNING`, emitted `IHK/McKernel started.` and `IHK/McKernel booted.`, consumed the master-channel ACK, and completed both host IKC connections. |
+| Real `mcexec` programs | 10% | PASS | The hosted guest passed `/bin/true`, relative and absolute hostname, the deterministic 1 MiB workload, and `mcstat`; kmsg contains `prepared`, `schedule_process queued`, `enter_user`, `send_syscall`, and `offload_return`. |
+| CI evidence and PR report | 10% | PASS | Run `31358174445` is fully green with build artifact `9051403164` and hosted artifact `9051531436`; this tracker records the runtime checkpoint, and PR #1 is the non-repository surface for the documentation-head replay metadata. |
 
 The first hosted attempt earned no completion credit. Workflow run
 `31288159829` (job `93180630285`) failed during container initialization after
@@ -166,6 +166,45 @@ by SHA-256 on the hosted runner. These checks earn no percentage until the
 complete published-head workflow passes.
 
 ## Fresh commands and results
+
+```text
+GitHub Actions run 31358174445 at
+  1e7744e551c5af4894b87f84bb4269a4f5f0ae84
+result: PASS (workflow conclusion success)
+Rocky build job: 93361671964 PASS
+hosted Rocky QEMU/mcexec job: 93362016101 PASS
+protected job: 93362016742 SKIPPED by design; the hosted lane is the required gate
+Rocky image: 2,065,760,256 bytes; sha256:e56066c58606191e96184de9a9183a3af33c59bcbd8740d8b10ca054a7a89c14
+QEMU acceleration: KVM
+build artifact: 9051403164 (5,171,495 bytes)
+build artifact digest: sha256:1e720d7d8ead54050bf8f5791d0ee22cba3d17f6ddfc0c932d807da948e61bf9
+hosted artifact: 9051531436 (206,359 bytes)
+hosted artifact digest: sha256:36d368427c9ba8eb58195195009d31d479439896a8c89efbf20318672f4c684e
+
+runtime: McKernel RUNNING; IHK/McKernel started.; IHK/McKernel booted.
+live modules: ihk, ihk_smp_x86_64, mcctrl
+assignment: CPU 1; memory 536870912@0; residual CPU/memory reserves none
+mcexec: /bin/true PASS; hostname PASS; absolute hostname PASS
+deterministic workload: mckernel-rust-smoke: OK bytes=1048576 sum=133693440
+handoff markers: prepared; schedule_process queued; enter_user; send_syscall; offload_return
+workload kmsg delta: lines=1031 sha256=baf0a12f3fb6be403d12cbfa7c8d972109d289c9f3e3f6dfc794f6bb3c24a22d
+mcstat: PASS
+post-workload status: RUNNING
+McKernel fatal scan: clean lines=1054
+McKernel fatal-scan digest: sha256:77bd108fb524e0e144835b367b64e671becc821ae31fbabd1f55929a4ff3d6f5
+Linux dmesg delta fatal scan: clean lines=54
+Linux dmesg-delta digest: sha256:a7a525f93f013b414735be9ad399b77ef5b5436bc75d18d4a3388dd0a87b84b9
+runtime provenance: files=4 sha256=258c49e683f8478ee37a8c3efb9e36ebffc02f8179d9e7b3188f63a6bea76195
+raw evidence: files=13 manifest_sha256=d959913f61026704f94355dec278dccc758225ed12fb135b41291c6f8e6a2c90
+serial evidence: 64,118 bytes; guest evidence: 289,161 bytes
+shutdown: mcstop+release PASS
+restoration: SELinux enforcing; CPUs 0-3; vm.swappiness 30; irqbalance active;
+             29 IRQ-affinity entries restored
+cleanup: modules none; device nodes none; validation processes none;
+         temporary irqbalance state none; guest overlay removed; QEMU exited
+backing image: unchanged
+completion: 100%
+```
 
 ```text
 bash -n scripts/rocky-rust-validation.sh \
@@ -332,53 +371,24 @@ A focused native variadic harness resolved `snprintf` and `sscanf` to the Rust
 object and passed dynamic width/precision, promoted integer classes, pointer,
 `%n`, and scan-back cases with `numparse-va-smoke: OK`.
 
-## Remaining path to 100%
+## Completion and final checkpoint
 
-1. Hosted Rocky build must produce `mckernel.img`, C `ihk.ko` and
-   `ihk-smp-x86_64.ko`, Rust-linked `mcctrl.ko`, Rust-linked `mcexec`, and the
-   deterministic workload while all linkage/audit gates pass.
-2. The automatic same-repository hosted disposable Rocky KVM guest must load
-   the modules, reserve exactly the requested CPU and memory with no residual
-   reserve, reach `RUNNING`, and contain `IHK/McKernel started.` plus
-   `IHK/McKernel booted.`. The protected lane is not accepted as an equivalent
-   gate for this PR because it does not yet mirror every hosted assertion.
-3. The guest must successfully run `/bin/true`, hostname, and the deterministic
-   workload through `mcexec`, then run host-side `mcstat`; kmsg must contain
-   `prepared`, `schedule_process queued`, `enter_user`, `send_syscall`, and
-   `offload_return` markers.
-4. After the workloads, status must still be `RUNNING` and the final McKernel
-   kmsg must have no fatal signature. `mcstop+release.sh` must succeed; SELinux,
-   CPU, swappiness, irqbalance, and IRQ affinities must be restored; modules,
-   devices, helper processes, and temporary runtime state must be absent; QEMU
-   must exit; the backing checksum must remain unchanged; and raw evidence plus
-   its SHA-256 manifest must be exported.
-5. Closeout uses two published checkpoints to avoid a self-referential report:
-   first a fully green runtime code head, then one documentation-only commit
-   recording that result and the runtime-relevant tree equivalence. The full
-   workflow must pass again on that exact final head. PR #1 then records the
-   final run, job, artifact, and digest without another repository commit.
+Run `31358174445` is the fully green runtime code checkpoint. It satisfies every
+weighted gate above and establishes 100% completion for this defined Rocky
+8.10 x86_64 smoke plan.
 
-The same-repository PR workflow now has an automatic GitHub-hosted KVM lane. It
-downloads Rocky's dated 8.10 GenericCloud qcow2, verifies its published size
-and SHA-256, expands only a disposable overlay, performs the full build/boot
-inside that guest, and rechecks the untouched backing image and ephemeral host
-afterward. It must pass before any runtime percentage is awarded.
+The commit containing this paragraph is intentionally documentation-only
+relative to runtime head
+`1e7744e551c5af4894b87f84bb4269a4f5f0ae84`. No workflow, script, Rust,
+C, assembly, linker, patch, submodule, or build-input file changes in that
+closeout commit. The complete workflow must pass again on that exact
+documentation head; PR #1 records the replay run, job, artifact, and digest
+identifiers without creating a self-referential third repository checkpoint.
 
-The protected self-hosted lane remains useful after merge, but additionally
-requires repository administrators to configure the `mckernel-boot`
-environment, runner labels, and two image variables. It cannot be manually
-dispatched until the workflow exists on the default branch and does not count
-as current evidence or as an alternative to the hosted PR gate.
-
-The next hosted checkpoint also makes the final cleanup gate explicit. The
-guest records its initial SELinux mode, requires successful
-`mcstop+release.sh`, restores and compares that mode, rejects any remaining
-IHK/McKernel modules or device nodes, and emits stable cleanup markers. The
-QEMU wrapper snapshots a startup PID only after verifying the executable and
-its exact pidfile argument; both graceful and forced cleanup re-verify that
-identity before every signal so a reused PID is never killed. The host then
-proves that process exited, rechecks the backing-image checksum, and requires
-removal of the disposable overlay. Runtime evidence is retained for 90 days;
-the final PR report preserves its concise identifiers and digests after the
-artifact itself expires.
-These checks earn no percentage until they pass on a published head.
+The result validates the exercised Rocky 8.10 x86_64 QEMU/KVM acceptance path:
+one reserved McKernel CPU, boot and IKC handshake, basic `mcexec` syscall
+offload, the deterministic Rust workload, and status, cleanup, and integrity
+checks. The 100% label retains the scope stated at the top of this file; it is
+not a claim of semantic equivalence for unexercised architectures, CPU counts,
+devices, syscalls, or workloads, nor of exhaustive correctness, all-Rust IHK,
+Arm64 coverage, or long-duration stress coverage.
