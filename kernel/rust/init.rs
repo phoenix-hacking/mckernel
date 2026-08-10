@@ -1,6 +1,6 @@
 use core::ffi::{c_char, c_void};
 use core::mem::size_of;
-use core::ptr::{null_mut, write_bytes};
+use core::ptr::{null_mut, write_bytes, write_volatile};
 
 use crate::abi::{
     CInt, CLong, CULong, IhkOsMonitor, RusagePercpu, SysfsBitmapParam, SysfsOps, IHK_MAX_NUM_CPUS,
@@ -92,6 +92,7 @@ unsafe extern "C" {
     fn kernel_panic(s: *const c_char) -> !;
     fn mem_init();
     fn numa_sysfs_setup();
+    fn phys_to_virt(phys: CULong) -> *mut c_void;
     fn proc_init();
     fn sched_init();
     fn schedule();
@@ -302,8 +303,40 @@ pub unsafe extern "C" fn monitor_init() {
             crate::x86_setup::early_panic();
             kernel_panic(cstr(b"PANIC: monitor_init() allocation failed.\0"));
         }
-        write_bytes(monitor_ptr.cast::<u8>(), 0, pages as usize * PAGE_SIZE);
+        if pages <= 0 {
+            crate::x86_setup::early_panic();
+            kernel_panic(cstr(b"PANIC: monitor_init() invalid page count.\0"));
+        }
+        let Some(span) = (pages as usize).checked_mul(PAGE_SIZE) else {
+            crate::x86_setup::early_panic();
+            kernel_panic(cstr(b"PANIC: monitor_init() page span overflow.\0"));
+        };
+        let probe_phys = virt_to_phys(monitor_ptr.cast::<c_void>());
+        let canonical_ptr = phys_to_virt(probe_phys).cast::<u8>();
+        kprintf(
+            cstr(
+                b"monitor_init: ptr=%lx phys=%lx canonical=%lx pages=%d bytes=%lu ncpus=%d\n\0",
+            ),
+            monitor_ptr as CULong,
+            probe_phys,
+            canonical_ptr as CULong,
+            pages,
+            bytes as CULong,
+            (*cpu_info).ncpus,
+        );
+        crate::x86_setup::early_phase(b'.');
+        write_volatile(canonical_ptr, 0);
+        crate::x86_setup::early_phase(b':');
+        write_volatile(canonical_ptr.add(span - 1), 0);
+        crate::x86_setup::early_phase(b';');
+        write_volatile(monitor_ptr.cast::<u8>(), 0);
+        crate::x86_setup::early_phase(b'<');
+        write_volatile(monitor_ptr.cast::<u8>().add(span - 1), 0);
+        crate::x86_setup::early_phase(b'=');
+        write_bytes(monitor_ptr.cast::<u8>(), 0, span);
+        crate::x86_setup::early_phase(b'>');
         (*monitor_ptr).num_processors = (*cpu_info).ncpus as CULong;
+        crate::x86_setup::early_phase(b'/');
         monitor = monitor_ptr;
         crate::x86_setup::early_phase(b'9');
         let phys = virt_to_phys(monitor_ptr.cast::<c_void>());
