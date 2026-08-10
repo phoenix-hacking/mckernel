@@ -58,6 +58,59 @@ index 102345b..feebcb6 100644
  
  static struct list_head ihk_kmsg_bufs;
  static spinlock_t ihk_kmsg_bufs_lock;
+@@ -393,38 +413,38 @@
+ 	case IHK_OS_STATUS_FREEZING:
+ 		/* wait 10 sec for frozen */
+ 		pr_info("%s: waiting for frozen...\n", __func__);
+ 		if (ihk_os_wait_for_status((ihk_os_t)data, IHK_OS_STATUS_FROZEN,
+-					   0, 100) != 0) {
++					   1, 100) != 0) {
+ 			pr_info("%s: warning: wait for frozen timeouted\n",
+ 			       __func__);
+ 		}
+ 		/* fall through */
+ 	case IHK_OS_STATUS_FROZEN:
+ 		pr_info("%s: trying to thaw...\n", __func__);
+ 		ret = __ihk_os_thaw(data);
+ 		if (ret) {
+ 			pr_err("%s: error: __ihk_os_thaw: %d\n",
+ 			       __func__, ret);
+ 		}
+ 		/* fall through */
+ 	case IHK_OS_STATUS_BOOTING:
+ 	case IHK_OS_STATUS_BOOTED:
+ 		/* wait 20 sec for ready */
+ 		pr_info("%s: waiting for ready...\n", __func__);
+ 		if (ihk_os_wait_for_status((ihk_os_t)data,
+ 					   IHK_OS_STATUS_READY,
+-					   0, 200) != 0) {
++					   1, 200) != 0) {
+ 			pr_info("%s: warning: wait for ready timeouted, "
+ 			       "trying to wait for running instead...\n",
+ 			       __func__);
+ 		}
+ 		/* fall through */
+ 	case IHK_OS_STATUS_READY:
+ 		/* wait 20 sec for running */
+ 		pr_info("%s: waiting for running...\n", __func__);
+ 		if (ihk_os_wait_for_status((ihk_os_t)data,
+ 					   IHK_OS_STATUS_RUNNING,
+-					   0, 200) != 0) {
++					   1, 200) != 0) {
+ 			pr_info("%s: warning: wait for running timeouted, "
+ 			       "trying to shutdown with nmi...\n",
+ 			       __func__);
+@@ -1008,9 +1028,9 @@
+ 	case IHK_OS_STATUS_FREEZING:
+ 		/* wait 10 sec for frozen */
+ 		pr_info("%s: waiting for frozen...\n", __func__);
+ 		if (ihk_os_wait_for_status((ihk_os_t)data, IHK_OS_STATUS_FROZEN,
+-					   0, 100) != 0) {
++					   1, 100) != 0) {
+ 			pr_info("%s: warning: wait for frozen timeouted\n",
+ 			       __func__);
+ 		}
+ 		break;
 @@ -1650,11 +1670,7 @@ static int __ihk_device_create_os(struct ihk_host_linux_device_data *data,
  		++kmsg_buf_order;
  
