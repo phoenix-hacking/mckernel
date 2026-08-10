@@ -1,0 +1,1586 @@
+# FINAL PUSH: ROCKY LINUX + NATIVE RUST McKERNEL HOST MODULES
+
+Authoritative target tracker for the production x86_64 hybrid-kernel path.
+
+This file is intentionally dependency-ordered and evidence-gated. It contains
+no calendar estimates. Work is complete only when the measurable acceptance
+gates below pass on the exact production artifacts.
+
+BEGIN AUTO-GENERATED TRACKER
+OVERALL COMPLETION: 1.50% (150 / 10000 evidence points)
+TRACKED GATES: 130 total; 2 PASS; 0 IN_PROGRESS; 0 BLOCKED; 128 TODO
+TRACKER INPUT SHA256: c0bda999fd6d7831ea2ad7d7786754f0a8fe77468d2c8c23aac63be5f1fc3770
+
+WORKSTREAM SUMMARY:
+- WS00 Scope, baseline, and evidence system: 37.50% (150 / 400 points; 2 / 7 gates PASS)
+- WS10 Rocky-derived Rust-capable kernel platform: 0.00% (0 / 1000 points; 0 / 14 gates PASS)
+- WS20 Shared Rust kernel API and ABI substrate: 0.00% (0 / 1000 points; 0 / 12 gates PASS)
+- WS30 Native Rust ihk.ko: 0.00% (0 / 1200 points; 0 / 13 gates PASS)
+- WS40 Native Rust ihk-smp-x86_64.ko: 0.00% (0 / 1500 points; 0 / 15 gates PASS)
+- WS50 Native Rust mcctrl.ko: 0.00% (0 / 1800 points; 0 / 19 gates PASS)
+- WS60 Integrated compatibility and equivalence: 0.00% (0 / 1000 points; 0 / 13 gates PASS)
+- WS70 Production benchmarks, stress, security, and reliability: 0.00% (0 / 1800 points; 0 / 31 gates PASS)
+- WS80 Release engineering and operational closure: 0.00% (0 / 300 points; 0 / 6 gates PASS)
+END AUTO-GENERATED TRACKER
+
+RELEASE READY: NO
+
+Credited today: the frozen Rocky 8.10 legacy build and hosted runtime smoke
+baseline only. No credit is currently awarded for a Rocky CONFIG_RUST kernel,
+a native Rust host module, production stress, or a release candidate.
+
+===============================================================================
+1. NON-NEGOTIABLE END STATE
+===============================================================================
+
+1. Rocky Linux remains the host operating system and Linux remains the control
+   plane. The Linux kernel core is not being rewritten in Rust.
+2. The host runs a version-pinned, Rocky-derived custom kernel package with
+   CONFIG_RUST enabled and the toolchain required by that exact kernel source.
+3. Only the three project-owned host kernel modules needed by the hybrid are
+   conversion targets:
+
+   - ihk.ko
+   - ihk-smp-x86_64.ko
+   - mcctrl.ko
+
+4. Each production module is a native Rust-for-Linux module with its own Rust
+   module entry point, Kconfig option, Kbuild rule, signed .ko, symbol namespace,
+   dependency declaration, lifecycle, and evidence manifest.
+5. A production module may call ordinary Linux kernel functions implemented in
+   C through kernel-provided Rust abstractions or a narrowly audited Rust FFI
+   abstraction. That does not make the project module a C implementation.
+6. No production module may compile, link, load, or dispatch into a
+   project-authored C implementation body, compatibility helper, fallback,
+   companion shim, archive, or prebuilt C object.
+7. Public C UAPI headers may remain because unchanged C applications consume
+   them. Generated bindings, generated Kbuild module metadata, linker scripts,
+   kernel headers, and Linux-core objects are allowed boundaries.
+8. Required x86 instructions may use Rust asm! or global_asm!. Any remaining
+   standalone project assembly must be separately justified, hashed, reviewed,
+   and allowlisted. Assembly is never counted as Rust source merely because it
+   is embedded in a Rust file.
+9. ihk-smp-x86_64.ko may depend on ihk.ko. mcctrl.ko may depend on the IHK
+   interfaces. Standalone means each is a distinct native Rust module without a
+   project C implementation dependency; it does not mean dependency-free.
+10. The C reference modules remain available only as test oracles in a clearly
+    separated reference build. They are forbidden from production packages,
+    initramfs contents, installed module trees, and the production link graph.
+11. The existing McKernel image, mcexec, ihklib, ihkconfig, ihkosctl, ihkmond,
+    mcstat, other host tools, Rocky user space, and Linux core are not new Rust
+    conversion targets. They remain compatibility consumers and test oracles.
+12. The existing Rust-first McKernel image is preserved and regression-tested;
+    this tracker does not require further conversion of its remaining C or
+    assembly primitives.
+13. x86_64 is the production architecture in this tracker. Arm64, MIC, and Tofu
+    do not earn, consume, or dilute these 10,000 evidence points.
+14. Rocky kABI support is not claimed. Kernel packages and all three modules are
+    built, signed, installed, upgraded, and rolled back as one exact-version set.
+
+The clean one-sentence architecture is:
+
+  A Rocky-derived Linux control plane with native Rust-for-Linux IHK, SMP, and
+  mcctrl host modules controls the existing McKernel co-kernel over a versioned
+  UAPI and IKC boundary.
+
+===============================================================================
+2. CURRENT LEGACY BOUNDARY
+===============================================================================
+
+The frozen runtime baseline is repository phoenix-hacking/mckernel at commit:
+
+  f2eb735212e6ab0494e638497e80d9ae78b2848e
+
+Its exact-head replay is GitHub Actions run:
+
+  https://github.com/phoenix-hacking/mckernel/actions/runs/31358939841
+
+That run proves the prior Rocky 8.10 smoke scope: build, module use, McKernel
+RUNNING, both IKC connections, real mcexec workloads, mcstat, shutdown,
+restoration, backing-image integrity, and evidence upload. It does not prove
+that the three host modules are native Rust.
+
+The audited legacy x86_64 module graph still contains:
+
+  ihk.ko
+    7 project C translation units, 4,927 raw whole-file lines
+    host_driver.c, mem_alloc.c, mm.c, mikc.c, ikc/linux.c,
+    ikc/master.c, ikc/queue.c
+
+  ihk-smp-x86_64.ko
+    2 project C translation units, 7,544 raw whole-file lines
+    smp-driver.c, arch/x86_64/smp-arch-driver.c
+    plus startup and trampoline assembly, 2 units and 210 lines
+
+  mcctrl.ko with ENABLE_RUST_IHK_MODULE_HELPERS=ON
+    6 project C translation units, 19,471 raw whole-file lines
+    driver.c, control.c, syscall.c, procfs.c, sysfs.c, futex.c
+    plus the existing Rust mcctrl_helpers object
+
+  Active production-module C total
+    15 translation units, 31,942 raw whole-file lines
+
+Raw lines are an inventory metric, never a completion metric. Completion is
+based on behavior, link inputs, and passing evidence.
+
+Exact active implementation map to retire from the production modules:
+
+  ihk.ko
+    ihk/linux/core/host_driver.c
+      Device and OS registry, two character-device families, ioctl dispatch,
+      lifecycle and callbacks, eventfd, kmsg, monitor, rusage, exported host API.
+    ihk/linux/core/mem_alloc.c
+      Bitmap-backed page allocation used by the host interface.
+    ihk/linux/core/mm.c
+      Generic host physical mapping.
+    ihk/linux/core/mikc.c
+      Per-OS IKC master state, listeners, channels, interrupts and work.
+    ihk/ikc/linux.c
+      Linux allocation, wait, wake, work, receive interrupt and send behavior.
+    ihk/ikc/master.c
+      Listen, connect, disconnect and master protocol transactions.
+    ihk/ikc/queue.c
+      Shared ring queue, packet and channel lifecycle.
+
+  ihk-smp-x86_64.ko
+    ihk/linux/driver/smp/smp-driver.c
+      CPU and memory reservation, OS assignment, image load, boot, shutdown,
+      status, dump, topology, IKC mapping, failure unwind and restoration.
+    ihk/linux/driver/smp/arch/x86_64/smp-arch-driver.c
+      APIC, IPI, NMI, AP startup and reset, page tables, trampoline, topology,
+      performance integration and x86-specific resource behavior.
+    ihk/linux/driver/smp/arch/x86_64/smp-x86_64-startup.S
+      CR3, stack, argument and transfer contract at kernel-mode boot entry.
+    ihk/linux/driver/smp/arch/x86_64/smp-x86_64-trampoline.S
+      16-bit through 32-bit into 64-bit AP transition, descriptor tables,
+      PAE, EFER, paging and final boot-target transfer.
+
+  mcctrl.ko in the current Rust-helper profile
+    executer/kernel/mcctrl/driver.c
+      Module and notifier lifecycle, handlers, binfmt and x86 bridges, private
+      symbol discovery and reverse-order cleanup.
+    executer/kernel/mcctrl/control.c
+      Auxiliary ioctls, process and thread lifecycle, image control, signals,
+      DMA, credentials, namespaces, performance, rusage and partition membership.
+    executer/kernel/mcctrl/syscall.c
+      Syscall offload, pager, remote faults, VMA and PTE behavior and core dumps.
+    executer/kernel/mcctrl/procfs.c
+      Mirrored procfs hierarchy and remote file protocol.
+    executer/kernel/mcctrl/sysfs.c
+      Dynamic kobject tree and remote show and store protocol.
+    executer/kernel/mcctrl/futex.c
+      Futex address resolution, cache, queues, wait, wake, requeue and wake-op.
+    executer/kernel/mcctrl/rust/mcctrl_helpers.rs
+      A manually compiled freestanding Rust helper object connected through C
+      operation tables. This is valuable prior work but is not a native
+      CONFIG_RUST module and receives no standalone-module credit.
+
+The current helper profile already omits six legacy mcctrl C objects for
+binfmt, IKC, priority lists, sysfs file definitions and x86 helpers. They remain
+reference sources, while the six active C objects above still prevent closure.
+
+Legacy build and package behavior that must remain compatible:
+
+  - CMake currently generates external-module Kbuild files and invokes the
+    selected kernel build tree with M equal to each module build directory.
+  - ihk-smp-x86_64.ko and mcctrl.ko consume ihk Module.symvers.
+  - normal module ordering is ihk, ihk-smp-x86_64, then mcctrl.
+  - installed paths are under /lib/modules/KERNEL/extra/mckernel.
+  - preserved module names are ihk, ihk_smp_x86_64 and mcctrl as normalized by
+    the kernel, with filenames ihk.ko, ihk-smp-x86_64.ko and mcctrl.ko.
+  - preserved licenses are GPL v2 for ihk, Dual BSD GPL for SMP, and GPL v2 for
+    mcctrl unless an explicit legal review requires a compatible correction.
+  - the target changes the build to native Rust Kbuild integration; it does not
+    preserve the manual rustc prebuilt-object technique as production design.
+
+The initial compatibility inventory must lock the following facts and generate
+machine-checked goldens from the source rather than relying on this prose alone.
+
+ihk device and OS surface:
+
+  - /dev/mcdN is the device-level open, read, write, mmap, ioctl and release
+    family; /dev/mcosN is the OS-level open, write, ioctl and release family.
+  - each family supports 64 minors in the audited reference.
+  - device operations include device lifecycle, OS create and destroy, CPU and
+    memory reserve, release and query, partial memory release, mapping, debug,
+    DMA, topology and Linux CPU to hardware-ID conversion.
+  - OS operations include open, close, image load, boot, shutdown, allocation,
+    status, hungup, NUMA, free memory, status wait, interrupts, kernel arguments,
+    dump, mapping, CPU and memory assignment, IKC maps, build ID, freeze, thaw,
+    panic and address translation.
+  - user auxiliary and kernel callback handlers plus boot, shutdown and freeze
+    notifier ordering are ABI and lifetime contracts.
+  - kmsg, monitor, rusage, eventfd and post-destruction kmsg-buffer ownership are
+    observable and require explicit Rust lifetime tests.
+  - the audited ihk module exports 70 host symbols: 49 host-driver symbols, 6
+    page-allocation symbols, 2 generic mapping symbols and 13 IKC symbols.
+    The generated compatibility manifest must preserve every required name,
+    export class, namespace, version and consumer relationship.
+
+ihk-smp-x86_64 module parameters:
+
+  - ihk_phys_start
+  - ihk_mem
+  - ihk_cores
+  - ihk_start_irq
+  - ihk_ikc_irq_core
+  - ihk_trampoline
+
+The legacy SMP path uses kernel-side sysfs file operations for CPU state and
+looks up numerous private allocator, vmap, APIC, IRQ, trampoline, slab, hugepage
+and performance symbols. The production Rust design must not reproduce private
+symbol guessing through kallsyms. The custom Rocky kernel must provide explicit,
+version-pinned generic Rust services, or the module must be redesigned around
+supported CPU hotplug, memory, mapping, interrupt and performance interfaces.
+
+mcctrl surface:
+
+  - mcctrl attaches auxiliary handlers to each /dev/mcosN rather than creating a
+    third device family.
+  - the audited baseline registers 34 auxiliary ioctls, or 37 when the optional
+    bind-mount feature enables mount, umount and unshare.
+  - it installs requester-CPU and CPU-register kernel callbacks.
+  - process, thread, VM, image, signal, DMA, credentials, namespaces, UTI,
+    performance, rusage, pager, remote fault, futex, procfs, sysfs, binfmt and
+    x86 TLS or vDSO behavior are all compatibility surfaces.
+  - private mount, scheduler, readlink, VMA-zap and hugetlbfs symbol discovery
+    must become explicit generic Rust services or a supported redesign.
+
+Critical UAPI and shared-memory goldens:
+
+  - all IHK device ioctl values in the 0x112900 and 0x122900 families;
+  - all IHK OS ioctl values in the 0x112a00 and 0x122a00 families;
+  - auxiliary handler range 0x10000000 through 0x7fffffff;
+  - performance and rusage requests in the 0x11290100 family;
+  - every native and compat structure size, alignment, field offset, flag,
+    pointer interpretation, padding rule, permission check and errno;
+  - OS states from NOT_BOOTED through LOADING, BOOTING, BOOTED, READY, RUNNING,
+    FREEZING, FROZEN, SHUTDOWN, FAILED and HUNGUP;
+  - shared kmsg, monitor, rusage, CPU, memory, topology and dump structures;
+  - ihk_ikc_queue_head exactly 64 bytes with exact offsets and barriers;
+  - IKC enabled, destroying, destroy-ack and no-copy flag values;
+  - master init acknowledgment, connect, connect reply, disconnect and
+    packet-on-channel values plus maximum port 512;
+  - raw packet layout, wrap, notification suppression, interrupt context,
+    remote address, no-copy ownership and teardown handshake;
+  - the 0x30a02900-family mcctrl operation values and debug log value;
+  - ikc_scd_packet exactly 128 bytes with exact header, reply, error and union
+    layouts for syscall, sysfs, wakeup, register, eventfd, futex and fault traffic;
+  - every SCD message identifier used by process, channel, syscall, signal,
+    cleanup, vDSO, procfs, faults, debug, sysfs, eventfd, performance, CPU
+    registers, file cleanup and futex wake.
+
+All shared Rust types use repr C where the ABI requires it, explicit integer
+widths and compile-time size, alignment and offset assertions against a
+C-generated golden manifest. Padding returned to user space is initialized.
+
+===============================================================================
+3. SCORING CONTRACT
+===============================================================================
+
+The denominator is permanently 10,000 evidence points. One basis point equals
+0.01 percentage point. Only PASS earns points.
+
+Permitted status values:
+
+  TODO          no accepted evidence and no active claim
+  IN_PROGRESS   work or evidence generation is active; earns zero
+  BLOCKED       a named prerequisite or defect prevents acceptance; earns zero
+  PASS          all acceptance criteria passed on named immutable evidence
+
+There is no partial credit. A gate that is 99 percent internally complete still
+earns zero until its complete acceptance contract passes. If work needs useful
+incremental credit, it must be split in advance into independent, measurable,
+weighted child gates without changing the 10,000-point denominator.
+
+Every PASS record must identify immutable evidence. At minimum that evidence
+must bind:
+
+  - full source commit and dirty-tree state;
+  - exact Rocky source RPM or kernel source commit;
+  - kernel NVR, build ID, configuration digest, and compiler/tool digests;
+  - ihk.ko, ihk-smp-x86_64.ko, mcctrl.ko, and McKernel image digests;
+  - test and benchmark manifest digest;
+  - hardware, firmware, topology, NUMA, governor, IRQ placement, and mitigations;
+  - exact commands, parameters, seeds, repetitions, and injected fault IDs;
+  - machine-checked assertions and raw-log manifest digest;
+  - fatal-signature scan and cleanup/resource-ledger result;
+  - durable run URL plus a committed compact evidence manifest.
+
+Anti-inflation rules:
+
+  - no points for source lines, commits, plans, wrappers, or tests merely added;
+  - no points for compiling when the functional acceptance gate says runtime;
+  - no points for a Rust wrapper whose behavior still executes project C;
+  - no skipped, expected-failure, waiver, or best-effort credit;
+  - an untriaged failure prevents PASS even if a later cherry-picked rerun passes;
+  - fault tests pass only if evidence proves that the intended fault fired;
+  - performance evidence includes every sample, the warmup policy, exclusions,
+    confidence intervals, and environment controls;
+  - a shared ABI, kernel config, toolchain, abstraction, or module-lifecycle
+    change invalidates every dependent PASS until replayed;
+  - the exact tested module and RPM digests must be the released digests;
+  - unsupported work remains in the denominator unless this scope contract is
+    explicitly revised and all weights are rebalanced to 10,000;
+  - documentation-only edits do not invalidate technical evidence;
+  - any source-affecting change records an impact set and marks affected gates
+    TODO before a new score is published.
+
+Update protocol:
+
+  python3 scripts/final_push_tracker.py --check
+  python3 scripts/final_push_tracker.py --update
+  python3 scripts/final_push_tracker.py --check --json evidence/final-push.json
+
+The generated top block is never edited by hand. Every green commit must pass
+the tracker checker, which validates unique IDs, legal statuses, concrete PASS
+evidence, exactly 10,000 points, each workstream subtotal, and the generated
+summary digest. Long-running tests publish non-scoring live counters in their
+evidence, while the weighted gate remains zero until its threshold passes.
+
+===============================================================================
+4. MACHINE-READABLE WORKSTREAMS AND GATES
+===============================================================================
+
+Record format:
+
+  WORKSTREAM | id | name | total evidence points
+  GATE | id | workstream | points | status | evidence | deliverable | owner role
+
+The actual records below contain no spaces around delimiters so the checker can
+parse them deterministically.
+
+WORKSTREAM|WS00|Scope, baseline, and evidence system|400
+WORKSTREAM|WS10|Rocky-derived Rust-capable kernel platform|1000
+WORKSTREAM|WS20|Shared Rust kernel API and ABI substrate|1000
+WORKSTREAM|WS30|Native Rust ihk.ko|1200
+WORKSTREAM|WS40|Native Rust ihk-smp-x86_64.ko|1500
+WORKSTREAM|WS50|Native Rust mcctrl.ko|1800
+WORKSTREAM|WS60|Integrated compatibility and equivalence|1000
+WORKSTREAM|WS70|Production benchmarks, stress, security, and reliability|1800
+WORKSTREAM|WS80|Release engineering and operational closure|300
+
+GATE|FP-0001|WS00|50|TODO|-|Approve and lock this exact conversion scope, exclusions, allowed Linux boundaries, and x86_64 completion definition|architecture
+GATE|FP-0002|WS00|50|TODO|-|Lock the zero-project-C policy, assembly policy, reference-build isolation, dependency rules, and evidence invalidation rules|architecture
+GATE|FP-0003|WS00|60|PASS|commit f2eb735212e6ab0494e638497e80d9ae78b2848e and build artifact 9051654724|Freeze the exact Rocky 8.10 legacy build baseline and its artifact digests|validation
+GATE|FP-0004|WS00|90|PASS|workflow 31358939841 and hosted evidence artifact 9051791233|Freeze the exact legacy boot, IKC, mcexec, workload, stop, restoration, and integrity runtime oracle|validation
+GATE|FP-0005|WS00|50|TODO|-|Generate the exact active object, source, symbol, ioctl, module parameter, procfs, sysfs, IKC, and dependency inventory for all three legacy modules|architecture
+GATE|FP-0006|WS00|50|TODO|-|Map every externally observable legacy behavior and failure code to one Rust replacement and at least one acceptance test ID|validation
+GATE|FP-0007|WS00|50|TODO|-|Pass tracker parser tests and the published CI check for weights, statuses, evidence, generated summary, digest, and stale-score rejection|release
+
+GATE|RK-001|WS10|75|TODO|-|Pin the Rocky release, kernel source RPM, source checksums, patch series, licenses, and reproducible source acquisition manifest|kernel-platform
+GATE|RK-002|WS10|75|TODO|-|Build the Rocky-derived kernel in a clean reproducible mock or container environment with all build inputs and network use pinned|kernel-platform
+GATE|RK-003|WS10|50|TODO|-|Pin and archive compatible rustc, rust-src, bindgen, libclang, LLVM, rustfmt, clippy, pahole, bpftool, and RPM tooling|kernel-platform
+GATE|RK-004|WS10|50|TODO|-|Pass make LLVM=1 rustavailable and compile, load, exercise, and unload an upstream-style Rust sample module|kernel-platform
+GATE|RK-005|WS10|75|TODO|-|Document and enforce the minimal Rocky configuration delta including CONFIG_RUST, BTF, debug info, module signing, and explicit MODVERSIONS policy|kernel-platform
+GATE|RK-006|WS10|75|TODO|-|Maintain a reviewable generic Rust kernel-abstraction patch series with no McKernel policy in Linux core and no project C helper escape hatch|kernel-platform
+GATE|RK-007|WS10|75|TODO|-|Integrate deterministic Kconfig and Kbuild staging for three native Rust modules with exact dependency ordering and no prebuilt-object workaround|build
+GATE|RK-008|WS10|150|TODO|-|Produce installable kernel, core, modules, modules-extra, devel, headers or source, tools, debug, and debuginfo RPM artifacts with one NVR|release
+GATE|RK-009|WS10|75|TODO|-|Sign RPMs, kernel, initramfs inputs, and all three modules; verify Secure Boot and enrolled-key acceptance plus rejection of altered artifacts|security
+GATE|RK-010|WS10|75|TODO|-|Install in parallel with official Rocky packages, build initramfs, create clear GRUB entries, preserve a stock Rocky rescue boot, and uninstall cleanly|release
+GATE|RK-011|WS10|50|TODO|-|Boot the exact custom Rocky package under QEMU KVM and prove CONFIG_RUST, module signatures, BTF, symbols, and ordinary Rocky services|validation
+GATE|RK-012|WS10|50|TODO|-|Boot and validate the exact custom package on representative Intel x86_64 bare metal|validation
+GATE|RK-013|WS10|50|TODO|-|Boot and validate the exact custom package on representative AMD x86_64 bare metal|validation
+GATE|RK-014|WS10|75|TODO|-|Prove atomic install, update, downgrade rejection policy, rollback, rescue selection, and exact kernel-module version matching|release
+
+GATE|RS-001|WS20|75|TODO|-|Inventory all Linux APIs, exported symbols, configuration prerequisites, context constraints, and missing Rust abstractions required by the three modules|rust-substrate
+GATE|RS-002|WS20|50|TODO|-|Generate reproducible kernel and project UAPI bindings tied to the exact header, config, bindgen, libclang, and kernel build digests|rust-substrate
+GATE|RS-003|WS20|75|TODO|-|Define canonical ioctl, compat ioctl, IKC, status, boot parameter, monitor, and shared structure contracts with compile-time size, offset, alignment, and endian assertions|abi
+GATE|RS-004|WS20|50|TODO|-|Define module ownership, dependency, symbol namespace, error mapping, Result policy, cancellation, Drop, unload, and panic-abort contracts|rust-substrate
+GATE|RS-005|WS20|100|TODO|-|Provide reviewed allocation, page, physical address, mapping, pinning, NUMA, hugepage, DMA-safe ownership, and overflow-checked range abstractions|rust-substrate
+GATE|RS-006|WS20|125|TODO|-|Provide native Rust character-device, file operation, ioctl, compat ioctl, uaccess, mmap, poll, eventfd, and capability-check abstractions|rust-substrate
+GATE|RS-007|WS20|100|TODO|-|Provide lock-ranked mutex, spinlock, irqsave, atomic, refcount, RCU, waitqueue, list, xarray or ID registry, and lifetime abstractions|rust-substrate
+GATE|RS-008|WS20|75|TODO|-|Provide workqueue, kthread, completion, timer, timeout, wakeup, cancellation, and module-exit drain abstractions|rust-substrate
+GATE|RS-009|WS20|100|TODO|-|Provide CPU topology, cpumask, CPU hotplug, APIC, IRQ, IPI, NMI, vector, affinity, and interrupt-lifetime abstractions|rust-substrate
+GATE|RS-010|WS20|100|TODO|-|Provide procfs, sysfs, binfmt, futex, credential, namespace, process, signal, and register-access abstractions needed by mcctrl|rust-substrate
+GATE|RS-011|WS20|75|TODO|-|Create an exhaustive unsafe and FFI ledger with a SAFETY contract, caller obligations, context constraints, and owner for every unsafe block and unsafe impl|security
+GATE|RS-012|WS20|75|TODO|-|Pass Rust unit, property, KUnit, layout, negative, allocation-failure, lock-order, and teardown tests for the shared substrate|validation
+
+GATE|IHK-001|WS30|75|TODO|-|Create the native Rust ihk crate, module entry and exit, Kconfig, Kbuild, parameters, version metadata, logging, and dependency-free load path|ihk
+GATE|IHK-002|WS30|75|TODO|-|Match every legacy exported symbol and consumer contract through versioned Rust exports and an explicit symbol namespace|ihk
+GATE|IHK-003|WS30|100|TODO|-|Port control device registration, open, release, read, write, poll, mmap, unlocked ioctl, compat ioctl, permissions, and device-node cleanup|ihk
+GATE|IHK-004|WS30|100|TODO|-|Port host driver registration, enumeration, lookup, ownership, unregister, and dependent-module reference management|ihk
+GATE|IHK-005|WS30|100|TODO|-|Port OS instance create, register, query, status, destroy, reference ownership, ID allocation, and concurrent lookup state machines|ihk
+GATE|IHK-006|WS30|125|TODO|-|Port host resource and memory allocators including reserve, split, merge, align, query, release, rollback, fragmentation handling, and accounting|ihk
+GATE|IHK-007|WS30|100|TODO|-|Port physical and virtual mapping, user mmap validation, remap behavior, bounds checks, cache policy, pinning, and unmap cleanup|ihk
+GATE|IHK-008|WS30|125|TODO|-|Port IKC queue creation, ring indexes, wrap, ordering, barriers, enqueue, dequeue, capacity, backpressure, corruption detection, and teardown|ihk
+GATE|IHK-009|WS30|100|TODO|-|Port IKC master registration, listener lookup, connect, accept, disconnect, packet routing, notification, and listener lifetime|ihk
+GATE|IHK-010|WS30|75|TODO|-|Port interrupt, event, poll, completion, wakeup, wait cancellation, and module-exit waiter drain behavior|ihk
+GATE|IHK-011|WS30|100|TODO|-|Prove lock ordering, RCU and refcount ownership, concurrent ioctl safety, dependent references, failure unwind, and unload-race correctness|ihk
+GATE|IHK-012|WS30|75|TODO|-|Prove final ihk.ko contains no project C body, helper symbol, archive, or fallback and loads with the reference C implementation absent|zero-c-audit
+GATE|IHK-013|WS30|50|TODO|-|Pass the complete legacy-versus-Rust ihk functional, error, ABI, concurrency, resource, and performance parity suite|validation
+
+GATE|SMP-001|WS40|75|TODO|-|Create the native Rust ihk_smp_x86_64 crate, module lifecycle, Kconfig, Kbuild, parameters, ihk dependency, and unload ordering|smp
+GATE|SMP-002|WS40|100|TODO|-|Port x86 topology discovery for sockets, cores, SMT siblings, APIC IDs, online and possible CPUs, isolated CPUs, and NUMA nodes|smp
+GATE|SMP-003|WS40|125|TODO|-|Port CPU reserve, release, assign, query, sparse masks, partial requests, duplicates, conflicts, offline states, and rollback state machines|smp
+GATE|SMP-004|WS40|100|TODO|-|Port CPU hotplug, isolation, scheduler evacuation, IRQ-affinity preservation, online restoration, and concurrent hotplug exclusion|smp
+GATE|SMP-005|WS40|100|TODO|-|Port NUMA memory discovery, physical ranges, holes, reserved regions, alignment constraints, and node-distance metadata|smp
+GATE|SMP-006|WS40|125|TODO|-|Port memory reserve, release, assign, query, split, merge, fragmentation, hugepage interaction, partial failure, and exact restoration|smp
+GATE|SMP-007|WS40|100|TODO|-|Port McKernel image validation, format and size checks, copying, placement, boot parameter construction, and malformed-image rejection|smp
+GATE|SMP-008|WS40|125|TODO|-|Port host mapping, page-table setup, direct-map assumptions, trampoline allocation below architectural limits, cache and TLB ordering, and cleanup|smp
+GATE|SMP-009|WS40|125|TODO|-|Implement startup and trampoline behavior with audited Rust asm or global_asm, exact register and stack contracts, relocations, and no standalone C body|smp
+GATE|SMP-010|WS40|100|TODO|-|Port local and x2APIC paths, INIT and SIPI sequencing, IPI and NMI delivery, vector registration, acknowledgements, timeout, and reset behavior|smp
+GATE|SMP-011|WS40|100|TODO|-|Port IKC interrupt registration, queue publication, master connection, receive dispatch, lost interrupt recovery, and interrupt-safe teardown|smp
+GATE|SMP-012|WS40|100|TODO|-|Port load, boot, status, stop, shutdown, reset, crash, restart, and unexpected McKernel exit recovery state machines|smp
+GATE|SMP-013|WS40|75|TODO|-|Prove multiple OS instances and concurrent reserve, boot, stop, release operations preserve isolation and deterministic ownership|smp
+GATE|SMP-014|WS40|75|TODO|-|Prove zero project C link inputs and publish the exact reviewed x86 assembly and relocation allowlist|zero-c-audit
+GATE|SMP-015|WS40|75|TODO|-|Pass Intel and AMD legacy-versus-Rust topology, reservation, image, boot, interrupt, rollback, resource, and performance parity suites|validation
+
+GATE|MCC-001|WS50|75|TODO|-|Create the native Rust mcctrl crate, module lifecycle, Kconfig, Kbuild, parameters, IHK dependencies, binfmt ownership, and unload ordering|mcctrl
+GATE|MCC-002|WS50|125|TODO|-|Port device open, release, read, write, poll, mmap, ioctl and compat ioctl dispatch, validation, capability checks, and per-file state|mcctrl
+GATE|MCC-003|WS50|125|TODO|-|Port process, thread, VM, OS, file, remote-process, wait, and request registries with explicit reference, RCU, and lock ownership|mcctrl
+GATE|MCC-004|WS50|100|TODO|-|Port control-plane boot, prepare, start, status, freeze, thaw, stop, shutdown, destroy, and event request handling|mcctrl
+GATE|MCC-005|WS50|125|TODO|-|Port persistent IKC listener descriptors, connect and accept, channel ownership, packet dispatch, reconnect, disconnect, and unload-safe teardown|mcctrl
+GATE|MCC-006|WS50|125|TODO|-|Port generic syscall request validation, dispatch, completion, interruption, cancellation, restart, timeout, and errno or return-value shaping|mcctrl
+GATE|MCC-007|WS50|100|TODO|-|Match delegated file, process, memory, time, resource, credential, scheduler, IPC, and network syscall-family behavior used by supported workloads|mcctrl
+GATE|MCC-008|WS50|100|TODO|-|Port signal send, receive, mask, action, pending, restart, process-group, credential refresh, and exit interaction paths|mcctrl
+GATE|MCC-009|WS50|125|TODO|-|Port futex wait, wake, requeue, timeout, robust-list, owner-death, process-exit, contention, and malformed-address behavior|mcctrl
+GATE|MCC-010|WS50|100|TODO|-|Port ptrace attach, detach, register and memory access, stop and continue, event, single-step, tracer exit, and race handling|mcctrl
+GATE|MCC-011|WS50|100|TODO|-|Port procfs creation, removal, process and thread views, lifetime, permissions, partial reads, concurrent exit, and unload cleanup|mcctrl
+GATE|MCC-012|WS50|100|TODO|-|Port sysfs attributes, request buffers, IKC exchanges, bounds checks, partial operations, lifetime, permissions, and unload cleanup|mcctrl
+GATE|MCC-013|WS50|75|TODO|-|Port binfmt_mcexec registration, interpreter selection, argument preservation, recursion prevention, unregister, and in-flight exec lifetime|mcctrl
+GATE|MCC-014|WS50|75|TODO|-|Port processor ID, CPU and NUMA affinity, topology queries, migration, processor mapping, and hotplug-visible behavior|mcctrl
+GATE|MCC-015|WS50|100|TODO|-|Port usercopy, page pinning, mappings, remote memory access, page faults, VMA lifetime, range validation, and error cleanup|mcctrl
+GATE|MCC-016|WS50|75|TODO|-|Prove every allocation, registration, channel, request, process, mapping, and callback failure unwinds without leaked or double-owned state|mcctrl
+GATE|MCC-017|WS50|75|TODO|-|Prove lock ordering, wait cancellation, reference safety, concurrent exit, disconnect, module removal, and callback lifetime correctness|mcctrl
+GATE|MCC-018|WS50|50|TODO|-|Prove final mcctrl.ko contains no project C body, helper symbol, archive, or fallback and loads with legacy C objects absent|zero-c-audit
+GATE|MCC-019|WS50|50|TODO|-|Pass the complete legacy-versus-Rust mcctrl functional, syscall, ABI, concurrency, resource, and performance parity suite|validation
+
+GATE|INT-001|WS60|75|TODO|-|Build all three native Rust modules through the exact Rocky kernel Kbuild and RPM path with legacy C implementations physically unavailable|integration
+GATE|INT-002|WS60|50|TODO|-|Verify modinfo, vermagic, signatures, dependencies, symbol namespaces, exported versions, taint state, load order, reference counts, and unload order|integration
+GATE|INT-003|WS60|100|TODO|-|Create a versioned A B harness that runs identical commands and seeds against the frozen C reference and native Rust module sets|validation
+GATE|INT-004|WS60|75|TODO|-|Pass ioctl values, compat values, structures, offsets, alignments, status values, packet layouts, symbols, module parameters, procfs, and sysfs ABI goldens|abi
+GATE|INT-005|WS60|75|TODO|-|Boot the existing McKernel with one reserved CPU and one NUMA memory range through the three Rust modules and reach RUNNING|integration
+GATE|INT-006|WS60|100|TODO|-|Pass multi-CPU, sparse CPU, SMT, multi-socket, one and multi-NUMA, memory-hole, and varied reservation matrices|integration
+GATE|INT-007|WS60|100|TODO|-|Run unchanged mcexec and host tools plus deterministic file, process, memory, signal, futex, thread, and network workloads against Rust modules|integration
+GATE|INT-008|WS60|125|TODO|-|Reach the declared supported syscall-family coverage with exact output, errno, signal, side effect, and cleanup equivalence|validation
+GATE|INT-009|WS60|75|TODO|-|Complete repeated create, reserve, boot, run, stop, destroy, release, unload cycles with deterministic results and no residual state|integration
+GATE|INT-010|WS60|75|TODO|-|Prove the resource ledger returns CPUs, memory, IRQ affinities, devices, sysfs, procfs, binfmt, mappings, files, threads, modules, and policies to baseline|validation
+GATE|INT-011|WS60|50|TODO|-|Provide structured tracepoints, generation-tagged IDs, bounded waits, invariant snapshots, fault IDs, crash capsules, and fatal scans|observability
+GATE|INT-012|WS60|50|TODO|-|Provide deterministic injectable failure points covering every allocation, copy, registration, interrupt, queue, mapping, connection, and teardown class|validation
+GATE|INT-013|WS60|50|TODO|-|Pass baseline integration performance smoke with stable environment controls and no threshold violation before long qualification runs|performance
+
+GATE|PQ-001|WS70|25|TODO|-|Freeze benchmark schemas, workload versions, reference artifacts, hardware classes, topology controls, statistical method, and evidence retention rules|benchmark
+GATE|PQ-002|WS70|75|TODO|-|Pass complete C-versus-Rust differential correctness for all supported public operations, state transitions, outputs, errors, and side effects|benchmark
+GATE|PQ-003|WS70|75|TODO|-|Pass at least 100000 complete reserve, boot, workload, stop, destroy, and release lifecycle cycles without mismatch, warning, leak, or residual state|stress
+GATE|PQ-004|WS70|75|TODO|-|Pass at least 100000 ordered and randomized three-module load and unload cycles with dependency, busy, forced-failure, and recovery checks|stress
+GATE|PQ-005|WS70|75|TODO|-|Pass at least 100000000 valid IKC operations in each direction per required topology and 10000000000 aggregate with sequence, checksum, wrap, saturation, and backpressure checks|stress
+GATE|PQ-006|WS70|50|TODO|-|Pass concurrent CPU reserve, release, hotplug, affinity, sparse-mask, conflict, cancellation, and rollback stress across supported topologies|stress
+GATE|PQ-007|WS70|50|TODO|-|Pass memory reserve, release, fragmentation, pressure, partial allocation, holes, alignment, NUMA placement, and exact coalescing restoration stress|stress
+GATE|PQ-008|WS70|50|TODO|-|Pass base page, transparent hugepage, explicit hugepage, multi-NUMA, cross-node, and memory-policy compatibility and stress matrices|stress
+GATE|PQ-009|WS70|75|TODO|-|Pass the supported syscall offload corpus and at least 1000000000 delegated calls under sequential, parallel, interrupted, restarted, invalid, and resource-constrained execution|benchmark
+GATE|PQ-010|WS70|50|TODO|-|Pass signal, wait, at least 100000000 futex pairs per hardware class, 1000000 realtime signals, 10000 ptrace cycles, process-death, timeout, contention, and cancellation races|stress
+GATE|PQ-011|WS70|50|TODO|-|Pass fork, clone, exec, thread, file-descriptor, mapping, and exit storms at supported concurrency without lost completions or state leaks|stress
+GATE|PQ-012|WS70|50|TODO|-|Pass MPI and OpenMP launch, synchronization, communication, affinity, oversubscription, exit, and deterministic-result workloads|benchmark
+GATE|PQ-013|WS70|50|TODO|-|Pass microbenchmarks for module lifecycle, reserve and release, image load, boot, IKC, syscall, process, futex, shutdown, CPU use, and memory use|performance
+GATE|PQ-014|WS70|50|TODO|-|Pass representative STREAM, NAS Parallel Benchmarks, OSU microbenchmarks, stress-ng, and application-level deterministic workloads|performance
+GATE|PQ-015|WS70|50|TODO|-|Meet median, p99, p99.99, throughput, host CPU, memory, and jitter regression limits using confidence-bound comparisons|performance
+GATE|PQ-016|WS70|75|TODO|-|Complete a 168-hour uninterrupted Intel bare-metal hybrid workload soak with continuous invariants, workload verification, and clean final restoration|reliability
+GATE|PQ-017|WS70|75|TODO|-|Complete a 168-hour uninterrupted AMD bare-metal hybrid workload soak with continuous invariants, workload verification, and clean final restoration|reliability
+GATE|PQ-018|WS70|75|TODO|-|Accumulate at least 30000 clean bare-metal node-hours across supported hardware classes with immutable per-node evidence manifests|reliability
+GATE|PQ-019|WS70|50|TODO|-|Pass deterministic allocation, mapping, usercopy, registration, workqueue, kthread, timer, and reference failure injection at every identified site|fault-injection
+GATE|PQ-020|WS70|50|TODO|-|Pass dropped, delayed, duplicated, saturated, wrapped, and interrupted IKC or interrupt event injection without corruption, hang, or leaked ownership|fault-injection
+GATE|PQ-021|WS70|50|TODO|-|Pass init, partial-init, boot, connection, process, stop, reset, and module-exit unwind matrices with every fault point proven active|fault-injection
+GATE|PQ-022|WS70|75|TODO|-|Pass host pressure using LTP, kselftest, stress-ng, CPU hotplug, memory pressure, filesystem, networking, and service activity with no new Linux regression|stress
+GATE|PQ-023|WS70|75|TODO|-|Pass KASAN, KCSAN, UBSAN, lockdep, kmemleak, debug object, refcount, RCU stall, hung task, and panic-on-warning campaigns with zero findings|security
+GATE|PQ-024|WS70|75|TODO|-|Complete at least 100000 aggregate VM-hours of syzkaller-compatible ioctl, compat ioctl, mmap, poll, module lifecycle, resource, and concurrency fuzzing with zero unresolved crash|fuzz
+GATE|PQ-025|WS70|75|TODO|-|Complete structured IKC packet, queue-state, syscall request, boot parameter, image, procfs, and sysfs parser fuzzing with zero unresolved crash or mismatch|fuzz
+GATE|PQ-026|WS70|50|TODO|-|Pass capability, ownership, namespace, device permission, mmap protection, information exposure, module signature, and privilege-boundary tests|security
+GATE|PQ-027|WS70|50|TODO|-|Reject malformed sizes, counts, pointers, CPU masks, ranges, overlaps, images, packets, states, IDs, and version skews with exact errors and no side effect|security
+GATE|PQ-028|WS70|50|TODO|-|Prove McKernel crash, host callback failure, process death, lost userspace controller, service restart, stop timeout, and rescue recovery paths|reliability
+GATE|PQ-029|WS70|75|TODO|-|Pass zero-growth resource accounting across long runs for pages, slabs, VMAs, IDs, references, IRQs, work, tasks, files, devices, procfs, sysfs, and binfmt|reliability
+GATE|PQ-030|WS70|25|TODO|-|Measure tracing, invariant checks, and fault-disabled instrumentation overhead and keep production observability within its declared budget|performance
+GATE|PQ-031|WS70|25|TODO|-|Publish complete signed benchmark manifests, raw-log digests, environment captures, source and binary provenance, result JSON, and reproducibility instructions|release
+
+GATE|REL-001|WS80|50|TODO|-|Close every correctness, security, sanitizer, warning, leak, taint, data mismatch, flaky test, and performance blocker with no undocumented waiver|release
+GATE|REL-002|WS80|50|TODO|-|Publish signed immutable RPM repositories, SBOMs, source and binary provenance, licenses, kernel config, symbols, debug packages, and artifact checksums|release
+GATE|REL-003|WS80|50|TODO|-|Provide tested install, update, rollback, rescue, uninstall, key rotation, kernel pinning, retention, and disaster-recovery automation and runbooks|release
+GATE|REL-004|WS80|50|TODO|-|Publish an exact supported hardware, firmware, Rocky package, kernel NVR, McKernel image, module, UAPI, tool, and feature compatibility matrix|release
+GATE|REL-005|WS80|50|TODO|-|Provide production telemetry, health queries, invariant snapshots, crash capture, evidence collection, fault isolation, and operator triage runbooks|release
+GATE|REL-006|WS80|50|TODO|-|Complete independent architecture, unsafe-code, zero-C, ABI, security, benchmark, artifact, rollback, and final evidence audit on the exact release digests|release
+
+===============================================================================
+5. DEPENDENCY-ORDERED IMPLEMENTATION PLAN
+===============================================================================
+
+Stage A: lock the reference and observable contract
+
+  A1. Preserve f2eb7352 and its exact run as the immutable legacy smoke oracle.
+  A2. Build a second C-reference profile on the chosen custom Rocky kernel so
+      C and Rust modules can be compared on the same Linux core and hardware.
+  A3. Extract all three modules' active build inputs from Kbuild .cmd files and
+      final link maps, not source-directory guesses.
+  A4. Inventory exported and imported symbols with namespaces and versions.
+  A5. Inventory module parameters, device nodes, ioctls, compat ioctls, mmap and
+      poll behavior, sysfs and procfs paths, binfmt behavior, status values,
+      IKC packets, boot parameters, structure layouts, errors, logs, and cleanup.
+  A6. Assign every observable row a feature ID, Rust owner, acceptance test,
+      negative test, fault test, and benchmark where applicable.
+
+Stage B: create the Rocky-derived Rust kernel product
+
+  B1. Start from a checksum-pinned Rocky kernel source RPM and its full patch,
+      configuration, RPM macro, certificate, and source manifest.
+  B2. Preserve Rocky configuration by default and apply a small reviewed delta.
+  B3. Enable CONFIG_RUST and its exact prerequisites; run rustavailable in the
+      same build environment used for RPM production.
+  B4. Resolve CONFIG_MODVERSIONS explicitly. Either use a kernel line where Rust
+      module versioning is supported or disable it and enforce exact NVR atomic
+      kernel-module deployment. Do not claim Rocky kABI compatibility.
+  B5. Build with the best-supported complete LLVM path unless the selected Rocky
+      kernel proves an equally supported alternative.
+  B6. Add only generic, reusable Rust abstractions to the kernel patch stack.
+      McKernel policy and protocol logic remains inside the project modules.
+  B7. Integrate the three Rust sources as native in-tree Kbuild modules in the
+      custom kernel source. The McKernel repository remains the source of truth;
+      a deterministic manifest stages the reviewed files into the kernel tree.
+  B8. Produce one signed RPM family and preserve an official Rocky rescue entry.
+  B9. Record the source, config, toolchain, build log, build ID, symbols,
+      Module.symvers, BTF, signatures, RPM contents, and reproducibility result.
+
+Stage C: define shared Rust contracts before porting behavior
+
+  C1. Keep public C UAPI headers for unchanged applications; generate Rust
+      declarations from them or generate both languages from a neutral schema.
+  C2. Never bind private legacy implementation structs as the new design.
+      Replace them with Rust types that encode ownership and state transitions.
+  C3. Introduce newtypes for CPU IDs, NUMA IDs, OS IDs, physical addresses,
+      virtual addresses, page counts, byte counts, vectors, generation IDs, and
+      channel IDs. Require checked conversions at all external boundaries.
+  C4. Centralize status, ioctl, IKC, boot, monitor, and error definitions.
+  C5. Build safe-as-possible wrappers for the kernel APIs listed in WS20.
+      Direct bindings belong only inside the abstraction layer, never scattered
+      through leaf driver logic.
+  C6. Attach a written invariant to every unsafe block, unsafe impl, raw pointer,
+      FFI callback, shared-memory access, DMA-like mapping, and assembly block.
+  C7. Implement generation-tagged registries and a resource ledger so stale IDs,
+      ABA reuse, double release, and incomplete teardown are detectable.
+
+Stage D: port ihk.ko first
+
+  D1. Establish the module lifecycle and exported core registration contract.
+  D2. Port device and ioctl surfaces while preserving UAPI and errno behavior.
+  D3. Port driver and OS registries using explicit Rust ownership and reference
+      rules; prohibit raw stored pointers without a documented lifetime anchor.
+  D4. Port resource allocation and mapping with rollback objects whose Drop
+      paths restore partially acquired resources.
+  D5. Port IKC queues and master/listener lifetimes with explicit memory ordering,
+      queue invariants, wrap arithmetic, capacity, and backpressure.
+  D6. Differential-test every public operation before downstream modules depend
+      on it. Do not begin production qualification on a C-backed fallback.
+
+Stage E: port ihk-smp-x86_64.ko
+
+  E1. Consume only the versioned ihk Rust interface and ordinary Linux APIs.
+  E2. Model CPU and memory ownership as explicit state machines so partial
+      reserve, boot failure, stop, reset, and release cannot double-own state.
+  E3. Preserve Linux CPU hotplug and IRQ affinity state and restore exact values.
+  E4. Validate every physical range and arithmetic operation before mapping or
+      copying the McKernel image.
+  E5. Port the x86 boot sequence with explicit register, stack, CR3, APIC, IPI,
+      trampoline-address, cache, barrier, and timeout contracts.
+  E6. Keep unavoidable assembly tiny and mechanically comparable to the legacy
+      sequence; prefer asm or global_asm within the Rust crate.
+  E7. Prove Intel and AMD behavior separately; neither substitutes for the other.
+
+Stage F: port mcctrl.ko
+
+  F1. Consume the native IHK module interfaces and preserve unchanged mcexec and
+      ihklib behavior.
+  F2. Anchor every persistent IKC listener, callback, process, request, VMA,
+      work item, and wait object in module-lifetime or reference-counted storage.
+  F3. Port ioctl and process lifecycle before the broad syscall surface.
+  F4. Port syscall families in observable, independently tested slices. Each
+      slice must cover success, errno, interruption, restart, cancellation,
+      invalid pointers, process exit, concurrency, and cleanup.
+  F5. Port futex and ptrace only with dedicated race, timeout, exit, and lock
+      testing; compile success is not meaningful evidence for these paths.
+  F6. Port procfs, sysfs, and binfmt with explicit unregister and in-flight-use
+      barriers so module exit cannot race an active callback.
+  F7. Remove every C object and helper only after equivalent Rust runtime evidence
+      exists, then run the link-map and source-closure audits.
+
+Stage G: integrate and qualify the exact production artifacts
+
+  G1. Run the same C and Rust module matrices on the same custom kernel, hardware,
+      firmware, topology, governor, IRQ policy, McKernel image, and workloads.
+  G2. Require exact functional and data parity. Performance is compared with
+      distributions and confidence bounds, not single best-case samples.
+  G3. Run fast deterministic gates before expensive stress; never use a soak to
+      replace a missing unit, ABI, fault, or differential test.
+  G4. Every long run continuously checks data, state, resources, warnings,
+      watchdogs, progress counters, and host health so a silent hang cannot pass.
+  G5. Release the exact RPM and module digests that passed production gates.
+
+===============================================================================
+6. NATIVE RUST MODULE ARCHITECTURE
+===============================================================================
+
+Recommended source layout in the McKernel repository:
+
+  host-kernel/
+    rust/
+      abi/                 shared UAPI and IKC declarations and layout checks
+      kernel_api/          reviewed wrappers over Linux Rust abstractions or FFI
+      resource/            generation IDs, registries, ledgers, rollback guards
+      ihk/                 ihk.ko native Rust crate root and submodules
+      ihk_smp_x86_64/      SMP module crate root and x86 implementation
+      mcctrl/              mcctrl.ko crate root and submodules
+    kbuild/                deterministic in-tree staging and Kconfig fragments
+    rocky/                 source manifest, config delta, patches, RPM inputs
+    reference/             test-only legacy C build manifest and isolation rules
+
+Recommended logical module decomposition:
+
+  ihk.ko
+    module.rs              entry, exit, parameters, version, dependency exposure
+    device.rs              char device and file operation surface
+    ioctl.rs               native and compat request validation and dispatch
+    driver_registry.rs     host driver ownership and enumeration
+    os_registry.rs         OS instance ownership and state machine
+    resource.rs            CPU and memory request contracts
+    memory.rs              reservation allocator and mappings
+    ikc_queue.rs           shared ring, ordering, wrap, backpressure
+    ikc_master.rs          listener, channel, connect, accept, disconnect
+    event.rs               wait, poll, notification, cancellation
+
+  ihk-smp-x86_64.ko
+    module.rs              lifecycle and ihk dependency
+    topology.rs            CPU, APIC, SMT, NUMA, physical range discovery
+    cpu.rs                 reserve, release, hotplug, affinity restoration
+    memory.rs              reserve, release, ranges, fragmentation, hugepages
+    image.rs               validation, loading, placement, boot metadata
+    mapping.rs             host mappings, page-table and direct-map contracts
+    trampoline.rs          startup code and low physical memory ownership
+    apic.rs                INIT, SIPI, IPI, NMI, vectors, acknowledgement
+    boot.rs                load, boot, status, stop, reset, crash, restart
+    ikc.rs                 interrupt and queue bring-up and teardown
+
+  mcctrl.ko
+    module.rs              lifecycle, IHK dependency, parameters, binfmt
+    device.rs              file operations, ioctl, mmap, poll, per-file state
+    control.rs             OS control messages and state transitions
+    ikc.rs                 listener and packet dispatch lifetime
+    process.rs             process and thread registries and lifecycle
+    vm.rs                  mappings, faults, pinning, remote memory
+    syscall.rs             generic request and return engine
+    syscall_families/      independently gated delegated syscall groups
+    signal.rs              signals, wait, exit, restart, credentials
+    futex.rs               futex and robust-list behavior
+    ptrace.rs              trace lifecycle and register or memory operations
+    procfs.rs              process views and safe teardown
+    sysfs.rs               attributes and IKC exchange
+    binfmt.rs              mcexec interpreter registration and lifetime
+
+Native build requirements:
+
+  - use the selected kernel's Rust Kbuild rules, kernel crate, allocator, panic
+    policy, generated configuration, symbol versioning, and module signing;
+  - do not invoke an unrelated standalone rustc and inject a prebuilt .o;
+  - do not use Cargo build scripts with ambient network access;
+  - vendor and audit any permitted no_std dependency or avoid it;
+  - forbid unwinding, floating point, SIMD, red-zone use, and unsupported target
+    features in kernel context;
+  - treat warnings, missing docs on unsafe APIs, clippy findings, and formatting
+    drift as build failures in development checks;
+  - generate rustdoc for the exact kernel configuration and archive its digest;
+  - expose build metadata through modinfo and structured diagnostic output.
+
+===============================================================================
+7. ZERO-PROJECT-C CLOSURE
+===============================================================================
+
+The final closure is object- and behavior-based, not extension-based.
+
+Required checks for each .ko and the RPM closure:
+
+  1. Parse Kbuild .cmd files and the complete compiler invocation log.
+  2. Enumerate every object, archive member, linker script, and generated input.
+  3. Fail if GCC or Clang compiles any project .c file for a production module.
+  4. Fail if a Rust object imports a project C helper or fallback symbol.
+  5. Fail if any reachable archive contains a project C implementation.
+  6. Inspect ELF, BTF, DWARF language tags, relocations, undefined symbols,
+     exported symbols, module metadata, and build IDs with readelf, nm, objdump,
+     pahole, bpftool, modinfo, and the kernel's modpost output.
+  7. Compare undefined imports to an explicit allowlist of ordinary Linux kernel
+     exports and versioned native Rust inter-module exports.
+  8. Verify the build context physically excludes legacy project C sources.
+  9. Inspect RPM file lists, initramfs, installed module trees, weak-updates,
+     depmod output, and loaded module paths for accidental legacy copies.
+  10. Boot and run with the C reference packages unavailable.
+
+Allowed non-Rust inputs:
+
+  - unchanged Rocky and upstream Linux kernel core objects;
+  - generated Rust bindings and generated Kbuild module metadata;
+  - public C header declarations consumed by bindgen or unchanged user space;
+  - linker scripts and build metadata;
+  - an explicit, minimal, hashed x86 assembly allowlist when Rust asm cannot
+    express the required relocation or entry contract.
+
+Forbidden inputs:
+
+  - project .c implementation bodies;
+  - project C wrappers for inline functions or macros used as convenience;
+  - C fallback branches selected by configuration or runtime dispatch;
+  - prebuilt C objects or static archives;
+  - function pointers that route a Rust surface back into a project C body;
+  - reference modules installed beside production modules under another name.
+
+===============================================================================
+8. BENCHMARK METHODOLOGY AND ACCEPTANCE LIMITS
+===============================================================================
+
+Reference configurations:
+
+  R0  Frozen f2eb7352 Rocky 8.10 smoke oracle for regression continuity.
+  R1  Legacy C modules rebuilt for the selected custom Rocky kernel. This is the
+      preferred functional and performance A B oracle.
+  R2  Native Rust modules on the exact same custom Rocky kernel and hardware.
+  R3  Official Rocky kernel on the same hardware for host-kernel regression
+      checks that do not require McKernel modules.
+
+An R1 versus R2 comparison changes only the module set. All other variables are
+identical: kernel NVR, firmware, microcode, mitigations, BIOS configuration,
+governor, turbo policy, C-states, topology, isolated CPUs, IRQ affinity, NUMA
+placement, memory, McKernel image, user space, filesystems, workloads, seeds,
+warmup, repetitions, collection tools, and ambient-service policy.
+
+Statistical rules:
+
+  - record raw samples, monotonic timestamps, warmup samples, failures, retries,
+    interruptions, and environment changes;
+  - predeclare sample size from the percentile and confidence target;
+  - use paired randomized A B order when reset cost permits;
+  - report median, mean, standard deviation, MAD, p90, p95, p99, p99.9,
+    p99.99 where sample count supports it, minimum, maximum, and bootstrap
+    confidence intervals;
+  - judge regression with the adverse confidence bound, not the point estimate;
+  - never delete outliers without preserving them and applying a predeclared,
+    equally applied rule with and without exclusion results;
+  - detect thermal, frequency, interrupt, scheduler, NUMA, and background-load
+    drift and invalidate contaminated comparisons;
+  - functional mismatches always fail regardless of speed.
+
+Default production performance limits unless a stricter feature limit exists:
+
+  - exact output, data, errno, signal, side effect, and final-state parity;
+  - throughput at least 97 percent of the valid R1 reference lower confidence
+    bound;
+  - median latency regression no greater than 3 percent;
+  - p99 latency regression no greater than 5 percent;
+  - p99.99 or maximum-jitter regression no greater than 10 percent;
+  - host CPU consumption regression no greater than 5 percent at equal work;
+  - retained memory after cleanup returns to the measured baseline with zero
+    monotonic growth; steady-state overhead must be explained and budgeted;
+  - zero dropped, duplicated, reordered, corrupted, or unacknowledged operation;
+  - zero unexpected kernel taint, warning, Oops, panic, stall, hung task, lockdep,
+    sanitizer, refcount, RCU, leak, or data-integrity finding.
+
+All benchmark evidence must include the exact commands and machine-readable
+result JSON. A chart or prose summary without raw sample digests cannot pass.
+
+===============================================================================
+9. DETAILED BENCHMARK AND STRESS CATALOG
+===============================================================================
+
+BM-001: build and package reproducibility
+
+  Workload:
+    Build the same source, config, toolchain, and RPM inputs in independent clean
+    builders. Compare source manifests, configs, symbols, module inputs, RPM file
+    lists, build IDs, and binary digests. Where bit-for-bit identity is not yet
+    possible, identify and normalize every nondeterministic field before PASS.
+  Pass:
+    Reproducible artifacts or a fully explained, machine-normalized difference;
+    no ambient dependency, unpinned download, or unrecorded tool.
+  Evidence:
+    builder images, package lists, logs, diffoscope report, checksums, signatures.
+
+BM-002: module lifecycle latency and correctness
+
+  Operations:
+    load ihk; load SMP; load mcctrl; query; unload reverse order; invalid order;
+    duplicate load; unload while busy; dependency reference; signature failure;
+    partial init failure; concurrent open and unload; forced userspace death.
+  Metrics:
+    load and unload latency distributions, allocations, module references,
+    CPU time, peak memory, warnings, and resource ledger delta.
+  Pass:
+    exact errors and state parity; thresholds in Section 8; zero residue.
+
+BM-003: CPU reserve and release
+
+  Matrix:
+    one CPU, all allowed CPUs, sparse masks, SMT siblings together and split,
+    cross-socket masks, isolated CPUs, offline CPUs, invalid IDs, duplicates,
+    overlapping requests, concurrent requesters, cancellation, and hotplug races.
+  Metrics:
+    reserve and release latency, scheduler evacuation, IRQ changes, online state,
+    lost CPU time, conflicts, and exact restoration.
+  Pass:
+    ownership never overlaps; Linux sees the expected topology; original CPU and
+    IRQ state is restored byte-for-byte after release.
+
+BM-004: memory reserve and release
+
+  Matrix:
+    minimum and maximum supported sizes, alignment edges, each NUMA node, split
+    ranges, holes, fragmented memory, pressure, hugepages, concurrent requesters,
+    invalid and overflowing ranges, partial success, cancellation, and rollback.
+  Metrics:
+    latency, bytes, extents, fragmentation, compaction, allocation failures,
+    Linux available memory, NUMA placement, and resource-ledger delta.
+  Pass:
+    exact range ownership and error parity; no inaccessible or leaked pages;
+    released extents coalesce and Linux memory returns to baseline.
+
+BM-005: image validation and load
+
+  Inputs:
+    valid images at supported sizes; truncated, oversized, misaligned, corrupt,
+    overlapping, wrong-architecture, wrong-version, malicious offset, invalid
+    entry, invalid boot parameter, and modified-after-validation images.
+  Metrics:
+    validation latency, copy throughput, allocations, mappings, checksum, errors.
+  Pass:
+    valid image bytes match; invalid inputs fail before side effects; no TOCTOU,
+    overflow, partial mapping, stale image, or leaked reservation.
+
+BM-006: boot-to-ready and boot-to-running
+
+  Matrix:
+    CPU and NUMA configurations, cold and warm caches, repeated boot, failed AP,
+    delayed ACK, missing interrupt, invalid trampoline, channel failure, timeout,
+    stop during boot, process death, and host pressure.
+  Metrics:
+    phase timestamps, boot-to-READY, boot-to-RUNNING, IPI counts, interrupts,
+    retries, CPU consumption, memory, logs, and state transitions.
+  Pass:
+    exact ordered phases, thresholds in Section 8, bounded failure, clean rollback.
+
+BM-007: IKC latency, throughput, wrap, and backpressure
+
+  Messages:
+    minimum, common, boundary, and maximum packet sizes; one-way and ping-pong;
+    single and multiple producers and consumers; both directions; queue sizes;
+    full queue; wrap at every index edge; interrupt coalescing; sustained saturation.
+  Metrics:
+    operations per second, bandwidth, one-way and round-trip distribution, CPU per
+    operation, interrupts, batches, occupancy, stalls, retries, and sequence gaps.
+  Pass:
+    no loss, duplicate, reorder, corruption, livelock, or unbounded wait; at least
+    100 million verified operations per direction and required topology.
+
+BM-008: unchanged user-space compatibility
+
+  Consumers:
+    ihklib, ihkconfig, ihkosctl, ihkmond, mcexec, mcstat, shell scripts, monitoring,
+    existing test tools, and supported management automation without recompilation
+    where ABI promises require it and with recompilation where explicitly versioned.
+  Pass:
+    output, exit code, errno, status, side effect, and cleanup match the oracle.
+
+BM-009: syscall offload latency and correctness
+
+  Families:
+    file and descriptor, process and thread, memory, signal, futex, time, resource,
+    credential, scheduler and affinity, IPC, socket and network, polling, and misc.
+  Modes:
+    success, invalid pointer, invalid length, interruption, restart, timeout,
+    cancellation, concurrent close or exit, pressure, signal arrival, and teardown.
+  Metrics:
+    request-to-completion latency, throughput, queue time, host CPU, context
+    switches, packets, errors, retries, and exact result data.
+  Pass:
+    supported corpus has exact results and meets Section 8 limits.
+
+BM-010: process, thread, exec, and exit storm
+
+  Workload:
+    bounded increasing concurrency of fork, clone, pthread creation, exec, wait,
+    file and mapping inheritance, signal, abrupt exit, controller death, and mixed
+    successful and failing operations.
+  Pass:
+    no orphan request, PID or ID collision, use-after-free, missed wake, zombie
+    leak, hung wait, stale procfs entry, or resource growth.
+
+BM-011: futex and robust-list stress
+
+  Workload:
+    wait and wake, broadcast, requeue, compare-requeue, timeout clocks, signals,
+    priority and non-priority modes if supported, robust owner death, shared and
+    private mappings, unmapped addresses, process exit, and high contention.
+  Pass:
+    Linux-compatible return and wake behavior; no lost wake, double wake, hang,
+    corrupt list, leaked waiter, or lock-order finding.
+
+BM-012: signal, wait, and ptrace races
+
+  Workload:
+    signal delivery and masks, stop and continue, group signals, wait options,
+    tracer attach and detach, register and memory access, traced exec and exit,
+    tracer death, concurrent target death, repeated interrupt and restart.
+  Pass:
+    exact observable behavior for supported operations and zero lifetime defect.
+
+BM-013: VM, mmap, fault, and remote-memory stress
+
+  Workload:
+    map and unmap, protection, brk, shared and private files, anonymous memory,
+    page faults, sparse access, concurrent unmap, process exit, remote access,
+    invalid ranges, overflow, low memory, hugepages, NUMA policies, and pressure.
+  Pass:
+    data and protection parity; no stale pin, mapping, page, VMA, or access after
+    teardown; exact failure rollback.
+
+BM-014: MPI, OpenMP, and HPC workloads
+
+  Suites:
+    OSU microbenchmarks, STREAM, NAS Parallel Benchmarks, representative MPI and
+    OpenMP applications, mixed process and thread affinity, multi-NUMA placement,
+    oversubscription where supported, repeated launch and teardown.
+  Pass:
+    deterministic checksums and results; no hang or leak; Section 8 performance.
+
+BM-015: complete lifecycle campaign
+
+  One cycle:
+    verify clean host; load modules; reserve exact CPU and RAM; create OS; load
+    image; boot; verify RUNNING and both IKC directions; run deterministic corpus;
+    verify RUNNING; stop; destroy; release; unload; compare full host snapshot.
+  Required result:
+    at least 100000 cycles with zero mismatch, untriaged failure, warning, leak,
+    stuck resource, altered policy, or backing-image mutation.
+
+BM-016: module lifecycle campaign
+
+  Required result:
+    at least 100000 cycles across valid order, invalid order, busy references,
+    partial initialization, injected failures, repeated dependency use, and
+    recovery. Every cycle ends at the exact module and resource baseline.
+
+BM-017: host coexistence and Linux regression
+
+  Workload:
+    kselftest, LTP, stress-ng CPU and memory, filesystem and networking traffic,
+    services, cgroups, namespaces, perf, BPF where relevant, CPU hotplug, memory
+    pressure, and ordinary administration while hybrid workloads run.
+  Pass:
+    no new unexplained Linux failure versus R3; no host starvation or corruption.
+
+BM-018: sanitizer and concurrency-debug kernels
+
+  Configurations:
+    KASAN, KCSAN, UBSAN, lockdep, kmemleak, debug objects, slab poisoning,
+    refcount checks, RCU diagnostics, hung-task detection, panic-on-warning, and
+    applicable hardened allocator or page-table checks.
+  Pass:
+    zero finding. A finding in Linux core is triaged against R3 and still blocks
+    if triggered by the project path.
+
+BM-019: allocation and API failure injection
+
+  Sites:
+    every project allocation and registration class, usercopy, page map, pin,
+    device, ID, procfs, sysfs, binfmt, work, thread, timer, IRQ, listener, queue,
+    channel, process, VMA, and response allocation.
+  Pass:
+    injection evidence names the fired site; exact error; complete reverse-order
+    rollback; no double free, callback after free, or state drift.
+
+BM-020: interrupt and IKC fault injection
+
+  Faults:
+    delay, loss, duplicate notification, reorder where the transport permits,
+    queue saturation, stale generation, wrap, malformed index, peer disconnect,
+    callback failure, stop during traffic, and timeout.
+  Pass:
+    detect or recover according to contract; no silent corruption or unbounded wait.
+
+BM-021: malformed control and parser fuzzing
+
+  Targets:
+    ioctl and compat ioctl, mmap, poll sequences, CPU and memory strings and
+    structures, IKC packets, syscall requests, boot parameters, images, procfs
+    writes if any, sysfs stores, status sequences, and module parameters.
+  Pass:
+    zero crash, hang, out-of-bounds access, information leak, invalid state, or
+    side effect after rejection; differential error behavior for valid domain.
+
+BM-022: syzkaller-compatible stateful fuzzing
+
+  Model:
+    declare devices, ioctls, resources, mmap relations, module lifecycle,
+    reserve and release dependencies, process and fd ownership, and concurrency.
+  Pass:
+    zero unresolved reproducer; every unique crash has minimized reproducer,
+    classification, fix, regression test, and affected-gate invalidation.
+
+BM-023: permissions and privilege boundary
+
+  Matrix:
+    root, unprivileged users, groups, capabilities, namespaces, containers,
+    device modes, SELinux enforcing policy, module signatures, mmap protections,
+    pointer and log exposure, stale descriptors, and post-unload access.
+  Pass:
+    least privilege matches declared policy; no unauthorized resource control,
+    kernel address or memory exposure, or bypass through compat paths.
+
+BM-024: crash and recovery
+
+  Faults:
+    McKernel crash, AP failure, malformed monitor, host callback failure, mcexec
+    death, management process death, IKC disconnect, stop timeout, module init
+    failure, machine reboot, and interrupted package update.
+  Pass:
+    crash evidence preserved; host remains recoverable where contract promises;
+    resources can be reclaimed or rescue boot succeeds; no silent reuse.
+
+BM-025: long-duration Intel and AMD soak
+
+  Workload mix:
+    lifecycle, IKC saturation, syscall corpus, MPI or OpenMP, memory pressure,
+    process churn, signals, futexes, host services, monitoring, and randomized
+    fault-free topology changes permitted by the support contract.
+  Required result:
+    168 uninterrupted hours on each required Intel and AMD class, continuous
+    data verification and progress, zero finding, and exact final restoration.
+
+BM-026: aggregate bare-metal exposure
+
+  Required result:
+    at least 30000 clean node-hours distributed across the supported hardware
+    matrix. Each node publishes signed identity, firmware, package, config,
+    artifact, workload, progress, fatal-scan, resource, and result manifests.
+
+BM-027: resource-growth analysis
+
+  Track:
+    page allocator, slab caches, vmalloc, pinned pages, VMAs, IDs, refs, RCU,
+    work items, tasks, timers, IRQs, eventfds, files, mappings, device nodes,
+    procfs, sysfs, binfmt, module refs, CPU state, memory extents, and policy state.
+  Pass:
+    no statistically or monotonically increasing retained resource after cleanup;
+    every stable cache has a justified bounded plateau and drain test.
+
+BM-028: observability overhead
+
+  Compare:
+    tracepoints and invariant checks disabled, production enabled, and diagnostic
+    verbose modes under idle, latency-sensitive, throughput, and stress workloads.
+  Pass:
+    production observability fits its predeclared CPU, latency, throughput,
+    memory, and log-volume budget without hiding required failure evidence.
+
+-------------------------------------------------------------------------------
+9A. EXACT PARAMETER SWEEPS
+-------------------------------------------------------------------------------
+
+These values are minimum required sweeps. The harness may add cases but may not
+remove a listed boundary without revising this scope and its evidence impact.
+
+Module and complete lifecycle exposure:
+
+  T1 deterministic KVM
+    100 complete module cycles and 100 complete hybrid lifecycles per core KVM
+    topology.
+
+  T2 instrumented
+    1000 cycles per sanitizer or concurrency-debug kernel configuration.
+
+  T3 bare metal
+    10000 module cycles and 10000 complete hybrid cycles on every required
+    Intel and AMD hardware class.
+
+  T4 release
+    100000 aggregate module cycles and 100000 aggregate complete hybrid cycles,
+    while preserving the per-hardware minima above.
+
+CPU reservation counts and shapes:
+
+  Counts:
+    1, 2, 4, 8, 16, 32, one full core, one full socket, half of each socket,
+    the maximum declared supported count, and all reservable CPUs while leaving
+    at least two physical cores for host safety.
+
+  Shapes:
+    contiguous, strided, 100 retained random seeds, one SMT thread per core,
+    both SMT siblings, cross-socket, cross-NUMA, excluding CPU 0, including CPU 0
+    if supported, offline member, duplicate member, empty, malformed, out of
+    range, overlap with an existing reservation, concurrent disjoint requests,
+    concurrent overlapping requests, cancellation, and CPU hotplug at each state.
+
+  Assertions:
+    exact assignment; no ordinary Linux task on reserved CPUs; only declared
+    interrupt exceptions; explicit SMT sibling policy; exact pre-reservation
+    online and IRQ-affinity restoration; zero residual reserve.
+
+Memory reservation sizes and layouts:
+
+  Sizes:
+    64 MiB, 256 MiB, 1 GiB, 4 GiB, 16 GiB, 64 GiB, 25 percent, 50 percent,
+    75 percent of reservable memory, maximum supported, and maximum while
+    retaining max of 4 GiB or 10 percent of RAM for the host.
+
+  Boundaries:
+    4 KiB, 2 MiB, and 1 GiB alignment; one page below, exact, and one page above
+    each boundary; zero; one page; maximum integer; overflowing addition and
+    multiplication; negative-equivalent userspace encodings.
+
+  Layouts:
+    every NUMA node, multiple chunks on one node, cross-node, interleaved,
+    physical holes, reserved firmware regions, low, medium, and severe host
+    fragmentation, THP states, explicit hugepages, duplicates, overlaps, offline
+    node, invalid node, concurrent disjoint and overlapping requests.
+
+  Assertions:
+    exact physical extents; host never allocates a reserved page; invalid request
+    is atomic; aliases are coherent; release returns every page; extents coalesce;
+    host OOM killer is never invoked for a nominal valid case.
+
+Image and boot argument boundaries:
+
+  Images:
+    known good; minimum and maximum supported; empty; header-truncated;
+    segment-table-truncated; first, middle, and final byte truncated; corrupt
+    magic, entry, architecture, segment length, physical address, checksum,
+    overlapping segments, arithmetic overflow, entry outside reservation,
+    unreadable source, and source concurrently truncated or unmapped.
+
+  Boot argument lengths:
+    0, 1, 255, 256, 4095, maximum minus 1, maximum, maximum plus 1; embedded NUL;
+    non-ASCII; unterminated; duplicate option; unknown option; conflicting option.
+
+  Assertions:
+    invalid input fails before McKernel execution and before durable mutation;
+    no byte written outside reserved memory; failed boot is fully reclaimable;
+    the next known-good boot succeeds.
+
+IKC payload and concurrency matrix:
+
+  Logical payload sizes:
+    0, 1, 7, 8, 15, 16, 63, 64, 255, 256, 1023, 4096, 65536, and 1048576 bytes,
+    constrained to the protocol's actual maximum and fragmented by the harness
+    where the logical message exceeds one packet.
+
+  Payload patterns:
+    all zero, all ff, incrementing byte, alternating aa and 55, seeded PRBS, and
+    random content carrying its sequence and SHA-256 tag.
+
+  Producer and consumer shapes:
+    1x1, 1xN, Nx1, and NxN for N equal to 2, 4, 8, and 32.
+
+  Channels:
+    1, 2, 8, 32, 128, and the declared maximum.
+
+  Outstanding requests:
+    1, 2, 16, 64, queue depth minus 1, exact queue depth, and queue depth plus 1.
+
+  Queue depths where configurable:
+    1, 2, 7, 8, 63, 64, 65, 255, 256, and 1024.
+
+  Directions and traffic:
+    host to McKernel, McKernel to host, simultaneous bidirectional, ping-pong,
+    sustained stream, and bursts of 1, 10, 100, and 1000 logical messages.
+
+  Wrap tests:
+    seed sequence, generation, index, and request identifiers immediately before
+    u16, u32, and u64 wrap where applicable; execute at least 4096 operations
+    across each boundary; execute more than 2^32 minimal operations for any
+    production 32-bit counter that cannot be test-seeded.
+
+  Assertions:
+    exact sequence and digest; no loss, duplicate, corruption, false empty or
+    full, stale reuse, generation collision, signed comparison defect, livelock,
+    or unbounded wait. Under equal-priority saturation, no active producer gets
+    less than 90 percent of its equal-share service unless policy says otherwise.
+
+Full ioctl and compat ioctl matrix for every command:
+
+  - minimum valid request and maximum valid request;
+  - unknown command and wrong direction or size encoding;
+  - null, unmapped, read-only, misaligned, and noncanonical pointer;
+  - buffer ending at and crossing a page boundary;
+  - buffer unmapped or protection-changed concurrently;
+  - zero, one, maximum, maximum plus one, truncated, overflowing length or count;
+  - native caller and 32-bit compat caller where supported;
+  - 1, 2, 8, and 64 concurrent callers;
+  - every command attempted in every lifecycle state;
+  - close, process exit, module unload, stop, and peer disconnect during call.
+
+  Assertions:
+    exact return and errno parity; no partial durable state; initialized output
+    padding; no kernel pointer or stale data disclosure; no sleep-in-atomic,
+    lock inversion, race, reference fault, or callback after teardown.
+
+Delegated syscall corpus:
+
+  Suites:
+    applicable LTP syscall, IPC, scheduler, memory, signal and filesystem groups;
+    Linux libc-test compatible cases; lmbench syscall and process tests; normalized
+    full strace comparisons; one million retained seeded programs of up to 1000
+    calls; purpose-built invalid and interrupted cases.
+
+  Families:
+    file and descriptor; open, close, read, write, pread, pwrite, stat; mmap,
+    munmap, mprotect, brk; fork, clone, exec, exit, wait; pipes and eventfd;
+    timerfd, select, poll and epoll where supported; sockets; credentials;
+    resources; scheduling and affinity; time; signals; futexes; IPC; explicitly
+    unsupported calls with their documented error.
+
+  Modes:
+    valid, invalid descriptor, invalid pointer, invalid flag, zero and boundary
+    lengths, interruption, restart, timeout, cancellation, concurrent close,
+    concurrent exit, signal arrival, low memory, queue saturation, and teardown.
+
+  Assertions:
+    every declared supported case passes with exact content, metadata, errno,
+    signal, ordering and side effect. No unexpected skip is allowed.
+
+File I O proxy matrix using fio or an equivalent verified generator:
+
+  Filesystems:
+    XFS, ext4, tmpfs, and NFS only when declared supported.
+
+  Modes:
+    sequential read, sequential write, random read, random write, and 70 30 mixed.
+
+  Block sizes:
+    4 KiB, 64 KiB, and 1 MiB.
+
+  Queue depths:
+    1, 8, 32, and 128.
+
+  Jobs:
+    1, 4, 16, and 64.
+
+  Data sets:
+    greater than host RAM for sustained disk and at least four times LLC for
+    memory-backed tests, with crc32c or stronger verification.
+
+Signal matrix:
+
+  Signals:
+    TERM, KILL, STOP, CONT, SEGV, BUS, ILL, FPE, ALRM, CHLD, both user signals,
+    and every supported realtime signal.
+
+  Modes:
+    blocked and unblocked, alternate stack, nested handler, delegated syscall,
+    page fault, fork, exec, exit, 1 through 1024 threads, standard coalescing,
+    realtime ordering, process group delivery, tracer interaction, target death.
+
+  Exposure:
+    at least 1000000 verified realtime deliveries with exact count and order.
+
+Futex and pthread matrix:
+
+  Operations:
+    WAIT, WAKE, WAIT_BITSET, WAKE_BITSET, REQUEUE, CMP_REQUEUE, robust owner death,
+    priority inheritance where supported, timeout, interruption, private and
+    shared mappings, process-shared and thread-shared primitives.
+
+  Workloads:
+    stress-ng futex, will-it-scale futex cases, pthread mutex, condition variable,
+    barrier, semaphore, robust mutex, 1, 2, 4, 8, 32, 128, and 1024 threads.
+
+  Exposure:
+    at least 100000000 verified wait and wake pairs per hardware class.
+
+Ptrace matrix:
+
+  attach, detach, single-step, breakpoint, register get and set, memory read and
+  write, signal inject and suppress, syscall trace, multithreaded exec and exit,
+  tracer death, tracee death, strace, GDB smoke, 1, 16, 256, and 1024 tracee
+  threads, and at least 10000 attach and detach cycles.
+
+NUMA, mapping, TLB, and hugepage matrix:
+
+  - local allocate and local execute on every node;
+  - local allocate and every remote execution-node pair;
+  - interleaved and cross-socket allocation;
+  - STREAM arrays at least four times LLC, pointer chase, random touch, page fault,
+    map and unmap throughput, and concurrent host pressure;
+  - base 4 KiB, explicit 2 MiB, explicit 1 GiB where supported, THP never,
+    madvise, always, and mixed mappings;
+  - exact alignment, one byte and one page below and above, partial unmap,
+    split, merge, mprotect, fork or exec inheritance, exhaustion, fallback, and
+    teardown during outstanding access;
+  - at least 1000000 map, protect and unmap cycles, 1, 2, 8, and 64 callers,
+    shootdown during remote access, aliases, maximum address, invalid PFN.
+
+MPI and OpenMP matrix:
+
+  OSU:
+    osu_latency, osu_bw, osu_bibw, osu_allreduce, osu_allgather, osu_alltoall,
+    osu_barrier; messages from 1 byte through 4 MiB; 10000 iterations up to 8 KiB
+    and 1000 above; ranks 2, 4, 8, 16, 32, 64, maximum, and supported multi-node;
+    local socket, cross-socket, cross-NUMA, and cross-node placement.
+
+  OpenMP:
+    EPCC synchronization microbenchmarks; NPB BT, CG, EP, FT, IS, LU, MG, SP;
+    classes B, C, and largest fitting reservation; threads 1, 2, 4, 8, 16, 32,
+    64, all reserved cores, and 2x oversubscription; PROC_BIND false, true, close,
+    spread; PLACES threads, cores, sockets; SMT on and off.
+
+  Applications:
+    STREAM, HPL using approximately 80 percent of reserved memory, HPCG, hybrid
+    MPI plus OpenMP NPB, allocator stress, launch and exit storms, and a declared
+    user-representative application corpus.
+
+Allocation and API failure injection matrix:
+
+  Sites:
+    page, slab, vmalloc, object, registry, table, request, response, kthread,
+    workqueue, timer, IRQ, character device, procfs, sysfs, binfmt, mapping,
+    page pin, listener, queue, channel, process, VMA, usercopy and callback setup.
+
+  Occurrences:
+    fail the first through 32nd occurrence; every 2nd, 10th and 100th occurrence;
+    seeded stochastic rates of 0.1, 1, 10, and 25 percent.
+
+  Assertions:
+    the named failpoint fired; exact error; reverse-order rollback; zero residue;
+    no callback after free; immediate retry without injection succeeds.
+
+IKC and interrupt fault injection matrix:
+
+  Delays:
+    1 microsecond, 100 microseconds, 10 milliseconds, and 1 second.
+
+  Loss and mutation:
+    drop every 1000th, 10000th, and 100000th notification or message where the
+    contract permits testing; duplicate every 10000th; reorder windows 2, 8, 64;
+    header and payload bit flips; ACK loss; CONNECT during disconnect; persistent
+    full queue; peer death during send or receive; stop while callback executes.
+
+  Assertions:
+    contract-defined recovery or bounded fail-closed behavior; no silent data
+    corruption, stale listener dereference, unbounded wait, or unreclaimable OS.
+
+Controller, peer, and machine disruption matrix:
+
+  - kill mcexec during every delegated syscall family;
+  - kill control client during every ioctl phase;
+  - kill workload leader and all workload threads;
+  - kill monitor and IKC peer during every state transition;
+  - offline CPU before reserve and request offline during reserve, boot, run, stop;
+  - pressure memory to 50, 75, and 90 percent of host safety margin;
+  - force low, medium and severe fragmentation and unavailable NUMA nodes;
+  - clean reboot idle, modules loaded, reserved, booting, running and stopping;
+  - forced VM power-off and authorized BMC reset in every lifecycle state;
+  - s2idle, S3 and hibernate when explicitly supported, or deterministic EBUSY
+    rejection before partial suspension when unsupported.
+
+Fuzz exposure and closure:
+
+  - at least 10 VM-hours for each changed interface during focused validation;
+  - at least 1000 aggregate VM-hours with sanitizer kernels before bare metal;
+  - at least 100000 aggregate VM-hours across release module, kernel and topology
+    variants;
+  - at least 1000000000 executions for independently fuzzable image, boot,
+    resource, ioctl arithmetic, IKC packet and serialization parsers, or a
+    documented coverage-saturation criterion plus full VM-hour exposure;
+  - preserve corpora, coverage, every crash bucket, first reproducer, minimized
+    reproducer, fix commit, regression test, and evidence invalidation set.
+
+===============================================================================
+10. TEST TOPOLOGY MATRIX
+===============================================================================
+
+Virtual coverage:
+
+  - q35 and the selected production machine type;
+  - KVM with host CPU and named CPU model where reproducibility requires it;
+  - 1, 2, 4, 8, and larger supported vCPU counts;
+  - SMT on and off exposure;
+  - one and multiple NUMA nodes, asymmetric memory, distance matrices, holes;
+  - small, boundary, and large reservation sizes;
+  - IOMMU off and on where applicable;
+  - Secure Boot test mode and signature-negative cases;
+  - production, diagnostic, sanitizer, and hardened kernel builds.
+
+Bare-metal coverage must include at least:
+
+  - representative Intel and AMD systems;
+  - single and multi-socket where supported;
+  - SMT enabled and disabled;
+  - one and multiple NUMA nodes;
+  - APIC and x2APIC modes supported by the platform;
+  - different memory capacities and fragmented long-lived host state;
+  - Secure Boot enabled and disabled;
+  - current supported firmware and microcode matrix;
+  - required hugepage and IOMMU configurations;
+  - production governor, power, C-state, turbo, mitigation, and IRQ policies.
+
+Each configuration must declare whether it is supported, required, diagnostic,
+or explicitly out of scope. An unsupported result cannot silently substitute
+for a required configuration.
+
+Qualification tiers are evidence scopes, not calendar commitments:
+
+  T0 build and static
+    All production, diagnostic, sanitizer, and hardened kernel configurations;
+    reproducibility; ABI layouts; Rust unit and property tests; KUnit; native
+    Rust and zero-C closure; signatures; package contents; unsafe ledger.
+
+  T1 deterministic KVM
+    1, 2, 8, and 32 vCPUs; 1, 2, and 4 virtual NUMA nodes; lifecycle,
+    reservation, image, boot, IKC, mcexec, syscall, fault, cleanup, and negative
+    smoke with retained seeds and recoverable disposable guests.
+
+  T2 instrumented integration
+    Full virtual topology matrix under KASAN, KCSAN, UBSAN, lockdep, kmemleak,
+    debug-object and fault-injection kernels; concurrency, stateful differential,
+    parser, ioctl, lifecycle, and syzkaller-compatible campaigns.
+
+  T3 bare metal
+    Required Intel and AMD classes; SMT on and off; single and multi-socket;
+    single and multi-NUMA; production firmware and interrupt behavior; Secure
+    Boot and lockdown; fixed-frequency and production power configurations.
+
+  T4 release qualification
+    Full lifecycle and operation counts, fuzz exposure, contiguous soaks,
+    aggregate node-hours, applications, performance, recovery, packaging,
+    rollback, exact release artifacts, and independent audit.
+
+No weighted gate receives tier-by-tier partial credit. Its detailed live evidence
+may say which tiers are green, but the gate earns points only when every tier
+required by that gate passes.
+
+Minimum required bare-metal classes:
+
+  - Intel Ice Lake-SP or newer, with dual socket where available;
+  - Intel Sapphire Rapids or Emerald Rapids class;
+  - AMD EPYC Milan class;
+  - AMD EPYC Genoa or Bergamo class;
+  - at least one Intel and one AMD host exposing four or more NUMA nodes;
+  - ECC memory and production microcode;
+  - SMT enabled and disabled;
+  - IOMMU enabled and disabled when declared in scope;
+  - Secure Boot and lockdown enabled and disabled;
+  - production C-state and turbo settings plus fixed-frequency measurement mode.
+
+Every bare-metal manifest records DMI, PCI inventory, CPU family, model,
+stepping, microcode, firmware, NUMA distances, DIMM topology, kernel command
+line, governor, frequencies, thermals, IRQ layout, module parameters, storage,
+network, BMC identity, and clock synchronization.
+
+Release exposure totals, all required simultaneously:
+
+  - 100000 native module load and unload cycles;
+  - 100000 full reserve, boot, workload, stop, destroy, and release cycles;
+  - 10000 full cycles on every required hardware class;
+  - 10000000000 verified IKC operations in aggregate;
+  - at least 100000000 valid IKC operations in each direction per required
+    topology and at least 1000000000 bidirectional operations per hardware class;
+  - 1000000000 delegated syscalls with exact results;
+  - 100000000 futex wait and wake pairs per hardware class;
+  - 1000000 verified realtime signal deliveries;
+  - 10000 ptrace attach and detach cycles;
+  - 1000000 map, protect, and unmap cycles;
+  - 100000 fuzz VM-hours across required module, kernel, and topology variants;
+  - 168 uninterrupted soak hours on each required Intel and AMD class;
+  - 30000 clean bare-metal node-hours, including at least 5000 Intel, 5000 AMD,
+    and 1000 on every required hardware class.
+
+Zero observed failures must be reported with a statistical upper bound, not as
+proof that the failure rate is literally zero. For example, the rule of three
+gives an approximate 95 percent upper bound of 3e-5 failures per cycle after
+zero failures in 100000 cycles, and 1e-4 critical failures per node-hour after
+zero failures in 30000 node-hours.
+
+Live non-scoring counters belong in evidence and job summaries, for example:
+
+  module_lifecycle=43218/100000
+  full_lifecycle=7512/100000
+  ikc_operations=3800000000/10000000000
+  fuzz_vm_hours=16750/100000
+  bare_metal_node_hours=9210/30000
+
+These counters make activity visible without inflating the 1.50 percent initial
+score or awarding a long-running gate before its complete acceptance threshold.
+
+===============================================================================
+11. EVIDENCE MANIFEST
+===============================================================================
+
+Every accepted gate stores a compact committed manifest shaped like:
+
+  {
+    "schema": 1,
+    "gate_id": "SMP-012",
+    "result": "PASS",
+    "git_sha": "40 hex",
+    "source_manifest_sha256": "sha256",
+    "test_manifest_sha256": "sha256",
+    "rocky_source_nvr": "exact source RPM",
+    "kernel_nvr": "exact binary package release",
+    "kernel_build_id": "build ID",
+    "kernel_config_sha256": "sha256",
+    "toolchain_manifest_sha256": "sha256",
+    "module_sha256": {
+      "ihk.ko": "sha256",
+      "ihk-smp-x86_64.ko": "sha256",
+      "mcctrl.ko": "sha256"
+    },
+    "mckernel_image_sha256": "sha256",
+    "reference_module_sha256": {},
+    "workflow_run": "immutable URL and attempt",
+    "hardware_manifest_sha256": "sha256",
+    "commands_sha256": "sha256",
+    "seed_manifest_sha256": "sha256",
+    "sample_count": 0,
+    "assertions": [],
+    "faults_requested": [],
+    "faults_observed": [],
+    "fatal_scan": "PASS",
+    "resource_ledger": "PASS",
+    "cleanup": "PASS",
+    "raw_manifest_sha256": "sha256",
+    "artifact_sha256": "sha256"
+  }
+
+The fatal scan covers at least:
+
+  BUG, Oops, WARNING, panic, KASAN, KCSAN, UBSAN, lockdep, hung task, soft lockup,
+  hard lockup, RCU stall, refcount, use-after-free, double free, invalid free,
+  memory leak, corrupted list, bad page, general protection fault, NMI watchdog,
+  unexpected taint, IKC integrity error, resource-ledger failure, and data mismatch.
+
+Large artifacts may live in durable object or release storage, but their compact
+manifest and cryptographic digest remain in the repository. A temporary Actions
+artifact URL alone is not sufficient permanent evidence.
+
+===============================================================================
+12. RELEASE-READY DEFINITION
+===============================================================================
+
+RELEASE READY changes to YES only when all 130 weighted gates are PASS and the
+generated score is exactly 100.00 percent on the exact release commit and exact
+release artifact digests.
+
+The final audit must prove all of the following together:
+
+  - Rocky-derived kernel packages are reproducible, signed, installable,
+    bootable, recoverable, and version-pinned;
+  - CONFIG_RUST and required kernel infrastructure are present in the running
+    production kernel;
+  - ihk.ko, ihk-smp-x86_64.ko, and mcctrl.ko are distinct native Rust modules;
+  - production module artifacts contain no project C implementation or fallback;
+  - unchanged McKernel and user-space consumers retain declared compatibility;
+  - functional, ABI, error, state, and cleanup parity pass;
+  - all production benchmark, stress, fault, fuzz, sanitizer, security,
+    reliability, and performance gates pass;
+  - no warning, sanitizer issue, leak, mismatch, unexplained failure, or release
+    blocker remains;
+  - install, update, rollback, rescue, telemetry, and triage procedures pass;
+  - the tested artifacts and released artifacts are byte-identical;
+  - the complete evidence set is signed, durable, and independently auditable.
+
+Reference documentation for the platform decision:
+
+  https://docs.kernel.org/rust/quick-start.html
+  https://docs.kernel.org/rust/general-information.html
+  https://docs.kernel.org/kbuild/modules.html
+  https://docs.rockylinux.org/10/guides/custom-linux-kernel/
