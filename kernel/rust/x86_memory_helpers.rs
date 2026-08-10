@@ -642,25 +642,33 @@ pub unsafe extern "C" fn x86_init_page_table_body_result(
         return -EINVAL;
     };
 
+    crate::x86_setup::early_phase(b'a');
     check_available_page_size(3);
+    crate::x86_setup::early_phase(b'b');
 
     let init_pt = alloc_pages(1, critical_flag);
     if init_pt.is_null() {
+        crate::x86_setup::early_panic();
         panic_cb(3);
         return -ENOMEM;
     }
     write_volatile(init_pt_slot, init_pt);
     spin_init(init_pt_lock);
     write_bytes(init_pt.cast::<u8>(), 0, page_table_size);
+    crate::x86_setup::early_phase(b'c');
 
     init_normal_area(init_pt);
+    crate::x86_setup::early_phase(b'd');
     init_linux_kernel_mapping(init_pt);
+    crate::x86_setup::early_phase(b'e');
     init_fixed_area(init_pt);
     init_text_area(init_pt);
     init_vsyscall_area(init_pt);
+    crate::x86_setup::early_phase(b'f');
 
     let boot_pt = alloc_pages(1, critical_flag);
     if boot_pt.is_null() {
+        crate::x86_setup::early_panic();
         panic_cb(4);
         return -ENOMEM;
     }
@@ -680,11 +688,15 @@ pub unsafe extern "C" fn x86_init_page_table_body_result(
         offset += 1;
     }
     if same {
+        crate::x86_setup::early_panic();
         panic_cb(5);
         return -EINVAL;
     }
+    crate::x86_setup::early_phase(b'g');
 
+    crate::x86_setup::early_phase(b'h');
     load_page_table(init_pt);
+    crate::x86_setup::early_phase(b'i');
     write_volatile(init_pt_loaded_slot, 1);
     if let Some(log) = log_fn {
         log(1, init_pt);
@@ -717,6 +729,7 @@ pub unsafe extern "C" fn init_page_table() {
         )
     };
     if ret != 0 {
+        crate::x86_setup::early_panic();
         unsafe { x86_init_page_table_panic_bridge(0) };
     }
 }

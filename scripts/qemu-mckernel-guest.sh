@@ -352,6 +352,7 @@ SSH_KEY="$LOG_DIR/id_ed25519"
 PIDFILE="$LOG_DIR/qemu.pid"
 STARTED_PIDFILE="$LOG_DIR/qemu-started.pid"
 SERIAL_LOG="$LOG_DIR/serial.log"
+DEBUGCON_LOG="$LOG_DIR/debugcon.log"
 STARTUP_LOG="$LOG_DIR/qemu-startup.log"
 QMP_SOCKET="$LOG_DIR/qmp.sock"
 QMP_LOG="$LOG_DIR/qmp-status.jsonl"
@@ -396,6 +397,13 @@ print_serial_tail() {
 		esac
 		echo "recent serial log:" >&2
 		tail -n 80 "$SERIAL_LOG" >&2 || true
+	fi
+	if [ -s "$DEBUGCON_LOG" ]; then
+		echo "McKernel early debugcon phases:" >&2
+		tail -c 4096 "$DEBUGCON_LOG" >&2 || true
+		echo >&2
+	else
+		echo "McKernel early debugcon phases: empty" >&2
 	fi
 }
 
@@ -682,6 +690,8 @@ QEMU_ARGS=(
 	-no-reboot
 	-display none
 	-serial "file:$SERIAL_LOG"
+	-chardev "file,id=mckdebug,path=$DEBUGCON_LOG"
+	-device "isa-debugcon,iobase=0xe9,chardev=mckdebug"
 	-qmp "unix:$QMP_SOCKET,server=on,wait=off"
 	-pidfile "$PIDFILE"
 	-daemonize
@@ -720,6 +730,7 @@ fi
 
 printf '%s\n' "Log directory: $LOG_DIR"
 printf '%s\n' "Serial log: $SERIAL_LOG"
+printf '%s\n' "Debugcon log: $DEBUGCON_LOG"
 printf '%s\n' "QEMU startup log: $STARTUP_LOG"
 printf '%s\n' "QMP status log: $QMP_LOG"
 printf '%s\n' "Overlay: $OVERLAY"
