@@ -195,7 +195,7 @@ pub static mut ihk_ikc_irq_apicid: u32 = 0;
 #[cfg_attr(not(mckernel_equivalence), no_mangle)]
 pub static mut dump_page: *mut IhkDumpPage = null_mut();
 
-static mut STACK: BootStack = BootStack([0; 8192]);
+static mut STACK: BootStack = BootStack([0; BOOT_STACK_SIZE]);
 static mut IHK_CPU_INFO: *mut IhkMcCpuInfo = null_mut();
 
 static mut PERF_MAP_NEHALEM: [u32; PERFCTR_MAX_TYPE + 1] = {
@@ -302,8 +302,8 @@ pub(crate) unsafe fn early_phase(_phase: u8) {}
 
 #[cfg(not(mckernel_equivalence))]
 pub(crate) unsafe fn early_panic() {
-    let phase = core::ptr::read_volatile(&raw const EARLY_PHASE);
     debugcon_byte(b'!');
+    let phase = core::ptr::read_volatile(&raw const EARLY_PHASE);
     debugcon_byte(phase);
     debugcon_byte(b'\n');
 }
