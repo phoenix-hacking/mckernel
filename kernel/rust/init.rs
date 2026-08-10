@@ -277,8 +277,10 @@ pub unsafe extern "C" fn monitor_init() {
         }
     }
 
+    let ncpus = unsafe { core::ptr::read_volatile(core::ptr::addr_of!((*cpu_info).ncpus)) };
+
     let bytes = size_of::<IhkOsMonitor>().wrapping_add(
-        size_of::<crate::abi::IhkOsCpuMonitor>() * unsafe { (*cpu_info).ncpus as usize },
+        size_of::<crate::abi::IhkOsCpuMonitor>() * ncpus as usize,
     );
     let pages = ((bytes + PAGE_SIZE - 1) >> PAGE_SHIFT) as CInt;
     unsafe {
@@ -322,7 +324,7 @@ pub unsafe extern "C" fn monitor_init() {
             canonical_ptr as CULong,
             pages,
             bytes as CULong,
-            (*cpu_info).ncpus,
+            ncpus,
         );
         crate::x86_setup::early_phase(b'.');
         write_volatile(canonical_ptr, 0);
@@ -340,7 +342,10 @@ pub unsafe extern "C" fn monitor_init() {
             offset += 1;
         }
         crate::x86_setup::early_phase(b'>');
-        (*monitor_ptr).num_processors = (*cpu_info).ncpus as CULong;
+        write_volatile(
+            core::ptr::addr_of_mut!((*monitor_ptr).num_processors),
+            ncpus as CULong,
+        );
         crate::x86_setup::early_phase(b'/');
         monitor = monitor_ptr;
         crate::x86_setup::early_phase(b'9');
