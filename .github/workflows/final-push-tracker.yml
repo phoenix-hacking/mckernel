@@ -1,0 +1,92 @@
+name: Final push completion tracker
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tracker:
+    name: Recalculate evidence-weighted completion
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out exact candidate
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Validate tracker implementation
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/final_push_tracker.py
+          python3 scripts/final_push_tracker.py \
+            --check \
+            --json evidence/final-push-summary.json
+
+      - name: Prove recalculation is idempotent
+        run: |
+          set -euo pipefail
+          cp final-push.txt /tmp/final-push.recalculated.txt
+          python3 scripts/final_push_tracker.py \
+            --file /tmp/final-push.recalculated.txt \
+            --update
+          cmp final-push.txt /tmp/final-push.recalculated.txt
+
+      - name: Prove stale and invalid trackers fail closed
+        run: |
+          set -euo pipefail
+
+          cp final-push.txt /tmp/final-push.stale.txt
+          sed -i 's/^OVERALL COMPLETION:.*/OVERALL COMPLETION: STALE/' \
+            /tmp/final-push.stale.txt
+          if python3 scripts/final_push_tracker.py \
+              --file /tmp/final-push.stale.txt --check; then
+            echo 'stale generated summary was incorrectly accepted' >&2
+            exit 1
+          fi
+
+          cp final-push.txt /tmp/final-push.missing-evidence.txt
+          sed -i \
+            's/^GATE|FP-0001|WS00|50|TODO|-|/GATE|FP-0001|WS00|50|PASS|-|/' \
+            /tmp/final-push.missing-evidence.txt
+          if python3 scripts/final_push_tracker.py \
+              --file /tmp/final-push.missing-evidence.txt --check; then
+            echo 'PASS without evidence was incorrectly accepted' >&2
+            exit 1
+          fi
+
+          cp final-push.txt /tmp/final-push.bad-weight.txt
+          sed -i \
+            's/^WORKSTREAM|WS00|Scope, baseline, and evidence system|400$/WORKSTREAM|WS00|Scope, baseline, and evidence system|401/' \
+            /tmp/final-push.bad-weight.txt
+          if python3 scripts/final_push_tracker.py \
+              --file /tmp/final-push.bad-weight.txt --check; then
+            echo 'invalid 10000-point denominator was incorrectly accepted' >&2
+            exit 1
+          fi
+
+      - name: Publish current completion in job summary
+        run: |
+          set -euo pipefail
+          {
+            echo '## Native Rust host-module completion'
+            echo
+            sed -n \
+              '/^BEGIN AUTO-GENERATED TRACKER$/,/^END AUTO-GENERATED TRACKER$/p' \
+              final-push.txt
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload machine-readable tracker state
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: final-push-tracker-${{ github.sha }}
+          path: evidence/final-push-summary.json
+          if-no-files-found: error
+          retention-days: 90
