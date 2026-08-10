@@ -534,14 +534,19 @@ unsafe fn populate_sysfs() {
 
 unsafe fn post_init() {
     unsafe {
+        crate::x86_setup::early_phase(b'[');
         cpu_enable_interrupt();
+        crate::x86_setup::early_phase(b']');
     }
 
-    while unsafe { host_ikc_inited } == 0 {
+    while unsafe { core::ptr::read_volatile(&raw const host_ikc_inited) } == 0 {
         core::sync::atomic::compiler_fence(core::sync::atomic::Ordering::SeqCst);
         unsafe {
             cpu_pause();
         }
+    }
+    unsafe {
+        crate::x86_setup::early_phase(b'{');
     }
 
     if !unsafe { find_command_line(cstr(b"hidos\0")) }.is_null() {
@@ -559,13 +564,18 @@ unsafe fn post_init() {
             init_host_ikc2linux(ikc_cpu);
         }
     }
-
     unsafe {
+        crate::x86_setup::early_phase(b'}');
         arch_setup_vdso();
+        crate::x86_setup::early_phase(b'^');
         arch_start_pvclock();
+        crate::x86_setup::early_phase(b'&');
         ap_start();
+        crate::x86_setup::early_phase(b'*');
         sysfs_init();
+        crate::x86_setup::early_phase(b'(');
         populate_sysfs();
+        crate::x86_setup::early_phase(b')');
     }
     #[cfg(enable_tofu)]
     unsafe {
