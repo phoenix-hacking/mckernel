@@ -1810,18 +1810,19 @@ boot_smoke() {
 	fi
 
 	BOOT_SHUTDOWN_NEEDED=1
+	say "Using safe_kernel_map for bounded validation memory mapping"
 	if [ "$TRAMPOLINE_PHYS" != "" ]; then
 		say "Using reserved IHK trampoline page at $TRAMPOLINE_PHYS"
 		if ! run_privileged_lifecycle_cmd "mcreboot" \
 			env IHK_TRAMPOLINE_PHYS="$TRAMPOLINE_PHYS" \
-			"$PREFIX/sbin/mcreboot.sh" -c "$BOOT_CPUS" -m "$BOOT_MEM" \
+			"$PREFIX/sbin/mcreboot.sh" -s -c "$BOOT_CPUS" -m "$BOOT_MEM" \
 			-o "$BOOT_DEVICE_OWNER"; then
 			dump_boot_failure_state
 			exit 1
 		fi
 	else
 		if ! run_privileged_lifecycle_cmd "mcreboot" \
-			"$PREFIX/sbin/mcreboot.sh" -c "$BOOT_CPUS" -m "$BOOT_MEM" \
+			"$PREFIX/sbin/mcreboot.sh" -s -c "$BOOT_CPUS" -m "$BOOT_MEM" \
 			-o "$BOOT_DEVICE_OWNER"; then
 			dump_boot_failure_state
 			exit 1
