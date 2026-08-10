@@ -7,12 +7,12 @@ no calendar estimates. Work is complete only when the measurable acceptance
 gates below pass on the exact production artifacts.
 
 BEGIN AUTO-GENERATED TRACKER
-OVERALL COMPLETION: 1.50% (150 / 10000 evidence points)
-TRACKED GATES: 130 total; 2 PASS; 0 IN_PROGRESS; 0 BLOCKED; 128 TODO
-TRACKER INPUT SHA256: c0bda999fd6d7831ea2ad7d7786754f0a8fe77468d2c8c23aac63be5f1fc3770
+OVERALL COMPLETION: 2.00% (200 / 10000 evidence points)
+TRACKED GATES: 130 total; 3 PASS; 0 IN_PROGRESS; 0 BLOCKED; 127 TODO
+TRACKER INPUT SHA256: 70f5d750c8600b965bf8737c812a51ebb34e424be510efb4d20cbc2517edd7bf
 
 WORKSTREAM SUMMARY:
-- WS00 Scope, baseline, and evidence system: 37.50% (150 / 400 points; 2 / 7 gates PASS)
+- WS00 Scope, baseline, and evidence system: 50.00% (200 / 400 points; 3 / 7 gates PASS)
 - WS10 Rocky-derived Rust-capable kernel platform: 0.00% (0 / 1000 points; 0 / 14 gates PASS)
 - WS20 Shared Rust kernel API and ABI substrate: 0.00% (0 / 1000 points; 0 / 12 gates PASS)
 - WS30 Native Rust ihk.ko: 0.00% (0 / 1200 points; 0 / 13 gates PASS)
@@ -25,9 +25,10 @@ END AUTO-GENERATED TRACKER
 
 RELEASE READY: NO
 
-Credited today: the frozen Rocky 8.10 legacy build and hosted runtime smoke
-baseline only. No credit is currently awarded for a Rocky CONFIG_RUST kernel,
-a native Rust host module, production stress, or a release candidate.
+Credited today: the frozen Rocky 8.10 legacy build and hosted runtime smoke,
+plus the published fail-closed tracker checker. No credit is currently awarded
+for a Rocky CONFIG_RUST kernel, a native Rust host module, production stress,
+or a release candidate.
 
 ===============================================================================
 1. NON-NEGOTIABLE END STATE
@@ -366,7 +367,7 @@ GATE|FP-0003|WS00|60|PASS|commit f2eb735212e6ab0494e638497e80d9ae78b2848e and bu
 GATE|FP-0004|WS00|90|PASS|workflow 31358939841 and hosted evidence artifact 9051791233|Freeze the exact legacy boot, IKC, mcexec, workload, stop, restoration, and integrity runtime oracle|validation
 GATE|FP-0005|WS00|50|TODO|-|Generate the exact active object, source, symbol, ioctl, module parameter, procfs, sysfs, IKC, and dependency inventory for all three legacy modules|architecture
 GATE|FP-0006|WS00|50|TODO|-|Map every externally observable legacy behavior and failure code to one Rust replacement and at least one acceptance test ID|validation
-GATE|FP-0007|WS00|50|TODO|-|Pass tracker parser tests and the published CI check for weights, statuses, evidence, generated summary, digest, and stale-score rejection|release
+GATE|FP-0007|WS00|50|PASS|workflow 31433094618 job 93600920326|Pass tracker parser tests and the published CI check for weights, statuses, evidence, generated summary, digest, and stale-score rejection|release
 
 GATE|RK-001|WS10|75|TODO|-|Pin the Rocky release, kernel source RPM, source checksums, patch series, licenses, and reproducible source acquisition manifest|kernel-platform
 GATE|RK-002|WS10|75|TODO|-|Build the Rocky-derived kernel in a clean reproducible mock or container environment with all build inputs and network use pinned|kernel-platform
@@ -1498,8 +1499,8 @@ Live non-scoring counters belong in evidence and job summaries, for example:
   fuzz_vm_hours=16750/100000
   bare_metal_node_hours=9210/30000
 
-These counters make activity visible without inflating the 1.50 percent initial
-score or awarding a long-running gate before its complete acceptance threshold.
+These counters make activity visible without awarding technical implementation
+points or a long-running gate before its complete acceptance threshold.
 
 ===============================================================================
 11. EVIDENCE MANIFEST
