@@ -18,8 +18,20 @@ jobs:
       - name: Check out exact candidate
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
-          fetch-depth: 1
+          fetch-depth: 0
           persist-credentials: false
+
+      - name: Initialize frozen IHK source
+        run: |
+          set -euo pipefail
+          git submodule update --init --depth 1 ihk
+
+      - name: Validate frozen host-module inventory
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/host_module_inventory.py
+          python3 -m unittest discover -s scripts/tests -v
+          python3 scripts/host_module_inventory.py --check
 
       - name: Validate tracker implementation
         run: |
