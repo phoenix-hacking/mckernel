@@ -35,6 +35,18 @@ EXPECTED_SUPPORT_SOURCES = (
         "kind": "rust_ioctl_dispatch",
         "path": "host-kernel/native-rust/ihk_ioctl.rs",
     },
+    {
+        "contract_path": "host-kernel/native-rust/ihk-page-allocator-contract-v1.json",
+        "destination": "page_allocator.rs",
+        "kind": "rust_support_module",
+        "path": "host-kernel/native-rust/page_allocator.rs",
+    },
+    {
+        "contract_path": "host-kernel/native-rust/ihk-page-owner-registry-contract-v1.json",
+        "destination": "page_owner_registry.rs",
+        "kind": "rust_support_module",
+        "path": "host-kernel/native-rust/page_owner_registry.rs",
+    },
 )
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 
@@ -230,6 +242,8 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
         "mod ikc_queue;",
         "mod ikc_master;",
         "mod ihk_ioctl;",
+        "mod page_allocator;",
+        "mod page_owner_registry;",
     ):
         if text.count(fragment) != 1:
             raise ValidationError(
@@ -364,10 +378,62 @@ def _validate_support_sources(
     if ioctl_readiness.get("status") != "TODO" or ioctl_readiness.get("credit_eligible") is not False:
         raise ValidationError("ioctl dispatcher support contract must remain TODO and credit-ineligible")
 
+    allocator_contract = values["page_allocator.rs"]
+    allocator_item = support[3]
+    allocator_source = allocator_contract.get("production_source", {})
+    allocator_evidence = allocator_contract.get("evidence_policy", {})
+    if allocator_contract.get("gate_id") != "IHK-006":
+        raise ValidationError("page allocator support contract identity differs")
+    if allocator_contract.get("foundation_status") != "private-crate-attached-bitmap-page-allocator":
+        raise ValidationError("page allocator support contract overclaims attachment readiness")
+    if allocator_source != {
+            "path": allocator_item["path"], "sha256": allocator_item["sha256"]}:
+        raise ValidationError("page allocator contract does not bind the staged source")
+    if allocator_evidence != {
+            "built_into_ihk_validated": True,
+            "differential_legacy_parity_validated": False,
+            "exact_kernel_compile_validated": False,
+            "failure_injection_validated": False,
+            "gate_credit_eligible": False,
+            "rocky_runtime_validated": False,
+    }:
+        raise ValidationError("page allocator support contract improperly claims evidence or credit")
+
+    owner_contract = values["page_owner_registry.rs"]
+    owner_item = support[4]
+    owner_source = owner_contract.get("production_source", {})
+    owner_dependency = owner_contract.get("allocator_dependency", {})
+    owner_evidence = owner_contract.get("evidence_policy", {})
+    if owner_contract.get("gate_id") != "IHK-006":
+        raise ValidationError("page-owner registry support contract identity differs")
+    if owner_contract.get("foundation_status") != "private-crate-attached-raw-page-owner-registry":
+        raise ValidationError("page-owner registry support contract overclaims attachment readiness")
+    if owner_source != {
+            "path": owner_item["path"], "sha256": owner_item["sha256"]}:
+        raise ValidationError("page-owner registry contract does not bind the staged source")
+    if owner_dependency != {
+            "contract_path": allocator_item["contract_path"],
+            "contract_sha256": allocator_item["contract_sha256"],
+            "source_path": allocator_item["path"],
+            "source_sha256": allocator_item["sha256"],
+    }:
+        raise ValidationError("page-owner registry uses a different allocator contract")
+    if owner_evidence != {
+            "built_into_ihk_validated": True,
+            "exact_kernel_compile_validated": False,
+            "failure_injection_validated": False,
+            "gate_credit_eligible": False,
+            "legacy_adapters_validated": False,
+            "rocky_runtime_validated": False,
+    }:
+        raise ValidationError("page-owner registry support contract improperly claims evidence or credit")
+
     declarations = (
         '#[allow(dead_code, unreachable_pub)]\n#[path = "abi/x86_64.rs"]\nmod abi;',
         "#[allow(dead_code)]\nmod os_registry;",
         "#[allow(dead_code)]\nmod ihk_ioctl;",
+        "#[allow(dead_code)]\nmod page_allocator;",
+        "#[allow(dead_code)]\nmod page_owner_registry;",
     )
     for declaration in declarations:
         if source_text.count(declaration) != 1:

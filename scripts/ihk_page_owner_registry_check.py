@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Validate the unattached native Rust IHK raw-page ownership registry.
+"""Validate the private-crate-attached native Rust IHK page-owner registry.
 
 This checker freezes the safe, allocation-free source foundation and its exact
 Rocky compiler fixture. It is structurally incapable of granting IHK-006
-credit: kernel ownership, legacy adapters, Kbuild attachment, and runtime proof
-remain explicit blockers.
+credit: kernel ownership, legacy adapters, successful exact Kbuild evidence,
+and runtime proof remain explicit blockers.
 """
 
 import argparse
@@ -46,7 +46,6 @@ EXPECTED_INTERNAL_TESTS = [
     "forged_handle_metadata_cannot_clear_a_live_lease",
 ]
 EXPECTED_UNPROVEN = [
-    "native ihk crate-root, authoritative staging manifest, and Kbuild integration",
     "audited Linux irqsave-equivalent outer owner lock enforcing IRQ-disabled, nonpreemptible, no-sleep, non-reentrant execution and registry-to-allocator lock order",
     "pinned allocator and slot-storage owner with an audited drain-before-module-teardown path",
     "six versioned legacy allocation/free export adapters and all consumer migration",
@@ -200,7 +199,7 @@ def _validate_contract(contract):
     )
     if contract["schema_version"] != 1 or contract["gate_id"] != "IHK-006":
         raise ValidationError("unsupported page-owner registry contract identity")
-    if contract["foundation_status"] != "source-only-unattached-raw-page-owner-registry":
+    if contract["foundation_status"] != "private-crate-attached-raw-page-owner-registry":
         raise ValidationError("foundation status differs or overclaims integration")
 
     source = contract["production_source"]
@@ -356,8 +355,15 @@ def _validate_contract(contract):
         },
         "evidence_policy",
     )
-    if any(value is not False for value in evidence.values()):
-        raise ValidationError("source-only registry cannot claim evidence or gate credit")
+    if evidence != {
+        "built_into_ihk_validated": True,
+        "exact_kernel_compile_validated": False,
+        "failure_injection_validated": False,
+        "gate_credit_eligible": False,
+        "legacy_adapters_validated": False,
+        "rocky_runtime_validated": False,
+    }:
+        raise ValidationError("attachment contract cannot claim unproven evidence or gate credit")
     if contract["unproven"] != EXPECTED_UNPROVEN:
         raise ValidationError("unproven blocker inventory differs")
 
@@ -685,7 +691,7 @@ def validate_repository(repo):
         "gate_id": "IHK-006",
         "source_contract_validated": True,
         "gate_credit_eligible": False,
-        "built_into_ihk_validated": False,
+        "built_into_ihk_validated": True,
         "exact_kernel_compile_validated": False,
         "rocky_runtime_validated": False,
         "legacy_adapters_validated": False,
@@ -868,7 +874,7 @@ def main(argv=None):
         print(json.dumps(result, sort_keys=True, separators=(",", ":")))
     else:
         print(
-            "SOURCE-CONTRACT-VERIFIED fixture={0} attached=NOT_PROVEN "
+            "SOURCE-CONTRACT-VERIFIED fixture={0} private_attachment=VERIFIED "
             "legacy_adapters=NOT_PROVEN runtime=NOT_PROVEN "
             "gate_credit=FORBIDDEN".format(result["fixture_status"])
         )

@@ -30,6 +30,10 @@ on:
       - host-kernel/rocky/patches/0012-netfs-mark-nonstring-lookup-tables.patch
       - host-kernel/rocky/patches/0013-lib-crypto-mark-binary-vectors-nonstring.patch
       - host-kernel/rocky/patches/0014-gcc-15-mark-byte-arrays-nonstring.patch
+      - host-kernel/rocky/patches/0015-gcc-15-demote-unterminated-string-warning.patch
+      - host-kernel/rocky/patches/0016-gcc-15-disable-unterminated-string-warning.patch
+      - host-kernel/rocky/patches/0017-kbuild-use-cc-disable-warning.patch
+      - host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch
       - host-kernel/rocky/patches/series.json
       - host-kernel/rocky/source-lock.json
       - host-kernel/rocky/toolchain-lock.json
@@ -39,6 +43,8 @@ on:
       - scripts/tests/test_ihk_native_queue_check.py
       - scripts/ihk_os_registry_check.py
       - scripts/ihk_ioctl_dispatch_check.py
+      - scripts/ihk_page_allocator_check.py
+      - scripts/ihk_page_owner_registry_check.py
       - scripts/ihk_smp_native_lifecycle_check.py
       - scripts/mcctrl_native_lifecycle_check.py
       - scripts/native_rust_build_surface_audit.py
@@ -51,10 +57,18 @@ on:
       - scripts/tests/fixtures/ihk_os_registry_compile.rs
       - scripts/tests/fixtures/rust-core-rocky-6.12/**
       - scripts/tests/fixtures/ihk_ioctl_dispatch_compile.rs
+      - scripts/tests/fixtures/ihk_page_allocator_compile.rs
+      - scripts/tests/fixtures/ihk_page_allocator_lifetime_compile_fail.rs
+      - scripts/tests/fixtures/ihk_page_allocator_must_use_compile_fail.rs
+      - scripts/tests/fixtures/ihk_page_owner_registry_compile.rs
+      - scripts/tests/fixtures/ihk_page_owner_registry_lifetime_compile_fail.rs
+      - scripts/tests/fixtures/ihk_page_owner_registry_sync_compile_fail.rs
       - scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/ioctl.rs
       - scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/uaccess.rs
       - scripts/tests/test_ihk_os_registry_check.py
       - scripts/tests/test_ihk_ioctl_dispatch_check.py
+      - scripts/tests/test_ihk_page_allocator_check.py
+      - scripts/tests/test_ihk_page_owner_registry_check.py
       - scripts/tests/test_linux_api_exact_probe.py
       - scripts/tests/test_rust_target_compatibility_patches.py
       - scripts/tests/test_x86_64_shared_abi.py
@@ -88,6 +102,10 @@ on:
       - host-kernel/rocky/patches/0012-netfs-mark-nonstring-lookup-tables.patch
       - host-kernel/rocky/patches/0013-lib-crypto-mark-binary-vectors-nonstring.patch
       - host-kernel/rocky/patches/0014-gcc-15-mark-byte-arrays-nonstring.patch
+      - host-kernel/rocky/patches/0015-gcc-15-demote-unterminated-string-warning.patch
+      - host-kernel/rocky/patches/0016-gcc-15-disable-unterminated-string-warning.patch
+      - host-kernel/rocky/patches/0017-kbuild-use-cc-disable-warning.patch
+      - host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch
       - host-kernel/rocky/patches/series.json
       - host-kernel/rocky/source-lock.json
       - host-kernel/rocky/toolchain-lock.json
@@ -97,6 +115,8 @@ on:
       - scripts/tests/test_ihk_native_queue_check.py
       - scripts/ihk_os_registry_check.py
       - scripts/ihk_ioctl_dispatch_check.py
+      - scripts/ihk_page_allocator_check.py
+      - scripts/ihk_page_owner_registry_check.py
       - scripts/ihk_smp_native_lifecycle_check.py
       - scripts/mcctrl_native_lifecycle_check.py
       - scripts/native_rust_build_surface_audit.py
@@ -109,10 +129,18 @@ on:
       - scripts/tests/fixtures/ihk_os_registry_compile.rs
       - scripts/tests/fixtures/rust-core-rocky-6.12/**
       - scripts/tests/fixtures/ihk_ioctl_dispatch_compile.rs
+      - scripts/tests/fixtures/ihk_page_allocator_compile.rs
+      - scripts/tests/fixtures/ihk_page_allocator_lifetime_compile_fail.rs
+      - scripts/tests/fixtures/ihk_page_allocator_must_use_compile_fail.rs
+      - scripts/tests/fixtures/ihk_page_owner_registry_compile.rs
+      - scripts/tests/fixtures/ihk_page_owner_registry_lifetime_compile_fail.rs
+      - scripts/tests/fixtures/ihk_page_owner_registry_sync_compile_fail.rs
       - scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/ioctl.rs
       - scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/uaccess.rs
       - scripts/tests/test_ihk_os_registry_check.py
       - scripts/tests/test_ihk_ioctl_dispatch_check.py
+      - scripts/tests/test_ihk_page_allocator_check.py
+      - scripts/tests/test_ihk_page_owner_registry_check.py
       - scripts/tests/test_linux_api_exact_probe.py
       - scripts/tests/test_rust_target_compatibility_patches.py
       - scripts/tests/test_x86_64_shared_abi.py
@@ -208,6 +236,12 @@ jobs:
           python3 scripts/ihk_ioctl_dispatch_check.py --repo "$GITHUB_WORKSPACE"
           MCKERNEL_RUSTC_1_92="$(command -v rustc)" \
             python3 -m unittest -v scripts.tests.test_ihk_ioctl_dispatch_check
+          IHK_PAGE_ALLOCATOR_RUSTC="$(command -v rustc)" \
+            python3 scripts/ihk_page_allocator_check.py \
+              --repo "$GITHUB_WORKSPACE" --require-rustc
+          IHK_PAGE_OWNER_REGISTRY_RUSTC="$(command -v rustc)" \
+            python3 scripts/ihk_page_owner_registry_check.py \
+              --repo "$GITHUB_WORKSPACE" --require-rustc
           python3 scripts/ihk_smp_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE"
           python3 scripts/mcctrl_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE"
           python3 scripts/native_rust_unsafe_ffi_ledger.py --repo "$GITHUB_WORKSPACE" check
@@ -252,6 +286,10 @@ jobs:
             0012-netfs-mark-nonstring-lookup-tables.patch \
             0013-lib-crypto-mark-binary-vectors-nonstring.patch \
             0014-gcc-15-mark-byte-arrays-nonstring.patch
+            0015-gcc-15-demote-unterminated-string-warning.patch \
+            0016-gcc-15-disable-unterminated-string-warning.patch \
+            0017-kbuild-use-cc-disable-warning.patch \
+            0018-kbuild-order-unterminated-string-disable.patch
           do
             compat_patch="$GITHUB_WORKSPACE/host-kernel/rocky/patches/$compat_name"
             test -s "$compat_patch"

@@ -80,6 +80,57 @@ def synthetic_probes():
     }
 
 
+def add_tar_directory(stream, name, mode=0o755):
+    member = tarfile.TarInfo(name)
+    member.type = tarfile.DIRTYPE
+    member.mode = mode
+    member.mtime = 123456789
+    stream.addfile(member)
+
+
+def add_tar_file(stream, name, data, mode=0o644):
+    member = tarfile.TarInfo(name)
+    member.type = tarfile.REGTYPE
+    member.mode = mode
+    member.mtime = 123456789
+    member.size = len(data)
+    stream.addfile(member, io.BytesIO(data))
+
+
+def write_source_archive(path, changes_target="process/changes.rst"):
+    with tarfile.open(str(path), "w:xz") as stream:
+        add_tar_directory(stream, "linux")
+        add_tar_file(stream, "linux/Makefile", b"all:\n\t@true\n", 0o755)
+        add_tar_file(stream, "linux/COPYING", b"fixture license\n")
+        add_tar_directory(stream, "linux/Documentation")
+        add_tar_directory(stream, "linux/Documentation/process")
+        add_tar_file(
+            stream,
+            "linux/Documentation/process/changes.rst",
+            b"fixture changes\n",
+        )
+        add_tar_directory(stream, "linux/arch")
+        add_tar_directory(stream, "linux/arch/arm64")
+        add_tar_directory(stream, "linux/arch/arm64/tools")
+        add_tar_directory(stream, "linux/scripts")
+        add_tar_file(stream, "linux/scripts/syscall.tbl", b"fixture syscall\n")
+        changes = tarfile.TarInfo("linux/Documentation/Changes")
+        changes.type = tarfile.SYMTYPE
+        changes.linkname = changes_target
+        changes.mtime = 123456789
+        stream.addfile(changes)
+        syscall = tarfile.TarInfo("linux/arch/arm64/tools/syscall_64.tbl")
+        syscall.type = tarfile.SYMTYPE
+        syscall.linkname = "../../../scripts/syscall.tbl"
+        syscall.mtime = 123456789
+        stream.addfile(syscall)
+        copying = tarfile.TarInfo("linux/COPYING.hard")
+        copying.type = tarfile.LNKTYPE
+        copying.linkname = "linux/COPYING"
+        copying.mtime = 123456789
+        stream.addfile(copying)
+
+
 class RepositoryContractTests(unittest.TestCase):
     def test_contract_and_workflow_validate_without_credit(self):
         contract = resolution.validate_contract(REPO_ROOT)
@@ -103,7 +154,7 @@ class RepositoryContractTests(unittest.TestCase):
             self.assertEqual(
                 hashlib.sha256(path.read_bytes()).hexdigest(), binding["sha256"]
             )
-        self.assertEqual(14, len(contract["patch_authority"]["rust_compatibility"]))
+        self.assertEqual(18, len(contract["patch_authority"]["rust_compatibility"]))
         self.assertEqual(
             [row["path"] for row in contract["patch_authority"]["rust_compatibility"]],
             resolution.EXPECTED_COMPATIBILITY_PATCHES,
@@ -125,7 +176,7 @@ class RepositoryContractTests(unittest.TestCase):
                     "no_config_symbol_changes"
                 ]
             ),
-            13,
+            17,
         )
         self.assertEqual(
             contract["tool_environment"]["expected_file_owners"]["rust_src_core"],
@@ -414,98 +465,124 @@ class InputSafetyTests(unittest.TestCase):
                 resolution.regular_directory(link, "fixture assets")
         device = tarfile.TarInfo("linux/device")
         device.type = tarfile.CHRTYPE
-        for member in (device, tarfile.TarInfo("../escape")):
+        sparse = tarfile.TarInfo("linux/sparse")
+        sparse.type = tarfile.GNUTYPE_SPARSE
+        malformed_names = (
+            "/absolute",
+            "../escape",
+            "other/file",
+            "linux/../escape",
+            "linux/./escape",
+            "linux//escape",
+            "linux\\escape",
+        )
+        for member in (device, sparse) + tuple(
+            tarfile.TarInfo(name) for name in malformed_names
+        ):
             with self.assertRaisesRegex(
                 resolution.ConfigResolutionError, "archive member is unsafe"
             ):
                 resolution.safe_tar_member(member, "linux")
 
-    def test_archive_relative_symlink_is_normalized_inside_root(self):
-        link = tarfile.TarInfo("linux/Documentation/Changes")
-        link.type = tarfile.SYMTYPE
-        link.linkname = "process/changes.rst"
-        self.assertEqual(
-            resolution.safe_tar_member(link, "linux"),
-            "linux/Documentation/process/changes.rst",
-        )
-
-    def test_archive_symlink_escape_absolute_missing_and_cycle_are_rejected(self):
-        for linkname in ("/etc/passwd", "../../outside"):
-            link = tarfile.TarInfo("linux/link")
-            link.type = tarfile.SYMTYPE
-            link.linkname = linkname
-            with self.assertRaisesRegex(
-                resolution.ConfigResolutionError, "symlink target"
-            ):
-                resolution.safe_tar_member(link, "linux")
-
-        root = tarfile.TarInfo("linux")
-        root.type = tarfile.DIRTYPE
-        missing = tarfile.TarInfo("linux/missing-link")
-        missing.type = tarfile.SYMTYPE
-        missing.linkname = "missing-target"
-        with self.assertRaisesRegex(
-            resolution.ConfigResolutionError, "target is missing"
-        ):
-            resolution.validate_archive_members([root, missing], "linux")
-
-        first = tarfile.TarInfo("linux/first")
-        first.type = tarfile.SYMTYPE
-        first.linkname = "second"
-        second = tarfile.TarInfo("linux/second")
-        second.type = tarfile.SYMTYPE
-        second.linkname = "first"
-        with self.assertRaisesRegex(resolution.ConfigResolutionError, "cycle"):
-            resolution.validate_archive_members([root, first, second], "linux")
-
-    def test_archive_duplicate_and_symlink_ancestor_are_rejected(self):
-        root = tarfile.TarInfo("linux")
-        root.type = tarfile.DIRTYPE
-        duplicate = tarfile.TarInfo("linux")
-        duplicate.type = tarfile.DIRTYPE
-        with self.assertRaisesRegex(resolution.ConfigResolutionError, "duplicate"):
-            resolution.validate_archive_members([root, duplicate], "linux")
-
-        target = tarfile.TarInfo("linux/target")
-        target.type = tarfile.DIRTYPE
-        link = tarfile.TarInfo("linux/link")
-        link.type = tarfile.SYMTYPE
-        link.linkname = "target"
-        child = tarfile.TarInfo("linux/link/child")
-        with self.assertRaisesRegex(
-            resolution.ConfigResolutionError, "traverses a symlink"
-        ):
-            resolution.validate_archive_members([root, target, link, child], "linux")
-
-    def test_extract_source_preserves_valid_relative_symlink(self):
+    def test_exact_documentation_changes_and_in_root_hardlink_extract(self):
         with tempfile.TemporaryDirectory() as temporary:
-            base = Path(temporary)
-            archive = base / "source.tar.xz"
-            with tarfile.open(str(archive), "w:xz") as stream:
-                root = tarfile.TarInfo("linux")
-                root.type = tarfile.DIRTYPE
-                stream.addfile(root)
-                makefile_data = b"VERSION = 6\n"
-                makefile = tarfile.TarInfo("linux/Makefile")
-                makefile.size = len(makefile_data)
-                stream.addfile(makefile, io.BytesIO(makefile_data))
-                target_data = b"requirements\n"
-                target = tarfile.TarInfo(
-                    "linux/Documentation/process/changes.rst"
-                )
-                target.size = len(target_data)
-                stream.addfile(target, io.BytesIO(target_data))
-                link = tarfile.TarInfo("linux/Documentation/Changes")
-                link.type = tarfile.SYMTYPE
-                link.linkname = "process/changes.rst"
-                stream.addfile(link)
-            output = base / "output"
-            output.mkdir()
-            source = resolution.extract_source(archive, output, "linux")
-            extracted = source / "Documentation/Changes"
-            self.assertTrue(extracted.is_symlink())
-            self.assertEqual(os.readlink(str(extracted)), "process/changes.rst")
-            self.assertEqual(extracted.read_bytes(), target_data)
+            root = Path(temporary)
+            archive = root / "linux.tar.xz"
+            write_source_archive(archive)
+            target = root / "extract"
+            target.mkdir()
+            source = resolution.extract_source(archive, target, "linux")
+            changes = source / "Documentation" / "Changes"
+            self.assertTrue(changes.is_symlink())
+            self.assertEqual(os.readlink(str(changes)), "process/changes.rst")
+            self.assertEqual(changes.read_text(encoding="utf-8"), "fixture changes\n")
+            syscall = source / "arch" / "arm64" / "tools" / "syscall_64.tbl"
+            self.assertTrue(syscall.is_symlink())
+            self.assertEqual(
+                os.readlink(str(syscall)), "../../../scripts/syscall.tbl"
+            )
+            self.assertEqual(syscall.read_text(encoding="utf-8"), "fixture syscall\n")
+            copying = source / "COPYING"
+            hardlink = source / "COPYING.hard"
+            self.assertEqual(hardlink.read_bytes(), copying.read_bytes())
+            self.assertEqual(hardlink.stat().st_ino, copying.stat().st_ino)
+            self.assertEqual((source / "Makefile").stat().st_mode & 0o777, 0o755)
+
+    def test_documentation_changes_link_mutations_fail_closed(self):
+        mutations = (
+            "/etc/passwd",
+            "../../outside",
+            "../../../linux/Documentation/process/changes.rst",
+            "process\\changes.rst",
+            "process//changes.rst",
+            "",
+        )
+        for target in mutations:
+            with self.subTest(target=target):
+                member = tarfile.TarInfo("linux/Documentation/Changes")
+                member.type = tarfile.SYMTYPE
+                member.linkname = target
+                with self.assertRaisesRegex(
+                    resolution.ConfigResolutionError,
+                    "link target (?:is unsafe|escapes its root)",
+                ):
+                    resolution.safe_tar_member(member, "linux")
+
+    def test_hardlink_escape_and_missing_link_targets_fail_closed(self):
+        for target in ("/etc/passwd", "../outside", "linux/../../outside"):
+            with self.subTest(target=target):
+                member = tarfile.TarInfo("linux/COPYING.hard")
+                member.type = tarfile.LNKTYPE
+                member.linkname = target
+                with self.assertRaisesRegex(
+                    resolution.ConfigResolutionError,
+                    "link target (?:is unsafe|escapes its root)",
+                ):
+                    resolution.safe_tar_member(member, "linux")
+
+        root = tarfile.TarInfo("linux")
+        root.type = tarfile.DIRTYPE
+        missing = tarfile.TarInfo("linux/Documentation/Changes")
+        missing.type = tarfile.SYMTYPE
+        missing.linkname = "process/changes.rst"
+        with self.assertRaisesRegex(
+            resolution.ConfigResolutionError, "link target is not a member"
+        ):
+            resolution.validated_tar_members([root, missing], "linux")
+
+    def test_archive_is_fully_validated_before_any_member_is_written(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            archive = root / "linux.tar.xz"
+            write_source_archive(archive, changes_target="../../outside")
+            target = root / "extract"
+            target.mkdir()
+            with self.assertRaisesRegex(
+                resolution.ConfigResolutionError, "link target escapes its root"
+            ):
+                resolution.extract_source(archive, target, "linux")
+            self.assertEqual(list(target.iterdir()), [])
+
+    def test_duplicate_and_link_ancestor_members_fail_closed(self):
+        root = tarfile.TarInfo("linux")
+        root.type = tarfile.DIRTYPE
+        first = tarfile.TarInfo("linux/Makefile")
+        second = tarfile.TarInfo("linux/Makefile")
+        with self.assertRaisesRegex(
+            resolution.ConfigResolutionError, "duplicate member"
+        ):
+            resolution.validated_tar_members([root, first, second], "linux")
+
+        linked_directory = tarfile.TarInfo("linux/Documentation")
+        linked_directory.type = tarfile.SYMTYPE
+        linked_directory.linkname = "."
+        child = tarfile.TarInfo("linux/Documentation/Changes")
+        with self.assertRaisesRegex(
+            resolution.ConfigResolutionError, "descends through a non-directory"
+        ):
+            resolution.validated_tar_members(
+                [root, linked_directory, child], "linux"
+            )
 
     def test_gate_promotion_and_supplemental_removal_are_detected(self):
         contract = resolution.validate_contract(REPO_ROOT)

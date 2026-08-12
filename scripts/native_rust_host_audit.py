@@ -95,11 +95,16 @@ def main():
         )
     ]
     if [item.get("destination") for item in support] != [
-        "abi/x86_64.rs", "ikc_queue.rs", "os_registry.rs", "ikc_master.rs"
+        "abi/x86_64.rs",
+        "ikc_queue.rs",
+        "os_registry.rs",
+        "ikc_master.rs",
+        "page_allocator.rs",
+        "page_owner_registry.rs",
     ]:
         die(
             "Rust support input closure differs from the locked ABI, queue, "
-            "OS registry, and IKC master"
+            "OS registry, IKC master, page allocator, and page-owner registry"
         )
     for item in support:
         relative = item.get("repository_path")

@@ -26,10 +26,9 @@ EXPECTED_COMPILER = (
     "rustc 1.92.0 (ded5c06cf 2025-12-08) (Red Hat 1.92.0-1.el10)"
 )
 EXPECTED_UNPROVEN = [
-    "native ihk crate-root and Kbuild integration",
     "audited Linux spin_lock_irqsave-equivalent adapter enforcing IRQ-disabled, nonpreemptible, no-sleep, and non-reentrant execution for every operation including Drop",
     "six versioned legacy export adapters, raw-address registry integration, generation-free address adapter ownership proof, and consumer migration",
-    "exact Rocky 10.2 kernel compilation, modpost, load, and unload",
+    "successful exact Rocky 10.2 Kbuild compilation, modpost, load, unload, and allocator runtime for the private ihk attachment",
     "differential legacy allocation, exhaustion, fragmentation, errno behavior, and deliberate boundary deltas",
     "bounded irq-disabled latency and large fragmented-allocation pressure",
     "fault injection, KCSAN, lockdep, and long-run leak evidence",
@@ -178,7 +177,7 @@ def _validate_contract(contract):
     )
     if contract["schema_version"] != 1 or contract["gate_id"] != "IHK-006":
         raise ValidationError("unsupported page-allocator contract identity")
-    if contract["foundation_status"] != "source-only-bitmap-page-allocator":
+    if contract["foundation_status"] != "private-crate-attached-bitmap-page-allocator":
         raise ValidationError("foundation status differs or overclaims integration")
 
     _require_keys(contract["production_source"], {"path", "sha256"}, "production_source")
@@ -362,8 +361,15 @@ def _validate_contract(contract):
         },
         "evidence_policy",
     )
-    if any(value is not False for value in contract["evidence_policy"].values()):
-        raise ValidationError("source-only contract cannot claim evidence or gate credit")
+    if contract["evidence_policy"] != {
+        "built_into_ihk_validated": True,
+        "differential_legacy_parity_validated": False,
+        "exact_kernel_compile_validated": False,
+        "failure_injection_validated": False,
+        "gate_credit_eligible": False,
+        "rocky_runtime_validated": False,
+    }:
+        raise ValidationError("attachment contract cannot claim unproven evidence or gate credit")
     if contract["unproven"] != EXPECTED_UNPROVEN:
         raise ValidationError("unproven blocker inventory differs")
 
@@ -677,7 +683,7 @@ def validate_repository(repo):
         "gate_id": "IHK-006",
         "source_contract_validated": True,
         "gate_credit_eligible": False,
-        "built_into_ihk_validated": False,
+        "built_into_ihk_validated": True,
         "exact_kernel_compile_validated": False,
         "rocky_runtime_validated": False,
         "differential_legacy_parity_validated": False,

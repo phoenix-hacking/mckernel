@@ -32,14 +32,14 @@
     ]
   },
   "evidence_policy": {
-    "built_into_ihk_validated": false,
+    "built_into_ihk_validated": true,
     "differential_legacy_parity_validated": false,
     "exact_kernel_compile_validated": false,
     "failure_injection_validated": false,
     "gate_credit_eligible": false,
     "rocky_runtime_validated": false
   },
-  "foundation_status": "source-only-bitmap-page-allocator",
+  "foundation_status": "private-crate-attached-bitmap-page-allocator",
   "gate_id": "IHK-006",
   "intentional_legacy_deltas": [
     "reject zero, non-power-of-two, misaligned, truncated-byte, overflowing, and out-of-range inputs",
@@ -115,10 +115,9 @@
   },
   "schema_version": 1,
   "unproven": [
-    "native ihk crate-root and Kbuild integration",
     "audited Linux spin_lock_irqsave-equivalent adapter enforcing IRQ-disabled, nonpreemptible, no-sleep, and non-reentrant execution for every operation including Drop",
     "six versioned legacy export adapters, raw-address registry integration, generation-free address adapter ownership proof, and consumer migration",
-    "exact Rocky 10.2 kernel compilation, modpost, load, and unload",
+    "successful exact Rocky 10.2 Kbuild compilation, modpost, load, unload, and allocator runtime for the private ihk attachment",
     "differential legacy allocation, exhaustion, fragmentation, errno behavior, and deliberate boundary deltas",
     "bounded irq-disabled latency and large fragmented-allocation pressure",
     "fault injection, KCSAN, lockdep, and long-run leak evidence",

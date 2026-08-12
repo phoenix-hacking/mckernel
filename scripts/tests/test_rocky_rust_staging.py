@@ -104,6 +104,8 @@ class RockyRustStagingTests(unittest.TestCase):
                 "os_registry.rs",
                 "ikc_master.rs",
                 "ihk_ioctl.rs",
+                "page_allocator.rs",
+                "page_owner_registry.rs",
                 "ihk.rs",
                 "ihk_smp_x86_64.rs",
                 "mcctrl.rs",
@@ -212,6 +214,8 @@ class RockyRustStagingTests(unittest.TestCase):
                 "os_registry.rs",
                 "ikc_master.rs",
                 "ihk_ioctl.rs",
+                "page_allocator.rs",
+                "page_owner_registry.rs",
                 "ihk.rs",
                 "ihk_smp_x86_64.rs",
                 "mcctrl.rs",
@@ -287,6 +291,44 @@ class RockyRustStagingTests(unittest.TestCase):
         self.assertIn("mod ikc_master;", source)
         self.assertIn("mod ihk_ioctl;", source)
         self.assertFalse(plan["credit_eligible"])
+
+    def test_page_allocator_and_owner_registry_are_staged_in_dependency_order(self):
+        plan = self.plan()
+        kernel = os.path.join(self.temporary, "page-evidence-kernel")
+        os.makedirs(os.path.join(kernel, "drivers", "misc"))
+        target = staging.stage_for_evidence(plan, kernel)
+        allocator_path = os.path.join(target, "page_allocator.rs")
+        owner_path = os.path.join(target, "page_owner_registry.rs")
+        self.assertTrue(os.path.isfile(allocator_path))
+        self.assertTrue(os.path.isfile(owner_path))
+        self.assertEqual(staging.EXPECTED_INPUTS[7]["sha256"], digest(allocator_path))
+        self.assertEqual(staging.EXPECTED_INPUTS[8]["sha256"], digest(owner_path))
+        destinations = [item["destination"] for item in plan["manifest"]["inputs"]]
+        self.assertLess(
+            destinations.index("page_allocator.rs"),
+            destinations.index("page_owner_registry.rs"),
+        )
+        with open(os.path.join(target, "ihk.rs"), "r") as stream:
+            source = stream.read()
+        self.assertIn("mod page_allocator;", source)
+        self.assertIn("mod page_owner_registry;", source)
+        self.assertFalse(plan["credit_eligible"])
+
+    def test_page_support_path_injection_is_rejected_even_when_hashed(self):
+        for destination in ("page_allocator.rs", "page_owner_registry.rs"):
+            with self.subTest(destination=destination):
+                manifest = copy.deepcopy(self.manifest)
+                item = next(
+                    value for value in manifest["inputs"]
+                    if value["destination"] == destination
+                )
+                item["destination"] = "../" + destination
+                self.manifest = manifest
+                self.write_manifest()
+                with self.assertRaises(staging.ValidationError):
+                    self.plan()
+                with open(os.path.join(REPO_ROOT, staging.DEFAULT_MANIFEST), "r") as stream:
+                    self.manifest = json.load(stream)
 
     def test_ioctl_dispatcher_path_injection_is_rejected_even_when_hashed(self):
         item = self.manifest["inputs"][6]

@@ -39,6 +39,14 @@ PATCHES = (
     / "host-kernel/rocky/patches/0013-lib-crypto-mark-binary-vectors-nonstring.patch",
     REPO_ROOT
     / "host-kernel/rocky/patches/0014-gcc-15-mark-byte-arrays-nonstring.patch",
+    REPO_ROOT
+    / "host-kernel/rocky/patches/0015-gcc-15-demote-unterminated-string-warning.patch",
+    REPO_ROOT
+    / "host-kernel/rocky/patches/0016-gcc-15-disable-unterminated-string-warning.patch",
+    REPO_ROOT
+    / "host-kernel/rocky/patches/0017-kbuild-use-cc-disable-warning.patch",
+    REPO_ROOT
+    / "host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch",
 )
 PREIMAGE = REPO_ROOT / "scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs"
 POSTIMAGE_SHA256 = "555ff4dff6548bb5f24087cdad737363b5694668aa462f77adfb3571498ec678"
@@ -49,7 +57,7 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
     def test_every_patch_rejects_second_application(self):
         from scripts import linux_api_exact_probe as probe
 
-        self.assertEqual(14, len(PATCHES))
+        self.assertEqual(18, len(PATCHES))
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory) / "linux"
             shutil.copytree(str(CORE_PREIMAGE), str(root))
@@ -61,6 +69,20 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
             for patch in PATCHES:
                 with self.assertRaises(probe.ProbeError):
                     probe.run_checked(command + [str(patch)], root)
+
+    def test_stable_warning_policy_rejects_predecessor_order_mutations(self):
+        from scripts import linux_api_exact_probe as probe
+
+        command = ["patch", "-p1", "--batch", "--forward", "--fuzz=0", "-i"]
+        for successor, prefix_stop in ((15, 14), (17, 16)):
+            with self.subTest(successor=PATCHES[successor].name):
+                with tempfile.TemporaryDirectory() as directory:
+                    root = Path(directory) / "linux"
+                    shutil.copytree(str(CORE_PREIMAGE), str(root))
+                    for patch in PATCHES[2:prefix_stop]:
+                        probe.run_checked(command + [str(patch)], root)
+                    with self.assertRaises(probe.ProbeError):
+                        probe.run_checked(command + [str(PATCHES[successor])], root)
 
     def test_series_applies_in_order_to_exact_rocky_preimage(self):
         from scripts import linux_api_exact_probe as probe
@@ -275,6 +297,28 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
                 "KBUILD_CFLAGS += $(call cc-disable-warning, "
                 "default-const-init-unsafe)",
                 (root / "scripts/Makefile.extrawarn").read_text(encoding="utf-8"),
+            )
+            top_makefile = (root / "Makefile").read_text(encoding="utf-8")
+            extra_warnings = (root / "scripts/Makefile.extrawarn").read_text(
+                encoding="utf-8"
+            )
+            self.assertNotIn("unterminated-string-initialization", top_makefile)
+            self.assertNotIn("CONFIG_CC_NO_STRINGOP_OVERFLOW", top_makefile)
+            self.assertLess(
+                extra_warnings.index("KBUILD_CFLAGS += -Wextra"),
+                extra_warnings.index(
+                    "$(call cc-disable-warning, unterminated-string-initialization)"
+                ),
+            )
+            self.assertLess(
+                extra_warnings.index("KBUILD_CFLAGS += -Wall"),
+                extra_warnings.index("KBUILD_CFLAGS += -Wextra"),
+            )
+            self.assertIn(
+                "$(call cc-disable-warning, stringop-overflow)", extra_warnings
+            )
+            self.assertIn(
+                "$(call cc-disable-warning, frame-address)", extra_warnings
             )
 
     def test_core_edition_patch_without_version_helper_is_incomplete(self):

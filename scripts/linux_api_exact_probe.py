@@ -54,6 +54,10 @@ RUST_COMPAT_PATCH_PATHS = (
     Path("host-kernel/rocky/patches/0012-netfs-mark-nonstring-lookup-tables.patch"),
     Path("host-kernel/rocky/patches/0013-lib-crypto-mark-binary-vectors-nonstring.patch"),
     Path("host-kernel/rocky/patches/0014-gcc-15-mark-byte-arrays-nonstring.patch"),
+    Path("host-kernel/rocky/patches/0015-gcc-15-demote-unterminated-string-warning.patch"),
+    Path("host-kernel/rocky/patches/0016-gcc-15-disable-unterminated-string-warning.patch"),
+    Path("host-kernel/rocky/patches/0017-kbuild-use-cc-disable-warning.patch"),
+    Path("host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch"),
 )
 CONFIG_POLICY_PATH = Path("host-kernel/rocky/config-policy.json")
 TOOLCHAIN_LOCK_PATH = Path("host-kernel/rocky/toolchain-lock.json")
@@ -126,10 +130,18 @@ RUST_1_92_RECONCILIATION_POSTIMAGE_SHA256S = (
     ("scripts/Makefile.build", "9a4d2a34fb5db30c43db86f14474a9b3135bd877ad2850aedb437d0c7606f9df"),
 )
 CLANG_21_WARNING_PREIMAGE_SHA256S = (
+    ("Makefile", "b2d9e6f03fa466db088337572dec4b0f98db8f5775ca537bce0a179a1ac216bd"),
+    ("arch/loongarch/kernel/Makefile", "0f1aeabed014f3e16ab67cc0b9dfc7c72eb726b6439d95562ba08264fba19a9b"),
+    ("arch/loongarch/kvm/Makefile", "af128de8bcbb08f5864ae2337c99ffd1897552377618653ad85ff45c89260ff9"),
+    ("arch/riscv/kernel/Makefile", "7a41a7b2abe85a8ab1631c65ad5a9e6dc43f13a83cd6e9fc47514a34ef4612f8"),
     ("scripts/Makefile.extrawarn", "f8b158270273a1ce7054847b0e63051756fbfc5ad83f244d908229861300502b"),
 )
 CLANG_21_WARNING_POSTIMAGE_SHA256S = (
-    ("scripts/Makefile.extrawarn", "af133c210b1c2a2fbf13c5dbead71baf47824f32b93562ef5cb50ab3f84c4a93"),
+    ("Makefile", "96d61309de7b5a043f53f8203c05ea30c27808fc7db06b3503d98105f4fde6f6"),
+    ("arch/loongarch/kernel/Makefile", "029acf9d4dbff4a807595c9b3ee9e114e53e05c3d724d8db487d1da7c79a8021"),
+    ("arch/loongarch/kvm/Makefile", "f497d63c91d5e7b86f2f3b47058fa8dab3866a5903138ea566acfa83df6bb2a3"),
+    ("arch/riscv/kernel/Makefile", "b50f087e3bce61fd0541c0122e8ef997c3a3f3b64c8f2464f19a54e862d4b93c"),
+    ("scripts/Makefile.extrawarn", "c027f8dc67f2a00011f651517003b312c430d5411bf7783d766ed31a7b64ac02"),
 )
 CLANG_21_SOURCE_FIX_PREIMAGE_SHA256S = (
     ("mm/ksm.c", "9747f8b5edcc4cf75333bc24e393658c59b8f86fb58a8588ec28bed51f6e626b"),
@@ -188,6 +200,10 @@ RUST_COMPAT_UPSTREAM_COMMITS = (
     "58db1c3cd0ce857e7210b0a95908900c25c28c3e",
     "e202196b8aa249d78ab87eae56bbe0e71e3dc39c",
     "05e8d261a34e5c637e37be55c26e42cf5c75ee5c",
+    "d5d45a7f26194460964eb5677a9226697f7b7fdd",
+    "9d7a0577c9db35c4cc52db90bc415ea248446472",
+    "a79be02bba5c31f967885c7f3bf3a756d77d11d9",
+    "4f79eaa2ceac86a0e0f304b0bab556cca5bf4f30",
 )
 RUST_COMPAT_STABLE_COMMITS = (
     None,
@@ -204,6 +220,10 @@ RUST_COMPAT_STABLE_COMMITS = (
     None,
     None,
     None,
+    "9f58537e9b8f07d56aca68308dc73db60fbc7ad3",
+    "d66cf772bebd789448121cdfc42734fb042c9c4b",
+    "3f856d5d84467c7fba0bf3cca405089c497e37eb",
+    "dd8a734155ae28094d27b96c00a478fa0ee6d5d7",
 )
 RUST_CORE_COMPAT_FAILURE_EVIDENCE = (
     {
@@ -684,6 +704,34 @@ def rust_compatibility_patch_records(repo):
             "+static const u8 otus_magic[4] __nonstring = { OTUS_MAGIC };": 1,
             "+static const char cachefiles_charmap[64] __nonstring =": 1,
         },
+        {
+            "+#Currently, disable -Wunterminated-string-initialization as an error": 1,
+            "+KBUILD_CFLAGS += $(call cc-option, -Wno-error=unterminated-string-initialization)": 1,
+        },
+        {
+            "+#Currently, disable -Wunterminated-string-initialization as broken": 1,
+            "+KBUILD_CFLAGS += $(call cc-option, -Wno-unterminated-string-initialization)": 1,
+        },
+        {
+            "+KBUILD_CFLAGS-$(CONFIG_CC_NO_STRINGOP_OVERFLOW) += $(call cc-disable-warning, stringop-overflow)": 1,
+            "+KBUILD_CFLAGS += $(call cc-disable-warning, unterminated-string-initialization)": 1,
+            "+CFLAGS_module.o\t\t+= $(call cc-disable-warning, override-init)": 1,
+            "+CFLAGS_syscall.o\t+= $(call cc-disable-warning, override-init)": 1,
+            "+CFLAGS_traps.o\t\t+= $(call cc-disable-warning, override-init)": 1,
+            "+CFLAGS_perf_event.o\t+= $(call cc-disable-warning, override-init)": 1,
+            "+CFLAGS_exit.o\t+= $(call cc-disable-warning, override-init)": 1,
+            "+CFLAGS_syscall_table.o\t+= $(call cc-disable-warning, override-init)": 1,
+            "+CFLAGS_compat_syscall_table.o += $(call cc-disable-warning, override-init)": 1,
+            "+KBUILD_CFLAGS += $(call cc-disable-warning, frame-address)": 1,
+        },
+        {
+            "+KBUILD_CFLAGS += -Wextra": 1,
+            "+# Currently, disable -Wstringop-overflow for GCC 11, globally.": 1,
+            "+KBUILD_CFLAGS-$(CONFIG_CC_NO_STRINGOP_OVERFLOW) += $(call cc-disable-warning, stringop-overflow)": 1,
+            "+KBUILD_CFLAGS-$(CONFIG_CC_STRINGOP_OVERFLOW) += $(call cc-option, -Wstringop-overflow)": 1,
+            "+# Currently, disable -Wunterminated-string-initialization as broken": 1,
+            "+KBUILD_CFLAGS += $(call cc-disable-warning, unterminated-string-initialization)": 1,
+        },
     )
     required_deletions = (
         {},
@@ -747,8 +795,33 @@ def rust_compatibility_patch_records(repo):
             "-static const u8 otus_magic[4] = { OTUS_MAGIC };": 1,
             "-static const char cachefiles_charmap[64] =": 1,
         },
+        {},
+        {
+            "-#Currently, disable -Wunterminated-string-initialization as an error": 1,
+            "-KBUILD_CFLAGS += $(call cc-option, -Wno-error=unterminated-string-initialization)": 1,
+        },
+        {
+            "-KBUILD_CFLAGS-$(CONFIG_CC_NO_STRINGOP_OVERFLOW) += $(call cc-option, -Wno-stringop-overflow)": 1,
+            "-KBUILD_CFLAGS += $(call cc-option, -Wno-unterminated-string-initialization)": 1,
+            "-CFLAGS_module.o\t\t+= $(call cc-option,-Wno-override-init,)": 1,
+            "-CFLAGS_syscall.o\t+= $(call cc-option,-Wno-override-init,)": 1,
+            "-CFLAGS_traps.o\t\t+= $(call cc-option,-Wno-override-init,)": 1,
+            "-CFLAGS_perf_event.o\t+= $(call cc-option,-Wno-override-init,)": 1,
+            "-CFLAGS_exit.o\t+= $(call cc-option,-Wno-override-init,)": 1,
+            "-CFLAGS_syscall_table.o\t+= $(call cc-option,-Wno-override-init,)": 1,
+            "-CFLAGS_compat_syscall_table.o += $(call cc-option,-Wno-override-init,)": 1,
+            "-KBUILD_CFLAGS += $(call cc-disable-warning,frame-address,)": 1,
+        },
+        {
+            "-#Currently, disable -Wstringop-overflow for GCC 11, globally.": 1,
+            "-KBUILD_CFLAGS-$(CONFIG_CC_NO_STRINGOP_OVERFLOW) += $(call cc-disable-warning, stringop-overflow)": 1,
+            "-KBUILD_CFLAGS-$(CONFIG_CC_STRINGOP_OVERFLOW) += $(call cc-option, -Wstringop-overflow)": 1,
+            "-#Currently, disable -Wunterminated-string-initialization as broken": 1,
+            "-KBUILD_CFLAGS += $(call cc-disable-warning, unterminated-string-initialization)": 1,
+            "-KBUILD_CFLAGS += -Wextra": 1,
+        },
     )
-    expected_diff_counts = (1, 1, 3, 2, 3, 1, 4, 4, 1, 1, 1, 2, 2, 3)
+    expected_diff_counts = (1, 1, 3, 2, 3, 1, 4, 4, 1, 1, 1, 2, 2, 3, 1, 1, 5, 2)
     for index, relative in enumerate(RUST_COMPAT_PATCH_PATHS):
         path = repository_file(repo, relative, "Rust target compatibility patch")
         try:
@@ -776,6 +849,19 @@ def rust_compatibility_patch_records(repo):
             or any(
                 text.count(fragment) != count
                 for fragment, count in required_deletions[index].items()
+            )
+            or (
+                index >= 14
+                and (
+                    text.count("Stable-Branch: linux-6.12.y") != 1
+                    or text.count("Stable-First-Release: v6.12.31") != 1
+                    or text.count("Rocky-Base: linux-6.12.0-211.44.1.el10_2") != 1
+                    or text.count(
+                        "Rocky-Series-Context: cumulative ordered repository "
+                        "compatibility patches"
+                    ) != 1
+                    or text.count("License: GPL-2.0-only") != 1
+                )
             )
         ):
             raise ProbeError(

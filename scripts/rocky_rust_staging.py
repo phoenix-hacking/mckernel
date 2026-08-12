@@ -94,10 +94,22 @@ EXPECTED_INPUTS = (
         "repository_path": "host-kernel/native-rust/ihk_ioctl.rs",
         "sha256": "3d603424705a9b0fb18725bae1d75f1d279b249b866c15f15f98166d013edfbb",
     },
+    {
+        "destination": "page_allocator.rs",
+        "kind": "rust_support_module",
+        "repository_path": "host-kernel/native-rust/page_allocator.rs",
+        "sha256": "8e2af0cde06cbb70204540b493e8a0a66d5203195ed671235b64bed44d328bc5",
+    },
+    {
+        "destination": "page_owner_registry.rs",
+        "kind": "rust_support_module",
+        "repository_path": "host-kernel/native-rust/page_owner_registry.rs",
+        "sha256": "443d58fa5b2e423f538c6622ef04d8e34338abc43c5e0fd34811d52fc21f4869",
+    },
 )
 EXPECTED_PARENT_INTEGRATION_REF = {
     "repository_path": "host-kernel/kbuild/parent-integration-v1.json",
-    "sha256": "71dc858c23366b90c9d7d867afb539fedc2863c9274e43c5a991cccfe35c2d72",
+    "sha256": "2a69d39a32ce29e8a864192b8a0b80a1f0dffe2cf01fcd972e9fd2dca0d70611",
 }
 EXPECTED_PARENT_SOURCE = {
     "archive_basename": "linux-6.12.0-211.44.1.el10_2.tar.xz",
@@ -105,7 +117,7 @@ EXPECTED_PARENT_SOURCE = {
     "archive_root": "linux-6.12.0-211.44.1.el10_2",
     "source_lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-source-v1",
     "source_lock_repository_path": "host-kernel/rocky/source-lock.json",
-    "source_lock_sha256": "20c959d1d793293e38e82a67fbf235b42ad105c135145135f59750e698d60170",
+    "source_lock_sha256": "cbca9fe2e92f56ba7dba3dc03b018b11605f5d6c3dfdf9e3e4f33149c442f8ff",
     "source_rpm_sha256": "2bfeda65bd9bdd4b86650074c81e061c37822b80317ac0d4f5aacc89c85589cb",
 }
 EXPECTED_PARENT_PATCH = {
@@ -163,7 +175,7 @@ EXPECTED_MODULES = (
         "required_import_namespaces": [],
         "source_destination": "ihk.rs",
         "source_repository_path": "host-kernel/native-rust/ihk.rs",
-        "source_sha256": "7c674f91e300b64d434369ae652414d67c7976f7f8691c038632da838b7b97c3",
+        "source_sha256": "4aa64fb0cf2c8b1342409d731d5494fa845f5f157d12576abc53c2a9c70e7043",
     },
     {
         "crate": "ihk_smp_x86_64",
@@ -547,10 +559,15 @@ def _validate_input(repo_root, item, index):
         "kbuild_template": "Kbuild",
         "kconfig": "Kconfig",
         "shared_rust_abi": "abi/x86_64.rs",
-        "rust_support_module": "os_registry.rs",
         "rust_ioctl_dispatch": "ihk_ioctl.rs",
     }.get(item["kind"])
     if item["kind"] == "rust_module":
+        expected_destination = item["destination"]
+    elif item["kind"] == "rust_support_module" and item["destination"] in (
+        "os_registry.rs",
+        "page_allocator.rs",
+        "page_owner_registry.rs",
+    ):
         expected_destination = item["destination"]
     if expected_destination is None:
         raise ValidationError("{0}.kind is not a locked staging input kind".format(label))
@@ -619,6 +636,34 @@ def _validate_input(repo_root, item, index):
         for token in required:
             if text.count(token) != 1:
                 raise ValidationError("{0} lacks a unique master-registry marker: {1}".format(label, token))
+        lowered = text.lower()
+        for forbidden in ('extern "c"', "unsafe", "include!", "include_bytes!", "asm!(", "module!"):
+            if forbidden in lowered:
+                raise ValidationError("{0} contains forbidden executable/boundary construct: {1}".format(label, forbidden))
+    elif item["destination"] == "page_allocator.rs":
+        required = (
+            "pub(crate) struct BitmapPageAllocator",
+            "pub(crate) struct PageAllocation",
+            "pub(crate) struct PageReservation",
+            "operation_lock: AtomicBool,",
+        )
+        for token in required:
+            if text.count(token) != 1:
+                raise ValidationError("{0} lacks a unique page-allocator marker: {1}".format(label, token))
+        lowered = text.lower()
+        for forbidden in ('extern "c"', "unsafe", "include!", "include_bytes!", "asm!(", "module!"):
+            if forbidden in lowered:
+                raise ValidationError("{0} contains forbidden executable/boundary construct: {1}".format(label, forbidden))
+    elif item["destination"] == "page_owner_registry.rs":
+        required = (
+            "pub(crate) struct RawPageOwnerRegistry",
+            "pub(crate) struct RawPageOwnerSlot",
+            "pub(crate) struct RawPageAllocationHandle",
+            "static NEXT_REGISTRY_ID: AtomicU64",
+        )
+        for token in required:
+            if text.count(token) != 1:
+                raise ValidationError("{0} lacks a unique page-owner marker: {1}".format(label, token))
         lowered = text.lower()
         for forbidden in ('extern "c"', "unsafe", "include!", "include_bytes!", "asm!(", "module!"):
             if forbidden in lowered:
@@ -697,6 +742,8 @@ def _validate_module(repo_root, module, expected, index):
             "mod os_registry;",
             "mod ikc_master;",
             "mod ihk_ioctl;",
+            "mod page_allocator;",
+            "mod page_owner_registry;",
         ):
             if text.count(fragment) != 1:
                 raise ValidationError(
@@ -751,7 +798,8 @@ def validate_manifest(repo_root, manifest_path):
     if not isinstance(inputs, list) or len(inputs) != len(EXPECTED_INPUTS):
         raise ValidationError(
             "inputs must contain exactly Kbuild, Kconfig, the shared x86_64 ABI, "
-            "the IHK queue module, OS registry, IKC master module, and ioctl dispatcher"
+            "the IHK queue module, OS registry, IKC master module, ioctl dispatcher, "
+            "page allocator, and page-owner registry"
         )
     staged_files = [_validate_input(repo_root, item, index) for index, item in enumerate(inputs)]
     destinations = [item["destination"] for item in staged_files]
@@ -763,10 +811,13 @@ def validate_manifest(repo_root, manifest_path):
         "os_registry.rs",
         "ikc_master.rs",
         "ihk_ioctl.rs",
+        "page_allocator.rs",
+        "page_owner_registry.rs",
     ]:
         raise ValidationError(
             "inputs must be ordered as Kbuild, Kconfig, abi/x86_64.rs, "
-            "ikc_queue.rs, os_registry.rs, ikc_master.rs, ihk_ioctl.rs"
+            "ikc_queue.rs, os_registry.rs, ikc_master.rs, ihk_ioctl.rs, "
+            "page_allocator.rs, page_owner_registry.rs"
         )
 
     modules = manifest["modules"]

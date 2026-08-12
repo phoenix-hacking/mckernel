@@ -182,6 +182,24 @@ class NativeRustBuildSurfaceAuditTests(unittest.TestCase):
         with self.assertRaises(audit.AuditError):
             audit.audit(self.repo)
 
+    def test_manifest_cannot_redirect_page_support_modules(self):
+        for destination in ("page_allocator.rs", "page_owner_registry.rs"):
+            with self.subTest(destination=destination):
+                manifest = self.load_manifest()
+                for item in manifest["inputs"]:
+                    if item["destination"] == destination:
+                        item["repository_path"] = "host-kernel/native-rust/README.md"
+                        item["sha256"] = digest(os.path.join(
+                            self.repo, "host-kernel", "native-rust", "README.md"))
+                        break
+                self.write_manifest(manifest)
+                with self.assertRaises(audit.AuditError):
+                    audit.audit(self.repo)
+                shutil.copyfile(
+                    os.path.join(REPO_ROOT, "host-kernel", "kbuild", "stage-manifest.json"),
+                    self.manifest_path,
+                )
+
     def test_authoritative_kconfig_rejects_legacy_symbol_family(self):
         self.mutate_authority(
             "Kconfig", "MCKERNEL_IHK_RUST", "MCKERNEL_RUST_IHK"

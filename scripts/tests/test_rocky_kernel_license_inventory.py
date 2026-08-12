@@ -247,6 +247,10 @@ class LicenseInventoryTests(unittest.TestCase):
                 "host-kernel/rocky/patches/0012-netfs-mark-nonstring-lookup-tables.patch",
                 "host-kernel/rocky/patches/0013-lib-crypto-mark-binary-vectors-nonstring.patch",
                 "host-kernel/rocky/patches/0014-gcc-15-mark-byte-arrays-nonstring.patch",
+                "host-kernel/rocky/patches/0015-gcc-15-demote-unterminated-string-warning.patch",
+                "host-kernel/rocky/patches/0016-gcc-15-disable-unterminated-string-warning.patch",
+                "host-kernel/rocky/patches/0017-kbuild-use-cc-disable-warning.patch",
+                "host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch",
             ):
                 item = by_path["repository/" + relative]
                 patch = REPO_ROOT / relative
@@ -290,6 +294,7 @@ class LicenseInventoryTests(unittest.TestCase):
             "host-kernel/native-rust/ihk_ioctl.rs",
             "host-kernel/native-rust/os_registry.rs",
             "host-kernel/native-rust/page_allocator.rs",
+            "host-kernel/native-rust/page_owner_registry.rs",
             "scripts/tests/fixtures/ihk_native_master_compile.rs",
             "scripts/tests/fixtures/ihk_native_queue_compile.rs",
             "scripts/tests/fixtures/ihk_ioctl_dispatch_compile.rs",
@@ -297,6 +302,9 @@ class LicenseInventoryTests(unittest.TestCase):
             "scripts/tests/fixtures/ihk_page_allocator_compile.rs",
             "scripts/tests/fixtures/ihk_page_allocator_lifetime_compile_fail.rs",
             "scripts/tests/fixtures/ihk_page_allocator_must_use_compile_fail.rs",
+            "scripts/tests/fixtures/ihk_page_owner_registry_compile.rs",
+            "scripts/tests/fixtures/ihk_page_owner_registry_lifetime_compile_fail.rs",
+            "scripts/tests/fixtures/ihk_page_owner_registry_sync_compile_fail.rs",
         ):
             item = by_path["repository/" + relative]
             source = REPO_ROOT / relative
@@ -309,7 +317,11 @@ class LicenseInventoryTests(unittest.TestCase):
         fixture_root = "scripts/tests/fixtures/rust-core-rocky-6.12/"
         relatives = (
             "Documentation/kbuild/makefiles.rst",
+            "Makefile",
             "arch/arm64/Makefile",
+            "arch/loongarch/kernel/Makefile",
+            "arch/loongarch/kvm/Makefile",
+            "arch/riscv/kernel/Makefile",
             "fs/netfs/fscache_cache.c",
             "fs/netfs/fscache_cookie.c",
             "init/Kconfig",

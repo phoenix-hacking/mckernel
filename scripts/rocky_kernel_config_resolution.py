@@ -23,7 +23,7 @@ TOOLCHAIN_LOCK_PATH = Path("host-kernel/rocky/toolchain-lock.json")
 CONFIG_POLICY_PATH = Path("host-kernel/rocky/config-policy.json")
 CONFIG_FRAGMENT_PATH = Path("host-kernel/rocky/configs/rust-minimal.config")
 EXPECTED_CONTRACT_SHA256 = (
-    "5c15b34388f3a9fcaa41ef6833c2727677a825f95bb88d305988d1a34117bd77"
+    "d08f3875aaa552435e6f2eff5d60c5af2e89841b1fe8f63a3e5dda3fe6bbcd9a"
 )
 EXPECTED_WORKFLOW_SHA256 = (
     "d49e4ec8331a67e867f83fc9db39858a0c8a9eb25a2a802fa721bb513120f082"
@@ -58,6 +58,10 @@ EXPECTED_COMPATIBILITY_PATCHES = [
     "host-kernel/rocky/patches/0012-netfs-mark-nonstring-lookup-tables.patch",
     "host-kernel/rocky/patches/0013-lib-crypto-mark-binary-vectors-nonstring.patch",
     "host-kernel/rocky/patches/0014-gcc-15-mark-byte-arrays-nonstring.patch",
+    "host-kernel/rocky/patches/0015-gcc-15-demote-unterminated-string-warning.patch",
+    "host-kernel/rocky/patches/0016-gcc-15-disable-unterminated-string-warning.patch",
+    "host-kernel/rocky/patches/0017-kbuild-use-cc-disable-warning.patch",
+    "host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch",
 ]
 CAPTURE_ENVIRONMENT = {
     "ARCH": "x86_64",
@@ -378,8 +382,8 @@ def validate_contract(repo):
     _, series_digest = sha256_file(series_path)
     require_exact(series_digest, rocky_series["sha256"], "Rocky series digest")
     patches = patch_authority["rust_compatibility"]
-    if not isinstance(patches, list) or len(patches) != 14:
-        raise ConfigResolutionError("exactly fourteen compatibility patches are required")
+    if not isinstance(patches, list) or len(patches) != 18:
+        raise ConfigResolutionError("exactly eighteen compatibility patches are required")
     patch_directory = repo / "host-kernel/rocky/patches"
     discovered_patches = sorted(
         path.relative_to(repo).as_posix()
@@ -537,7 +541,7 @@ def validate_contract(repo):
     ) < 0:
         raise ConfigResolutionError("policy reconciliation blocker is missing")
     if not any(
-        "0006 through 0014" in item and "compile probes" in item
+        "0006 through 0018" in item and "compile probes" in item
         for item in contract["success_blockers"]
     ):
         raise ConfigResolutionError("compatibility compile-scope blocker is missing")
@@ -982,7 +986,24 @@ def verify_asset(path, record, label):
     return path
 
 
-def normalized_symlink_target(member, root):
+def normalized_tar_member_path(name, root):
+    if not isinstance(name, str):
+        raise ConfigResolutionError("source archive member name is not text")
+    normalized_name = name.rstrip("/")
+    parts = normalized_name.split("/")
+    if (
+        not normalized_name
+        or normalized_name.startswith("/")
+        or "\\" in normalized_name
+        or "\x00" in normalized_name
+        or any(part in ("", ".", "..") for part in parts)
+        or parts[0] != root
+    ):
+        raise ConfigResolutionError("source archive member is unsafe: {}".format(name))
+    return PurePosixPath(*parts)
+
+
+def normalized_tar_link_target(member, member_path, root):
     linkname = member.linkname
     if (
         not isinstance(linkname, str)
@@ -990,107 +1011,227 @@ def normalized_symlink_target(member, root):
         or linkname.startswith("/")
         or "\\" in linkname
         or "\x00" in linkname
+        or any(part == "" for part in linkname.split("/"))
     ):
         raise ConfigResolutionError(
-            "source archive symlink target is unsafe: {} -> {}".format(
+            "source archive link target is unsafe: {} -> {}".format(
                 member.name, linkname
             )
         )
-    parts = member.name.rstrip("/").split("/")[:-1]
+
+    # POSIX symlinks are relative to their containing directory. Tar hard-link
+    # names are archive member names and are therefore relative to the archive
+    # root. Resolve both forms lexically; no filesystem lookup is authoritative.
+    if member.issym():
+        parts = list(member_path.parent.parts)
+    else:
+        parts = []
     for part in linkname.split("/"):
-        if part in ("", "."):
+        if part == ".":
             continue
         if part == "..":
             if len(parts) <= 1:
                 raise ConfigResolutionError(
-                    "source archive symlink target escapes root: {} -> {}".format(
+                    "source archive link target escapes its root: {} -> {}".format(
                         member.name, linkname
                     )
                 )
             parts.pop()
-        else:
-            parts.append(part)
+            continue
+        parts.append(part)
     if not parts or parts[0] != root:
         raise ConfigResolutionError(
-            "source archive symlink target escapes root: {} -> {}".format(
+            "source archive link target escapes its root: {} -> {}".format(
                 member.name, linkname
             )
         )
-    return "/".join(parts)
+    return PurePosixPath(*parts)
 
 
 def safe_tar_member(member, root):
-    name = member.name.rstrip("/")
-    parts = name.split("/")
-    if (
-        not name
-        or name.startswith("/")
-        or "\\" in name
-        or "\x00" in name
-        or any(part in ("", ".", "..") for part in parts)
-        or parts[0] != root
-        or member.islnk()
-        or not (member.isfile() or member.isdir() or member.issym())
-    ):
-        raise ConfigResolutionError("source archive member is unsafe: {}".format(member.name))
-    if member.issym():
-        return normalized_symlink_target(member, root)
-    return None
+    path = normalized_tar_member_path(member.name, root)
+    target = None
+    if member.type in (tarfile.REGTYPE, tarfile.AREGTYPE):
+        kind = "file"
+        if not isinstance(member.size, int) or member.size < 0:
+            raise ConfigResolutionError(
+                "source archive member has an invalid size: {}".format(member.name)
+            )
+    elif member.type == tarfile.DIRTYPE:
+        kind = "directory"
+    elif member.type == tarfile.SYMTYPE:
+        kind = "symlink"
+        target = normalized_tar_link_target(member, path, root)
+    elif member.type == tarfile.LNKTYPE:
+        kind = "hardlink"
+        target = normalized_tar_link_target(member, path, root)
+    else:
+        raise ConfigResolutionError(
+            "source archive member is unsafe: {}".format(member.name)
+        )
+    return {"kind": kind, "member": member, "path": path, "target": target}
 
 
-def validate_archive_members(members, root):
+def validated_tar_members(members, root):
     if (
         not isinstance(root, str)
         or not root
         or "/" in root
         or "\\" in root
+        or "\x00" in root
         or root in (".", "..")
     ):
-        raise ConfigResolutionError("source archive root is unsafe")
+        raise ConfigResolutionError("source archive root name is unsafe")
+    records = []
     by_name = {}
-    symlink_targets = {}
     for member in members:
-        name = member.name.rstrip("/")
+        record = safe_tar_member(member, root)
+        name = record["path"].as_posix()
         if name in by_name:
             raise ConfigResolutionError(
-                "source archive contains duplicate member: {}".format(member.name)
+                "source archive contains a duplicate member: {}".format(name)
             )
-        target = safe_tar_member(member, root)
-        by_name[name] = member
-        if target is not None:
-            symlink_targets[name] = target
+        by_name[name] = record
+        records.append(record)
 
-    root_member = by_name.get(root)
-    if root_member is None or not root_member.isdir():
-        raise ConfigResolutionError("source archive root directory is missing")
-    for name, target in symlink_targets.items():
-        if target not in by_name:
+    root_record = by_name.get(root)
+    if root_record is None or root_record["kind"] != "directory":
+        raise ConfigResolutionError("source archive needs one explicit root directory")
+
+    known_directories = {root}
+    for record in records:
+        path = record["path"]
+        for parent in path.parents:
+            parent_name = parent.as_posix()
+            if parent_name == ".":
+                break
+            known_directories.add(parent_name)
+        for parent in path.parents:
+            parent_name = parent.as_posix()
+            if parent_name == ".":
+                break
+            prior = by_name.get(parent_name)
+            if prior is not None and prior["kind"] != "directory":
+                raise ConfigResolutionError(
+                    "source archive member descends through a non-directory: {}".format(
+                        record["member"].name
+                    )
+                )
+
+    for record in records:
+        target = record["target"]
+        if target is None:
+            continue
+        target_name = target.as_posix()
+        target_record = by_name.get(target_name)
+        if target_record is None and target_name not in known_directories:
             raise ConfigResolutionError(
-                "source archive symlink target is missing: {} -> {}".format(
-                    name, target
+                "source archive link target is not a member: {} -> {}".format(
+                    record["member"].name, record["member"].linkname
                 )
             )
-        seen = {name}
-        current = target
-        while current in symlink_targets:
-            if current in seen:
-                raise ConfigResolutionError(
-                    "source archive symlink cycle is unsafe: {}".format(name)
+        if record["kind"] == "hardlink" and (
+            target_record is None or target_record["kind"] != "file"
+        ):
+            raise ConfigResolutionError(
+                "source archive hard-link target is not a regular file: {} -> {}".format(
+                    record["member"].name, record["member"].linkname
                 )
-            seen.add(current)
-            current = symlink_targets[current]
+            )
+    return records
 
-    symlink_names = set(symlink_targets)
-    for name in by_name:
-        parts = name.split("/")
-        for index in range(1, len(parts)):
-            if "/".join(parts[:index]) in symlink_names:
-                raise ConfigResolutionError(
-                    "source archive member traverses a symlink: {}".format(name)
+
+def tar_output_path(target, archive_path):
+    return target.joinpath(*archive_path.parts)
+
+
+def extract_validated_tar(stream, records, target):
+    directory_paths = set()
+    explicit_directories = []
+    for record in records:
+        for parent in record["path"].parents:
+            if parent.as_posix() == ".":
+                break
+            directory_paths.add(parent)
+        if record["kind"] == "directory":
+            directory_paths.add(record["path"])
+            explicit_directories.append(record)
+
+    for path in sorted(
+        directory_paths, key=lambda item: (len(item.parts), item.as_posix())
+    ):
+        destination = tar_output_path(target, path)
+        destination.mkdir(mode=0o700)
+
+    for record in records:
+        if record["kind"] != "file":
+            continue
+        member = record["member"]
+        destination = tar_output_path(target, record["path"])
+        source = stream.extractfile(member)
+        if source is None:
+            raise ConfigResolutionError(
+                "source archive regular member has no data: {}".format(member.name)
+            )
+        copied = 0
+        with source:
+            with destination.open("xb") as output:
+                while True:
+                    chunk = source.read(1024 * 1024)
+                    if not chunk:
+                        break
+                    copied += len(chunk)
+                    if copied > member.size:
+                        raise ConfigResolutionError(
+                            "source archive member exceeds its declared size: {}".format(
+                                member.name
+                            )
+                        )
+                    output.write(chunk)
+        if copied != member.size:
+            raise ConfigResolutionError(
+                "source archive member differs from its declared size: {}".format(
+                    member.name
                 )
+            )
+        os.chmod(str(destination), member.mode & 0o777)
+        os.utime(str(destination), (member.mtime, member.mtime))
+
+    for record in records:
+        member = record["member"]
+        destination = tar_output_path(target, record["path"])
+        if record["kind"] == "symlink":
+            destination.symlink_to(member.linkname)
+        elif record["kind"] == "hardlink":
+            source = tar_output_path(target, record["target"])
+            if source.is_symlink() or not source.is_file():
+                raise ConfigResolutionError(
+                    "source archive hard-link target was not safely extracted: {}".format(
+                        member.name
+                    )
+                )
+            os.link(str(source), str(destination))
+
+    for record in sorted(
+        explicit_directories,
+        key=lambda item: (-len(item["path"].parts), item["path"].as_posix()),
+    ):
+        member = record["member"]
+        destination = tar_output_path(target, record["path"])
+        os.chmod(str(destination), member.mode & 0o777)
+        os.utime(str(destination), (member.mtime, member.mtime))
 
 
 def extract_source(archive, target, root_name):
+    target = Path(target)
+    if target.is_symlink() or not target.is_dir():
+        raise ConfigResolutionError("source extraction target is not a regular directory")
+    try:
+        next(target.iterdir())
+    except StopIteration:
+        pass
+    else:
+        raise ConfigResolutionError("source extraction target is not empty")
     try:
         stream = tarfile.open(str(archive), "r:xz")
     except (OSError, tarfile.TarError) as exc:
@@ -1099,8 +1240,8 @@ def extract_source(archive, target, root_name):
         members = stream.getmembers()
         if not members:
             raise ConfigResolutionError("source archive is empty")
-        validate_archive_members(members, root_name)
-        stream.extractall(str(target), members=members)
+        records = validated_tar_members(members, root_name)
+        extract_validated_tar(stream, records, target)
     source = target / root_name
     if source.is_symlink() or not (source / "Makefile").is_file():
         raise ConfigResolutionError("source archive root is invalid")

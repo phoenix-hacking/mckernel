@@ -103,9 +103,9 @@ class IhkPageOwnerRegistryCheckTests(unittest.TestCase):
         result = registry_check.validate_repository(REPO_ROOT)
         self.assertEqual("IHK-006", result["gate_id"])
         self.assertTrue(result["source_contract_validated"])
+        self.assertTrue(result["built_into_ihk_validated"])
         for field in (
             "gate_credit_eligible",
-            "built_into_ihk_validated",
             "exact_kernel_compile_validated",
             "rocky_runtime_validated",
             "legacy_adapters_validated",
@@ -183,7 +183,7 @@ class IhkPageOwnerRegistryCheckTests(unittest.TestCase):
         for field in self.contract["evidence_policy"]:
             with self.subTest(field=field):
                 mutated = json.loads(json.dumps(self.contract))
-                mutated["evidence_policy"][field] = True
+                mutated["evidence_policy"][field] = not mutated["evidence_policy"][field]
                 self.write_contract(mutated)
                 with self.assertRaisesRegex(registry_check.ValidationError, "cannot claim"):
                     registry_check.validate_repository(self.repo)

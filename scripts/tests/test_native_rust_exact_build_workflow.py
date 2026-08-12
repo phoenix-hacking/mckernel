@@ -9,6 +9,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 WORKFLOW = REPO_ROOT / ".github/workflows/native-rust-host-modules-exact-build.yml"
+SOURCE_WORKFLOW = REPO_ROOT / ".github/workflows/rocky-kernel-source-evidence.yml"
 PATCH = REPO_ROOT / "host-kernel/kbuild/patches/0002-rust-bindings-expose-module-parameters.patch"
 CONFIG = REPO_ROOT / "host-kernel/rocky/configs/native-rust-evidence.config"
 
@@ -17,6 +18,7 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.workflow = WORKFLOW.read_text(encoding="utf-8")
+        cls.source_workflow = SOURCE_WORKFLOW.read_text(encoding="utf-8")
 
     def test_runtime_and_actions_are_digest_pinned(self):
         image = (
@@ -126,9 +128,25 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             "0014-gcc-15-mark-byte-arrays-nonstring.patch",
             crypto_nonstring,
         )
+        warning_demote = self.workflow.index(
+            "0015-gcc-15-demote-unterminated-string-warning.patch",
+            byte_array_nonstring,
+        )
+        warning_disable = self.workflow.index(
+            "0016-gcc-15-disable-unterminated-string-warning.patch",
+            warning_demote,
+        )
+        warning_helper = self.workflow.index(
+            "0017-kbuild-use-cc-disable-warning.patch",
+            warning_disable,
+        )
+        warning_order = self.workflow.index(
+            "0018-kbuild-order-unterminated-string-disable.patch",
+            warning_helper,
+        )
         project = self.workflow.index(
             "0001-drivers-misc-add-mckernel-rust-host-modules.patch",
-            byte_array_nonstring,
+            warning_order,
         )
         self.assertLess(debrand, softfloat)
         self.assertLess(softfloat, target_spec)
@@ -144,7 +162,11 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         self.assertLess(ksm_clang_21, netfs_nonstring)
         self.assertLess(netfs_nonstring, crypto_nonstring)
         self.assertLess(crypto_nonstring, byte_array_nonstring)
-        self.assertLess(byte_array_nonstring, project)
+        self.assertLess(byte_array_nonstring, warning_demote)
+        self.assertLess(warning_demote, warning_disable)
+        self.assertLess(warning_disable, warning_helper)
+        self.assertLess(warning_helper, warning_order)
+        self.assertLess(warning_order, project)
 
     def test_failure_log_and_artifact_capture_are_unconditional(self):
         bootstrap = self.workflow.index("Refuse the wrong runtime")
@@ -284,6 +306,61 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         self.assertIn("fetch-depth: 0", checkout)
         self.assertNotIn("fetch-depth: 1", checkout)
         self.assertIn("persist-credentials: false", checkout)
+
+    def test_attached_page_foundations_require_exact_rocky_rustc(self):
+        for path in (
+            "scripts/ihk_page_allocator_check.py",
+            "scripts/ihk_page_owner_registry_check.py",
+            "scripts/tests/fixtures/ihk_page_allocator_compile.rs",
+            "scripts/tests/fixtures/ihk_page_allocator_lifetime_compile_fail.rs",
+            "scripts/tests/fixtures/ihk_page_allocator_must_use_compile_fail.rs",
+            "scripts/tests/fixtures/ihk_page_owner_registry_compile.rs",
+            "scripts/tests/fixtures/ihk_page_owner_registry_lifetime_compile_fail.rs",
+            "scripts/tests/fixtures/ihk_page_owner_registry_sync_compile_fail.rs",
+            "scripts/tests/test_ihk_page_allocator_check.py",
+            "scripts/tests/test_ihk_page_owner_registry_check.py",
+        ):
+            self.assertGreaterEqual(self.workflow.count(path), 2)
+        self.assertIn(
+            'IHK_PAGE_ALLOCATOR_RUSTC="$(command -v rustc)"', self.workflow
+        )
+        self.assertIn(
+            'IHK_PAGE_OWNER_REGISTRY_RUSTC="$(command -v rustc)"', self.workflow
+        )
+        allocator = self.workflow.index("IHK_PAGE_ALLOCATOR_RUSTC=")
+        owner = self.workflow.index("IHK_PAGE_OWNER_REGISTRY_RUSTC=", allocator)
+        self.assertIn("--require-rustc", self.workflow[allocator:owner])
+        self.assertIn("--require-rustc", self.workflow[owner:])
+
+    def test_central_source_ci_uses_the_same_exact_rocky_compiler_contract(self):
+        image = (
+            "rockylinux/rockylinux:10.2@sha256:"
+            "e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176"
+        )
+        self.assertIn(image, self.source_workflow)
+        self.assertIn("submodules: recursive", self.source_workflow)
+        self.assertIn(
+            'test "$(git -C ihk rev-parse HEAD)" = \\\n'
+            '            "3114d9e7101ad52030eb3effa849a5c108972a1f"',
+            self.source_workflow,
+        )
+        self.assertIn(
+            "rustc 1.92.0 (ded5c06cf 2025-12-08) (Red Hat 1.92.0-1.el10)",
+            self.source_workflow,
+        )
+        for environment, checker in (
+            ("IHK_PAGE_ALLOCATOR_RUSTC", "scripts/ihk_page_allocator_check.py"),
+            (
+                "IHK_PAGE_OWNER_REGISTRY_RUSTC",
+                "scripts/ihk_page_owner_registry_check.py",
+            ),
+        ):
+            self.assertIn(environment + '="$(command -v rustc)"', self.source_workflow)
+            start = self.source_workflow.index(environment + "=")
+            end = self.source_workflow.find("\n", self.source_workflow.index("--require-rustc", start))
+            invocation = self.source_workflow[start:end]
+            self.assertIn(checker, invocation)
+            self.assertIn("--require-rustc", invocation)
 
 
 if __name__ == "__main__":

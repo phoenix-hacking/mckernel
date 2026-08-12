@@ -38,7 +38,7 @@ EXPECTED_CONTAINER_IMAGE = (
     "e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176"
 )
 EXPECTED_SOURCE_LOCK_SHA256 = (
-    "20c959d1d793293e38e82a67fbf235b42ad105c135145135f59750e698d60170"
+    "cbca9fe2e92f56ba7dba3dc03b018b11605f5d6c3dfdf9e3e4f33149c442f8ff"
 )
 EXPECTED_PATCH_SERIES_SHA256 = (
     "6a1a5e8fb13b6ce6ed35bd8e5487bb67ecf92d2be927799b660f21b5631f68fb"
@@ -101,6 +101,8 @@ EXPECTED_STAGE_REPOSITORY_INPUT_PATHS = sorted([
     "host-kernel/native-rust/ikc_queue.rs",
     "host-kernel/native-rust/mcctrl.rs",
     "host-kernel/native-rust/os_registry.rs",
+    "host-kernel/native-rust/page_allocator.rs",
+    "host-kernel/native-rust/page_owner_registry.rs",
 ])
 EXPECTED_REPOSITORY_INPUT_PATHS = [
     "host-kernel/kbuild/parent-integration-v1.json",
@@ -118,6 +120,7 @@ EXPECTED_REPOSITORY_INPUT_PATHS = [
     "host-kernel/native-rust/mcctrl.rs",
     "host-kernel/native-rust/os_registry.rs",
     "host-kernel/native-rust/page_allocator.rs",
+    "host-kernel/native-rust/page_owner_registry.rs",
     "host-kernel/rocky/configs/native-rust-evidence.config",
     "host-kernel/rocky/configs/rust-minimal.config",
     "host-kernel/rocky/patches/0001-x86-rust-set-rustc-abi-x86-softfloat.patch",
@@ -134,6 +137,10 @@ EXPECTED_REPOSITORY_INPUT_PATHS = [
     "host-kernel/rocky/patches/0012-netfs-mark-nonstring-lookup-tables.patch",
     "host-kernel/rocky/patches/0013-lib-crypto-mark-binary-vectors-nonstring.patch",
     "host-kernel/rocky/patches/0014-gcc-15-mark-byte-arrays-nonstring.patch",
+    "host-kernel/rocky/patches/0015-gcc-15-demote-unterminated-string-warning.patch",
+    "host-kernel/rocky/patches/0016-gcc-15-disable-unterminated-string-warning.patch",
+    "host-kernel/rocky/patches/0017-kbuild-use-cc-disable-warning.patch",
+    "host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch",
     "host-kernel/rocky/patches/series.json",
     "scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs",
     "scripts/tests/fixtures/ihk_native_master_compile.rs",
@@ -143,8 +150,15 @@ EXPECTED_REPOSITORY_INPUT_PATHS = [
     "scripts/tests/fixtures/ihk_page_allocator_compile.rs",
     "scripts/tests/fixtures/ihk_page_allocator_lifetime_compile_fail.rs",
     "scripts/tests/fixtures/ihk_page_allocator_must_use_compile_fail.rs",
+    "scripts/tests/fixtures/ihk_page_owner_registry_compile.rs",
+    "scripts/tests/fixtures/ihk_page_owner_registry_lifetime_compile_fail.rs",
+    "scripts/tests/fixtures/ihk_page_owner_registry_sync_compile_fail.rs",
     "scripts/tests/fixtures/rust-core-rocky-6.12/Documentation/kbuild/makefiles.rst",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/Makefile",
     "scripts/tests/fixtures/rust-core-rocky-6.12/arch/arm64/Makefile",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/arch/loongarch/kernel/Makefile",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/arch/loongarch/kvm/Makefile",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/arch/riscv/kernel/Makefile",
     "scripts/tests/fixtures/rust-core-rocky-6.12/drivers/iio/magnetometer/ak8974.c",
     "scripts/tests/fixtures/rust-core-rocky-6.12/drivers/input/joystick/magellan.c",
     "scripts/tests/fixtures/rust-core-rocky-6.12/drivers/net/wireless/ath/carl9170/fw.c",

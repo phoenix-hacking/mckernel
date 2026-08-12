@@ -448,6 +448,30 @@ class ContractTests(ProbeFixture):
             workflow.index(probe.RUST_COMPAT_PATCH_PATHS[10].name),
             workflow.index(probe.RUST_COMPAT_PATCH_PATHS[11].name),
         )
+        self.assertLess(
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[11].name),
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[12].name),
+        )
+        self.assertLess(
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[12].name),
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[13].name),
+        )
+        self.assertLess(
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[13].name),
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[14].name),
+        )
+        self.assertLess(
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[14].name),
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[15].name),
+        )
+        self.assertLess(
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[15].name),
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[16].name),
+        )
+        self.assertLess(
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[16].name),
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[17].name),
+        )
 
     def test_rust_compatibility_patch_shape_is_fail_closed(self):
         original = (REPO_ROOT / probe.RUST_COMPAT_PATCH_PATHS[3]).read_text(
@@ -624,6 +648,59 @@ class ContractTests(ProbeFixture):
                 original.replace(" __nonstring = \"-PAEW\"", " = \"-PAEW\"", 1),
                 encoding="utf-8",
             )
+            with self.assertRaises(probe.ProbeError):
+                probe.rust_compatibility_patch_records(root)
+
+    def test_stable_warning_policy_chain_shape_is_fail_closed(self):
+        mutations = (
+            (14, "-Wno-error=unterminated-string-initialization", "-Wno-error"),
+            (15, "-Wno-unterminated-string-initialization", "-Wno-unused"),
+            (16, "$(call cc-disable-warning, stringop-overflow)", "-Wno-stringop-overflow"),
+            (17, "+KBUILD_CFLAGS += -Wextra", "+KBUILD_CFLAGS += -Wall"),
+        )
+        for index, old, new in mutations:
+            with self.subTest(patch=probe.RUST_COMPAT_PATCH_PATHS[index].name):
+                with tempfile.TemporaryDirectory() as directory:
+                    root = Path(directory)
+                    self.copy_rust_compatibility_inputs(root)
+                    path = root / probe.RUST_COMPAT_PATCH_PATHS[index]
+                    original = path.read_text(encoding="utf-8")
+                    self.assertIn(old, original)
+                    path.write_text(original.replace(old, new, 1), encoding="utf-8")
+                    with self.assertRaises(probe.ProbeError):
+                        probe.rust_compatibility_patch_records(root)
+
+    def test_stable_warning_policy_provenance_is_fail_closed(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.copy_rust_compatibility_inputs(root)
+            path = root / probe.RUST_COMPAT_PATCH_PATHS[14]
+            original = path.read_text(encoding="utf-8")
+            stable = probe.RUST_COMPAT_STABLE_COMMITS[14]
+            self.assertEqual(2, original.count(stable))
+            path.write_text(original.replace(stable, "0" * 40, 1), encoding="utf-8")
+            with self.assertRaises(probe.ProbeError):
+                probe.rust_compatibility_patch_records(root)
+
+    def test_stable_warning_policy_release_binding_is_fail_closed(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.copy_rust_compatibility_inputs(root)
+            path = root / probe.RUST_COMPAT_PATCH_PATHS[15]
+            original = path.read_text(encoding="utf-8")
+            path.write_text(
+                original.replace("Stable-First-Release: v6.12.31", "v6.12.30", 1),
+                encoding="utf-8",
+            )
+            with self.assertRaises(probe.ProbeError):
+                probe.rust_compatibility_patch_records(root)
+
+    def test_stable_warning_policy_fixture_digest_is_fail_closed(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.copy_rust_compatibility_inputs(root)
+            fixture = root / probe.RUST_CORE_COMPAT_FIXTURE_ROOT / "Makefile"
+            fixture.write_bytes(fixture.read_bytes() + b"\n")
             with self.assertRaises(probe.ProbeError):
                 probe.rust_compatibility_patch_records(root)
 

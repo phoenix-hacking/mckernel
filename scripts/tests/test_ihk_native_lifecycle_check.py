@@ -56,7 +56,7 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
         self.assertEqual(0, summary["parameters"])
         self.assertEqual(0, summary["dependencies"])
         self.assertEqual(3, summary["transitive_module_count"])
-        self.assertEqual(3, summary["support_sources"])
+        self.assertEqual(5, summary["support_sources"])
 
     def test_ihk_queue_module_edge_is_required(self) -> None:
         self.mutate_text(
@@ -84,6 +84,20 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
         )
         with self.assertRaisesRegex(lifecycle.ValidationError, "module edge"):
             lifecycle.validate_repository(self.repo)
+
+    def test_page_support_module_edges_are_required(self) -> None:
+        for present, missing in (
+            ("mod page_allocator;", "mod missing_page_allocator;"),
+            ("mod page_owner_registry;", "mod missing_page_owner_registry;"),
+        ):
+            with self.subTest(edge=present):
+                source = self.repo / self.contract["production_source"]
+                original = source.read_text(encoding="utf-8")
+                self.assertIn(present, original)
+                source.write_text(original.replace(present, missing, 1), encoding="utf-8")
+                with self.assertRaisesRegex(lifecycle.ValidationError, "module edge"):
+                    lifecycle.validate_repository(self.repo)
+                source.write_text(original, encoding="utf-8")
 
     def test_lifecycle_crate_root_digest_drift_is_rejected(self) -> None:
         source = self.repo / self.contract["production_source"]
@@ -203,6 +217,48 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
         )
         with self.assertRaisesRegex(lifecycle.ValidationError, r"support_sources\[1\] digest"):
             lifecycle.validate_repository(self.repo)
+
+    def test_page_support_source_drift_is_rejected(self) -> None:
+        for index in (3, 4):
+            with self.subTest(index=index):
+                support = self.contract["support_sources"][index]
+                source = self.repo / support["path"]
+                original = source.read_text(encoding="utf-8")
+                source.write_text(original + "// unbound page support drift\n", encoding="utf-8")
+                with self.assertRaisesRegex(
+                    lifecycle.ValidationError,
+                    r"support_sources\[{0}\] digest".format(index),
+                ):
+                    lifecycle.validate_repository(self.repo)
+                source.write_text(original, encoding="utf-8")
+
+    def test_page_support_contract_cannot_claim_credit(self) -> None:
+        for index in (3, 4):
+            with self.subTest(index=index):
+                support = self.contract["support_sources"][index]
+                contract_path = self.repo / support["contract_path"]
+                original = contract_path.read_text(encoding="utf-8")
+                value = json.loads(original)
+                value["evidence_policy"]["gate_credit_eligible"] = True
+                contract_path.write_text(
+                    json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+                )
+                support["contract_sha256"] = lifecycle._sha256(contract_path)
+                lifecycle_contract = self.repo / lifecycle.DEFAULT_CONTRACT
+                lifecycle_contract.write_text(
+                    json.dumps(self.contract, indent=2, sort_keys=True) + "\n",
+                    encoding="utf-8",
+                )
+                with self.assertRaisesRegex(lifecycle.ValidationError, "claims evidence"):
+                    lifecycle.validate_repository(self.repo)
+                contract_path.write_text(original, encoding="utf-8")
+                self.contract = json.loads(
+                    (REPO_ROOT / lifecycle.DEFAULT_CONTRACT).read_text(encoding="utf-8")
+                )
+                lifecycle_contract.write_text(
+                    json.dumps(self.contract, indent=2, sort_keys=True) + "\n",
+                    encoding="utf-8",
+                )
 
     def test_support_contract_cannot_claim_credit(self) -> None:
         support = self.contract["support_sources"][1]

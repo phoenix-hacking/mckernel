@@ -48,11 +48,11 @@
     }
   ],
   "contract_id": "mckernel-rs001-exact-linux-api-probe-v1",
-  "contract_sha256": "eb6ef9395bc2f23c7ea2491edbde7fff87036022ceea4975e25909dba9b44c1d",
+  "contract_sha256": "1fb5fd93f15d5f6b78025c18e314488b56ece208c006bb189ee9ce7baeb5f7ea",
   "evidence_profile": "rocky-10.2-exact-linux-api-evidence-v1",
   "frozen_needs": {
-    "file_sha256": "55f23a81ae8ac364b604e3cd1af1437c66544c19a750ef310758f20cc73666dc",
-    "manifest_sha256": "c9b20ee78f55fcdfbeb3e0a7ff3c98315f237cb9b55e23e885c7aabb92badb5b",
+    "file_sha256": "c49ec05bdef0e1d90a25176766c4abc4063b4ab1d741676061145cdf6a936384",
+    "manifest_sha256": "787461d14a5a72cbfc8705c3f93acb9e643b06056eeb0e881ab79290d818d6c8",
     "need_count": 268,
     "need_ids_sha256": "aabfc7c4d6551f0b57fcc9c580e3aa6cf6ef0c93ee5e179529f161d7084a6a3b",
     "path": "host-kernel/contracts/linux-api-needs-v1.json"
@@ -103,7 +103,7 @@
   "repository_inputs": {
     "checker": {
       "path": "scripts/linux_api_exact_probe.py",
-      "sha256": "8fed4fcb0fbcb2e76d729dee574823a5a54ecdeed36ab79ed713edd70bfac915"
+      "sha256": "fff0ee7ead6383a71d99738e2dfdd394abed63fe792d3f6d2cce8e27b1da8e62"
     },
     "clang_21_source_fix_preimages": [
       {
@@ -144,6 +144,22 @@
       }
     ],
     "clang_21_warning_preimages": [
+      {
+        "path": "scripts/tests/fixtures/rust-core-rocky-6.12/Makefile",
+        "sha256": "b2d9e6f03fa466db088337572dec4b0f98db8f5775ca537bce0a179a1ac216bd"
+      },
+      {
+        "path": "scripts/tests/fixtures/rust-core-rocky-6.12/arch/loongarch/kernel/Makefile",
+        "sha256": "0f1aeabed014f3e16ab67cc0b9dfc7c72eb726b6439d95562ba08264fba19a9b"
+      },
+      {
+        "path": "scripts/tests/fixtures/rust-core-rocky-6.12/arch/loongarch/kvm/Makefile",
+        "sha256": "af128de8bcbb08f5864ae2337c99ffd1897552377618653ad85ff45c89260ff9"
+      },
+      {
+        "path": "scripts/tests/fixtures/rust-core-rocky-6.12/arch/riscv/kernel/Makefile",
+        "sha256": "7a41a7b2abe85a8ab1631c65ad5a9e6dc43f13a83cd6e9fc47514a34ef4612f8"
+      },
       {
         "path": "scripts/tests/fixtures/rust-core-rocky-6.12/scripts/Makefile.extrawarn",
         "sha256": "f8b158270273a1ce7054847b0e63051756fbfc5ad83f244d908229861300502b"
@@ -353,6 +369,38 @@
         "size": 3052,
         "stable_commit": null,
         "upstream_commit": "05e8d261a34e5c637e37be55c26e42cf5c75ee5c"
+      },
+      {
+        "applied_after": "host-kernel/rocky/patches/0014-gcc-15-mark-byte-arrays-nonstring.patch",
+        "path": "host-kernel/rocky/patches/0015-gcc-15-demote-unterminated-string-warning.patch",
+        "sha256": "b07d58736bfe7e9ef5f9c3c4ce2807514f2cd01ab1146620fc09eb4f98ac8f29",
+        "size": 3897,
+        "stable_commit": "9f58537e9b8f07d56aca68308dc73db60fbc7ad3",
+        "upstream_commit": "d5d45a7f26194460964eb5677a9226697f7b7fdd"
+      },
+      {
+        "applied_after": "host-kernel/rocky/patches/0015-gcc-15-demote-unterminated-string-warning.patch",
+        "path": "host-kernel/rocky/patches/0016-gcc-15-disable-unterminated-string-warning.patch",
+        "sha256": "ea3a2c85b9dc1c15d3307c3958512b812d56297930d58fc6912adfb2ea3e7284",
+        "size": 4225,
+        "stable_commit": "d66cf772bebd789448121cdfc42734fb042c9c4b",
+        "upstream_commit": "9d7a0577c9db35c4cc52db90bc415ea248446472"
+      },
+      {
+        "applied_after": "host-kernel/rocky/patches/0016-gcc-15-disable-unterminated-string-warning.patch",
+        "path": "host-kernel/rocky/patches/0017-kbuild-use-cc-disable-warning.patch",
+        "sha256": "890a11c4540d4c003773482c47858a946156e4cf0d2e04d3a9ed8e1a9382fd4b",
+        "size": 6496,
+        "stable_commit": "3f856d5d84467c7fba0bf3cca405089c497e37eb",
+        "upstream_commit": "a79be02bba5c31f967885c7f3bf3a756d77d11d9"
+      },
+      {
+        "applied_after": "host-kernel/rocky/patches/0017-kbuild-use-cc-disable-warning.patch",
+        "path": "host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch",
+        "sha256": "e271fa6f30bb3b39a24ae2f926dfa067577997ecf2076e412b5575a4d785021e",
+        "size": 5609,
+        "stable_commit": "dd8a734155ae28094d27b96c00a478fa0ee6d5d7",
+        "upstream_commit": "4f79eaa2ceac86a0e0f304b0bab556cca5bf4f30"
       }
     ],
     "rust_target_generator_preimage": {
@@ -361,7 +409,7 @@
     },
     "source_lock": {
       "path": "host-kernel/rocky/source-lock.json",
-      "sha256": "20c959d1d793293e38e82a67fbf235b42ad105c135145135f59750e698d60170"
+      "sha256": "cbca9fe2e92f56ba7dba3dc03b018b11605f5d6c3dfdf9e3e4f33149c442f8ff"
     },
     "toolchain_lock": {
       "path": "host-kernel/rocky/toolchain-lock.json",
@@ -369,7 +417,7 @@
     },
     "workflow": {
       "path": ".github/workflows/rs001-linux-api-exact-probe.yml",
-      "sha256": "d146797ad6ec6841311d1fa33eb5c7b226a10b40c1ca30f3ed76fd463a2e2ac7"
+      "sha256": "1c77ded6553a6534644ba7684c1522a6d256395fadb8f772774b32ae2d973369"
     }
   },
   "required_capture_inputs": [
@@ -572,6 +620,34 @@
         "path": "host-kernel/rocky/patches/0014-gcc-15-mark-byte-arrays-nonstring.patch",
         "sha256": "e98032b0d88ea5dbaffdbdf39a16423fded48dbed41adec29cc232782ba6d24b",
         "size": 3052
+      },
+      {
+        "applied": true,
+        "empty": false,
+        "path": "host-kernel/rocky/patches/0015-gcc-15-demote-unterminated-string-warning.patch",
+        "sha256": "b07d58736bfe7e9ef5f9c3c4ce2807514f2cd01ab1146620fc09eb4f98ac8f29",
+        "size": 3897
+      },
+      {
+        "applied": true,
+        "empty": false,
+        "path": "host-kernel/rocky/patches/0016-gcc-15-disable-unterminated-string-warning.patch",
+        "sha256": "ea3a2c85b9dc1c15d3307c3958512b812d56297930d58fc6912adfb2ea3e7284",
+        "size": 4225
+      },
+      {
+        "applied": true,
+        "empty": false,
+        "path": "host-kernel/rocky/patches/0017-kbuild-use-cc-disable-warning.patch",
+        "sha256": "890a11c4540d4c003773482c47858a946156e4cf0d2e04d3a9ed8e1a9382fd4b",
+        "size": 6496
+      },
+      {
+        "applied": true,
+        "empty": false,
+        "path": "host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch",
+        "sha256": "e271fa6f30bb3b39a24ae2f926dfa067577997ecf2076e412b5575a4d785021e",
+        "size": 5609
       }
     ],
     "tree_comparison": "fresh locked archive plus every applied Rocky patch and the bound Rust target compatibility patch must byte-match the supplied out-of-tree build source"

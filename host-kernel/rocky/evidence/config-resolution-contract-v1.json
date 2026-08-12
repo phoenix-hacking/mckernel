@@ -88,9 +88,13 @@
         "host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch",
         "host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch",
         "host-kernel/rocky/patches/0011-mm-ksm-fix-clang-21-uninitialized.patch",
-        "host-kernel/rocky/patches/0012-netfs-mark-nonstring-lookup-tables.patch",
-        "host-kernel/rocky/patches/0013-lib-crypto-mark-binary-vectors-nonstring.patch",
-        "host-kernel/rocky/patches/0014-gcc-15-mark-byte-arrays-nonstring.patch"
+      "host-kernel/rocky/patches/0012-netfs-mark-nonstring-lookup-tables.patch",
+      "host-kernel/rocky/patches/0013-lib-crypto-mark-binary-vectors-nonstring.patch",
+      "host-kernel/rocky/patches/0014-gcc-15-mark-byte-arrays-nonstring.patch",
+      "host-kernel/rocky/patches/0015-gcc-15-demote-unterminated-string-warning.patch",
+      "host-kernel/rocky/patches/0016-gcc-15-disable-unterminated-string-warning.patch",
+      "host-kernel/rocky/patches/0017-kbuild-use-cc-disable-warning.patch",
+      "host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch"
       ]
     },
     "rocky_series": {
@@ -170,11 +174,35 @@
         "sha256": "329e86bdadf721f366b58582bf893df451a25e1f5cb91715bb789e10c242f021",
         "upstream_commit": "e202196b8aa249d78ab87eae56bbe0e71e3dc39c"
       },
-      {
-        "path": "host-kernel/rocky/patches/0014-gcc-15-mark-byte-arrays-nonstring.patch",
-        "sha256": "e98032b0d88ea5dbaffdbdf39a16423fded48dbed41adec29cc232782ba6d24b",
-        "upstream_commit": "05e8d261a34e5c637e37be55c26e42cf5c75ee5c"
-      }
+    {
+      "path": "host-kernel/rocky/patches/0014-gcc-15-mark-byte-arrays-nonstring.patch",
+      "sha256": "e98032b0d88ea5dbaffdbdf39a16423fded48dbed41adec29cc232782ba6d24b",
+      "upstream_commit": "05e8d261a34e5c637e37be55c26e42cf5c75ee5c"
+    },
+    {
+      "path": "host-kernel/rocky/patches/0015-gcc-15-demote-unterminated-string-warning.patch",
+      "sha256": "b07d58736bfe7e9ef5f9c3c4ce2807514f2cd01ab1146620fc09eb4f98ac8f29",
+      "stable_commit": "9f58537e9b8f07d56aca68308dc73db60fbc7ad3",
+      "upstream_commit": "d5d45a7f26194460964eb5677a9226697f7b7fdd"
+    },
+    {
+      "path": "host-kernel/rocky/patches/0016-gcc-15-disable-unterminated-string-warning.patch",
+      "sha256": "ea3a2c85b9dc1c15d3307c3958512b812d56297930d58fc6912adfb2ea3e7284",
+      "stable_commit": "d66cf772bebd789448121cdfc42734fb042c9c4b",
+      "upstream_commit": "9d7a0577c9db35c4cc52db90bc415ea248446472"
+    },
+    {
+      "path": "host-kernel/rocky/patches/0017-kbuild-use-cc-disable-warning.patch",
+      "sha256": "890a11c4540d4c003773482c47858a946156e4cf0d2e04d3a9ed8e1a9382fd4b",
+      "stable_commit": "3f856d5d84467c7fba0bf3cca405089c497e37eb",
+      "upstream_commit": "a79be02bba5c31f967885c7f3bf3a756d77d11d9"
+    },
+    {
+      "path": "host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch",
+      "sha256": "e271fa6f30bb3b39a24ae2f926dfa067577997ecf2076e412b5575a4d785021e",
+      "stable_commit": "dd8a734155ae28094d27b96c00a478fa0ee6d5d7",
+      "upstream_commit": "4f79eaa2ceac86a0e0f304b0bab556cca5bf4f30"
+    }
     ]
   },
   "phase_id": "config-resolution",
@@ -287,12 +315,12 @@
   "source_lock": {
     "id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-source-v1",
     "path": "host-kernel/rocky/source-lock.json",
-    "sha256": "20c959d1d793293e38e82a67fbf235b42ad105c135145135f59750e698d60170"
+    "sha256": "cbca9fe2e92f56ba7dba3dc03b018b11605f5d6c3dfdf9e3e4f33149c442f8ff"
   },
   "success_blockers": [
     "The RK-003 closure/offline artifact and its exact tool probes still require independent review and durable archival before RK-005 may inherit that authority.",
     "The current config policy generated-symbol allowlist omits CONFIG_RUSTC_HAS_UNNECESSARY_TRANSMUTES introduced by the current compatibility patch 0005; policy reconciliation is required before review ingestion or gate credit.",
-    "Compatibility patches 0006 through 0014 change source/build compatibility without adding configuration symbols; this phase binds and applies them but cannot substitute config resolution for their separate exact compile probes.",
+    "Compatibility patches 0006 through 0018 change source/build compatibility without adding configuration symbols; this phase binds and applies them but cannot substitute config resolution for their separate exact compile probes.",
     "The current RK-003 lock maps llvm-config to llvm-0:21.1.8-1.el10.x86_64, while the exact captured binary owner is llvm-devel-0:21.1.8-1.el10.x86_64; that authority mismatch requires reconciliation before review ingestion or gate credit.",
     "A successful config-resolution artifact still requires independent review and durable archival before any authority lock may be updated.",
     "make LLVM=1 rustavailable remains a separate required phase and is not claimed here.",

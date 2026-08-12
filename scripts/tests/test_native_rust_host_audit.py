@@ -69,16 +69,37 @@ class NativeRustHostAuditTests(unittest.TestCase):
         with self.assertRaisesRegex(SystemExit, "IKC master"):
             host_audit.main()
 
-        value = self.load_manifest()
-        master = copy.deepcopy(next(
-            item for item in self.original_manifest["inputs"]
+        value = copy.deepcopy(self.original_manifest)
+        master = next(
+            item for item in value["inputs"]
             if item.get("destination") == "ikc_master.rs"
-        ))
-        value["inputs"].append(master)
-        value["inputs"][-1]["sha256"] = "0" * 64
+        )
+        master["sha256"] = "0" * 64
         self.write_manifest(value)
         with self.assertRaisesRegex(SystemExit, "digest drift"):
             host_audit.main()
+
+    def test_page_support_omission_and_digest_drift_fail_closed(self):
+        for destination in ("page_allocator.rs", "page_owner_registry.rs"):
+            with self.subTest(destination=destination):
+                value = copy.deepcopy(self.original_manifest)
+                value["inputs"] = [
+                    item for item in value["inputs"]
+                    if item.get("destination") != destination
+                ]
+                self.write_manifest(value)
+                with self.assertRaisesRegex(SystemExit, "support input closure"):
+                    host_audit.main()
+
+                value = copy.deepcopy(self.original_manifest)
+                item = next(
+                    entry for entry in value["inputs"]
+                    if entry.get("destination") == destination
+                )
+                item["sha256"] = "0" * 64
+                self.write_manifest(value)
+                with self.assertRaisesRegex(SystemExit, "digest drift"):
+                    host_audit.main()
 
     def test_checker_and_tests_parse_with_python_3_6_grammar(self):
         paths = (host_audit.__file__, os.path.abspath(__file__))

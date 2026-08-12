@@ -1,7 +1,7 @@
 {
   "allocator_dependency": {
     "contract_path": "host-kernel/native-rust/ihk-page-allocator-contract-v1.json",
-    "contract_sha256": "62ab233b15c0a5ffa9de613bf854263211bb5f37154d906d48946cfc43856c30",
+    "contract_sha256": "dfbf8d3f58b188ff15fd618346b80945b8840be106f899f9a21cba0d4cda171b",
     "source_path": "host-kernel/native-rust/page_allocator.rs",
     "source_sha256": "8e2af0cde06cbb70204540b493e8a0a66d5203195ed671235b64bed44d328bc5"
   },
@@ -39,14 +39,14 @@
     ]
   },
   "evidence_policy": {
-    "built_into_ihk_validated": false,
+    "built_into_ihk_validated": true,
     "exact_kernel_compile_validated": false,
     "failure_injection_validated": false,
     "gate_credit_eligible": false,
     "legacy_adapters_validated": false,
     "rocky_runtime_validated": false
   },
-  "foundation_status": "source-only-unattached-raw-page-owner-registry",
+  "foundation_status": "private-crate-attached-raw-page-owner-registry",
   "gate_id": "IHK-006",
   "identity_contract": {
     "foreign_registry_rejected": true,
@@ -102,7 +102,6 @@
     "sha256": "e9eba5b3a0aac117a66daac35bde6a19596475db18f36062b2fcf6d7c97865fd"
   },
   "unproven": [
-    "native ihk crate-root, authoritative staging manifest, and Kbuild integration",
     "audited Linux irqsave-equivalent outer owner lock enforcing IRQ-disabled, nonpreemptible, no-sleep, non-reentrant execution and registry-to-allocator lock order",
     "pinned allocator and slot-storage owner with an audited drain-before-module-teardown path",
     "six versioned legacy allocation/free export adapters and all consumer migration",

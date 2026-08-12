@@ -75,6 +75,31 @@ Passing an unmodified exact Rocky source root through `--kernel-source` also
 replays the full Rust-tree absence audit. This remains an IHK-005 `TODO`
 checkpoint with no gate credit and no runtime create/destroy/status claim.
 
+## IHK page-allocation attachment
+
+The IHK provider now privately compiles `page_allocator.rs` followed by
+`page_owner_registry.rs` through literal module edges in `ihk.rs`. The
+authoritative staging manifest copies both files beside the crate root, and the
+lifecycle, build-surface, host-input, and RS-011 audits bind the same exact
+source closure. This attachment makes the safe, allocation-free foundations
+visible to exact Kbuild compilation; it does not publish legacy allocation or
+free exports and does not make either foundation runtime reachable.
+
+Validate the frozen contracts and their exact Rocky Rust 1.92 fixtures with:
+
+```sh
+IHK_PAGE_ALLOCATOR_RUSTC=/path/to/rocky/rustc \
+  python3 scripts/ihk_page_allocator_check.py --require-rustc
+IHK_PAGE_OWNER_REGISTRY_RUSTC=/path/to/rocky/rustc \
+  python3 scripts/ihk_page_owner_registry_check.py --require-rustc
+```
+
+IHK-006 remains `TODO` and credit-ineligible. An audited irqsave-equivalent
+outer lock, pinned owner and teardown drain, six legacy adapters and consumer
+migration, proof for the raw-address ABA limitation, exact module build/load
+evidence, and allocator runtime, fault-injection, lockdep, KCSAN, fragmentation,
+and leak evidence are still required.
+
 ## Single build-control authority
 
 This directory contains Rust crate roots and their reviewed contracts only. It

@@ -18,6 +18,10 @@ mod os_registry;
 mod ikc_master;
 #[allow(dead_code)]
 mod ihk_ioctl;
+#[allow(dead_code)]
+mod page_allocator;
+#[allow(dead_code)]
+mod page_owner_registry;
 
 use kernel::prelude::*;
 

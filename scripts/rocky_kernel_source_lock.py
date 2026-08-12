@@ -89,6 +89,7 @@ EXPECTED_LICENSE_CAPTURE_AUTHORITY: dict[str, Any] = {
                 "host-kernel/native-rust/mcctrl.rs",
                 "host-kernel/native-rust/os_registry.rs",
                 "host-kernel/native-rust/page_allocator.rs",
+                "host-kernel/native-rust/page_owner_registry.rs",
                 "host-kernel/rocky/configs/native-rust-evidence.config",
                 "host-kernel/rocky/configs/rust-minimal.config",
                 (
@@ -147,6 +148,22 @@ EXPECTED_LICENSE_CAPTURE_AUTHORITY: dict[str, Any] = {
                     "host-kernel/rocky/patches/"
                     "0014-gcc-15-mark-byte-arrays-nonstring.patch"
                 ),
+                (
+                    "host-kernel/rocky/patches/"
+                    "0015-gcc-15-demote-unterminated-string-warning.patch"
+                ),
+                (
+                    "host-kernel/rocky/patches/"
+                    "0016-gcc-15-disable-unterminated-string-warning.patch"
+                ),
+                (
+                    "host-kernel/rocky/patches/"
+                    "0017-kbuild-use-cc-disable-warning.patch"
+                ),
+                (
+                    "host-kernel/rocky/patches/"
+                    "0018-kbuild-order-unterminated-string-disable.patch"
+                ),
                 "host-kernel/rocky/patches/series.json",
                 "scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs",
                 "scripts/tests/fixtures/ihk_native_master_compile.rs",
@@ -162,11 +179,33 @@ EXPECTED_LICENSE_CAPTURE_AUTHORITY: dict[str, Any] = {
                     "scripts/tests/fixtures/"
                     "ihk_page_allocator_must_use_compile_fail.rs"
                 ),
+                "scripts/tests/fixtures/ihk_page_owner_registry_compile.rs",
+                (
+                    "scripts/tests/fixtures/"
+                    "ihk_page_owner_registry_lifetime_compile_fail.rs"
+                ),
+                (
+                    "scripts/tests/fixtures/"
+                    "ihk_page_owner_registry_sync_compile_fail.rs"
+                ),
                 (
                     "scripts/tests/fixtures/rust-core-rocky-6.12/"
                     "Documentation/kbuild/makefiles.rst"
                 ),
+                "scripts/tests/fixtures/rust-core-rocky-6.12/Makefile",
                 "scripts/tests/fixtures/rust-core-rocky-6.12/arch/arm64/Makefile",
+                (
+                    "scripts/tests/fixtures/rust-core-rocky-6.12/"
+                    "arch/loongarch/kernel/Makefile"
+                ),
+                (
+                    "scripts/tests/fixtures/rust-core-rocky-6.12/"
+                    "arch/loongarch/kvm/Makefile"
+                ),
+                (
+                    "scripts/tests/fixtures/rust-core-rocky-6.12/"
+                    "arch/riscv/kernel/Makefile"
+                ),
                 (
                     "scripts/tests/fixtures/rust-core-rocky-6.12/"
                     "drivers/iio/magnetometer/ak8974.c"

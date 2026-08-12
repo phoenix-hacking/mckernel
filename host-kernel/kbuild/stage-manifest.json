@@ -64,6 +64,18 @@
       "kind": "rust_ioctl_dispatch",
       "repository_path": "host-kernel/native-rust/ihk_ioctl.rs",
       "sha256": "3d603424705a9b0fb18725bae1d75f1d279b249b866c15f15f98166d013edfbb"
+    },
+    {
+      "destination": "page_allocator.rs",
+      "kind": "rust_support_module",
+      "repository_path": "host-kernel/native-rust/page_allocator.rs",
+      "sha256": "8e2af0cde06cbb70204540b493e8a0a66d5203195ed671235b64bed44d328bc5"
+    },
+    {
+      "destination": "page_owner_registry.rs",
+      "kind": "rust_support_module",
+      "repository_path": "host-kernel/native-rust/page_owner_registry.rs",
+      "sha256": "443d58fa5b2e423f538c6622ef04d8e34338abc43c5e0fd34811d52fc21f4869"
     }
   ],
   "modules": [
@@ -79,7 +91,7 @@
       "source": {
         "destination": "ihk.rs",
         "repository_path": "host-kernel/native-rust/ihk.rs",
-        "sha256": "7c674f91e300b64d434369ae652414d67c7976f7f8691c038632da838b7b97c3"
+        "sha256": "4aa64fb0cf2c8b1342409d731d5494fa845f5f157d12576abc53c2a9c70e7043"
       }
     },
     {
@@ -123,7 +135,7 @@
   ],
   "parent_integration": {
     "repository_path": "host-kernel/kbuild/parent-integration-v1.json",
-    "sha256": "71dc858c23366b90c9d7d867afb539fedc2863c9274e43c5a991cccfe35c2d72"
+    "sha256": "2a69d39a32ce29e8a864192b8a0b80a1f0dffe2cf01fcd972e9fd2dca0d70611"
   },
   "profile_id": "rocky-10.2-native-rust-host-modules-v1",
   "readiness": {
