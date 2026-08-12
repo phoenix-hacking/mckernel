@@ -219,7 +219,11 @@ def validate_workflow_contract(repo: Path) -> bytes:
         "persist-credentials: false": 1,
         "python3 scripts/rocky_kernel_source_evidence.py": 2,
         "actions/checkout@11d5960a326750d5838078e36cf38b85af677262": 1,
-        "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02": 1,
+        "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02": 2,
+        "name: rk001-source-evidence-${{ github.run_id }}-${{ github.run_attempt }}": 1,
+        "name: rk001-license-inventory-${{ github.run_id }}-${{ github.run_attempt }}": 1,
+        "path: ${{ runner.temp }}/rk001-source-evidence/": 1,
+        "path: ${{ runner.temp }}/rk001-license-inventory/": 1,
     }
     for needle, expected_count in required_counts.items():
         if text.count(needle) != expected_count:

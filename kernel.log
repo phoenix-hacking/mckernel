@@ -28477,3 +28477,13 @@ Error summary: the reviewer indexed `expected["size"]` for the Rocky release key
 Command: `rustfmt --check host-kernel/native-rust/ihk.rs` after the focused lifecycle checker and its eight unit tests passed.
 Environment: local Codex workspace at `/workspace/scratch/f56ce2128fa9/mckernel`; `/bin/bash` could not resolve `rustfmt`. No module load, guest boot, host reboot, or reboot-capable command ran.
 Error summary: the shell exited 127 with `rustfmt: command not found` before the existing Rocky staging tests or native-host audit ran. Treat formatting as environment-unverified, continue only with the related Python/static validations, and require kernel-owned Rust formatting/build validation in the exact Rocky toolchain evidence run.
+
+2026-08-11: focused RK-001 license-inventory tests stopped on an ambiguously normalized repository path.
+Command: `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest scripts.tests.test_rocky_kernel_license_inventory -v` after adding the deterministic SRPM/Linux archive inventory capture and workflow.
+Environment: isolated local worktree `/tmp/mck-license001`, Python 3.12, published base 37aaaf0f56d4fcc076684c53980c2fcdd5109498; no source acquisition, module load, guest boot, host reboot, or reboot-capable command ran.
+Error summary: 7/8 tests passed, but `safe_relative("a/./b")` was accepted because `PurePosixPath` normalized the raw dot component before validation. Require the canonical `as_posix()` representation to equal the original input, then replay the focused suite before any capture is published.
+
+2026-08-11: RK-001 source-evidence contract replay stopped after the license inventory added a second immutable artifact upload.
+Command: `PYTHONDONTWRITEBYTECODE=1 python3 scripts/rocky_kernel_source_evidence.py --repo . --check` in the isolated license-inventory worktree.
+Environment: local Python 3.12, published base 37aaaf0f56d4fcc076684c53980c2fcdd5109498 plus the uncommitted inventory workflow; no source acquisition, module load, guest boot, host reboot, or reboot-capable command ran.
+Error summary: the existing workflow verifier required the pinned `actions/upload-artifact` action to occur exactly once, while the new design intentionally has separate canonical replay and exhaustive inventory artifacts. Keep the action digest pinned and require exactly two uploads with distinct locked names and paths; do not relax the workflow contract to an unbounded count.

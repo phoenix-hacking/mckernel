@@ -9,6 +9,7 @@ on:
       - host-kernel/rocky/source-lock.json
       - host-kernel/rocky/patches/series.json
       - scripts/rocky_kernel_source_evidence.py
+      - scripts/rocky_kernel_license_inventory.py
       - scripts/rocky_kernel_source_lock.py
   pull_request:
     branches: [development]
@@ -17,6 +18,7 @@ on:
       - host-kernel/rocky/source-lock.json
       - host-kernel/rocky/patches/series.json
       - scripts/rocky_kernel_source_evidence.py
+      - scripts/rocky_kernel_license_inventory.py
       - scripts/rocky_kernel_source_lock.py
 
 permissions:
@@ -49,9 +51,9 @@ jobs:
           test "$ID" = rocky
           test "$VERSION_ID" = 10.2
           dnf -y --setopt=install_weak_deps=False install \
-            git-core gnupg2 gzip python3 rpm
+            cpio git-core gnupg2 gzip python3 rpm xz
           dnf clean all
-          for tool in git gpg gpgv gzip python3 rpm rpmkeys; do
+          for tool in cpio git gpg gpgv gzip python3 rpm rpm2cpio rpmkeys xz; do
             command -v "$tool" >/dev/null
           done
 
@@ -89,10 +91,41 @@ jobs:
             sha256sum --check --strict SHA256SUMS
           )
 
+      - name: Capture exhaustive source and license inventory
+        env:
+          LICENSE_CACHE_ROOT: ${{ runner.temp }}/rk001-license-cache
+          LICENSE_EVIDENCE_DIR: ${{ runner.temp }}/rk001-license-inventory
+        run: |
+          set -euo pipefail
+          python3 scripts/rocky_kernel_license_inventory.py \
+            --repo "$GITHUB_WORKSPACE" \
+            --capture \
+            --cache-root "$LICENSE_CACHE_ROOT" \
+            --output-dir "$LICENSE_EVIDENCE_DIR" \
+            --github-head-sha "$EXPECTED_HEAD_SHA" \
+            --github-run-id "$GITHUB_RUN_ID" \
+            --github-run-attempt "$GITHUB_RUN_ATTEMPT" \
+            --github-repository "$GITHUB_REPOSITORY" \
+            --container-image "$RK001_CONTAINER_IMAGE"
+          python3 scripts/rocky_kernel_license_inventory.py \
+            --verify-capture "$LICENSE_EVIDENCE_DIR"
+          (
+            cd "$LICENSE_EVIDENCE_DIR"
+            sha256sum --check --strict SHA256SUMS
+          )
+
       - name: Upload canonical source evidence
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: rk001-source-evidence-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/rk001-source-evidence/
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload exhaustive license inventory capture
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: rk001-license-inventory-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/rk001-license-inventory/
           if-no-files-found: error
           retention-days: 30
