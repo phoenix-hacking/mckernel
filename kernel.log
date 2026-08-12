@@ -28447,3 +28447,8 @@ Error summary: the draft asserted R0 Rocky 8.10 vermagic and MODVERSIONS CRC equ
 Command: `python3 -m py_compile scripts/host_module_contracts.py && python3 scripts/host_module_contracts.py --print > /tmp/revised-contract.json` after implementing the R0/R1/R2 and failure-site corrections.
 Environment: same clean execution worktree, frozen source provenance, and non-runtime validation constraints as the preceding entry.
 Error summary: the new generic validation required every legacy value to be a JSON object, while the frozen `mcctrl_registered_aux_handlers` entries are intentionally strings. Restrict object-schema validation to module identity, exported symbol, module parameter, and failure-site kinds; retain scalar legacy values for behavior kinds whose frozen schema is scalar, then rerun from generation.
+
+2026-08-11: direct authenticated Git transport was unavailable while publishing the corrected module-oracle contract checkpoint.
+Command: `git push origin HEAD:refs/heads/codex/rocky-rust-validation` from local checkpoint fbf3b65f.
+Environment: clean execution worktree plus generated Python cache files; HTTPS origin `phoenix-hacking/mckernel`; no Git credential helper or interactive terminal credential was available. No module load, guest boot, host reboot, or reboot-capable command ran.
+Error summary: Git exited 128 with `could not read Username for 'https://github.com': No such device or address` before updating the remote. The authorized GitHub connector fallback then created the exact local tree b4584453cada75f1ce046d5a1b340f852fbbb814 as remote commit 6440e3c89df41c092b2a29a02e828fb3aefd2cc7 and advanced `codex/rocky-rust-validation` fast-forward without force.

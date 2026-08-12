@@ -7,12 +7,12 @@ no calendar estimates. Work is complete only when the measurable acceptance
 gates below pass on the exact production artifacts.
 
 BEGIN AUTO-GENERATED TRACKER
-OVERALL COMPLETION: 2.50% (250 / 10000 evidence points)
-TRACKED GATES: 130 total; 4 PASS; 3 IN_PROGRESS; 0 BLOCKED; 123 TODO
-TRACKER INPUT SHA256: f1703fff23888016e21b6f92ed5a3b1a78c0fbade7931df1993d6f8cac85589c
+OVERALL COMPLETION: 3.50% (350 / 10000 evidence points)
+TRACKED GATES: 130 total; 6 PASS; 1 IN_PROGRESS; 0 BLOCKED; 123 TODO
+TRACKER INPUT SHA256: 174122a5ea4d7e3262b609a7176a093ffea3a99d12a61f6153fd5aa30fe0ab19
 
 WORKSTREAM SUMMARY:
-- WS00 Scope, baseline, and evidence system: 62.50% (250 / 400 points; 4 / 7 gates PASS)
+- WS00 Scope, baseline, and evidence system: 87.50% (350 / 400 points; 6 / 7 gates PASS)
 - WS10 Rocky-derived Rust-capable kernel platform: 0.00% (0 / 1000 points; 0 / 14 gates PASS)
 - WS20 Shared Rust kernel API and ABI substrate: 0.00% (0 / 1000 points; 0 / 12 gates PASS)
 - WS30 Native Rust ihk.ko: 0.00% (0 / 1200 points; 0 / 13 gates PASS)
@@ -361,8 +361,8 @@ WORKSTREAM|WS60|Integrated compatibility and equivalence|1000
 WORKSTREAM|WS70|Production benchmarks, stress, security, and reliability|1800
 WORKSTREAM|WS80|Release engineering and operational closure|300
 
-GATE|FP-0001|WS00|50|IN_PROGRESS|-|Approve and lock this exact conversion scope, exclusions, allowed Linux boundaries, and x86_64 completion definition|architecture
-GATE|FP-0002|WS00|50|IN_PROGRESS|-|Lock the zero-project-C policy, assembly policy, reference-build isolation, dependency rules, and evidence invalidation rules|architecture
+GATE|FP-0001|WS00|50|PASS|commit 6440e3c89df41c092b2a29a02e828fb3aefd2cc7 tree b4584453cada75f1ce046d5a1b340f852fbbb814 workflow 31554459261 job 93983889888 artifact 9125466203 policy sha256 5c745cd7c01d061a7582c524849d4c9e566a7b0f02652c234b374738878cea6e|Approve and lock this exact conversion scope, exclusions, allowed Linux boundaries, and x86_64 completion definition|architecture
+GATE|FP-0002|WS00|50|PASS|commit 6440e3c89df41c092b2a29a02e828fb3aefd2cc7 tree b4584453cada75f1ce046d5a1b340f852fbbb814 workflow 31554459261 job 93983889888 artifact 9125466203 policy sha256 5c745cd7c01d061a7582c524849d4c9e566a7b0f02652c234b374738878cea6e|Lock the zero-project-C policy, assembly policy, reference-build isolation, dependency rules, and evidence invalidation rules|architecture
 GATE|FP-0003|WS00|60|PASS|commit f2eb735212e6ab0494e638497e80d9ae78b2848e and build artifact 9051654724|Freeze the exact Rocky 8.10 legacy build baseline and its artifact digests|validation
 GATE|FP-0004|WS00|90|PASS|workflow 31358939841 and hosted evidence artifact 9051791233|Freeze the exact legacy boot, IKC, mcexec, workload, stop, restoration, and integrity runtime oracle|validation
 GATE|FP-0005|WS00|50|PASS|workflow 31462744353 job 93689372259 commit 6aeaaf60631130404064f5b3933cce21869629f9|Generate the exact active object, source, symbol, ioctl, module parameter, procfs, sysfs, IKC, and dependency inventory for all three legacy modules|architecture
