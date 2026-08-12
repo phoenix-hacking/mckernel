@@ -85,6 +85,21 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         self.assertIn("if: ${{ always() }}", self.workflow)
         self.assertIn("if-no-files-found: error", self.workflow)
 
+    def test_frozen_legacy_oracle_and_shared_evidence_path_are_available(self):
+        self.assertIn("submodules: recursive", self.workflow)
+        self.assertIn(
+            'test "$(git -C ihk rev-parse HEAD)" = '
+            '"3114d9e7101ad52030eb3effa849a5c108972a1f"',
+            self.workflow,
+        )
+        self.assertGreaterEqual(
+            self.workflow.count('$RUNNER_TEMP/native-rust-build-evidence'), 3
+        )
+        self.assertNotIn(
+            'evidence_dir="${{ runner.temp }}/native-rust-build-evidence"',
+            self.workflow,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
