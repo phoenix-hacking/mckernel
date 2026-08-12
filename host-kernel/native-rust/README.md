@@ -20,3 +20,29 @@ The sole production definitions are `host-kernel/kbuild/Kconfig` and
 ```sh
 python3 scripts/native_rust_build_surface_audit.py
 ```
+
+## mcctrl lifecycle foundation
+
+The lifecycle contract preserves the frozen zero-parameter surface and exact
+semantic module metadata: `name=mcctrl`, `license=GPL v2`, `depends=ihk`, with
+no author, description, or version field. The dependency is not forged in
+source. Kconfig requires the native IHK provider and the crate emits the
+reviewed `MCKERNEL_IHK_V1` import-namespace declaration, while a real symbol
+import remains blocked until the native provider has a supported exported ABI
+anchor.
+Only modpost may derive `depends=ihk` from that future real import.
+
+The frozen module owns mcexec binfmt registration, but the selected Linux 6.12
+Rust kernel crate has no safe `linux_binfmt` registration API. That ownership
+therefore remains blocked under `MCC-013`; this lifecycle foundation neither
+registers binfmt nor emits the legacy success messages that would imply it did.
+
+Validate these fail-closed constraints with:
+
+```sh
+python3 scripts/mcctrl_native_lifecycle_check.py
+```
+
+The source-only result is never MCC-001 gate credit. Supplying `--module`
+additionally requires exact built metadata and deterministic diagnostics, but
+Rocky 10.2 build, load, and unload evidence is still required separately.

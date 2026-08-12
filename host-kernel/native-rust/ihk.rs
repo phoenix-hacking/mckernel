@@ -12,6 +12,40 @@ const IHK_ABI_VERSION: u16 = 1;
 const IHK_PARAMETER_COUNT: usize = 0;
 const IHK_DEPENDENCY_COUNT: usize = 0;
 
+// Linux 6.12 recognizes exports through a relocation in `.export_symbol` and
+// generates the final ksymtab entry during modpost.  This data-only anchor
+// gives native consumers a real module reference without exposing lifecycle
+// behavior or involving a project-owned C shim.
+#[doc(hidden)]
+#[repr(C, align(8))]
+pub struct IhkExportSymbolRecord {
+    license: [u8; 4],
+    namespace: [u8; 16],
+    padding: [u8; 4],
+    symbol: *const u8,
+}
+
+// SAFETY: The record and its target are immutable for the module lifetime.
+unsafe impl Sync for IhkExportSymbolRecord {}
+
+const _: [(); 32] = [(); core::mem::size_of::<IhkExportSymbolRecord>()];
+const _: [(); 8] = [(); core::mem::align_of::<IhkExportSymbolRecord>()];
+
+#[doc(hidden)]
+#[export_name = "ihk_provider_lifecycle_v1"]
+pub static IHK_PROVIDER_LIFECYCLE_V1: u8 = 1;
+
+#[doc(hidden)]
+#[export_name = "__export_symbol_ihk_provider_lifecycle_v1"]
+#[link_section = ".export_symbol"]
+#[used]
+pub static IHK_PROVIDER_LIFECYCLE_V1_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
+    license: *b"GPL\0",
+    namespace: *b"MCKERNEL_IHK_V1\0",
+    padding: [0; 4],
+    symbol: core::ptr::addr_of!(IHK_PROVIDER_LIFECYCLE_V1),
+};
+
 // Linux 6.12's Rust `module!` macro does not accept a `version` field. Emit the
 // same `.modinfo` record that `MODULE_VERSION()` emits for a loadable module.
 #[cfg(MODULE)]

@@ -132,7 +132,7 @@ EXPECTED_MODULES = (
         "required_import_namespaces": [],
         "source_destination": "ihk.rs",
         "source_repository_path": "host-kernel/native-rust/ihk.rs",
-        "source_sha256": "4d578677d052e40aa110f7ca01899ae74da16db8f4c14644bc406e409af0bdaa",
+        "source_sha256": "b24bb72113efe0ec8febbe80f613ffa5d42e50f125ecd3923d2d74d949012556",
     },
     {
         "crate": "ihk_smp_x86_64",
@@ -144,7 +144,7 @@ EXPECTED_MODULES = (
         "required_import_namespaces": ["MCKERNEL_IHK_V1"],
         "source_destination": "ihk_smp_x86_64.rs",
         "source_repository_path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
-        "source_sha256": "ed6e7a7ff6a0809e834d08c5b5f1570f07061d9f57850ecd5b0841fd090ff37d",
+        "source_sha256": "443f9c8637da5dd0ab1fcf44daec44115a5207488cb4d0432b2573ea2a89aab7",
     },
     {
         "crate": "mcctrl",
@@ -156,7 +156,7 @@ EXPECTED_MODULES = (
         "required_import_namespaces": ["MCKERNEL_IHK_V1"],
         "source_destination": "mcctrl.rs",
         "source_repository_path": "host-kernel/native-rust/mcctrl.rs",
-        "source_sha256": "f669d0359a040a7986774cfe743bc2bff6e89b94f5c0bc25ea92ac4d7867b355",
+        "source_sha256": "d7b845e3d88c968c26a47f2ba84b86df9ebdcd2053d654bd6be271ec6511bfce",
     },
 )
 EXPECTED_TOP_LEVEL_KEYS = {

@@ -1,0 +1,114 @@
+{
+  "contract_id": "mckernel-rs001-exact-linux-api-probe-v1",
+  "contract_sha256": "ae85c94cca32d390a3a2e1b1e3bbdeefb641f717bd47fabd4ec3c169de18a8b7",
+  "evidence_profile": "rocky-10.2-exact-linux-api-evidence-v1",
+  "frozen_needs": {
+    "file_sha256": "76f16c395dd40f78ab1b72debcc61a352e28a3ddbf78586824ce9882a2a43e4c",
+    "manifest_sha256": "fa11cfb219bb35b14ebf0b91edf876a23c0c4effcfe8b7c9a70aa7a10f3e6567",
+    "need_count": 268,
+    "need_ids_sha256": "aabfc7c4d6551f0b57fcc9c580e3aa6cf6ef0c93ee5e179529f161d7084a6a3b",
+    "path": "host-kernel/contracts/linux-api-needs-v1.json"
+  },
+  "gate": {
+    "credit_eligible": false,
+    "gate_id": "RS-001",
+    "policy": "Capture may prove exact technical facts but can never mark RS-001 PASS; independent review and evidence registration are required.",
+    "self_attestation_forbidden": true
+  },
+  "per_need_evidence": [
+    "availability in System.map and/or Module.symvers",
+    "export class, provider module, and namespace",
+    "selected config digest plus separately reviewed Kconfig requirements",
+    "generated Rust binding or separately reviewed Rust abstraction",
+    "separately reviewed compiler-backed consumer context classification"
+  ],
+  "readiness_without_exact_capture": {
+    "blocker": "exact compiler/source/build inputs and pinned reviewed maps are absent",
+    "credit_eligible": false,
+    "gate_status": "NOT_READY",
+    "technical_complete": false
+  },
+  "repository_inputs": {
+    "checker": {
+      "path": "scripts/linux_api_exact_probe.py",
+      "sha256": "2bd514d068ec7691722103375968346c364f48c460d85a1fc92af18f54eee2ba"
+    },
+    "config_policy": {
+      "path": "host-kernel/rocky/config-policy.json",
+      "sha256": "94c4715f9c823b3aafcb8399ed7b2cbe25e77308b1c165afc75db70f5afbfd7f"
+    },
+    "patch_series": {
+      "path": "host-kernel/rocky/patches/series.json",
+      "sha256": "6a1a5e8fb13b6ce6ed35bd8e5487bb67ecf92d2be927799b660f21b5631f68fb"
+    },
+    "source_lock": {
+      "path": "host-kernel/rocky/source-lock.json",
+      "sha256": "6b8571b229f31bf68b58749217391d917a2ba2028ac876e8475be1ec5bfef222"
+    },
+    "toolchain_lock": {
+      "path": "host-kernel/rocky/toolchain-lock.json",
+      "sha256": "fd3d7a13e1b8b5d103f7e59d22f17c9e4b99cc937637decaa66749acfae6c802"
+    },
+    "workflow": {
+      "path": ".github/workflows/rs001-linux-api-exact-probe.yml",
+      "sha256": "4f742906a1cbc5d9a63c4d3c7d8fe6e5846cfc99a0c39ae223f237a4a2598568"
+    }
+  },
+  "required_capture_inputs": [
+    "locked source RPM bytes",
+    "locked Linux source archive bytes",
+    "all locked patch bytes",
+    "byte-exact patched source tree",
+    "locked Rocky x86_64 baseline config",
+    "first and second idempotent resolved configs",
+    "Module.symvers from the exact selected build",
+    "System.map from the exact selected build",
+    "generated Rust bindings from the exact selected build",
+    "kernel.release and compiler/tool provenance"
+  ],
+  "reviewed_map_pins": {
+    "config_requirements_sha256": null,
+    "consumer_contexts_sha256": null,
+    "rust_abstractions_sha256": null
+  },
+  "schema_version": 1,
+  "source_patch_contract": {
+    "patches": [
+      {
+        "applied": false,
+        "empty": true,
+        "path": "SOURCES/patch-6.12-redhat.patch",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "applied": false,
+        "empty": true,
+        "path": "SOURCES/linux-kernel-test.patch",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "applied": true,
+        "empty": false,
+        "path": "SOURCES/1000-debrand-some-messages.patch",
+        "sha256": "080bbc72a543eed6b71daee1b3236b59f3a0f8b3ad20815d962444d3b106b144",
+        "size": 928
+      }
+    ],
+    "tree_comparison": "fresh locked archive plus every applied locked patch must byte-match the supplied out-of-tree build source"
+  },
+  "target": {
+    "architecture": "x86_64",
+    "distribution": "Rocky Linux",
+    "kernel_nvr": "kernel-6.12.0-211.44.1.el10_2",
+    "release": "10.2",
+    "source_archive_bytes": 153374592,
+    "source_archive_filename": "linux-6.12.0-211.44.1.el10_2.tar.xz",
+    "source_archive_root": "linux-6.12.0-211.44.1.el10_2",
+    "source_archive_sha256": "4a174d47b8874a2139efcd1ac1ab2d6b80ae7a0ca62f0ae4596fd20cf62a3533",
+    "source_rpm_bytes": 159328372,
+    "source_rpm_filename": "kernel-6.12.0-211.44.1.el10_2.src.rpm",
+    "source_rpm_sha256": "2bfeda65bd9bdd4b86650074c81e061c37822b80317ac0d4f5aacc89c85589cb"
+  }
+}

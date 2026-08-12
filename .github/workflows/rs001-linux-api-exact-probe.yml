@@ -1,0 +1,202 @@
+name: RS-001 exact Rocky Linux API evidence
+
+on:
+  push:
+    branches: [codex/rocky-rust-validation]
+    paths:
+      - .github/workflows/rs001-linux-api-exact-probe.yml
+      - host-kernel/contracts/linux-api-needs-v1.json
+      - host-kernel/contracts/linux-api-exact-probe-v1.json
+      - host-kernel/rocky/config-policy.json
+      - host-kernel/rocky/configs/rust-minimal.config
+      - host-kernel/rocky/patches/series.json
+      - host-kernel/rocky/source-lock.json
+      - host-kernel/rocky/toolchain-lock.json
+      - scripts/linux_api_exact_probe.py
+      - scripts/tests/test_linux_api_exact_probe.py
+  pull_request:
+    branches: [codex/rocky-rust-validation]
+    paths:
+      - .github/workflows/rs001-linux-api-exact-probe.yml
+      - host-kernel/contracts/linux-api-needs-v1.json
+      - host-kernel/contracts/linux-api-exact-probe-v1.json
+      - host-kernel/rocky/**
+      - scripts/linux_api_exact_probe.py
+      - scripts/tests/test_linux_api_exact_probe.py
+  workflow_dispatch:
+    inputs:
+      validation_sha:
+        description: Exact 40-hex candidate commit
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+env:
+  ROCKY_IMAGE: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
+  EXPECTED_HEAD_SHA: ${{ github.event_name == 'workflow_dispatch' && inputs.validation_sha || github.event.pull_request.head.sha || github.sha }}
+
+jobs:
+  exact-probe:
+    name: Build-bound 268-API capture (credit forbidden)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 330
+    concurrency:
+      group: rs001-api-${{ github.event.pull_request.number || github.ref }}
+      cancel-in-progress: true
+    container:
+      image: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Refuse the wrong runtime and install probe/build tools
+        run: |
+          set -euo pipefail
+          test "$(uname -m)" = x86_64
+          . /etc/os-release
+          test "$ID" = rocky
+          test "$VERSION_ID" = 10.2
+          dnf -y --setopt=install_weak_deps=False install dnf-plugins-core
+          dnf config-manager --set-enabled crb
+          dnf -y --setopt=install_weak_deps=False install \
+            bc binutils bison bindgen-cli bpftool cargo clang cpio diffutils \
+            dwarves elfutils-libelf-devel findutils flex gcc git-core gzip \
+            hostname kernel-rpm-macros kmod lld llvm make ncurses-devel \
+            openssl-devel patch perl python3 python3-devel redhat-rpm-config \
+            rpm-build rust rust-src rustfmt tar which xz zstd
+          dnf clean all
+
+      - name: Validate exact manual commit input
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        env:
+          VALIDATION_SHA: ${{ inputs.validation_sha }}
+        run: |
+          set -euo pipefail
+          [[ "$VALIDATION_SHA" =~ ^[0-9a-f]{40}$ ]]
+
+      - name: Check out the exact candidate without credentials
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ env.EXPECTED_HEAD_SHA }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Verify immutable contract and absent-input fail-closed state
+        run: |
+          set -euo pipefail
+          test "$(git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"
+          python3 scripts/linux_api_exact_probe.py \
+            --repo "$GITHUB_WORKSPACE" check-contract
+
+      - name: Acquire and unpack checksum-locked Rocky source RPM
+        env:
+          CACHE_ROOT: ${{ runner.temp }}/rs001-cache
+          SOURCE_ASSETS: ${{ runner.temp }}/rs001-assets
+        run: |
+          set -euo pipefail
+          python3 scripts/rocky_kernel_source_lock.py \
+            --repo "$GITHUB_WORKSPACE" \
+            --cache-root "$CACHE_ROOT" \
+            --acquire
+          srpm="$(find "$CACHE_ROOT" -type f -name 'kernel-6.12.0-211.44.1.el10_2.src.rpm' -print)"
+          test -n "$srpm"
+          test "$(printf '%s\n' "$srpm" | wc -l)" = 1
+          mkdir -p "$SOURCE_ASSETS"
+          (
+            cd "$SOURCE_ASSETS"
+            rpm2cpio "$srpm" | cpio -idm --quiet --no-absolute-filenames
+          )
+          archive="$SOURCE_ASSETS/linux-6.12.0-211.44.1.el10_2.tar.xz"
+          baseline="$SOURCE_ASSETS/kernel-x86_64-rhel.config"
+          test -f "$archive"
+          test -f "$baseline"
+          printf 'RS001_SRPM=%s\n' "$srpm" >> "$GITHUB_ENV"
+          printf 'RS001_SOURCE_ASSETS=%s\n' "$SOURCE_ASSETS" >> "$GITHUB_ENV"
+          printf 'RS001_SOURCE_ARCHIVE=%s\n' "$archive" >> "$GITHUB_ENV"
+          printf 'RS001_BASELINE_CONFIG=%s\n' "$baseline" >> "$GITHUB_ENV"
+
+      - name: Replay exact source patches and resolve config twice
+        env:
+          SOURCE_PARENT: ${{ runner.temp }}/rs001-source
+          BUILD_DIR: ${{ runner.temp }}/rs001-build
+        run: |
+          set -euo pipefail
+          mkdir -p "$SOURCE_PARENT" "$BUILD_DIR"
+          tar -C "$SOURCE_PARENT" -xf "$RS001_SOURCE_ARCHIVE"
+          source_root="$SOURCE_PARENT/linux-6.12.0-211.44.1.el10_2"
+          test -f "$source_root/Makefile"
+          patch -d "$source_root" -p1 --batch --forward --no-backup-if-mismatch \
+            -i "$RS001_SOURCE_ASSETS/1000-debrand-some-messages.patch"
+
+          cp "$RS001_BASELINE_CONFIG" "$BUILD_DIR/.config"
+          "$source_root/scripts/kconfig/merge_config.sh" -m -O "$BUILD_DIR" \
+            "$BUILD_DIR/.config" \
+            "$GITHUB_WORKSPACE/host-kernel/rocky/configs/rust-minimal.config"
+          make -C "$source_root" O="$BUILD_DIR" ARCH=x86_64 LLVM=1 olddefconfig
+          cp "$BUILD_DIR/.config" "$BUILD_DIR/resolved-first.config"
+          make -C "$source_root" O="$BUILD_DIR" ARCH=x86_64 LLVM=1 olddefconfig
+          cp "$BUILD_DIR/.config" "$BUILD_DIR/resolved-second.config"
+          cmp "$BUILD_DIR/resolved-first.config" "$BUILD_DIR/resolved-second.config"
+          printf 'RS001_SOURCE_ROOT=%s\n' "$source_root" >> "$GITHUB_ENV"
+          printf 'RS001_BUILD_DIR=%s\n' "$BUILD_DIR" >> "$GITHUB_ENV"
+
+      - name: Build exact symbol and Rust-binding oracles
+        run: |
+          set -euo pipefail
+          make -C "$RS001_SOURCE_ROOT" O="$RS001_BUILD_DIR" \
+            ARCH=x86_64 LLVM=1 rustavailable
+          make -C "$RS001_SOURCE_ROOT" O="$RS001_BUILD_DIR" \
+            ARCH=x86_64 LLVM=1 -j2 prepare
+          make -C "$RS001_SOURCE_ROOT" O="$RS001_BUILD_DIR" \
+            ARCH=x86_64 LLVM=1 -j2 vmlinux modules
+          test -s "$RS001_BUILD_DIR/Module.symvers"
+          test -s "$RS001_BUILD_DIR/System.map"
+          test -s "$RS001_BUILD_DIR/rust/bindings/bindings_generated.rs"
+          make -s -C "$RS001_SOURCE_ROOT" O="$RS001_BUILD_DIR" \
+            ARCH=x86_64 LLVM=1 kernelrelease > "$RS001_BUILD_DIR/kernel.release"
+          test -s "$RS001_BUILD_DIR/kernel.release"
+
+      - name: Capture and verify immutable per-need evidence
+        env:
+          EVIDENCE_DIR: ${{ runner.temp }}/rs001-evidence
+        run: |
+          set -euo pipefail
+          mkdir -p "$EVIDENCE_DIR"
+          kernel_release="$(tr -d '[:space:]' < "$RS001_BUILD_DIR/kernel.release")"
+          python3 scripts/linux_api_exact_probe.py \
+            --repo "$GITHUB_WORKSPACE" capture \
+            --source-rpm "$RS001_SRPM" \
+            --source-archive "$RS001_SOURCE_ARCHIVE" \
+            --source-assets "$RS001_SOURCE_ASSETS" \
+            --source-root "$RS001_SOURCE_ROOT" \
+            --baseline-config "$RS001_BASELINE_CONFIG" \
+            --resolved-config "$RS001_BUILD_DIR/resolved-first.config" \
+            --second-pass-config "$RS001_BUILD_DIR/resolved-second.config" \
+            --module-symvers "$RS001_BUILD_DIR/Module.symvers" \
+            --system-map "$RS001_BUILD_DIR/System.map" \
+            --rust-bindings "$RS001_BUILD_DIR/rust/bindings/bindings_generated.rs" \
+            --kernel-release "$kernel_release" \
+            --github-head-sha "$EXPECTED_HEAD_SHA" \
+            --github-repository "$GITHUB_REPOSITORY" \
+            --github-run-id "$GITHUB_RUN_ID" \
+            --github-run-attempt "$GITHUB_RUN_ATTEMPT" \
+            --output "$EVIDENCE_DIR/linux-api-exact-evidence.json"
+          python3 scripts/linux_api_exact_probe.py \
+            --repo "$GITHUB_WORKSPACE" verify-evidence \
+            --evidence "$EVIDENCE_DIR/linux-api-exact-evidence.json"
+          (
+            cd "$EVIDENCE_DIR"
+            sha256sum linux-api-exact-evidence.json > SHA256SUMS
+            sha256sum --check --strict SHA256SUMS
+          )
+
+      - name: Upload evidence without awarding RS-001 credit
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: rs001-linux-api-exact-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/rs001-evidence/
+          if-no-files-found: error
+          retention-days: 30

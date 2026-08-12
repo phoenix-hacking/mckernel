@@ -1,0 +1,331 @@
+import contextlib
+import io
+import json
+from pathlib import Path
+import shutil
+import sys
+import tempfile
+import unittest
+from unittest import mock
+
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from scripts import ihk_smp_native_lifecycle_check as lifecycle
+
+
+class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.temporary = tempfile.TemporaryDirectory(prefix="ihk-smp-native-lifecycle-")
+        self.repo = Path(self.temporary.name) / "repo"
+        self.contract = json.loads(
+            (REPO_ROOT / lifecycle.DEFAULT_CONTRACT).read_text(encoding="utf-8")
+        )
+        relative_paths = {
+            lifecycle.DEFAULT_CONTRACT.as_posix(),
+            self.contract["production_source"],
+            self.contract["provider_source"],
+            self.contract["kconfig"]["path"],
+            self.contract["kbuild"]["path"],
+            self.contract["stage_manifest"],
+            self.contract["reference_inventory"],
+        }
+        relative_paths.update(
+            parameter["legacy_source"] for parameter in self.contract["parameters"]
+        )
+        for relative in relative_paths:
+            target = self.repo / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(REPO_ROOT / relative, target)
+
+    def tearDown(self) -> None:
+        self.temporary.cleanup()
+
+    def mutate_text(self, relative: str, old: str, new: str) -> None:
+        path = self.repo / relative
+        text = path.read_text(encoding="utf-8")
+        self.assertIn(old, text)
+        path.write_text(text.replace(old, new, 1), encoding="utf-8")
+
+    def write_json(self, relative: str, value: object) -> None:
+        (self.repo / relative).write_text(
+            json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+
+    def test_repository_contract_is_verified_without_runtime_overclaim(self) -> None:
+        summary = lifecycle.validate_repository(REPO_ROOT)
+        self.assertEqual("SMP-001", summary["gate_id"])
+        self.assertEqual("ihk_smp_x86_64", summary["module"])
+        self.assertEqual(6, summary["parameters"])
+        self.assertEqual(["ihk"], summary["dependencies"])
+        self.assertEqual(["MCKERNEL_IHK_V1"], summary["import_namespaces"])
+        self.assertFalse(summary["artifact_validated"])
+        self.assertFalse(summary["built_symbol_reference_validated"])
+        self.assertFalse(summary["rocky_build_load_validated"])
+        self.assertTrue(summary["source_symbol_reference_present"])
+        self.assertFalse(summary["runtime_symbol_reference_proven"])
+
+    def test_cli_deliberately_does_not_report_gate_pass(self) -> None:
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            result = lifecycle.main(["--repo", str(REPO_ROOT)])
+        self.assertEqual(0, result)
+        rendered = output.getvalue()
+        self.assertIn("SOURCE-CONTRACT-VERIFIED", rendered)
+        self.assertIn("rocky_build_load=NOT_EVALUATED", rendered)
+        self.assertNotIn("PASS", rendered)
+
+    def test_each_parameter_name_binding_is_fail_closed(self) -> None:
+        source_path = self.repo / self.contract["production_source"]
+        original = source_path.read_text(encoding="utf-8")
+        for parameter in self.contract["parameters"]:
+            with self.subTest(parameter=parameter["name"]):
+                old = f'name_bytes: b"{parameter["name"]}\\0",'
+                mutated = original.replace(old, 'name_bytes: b"wrong_name\\0",', 1)
+                self.assertNotEqual(original, mutated)
+                source_path.write_text(mutated, encoding="utf-8")
+                with self.assertRaisesRegex(lifecycle.ValidationError, "descriptor"):
+                    lifecycle.validate_repository(self.repo)
+        source_path.write_text(original, encoding="utf-8")
+
+    def test_each_parameter_type_and_ops_binding_is_fail_closed(self) -> None:
+        source_path = self.repo / self.contract["production_source"]
+        original = source_path.read_text(encoding="utf-8")
+        for parameter in self.contract["parameters"]:
+            with self.subTest(parameter=parameter["name"]):
+                old_type = parameter["rust_type"]
+                new_type = (
+                    "core::ffi::c_ulong"
+                    if old_type == "core::ffi::c_uint"
+                    else "core::ffi::c_uint"
+                )
+                marker = f"name: {parameter['name']},"
+                start = original.index(marker)
+                end = original.index("\n);", start)
+                block = original[start:end]
+                mutated_block = block.replace(old_type, new_type, 1)
+                mutated = original[:start] + mutated_block + original[end:]
+                source_path.write_text(mutated, encoding="utf-8")
+                with self.assertRaisesRegex(lifecycle.ValidationError, "descriptor"):
+                    lifecycle.validate_repository(self.repo)
+        source_path.write_text(original, encoding="utf-8")
+
+    def test_each_parameter_default_is_fail_closed(self) -> None:
+        source_path = self.repo / self.contract["production_source"]
+        original = source_path.read_text(encoding="utf-8")
+        for parameter in self.contract["parameters"]:
+            with self.subTest(parameter=parameter["name"]):
+                marker = f"name: {parameter['name']},"
+                start = original.index(marker)
+                end = original.index("\n);", start)
+                block = original[start:end]
+                mutated_block = block.replace("default: 0,", "default: 1,", 1)
+                mutated = original[:start] + mutated_block + original[end:]
+                source_path.write_text(mutated, encoding="utf-8")
+                with self.assertRaisesRegex(lifecycle.ValidationError, "descriptor"):
+                    lifecycle.validate_repository(self.repo)
+        source_path.write_text(original, encoding="utf-8")
+
+    def test_each_parameter_permission_is_fail_closed(self) -> None:
+        source_path = self.repo / self.contract["production_source"]
+        original = source_path.read_text(encoding="utf-8")
+        for parameter in self.contract["parameters"]:
+            with self.subTest(parameter=parameter["name"]):
+                marker = f"name: {parameter['name']},"
+                start = original.index(marker)
+                end = original.index("\n);", start)
+                block = original[start:end]
+                mutated_block = block.replace("permission: 0o644,", "permission: 0o600,", 1)
+                mutated = original[:start] + mutated_block + original[end:]
+                source_path.write_text(mutated, encoding="utf-8")
+                with self.assertRaisesRegex(lifecycle.ValidationError, "descriptor"):
+                    lifecycle.validate_repository(self.repo)
+        source_path.write_text(original, encoding="utf-8")
+
+    def test_parameter_description_modinfo_drift_is_rejected(self) -> None:
+        self.mutate_text(
+            self.contract["production_source"],
+            "parm=ihk_cores:IHK reserved CPU cores\\0",
+            "parm=ihk_cores:wrong description\\0",
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "modinfo"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_parameter_descriptor_section_drift_is_rejected(self) -> None:
+        self.mutate_text(
+            self.contract["production_source"],
+            '#[link_section = "__param"]',
+            '#[link_section = "wrong_param"]',
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "ABI"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_provider_symbol_import_drift_is_rejected(self) -> None:
+        self.mutate_text(
+            self.contract["production_source"],
+            '#[link_name = "ihk_provider_lifecycle_v1"]',
+            '#[link_name = "wrong_provider_symbol"]',
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "provider-symbol import"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_manual_dependency_modinfo_is_rejected(self) -> None:
+        source = self.repo / self.contract["production_source"]
+        with source.open("a", encoding="utf-8") as stream:
+            stream.write('static WRONG: &[u8] = b"depends=ihk\\0";\n')
+        with self.assertRaisesRegex(lifecycle.ValidationError, "let modpost derive"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_provider_export_namespace_drift_is_rejected(self) -> None:
+        self.mutate_text(
+            self.contract["provider_source"],
+            'namespace: *b"MCKERNEL_IHK_V1\\0"',
+            'namespace: *b"UNVERSIONED_____\\0"',
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "provider anchor"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_import_namespace_modinfo_drift_is_rejected(self) -> None:
+        self.mutate_text(
+            self.contract["production_source"],
+            "import_ns=MCKERNEL_IHK_V1\\0",
+            "import_ns=UNVERSIONED\\0",
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "modinfo"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_extra_module_metadata_is_rejected(self) -> None:
+        self.mutate_text(
+            self.contract["production_source"],
+            '    name: "ihk_smp_x86_64",\n',
+            '    name: "ihk_smp_x86_64",\n    author: "not legacy",\n',
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "metadata"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_lifecycle_log_drift_is_rejected(self) -> None:
+        self.mutate_text(
+            self.contract["production_source"], "lifecycle=load", "lifecycle=start"
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "load lifecycle"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_unreviewed_ffi_escape_hatch_is_rejected(self) -> None:
+        source = self.repo / self.contract["production_source"]
+        with source.open("a", encoding="utf-8") as stream:
+            stream.write('extern "C" { fn legacy_smp_init(); }\n')
+        with self.assertRaisesRegex(lifecycle.ValidationError, "extern boundary"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_kconfig_provider_edge_removal_is_rejected(self) -> None:
+        self.mutate_text(
+            self.contract["kconfig"]["path"],
+            "\tdepends on MCKERNEL_IHK_RUST\n",
+            "",
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "provider dependency"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_kbuild_output_name_drift_is_rejected(self) -> None:
+        self.mutate_text(
+            self.contract["kbuild"]["path"],
+            "ihk-smp-x86_64.o",
+            "ihk_smp_x86_64.o",
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "mapping"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_stage_manifest_provider_dependency_drift_is_rejected(self) -> None:
+        relative = self.contract["stage_manifest"]
+        manifest = json.loads((self.repo / relative).read_text(encoding="utf-8"))
+        module = next(item for item in manifest["modules"] if item["crate"] == "ihk_smp_x86_64")
+        module["dependencies"] = []
+        self.write_json(relative, manifest)
+        with self.assertRaisesRegex(lifecycle.ValidationError, "provider dependency"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_stage_manifest_import_namespace_drift_is_rejected(self) -> None:
+        relative = self.contract["stage_manifest"]
+        manifest = json.loads((self.repo / relative).read_text(encoding="utf-8"))
+        module = next(item for item in manifest["modules"] if item["crate"] == "ihk_smp_x86_64")
+        module["required_import_namespaces"] = []
+        self.write_json(relative, manifest)
+        with self.assertRaisesRegex(lifecycle.ValidationError, "import namespace"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_stale_source_digest_is_rejected(self) -> None:
+        relative = self.contract["stage_manifest"]
+        manifest = json.loads((self.repo / relative).read_text(encoding="utf-8"))
+        module = next(item for item in manifest["modules"] if item["crate"] == "ihk_smp_x86_64")
+        module["source"]["sha256"] = "0" * 64
+        self.write_json(relative, manifest)
+        with self.assertRaisesRegex(lifecycle.ValidationError, "digest is stale"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_frozen_source_default_drift_is_rejected(self) -> None:
+        parameter = next(item for item in self.contract["parameters"] if item["name"] == "ihk_mem")
+        self.mutate_text(
+            parameter["legacy_source"],
+            "static unsigned long ihk_mem = 0;",
+            "static unsigned long ihk_mem = 1;",
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "does not prove ihk_mem"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_reference_binary_dependency_drift_is_rejected(self) -> None:
+        relative = self.contract["reference_inventory"]
+        inventory = json.loads((self.repo / relative).read_text(encoding="utf-8"))
+        inventory["binary_capture"]["modules"]["ihk_smp_x86_64"]["modinfo"]["values"][
+            "depends"
+        ] = []
+        self.write_json(relative, inventory)
+        with self.assertRaisesRegex(lifecycle.ValidationError, "provider dependency"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_built_artifact_metadata_and_diagnostics_are_checked(self) -> None:
+        module = self.repo / "ihk-smp-x86_64.ko"
+        module.write_bytes(b"lifecycle=load parameters=\0lifecycle=unload parameters=\0")
+        summary = lifecycle.validate_repository(REPO_ROOT)
+        contract = json.loads(
+            (REPO_ROOT / lifecycle.DEFAULT_CONTRACT).read_text(encoding="utf-8")
+        )
+        parameters = contract["parameters"]
+        values = {
+            "name": ["ihk_smp_x86_64"],
+            "license": ["Dual BSD/GPL"],
+            "depends": ["ihk"],
+            "import_ns": ["MCKERNEL_IHK_V1"],
+            "author": [],
+            "description": [],
+            "version": [],
+            "parm": [f"{item['name']}:{item['description']}" for item in parameters],
+            "parmtype": [f"{item['name']}:{item['type']}" for item in parameters],
+        }
+        with mock.patch.object(
+            lifecycle, "_modinfo", side_effect=lambda _path, field: values[field]
+        ), mock.patch.object(
+            lifecycle,
+            "_undefined_symbols",
+            return_value={"ihk_provider_lifecycle_v1"},
+        ):
+            lifecycle.validate_module_artifact(module, summary, contract)
+        self.assertTrue(summary["artifact_validated"])
+        self.assertTrue(summary["built_symbol_reference_validated"])
+        self.assertFalse(summary["rocky_build_load_validated"])
+
+        values["depends"] = []
+        with mock.patch.object(
+            lifecycle, "_modinfo", side_effect=lambda _path, field: values[field]
+        ), mock.patch.object(
+            lifecycle,
+            "_undefined_symbols",
+            return_value={"ihk_provider_lifecycle_v1"},
+        ):
+            with self.assertRaisesRegex(lifecycle.ValidationError, "depends differs"):
+                lifecycle.validate_module_artifact(module, summary, contract)
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -1,0 +1,69 @@
+{
+  "binfmt": {
+    "legacy_imports": [
+      "__register_binfmt",
+      "unregister_binfmt"
+    ],
+    "native_registration_status": "blocked",
+    "owner_gate_id": "MCC-013",
+    "reason": "The selected Linux 6.12 Rust kernel crate has no safe linux_binfmt registration API; this foundation must not claim registration or unregister ownership."
+  },
+  "dependencies": [
+    "ihk"
+  ],
+  "foundation_status": "source-contract-only",
+  "foundation_version": 1,
+  "gate_credit_eligible": false,
+  "gate_id": "MCC-001",
+  "ihk_dependency": {
+    "legacy_inter_module_import_count": 32,
+    "native_symbol_import": {
+      "reason": "The selected Linux 6.12 Rust surface has no supported custom module-symbol export API and the native ihk provider exposes no reviewed ABI anchor; a hand-authored depends record is forbidden.",
+      "status": "blocked"
+    },
+    "required_import_namespace": "MCKERNEL_IHK_V1"
+  },
+  "kbuild": {
+    "config_symbol": "CONFIG_MCKERNEL_MCCTRL_RUST",
+    "module_object": "mcctrl.o",
+    "path": "host-kernel/kbuild/Kbuild.in"
+  },
+  "kconfig": {
+    "depends_on": "MCKERNEL_IHK_RUST",
+    "path": "host-kernel/kbuild/Kconfig",
+    "symbol": "MCKERNEL_MCCTRL_RUST",
+    "type": "tristate"
+  },
+  "legacy_lifecycle": {
+    "load_success_log": "mcctrl: initialized successfully.",
+    "unload_success_log": "mcctrl: unregistered."
+  },
+  "lifecycle_logs": {
+    "load": "lifecycle=load foundation={} parameters={} declared_dependencies={} ihk_import={} binfmt={}",
+    "unload": "lifecycle=unload foundation={} parameters={} declared_dependencies={} ihk_import={} binfmt={}"
+  },
+  "module": {
+    "author": null,
+    "description": null,
+    "license": "GPL v2",
+    "name": "mcctrl",
+    "output": "mcctrl.ko",
+    "version": null
+  },
+  "parameter_count": 0,
+  "production_source": "host-kernel/native-rust/mcctrl.rs",
+  "reference_inventory": "host-kernel/reference/legacy-host-modules-f2eb7352.json",
+  "schema_version": 1,
+  "selected_kernel": {
+    "archive_sha256": "4a174d47b8874a2139efcd1ac1ab2d6b80ae7a0ca62f0ae4596fd20cf62a3533",
+    "release": "6.12.0-211.44.1.el10_2",
+    "reviewed_rust_paths": [
+      "rust/bindings/bindings_helper.h",
+      "rust/exports.c",
+      "rust/kernel/lib.rs",
+      "rust/macros/module.rs"
+    ],
+    "source_lock": "host-kernel/rocky/source-lock.json"
+  },
+  "stage_manifest": "host-kernel/kbuild/stage-manifest.json"
+}

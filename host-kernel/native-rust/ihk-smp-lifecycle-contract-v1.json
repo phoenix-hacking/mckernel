@@ -1,0 +1,117 @@
+{
+  "artifact_policy": {
+    "environment_generated_metadata": [
+      "rhelversion",
+      "srcversion",
+      "vermagic"
+    ],
+    "rocky_10_2_build_and_load_required_for_gate": true
+  },
+  "dependency_contract": {
+    "built_symbol_reference_validated": false,
+    "dependencies": [
+      "ihk"
+    ],
+    "import_namespaces": [
+      "MCKERNEL_IHK_V1"
+    ],
+    "provider_symbol": "ihk_provider_lifecycle_v1",
+    "scope": "source-bound namespaced symbol dependency; built relocation and runtime ordering require Rocky evidence",
+    "source_symbol_reference_required": true
+  },
+  "gate_id": "SMP-001",
+  "kbuild": {
+    "composite_object": "ihk-smp-x86_64-y := ihk_smp_x86_64.o",
+    "config_symbol": "CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST",
+    "module_object": "ihk-smp-x86_64.o",
+    "path": "host-kernel/kbuild/Kbuild.in"
+  },
+  "kconfig": {
+    "path": "host-kernel/kbuild/Kconfig",
+    "provider_symbol": "MCKERNEL_IHK_RUST",
+    "symbol": "MCKERNEL_IHK_SMP_X86_64_RUST",
+    "type": "tristate"
+  },
+  "legacy_source_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+  "lifecycle_logs": {
+    "load": "lifecycle=load parameters={} dependency={} import_namespace={}",
+    "unload": "lifecycle=unload parameters={} dependency={} import_namespace={}"
+  },
+  "module": {
+    "forbidden_static_metadata": [
+      "author",
+      "description",
+      "version"
+    ],
+    "license": "Dual BSD/GPL",
+    "name": "ihk_smp_x86_64",
+    "output": "ihk-smp-x86_64.ko"
+  },
+  "parameters": [
+    {
+      "default": 0,
+      "description": "IHK reserved CPU cores",
+      "legacy_source": "ihk/linux/driver/smp/smp-driver.c",
+      "name": "ihk_cores",
+      "ops": "param_ops_uint",
+      "permission": "0644",
+      "rust_type": "core::ffi::c_uint",
+      "type": "uint"
+    },
+    {
+      "default": 0,
+      "description": "Target CPU of IHK IKC IRQ",
+      "legacy_source": "ihk/linux/driver/smp/arch/x86_64/smp-arch-driver.c",
+      "name": "ihk_ikc_irq_core",
+      "ops": "param_ops_uint",
+      "permission": "0644",
+      "rust_type": "core::ffi::c_uint",
+      "type": "uint"
+    },
+    {
+      "default": 0,
+      "description": "IHK reserved memory in MBs",
+      "legacy_source": "ihk/linux/driver/smp/smp-driver.c",
+      "name": "ihk_mem",
+      "ops": "param_ops_ulong",
+      "permission": "0644",
+      "rust_type": "core::ffi::c_ulong",
+      "type": "ulong"
+    },
+    {
+      "default": 0,
+      "description": "IHK reserved physical memory start address",
+      "legacy_source": "ihk/linux/driver/smp/smp-driver.c",
+      "name": "ihk_phys_start",
+      "ops": "param_ops_ulong",
+      "permission": "0644",
+      "rust_type": "core::ffi::c_ulong",
+      "type": "ulong"
+    },
+    {
+      "default": 0,
+      "description": "IHK IKC IPI to be scanned from this IRQ vector",
+      "legacy_source": "ihk/linux/driver/smp/arch/x86_64/smp-arch-driver.c",
+      "name": "ihk_start_irq",
+      "ops": "param_ops_uint",
+      "permission": "0644",
+      "rust_type": "core::ffi::c_uint",
+      "type": "uint"
+    },
+    {
+      "default": 0,
+      "description": "IHK trampoline page physical address",
+      "legacy_source": "ihk/linux/driver/smp/arch/x86_64/smp-arch-driver.c",
+      "name": "ihk_trampoline",
+      "ops": "param_ops_ulong",
+      "permission": "0644",
+      "rust_type": "core::ffi::c_ulong",
+      "type": "ulong"
+    }
+  ],
+  "production_source": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+  "provider_source": "host-kernel/native-rust/ihk.rs",
+  "reference_inventory": "host-kernel/reference/legacy-host-modules-f2eb7352.json",
+  "schema_version": 1,
+  "stage_manifest": "host-kernel/kbuild/stage-manifest.json"
+}
