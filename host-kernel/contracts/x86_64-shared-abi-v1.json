@@ -1,0 +1,885 @@
+{
+  "capture": {
+    "constant_count": 145,
+    "constant_declarations_sha256": "1dc60021b09f630dd4593eaf2b18692107042954714cc7b7474e9669f5c54fdb",
+    "layout_count": 28,
+    "rust_path": "host-kernel/native-rust/abi/x86_64.rs",
+    "rust_sha256": "b5980e5b621914a120a0e6b72241477c48aee85615ae4cc76077f3874e35f860",
+    "sources": [
+      {
+        "bytes": 995,
+        "id": "status",
+        "owner": "ihk",
+        "path": "linux/include/ihk/status.h",
+        "ref": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+        "sha256": "fef81cf170da96d41500a572c22e44c272f7110eff815cf43944de0e429d81e7"
+      },
+      {
+        "bytes": 5704,
+        "id": "host_user",
+        "owner": "ihk",
+        "path": "linux/include/ihk/ihk_host_user.h",
+        "ref": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+        "sha256": "2335260024075a08becbe74651162a950aee8bea603e9a451cb8bcae3aa0ef97"
+      },
+      {
+        "bytes": 4501,
+        "id": "queue",
+        "owner": "ihk",
+        "path": "ikc/include/ikc/queue.h",
+        "ref": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+        "sha256": "0acb85aee2d3b0b7620a0b222461815c6c96c530c5b7182fe60e8ae52ec4e461"
+      },
+      {
+        "bytes": 987,
+        "id": "message",
+        "owner": "ihk",
+        "path": "ikc/include/ikc/msg.h",
+        "ref": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+        "sha256": "3f88492d20e5177f11298e15401ae460bb7cc7173035b71dcf3074ee319bdf6f"
+      },
+      {
+        "bytes": 1395,
+        "id": "master",
+        "owner": "ihk",
+        "path": "ikc/include/ikc/master.h",
+        "ref": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+        "sha256": "63fb24c40078b464fa751f1e564a7fa548e3047a91fd54c5cf9029fceb4eefbd"
+      },
+      {
+        "bytes": 919,
+        "id": "kmsg",
+        "owner": "ihk",
+        "path": "linux/include/ihk/ihk_debug.h",
+        "ref": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+        "sha256": "63160ae79466f721b35bae1f2a8dad1378bcd4b8525045930abfaf4ec47383d7"
+      },
+      {
+        "bytes": 1575,
+        "id": "monitor",
+        "owner": "ihk",
+        "path": "linux/include/ihk/ihk_monitor.h",
+        "ref": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+        "sha256": "6fb530c99848036f8c71f946c01d2f7189e15c3e8a42b9962be980eaf29e3b60"
+      },
+      {
+        "bytes": 1404,
+        "id": "rusage",
+        "owner": "ihk",
+        "path": "linux/include/ihk/ihk_rusage.h",
+        "ref": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+        "sha256": "afc786f096e70bd9b89834b5b0af81ee0e1cfe3f3cd2e73ef5f88db4d63d5d01"
+      },
+      {
+        "bytes": 4490,
+        "id": "boot",
+        "owner": "ihk",
+        "path": "cokernel/smp/x86_64/bootparam.h",
+        "ref": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+        "sha256": "6e72eae27f27625efa66bdf0a76d661cb4a8050ceb117fb75c56ff63678e5da1"
+      },
+      {
+        "bytes": 14511,
+        "id": "build_profile",
+        "owner": "root",
+        "path": "CMakeLists.txt",
+        "ref": "f2eb735212e6ab0494e638497e80d9ae78b2848e",
+        "sha256": "e60b304fd38bd2dcddd4f7f8c6217bf887bacfc997741e7aed321dd9222899da"
+      },
+      {
+        "bytes": 20816,
+        "id": "syscall",
+        "owner": "root",
+        "path": "kernel/include/syscall.h",
+        "ref": "f2eb735212e6ab0494e638497e80d9ae78b2848e",
+        "sha256": "758353cfee780c8ba95038947eebbbbfbd5d8cf571f9cb8ccc1558b723a6ece8"
+      },
+      {
+        "bytes": 9756,
+        "id": "uprotocol",
+        "owner": "root",
+        "path": "executer/include/uprotocol.h",
+        "ref": "f2eb735212e6ab0494e638497e80d9ae78b2848e",
+        "sha256": "1770a59cf4486380eb5aa483d3634dc1e4c9c9c16d1bf09865d4ff8f71191e69"
+      },
+      {
+        "bytes": 17637,
+        "id": "mcctrl",
+        "owner": "root",
+        "path": "executer/kernel/mcctrl/mcctrl.h",
+        "ref": "f2eb735212e6ab0494e638497e80d9ae78b2848e",
+        "sha256": "f57a0a6d7e0b0a07cf3ffabd9c88953bed4ae5a2cb8d68d13af5ffe30afaa8d8"
+      }
+    ]
+  },
+  "constant_bindings": {
+    "boot": {
+      "PERF_EXTRA_REG_MAX": 10,
+      "SMP_MAX_CPUS": 512
+    },
+    "host_user": {
+      "FLAG_IHK_OS_SHUTDOWN_FORCE": 1073741824,
+      "IHK_DEVICE_CREATE_OS": 1124608,
+      "IHK_DEVICE_DESTROY_OS": 1124609,
+      "IHK_DEVICE_DETECT_HUNGUP": 1124623,
+      "IHK_DEVICE_GET_BUILDID": 1124619,
+      "IHK_DEVICE_GET_KMSG_BUF": 1124616,
+      "IHK_DEVICE_GET_NUM_CPUS": 1124620,
+      "IHK_DEVICE_QUERY_CPU": 1124614,
+      "IHK_DEVICE_QUERY_MEM": 1124615,
+      "IHK_DEVICE_READ_KMSG_BUF": 1124617,
+      "IHK_DEVICE_RELEASE_CPU": 1124611,
+      "IHK_DEVICE_RELEASE_KMSG_BUF": 1124618,
+      "IHK_DEVICE_RELEASE_MEM": 1124613,
+      "IHK_DEVICE_RELEASE_MEM_PARTIALLY": 1124621,
+      "IHK_DEVICE_RESERVE_CPU": 1124610,
+      "IHK_DEVICE_RESERVE_MEM": 1124612,
+      "IHK_OS_ALLOC_CPU": 1124880,
+      "IHK_OS_ALLOC_MEM": 1124881,
+      "IHK_OS_ASSIGN_CPU": 1124898,
+      "IHK_OS_ASSIGN_MEM": 1124900,
+      "IHK_OS_AUX_PERF_DESTROY": 287899909,
+      "IHK_OS_AUX_PERF_DISABLE": 287899908,
+      "IHK_OS_AUX_PERF_ENABLE": 287899907,
+      "IHK_OS_AUX_PERF_GET": 287899906,
+      "IHK_OS_AUX_PERF_NUM": 287899904,
+      "IHK_OS_AUX_PERF_SET": 287899905,
+      "IHK_OS_BOOT": 1124865,
+      "IHK_OS_CLEAR_KMSG": 1124897,
+      "IHK_OS_DUMP": 1124870,
+      "IHK_OS_EVENTFD": 1124886,
+      "IHK_OS_FREEZE": 1124912,
+      "IHK_OS_GETRUSAGE": 287899910,
+      "IHK_OS_GET_BUILDID": 1124919,
+      "IHK_OS_GET_CPU_USAGE": 1124915,
+      "IHK_OS_GET_IKC_MAP": 1124905,
+      "IHK_OS_GET_NUM_CPUS": 1124920,
+      "IHK_OS_GET_NUM_NUMA_NODES": 1124916,
+      "IHK_OS_GET_USAGE": 1124914,
+      "IHK_OS_LOAD": 1124864,
+      "IHK_OS_NOTIFY_HUNGUP": 1124917,
+      "IHK_OS_QUERY_CPU": 1124902,
+      "IHK_OS_QUERY_FREE_MEM": 1124869,
+      "IHK_OS_QUERY_MEM": 1124903,
+      "IHK_OS_QUERY_STATUS": 1124867,
+      "IHK_OS_READ_KADDR": 1124921,
+      "IHK_OS_READ_KMSG": 1124896,
+      "IHK_OS_REGISTER_EVENT": 1124885,
+      "IHK_OS_RELEASE_CPU": 1124899,
+      "IHK_OS_RELEASE_MEM": 1124901,
+      "IHK_OS_RESERVE_CPU": 1124882,
+      "IHK_OS_RESERVE_MEM": 1124883,
+      "IHK_OS_SET_IKC_MAP": 1124904,
+      "IHK_OS_SET_KARGS": 1124868,
+      "IHK_OS_SHUTDOWN": 1124866,
+      "IHK_OS_STATUS": 1124884,
+      "IHK_OS_THAW": 1124913
+    },
+    "kmsg": {
+      "IHK_KMSG_SIZE": 4190208
+    },
+    "master": {
+      "IHK_IKC_MAX_PORT": 512
+    },
+    "message": {
+      "IHK_IKC_MASTER_MSG_CONNECT": 536870913,
+      "IHK_IKC_MASTER_MSG_CONNECT_REPLY": 536870914,
+      "IHK_IKC_MASTER_MSG_DISCONNECT": 536870920,
+      "IHK_IKC_MASTER_MSG_INIT_ACK": 270544912,
+      "IHK_IKC_MASTER_MSG_PACKET_ON_CHANNEL": 536870928
+    },
+    "queue": {
+      "IKC_FLAG_DESTROYING": 2,
+      "IKC_FLAG_DESTROY_ACKED": 4,
+      "IKC_FLAG_ENABLED": 1,
+      "IKC_FLAG_NO_COPY": 16,
+      "IKC_FLAG_STATUS_MASK": 7,
+      "IKC_NO_NOTIFY": 256
+    },
+    "rusage": {
+      "IHK_MAX_NUM_CPUS": 1024,
+      "IHK_MAX_NUM_NUMA_NODES": 1024,
+      "IHK_MAX_NUM_PGSIZES": 8
+    },
+    "status": {
+      "IHK_OS_STATUS_BOOTED": 3,
+      "IHK_OS_STATUS_BOOTING": 2,
+      "IHK_OS_STATUS_COUNT": 11,
+      "IHK_OS_STATUS_FAILED": 9,
+      "IHK_OS_STATUS_FREEZING": 6,
+      "IHK_OS_STATUS_FROZEN": 7,
+      "IHK_OS_STATUS_HUNGUP": 10,
+      "IHK_OS_STATUS_LOADING": 1,
+      "IHK_OS_STATUS_NOT_BOOTED": 0,
+      "IHK_OS_STATUS_READY": 4,
+      "IHK_OS_STATUS_RUNNING": 5,
+      "IHK_OS_STATUS_SHUTDOWN": 8
+    },
+    "syscall": {
+      "SCD_MSG_CLEANUP_FD": 84,
+      "SCD_MSG_CLEANUP_FD_RESP": 85,
+      "SCD_MSG_CLEANUP_PROCESS": 9,
+      "SCD_MSG_CLEANUP_PROCESS_RESP": 10,
+      "SCD_MSG_CPU_RW_REG": 82,
+      "SCD_MSG_CPU_RW_REG_RESP": 83,
+      "SCD_MSG_DEBUG_LOG": 32,
+      "SCD_MSG_EVENTFD": 70,
+      "SCD_MSG_FUTEX_WAKE": 96,
+      "SCD_MSG_GET_CPU_MAPPING": 12,
+      "SCD_MSG_GET_VDSO_INFO": 11,
+      "SCD_MSG_INIT_CHANNEL": 5,
+      "SCD_MSG_INIT_CHANNEL_ACKED": 6,
+      "SCD_MSG_PERF_ACK": 81,
+      "SCD_MSG_PERF_CTRL": 80,
+      "SCD_MSG_PREPARE_PROCESS": 1,
+      "SCD_MSG_PREPARE_PROCESS_ACKED": 2,
+      "SCD_MSG_PROCFS_ANSWER": 19,
+      "SCD_MSG_PROCFS_CREATE": 16,
+      "SCD_MSG_PROCFS_DELETE": 17,
+      "SCD_MSG_PROCFS_RELEASE": 21,
+      "SCD_MSG_PROCFS_REQUEST": 18,
+      "SCD_MSG_PROCFS_TID_CREATE": 68,
+      "SCD_MSG_PROCFS_TID_DELETE": 69,
+      "SCD_MSG_REMOTE_PAGE_FAULT": 24,
+      "SCD_MSG_REMOTE_PAGE_FAULT_ANSWER": 25,
+      "SCD_MSG_REPLY_GET_CPU_MAPPING": 13,
+      "SCD_MSG_SCHEDULE_PROCESS": 3,
+      "SCD_MSG_SEND_SIGNAL": 7,
+      "SCD_MSG_SEND_SIGNAL_ACK": 8,
+      "SCD_MSG_SYSCALL_ONESIDE": 4,
+      "SCD_MSG_SYSFS_REQ_CREATE": 48,
+      "SCD_MSG_SYSFS_REQ_LOOKUP": 54,
+      "SCD_MSG_SYSFS_REQ_MKDIR": 50,
+      "SCD_MSG_SYSFS_REQ_RELEASE": 62,
+      "SCD_MSG_SYSFS_REQ_SETUP": 64,
+      "SCD_MSG_SYSFS_REQ_SHOW": 58,
+      "SCD_MSG_SYSFS_REQ_STORE": 60,
+      "SCD_MSG_SYSFS_REQ_SYMLINK": 52,
+      "SCD_MSG_SYSFS_REQ_UNLINK": 56,
+      "SCD_MSG_SYSFS_RESP_RELEASE": 63,
+      "SCD_MSG_SYSFS_RESP_SETUP": 65,
+      "SCD_MSG_SYSFS_RESP_SHOW": 59,
+      "SCD_MSG_SYSFS_RESP_STORE": 61,
+      "SCD_MSG_WAKE_UP_SYSCALL_THREAD": 20
+    },
+    "uprotocol": {
+      "MCEXEC_UP_CREATE_PPD": 815802638,
+      "MCEXEC_UP_GET_CPU": 815802631,
+      "MCEXEC_UP_GET_CPUSET": 815802637,
+      "MCEXEC_UP_GET_CRED": 815802634,
+      "MCEXEC_UP_GET_CREDV": 815802635,
+      "MCEXEC_UP_GET_NODES": 815802636,
+      "MCEXEC_UP_LOAD_SYSCALL": 815802629,
+      "MCEXEC_UP_PREPARE_IMAGE": 815802624,
+      "MCEXEC_UP_RET_SYSCALL": 815802628,
+      "MCEXEC_UP_SEND_SIGNAL": 815802630,
+      "MCEXEC_UP_START_IMAGE": 815802626,
+      "MCEXEC_UP_STRNCPY_FROM_USER": 815802632,
+      "MCEXEC_UP_TRANSFER": 815802625,
+      "MCEXEC_UP_WAIT_SYSCALL": 815802627
+    }
+  },
+  "coverage": {
+    "complete_rs003_catalog": false,
+    "included": [
+      "native ioctl values and fixed argument prefixes",
+      "OS status values",
+      "IKC queue head, packet header, master packet, and SCD packet",
+      "kmsg, monitor, rusage, and active x86_64 boot-parameter layouts"
+    ],
+    "omitted": [
+      "compat ioctl translation after independent legacy-policy confirmation",
+      "all conditional and non-x86_64 boot layouts",
+      "structures not consumed by the first native module slices"
+    ]
+  },
+  "cross_validation": {
+    "duplicate_declarations": [
+      {
+        "declaration_sha256": "ead425d4a8e6bf3007531d1f46cbe97d4e193642542772ffea44ea268105830a",
+        "name": "syscall_request",
+        "sources": [
+          "syscall",
+          "uprotocol"
+        ]
+      },
+      {
+        "declaration_sha256": "23cb8bc4005a4f724be79bcacaca2a1ee7b022533b0f39b7ecc63ca3118c3bfd",
+        "name": "ikc_scd_packet",
+        "sources": [
+          "syscall",
+          "mcctrl"
+        ]
+      }
+    ],
+    "shared_scd_constant_count": 43,
+    "shared_scd_constants": [
+      "SCD_MSG_CLEANUP_FD",
+      "SCD_MSG_CLEANUP_FD_RESP",
+      "SCD_MSG_CLEANUP_PROCESS",
+      "SCD_MSG_CLEANUP_PROCESS_RESP",
+      "SCD_MSG_CPU_RW_REG",
+      "SCD_MSG_CPU_RW_REG_RESP",
+      "SCD_MSG_DEBUG_LOG",
+      "SCD_MSG_EVENTFD",
+      "SCD_MSG_FUTEX_WAKE",
+      "SCD_MSG_GET_VDSO_INFO",
+      "SCD_MSG_INIT_CHANNEL",
+      "SCD_MSG_INIT_CHANNEL_ACKED",
+      "SCD_MSG_PERF_ACK",
+      "SCD_MSG_PERF_CTRL",
+      "SCD_MSG_PREPARE_PROCESS",
+      "SCD_MSG_PREPARE_PROCESS_ACKED",
+      "SCD_MSG_PROCFS_ANSWER",
+      "SCD_MSG_PROCFS_CREATE",
+      "SCD_MSG_PROCFS_DELETE",
+      "SCD_MSG_PROCFS_RELEASE",
+      "SCD_MSG_PROCFS_REQUEST",
+      "SCD_MSG_PROCFS_TID_CREATE",
+      "SCD_MSG_PROCFS_TID_DELETE",
+      "SCD_MSG_REMOTE_PAGE_FAULT",
+      "SCD_MSG_REMOTE_PAGE_FAULT_ANSWER",
+      "SCD_MSG_SCHEDULE_PROCESS",
+      "SCD_MSG_SEND_SIGNAL",
+      "SCD_MSG_SEND_SIGNAL_ACK",
+      "SCD_MSG_SYSCALL_ONESIDE",
+      "SCD_MSG_SYSFS_REQ_CREATE",
+      "SCD_MSG_SYSFS_REQ_LOOKUP",
+      "SCD_MSG_SYSFS_REQ_MKDIR",
+      "SCD_MSG_SYSFS_REQ_RELEASE",
+      "SCD_MSG_SYSFS_REQ_SETUP",
+      "SCD_MSG_SYSFS_REQ_SHOW",
+      "SCD_MSG_SYSFS_REQ_STORE",
+      "SCD_MSG_SYSFS_REQ_SYMLINK",
+      "SCD_MSG_SYSFS_REQ_UNLINK",
+      "SCD_MSG_SYSFS_RESP_RELEASE",
+      "SCD_MSG_SYSFS_RESP_SETUP",
+      "SCD_MSG_SYSFS_RESP_SHOW",
+      "SCD_MSG_SYSFS_RESP_STORE",
+      "SCD_MSG_WAKE_UP_SYSCALL_THREAD"
+    ]
+  },
+  "gate": "RS-003",
+  "layouts": [
+    {
+      "alignment": 8,
+      "c_declaration_sha256": "defa24fbead27c06f29885e009a92d0cb22255eb2819dc7f2f103e1c1bcf48a0",
+      "c_name": "dump_mem_chunk",
+      "offsets": {
+        "addr": 0,
+        "size": 8
+      },
+      "rust_assertion_sha256": "726db803671ce4f4305543f3086adfb8f7f808535729a6568c0b8d5a6fc49a05",
+      "rust_declaration_sha256": "3e84d8ca0ef1c0a3e2487f51fc6fed9b7c5fa259167a381bf0a53872b938bab5",
+      "rust_name": "DumpMemChunk",
+      "size": 16,
+      "source_id": "host_user"
+    },
+    {
+      "alignment": 8,
+      "c_declaration_sha256": "fdf428653bed85765200f6a45f830d96302a9b9130256051180e68500947df51",
+      "c_name": "dump_mem_chunks_s",
+      "offsets": {
+        "kernel_base": 8,
+        "nr_chunks": 0,
+        "phys_start": 16
+      },
+      "rust_assertion_sha256": "9f348b833ea2f2a8e9e7f3ce1dd6ff5814ac848f1c222d2f0486f6f2c507a8b7",
+      "rust_declaration_sha256": "6b830eff8810edaa6e0409d86eea1bee894083feee4eb3286321ac6dca92a02a",
+      "rust_name": "DumpMemChunksPrefix",
+      "size": 24,
+      "source_id": "host_user"
+    },
+    {
+      "alignment": 8,
+      "c_declaration_sha256": "c5eba64ceef8ba92771c7639be150fb5b14b82f22f74ff73b0a7edc831e8b7d1",
+      "c_name": "dumpargs_s",
+      "offsets": {
+        "buf": 24,
+        "cmd": 0,
+        "level": 4,
+        "size": 16,
+        "spare": 32,
+        "start": 8
+      },
+      "rust_assertion_sha256": "069a4dae64914621ce2beb50ae5ebff60f4ca631c269000510d346e8bba00b8a",
+      "rust_declaration_sha256": "29641758cc2cac601339e0cad4e9278955ad717004844bdc2cb11115104df646",
+      "rust_name": "DumpArgs",
+      "size": 64,
+      "source_id": "host_user"
+    },
+    {
+      "alignment": 8,
+      "c_declaration_sha256": "a3f15e0338ba80825c7182ae2c0a20f62e583abe51fd71fa3f2ca664dd03d434",
+      "c_name": "ihk_cpu_req",
+      "offsets": {
+        "cpus": 0,
+        "num_cpus": 8
+      },
+      "rust_assertion_sha256": "4eea6d8b66eead5b648cb8289f038dc3d3c98da895380c4baa2eb259f6aeaa46",
+      "rust_declaration_sha256": "ebbfe16d523097e393c88fb847e24fcccb01930269b645f065d1c49b47eb6711",
+      "rust_name": "IhkCpuRequest",
+      "size": 16,
+      "source_id": "host_user"
+    },
+    {
+      "alignment": 8,
+      "c_declaration_sha256": "fe8036c8947c6dcc6fd5ace18ca3fd238221c5351ce0dbfe4ab9cad3f69d6f7d",
+      "c_name": "ihk_mem_req",
+      "offsets": {
+        "max_size_ratio_all": 24,
+        "min_chunk_size": 20,
+        "num_chunks": 16,
+        "numa_ids": 8,
+        "sizes": 0,
+        "timeout": 28
+      },
+      "rust_assertion_sha256": "48f8efd8e07e830f4ee727142974c457b7a3f1bea779dc823ae38f1e1b923b88",
+      "rust_declaration_sha256": "b571a1f9a38f4f3c6c960e6ead1077c7c4d3479ce4aeabeffe4258a15c881694",
+      "rust_name": "IhkMemoryRequest",
+      "size": 32,
+      "source_id": "host_user"
+    },
+    {
+      "alignment": 8,
+      "c_declaration_sha256": "a2778fa6dc76db23bfc4bff849781f9d5d875cd41b4faa41bfa40796504cee7c",
+      "c_name": "ihk_ikc_req",
+      "offsets": {
+        "dst_cpus": 8,
+        "num_cpus": 16,
+        "src_cpus": 0
+      },
+      "rust_assertion_sha256": "a69c8f9dd719ec05cec353788818ee042684b3c959fbdb946b64dc8e87fd5e7b",
+      "rust_declaration_sha256": "7a6e5f10f2f13bfebbea6ad68b2e4e6d3dd25746840e5d0921ff2f2d5c3f1956",
+      "rust_name": "IhkIkcRequest",
+      "size": 24,
+      "source_id": "host_user"
+    },
+    {
+      "alignment": 4,
+      "c_declaration_sha256": "161bb89e85be2823b49fddbbe150948c8c00e566fc4343b9e4ea7d7eef628613",
+      "c_name": "ihk_os_ioctl_eventfd_desc",
+      "offsets": {
+        "eventfd_type": 4,
+        "fd": 0
+      },
+      "rust_assertion_sha256": "15b2e5302c7c19032ad01ca12b3646c076ddda94731705ae6f9aaf395d516392",
+      "rust_declaration_sha256": "e830266f0ea232450708c10d6cab532fb8daa57adb4cac0a586e2667e1e05b7a",
+      "rust_name": "IhkOsIoctlEventfdDesc",
+      "size": 8,
+      "source_id": "host_user"
+    },
+    {
+      "alignment": 8,
+      "c_declaration_sha256": "3869d508bc43d5b2b7d8367c0ec96d0cdb38428ee0aedf743918e2222ef937cd",
+      "c_name": "ihk_os_read_kaddr_desc",
+      "offsets": {
+        "flags": 24,
+        "kernel_address": 0,
+        "length": 8,
+        "user_buffer": 16
+      },
+      "rust_assertion_sha256": "de6b80b06a064145c3a4006480c6a54c7ec8cd34f4d8dc958cde6e585aa86154",
+      "rust_declaration_sha256": "ac79e8b8734fc6c9153d61f675848c42625bc7a15a4fc6678bccf6c9a86fe60c",
+      "rust_name": "IhkOsReadKernelAddressDesc",
+      "size": 32,
+      "source_id": "host_user"
+    },
+    {
+      "alignment": 8,
+      "c_declaration_sha256": "a172c04a6eccff98b21fb08349dc6907b8ab26f6d1fa8b1d8f754e79d547d362",
+      "c_name": "ihk_device_get_kmsg_buf_desc",
+      "offsets": {
+        "handle": 8,
+        "os_index": 0
+      },
+      "rust_assertion_sha256": "21d920d2cca291c9744d0845ea6d0b1b3907f62f5137e8be5d5ca6825d0fd19c",
+      "rust_declaration_sha256": "c0727939ccc622676d1173c4071c6f746d0458a42cf21e5a31efd47818a5d1f4",
+      "rust_name": "IhkDeviceGetKmsgBufDesc",
+      "size": 16,
+      "source_id": "host_user"
+    },
+    {
+      "alignment": 8,
+      "c_declaration_sha256": "60ca578c052cc6624aba45963e3d5ad2ab4f9f3e17fed65ed226b08823cbce68",
+      "c_name": "ihk_device_read_kmsg_buf_desc",
+      "offsets": {
+        "buffer": 16,
+        "handle": 0,
+        "shift": 8
+      },
+      "rust_assertion_sha256": "3b2a4091247bfa67b515887f6c2b86993463a8ee0a24d9bed2c1c8614da2aa98",
+      "rust_declaration_sha256": "fd7de87130f82700eb80d8bf511503de69d419e130916ce9c831768c9e69e8e8",
+      "rust_name": "IhkDeviceReadKmsgBufDesc",
+      "size": 24,
+      "source_id": "host_user"
+    },
+    {
+      "alignment": 8,
+      "c_declaration_sha256": "a5b9f18120a01588e0d040e66b9c9cffce13c80e8c154c1d521eef71e4927177",
+      "c_name": "ihk_ikc_queue_head",
+      "offsets": {
+        "channel_id": 48,
+        "flags": 12,
+        "id": 0,
+        "max_read_offset": 24,
+        "packet_count": 8,
+        "packet_size": 6,
+        "queue_size": 40,
+        "read_cpu": 52,
+        "read_offset": 16,
+        "reserved": 60,
+        "type_": 4,
+        "write_cpu": 56,
+        "write_offset": 32
+      },
+      "rust_assertion_sha256": "8bca03a614ac68ecf8663bc7928c3e705d78cf7967a0c57ff9a4e1162308c338",
+      "rust_declaration_sha256": "57b627dd888052e297746e3333732779ee8c020e9a8022c24a4028629d738087",
+      "rust_name": "IhkIkcQueueHead",
+      "size": 64,
+      "source_id": "queue"
+    },
+    {
+      "alignment": 8,
+      "c_declaration_sha256": "46b27df79fd5578dbbf357a9aa752e3d97ee44a424c2ccc1211e2ecf2f40421c",
+      "c_name": "ihk_ikc_packet_header",
+      "offsets": {
+        "channel": 0
+      },
+      "rust_assertion_sha256": "37221d6db1bc112e629fbef1539fdd9423404c72871c152ad01be0bd6951c650",
+      "rust_declaration_sha256": "b608a439509f0cbc39143af5614c665cdfd634c4ff0514deb1d8bc3dc35bff17",
+      "rust_name": "IhkIkcPacketHeader",
+      "size": 8,
+      "source_id": "queue"
+    },
+    {
+      "alignment": 8,
+      "c_declaration_sha256": "a625701f5b1b5b601c4bd3ade484b47d04bf2fbbd9f7bb3e3d7e3e5a030b10d9",
+      "c_name": "ihk_ikc_master_packet",
+      "offsets": {
+        "header": 0,
+        "message": 8,
+        "parameters": 16,
+        "reference": 12
+      },
+      "rust_assertion_sha256": "1142bdf9d2708e93015bb75b30e48146296e72706765103ce8352e8cde0a6cff",
+      "rust_declaration_sha256": "608b3f84ef233830dc28121477ac6e5cf09a0b2e8c987c92ddc516b5dc4021bf",
+      "rust_name": "IhkIkcMasterPacket",
+      "size": 56,
+      "source_id": "message"
+    },
+    {
+      "alignment": 8,
+      "c_declaration_sha256": "93d2c2d2689686529c2877ef452b415e6798db39726e4b9fedbf1267a20a9ea7",
+      "c_name": "syscall_request",
+      "offsets": {
+        "args": 24,
+        "number": 16,
+        "requesting_tid": 0,
+        "target_tid": 4,
+        "valid": 8
+      },
+      "rust_assertion_sha256": "a6ff3cbf30b8f3697e87ba538cba89f8f9dfcab94e8ef2e8e2c4374567ec204b",
+      "rust_declaration_sha256": "bdd2621cb236a13da9d1d236caa21569db0801ca372ef6ca539da1169b8f396a",
+      "rust_name": "SyscallRequest",
+      "size": 72,
+      "source_id": "syscall"
+    },
+    {
+      "alignment": 8,
+      "c_declaration_sha256": "d56c111acb01c628969e800f99b18d1fd0372c0906df01c53ddc73957a4816ff",
+      "c_name": "ikc_scd_packet",
+      "offsets": {
+        "argument": 16,
+        "os_number": 4,
+        "pid": 8,
+        "reference": 0,
+        "request": 24,
+        "response_physical_address": 96
+      },
+      "rust_assertion_sha256": "7dd1abd4cd31f61a0fc53dc87d78eedcbd015fb9281d9e508819625e14bddb95",
+      "rust_declaration_sha256": "e812261839c6c38410dec2c39a08e1fbb52c379e3c013a8df1e7227eabe466d2",
+      "rust_name": "IkcScdTraditionalPayload",
+      "size": 104,
+      "source_id": "syscall"
+    },
+    {
+      "alignment": 8,
+      "c_declaration_sha256": "d56c111acb01c628969e800f99b18d1fd0372c0906df01c53ddc73957a4816ff",
+      "c_name": "ikc_scd_packet",
+      "offsets": {
+        "raw": 0,
+        "sysfs": 0,
+        "traditional": 0,
+        "wake_target_tid": 0
+      },
+      "rust_assertion_sha256": "b904c18a97e34e73315cef6ce9bb98ddacbee9dd35a729337a38eab81f71f189",
+      "rust_declaration_sha256": "149fbcd30ec6164ded5176f82fc0e880cd92f1e21f932a0ca61e33db5f2bdd19",
+      "rust_name": "IkcScdPayload",
+      "size": 104,
+      "source_id": "syscall"
+    },
+    {
+      "alignment": 8,
+      "c_declaration_sha256": "d56c111acb01c628969e800f99b18d1fd0372c0906df01c53ddc73957a4816ff",
+      "c_name": "ikc_scd_packet",
+      "offsets": {
+        "error": 12,
+        "header": 0,
+        "message": 8,
+        "payload": 24,
+        "reply": 16
+      },
+      "rust_assertion_sha256": "9241b479a858de1f030540b5cd6484001954bc04efca312563981c3f42274014",
+      "rust_declaration_sha256": "32da70641caa11c742f450884ffb7537c2bf9ba024fdf226d3e96e50af0b9130",
+      "rust_name": "IkcScdPacket",
+      "size": 128,
+      "source_id": "syscall"
+    },
+    {
+      "alignment": 4,
+      "c_declaration_sha256": "f882e4479e9d9f0ac88585f1cda616106b378ec9f159dd3a5087648f176d0e66",
+      "c_name": "ihk_kmsg_buf",
+      "offsets": {
+        "bytes": 4096,
+        "head": 12,
+        "length": 8,
+        "lock": 0,
+        "padding": 16,
+        "tail": 4
+      },
+      "rust_assertion_sha256": "c4dc21c39e36b657e07fc89cb4b9f6e830419e89fae9b8d74e9eb9e4d350debb",
+      "rust_declaration_sha256": "63f7a712a711fedfda16042a0bee8486bbf397c4821d3a6468e7f1f82829fe50",
+      "rust_name": "IhkKmsgBuffer",
+      "size": 4194304,
+      "source_id": "kmsg"
+    },
+    {
+      "alignment": 8,
+      "c_declaration_sha256": "170b2d4f913ebd75be88f12798e255c99ae0fa80ce47318565a4d7ae0167bf71",
+      "c_name": "ihk_os_cpu_monitor",
+      "offsets": {
+        "counter": 8,
+        "previous_counter": 16,
+        "previous_status": 4,
+        "status": 0
+      },
+      "rust_assertion_sha256": "f165d779081e4776c2fa21baab5c4b3d66d4c840624a169f160b23e00b523fdf",
+      "rust_declaration_sha256": "b1559f8a7ced18f421eba7325529ed3b8595fa1a4f8b6cef78c32fc30280ed3e",
+      "rust_name": "IhkOsCpuMonitor",
+      "size": 24,
+      "source_id": "monitor"
+    },
+    {
+      "alignment": 8,
+      "c_declaration_sha256": "28abff25567b5849b010eaf81ca564cea534ddedb5a51079bb1e243058223ffc",
+      "c_name": "ihk_os_monitor",
+      "offsets": {
+        "num_processors": 0,
+        "reserve": 8
+      },
+      "rust_assertion_sha256": "3de72b7a27ecd3b12ae626d7d0f622d86cc1cfbc00b276b14538e1c953a710df",
+      "rust_declaration_sha256": "5183f05429c034b67cffa17288b37cf43bf8f5d093c6568429cad1fd9a5414c3",
+      "rust_name": "IhkOsMonitorPrefix",
+      "size": 1032,
+      "source_id": "monitor"
+    },
+    {
+      "alignment": 8,
+      "c_declaration_sha256": "6f2aa410686e073697f96826365647e95f43903b40c827e69d9f9ae3cace70a7",
+      "c_name": "ihk_os_rusage",
+      "offsets": {
+        "cpuacct_stat_system": 8344,
+        "cpuacct_stat_user": 8352,
+        "cpuacct_usage": 8360,
+        "cpuacct_usage_percpu": 8368,
+        "max_num_threads": 16564,
+        "memory_kmem_max_usage": 144,
+        "memory_kmem_usage": 136,
+        "memory_max_usage": 128,
+        "memory_numa_stat": 152,
+        "memory_stat_mapped_file": 64,
+        "memory_stat_rss": 0,
+        "num_threads": 16560
+      },
+      "rust_assertion_sha256": "81db7888d36b3f36e41e440b773c17fe70734f2120abd0bb115c161c7419068c",
+      "rust_declaration_sha256": "09be7b6f71d23417dab28745e33b3c4c82fe9564f2e8c13520056b94cafac738",
+      "rust_name": "IhkOsRusage",
+      "size": 16568,
+      "source_id": "rusage"
+    },
+    {
+      "alignment": 8,
+      "c_declaration_sha256": "cf6d73df507877a4c3c521e335945fe9b5861e806240b5752fb0d3f8a6f8cffc",
+      "c_name": "smp_coreset",
+      "offsets": {
+        "set": 0
+      },
+      "rust_assertion_sha256": "1f1530dea7f1bc831af51fe9c5cee468c75ed0d51497a1c6e96ac3e8cd80adf2",
+      "rust_declaration_sha256": "aea243b75eef797e978f248e2e9f85c291f4f65f3d9b0fe386f5da4b0ebe9661",
+      "rust_name": "IhkSmpCoreSet",
+      "size": 64,
+      "source_id": "boot"
+    },
+    {
+      "alignment": 4,
+      "c_declaration_sha256": "a4bcd2337f4982f2bcccecf1fab83e823895bc2bcd67b174427e5518d09b5a8e",
+      "c_name": "ihk_smp_boot_param_cpu",
+      "offsets": {
+        "hardware_id": 4,
+        "ikc_cpu": 12,
+        "linux_cpu_id": 8,
+        "numa_id": 0
+      },
+      "rust_assertion_sha256": "d60a66844437c7b1d14df96823b5c40dcbd026eedb7e9ebdc49027560e228a6f",
+      "rust_declaration_sha256": "9326e72ac576372c192858890bf723227278bd72917c779466067942a6e07213",
+      "rust_name": "IhkSmpBootParamCpu",
+      "size": 16,
+      "source_id": "boot"
+    },
+    {
+      "alignment": 8,
+      "c_declaration_sha256": "b2d339d2100fbf29caf7076b2add7fb73a50a1ef25471b53c0afa937689b5504",
+      "c_name": "ihk_smp_boot_param_memory_chunk",
+      "offsets": {
+        "end": 8,
+        "numa_id": 16,
+        "start": 0
+      },
+      "rust_assertion_sha256": "ed230821a0d89477e14e9e95bfb0f596155c5b1ab11a2a2cf4d4ee3354860125",
+      "rust_declaration_sha256": "2176dca370e3895e5fecca41799aeb4226e0c9f2648d2763e7e41105369de3cb",
+      "rust_name": "IhkSmpBootParamMemoryChunk",
+      "size": 24,
+      "source_id": "boot"
+    },
+    {
+      "alignment": 4,
+      "c_declaration_sha256": "2d33a49567b5f5947e177f5219b6efa77639406099b6dacd4319484b11527274",
+      "c_name": "ihk_smp_boot_param_numa_node",
+      "offsets": {
+        "linux_numa_id": 4,
+        "memory_type": 0
+      },
+      "rust_assertion_sha256": "6d19e02e626267506dc31d35694e78b5e4acd7b208307a0399615fa040d7f536",
+      "rust_declaration_sha256": "f0ec95873faf50a0d1a9b66c644952b1adcc65189bc32421ee8a34c13606ce88",
+      "rust_name": "IhkSmpBootParamNumaNode",
+      "size": 8,
+      "source_id": "boot"
+    },
+    {
+      "alignment": 8,
+      "c_declaration_sha256": "07e760a7c52467885f679360f9319ff2aa295ec0d38b159e4f29423f8c36bbac",
+      "c_name": "ihk_dump_page",
+      "offsets": {
+        "map_count": 8,
+        "start": 0
+      },
+      "rust_assertion_sha256": "e37d1679b9302c3cf0eb4e990fd91aa10be8731a8ce43d603e3ee23410cef06b",
+      "rust_declaration_sha256": "f4a255910e83c09c7aa19be1757f537dc310f4bb936feb53004b8cabc40a656d",
+      "rust_name": "IhkDumpPagePrefix",
+      "size": 16,
+      "source_id": "boot"
+    },
+    {
+      "alignment": 8,
+      "c_declaration_sha256": "764e8933b28d3dd077c518d735f97bad5cd141d0c3d336c13e9299ac4b57a5ea",
+      "c_name": "ihk_dump_page_set",
+      "offsets": {
+        "completion_flag": 0,
+        "count": 4,
+        "page_size": 8,
+        "physical_page": 16
+      },
+      "rust_assertion_sha256": "3d3be24d2b3c6ed4341a4e0aa5d6afdc0016a9aebf3ab5adabeeb17dc512f739",
+      "rust_declaration_sha256": "030d46e70558ee153d76a84cb23c7ceaeda59f855893a189c8d9e3c377da17d8",
+      "rust_name": "IhkDumpPageSet",
+      "size": 24,
+      "source_id": "boot"
+    },
+    {
+      "alignment": 8,
+      "c_declaration_sha256": "97c5ecccb033d5a7e0ddd143b141a4d26e7648124fe2f2c841d808d3a0a94519",
+      "c_name": "smp_boot_param",
+      "offsets": {
+        "boot_nanoseconds": 184,
+        "boot_seconds": 176,
+        "boot_tsc": 168,
+        "bootstrap_memory_end": 32,
+        "dma_address": 144,
+        "dump_level": 6624,
+        "dump_page_set": 6632,
+        "end": 8,
+        "extra_register_event": 7412,
+        "extra_register_index": 7576,
+        "extra_register_msr": 7452,
+        "extra_register_valid_mask": 7496,
+        "hardware_cache_event_ids": 6736,
+        "hardware_cache_extra_registers": 7072,
+        "hardware_event_map": 6656,
+        "identity_table": 152,
+        "ikc_cpu_raised_list": 192,
+        "ikc_irq": 4296,
+        "ikc_irq_apic_ids": 4300,
+        "ikc_irq_work_function": 4288,
+        "kernel_args": 6348,
+        "linux_default_huge_page_shift": 6628,
+        "linux_kernel_page_table_physical": 128,
+        "master_ikc_queue_receive": 56,
+        "master_ikc_queue_send": 64,
+        "mckernel_do_futex": 120,
+        "message_buffer": 40,
+        "message_buffer_size": 48,
+        "monitor": 72,
+        "monitor_size": 80,
+        "multi_interrupt_mode_address": 112,
+        "nanoseconds_per_tsc": 160,
+        "nmi_mode_address": 104,
+        "nr_cpus": 6608,
+        "nr_extra_registers": 7408,
+        "nr_linux_cpus": 6604,
+        "nr_memory_chunks": 6616,
+        "nr_numa_nodes": 6612,
+        "os_number": 6620,
+        "page_offset_base": 136,
+        "parameter_size": 24,
+        "rusage": 88,
+        "rusage_size": 96,
+        "start": 0,
+        "status": 16
+      },
+      "rust_assertion_sha256": "6833fb5f22aeb632d6faf7ee95f1f2a11693fada28ef05354fab2574b903628c",
+      "rust_declaration_sha256": "88109cad073957743022d76a2bb633960cefed8e508461d6697e7b22c3b57f94",
+      "rust_name": "IhkSmpBootParam",
+      "size": 7616,
+      "source_id": "boot"
+    }
+  ],
+  "profile": {
+    "architecture": "x86_64",
+    "boot_conditionals": [
+      "IHK_IKC_USE_LINUX_WORK_IRQ",
+      "ENABLE_PERF"
+    ],
+    "build_profile_source_id": "build_profile",
+    "endian": "little",
+    "long_bits": 64,
+    "pointer_bits": 64
+  },
+  "readiness": {
+    "blockers": [
+      "RS-003 coverage is a bounded foundation, not the complete legacy ABI catalog",
+      "no frozen legacy compat_ioctl translator exists; compatibility policy still requires independent confirmation",
+      "the shared module has not been attached to native crates or built by exact Rocky Linux Kbuild",
+      "compiler-produced C/Rust layout evidence and independent review are absent"
+    ],
+    "credit_eligible": false,
+    "status": "TODO"
+  },
+  "schema_version": 1,
+  "target_constants": {
+    "ABI_LITTLE_ENDIAN": true,
+    "ABI_LONG_BITS": 64,
+    "ABI_POINTER_BITS": 64,
+    "COMPAT_IOCTL_TRANSLATION_PRESENT": false
+  }
+}

@@ -86,15 +86,19 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         core_edition = self.workflow.index(
             "0004-rust-compile-libcore-edition-2024.patch", rustc_minimum
         )
+        bindgen_lint = self.workflow.index(
+            "0005-rust-clean-unnecessary-transmutes-lint.patch", core_edition
+        )
         project = self.workflow.index(
             "0001-drivers-misc-add-mckernel-rust-host-modules.patch",
-            core_edition,
+            bindgen_lint,
         )
         self.assertLess(debrand, softfloat)
         self.assertLess(softfloat, target_spec)
         self.assertLess(target_spec, rustc_minimum)
         self.assertLess(rustc_minimum, core_edition)
-        self.assertLess(core_edition, project)
+        self.assertLess(core_edition, bindgen_lint)
+        self.assertLess(bindgen_lint, project)
 
     def test_failure_log_and_artifact_capture_are_unconditional(self):
         bootstrap = self.workflow.index("Refuse the wrong runtime")

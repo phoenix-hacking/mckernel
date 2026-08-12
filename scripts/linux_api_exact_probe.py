@@ -44,6 +44,7 @@ RUST_COMPAT_PATCH_PATHS = (
     Path("host-kernel/rocky/patches/0002-rust-support-rust-1.91-target-spec.patch"),
     Path("host-kernel/rocky/patches/0003-kbuild-rust-add-rustc-min-version.patch"),
     Path("host-kernel/rocky/patches/0004-rust-compile-libcore-edition-2024.patch"),
+    Path("host-kernel/rocky/patches/0005-rust-clean-unnecessary-transmutes-lint.patch"),
 )
 CONFIG_POLICY_PATH = Path("host-kernel/rocky/config-policy.json")
 TOOLCHAIN_LOCK_PATH = Path("host-kernel/rocky/toolchain-lock.json")
@@ -75,6 +76,16 @@ RUST_CORE_COMPAT_POSTIMAGE_SHA256S = (
     ("scripts/Makefile.compiler", "d5b48a68e9b00c6fe240805ccdf52105ac4655fb3ae0eff8c2c0815806766378"),
     ("scripts/generate_rust_analyzer.py", "470ca4bf6e5a35d4b193ef46c3130b051921f2a18fa33891c17f482f9a3e80ca"),
 )
+RUST_BINDINGS_COMPAT_PREIMAGE_SHA256S = (
+    ("init/Kconfig", "35cfd4cc4e8850302a072b9d8aef35d827883f6e30f4ff2d428d12eb622fa749"),
+    ("rust/bindings/lib.rs", "19e4c18d9999bd6871d5ea01decb37956c96a7dbf3064578e96130f539405524"),
+    ("rust/uapi/lib.rs", "bdfbafb3df88795d587d42a00ca1a574b31b8668721c645c87eff3ecf318fef8"),
+)
+RUST_BINDINGS_COMPAT_POSTIMAGE_SHA256S = (
+    ("init/Kconfig", "629abc3bdd5105cc843a2a1835819d69e43ead874b8ee9867d3384741641391d"),
+    ("rust/bindings/lib.rs", "6729d72292b3003c37f8f68a81c2496bc2d53b2441d2df6502c86a0a99f5a4cd"),
+    ("rust/uapi/lib.rs", "0b4ba3250770fd0aa8aaeeb73fdaa76dab8b323cc88750ec82046d9f39859bd0"),
+)
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
 CONFIG_LINE = re.compile(r"^(CONFIG_[A-Za-z0-9_]+)=(.*)$")
@@ -99,12 +110,14 @@ RUST_COMPAT_UPSTREAM_COMMITS = (
     "8851e27d2cb947ea8bbbe8e812068f7bf5cbd00b",
     "ac954145e1ee3f72033161cbe4ac0b16b5354ae7",
     "f4daa80d6be7d3c55ca72a8e560afc4e21f886aa",
+    "7129ea6e242b00938532537da41ddf5fa3e21471",
 )
 RUST_COMPAT_STABLE_COMMITS = (
     None,
     None,
     "1814e71a4e9c20bd69dbe1e007d31c0ab2c237a2",
     "60d8db49ef143c04f7daf90dafa3347a7af3b4c7",
+    "376b73292a262124c8aed10026e9da23e92554b2",
 )
 RUST_CORE_COMPAT_FAILURE_EVIDENCE = (
     {
@@ -124,6 +137,26 @@ RUST_CORE_COMPAT_FAILURE_EVIDENCE = (
         "artifact_id": 9129770822,
         "artifact_zip_sha256": "f08bfab3394c91bf7aaf6709f558b3ccf1aac9f8e1b4605617bafa7ea25b10d2",
         "rust_core_diagnostic_count": 8,
+    },
+)
+RUST_UAPI_COMPAT_FAILURE_EVIDENCE = (
+    {
+        "workflow": "RS-001 exact Rocky Linux API evidence",
+        "repository_commit": "c0b8687f39f6718c3647beaaa5e84c58fbbf6878",
+        "run_id": 31568982595,
+        "job_id": 94026729494,
+        "artifact_id": None,
+        "artifact_zip_sha256": None,
+        "rust_uapi_diagnostic_count": 156,
+    },
+    {
+        "workflow": "Native Rust host modules exact Rocky build",
+        "repository_commit": "c0b8687f39f6718c3647beaaa5e84c58fbbf6878",
+        "run_id": 31568982672,
+        "job_id": 94026729704,
+        "artifact_id": 9130600533,
+        "artifact_zip_sha256": "ee6413b03d472e7dc770a39f90b31e3439e0d1c65467f9c05da8b1dc7516b6a1",
+        "rust_uapi_diagnostic_count": 156,
     },
 )
 
@@ -317,6 +350,16 @@ def rust_compatibility_patch_records(repo):
         )
         if sha256_file(path) != digest:
             raise ProbeError("Rocky Rust core fixture digest changed: {0}".format(relative))
+    for relative, digest in RUST_BINDINGS_COMPAT_PREIMAGE_SHA256S:
+        path = repository_file(
+            repo,
+            RUST_CORE_COMPAT_FIXTURE_ROOT / relative,
+            "Rocky Rust bindings fixture file",
+        )
+        if sha256_file(path) != digest:
+            raise ProbeError(
+                "Rocky Rust bindings fixture digest changed: {0}".format(relative)
+            )
     records = []
     required_additions = (
         {
@@ -340,8 +383,14 @@ def rust_compatibility_patch_records(repo):
             "+$(obj)/core.o: private rustc_target_flags = --edition=$(core-edition) $(core-cfgs)": 1,
             '+    parser.add_argument("core_edition")': 1,
         },
+        {
+            "+config RUSTC_HAS_UNNECESSARY_TRANSMUTES": 1,
+            "+\tdef_bool RUSTC_VERSION >= 108800": 1,
+            "+#[cfg_attr(CONFIG_RUSTC_HAS_UNNECESSARY_TRANSMUTES, allow(unnecessary_transmutes))]": 1,
+            "+#![cfg_attr(CONFIG_RUSTC_HAS_UNNECESSARY_TRANSMUTES, allow(unnecessary_transmutes))]": 1,
+        },
     )
-    expected_diff_counts = (1, 1, 3, 2)
+    expected_diff_counts = (1, 1, 3, 2, 3)
     for index, relative in enumerate(RUST_COMPAT_PATCH_PATHS):
         path = repository_file(repo, relative, "Rust target compatibility patch")
         try:
@@ -419,7 +468,10 @@ def verify_rust_compatibility_patch_replay(repo, records):
             raise ProbeError("Rust target compatibility patch postimage changed")
     with tempfile.TemporaryDirectory(prefix="rs001-rust-core-compat-") as temporary:
         root = Path(temporary)
-        for relative, _unused_digest in RUST_CORE_COMPAT_PREIMAGE_SHA256S:
+        for relative, _unused_digest in (
+            RUST_CORE_COMPAT_PREIMAGE_SHA256S
+            + RUST_BINDINGS_COMPAT_PREIMAGE_SHA256S
+        ):
             source = repository_file(
                 repo,
                 RUST_CORE_COMPAT_FIXTURE_ROOT / relative,
@@ -449,6 +501,13 @@ def verify_rust_compatibility_patch_replay(repo, records):
             if sha256_file(root / relative) != digest:
                 raise ProbeError(
                     "Rust core compatibility patch postimage changed: {0}".format(
+                        relative
+                    )
+                )
+        for relative, digest in RUST_BINDINGS_COMPAT_POSTIMAGE_SHA256S:
+            if sha256_file(root / relative) != digest:
+                raise ProbeError(
+                    "Rust bindings compatibility patch postimage changed: {0}".format(
                         relative
                     )
                 )
@@ -535,6 +594,13 @@ def build_contract(repo):
                 }
                 for relative, digest in RUST_CORE_COMPAT_PREIMAGE_SHA256S
             ],
+            "rust_bindings_build_preimages": [
+                {
+                    "path": str(RUST_CORE_COMPAT_FIXTURE_ROOT / relative),
+                    "sha256": digest,
+                }
+                for relative, digest in RUST_BINDINGS_COMPAT_PREIMAGE_SHA256S
+            ],
             "config_policy": config_record,
             "toolchain_lock": toolchain_record,
             "checker": {"path": str(SCRIPT_PATH), "sha256": sha256_file(script)},
@@ -542,6 +608,9 @@ def build_contract(repo):
         },
         "rust_core_compatibility_failure_evidence": [
             dict(row) for row in RUST_CORE_COMPAT_FAILURE_EVIDENCE
+        ],
+        "rust_uapi_compatibility_failure_evidence": [
+            dict(row) for row in RUST_UAPI_COMPAT_FAILURE_EVIDENCE
         ],
         "source_patch_contract": {
             "patches": [

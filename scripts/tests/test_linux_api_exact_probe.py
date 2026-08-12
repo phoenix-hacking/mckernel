@@ -217,6 +217,10 @@ class ContractTests(ProbeFixture):
             list(probe.RUST_COMPAT_UPSTREAM_COMMITS),
         )
         self.assertEqual(
+            [row["stable_commit"] for row in compatibility],
+            list(probe.RUST_COMPAT_STABLE_COMMITS),
+        )
+        self.assertEqual(
             generated["repository_inputs"]["rust_target_generator_preimage"],
             {
                 "path": str(probe.RUST_COMPAT_FIXTURE_PATH),
@@ -224,7 +228,7 @@ class ContractTests(ProbeFixture):
             },
         )
         self.assertEqual(
-            generated["source_patch_contract"]["patches"][-4:],
+            generated["source_patch_contract"]["patches"][-5:],
             [
                 {
                     "applied": True,
@@ -253,6 +257,26 @@ class ContractTests(ProbeFixture):
         self.assertEqual(
             9129770822,
             generated["rust_core_compatibility_failure_evidence"][1][
+                "artifact_id"
+            ],
+        )
+        self.assertEqual(
+            generated["repository_inputs"]["rust_bindings_build_preimages"],
+            [
+                {
+                    "path": str(probe.RUST_CORE_COMPAT_FIXTURE_ROOT / relative),
+                    "sha256": digest,
+                }
+                for relative, digest in probe.RUST_BINDINGS_COMPAT_PREIMAGE_SHA256S
+            ],
+        )
+        self.assertEqual(
+            generated["rust_uapi_compatibility_failure_evidence"],
+            [dict(row) for row in probe.RUST_UAPI_COMPAT_FAILURE_EVIDENCE],
+        )
+        self.assertEqual(
+            9130600533,
+            generated["rust_uapi_compatibility_failure_evidence"][1][
                 "artifact_id"
             ],
         )
@@ -287,6 +311,10 @@ class ContractTests(ProbeFixture):
             workflow.index(probe.RUST_COMPAT_PATCH_PATHS[2].name),
             workflow.index(probe.RUST_COMPAT_PATCH_PATHS[3].name),
         )
+        self.assertLess(
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[3].name),
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[4].name),
+        )
 
     def test_rust_compatibility_patch_shape_is_fail_closed(self):
         original = (REPO_ROOT / probe.RUST_COMPAT_PATCH_PATHS[3]).read_text(
@@ -303,6 +331,28 @@ class ContractTests(ProbeFixture):
                 original.replace(
                     "rustc-min-version,108700",
                     "rustc-min-version,108600",
+                    1,
+                ),
+                encoding="utf-8",
+            )
+            with self.assertRaises(probe.ProbeError):
+                probe.rust_compatibility_patch_records(root)
+
+    def test_unnecessary_transmutes_patch_shape_is_fail_closed(self):
+        original = (REPO_ROOT / probe.RUST_COMPAT_PATCH_PATHS[4]).read_text(
+            encoding="utf-8"
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for relative in probe.RUST_COMPAT_PATCH_PATHS:
+                path = root / relative
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes((REPO_ROOT / relative).read_bytes())
+            path = root / probe.RUST_COMPAT_PATCH_PATHS[4]
+            path.write_text(
+                original.replace(
+                    "RUSTC_VERSION >= 108800",
+                    "RUSTC_VERSION >= 108900",
                     1,
                 ),
                 encoding="utf-8",

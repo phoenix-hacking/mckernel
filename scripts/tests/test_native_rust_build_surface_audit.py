@@ -34,6 +34,11 @@ class NativeRustBuildSurfaceAuditTests(unittest.TestCase):
                 os.path.join(REPO_ROOT, "host-kernel", "kbuild", name),
                 os.path.join(self.repo, "host-kernel", "kbuild", name),
             )
+        os.makedirs(os.path.join(self.repo, "host-kernel", "native-rust", "abi"))
+        shutil.copyfile(
+            os.path.join(REPO_ROOT, "host-kernel", "native-rust", "abi", "x86_64.rs"),
+            os.path.join(self.repo, "host-kernel", "native-rust", "abi", "x86_64.rs"),
+        )
         with open(
             os.path.join(self.repo, "host-kernel", "native-rust", "README.md"), "w"
         ) as stream:
@@ -109,6 +114,18 @@ class NativeRustBuildSurfaceAuditTests(unittest.TestCase):
         for item in manifest["inputs"]:
             if item["destination"] == "Kconfig":
                 item["repository_path"] = "host-kernel/native-rust/not-Kconfig"
+                break
+        self.write_manifest(manifest)
+        with self.assertRaises(audit.AuditError):
+            audit.audit(self.repo)
+
+    def test_manifest_cannot_redirect_the_supplemental_abi(self):
+        manifest = self.load_manifest()
+        for item in manifest["inputs"]:
+            if item["destination"] == "abi/x86_64.rs":
+                item["repository_path"] = "host-kernel/native-rust/README.md"
+                item["sha256"] = digest(os.path.join(
+                    self.repo, "host-kernel", "native-rust", "README.md"))
                 break
         self.write_manifest(manifest)
         with self.assertRaises(audit.AuditError):

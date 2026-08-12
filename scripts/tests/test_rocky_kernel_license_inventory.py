@@ -81,6 +81,7 @@ class LicenseInventoryTests(unittest.TestCase):
             "host-kernel/rocky/patches/0002-rust-support-rust-1.91-target-spec.patch",
             "host-kernel/rocky/patches/0003-kbuild-rust-add-rustc-min-version.patch",
             "host-kernel/rocky/patches/0004-rust-compile-libcore-edition-2024.patch",
+            "host-kernel/rocky/patches/0005-rust-clean-unnecessary-transmutes-lint.patch",
         ):
             item = by_path["repository/" + relative]
             patch = REPO_ROOT / relative
@@ -98,6 +99,9 @@ class LicenseInventoryTests(unittest.TestCase):
             "Documentation/kbuild/makefiles.rst",
             "arch/arm64/Makefile",
             "rust/Makefile",
+            "init/Kconfig",
+            "rust/bindings/lib.rs",
+            "rust/uapi/lib.rs",
             "scripts/Makefile.compiler",
             "scripts/generate_rust_analyzer.py",
         )

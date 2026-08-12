@@ -1,5 +1,21 @@
 # McKernel Rust Migration Log
 
+Date: 2026-08-11
+Workspace: /tmp/mck-rs003
+Target: RS-003 x86_64 shared ABI source-only compile
+
+First failing validation command:
+`LD_LIBRARY_PATH=/tmp/rocky-rustc-1.92.iaqIUm/usr/lib64 /tmp/rocky-rustc-1.92.iaqIUm/usr/bin/rustc --edition=2021 --crate-type rlib --crate-name rs003_abi host-kernel/native-rust/abi_x86_64.rs -o /tmp/rs003_abi.rlib`
+
+Environment: detached worktree at `3b46c7e1be9cd89d35b45e228ee8c96ea87c77ae`;
+Rocky rustc `1.92.0-1.el10`; x86_64 little-endian source-only ABI compile.
+
+Failure summary: compile-time layout assertions rejected the initial
+`IkcScdTraditionalPayload`/`IkcScdPayload`/`IkcScdPacket` sizes (the model
+omitted the final `resp_pa` word and produced a 120-byte packet instead of the
+frozen legacy 128-byte contract). The related model and assertions were fixed
+before validation resumed.
+
 Date: 2026-05-11
 Workspace: /home/hgordon/projects/mckernel
 Primary target: smp-x86 / x86_64
@@ -28630,3 +28646,18 @@ Error summary: git interpreted required unified-diff context prefixes in the two
 Command: `PYTHONDONTWRITEBYTECODE=1 python3 scripts/linux_api_exact_probe.py --repo . update-contract`, followed by the focused `test_series_applies_in_order_to_exact_rocky_preimage` and direct GNU patch replay with `-p1 --batch --forward --fuzz=0`, in `/tmp/mck-rust192` at base 3b46c7e1be9cd89d35b45e228ee8c96ea87c77ae.
 Environment: local Python 3.12 and GNU patch against exact fixture sha256:9c21a1b67751db98e407439b77d014be6b92ba3cf6457fde6a4118a798f4fa05; no kernel build, module load, guest boot, host reboot, or reboot-capable command ran.
 Error summary: patch 0001's first hunk declared four old context lines but serialized only three after an earlier whitespace cleanup, so exact no-fuzz replay failed hunk #1 at line 165. Restore the omitted exact blank/`fn main()` context in the wrapper, leave the applied source postimage unchanged, update its bound digest, and replay the complete strict series.
+
+2026-08-11: exact Rocky 10.2 Rust 1.92 builds stopped on bindgen-generated UAPI code after the libcore edition backports let `prepare` advance past `rust/core.o`.
+Command: GitHub Actions native run 31568982672/job 94026729704 step `Compile the exact kernel and native Rust modules`, and RS-001 run 31568982595/job 94026729494 step `Build exact symbol and Rust-binding oracles`, at exact candidate c0b8687f39f6718c3647beaaa5e84c58fbbf6878.
+Environment: digest-pinned Rocky Linux 10.2 x86_64 container `sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176`; exact signed Rocky kernel 6.12.0-211.44.1.el10_2 source, all four earlier Rust compatibility backports, two-pass config resolution, and Rocky rustc/rust-src 1.92.0-1.el10. Source acquisition, patch staging, config, `rustavailable`, and `rust/core.o` passed. No module load, guest boot, host reboot, or reboot-capable command ran.
+Error summary: `RUSTC L rust/uapi.o` aborted with 156 `unnecessary_transmutes` diagnostics promoted by `-D warnings` from bindgen-generated `rust/uapi/uapi_generated.rs`, including bool/bitfield-to-`u8` transmute sites. Native diagnostics artifact 9130600533 (`native-rust-exact-build-31568982672-1`) was uploaded with ZIP sha256:ee6413b03d472e7dc770a39f90b31e3439e0d1c65467f9c05da8b1dc7516b6a1; RS-001 uploaded no artifact. Backport Linux 6.12.y commit 376b73292a262124c8aed10026e9da23e92554b2 (upstream 7129ea6e242b00938532537da41ddf5fa3e21471), rerun both exact workflows, and award no tracker credit until real build/load evidence passes.
+
+2026-08-11: the first local strict replay of the Rocky-adapted unnecessary-transmutes backport stopped on a malformed init/Kconfig hunk count.
+Command: apply repository patches 0003, 0004, then proposed 0005 with GNU patch `-p1 --batch --forward --fuzz=0 --no-backup-if-mismatch` to a disposable copy of the exact Rocky affected-file fixtures in `/tmp/mck-uapi192` at base c0b8687f39f6718c3647beaaa5e84c58fbbf6878.
+Environment: local GNU patch, exact Rocky preimages, no kernel build, module load, guest boot, host reboot, or reboot-capable command.
+Error summary: patches 0003 and 0004 applied, but GNU patch rejected 0005 as malformed at the second `diff --git` header because its first adapted hunk declared six old/nine new lines while serializing five/eight. Correct only the hunk cardinality and repeat the strict replay before any wider validation.
+
+2026-08-11: the second local strict replay of the Rocky-adapted unnecessary-transmutes backport stopped on the adapted rust/uapi hunk context.
+Command: repeat the 0003, 0004, 0005 GNU patch series with `-p1 --batch --forward --fuzz=0 --no-backup-if-mismatch` against a fresh disposable copy of the exact Rocky affected-file fixtures in `/tmp/mck-uapi192`.
+Environment: local GNU patch and exact Rocky preimages; no kernel build, module load, guest boot, host reboot, or reboot-capable command.
+Error summary: 0003 and 0004 applied; 0005 applied its init/Kconfig and bindings hunks with offsets, then failed its UAPI hunk because the adapted header again counted one more old/new line than serialized. Correct all three adapted hunk start lines to the exact Rocky positions and the UAPI cardinality to five/six, then repeat the strict replay.

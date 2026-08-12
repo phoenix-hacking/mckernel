@@ -19,6 +19,8 @@ PATCHES = (
     / "host-kernel/rocky/patches/0003-kbuild-rust-add-rustc-min-version.patch",
     REPO_ROOT
     / "host-kernel/rocky/patches/0004-rust-compile-libcore-edition-2024.patch",
+    REPO_ROOT
+    / "host-kernel/rocky/patches/0005-rust-clean-unnecessary-transmutes-lint.patch",
 )
 PREIMAGE = REPO_ROOT / "scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs"
 POSTIMAGE_SHA256 = "555ff4dff6548bb5f24087cdad737363b5694668aa462f77adfb3571498ec678"
@@ -29,7 +31,7 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
     def test_every_patch_rejects_second_application(self):
         from scripts import linux_api_exact_probe as probe
 
-        self.assertEqual(4, len(PATCHES))
+        self.assertEqual(5, len(PATCHES))
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory) / "linux"
             shutil.copytree(str(CORE_PREIMAGE), str(root))
@@ -83,10 +85,12 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
                 target.read_text(encoding="utf-8"),
             )
 
-    def test_core_series_applies_in_order_to_exact_rocky_preimages(self):
+    def test_core_and_bindings_series_applies_to_exact_rocky_preimages(self):
         from scripts import linux_api_exact_probe as probe
 
         for relative, digest in probe.RUST_CORE_COMPAT_PREIMAGE_SHA256S:
+            self.assertEqual(digest, probe.sha256_file(CORE_PREIMAGE / relative))
+        for relative, digest in probe.RUST_BINDINGS_COMPAT_PREIMAGE_SHA256S:
             self.assertEqual(digest, probe.sha256_file(CORE_PREIMAGE / relative))
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory) / "linux"
@@ -97,6 +101,8 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
                     root,
                 )
             for relative, digest in probe.RUST_CORE_COMPAT_POSTIMAGE_SHA256S:
+                self.assertEqual(digest, probe.sha256_file(root / relative))
+            for relative, digest in probe.RUST_BINDINGS_COMPAT_POSTIMAGE_SHA256S:
                 self.assertEqual(digest, probe.sha256_file(root / relative))
             makefile = (root / "rust/Makefile").read_text(encoding="utf-8")
             compiler = (root / "scripts/Makefile.compiler").read_text(
@@ -122,6 +128,18 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
                 compiler,
             )
             self.assertIn('parser.add_argument("core_edition")', analyzer)
+            self.assertIn(
+                "config RUSTC_HAS_UNNECESSARY_TRANSMUTES",
+                (root / "init/Kconfig").read_text(encoding="utf-8"),
+            )
+            self.assertIn(
+                "#[cfg_attr(CONFIG_RUSTC_HAS_UNNECESSARY_TRANSMUTES, allow(unnecessary_transmutes))]",
+                (root / "rust/bindings/lib.rs").read_text(encoding="utf-8"),
+            )
+            self.assertIn(
+                "#![cfg_attr(CONFIG_RUSTC_HAS_UNNECESSARY_TRANSMUTES, allow(unnecessary_transmutes))]",
+                (root / "rust/uapi/lib.rs").read_text(encoding="utf-8"),
+            )
 
     def test_core_edition_patch_without_version_helper_is_incomplete(self):
         from scripts import linux_api_exact_probe as probe

@@ -1,6 +1,6 @@
 {
   "contract_id": "mckernel-rs001-exact-linux-api-probe-v1",
-  "contract_sha256": "b2a78cb171ec3379a30b180d93cfdef986b24bcaf2a1abf735041beb999144fa",
+  "contract_sha256": "cbe507ef564349cdb4baf3ccd446f8de70e6148c50ef771230b0dfd323e5237f",
   "evidence_profile": "rocky-10.2-exact-linux-api-evidence-v1",
   "frozen_needs": {
     "file_sha256": "76f16c395dd40f78ab1b72debcc61a352e28a3ddbf78586824ce9882a2a43e4c",
@@ -31,7 +31,7 @@
   "repository_inputs": {
     "checker": {
       "path": "scripts/linux_api_exact_probe.py",
-      "sha256": "ea55125c44d3b2b051c434325ef7d8181f7085513f6b1b2ae5e906b5322f7333"
+      "sha256": "87e3e38f48f8c5c4f99b4348a863c617637f06dceba32ff2c43898828bfcc1c1"
     },
     "config_policy": {
       "path": "host-kernel/rocky/config-policy.json",
@@ -41,6 +41,20 @@
       "path": "host-kernel/rocky/patches/series.json",
       "sha256": "6a1a5e8fb13b6ce6ed35bd8e5487bb67ecf92d2be927799b660f21b5631f68fb"
     },
+    "rust_bindings_build_preimages": [
+      {
+        "path": "scripts/tests/fixtures/rust-core-rocky-6.12/init/Kconfig",
+        "sha256": "35cfd4cc4e8850302a072b9d8aef35d827883f6e30f4ff2d428d12eb622fa749"
+      },
+      {
+        "path": "scripts/tests/fixtures/rust-core-rocky-6.12/rust/bindings/lib.rs",
+        "sha256": "19e4c18d9999bd6871d5ea01decb37956c96a7dbf3064578e96130f539405524"
+      },
+      {
+        "path": "scripts/tests/fixtures/rust-core-rocky-6.12/rust/uapi/lib.rs",
+        "sha256": "bdfbafb3df88795d587d42a00ca1a574b31b8668721c645c87eff3ecf318fef8"
+      }
+    ],
     "rust_core_build_preimages": [
       {
         "path": "scripts/tests/fixtures/rust-core-rocky-6.12/Documentation/kbuild/makefiles.rst",
@@ -95,6 +109,14 @@
         "size": 7891,
         "stable_commit": "60d8db49ef143c04f7daf90dafa3347a7af3b4c7",
         "upstream_commit": "f4daa80d6be7d3c55ca72a8e560afc4e21f886aa"
+      },
+      {
+        "applied_after": "host-kernel/rocky/patches/0004-rust-compile-libcore-edition-2024.patch",
+        "path": "host-kernel/rocky/patches/0005-rust-clean-unnecessary-transmutes-lint.patch",
+        "sha256": "0ba29993d78fea5db3c0ff8dbf41bf8a6c08b00d9803fc85da7805e698ac8c33",
+        "size": 3520,
+        "stable_commit": "376b73292a262124c8aed10026e9da23e92554b2",
+        "upstream_commit": "7129ea6e242b00938532537da41ddf5fa3e21471"
       }
     ],
     "rust_target_generator_preimage": {
@@ -111,7 +133,7 @@
     },
     "workflow": {
       "path": ".github/workflows/rs001-linux-api-exact-probe.yml",
-      "sha256": "9b37122fe66953395b757fc0daf53f52189c5b4a9f362586f5d675336a15fcd6"
+      "sha256": "ed3633faa4f970772ae245a30f3a6bc8566b68e72b9c5db1b7b5733eed3b5572"
     }
   },
   "required_capture_inputs": [
@@ -148,6 +170,26 @@
       "repository_commit": "3b46c7e1be9cd89d35b45e228ee8c96ea87c77ae",
       "run_id": 31566770544,
       "rust_core_diagnostic_count": 8,
+      "workflow": "Native Rust host modules exact Rocky build"
+    }
+  ],
+  "rust_uapi_compatibility_failure_evidence": [
+    {
+      "artifact_id": null,
+      "artifact_zip_sha256": null,
+      "job_id": 94026729494,
+      "repository_commit": "c0b8687f39f6718c3647beaaa5e84c58fbbf6878",
+      "run_id": 31568982595,
+      "rust_uapi_diagnostic_count": 156,
+      "workflow": "RS-001 exact Rocky Linux API evidence"
+    },
+    {
+      "artifact_id": 9130600533,
+      "artifact_zip_sha256": "ee6413b03d472e7dc770a39f90b31e3439e0d1c65467f9c05da8b1dc7516b6a1",
+      "job_id": 94026729704,
+      "repository_commit": "c0b8687f39f6718c3647beaaa5e84c58fbbf6878",
+      "run_id": 31568982672,
+      "rust_uapi_diagnostic_count": 156,
       "workflow": "Native Rust host modules exact Rocky build"
     }
   ],
@@ -202,6 +244,13 @@
         "path": "host-kernel/rocky/patches/0004-rust-compile-libcore-edition-2024.patch",
         "sha256": "3ef23cf99a4523a6045a29b70f49ba0080242d7b219db7f0bca58b4f7d73fbb7",
         "size": 7891
+      },
+      {
+        "applied": true,
+        "empty": false,
+        "path": "host-kernel/rocky/patches/0005-rust-clean-unnecessary-transmutes-lint.patch",
+        "sha256": "0ba29993d78fea5db3c0ff8dbf41bf8a6c08b00d9803fc85da7805e698ac8c33",
+        "size": 3520
       }
     ],
     "tree_comparison": "fresh locked archive plus every applied Rocky patch and the bound Rust target compatibility patch must byte-match the supplied out-of-tree build source"

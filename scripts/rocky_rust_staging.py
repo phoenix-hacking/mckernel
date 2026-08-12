@@ -64,6 +64,12 @@ EXPECTED_INPUTS = (
         "repository_path": "host-kernel/kbuild/Kconfig",
         "sha256": "69f14cc7d347d6da3d6cbe0199e35fab72e40f6af3683df1c337efd449721296",
     },
+    {
+        "destination": "abi/x86_64.rs",
+        "kind": "shared_rust_abi",
+        "repository_path": "host-kernel/native-rust/abi/x86_64.rs",
+        "sha256": "b5980e5b621914a120a0e6b72241477c48aee85615ae4cc76077f3874e35f860",
+    },
 )
 EXPECTED_PARENT_INTEGRATION_REF = {
     "repository_path": "host-kernel/kbuild/parent-integration-v1.json",
@@ -513,7 +519,13 @@ def _validate_input(repo_root, item, index):
     _require_keys(item, {"destination", "kind", "repository_path", "sha256"}, label)
     if index >= len(EXPECTED_INPUTS) or item != EXPECTED_INPUTS[index]:
         raise ValidationError("{0} differs from the hard-locked staging input".format(label))
-    expected_destination = "Kbuild" if item["kind"] == "kbuild_template" else "Kconfig"
+    expected_destination = {
+        "kbuild_template": "Kbuild",
+        "kconfig": "Kconfig",
+        "shared_rust_abi": "abi/x86_64.rs",
+    }.get(item["kind"])
+    if expected_destination is None:
+        raise ValidationError("{0}.kind is not a locked staging input kind".format(label))
     if item["destination"] != expected_destination:
         raise ValidationError("{0}.destination must be {1}".format(label, expected_destination))
     path = _repo_regular_file(repo_root, item["repository_path"], label + ".repository_path")
@@ -521,8 +533,22 @@ def _validate_input(repo_root, item, index):
     text = _read_text(path, label)
     if item["kind"] == "kbuild_template":
         _validate_kbuild(text)
-    else:
+    elif item["kind"] == "kconfig":
         _validate_kconfig(text)
+    else:
+        required = (
+            "pub struct IhkIkcQueueHead",
+            "assert_layout!(IhkIkcQueueHead, 64, 8,",
+            '#[cfg(not(target_endian = "little"))]',
+            '#[cfg(not(target_pointer_width = "64"))]',
+        )
+        for token in required:
+            if text.count(token) != 1:
+                raise ValidationError("{0} lacks a unique ABI marker: {1}".format(label, token))
+        lowered = text.lower()
+        for forbidden in ('extern "c"', "unsafe", "include!", "include_bytes!", "asm!(", "module!"):
+            if forbidden in lowered:
+                raise ValidationError("{0} contains forbidden executable/boundary construct: {1}".format(label, forbidden))
     return {
         "destination": item["destination"],
         "path": path,
@@ -619,12 +645,12 @@ def validate_manifest(repo_root, manifest_path):
     parent_integration = _validate_parent_integration(repo_root, manifest["parent_integration"])
 
     inputs = manifest["inputs"]
-    if not isinstance(inputs, list) or len(inputs) != 2:
-        raise ValidationError("inputs must contain exactly Kbuild and Kconfig")
+    if not isinstance(inputs, list) or len(inputs) != len(EXPECTED_INPUTS):
+        raise ValidationError("inputs must contain exactly Kbuild, Kconfig, and the shared x86_64 ABI")
     staged_files = [_validate_input(repo_root, item, index) for index, item in enumerate(inputs)]
     destinations = [item["destination"] for item in staged_files]
-    if destinations != ["Kbuild", "Kconfig"]:
-        raise ValidationError("inputs must be deterministically ordered as Kbuild, Kconfig")
+    if destinations != ["Kbuild", "Kconfig", "abi/x86_64.rs"]:
+        raise ValidationError("inputs must be ordered as Kbuild, Kconfig, abi/x86_64.rs")
 
     modules = manifest["modules"]
     if not isinstance(modules, list) or len(modules) != len(EXPECTED_MODULES):
@@ -776,6 +802,10 @@ def _stage_locked(plan, kernel_tree, lock):
         os.chmod(temporary, 0o755)
         for item in plan["files"]:
             destination = os.path.join(temporary, item["destination"])
+            destination_parent = os.path.dirname(destination)
+            if destination_parent != temporary and not os.path.isdir(destination_parent):
+                os.makedirs(destination_parent, 0o755)
+                os.chmod(destination_parent, 0o755)
             with open(item["path"], "rb") as source, open(destination, "wb") as output:
                 shutil.copyfileobj(source, output)
             os.chmod(destination, 0o644)
@@ -811,10 +841,27 @@ def _verify_locked_stage(plan, kernel_tree, lock):
     expected = {item["destination"]: item["sha256"] for item in plan["files"]}
     expected["stage-lock.json"] = sha256_bytes(canonical_json_bytes(lock))
     actual = []
+    actual_directories = []
     for root, directories, files in os.walk(target):
-        if root != target or directories:
-            raise ValidationError("staged tree may contain only locked top-level files")
-        actual.extend(files)
+        for directory in directories:
+            actual_directories.append(os.path.relpath(os.path.join(root, directory), target))
+        for name in files:
+            actual.append(os.path.relpath(os.path.join(root, name), target))
+    expected_directories = set()
+    for name in expected:
+        parent = os.path.dirname(name)
+        while parent:
+            expected_directories.add(parent)
+            parent = os.path.dirname(parent)
+    if set(actual_directories) != expected_directories:
+        raise ValidationError("staged directory closure differs")
+    for name in expected_directories:
+        path = os.path.join(target, name)
+        info = os.lstat(path)
+        if stat.S_ISLNK(info.st_mode) or not stat.S_ISDIR(info.st_mode):
+            raise ValidationError("staged directory must be real and non-symlink: {0}".format(name))
+        if stat.S_IMODE(info.st_mode) != 0o755:
+            raise ValidationError("staged directory mode must be 0755: {0}".format(name))
     if set(actual) != set(expected):
         raise ValidationError(
             "staged file closure differs: missing={0}, extra={1}".format(

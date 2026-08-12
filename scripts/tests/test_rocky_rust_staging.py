@@ -29,10 +29,15 @@ class RockyRustStagingTests(unittest.TestCase):
         os.makedirs(os.path.join(self.repo, "host-kernel", "kbuild", "patches"))
         os.makedirs(os.path.join(self.repo, "host-kernel", "rocky"))
         os.makedirs(os.path.join(self.repo, "host-kernel", "native-rust"))
-        for name in ("Kbuild.in", "Kconfig"):
+        for item in staging.EXPECTED_INPUTS:
+            source = os.path.join(REPO_ROOT, item["repository_path"])
+            destination = os.path.join(self.repo, item["repository_path"])
+            parent = os.path.dirname(destination)
+            if not os.path.isdir(parent):
+                os.makedirs(parent)
             shutil.copyfile(
-                os.path.join(REPO_ROOT, "host-kernel", "kbuild", name),
-                os.path.join(self.repo, "host-kernel", "kbuild", name),
+                source,
+                destination,
             )
         for module in staging.EXPECTED_MODULES:
             shutil.copyfile(
@@ -91,7 +96,7 @@ class RockyRustStagingTests(unittest.TestCase):
         self.assertEqual(staging.EXPECTED_TARGET, plan["manifest"]["target"])
         staged = {item["destination"] for item in plan["files"]}
         self.assertEqual(
-            {"Kbuild", "Kconfig", "ihk.rs", "ihk_smp_x86_64.rs", "mcctrl.rs"}, staged
+            {"Kbuild", "Kconfig", "abi/x86_64.rs", "ihk.rs", "ihk_smp_x86_64.rs", "mcctrl.rs"}, staged
         )
 
     def test_crate_root_digest_drift_is_rejected(self):
@@ -187,8 +192,26 @@ class RockyRustStagingTests(unittest.TestCase):
         self.assertEqual(staging.EXPECTED_TARGET, lock["target"])
         paths = {item["path"] for item in lock["files"]}
         self.assertEqual(
-            {"Kbuild", "Kconfig", "ihk.rs", "ihk_smp_x86_64.rs", "mcctrl.rs"}, paths
+            {"Kbuild", "Kconfig", "abi/x86_64.rs", "ihk.rs", "ihk_smp_x86_64.rs", "mcctrl.rs"}, paths
         )
+
+    def test_shared_abi_is_staged_at_its_import_path_and_is_not_credit(self):
+        plan = self.plan()
+        kernel = os.path.join(self.temporary, "evidence-kernel")
+        os.makedirs(os.path.join(kernel, "drivers", "misc"))
+        target = staging.stage_for_evidence(plan, kernel)
+        abi_path = os.path.join(target, "abi", "x86_64.rs")
+        self.assertTrue(os.path.isfile(abi_path))
+        self.assertEqual(0o755, os.stat(os.path.dirname(abi_path)).st_mode & 0o777)
+        self.assertEqual(staging.EXPECTED_INPUTS[2]["sha256"], digest(abi_path))
+        self.assertFalse(plan["credit_eligible"])
+
+    def test_shared_abi_path_injection_is_rejected_even_when_hashed(self):
+        item = self.manifest["inputs"][2]
+        item["destination"] = "../abi.rs"
+        self.write_manifest()
+        with self.assertRaises(staging.ValidationError):
+            self.plan()
 
     def test_kbuild_command_injection_is_rejected_after_rehash(self):
         path = os.path.join(self.repo, "host-kernel", "kbuild", "Kbuild.in")

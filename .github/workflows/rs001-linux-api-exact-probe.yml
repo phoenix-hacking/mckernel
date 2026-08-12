@@ -13,6 +13,7 @@ on:
       - host-kernel/rocky/patches/0002-rust-support-rust-1.91-target-spec.patch
       - host-kernel/rocky/patches/0003-kbuild-rust-add-rustc-min-version.patch
       - host-kernel/rocky/patches/0004-rust-compile-libcore-edition-2024.patch
+      - host-kernel/rocky/patches/0005-rust-clean-unnecessary-transmutes-lint.patch
       - host-kernel/rocky/patches/series.json
       - host-kernel/rocky/source-lock.json
       - host-kernel/rocky/toolchain-lock.json
@@ -144,7 +145,8 @@ jobs:
             0001-x86-rust-set-rustc-abi-x86-softfloat.patch \
             0002-rust-support-rust-1.91-target-spec.patch \
             0003-kbuild-rust-add-rustc-min-version.patch \
-            0004-rust-compile-libcore-edition-2024.patch
+            0004-rust-compile-libcore-edition-2024.patch \
+            0005-rust-clean-unnecessary-transmutes-lint.patch
           do
             compat_source="$GITHUB_WORKSPACE/host-kernel/rocky/patches/$compat_name"
             compat_asset="$RS001_SOURCE_ASSETS/$compat_name"

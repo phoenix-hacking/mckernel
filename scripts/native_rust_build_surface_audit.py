@@ -19,6 +19,9 @@ AUTHORITATIVE_INPUTS = {
     "Kbuild": "host-kernel/kbuild/Kbuild.in",
     "Kconfig": "host-kernel/kbuild/Kconfig",
 }
+SUPPLEMENTAL_INPUTS = {
+    "abi/x86_64.rs": "host-kernel/native-rust/abi/x86_64.rs",
+}
 FORBIDDEN_BUILD_BASENAMES = frozenset(("kbuild", "kconfig", "makefile"))
 EXPECTED_SYMBOLS = (
     "MCKERNEL_IHK_RUST",
@@ -119,9 +122,11 @@ def _check_manifest(repo):
     manifest_path = _repository_file(repo, MANIFEST, "stage manifest")
     manifest = _read_json(manifest_path)
     inputs = manifest.get("inputs")
-    if not isinstance(inputs, list) or len(inputs) != 2:
+    expected_inputs = dict(AUTHORITATIVE_INPUTS)
+    expected_inputs.update(SUPPLEMENTAL_INPUTS)
+    if not isinstance(inputs, list) or len(inputs) != len(expected_inputs):
         raise AuditError(
-            "stage manifest must name exactly authoritative Kbuild and Kconfig inputs"
+            "stage manifest must name exactly the build authorities and locked supplemental inputs"
         )
     by_destination = {}
     for index, item in enumerate(inputs):
@@ -133,13 +138,13 @@ def _check_manifest(repo):
         if destination in by_destination:
             raise AuditError("duplicate staged destination: {0}".format(destination))
         by_destination[destination] = item
-    if set(by_destination) != set(AUTHORITATIVE_INPUTS):
-        raise AuditError("manifest input destinations differ from the sole build authority")
+    if set(by_destination) != set(expected_inputs):
+        raise AuditError("manifest input destinations differ from the locked staging surface")
 
     paths = {}
-    for destination in sorted(AUTHORITATIVE_INPUTS):
+    for destination in sorted(expected_inputs):
         item = by_destination[destination]
-        expected_path = AUTHORITATIVE_INPUTS[destination]
+        expected_path = expected_inputs[destination]
         if item.get("repository_path") != expected_path:
             raise AuditError(
                 "{0} authority redirected from {1}".format(destination, expected_path)
@@ -151,7 +156,7 @@ def _check_manifest(repo):
         if _sha256(path) != expected_digest:
             raise AuditError("{0} authority digest drift".format(destination))
         paths[destination] = path
-    return paths
+    return dict((name, paths[name]) for name in AUTHORITATIVE_INPUTS)
 
 
 def _check_kconfig(path):
