@@ -27,6 +27,15 @@
     "CONFIG_RANDSTRUCT": "n",
     "CONFIG_RUST_IS_AVAILABLE": "y"
   },
+  "derived_delta": [
+    {
+      "baseline": "y",
+      "depends_on": "CONFIG_MODVERSIONS",
+      "reason": "CONFIG_ASM_MODVERSIONS is visible only when CONFIG_MODVERSIONS is enabled.",
+      "resolved": "n",
+      "symbol": "CONFIG_ASM_MODVERSIONS"
+    }
+  ],
   "gate_claims": {
     "RK-002": false,
     "RK-003": false,
@@ -299,6 +308,20 @@
     ],
     "passes": 2,
     "process_configs_required": true,
+    "rustavailable": {
+      "command": [
+        "make",
+        "-C",
+        "SOURCE_ROOT",
+        "O=REQUESTED_BUILD_DIR",
+        "ARCH=x86_64",
+        "LLVM=1",
+        "rustavailable"
+      ],
+      "passes": 2,
+      "required_stdout_line": "Rust is available!",
+      "stderr_must_be_empty": true
+    },
     "source_cleanup_command": [
       "make",
       "-C",
@@ -343,7 +366,7 @@
     "Compatibility patches 0006 through 0020 change source/build compatibility without adding configuration symbols; this phase binds and applies them but cannot substitute config resolution for their separate exact compile probes.",
     "The current RK-003 lock maps llvm-config to llvm-0:21.1.8-1.el10.x86_64, while the exact captured binary owner is llvm-devel-0:21.1.8-1.el10.x86_64; that authority mismatch requires reconciliation before review ingestion or gate credit.",
     "A successful config-resolution artifact still requires independent review and durable archival before any authority lock may be updated.",
-    "make LLVM=1 rustavailable remains a separate required phase and is not claimed here.",
+    "Both requested resolutions run make LLVM=1 rustavailable against their final external-build .config, but these hosted config-only invocations do not prove the offline RK-003 replay, a production compilation, or RK-005 credit.",
     "A production kernel build has not yet proved that its final .config byte-matches both independent resolutions.",
     "RK-002, RK-003, RK-004, RK-005, RK-006, RS-001, and tracker credit remain false."
   ],

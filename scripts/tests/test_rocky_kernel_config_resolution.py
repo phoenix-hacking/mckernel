@@ -54,13 +54,18 @@ def synthetic_maps(contract):
         }
     )
     control.update(contract["dependency_symbols"])
-    control["CONFIG_RUST"] = "n"
+    # Rocky process_configs may omit a dependency-hidden disabled bool instead
+    # of retaining an explicit ``# CONFIG_RUST is not set`` line.
+    control.pop("CONFIG_RUST", None)
     control["CONFIG_MODVERSIONS"] = "y"
+    control["CONFIG_ASM_MODVERSIONS"] = "y"
     requested = dict(control)
+    requested.pop("CONFIG_ASM_MODVERSIONS")
     requested.update(
         {
             "CONFIG_RUST": "y",
             "CONFIG_MODVERSIONS": "n",
+            "CONFIG_RUST_DEBUG_ASSERTIONS": "n",
             "CONFIG_RUSTC_HAS_UNNECESSARY_TRANSMUTES": "y",
             "CONFIG_RUSTC_VERSION_TEXT": '"rustc 1.92.0 (fixture)"',
         }
@@ -151,6 +156,8 @@ class RepositoryContractTests(unittest.TestCase):
 
             def fake_run_command(arguments, cwd=None, env=None, timeout=600):
                 commands.append(list(arguments))
+                if arguments[-1] == "rustavailable":
+                    return b"Rust is available!\n", b""
                 return b"", b""
 
             original_run_command = resolution.run_command
@@ -169,6 +176,9 @@ class RepositoryContractTests(unittest.TestCase):
             self.assertEqual(commands[3][-3:], ["ARCH=x86_64", "LLVM=1", "mrproper"])
             self.assertEqual(commands[4], result["control_command"])
             self.assertEqual(commands[5], result["requested_command"])
+            self.assertEqual(commands[6], result["rustavailable"]["command"])
+            self.assertEqual(commands[6][-1], "rustavailable")
+            self.assertEqual(result["rustavailable"]["success_line_count"], 1)
             self.assertEqual(result["control"].read_bytes(), baseline.read_bytes())
             self.assertEqual(result["requested"].read_bytes(), baseline.read_bytes())
 
@@ -266,6 +276,23 @@ class RepositoryContractTests(unittest.TestCase):
             ],
         )
         self.assertEqual(
+            contract["resolution"]["rustavailable"],
+            {
+                "command": [
+                    "make",
+                    "-C",
+                    "SOURCE_ROOT",
+                    "O=REQUESTED_BUILD_DIR",
+                    "ARCH=x86_64",
+                    "LLVM=1",
+                    "rustavailable",
+                ],
+                "passes": 2,
+                "required_stdout_line": "Rust is available!",
+                "stderr_must_be_empty": True,
+            },
+        )
+        self.assertEqual(
             contract["process_configs"]["sha256"],
             "23501d7f0709000203940749953be512a36c55bd857ba35309224f902ed1e791",
         )
@@ -281,6 +308,21 @@ class RepositoryContractTests(unittest.TestCase):
                     "resolved": "n",
                     "symbol": "CONFIG_MODVERSIONS",
                 },
+            ],
+        )
+        self.assertEqual(
+            contract["derived_delta"],
+            [
+                {
+                    "baseline": "y",
+                    "depends_on": "CONFIG_MODVERSIONS",
+                    "reason": (
+                        "CONFIG_ASM_MODVERSIONS is visible only when "
+                        "CONFIG_MODVERSIONS is enabled."
+                    ),
+                    "resolved": "n",
+                    "symbol": "CONFIG_ASM_MODVERSIONS",
+                }
             ],
         )
         self.assertEqual(
@@ -328,9 +370,16 @@ class ConfigClassificationTests(unittest.TestCase):
         self.contract = resolution.validate_contract(REPO_ROOT)
 
     def write_fixture(
-        self, root, control_mutation=None, requested_mutation=None, shared_mutation=None
+        self,
+        root,
+        baseline_mutation=None,
+        control_mutation=None,
+        requested_mutation=None,
+        shared_mutation=None,
     ):
         baseline, control, requested = synthetic_maps(self.contract)
+        if baseline_mutation:
+            baseline_mutation(baseline)
         if shared_mutation:
             shared_mutation(control)
             shared_mutation(requested)
@@ -370,6 +419,20 @@ class ConfigClassificationTests(unittest.TestCase):
                 ["CONFIG_MODVERSIONS", "CONFIG_RUST"],
             )
             self.assertEqual(
+                delta["derived_changes"],
+                [
+                    {
+                        "after": "n",
+                        "before": "y",
+                        "symbol": "CONFIG_ASM_MODVERSIONS",
+                    }
+                ],
+            )
+            self.assertNotIn(
+                "CONFIG_RUST_DEBUG_ASSERTIONS",
+                [row["symbol"] for row in delta["requested_generated_symbols"]],
+            )
+            self.assertEqual(
                 [row["symbol"] for row in delta["requested_generated_symbols"]],
                 [
                     "CONFIG_RUSTC_HAS_UNNECESSARY_TRANSMUTES",
@@ -392,17 +455,131 @@ class ConfigClassificationTests(unittest.TestCase):
                 self.validate(paths)
 
     def test_unexpected_requested_symbol_fails_closed(self):
+        for value in ("y", "m", '"unreviewed"', "42"):
+            with self.subTest(value=value):
+                with tempfile.TemporaryDirectory() as temporary:
+                    paths = self.write_fixture(
+                        Path(temporary),
+                        requested_mutation=lambda values, item=value: values.update(
+                            {"CONFIG_UNREVIEWED_GENERATED": item}
+                        ),
+                    )
+                    with self.assertRaisesRegex(
+                        resolution.ConfigResolutionError,
+                        "unexpected generated symbols",
+                    ):
+                        self.validate(paths)
+
+    def test_absent_and_n_are_only_the_same_disabled_semantic_value(self):
+        self.assertEqual(
+            resolution.changed_symbols({}, {"CONFIG_DISABLED": "n"}), []
+        )
+        self.assertEqual(
+            resolution.changed_symbols({"CONFIG_DISABLED": "n"}, {}), []
+        )
+        for value in ("y", "m", '"n"', "0"):
+            with self.subTest(value=value):
+                self.assertEqual(
+                    resolution.changed_symbols({}, {"CONFIG_VISIBLE": value}),
+                    [
+                        {
+                            "after": value,
+                            "before": "n",
+                            "symbol": "CONFIG_VISIBLE",
+                        }
+                    ],
+                )
+
+    def test_expected_n_assertions_accept_absence_but_other_values_do_not(self):
+        def remove_disabled_assertions(values):
+            for symbol in (
+                "CONFIG_CALL_PADDING",
+                "CONFIG_DEBUG_INFO_REDUCED",
+                "CONFIG_GCC_PLUGIN_RANDSTRUCT",
+            ):
+                values.pop(symbol)
+
         with tempfile.TemporaryDirectory() as temporary:
             paths = self.write_fixture(
                 Path(temporary),
-                requested_mutation=lambda values: values.update(
-                    {"CONFIG_UNREVIEWED_GENERATED": "y"}
+                baseline_mutation=lambda values: values.pop(
+                    "CONFIG_DEBUG_INFO_REDUCED"
                 ),
+                shared_mutation=remove_disabled_assertions,
             )
+            _, assertions = self.validate(paths)
+            self.assertEqual(
+                assertions["dependencies"]["CONFIG_GCC_PLUGIN_RANDSTRUCT"],
+                "n",
+            )
+            self.assertEqual(
+                assertions["dependencies"]["CONFIG_CALL_PADDING"], "n"
+            )
+            self.assertEqual(
+                assertions["preservation_groups"]["btf_debug"][
+                    "CONFIG_DEBUG_INFO_REDUCED"
+                ],
+                "n",
+            )
+
+        self.assertEqual(
+            resolution.asserted_config_value(
+                {}, "CONFIG_HIDDEN", "n", "generated tool probe"
+            ),
+            "n",
+        )
+        for expected in ("y", "m", '"value"', "42"):
+            with self.subTest(expected=expected):
+                with self.assertRaisesRegex(
+                    resolution.ConfigResolutionError, "differs"
+                ):
+                    resolution.asserted_config_value(
+                        {}, "CONFIG_HIDDEN", expected, "fixture"
+                    )
+
+    def test_rust_cannot_be_removed_from_requested_classification(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            paths = self.write_fixture(Path(temporary))
+            contract = copy.deepcopy(self.contract)
+            contract["requested_delta"] = [
+                row
+                for row in contract["requested_delta"]
+                if row["symbol"] != "CONFIG_RUST"
+            ]
             with self.assertRaisesRegex(
                 resolution.ConfigResolutionError, "unexpected generated symbols"
             ):
-                self.validate(paths)
+                resolution.validate_config_pair(
+                    contract,
+                    paths["baseline"],
+                    [paths["control1"], paths["control2"]],
+                    [paths["resolved1"], paths["resolved2"]],
+                    synthetic_probes(),
+                )
+
+    def test_asm_modversions_derived_classification_is_exact(self):
+        for mutation, message in (
+            (lambda rows: [], "unclassified existing symbols"),
+            (
+                lambda rows: [dict(rows[0], resolved="y")],
+                "derived semantic delta",
+            ),
+        ):
+            with self.subTest(message=message):
+                with tempfile.TemporaryDirectory() as temporary:
+                    paths = self.write_fixture(Path(temporary))
+                    contract = copy.deepcopy(self.contract)
+                    contract["derived_delta"] = mutation(contract["derived_delta"])
+                    with self.assertRaisesRegex(
+                        resolution.ConfigResolutionError, message
+                    ):
+                        resolution.validate_config_pair(
+                            contract,
+                            paths["baseline"],
+                            [paths["control1"], paths["control2"]],
+                            [paths["resolved1"], paths["resolved2"]],
+                            synthetic_probes(),
+                        )
 
     def test_tool_probe_mismatch_fails_closed(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -429,6 +606,7 @@ class ConfigClassificationTests(unittest.TestCase):
             self.assertEqual(
                 set(delta),
                 {
+                    "derived_changes",
                     "environment_generated_changes",
                     "generated_symbol_results",
                     "requested_changes",
@@ -496,6 +674,104 @@ class ConfigClassificationTests(unittest.TestCase):
                 resolution.ConfigResolutionError, "duplicate config symbol"
             ):
                 resolution.parse_config(path)
+
+
+class RustavailableTests(unittest.TestCase):
+    def setUp(self):
+        self.contract = resolution.validate_contract(REPO_ROOT)
+        self.command = [
+            "make",
+            "-C",
+            "/source",
+            "O=/requested-build",
+            "ARCH=x86_64",
+            "LLVM=1",
+            "rustavailable",
+        ]
+
+    def invoke(self, stdout=b"Rust is available!\n", stderr=b"", error=None):
+        original = resolution.run_command
+
+        def fake_run_command(arguments, cwd=None, env=None, timeout=600):
+            self.assertEqual(arguments, self.command)
+            self.assertEqual(env, resolution.CAPTURE_ENVIRONMENT)
+            self.assertEqual(timeout, 1800)
+            if error is not None:
+                raise error
+            return stdout, stderr
+
+        resolution.run_command = fake_run_command
+        try:
+            return resolution.run_rustavailable(self.command, self.contract)
+        finally:
+            resolution.run_command = original
+
+    def test_exact_success_is_digest_bound(self):
+        record = self.invoke(
+            b"make: Entering directory '/source'\nRust is available!\n"
+        )
+        self.assertEqual(record["command"], self.command)
+        self.assertEqual(record["exit_code"], 0)
+        self.assertEqual(record["success_line_count"], 1)
+        self.assertEqual(
+            record["stderr_sha256"], hashlib.sha256(b"").hexdigest()
+        )
+
+    def test_nonzero_exit_is_not_swallowed(self):
+        with self.assertRaisesRegex(resolution.ConfigResolutionError, r"failed \(7\)"):
+            self.invoke(error=resolution.ConfigResolutionError("command failed (7)"))
+
+    def test_stderr_and_missing_or_duplicate_success_fail_closed(self):
+        cases = (
+            (b"Rust is available!\n", b"warning\n", "wrote stderr"),
+            (b"make output only\n", b"", "unique success line"),
+            (
+                b"Rust is available!\nRust is available!\n",
+                b"",
+                "unique success line",
+            ),
+        )
+        for stdout, stderr, message in cases:
+            with self.subTest(message=message):
+                with self.assertRaisesRegex(
+                    resolution.ConfigResolutionError, message
+                ):
+                    self.invoke(stdout=stdout, stderr=stderr)
+
+    def test_commands_manifest_binds_rustavailable_for_both_runs(self):
+        runs = []
+        for number in (1, 2):
+            runs.append(
+                {
+                    "control_command": ["control-olddefconfig", str(number)],
+                    "control_process_command": ["control-process", str(number)],
+                    "control_process_environment": {"PASS": str(number)},
+                    "merge_command": ["merge", str(number)],
+                    "requested_process_command": ["requested-process", str(number)],
+                    "requested_process_environment": {"PASS": str(number)},
+                    "requested_command": ["requested-olddefconfig", str(number)],
+                    "rustavailable": {
+                        "command": ["rustavailable", str(number)],
+                        "exit_code": 0,
+                        "stderr_sha256": hashlib.sha256(b"").hexdigest(),
+                        "stdout_sha256": hashlib.sha256(
+                            "pass {}\n".format(number).encode("ascii")
+                        ).hexdigest(),
+                        "success_line_count": 1,
+                    },
+                    "source_cleanup_command": ["mrproper", str(number)],
+                }
+            )
+        manifest = resolution.build_command_manifest(runs, self.contract)
+        self.assertEqual(len(manifest["passes"]), 2)
+        self.assertEqual(
+            [row["requested_rustavailable"] for row in manifest["passes"]],
+            [run["rustavailable"] for run in runs],
+        )
+        with self.assertRaisesRegex(
+            resolution.ConfigResolutionError, "exactly two runs"
+        ):
+            resolution.build_command_manifest(runs[:1], self.contract)
 
 
 class InputSafetyTests(unittest.TestCase):

@@ -23,7 +23,7 @@ TOOLCHAIN_LOCK_PATH = Path("host-kernel/rocky/toolchain-lock.json")
 CONFIG_POLICY_PATH = Path("host-kernel/rocky/config-policy.json")
 CONFIG_FRAGMENT_PATH = Path("host-kernel/rocky/configs/rust-minimal.config")
 EXPECTED_CONTRACT_SHA256 = (
-    "3bfd40a1f04fff9b4f1770a538a4cd5685bd9f51ce5056a02eb9556040261d5d"
+    "fb62377e1e9c868e77d199f8338617fe3659f99181e7537e4a74d3d2cbba15ef"
 )
 EXPECTED_WORKFLOW_SHA256 = (
     "d388610f13701e0166656d019ac0cd48c456c33a3d616ebb5df9bc3ad7e36ece"
@@ -233,6 +233,7 @@ def validate_contract(repo):
             "config_policy",
             "conditional_dependencies",
             "dependency_symbols",
+            "derived_delta",
             "gate_claims",
             "generated_environment",
             "outputs",
@@ -286,6 +287,22 @@ def validate_contract(repo):
             },
         ],
         "requested delta",
+    )
+    require_exact(
+        contract["derived_delta"],
+        [
+            {
+                "baseline": "y",
+                "depends_on": "CONFIG_MODVERSIONS",
+                "reason": (
+                    "CONFIG_ASM_MODVERSIONS is visible only when "
+                    "CONFIG_MODVERSIONS is enabled."
+                ),
+                "resolved": "n",
+                "symbol": "CONFIG_ASM_MODVERSIONS",
+            }
+        ],
+        "derived delta",
     )
     require_exact(
         contract["conditional_dependencies"],
@@ -509,6 +526,7 @@ def validate_contract(repo):
             "olddefconfig_command",
             "passes",
             "process_configs_required",
+            "rustavailable",
             "source_cleanup_command",
         },
         "resolution commands",
@@ -557,6 +575,24 @@ def validate_contract(repo):
         ],
         "source cleanup command",
     )
+    require_exact(
+        resolution["rustavailable"],
+        {
+            "command": [
+                "make",
+                "-C",
+                "SOURCE_ROOT",
+                "O=REQUESTED_BUILD_DIR",
+                "ARCH=x86_64",
+                "LLVM=1",
+                "rustavailable",
+            ],
+            "passes": 2,
+            "required_stdout_line": "Rust is available!",
+            "stderr_must_be_empty": True,
+        },
+        "rustavailable resolution",
+    )
     comparison = str(resolution["comparison"])
     if "complete resolved config bytes" not in comparison or "symbol maps" not in comparison:
         raise ConfigResolutionError("two-pass comparison contract is incomplete")
@@ -569,6 +605,13 @@ def validate_contract(repo):
         for item in contract["success_blockers"]
     ):
         raise ConfigResolutionError("compatibility compile-scope blocker is missing")
+    if not any(
+        "Both requested resolutions run" in item
+        and "rustavailable" in item
+        and "do not prove" in item
+        for item in contract["success_blockers"]
+    ):
+        raise ConfigResolutionError("rustavailable claim boundary is missing")
     tool_environment = exact_keys(
         contract["tool_environment"],
         {
@@ -712,13 +755,37 @@ def parse_config(path):
 def changed_symbols(before, after):
     return [
         {
-            "before": before.get(symbol, "<absent>"),
-            "after": after.get(symbol, "<absent>"),
+            "before": semantic_config_value(before.get(symbol, "<absent>")),
+            "after": semantic_config_value(after.get(symbol, "<absent>")),
             "symbol": symbol,
         }
         for symbol in sorted(set(before) | set(after))
-        if before.get(symbol, "<absent>") != after.get(symbol, "<absent>")
+        if semantic_config_value(before.get(symbol, "<absent>"))
+        != semantic_config_value(after.get(symbol, "<absent>"))
     ]
+
+
+def semantic_config_value(value):
+    # Kconfig may omit a disabled bool/tristate when a dependency hides it, or
+    # materialize the same value as ``# CONFIG_FOO is not set`` when the
+    # dependency becomes visible.  parse_config() represents the latter as
+    # ``n``.  A raw unquoted ``n`` is not an integer or string value, so this
+    # equivalence is deliberately narrow and does not hide other type drift.
+    if value == "<absent>":
+        return "n"
+    return value
+
+
+def asserted_config_value(values, symbol, expected, label):
+    raw = values.get(symbol, "<absent>")
+    actual = semantic_config_value(raw) if expected == "n" else raw
+    if actual != expected:
+        raise ConfigResolutionError(
+            "{} {} differs: {!r} != {!r}".format(
+                label, symbol, raw, expected
+            )
+        )
+    return actual
 
 
 def rpm_file_owner(path):
@@ -902,16 +969,47 @@ def validate_config_pair(contract, baseline_path, control_paths, resolved_paths,
         for row in contract["requested_delta"]
     ]
     expected_requested.sort(key=lambda item: item["symbol"])
-    requested_existing = [
-        row for row in requested_delta if row["before"] != "<absent>"
+    expected_derived = [
+        {"before": row["baseline"], "after": row["resolved"], "symbol": row["symbol"]}
+        for row in contract["derived_delta"]
     ]
-    requested_existing.sort(key=lambda item: item["symbol"])
-    require_exact(requested_existing, expected_requested, "requested existing-symbol delta")
+    expected_derived.sort(key=lambda item: item["symbol"])
+    requested_symbols = {row["symbol"] for row in expected_requested}
+    derived_symbols = {row["symbol"] for row in expected_derived}
+    if requested_symbols & derived_symbols:
+        raise ConfigResolutionError("requested and derived delta symbols overlap")
+    requested_changes = [
+        row for row in requested_delta if row["symbol"] in requested_symbols
+    ]
+    derived_changes = [
+        row for row in requested_delta if row["symbol"] in derived_symbols
+    ]
+    require_exact(requested_changes, expected_requested, "requested semantic delta")
+    require_exact(derived_changes, expected_derived, "derived semantic delta")
 
     generated_contract = contract["generated_environment"]
     generated_allowed = set(generated_contract["historical_policy_symbols"])
     generated_allowed.update(generated_contract["supplemental_symbols"])
-    requested_new = [row for row in requested_delta if row["before"] == "<absent>"]
+    requested_new = [
+        row
+        for row in requested_delta
+        if row["symbol"] not in requested_symbols | derived_symbols
+        and controls[0].get(row["symbol"], "<absent>") == "<absent>"
+    ]
+    classified_symbols = requested_symbols | derived_symbols | {
+        row["symbol"] for row in requested_new
+    }
+    unclassified = sorted(
+        row["symbol"]
+        for row in requested_delta
+        if row["symbol"] not in classified_symbols
+    )
+    if unclassified:
+        raise ConfigResolutionError(
+            "requested config changed unclassified existing symbols: {}".format(
+                ", ".join(unclassified)
+            )
+        )
     unexpected_new = sorted(
         row["symbol"] for row in requested_new if row["symbol"] not in generated_allowed
     )
@@ -924,30 +1022,25 @@ def validate_config_pair(contract, baseline_path, control_paths, resolved_paths,
     expected_generated = expected_generated_values(probes)
     generated_results = {}
     for symbol in sorted(generated_allowed):
-        actual = resolved[0].get(symbol, "<absent>")
         expected = expected_generated[symbol]
-        if actual != expected:
-            raise ConfigResolutionError(
-                "generated {} differs from tool probe: {!r} != {!r}".format(
-                    symbol, actual, expected
-                )
-            )
+        actual = asserted_config_value(
+            resolved[0], symbol, expected, "generated tool probe"
+        )
         generated_results[symbol] = actual
 
     assertions = {}
     for symbol, expected in sorted(contract["dependency_symbols"].items()):
-        actual = resolved[0].get(symbol, "<absent>")
-        if actual != expected:
-            raise ConfigResolutionError(
-                "dependency {} differs: {!r} != {!r}".format(symbol, actual, expected)
-            )
+        actual = asserted_config_value(
+            resolved[0], symbol, expected, "dependency"
+        )
         assertions[symbol] = actual
     for symbol, rule in sorted(contract["conditional_dependencies"].items()):
-        actual = resolved[0].get(symbol, "<absent>")
+        raw = resolved[0].get(symbol, "<absent>")
+        actual = semantic_config_value(raw)
         if actual not in rule["allowed_values"]:
             raise ConfigResolutionError(
                 "conditional dependency {} has invalid value {!r}".format(
-                    symbol, actual
+                    symbol, raw
                 )
             )
         if actual == "y" and probes["derived"]["rustc_version"] < rule[
@@ -961,21 +1054,24 @@ def validate_config_pair(contract, baseline_path, control_paths, resolved_paths,
     for group, values in sorted(contract["preservation_groups"].items()):
         preserved[group] = {}
         for symbol, expected in sorted(values.items()):
-            actual = resolved[0].get(symbol, "<absent>")
-            if actual != expected:
-                raise ConfigResolutionError(
-                    "preserved {} differs: {!r} != {!r}".format(
-                        symbol, actual, expected
-                    )
-                )
-            if baseline.get(symbol, "<absent>") != actual:
+            actual = asserted_config_value(
+                resolved[0], symbol, expected, "preserved"
+            )
+            baseline_raw = baseline.get(symbol, "<absent>")
+            baseline_actual = (
+                semantic_config_value(baseline_raw)
+                if expected == "n"
+                else baseline_raw
+            )
+            if baseline_actual != actual:
                 raise ConfigResolutionError("preserved {} drifted from baseline".format(symbol))
             preserved[group][symbol] = actual
 
     return {
+        "derived_changes": derived_changes,
         "environment_generated_changes": environment_delta,
         "generated_symbol_results": generated_results,
-        "requested_changes": requested_existing,
+        "requested_changes": requested_changes,
         "requested_generated_symbols": requested_new,
         "unexpected_generated_symbols": unexpected_new,
     }, {"dependencies": assertions, "preservation_groups": preserved}
@@ -1003,6 +1099,30 @@ def run_command(arguments, cwd=None, env=None, timeout=600):
             )
         )
     return completed.stdout, completed.stderr
+
+
+def run_rustavailable(command, contract):
+    stdout, stderr = run_command(
+        command,
+        env=CAPTURE_ENVIRONMENT,
+        timeout=1800,
+    )
+    if stderr:
+        raise ConfigResolutionError("rustavailable wrote stderr")
+    success_line = contract["resolution"]["rustavailable"]["required_stdout_line"]
+    stdout_lines = stdout.decode("utf-8", errors="strict").splitlines()
+    success_line_count = stdout_lines.count(success_line)
+    if success_line_count != 1:
+        raise ConfigResolutionError(
+            "rustavailable did not emit its unique success line"
+        )
+    return {
+        "command": command,
+        "exit_code": 0,
+        "stderr_sha256": hashlib.sha256(stderr).hexdigest(),
+        "stdout_sha256": hashlib.sha256(stdout).hexdigest(),
+        "success_line_count": success_line_count,
+    }
 
 
 def verify_asset(path, record, label):
@@ -1413,6 +1533,16 @@ def run_resolution(source, baseline, fragment, pass_number, contract):
     ]
     run_command(make_control, env=CAPTURE_ENVIRONMENT, timeout=1800)
     run_command(make_requested, env=CAPTURE_ENVIRONMENT, timeout=1800)
+    rustavailable_command = [
+        "make",
+        "-C",
+        str(source),
+        "O=" + str(requested_dir),
+        "ARCH=x86_64",
+        "LLVM=1",
+        "rustavailable",
+    ]
+    rustavailable = run_rustavailable(rustavailable_command, contract)
     return {
         "control": control_dir / ".config",
         "control_process_environment": control_environment,
@@ -1423,6 +1553,7 @@ def run_resolution(source, baseline, fragment, pass_number, contract):
         "requested_process_command": requested_process_command,
         "requested_command": make_requested,
         "control_command": make_control,
+        "rustavailable": rustavailable,
         "source_cleanup_command": source_cleanup,
     }
 
@@ -1467,6 +1598,36 @@ def write_sha256sums(root):
             raise ConfigResolutionError("evidence output is empty: {}".format(name))
         rows.append("{}  {}".format(digest, name))
     write_output(root, "SHA256SUMS", ("\n".join(rows) + "\n").encode("ascii"))
+
+
+def build_command_manifest(runs, contract):
+    if not isinstance(runs, list) or len(runs) != 2:
+        raise ConfigResolutionError("commands manifest requires exactly two runs")
+    return {
+        "patches": [
+            {"path": row["path"], "sha256": row["sha256"]}
+            for row in contract["patch_authority"]["rust_compatibility"]
+        ],
+        "passes": [
+            {
+                "control_olddefconfig": run["control_command"],
+                "control_process_configs": run["control_process_command"],
+                "control_process_environment": run[
+                    "control_process_environment"
+                ],
+                "fragment_merge": run["merge_command"],
+                "requested_process_configs": run["requested_process_command"],
+                "requested_process_environment": run[
+                    "requested_process_environment"
+                ],
+                "requested_olddefconfig": run["requested_command"],
+                "requested_rustavailable": run["rustavailable"],
+                "source_cleanup": run["source_cleanup_command"],
+            }
+            for run in runs
+        ],
+        "schema_version": SCHEMA_VERSION,
+    }
 
 
 def capture(repo, source_assets, output_dir, identity, contract):
@@ -1531,34 +1692,7 @@ def capture(repo, source_assets, output_dir, identity, contract):
         write_output(output, "control-pass-2.config", runs[1]["control"].read_bytes())
         write_output(output, "resolved-pass-1.config", runs[0]["requested"].read_bytes())
         write_output(output, "resolved-pass-2.config", runs[1]["requested"].read_bytes())
-        command_manifest = {
-            "patches": [
-                {"path": row["path"], "sha256": row["sha256"]}
-                for row in contract["patch_authority"]["rust_compatibility"]
-            ],
-            "passes": [
-                {
-                    "control_olddefconfig": runs[index]["control_command"],
-                    "control_process_configs": runs[index][
-                        "control_process_command"
-                    ],
-                    "control_process_environment": runs[index][
-                        "control_process_environment"
-                    ],
-                    "fragment_merge": runs[index]["merge_command"],
-                    "requested_process_configs": runs[index][
-                        "requested_process_command"
-                    ],
-                    "requested_process_environment": runs[index][
-                        "requested_process_environment"
-                    ],
-                    "requested_olddefconfig": runs[index]["requested_command"],
-                    "source_cleanup": runs[index]["source_cleanup_command"],
-                }
-                for index in range(2)
-            ],
-            "schema_version": SCHEMA_VERSION,
-        }
+        command_manifest = build_command_manifest(runs, contract)
         environment = {
             "container_image": CONTAINER_IMAGE,
             "fixed_environment": CAPTURE_ENVIRONMENT,

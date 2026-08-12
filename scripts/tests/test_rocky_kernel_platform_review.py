@@ -167,9 +167,9 @@ class RepositoryReviewTests(unittest.TestCase):
             review.PUBLISHED_BASE_REVIEW,
             {
                 "path": review.REVIEW_PATH.as_posix(),
-                "size": 11281,
-                "sha256": "ffb4ff68d743bba71199e4b47d8cb15bc0f149193e4fa944f246e2447123dabc",
-                "git_blob_sha1": "c4d361a684fbb6a67607137b7cf4a6ca98eaea85",
+                "size": 11208,
+                "sha256": "21dc474c6ae1ce73c9802c509d4b0b7e0b99d660c737df3a1a7e5216e4925333",
+                "git_blob_sha1": "129874d00cd5477f8dfb24548fb6bcd74a081fa6",
             },
         )
 
