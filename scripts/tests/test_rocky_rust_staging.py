@@ -26,12 +26,25 @@ class RockyRustStagingTests(unittest.TestCase):
     def setUp(self):
         self.temporary = tempfile.mkdtemp(prefix="rocky-rust-stage-test-")
         self.repo = os.path.join(self.temporary, "repo")
-        os.makedirs(os.path.join(self.repo, "host-kernel", "kbuild"))
+        os.makedirs(os.path.join(self.repo, "host-kernel", "kbuild", "patches"))
+        os.makedirs(os.path.join(self.repo, "host-kernel", "rocky"))
         for name in ("Kbuild.in", "Kconfig"):
             shutil.copyfile(
                 os.path.join(REPO_ROOT, "host-kernel", "kbuild", name),
                 os.path.join(self.repo, "host-kernel", "kbuild", name),
             )
+        shutil.copyfile(
+            os.path.join(REPO_ROOT, staging.EXPECTED_PARENT_INTEGRATION_REF["repository_path"]),
+            os.path.join(self.repo, staging.EXPECTED_PARENT_INTEGRATION_REF["repository_path"]),
+        )
+        shutil.copyfile(
+            os.path.join(REPO_ROOT, staging.EXPECTED_PARENT_PATCH["repository_path"]),
+            os.path.join(self.repo, staging.EXPECTED_PARENT_PATCH["repository_path"]),
+        )
+        shutil.copyfile(
+            os.path.join(REPO_ROOT, staging.EXPECTED_PARENT_SOURCE["source_lock_repository_path"]),
+            os.path.join(self.repo, staging.EXPECTED_PARENT_SOURCE["source_lock_repository_path"]),
+        )
         with open(os.path.join(REPO_ROOT, staging.DEFAULT_MANIFEST), "r") as stream:
             self.manifest = json.load(stream)
         self.manifest_path = os.path.join(self.repo, staging.DEFAULT_MANIFEST)
@@ -73,6 +86,10 @@ class RockyRustStagingTests(unittest.TestCase):
         )
         self.assertEqual(staging.EXPECTED_TARGET, plan["manifest"]["target"])
         self.assertEqual(
+            staging.EXPECTED_PARENT_INTEGRATION_REF,
+            plan["manifest"]["parent_integration"],
+        )
+        self.assertEqual(
             "drivers/misc/Makefile",
             plan["manifest"]["destination"]["parent_kbuild_integration"],
         )
@@ -110,6 +127,14 @@ class RockyRustStagingTests(unittest.TestCase):
         lock = staging._stage_lock(self.plan())
         self.assertEqual(staging.EXPECTED_TARGET, lock["target"])
         self.assertIsNone(lock["target"]["resolved_config_sha256"])
+        self.assertEqual(
+            staging.EXPECTED_PARENT_INTEGRATION_REF["sha256"],
+            lock["parent_integration"]["bundle_sha256"],
+        )
+        self.assertEqual(
+            staging.EXPECTED_PARENT_PATCH["sha256"],
+            lock["parent_integration"]["patch_sha256"],
+        )
 
     def test_source_injection_is_rejected_even_when_hashed(self):
         os.makedirs(os.path.join(self.repo, "native"))
@@ -151,6 +176,32 @@ class RockyRustStagingTests(unittest.TestCase):
         with self.assertRaises(staging.ValidationError):
             self.plan()
 
+    def test_kconfig_semantic_validator_independently_rejects_mutations(self):
+        path = os.path.join(REPO_ROOT, "host-kernel", "kbuild", "Kconfig")
+        with open(path, "r") as stream:
+            original = stream.read()
+        mutations = {
+            "bool": original.replace(
+                '\ttristate "McKernel IHK core host module (Rust)"',
+                '\tbool "McKernel IHK core host module (Rust)"',
+                1,
+            ),
+            "default": original.replace(
+                '\ttristate "McKernel IHK core host module (Rust)"',
+                '\ttristate "McKernel IHK core host module (Rust)"\n\tdefault y',
+                1,
+            ),
+            "extra dependency": original.replace(
+                '\ttristate "McKernel IHK core host module (Rust)"',
+                '\ttristate "McKernel IHK core host module (Rust)"\n\tdepends on MODULES',
+                1,
+            ),
+        }
+        for label, text in mutations.items():
+            with self.subTest(label=label):
+                with self.assertRaises(staging.ValidationError):
+                    staging._validate_kconfig(text)
+
     def test_consumer_without_provider_dependency_is_rejected_after_rehash(self):
         self.mutate_kconfig("\tdepends on MCKERNEL_IHK_RUST\n", "")
         with self.assertRaises(staging.ValidationError):
@@ -176,6 +227,54 @@ class RockyRustStagingTests(unittest.TestCase):
         self.write_manifest()
         with self.assertRaises(staging.ValidationError):
             self.plan()
+
+    def test_parent_patch_drift_is_rejected(self):
+        path = os.path.join(self.repo, staging.EXPECTED_PARENT_PATCH["repository_path"])
+        with open(path, "a") as stream:
+            stream.write("# drift\n")
+        with self.assertRaises(staging.ValidationError):
+            self.plan()
+
+    def test_parent_bundle_source_lock_drift_is_rejected(self):
+        path = os.path.join(
+            self.repo, staging.EXPECTED_PARENT_SOURCE["source_lock_repository_path"]
+        )
+        with open(path, "a") as stream:
+            stream.write("\n")
+        with self.assertRaises(staging.ValidationError):
+            self.plan()
+
+    def test_parent_bundle_cannot_self_attest_a_postimage(self):
+        path = os.path.join(self.repo, staging.EXPECTED_PARENT_INTEGRATION_REF["repository_path"])
+        with open(path, "r") as stream:
+            bundle = json.load(stream)
+        bundle["parent_files"][0]["postimage_sha256"] = "0" * 64
+        with open(path, "w") as stream:
+            json.dump(bundle, stream, indent=2, sort_keys=True)
+            stream.write("\n")
+        self.manifest["parent_integration"]["sha256"] = digest(path)
+        self.write_manifest()
+        with self.assertRaises(staging.ValidationError):
+            self.plan()
+
+    def test_atomic_no_replace_rename_preserves_concurrent_destination(self):
+        parent = os.path.join(self.temporary, "rename-parent")
+        os.makedirs(parent)
+        source = os.path.join(parent, "source")
+        target = os.path.join(parent, "target")
+        os.makedirs(source)
+        staging._rename_directory_noreplace(parent, source, target)
+        self.assertFalse(os.path.exists(source))
+        self.assertTrue(os.path.isdir(target))
+
+        second_source = os.path.join(parent, "second-source")
+        occupied = os.path.join(parent, "occupied")
+        os.makedirs(second_source)
+        os.makedirs(occupied)
+        with self.assertRaises(staging.ValidationError):
+            staging._rename_directory_noreplace(parent, second_source, occupied)
+        self.assertTrue(os.path.isdir(second_source))
+        self.assertTrue(os.path.isdir(occupied))
 
     def test_symlinked_locked_input_is_rejected(self):
         path = os.path.join(self.repo, "host-kernel", "kbuild", "Kconfig")

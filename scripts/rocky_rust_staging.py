@@ -4,6 +4,9 @@
 from __future__ import print_function
 
 import argparse
+import ctypes
+import difflib
+import errno
 import hashlib
 import json
 import os
@@ -11,6 +14,7 @@ import re
 import shutil
 import stat
 import sys
+import tarfile
 import tempfile
 
 
@@ -58,10 +62,59 @@ EXPECTED_INPUTS = (
         "sha256": "69f14cc7d347d6da3d6cbe0199e35fab72e40f6af3683df1c337efd449721296",
     },
 )
+EXPECTED_PARENT_INTEGRATION_REF = {
+    "repository_path": "host-kernel/kbuild/parent-integration-v1.json",
+    "sha256": "c1028925dd59034da5692c4384c61158236064be80c4e5a551c2d08a290f5caa",
+}
+EXPECTED_PARENT_SOURCE = {
+    "archive_basename": "linux-6.12.0-211.44.1.el10_2.tar.xz",
+    "archive_sha256": "4a174d47b8874a2139efcd1ac1ab2d6b80ae7a0ca62f0ae4596fd20cf62a3533",
+    "archive_root": "linux-6.12.0-211.44.1.el10_2",
+    "source_lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-source-v1",
+    "source_lock_repository_path": "host-kernel/rocky/source-lock.json",
+    "source_lock_sha256": "6b8571b229f31bf68b58749217391d917a2ba2028ac876e8475be1ec5bfef222",
+    "source_rpm_sha256": "2bfeda65bd9bdd4b86650074c81e061c37822b80317ac0d4f5aacc89c85589cb",
+}
+EXPECTED_PARENT_PATCH = {
+    "format": "unified-diff",
+    "path_strip": 1,
+    "repository_path": "host-kernel/kbuild/patches/0001-drivers-misc-add-mckernel-rust-host-modules.patch",
+    "sha256": "25b0724a2523c3fd5d6d8b824b72c6e6b19c2b16edebaa6719b53c22d4d5c7d9",
+}
+EXPECTED_PARENT_FILES = [
+    {
+        "insertion": {
+            "anchor": "obj-y\t\t\t\t+= keba/",
+            "line": "obj-$(CONFIG_MCKERNEL_IHK_RUST)\t+= mckernel/",
+            "placement": "after",
+        },
+        "path": "drivers/misc/Makefile",
+        "postimage_sha256": "548e7eed491c9287908870a4783be57c15a360f03ecc68a4c4856e7c5c51a74f",
+        "preimage_sha256": "3f998f3c28cae01f8cb6e3b283f25175635ff2510ba40ce60235a3c059a9a238",
+    },
+    {
+        "insertion": {
+            "anchor": "endmenu",
+            "line": 'source "drivers/misc/mckernel/Kconfig"',
+            "placement": "before",
+        },
+        "path": "drivers/misc/Kconfig",
+        "postimage_sha256": "ed57d452061fb74e62d5dce3aa3680aec0b70811b87b57a25554dc4dd4c33e4a",
+        "preimage_sha256": "679b6c945aebec04f936c184b724f1b0d6daa6d760ec3bb4d6b56db905c19683",
+    },
+]
+EXPECTED_PARENT_ABSENT_PATHS = [
+    "drivers/misc/mckernel",
+    "drivers/misc/mckernel/Kbuild",
+    "drivers/misc/mckernel/Kconfig",
+]
+PARENT_VERIFICATION_SCOPE = (
+    "byte-exact parent preimages, intended insertions, postimages, and patch bytes only; "
+    "no build, runtime, or RK-007 credit"
+)
 MODULE_BLOCKERS = ["schema-v1 checkpoint has no evidence-bound native Rust crate root"]
 READINESS_BLOCKERS = [
     "selected Rocky kernel source, toolchain, and config evidence is not gate-ready",
-    "parent Kconfig and Makefile integration patch with preimage and postimage hashes is not locked",
     "upstream Rust-for-Linux sample has not built through this staging path",
     "native crate roots for ihk, ihk-smp-x86_64, and mcctrl are not implemented",
     "production namespace and import metadata has not been proven from built modules",
@@ -104,6 +157,7 @@ EXPECTED_TOP_LEVEL_KEYS = {
     "destination",
     "inputs",
     "modules",
+    "parent_integration",
     "profile_id",
     "readiness",
     "schema_version",
@@ -219,6 +273,187 @@ def _read_text(path, label):
             return stream.read()
     except (IOError, OSError, UnicodeError) as error:
         raise ValidationError("cannot read {0}: {1}".format(label, error))
+
+
+def _validate_parent_integration(repo_root, reference):
+    if reference != EXPECTED_PARENT_INTEGRATION_REF:
+        raise ValidationError("parent_integration differs from the hard-locked schema-v1 bundle")
+    bundle_path = _repo_regular_file(
+        repo_root, reference["repository_path"], "parent_integration.repository_path"
+    )
+    _validate_digest(bundle_path, reference["sha256"], "parent_integration")
+    bundle = load_json(bundle_path)
+    _require_keys(
+        bundle,
+        {
+            "checkpoint",
+            "credit_eligible",
+            "parent_files",
+            "patch",
+            "profile_id",
+            "required_absent_paths",
+            "schema_version",
+            "selected_source",
+            "verification_scope",
+        },
+        "parent integration bundle",
+    )
+    if bundle["schema_version"] != SCHEMA_VERSION or bundle["profile_id"] != PROFILE_ID:
+        raise ValidationError("parent integration bundle identity differs")
+    if bundle["checkpoint"] != "integrity_only" or bundle["credit_eligible"] is not False:
+        raise ValidationError("parent integration bundle may not claim readiness or credit")
+    if bundle["selected_source"] != EXPECTED_PARENT_SOURCE:
+        raise ValidationError("parent integration selected source differs from the locked Rocky source")
+    selected = bundle["selected_source"]
+    source_lock_path = _repo_regular_file(
+        repo_root, selected["source_lock_repository_path"], "parent integration source lock"
+    )
+    _validate_digest(source_lock_path, selected["source_lock_sha256"], "parent integration source lock")
+    source_lock = load_json(source_lock_path)
+    if source_lock.get("lock_id") != selected["source_lock_id"]:
+        raise ValidationError("parent integration source-lock ID differs")
+    if source_lock.get("source_rpm", {}).get("sha256") != selected["source_rpm_sha256"]:
+        raise ValidationError("parent integration source RPM differs from its source lock")
+    archive_objects = [
+        item
+        for item in source_lock.get("embedded_objects", [])
+        if item.get("path") == "SOURCES/" + selected["archive_basename"]
+    ]
+    if len(archive_objects) != 1 or archive_objects[0].get("sha256") != selected["archive_sha256"]:
+        raise ValidationError("parent integration source archive differs from its source lock")
+    if bundle["patch"] != EXPECTED_PARENT_PATCH:
+        raise ValidationError("parent integration patch identity differs")
+    if bundle["parent_files"] != EXPECTED_PARENT_FILES:
+        raise ValidationError("parent integration preimages, insertions, or postimages differ")
+    if bundle["required_absent_paths"] != EXPECTED_PARENT_ABSENT_PATHS:
+        raise ValidationError("parent integration destination absence contract differs")
+    if bundle["verification_scope"] != PARENT_VERIFICATION_SCOPE:
+        raise ValidationError("parent integration verification scope differs")
+
+    patch_path = _repo_regular_file(
+        repo_root, bundle["patch"]["repository_path"], "parent integration patch"
+    )
+    _validate_digest(patch_path, bundle["patch"]["sha256"], "parent integration patch")
+    try:
+        with open(patch_path, "rb") as stream:
+            patch_bytes = stream.read()
+    except (IOError, OSError) as error:
+        raise ValidationError("cannot read parent integration patch: {0}".format(error))
+    if not patch_bytes.endswith(b"\n") or b"\r" in patch_bytes or b"\0" in patch_bytes:
+        raise ValidationError("parent integration patch must be LF-only text ending in a newline")
+    return {
+        "bundle": bundle,
+        "bundle_path": bundle_path,
+        "bundle_sha256": reference["sha256"],
+        "patch_bytes": patch_bytes,
+        "patch_path": patch_path,
+    }
+
+
+def _apply_parent_insertion(preimage, item):
+    label = item["path"]
+    if sha256_bytes(preimage) != item["preimage_sha256"]:
+        raise ValidationError("parent preimage digest mismatch: {0}".format(label))
+    if b"\r" in preimage or not preimage.endswith(b"\n"):
+        raise ValidationError("parent preimage must be LF-only text ending in a newline: {0}".format(label))
+    try:
+        text = preimage.decode("utf-8")
+    except UnicodeError as error:
+        raise ValidationError("parent preimage is not UTF-8 text ({0}): {1}".format(label, error))
+    lines = text.splitlines()
+    insertion = item["insertion"]
+    matches = [index for index, line in enumerate(lines) if line == insertion["anchor"]]
+    if len(matches) != 1:
+        raise ValidationError(
+            "parent insertion anchor must occur exactly once ({0}): got {1}".format(label, len(matches))
+        )
+    index = matches[0]
+    if insertion["placement"] == "after":
+        index += 1
+    elif insertion["placement"] != "before":
+        raise ValidationError("unsupported parent insertion placement: {0}".format(label))
+    lines.insert(index, insertion["line"])
+    postimage = ("\n".join(lines) + "\n").encode("utf-8")
+    if sha256_bytes(postimage) != item["postimage_sha256"]:
+        raise ValidationError("parent postimage digest mismatch: {0}".format(label))
+    return postimage
+
+
+def _render_parent_patch(parent_files, preimages, postimages):
+    chunks = []
+    for item in parent_files:
+        path = item["path"]
+        chunks.append("diff --git a/{0} b/{0}\n".format(path))
+        chunks.extend(
+            difflib.unified_diff(
+                preimages[path].decode("utf-8").splitlines(True),
+                postimages[path].decode("utf-8").splitlines(True),
+                fromfile="a/" + path,
+                tofile="b/" + path,
+                n=3,
+            )
+        )
+    return "".join(chunks).encode("utf-8")
+
+
+def verify_parent_source_archive(plan, archive_path):
+    parent = plan["parent_integration"]
+    bundle = parent["bundle"]
+    selected = bundle["selected_source"]
+    archive_path = os.path.abspath(archive_path)
+    try:
+        info = os.lstat(archive_path)
+    except OSError as error:
+        raise ValidationError("selected source archive is unavailable: {0}".format(error))
+    if stat.S_ISLNK(info.st_mode) or not stat.S_ISREG(info.st_mode):
+        raise ValidationError("selected source archive must be a regular, non-symlink file")
+    if os.path.basename(archive_path) != selected["archive_basename"]:
+        raise ValidationError("selected source archive basename differs")
+    _validate_digest(archive_path, selected["archive_sha256"], "selected source archive")
+
+    try:
+        with tarfile.open(archive_path, mode="r:xz") as archive:
+            members = archive.getmembers()
+            normalized_names = [member.name.rstrip("/") for member in members]
+            root = selected["archive_root"]
+            for relative in bundle["required_absent_paths"]:
+                locked = root + "/" + relative
+                if any(name == locked or name.startswith(locked + "/") for name in normalized_names):
+                    raise ValidationError("selected source already contains locked destination: {0}".format(relative))
+
+            preimages = {}
+            for item in bundle["parent_files"]:
+                member_name = root + "/" + item["path"]
+                matching = [member for member in members if member.name.rstrip("/") == member_name]
+                if len(matching) != 1 or not matching[0].isfile():
+                    raise ValidationError(
+                        "selected source must contain one regular parent file: {0}".format(item["path"])
+                    )
+                stream = archive.extractfile(matching[0])
+                if stream is None:
+                    raise ValidationError("cannot read selected source parent: {0}".format(item["path"]))
+                preimages[item["path"]] = stream.read()
+    except (IOError, OSError, tarfile.TarError) as error:
+        raise ValidationError("cannot inspect selected source archive: {0}".format(error))
+
+    postimages = {}
+    for item in bundle["parent_files"]:
+        postimages[item["path"]] = _apply_parent_insertion(preimages[item["path"]], item)
+    rendered = _render_parent_patch(bundle["parent_files"], preimages, postimages)
+    if rendered != parent["patch_bytes"]:
+        raise ValidationError("parent integration patch bytes differ from exact intended insertions")
+    return {
+        "archive_sha256": selected["archive_sha256"],
+        "parent_files": [
+            {
+                "path": item["path"],
+                "postimage_sha256": item["postimage_sha256"],
+                "preimage_sha256": item["preimage_sha256"],
+            }
+            for item in bundle["parent_files"]
+        ],
+        "patch_sha256": bundle["patch"]["sha256"],
+    }
 
 
 def _validate_kbuild(text):
@@ -360,6 +595,7 @@ def validate_manifest(repo_root, manifest_path):
         raise ValidationError("destination does not match the locked in-tree staging path")
     if manifest["target"] != EXPECTED_TARGET:
         raise ValidationError("target differs from the locked Rocky identity or overclaims resolved evidence")
+    parent_integration = _validate_parent_integration(repo_root, manifest["parent_integration"])
 
     inputs = manifest["inputs"]
     if not isinstance(inputs, list) or len(inputs) != 2:
@@ -404,17 +640,31 @@ def validate_manifest(repo_root, manifest_path):
         "manifest": manifest,
         "manifest_path": manifest_path,
         "manifest_sha256": sha256_file(manifest_path),
+        "parent_integration": parent_integration,
         "repo_root": repo_root,
     }
 
 
 def _stage_lock(plan):
+    parent = plan["parent_integration"]
     return {
         "files": [
             {"path": item["destination"], "sha256": item["sha256"]}
             for item in sorted(plan["files"], key=lambda value: value["destination"])
         ],
         "manifest_sha256": plan["manifest_sha256"],
+        "parent_integration": {
+            "bundle_sha256": parent["bundle_sha256"],
+            "parent_files": [
+                {
+                    "path": item["path"],
+                    "postimage_sha256": item["postimage_sha256"],
+                    "preimage_sha256": item["preimage_sha256"],
+                }
+                for item in parent["bundle"]["parent_files"]
+            ],
+            "patch_sha256": parent["bundle"]["patch"]["sha256"],
+        },
         "profile_id": PROFILE_ID,
         "schema_version": SCHEMA_VERSION,
         "target": EXPECTED_TARGET,
@@ -438,6 +688,51 @@ def _kernel_target(kernel_tree, destination):
     if os.path.commonpath([kernel_real, parent_real]) != kernel_real:
         raise ValidationError("staging destination escapes the kernel tree")
     return target, parent
+
+
+def _rename_directory_noreplace(parent, temporary, target):
+    parent = os.path.abspath(parent)
+    temporary = os.path.abspath(temporary)
+    target = os.path.abspath(target)
+    if os.path.dirname(temporary) != parent or os.path.dirname(target) != parent:
+        raise ValidationError("no-replace rename requires sibling directories")
+    old_name = os.path.basename(temporary)
+    new_name = os.path.basename(target)
+    if old_name in ("", ".", "..") or new_name in ("", ".", ".."):
+        raise ValidationError("no-replace rename received an unsafe directory name")
+
+    try:
+        libc = ctypes.CDLL(None, use_errno=True)
+        renameat2 = libc.renameat2
+    except (AttributeError, OSError) as error:
+        raise ValidationError("renameat2 is unavailable; refusing a racy staging rename: {0}".format(error))
+    renameat2.argtypes = [ctypes.c_int, ctypes.c_char_p, ctypes.c_int, ctypes.c_char_p, ctypes.c_uint]
+    renameat2.restype = ctypes.c_int
+    flags = os.O_RDONLY
+    flags |= getattr(os, "O_DIRECTORY", 0)
+    flags |= getattr(os, "O_CLOEXEC", 0)
+    try:
+        parent_fd = os.open(parent, flags)
+    except OSError as error:
+        raise ValidationError("cannot open staging parent for atomic rename: {0}".format(error))
+    try:
+        ctypes.set_errno(0)
+        result = renameat2(
+            parent_fd,
+            os.fsencode(old_name),
+            parent_fd,
+            os.fsencode(new_name),
+            1,
+        )
+        if result != 0:
+            number = ctypes.get_errno()
+            if number in (errno.EEXIST, errno.ENOTEMPTY):
+                raise ValidationError("staging destination appeared concurrently: {0}".format(target))
+            if number in (errno.ENOSYS, errno.EINVAL, errno.EOPNOTSUPP):
+                raise ValidationError("atomic no-replace rename is unsupported; staging remains unchanged")
+            raise ValidationError("atomic no-replace rename failed: {0}".format(os.strerror(number)))
+    finally:
+        os.close(parent_fd)
 
 
 def stage(plan, kernel_tree):
@@ -465,7 +760,7 @@ def stage(plan, kernel_tree):
         for name, digest in expected.items():
             if sha256_file(os.path.join(temporary, name)) != digest:
                 raise ValidationError("staged temporary file digest mismatch: {0}".format(name))
-        os.rename(temporary, target)
+        _rename_directory_noreplace(parent, temporary, target)
         temporary = None
     finally:
         if temporary is not None:
@@ -526,6 +821,7 @@ def parse_args(argv):
     action = parser.add_mutually_exclusive_group(required=True)
     action.add_argument("--check", action="store_true")
     action.add_argument("--gate-ready", action="store_true")
+    action.add_argument("--verify-parent-source-archive", metavar="SOURCE_TAR_XZ")
     action.add_argument("--stage", metavar="KERNEL_TREE")
     action.add_argument("--verify-stage", metavar="KERNEL_TREE")
     return parser.parse_args(argv)
@@ -549,6 +845,15 @@ def main(argv=None):
             print("Rocky Rust staging gate: NOT READY", file=sys.stderr)
             _print_blockers(plan, sys.stderr)
             return 1
+        if args.verify_parent_source_archive:
+            result = verify_parent_source_archive(plan, args.verify_parent_source_archive)
+            print(
+                "Rocky parent integration source verification: PASS ({0}, patch {1})".format(
+                    result["archive_sha256"], result["patch_sha256"]
+                )
+            )
+            print("RK-007 credit: NOT ELIGIBLE (integrity-only schema v1)")
+            return 0
         if args.stage:
             print("Staged native Rust inputs at {0}".format(stage(plan, args.stage)))
             return 0

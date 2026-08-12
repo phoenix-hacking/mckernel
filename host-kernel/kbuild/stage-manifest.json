@@ -97,13 +97,16 @@
       }
     }
   ],
+  "parent_integration": {
+    "repository_path": "host-kernel/kbuild/parent-integration-v1.json",
+    "sha256": "c1028925dd59034da5692c4384c61158236064be80c4e5a551c2d08a290f5caa"
+  },
   "profile_id": "rocky-10.2-native-rust-host-modules-v1",
   "readiness": {
     "checkpoint": "integrity_only",
     "credit_eligible": false,
     "blockers": [
       "selected Rocky kernel source, toolchain, and config evidence is not gate-ready",
-      "parent Kconfig and Makefile integration patch with preimage and postimage hashes is not locked",
       "upstream Rust-for-Linux sample has not built through this staging path",
       "native crate roots for ihk, ihk-smp-x86_64, and mcctrl are not implemented",
       "production namespace and import metadata has not been proven from built modules",

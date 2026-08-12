@@ -1,0 +1,49 @@
+{
+  "checkpoint": "integrity_only",
+  "credit_eligible": false,
+  "parent_files": [
+    {
+      "insertion": {
+        "anchor": "obj-y\t\t\t\t+= keba/",
+        "line": "obj-$(CONFIG_MCKERNEL_IHK_RUST)\t+= mckernel/",
+        "placement": "after"
+      },
+      "path": "drivers/misc/Makefile",
+      "postimage_sha256": "548e7eed491c9287908870a4783be57c15a360f03ecc68a4c4856e7c5c51a74f",
+      "preimage_sha256": "3f998f3c28cae01f8cb6e3b283f25175635ff2510ba40ce60235a3c059a9a238"
+    },
+    {
+      "insertion": {
+        "anchor": "endmenu",
+        "line": "source \"drivers/misc/mckernel/Kconfig\"",
+        "placement": "before"
+      },
+      "path": "drivers/misc/Kconfig",
+      "postimage_sha256": "ed57d452061fb74e62d5dce3aa3680aec0b70811b87b57a25554dc4dd4c33e4a",
+      "preimage_sha256": "679b6c945aebec04f936c184b724f1b0d6daa6d760ec3bb4d6b56db905c19683"
+    }
+  ],
+  "patch": {
+    "format": "unified-diff",
+    "path_strip": 1,
+    "repository_path": "host-kernel/kbuild/patches/0001-drivers-misc-add-mckernel-rust-host-modules.patch",
+    "sha256": "25b0724a2523c3fd5d6d8b824b72c6e6b19c2b16edebaa6719b53c22d4d5c7d9"
+  },
+  "profile_id": "rocky-10.2-native-rust-host-modules-v1",
+  "required_absent_paths": [
+    "drivers/misc/mckernel",
+    "drivers/misc/mckernel/Kbuild",
+    "drivers/misc/mckernel/Kconfig"
+  ],
+  "schema_version": 1,
+  "selected_source": {
+    "archive_basename": "linux-6.12.0-211.44.1.el10_2.tar.xz",
+    "archive_sha256": "4a174d47b8874a2139efcd1ac1ab2d6b80ae7a0ca62f0ae4596fd20cf62a3533",
+    "archive_root": "linux-6.12.0-211.44.1.el10_2",
+    "source_lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-source-v1",
+    "source_lock_repository_path": "host-kernel/rocky/source-lock.json",
+    "source_lock_sha256": "6b8571b229f31bf68b58749217391d917a2ba2028ac876e8475be1ec5bfef222",
+    "source_rpm_sha256": "2bfeda65bd9bdd4b86650074c81e061c37822b80317ac0d4f5aacc89c85589cb"
+  },
+  "verification_scope": "byte-exact parent preimages, intended insertions, postimages, and patch bytes only; no build, runtime, or RK-007 credit"
+}
