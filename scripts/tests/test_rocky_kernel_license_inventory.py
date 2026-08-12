@@ -245,6 +245,8 @@ class LicenseInventoryTests(unittest.TestCase):
                 "host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch",
                 "host-kernel/rocky/patches/0011-mm-ksm-fix-clang-21-uninitialized.patch",
                 "host-kernel/rocky/patches/0012-netfs-mark-nonstring-lookup-tables.patch",
+                "host-kernel/rocky/patches/0013-lib-crypto-mark-binary-vectors-nonstring.patch",
+                "host-kernel/rocky/patches/0014-gcc-15-mark-byte-arrays-nonstring.patch",
             ):
                 item = by_path["repository/" + relative]
                 patch = REPO_ROOT / relative

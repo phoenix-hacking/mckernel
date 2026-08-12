@@ -1,0 +1,110 @@
+{
+  "artifact": {
+    "deterministic_payload": "snapshot.tar",
+    "deterministic_payload_digest": "snapshot.tar.sha256",
+    "format": "ustar with sorted regular-file entries, uid/gid/mtime zero, empty owner/group names, and mode 0644",
+    "retention_days": 30
+  },
+  "capture_id": "rocky-10.2-x86_64-repository-metadata-capture-v2",
+  "claims": {
+    "accepted_checkpoint": false,
+    "credit_eligible": false,
+    "durable_archive": false,
+    "gate_rk_001": false,
+    "gate_rk_003": false,
+    "gate_rk_005": false,
+    "old_checkpoint_replaced": false,
+    "repository_metadata_closure_accepted": false,
+    "routine_ci_replay_ready": false,
+    "rpm_closure_complete": false,
+    "tracker_credit": false
+  },
+  "diagnostic_baselines": [
+    {
+      "id": "source-baseos",
+      "primary_sha256": "1cc64f6d0e798011d1862c2284189742f6383c6fc27c84de207c739148e50209",
+      "primary_size": 186048,
+      "repomd_sha256": "9085b7c0ce3d9ebda8cba25d3daafd13062ce7cd4a10c0036265af80449adea0",
+      "signature_sha256": "40e16e3d39ddc9ed7fff85201704b0805a37d732291193e6a3143a731001641e"
+    },
+    {
+      "id": "baseos",
+      "primary_sha256": "6e0f444d03d0d2c15a55aecd84287914435f2573016532280d124549d9fa256d",
+      "primary_size": 17598546,
+      "repomd_sha256": "266aec928c5111a4e5b002a3b491261b454351341ea4e9e6d22b9a596dc26c0d",
+      "signature_sha256": "34c9870178d2a7f194d03c35624af961fb0212e3f48292a7047ddac2b206b9fa"
+    },
+    {
+      "id": "appstream",
+      "primary_sha256": "ceacd5afd9e68516c25846fc41f2c5668a4b5c2cd092b792529f74b716e91edf",
+      "primary_size": 1799777,
+      "repomd_sha256": "067e62bd6a9c1b2c68935083cc5f0d7cdad3e8d30a2643a6d0f887a47536bd7c",
+      "signature_sha256": "a113f22ef47ecb6a3012ed32e15081f682652ac2d2ec84b526c6c010a7031267"
+    },
+    {
+      "id": "crb",
+      "primary_sha256": "288c787cbb9142c054daef1c9fcceddae986e3d4a2853427ee7124e94d6c1b6a",
+      "primary_size": 449395,
+      "repomd_sha256": "1ea3907a2adf3e162e09339628d52133e5c976cfa5e795779ca555cbd534e95f",
+      "signature_sha256": "78fe1199974c88e3891064dd7d15716c13d94227be82f6a070394c888231a530"
+    }
+  ],
+  "limits": {
+    "download_timeout_seconds": 90,
+    "max_key_bytes": 65536,
+    "max_metadata_object_bytes": 536870912,
+    "max_metadata_open_bytes": 4294967296,
+    "max_open_bytes_total": 8589934592,
+    "max_repository_objects": 64,
+    "max_repomd_bytes": 8388608,
+    "max_signature_bytes": 1048576,
+    "max_total_download_bytes": 4294967296,
+    "redirect_limit": 5
+  },
+  "network": {
+    "allowed_hosts": [
+      "download.rockylinux.org"
+    ],
+    "policy": "HTTPS only; reject credentials, ports, query strings, fragments, cross-policy redirects, content encodings, path traversal, and objects not named by a verified repomd.xml"
+  },
+  "release_key": {
+    "fingerprint": "FC226859C0860BF0DDB95B085B106C736FEDFC85",
+    "sha256": "be8c4f070b696e64d8ce40e59a95a57e8b5c776f0015c2fd64e14b896622bdb4",
+    "size": 1688,
+    "url": "https://download.rockylinux.org/pub/rocky/RPM-GPG-KEY-Rocky-10"
+  },
+  "repositories": [
+    {
+      "base_url": "https://download.rockylinux.org/pub/rocky/10.2/BaseOS/source/tree/",
+      "id": "source-baseos",
+      "kind": "source"
+    },
+    {
+      "base_url": "https://download.rockylinux.org/pub/rocky/10.2/BaseOS/x86_64/os/",
+      "id": "baseos",
+      "kind": "binary"
+    },
+    {
+      "base_url": "https://download.rockylinux.org/pub/rocky/10.2/AppStream/x86_64/os/",
+      "id": "appstream",
+      "kind": "binary"
+    },
+    {
+      "base_url": "https://download.rockylinux.org/pub/rocky/10.2/CRB/x86_64/os/",
+      "id": "crb",
+      "kind": "binary"
+    }
+  ],
+  "required_repository_inputs": {
+    "checker": "scripts/rocky_repository_snapshot_capture.py",
+    "contract": "host-kernel/rocky/evidence/repository-snapshot-capture-contract-v2.json",
+    "tests": "scripts/tests/test_rocky_repository_snapshot_capture.py",
+    "workflow": ".github/workflows/rocky-repository-snapshot-capture-v2.yml"
+  },
+  "schema_version": 2,
+  "target": {
+    "architecture": "x86_64",
+    "distribution": "Rocky Linux",
+    "release": "10.2"
+  }
+}

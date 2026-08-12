@@ -21,6 +21,8 @@ on:
       - host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch
       - host-kernel/rocky/patches/0011-mm-ksm-fix-clang-21-uninitialized.patch
       - host-kernel/rocky/patches/0012-netfs-mark-nonstring-lookup-tables.patch
+      - host-kernel/rocky/patches/0013-lib-crypto-mark-binary-vectors-nonstring.patch
+      - host-kernel/rocky/patches/0014-gcc-15-mark-byte-arrays-nonstring.patch
       - host-kernel/rocky/patches/series.json
       - host-kernel/rocky/source-lock.json
       - host-kernel/rocky/toolchain-lock.json
@@ -164,7 +166,9 @@ jobs:
             0009-rust-block-drop-removed-merge-flag.patch \
             0010-kbuild-disable-default-const-init-unsafe.patch \
             0011-mm-ksm-fix-clang-21-uninitialized.patch \
-            0012-netfs-mark-nonstring-lookup-tables.patch
+            0012-netfs-mark-nonstring-lookup-tables.patch \
+            0013-lib-crypto-mark-binary-vectors-nonstring.patch \
+            0014-gcc-15-mark-byte-arrays-nonstring.patch
           do
             compat_source="$GITHUB_WORKSPACE/host-kernel/rocky/patches/$compat_name"
             compat_asset="$RS001_SOURCE_ASSETS/$compat_name"

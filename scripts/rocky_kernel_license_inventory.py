@@ -38,7 +38,7 @@ EXPECTED_CONTAINER_IMAGE = (
     "e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176"
 )
 EXPECTED_SOURCE_LOCK_SHA256 = (
-    "16f94def36b3b87ef8bca064bcf4f4ad7251d838fdf1af6cf7bd3413fa6c5531"
+    "20c959d1d793293e38e82a67fbf235b42ad105c135145135f59750e698d60170"
 )
 EXPECTED_PATCH_SERIES_SHA256 = (
     "6a1a5e8fb13b6ce6ed35bd8e5487bb67ecf92d2be927799b660f21b5631f68fb"
@@ -132,6 +132,8 @@ EXPECTED_REPOSITORY_INPUT_PATHS = [
     "host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch",
     "host-kernel/rocky/patches/0011-mm-ksm-fix-clang-21-uninitialized.patch",
     "host-kernel/rocky/patches/0012-netfs-mark-nonstring-lookup-tables.patch",
+    "host-kernel/rocky/patches/0013-lib-crypto-mark-binary-vectors-nonstring.patch",
+    "host-kernel/rocky/patches/0014-gcc-15-mark-byte-arrays-nonstring.patch",
     "host-kernel/rocky/patches/series.json",
     "scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs",
     "scripts/tests/fixtures/ihk_native_master_compile.rs",
@@ -143,10 +145,16 @@ EXPECTED_REPOSITORY_INPUT_PATHS = [
     "scripts/tests/fixtures/ihk_page_allocator_must_use_compile_fail.rs",
     "scripts/tests/fixtures/rust-core-rocky-6.12/Documentation/kbuild/makefiles.rst",
     "scripts/tests/fixtures/rust-core-rocky-6.12/arch/arm64/Makefile",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/drivers/iio/magnetometer/ak8974.c",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/drivers/input/joystick/magellan.c",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/drivers/net/wireless/ath/carl9170/fw.c",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/fs/cachefiles/key.c",
     "scripts/tests/fixtures/rust-core-rocky-6.12/fs/netfs/fscache_cache.c",
     "scripts/tests/fixtures/rust-core-rocky-6.12/fs/netfs/fscache_cookie.c",
     "scripts/tests/fixtures/rust-core-rocky-6.12/include/linux/blk-mq.h",
     "scripts/tests/fixtures/rust-core-rocky-6.12/init/Kconfig",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/lib/crypto/aescfb.c",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/lib/crypto/aesgcm.c",
     "scripts/tests/fixtures/rust-core-rocky-6.12/mm/ksm.c",
     "scripts/tests/fixtures/rust-core-rocky-6.12/rust/Makefile",
     "scripts/tests/fixtures/rust-core-rocky-6.12/rust/bindings/lib.rs",

@@ -139,6 +139,14 @@ EXPECTED_LICENSE_CAPTURE_AUTHORITY: dict[str, Any] = {
                     "host-kernel/rocky/patches/"
                     "0012-netfs-mark-nonstring-lookup-tables.patch"
                 ),
+                (
+                    "host-kernel/rocky/patches/"
+                    "0013-lib-crypto-mark-binary-vectors-nonstring.patch"
+                ),
+                (
+                    "host-kernel/rocky/patches/"
+                    "0014-gcc-15-mark-byte-arrays-nonstring.patch"
+                ),
                 "host-kernel/rocky/patches/series.json",
                 "scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs",
                 "scripts/tests/fixtures/ihk_native_master_compile.rs",
@@ -161,6 +169,22 @@ EXPECTED_LICENSE_CAPTURE_AUTHORITY: dict[str, Any] = {
                 "scripts/tests/fixtures/rust-core-rocky-6.12/arch/arm64/Makefile",
                 (
                     "scripts/tests/fixtures/rust-core-rocky-6.12/"
+                    "drivers/iio/magnetometer/ak8974.c"
+                ),
+                (
+                    "scripts/tests/fixtures/rust-core-rocky-6.12/"
+                    "drivers/input/joystick/magellan.c"
+                ),
+                (
+                    "scripts/tests/fixtures/rust-core-rocky-6.12/"
+                    "drivers/net/wireless/ath/carl9170/fw.c"
+                ),
+                (
+                    "scripts/tests/fixtures/rust-core-rocky-6.12/"
+                    "fs/cachefiles/key.c"
+                ),
+                (
+                    "scripts/tests/fixtures/rust-core-rocky-6.12/"
                     "fs/netfs/fscache_cache.c"
                 ),
                 (
@@ -172,6 +196,14 @@ EXPECTED_LICENSE_CAPTURE_AUTHORITY: dict[str, Any] = {
                     "include/linux/blk-mq.h"
                 ),
                 "scripts/tests/fixtures/rust-core-rocky-6.12/init/Kconfig",
+                (
+                    "scripts/tests/fixtures/rust-core-rocky-6.12/"
+                    "lib/crypto/aescfb.c"
+                ),
+                (
+                    "scripts/tests/fixtures/rust-core-rocky-6.12/"
+                    "lib/crypto/aesgcm.c"
+                ),
                 "scripts/tests/fixtures/rust-core-rocky-6.12/mm/ksm.c",
                 "scripts/tests/fixtures/rust-core-rocky-6.12/rust/Makefile",
                 (

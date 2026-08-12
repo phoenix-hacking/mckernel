@@ -118,9 +118,17 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             "0012-netfs-mark-nonstring-lookup-tables.patch",
             ksm_clang_21,
         )
+        crypto_nonstring = self.workflow.index(
+            "0013-lib-crypto-mark-binary-vectors-nonstring.patch",
+            netfs_nonstring,
+        )
+        byte_array_nonstring = self.workflow.index(
+            "0014-gcc-15-mark-byte-arrays-nonstring.patch",
+            crypto_nonstring,
+        )
         project = self.workflow.index(
             "0001-drivers-misc-add-mckernel-rust-host-modules.patch",
-            netfs_nonstring,
+            byte_array_nonstring,
         )
         self.assertLess(debrand, softfloat)
         self.assertLess(softfloat, target_spec)
@@ -134,7 +142,9 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         self.assertLess(block_reconciliation, clang_warning_policy)
         self.assertLess(clang_warning_policy, ksm_clang_21)
         self.assertLess(ksm_clang_21, netfs_nonstring)
-        self.assertLess(netfs_nonstring, project)
+        self.assertLess(netfs_nonstring, crypto_nonstring)
+        self.assertLess(crypto_nonstring, byte_array_nonstring)
+        self.assertLess(byte_array_nonstring, project)
 
     def test_failure_log_and_artifact_capture_are_unconditional(self):
         bootstrap = self.workflow.index("Refuse the wrong runtime")
@@ -266,6 +276,14 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             ),
             2,
         )
+
+    def test_checkout_includes_frozen_superproject_history_for_shared_abi(self):
+        checkout = self.workflow.split(
+            "- name: Check out the exact candidate without credentials", 1
+        )[1].split("- name: Verify source-only contracts", 1)[0]
+        self.assertIn("fetch-depth: 0", checkout)
+        self.assertNotIn("fetch-depth: 1", checkout)
+        self.assertIn("persist-credentials: false", checkout)
 
 
 if __name__ == "__main__":

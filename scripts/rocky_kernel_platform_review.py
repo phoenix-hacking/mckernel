@@ -38,12 +38,12 @@ SOURCE_LOCK_PATH = Path("host-kernel/rocky/source-lock.json")
 REVIEW_ID = "rk-003-rk-005-platform-repository-review-dd6-v1"
 RUNTIME_HEAD = "dd6d1954538ca1adbaf335a1dd058aba26c28840"
 OBSERVED_HEAD = "9ddbee3bb7fc93ee4514da73ac748ad4c820c068"
-PUBLISHED_BASE_HEAD = "8f067ae0dd0ced29e3c1805a3897da832a3ad172"
+PUBLISHED_BASE_HEAD = "515b3380f914b34ba6bf21ec81f7811d20034f19"
 PUBLISHED_BASE_REVIEW = {
     "path": REVIEW_PATH.as_posix(),
-    "size": 8193,
-    "sha256": "2640ab33de5ecfeea364007bef6d5aa88cc8289eacd8fe40db474d7a2d8b18e5",
-    "git_blob_sha1": "69663e1d5c4eaade855b6e1c67d173c23e3485bd",
+    "size": 11280,
+    "sha256": "ffd43d9fee68802f6d1875ca52ce9ec200977a69441f751116a96c0061628f2e",
+    "git_blob_sha1": "dc58a18981b964bb4790814919b2879f562b92f1",
 }
 REPOSITORY = "phoenix-hacking/mckernel"
 RUN_ID = 31563271344
@@ -57,7 +57,7 @@ ARTIFACT_SHA256 = (
     "a88e8a35c13dbd5b7a4e6524595d5cec31450f83c136b4cf64030e517d208eef"
 )
 EXPECTED_REVIEW_SHA256 = (
-    "ffd43d9fee68802f6d1875ca52ce9ec200977a69441f751116a96c0061628f2e"
+    "bad5847a57f099f01ea092f7a2e4460bfef9f3fef100275787164a46a6725cb9"
 )
 
 RELEASE_KEY_FINGERPRINT = "FC226859C0860BF0DDB95B085B106C736FEDFC85"
@@ -153,15 +153,15 @@ EXPECTED_INPUTS = [
 CURRENT_INPUT_OVERRIDES = [
     {
         "path": "host-kernel/rocky/source-lock.json",
-        "git_blob_sha1": "ad8379320f186646e45a402e5e6fce7b1200f60e",
-        "sha256": "16f94def36b3b87ef8bca064bcf4f4ad7251d838fdf1af6cf7bd3413fa6c5531",
-        "size": 15666,
+        "git_blob_sha1": "9886e20c118917dfea7dacb94085bd91e29d49de",
+        "sha256": "20c959d1d793293e38e82a67fbf235b42ad105c135145135f59750e698d60170",
+        "size": 16366,
     },
     {
         "path": "scripts/rocky_kernel_source_lock.py",
-        "git_blob_sha1": "cd5f4b4ad96fa13716ecc26f1bbc84096d7f36ea",
-        "sha256": "ffe84874f843126c4d1e680b413aeb279a6116121a1c933e40e2a42411c3ee6e",
-        "size": 55617,
+        "git_blob_sha1": "a52d61e53d4fb6be95927580c94283b6609d6bbd",
+        "sha256": "e927cb63226de7aa4cc46f79c9f1cc7855e16999c27b308e54dbebcb2a15ff14",
+        "size": 56853,
     },
 ]
 

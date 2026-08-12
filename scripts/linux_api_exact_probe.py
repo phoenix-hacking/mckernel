@@ -52,6 +52,8 @@ RUST_COMPAT_PATCH_PATHS = (
     Path("host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch"),
     Path("host-kernel/rocky/patches/0011-mm-ksm-fix-clang-21-uninitialized.patch"),
     Path("host-kernel/rocky/patches/0012-netfs-mark-nonstring-lookup-tables.patch"),
+    Path("host-kernel/rocky/patches/0013-lib-crypto-mark-binary-vectors-nonstring.patch"),
+    Path("host-kernel/rocky/patches/0014-gcc-15-mark-byte-arrays-nonstring.patch"),
 )
 CONFIG_POLICY_PATH = Path("host-kernel/rocky/config-policy.json")
 TOOLCHAIN_LOCK_PATH = Path("host-kernel/rocky/toolchain-lock.json")
@@ -133,11 +135,23 @@ CLANG_21_SOURCE_FIX_PREIMAGE_SHA256S = (
     ("mm/ksm.c", "9747f8b5edcc4cf75333bc24e393658c59b8f86fb58a8588ec28bed51f6e626b"),
     ("fs/netfs/fscache_cache.c", "c2de391430c3097d43cdaa48d172bdb00c3405a6799550b9985412490d633024"),
     ("fs/netfs/fscache_cookie.c", "5582559081b3bbf67e9cfd361ee27a63ffcf2973d248e3a05bd3b95e49a2ce45"),
+    ("lib/crypto/aescfb.c", "718a46e880372f010abdf657c23fd0ec7cbb76efdd939bd526b7c99483c01a8c"),
+    ("lib/crypto/aesgcm.c", "9f83ab9dc4e613ebb73d7e808975f29522de00fdce7f25f7b43fe3cddc4ec4e4"),
+    ("drivers/iio/magnetometer/ak8974.c", "1ca66cb95c7596663c08a431cc7217d7d8c1e35684f744c0f8cb70c4aa972b36"),
+    ("drivers/input/joystick/magellan.c", "378f72010cc8ac622a55355d6744d29f0dfa166ff061953eb22ba8e8846a1667"),
+    ("drivers/net/wireless/ath/carl9170/fw.c", "445740ac539580d044d8209edd64db36405b2691391d72c827ced99436c5b0ca"),
+    ("fs/cachefiles/key.c", "8c8a2707524f17f81138607fe2327437421f782ef58b6d1516d2f06315850d62"),
 )
 CLANG_21_SOURCE_FIX_POSTIMAGE_SHA256S = (
     ("mm/ksm.c", "d3d926171fd7f3cf6885ac57664146182260f43147dc334c2094cc194b4f7f04"),
     ("fs/netfs/fscache_cache.c", "a211f051c4c052504f193566ffac2b31f53bad5f6712ffc7932894bb6b752de1"),
     ("fs/netfs/fscache_cookie.c", "7ce7899790e9928adf5922affb761106229ab0a5430020ff7eb1cfe950fd0ab1"),
+    ("lib/crypto/aescfb.c", "2256a26cb3107a1b4d3781170a9ea1db5a235d178f596ca4b47118070e9e9354"),
+    ("lib/crypto/aesgcm.c", "2e4bcb4fabcbae935b836bc8c3555716dd8485c39bdebf2f72642f1a38a70c98"),
+    ("drivers/iio/magnetometer/ak8974.c", "1f296aed1b37cb88ffdde827e48d7d25fd653ee58ddff63ab915cd8251fc031a"),
+    ("drivers/input/joystick/magellan.c", "378f72010cc8ac622a55355d6744d29f0dfa166ff061953eb22ba8e8846a1667"),
+    ("drivers/net/wireless/ath/carl9170/fw.c", "33f6e432e29f0d28a0092b3cf1228a590862ae70a3cc2cb8eef9a576e927d2b8"),
+    ("fs/cachefiles/key.c", "7973105f797ff23c9e7565a7ac4d938175f506c2e5afb65f7a396c2514fc1d09"),
 )
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
@@ -172,6 +186,8 @@ RUST_COMPAT_UPSTREAM_COMMITS = (
     "d0afcfeb9e3810ec89d1ffde1a0e36621bb75dca",
     "153ad566724fe6f57b14f66e9726d295d22e576d",
     "58db1c3cd0ce857e7210b0a95908900c25c28c3e",
+    "e202196b8aa249d78ab87eae56bbe0e71e3dc39c",
+    "05e8d261a34e5c637e37be55c26e42cf5c75ee5c",
 )
 RUST_COMPAT_STABLE_COMMITS = (
     None,
@@ -185,6 +201,8 @@ RUST_COMPAT_STABLE_COMMITS = (
     None,
     "511ceee89966ce906ca8989523e1a67ba6de44c1",
     "f7ff0324760013762088f70d74ed1ddb7edffb13",
+    None,
+    None,
     None,
 )
 RUST_CORE_COMPAT_FAILURE_EVIDENCE = (
@@ -631,6 +649,41 @@ def rust_compatibility_patch_records(repo):
             "+static const char fscache_cache_states[NR__FSCACHE_CACHE_STATE] __nonstring = \"-PAEW\";": 1,
             "+static const char fscache_cookie_states[FSCACHE_COOKIE_STATE__NR] __nonstring = \"-LCAIFUWRD\";": 1,
         },
+        {
+            "+\tu8\tptext[64] __nonstring;": 1,
+            "+\tu8\tctext[64] __nonstring;": 1,
+            "+\tu8\tkey[AES_MAX_KEY_SIZE] __nonstring;": 1,
+            "+\tu8\tiv[AES_BLOCK_SIZE] __nonstring;": 1,
+            "+static const u8 __initconst ctext0[16] __nonstring =": 1,
+            "+static const u8 __initconst ctext1[32] __nonstring =": 1,
+            "+static const u8 __initconst ptext2[64] __nonstring =": 1,
+            "+static const u8 __initconst ctext2[80] __nonstring =": 1,
+            "+static const u8 __initconst ptext3[60] __nonstring =": 1,
+            "+static const u8 __initconst ctext3[76] __nonstring =": 1,
+            "+static const u8 __initconst ctext4[16] __nonstring =": 1,
+            "+static const u8 __initconst ctext5[32] __nonstring =": 1,
+            "+static const u8 __initconst ptext6[64] __nonstring =": 1,
+            "+static const u8 __initconst ctext6[80] __nonstring =": 1,
+            "+static const u8 __initconst ctext7[16] __nonstring =": 1,
+            "+static const u8 __initconst ctext8[32] __nonstring =": 1,
+            "+static const u8 __initconst ptext9[64] __nonstring =": 1,
+            "+static const u8 __initconst ctext9[80] __nonstring =": 1,
+            "+static const u8 __initconst ptext10[60] __nonstring =": 1,
+            "+static const u8 __initconst ctext10[76] __nonstring =": 1,
+            "+static const u8 __initconst ptext11[60] __nonstring =": 1,
+            "+static const u8 __initconst ctext11[76] __nonstring =": 1,
+            "+static const u8 __initconst ptext12[719] __nonstring =": 1,
+            "+static const u8 __initconst ctext12[735] __nonstring =": 1,
+            "+\tu8\t\tkey[AES_MAX_KEY_SIZE] __nonstring;": 1,
+            "+\tu8\t\tiv[GCM_AES_IV_SIZE] __nonstring;": 1,
+            "+\tu8\t\tassoc[20] __nonstring;": 1,
+        },
+        {
+            "+\t\t\tstatic const char axis[] = \"XYZ\";": 1,
+            "+\t\t\tstatic const char pgaxis[] = \"ZYZXYX\";": 1,
+            "+static const u8 otus_magic[4] __nonstring = { OTUS_MAGIC };": 1,
+            "+static const char cachefiles_charmap[64] __nonstring =": 1,
+        },
     )
     required_deletions = (
         {},
@@ -659,8 +712,43 @@ def rust_compatibility_patch_records(repo):
             "-static const char fscache_cache_states[NR__FSCACHE_CACHE_STATE] = \"-PAEW\";": 1,
             "-static const char fscache_cookie_states[FSCACHE_COOKIE_STATE__NR] = \"-LCAIFUWRD\";": 1,
         },
+        {
+            "-\tu8\tptext[64];": 1,
+            "-\tu8\tctext[64];": 1,
+            "-\tu8\tkey[AES_MAX_KEY_SIZE];": 1,
+            "-\tu8\tiv[AES_BLOCK_SIZE];": 1,
+            "-static const u8 __initconst ctext0[16] =": 1,
+            "-static const u8 __initconst ctext1[32] =": 1,
+            "-static const u8 __initconst ptext2[64] =": 1,
+            "-static const u8 __initconst ctext2[80] =": 1,
+            "-static const u8 __initconst ptext3[60] =": 1,
+            "-static const u8 __initconst ctext3[76] =": 1,
+            "-static const u8 __initconst ctext4[16] =": 1,
+            "-static const u8 __initconst ctext5[32] =": 1,
+            "-static const u8 __initconst ptext6[64] =": 1,
+            "-static const u8 __initconst ctext6[80] =": 1,
+            "-static const u8 __initconst ctext7[16] =": 1,
+            "-static const u8 __initconst ctext8[32] =": 1,
+            "-static const u8 __initconst ptext9[64] =": 1,
+            "-static const u8 __initconst ctext9[80] =": 1,
+            "-static const u8 __initconst ptext10[60] =": 1,
+            "-static const u8 __initconst ctext10[76] =": 1,
+            "-static const u8 __initconst ptext11[60] =": 1,
+            "-static const u8 __initconst ctext11[76] =": 1,
+            "-static const u8 __initconst ptext12[719] =": 1,
+            "-static const u8 __initconst ctext12[735] =": 1,
+            "-\tu8\t\tkey[AES_MAX_KEY_SIZE];": 1,
+            "-\tu8\t\tiv[GCM_AES_IV_SIZE];": 1,
+            "-\tu8\t\tassoc[20];": 1,
+        },
+        {
+            "-\t\t\tstatic const char axis[3] = \"XYZ\";": 1,
+            "-\t\t\tstatic const char pgaxis[6] = \"ZYZXYX\";": 1,
+            "-static const u8 otus_magic[4] = { OTUS_MAGIC };": 1,
+            "-static const char cachefiles_charmap[64] =": 1,
+        },
     )
-    expected_diff_counts = (1, 1, 3, 2, 3, 1, 4, 4, 1, 1, 1, 2)
+    expected_diff_counts = (1, 1, 3, 2, 3, 1, 4, 4, 1, 1, 1, 2, 2, 3)
     for index, relative in enumerate(RUST_COMPAT_PATCH_PATHS):
         path = repository_file(repo, relative, "Rust target compatibility patch")
         try:

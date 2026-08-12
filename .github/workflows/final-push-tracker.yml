@@ -8,6 +8,9 @@ on:
 permissions:
   contents: read
 
+env:
+  EXPECTED_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+
 jobs:
   tracker:
     name: Recalculate evidence-weighted completion
@@ -18,8 +21,15 @@ jobs:
       - name: Check out exact candidate
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
+          ref: ${{ env.EXPECTED_HEAD_SHA }}
           fetch-depth: 0
           persist-credentials: false
+
+      - name: Verify exact candidate identity
+        run: |
+          set -euo pipefail
+          [[ "$EXPECTED_HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"
 
       - name: Initialize frozen IHK source
         run: |
@@ -134,7 +144,7 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: final-push-tracker-${{ github.sha }}
+          name: final-push-tracker-${{ env.EXPECTED_HEAD_SHA }}
           path: evidence/final-push-summary.json
           if-no-files-found: error
           retention-days: 90

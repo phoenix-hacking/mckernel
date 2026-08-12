@@ -23,7 +23,7 @@ TOOLCHAIN_LOCK_PATH = Path("host-kernel/rocky/toolchain-lock.json")
 CONFIG_POLICY_PATH = Path("host-kernel/rocky/config-policy.json")
 CONFIG_FRAGMENT_PATH = Path("host-kernel/rocky/configs/rust-minimal.config")
 EXPECTED_CONTRACT_SHA256 = (
-    "aa41041101ed5e8f6e1de2cf5df0846f0f037abcd7fc55e533aae7206345a1c1"
+    "5c15b34388f3a9fcaa41ef6833c2727677a825f95bb88d305988d1a34117bd77"
 )
 EXPECTED_WORKFLOW_SHA256 = (
     "d49e4ec8331a67e867f83fc9db39858a0c8a9eb25a2a802fa721bb513120f082"
@@ -56,6 +56,8 @@ EXPECTED_COMPATIBILITY_PATCHES = [
     "host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch",
     "host-kernel/rocky/patches/0011-mm-ksm-fix-clang-21-uninitialized.patch",
     "host-kernel/rocky/patches/0012-netfs-mark-nonstring-lookup-tables.patch",
+    "host-kernel/rocky/patches/0013-lib-crypto-mark-binary-vectors-nonstring.patch",
+    "host-kernel/rocky/patches/0014-gcc-15-mark-byte-arrays-nonstring.patch",
 ]
 CAPTURE_ENVIRONMENT = {
     "ARCH": "x86_64",
@@ -376,8 +378,8 @@ def validate_contract(repo):
     _, series_digest = sha256_file(series_path)
     require_exact(series_digest, rocky_series["sha256"], "Rocky series digest")
     patches = patch_authority["rust_compatibility"]
-    if not isinstance(patches, list) or len(patches) != 12:
-        raise ConfigResolutionError("exactly twelve compatibility patches are required")
+    if not isinstance(patches, list) or len(patches) != 14:
+        raise ConfigResolutionError("exactly fourteen compatibility patches are required")
     patch_directory = repo / "host-kernel/rocky/patches"
     discovered_patches = sorted(
         path.relative_to(repo).as_posix()
@@ -535,7 +537,7 @@ def validate_contract(repo):
     ) < 0:
         raise ConfigResolutionError("policy reconciliation blocker is missing")
     if not any(
-        "0006 through 0012" in item and "compile probes" in item
+        "0006 through 0014" in item and "compile probes" in item
         for item in contract["success_blockers"]
     ):
         raise ConfigResolutionError("compatibility compile-scope blocker is missing")
@@ -980,6 +982,43 @@ def verify_asset(path, record, label):
     return path
 
 
+def normalized_symlink_target(member, root):
+    linkname = member.linkname
+    if (
+        not isinstance(linkname, str)
+        or not linkname
+        or linkname.startswith("/")
+        or "\\" in linkname
+        or "\x00" in linkname
+    ):
+        raise ConfigResolutionError(
+            "source archive symlink target is unsafe: {} -> {}".format(
+                member.name, linkname
+            )
+        )
+    parts = member.name.rstrip("/").split("/")[:-1]
+    for part in linkname.split("/"):
+        if part in ("", "."):
+            continue
+        if part == "..":
+            if len(parts) <= 1:
+                raise ConfigResolutionError(
+                    "source archive symlink target escapes root: {} -> {}".format(
+                        member.name, linkname
+                    )
+                )
+            parts.pop()
+        else:
+            parts.append(part)
+    if not parts or parts[0] != root:
+        raise ConfigResolutionError(
+            "source archive symlink target escapes root: {} -> {}".format(
+                member.name, linkname
+            )
+        )
+    return "/".join(parts)
+
+
 def safe_tar_member(member, root):
     name = member.name.rstrip("/")
     parts = name.split("/")
@@ -987,13 +1026,68 @@ def safe_tar_member(member, root):
         not name
         or name.startswith("/")
         or "\\" in name
+        or "\x00" in name
         or any(part in ("", ".", "..") for part in parts)
         or parts[0] != root
-        or member.issym()
         or member.islnk()
-        or not (member.isfile() or member.isdir())
+        or not (member.isfile() or member.isdir() or member.issym())
     ):
         raise ConfigResolutionError("source archive member is unsafe: {}".format(member.name))
+    if member.issym():
+        return normalized_symlink_target(member, root)
+    return None
+
+
+def validate_archive_members(members, root):
+    if (
+        not isinstance(root, str)
+        or not root
+        or "/" in root
+        or "\\" in root
+        or root in (".", "..")
+    ):
+        raise ConfigResolutionError("source archive root is unsafe")
+    by_name = {}
+    symlink_targets = {}
+    for member in members:
+        name = member.name.rstrip("/")
+        if name in by_name:
+            raise ConfigResolutionError(
+                "source archive contains duplicate member: {}".format(member.name)
+            )
+        target = safe_tar_member(member, root)
+        by_name[name] = member
+        if target is not None:
+            symlink_targets[name] = target
+
+    root_member = by_name.get(root)
+    if root_member is None or not root_member.isdir():
+        raise ConfigResolutionError("source archive root directory is missing")
+    for name, target in symlink_targets.items():
+        if target not in by_name:
+            raise ConfigResolutionError(
+                "source archive symlink target is missing: {} -> {}".format(
+                    name, target
+                )
+            )
+        seen = {name}
+        current = target
+        while current in symlink_targets:
+            if current in seen:
+                raise ConfigResolutionError(
+                    "source archive symlink cycle is unsafe: {}".format(name)
+                )
+            seen.add(current)
+            current = symlink_targets[current]
+
+    symlink_names = set(symlink_targets)
+    for name in by_name:
+        parts = name.split("/")
+        for index in range(1, len(parts)):
+            if "/".join(parts[:index]) in symlink_names:
+                raise ConfigResolutionError(
+                    "source archive member traverses a symlink: {}".format(name)
+                )
 
 
 def extract_source(archive, target, root_name):
@@ -1005,9 +1099,8 @@ def extract_source(archive, target, root_name):
         members = stream.getmembers()
         if not members:
             raise ConfigResolutionError("source archive is empty")
-        for member in members:
-            safe_tar_member(member, root_name)
-        stream.extractall(str(target))
+        validate_archive_members(members, root_name)
+        stream.extractall(str(target), members=members)
     source = target / root_name
     if source.is_symlink() or not (source / "Makefile").is_file():
         raise ConfigResolutionError("source archive root is invalid")

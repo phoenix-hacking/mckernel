@@ -35,6 +35,10 @@ PATCHES = (
     / "host-kernel/rocky/patches/0011-mm-ksm-fix-clang-21-uninitialized.patch",
     REPO_ROOT
     / "host-kernel/rocky/patches/0012-netfs-mark-nonstring-lookup-tables.patch",
+    REPO_ROOT
+    / "host-kernel/rocky/patches/0013-lib-crypto-mark-binary-vectors-nonstring.patch",
+    REPO_ROOT
+    / "host-kernel/rocky/patches/0014-gcc-15-mark-byte-arrays-nonstring.patch",
 )
 PREIMAGE = REPO_ROOT / "scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs"
 POSTIMAGE_SHA256 = "555ff4dff6548bb5f24087cdad737363b5694668aa462f77adfb3571498ec678"
@@ -45,7 +49,7 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
     def test_every_patch_rejects_second_application(self):
         from scripts import linux_api_exact_probe as probe
 
-        self.assertEqual(12, len(PATCHES))
+        self.assertEqual(14, len(PATCHES))
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory) / "linux"
             shutil.copytree(str(CORE_PREIMAGE), str(root))
@@ -160,6 +164,28 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
             self.assertIn(
                 "fscache_cookie_states[FSCACHE_COOKIE_STATE__NR] __nonstring",
                 cookie,
+            )
+            aescfb = (root / "lib/crypto/aescfb.c").read_text(encoding="utf-8")
+            aesgcm = (root / "lib/crypto/aesgcm.c").read_text(encoding="utf-8")
+            self.assertEqual(4, aescfb.count("__nonstring"))
+            self.assertEqual(23, aesgcm.count("__nonstring"))
+            ak8974 = (
+                root / "drivers/iio/magnetometer/ak8974.c"
+            ).read_text(encoding="utf-8")
+            self.assertIn('static const char axis[] = "XYZ";', ak8974)
+            self.assertIn('static const char pgaxis[] = "ZYZXYX";', ak8974)
+            carl9170 = (
+                root / "drivers/net/wireless/ath/carl9170/fw.c"
+            ).read_text(encoding="utf-8")
+            self.assertIn("otus_magic[4] __nonstring", carl9170)
+            key = (root / "fs/cachefiles/key.c").read_text(encoding="utf-8")
+            self.assertIn("cachefiles_charmap[64] __nonstring", key)
+            magellan = (
+                root / "drivers/input/joystick/magellan.c"
+            ).read_text(encoding="utf-8")
+            self.assertIn(
+                "static const unsigned char nibbles[16] __nonstring",
+                magellan,
             )
             makefile = (root / "rust/Makefile").read_text(encoding="utf-8")
             compiler = (root / "scripts/Makefile.compiler").read_text(

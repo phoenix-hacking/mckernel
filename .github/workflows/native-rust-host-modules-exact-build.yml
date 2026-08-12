@@ -28,6 +28,8 @@ on:
       - host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch
       - host-kernel/rocky/patches/0011-mm-ksm-fix-clang-21-uninitialized.patch
       - host-kernel/rocky/patches/0012-netfs-mark-nonstring-lookup-tables.patch
+      - host-kernel/rocky/patches/0013-lib-crypto-mark-binary-vectors-nonstring.patch
+      - host-kernel/rocky/patches/0014-gcc-15-mark-byte-arrays-nonstring.patch
       - host-kernel/rocky/patches/series.json
       - host-kernel/rocky/source-lock.json
       - host-kernel/rocky/toolchain-lock.json
@@ -84,6 +86,8 @@ on:
       - host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch
       - host-kernel/rocky/patches/0011-mm-ksm-fix-clang-21-uninitialized.patch
       - host-kernel/rocky/patches/0012-netfs-mark-nonstring-lookup-tables.patch
+      - host-kernel/rocky/patches/0013-lib-crypto-mark-binary-vectors-nonstring.patch
+      - host-kernel/rocky/patches/0014-gcc-15-mark-byte-arrays-nonstring.patch
       - host-kernel/rocky/patches/series.json
       - host-kernel/rocky/source-lock.json
       - host-kernel/rocky/toolchain-lock.json
@@ -174,7 +178,10 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           ref: ${{ env.EXPECTED_HEAD_SHA }}
-          fetch-depth: 1
+          # The shared-ABI checker reads exact frozen superproject blobs from
+          # ROOT_REF as well as the current candidate.  A depth-1 checkout
+          # leaves that immutable commit object unavailable.
+          fetch-depth: 0
           persist-credentials: false
           submodules: recursive
 
@@ -242,7 +249,9 @@ jobs:
             0009-rust-block-drop-removed-merge-flag.patch \
             0010-kbuild-disable-default-const-init-unsafe.patch \
             0011-mm-ksm-fix-clang-21-uninitialized.patch \
-            0012-netfs-mark-nonstring-lookup-tables.patch
+            0012-netfs-mark-nonstring-lookup-tables.patch \
+            0013-lib-crypto-mark-binary-vectors-nonstring.patch \
+            0014-gcc-15-mark-byte-arrays-nonstring.patch
           do
             compat_patch="$GITHUB_WORKSPACE/host-kernel/rocky/patches/$compat_name"
             test -s "$compat_patch"

@@ -48,11 +48,11 @@
     }
   ],
   "contract_id": "mckernel-rs001-exact-linux-api-probe-v1",
-  "contract_sha256": "316bceda1b6dc1ce510bf0c8037635c02b6a3e29a4468395ccfc0b47f0d01336",
+  "contract_sha256": "eb6ef9395bc2f23c7ea2491edbde7fff87036022ceea4975e25909dba9b44c1d",
   "evidence_profile": "rocky-10.2-exact-linux-api-evidence-v1",
   "frozen_needs": {
-    "file_sha256": "a0290ccd42e751a9e41f714bb8de5ec36a5646e0a80b3c62e1b10cad3f7aad0b",
-    "manifest_sha256": "1ff38b51f0cc1d0f1fcabaa9460b4add8a140f36d0b224ebfc931f421e7a5791",
+    "file_sha256": "55f23a81ae8ac364b604e3cd1af1437c66544c19a750ef310758f20cc73666dc",
+    "manifest_sha256": "c9b20ee78f55fcdfbeb3e0a7ff3c98315f237cb9b55e23e885c7aabb92badb5b",
     "need_count": 268,
     "need_ids_sha256": "aabfc7c4d6551f0b57fcc9c580e3aa6cf6ef0c93ee5e179529f161d7084a6a3b",
     "path": "host-kernel/contracts/linux-api-needs-v1.json"
@@ -103,7 +103,7 @@
   "repository_inputs": {
     "checker": {
       "path": "scripts/linux_api_exact_probe.py",
-      "sha256": "7a7d7933dd367ff49f1d99117486bab8aaea4bb5f0e66d37070dee188f378f57"
+      "sha256": "8fed4fcb0fbcb2e76d729dee574823a5a54ecdeed36ab79ed713edd70bfac915"
     },
     "clang_21_source_fix_preimages": [
       {
@@ -117,6 +117,30 @@
       {
         "path": "scripts/tests/fixtures/rust-core-rocky-6.12/fs/netfs/fscache_cookie.c",
         "sha256": "5582559081b3bbf67e9cfd361ee27a63ffcf2973d248e3a05bd3b95e49a2ce45"
+      },
+      {
+        "path": "scripts/tests/fixtures/rust-core-rocky-6.12/lib/crypto/aescfb.c",
+        "sha256": "718a46e880372f010abdf657c23fd0ec7cbb76efdd939bd526b7c99483c01a8c"
+      },
+      {
+        "path": "scripts/tests/fixtures/rust-core-rocky-6.12/lib/crypto/aesgcm.c",
+        "sha256": "9f83ab9dc4e613ebb73d7e808975f29522de00fdce7f25f7b43fe3cddc4ec4e4"
+      },
+      {
+        "path": "scripts/tests/fixtures/rust-core-rocky-6.12/drivers/iio/magnetometer/ak8974.c",
+        "sha256": "1ca66cb95c7596663c08a431cc7217d7d8c1e35684f744c0f8cb70c4aa972b36"
+      },
+      {
+        "path": "scripts/tests/fixtures/rust-core-rocky-6.12/drivers/input/joystick/magellan.c",
+        "sha256": "378f72010cc8ac622a55355d6744d29f0dfa166ff061953eb22ba8e8846a1667"
+      },
+      {
+        "path": "scripts/tests/fixtures/rust-core-rocky-6.12/drivers/net/wireless/ath/carl9170/fw.c",
+        "sha256": "445740ac539580d044d8209edd64db36405b2691391d72c827ced99436c5b0ca"
+      },
+      {
+        "path": "scripts/tests/fixtures/rust-core-rocky-6.12/fs/cachefiles/key.c",
+        "sha256": "8c8a2707524f17f81138607fe2327437421f782ef58b6d1516d2f06315850d62"
       }
     ],
     "clang_21_warning_preimages": [
@@ -313,6 +337,22 @@
         "size": 2500,
         "stable_commit": null,
         "upstream_commit": "58db1c3cd0ce857e7210b0a95908900c25c28c3e"
+      },
+      {
+        "applied_after": "host-kernel/rocky/patches/0012-netfs-mark-nonstring-lookup-tables.patch",
+        "path": "host-kernel/rocky/patches/0013-lib-crypto-mark-binary-vectors-nonstring.patch",
+        "sha256": "329e86bdadf721f366b58582bf893df451a25e1f5cb91715bb789e10c242f021",
+        "size": 8544,
+        "stable_commit": null,
+        "upstream_commit": "e202196b8aa249d78ab87eae56bbe0e71e3dc39c"
+      },
+      {
+        "applied_after": "host-kernel/rocky/patches/0013-lib-crypto-mark-binary-vectors-nonstring.patch",
+        "path": "host-kernel/rocky/patches/0014-gcc-15-mark-byte-arrays-nonstring.patch",
+        "sha256": "e98032b0d88ea5dbaffdbdf39a16423fded48dbed41adec29cc232782ba6d24b",
+        "size": 3052,
+        "stable_commit": null,
+        "upstream_commit": "05e8d261a34e5c637e37be55c26e42cf5c75ee5c"
       }
     ],
     "rust_target_generator_preimage": {
@@ -321,7 +361,7 @@
     },
     "source_lock": {
       "path": "host-kernel/rocky/source-lock.json",
-      "sha256": "16f94def36b3b87ef8bca064bcf4f4ad7251d838fdf1af6cf7bd3413fa6c5531"
+      "sha256": "20c959d1d793293e38e82a67fbf235b42ad105c135145135f59750e698d60170"
     },
     "toolchain_lock": {
       "path": "host-kernel/rocky/toolchain-lock.json",
@@ -329,7 +369,7 @@
     },
     "workflow": {
       "path": ".github/workflows/rs001-linux-api-exact-probe.yml",
-      "sha256": "1f604bdbacfdd8c870aae1159b42c5865feb277e82353dde8d34df52acc71139"
+      "sha256": "d146797ad6ec6841311d1fa33eb5c7b226a10b40c1ca30f3ed76fd463a2e2ac7"
     }
   },
   "required_capture_inputs": [
@@ -518,6 +558,20 @@
         "path": "host-kernel/rocky/patches/0012-netfs-mark-nonstring-lookup-tables.patch",
         "sha256": "3aeb8de2d5eee43f56268475b8911e6e14eef59e3b8007b4719b8c4ef0a1b691",
         "size": 2500
+      },
+      {
+        "applied": true,
+        "empty": false,
+        "path": "host-kernel/rocky/patches/0013-lib-crypto-mark-binary-vectors-nonstring.patch",
+        "sha256": "329e86bdadf721f366b58582bf893df451a25e1f5cb91715bb789e10c242f021",
+        "size": 8544
+      },
+      {
+        "applied": true,
+        "empty": false,
+        "path": "host-kernel/rocky/patches/0014-gcc-15-mark-byte-arrays-nonstring.patch",
+        "sha256": "e98032b0d88ea5dbaffdbdf39a16423fded48dbed41adec29cc232782ba6d24b",
+        "size": 3052
       }
     ],
     "tree_comparison": "fresh locked archive plus every applied Rocky patch and the bound Rust target compatibility patch must byte-match the supplied out-of-tree build source"
