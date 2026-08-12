@@ -336,6 +336,7 @@
     "expected_binary_owners": {
       "bindgen": "bindgen-cli-0:0.72.1-1.el10.x86_64",
       "clang": "clang-0:21.1.8-1.el10.x86_64",
+      "lld": "lld-0:21.1.8-1.el10.x86_64",
       "llvm": "llvm-devel-0:21.1.8-1.el10.x86_64",
       "pahole": "dwarves-0:1.31-1.el10.x86_64",
       "rustc": "rust-0:1.92.0-1.el10.x86_64"
@@ -347,6 +348,7 @@
     "expected_versions": {
       "bindgen": "0.72.1",
       "clang": "21.1.8",
+      "lld": "21.1.8",
       "llvm": "21.1.8",
       "pahole": "1.31",
       "rustc": "1.92.0"
@@ -368,6 +370,10 @@
       ],
       "clang": [
         "clang",
+        "--version"
+      ],
+      "lld": [
+        "ld.lld",
         "--version"
       ],
       "llvm": [

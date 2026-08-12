@@ -67,10 +67,13 @@ jobs:
           dnf config-manager --set-enabled crb
           dnf -y --setopt=install_weak_deps=False install \
             bc binutils bison bindgen-cli clang cpio diffutils dwarves \
-            elfutils-libelf-devel findutils flex git-core gzip llvm \
+            elfutils-libelf-devel findutils flex git-core gzip lld llvm \
             llvm-devel make openssl-devel patch perl python3 rpm-build \
             rust rust-src tar xz
           dnf clean all
+          test "$(command -v ld.lld)" = /usr/bin/ld.lld
+          test "$(rpm -qf --qf '%{NAME}\n' /usr/bin/ld.lld)" = lld
+          ld.lld --version
           printf '%s\n' bootstrap-complete > "$evidence_root/workflow-state"
 
       - name: Check out the exact candidate without credentials

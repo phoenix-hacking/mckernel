@@ -194,6 +194,18 @@ class RepositoryContractTests(unittest.TestCase):
             contract["tool_environment"]["expected_versions"]["llvm"],
             "21.1.8",
         )
+        self.assertEqual(
+            contract["tool_environment"]["expected_versions"]["lld"],
+            "21.1.8",
+        )
+        self.assertEqual(
+            contract["tool_environment"]["expected_binary_owners"]["lld"],
+            "lld-0:21.1.8-1.el10.x86_64",
+        )
+        self.assertEqual(
+            contract["tool_environment"]["probe_commands"]["lld"],
+            ["ld.lld", "--version"],
+        )
         self.assertNotEqual(
             contract["tool_environment"]["expected_rustc_llvm_version"],
             contract["tool_environment"]["expected_versions"]["llvm"],
@@ -603,8 +615,13 @@ class InputSafetyTests(unittest.TestCase):
         import yaml
 
         workflow_path = REPO_ROOT / resolution.WORKFLOW_PATH
-        workflow = yaml.safe_load(workflow_path.read_text(encoding="utf-8"))
+        workflow_text = workflow_path.read_text(encoding="utf-8")
+        workflow = yaml.safe_load(workflow_text)
         self.assertIsInstance(workflow, dict)
+        self.assertIn("gzip lld llvm", workflow_text)
+        self.assertIn('test "$(command -v ld.lld)" = /usr/bin/ld.lld', workflow_text)
+        self.assertIn("rpm -qf --qf '%{NAME}\\n' /usr/bin/ld.lld", workflow_text)
+        self.assertIn("ld.lld --version", workflow_text)
         for job in workflow["jobs"].values():
             for step in job.get("steps", []):
                 script = step.get("run")

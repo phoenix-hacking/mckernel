@@ -23,10 +23,10 @@ TOOLCHAIN_LOCK_PATH = Path("host-kernel/rocky/toolchain-lock.json")
 CONFIG_POLICY_PATH = Path("host-kernel/rocky/config-policy.json")
 CONFIG_FRAGMENT_PATH = Path("host-kernel/rocky/configs/rust-minimal.config")
 EXPECTED_CONTRACT_SHA256 = (
-    "d08f3875aaa552435e6f2eff5d60c5af2e89841b1fe8f63a3e5dda3fe6bbcd9a"
+    "7eef2edb2b4e6a22d39b3b1dd7feb62f1ff48c7c76f642eff563fc99d2238f99"
 )
 EXPECTED_WORKFLOW_SHA256 = (
-    "d49e4ec8331a67e867f83fc9db39858a0c8a9eb25a2a802fa721bb513120f082"
+    "d388610f13701e0166656d019ac0cd48c456c33a3d616ebb5df9bc3ad7e36ece"
 )
 CONTAINER_IMAGE = (
     "rockylinux/rockylinux:10.2@"
@@ -74,6 +74,7 @@ CAPTURE_ENVIRONMENT = {
 PROBE_COMMANDS = {
     "bindgen": ["bindgen", "--version", "workaround-for-0.69.0"],
     "clang": ["clang", "--version"],
+    "lld": ["ld.lld", "--version"],
     "llvm": ["llvm-config", "--version"],
     "pahole": ["pahole", "--version"],
     "rustc": ["rustc", "--version", "--verbose"],
@@ -566,6 +567,7 @@ def validate_contract(repo):
     expected_versions = {
         "bindgen": "0.72.1",
         "clang": "21.1.8",
+        "lld": "21.1.8",
         "llvm": "21.1.8",
         "pahole": "1.31",
         "rustc": "1.92.0",
@@ -591,6 +593,7 @@ def validate_contract(repo):
     expected_owners = {
         "bindgen": artifact_by_name["bindgen-cli"]["nevra"],
         "clang": artifact_by_name["clang"]["nevra"],
+        "lld": artifact_by_name["lld"]["nevra"],
         "llvm": "llvm-devel-0:21.1.8-1.el10.x86_64",
         "pahole": artifact_by_name["dwarves"]["nevra"],
         "rustc": artifact_by_name["rust"]["nevra"],
@@ -778,6 +781,7 @@ def probe_environment(contract):
     version_patterns = {
         "bindgen": r"(?m)^bindgen 0\.72\.1(?:\s|$)",
         "clang": r"(?m)clang version 21\.1\.8(?:\s|$)",
+        "lld": r"(?m)^LLD 21\.1\.8(?:\s|$)",
         "llvm": r"(?m)^21\.1\.8$",
         "pahole": r"(?m)^v?1\.31$",
         "rustc": r"(?m)^rustc 1\.92\.0(?:\s|$)",

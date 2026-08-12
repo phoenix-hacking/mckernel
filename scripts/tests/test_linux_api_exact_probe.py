@@ -393,6 +393,28 @@ class ContractTests(ProbeFixture):
         self.assertIn('test "$openssl_path" = /usr/bin/openssl', workflow)
         self.assertIn("rpm -qf --qf '%{NAME}\\n' \"$openssl_path\"", workflow)
         self.assertIn("openssl version", workflow)
+
+        import yaml
+
+        parsed = yaml.safe_load(workflow)
+        for job in parsed["jobs"].values():
+            for step in job.get("steps", []):
+                script = step.get("run")
+                if script:
+                    completed = subprocess.run(
+                        ["bash", "-n"],
+                        input=script.encode("utf-8"),
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                    )
+                    self.assertEqual(
+                        completed.returncode,
+                        0,
+                        "{}: {}".format(
+                            step.get("name", "unnamed step"),
+                            completed.stderr.decode("utf-8", errors="replace"),
+                        ),
+                    )
         self.assertIn(
             ("openssl", ("openssl", "version")),
             probe.TOOL_PROBES,

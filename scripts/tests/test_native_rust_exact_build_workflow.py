@@ -3,8 +3,11 @@
 from __future__ import print_function
 
 import re
+import subprocess
 import unittest
 from pathlib import Path
+
+import yaml
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -30,6 +33,27 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         self.assertTrue(uses)
         for value in uses:
             self.assertRegex(value, r"^[^@]+@[0-9a-f]{40}$")
+
+    def test_every_shell_block_parses(self):
+        workflow = yaml.safe_load(self.workflow)
+        for job in workflow["jobs"].values():
+            for step in job.get("steps", []):
+                script = step.get("run")
+                if script:
+                    completed = subprocess.run(
+                        ["bash", "-n"],
+                        input=script.encode("utf-8"),
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                    )
+                    self.assertEqual(
+                        completed.returncode,
+                        0,
+                        "{}: {}".format(
+                            step.get("name", "unnamed step"),
+                            completed.stderr.decode("utf-8", errors="replace"),
+                        ),
+                    )
 
     def test_stage_is_explicitly_credit_forbidden(self):
         self.assertIn("--stage-for-evidence", self.workflow)

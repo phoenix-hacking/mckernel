@@ -144,11 +144,12 @@ class RepositoryReviewTests(unittest.TestCase):
         self.assertEqual(port["binding_kind"], "exact-input-tree-port")
         self.assertEqual(port["published_base_head_sha"], review.PUBLISHED_BASE_HEAD)
         self.assertEqual(port["ported_input_count"], 10)
-        self.assertEqual(port["changed_from_published_base_count"], 2)
+        self.assertEqual(port["changed_from_published_base_count"], 0)
         self.assertEqual(
             port["changed_from_published_base_paths"],
             review.PUBLISHED_BASE_CHANGED_PATHS,
         )
+        self.assertEqual(port["unchanged_from_published_base_count"], 10)
         self.assertTrue(
             port["historical_review_preserved_by_exact_base_review_blob"]
         )
@@ -160,6 +161,28 @@ class RepositoryReviewTests(unittest.TestCase):
         )
         self.assertFalse(port["runtime_identity_claimed"])
         self.assertFalse(port["credit_eligible"])
+
+    def test_connector_tree_port_published_base_review_anchor_is_exact(self):
+        self.assertEqual(
+            review.PUBLISHED_BASE_REVIEW,
+            {
+                "path": review.REVIEW_PATH.as_posix(),
+                "size": 11281,
+                "sha256": "6d1e87f11f06ad78d8b1ca01afe512a7d672abd8965fd09436580159e4a80a06",
+                "git_blob_sha1": "4f183b7093559b344aaeef4a278dd9ce8135b047",
+            },
+        )
+
+    def test_connector_tree_port_changed_path_mutation_is_rejected(self):
+        mutated = copy.deepcopy(self.manifest)
+        port = mutated["connector_tree_port"]
+        port["changed_from_published_base_count"] = 1
+        port["changed_from_published_base_paths"] = [
+            review.SOURCE_LOCK_PATH.as_posix()
+        ]
+        port["unchanged_from_published_base_count"] = 9
+        with self.assertRaisesRegex(review.ReviewError, "connector tree port"):
+            review.validate_review(mutated, self.manifest_bytes)
 
     def test_connector_tree_port_credit_and_identity_mutations_are_rejected(self):
         for key in ("runtime_identity_claimed", "credit_eligible"):

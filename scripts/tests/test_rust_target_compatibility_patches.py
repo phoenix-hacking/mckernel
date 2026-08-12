@@ -54,6 +54,15 @@ CORE_PREIMAGE = REPO_ROOT / "scripts/tests/fixtures/rust-core-rocky-6.12"
 
 
 class RustTargetCompatibilityPatchTests(unittest.TestCase):
+    def test_exact_rocky_makefile_whitespace_is_explicitly_preserved(self):
+        attributes = (REPO_ROOT / ".gitattributes").read_text(encoding="utf-8")
+        fixture = "scripts/tests/fixtures/rust-core-rocky-6.12/Makefile"
+        self.assertIn(fixture + " whitespace=-blank-at-eol", attributes)
+        self.assertIn(
+            b"RHEL_DRM_SUBLEVEL = \n",
+            (REPO_ROOT / fixture).read_bytes(),
+        )
+
     def test_every_patch_rejects_second_application(self):
         from scripts import linux_api_exact_probe as probe
 
