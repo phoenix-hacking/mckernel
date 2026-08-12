@@ -48,11 +48,11 @@
     }
   ],
   "contract_id": "mckernel-rs001-exact-linux-api-probe-v1",
-  "contract_sha256": "aa7344da1d2f99cf72228156d4af6247ee00608a63386a6c61135ab76c8a065a",
+  "contract_sha256": "a4a75529c9d10c3fdb13fe09c18a99d5b9457b02c235244b1448872587f37764",
   "evidence_profile": "rocky-10.2-exact-linux-api-evidence-v1",
   "frozen_needs": {
-    "file_sha256": "c49ec05bdef0e1d90a25176766c4abc4063b4ab1d741676061145cdf6a936384",
-    "manifest_sha256": "787461d14a5a72cbfc8705c3f93acb9e643b06056eeb0e881ab79290d818d6c8",
+    "file_sha256": "48e45352ae8d99ceed5110ee06ff3f8cf6bbb3c74f543378a162be09ef39d628",
+    "manifest_sha256": "ecc3814b4e56af55d43a95121f1cb0b234febdfed5acd72ddae50e4bef18a170",
     "need_count": 268,
     "need_ids_sha256": "aabfc7c4d6551f0b57fcc9c580e3aa6cf6ef0c93ee5e179529f161d7084a6a3b",
     "path": "host-kernel/contracts/linux-api-needs-v1.json"
@@ -103,7 +103,7 @@
   "repository_inputs": {
     "checker": {
       "path": "scripts/linux_api_exact_probe.py",
-      "sha256": "fff0ee7ead6383a71d99738e2dfdd394abed63fe792d3f6d2cce8e27b1da8e62"
+      "sha256": "9839eb588a417c471b57f89f3c52d1f1303545f60038e4c8173ef7545d7f0c49"
     },
     "clang_21_source_fix_preimages": [
       {
@@ -401,6 +401,22 @@
         "size": 5609,
         "stable_commit": "dd8a734155ae28094d27b96c00a478fa0ee6d5d7",
         "upstream_commit": "4f79eaa2ceac86a0e0f304b0bab556cca5bf4f30"
+      },
+      {
+        "applied_after": "host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch",
+        "path": "host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch",
+        "sha256": "bc9b84c4c8bf36b7fac02dd3d04e1a170b86ee143b76739a6eed3e564cdebc2b",
+        "size": 1935,
+        "stable_commit": null,
+        "upstream_commit": "a69dc41a4211b0da311ae3a3b79dd4497c9dfb60"
+      },
+      {
+        "applied_after": "host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch",
+        "path": "host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch",
+        "sha256": "d377b5bd91d507e383b8673beac42381b9b6c37a47bba7955c768a8f6ddaad25",
+        "size": 10726,
+        "stable_commit": null,
+        "upstream_commit": "f893691e742688ae21ad597c5bba13bef54706cd"
       }
     ],
     "rust_target_generator_preimage": {
@@ -409,7 +425,7 @@
     },
     "source_lock": {
       "path": "host-kernel/rocky/source-lock.json",
-      "sha256": "cbca9fe2e92f56ba7dba3dc03b018b11605f5d6c3dfdf9e3e4f33149c442f8ff"
+      "sha256": "dbae5b6de02e944ea775fcf382dbabe7da7fe0ec855165f11d35539a9e3dd8ee"
     },
     "toolchain_lock": {
       "path": "host-kernel/rocky/toolchain-lock.json",
@@ -417,7 +433,7 @@
     },
     "workflow": {
       "path": ".github/workflows/rs001-linux-api-exact-probe.yml",
-      "sha256": "c2f46ca7ce877e24019caa00346a59209bf833eb0f1f1a658b824588cebec374"
+      "sha256": "71b72fa7432dee49381234f6024c3cac55b76b713f58f4b948b2d49910183b76"
     }
   },
   "required_capture_inputs": [
@@ -648,6 +664,20 @@
         "path": "host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch",
         "sha256": "e271fa6f30bb3b39a24ae2f926dfa067577997ecf2076e412b5575a4d785021e",
         "size": 5609
+      },
+      {
+        "applied": true,
+        "empty": false,
+        "path": "host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch",
+        "sha256": "bc9b84c4c8bf36b7fac02dd3d04e1a170b86ee143b76739a6eed3e564cdebc2b",
+        "size": 1935
+      },
+      {
+        "applied": true,
+        "empty": false,
+        "path": "host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch",
+        "sha256": "d377b5bd91d507e383b8673beac42381b9b6c37a47bba7955c768a8f6ddaad25",
+        "size": 10726
       }
     ],
     "tree_comparison": "fresh locked archive plus every applied Rocky patch and the bound Rust target compatibility patch must byte-match the supplied out-of-tree build source"

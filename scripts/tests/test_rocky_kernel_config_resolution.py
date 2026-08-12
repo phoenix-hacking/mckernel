@@ -132,6 +132,46 @@ def write_source_archive(path, changes_target="process/changes.rst"):
 
 
 class RepositoryContractTests(unittest.TestCase):
+    def test_source_cleanup_is_ordered_after_processed_configs_are_copied(self):
+        contract = resolution.validate_contract(REPO_ROOT)
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source = root / "linux"
+            configs = source / "redhat" / "configs"
+            configs.mkdir(parents=True)
+            (configs / "process_configs.sh").write_text(
+                "#!/bin/sh\nexit 0\n", encoding="utf-8"
+            )
+            (source / "scripts" / "kconfig").mkdir(parents=True)
+            baseline = root / "baseline.config"
+            fragment = root / "fragment.config"
+            baseline.write_text("# x86_64\n# CONFIG_RUST is not set\n", encoding="utf-8")
+            fragment.write_text("CONFIG_RUST=y\n", encoding="utf-8")
+            commands = []
+
+            def fake_run_command(arguments, cwd=None, env=None, timeout=600):
+                commands.append(list(arguments))
+                return b"", b""
+
+            original_run_command = resolution.run_command
+            original_verify_asset = resolution.verify_asset
+            resolution.run_command = fake_run_command
+            resolution.verify_asset = lambda path, record, label: Path(path)
+            try:
+                result = resolution.run_resolution(
+                    source, baseline, fragment, 1, contract
+                )
+            finally:
+                resolution.run_command = original_run_command
+                resolution.verify_asset = original_verify_asset
+
+            self.assertEqual(commands[3], result["source_cleanup_command"])
+            self.assertEqual(commands[3][-3:], ["ARCH=x86_64", "LLVM=1", "mrproper"])
+            self.assertEqual(commands[4], result["control_command"])
+            self.assertEqual(commands[5], result["requested_command"])
+            self.assertEqual(result["control"].read_bytes(), baseline.read_bytes())
+            self.assertEqual(result["requested"].read_bytes(), baseline.read_bytes())
+
     def test_contract_and_workflow_validate_without_credit(self):
         contract = resolution.validate_contract(REPO_ROOT)
         resolution.validate_workflow(REPO_ROOT)
@@ -154,7 +194,7 @@ class RepositoryContractTests(unittest.TestCase):
             self.assertEqual(
                 hashlib.sha256(path.read_bytes()).hexdigest(), binding["sha256"]
             )
-        self.assertEqual(18, len(contract["patch_authority"]["rust_compatibility"]))
+        self.assertEqual(20, len(contract["patch_authority"]["rust_compatibility"]))
         self.assertEqual(
             [row["path"] for row in contract["patch_authority"]["rust_compatibility"]],
             resolution.EXPECTED_COMPATIBILITY_PATCHES,
@@ -176,7 +216,7 @@ class RepositoryContractTests(unittest.TestCase):
                     "no_config_symbol_changes"
                 ]
             ),
-            17,
+            19,
         )
         self.assertEqual(
             contract["tool_environment"]["expected_file_owners"]["rust_src_core"],
@@ -213,6 +253,17 @@ class RepositoryContractTests(unittest.TestCase):
         self.assertEqual(
             contract["resolution"]["olddefconfig_command"][-3:],
             ["ARCH=x86_64", "LLVM=1", "olddefconfig"],
+        )
+        self.assertEqual(
+            contract["resolution"]["source_cleanup_command"],
+            [
+                "make",
+                "-C",
+                "SOURCE_ROOT",
+                "ARCH=x86_64",
+                "LLVM=1",
+                "mrproper",
+            ],
         )
         self.assertEqual(
             contract["process_configs"]["sha256"],

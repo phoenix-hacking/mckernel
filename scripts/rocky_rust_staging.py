@@ -109,7 +109,7 @@ EXPECTED_INPUTS = (
 )
 EXPECTED_PARENT_INTEGRATION_REF = {
     "repository_path": "host-kernel/kbuild/parent-integration-v1.json",
-    "sha256": "2a69d39a32ce29e8a864192b8a0b80a1f0dffe2cf01fcd972e9fd2dca0d70611",
+    "sha256": "f9422ea1d23e6ba959a58ef3f8b3ba17596903040fa13ece28020d527a3f95dc",
 }
 EXPECTED_PARENT_SOURCE = {
     "archive_basename": "linux-6.12.0-211.44.1.el10_2.tar.xz",
@@ -117,7 +117,7 @@ EXPECTED_PARENT_SOURCE = {
     "archive_root": "linux-6.12.0-211.44.1.el10_2",
     "source_lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-source-v1",
     "source_lock_repository_path": "host-kernel/rocky/source-lock.json",
-    "source_lock_sha256": "cbca9fe2e92f56ba7dba3dc03b018b11605f5d6c3dfdf9e3e4f33149c442f8ff",
+    "source_lock_sha256": "dbae5b6de02e944ea775fcf382dbabe7da7fe0ec855165f11d35539a9e3dd8ee",
     "source_rpm_sha256": "2bfeda65bd9bdd4b86650074c81e061c37822b80317ac0d4f5aacc89c85589cb",
 }
 EXPECTED_PARENT_PATCH = {

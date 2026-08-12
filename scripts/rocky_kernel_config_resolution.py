@@ -23,7 +23,7 @@ TOOLCHAIN_LOCK_PATH = Path("host-kernel/rocky/toolchain-lock.json")
 CONFIG_POLICY_PATH = Path("host-kernel/rocky/config-policy.json")
 CONFIG_FRAGMENT_PATH = Path("host-kernel/rocky/configs/rust-minimal.config")
 EXPECTED_CONTRACT_SHA256 = (
-    "7eef2edb2b4e6a22d39b3b1dd7feb62f1ff48c7c76f642eff563fc99d2238f99"
+    "3bfd40a1f04fff9b4f1770a538a4cd5685bd9f51ce5056a02eb9556040261d5d"
 )
 EXPECTED_WORKFLOW_SHA256 = (
     "d388610f13701e0166656d019ac0cd48c456c33a3d616ebb5df9bc3ad7e36ece"
@@ -62,6 +62,8 @@ EXPECTED_COMPATIBILITY_PATCHES = [
     "host-kernel/rocky/patches/0016-gcc-15-disable-unterminated-string-warning.patch",
     "host-kernel/rocky/patches/0017-kbuild-use-cc-disable-warning.patch",
     "host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch",
+    "host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch",
+    "host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch",
 ]
 CAPTURE_ENVIRONMENT = {
     "ARCH": "x86_64",
@@ -383,8 +385,8 @@ def validate_contract(repo):
     _, series_digest = sha256_file(series_path)
     require_exact(series_digest, rocky_series["sha256"], "Rocky series digest")
     patches = patch_authority["rust_compatibility"]
-    if not isinstance(patches, list) or len(patches) != 18:
-        raise ConfigResolutionError("exactly eighteen compatibility patches are required")
+    if not isinstance(patches, list) or len(patches) != 20:
+        raise ConfigResolutionError("exactly twenty compatibility patches are required")
     patch_directory = repo / "host-kernel/rocky/patches"
     discovered_patches = sorted(
         path.relative_to(repo).as_posix()
@@ -431,7 +433,15 @@ def validate_contract(repo):
                 identity_count += 1
                 require_exact(row.get(field), identities[0], field)
         if identity_count == 0:
-            raise ConfigResolutionError("compatibility patch has no commit identity")
+            mail_commits = re.findall(
+                r"\AFrom ([0-9a-f]{40}) Mon Sep 17 00:00:00 2001$",
+                text,
+                re.MULTILINE,
+            )
+            if len(mail_commits) != 1:
+                raise ConfigResolutionError("compatibility patch has no unique commit identity")
+            expected_fields.add("upstream_commit")
+            require_exact(row.get("upstream_commit"), mail_commits[0], "upstream_commit")
         exact_keys(row, expected_fields, "compatibility patch {}".format(index))
         changed_paths = re.findall(
             r"(?m)^diff --git a/(\S+) b/(\S+)$", text
@@ -499,6 +509,7 @@ def validate_contract(repo):
             "olddefconfig_command",
             "passes",
             "process_configs_required",
+            "source_cleanup_command",
         },
         "resolution commands",
     )
@@ -534,6 +545,18 @@ def validate_contract(repo):
         ],
         "olddefconfig command",
     )
+    require_exact(
+        resolution["source_cleanup_command"],
+        [
+            "make",
+            "-C",
+            "SOURCE_ROOT",
+            "ARCH=x86_64",
+            "LLVM=1",
+            "mrproper",
+        ],
+        "source cleanup command",
+    )
     comparison = str(resolution["comparison"])
     if "complete resolved config bytes" not in comparison or "symbol maps" not in comparison:
         raise ConfigResolutionError("two-pass comparison contract is incomplete")
@@ -542,7 +565,7 @@ def validate_contract(repo):
     ) < 0:
         raise ConfigResolutionError("policy reconciliation blocker is missing")
     if not any(
-        "0006 through 0018" in item and "compile probes" in item
+        "0006 through 0020" in item and "compile probes" in item
         for item in contract["success_blockers"]
     ):
         raise ConfigResolutionError("compatibility compile-scope blocker is missing")
@@ -1361,6 +1384,15 @@ def run_resolution(source, baseline, fragment, pass_number, contract):
     requested_dir.mkdir(mode=0o700)
     shutil.copyfile(str(control_output), str(control_dir / ".config"))
     shutil.copyfile(str(requested_output), str(requested_dir / ".config"))
+    source_cleanup = [
+        "make",
+        "-C",
+        str(source),
+        "ARCH=x86_64",
+        "LLVM=1",
+        "mrproper",
+    ]
+    run_command(source_cleanup, env=CAPTURE_ENVIRONMENT, timeout=1800)
     make_control = [
         "make",
         "-C",
@@ -1391,6 +1423,7 @@ def run_resolution(source, baseline, fragment, pass_number, contract):
         "requested_process_command": requested_process_command,
         "requested_command": make_requested,
         "control_command": make_control,
+        "source_cleanup_command": source_cleanup,
     }
 
 
@@ -1520,6 +1553,7 @@ def capture(repo, source_assets, output_dir, identity, contract):
                         "requested_process_environment"
                     ],
                     "requested_olddefconfig": runs[index]["requested_command"],
+                    "source_cleanup": runs[index]["source_cleanup_command"],
                 }
                 for index in range(2)
             ],

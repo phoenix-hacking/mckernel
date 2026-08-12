@@ -12,6 +12,7 @@ on:
       - host-kernel/contracts/ihk-os-registry-foundation-v1.json
       - host-kernel/contracts/ihk-ioctl-dispatch-foundation-v1.json
       - host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json
+      - host-kernel/contracts/rs006-miscdevice-substrate-v1.json
       - host-kernel/native-rust/**
       - host-kernel/rocky/config-policy.json
       - host-kernel/rocky/configs/native-rust-evidence.config
@@ -34,6 +35,8 @@ on:
       - host-kernel/rocky/patches/0016-gcc-15-disable-unterminated-string-warning.patch
       - host-kernel/rocky/patches/0017-kbuild-use-cc-disable-warning.patch
       - host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch
+      - host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch
+      - host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch
       - host-kernel/rocky/patches/series.json
       - host-kernel/rocky/source-lock.json
       - host-kernel/rocky/toolchain-lock.json
@@ -52,6 +55,7 @@ on:
       - scripts/native_rust_unsafe_ffi_ledger.py
       - scripts/linux_api_exact_probe.py
       - scripts/rocky_kernel_source_lock.py
+      - scripts/rs006_miscdevice_substrate.py
       - scripts/rocky_rust_staging.py
       - scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs
       - scripts/tests/fixtures/ihk_os_registry_compile.rs
@@ -71,6 +75,7 @@ on:
       - scripts/tests/test_ihk_page_owner_registry_check.py
       - scripts/tests/test_linux_api_exact_probe.py
       - scripts/tests/test_rust_target_compatibility_patches.py
+      - scripts/tests/test_rs006_miscdevice_substrate.py
       - scripts/tests/test_x86_64_shared_abi.py
       - scripts/x86_64_shared_abi.py
   pull_request:
@@ -84,6 +89,7 @@ on:
       - host-kernel/contracts/ihk-os-registry-foundation-v1.json
       - host-kernel/contracts/ihk-ioctl-dispatch-foundation-v1.json
       - host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json
+      - host-kernel/contracts/rs006-miscdevice-substrate-v1.json
       - host-kernel/native-rust/**
       - host-kernel/rocky/config-policy.json
       - host-kernel/rocky/configs/native-rust-evidence.config
@@ -106,6 +112,8 @@ on:
       - host-kernel/rocky/patches/0016-gcc-15-disable-unterminated-string-warning.patch
       - host-kernel/rocky/patches/0017-kbuild-use-cc-disable-warning.patch
       - host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch
+      - host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch
+      - host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch
       - host-kernel/rocky/patches/series.json
       - host-kernel/rocky/source-lock.json
       - host-kernel/rocky/toolchain-lock.json
@@ -124,6 +132,7 @@ on:
       - scripts/native_rust_unsafe_ffi_ledger.py
       - scripts/linux_api_exact_probe.py
       - scripts/rocky_kernel_source_lock.py
+      - scripts/rs006_miscdevice_substrate.py
       - scripts/rocky_rust_staging.py
       - scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs
       - scripts/tests/fixtures/ihk_os_registry_compile.rs
@@ -143,6 +152,7 @@ on:
       - scripts/tests/test_ihk_page_owner_registry_check.py
       - scripts/tests/test_linux_api_exact_probe.py
       - scripts/tests/test_rust_target_compatibility_patches.py
+      - scripts/tests/test_rs006_miscdevice_substrate.py
       - scripts/tests/test_x86_64_shared_abi.py
       - scripts/x86_64_shared_abi.py
   workflow_dispatch:
@@ -245,6 +255,7 @@ jobs:
           python3 scripts/ihk_smp_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE"
           python3 scripts/mcctrl_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE"
           python3 scripts/native_rust_unsafe_ffi_ledger.py --repo "$GITHUB_WORKSPACE" check
+          python3 scripts/rs006_miscdevice_substrate.py --repo "$GITHUB_WORKSPACE"
 
       - name: Acquire, patch, and credit-forbidden-stage the exact source
         env:
@@ -267,6 +278,9 @@ jobs:
           tar -C "$SOURCE_PARENT" -xf "$archive"
           source_root="$SOURCE_PARENT/linux-6.12.0-211.44.1.el10_2"
           test -f "$source_root/Makefile"
+          python3 scripts/rs006_miscdevice_substrate.py \
+            --repo "$GITHUB_WORKSPACE" --kernel-source "$source_root" \
+            --require-source-replay
           python3 scripts/ihk_ioctl_dispatch_check.py --repo "$GITHUB_WORKSPACE" \
             --kernel-source "$source_root"
           patch -d "$source_root" -p1 --batch --forward --no-backup-if-mismatch \
@@ -289,7 +303,9 @@ jobs:
             0015-gcc-15-demote-unterminated-string-warning.patch \
             0016-gcc-15-disable-unterminated-string-warning.patch \
             0017-kbuild-use-cc-disable-warning.patch \
-            0018-kbuild-order-unterminated-string-disable.patch
+            0018-kbuild-order-unterminated-string-disable.patch \
+            0019-rust-types-add-opaque-try-ffi-init.patch \
+            0020-rust-miscdevice-add-base-abstraction.patch
           do
             compat_patch="$GITHUB_WORKSPACE/host-kernel/rocky/patches/$compat_name"
             test -s "$compat_patch"

@@ -168,9 +168,17 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             "0018-kbuild-order-unterminated-string-disable.patch",
             warning_helper,
         )
+        opaque_init = self.workflow.index(
+            "0019-rust-types-add-opaque-try-ffi-init.patch",
+            warning_order,
+        )
+        miscdevice = self.workflow.index(
+            "0020-rust-miscdevice-add-base-abstraction.patch",
+            opaque_init,
+        )
         project = self.workflow.index(
             "0001-drivers-misc-add-mckernel-rust-host-modules.patch",
-            warning_order,
+            miscdevice,
         )
         self.assertLess(debrand, softfloat)
         self.assertLess(softfloat, target_spec)
@@ -190,7 +198,14 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         self.assertLess(warning_demote, warning_disable)
         self.assertLess(warning_disable, warning_helper)
         self.assertLess(warning_helper, warning_order)
-        self.assertLess(warning_order, project)
+        self.assertLess(warning_order, opaque_init)
+        self.assertLess(opaque_init, miscdevice)
+        self.assertLess(miscdevice, project)
+
+    def test_rs006_source_substrate_is_checked_without_credit(self):
+        self.assertIn("scripts/rs006_miscdevice_substrate.py", self.workflow)
+        self.assertIn("--require-source-replay", self.workflow)
+        self.assertNotIn("RS-006: PASS", self.workflow)
 
     def test_failure_log_and_artifact_capture_are_unconditional(self):
         bootstrap = self.workflow.index("Refuse the wrong runtime")

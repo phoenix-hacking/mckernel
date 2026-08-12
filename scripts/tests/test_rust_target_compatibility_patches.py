@@ -47,6 +47,10 @@ PATCHES = (
     / "host-kernel/rocky/patches/0017-kbuild-use-cc-disable-warning.patch",
     REPO_ROOT
     / "host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch",
+    REPO_ROOT
+    / "host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch",
+    REPO_ROOT
+    / "host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch",
 )
 PREIMAGE = REPO_ROOT / "scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs"
 POSTIMAGE_SHA256 = "555ff4dff6548bb5f24087cdad737363b5694668aa462f77adfb3571498ec678"
@@ -66,7 +70,7 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
     def test_every_patch_rejects_second_application(self):
         from scripts import linux_api_exact_probe as probe
 
-        self.assertEqual(18, len(PATCHES))
+        self.assertEqual(20, len(PATCHES))
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory) / "linux"
             shutil.copytree(str(CORE_PREIMAGE), str(root))
@@ -149,6 +153,8 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
             self.assertEqual(digest, probe.sha256_file(CORE_PREIMAGE / relative))
         for relative, digest in probe.CLANG_21_SOURCE_FIX_PREIMAGE_SHA256S:
             self.assertEqual(digest, probe.sha256_file(CORE_PREIMAGE / relative))
+        for relative, digest in probe.RUST_MISCDEVICE_PREIMAGE_SHA256S:
+            self.assertEqual(digest, probe.sha256_file(CORE_PREIMAGE / relative))
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory) / "linux"
             shutil.copytree(str(CORE_PREIMAGE), str(root))
@@ -158,6 +164,7 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
                     root,
                 )
             reconciled_paths = dict(probe.RUST_1_92_RECONCILIATION_POSTIMAGE_SHA256S)
+            miscdevice_paths = dict(probe.RUST_MISCDEVICE_POSTIMAGE_SHA256S)
             for relative, digest in probe.RUST_CORE_COMPAT_POSTIMAGE_SHA256S:
                 if relative not in reconciled_paths:
                     self.assertEqual(digest, probe.sha256_file(root / relative))
@@ -167,10 +174,13 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
                 if relative not in reconciled_paths:
                     self.assertEqual(digest, probe.sha256_file(root / relative))
             for relative, digest in probe.RUST_1_92_RECONCILIATION_POSTIMAGE_SHA256S:
-                self.assertEqual(digest, probe.sha256_file(root / relative))
+                if relative not in miscdevice_paths:
+                    self.assertEqual(digest, probe.sha256_file(root / relative))
             for relative, digest in probe.CLANG_21_WARNING_POSTIMAGE_SHA256S:
                 self.assertEqual(digest, probe.sha256_file(root / relative))
             for relative, digest in probe.CLANG_21_SOURCE_FIX_POSTIMAGE_SHA256S:
+                self.assertEqual(digest, probe.sha256_file(root / relative))
+            for relative, digest in probe.RUST_MISCDEVICE_POSTIMAGE_SHA256S:
                 self.assertEqual(digest, probe.sha256_file(root / relative))
             ksm = (root / "mm/ksm.c").read_text(encoding="utf-8")
             advisor_show = ksm.split(
@@ -329,6 +339,20 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
             self.assertIn(
                 "$(call cc-disable-warning, frame-address)", extra_warnings
             )
+            types = (root / "rust/kernel/types.rs").read_text(encoding="utf-8")
+            self.assertIn("pub fn try_ffi_init<E>", types)
+            bindings = (
+                root / "rust/bindings/bindings_helper.h"
+            ).read_text(encoding="utf-8")
+            self.assertIn("#include <linux/miscdevice.h>", bindings)
+            kernel_lib = (root / "rust/kernel/lib.rs").read_text(encoding="utf-8")
+            self.assertIn("pub mod miscdevice;", kernel_lib)
+            miscdevice = (
+                root / "rust/kernel/miscdevice.rs"
+            ).read_text(encoding="utf-8")
+            self.assertIn("MISC_DYNAMIC_MINOR", miscdevice)
+            self.assertIn("pub trait MiscDevice", miscdevice)
+            self.assertNotIn("fn mmap", miscdevice)
 
     def test_core_edition_patch_without_version_helper_is_incomplete(self):
         from scripts import linux_api_exact_probe as probe

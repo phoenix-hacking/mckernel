@@ -426,6 +426,8 @@ class ContractTests(ProbeFixture):
             self.assertIn(path.name, workflow)
         self.assertLess(workflow.index(rocky_patch), workflow.index(compatibility_patch))
         self.assertLess(workflow.index(compatibility_patch), workflow.index("rustavailable"))
+        self.assertIn("scripts/rs006_miscdevice_substrate.py", workflow)
+        self.assertIn("--require-source-replay", workflow)
         self.assertLess(
             workflow.index(probe.RUST_COMPAT_PATCH_PATHS[0].name),
             workflow.index(probe.RUST_COMPAT_PATCH_PATHS[1].name),
@@ -493,6 +495,14 @@ class ContractTests(ProbeFixture):
         self.assertLess(
             workflow.index(probe.RUST_COMPAT_PATCH_PATHS[16].name),
             workflow.index(probe.RUST_COMPAT_PATCH_PATHS[17].name),
+        )
+        self.assertLess(
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[17].name),
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[18].name),
+        )
+        self.assertLess(
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[18].name),
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[19].name),
         )
 
     def test_rust_compatibility_patch_shape_is_fail_closed(self):
@@ -703,6 +713,27 @@ class ContractTests(ProbeFixture):
             path.write_text(original.replace(stable, "0" * 40, 1), encoding="utf-8")
             with self.assertRaises(probe.ProbeError):
                 probe.rust_compatibility_patch_records(root)
+
+    def test_miscdevice_substrate_shape_is_fail_closed(self):
+        mutations = (
+            (18, "pub fn try_ffi_init<E>", "pub fn ffi_init<E>"),
+            (
+                19,
+                "result.minor = bindings::MISC_DYNAMIC_MINOR as _;",
+                "result.minor = 64;",
+            ),
+        )
+        for index, old, new in mutations:
+            with self.subTest(patch=probe.RUST_COMPAT_PATCH_PATHS[index].name):
+                with tempfile.TemporaryDirectory() as directory:
+                    root = Path(directory)
+                    self.copy_rust_compatibility_inputs(root)
+                    path = root / probe.RUST_COMPAT_PATCH_PATHS[index]
+                    original = path.read_text(encoding="utf-8")
+                    self.assertIn(old, original)
+                    path.write_text(original.replace(old, new, 1), encoding="utf-8")
+                    with self.assertRaises(probe.ProbeError):
+                        probe.rust_compatibility_patch_records(root)
 
     def test_stable_warning_policy_release_binding_is_fail_closed(self):
         with tempfile.TemporaryDirectory() as directory:

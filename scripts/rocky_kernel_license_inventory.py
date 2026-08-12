@@ -38,7 +38,7 @@ EXPECTED_CONTAINER_IMAGE = (
     "e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176"
 )
 EXPECTED_SOURCE_LOCK_SHA256 = (
-    "cbca9fe2e92f56ba7dba3dc03b018b11605f5d6c3dfdf9e3e4f33149c442f8ff"
+    "dbae5b6de02e944ea775fcf382dbabe7da7fe0ec855165f11d35539a9e3dd8ee"
 )
 EXPECTED_PATCH_SERIES_SHA256 = (
     "6a1a5e8fb13b6ce6ed35bd8e5487bb67ecf92d2be927799b660f21b5631f68fb"
@@ -141,6 +141,8 @@ EXPECTED_REPOSITORY_INPUT_PATHS = [
     "host-kernel/rocky/patches/0016-gcc-15-disable-unterminated-string-warning.patch",
     "host-kernel/rocky/patches/0017-kbuild-use-cc-disable-warning.patch",
     "host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch",
+    "host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch",
+    "host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch",
     "host-kernel/rocky/patches/series.json",
     "scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs",
     "scripts/tests/fixtures/ihk_native_master_compile.rs",
@@ -171,6 +173,7 @@ EXPECTED_REPOSITORY_INPUT_PATHS = [
     "scripts/tests/fixtures/rust-core-rocky-6.12/lib/crypto/aesgcm.c",
     "scripts/tests/fixtures/rust-core-rocky-6.12/mm/ksm.c",
     "scripts/tests/fixtures/rust-core-rocky-6.12/rust/Makefile",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/rust/bindings/bindings_helper.h",
     "scripts/tests/fixtures/rust-core-rocky-6.12/rust/bindings/lib.rs",
     "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/block/mq/tag_set.rs",
     "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/ioctl.rs",
@@ -178,6 +181,7 @@ EXPECTED_REPOSITORY_INPUT_PATHS = [
     "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/lib.rs",
     "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/list/arc.rs",
     "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/sync/arc.rs",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/types.rs",
     "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/uaccess.rs",
     "scripts/tests/fixtures/rust-core-rocky-6.12/rust/macros/module.rs",
     "scripts/tests/fixtures/rust-core-rocky-6.12/rust/uapi/lib.rs",

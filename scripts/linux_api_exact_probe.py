@@ -58,6 +58,8 @@ RUST_COMPAT_PATCH_PATHS = (
     Path("host-kernel/rocky/patches/0016-gcc-15-disable-unterminated-string-warning.patch"),
     Path("host-kernel/rocky/patches/0017-kbuild-use-cc-disable-warning.patch"),
     Path("host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch"),
+    Path("host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch"),
+    Path("host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch"),
 )
 CONFIG_POLICY_PATH = Path("host-kernel/rocky/config-policy.json")
 TOOLCHAIN_LOCK_PATH = Path("host-kernel/rocky/toolchain-lock.json")
@@ -128,6 +130,16 @@ RUST_1_92_RECONCILIATION_POSTIMAGE_SHA256S = (
     ("rust/kernel/list/arc.rs", "6bfd5e6d5732819f4097ef5e8917f1031a393d70350848fdf91bb5b1a9458866"),
     ("rust/kernel/sync/arc.rs", "d18fccfcbe7a55297dfd4574218c9e6aeeaf8d30f99b0128071f0f444768d8ae"),
     ("scripts/Makefile.build", "9a4d2a34fb5db30c43db86f14474a9b3135bd877ad2850aedb437d0c7606f9df"),
+)
+RUST_MISCDEVICE_PREIMAGE_SHA256S = (
+    ("rust/kernel/types.rs", "3fe4d0cc0910560abefbd668afdb7aad90629b90079ad5e09a6b4346203f9413"),
+    ("rust/bindings/bindings_helper.h", "e7590a0468bb99dbf3f32dc5a3d40d2f5f35b4ac50803e9f755825a856ad518c"),
+)
+RUST_MISCDEVICE_POSTIMAGE_SHA256S = (
+    ("rust/kernel/types.rs", "3fde339b8a41b521407faa9e45d51ce9ecb183a170e9c650a72d25c73d50f6f7"),
+    ("rust/kernel/lib.rs", "12079556f6e69f48db7fc887227e9243f9fc6837715afb5eaddf57bab8850cdd"),
+    ("rust/bindings/bindings_helper.h", "f2644392ca91a791e4ab2ffb05a9b30a911a51f1ae025c696c710cfb3a447d07"),
+    ("rust/kernel/miscdevice.rs", "6cfa6ed228561b7a8d41df50700868480d29514dd3469935679b11015c93fc9c"),
 )
 CLANG_21_WARNING_PREIMAGE_SHA256S = (
     ("Makefile", "b2d9e6f03fa466db088337572dec4b0f98db8f5775ca537bce0a179a1ac216bd"),
@@ -204,6 +216,8 @@ RUST_COMPAT_UPSTREAM_COMMITS = (
     "9d7a0577c9db35c4cc52db90bc415ea248446472",
     "a79be02bba5c31f967885c7f3bf3a756d77d11d9",
     "4f79eaa2ceac86a0e0f304b0bab556cca5bf4f30",
+    "a69dc41a4211b0da311ae3a3b79dd4497c9dfb60",
+    "f893691e742688ae21ad597c5bba13bef54706cd",
 )
 RUST_COMPAT_STABLE_COMMITS = (
     None,
@@ -224,6 +238,8 @@ RUST_COMPAT_STABLE_COMMITS = (
     "d66cf772bebd789448121cdfc42734fb042c9c4b",
     "3f856d5d84467c7fba0bf3cca405089c497e37eb",
     "dd8a734155ae28094d27b96c00a478fa0ee6d5d7",
+    None,
+    None,
 )
 RUST_CORE_COMPAT_FAILURE_EVIDENCE = (
     {
@@ -611,6 +627,16 @@ def rust_compatibility_patch_records(repo):
                     relative
                 )
             )
+    for relative, digest in RUST_MISCDEVICE_PREIMAGE_SHA256S:
+        path = repository_file(
+            repo,
+            RUST_CORE_COMPAT_FIXTURE_ROOT / relative,
+            "Rocky Rust miscdevice fixture file",
+        )
+        if sha256_file(path) != digest:
+            raise ProbeError(
+                "Rocky Rust miscdevice fixture digest changed: {0}".format(relative)
+            )
     records = []
     required_additions = (
         {
@@ -732,6 +758,22 @@ def rust_compatibility_patch_records(repo):
             "+# Currently, disable -Wunterminated-string-initialization as broken": 1,
             "+KBUILD_CFLAGS += $(call cc-disable-warning, unterminated-string-initialization)": 1,
         },
+        {
+            "+    pub fn try_ffi_init<E>(": 1,
+            "+        init_func: impl FnOnce(*mut T) -> Result<(), E>,": 1,
+            "+        unsafe { init::pin_init_from_closure::<_, E>(move |slot| init_func(Self::raw_get(slot))) }": 1,
+        },
+        {
+            "+#include <linux/miscdevice.h>": 1,
+            "+pub mod miscdevice;": 1,
+            "+pub struct MiscDeviceRegistration<T> {": 1,
+            "+        result.minor = bindings::MISC_DYNAMIC_MINOR as _;": 1,
+            "+                to_result(unsafe { bindings::misc_register(slot) })": 1,
+            "+        unsafe { bindings::misc_deregister(self.inner.get()) };": 1,
+            "+pub trait MiscDevice {": 1,
+            "+    type Ptr: ForeignOwnable + Send + Sync;": 1,
+            "+unsafe extern \"C\" fn fops_open<T: MiscDevice>(": 1,
+        },
     )
     required_deletions = (
         {},
@@ -820,8 +862,10 @@ def rust_compatibility_patch_records(repo):
             "-KBUILD_CFLAGS += $(call cc-disable-warning, unterminated-string-initialization)": 1,
             "-KBUILD_CFLAGS += -Wextra": 1,
         },
+        {},
+        {},
     )
-    expected_diff_counts = (1, 1, 3, 2, 3, 1, 4, 4, 1, 1, 1, 2, 2, 3, 1, 1, 5, 2)
+    expected_diff_counts = (1, 1, 3, 2, 3, 1, 4, 4, 1, 1, 1, 2, 2, 3, 1, 1, 5, 2, 1, 3)
     for index, relative in enumerate(RUST_COMPAT_PATCH_PATHS):
         path = repository_file(repo, relative, "Rust target compatibility patch")
         try:
@@ -836,7 +880,7 @@ def rust_compatibility_patch_records(repo):
         commit = RUST_COMPAT_UPSTREAM_COMMITS[index]
         stable_commit = RUST_COMPAT_STABLE_COMMITS[index]
         if (
-            (commit is not None and text.count(commit) != 2)
+            (commit is not None and text.count(commit) != (1 if index >= 18 else 2))
             or (
                 stable_commit is not None
                 and text.count(stable_commit) != 2
@@ -851,7 +895,7 @@ def rust_compatibility_patch_records(repo):
                 for fragment, count in required_deletions[index].items()
             )
             or (
-                index >= 14
+                14 <= index <= 17
                 and (
                     text.count("Stable-Branch: linux-6.12.y") != 1
                     or text.count("Stable-First-Release: v6.12.31") != 1
@@ -923,6 +967,7 @@ def verify_rust_compatibility_patch_replay(repo, records):
             + RUST_1_92_RECONCILIATION_PREIMAGE_SHA256S
             + CLANG_21_WARNING_PREIMAGE_SHA256S
             + CLANG_21_SOURCE_FIX_PREIMAGE_SHA256S
+            + RUST_MISCDEVICE_PREIMAGE_SHA256S
         ):
             source = repository_file(
                 repo,
@@ -997,7 +1042,10 @@ def verify_rust_compatibility_patch_replay(repo, records):
                 root,
             )
         for relative, digest in RUST_1_92_RECONCILIATION_POSTIMAGE_SHA256S:
-            if sha256_file(root / relative) != digest:
+            if (
+                relative not in dict(RUST_MISCDEVICE_POSTIMAGE_SHA256S)
+                and sha256_file(root / relative) != digest
+            ):
                 raise ProbeError(
                     "Rust 1.92 reconciliation patch postimage changed: {0}".format(
                         relative
@@ -1014,6 +1062,13 @@ def verify_rust_compatibility_patch_replay(repo, records):
             if sha256_file(root / relative) != digest:
                 raise ProbeError(
                     "Clang 21 source-fix patch postimage changed: {0}".format(
+                        relative
+                    )
+                )
+        for relative, digest in RUST_MISCDEVICE_POSTIMAGE_SHA256S:
+            if sha256_file(root / relative) != digest:
+                raise ProbeError(
+                    "Rust miscdevice compatibility patch postimage changed: {0}".format(
                         relative
                     )
                 )

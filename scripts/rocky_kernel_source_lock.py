@@ -164,6 +164,14 @@ EXPECTED_LICENSE_CAPTURE_AUTHORITY: dict[str, Any] = {
                     "host-kernel/rocky/patches/"
                     "0018-kbuild-order-unterminated-string-disable.patch"
                 ),
+                (
+                    "host-kernel/rocky/patches/"
+                    "0019-rust-types-add-opaque-try-ffi-init.patch"
+                ),
+                (
+                    "host-kernel/rocky/patches/"
+                    "0020-rust-miscdevice-add-base-abstraction.patch"
+                ),
                 "host-kernel/rocky/patches/series.json",
                 "scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs",
                 "scripts/tests/fixtures/ihk_native_master_compile.rs",
@@ -247,6 +255,10 @@ EXPECTED_LICENSE_CAPTURE_AUTHORITY: dict[str, Any] = {
                 "scripts/tests/fixtures/rust-core-rocky-6.12/rust/Makefile",
                 (
                     "scripts/tests/fixtures/rust-core-rocky-6.12/"
+                    "rust/bindings/bindings_helper.h"
+                ),
+                (
+                    "scripts/tests/fixtures/rust-core-rocky-6.12/"
                     "rust/bindings/lib.rs"
                 ),
                 (
@@ -272,6 +284,10 @@ EXPECTED_LICENSE_CAPTURE_AUTHORITY: dict[str, Any] = {
                 (
                     "scripts/tests/fixtures/rust-core-rocky-6.12/"
                     "rust/kernel/sync/arc.rs"
+                ),
+                (
+                    "scripts/tests/fixtures/rust-core-rocky-6.12/"
+                    "rust/kernel/types.rs"
                 ),
                 (
                     "scripts/tests/fixtures/rust-core-rocky-6.12/"

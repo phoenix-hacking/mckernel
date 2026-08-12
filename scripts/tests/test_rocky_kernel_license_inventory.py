@@ -251,6 +251,8 @@ class LicenseInventoryTests(unittest.TestCase):
                 "host-kernel/rocky/patches/0016-gcc-15-disable-unterminated-string-warning.patch",
                 "host-kernel/rocky/patches/0017-kbuild-use-cc-disable-warning.patch",
                 "host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch",
+                "host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch",
+                "host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch",
             ):
                 item = by_path["repository/" + relative]
                 patch = REPO_ROOT / relative
@@ -327,9 +329,11 @@ class LicenseInventoryTests(unittest.TestCase):
             "init/Kconfig",
             "mm/ksm.c",
             "rust/Makefile",
+            "rust/bindings/bindings_helper.h",
             "rust/bindings/lib.rs",
             "rust/kernel/ioctl.rs",
             "rust/kernel/uaccess.rs",
+            "rust/kernel/types.rs",
             "rust/uapi/lib.rs",
             "scripts/Makefile.compiler",
             "scripts/generate_rust_analyzer.py",

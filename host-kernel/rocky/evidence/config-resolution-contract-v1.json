@@ -94,7 +94,9 @@
       "host-kernel/rocky/patches/0015-gcc-15-demote-unterminated-string-warning.patch",
       "host-kernel/rocky/patches/0016-gcc-15-disable-unterminated-string-warning.patch",
       "host-kernel/rocky/patches/0017-kbuild-use-cc-disable-warning.patch",
-      "host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch"
+      "host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch",
+      "host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch",
+      "host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch"
       ]
     },
     "rocky_series": {
@@ -202,6 +204,16 @@
       "sha256": "e271fa6f30bb3b39a24ae2f926dfa067577997ecf2076e412b5575a4d785021e",
       "stable_commit": "dd8a734155ae28094d27b96c00a478fa0ee6d5d7",
       "upstream_commit": "4f79eaa2ceac86a0e0f304b0bab556cca5bf4f30"
+    },
+    {
+      "path": "host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch",
+      "sha256": "bc9b84c4c8bf36b7fac02dd3d04e1a170b86ee143b76739a6eed3e564cdebc2b",
+      "upstream_commit": "a69dc41a4211b0da311ae3a3b79dd4497c9dfb60"
+    },
+    {
+      "path": "host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch",
+      "sha256": "d377b5bd91d507e383b8673beac42381b9b6c37a47bba7955c768a8f6ddaad25",
+      "upstream_commit": "f893691e742688ae21ad597c5bba13bef54706cd"
     }
     ]
   },
@@ -286,7 +298,15 @@
       "olddefconfig"
     ],
     "passes": 2,
-    "process_configs_required": true
+    "process_configs_required": true,
+    "source_cleanup_command": [
+      "make",
+      "-C",
+      "SOURCE_ROOT",
+      "ARCH=x86_64",
+      "LLVM=1",
+      "mrproper"
+    ]
   },
   "schema_version": 1,
   "source_assets": {
@@ -315,12 +335,12 @@
   "source_lock": {
     "id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-source-v1",
     "path": "host-kernel/rocky/source-lock.json",
-    "sha256": "cbca9fe2e92f56ba7dba3dc03b018b11605f5d6c3dfdf9e3e4f33149c442f8ff"
+    "sha256": "dbae5b6de02e944ea775fcf382dbabe7da7fe0ec855165f11d35539a9e3dd8ee"
   },
   "success_blockers": [
     "The RK-003 closure/offline artifact and its exact tool probes still require independent review and durable archival before RK-005 may inherit that authority.",
     "The current config policy generated-symbol allowlist omits CONFIG_RUSTC_HAS_UNNECESSARY_TRANSMUTES introduced by the current compatibility patch 0005; policy reconciliation is required before review ingestion or gate credit.",
-    "Compatibility patches 0006 through 0018 change source/build compatibility without adding configuration symbols; this phase binds and applies them but cannot substitute config resolution for their separate exact compile probes.",
+    "Compatibility patches 0006 through 0020 change source/build compatibility without adding configuration symbols; this phase binds and applies them but cannot substitute config resolution for their separate exact compile probes.",
     "The current RK-003 lock maps llvm-config to llvm-0:21.1.8-1.el10.x86_64, while the exact captured binary owner is llvm-devel-0:21.1.8-1.el10.x86_64; that authority mismatch requires reconciliation before review ingestion or gate credit.",
     "A successful config-resolution artifact still requires independent review and durable archival before any authority lock may be updated.",
     "make LLVM=1 rustavailable remains a separate required phase and is not claimed here.",
