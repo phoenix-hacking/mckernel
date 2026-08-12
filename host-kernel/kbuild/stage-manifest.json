@@ -38,9 +38,7 @@
   ],
   "modules": [
     {
-      "blockers": [
-        "schema-v1 checkpoint has no evidence-bound native Rust crate root"
-      ],
+      "blockers": [],
       "crate": "ihk",
       "dependencies": [],
       "kconfig_symbol": "CONFIG_MCKERNEL_IHK_RUST",
@@ -50,14 +48,12 @@
       "required_import_namespaces": [],
       "source": {
         "destination": "ihk.rs",
-        "repository_path": null,
-        "sha256": null
+        "repository_path": "host-kernel/native-rust/ihk.rs",
+        "sha256": "a2b4d2c5be07d55d3650aa3e5895ea4fd61f42ae8ad0cf6b47819c74f04246b6"
       }
     },
     {
-      "blockers": [
-        "schema-v1 checkpoint has no evidence-bound native Rust crate root"
-      ],
+      "blockers": [],
       "crate": "ihk_smp_x86_64",
       "dependencies": [
         "ihk"
@@ -71,14 +67,12 @@
       ],
       "source": {
         "destination": "ihk_smp_x86_64.rs",
-        "repository_path": null,
-        "sha256": null
+        "repository_path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+        "sha256": "875196ab37f8eb4f185185fa8f37e4db4e2bfcba05fc6642413bb415d60314be"
       }
     },
     {
-      "blockers": [
-        "schema-v1 checkpoint has no evidence-bound native Rust crate root"
-      ],
+      "blockers": [],
       "crate": "mcctrl",
       "dependencies": [
         "ihk"
@@ -92,8 +86,8 @@
       ],
       "source": {
         "destination": "mcctrl.rs",
-        "repository_path": null,
-        "sha256": null
+        "repository_path": "host-kernel/native-rust/mcctrl.rs",
+        "sha256": "c6ed87fbc55cdfc28f2b56675a93d61783145f2668dc143ab68d86a5401c6b8e"
       }
     }
   ],
@@ -103,12 +97,11 @@
   },
   "profile_id": "rocky-10.2-native-rust-host-modules-v1",
   "readiness": {
-    "checkpoint": "integrity_only",
+    "checkpoint": "crate_roots_bound",
     "credit_eligible": false,
     "blockers": [
       "selected Rocky kernel source, toolchain, and config evidence is not gate-ready",
       "upstream Rust-for-Linux sample has not built through this staging path",
-      "native crate roots for ihk, ihk-smp-x86_64, and mcctrl are not implemented",
       "production namespace and import metadata has not been proven from built modules",
       "zero-project-C final link manifests have not been captured"
     ]
