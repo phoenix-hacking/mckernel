@@ -1,0 +1,940 @@
+#!/usr/bin/env python3
+"""Validate and acquire the checksum-pinned Rocky kernel source for RK-001.
+
+``--check`` validates the immutable identities and reports (but does not hide)
+missing evidence.  ``--gate-ready`` is the only gate-credit mode and fails
+closed until every required signature, replay, and license item is verified.
+Network acquisition is optional and publishes an SRPM into a deterministic
+content-addressed cache only after its exact size and SHA-256 match the lock.
+"""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import os
+import re
+import subprocess
+import sys
+import tempfile
+import urllib.error
+import urllib.parse
+import urllib.request
+from pathlib import Path, PurePosixPath
+from typing import Any, BinaryIO, Iterable, Mapping, Sequence
+
+
+SOURCE_LOCK_PATH = Path("host-kernel/rocky/source-lock.json")
+PATCH_SERIES_PATH = Path("host-kernel/rocky/patches/series.json")
+MAX_MANIFEST_BYTES = 1024 * 1024
+HEX_SHA256 = re.compile(r"^[0-9a-f]{64}$")
+HEX_SHA1 = re.compile(r"^[0-9a-f]{40}$")
+LICENSE_EXPRESSION_SHA256 = (
+    "91f37e234988053edb7757c43af2406fdced5ef2e2e01b316fe2dd474ff52e2f"
+)
+
+
+# These are immutable source identities, not defaults.  A platform update must
+# change this authority, both JSON manifests, and all mutation tests together.
+EXPECTED_SOURCE_IDENTITIES: dict[str, Any] = {
+    "schema_version": 1,
+    "lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-source-v1",
+    "observed_at": "2026-08-11",
+    "target": {
+        "architecture": "x86_64",
+        "distribution": "Rocky Linux",
+        "release": "10.2",
+    },
+    "source_rpm": {
+        "arch": "src",
+        "epoch": 0,
+        "filename": "kernel-6.12.0-211.44.1.el10_2.src.rpm",
+        "name": "kernel",
+        "nevra": "kernel-0:6.12.0-211.44.1.el10_2.src",
+        "nvr": "kernel-6.12.0-211.44.1.el10_2",
+        "release": "211.44.1.el10_2",
+        "repository_location": (
+            "Packages/k/kernel-6.12.0-211.44.1.el10_2.src.rpm"
+        ),
+        "sha256": (
+            "2bfeda65bd9bdd4b86650074c81e061c37822b80317ac0d4f5aacc89c85589cb"
+        ),
+        "size": 159328372,
+        "url": (
+            "https://download.rockylinux.org/pub/rocky/10.2/BaseOS/source/tree/"
+            "Packages/k/kernel-6.12.0-211.44.1.el10_2.src.rpm"
+        ),
+        "version": "6.12.0",
+    },
+    "repository_snapshot": {
+        "base_url": (
+            "https://download.rockylinux.org/pub/rocky/10.2/BaseOS/source/tree/"
+        ),
+        "primary_metadata": {
+            "href": (
+                "repodata/1cc64f6d0e798011d1862c2284189742f6383c6fc27c84de207"
+                "c739148e50209-primary.xml.gz"
+            ),
+            "open_sha256": (
+                "43c8be01489c52b45ccf8ded2d64b476d883b86aa5b4daf85df2a5ac9abc1ab7"
+            ),
+            "open_size": 1320895,
+            "sha256": (
+                "1cc64f6d0e798011d1862c2284189742f6383c6fc27c84de207c739148e50209"
+            ),
+            "size": 186048,
+            "timestamp": 1786434034,
+        },
+        "release_key": {
+            "fingerprint": "FC226859C0860BF0DDB95B085B106C736FEDFC85",
+            "key_id": "5B106C736FEDFC85",
+            "sha256": (
+                "be8c4f070b696e64d8ce40e59a95a57e8b5c776f0015c2fd64e14b896622bdb4"
+            ),
+            "url": "https://download.rockylinux.org/pub/rocky/RPM-GPG-KEY-Rocky-10",
+        },
+        "repomd": {
+            "revision": "10.2",
+            "sha256": (
+                "9085b7c0ce3d9ebda8cba25d3daafd13062ce7cd4a10c0036265af80449adea0"
+            ),
+            "signature": {
+                "created_unix": 1786434220,
+                "sha256": (
+                    "40e16e3d39ddc9ed7fff85201704b0805a37d732291193e6a3143a731001641e"
+                ),
+                "status": "verified",
+                "validsig_fingerprint": "FC226859C0860BF0DDB95B085B106C736FEDFC85",
+                "verification_tool": "gpg --verify",
+                "url": (
+                    "https://download.rockylinux.org/pub/rocky/10.2/BaseOS/"
+                    "source/tree/repodata/repomd.xml.asc"
+                ),
+            },
+            "url": (
+                "https://download.rockylinux.org/pub/rocky/10.2/BaseOS/source/"
+                "tree/repodata/repomd.xml"
+            ),
+        },
+    },
+    "dist_git": {
+        "branch_context": "r10",
+        "branch_is_immutable_identity": False,
+        "commit": "e4cad646580f7f3dfec5e3b6b4ea9e89b7572f6c",
+        "commit_parent": "ec0da4795eed03a457da5a3fb83a5622ef95839b",
+        "content": [
+            {
+                "path": ".kernel.checksum",
+                "sha256": (
+                    "f9c6578888639f601e0dbfda887b73d8fcfcba5dbd68e0fef186febaa6959215"
+                ),
+                "size": 65,
+            },
+            {
+                "path": ".kernel.metadata",
+                "sha256": (
+                    "65eddbfd4115f7d7143231c5380835accf44f9d7c394709473c5f9948b3a1b50"
+                ),
+                "size": 356,
+            },
+            {
+                "path": "SPECS/kernel.spec",
+                "sha256": (
+                    "081eb3b79dbbd240d484c6b72ecc786abf9997f8040b88120165e9b32273fdfe"
+                ),
+                "size": 1855272,
+            },
+            {
+                "path": "SOURCES/kernel-x86_64-rhel.config",
+                "sha256": (
+                    "5bbdda60ce822ec903c85d3d8ddda1bfc9493216bed86c6c432683aa50dcf50d"
+                ),
+                "size": 254653,
+            },
+        ],
+        "repository_url": "https://git.rockylinux.org/staging/rpms/kernel.git",
+        "tag": "patched/r10/kernel-6.12.0-211.44.1.el10_2",
+        "tag_annotation_original_hash": (
+            "2d1667d05d35af0db51fb674095decbc3ea6ca7b752134ff40815b815652616e"
+        ),
+        "tag_object": "e2eab3dcafd17dcf661d4df2582bcae8188a7550",
+    },
+    "embedded_objects": [
+        {
+            "path": (
+                "SOURCES/kernel-abi-stablelists-6.12.0-211.44.1.el10_2.tar.xz"
+            ),
+            "role": "kernel ABI stable-list source object",
+            "sha256": (
+                "9c753338d255502a040c82be6a39a47b80df15e30fb1d3bc2f13687522c27032"
+            ),
+            "size": 18168,
+        },
+        {
+            "path": "SOURCES/kernel-kabi-dw-6.12.0-211.44.1.el10_2.tar.xz",
+            "role": "kernel ABI DWARF source object",
+            "sha256": (
+                "7547d50e4f0daeb28eba949801d3d09d0c3c6a8946859759a44d00f786791d4e"
+            ),
+            "size": 1096,
+        },
+        {
+            "path": "SOURCES/linux-6.12.0-211.44.1.el10_2.tar.xz",
+            "role": "Rocky-derived Linux source archive",
+            "sha256": (
+                "4a174d47b8874a2139efcd1ac1ab2d6b80ae7a0ca62f0ae4596fd20cf62a3533"
+            ),
+            "size": 153374592,
+        },
+    ],
+    "patch_series": {
+        "path": "host-kernel/rocky/patches/series.json",
+        "sha256": (
+            "6a1a5e8fb13b6ce6ed35bd8e5487bb67ecf92d2be927799b660f21b5631f68fb"
+        ),
+    },
+    "acquisition": {
+        "allowed_redirect_hosts": ["download.rockylinux.org"],
+        "cache_layout_version": 1,
+        "cache_relative_path": (
+            "rocky/10.2/x86_64/source-rpms/sha256/2b/"
+            "2bfeda65bd9bdd4b86650074c81e061c37822b80317ac0d4f5aacc89c85589cb/"
+            "kernel-6.12.0-211.44.1.el10_2.src.rpm"
+        ),
+        "default_cache_root": ".cache/mckernel-kernel-sources",
+        "hash_algorithm": "sha256",
+        "network_policy": (
+            "HTTPS only; reject redirects outside allowed_redirect_hosts; verify "
+            "exact byte count and SHA-256 before atomic cache publication"
+        ),
+    },
+}
+
+
+EXPECTED_SERIES: dict[str, Any] = {
+    "dist_git": {
+        "commit": "e4cad646580f7f3dfec5e3b6b4ea9e89b7572f6c",
+        "tag": "patched/r10/kernel-6.12.0-211.44.1.el10_2",
+    },
+    "kernel_source_nevra": "kernel-0:6.12.0-211.44.1.el10_2.src",
+    "patch_application": {
+        "function": "ApplyOptionalPatch",
+        "minimum_line_count_to_apply": 10,
+        "program": "git --work-tree=. apply",
+        "spec_path": "SPECS/kernel.spec",
+    },
+    "patches": [
+        {
+            "applied": False,
+            "empty": True,
+            "line_count": 0,
+            "order": 1,
+            "path": "SOURCES/patch-6.12-redhat.patch",
+            "sha256": (
+                "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            ),
+            "size": 0,
+            "spec_reference": "Patch1",
+        },
+        {
+            "applied": False,
+            "empty": True,
+            "line_count": 0,
+            "order": 2,
+            "path": "SOURCES/linux-kernel-test.patch",
+            "sha256": (
+                "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            ),
+            "size": 0,
+            "spec_reference": "Patch999999",
+        },
+        {
+            "applied": True,
+            "empty": False,
+            "line_count": 27,
+            "order": 3,
+            "path": "SOURCES/1000-debrand-some-messages.patch",
+            "sha256": (
+                "080bbc72a543eed6b71daee1b3236b59f3a0f8b3ad20815d962444d3b106b144"
+            ),
+            "size": 928,
+            "spec_reference": "Patch1000000",
+        },
+    ],
+    "schema_version": 1,
+    "series_id": (
+        "rocky-10.2-kernel-6.12.0-211.44.1.el10_2-patch-series-v1"
+    ),
+    "source_lock_id": (
+        "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-source-v1"
+    ),
+}
+
+
+class SourceLockError(RuntimeError):
+    """Raised when an RK-001 source identity or evidence claim is invalid."""
+
+
+def sha256_bytes(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()
+
+
+def sha256_file(path: Path) -> tuple[int, str]:
+    digest = hashlib.sha256()
+    size = 0
+    try:
+        with path.open("rb") as source:
+            for chunk in iter(lambda: source.read(1024 * 1024), b""):
+                size += len(chunk)
+                digest.update(chunk)
+    except OSError as exc:
+        raise SourceLockError(f"cannot read {path}: {exc}") from exc
+    return size, digest.hexdigest()
+
+
+def read_json(path: Path) -> tuple[dict[str, Any], bytes]:
+    try:
+        data = path.read_bytes()
+    except OSError as exc:
+        raise SourceLockError(f"cannot read {path}: {exc}") from exc
+    if len(data) > MAX_MANIFEST_BYTES:
+        raise SourceLockError(f"manifest is implausibly large: {path}")
+    try:
+        value = json.loads(data)
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise SourceLockError(f"cannot parse {path}: {exc}") from exc
+    if not isinstance(value, dict):
+        raise SourceLockError(f"{path} must contain one JSON object")
+    return value, data
+
+
+def exact_keys(value: object, expected: Iterable[str], label: str) -> Mapping[str, Any]:
+    if not isinstance(value, dict):
+        raise SourceLockError(f"{label} must be an object")
+    expected_set = set(expected)
+    actual_set = set(value)
+    if actual_set != expected_set:
+        raise SourceLockError(
+            f"{label} fields changed: actual={sorted(actual_set)}, "
+            f"expected={sorted(expected_set)}"
+        )
+    return value
+
+
+def assert_expected_subset(
+    actual: object, expected: object, label: str = "source lock"
+) -> None:
+    if isinstance(expected, dict):
+        if not isinstance(actual, dict):
+            raise SourceLockError(f"{label} must be an object")
+        for key, expected_value in expected.items():
+            if key not in actual:
+                raise SourceLockError(f"{label}.{key} is missing")
+            assert_expected_subset(actual[key], expected_value, f"{label}.{key}")
+        return
+    if isinstance(expected, list):
+        if not isinstance(actual, list) or len(actual) != len(expected):
+            raise SourceLockError(f"{label} list identity changed")
+        for index, expected_value in enumerate(expected):
+            assert_expected_subset(actual[index], expected_value, f"{label}[{index}]")
+        return
+    if actual != expected or type(actual) is not type(expected):
+        raise SourceLockError(
+            f"{label} changed: actual={actual!r}, expected={expected!r}"
+        )
+
+
+def validate_sha256(value: object, label: str) -> str:
+    if not isinstance(value, str) or not HEX_SHA256.fullmatch(value):
+        raise SourceLockError(f"{label} must be a lowercase SHA-256")
+    return value
+
+
+def validate_relative_path(value: object, label: str) -> str:
+    if not isinstance(value, str) or not value:
+        raise SourceLockError(f"{label} must be a non-empty relative path")
+    path = PurePosixPath(value)
+    if path.is_absolute() or any(part in {"", ".", ".."} for part in path.parts):
+        raise SourceLockError(f"{label} is not a normalized relative path: {value!r}")
+    return value
+
+
+def validate_https_url(value: object, hosts: Iterable[str], label: str) -> str:
+    if not isinstance(value, str):
+        raise SourceLockError(f"{label} must be a URL")
+    parsed = urllib.parse.urlsplit(value)
+    if (
+        parsed.scheme != "https"
+        or not parsed.hostname
+        or parsed.hostname not in set(hosts)
+        or parsed.username is not None
+        or parsed.password is not None
+        or parsed.fragment
+    ):
+        raise SourceLockError(f"{label} is not a permitted HTTPS URL: {value!r}")
+    return value
+
+
+def validate_evidence_record(
+    evidence_id: str,
+    record: object,
+    repo: Path | None,
+) -> str | None:
+    fields = {"blocker", "evidence_path", "evidence_sha256", "required", "status"}
+    if evidence_id == "srpm_header_signature":
+        fields |= {"signature_algorithm", "signer_fingerprint"}
+    item = exact_keys(record, fields, f"evidence.{evidence_id}")
+    if item["required"] is not True:
+        raise SourceLockError(f"evidence.{evidence_id} must remain required")
+    status = item["status"]
+    if status not in {"required-missing", "captured-unverified", "verified"}:
+        raise SourceLockError(f"evidence.{evidence_id} has invalid status {status!r}")
+    if status == "required-missing":
+        if not isinstance(item["blocker"], str) or not item["blocker"].strip():
+            raise SourceLockError(f"evidence.{evidence_id} needs a blocker")
+        for key in ("evidence_path", "evidence_sha256"):
+            if item[key] is not None:
+                raise SourceLockError(
+                    f"evidence.{evidence_id}.{key} must be null while missing"
+                )
+        if evidence_id == "srpm_header_signature":
+            for key in ("signature_algorithm", "signer_fingerprint"):
+                if item[key] is not None:
+                    raise SourceLockError(
+                        f"evidence.{evidence_id}.{key} must be null while missing"
+                    )
+        return str(item["blocker"])
+
+    path_text = validate_relative_path(
+        item["evidence_path"], f"evidence.{evidence_id}.evidence_path"
+    )
+    expected_digest = validate_sha256(
+        item["evidence_sha256"], f"evidence.{evidence_id}.evidence_sha256"
+    )
+    if repo is None:
+        raise SourceLockError(
+            f"evidence.{evidence_id} claims capture without a repository to verify it"
+        )
+    evidence_path = repo / path_text
+    size, actual_digest = sha256_file(evidence_path)
+    if size == 0 or actual_digest != expected_digest:
+        raise SourceLockError(f"evidence.{evidence_id} file is absent, empty, or stale")
+    if evidence_id == "srpm_header_signature":
+        if not isinstance(item["signature_algorithm"], str) or not item[
+            "signature_algorithm"
+        ].strip():
+            raise SourceLockError("SRPM signature algorithm is not captured")
+        fingerprint = item["signer_fingerprint"]
+        if fingerprint != EXPECTED_SOURCE_IDENTITIES["repository_snapshot"][
+            "release_key"
+        ]["fingerprint"]:
+            raise SourceLockError("SRPM signer is not the pinned Rocky Linux 10 key")
+    if status != "verified":
+        return str(item["blocker"])
+    return None
+
+
+def validate_license_policy(lock: Mapping[str, Any], repo: Path | None) -> str | None:
+    licenses = exact_keys(
+        lock.get("licenses"),
+        {"declared_spdx_expression", "inventory", "policy", "spec_path"},
+        "licenses",
+    )
+    expression = licenses["declared_spdx_expression"]
+    if not isinstance(expression, str) or sha256_bytes(expression.encode()) != (
+        LICENSE_EXPRESSION_SHA256
+    ):
+        raise SourceLockError("the exact kernel.spec License expression changed")
+    if licenses["spec_path"] != "SPECS/kernel.spec":
+        raise SourceLockError("licenses.spec_path changed")
+
+    policy = exact_keys(
+        licenses["policy"],
+        {
+            "fail_on_missing_or_ambiguous_license",
+            "license_texts_required",
+            "patch_authorship_and_license_required",
+            "required_fields_per_item",
+            "scope",
+            "unreviewed_items_forbid_gate_credit",
+        },
+        "licenses.policy",
+    )
+    for flag in (
+        "fail_on_missing_or_ambiguous_license",
+        "license_texts_required",
+        "patch_authorship_and_license_required",
+        "unreviewed_items_forbid_gate_credit",
+    ):
+        if policy[flag] is not True:
+            raise SourceLockError(f"licenses.policy.{flag} must remain true")
+    required_fields = policy["required_fields_per_item"]
+    if required_fields != [
+        "path",
+        "sha256",
+        "origin",
+        "spdx_expression",
+        "license_text_paths",
+        "review_status",
+    ]:
+        raise SourceLockError("license inventory fields are incomplete or reordered")
+    scope = policy["scope"]
+    if not isinstance(scope, list) or len(scope) != 4:
+        raise SourceLockError("license inventory scope must cover exactly four classes")
+    scope_text = "\n".join(str(item).lower() for item in scope)
+    for phrase in ("linux source archive", "dist-git", "patch", "license text"):
+        if phrase not in scope_text:
+            raise SourceLockError(f"license inventory scope does not cover {phrase}")
+
+    inventory = exact_keys(
+        licenses["inventory"],
+        {
+            "blocker",
+            "complete",
+            "inventory_path",
+            "inventory_sha256",
+            "item_count",
+            "required",
+            "status",
+        },
+        "licenses.inventory",
+    )
+    if inventory["required"] is not True:
+        raise SourceLockError("license inventory must remain required")
+    status = inventory["status"]
+    if status == "required-missing":
+        if inventory["complete"] is not False:
+            raise SourceLockError("missing license inventory cannot be complete")
+        for key in ("inventory_path", "inventory_sha256", "item_count"):
+            if inventory[key] is not None:
+                raise SourceLockError(f"licenses.inventory.{key} must be null while missing")
+        blocker = inventory["blocker"]
+        if not isinstance(blocker, str) or not blocker.strip():
+            raise SourceLockError("missing license inventory needs a blocker")
+        return blocker
+    if status != "verified" or inventory["complete"] is not True:
+        raise SourceLockError("license inventory status must be missing or verified-complete")
+    path_text = validate_relative_path(
+        inventory["inventory_path"], "licenses.inventory.inventory_path"
+    )
+    expected_digest = validate_sha256(
+        inventory["inventory_sha256"], "licenses.inventory.inventory_sha256"
+    )
+    if not isinstance(inventory["item_count"], int) or inventory["item_count"] < 1:
+        raise SourceLockError("verified license inventory needs a positive item_count")
+    if repo is None:
+        raise SourceLockError("verified license inventory needs a repository to verify it")
+    size, actual_digest = sha256_file(repo / path_text)
+    if size == 0 or actual_digest != expected_digest:
+        raise SourceLockError("license inventory file is absent, empty, or stale")
+    return None
+
+
+def validate_source_lock(
+    lock: dict[str, Any], series: dict[str, Any], repo: Path | None = None
+) -> list[str]:
+    exact_keys(
+        lock,
+        {
+            "acquisition",
+            "dist_git",
+            "embedded_objects",
+            "evidence",
+            "gate",
+            "licenses",
+            "lock_id",
+            "observed_at",
+            "patch_series",
+            "repository_snapshot",
+            "schema_version",
+            "source_rpm",
+            "target",
+        },
+        "source lock",
+    )
+    assert_expected_subset(lock, EXPECTED_SOURCE_IDENTITIES)
+    validate_series(series)
+
+    source = lock["source_rpm"]
+    repository = lock["repository_snapshot"]
+    if source["url"] != repository["base_url"] + source["repository_location"]:
+        raise SourceLockError("SRPM URL is not derived from its pinned repository location")
+    signature = repository["repomd"]["signature"]
+    release_key = repository["release_key"]
+    if signature["status"] != "verified":
+        raise SourceLockError("repomd signature must be verified, never assumed")
+    if signature["validsig_fingerprint"] != release_key["fingerprint"]:
+        raise SourceLockError("repomd signature does not match the pinned release key")
+
+    allowed_download_hosts = lock["acquisition"]["allowed_redirect_hosts"]
+    if allowed_download_hosts != ["download.rockylinux.org"]:
+        raise SourceLockError("download host allowlist changed")
+    for label, url, hosts in (
+        ("source_rpm.url", source["url"], allowed_download_hosts),
+        ("repository_snapshot.base_url", repository["base_url"], allowed_download_hosts),
+        ("repository_snapshot.repomd.url", repository["repomd"]["url"], allowed_download_hosts),
+        (
+            "repository_snapshot.repomd.signature.url",
+            signature["url"],
+            allowed_download_hosts,
+        ),
+        ("repository_snapshot.release_key.url", release_key["url"], allowed_download_hosts),
+        ("dist_git.repository_url", lock["dist_git"]["repository_url"], ["git.rockylinux.org"]),
+    ):
+        validate_https_url(url, hosts, label)
+    validate_relative_path(
+        lock["acquisition"]["cache_relative_path"],
+        "acquisition.cache_relative_path",
+    )
+
+    if source["nevra"] != series["kernel_source_nevra"]:
+        raise SourceLockError("patch series names a different source NEVRA")
+    if lock["lock_id"] != series["source_lock_id"]:
+        raise SourceLockError("patch series links to a different source lock")
+    if lock["dist_git"]["commit"] != series["dist_git"]["commit"]:
+        raise SourceLockError("patch series links to a different dist-git commit")
+    if lock["dist_git"]["tag"] != series["dist_git"]["tag"]:
+        raise SourceLockError("patch series links to a different dist-git tag")
+
+    evidence = exact_keys(
+        lock["evidence"],
+        {
+            "acquisition_replay",
+            "dist_git_object_replay",
+            "repository_metadata_signature_replay",
+            "srpm_header_signature",
+        },
+        "evidence",
+    )
+    blockers: list[str] = []
+    for evidence_id in sorted(evidence):
+        blocker = validate_evidence_record(evidence_id, evidence[evidence_id], repo)
+        if blocker:
+            blockers.append(f"{evidence_id}: {blocker}")
+    license_blocker = validate_license_policy(lock, repo)
+    if license_blocker:
+        blockers.append(f"license_inventory: {license_blocker}")
+
+    gate = exact_keys(lock["gate"], {"credit_eligible", "gate_id", "policy"}, "gate")
+    if gate["gate_id"] != "RK-001":
+        raise SourceLockError("source lock is bound to the wrong gate")
+    if not isinstance(gate["policy"], str) or "forbidden" not in gate["policy"].lower():
+        raise SourceLockError("gate policy does not fail closed")
+    calculated_credit = not blockers
+    if gate["credit_eligible"] is not calculated_credit:
+        raise SourceLockError(
+            "gate.credit_eligible contradicts the required evidence state"
+        )
+    return blockers
+
+
+def validate_series(series: dict[str, Any]) -> None:
+    if series != EXPECTED_SERIES:
+        assert_expected_subset(series, EXPECTED_SERIES, "patch series")
+        extra = set(series) - set(EXPECTED_SERIES)
+        if extra:
+            raise SourceLockError(f"patch series has unexpected fields: {sorted(extra)}")
+        raise SourceLockError("patch series identity changed")
+    orders = [item["order"] for item in series["patches"]]
+    if orders != list(range(1, len(series["patches"]) + 1)):
+        raise SourceLockError("patch order must be contiguous and one-based")
+    threshold = series["patch_application"]["minimum_line_count_to_apply"]
+    for item in series["patches"]:
+        expected_applied = item["line_count"] >= threshold
+        if item["applied"] is not expected_applied:
+            raise SourceLockError(f"patch application result is stale for {item['path']}")
+        if item["empty"] is not (item["size"] == 0 and item["line_count"] == 0):
+            raise SourceLockError(f"empty-patch classification is stale for {item['path']}")
+
+
+def validate_loaded_manifests(
+    lock: dict[str, Any],
+    series: dict[str, Any],
+    series_bytes: bytes,
+    repo: Path | None,
+) -> list[str]:
+    blockers = validate_source_lock(lock, series, repo)
+    expected_digest = lock["patch_series"]["sha256"]
+    if sha256_bytes(series_bytes) != expected_digest:
+        raise SourceLockError("patch-series file bytes do not match source-lock SHA-256")
+    return blockers
+
+
+def load_manifests(
+    repo: Path,
+    lock_path: Path = SOURCE_LOCK_PATH,
+    series_path: Path = PATCH_SERIES_PATH,
+) -> tuple[dict[str, Any], dict[str, Any], list[str]]:
+    lock_file = lock_path if lock_path.is_absolute() else repo / lock_path
+    series_file = series_path if series_path.is_absolute() else repo / series_path
+    lock, _ = read_json(lock_file)
+    series, series_bytes = read_json(series_file)
+    blockers = validate_loaded_manifests(lock, series, series_bytes, repo)
+    return lock, series, blockers
+
+
+def artifact_cache_path(cache_root: Path, lock: Mapping[str, Any]) -> Path:
+    relative = validate_relative_path(
+        lock["acquisition"]["cache_relative_path"],
+        "acquisition.cache_relative_path",
+    )
+    root = cache_root.resolve()
+    target = root.joinpath(*PurePosixPath(relative).parts).resolve()
+    try:
+        common = Path(os.path.commonpath((str(root), str(target))))
+    except ValueError as exc:
+        raise SourceLockError("cache path is on a different filesystem root") from exc
+    if common != root:
+        raise SourceLockError("cache path escapes the selected cache root")
+    return target
+
+
+def verify_artifact(path: Path, expected_size: int, expected_sha256: str) -> None:
+    if path.is_symlink() or not path.is_file():
+        raise SourceLockError(f"cached artifact is not a regular non-symlink file: {path}")
+    size, digest = sha256_file(path)
+    if size != expected_size:
+        raise SourceLockError(
+            f"artifact size mismatch for {path}: actual={size}, expected={expected_size}"
+        )
+    if digest != expected_sha256:
+        raise SourceLockError(
+            f"artifact SHA-256 mismatch for {path}: actual={digest}, "
+            f"expected={expected_sha256}"
+        )
+
+
+class PinnedRedirectHandler(urllib.request.HTTPRedirectHandler):
+    """Reject redirects that leave the manifest's HTTPS host allowlist."""
+
+    def __init__(self, allowed_hosts: Iterable[str]):
+        super().__init__()
+        self.allowed_hosts = frozenset(allowed_hosts)
+
+    def redirect_request(
+        self,
+        request: urllib.request.Request,
+        file_pointer: BinaryIO,
+        code: int,
+        message: str,
+        headers: Mapping[str, str],
+        new_url: str,
+    ) -> urllib.request.Request | None:
+        validate_https_url(new_url, self.allowed_hosts, "redirect URL")
+        return super().redirect_request(
+            request, file_pointer, code, message, headers, new_url
+        )
+
+
+def stream_verified_download(
+    response: BinaryIO,
+    target: Path,
+    expected_size: int,
+    expected_sha256: str,
+) -> None:
+    target.parent.mkdir(parents=True, exist_ok=True)
+    temporary_name: str | None = None
+    digest = hashlib.sha256()
+    size = 0
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="wb", prefix=f".{target.name}.", dir=target.parent, delete=False
+        ) as temporary:
+            temporary_name = temporary.name
+            while True:
+                chunk = response.read(1024 * 1024)
+                if not chunk:
+                    break
+                if not isinstance(chunk, bytes):
+                    raise SourceLockError("download stream returned non-byte data")
+                size += len(chunk)
+                if size > expected_size:
+                    raise SourceLockError("download exceeded the locked byte count")
+                digest.update(chunk)
+                temporary.write(chunk)
+            temporary.flush()
+            os.fsync(temporary.fileno())
+        if size != expected_size:
+            raise SourceLockError(
+                f"download byte count mismatch: actual={size}, expected={expected_size}"
+            )
+        actual_sha256 = digest.hexdigest()
+        if actual_sha256 != expected_sha256:
+            raise SourceLockError(
+                f"download SHA-256 mismatch: actual={actual_sha256}, "
+                f"expected={expected_sha256}"
+            )
+        assert temporary_name is not None
+        os.chmod(temporary_name, 0o444)
+        os.replace(temporary_name, target)
+        temporary_name = None
+    finally:
+        if temporary_name is not None:
+            try:
+                os.unlink(temporary_name)
+            except FileNotFoundError:
+                pass
+
+
+def acquire_source(
+    lock: Mapping[str, Any], cache_root: Path, timeout: float = 60.0
+) -> Path:
+    source = lock["source_rpm"]
+    allowed_hosts = lock["acquisition"]["allowed_redirect_hosts"]
+    url = validate_https_url(source["url"], allowed_hosts, "source_rpm.url")
+    target = artifact_cache_path(cache_root, lock)
+    if target.exists() or target.is_symlink():
+        verify_artifact(target, source["size"], source["sha256"])
+        return target
+    opener = urllib.request.build_opener(PinnedRedirectHandler(allowed_hosts))
+    request = urllib.request.Request(
+        url,
+        headers={
+            "Accept-Encoding": "identity",
+            "User-Agent": "mckernel-rk-001-source-lock/1",
+        },
+        method="GET",
+    )
+    try:
+        with opener.open(request, timeout=timeout) as response:
+            final_url = response.geturl()
+            validate_https_url(final_url, allowed_hosts, "final download URL")
+            content_length = response.headers.get("Content-Length")
+            if content_length is not None:
+                try:
+                    parsed_length = int(content_length)
+                except ValueError as exc:
+                    raise SourceLockError("download Content-Length is not an integer") from exc
+                if parsed_length != source["size"]:
+                    raise SourceLockError(
+                        "download Content-Length does not match the source lock"
+                    )
+            stream_verified_download(
+                response, target, source["size"], source["sha256"]
+            )
+    except (OSError, urllib.error.URLError) as exc:
+        raise SourceLockError(f"source acquisition failed: {exc}") from exc
+    verify_artifact(target, source["size"], source["sha256"])
+    return target
+
+
+def run_git(repo: Path, arguments: Sequence[str]) -> bytes:
+    try:
+        completed = subprocess.run(
+            ["git", *arguments],
+            cwd=repo,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+    except (OSError, subprocess.CalledProcessError) as exc:
+        stderr = getattr(exc, "stderr", b"").decode(errors="replace").strip()
+        raise SourceLockError(
+            f"git {' '.join(arguments)} failed in {repo}: {stderr}"
+        ) from exc
+    return completed.stdout
+
+
+def verify_dist_git(
+    dist_git: Path, lock: Mapping[str, Any], series: Mapping[str, Any]
+) -> None:
+    identity = lock["dist_git"]
+    if not (dist_git / ".git").exists():
+        raise SourceLockError(f"not a Git worktree: {dist_git}")
+    tag = identity["tag"]
+    tag_object = run_git(dist_git, ["rev-parse", tag]).decode().strip()
+    peeled = run_git(dist_git, ["rev-parse", f"{tag}^{{}}"]).decode().strip()
+    parent = run_git(dist_git, ["rev-parse", f"{identity['commit']}^"]).decode().strip()
+    if tag_object != identity["tag_object"] or not HEX_SHA1.fullmatch(tag_object):
+        raise SourceLockError("dist-git annotated-tag object changed")
+    if peeled != identity["commit"] or parent != identity["commit_parent"]:
+        raise SourceLockError("dist-git tag peel or commit parent changed")
+    tag_bytes = run_git(dist_git, ["cat-file", "-p", tag])
+    if identity["tag_annotation_original_hash"].encode() not in tag_bytes:
+        raise SourceLockError("dist-git tag annotation lost its original import hash")
+
+    objects = list(identity["content"]) + list(series["patches"])
+    for item in objects:
+        path = item["path"]
+        data = run_git(dist_git, ["show", f"{identity['commit']}:{path}"])
+        if len(data) != item["size"] or sha256_bytes(data) != item["sha256"]:
+            raise SourceLockError(f"dist-git object changed: {path}")
+        if "line_count" in item and data.count(b"\n") != item["line_count"]:
+            raise SourceLockError(f"dist-git patch line count changed: {path}")
+
+
+def parse_args(argv: Sequence[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--repo", type=Path, default=Path(__file__).resolve().parents[1])
+    parser.add_argument("--lock", type=Path, default=SOURCE_LOCK_PATH)
+    parser.add_argument("--series", type=Path, default=PATCH_SERIES_PATH)
+    parser.add_argument("--cache-root", type=Path)
+    modes = parser.add_mutually_exclusive_group(required=True)
+    modes.add_argument("--check", action="store_true")
+    modes.add_argument("--gate-ready", action="store_true")
+    modes.add_argument("--verify-cache", action="store_true")
+    modes.add_argument("--acquire", action="store_true")
+    modes.add_argument("--verify-dist-git", type=Path)
+    return parser.parse_args(argv)
+
+
+def print_blockers(blockers: Sequence[str], stream: Any = sys.stdout) -> None:
+    print(f"RK-001 NOT READY: {len(blockers)} required evidence item(s) incomplete", file=stream)
+    for blocker in blockers:
+        print(f"- {blocker}", file=stream)
+
+
+def main(argv: Sequence[str]) -> int:
+    args = parse_args(argv)
+    repo = args.repo.resolve()
+    try:
+        lock, series, blockers = load_manifests(repo, args.lock, args.series)
+        if args.check:
+            print(
+                "Rocky kernel source lock verified: "
+                f"{lock['source_rpm']['nevra']} sha256={lock['source_rpm']['sha256']}"
+            )
+            if blockers:
+                print_blockers(blockers)
+            else:
+                print("RK-001 READY: all required evidence verified")
+            return 0
+        if args.gate_ready:
+            if blockers:
+                print_blockers(blockers, sys.stderr)
+                return 1
+            print("RK-001 READY: all required evidence verified")
+            return 0
+
+        cache_root = args.cache_root
+        if cache_root is None:
+            cache_root = repo / lock["acquisition"]["default_cache_root"]
+        if args.verify_cache:
+            target = artifact_cache_path(cache_root, lock)
+            verify_artifact(
+                target, lock["source_rpm"]["size"], lock["source_rpm"]["sha256"]
+            )
+            print(f"verified cached SRPM: {target}")
+            return 0
+        if args.acquire:
+            target = acquire_source(lock, cache_root)
+            print(f"acquired locked SRPM: {target}")
+            if blockers:
+                print_blockers(blockers)
+            return 0
+        if args.verify_dist_git is not None:
+            verify_dist_git(args.verify_dist_git.resolve(), lock, series)
+            print(
+                "verified Rocky dist-git tag, commit, content, and patch series: "
+                f"{lock['dist_git']['commit']}"
+            )
+            return 0
+        raise SourceLockError("no mode selected")
+    except SourceLockError as exc:
+        print(f"Rocky kernel source-lock error: {exc}", file=sys.stderr)
+        return 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv[1:]))
