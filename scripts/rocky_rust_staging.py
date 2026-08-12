@@ -18,7 +18,9 @@ import tarfile
 import tempfile
 
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
+PARENT_SCHEMA_VERSION = 1
+PRODUCTION_STAGE_ENABLED = False
 PROFILE_ID = "rocky-10.2-native-rust-host-modules-v1"
 DEFAULT_MANIFEST = "host-kernel/kbuild/stage-manifest.json"
 EXPECTED_DESTINATION = {
@@ -282,7 +284,7 @@ def _read_text(path, label):
 
 def _validate_parent_integration(repo_root, reference):
     if reference != EXPECTED_PARENT_INTEGRATION_REF:
-        raise ValidationError("parent_integration differs from the hard-locked schema-v1 bundle")
+        raise ValidationError("parent_integration differs from the hard-locked parent bundle")
     bundle_path = _repo_regular_file(
         repo_root, reference["repository_path"], "parent_integration.repository_path"
     )
@@ -303,7 +305,7 @@ def _validate_parent_integration(repo_root, reference):
         },
         "parent integration bundle",
     )
-    if bundle["schema_version"] != SCHEMA_VERSION or bundle["profile_id"] != PROFILE_ID:
+    if bundle["schema_version"] != PARENT_SCHEMA_VERSION or bundle["profile_id"] != PROFILE_ID:
         raise ValidationError("parent integration bundle identity differs")
     if bundle["checkpoint"] != "integrity_only" or bundle["credit_eligible"] is not False:
         raise ValidationError("parent integration bundle may not claim readiness or credit")
@@ -509,7 +511,7 @@ def _validate_input(repo_root, item, index):
     label = "inputs[{0}]".format(index)
     _require_keys(item, {"destination", "kind", "repository_path", "sha256"}, label)
     if index >= len(EXPECTED_INPUTS) or item != EXPECTED_INPUTS[index]:
-        raise ValidationError("{0} differs from the hard-locked schema-v1 input".format(label))
+        raise ValidationError("{0} differs from the hard-locked staging input".format(label))
     expected_destination = "Kbuild" if item["kind"] == "kbuild_template" else "Kconfig"
     if item["destination"] != expected_destination:
         raise ValidationError("{0}.destination must be {1}".format(label, expected_destination))
@@ -753,8 +755,12 @@ def _rename_directory_noreplace(parent, temporary, target):
 
 
 def stage(plan, kernel_tree):
-    if SCHEMA_VERSION == 1:
-        raise ValidationError("crate-roots-bound schema v1 cannot stage production modules without build evidence")
+    if not PRODUCTION_STAGE_ENABLED:
+        raise ValidationError(
+            "crate-roots-bound schema v{0} cannot stage production modules without build evidence".format(
+                SCHEMA_VERSION
+            )
+        )
     if plan.get("credit_eligible") is not True or plan["blockers"]:
         raise ValidationError("staging is blocked: {0}".format("; ".join(plan["blockers"])))
     target, parent = _kernel_target(kernel_tree, plan["destination"])
@@ -787,8 +793,12 @@ def stage(plan, kernel_tree):
 
 
 def verify_stage(plan, kernel_tree):
-    if SCHEMA_VERSION == 1:
-        raise ValidationError("crate-roots-bound schema v1 has no verifiable production stage")
+    if not PRODUCTION_STAGE_ENABLED:
+        raise ValidationError(
+            "crate-roots-bound schema v{0} has no verifiable production stage".format(
+                SCHEMA_VERSION
+            )
+        )
     if plan.get("credit_eligible") is not True or plan["blockers"]:
         raise ValidationError("stage verification requires a gate-ready manifest")
     target, unused_parent = _kernel_target(kernel_tree, plan["destination"])
@@ -869,7 +879,11 @@ def main(argv=None):
                     result["archive_sha256"], result["patch_sha256"]
                 )
             )
-            print("RK-007 credit: NOT ELIGIBLE (crate-roots-bound schema v1)")
+            print(
+                "RK-007 credit: NOT ELIGIBLE (crate-roots-bound schema v{0})".format(
+                    SCHEMA_VERSION
+                )
+            )
             return 0
         if args.stage:
             print("Staged native Rust inputs at {0}".format(stage(plan, args.stage)))

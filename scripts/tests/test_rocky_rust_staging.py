@@ -178,6 +178,40 @@ class RockyRustStagingTests(unittest.TestCase):
         with self.assertRaises(staging.ValidationError):
             self.plan()
 
+    def test_kconfig_extra_dependency_is_rejected_after_rehash(self):
+        self.mutate_kconfig(
+            '\ttristate "McKernel IHK core host module (Rust)"',
+            '\ttristate "McKernel IHK core host module (Rust)"\n\tdepends on MODULES',
+        )
+        with self.assertRaises(staging.ValidationError):
+            self.plan()
+
+    def test_kconfig_semantic_validator_independently_rejects_mutations(self):
+        path = os.path.join(REPO_ROOT, "host-kernel", "kbuild", "Kconfig")
+        with open(path, "r") as stream:
+            original = stream.read()
+        mutations = {
+            "bool": original.replace(
+                '\ttristate "McKernel IHK core host module (Rust)"',
+                '\tbool "McKernel IHK core host module (Rust)"',
+                1,
+            ),
+            "default": original.replace(
+                '\ttristate "McKernel IHK core host module (Rust)"',
+                '\ttristate "McKernel IHK core host module (Rust)"\n\tdefault y',
+                1,
+            ),
+            "extra dependency": original.replace(
+                '\ttristate "McKernel IHK core host module (Rust)"',
+                '\ttristate "McKernel IHK core host module (Rust)"\n\tdepends on MODULES',
+                1,
+            ),
+        }
+        for label, text in mutations.items():
+            with self.subTest(label=label):
+                with self.assertRaises(staging.ValidationError):
+                    staging._validate_kconfig(text)
+
     def test_target_identity_or_resolved_evidence_cannot_be_self_attested(self):
         for field, value in (
             ("release", "10.3"),
@@ -199,6 +233,47 @@ class RockyRustStagingTests(unittest.TestCase):
             stream.write("# drift\n")
         with self.assertRaises(staging.ValidationError):
             self.plan()
+
+    def test_parent_bundle_source_lock_drift_is_rejected(self):
+        path = os.path.join(
+            self.repo, staging.EXPECTED_PARENT_SOURCE["source_lock_repository_path"]
+        )
+        with open(path, "a") as stream:
+            stream.write("\n")
+        with self.assertRaises(staging.ValidationError):
+            self.plan()
+
+    def test_parent_bundle_cannot_self_attest_a_postimage(self):
+        path = os.path.join(self.repo, staging.EXPECTED_PARENT_INTEGRATION_REF["repository_path"])
+        with open(path, "r") as stream:
+            bundle = json.load(stream)
+        bundle["parent_files"][0]["postimage_sha256"] = "0" * 64
+        with open(path, "w") as stream:
+            json.dump(bundle, stream, indent=2, sort_keys=True)
+            stream.write("\n")
+        self.manifest["parent_integration"]["sha256"] = digest(path)
+        self.write_manifest()
+        with self.assertRaises(staging.ValidationError):
+            self.plan()
+
+    def test_atomic_no_replace_rename_preserves_concurrent_destination(self):
+        parent = os.path.join(self.temporary, "rename-parent")
+        os.makedirs(parent)
+        source = os.path.join(parent, "source")
+        target = os.path.join(parent, "target")
+        os.makedirs(source)
+        staging._rename_directory_noreplace(parent, source, target)
+        self.assertFalse(os.path.exists(source))
+        self.assertTrue(os.path.isdir(target))
+
+        second_source = os.path.join(parent, "second-source")
+        occupied = os.path.join(parent, "occupied")
+        os.makedirs(second_source)
+        os.makedirs(occupied)
+        with self.assertRaises(staging.ValidationError):
+            staging._rename_directory_noreplace(parent, second_source, occupied)
+        self.assertTrue(os.path.isdir(second_source))
+        self.assertTrue(os.path.isdir(occupied))
 
     def test_symlinked_locked_input_is_rejected(self):
         path = os.path.join(self.repo, "host-kernel", "kbuild", "Kconfig")
@@ -222,6 +297,12 @@ class RockyRustStagingTests(unittest.TestCase):
             json.dump(copy.deepcopy(self.manifest), stream)
         with self.assertRaises(staging.ValidationError):
             staging.validate_manifest(self.repo, outside)
+
+    def test_symlinked_manifest_is_rejected(self):
+        link = os.path.join(self.repo, "manifest-link.json")
+        os.symlink(self.manifest_path, link)
+        with self.assertRaises(staging.ValidationError):
+            staging.validate_manifest(self.repo, link)
 
 
 if __name__ == "__main__":
