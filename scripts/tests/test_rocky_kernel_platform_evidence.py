@@ -473,6 +473,56 @@ class DownloadTests(unittest.TestCase):
                     self.URL, Path(temporary) / "second", digest, len(payload), len(payload)
                 )
 
+    def test_completed_mismatch_reports_full_identity_and_deletes_bytes(self) -> None:
+        payload = b"mutable repository bytes"
+        expected_digest = "0" * 64
+        actual_digest = hashlib.sha256(payload).hexdigest()
+        response = FakeResponse(payload, self.URL)
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary) / "artifact"
+            session = self.session(response)
+            with self.assertRaises(evidence.EvidenceError) as caught:
+                session.download_exact(
+                    self.URL,
+                    target,
+                    expected_digest,
+                    len(payload),
+                    len(payload),
+                )
+            message = str(caught.exception)
+            for fragment in (
+                "url={!r}".format(self.URL),
+                "locked_size={}".format(len(payload)),
+                "actual_size={}".format(len(payload)),
+                "locked_sha256={}".format(expected_digest),
+                "actual_sha256={}".format(actual_digest),
+            ):
+                self.assertIn(fragment, message)
+            self.assertFalse(target.exists())
+            self.assertEqual(session.downloaded_bytes, 0)
+
+    def test_content_length_mismatch_reports_header_without_consuming_body(self) -> None:
+        payload = b"locked rpm bytes"
+        response = FakeResponse(payload, self.URL, content_length="1")
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary) / "artifact"
+            session = self.session(response)
+            with self.assertRaises(evidence.EvidenceError) as caught:
+                session.download_exact(
+                    self.URL,
+                    target,
+                    hashlib.sha256(payload).hexdigest(),
+                    len(payload),
+                    len(payload),
+                )
+            message = str(caught.exception)
+            self.assertIn("url={!r}".format(self.URL), message)
+            self.assertIn("locked_size={}".format(len(payload)), message)
+            self.assertIn("declared_content_lengths=['1']", message)
+            self.assertEqual(response.stream.tell(), 0)
+            self.assertFalse(target.exists())
+            self.assertEqual(session.downloaded_bytes, 0)
+
     def test_mismatch_drift_and_ambiguous_headers_fail_without_artifact(self) -> None:
         payload = b"locked rpm bytes"
         digest = hashlib.sha256(payload).hexdigest()

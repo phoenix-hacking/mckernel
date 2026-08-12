@@ -38,12 +38,12 @@ SOURCE_LOCK_PATH = Path("host-kernel/rocky/source-lock.json")
 REVIEW_ID = "rk-003-rk-005-platform-repository-review-dd6-v1"
 RUNTIME_HEAD = "dd6d1954538ca1adbaf335a1dd058aba26c28840"
 OBSERVED_HEAD = "9ddbee3bb7fc93ee4514da73ac748ad4c820c068"
-PUBLISHED_BASE_HEAD = "6b03f580760b23c77c20497d33f2562f6e75bd2e"
+PUBLISHED_BASE_HEAD = "5500ed831b69a31f30804b11338256c27c09e05a"
 PUBLISHED_BASE_REVIEW = {
     "path": REVIEW_PATH.as_posix(),
-    "size": 11208,
-    "sha256": "ce244de77b5cb18dab96bb5f600685ff3c3b64b79dc5502d1c6054b579f9e1e0",
-    "git_blob_sha1": "47c327d8b6ab7c9ee1ab6bbb3315d730e8f5d5f7",
+    "size": 11281,
+    "sha256": "da7617eed274547053f46143e1399b2d036db79780862ca75fab7efa0582fc43",
+    "git_blob_sha1": "9bafeb5bcaa67210cfe5919056bd939a1cf8c98c",
 }
 REPOSITORY = "phoenix-hacking/mckernel"
 RUN_ID = 31563271344
@@ -57,7 +57,7 @@ ARTIFACT_SHA256 = (
     "a88e8a35c13dbd5b7a4e6524595d5cec31450f83c136b4cf64030e517d208eef"
 )
 EXPECTED_REVIEW_SHA256 = (
-    "da7617eed274547053f46143e1399b2d036db79780862ca75fab7efa0582fc43"
+    "67071f85a65fee3b4e5a4400c065d183bfcb61a95e9cda8d460a217200847b8f"
 )
 
 RELEASE_KEY_FINGERPRINT = "FC226859C0860BF0DDB95B085B106C736FEDFC85"
@@ -163,20 +163,25 @@ CURRENT_INPUT_OVERRIDES = [
         "sha256": "e3336aaf238467055210065a6affbd92433a8dbc8d752856c97fe6c711b297ee",
         "size": 59390,
     },
+    {
+        "path": "scripts/rocky_kernel_platform_evidence.py",
+        "git_blob_sha1": "167efcad5b622c7c01d8a13802d6b97312593b46",
+        "sha256": "eaa3b2684d1620efee7b72f2c37b8f71bf356e35ed0879e2d05c6d4698699b74",
+        "size": 96109,
+    },
 ]
 
 PUBLISHED_BASE_CHANGED_PATHS = [
-    "host-kernel/rocky/source-lock.json",
-    "scripts/rocky_kernel_source_lock.py",
+    "scripts/rocky_kernel_platform_evidence.py",
 ]
 
 EXPECTED_CURRENT_REPOSITORY_BINDING = {
     "base_head_sha": OBSERVED_HEAD,
     "binding_kind": "exact-repository-tree-overrides",
     "runtime_committed_input_count": 10,
-    "current_override_count": 2,
+    "current_override_count": 3,
     "current_overrides": CURRENT_INPUT_OVERRIDES,
-    "unchanged_runtime_input_count": 8,
+    "unchanged_runtime_input_count": 7,
     "all_unoverridden_input_bytes_equal_to_runtime": True,
     "all_unoverridden_input_git_blobs_equal_to_runtime": True,
     "runtime_identity_claimed": False,

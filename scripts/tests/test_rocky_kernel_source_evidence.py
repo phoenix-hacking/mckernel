@@ -250,6 +250,56 @@ class DownloadTests(unittest.TestCase):
             self.assertEqual(result["sha256"], digest)
             self.assertEqual(target.stat().st_mode & 0o777, 0o400)
 
+    def test_completed_mismatch_reports_full_identity_and_deletes_staged_bytes(self) -> None:
+        payload = b"mutable source bytes"
+        expected_digest = "0" * 64
+        actual_digest = hashlib.sha256(payload).hexdigest()
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            target = root / "artifact"
+            with self.assertRaises(evidence.EvidenceError) as caught:
+                evidence.download_exact(
+                    self.URL,
+                    target,
+                    expected_digest,
+                    len(payload),
+                    len(payload),
+                    FakeOpener(FakeResponse(payload, self.URL)),
+                )
+            message = str(caught.exception)
+            for fragment in (
+                "url={!r}".format(self.URL),
+                "locked_size={}".format(len(payload)),
+                "declared_size={}".format(len(payload)),
+                "actual_size={}".format(len(payload)),
+                "locked_sha256={}".format(expected_digest),
+                "actual_sha256={}".format(actual_digest),
+            ):
+                self.assertIn(fragment, message)
+            self.assertFalse(target.exists())
+            self.assertEqual(list(root.iterdir()), [])
+
+    def test_content_length_mismatch_reports_header_without_consuming_body(self) -> None:
+        payload = b"locked source bytes"
+        response = FakeResponse(payload, self.URL, content_length="1")
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary) / "artifact"
+            with self.assertRaises(evidence.EvidenceError) as caught:
+                evidence.download_exact(
+                    self.URL,
+                    target,
+                    hashlib.sha256(payload).hexdigest(),
+                    len(payload),
+                    len(payload),
+                    FakeOpener(response),
+                )
+            message = str(caught.exception)
+            self.assertIn("url={!r}".format(self.URL), message)
+            self.assertIn("locked_size={}".format(len(payload)), message)
+            self.assertIn("declared_size=1", message)
+            self.assertEqual(response.stream.tell(), 0)
+            self.assertFalse(target.exists())
+
     def test_download_mismatch_host_drift_and_ambiguous_headers_fail_closed(self) -> None:
         payload = b"locked source bytes"
         digest = hashlib.sha256(payload).hexdigest()

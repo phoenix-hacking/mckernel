@@ -495,12 +495,22 @@ def download_exact(
                 raise EvidenceError("download used an unexpected content encoding")
             lengths = response.headers.get_all("Content-Length") or []
             if len(lengths) != 1 or not lengths[0].isdigit():
-                raise EvidenceError("download needs one unambiguous Content-Length")
+                raise EvidenceError(
+                    "download needs one unambiguous Content-Length: "
+                    "url={!r} locked_size={!r} declared_content_lengths={!r}".format(
+                        url, expected_size, lengths
+                    )
+                )
             content_length = int(lengths[0])
             if content_length < 1 or content_length > maximum_size:
                 raise EvidenceError("download Content-Length exceeds its evidence cap")
             if expected_size is not None and content_length != expected_size:
-                raise EvidenceError("download Content-Length differs from its lock")
+                raise EvidenceError(
+                    "download Content-Length differs from its lock: "
+                    "url={!r} locked_size={} declared_size={}".format(
+                        url, expected_size, content_length
+                    )
+                )
             with tempfile.NamedTemporaryFile(
                 mode="wb",
                 prefix=".{}-".format(target.name),
@@ -521,11 +531,24 @@ def download_exact(
                     output.write(chunk)
                 output.flush()
                 os.fsync(output.fileno())
-        if size != content_length or (expected_size is not None and size != expected_size):
-            raise EvidenceError("download byte count differs from its lock")
         actual_sha256 = digest.hexdigest()
-        if actual_sha256 != expected_sha256:
-            raise EvidenceError("download SHA-256 differs from its lock")
+        if (
+            size != content_length
+            or (expected_size is not None and size != expected_size)
+            or actual_sha256 != expected_sha256
+        ):
+            raise EvidenceError(
+                "download identity differs from its lock: "
+                "url={!r} locked_size={!r} declared_size={} actual_size={} "
+                "locked_sha256={} actual_sha256={}".format(
+                    url,
+                    expected_size,
+                    content_length,
+                    size,
+                    expected_sha256,
+                    actual_sha256,
+                )
+            )
         if temporary is None:
             raise EvidenceError("download did not create a staged artifact")
         os.chmod(temporary, 0o400)

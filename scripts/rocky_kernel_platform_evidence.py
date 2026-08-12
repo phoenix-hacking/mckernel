@@ -993,7 +993,12 @@ class NetworkSession:
                 headers = response.headers
                 lengths = headers.get_all("Content-Length", [])
                 if len(lengths) != 1 or lengths[0] != str(expected_size):
-                    raise EvidenceError("download Content-Length differs from its lock")
+                    raise EvidenceError(
+                        "download Content-Length differs from its lock: "
+                        "url={!r} locked_size={} declared_content_lengths={!r}".format(
+                            url, expected_size, lengths
+                        )
+                    )
                 encodings = headers.get_all("Content-Encoding", [])
                 if encodings:
                     raise EvidenceError("encoded HTTP response is forbidden")
@@ -1009,8 +1014,19 @@ class NetworkSession:
                         output.write(chunk)
                     output.flush()
                     os.fsync(output.fileno())
-            if size != expected_size or digest.hexdigest() != expected_sha256:
-                raise EvidenceError("download bytes differ from the locked identity")
+            actual_sha256 = digest.hexdigest()
+            if size != expected_size or actual_sha256 != expected_sha256:
+                raise EvidenceError(
+                    "download identity differs from its lock: "
+                    "url={!r} locked_size={} actual_size={} locked_sha256={} "
+                    "actual_sha256={}".format(
+                        url,
+                        expected_size,
+                        size,
+                        expected_sha256,
+                        actual_sha256,
+                    )
+                )
             target.chmod(0o400)
         except (OSError, urllib.error.URLError, EvidenceError) as exc:
             try:
