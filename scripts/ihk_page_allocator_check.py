@@ -28,7 +28,7 @@ EXPECTED_COMPILER = (
 EXPECTED_UNPROVEN = [
     "native ihk crate-root and Kbuild integration",
     "audited Linux spin_lock_irqsave-equivalent adapter enforcing IRQ-disabled, nonpreemptible, no-sleep, and non-reentrant execution for every operation including Drop",
-    "six versioned legacy export adapters, raw-address ownership-transfer registry, address-based free adapter, and consumer migration",
+    "six versioned legacy export adapters, raw-address registry integration, generation-free address adapter ownership proof, and consumer migration",
     "exact Rocky 10.2 kernel compilation, modpost, load, and unload",
     "differential legacy allocation, exhaustion, fragmentation, errno behavior, and deliberate boundary deltas",
     "bounded irq-disabled latency and large fragmented-allocation pressure",
@@ -328,6 +328,7 @@ def _validate_contract(contract):
             "bitmap_storage_caller_owned",
             "drop_requires_irqsave_nonpreemptible_no_sleep_context",
             "double_or_wrong_kind_release_rejected",
+            "failed_explicit_release_retains_lease",
             "leases_are_must_use",
             "operation_lock_requires_non_reentrant_context",
             "range_metadata_does_not_extend_lease_ownership",
@@ -416,6 +417,26 @@ def _validate_source(source):
     _require_at_least(source, ".release_owned(self.range, OwnershipKind::Allocated)", 2, "allocation rollback")
     _require_at_least(source, ".release_owned(self.range, OwnershipKind::Reserved)", 2, "reservation rollback")
     _require_at_least(source, ".checked_mul(self.unit_bytes)", 3, "checked range multiplication")
+
+    retryable_release = _function_body(
+        source, "pub(crate) fn try_release(", "retryable allocation release"
+    )
+    _require_order(
+        retryable_release,
+        [
+            "if !self.owned",
+            "return Err(PageAllocatorError::Ownership);",
+            ".release_owned(self.range, OwnershipKind::Allocated)?;",
+            "self.owned = false;",
+            "Ok(())",
+        ],
+        "failure-preserving explicit allocation release",
+    )
+    consuming_release = _function_body(
+        source, "pub(crate) fn release(mut self)", "consuming allocation release"
+    )
+    if "self.try_release()" not in consuming_release:
+        raise ValidationError("consuming allocation release must use retryable release")
 
     constructor = _function_body(source, "pub(crate) fn new(", "allocator constructor")
     for fragment, label in (
@@ -524,6 +545,24 @@ def _validate_source(source):
         source,
         "fn wrong_kind_and_overlapping_release_are_rejected_without_clearing()",
         "ownership invariant test",
+    )
+    ownership_test = _function_body(
+        source,
+        "fn wrong_kind_and_overlapping_release_are_rejected_without_clearing()",
+        "ownership invariant test",
+    )
+    _require_order(
+        ownership_test,
+        [
+            "inject_reserved_overlap_for_test(range.address(), range.blocks(), true)",
+            "allocation.try_release()",
+            "Err(PageAllocatorError::Ownership)",
+            "assert!(allocator.bit_is_set(allocator.allocated, 0));",
+            "inject_reserved_overlap_for_test(range.address(), range.blocks(), false)",
+            "allocation.try_release().unwrap();",
+            "assert_eq!(allocation.try_release(), Err(PageAllocatorError::Ownership));",
+        ],
+        "failed explicit release retains ownership test",
     )
 
 

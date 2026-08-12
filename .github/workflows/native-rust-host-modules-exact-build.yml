@@ -10,6 +10,7 @@ on:
       - host-kernel/contracts/x86_64-shared-abi-v1.json
       - host-kernel/kbuild/**
       - host-kernel/contracts/ihk-os-registry-foundation-v1.json
+      - host-kernel/contracts/ihk-ioctl-dispatch-foundation-v1.json
       - host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json
       - host-kernel/native-rust/**
       - host-kernel/rocky/config-policy.json
@@ -35,6 +36,7 @@ on:
       - scripts/tests/fixtures/ihk_native_queue_compile.rs
       - scripts/tests/test_ihk_native_queue_check.py
       - scripts/ihk_os_registry_check.py
+      - scripts/ihk_ioctl_dispatch_check.py
       - scripts/ihk_smp_native_lifecycle_check.py
       - scripts/mcctrl_native_lifecycle_check.py
       - scripts/native_rust_build_surface_audit.py
@@ -46,7 +48,11 @@ on:
       - scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs
       - scripts/tests/fixtures/ihk_os_registry_compile.rs
       - scripts/tests/fixtures/rust-core-rocky-6.12/**
+      - scripts/tests/fixtures/ihk_ioctl_dispatch_compile.rs
+      - scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/ioctl.rs
+      - scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/uaccess.rs
       - scripts/tests/test_ihk_os_registry_check.py
+      - scripts/tests/test_ihk_ioctl_dispatch_check.py
       - scripts/tests/test_linux_api_exact_probe.py
       - scripts/tests/test_rust_target_compatibility_patches.py
       - scripts/tests/test_x86_64_shared_abi.py
@@ -60,6 +66,7 @@ on:
       - host-kernel/contracts/x86_64-shared-abi-v1.json
       - host-kernel/kbuild/**
       - host-kernel/contracts/ihk-os-registry-foundation-v1.json
+      - host-kernel/contracts/ihk-ioctl-dispatch-foundation-v1.json
       - host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json
       - host-kernel/native-rust/**
       - host-kernel/rocky/config-policy.json
@@ -85,6 +92,7 @@ on:
       - scripts/tests/fixtures/ihk_native_queue_compile.rs
       - scripts/tests/test_ihk_native_queue_check.py
       - scripts/ihk_os_registry_check.py
+      - scripts/ihk_ioctl_dispatch_check.py
       - scripts/ihk_smp_native_lifecycle_check.py
       - scripts/mcctrl_native_lifecycle_check.py
       - scripts/native_rust_build_surface_audit.py
@@ -96,7 +104,11 @@ on:
       - scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs
       - scripts/tests/fixtures/ihk_os_registry_compile.rs
       - scripts/tests/fixtures/rust-core-rocky-6.12/**
+      - scripts/tests/fixtures/ihk_ioctl_dispatch_compile.rs
+      - scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/ioctl.rs
+      - scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/uaccess.rs
       - scripts/tests/test_ihk_os_registry_check.py
+      - scripts/tests/test_ihk_ioctl_dispatch_check.py
       - scripts/tests/test_linux_api_exact_probe.py
       - scripts/tests/test_rust_target_compatibility_patches.py
       - scripts/tests/test_x86_64_shared_abi.py
@@ -186,6 +198,9 @@ jobs:
           test "$(rustc --version | awk '{print $2}')" = "1.92.0"
           MCKERNEL_RUSTC_1_92="$(command -v rustc)" \
             python3 -m unittest -v scripts.tests.test_ihk_os_registry_check
+          python3 scripts/ihk_ioctl_dispatch_check.py --repo "$GITHUB_WORKSPACE"
+          MCKERNEL_RUSTC_1_92="$(command -v rustc)" \
+            python3 -m unittest -v scripts.tests.test_ihk_ioctl_dispatch_check
           python3 scripts/ihk_smp_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE"
           python3 scripts/mcctrl_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE"
           python3 scripts/native_rust_unsafe_ffi_ledger.py --repo "$GITHUB_WORKSPACE" check
@@ -211,6 +226,8 @@ jobs:
           tar -C "$SOURCE_PARENT" -xf "$archive"
           source_root="$SOURCE_PARENT/linux-6.12.0-211.44.1.el10_2"
           test -f "$source_root/Makefile"
+          python3 scripts/ihk_ioctl_dispatch_check.py --repo "$GITHUB_WORKSPACE" \
+            --kernel-source "$source_root"
           patch -d "$source_root" -p1 --batch --forward --no-backup-if-mismatch \
             -i "$SOURCE_ASSETS/1000-debrand-some-messages.patch"
           for compat_name in \
@@ -296,6 +313,9 @@ jobs:
           test "$(rustc --version | awk '{print $2}')" = "1.92.0"
           MCKERNEL_RUSTC_1_92="$(command -v rustc)" \
             python3 -m unittest -v scripts.tests.test_ihk_os_registry_check
+          python3 scripts/ihk_ioctl_dispatch_check.py --repo "$GITHUB_WORKSPACE"
+          MCKERNEL_RUSTC_1_92="$(command -v rustc)" \
+            python3 -m unittest -v scripts.tests.test_ihk_ioctl_dispatch_check
           python3 scripts/ihk_smp_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" --module "$smp"
           python3 scripts/mcctrl_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" --module "$mcctrl"
           cp "$NATIVE_BUILD_DIR/.config" "$EVIDENCE_DIR/resolved.config"

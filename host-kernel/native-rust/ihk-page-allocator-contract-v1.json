@@ -82,6 +82,7 @@
     "bitmap_storage_caller_owned": true,
     "drop_requires_irqsave_nonpreemptible_no_sleep_context": true,
     "double_or_wrong_kind_release_rejected": true,
+    "failed_explicit_release_retains_lease": true,
     "leases_are_must_use": true,
     "operation_lock_requires_non_reentrant_context": true,
     "range_metadata_does_not_extend_lease_ownership": true,
@@ -101,7 +102,7 @@
   },
   "production_source": {
     "path": "host-kernel/native-rust/page_allocator.rs",
-    "sha256": "20acb2eae89e26faea92e9ecd267e1d43c9e7557016b885edd90871aba4d925b"
+    "sha256": "8e2af0cde06cbb70204540b493e8a0a66d5203195ed671235b64bed44d328bc5"
   },
   "protocol": {
     "alignment": "power-of-two allocator-unit counts applied to the absolute physical unit number",
@@ -116,7 +117,7 @@
   "unproven": [
     "native ihk crate-root and Kbuild integration",
     "audited Linux spin_lock_irqsave-equivalent adapter enforcing IRQ-disabled, nonpreemptible, no-sleep, and non-reentrant execution for every operation including Drop",
-    "six versioned legacy export adapters, raw-address ownership-transfer registry, address-based free adapter, and consumer migration",
+    "six versioned legacy export adapters, raw-address registry integration, generation-free address adapter ownership proof, and consumer migration",
     "exact Rocky 10.2 kernel compilation, modpost, load, and unload",
     "differential legacy allocation, exhaustion, fragmentation, errno behavior, and deliberate boundary deltas",
     "bounded irq-disabled latency and large fragmented-allocation pressure",

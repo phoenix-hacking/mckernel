@@ -1,0 +1,140 @@
+{
+  "behavior": {
+    "capacity": 64,
+    "commands": {
+      "IHK_DEVICE_CREATE_OS": 1124608,
+      "IHK_DEVICE_DESTROY_OS": 1124609,
+      "IHK_OS_QUERY_STATUS": 1124867,
+      "IHK_OS_STATUS": 1124884
+    },
+    "create_return": "minor-number",
+    "destroy_missing_minor_errno": -22,
+    "destroy_return": 0,
+    "errno_map": {
+      "Busy": -16,
+      "Capacity": -12,
+      "Corrupt": -117,
+      "InvalidArgument": -22,
+      "MissingOs": -2,
+      "Overflow": -75,
+      "StaleHandle": -116
+    },
+    "minor_policy": "accept-0-through-63; reject-legacy-off-by-one-64",
+    "provider_failure_policy": {
+      "create": "propagate-external-errno-and-rollback",
+      "destroy_provider": "map-to-EINVAL-and-rollback",
+      "destroy_shutdown": "propagate-external-errno-and-rollback"
+    },
+    "status_return": "direct-enum-value-for-both-aliases",
+    "user_copy": "none-for-this-scalar-subset"
+  },
+  "canonical_inputs": {
+    "abi": {
+      "path": "host-kernel/native-rust/abi/x86_64.rs",
+      "sha256": "b5980e5b621914a120a0e6b72241477c48aee85615ae4cc76077f3874e35f860"
+    },
+    "registry": {
+      "path": "host-kernel/native-rust/os_registry.rs",
+      "sha256": "29464b8ca1038d87cc0d5f760eb22e0cbd7a1a512ae88f4c550574a784d1e49d"
+    }
+  },
+  "fixture": {
+    "edition": "2021",
+    "minimum_rustc": "1.92.0",
+    "no_std_library_mode": true,
+    "path": "scripts/tests/fixtures/ihk_ioctl_dispatch_compile.rs",
+    "sha256": "d8cf6958ab86b2251b74cb73581d513ae583ce18d5994854af5db41ae03c56bf",
+    "test_count": 10,
+    "toolchain_identity": "rustc 1.92.0 (ded5c06cf 2025-12-08) (Red Hat 1.92.0-1.el10)"
+  },
+  "gate_id": "IHK-005-ioctl-dispatch-foundation",
+  "implementation": {
+    "allocation_free": true,
+    "attached_private": true,
+    "ffi_free": true,
+    "path": "host-kernel/native-rust/ihk_ioctl.rs",
+    "registration_supported": false,
+    "sha256": "3d603424705a9b0fb18725bae1d75f1d279b249b866c15f15f98166d013edfbb",
+    "size": 9977,
+    "user_copy_reachable": false
+  },
+  "legacy_capture": {
+    "ihk_ref": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+    "sources": [
+      {
+        "id": "host_user",
+        "path": "linux/include/ihk/ihk_host_user.h",
+        "sha256": "2335260024075a08becbe74651162a950aee8bea603e9a451cb8bcae3aa0ef97",
+        "size": 5704
+      },
+      {
+        "id": "host_driver",
+        "path": "linux/core/host_driver.c",
+        "sha256": "be75185f5b1a0aea84b0be995f67405e45964999b6ed28ae60adb3ed1dece722",
+        "size": 69863
+      }
+    ]
+  },
+  "readiness": {
+    "blockers": [
+      "exact Rocky Linux 6.12 has no supported Rust miscdevice, cdev, file_operations, or ioctl callback registration API",
+      "the privately attached decoder has no userspace-reachable registration or file-operation adapter",
+      "safe UserSlice copy primitives exist, but no supported ioctl callback can supply a userspace argument to them",
+      "legacy provider callbacks, kmsg ownership, cdev publication, device-model publication, and teardown are not connected",
+      "exact Kbuild, module-load, ioctl, and teardown runtime evidence for this dispatcher is absent"
+    ],
+    "credit_eligible": false,
+    "status": "TODO"
+  },
+  "rocky_rust_api_audit": {
+    "available": [
+      "ioctl-number-helpers",
+      "UserSlice-copy-wrappers"
+    ],
+    "kernel_nvr": "6.12.0-211.44.1.el10_2",
+    "outcome": "dispatcher-only-registration-blocked",
+    "registration_apis_absent": [
+      "miscdevice",
+      "cdev",
+      "file_operations",
+      "ioctl-callback-adapter"
+    ],
+    "source_lock_path": "host-kernel/rocky/source-lock.json",
+    "source_lock_sha256": "16f94def36b3b87ef8bca064bcf4f4ad7251d838fdf1af6cf7bd3413fa6c5531",
+    "sources": [
+      {
+        "id": "crate_exports",
+        "path": "rust/kernel/lib.rs",
+        "sha256": "730fce907dbd8c48439f63f506d9400ceb707282846f1e325822c77dc99a56f0",
+        "size": 4089
+      },
+      {
+        "id": "ioctl_numbers",
+        "path": "rust/kernel/ioctl.rs",
+        "sha256": "5825ea4fa49271407d85d6be03f03419431732fc6534cd0e6d551aa29dd8f085",
+        "size": 2062
+      },
+      {
+        "id": "user_access",
+        "path": "rust/kernel/uaccess.rs",
+        "sha256": "e0127f615c717909d31042f8f7decef96bbbb72f6987579954cb9036774bdf07",
+        "size": 14314
+      }
+    ],
+    "verified_key_source_fixtures": [
+      {
+        "path": "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/lib.rs",
+        "sha256": "730fce907dbd8c48439f63f506d9400ceb707282846f1e325822c77dc99a56f0"
+      },
+      {
+        "path": "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/ioctl.rs",
+        "sha256": "5825ea4fa49271407d85d6be03f03419431732fc6534cd0e6d551aa29dd8f085"
+      },
+      {
+        "path": "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/uaccess.rs",
+        "sha256": "e0127f615c717909d31042f8f7decef96bbbb72f6987579954cb9036774bdf07"
+      }
+    ]
+  },
+  "schema_version": 1
+}

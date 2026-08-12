@@ -1,0 +1,115 @@
+{
+  "allocator_dependency": {
+    "contract_path": "host-kernel/native-rust/ihk-page-allocator-contract-v1.json",
+    "contract_sha256": "62ab233b15c0a5ffa9de613bf854263211bb5f37154d906d48946cfc43856c30",
+    "source_path": "host-kernel/native-rust/page_allocator.rs",
+    "source_sha256": "8e2af0cde06cbb70204540b493e8a0a66d5203195ed671235b64bed44d328bc5"
+  },
+  "compile_fixture": {
+    "compile_arguments": [
+      "--edition=2021",
+      "--test",
+      "-Dwarnings",
+      "-C",
+      "overflow-checks=yes"
+    ],
+    "compiler_environment": "IHK_PAGE_OWNER_REGISTRY_RUSTC",
+    "compiler_version_first_line": "rustc 1.92.0 (ded5c06cf 2025-12-08) (Red Hat 1.92.0-1.el10)",
+    "expected_test_count": 15,
+    "internal_test_names": [
+      "wrong_kind_and_overlapping_release_are_rejected_without_clearing",
+      "generation_exhaustion_never_wraps_or_allocates",
+      "forged_handle_metadata_cannot_clear_a_live_lease"
+    ],
+    "path": "scripts/tests/fixtures/ihk_page_owner_registry_compile.rs",
+    "sha256": "49da4c0db1455809f99bb59498e7a92400062e5ec8b609c3f9e4a1b00e99bdc3",
+    "test_names": [
+      "construction_requires_caller_capacity_and_issues_distinct_identities",
+      "allocation_lease_remains_owned_until_typed_release",
+      "exact_capacity_full_failure_preserves_allocator_state",
+      "double_free_and_stale_generation_are_distinct",
+      "foreign_registry_handle_cannot_release_current_owner",
+      "raw_address_release_is_exact_and_fails_closed",
+      "backing_allocator_failure_does_not_consume_free_slot",
+      "failed_release_retains_lease_for_retry",
+      "aligned_byte_metadata_round_trips_exactly",
+      "registry_drop_drains_every_retained_lease_once",
+      "locked_concurrency_preserves_unique_addresses_and_accounting",
+      "address_only_aba_limit_is_explicit_while_typed_handle_stays_stale"
+    ]
+  },
+  "evidence_policy": {
+    "built_into_ihk_validated": false,
+    "exact_kernel_compile_validated": false,
+    "failure_injection_validated": false,
+    "gate_credit_eligible": false,
+    "legacy_adapters_validated": false,
+    "rocky_runtime_validated": false
+  },
+  "foundation_status": "source-only-unattached-raw-page-owner-registry",
+  "gate_id": "IHK-006",
+  "identity_contract": {
+    "foreign_registry_rejected": true,
+    "generation_is_nonzero_and_checked": true,
+    "generation_never_wraps": true,
+    "identity_is_module_lifetime_nonwrapping_atomic": true,
+    "stale_generation_rejected": true
+  },
+  "lifetime_probe": {
+    "compile_arguments": [
+      "--edition=2021"
+    ],
+    "diagnostic_fragments": [
+      "cannot return value referencing local variable `allocator`",
+      "cannot return value referencing local variable `slots`"
+    ],
+    "path": "scripts/tests/fixtures/ihk_page_owner_registry_lifetime_compile_fail.rs",
+    "sha256": "3408c0d545b67c49bb90ce076b44f6a16c64e64811d99144efd4525817bd7e8e"
+  },
+  "ownership_contract": {
+    "address_and_size_must_match": true,
+    "allocation_failure_leaves_slot_free": true,
+    "caller_owned_slot_storage": true,
+    "double_free_rejected": true,
+    "failed_release_retains_lease": true,
+    "full_capacity_leaves_allocator_unchanged": true,
+    "no_heap_or_unsafe_implementation": true,
+    "registry_drop_releases_live_leases": true,
+    "typed_handle_binds_address_blocks_and_bytes": true
+  },
+  "production_source": {
+    "path": "host-kernel/native-rust/page_owner_registry.rs",
+    "sha256": "443d58fa5b2e423f538c6622ef04d8e34338abc43c5e0fd34811d52fc21f4869"
+  },
+  "protocol": {
+    "address_only_release": "exact current address and block count under a caller current-ownership precondition",
+    "authoritative_release": "registry identity plus slot generation plus exact copied range",
+    "capacity": "fixed caller-owned slot slice; Full is a fail-closed source-only outcome",
+    "generation": "nonzero checked u64 per slot; exhausted slots never wrap",
+    "mutation": "exclusive &mut registry access behind one future audited kernel outer lock",
+    "storage": "Option<PageAllocation> retains the actual lease without allocation or pointer erasure"
+  },
+  "schema_version": 1,
+  "sync_probe": {
+    "compile_arguments": [
+      "--edition=2021"
+    ],
+    "diagnostic_fragments": [
+      "Cell<()>` cannot be shared between threads safely",
+      "required by a bound in `assert_sync`"
+    ],
+    "path": "scripts/tests/fixtures/ihk_page_owner_registry_sync_compile_fail.rs",
+    "sha256": "e9eba5b3a0aac117a66daac35bde6a19596475db18f36062b2fcf6d7c97865fd"
+  },
+  "unproven": [
+    "native ihk crate-root, authoritative staging manifest, and Kbuild integration",
+    "audited Linux irqsave-equivalent outer owner lock enforcing IRQ-disabled, nonpreemptible, no-sleep, non-reentrant execution and registry-to-allocator lock order",
+    "pinned allocator and slot-storage owner with an audited drain-before-module-teardown path",
+    "six versioned legacy allocation/free export adapters and all consumer migration",
+    "generation-free legacy raw-address stale request after identical address-and-size reuse, which the frozen ABI cannot distinguish from the current owner",
+    "registry capacity sizing plus bounded O(capacity) scan and drain latency while IRQs are disabled",
+    "exact Rocky 10.2 kernel compilation, modpost, module load, unload, and allocator runtime",
+    "differential legacy behavior, failure injection, KCSAN, lockdep, fragmentation pressure, and long-run leak evidence",
+    "IHK-006 gate completion or credit"
+  ]
+}

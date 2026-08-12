@@ -23,7 +23,7 @@ TOOLCHAIN_LOCK_PATH = Path("host-kernel/rocky/toolchain-lock.json")
 CONFIG_POLICY_PATH = Path("host-kernel/rocky/config-policy.json")
 CONFIG_FRAGMENT_PATH = Path("host-kernel/rocky/configs/rust-minimal.config")
 EXPECTED_CONTRACT_SHA256 = (
-    "b7f264c647dcad3d841b0c4f20ca330c9c8f647dac6c688ac1a306c575c77042"
+    "aa41041101ed5e8f6e1de2cf5df0846f0f037abcd7fc55e533aae7206345a1c1"
 )
 EXPECTED_WORKFLOW_SHA256 = (
     "d49e4ec8331a67e867f83fc9db39858a0c8a9eb25a2a802fa721bb513120f082"

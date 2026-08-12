@@ -38,6 +38,13 @@ SOURCE_LOCK_PATH = Path("host-kernel/rocky/source-lock.json")
 REVIEW_ID = "rk-003-rk-005-platform-repository-review-dd6-v1"
 RUNTIME_HEAD = "dd6d1954538ca1adbaf335a1dd058aba26c28840"
 OBSERVED_HEAD = "9ddbee3bb7fc93ee4514da73ac748ad4c820c068"
+PUBLISHED_BASE_HEAD = "8f067ae0dd0ced29e3c1805a3897da832a3ad172"
+PUBLISHED_BASE_REVIEW = {
+    "path": REVIEW_PATH.as_posix(),
+    "size": 8193,
+    "sha256": "2640ab33de5ecfeea364007bef6d5aa88cc8289eacd8fe40db474d7a2d8b18e5",
+    "git_blob_sha1": "69663e1d5c4eaade855b6e1c67d173c23e3485bd",
+}
 REPOSITORY = "phoenix-hacking/mckernel"
 RUN_ID = 31563271344
 RUN_ATTEMPT = 1
@@ -50,7 +57,7 @@ ARTIFACT_SHA256 = (
     "a88e8a35c13dbd5b7a4e6524595d5cec31450f83c136b4cf64030e517d208eef"
 )
 EXPECTED_REVIEW_SHA256 = (
-    "2640ab33de5ecfeea364007bef6d5aa88cc8289eacd8fe40db474d7a2d8b18e5"
+    "ffd43d9fee68802f6d1875ca52ce9ec200977a69441f751116a96c0061628f2e"
 )
 
 RELEASE_KEY_FINGERPRINT = "FC226859C0860BF0DDB95B085B106C736FEDFC85"
@@ -146,16 +153,21 @@ EXPECTED_INPUTS = [
 CURRENT_INPUT_OVERRIDES = [
     {
         "path": "host-kernel/rocky/source-lock.json",
-        "git_blob_sha1": "1d82533103a0e4e0611e44f43476eb562d6d9cd9",
-        "sha256": "a70944b60d6cd6343456f8f2531e49a7ed9bef68ad33c3c95e699226b153e511",
-        "size": 15270,
+        "git_blob_sha1": "ad8379320f186646e45a402e5e6fce7b1200f60e",
+        "sha256": "16f94def36b3b87ef8bca064bcf4f4ad7251d838fdf1af6cf7bd3413fa6c5531",
+        "size": 15666,
     },
     {
         "path": "scripts/rocky_kernel_source_lock.py",
-        "git_blob_sha1": "09da08a91ee151ed80046f431c6dbc59764bd8f3",
-        "sha256": "c891847d13903d8b24f7d0a54563f30804bdf4836881e9cd7cb3023596c694a6",
-        "size": 55193,
+        "git_blob_sha1": "cd5f4b4ad96fa13716ecc26f1bbc84096d7f36ea",
+        "sha256": "ffe84874f843126c4d1e680b413aeb279a6116121a1c933e40e2a42411c3ee6e",
+        "size": 55617,
     },
+]
+
+PUBLISHED_BASE_CHANGED_PATHS = [
+    "host-kernel/rocky/source-lock.json",
+    "scripts/rocky_kernel_source_lock.py",
 ]
 
 EXPECTED_CURRENT_REPOSITORY_BINDING = {
@@ -383,12 +395,13 @@ def validate_review(review, review_bytes):
             "current_repository_input_binding",
             "verified_facts",
             "claims",
+            "connector_tree_port",
             "phase_blockers_at_capture",
             "caveats",
         },
         "historical review",
     )
-    require_exact(review["schema_version"], 1, "review schema")
+    require_exact(review["schema_version"], 2, "review schema")
     require_exact(review["review_id"], REVIEW_ID, "review ID")
     require_exact(
         review["review_kind"],
@@ -459,6 +472,11 @@ def validate_review(review, review_bytes):
         review["current_repository_input_binding"],
         EXPECTED_CURRENT_REPOSITORY_BINDING,
         "current repository input binding",
+    )
+    require_exact(
+        review["connector_tree_port"],
+        expected_connector_tree_port(),
+        "connector tree port",
     )
     require_exact(
         review["verified_facts"],
@@ -580,6 +598,29 @@ def current_expected_inputs():
     return [overrides.get(row["path"], row) for row in EXPECTED_INPUTS]
 
 
+def expected_connector_tree_port():
+    inputs = current_expected_inputs()
+    return {
+        "binding_kind": "exact-input-tree-port",
+        "published_base_head_sha": PUBLISHED_BASE_HEAD,
+        "published_base_review": PUBLISHED_BASE_REVIEW,
+        "historical_runtime_head_sha": RUNTIME_HEAD,
+        "historical_observation_head_sha": OBSERVED_HEAD,
+        "historical_review_preserved_by_exact_base_review_blob": True,
+        "historical_observation_fresh_git_reverification_claimed": False,
+        "historical_observation_git_object_required_for_tree_port": False,
+        "ported_input_count": len(inputs),
+        "ported_inputs": inputs,
+        "ported_inputs_sha256": sha256_bytes(canonical_json_bytes(inputs)),
+        "changed_from_published_base_count": len(PUBLISHED_BASE_CHANGED_PATHS),
+        "changed_from_published_base_paths": PUBLISHED_BASE_CHANGED_PATHS,
+        "unchanged_from_published_base_count": len(inputs)
+        - len(PUBLISHED_BASE_CHANGED_PATHS),
+        "runtime_identity_claimed": False,
+        "credit_eligible": False,
+    }
+
+
 def validate_repository_inputs(repo):
     for expected in current_expected_inputs():
         relative = Path(expected["path"])
@@ -596,43 +637,149 @@ def validate_repository_inputs(repo):
         )
 
 
+def validate_connector_parent_vector(parents):
+    require_exact(
+        parents,
+        [PUBLISHED_BASE_HEAD],
+        "connector tree-port parent vector",
+    )
+
+
+def validate_connector_input(
+    expected, relative, head_bytes, worktree_bytes, tree_entry, index_entry
+):
+    require_exact(
+        tree_entry,
+        "100644 blob {}\t{}\0".format(
+            expected["git_blob_sha1"], relative
+        ).encode("utf-8"),
+        "connector HEAD tree entry {}".format(relative),
+    )
+    require_exact(
+        index_entry,
+        "100644 {} 0\t{}\n".format(
+            expected["git_blob_sha1"], relative
+        ).encode("utf-8"),
+        "connector index entry {}".format(relative),
+    )
+    require_exact(
+        worktree_bytes,
+        head_bytes,
+        "connector worktree input {}".format(relative),
+    )
+    require_exact(len(head_bytes), expected["size"], "HEAD {} size".format(relative))
+    require_exact(
+        sha256_bytes(head_bytes),
+        expected["sha256"],
+        "HEAD {} SHA-256".format(relative),
+    )
+    require_exact(
+        git_blob_sha1(head_bytes),
+        expected["git_blob_sha1"],
+        "HEAD {} Git blob".format(relative),
+    )
+
+
 def validate_git_observation(repo):
     if not (repo / ".git").exists():
-        return False
+        raise ReviewError("connector tree port requires a Git checkout")
     current_stdout, _ = run_git(repo, ["rev-parse", "HEAD"])
     current = current_stdout.decode("ascii").strip()
     if not HEX_SHA1.fullmatch(current):
         raise ReviewError("current Git HEAD is malformed")
-    if not all(
-        git_commit_available(repo, commit)
-        for commit in (RUNTIME_HEAD, OBSERVED_HEAD)
-    ):
-        return False
-    run_git(repo, ["merge-base", "--is-ancestor", RUNTIME_HEAD, OBSERVED_HEAD])
-    count_stdout, _ = run_git(
-        repo, ["rev-list", "--count", "{}..{}".format(RUNTIME_HEAD, OBSERVED_HEAD)]
+    base_stdout, _ = run_git(repo, ["rev-parse", PUBLISHED_BASE_HEAD + "^{commit}"])
+    require_exact(
+        base_stdout.decode("ascii").strip(),
+        PUBLISHED_BASE_HEAD,
+        "published connector base commit",
     )
-    require_exact(count_stdout.decode("ascii").strip(), "15", "observed commit distance")
-    paths_stdout, _ = run_git(
-        repo, ["diff", "--name-only", "{}..{}".format(RUNTIME_HEAD, OBSERVED_HEAD)]
+    parents_stdout, _ = run_git(repo, ["show", "-s", "--format=%P", current])
+    parents = parents_stdout.decode("ascii").strip().split()
+    validate_connector_parent_vector(parents)
+    base_review, _ = run_git(
+        repo, ["show", "{}:{}".format(PUBLISHED_BASE_HEAD, REVIEW_PATH.as_posix())]
     )
-    changed = [line for line in paths_stdout.decode("utf-8").splitlines() if line]
-    require_exact(len(changed), 111, "observed changed-path count")
-    for expected in EXPECTED_INPUTS:
-        spec = "{}:{}".format(RUNTIME_HEAD, expected["path"])
-        runtime_bytes, _ = run_git(repo, ["show", spec])
-        observed_bytes, _ = run_git(
-            repo, ["show", "{}:{}".format(OBSERVED_HEAD, expected["path"])]
+    require_exact(len(base_review), PUBLISHED_BASE_REVIEW["size"], "base review size")
+    require_exact(
+        sha256_bytes(base_review),
+        PUBLISHED_BASE_REVIEW["sha256"],
+        "base review SHA-256",
+    )
+    require_exact(
+        git_blob_sha1(base_review),
+        PUBLISHED_BASE_REVIEW["git_blob_sha1"],
+        "base review Git blob",
+    )
+    changed = []
+    for expected in current_expected_inputs():
+        relative = expected["path"]
+        base_bytes, _ = run_git(
+            repo,
+            ["show", "{}:{}".format(PUBLISHED_BASE_HEAD, relative)],
         )
-        if runtime_bytes != observed_bytes:
-            raise ReviewError(
-                "observed head changed bound input {}".format(expected["path"])
-            )
+        head_bytes, _ = run_git(repo, ["show", "{}:{}".format(current, relative)])
+        tree_entry, _ = run_git(repo, ["ls-tree", "-z", current, "--", relative])
+        index_entry, _ = run_git(repo, ["ls-files", "--stage", "--", relative])
+        worktree_bytes = repository_file(repo, Path(relative)).read_bytes()
+        validate_connector_input(
+            expected,
+            relative,
+            head_bytes,
+            worktree_bytes,
+            tree_entry,
+            index_entry,
+        )
+        if base_bytes != head_bytes:
+            changed.append(relative)
+    require_exact(
+        changed,
+        PUBLISHED_BASE_CHANGED_PATHS,
+        "connector tree-port changed paths",
+    )
+    try:
+        observed_type = run_git(repo, ["cat-file", "-t", OBSERVED_HEAD])[0]
+    except ReviewError:
+        observed_type = b""
+    if observed_type.decode("ascii").strip() == "commit":
+        run_git(repo, ["merge-base", "--is-ancestor", RUNTIME_HEAD, OBSERVED_HEAD])
+        count_stdout, _ = run_git(
+            repo,
+            ["rev-list", "--count", "{}..{}".format(RUNTIME_HEAD, OBSERVED_HEAD)],
+        )
         require_exact(
-            sha256_bytes(runtime_bytes),
-            expected["sha256"],
-            "historical input {}".format(expected["path"]),
+            count_stdout.decode("ascii").strip(),
+            "15",
+            "historical observed commit distance",
         )
+        paths_stdout, _ = run_git(
+            repo,
+            ["diff", "--name-only", "{}..{}".format(RUNTIME_HEAD, OBSERVED_HEAD)],
+        )
+        historical_changed = [
+            line for line in paths_stdout.decode("utf-8").splitlines() if line
+        ]
+        require_exact(
+            len(historical_changed),
+            111,
+            "historical observed changed-path count",
+        )
+        for expected in EXPECTED_INPUTS:
+            runtime_bytes, _ = run_git(
+                repo, ["show", "{}:{}".format(RUNTIME_HEAD, expected["path"])]
+            )
+            observed_bytes, _ = run_git(
+                repo, ["show", "{}:{}".format(OBSERVED_HEAD, expected["path"])]
+            )
+            require_exact(
+                observed_bytes,
+                runtime_bytes,
+                "historical observed input {}".format(expected["path"]),
+            )
+            require_exact(
+                sha256_bytes(runtime_bytes),
+                expected["sha256"],
+                "historical runtime input {}".format(expected["path"]),
+            )
     return True
 
 

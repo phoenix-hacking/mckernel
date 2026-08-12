@@ -88,10 +88,16 @@ EXPECTED_INPUTS = (
         "repository_path": "host-kernel/native-rust/ikc_master.rs",
         "sha256": "f7e8f8bc1cc860a2eb3724457d81bf03b132fa156eac5c5e258a393808e6ca1e",
     },
+    {
+        "destination": "ihk_ioctl.rs",
+        "kind": "rust_ioctl_dispatch",
+        "repository_path": "host-kernel/native-rust/ihk_ioctl.rs",
+        "sha256": "3d603424705a9b0fb18725bae1d75f1d279b249b866c15f15f98166d013edfbb",
+    },
 )
 EXPECTED_PARENT_INTEGRATION_REF = {
     "repository_path": "host-kernel/kbuild/parent-integration-v1.json",
-    "sha256": "035bc3bf13098f3acf0279ec2b34aaefe9c98aa621caf92e5bf80fc0c62a5224",
+    "sha256": "672dfc05a44e735f9cd19db49c671b59c52fe3e3216f9f8ac42cee7316f97cd1",
 }
 EXPECTED_PARENT_SOURCE = {
     "archive_basename": "linux-6.12.0-211.44.1.el10_2.tar.xz",
@@ -99,7 +105,7 @@ EXPECTED_PARENT_SOURCE = {
     "archive_root": "linux-6.12.0-211.44.1.el10_2",
     "source_lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-source-v1",
     "source_lock_repository_path": "host-kernel/rocky/source-lock.json",
-    "source_lock_sha256": "a70944b60d6cd6343456f8f2531e49a7ed9bef68ad33c3c95e699226b153e511",
+    "source_lock_sha256": "16f94def36b3b87ef8bca064bcf4f4ad7251d838fdf1af6cf7bd3413fa6c5531",
     "source_rpm_sha256": "2bfeda65bd9bdd4b86650074c81e061c37822b80317ac0d4f5aacc89c85589cb",
 }
 EXPECTED_PARENT_PATCH = {
@@ -157,7 +163,7 @@ EXPECTED_MODULES = (
         "required_import_namespaces": [],
         "source_destination": "ihk.rs",
         "source_repository_path": "host-kernel/native-rust/ihk.rs",
-        "source_sha256": "86f6e2980bae1506495e32be76fc4330a3517030e35a27d17d723004acde6252",
+        "source_sha256": "7c674f91e300b64d434369ae652414d67c7976f7f8691c038632da838b7b97c3",
     },
     {
         "crate": "ihk_smp_x86_64",
@@ -542,6 +548,7 @@ def _validate_input(repo_root, item, index):
         "kconfig": "Kconfig",
         "shared_rust_abi": "abi/x86_64.rs",
         "rust_support_module": "os_registry.rs",
+        "rust_ioctl_dispatch": "ihk_ioctl.rs",
     }.get(item["kind"])
     if item["kind"] == "rust_module":
         expected_destination = item["destination"]
@@ -600,7 +607,7 @@ def _validate_input(repo_root, item, index):
         for forbidden in ('extern "c"', "unsafe", "include!", "include_bytes!", "asm!(", "module!"):
             if forbidden in lowered:
                 raise ValidationError("{0} contains forbidden executable/boundary construct: {1}".format(label, forbidden))
-    else:
+    elif item["destination"] == "ikc_master.rs":
         required = (
             "pub(crate) struct ListenerRegistry",
             "pub(crate) struct ListenerLease",
@@ -614,6 +621,21 @@ def _validate_input(repo_root, item, index):
                 raise ValidationError("{0} lacks a unique master-registry marker: {1}".format(label, token))
         lowered = text.lower()
         for forbidden in ('extern "c"', "unsafe", "include!", "include_bytes!", "asm!(", "module!"):
+            if forbidden in lowered:
+                raise ValidationError("{0} contains forbidden executable/boundary construct: {1}".format(label, forbidden))
+    else:
+        required = (
+            "pub(crate) struct IhkIoctlDispatcher",
+            "pub(crate) fn prepare_device",
+            "commit_after_external_success",
+            "NATIVE_DEVICE_REGISTRATION_SUPPORTED: bool = false",
+            "USER_COPY_REACHABLE_FROM_IOCTL: bool = false",
+        )
+        for token in required:
+            if text.count(token) < 1:
+                raise ValidationError("{0} lacks ioctl-dispatch marker: {1}".format(label, token))
+        lowered = text.lower()
+        for forbidden in ('extern "c"', "unsafe", "kernel::", "bindings::", "include!", "include_bytes!", "asm!(", "module!"):
             if forbidden in lowered:
                 raise ValidationError("{0} contains forbidden executable/boundary construct: {1}".format(label, forbidden))
     return {
@@ -674,6 +696,7 @@ def _validate_module(repo_root, module, expected, index):
             "mod ikc_queue;",
             "mod os_registry;",
             "mod ikc_master;",
+            "mod ihk_ioctl;",
         ):
             if text.count(fragment) != 1:
                 raise ValidationError(
@@ -728,7 +751,7 @@ def validate_manifest(repo_root, manifest_path):
     if not isinstance(inputs, list) or len(inputs) != len(EXPECTED_INPUTS):
         raise ValidationError(
             "inputs must contain exactly Kbuild, Kconfig, the shared x86_64 ABI, "
-            "the IHK queue module, OS registry, and IKC master module"
+            "the IHK queue module, OS registry, IKC master module, and ioctl dispatcher"
         )
     staged_files = [_validate_input(repo_root, item, index) for index, item in enumerate(inputs)]
     destinations = [item["destination"] for item in staged_files]
@@ -739,10 +762,11 @@ def validate_manifest(repo_root, manifest_path):
         "ikc_queue.rs",
         "os_registry.rs",
         "ikc_master.rs",
+        "ihk_ioctl.rs",
     ]:
         raise ValidationError(
             "inputs must be ordered as Kbuild, Kconfig, abi/x86_64.rs, "
-            "ikc_queue.rs, os_registry.rs, ikc_master.rs"
+            "ikc_queue.rs, os_registry.rs, ikc_master.rs, ihk_ioctl.rs"
         )
 
     modules = manifest["modules"]

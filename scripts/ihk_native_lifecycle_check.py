@@ -29,6 +29,12 @@ EXPECTED_SUPPORT_SOURCES = (
         "kind": "rust_support_module",
         "path": "host-kernel/native-rust/os_registry.rs",
     },
+    {
+        "contract_path": "host-kernel/contracts/ihk-ioctl-dispatch-foundation-v1.json",
+        "destination": "ihk_ioctl.rs",
+        "kind": "rust_ioctl_dispatch",
+        "path": "host-kernel/native-rust/ihk_ioctl.rs",
+    },
 )
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 
@@ -219,7 +225,12 @@ def _validate_contract(contract: dict[str, Any]) -> None:
 
 
 def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
-    for fragment in ('#[path = "abi/x86_64.rs"]\nmod abi;', "mod ikc_queue;", "mod ikc_master;"):
+    for fragment in (
+        '#[path = "abi/x86_64.rs"]\nmod abi;',
+        "mod ikc_queue;",
+        "mod ikc_master;",
+        "mod ihk_ioctl;",
+    ):
         if text.count(fragment) != 1:
             raise ValidationError(
                 f"IHK crate root lacks the exact staged module edge: {fragment}"
@@ -330,9 +341,33 @@ def _validate_support_sources(
     if readiness.get("status") != "TODO" or readiness.get("credit_eligible") is not False:
         raise ValidationError("OS registry support contract must remain TODO and credit-ineligible")
 
+    ioctl_contract = values["ihk_ioctl.rs"]
+    ioctl_item = support[2]
+    ioctl_implementation = ioctl_contract.get("implementation", {})
+    ioctl_inputs = ioctl_contract.get("canonical_inputs", {})
+    ioctl_readiness = ioctl_contract.get("readiness", {})
+    if ioctl_contract.get("gate_id") != "IHK-005-ioctl-dispatch-foundation":
+        raise ValidationError("ioctl dispatcher support contract identity differs")
+    if (ioctl_implementation.get("path") != ioctl_item["path"] or
+            ioctl_implementation.get("sha256") != ioctl_item["sha256"]):
+        raise ValidationError("ioctl dispatcher contract does not bind the staged source")
+    if ioctl_implementation.get("registration_supported") is not False:
+        raise ValidationError("ioctl dispatcher contract overclaims device registration")
+    if ioctl_implementation.get("user_copy_reachable") is not False:
+        raise ValidationError("ioctl dispatcher contract overclaims reachable user copy")
+    if ioctl_inputs.get("abi") != {
+            "path": abi_item["path"], "sha256": abi_item["sha256"]}:
+        raise ValidationError("ioctl dispatcher contract uses a different canonical ABI")
+    if ioctl_inputs.get("registry") != {
+            "path": registry_item["path"], "sha256": registry_item["sha256"]}:
+        raise ValidationError("ioctl dispatcher contract uses a different OS registry")
+    if ioctl_readiness.get("status") != "TODO" or ioctl_readiness.get("credit_eligible") is not False:
+        raise ValidationError("ioctl dispatcher support contract must remain TODO and credit-ineligible")
+
     declarations = (
         '#[allow(dead_code, unreachable_pub)]\n#[path = "abi/x86_64.rs"]\nmod abi;',
         "#[allow(dead_code)]\nmod os_registry;",
+        "#[allow(dead_code)]\nmod ihk_ioctl;",
     )
     for declaration in declarations:
         if source_text.count(declaration) != 1:

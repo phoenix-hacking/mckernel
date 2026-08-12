@@ -16,6 +16,8 @@ mod ikc_queue;
 mod os_registry;
 #[allow(dead_code)]
 mod ikc_master;
+#[allow(dead_code)]
+mod ihk_ioctl;
 
 use kernel::prelude::*;
 

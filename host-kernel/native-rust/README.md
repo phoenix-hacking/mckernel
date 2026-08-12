@@ -28,11 +28,12 @@ closure capture remain `NOT_READY`.
 
 ## IHK OS registry foundation
 
-The IHK provider now privately compiles `abi/x86_64.rs`, `ikc_queue.rs`, and
-`os_registry.rs`. The registry is an allocation-free 64-slot state machine
+The IHK provider now privately compiles `abi/x86_64.rs`, `ikc_queue.rs`,
+`os_registry.rs`, `ikc_master.rs`, and `ihk_ioctl.rs`. The registry is an
+allocation-free 64-slot state machine
 with generation-tagged handles, rollback guards, reference leases, deterministic
 errno mapping, and a fail-closed transition graph. The authoritative staging
-manifest copies all three support sources to the paths named by the crate
+manifest copies all five transitive sources to the paths named by the crate
 root, so Rust dep-info must include them in the exact compiler closure.
 
 The foundation does not expose create/destroy entry points, register character
@@ -47,6 +48,32 @@ python3 -m unittest -v scripts.tests.test_ihk_os_registry_check
 This source validation remains `TODO` and credit-ineligible until the provider
 callbacks, device publication/teardown, exact Kbuild, module load, runtime
 behavior, and independent transition/errno review are complete.
+
+## IHK scalar ioctl dispatcher foundation
+
+The private `ihk_ioctl.rs` module decodes the exact legacy raw command numbers
+for device create/destroy and the two OS-status aliases. It retains the x86_64
+scalar provider argument, rejects destroy minors outside 0 through 63, prepares
+rollback-safe registry transactions, preserves the legacy subset's errno and
+direct-return semantics, and uses generation-tagged OS identities for status.
+It performs no allocation, FFI, C dispatch, registration, or userspace copy.
+
+An audit of the byte-exact Rocky Linux 6.12 Rust sources found ioctl-number
+helpers and safe `UserSlice` copy wrappers, but no Rust `miscdevice`, `cdev`,
+`file_operations`, or ioctl-callback registration layer. The dispatcher is
+therefore not userspace reachable. It must not be wired through raw bindings or
+hand-written unstable FFI; a supported kernel registration adapter is an
+explicit blocker. Validate the frozen IHK behavior, exact Rocky API capture,
+mutation defenses, and standalone Rust 1.92 fixture with:
+
+```sh
+python3 scripts/ihk_ioctl_dispatch_check.py
+python3 -m unittest -v scripts.tests.test_ihk_ioctl_dispatch_check
+```
+
+Passing an unmodified exact Rocky source root through `--kernel-source` also
+replays the full Rust-tree absence audit. This remains an IHK-005 `TODO`
+checkpoint with no gate credit and no runtime create/destroy/status claim.
 
 ## Single build-control authority
 

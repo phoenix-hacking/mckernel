@@ -56,7 +56,7 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
         self.assertEqual(0, summary["parameters"])
         self.assertEqual(0, summary["dependencies"])
         self.assertEqual(3, summary["transitive_module_count"])
-        self.assertEqual(2, summary["support_sources"])
+        self.assertEqual(3, summary["support_sources"])
 
     def test_ihk_queue_module_edge_is_required(self) -> None:
         self.mutate_text(
@@ -72,6 +72,15 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
             self.contract["production_source"],
             "mod ikc_master;",
             "mod missing_master;",
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "module edge"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_ihk_ioctl_module_edge_is_required(self) -> None:
+        self.mutate_text(
+            self.contract["production_source"],
+            "mod ihk_ioctl;",
+            "mod missing_ioctl;",
         )
         with self.assertRaisesRegex(lifecycle.ValidationError, "module edge"):
             lifecycle.validate_repository(self.repo)
@@ -209,6 +218,22 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
             json.dumps(self.contract, indent=2, sort_keys=True) + "\n", encoding="utf-8"
         )
         with self.assertRaisesRegex(lifecycle.ValidationError, "TODO and credit-ineligible"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_ioctl_dispatch_registration_overclaim_is_rejected(self) -> None:
+        support = self.contract["support_sources"][2]
+        contract_path = self.repo / support["contract_path"]
+        value = json.loads(contract_path.read_text(encoding="utf-8"))
+        value["implementation"]["registration_supported"] = True
+        contract_path.write_text(
+            json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        support["contract_sha256"] = lifecycle._sha256(contract_path)
+        lifecycle_contract = self.repo / lifecycle.DEFAULT_CONTRACT
+        lifecycle_contract.write_text(
+            json.dumps(self.contract, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "overclaims device registration"):
             lifecycle.validate_repository(self.repo)
 
     def test_reference_parameter_oracle_drift_is_rejected(self) -> None:

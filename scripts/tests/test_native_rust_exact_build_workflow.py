@@ -243,6 +243,30 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             self.workflow.replace("\\\n            ", ""),
         )
 
+    def test_ihk_ioctl_dispatch_contract_api_audit_and_fixture_are_mandatory(self):
+        for path in (
+            "host-kernel/contracts/ihk-ioctl-dispatch-foundation-v1.json",
+            "scripts/ihk_ioctl_dispatch_check.py",
+            "scripts/tests/fixtures/ihk_ioctl_dispatch_compile.rs",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/ioctl.rs",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/uaccess.rs",
+            "scripts/tests/test_ihk_ioctl_dispatch_check.py",
+        ):
+            self.assertGreaterEqual(self.workflow.count(path), 2)
+        self.assertGreaterEqual(
+            self.workflow.count(
+                'python3 scripts/ihk_ioctl_dispatch_check.py --repo "$GITHUB_WORKSPACE"'
+            ),
+            3,
+        )
+        self.assertIn('--kernel-source "$source_root"', self.workflow)
+        self.assertGreaterEqual(
+            self.workflow.count(
+                "python3 -m unittest -v scripts.tests.test_ihk_ioctl_dispatch_check"
+            ),
+            2,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

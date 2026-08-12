@@ -98,6 +98,18 @@ impl PageAllocation<'_, '_> {
 
     /// Release this allocation immediately instead of waiting for `Drop`.
     pub(crate) fn release(mut self) -> Result<(), PageAllocatorError> {
+        self.try_release()
+    }
+
+    /// Attempt release while retaining this lease if allocator validation fails.
+    ///
+    /// This is the ownership-transfer registry's rollback primitive: callers
+    /// may retry after an internal invariant failure without reconstructing an
+    /// ownership token from a raw address.
+    pub(crate) fn try_release(&mut self) -> Result<(), PageAllocatorError> {
+        if !self.owned {
+            return Err(PageAllocatorError::Ownership);
+        }
         self.allocator
             .release_owned(self.range, OwnershipKind::Allocated)?;
         self.owned = false;
@@ -360,6 +372,20 @@ impl<'storage> BitmapPageAllocator<'storage> {
         }
     }
 
+    /// Inject reserved-map state for exact rollback tests only.
+    #[cfg(test)]
+    pub(crate) fn inject_reserved_overlap_for_test(
+        &self,
+        address: u64,
+        blocks: usize,
+        value: bool,
+    ) -> Result<(), PageAllocatorError> {
+        let start_block = self.validate_range(address, blocks)?;
+        let _guard = self.lock();
+        self.set_range(self.reserved, start_block, blocks, value);
+        Ok(())
+    }
+
     fn lock(&self) -> OperationGuard<'_> {
         loop {
             if self
@@ -545,7 +571,7 @@ mod tests {
         let allocator =
             BitmapPageAllocator::new(0x1000, 0x1000, 0x1000, &mut allocated, &mut reserved)
                 .unwrap();
-        let allocation = allocator.allocate(1).unwrap();
+        let mut allocation = allocator.allocate(1).unwrap();
         let range = allocation.range();
 
         assert_eq!(
@@ -554,15 +580,21 @@ mod tests {
         );
         assert!(allocator.bit_is_set(allocator.allocated, 0));
 
-        allocator.reserved[0].store(1, Ordering::Relaxed);
+        allocator
+            .inject_reserved_overlap_for_test(range.address(), range.blocks(), true)
+            .unwrap();
         assert_eq!(
-            allocator.release_owned(range, OwnershipKind::Allocated),
+            allocation.try_release(),
             Err(PageAllocatorError::Ownership)
         );
         assert!(allocator.bit_is_set(allocator.allocated, 0));
         assert!(allocator.bit_is_set(allocator.reserved, 0));
 
-        allocator.reserved[0].store(0, Ordering::Relaxed);
+        allocator
+            .inject_reserved_overlap_for_test(range.address(), range.blocks(), false)
+            .unwrap();
+        allocation.try_release().unwrap();
+        assert_eq!(allocation.try_release(), Err(PageAllocatorError::Ownership));
         drop(allocation);
         let snapshot = allocator.snapshot();
         assert_eq!(snapshot.allocated_blocks, 0);

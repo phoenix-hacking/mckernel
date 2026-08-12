@@ -44,7 +44,7 @@ class CurrentLedgerTests(unittest.TestCase):
     def test_committed_ledger_is_exact_complete_and_fail_closed(self):
         value = load_committed()
         discovery = ledger.validate_ledger(value, REPO_ROOT)
-        self.assertEqual(len(discovery["inputs"]), 7)
+        self.assertEqual(len(discovery["inputs"]), 8)
         self.assertEqual(len(discovery["sites"]), 21)
         self.assertEqual(value["coverage"]["by_crate"], {
             "ihk": 14,
@@ -84,6 +84,7 @@ class CurrentLedgerTests(unittest.TestCase):
             [
                 "host-kernel/native-rust/abi/x86_64.rs",
                 "host-kernel/native-rust/ihk.rs",
+                "host-kernel/native-rust/ihk_ioctl.rs",
                 "host-kernel/native-rust/ikc_master.rs",
                 "host-kernel/native-rust/ikc_queue.rs",
                 "host-kernel/native-rust/os_registry.rs",
@@ -284,6 +285,7 @@ class LedgerMutationTests(unittest.TestCase):
         ledger.NATIVE_SOURCE_ROOT + "/ikc_master.rs",
         ledger.NATIVE_SOURCE_ROOT + "/ikc_queue.rs",
         ledger.NATIVE_SOURCE_ROOT + "/os_registry.rs",
+        ledger.NATIVE_SOURCE_ROOT + "/ihk_ioctl.rs",
     )
 
     def setUp(self):

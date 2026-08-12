@@ -38,7 +38,7 @@ EXPECTED_CONTAINER_IMAGE = (
     "e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176"
 )
 EXPECTED_SOURCE_LOCK_SHA256 = (
-    "a70944b60d6cd6343456f8f2531e49a7ed9bef68ad33c3c95e699226b153e511"
+    "16f94def36b3b87ef8bca064bcf4f4ad7251d838fdf1af6cf7bd3413fa6c5531"
 )
 EXPECTED_PATCH_SERIES_SHA256 = (
     "6a1a5e8fb13b6ce6ed35bd8e5487bb67ecf92d2be927799b660f21b5631f68fb"
@@ -95,6 +95,7 @@ EXPECTED_STAGE_REPOSITORY_INPUT_PATHS = sorted([
     "host-kernel/kbuild/parent-integration-v1.json",
     "host-kernel/native-rust/abi/x86_64.rs",
     "host-kernel/native-rust/ihk.rs",
+    "host-kernel/native-rust/ihk_ioctl.rs",
     "host-kernel/native-rust/ihk_smp_x86_64.rs",
     "host-kernel/native-rust/ikc_master.rs",
     "host-kernel/native-rust/ikc_queue.rs",
@@ -110,6 +111,7 @@ EXPECTED_REPOSITORY_INPUT_PATHS = [
     "host-kernel/kbuild/Kconfig",
     "host-kernel/native-rust/abi/x86_64.rs",
     "host-kernel/native-rust/ihk.rs",
+    "host-kernel/native-rust/ihk_ioctl.rs",
     "host-kernel/native-rust/ihk_smp_x86_64.rs",
     "host-kernel/native-rust/ikc_master.rs",
     "host-kernel/native-rust/ikc_queue.rs",
@@ -134,6 +136,7 @@ EXPECTED_REPOSITORY_INPUT_PATHS = [
     "scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs",
     "scripts/tests/fixtures/ihk_native_master_compile.rs",
     "scripts/tests/fixtures/ihk_native_queue_compile.rs",
+    "scripts/tests/fixtures/ihk_ioctl_dispatch_compile.rs",
     "scripts/tests/fixtures/ihk_os_registry_compile.rs",
     "scripts/tests/fixtures/ihk_page_allocator_compile.rs",
     "scripts/tests/fixtures/ihk_page_allocator_lifetime_compile_fail.rs",
@@ -148,10 +151,12 @@ EXPECTED_REPOSITORY_INPUT_PATHS = [
     "scripts/tests/fixtures/rust-core-rocky-6.12/rust/Makefile",
     "scripts/tests/fixtures/rust-core-rocky-6.12/rust/bindings/lib.rs",
     "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/block/mq/tag_set.rs",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/ioctl.rs",
     "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/init/macros.rs",
     "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/lib.rs",
     "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/list/arc.rs",
     "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/sync/arc.rs",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/uaccess.rs",
     "scripts/tests/fixtures/rust-core-rocky-6.12/rust/macros/module.rs",
     "scripts/tests/fixtures/rust-core-rocky-6.12/rust/uapi/lib.rs",
     "scripts/tests/fixtures/rust-core-rocky-6.12/scripts/Makefile.build",

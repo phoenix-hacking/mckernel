@@ -97,15 +97,9 @@ class RepositoryReviewTests(unittest.TestCase):
         )
         self.assertNotEqual(current, inputs)
         review.validate_repository_inputs(REPO_ROOT)
-        self.assertEqual(
-            self.git_checked,
-            all(
-                review.git_commit_available(REPO_ROOT, commit)
-                for commit in (review.RUNTIME_HEAD, review.OBSERVED_HEAD)
-            ),
-        )
+        self.assertTrue(self.git_checked)
 
-    def test_missing_historical_commits_use_exact_byte_binding_fail_closed(self):
+    def test_missing_published_base_fails_even_when_input_bytes_match(self):
         with tempfile.TemporaryDirectory(prefix="platform-review-shallow-") as text:
             root = Path(text)
             relative_paths = [review.REVIEW_PATH] + [
@@ -138,14 +132,81 @@ class RepositoryReviewTests(unittest.TestCase):
 
             self.assertFalse(review.git_commit_available(root, review.RUNTIME_HEAD))
             self.assertFalse(review.git_commit_available(root, review.OBSERVED_HEAD))
-            manifest, git_checked = review.check_repository(root)
-            self.assertEqual(review.REVIEW_ID, manifest["review_id"])
-            self.assertFalse(git_checked)
-
-            changed = root / review.current_expected_inputs()[0]["path"]
-            changed.write_bytes(changed.read_bytes() + b"\n")
-            with self.assertRaisesRegex(review.ReviewError, "size"):
+            self.assertFalse(
+                review.git_commit_available(root, review.PUBLISHED_BASE_HEAD)
+            )
+            with self.assertRaisesRegex(review.ReviewError, "command failed"):
                 review.check_repository(root)
+
+    def test_connector_tree_port_is_exact_and_never_runtime_credit(self):
+        port = self.manifest["connector_tree_port"]
+        self.assertEqual(port, review.expected_connector_tree_port())
+        self.assertEqual(port["binding_kind"], "exact-input-tree-port")
+        self.assertEqual(port["published_base_head_sha"], review.PUBLISHED_BASE_HEAD)
+        self.assertEqual(port["ported_input_count"], 10)
+        self.assertEqual(port["changed_from_published_base_count"], 2)
+        self.assertEqual(
+            port["changed_from_published_base_paths"],
+            review.PUBLISHED_BASE_CHANGED_PATHS,
+        )
+        self.assertTrue(
+            port["historical_review_preserved_by_exact_base_review_blob"]
+        )
+        self.assertFalse(
+            port["historical_observation_fresh_git_reverification_claimed"]
+        )
+        self.assertFalse(
+            port["historical_observation_git_object_required_for_tree_port"]
+        )
+        self.assertFalse(port["runtime_identity_claimed"])
+        self.assertFalse(port["credit_eligible"])
+
+    def test_connector_tree_port_credit_and_identity_mutations_are_rejected(self):
+        for key in ("runtime_identity_claimed", "credit_eligible"):
+            mutated = copy.deepcopy(self.manifest)
+            mutated["connector_tree_port"][key] = True
+            with self.assertRaisesRegex(review.ReviewError, "connector tree port"):
+                review.validate_review(mutated, self.manifest_bytes)
+
+    def test_connector_parent_vector_rejects_merge_and_descendant(self):
+        review.validate_connector_parent_vector([review.PUBLISHED_BASE_HEAD])
+        for parents in (
+            [review.PUBLISHED_BASE_HEAD, review.OBSERVED_HEAD],
+            ["a" * 40],
+        ):
+            with self.assertRaisesRegex(review.ReviewError, "parent vector"):
+                review.validate_connector_parent_vector(parents)
+
+    def test_connector_input_rejects_dirty_index_mode_and_masked_head(self):
+        expected = review.current_expected_inputs()[0]
+        relative = expected["path"]
+        data = (REPO_ROOT / relative).read_bytes()
+        tree_entry = "100644 blob {}\t{}\0".format(
+            expected["git_blob_sha1"], relative
+        ).encode("utf-8")
+        index_entry = "100644 {} 0\t{}\n".format(
+            expected["git_blob_sha1"], relative
+        ).encode("utf-8")
+        review.validate_connector_input(
+            expected, relative, data, data, tree_entry, index_entry
+        )
+        with self.assertRaisesRegex(review.ReviewError, "worktree input"):
+            review.validate_connector_input(
+                expected, relative, data + b"x", data, tree_entry, index_entry
+            )
+        with self.assertRaisesRegex(review.ReviewError, "index entry"):
+            review.validate_connector_input(
+                expected, relative, data, data, tree_entry, b""
+            )
+        with self.assertRaisesRegex(review.ReviewError, "HEAD tree entry"):
+            review.validate_connector_input(
+                expected,
+                relative,
+                data,
+                data,
+                tree_entry.replace(b"100644", b"120000"),
+                index_entry,
+            )
 
     def test_container_claim_boundary_is_not_escalated(self):
         container = self.manifest["runtime_candidate"]["container"]

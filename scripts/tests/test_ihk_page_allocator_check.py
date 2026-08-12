@@ -225,6 +225,20 @@ class IhkPageAllocatorCheckTests(unittest.TestCase):
         with self.assertRaisesRegex(allocator_check.ValidationError, "allocation Drop"):
             allocator_check.validate_repository(self.repo)
 
+    def test_resigned_retryable_release_ownership_clear_reordering_fails(self):
+        self.mutate_and_resign(
+            self.contract["production_source"]["path"],
+            "        self.allocator\n            .release_owned(self.range, OwnershipKind::Allocated)?;\n        self.owned = false;",
+            "        self.owned = false;\n        self.allocator\n            .release_owned(self.range, OwnershipKind::Allocated)?;",
+            self.contract["production_source"],
+            "sha256",
+        )
+        with self.assertRaisesRegex(
+            allocator_check.ValidationError,
+            "failure-preserving explicit allocation release",
+        ):
+            allocator_check.validate_repository(self.repo)
+
     def test_resigned_alignment_mutation_fails(self):
         self.mutate_and_resign(
             self.contract["production_source"]["path"],

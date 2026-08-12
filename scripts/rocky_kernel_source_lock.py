@@ -82,6 +82,7 @@ EXPECTED_LICENSE_CAPTURE_AUTHORITY: dict[str, Any] = {
                 "host-kernel/kbuild/Kconfig",
                 "host-kernel/native-rust/abi/x86_64.rs",
                 "host-kernel/native-rust/ihk.rs",
+                "host-kernel/native-rust/ihk_ioctl.rs",
                 "host-kernel/native-rust/ihk_smp_x86_64.rs",
                 "host-kernel/native-rust/ikc_master.rs",
                 "host-kernel/native-rust/ikc_queue.rs",
@@ -142,6 +143,7 @@ EXPECTED_LICENSE_CAPTURE_AUTHORITY: dict[str, Any] = {
                 "scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs",
                 "scripts/tests/fixtures/ihk_native_master_compile.rs",
                 "scripts/tests/fixtures/ihk_native_queue_compile.rs",
+                "scripts/tests/fixtures/ihk_ioctl_dispatch_compile.rs",
                 "scripts/tests/fixtures/ihk_os_registry_compile.rs",
                 "scripts/tests/fixtures/ihk_page_allocator_compile.rs",
                 (
@@ -182,6 +184,10 @@ EXPECTED_LICENSE_CAPTURE_AUTHORITY: dict[str, Any] = {
                 ),
                 (
                     "scripts/tests/fixtures/rust-core-rocky-6.12/"
+                    "rust/kernel/ioctl.rs"
+                ),
+                (
+                    "scripts/tests/fixtures/rust-core-rocky-6.12/"
                     "rust/kernel/init/macros.rs"
                 ),
                 (
@@ -195,6 +201,10 @@ EXPECTED_LICENSE_CAPTURE_AUTHORITY: dict[str, Any] = {
                 (
                     "scripts/tests/fixtures/rust-core-rocky-6.12/"
                     "rust/kernel/sync/arc.rs"
+                ),
+                (
+                    "scripts/tests/fixtures/rust-core-rocky-6.12/"
+                    "rust/kernel/uaccess.rs"
                 ),
                 (
                     "scripts/tests/fixtures/rust-core-rocky-6.12/"

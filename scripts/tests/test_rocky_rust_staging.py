@@ -103,6 +103,7 @@ class RockyRustStagingTests(unittest.TestCase):
                 "ikc_queue.rs",
                 "os_registry.rs",
                 "ikc_master.rs",
+                "ihk_ioctl.rs",
                 "ihk.rs",
                 "ihk_smp_x86_64.rs",
                 "mcctrl.rs",
@@ -210,6 +211,7 @@ class RockyRustStagingTests(unittest.TestCase):
                 "ikc_queue.rs",
                 "os_registry.rs",
                 "ikc_master.rs",
+                "ihk_ioctl.rs",
                 "ihk.rs",
                 "ihk_smp_x86_64.rs",
                 "mcctrl.rs",
@@ -266,6 +268,29 @@ class RockyRustStagingTests(unittest.TestCase):
     def test_os_registry_path_injection_is_rejected_even_when_hashed(self):
         item = self.manifest["inputs"][4]
         item["destination"] = "../os_registry.rs"
+        self.write_manifest()
+        with self.assertRaises(staging.ValidationError):
+            self.plan()
+
+    def test_ioctl_dispatcher_is_staged_beside_its_registry(self):
+        plan = self.plan()
+        kernel = os.path.join(self.temporary, "ioctl-evidence-kernel")
+        os.makedirs(os.path.join(kernel, "drivers", "misc"))
+        target = staging.stage_for_evidence(plan, kernel)
+        dispatcher_path = os.path.join(target, "ihk_ioctl.rs")
+        self.assertTrue(os.path.isfile(dispatcher_path))
+        self.assertEqual(staging.EXPECTED_INPUTS[6]["sha256"], digest(dispatcher_path))
+        with open(os.path.join(target, "ihk.rs"), "r") as stream:
+            source = stream.read()
+        self.assertIn("mod ikc_queue;", source)
+        self.assertIn("mod os_registry;", source)
+        self.assertIn("mod ikc_master;", source)
+        self.assertIn("mod ihk_ioctl;", source)
+        self.assertFalse(plan["credit_eligible"])
+
+    def test_ioctl_dispatcher_path_injection_is_rejected_even_when_hashed(self):
+        item = self.manifest["inputs"][6]
+        item["destination"] = "../ihk_ioctl.rs"
         self.write_manifest()
         with self.assertRaises(staging.ValidationError):
             self.plan()
