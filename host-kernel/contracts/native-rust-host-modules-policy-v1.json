@@ -65,6 +65,89 @@
       "ihk"
     ]
   },
+  "module_oracles": {
+    "comparison_identity_fields": [
+      "kernel_nvr",
+      "kernel_build_id",
+      "kernel_config_sha256",
+      "toolchain_manifest_sha256",
+      "vermagic",
+      "signing_policy",
+      "dependency_names",
+      "symbol_signatures"
+    ],
+    "profiles": {
+      "R0": {
+        "implementation": "frozen legacy C and Rust-helper reference artifacts",
+        "kernel_specific_metadata": "provenance only",
+        "required_bindings": [
+          "source_commit",
+          "ihk_commit",
+          "kernel_nvr",
+          "kernel_build_id",
+          "kernel_config_sha256",
+          "toolchain_manifest_sha256",
+          "artifact_sha256"
+        ],
+        "role": "Rocky 8.10 regression-continuity oracle"
+      },
+      "R1": {
+        "implementation": "legacy C modules rebuilt from the frozen source",
+        "kernel_specific_metadata": "production comparison baseline",
+        "required_bindings": [
+          "source_commit",
+          "ihk_commit",
+          "kernel_nvr",
+          "kernel_build_id",
+          "kernel_config_sha256",
+          "toolchain_manifest_sha256",
+          "artifact_sha256"
+        ],
+        "role": "selected custom Rocky kernel legacy baseline"
+      },
+      "R2": {
+        "implementation": "native standalone Rust-for-Linux modules",
+        "kernel_specific_metadata": "must equal R1",
+        "required_bindings": [
+          "source_commit",
+          "kernel_nvr",
+          "kernel_build_id",
+          "kernel_config_sha256",
+          "toolchain_manifest_sha256",
+          "artifact_sha256"
+        ],
+        "role": "selected custom Rocky kernel production candidate"
+      }
+    },
+    "production_comparison": "R1 and R2 must use the exact same selected custom Rocky kernel, config, toolchain, and signing policy; R0 kernel-specific metadata must never satisfy an R2 requirement",
+    "r0_stable_surfaces": [
+      "module filename",
+      "normalized module name",
+      "compatible license",
+      "public UAPI",
+      "observable behavior"
+    ]
+  },
+  "module_symbol_contract": {
+    "modversions": {
+      "config_source": "the selected custom Rocky kernel .config bound by SHA-256",
+      "disabled": "R1 and R2 must both omit symbol CRC entries; exact-NVR artifacts must be deployed atomically and consumer link/load validation remains mandatory",
+      "enabled": "every shared R1/R2 export must have an equal same-kernel CRC and every consumer build must use the resulting Module.symvers",
+      "r0_crc_policy": "informational provenance only"
+    },
+    "production_namespaces": {
+      "ihk": "MCKERNEL_IHK_V1"
+    },
+    "required_imports": {
+      "ihk_smp_x86_64": [
+        "MCKERNEL_IHK_V1"
+      ],
+      "mcctrl": [
+        "MCKERNEL_IHK_V1"
+      ]
+    },
+    "r0_namespace_policy": "the frozen ihk exports are unnamespaced; adding MCKERNEL_IHK_V1 is an intentional production-only hardening delta, not an R0 parity failure"
+  },
   "evidence_invalidation_rules": [
     {
       "change": "policy manifest bytes or schema",

@@ -105,6 +105,8 @@ KIND_HARNESS = {
 }
 
 ERRNO_PATTERN = re.compile(r"-\s*(E[A-Z][A-Z0-9_]*)\b")
+PATCH_PATH = "scripts/patches/ihk-linux-compat.patch"
+IHK_SYMBOL_NAMESPACE = "MCKERNEL_IHK_V1"
 
 
 class ContractError(RuntimeError):
@@ -249,28 +251,277 @@ def validate_policy(policy: dict[str, Any]) -> None:
         if dependencies.get(flag) is not True:
             raise ContractError(f"dependency rule {flag} must be true")
 
+    oracles = policy.get("module_oracles")
+    if not isinstance(oracles, dict):
+        raise ContractError("module oracle policy is missing")
+    profiles = oracles.get("profiles")
+    if not isinstance(profiles, dict) or set(profiles) != {"R0", "R1", "R2"}:
+        raise ContractError("module oracle profiles must be exactly R0, R1, and R2")
+    expected_bindings = {
+        "R0": {
+            "source_commit",
+            "ihk_commit",
+            "kernel_nvr",
+            "kernel_build_id",
+            "kernel_config_sha256",
+            "toolchain_manifest_sha256",
+            "artifact_sha256",
+        },
+        "R1": {
+            "source_commit",
+            "ihk_commit",
+            "kernel_nvr",
+            "kernel_build_id",
+            "kernel_config_sha256",
+            "toolchain_manifest_sha256",
+            "artifact_sha256",
+        },
+        "R2": {
+            "source_commit",
+            "kernel_nvr",
+            "kernel_build_id",
+            "kernel_config_sha256",
+            "toolchain_manifest_sha256",
+            "artifact_sha256",
+        },
+    }
+    for profile, required in expected_bindings.items():
+        entry = profiles.get(profile)
+        if not isinstance(entry, dict):
+            raise ContractError(f"module oracle profile {profile} is malformed")
+        if set(entry.get("required_bindings", [])) != required:
+            raise ContractError(f"module oracle profile {profile} bindings changed")
+    required_comparison_fields = {
+        "kernel_nvr",
+        "kernel_build_id",
+        "kernel_config_sha256",
+        "toolchain_manifest_sha256",
+        "vermagic",
+        "signing_policy",
+        "dependency_names",
+        "symbol_signatures",
+    }
+    if set(oracles.get("comparison_identity_fields", [])) != required_comparison_fields:
+        raise ContractError("R1/R2 comparison identity fields changed")
+    comparison = str(oracles.get("production_comparison", ""))
+    if "R1 and R2" not in comparison or "R0" not in comparison:
+        raise ContractError("module oracle production comparison is incomplete")
+
+    symbol_contract = policy.get("module_symbol_contract")
+    if not isinstance(symbol_contract, dict):
+        raise ContractError("module symbol contract is missing")
+    if symbol_contract.get("production_namespaces") != {
+        "ihk": IHK_SYMBOL_NAMESPACE
+    }:
+        raise ContractError("production symbol namespaces changed")
+    if symbol_contract.get("required_imports") != {
+        "ihk_smp_x86_64": [IHK_SYMBOL_NAMESPACE],
+        "mcctrl": [IHK_SYMBOL_NAMESPACE],
+    }:
+        raise ContractError("production namespace imports changed")
+    if "intentional production-only" not in str(
+        symbol_contract.get("r0_namespace_policy", "")
+    ):
+        raise ContractError("R0 namespace delta is not explicit")
+    modversions = symbol_contract.get("modversions")
+    if not isinstance(modversions, dict) or set(modversions) != {
+        "config_source",
+        "disabled",
+        "enabled",
+        "r0_crc_policy",
+    }:
+        raise ContractError("conditional MODVERSIONS policy is incomplete")
+    if "R1/R2" not in str(modversions["enabled"]):
+        raise ContractError("enabled MODVERSIONS policy does not bind R1 to R2")
+    if "omit symbol CRC" not in str(modversions["disabled"]):
+        raise ContractError("disabled MODVERSIONS policy does not reject CRCs")
+    if modversions["r0_crc_policy"] != "informational provenance only":
+        raise ContractError("R0 CRCs must remain informational")
+
+
+def apply_unified_diff_to_text(
+    text: str, patch_text: str, source_path: str
+) -> tuple[str, bool]:
+    """Apply one file's unified diff while preserving deterministic provenance."""
+
+    relative = source_path.removeprefix("ihk/")
+    lines = patch_text.splitlines(keepends=True)
+    start: int | None = None
+    end = len(lines)
+    for index, line in enumerate(lines):
+        match = re.match(r"^diff --git a/(\S+) b/(\S+)\s*$", line)
+        if not match:
+            continue
+        if start is not None:
+            end = index
+            break
+        if source_path.startswith("ihk/") and match.group(1) == relative:
+            start = index
+    if start is None:
+        return text, False
+
+    original = text.splitlines(keepends=True)
+    output: list[str] = []
+    cursor = 0
+    index = start
+    while index < end:
+        header = re.match(
+            r"^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@",
+            lines[index],
+        )
+        if not header:
+            index += 1
+            continue
+        old_start = int(header.group(1)) - 1
+        old_count = int(header.group(2) or "1")
+        if old_start < cursor:
+            raise ContractError(f"overlapping patch hunks for {source_path}")
+        output.extend(original[cursor:old_start])
+        cursor = old_start
+        consumed = 0
+        index += 1
+        while index < end and not lines[index].startswith("@@ "):
+            line = lines[index]
+            if line.startswith("diff --git "):
+                break
+            if line.startswith("\\ No newline at end of file"):
+                index += 1
+                continue
+            if not line or line[0] not in " +-":
+                raise ContractError(
+                    f"malformed unified diff line for {source_path}: {line!r}"
+                )
+            marker, value = line[0], line[1:]
+            if marker in " -":
+                if cursor >= len(original) or original[cursor] != value:
+                    raise ContractError(
+                        f"compatibility overlay context mismatch for {source_path} "
+                        f"at source line {cursor + 1}"
+                    )
+                cursor += 1
+                consumed += 1
+            if marker in " +":
+                output.append(value)
+            index += 1
+        if consumed != old_count:
+            raise ContractError(
+                f"compatibility overlay hunk count mismatch for {source_path}: "
+                f"consumed {consumed}, expected {old_count}"
+            )
+    output.extend(original[cursor:])
+    return "".join(output), True
+
+
+def effective_source_text(
+    repo: Path, path: str, language: str = "c"
+) -> tuple[str, dict[str, Any]]:
+    base = inventory_tool.source_blob(repo, path).decode("utf-8", errors="replace")
+    patch = inventory_tool.source_blob(repo, PATCH_PATH)
+    if language == "c":
+        effective, applied = apply_unified_diff_to_text(
+            base, patch.decode("utf-8", errors="strict"), path
+        )
+        filtered = inventory_tool.filter_simple_cpp(
+            inventory_tool.strip_c_comments(effective), inventory_tool.CPP_DEFINES
+        )
+        filter_mode = "compatibility overlay plus conservative named-guard CPP"
+        cpp_defines: list[str] = sorted(inventory_tool.CPP_DEFINES)
+        unknown_policy: str | None = "retain both branches conservatively"
+    elif language == "rust":
+        effective, applied = base, False
+        filtered = inventory_tool.strip_c_comments(effective)
+        filter_mode = "Rust source with comments removed; no cfg attributes in frozen input"
+        cpp_defines = []
+        unknown_policy = None
+    else:
+        raise ContractError(f"unsupported failure-site source language {language}: {path}")
+    return filtered, {
+        "base_sha256": sha256(base.encode()),
+        "compatibility_overlay_applied": applied,
+        "compatibility_overlay_sha256": sha256(patch) if applied else None,
+        "cpp_defines": cpp_defines,
+        "cpp_unknown_condition_policy": unknown_policy,
+        "effective_filtered_sha256": sha256(filtered.encode()),
+        "filter_mode": filter_mode,
+        "language": language,
+    }
+
 
 def source_errno_surface(repo: Path, legacy: dict[str, Any]) -> dict[str, list[dict[str, Any]]]:
     result: dict[str, list[dict[str, Any]]] = {}
     source_modules = legacy["source_capture"]["modules"]
     for module in EXPECTED_MODULES:
-        occurrences: dict[str, list[dict[str, Any]]] = defaultdict(list)
+        occurrences: list[dict[str, Any]] = []
         for entry in source_modules[module]["active_inputs"]:
             path = str(entry["source"])
-            text = inventory_tool.source_blob(repo, path).decode("utf-8", errors="replace")
-            filtered = inventory_tool.strip_c_comments(text)
+            language = str(entry.get("language"))
+            if language not in {"c", "rust"}:
+                continue
+            filtered, provenance = effective_source_text(repo, path, language)
             for match in ERRNO_PATTERN.finditer(filtered):
-                occurrences[match.group(1)].append(
+                line = filtered.count("\n", 0, match.start()) + 1
+                line_start = filtered.rfind("\n", 0, match.start()) + 1
+                line_end = filtered.find("\n", match.end())
+                if line_end < 0:
+                    line_end = len(filtered)
+                statement = " ".join(filtered[line_start:line_end].strip().split())
+                occurrences.append(
                     {
+                        "column": match.start() - line_start + 1,
+                        "errno": match.group(1),
+                        "line": line,
                         "source": path,
-                        "line": filtered.count("\n", 0, match.start()) + 1,
+                        "source_provenance": provenance,
+                        "statement": statement,
                     }
                 )
-        result[module] = [
-            {"errno": name, "occurrences": occurrences[name]}
-            for name in sorted(occurrences)
-        ]
+        occurrences.sort(
+            key=lambda item: (
+                str(item["source"]),
+                int(item["line"]),
+                int(item["column"]),
+                str(item["errno"]),
+            )
+        )
+        for ordinal, occurrence in enumerate(occurrences, start=1):
+            occurrence["site_ordinal"] = ordinal
+            occurrence["site_id"] = (
+                f"{module}:{occurrence['source']}:{occurrence['line']}:"
+                f"{occurrence['column']}:{occurrence['errno']}"
+            )
+        result[module] = occurrences
     return result
+
+
+def parameter_default(repo: Path, parameter: dict[str, Any]) -> dict[str, Any]:
+    path = str(parameter["source"])
+    filtered, provenance = effective_source_text(repo, path)
+    name = re.escape(str(parameter["name"]))
+    declaration = re.compile(
+        rf"\b(?:static\s+)?(?P<ctype>unsigned\s+(?:int|long)|int|long|bool)\s+"
+        rf"{name}\s*=\s*(?P<value>[^;]+);"
+    )
+    matches = list(declaration.finditer(filtered))
+    if len(matches) != 1:
+        raise ContractError(
+            f"expected one initialized declaration for module parameter "
+            f"{parameter['name']} in {path}, found {len(matches)}"
+        )
+    match = matches[0]
+    expression = match.group("value").strip()
+    try:
+        value = inventory_tool.parse_c_integer(expression)
+    except inventory_tool.InventoryError as exc:
+        raise ContractError(
+            f"cannot evaluate default for module parameter {parameter['name']}: {exc}"
+        ) from exc
+    return {
+        "c_type": " ".join(match.group("ctype").split()),
+        "expression": expression,
+        "line": filtered.count("\n", 0, match.start()) + 1,
+        "source_provenance": provenance,
+        "value": value,
+    }
 
 
 def flatten_procfs(procfs: dict[str, Any]) -> Iterable[tuple[str, dict[str, Any], str]]:
@@ -326,7 +577,7 @@ def build_contract(repo: Path, policy: dict[str, Any], legacy: dict[str, Any]) -
         behavior_id = f"BHV-{slug(module, 20)}-{slug(kind, 24)}-{slug(name)}-{suffix}"
         test_id = f"AT-{slug(module, 20)}-{slug(kind, 24)}-{suffix}"
         component = KIND_COMPONENT[kind]
-        replacement = f"crate::{component}::{slug(name).lower()}"
+        replacement = f"crate::{component}::{slug(name).lower()}_{suffix.lower()}"
         behavior = {
             "acceptance_test_ids": [test_id],
             "id": behavior_id,
@@ -357,10 +608,22 @@ def build_contract(repo: Path, policy: dict[str, Any], legacy: dict[str, Any]) -
         details = binary_modules[module]
         modinfo = details["modinfo"]["values"]
         identity = {
-            "filename": expected["filename"],
-            "normalized_name": expected["normalized_name"],
-            "license": modinfo.get("license", []),
-            "vermagic": modinfo.get("vermagic", []),
+            "production_contract": {
+                "filename": expected["filename"],
+                "license": modinfo.get("license", []),
+                "normalized_name": expected["normalized_name"],
+                "vermagic_policy": (
+                    "R1 legacy-C and R2 native-Rust artifacts must have identical "
+                    "vermagic for the selected custom Rocky kernel NVR; the R0 Rocky "
+                    "8.10 vermagic is provenance only and must not be copied"
+                ),
+            },
+            "r0_reference": {
+                "filename": expected["filename"],
+                "license": modinfo.get("license", []),
+                "normalized_name": expected["normalized_name"],
+                "vermagic": modinfo.get("vermagic", []),
+            },
         }
         add(
             module,
@@ -368,7 +631,11 @@ def build_contract(repo: Path, policy: dict[str, Any], legacy: dict[str, Any]) -
             expected["normalized_name"],
             identity,
             f"binary_capture.modules.{module}.modinfo",
-            ["exact filename, normalized name, license, and vermagic contract", "no unexpected module taint"],
+            [
+                "filename, normalized name, and compatible license match the frozen interface",
+                "R1 and R2 vermagic match the selected custom Rocky kernel exactly without requiring R0 vermagic equality",
+                "no unexpected module taint",
+            ],
         )
         for action in ("load", "unload"):
             add(
@@ -384,27 +651,67 @@ def build_contract(repo: Path, policy: dict[str, Any], legacy: dict[str, Any]) -
                 module,
                 "module_dependency",
                 provider,
-                {"consumer": module, "provider": provider},
+                {
+                    "consumer": module,
+                    "provider": provider,
+                    "required_symbol_namespace": IHK_SYMBOL_NAMESPACE,
+                },
                 f"policy.conversion_scope.included_modules.{module}.dependencies",
-                ["dependency is declared and versioned", "load and unload ordering is enforced"],
+                [
+                    "dependency and required provider namespace are declared and versioned",
+                    "load and unload ordering is enforced",
+                ],
             )
         for index, parameter in enumerate(source_modules[module]["source_module_parameters"]):
+            parameter_contract = dict(parameter)
+            parameter_contract["default"] = parameter_default(repo, parameter)
             add(
                 module,
                 "module_parameter",
                 str(parameter["name"]),
-                parameter,
+                parameter_contract,
                 f"source_capture.modules.{module}.source_module_parameters[{index}]",
                 ["name, type, permissions, default, and invalid-input behavior match", "parameter lifetime survives load and unload cycles"],
             )
+        source_exports = {
+            str(entry["name"]): entry
+            for entry in source_modules[module]["source_export_macros"]
+        }
         for index, exported in enumerate(details["exports"]):
+            name = str(exported["name"])
+            source_export = source_exports.get(name)
+            if source_export is None:
+                raise ContractError(f"missing source export provenance for {module}:{name}")
+            export_contract = {
+                "production_contract": {
+                    "export_class": source_export["class"],
+                    "name": name,
+                    "namespace": IHK_SYMBOL_NAMESPACE,
+                    "namespace_policy": (
+                        "an intentional production-only namespace delta; R0 has no "
+                        "namespace and consumers must import the new namespace"
+                    ),
+                    "symbol_version_policy": (
+                        "when the selected kernel enables CONFIG_MODVERSIONS, R1 and R2 "
+                        "CRCs must match each other; when disabled, both must omit CRCs; "
+                        "the R0 CRC is provenance only"
+                    ),
+                },
+                "r0_reference": dict(exported),
+                "source_declaration": source_export,
+            }
             add(
                 module,
                 "exported_symbol",
-                str(exported["name"]),
-                exported,
+                name,
+                export_contract,
                 f"binary_capture.modules.{module}.exports[{index}]",
-                ["symbol name, class, namespace, and version match", "all frozen consumers link and execute identically"],
+                [
+                    "symbol name, signature, export class, and consumer relationship match",
+                    "the declared production namespace is imported by every R2 consumer as an intentional delta from unnamespaced R0",
+                    "symbol CRCs match R1 only when CONFIG_MODVERSIONS is enabled and are absent from both R1 and R2 otherwise",
+                    "all frozen consumers rebuilt for R1 and R2 link and execute identically",
+                ],
             )
 
     for index, node in enumerate(legacy["device_nodes"]):
@@ -562,10 +869,14 @@ def build_contract(repo: Path, policy: dict[str, Any], legacy: dict[str, Any]) -
             add(
                 module,
                 "legacy_errno",
-                str(entry["errno"]),
+                str(entry["site_id"]),
                 entry,
                 f"source_errno_surface.{module}[{index}]",
-                ["the same reachable fault returns the exact negative errno", "output and ownership state match after the failure"],
+                [
+                    "the same explicit failure site returns the exact negative errno",
+                    "the mapped Rust fault test proves the intended site fired",
+                    "output and ownership state match after the failure",
+                ],
             )
         add(
             module,
@@ -583,7 +894,11 @@ def build_contract(repo: Path, policy: dict[str, Any], legacy: dict[str, Any]) -
         "by_kind": dict(sorted(Counter(item["kind"] for item in behaviors).items())),
         "by_module": dict(sorted(Counter(item["module"] for item in behaviors).items())),
         "errno_by_module": {
-            module: [entry["errno"] for entry in errno_surface[module]]
+            module: sorted({entry["errno"] for entry in errno_surface[module]})
+            for module in EXPECTED_MODULES
+        },
+        "errno_sites_by_module": {
+            module: len(errno_surface[module])
             for module in EXPECTED_MODULES
         },
         "test_count": len(tests),
@@ -597,6 +912,12 @@ def build_contract(repo: Path, policy: dict[str, Any], legacy: dict[str, Any]) -
         "inventory_profile": legacy["profile"],
         "policy_file_sha256": sha256((repo / POLICY_PATH).read_bytes()),
         "policy_id": policy["policy_id"],
+        "comparison_profiles": {
+            "R0": "frozen Rocky 8.10 binary and runtime provenance oracle",
+            "R1": "legacy C modules rebuilt for the selected custom Rocky kernel",
+            "R2": "native Rust modules built for the exact same custom Rocky kernel",
+            "identity_rule": "R1 and R2 are compared directly; R0 kernel-specific metadata is never copied into R2",
+        },
         "provenance": {
             "parent_commit": legacy["provenance"]["parent_commit"],
             "ihk_commit": legacy["provenance"]["ihk_commit"],
@@ -617,6 +938,11 @@ def validate_contract(contract: dict[str, Any], policy: dict[str, Any], legacy: 
         raise ContractError("contract policy digest is stale")
     if contract.get("inventory_file_sha256") != sha256((repo / INVENTORY_PATH).read_bytes()):
         raise ContractError("contract inventory digest is stale")
+    profiles = contract.get("comparison_profiles")
+    if not isinstance(profiles, dict) or set(profiles) != {"R0", "R1", "R2", "identity_rule"}:
+        raise ContractError("R0/R1/R2 comparison profiles are missing")
+    if "R1 and R2" not in str(profiles["identity_rule"]):
+        raise ContractError("module identity must compare R1 directly with R2")
 
     behaviors = contract.get("behaviors")
     tests = contract.get("acceptance_tests")
@@ -626,6 +952,7 @@ def validate_contract(contract: dict[str, Any], policy: dict[str, Any], legacy: 
         raise ContractError("contract has no acceptance tests")
     behavior_by_id: dict[str, dict[str, Any]] = {}
     test_by_id: dict[str, dict[str, Any]] = {}
+    native_paths: set[str] = set()
     for behavior in behaviors:
         if not isinstance(behavior, dict) or not isinstance(behavior.get("id"), str):
             raise ContractError("malformed behavior entry")
@@ -641,11 +968,66 @@ def validate_contract(contract: dict[str, Any], policy: dict[str, Any], legacy: 
         native_path = replacement.get("native_path")
         if not isinstance(native_path, str) or not native_path.startswith("crate::"):
             raise ContractError(f"{behavior_id} replacement is not a native Rust path")
+        if native_path in native_paths:
+            raise ContractError(f"duplicate native Rust replacement path {native_path}")
+        native_paths.add(native_path)
         if replacement.get("project_c_dispatch_permitted") is not False:
             raise ContractError(f"{behavior_id} permits project C dispatch")
         test_ids = behavior.get("acceptance_test_ids")
         if not isinstance(test_ids, list) or not test_ids:
             raise ContractError(f"{behavior_id} has no acceptance test id")
+        legacy_value = behavior.get("legacy")
+        kind = behavior.get("kind")
+        if kind in {
+            "module_identity",
+            "exported_symbol",
+            "module_parameter",
+            "legacy_errno",
+        } and not isinstance(legacy_value, dict):
+            raise ContractError(f"{behavior_id} has malformed legacy contract")
+        if kind == "module_identity":
+            assert isinstance(legacy_value, dict)
+            production = legacy_value.get("production_contract")
+            r0 = legacy_value.get("r0_reference")
+            if not isinstance(production, dict) or not isinstance(r0, dict):
+                raise ContractError(f"{behavior_id} does not separate R0 identity from production")
+            if "vermagic" in production or "R1" not in str(production.get("vermagic_policy")):
+                raise ContractError(f"{behavior_id} incorrectly freezes R0 vermagic")
+            if not r0.get("vermagic"):
+                raise ContractError(f"{behavior_id} lacks R0 vermagic provenance")
+        elif kind == "exported_symbol":
+            assert isinstance(legacy_value, dict)
+            production = legacy_value.get("production_contract")
+            r0 = legacy_value.get("r0_reference")
+            if not isinstance(production, dict) or not isinstance(r0, dict):
+                raise ContractError(f"{behavior_id} does not separate R0 export metadata")
+            expected_namespace = IHK_SYMBOL_NAMESPACE
+            if production.get("namespace") != expected_namespace:
+                raise ContractError(f"{behavior_id} has wrong production namespace")
+            version_policy = str(production.get("symbol_version_policy"))
+            if "R1 and R2" not in version_policy or "R0 CRC is provenance only" not in version_policy:
+                raise ContractError(f"{behavior_id} has invalid symbol version policy")
+        elif kind == "module_parameter":
+            assert isinstance(legacy_value, dict)
+            default = legacy_value.get("default")
+            if not isinstance(default, dict) or not isinstance(default.get("value"), int):
+                raise ContractError(f"{behavior_id} lacks an evaluated source default")
+            if not isinstance(default.get("source_provenance"), dict):
+                raise ContractError(f"{behavior_id} lacks default provenance")
+        elif kind == "legacy_errno":
+            assert isinstance(legacy_value, dict)
+            required = {
+                "column",
+                "errno",
+                "line",
+                "site_id",
+                "site_ordinal",
+                "source",
+                "source_provenance",
+                "statement",
+            }
+            if set(legacy_value) != required:
+                raise ContractError(f"{behavior_id} has malformed failure-site mapping")
 
     for test in tests:
         if not isinstance(test, dict) or not isinstance(test.get("id"), str):
@@ -676,16 +1058,17 @@ def validate_contract(contract: dict[str, Any], policy: dict[str, Any], legacy: 
     if any(modules[module] < 10 for module in EXPECTED_MODULES):
         raise ContractError(f"implausibly small behavior map: {dict(modules)}")
 
-    mapped_errno: dict[str, set[str]] = defaultdict(set)
+    mapped_errno_sites: dict[str, set[str]] = defaultdict(set)
     for behavior in behaviors:
         if behavior["kind"] == "legacy_errno":
-            mapped_errno[behavior["module"]].add(str(behavior["legacy"]["errno"]))
+            mapped_errno_sites[behavior["module"]].add(str(behavior["legacy"]["site_id"]))
     expected_errno = source_errno_surface(repo, legacy)
     for module, entries in expected_errno.items():
-        expected = {str(entry["errno"]) for entry in entries}
-        if mapped_errno[module] != expected:
+        expected = {str(entry["site_id"]) for entry in entries}
+        if mapped_errno_sites[module] != expected:
             raise ContractError(
-                f"errno coverage mismatch for {module}: mapped={sorted(mapped_errno[module])}, expected={sorted(expected)}"
+                f"errno site coverage mismatch for {module}: "
+                f"mapped={len(mapped_errno_sites[module])}, expected={len(expected)}"
             )
 
     coverage = contract.get("coverage")
@@ -697,6 +1080,17 @@ def validate_contract(contract: dict[str, Any], policy: dict[str, Any], legacy: 
         raise ContractError("coverage by_kind is stale")
     if coverage.get("by_module") != dict(sorted(modules.items())):
         raise ContractError("coverage by_module is stale")
+    expected_errno_classes = {
+        module: sorted({entry["errno"] for entry in entries})
+        for module, entries in expected_errno.items()
+    }
+    expected_errno_sites = {
+        module: len(entries) for module, entries in expected_errno.items()
+    }
+    if coverage.get("errno_by_module") != expected_errno_classes:
+        raise ContractError("coverage errno_by_module is stale")
+    if coverage.get("errno_sites_by_module") != expected_errno_sites:
+        raise ContractError("coverage errno_sites_by_module is stale")
 
 
 def parse_args(argv: Sequence[str]) -> argparse.Namespace:
