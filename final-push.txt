@@ -8,8 +8,8 @@ gates below pass on the exact production artifacts.
 
 BEGIN AUTO-GENERATED TRACKER
 OVERALL COMPLETION: 2.50% (250 / 10000 evidence points)
-TRACKED GATES: 130 total; 4 PASS; 0 IN_PROGRESS; 0 BLOCKED; 126 TODO
-TRACKER INPUT SHA256: ad3c9e5d9db7e1ba44b1d94a54f203faa3b2718e6445b1133a68181d2514d23b
+TRACKED GATES: 130 total; 4 PASS; 3 IN_PROGRESS; 0 BLOCKED; 123 TODO
+TRACKER INPUT SHA256: f1703fff23888016e21b6f92ed5a3b1a78c0fbade7931df1993d6f8cac85589c
 
 WORKSTREAM SUMMARY:
 - WS00 Scope, baseline, and evidence system: 62.50% (250 / 400 points; 4 / 7 gates PASS)
@@ -361,12 +361,12 @@ WORKSTREAM|WS60|Integrated compatibility and equivalence|1000
 WORKSTREAM|WS70|Production benchmarks, stress, security, and reliability|1800
 WORKSTREAM|WS80|Release engineering and operational closure|300
 
-GATE|FP-0001|WS00|50|TODO|-|Approve and lock this exact conversion scope, exclusions, allowed Linux boundaries, and x86_64 completion definition|architecture
-GATE|FP-0002|WS00|50|TODO|-|Lock the zero-project-C policy, assembly policy, reference-build isolation, dependency rules, and evidence invalidation rules|architecture
+GATE|FP-0001|WS00|50|IN_PROGRESS|-|Approve and lock this exact conversion scope, exclusions, allowed Linux boundaries, and x86_64 completion definition|architecture
+GATE|FP-0002|WS00|50|IN_PROGRESS|-|Lock the zero-project-C policy, assembly policy, reference-build isolation, dependency rules, and evidence invalidation rules|architecture
 GATE|FP-0003|WS00|60|PASS|commit f2eb735212e6ab0494e638497e80d9ae78b2848e and build artifact 9051654724|Freeze the exact Rocky 8.10 legacy build baseline and its artifact digests|validation
 GATE|FP-0004|WS00|90|PASS|workflow 31358939841 and hosted evidence artifact 9051791233|Freeze the exact legacy boot, IKC, mcexec, workload, stop, restoration, and integrity runtime oracle|validation
 GATE|FP-0005|WS00|50|PASS|workflow 31462744353 job 93689372259 commit 6aeaaf60631130404064f5b3933cce21869629f9|Generate the exact active object, source, symbol, ioctl, module parameter, procfs, sysfs, IKC, and dependency inventory for all three legacy modules|architecture
-GATE|FP-0006|WS00|50|TODO|-|Map every externally observable legacy behavior and failure code to one Rust replacement and at least one acceptance test ID|validation
+GATE|FP-0006|WS00|50|IN_PROGRESS|-|Map every externally observable legacy behavior and failure code to one Rust replacement and at least one acceptance test ID|validation
 GATE|FP-0007|WS00|50|PASS|workflow 31433094618 job 93600920326|Pass tracker parser tests and the published CI check for weights, statuses, evidence, generated summary, digest, and stale-score rejection|release
 
 GATE|RK-001|WS10|75|TODO|-|Pin the Rocky release, kernel source RPM, source checksums, patch series, licenses, and reproducible source acquisition manifest|kernel-platform
