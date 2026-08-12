@@ -43,13 +43,19 @@ on:
         description: Exact 40-hex candidate commit
         required: true
         type: string
+  workflow_call:
+    inputs:
+      validation_sha:
+        description: Exact 40-hex candidate commit
+        required: true
+        type: string
 
 permissions:
   contents: read
 
 env:
   ROCKY_IMAGE: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
-  EXPECTED_HEAD_SHA: ${{ github.event_name == 'workflow_dispatch' && inputs.validation_sha || github.event.pull_request.head.sha || github.sha }}
+  EXPECTED_HEAD_SHA: ${{ inputs.validation_sha || github.event.pull_request.head.sha || github.sha }}
 
 jobs:
   exact-build:
@@ -179,7 +185,7 @@ jobs:
           mkdir -p "$evidence_dir"
           {
             make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 rustavailable
-            make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 -j2 vmlinux modules
+            make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 -j2 bzImage modules
           } 2>&1 | tee "$evidence_dir/build.log"
           status="${PIPESTATUS[0]}"
           printf '%s\n' "$status" > "$evidence_dir/build.exit-code"
@@ -200,7 +206,10 @@ jobs:
           python3 scripts/ihk_smp_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" --module "$smp"
           python3 scripts/mcctrl_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" --module "$mcctrl"
           cp "$NATIVE_BUILD_DIR/.config" "$EVIDENCE_DIR/resolved.config"
+          cp "$NATIVE_BUILD_DIR/arch/x86/boot/bzImage" "$EVIDENCE_DIR/bzImage"
           cp "$NATIVE_SOURCE_ROOT/drivers/misc/mckernel/stage-lock.json" "$EVIDENCE_DIR/stage-lock.json"
+          make -s -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 \
+            kernelrelease > "$EVIDENCE_DIR/kernel.release"
           git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD > "$EVIDENCE_DIR/commit.sha"
           for module in "$ihk" "$smp" "$mcctrl"; do
             name="$(basename "$module")"
@@ -226,3 +235,4 @@ jobs:
           if-no-files-found: error
           retention-days: 30
           compression-level: 0
+          include-hidden-files: true

@@ -35,6 +35,21 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         self.assertNotRegex(self.workflow, r"(?m)^\s+--stage\s")
         self.assertIn("credit forbidden", self.workflow)
 
+    def test_reusable_exact_build_exports_a_bootable_kernel(self):
+        self.assertIn("workflow_call:", self.workflow)
+        self.assertIn(
+            "EXPECTED_HEAD_SHA: ${{ inputs.validation_sha || "
+            "github.event.pull_request.head.sha || github.sha }}",
+            self.workflow,
+        )
+        self.assertIn("-j2 bzImage modules", self.workflow)
+        self.assertIn(
+            'cp "$NATIVE_BUILD_DIR/arch/x86/boot/bzImage" "$EVIDENCE_DIR/bzImage"',
+            self.workflow,
+        )
+        self.assertIn('> "$EVIDENCE_DIR/kernel.release"', self.workflow)
+        self.assertIn("include-hidden-files: true", self.workflow)
+
     def test_exact_three_module_config_and_artifacts_are_required(self):
         for symbol in (
             "CONFIG_MCKERNEL_IHK_RUST",

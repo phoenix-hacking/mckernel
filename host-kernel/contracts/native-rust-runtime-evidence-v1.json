@@ -1,0 +1,137 @@
+{
+  "artifact_contract": {
+    "build_evidence_files": [
+      "SHA256SUMS",
+      "bzImage",
+      "commit.sha",
+      "ihk-smp-x86_64.ko",
+      "ihk-smp-x86_64.ko.modinfo",
+      "ihk-smp-x86_64.ko.nm",
+      "ihk.ko",
+      "ihk.ko.modinfo",
+      "ihk.ko.nm",
+      "kernel.release",
+      "mcctrl.ko",
+      "mcctrl.ko.modinfo",
+      "mcctrl.ko.nm",
+      "resolved.config",
+      "stage-lock.json"
+    ],
+    "capture_status": "required-missing",
+    "immutable_artifact_digest_required": true,
+    "independent_review_status": "required-missing",
+    "runtime_evidence_files": [
+      "SHA256SUMS",
+      "capture.json",
+      "environment.txt",
+      "initramfs.cpio.gz",
+      "initramfs.sha256",
+      "qemu-command.txt",
+      "qemu.exit-code",
+      "qemu.log",
+      "qemu-version.txt",
+      "serial.log",
+      "workflow-state"
+    ]
+  },
+  "gate": {
+    "capture_can_claim_pass": false,
+    "credit_eligible": false,
+    "gate_ids": [
+      "IHK-001",
+      "SMP-001",
+      "MCC-001"
+    ],
+    "independent_evidence_review_required": true,
+    "policy": "The workflow may create an exact technical capture, but cannot claim PASS or credit. Exact-run success and a separately committed independent artifact review are both required before any gate decision."
+  },
+  "modules": [
+    {
+      "depends": [],
+      "file": "ihk.ko",
+      "import_namespace": null,
+      "name": "ihk",
+      "provider_symbol_definition": "ihk_provider_lifecycle_v1"
+    },
+    {
+      "depends": [
+        "ihk"
+      ],
+      "file": "ihk-smp-x86_64.ko",
+      "import_namespace": "MCKERNEL_IHK_V1",
+      "name": "ihk_smp_x86_64",
+      "undefined_provider_symbol": "ihk_provider_lifecycle_v1"
+    },
+    {
+      "depends": [
+        "ihk"
+      ],
+      "file": "mcctrl.ko",
+      "import_namespace": "MCKERNEL_IHK_V1",
+      "name": "mcctrl",
+      "undefined_provider_symbol": "ihk_provider_lifecycle_v1"
+    }
+  ],
+  "protocol": {
+    "load_order": [
+      "ihk",
+      "ihk_smp_x86_64",
+      "mcctrl"
+    ],
+    "provider_refcount_after_load": 2,
+    "provider_refcounts": {
+      "after_load": 2,
+      "after_mcctrl_unload": 1,
+      "after_negative": 2,
+      "after_smp_unload": 0
+    },
+    "provider_unload_expected_diagnostic": "Module ihk is in use",
+    "provider_unload_expected_status": 1,
+    "provider_unload_while_referenced_must_fail": true,
+    "serial_protocol": "MCKERNEL_NATIVE_RUST_RUNTIME_V1",
+    "unload_order": [
+      "mcctrl",
+      "ihk_smp_x86_64",
+      "ihk"
+    ]
+  },
+  "repository_inputs": {
+    "build_workflow": ".github/workflows/native-rust-host-modules-exact-build.yml",
+    "config_fragment": "host-kernel/rocky/configs/native-rust-evidence.config",
+    "init": "scripts/native-rust-runtime-init.sh",
+    "poweroff": "scripts/native-rust-runtime-poweroff.S",
+    "runtime_workflow": ".github/workflows/native-rust-host-modules-exact-runtime.yml",
+    "source_lock": "host-kernel/rocky/source-lock.json"
+  },
+  "runtime": {
+    "architecture": "x86_64",
+    "boot_medium": "deterministic initramfs",
+    "container_image": "rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176",
+    "distribution": "Rocky Linux",
+    "qemu_accelerator": "tcg",
+    "required_kernel_config": {
+      "disabled": [
+        "CONFIG_MODULE_SIG_FORCE"
+      ],
+      "enabled": [
+        "CONFIG_BINFMT_ELF",
+        "CONFIG_BLK_DEV_INITRD",
+        "CONFIG_MODULES",
+        "CONFIG_MODULE_UNLOAD",
+        "CONFIG_PRINTK",
+        "CONFIG_PROC_FS",
+        "CONFIG_RD_GZIP",
+        "CONFIG_SERIAL_8250",
+        "CONFIG_SERIAL_8250_CONSOLE",
+        "CONFIG_SYSFS"
+      ]
+    },
+    "release": "10.2"
+  },
+  "schema_version": 1,
+  "selected_kernel": {
+    "archive_sha256": "4a174d47b8874a2139efcd1ac1ab2d6b80ae7a0ca62f0ae4596fd20cf62a3533",
+    "nvr": "kernel-6.12.0-211.44.1.el10_2",
+    "source_lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-source-v1"
+  }
+}
