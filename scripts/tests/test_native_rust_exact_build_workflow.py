@@ -106,9 +106,13 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             "0009-rust-block-drop-removed-merge-flag.patch",
             receiver_reconciliation,
         )
+        clang_warning_policy = self.workflow.index(
+            "0010-kbuild-disable-default-const-init-unsafe.patch",
+            block_reconciliation,
+        )
         project = self.workflow.index(
             "0001-drivers-misc-add-mckernel-rust-host-modules.patch",
-            block_reconciliation,
+            clang_warning_policy,
         )
         self.assertLess(debrand, softfloat)
         self.assertLess(softfloat, target_spec)
@@ -119,7 +123,8 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         self.assertLess(pin_data_lint, used_compiler)
         self.assertLess(used_compiler, receiver_reconciliation)
         self.assertLess(receiver_reconciliation, block_reconciliation)
-        self.assertLess(block_reconciliation, project)
+        self.assertLess(block_reconciliation, clang_warning_policy)
+        self.assertLess(clang_warning_policy, project)
 
     def test_failure_log_and_artifact_capture_are_unconditional(self):
         bootstrap = self.workflow.index("Refuse the wrong runtime")
@@ -148,6 +153,37 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         self.assertNotIn(
             'evidence_dir="${{ runner.temp }}/native-rust-build-evidence"',
             self.workflow,
+        )
+
+    def test_ihk_registry_contract_and_exact_fixture_are_mandatory(self):
+        for path in (
+            "host-kernel/contracts/ihk-os-registry-foundation-v1.json",
+            "scripts/ihk_os_registry_check.py",
+            "scripts/tests/fixtures/ihk_os_registry_compile.rs",
+            "scripts/tests/test_ihk_os_registry_check.py",
+        ):
+            self.assertGreaterEqual(self.workflow.count(path), 2)
+        self.assertGreaterEqual(
+            self.workflow.count(
+                'python3 scripts/ihk_os_registry_check.py --repo "$GITHUB_WORKSPACE"'
+            ),
+            2,
+        )
+        self.assertGreaterEqual(
+            self.workflow.count('MCKERNEL_RUSTC_1_92="$(command -v rustc)"'), 2
+        )
+        self.assertGreaterEqual(
+            self.workflow.count(
+                "python3 -m unittest -v scripts.tests.test_ihk_os_registry_check"
+            ),
+            2,
+        )
+        self.assertGreaterEqual(
+            self.workflow.count(
+                "python3 scripts/native_rust_unsafe_ffi_ledger.py "
+                '--repo "$GITHUB_WORKSPACE" check'
+            ),
+            1,
         )
 
 

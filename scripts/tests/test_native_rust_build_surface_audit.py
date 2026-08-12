@@ -34,15 +34,12 @@ class NativeRustBuildSurfaceAuditTests(unittest.TestCase):
                 os.path.join(REPO_ROOT, "host-kernel", "kbuild", name),
                 os.path.join(self.repo, "host-kernel", "kbuild", name),
             )
-        os.makedirs(os.path.join(self.repo, "host-kernel", "native-rust", "abi"))
-        shutil.copyfile(
-            os.path.join(REPO_ROOT, "host-kernel", "native-rust", "abi", "x86_64.rs"),
-            os.path.join(self.repo, "host-kernel", "native-rust", "abi", "x86_64.rs"),
-        )
-        shutil.copyfile(
-            os.path.join(REPO_ROOT, "host-kernel", "native-rust", "ikc_queue.rs"),
-            os.path.join(self.repo, "host-kernel", "native-rust", "ikc_queue.rs"),
-        )
+        for relative in audit.SUPPLEMENTAL_INPUTS.values():
+            destination = os.path.join(self.repo, *relative.split("/"))
+            parent = os.path.dirname(destination)
+            if not os.path.isdir(parent):
+                os.makedirs(parent)
+            shutil.copyfile(os.path.join(REPO_ROOT, *relative.split("/")), destination)
         with open(
             os.path.join(self.repo, "host-kernel", "native-rust", "README.md"), "w"
         ) as stream:
@@ -143,6 +140,18 @@ class NativeRustBuildSurfaceAuditTests(unittest.TestCase):
                 item["sha256"] = digest(
                     os.path.join(self.repo, "host-kernel", "native-rust", "README.md")
                 )
+                break
+        self.write_manifest(manifest)
+        with self.assertRaises(audit.AuditError):
+            audit.audit(self.repo)
+
+    def test_manifest_cannot_redirect_the_registry_support_module(self):
+        manifest = self.load_manifest()
+        for item in manifest["inputs"]:
+            if item["destination"] == "os_registry.rs":
+                item["repository_path"] = "host-kernel/native-rust/README.md"
+                item["sha256"] = digest(os.path.join(
+                    self.repo, "host-kernel", "native-rust", "README.md"))
                 break
         self.write_manifest(manifest)
         with self.assertRaises(audit.AuditError):

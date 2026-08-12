@@ -44,7 +44,7 @@ class CurrentLedgerTests(unittest.TestCase):
     def test_committed_ledger_is_exact_complete_and_fail_closed(self):
         value = load_committed()
         discovery = ledger.validate_ledger(value, REPO_ROOT)
-        self.assertEqual(len(discovery["inputs"]), 5)
+        self.assertEqual(len(discovery["inputs"]), 6)
         self.assertEqual(len(discovery["sites"]), 21)
         self.assertEqual(value["coverage"]["by_crate"], {
             "ihk": 14,
@@ -77,6 +77,20 @@ class CurrentLedgerTests(unittest.TestCase):
                 for site in queue_sites
                 for obligation in site["caller_obligations"]
             )
+        )
+        roots = {item["crate"]: item for item in value["crate_roots"]}
+        self.assertEqual(
+            roots["ihk"]["transitive_inputs"],
+            [
+                "host-kernel/native-rust/abi/x86_64.rs",
+                "host-kernel/native-rust/ihk.rs",
+                "host-kernel/native-rust/ikc_queue.rs",
+                "host-kernel/native-rust/os_registry.rs",
+            ],
+        )
+        self.assertEqual(
+            [item["id"] for item in value["sites"] if "ihk" in item["crate_roots"]],
+            ["RS011-IHK-%04d" % index for index in range(1, 15)],
         )
 
     def test_checker_and_tests_parse_with_python_3_6_grammar(self):
@@ -267,6 +281,7 @@ class LedgerMutationTests(unittest.TestCase):
         ledger.EXPECTED_ROOTS["mcctrl"],
         ledger.NATIVE_SOURCE_ROOT + "/abi/x86_64.rs",
         ledger.NATIVE_SOURCE_ROOT + "/ikc_queue.rs",
+        ledger.NATIVE_SOURCE_ROOT + "/os_registry.rs",
     )
 
     def setUp(self):

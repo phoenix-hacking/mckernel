@@ -479,6 +479,7 @@ def repository_patch_items(repo, head, license_map):
         "host-kernel/rocky/patches/0007-rust-use-used-compiler-rust-1.89.patch",
         "host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch",
         "host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch",
+        "host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch",
         "host-kernel/rocky/patches/series.json",
         "scripts/tests/fixtures/rust-core-rocky-6.12/include/linux/blk-mq.h",
         "scripts/tests/fixtures/rust-core-rocky-6.12/Documentation/kbuild/makefiles.rst",
@@ -495,6 +496,7 @@ def repository_patch_items(repo, head, license_map):
         "scripts/tests/fixtures/rust-core-rocky-6.12/rust/macros/module.rs",
         "scripts/tests/fixtures/rust-core-rocky-6.12/scripts/Makefile.build",
         "scripts/tests/fixtures/rust-core-rocky-6.12/scripts/Makefile.compiler",
+        "scripts/tests/fixtures/rust-core-rocky-6.12/scripts/Makefile.extrawarn",
         "scripts/tests/fixtures/rust-core-rocky-6.12/scripts/generate_rust_analyzer.py",
     ]
     items = []

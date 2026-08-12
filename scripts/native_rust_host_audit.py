@@ -83,6 +83,32 @@ def main():
             die("duplicate staged destination: {0}".format(destination))
         destinations.add(destination)
 
+    support = [
+        item for item in manifest.get("inputs", [])
+        if item.get("kind") in (
+            "shared_rust_abi", "rust_module", "rust_support_module"
+        )
+    ]
+    if [item.get("destination") for item in support] != [
+        "abi/x86_64.rs", "ikc_queue.rs", "os_registry.rs"
+    ]:
+        die("Rust support input closure differs from the locked ABI, queue, and OS registry")
+    for item in support:
+        relative = item.get("repository_path")
+        if not isinstance(relative, str) or not relative.endswith(".rs"):
+            die("non-Rust support input: {0}".format(relative))
+        path = regular_repo_file(relative)
+        if sha256(path) != item.get("sha256"):
+            die("support input digest drift: {0}".format(relative))
+        text = open(path, "r", encoding="utf-8").read()
+        for pattern in FORBIDDEN_RUST_PATTERNS:
+            if re.search(pattern, text):
+                die("unreviewed implementation escape hatch in {0}: {1}".format(relative, pattern))
+        destination = item.get("destination")
+        if destination in destinations:
+            die("duplicate staged destination: {0}".format(destination))
+        destinations.add(destination)
+
     kbuild = regular_repo_file("host-kernel/kbuild/Kbuild.in")
     ktext = open(kbuild, "r", encoding="utf-8").read().lower()
     for token in ("rustc", "$(shell", ".c ", ".o ", ".a ", ".so "):

@@ -241,7 +241,7 @@ class ContractTests(ProbeFixture):
             },
         )
         self.assertEqual(
-            generated["source_patch_contract"]["patches"][-9:],
+            generated["source_patch_contract"]["patches"][-10:],
             [
                 {
                     "applied": True,
@@ -326,6 +326,24 @@ class ContractTests(ProbeFixture):
                 "artifact_id"
             ],
         )
+        self.assertEqual(
+            generated["repository_inputs"]["clang_21_warning_preimages"],
+            [
+                {
+                    "path": str(probe.RUST_CORE_COMPAT_FIXTURE_ROOT / relative),
+                    "sha256": digest,
+                }
+                for relative, digest in probe.CLANG_21_WARNING_PREIMAGE_SHA256S
+            ],
+        )
+        self.assertEqual(
+            generated["clang_21_default_const_failure_evidence"],
+            [dict(row) for row in probe.CLANG_21_DEFAULT_CONST_FAILURE_EVIDENCE],
+        )
+        self.assertEqual(
+            9132598094,
+            generated["clang_21_default_const_failure_evidence"][1]["artifact_id"],
+        )
 
     def test_workflow_is_exact_build_bound_and_never_edits_tracker(self):
         workflow = (REPO_ROOT / probe.WORKFLOW_PATH).read_text(encoding="utf-8")
@@ -376,6 +394,10 @@ class ContractTests(ProbeFixture):
         self.assertLess(
             workflow.index(probe.RUST_COMPAT_PATCH_PATHS[7].name),
             workflow.index(probe.RUST_COMPAT_PATCH_PATHS[8].name),
+        )
+        self.assertLess(
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[8].name),
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[9].name),
         )
 
     def test_rust_compatibility_patch_shape_is_fail_closed(self):
@@ -498,6 +520,26 @@ class ContractTests(ProbeFixture):
             self.copy_rust_compatibility_inputs(root)
             header = root / probe.RUST_CORE_COMPAT_FIXTURE_ROOT / "include/linux/blk-mq.h"
             header.write_bytes(header.read_bytes() + b"\n#define BLK_MQ_F_SHOULD_MERGE 1\n")
+            with self.assertRaises(probe.ProbeError):
+                probe.rust_compatibility_patch_records(root)
+
+    def test_clang_21_warning_policy_patch_shape_is_fail_closed(self):
+        original = (REPO_ROOT / probe.RUST_COMPAT_PATCH_PATHS[9]).read_text(
+            encoding="utf-8"
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.copy_rust_compatibility_inputs(root)
+            path = root / probe.RUST_COMPAT_PATCH_PATHS[9]
+            path.write_text(
+                original.replace(
+                    "+KBUILD_CFLAGS += $(call cc-disable-warning, "
+                    "default-const-init-unsafe)",
+                    "+KBUILD_CFLAGS += -Wno-default-const-init-field-unsafe",
+                    1,
+                ),
+                encoding="utf-8",
+            )
             with self.assertRaises(probe.ProbeError):
                 probe.rust_compatibility_patch_records(root)
 

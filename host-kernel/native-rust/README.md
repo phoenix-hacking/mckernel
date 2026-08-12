@@ -26,6 +26,28 @@ capture also includes compiler-expanded unsafe-operation spans and receives an
 independent owner/security review, both the committed ledger and any compiler
 closure capture remain `NOT_READY`.
 
+## IHK OS registry foundation
+
+The IHK provider now privately compiles `abi/x86_64.rs`, `ikc_queue.rs`, and
+`os_registry.rs`. The registry is an allocation-free 64-slot state machine
+with generation-tagged handles, rollback guards, reference leases, deterministic
+errno mapping, and a fail-closed transition graph. The authoritative staging
+manifest copies all three support sources to the paths named by the crate
+root, so Rust dep-info must include them in the exact compiler closure.
+
+The foundation does not expose create/destroy entry points, register character
+devices, allocate kmsg storage, or call a legacy C implementation. Validate its
+frozen-source contract and exact standalone Rust 1.92 fixture with:
+
+```sh
+python3 scripts/ihk_os_registry_check.py
+python3 -m unittest -v scripts.tests.test_ihk_os_registry_check
+```
+
+This source validation remains `TODO` and credit-ineligible until the provider
+callbacks, device publication/teardown, exact Kbuild, module load, runtime
+behavior, and independent transition/errno review are complete.
+
 ## Single build-control authority
 
 This directory contains Rust crate roots and their reviewed contracts only. It

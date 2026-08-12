@@ -6,6 +6,8 @@ on:
     paths:
       - .github/workflows/native-rust-host-modules-exact-build.yml
       - host-kernel/kbuild/**
+      - host-kernel/contracts/ihk-os-registry-foundation-v1.json
+      - host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json
       - host-kernel/native-rust/**
       - host-kernel/rocky/configs/native-rust-evidence.config
       - host-kernel/rocky/configs/rust-minimal.config
@@ -18,22 +20,29 @@ on:
       - host-kernel/rocky/patches/0007-rust-use-used-compiler-rust-1.89.patch
       - host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch
       - host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch
+      - host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch
       - host-kernel/rocky/source-lock.json
       - scripts/ihk_native_lifecycle_check.py
       - scripts/ihk_native_queue_check.py
       - scripts/tests/fixtures/ihk_native_queue_compile.rs
       - scripts/tests/test_ihk_native_queue_check.py
+      - scripts/ihk_os_registry_check.py
       - scripts/ihk_smp_native_lifecycle_check.py
       - scripts/mcctrl_native_lifecycle_check.py
       - scripts/native_rust_build_surface_audit.py
       - scripts/native_rust_host_audit.py
+      - scripts/native_rust_unsafe_ffi_ledger.py
       - scripts/rocky_kernel_source_lock.py
       - scripts/rocky_rust_staging.py
+      - scripts/tests/fixtures/ihk_os_registry_compile.rs
+      - scripts/tests/test_ihk_os_registry_check.py
   pull_request:
     branches: [development]
     paths:
       - .github/workflows/native-rust-host-modules-exact-build.yml
       - host-kernel/kbuild/**
+      - host-kernel/contracts/ihk-os-registry-foundation-v1.json
+      - host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json
       - host-kernel/native-rust/**
       - host-kernel/rocky/configs/native-rust-evidence.config
       - host-kernel/rocky/configs/rust-minimal.config
@@ -46,17 +55,22 @@ on:
       - host-kernel/rocky/patches/0007-rust-use-used-compiler-rust-1.89.patch
       - host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch
       - host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch
+      - host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch
       - host-kernel/rocky/source-lock.json
       - scripts/ihk_native_lifecycle_check.py
       - scripts/ihk_native_queue_check.py
       - scripts/tests/fixtures/ihk_native_queue_compile.rs
       - scripts/tests/test_ihk_native_queue_check.py
+      - scripts/ihk_os_registry_check.py
       - scripts/ihk_smp_native_lifecycle_check.py
       - scripts/mcctrl_native_lifecycle_check.py
       - scripts/native_rust_build_surface_audit.py
       - scripts/native_rust_host_audit.py
+      - scripts/native_rust_unsafe_ffi_ledger.py
       - scripts/rocky_kernel_source_lock.py
       - scripts/rocky_rust_staging.py
+      - scripts/tests/fixtures/ihk_os_registry_compile.rs
+      - scripts/tests/test_ihk_os_registry_check.py
   workflow_dispatch:
     inputs:
       validation_sha:
@@ -130,8 +144,13 @@ jobs:
           python3 scripts/ihk_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE"
           python3 scripts/ihk_native_queue_check.py --repo "$GITHUB_WORKSPACE" \
             --rustc "$(command -v rustc)" --require-rustc
+          python3 scripts/ihk_os_registry_check.py --repo "$GITHUB_WORKSPACE"
+          test "$(rustc --version | awk '{print $2}')" = "1.92.0"
+          MCKERNEL_RUSTC_1_92="$(command -v rustc)" \
+            python3 -m unittest -v scripts.tests.test_ihk_os_registry_check
           python3 scripts/ihk_smp_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE"
           python3 scripts/mcctrl_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE"
+          python3 scripts/native_rust_unsafe_ffi_ledger.py --repo "$GITHUB_WORKSPACE" check
 
       - name: Acquire, patch, and credit-forbidden-stage the exact source
         env:
@@ -165,7 +184,8 @@ jobs:
             0006-rust-init-allow-dead-code-rust-1.89.patch \
             0007-rust-use-used-compiler-rust-1.89.patch \
             0008-rust-enable-arbitrary-self-types-rust-1.92.patch \
-            0009-rust-block-drop-removed-merge-flag.patch
+            0009-rust-block-drop-removed-merge-flag.patch \
+            0010-kbuild-disable-default-const-init-unsafe.patch
           do
             compat_patch="$GITHUB_WORKSPACE/host-kernel/rocky/patches/$compat_name"
             test -s "$compat_patch"
@@ -232,6 +252,10 @@ jobs:
           test -s "$smp"
           test -s "$mcctrl"
           python3 scripts/ihk_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" --module "$ihk"
+          python3 scripts/ihk_os_registry_check.py --repo "$GITHUB_WORKSPACE"
+          test "$(rustc --version | awk '{print $2}')" = "1.92.0"
+          MCKERNEL_RUSTC_1_92="$(command -v rustc)" \
+            python3 -m unittest -v scripts.tests.test_ihk_os_registry_check
           python3 scripts/ihk_smp_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" --module "$smp"
           python3 scripts/mcctrl_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" --module "$mcctrl"
           cp "$NATIVE_BUILD_DIR/.config" "$EVIDENCE_DIR/resolved.config"

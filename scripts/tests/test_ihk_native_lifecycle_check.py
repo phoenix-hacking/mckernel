@@ -1,3 +1,4 @@
+import ast
 import json
 from pathlib import Path
 import shutil
@@ -30,6 +31,9 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
             self.contract["reference_inventory"],
         }
         relative_paths.update(item["path"] for item in self.contract["crate_modules"])
+        for item in self.contract["support_sources"]:
+            relative_paths.add(item["path"])
+            relative_paths.add(item["contract_path"])
         for relative in relative_paths:
             target = self.repo / relative
             target.parent.mkdir(parents=True, exist_ok=True)
@@ -52,6 +56,7 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
         self.assertEqual(0, summary["parameters"])
         self.assertEqual(0, summary["dependencies"])
         self.assertEqual(2, summary["transitive_module_count"])
+        self.assertEqual(2, summary["support_sources"])
 
     def test_ihk_queue_module_edge_is_required(self) -> None:
         self.mutate_text(
@@ -89,6 +94,14 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
         )
         with self.assertRaisesRegex(lifecycle.ValidationError, "omits IHK module"):
             lifecycle.validate_repository(self.repo)
+
+    def test_lifecycle_checker_and_tests_parse_as_python_3_6(self) -> None:
+        for path in (Path(lifecycle.__file__), Path(__file__)):
+            source = path.read_text(encoding="utf-8")
+            try:
+                ast.parse(source, filename=str(path), feature_version=(3, 6))
+            except TypeError:
+                ast.parse(source, filename=str(path), feature_version=6)
 
     def test_parameter_surface_drift_is_rejected(self) -> None:
         self.mutate_text(
@@ -140,6 +153,32 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
             json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
         )
         with self.assertRaisesRegex(lifecycle.ValidationError, "dependency set"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_support_source_drift_is_rejected(self) -> None:
+        support = self.contract["support_sources"][1]
+        self.mutate_text(
+            support["path"],
+            "pub(crate) const OS_CAPACITY: usize = 64;",
+            "pub(crate) const OS_CAPACITY: usize = 63;",
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, r"support_sources\[1\] digest"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_support_contract_cannot_claim_credit(self) -> None:
+        support = self.contract["support_sources"][1]
+        contract_path = self.repo / support["contract_path"]
+        value = json.loads(contract_path.read_text(encoding="utf-8"))
+        value["readiness"] = {"blockers": [], "credit_eligible": True, "status": "PASS"}
+        contract_path.write_text(
+            json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        support["contract_sha256"] = lifecycle._sha256(contract_path)
+        lifecycle_contract = self.repo / lifecycle.DEFAULT_CONTRACT
+        lifecycle_contract.write_text(
+            json.dumps(self.contract, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "TODO and credit-ineligible"):
             lifecycle.validate_repository(self.repo)
 
     def test_reference_parameter_oracle_drift_is_rejected(self) -> None:

@@ -86,6 +86,7 @@ class LicenseInventoryTests(unittest.TestCase):
             "host-kernel/rocky/patches/0007-rust-use-used-compiler-rust-1.89.patch",
             "host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch",
             "host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch",
+            "host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch",
         ):
             item = by_path["repository/" + relative]
             patch = REPO_ROOT / relative
@@ -115,6 +116,7 @@ class LicenseInventoryTests(unittest.TestCase):
             "rust/macros/module.rs",
             "scripts/Makefile.build",
             "scripts/Makefile.compiler",
+            "scripts/Makefile.extrawarn",
             "scripts/generate_rust_analyzer.py",
         )
         for relative in relatives:

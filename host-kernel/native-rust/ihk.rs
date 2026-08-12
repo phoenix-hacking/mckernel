@@ -5,11 +5,15 @@
 //! Behavioral implementation is added only with contract-linked tests, and no
 //! path in this crate dispatches into the legacy project C implementation.
 
-#[allow(dead_code)]
+// These source-bound foundations are compiled into the provider now, while
+// their externally reachable create/destroy entry points remain evidence-gated.
+#[allow(dead_code, unreachable_pub)]
 #[path = "abi/x86_64.rs"]
 mod abi;
 #[allow(dead_code)]
 mod ikc_queue;
+#[allow(dead_code)]
+mod os_registry;
 
 use kernel::prelude::*;
 

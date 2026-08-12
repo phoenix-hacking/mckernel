@@ -101,6 +101,7 @@ class RockyRustStagingTests(unittest.TestCase):
                 "Kconfig",
                 "abi/x86_64.rs",
                 "ikc_queue.rs",
+                "os_registry.rs",
                 "ihk.rs",
                 "ihk_smp_x86_64.rs",
                 "mcctrl.rs",
@@ -206,6 +207,7 @@ class RockyRustStagingTests(unittest.TestCase):
                 "Kconfig",
                 "abi/x86_64.rs",
                 "ikc_queue.rs",
+                "os_registry.rs",
                 "ihk.rs",
                 "ihk_smp_x86_64.rs",
                 "mcctrl.rs",
@@ -242,6 +244,23 @@ class RockyRustStagingTests(unittest.TestCase):
         with open(os.path.join(target, "ihk.rs"), "r") as stream:
             self.assertIn("mod ikc_queue;", stream.read())
         self.assertFalse(plan["credit_eligible"])
+
+    def test_os_registry_is_staged_at_the_module_import_path(self):
+        plan = self.plan()
+        kernel = os.path.join(self.temporary, "evidence-kernel")
+        os.makedirs(os.path.join(kernel, "drivers", "misc"))
+        target = staging.stage_for_evidence(plan, kernel)
+        registry_path = os.path.join(target, "os_registry.rs")
+        self.assertTrue(os.path.isfile(registry_path))
+        self.assertEqual(staging.EXPECTED_INPUTS[4]["sha256"], digest(registry_path))
+        self.assertFalse(plan["credit_eligible"])
+
+    def test_os_registry_path_injection_is_rejected_even_when_hashed(self):
+        item = self.manifest["inputs"][4]
+        item["destination"] = "../os_registry.rs"
+        self.write_manifest()
+        with self.assertRaises(staging.ValidationError):
+            self.plan()
 
     def test_kbuild_command_injection_is_rejected_after_rehash(self):
         path = os.path.join(self.repo, "host-kernel", "kbuild", "Kbuild.in")

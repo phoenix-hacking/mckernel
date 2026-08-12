@@ -44,6 +44,8 @@ jobs:
           python3 scripts/ihk_native_queue_check.py
           python3 -m py_compile scripts/native_rust_unsafe_ffi_ledger.py
           python3 scripts/native_rust_unsafe_ffi_ledger.py check
+          python3 -m py_compile scripts/ihk_os_registry_check.py
+          python3 scripts/ihk_os_registry_check.py --repo "$GITHUB_WORKSPACE"
           python3 -m py_compile scripts/mcctrl_native_lifecycle_check.py
           python3 scripts/mcctrl_native_lifecycle_check.py
 

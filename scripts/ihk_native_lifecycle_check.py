@@ -16,6 +16,21 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_CONTRACT = Path("host-kernel/native-rust/ihk-lifecycle-contract-v1.json")
+EXPECTED_SUPPORT_SOURCES = (
+    {
+        "contract_path": "host-kernel/contracts/x86_64-shared-abi-v1.json",
+        "destination": "abi/x86_64.rs",
+        "kind": "shared_rust_abi",
+        "path": "host-kernel/native-rust/abi/x86_64.rs",
+    },
+    {
+        "contract_path": "host-kernel/contracts/ihk-os-registry-foundation-v1.json",
+        "destination": "os_registry.rs",
+        "kind": "rust_support_module",
+        "path": "host-kernel/native-rust/os_registry.rs",
+    },
+)
+HEX64 = re.compile(r"^[0-9a-f]{64}$")
 
 
 class ValidationError(Exception):
@@ -140,6 +155,7 @@ def _validate_contract(contract: dict[str, Any]) -> None:
             "reference_inventory",
             "schema_version",
             "stage_manifest",
+            "support_sources",
         },
         "contract",
     )
@@ -153,9 +169,9 @@ def _validate_contract(contract: dict[str, Any]) -> None:
         raise ValidationError("ihk core must match the legacy zero-parameter surface")
     if contract["production_source"] != "host-kernel/native-rust/ihk.rs":
         raise ValidationError("IHK lifecycle contract redirects the crate root")
-    if not isinstance(contract["production_source_sha256"], str) or re.fullmatch(
-        r"[0-9a-f]{64}", contract["production_source_sha256"]
-    ) is None:
+    if not isinstance(contract["production_source_sha256"], str) or not HEX64.fullmatch(
+        contract["production_source_sha256"]
+    ):
         raise ValidationError("IHK lifecycle crate-root digest is malformed")
     expected_modules = [
         {
@@ -258,6 +274,67 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
             raise ValidationError(f"unreviewed Rust dependency in lifecycle source: {imported}")
 
 
+def _validate_support_sources(
+    repo: Path, contract: dict[str, Any], source_text: str
+) -> dict[str, Path]:
+    support = contract["support_sources"]
+    if not isinstance(support, list) or len(support) != len(EXPECTED_SUPPORT_SOURCES):
+        raise ValidationError("lifecycle contract must bind the exact IHK Rust support closure")
+    paths: dict[str, Path] = {}
+    values: dict[str, dict[str, Any]] = {}
+    for index, (item, expected) in enumerate(zip(support, EXPECTED_SUPPORT_SOURCES)):
+        _require_keys(
+            item,
+            {"contract_path", "contract_sha256", "destination", "kind", "path", "sha256"},
+            f"support_sources[{index}]",
+        )
+        for field, value in expected.items():
+            if item[field] != value:
+                raise ValidationError(f"support_sources[{index}].{field} differs from the locked closure")
+        for field in ("contract_sha256", "sha256"):
+            if not isinstance(item[field], str) or not HEX64.fullmatch(item[field]):
+                raise ValidationError(f"support_sources[{index}].{field} is not lowercase SHA-256")
+        path = _repo_file(repo, item["path"], f"support_sources[{index}].path")
+        contract_path = _repo_file(
+            repo, item["contract_path"], f"support_sources[{index}].contract_path"
+        )
+        if _sha256(path) != item["sha256"] or _sha256(contract_path) != item["contract_sha256"]:
+            raise ValidationError(f"support_sources[{index}] digest is stale")
+        paths[item["destination"]] = path
+        values[item["destination"]] = _load_json(contract_path)
+
+    abi_contract = values["abi/x86_64.rs"]
+    capture = abi_contract.get("capture", {})
+    abi_item = support[0]
+    if capture.get("rust_path") != abi_item["path"] or capture.get("rust_sha256") != abi_item["sha256"]:
+        raise ValidationError("shared ABI contract does not bind the staged ABI source")
+    if abi_contract.get("readiness", {}).get("credit_eligible") is not False:
+        raise ValidationError("shared ABI support contract improperly claims credit")
+
+    registry_contract = values["os_registry.rs"]
+    registry_item = support[1]
+    implementation = registry_contract.get("implementation", {})
+    canonical_abi = registry_contract.get("canonical_abi", {})
+    readiness = registry_contract.get("readiness", {})
+    if registry_contract.get("gate_id") != "IHK-005-foundation":
+        raise ValidationError("OS registry support contract identity differs")
+    if implementation.get("path") != registry_item["path"] or implementation.get("sha256") != registry_item["sha256"]:
+        raise ValidationError("OS registry contract does not bind the staged source")
+    if canonical_abi.get("path") != abi_item["path"] or canonical_abi.get("sha256") != abi_item["sha256"]:
+        raise ValidationError("OS registry contract uses a different canonical ABI")
+    if readiness.get("status") != "TODO" or readiness.get("credit_eligible") is not False:
+        raise ValidationError("OS registry support contract must remain TODO and credit-ineligible")
+
+    declarations = (
+        '#[allow(dead_code, unreachable_pub)]\n#[path = "abi/x86_64.rs"]\nmod abi;',
+        "#[allow(dead_code)]\nmod os_registry;",
+    )
+    for declaration in declarations:
+        if source_text.count(declaration) != 1:
+            raise ValidationError(f"ihk crate root lacks unique support declaration: {declaration!r}")
+    return paths
+
+
 def _validate_kconfig(text: str, contract: dict[str, Any]) -> None:
     symbol = contract["kconfig"]["symbol"]
     matches = list(re.finditer(rf"^config {re.escape(symbol)}$", text, re.MULTILINE))
@@ -296,6 +373,7 @@ def _validate_stage_manifest(
     manifest: dict[str, Any],
     source_path: Path,
     module_paths: dict[str, Path],
+    support_paths: dict[str, Path],
     contract: dict[str, Any],
 ) -> None:
     build = manifest.get("build_contract", {})
@@ -334,6 +412,20 @@ def _validate_stage_manifest(
             raise ValidationError(
                 f"stage manifest IHK module digest is stale: {expected['destination']}"
             )
+    for support in contract["support_sources"]:
+        staged = by_destination.get(support["destination"])
+        expected = {
+            "destination": support["destination"],
+            "kind": support["kind"],
+            "repository_path": support["path"],
+            "sha256": support["sha256"],
+        }
+        if staged != expected:
+            raise ValidationError(
+                f"stage manifest support input differs: {support['destination']}"
+            )
+        if _sha256(support_paths[support["destination"]]) != support["sha256"]:
+            raise ValidationError(f"staged support digest is stale: {support['destination']}")
 
 
 def _validate_reference_inventory(inventory: dict[str, Any], contract: dict[str, Any]) -> None:
@@ -368,7 +460,8 @@ def validate_repository(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) 
         repo, contract["reference_inventory"], "legacy reference inventory"
     )
 
-    _validate_rust_source(_read_text(source_path, "production Rust source"), contract)
+    source_text = _read_text(source_path, "production Rust source")
+    _validate_rust_source(source_text, contract)
     if _sha256(source_path) != contract["production_source_sha256"]:
         raise ValidationError("IHK lifecycle crate-root digest is stale")
     for item in contract["crate_modules"]:
@@ -376,10 +469,11 @@ def validate_repository(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) 
             raise ValidationError(
                 f"IHK lifecycle module digest is stale: {item['destination']}"
             )
+    support_paths = _validate_support_sources(repo, contract, source_text)
     _validate_kconfig(_read_text(kconfig_path, "production Kconfig"), contract)
     _validate_kbuild(_read_text(kbuild_path, "production Kbuild"), contract)
     _validate_stage_manifest(
-        _load_json(manifest_path), source_path, module_paths, contract
+        _load_json(manifest_path), source_path, module_paths, support_paths, contract
     )
     _validate_reference_inventory(_load_json(inventory_path), contract)
     return {
@@ -390,6 +484,7 @@ def validate_repository(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) 
         "parameters": contract["parameter_count"],
         "source_sha256": _sha256(source_path),
         "transitive_module_count": len(module_paths),
+        "support_sources": len(support_paths),
         "version": contract["module"]["version"],
     }
 

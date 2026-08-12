@@ -15,7 +15,7 @@
     },
     "site_count": 21,
     "site_ids_sha256": "f1d1aca06b5a439fcb3d547a51d10600ce688b7a36c51171000377080ac51e9c",
-    "source_input_count": 5,
+    "source_input_count": 6,
     "source_inventory_status": "complete_for_locked_source_bytes"
   },
   "crate_roots": [
@@ -23,13 +23,14 @@
       "crate": "ihk",
       "destination": "ihk.rs",
       "path": "host-kernel/native-rust/ihk.rs",
-      "sha256": "d263c4321e491b54dff3b3b4213e18e2ced855ac7c399b19b14bdbf832f1ee18",
+      "sha256": "ff0ab16b609fd333cdc412d3e15ce27fbaf0fb9e880655deb11109bb3b80d22e",
       "transitive_inputs": [
         "host-kernel/native-rust/abi/x86_64.rs",
         "host-kernel/native-rust/ihk.rs",
-        "host-kernel/native-rust/ikc_queue.rs"
+        "host-kernel/native-rust/ikc_queue.rs",
+        "host-kernel/native-rust/os_registry.rs"
       ],
-      "transitive_inputs_sha256": "eb613ad5d00a3394fc7dfcd05483608b8f48bc4a942031332eb4e56bec929371"
+      "transitive_inputs_sha256": "460b9597eae50dc1f2b6b352451210b91a9ddb8c4963c991a5054f1729cfa695"
     },
     {
       "crate": "ihk_smp_x86_64",
@@ -59,7 +60,7 @@
     "self_attestation_forbidden": true
   },
   "ledger_id": "mckernel-native-rust-unsafe-ffi-ledger-v1",
-  "ledger_sha256": "077b97bda2afadf57efefa7b859aedd5a77dcfcda3c9f6e8530681c36c42e5b6",
+  "ledger_sha256": "3a08573f872a4946e93a9b22f53b7639125111b33ae7503e28b47d1efd80e789",
   "readiness": {
     "blockers": [
       "exact Rocky 10.2 rustc commands, dep-info closure, objects, source, config, and toolchain evidence are absent",
@@ -84,7 +85,7 @@
     },
     "stage_manifest": {
       "path": "host-kernel/kbuild/stage-manifest.json",
-      "sha256": "1b7b0f5fafa09dada420494534fa0db844ea19c8284fef331a67e55829a85785"
+      "sha256": "25e227d10ce3d079425663e3f3928e29db18634a3e28bca5ea0d789255377ef5"
     },
     "toolchain_lock": {
       "path": "host-kernel/rocky/toolchain-lock.json",
@@ -112,8 +113,8 @@
   },
   "sites": [
     {
-      "byte_end": 1160,
-      "byte_start": 1115,
+      "byte_end": 1371,
+      "byte_start": 1326,
       "caller_obligations": [
         "Constructors must keep the record fields and target pointer immutable after publication.",
         "The target pointer must reference module-static storage for every possible reader."
@@ -133,7 +134,7 @@
         "ihk"
       ],
       "expression_sha256": "778d5e4bea5080d53eaf135993572f31d8510d804f2a9034179df6a8f0b5aa32",
-      "file_sha256": "d263c4321e491b54dff3b3b4213e18e2ced855ac7c399b19b14bdbf832f1ee18",
+      "file_sha256": "ff0ab16b609fd333cdc412d3e15ce27fbaf0fb9e880655deb11109bb3b80d22e",
       "id": "RS011-IHK-0001",
       "independent_review": {
         "evidence_sha256": null,
@@ -142,8 +143,8 @@
         "status": "pending"
       },
       "kind": "unsafe_impl",
-      "line_end": 35,
-      "line_start": 35,
+      "line_end": 39,
+      "line_start": 39,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK module owner",
@@ -151,16 +152,16 @@
       },
       "path": "host-kernel/native-rust/ihk.rs",
       "safety_comment": {
-        "line_end": 34,
-        "line_start": 34,
+        "line_end": 38,
+        "line_start": 38,
         "source_sha256": "20da20cad5e54e309d04f6e577c361c603cbb066b582b6e647eb9ab960bd4098",
         "text": "SAFETY: The record and its target are immutable for the module lifetime."
       },
       "source_sha256": "4050dbb78cd5aced2f7deee385329cd1087395c149f62bad6ff12a129fbcd5a5"
     },
     {
-      "byte_end": 1575,
-      "byte_start": 1485,
+      "byte_end": 1786,
+      "byte_start": 1696,
       "caller_obligations": [
         "Consumers must import MCKERNEL_IHK_V1 and hold the provider module dependency.",
         "Consumers may only read the anchor byte and must not assign behavioral meaning to its value."
@@ -180,7 +181,7 @@
         "ihk"
       ],
       "expression_sha256": "a5e5090b3a7542300bfaeac36e845705f4be4a6a57a371a86770f7a6b3a74ee4",
-      "file_sha256": "d263c4321e491b54dff3b3b4213e18e2ced855ac7c399b19b14bdbf832f1ee18",
+      "file_sha256": "ff0ab16b609fd333cdc412d3e15ce27fbaf0fb9e880655deb11109bb3b80d22e",
       "id": "RS011-IHK-0002",
       "independent_review": {
         "evidence_sha256": null,
@@ -189,8 +190,8 @@
         "status": "pending"
       },
       "kind": "ffi_export",
-      "line_end": 44,
-      "line_start": 43,
+      "line_end": 48,
+      "line_start": 47,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK ABI owner",
@@ -198,16 +199,16 @@
       },
       "path": "host-kernel/native-rust/ihk.rs",
       "safety_comment": {
-        "line_end": 42,
-        "line_start": 41,
+        "line_end": 46,
+        "line_start": 45,
         "source_sha256": "3762992c52c6ffb0f1fc5074186ca8c3ea7c245538b816fcc7b20b8db94d11de",
         "text": "SAFETY: This immutable byte is the provider's read-only ABI anchor. Consumers must import it through MCKERNEL_IHK_V1 and may not treat its value as state."
       },
       "source_sha256": "695ff689567b02209f0f71eab292e5412d0d2b3714d5b36a661df9715d250663"
     },
     {
-      "byte_end": 2092,
-      "byte_start": 1750,
+      "byte_end": 2303,
+      "byte_start": 1961,
       "caller_obligations": [
         "The record layout, namespace bytes, and target relocation must remain compatible with the selected Linux export format.",
         "Only Linux modpost/module-loader machinery may interpret the .export_symbol record."
@@ -227,7 +228,7 @@
         "ihk"
       ],
       "expression_sha256": "10347961efcc905837db5c6899b143ce802cff6b42adf0de579b333bc86c4a45",
-      "file_sha256": "d263c4321e491b54dff3b3b4213e18e2ced855ac7c399b19b14bdbf832f1ee18",
+      "file_sha256": "ff0ab16b609fd333cdc412d3e15ce27fbaf0fb9e880655deb11109bb3b80d22e",
       "id": "RS011-IHK-0003",
       "independent_review": {
         "evidence_sha256": null,
@@ -236,8 +237,8 @@
         "status": "pending"
       },
       "kind": "ffi_export",
-      "line_end": 57,
-      "line_start": 49,
+      "line_end": 61,
+      "line_start": 53,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK ABI owner",
@@ -245,8 +246,8 @@
       },
       "path": "host-kernel/native-rust/ihk.rs",
       "safety_comment": {
-        "line_end": 48,
-        "line_start": 47,
+        "line_end": 52,
+        "line_start": 51,
         "source_sha256": "57b9cad46030f1540a9952cc472d494d55417d72dcdcebc0958c2b44b33aa5d0",
         "text": "SAFETY: Linux modpost consumes this immutable relocation record to publish the namespaced anchor; neither the record nor its target is mutated in Rust."
       },
@@ -1099,7 +1100,7 @@
       "source_sha256": "1bddcf599fe238e7338837f6a1a133cd756c8101b97f860ef0cfe3bad8d80f2b"
     }
   ],
-  "source_closure_sha256": "6c2ce3fda88db37c9202707fd1ce890768f0667fcb63c23060fd1b7bfc34e118",
+  "source_closure_sha256": "f13f4842288a2087e53604785f56ce9b5697fad58ec4c5691b54c3e9a5f81799",
   "source_inputs": [
     {
       "bytes": 18796,
@@ -1110,12 +1111,12 @@
       "sha256": "b5980e5b621914a120a0e6b72241477c48aee85615ae4cc76077f3874e35f860"
     },
     {
-      "bytes": 3421,
+      "bytes": 3632,
       "crate_roots": [
         "ihk"
       ],
       "path": "host-kernel/native-rust/ihk.rs",
-      "sha256": "d263c4321e491b54dff3b3b4213e18e2ced855ac7c399b19b14bdbf832f1ee18"
+      "sha256": "ff0ab16b609fd333cdc412d3e15ce27fbaf0fb9e880655deb11109bb3b80d22e"
     },
     {
       "bytes": 10260,
@@ -1140,6 +1141,14 @@
       ],
       "path": "host-kernel/native-rust/mcctrl.rs",
       "sha256": "3b996deb4a3eb26f93e45a243d2f7dc075344cee95ff583eeaf20d602ab63e31"
+    },
+    {
+      "bytes": 17706,
+      "crate_roots": [
+        "ihk"
+      ],
+      "path": "host-kernel/native-rust/os_registry.rs",
+      "sha256": "29464b8ca1038d87cc0d5f760eb22e0cbd7a1a512ae88f4c550574a784d1e49d"
     }
   ],
   "target": {

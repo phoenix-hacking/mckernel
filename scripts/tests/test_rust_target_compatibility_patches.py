@@ -29,6 +29,8 @@ PATCHES = (
     / "host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch",
     REPO_ROOT
     / "host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch",
+    REPO_ROOT
+    / "host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch",
 )
 PREIMAGE = REPO_ROOT / "scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs"
 POSTIMAGE_SHA256 = "555ff4dff6548bb5f24087cdad737363b5694668aa462f77adfb3571498ec678"
@@ -39,7 +41,7 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
     def test_every_patch_rejects_second_application(self):
         from scripts import linux_api_exact_probe as probe
 
-        self.assertEqual(9, len(PATCHES))
+        self.assertEqual(10, len(PATCHES))
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory) / "linux"
             shutil.copytree(str(CORE_PREIMAGE), str(root))
@@ -104,6 +106,8 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
             self.assertEqual(digest, probe.sha256_file(CORE_PREIMAGE / relative))
         for relative, digest in probe.RUST_1_92_RECONCILIATION_PREIMAGE_SHA256S:
             self.assertEqual(digest, probe.sha256_file(CORE_PREIMAGE / relative))
+        for relative, digest in probe.CLANG_21_WARNING_PREIMAGE_SHA256S:
+            self.assertEqual(digest, probe.sha256_file(CORE_PREIMAGE / relative))
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory) / "linux"
             shutil.copytree(str(CORE_PREIMAGE), str(root))
@@ -122,6 +126,8 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
                 if relative not in reconciled_paths:
                     self.assertEqual(digest, probe.sha256_file(root / relative))
             for relative, digest in probe.RUST_1_92_RECONCILIATION_POSTIMAGE_SHA256S:
+                self.assertEqual(digest, probe.sha256_file(root / relative))
+            for relative, digest in probe.CLANG_21_WARNING_POSTIMAGE_SHA256S:
                 self.assertEqual(digest, probe.sha256_file(root / relative))
             makefile = (root / "rust/Makefile").read_text(encoding="utf-8")
             compiler = (root / "scripts/Makefile.compiler").read_text(
@@ -207,6 +213,11 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
             )
             self.assertNotIn("BLK_MQ_F_SHOULD_MERGE", tag_set)
             self.assertIn("flags: 0,", tag_set)
+            self.assertIn(
+                "KBUILD_CFLAGS += $(call cc-disable-warning, "
+                "default-const-init-unsafe)",
+                (root / "scripts/Makefile.extrawarn").read_text(encoding="utf-8"),
+            )
 
     def test_core_edition_patch_without_version_helper_is_incomplete(self):
         from scripts import linux_api_exact_probe as probe

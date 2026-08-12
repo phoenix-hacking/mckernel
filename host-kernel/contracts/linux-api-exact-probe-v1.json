@@ -1,6 +1,28 @@
 {
+  "clang_21_default_const_failure_evidence": [
+    {
+      "artifact_id": null,
+      "artifact_zip_bytes": null,
+      "artifact_zip_sha256": null,
+      "clang_default_const_diagnostic_count": 3,
+      "job_id": 94042622684,
+      "repository_commit": "54e0bb475336b8c7661ad026de289625e06c8f64",
+      "run_id": 31574226844,
+      "workflow": "RS-001 exact Rocky Linux API evidence"
+    },
+    {
+      "artifact_id": 9132598094,
+      "artifact_zip_bytes": 112757,
+      "artifact_zip_sha256": "456d947ea5a4e73de2da7ff6e4dd41376c62ccb0ca91e38fbdbe3fefe5e65d79",
+      "clang_default_const_diagnostic_count": 3,
+      "job_id": 94042622785,
+      "repository_commit": "54e0bb475336b8c7661ad026de289625e06c8f64",
+      "run_id": 31574226958,
+      "workflow": "Native Rust host modules exact Rocky build"
+    }
+  ],
   "contract_id": "mckernel-rs001-exact-linux-api-probe-v1",
-  "contract_sha256": "9f67d6895e6e9cdfa3dbfee03bbb7b9d26485bb48b0f36d9751adbbb396be448",
+  "contract_sha256": "b1fe96dab77902c8b031c15b5f034e4ea35970b8458ba6a248b1402f04783b34",
   "evidence_profile": "rocky-10.2-exact-linux-api-evidence-v1",
   "frozen_needs": {
     "file_sha256": "76f16c395dd40f78ab1b72debcc61a352e28a3ddbf78586824ce9882a2a43e4c",
@@ -31,8 +53,14 @@
   "repository_inputs": {
     "checker": {
       "path": "scripts/linux_api_exact_probe.py",
-      "sha256": "e3c93857dc63cdd520e2a08ea2f3a7b0600f2b6dcabe76406f84305e07692069"
+      "sha256": "745e2b9b91b44c2fb3eedb89117d172cfe4dc9b9014a4cf909b16185ab00d830"
     },
+    "clang_21_warning_preimages": [
+      {
+        "path": "scripts/tests/fixtures/rust-core-rocky-6.12/scripts/Makefile.extrawarn",
+        "sha256": "f8b158270273a1ce7054847b0e63051756fbfc5ad83f244d908229861300502b"
+      }
+    ],
     "config_policy": {
       "path": "host-kernel/rocky/config-policy.json",
       "sha256": "94c4715f9c823b3aafcb8399ed7b2cbe25e77308b1c165afc75db70f5afbfd7f"
@@ -197,6 +225,14 @@
         "size": 1751,
         "stable_commit": null,
         "upstream_commit": "31d813a3b8cbde2d09ba4dee282ca29096541006"
+      },
+      {
+        "applied_after": "host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch",
+        "path": "host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch",
+        "sha256": "2781f4eac05a806a58e76a035f2dba45f137a9147512c87cf9f63b1deb40c7e0",
+        "size": 2961,
+        "stable_commit": "511ceee89966ce906ca8989523e1a67ba6de44c1",
+        "upstream_commit": "d0afcfeb9e3810ec89d1ffde1a0e36621bb75dca"
       }
     ],
     "rust_target_generator_preimage": {
@@ -213,7 +249,7 @@
     },
     "workflow": {
       "path": ".github/workflows/rs001-linux-api-exact-probe.yml",
-      "sha256": "965f8441a18316f94294224eb6ba230cce96967416a1437a6e728dbbe2b95022"
+      "sha256": "59d8efece102d4efb358d906c37161c17df0c89dbdba586f07ebe6c859bf4f17"
     }
   },
   "required_capture_inputs": [
@@ -381,6 +417,13 @@
         "path": "host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch",
         "sha256": "076b0b48effba9bed12cb00a4c93318353aa26344f14b0b1bba5508c55a1bcfb",
         "size": 1751
+      },
+      {
+        "applied": true,
+        "empty": false,
+        "path": "host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch",
+        "sha256": "2781f4eac05a806a58e76a035f2dba45f137a9147512c87cf9f63b1deb40c7e0",
+        "size": 2961
       }
     ],
     "tree_comparison": "fresh locked archive plus every applied Rocky patch and the bound Rust target compatibility patch must byte-match the supplied out-of-tree build source"

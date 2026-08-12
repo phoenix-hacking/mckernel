@@ -49,6 +49,7 @@ RUST_COMPAT_PATCH_PATHS = (
     Path("host-kernel/rocky/patches/0007-rust-use-used-compiler-rust-1.89.patch"),
     Path("host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch"),
     Path("host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch"),
+    Path("host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch"),
 )
 CONFIG_POLICY_PATH = Path("host-kernel/rocky/config-policy.json")
 TOOLCHAIN_LOCK_PATH = Path("host-kernel/rocky/toolchain-lock.json")
@@ -120,6 +121,12 @@ RUST_1_92_RECONCILIATION_POSTIMAGE_SHA256S = (
     ("rust/kernel/sync/arc.rs", "d18fccfcbe7a55297dfd4574218c9e6aeeaf8d30f99b0128071f0f444768d8ae"),
     ("scripts/Makefile.build", "9a4d2a34fb5db30c43db86f14474a9b3135bd877ad2850aedb437d0c7606f9df"),
 )
+CLANG_21_WARNING_PREIMAGE_SHA256S = (
+    ("scripts/Makefile.extrawarn", "f8b158270273a1ce7054847b0e63051756fbfc5ad83f244d908229861300502b"),
+)
+CLANG_21_WARNING_POSTIMAGE_SHA256S = (
+    ("scripts/Makefile.extrawarn", "af133c210b1c2a2fbf13c5dbead71baf47824f32b93562ef5cb50ab3f84c4a93"),
+)
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
 CONFIG_LINE = re.compile(r"^(CONFIG_[A-Za-z0-9_]+)=(.*)$")
@@ -149,6 +156,7 @@ RUST_COMPAT_UPSTREAM_COMMITS = (
     "7498159226772d66f150dd406be462d75964a366",
     "c95bbb59a9b22f9b838b15d28319185c1c884329",
     "31d813a3b8cbde2d09ba4dee282ca29096541006",
+    "d0afcfeb9e3810ec89d1ffde1a0e36621bb75dca",
 )
 RUST_COMPAT_STABLE_COMMITS = (
     None,
@@ -160,6 +168,7 @@ RUST_COMPAT_STABLE_COMMITS = (
     "d9ebd928288bb82df8efeb3a34f2cd31883f440e",
     "e18d5b42489311bc86d7ce5fb0f19af067495589",
     None,
+    "511ceee89966ce906ca8989523e1a67ba6de44c1",
 )
 RUST_CORE_COMPAT_FAILURE_EVIDENCE = (
     {
@@ -221,6 +230,28 @@ RUST_KERNEL_1_92_RECONCILIATION_FAILURE_EVIDENCE = (
         "artifact_zip_sha256": "fa0a900b182da68e818e751f56980ca7432a8ea1108e9ac6b25426784b53cbab",
         "artifact_zip_bytes": 60214,
         "rust_kernel_diagnostic_count": 8,
+    },
+)
+CLANG_21_DEFAULT_CONST_FAILURE_EVIDENCE = (
+    {
+        "workflow": "RS-001 exact Rocky Linux API evidence",
+        "repository_commit": "54e0bb475336b8c7661ad026de289625e06c8f64",
+        "run_id": 31574226844,
+        "job_id": 94042622684,
+        "artifact_id": None,
+        "artifact_zip_sha256": None,
+        "artifact_zip_bytes": None,
+        "clang_default_const_diagnostic_count": 3,
+    },
+    {
+        "workflow": "Native Rust host modules exact Rocky build",
+        "repository_commit": "54e0bb475336b8c7661ad026de289625e06c8f64",
+        "run_id": 31574226958,
+        "job_id": 94042622785,
+        "artifact_id": 9132598094,
+        "artifact_zip_sha256": "456d947ea5a4e73de2da7ff6e4dd41376c62ccb0ca91e38fbdbe3fefe5e65d79",
+        "artifact_zip_bytes": 112757,
+        "clang_default_const_diagnostic_count": 3,
     },
 )
 
@@ -448,6 +479,18 @@ def rust_compatibility_patch_records(repo):
                     relative
                 )
             )
+    for relative, digest in CLANG_21_WARNING_PREIMAGE_SHA256S:
+        path = repository_file(
+            repo,
+            RUST_CORE_COMPAT_FIXTURE_ROOT / relative,
+            "Rocky Clang 21 warning-policy fixture file",
+        )
+        if sha256_file(path) != digest:
+            raise ProbeError(
+                "Rocky Clang 21 warning-policy fixture digest changed: {0}".format(
+                    relative
+                )
+            )
     records = []
     required_additions = (
         {
@@ -494,6 +537,9 @@ def rust_compatibility_patch_records(repo):
         {
             "+                    flags: 0,": 1,
         },
+        {
+            "+KBUILD_CFLAGS += $(call cc-disable-warning, default-const-init-unsafe)": 1,
+        },
     )
     required_deletions = (
         {},
@@ -512,8 +558,9 @@ def rust_compatibility_patch_records(repo):
         {
             "-                    flags: bindings::BLK_MQ_F_SHOULD_MERGE,": 1,
         },
+        {},
     )
-    expected_diff_counts = (1, 1, 3, 2, 3, 1, 4, 4, 1)
+    expected_diff_counts = (1, 1, 3, 2, 3, 1, 4, 4, 1, 1)
     for index, relative in enumerate(RUST_COMPAT_PATCH_PATHS):
         path = repository_file(repo, relative, "Rust target compatibility patch")
         try:
@@ -600,6 +647,7 @@ def verify_rust_compatibility_patch_replay(repo, records):
             + RUST_BINDINGS_COMPAT_PREIMAGE_SHA256S
             + RUST_1_89_COMPAT_PREIMAGE_SHA256S
             + RUST_1_92_RECONCILIATION_PREIMAGE_SHA256S
+            + CLANG_21_WARNING_PREIMAGE_SHA256S
         ):
             source = repository_file(
                 repo,
@@ -677,6 +725,13 @@ def verify_rust_compatibility_patch_replay(repo, records):
             if sha256_file(root / relative) != digest:
                 raise ProbeError(
                     "Rust 1.92 reconciliation patch postimage changed: {0}".format(
+                        relative
+                    )
+                )
+        for relative, digest in CLANG_21_WARNING_POSTIMAGE_SHA256S:
+            if sha256_file(root / relative) != digest:
+                raise ProbeError(
+                    "Clang 21 warning-policy patch postimage changed: {0}".format(
                         relative
                     )
                 )
@@ -788,6 +843,13 @@ def build_contract(repo):
                 }
                 for relative, digest in RUST_1_92_RECONCILIATION_PREIMAGE_SHA256S
             ],
+            "clang_21_warning_preimages": [
+                {
+                    "path": str(RUST_CORE_COMPAT_FIXTURE_ROOT / relative),
+                    "sha256": digest,
+                }
+                for relative, digest in CLANG_21_WARNING_PREIMAGE_SHA256S
+            ],
             "config_policy": config_record,
             "toolchain_lock": toolchain_record,
             "checker": {"path": str(SCRIPT_PATH), "sha256": sha256_file(script)},
@@ -801,6 +863,9 @@ def build_contract(repo):
         ],
         "rust_kernel_1_92_reconciliation_failure_evidence": [
             dict(row) for row in RUST_KERNEL_1_92_RECONCILIATION_FAILURE_EVIDENCE
+        ],
+        "clang_21_default_const_failure_evidence": [
+            dict(row) for row in CLANG_21_DEFAULT_CONST_FAILURE_EVIDENCE
         ],
         "source_patch_contract": {
             "patches": [
