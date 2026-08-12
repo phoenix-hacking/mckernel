@@ -75,6 +75,12 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         self.assertIn(
             'ARCH=x86_64 LLVM=1 -j2 "${module_targets[@]}"', self.workflow
         )
+        self.assertLess(
+            self.workflow.index(
+                'ARCH=x86_64 LLVM=1 -j2 "${module_targets[@]}"'
+            ),
+            self.workflow.index("ARCH=x86_64 LLVM=1 -j2 bzImage"),
+        )
         self.assertNotRegex(self.workflow, r"(?m)^\s*make\s+.*\bmodules\b")
         self.assertIn(
             'cp "$NATIVE_BUILD_DIR/arch/x86/boot/bzImage" "$EVIDENCE_DIR/bzImage"',

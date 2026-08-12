@@ -385,15 +385,17 @@ jobs:
             run_phase rustavailable \
               make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \
                 ARCH=x86_64 LLVM=1 rustavailable
-            run_phase bzImage \
-              make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \
-                ARCH=x86_64 LLVM=1 -j2 bzImage
             # Linux 6.12 supports in-tree %.ko single targets.  Keep all three
             # in one invocation so their one modpost pass sees the complete
-            # ihk provider/consumer symbol graph.
+            # ihk provider/consumer symbol graph.  Run this bounded compiler
+            # boundary before the independent full-image build so an unrelated
+            # vmlinux failure cannot mask the native Rust module result.
             run_phase native-modules \
               make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \
                 ARCH=x86_64 LLVM=1 -j2 "${module_targets[@]}"
+            run_phase bzImage \
+              make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \
+                ARCH=x86_64 LLVM=1 -j2 bzImage
             printf '%s\n' complete > "$evidence_dir/build.phase"
           ) 2>&1 | tee "$evidence_dir/build.log"
           pipeline_status=("${PIPESTATUS[@]}")

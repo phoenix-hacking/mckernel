@@ -333,8 +333,8 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         values = {
             "build.commands": (
                 f"{prefix} rustavailable\n"
-                f"{prefix} -j2 bzImage\n"
                 f"{prefix} -j2 {' '.join(evidence.BUILD_MODULE_TARGETS)}\n"
+                f"{prefix} -j2 bzImage\n"
             ),
             "build.exit-code": "0\n",
             "build.log": "Rust is available!\n",
@@ -377,7 +377,7 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         exit_code.write_text("0\n", encoding="utf-8")
         records[exit_code.name] = hashlib.sha256(exit_code.read_bytes()).hexdigest()
         phase = directory / "build.phase"
-        phase.write_text("native-modules\n", encoding="utf-8")
+        phase.write_text("bzImage\n", encoding="utf-8")
         records[phase.name] = hashlib.sha256(phase.read_bytes()).hexdigest()
         with self.assertRaisesRegex(evidence.EvidenceError, "complete phase"):
             evidence._validate_build_scope_artifacts(directory, records)

@@ -168,8 +168,8 @@ class RepositoryReviewTests(unittest.TestCase):
             {
                 "path": review.REVIEW_PATH.as_posix(),
                 "size": 11208,
-                "sha256": "dbe7751549b39b0b2694b491dcfd0df1fc46dce018dca90881d551f9f481180a",
-                "git_blob_sha1": "85f6f5d6775d8881450c1e7954ce3264375cfe06",
+                "sha256": "53299e93e8e2ec42e4d3217f7b8cb9163d007b25c206b0106b31831d021778cd",
+                "git_blob_sha1": "f015de090a153c25315f07a2303397705a8cc0a2",
             },
         )
 
