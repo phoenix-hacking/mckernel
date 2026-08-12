@@ -91,6 +91,19 @@ class RepositoryContractTests(unittest.TestCase):
             "sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176",
         )
         self.assertNotIn("image: rockylinux/rockylinux:10.2\n", workflow)
+        install_step = workflow.split(
+            "- name: Install required verification tools", 1
+        )[1].split("- name: Check out the exact candidate commit", 1)[0]
+        self.assertIn("git-core gnupg2 gzip python3 rpm", install_step)
+        self.assertNotRegex(install_step, r"\bcoreutils\b")
+
+    def test_runtime_package_capture_matches_the_minimal_rocky_image(self) -> None:
+        source = (REPO_ROOT / evidence.CAPTURE_SCRIPT_PATH).read_text(
+            encoding="utf-8"
+        )
+        self.assertIn('"coreutils-single"', source)
+        self.assertIn('"git-core"', source)
+        self.assertNotIn('            "coreutils",\n', source)
 
     def test_cli_check_succeeds_without_gate_claim(self) -> None:
         self.assertEqual(evidence.main(["--repo", str(REPO_ROOT), "--check"]), 0)
