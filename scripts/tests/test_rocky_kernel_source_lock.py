@@ -306,6 +306,50 @@ class LockedIdentityTests(SourceLockFixture):
                 with self.assertRaises(source_lock.SourceLockError):
                     self.validate(broken)
 
+    def test_captured_but_unverified_evidence_always_remains_a_blocker(self) -> None:
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT) as temporary:
+            evidence_path = Path(temporary) / "capture.json"
+            evidence_path.write_text('{"unverified":true}\n', encoding="utf-8")
+            relative = evidence_path.relative_to(REPO_ROOT).as_posix()
+            digest = hashlib.sha256(evidence_path.read_bytes()).hexdigest()
+            broken = copy.deepcopy(self.lock)
+            item = broken["evidence"]["acquisition_replay"]
+            item.update(
+                {
+                    "evidence_path": relative,
+                    "evidence_sha256": digest,
+                    "status": "captured-unverified",
+                }
+            )
+            blockers = self.validate(broken)
+            self.assertTrue(
+                any(blocker.startswith("acquisition_replay:") for blocker in blockers)
+            )
+
+            item["blocker"] = ""
+            with self.assertRaises(source_lock.SourceLockError):
+                self.validate(broken)
+
+    def test_evidence_symlinks_are_rejected_even_when_bytes_match(self) -> None:
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT) as temporary:
+            directory = Path(temporary)
+            real_path = directory / "real.json"
+            link_path = directory / "link.json"
+            real_path.write_text('{"captured":true}\n', encoding="utf-8")
+            link_path.symlink_to(real_path)
+            broken = copy.deepcopy(self.lock)
+            item = broken["evidence"]["acquisition_replay"]
+            item.update(
+                {
+                    "blocker": None,
+                    "evidence_path": link_path.relative_to(REPO_ROOT).as_posix(),
+                    "evidence_sha256": hashlib.sha256(real_path.read_bytes()).hexdigest(),
+                    "status": "verified",
+                }
+            )
+            with self.assertRaises(source_lock.SourceLockError):
+                self.validate(broken)
+
     def test_gate_credit_claim_fails_while_any_required_evidence_is_missing(self) -> None:
         broken = copy.deepcopy(self.lock)
         broken["gate"]["credit_eligible"] = True

@@ -376,6 +376,23 @@ def validate_https_url(value: object, hosts: Iterable[str], label: str) -> str:
     return value
 
 
+def repository_evidence_path(repo: Path, relative: str, label: str) -> Path:
+    root = repo.resolve()
+    requested = root.joinpath(*PurePosixPath(relative).parts)
+    resolved = requested.resolve()
+    try:
+        common = Path(os.path.commonpath((str(root), str(resolved))))
+    except ValueError as exc:
+        raise SourceLockError(f"{label} is on a different filesystem root") from exc
+    if common != root:
+        raise SourceLockError(f"{label} escapes the repository")
+    if requested != resolved or requested.is_symlink() or not requested.is_file():
+        raise SourceLockError(
+            f"{label} must be a regular repository file with no symlink traversal"
+        )
+    return requested
+
+
 def validate_evidence_record(
     evidence_id: str,
     record: object,
@@ -416,7 +433,9 @@ def validate_evidence_record(
         raise SourceLockError(
             f"evidence.{evidence_id} claims capture without a repository to verify it"
         )
-    evidence_path = repo / path_text
+    evidence_path = repository_evidence_path(
+        repo, path_text, f"evidence.{evidence_id}.evidence_path"
+    )
     size, actual_digest = sha256_file(evidence_path)
     if size == 0 or actual_digest != expected_digest:
         raise SourceLockError(f"evidence.{evidence_id} file is absent, empty, or stale")
@@ -431,7 +450,15 @@ def validate_evidence_record(
         ]["fingerprint"]:
             raise SourceLockError("SRPM signer is not the pinned Rocky Linux 10 key")
     if status != "verified":
+        if not isinstance(item["blocker"], str) or not item["blocker"].strip():
+            raise SourceLockError(
+                f"unverified evidence.{evidence_id} needs a non-empty blocker"
+            )
         return str(item["blocker"])
+    if item["blocker"] is not None:
+        raise SourceLockError(
+            f"verified evidence.{evidence_id} must clear its blocker"
+        )
     return None
 
 
@@ -515,6 +542,8 @@ def validate_license_policy(lock: Mapping[str, Any], repo: Path | None) -> str |
         return blocker
     if status != "verified" or inventory["complete"] is not True:
         raise SourceLockError("license inventory status must be missing or verified-complete")
+    if inventory["blocker"] is not None:
+        raise SourceLockError("verified license inventory must clear its blocker")
     path_text = validate_relative_path(
         inventory["inventory_path"], "licenses.inventory.inventory_path"
     )
@@ -525,7 +554,10 @@ def validate_license_policy(lock: Mapping[str, Any], repo: Path | None) -> str |
         raise SourceLockError("verified license inventory needs a positive item_count")
     if repo is None:
         raise SourceLockError("verified license inventory needs a repository to verify it")
-    size, actual_digest = sha256_file(repo / path_text)
+    inventory_path = repository_evidence_path(
+        repo, path_text, "licenses.inventory.inventory_path"
+    )
+    size, actual_digest = sha256_file(inventory_path)
     if size == 0 or actual_digest != expected_digest:
         raise SourceLockError("license inventory file is absent, empty, or stale")
     return None
