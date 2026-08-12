@@ -52,12 +52,36 @@ PATCHES = (
     REPO_ROOT
     / "host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch",
 )
+PROJECT_PATCHES = (
+    REPO_ROOT
+    / "host-kernel/kbuild/patches/0001-drivers-misc-add-mckernel-rust-host-modules.patch",
+    REPO_ROOT
+    / "host-kernel/kbuild/patches/0002-rust-bindings-expose-module-parameters.patch",
+)
 PREIMAGE = REPO_ROOT / "scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs"
 POSTIMAGE_SHA256 = "555ff4dff6548bb5f24087cdad737363b5694668aa462f77adfb3571498ec678"
 CORE_PREIMAGE = REPO_ROOT / "scripts/tests/fixtures/rust-core-rocky-6.12"
 
 
 class RustTargetCompatibilityPatchTests(unittest.TestCase):
+    @staticmethod
+    def seed_project_patch_preimages(root):
+        makefile = root / "drivers/misc/Makefile"
+        makefile.parent.mkdir(parents=True, exist_ok=True)
+        makefile.write_text(
+            "obj-$(CONFIG_NSM)\t\t+= nsm.o\n"
+            "obj-$(CONFIG_MARVELL_CN10K_DPI)\t+= mrvl_cn10k_dpi.o\n"
+            "obj-y\t\t\t\t+= keba/\n",
+            encoding="utf-8",
+        )
+        (root / "drivers/misc/Kconfig").write_text(
+            'source "drivers/misc/pvpanic/Kconfig"\n'
+            'source "drivers/misc/mchp_pci1xxxx/Kconfig"\n'
+            'source "drivers/misc/keba/Kconfig"\n'
+            "endmenu\n",
+            encoding="utf-8",
+        )
+
     def test_exact_rocky_makefile_whitespace_is_explicitly_preserved(self):
         attributes = (REPO_ROOT / ".gitattributes").read_text(encoding="utf-8")
         fixture = "scripts/tests/fixtures/rust-core-rocky-6.12/Makefile"
@@ -82,6 +106,36 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
             for patch in PATCHES:
                 with self.assertRaises(probe.ProbeError):
                     probe.run_checked(command + [str(patch)], root)
+
+    def test_full_compatibility_then_project_series_preserves_bindings(self):
+        from scripts import linux_api_exact_probe as probe
+
+        command = ["patch", "-p1", "--batch", "--forward", "--fuzz=0", "-i"]
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / "linux"
+            shutil.copytree(str(CORE_PREIMAGE), str(root))
+            (root / "scripts/generate_rust_target.rs").write_bytes(
+                PREIMAGE.read_bytes()
+            )
+            self.seed_project_patch_preimages(root)
+            for patch in PATCHES + PROJECT_PATCHES:
+                probe.run_checked(command + [str(patch)], root)
+
+            bindings = (
+                root / "rust/bindings/bindings_helper.h"
+            ).read_text(encoding="utf-8")
+            miscdevice = "#include <linux/miscdevice.h>"
+            moduleparam = "#include <linux/moduleparam.h>"
+            self.assertEqual(1, bindings.count(miscdevice))
+            self.assertEqual(1, bindings.count(moduleparam))
+            self.assertLess(bindings.index(miscdevice), bindings.index(moduleparam))
+            self.assertLess(
+                bindings.index(moduleparam), bindings.index("#include <linux/phy.h>")
+            )
+            self.assertEqual(
+                "dfdde6df9f8e8a38713cb210f7d2fe3a96fbbf19e60b262aa40de340d0059e6b",
+                probe.sha256_file(root / "rust/bindings/bindings_helper.h"),
+            )
 
     def test_stable_warning_policy_rejects_predecessor_order_mutations(self):
         from scripts import linux_api_exact_probe as probe

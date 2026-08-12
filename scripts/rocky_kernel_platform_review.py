@@ -38,12 +38,12 @@ SOURCE_LOCK_PATH = Path("host-kernel/rocky/source-lock.json")
 REVIEW_ID = "rk-003-rk-005-platform-repository-review-dd6-v1"
 RUNTIME_HEAD = "dd6d1954538ca1adbaf335a1dd058aba26c28840"
 OBSERVED_HEAD = "9ddbee3bb7fc93ee4514da73ac748ad4c820c068"
-PUBLISHED_BASE_HEAD = "113ff881d100d0d35ec57229e4eb21d7329b2c56"
+PUBLISHED_BASE_HEAD = "03c5d4bd80e7a428d4a5fa6a2244abada2d9fbe5"
 PUBLISHED_BASE_REVIEW = {
     "path": REVIEW_PATH.as_posix(),
-    "size": 11208,
-    "sha256": "cee5b6f8c7810fbfb089be413d1a45e599a667e3daedadb23404186c88112321",
-    "git_blob_sha1": "008639cf6245d8e2075af334ee67f07c3e09dfc9",
+    "size": 11281,
+    "sha256": "ffb4ff68d743bba71199e4b47d8cb15bc0f149193e4fa944f246e2447123dabc",
+    "git_blob_sha1": "c4d361a684fbb6a67607137b7cf4a6ca98eaea85",
 }
 REPOSITORY = "phoenix-hacking/mckernel"
 RUN_ID = 31563271344
@@ -57,7 +57,7 @@ ARTIFACT_SHA256 = (
     "a88e8a35c13dbd5b7a4e6524595d5cec31450f83c136b4cf64030e517d208eef"
 )
 EXPECTED_REVIEW_SHA256 = (
-    "ffb4ff68d743bba71199e4b47d8cb15bc0f149193e4fa944f246e2447123dabc"
+    "21dc474c6ae1ce73c9802c509d4b0b7e0b99d660c737df3a1a7e5216e4925333"
 )
 
 RELEASE_KEY_FINGERPRINT = "FC226859C0860BF0DDB95B085B106C736FEDFC85"
@@ -165,10 +165,7 @@ CURRENT_INPUT_OVERRIDES = [
     },
 ]
 
-PUBLISHED_BASE_CHANGED_PATHS = [
-    "host-kernel/rocky/source-lock.json",
-    "scripts/rocky_kernel_source_lock.py",
-]
+PUBLISHED_BASE_CHANGED_PATHS = []
 
 EXPECTED_CURRENT_REPOSITORY_BINDING = {
     "base_head_sha": OBSERVED_HEAD,

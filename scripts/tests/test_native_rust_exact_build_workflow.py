@@ -2,6 +2,7 @@
 
 from __future__ import print_function
 
+import hashlib
 import re
 import subprocess
 import unittest
@@ -98,8 +99,26 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         ):
             self.assertIn(name, self.workflow)
         patch = PATCH.read_text(encoding="utf-8")
-        self.assertIn("#include <linux/moduleparam.h>", patch)
+        self.assertEqual(
+            "e01b48d89e4126eb3c31b355491ec95e3f31458de79ffd6e28d1bae71ddec14c",
+            hashlib.sha256(PATCH.read_bytes()).hexdigest(),
+        )
+        self.assertIn("index 84303bf221dd9..5e5c00c655cf 100644", patch)
+        self.assertIn(
+            " #include <linux/miscdevice.h>\n"
+            "+#include <linux/moduleparam.h>\n"
+            " #include <linux/phy.h>\n",
+            patch,
+        )
         self.assertNotIn("mckernel", patch.lower())
+        self.assertIn(
+            "python3 -m unittest -v "
+            "scripts.tests.test_rust_target_compatibility_patches",
+            self.workflow,
+        )
+        self.assertGreaterEqual(
+            self.workflow.count("--fuzz=0 --no-backup-if-mismatch"), 3
+        )
 
     def test_upstream_rust_compatibility_series_precedes_project_staging(self):
         self.assertIn("--fuzz=0 --no-backup-if-mismatch", self.workflow)

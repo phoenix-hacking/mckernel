@@ -144,12 +144,12 @@ class RepositoryReviewTests(unittest.TestCase):
         self.assertEqual(port["binding_kind"], "exact-input-tree-port")
         self.assertEqual(port["published_base_head_sha"], review.PUBLISHED_BASE_HEAD)
         self.assertEqual(port["ported_input_count"], 10)
-        self.assertEqual(port["changed_from_published_base_count"], 2)
+        self.assertEqual(port["changed_from_published_base_count"], 0)
         self.assertEqual(
             port["changed_from_published_base_paths"],
             review.PUBLISHED_BASE_CHANGED_PATHS,
         )
-        self.assertEqual(port["unchanged_from_published_base_count"], 8)
+        self.assertEqual(port["unchanged_from_published_base_count"], 10)
         self.assertTrue(
             port["historical_review_preserved_by_exact_base_review_blob"]
         )
@@ -167,9 +167,9 @@ class RepositoryReviewTests(unittest.TestCase):
             review.PUBLISHED_BASE_REVIEW,
             {
                 "path": review.REVIEW_PATH.as_posix(),
-                "size": 11208,
-                "sha256": "cee5b6f8c7810fbfb089be413d1a45e599a667e3daedadb23404186c88112321",
-                "git_blob_sha1": "008639cf6245d8e2075af334ee67f07c3e09dfc9",
+                "size": 11281,
+                "sha256": "ffb4ff68d743bba71199e4b47d8cb15bc0f149193e4fa944f246e2447123dabc",
+                "git_blob_sha1": "c4d361a684fbb6a67607137b7cf4a6ca98eaea85",
             },
         )
 

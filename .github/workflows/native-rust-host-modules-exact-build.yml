@@ -256,6 +256,7 @@ jobs:
           python3 scripts/mcctrl_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE"
           python3 scripts/native_rust_unsafe_ffi_ledger.py --repo "$GITHUB_WORKSPACE" check
           python3 scripts/rs006_miscdevice_substrate.py --repo "$GITHUB_WORKSPACE"
+          python3 -m unittest -v scripts.tests.test_rust_target_compatibility_patches
 
       - name: Acquire, patch, and credit-forbidden-stage the exact source
         env:
@@ -312,9 +313,9 @@ jobs:
             patch -d "$source_root" -p1 --batch --forward --fuzz=0 --no-backup-if-mismatch \
               -i "$compat_patch"
           done
-          patch -d "$source_root" -p1 --batch --forward --no-backup-if-mismatch \
+          patch -d "$source_root" -p1 --batch --forward --fuzz=0 --no-backup-if-mismatch \
             -i "$GITHUB_WORKSPACE/host-kernel/kbuild/patches/0001-drivers-misc-add-mckernel-rust-host-modules.patch"
-          patch -d "$source_root" -p1 --batch --forward --no-backup-if-mismatch \
+          patch -d "$source_root" -p1 --batch --forward --fuzz=0 --no-backup-if-mismatch \
             -i "$GITHUB_WORKSPACE/host-kernel/kbuild/patches/0002-rust-bindings-expose-module-parameters.patch"
           python3 scripts/rocky_rust_staging.py --repo "$GITHUB_WORKSPACE" \
             --stage-for-evidence "$source_root"
