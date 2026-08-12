@@ -1,0 +1,100 @@
+{
+  "canonical_abi": {
+    "path": "host-kernel/native-rust/abi/x86_64.rs",
+    "sha256": "b5980e5b621914a120a0e6b72241477c48aee85615ae4cc76077f3874e35f860",
+    "type": "IhkIkcQueueHead"
+  },
+  "compile_fixture": {
+    "expected_test_count": 5,
+    "fixture_test_names": [
+      "sequential_capacity_fifo_and_legacy_results",
+      "counters_wrap_without_changing_slot_order",
+      "malformed_metadata_and_short_packets_fail_closed",
+      "concurrent_producers_and_consumers_transfer_each_packet_once"
+    ],
+    "internal_test_names": [
+      "consumer_claim_is_exclusive_and_released_on_every_error"
+    ],
+    "path": "scripts/tests/fixtures/ihk_native_queue_compile.rs",
+    "sha256": "95b555195003c7a0e84ac87aa975ba05d6f1b1d779487644a511487bf50f767b"
+  },
+  "configured_fixture": {
+    "compile_arguments": [
+      "--edition=2021",
+      "--test",
+      "-C",
+      "overflow-checks=yes"
+    ],
+    "compiler_environment": "IHK_NATIVE_QUEUE_RUSTC",
+    "compiler_version_first_line": "rustc 1.92.0 (ded5c06cf 2025-12-08) (Red Hat 1.92.0-1.el10)",
+    "run_arguments": [
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "status_when_compiler_absent": "SKIPPED_NO_CONFIGURED_RUSTC"
+  },
+  "error_status": {
+    "busy": -16,
+    "corrupt": -117,
+    "empty": -1,
+    "full": -16,
+    "invalid": -22
+  },
+  "evidence_policy": {
+    "built_into_ihk_validated": false,
+    "exact_kernel_compile_validated": false,
+    "gate_credit_eligible": false,
+    "performance_parity_validated": false,
+    "rocky_runtime_validated": false,
+    "teardown_validated": false
+  },
+  "foundation_status": "source-only-bounded-queue",
+  "gate_id": "IHK-008",
+  "legacy_oracle": {
+    "header_path": "ihk/ikc/include/ikc/queue.h",
+    "source_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+    "source_path": "ihk/ikc/queue.c",
+    "write_full_retry_limit": 128
+  },
+  "production_source": {
+    "path": "host-kernel/native-rust/ikc_queue.rs",
+    "sha256": "514f9bce452498e5e9394c450532b040c44fce1ac7a6b5158c76f3d4c7270d40"
+  },
+  "protocol": {
+    "capacity": "packet_count - 1",
+    "counter_width_bits": 64,
+    "dequeue_order": [
+      "claim-local-consumer",
+      "acquire-published-snapshot",
+      "copy-packet",
+      "release-read-offset",
+      "release-local-consumer"
+    ],
+    "minimum_packet_count": 2,
+    "packet_alignment_bytes": 8,
+    "publication_order": [
+      "reserve-write-offset-acqrel",
+      "copy-packet",
+      "publish-max-read-offset-release"
+    ],
+    "wrap_arithmetic": "u64-wrapping"
+  },
+  "safety_contract": {
+    "aligned_linux_cmpxchg_peer_required": true,
+    "mapping_aliases_forbidden": true,
+    "mapping_overlap_packets_rejected": true,
+    "non_sleeping_reservation_to_publication_required": true,
+    "remote_dequeue_owner_forbidden": true,
+    "sole_rust_dequeue_owner_required": true,
+    "single_local_queue_view_required": true
+  },
+  "schema_version": 1,
+  "unproven": [
+    "exact built ihk.ko incorporation of the statically connected queue source",
+    "exact Rocky 10.2 kernel compilation and modpost",
+    "Linux-to-McKernel shared-memory runtime interoperability",
+    "queue allocation, notification, and teardown integration",
+    "KCSAN, lockdep, model-checked concurrency, and stalled-producer recovery",
+    "IHK-008 gate completion or credit"
+  ]
+}

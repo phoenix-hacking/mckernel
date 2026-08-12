@@ -45,6 +45,10 @@ RUST_COMPAT_PATCH_PATHS = (
     Path("host-kernel/rocky/patches/0003-kbuild-rust-add-rustc-min-version.patch"),
     Path("host-kernel/rocky/patches/0004-rust-compile-libcore-edition-2024.patch"),
     Path("host-kernel/rocky/patches/0005-rust-clean-unnecessary-transmutes-lint.patch"),
+    Path("host-kernel/rocky/patches/0006-rust-init-allow-dead-code-rust-1.89.patch"),
+    Path("host-kernel/rocky/patches/0007-rust-use-used-compiler-rust-1.89.patch"),
+    Path("host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch"),
+    Path("host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch"),
 )
 CONFIG_POLICY_PATH = Path("host-kernel/rocky/config-policy.json")
 TOOLCHAIN_LOCK_PATH = Path("host-kernel/rocky/toolchain-lock.json")
@@ -72,7 +76,7 @@ RUST_CORE_COMPAT_PREIMAGE_SHA256S = (
 RUST_CORE_COMPAT_POSTIMAGE_SHA256S = (
     ("Documentation/kbuild/makefiles.rst", "180f5f93323cb8658f885e2c1233ae6ff1a8a04c393dcf01abe5b586bf26373e"),
     ("arch/arm64/Makefile", "27d44d2ca4dbd92f3e2577b3dec171a79e5147698eb8e69710932252fb129122"),
-    ("rust/Makefile", "54ae6ce490521627b038eaa66392be327764b1ca64debf62a2b99d4e6fd90192"),
+    ("rust/Makefile", "ea5a2f26d7a8ec607c35b568dff02c7cde712d7ff356e0edcc759a8ac79376e9"),
     ("scripts/Makefile.compiler", "d5b48a68e9b00c6fe240805ccdf52105ac4655fb3ae0eff8c2c0815806766378"),
     ("scripts/generate_rust_analyzer.py", "470ca4bf6e5a35d4b193ef46c3130b051921f2a18fa33891c17f482f9a3e80ca"),
 )
@@ -85,6 +89,36 @@ RUST_BINDINGS_COMPAT_POSTIMAGE_SHA256S = (
     ("init/Kconfig", "629abc3bdd5105cc843a2a1835819d69e43ead874b8ee9867d3384741641391d"),
     ("rust/bindings/lib.rs", "6729d72292b3003c37f8f68a81c2496bc2d53b2441d2df6502c86a0a99f5a4cd"),
     ("rust/uapi/lib.rs", "0b4ba3250770fd0aa8aaeeb73fdaa76dab8b323cc88750ec82046d9f39859bd0"),
+)
+RUST_1_89_COMPAT_PREIMAGE_SHA256S = (
+    ("rust/Makefile", "65c896300a77852631c339e2d0cb49b72de44b4dfc854320a7d09b16c68adaff"),
+    ("rust/kernel/init/macros.rs", "5f7171499edf31631d6aa25df850a81f902c2473fe94d3d6a75137b926e2c336"),
+    ("rust/kernel/lib.rs", "730fce907dbd8c48439f63f506d9400ceb707282846f1e325822c77dc99a56f0"),
+    ("rust/macros/module.rs", "5fbe26a038e97bdd04e629195e405987f61132d688f4fe808742d02a6bce223f"),
+    ("scripts/Makefile.build", "cc30dcf2a77a0a66c748baaadd54c3733af67e904feceb92891f9f31c45409e3"),
+)
+RUST_1_89_COMPAT_POSTIMAGE_SHA256S = (
+    ("rust/Makefile", "ea5a2f26d7a8ec607c35b568dff02c7cde712d7ff356e0edcc759a8ac79376e9"),
+    ("rust/kernel/init/macros.rs", "62e0f3cf9fffdf5679ff65c2399116820ef5994df61a1cbb264500302f51f963"),
+    ("rust/kernel/lib.rs", "72ff1b9f40f61a519e050d5e77919e1e099f399de0610997b515117e75485202"),
+    ("rust/macros/module.rs", "974f7353529834258579b358deb04d4af595e3440d082068cacb9e1796dde5ff"),
+    ("scripts/Makefile.build", "bf07905579ac0b533fdfe4caedbff96875244d24af1b62c22fd287d7f9b41b04"),
+)
+RUST_1_92_RECONCILIATION_PREIMAGE_SHA256S = (
+    ("include/linux/blk-mq.h", "336277799bcff072562b6e01b632d2c5136092bf62d37011452794350871d5ba"),
+    ("rust/kernel/block/mq/tag_set.rs", "f811f6d04fec48a695495b38083c7729cdd574696310f1e53072e1f793fe1fa3"),
+    ("rust/kernel/lib.rs", "730fce907dbd8c48439f63f506d9400ceb707282846f1e325822c77dc99a56f0"),
+    ("rust/kernel/list/arc.rs", "69c4d3226b174ed5a183e501a82423d655dd5f54d2664be11fcae1297bec2e1f"),
+    ("rust/kernel/sync/arc.rs", "3f3a8b0d560dcf5a1c965fbe677ca759a43e4fae405d0cec63196577672d51f9"),
+    ("scripts/Makefile.build", "cc30dcf2a77a0a66c748baaadd54c3733af67e904feceb92891f9f31c45409e3"),
+)
+RUST_1_92_RECONCILIATION_POSTIMAGE_SHA256S = (
+    ("include/linux/blk-mq.h", "336277799bcff072562b6e01b632d2c5136092bf62d37011452794350871d5ba"),
+    ("rust/kernel/block/mq/tag_set.rs", "b7a4acbd77165513ba8ffa7d65cc9296a81ab66b4ddd77ef67a927b14b456e6d"),
+    ("rust/kernel/lib.rs", "7e4ab7eda6ffea5c0309dfcbac7ab91c7ea3107d2c706bb7e07d41687fbd9fd9"),
+    ("rust/kernel/list/arc.rs", "6bfd5e6d5732819f4097ef5e8917f1031a393d70350848fdf91bb5b1a9458866"),
+    ("rust/kernel/sync/arc.rs", "d18fccfcbe7a55297dfd4574218c9e6aeeaf8d30f99b0128071f0f444768d8ae"),
+    ("scripts/Makefile.build", "9a4d2a34fb5db30c43db86f14474a9b3135bd877ad2850aedb437d0c7606f9df"),
 )
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
@@ -111,6 +145,10 @@ RUST_COMPAT_UPSTREAM_COMMITS = (
     "ac954145e1ee3f72033161cbe4ac0b16b5354ae7",
     "f4daa80d6be7d3c55ca72a8e560afc4e21f886aa",
     "7129ea6e242b00938532537da41ddf5fa3e21471",
+    None,
+    "7498159226772d66f150dd406be462d75964a366",
+    "c95bbb59a9b22f9b838b15d28319185c1c884329",
+    "31d813a3b8cbde2d09ba4dee282ca29096541006",
 )
 RUST_COMPAT_STABLE_COMMITS = (
     None,
@@ -118,6 +156,10 @@ RUST_COMPAT_STABLE_COMMITS = (
     "1814e71a4e9c20bd69dbe1e007d31c0ab2c237a2",
     "60d8db49ef143c04f7daf90dafa3347a7af3b4c7",
     "376b73292a262124c8aed10026e9da23e92554b2",
+    "5d2d34f36724585801937e76f81a69ab97cd045b",
+    "d9ebd928288bb82df8efeb3a34f2cd31883f440e",
+    "e18d5b42489311bc86d7ce5fb0f19af067495589",
+    None,
 )
 RUST_CORE_COMPAT_FAILURE_EVIDENCE = (
     {
@@ -157,6 +199,28 @@ RUST_UAPI_COMPAT_FAILURE_EVIDENCE = (
         "artifact_id": 9130600533,
         "artifact_zip_sha256": "ee6413b03d472e7dc770a39f90b31e3439e0d1c65467f9c05da8b1dc7516b6a1",
         "rust_uapi_diagnostic_count": 156,
+    },
+)
+RUST_KERNEL_1_92_RECONCILIATION_FAILURE_EVIDENCE = (
+    {
+        "workflow": "RS-001 exact Rocky Linux API evidence",
+        "repository_commit": "8bf9446938faf08d8bb4ab1c6d177dcfd8212660",
+        "run_id": 31571633622,
+        "job_id": 94034684734,
+        "artifact_id": None,
+        "artifact_zip_sha256": None,
+        "artifact_zip_bytes": None,
+        "rust_kernel_diagnostic_count": 8,
+    },
+    {
+        "workflow": "Native Rust host modules exact Rocky build",
+        "repository_commit": "8bf9446938faf08d8bb4ab1c6d177dcfd8212660",
+        "run_id": 31571633686,
+        "job_id": 94034684824,
+        "artifact_id": 9131625436,
+        "artifact_zip_sha256": "fa0a900b182da68e818e751f56980ca7432a8ea1108e9ac6b25426784b53cbab",
+        "artifact_zip_bytes": 60214,
+        "rust_kernel_diagnostic_count": 8,
     },
 )
 
@@ -360,6 +424,30 @@ def rust_compatibility_patch_records(repo):
             raise ProbeError(
                 "Rocky Rust bindings fixture digest changed: {0}".format(relative)
             )
+    for relative, digest in RUST_1_89_COMPAT_PREIMAGE_SHA256S:
+        path = repository_file(
+            repo,
+            RUST_CORE_COMPAT_FIXTURE_ROOT / relative,
+            "Rocky Rust 1.89 compatibility fixture file",
+        )
+        if sha256_file(path) != digest:
+            raise ProbeError(
+                "Rocky Rust 1.89 compatibility fixture digest changed: {0}".format(
+                    relative
+                )
+            )
+    for relative, digest in RUST_1_92_RECONCILIATION_PREIMAGE_SHA256S:
+        path = repository_file(
+            repo,
+            RUST_CORE_COMPAT_FIXTURE_ROOT / relative,
+            "Rocky Rust 1.92 reconciliation fixture file",
+        )
+        if sha256_file(path) != digest:
+            raise ProbeError(
+                "Rocky Rust 1.92 reconciliation fixture digest changed: {0}".format(
+                    relative
+                )
+            )
     records = []
     required_additions = (
         {
@@ -389,8 +477,43 @@ def rust_compatibility_patch_records(repo):
             "+#[cfg_attr(CONFIG_RUSTC_HAS_UNNECESSARY_TRANSMUTES, allow(unnecessary_transmutes))]": 1,
             "+#![cfg_attr(CONFIG_RUSTC_HAS_UNNECESSARY_TRANSMUTES, allow(unnecessary_transmutes))]": 1,
         },
+        {
+            "+        #[allow(dead_code)]": 2,
+        },
+        {
+            "+\t\t-Zcrate-attr='feature(used_with_arg)' \\": 1,
+            "+#![feature(used_with_arg)]": 1,
+            "+                    #[used(compiler)]": 4,
+            "+                #[used(compiler)]": 1,
+            "+rust_allowed_features := new_uninit,used_with_arg": 1,
+        },
+        {
+            "+#![feature(arbitrary_self_types)]": 1,
+            "+rust_allowed_features := arbitrary_self_types,new_uninit,used_with_arg": 1,
+        },
+        {
+            "+                    flags: 0,": 1,
+        },
     )
-    expected_diff_counts = (1, 1, 3, 2, 3)
+    required_deletions = (
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {
+            "-#![feature(receiver_trait)]": 1,
+            "-impl<T, const ID: u64> core::ops::Receiver for ListArc<T, ID> where T: ListArcSafe<ID> + ?Sized {}": 1,
+            "-impl<T: ?Sized> core::ops::Receiver for Arc<T> {}": 1,
+            "-impl<T: ?Sized> core::ops::Receiver for ArcBorrow<'_, T> {}": 1,
+        },
+        {
+            "-                    flags: bindings::BLK_MQ_F_SHOULD_MERGE,": 1,
+        },
+    )
+    expected_diff_counts = (1, 1, 3, 2, 3, 1, 4, 4, 1)
     for index, relative in enumerate(RUST_COMPAT_PATCH_PATHS):
         path = repository_file(repo, relative, "Rust target compatibility patch")
         try:
@@ -405,7 +528,7 @@ def rust_compatibility_patch_records(repo):
         commit = RUST_COMPAT_UPSTREAM_COMMITS[index]
         stable_commit = RUST_COMPAT_STABLE_COMMITS[index]
         if (
-            text.count(commit) != 2
+            (commit is not None and text.count(commit) != 2)
             or (
                 stable_commit is not None
                 and text.count(stable_commit) != 2
@@ -415,10 +538,14 @@ def rust_compatibility_patch_records(repo):
                 text.count(fragment) != count
                 for fragment, count in required_additions[index].items()
             )
+            or any(
+                text.count(fragment) != count
+                for fragment, count in required_deletions[index].items()
+            )
         ):
             raise ProbeError(
                 "Rust target compatibility patch is not frozen upstream commit {0}".format(
-                    commit
+                    commit or stable_commit
                 )
             )
         records.append(
@@ -471,6 +598,8 @@ def verify_rust_compatibility_patch_replay(repo, records):
         for relative, _unused_digest in (
             RUST_CORE_COMPAT_PREIMAGE_SHA256S
             + RUST_BINDINGS_COMPAT_PREIMAGE_SHA256S
+            + RUST_1_89_COMPAT_PREIMAGE_SHA256S
+            + RUST_1_92_RECONCILIATION_PREIMAGE_SHA256S
         ):
             source = repository_file(
                 repo,
@@ -480,7 +609,16 @@ def verify_rust_compatibility_patch_replay(repo, records):
             target = root / relative
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(str(source), str(target))
-        for record in records[2:]:
+        block_flag = "BLK_MQ_F_SHOULD_MERGE"
+        if block_flag in (root / "include/linux/blk-mq.h").read_text(
+            encoding="utf-8"
+        ) or (root / "rust/kernel/block/mq/tag_set.rs").read_text(
+            encoding="utf-8"
+        ).count(block_flag) != 1:
+            raise ProbeError(
+                "Rocky Rust block source no longer has the frozen C/Rust flag mismatch"
+            )
+        for record in records[2:7]:
             patch_path = repository_file(
                 repo, Path(record["path"]), "Rust core compatibility patch"
             )
@@ -511,6 +649,41 @@ def verify_rust_compatibility_patch_replay(repo, records):
                         relative
                     )
                 )
+        for relative, digest in RUST_1_89_COMPAT_POSTIMAGE_SHA256S:
+            if sha256_file(root / relative) != digest:
+                raise ProbeError(
+                    "Rust 1.89 compatibility patch postimage changed: {0}".format(
+                        relative
+                    )
+                )
+        for record in records[7:]:
+            patch_path = repository_file(
+                repo, Path(record["path"]), "Rust 1.92 reconciliation patch"
+            )
+            run_checked(
+                [
+                    shutil.which("patch") or "patch",
+                    "-p1",
+                    "--batch",
+                    "--forward",
+                    "--fuzz=0",
+                    "--no-backup-if-mismatch",
+                    "-i",
+                    str(patch_path),
+                ],
+                root,
+            )
+        for relative, digest in RUST_1_92_RECONCILIATION_POSTIMAGE_SHA256S:
+            if sha256_file(root / relative) != digest:
+                raise ProbeError(
+                    "Rust 1.92 reconciliation patch postimage changed: {0}".format(
+                        relative
+                    )
+                )
+        if block_flag in (root / "rust/kernel/block/mq/tag_set.rs").read_text(
+            encoding="utf-8"
+        ):
+            raise ProbeError("Rust block reconciliation retained the removed merge flag")
 
 
 def build_contract(repo):
@@ -601,6 +774,20 @@ def build_contract(repo):
                 }
                 for relative, digest in RUST_BINDINGS_COMPAT_PREIMAGE_SHA256S
             ],
+            "rust_1_89_build_preimages": [
+                {
+                    "path": str(RUST_CORE_COMPAT_FIXTURE_ROOT / relative),
+                    "sha256": digest,
+                }
+                for relative, digest in RUST_1_89_COMPAT_PREIMAGE_SHA256S
+            ],
+            "rust_1_92_reconciliation_preimages": [
+                {
+                    "path": str(RUST_CORE_COMPAT_FIXTURE_ROOT / relative),
+                    "sha256": digest,
+                }
+                for relative, digest in RUST_1_92_RECONCILIATION_PREIMAGE_SHA256S
+            ],
             "config_policy": config_record,
             "toolchain_lock": toolchain_record,
             "checker": {"path": str(SCRIPT_PATH), "sha256": sha256_file(script)},
@@ -611,6 +798,9 @@ def build_contract(repo):
         ],
         "rust_uapi_compatibility_failure_evidence": [
             dict(row) for row in RUST_UAPI_COMPAT_FAILURE_EVIDENCE
+        ],
+        "rust_kernel_1_92_reconciliation_failure_evidence": [
+            dict(row) for row in RUST_KERNEL_1_92_RECONCILIATION_FAILURE_EVIDENCE
         ],
         "source_patch_contract": {
             "patches": [

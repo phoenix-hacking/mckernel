@@ -29,6 +29,7 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
             self.contract["stage_manifest"],
             self.contract["reference_inventory"],
         }
+        relative_paths.update(item["path"] for item in self.contract["crate_modules"])
         for relative in relative_paths:
             target = self.repo / relative
             target.parent.mkdir(parents=True, exist_ok=True)
@@ -50,6 +51,44 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
         self.assertEqual("1.7.0rc4", summary["version"])
         self.assertEqual(0, summary["parameters"])
         self.assertEqual(0, summary["dependencies"])
+        self.assertEqual(2, summary["transitive_module_count"])
+
+    def test_ihk_queue_module_edge_is_required(self) -> None:
+        self.mutate_text(
+            self.contract["production_source"],
+            "mod ikc_queue;",
+            "mod missing_queue;",
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "module edge"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_lifecycle_crate_root_digest_drift_is_rejected(self) -> None:
+        source = self.repo / self.contract["production_source"]
+        with source.open("a", encoding="utf-8") as stream:
+            stream.write("// unbound lifecycle drift\n")
+        with self.assertRaisesRegex(lifecycle.ValidationError, "crate-root digest"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_queue_module_digest_drift_is_rejected(self) -> None:
+        queue = self.repo / "host-kernel/native-rust/ikc_queue.rs"
+        with queue.open("a", encoding="utf-8") as stream:
+            stream.write("// unbound queue drift\n")
+        with self.assertRaisesRegex(lifecycle.ValidationError, "module digest"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_stage_manifest_cannot_omit_queue_module(self) -> None:
+        manifest_path = self.repo / self.contract["stage_manifest"]
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        manifest["inputs"] = [
+            item
+            for item in manifest["inputs"]
+            if item.get("destination") != "ikc_queue.rs"
+        ]
+        manifest_path.write_text(
+            json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "omits IHK module"):
+            lifecycle.validate_repository(self.repo)
 
     def test_parameter_surface_drift_is_rejected(self) -> None:
         self.mutate_text(

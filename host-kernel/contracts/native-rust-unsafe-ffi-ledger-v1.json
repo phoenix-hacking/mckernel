@@ -1,7 +1,7 @@
 {
   "coverage": {
     "by_crate": {
-      "ihk": 3,
+      "ihk": 14,
       "ihk_smp_x86_64": 5,
       "mcctrl": 2
     },
@@ -9,12 +9,13 @@
       "ffi_export": 2,
       "foreign_block": 2,
       "mutable_static": 1,
-      "unsafe_block": 3,
-      "unsafe_impl": 2
+      "unsafe_block": 11,
+      "unsafe_function": 1,
+      "unsafe_impl": 4
     },
-    "site_count": 10,
-    "site_ids_sha256": "fda04613bd6eea37851fe6eac345d40e01725e3a17904addd801d730634b3a80",
-    "source_input_count": 3,
+    "site_count": 21,
+    "site_ids_sha256": "f1d1aca06b5a439fcb3d547a51d10600ce688b7a36c51171000377080ac51e9c",
+    "source_input_count": 5,
     "source_inventory_status": "complete_for_locked_source_bytes"
   },
   "crate_roots": [
@@ -22,11 +23,13 @@
       "crate": "ihk",
       "destination": "ihk.rs",
       "path": "host-kernel/native-rust/ihk.rs",
-      "sha256": "76a3e6c0d5ea4f1d57686de60c63dd26c5adf9ade7b6f562897c20749fd00196",
+      "sha256": "d263c4321e491b54dff3b3b4213e18e2ced855ac7c399b19b14bdbf832f1ee18",
       "transitive_inputs": [
-        "host-kernel/native-rust/ihk.rs"
+        "host-kernel/native-rust/abi/x86_64.rs",
+        "host-kernel/native-rust/ihk.rs",
+        "host-kernel/native-rust/ikc_queue.rs"
       ],
-      "transitive_inputs_sha256": "338475d3a3345658e2309d75ab1d4df2547e6d070e70705f57f27eda12612814"
+      "transitive_inputs_sha256": "eb613ad5d00a3394fc7dfcd05483608b8f48bc4a942031332eb4e56bec929371"
     },
     {
       "crate": "ihk_smp_x86_64",
@@ -56,7 +59,7 @@
     "self_attestation_forbidden": true
   },
   "ledger_id": "mckernel-native-rust-unsafe-ffi-ledger-v1",
-  "ledger_sha256": "97a0f365498aa47bb850108a053ada09d42562b3feb73a617453ef13ad420d0b",
+  "ledger_sha256": "077b97bda2afadf57efefa7b859aedd5a77dcfcda3c9f6e8530681c36c42e5b6",
   "readiness": {
     "blockers": [
       "exact Rocky 10.2 rustc commands, dep-info closure, objects, source, config, and toolchain evidence are absent",
@@ -81,7 +84,7 @@
     },
     "stage_manifest": {
       "path": "host-kernel/kbuild/stage-manifest.json",
-      "sha256": "e7552a87e3af36b51a4baaeaeb032d4e2fc86ee2ff171203f56233cd0765c919"
+      "sha256": "1b7b0f5fafa09dada420494534fa0db844ea19c8284fef331a67e55829a85785"
     },
     "toolchain_lock": {
       "path": "host-kernel/rocky/toolchain-lock.json",
@@ -109,8 +112,8 @@
   },
   "sites": [
     {
-      "byte_end": 1069,
-      "byte_start": 1024,
+      "byte_end": 1160,
+      "byte_start": 1115,
       "caller_obligations": [
         "Constructors must keep the record fields and target pointer immutable after publication.",
         "The target pointer must reference module-static storage for every possible reader."
@@ -130,7 +133,7 @@
         "ihk"
       ],
       "expression_sha256": "778d5e4bea5080d53eaf135993572f31d8510d804f2a9034179df6a8f0b5aa32",
-      "file_sha256": "76a3e6c0d5ea4f1d57686de60c63dd26c5adf9ade7b6f562897c20749fd00196",
+      "file_sha256": "d263c4321e491b54dff3b3b4213e18e2ced855ac7c399b19b14bdbf832f1ee18",
       "id": "RS011-IHK-0001",
       "independent_review": {
         "evidence_sha256": null,
@@ -139,8 +142,8 @@
         "status": "pending"
       },
       "kind": "unsafe_impl",
-      "line_end": 29,
-      "line_start": 29,
+      "line_end": 35,
+      "line_start": 35,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK module owner",
@@ -148,16 +151,16 @@
       },
       "path": "host-kernel/native-rust/ihk.rs",
       "safety_comment": {
-        "line_end": 28,
-        "line_start": 28,
+        "line_end": 34,
+        "line_start": 34,
         "source_sha256": "20da20cad5e54e309d04f6e577c361c603cbb066b582b6e647eb9ab960bd4098",
         "text": "SAFETY: The record and its target are immutable for the module lifetime."
       },
       "source_sha256": "4050dbb78cd5aced2f7deee385329cd1087395c149f62bad6ff12a129fbcd5a5"
     },
     {
-      "byte_end": 1484,
-      "byte_start": 1394,
+      "byte_end": 1575,
+      "byte_start": 1485,
       "caller_obligations": [
         "Consumers must import MCKERNEL_IHK_V1 and hold the provider module dependency.",
         "Consumers may only read the anchor byte and must not assign behavioral meaning to its value."
@@ -177,7 +180,7 @@
         "ihk"
       ],
       "expression_sha256": "a5e5090b3a7542300bfaeac36e845705f4be4a6a57a371a86770f7a6b3a74ee4",
-      "file_sha256": "76a3e6c0d5ea4f1d57686de60c63dd26c5adf9ade7b6f562897c20749fd00196",
+      "file_sha256": "d263c4321e491b54dff3b3b4213e18e2ced855ac7c399b19b14bdbf832f1ee18",
       "id": "RS011-IHK-0002",
       "independent_review": {
         "evidence_sha256": null,
@@ -186,8 +189,8 @@
         "status": "pending"
       },
       "kind": "ffi_export",
-      "line_end": 38,
-      "line_start": 37,
+      "line_end": 44,
+      "line_start": 43,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK ABI owner",
@@ -195,16 +198,16 @@
       },
       "path": "host-kernel/native-rust/ihk.rs",
       "safety_comment": {
-        "line_end": 36,
-        "line_start": 35,
+        "line_end": 42,
+        "line_start": 41,
         "source_sha256": "3762992c52c6ffb0f1fc5074186ca8c3ea7c245538b816fcc7b20b8db94d11de",
         "text": "SAFETY: This immutable byte is the provider's read-only ABI anchor. Consumers must import it through MCKERNEL_IHK_V1 and may not treat its value as state."
       },
       "source_sha256": "695ff689567b02209f0f71eab292e5412d0d2b3714d5b36a661df9715d250663"
     },
     {
-      "byte_end": 2001,
-      "byte_start": 1659,
+      "byte_end": 2092,
+      "byte_start": 1750,
       "caller_obligations": [
         "The record layout, namespace bytes, and target relocation must remain compatible with the selected Linux export format.",
         "Only Linux modpost/module-loader machinery may interpret the .export_symbol record."
@@ -224,7 +227,7 @@
         "ihk"
       ],
       "expression_sha256": "10347961efcc905837db5c6899b143ce802cff6b42adf0de579b333bc86c4a45",
-      "file_sha256": "76a3e6c0d5ea4f1d57686de60c63dd26c5adf9ade7b6f562897c20749fd00196",
+      "file_sha256": "d263c4321e491b54dff3b3b4213e18e2ced855ac7c399b19b14bdbf832f1ee18",
       "id": "RS011-IHK-0003",
       "independent_review": {
         "evidence_sha256": null,
@@ -233,8 +236,8 @@
         "status": "pending"
       },
       "kind": "ffi_export",
-      "line_end": 51,
-      "line_start": 43,
+      "line_end": 57,
+      "line_start": 49,
       "macro_context": null,
       "owner": {
         "accountable_role": "native IHK ABI owner",
@@ -242,8 +245,8 @@
       },
       "path": "host-kernel/native-rust/ihk.rs",
       "safety_comment": {
-        "line_end": 42,
-        "line_start": 41,
+        "line_end": 48,
+        "line_start": 47,
         "source_sha256": "57b9cad46030f1540a9952cc472d494d55417d72dcdcebc0958c2b44b33aa5d0",
         "text": "SAFETY: Linux modpost consumes this immutable relocation record to publish the namespaced anchor; neither the record nor its target is mutated in Rust."
       },
@@ -485,6 +488,523 @@
       "source_sha256": "1bddcf599fe238e7338837f6a1a133cd756c8101b97f860ef0cfe3bad8d80f2b"
     },
     {
+      "byte_end": 2485,
+      "byte_start": 2446,
+      "caller_obligations": [
+        "Attach callers must preserve the unique non-aliasing mapping view for the full SharedQueue lifetime.",
+        "Queue methods must not manufacture Rust references to remotely shared packet storage or access counters non-atomically."
+      ],
+      "column_end": 39,
+      "column_start": 1,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "The mapping may cross kernel execution contexts only while its backing pages remain live.",
+        "The exact Rocky compiler must validate the Send boundary against the canonical ABI and transitive crate closure."
+      ],
+      "crate_roots": [
+        "ihk"
+      ],
+      "expression_sha256": "6f8438c29f6775c74740c913cb66793535b185670510dbb3db2df9181b6ad9df",
+      "file_sha256": "514f9bce452498e5e9394c450532b040c44fce1ac7a6b5158c76f3d4c7270d40",
+      "id": "RS011-IHK-0004",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_impl",
+      "line_end": 78,
+      "line_start": 78,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "native IHK queue owner",
+        "component": "native-rust/ihk-ikc-queue-sharing"
+      },
+      "path": "host-kernel/native-rust/ikc_queue.rs",
+      "safety_comment": {
+        "line_end": 77,
+        "line_start": 76,
+        "source_sha256": "22c36f10580914a33d554a903d00bb7d206c222922935705234f6c8560698470",
+        "text": "SAFETY: `SharedQueue` never creates references to packet storage. All shared counters are accessed atomically and immutable metadata is read volatile."
+      },
+      "source_sha256": "1a3b4381d05180b02c9916a02584087db3c14d33efcf9b674a06f789d3ab6129"
+    },
+    {
+      "byte_end": 2759,
+      "byte_start": 2720,
+      "caller_obligations": [
+        "The remote peer must use aligned atomic operations compatible with Linux cmpxchg for every shared counter.",
+        "Exactly one local SharedQueue view and no remote dequeue owner may exist for a mapping."
+      ],
+      "column_end": 39,
+      "column_start": 1,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "Concurrent producers coordinate through reserve and publish counters; local consumers are serialized by consumer_active.",
+        "A producer that has reserved a slot must reach publication without sleeping under the legacy progress contract."
+      ],
+      "crate_roots": [
+        "ihk"
+      ],
+      "expression_sha256": "2a2808f4c383cf30cbf618b193dd1c0ddb832df944fb22d6ab5378249aef9908",
+      "file_sha256": "514f9bce452498e5e9394c450532b040c44fce1ac7a6b5158c76f3d4c7270d40",
+      "id": "RS011-IHK-0005",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_impl",
+      "line_end": 83,
+      "line_start": 83,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "native IHK queue concurrency owner",
+        "component": "native-rust/ihk-ikc-queue-sharing"
+      },
+      "path": "host-kernel/native-rust/ikc_queue.rs",
+      "safety_comment": {
+        "line_end": 82,
+        "line_start": 80,
+        "source_sha256": "113a5e965c010439926094d03e1b8ce6a0a308314e71cc1425d40ce363460244",
+        "text": "SAFETY: Concurrent producers coordinate reservations/publication through the aligned counters. Consumers are serialized by `consumer_active`, so a producer cannot reuse a slot until its sole local consumer finishes copying."
+      },
+      "source_sha256": "d14927abb837f2bd4bd7d1a9d63aa025f96c62a45b89a96c6b5b9d1d17576393"
+    },
+    {
+      "byte_end": 4606,
+      "byte_start": 3999,
+      "caller_obligations": [
+        "The supplied storage must be exclusive, correctly aligned, and at least the checked header-plus-payload size.",
+        "Packet size and count must describe the canonical x86_64 queue layout without arithmetic overflow."
+      ],
+      "column_end": 9,
+      "column_start": 9,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "Initialization occurs before the mapping is published to any local or remote queue participant.",
+        "Every header byte is initialized in one exclusive write before attach validates the snapshot."
+      ],
+      "crate_roots": [
+        "ihk"
+      ],
+      "expression_sha256": "7210167d173eb01f21560c6c4f2a973ac1ac4cc98ac7edeca8c92aca53fd6c91",
+      "file_sha256": "514f9bce452498e5e9394c450532b040c44fce1ac7a6b5158c76f3d4c7270d40",
+      "id": "RS011-IHK-0006",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_block",
+      "line_end": 133,
+      "line_start": 114,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "native IHK queue ABI owner",
+        "component": "native-rust/ihk-ikc-queue-initialization"
+      },
+      "path": "host-kernel/native-rust/ikc_queue.rs",
+      "safety_comment": {
+        "line_end": 113,
+        "line_start": 112,
+        "source_sha256": "425e8e7ec48836df57581021653a443ddb5c82bd22a0a9ed0a8f8a4c76ad97ae",
+        "text": "SAFETY: `storage` is exclusive for `'mapping`, has the checked alignment and size, and the value initializes every header byte."
+      },
+      "source_sha256": "27322fc84f7a6b871f2172b60fe309e4d03551a03d58ff51e5bceb3ea48fb336"
+    },
+    {
+      "byte_end": 4737,
+      "byte_start": 4693,
+      "caller_obligations": [
+        "The freshly initialized header and payload must remain inside the same live exclusive mapping.",
+        "The returned SharedQueue must remain the only local view and inherit every unsafe attach obligation."
+      ],
+      "column_end": 52,
+      "column_start": 9,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "This call occurs before remote publication and before any concurrent counter or payload access.",
+        "A failed attach returns without publishing a usable queue view."
+      ],
+      "crate_roots": [
+        "ihk"
+      ],
+      "expression_sha256": "6f6256c1cc01d4cfb91bbcd38926b8942b4e72f7595fb8eb94011c9a6d7dfbc9",
+      "file_sha256": "514f9bce452498e5e9394c450532b040c44fce1ac7a6b5158c76f3d4c7270d40",
+      "id": "RS011-IHK-0007",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_block",
+      "line_end": 136,
+      "line_start": 136,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "native IHK queue ABI owner",
+        "component": "native-rust/ihk-ikc-queue-initialization"
+      },
+      "path": "host-kernel/native-rust/ikc_queue.rs",
+      "safety_comment": {
+        "line_end": 135,
+        "line_start": 135,
+        "source_sha256": "59d6bf566d80464cea4b50f924d4f5400bb352855ccfd73cd4db733204a38c16",
+        "text": "SAFETY: The header was just initialized in the same live mapping."
+      },
+      "source_sha256": "222c7b6ba0e5dc0ab01477c82b31e6a79138d900aac7ea06d1dbc64a2b4d2838"
+    },
+    {
+      "byte_end": 6442,
+      "byte_start": 5761,
+      "caller_obligations": [
+        "Callers must keep the complete mapping live and forbid Rust references that alias the header or payload.",
+        "Callers must enforce an aligned atomic peer, one local view, sole Rust dequeue ownership, and non-sleeping reservation-to-publication progress."
+      ],
+      "column_end": 5,
+      "column_start": 16,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "Remote access is limited to the frozen shared-memory protocol for the entire attached lifetime.",
+        "Queue allocation, mapping ownership, notification, and teardown are outside this source foundation and require separate runtime integration."
+      ],
+      "crate_roots": [
+        "ihk"
+      ],
+      "expression_sha256": "25e84d5e4fdc066cd087d9ee18d7aef903d5570ed2b8d626c374cad3ac8784ee",
+      "file_sha256": "514f9bce452498e5e9394c450532b040c44fce1ac7a6b5158c76f3d4c7270d40",
+      "id": "RS011-IHK-0008",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_function",
+      "line_end": 174,
+      "line_start": 155,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "native IHK queue safety owner",
+        "component": "native-rust/ihk-ikc-queue-attach"
+      },
+      "path": "host-kernel/native-rust/ikc_queue.rs",
+      "safety_comment": {
+        "line_end": 154,
+        "line_start": 139,
+        "source_sha256": "f5b3dd39614c50245803faeb4800bba0ac8d0bfa4fcf46a5bc1db33ae2714baf",
+        "text": "SAFETY: Callers must uphold the mapping lifetime, no-alias, aligned Linux-cmpxchg peer, sole Rust dequeue owner, and IRQ-disabled progress obligations documented above for the entire attached view lifetime."
+      },
+      "source_sha256": "9c9de7e036b6fcfad6ef40f5e5541eeeab0a45dc451ba39977048b7e4de593e7"
+    },
+    {
+      "byte_end": 6732,
+      "byte_start": 6653,
+      "caller_obligations": [
+        "Attach must have validated header alignment and the canonical read_offset field placement.",
+        "Every peer access to read_offset must use an atomic operation compatible with the shared counter contract."
+      ],
+      "column_end": 87,
+      "column_start": 9,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "The AtomicU64 view exists only while the mapping lifetime remains valid.",
+        "Only the sole local Rust consumer advances read_offset after copying a packet."
+      ],
+      "crate_roots": [
+        "ihk"
+      ],
+      "expression_sha256": "87f0510a38212b039a3b5dbae8325978acca58ea57fb1429c9a1f23e681c1cb4",
+      "file_sha256": "514f9bce452498e5e9394c450532b040c44fce1ac7a6b5158c76f3d4c7270d40",
+      "id": "RS011-IHK-0009",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_block",
+      "line_end": 180,
+      "line_start": 180,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "native IHK queue concurrency owner",
+        "component": "native-rust/ihk-ikc-queue-counters"
+      },
+      "path": "host-kernel/native-rust/ikc_queue.rs",
+      "safety_comment": {
+        "line_end": 179,
+        "line_start": 178,
+        "source_sha256": "3879c3fdf7471c1b2cf0245667e9e5cc5a58516f46621d38ff241fc90a45c8fc",
+        "text": "SAFETY: `attach` checked the header alignment and lifetime. The frozen ABI places this field at an 8-byte-aligned offset."
+      },
+      "source_sha256": "ade3f19252652e68bc70c195da11b29371c97dceefae9264bacf2e7dba0698b7"
+    },
+    {
+      "byte_end": 7027,
+      "byte_start": 6944,
+      "caller_obligations": [
+        "Attach must have validated header alignment and the canonical max_read_offset field placement.",
+        "Every peer access to max_read_offset must use an atomic operation compatible with the shared counter contract."
+      ],
+      "column_end": 91,
+      "column_start": 9,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "The AtomicU64 view exists only while the mapping lifetime remains valid.",
+        "Concurrent producers publish completed reservations in order with release semantics."
+      ],
+      "crate_roots": [
+        "ihk"
+      ],
+      "expression_sha256": "0b2f29a58a8131ddce6af85baabe839b30fc657bde97d451bfc25c5f4d134931",
+      "file_sha256": "514f9bce452498e5e9394c450532b040c44fce1ac7a6b5158c76f3d4c7270d40",
+      "id": "RS011-IHK-0010",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_block",
+      "line_end": 187,
+      "line_start": 187,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "native IHK queue concurrency owner",
+        "component": "native-rust/ihk-ikc-queue-counters"
+      },
+      "path": "host-kernel/native-rust/ikc_queue.rs",
+      "safety_comment": {
+        "line_end": 186,
+        "line_start": 185,
+        "source_sha256": "0beb0e9f390946a0b3192e212d40da7acd914c3497424a00a97ff12d35345be2",
+        "text": "SAFETY: Same mapping/alignment argument as `read_counter`; this is the frozen max_read_offset field at offset 24."
+      },
+      "source_sha256": "76b8ef0642f99dd432b172832f6b2a2bdb84116cf12cc0189df9c255bc976894"
+    },
+    {
+      "byte_end": 7314,
+      "byte_start": 7234,
+      "caller_obligations": [
+        "Attach must have validated header alignment and the canonical write_offset field placement.",
+        "Every peer access to write_offset must use an atomic operation compatible with the shared counter contract."
+      ],
+      "column_end": 88,
+      "column_start": 9,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "The AtomicU64 view exists only while the mapping lifetime remains valid.",
+        "Concurrent producers reserve distinct slots with acquire-release compare-exchange operations."
+      ],
+      "crate_roots": [
+        "ihk"
+      ],
+      "expression_sha256": "632418ca486b3e02021d43b2a536156aef5907a1bae08788044275845ef98080",
+      "file_sha256": "514f9bce452498e5e9394c450532b040c44fce1ac7a6b5158c76f3d4c7270d40",
+      "id": "RS011-IHK-0011",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_block",
+      "line_end": 194,
+      "line_start": 194,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "native IHK queue concurrency owner",
+        "component": "native-rust/ihk-ikc-queue-counters"
+      },
+      "path": "host-kernel/native-rust/ikc_queue.rs",
+      "safety_comment": {
+        "line_end": 193,
+        "line_start": 192,
+        "source_sha256": "97da809c84978cecc76de71941c99984f5ecaec3ed341b7c2d1c7a59037bd92e",
+        "text": "SAFETY: Same mapping/alignment argument as `read_counter`; this is the frozen write_offset field at offset 32."
+      },
+      "source_sha256": "2737a2f2b78ec563b22156ca58fe04d508f3372de978ecda14e5bd058a3d650c"
+    },
+    {
+      "byte_end": 7897,
+      "byte_start": 7599,
+      "caller_obligations": [
+        "The remote endpoint must never mutate queue_size, packet_size, or packet_count while the queue is attached.",
+        "The mapping must remain live and no Rust reference may alias the volatile header reads."
+      ],
+      "column_end": 9,
+      "column_start": 9,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "Metadata may be read while counter fields change concurrently, but metadata itself is immutable after publication.",
+        "Snapshot validation rejects inconsistent sizes, overflow, and counter-distance corruption before payload access."
+      ],
+      "crate_roots": [
+        "ihk"
+      ],
+      "expression_sha256": "9123d62d0665a6be9128deb2ebe17e8bbf2a8c116531e76c9f7f6e5c5e04a861",
+      "file_sha256": "514f9bce452498e5e9394c450532b040c44fce1ac7a6b5158c76f3d4c7270d40",
+      "id": "RS011-IHK-0012",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_block",
+      "line_end": 207,
+      "line_start": 201,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "native IHK queue ABI owner",
+        "component": "native-rust/ihk-ikc-queue-metadata"
+      },
+      "path": "host-kernel/native-rust/ikc_queue.rs",
+      "safety_comment": {
+        "line_end": 200,
+        "line_start": 198,
+        "source_sha256": "6e93eb5a5673590069a35469ba171176d1a8b79bc7c51b9b3a328d67257a45e6",
+        "text": "SAFETY: The header remains mapped for `'mapping`. Metadata is initialized before publication and is immutable while attached; volatile reads also avoid manufacturing shared Rust references."
+      },
+      "source_sha256": "ace1ffa7b8ac0eacae777391c24f4a2a1f6c7cf58b85cdfa1d1485fa604c66d2"
+    },
+    {
+      "byte_end": 13295,
+      "byte_start": 13202,
+      "caller_obligations": [
+        "The input packet slice must be large enough and disjoint from the complete queue mapping.",
+        "The producer must own the reserved slot and reach ordered publication under the non-sleeping progress rule."
+      ],
+      "column_end": 13,
+      "column_start": 13,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "The copy occurs after acquire-release reservation and before release publication makes the packet visible.",
+        "Concurrent producers may copy only into their independently reserved slots."
+      ],
+      "crate_roots": [
+        "ihk"
+      ],
+      "expression_sha256": "fa90929e686e1d867bf2e22322ad316517eb8e681aa05445562371e7ffe817b8",
+      "file_sha256": "514f9bce452498e5e9394c450532b040c44fce1ac7a6b5158c76f3d4c7270d40",
+      "id": "RS011-IHK-0013",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_block",
+      "line_end": 335,
+      "line_start": 333,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "native IHK queue concurrency owner",
+        "component": "native-rust/ihk-ikc-queue-enqueue"
+      },
+      "path": "host-kernel/native-rust/ikc_queue.rs",
+      "safety_comment": {
+        "line_end": 332,
+        "line_start": 328,
+        "source_sha256": "3afe13bb1ffba099cfc9941579585353a91f38b2e4d1ec3d0eb2d52917a651a6",
+        "text": "SAFETY: `snapshot` proved the destination slot is wholly mapped; the reservation gives this producer exclusive access to it and the source slice was checked to contain `packet_size` bytes. Mapping overlap was rejected above. `copy` is used only as a raw-byte transfer between the disjoint packet and queue slot."
+      },
+      "source_sha256": "1fb4e715bdf73f4eb61a4b35e6e58a4649055c2e4aaa16a754921fff1491ad8a"
+    },
+    {
+      "byte_end": 15949,
+      "byte_start": 15857,
+      "caller_obligations": [
+        "The output packet slice must be large enough and disjoint from the complete queue mapping.",
+        "Rust must remain the sole dequeue owner and hold the process-local consumer claim until the read counter advances."
+      ],
+      "column_end": 13,
+      "column_start": 13,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "The copy observes release publication through an acquire snapshot and completes before release advancement of read_offset.",
+        "The remote endpoint may not dequeue, and a contending local consumer receives Busy instead of reading concurrently."
+      ],
+      "crate_roots": [
+        "ihk"
+      ],
+      "expression_sha256": "3d80ccb897b0553660f488bdff6101467002a2723648fd84a2ff7defaa37074b",
+      "file_sha256": "514f9bce452498e5e9394c450532b040c44fce1ac7a6b5158c76f3d4c7270d40",
+      "id": "RS011-IHK-0014",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_block",
+      "line_end": 393,
+      "line_start": 391,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "native IHK queue concurrency owner",
+        "component": "native-rust/ihk-ikc-queue-dequeue"
+      },
+      "path": "host-kernel/native-rust/ikc_queue.rs",
+      "safety_comment": {
+        "line_end": 390,
+        "line_start": 383,
+        "source_sha256": "af568737646a3d700dfbb4474c14c5231342899ba83a1cf6d718616c5665468c",
+        "text": "SAFETY: `snapshot` proved the source slot is wholly mapped, its acquire load observed release publication, and the destination slice is large enough. Mapping overlap was rejected above, so `copy` is only a raw-byte transfer between disjoint regions."
+      },
+      "source_sha256": "67fd7ad4890f627a9c379712a5f3234436ac032b63eb7c1ece0997ed2114f74e"
+    },
+    {
       "byte_end": 1222,
       "byte_start": 1116,
       "caller_obligations": [
@@ -579,15 +1099,23 @@
       "source_sha256": "1bddcf599fe238e7338837f6a1a133cd756c8101b97f860ef0cfe3bad8d80f2b"
     }
   ],
-  "source_closure_sha256": "0b1a31883609307cf24bd584ee81e57d94d9f7ae400a3b12a40f16cd62733bb8",
+  "source_closure_sha256": "6c2ce3fda88db37c9202707fd1ce890768f0667fcb63c23060fd1b7bfc34e118",
   "source_inputs": [
     {
-      "bytes": 3330,
+      "bytes": 18796,
+      "crate_roots": [
+        "ihk"
+      ],
+      "path": "host-kernel/native-rust/abi/x86_64.rs",
+      "sha256": "b5980e5b621914a120a0e6b72241477c48aee85615ae4cc76077f3874e35f860"
+    },
+    {
+      "bytes": 3421,
       "crate_roots": [
         "ihk"
       ],
       "path": "host-kernel/native-rust/ihk.rs",
-      "sha256": "76a3e6c0d5ea4f1d57686de60c63dd26c5adf9ade7b6f562897c20749fd00196"
+      "sha256": "d263c4321e491b54dff3b3b4213e18e2ced855ac7c399b19b14bdbf832f1ee18"
     },
     {
       "bytes": 10260,
@@ -596,6 +1124,14 @@
       ],
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
       "sha256": "44aae46f0177abf98133ed86041a3682c7f894ec85c5cdd122ec816802e1106d"
+    },
+    {
+      "bytes": 17662,
+      "crate_roots": [
+        "ihk"
+      ],
+      "path": "host-kernel/native-rust/ikc_queue.rs",
+      "sha256": "514f9bce452498e5e9394c450532b040c44fce1ac7a6b5158c76f3d4c7270d40"
     },
     {
       "bytes": 2997,

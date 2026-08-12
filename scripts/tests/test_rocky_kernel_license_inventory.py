@@ -82,6 +82,10 @@ class LicenseInventoryTests(unittest.TestCase):
             "host-kernel/rocky/patches/0003-kbuild-rust-add-rustc-min-version.patch",
             "host-kernel/rocky/patches/0004-rust-compile-libcore-edition-2024.patch",
             "host-kernel/rocky/patches/0005-rust-clean-unnecessary-transmutes-lint.patch",
+            "host-kernel/rocky/patches/0006-rust-init-allow-dead-code-rust-1.89.patch",
+            "host-kernel/rocky/patches/0007-rust-use-used-compiler-rust-1.89.patch",
+            "host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch",
+            "host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch",
         ):
             item = by_path["repository/" + relative]
             patch = REPO_ROOT / relative
@@ -100,8 +104,16 @@ class LicenseInventoryTests(unittest.TestCase):
             "arch/arm64/Makefile",
             "rust/Makefile",
             "init/Kconfig",
+            "include/linux/blk-mq.h",
             "rust/bindings/lib.rs",
             "rust/uapi/lib.rs",
+            "rust/kernel/init/macros.rs",
+            "rust/kernel/lib.rs",
+            "rust/kernel/block/mq/tag_set.rs",
+            "rust/kernel/list/arc.rs",
+            "rust/kernel/sync/arc.rs",
+            "rust/macros/module.rs",
+            "scripts/Makefile.build",
             "scripts/Makefile.compiler",
             "scripts/generate_rust_analyzer.py",
         )

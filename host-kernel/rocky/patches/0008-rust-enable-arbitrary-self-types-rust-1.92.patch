@@ -1,0 +1,104 @@
+From e18d5b42489311bc86d7ce5fb0f19af067495589 Mon Sep 17 00:00:00 2001
+From: Gary Guo <gary@garyguo.net>
+Date: Sun, 15 Sep 2024 15:29:54 +0100
+Subject: [PATCH] rust: enable arbitrary_self_types and remove `Receiver`
+
+Upstream-Commit: c95bbb59a9b22f9b838b15d28319185c1c884329
+Stable-Commit: e18d5b42489311bc86d7ce5fb0f19af067495589
+Upstream-Repository: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+Stable-Repository: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+License: GPL-2.0-only
+
+commit c95bbb59a9b22f9b838b15d28319185c1c884329 upstream.
+
+The kernel's `Arc`, `ArcBorrow`, and `ListArc` implement `Deref`, so the
+`arbitrary_self_types` feature already permits them as method receivers.
+Remove the obsolete explicit `core::ops::Receiver` implementations and
+replace the removed `receiver_trait` feature gate. Rust 1.92 supplies a
+blanket `Receiver` implementation for `Deref` types, making the old
+implementations conflict and the old feature name invalid.
+
+The arbitrary-self-types gate has existed since Rust 1.23; the raw-pointer
+portion moved to a separate gate before the compiler used here and is not
+needed by these kernel pointer types.
+
+Link: https://github.com/rust-lang/rfcs/pull/3519
+Link: https://github.com/rust-lang/rust/issues/44874
+Signed-off-by: Gary Guo <gary@garyguo.net>
+[ Adapted scripts/Makefile.build to retain Rocky's `new_uninit` and the
+  preceding `used_with_arg` compatibility feature in the exact series. ]
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ rust/kernel/lib.rs      | 2 +-
+ rust/kernel/list/arc.rs | 3 ---
+ rust/kernel/sync/arc.rs | 6 ------
+ scripts/Makefile.build  | 2 +-
+ 4 files changed, 2 insertions(+), 11 deletions(-)
+
+diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+index dbb53a6..a0a35b5 100644
+--- a/rust/kernel/lib.rs
++++ b/rust/kernel/lib.rs
+@@ -12,10 +12,10 @@
+ //! do so first instead of bypassing this crate.
+ 
+ #![no_std]
++#![feature(arbitrary_self_types)]
+ #![feature(coerce_unsized)]
+ #![feature(dispatch_from_dyn)]
+ #![feature(new_uninit)]
+-#![feature(receiver_trait)]
+ #![feature(unsize)]
+ #![feature(used_with_arg)]
+ 
+diff --git a/rust/kernel/list/arc.rs b/rust/kernel/list/arc.rs
+index d801b9d..3483d8c 100644
+--- a/rust/kernel/list/arc.rs
++++ b/rust/kernel/list/arc.rs
+@@ -441,9 +441,6 @@ where
+     }
+ }
+ 
+-// This is to allow [`ListArc`] (and variants) to be used as the type of `self`.
+-impl<T, const ID: u64> core::ops::Receiver for ListArc<T, ID> where T: ListArcSafe<ID> + ?Sized {}
+-
+ // This is to allow coercion from `ListArc<T>` to `ListArc<U>` if `T` can be converted to the
+ // dynamically-sized type (DST) `U`.
+ impl<T, U, const ID: u64> core::ops::CoerceUnsized<ListArc<U, ID>> for ListArc<T, ID>
+diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
+index 3021f30..28743a7 100644
+--- a/rust/kernel/sync/arc.rs
++++ b/rust/kernel/sync/arc.rs
+@@ -171,9 +171,6 @@ impl<T: ?Sized> ArcInner<T> {
+     }
+ }
+ 
+-// This is to allow [`Arc`] (and variants) to be used as the type of `self`.
+-impl<T: ?Sized> core::ops::Receiver for Arc<T> {}
+-
+ // This is to allow coercion from `Arc<T>` to `Arc<U>` if `T` can be converted to the
+ // dynamically-sized type (DST) `U`.
+ impl<T: ?Sized + Unsize<U>, U: ?Sized> core::ops::CoerceUnsized<Arc<U>> for Arc<T> {}
+@@ -480,9 +477,6 @@ pub struct ArcBorrow<'a, T: ?Sized + 'a> {
+     _p: PhantomData<&'a ()>,
+ }
+ 
+-// This is to allow [`ArcBorrow`] (and variants) to be used as the type of `self`.
+-impl<T: ?Sized> core::ops::Receiver for ArcBorrow<'_, T> {}
+-
+ // This is to allow `ArcBorrow<U>` to be dispatched on when `ArcBorrow<T>` can be coerced into
+ // `ArcBorrow<U>`.
+ impl<T: ?Sized + Unsize<U>, U: ?Sized> core::ops::DispatchFromDyn<ArcBorrow<'_, U>>
+diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+index f32758d..573a797 100644
+--- a/scripts/Makefile.build
++++ b/scripts/Makefile.build
+@@ -248,7 +248,7 @@ $(obj)/%.lst: $(obj)/%.c FORCE
+ # Compile Rust sources (.rs)
+ # ---------------------------------------------------------------------------
+ 
+-rust_allowed_features := new_uninit,used_with_arg
++rust_allowed_features := arbitrary_self_types,new_uninit,used_with_arg
+ 
+ # `--out-dir` is required to avoid temporaries being created by `rustc` in the
+ # current working directory, which may be not accessible in the out-of-tree

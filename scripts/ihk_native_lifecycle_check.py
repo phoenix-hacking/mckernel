@@ -127,6 +127,7 @@ def _validate_contract(contract: dict[str, Any]) -> None:
         contract,
         {
             "abi_version",
+            "crate_modules",
             "dependencies",
             "gate_id",
             "kbuild",
@@ -135,6 +136,7 @@ def _validate_contract(contract: dict[str, Any]) -> None:
             "module",
             "parameter_count",
             "production_source",
+            "production_source_sha256",
             "reference_inventory",
             "schema_version",
             "stage_manifest",
@@ -149,6 +151,26 @@ def _validate_contract(contract: dict[str, Any]) -> None:
         raise ValidationError("ihk core must have no module dependencies")
     if contract["parameter_count"] != 0:
         raise ValidationError("ihk core must match the legacy zero-parameter surface")
+    if contract["production_source"] != "host-kernel/native-rust/ihk.rs":
+        raise ValidationError("IHK lifecycle contract redirects the crate root")
+    if not isinstance(contract["production_source_sha256"], str) or re.fullmatch(
+        r"[0-9a-f]{64}", contract["production_source_sha256"]
+    ) is None:
+        raise ValidationError("IHK lifecycle crate-root digest is malformed")
+    expected_modules = [
+        {
+            "destination": "abi/x86_64.rs",
+            "path": "host-kernel/native-rust/abi/x86_64.rs",
+            "sha256": "b5980e5b621914a120a0e6b72241477c48aee85615ae4cc76077f3874e35f860",
+        },
+        {
+            "destination": "ikc_queue.rs",
+            "path": "host-kernel/native-rust/ikc_queue.rs",
+            "sha256": "514f9bce452498e5e9394c450532b040c44fce1ac7a6b5158c76f3d4c7270d40",
+        },
+    ]
+    if contract["crate_modules"] != expected_modules:
+        raise ValidationError("IHK lifecycle transitive Rust module graph differs")
     _require_keys(
         contract["module"],
         {"author", "description", "license", "name", "output", "version"},
@@ -176,6 +198,11 @@ def _validate_contract(contract: dict[str, Any]) -> None:
 
 
 def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
+    for fragment in ('#[path = "abi/x86_64.rs"]\nmod abi;', "mod ikc_queue;"):
+        if text.count(fragment) != 1:
+            raise ValidationError(
+                f"IHK crate root lacks the exact staged module edge: {fragment}"
+            )
     module = contract["module"]
     expected_metadata = {
         "name": module["name"],
@@ -266,7 +293,10 @@ def _validate_kbuild(text: str, contract: dict[str, Any]) -> None:
 
 
 def _validate_stage_manifest(
-    manifest: dict[str, Any], source_path: Path, contract: dict[str, Any]
+    manifest: dict[str, Any],
+    source_path: Path,
+    module_paths: dict[str, Path],
+    contract: dict[str, Any],
 ) -> None:
     build = manifest.get("build_contract", {})
     if build.get("project_c_link_objects") != 0:
@@ -286,6 +316,24 @@ def _validate_stage_manifest(
         raise ValidationError("stage manifest points ihk at a different production source")
     if source.get("sha256") != _sha256(source_path):
         raise ValidationError("stage manifest ihk source digest is stale")
+    inputs = manifest.get("inputs", [])
+    by_destination = {
+        item.get("destination"): item for item in inputs if isinstance(item, dict)
+    }
+    for expected in contract["crate_modules"]:
+        item = by_destination.get(expected["destination"])
+        if item is None:
+            raise ValidationError(
+                f"stage manifest omits IHK module {expected['destination']}"
+            )
+        if item.get("repository_path") != expected["path"]:
+            raise ValidationError(
+                f"stage manifest redirects IHK module {expected['destination']}"
+            )
+        if item.get("sha256") != _sha256(module_paths[expected["destination"]]):
+            raise ValidationError(
+                f"stage manifest IHK module digest is stale: {expected['destination']}"
+            )
 
 
 def _validate_reference_inventory(inventory: dict[str, Any], contract: dict[str, Any]) -> None:
@@ -309,6 +357,10 @@ def validate_repository(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) 
     _validate_contract(contract)
 
     source_path = _repo_file(repo, contract["production_source"], "production Rust source")
+    module_paths = {
+        item["destination"]: _repo_file(repo, item["path"], item["destination"])
+        for item in contract["crate_modules"]
+    }
     kconfig_path = _repo_file(repo, contract["kconfig"]["path"], "production Kconfig")
     kbuild_path = _repo_file(repo, contract["kbuild"]["path"], "production Kbuild")
     manifest_path = _repo_file(repo, contract["stage_manifest"], "stage manifest")
@@ -317,9 +369,18 @@ def validate_repository(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) 
     )
 
     _validate_rust_source(_read_text(source_path, "production Rust source"), contract)
+    if _sha256(source_path) != contract["production_source_sha256"]:
+        raise ValidationError("IHK lifecycle crate-root digest is stale")
+    for item in contract["crate_modules"]:
+        if _sha256(module_paths[item["destination"]]) != item["sha256"]:
+            raise ValidationError(
+                f"IHK lifecycle module digest is stale: {item['destination']}"
+            )
     _validate_kconfig(_read_text(kconfig_path, "production Kconfig"), contract)
     _validate_kbuild(_read_text(kbuild_path, "production Kbuild"), contract)
-    _validate_stage_manifest(_load_json(manifest_path), source_path, contract)
+    _validate_stage_manifest(
+        _load_json(manifest_path), source_path, module_paths, contract
+    )
     _validate_reference_inventory(_load_json(inventory_path), contract)
     return {
         "abi_version": contract["abi_version"],
@@ -328,6 +389,7 @@ def validate_repository(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) 
         "module": contract["module"]["name"],
         "parameters": contract["parameter_count"],
         "source_sha256": _sha256(source_path),
+        "transitive_module_count": len(module_paths),
         "version": contract["module"]["version"],
     }
 

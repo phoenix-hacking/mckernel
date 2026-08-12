@@ -1,6 +1,6 @@
 {
   "contract_id": "mckernel-rs001-exact-linux-api-probe-v1",
-  "contract_sha256": "cbe507ef564349cdb4baf3ccd446f8de70e6148c50ef771230b0dfd323e5237f",
+  "contract_sha256": "9f67d6895e6e9cdfa3dbfee03bbb7b9d26485bb48b0f36d9751adbbb396be448",
   "evidence_profile": "rocky-10.2-exact-linux-api-evidence-v1",
   "frozen_needs": {
     "file_sha256": "76f16c395dd40f78ab1b72debcc61a352e28a3ddbf78586824ce9882a2a43e4c",
@@ -31,7 +31,7 @@
   "repository_inputs": {
     "checker": {
       "path": "scripts/linux_api_exact_probe.py",
-      "sha256": "87e3e38f48f8c5c4f99b4348a863c617637f06dceba32ff2c43898828bfcc1c1"
+      "sha256": "e3c93857dc63cdd520e2a08ea2f3a7b0600f2b6dcabe76406f84305e07692069"
     },
     "config_policy": {
       "path": "host-kernel/rocky/config-policy.json",
@@ -41,6 +41,54 @@
       "path": "host-kernel/rocky/patches/series.json",
       "sha256": "6a1a5e8fb13b6ce6ed35bd8e5487bb67ecf92d2be927799b660f21b5631f68fb"
     },
+    "rust_1_89_build_preimages": [
+      {
+        "path": "scripts/tests/fixtures/rust-core-rocky-6.12/rust/Makefile",
+        "sha256": "65c896300a77852631c339e2d0cb49b72de44b4dfc854320a7d09b16c68adaff"
+      },
+      {
+        "path": "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/init/macros.rs",
+        "sha256": "5f7171499edf31631d6aa25df850a81f902c2473fe94d3d6a75137b926e2c336"
+      },
+      {
+        "path": "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/lib.rs",
+        "sha256": "730fce907dbd8c48439f63f506d9400ceb707282846f1e325822c77dc99a56f0"
+      },
+      {
+        "path": "scripts/tests/fixtures/rust-core-rocky-6.12/rust/macros/module.rs",
+        "sha256": "5fbe26a038e97bdd04e629195e405987f61132d688f4fe808742d02a6bce223f"
+      },
+      {
+        "path": "scripts/tests/fixtures/rust-core-rocky-6.12/scripts/Makefile.build",
+        "sha256": "cc30dcf2a77a0a66c748baaadd54c3733af67e904feceb92891f9f31c45409e3"
+      }
+    ],
+    "rust_1_92_reconciliation_preimages": [
+      {
+        "path": "scripts/tests/fixtures/rust-core-rocky-6.12/include/linux/blk-mq.h",
+        "sha256": "336277799bcff072562b6e01b632d2c5136092bf62d37011452794350871d5ba"
+      },
+      {
+        "path": "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/block/mq/tag_set.rs",
+        "sha256": "f811f6d04fec48a695495b38083c7729cdd574696310f1e53072e1f793fe1fa3"
+      },
+      {
+        "path": "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/lib.rs",
+        "sha256": "730fce907dbd8c48439f63f506d9400ceb707282846f1e325822c77dc99a56f0"
+      },
+      {
+        "path": "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/list/arc.rs",
+        "sha256": "69c4d3226b174ed5a183e501a82423d655dd5f54d2664be11fcae1297bec2e1f"
+      },
+      {
+        "path": "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/sync/arc.rs",
+        "sha256": "3f3a8b0d560dcf5a1c965fbe677ca759a43e4fae405d0cec63196577672d51f9"
+      },
+      {
+        "path": "scripts/tests/fixtures/rust-core-rocky-6.12/scripts/Makefile.build",
+        "sha256": "cc30dcf2a77a0a66c748baaadd54c3733af67e904feceb92891f9f31c45409e3"
+      }
+    ],
     "rust_bindings_build_preimages": [
       {
         "path": "scripts/tests/fixtures/rust-core-rocky-6.12/init/Kconfig",
@@ -117,6 +165,38 @@
         "size": 3520,
         "stable_commit": "376b73292a262124c8aed10026e9da23e92554b2",
         "upstream_commit": "7129ea6e242b00938532537da41ddf5fa3e21471"
+      },
+      {
+        "applied_after": "host-kernel/rocky/patches/0005-rust-clean-unnecessary-transmutes-lint.patch",
+        "path": "host-kernel/rocky/patches/0006-rust-init-allow-dead-code-rust-1.89.patch",
+        "sha256": "315ec61d17c5d3cc97c6123f30bcffa08befcc00c487efaa5e6eda38333d29c5",
+        "size": 2243,
+        "stable_commit": "5d2d34f36724585801937e76f81a69ab97cd045b",
+        "upstream_commit": null
+      },
+      {
+        "applied_after": "host-kernel/rocky/patches/0006-rust-init-allow-dead-code-rust-1.89.patch",
+        "path": "host-kernel/rocky/patches/0007-rust-use-used-compiler-rust-1.89.patch",
+        "sha256": "d9a58b1123e5f5522efb7ad7b7837c406b955c1a1c4a7a38f0d2faa4dd4285fc",
+        "size": 5325,
+        "stable_commit": "d9ebd928288bb82df8efeb3a34f2cd31883f440e",
+        "upstream_commit": "7498159226772d66f150dd406be462d75964a366"
+      },
+      {
+        "applied_after": "host-kernel/rocky/patches/0007-rust-use-used-compiler-rust-1.89.patch",
+        "path": "host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch",
+        "sha256": "ab3f6adaed3fcb65669ffc0baccdb3d7a9b7e3df9d0c5889228c775585daacaa",
+        "size": 4343,
+        "stable_commit": "e18d5b42489311bc86d7ce5fb0f19af067495589",
+        "upstream_commit": "c95bbb59a9b22f9b838b15d28319185c1c884329"
+      },
+      {
+        "applied_after": "host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch",
+        "path": "host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch",
+        "sha256": "076b0b48effba9bed12cb00a4c93318353aa26344f14b0b1bba5508c55a1bcfb",
+        "size": 1751,
+        "stable_commit": null,
+        "upstream_commit": "31d813a3b8cbde2d09ba4dee282ca29096541006"
       }
     ],
     "rust_target_generator_preimage": {
@@ -133,7 +213,7 @@
     },
     "workflow": {
       "path": ".github/workflows/rs001-linux-api-exact-probe.yml",
-      "sha256": "ed3633faa4f970772ae245a30f3a6bc8566b68e72b9c5db1b7b5733eed3b5572"
+      "sha256": "965f8441a18316f94294224eb6ba230cce96967416a1437a6e728dbbe2b95022"
     }
   },
   "required_capture_inputs": [
@@ -170,6 +250,28 @@
       "repository_commit": "3b46c7e1be9cd89d35b45e228ee8c96ea87c77ae",
       "run_id": 31566770544,
       "rust_core_diagnostic_count": 8,
+      "workflow": "Native Rust host modules exact Rocky build"
+    }
+  ],
+  "rust_kernel_1_92_reconciliation_failure_evidence": [
+    {
+      "artifact_id": null,
+      "artifact_zip_bytes": null,
+      "artifact_zip_sha256": null,
+      "job_id": 94034684734,
+      "repository_commit": "8bf9446938faf08d8bb4ab1c6d177dcfd8212660",
+      "run_id": 31571633622,
+      "rust_kernel_diagnostic_count": 8,
+      "workflow": "RS-001 exact Rocky Linux API evidence"
+    },
+    {
+      "artifact_id": 9131625436,
+      "artifact_zip_bytes": 60214,
+      "artifact_zip_sha256": "fa0a900b182da68e818e751f56980ca7432a8ea1108e9ac6b25426784b53cbab",
+      "job_id": 94034684824,
+      "repository_commit": "8bf9446938faf08d8bb4ab1c6d177dcfd8212660",
+      "run_id": 31571633686,
+      "rust_kernel_diagnostic_count": 8,
       "workflow": "Native Rust host modules exact Rocky build"
     }
   ],
@@ -251,6 +353,34 @@
         "path": "host-kernel/rocky/patches/0005-rust-clean-unnecessary-transmutes-lint.patch",
         "sha256": "0ba29993d78fea5db3c0ff8dbf41bf8a6c08b00d9803fc85da7805e698ac8c33",
         "size": 3520
+      },
+      {
+        "applied": true,
+        "empty": false,
+        "path": "host-kernel/rocky/patches/0006-rust-init-allow-dead-code-rust-1.89.patch",
+        "sha256": "315ec61d17c5d3cc97c6123f30bcffa08befcc00c487efaa5e6eda38333d29c5",
+        "size": 2243
+      },
+      {
+        "applied": true,
+        "empty": false,
+        "path": "host-kernel/rocky/patches/0007-rust-use-used-compiler-rust-1.89.patch",
+        "sha256": "d9a58b1123e5f5522efb7ad7b7837c406b955c1a1c4a7a38f0d2faa4dd4285fc",
+        "size": 5325
+      },
+      {
+        "applied": true,
+        "empty": false,
+        "path": "host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch",
+        "sha256": "ab3f6adaed3fcb65669ffc0baccdb3d7a9b7e3df9d0c5889228c775585daacaa",
+        "size": 4343
+      },
+      {
+        "applied": true,
+        "empty": false,
+        "path": "host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch",
+        "sha256": "076b0b48effba9bed12cb00a4c93318353aa26344f14b0b1bba5508c55a1bcfb",
+        "size": 1751
       }
     ],
     "tree_comparison": "fresh locked archive plus every applied Rocky patch and the bound Rust target compatibility patch must byte-match the supplied out-of-tree build source"

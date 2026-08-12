@@ -21,6 +21,14 @@ PATCHES = (
     / "host-kernel/rocky/patches/0004-rust-compile-libcore-edition-2024.patch",
     REPO_ROOT
     / "host-kernel/rocky/patches/0005-rust-clean-unnecessary-transmutes-lint.patch",
+    REPO_ROOT
+    / "host-kernel/rocky/patches/0006-rust-init-allow-dead-code-rust-1.89.patch",
+    REPO_ROOT
+    / "host-kernel/rocky/patches/0007-rust-use-used-compiler-rust-1.89.patch",
+    REPO_ROOT
+    / "host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch",
+    REPO_ROOT
+    / "host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch",
 )
 PREIMAGE = REPO_ROOT / "scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs"
 POSTIMAGE_SHA256 = "555ff4dff6548bb5f24087cdad737363b5694668aa462f77adfb3571498ec678"
@@ -31,7 +39,7 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
     def test_every_patch_rejects_second_application(self):
         from scripts import linux_api_exact_probe as probe
 
-        self.assertEqual(5, len(PATCHES))
+        self.assertEqual(9, len(PATCHES))
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory) / "linux"
             shutil.copytree(str(CORE_PREIMAGE), str(root))
@@ -92,6 +100,10 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
             self.assertEqual(digest, probe.sha256_file(CORE_PREIMAGE / relative))
         for relative, digest in probe.RUST_BINDINGS_COMPAT_PREIMAGE_SHA256S:
             self.assertEqual(digest, probe.sha256_file(CORE_PREIMAGE / relative))
+        for relative, digest in probe.RUST_1_89_COMPAT_PREIMAGE_SHA256S:
+            self.assertEqual(digest, probe.sha256_file(CORE_PREIMAGE / relative))
+        for relative, digest in probe.RUST_1_92_RECONCILIATION_PREIMAGE_SHA256S:
+            self.assertEqual(digest, probe.sha256_file(CORE_PREIMAGE / relative))
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory) / "linux"
             shutil.copytree(str(CORE_PREIMAGE), str(root))
@@ -100,9 +112,16 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
                     ["patch", "-p1", "--batch", "--forward", "--fuzz=0", "-i", str(patch)],
                     root,
                 )
+            reconciled_paths = dict(probe.RUST_1_92_RECONCILIATION_POSTIMAGE_SHA256S)
             for relative, digest in probe.RUST_CORE_COMPAT_POSTIMAGE_SHA256S:
-                self.assertEqual(digest, probe.sha256_file(root / relative))
+                if relative not in reconciled_paths:
+                    self.assertEqual(digest, probe.sha256_file(root / relative))
             for relative, digest in probe.RUST_BINDINGS_COMPAT_POSTIMAGE_SHA256S:
+                self.assertEqual(digest, probe.sha256_file(root / relative))
+            for relative, digest in probe.RUST_1_89_COMPAT_POSTIMAGE_SHA256S:
+                if relative not in reconciled_paths:
+                    self.assertEqual(digest, probe.sha256_file(root / relative))
+            for relative, digest in probe.RUST_1_92_RECONCILIATION_POSTIMAGE_SHA256S:
                 self.assertEqual(digest, probe.sha256_file(root / relative))
             makefile = (root / "rust/Makefile").read_text(encoding="utf-8")
             compiler = (root / "scripts/Makefile.compiler").read_text(
@@ -140,6 +159,54 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
                 "#![cfg_attr(CONFIG_RUSTC_HAS_UNNECESSARY_TRANSMUTES, allow(unnecessary_transmutes))]",
                 (root / "rust/uapi/lib.rs").read_text(encoding="utf-8"),
             )
+            init_macros = (root / "rust/kernel/init/macros.rs").read_text(
+                encoding="utf-8"
+            )
+            self.assertEqual(
+                1,
+                init_macros.count(
+                    "#[allow(dead_code)]\n        trait MustNotImplDrop {}"
+                ),
+            )
+            self.assertEqual(
+                1,
+                init_macros.count(
+                    "#[allow(dead_code)]\n        #[allow(non_camel_case_types)]\n"
+                    "        trait UselessPinnedDropImpl_you_need_to_specify_PinnedDrop {}"
+                ),
+            )
+            self.assertIn(
+                "-Zcrate-attr='feature(used_with_arg)'",
+                makefile,
+            )
+            self.assertIn(
+                "#![feature(used_with_arg)]",
+                (root / "rust/kernel/lib.rs").read_text(encoding="utf-8"),
+            )
+            module = (root / "rust/macros/module.rs").read_text(encoding="utf-8")
+            self.assertEqual(5, module.count("#[used(compiler)]"))
+            self.assertNotIn("#[used]", module)
+            self.assertIn(
+                "rust_allowed_features := arbitrary_self_types,new_uninit,used_with_arg",
+                (root / "scripts/Makefile.build").read_text(encoding="utf-8"),
+            )
+            kernel_lib = (root / "rust/kernel/lib.rs").read_text(encoding="utf-8")
+            self.assertIn("#![feature(arbitrary_self_types)]", kernel_lib)
+            self.assertNotIn("#![feature(receiver_trait)]", kernel_lib)
+            for relative in ("rust/kernel/list/arc.rs", "rust/kernel/sync/arc.rs"):
+                self.assertNotIn(
+                    "core::ops::Receiver",
+                    (root / relative).read_text(encoding="utf-8"),
+                )
+            self.assertNotIn(
+                "BLK_MQ_F_SHOULD_MERGE",
+                (root / "include/linux/blk-mq.h").read_text(encoding="utf-8"),
+            )
+            tag_set = (root / "rust/kernel/block/mq/tag_set.rs").read_text(
+                encoding="utf-8"
+            )
+            self.assertNotIn("BLK_MQ_F_SHOULD_MERGE", tag_set)
+            self.assertIn("flags: 0,", tag_set)
 
     def test_core_edition_patch_without_version_helper_is_incomplete(self):
         from scripts import linux_api_exact_probe as probe

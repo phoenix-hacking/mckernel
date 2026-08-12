@@ -1,5 +1,17 @@
 {
   "abi_version": 1,
+  "crate_modules": [
+    {
+      "destination": "abi/x86_64.rs",
+      "path": "host-kernel/native-rust/abi/x86_64.rs",
+      "sha256": "b5980e5b621914a120a0e6b72241477c48aee85615ae4cc76077f3874e35f860"
+    },
+    {
+      "destination": "ikc_queue.rs",
+      "path": "host-kernel/native-rust/ikc_queue.rs",
+      "sha256": "514f9bce452498e5e9394c450532b040c44fce1ac7a6b5158c76f3d4c7270d40"
+    }
+  ],
   "dependencies": [],
   "gate_id": "IHK-001",
   "kbuild": {
@@ -26,6 +38,7 @@
   },
   "parameter_count": 0,
   "production_source": "host-kernel/native-rust/ihk.rs",
+  "production_source_sha256": "d263c4321e491b54dff3b3b4213e18e2ced855ac7c399b19b14bdbf832f1ee18",
   "reference_inventory": "host-kernel/reference/legacy-host-modules-f2eb7352.json",
   "schema_version": 1,
   "stage_manifest": "host-kernel/kbuild/stage-manifest.json"

@@ -14,8 +14,15 @@ on:
       - host-kernel/rocky/patches/0003-kbuild-rust-add-rustc-min-version.patch
       - host-kernel/rocky/patches/0004-rust-compile-libcore-edition-2024.patch
       - host-kernel/rocky/patches/0005-rust-clean-unnecessary-transmutes-lint.patch
+      - host-kernel/rocky/patches/0006-rust-init-allow-dead-code-rust-1.89.patch
+      - host-kernel/rocky/patches/0007-rust-use-used-compiler-rust-1.89.patch
+      - host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch
+      - host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch
       - host-kernel/rocky/source-lock.json
       - scripts/ihk_native_lifecycle_check.py
+      - scripts/ihk_native_queue_check.py
+      - scripts/tests/fixtures/ihk_native_queue_compile.rs
+      - scripts/tests/test_ihk_native_queue_check.py
       - scripts/ihk_smp_native_lifecycle_check.py
       - scripts/mcctrl_native_lifecycle_check.py
       - scripts/native_rust_build_surface_audit.py
@@ -35,8 +42,15 @@ on:
       - host-kernel/rocky/patches/0003-kbuild-rust-add-rustc-min-version.patch
       - host-kernel/rocky/patches/0004-rust-compile-libcore-edition-2024.patch
       - host-kernel/rocky/patches/0005-rust-clean-unnecessary-transmutes-lint.patch
+      - host-kernel/rocky/patches/0006-rust-init-allow-dead-code-rust-1.89.patch
+      - host-kernel/rocky/patches/0007-rust-use-used-compiler-rust-1.89.patch
+      - host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch
+      - host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch
       - host-kernel/rocky/source-lock.json
       - scripts/ihk_native_lifecycle_check.py
+      - scripts/ihk_native_queue_check.py
+      - scripts/tests/fixtures/ihk_native_queue_compile.rs
+      - scripts/tests/test_ihk_native_queue_check.py
       - scripts/ihk_smp_native_lifecycle_check.py
       - scripts/mcctrl_native_lifecycle_check.py
       - scripts/native_rust_build_surface_audit.py
@@ -114,6 +128,8 @@ jobs:
           python3 scripts/native_rust_host_audit.py
           python3 scripts/rocky_rust_staging.py --repo "$GITHUB_WORKSPACE" --check
           python3 scripts/ihk_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE"
+          python3 scripts/ihk_native_queue_check.py --repo "$GITHUB_WORKSPACE" \
+            --rustc "$(command -v rustc)" --require-rustc
           python3 scripts/ihk_smp_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE"
           python3 scripts/mcctrl_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE"
 
@@ -145,7 +161,11 @@ jobs:
             0002-rust-support-rust-1.91-target-spec.patch \
             0003-kbuild-rust-add-rustc-min-version.patch \
             0004-rust-compile-libcore-edition-2024.patch \
-            0005-rust-clean-unnecessary-transmutes-lint.patch
+            0005-rust-clean-unnecessary-transmutes-lint.patch \
+            0006-rust-init-allow-dead-code-rust-1.89.patch \
+            0007-rust-use-used-compiler-rust-1.89.patch \
+            0008-rust-enable-arbitrary-self-types-rust-1.92.patch \
+            0009-rust-block-drop-removed-merge-flag.patch
           do
             compat_patch="$GITHUB_WORKSPACE/host-kernel/rocky/patches/$compat_name"
             test -s "$compat_patch"

@@ -41,6 +41,30 @@ The sole production definitions are `host-kernel/kbuild/Kconfig` and
 python3 scripts/native_rust_build_surface_audit.py
 ```
 
+## IHK IKC queue source foundation
+
+The native IHK crate includes `abi/x86_64.rs` and `ikc_queue.rs` through
+literal Rust module edges in `ihk.rs`.  They therefore compile as part of the
+single `ihk.o` crate object selected by the authoritative Kbuild; the queue is
+not a separate object or module.  The queue source binds the frozen x86_64
+header layout, wrapping 64-bit counters, the legacy 128-full-retry behavior,
+reserve/copy/publish ordering, corruption checks, and the sole local Rust
+dequeue-owner rule.
+
+The source foundation does not allocate or map an IKC queue, notify McKernel,
+or own teardown.  It also does not prove that the exact Rocky kernel compiled
+the module or that Linux and McKernel interoperate at runtime, so it cannot
+earn IHK-008 credit.  Validate the source contract, with an explicit compiler
+skip when no exact compiler is configured, using:
+
+```sh
+python3 scripts/ihk_native_queue_check.py
+```
+
+The exact Rocky native-module workflow supplies its installed Rust 1.92
+compiler explicitly and adds `--require-rustc`, which makes compilation and
+execution of the five-test fixture mandatory.
+
 ## mcctrl lifecycle foundation
 
 The lifecycle contract preserves the frozen zero-parameter surface and exact

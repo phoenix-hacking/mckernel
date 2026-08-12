@@ -14,6 +14,10 @@ on:
       - host-kernel/rocky/patches/0003-kbuild-rust-add-rustc-min-version.patch
       - host-kernel/rocky/patches/0004-rust-compile-libcore-edition-2024.patch
       - host-kernel/rocky/patches/0005-rust-clean-unnecessary-transmutes-lint.patch
+      - host-kernel/rocky/patches/0006-rust-init-allow-dead-code-rust-1.89.patch
+      - host-kernel/rocky/patches/0007-rust-use-used-compiler-rust-1.89.patch
+      - host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch
+      - host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch
       - host-kernel/rocky/patches/series.json
       - host-kernel/rocky/source-lock.json
       - host-kernel/rocky/toolchain-lock.json
@@ -146,7 +150,11 @@ jobs:
             0002-rust-support-rust-1.91-target-spec.patch \
             0003-kbuild-rust-add-rustc-min-version.patch \
             0004-rust-compile-libcore-edition-2024.patch \
-            0005-rust-clean-unnecessary-transmutes-lint.patch
+            0005-rust-clean-unnecessary-transmutes-lint.patch \
+            0006-rust-init-allow-dead-code-rust-1.89.patch \
+            0007-rust-use-used-compiler-rust-1.89.patch \
+            0008-rust-enable-arbitrary-self-types-rust-1.92.patch \
+            0009-rust-block-drop-removed-merge-flag.patch
           do
             compat_source="$GITHUB_WORKSPACE/host-kernel/rocky/patches/$compat_name"
             compat_asset="$RS001_SOURCE_ASSETS/$compat_name"

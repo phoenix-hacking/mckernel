@@ -21,6 +21,7 @@ AUTHORITATIVE_INPUTS = {
 }
 SUPPLEMENTAL_INPUTS = {
     "abi/x86_64.rs": "host-kernel/native-rust/abi/x86_64.rs",
+    "ikc_queue.rs": "host-kernel/native-rust/ikc_queue.rs",
 }
 FORBIDDEN_BUILD_BASENAMES = frozenset(("kbuild", "kconfig", "makefile"))
 EXPECTED_SYMBOLS = (

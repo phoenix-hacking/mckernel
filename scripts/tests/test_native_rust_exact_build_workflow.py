@@ -61,6 +61,10 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         for output in ("ihk.ko", "ihk-smp-x86_64.ko", "mcctrl.ko"):
             self.assertIn(output, self.workflow)
 
+    def test_ihk_queue_fixture_requires_the_exact_rocky_compiler(self):
+        self.assertIn("scripts/ihk_native_queue_check.py", self.workflow)
+        self.assertIn('--rustc "$(command -v rustc)" --require-rustc', self.workflow)
+
     def test_both_local_kernel_patches_are_applied(self):
         for name in (
             "0001-drivers-misc-add-mckernel-rust-host-modules.patch",
@@ -89,16 +93,33 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         bindgen_lint = self.workflow.index(
             "0005-rust-clean-unnecessary-transmutes-lint.patch", core_edition
         )
+        pin_data_lint = self.workflow.index(
+            "0006-rust-init-allow-dead-code-rust-1.89.patch", bindgen_lint
+        )
+        used_compiler = self.workflow.index(
+            "0007-rust-use-used-compiler-rust-1.89.patch", pin_data_lint
+        )
+        receiver_reconciliation = self.workflow.index(
+            "0008-rust-enable-arbitrary-self-types-rust-1.92.patch", used_compiler
+        )
+        block_reconciliation = self.workflow.index(
+            "0009-rust-block-drop-removed-merge-flag.patch",
+            receiver_reconciliation,
+        )
         project = self.workflow.index(
             "0001-drivers-misc-add-mckernel-rust-host-modules.patch",
-            bindgen_lint,
+            block_reconciliation,
         )
         self.assertLess(debrand, softfloat)
         self.assertLess(softfloat, target_spec)
         self.assertLess(target_spec, rustc_minimum)
         self.assertLess(rustc_minimum, core_edition)
         self.assertLess(core_edition, bindgen_lint)
-        self.assertLess(bindgen_lint, project)
+        self.assertLess(bindgen_lint, pin_data_lint)
+        self.assertLess(pin_data_lint, used_compiler)
+        self.assertLess(used_compiler, receiver_reconciliation)
+        self.assertLess(receiver_reconciliation, block_reconciliation)
+        self.assertLess(block_reconciliation, project)
 
     def test_failure_log_and_artifact_capture_are_unconditional(self):
         bootstrap = self.workflow.index("Refuse the wrong runtime")

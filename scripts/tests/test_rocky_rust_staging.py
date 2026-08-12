@@ -96,7 +96,16 @@ class RockyRustStagingTests(unittest.TestCase):
         self.assertEqual(staging.EXPECTED_TARGET, plan["manifest"]["target"])
         staged = {item["destination"] for item in plan["files"]}
         self.assertEqual(
-            {"Kbuild", "Kconfig", "abi/x86_64.rs", "ihk.rs", "ihk_smp_x86_64.rs", "mcctrl.rs"}, staged
+            {
+                "Kbuild",
+                "Kconfig",
+                "abi/x86_64.rs",
+                "ikc_queue.rs",
+                "ihk.rs",
+                "ihk_smp_x86_64.rs",
+                "mcctrl.rs",
+            },
+            staged,
         )
 
     def test_crate_root_digest_drift_is_rejected(self):
@@ -192,7 +201,16 @@ class RockyRustStagingTests(unittest.TestCase):
         self.assertEqual(staging.EXPECTED_TARGET, lock["target"])
         paths = {item["path"] for item in lock["files"]}
         self.assertEqual(
-            {"Kbuild", "Kconfig", "abi/x86_64.rs", "ihk.rs", "ihk_smp_x86_64.rs", "mcctrl.rs"}, paths
+            {
+                "Kbuild",
+                "Kconfig",
+                "abi/x86_64.rs",
+                "ikc_queue.rs",
+                "ihk.rs",
+                "ihk_smp_x86_64.rs",
+                "mcctrl.rs",
+            },
+            paths,
         )
 
     def test_shared_abi_is_staged_at_its_import_path_and_is_not_credit(self):
@@ -212,6 +230,18 @@ class RockyRustStagingTests(unittest.TestCase):
         self.write_manifest()
         with self.assertRaises(staging.ValidationError):
             self.plan()
+
+    def test_queue_module_is_staged_beside_the_ihk_crate_root(self):
+        plan = self.plan()
+        kernel = os.path.join(self.temporary, "queue-evidence-kernel")
+        os.makedirs(os.path.join(kernel, "drivers", "misc"))
+        target = staging.stage_for_evidence(plan, kernel)
+        queue_path = os.path.join(target, "ikc_queue.rs")
+        self.assertTrue(os.path.isfile(queue_path))
+        self.assertEqual(staging.EXPECTED_INPUTS[3]["sha256"], digest(queue_path))
+        with open(os.path.join(target, "ihk.rs"), "r") as stream:
+            self.assertIn("mod ikc_queue;", stream.read())
+        self.assertFalse(plan["credit_eligible"])
 
     def test_kbuild_command_injection_is_rejected_after_rehash(self):
         path = os.path.join(self.repo, "host-kernel", "kbuild", "Kbuild.in")

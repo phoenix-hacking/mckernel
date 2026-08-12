@@ -7,6 +7,7 @@ import ast
 import copy
 import io
 import json
+import shutil
 import subprocess
 import sys
 import tarfile
@@ -176,6 +177,18 @@ class ProbeFixture(unittest.TestCase):
         evidence["evidence_sha256"] = probe.evidence_digest(evidence)
         return evidence
 
+    def copy_rust_compatibility_inputs(self, root):
+        for relative in list(probe.RUST_COMPAT_PATCH_PATHS) + [
+            probe.RUST_COMPAT_FIXTURE_PATH
+        ]:
+            path = root / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes((REPO_ROOT / relative).read_bytes())
+        shutil.copytree(
+            str(REPO_ROOT / probe.RUST_CORE_COMPAT_FIXTURE_ROOT),
+            str(root / probe.RUST_CORE_COMPAT_FIXTURE_ROOT),
+        )
+
     def resign(self, evidence):
         evidence["evidence_sha256"] = probe.evidence_digest(evidence)
 
@@ -228,7 +241,7 @@ class ContractTests(ProbeFixture):
             },
         )
         self.assertEqual(
-            generated["source_patch_contract"]["patches"][-5:],
+            generated["source_patch_contract"]["patches"][-9:],
             [
                 {
                     "applied": True,
@@ -280,6 +293,39 @@ class ContractTests(ProbeFixture):
                 "artifact_id"
             ],
         )
+        self.assertEqual(
+            generated["repository_inputs"]["rust_1_89_build_preimages"],
+            [
+                {
+                    "path": str(probe.RUST_CORE_COMPAT_FIXTURE_ROOT / relative),
+                    "sha256": digest,
+                }
+                for relative, digest in probe.RUST_1_89_COMPAT_PREIMAGE_SHA256S
+            ],
+        )
+        self.assertEqual(
+            generated["repository_inputs"]["rust_1_92_reconciliation_preimages"],
+            [
+                {
+                    "path": str(probe.RUST_CORE_COMPAT_FIXTURE_ROOT / relative),
+                    "sha256": digest,
+                }
+                for relative, digest in probe.RUST_1_92_RECONCILIATION_PREIMAGE_SHA256S
+            ],
+        )
+        self.assertEqual(
+            generated["rust_kernel_1_92_reconciliation_failure_evidence"],
+            [
+                dict(row)
+                for row in probe.RUST_KERNEL_1_92_RECONCILIATION_FAILURE_EVIDENCE
+            ],
+        )
+        self.assertEqual(
+            9131625436,
+            generated["rust_kernel_1_92_reconciliation_failure_evidence"][1][
+                "artifact_id"
+            ],
+        )
 
     def test_workflow_is_exact_build_bound_and_never_edits_tracker(self):
         workflow = (REPO_ROOT / probe.WORKFLOW_PATH).read_text(encoding="utf-8")
@@ -315,6 +361,22 @@ class ContractTests(ProbeFixture):
             workflow.index(probe.RUST_COMPAT_PATCH_PATHS[3].name),
             workflow.index(probe.RUST_COMPAT_PATCH_PATHS[4].name),
         )
+        self.assertLess(
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[4].name),
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[5].name),
+        )
+        self.assertLess(
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[5].name),
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[6].name),
+        )
+        self.assertLess(
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[6].name),
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[7].name),
+        )
+        self.assertLess(
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[7].name),
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[8].name),
+        )
 
     def test_rust_compatibility_patch_shape_is_fail_closed(self):
         original = (REPO_ROOT / probe.RUST_COMPAT_PATCH_PATHS[3]).read_text(
@@ -322,10 +384,7 @@ class ContractTests(ProbeFixture):
         )
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            for relative in probe.RUST_COMPAT_PATCH_PATHS:
-                path = root / relative
-                path.parent.mkdir(parents=True, exist_ok=True)
-                path.write_bytes((REPO_ROOT / relative).read_bytes())
+            self.copy_rust_compatibility_inputs(root)
             path = root / probe.RUST_COMPAT_PATCH_PATHS[3]
             path.write_text(
                 original.replace(
@@ -344,10 +403,7 @@ class ContractTests(ProbeFixture):
         )
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            for relative in probe.RUST_COMPAT_PATCH_PATHS:
-                path = root / relative
-                path.parent.mkdir(parents=True, exist_ok=True)
-                path.write_bytes((REPO_ROOT / relative).read_bytes())
+            self.copy_rust_compatibility_inputs(root)
             path = root / probe.RUST_COMPAT_PATCH_PATHS[4]
             path.write_text(
                 original.replace(
@@ -357,6 +413,91 @@ class ContractTests(ProbeFixture):
                 ),
                 encoding="utf-8",
             )
+            with self.assertRaises(probe.ProbeError):
+                probe.rust_compatibility_patch_records(root)
+
+    def test_pin_data_dead_code_patch_shape_is_fail_closed(self):
+        original = (REPO_ROOT / probe.RUST_COMPAT_PATCH_PATHS[5]).read_text(
+            encoding="utf-8"
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.copy_rust_compatibility_inputs(root)
+            path = root / probe.RUST_COMPAT_PATCH_PATHS[5]
+            path.write_text(
+                original.replace(
+                    "+        #[allow(dead_code)]",
+                    "+        #[allow(unused)]",
+                    1,
+                ),
+                encoding="utf-8",
+            )
+            with self.assertRaises(probe.ProbeError):
+                probe.rust_compatibility_patch_records(root)
+
+    def test_used_compiler_patch_shape_is_fail_closed(self):
+        original = (REPO_ROOT / probe.RUST_COMPAT_PATCH_PATHS[6]).read_text(
+            encoding="utf-8"
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.copy_rust_compatibility_inputs(root)
+            path = root / probe.RUST_COMPAT_PATCH_PATHS[6]
+            path.write_text(
+                original.replace(
+                    "+rust_allowed_features := new_uninit,used_with_arg",
+                    "+rust_allowed_features := new_uninit",
+                    1,
+                ),
+                encoding="utf-8",
+            )
+            with self.assertRaises(probe.ProbeError):
+                probe.rust_compatibility_patch_records(root)
+
+    def test_receiver_reconciliation_patch_shape_is_fail_closed(self):
+        original = (REPO_ROOT / probe.RUST_COMPAT_PATCH_PATHS[7]).read_text(
+            encoding="utf-8"
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.copy_rust_compatibility_inputs(root)
+            path = root / probe.RUST_COMPAT_PATCH_PATHS[7]
+            path.write_text(
+                original.replace(
+                    "+#![feature(arbitrary_self_types)]",
+                    "+#![feature(receiver_trait)]",
+                    1,
+                ),
+                encoding="utf-8",
+            )
+            with self.assertRaises(probe.ProbeError):
+                probe.rust_compatibility_patch_records(root)
+
+    def test_block_reconciliation_patch_shape_is_fail_closed(self):
+        original = (REPO_ROOT / probe.RUST_COMPAT_PATCH_PATHS[8]).read_text(
+            encoding="utf-8"
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.copy_rust_compatibility_inputs(root)
+            path = root / probe.RUST_COMPAT_PATCH_PATHS[8]
+            path.write_text(
+                original.replace(
+                    "+                    flags: 0,",
+                    "+                    flags: 1,",
+                    1,
+                ),
+                encoding="utf-8",
+            )
+            with self.assertRaises(probe.ProbeError):
+                probe.rust_compatibility_patch_records(root)
+
+    def test_block_reconciliation_requires_exact_c_header_absence(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.copy_rust_compatibility_inputs(root)
+            header = root / probe.RUST_CORE_COMPAT_FIXTURE_ROOT / "include/linux/blk-mq.h"
+            header.write_bytes(header.read_bytes() + b"\n#define BLK_MQ_F_SHOULD_MERGE 1\n")
             with self.assertRaises(probe.ProbeError):
                 probe.rust_compatibility_patch_records(root)
 

@@ -5,6 +5,12 @@
 //! Behavioral implementation is added only with contract-linked tests, and no
 //! path in this crate dispatches into the legacy project C implementation.
 
+#[allow(dead_code)]
+#[path = "abi/x86_64.rs"]
+mod abi;
+#[allow(dead_code)]
+mod ikc_queue;
+
 use kernel::prelude::*;
 
 const IHK_VERSION: &str = "1.7.0rc4";

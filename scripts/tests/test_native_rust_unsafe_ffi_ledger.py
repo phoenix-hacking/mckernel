@@ -44,10 +44,10 @@ class CurrentLedgerTests(unittest.TestCase):
     def test_committed_ledger_is_exact_complete_and_fail_closed(self):
         value = load_committed()
         discovery = ledger.validate_ledger(value, REPO_ROOT)
-        self.assertEqual(len(discovery["inputs"]), 3)
-        self.assertEqual(len(discovery["sites"]), 10)
+        self.assertEqual(len(discovery["inputs"]), 5)
+        self.assertEqual(len(discovery["sites"]), 21)
         self.assertEqual(value["coverage"]["by_crate"], {
-            "ihk": 3,
+            "ihk": 14,
             "ihk_smp_x86_64": 5,
             "mcctrl": 2,
         })
@@ -62,6 +62,22 @@ class CurrentLedgerTests(unittest.TestCase):
             self.assertTrue(site["owner"]["component"])
             self.assertEqual(site["compiler_capture"]["status"], "not_captured")
             self.assertEqual(site["independent_review"]["status"], "pending")
+        queue_sites = [
+            site
+            for site in value["sites"]
+            if site["path"] == "host-kernel/native-rust/ikc_queue.rs"
+        ]
+        self.assertEqual(
+            [site["id"] for site in queue_sites],
+            ["RS011-IHK-%04d" % index for index in range(4, 15)],
+        )
+        self.assertTrue(
+            any(
+                "no remote dequeue owner" in obligation
+                for site in queue_sites
+                for obligation in site["caller_obligations"]
+            )
+        )
 
     def test_checker_and_tests_parse_with_python_3_6_grammar(self):
         paths = (
@@ -249,6 +265,8 @@ class LedgerMutationTests(unittest.TestCase):
         ledger.EXPECTED_ROOTS["ihk"],
         ledger.EXPECTED_ROOTS["ihk_smp_x86_64"],
         ledger.EXPECTED_ROOTS["mcctrl"],
+        ledger.NATIVE_SOURCE_ROOT + "/abi/x86_64.rs",
+        ledger.NATIVE_SOURCE_ROOT + "/ikc_queue.rs",
     )
 
     def setUp(self):
@@ -374,14 +392,22 @@ class CompilerCaptureTests(unittest.TestCase):
         for crate in ledger.EXPECTED_CRATES:
             root = roots[crate]
             staged_source = os.path.join(self.staged, root["destination"])
-            shutil.copy2(os.path.join(REPO_ROOT, root["path"]), staged_source)
+            staged_inputs = []
+            for repository_path in root["transitive_inputs"]:
+                relative = repository_path[len(ledger.NATIVE_SOURCE_ROOT) + 1 :]
+                staged_input = os.path.join(self.staged, relative)
+                parent = os.path.dirname(staged_input)
+                if not os.path.isdir(parent):
+                    os.makedirs(parent)
+                shutil.copy2(os.path.join(REPO_ROOT, repository_path), staged_input)
+                staged_inputs.append(staged_input)
             dep = os.path.join(self.kernel_build, crate + ".d")
             obj = os.path.join(self.kernel_build, crate + ".o")
             command = os.path.join(self.kernel_build, ".{0}.o.cmd".format(crate))
             with open(obj, "wb") as stream:
                 stream.write((crate + " object\n").encode("utf-8"))
             with open(dep, "w", encoding="utf-8") as stream:
-                stream.write("{0}: {1}\n".format(obj, staged_source))
+                stream.write("{0}: {1}\n".format(obj, " ".join(staged_inputs)))
             with open(command, "w", encoding="utf-8") as stream:
                 stream.write(
                     "cmd_{0} := {1} --crate-name {2} --emit=dep-info={3},obj={4} {5}\n"
