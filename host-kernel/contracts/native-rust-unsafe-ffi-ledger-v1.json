@@ -23,7 +23,7 @@
       "crate": "ihk",
       "destination": "ihk.rs",
       "path": "host-kernel/native-rust/ihk.rs",
-      "sha256": "4aa64fb0cf2c8b1342409d731d5494fa845f5f157d12576abc53c2a9c70e7043",
+      "sha256": "53e2b003573804df8d11f34a8290108ac5a0fc15bb559f2f980c38a3316b4a55",
       "transitive_inputs": [
         "host-kernel/native-rust/abi/x86_64.rs",
         "host-kernel/native-rust/ihk.rs",
@@ -40,7 +40,7 @@
       "crate": "ihk_smp_x86_64",
       "destination": "ihk_smp_x86_64.rs",
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
-      "sha256": "85156ded690ec9f6d74ab5dc1103b85f2e1c3eb8ba315b516ca2b83029940f80",
+      "sha256": "f5beb6dae65e486772af5198aa60f77d4e1b86d37b5ee8ae50eb4b34f9b0d74f",
       "transitive_inputs": [
         "host-kernel/native-rust/ihk_smp_x86_64.rs"
       ],
@@ -50,7 +50,7 @@
       "crate": "mcctrl",
       "destination": "mcctrl.rs",
       "path": "host-kernel/native-rust/mcctrl.rs",
-      "sha256": "3b996deb4a3eb26f93e45a243d2f7dc075344cee95ff583eeaf20d602ab63e31",
+      "sha256": "1a8b85c379d6976d90ba462b9386d1bbd7fce83ca152e46bce391e6cfa6b5389",
       "transitive_inputs": [
         "host-kernel/native-rust/mcctrl.rs"
       ],
@@ -64,7 +64,7 @@
     "self_attestation_forbidden": true
   },
   "ledger_id": "mckernel-native-rust-unsafe-ffi-ledger-v1",
-  "ledger_sha256": "fb9228182526817f63c2d28a64079c2c3d3f93110b064f5bae30b58728e0ed82",
+  "ledger_sha256": "4174e962171cb36dbaa3c2f2643608c5a18da7c6356795c2d3b098f3a6ab7bce",
   "readiness": {
     "blockers": [
       "exact Rocky 10.2 rustc commands, dep-info closure, objects, source, config, and toolchain evidence are absent",
@@ -85,11 +85,11 @@
     },
     "source_lock": {
       "path": "host-kernel/rocky/source-lock.json",
-      "sha256": "f3cf396479fbf4db7b5222eb78399e7ddd1f00f9db81fd0842303ad1a9e0102e"
+      "sha256": "3b512e6fce7830df0323289ce602d60de0ee4167c6655e5ced9184b530785778"
     },
     "stage_manifest": {
       "path": "host-kernel/kbuild/stage-manifest.json",
-      "sha256": "55a66d36bafbb029089fa8e52eaacee176e55445c163c5b78a2f57049eeaebb4"
+      "sha256": "65fca34252b739646a3a347dcbf7c5ad3d7aaa77ae287e8f57fa733cd676a423"
     },
     "toolchain_lock": {
       "path": "host-kernel/rocky/toolchain-lock.json",
@@ -138,7 +138,7 @@
         "ihk"
       ],
       "expression_sha256": "778d5e4bea5080d53eaf135993572f31d8510d804f2a9034179df6a8f0b5aa32",
-      "file_sha256": "4aa64fb0cf2c8b1342409d731d5494fa845f5f157d12576abc53c2a9c70e7043",
+      "file_sha256": "53e2b003573804df8d11f34a8290108ac5a0fc15bb559f2f980c38a3316b4a55",
       "id": "RS011-IHK-0001",
       "independent_review": {
         "evidence_sha256": null,
@@ -185,7 +185,7 @@
         "ihk"
       ],
       "expression_sha256": "a5e5090b3a7542300bfaeac36e845705f4be4a6a57a371a86770f7a6b3a74ee4",
-      "file_sha256": "4aa64fb0cf2c8b1342409d731d5494fa845f5f157d12576abc53c2a9c70e7043",
+      "file_sha256": "53e2b003573804df8d11f34a8290108ac5a0fc15bb559f2f980c38a3316b4a55",
       "id": "RS011-IHK-0002",
       "independent_review": {
         "evidence_sha256": null,
@@ -211,7 +211,7 @@
       "source_sha256": "695ff689567b02209f0f71eab292e5412d0d2b3714d5b36a661df9715d250663"
     },
     {
-      "byte_end": 2459,
+      "byte_end": 2469,
       "byte_start": 2117,
       "caller_obligations": [
         "The record layout, namespace bytes, and target relocation must remain compatible with the selected Linux export format.",
@@ -231,8 +231,8 @@
       "crate_roots": [
         "ihk"
       ],
-      "expression_sha256": "10347961efcc905837db5c6899b143ce802cff6b42adf0de579b333bc86c4a45",
-      "file_sha256": "4aa64fb0cf2c8b1342409d731d5494fa845f5f157d12576abc53c2a9c70e7043",
+      "expression_sha256": "96c863cef3a97c75e2354b852f98ea0f6fc8c1baf6be15f6c033218e52a91641",
+      "file_sha256": "53e2b003573804df8d11f34a8290108ac5a0fc15bb559f2f980c38a3316b4a55",
       "id": "RS011-IHK-0003",
       "independent_review": {
         "evidence_sha256": null,
@@ -255,7 +255,7 @@
         "source_sha256": "57b9cad46030f1540a9952cc472d494d55417d72dcdcebc0958c2b44b33aa5d0",
         "text": "SAFETY: Linux modpost consumes this immutable relocation record to publish the namespaced anchor; neither the record nor its target is mutated in Rust."
       },
-      "source_sha256": "6ef2e0f286388d75871d45383a750b7a12949c8aba23e6748599a234585282ca"
+      "source_sha256": "d6de54b6a3714dd82390c702f296c461113682632793a7aab6bd2b5f44974127"
     },
     {
       "byte_end": 1015,
@@ -279,7 +279,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "e69ff87cfc5c739fdd9dda4e26d250abac32cf6f07d0d227ece9e6017d36fee1",
-      "file_sha256": "85156ded690ec9f6d74ab5dc1103b85f2e1c3eb8ba315b516ca2b83029940f80",
+      "file_sha256": "f5beb6dae65e486772af5198aa60f77d4e1b86d37b5ee8ae50eb4b34f9b0d74f",
       "id": "RS011-SMP-0001",
       "independent_review": {
         "evidence_sha256": null,
@@ -326,7 +326,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "bea3c7c4216f0a81b933691be1cbe242d286933ebc8d1f4420d9e8bd640f43ab",
-      "file_sha256": "85156ded690ec9f6d74ab5dc1103b85f2e1c3eb8ba315b516ca2b83029940f80",
+      "file_sha256": "f5beb6dae65e486772af5198aa60f77d4e1b86d37b5ee8ae50eb4b34f9b0d74f",
       "id": "RS011-SMP-0002",
       "independent_review": {
         "evidence_sha256": null,
@@ -373,7 +373,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "2a6c16da34f3036c684810184403f5eb1532eacf7b422679ce811e0ea1eec4ae",
-      "file_sha256": "85156ded690ec9f6d74ab5dc1103b85f2e1c3eb8ba315b516ca2b83029940f80",
+      "file_sha256": "f5beb6dae65e486772af5198aa60f77d4e1b86d37b5ee8ae50eb4b34f9b0d74f",
       "id": "RS011-SMP-0003",
       "independent_review": {
         "evidence_sha256": null,
@@ -399,8 +399,8 @@
       "source_sha256": "ae99e1365c2c804cb41e2cc2d5a255679f2d777e19652ae7375d74f3682d6b73"
     },
     {
-      "byte_end": 9717,
-      "byte_start": 9614,
+      "byte_end": 9747,
+      "byte_start": 9644,
       "caller_obligations": [
         "The provider dependency and namespaced relocation must already be valid.",
         "The operation must remain one volatile byte read and may not create or retain a reference."
@@ -420,7 +420,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "1a2595e55bf404343cc03aceeb3e13e851ad459fa498f9efab6a467d8b64c354",
-      "file_sha256": "85156ded690ec9f6d74ab5dc1103b85f2e1c3eb8ba315b516ca2b83029940f80",
+      "file_sha256": "f5beb6dae65e486772af5198aa60f77d4e1b86d37b5ee8ae50eb4b34f9b0d74f",
       "id": "RS011-SMP-0005",
       "independent_review": {
         "evidence_sha256": null,
@@ -984,7 +984,7 @@
         "mcctrl"
       ],
       "expression_sha256": "e69ff87cfc5c739fdd9dda4e26d250abac32cf6f07d0d227ece9e6017d36fee1",
-      "file_sha256": "3b996deb4a3eb26f93e45a243d2f7dc075344cee95ff583eeaf20d602ab63e31",
+      "file_sha256": "1a8b85c379d6976d90ba462b9386d1bbd7fce83ca152e46bce391e6cfa6b5389",
       "id": "RS011-MCC-0001",
       "independent_review": {
         "evidence_sha256": null,
@@ -1010,8 +1010,8 @@
       "source_sha256": "c206b8c2757d2d2890396d2daccd4193bf3a06e872c1b9f5bf6af5181d278d78"
     },
     {
-      "byte_end": 2243,
-      "byte_start": 2140,
+      "byte_end": 2263,
+      "byte_start": 2160,
       "caller_obligations": [
         "The provider dependency and namespaced relocation must already be valid.",
         "The operation must remain one volatile byte read and may not create or retain a reference."
@@ -1031,7 +1031,7 @@
         "mcctrl"
       ],
       "expression_sha256": "1a2595e55bf404343cc03aceeb3e13e851ad459fa498f9efab6a467d8b64c354",
-      "file_sha256": "3b996deb4a3eb26f93e45a243d2f7dc075344cee95ff583eeaf20d602ab63e31",
+      "file_sha256": "1a8b85c379d6976d90ba462b9386d1bbd7fce83ca152e46bce391e6cfa6b5389",
       "id": "RS011-MCC-0002",
       "independent_review": {
         "evidence_sha256": null,
@@ -1057,7 +1057,7 @@
       "source_sha256": "1bddcf599fe238e7338837f6a1a133cd756c8101b97f860ef0cfe3bad8d80f2b"
     }
   ],
-  "source_closure_sha256": "b0907f006aad08aaec37d32fbeb1d5ad66eddba198f8f707acc8dc3f80fd006a",
+  "source_closure_sha256": "0e46ed9f310087aa82eae87c301220be86b4c4a0b2f74bef9e29f1fc450324d2",
   "source_inputs": [
     {
       "bytes": 18796,
@@ -1068,12 +1068,12 @@
       "sha256": "b5980e5b621914a120a0e6b72241477c48aee85615ae4cc76077f3874e35f860"
     },
     {
-      "bytes": 3788,
+      "bytes": 3818,
       "crate_roots": [
         "ihk"
       ],
       "path": "host-kernel/native-rust/ihk.rs",
-      "sha256": "4aa64fb0cf2c8b1342409d731d5494fa845f5f157d12576abc53c2a9c70e7043"
+      "sha256": "53e2b003573804df8d11f34a8290108ac5a0fc15bb559f2f980c38a3316b4a55"
     },
     {
       "bytes": 9977,
@@ -1084,12 +1084,12 @@
       "sha256": "3d603424705a9b0fb18725bae1d75f1d279b249b866c15f15f98166d013edfbb"
     },
     {
-      "bytes": 10241,
+      "bytes": 10271,
       "crate_roots": [
         "ihk_smp_x86_64"
       ],
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
-      "sha256": "85156ded690ec9f6d74ab5dc1103b85f2e1c3eb8ba315b516ca2b83029940f80"
+      "sha256": "f5beb6dae65e486772af5198aa60f77d4e1b86d37b5ee8ae50eb4b34f9b0d74f"
     },
     {
       "bytes": 26419,
@@ -1108,12 +1108,12 @@
       "sha256": "514f9bce452498e5e9394c450532b040c44fce1ac7a6b5158c76f3d4c7270d40"
     },
     {
-      "bytes": 2997,
+      "bytes": 3017,
       "crate_roots": [
         "mcctrl"
       ],
       "path": "host-kernel/native-rust/mcctrl.rs",
-      "sha256": "3b996deb4a3eb26f93e45a243d2f7dc075344cee95ff583eeaf20d602ab63e31"
+      "sha256": "1a8b85c379d6976d90ba462b9386d1bbd7fce83ca152e46bce391e6cfa6b5389"
     },
     {
       "bytes": 17706,

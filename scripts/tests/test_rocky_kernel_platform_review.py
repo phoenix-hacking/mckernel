@@ -145,12 +145,12 @@ class RepositoryReviewTests(unittest.TestCase):
         self.assertEqual(port["binding_kind"], "exact-input-tree-port")
         self.assertEqual(port["published_base_head_sha"], review.PUBLISHED_BASE_HEAD)
         self.assertEqual(port["ported_input_count"], 10)
-        self.assertEqual(port["changed_from_published_base_count"], 1)
+        self.assertEqual(port["changed_from_published_base_count"], 2)
         self.assertEqual(
             port["changed_from_published_base_paths"],
             review.PUBLISHED_BASE_CHANGED_PATHS,
         )
-        self.assertEqual(port["unchanged_from_published_base_count"], 9)
+        self.assertEqual(port["unchanged_from_published_base_count"], 8)
         self.assertTrue(
             port["historical_review_preserved_by_exact_base_review_blob"]
         )
@@ -166,30 +166,33 @@ class RepositoryReviewTests(unittest.TestCase):
     def test_connector_tree_port_published_base_review_anchor_is_exact(self):
         self.assertEqual(
             review.PUBLISHED_BASE_HEAD,
-            "5500ed831b69a31f30804b11338256c27c09e05a",
+            "d3c88f7576691a54e977940213a2eeab986bd83e",
         )
         self.assertEqual(
             review.PUBLISHED_BASE_REVIEW,
             {
                 "path": review.REVIEW_PATH.as_posix(),
-                "size": 11281,
-                "sha256": "da7617eed274547053f46143e1399b2d036db79780862ca75fab7efa0582fc43",
-                "git_blob_sha1": "9bafeb5bcaa67210cfe5919056bd939a1cf8c98c",
+                "size": 11451,
+                "sha256": "67071f85a65fee3b4e5a4400c065d183bfcb61a95e9cda8d460a217200847b8f",
+                "git_blob_sha1": "7ea285bbe6629c3b61a5ef63fa3bede5b9778a97",
             },
         )
         self.assertEqual(
             review.PUBLISHED_BASE_CHANGED_PATHS,
-            ["scripts/rocky_kernel_platform_evidence.py"],
+            [
+                "host-kernel/rocky/source-lock.json",
+                "scripts/rocky_kernel_source_lock.py",
+            ],
         )
 
     def test_connector_tree_port_changed_path_mutation_is_rejected(self):
         mutated = copy.deepcopy(self.manifest)
         port = mutated["connector_tree_port"]
-        port["changed_from_published_base_count"] = 1
+        port["changed_from_published_base_count"] = 2
         port["changed_from_published_base_paths"] = [
             review.SOURCE_LOCK_PATH.as_posix()
         ]
-        port["unchanged_from_published_base_count"] = 9
+        port["unchanged_from_published_base_count"] = 8
         with self.assertRaisesRegex(review.ReviewError, "connector tree port"):
             review.validate_review(mutated, self.manifest_bytes)
 

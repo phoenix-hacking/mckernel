@@ -60,7 +60,7 @@ pub static IHK_PROVIDER_LIFECYCLE_V1: u8 = 1;
 // the namespaced anchor; neither the record nor its target is mutated in Rust.
 #[export_name = "__export_symbol_ihk_provider_lifecycle_v1"]
 #[link_section = ".export_symbol"]
-#[used]
+#[used(compiler)]
 pub static IHK_PROVIDER_LIFECYCLE_V1_EXPORT: IhkExportSymbolRecord = IhkExportSymbolRecord {
     license: *b"GPL\0",
     namespace: *b"MCKERNEL_IHK_V1\0",
@@ -73,14 +73,14 @@ pub static IHK_PROVIDER_LIFECYCLE_V1_EXPORT: IhkExportSymbolRecord = IhkExportSy
 #[cfg(MODULE)]
 #[doc(hidden)]
 #[link_section = ".modinfo"]
-#[used]
+#[used(compiler)]
 static IHK_VERSION_MODINFO: [u8; 17] = *b"version=1.7.0rc4\0";
 
 // Built-in module metadata is namespaced in `modules.builtin.modinfo`.
 #[cfg(not(MODULE))]
 #[doc(hidden)]
 #[link_section = ".modinfo"]
-#[used]
+#[used(compiler)]
 static IHK_BUILTIN_VERSION_MODINFO: [u8; 21] = *b"ihk.version=1.7.0rc4\0";
 
 module! {

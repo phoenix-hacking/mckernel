@@ -39,6 +39,7 @@ on:
       - host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch
       - host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch
       - host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch
+      - host-kernel/rocky/patches/0022-x86-pvh-annotate-noendbr.patch
       - host-kernel/rocky/patches/series.json
       - host-kernel/rocky/source-lock.json
       - host-kernel/rocky/toolchain-lock.json
@@ -119,6 +120,7 @@ on:
       - host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch
       - host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch
       - host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch
+      - host-kernel/rocky/patches/0022-x86-pvh-annotate-noendbr.patch
       - host-kernel/rocky/patches/series.json
       - host-kernel/rocky/source-lock.json
       - host-kernel/rocky/toolchain-lock.json
@@ -315,7 +317,8 @@ jobs:
             0018-kbuild-order-unterminated-string-disable.patch \
             0019-rust-types-add-opaque-try-ffi-init.patch \
             0020-rust-miscdevice-add-base-abstraction.patch \
-            0021-objtool-recognize-rust-1.92-panic-const.patch
+            0021-objtool-recognize-rust-1.92-panic-const.patch \
+            0022-x86-pvh-annotate-noendbr.patch
           do
             compat_patch="$GITHUB_WORKSPACE/host-kernel/rocky/patches/$compat_name"
             test -s "$compat_patch"
@@ -388,17 +391,16 @@ jobs:
             run_phase rustavailable \
               make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \
                 ARCH=x86_64 LLVM=1 rustavailable
-            # Linux 6.12 supports in-tree %.ko single targets.  Keep all three
-            # in one invocation so their one modpost pass sees the complete
-            # ihk provider/consumer symbol graph.  Run this bounded compiler
-            # boundary before the independent full-image build so an unrelated
-            # vmlinux failure cannot mask the native Rust module result.
-            run_phase native-modules \
-              make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \
-                ARCH=x86_64 LLVM=1 -j2 "${module_targets[@]}"
             run_phase bzImage \
               make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \
                 ARCH=x86_64 LLVM=1 -j2 bzImage
+            # Linux 6.12 supports in-tree %.ko single targets.  Build the exact
+            # boot kernel first so their modpost pass consumes its vmlinux.o
+            # symbol universe.  Keep all three module targets in one invocation
+            # so modpost also sees the complete ihk provider/consumer graph.
+            run_phase native-modules \
+              make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \
+                ARCH=x86_64 LLVM=1 -j2 "${module_targets[@]}"
             printf '%s\n' complete > "$evidence_dir/build.phase"
           ) 2>&1 | tee "$evidence_dir/build.log"
           pipeline_status=("${PIPESTATUS[@]}")

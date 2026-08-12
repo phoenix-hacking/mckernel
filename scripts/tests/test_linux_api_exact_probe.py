@@ -236,16 +236,35 @@ class ContractTests(ProbeFixture):
         self.assertIsNone(compatibility[-1]["upstream_commit"])
         self.assertIsNone(compatibility[-1]["stable_commit"])
         self.assertEqual(
-            compatibility[-1]["preimage"]["sha256"],
+            compatibility[-2]["preimage"]["sha256"],
             probe.RUST_OBJTOOL_NORETURN_PREIMAGE_SHA256S[0][1],
         )
         self.assertEqual(
-            compatibility[-1]["postimage"]["sha256"],
+            compatibility[-2]["postimage"]["sha256"],
             probe.RUST_OBJTOOL_NORETURN_POSTIMAGE_SHA256S[0][1],
         )
         self.assertEqual(
-            compatibility[-1]["observed_failure"],
+            compatibility[-2]["observed_failure"],
             probe.RUST_OBJTOOL_NORETURN_FAILURE_EVIDENCE,
+        )
+        self.assertEqual(
+            compatibility[-1],
+            {
+                "applied_after": str(probe.RUST_COMPAT_PATCH_PATHS[-2]),
+                "path": str(probe.RUST_COMPAT_PATCH_PATHS[-1]),
+                "sha256": probe.sha256_file(
+                    REPO_ROOT / probe.RUST_COMPAT_PATCH_PATHS[-1]
+                ),
+                "size": (
+                    REPO_ROOT / probe.RUST_COMPAT_PATCH_PATHS[-1]
+                ).stat().st_size,
+                "stable_commit": None,
+                "upstream_commit": None,
+                "failure_evidence": dict(probe.PVH_OBJTOOL_FAILURE_EVIDENCE),
+                "license": "GPL-2.0-only",
+                "local_origin": probe.PVH_OBJTOOL_LOCAL_ORIGIN,
+                "rocky_base": probe.PVH_OBJTOOL_ROCKY_BASE,
+            },
         )
         self.assertEqual(
             generated["repository_inputs"]["rust_target_generator_preimage"],
@@ -404,6 +423,16 @@ class ContractTests(ProbeFixture):
             9134206857,
             generated["clang_21_source_failure_evidence"][1]["artifact_id"],
         )
+        self.assertEqual(
+            generated["repository_inputs"]["pvh_objtool_compatibility_preimages"],
+            [
+                {
+                    "path": str(probe.RUST_CORE_COMPAT_FIXTURE_ROOT / relative),
+                    "sha256": digest,
+                }
+                for relative, digest in probe.PVH_OBJTOOL_COMPAT_PREIMAGE_SHA256S
+            ],
+        )
 
     def test_workflow_is_exact_build_bound_and_never_edits_tracker(self):
         workflow = (REPO_ROOT / probe.WORKFLOW_PATH).read_text(encoding="utf-8")
@@ -535,6 +564,18 @@ class ContractTests(ProbeFixture):
         self.assertLess(
             workflow.index(probe.RUST_COMPAT_PATCH_PATHS[19].name),
             workflow.index(probe.RUST_COMPAT_PATCH_PATHS[20].name),
+        )
+        self.assertLess(
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[20].name),
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[21].name),
+        )
+        self.assertEqual(
+            workflow.count(probe.RUST_COMPAT_PATCH_PATHS[20].name),
+            2,
+        )
+        self.assertEqual(
+            workflow.count(probe.RUST_COMPAT_PATCH_PATHS[21].name),
+            2,
         )
 
     def test_rust_compatibility_patch_shape_is_fail_closed(self):
@@ -784,6 +825,49 @@ class ContractTests(ProbeFixture):
                     path.write_text(original.replace(old, new, 1), encoding="utf-8")
                     with self.assertRaises(probe.ProbeError):
                         probe.rust_compatibility_patch_records(root)
+
+    def test_pvh_objtool_patch_shape_and_provenance_are_fail_closed(self):
+        mutations = (
+            ("+\tANNOTATE_NOENDBR", "+\tENDBR"),
+            ("Failure-Artifact: 9145918955", "Failure-Artifact: 0"),
+            (
+                "Failure-Log-SHA256: "
+                "614f179c466c2721817fbc9b44c1dbaa9e45f4d638ed489e2b31c2c5beb69f6f",
+                "Failure-Log-SHA256: " + "0" * 64,
+            ),
+            (
+                "absolute relocation as part of a broader PVH cleanup",
+                "annotation from upstream commit",
+            ),
+        )
+        for old, new in mutations:
+            with self.subTest(old=old):
+                with tempfile.TemporaryDirectory() as directory:
+                    root = Path(directory)
+                    self.copy_rust_compatibility_inputs(root)
+                    path = root / probe.RUST_COMPAT_PATCH_PATHS[21]
+                    original = path.read_text(encoding="utf-8")
+                    self.assertIn(old, original)
+                    path.write_text(original.replace(old, new, 1), encoding="utf-8")
+                    with self.assertRaises(probe.ProbeError):
+                        probe.rust_compatibility_patch_records(root)
+
+    def test_pvh_objtool_fixture_digest_is_fail_closed(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.copy_rust_compatibility_inputs(root)
+            fixture = (
+                root
+                / probe.RUST_CORE_COMPAT_FIXTURE_ROOT
+                / "arch/x86/platform/pvh/head.S"
+            )
+            fixture.write_bytes(fixture.read_bytes() + b"\n")
+            with self.assertRaises(probe.ProbeError):
+                probe.rust_compatibility_patch_records(root)
+
+    def test_pvh_objtool_patch_replays_at_zero_fuzz_and_rejects_second_apply(self):
+        records = probe.rust_compatibility_patch_records(REPO_ROOT)
+        probe.verify_rust_compatibility_patch_replay(REPO_ROOT, records)
 
     def test_stable_warning_policy_release_binding_is_fail_closed(self):
         with tempfile.TemporaryDirectory() as directory:

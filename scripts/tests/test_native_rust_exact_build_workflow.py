@@ -76,10 +76,10 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             'ARCH=x86_64 LLVM=1 -j2 "${module_targets[@]}"', self.workflow
         )
         self.assertLess(
+            self.workflow.index("ARCH=x86_64 LLVM=1 -j2 bzImage"),
             self.workflow.index(
                 'ARCH=x86_64 LLVM=1 -j2 "${module_targets[@]}"'
             ),
-            self.workflow.index("ARCH=x86_64 LLVM=1 -j2 bzImage"),
         )
         self.assertNotRegex(self.workflow, r"(?m)^\s*make\s+.*\bmodules\b")
         self.assertIn(
@@ -88,6 +88,36 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         )
         self.assertIn('> "$EVIDENCE_DIR/kernel.release"', self.workflow)
         self.assertIn("include-hidden-files: true", self.workflow)
+
+    def test_module_modpost_cannot_precede_kernel_symbol_universe(self):
+        bzimage = (
+            '            run_phase bzImage \\\n'
+            '              make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \\\n'
+            '                ARCH=x86_64 LLVM=1 -j2 bzImage\n'
+        )
+        modules = (
+            '            run_phase native-modules \\\n'
+            '              make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \\\n'
+            '                ARCH=x86_64 LLVM=1 -j2 "${module_targets[@]}"\n'
+        )
+        self.assertEqual(1, self.workflow.count(bzimage))
+        self.assertEqual(1, self.workflow.count(modules))
+        mutation = self.workflow.replace(bzimage, "__BZIMAGE_PHASE__\n", 1)
+        mutation = mutation.replace(modules, bzimage, 1)
+        mutation = mutation.replace("__BZIMAGE_PHASE__\n", modules, 1)
+        with self.assertRaisesRegex(
+            runtime_evidence.EvidenceError, "commands are out of order"
+        ):
+            runtime_evidence._validate_exact_build_workflow(mutation)
+
+    def test_symbol_universe_failure_cannot_be_downgraded_or_injected(self):
+        for forbidden in (
+            "modules_prepare",
+            "Module.symvers",
+            "KBUILD_MODPOST_WARN",
+        ):
+            with self.subTest(forbidden=forbidden):
+                self.assertNotIn(forbidden, self.workflow)
 
     def test_build_scope_checker_binds_supported_in_tree_single_targets(self):
         runtime_evidence._validate_exact_build_workflow(self.workflow)
@@ -235,7 +265,7 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             self.workflow.count("--fuzz=0 --no-backup-if-mismatch"), 3
         )
 
-    def test_upstream_rust_compatibility_series_precedes_project_staging(self):
+    def test_kernel_compatibility_series_precedes_project_staging(self):
         self.assertIn("--fuzz=0 --no-backup-if-mismatch", self.workflow)
         debrand = self.workflow.index("1000-debrand-some-messages.patch")
         softfloat = self.workflow.index(
@@ -314,9 +344,13 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             "0021-objtool-recognize-rust-1.92-panic-const.patch",
             miscdevice,
         )
+        pvh_noendbr = self.workflow.index(
+            "0022-x86-pvh-annotate-noendbr.patch",
+            objtool_noreturn,
+        )
         project = self.workflow.index(
             "0001-drivers-misc-add-mckernel-rust-host-modules.patch",
-            objtool_noreturn,
+            pvh_noendbr,
         )
         self.assertLess(debrand, softfloat)
         self.assertLess(softfloat, target_spec)
@@ -339,7 +373,16 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         self.assertLess(warning_order, opaque_init)
         self.assertLess(opaque_init, miscdevice)
         self.assertLess(miscdevice, objtool_noreturn)
-        self.assertLess(objtool_noreturn, project)
+        self.assertLess(objtool_noreturn, pvh_noendbr)
+        self.assertLess(pvh_noendbr, project)
+        self.assertEqual(
+            3,
+            self.workflow.count("0021-objtool-recognize-rust-1.92-panic-const.patch"),
+        )
+        self.assertEqual(
+            3,
+            self.workflow.count("0022-x86-pvh-annotate-noendbr.patch"),
+        )
 
     def test_rs006_source_substrate_is_checked_without_credit(self):
         self.assertIn("scripts/rs006_miscdevice_substrate.py", self.workflow)

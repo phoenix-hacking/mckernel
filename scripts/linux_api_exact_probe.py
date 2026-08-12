@@ -61,6 +61,7 @@ RUST_COMPAT_PATCH_PATHS = (
     Path("host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch"),
     Path("host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch"),
     Path("host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch"),
+    Path("host-kernel/rocky/patches/0022-x86-pvh-annotate-noendbr.patch"),
 )
 CONFIG_POLICY_PATH = Path("host-kernel/rocky/config-policy.json")
 TOOLCHAIN_LOCK_PATH = Path("host-kernel/rocky/toolchain-lock.json")
@@ -148,6 +149,12 @@ RUST_OBJTOOL_NORETURN_PREIMAGE_SHA256S = (
 RUST_OBJTOOL_NORETURN_POSTIMAGE_SHA256S = (
     ("tools/objtool/check.c", "2c8d113bcbf65bc0de8ad360f70bc707a0379baa925da01cebf0e95f23ce28e7"),
 )
+PVH_OBJTOOL_COMPAT_PREIMAGE_SHA256S = (
+    ("arch/x86/platform/pvh/head.S", "37bb547fa36816be42d4376a342485074eab76aac92e3c5975613420f2670ff1"),
+)
+PVH_OBJTOOL_COMPAT_POSTIMAGE_SHA256S = (
+    ("arch/x86/platform/pvh/head.S", "d7e13bfa0c80d152af07799d6fce8beabc7bfd17cdf8d37cde2ac754bba51da4"),
+)
 CLANG_21_WARNING_PREIMAGE_SHA256S = (
     ("Makefile", "b2d9e6f03fa466db088337572dec4b0f98db8f5775ca537bce0a179a1ac216bd"),
     ("arch/loongarch/kernel/Makefile", "0f1aeabed014f3e16ab67cc0b9dfc7c72eb726b6439d95562ba08264fba19a9b"),
@@ -226,6 +233,7 @@ RUST_COMPAT_UPSTREAM_COMMITS = (
     "a69dc41a4211b0da311ae3a3b79dd4497c9dfb60",
     "f893691e742688ae21ad597c5bba13bef54706cd",
     None,
+    None,
 )
 RUST_COMPAT_STABLE_COMMITS = (
     None,
@@ -246,6 +254,7 @@ RUST_COMPAT_STABLE_COMMITS = (
     "d66cf772bebd789448121cdfc42734fb042c9c4b",
     "3f856d5d84467c7fba0bf3cca405089c497e37eb",
     "dd8a734155ae28094d27b96c00a478fa0ee6d5d7",
+    None,
     None,
     None,
     None,
@@ -401,6 +410,21 @@ CLANG_21_SOURCE_FAILURE_EVIDENCE = (
         "clang_21_source_diagnostic_count": 1,
     },
 )
+PVH_OBJTOOL_LOCAL_ORIGIN = "McKernel Rocky 10.2 exact-build compatibility"
+PVH_OBJTOOL_ROCKY_BASE = "linux-6.12.0-211.44.1.el10_2"
+PVH_OBJTOOL_FAILURE_EVIDENCE = {
+    "workflow": "Native Rust host modules exact Rocky build",
+    "repository_commit": "80a07871b81aa3d05378eb07b3d4cd9d8b922ef0",
+    "run_id": 31605746750,
+    "job_id": 94144112731,
+    "artifact_id": 9145918955,
+    "build_phase": "bzImage",
+    "build_exit_code": 2,
+    "build_log_sha256": "614f179c466c2721817fbc9b44c1dbaa9e45f4d638ed489e2b31c2c5beb69f6f",
+    "build_log_bytes": 232963,
+    "diagnostic": "pvh_start_xen+0x64: relocation to !ENDBR: pvh_start_xen+0x0",
+    "failure_boundary": "LD vmlinux.o",
+}
 
 
 class ProbeError(RuntimeError):
@@ -670,6 +694,16 @@ def rust_compatibility_patch_records(repo):
             raise ProbeError(
                 "Rocky Rust Objtool fixture digest changed: {0}".format(relative)
             )
+    for relative, digest in PVH_OBJTOOL_COMPAT_PREIMAGE_SHA256S:
+        path = repository_file(
+            repo,
+            RUST_CORE_COMPAT_FIXTURE_ROOT / relative,
+            "Rocky PVH objtool fixture file",
+        )
+        if sha256_file(path) != digest:
+            raise ProbeError(
+                "Rocky PVH objtool fixture digest changed: {0}".format(relative)
+            )
     records = []
     required_additions = (
         {
@@ -810,6 +844,9 @@ def rust_compatibility_patch_records(repo):
         {
             "+\t       strstr(func->name, \"_4core9panicking11panic_const23panic_const_\")\t\t\t||": 1,
         },
+        {
+            "+\tANNOTATE_NOENDBR": 1,
+        },
     )
     required_deletions = (
         {},
@@ -901,9 +938,10 @@ def rust_compatibility_patch_records(repo):
         {},
         {},
         {},
+        {},
     )
     expected_diff_counts = (
-        1, 1, 3, 2, 3, 1, 4, 4, 1, 1, 1, 2, 2, 3, 1, 1, 5, 2, 1, 3, 1
+        1, 1, 3, 2, 3, 1, 4, 4, 1, 1, 1, 2, 2, 3, 1, 1, 5, 2, 1, 3, 1, 1
     )
     for index, relative in enumerate(RUST_COMPAT_PATCH_PATHS):
         path = repository_file(repo, relative, "Rust target compatibility patch")
@@ -973,6 +1011,33 @@ def rust_compatibility_patch_records(repo):
                     or "Stable-Commit:" in text
                 )
             )
+            or (
+                index == 21
+                and (
+                    text.count("Local-Origin: " + PVH_OBJTOOL_LOCAL_ORIGIN) != 1
+                    or text.count("Rocky-Base: " + PVH_OBJTOOL_ROCKY_BASE) != 1
+                    or text.count("Failure-Run: 31605746750") != 1
+                    or text.count("Failure-Job: 94144112731") != 1
+                    or text.count("Failure-Artifact: 9145918955") != 1
+                    or text.count(
+                        "Failure-Commit: "
+                        + PVH_OBJTOOL_FAILURE_EVIDENCE["repository_commit"]
+                    )
+                    != 1
+                    or text.count("Failure-Phase: bzImage") != 1
+                    or text.count("Failure-Exit-Code: 2") != 1
+                    or text.count(
+                        "Failure-Log-SHA256: "
+                        + PVH_OBJTOOL_FAILURE_EVIDENCE["build_log_sha256"]
+                    )
+                    != 1
+                    or text.count("Failure-Log-Bytes: 232963") != 1
+                    or text.count("License: GPL-2.0-only") != 1
+                    or "absolute relocation as part of a broader PVH cleanup" not in text
+                    or "Upstream-Commit:" in text
+                    or "Stable-Commit:" in text
+                )
+            )
         ):
             raise ProbeError(
                 "Rust target compatibility patch is not frozen upstream commit {0}".format(
@@ -1005,6 +1070,15 @@ def rust_compatibility_patch_records(repo):
                 "sha256": postimage_sha256,
                 "size": 116993,
             }
+        elif index == 21:
+            record.update(
+                {
+                    "failure_evidence": dict(PVH_OBJTOOL_FAILURE_EVIDENCE),
+                    "license": "GPL-2.0-only",
+                    "local_origin": PVH_OBJTOOL_LOCAL_ORIGIN,
+                    "rocky_base": PVH_OBJTOOL_ROCKY_BASE,
+                }
+            )
         records.append(record)
     return records
 
@@ -1048,6 +1122,7 @@ def verify_rust_compatibility_patch_replay(repo, records):
             + CLANG_21_SOURCE_FIX_PREIMAGE_SHA256S
             + RUST_MISCDEVICE_PREIMAGE_SHA256S
             + RUST_OBJTOOL_NORETURN_PREIMAGE_SHA256S
+            + PVH_OBJTOOL_COMPAT_PREIMAGE_SHA256S
         ):
             source = repository_file(
                 repo,
@@ -1121,6 +1196,36 @@ def verify_rust_compatibility_patch_replay(repo, records):
                 ],
                 root,
             )
+        pvh_patch = repository_file(
+            repo,
+            Path(records[-1]["path"]),
+            "PVH objtool compatibility patch",
+        )
+        try:
+            second_apply = subprocess.run(
+                [
+                    shutil.which("patch") or "patch",
+                    "-p1",
+                    "--batch",
+                    "--forward",
+                    "--fuzz=0",
+                    "--no-backup-if-mismatch",
+                    "-i",
+                    str(pvh_patch),
+                ],
+                cwd=str(root),
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                timeout=300,
+            )
+        except (OSError, subprocess.TimeoutExpired) as exc:
+            raise ProbeError(
+                "PVH compatibility second-apply check failed to execute: {0}".format(
+                    exc
+                )
+            )
+        if second_apply.returncode == 0:
+            raise ProbeError("PVH compatibility patch unexpectedly applies twice")
         for relative, digest in RUST_1_92_RECONCILIATION_POSTIMAGE_SHA256S:
             if (
                 relative not in dict(RUST_MISCDEVICE_POSTIMAGE_SHA256S)
@@ -1156,6 +1261,13 @@ def verify_rust_compatibility_patch_replay(repo, records):
             if sha256_file(root / relative) != digest:
                 raise ProbeError(
                     "Rust Objtool compatibility patch postimage changed: {0}".format(
+                        relative
+                    )
+                )
+        for relative, digest in PVH_OBJTOOL_COMPAT_POSTIMAGE_SHA256S:
+            if sha256_file(root / relative) != digest:
+                raise ProbeError(
+                    "PVH objtool compatibility patch postimage changed: {0}".format(
                         relative
                     )
                 )
@@ -1287,6 +1399,13 @@ def build_contract(repo):
                     "sha256": digest,
                 }
                 for relative, digest in CLANG_21_SOURCE_FIX_PREIMAGE_SHA256S
+            ],
+            "pvh_objtool_compatibility_preimages": [
+                {
+                    "path": str(RUST_CORE_COMPAT_FIXTURE_ROOT / relative),
+                    "sha256": digest,
+                }
+                for relative, digest in PVH_OBJTOOL_COMPAT_PREIMAGE_SHA256S
             ],
             "config_policy": config_record,
             "toolchain_lock": toolchain_record,

@@ -48,11 +48,11 @@
     }
   ],
   "contract_id": "mckernel-rs001-exact-linux-api-probe-v1",
-  "contract_sha256": "e23c4d87685896cd441618e41f6222b8863364faf3ef4d52bb1cb7b7ea142638",
+  "contract_sha256": "3dc4fd20d84629f5d1e15bdd7ec163a481c4eba206e888d322298113c659a0ed",
   "evidence_profile": "rocky-10.2-exact-linux-api-evidence-v1",
   "frozen_needs": {
-    "file_sha256": "79e1442220d16cf97c359bd28a723b9ac9e5bd1b3f68f4b8f9007af3c3ae3228",
-    "manifest_sha256": "165345b3682bea567477befb3448abf54114ecefe45498541aed316e1f824288",
+    "file_sha256": "251f4680ff7350f576cdee9af18c26b97f262bd6d8ab26d8390b08dacca1748d",
+    "manifest_sha256": "4c390fb072f75bd0dcf014a671b3c4b1cb1fac9901409800d8c3582b6301e2c4",
     "need_count": 268,
     "need_ids_sha256": "aabfc7c4d6551f0b57fcc9c580e3aa6cf6ef0c93ee5e179529f161d7084a6a3b",
     "path": "host-kernel/contracts/linux-api-needs-v1.json"
@@ -103,7 +103,7 @@
   "repository_inputs": {
     "checker": {
       "path": "scripts/linux_api_exact_probe.py",
-      "sha256": "6daff6be6d986cdb45605d583348ae4335d6775823ad76d387b7669d2fb260b3"
+      "sha256": "2e52b67c607c5ec74f752a8b0f6229d695e5134b7d31618ab6b919bdf59d6155"
     },
     "clang_21_source_fix_preimages": [
       {
@@ -173,6 +173,12 @@
       "path": "host-kernel/rocky/patches/series.json",
       "sha256": "6a1a5e8fb13b6ce6ed35bd8e5487bb67ecf92d2be927799b660f21b5631f68fb"
     },
+    "pvh_objtool_compatibility_preimages": [
+      {
+        "path": "scripts/tests/fixtures/rust-core-rocky-6.12/arch/x86/platform/pvh/head.S",
+        "sha256": "37bb547fa36816be42d4376a342485074eab76aac92e3c5975613420f2670ff1"
+      }
+    ],
     "rust_1_89_build_preimages": [
       {
         "path": "scripts/tests/fixtures/rust-core-rocky-6.12/rust/Makefile",
@@ -453,6 +459,30 @@
         "size": 2069,
         "stable_commit": null,
         "upstream_commit": null
+      },
+      {
+        "applied_after": "host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch",
+        "failure_evidence": {
+          "artifact_id": 9145918955,
+          "build_exit_code": 2,
+          "build_log_bytes": 232963,
+          "build_log_sha256": "614f179c466c2721817fbc9b44c1dbaa9e45f4d638ed489e2b31c2c5beb69f6f",
+          "build_phase": "bzImage",
+          "diagnostic": "pvh_start_xen+0x64: relocation to !ENDBR: pvh_start_xen+0x0",
+          "failure_boundary": "LD vmlinux.o",
+          "job_id": 94144112731,
+          "repository_commit": "80a07871b81aa3d05378eb07b3d4cd9d8b922ef0",
+          "run_id": 31605746750,
+          "workflow": "Native Rust host modules exact Rocky build"
+        },
+        "license": "GPL-2.0-only",
+        "local_origin": "McKernel Rocky 10.2 exact-build compatibility",
+        "path": "host-kernel/rocky/patches/0022-x86-pvh-annotate-noendbr.patch",
+        "rocky_base": "linux-6.12.0-211.44.1.el10_2",
+        "sha256": "2f07f4030312ce1df38ed78615c94bfb99c7e084d27611de96d38bcf47237e48",
+        "size": 1834,
+        "stable_commit": null,
+        "upstream_commit": null
       }
     ],
     "rust_target_generator_preimage": {
@@ -461,7 +491,7 @@
     },
     "source_lock": {
       "path": "host-kernel/rocky/source-lock.json",
-      "sha256": "f3cf396479fbf4db7b5222eb78399e7ddd1f00f9db81fd0842303ad1a9e0102e"
+      "sha256": "3b512e6fce7830df0323289ce602d60de0ee4167c6655e5ced9184b530785778"
     },
     "toolchain_lock": {
       "path": "host-kernel/rocky/toolchain-lock.json",
@@ -469,7 +499,7 @@
     },
     "workflow": {
       "path": ".github/workflows/rs001-linux-api-exact-probe.yml",
-      "sha256": "a442b1da0bfc511cb60f4e8ce306ffa1dcf8e2b023c53ddc5f6169feb55a8050"
+      "sha256": "f3e6e0b93d8d904cea6a9d1f5e955ae0b65db8774c169186a189aa266b92bce6"
     }
   },
   "required_capture_inputs": [
@@ -733,6 +763,13 @@
         "path": "host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch",
         "sha256": "6eb8dd4789a5b01a3f8e00ea45dab9debb7d23bb7a8c4af5b2cfdc181656633a",
         "size": 2069
+      },
+      {
+        "applied": true,
+        "empty": false,
+        "path": "host-kernel/rocky/patches/0022-x86-pvh-annotate-noendbr.patch",
+        "sha256": "2f07f4030312ce1df38ed78615c94bfb99c7e084d27611de96d38bcf47237e48",
+        "size": 1834
       }
     ],
     "tree_comparison": "fresh locked archive plus every applied Rocky patch and the bound Rust target compatibility patch must byte-match the supplied out-of-tree build source"

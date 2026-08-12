@@ -38,12 +38,12 @@ SOURCE_LOCK_PATH = Path("host-kernel/rocky/source-lock.json")
 REVIEW_ID = "rk-003-rk-005-platform-repository-review-dd6-v1"
 RUNTIME_HEAD = "dd6d1954538ca1adbaf335a1dd058aba26c28840"
 OBSERVED_HEAD = "9ddbee3bb7fc93ee4514da73ac748ad4c820c068"
-PUBLISHED_BASE_HEAD = "5500ed831b69a31f30804b11338256c27c09e05a"
+PUBLISHED_BASE_HEAD = "d3c88f7576691a54e977940213a2eeab986bd83e"
 PUBLISHED_BASE_REVIEW = {
     "path": REVIEW_PATH.as_posix(),
-    "size": 11281,
-    "sha256": "da7617eed274547053f46143e1399b2d036db79780862ca75fab7efa0582fc43",
-    "git_blob_sha1": "9bafeb5bcaa67210cfe5919056bd939a1cf8c98c",
+    "size": 11451,
+    "sha256": "67071f85a65fee3b4e5a4400c065d183bfcb61a95e9cda8d460a217200847b8f",
+    "git_blob_sha1": "7ea285bbe6629c3b61a5ef63fa3bede5b9778a97",
 }
 REPOSITORY = "phoenix-hacking/mckernel"
 RUN_ID = 31563271344
@@ -57,7 +57,7 @@ ARTIFACT_SHA256 = (
     "a88e8a35c13dbd5b7a4e6524595d5cec31450f83c136b4cf64030e517d208eef"
 )
 EXPECTED_REVIEW_SHA256 = (
-    "67071f85a65fee3b4e5a4400c065d183bfcb61a95e9cda8d460a217200847b8f"
+    "f5099a914ca9204e62d53c43c4d7b837e9e72d5009bc30176f5c7b76a7a9bb88"
 )
 
 RELEASE_KEY_FINGERPRINT = "FC226859C0860BF0DDB95B085B106C736FEDFC85"
@@ -153,15 +153,15 @@ EXPECTED_INPUTS = [
 CURRENT_INPUT_OVERRIDES = [
     {
         "path": "host-kernel/rocky/source-lock.json",
-        "git_blob_sha1": "c0144f11488524ba5bb0f1f4b722883fbe89c162",
-        "sha256": "f3cf396479fbf4db7b5222eb78399e7ddd1f00f9db81fd0842303ad1a9e0102e",
-        "size": 17886,
+        "git_blob_sha1": "dfe57ba2e88f566c70a5a5b588db984b9de04b8d",
+        "sha256": "3b512e6fce7830df0323289ce602d60de0ee4167c6655e5ced9184b530785778",
+        "size": 18051,
     },
     {
         "path": "scripts/rocky_kernel_source_lock.py",
-        "git_blob_sha1": "3599cbf889ae30fe304d0286acddea985fc3e0a2",
-        "sha256": "e3336aaf238467055210065a6affbd92433a8dbc8d752856c97fe6c711b297ee",
-        "size": 59390,
+        "git_blob_sha1": "f05e55e275ba006e35b523e31efbbdd33ee77fae",
+        "sha256": "efffc81195e6f55eb0a6144a8ffe3c9da4402d102079cf49623e8e841beefd02",
+        "size": 59689,
     },
     {
         "path": "scripts/rocky_kernel_platform_evidence.py",
@@ -172,7 +172,8 @@ CURRENT_INPUT_OVERRIDES = [
 ]
 
 PUBLISHED_BASE_CHANGED_PATHS = [
-    "scripts/rocky_kernel_platform_evidence.py",
+    "host-kernel/rocky/source-lock.json",
+    "scripts/rocky_kernel_source_lock.py",
 ]
 
 EXPECTED_CURRENT_REPOSITORY_BINDING = {

@@ -31,13 +31,13 @@ extern "Rust" {
 #[cfg(MODULE)]
 #[doc(hidden)]
 #[link_section = ".modinfo"]
-#[used]
+#[used(compiler)]
 static MCCTRL_IHK_IMPORT_NAMESPACE: [u8; 26] = *b"import_ns=MCKERNEL_IHK_V1\0";
 
 #[cfg(not(MODULE))]
 #[doc(hidden)]
 #[link_section = ".modinfo"]
-#[used]
+#[used(compiler)]
 static MCCTRL_BUILTIN_IHK_IMPORT_NAMESPACE: [u8; 33] =
     *b"mcctrl.import_ns=MCKERNEL_IHK_V1\0";
 

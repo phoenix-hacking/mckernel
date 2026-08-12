@@ -9,6 +9,7 @@ import hashlib
 import io
 import json
 import os
+import re
 import subprocess
 import sys
 import tarfile
@@ -136,6 +137,111 @@ def write_source_archive(path, changes_target="process/changes.rst"):
         stream.addfile(copying)
 
 
+def local_patch_contract_row():
+    path = REPO_ROOT / resolution.LOCAL_COMPATIBILITY_PATCH
+    return {
+        "failure_evidence": dict(
+            resolution.LOCAL_COMPATIBILITY_FAILURE_EVIDENCE
+        ),
+        "license": resolution.LOCAL_COMPATIBILITY_LICENSE,
+        "local_origin": resolution.LOCAL_COMPATIBILITY_ORIGIN,
+        "path": resolution.LOCAL_COMPATIBILITY_PATCH,
+        "rocky_base": resolution.LOCAL_COMPATIBILITY_ROCKY_BASE,
+        "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+        "stable_commit": None,
+        "upstream_commit": None,
+    }
+
+
+class LocalPatchProvenanceTests(unittest.TestCase):
+    def setUp(self):
+        path = REPO_ROOT / resolution.LOCAL_COMPATIBILITY_PATCH
+        self.text = path.read_text(encoding="utf-8")
+        self.row = local_patch_contract_row()
+        self.index = len(resolution.EXPECTED_COMPATIBILITY_PATCHES) - 1
+
+    def validate(self, row=None, text=None):
+        resolution.validate_compatibility_patch_provenance(
+            self.row if row is None else row,
+            self.text if text is None else text,
+            self.index,
+        )
+
+    def test_local_origin_and_failure_evidence_are_accepted(self):
+        self.validate()
+
+    def test_local_patch_does_not_claim_an_upstream_or_stable_commit(self):
+        for field in ("upstream_commit", "stable_commit"):
+            with self.subTest(field=field):
+                row = copy.deepcopy(self.row)
+                row[field] = "1" * 40
+                with self.assertRaises(resolution.ConfigResolutionError):
+                    self.validate(row=row)
+        for header in ("Upstream-Commit", "Stable-Commit"):
+            with self.subTest(header=header):
+                text = self.text.replace(
+                    "Local-Origin:",
+                    "{}: {}\nLocal-Origin:".format(header, "1" * 40),
+                    1,
+                )
+                with self.assertRaisesRegex(
+                    resolution.ConfigResolutionError, "must not claim"
+                ):
+                    self.validate(text=text)
+
+    def test_every_local_provenance_header_is_required_exactly_once(self):
+        headers = (
+            "Local-Origin",
+            "Rocky-Base",
+            "Failure-Run",
+            "Failure-Job",
+            "Failure-Artifact",
+            "Failure-Commit",
+            "Failure-Phase",
+            "Failure-Exit-Code",
+            "Failure-Log-SHA256",
+            "Failure-Log-Bytes",
+            "License",
+        )
+        for header in headers:
+            with self.subTest(header=header):
+                missing = re.sub(
+                    r"(?m)^{}: .*\n".format(re.escape(header)),
+                    "",
+                    self.text,
+                    count=1,
+                )
+                with self.assertRaises(resolution.ConfigResolutionError):
+                    self.validate(text=missing)
+                matching = re.search(
+                    r"(?m)^{}: .*\n".format(re.escape(header)), self.text
+                )
+                self.assertIsNotNone(matching)
+                duplicate = self.text.replace(
+                    matching.group(0), matching.group(0) * 2, 1
+                )
+                with self.assertRaises(resolution.ConfigResolutionError):
+                    self.validate(text=duplicate)
+
+    def test_local_contract_metadata_is_exact(self):
+        for field in ("license", "local_origin", "path", "rocky_base"):
+            with self.subTest(field=field):
+                row = copy.deepcopy(self.row)
+                row[field] += "-drift"
+                with self.assertRaises(resolution.ConfigResolutionError):
+                    self.validate(row=row)
+
+    def test_local_contract_failure_evidence_is_exact(self):
+        for field in resolution.LOCAL_COMPATIBILITY_FAILURE_EVIDENCE:
+            with self.subTest(field=field):
+                row = copy.deepcopy(self.row)
+                row["failure_evidence"][field] = None
+                with self.assertRaisesRegex(
+                    resolution.ConfigResolutionError, "failure evidence changed"
+                ):
+                    self.validate(row=row)
+
+
 class RepositoryContractTests(unittest.TestCase):
     def test_source_cleanup_is_ordered_after_processed_configs_are_copied(self):
         contract = resolution.validate_contract(REPO_ROOT)
@@ -204,7 +310,7 @@ class RepositoryContractTests(unittest.TestCase):
             self.assertEqual(
                 hashlib.sha256(path.read_bytes()).hexdigest(), binding["sha256"]
             )
-        self.assertEqual(21, len(contract["patch_authority"]["rust_compatibility"]))
+        self.assertEqual(22, len(contract["patch_authority"]["rust_compatibility"]))
         self.assertEqual(
             [row["path"] for row in contract["patch_authority"]["rust_compatibility"]],
             resolution.EXPECTED_COMPATIBILITY_PATCHES,
@@ -226,9 +332,13 @@ class RepositoryContractTests(unittest.TestCase):
                     "no_config_symbol_changes"
                 ]
             ),
-            20,
+            21,
         )
-        objtool_patch = contract["patch_authority"]["rust_compatibility"][-1]
+        self.assertEqual(
+            contract["patch_authority"]["rust_compatibility"][-1],
+            local_patch_contract_row(),
+        )
+        objtool_patch = contract["patch_authority"]["rust_compatibility"][-2]
         self.assertEqual(
             objtool_patch["observed_failure"],
             resolution.EXPECTED_OBJTOOL_NORETURN_FAILURE,

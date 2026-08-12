@@ -71,7 +71,7 @@ macro_rules! numeric_parameter {
 
         #[doc(hidden)]
         #[link_section = "__param"]
-        #[used]
+        #[used(compiler)]
         static $descriptor: KernelParameter = KernelParameter {
             name: {
                 #[cfg(MODULE)]
@@ -180,13 +180,13 @@ macro_rules! modinfo_pair {
         #[cfg(MODULE)]
         #[doc(hidden)]
         #[link_section = ".modinfo"]
-        #[used]
+        #[used(compiler)]
         static $loadable_name: [u8; $loadable.len()] = *$loadable;
 
         #[cfg(not(MODULE))]
         #[doc(hidden)]
         #[link_section = ".modinfo"]
-        #[used]
+        #[used(compiler)]
         static $builtin_name: [u8; $builtin.len()] = *$builtin;
     };
 }

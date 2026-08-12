@@ -23,7 +23,7 @@ TOOLCHAIN_LOCK_PATH = Path("host-kernel/rocky/toolchain-lock.json")
 CONFIG_POLICY_PATH = Path("host-kernel/rocky/config-policy.json")
 CONFIG_FRAGMENT_PATH = Path("host-kernel/rocky/configs/rust-minimal.config")
 EXPECTED_CONTRACT_SHA256 = (
-    "4bff9fbae437e42d7870e5af1188b675acb0c520f039fc97e15732a9acd03d18"
+    "12749815ff0d49e6b72583d879867e49705797ed7258422554fab8a1b37dafb5"
 )
 EXPECTED_WORKFLOW_SHA256 = (
     "d388610f13701e0166656d019ac0cd48c456c33a3d616ebb5df9bc3ad7e36ece"
@@ -65,6 +65,7 @@ EXPECTED_COMPATIBILITY_PATCHES = [
     "host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch",
     "host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch",
     "host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch",
+    "host-kernel/rocky/patches/0022-x86-pvh-annotate-noendbr.patch",
 ]
 EXPECTED_OBJTOOL_NORETURN_FAILURE = {
     "artifact_id": 9160078637,
@@ -89,6 +90,27 @@ EXPECTED_OBJTOOL_NORETURN_POSTIMAGE = {
     "path": "tools/objtool/check.c",
     "sha256": "2c8d113bcbf65bc0de8ad360f70bc707a0379baa925da01cebf0e95f23ce28e7",
     "size": 116993,
+}
+LOCAL_COMPATIBILITY_PATCH = EXPECTED_COMPATIBILITY_PATCHES[-1]
+LOCAL_COMPATIBILITY_ORIGIN = "McKernel Rocky 10.2 exact-build compatibility"
+LOCAL_COMPATIBILITY_ROCKY_BASE = "linux-6.12.0-211.44.1.el10_2"
+LOCAL_COMPATIBILITY_LICENSE = "GPL-2.0-only"
+LOCAL_COMPATIBILITY_FAILURE_EVIDENCE = {
+    "artifact_id": 9145918955,
+    "build_exit_code": 2,
+    "build_log_bytes": 232963,
+    "build_log_sha256": (
+        "614f179c466c2721817fbc9b44c1dbaa9e45f4d638ed489e2b31c2c5beb69f6f"
+    ),
+    "build_phase": "bzImage",
+    "diagnostic": (
+        "pvh_start_xen+0x64: relocation to !ENDBR: pvh_start_xen+0x0"
+    ),
+    "failure_boundary": "LD vmlinux.o",
+    "job_id": 94144112731,
+    "repository_commit": "80a07871b81aa3d05378eb07b3d4cd9d8b922ef0",
+    "run_id": 31605746750,
+    "workflow": "Native Rust host modules exact Rocky build",
 }
 CAPTURE_ENVIRONMENT = {
     "ARCH": "x86_64",
@@ -240,6 +262,184 @@ def validate_binding(repo, binding, label):
     value, _ = read_json(path, label)
     require_exact(value.get("lock_id"), binding["id"], label + " ID")
     return value
+
+
+def require_patch_header(text, name, expected, label):
+    values = re.findall(
+        r"(?m)^{}: (.*)$".format(re.escape(name)),
+        text,
+    )
+    require_exact(values, [str(expected)], label)
+
+
+def validate_compatibility_patch_provenance(row, text, index):
+    label = "compatibility patch {}".format(index)
+    if index == len(EXPECTED_COMPATIBILITY_PATCHES) - 2:
+        exact_keys(
+            row,
+            {
+                "observed_failure",
+                "path",
+                "postimage",
+                "preimage",
+                "sha256",
+            },
+            label,
+        )
+        require_exact(
+            row["observed_failure"],
+            EXPECTED_OBJTOOL_NORETURN_FAILURE,
+            "observed Objtool failure",
+        )
+        require_exact(row["preimage"], EXPECTED_OBJTOOL_NORETURN_PREIMAGE, "Objtool preimage")
+        require_exact(row["postimage"], EXPECTED_OBJTOOL_NORETURN_POSTIMAGE, "Objtool postimage")
+        for field, expected in (
+            ("Observed-Repository-Commit", "9438ad175b4c1ac7855f6afc119f154639fe18c2"),
+            ("Observed-Run-ID", "31644047766"),
+            ("Observed-Job-ID", "94273299611"),
+            ("Observed-Artifact-ID", "9160078637"),
+            ("Observed-Rustc", "1.92.0"),
+        ):
+            require_exact(
+                text.count("{}: {}".format(field, expected)),
+                1,
+                "observed Objtool patch metadata",
+            )
+        for forbidden in ("Local-Origin:", "Upstream-Commit:", "Stable-Commit:"):
+            if forbidden in text:
+                raise ConfigResolutionError(
+                    "observed Objtool patch invents provenance"
+                )
+        return
+    if index == len(EXPECTED_COMPATIBILITY_PATCHES) - 1:
+        exact_keys(
+            row,
+            {
+                "failure_evidence",
+                "license",
+                "local_origin",
+                "path",
+                "rocky_base",
+                "sha256",
+                "stable_commit",
+                "upstream_commit",
+            },
+            label,
+        )
+        require_exact(row["path"], LOCAL_COMPATIBILITY_PATCH, "local patch path")
+        require_exact(row["upstream_commit"], None, "local upstream commit")
+        require_exact(row["stable_commit"], None, "local stable commit")
+        require_exact(
+            row["local_origin"],
+            LOCAL_COMPATIBILITY_ORIGIN,
+            "local compatibility origin",
+        )
+        require_exact(
+            row["rocky_base"],
+            LOCAL_COMPATIBILITY_ROCKY_BASE,
+            "local compatibility Rocky base",
+        )
+        require_exact(
+            row["license"],
+            LOCAL_COMPATIBILITY_LICENSE,
+            "local compatibility license",
+        )
+        failure = exact_keys(
+            row["failure_evidence"],
+            set(LOCAL_COMPATIBILITY_FAILURE_EVIDENCE),
+            "local compatibility failure evidence",
+        )
+        require_exact(
+            failure,
+            LOCAL_COMPATIBILITY_FAILURE_EVIDENCE,
+            "local compatibility failure evidence",
+        )
+        for forbidden in ("Upstream-Commit", "Stable-Commit"):
+            if re.search(r"(?m)^{}: ".format(re.escape(forbidden)), text):
+                raise ConfigResolutionError(
+                    "local compatibility patch must not claim {}".format(forbidden)
+                )
+        mail_commits = re.findall(
+            r"\AFrom ([0-9a-f]{40}) Mon Sep 17 00:00:00 2001$",
+            text,
+            re.MULTILINE,
+        )
+        require_exact(
+            mail_commits,
+            ["0" * 40],
+            "local compatibility patch mail identity",
+        )
+        require_patch_header(
+            text,
+            "Local-Origin",
+            LOCAL_COMPATIBILITY_ORIGIN,
+            "local compatibility origin header",
+        )
+        require_patch_header(
+            text,
+            "Rocky-Base",
+            row["rocky_base"],
+            "local compatibility Rocky base header",
+        )
+        failure_headers = {
+            "Failure-Artifact": failure["artifact_id"],
+            "Failure-Commit": failure["repository_commit"],
+            "Failure-Exit-Code": failure["build_exit_code"],
+            "Failure-Job": failure["job_id"],
+            "Failure-Log-Bytes": failure["build_log_bytes"],
+            "Failure-Log-SHA256": failure["build_log_sha256"],
+            "Failure-Phase": failure["build_phase"],
+            "Failure-Run": failure["run_id"],
+        }
+        for name, value in failure_headers.items():
+            require_patch_header(
+                text,
+                name,
+                value,
+                "local compatibility {} header".format(name),
+            )
+        require_patch_header(
+            text,
+            "License",
+            row["license"],
+            "local compatibility license header",
+        )
+        return
+
+    if re.search(r"(?m)^Local-Origin: ", text):
+        raise ConfigResolutionError(
+            "upstream compatibility patch must not claim local origin"
+        )
+    expected_fields = {"path", "sha256"}
+    identity_count = 0
+    for field, prefix in (
+        ("upstream_commit", "Upstream-Commit: "),
+        ("stable_commit", "Stable-Commit: "),
+    ):
+        identities = re.findall(
+            r"(?m)^{}([0-9a-f]{{40}})$".format(re.escape(prefix)), text
+        )
+        if identities:
+            if len(identities) != 1:
+                raise ConfigResolutionError(
+                    "compatibility patch identity is ambiguous"
+                )
+            expected_fields.add(field)
+            identity_count += 1
+            require_exact(row.get(field), identities[0], field)
+    if identity_count == 0:
+        mail_commits = re.findall(
+            r"\AFrom ([0-9a-f]{40}) Mon Sep 17 00:00:00 2001$",
+            text,
+            re.MULTILINE,
+        )
+        if len(mail_commits) != 1:
+            raise ConfigResolutionError(
+                "compatibility patch has no unique commit identity"
+            )
+        expected_fields.add("upstream_commit")
+        require_exact(row.get("upstream_commit"), mail_commits[0], "upstream_commit")
+    exact_keys(row, expected_fields, label)
 
 
 def validate_contract(repo):
@@ -427,8 +627,14 @@ def validate_contract(repo):
     _, series_digest = sha256_file(series_path)
     require_exact(series_digest, rocky_series["sha256"], "Rocky series digest")
     patches = patch_authority["rust_compatibility"]
-    if not isinstance(patches, list) or len(patches) != 21:
-        raise ConfigResolutionError("exactly twenty-one compatibility patches are required")
+    if not isinstance(patches, list) or len(patches) != len(
+        EXPECTED_COMPATIBILITY_PATCHES
+    ):
+        raise ConfigResolutionError(
+            "exactly {} compatibility patches are required".format(
+                len(EXPECTED_COMPATIBILITY_PATCHES)
+            )
+        )
     patch_directory = repo / "host-kernel/rocky/patches"
     discovered_patches = sorted(
         path.relative_to(repo).as_posix()
@@ -457,69 +663,7 @@ def validate_contract(repo):
         _, digest = sha256_file(patch)
         require_exact(digest, row["sha256"], "compatibility patch digest")
         text = patch.read_text(encoding="utf-8")
-        expected_fields = {"path", "sha256"}
-        identity_count = 0
-        for field, prefix in (
-            ("upstream_commit", "Upstream-Commit: "),
-            ("stable_commit", "Stable-Commit: "),
-        ):
-            identities = re.findall(
-                r"(?m)^{}([0-9a-f]{{40}})$".format(re.escape(prefix)), text
-            )
-            if identities:
-                if len(identities) != 1:
-                    raise ConfigResolutionError(
-                        "compatibility patch identity is ambiguous"
-                    )
-                expected_fields.add(field)
-                identity_count += 1
-                require_exact(row.get(field), identities[0], field)
-        if identity_count == 0 and index == 20:
-            expected_fields.update(
-                {"observed_failure", "postimage", "preimage"}
-            )
-            require_exact(
-                row.get("observed_failure"),
-                EXPECTED_OBJTOOL_NORETURN_FAILURE,
-                "observed Objtool failure",
-            )
-            require_exact(
-                row.get("preimage"),
-                EXPECTED_OBJTOOL_NORETURN_PREIMAGE,
-                "Objtool preimage",
-            )
-            require_exact(
-                row.get("postimage"),
-                EXPECTED_OBJTOOL_NORETURN_POSTIMAGE,
-                "Objtool postimage",
-            )
-            for field, expected in (
-                ("Observed-Repository-Commit", "9438ad175b4c1ac7855f6afc119f154639fe18c2"),
-                ("Observed-Run-ID", "31644047766"),
-                ("Observed-Job-ID", "94273299611"),
-                ("Observed-Artifact-ID", "9160078637"),
-                ("Observed-Rustc", "1.92.0"),
-            ):
-                require_exact(
-                    text.count("{}: {}".format(field, expected)),
-                    1,
-                    "observed Objtool patch metadata",
-                )
-            if "Upstream-Commit:" in text or "Stable-Commit:" in text:
-                raise ConfigResolutionError(
-                    "observed Objtool patch invents upstream provenance"
-                )
-        elif identity_count == 0:
-            mail_commits = re.findall(
-                r"\AFrom ([0-9a-f]{40}) Mon Sep 17 00:00:00 2001$",
-                text,
-                re.MULTILINE,
-            )
-            if len(mail_commits) != 1:
-                raise ConfigResolutionError("compatibility patch has no unique commit identity")
-            expected_fields.add("upstream_commit")
-            require_exact(row.get("upstream_commit"), mail_commits[0], "upstream_commit")
-        exact_keys(row, expected_fields, "compatibility patch {}".format(index))
+        validate_compatibility_patch_provenance(row, text, index)
         changed_paths = re.findall(
             r"(?m)^diff --git a/(\S+) b/(\S+)$", text
         )
@@ -661,7 +805,7 @@ def validate_contract(repo):
     ) < 0:
         raise ConfigResolutionError("policy reconciliation blocker is missing")
     if not any(
-        "0006 through 0020" in item and "compile probes" in item
+        "0006 through 0022" in item and "compile probes" in item
         for item in contract["success_blockers"]
     ):
         raise ConfigResolutionError("compatibility compile-scope blocker is missing")

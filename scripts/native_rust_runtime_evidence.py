@@ -135,12 +135,12 @@ def _validate_exact_build_workflow(text: str) -> None:
             'O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 rustavailable'
         ),
         (
-            'run_phase native-modules make -C "$NATIVE_SOURCE_ROOT" '
-            'O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 -j2 "${module_targets[@]}"'
-        ),
-        (
             'run_phase bzImage make -C "$NATIVE_SOURCE_ROOT" '
             'O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 -j2 bzImage'
+        ),
+        (
+            'run_phase native-modules make -C "$NATIVE_SOURCE_ROOT" '
+            'O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 -j2 "${module_targets[@]}"'
         ),
     ]
     positions: list[int] = []
@@ -708,8 +708,8 @@ def _validate_build_scope_artifacts(
     prefix = ["make", "-C", sources[0], "O=" + outputs[0], "ARCH=x86_64", "LLVM=1"]
     expected_commands = [
         prefix + ["rustavailable"],
-        prefix + ["-j2"] + BUILD_MODULE_TARGETS,
         prefix + ["-j2", "bzImage"],
+        prefix + ["-j2"] + BUILD_MODULE_TARGETS,
     ]
     if commands != expected_commands:
         raise EvidenceError("exact build commands exceed the bounded target scope")

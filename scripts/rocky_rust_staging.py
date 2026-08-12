@@ -109,7 +109,7 @@ EXPECTED_INPUTS = (
 )
 EXPECTED_PARENT_INTEGRATION_REF = {
     "repository_path": "host-kernel/kbuild/parent-integration-v1.json",
-    "sha256": "82be155bc77c7d709142f92e3d4bfa418c757d9883c372a28dbed1118e4bf548",
+    "sha256": "e3ebe413a98463cf1da37d39b458405db909cfac18fb422a2ce77d294b238d0f",
 }
 EXPECTED_PARENT_SOURCE = {
     "archive_basename": "linux-6.12.0-211.44.1.el10_2.tar.xz",
@@ -117,7 +117,7 @@ EXPECTED_PARENT_SOURCE = {
     "archive_root": "linux-6.12.0-211.44.1.el10_2",
     "source_lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-source-v1",
     "source_lock_repository_path": "host-kernel/rocky/source-lock.json",
-    "source_lock_sha256": "f3cf396479fbf4db7b5222eb78399e7ddd1f00f9db81fd0842303ad1a9e0102e",
+    "source_lock_sha256": "3b512e6fce7830df0323289ce602d60de0ee4167c6655e5ced9184b530785778",
     "source_rpm_sha256": "2bfeda65bd9bdd4b86650074c81e061c37822b80317ac0d4f5aacc89c85589cb",
 }
 EXPECTED_PARENT_PATCH = {
@@ -175,7 +175,7 @@ EXPECTED_MODULES = (
         "required_import_namespaces": [],
         "source_destination": "ihk.rs",
         "source_repository_path": "host-kernel/native-rust/ihk.rs",
-        "source_sha256": "4aa64fb0cf2c8b1342409d731d5494fa845f5f157d12576abc53c2a9c70e7043",
+        "source_sha256": "53e2b003573804df8d11f34a8290108ac5a0fc15bb559f2f980c38a3316b4a55",
     },
     {
         "crate": "ihk_smp_x86_64",
@@ -187,7 +187,7 @@ EXPECTED_MODULES = (
         "required_import_namespaces": ["MCKERNEL_IHK_V1"],
         "source_destination": "ihk_smp_x86_64.rs",
         "source_repository_path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
-        "source_sha256": "85156ded690ec9f6d74ab5dc1103b85f2e1c3eb8ba315b516ca2b83029940f80",
+        "source_sha256": "f5beb6dae65e486772af5198aa60f77d4e1b86d37b5ee8ae50eb4b34f9b0d74f",
     },
     {
         "crate": "mcctrl",
@@ -199,7 +199,7 @@ EXPECTED_MODULES = (
         "required_import_namespaces": ["MCKERNEL_IHK_V1"],
         "source_destination": "mcctrl.rs",
         "source_repository_path": "host-kernel/native-rust/mcctrl.rs",
-        "source_sha256": "3b996deb4a3eb26f93e45a243d2f7dc075344cee95ff583eeaf20d602ab63e31",
+        "source_sha256": "1a8b85c379d6976d90ba462b9386d1bbd7fce83ca152e46bce391e6cfa6b5389",
     },
 )
 EXPECTED_TOP_LEVEL_KEYS = {

@@ -333,8 +333,8 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         values = {
             "build.commands": (
                 f"{prefix} rustavailable\n"
-                f"{prefix} -j2 {' '.join(evidence.BUILD_MODULE_TARGETS)}\n"
                 f"{prefix} -j2 bzImage\n"
+                f"{prefix} -j2 {' '.join(evidence.BUILD_MODULE_TARGETS)}\n"
             ),
             "build.exit-code": "0\n",
             "build.log": "Rust is available!\n",
@@ -398,6 +398,16 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             "-j2 " + " ".join(evidence.BUILD_MODULE_TARGETS), "-j2 modules", 1
         )
         commands.write_text(text, encoding="utf-8")
+        records[commands.name] = hashlib.sha256(commands.read_bytes()).hexdigest()
+        with self.assertRaisesRegex(evidence.EvidenceError, "bounded target scope"):
+            evidence._validate_build_scope_artifacts(directory, records)
+
+    def test_module_command_before_kernel_artifact_is_rejected(self) -> None:
+        directory, records = self.write_build_scope_artifacts()
+        commands = directory / "build.commands"
+        lines = commands.read_text(encoding="utf-8").splitlines()
+        lines[1], lines[2] = lines[2], lines[1]
+        commands.write_text("\n".join(lines) + "\n", encoding="utf-8")
         records[commands.name] = hashlib.sha256(commands.read_bytes()).hexdigest()
         with self.assertRaisesRegex(evidence.EvidenceError, "bounded target scope"):
             evidence._validate_build_scope_artifacts(directory, records)

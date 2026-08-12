@@ -53,6 +53,8 @@ PATCHES = (
     / "host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch",
     REPO_ROOT
     / "host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch",
+    REPO_ROOT
+    / "host-kernel/rocky/patches/0022-x86-pvh-annotate-noendbr.patch",
 )
 PROJECT_PATCHES = (
     REPO_ROOT
@@ -96,7 +98,7 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
     def test_every_patch_rejects_second_application(self):
         from scripts import linux_api_exact_probe as probe
 
-        self.assertEqual(21, len(PATCHES))
+        self.assertEqual(22, len(PATCHES))
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory) / "linux"
             shutil.copytree(str(CORE_PREIMAGE), str(root))
@@ -108,6 +110,29 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
             for patch in PATCHES:
                 with self.assertRaises(probe.ProbeError):
                     probe.run_checked(command + [str(patch)], root)
+
+    def test_patch_prefixes_are_unique_and_sequential(self):
+        self.assertEqual(
+            ["{0:04d}".format(index) for index in range(1, len(PATCHES) + 1)],
+            [patch.name.split("-", 1)[0] for patch in PATCHES],
+        )
+
+    def test_project_retention_attributes_use_rust_1_89_semantics(self):
+        expected_counts = {
+            "ihk.rs": 3,
+            "ihk_smp_x86_64.rs": 3,
+            "mcctrl.rs": 2,
+        }
+        actual_total = 0
+        for name, expected in expected_counts.items():
+            source = (
+                REPO_ROOT / "host-kernel/native-rust" / name
+            ).read_text(encoding="utf-8")
+            with self.subTest(source=name):
+                self.assertEqual(expected, source.count("#[used(compiler)]"))
+                self.assertEqual(0, source.count("#[used]"))
+            actual_total += source.count("#[used(compiler)]")
+        self.assertEqual(8, actual_total)
 
     def test_full_compatibility_then_project_series_preserves_bindings(self):
         from scripts import linux_api_exact_probe as probe
@@ -213,6 +238,8 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
             self.assertEqual(digest, probe.sha256_file(CORE_PREIMAGE / relative))
         for relative, digest in probe.RUST_OBJTOOL_NORETURN_PREIMAGE_SHA256S:
             self.assertEqual(digest, probe.sha256_file(CORE_PREIMAGE / relative))
+        for relative, digest in probe.PVH_OBJTOOL_COMPAT_PREIMAGE_SHA256S:
+            self.assertEqual(digest, probe.sha256_file(CORE_PREIMAGE / relative))
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory) / "linux"
             shutil.copytree(str(CORE_PREIMAGE), str(root))
@@ -241,6 +268,8 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
             for relative, digest in probe.RUST_MISCDEVICE_POSTIMAGE_SHA256S:
                 self.assertEqual(digest, probe.sha256_file(root / relative))
             for relative, digest in probe.RUST_OBJTOOL_NORETURN_POSTIMAGE_SHA256S:
+                self.assertEqual(digest, probe.sha256_file(root / relative))
+            for relative, digest in probe.PVH_OBJTOOL_COMPAT_POSTIMAGE_SHA256S:
                 self.assertEqual(digest, probe.sha256_file(root / relative))
             ksm = (root / "mm/ksm.c").read_text(encoding="utf-8")
             advisor_show = ksm.split(
