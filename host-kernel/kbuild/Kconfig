@@ -1,0 +1,27 @@
+# SPDX-License-Identifier: GPL-2.0
+
+menu "McKernel native Rust host modules"
+	depends on RUST
+	depends on X86_64
+
+config MCKERNEL_IHK_RUST
+	tristate "McKernel IHK core host module (Rust)"
+	help
+	  Build the native Rust-for-Linux IHK provider module.  This module
+	  contains no project-owned C implementation objects.
+
+config MCKERNEL_IHK_SMP_X86_64_RUST
+	tristate "McKernel IHK x86_64 SMP host module (Rust)"
+	depends on MCKERNEL_IHK_RUST
+	help
+	  Build the native Rust-for-Linux x86_64 SMP consumer module.  The
+	  module consumes the versioned IHK provider namespace.
+
+config MCKERNEL_MCCTRL_RUST
+	tristate "McKernel control host module (Rust)"
+	depends on MCKERNEL_IHK_RUST
+	help
+	  Build the native Rust-for-Linux McKernel control consumer module.
+	  The module consumes the versioned IHK provider namespace.
+
+endmenu

@@ -1,0 +1,127 @@
+{
+  "build_contract": {
+    "allowed_project_source_suffixes": [
+      ".rs"
+    ],
+    "build_system": "Linux in-tree Kbuild with Rust-for-Linux",
+    "compiler_invocation_owner": "Linux Kbuild",
+    "forbidden_project_input_suffixes": [
+      ".a",
+      ".c",
+      ".cc",
+      ".cpp",
+      ".o",
+      ".so"
+    ],
+    "manual_rustc_invocation_forbidden": true,
+    "prebuilt_project_objects_forbidden": true,
+    "project_c_link_objects": 0
+  },
+  "destination": {
+    "kernel_relative_root": "drivers/misc/mckernel",
+    "parent_kbuild_integration": "drivers/misc/Makefile",
+    "parent_kconfig_integration": "drivers/misc/Kconfig"
+  },
+  "inputs": [
+    {
+      "destination": "Kbuild",
+      "kind": "kbuild_template",
+      "repository_path": "host-kernel/kbuild/Kbuild.in",
+      "sha256": "f33c826539ed0807617337ba64a1cb646daf510cc06a44b47243d14e366d67a3"
+    },
+    {
+      "destination": "Kconfig",
+      "kind": "kconfig",
+      "repository_path": "host-kernel/kbuild/Kconfig",
+      "sha256": "69f14cc7d347d6da3d6cbe0199e35fab72e40f6af3683df1c337efd449721296"
+    }
+  ],
+  "modules": [
+    {
+      "blockers": [
+        "schema-v1 checkpoint has no evidence-bound native Rust crate root"
+      ],
+      "crate": "ihk",
+      "dependencies": [],
+      "kconfig_symbol": "CONFIG_MCKERNEL_IHK_RUST",
+      "normalized_name": "ihk",
+      "output": "ihk.ko",
+      "production_namespace": "MCKERNEL_IHK_V1",
+      "required_import_namespaces": [],
+      "source": {
+        "destination": "ihk.rs",
+        "repository_path": null,
+        "sha256": null
+      }
+    },
+    {
+      "blockers": [
+        "schema-v1 checkpoint has no evidence-bound native Rust crate root"
+      ],
+      "crate": "ihk_smp_x86_64",
+      "dependencies": [
+        "ihk"
+      ],
+      "kconfig_symbol": "CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST",
+      "normalized_name": "ihk_smp_x86_64",
+      "output": "ihk-smp-x86_64.ko",
+      "production_namespace": null,
+      "required_import_namespaces": [
+        "MCKERNEL_IHK_V1"
+      ],
+      "source": {
+        "destination": "ihk_smp_x86_64.rs",
+        "repository_path": null,
+        "sha256": null
+      }
+    },
+    {
+      "blockers": [
+        "schema-v1 checkpoint has no evidence-bound native Rust crate root"
+      ],
+      "crate": "mcctrl",
+      "dependencies": [
+        "ihk"
+      ],
+      "kconfig_symbol": "CONFIG_MCKERNEL_MCCTRL_RUST",
+      "normalized_name": "mcctrl",
+      "output": "mcctrl.ko",
+      "production_namespace": null,
+      "required_import_namespaces": [
+        "MCKERNEL_IHK_V1"
+      ],
+      "source": {
+        "destination": "mcctrl.rs",
+        "repository_path": null,
+        "sha256": null
+      }
+    }
+  ],
+  "profile_id": "rocky-10.2-native-rust-host-modules-v1",
+  "readiness": {
+    "checkpoint": "integrity_only",
+    "credit_eligible": false,
+    "blockers": [
+      "selected Rocky kernel source, toolchain, and config evidence is not gate-ready",
+      "parent Kconfig and Makefile integration patch with preimage and postimage hashes is not locked",
+      "upstream Rust-for-Linux sample has not built through this staging path",
+      "native crate roots for ihk, ihk-smp-x86_64, and mcctrl are not implemented",
+      "production namespace and import metadata has not been proven from built modules",
+      "zero-project-C final link manifests have not been captured"
+    ]
+  },
+  "schema_version": 1,
+  "target": {
+    "architecture": "x86_64",
+    "config_policy_lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-config-policy-v1",
+    "distribution": "Rocky Linux",
+    "kernel_nvr_base": "kernel-6.12.0-211.44.1.el10_2",
+    "release": "10.2",
+    "resolved_config_sha256": null,
+    "resolved_kernel_nvr": null,
+    "resolved_toolchain_manifest_sha256": null,
+    "source_lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-source-v1",
+    "source_rpm_sha256": "2bfeda65bd9bdd4b86650074c81e061c37822b80317ac0d4f5aacc89c85589cb",
+    "toolchain_lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-toolchain-v1"
+  }
+}
