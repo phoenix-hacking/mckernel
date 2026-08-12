@@ -219,6 +219,40 @@ jobs:
               > host-module-failure-flows.json.sha256
           )
 
+      - name: Capture host-module failure-contract gaps
+        run: |
+          set -euo pipefail
+          gap_path="$BUILD_DIR/host-module-failure-contract-gaps.json"
+          runuser -u validator -- env \
+            HOME=/home/validator \
+            RUSTUP_HOME=/home/validator/.rustup \
+            CARGO_HOME=/home/validator/.cargo \
+            PATH=/home/validator/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+            GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
+            BUILD_DIR="$BUILD_DIR" \
+            MCKERNEL_CI_KERNEL_DIR="$MCKERNEL_CI_KERNEL_DIR" \
+            bash -c '
+              set -euo pipefail
+              cd "$GITHUB_WORKSPACE"
+              MCKERNEL_REAL_FLOW_EVIDENCE_DIR="$BUILD_DIR" \
+                python3 -m unittest -v \
+                  scripts.tests.test_host_module_failure_contract_gaps
+              python3 scripts/host_module_failure_contract_gaps.py \
+                --repo "$GITHUB_WORKSPACE" \
+                --build-dir "$BUILD_DIR" \
+                --kernel-dir "$MCKERNEL_CI_KERNEL_DIR" \
+                --failure-sites "$BUILD_DIR/host-module-failure-sites.json" \
+                --failure-flows "$BUILD_DIR/host-module-failure-flows.json" \
+                --output "$BUILD_DIR/host-module-failure-contract-gaps.json"
+            ' 2>&1 | tee evidence/host-module-failure-contract-gaps.log
+          install -m 0644 \
+            "$gap_path" evidence/host-module-failure-contract-gaps.json
+          (
+            cd evidence
+            sha256sum host-module-failure-contract-gaps.json \
+              > host-module-failure-contract-gaps.json.sha256
+          )
+
       - name: Collect build evidence
         if: ${{ always() }}
         run: |
