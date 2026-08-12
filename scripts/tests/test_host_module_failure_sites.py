@@ -153,10 +153,15 @@ class SiteScannerTests(unittest.TestCase):
             (8, "/* outer -EPERM /* inner -ENOSYS */ done */\n"),
             (9, "let byte = b'-'; let result = -EINVAL;\n"),
             (10, 'let string = "-EFAULT";\n'),
+            (11, "return -(ENOSPC as c_long);\n"),
+            (12, "if result == -(EINTR as c_long) { retry(); }\n"),
         ]
         digest = capture.rows_digest(rows)
         sites = capture.scan_rows("mcctrl", "rust", "helper.rs", "a" * 64, digest, rows)
-        self.assertEqual([(site["errno"], site["line"]) for site in sites], [("EINVAL", 9)])
+        self.assertEqual(
+            [(site["errno"], site["line"]) for site in sites],
+            [("EINVAL", 9), ("ENOSPC", 11), ("EINTR", 12)],
+        )
 
     def test_site_id_is_stable_and_bound_to_source_hash(self):
         rows = [(100, "return -EINVAL;\n")]

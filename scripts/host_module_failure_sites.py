@@ -31,7 +31,9 @@ from pathlib import Path
 
 SCHEMA_VERSION = 1
 PROFILE = "compiler-backed-active-host-module-failure-sites-v1"
-ERRNO_PATTERN = re.compile(r"(?<![A-Za-z0-9_])-\s*(E[A-Z][A-Z0-9_]*)\b")
+ERRNO_PATTERN = re.compile(
+    r"(?<![A-Za-z0-9_])-\s*(?:\(\s*)*(E[A-Z][A-Z0-9_]*)\b"
+)
 LINE_MARKER_PATTERN = re.compile(
     r'^\s*#\s*(?:line\s+)?(?P<line>[0-9]+)\s+"(?P<file>(?:\\.|[^"\\])*)"'
     r"(?:\s+[0-9]+)*\s*$"
