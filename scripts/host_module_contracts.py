@@ -7,8 +7,6 @@ every frozen externally visible legacy surface and discovered errno token to
 one native Rust replacement and at least one acceptance-test identifier.
 """
 
-from __future__ import annotations
-
 import argparse
 import difflib
 import hashlib
@@ -17,7 +15,7 @@ import re
 import sys
 from collections import Counter, defaultdict
 from pathlib import Path
-from typing import Any, Iterable, Sequence
+from typing import Any, Dict, Iterable, List, Optional, Sequence, Set, Tuple
 
 import host_module_failure_sites as failure_site_tool
 import host_module_inventory as inventory_tool
@@ -136,7 +134,7 @@ def slug(value: str, limit: int = 44) -> str:
     return (normalized or "VALUE")[:limit]
 
 
-def read_json(path: Path) -> dict[str, Any]:
+def read_json(path: Path) -> Dict[str, Any]:
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
@@ -146,7 +144,7 @@ def read_json(path: Path) -> dict[str, Any]:
     return value
 
 
-def validate_policy(policy: dict[str, Any]) -> None:
+def validate_policy(policy: Dict[str, Any]) -> None:
     if policy.get("schema_version") != 1:
         raise ContractError("policy schema_version must be 1")
     if policy.get("policy_id") != "native-rust-host-modules-v1":
@@ -176,7 +174,7 @@ def validate_policy(policy: dict[str, Any]) -> None:
     modules = scope.get("included_modules")
     if not isinstance(modules, list):
         raise ContractError("included_modules must be a list")
-    actual: dict[str, dict[str, Any]] = {}
+    actual: Dict[str, Dict[str, Any]] = {}
     for entry in modules:
         if not isinstance(entry, dict) or not isinstance(entry.get("crate"), str):
             raise ContractError("every included module needs a crate")
@@ -347,12 +345,12 @@ def validate_policy(policy: dict[str, Any]) -> None:
 
 def apply_unified_diff_to_text(
     text: str, patch_text: str, source_path: str
-) -> tuple[str, bool]:
+) -> Tuple[str, bool]:
     """Apply one file's unified diff while preserving deterministic provenance."""
 
-    relative = source_path.removeprefix("ihk/")
+    relative = source_path[len("ihk/") :] if source_path.startswith("ihk/") else source_path
     lines = patch_text.splitlines(keepends=True)
-    start: int | None = None
+    start: Optional[int] = None
     end = len(lines)
     for index, line in enumerate(lines):
         match = re.match(r"^diff --git a/(\S+) b/(\S+)\s*$", line)
@@ -367,7 +365,7 @@ def apply_unified_diff_to_text(
         return text, False
 
     original = text.splitlines(keepends=True)
-    output: list[str] = []
+    output: List[str] = []
     cursor = 0
     index = start
     while index < end:
@@ -420,7 +418,7 @@ def apply_unified_diff_to_text(
 
 def effective_source_text(
     repo: Path, path: str, language: str = "c"
-) -> tuple[str, dict[str, Any]]:
+) -> Tuple[str, Dict[str, Any]]:
     base = inventory_tool.source_blob(repo, path).decode("utf-8", errors="replace")
     patch = inventory_tool.source_blob(repo, PATCH_PATH)
     if language == "c":
@@ -431,8 +429,8 @@ def effective_source_text(
             inventory_tool.strip_c_comments(effective), inventory_tool.CPP_DEFINES
         )
         filter_mode = "compatibility overlay plus conservative named-guard CPP"
-        cpp_defines: list[str] = sorted(inventory_tool.CPP_DEFINES)
-        unknown_policy: str | None = "retain both branches conservatively"
+        cpp_defines: List[str] = sorted(inventory_tool.CPP_DEFINES)
+        unknown_policy: Optional[str] = "retain both branches conservatively"
     elif language == "rust":
         effective, applied = base, False
         filtered = inventory_tool.strip_c_comments(effective)
@@ -454,11 +452,13 @@ def effective_source_text(
     }
 
 
-def source_errno_surface(repo: Path, legacy: dict[str, Any]) -> dict[str, list[dict[str, Any]]]:
-    result: dict[str, list[dict[str, Any]]] = {}
+def source_errno_surface(
+    repo: Path, legacy: Dict[str, Any]
+) -> Dict[str, List[Dict[str, Any]]]:
+    result: Dict[str, List[Dict[str, Any]]] = {}
     source_modules = legacy["source_capture"]["modules"]
     for module in EXPECTED_MODULES:
-        occurrences: list[dict[str, Any]] = []
+        occurrences: List[Dict[str, Any]] = []
         for entry in source_modules[module]["active_inputs"]:
             path = str(entry["source"])
             language = str(entry.get("language"))
@@ -514,7 +514,7 @@ def source_errno_surface(repo: Path, legacy: dict[str, Any]) -> dict[str, list[d
     return result
 
 
-def failure_site_key(entry: dict[str, Any]) -> tuple[str, str, int, int, str]:
+def failure_site_key(entry: Dict[str, Any]) -> Tuple[str, str, int, int, str]:
     """Return the cross-oracle identity shared with compiler-backed capture."""
 
     try:
@@ -530,8 +530,8 @@ def failure_site_key(entry: dict[str, Any]) -> tuple[str, str, int, int, str]:
 
 
 def validate_compiler_failure_capture(
-    contract: dict[str, Any], capture: dict[str, Any]
-) -> dict[str, int]:
+    contract: Dict[str, Any], capture: Dict[str, Any]
+) -> Dict[str, int]:
     """Prove every compiler-active negative errno site has a contract row.
 
     The source contract is deliberately conservative when a preprocessor guard
@@ -557,7 +557,7 @@ def validate_compiler_failure_capture(
     if not isinstance(sites, list) or not sites:
         raise ContractError("compiler failure capture has no active sites")
 
-    mapped: dict[tuple[str, str, int, int, str], dict[str, Any]] = {}
+    mapped: Dict[Tuple[str, str, int, int, str], Dict[str, Any]] = {}
     for behavior in contract.get("behaviors", []):
         if not isinstance(behavior, dict) or behavior.get("kind") != "legacy_errno":
             continue
@@ -571,8 +571,8 @@ def validate_compiler_failure_capture(
             raise ContractError(f"duplicate mapped compiler failure-site key {key}")
         mapped[key] = legacy
 
-    active: set[tuple[str, str, int, int, str]] = set()
-    by_module: Counter[str] = Counter()
+    active: Set[Tuple[str, str, int, int, str]] = set()
+    by_module = Counter()
     for index, site in enumerate(sites):
         if not isinstance(site, dict):
             raise ContractError(f"compiler failure site {index} is malformed")
@@ -655,7 +655,7 @@ def validate_compiler_failure_capture(
     return dict(sorted(by_module.items()))
 
 
-def parameter_default(repo: Path, parameter: dict[str, Any]) -> dict[str, Any]:
+def parameter_default(repo: Path, parameter: Dict[str, Any]) -> Dict[str, Any]:
     path = str(parameter["source"])
     filtered, provenance = effective_source_text(repo, path)
     name = re.escape(str(parameter["name"]))
@@ -686,7 +686,9 @@ def parameter_default(repo: Path, parameter: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def flatten_procfs(procfs: dict[str, Any]) -> Iterable[tuple[str, dict[str, Any], str]]:
+def flatten_procfs(
+    procfs: Dict[str, Any]
+) -> Iterable[Tuple[str, Dict[str, Any], str]]:
     for key in ("dynamic_directories", "dynamic_symlinks"):
         for index, entry in enumerate(procfs.get(key, [])):
             if isinstance(entry, dict):
@@ -708,16 +710,18 @@ def flatten_procfs(procfs: dict[str, Any]) -> Iterable[tuple[str, dict[str, Any]
                 yield name, value, f"procfs.tables.{table_name}[{index}]"
 
 
-def build_contract(repo: Path, policy: dict[str, Any], legacy: dict[str, Any]) -> dict[str, Any]:
+def build_contract(
+    repo: Path, policy: Dict[str, Any], legacy: Dict[str, Any]
+) -> Dict[str, Any]:
     validate_policy(policy)
     if legacy.get("profile") != inventory_tool.PROFILE:
         raise ContractError("legacy inventory profile changed")
     if legacy.get("module_order") != ["ihk", "ihk_smp_x86_64", "mcctrl"]:
         raise ContractError("legacy module order changed")
 
-    behaviors: list[dict[str, Any]] = []
-    tests: list[dict[str, Any]] = []
-    seen_keys: set[str] = set()
+    behaviors: List[Dict[str, Any]] = []
+    tests: List[Dict[str, Any]] = []
+    seen_keys: Set[str] = set()
 
     def add(
         module: str,
@@ -1114,7 +1118,12 @@ def build_contract(repo: Path, policy: dict[str, Any], legacy: dict[str, Any]) -
     }
 
 
-def validate_contract(contract: dict[str, Any], policy: dict[str, Any], legacy: dict[str, Any], repo: Path) -> None:
+def validate_contract(
+    contract: Dict[str, Any],
+    policy: Dict[str, Any],
+    legacy: Dict[str, Any],
+    repo: Path,
+) -> None:
     validate_policy(policy)
     if contract.get("schema_version") != 2:
         raise ContractError("contract schema_version must be 2")
@@ -1156,9 +1165,9 @@ def validate_contract(contract: dict[str, Any], policy: dict[str, Any], legacy: 
         raise ContractError("contract has no behaviors")
     if not isinstance(tests, list) or not tests:
         raise ContractError("contract has no acceptance tests")
-    behavior_by_id: dict[str, dict[str, Any]] = {}
-    test_by_id: dict[str, dict[str, Any]] = {}
-    native_paths: set[str] = set()
+    behavior_by_id: Dict[str, Dict[str, Any]] = {}
+    test_by_id: Dict[str, Dict[str, Any]] = {}
+    native_paths: Set[str] = set()
     for behavior in behaviors:
         if not isinstance(behavior, dict) or not isinstance(behavior.get("id"), str):
             raise ContractError("malformed behavior entry")
@@ -1263,7 +1272,7 @@ def validate_contract(contract: dict[str, Any], policy: dict[str, Any], legacy: 
         if not test.get("assertions") or not test.get("behavior_ids"):
             raise ContractError(f"{test_id} lacks assertions or behavior links")
 
-    referenced_tests: set[str] = set()
+    referenced_tests: Set[str] = set()
     for behavior_id, behavior in behavior_by_id.items():
         for test_id in behavior["acceptance_test_ids"]:
             referenced_tests.add(test_id)
@@ -1282,7 +1291,7 @@ def validate_contract(contract: dict[str, Any], policy: dict[str, Any], legacy: 
     if any(modules[module] < 10 for module in EXPECTED_MODULES):
         raise ContractError(f"implausibly small behavior map: {dict(modules)}")
 
-    mapped_errno_sites: dict[str, set[str]] = defaultdict(set)
+    mapped_errno_sites: Dict[str, Set[str]] = defaultdict(set)
     for behavior in behaviors:
         if behavior["kind"] == "legacy_errno":
             mapped_errno_sites[behavior["module"]].add(str(behavior["legacy"]["site_id"]))

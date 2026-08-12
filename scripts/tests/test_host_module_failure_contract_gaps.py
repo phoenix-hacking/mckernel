@@ -25,7 +25,15 @@ import host_module_failure_sites as sites  # noqa: E402
 
 class StrictInputTests(unittest.TestCase):
     def test_generator_and_tests_remain_python_3_6_compatible(self) -> None:
-        paths = [Path(gaps.__file__), Path(__file__)]
+        paths = [
+            Path(gaps.__file__),
+            Path(gaps.contracts.__file__),
+            Path(gaps.contracts.inventory_tool.__file__),
+            Path(gaps.flows.__file__),
+            Path(gaps.sites.__file__),
+            Path(__file__),
+        ]
+        self.assertEqual(len(paths), len(set(paths)))
         for path in paths:
             source = path.read_text(encoding="utf-8")
             if sys.version_info >= (3, 8):
@@ -43,8 +51,22 @@ class StrictInputTests(unittest.TestCase):
                     self.assertNotIn(
                         "annotations", [alias.name for alias in node.names]
                     )
+                if isinstance(node, ast.ImportFrom):
+                    self.assertNotEqual(node.module, "dataclasses")
+                if isinstance(node, ast.Import):
+                    self.assertNotIn(
+                        "dataclasses", [alias.name for alias in node.names]
+                    )
                 if isinstance(node, ast.Attribute):
-                    self.assertNotIn(node.attr, {"removeprefix", "removesuffix"})
+                    self.assertNotIn(
+                        node.attr,
+                        {"is_relative_to", "removeprefix", "removesuffix"},
+                    )
+                if isinstance(node, ast.Call):
+                    self.assertFalse(
+                        {keyword.arg for keyword in node.keywords}
+                        & {"capture_output", "missing_ok", "text"}
+                    )
                 if isinstance(node, ast.Subscript) and isinstance(node.value, ast.Name):
                     self.assertNotIn(node.value.id, {"dict", "list", "set", "tuple"})
                 annotation = None
@@ -66,10 +88,15 @@ class StrictInputTests(unittest.TestCase):
                         ),
                     )
 
-        python36 = shutil.which("python3.6")
+        python36 = (
+            sys.executable
+            if sys.version_info[:2] == (3, 6)
+            else shutil.which("python3.6")
+        )
         if python36:
             completed = subprocess.run(
                 [python36, str(Path(gaps.__file__)), "--help"],
+                cwd=str(REPO_ROOT),
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
             )

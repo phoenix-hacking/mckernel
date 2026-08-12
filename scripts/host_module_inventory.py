@@ -17,8 +17,6 @@ fact from the frozen Git objects and verifies the locked binary-capture digest::
     python3 scripts/host_module_inventory.py --check
 """
 
-from __future__ import annotations
-
 import argparse
 import ast
 import difflib
@@ -29,9 +27,19 @@ import re
 import subprocess
 import sys
 from collections import OrderedDict
-from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
-from typing import Iterable, Iterator, Sequence
+from typing import (
+    Dict,
+    Iterable,
+    Iterator,
+    List,
+    Match,
+    NamedTuple,
+    Optional,
+    Sequence,
+    Set,
+    Tuple,
+)
 
 
 PARENT_REF = "f2eb735212e6ab0494e638497e80d9ae78b2848e"
@@ -94,8 +102,7 @@ class InventoryError(RuntimeError):
     """Raised when the reference inventory cannot be reproduced exactly."""
 
 
-@dataclass(frozen=True)
-class SourceEntry:
+class SourceEntry(NamedTuple):
     source: str
     object: str
     cmake_token: str
@@ -118,7 +125,7 @@ def run(command: Sequence[str], cwd: Path) -> str:
             check=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            text=True,
+            universal_newlines=True,
         )
     except (OSError, subprocess.CalledProcessError) as exc:
         stderr = getattr(exc, "stderr", "")
@@ -156,7 +163,7 @@ def source_blob(repo: Path, path: str) -> bytes:
             raise InventoryError(
                 "IHK submodule is not initialized; run 'git submodule update --init ihk'"
             )
-        return git_blob(ihk_repo, IHK_REF, path.removeprefix("ihk/"))
+        return git_blob(ihk_repo, IHK_REF, path[len("ihk/") :])
     return git_blob(repo, PARENT_REF, path)
 
 
@@ -175,22 +182,22 @@ def text_blob(repo: Path, path: str) -> str:
 def strip_c_comments(text: str) -> str:
     pattern = re.compile(r"//[^\n]*|/\*.*?\*/", re.DOTALL)
 
-    def replacement(match: re.Match[str]) -> str:
+    def replacement(match: Match[str]) -> str:
         value = match.group(0)
         return "\n" * value.count("\n")
 
     return pattern.sub(replacement, text)
 
 
-def filter_simple_cpp(text: str, defines: set[str]) -> str:
+def filter_simple_cpp(text: str, defines: Set[str]) -> str:
     """Filter simple #ifdef/#ifndef blocks while preserving line numbers.
 
     Unknown numeric #if expressions are kept.  The source surfaces parsed by
     this tool only require deterministic handling of named feature guards.
     """
 
-    output: list[str] = []
-    stack: list[tuple[bool, bool, bool]] = []
+    output: List[str] = []
+    stack: List[Tuple[bool, bool, bool]] = []
     active = True
 
     for line in text.splitlines(keepends=True):
@@ -240,7 +247,7 @@ def filter_simple_cpp(text: str, defines: set[str]) -> str:
     return "".join(output)
 
 
-def split_tokens(value: str) -> list[str]:
+def split_tokens(value: str) -> List[str]:
     return [token for token in re.split(r"\s+", value.strip()) if token]
 
 
@@ -255,7 +262,7 @@ def find_kmod_body(text: str, name_prefix: str) -> str:
     return match.group("body")
 
 
-def kmod_sources(text: str, name_prefix: str) -> list[str]:
+def kmod_sources(text: str, name_prefix: str) -> List[str]:
     body = find_kmod_body(text, name_prefix)
     match = re.search(
         r"\bSOURCES\s+(?P<sources>.*?)(?=^\s*(?:PREBUILT_OBJECTS|EXTRA_SYMBOLS|DEPENDS|INSTALL_DEST)\b)",
@@ -268,11 +275,13 @@ def kmod_sources(text: str, name_prefix: str) -> list[str]:
 
 
 def normalize_source_entry(
-    repo: Path, base: str, token: str, object_token: str | None = None
+    repo: Path, base: str, token: str, object_token: Optional[str] = None
 ) -> SourceEntry:
     expanded = token.replace("${ARCH}", "x86_64")
     logical = str(PurePosixPath(base) / expanded)
-    normalized = posixpath.normpath(logical).removeprefix("/")
+    normalized = posixpath.normpath(logical)
+    if normalized.startswith("/"):
+        normalized = normalized[1:]
 
     actual = normalized
     if not source_exists(repo, actual) and actual.endswith(".c"):
@@ -287,9 +296,9 @@ def normalize_source_entry(
     if object_token is None:
         object_path = normalized.rsplit(".", 1)[0] + ".o"
     else:
-        object_path = posixpath.normpath(
-            str(PurePosixPath(base) / object_token)
-        ).removeprefix("/")
+        object_path = posixpath.normpath(str(PurePosixPath(base) / object_token))
+        if object_path.startswith("/"):
+            object_path = object_path[1:]
 
     suffix = PurePosixPath(actual).suffix
     language = {".c": "c", ".S": "assembly", ".rs": "rust"}.get(suffix)
@@ -298,7 +307,7 @@ def normalize_source_entry(
     return SourceEntry(actual, object_path, expanded, language)
 
 
-def module_source_entries(repo: Path) -> OrderedDict[str, list[SourceEntry]]:
+def module_source_entries(repo: Path) -> Dict[str, List[SourceEntry]]:
     core_cmake = text_blob(repo, "ihk/linux/core/CMakeLists.txt")
     smp_cmake = text_blob(repo, "ihk/linux/driver/smp/CMakeLists.txt")
     mcctrl_cmake = text_blob(repo, "executer/kernel/mcctrl/CMakeLists.txt")
@@ -343,7 +352,7 @@ def module_source_entries(repo: Path) -> OrderedDict[str, list[SourceEntry]]:
         )
     )
 
-    result: OrderedDict[str, list[SourceEntry]] = OrderedDict()
+    result: Dict[str, List[SourceEntry]] = OrderedDict()
     result["ihk"] = core
     result["ihk_smp_x86_64"] = smp
     result["mcctrl"] = mcctrl
@@ -353,7 +362,7 @@ def module_source_entries(repo: Path) -> OrderedDict[str, list[SourceEntry]]:
         "mcctrl": {"c": 6, "rust": 1},
     }
     for module, entries in result.items():
-        counts: dict[str, int] = {}
+        counts: Dict[str, int] = {}
         for entry in entries:
             counts[entry.language] = counts.get(entry.language, 0) + 1
         if counts != expected[module]:
@@ -368,8 +377,10 @@ def line_number(text: str, offset: int) -> int:
     return text.count("\n", 0, offset) + 1
 
 
-def source_export_macros(repo: Path, entries: Iterable[SourceEntry]) -> list[dict[str, object]]:
-    exports: list[dict[str, object]] = []
+def source_export_macros(
+    repo: Path, entries: Iterable[SourceEntry]
+) -> List[Dict[str, object]]:
+    exports: List[Dict[str, object]] = []
     pattern = re.compile(
         r"\b(?P<macro>IHK_EXPORT_SYMBOL|EXPORT_SYMBOL(?:_GPL)?)\s*\(\s*(?P<name>[A-Za-z_]\w*)\s*\)"
     )
@@ -394,9 +405,11 @@ def source_export_macros(repo: Path, entries: Iterable[SourceEntry]) -> list[dic
     return exports
 
 
-def module_parameters(repo: Path, entries: Iterable[SourceEntry]) -> list[dict[str, object]]:
-    results: list[dict[str, object]] = []
-    descriptions: dict[str, str] = {}
+def module_parameters(
+    repo: Path, entries: Iterable[SourceEntry]
+) -> List[Dict[str, object]]:
+    results: List[Dict[str, object]] = []
+    descriptions: Dict[str, str] = {}
     desc_pattern = re.compile(
         r"MODULE_PARM_DESC\s*\(\s*([A-Za-z_]\w*)\s*,\s*\"([^\"]*)\"\s*\)"
     )
@@ -443,16 +456,21 @@ class IntEvaluator(ast.NodeVisitor):
         ast.Invert: lambda value: ~value,
     }
 
-    def __init__(self, names: dict[str, int] | None = None) -> None:
+    def __init__(self, names: Optional[Dict[str, int]] = None) -> None:
         self.names = names or {}
 
     def visit_Expression(self, node: ast.Expression) -> int:  # noqa: N802
         return self.visit(node.body)
 
-    def visit_Constant(self, node: ast.Constant) -> int:  # noqa: N802
+    def visit_Constant(self, node: ast.AST) -> int:  # noqa: N802
         if not isinstance(node.value, int):
             raise ValueError("not an integer")
         return node.value
+
+    def visit_Num(self, node: ast.AST) -> int:  # noqa: N802
+        if not isinstance(node.n, int):
+            raise ValueError("not an integer")
+        return node.n
 
     def visit_Name(self, node: ast.Name) -> int:  # noqa: N802
         if node.id not in self.names:
@@ -475,7 +493,9 @@ class IntEvaluator(ast.NodeVisitor):
         raise ValueError(f"unsupported integer expression node {type(node).__name__}")
 
 
-def parse_c_integer(expression: str, names: dict[str, int] | None = None) -> int:
+def parse_c_integer(
+    expression: str, names: Optional[Dict[str, int]] = None
+) -> int:
     cleaned = expression.strip()
     c_integer = r"(?:0[xX][0-9A-Fa-f]+|0[bB][01]+|0[0-7]*|[1-9][0-9]*)"
     cleaned = re.sub(
@@ -492,13 +512,13 @@ def parse_c_integer(expression: str, names: dict[str, int] | None = None) -> int
 def macro_table(
     repo: Path,
     path: str,
-    prefixes: tuple[str, ...],
-    defines: set[str] | None = None,
-) -> list[dict[str, object]]:
+    prefixes: Tuple[str, ...],
+    defines: Optional[Set[str]] = None,
+) -> List[Dict[str, object]]:
     text = text_blob(repo, path)
     text = filter_simple_cpp(text, defines or set())
     text = strip_c_comments(text)
-    results: list[dict[str, object]] = []
+    results: List[Dict[str, object]] = []
     for match in re.finditer(
         r"^\s*#\s*define\s+([A-Za-z_]\w*)\s+([^\n]+)$", text, re.MULTILINE
     ):
@@ -523,16 +543,18 @@ def macro_table(
     return results
 
 
-def enum_table(repo: Path, path: str, enum_name: str) -> list[dict[str, object]]:
+def enum_table(
+    repo: Path, path: str, enum_name: str
+) -> List[Dict[str, object]]:
     text = strip_c_comments(text_blob(repo, path))
     match = re.search(
         rf"enum\s+{re.escape(enum_name)}\s*\{{(?P<body>.*?)\}}\s*;", text, re.DOTALL
     )
     if not match:
         raise InventoryError(f"cannot find enum {enum_name} in {path}")
-    values: dict[str, int] = {}
+    values: Dict[str, int] = {}
     current = -1
-    results: list[dict[str, object]] = []
+    results: List[Dict[str, object]] = []
     for raw in match.group("body").split(","):
         item = raw.strip()
         if not item:
@@ -557,7 +579,7 @@ def enum_table(repo: Path, path: str, enum_name: str) -> list[dict[str, object]]
     return results
 
 
-def ioctl_inventory(repo: Path) -> dict[str, object]:
+def ioctl_inventory(repo: Path) -> Dict[str, object]:
     ihk_macros = macro_table(
         repo,
         "ihk/linux/include/ihk/ihk_host_user.h",
@@ -635,12 +657,12 @@ def extract_named_array(text: str, name: str) -> str:
     return match.group("body")
 
 
-def procfs_entries(repo: Path) -> dict[str, object]:
+def procfs_entries(repo: Path) -> Dict[str, object]:
     source = filter_simple_cpp(
         strip_c_comments(text_blob(repo, "executer/kernel/mcctrl/procfs.c")),
         CPP_DEFINES,
     )
-    tables: dict[str, list[dict[str, object]]] = {}
+    tables: Dict[str, List[Dict[str, object]]] = {}
     hierarchy = {
         "base_entry_stuff": "/proc/mcos{os_id}/{name}",
         "pid_entry_stuff": "/proc/mcos{os_id}/{pid}/{name}",
@@ -652,7 +674,7 @@ def procfs_entries(repo: Path) -> dict[str, object]:
     )
     for table_name, path_format in hierarchy.items():
         body = extract_named_array(source, table_name)
-        rows: list[dict[str, object]] = []
+        rows: List[Dict[str, object]] = []
         for match in pattern.finditer(body):
             mode_expression = match.group("mode").strip()
             permission_expression = mode_expression
@@ -725,7 +747,7 @@ def matching_brace(text: str, open_offset: int) -> int:
     raise InventoryError("unterminated function body while extracting Rust sysfs paths")
 
 
-def rust_function(text: str, name: str) -> tuple[str, int]:
+def rust_function(text: str, name: str) -> Tuple[str, int]:
     match = re.search(rf"\bfn\s+{re.escape(name)}\s*\(", text)
     if not match:
         raise InventoryError(f"cannot find Rust function {name}")
@@ -766,10 +788,10 @@ def decode_rust_bytes(value: str) -> str:
         decoded = bytes(value, "utf-8").decode("unicode_escape")
     except UnicodeDecodeError as exc:
         raise InventoryError(f"cannot decode Rust byte string {value!r}") from exc
-    return decoded.removesuffix("\x00")
+    return decoded[:-1] if decoded.endswith("\x00") else decoded
 
 
-def sysfs_entries(repo: Path) -> list[dict[str, object]]:
+def sysfs_entries(repo: Path) -> List[Dict[str, object]]:
     path = "executer/kernel/mcctrl/rust/mcctrl_helpers.rs"
     text = text_blob(repo, path)
     function_names = [
@@ -779,7 +801,7 @@ def sysfs_entries(repo: Path) -> list[dict[str, object]]:
         "setup_node_files",
         "setup_sysfs_files",
     ]
-    rows: list[dict[str, object]] = []
+    rows: List[Dict[str, object]] = []
     for function_name in function_names:
         body, body_offset = rust_function(text, function_name)
         prefix_match = re.search(r"let\s+prefix\s*=\s*b\"([^\"]+)\"", body)
@@ -818,7 +840,7 @@ def sysfs_entries(repo: Path) -> list[dict[str, object]]:
                     ),
                 }
             )
-    unique: dict[tuple[object, ...], dict[str, object]] = {}
+    unique: Dict[Tuple[object, ...], Dict[str, object]] = {}
     for row in rows:
         key = (
             row["operation"],
@@ -837,8 +859,10 @@ def sysfs_entries(repo: Path) -> list[dict[str, object]]:
     )
 
 
-def dynamic_symbol_lookups(repo: Path, entries: Iterable[SourceEntry]) -> list[dict[str, object]]:
-    results: list[dict[str, object]] = []
+def dynamic_symbol_lookups(
+    repo: Path, entries: Iterable[SourceEntry]
+) -> List[Dict[str, object]]:
+    results: List[Dict[str, object]] = []
     pattern = re.compile(r"\bkallsyms_lookup_name\s*\(\s*\"([^\"]+)\"\s*\)")
     for entry in entries:
         if entry.language != "c":
@@ -862,7 +886,7 @@ def dynamic_symbol_lookups(repo: Path, entries: Iterable[SourceEntry]) -> list[d
     )
 
 
-def ikc_inventory(repo: Path) -> dict[str, object]:
+def ikc_inventory(repo: Path) -> Dict[str, object]:
     master = macro_table(
         repo, "ihk/ikc/include/ikc/msg.h", ("IHK_IKC_MASTER_MSG_",), CPP_DEFINES
     )
@@ -904,7 +928,7 @@ def ikc_inventory(repo: Path) -> dict[str, object]:
     type_size = {"uint16_t": 2, "uint32_t": 4, "uint64_t": 8}
     offset = 0
     max_alignment = 1
-    fields: list[dict[str, object]] = []
+    fields: List[Dict[str, object]] = []
     for field in field_pattern.finditer(fields_match.group("body")):
         type_name, name = field.group(1), field.group(2)
         size = type_size[type_name]
@@ -943,24 +967,26 @@ def ikc_inventory(repo: Path) -> dict[str, object]:
     }
 
 
-def parse_nm_exports(nm_output: str) -> tuple[list[dict[str, object]], list[str]]:
-    crc: dict[str, str] = {}
-    exports: list[str] = []
+def parse_nm_exports(
+    nm_output: str,
+) -> Tuple[List[Dict[str, object]], List[str]]:
+    crc: Dict[str, str] = {}
+    exports: List[str] = []
     for line in nm_output.splitlines():
         fields = line.split()
         if len(fields) < 3:
             continue
         address, _, name = fields[-3], fields[-2], fields[-1]
         if name.startswith("__crc_"):
-            crc[name.removeprefix("__crc_")] = f"0x{int(address, 16):08x}"
+            crc[name[len("__crc_") :]] = f"0x{int(address, 16):08x}"
         elif name.startswith("__ksymtab_"):
-            exports.append(name.removeprefix("__ksymtab_"))
+            exports.append(name[len("__ksymtab_") :])
     exports = sorted(set(exports))
     return ([{"name": name, "crc": crc.get(name)} for name in exports], exports)
 
 
-def parse_nm_imports(nm_output: str) -> list[str]:
-    imports: list[str] = []
+def parse_nm_imports(nm_output: str) -> List[str]:
+    imports: List[str] = []
     for line in nm_output.splitlines():
         fields = line.split()
         if len(fields) >= 2 and fields[-2] == "U":
@@ -968,8 +994,8 @@ def parse_nm_imports(nm_output: str) -> list[str]:
     return sorted(set(imports))
 
 
-def parse_global_defined(nm_output: str) -> list[dict[str, str]]:
-    results: list[dict[str, str]] = []
+def parse_global_defined(nm_output: str) -> List[Dict[str, str]]:
+    results: List[Dict[str, str]] = []
     for line in nm_output.splitlines():
         fields = line.split()
         if len(fields) != 3:
@@ -979,13 +1005,13 @@ def parse_global_defined(nm_output: str) -> list[dict[str, str]]:
     return sorted(results, key=lambda item: (item["name"], item["type"]))
 
 
-def parse_modinfo(readelf_output: str) -> dict[str, object]:
-    strings: list[str] = []
+def parse_modinfo(readelf_output: str) -> Dict[str, object]:
+    strings: List[str] = []
     for line in readelf_output.splitlines():
         match = re.match(r"\s*\[[^\]]+\]\s+(.*)$", line)
         if match:
             strings.append(match.group(1).strip())
-    values: dict[str, list[str]] = {}
+    values: Dict[str, List[str]] = {}
     for item in strings:
         if "=" not in item:
             continue
@@ -994,8 +1020,8 @@ def parse_modinfo(readelf_output: str) -> dict[str, object]:
     return {"strings": strings, "values": {key: values[key] for key in sorted(values)}}
 
 
-def binary_capture(repo: Path, artifact_root: Path) -> dict[str, object]:
-    capture: dict[str, object] = {
+def binary_capture(repo: Path, artifact_root: Path) -> Dict[str, object]:
+    capture: Dict[str, object] = {
         "provenance": {
             "workflow_run": WORKFLOW_RUN,
             "artifact_id": ARTIFACT_ID,
@@ -1005,7 +1031,7 @@ def binary_capture(repo: Path, artifact_root: Path) -> dict[str, object]:
     }
     modules = capture["modules"]
     assert isinstance(modules, dict)
-    exported_names: dict[str, set[str]] = {}
+    exported_names: Dict[str, Set[str]] = {}
 
     for module_name, metadata in MODULE_ARTIFACTS.items():
         module_path = artifact_root / str(metadata["path"])
@@ -1037,7 +1063,7 @@ def binary_capture(repo: Path, artifact_root: Path) -> dict[str, object]:
 
     for module_name, details in modules.items():
         assert isinstance(details, dict)
-        providers: list[dict[str, str]] = []
+        providers: List[Dict[str, str]] = []
         for imported in details["imports"]:
             for provider, names in exported_names.items():
                 if provider != module_name and imported in names:
@@ -1048,7 +1074,7 @@ def binary_capture(repo: Path, artifact_root: Path) -> dict[str, object]:
     return capture
 
 
-def validate_locked_binary_capture(capture: dict[str, object]) -> str:
+def validate_locked_binary_capture(capture: Dict[str, object]) -> str:
     digest = sha256_bytes(canonical_json(capture))
     if BINARY_CAPTURE_SHA256 == "TO_BE_FILLED_AFTER_GENERATION":
         return digest
@@ -1069,7 +1095,9 @@ def validate_locked_binary_capture(capture: dict[str, object]) -> str:
     return digest
 
 
-def source_capture(repo: Path, modules: OrderedDict[str, list[SourceEntry]]) -> dict[str, object]:
+def source_capture(
+    repo: Path, modules: Dict[str, List[SourceEntry]]
+) -> Dict[str, object]:
     patch_path = "scripts/patches/ihk-linux-compat.patch"
     patch_data = source_blob(repo, patch_path)
     patch_text = patch_data.decode("utf-8")
@@ -1079,10 +1107,10 @@ def source_capture(repo: Path, modules: OrderedDict[str, list[SourceEntry]]) -> 
     }
     patch_digest = sha256_bytes(patch_data)
 
-    module_rows: dict[str, object] = {}
-    all_source_digests: list[dict[str, str]] = []
+    module_rows: Dict[str, object] = {}
+    all_source_digests: List[Dict[str, str]] = []
     for module_name, entries in modules.items():
-        rows: list[dict[str, object]] = []
+        rows: List[Dict[str, object]] = []
         for entry in entries:
             data = source_blob(repo, entry.source)
             base_digest = sha256_bytes(data)
@@ -1125,7 +1153,7 @@ def source_capture(repo: Path, modules: OrderedDict[str, list[SourceEntry]]) -> 
     }
 
 
-def validate_cross_capture(inventory: dict[str, object]) -> None:
+def validate_cross_capture(inventory: Dict[str, object]) -> None:
     source = inventory["source_capture"]
     binary = inventory["binary_capture"]
     assert isinstance(source, dict) and isinstance(binary, dict)
@@ -1168,9 +1196,9 @@ def validate_cross_capture(inventory: dict[str, object]) -> None:
 
 def build_inventory(
     repo: Path,
-    artifact_root: Path | None,
-    preserved_binary: dict[str, object] | None,
-) -> dict[str, object]:
+    artifact_root: Optional[Path],
+    preserved_binary: Optional[Dict[str, object]],
+) -> Dict[str, object]:
     parent_actual = run(["git", "rev-parse", PARENT_REF], repo).strip()
     if parent_actual != PARENT_REF:
         raise InventoryError(f"cannot resolve frozen parent commit {PARENT_REF}")
@@ -1188,7 +1216,7 @@ def build_inventory(
     binary_digest = validate_locked_binary_capture(binary)
 
     source = source_capture(repo, module_entries)
-    inventory: dict[str, object] = {
+    inventory: Dict[str, object] = {
         "schema_version": 1,
         "profile": PROFILE,
         "generator": "scripts/host_module_inventory.py",
@@ -1236,7 +1264,7 @@ def build_inventory(
     return inventory
 
 
-def render(inventory: dict[str, object]) -> str:
+def render(inventory: Dict[str, object]) -> str:
     return json.dumps(inventory, indent=2, sort_keys=True) + "\n"
 
 
@@ -1256,8 +1284,8 @@ def main(argv: Sequence[str]) -> int:
     args = parse_args(argv)
     repo = args.repo.resolve()
     output = args.output if args.output.is_absolute() else repo / args.output
-    expected: dict[str, object] | None = None
-    preserved_binary: dict[str, object] | None = None
+    expected: Optional[Dict[str, object]] = None
+    preserved_binary: Optional[Dict[str, object]] = None
     if output.is_file():
         try:
             expected = json.loads(output.read_text(encoding="utf-8"))
