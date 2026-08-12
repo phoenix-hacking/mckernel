@@ -1,0 +1,98 @@
+name: Rocky 10.2 kernel source evidence
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/rocky-rust-validation]
+    paths:
+      - .github/workflows/rocky-kernel-source-evidence.yml
+      - host-kernel/rocky/source-lock.json
+      - host-kernel/rocky/patches/series.json
+      - scripts/rocky_kernel_source_evidence.py
+      - scripts/rocky_kernel_source_lock.py
+  pull_request:
+    branches: [development]
+    paths:
+      - .github/workflows/rocky-kernel-source-evidence.yml
+      - host-kernel/rocky/source-lock.json
+      - host-kernel/rocky/patches/series.json
+      - scripts/rocky_kernel_source_evidence.py
+      - scripts/rocky_kernel_source_lock.py
+
+permissions:
+  contents: read
+
+env:
+  RK001_CONTAINER_IMAGE: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
+  EXPECTED_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+
+jobs:
+  capture:
+    name: Exact source, signature, metadata, and dist-git replay
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    container:
+      # Official Rocky 10.2 linux/amd64 OCI manifest, not a mutable tag or
+      # multi-platform index. The capture script also rejects non-x86_64 and
+      # non-Rocky-10.2 runtime identities.
+      image: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Install required verification tools
+        run: |
+          set -euo pipefail
+          test "$(uname -m)" = x86_64
+          . /etc/os-release
+          test "$ID" = rocky
+          test "$VERSION_ID" = 10.2
+          dnf -y --setopt=install_weak_deps=False install \
+            coreutils git gnupg2 gzip python3 rpm
+          dnf clean all
+          for tool in git gpg gpgv gzip python3 rpm rpmkeys; do
+            command -v "$tool" >/dev/null
+          done
+
+      - name: Check out the exact candidate commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ env.EXPECTED_HEAD_SHA }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Verify capture contract without claiming gate credit
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"
+          python3 scripts/rocky_kernel_source_evidence.py \
+            --repo "$GITHUB_WORKSPACE" \
+            --check
+
+      - name: Capture exact RK-001 replay evidence
+        env:
+          EVIDENCE_DIR: ${{ runner.temp }}/rk001-source-evidence
+        run: |
+          set -euo pipefail
+          python3 scripts/rocky_kernel_source_evidence.py \
+            --repo "$GITHUB_WORKSPACE" \
+            --run \
+            --output-dir "$EVIDENCE_DIR" \
+            --github-head-sha "$EXPECTED_HEAD_SHA" \
+            --github-run-id "$GITHUB_RUN_ID" \
+            --github-run-attempt "$GITHUB_RUN_ATTEMPT" \
+            --github-repository "$GITHUB_REPOSITORY" \
+            --container-image "$RK001_CONTAINER_IMAGE"
+          (
+            cd "$EVIDENCE_DIR"
+            sha256sum --check --strict SHA256SUMS
+          )
+
+      - name: Upload canonical source evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: rk001-source-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/rk001-source-evidence/
+          if-no-files-found: error
+          retention-days: 30
