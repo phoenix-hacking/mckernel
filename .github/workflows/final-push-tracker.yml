@@ -32,6 +32,7 @@ jobs:
           python3 -m py_compile scripts/host_module_inventory.py
           python3 -m unittest discover -s scripts/tests -v
           python3 scripts/host_module_inventory.py --check
+          python3 scripts/rocky_kernel_source_lock.py --check
 
       - name: Validate locked scope, policy, and behavior contract
         run: |
