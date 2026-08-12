@@ -228,8 +228,11 @@ def normalize_tar_members(archive):
         path = PurePosixPath(raw)
         if path.is_absolute() or any(part in ("", ".", "..") for part in path.parts):
             raise InventoryError("unsafe Linux archive member: {0}".format(member.name))
-        if len(path.parts) < 2:
-            raise InventoryError("Linux archive lacks one containing source directory")
+        if len(path.parts) == 1:
+            if not member.isdir():
+                raise InventoryError("Linux archive has a file outside its source directory")
+            roots.add(path.parts[0])
+            continue
         roots.add(path.parts[0])
         relative = PurePosixPath(*path.parts[1:]).as_posix()
         normalized.append((relative, member))

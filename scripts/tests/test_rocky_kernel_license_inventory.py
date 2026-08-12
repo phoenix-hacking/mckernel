@@ -37,6 +37,10 @@ def add_link(archive, name, target):
 
 def synthetic_linux_archive(path, include_missing=True):
     with tarfile.open(str(path), "w:xz") as archive:
+        root = tarfile.TarInfo(name="linux-test/")
+        root.type = tarfile.DIRTYPE
+        root.mode = 0o755
+        archive.addfile(root)
         add_file(
             archive,
             "linux-test/LICENSES/preferred/GPL-2.0",
@@ -87,6 +91,14 @@ class LicenseInventoryTests(unittest.TestCase):
             with tarfile.open(str(archive_path), "w:xz") as archive:
                 add_file(archive, "linux-test/../escape", b"bad")
             with self.assertRaises(inventory.InventoryError):
+                inventory.inventory_linux_archive(archive_path, "0" * 64)
+
+    def test_root_level_archive_file_is_rejected(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            archive_path = Path(temporary) / "root-file.tar.xz"
+            with tarfile.open(str(archive_path), "w:xz") as archive:
+                add_file(archive, "outside.c", b"bad")
+            with self.assertRaisesRegex(inventory.InventoryError, "outside"):
                 inventory.inventory_linux_archive(archive_path, "0" * 64)
 
     def test_duplicate_license_identifier_is_rejected(self):
