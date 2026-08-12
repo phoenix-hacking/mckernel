@@ -16,7 +16,7 @@
     },
     "configuration": "derive exact Kconfig requirements from the selected Rocky source/config",
     "export": "ordinary imports need an exported binding; kallsyms dependencies must be retired",
-    "owner": "Linux kernel core for every included need; project-module imports are excluded"
+    "owner": "Linux kernel core except explicitly named optional external providers; project-module imports are excluded"
   },
   "coverage": {
     "by_lookup_kind": {
@@ -121,7 +121,7 @@
     "unresolved_computed_names": []
   },
   "manifest_id": "mckernel-native-rust-linux-api-needs-v1",
-  "manifest_sha256": "690dcfcee4fb8dc2a5050c8def0b17beed77d5b58148181fa093f36186bf24e5",
+  "manifest_sha256": "fa11cfb219bb35b14ebf0b91edf876a23c0c4effcfe8b7c9a70aa7a10f3e6567",
   "needs": [
     {
       "abstraction": {
@@ -15299,7 +15299,7 @@
         "test_id": "AT-KALLSYMS-VVAR_PAGE-6F713363C6"
       },
       "availability": {
-        "legacy_r0": "requested by a literal lookup in frozen active source",
+        "legacy_r0": "requested by source-proven static Rust forwarding through the bounded bridge",
         "production_disposition": "blocked_pending_target_probe",
         "rocky_10_2": "unverified"
       },
@@ -15322,7 +15322,7 @@
       "consumers": [
         {
           "artifact_path": "executer/kernel/mcctrl/mcctrl.ko",
-          "evidence": "literal lookup in frozen active source",
+          "evidence": "source-proven static Rust forwarding through bounded kallsyms bridge",
           "filename": "mcctrl.ko",
           "module": "mcctrl",
           "module_sha256": "dc107900700da8a0ff88e561dbabc5bea979268c0c1220845226d85b60bad65e"
@@ -16246,7 +16246,7 @@
         "test_id": "AT-KALLSYMS-HPET_ADDRESS-A7B4FBD64B"
       },
       "availability": {
-        "legacy_r0": "requested by a literal lookup in frozen active source",
+        "legacy_r0": "requested by source-proven static Rust forwarding through the bounded bridge",
         "production_disposition": "blocked_pending_target_probe",
         "rocky_10_2": "unverified"
       },
@@ -16269,7 +16269,7 @@
       "consumers": [
         {
           "artifact_path": "executer/kernel/mcctrl/mcctrl.ko",
-          "evidence": "literal lookup in frozen active source",
+          "evidence": "source-proven static Rust forwarding through bounded kallsyms bridge",
           "filename": "mcctrl.ko",
           "module": "mcctrl",
           "module_sha256": "dc107900700da8a0ff88e561dbabc5bea979268c0c1220845226d85b60bad65e"
@@ -16483,7 +16483,7 @@
         "test_id": "AT-KALLSYMS-HV_CLOCK-863907E0C9"
       },
       "availability": {
-        "legacy_r0": "requested by a literal lookup in frozen active source",
+        "legacy_r0": "requested by source-proven static Rust forwarding through the bounded bridge",
         "production_disposition": "blocked_pending_target_probe",
         "rocky_10_2": "unverified"
       },
@@ -16506,7 +16506,7 @@
       "consumers": [
         {
           "artifact_path": "executer/kernel/mcctrl/mcctrl.ko",
-          "evidence": "literal lookup in frozen active source",
+          "evidence": "source-proven static Rust forwarding through bounded kallsyms bridge",
           "filename": "mcctrl.ko",
           "module": "mcctrl",
           "module_sha256": "dc107900700da8a0ff88e561dbabc5bea979268c0c1220845226d85b60bad65e"
@@ -18616,7 +18616,7 @@
         "consuming_modules": [
           "ihk_smp_x86_64"
         ],
-        "provider": "Linux kernel core"
+        "provider": "external optional Tofu SMMU provider"
       },
       "source_provenance": {
         "forwarded_static_site_count": 0,
@@ -18691,7 +18691,7 @@
         "consuming_modules": [
           "ihk_smp_x86_64"
         ],
-        "provider": "Linux kernel core"
+        "provider": "external optional Tofu SMMU provider"
       },
       "source_provenance": {
         "forwarded_static_site_count": 0,
@@ -18951,7 +18951,7 @@
         "test_id": "AT-KALLSYMS-VDSO_IMAGE_64-50ACF0B025"
       },
       "availability": {
-        "legacy_r0": "requested by a literal lookup in frozen active source",
+        "legacy_r0": "requested by source-proven static Rust forwarding through the bounded bridge",
         "production_disposition": "blocked_pending_target_probe",
         "rocky_10_2": "unverified"
       },
@@ -18974,7 +18974,7 @@
       "consumers": [
         {
           "artifact_path": "executer/kernel/mcctrl/mcctrl.ko",
-          "evidence": "literal lookup in frozen active source",
+          "evidence": "source-proven static Rust forwarding through bounded kallsyms bridge",
           "filename": "mcctrl.ko",
           "module": "mcctrl",
           "module_sha256": "dc107900700da8a0ff88e561dbabc5bea979268c0c1220845226d85b60bad65e"
@@ -19416,7 +19416,7 @@
   },
   "readiness": {
     "blockers": [
-      "probe every symbol against the selected Rocky 10.2 source, config, and exports",
+      "probe every Linux symbol against the selected Rocky 10.2 source, config, and exports and resolve every optional external provider",
       "resolve exact Kconfig requirements for every available provider",
       "complete compiler-backed call-site and process/atomic/IRQ/NMI context classification",
       "replace every private kallsyms dependency with a stable exported API or reviewed abstraction",

@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 """Fail-closed tests for the frozen Linux API-needs manifest."""
 
-from __future__ import annotations
-
+import ast
 import copy
+import shutil
+import subprocess
 import sys
+import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
-import host_module_inventory as inventory_tool  # noqa: E402
 import linux_api_needs as api_needs  # noqa: E402
 
 
@@ -26,6 +28,7 @@ class ApiNeedsFixture(unittest.TestCase):
 
 class GoldenManifestTests(ApiNeedsFixture):
     def test_generated_manifest_is_complete_and_current(self) -> None:
+        api_needs.verify_inventory_replay(REPO_ROOT, self.inventory)
         generated = api_needs.build_manifest(self.inventory, self.source_lock)
         api_needs.validate_manifest(
             generated, self.inventory, self.source_lock
@@ -119,7 +122,10 @@ class GoldenManifestTests(ApiNeedsFixture):
             api_needs.validate_need_shape(need)
             ids.add(need["id"])
             acceptance_ids.add(need["acceptance"]["test_id"])
-            self.assertEqual(need["owner"]["provider"], "Linux kernel core")
+            self.assertEqual(
+                need["owner"]["provider"],
+                api_needs.provider_for(need["lookup_kind"], need["symbol"]),
+            )
             self.assertTrue(need["owner"]["consuming_modules"])
             self.assertEqual(need["availability"]["rocky_10_2"], "unverified")
             self.assertEqual(need["export"]["rocky_10_2_status"], "unverified")
@@ -156,6 +162,12 @@ class GoldenManifestTests(ApiNeedsFixture):
                 )
         self.assertEqual(len(ids), len(self.manifest["needs"]))
         self.assertEqual(len(acceptance_ids), len(self.manifest["needs"]))
+        external = {
+            need["symbol"]: need["owner"]["provider"]
+            for need in self.manifest["needs"]
+            if need["owner"]["provider"] != "Linux kernel core"
+        }
+        self.assertEqual(external, api_needs.OPTIONAL_EXTERNAL_PROVIDERS)
 
     def test_manifest_is_bound_to_rocky_10_2_source_lock(self) -> None:
         target = self.manifest["target"]
@@ -188,6 +200,103 @@ class GoldenManifestTests(ApiNeedsFixture):
             if row["lookup_kind"] == "dynamic_kallsyms"
         }
         self.assertTrue({row["symbol"] for row in forwarded} <= need_symbols)
+
+        for row in forwarded:
+            need = next(
+                item
+                for item in self.manifest["needs"]
+                if item["symbol"] == row["symbol"]
+            )
+            self.assertEqual(need["source_provenance"]["site_count"], 0)
+            self.assertEqual(
+                need["availability"]["legacy_r0"],
+                "requested by source-proven static Rust forwarding through the bounded bridge",
+            )
+            self.assertEqual(
+                need["consumers"][0]["evidence"],
+                "source-proven static Rust forwarding through bounded kallsyms bridge",
+            )
+
+    def test_generator_and_tests_remain_python_3_6_compatible(self) -> None:
+        paths = [Path(api_needs.__file__), Path(__file__)]
+        for path in paths:
+            source = path.read_text(encoding="utf-8")
+            if sys.version_info >= (3, 8):
+                try:
+                    tree = ast.parse(source, filename=str(path), feature_version=(3, 6))
+                except TypeError:
+                    tree = ast.parse(source, filename=str(path), feature_version=6)
+            else:
+                tree = ast.parse(source, filename=str(path))
+            self.assertIsNotNone(tree)
+            for node in ast.walk(tree):
+                if isinstance(node, ast.ImportFrom) and node.module == "__future__":
+                    self.assertNotIn(
+                        "annotations", [alias.name for alias in node.names]
+                    )
+                if isinstance(node, ast.Attribute):
+                    self.assertNotIn(node.attr, {"removeprefix", "removesuffix"})
+                if isinstance(node, ast.Subscript) and isinstance(node.value, ast.Name):
+                    self.assertNotIn(node.value.id, {"dict", "list", "set", "tuple"})
+                annotation = None
+                if isinstance(node, ast.arg):
+                    annotation = node.annotation
+                elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                    annotation = node.returns
+                elif isinstance(node, ast.AnnAssign):
+                    annotation = node.annotation
+                if annotation is not None:
+                    self.assertFalse(
+                        any(
+                            isinstance(part, ast.BinOp)
+                            and isinstance(part.op, ast.BitOr)
+                            for part in ast.walk(annotation)
+                        ),
+                        "PEP 604 annotation is not Python 3.6 compatible in {0}".format(
+                            path
+                        ),
+                    )
+
+        python36 = shutil.which("python3.6")
+        if python36:
+            completed = subprocess.run(
+                [
+                    python36,
+                    str(Path(api_needs.__file__)),
+                    "--repo",
+                    str(REPO_ROOT),
+                    "--check",
+                ],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            self.assertEqual(
+                completed.returncode,
+                0,
+                completed.stderr.decode("utf-8", errors="replace"),
+            )
+
+    def test_repository_paths_reject_escape_and_symlink_traversal(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            regular = root / "input.json"
+            regular.write_text("{}\n", encoding="utf-8")
+            self.assertEqual(
+                api_needs.resolve_repository_path(
+                    root, Path("input.json"), "test input", True
+                ),
+                regular,
+            )
+            link = root / "input-link.json"
+            link.symlink_to(regular)
+            with self.assertRaises(api_needs.ApiNeedsError):
+                api_needs.resolve_repository_path(
+                    root, Path("input-link.json"), "test input", True
+                )
+            with self.assertRaises(api_needs.ApiNeedsError):
+                api_needs.resolve_repository_path(
+                    root, root.parent / "outside.json", "test output", False
+                )
 
 
 class FailClosedMutationTests(ApiNeedsFixture):
@@ -233,7 +342,7 @@ class FailClosedMutationTests(ApiNeedsFixture):
         binary["modules"]["ihk"]["imports"].append("invented_kernel_symbol")
         binary["modules"]["ihk"]["imports"].sort()
         broken["binary_capture_sha256"] = api_needs.sha256_bytes(
-            inventory_tool.canonical_json(binary)
+            api_needs.canonical_bytes(binary)
         )
         with self.assertRaises(api_needs.ApiNeedsError):
             api_needs.validate_inventory(broken)
@@ -245,7 +354,7 @@ class FailClosedMutationTests(ApiNeedsFixture):
         ][0]
         site["line"] += 1
         broken["source_capture_sha256"] = api_needs.sha256_bytes(
-            inventory_tool.canonical_json(broken["source_capture"])
+            api_needs.canonical_bytes(broken["source_capture"])
         )
         with self.assertRaises(api_needs.ApiNeedsError):
             api_needs.validate_inventory(broken)
@@ -270,6 +379,23 @@ class FailClosedMutationTests(ApiNeedsFixture):
         broken["needs"][0]["symbol"] = "changed"
         with self.assertRaises(api_needs.ApiNeedsError):
             api_needs.validate_manifest(broken, self.inventory, self.source_lock)
+
+    def test_unsupported_computed_kallsyms_argument_fails_closed(self) -> None:
+        original = api_needs.text_blob
+
+        def mutated_text(repo, logical_path):
+            text = original(repo, logical_path)
+            if logical_path == "executer/kernel/mcctrl/driver.c":
+                text += (
+                    "\nstatic void *invented_lookup(void) {\n"
+                    "    return (void *)kallsyms_lookup_name(select_private_name());\n"
+                    "}\n"
+                )
+            return text
+
+        with mock.patch.object(api_needs, "text_blob", side_effect=mutated_text):
+            with self.assertRaises(api_needs.ApiNeedsError):
+                api_needs.build_manifest(self.inventory, self.source_lock, REPO_ROOT)
 
 
 if __name__ == "__main__":
