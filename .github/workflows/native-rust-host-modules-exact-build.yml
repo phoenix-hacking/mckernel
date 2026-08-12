@@ -12,6 +12,7 @@ on:
       - host-kernel/contracts/ihk-os-registry-foundation-v1.json
       - host-kernel/contracts/ihk-ioctl-dispatch-foundation-v1.json
       - host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json
+      - host-kernel/contracts/native-rust-runtime-evidence-v1.json
       - host-kernel/contracts/rs006-miscdevice-substrate-v1.json
       - host-kernel/native-rust/**
       - host-kernel/rocky/config-policy.json
@@ -52,6 +53,7 @@ on:
       - scripts/mcctrl_native_lifecycle_check.py
       - scripts/native_rust_build_surface_audit.py
       - scripts/native_rust_host_audit.py
+      - scripts/native_rust_runtime_evidence.py
       - scripts/native_rust_unsafe_ffi_ledger.py
       - scripts/linux_api_exact_probe.py
       - scripts/rocky_kernel_source_lock.py
@@ -89,6 +91,7 @@ on:
       - host-kernel/contracts/ihk-os-registry-foundation-v1.json
       - host-kernel/contracts/ihk-ioctl-dispatch-foundation-v1.json
       - host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json
+      - host-kernel/contracts/native-rust-runtime-evidence-v1.json
       - host-kernel/contracts/rs006-miscdevice-substrate-v1.json
       - host-kernel/native-rust/**
       - host-kernel/rocky/config-policy.json
@@ -129,6 +132,7 @@ on:
       - scripts/mcctrl_native_lifecycle_check.py
       - scripts/native_rust_build_surface_audit.py
       - scripts/native_rust_host_audit.py
+      - scripts/native_rust_runtime_evidence.py
       - scripts/native_rust_unsafe_ffi_ledger.py
       - scripts/linux_api_exact_probe.py
       - scripts/rocky_kernel_source_lock.py
@@ -255,6 +259,8 @@ jobs:
           python3 scripts/ihk_smp_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE"
           python3 scripts/mcctrl_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE"
           python3 scripts/native_rust_unsafe_ffi_ledger.py --repo "$GITHUB_WORKSPACE" check
+          python3 scripts/native_rust_runtime_evidence.py \
+            --repo "$GITHUB_WORKSPACE" --check-contract
           python3 scripts/rs006_miscdevice_substrate.py --repo "$GITHUB_WORKSPACE"
           python3 -m unittest -v scripts.tests.test_rust_target_compatibility_patches
 
@@ -353,13 +359,53 @@ jobs:
           set -uo pipefail
           evidence_dir="$RUNNER_TEMP/native-rust-build-evidence"
           mkdir -p "$evidence_dir"
-          {
-            make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 rustavailable
-            make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 -j2 bzImage modules
-          } 2>&1 | tee "$evidence_dir/build.log"
-          status="${PIPESTATUS[0]}"
-          printf '%s\n' "$status" > "$evidence_dir/build.exit-code"
-          exit "$status"
+          module_targets=(
+            drivers/misc/mckernel/ihk.ko
+            drivers/misc/mckernel/ihk-smp-x86_64.ko
+            drivers/misc/mckernel/mcctrl.ko
+          )
+          printf '%s\n' "${module_targets[@]}" > "$evidence_dir/module-targets.txt"
+          : > "$evidence_dir/build.commands"
+          printf '%s\n' not-started > "$evidence_dir/build.phase"
+
+          run_phase() {
+            local phase="$1"
+            shift
+            local -a command=("$@")
+            printf '%s\n' "$phase" > "$evidence_dir/build.phase"
+            printf '%q' "${command[0]}" >> "$evidence_dir/build.commands"
+            printf ' %q' "${command[@]:1}" >> "$evidence_dir/build.commands"
+            printf '\n' >> "$evidence_dir/build.commands"
+            "${command[@]}"
+          }
+
+          set +e
+          (
+            set -e
+            run_phase rustavailable \
+              make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \
+                ARCH=x86_64 LLVM=1 rustavailable
+            run_phase bzImage \
+              make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \
+                ARCH=x86_64 LLVM=1 -j2 bzImage
+            # Linux 6.12 supports in-tree %.ko single targets.  Keep all three
+            # in one invocation so their one modpost pass sees the complete
+            # ihk provider/consumer symbol graph.
+            run_phase native-modules \
+              make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \
+                ARCH=x86_64 LLVM=1 -j2 "${module_targets[@]}"
+            printf '%s\n' complete > "$evidence_dir/build.phase"
+          ) 2>&1 | tee "$evidence_dir/build.log"
+          pipeline_status=("${PIPESTATUS[@]}")
+          set -e
+          producer_status="${pipeline_status[0]}"
+          tee_status="${pipeline_status[1]}"
+          printf '%s\n' "$producer_status" > "$evidence_dir/build.exit-code"
+          printf '%s\n' "$tee_status" > "$evidence_dir/build-log.exit-code"
+          if (( producer_status != 0 )); then
+            exit "$producer_status"
+          fi
+          exit "$tee_status"
 
       - name: Validate built metadata and capture immutable diagnostics
         run: |
@@ -372,6 +418,15 @@ jobs:
           test -s "$ihk"
           test -s "$smp"
           test -s "$mcctrl"
+          (
+            cd "$NATIVE_BUILD_DIR"
+            find . -type f -name '*.ko' -printf '%P\n' | LC_ALL=C sort
+          ) > "$EVIDENCE_DIR/built-module-artifacts.txt"
+          LC_ALL=C sort "$EVIDENCE_DIR/module-targets.txt" \
+            > "$EVIDENCE_DIR/module-targets.sorted"
+          cmp "$EVIDENCE_DIR/module-targets.sorted" \
+            "$EVIDENCE_DIR/built-module-artifacts.txt"
+          rm "$EVIDENCE_DIR/module-targets.sorted"
           python3 scripts/ihk_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" --module "$ihk"
           python3 scripts/ihk_os_registry_check.py --repo "$GITHUB_WORKSPACE"
           test "$(rustc --version | awk '{print $2}')" = "1.92.0"

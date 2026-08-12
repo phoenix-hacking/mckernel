@@ -146,6 +146,24 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         with self.assertRaisesRegex(evidence.EvidenceError, "credit/review boundary"):
             evidence.validate_contract(repo)
 
+    def test_full_module_tree_claim_mutation_is_rejected(self) -> None:
+        repo = self.copy_contract_repository()
+        path = repo / evidence.DEFAULT_CONTRACT
+        contract = json.loads(path.read_text(encoding="utf-8"))
+        contract["build_scope"]["builds_full_module_tree"] = True
+        path.write_text(json.dumps(contract, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        with self.assertRaisesRegex(evidence.EvidenceError, "exact build scope"):
+            evidence.validate_contract(repo)
+
+    def test_rk002_credit_mutation_is_rejected(self) -> None:
+        repo = self.copy_contract_repository()
+        path = repo / evidence.DEFAULT_CONTRACT
+        contract = json.loads(path.read_text(encoding="utf-8"))
+        contract["build_scope"]["credit_eligible"] = True
+        path.write_text(json.dumps(contract, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        with self.assertRaisesRegex(evidence.EvidenceError, "exact build scope"):
+            evidence.validate_contract(repo)
+
     def test_host_kvm_mutation_is_rejected(self) -> None:
         repo = self.copy_contract_repository()
         workflow = ".github/workflows/native-rust-host-modules-exact-runtime.yml"
@@ -305,6 +323,84 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             f"{digest}  .ihk.o.cmd\n", encoding="utf-8"
         )
         self.assertEqual(digest, evidence._parse_sums(directory)[".ihk.o.cmd"])
+
+    def write_build_scope_artifacts(self) -> tuple[Path, dict[str, str]]:
+        directory = self.root / "scope"
+        directory.mkdir()
+        source = self.root / "native-rust-source" / "linux-6.12.0-211.44.1.el10_2"
+        output = self.root / "native-rust-build"
+        prefix = f"make -C {source} O={output} ARCH=x86_64 LLVM=1"
+        values = {
+            "build.commands": (
+                f"{prefix} rustavailable\n"
+                f"{prefix} -j2 bzImage\n"
+                f"{prefix} -j2 {' '.join(evidence.BUILD_MODULE_TARGETS)}\n"
+            ),
+            "build.exit-code": "0\n",
+            "build.log": "Rust is available!\n",
+            "build-log.exit-code": "0\n",
+            "build.phase": "complete\n",
+            "built-module-artifacts.txt": (
+                "\n".join(sorted(evidence.BUILD_MODULE_TARGETS)) + "\n"
+            ),
+            "module-targets.txt": "\n".join(evidence.BUILD_MODULE_TARGETS) + "\n",
+        }
+        records = {}
+        for name, value in values.items():
+            path = directory / name
+            path.write_text(value, encoding="utf-8")
+            records[name] = hashlib.sha256(path.read_bytes()).hexdigest()
+        return directory, records
+
+    def test_build_scope_artifacts_bind_only_three_native_modules(self) -> None:
+        directory, records = self.write_build_scope_artifacts()
+        result = evidence._validate_build_scope_artifacts(directory, records)
+        self.assertEqual(evidence.BUILD_KERNEL_TARGETS, result["kernel_targets"])
+        self.assertEqual(evidence.BUILD_MODULE_TARGETS, result["module_targets"])
+
+    def test_unrelated_module_artifact_is_rejected(self) -> None:
+        directory, records = self.write_build_scope_artifacts()
+        path = directory / "built-module-artifacts.txt"
+        path.write_text(path.read_text(encoding="utf-8") + "drivers/gpu/radeon.ko\n")
+        records[path.name] = hashlib.sha256(path.read_bytes()).hexdigest()
+        with self.assertRaisesRegex(evidence.EvidenceError, "artifact scope differs"):
+            evidence._validate_build_scope_artifacts(directory, records)
+
+    def test_failed_or_incomplete_build_scope_is_rejected(self) -> None:
+        directory, records = self.write_build_scope_artifacts()
+        exit_code = directory / "build.exit-code"
+        exit_code.write_text("2\n", encoding="utf-8")
+        records[exit_code.name] = hashlib.sha256(exit_code.read_bytes()).hexdigest()
+        with self.assertRaisesRegex(evidence.EvidenceError, "successful exit"):
+            evidence._validate_build_scope_artifacts(directory, records)
+
+        exit_code.write_text("0\n", encoding="utf-8")
+        records[exit_code.name] = hashlib.sha256(exit_code.read_bytes()).hexdigest()
+        phase = directory / "build.phase"
+        phase.write_text("native-modules\n", encoding="utf-8")
+        records[phase.name] = hashlib.sha256(phase.read_bytes()).hexdigest()
+        with self.assertRaisesRegex(evidence.EvidenceError, "complete phase"):
+            evidence._validate_build_scope_artifacts(directory, records)
+
+        phase.write_text("complete\n", encoding="utf-8")
+        records[phase.name] = hashlib.sha256(phase.read_bytes()).hexdigest()
+        tee_status = directory / "build-log.exit-code"
+        tee_status.write_text("1\n", encoding="utf-8")
+        records[tee_status.name] = hashlib.sha256(tee_status.read_bytes()).hexdigest()
+        with self.assertRaisesRegex(evidence.EvidenceError, "log capture"):
+            evidence._validate_build_scope_artifacts(directory, records)
+
+    def test_broad_modules_command_artifact_is_rejected(self) -> None:
+        directory, records = self.write_build_scope_artifacts()
+        commands = directory / "build.commands"
+        text = commands.read_text(encoding="utf-8")
+        text = text.replace(
+            "-j2 " + " ".join(evidence.BUILD_MODULE_TARGETS), "-j2 modules", 1
+        )
+        commands.write_text(text, encoding="utf-8")
+        records[commands.name] = hashlib.sha256(commands.read_bytes()).hexdigest()
+        with self.assertRaisesRegex(evidence.EvidenceError, "bounded target scope"):
+            evidence._validate_build_scope_artifacts(directory, records)
 
     def test_resolved_config_missing_unload_support_is_rejected(self) -> None:
         path = self.root / "resolved.config"

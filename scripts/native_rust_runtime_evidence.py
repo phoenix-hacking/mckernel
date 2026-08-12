@@ -10,6 +10,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shlex
 import shutil
 import subprocess
 import sys
@@ -22,6 +23,12 @@ CONTRACT_ID = "mckernel-native-rust-runtime-evidence-v1"
 PROTOCOL = "MCKERNEL_NATIVE_RUST_RUNTIME_V1"
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
+BUILD_KERNEL_TARGETS = ["bzImage"]
+BUILD_MODULE_TARGETS = [
+    "drivers/misc/mckernel/ihk.ko",
+    "drivers/misc/mckernel/ihk-smp-x86_64.ko",
+    "drivers/misc/mckernel/mcctrl.ko",
+]
 
 
 class EvidenceError(RuntimeError):
@@ -110,6 +117,121 @@ def _read_text(path: Path, label: str) -> str:
         raise EvidenceError("cannot read {0}: {1}".format(label, error)) from error
 
 
+def _validate_exact_build_workflow(text: str) -> None:
+    arrays = re.findall(
+        r"(?ms)^\s*module_targets=\(\n(?P<body>.*?)^\s*\)\n", text
+    )
+    if len(arrays) != 1:
+        raise EvidenceError("exact build workflow must declare one module target array")
+    targets = [line.strip() for line in arrays[0].splitlines() if line.strip()]
+    if targets != BUILD_MODULE_TARGETS:
+        raise EvidenceError("exact build workflow module target scope differs")
+
+    normalized = re.sub(r"\\\n\s*", " ", text)
+    collapsed = re.sub(r"\s+", " ", normalized)
+    required_commands = [
+        (
+            'run_phase rustavailable make -C "$NATIVE_SOURCE_ROOT" '
+            'O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 rustavailable'
+        ),
+        (
+            'run_phase bzImage make -C "$NATIVE_SOURCE_ROOT" '
+            'O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 -j2 bzImage'
+        ),
+        (
+            'run_phase native-modules make -C "$NATIVE_SOURCE_ROOT" '
+            'O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 -j2 "${module_targets[@]}"'
+        ),
+    ]
+    positions: list[int] = []
+    for command in required_commands:
+        if collapsed.count(command) != 1:
+            raise EvidenceError("exact build workflow command scope differs")
+        positions.append(collapsed.index(command))
+    if positions != sorted(positions):
+        raise EvidenceError("exact build workflow commands are out of order")
+
+    for line in normalized.splitlines():
+        if 'make -C "$NATIVE_SOURCE_ROOT"' not in line:
+            continue
+        tokens = line.split()
+        if "modules" in tokens or any(token.startswith("M=") for token in tokens):
+            raise EvidenceError("exact build workflow invokes a broad module build")
+
+    compile_match = re.search(
+        r"(?ms)^      - name: Compile the exact kernel and native Rust modules\n"
+        r"(?P<body>.*?)^      - name: Validate built metadata",
+        text,
+    )
+    if compile_match is None:
+        raise EvidenceError("exact build workflow compile step differs")
+    compile_body = compile_match.group("body")
+    for invocation in required_commands:
+        if collapsed.count(invocation + " ||") or collapsed.count(invocation + " &&"):
+            raise EvidenceError("exact build workflow masks a phase failure")
+    if re.search(r"(?m)^\s*set \+e\s*$", compile_body) is None:
+        raise EvidenceError("exact build workflow failure capture differs")
+    if len(re.findall(r"(?m)^\s*set \+e\s*$", compile_body)) != 1:
+        raise EvidenceError("exact build workflow failure capture differs")
+    inner = compile_body.split("          (\n", 1)[1].split(
+        '          ) 2>&1 | tee "$evidence_dir/build.log"', 1
+    )[0]
+    if re.search(r"(?m)^\s*set \+e\s*$", inner):
+        raise EvidenceError("exact build workflow weakens inner fail-fast")
+
+    status_capture = (
+        '          ) 2>&1 | tee "$evidence_dir/build.log"\n'
+        '          pipeline_status=("${PIPESTATUS[@]}")\n'
+        "          set -e\n"
+        '          producer_status="${pipeline_status[0]}"\n'
+        '          tee_status="${pipeline_status[1]}"\n'
+        '          printf \'%s\\n\' "$producer_status" '
+        '> "$evidence_dir/build.exit-code"\n'
+        '          printf \'%s\\n\' "$tee_status" '
+        '> "$evidence_dir/build-log.exit-code"\n'
+        "          if (( producer_status != 0 )); then\n"
+        '            exit "$producer_status"\n'
+        "          fi\n"
+        '          exit "$tee_status"\n'
+    )
+    if text.count(status_capture) != 1:
+        raise EvidenceError("exact build workflow failure capture differs")
+
+    failure_boundaries = (
+        ': > "$evidence_dir/build.commands"',
+        'printf \'%s\\n\' not-started > "$evidence_dir/build.phase"',
+        "run_phase() {",
+        'printf \'%s\\n\' "$phase" > "$evidence_dir/build.phase"',
+        '\n            "${command[@]}"\n',
+        "set +e\n          (\n            set -e",
+        'printf \'%s\\n\' complete > "$evidence_dir/build.phase"',
+        "if: ${{ always() }}",
+    )
+    failure_positions: list[int] = []
+    for boundary in failure_boundaries:
+        if text.count(boundary) != 1:
+            raise EvidenceError("exact build workflow failure evidence differs")
+        failure_positions.append(text.index(boundary))
+    if failure_positions != sorted(failure_positions):
+        raise EvidenceError("exact build workflow failure evidence is out of order")
+
+    artifact_boundaries = (
+        "find . -type f -name '*.ko' -printf '%P\\n' | LC_ALL=C sort",
+        '> "$EVIDENCE_DIR/built-module-artifacts.txt"',
+        'LC_ALL=C sort "$EVIDENCE_DIR/module-targets.txt"',
+        '> "$EVIDENCE_DIR/module-targets.sorted"',
+        'cmp "$EVIDENCE_DIR/module-targets.sorted" \\\n            "$EVIDENCE_DIR/built-module-artifacts.txt"',
+        'rm "$EVIDENCE_DIR/module-targets.sorted"',
+    )
+    artifact_positions: list[int] = []
+    for boundary in artifact_boundaries:
+        if text.count(boundary) != 1:
+            raise EvidenceError("exact build workflow artifact scope differs")
+        artifact_positions.append(text.index(boundary))
+    if artifact_positions != sorted(artifact_positions):
+        raise EvidenceError("exact build workflow artifact scope is out of order")
+
+
 def _regular_evidence_file(path: Path, label: str, nonempty: bool = True) -> Path:
     if path.is_symlink() or not path.is_file():
         raise EvidenceError("{0} must be a regular non-symlink file".format(label))
@@ -127,6 +249,7 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
         contract,
         {
             "artifact_contract",
+            "build_scope",
             "gate",
             "modules",
             "protocol",
@@ -139,6 +262,24 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
     )
     if contract["schema_version"] != 1:
         raise EvidenceError("unsupported runtime contract schema")
+
+    expected_build_scope = {
+        "builds_full_module_tree": False,
+        "credit_eligible": False,
+        "kernel_targets": BUILD_KERNEL_TARGETS,
+        "module_target_interface": (
+            "Linux 6.12 in-tree %.ko single targets in one modpost invocation"
+        ),
+        "module_targets": BUILD_MODULE_TARGETS,
+        "policy": (
+            "Build the boot kernel and only the three staged McKernel native Rust modules. "
+            "This bounded technical capture neither validates every configured distro module "
+            "nor awards RK-002, native-module, migration, or tracker credit."
+        ),
+        "tracker_credit": False,
+    }
+    if contract["build_scope"] != expected_build_scope:
+        raise EvidenceError("runtime contract weakens the exact build scope")
 
     expected_gate = {
         "capture_can_claim_pass": False,
@@ -268,6 +409,12 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
         raise EvidenceError("repository contract must remain uncaptured and unreviewed")
     expected_build_evidence = [
         "SHA256SUMS",
+        "build.commands",
+        "build.exit-code",
+        "build.log",
+        "build-log.exit-code",
+        "build.phase",
+        "built-module-artifacts.txt",
         "bzImage",
         "commit.sha",
         "ihk-smp-x86_64.ko",
@@ -280,6 +427,7 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
         "mcctrl.ko",
         "mcctrl.ko.modinfo",
         "mcctrl.ko.nm",
+        "module-targets.txt",
         "resolved.config",
         "stage-lock.json",
     ]
@@ -348,9 +496,10 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
     ):
         if config.count(symbol) != 1:
             raise EvidenceError("runtime config lacks exact modular selection: {0}".format(symbol))
-    for fragment in ("workflow_call:", "-j2 bzImage modules", '"$EVIDENCE_DIR/bzImage"'):
+    for fragment in ("workflow_call:", '"$EVIDENCE_DIR/bzImage"'):
         if fragment not in build_workflow:
             raise EvidenceError("exact build workflow is not a reusable boot artifact producer")
+    _validate_exact_build_workflow(build_workflow)
     openssl_boundaries = (
         "openssl openssl-devel patch",
         'openssl_path="$(command -v openssl)"',
@@ -489,6 +638,87 @@ def _parse_sums(directory: Path) -> dict[str, str]:
         if path.is_symlink() or not path.is_file() or _sha256_file(path) != digest:
             raise EvidenceError("build evidence digest differs for {0}".format(name))
     return records
+
+
+def _validate_build_scope_artifacts(
+    directory: Path, records: dict[str, str]
+) -> dict[str, Any]:
+    required = {
+        "build.commands",
+        "build.exit-code",
+        "build.log",
+        "build-log.exit-code",
+        "build.phase",
+        "built-module-artifacts.txt",
+        "module-targets.txt",
+    }
+    if not required.issubset(records):
+        raise EvidenceError(
+            "build scope evidence is incomplete: {0}".format(
+                sorted(required - set(records))
+            )
+        )
+    if _read_text(directory / "build.exit-code", "build exit code") != "0\n":
+        raise EvidenceError("exact build did not record a successful exit")
+    if _read_text(directory / "build-log.exit-code", "build log exit code") != "0\n":
+        raise EvidenceError("exact build log capture did not succeed")
+    if _read_text(directory / "build.phase", "build phase") != "complete\n":
+        raise EvidenceError("exact build did not reach its complete phase")
+    _regular_evidence_file(directory / "build.log", "exact build log")
+
+    targets = _read_text(directory / "module-targets.txt", "module target scope").splitlines()
+    if targets != BUILD_MODULE_TARGETS:
+        raise EvidenceError("recorded module target scope differs")
+    built = _read_text(
+        directory / "built-module-artifacts.txt", "built module artifact scope"
+    ).splitlines()
+    if built != sorted(BUILD_MODULE_TARGETS):
+        raise EvidenceError("built module artifact scope differs")
+
+    command_lines = _read_text(
+        directory / "build.commands", "exact build commands"
+    ).splitlines()
+    if len(command_lines) != 3 or any(not line for line in command_lines):
+        raise EvidenceError("exact build command record count differs")
+    try:
+        commands = [shlex.split(line, posix=True) for line in command_lines]
+    except ValueError as error:
+        raise EvidenceError("exact build command record is malformed") from error
+    if any(len(command) < 7 for command in commands):
+        raise EvidenceError("exact build command record is truncated")
+
+    sources = [command[2] for command in commands]
+    outputs = [command[3][2:] if command[3].startswith("O=") else "" for command in commands]
+    if len(set(sources)) != 1 or len(set(outputs)) != 1:
+        raise EvidenceError("exact build commands use inconsistent trees")
+    source = Path(sources[0])
+    output = Path(outputs[0])
+    selected_source = "linux-6.12.0-211.44.1.el10_2"
+    if (
+        not source.is_absolute()
+        or ".." in source.parts
+        or source.name != selected_source
+        or source.parent.name != "native-rust-source"
+        or not output.is_absolute()
+        or ".." in output.parts
+        or output.name != "native-rust-build"
+    ):
+        raise EvidenceError("exact build commands use an unexpected source/output identity")
+
+    prefix = ["make", "-C", sources[0], "O=" + outputs[0], "ARCH=x86_64", "LLVM=1"]
+    expected_commands = [
+        prefix + ["rustavailable"],
+        prefix + ["-j2", "bzImage"],
+        prefix + ["-j2"] + BUILD_MODULE_TARGETS,
+    ]
+    if commands != expected_commands:
+        raise EvidenceError("exact build commands exceed the bounded target scope")
+    return {
+        "build_commands_sha256": records["build.commands"],
+        "build_log_sha256": records["build.log"],
+        "kernel_targets": BUILD_KERNEL_TARGETS,
+        "module_targets": BUILD_MODULE_TARGETS,
+    }
 
 
 def _run_field(module: Path, field: str) -> list[str]:
@@ -789,6 +1019,7 @@ def capture(
         raise EvidenceError(
             "build artifact lacks required files: {0}".format(sorted(required - available))
         )
+    build_scope = _validate_build_scope_artifacts(build_dir, records)
     commit = _read_text(build_dir / "commit.sha", "build commit").strip()
     if commit != candidate_sha:
         raise EvidenceError("build artifact commit differs from runtime candidate")
@@ -900,6 +1131,7 @@ def capture(
             "config_runtime_requirements": config_state,
             "kernel_release": kernel_release,
             "modules": modules,
+            "scope": build_scope,
         },
         "runtime": runtime,
         "readiness": {

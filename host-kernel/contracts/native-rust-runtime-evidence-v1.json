@@ -2,6 +2,12 @@
   "artifact_contract": {
     "build_evidence_files": [
       "SHA256SUMS",
+      "build.commands",
+      "build.exit-code",
+      "build.log",
+      "build-log.exit-code",
+      "build.phase",
+      "built-module-artifacts.txt",
       "bzImage",
       "commit.sha",
       "ihk-smp-x86_64.ko",
@@ -14,6 +20,7 @@
       "mcctrl.ko",
       "mcctrl.ko.modinfo",
       "mcctrl.ko.nm",
+      "module-targets.txt",
       "resolved.config",
       "stage-lock.json"
     ],
@@ -33,6 +40,21 @@
       "serial.log",
       "workflow-state"
     ]
+  },
+  "build_scope": {
+    "builds_full_module_tree": false,
+    "credit_eligible": false,
+    "kernel_targets": [
+      "bzImage"
+    ],
+    "module_target_interface": "Linux 6.12 in-tree %.ko single targets in one modpost invocation",
+    "module_targets": [
+      "drivers/misc/mckernel/ihk.ko",
+      "drivers/misc/mckernel/ihk-smp-x86_64.ko",
+      "drivers/misc/mckernel/mcctrl.ko"
+    ],
+    "policy": "Build the boot kernel and only the three staged McKernel native Rust modules. This bounded technical capture neither validates every configured distro module nor awards RK-002, native-module, migration, or tracker credit.",
+    "tracker_credit": false
   },
   "gate": {
     "capture_can_claim_pass": false,

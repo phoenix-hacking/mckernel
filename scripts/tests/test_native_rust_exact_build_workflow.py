@@ -10,6 +10,8 @@ from pathlib import Path
 
 import yaml
 
+from scripts import native_rust_runtime_evidence as runtime_evidence
+
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 WORKFLOW = REPO_ROOT / ".github/workflows/native-rust-host-modules-exact-build.yml"
@@ -69,13 +71,120 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             "github.event.pull_request.head.sha || github.sha }}",
             self.workflow,
         )
-        self.assertIn("-j2 bzImage modules", self.workflow)
+        self.assertIn("ARCH=x86_64 LLVM=1 -j2 bzImage", self.workflow)
+        self.assertIn(
+            'ARCH=x86_64 LLVM=1 -j2 "${module_targets[@]}"', self.workflow
+        )
+        self.assertNotRegex(self.workflow, r"(?m)^\s*make\s+.*\bmodules\b")
         self.assertIn(
             'cp "$NATIVE_BUILD_DIR/arch/x86/boot/bzImage" "$EVIDENCE_DIR/bzImage"',
             self.workflow,
         )
         self.assertIn('> "$EVIDENCE_DIR/kernel.release"', self.workflow)
         self.assertIn("include-hidden-files: true", self.workflow)
+
+    def test_build_scope_checker_binds_supported_in_tree_single_targets(self):
+        runtime_evidence._validate_exact_build_workflow(self.workflow)
+        targets = runtime_evidence.BUILD_MODULE_TARGETS
+        self.assertEqual(
+            [
+                "drivers/misc/mckernel/ihk.ko",
+                "drivers/misc/mckernel/ihk-smp-x86_64.ko",
+                "drivers/misc/mckernel/mcctrl.ko",
+            ],
+            targets,
+        )
+        for target in targets:
+            self.assertEqual(1, self.workflow.count("            " + target + "\n"))
+        for path in (
+            "host-kernel/contracts/native-rust-runtime-evidence-v1.json",
+            "scripts/native_rust_runtime_evidence.py",
+        ):
+            self.assertEqual(2, self.workflow.count("      - " + path))
+        self.assertIn(
+            "python3 scripts/native_rust_runtime_evidence.py \\\n"
+            '            --repo "$GITHUB_WORKSPACE" --check-contract',
+            self.workflow,
+        )
+
+    def test_broad_module_build_mutation_is_rejected(self):
+        mutation = self.workflow.replace(
+            'ARCH=x86_64 LLVM=1 -j2 "${module_targets[@]}"',
+            "ARCH=x86_64 LLVM=1 -j2 modules",
+            1,
+        )
+        with self.assertRaisesRegex(
+            runtime_evidence.EvidenceError,
+            "command scope|broad module build",
+        ):
+            runtime_evidence._validate_exact_build_workflow(mutation)
+
+    def test_partial_module_target_mutation_is_rejected(self):
+        mutation = self.workflow.replace(
+            "            drivers/misc/mckernel/mcctrl.ko\n", "", 1
+        )
+        with self.assertRaisesRegex(
+            runtime_evidence.EvidenceError, "module target scope"
+        ):
+            runtime_evidence._validate_exact_build_workflow(mutation)
+
+    def test_build_phase_and_exact_artifact_scope_are_bound(self):
+        for fragment in (
+            'printf \'%s\\n\' "$phase" > "$evidence_dir/build.phase"',
+            'printf \'%s\\n\' "$producer_status" > "$evidence_dir/build.exit-code"',
+            'printf \'%s\\n\' "$tee_status" > "$evidence_dir/build-log.exit-code"',
+            'tee "$evidence_dir/build.log"',
+            "find . -type f -name '*.ko' -printf '%P\\n' | LC_ALL=C sort",
+            '> "$EVIDENCE_DIR/built-module-artifacts.txt"',
+            'cmp "$EVIDENCE_DIR/module-targets.sorted"',
+        ):
+            self.assertIn(fragment, self.workflow)
+
+    def test_rustavailable_failure_cannot_be_masked(self):
+        for old, new in (
+            ("(\n            set -e\n", "(\n            set +e\n"),
+            ('            "${command[@]}"\n', '            "${command[@]}" || true\n'),
+            (
+                '                ARCH=x86_64 LLVM=1 rustavailable\n',
+                '                ARCH=x86_64 LLVM=1 rustavailable || true\n',
+            ),
+        ):
+            mutation = self.workflow.replace(old, new, 1)
+            with self.subTest(mutation=new.strip()):
+                with self.assertRaisesRegex(
+                    runtime_evidence.EvidenceError,
+                    "failure (capture|evidence)|masks a phase failure",
+                ):
+                    runtime_evidence._validate_exact_build_workflow(mutation)
+
+    def test_pipeline_status_capture_cannot_be_weakened(self):
+        for old, new in (
+            ("          set +e\n", ""),
+            (
+                '          pipeline_status=("${PIPESTATUS[@]}")\n',
+                '          pipeline_status=(0 0)\n',
+            ),
+            (
+                '          pipeline_status=("${PIPESTATUS[@]}")\n',
+                '          true\n          pipeline_status=("${PIPESTATUS[@]}")\n',
+            ),
+            (
+                "          if (( producer_status != 0 )); then\n",
+                "          producer_status=0\n"
+                "          if (( producer_status != 0 )); then\n",
+            ),
+            (
+                '          printf \'%s\\n\' "$tee_status" '
+                '> "$evidence_dir/build-log.exit-code"\n',
+                "",
+            ),
+        ):
+            mutation = self.workflow.replace(old, new, 1)
+            with self.subTest(mutation=new.strip() or "removed"):
+                with self.assertRaisesRegex(
+                    runtime_evidence.EvidenceError, "failure (capture|evidence)"
+                ):
+                    runtime_evidence._validate_exact_build_workflow(mutation)
 
     def test_exact_three_module_config_and_artifacts_are_required(self):
         for symbol in (
@@ -236,7 +345,8 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         self.assertLess(evidence_init, checkout)
         self.assertIn('> "$evidence_dir/workflow-state"', self.workflow)
         self.assertIn('tee "$evidence_dir/build.log"', self.workflow)
-        self.assertIn('printf \'%s\\n\' "$status"', self.workflow)
+        self.assertIn('printf \'%s\\n\' "$producer_status"', self.workflow)
+        self.assertIn('printf \'%s\\n\' "$tee_status"', self.workflow)
         self.assertIn("if: ${{ always() }}", self.workflow)
         self.assertIn("if-no-files-found: error", self.workflow)
 
