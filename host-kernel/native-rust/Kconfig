@@ -1,0 +1,24 @@
+menu "McKernel native Rust host modules"
+
+depends on RUST
+
+config MCKERNEL_RUST_IHK
+	tristate "Native Rust IHK core host module"
+	help
+	  Build the project-owned ihk host module as a native Rust-for-Linux
+	  module. This production target must not link any project C object.
+
+config MCKERNEL_RUST_IHK_SMP_X86_64
+	tristate "Native Rust IHK SMP x86_64 host module"
+	depends on X86_64 && MCKERNEL_RUST_IHK
+	help
+	  Build the project-owned x86_64 SMP host module as native Rust.
+
+config MCKERNEL_RUST_MCCTRL
+	tristate "Native Rust McKernel control module"
+	depends on MCKERNEL_RUST_IHK
+	help
+	  Build mcctrl as a native Rust-for-Linux module. The legacy C module and
+	  manually compiled Rust helper object are reference-only for this target.
+
+endmenu
