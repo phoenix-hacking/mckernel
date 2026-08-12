@@ -51,6 +51,8 @@ PATCHES = (
     / "host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch",
     REPO_ROOT
     / "host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch",
+    REPO_ROOT
+    / "host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch",
 )
 PROJECT_PATCHES = (
     REPO_ROOT
@@ -94,7 +96,7 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
     def test_every_patch_rejects_second_application(self):
         from scripts import linux_api_exact_probe as probe
 
-        self.assertEqual(20, len(PATCHES))
+        self.assertEqual(21, len(PATCHES))
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory) / "linux"
             shutil.copytree(str(CORE_PREIMAGE), str(root))
@@ -209,6 +211,8 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
             self.assertEqual(digest, probe.sha256_file(CORE_PREIMAGE / relative))
         for relative, digest in probe.RUST_MISCDEVICE_PREIMAGE_SHA256S:
             self.assertEqual(digest, probe.sha256_file(CORE_PREIMAGE / relative))
+        for relative, digest in probe.RUST_OBJTOOL_NORETURN_PREIMAGE_SHA256S:
+            self.assertEqual(digest, probe.sha256_file(CORE_PREIMAGE / relative))
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory) / "linux"
             shutil.copytree(str(CORE_PREIMAGE), str(root))
@@ -235,6 +239,8 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
             for relative, digest in probe.CLANG_21_SOURCE_FIX_POSTIMAGE_SHA256S:
                 self.assertEqual(digest, probe.sha256_file(root / relative))
             for relative, digest in probe.RUST_MISCDEVICE_POSTIMAGE_SHA256S:
+                self.assertEqual(digest, probe.sha256_file(root / relative))
+            for relative, digest in probe.RUST_OBJTOOL_NORETURN_POSTIMAGE_SHA256S:
                 self.assertEqual(digest, probe.sha256_file(root / relative))
             ksm = (root / "mm/ksm.c").read_text(encoding="utf-8")
             advisor_show = ksm.split(
@@ -407,6 +413,19 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
             self.assertIn("MISC_DYNAMIC_MINOR", miscdevice)
             self.assertIn("pub trait MiscDevice", miscdevice)
             self.assertNotIn("fn mmap", miscdevice)
+            objtool = (root / "tools/objtool/check.c").read_text(encoding="utf-8")
+            self.assertEqual(
+                1,
+                objtool.count(
+                    "_4core9panicking11panic_const23panic_const_"
+                ),
+            )
+            self.assertEqual(
+                1,
+                objtool.count(
+                    "_4core9panicking11panic_const24panic_const_"
+                ),
+            )
 
     def test_core_edition_patch_without_version_helper_is_incomplete(self):
         from scripts import linux_api_exact_probe as probe
@@ -428,6 +447,45 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
                 ],
                 probe.sha256_file(root / "scripts/Makefile.compiler"),
             )
+
+    def test_objtool_rust_1_92_patch_and_fixture_are_fail_closed(self):
+        from scripts import linux_api_exact_probe as probe
+
+        original = PATCHES[20].read_text(encoding="utf-8")
+        for mutation in ("patch", "fixture"):
+            with self.subTest(mutation=mutation):
+                with tempfile.TemporaryDirectory() as directory:
+                    root = Path(directory)
+                    shutil.copytree(
+                        str(REPO_ROOT / "host-kernel/rocky/patches"),
+                        str(root / "host-kernel/rocky/patches"),
+                    )
+                    shutil.copytree(
+                        str(CORE_PREIMAGE),
+                        str(root / probe.RUST_CORE_COMPAT_FIXTURE_ROOT),
+                    )
+                    target_fixture = root / probe.RUST_COMPAT_FIXTURE_PATH
+                    target_fixture.parent.mkdir(parents=True, exist_ok=True)
+                    target_fixture.write_bytes(PREIMAGE.read_bytes())
+                    if mutation == "patch":
+                        patch = root / PATCHES[20].relative_to(REPO_ROOT)
+                        patch.write_text(
+                            original.replace(
+                                "panic_const23panic_const_",
+                                "panic_const22panic_const_",
+                                1,
+                            ),
+                            encoding="utf-8",
+                        )
+                    else:
+                        fixture = (
+                            root
+                            / probe.RUST_CORE_COMPAT_FIXTURE_ROOT
+                            / "tools/objtool/check.c"
+                        )
+                        fixture.write_bytes(fixture.read_bytes() + b"\n")
+                    with self.assertRaises(probe.ProbeError):
+                        probe.rust_compatibility_patch_records(root)
 
 
 if __name__ == "__main__":

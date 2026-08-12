@@ -204,7 +204,7 @@ class RepositoryContractTests(unittest.TestCase):
             self.assertEqual(
                 hashlib.sha256(path.read_bytes()).hexdigest(), binding["sha256"]
             )
-        self.assertEqual(20, len(contract["patch_authority"]["rust_compatibility"]))
+        self.assertEqual(21, len(contract["patch_authority"]["rust_compatibility"]))
         self.assertEqual(
             [row["path"] for row in contract["patch_authority"]["rust_compatibility"]],
             resolution.EXPECTED_COMPATIBILITY_PATCHES,
@@ -226,8 +226,23 @@ class RepositoryContractTests(unittest.TestCase):
                     "no_config_symbol_changes"
                 ]
             ),
-            19,
+            20,
         )
+        objtool_patch = contract["patch_authority"]["rust_compatibility"][-1]
+        self.assertEqual(
+            objtool_patch["observed_failure"],
+            resolution.EXPECTED_OBJTOOL_NORETURN_FAILURE,
+        )
+        self.assertEqual(
+            objtool_patch["preimage"],
+            resolution.EXPECTED_OBJTOOL_NORETURN_PREIMAGE,
+        )
+        self.assertEqual(
+            objtool_patch["postimage"],
+            resolution.EXPECTED_OBJTOOL_NORETURN_POSTIMAGE,
+        )
+        self.assertNotIn("upstream_commit", objtool_patch)
+        self.assertNotIn("stable_commit", objtool_patch)
         self.assertEqual(
             contract["tool_environment"]["expected_file_owners"]["rust_src_core"],
             "rust-src-0:1.92.0-1.el10.noarch",

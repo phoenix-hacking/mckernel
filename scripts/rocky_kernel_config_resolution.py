@@ -23,7 +23,7 @@ TOOLCHAIN_LOCK_PATH = Path("host-kernel/rocky/toolchain-lock.json")
 CONFIG_POLICY_PATH = Path("host-kernel/rocky/config-policy.json")
 CONFIG_FRAGMENT_PATH = Path("host-kernel/rocky/configs/rust-minimal.config")
 EXPECTED_CONTRACT_SHA256 = (
-    "fb62377e1e9c868e77d199f8338617fe3659f99181e7537e4a74d3d2cbba15ef"
+    "4bff9fbae437e42d7870e5af1188b675acb0c520f039fc97e15732a9acd03d18"
 )
 EXPECTED_WORKFLOW_SHA256 = (
     "d388610f13701e0166656d019ac0cd48c456c33a3d616ebb5df9bc3ad7e36ece"
@@ -64,7 +64,32 @@ EXPECTED_COMPATIBILITY_PATCHES = [
     "host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch",
     "host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch",
     "host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch",
+    "host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch",
 ]
+EXPECTED_OBJTOOL_NORETURN_FAILURE = {
+    "artifact_id": 9160078637,
+    "artifact_zip_bytes": 62669,
+    "artifact_zip_sha256": (
+        "e4c3786f8fed3255fcd4f4c9e9baba340527050bf5be1b044b9c81cdd5a4cfbc"
+    ),
+    "job_id": 94273299611,
+    "objtool_diagnostic_count": 1,
+    "repository_commit": "9438ad175b4c1ac7855f6afc119f154639fe18c2",
+    "run_id": 31644047766,
+    "rustc_version": "1.92.0",
+    "symbol_fragment": "_4core9panicking11panic_const23panic_const_",
+    "workflow": "Native Rust host modules exact Rocky build",
+}
+EXPECTED_OBJTOOL_NORETURN_PREIMAGE = {
+    "path": "tools/objtool/check.c",
+    "sha256": "71b836ba23a062554bc3038e8e8c7f940bfb38d05dec8d063ef87b70901d4f2e",
+    "size": 116914,
+}
+EXPECTED_OBJTOOL_NORETURN_POSTIMAGE = {
+    "path": "tools/objtool/check.c",
+    "sha256": "2c8d113bcbf65bc0de8ad360f70bc707a0379baa925da01cebf0e95f23ce28e7",
+    "size": 116993,
+}
 CAPTURE_ENVIRONMENT = {
     "ARCH": "x86_64",
     "HOME": "/root",
@@ -402,8 +427,8 @@ def validate_contract(repo):
     _, series_digest = sha256_file(series_path)
     require_exact(series_digest, rocky_series["sha256"], "Rocky series digest")
     patches = patch_authority["rust_compatibility"]
-    if not isinstance(patches, list) or len(patches) != 20:
-        raise ConfigResolutionError("exactly twenty compatibility patches are required")
+    if not isinstance(patches, list) or len(patches) != 21:
+        raise ConfigResolutionError("exactly twenty-one compatibility patches are required")
     patch_directory = repo / "host-kernel/rocky/patches"
     discovered_patches = sorted(
         path.relative_to(repo).as_posix()
@@ -449,7 +474,42 @@ def validate_contract(repo):
                 expected_fields.add(field)
                 identity_count += 1
                 require_exact(row.get(field), identities[0], field)
-        if identity_count == 0:
+        if identity_count == 0 and index == 20:
+            expected_fields.update(
+                {"observed_failure", "postimage", "preimage"}
+            )
+            require_exact(
+                row.get("observed_failure"),
+                EXPECTED_OBJTOOL_NORETURN_FAILURE,
+                "observed Objtool failure",
+            )
+            require_exact(
+                row.get("preimage"),
+                EXPECTED_OBJTOOL_NORETURN_PREIMAGE,
+                "Objtool preimage",
+            )
+            require_exact(
+                row.get("postimage"),
+                EXPECTED_OBJTOOL_NORETURN_POSTIMAGE,
+                "Objtool postimage",
+            )
+            for field, expected in (
+                ("Observed-Repository-Commit", "9438ad175b4c1ac7855f6afc119f154639fe18c2"),
+                ("Observed-Run-ID", "31644047766"),
+                ("Observed-Job-ID", "94273299611"),
+                ("Observed-Artifact-ID", "9160078637"),
+                ("Observed-Rustc", "1.92.0"),
+            ):
+                require_exact(
+                    text.count("{}: {}".format(field, expected)),
+                    1,
+                    "observed Objtool patch metadata",
+                )
+            if "Upstream-Commit:" in text or "Stable-Commit:" in text:
+                raise ConfigResolutionError(
+                    "observed Objtool patch invents upstream provenance"
+                )
+        elif identity_count == 0:
             mail_commits = re.findall(
                 r"\AFrom ([0-9a-f]{40}) Mon Sep 17 00:00:00 2001$",
                 text,

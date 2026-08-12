@@ -45,10 +45,10 @@ class CurrentLedgerTests(unittest.TestCase):
         value = load_committed()
         discovery = ledger.validate_ledger(value, REPO_ROOT)
         self.assertEqual(len(discovery["inputs"]), 10)
-        self.assertEqual(len(discovery["sites"]), 21)
+        self.assertEqual(len(discovery["sites"]), 20)
         self.assertEqual(value["coverage"]["by_crate"], {
             "ihk": 14,
-            "ihk_smp_x86_64": 5,
+            "ihk_smp_x86_64": 4,
             "mcctrl": 2,
         })
         self.assertEqual(value["readiness"]["gate_status"], "NOT_READY")

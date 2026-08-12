@@ -253,6 +253,7 @@ class LicenseInventoryTests(unittest.TestCase):
                 "host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch",
                 "host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch",
                 "host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch",
+                "host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch",
             ):
                 item = by_path["repository/" + relative]
                 patch = REPO_ROOT / relative

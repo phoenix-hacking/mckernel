@@ -60,6 +60,7 @@ RUST_COMPAT_PATCH_PATHS = (
     Path("host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch"),
     Path("host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch"),
     Path("host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch"),
+    Path("host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch"),
 )
 CONFIG_POLICY_PATH = Path("host-kernel/rocky/config-policy.json")
 TOOLCHAIN_LOCK_PATH = Path("host-kernel/rocky/toolchain-lock.json")
@@ -141,6 +142,12 @@ RUST_MISCDEVICE_POSTIMAGE_SHA256S = (
     ("rust/bindings/bindings_helper.h", "f2644392ca91a791e4ab2ffb05a9b30a911a51f1ae025c696c710cfb3a447d07"),
     ("rust/kernel/miscdevice.rs", "6cfa6ed228561b7a8d41df50700868480d29514dd3469935679b11015c93fc9c"),
 )
+RUST_OBJTOOL_NORETURN_PREIMAGE_SHA256S = (
+    ("tools/objtool/check.c", "71b836ba23a062554bc3038e8e8c7f940bfb38d05dec8d063ef87b70901d4f2e"),
+)
+RUST_OBJTOOL_NORETURN_POSTIMAGE_SHA256S = (
+    ("tools/objtool/check.c", "2c8d113bcbf65bc0de8ad360f70bc707a0379baa925da01cebf0e95f23ce28e7"),
+)
 CLANG_21_WARNING_PREIMAGE_SHA256S = (
     ("Makefile", "b2d9e6f03fa466db088337572dec4b0f98db8f5775ca537bce0a179a1ac216bd"),
     ("arch/loongarch/kernel/Makefile", "0f1aeabed014f3e16ab67cc0b9dfc7c72eb726b6439d95562ba08264fba19a9b"),
@@ -218,6 +225,7 @@ RUST_COMPAT_UPSTREAM_COMMITS = (
     "4f79eaa2ceac86a0e0f304b0bab556cca5bf4f30",
     "a69dc41a4211b0da311ae3a3b79dd4497c9dfb60",
     "f893691e742688ae21ad597c5bba13bef54706cd",
+    None,
 )
 RUST_COMPAT_STABLE_COMMITS = (
     None,
@@ -238,6 +246,7 @@ RUST_COMPAT_STABLE_COMMITS = (
     "d66cf772bebd789448121cdfc42734fb042c9c4b",
     "3f856d5d84467c7fba0bf3cca405089c497e37eb",
     "dd8a734155ae28094d27b96c00a478fa0ee6d5d7",
+    None,
     None,
     None,
 )
@@ -303,6 +312,20 @@ RUST_KERNEL_1_92_RECONCILIATION_FAILURE_EVIDENCE = (
         "rust_kernel_diagnostic_count": 8,
     },
 )
+RUST_OBJTOOL_NORETURN_FAILURE_EVIDENCE = {
+    "workflow": "Native Rust host modules exact Rocky build",
+    "repository_commit": "9438ad175b4c1ac7855f6afc119f154639fe18c2",
+    "run_id": 31644047766,
+    "job_id": 94273299611,
+    "artifact_id": 9160078637,
+    "artifact_zip_bytes": 62669,
+    "artifact_zip_sha256": (
+        "e4c3786f8fed3255fcd4f4c9e9baba340527050bf5be1b044b9c81cdd5a4cfbc"
+    ),
+    "rustc_version": "1.92.0",
+    "objtool_diagnostic_count": 1,
+    "symbol_fragment": "_4core9panicking11panic_const23panic_const_",
+}
 CLANG_21_DEFAULT_CONST_FAILURE_EVIDENCE = (
     {
         "workflow": "RS-001 exact Rocky Linux API evidence",
@@ -637,6 +660,16 @@ def rust_compatibility_patch_records(repo):
             raise ProbeError(
                 "Rocky Rust miscdevice fixture digest changed: {0}".format(relative)
             )
+    for relative, digest in RUST_OBJTOOL_NORETURN_PREIMAGE_SHA256S:
+        path = repository_file(
+            repo,
+            RUST_CORE_COMPAT_FIXTURE_ROOT / relative,
+            "Rocky Rust Objtool fixture file",
+        )
+        if sha256_file(path) != digest:
+            raise ProbeError(
+                "Rocky Rust Objtool fixture digest changed: {0}".format(relative)
+            )
     records = []
     required_additions = (
         {
@@ -774,6 +807,9 @@ def rust_compatibility_patch_records(repo):
             "+    type Ptr: ForeignOwnable + Send + Sync;": 1,
             "+unsafe extern \"C\" fn fops_open<T: MiscDevice>(": 1,
         },
+        {
+            "+\t       strstr(func->name, \"_4core9panicking11panic_const23panic_const_\")\t\t\t||": 1,
+        },
     )
     required_deletions = (
         {},
@@ -864,8 +900,11 @@ def rust_compatibility_patch_records(repo):
         },
         {},
         {},
+        {},
     )
-    expected_diff_counts = (1, 1, 3, 2, 3, 1, 4, 4, 1, 1, 1, 2, 2, 3, 1, 1, 5, 2, 1, 3)
+    expected_diff_counts = (
+        1, 1, 3, 2, 3, 1, 4, 4, 1, 1, 1, 2, 2, 3, 1, 1, 5, 2, 1, 3, 1
+    )
     for index, relative in enumerate(RUST_COMPAT_PATCH_PATHS):
         path = repository_file(repo, relative, "Rust target compatibility patch")
         try:
@@ -907,26 +946,66 @@ def rust_compatibility_patch_records(repo):
                     or text.count("License: GPL-2.0-only") != 1
                 )
             )
+            or (
+                index == 20
+                and (
+                    text.count(
+                        "Observed-Repository-Commit: "
+                        "9438ad175b4c1ac7855f6afc119f154639fe18c2"
+                    ) != 1
+                    or text.count(
+                        "Observed-Workflow: Native Rust host modules exact Rocky build"
+                    ) != 1
+                    or text.count("Observed-Run-ID: 31644047766") != 1
+                    or text.count("Observed-Job-ID: 94273299611") != 1
+                    or text.count("Observed-Artifact-ID: 9160078637") != 1
+                    or text.count("Observed-Artifact-Zip-Bytes: 62669") != 1
+                    or text.count(
+                        "Observed-Artifact-Zip-SHA256: "
+                        "e4c3786f8fed3255fcd4f4c9e9baba340527050bf5be1b044b9c81cdd5a4cfbc"
+                    ) != 1
+                    or text.count("Observed-Rustc: 1.92.0") != 1
+                    or text.count(
+                        "Rocky-Base: linux-6.12.0-211.44.1.el10_2"
+                    ) != 1
+                    or text.count("License: GPL-2.0-only") != 1
+                    or "Upstream-Commit:" in text
+                    or "Stable-Commit:" in text
+                )
+            )
         ):
             raise ProbeError(
                 "Rust target compatibility patch is not frozen upstream commit {0}".format(
                     commit or stable_commit
                 )
             )
-        records.append(
-            {
-                "applied_after": (
-                    "exact Rocky dist-git patch series"
-                    if index == 0
-                    else str(RUST_COMPAT_PATCH_PATHS[index - 1])
-                ),
-                "path": str(relative),
-                "sha256": sha256_bytes(raw),
-                "size": len(raw),
-                "stable_commit": stable_commit,
-                "upstream_commit": commit,
+        record = {
+            "applied_after": (
+                "exact Rocky dist-git patch series"
+                if index == 0
+                else str(RUST_COMPAT_PATCH_PATHS[index - 1])
+            ),
+            "path": str(relative),
+            "sha256": sha256_bytes(raw),
+            "size": len(raw),
+            "stable_commit": stable_commit,
+            "upstream_commit": commit,
+        }
+        if index == 20:
+            relative_path, preimage_sha256 = RUST_OBJTOOL_NORETURN_PREIMAGE_SHA256S[0]
+            _relative_path, postimage_sha256 = RUST_OBJTOOL_NORETURN_POSTIMAGE_SHA256S[0]
+            record["observed_failure"] = dict(RUST_OBJTOOL_NORETURN_FAILURE_EVIDENCE)
+            record["preimage"] = {
+                "path": relative_path,
+                "sha256": preimage_sha256,
+                "size": 116914,
             }
-        )
+            record["postimage"] = {
+                "path": relative_path,
+                "sha256": postimage_sha256,
+                "size": 116993,
+            }
+        records.append(record)
     return records
 
 
@@ -968,6 +1047,7 @@ def verify_rust_compatibility_patch_replay(repo, records):
             + CLANG_21_WARNING_PREIMAGE_SHA256S
             + CLANG_21_SOURCE_FIX_PREIMAGE_SHA256S
             + RUST_MISCDEVICE_PREIMAGE_SHA256S
+            + RUST_OBJTOOL_NORETURN_PREIMAGE_SHA256S
         ):
             source = repository_file(
                 repo,
@@ -1069,6 +1149,13 @@ def verify_rust_compatibility_patch_replay(repo, records):
             if sha256_file(root / relative) != digest:
                 raise ProbeError(
                     "Rust miscdevice compatibility patch postimage changed: {0}".format(
+                        relative
+                    )
+                )
+        for relative, digest in RUST_OBJTOOL_NORETURN_POSTIMAGE_SHA256S:
+            if sha256_file(root / relative) != digest:
+                raise ProbeError(
+                    "Rust Objtool compatibility patch postimage changed: {0}".format(
                         relative
                     )
                 )
@@ -1180,6 +1267,13 @@ def build_contract(repo):
                 }
                 for relative, digest in RUST_1_92_RECONCILIATION_PREIMAGE_SHA256S
             ],
+            "rust_objtool_noreturn_preimages": [
+                {
+                    "path": str(RUST_CORE_COMPAT_FIXTURE_ROOT / relative),
+                    "sha256": digest,
+                }
+                for relative, digest in RUST_OBJTOOL_NORETURN_PREIMAGE_SHA256S
+            ],
             "clang_21_warning_preimages": [
                 {
                     "path": str(RUST_CORE_COMPAT_FIXTURE_ROOT / relative),
@@ -1208,6 +1302,9 @@ def build_contract(repo):
         "rust_kernel_1_92_reconciliation_failure_evidence": [
             dict(row) for row in RUST_KERNEL_1_92_RECONCILIATION_FAILURE_EVIDENCE
         ],
+        "rust_objtool_noreturn_failure_evidence": dict(
+            RUST_OBJTOOL_NORETURN_FAILURE_EVIDENCE
+        ),
         "clang_21_default_const_failure_evidence": [
             dict(row) for row in CLANG_21_DEFAULT_CONST_FAILURE_EVIDENCE
         ],

@@ -233,6 +233,20 @@ class ContractTests(ProbeFixture):
             [row["stable_commit"] for row in compatibility],
             list(probe.RUST_COMPAT_STABLE_COMMITS),
         )
+        self.assertIsNone(compatibility[-1]["upstream_commit"])
+        self.assertIsNone(compatibility[-1]["stable_commit"])
+        self.assertEqual(
+            compatibility[-1]["preimage"]["sha256"],
+            probe.RUST_OBJTOOL_NORETURN_PREIMAGE_SHA256S[0][1],
+        )
+        self.assertEqual(
+            compatibility[-1]["postimage"]["sha256"],
+            probe.RUST_OBJTOOL_NORETURN_POSTIMAGE_SHA256S[0][1],
+        )
+        self.assertEqual(
+            compatibility[-1]["observed_failure"],
+            probe.RUST_OBJTOOL_NORETURN_FAILURE_EVIDENCE,
+        )
         self.assertEqual(
             generated["repository_inputs"]["rust_target_generator_preimage"],
             {
@@ -319,6 +333,20 @@ class ContractTests(ProbeFixture):
                 dict(row)
                 for row in probe.RUST_KERNEL_1_92_RECONCILIATION_FAILURE_EVIDENCE
             ],
+        )
+        self.assertEqual(
+            generated["repository_inputs"]["rust_objtool_noreturn_preimages"],
+            [
+                {
+                    "path": str(probe.RUST_CORE_COMPAT_FIXTURE_ROOT / relative),
+                    "sha256": digest,
+                }
+                for relative, digest in probe.RUST_OBJTOOL_NORETURN_PREIMAGE_SHA256S
+            ],
+        )
+        self.assertEqual(
+            generated["rust_objtool_noreturn_failure_evidence"],
+            probe.RUST_OBJTOOL_NORETURN_FAILURE_EVIDENCE,
         )
         self.assertEqual(
             9131625436,
@@ -503,6 +531,10 @@ class ContractTests(ProbeFixture):
         self.assertLess(
             workflow.index(probe.RUST_COMPAT_PATCH_PATHS[18].name),
             workflow.index(probe.RUST_COMPAT_PATCH_PATHS[19].name),
+        )
+        self.assertLess(
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[19].name),
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[20].name),
         )
 
     def test_rust_compatibility_patch_shape_is_fail_closed(self):
@@ -731,6 +763,24 @@ class ContractTests(ProbeFixture):
                     path = root / probe.RUST_COMPAT_PATCH_PATHS[index]
                     original = path.read_text(encoding="utf-8")
                     self.assertIn(old, original)
+                    path.write_text(original.replace(old, new, 1), encoding="utf-8")
+                    with self.assertRaises(probe.ProbeError):
+                        probe.rust_compatibility_patch_records(root)
+
+    def test_objtool_noreturn_shape_and_observed_provenance_are_fail_closed(self):
+        original = (REPO_ROOT / probe.RUST_COMPAT_PATCH_PATHS[20]).read_text(
+            encoding="utf-8"
+        )
+        for old, new in (
+            ("panic_const23panic_const_", "panic_const22panic_const_"),
+            ("Observed-Run-ID: 31644047766", "Observed-Run-ID: 1"),
+            ("Observed-Rustc: 1.92.0", "Observed-Rustc: 1.91.0"),
+        ):
+            with self.subTest(field=old):
+                with tempfile.TemporaryDirectory() as directory:
+                    root = Path(directory)
+                    self.copy_rust_compatibility_inputs(root)
+                    path = root / probe.RUST_COMPAT_PATCH_PATHS[20]
                     path.write_text(original.replace(old, new, 1), encoding="utf-8")
                     with self.assertRaises(probe.ProbeError):
                         probe.rust_compatibility_patch_records(root)

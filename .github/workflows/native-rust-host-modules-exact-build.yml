@@ -38,6 +38,7 @@ on:
       - host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch
       - host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch
       - host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch
+      - host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch
       - host-kernel/rocky/patches/series.json
       - host-kernel/rocky/source-lock.json
       - host-kernel/rocky/toolchain-lock.json
@@ -117,6 +118,7 @@ on:
       - host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch
       - host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch
       - host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch
+      - host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch
       - host-kernel/rocky/patches/series.json
       - host-kernel/rocky/source-lock.json
       - host-kernel/rocky/toolchain-lock.json
@@ -312,7 +314,8 @@ jobs:
             0017-kbuild-use-cc-disable-warning.patch \
             0018-kbuild-order-unterminated-string-disable.patch \
             0019-rust-types-add-opaque-try-ffi-init.patch \
-            0020-rust-miscdevice-add-base-abstraction.patch
+            0020-rust-miscdevice-add-base-abstraction.patch \
+            0021-objtool-recognize-rust-1.92-panic-const.patch
           do
             compat_patch="$GITHUB_WORKSPACE/host-kernel/rocky/patches/$compat_name"
             test -s "$compat_patch"

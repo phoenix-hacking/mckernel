@@ -2,19 +2,19 @@
   "coverage": {
     "by_crate": {
       "ihk": 14,
-      "ihk_smp_x86_64": 5,
+      "ihk_smp_x86_64": 4,
       "mcctrl": 2
     },
     "by_kind": {
       "ffi_export": 2,
       "foreign_block": 2,
       "mutable_static": 1,
-      "unsafe_block": 11,
+      "unsafe_block": 10,
       "unsafe_function": 1,
       "unsafe_impl": 4
     },
-    "site_count": 21,
-    "site_ids_sha256": "f1d1aca06b5a439fcb3d547a51d10600ce688b7a36c51171000377080ac51e9c",
+    "site_count": 20,
+    "site_ids_sha256": "cec459ce2034e9fbd5f5edcb688815c22f7e3d8c8fef468295e0f9497a39566a",
     "source_input_count": 10,
     "source_inventory_status": "complete_for_locked_source_bytes"
   },
@@ -40,7 +40,7 @@
       "crate": "ihk_smp_x86_64",
       "destination": "ihk_smp_x86_64.rs",
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
-      "sha256": "44aae46f0177abf98133ed86041a3682c7f894ec85c5cdd122ec816802e1106d",
+      "sha256": "85156ded690ec9f6d74ab5dc1103b85f2e1c3eb8ba315b516ca2b83029940f80",
       "transitive_inputs": [
         "host-kernel/native-rust/ihk_smp_x86_64.rs"
       ],
@@ -64,7 +64,7 @@
     "self_attestation_forbidden": true
   },
   "ledger_id": "mckernel-native-rust-unsafe-ffi-ledger-v1",
-  "ledger_sha256": "f1c6758aa6d659743904acd8db4a213655d1ab76ad63771dd96ff600481d805a",
+  "ledger_sha256": "fb9228182526817f63c2d28a64079c2c3d3f93110b064f5bae30b58728e0ed82",
   "readiness": {
     "blockers": [
       "exact Rocky 10.2 rustc commands, dep-info closure, objects, source, config, and toolchain evidence are absent",
@@ -85,11 +85,11 @@
     },
     "source_lock": {
       "path": "host-kernel/rocky/source-lock.json",
-      "sha256": "dbae5b6de02e944ea775fcf382dbabe7da7fe0ec855165f11d35539a9e3dd8ee"
+      "sha256": "f3cf396479fbf4db7b5222eb78399e7ddd1f00f9db81fd0842303ad1a9e0102e"
     },
     "stage_manifest": {
       "path": "host-kernel/kbuild/stage-manifest.json",
-      "sha256": "d2d835a9cfc3c6149653fefd5a7ba2a5730b076fef0674de520904168b26a625"
+      "sha256": "55a66d36bafbb029089fa8e52eaacee176e55445c163c5b78a2f57049eeaebb4"
     },
     "toolchain_lock": {
       "path": "host-kernel/rocky/toolchain-lock.json",
@@ -279,7 +279,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "e69ff87cfc5c739fdd9dda4e26d250abac32cf6f07d0d227ece9e6017d36fee1",
-      "file_sha256": "44aae46f0177abf98133ed86041a3682c7f894ec85c5cdd122ec816802e1106d",
+      "file_sha256": "85156ded690ec9f6d74ab5dc1103b85f2e1c3eb8ba315b516ca2b83029940f80",
       "id": "RS011-SMP-0001",
       "independent_review": {
         "evidence_sha256": null,
@@ -326,7 +326,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "bea3c7c4216f0a81b933691be1cbe242d286933ebc8d1f4420d9e8bd640f43ab",
-      "file_sha256": "44aae46f0177abf98133ed86041a3682c7f894ec85c5cdd122ec816802e1106d",
+      "file_sha256": "85156ded690ec9f6d74ab5dc1103b85f2e1c3eb8ba315b516ca2b83029940f80",
       "id": "RS011-SMP-0002",
       "independent_review": {
         "evidence_sha256": null,
@@ -373,7 +373,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "2a6c16da34f3036c684810184403f5eb1532eacf7b422679ce811e0ea1eec4ae",
-      "file_sha256": "44aae46f0177abf98133ed86041a3682c7f894ec85c5cdd122ec816802e1106d",
+      "file_sha256": "85156ded690ec9f6d74ab5dc1103b85f2e1c3eb8ba315b516ca2b83029940f80",
       "id": "RS011-SMP-0003",
       "independent_review": {
         "evidence_sha256": null,
@@ -399,55 +399,8 @@
       "source_sha256": "ae99e1365c2c804cb41e2cc2d5a255679f2d777e19652ae7375d74f3682d6b73"
     },
     {
-      "byte_end": 3441,
-      "byte_start": 3387,
-      "caller_obligations": [
-        "The selected binding must be an immutable exported kernel_param_ops object with static lifetime.",
-        "The uint or ulong operations must match the type of the paired parameter storage."
-      ],
-      "column_end": 71,
-      "column_start": 18,
-      "compiler_capture": {
-        "evidence_sha256": null,
-        "required": true,
-        "status": "not_captured"
-      },
-      "context_constraints": [
-        "The address is formed during static descriptor initialization and is never dereferenced by project Rust.",
-        "Exact generated Rocky bindings and export availability must be compiler-validated."
-      ],
-      "crate_roots": [
-        "ihk_smp_x86_64"
-      ],
-      "expression_sha256": "0e8976f53e69093a9462e15a088afaedea0de2c7adbff578d78e061ea60d3f9d",
-      "file_sha256": "44aae46f0177abf98133ed86041a3682c7f894ec85c5cdd122ec816802e1106d",
-      "id": "RS011-SMP-0004",
-      "independent_review": {
-        "evidence_sha256": null,
-        "required": true,
-        "reviewer": null,
-        "status": "pending"
-      },
-      "kind": "unsafe_block",
-      "line_end": 86,
-      "line_start": 86,
-      "macro_context": "numeric_parameter",
-      "owner": {
-        "accountable_role": "native IHK SMP parameter owner",
-        "component": "native-rust/ihk-smp-parameters"
-      },
-      "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
-      "safety_comment": {
-        "line_end": 85,
-        "line_start": 84,
-        "source_sha256": "6c352b4723cdb4a74a58ebf5e1d7bf05f6b8bcb0ea0743b1ca11ff2ef814cc6f",
-        "text": "SAFETY: `param_ops_uint` and `param_ops_ulong` are immutable, exported Linux kernel objects with static lifetime."
-      },
-      "source_sha256": "1a8cfa0c103bdc1d2236440c3e684d3e47b584119cf1d762b396771a58d57c94"
-    },
-    {
-      "byte_end": 9736,
-      "byte_start": 9633,
+      "byte_end": 9717,
+      "byte_start": 9614,
       "caller_obligations": [
         "The provider dependency and namespaced relocation must already be valid.",
         "The operation must remain one volatile byte read and may not create or retain a reference."
@@ -467,7 +420,7 @@
         "ihk_smp_x86_64"
       ],
       "expression_sha256": "1a2595e55bf404343cc03aceeb3e13e851ad459fa498f9efab6a467d8b64c354",
-      "file_sha256": "44aae46f0177abf98133ed86041a3682c7f894ec85c5cdd122ec816802e1106d",
+      "file_sha256": "85156ded690ec9f6d74ab5dc1103b85f2e1c3eb8ba315b516ca2b83029940f80",
       "id": "RS011-SMP-0005",
       "independent_review": {
         "evidence_sha256": null,
@@ -1104,7 +1057,7 @@
       "source_sha256": "1bddcf599fe238e7338837f6a1a133cd756c8101b97f860ef0cfe3bad8d80f2b"
     }
   ],
-  "source_closure_sha256": "18f210cf50d9c92e09e3e2c048fb750bff72c31fff1fcf302c5c0f18be7ca57c",
+  "source_closure_sha256": "b0907f006aad08aaec37d32fbeb1d5ad66eddba198f8f707acc8dc3f80fd006a",
   "source_inputs": [
     {
       "bytes": 18796,
@@ -1131,12 +1084,12 @@
       "sha256": "3d603424705a9b0fb18725bae1d75f1d279b249b866c15f15f98166d013edfbb"
     },
     {
-      "bytes": 10260,
+      "bytes": 10241,
       "crate_roots": [
         "ihk_smp_x86_64"
       ],
       "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
-      "sha256": "44aae46f0177abf98133ed86041a3682c7f894ec85c5cdd122ec816802e1106d"
+      "sha256": "85156ded690ec9f6d74ab5dc1103b85f2e1c3eb8ba315b516ca2b83029940f80"
     },
     {
       "bytes": 26419,

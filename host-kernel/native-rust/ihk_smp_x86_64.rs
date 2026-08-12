@@ -81,9 +81,9 @@ macro_rules! numeric_parameter {
                 PARAMETER_NAME.as_ptr() as *const core::ffi::c_char
             },
             module: THIS_MODULE.as_ptr(),
-            // SAFETY: `param_ops_uint` and `param_ops_ulong` are immutable,
-            // exported Linux kernel objects with static lifetime.
-            ops: unsafe { core::ptr::addr_of!(kernel::bindings::$ops) },
+            // `param_ops_uint` and `param_ops_ulong` are immutable, exported
+            // Linux kernel objects with static lifetime.
+            ops: core::ptr::addr_of!(kernel::bindings::$ops),
             permission: $permission,
             level: -1,
             flags: 0,

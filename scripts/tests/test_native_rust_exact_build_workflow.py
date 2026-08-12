@@ -310,9 +310,13 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             "0020-rust-miscdevice-add-base-abstraction.patch",
             opaque_init,
         )
+        objtool_noreturn = self.workflow.index(
+            "0021-objtool-recognize-rust-1.92-panic-const.patch",
+            miscdevice,
+        )
         project = self.workflow.index(
             "0001-drivers-misc-add-mckernel-rust-host-modules.patch",
-            miscdevice,
+            objtool_noreturn,
         )
         self.assertLess(debrand, softfloat)
         self.assertLess(softfloat, target_spec)
@@ -334,7 +338,8 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         self.assertLess(warning_helper, warning_order)
         self.assertLess(warning_order, opaque_init)
         self.assertLess(opaque_init, miscdevice)
-        self.assertLess(miscdevice, project)
+        self.assertLess(miscdevice, objtool_noreturn)
+        self.assertLess(objtool_noreturn, project)
 
     def test_rs006_source_substrate_is_checked_without_credit(self):
         self.assertIn("scripts/rs006_miscdevice_substrate.py", self.workflow)

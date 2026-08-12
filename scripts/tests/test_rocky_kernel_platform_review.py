@@ -144,12 +144,12 @@ class RepositoryReviewTests(unittest.TestCase):
         self.assertEqual(port["binding_kind"], "exact-input-tree-port")
         self.assertEqual(port["published_base_head_sha"], review.PUBLISHED_BASE_HEAD)
         self.assertEqual(port["ported_input_count"], 10)
-        self.assertEqual(port["changed_from_published_base_count"], 0)
+        self.assertEqual(port["changed_from_published_base_count"], 2)
         self.assertEqual(
             port["changed_from_published_base_paths"],
             review.PUBLISHED_BASE_CHANGED_PATHS,
         )
-        self.assertEqual(port["unchanged_from_published_base_count"], 10)
+        self.assertEqual(port["unchanged_from_published_base_count"], 8)
         self.assertTrue(
             port["historical_review_preserved_by_exact_base_review_blob"]
         )
@@ -164,13 +164,24 @@ class RepositoryReviewTests(unittest.TestCase):
 
     def test_connector_tree_port_published_base_review_anchor_is_exact(self):
         self.assertEqual(
+            review.PUBLISHED_BASE_HEAD,
+            "6b03f580760b23c77c20497d33f2562f6e75bd2e",
+        )
+        self.assertEqual(
             review.PUBLISHED_BASE_REVIEW,
             {
                 "path": review.REVIEW_PATH.as_posix(),
                 "size": 11208,
-                "sha256": "53299e93e8e2ec42e4d3217f7b8cb9163d007b25c206b0106b31831d021778cd",
-                "git_blob_sha1": "f015de090a153c25315f07a2303397705a8cc0a2",
+                "sha256": "ce244de77b5cb18dab96bb5f600685ff3c3b64b79dc5502d1c6054b579f9e1e0",
+                "git_blob_sha1": "47c327d8b6ab7c9ee1ab6bbb3315d730e8f5d5f7",
             },
+        )
+        self.assertEqual(
+            review.PUBLISHED_BASE_CHANGED_PATHS,
+            [
+                "host-kernel/rocky/source-lock.json",
+                "scripts/rocky_kernel_source_lock.py",
+            ],
         )
 
     def test_connector_tree_port_changed_path_mutation_is_rejected(self):

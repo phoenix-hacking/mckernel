@@ -105,7 +105,8 @@
       "host-kernel/rocky/patches/0017-kbuild-use-cc-disable-warning.patch",
       "host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch",
       "host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch",
-      "host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch"
+      "host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch",
+      "host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch"
       ]
     },
     "rocky_series": {
@@ -223,6 +224,32 @@
       "path": "host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch",
       "sha256": "d377b5bd91d507e383b8673beac42381b9b6c37a47bba7955c768a8f6ddaad25",
       "upstream_commit": "f893691e742688ae21ad597c5bba13bef54706cd"
+    },
+    {
+      "observed_failure": {
+        "artifact_id": 9160078637,
+        "artifact_zip_bytes": 62669,
+        "artifact_zip_sha256": "e4c3786f8fed3255fcd4f4c9e9baba340527050bf5be1b044b9c81cdd5a4cfbc",
+        "job_id": 94273299611,
+        "objtool_diagnostic_count": 1,
+        "repository_commit": "9438ad175b4c1ac7855f6afc119f154639fe18c2",
+        "run_id": 31644047766,
+        "rustc_version": "1.92.0",
+        "symbol_fragment": "_4core9panicking11panic_const23panic_const_",
+        "workflow": "Native Rust host modules exact Rocky build"
+      },
+      "path": "host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch",
+      "postimage": {
+        "path": "tools/objtool/check.c",
+        "sha256": "2c8d113bcbf65bc0de8ad360f70bc707a0379baa925da01cebf0e95f23ce28e7",
+        "size": 116993
+      },
+      "preimage": {
+        "path": "tools/objtool/check.c",
+        "sha256": "71b836ba23a062554bc3038e8e8c7f940bfb38d05dec8d063ef87b70901d4f2e",
+        "size": 116914
+      },
+      "sha256": "6eb8dd4789a5b01a3f8e00ea45dab9debb7d23bb7a8c4af5b2cfdc181656633a"
     }
     ]
   },
@@ -358,7 +385,7 @@
   "source_lock": {
     "id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-source-v1",
     "path": "host-kernel/rocky/source-lock.json",
-    "sha256": "dbae5b6de02e944ea775fcf382dbabe7da7fe0ec855165f11d35539a9e3dd8ee"
+    "sha256": "f3cf396479fbf4db7b5222eb78399e7ddd1f00f9db81fd0842303ad1a9e0102e"
   },
   "success_blockers": [
     "The RK-003 closure/offline artifact and its exact tool probes still require independent review and durable archival before RK-005 may inherit that authority.",

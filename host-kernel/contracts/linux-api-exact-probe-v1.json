@@ -48,11 +48,11 @@
     }
   ],
   "contract_id": "mckernel-rs001-exact-linux-api-probe-v1",
-  "contract_sha256": "a4a75529c9d10c3fdb13fe09c18a99d5b9457b02c235244b1448872587f37764",
+  "contract_sha256": "e23c4d87685896cd441618e41f6222b8863364faf3ef4d52bb1cb7b7ea142638",
   "evidence_profile": "rocky-10.2-exact-linux-api-evidence-v1",
   "frozen_needs": {
-    "file_sha256": "48e45352ae8d99ceed5110ee06ff3f8cf6bbb3c74f543378a162be09ef39d628",
-    "manifest_sha256": "ecc3814b4e56af55d43a95121f1cb0b234febdfed5acd72ddae50e4bef18a170",
+    "file_sha256": "79e1442220d16cf97c359bd28a723b9ac9e5bd1b3f68f4b8f9007af3c3ae3228",
+    "manifest_sha256": "165345b3682bea567477befb3448abf54114ecefe45498541aed316e1f824288",
     "need_count": 268,
     "need_ids_sha256": "aabfc7c4d6551f0b57fcc9c580e3aa6cf6ef0c93ee5e179529f161d7084a6a3b",
     "path": "host-kernel/contracts/linux-api-needs-v1.json"
@@ -103,7 +103,7 @@
   "repository_inputs": {
     "checker": {
       "path": "scripts/linux_api_exact_probe.py",
-      "sha256": "9839eb588a417c471b57f89f3c52d1f1303545f60038e4c8173ef7545d7f0c49"
+      "sha256": "6daff6be6d986cdb45605d583348ae4335d6775823ad76d387b7669d2fb260b3"
     },
     "clang_21_source_fix_preimages": [
       {
@@ -255,6 +255,12 @@
       {
         "path": "scripts/tests/fixtures/rust-core-rocky-6.12/scripts/generate_rust_analyzer.py",
         "sha256": "26c0b246dbdeee5c1bcb787744b0b7e781e422b5c9ddebba7e9a7ee629aec58f"
+      }
+    ],
+    "rust_objtool_noreturn_preimages": [
+      {
+        "path": "scripts/tests/fixtures/rust-core-rocky-6.12/tools/objtool/check.c",
+        "sha256": "71b836ba23a062554bc3038e8e8c7f940bfb38d05dec8d063ef87b70901d4f2e"
       }
     ],
     "rust_target_compatibility_patches": [
@@ -417,6 +423,36 @@
         "size": 10726,
         "stable_commit": null,
         "upstream_commit": "f893691e742688ae21ad597c5bba13bef54706cd"
+      },
+      {
+        "applied_after": "host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch",
+        "observed_failure": {
+          "artifact_id": 9160078637,
+          "artifact_zip_bytes": 62669,
+          "artifact_zip_sha256": "e4c3786f8fed3255fcd4f4c9e9baba340527050bf5be1b044b9c81cdd5a4cfbc",
+          "job_id": 94273299611,
+          "objtool_diagnostic_count": 1,
+          "repository_commit": "9438ad175b4c1ac7855f6afc119f154639fe18c2",
+          "run_id": 31644047766,
+          "rustc_version": "1.92.0",
+          "symbol_fragment": "_4core9panicking11panic_const23panic_const_",
+          "workflow": "Native Rust host modules exact Rocky build"
+        },
+        "path": "host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch",
+        "postimage": {
+          "path": "tools/objtool/check.c",
+          "sha256": "2c8d113bcbf65bc0de8ad360f70bc707a0379baa925da01cebf0e95f23ce28e7",
+          "size": 116993
+        },
+        "preimage": {
+          "path": "tools/objtool/check.c",
+          "sha256": "71b836ba23a062554bc3038e8e8c7f940bfb38d05dec8d063ef87b70901d4f2e",
+          "size": 116914
+        },
+        "sha256": "6eb8dd4789a5b01a3f8e00ea45dab9debb7d23bb7a8c4af5b2cfdc181656633a",
+        "size": 2069,
+        "stable_commit": null,
+        "upstream_commit": null
       }
     ],
     "rust_target_generator_preimage": {
@@ -425,7 +461,7 @@
     },
     "source_lock": {
       "path": "host-kernel/rocky/source-lock.json",
-      "sha256": "dbae5b6de02e944ea775fcf382dbabe7da7fe0ec855165f11d35539a9e3dd8ee"
+      "sha256": "f3cf396479fbf4db7b5222eb78399e7ddd1f00f9db81fd0842303ad1a9e0102e"
     },
     "toolchain_lock": {
       "path": "host-kernel/rocky/toolchain-lock.json",
@@ -433,7 +469,7 @@
     },
     "workflow": {
       "path": ".github/workflows/rs001-linux-api-exact-probe.yml",
-      "sha256": "71b72fa7432dee49381234f6024c3cac55b76b713f58f4b948b2d49910183b76"
+      "sha256": "a442b1da0bfc511cb60f4e8ce306ffa1dcf8e2b023c53ddc5f6169feb55a8050"
     }
   },
   "required_capture_inputs": [
@@ -495,6 +531,18 @@
       "workflow": "Native Rust host modules exact Rocky build"
     }
   ],
+  "rust_objtool_noreturn_failure_evidence": {
+    "artifact_id": 9160078637,
+    "artifact_zip_bytes": 62669,
+    "artifact_zip_sha256": "e4c3786f8fed3255fcd4f4c9e9baba340527050bf5be1b044b9c81cdd5a4cfbc",
+    "job_id": 94273299611,
+    "objtool_diagnostic_count": 1,
+    "repository_commit": "9438ad175b4c1ac7855f6afc119f154639fe18c2",
+    "run_id": 31644047766,
+    "rustc_version": "1.92.0",
+    "symbol_fragment": "_4core9panicking11panic_const23panic_const_",
+    "workflow": "Native Rust host modules exact Rocky build"
+  },
   "rust_uapi_compatibility_failure_evidence": [
     {
       "artifact_id": null,
@@ -678,6 +726,13 @@
         "path": "host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch",
         "sha256": "d377b5bd91d507e383b8673beac42381b9b6c37a47bba7955c768a8f6ddaad25",
         "size": 10726
+      },
+      {
+        "applied": true,
+        "empty": false,
+        "path": "host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch",
+        "sha256": "6eb8dd4789a5b01a3f8e00ea45dab9debb7d23bb7a8c4af5b2cfdc181656633a",
+        "size": 2069
       }
     ],
     "tree_comparison": "fresh locked archive plus every applied Rocky patch and the bound Rust target compatibility patch must byte-match the supplied out-of-tree build source"

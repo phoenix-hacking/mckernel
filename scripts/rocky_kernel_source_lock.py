@@ -172,6 +172,10 @@ EXPECTED_LICENSE_CAPTURE_AUTHORITY: dict[str, Any] = {
                     "host-kernel/rocky/patches/"
                     "0020-rust-miscdevice-add-base-abstraction.patch"
                 ),
+                (
+                    "host-kernel/rocky/patches/"
+                    "0021-objtool-recognize-rust-1.92-panic-const.patch"
+                ),
                 "host-kernel/rocky/patches/series.json",
                 "scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs",
                 "scripts/tests/fixtures/ihk_native_master_compile.rs",
@@ -313,6 +317,10 @@ EXPECTED_LICENSE_CAPTURE_AUTHORITY: dict[str, Any] = {
                 (
                     "scripts/tests/fixtures/rust-core-rocky-6.12/"
                     "scripts/generate_rust_analyzer.py"
+                ),
+                (
+                    "scripts/tests/fixtures/rust-core-rocky-6.12/"
+                    "tools/objtool/check.c"
                 ),
             ],
             "verification": (
