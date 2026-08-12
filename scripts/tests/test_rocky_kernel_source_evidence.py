@@ -96,6 +96,11 @@ class RepositoryContractTests(unittest.TestCase):
         )[1].split("- name: Check out the exact candidate commit", 1)[0]
         self.assertIn("git-core gnupg2 gzip python3 rpm", install_step)
         self.assertNotRegex(install_step, r"\bcoreutils\b")
+        verify_step = workflow.split(
+            "- name: Verify capture contract without claiming gate credit", 1
+        )[1].split("- name: Capture exact RK-001 replay evidence", 1)[0]
+        self.assertIn('git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD', verify_step)
+        self.assertNotIn("safe.directory=*", workflow)
 
     def test_runtime_package_capture_matches_the_minimal_rocky_image(self) -> None:
         source = (REPO_ROOT / evidence.CAPTURE_SCRIPT_PATH).read_text(
@@ -104,6 +109,7 @@ class RepositoryContractTests(unittest.TestCase):
         self.assertIn('"coreutils-single"', source)
         self.assertIn('"git-core"', source)
         self.assertNotIn('            "coreutils",\n', source)
+        self.assertIn('"safe.directory={}".format(repo.resolve())', source)
 
     def test_cli_check_succeeds_without_gate_claim(self) -> None:
         self.assertEqual(evidence.main(["--repo", str(REPO_ROOT), "--check"]), 0)

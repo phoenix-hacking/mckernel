@@ -270,7 +270,14 @@ def committed_file_identity(repo: Path, head_sha: str, relative: Path) -> Dict[s
     path = repository_file(repo, relative)
     filesystem_bytes = path.read_bytes()
     committed_bytes = run_command(
-        ["git", "show", "{}:{}".format(head_sha, relative.as_posix())], cwd=repo
+        [
+            "git",
+            "-c",
+            "safe.directory={}".format(repo.resolve()),
+            "show",
+            "{}:{}".format(head_sha, relative.as_posix()),
+        ],
+        cwd=repo,
     )
     if filesystem_bytes != committed_bytes:
         raise EvidenceError("checkout bytes differ from {}:{}".format(head_sha, relative))
@@ -363,7 +370,16 @@ def build_binding(
     github: Mapping[str, Any],
     container_image: str,
 ) -> Dict[str, Any]:
-    actual_head = run_command(["git", "rev-parse", "HEAD"], cwd=repo).decode().strip()
+    actual_head = run_command(
+        [
+            "git",
+            "-c",
+            "safe.directory={}".format(repo.resolve()),
+            "rev-parse",
+            "HEAD",
+        ],
+        cwd=repo,
+    ).decode().strip()
     if actual_head != github["head_sha"]:
         raise EvidenceError("checked-out commit differs from the GitHub head SHA")
     inputs = {}
