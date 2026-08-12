@@ -37,6 +37,8 @@ jobs:
           python3 scripts/rocky_kernel_platform_lock.py --check
           python3 scripts/linux_api_needs.py --check
           python3 scripts/rocky_rust_staging.py --check
+          python3 -m py_compile scripts/native_rust_build_surface_audit.py
+          python3 scripts/native_rust_build_surface_audit.py
           python3 scripts/native_rust_host_audit.py
 
       - name: Validate locked scope, policy, and behavior contract
