@@ -2,16 +2,20 @@
 
 from __future__ import print_function
 
+import ast
 import copy
+import gzip
 import hashlib
 import io
 import json
 import os
+import subprocess
 import sys
 import tarfile
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -56,17 +60,167 @@ def synthetic_linux_archive(path, include_missing=True):
             add_file(archive, "linux-test/firmware/blob.bin", b"\x00\x01\x02")
 
 
+def binding(head="2" * 40):
+    return {
+        "container_image": inventory.EXPECTED_CONTAINER_IMAGE,
+        "github_head_sha": head,
+        "github_repository": "phoenix-hacking/mckernel",
+        "github_run_attempt": "1",
+        "github_run_id": "2",
+    }
+
+
+def git(repo, *arguments):
+    completed = subprocess.run(
+        ["git"] + list(arguments),
+        cwd=str(repo),
+        check=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    return completed.stdout.decode("ascii").strip()
+
+
+def synthetic_capture_inputs(root):
+    repo = root / "repo"
+    repo.mkdir()
+    git(repo, "init", "--quiet")
+    git(repo, "config", "user.email", "capture@example.test")
+    git(repo, "config", "user.name", "Capture Fixture")
+    for relative in inventory.EXPECTED_REPOSITORY_INPUT_PATHS:
+        path = repo / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        if relative == "host-kernel/kbuild/stage-manifest.json":
+            path.write_bytes((REPO_ROOT / relative).read_bytes())
+        else:
+            path.write_text("fixture for {0}\n".format(relative), encoding="utf-8")
+    git(repo, "add", ".")
+    git(repo, "commit", "--quiet", "-m", "fixture")
+    head = git(repo, "rev-parse", "HEAD")
+
+    linux = LicenseInventoryTests.synthetic_item()
+    dist_payload = b"dist-git fixture\n"
+    dist_git = inventory.make_item(
+        "dist-git/example",
+        len(dist_payload),
+        hashlib.sha256(dist_payload).hexdigest(),
+        "rocky-dist-git:{0}".format(inventory.EXPECTED_DIST_GIT_COMMIT),
+        "regular",
+        dist_payload,
+        source_identity={"git_blob_oid": "1" * 40, "git_mode": "100644"},
+    )
+    srpm_payload = b"SRPM fixture\n"
+    srpm = inventory.make_item(
+        "srpm/SOURCES/example",
+        len(srpm_payload),
+        hashlib.sha256(srpm_payload).hexdigest(),
+        "srpm:sha256:{0}".format(inventory.EXPECTED_SOURCE_RPM_SHA256),
+        "regular",
+        srpm_payload,
+        source_identity={
+            "source_rpm_sha256": inventory.EXPECTED_SOURCE_RPM_SHA256
+        },
+    )
+    bound = binding(head)
+    repository = inventory.repository_patch_items(repo, head, {})
+    items = [linux, dist_git, srpm] + repository
+    static = {
+        "dist-git": inventory.source_closure([dist_git]),
+        "linux": inventory.source_closure([linux]),
+        "srpm": inventory.source_closure([srpm]),
+    }
+    return repo, bound, items, static
+
+
+def committed_current_repository_inputs(root):
+    repo = root / "current-repository-inputs"
+    repo.mkdir()
+    git(repo, "init", "--quiet")
+    git(repo, "config", "user.email", "capture@example.test")
+    git(repo, "config", "user.name", "Capture Fixture")
+    for relative in inventory.EXPECTED_REPOSITORY_INPUT_PATHS:
+        target = repo / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes((REPO_ROOT / relative).read_bytes())
+    git(repo, "add", ".")
+    git(repo, "commit", "--quiet", "-m", "exact repository inputs")
+    return repo, git(repo, "rev-parse", "HEAD")
+
+
+def rewrite_capture(directory, items):
+    ordered = sorted(items, key=lambda item: item["path"])
+    raw = b"".join(inventory.canonical_json(item) + b"\n" for item in ordered)
+    inventory_path = directory / "license-inventory.jsonl.gz"
+    with inventory_path.open("wb") as stream:
+        with gzip.GzipFile(filename="", mode="wb", fileobj=stream, mtime=0) as zipped:
+            zipped.write(raw)
+    compressed_size, compressed_sha = inventory.hash_file(inventory_path)
+    summary_path = directory / "license-inventory-summary.json"
+    summary = json.loads(summary_path.read_text(encoding="ascii"))
+    summary["inventory"].update(
+        {
+            "compressed_sha256": compressed_sha,
+            "compressed_size": compressed_size,
+            "item_count": len(ordered),
+            "uncompressed_sha256": hashlib.sha256(raw).hexdigest(),
+        }
+    )
+    summary["review_counts"] = {"captured-unreviewed": len(ordered)}
+    summary["signal_issue_count"] = sum(
+        item["unresolved_reasons"] != ["independent-review-required"]
+        for item in ordered
+    )
+    summary["unresolved_count"] = len(ordered)
+    summary["unresolved_sample"] = [
+        {"path": item["path"], "reasons": item["unresolved_reasons"]}
+        for item in ordered[:200]
+    ]
+    summary_path.write_bytes(inventory.canonical_json(summary) + b"\n")
+    _, summary_sha = inventory.hash_file(summary_path)
+    (directory / "SHA256SUMS").write_text(
+        "{0}  license-inventory.jsonl.gz\n{1}  license-inventory-summary.json\n".format(
+            compressed_sha, summary_sha
+        ),
+        encoding="ascii",
+    )
+
+
 class LicenseInventoryTests(unittest.TestCase):
+    def test_inventory_and_review_scripts_retain_python_3_6_syntax(self):
+        forbidden = (
+            ".is_relative" + "_to(",
+            ".remove" + "prefix(",
+            ".remove" + "suffix(",
+            "capture_" + "output=",
+            "missing_" + "ok=",
+        )
+        for relative in (
+            "scripts/rocky_kernel_license_inventory.py",
+            "scripts/rocky_kernel_source_review.py",
+            "scripts/tests/test_rocky_kernel_license_inventory.py",
+            "scripts/tests/test_rocky_kernel_source_review.py",
+        ):
+            path = REPO_ROOT / relative
+            source = path.read_text(encoding="utf-8")
+            try:
+                tree = ast.parse(source, filename=str(path), feature_version=(3, 6))
+            except TypeError:
+                tree = ast.parse(source, filename=str(path), feature_version=6)
+            self.assertIsNotNone(tree)
+            for fragment in forbidden:
+                self.assertNotIn(fragment, source, relative)
+
     def test_repository_capture_contract_passes(self):
         lock, series = inventory.check_repository(REPO_ROOT)
         self.assertEqual(1, lock["schema_version"])
         self.assertEqual(1, series["schema_version"])
 
     def test_local_compiler_patch_and_config_are_inventoried(self):
-        items = inventory.repository_patch_items(
-            REPO_ROOT, "0" * 40, {"GPL-2.0-only": "linux/COPYING"}
-        )
+        with tempfile.TemporaryDirectory() as temporary:
+            repo, head = committed_current_repository_inputs(Path(temporary))
+            items = inventory.repository_patch_items(repo, head, {})
         paths = {item["path"] for item in items}
+        self.assertEqual(len(inventory.EXPECTED_REPOSITORY_INPUT_PATHS), len(paths))
         for relative in (
             "host-kernel/kbuild/patches/0002-rust-bindings-expose-module-parameters.patch",
             "host-kernel/rocky/configs/native-rust-evidence.config",
@@ -74,68 +228,111 @@ class LicenseInventoryTests(unittest.TestCase):
             self.assertIn("repository/" + relative, paths)
 
     def test_repository_inventory_binds_rust_compatibility_patch(self):
-        items = inventory.repository_patch_items(REPO_ROOT, "a" * 40, {})
-        by_path = {item["path"]: item for item in items}
+        with tempfile.TemporaryDirectory() as temporary:
+            repo, head = committed_current_repository_inputs(Path(temporary))
+            items = inventory.repository_patch_items(repo, head, {})
+            by_path = {item["path"]: item for item in items}
+            for relative in (
+                "host-kernel/rocky/patches/0001-x86-rust-set-rustc-abi-x86-softfloat.patch",
+                "host-kernel/rocky/patches/0002-rust-support-rust-1.91-target-spec.patch",
+                "host-kernel/rocky/patches/0003-kbuild-rust-add-rustc-min-version.patch",
+                "host-kernel/rocky/patches/0004-rust-compile-libcore-edition-2024.patch",
+                "host-kernel/rocky/patches/0005-rust-clean-unnecessary-transmutes-lint.patch",
+                "host-kernel/rocky/patches/0006-rust-init-allow-dead-code-rust-1.89.patch",
+                "host-kernel/rocky/patches/0007-rust-use-used-compiler-rust-1.89.patch",
+                "host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch",
+                "host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch",
+                "host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch",
+            ):
+                item = by_path["repository/" + relative]
+                patch = REPO_ROOT / relative
+                self.assertEqual(patch.stat().st_size, item["size"])
+                self.assertEqual(
+                    hashlib.sha256(patch.read_bytes()).hexdigest(), item["sha256"]
+                )
+                self.assertEqual("repository-commit:" + head, item["origin"])
+                self.assertEqual(
+                    {
+                        "git_blob_oid": git(repo, "rev-parse", head + ":" + relative),
+                        "git_commit": head,
+                    },
+                    item["source_identity"],
+                )
+
+    def test_repository_inventory_derives_every_staged_source_input(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            repo, head = committed_current_repository_inputs(Path(temporary))
+            self.assertEqual(
+                inventory.EXPECTED_STAGE_REPOSITORY_INPUT_PATHS,
+                inventory.stage_repository_input_paths(repo),
+            )
+            by_path = {
+                item["path"]: item
+                for item in inventory.repository_patch_items(repo, head, {})
+            }
+            for relative in inventory.EXPECTED_STAGE_REPOSITORY_INPUT_PATHS:
+                self.assertIn("repository/" + relative, by_path)
+
+    def test_repository_inventory_binds_current_native_foundations(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            repo, head = committed_current_repository_inputs(Path(temporary))
+            by_path = {
+                item["path"]: item
+                for item in inventory.repository_patch_items(repo, head, {})
+            }
         for relative in (
-            "host-kernel/rocky/patches/0001-x86-rust-set-rustc-abi-x86-softfloat.patch",
-            "host-kernel/rocky/patches/0002-rust-support-rust-1.91-target-spec.patch",
-            "host-kernel/rocky/patches/0003-kbuild-rust-add-rustc-min-version.patch",
-            "host-kernel/rocky/patches/0004-rust-compile-libcore-edition-2024.patch",
-            "host-kernel/rocky/patches/0005-rust-clean-unnecessary-transmutes-lint.patch",
-            "host-kernel/rocky/patches/0006-rust-init-allow-dead-code-rust-1.89.patch",
-            "host-kernel/rocky/patches/0007-rust-use-used-compiler-rust-1.89.patch",
-            "host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch",
-            "host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch",
-            "host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch",
+            "host-kernel/native-rust/ikc_master.rs",
+            "host-kernel/native-rust/ikc_queue.rs",
+            "host-kernel/native-rust/os_registry.rs",
+            "host-kernel/native-rust/page_allocator.rs",
+            "scripts/tests/fixtures/ihk_native_master_compile.rs",
+            "scripts/tests/fixtures/ihk_native_queue_compile.rs",
+            "scripts/tests/fixtures/ihk_os_registry_compile.rs",
+            "scripts/tests/fixtures/ihk_page_allocator_compile.rs",
+            "scripts/tests/fixtures/ihk_page_allocator_lifetime_compile_fail.rs",
+            "scripts/tests/fixtures/ihk_page_allocator_must_use_compile_fail.rs",
         ):
             item = by_path["repository/" + relative]
-            patch = REPO_ROOT / relative
-            self.assertEqual(patch.stat().st_size, item["size"])
-            self.assertEqual(hashlib.sha256(patch.read_bytes()).hexdigest(), item["sha256"])
-            self.assertEqual("repository-commit:" + "a" * 40, item["origin"])
-
-    def test_repository_inventory_binds_rocky_rust_core_preimages(self):
-        items = inventory.repository_patch_items(
-            REPO_ROOT, "b" * 40, {"GPL-2.0": "linux/COPYING", "GPL-2.0-only": "linux/COPYING"}
-        )
-        by_path = {item["path"]: item for item in items}
-        fixture_root = "scripts/tests/fixtures/rust-core-rocky-6.12"
-        relatives = (
-            "Documentation/kbuild/makefiles.rst",
-            "arch/arm64/Makefile",
-            "rust/Makefile",
-            "init/Kconfig",
-            "include/linux/blk-mq.h",
-            "rust/bindings/lib.rs",
-            "rust/uapi/lib.rs",
-            "rust/kernel/init/macros.rs",
-            "rust/kernel/lib.rs",
-            "rust/kernel/block/mq/tag_set.rs",
-            "rust/kernel/list/arc.rs",
-            "rust/kernel/sync/arc.rs",
-            "rust/macros/module.rs",
-            "scripts/Makefile.build",
-            "scripts/Makefile.compiler",
-            "scripts/Makefile.extrawarn",
-            "scripts/generate_rust_analyzer.py",
-        )
-        for relative in relatives:
-            repository_relative = fixture_root + "/" + relative
-            source = REPO_ROOT / repository_relative
-            item = by_path["repository/" + repository_relative]
+            source = REPO_ROOT / relative
             self.assertEqual(source.stat().st_size, item["size"])
             self.assertEqual(
                 hashlib.sha256(source.read_bytes()).hexdigest(), item["sha256"]
             )
-            self.assertEqual("repository-commit:" + "b" * 40, item["origin"])
-        self.assertEqual(
-            "captured-unreviewed",
-            by_path["repository/" + fixture_root + "/arch/arm64/Makefile"]["review_status"],
+
+    def test_repository_inventory_binds_full_rust_core_preimages(self):
+        fixture_root = "scripts/tests/fixtures/rust-core-rocky-6.12/"
+        relatives = (
+            "Documentation/kbuild/makefiles.rst",
+            "arch/arm64/Makefile",
+            "init/Kconfig",
+            "rust/Makefile",
+            "rust/bindings/lib.rs",
+            "rust/uapi/lib.rs",
+            "scripts/Makefile.compiler",
+            "scripts/generate_rust_analyzer.py",
         )
-        self.assertEqual(
-            "verified",
-            by_path["repository/" + fixture_root + "/rust/Makefile"]["review_status"],
-        )
+        with tempfile.TemporaryDirectory() as temporary:
+            repo, head = committed_current_repository_inputs(Path(temporary))
+            items = inventory.repository_patch_items(repo, head, {})
+            by_path = {item["path"]: item for item in items}
+            for relative in relatives:
+                repository_relative = fixture_root + relative
+                item = by_path["repository/" + repository_relative]
+                source = REPO_ROOT / repository_relative
+                self.assertEqual(source.stat().st_size, item["size"])
+                self.assertEqual(
+                    hashlib.sha256(source.read_bytes()).hexdigest(), item["sha256"]
+                )
+                self.assertEqual("repository-commit:" + head, item["origin"])
+                self.assertEqual(
+                    {
+                        "git_blob_oid": git(
+                            repo, "rev-parse", head + ":" + repository_relative
+                        ),
+                        "git_commit": head,
+                    },
+                    item["source_identity"],
+                )
 
     def test_linux_archive_maps_spdx_and_preserves_missing_cases(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -145,20 +342,21 @@ class LicenseInventoryTests(unittest.TestCase):
             items, licenses = inventory.inventory_linux_archive(archive, digest)
         by_path = {item["path"]: item for item in items}
         self.assertEqual(
-            "linux/LICENSES/preferred/GPL-2.0", licenses["GPL-2.0-only"]
+            ["linux/LICENSES/preferred/GPL-2.0"], licenses["GPL-2.0-only"]
         )
         source = by_path["linux/drivers/example.c"]
-        self.assertEqual("verified", source["review_status"])
+        self.assertEqual("captured-unreviewed", source["review_status"])
         self.assertEqual(
             ["linux/LICENSES/preferred/GPL-2.0"], source["license_text_paths"]
         )
         link = by_path["linux/drivers/example-link.c"]
-        self.assertEqual("verified", link["review_status"])
+        self.assertEqual("captured-unreviewed", link["review_status"])
         self.assertEqual(source["spdx_expression"], link["spdx_expression"])
+        self.assertIn("link-provenance-needs-review", link["unresolved_reasons"])
         missing = by_path["linux/firmware/blob.bin"]
         self.assertEqual("captured-unreviewed", missing["review_status"])
         self.assertEqual("NOASSERTION", missing["spdx_expression"])
-        self.assertEqual("missing-spdx", missing["_reason"])
+        self.assertIn("missing-spdx", missing["unresolved_reasons"])
 
     def test_archive_path_traversal_is_rejected(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -176,7 +374,7 @@ class LicenseInventoryTests(unittest.TestCase):
             with self.assertRaisesRegex(inventory.InventoryError, "outside"):
                 inventory.inventory_linux_archive(archive_path, "0" * 64)
 
-    def test_duplicate_license_identifier_is_rejected(self):
+    def test_legitimate_multiple_license_texts_are_retained(self):
         with tempfile.TemporaryDirectory() as temporary:
             archive_path = Path(temporary) / "duplicate.tar.xz"
             with tarfile.open(str(archive_path), "w:xz") as archive:
@@ -186,8 +384,17 @@ class LicenseInventoryTests(unittest.TestCase):
                         "linux-test/LICENSES/{0}".format(suffix),
                         b"Valid-License-Identifier: GPL-2.0-only\n",
                     )
-            with self.assertRaisesRegex(inventory.InventoryError, "duplicate license"):
-                inventory.inventory_linux_archive(archive_path, "0" * 64)
+            items, licenses = inventory.inventory_linux_archive(
+                archive_path, "0" * 64
+            )
+        self.assertEqual(
+            [
+                "linux/LICENSES/dual/two",
+                "linux/LICENSES/preferred/one",
+            ],
+            licenses["GPL-2.0-only"],
+        )
+        self.assertTrue(items)
 
     def test_documented_exception_example_is_not_a_license_text(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -207,7 +414,7 @@ class LicenseInventoryTests(unittest.TestCase):
                 archive_path, "0" * 64
             )
         self.assertEqual(
-            "linux/LICENSES/exceptions/GCC-exception-2.0",
+            ["linux/LICENSES/exceptions/GCC-exception-2.0"],
             licenses["GCC-exception-2.0"],
         )
         by_path = {item["path"]: item for item in items}
@@ -236,10 +443,13 @@ class LicenseInventoryTests(unittest.TestCase):
         )
         inventory.resolve_items(
             [item],
-            {"MIT": "linux/LICENSES/preferred/MIT", "GPL-2.0-only": "linux/COPYING"},
+            {
+                "MIT": ["linux/LICENSES/preferred/MIT"],
+                "GPL-2.0-only": ["linux/COPYING"],
+            },
         )
         self.assertEqual("captured-unreviewed", item["review_status"])
-        self.assertEqual("ambiguous-spdx", item["_reason"])
+        self.assertIn("ambiguous-spdx", item["unresolved_reasons"])
 
     def test_spdx_text_inside_code_or_documentation_is_not_a_header(self):
         prefix = (
@@ -252,7 +462,7 @@ class LicenseInventoryTests(unittest.TestCase):
         )
         self.assertEqual("captured-unreviewed", item["review_status"])
         self.assertEqual("NOASSERTION", item["spdx_expression"])
-        self.assertEqual("missing-spdx", item["_reason"])
+        self.assertIn("missing-spdx", item["unresolved_reasons"])
 
     def test_malformed_real_spdx_header_remains_unreviewed(self):
         prefix = b"// SPDX-License-Identifier: '\n"
@@ -262,53 +472,248 @@ class LicenseInventoryTests(unittest.TestCase):
         )
         self.assertEqual("captured-unreviewed", item["review_status"])
         self.assertEqual("NOASSERTION", item["spdx_expression"])
-        self.assertEqual("malformed-spdx", item["_reason"])
+        self.assertIn("malformed-spdx", item["unresolved_reasons"])
 
     def test_capture_is_deterministic_and_self_verifying(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
-            archive = root / "linux.tar.xz"
-            synthetic_linux_archive(archive)
-            digest = hashlib.sha256(archive.read_bytes()).hexdigest()
-            items, _ = inventory.inventory_linux_archive(archive, digest)
-            binding = {
-                "container_image": "rocky@example@sha256:" + "1" * 64,
-                "github_head_sha": "2" * 40,
-                "github_repository": "phoenix-hacking/mckernel",
-                "github_run_attempt": "1",
-                "github_run_id": "2",
-            }
+            repo, bound, items, static = synthetic_capture_inputs(root)
             first = root / "first"
             second = root / "second"
-            summary = inventory.write_capture(
-                first, copy.deepcopy(items), binding, "3" * 64, "4" * 64
-            )
-            inventory.write_capture(
-                second, copy.deepcopy(items), binding, "3" * 64, "4" * 64
-            )
+            with mock.patch.object(
+                inventory, "EXPECTED_STATIC_NAMESPACE_CLOSURES", static
+            ):
+                summary = inventory.write_capture(
+                    first,
+                    copy.deepcopy(items),
+                    bound,
+                    inventory.EXPECTED_SOURCE_LOCK_SHA256,
+                    inventory.EXPECTED_PATCH_SERIES_SHA256,
+                    repo,
+                )
+                inventory.write_capture(
+                    second,
+                    copy.deepcopy(items),
+                    bound,
+                    inventory.EXPECTED_SOURCE_LOCK_SHA256,
+                    inventory.EXPECTED_PATCH_SERIES_SHA256,
+                    repo,
+                )
+                verified = inventory.verify_capture(first, repo)
             self.assertEqual(
                 (first / "license-inventory.jsonl.gz").read_bytes(),
                 (second / "license-inventory.jsonl.gz").read_bytes(),
             )
-            verified = inventory.verify_capture(first)
             self.assertEqual(summary["inventory"]["item_count"], verified["inventory"]["item_count"])
             self.assertFalse(verified["complete"])
-            self.assertEqual(1, verified["unresolved_count"])
+            self.assertEqual(
+                verified["inventory"]["item_count"], verified["unresolved_count"]
+            )
+            self.assertTrue(
+                all(
+                    value["complete"]
+                    for value in verified["scope"]["namespaces"].values()
+                )
+            )
 
     def test_capture_tampering_fails_closed(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
-            archive = root / "linux.tar.xz"
-            synthetic_linux_archive(archive, include_missing=False)
-            items, _ = inventory.inventory_linux_archive(
-                archive, hashlib.sha256(archive.read_bytes()).hexdigest()
-            )
+            repo, bound, items, static = synthetic_capture_inputs(root)
             output = root / "capture"
-            inventory.write_capture(output, items, {}, "3" * 64, "4" * 64)
+            with mock.patch.object(
+                inventory, "EXPECTED_STATIC_NAMESPACE_CLOSURES", static
+            ):
+                inventory.write_capture(
+                    output,
+                    items,
+                    bound,
+                    inventory.EXPECTED_SOURCE_LOCK_SHA256,
+                    inventory.EXPECTED_PATCH_SERIES_SHA256,
+                    repo,
+                )
             path = output / "license-inventory.jsonl.gz"
             path.write_bytes(path.read_bytes() + b"tamper")
             with self.assertRaises(inventory.InventoryError):
-                inventory.verify_capture(output)
+                inventory.verify_capture(output, repo)
+
+    def test_fully_rehashed_one_row_capture_cannot_claim_complete_scope(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            repo, bound, items, static = synthetic_capture_inputs(root)
+            output = root / "capture"
+            with mock.patch.object(
+                inventory, "EXPECTED_STATIC_NAMESPACE_CLOSURES", static
+            ):
+                inventory.write_capture(
+                    output,
+                    copy.deepcopy(items),
+                    bound,
+                    inventory.EXPECTED_SOURCE_LOCK_SHA256,
+                    inventory.EXPECTED_PATCH_SERIES_SHA256,
+                    repo,
+                )
+                rewrite_capture(
+                    output,
+                    [item for item in items if item["path"].startswith("linux/")][
+                        :1
+                    ],
+                )
+                with self.assertRaisesRegex(
+                    inventory.InventoryError, "omits|required source|closure"
+                ):
+                    inventory.verify_capture(output, repo)
+
+    def test_verification_replays_repository_bytes_and_exact_git_blobs(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            repo, bound, items, static = synthetic_capture_inputs(root)
+            output = root / "capture"
+            with mock.patch.object(
+                inventory, "EXPECTED_STATIC_NAMESPACE_CLOSURES", static
+            ):
+                inventory.write_capture(
+                    output,
+                    items,
+                    bound,
+                    inventory.EXPECTED_SOURCE_LOCK_SHA256,
+                    inventory.EXPECTED_PATCH_SERIES_SHA256,
+                    repo,
+                )
+                target = repo / inventory.EXPECTED_REPOSITORY_INPUT_PATHS[0]
+                target.write_text("working-tree substitution\n", encoding="utf-8")
+                with self.assertRaisesRegex(
+                    inventory.InventoryError, "bound repository commit"
+                ):
+                    inventory.verify_capture(output, repo)
+
+    def test_machine_capture_cannot_self_attest_review_or_completion(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            repo, bound, items, static = synthetic_capture_inputs(root)
+            forged = copy.deepcopy(items)
+            forged[0]["review_status"] = "verified"
+            with self.assertRaisesRegex(inventory.InventoryError, "reviewed"):
+                inventory.write_capture(
+                    root / "forged",
+                    forged,
+                    bound,
+                    inventory.EXPECTED_SOURCE_LOCK_SHA256,
+                    inventory.EXPECTED_PATCH_SERIES_SHA256,
+                    repo,
+                )
+
+            output = root / "valid"
+            with mock.patch.object(
+                inventory, "EXPECTED_STATIC_NAMESPACE_CLOSURES", static
+            ):
+                inventory.write_capture(
+                    output,
+                    items,
+                    bound,
+                    inventory.EXPECTED_SOURCE_LOCK_SHA256,
+                    inventory.EXPECTED_PATCH_SERIES_SHA256,
+                    repo,
+                )
+            summary_path = output / "license-inventory-summary.json"
+            summary = json.loads(summary_path.read_text(encoding="ascii"))
+            summary["complete"] = True
+            summary["review_complete"] = True
+            summary_path.write_bytes(inventory.canonical_json(summary) + b"\n")
+            with self.assertRaises(inventory.InventoryError):
+                inventory.verify_capture(output, repo)
+
+    def test_capture_authorities_are_exact_not_merely_well_formed(self):
+        valid = binding()
+        for mutation in ("container", "lock", "series"):
+            with self.subTest(mutation=mutation):
+                changed = copy.deepcopy(valid)
+                lock_sha = inventory.EXPECTED_SOURCE_LOCK_SHA256
+                series_sha = inventory.EXPECTED_PATCH_SERIES_SHA256
+                if mutation == "container":
+                    changed["container_image"] = "rocky@example@sha256:" + "0" * 64
+                    with self.assertRaises(inventory.InventoryError):
+                        inventory.validate_capture_binding(changed)
+                elif mutation == "lock":
+                    with tempfile.TemporaryDirectory() as temporary:
+                        with self.assertRaises(inventory.InventoryError):
+                            inventory.write_capture(
+                                Path(temporary) / "capture",
+                                [self.synthetic_item()],
+                                changed,
+                                "0" * 64,
+                                series_sha,
+                                REPO_ROOT,
+                            )
+                else:
+                    with tempfile.TemporaryDirectory() as temporary:
+                        with self.assertRaises(inventory.InventoryError):
+                            inventory.write_capture(
+                                Path(temporary) / "capture",
+                                [self.synthetic_item()],
+                                changed,
+                                lock_sha,
+                                "0" * 64,
+                                REPO_ROOT,
+                            )
+
+    @staticmethod
+    def synthetic_item():
+        return inventory.make_item(
+            "linux/example.c",
+            0,
+            hashlib.sha256(b"").hexdigest(),
+            "linux-archive:sha256:{0}".format(
+                inventory.EXPECTED_LINUX_ARCHIVE_SHA256
+            ),
+            "regular",
+            b"// SPDX-License-Identifier: MIT\n",
+            source_identity={
+                "archive_sha256": inventory.EXPECTED_LINUX_ARCHIVE_SHA256
+            },
+        )
+
+    def test_patch_authorship_and_missing_license_signals_are_explicit(self):
+        payload = (
+            b"From: Example Author <author@example.test>\n"
+            b"Signed-off-by: Example Author <author@example.test>\n"
+        )
+        item = inventory.make_item(
+            "dist-git/example.patch",
+            len(payload),
+            hashlib.sha256(payload).hexdigest(),
+            "rocky-dist-git:{0}".format(inventory.EXPECTED_DIST_GIT_COMMIT),
+            "regular",
+            payload,
+            source_identity={"git_blob_oid": "1" * 40, "git_mode": "100644"},
+        )
+        self.assertEqual(
+            ["Example Author <author@example.test>"], item["authorship_signals"]
+        )
+        self.assertIn("patch-license-signal-missing", item["unresolved_reasons"])
+        inventory.validate_generated_item(item)
+
+    def test_dist_git_tree_is_complete_bounded_and_mode_explicit(self):
+        rows = inventory.parse_tree(
+            b"100644 blob " + b"1" * 40 + b"\tregular\0"
+            b"120000 blob " + b"2" * 40 + b"\tlink\0"
+        )
+        self.assertEqual(
+            [("regular", "100644", "1" * 40), ("link", "120000", "2" * 40)],
+            rows,
+        )
+        with self.assertRaises(inventory.InventoryError):
+            inventory.parse_tree(
+                b"100644 blob " + b"1" * 40 + b"\tduplicate\0"
+                b"100644 blob " + b"2" * 40 + b"\tduplicate\0"
+            )
+
+    def test_duplicate_json_keys_fail_closed(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "duplicate.json"
+            path.write_text('{"a":1,"a":2}\n', encoding="ascii")
+            with self.assertRaises(inventory.InventoryError):
+                inventory.read_json(path)
 
     def test_relative_paths_reject_ambiguous_forms(self):
         for value in ("", "/absolute", "../escape", "a/../b", "a/./b"):

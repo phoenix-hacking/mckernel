@@ -205,6 +205,34 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             1,
         )
 
+    def test_exact_probe_and_shared_abi_checks_and_triggers_are_mandatory(self):
+        for path in (
+            "host-kernel/contracts/linux-api-exact-probe-v1.json",
+            "host-kernel/contracts/linux-api-needs-v1.json",
+            "host-kernel/contracts/x86_64-shared-abi-v1.json",
+            "host-kernel/rocky/config-policy.json",
+            "host-kernel/rocky/patches/series.json",
+            "host-kernel/rocky/toolchain-lock.json",
+            "scripts/linux_api_exact_probe.py",
+            "scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/**",
+            "scripts/tests/test_linux_api_exact_probe.py",
+            "scripts/tests/test_rust_target_compatibility_patches.py",
+            "scripts/tests/test_x86_64_shared_abi.py",
+            "scripts/x86_64_shared_abi.py",
+        ):
+            self.assertGreaterEqual(self.workflow.count(path), 2)
+        self.assertIn(
+            "python3 scripts/linux_api_exact_probe.py "
+            '--repo "$GITHUB_WORKSPACE" check-contract',
+            self.workflow.replace("\\\n            ", ""),
+        )
+        self.assertIn(
+            "python3 scripts/x86_64_shared_abi.py "
+            '--repo-root "$GITHUB_WORKSPACE" --check',
+            self.workflow.replace("\\\n            ", ""),
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

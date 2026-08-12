@@ -24,6 +24,8 @@ import urllib.request
 from pathlib import Path, PurePosixPath
 from typing import Any, BinaryIO, Iterable, Mapping, Sequence
 
+import rocky_kernel_source_review as source_review
+
 
 SOURCE_LOCK_PATH = Path("host-kernel/rocky/source-lock.json")
 PATCH_SERIES_PATH = Path("host-kernel/rocky/patches/series.json")
@@ -33,6 +35,261 @@ HEX_SHA1 = re.compile(r"^[0-9a-f]{40}$")
 LICENSE_EXPRESSION_SHA256 = (
     "91f37e234988053edb7757c43af2406fdced5ef2e2e01b316fe2dd474ff52e2f"
 )
+LICENSE_DECISION_PATH = "host-kernel/rocky/evidence/license-decision.json"
+LICENSE_DECISION_ID = "rk-001-license-decision-v1"
+# Gate closure needs an independently reviewed decision whose exact digest and
+# authority are registered here in a later reviewed change.  Machine capture
+# can never populate these values or make RK-001 eligible on its own.
+EXPECTED_LICENSE_DECISION_SHA256: str | None = None
+EXPECTED_LICENSE_REVIEW_AUTHORITY_ID: str | None = None
+EXPECTED_LICENSE_CAPTURE_AUTHORITY: dict[str, Any] = {
+    "authority_id": "rk-001-license-capture-source-closure-v1",
+    "closure_algorithm": (
+        "sha256 over canonical sorted path rows and canonical source-identity rows"
+    ),
+    "namespaces": {
+        "dist-git": {
+            "item_count": 77,
+            "path_set_sha256": (
+                "ffe07b597e0a3b72d5e29e7b05aea8e75bdf112d75068d3d72e28547a4833c22"
+            ),
+            "source_manifest_sha256": (
+                "ac819ee853a73c109c2db5f8735b947c1fae6374fce8b3402779720fe5621e96"
+            ),
+        },
+        "linux": {
+            "item_count": 115027,
+            "path_set_sha256": (
+                "f7495feae099d970ef02bbb1a73a0669b88c83c33dad80d3cc6bfb4184b2b0c2"
+            ),
+            "source_manifest_sha256": (
+                "321b8a227f7a9473a94db6fbf747c48727a39b20bd8a24474f68578915ca4e56"
+            ),
+        },
+        "repository": {
+            "paths": [
+                "host-kernel/kbuild/parent-integration-v1.json",
+                (
+                    "host-kernel/kbuild/patches/"
+                    "0001-drivers-misc-add-mckernel-rust-host-modules.patch"
+                ),
+                (
+                    "host-kernel/kbuild/patches/"
+                    "0002-rust-bindings-expose-module-parameters.patch"
+                ),
+                "host-kernel/kbuild/stage-manifest.json",
+                "host-kernel/kbuild/Kbuild.in",
+                "host-kernel/kbuild/Kconfig",
+                "host-kernel/native-rust/abi/x86_64.rs",
+                "host-kernel/native-rust/ihk.rs",
+                "host-kernel/native-rust/ihk_smp_x86_64.rs",
+                "host-kernel/native-rust/ikc_master.rs",
+                "host-kernel/native-rust/ikc_queue.rs",
+                "host-kernel/native-rust/mcctrl.rs",
+                "host-kernel/native-rust/os_registry.rs",
+                "host-kernel/native-rust/page_allocator.rs",
+                "host-kernel/rocky/configs/native-rust-evidence.config",
+                "host-kernel/rocky/configs/rust-minimal.config",
+                (
+                    "host-kernel/rocky/patches/"
+                    "0001-x86-rust-set-rustc-abi-x86-softfloat.patch"
+                ),
+                (
+                    "host-kernel/rocky/patches/"
+                    "0002-rust-support-rust-1.91-target-spec.patch"
+                ),
+                (
+                    "host-kernel/rocky/patches/"
+                    "0003-kbuild-rust-add-rustc-min-version.patch"
+                ),
+                (
+                    "host-kernel/rocky/patches/"
+                    "0004-rust-compile-libcore-edition-2024.patch"
+                ),
+                (
+                    "host-kernel/rocky/patches/"
+                    "0005-rust-clean-unnecessary-transmutes-lint.patch"
+                ),
+                (
+                    "host-kernel/rocky/patches/"
+                    "0006-rust-init-allow-dead-code-rust-1.89.patch"
+                ),
+                (
+                    "host-kernel/rocky/patches/"
+                    "0007-rust-use-used-compiler-rust-1.89.patch"
+                ),
+                (
+                    "host-kernel/rocky/patches/"
+                    "0008-rust-enable-arbitrary-self-types-rust-1.92.patch"
+                ),
+                (
+                    "host-kernel/rocky/patches/"
+                    "0009-rust-block-drop-removed-merge-flag.patch"
+                ),
+                (
+                    "host-kernel/rocky/patches/"
+                    "0010-kbuild-disable-default-const-init-unsafe.patch"
+                ),
+                "host-kernel/rocky/patches/series.json",
+                "scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs",
+                "scripts/tests/fixtures/ihk_native_master_compile.rs",
+                "scripts/tests/fixtures/ihk_native_queue_compile.rs",
+                "scripts/tests/fixtures/ihk_os_registry_compile.rs",
+                "scripts/tests/fixtures/ihk_page_allocator_compile.rs",
+                (
+                    "scripts/tests/fixtures/"
+                    "ihk_page_allocator_lifetime_compile_fail.rs"
+                ),
+                (
+                    "scripts/tests/fixtures/"
+                    "ihk_page_allocator_must_use_compile_fail.rs"
+                ),
+                (
+                    "scripts/tests/fixtures/rust-core-rocky-6.12/"
+                    "Documentation/kbuild/makefiles.rst"
+                ),
+                "scripts/tests/fixtures/rust-core-rocky-6.12/arch/arm64/Makefile",
+                (
+                    "scripts/tests/fixtures/rust-core-rocky-6.12/"
+                    "include/linux/blk-mq.h"
+                ),
+                "scripts/tests/fixtures/rust-core-rocky-6.12/init/Kconfig",
+                "scripts/tests/fixtures/rust-core-rocky-6.12/rust/Makefile",
+                (
+                    "scripts/tests/fixtures/rust-core-rocky-6.12/"
+                    "rust/bindings/lib.rs"
+                ),
+                (
+                    "scripts/tests/fixtures/rust-core-rocky-6.12/"
+                    "rust/kernel/block/mq/tag_set.rs"
+                ),
+                (
+                    "scripts/tests/fixtures/rust-core-rocky-6.12/"
+                    "rust/kernel/init/macros.rs"
+                ),
+                (
+                    "scripts/tests/fixtures/rust-core-rocky-6.12/"
+                    "rust/kernel/lib.rs"
+                ),
+                (
+                    "scripts/tests/fixtures/rust-core-rocky-6.12/"
+                    "rust/kernel/list/arc.rs"
+                ),
+                (
+                    "scripts/tests/fixtures/rust-core-rocky-6.12/"
+                    "rust/kernel/sync/arc.rs"
+                ),
+                (
+                    "scripts/tests/fixtures/rust-core-rocky-6.12/"
+                    "rust/macros/module.rs"
+                ),
+                "scripts/tests/fixtures/rust-core-rocky-6.12/rust/uapi/lib.rs",
+                (
+                    "scripts/tests/fixtures/rust-core-rocky-6.12/"
+                    "scripts/Makefile.build"
+                ),
+                (
+                    "scripts/tests/fixtures/rust-core-rocky-6.12/"
+                    "scripts/Makefile.compiler"
+                ),
+                (
+                    "scripts/tests/fixtures/rust-core-rocky-6.12/"
+                    "scripts/Makefile.extrawarn"
+                ),
+                (
+                    "scripts/tests/fixtures/rust-core-rocky-6.12/"
+                    "scripts/generate_rust_analyzer.py"
+                ),
+            ],
+            "verification": (
+                "recompute exact blob OIDs, bytes, and closure from the bound Git commit"
+            ),
+        },
+        "srpm": {
+            "item_count": 71,
+            "path_set_sha256": (
+                "d599d27ba45a688e7f550f793dc467f48e3603fb77efb790331b5b8b42a4ee96"
+            ),
+            "source_manifest_sha256": (
+                "8158ccfb1a5899e47962e45ad107d04e0747fdf0951f167039e7ae3e13d84f47"
+            ),
+        },
+    },
+    "scope_is_derived_from_verified_closures": True,
+}
+EXPECTED_LICENSE_INVENTORY_ITEM_COUNT = sum(
+    namespace["item_count"]
+    for name, namespace in EXPECTED_LICENSE_CAPTURE_AUTHORITY["namespaces"].items()
+    if name != "repository"
+) + len(
+    EXPECTED_LICENSE_CAPTURE_AUTHORITY["namespaces"]["repository"]["paths"]
+)
+EXPECTED_LICENSE_DECISION_REGISTRATION = (
+    "an independently reviewed exact decision-manifest SHA-256 must be registered "
+    "in the validator before RK-001 can close"
+)
+EXPECTED_LICENSE_ITEM_FIELDS = [
+    "authorship_signals",
+    "entry_type",
+    "license_text_paths",
+    "link_target",
+    "origin",
+    "path",
+    "sha256",
+    "size",
+    "source_identity",
+    "spdx_expression",
+    "review_status",
+    "unresolved_reasons",
+]
+SOURCE_EVIDENCE_REVIEW_PATH = Path(
+    "host-kernel/rocky/evidence/source-evidence-review.json"
+)
+SOURCE_EVIDENCE_REVIEW_SHA256 = (
+    "b4993bde598db1bacc39b73f4d5bfc78819bdc0e592d66475b700f824cba4896"
+)
+EXPECTED_REVIEWED_EVIDENCE: dict[str, dict[str, Any]] = {
+    "acquisition_replay": {
+        "blocker": None,
+        "evidence_path": "host-kernel/rocky/evidence/acquisition-replay.json",
+        "evidence_sha256": (
+            "d37019bfa3c295867c68461c89bd70d9bcc8417e8dfc6ffd23ff46601280e2a0"
+        ),
+        "required": True,
+        "status": "verified",
+    },
+    "dist_git_object_replay": {
+        "blocker": None,
+        "evidence_path": "host-kernel/rocky/evidence/dist-git-object-replay.json",
+        "evidence_sha256": (
+            "359ed16070bd3a401fe733a00581499e6784fa2b017c51cbf3da2bbd7fe499de"
+        ),
+        "required": True,
+        "status": "verified",
+    },
+    "repository_metadata_signature_replay": {
+        "blocker": None,
+        "evidence_path": (
+            "host-kernel/rocky/evidence/repository-metadata-signature-replay.json"
+        ),
+        "evidence_sha256": (
+            "4573f66b43019a6b45907a611d3c52a3af4ac92cdacd0ff3c1ee8a945b270dc5"
+        ),
+        "required": True,
+        "status": "verified",
+    },
+    "srpm_header_signature": {
+        "blocker": None,
+        "evidence_path": "host-kernel/rocky/evidence/srpm-header-signature.json",
+        "evidence_sha256": (
+            "0106cd8d9ae07a9191affa55f35f7d79390e66ca95c1e85034d3434d06a79901"
+        ),
+        "required": True,
+        "signature_algorithm": "RSA/SHA256",
+        "signer_fingerprint": "FC226859C0860BF0DDB95B085B106C736FEDFC85",
+        "status": "verified",
+    },
+}
 
 
 # These are immutable source identities, not defaults.  A platform update must
@@ -293,6 +550,15 @@ def sha256_file(path: Path) -> tuple[int, str]:
     return size, digest.hexdigest()
 
 
+def object_without_duplicates(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    value: dict[str, Any] = {}
+    for key, child in pairs:
+        if key in value:
+            raise SourceLockError(f"duplicate JSON key: {key}")
+        value[key] = child
+    return value
+
+
 def read_json(path: Path) -> tuple[dict[str, Any], bytes]:
     try:
         data = path.read_bytes()
@@ -301,7 +567,9 @@ def read_json(path: Path) -> tuple[dict[str, Any], bytes]:
     if len(data) > MAX_MANIFEST_BYTES:
         raise SourceLockError(f"manifest is implausibly large: {path}")
     try:
-        value = json.loads(data)
+        value = json.loads(data, object_pairs_hook=object_without_duplicates)
+    except SourceLockError:
+        raise
     except (UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise SourceLockError(f"cannot parse {path}: {exc}") from exc
     if not isinstance(value, dict):
@@ -459,15 +727,157 @@ def validate_evidence_record(
         raise SourceLockError(
             f"verified evidence.{evidence_id} must clear its blocker"
         )
+    if item != EXPECTED_REVIEWED_EVIDENCE[evidence_id]:
+        raise SourceLockError(
+            f"verified evidence.{evidence_id} differs from the reviewed record"
+        )
+    return None
+
+
+def validate_source_evidence_review(
+    lock: Mapping[str, Any],
+    series: Mapping[str, Any],
+    repo: Path | None,
+) -> None:
+    if repo is None:
+        raise SourceLockError("verified source evidence needs a repository review")
+    review_path = repository_evidence_path(
+        repo,
+        SOURCE_EVIDENCE_REVIEW_PATH.as_posix(),
+        "source evidence review manifest",
+    )
+    size, digest = sha256_file(review_path)
+    if size == 0 or digest != SOURCE_EVIDENCE_REVIEW_SHA256:
+        raise SourceLockError("source evidence review manifest is absent or stale")
+    try:
+        source_review.check(
+            str(repo.resolve()),
+            lock_override=lock,
+            series_override=series,
+        )
+    except source_review.ReviewError as exc:
+        raise SourceLockError(f"source evidence semantic review failed: {exc}") from exc
+
+
+def validate_license_decision(
+    decision: object,
+    inventory: Mapping[str, Any],
+    repo: Path | None,
+) -> str | None:
+    item = exact_keys(
+        decision,
+        {
+            "authority_registration",
+            "blocker",
+            "decision_path",
+            "decision_sha256",
+            "required",
+            "status",
+        },
+        "licenses.decision",
+    )
+    if item["required"] is not True:
+        raise SourceLockError("license decision must remain required")
+    if item["authority_registration"] != EXPECTED_LICENSE_DECISION_REGISTRATION:
+        raise SourceLockError("license decision authority registration policy changed")
+    if item["status"] == "required-missing":
+        if not isinstance(item["blocker"], str) or not item["blocker"].strip():
+            raise SourceLockError("missing license decision needs a blocker")
+        for key in ("decision_path", "decision_sha256"):
+            if item[key] is not None:
+                raise SourceLockError(
+                    f"licenses.decision.{key} must be null while missing"
+                )
+        return str(item["blocker"])
+    if item["status"] != "verified":
+        raise SourceLockError("license decision status must be missing or verified")
+    if item["blocker"] is not None:
+        raise SourceLockError("verified license decision must clear its blocker")
+    if (
+        EXPECTED_LICENSE_DECISION_SHA256 is None
+        or EXPECTED_LICENSE_REVIEW_AUTHORITY_ID is None
+    ):
+        raise SourceLockError(
+            "no independently reviewed license decision authority is registered"
+        )
+    if item["decision_path"] != LICENSE_DECISION_PATH:
+        raise SourceLockError("license decision path differs from its reviewed location")
+    digest = validate_sha256(
+        item["decision_sha256"], "licenses.decision.decision_sha256"
+    )
+    if digest != EXPECTED_LICENSE_DECISION_SHA256:
+        raise SourceLockError("license decision digest is not independently registered")
+    if repo is None:
+        raise SourceLockError("verified license decision needs a repository")
+    decision_path = repository_evidence_path(
+        repo, LICENSE_DECISION_PATH, "licenses.decision.decision_path"
+    )
+    value, payload = read_json(decision_path)
+    if sha256_bytes(payload) != digest:
+        raise SourceLockError("license decision file is absent or stale")
+    manifest = exact_keys(
+        value,
+        {"decision_id", "inventory", "result", "review", "schema_version"},
+        "license decision manifest",
+    )
+    if manifest["schema_version"] != 1 or manifest["decision_id"] != LICENSE_DECISION_ID:
+        raise SourceLockError("license decision identity changed")
+    reviewed_inventory = exact_keys(
+        manifest["inventory"],
+        {"item_count", "path", "sha256"},
+        "license decision inventory",
+    )
+    if reviewed_inventory != {
+        "item_count": inventory["item_count"],
+        "path": inventory["inventory_path"],
+        "sha256": inventory["inventory_sha256"],
+    }:
+        raise SourceLockError("license decision reviews a different inventory")
+    review = exact_keys(
+        manifest["review"],
+        {"authority_id", "independent_from_capture"},
+        "license decision review",
+    )
+    if (
+        review["authority_id"] != EXPECTED_LICENSE_REVIEW_AUTHORITY_ID
+        or review["independent_from_capture"] is not True
+    ):
+        raise SourceLockError("license decision lacks the registered independent authority")
+    result = exact_keys(
+        manifest["result"],
+        {
+            "all_items_reviewed",
+            "credit_eligible",
+            "review_status",
+            "unresolved_count",
+        },
+        "license decision result",
+    )
+    if result != {
+        "all_items_reviewed": True,
+        "credit_eligible": True,
+        "review_status": "independently-reviewed",
+        "unresolved_count": 0,
+    }:
+        raise SourceLockError("license decision does not close every review blocker")
     return None
 
 
 def validate_license_policy(lock: Mapping[str, Any], repo: Path | None) -> str | None:
     licenses = exact_keys(
         lock.get("licenses"),
-        {"declared_spdx_expression", "inventory", "policy", "spec_path"},
+        {
+            "capture_authority",
+            "decision",
+            "declared_spdx_expression",
+            "inventory",
+            "policy",
+            "spec_path",
+        },
         "licenses",
     )
+    if licenses["capture_authority"] != EXPECTED_LICENSE_CAPTURE_AUTHORITY:
+        raise SourceLockError("license capture source-closure authority changed")
     expression = licenses["declared_spdx_expression"]
     if not isinstance(expression, str) or sha256_bytes(expression.encode()) != (
         LICENSE_EXPRESSION_SHA256
@@ -497,14 +907,7 @@ def validate_license_policy(lock: Mapping[str, Any], repo: Path | None) -> str |
         if policy[flag] is not True:
             raise SourceLockError(f"licenses.policy.{flag} must remain true")
     required_fields = policy["required_fields_per_item"]
-    if required_fields != [
-        "path",
-        "sha256",
-        "origin",
-        "spdx_expression",
-        "license_text_paths",
-        "review_status",
-    ]:
+    if required_fields != EXPECTED_LICENSE_ITEM_FIELDS:
         raise SourceLockError("license inventory fields are incomplete or reordered")
     scope = policy["scope"]
     if not isinstance(scope, list) or len(scope) != 4:
@@ -530,6 +933,7 @@ def validate_license_policy(lock: Mapping[str, Any], repo: Path | None) -> str |
     if inventory["required"] is not True:
         raise SourceLockError("license inventory must remain required")
     status = inventory["status"]
+    inventory_blocker: str | None = None
     if status == "required-missing":
         if inventory["complete"] is not False:
             raise SourceLockError("missing license inventory cannot be complete")
@@ -539,28 +943,35 @@ def validate_license_policy(lock: Mapping[str, Any], repo: Path | None) -> str |
         blocker = inventory["blocker"]
         if not isinstance(blocker, str) or not blocker.strip():
             raise SourceLockError("missing license inventory needs a blocker")
-        return blocker
-    if status != "verified" or inventory["complete"] is not True:
-        raise SourceLockError("license inventory status must be missing or verified-complete")
-    if inventory["blocker"] is not None:
-        raise SourceLockError("verified license inventory must clear its blocker")
-    path_text = validate_relative_path(
-        inventory["inventory_path"], "licenses.inventory.inventory_path"
-    )
-    expected_digest = validate_sha256(
-        inventory["inventory_sha256"], "licenses.inventory.inventory_sha256"
-    )
-    if not isinstance(inventory["item_count"], int) or inventory["item_count"] < 1:
-        raise SourceLockError("verified license inventory needs a positive item_count")
-    if repo is None:
-        raise SourceLockError("verified license inventory needs a repository to verify it")
-    inventory_path = repository_evidence_path(
-        repo, path_text, "licenses.inventory.inventory_path"
-    )
-    size, actual_digest = sha256_file(inventory_path)
-    if size == 0 or actual_digest != expected_digest:
-        raise SourceLockError("license inventory file is absent, empty, or stale")
-    return None
+        inventory_blocker = str(blocker)
+    else:
+        if status != "verified" or inventory["complete"] is not True:
+            raise SourceLockError(
+                "license inventory status must be missing or verified-complete"
+            )
+        if inventory["blocker"] is not None:
+            raise SourceLockError("verified license inventory must clear its blocker")
+        path_text = validate_relative_path(
+            inventory["inventory_path"], "licenses.inventory.inventory_path"
+        )
+        expected_digest = validate_sha256(
+            inventory["inventory_sha256"], "licenses.inventory.inventory_sha256"
+        )
+        if inventory["item_count"] != EXPECTED_LICENSE_INVENTORY_ITEM_COUNT:
+            raise SourceLockError(
+                "verified license inventory item_count differs from source closure"
+            )
+        if repo is None:
+            raise SourceLockError("verified license inventory needs a repository to verify it")
+        inventory_path = repository_evidence_path(
+            repo, path_text, "licenses.inventory.inventory_path"
+        )
+        size, actual_digest = sha256_file(inventory_path)
+        if size == 0 or actual_digest != expected_digest:
+            raise SourceLockError("license inventory file is absent, empty, or stale")
+    decision_blocker = validate_license_decision(licenses["decision"], inventory, repo)
+    blockers = [item for item in (inventory_blocker, decision_blocker) if item]
+    return "; ".join(blockers) if blockers else None
 
 
 def validate_source_lock(
@@ -640,10 +1051,14 @@ def validate_source_lock(
         "evidence",
     )
     blockers: list[str] = []
+    evidence_blockers: list[str] = []
     for evidence_id in sorted(evidence):
         blocker = validate_evidence_record(evidence_id, evidence[evidence_id], repo)
         if blocker:
-            blockers.append(f"{evidence_id}: {blocker}")
+            evidence_blockers.append(f"{evidence_id}: {blocker}")
+    blockers.extend(evidence_blockers)
+    if not evidence_blockers:
+        validate_source_evidence_review(lock, series, repo)
     license_blocker = validate_license_policy(lock, repo)
     if license_blocker:
         blockers.append(f"license_inventory: {license_blocker}")

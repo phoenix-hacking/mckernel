@@ -5,10 +5,14 @@ on:
     branches: [codex/rocky-rust-validation]
     paths:
       - .github/workflows/native-rust-host-modules-exact-build.yml
+      - host-kernel/contracts/linux-api-exact-probe-v1.json
+      - host-kernel/contracts/linux-api-needs-v1.json
+      - host-kernel/contracts/x86_64-shared-abi-v1.json
       - host-kernel/kbuild/**
       - host-kernel/contracts/ihk-os-registry-foundation-v1.json
       - host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json
       - host-kernel/native-rust/**
+      - host-kernel/rocky/config-policy.json
       - host-kernel/rocky/configs/native-rust-evidence.config
       - host-kernel/rocky/configs/rust-minimal.config
       - host-kernel/rocky/patches/0001-x86-rust-set-rustc-abi-x86-softfloat.patch
@@ -21,7 +25,9 @@ on:
       - host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch
       - host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch
       - host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch
+      - host-kernel/rocky/patches/series.json
       - host-kernel/rocky/source-lock.json
+      - host-kernel/rocky/toolchain-lock.json
       - scripts/ihk_native_lifecycle_check.py
       - scripts/ihk_native_queue_check.py
       - scripts/tests/fixtures/ihk_native_queue_compile.rs
@@ -32,18 +38,29 @@ on:
       - scripts/native_rust_build_surface_audit.py
       - scripts/native_rust_host_audit.py
       - scripts/native_rust_unsafe_ffi_ledger.py
+      - scripts/linux_api_exact_probe.py
       - scripts/rocky_kernel_source_lock.py
       - scripts/rocky_rust_staging.py
+      - scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs
       - scripts/tests/fixtures/ihk_os_registry_compile.rs
+      - scripts/tests/fixtures/rust-core-rocky-6.12/**
       - scripts/tests/test_ihk_os_registry_check.py
+      - scripts/tests/test_linux_api_exact_probe.py
+      - scripts/tests/test_rust_target_compatibility_patches.py
+      - scripts/tests/test_x86_64_shared_abi.py
+      - scripts/x86_64_shared_abi.py
   pull_request:
     branches: [development]
     paths:
       - .github/workflows/native-rust-host-modules-exact-build.yml
+      - host-kernel/contracts/linux-api-exact-probe-v1.json
+      - host-kernel/contracts/linux-api-needs-v1.json
+      - host-kernel/contracts/x86_64-shared-abi-v1.json
       - host-kernel/kbuild/**
       - host-kernel/contracts/ihk-os-registry-foundation-v1.json
       - host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json
       - host-kernel/native-rust/**
+      - host-kernel/rocky/config-policy.json
       - host-kernel/rocky/configs/native-rust-evidence.config
       - host-kernel/rocky/configs/rust-minimal.config
       - host-kernel/rocky/patches/0001-x86-rust-set-rustc-abi-x86-softfloat.patch
@@ -56,7 +73,9 @@ on:
       - host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch
       - host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch
       - host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch
+      - host-kernel/rocky/patches/series.json
       - host-kernel/rocky/source-lock.json
+      - host-kernel/rocky/toolchain-lock.json
       - scripts/ihk_native_lifecycle_check.py
       - scripts/ihk_native_queue_check.py
       - scripts/tests/fixtures/ihk_native_queue_compile.rs
@@ -67,10 +86,17 @@ on:
       - scripts/native_rust_build_surface_audit.py
       - scripts/native_rust_host_audit.py
       - scripts/native_rust_unsafe_ffi_ledger.py
+      - scripts/linux_api_exact_probe.py
       - scripts/rocky_kernel_source_lock.py
       - scripts/rocky_rust_staging.py
+      - scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs
       - scripts/tests/fixtures/ihk_os_registry_compile.rs
+      - scripts/tests/fixtures/rust-core-rocky-6.12/**
       - scripts/tests/test_ihk_os_registry_check.py
+      - scripts/tests/test_linux_api_exact_probe.py
+      - scripts/tests/test_rust_target_compatibility_patches.py
+      - scripts/tests/test_x86_64_shared_abi.py
+      - scripts/x86_64_shared_abi.py
   workflow_dispatch:
     inputs:
       validation_sha:
@@ -142,6 +168,10 @@ jobs:
           [[ "$EXPECTED_HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]
           test "$(git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"
           test "$(git -C ihk rev-parse HEAD)" = "3114d9e7101ad52030eb3effa849a5c108972a1f"
+          python3 scripts/linux_api_exact_probe.py \
+            --repo "$GITHUB_WORKSPACE" check-contract
+          python3 scripts/x86_64_shared_abi.py \
+            --repo-root "$GITHUB_WORKSPACE" --check
           python3 scripts/native_rust_build_surface_audit.py
           python3 scripts/native_rust_host_audit.py
           python3 scripts/rocky_rust_staging.py --repo "$GITHUB_WORKSPACE" --check

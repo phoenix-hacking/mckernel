@@ -1,0 +1,138 @@
+name: Rocky 10.2 deterministic kernel config resolution
+
+on:
+  workflow_dispatch:
+    inputs:
+      validation_sha:
+        description: Exact 40-hex candidate commit
+        required: true
+        type: string
+  push:
+    branches: [codex/rocky-rust-validation]
+    paths:
+      - .github/workflows/rocky-kernel-config-resolution.yml
+      - host-kernel/rocky/config-policy.json
+      - host-kernel/rocky/configs/rust-minimal.config
+      - host-kernel/rocky/evidence/config-resolution-contract-v1.json
+      - host-kernel/rocky/patches/**
+      - host-kernel/rocky/source-lock.json
+      - host-kernel/rocky/toolchain-lock.json
+      - scripts/rocky_kernel_config_resolution.py
+      - scripts/rocky_kernel_source_lock.py
+      - scripts/tests/test_rocky_kernel_config_resolution.py
+  pull_request:
+    branches: [development]
+    paths:
+      - .github/workflows/rocky-kernel-config-resolution.yml
+      - host-kernel/rocky/config-policy.json
+      - host-kernel/rocky/configs/rust-minimal.config
+      - host-kernel/rocky/evidence/config-resolution-contract-v1.json
+      - host-kernel/rocky/patches/**
+      - host-kernel/rocky/source-lock.json
+      - host-kernel/rocky/toolchain-lock.json
+      - scripts/rocky_kernel_config_resolution.py
+      - scripts/rocky_kernel_source_lock.py
+      - scripts/tests/test_rocky_kernel_config_resolution.py
+
+permissions:
+  contents: read
+
+env:
+  RK_PLATFORM_CONTAINER_IMAGE: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
+  EXPECTED_HEAD_SHA: ${{ github.event_name == 'workflow_dispatch' && inputs.validation_sha || github.event.pull_request.head.sha || github.sha }}
+
+jobs:
+  config-resolution:
+    name: Resolve exact config twice (credit forbidden)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    container:
+      image: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Refuse the wrong runtime and install exact config tools
+        run: |
+          set -euo pipefail
+          evidence_root="$RUNNER_TEMP/rk005-config-resolution"
+          mkdir -m 700 "$evidence_root"
+          printf '%s\n' bootstrap-started > "$evidence_root/workflow-state"
+          test "$(uname -m)" = x86_64
+          . /etc/os-release
+          test "$ID" = rocky
+          test "$VERSION_ID" = 10.2
+          dnf -y --setopt=install_weak_deps=False install dnf-plugins-core
+          dnf config-manager --set-enabled crb
+          dnf -y --setopt=install_weak_deps=False install \
+            bc binutils bison bindgen-cli clang cpio diffutils dwarves \
+            elfutils-libelf-devel findutils flex git-core gzip llvm \
+            llvm-devel make openssl-devel patch perl python3 rpm-build \
+            rust rust-src tar xz
+          dnf clean all
+          printf '%s\n' bootstrap-complete > "$evidence_root/workflow-state"
+
+      - name: Check out the exact candidate without credentials
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ env.EXPECTED_HEAD_SHA }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Verify the bounded source contract
+        run: |
+          set -euo pipefail
+          [[ "$EXPECTED_HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]
+          test "$(git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"
+          python3 scripts/rocky_kernel_source_lock.py --repo "$GITHUB_WORKSPACE" --check
+          python3 scripts/rocky_kernel_config_resolution.py \
+            --repo "$GITHUB_WORKSPACE" --check
+
+      - name: Acquire and extract exact Rocky source assets
+        env:
+          CACHE_ROOT: ${{ runner.temp }}/rk005-source-cache
+          SOURCE_ASSETS: ${{ runner.temp }}/rk005-source-assets
+        run: |
+          set -euo pipefail
+          python3 scripts/rocky_kernel_source_lock.py \
+            --repo "$GITHUB_WORKSPACE" --cache-root "$CACHE_ROOT" --acquire
+          srpm="$(find "$CACHE_ROOT" -type f -name 'kernel-6.12.0-211.44.1.el10_2.src.rpm' -print)"
+          test -n "$srpm"
+          test "$(printf '%s\n' "$srpm" | wc -l)" = 1
+          mkdir -m 700 "$SOURCE_ASSETS"
+          (cd "$SOURCE_ASSETS" && rpm2cpio "$srpm" | cpio -idm --quiet --no-absolute-filenames)
+          printf 'RK005_SOURCE_ASSETS=%s\n' "$SOURCE_ASSETS" >> "$GITHUB_ENV"
+
+      - name: Capture two independent exact config resolutions
+        env:
+          EVIDENCE_ROOT: ${{ runner.temp }}/rk005-config-resolution
+        run: |
+          set -uo pipefail
+          {
+            python3 scripts/rocky_kernel_config_resolution.py \
+              --repo "$GITHUB_WORKSPACE" \
+              --capture \
+              --phase config-resolution \
+              --source-assets "$RK005_SOURCE_ASSETS" \
+              --output-dir "$EVIDENCE_ROOT/capture" \
+              --github-head-sha "$EXPECTED_HEAD_SHA" \
+              --github-run-id "$GITHUB_RUN_ID" \
+              --github-run-attempt "$GITHUB_RUN_ATTEMPT" \
+              --github-repository "$GITHUB_REPOSITORY" \
+              --container-image "$RK_PLATFORM_CONTAINER_IMAGE"
+          } 2>&1 | tee "$EVIDENCE_ROOT/capture.log"
+          status="${PIPESTATUS[0]}"
+          printf '%s\n' "$status" > "$EVIDENCE_ROOT/capture.exit-code"
+          exit "$status"
+
+      - name: Upload config evidence or first-failure diagnostics
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: rk005-config-resolution-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/rk005-config-resolution/
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
+          include-hidden-files: true

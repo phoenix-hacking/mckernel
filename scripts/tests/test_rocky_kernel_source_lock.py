@@ -84,20 +84,65 @@ class SourceLockFixture(unittest.TestCase):
 
 
 class LockedIdentityTests(SourceLockFixture):
+    def test_duplicate_json_keys_fail_closed(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "duplicate.json"
+            path.write_text('{"gate":{},"gate":{}}\n', encoding="utf-8")
+            with self.assertRaisesRegex(source_lock.SourceLockError, "duplicate"):
+                source_lock.read_json(path)
+
     def test_committed_lock_is_valid_but_not_gate_ready(self) -> None:
         blockers = self.validate()
-        self.assertEqual(len(blockers), 5)
+        self.assertEqual(len(blockers), 1)
         self.assertEqual(
             {blocker.split(":", 1)[0] for blocker in blockers},
-            {
-                "acquisition_replay",
-                "dist_git_object_replay",
-                "license_inventory",
-                "repository_metadata_signature_replay",
-                "srpm_header_signature",
-            },
+            {"license_inventory"},
         )
         self.assertFalse(self.lock["gate"]["credit_eligible"])
+
+    def test_every_reviewed_evidence_row_leaf_is_authoritative(self) -> None:
+        tested = 0
+        for evidence_id, expected in source_lock.EXPECTED_REVIEWED_EVIDENCE.items():
+            self.assertEqual(self.lock["evidence"][evidence_id], expected)
+            for path, original in identity_leaves(expected):
+                with self.subTest(evidence=evidence_id, path=path):
+                    broken = copy.deepcopy(self.lock)
+                    replacement = "not-null" if original is None else changed_scalar(original)
+                    replace_at_path(broken["evidence"][evidence_id], path, replacement)
+                    with self.assertRaises(source_lock.SourceLockError):
+                        self.validate(broken)
+                    tested += 1
+        self.assertGreater(tested, 20)
+
+    def test_review_manifest_digest_is_an_authoritative_cross_lock(self) -> None:
+        original = source_lock.SOURCE_EVIDENCE_REVIEW_SHA256
+        source_lock.SOURCE_EVIDENCE_REVIEW_SHA256 = "0" * 64
+        try:
+            with self.assertRaisesRegex(source_lock.SourceLockError, "review manifest"):
+                self.validate()
+        finally:
+            source_lock.SOURCE_EVIDENCE_REVIEW_SHA256 = original
+
+    def test_every_license_capture_authority_leaf_is_immutable(self) -> None:
+        self.assertEqual(
+            source_lock.EXPECTED_LICENSE_CAPTURE_AUTHORITY,
+            self.lock["licenses"]["capture_authority"],
+        )
+        tested = 0
+        for path, original in identity_leaves(
+            source_lock.EXPECTED_LICENSE_CAPTURE_AUTHORITY
+        ):
+            with self.subTest(path=path):
+                broken = copy.deepcopy(self.lock)
+                replace_at_path(
+                    broken["licenses"]["capture_authority"],
+                    path,
+                    changed_scalar(original),
+                )
+                with self.assertRaises(source_lock.SourceLockError):
+                    self.validate(broken)
+                tested += 1
+        self.assertGreater(tested, 15)
 
     def test_srpm_identity_mutations_fail_closed(self) -> None:
         cases = {
@@ -316,6 +361,7 @@ class LockedIdentityTests(SourceLockFixture):
             item = broken["evidence"]["acquisition_replay"]
             item.update(
                 {
+                    "blocker": "captured record still needs review",
                     "evidence_path": relative,
                     "evidence_sha256": digest,
                     "status": "captured-unverified",
@@ -350,11 +396,63 @@ class LockedIdentityTests(SourceLockFixture):
             with self.assertRaises(source_lock.SourceLockError):
                 self.validate(broken)
 
-    def test_gate_credit_claim_fails_while_any_required_evidence_is_missing(self) -> None:
+    def test_gate_credit_claim_fails_while_license_inventory_is_missing(self) -> None:
         broken = copy.deepcopy(self.lock)
         broken["gate"]["credit_eligible"] = True
-        with self.assertRaisesRegex(source_lock.SourceLockError, "credit_eligible"):
+        with self.assertRaisesRegex(
+            source_lock.SourceLockError, "credit_eligible|silently close"
+        ):
             self.validate(broken)
+
+    def test_rehashed_one_line_inventory_cannot_close_rk001(self) -> None:
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT) as temporary:
+            path = Path(temporary) / "forged-license-inventory.jsonl"
+            path.write_text('{"review_status":"verified"}\n', encoding="utf-8")
+            broken = copy.deepcopy(self.lock)
+            broken["licenses"]["inventory"].update(
+                {
+                    "blocker": None,
+                    "complete": True,
+                    "inventory_path": path.relative_to(REPO_ROOT).as_posix(),
+                    "inventory_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+                    "item_count": 1,
+                    "status": "verified",
+                }
+            )
+            broken["gate"]["credit_eligible"] = True
+            with self.assertRaisesRegex(
+                source_lock.SourceLockError, "item_count|credit_eligible"
+            ):
+                self.validate(broken)
+
+    def test_self_authored_license_decision_cannot_close_rk001(self) -> None:
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT) as temporary:
+            path = Path(temporary) / "forged-license-inventory.jsonl"
+            path.write_text('{"review_status":"verified"}\n', encoding="utf-8")
+            broken = copy.deepcopy(self.lock)
+            broken["licenses"]["inventory"].update(
+                {
+                    "blocker": None,
+                    "complete": True,
+                    "inventory_path": path.relative_to(REPO_ROOT).as_posix(),
+                    "inventory_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+                    "item_count": source_lock.EXPECTED_LICENSE_INVENTORY_ITEM_COUNT,
+                    "status": "verified",
+                }
+            )
+            broken["licenses"]["decision"].update(
+                {
+                    "blocker": None,
+                    "decision_path": source_lock.LICENSE_DECISION_PATH,
+                    "decision_sha256": "0" * 64,
+                    "status": "verified",
+                }
+            )
+            broken["gate"]["credit_eligible"] = True
+            with self.assertRaisesRegex(
+                source_lock.SourceLockError, "independently reviewed"
+            ):
+                self.validate(broken)
 
     def test_unknown_fields_are_rejected(self) -> None:
         broken = copy.deepcopy(self.lock)

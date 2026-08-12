@@ -63,34 +63,34 @@
   ],
   "evidence": {
     "acquisition_replay": {
-      "blocker": "Run the locked acquisition in a clean Rocky 10.2 environment and retain a machine-readable transcript that includes the cache artifact digest.",
-      "evidence_path": null,
-      "evidence_sha256": null,
+      "blocker": null,
+      "evidence_path": "host-kernel/rocky/evidence/acquisition-replay.json",
+      "evidence_sha256": "d37019bfa3c295867c68461c89bd70d9bcc8417e8dfc6ffd23ff46601280e2a0",
       "required": true,
-      "status": "required-missing"
+      "status": "verified"
     },
     "dist_git_object_replay": {
-      "blocker": "Fetch the exact tag and commit in a clean environment, verify every locked Git blob and tag peel, and retain the transcript.",
-      "evidence_path": null,
-      "evidence_sha256": null,
+      "blocker": null,
+      "evidence_path": "host-kernel/rocky/evidence/dist-git-object-replay.json",
+      "evidence_sha256": "359ed16070bd3a401fe733a00581499e6784fa2b017c51cbf3da2bbd7fe499de",
       "required": true,
-      "status": "required-missing"
+      "status": "verified"
     },
     "repository_metadata_signature_replay": {
-      "blocker": "Re-fetch the pinned Rocky release key, repomd.xml, detached signature, and primary metadata; verify their locked hashes and signature in a clean environment; retain the machine-readable transcript.",
-      "evidence_path": null,
-      "evidence_sha256": null,
+      "blocker": null,
+      "evidence_path": "host-kernel/rocky/evidence/repository-metadata-signature-replay.json",
+      "evidence_sha256": "4573f66b43019a6b45907a611d3c52a3af4ac92cdacd0ff3c1ee8a945b270dc5",
       "required": true,
-      "status": "required-missing"
+      "status": "verified"
     },
     "srpm_header_signature": {
-      "blocker": "Capture an rpmkeys verification of the downloaded SRPM against the pinned Rocky Linux 10 release key, including signer fingerprint and signature algorithm.",
-      "evidence_path": null,
-      "evidence_sha256": null,
+      "blocker": null,
+      "evidence_path": "host-kernel/rocky/evidence/srpm-header-signature.json",
+      "evidence_sha256": "0106cd8d9ae07a9191affa55f35f7d79390e66ca95c1e85034d3434d06a79901",
       "required": true,
-      "signature_algorithm": null,
-      "signer_fingerprint": null,
-      "status": "required-missing"
+      "signature_algorithm": "RSA/SHA256",
+      "signer_fingerprint": "FC226859C0860BF0DDB95B085B106C736FEDFC85",
+      "status": "verified"
     }
   },
   "gate": {
@@ -99,7 +99,93 @@
     "policy": "Credit is forbidden while any required evidence or the complete license inventory is missing or unverified."
   },
   "licenses": {
+    "capture_authority": {
+      "authority_id": "rk-001-license-capture-source-closure-v1",
+      "closure_algorithm": "sha256 over canonical sorted path rows and canonical source-identity rows",
+      "namespaces": {
+        "dist-git": {
+          "item_count": 77,
+          "path_set_sha256": "ffe07b597e0a3b72d5e29e7b05aea8e75bdf112d75068d3d72e28547a4833c22",
+          "source_manifest_sha256": "ac819ee853a73c109c2db5f8735b947c1fae6374fce8b3402779720fe5621e96"
+        },
+        "linux": {
+          "item_count": 115027,
+          "path_set_sha256": "f7495feae099d970ef02bbb1a73a0669b88c83c33dad80d3cc6bfb4184b2b0c2",
+          "source_manifest_sha256": "321b8a227f7a9473a94db6fbf747c48727a39b20bd8a24474f68578915ca4e56"
+        },
+        "repository": {
+          "paths": [
+          "host-kernel/kbuild/parent-integration-v1.json",
+          "host-kernel/kbuild/patches/0001-drivers-misc-add-mckernel-rust-host-modules.patch",
+          "host-kernel/kbuild/patches/0002-rust-bindings-expose-module-parameters.patch",
+          "host-kernel/kbuild/stage-manifest.json",
+          "host-kernel/kbuild/Kbuild.in",
+          "host-kernel/kbuild/Kconfig",
+          "host-kernel/native-rust/abi/x86_64.rs",
+          "host-kernel/native-rust/ihk.rs",
+          "host-kernel/native-rust/ihk_smp_x86_64.rs",
+          "host-kernel/native-rust/ikc_master.rs",
+          "host-kernel/native-rust/ikc_queue.rs",
+          "host-kernel/native-rust/mcctrl.rs",
+          "host-kernel/native-rust/os_registry.rs",
+          "host-kernel/native-rust/page_allocator.rs",
+          "host-kernel/rocky/configs/native-rust-evidence.config",
+          "host-kernel/rocky/configs/rust-minimal.config",
+          "host-kernel/rocky/patches/0001-x86-rust-set-rustc-abi-x86-softfloat.patch",
+          "host-kernel/rocky/patches/0002-rust-support-rust-1.91-target-spec.patch",
+          "host-kernel/rocky/patches/0003-kbuild-rust-add-rustc-min-version.patch",
+          "host-kernel/rocky/patches/0004-rust-compile-libcore-edition-2024.patch",
+          "host-kernel/rocky/patches/0005-rust-clean-unnecessary-transmutes-lint.patch",
+          "host-kernel/rocky/patches/0006-rust-init-allow-dead-code-rust-1.89.patch",
+          "host-kernel/rocky/patches/0007-rust-use-used-compiler-rust-1.89.patch",
+          "host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch",
+          "host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch",
+          "host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch",
+          "host-kernel/rocky/patches/series.json",
+          "scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs",
+          "scripts/tests/fixtures/ihk_native_master_compile.rs",
+          "scripts/tests/fixtures/ihk_native_queue_compile.rs",
+          "scripts/tests/fixtures/ihk_os_registry_compile.rs",
+          "scripts/tests/fixtures/ihk_page_allocator_compile.rs",
+          "scripts/tests/fixtures/ihk_page_allocator_lifetime_compile_fail.rs",
+          "scripts/tests/fixtures/ihk_page_allocator_must_use_compile_fail.rs",
+          "scripts/tests/fixtures/rust-core-rocky-6.12/Documentation/kbuild/makefiles.rst",
+          "scripts/tests/fixtures/rust-core-rocky-6.12/arch/arm64/Makefile",
+          "scripts/tests/fixtures/rust-core-rocky-6.12/include/linux/blk-mq.h",
+          "scripts/tests/fixtures/rust-core-rocky-6.12/init/Kconfig",
+          "scripts/tests/fixtures/rust-core-rocky-6.12/rust/Makefile",
+          "scripts/tests/fixtures/rust-core-rocky-6.12/rust/bindings/lib.rs",
+          "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/block/mq/tag_set.rs",
+          "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/init/macros.rs",
+          "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/lib.rs",
+          "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/list/arc.rs",
+          "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/sync/arc.rs",
+          "scripts/tests/fixtures/rust-core-rocky-6.12/rust/macros/module.rs",
+          "scripts/tests/fixtures/rust-core-rocky-6.12/rust/uapi/lib.rs",
+          "scripts/tests/fixtures/rust-core-rocky-6.12/scripts/Makefile.build",
+          "scripts/tests/fixtures/rust-core-rocky-6.12/scripts/Makefile.compiler",
+          "scripts/tests/fixtures/rust-core-rocky-6.12/scripts/Makefile.extrawarn",
+          "scripts/tests/fixtures/rust-core-rocky-6.12/scripts/generate_rust_analyzer.py"
+        ],
+          "verification": "recompute exact blob OIDs, bytes, and closure from the bound Git commit"
+        },
+        "srpm": {
+          "item_count": 71,
+          "path_set_sha256": "d599d27ba45a688e7f550f793dc467f48e3603fb77efb790331b5b8b42a4ee96",
+          "source_manifest_sha256": "8158ccfb1a5899e47962e45ad107d04e0747fdf0951f167039e7ae3e13d84f47"
+        }
+      },
+      "scope_is_derived_from_verified_closures": true
+    },
     "declared_spdx_expression": "((GPL-2.0-only WITH Linux-syscall-note) OR BSD-2-Clause) AND ((GPL-2.0-only WITH Linux-syscall-note) OR BSD-3-Clause) AND ((GPL-2.0-only WITH Linux-syscall-note) OR CDDL-1.0) AND ((GPL-2.0-only WITH Linux-syscall-note) OR Linux-OpenIB) AND ((GPL-2.0-only WITH Linux-syscall-note) OR MIT) AND ((GPL-2.0-or-later WITH Linux-syscall-note) OR BSD-3-Clause) AND ((GPL-2.0-or-later WITH Linux-syscall-note) OR MIT) AND 0BSD AND BSD-2-Clause AND (BSD-2-Clause OR Apache-2.0) AND BSD-3-Clause AND BSD-3-Clause-Clear AND CC0-1.0 AND GFDL-1.1-no-invariants-or-later AND GPL-1.0-or-later AND (GPL-1.0-or-later OR BSD-3-Clause) AND (GPL-1.0-or-later WITH Linux-syscall-note) AND GPL-2.0-only AND (GPL-2.0-only OR Apache-2.0) AND (GPL-2.0-only OR BSD-2-Clause) AND (GPL-2.0-only OR BSD-3-Clause) AND (GPL-2.0-only OR CDDL-1.0) AND (GPL-2.0-only OR GFDL-1.1-no-invariants-or-later) AND (GPL-2.0-only OR GFDL-1.2-no-invariants-only) AND (GPL-2.0-only WITH Linux-syscall-note) AND GPL-2.0-or-later AND (GPL-2.0-or-later OR BSD-2-Clause) AND (GPL-2.0-or-later OR BSD-3-Clause) AND (GPL-2.0-or-later OR CC-BY-4.0) AND (GPL-2.0-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH Linux-syscall-note) AND ISC AND LGPL-2.0-or-later AND (LGPL-2.0-or-later OR BSD-2-Clause) AND (LGPL-2.0-or-later WITH Linux-syscall-note) AND LGPL-2.1-only AND (LGPL-2.1-only OR BSD-2-Clause) AND (LGPL-2.1-only WITH Linux-syscall-note) AND LGPL-2.1-or-later AND (LGPL-2.1-or-later WITH Linux-syscall-note) AND (Linux-OpenIB OR GPL-2.0-only) AND (Linux-OpenIB OR GPL-2.0-only OR BSD-2-Clause) AND Linux-man-pages-copyleft AND MIT AND (MIT OR Apache-2.0) AND (MIT OR GPL-2.0-only) AND (MIT OR GPL-2.0-or-later) AND (MIT OR LGPL-2.1-only) AND (MPL-1.1 OR GPL-2.0-only) AND (X11 OR GPL-2.0-only) AND (X11 OR GPL-2.0-or-later) AND Zlib AND (copyleft-next-0.3.1 OR GPL-2.0-or-later)",
+    "decision": {
+      "authority_registration": "an independently reviewed exact decision-manifest SHA-256 must be registered in the validator before RK-001 can close",
+      "blocker": "No independently reviewed license decision manifest is registered.",
+      "decision_path": null,
+      "decision_sha256": null,
+      "required": true,
+      "status": "required-missing"
+    },
     "inventory": {
       "blocker": "A path-by-path SPDX/provenance inventory has not yet been generated and reviewed.",
       "complete": false,
@@ -114,12 +200,18 @@
       "license_texts_required": true,
       "patch_authorship_and_license_required": true,
       "required_fields_per_item": [
+        "authorship_signals",
+        "entry_type",
+        "license_text_paths",
+        "link_target",
+        "origin",
         "path",
         "sha256",
-        "origin",
+        "size",
+        "source_identity",
         "spdx_expression",
-        "license_text_paths",
-        "review_status"
+        "review_status",
+        "unresolved_reasons"
       ],
       "scope": [
         "every file in the embedded Linux source archive",

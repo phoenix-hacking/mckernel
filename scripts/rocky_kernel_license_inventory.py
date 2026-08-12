@@ -30,16 +30,153 @@ WORKFLOW = Path(".github/workflows/rocky-kernel-source-evidence.yml")
 SCHEMA_VERSION = 1
 MAX_ARCHIVE_MEMBERS = 250000
 MAX_ARCHIVE_BYTES = 4 * 1024 * 1024 * 1024
+MAX_MEMBER_BYTES = 64 * 1024 * 1024
+MAX_INVENTORY_BYTES = 1024 * 1024 * 1024
 PREFIX_BYTES = 128 * 1024
+EXPECTED_CONTAINER_IMAGE = (
+    "rockylinux/rockylinux:10.2@sha256:"
+    "e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176"
+)
+EXPECTED_SOURCE_LOCK_SHA256 = (
+    "36687c952e643918cb6d1f1301e79ed737f189b2fc5d5b5a833f0e60e41a4cd2"
+)
+EXPECTED_PATCH_SERIES_SHA256 = (
+    "6a1a5e8fb13b6ce6ed35bd8e5487bb67ecf92d2be927799b660f21b5631f68fb"
+)
+EXPECTED_SOURCE_RPM_SHA256 = (
+    "2bfeda65bd9bdd4b86650074c81e061c37822b80317ac0d4f5aacc89c85589cb"
+)
+EXPECTED_LINUX_ARCHIVE_SHA256 = (
+    "4a174d47b8874a2139efcd1ac1ab2d6b80ae7a0ca62f0ae4596fd20cf62a3533"
+)
+EXPECTED_DIST_GIT_COMMIT = "e4cad646580f7f3dfec5e3b6b4ea9e89b7572f6c"
+UNEXPANDED_EMBEDDED_OBJECTS = [
+    "SOURCES/kernel-abi-stablelists-6.12.0-211.44.1.el10_2.tar.xz",
+    "SOURCES/kernel-kabi-dw-6.12.0-211.44.1.el10_2.tar.xz",
+]
+CAPTURE_BLOCKERS = [
+    "every machine-generated item requires independent license/provenance review",
+    "generated captures cannot contain reviewed items or close RK-001",
+    "two additional embedded source archives remain unexpanded and unreviewed",
+    "dist-git and local patch consumption/redistribution scope requires kernel.spec review",
+]
+EXPECTED_STATIC_NAMESPACE_CLOSURES = {
+    "dist-git": {
+        "item_count": 77,
+        "path_set_sha256": (
+            "ffe07b597e0a3b72d5e29e7b05aea8e75bdf112d75068d3d72e28547a4833c22"
+        ),
+        "source_manifest_sha256": (
+            "ac819ee853a73c109c2db5f8735b947c1fae6374fce8b3402779720fe5621e96"
+        ),
+    },
+    "linux": {
+        "item_count": 115027,
+        "path_set_sha256": (
+            "f7495feae099d970ef02bbb1a73a0669b88c83c33dad80d3cc6bfb4184b2b0c2"
+        ),
+        "source_manifest_sha256": (
+            "321b8a227f7a9473a94db6fbf747c48727a39b20bd8a24474f68578915ca4e56"
+        ),
+    },
+    "srpm": {
+        "item_count": 71,
+        "path_set_sha256": (
+            "d599d27ba45a688e7f550f793dc467f48e3603fb77efb790331b5b8b42a4ee96"
+        ),
+        "source_manifest_sha256": (
+            "8158ccfb1a5899e47962e45ad107d04e0747fdf0951f167039e7ae3e13d84f47"
+        ),
+    },
+}
+EXPECTED_STAGE_REPOSITORY_INPUT_PATHS = sorted([
+    "host-kernel/kbuild/Kbuild.in",
+    "host-kernel/kbuild/Kconfig",
+    "host-kernel/kbuild/parent-integration-v1.json",
+    "host-kernel/native-rust/abi/x86_64.rs",
+    "host-kernel/native-rust/ihk.rs",
+    "host-kernel/native-rust/ihk_smp_x86_64.rs",
+    "host-kernel/native-rust/ikc_master.rs",
+    "host-kernel/native-rust/ikc_queue.rs",
+    "host-kernel/native-rust/mcctrl.rs",
+    "host-kernel/native-rust/os_registry.rs",
+])
+EXPECTED_REPOSITORY_INPUT_PATHS = [
+    "host-kernel/kbuild/parent-integration-v1.json",
+    "host-kernel/kbuild/patches/0001-drivers-misc-add-mckernel-rust-host-modules.patch",
+    "host-kernel/kbuild/patches/0002-rust-bindings-expose-module-parameters.patch",
+    "host-kernel/kbuild/stage-manifest.json",
+    "host-kernel/kbuild/Kbuild.in",
+    "host-kernel/kbuild/Kconfig",
+    "host-kernel/native-rust/abi/x86_64.rs",
+    "host-kernel/native-rust/ihk.rs",
+    "host-kernel/native-rust/ihk_smp_x86_64.rs",
+    "host-kernel/native-rust/ikc_master.rs",
+    "host-kernel/native-rust/ikc_queue.rs",
+    "host-kernel/native-rust/mcctrl.rs",
+    "host-kernel/native-rust/os_registry.rs",
+    "host-kernel/native-rust/page_allocator.rs",
+    "host-kernel/rocky/configs/native-rust-evidence.config",
+    "host-kernel/rocky/configs/rust-minimal.config",
+    "host-kernel/rocky/patches/0001-x86-rust-set-rustc-abi-x86-softfloat.patch",
+    "host-kernel/rocky/patches/0002-rust-support-rust-1.91-target-spec.patch",
+    "host-kernel/rocky/patches/0003-kbuild-rust-add-rustc-min-version.patch",
+    "host-kernel/rocky/patches/0004-rust-compile-libcore-edition-2024.patch",
+    "host-kernel/rocky/patches/0005-rust-clean-unnecessary-transmutes-lint.patch",
+    "host-kernel/rocky/patches/0006-rust-init-allow-dead-code-rust-1.89.patch",
+    "host-kernel/rocky/patches/0007-rust-use-used-compiler-rust-1.89.patch",
+    "host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch",
+    "host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch",
+    "host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch",
+    "host-kernel/rocky/patches/series.json",
+    "scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs",
+    "scripts/tests/fixtures/ihk_native_master_compile.rs",
+    "scripts/tests/fixtures/ihk_native_queue_compile.rs",
+    "scripts/tests/fixtures/ihk_os_registry_compile.rs",
+    "scripts/tests/fixtures/ihk_page_allocator_compile.rs",
+    "scripts/tests/fixtures/ihk_page_allocator_lifetime_compile_fail.rs",
+    "scripts/tests/fixtures/ihk_page_allocator_must_use_compile_fail.rs",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/Documentation/kbuild/makefiles.rst",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/arch/arm64/Makefile",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/include/linux/blk-mq.h",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/init/Kconfig",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/rust/Makefile",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/rust/bindings/lib.rs",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/block/mq/tag_set.rs",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/init/macros.rs",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/lib.rs",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/list/arc.rs",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/sync/arc.rs",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/rust/macros/module.rs",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/rust/uapi/lib.rs",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/scripts/Makefile.build",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/scripts/Makefile.compiler",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/scripts/Makefile.extrawarn",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/scripts/generate_rust_analyzer.py",
+]
+SOURCE_CLOSURE_KEYS = {
+    "entry_type",
+    "link_target",
+    "origin",
+    "path",
+    "sha256",
+    "size",
+    "source_identity",
+}
+CAPTURE_AUTHORITY_ID = "rk-001-license-capture-source-closure-v1"
 REQUIRED_ITEM_KEYS = {
+    "authorship_signals",
     "entry_type",
     "license_text_paths",
+    "link_target",
     "origin",
     "path",
     "review_status",
     "sha256",
     "size",
+    "source_identity",
     "spdx_expression",
+    "unresolved_reasons",
 }
 SPDX_LINE = re.compile(
     br"^(?:SPDX-License-Identifier:|[ \t]*(?://+|/\*+|\*+|#+|;+|--+|\.\.|<!--)"
@@ -52,6 +189,10 @@ VALID_LICENSE = re.compile(
     re.IGNORECASE | re.MULTILINE,
 )
 SPDX_TOKEN = re.compile(r"[A-Za-z0-9][A-Za-z0-9.+-]*")
+PATCH_AUTHOR = re.compile(
+    br"^(?:From|Author|Signed-off-by|Co-developed-by):[ \t]*(.+)$",
+    re.IGNORECASE | re.MULTILINE,
+)
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
 RUN_ID = re.compile(r"^[1-9][0-9]*$")
 COMMIT = re.compile(r"^[0-9a-f]{40}$")
@@ -102,7 +243,7 @@ def hash_file(path):
     return size, digest.hexdigest()
 
 
-def hash_stream(stream):
+def hash_stream(stream, expected_size=None):
     digest = hashlib.sha256()
     size = 0
     prefix = bytearray()
@@ -113,6 +254,8 @@ def hash_stream(stream):
         if not isinstance(block, bytes):
             raise InventoryError("archive stream returned non-byte data")
         size += len(block)
+        if expected_size is not None and size > expected_size:
+            raise InventoryError("archive stream exceeded its declared size")
         if len(prefix) < PREFIX_BYTES:
             prefix.extend(block[: PREFIX_BYTES - len(prefix)])
         digest.update(block)
@@ -150,6 +293,35 @@ def repository_file(repo, relative, label):
     if stat.S_ISLNK(info.st_mode) or not stat.S_ISREG(info.st_mode):
         raise InventoryError("{0} must be a regular non-symlink file".format(label))
     return requested
+
+
+def stage_repository_input_paths(repo):
+    manifest_path = repository_file(
+        repo, "host-kernel/kbuild/stage-manifest.json", "stage manifest"
+    )
+    manifest = read_json(manifest_path)
+    inputs = manifest.get("inputs")
+    modules = manifest.get("modules")
+    parent = manifest.get("parent_integration")
+    if not isinstance(inputs, list) or not isinstance(modules, list):
+        raise InventoryError("stage manifest input collections are malformed")
+    if not isinstance(parent, dict):
+        raise InventoryError("stage manifest parent integration is malformed")
+    values = [parent.get("repository_path")]
+    for item in inputs:
+        if not isinstance(item, dict):
+            raise InventoryError("stage manifest input row is malformed")
+        values.append(item.get("repository_path"))
+    for module in modules:
+        if not isinstance(module, dict) or not isinstance(module.get("source"), dict):
+            raise InventoryError("stage manifest module source row is malformed")
+        values.append(module["source"].get("repository_path"))
+    normalized = sorted(
+        safe_relative(value, "stage repository input") for value in values
+    )
+    if len(normalized) != len(set(normalized)):
+        raise InventoryError("stage manifest repository inputs are duplicated")
+    return normalized
 
 
 def clean_expression(raw):
@@ -192,23 +364,52 @@ def expression_tokens(expression):
     return sorted(set(tokens))
 
 
-def make_item(path, size, digest, origin, entry_type, prefix, link_target=None):
+def patch_authorship_signals(path, prefix):
+    if not path.endswith(".patch"):
+        return []
+    return sorted(
+        set(
+            value.decode("utf-8", errors="replace").strip()
+            for value in PATCH_AUTHOR.findall(prefix)
+        )
+    )
+
+
+def make_item(
+    path,
+    size,
+    digest,
+    origin,
+    entry_type,
+    prefix,
+    link_target=None,
+    source_identity=None,
+):
     path = safe_relative(path, "inventory path")
     expressions, reason = expressions_from_prefix(prefix)
     expression = expressions[0] if len(expressions) == 1 else "NOASSERTION"
+    reasons = ["independent-review-required"]
+    if reason is not None:
+        reasons.append(reason)
+    authors = patch_authorship_signals(path, prefix)
+    if path.endswith(".patch") and not authors:
+        reasons.append("patch-authorship-signal-missing")
+    if path.endswith(".patch") and expression == "NOASSERTION":
+        reasons.append("patch-license-signal-missing")
     item = {
+        "authorship_signals": authors,
         "entry_type": entry_type,
         "license_text_paths": [],
+        "link_target": link_target,
         "origin": origin,
         "path": path,
         "review_status": "captured-unreviewed",
         "sha256": digest,
         "size": size,
+        "source_identity": dict(source_identity or {}),
         "spdx_expression": expression,
+        "unresolved_reasons": sorted(set(reasons)),
     }
-    item["_reason"] = reason
-    if link_target is not None:
-        item["_link_target"] = link_target
     return item
 
 
@@ -263,20 +464,32 @@ def inventory_linux_archive(archive_path, archive_digest):
             if member.isdir():
                 continue
             if member.isreg():
+                if member.size < 0 or member.size > MAX_MEMBER_BYTES:
+                    raise InventoryError(
+                        "Linux archive member exceeds its size cap: {0}".format(
+                            canonical
+                        )
+                    )
                 extracted = archive.extractfile(member)
                 if extracted is None:
                     raise InventoryError("cannot read archive member: {0}".format(canonical))
-                size, digest, prefix = hash_stream(extracted)
+                size, digest, prefix = hash_stream(extracted, member.size)
                 if size != member.size:
                     raise InventoryError("archive member size changed: {0}".format(canonical))
                 total += size
                 if total > MAX_ARCHIVE_BYTES:
                     raise InventoryError("Linux archive expansion exceeds its cap")
-                item = make_item(canonical, size, digest, origin, "regular", prefix)
-                # Only the kernel's canonical LICENSES/ tree declares license
-                # texts.  Documentation contains literal examples of
-                # SPDX-Exception-Identifier fields and must remain ordinary
-                # source inventory rather than competing license definitions.
+                item = make_item(
+                    canonical,
+                    size,
+                    digest,
+                    origin,
+                    "regular",
+                    prefix,
+                    source_identity={"archive_sha256": archive_digest},
+                )
+                # Only the canonical LICENSES/ tree declares license texts.
+                # Documentation contains literal declaration examples.
                 identifiers = (
                     license_identifiers(prefix)
                     if relative.startswith("LICENSES/")
@@ -286,19 +499,10 @@ def inventory_linux_archive(archive_path, archive_digest):
                     identifiers.extend(("GPL-2.0", "GPL-2.0-only"))
                 if identifiers:
                     for identifier in sorted(set(identifiers)):
-                        if identifier in licenses and licenses[identifier] != canonical:
-                            # The top-level COPYING duplicates identifiers whose
-                            # canonical machine-readable text lives in LICENSES/.
-                            # Prefer LICENSES/ and reject every other collision.
-                            if relative == "COPYING":
-                                continue
-                            if licenses[identifier] == "linux/COPYING":
-                                licenses[identifier] = canonical
-                                continue
-                            raise InventoryError(
-                                "duplicate license text for {0}".format(identifier)
-                            )
-                        licenses[identifier] = canonical
+                        paths = licenses.setdefault(identifier, [])
+                        if canonical not in paths:
+                            paths.append(canonical)
+                            paths.sort()
                     item["_license_identifiers"] = sorted(set(identifiers))
                 items.append(item)
             elif member.issym() or member.islnk():
@@ -315,17 +519,42 @@ def inventory_linux_archive(archive_path, archive_digest):
                         "symlink" if member.issym() else "hardlink",
                         b"",
                         target,
+                        {"archive_sha256": archive_digest},
                     )
                 )
             else:
-                raise InventoryError("unsupported Linux archive entry: {0}".format(canonical))
+                entry_type = "unknown"
+                if member.ischr():
+                    entry_type = "character-device"
+                elif member.isblk():
+                    entry_type = "block-device"
+                elif member.isfifo():
+                    entry_type = "fifo"
+                descriptor = "{0}:{1}:{2}".format(
+                    entry_type, member.devmajor, member.devminor
+                ).encode("ascii")
+                item = make_item(
+                    canonical,
+                    member.size,
+                    hashlib.sha256(descriptor).hexdigest(),
+                    origin,
+                    entry_type,
+                    b"",
+                    source_identity={"archive_sha256": archive_digest},
+                )
+                item["unresolved_reasons"].append("nonregular-entry-needs-review")
+                item["unresolved_reasons"] = sorted(
+                    set(item["unresolved_reasons"])
+                )
+                items.append(item)
     resolve_items(items, licenses)
     return items, licenses
 
 
 def resolve_link(path, target):
     relative = posixpath.normpath(posixpath.join(posixpath.dirname(path), target))
-    if relative == ".." or relative.startswith("../") or not relative.startswith("linux/"):
+    root = path.split("/", 1)[0] + "/"
+    if relative == ".." or relative.startswith("../") or not relative.startswith(root):
         return None
     try:
         return safe_relative(relative, "archive link target")
@@ -340,27 +569,38 @@ def resolve_items(items, license_map):
         if identifiers:
             item["spdx_expression"] = " OR ".join(identifiers)
             item["license_text_paths"] = [item["path"]]
-            item["review_status"] = "verified"
-            item.pop("_reason", None)
             continue
         expression = item["spdx_expression"]
         if expression != "NOASSERTION":
             missing = [token for token in expression_tokens(expression) if token not in license_map]
             if not missing:
                 item["license_text_paths"] = sorted(
-                    set(license_map[token] for token in expression_tokens(expression))
+                    set(
+                        path
+                        for token in expression_tokens(expression)
+                        for path in license_map[token]
+                    )
                 )
-                item["review_status"] = "verified"
-                item.pop("_reason", None)
+            else:
+                item["unresolved_reasons"].append(
+                    "license-text-mapping-missing:{0}".format(",".join(missing))
+                )
+                item["unresolved_reasons"] = sorted(
+                    set(item["unresolved_reasons"])
+                )
     for item in items:
         if item["entry_type"] in ("symlink", "hardlink"):
-            target = resolve_link(item["path"], item.pop("_link_target"))
+            target = resolve_link(item["path"], item["link_target"])
             target_item = by_path.get(target)
-            if target_item is not None and target_item.get("review_status") == "verified":
+            if target_item is not None and target_item["spdx_expression"] != "NOASSERTION":
                 item["spdx_expression"] = target_item["spdx_expression"]
                 item["license_text_paths"] = list(target_item["license_text_paths"])
-                item["review_status"] = "verified"
-                item.pop("_reason", None)
+            else:
+                item["unresolved_reasons"].append(
+                    "link-target-missing-or-unlicensed"
+                )
+            item["unresolved_reasons"].append("link-provenance-needs-review")
+            item["unresolved_reasons"] = sorted(set(item["unresolved_reasons"]))
 
 
 def run_pipeline(first, second, cwd=None):
@@ -449,11 +689,20 @@ def srpm_inventory(extracted, lock, series, license_map):
             else "srpm:sha256:{0}".format(lock["source_rpm"]["sha256"])
         )
         item = make_item(
-            "srpm/{0}".format(canonical_tail), size, digest, origin, "regular", prefix
+            "srpm/{0}".format(canonical_tail),
+            size,
+            digest,
+            origin,
+            "regular",
+            prefix,
+            source_identity={
+                "source_rpm_sha256": lock["source_rpm"]["sha256"],
+            },
         )
         if path.name == linux_name:
             item["spdx_expression"] = lock["licenses"]["declared_spdx_expression"]
-            item["_reason"] = "package-expression-needs-review"
+            item["unresolved_reasons"].append("package-expression-needs-review")
+            item["unresolved_reasons"] = sorted(set(item["unresolved_reasons"]))
             linux_archive = path
         items.append(item)
     missing = sorted(name for name in embedded if not any(path.name == name for path in files))
@@ -463,48 +712,114 @@ def srpm_inventory(extracted, lock, series, license_map):
     return items, linux_archive
 
 
-def repository_patch_items(repo, head, license_map):
-    paths = [
-        "host-kernel/kbuild/parent-integration-v1.json",
-        "host-kernel/kbuild/patches/0001-drivers-misc-add-mckernel-rust-host-modules.patch",
-        "host-kernel/kbuild/patches/0002-rust-bindings-expose-module-parameters.patch",
-        "host-kernel/kbuild/stage-manifest.json",
-        "host-kernel/rocky/configs/native-rust-evidence.config",
-        "host-kernel/rocky/patches/0001-x86-rust-set-rustc-abi-x86-softfloat.patch",
-        "host-kernel/rocky/patches/0002-rust-support-rust-1.91-target-spec.patch",
-        "host-kernel/rocky/patches/0003-kbuild-rust-add-rustc-min-version.patch",
-        "host-kernel/rocky/patches/0004-rust-compile-libcore-edition-2024.patch",
-        "host-kernel/rocky/patches/0005-rust-clean-unnecessary-transmutes-lint.patch",
-        "host-kernel/rocky/patches/0006-rust-init-allow-dead-code-rust-1.89.patch",
-        "host-kernel/rocky/patches/0007-rust-use-used-compiler-rust-1.89.patch",
-        "host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch",
-        "host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch",
-        "host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch",
-        "host-kernel/rocky/patches/series.json",
-        "scripts/tests/fixtures/rust-core-rocky-6.12/include/linux/blk-mq.h",
-        "scripts/tests/fixtures/rust-core-rocky-6.12/Documentation/kbuild/makefiles.rst",
-        "scripts/tests/fixtures/rust-core-rocky-6.12/arch/arm64/Makefile",
-        "scripts/tests/fixtures/rust-core-rocky-6.12/rust/Makefile",
-        "scripts/tests/fixtures/rust-core-rocky-6.12/init/Kconfig",
-        "scripts/tests/fixtures/rust-core-rocky-6.12/rust/bindings/lib.rs",
-        "scripts/tests/fixtures/rust-core-rocky-6.12/rust/uapi/lib.rs",
-        "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/init/macros.rs",
-        "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/lib.rs",
-        "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/block/mq/tag_set.rs",
-        "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/list/arc.rs",
-        "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/sync/arc.rs",
-        "scripts/tests/fixtures/rust-core-rocky-6.12/rust/macros/module.rs",
-        "scripts/tests/fixtures/rust-core-rocky-6.12/scripts/Makefile.build",
-        "scripts/tests/fixtures/rust-core-rocky-6.12/scripts/Makefile.compiler",
-        "scripts/tests/fixtures/rust-core-rocky-6.12/scripts/Makefile.extrawarn",
-        "scripts/tests/fixtures/rust-core-rocky-6.12/scripts/generate_rust_analyzer.py",
-    ]
+def git_command(repo, arguments):
+    environment = dict(os.environ)
+    environment.update(
+        {
+            "GIT_CONFIG_GLOBAL": os.devnull,
+            "GIT_CONFIG_NOSYSTEM": "1",
+            "GIT_NO_REPLACE_OBJECTS": "1",
+            "LC_ALL": "C",
+        }
+    )
+    command = ["git", "-c", "safe.directory={0}".format(repo)] + list(arguments)
+    try:
+        completed = subprocess.run(
+            command,
+            cwd=str(repo),
+            check=True,
+            env=environment,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+    except (OSError, subprocess.CalledProcessError) as error:
+        stderr = getattr(error, "stderr", b"").decode(
+            "utf-8", errors="replace"
+        ).strip()
+        raise InventoryError("git command failed: {0}".format(stderr))
+    return completed.stdout
+
+
+def parse_tree(payload):
+    rows = []
+    seen = set()
+    for raw in payload.split(b"\0"):
+        if not raw:
+            continue
+        try:
+            metadata, raw_path = raw.split(b"\t", 1)
+            mode, kind, oid = metadata.decode("ascii").split(" ")
+            path = raw_path.decode("utf-8")
+        except (UnicodeError, ValueError) as error:
+            raise InventoryError("dist-git tree row is malformed: {0}".format(error))
+        safe_relative(path, "dist-git tree path")
+        if path in seen:
+            raise InventoryError("duplicate dist-git tree path: {0}".format(path))
+        if kind != "blob" or not COMMIT.fullmatch(oid):
+            raise InventoryError("unsupported dist-git object: {0}".format(path))
+        if mode not in ("100644", "100755", "120000"):
+            raise InventoryError("unsupported dist-git blob mode: {0}".format(mode))
+        seen.add(path)
+        rows.append((path, mode, oid))
+    if not rows:
+        raise InventoryError("dist-git tree is empty")
+    return rows
+
+
+def inventory_dist_git(dist_git, lock, license_map):
+    commit = lock["dist_git"]["commit"]
+    rows = parse_tree(
+        git_command(dist_git, ["ls-tree", "-rz", "--full-tree", commit])
+    )
     items = []
-    for relative in paths:
+    for path, mode, oid in rows:
+        payload = git_command(dist_git, ["cat-file", "blob", oid])
+        entry_type = "symlink" if mode == "120000" else "regular"
+        link_target = None
+        if entry_type == "symlink":
+            try:
+                link_target = payload.decode("utf-8")
+            except UnicodeError:
+                raise InventoryError("dist-git symlink target is not UTF-8: {0}".format(path))
+        item = make_item(
+            "dist-git/{0}".format(path),
+            len(payload),
+            hashlib.sha256(payload).hexdigest(),
+            "rocky-dist-git:{0}".format(commit),
+            entry_type,
+            payload[:PREFIX_BYTES],
+            link_target,
+            {"git_blob_oid": oid, "git_mode": mode},
+        )
+        if entry_type == "symlink":
+            item["unresolved_reasons"].append("dist-git-symlink-needs-review")
+            item["unresolved_reasons"] = sorted(set(item["unresolved_reasons"]))
+        items.append(item)
+    resolve_items(items, license_map)
+    return items
+
+
+def repository_patch_items(repo, head, license_map):
+    if stage_repository_input_paths(repo) != EXPECTED_STAGE_REPOSITORY_INPUT_PATHS:
+        raise InventoryError(
+            "repository license authority differs from the exact staging input closure"
+        )
+    items = []
+    for relative in EXPECTED_REPOSITORY_INPUT_PATHS:
         path = repository_file(repo, relative, "local patch input")
         size, digest = hash_file(path)
-        with path.open("rb") as stream:
-            prefix = stream.read(PREFIX_BYTES)
+        payload = git_command(repo, ["show", "{0}:{1}".format(head, relative)])
+        if len(payload) != size or hashlib.sha256(payload).hexdigest() != digest:
+            raise InventoryError(
+                "local patch input differs from the bound repository commit: {0}".format(
+                    relative
+                )
+            )
+        oid = git_command(
+            repo, ["rev-parse", "{0}:{1}".format(head, relative)]
+        ).decode("ascii").strip()
+        if not COMMIT.fullmatch(oid):
+            raise InventoryError("local patch input has no immutable blob ID")
         items.append(
             make_item(
                 "repository/{0}".format(relative),
@@ -512,7 +827,8 @@ def repository_patch_items(repo, head, license_map):
                 digest,
                 "repository-commit:{0}".format(head),
                 "regular",
-                prefix,
+                payload[:PREFIX_BYTES],
+                source_identity={"git_blob_oid": oid, "git_commit": head},
             )
         )
     resolve_items(items, license_map)
@@ -520,17 +836,7 @@ def repository_patch_items(repo, head, license_map):
 
 
 def git_head(repo):
-    try:
-        completed = subprocess.run(
-            ["git", "-c", "safe.directory={0}".format(repo), "rev-parse", "HEAD"],
-            cwd=str(repo),
-            check=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        )
-    except (OSError, subprocess.CalledProcessError) as error:
-        raise InventoryError("cannot resolve repository HEAD: {0}".format(error))
-    head = completed.stdout.decode("ascii").strip()
+    head = git_command(repo, ["rev-parse", "HEAD"]).decode("ascii").strip()
     if not COMMIT.fullmatch(head):
         raise InventoryError("repository HEAD is not a full commit")
     return head
@@ -548,8 +854,8 @@ def validate_binding(repo, args):
             raise InventoryError("{0} is invalid".format(label))
     if args.github_repository != "phoenix-hacking/mckernel":
         raise InventoryError("unexpected GitHub repository")
-    if not isinstance(args.container_image, str) or "@sha256:" not in args.container_image:
-        raise InventoryError("container image must be digest pinned")
+    if args.container_image != EXPECTED_CONTAINER_IMAGE:
+        raise InventoryError("container image differs from the locked Rocky 10.2 image")
     return {
         "container_image": args.container_image,
         "github_head_sha": head,
@@ -559,35 +865,252 @@ def validate_binding(repo, args):
     }
 
 
-def write_capture(output_dir, items, binding, lock_sha, series_sha):
-    if output_dir.exists() or output_dir.is_symlink():
-        raise InventoryError("output directory already exists")
-    output_dir.mkdir(mode=0o700)
+def validate_capture_binding(binding):
+    expected_keys = {
+        "container_image",
+        "github_head_sha",
+        "github_repository",
+        "github_run_attempt",
+        "github_run_id",
+    }
+    if not isinstance(binding, dict) or set(binding) != expected_keys:
+        raise InventoryError("capture binding fields changed")
+    if binding["container_image"] != EXPECTED_CONTAINER_IMAGE:
+        raise InventoryError("capture binding has the wrong Rocky image")
+    if binding["github_repository"] != "phoenix-hacking/mckernel":
+        raise InventoryError("capture binding has the wrong repository")
+    if not COMMIT.fullmatch(binding["github_head_sha"]):
+        raise InventoryError("capture binding head is not a full commit")
+    for key in ("github_run_attempt", "github_run_id"):
+        if not isinstance(binding[key], str) or not RUN_ID.fullmatch(binding[key]):
+            raise InventoryError("capture binding {0} is invalid".format(key))
+    return binding
+
+
+def validate_generated_item(item, binding=None):
+    if not isinstance(item, dict) or set(item) != REQUIRED_ITEM_KEYS:
+        raise InventoryError("inventory item has an invalid schema")
+    safe_relative(item["path"], "inventory item path")
+    if not SHA256.fullmatch(item.get("sha256", "")):
+        raise InventoryError("inventory item SHA-256 is malformed")
+    if (
+        isinstance(item.get("size"), bool)
+        or not isinstance(item.get("size"), int)
+        or item["size"] < 0
+    ):
+        raise InventoryError("inventory item size is malformed")
+    if not isinstance(item.get("origin"), str) or not item["origin"]:
+        raise InventoryError("inventory item origin is missing")
+    if not isinstance(item.get("source_identity"), dict) or not item["source_identity"]:
+        raise InventoryError("inventory item source identity is missing")
+    path = item["path"]
+    origin = item["origin"]
+    identity = item["source_identity"]
+    if path.startswith("linux/"):
+        if origin != "linux-archive:sha256:{0}".format(
+            EXPECTED_LINUX_ARCHIVE_SHA256
+        ) or identity != {"archive_sha256": EXPECTED_LINUX_ARCHIVE_SHA256}:
+            raise InventoryError("Linux inventory item has the wrong source authority")
+    elif path.startswith("dist-git/"):
+        if (
+            origin != "rocky-dist-git:{0}".format(EXPECTED_DIST_GIT_COMMIT)
+            or set(identity) != {"git_blob_oid", "git_mode"}
+            or not COMMIT.fullmatch(identity.get("git_blob_oid", ""))
+            or identity.get("git_mode") not in ("100644", "100755", "120000")
+        ):
+            raise InventoryError("dist-git inventory item has the wrong source authority")
+    elif path.startswith("srpm/"):
+        if (
+            origin
+            not in (
+                "srpm:sha256:{0}".format(EXPECTED_SOURCE_RPM_SHA256),
+                "dist-git:{0}".format(EXPECTED_DIST_GIT_COMMIT),
+            )
+            or identity != {"source_rpm_sha256": EXPECTED_SOURCE_RPM_SHA256}
+        ):
+            raise InventoryError("SRPM inventory item has the wrong source authority")
+    elif path.startswith("repository/"):
+        if binding is None:
+            raise InventoryError("repository item needs the capture binding")
+        head = binding["github_head_sha"]
+        if (
+            origin != "repository-commit:{0}".format(head)
+            or set(identity) != {"git_blob_oid", "git_commit"}
+            or not COMMIT.fullmatch(identity.get("git_blob_oid", ""))
+            or identity.get("git_commit") != head
+        ):
+            raise InventoryError("repository item has the wrong source authority")
+    else:
+        raise InventoryError("inventory item has an unknown source namespace")
+    if item.get("review_status") != "captured-unreviewed":
+        raise InventoryError("generated inventory may not contain reviewed items")
+    reasons = item.get("unresolved_reasons")
+    if (
+        not isinstance(reasons, list)
+        or reasons != sorted(set(reasons))
+        or "independent-review-required" not in reasons
+        or any(not isinstance(reason, str) or not reason for reason in reasons)
+    ):
+        raise InventoryError("inventory item review reasons are incomplete")
+    license_paths = item.get("license_text_paths")
+    if not isinstance(license_paths, list) or license_paths != sorted(set(license_paths)):
+        raise InventoryError("inventory license-text paths are malformed")
+    for license_path in license_paths:
+        safe_relative(license_path, "inventory license text")
+    if not isinstance(item.get("spdx_expression"), str) or not item["spdx_expression"]:
+        raise InventoryError("inventory SPDX expression is malformed")
+    authors = item.get("authorship_signals")
+    if (
+        not isinstance(authors, list)
+        or authors != sorted(set(authors))
+        or any(not isinstance(author, str) or not author for author in authors)
+    ):
+        raise InventoryError("inventory authorship signals are malformed")
+    link_target = item.get("link_target")
+    if item.get("entry_type") in ("symlink", "hardlink"):
+        if not isinstance(link_target, str) or not link_target:
+            raise InventoryError("inventory link target is missing")
+    elif link_target is not None:
+        raise InventoryError("non-link inventory item has a link target")
+    if item["path"].endswith(".patch"):
+        if not authors and "patch-authorship-signal-missing" not in reasons:
+            raise InventoryError("patch lacks authorship evidence or a blocker")
+        if (
+            item["spdx_expression"] == "NOASSERTION"
+            and "patch-license-signal-missing" not in reasons
+        ):
+            raise InventoryError("patch lacks license evidence or a blocker")
+    return item
+
+
+def source_namespace(path):
+    for namespace in ("dist-git", "linux", "repository", "srpm"):
+        if path.startswith(namespace + "/"):
+            return namespace
+    raise InventoryError("inventory item has an unknown source namespace")
+
+
+def source_closure(items):
     ordered = sorted(items, key=lambda item: item["path"])
-    if len({item["path"] for item in ordered}) != len(ordered):
-        raise InventoryError("inventory contains duplicate paths")
-    unresolved = []
+    path_digest = hashlib.sha256()
+    source_digest = hashlib.sha256()
+    for item in ordered:
+        row = {key: item[key] for key in SOURCE_CLOSURE_KEYS}
+        path_digest.update((item["path"] + "\n").encode("utf-8"))
+        source_digest.update(canonical_json(row) + b"\n")
+    return {
+        "item_count": len(ordered),
+        "path_set_sha256": path_digest.hexdigest(),
+        "source_manifest_sha256": source_digest.hexdigest(),
+    }
+
+
+def inventory_source_closures(items):
+    grouped = {name: [] for name in ("dist-git", "linux", "repository", "srpm")}
+    for item in items:
+        grouped[source_namespace(item["path"])].append(item)
+    closures = {name: source_closure(grouped[name]) for name in sorted(grouped)}
+    if any(value["item_count"] < 1 for value in closures.values()):
+        raise InventoryError("inventory omits a required source namespace")
+    return closures
+
+
+def expected_source_closures(repo, binding):
+    validate_capture_binding(binding)
+    head = git_head(repo)
+    if head != binding["github_head_sha"]:
+        raise InventoryError("capture binding differs from the verification checkout")
+    repository_items = repository_patch_items(repo, head, {})
+    expected = dict(EXPECTED_STATIC_NAMESPACE_CLOSURES)
+    expected["repository"] = source_closure(repository_items)
+    return {name: expected[name] for name in sorted(expected)}
+
+
+def validate_source_closures(items, binding, repo):
+    actual = inventory_source_closures(items)
+    expected = expected_source_closures(repo, binding)
+    if actual != expected:
+        differences = sorted(
+            name for name in expected if actual.get(name) != expected.get(name)
+        )
+        raise InventoryError(
+            "inventory source closure differs for: {0}".format(
+                ", ".join(differences)
+            )
+        )
+    return actual
+
+
+def derived_capture_scope(closures):
+    namespaces = {}
+    for name in sorted(closures):
+        namespaces[name] = dict(closures[name])
+        namespaces[name]["complete"] = True
+    return {
+        "authority_id": CAPTURE_AUTHORITY_ID,
+        "namespaces": namespaces,
+        "unexpanded_embedded_objects": UNEXPANDED_EMBEDDED_OBJECTS,
+    }
+
+
+def expected_capture_authority_record():
+    namespaces = dict(EXPECTED_STATIC_NAMESPACE_CLOSURES)
+    namespaces["repository"] = {
+        "paths": EXPECTED_REPOSITORY_INPUT_PATHS,
+        "verification": (
+            "recompute exact blob OIDs, bytes, and closure from the bound Git commit"
+        ),
+    }
+    return {
+        "authority_id": CAPTURE_AUTHORITY_ID,
+        "closure_algorithm": (
+            "sha256 over canonical sorted path rows and canonical source-identity rows"
+        ),
+        "namespaces": {name: namespaces[name] for name in sorted(namespaces)},
+        "scope_is_derived_from_verified_closures": True,
+    }
+
+
+def write_capture(output_dir, items, binding, lock_sha, series_sha, repo):
+    validate_capture_binding(binding)
+    if lock_sha != EXPECTED_SOURCE_LOCK_SHA256:
+        raise InventoryError("capture source-lock digest is not authoritative")
+    if series_sha != EXPECTED_PATCH_SERIES_SHA256:
+        raise InventoryError("capture patch-series digest is not authoritative")
+    try:
+        output_dir.mkdir(mode=0o700)
+    except OSError as error:
+        raise InventoryError("cannot create fresh capture directory: {0}".format(error))
+    ordered = sorted(items, key=lambda item: item["path"])
+    if not ordered or len({item["path"] for item in ordered}) != len(ordered):
+        raise InventoryError("inventory is empty or contains duplicate paths")
+    for item in ordered:
+        validate_generated_item(item, binding)
+    closures = validate_source_closures(ordered, binding, repo)
     raw_digest = hashlib.sha256()
     inventory_path = output_dir / "license-inventory.jsonl.gz"
+    signal_issue_count = 0
+    unresolved_sample = []
     with inventory_path.open("wb") as raw:
         with gzip.GzipFile(filename="", mode="wb", fileobj=raw, mtime=0) as compressed:
             for item in ordered:
-                reason = item.pop("_reason", None)
-                if set(item) != REQUIRED_ITEM_KEYS:
-                    raise InventoryError("inventory item has an invalid schema")
                 line = canonical_json(item) + b"\n"
                 raw_digest.update(line)
                 compressed.write(line)
-                if item["review_status"] != "verified":
-                    unresolved.append({"path": item["path"], "reason": reason or "unresolved"})
+                if item["unresolved_reasons"] != ["independent-review-required"]:
+                    signal_issue_count += 1
+                if len(unresolved_sample) < 200:
+                    unresolved_sample.append(
+                        {
+                            "path": item["path"],
+                            "reasons": item["unresolved_reasons"],
+                        }
+                    )
     inventory_size, inventory_sha = hash_file(inventory_path)
-    counts = {}
-    for item in ordered:
-        key = item["review_status"]
-        counts[key] = counts.get(key, 0) + 1
     summary = {
         "binding": binding,
-        "complete": not unresolved,
+        "blockers": CAPTURE_BLOCKERS,
+        "complete": False,
         "credit_eligible": False,
         "inventory": {
             "compressed_sha256": inventory_sha,
@@ -596,12 +1119,15 @@ def write_capture(output_dir, items, binding, lock_sha, series_sha):
             "path": inventory_path.name,
             "uncompressed_sha256": raw_digest.hexdigest(),
         },
-        "review_counts": counts,
-        "schema_version": SCHEMA_VERSION,
-        "source_lock_sha256": lock_sha,
-        "unresolved_count": len(unresolved),
-        "unresolved_sample": unresolved[:200],
         "patch_series_sha256": series_sha,
+        "review_complete": False,
+        "review_counts": {"captured-unreviewed": len(ordered)},
+        "schema_version": SCHEMA_VERSION,
+        "scope": derived_capture_scope(closures),
+        "signal_issue_count": signal_issue_count,
+        "source_lock_sha256": lock_sha,
+        "unresolved_count": len(ordered),
+        "unresolved_sample": unresolved_sample,
     }
     summary_path = output_dir / "license-inventory-summary.json"
     summary_path.write_bytes(canonical_json(summary) + b"\n")
@@ -613,56 +1139,121 @@ def write_capture(output_dir, items, binding, lock_sha, series_sha):
     return summary
 
 
-def verify_capture(directory):
+def verify_capture(directory, repo):
     if directory.is_symlink() or not directory.is_dir():
         raise InventoryError("capture directory is missing or symlinked")
-    summary = read_json(directory / "license-inventory-summary.json")
-    if summary.get("schema_version") != SCHEMA_VERSION or summary.get("credit_eligible") is not False:
-        raise InventoryError("capture summary schema or credit policy changed")
+    summary_path = repository_file(
+        directory, "license-inventory-summary.json", "capture summary"
+    )
+    summary = read_json(summary_path)
+    expected_summary_keys = {
+        "binding",
+        "blockers",
+        "complete",
+        "credit_eligible",
+        "inventory",
+        "patch_series_sha256",
+        "review_complete",
+        "review_counts",
+        "schema_version",
+        "scope",
+        "signal_issue_count",
+        "source_lock_sha256",
+        "unresolved_count",
+        "unresolved_sample",
+    }
+    if set(summary) != expected_summary_keys:
+        raise InventoryError("capture summary fields changed")
+    if summary_path.read_bytes() != canonical_json(summary) + b"\n":
+        raise InventoryError("capture summary is not canonical JSON")
+    validate_capture_binding(summary["binding"])
+    if (
+        summary["schema_version"] != SCHEMA_VERSION
+        or summary["credit_eligible"] is not False
+        or summary["review_complete"] is not False
+        or summary["complete"] is not False
+        or summary["blockers"] != CAPTURE_BLOCKERS
+        or summary["source_lock_sha256"] != EXPECTED_SOURCE_LOCK_SHA256
+        or summary["patch_series_sha256"] != EXPECTED_PATCH_SERIES_SHA256
+    ):
+        raise InventoryError("capture summary overclaims or changes its authorities")
     inventory = summary.get("inventory")
-    if not isinstance(inventory, dict):
-        raise InventoryError("capture summary inventory is missing")
-    path = repository_file(directory, inventory.get("path"), "captured inventory")
+    expected_inventory_keys = {
+        "compressed_sha256",
+        "compressed_size",
+        "item_count",
+        "path",
+        "uncompressed_sha256",
+    }
+    if not isinstance(inventory, dict) or set(inventory) != expected_inventory_keys:
+        raise InventoryError("capture summary inventory is missing or changed")
+    if inventory["path"] != "license-inventory.jsonl.gz":
+        raise InventoryError("capture inventory path changed")
+    path = repository_file(directory, inventory["path"], "captured inventory")
     size, digest = hash_file(path)
-    if size != inventory.get("compressed_size") or digest != inventory.get("compressed_sha256"):
+    if size != inventory["compressed_size"] or digest != inventory["compressed_sha256"]:
         raise InventoryError("compressed inventory digest or size mismatch")
     raw_digest = hashlib.sha256()
+    raw_size = 0
     count = 0
     previous = None
-    unresolved = 0
+    signal_issue_count = 0
+    unresolved_sample = []
+    items = []
     try:
         with gzip.open(str(path), "rb") as stream:
             for line in stream:
-                if not line.endswith(b"\n"):
-                    raise InventoryError("inventory line is not newline terminated")
+                if len(line) > 1024 * 1024 or not line.endswith(b"\n"):
+                    raise InventoryError("inventory line is oversized or unterminated")
+                raw_size += len(line)
+                if raw_size > MAX_INVENTORY_BYTES:
+                    raise InventoryError("inventory expansion exceeds its cap")
                 raw_digest.update(line)
                 try:
-                    item = json.loads(line.decode("ascii"), object_pairs_hook=reject_duplicates)
+                    item = json.loads(
+                        line.decode("ascii"), object_pairs_hook=reject_duplicates
+                    )
                 except (UnicodeError, ValueError) as error:
                     raise InventoryError("invalid inventory JSON: {0}".format(error))
-                if not isinstance(item, dict) or set(item) != REQUIRED_ITEM_KEYS:
-                    raise InventoryError("inventory item schema changed")
+                validate_generated_item(item, summary["binding"])
+                items.append(item)
                 if canonical_json(item) + b"\n" != line:
                     raise InventoryError("inventory JSON is not canonical")
-                path_text = safe_relative(item["path"], "inventory item path")
+                path_text = item["path"]
                 if previous is not None and path_text <= previous:
                     raise InventoryError("inventory paths are duplicate or unsorted")
                 previous = path_text
-                if not SHA256.fullmatch(item.get("sha256", "")):
-                    raise InventoryError("inventory item SHA-256 is malformed")
-                if item.get("review_status") != "verified":
-                    unresolved += 1
+                if item["unresolved_reasons"] != ["independent-review-required"]:
+                    signal_issue_count += 1
+                if len(unresolved_sample) < 200:
+                    unresolved_sample.append(
+                        {"path": path_text, "reasons": item["unresolved_reasons"]}
+                    )
                 count += 1
+                if count > MAX_ARCHIVE_MEMBERS:
+                    raise InventoryError("inventory item count exceeds its cap")
     except (OSError, EOFError) as error:
         raise InventoryError("cannot read compressed inventory: {0}".format(error))
-    if count != inventory.get("item_count") or raw_digest.hexdigest() != inventory.get(
-        "uncompressed_sha256"
+    if (
+        count < 1
+        or count != inventory["item_count"]
+        or raw_digest.hexdigest() != inventory["uncompressed_sha256"]
+        or summary["unresolved_count"] != count
+        or summary["review_counts"] != {"captured-unreviewed": count}
+        or summary["signal_issue_count"] != signal_issue_count
+        or summary["unresolved_sample"] != unresolved_sample
     ):
-        raise InventoryError("inventory count or uncompressed digest mismatch")
-    if unresolved != summary.get("unresolved_count"):
-        raise InventoryError("unresolved inventory count mismatch")
-    if summary.get("complete") is not (unresolved == 0):
-        raise InventoryError("capture completeness contradicts unresolved items")
+        raise InventoryError("inventory counts, digest, or review state is stale")
+    closures = validate_source_closures(items, summary["binding"], repo)
+    if summary["scope"] != derived_capture_scope(closures):
+        raise InventoryError("capture scope is not derived from verified closures")
+    _, summary_sha = hash_file(summary_path)
+    checksums = "{0}  {1}\n{2}  {3}\n".format(
+        digest, path.name, summary_sha, summary_path.name
+    ).encode("ascii")
+    checksum_path = repository_file(directory, "SHA256SUMS", "capture checksums")
+    if checksum_path.read_bytes() != checksums:
+        raise InventoryError("capture checksum manifest is stale")
     return summary
 
 
@@ -672,11 +1263,28 @@ def check_repository(repo):
     workflow = repository_file(repo, WORKFLOW.as_posix(), "source evidence workflow")
     lock = read_json(lock_path)
     series = read_json(series_path)
-    if lock.get("schema_version") != 1 or series.get("schema_version") != 1:
-        raise InventoryError("source lock or patch series schema changed")
-    inventory = lock.get("licenses", {}).get("inventory")
-    if not isinstance(inventory, dict) or inventory.get("required") is not True:
-        raise InventoryError("source lock no longer requires a license inventory")
+    lock_size, lock_digest = hash_file(lock_path)
+    series_size, series_digest = hash_file(series_path)
+    if lock_size < 1 or lock_digest != EXPECTED_SOURCE_LOCK_SHA256:
+        raise InventoryError("source-lock bytes differ from the reviewed identity")
+    if series_size < 1 or series_digest != EXPECTED_PATCH_SERIES_SHA256:
+        raise InventoryError("patch-series bytes differ from the reviewed identity")
+    if lock.get("licenses", {}).get("capture_authority") != (
+        expected_capture_authority_record()
+    ):
+        raise InventoryError("source-lock capture closure authority differs")
+    try:
+        import rocky_kernel_source_lock as source_lock
+    except ImportError as error:
+        raise InventoryError("cannot import source-lock validator: {0}".format(error))
+    try:
+        blockers = source_lock.validate_loaded_manifests(
+            lock, series, series_path.read_bytes(), repo
+        )
+    except source_lock.SourceLockError as error:
+        raise InventoryError("source-lock validation failed: {0}".format(error))
+    if len(blockers) != 1 or not blockers[0].startswith("license_inventory:"):
+        raise InventoryError("license inventory is not the sole RK-001 blocker")
     workflow_text = workflow.read_text(encoding="utf-8")
     for token in (
         "rocky_kernel_license_inventory.py",
@@ -699,8 +1307,9 @@ def capture(repo, args):
     _, series_sha = hash_file(series_path)
     try:
         import rocky_kernel_source_lock as source_lock
+        import rocky_kernel_source_evidence as source_evidence
     except ImportError as error:
-        raise InventoryError("cannot import source-lock verifier: {0}".format(error))
+        raise InventoryError("cannot import source verifiers: {0}".format(error))
     cache_root = args.cache_root.resolve()
     cache_root.mkdir(parents=True, exist_ok=True)
     try:
@@ -708,7 +1317,8 @@ def capture(repo, args):
     except Exception as error:
         raise InventoryError("locked SRPM acquisition failed: {0}".format(error))
     with tempfile.TemporaryDirectory(prefix="rk001-license-") as temporary:
-        extracted = Path(temporary) / "srpm"
+        work = Path(temporary)
+        extracted = work / "srpm"
         extracted.mkdir()
         extract_srpm(srpm, extracted)
         linux_name = PurePosixPath(lock["embedded_objects"][2]["path"]).name
@@ -722,15 +1332,23 @@ def capture(repo, args):
             raise InventoryError("embedded Linux archive identity changed")
         linux_items, license_map = inventory_linux_archive(linux_path, linux_sha)
         srpm_items, _ = srpm_inventory(extracted, lock, series, license_map)
+        try:
+            source_evidence.fetch_and_verify_dist_git(work, lock, series)
+        except source_evidence.EvidenceError as error:
+            raise InventoryError(
+                "locked dist-git acquisition failed: {0}".format(error)
+            )
+        dist_git_items = inventory_dist_git(work / "dist-git", lock, license_map)
         local_items = repository_patch_items(repo, binding["github_head_sha"], license_map)
         summary = write_capture(
             args.output_dir.resolve(),
-            linux_items + srpm_items + local_items,
+            linux_items + srpm_items + dist_git_items + local_items,
             binding,
             lock_sha,
             series_sha,
+            repo,
         )
-    verify_capture(args.output_dir.resolve())
+    verify_capture(args.output_dir.resolve(), repo)
     print(
         "RK-001 license inventory captured: items={0} unresolved={1} complete={2}".format(
             summary["inventory"]["item_count"],
@@ -766,7 +1384,7 @@ def main(argv=None):
             print("RK-001 license inventory capture contract: PASS")
             return 0
         if args.verify_capture is not None:
-            summary = verify_capture(args.verify_capture.resolve())
+            summary = verify_capture(args.verify_capture.resolve(), repo)
             print(
                 "RK-001 license capture verified: items={0} unresolved={1}".format(
                     summary["inventory"]["item_count"], summary["unresolved_count"]

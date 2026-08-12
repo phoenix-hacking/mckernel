@@ -63,6 +63,11 @@ class RepositoryReviewTests(unittest.TestCase):
         self.assertFalse(self.manifest["claims"]["current_head_runtime_identity"])
         self.assertTrue(observation["all_bound_input_bytes_equal"])
         self.assertTrue(observation["all_bound_input_git_blobs_equal"])
+        binding = self.manifest["current_repository_input_binding"]
+        self.assertEqual(binding, review.EXPECTED_CURRENT_REPOSITORY_BINDING)
+        self.assertEqual(binding["base_head_sha"], review.OBSERVED_HEAD)
+        self.assertEqual(binding["current_override_count"], 2)
+        self.assertFalse(binding["runtime_identity_claimed"])
 
     def test_artifact_and_full_zip_closure_are_exactly_pinned(self):
         artifact = self.manifest["source_artifact"]["artifact"]
@@ -77,10 +82,20 @@ class RepositoryReviewTests(unittest.TestCase):
             [98, 66],
         )
 
-    def test_exact_ten_committed_inputs_match_current_bytes_and_git_blobs(self):
+    def test_exact_ten_runtime_inputs_and_current_tree_are_separately_bound(self):
         inputs = self.manifest["runtime_candidate"]["committed_inputs"]
         self.assertEqual(inputs, review.EXPECTED_INPUTS)
         self.assertEqual(len(inputs), 10)
+        current = review.current_expected_inputs()
+        self.assertEqual(len(current), 10)
+        self.assertEqual(
+            {row["path"] for row in review.CURRENT_INPUT_OVERRIDES},
+            {
+                "host-kernel/rocky/source-lock.json",
+                "scripts/rocky_kernel_source_lock.py",
+            },
+        )
+        self.assertNotEqual(current, inputs)
         review.validate_repository_inputs(REPO_ROOT)
         self.assertTrue(self.git_checked)
 
@@ -141,6 +156,28 @@ class RepositoryReviewTests(unittest.TestCase):
         with self.assertRaisesRegex(review.ReviewError, "blob-equivalence"):
             review.validate_review(mutated, self.manifest_bytes)
 
+    def test_current_tree_runtime_claim_is_rejected(self):
+        mutated = copy.deepcopy(self.manifest)
+        mutated["current_repository_input_binding"][
+            "runtime_identity_claimed"
+        ] = True
+        with self.assertRaisesRegex(review.ReviewError, "bytes changed"):
+            review.validate_review(mutated, review.canonical_json_bytes(mutated))
+
+    def test_rehashed_current_source_lock_drift_is_rejected(self):
+        mutated = copy.deepcopy(self.manifest)
+        changed = (REPO_ROOT / review.SOURCE_LOCK_PATH).read_bytes() + b"\n"
+        for row in mutated["current_repository_input_binding"]["current_overrides"]:
+            if row["path"] == review.SOURCE_LOCK_PATH.as_posix():
+                row["size"] = len(changed)
+                row["sha256"] = review.sha256_bytes(changed)
+                row["git_blob_sha1"] = review.git_blob_sha1(changed)
+                break
+        else:
+            self.fail("current source-lock override is missing")
+        with self.assertRaisesRegex(review.ReviewError, "bytes changed"):
+            review.validate_review(mutated, review.canonical_json_bytes(mutated))
+
     def test_durable_archive_claim_is_rejected(self):
         mutated = copy.deepcopy(self.manifest)
         mutated["source_artifact"]["durable_archive"] = True
@@ -154,12 +191,25 @@ class RepositoryReviewTests(unittest.TestCase):
     def test_repository_input_mutation_is_rejected(self):
         with tempfile.TemporaryDirectory(prefix="platform-review-test-") as text:
             root = Path(text)
-            for row in review.EXPECTED_INPUTS:
+            for row in review.current_expected_inputs():
                 source = REPO_ROOT / row["path"]
                 target = root / row["path"]
                 target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(str(source), str(target))
-            target = root / review.EXPECTED_INPUTS[0]["path"]
+            target = root / review.current_expected_inputs()[0]["path"]
+            target.write_bytes(target.read_bytes() + b"\n")
+            with self.assertRaisesRegex(review.ReviewError, "size"):
+                review.validate_repository_inputs(root)
+
+    def test_current_source_lock_mutation_is_rejected(self):
+        with tempfile.TemporaryDirectory(prefix="platform-review-lock-") as text:
+            root = Path(text)
+            for row in review.current_expected_inputs():
+                source = REPO_ROOT / row["path"]
+                target = root / row["path"]
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(str(source), str(target))
+            target = root / review.SOURCE_LOCK_PATH
             target.write_bytes(target.read_bytes() + b"\n")
             with self.assertRaisesRegex(review.ReviewError, "size"):
                 review.validate_repository_inputs(root)

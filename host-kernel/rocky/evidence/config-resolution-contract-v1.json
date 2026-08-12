@@ -1,0 +1,339 @@
+{
+  "architecture": "x86_64",
+  "claim_scope": "RK-005 deterministic configuration-resolution evidence only. This phase never awards gate or tracker credit, does not prove a production build, and does not supersede the RK-003 offline-toolchain or RK-006 compatibility-patch authorities.",
+  "config_policy": {
+    "id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-config-policy-v1",
+    "path": "host-kernel/rocky/config-policy.json",
+    "sha256": "94c4715f9c823b3aafcb8399ed7b2cbe25e77308b1c165afc75db70f5afbfd7f"
+  },
+  "conditional_dependencies": {
+    "CONFIG_CALL_PADDING": {
+      "allowed_values": [
+        "n",
+        "y"
+      ],
+      "rustc_minimum_if_y": 108100
+    }
+  },
+  "dependency_symbols": {
+    "CONFIG_CFI_CLANG": "n",
+    "CONFIG_GCC_PLUGIN_RANDSTRUCT": "n",
+    "CONFIG_HAVE_RUST": "y",
+    "CONFIG_KASAN": "n",
+    "CONFIG_KASAN_SW_TAGS": "n",
+    "CONFIG_MITIGATION_RETHUNK": "y",
+    "CONFIG_MODVERSIONS": "n",
+    "CONFIG_PAHOLE_HAS_LANG_EXCLUDE": "y",
+    "CONFIG_RANDSTRUCT": "n",
+    "CONFIG_RUST_IS_AVAILABLE": "y"
+  },
+  "gate_claims": {
+    "RK-002": false,
+    "RK-003": false,
+    "RK-004": false,
+    "RK-005": false,
+    "RK-006": false,
+    "RS-001": false
+  },
+  "generated_environment": {
+    "classification": "Resolve an unmodified control and the requested fragment under the same clean environment. Every locked-baseline-to-control change is enumerated as environment-generated; every control-to-requested existing-symbol change must be the two requested symbols; every new requested symbol must be historically allowlisted or explicitly supplemental. The two independent runs and captured tool probes must agree.",
+    "historical_policy_symbols": [
+      "CONFIG_BINDGEN_VERSION_TEXT",
+      "CONFIG_PAHOLE_HAS_BTF_TAG",
+      "CONFIG_PAHOLE_HAS_LANG_EXCLUDE",
+      "CONFIG_PAHOLE_HAS_SPLIT_BTF",
+      "CONFIG_PAHOLE_VERSION",
+      "CONFIG_RUSTC_LLVM_VERSION",
+      "CONFIG_RUSTC_VERSION",
+      "CONFIG_RUSTC_VERSION_TEXT",
+      "CONFIG_RUST_IS_AVAILABLE"
+    ],
+    "supplemental_symbols": {
+      "CONFIG_RUSTC_HAS_UNNECESSARY_TRANSMUTES": {
+        "expected": "y",
+        "minimum_rustc_version": 108800,
+        "patch": "host-kernel/rocky/patches/0005-rust-clean-unnecessary-transmutes-lint.patch"
+      }
+    },
+    "unexpected_symbols_forbidden": true
+  },
+  "outputs": [
+    "baseline.config",
+    "fragment.config",
+    "control-pass-1.config",
+    "control-pass-2.config",
+    "resolved-pass-1.config",
+    "resolved-pass-2.config",
+    "commands.json",
+    "environment.json",
+    "config-delta.json",
+    "dependency-assertions.json",
+    "blockers.json",
+    "checkpoint.json",
+    "SHA256SUMS"
+  ],
+  "patch_authority": {
+    "configuration_effects": {
+      "generated_symbols": {
+        "CONFIG_RUSTC_HAS_UNNECESSARY_TRANSMUTES": "host-kernel/rocky/patches/0005-rust-clean-unnecessary-transmutes-lint.patch"
+      },
+      "no_config_symbol_changes": [
+        "host-kernel/rocky/patches/0001-x86-rust-set-rustc-abi-x86-softfloat.patch",
+        "host-kernel/rocky/patches/0002-rust-support-rust-1.91-target-spec.patch",
+        "host-kernel/rocky/patches/0003-kbuild-rust-add-rustc-min-version.patch",
+        "host-kernel/rocky/patches/0004-rust-compile-libcore-edition-2024.patch",
+        "host-kernel/rocky/patches/0006-rust-init-allow-dead-code-rust-1.89.patch",
+        "host-kernel/rocky/patches/0007-rust-use-used-compiler-rust-1.89.patch",
+        "host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch",
+        "host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch",
+        "host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch"
+      ]
+    },
+    "rocky_series": {
+      "path": "host-kernel/rocky/patches/series.json",
+      "sha256": "6a1a5e8fb13b6ce6ed35bd8e5487bb67ecf92d2be927799b660f21b5631f68fb"
+    },
+    "rust_compatibility": [
+      {
+        "path": "host-kernel/rocky/patches/0001-x86-rust-set-rustc-abi-x86-softfloat.patch",
+        "sha256": "85069fa5d4e1de8a0d0172480604c74deba0caeafd34268a6735d069599e5113",
+        "upstream_commit": "6273a058383e05465083b535ed9469f2c8a48321"
+      },
+      {
+        "path": "host-kernel/rocky/patches/0002-rust-support-rust-1.91-target-spec.patch",
+        "sha256": "c52bde4ace32fbd908b6c5ed5e4ac1881effd6e9ebd5813e7e083d74a5f34997",
+        "upstream_commit": "8851e27d2cb947ea8bbbe8e812068f7bf5cbd00b"
+      },
+      {
+        "path": "host-kernel/rocky/patches/0003-kbuild-rust-add-rustc-min-version.patch",
+        "sha256": "4af4b725292a080a9bf69f37308cb4099e957674001f0fc83239f4be29f07ec1",
+        "stable_commit": "1814e71a4e9c20bd69dbe1e007d31c0ab2c237a2",
+        "upstream_commit": "ac954145e1ee3f72033161cbe4ac0b16b5354ae7"
+      },
+      {
+        "path": "host-kernel/rocky/patches/0004-rust-compile-libcore-edition-2024.patch",
+        "sha256": "3ef23cf99a4523a6045a29b70f49ba0080242d7b219db7f0bca58b4f7d73fbb7",
+        "stable_commit": "60d8db49ef143c04f7daf90dafa3347a7af3b4c7",
+        "upstream_commit": "f4daa80d6be7d3c55ca72a8e560afc4e21f886aa"
+      },
+      {
+        "path": "host-kernel/rocky/patches/0005-rust-clean-unnecessary-transmutes-lint.patch",
+        "sha256": "0ba29993d78fea5db3c0ff8dbf41bf8a6c08b00d9803fc85da7805e698ac8c33",
+        "stable_commit": "376b73292a262124c8aed10026e9da23e92554b2",
+        "upstream_commit": "7129ea6e242b00938532537da41ddf5fa3e21471"
+      },
+      {
+        "path": "host-kernel/rocky/patches/0006-rust-init-allow-dead-code-rust-1.89.patch",
+        "sha256": "315ec61d17c5d3cc97c6123f30bcffa08befcc00c487efaa5e6eda38333d29c5",
+        "stable_commit": "5d2d34f36724585801937e76f81a69ab97cd045b"
+      },
+      {
+        "path": "host-kernel/rocky/patches/0007-rust-use-used-compiler-rust-1.89.patch",
+        "sha256": "d9a58b1123e5f5522efb7ad7b7837c406b955c1a1c4a7a38f0d2faa4dd4285fc",
+        "stable_commit": "d9ebd928288bb82df8efeb3a34f2cd31883f440e",
+        "upstream_commit": "7498159226772d66f150dd406be462d75964a366"
+      },
+      {
+        "path": "host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch",
+        "sha256": "ab3f6adaed3fcb65669ffc0baccdb3d7a9b7e3df9d0c5889228c775585daacaa",
+        "stable_commit": "e18d5b42489311bc86d7ce5fb0f19af067495589",
+        "upstream_commit": "c95bbb59a9b22f9b838b15d28319185c1c884329"
+      },
+      {
+        "path": "host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch",
+        "sha256": "076b0b48effba9bed12cb00a4c93318353aa26344f14b0b1bba5508c55a1bcfb",
+        "upstream_commit": "31d813a3b8cbde2d09ba4dee282ca29096541006"
+      },
+      {
+        "path": "host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch",
+        "sha256": "2781f4eac05a806a58e76a035f2dba45f137a9147512c87cf9f63b1deb40c7e0",
+        "stable_commit": "511ceee89966ce906ca8989523e1a67ba6de44c1",
+        "upstream_commit": "d0afcfeb9e3810ec89d1ffde1a0e36621bb75dca"
+      }
+    ]
+  },
+  "phase_id": "config-resolution",
+  "preservation_groups": {
+    "btf_debug": {
+      "CONFIG_BPF_SYSCALL": "y",
+      "CONFIG_DEBUG_INFO": "y",
+      "CONFIG_DEBUG_INFO_BTF": "y",
+      "CONFIG_DEBUG_INFO_BTF_MODULES": "y",
+      "CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT": "y",
+      "CONFIG_DEBUG_INFO_REDUCED": "n",
+      "CONFIG_DEBUG_INFO_SPLIT": "n"
+    },
+    "module_signing": {
+      "CONFIG_CRYPTO_RSA": "y",
+      "CONFIG_CRYPTO_SHA512": "y",
+      "CONFIG_MODULES": "y",
+      "CONFIG_MODULE_ALLOW_BTF_MISMATCH": "n",
+      "CONFIG_MODULE_SIG": "y",
+      "CONFIG_MODULE_SIG_ALL": "y",
+      "CONFIG_MODULE_SIG_FORCE": "n",
+      "CONFIG_MODULE_SIG_KEY": "\"certs/signing_key.pem\"",
+      "CONFIG_MODULE_SIG_KEY_TYPE_RSA": "y",
+      "CONFIG_MODULE_SIG_SHA512": "y"
+    }
+  },
+  "process_configs": {
+    "command": [
+      "SOURCE_ROOT/redhat/configs/process_configs.sh",
+      "-m",
+      "LLVM=1",
+      "6.12.0",
+      "rhel"
+    ],
+    "environment": {
+      "ARCH": "x86_64",
+      "FLAVOR": "rhel",
+      "HOME": "/root",
+      "LANG": "C",
+      "LC_ALL": "C",
+      "PATH": "/usr/sbin:/usr/bin:/sbin:/bin",
+      "RHJOBS": "1",
+      "SPECPACKAGE_NAME": "kernel-rk005-{control,requested}-pass-N",
+      "TZ": "UTC"
+    },
+    "path": "redhat/configs/process_configs.sh",
+    "sha256": "23501d7f0709000203940749953be512a36c55bd857ba35309224f902ed1e791",
+    "source": "Source81 of the exact Rocky kernel SRPM and byte-identical redhat/configs source copy",
+    "working_directory": "SOURCE_ROOT/redhat/configs"
+  },
+  "requested_delta": [
+    {
+      "baseline": "n",
+      "resolved": "y",
+      "symbol": "CONFIG_RUST"
+    },
+    {
+      "baseline": "y",
+      "resolved": "n",
+      "symbol": "CONFIG_MODVERSIONS"
+    }
+  ],
+  "resolution": {
+    "clean_build_directories": true,
+    "comparison": "The complete resolved config bytes and normalized symbol maps from two independent clean source/build directories must be identical.",
+    "fragment_merge_command": [
+      "SOURCE_ROOT/scripts/kconfig/merge_config.sh",
+      "-m",
+      "-O",
+      "MERGE_DIR",
+      "MERGE_DIR/.config",
+      "FRAGMENT"
+    ],
+    "olddefconfig_command": [
+      "make",
+      "-C",
+      "SOURCE_ROOT",
+      "O=BUILD_DIR",
+      "ARCH=x86_64",
+      "LLVM=1",
+      "olddefconfig"
+    ],
+    "passes": 2,
+    "process_configs_required": true
+  },
+  "schema_version": 1,
+  "source_assets": {
+    "baseline": {
+      "path": "SOURCES/kernel-x86_64-rhel.config",
+      "sha256": "5bbdda60ce822ec903c85d3d8ddda1bfc9493216bed86c6c432683aa50dcf50d",
+      "size": 254653
+    },
+    "debrand_patch": {
+      "path": "SOURCES/1000-debrand-some-messages.patch",
+      "sha256": "080bbc72a543eed6b71daee1b3236b59f3a0f8b3ad20815d962444d3b106b144",
+      "size": 928
+    },
+    "linux_archive": {
+      "path": "SOURCES/linux-6.12.0-211.44.1.el10_2.tar.xz",
+      "root": "linux-6.12.0-211.44.1.el10_2",
+      "sha256": "4a174d47b8874a2139efcd1ac1ab2d6b80ae7a0ca62f0ae4596fd20cf62a3533",
+      "size": 153374592
+    },
+    "process_configs": {
+      "path": "SOURCES/process_configs.sh",
+      "sha256": "23501d7f0709000203940749953be512a36c55bd857ba35309224f902ed1e791",
+      "size": 10883
+    }
+  },
+  "source_lock": {
+    "id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-source-v1",
+    "path": "host-kernel/rocky/source-lock.json",
+    "sha256": "36687c952e643918cb6d1f1301e79ed737f189b2fc5d5b5a833f0e60e41a4cd2"
+  },
+  "success_blockers": [
+    "The RK-003 closure/offline artifact and its exact tool probes still require independent review and durable archival before RK-005 may inherit that authority.",
+    "The current config policy generated-symbol allowlist omits CONFIG_RUSTC_HAS_UNNECESSARY_TRANSMUTES introduced by the current compatibility patch 0005; policy reconciliation is required before review ingestion or gate credit.",
+    "Compatibility patches 0006 through 0010 change source/build compatibility without adding configuration symbols; this phase binds and applies them but cannot substitute config resolution for their separate exact compile probes.",
+    "The current RK-003 lock maps llvm-config to llvm-0:21.1.8-1.el10.x86_64, while the exact captured binary owner is llvm-devel-0:21.1.8-1.el10.x86_64; that authority mismatch requires reconciliation before review ingestion or gate credit.",
+    "A successful config-resolution artifact still requires independent review and durable archival before any authority lock may be updated.",
+    "make LLVM=1 rustavailable remains a separate required phase and is not claimed here.",
+    "A production kernel build has not yet proved that its final .config byte-matches both independent resolutions.",
+    "RK-002, RK-003, RK-004, RK-005, RK-006, RS-001, and tracker credit remain false."
+  ],
+  "toolchain_lock": {
+    "id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-toolchain-v1",
+    "path": "host-kernel/rocky/toolchain-lock.json",
+    "sha256": "fd3d7a13e1b8b5d103f7e59d22f17c9e4b99cc937637decaa66749acfae6c802"
+  },
+  "tool_environment": {
+    "expected_binary_owners": {
+      "bindgen": "bindgen-cli-0:0.72.1-1.el10.x86_64",
+      "clang": "clang-0:21.1.8-1.el10.x86_64",
+      "llvm": "llvm-devel-0:21.1.8-1.el10.x86_64",
+      "pahole": "dwarves-0:1.31-1.el10.x86_64",
+      "rustc": "rust-0:1.92.0-1.el10.x86_64"
+    },
+    "expected_file_owners": {
+      "rust_src_core": "rust-src-0:1.92.0-1.el10.noarch"
+    },
+    "expected_versions": {
+      "bindgen": "0.72.1",
+      "clang": "21.1.8",
+      "llvm": "21.1.8",
+      "pahole": "1.31",
+      "rustc": "1.92.0"
+    },
+    "fixed_environment": {
+      "ARCH": "x86_64",
+      "HOME": "/root",
+      "LANG": "C",
+      "LC_ALL": "C",
+      "PATH": "/usr/sbin:/usr/bin:/sbin:/bin",
+      "TZ": "UTC"
+    },
+    "llvm_config_authority_blocker": "The current RK-003 lock maps llvm-config to llvm-0:21.1.8-1.el10.x86_64, while the exact captured binary owner is llvm-devel-0:21.1.8-1.el10.x86_64; this phase enforces the observed owner but cannot reconcile the historical lock.",
+    "probe_commands": {
+      "bindgen": [
+        "bindgen",
+        "--version",
+        "workaround-for-0.69.0"
+      ],
+      "clang": [
+        "clang",
+        "--version"
+      ],
+      "llvm": [
+        "llvm-config",
+        "--version"
+      ],
+      "pahole": [
+        "pahole",
+        "--version"
+      ],
+      "rust_src_core": [
+        "rustc",
+        "--print",
+        "sysroot"
+      ],
+      "rustc": [
+        "rustc",
+        "--version",
+        "--verbose"
+      ]
+    }
+  }
+}

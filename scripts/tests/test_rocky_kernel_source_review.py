@@ -17,6 +17,38 @@ sys.path.insert(0, os.path.join(REPO_ROOT, "scripts"))
 import rocky_kernel_source_review as review  # noqa: E402
 
 
+def scalar_leaves(value, path=()):
+    if isinstance(value, dict):
+        for key, child in value.items():
+            for result in scalar_leaves(child, path + (key,)):
+                yield result
+    elif isinstance(value, list):
+        for index, child in enumerate(value):
+            for result in scalar_leaves(child, path + (index,)):
+                yield result
+    else:
+        yield path, value
+
+
+def replace(value, path, replacement):
+    target = value
+    for part in path[:-1]:
+        target = target[part]
+    target[path[-1]] = replacement
+
+
+def changed(value):
+    if isinstance(value, bool):
+        return not value
+    if isinstance(value, int):
+        return value + 1
+    if isinstance(value, str):
+        return value + "-mutated"
+    if value is None:
+        return "not-null"
+    raise TypeError("unsupported scalar: {0!r}".format(value))
+
+
 class SourceEvidenceReviewTests(unittest.TestCase):
     @staticmethod
     def load(path):
@@ -36,8 +68,8 @@ class SourceEvidenceReviewTests(unittest.TestCase):
     def test_committed_capture_is_semantically_accepted_without_gate_credit(self):
         result = review.check(REPO_ROOT)
         self.assertFalse(result["gate_claim"])
-        self.assertEqual(result["workflow"]["run_id"], 31560588350)
-        self.assertEqual(result["artifact"]["id"], 9127584719)
+        self.assertEqual(result["workflow"]["run_id"], 31563766469)
+        self.assertEqual(result["artifact"]["id"], 9128694499)
 
     def test_cli_check_passes(self):
         self.assertEqual(review.main(["--repo", REPO_ROOT, "--check"]), 0)
@@ -74,6 +106,72 @@ class SourceEvidenceReviewTests(unittest.TestCase):
                     finally:
                         review.REVIEW = original_review
 
+    def test_every_binding_leaf_is_checked_not_just_the_run_id(self):
+        manifest = self.load(os.path.join(REPO_ROOT, review.REVIEW))
+        source = os.path.join(
+            REPO_ROOT, manifest["files"]["acquisition_replay"]["path"]
+        )
+        record = self.load(source)
+        tested = 0
+        for path, original in scalar_leaves(review.EXPECTED_BINDING):
+            with self.subTest(path=path):
+                broken = copy.deepcopy(record)
+                replace(broken["binding"], path, changed(original))
+                with self.assertRaises(review.ReviewError):
+                    review.binding(broken, review.EXPECTED_REVIEW, "fixture")
+                tested += 1
+        self.assertGreater(tested, 20)
+
+    def test_every_semantic_result_leaf_is_checked(self):
+        lock = self.load(os.path.join(REPO_ROOT, review.SOURCE_LOCK))
+        series = self.load(os.path.join(REPO_ROOT, review.PATCH_SERIES))
+        manifest = self.load(os.path.join(REPO_ROOT, review.REVIEW))
+        verifiers = {
+            "acquisition_replay": lambda record: review.verify_acquisition(record, lock),
+            "dist_git_object_replay": lambda record: review.verify_dist_git(record, lock, series),
+            "repository_metadata_signature_replay": lambda record: review.verify_repository(record, lock),
+            "srpm_header_signature": lambda record: review.verify_srpm_signature(record, lock),
+        }
+        tested = 0
+        for evidence_id, verifier in verifiers.items():
+            record = self.load(
+                os.path.join(REPO_ROOT, manifest["files"][evidence_id]["path"])
+            )
+            for path, original in scalar_leaves(record["result"]):
+                with self.subTest(evidence=evidence_id, path=path):
+                    broken = copy.deepcopy(record)
+                    replace(broken["result"], path, changed(original))
+                    with self.assertRaises(review.ReviewError):
+                        verifier(broken)
+                    tested += 1
+        self.assertGreater(tested, 60)
+
+    def test_duplicate_keys_and_rehashed_self_attestation_fail(self):
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT) as temporary:
+            duplicate = os.path.join(temporary, "duplicate.json")
+            self.write_text(duplicate, '{"a":1,"a":2}\n')
+            with self.assertRaises(review.ReviewError):
+                review.read_json(duplicate)
+
+        manifest = copy.deepcopy(review.EXPECTED_REVIEW)
+        manifest["artifact"]["digest"] = "sha256:" + "0" * 64
+        manifest["files"]["acquisition_replay"]["sha256"] = "0" * 64
+        with self.assertRaises(review.ReviewError):
+            review.require_exact(manifest, review.EXPECTED_REVIEW, "self-attested review")
+
+    def test_every_review_manifest_leaf_is_immutable(self):
+        tested = 0
+        for path, original in scalar_leaves(review.EXPECTED_REVIEW):
+            with self.subTest(path=path):
+                broken = copy.deepcopy(review.EXPECTED_REVIEW)
+                replace(broken, path, changed(original))
+                with self.assertRaises(review.ReviewError):
+                    review.require_exact(
+                        broken, review.EXPECTED_REVIEW, "review manifest"
+                    )
+                tested += 1
+        self.assertGreaterEqual(tested, 40)
+
     def test_digest_and_path_escape_fail_closed(self):
         manifest_path = os.path.join(REPO_ROOT, review.REVIEW)
         manifest = self.load(manifest_path)
@@ -109,6 +207,13 @@ class SourceEvidenceReviewTests(unittest.TestCase):
                     review.check(REPO_ROOT)
             finally:
                 review.REVIEW = original_review
+
+    def test_source_review_does_not_permanently_block_later_license_closure(self):
+        lock = self.load(os.path.join(REPO_ROOT, review.SOURCE_LOCK))
+        lock["gate"]["credit_eligible"] = True
+        lock["licenses"]["inventory"]["complete"] = True
+        result = review.check(REPO_ROOT, lock_override=lock)
+        self.assertFalse(result["gate_claim"])
 
 
 if __name__ == "__main__":

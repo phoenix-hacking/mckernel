@@ -34,7 +34,7 @@ SOURCE_LOCK_PATH = Path("host-kernel/rocky/source-lock.json")
 
 REVIEW_ID = "rk-003-rk-005-platform-repository-review-dd6-v1"
 RUNTIME_HEAD = "dd6d1954538ca1adbaf335a1dd058aba26c28840"
-OBSERVED_HEAD = "4583cdcef24d4c163bf5f4630e369e9318a9809a"
+OBSERVED_HEAD = "9ddbee3bb7fc93ee4514da73ac748ad4c820c068"
 REPOSITORY = "phoenix-hacking/mckernel"
 RUN_ID = 31563271344
 RUN_ATTEMPT = 1
@@ -47,7 +47,7 @@ ARTIFACT_SHA256 = (
     "a88e8a35c13dbd5b7a4e6524595d5cec31450f83c136b4cf64030e517d208eef"
 )
 EXPECTED_REVIEW_SHA256 = (
-    "1630a9e47d5eedad00c17e327d713e6941ce7363d683df28e52cb677a929dbaa"
+    "8268afe35c30b692e60cfc55e861ad1d911a3e87bd313bab31b7f6755503220c"
 )
 
 RELEASE_KEY_FINGERPRINT = "FC226859C0860BF0DDB95B085B106C736FEDFC85"
@@ -139,6 +139,33 @@ EXPECTED_INPUTS = [
         "size": 5711,
     },
 ]
+
+CURRENT_INPUT_OVERRIDES = [
+    {
+        "path": "host-kernel/rocky/source-lock.json",
+        "git_blob_sha1": "164c77442f8bb51caac4aff5dcf02c9dc08760b5",
+        "sha256": "36687c952e643918cb6d1f1301e79ed737f189b2fc5d5b5a833f0e60e41a4cd2",
+        "size": 14870,
+    },
+    {
+        "path": "scripts/rocky_kernel_source_lock.py",
+        "git_blob_sha1": "2918a71fb2fc405f893783ed638b8be3a8dbeea6",
+        "sha256": "d16bf1781ecf41968cc3204f8f92302b578f27c43033d91d11ddae95aff70586",
+        "size": 54511,
+    },
+]
+
+EXPECTED_CURRENT_REPOSITORY_BINDING = {
+    "base_head_sha": OBSERVED_HEAD,
+    "binding_kind": "exact-repository-tree-overrides",
+    "runtime_committed_input_count": 10,
+    "current_override_count": 2,
+    "current_overrides": CURRENT_INPUT_OVERRIDES,
+    "unchanged_runtime_input_count": 8,
+    "all_unoverridden_input_bytes_equal_to_runtime": True,
+    "all_unoverridden_input_git_blobs_equal_to_runtime": True,
+    "runtime_identity_claimed": False,
+}
 
 EXPECTED_PHASE_BLOCKERS = [
     "The full transitive RPM closure has not been resolved or archived.",
@@ -350,6 +377,7 @@ def validate_review(review, review_bytes):
             "zip_closure",
             "runtime_candidate",
             "current_head_blob_equivalence_observation",
+            "current_repository_input_binding",
             "verified_facts",
             "claims",
             "phase_blockers_at_capture",
@@ -415,14 +443,19 @@ def validate_review(review, review_bytes):
             "head_sha": OBSERVED_HEAD,
             "observed_against_runtime_head_sha": RUNTIME_HEAD,
             "relationship": "descendant",
-            "descendant_commit_count": 3,
-            "changed_path_count": 23,
+            "descendant_commit_count": 15,
+            "changed_path_count": 111,
             "bound_input_count": 10,
             "all_bound_input_bytes_equal": True,
             "all_bound_input_git_blobs_equal": True,
             "runtime_identity_claimed": False,
         },
         "current-head blob-equivalence observation",
+    )
+    require_exact(
+        review["current_repository_input_binding"],
+        EXPECTED_CURRENT_REPOSITORY_BINDING,
+        "current repository input binding",
     )
     require_exact(
         review["verified_facts"],
@@ -508,8 +541,18 @@ def run_git(repo, arguments):
     )
 
 
+def current_expected_inputs():
+    overrides = {row["path"]: row for row in CURRENT_INPUT_OVERRIDES}
+    expected_paths = {row["path"] for row in EXPECTED_INPUTS}
+    if len(overrides) != len(CURRENT_INPUT_OVERRIDES):
+        raise ReviewError("current input override paths are duplicated")
+    if not set(overrides).issubset(expected_paths):
+        raise ReviewError("current input override is outside the runtime input set")
+    return [overrides.get(row["path"], row) for row in EXPECTED_INPUTS]
+
+
 def validate_repository_inputs(repo):
-    for expected in EXPECTED_INPUTS:
+    for expected in current_expected_inputs():
         relative = Path(expected["path"])
         path = repository_file(repo, relative)
         data = path.read_bytes()
@@ -536,12 +579,12 @@ def validate_git_observation(repo):
     count_stdout, _ = run_git(
         repo, ["rev-list", "--count", "{}..{}".format(RUNTIME_HEAD, OBSERVED_HEAD)]
     )
-    require_exact(count_stdout.decode("ascii").strip(), "3", "observed commit distance")
+    require_exact(count_stdout.decode("ascii").strip(), "15", "observed commit distance")
     paths_stdout, _ = run_git(
         repo, ["diff", "--name-only", "{}..{}".format(RUNTIME_HEAD, OBSERVED_HEAD)]
     )
     changed = [line for line in paths_stdout.decode("utf-8").splitlines() if line]
-    require_exact(len(changed), 23, "observed changed-path count")
+    require_exact(len(changed), 111, "observed changed-path count")
     for expected in EXPECTED_INPUTS:
         spec = "{}:{}".format(RUNTIME_HEAD, expected["path"])
         runtime_bytes, _ = run_git(repo, ["show", spec])

@@ -75,12 +75,12 @@ class RepositoryContractTests(unittest.TestCase):
         cls.lock, cls.series, cls.blockers = evidence.check_repository(REPO_ROOT)
 
     def test_current_contract_is_valid_and_keeps_rk001_blocked(self) -> None:
-        self.assertEqual(len(self.blockers), 5)
+        self.assertEqual(len(self.blockers), 1)
         self.assertFalse(self.lock["gate"]["credit_eligible"])
         self.assertFalse(self.lock["licenses"]["inventory"]["complete"])
-        self.assertIn(
-            "license_inventory",
+        self.assertEqual(
             {item.split(":", 1)[0] for item in self.blockers},
+            {"license_inventory"},
         )
 
     def test_workflow_uses_exact_rocky_10_2_amd64_manifest(self) -> None:
