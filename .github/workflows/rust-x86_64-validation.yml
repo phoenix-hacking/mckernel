@@ -190,6 +190,35 @@ jobs:
               > host-module-failure-sites.json.sha256
           )
 
+      - name: Capture bounded compiler-backed host-module failure flows
+        run: |
+          set -euo pipefail
+          flow_path="$BUILD_DIR/host-module-failure-flows.json"
+          runuser -u validator -- env \
+            HOME=/home/validator \
+            RUSTUP_HOME=/home/validator/.rustup \
+            CARGO_HOME=/home/validator/.cargo \
+            PATH=/home/validator/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+            GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
+            BUILD_DIR="$BUILD_DIR" \
+            MCKERNEL_CI_KERNEL_DIR="$MCKERNEL_CI_KERNEL_DIR" \
+            bash -c '
+              set -euo pipefail
+              cd "$GITHUB_WORKSPACE"
+              python3 scripts/host_module_failure_flows.py \
+                --repo "$GITHUB_WORKSPACE" \
+                --build-dir "$BUILD_DIR" \
+                --kernel-dir "$MCKERNEL_CI_KERNEL_DIR" \
+                --failure-sites "$BUILD_DIR/host-module-failure-sites.json" \
+                --output "$BUILD_DIR/host-module-failure-flows.json"
+            ' 2>&1 | tee evidence/host-module-failure-flows.log
+          install -m 0644 "$flow_path" evidence/host-module-failure-flows.json
+          (
+            cd evidence
+            sha256sum host-module-failure-flows.json \
+              > host-module-failure-flows.json.sha256
+          )
+
       - name: Collect build evidence
         if: ${{ always() }}
         run: |
