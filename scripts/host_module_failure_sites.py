@@ -788,7 +788,13 @@ def capture_rust_source(module, source_rel, cmd_rel, repo, build_dir, kernel_dir
                 len(source_indexes)
             )
         )
+    command_compiler = compiler_provenance(command["compile_argv"][0], environment)
     compiler = compiler_provenance(recorded_argv[0], environment)
+    for field in ("resolved_path", "sha256"):
+        if command_compiler[field] != compiler[field]:
+            raise CaptureError(
+                "Rust .cmd and exact argv name different compiler identities"
+            )
     rows = list(enumerate(source_text.splitlines(keepends=True), 1))
     if not rows:
         raise CaptureError("Rust helper source is empty")
@@ -820,6 +826,7 @@ def capture_rust_source(module, source_rel, cmd_rel, repo, build_dir, kernel_dir
             Path(cmd_rel).with_name(Path(cmd_rel).name + ".argv.json")
         ),
         "recorded_compiler": compiler,
+        "simplified_command_compiler": command_compiler,
         "source": source_rel,
     }
     return record, sites

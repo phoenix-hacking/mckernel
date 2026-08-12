@@ -415,6 +415,46 @@ print('return -EFAULT;')
                 capture.config_provenance(self.kernel),
             )
 
+    def test_rust_cmd_and_recorded_argv_compilers_must_match(self):
+        source = self.repo / "helper.rs"
+        command_path = self.build / "rust/.helper.o.cmd"
+        first = self.root / "first-rustc"
+        second = self.root / "second-rustc"
+        source.write_text("const A: i32 = -EINVAL;\n", encoding="utf-8")
+        for compiler, version in ((first, "one"), (second, "two")):
+            compiler.write_text(
+                "#!/bin/sh\n"
+                "case \"$1\" in\n"
+                "  --version) printf '%s\\n' 'rustc {0}' ;;\n"
+                "  *) exit 2 ;;\n"
+                "esac\n".format(version),
+                encoding="utf-8",
+            )
+            compiler.chmod(0o755)
+        command_path.parent.mkdir(parents=True)
+        key = str(command_path.parent / "helper.o")
+        command_path.write_text(
+            "cmd_{0} := {1} --emit=obj={0} {2}\nsource_{0} := {2}\n".format(
+                key, shlex.quote(str(first)), shlex.quote(str(source))
+            ),
+            encoding="utf-8",
+        )
+        (command_path.parent / (command_path.name + ".argv.json")).write_text(
+            json.dumps([str(second), "--emit=obj={0}".format(key), str(source)])
+            + "\n",
+            encoding="utf-8",
+        )
+        with self.assertRaisesRegex(capture.CaptureError, "different compiler"):
+            capture.capture_rust_source(
+                "mcctrl",
+                "helper.rs",
+                "rust/.helper.o.cmd",
+                self.repo,
+                self.build,
+                self.kernel,
+                capture.config_provenance(self.kernel),
+            )
+
     def test_configuration_requires_primary_and_generated_inputs(self):
         (self.kernel / "include/generated/autoconf.h").unlink()
         with self.assertRaises(capture.CaptureError):
