@@ -39,10 +39,23 @@ NEEDS_PATH = Path("host-kernel/contracts/linux-api-needs-v1.json")
 CONTRACT_PATH = Path("host-kernel/contracts/linux-api-exact-probe-v1.json")
 SOURCE_LOCK_PATH = Path("host-kernel/rocky/source-lock.json")
 PATCH_SERIES_PATH = Path("host-kernel/rocky/patches/series.json")
+RUST_COMPAT_PATCH_PATHS = (
+    Path("host-kernel/rocky/patches/0001-x86-rust-set-rustc-abi-x86-softfloat.patch"),
+    Path("host-kernel/rocky/patches/0002-rust-support-rust-1.91-target-spec.patch"),
+)
 CONFIG_POLICY_PATH = Path("host-kernel/rocky/config-policy.json")
 TOOLCHAIN_LOCK_PATH = Path("host-kernel/rocky/toolchain-lock.json")
 WORKFLOW_PATH = Path(".github/workflows/rs001-linux-api-exact-probe.yml")
 SCRIPT_PATH = Path("scripts/linux_api_exact_probe.py")
+RUST_COMPAT_FIXTURE_PATH = Path(
+    "scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs"
+)
+RUST_COMPAT_FIXTURE_SHA256 = (
+    "9c21a1b67751db98e407439b77d014be6b92ba3cf6457fde6a4118a798f4fa05"
+)
+RUST_COMPAT_POSTIMAGE_SHA256 = (
+    "555ff4dff6548bb5f24087cdad737363b5694668aa462f77adfb3571498ec678"
+)
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
 CONFIG_LINE = re.compile(r"^(CONFIG_[A-Za-z0-9_]+)=(.*)$")
@@ -61,6 +74,10 @@ TOOL_PROBES = (
     ("pahole", ("pahole", "--version")),
     ("patch", ("patch", "--version")),
     ("rpm", ("rpm", "--version")),
+)
+RUST_COMPAT_UPSTREAM_COMMITS = (
+    "6273a058383e05465083b535ed9469f2c8a48321",
+    "8851e27d2cb947ea8bbbe8e812068f7bf5cbd00b",
 )
 
 
@@ -239,6 +256,91 @@ def lock_record(repo, relative):
     }
 
 
+def rust_compatibility_patch_records(repo):
+    fixture = repository_file(
+        repo, RUST_COMPAT_FIXTURE_PATH, "Rocky Rust target generator fixture"
+    )
+    if sha256_file(fixture) != RUST_COMPAT_FIXTURE_SHA256:
+        raise ProbeError("Rocky Rust target generator fixture digest changed")
+    records = []
+    required_additions = (
+        {
+            "+    fn rustc_version_atleast(&self, major: u32, minor: u32, patch: u32)": 1,
+            "+        if cfg.rustc_version_atleast(1, 86, 0) {": 2,
+            '+            ts.push("rustc-abi", "x86-softfloat");': 2,
+        },
+        {
+            "+        if cfg.rustc_version_atleast(1, 91, 0) {": 2,
+            '+            ts.push("target-pointer-width", 64);': 1,
+            '+            ts.push("target-pointer-width", 32);': 1,
+        },
+    )
+    for index, relative in enumerate(RUST_COMPAT_PATCH_PATHS):
+        path = repository_file(repo, relative, "Rust target compatibility patch")
+        try:
+            raw = path.read_bytes()
+            text = raw.decode("utf-8")
+        except (IOError, OSError, UnicodeDecodeError) as exc:
+            raise ProbeError(
+                "cannot read Rust target compatibility patch: {0}".format(exc)
+            )
+        if not raw.endswith(b"\n") or b"\r" in raw:
+            raise ProbeError("Rust target compatibility patch must be LF-only text")
+        commit = RUST_COMPAT_UPSTREAM_COMMITS[index]
+        if text.count(commit) != 2 or text.count("diff --git ") != 1 or any(
+            text.count(fragment) != count
+            for fragment, count in required_additions[index].items()
+        ):
+            raise ProbeError(
+                "Rust target compatibility patch is not frozen upstream commit {0}".format(
+                    commit
+                )
+            )
+        records.append(
+            {
+                "applied_after": (
+                    "exact Rocky dist-git patch series"
+                    if index == 0
+                    else str(RUST_COMPAT_PATCH_PATHS[index - 1])
+                ),
+                "path": str(relative),
+                "sha256": sha256_bytes(raw),
+                "size": len(raw),
+                "upstream_commit": commit,
+            }
+        )
+    return records
+
+
+def verify_rust_compatibility_patch_replay(repo, records):
+    fixture = repository_file(
+        repo, RUST_COMPAT_FIXTURE_PATH, "Rocky Rust target generator fixture"
+    )
+    with tempfile.TemporaryDirectory(prefix="rs001-rust-compat-") as temporary:
+        root = Path(temporary)
+        target = root / "scripts/generate_rust_target.rs"
+        target.parent.mkdir()
+        shutil.copyfile(str(fixture), str(target))
+        for record in records:
+            patch_path = repository_file(
+                repo, Path(record["path"]), "Rust target compatibility patch"
+            )
+            run_checked(
+                [
+                    shutil.which("patch") or "patch",
+                    "-p1",
+                    "--batch",
+                    "--forward",
+                    "--no-backup-if-mismatch",
+                    "-i",
+                    str(patch_path),
+                ],
+                root,
+            )
+        if sha256_file(target) != RUST_COMPAT_POSTIMAGE_SHA256:
+            raise ProbeError("Rust target compatibility patch postimage changed")
+
+
 def build_contract(repo):
     needs_path = repository_file(repo, NEEDS_PATH, "Linux API needs")
     needs_manifest = read_json(needs_path)
@@ -247,6 +349,8 @@ def build_contract(repo):
     patch_series, patch_record = lock_record(repo, PATCH_SERIES_PATH)
     config_policy, config_record = lock_record(repo, CONFIG_POLICY_PATH)
     toolchain_lock, toolchain_record = lock_record(repo, TOOLCHAIN_LOCK_PATH)
+    rust_compat_records = rust_compatibility_patch_records(repo)
+    verify_rust_compatibility_patch_replay(repo, rust_compat_records)
     source_rpm = source_lock.get("source_rpm", {})
     embedded = source_lock.get("embedded_objects", [])
     archives = [
@@ -306,6 +410,11 @@ def build_contract(repo):
         "repository_inputs": {
             "source_lock": source_record,
             "patch_series": patch_record,
+            "rust_target_compatibility_patches": rust_compat_records,
+            "rust_target_generator_preimage": {
+                "path": str(RUST_COMPAT_FIXTURE_PATH),
+                "sha256": RUST_COMPAT_FIXTURE_SHA256,
+            },
             "config_policy": config_record,
             "toolchain_lock": toolchain_record,
             "checker": {"path": str(SCRIPT_PATH), "sha256": sha256_file(script)},
@@ -321,16 +430,27 @@ def build_contract(repo):
                     "size": row.get("size"),
                 }
                 for row in patch_rows
+            ]
+            + [
+                {
+                    "applied": True,
+                    "empty": False,
+                    "path": record["path"],
+                    "sha256": record["sha256"],
+                    "size": record["size"],
+                }
+                for record in rust_compat_records
             ],
             "tree_comparison": (
-                "fresh locked archive plus every applied locked patch must byte-match "
-                "the supplied out-of-tree build source"
+                "fresh locked archive plus every applied Rocky patch and the bound "
+                "Rust target compatibility patch must byte-match the supplied "
+                "out-of-tree build source"
             ),
         },
         "required_capture_inputs": [
             "locked source RPM bytes",
             "locked Linux source archive bytes",
-            "all locked patch bytes",
+            "all locked Rocky and repository compatibility patch bytes",
             "byte-exact patched source tree",
             "locked Rocky x86_64 baseline config",
             "first and second idempotent resolved configs",
@@ -1087,6 +1207,12 @@ def build_evidence(args, repo, contract):
             "config_policy_sha256": contract["repository_inputs"]["config_policy"]["sha256"],
             "toolchain_lock_sha256": contract["repository_inputs"]["toolchain_lock"]["sha256"],
             "patch_series_sha256": contract["repository_inputs"]["patch_series"]["sha256"],
+            "rust_target_compatibility_patch_sha256s": [
+                row["sha256"]
+                for row in contract["repository_inputs"][
+                    "rust_target_compatibility_patches"
+                ]
+            ],
         },
         "environment": {
             "architecture": platform.machine(),
@@ -1186,6 +1312,12 @@ def validate_evidence(evidence, contract, needs_manifest):
         "config_policy_sha256": contract["repository_inputs"]["config_policy"]["sha256"],
         "toolchain_lock_sha256": contract["repository_inputs"]["toolchain_lock"]["sha256"],
         "patch_series_sha256": contract["repository_inputs"]["patch_series"]["sha256"],
+        "rust_target_compatibility_patch_sha256s": [
+            row["sha256"]
+            for row in contract["repository_inputs"][
+                "rust_target_compatibility_patches"
+            ]
+        ],
     }
     if evidence["inputs"] != expected_inputs:
         raise ProbeError("evidence repository input bindings changed")

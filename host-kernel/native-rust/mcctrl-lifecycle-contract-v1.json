@@ -11,15 +11,19 @@
   "dependencies": [
     "ihk"
   ],
-  "foundation_status": "source-contract-only",
+  "foundation_status": "source-bound-dependency",
   "foundation_version": 1,
   "gate_credit_eligible": false,
   "gate_id": "MCC-001",
   "ihk_dependency": {
     "legacy_inter_module_import_count": 32,
     "native_symbol_import": {
-      "reason": "The selected Linux 6.12 Rust surface has no supported custom module-symbol export API and the native ihk provider exposes no reviewed ABI anchor; a hand-authored depends record is forbidden.",
-      "status": "blocked"
+      "built_symbol_reference_validated": false,
+      "provider_symbol": "ihk_provider_lifecycle_v1",
+      "runtime_symbol_reference_proven": false,
+      "scope": "source-bound namespaced lifecycle anchor; built relocation and runtime unload ordering require exact Rocky 10.2 evidence",
+      "source_reference_required": true,
+      "status": "source-bound"
     },
     "required_import_namespace": "MCKERNEL_IHK_V1"
   },
@@ -52,16 +56,19 @@
   },
   "parameter_count": 0,
   "production_source": "host-kernel/native-rust/mcctrl.rs",
+  "provider_source": "host-kernel/native-rust/ihk.rs",
   "reference_inventory": "host-kernel/reference/legacy-host-modules-f2eb7352.json",
   "schema_version": 1,
   "selected_kernel": {
     "archive_sha256": "4a174d47b8874a2139efcd1ac1ab2d6b80ae7a0ca62f0ae4596fd20cf62a3533",
     "release": "6.12.0-211.44.1.el10_2",
     "reviewed_rust_paths": [
+      "include/linux/export.h",
       "rust/bindings/bindings_helper.h",
       "rust/exports.c",
       "rust/kernel/lib.rs",
-      "rust/macros/module.rs"
+      "rust/macros/module.rs",
+      "scripts/mod/modpost.c"
     ],
     "source_lock": "host-kernel/rocky/source-lock.json"
   },

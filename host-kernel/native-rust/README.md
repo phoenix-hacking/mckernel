@@ -6,6 +6,26 @@ Linux remains the Rocky-derived control-plane kernel; only these project-owned h
 
 Behavioral implementation is evidence-gated against `host-kernel/contracts/legacy-behavior-contract-f2eb7352.json`. Before any implementation gate is credited, the exact Rocky-derived `CONFIG_RUST` kernel must compile the module and the relevant acceptance tests must pass on immutable CI evidence.
 
+## Unsafe and FFI ledger
+
+Every reachable project Rust input and every explicit unsafe/FFI source site is
+bound by `host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json`. The
+ledger keeps a durable site ID separate from exact source and normalized
+expression digests, and records the source `SAFETY:` comment, caller
+obligations, context constraints, component owner, compiler-capture state, and
+independent-review state. Validate the source-bound inventory with:
+
+```sh
+python3 scripts/native_rust_unsafe_ffi_ledger.py check
+```
+
+The check is deliberately not RS-011 credit. The checker's
+`capture-compiler` mode is a later evidence hook for exact Kbuild `.cmd`, rustc
+dep-info, object, compiler, and RS-001 platform-evidence digests. Until that
+capture also includes compiler-expanded unsafe-operation spans and receives an
+independent owner/security review, both the committed ledger and any compiler
+closure capture remain `NOT_READY`.
+
 ## Single build-control authority
 
 This directory contains Rust crate roots and their reviewed contracts only. It
@@ -27,10 +47,11 @@ The lifecycle contract preserves the frozen zero-parameter surface and exact
 semantic module metadata: `name=mcctrl`, `license=GPL v2`, `depends=ihk`, with
 no author, description, or version field. The dependency is not forged in
 source. Kconfig requires the native IHK provider and the crate emits the
-reviewed `MCKERNEL_IHK_V1` import-namespace declaration, while a real symbol
-import remains blocked until the native provider has a supported exported ABI
-anchor.
-Only modpost may derive `depends=ihk` from that future real import.
+reviewed `MCKERNEL_IHK_V1` import-namespace declaration. The crate now imports
+and performs a volatile read of the provider's
+`ihk_provider_lifecycle_v1` anchor, leaving modpost to derive `depends=ihk`
+from the real relocation. Exact Rocky 10.2 build and runtime evidence is still
+required to prove the built relocation, provider refcount, and unload ordering.
 
 The frozen module owns mcexec binfmt registration, but the selected Linux 6.12
 Rust kernel crate has no safe `linux_binfmt` registration API. That ownership

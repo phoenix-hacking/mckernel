@@ -9,11 +9,15 @@ on:
       - host-kernel/contracts/linux-api-exact-probe-v1.json
       - host-kernel/rocky/config-policy.json
       - host-kernel/rocky/configs/rust-minimal.config
+      - host-kernel/rocky/patches/0001-x86-rust-set-rustc-abi-x86-softfloat.patch
+      - host-kernel/rocky/patches/0002-rust-support-rust-1.91-target-spec.patch
       - host-kernel/rocky/patches/series.json
       - host-kernel/rocky/source-lock.json
       - host-kernel/rocky/toolchain-lock.json
       - scripts/linux_api_exact_probe.py
       - scripts/tests/test_linux_api_exact_probe.py
+      - scripts/tests/test_rust_target_compatibility_patches.py
+      - scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs
   pull_request:
     branches: [codex/rocky-rust-validation]
     paths:
@@ -130,6 +134,17 @@ jobs:
           test -f "$source_root/Makefile"
           patch -d "$source_root" -p1 --batch --forward --no-backup-if-mismatch \
             -i "$RS001_SOURCE_ASSETS/1000-debrand-some-messages.patch"
+          for compat_name in \
+            0001-x86-rust-set-rustc-abi-x86-softfloat.patch \
+            0002-rust-support-rust-1.91-target-spec.patch
+          do
+            compat_source="$GITHUB_WORKSPACE/host-kernel/rocky/patches/$compat_name"
+            compat_asset="$RS001_SOURCE_ASSETS/$compat_name"
+            cp "$compat_source" "$compat_asset"
+            cmp "$compat_source" "$compat_asset"
+            patch -d "$source_root" -p1 --batch --forward --no-backup-if-mismatch \
+              -i "$compat_asset"
+          done
 
           cp "$RS001_BASELINE_CONFIG" "$BUILD_DIR/.config"
           "$source_root/scripts/kconfig/merge_config.sh" -m -O "$BUILD_DIR" \

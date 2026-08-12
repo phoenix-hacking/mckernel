@@ -467,7 +467,11 @@ def repository_patch_items(repo, head, license_map):
     paths = [
         "host-kernel/kbuild/parent-integration-v1.json",
         "host-kernel/kbuild/patches/0001-drivers-misc-add-mckernel-rust-host-modules.patch",
+        "host-kernel/kbuild/patches/0002-rust-bindings-expose-module-parameters.patch",
         "host-kernel/kbuild/stage-manifest.json",
+        "host-kernel/rocky/configs/native-rust-evidence.config",
+        "host-kernel/rocky/patches/0001-x86-rust-set-rustc-abi-x86-softfloat.patch",
+        "host-kernel/rocky/patches/0002-rust-support-rust-1.91-target-spec.patch",
         "host-kernel/rocky/patches/series.json",
     ]
     items = []

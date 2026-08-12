@@ -32,10 +32,14 @@ const _: [(); 32] = [(); core::mem::size_of::<IhkExportSymbolRecord>()];
 const _: [(); 8] = [(); core::mem::align_of::<IhkExportSymbolRecord>()];
 
 #[doc(hidden)]
+// SAFETY: This immutable byte is the provider's read-only ABI anchor. Consumers
+// must import it through MCKERNEL_IHK_V1 and may not treat its value as state.
 #[export_name = "ihk_provider_lifecycle_v1"]
 pub static IHK_PROVIDER_LIFECYCLE_V1: u8 = 1;
 
 #[doc(hidden)]
+// SAFETY: Linux modpost consumes this immutable relocation record to publish
+// the namespaced anchor; neither the record nor its target is mutated in Rust.
 #[export_name = "__export_symbol_ihk_provider_lifecycle_v1"]
 #[link_section = ".export_symbol"]
 #[used]

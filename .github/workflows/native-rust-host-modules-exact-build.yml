@@ -1,0 +1,227 @@
+name: Native Rust host modules exact Rocky build
+
+on:
+  push:
+    branches: [codex/rocky-rust-validation]
+    paths:
+      - .github/workflows/native-rust-host-modules-exact-build.yml
+      - host-kernel/kbuild/**
+      - host-kernel/native-rust/**
+      - host-kernel/rocky/configs/native-rust-evidence.config
+      - host-kernel/rocky/configs/rust-minimal.config
+      - host-kernel/rocky/patches/0001-x86-rust-set-rustc-abi-x86-softfloat.patch
+      - host-kernel/rocky/patches/0002-rust-support-rust-1.91-target-spec.patch
+      - host-kernel/rocky/source-lock.json
+      - scripts/ihk_native_lifecycle_check.py
+      - scripts/ihk_smp_native_lifecycle_check.py
+      - scripts/mcctrl_native_lifecycle_check.py
+      - scripts/native_rust_build_surface_audit.py
+      - scripts/native_rust_host_audit.py
+      - scripts/rocky_kernel_source_lock.py
+      - scripts/rocky_rust_staging.py
+  pull_request:
+    branches: [development]
+    paths:
+      - .github/workflows/native-rust-host-modules-exact-build.yml
+      - host-kernel/kbuild/**
+      - host-kernel/native-rust/**
+      - host-kernel/rocky/configs/native-rust-evidence.config
+      - host-kernel/rocky/configs/rust-minimal.config
+      - host-kernel/rocky/patches/0001-x86-rust-set-rustc-abi-x86-softfloat.patch
+      - host-kernel/rocky/patches/0002-rust-support-rust-1.91-target-spec.patch
+      - host-kernel/rocky/source-lock.json
+      - scripts/ihk_native_lifecycle_check.py
+      - scripts/ihk_smp_native_lifecycle_check.py
+      - scripts/mcctrl_native_lifecycle_check.py
+      - scripts/native_rust_build_surface_audit.py
+      - scripts/native_rust_host_audit.py
+      - scripts/rocky_kernel_source_lock.py
+      - scripts/rocky_rust_staging.py
+  workflow_dispatch:
+    inputs:
+      validation_sha:
+        description: Exact 40-hex candidate commit
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+env:
+  ROCKY_IMAGE: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
+  EXPECTED_HEAD_SHA: ${{ github.event_name == 'workflow_dispatch' && inputs.validation_sha || github.event.pull_request.head.sha || github.sha }}
+
+jobs:
+  exact-build:
+    name: Compile three native modules (credit forbidden)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 330
+    container:
+      image: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Refuse the wrong runtime and install exact build tools
+        run: |
+          set -euo pipefail
+          evidence_dir="${{ runner.temp }}/native-rust-build-evidence"
+          mkdir -p "$evidence_dir"
+          printf '%s\n' "bootstrap-started" > "$evidence_dir/workflow-state"
+          test "$(uname -m)" = x86_64
+          . /etc/os-release
+          test "$ID" = rocky
+          test "$VERSION_ID" = 10.2
+          dnf -y --setopt=install_weak_deps=False install dnf-plugins-core
+          dnf config-manager --set-enabled crb
+          dnf -y --setopt=install_weak_deps=False install \
+            bc binutils bison bindgen-cli bpftool cargo clang cpio diffutils \
+            dwarves elfutils-libelf-devel findutils flex gcc git-core gzip \
+            hostname kernel-rpm-macros kmod lld llvm make ncurses-devel \
+            openssl-devel patch perl python3 python3-devel redhat-rpm-config \
+            rpm-build rust rust-src rustfmt tar which xz zstd
+          dnf clean all
+          printf '%s\n' "bootstrap-complete" > "$evidence_dir/workflow-state"
+
+      - name: Check out the exact candidate without credentials
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ env.EXPECTED_HEAD_SHA }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Verify source-only contracts without claiming readiness
+        run: |
+          set -euo pipefail
+          [[ "$EXPECTED_HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]
+          test "$(git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"
+          python3 scripts/native_rust_build_surface_audit.py
+          python3 scripts/native_rust_host_audit.py
+          python3 scripts/rocky_rust_staging.py --repo "$GITHUB_WORKSPACE" --check
+          python3 scripts/ihk_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE"
+          python3 scripts/ihk_smp_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE"
+          python3 scripts/mcctrl_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE"
+
+      - name: Acquire, patch, and credit-forbidden-stage the exact source
+        env:
+          CACHE_ROOT: ${{ runner.temp }}/native-rust-cache
+          SOURCE_ASSETS: ${{ runner.temp }}/native-rust-assets
+          SOURCE_PARENT: ${{ runner.temp }}/native-rust-source
+        run: |
+          set -euo pipefail
+          python3 scripts/rocky_kernel_source_lock.py \
+            --repo "$GITHUB_WORKSPACE" --cache-root "$CACHE_ROOT" --acquire
+          srpm="$(find "$CACHE_ROOT" -type f -name 'kernel-6.12.0-211.44.1.el10_2.src.rpm' -print)"
+          test -n "$srpm"
+          test "$(printf '%s\n' "$srpm" | wc -l)" = 1
+          mkdir -p "$SOURCE_ASSETS" "$SOURCE_PARENT"
+          (cd "$SOURCE_ASSETS" && rpm2cpio "$srpm" | cpio -idm --quiet --no-absolute-filenames)
+          archive="$SOURCE_ASSETS/linux-6.12.0-211.44.1.el10_2.tar.xz"
+          baseline="$SOURCE_ASSETS/kernel-x86_64-rhel.config"
+          test -f "$archive"
+          test -f "$baseline"
+          tar -C "$SOURCE_PARENT" -xf "$archive"
+          source_root="$SOURCE_PARENT/linux-6.12.0-211.44.1.el10_2"
+          test -f "$source_root/Makefile"
+          patch -d "$source_root" -p1 --batch --forward --no-backup-if-mismatch \
+            -i "$SOURCE_ASSETS/1000-debrand-some-messages.patch"
+          for compat_name in \
+            0001-x86-rust-set-rustc-abi-x86-softfloat.patch \
+            0002-rust-support-rust-1.91-target-spec.patch
+          do
+            compat_patch="$GITHUB_WORKSPACE/host-kernel/rocky/patches/$compat_name"
+            test -s "$compat_patch"
+            patch -d "$source_root" -p1 --batch --forward --no-backup-if-mismatch \
+              -i "$compat_patch"
+          done
+          patch -d "$source_root" -p1 --batch --forward --no-backup-if-mismatch \
+            -i "$GITHUB_WORKSPACE/host-kernel/kbuild/patches/0001-drivers-misc-add-mckernel-rust-host-modules.patch"
+          patch -d "$source_root" -p1 --batch --forward --no-backup-if-mismatch \
+            -i "$GITHUB_WORKSPACE/host-kernel/kbuild/patches/0002-rust-bindings-expose-module-parameters.patch"
+          python3 scripts/rocky_rust_staging.py --repo "$GITHUB_WORKSPACE" \
+            --stage-for-evidence "$source_root"
+          python3 scripts/rocky_rust_staging.py --repo "$GITHUB_WORKSPACE" \
+            --verify-evidence-stage "$source_root"
+          printf 'NATIVE_SRPM=%s\n' "$srpm" >> "$GITHUB_ENV"
+          printf 'NATIVE_SOURCE_ROOT=%s\n' "$source_root" >> "$GITHUB_ENV"
+          printf 'NATIVE_BASELINE_CONFIG=%s\n' "$baseline" >> "$GITHUB_ENV"
+
+      - name: Resolve the evidence-only module configuration twice
+        env:
+          BUILD_DIR: ${{ runner.temp }}/native-rust-build
+        run: |
+          set -euo pipefail
+          mkdir -p "$BUILD_DIR"
+          cp "$NATIVE_BASELINE_CONFIG" "$BUILD_DIR/.config"
+          "$NATIVE_SOURCE_ROOT/scripts/kconfig/merge_config.sh" -m -O "$BUILD_DIR" \
+            "$BUILD_DIR/.config" \
+            "$GITHUB_WORKSPACE/host-kernel/rocky/configs/rust-minimal.config" \
+            "$GITHUB_WORKSPACE/host-kernel/rocky/configs/native-rust-evidence.config"
+          make -C "$NATIVE_SOURCE_ROOT" O="$BUILD_DIR" ARCH=x86_64 LLVM=1 olddefconfig
+          cp "$BUILD_DIR/.config" "$BUILD_DIR/resolved-first.config"
+          make -C "$NATIVE_SOURCE_ROOT" O="$BUILD_DIR" ARCH=x86_64 LLVM=1 olddefconfig
+          cmp "$BUILD_DIR/resolved-first.config" "$BUILD_DIR/.config"
+          for symbol in \
+            CONFIG_MCKERNEL_IHK_RUST \
+            CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST \
+            CONFIG_MCKERNEL_MCCTRL_RUST; do
+            grep -qx "$symbol=m" "$BUILD_DIR/.config"
+          done
+          printf 'NATIVE_BUILD_DIR=%s\n' "$BUILD_DIR" >> "$GITHUB_ENV"
+
+      - name: Compile the exact kernel and native Rust modules
+        run: |
+          set -uo pipefail
+          evidence_dir="${{ runner.temp }}/native-rust-build-evidence"
+          mkdir -p "$evidence_dir"
+          {
+            make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 rustavailable
+            make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 -j2 vmlinux modules
+          } 2>&1 | tee "$evidence_dir/build.log"
+          status="${PIPESTATUS[0]}"
+          printf '%s\n' "$status" > "$evidence_dir/build.exit-code"
+          exit "$status"
+
+      - name: Validate built metadata and capture immutable diagnostics
+        env:
+          EVIDENCE_DIR: ${{ runner.temp }}/native-rust-build-evidence
+        run: |
+          set -euo pipefail
+          module_root="$NATIVE_BUILD_DIR/drivers/misc/mckernel"
+          ihk="$module_root/ihk.ko"
+          smp="$module_root/ihk-smp-x86_64.ko"
+          mcctrl="$module_root/mcctrl.ko"
+          test -s "$ihk"
+          test -s "$smp"
+          test -s "$mcctrl"
+          python3 scripts/ihk_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" --module "$ihk"
+          python3 scripts/ihk_smp_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" --module "$smp"
+          python3 scripts/mcctrl_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" --module "$mcctrl"
+          cp "$NATIVE_BUILD_DIR/.config" "$EVIDENCE_DIR/resolved.config"
+          cp "$NATIVE_SOURCE_ROOT/drivers/misc/mckernel/stage-lock.json" "$EVIDENCE_DIR/stage-lock.json"
+          git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD > "$EVIDENCE_DIR/commit.sha"
+          for module in "$ihk" "$smp" "$mcctrl"; do
+            name="$(basename "$module")"
+            cp "$module" "$EVIDENCE_DIR/$name"
+            modinfo "$module" > "$EVIDENCE_DIR/$name.modinfo"
+            readelf -SWr "$module" > "$EVIDENCE_DIR/$name.readelf"
+            nm -A -a "$module" > "$EVIDENCE_DIR/$name.nm"
+          done
+          find "$module_root" -maxdepth 1 -type f -name '.*.cmd' -exec cp '{}' "$EVIDENCE_DIR/" ';'
+          (
+            cd "$EVIDENCE_DIR"
+            find . -maxdepth 1 -type f ! -name SHA256SUMS -printf '%P\0' \
+              | sort -z | xargs -0 sha256sum -- > SHA256SUMS
+            sha256sum --check --strict SHA256SUMS
+          )
+
+      - name: Upload compiler evidence or first-failure diagnostics
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: native-rust-exact-build-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/native-rust-build-evidence/
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0

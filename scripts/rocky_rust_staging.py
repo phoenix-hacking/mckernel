@@ -21,6 +21,7 @@ import tempfile
 SCHEMA_VERSION = 2
 PARENT_SCHEMA_VERSION = 1
 PRODUCTION_STAGE_ENABLED = False
+EVIDENCE_STAGE_PURPOSE = "compiler-evidence-only"
 PROFILE_ID = "rocky-10.2-native-rust-host-modules-v1"
 DEFAULT_MANIFEST = "host-kernel/kbuild/stage-manifest.json"
 EXPECTED_DESTINATION = {
@@ -132,7 +133,7 @@ EXPECTED_MODULES = (
         "required_import_namespaces": [],
         "source_destination": "ihk.rs",
         "source_repository_path": "host-kernel/native-rust/ihk.rs",
-        "source_sha256": "b24bb72113efe0ec8febbe80f613ffa5d42e50f125ecd3923d2d74d949012556",
+        "source_sha256": "76a3e6c0d5ea4f1d57686de60c63dd26c5adf9ade7b6f562897c20749fd00196",
     },
     {
         "crate": "ihk_smp_x86_64",
@@ -144,7 +145,7 @@ EXPECTED_MODULES = (
         "required_import_namespaces": ["MCKERNEL_IHK_V1"],
         "source_destination": "ihk_smp_x86_64.rs",
         "source_repository_path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
-        "source_sha256": "443f9c8637da5dd0ab1fcf44daec44115a5207488cb4d0432b2573ea2a89aab7",
+        "source_sha256": "44aae46f0177abf98133ed86041a3682c7f894ec85c5cdd122ec816802e1106d",
     },
     {
         "crate": "mcctrl",
@@ -156,7 +157,7 @@ EXPECTED_MODULES = (
         "required_import_namespaces": ["MCKERNEL_IHK_V1"],
         "source_destination": "mcctrl.rs",
         "source_repository_path": "host-kernel/native-rust/mcctrl.rs",
-        "source_sha256": "d7b845e3d88c968c26a47f2ba84b86df9ebdcd2053d654bd6be271ec6511bfce",
+        "source_sha256": "3b996deb4a3eb26f93e45a243d2f7dc075344cee95ff583eeaf20d602ab63e31",
     },
 )
 EXPECTED_TOP_LEVEL_KEYS = {
@@ -690,6 +691,18 @@ def _stage_lock(plan):
     }
 
 
+def _evidence_stage_lock(plan):
+    lock = _stage_lock(plan)
+    lock.update(
+        {
+            "credit_eligible": False,
+            "production_readiness_blockers": list(READINESS_BLOCKERS),
+            "purpose": EVIDENCE_STAGE_PURPOSE,
+        }
+    )
+    return lock
+
+
 def _kernel_target(kernel_tree, destination):
     kernel_tree = os.path.abspath(kernel_tree)
     try:
@@ -754,15 +767,7 @@ def _rename_directory_noreplace(parent, temporary, target):
         os.close(parent_fd)
 
 
-def stage(plan, kernel_tree):
-    if not PRODUCTION_STAGE_ENABLED:
-        raise ValidationError(
-            "crate-roots-bound schema v{0} cannot stage production modules without build evidence".format(
-                SCHEMA_VERSION
-            )
-        )
-    if plan.get("credit_eligible") is not True or plan["blockers"]:
-        raise ValidationError("staging is blocked: {0}".format("; ".join(plan["blockers"])))
+def _stage_locked(plan, kernel_tree, lock):
     target, parent = _kernel_target(kernel_tree, plan["destination"])
     if os.path.lexists(target):
         raise ValidationError("staging destination already exists: {0}".format(target))
@@ -776,10 +781,10 @@ def stage(plan, kernel_tree):
             os.chmod(destination, 0o644)
         lock_path = os.path.join(temporary, "stage-lock.json")
         with open(lock_path, "wb") as stream:
-            stream.write(canonical_json_bytes(_stage_lock(plan)))
+            stream.write(canonical_json_bytes(lock))
         os.chmod(lock_path, 0o644)
         expected = {item["destination"]: item["sha256"] for item in plan["files"]}
-        expected["stage-lock.json"] = sha256_bytes(canonical_json_bytes(_stage_lock(plan)))
+        expected["stage-lock.json"] = sha256_bytes(canonical_json_bytes(lock))
         for name, digest in expected.items():
             if sha256_file(os.path.join(temporary, name)) != digest:
                 raise ValidationError("staged temporary file digest mismatch: {0}".format(name))
@@ -788,19 +793,11 @@ def stage(plan, kernel_tree):
     finally:
         if temporary is not None:
             shutil.rmtree(temporary)
-    verify_stage(plan, kernel_tree)
+    _verify_locked_stage(plan, kernel_tree, lock)
     return target
 
 
-def verify_stage(plan, kernel_tree):
-    if not PRODUCTION_STAGE_ENABLED:
-        raise ValidationError(
-            "crate-roots-bound schema v{0} has no verifiable production stage".format(
-                SCHEMA_VERSION
-            )
-        )
-    if plan.get("credit_eligible") is not True or plan["blockers"]:
-        raise ValidationError("stage verification requires a gate-ready manifest")
+def _verify_locked_stage(plan, kernel_tree, lock):
     target, unused_parent = _kernel_target(kernel_tree, plan["destination"])
     del unused_parent
     try:
@@ -812,7 +809,7 @@ def verify_stage(plan, kernel_tree):
     if stat.S_IMODE(info.st_mode) != 0o755:
         raise ValidationError("staged destination mode must be 0755")
     expected = {item["destination"]: item["sha256"] for item in plan["files"]}
-    expected["stage-lock.json"] = sha256_bytes(canonical_json_bytes(_stage_lock(plan)))
+    expected["stage-lock.json"] = sha256_bytes(canonical_json_bytes(lock))
     actual = []
     for root, directories, files in os.walk(target):
         if root != target or directories:
@@ -831,9 +828,50 @@ def verify_stage(plan, kernel_tree):
             raise ValidationError("staged file must be regular and non-symlink: {0}".format(name))
         if sha256_file(path) != digest:
             raise ValidationError("staged file digest mismatch: {0}".format(name))
-    if load_json(os.path.join(target, "stage-lock.json")) != _stage_lock(plan):
+    if load_json(os.path.join(target, "stage-lock.json")) != lock:
         raise ValidationError("stage-lock.json content differs from the deterministic lock")
     return target
+
+
+def stage(plan, kernel_tree):
+    if not PRODUCTION_STAGE_ENABLED:
+        raise ValidationError(
+            "crate-roots-bound schema v{0} cannot stage production modules without build evidence".format(
+                SCHEMA_VERSION
+            )
+        )
+    if plan.get("credit_eligible") is not True or plan["blockers"]:
+        raise ValidationError("staging is blocked: {0}".format("; ".join(plan["blockers"])))
+    return _stage_locked(plan, kernel_tree, _stage_lock(plan))
+
+
+def verify_stage(plan, kernel_tree):
+    if not PRODUCTION_STAGE_ENABLED:
+        raise ValidationError(
+            "crate-roots-bound schema v{0} has no verifiable production stage".format(
+                SCHEMA_VERSION
+            )
+        )
+    if plan.get("credit_eligible") is not True or plan["blockers"]:
+        raise ValidationError("stage verification requires a gate-ready manifest")
+    return _verify_locked_stage(plan, kernel_tree, _stage_lock(plan))
+
+
+def _require_evidence_only_plan(plan):
+    if plan.get("credit_eligible") is not False:
+        raise ValidationError("compiler-evidence staging may never claim gate credit")
+    if plan.get("blockers") != READINESS_BLOCKERS:
+        raise ValidationError("compiler-evidence staging requires the exact readiness blockers")
+
+
+def stage_for_evidence(plan, kernel_tree):
+    _require_evidence_only_plan(plan)
+    return _stage_locked(plan, kernel_tree, _evidence_stage_lock(plan))
+
+
+def verify_evidence_stage(plan, kernel_tree):
+    _require_evidence_only_plan(plan)
+    return _verify_locked_stage(plan, kernel_tree, _evidence_stage_lock(plan))
 
 
 def _print_blockers(plan, stream):
@@ -851,6 +889,8 @@ def parse_args(argv):
     action.add_argument("--verify-parent-source-archive", metavar="SOURCE_TAR_XZ")
     action.add_argument("--stage", metavar="KERNEL_TREE")
     action.add_argument("--verify-stage", metavar="KERNEL_TREE")
+    action.add_argument("--stage-for-evidence", metavar="KERNEL_TREE")
+    action.add_argument("--verify-evidence-stage", metavar="KERNEL_TREE")
     return parser.parse_args(argv)
 
 
@@ -888,7 +928,23 @@ def main(argv=None):
         if args.stage:
             print("Staged native Rust inputs at {0}".format(stage(plan, args.stage)))
             return 0
-        print("Verified native Rust stage at {0}".format(verify_stage(plan, args.verify_stage)))
+        if args.verify_stage:
+            print("Verified native Rust stage at {0}".format(verify_stage(plan, args.verify_stage)))
+            return 0
+        if args.stage_for_evidence:
+            print(
+                "Staged credit-forbidden compiler evidence inputs at {0}".format(
+                    stage_for_evidence(plan, args.stage_for_evidence)
+                )
+            )
+            print("RK-007 credit: NOT ELIGIBLE (compiler evidence only)")
+            return 0
+        print(
+            "Verified credit-forbidden compiler evidence stage at {0}".format(
+                verify_evidence_stage(plan, args.verify_evidence_stage)
+            )
+        )
+        print("RK-007 credit: NOT ELIGIBLE (compiler evidence only)")
         return 0
     except (OSError, ValidationError) as error:
         print("Rocky Rust staging validation failed: {0}".format(error), file=sys.stderr)

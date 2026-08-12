@@ -82,13 +82,40 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
         original = source_path.read_text(encoding="utf-8")
         for parameter in self.contract["parameters"]:
             with self.subTest(parameter=parameter["name"]):
-                old = f'name_bytes: b"{parameter["name"]}\\0",'
-                mutated = original.replace(old, 'name_bytes: b"wrong_name\\0",', 1)
+                old = f'loadable_name_bytes: b"{parameter["name"]}\\0",'
+                mutated = original.replace(
+                    old, 'loadable_name_bytes: b"wrong_name\\0",', 1
+                )
                 self.assertNotEqual(original, mutated)
                 source_path.write_text(mutated, encoding="utf-8")
                 with self.assertRaisesRegex(lifecycle.ValidationError, "descriptor"):
                     lifecycle.validate_repository(self.repo)
         source_path.write_text(original, encoding="utf-8")
+
+    def test_each_builtin_parameter_name_binding_is_fail_closed(self) -> None:
+        source_path = self.repo / self.contract["production_source"]
+        original = source_path.read_text(encoding="utf-8")
+        module = self.contract["module"]["name"]
+        for parameter in self.contract["parameters"]:
+            with self.subTest(parameter=parameter["name"]):
+                old = f'builtin_name_bytes: b"{module}.{parameter["name"]}\\0",'
+                mutated = original.replace(
+                    old, 'builtin_name_bytes: b"wrong_module.wrong_name\\0",', 1
+                )
+                self.assertNotEqual(original, mutated)
+                source_path.write_text(mutated, encoding="utf-8")
+                with self.assertRaisesRegex(lifecycle.ValidationError, "descriptor"):
+                    lifecycle.validate_repository(self.repo)
+        source_path.write_text(original, encoding="utf-8")
+
+    def test_parameter_name_mode_selection_is_fail_closed(self) -> None:
+        self.mutate_text(
+            self.contract["production_source"],
+            "const PARAMETER_NAME: &[u8] = $loadable_name_bytes;",
+            "const PARAMETER_NAME: &[u8] = $builtin_name_bytes;",
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "descriptor names by MODULE"):
+            lifecycle.validate_repository(self.repo)
 
     def test_each_parameter_type_and_ops_binding_is_fail_closed(self) -> None:
         source_path = self.repo / self.contract["production_source"]
@@ -185,6 +212,15 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
             'namespace: *b"UNVERSIONED_____\\0"',
         )
         with self.assertRaisesRegex(lifecycle.ValidationError, "provider anchor"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_provider_export_record_field_order_drift_is_rejected(self) -> None:
+        self.mutate_text(
+            self.contract["provider_source"],
+            "    namespace: [u8; 16],\n    padding: [u8; 4],",
+            "    padding: [u8; 4],\n    namespace: [u8; 16],",
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "export_symbol record layout"):
             lifecycle.validate_repository(self.repo)
 
     def test_import_namespace_modinfo_drift_is_rejected(self) -> None:

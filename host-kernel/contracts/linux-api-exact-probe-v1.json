@@ -1,6 +1,6 @@
 {
   "contract_id": "mckernel-rs001-exact-linux-api-probe-v1",
-  "contract_sha256": "ae85c94cca32d390a3a2e1b1e3bbdeefb641f717bd47fabd4ec3c169de18a8b7",
+  "contract_sha256": "a091e8bd0988a87fdf937c280c0ec1ffeab43a35921e1e2141558bfb4dc339ca",
   "evidence_profile": "rocky-10.2-exact-linux-api-evidence-v1",
   "frozen_needs": {
     "file_sha256": "76f16c395dd40f78ab1b72debcc61a352e28a3ddbf78586824ce9882a2a43e4c",
@@ -31,7 +31,7 @@
   "repository_inputs": {
     "checker": {
       "path": "scripts/linux_api_exact_probe.py",
-      "sha256": "2bd514d068ec7691722103375968346c364f48c460d85a1fc92af18f54eee2ba"
+      "sha256": "ef5ff6cb3142c9fa1e2f1f8cb89ce9f441315a762a4357da28cd69aa6047de09"
     },
     "config_policy": {
       "path": "host-kernel/rocky/config-policy.json",
@@ -40,6 +40,26 @@
     "patch_series": {
       "path": "host-kernel/rocky/patches/series.json",
       "sha256": "6a1a5e8fb13b6ce6ed35bd8e5487bb67ecf92d2be927799b660f21b5631f68fb"
+    },
+    "rust_target_compatibility_patches": [
+      {
+        "applied_after": "exact Rocky dist-git patch series",
+        "path": "host-kernel/rocky/patches/0001-x86-rust-set-rustc-abi-x86-softfloat.patch",
+        "sha256": "ec666e4c74d7ce8390118aef13accf4c3213eab8aff35902f3d973f1583a9dd5",
+        "size": 2697,
+        "upstream_commit": "6273a058383e05465083b535ed9469f2c8a48321"
+      },
+      {
+        "applied_after": "host-kernel/rocky/patches/0001-x86-rust-set-rustc-abi-x86-softfloat.patch",
+        "path": "host-kernel/rocky/patches/0002-rust-support-rust-1.91-target-spec.patch",
+        "sha256": "03fda3ded883adbdc59f372739d714543ecfe3b0ca3544af082c3e08d0df3cd1",
+        "size": 2048,
+        "upstream_commit": "8851e27d2cb947ea8bbbe8e812068f7bf5cbd00b"
+      }
+    ],
+    "rust_target_generator_preimage": {
+      "path": "scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs",
+      "sha256": "9c21a1b67751db98e407439b77d014be6b92ba3cf6457fde6a4118a798f4fa05"
     },
     "source_lock": {
       "path": "host-kernel/rocky/source-lock.json",
@@ -51,13 +71,13 @@
     },
     "workflow": {
       "path": ".github/workflows/rs001-linux-api-exact-probe.yml",
-      "sha256": "4f742906a1cbc5d9a63c4d3c7d8fe6e5846cfc99a0c39ae223f237a4a2598568"
+      "sha256": "7716ca1a10dc40e80e3627dba263b7f86777e9e2722b819693583a816089e228"
     }
   },
   "required_capture_inputs": [
     "locked source RPM bytes",
     "locked Linux source archive bytes",
-    "all locked patch bytes",
+    "all locked Rocky and repository compatibility patch bytes",
     "byte-exact patched source tree",
     "locked Rocky x86_64 baseline config",
     "first and second idempotent resolved configs",
@@ -94,9 +114,23 @@
         "path": "SOURCES/1000-debrand-some-messages.patch",
         "sha256": "080bbc72a543eed6b71daee1b3236b59f3a0f8b3ad20815d962444d3b106b144",
         "size": 928
+      },
+      {
+        "applied": true,
+        "empty": false,
+        "path": "host-kernel/rocky/patches/0001-x86-rust-set-rustc-abi-x86-softfloat.patch",
+        "sha256": "ec666e4c74d7ce8390118aef13accf4c3213eab8aff35902f3d973f1583a9dd5",
+        "size": 2697
+      },
+      {
+        "applied": true,
+        "empty": false,
+        "path": "host-kernel/rocky/patches/0002-rust-support-rust-1.91-target-spec.patch",
+        "sha256": "03fda3ded883adbdc59f372739d714543ecfe3b0ca3544af082c3e08d0df3cd1",
+        "size": 2048
       }
     ],
-    "tree_comparison": "fresh locked archive plus every applied locked patch must byte-match the supplied out-of-tree build source"
+    "tree_comparison": "fresh locked archive plus every applied Rocky patch and the bound Rust target compatibility patch must byte-match the supplied out-of-tree build source"
   },
   "target": {
     "architecture": "x86_64",

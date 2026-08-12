@@ -135,7 +135,8 @@ PARAMETER_PATTERN = re.compile(
     ops:\s*(?P<ops>param_ops_(?:uint|ulong)),\s*
     default:\s*(?P<default>[0-9]+),\s*
     permission:\s*(?P<permission>0o[0-7]+),\s*
-    name_bytes:\s*b"(?P<name_bytes>[a-z][a-z0-9_]*\\0)",\s*
+    loadable_name_bytes:\s*b"(?P<loadable_name_bytes>[a-z][a-z0-9_]*\\0)",\s*
+    builtin_name_bytes:\s*b"(?P<builtin_name_bytes>[a-z][a-z0-9_.]*\\0)",\s*
     \);$
     """,
     re.MULTILINE | re.VERBOSE,
@@ -366,6 +367,18 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
         if fragment not in text:
             raise ValidationError(f"Rust parameter ABI lacks required fragment: {fragment}")
 
+    parameter_name_selection = """name: {
+                #[cfg(MODULE)]
+                const PARAMETER_NAME: &[u8] = $loadable_name_bytes;
+                #[cfg(not(MODULE))]
+                const PARAMETER_NAME: &[u8] = $builtin_name_bytes;
+                PARAMETER_NAME.as_ptr() as *const core::ffi::c_char
+            },"""
+    if text.count(parameter_name_selection) != 1:
+        raise ValidationError(
+            "Rust parameter ABI must select Linux loadable/built-in descriptor names by MODULE"
+        )
+
     matches = list(PARAMETER_PATTERN.finditer(text))
     invocation_count = len(re.findall(r"^numeric_parameter!\(", text, re.MULTILINE))
     if len(matches) != 6 or invocation_count != len(matches):
@@ -388,7 +401,8 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
             "ops": item["ops"],
             "default": item["default"],
             "permission": item["permission"],
-            "name_bytes": item["name_bytes"],
+            "loadable_name_bytes": item["loadable_name_bytes"],
+            "builtin_name_bytes": item["builtin_name_bytes"],
         }
         wanted = {
             "storage": expected_storage,
@@ -397,7 +411,8 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
             "ops": expected["ops"],
             "default": str(expected["default"]),
             "permission": "0o" + expected["permission"].lstrip("0"),
-            "name_bytes": name + "\\0",
+            "loadable_name_bytes": name + "\\0",
+            "builtin_name_bytes": contract["module"]["name"] + "." + name + "\\0",
         }
         if actual != wanted:
             raise ValidationError(f"Rust descriptor for {name} differs: expected {wanted}, got {actual}")
@@ -448,6 +463,16 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
 
 def _validate_provider_source(text: str, contract: dict[str, Any]) -> None:
     symbol = contract["dependency_contract"]["provider_symbol"]
+    export_record_layout = """pub struct IhkExportSymbolRecord {
+    license: [u8; 4],
+    namespace: [u8; 16],
+    padding: [u8; 4],
+    symbol: *const u8,
+}"""
+    if text.count(export_record_layout) != 1:
+        raise ValidationError(
+            "native IHK provider anchor lacks the exact x86_64 .export_symbol record layout"
+        )
     required = (
         '#[repr(C, align(8))]',
         "pub struct IhkExportSymbolRecord",

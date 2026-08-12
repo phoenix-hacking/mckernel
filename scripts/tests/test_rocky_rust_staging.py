@@ -143,6 +143,44 @@ class RockyRustStagingTests(unittest.TestCase):
             staging.stage(plan, kernel)
         self.assertFalse(os.path.exists(os.path.join(kernel, "drivers", "misc", "mckernel")))
 
+    def test_credit_forbidden_compiler_evidence_stage_is_available(self):
+        plan = self.plan()
+        kernel = os.path.join(self.temporary, "evidence-kernel")
+        os.makedirs(os.path.join(kernel, "drivers", "misc"))
+        target = staging.stage_for_evidence(plan, kernel)
+        self.assertEqual(
+            os.path.join(kernel, "drivers", "misc", "mckernel"), target
+        )
+        self.assertEqual(target, staging.verify_evidence_stage(plan, kernel))
+        with open(os.path.join(target, "stage-lock.json"), "r") as stream:
+            lock = json.load(stream)
+        self.assertFalse(lock["credit_eligible"])
+        self.assertEqual(staging.EVIDENCE_STAGE_PURPOSE, lock["purpose"])
+        self.assertEqual(
+            staging.READINESS_BLOCKERS, lock["production_readiness_blockers"]
+        )
+
+    def test_evidence_stage_rejects_mutated_readiness_claims(self):
+        plan = self.plan()
+        kernel = os.path.join(self.temporary, "evidence-kernel")
+        os.makedirs(os.path.join(kernel, "drivers", "misc"))
+        for mutation in (
+            lambda value: value.update({"credit_eligible": True}),
+            lambda value: value.update({"blockers": []}),
+        ):
+            broken = copy.deepcopy(plan)
+            mutation(broken)
+            with self.assertRaises(staging.ValidationError):
+                staging.stage_for_evidence(broken, kernel)
+
+    def test_evidence_stage_is_atomic_and_refuses_replacement(self):
+        plan = self.plan()
+        kernel = os.path.join(self.temporary, "evidence-kernel")
+        os.makedirs(os.path.join(kernel, "drivers", "misc"))
+        staging.stage_for_evidence(plan, kernel)
+        with self.assertRaises(staging.ValidationError):
+            staging.stage_for_evidence(plan, kernel)
+
     def test_stage_lock_binds_crate_roots_and_target_identity(self):
         plan = self.plan()
         lock = staging._stage_lock(plan)

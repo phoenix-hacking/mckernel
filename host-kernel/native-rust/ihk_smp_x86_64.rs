@@ -4,8 +4,10 @@
 //! Linux 6.12 does not yet expose module parameters through its Rust
 //! `module!` macro.  The six frozen legacy parameters therefore use the same
 //! `__param` ABI as `module_param()`, backed by the kernel's exported numeric
-//! parameter operations.  No project-owned C object participates in this
-//! crate.
+//! parameter operations.  Linux's `MODULE_PARAM_PREFIX` is empty for a
+//! loadable module and `KBUILD_MODNAME.` for a built-in, so both descriptor
+//! names are emitted explicitly.  No project-owned C object participates in
+//! this crate.
 
 use kernel::prelude::*;
 
@@ -13,6 +15,8 @@ const IHK_SMP_PARAMETER_COUNT: usize = 6;
 const IHK_SMP_DEPENDENCY: &str = "ihk";
 const IHK_SMP_IMPORT_NAMESPACE: &str = "MCKERNEL_IHK_V1";
 
+// SAFETY: The provider owns this immutable namespaced byte for its full module
+// lifetime. Access is restricted to the dependency-establishing init read.
 extern "Rust" {
     #[link_name = "ihk_provider_lifecycle_v1"]
     static IHK_PROVIDER_LIFECYCLE_V1: u8;
@@ -57,16 +61,25 @@ macro_rules! numeric_parameter {
         ops: $ops:ident,
         default: $default:literal,
         permission: $permission:literal,
-        name_bytes: $name_bytes:literal,
+        loadable_name_bytes: $loadable_name_bytes:literal,
+        builtin_name_bytes: $builtin_name_bytes:literal,
     ) => {
         #[doc(hidden)]
+        // SAFETY: Linux's parameter subsystem is the only writer after module
+        // publication and serializes access; Rust never reads this storage.
         static mut $storage: $rust_type = $default;
 
         #[doc(hidden)]
         #[link_section = "__param"]
         #[used]
         static $descriptor: KernelParameter = KernelParameter {
-            name: $name_bytes.as_ptr() as *const core::ffi::c_char,
+            name: {
+                #[cfg(MODULE)]
+                const PARAMETER_NAME: &[u8] = $loadable_name_bytes;
+                #[cfg(not(MODULE))]
+                const PARAMETER_NAME: &[u8] = $builtin_name_bytes;
+                PARAMETER_NAME.as_ptr() as *const core::ffi::c_char
+            },
             module: THIS_MODULE.as_ptr(),
             // SAFETY: `param_ops_uint` and `param_ops_ulong` are immutable,
             // exported Linux kernel objects with static lifetime.
@@ -93,7 +106,8 @@ numeric_parameter!(
     ops: param_ops_ulong,
     default: 0,
     permission: 0o644,
-    name_bytes: b"ihk_phys_start\0",
+    loadable_name_bytes: b"ihk_phys_start\0",
+    builtin_name_bytes: b"ihk_smp_x86_64.ihk_phys_start\0",
 );
 
 numeric_parameter!(
@@ -104,7 +118,8 @@ numeric_parameter!(
     ops: param_ops_ulong,
     default: 0,
     permission: 0o644,
-    name_bytes: b"ihk_mem\0",
+    loadable_name_bytes: b"ihk_mem\0",
+    builtin_name_bytes: b"ihk_smp_x86_64.ihk_mem\0",
 );
 
 numeric_parameter!(
@@ -115,7 +130,8 @@ numeric_parameter!(
     ops: param_ops_uint,
     default: 0,
     permission: 0o644,
-    name_bytes: b"ihk_cores\0",
+    loadable_name_bytes: b"ihk_cores\0",
+    builtin_name_bytes: b"ihk_smp_x86_64.ihk_cores\0",
 );
 
 numeric_parameter!(
@@ -126,7 +142,8 @@ numeric_parameter!(
     ops: param_ops_uint,
     default: 0,
     permission: 0o644,
-    name_bytes: b"ihk_start_irq\0",
+    loadable_name_bytes: b"ihk_start_irq\0",
+    builtin_name_bytes: b"ihk_smp_x86_64.ihk_start_irq\0",
 );
 
 numeric_parameter!(
@@ -137,7 +154,8 @@ numeric_parameter!(
     ops: param_ops_uint,
     default: 0,
     permission: 0o644,
-    name_bytes: b"ihk_ikc_irq_core\0",
+    loadable_name_bytes: b"ihk_ikc_irq_core\0",
+    builtin_name_bytes: b"ihk_smp_x86_64.ihk_ikc_irq_core\0",
 );
 
 numeric_parameter!(
@@ -148,7 +166,8 @@ numeric_parameter!(
     ops: param_ops_ulong,
     default: 0,
     permission: 0o644,
-    name_bytes: b"ihk_trampoline\0",
+    loadable_name_bytes: b"ihk_trampoline\0",
+    builtin_name_bytes: b"ihk_smp_x86_64.ihk_trampoline\0",
 );
 
 // Linux 6.12's Rust `module!` macro cannot emit namespace-import or parameter

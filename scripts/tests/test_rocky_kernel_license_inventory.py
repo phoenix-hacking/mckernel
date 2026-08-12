@@ -62,6 +62,30 @@ class LicenseInventoryTests(unittest.TestCase):
         self.assertEqual(1, lock["schema_version"])
         self.assertEqual(1, series["schema_version"])
 
+    def test_local_compiler_patch_and_config_are_inventoried(self):
+        items = inventory.repository_patch_items(
+            REPO_ROOT, "0" * 40, {"GPL-2.0-only": "linux/COPYING"}
+        )
+        paths = {item["path"] for item in items}
+        for relative in (
+            "host-kernel/kbuild/patches/0002-rust-bindings-expose-module-parameters.patch",
+            "host-kernel/rocky/configs/native-rust-evidence.config",
+        ):
+            self.assertIn("repository/" + relative, paths)
+
+    def test_repository_inventory_binds_rust_compatibility_patch(self):
+        items = inventory.repository_patch_items(REPO_ROOT, "a" * 40, {})
+        by_path = {item["path"]: item for item in items}
+        for relative in (
+            "host-kernel/rocky/patches/0001-x86-rust-set-rustc-abi-x86-softfloat.patch",
+            "host-kernel/rocky/patches/0002-rust-support-rust-1.91-target-spec.patch",
+        ):
+            item = by_path["repository/" + relative]
+            patch = REPO_ROOT / relative
+            self.assertEqual(patch.stat().st_size, item["size"])
+            self.assertEqual(hashlib.sha256(patch.read_bytes()).hexdigest(), item["sha256"])
+            self.assertEqual("repository-commit:" + "a" * 40, item["origin"])
+
     def test_linux_archive_maps_spdx_and_preserves_missing_cases(self):
         with tempfile.TemporaryDirectory() as temporary:
             archive = Path(temporary) / "linux.tar.xz"

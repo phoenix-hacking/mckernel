@@ -1,0 +1,619 @@
+{
+  "coverage": {
+    "by_crate": {
+      "ihk": 3,
+      "ihk_smp_x86_64": 5,
+      "mcctrl": 2
+    },
+    "by_kind": {
+      "ffi_export": 2,
+      "foreign_block": 2,
+      "mutable_static": 1,
+      "unsafe_block": 3,
+      "unsafe_impl": 2
+    },
+    "site_count": 10,
+    "site_ids_sha256": "fda04613bd6eea37851fe6eac345d40e01725e3a17904addd801d730634b3a80",
+    "source_input_count": 3,
+    "source_inventory_status": "complete_for_locked_source_bytes"
+  },
+  "crate_roots": [
+    {
+      "crate": "ihk",
+      "destination": "ihk.rs",
+      "path": "host-kernel/native-rust/ihk.rs",
+      "sha256": "76a3e6c0d5ea4f1d57686de60c63dd26c5adf9ade7b6f562897c20749fd00196",
+      "transitive_inputs": [
+        "host-kernel/native-rust/ihk.rs"
+      ],
+      "transitive_inputs_sha256": "338475d3a3345658e2309d75ab1d4df2547e6d070e70705f57f27eda12612814"
+    },
+    {
+      "crate": "ihk_smp_x86_64",
+      "destination": "ihk_smp_x86_64.rs",
+      "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+      "sha256": "44aae46f0177abf98133ed86041a3682c7f894ec85c5cdd122ec816802e1106d",
+      "transitive_inputs": [
+        "host-kernel/native-rust/ihk_smp_x86_64.rs"
+      ],
+      "transitive_inputs_sha256": "e229bef975f7464bf62eacc21874f1595b5f1f287dbc557cce232a4dda1b5729"
+    },
+    {
+      "crate": "mcctrl",
+      "destination": "mcctrl.rs",
+      "path": "host-kernel/native-rust/mcctrl.rs",
+      "sha256": "3b996deb4a3eb26f93e45a243d2f7dc075344cee95ff583eeaf20d602ab63e31",
+      "transitive_inputs": [
+        "host-kernel/native-rust/mcctrl.rs"
+      ],
+      "transitive_inputs_sha256": "6e91ad99a461c48fde474546b05c4f48122879c151295cca5c78d3b3b52fa1e1"
+    }
+  ],
+  "gate": {
+    "credit_eligible": false,
+    "gate_id": "RS-011",
+    "independent_review_required": true,
+    "self_attestation_forbidden": true
+  },
+  "ledger_id": "mckernel-native-rust-unsafe-ffi-ledger-v1",
+  "ledger_sha256": "02625e4a76ad023f62d65876f4de2d91c910f3b9ffc8b167b9e110c17d372eb7",
+  "readiness": {
+    "blockers": [
+      "exact Rocky 10.2 rustc commands, dep-info closure, objects, source, config, and toolchain evidence are absent",
+      "compiler-expanded unsafe-operation/span capture has not been cross-validated",
+      "independent owner and unsafe-code review has not been registered as immutable evidence",
+      "source inventory cannot self-attest or award RS-011 gate credit"
+    ],
+    "compiler_capture_status": "missing",
+    "credit_eligible": false,
+    "gate_status": "NOT_READY",
+    "independent_review_status": "pending",
+    "technical_complete": false
+  },
+  "repository_locks": {
+    "config_policy": {
+      "path": "host-kernel/rocky/config-policy.json",
+      "sha256": "94c4715f9c823b3aafcb8399ed7b2cbe25e77308b1c165afc75db70f5afbfd7f"
+    },
+    "source_lock": {
+      "path": "host-kernel/rocky/source-lock.json",
+      "sha256": "6b8571b229f31bf68b58749217391d917a2ba2028ac876e8475be1ec5bfef222"
+    },
+    "stage_manifest": {
+      "path": "host-kernel/kbuild/stage-manifest.json",
+      "sha256": "0d0c0eb2e2c8901288c1bdcec518832b0e2a2d7b6b5963f8ccba6f830c9c8871"
+    },
+    "toolchain_lock": {
+      "path": "host-kernel/rocky/toolchain-lock.json",
+      "sha256": "fd3d7a13e1b8b5d103f7e59d22f17c9e4b99cc937637decaa66749acfae6c802"
+    }
+  },
+  "schema_version": 1,
+  "scope": {
+    "compiler_cross_validation": "exact Kbuild command plus rustc dep-info/object/tool/platform digests required",
+    "crate_count": 3,
+    "native_source_root": "host-kernel/native-rust",
+    "site_kinds": [
+      "unsafe_block",
+      "unsafe_impl",
+      "unsafe_function",
+      "unsafe_trait",
+      "foreign_block",
+      "extern_function",
+      "ffi_export",
+      "mutable_static",
+      "inline_asm",
+      "global_asm"
+    ],
+    "source_discovery": "literal transitive mod/include closure; unresolved or escaping inputs fail closed"
+  },
+  "sites": [
+    {
+      "byte_end": 1069,
+      "byte_start": 1024,
+      "caller_obligations": [
+        "Constructors must keep the record fields and target pointer immutable after publication.",
+        "The target pointer must reference module-static storage for every possible reader."
+      ],
+      "column_end": 45,
+      "column_start": 1,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "The record is published as module static data and may be observed from any kernel context.",
+        "Provider unload must wait until all dependent module references have drained."
+      ],
+      "crate_roots": [
+        "ihk"
+      ],
+      "expression_sha256": "778d5e4bea5080d53eaf135993572f31d8510d804f2a9034179df6a8f0b5aa32",
+      "file_sha256": "76a3e6c0d5ea4f1d57686de60c63dd26c5adf9ade7b6f562897c20749fd00196",
+      "id": "RS011-IHK-0001",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_impl",
+      "line_end": 29,
+      "line_start": 29,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "native IHK module owner",
+        "component": "native-rust/ihk-provider-export"
+      },
+      "path": "host-kernel/native-rust/ihk.rs",
+      "safety_comment": {
+        "line_end": 28,
+        "line_start": 28,
+        "source_sha256": "20da20cad5e54e309d04f6e577c361c603cbb066b582b6e647eb9ab960bd4098",
+        "text": "SAFETY: The record and its target are immutable for the module lifetime."
+      },
+      "source_sha256": "4050dbb78cd5aced2f7deee385329cd1087395c149f62bad6ff12a129fbcd5a5"
+    },
+    {
+      "byte_end": 1484,
+      "byte_start": 1394,
+      "caller_obligations": [
+        "Consumers must import MCKERNEL_IHK_V1 and hold the provider module dependency.",
+        "Consumers may only read the anchor byte and must not assign behavioral meaning to its value."
+      ],
+      "column_end": 45,
+      "column_start": 1,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "Modpost and the module loader resolve the relocation before consumer initialization.",
+        "The provider byte remains immutable until dependents have drained during unload."
+      ],
+      "crate_roots": [
+        "ihk"
+      ],
+      "expression_sha256": "a5e5090b3a7542300bfaeac36e845705f4be4a6a57a371a86770f7a6b3a74ee4",
+      "file_sha256": "76a3e6c0d5ea4f1d57686de60c63dd26c5adf9ade7b6f562897c20749fd00196",
+      "id": "RS011-IHK-0002",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "ffi_export",
+      "line_end": 38,
+      "line_start": 37,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "native IHK ABI owner",
+        "component": "native-rust/ihk-provider-export"
+      },
+      "path": "host-kernel/native-rust/ihk.rs",
+      "safety_comment": {
+        "line_end": 36,
+        "line_start": 35,
+        "source_sha256": "3762992c52c6ffb0f1fc5074186ca8c3ea7c245538b816fcc7b20b8db94d11de",
+        "text": "SAFETY: This immutable byte is the provider's read-only ABI anchor. Consumers must import it through MCKERNEL_IHK_V1 and may not treat its value as state."
+      },
+      "source_sha256": "695ff689567b02209f0f71eab292e5412d0d2b3714d5b36a661df9715d250663"
+    },
+    {
+      "byte_end": 2001,
+      "byte_start": 1659,
+      "caller_obligations": [
+        "The record layout, namespace bytes, and target relocation must remain compatible with the selected Linux export format.",
+        "Only Linux modpost/module-loader machinery may interpret the .export_symbol record."
+      ],
+      "column_end": 2,
+      "column_start": 1,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "The record is consumed during module post-processing and load-time relocation.",
+        "The record and target remain immutable for the provider module lifetime."
+      ],
+      "crate_roots": [
+        "ihk"
+      ],
+      "expression_sha256": "10347961efcc905837db5c6899b143ce802cff6b42adf0de579b333bc86c4a45",
+      "file_sha256": "76a3e6c0d5ea4f1d57686de60c63dd26c5adf9ade7b6f562897c20749fd00196",
+      "id": "RS011-IHK-0003",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "ffi_export",
+      "line_end": 51,
+      "line_start": 43,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "native IHK ABI owner",
+        "component": "native-rust/ihk-provider-export"
+      },
+      "path": "host-kernel/native-rust/ihk.rs",
+      "safety_comment": {
+        "line_end": 42,
+        "line_start": 41,
+        "source_sha256": "57b9cad46030f1540a9952cc472d494d55417d72dcdcebc0958c2b44b33aa5d0",
+        "text": "SAFETY: Linux modpost consumes this immutable relocation record to publish the namespaced anchor; neither the record nor its target is mutated in Rust."
+      },
+      "source_sha256": "6ef2e0f286388d75871d45383a750b7a12949c8aba23e6748599a234585282ca"
+    },
+    {
+      "byte_end": 1015,
+      "byte_start": 909,
+      "caller_obligations": [
+        "Every access must hold the ihk provider dependency and use the MCKERNEL_IHK_V1 namespace.",
+        "Callers may only read the imported byte and must not retain a reference past provider lifetime."
+      ],
+      "column_end": 1,
+      "column_start": 1,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "The only current access is the dependency-establishing read during module init in process context.",
+        "The provider must be loaded and its relocation resolved before consumer initialization."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "e69ff87cfc5c739fdd9dda4e26d250abac32cf6f07d0d227ece9e6017d36fee1",
+      "file_sha256": "44aae46f0177abf98133ed86041a3682c7f894ec85c5cdd122ec816802e1106d",
+      "id": "RS011-SMP-0001",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "foreign_block",
+      "line_end": 23,
+      "line_start": 20,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "native IHK SMP module owner",
+        "component": "native-rust/ihk-smp-provider-import"
+      },
+      "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+      "safety_comment": {
+        "line_end": 19,
+        "line_start": 18,
+        "source_sha256": "80ff0e4be11a5276054140d4de47bbb2b806a50200166568083e935f350ab44c",
+        "text": "SAFETY: The provider owns this immutable namespaced byte for its full module lifetime. Access is restricted to the dependency-establishing init read."
+      },
+      "source_sha256": "c206b8c2757d2d2890396d2daccd4193bf3a06e872c1b9f5bf6af5181d278d78"
+    },
+    {
+      "byte_end": 1857,
+      "byte_start": 1818,
+      "caller_obligations": [
+        "Every KernelParameter instance must remain immutable after relocation.",
+        "Pointers must name module-static parameter storage and selected-kernel parameter operations with matching types."
+      ],
+      "column_end": 39,
+      "column_start": 1,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "Linux parameter callbacks may access descriptors after module publication.",
+        "The Linux parameter subsystem serializes writes; unload must drain parameter access before storage disappears."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "bea3c7c4216f0a81b933691be1cbe242d286933ebc8d1f4420d9e8bd640f43ab",
+      "file_sha256": "44aae46f0177abf98133ed86041a3682c7f894ec85c5cdd122ec816802e1106d",
+      "id": "RS011-SMP-0002",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_impl",
+      "line_end": 48,
+      "line_start": 48,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "native IHK SMP parameter owner",
+        "component": "native-rust/ihk-smp-parameters"
+      },
+      "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+      "safety_comment": {
+        "line_end": 47,
+        "line_start": 45,
+        "source_sha256": "68f329188c795513648285f37e10728cb4b6d17f27e75e51c69d9e98fdf5be8f",
+        "text": "SAFETY: Each instance is immutable after relocation.  Linux owns access to the pointed-to parameter storage and serializes writes with its parameter subsystem; Rust code never dereferences these pointers."
+      },
+      "source_sha256": "8b15f4f88f64705a55f48fd4acaaab6113cbf1073f86c8946aac19b4b987fc80"
+    },
+    {
+      "byte_end": 2738,
+      "byte_start": 2695,
+      "caller_obligations": [
+        "Rust code must not directly read or write the mutable storage after publication.",
+        "Each macro expansion must give its descriptor a unique, type-matched pointer to module-static storage."
+      ],
+      "column_end": 51,
+      "column_start": 9,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "The source site expands into six independent Linux module-parameter storage objects.",
+        "Linux parameter subsystem serialization and module lifetime govern all post-publication access."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "2a6c16da34f3036c684810184403f5eb1532eacf7b422679ce811e0ea1eec4ae",
+      "file_sha256": "44aae46f0177abf98133ed86041a3682c7f894ec85c5cdd122ec816802e1106d",
+      "id": "RS011-SMP-0003",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "mutable_static",
+      "line_end": 70,
+      "line_start": 70,
+      "macro_context": "numeric_parameter",
+      "owner": {
+        "accountable_role": "native IHK SMP parameter owner",
+        "component": "native-rust/ihk-smp-parameters"
+      },
+      "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+      "safety_comment": {
+        "line_end": 69,
+        "line_start": 68,
+        "source_sha256": "2c725c36e7e796d5ad9874c306ead7272df73149400633a5614d736ea067fe7d",
+        "text": "SAFETY: Linux's parameter subsystem is the only writer after module publication and serializes access; Rust never reads this storage."
+      },
+      "source_sha256": "ae99e1365c2c804cb41e2cc2d5a255679f2d777e19652ae7375d74f3682d6b73"
+    },
+    {
+      "byte_end": 3441,
+      "byte_start": 3387,
+      "caller_obligations": [
+        "The selected binding must be an immutable exported kernel_param_ops object with static lifetime.",
+        "The uint or ulong operations must match the type of the paired parameter storage."
+      ],
+      "column_end": 71,
+      "column_start": 18,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "The address is formed during static descriptor initialization and is never dereferenced by project Rust.",
+        "Exact generated Rocky bindings and export availability must be compiler-validated."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "0e8976f53e69093a9462e15a088afaedea0de2c7adbff578d78e061ea60d3f9d",
+      "file_sha256": "44aae46f0177abf98133ed86041a3682c7f894ec85c5cdd122ec816802e1106d",
+      "id": "RS011-SMP-0004",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_block",
+      "line_end": 86,
+      "line_start": 86,
+      "macro_context": "numeric_parameter",
+      "owner": {
+        "accountable_role": "native IHK SMP parameter owner",
+        "component": "native-rust/ihk-smp-parameters"
+      },
+      "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+      "safety_comment": {
+        "line_end": 85,
+        "line_start": 84,
+        "source_sha256": "6c352b4723cdb4a74a58ebf5e1d7bf05f6b8bcb0ea0743b1ca11ff2ef814cc6f",
+        "text": "SAFETY: `param_ops_uint` and `param_ops_ulong` are immutable, exported Linux kernel objects with static lifetime."
+      },
+      "source_sha256": "1a8cfa0c103bdc1d2236440c3e684d3e47b584119cf1d762b396771a58d57c94"
+    },
+    {
+      "byte_end": 9736,
+      "byte_start": 9633,
+      "caller_obligations": [
+        "The provider dependency and namespaced relocation must already be valid.",
+        "The operation must remain one volatile byte read and may not create or retain a reference."
+      ],
+      "column_end": 9,
+      "column_start": 17,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "The read executes once during consumer module init in process context.",
+        "Provider initialization precedes the read and dependent teardown precedes provider unload."
+      ],
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "expression_sha256": "1a2595e55bf404343cc03aceeb3e13e851ad459fa498f9efab6a467d8b64c354",
+      "file_sha256": "44aae46f0177abf98133ed86041a3682c7f894ec85c5cdd122ec816802e1106d",
+      "id": "RS011-SMP-0005",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_block",
+      "line_end": 289,
+      "line_start": 287,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "native IHK SMP lifecycle owner",
+        "component": "native-rust/ihk-smp-lifecycle"
+      },
+      "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+      "safety_comment": {
+        "line_end": 286,
+        "line_start": 284,
+        "source_sha256": "f87c1314a28fa1c8c36d4411879cf6e4d13b8b423e959c9e8fa239f15ca7adc0",
+        "text": "SAFETY: The provider exports this immutable byte in the declared namespace.  The volatile read keeps the relocation as an actual module dependency; the value itself has no behavioral meaning."
+      },
+      "source_sha256": "1bddcf599fe238e7338837f6a1a133cd756c8101b97f860ef0cfe3bad8d80f2b"
+    },
+    {
+      "byte_end": 1222,
+      "byte_start": 1116,
+      "caller_obligations": [
+        "Every access must hold the ihk provider dependency and use the MCKERNEL_IHK_V1 namespace.",
+        "Callers may only read the imported byte and must not retain a reference past provider lifetime."
+      ],
+      "column_end": 1,
+      "column_start": 1,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "The only current access is the dependency-establishing read during mcctrl module init in process context.",
+        "The provider must be loaded and its relocation resolved before mcctrl initialization."
+      ],
+      "crate_roots": [
+        "mcctrl"
+      ],
+      "expression_sha256": "e69ff87cfc5c739fdd9dda4e26d250abac32cf6f07d0d227ece9e6017d36fee1",
+      "file_sha256": "3b996deb4a3eb26f93e45a243d2f7dc075344cee95ff583eeaf20d602ab63e31",
+      "id": "RS011-MCC-0001",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "foreign_block",
+      "line_end": 27,
+      "line_start": 24,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "native mcctrl module owner",
+        "component": "native-rust/mcctrl-provider-import"
+      },
+      "path": "host-kernel/native-rust/mcctrl.rs",
+      "safety_comment": {
+        "line_end": 23,
+        "line_start": 21,
+        "source_sha256": "bb5a19a44edc43c15234ee2edd8987e602da0d3949c746baada0117f9b4a20a3",
+        "text": "SAFETY: The provider exports this immutable byte for the entire dependent module lifetime. Modpost resolves the symbol through MCKERNEL_IHK_V1 before initialization, and callers may only read it as a dependency anchor."
+      },
+      "source_sha256": "c206b8c2757d2d2890396d2daccd4193bf3a06e872c1b9f5bf6af5181d278d78"
+    },
+    {
+      "byte_end": 2243,
+      "byte_start": 2140,
+      "caller_obligations": [
+        "The provider dependency and namespaced relocation must already be valid.",
+        "The operation must remain one volatile byte read and may not create or retain a reference."
+      ],
+      "column_end": 9,
+      "column_start": 17,
+      "compiler_capture": {
+        "evidence_sha256": null,
+        "required": true,
+        "status": "not_captured"
+      },
+      "context_constraints": [
+        "The read executes once during mcctrl module init in process context.",
+        "Provider initialization precedes the read and dependent teardown precedes provider unload."
+      ],
+      "crate_roots": [
+        "mcctrl"
+      ],
+      "expression_sha256": "1a2595e55bf404343cc03aceeb3e13e851ad459fa498f9efab6a467d8b64c354",
+      "file_sha256": "3b996deb4a3eb26f93e45a243d2f7dc075344cee95ff583eeaf20d602ab63e31",
+      "id": "RS011-MCC-0002",
+      "independent_review": {
+        "evidence_sha256": null,
+        "required": true,
+        "reviewer": null,
+        "status": "pending"
+      },
+      "kind": "unsafe_block",
+      "line_end": 59,
+      "line_start": 57,
+      "macro_context": null,
+      "owner": {
+        "accountable_role": "native mcctrl lifecycle owner",
+        "component": "native-rust/mcctrl-lifecycle"
+      },
+      "path": "host-kernel/native-rust/mcctrl.rs",
+      "safety_comment": {
+        "line_end": 56,
+        "line_start": 54,
+        "source_sha256": "04fb81f89ff073afd45d3addbe3595cd657d62dd22ed29adbde766a85eb7f462",
+        "text": "SAFETY: The provider exports this immutable byte in the declared namespace. The volatile read preserves the relocation that makes modpost derive the module dependency and loader unload ordering."
+      },
+      "source_sha256": "1bddcf599fe238e7338837f6a1a133cd756c8101b97f860ef0cfe3bad8d80f2b"
+    }
+  ],
+  "source_closure_sha256": "0b1a31883609307cf24bd584ee81e57d94d9f7ae400a3b12a40f16cd62733bb8",
+  "source_inputs": [
+    {
+      "bytes": 3330,
+      "crate_roots": [
+        "ihk"
+      ],
+      "path": "host-kernel/native-rust/ihk.rs",
+      "sha256": "76a3e6c0d5ea4f1d57686de60c63dd26c5adf9ade7b6f562897c20749fd00196"
+    },
+    {
+      "bytes": 10260,
+      "crate_roots": [
+        "ihk_smp_x86_64"
+      ],
+      "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+      "sha256": "44aae46f0177abf98133ed86041a3682c7f894ec85c5cdd122ec816802e1106d"
+    },
+    {
+      "bytes": 2997,
+      "crate_roots": [
+        "mcctrl"
+      ],
+      "path": "host-kernel/native-rust/mcctrl.rs",
+      "sha256": "3b996deb4a3eb26f93e45a243d2f7dc075344cee95ff583eeaf20d602ab63e31"
+    }
+  ],
+  "target": {
+    "architecture": "x86_64",
+    "config_policy_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-config-policy-v1",
+    "distribution": "Rocky Linux",
+    "kernel_nvr": "kernel-6.12.0-211.44.1.el10_2",
+    "release": "10.2",
+    "source_lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-source-v1",
+    "source_rpm_sha256": "2bfeda65bd9bdd4b86650074c81e061c37822b80317ac0d4f5aacc89c85589cb",
+    "toolchain_lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-toolchain-v1"
+  }
+}

@@ -154,6 +154,7 @@ def _validate_contract(contract: dict[str, Any]) -> None:
             "module",
             "parameter_count",
             "production_source",
+            "provider_source",
             "reference_inventory",
             "schema_version",
             "selected_kernel",
@@ -165,7 +166,7 @@ def _validate_contract(contract: dict[str, Any]) -> None:
         raise ValidationError("unsupported mcctrl lifecycle contract identity")
     if contract["foundation_version"] != 1:
         raise ValidationError("mcctrl foundation version must be 1")
-    if contract["foundation_status"] != "source-contract-only":
+    if contract["foundation_status"] != "source-bound-dependency":
         raise ValidationError("mcctrl foundation status overclaims implementation")
     if contract["gate_credit_eligible"] is not False:
         raise ValidationError("MCC-001 credit is forbidden by this source-only contract")
@@ -173,6 +174,8 @@ def _validate_contract(contract: dict[str, Any]) -> None:
         raise ValidationError("frozen mcctrl dependency set must be ['ihk']")
     if contract["parameter_count"] != 0:
         raise ValidationError("frozen mcctrl module-parameter count must be zero")
+    if contract["provider_source"] != "host-kernel/native-rust/ihk.rs":
+        raise ValidationError("contract points at a different native IHK provider")
 
     _require_keys(
         contract["module"],
@@ -199,10 +202,31 @@ def _validate_contract(contract: dict[str, Any]) -> None:
         raise ValidationError("frozen mcctrl IHK import count must be 32")
     if dependency["required_import_namespace"] != "MCKERNEL_IHK_V1":
         raise ValidationError("mcctrl must declare the production IHK namespace")
-    _require_keys(dependency["native_symbol_import"], {"reason", "status"}, "native symbol import")
-    if dependency["native_symbol_import"]["status"] != "blocked":
-        raise ValidationError("native IHK symbol import must remain blocked until implemented")
-    _require_nonempty_string(dependency["native_symbol_import"]["reason"], "native import reason")
+    _require_keys(
+        dependency["native_symbol_import"],
+        {
+            "built_symbol_reference_validated",
+            "provider_symbol",
+            "runtime_symbol_reference_proven",
+            "scope",
+            "source_reference_required",
+            "status",
+        },
+        "native symbol import",
+    )
+    dependency_scope = (
+        "source-bound namespaced lifecycle anchor; built relocation and runtime "
+        "unload ordering require exact Rocky 10.2 evidence"
+    )
+    if dependency["native_symbol_import"] != {
+        "built_symbol_reference_validated": False,
+        "provider_symbol": "ihk_provider_lifecycle_v1",
+        "runtime_symbol_reference_proven": False,
+        "scope": dependency_scope,
+        "source_reference_required": True,
+        "status": "source-bound",
+    }:
+        raise ValidationError("native IHK symbol import contract differs or overclaims proof")
 
     _require_keys(
         contract["binfmt"],
@@ -259,10 +283,12 @@ def _validate_contract(contract: dict[str, Any]) -> None:
     if selected["archive_sha256"] != expected_archive_sha256:
         raise ValidationError("selected kernel archive digest differs")
     if selected["reviewed_rust_paths"] != [
+        "include/linux/export.h",
         "rust/bindings/bindings_helper.h",
         "rust/exports.c",
         "rust/kernel/lib.rs",
         "rust/macros/module.rs",
+        "scripts/mod/modpost.c",
     ]:
         raise ValidationError("selected Rust API review scope differs")
 
@@ -287,8 +313,8 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
     )
     if declared_dependencies != len(contract["dependencies"]):
         raise ValidationError("Rust declared dependency count differs from contract")
-    if _rust_string_constant(text, "MCCTRL_IHK_IMPORT_STATUS") != "namespace-only":
-        raise ValidationError("Rust source overclaims the native IHK symbol import")
+    if _rust_string_constant(text, "MCCTRL_IHK_IMPORT_STATUS") != "source-bound-anchor":
+        raise ValidationError("Rust source does not identify its source-bound IHK anchor")
     if _rust_string_constant(text, "MCCTRL_BINFMT_STATUS") != "blocked-no-safe-rust-api":
         raise ValidationError("Rust source overclaims binfmt ownership")
 
@@ -298,6 +324,25 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
             raise ValidationError(f"Rust source lacks IHK namespace modinfo record: {record}")
     if "#[cfg(MODULE)]" not in text or "#[cfg(not(MODULE))]" not in text:
         raise ValidationError("IHK import metadata must cover loadable and built-in forms")
+
+    provider_symbol = contract["ihk_dependency"]["native_symbol_import"][
+        "provider_symbol"
+    ]
+    provider_import = (
+        'extern "Rust" {\n'
+        f'    #[link_name = "{provider_symbol}"]\n'
+        "    static IHK_PROVIDER_LIFECYCLE_V1: u8;\n"
+        "}"
+    )
+    if provider_import not in text or len(re.findall(r'\bextern\s+"Rust"', text)) != 1:
+        raise ValidationError("Rust source lacks the exact audited provider-symbol import")
+    if len(re.findall(r'\bextern\s+"', text)) != 1:
+        raise ValidationError("Rust source contains an additional unreviewed extern boundary")
+    provider_reference = (
+        "core::ptr::read_volatile(core::ptr::addr_of!(IHK_PROVIDER_LIFECYCLE_V1))"
+    )
+    if provider_reference not in text or text.count(provider_reference) != 1:
+        raise ValidationError("Rust source lacks the exact provider-anchor relocation")
 
     if (
         "impl kernel::Module for McctrlModule" not in text
@@ -321,7 +366,6 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
         r"\b(?:global_asm|asm)!\s*\(",
         r"\bmodule_param(?:_named)?\s*!?\s*\(",
         r"^\s*params\s*:",
-        r'b"(?:mcctrl\.)?depends=',
         r"\b(?:insert_binfmt|register_binfmt|__register_binfmt|unregister_binfmt)\s*\(",
         r"binfmt=registered",
     )
@@ -330,6 +374,10 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
             raise ValidationError(
                 f"Rust foundation contains forbidden boundary or claim: {pattern}"
             )
+    if re.search(r'b"(?:mcctrl\.)?depends=', text):
+        raise ValidationError(
+            "Rust source must let modpost derive depends=ihk from the provider symbol"
+        )
     for false_log in contract["legacy_lifecycle"].values():
         if false_log in text:
             raise ValidationError("Rust foundation falsely emits a legacy lifecycle success log")
@@ -339,6 +387,36 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
         imported = match.group(1).strip()
         if not imported.startswith(("kernel::", "core::")):
             raise ValidationError(f"unreviewed Rust dependency in mcctrl source: {imported}")
+
+
+def _validate_provider_source(text: str, contract: dict[str, Any]) -> None:
+    symbol = contract["ihk_dependency"]["native_symbol_import"]["provider_symbol"]
+    required = (
+        '#[repr(C, align(8))]',
+        "pub struct IhkExportSymbolRecord",
+        "unsafe impl Sync for IhkExportSymbolRecord {}",
+        "const _: [(); 32] = [(); core::mem::size_of::<IhkExportSymbolRecord>()];",
+        "const _: [(); 8] = [(); core::mem::align_of::<IhkExportSymbolRecord>()];",
+        f'#[export_name = "{symbol}"]',
+        f'#[export_name = "__export_symbol_{symbol}"]',
+        '#[link_section = ".export_symbol"]',
+        'license: *b"GPL\\0"',
+        'namespace: *b"MCKERNEL_IHK_V1\\0"',
+        "symbol: core::ptr::addr_of!(IHK_PROVIDER_LIFECYCLE_V1)",
+    )
+    for fragment in required:
+        if fragment not in text:
+            raise ValidationError(
+                f"native IHK provider anchor lacks required fragment: {fragment}"
+            )
+    if text.count(f'#[export_name = "{symbol}"]') != 1:
+        raise ValidationError("native IHK provider anchor symbol is not unique")
+    if text.count(f'#[export_name = "__export_symbol_{symbol}"]') != 1:
+        raise ValidationError("native IHK provider export record is not unique")
+    lowered = text.lower()
+    for forbidden in ('extern "c"', "include_bytes!", "include!", "global_asm!", "asm!("):
+        if forbidden in lowered:
+            raise ValidationError(f"native IHK provider contains forbidden boundary: {forbidden}")
 
 
 def _validate_kconfig(text: str, contract: dict[str, Any]) -> None:
@@ -377,7 +455,10 @@ def _validate_kbuild(text: str, contract: dict[str, Any]) -> None:
 
 
 def _validate_stage_manifest(
-    manifest: dict[str, Any], source_path: Path, contract: dict[str, Any]
+    manifest: dict[str, Any],
+    source_path: Path,
+    provider_path: Path,
+    contract: dict[str, Any],
 ) -> None:
     build = manifest.get("build_contract", {})
     if build.get("project_c_link_objects") != 0:
@@ -403,6 +484,16 @@ def _validate_stage_manifest(
         raise ValidationError("stage manifest points mcctrl at a different source")
     if source.get("sha256") != _sha256(source_path):
         raise ValidationError("stage manifest mcctrl source digest is stale")
+    providers = [
+        item for item in manifest.get("modules", []) if item.get("crate") == "ihk"
+    ]
+    if len(providers) != 1:
+        raise ValidationError("stage manifest must contain exactly one native IHK provider")
+    provider_source = providers[0].get("source", {})
+    if provider_source.get("repository_path") != contract["provider_source"]:
+        raise ValidationError("stage manifest points at a different native IHK provider")
+    if provider_source.get("sha256") != _sha256(provider_path):
+        raise ValidationError("stage manifest native IHK provider source digest is stale")
 
 
 def _validate_reference_inventory(inventory: dict[str, Any], contract: dict[str, Any]) -> None:
@@ -470,6 +561,7 @@ def validate_repository(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) 
     contract = _load_json(contract_path)
     _validate_contract(contract)
     source_path = _repo_file(repo, contract["production_source"], "production Rust source")
+    provider_path = _repo_file(repo, contract["provider_source"], "native IHK provider")
     kconfig_path = _repo_file(repo, contract["kconfig"]["path"], "production Kconfig")
     kbuild_path = _repo_file(repo, contract["kbuild"]["path"], "production Kbuild")
     manifest_path = _repo_file(repo, contract["stage_manifest"], "stage manifest")
@@ -477,22 +569,33 @@ def validate_repository(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) 
     source_lock_path = _repo_file(repo, contract["selected_kernel"]["source_lock"], "source lock")
 
     _validate_rust_source(_read_text(source_path, "production Rust source"), contract)
+    _validate_provider_source(_read_text(provider_path, "native IHK provider"), contract)
     _validate_kconfig(_read_text(kconfig_path, "production Kconfig"), contract)
     _validate_kbuild(_read_text(kbuild_path, "production Kbuild"), contract)
-    _validate_stage_manifest(_load_json(manifest_path), source_path, contract)
+    _validate_stage_manifest(
+        _load_json(manifest_path), source_path, provider_path, contract
+    )
     _validate_reference_inventory(_load_json(inventory_path), contract)
     _validate_selected_kernel(_load_json(source_lock_path), contract)
     return {
         "binfmt_status": contract["binfmt"]["native_registration_status"],
         "dependencies": len(contract["dependencies"]),
         "foundation_status": contract["foundation_status"],
+        "artifact_validated": False,
+        "built_symbol_reference_validated": False,
         "gate_credit_eligible": False,
         "gate_id": contract["gate_id"],
         "ihk_symbol_import_status": contract["ihk_dependency"]["native_symbol_import"]["status"],
         "module": contract["module"]["name"],
         "parameters": contract["parameter_count"],
+        "provider_symbol": contract["ihk_dependency"]["native_symbol_import"][
+            "provider_symbol"
+        ],
         "required_import_namespace": contract["ihk_dependency"]["required_import_namespace"],
+        "rocky_build_load_validated": False,
+        "runtime_symbol_reference_proven": False,
         "source_sha256": _sha256(source_path),
+        "source_symbol_reference_present": True,
     }
 
 
@@ -513,6 +616,24 @@ def _modinfo(module_path: Path, field: str | None = None) -> str:
             f"{result.stderr.strip() or result.stdout.strip()}"
         )
     return result.stdout.strip()
+
+
+def _undefined_symbols(module_path: Path) -> set[str]:
+    executable = shutil.which("nm")
+    if executable is None:
+        raise ValidationError("nm is required for built-module dependency validation")
+    result = subprocess.run(
+        [executable, "-u", str(module_path)],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        raise ValidationError(
+            f"nm -u failed ({result.returncode}): "
+            f"{result.stderr.strip() or result.stdout.strip()}"
+        )
+    return {line.split()[-1] for line in result.stdout.splitlines() if line.split()}
 
 
 def validate_module_artifact(module_path: Path, summary: dict[str, Any]) -> None:
@@ -536,6 +657,8 @@ def validate_module_artifact(module_path: Path, summary: dict[str, Any]) -> None
             )
     if _modinfo(module_path) != "":
         raise ValidationError("built mcctrl.ko unexpectedly exposes module parameters")
+    if summary["provider_symbol"] not in _undefined_symbols(module_path):
+        raise ValidationError("built mcctrl.ko lacks the provider anchor relocation")
     data = module_path.read_bytes()
     for marker in (
         b"lifecycle=load",
@@ -546,6 +669,8 @@ def validate_module_artifact(module_path: Path, summary: dict[str, Any]) -> None
     ):
         if marker not in data:
             raise ValidationError(f"built mcctrl.ko lacks diagnostic marker {marker!r}")
+    summary["artifact_validated"] = True
+    summary["built_symbol_reference_validated"] = True
 
 
 def _parse_args(argv: list[str]) -> argparse.Namespace:
@@ -572,13 +697,17 @@ def main(argv: list[str] | None = None) -> int:
     if args.json:
         print(json.dumps(summary, sort_keys=True))
     else:
-        artifact = "validated" if args.module is not None else "not-supplied"
+        level = (
+            "ARTIFACT-CONTRACT-VERIFIED"
+            if summary["artifact_validated"]
+            else "SOURCE-CONTRACT-VERIFIED"
+        )
         print(
-            "mcctrl-native-lifecycle-check: VALID scope=source-foundation "
-            f"gate_credit=false parameters={summary['parameters']} "
-            f"declared_dependencies={summary['dependencies']} "
+            f"mcctrl-native-lifecycle-check: {level} "
+            f"parameters={summary['parameters']} dependencies={summary['dependencies']} "
             f"ihk_symbol_import={summary['ihk_symbol_import_status']} "
-            f"binfmt={summary['binfmt_status']} artifact={artifact}"
+            f"binfmt={summary['binfmt_status']} rocky_build_load=NOT_EVALUATED "
+            "runtime_symbol_reference=NOT_PROVEN"
         )
     return 0
 

@@ -90,6 +90,12 @@ class ProbeFixture(unittest.TestCase):
                 "config_policy_sha256": self.contract["repository_inputs"]["config_policy"]["sha256"],
                 "toolchain_lock_sha256": self.contract["repository_inputs"]["toolchain_lock"]["sha256"],
                 "patch_series_sha256": self.contract["repository_inputs"]["patch_series"]["sha256"],
+                "rust_target_compatibility_patch_sha256s": [
+                    row["sha256"]
+                    for row in self.contract["repository_inputs"][
+                        "rust_target_compatibility_patches"
+                    ]
+                ],
             },
             "environment": {
                 "architecture": "x86_64",
@@ -199,6 +205,37 @@ class ContractTests(ProbeFixture):
                 "rust_abstractions_sha256": None,
             },
         )
+        compatibility = generated["repository_inputs"][
+            "rust_target_compatibility_patches"
+        ]
+        self.assertEqual(
+            [row["path"] for row in compatibility],
+            [str(path) for path in probe.RUST_COMPAT_PATCH_PATHS],
+        )
+        self.assertEqual(
+            [row["upstream_commit"] for row in compatibility],
+            list(probe.RUST_COMPAT_UPSTREAM_COMMITS),
+        )
+        self.assertEqual(
+            generated["repository_inputs"]["rust_target_generator_preimage"],
+            {
+                "path": str(probe.RUST_COMPAT_FIXTURE_PATH),
+                "sha256": probe.RUST_COMPAT_FIXTURE_SHA256,
+            },
+        )
+        self.assertEqual(
+            generated["source_patch_contract"]["patches"][-2:],
+            [
+                {
+                    "applied": True,
+                    "empty": False,
+                    "path": row["path"],
+                    "sha256": row["sha256"],
+                    "size": row["size"],
+                }
+                for row in compatibility
+            ],
+        )
 
     def test_workflow_is_exact_build_bound_and_never_edits_tracker(self):
         workflow = (REPO_ROOT / probe.WORKFLOW_PATH).read_text(encoding="utf-8")
@@ -211,6 +248,38 @@ class ContractTests(ProbeFixture):
         self.assertIn("actions/checkout@11d5960", workflow)
         self.assertIn("actions/upload-artifact@ea165f8", workflow)
         self.assertNotIn("final-push.txt", workflow)
+        rocky_patch = '-i "$RS001_SOURCE_ASSETS/1000-debrand-some-messages.patch"'
+        compatibility_patch = '-i "$compat_asset"'
+        for path in probe.RUST_COMPAT_PATCH_PATHS:
+            self.assertIn(path.name, workflow)
+        self.assertLess(workflow.index(rocky_patch), workflow.index(compatibility_patch))
+        self.assertLess(workflow.index(compatibility_patch), workflow.index("rustavailable"))
+        self.assertLess(
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[0].name),
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[1].name),
+        )
+
+    def test_rust_compatibility_patch_shape_is_fail_closed(self):
+        original = (REPO_ROOT / probe.RUST_COMPAT_PATCH_PATHS[1]).read_text(
+            encoding="utf-8"
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for relative in probe.RUST_COMPAT_PATCH_PATHS:
+                path = root / relative
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes((REPO_ROOT / relative).read_bytes())
+            path = root / probe.RUST_COMPAT_PATCH_PATHS[1]
+            path.write_text(
+                original.replace(
+                    "+        if cfg.rustc_version_atleast(1, 91, 0) {",
+                    "+        if cfg.rustc_version_atleast(1, 90, 0) {",
+                    1,
+                ),
+                encoding="utf-8",
+            )
+            with self.assertRaises(probe.ProbeError):
+                probe.rust_compatibility_patch_records(root)
 
     def test_generator_and_tests_parse_as_python_3_6(self):
         for path in (Path(probe.__file__), Path(__file__)):
@@ -371,6 +440,62 @@ class ExactInputTests(unittest.TestCase):
             )
             self.assertTrue(captured["exact_locked_replay"])
             (source_root / "Makefile").write_text("VERSION = 2\n", encoding="utf-8")
+            with self.assertRaises(probe.ProbeError):
+                probe.source_capture(srpm, archive, source_root, root, contract)
+
+    def test_applied_repository_patch_is_part_of_exact_source_replay(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            archive = root / "linux-demo.tar.xz"
+            srpm = root / "kernel.src.rpm"
+            patch_path = root / "compat.patch"
+            srpm.write_bytes(b"srpm")
+            with tarfile.open(str(archive), "w:xz") as stream:
+                info = tarfile.TarInfo("linux-demo/value")
+                payload = b"old\n"
+                info.size = len(payload)
+                stream.addfile(info, io.BytesIO(payload))
+            patch_path.write_text(
+                "--- a/value\n+++ b/value\n@@ -1 +1 @@\n-old\n+new\n",
+                encoding="utf-8",
+            )
+            source_parent = root / "source"
+            source_parent.mkdir()
+            with tarfile.open(str(archive), "r:xz") as stream:
+                stream.extractall(str(source_parent))
+            source_root = source_parent / "linux-demo"
+            contract = {
+                "target": {
+                    "source_rpm_filename": srpm.name,
+                    "source_rpm_bytes": srpm.stat().st_size,
+                    "source_rpm_sha256": probe.sha256_file(srpm),
+                    "source_archive_filename": archive.name,
+                    "source_archive_bytes": archive.stat().st_size,
+                    "source_archive_sha256": probe.sha256_file(archive),
+                    "source_archive_root": "linux-demo",
+                },
+                "source_patch_contract": {
+                    "patches": [
+                        {
+                            "applied": True,
+                            "empty": False,
+                            "path": "repository/compat.patch",
+                            "sha256": probe.sha256_file(patch_path),
+                            "size": patch_path.stat().st_size,
+                        }
+                    ]
+                },
+            }
+            probe.run_checked(
+                ["patch", "-p1", "--batch", "--forward", "-i", str(patch_path)],
+                source_root,
+            )
+            captured = probe.source_capture(
+                srpm, archive, source_root, root, contract
+            )
+            self.assertTrue(captured["exact_locked_replay"])
+            self.assertEqual(captured["patches"][0]["sha256"], probe.sha256_file(patch_path))
+            (source_root / "value").write_text("old\n", encoding="utf-8")
             with self.assertRaises(probe.ProbeError):
                 probe.source_capture(srpm, archive, source_root, root, contract)
 

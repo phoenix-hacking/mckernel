@@ -2,10 +2,9 @@
 //! Native Rust-for-Linux mcctrl module entry point.
 //!
 //! The frozen legacy module exposes no module parameters and depends on `ihk`.
-//! This foundation declares the future IHK symbol namespace, but deliberately
-//! does not manufacture a `depends=ihk` record: Kbuild must derive that record
-//! from a real imported provider symbol. The selected Linux 6.12 Rust surface
-//! does not yet provide a supported custom module-symbol export API.
+//! This foundation imports the native provider's namespaced lifecycle anchor
+//! and deliberately does not manufacture a `depends=ihk` record: modpost must
+//! derive that record from the real symbol relocation.
 //!
 //! The legacy module also owns the mcexec binary-format registration. Linux
 //! 6.12 exposes no safe Rust wrapper for `struct linux_binfmt`, so registration
@@ -16,10 +15,18 @@ use kernel::prelude::*;
 const MCCTRL_FOUNDATION_VERSION: u16 = 1;
 const MCCTRL_PARAMETER_COUNT: usize = 0;
 const MCCTRL_DECLARED_DEPENDENCY_COUNT: usize = 1;
-const MCCTRL_IHK_IMPORT_STATUS: &str = "namespace-only";
+const MCCTRL_IHK_IMPORT_STATUS: &str = "source-bound-anchor";
 const MCCTRL_BINFMT_STATUS: &str = "blocked-no-safe-rust-api";
 
-// Declare the namespace that future real IHK symbol imports must consume.
+// SAFETY: The provider exports this immutable byte for the entire dependent
+// module lifetime. Modpost resolves the symbol through MCKERNEL_IHK_V1 before
+// initialization, and callers may only read it as a dependency anchor.
+extern "Rust" {
+    #[link_name = "ihk_provider_lifecycle_v1"]
+    static IHK_PROVIDER_LIFECYCLE_V1: u8;
+}
+
+// Declare the namespace consumed by the provider-anchor relocation above.
 // This is MODULE_IMPORT_NS() metadata, not a fabricated module dependency.
 #[cfg(MODULE)]
 #[doc(hidden)]
@@ -44,6 +51,12 @@ struct McctrlModule;
 
 impl kernel::Module for McctrlModule {
     fn init(_module: &'static ThisModule) -> Result<Self> {
+        // SAFETY: The provider exports this immutable byte in the declared
+        // namespace. The volatile read preserves the relocation that makes
+        // modpost derive the module dependency and loader unload ordering.
+        let _ = unsafe {
+            core::ptr::read_volatile(core::ptr::addr_of!(IHK_PROVIDER_LIFECYCLE_V1))
+        };
         pr_info!(
             "lifecycle=load foundation={} parameters={} declared_dependencies={} ihk_import={} binfmt={}\n",
             MCCTRL_FOUNDATION_VERSION,
