@@ -21,12 +21,38 @@
       "workflow": "Native Rust host modules exact Rocky build"
     }
   ],
+  "clang_21_source_failure_evidence": [
+    {
+      "artifact_id": null,
+      "artifact_zip_bytes": null,
+      "artifact_zip_sha256": null,
+      "clang_21_source_diagnostic_count": 2,
+      "diagnostic": "-Wsometimes-uninitialized; -Wunterminated-string-initialization",
+      "failure_boundary": "mm/ksm.o and fs/netfs/fscache_cache.o",
+      "job_id": 94065469904,
+      "repository_commit": "6059a00d15cd68b834ede0e9c28e28d934bdd071",
+      "run_id": 31581528986,
+      "workflow": "RS-001 exact Rocky Linux API evidence"
+    },
+    {
+      "artifact_id": 9134206857,
+      "artifact_zip_bytes": 137224,
+      "artifact_zip_sha256": "4c971df8d5be18499334d776a20bad7eb23f05ac88259e6dab5d064d035359be",
+      "clang_21_source_diagnostic_count": 1,
+      "diagnostic": "-Wsometimes-uninitialized",
+      "failure_boundary": "mm/ksm.o",
+      "job_id": 94054822782,
+      "repository_commit": "ab6d62e758c7fe2c1a396c720da59e9ddee44458",
+      "run_id": 31578138109,
+      "workflow": "Native Rust host modules exact Rocky build"
+    }
+  ],
   "contract_id": "mckernel-rs001-exact-linux-api-probe-v1",
-  "contract_sha256": "8d8b027be4e7ac95360679d60c59ce55366189b2ee186369ae61e23b44a97a59",
+  "contract_sha256": "8d72b53e254075ca97cb03a91d1bd6c15eda187b0f350f31de4fb0f79e7f4d01",
   "evidence_profile": "rocky-10.2-exact-linux-api-evidence-v1",
   "frozen_needs": {
-    "file_sha256": "a0e638dfb3c87b20ffa1daef0f6f61903428b2574647fa639bc45585c021e29c",
-    "manifest_sha256": "42906e3916f9fcae3b654e55ae589a610badd568a53e8eb438ef7a596f7646f1",
+    "file_sha256": "903baa56591244f9e80bf01cb6b4cd3302c4a050b2726f9d88760c2d48ca5f92",
+    "manifest_sha256": "435fe64f1f0f3d4f06c4b28455cef11ab6ec8dcfd6df37698d5eda3d57575d09",
     "need_count": 268,
     "need_ids_sha256": "aabfc7c4d6551f0b57fcc9c580e3aa6cf6ef0c93ee5e179529f161d7084a6a3b",
     "path": "host-kernel/contracts/linux-api-needs-v1.json"
@@ -77,8 +103,22 @@
   "repository_inputs": {
     "checker": {
       "path": "scripts/linux_api_exact_probe.py",
-      "sha256": "6437b57b6dbb5bc6292131e4305ad8ce99b0ada9993f98da1beeba829da987d0"
+      "sha256": "7a7d7933dd367ff49f1d99117486bab8aaea4bb5f0e66d37070dee188f378f57"
     },
+    "clang_21_source_fix_preimages": [
+      {
+        "path": "scripts/tests/fixtures/rust-core-rocky-6.12/mm/ksm.c",
+        "sha256": "9747f8b5edcc4cf75333bc24e393658c59b8f86fb58a8588ec28bed51f6e626b"
+      },
+      {
+        "path": "scripts/tests/fixtures/rust-core-rocky-6.12/fs/netfs/fscache_cache.c",
+        "sha256": "c2de391430c3097d43cdaa48d172bdb00c3405a6799550b9985412490d633024"
+      },
+      {
+        "path": "scripts/tests/fixtures/rust-core-rocky-6.12/fs/netfs/fscache_cookie.c",
+        "sha256": "5582559081b3bbf67e9cfd361ee27a63ffcf2973d248e3a05bd3b95e49a2ce45"
+      }
+    ],
     "clang_21_warning_preimages": [
       {
         "path": "scripts/tests/fixtures/rust-core-rocky-6.12/scripts/Makefile.extrawarn",
@@ -257,6 +297,22 @@
         "size": 2961,
         "stable_commit": "511ceee89966ce906ca8989523e1a67ba6de44c1",
         "upstream_commit": "d0afcfeb9e3810ec89d1ffde1a0e36621bb75dca"
+      },
+      {
+        "applied_after": "host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch",
+        "path": "host-kernel/rocky/patches/0011-mm-ksm-fix-clang-21-uninitialized.patch",
+        "sha256": "2104f602c62bbda355089fb0210647b39d511e77bbdb9857e5c092c004f490a1",
+        "size": 1975,
+        "stable_commit": "f7ff0324760013762088f70d74ed1ddb7edffb13",
+        "upstream_commit": "153ad566724fe6f57b14f66e9726d295d22e576d"
+      },
+      {
+        "applied_after": "host-kernel/rocky/patches/0011-mm-ksm-fix-clang-21-uninitialized.patch",
+        "path": "host-kernel/rocky/patches/0012-netfs-mark-nonstring-lookup-tables.patch",
+        "sha256": "3aeb8de2d5eee43f56268475b8911e6e14eef59e3b8007b4719b8c4ef0a1b691",
+        "size": 2500,
+        "stable_commit": null,
+        "upstream_commit": "58db1c3cd0ce857e7210b0a95908900c25c28c3e"
       }
     ],
     "rust_target_generator_preimage": {
@@ -265,7 +321,7 @@
     },
     "source_lock": {
       "path": "host-kernel/rocky/source-lock.json",
-      "sha256": "36687c952e643918cb6d1f1301e79ed737f189b2fc5d5b5a833f0e60e41a4cd2"
+      "sha256": "a70944b60d6cd6343456f8f2531e49a7ed9bef68ad33c3c95e699226b153e511"
     },
     "toolchain_lock": {
       "path": "host-kernel/rocky/toolchain-lock.json",
@@ -273,7 +329,7 @@
     },
     "workflow": {
       "path": ".github/workflows/rs001-linux-api-exact-probe.yml",
-      "sha256": "9ddb9811f5e35373cd7f17cdbeb3b7f731446d5bc7e2c09297a3b47bb6f21942"
+      "sha256": "1f604bdbacfdd8c870aae1159b42c5865feb277e82353dde8d34df52acc71139"
     }
   },
   "required_capture_inputs": [
@@ -448,6 +504,20 @@
         "path": "host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch",
         "sha256": "2781f4eac05a806a58e76a035f2dba45f137a9147512c87cf9f63b1deb40c7e0",
         "size": 2961
+      },
+      {
+        "applied": true,
+        "empty": false,
+        "path": "host-kernel/rocky/patches/0011-mm-ksm-fix-clang-21-uninitialized.patch",
+        "sha256": "2104f602c62bbda355089fb0210647b39d511e77bbdb9857e5c092c004f490a1",
+        "size": 1975
+      },
+      {
+        "applied": true,
+        "empty": false,
+        "path": "host-kernel/rocky/patches/0012-netfs-mark-nonstring-lookup-tables.patch",
+        "sha256": "3aeb8de2d5eee43f56268475b8911e6e14eef59e3b8007b4719b8c4ef0a1b691",
+        "size": 2500
       }
     ],
     "tree_comparison": "fresh locked archive plus every applied Rocky patch and the bound Rust target compatibility patch must byte-match the supplied out-of-tree build source"

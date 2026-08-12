@@ -241,7 +241,7 @@ class ContractTests(ProbeFixture):
             },
         )
         self.assertEqual(
-            generated["source_patch_contract"]["patches"][-10:],
+            generated["source_patch_contract"]["patches"][-len(compatibility):],
             [
                 {
                     "applied": True,
@@ -352,6 +352,30 @@ class ContractTests(ProbeFixture):
             9133510114,
             generated["openssl_tool_closure_failure_evidence"][1]["artifact_id"],
         )
+        self.assertEqual(
+            generated["repository_inputs"]["clang_21_source_fix_preimages"],
+            [
+                {
+                    "path": str(probe.RUST_CORE_COMPAT_FIXTURE_ROOT / relative),
+                    "sha256": digest,
+                }
+                for relative, digest in probe.CLANG_21_SOURCE_FIX_PREIMAGE_SHA256S
+            ],
+        )
+        self.assertEqual(
+            generated["clang_21_source_failure_evidence"],
+            [dict(row) for row in probe.CLANG_21_SOURCE_FAILURE_EVIDENCE],
+        )
+        self.assertEqual(
+            "6059a00d15cd68b834ede0e9c28e28d934bdd071",
+            generated["clang_21_source_failure_evidence"][0][
+                "repository_commit"
+            ],
+        )
+        self.assertEqual(
+            9134206857,
+            generated["clang_21_source_failure_evidence"][1]["artifact_id"],
+        )
 
     def test_workflow_is_exact_build_bound_and_never_edits_tracker(self):
         workflow = (REPO_ROOT / probe.WORKFLOW_PATH).read_text(encoding="utf-8")
@@ -415,6 +439,14 @@ class ContractTests(ProbeFixture):
         self.assertLess(
             workflow.index(probe.RUST_COMPAT_PATCH_PATHS[8].name),
             workflow.index(probe.RUST_COMPAT_PATCH_PATHS[9].name),
+        )
+        self.assertLess(
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[9].name),
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[10].name),
+        )
+        self.assertLess(
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[10].name),
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[11].name),
         )
 
     def test_rust_compatibility_patch_shape_is_fail_closed(self):
@@ -557,6 +589,54 @@ class ContractTests(ProbeFixture):
                 ),
                 encoding="utf-8",
             )
+            with self.assertRaises(probe.ProbeError):
+                probe.rust_compatibility_patch_records(root)
+
+    def test_clang_21_ksm_patch_shape_is_fail_closed(self):
+        original = (REPO_ROOT / probe.RUST_COMPAT_PATCH_PATHS[10]).read_text(
+            encoding="utf-8"
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.copy_rust_compatibility_inputs(root)
+            path = root / probe.RUST_COMPAT_PATCH_PATHS[10]
+            path.write_text(
+                original.replace(
+                    "+\telse\n+\t\toutput = \"[none] scan-time\";",
+                    "+\telse if (ksm_advisor == KSM_ADVISOR_NONE)\n"
+                    "+\t\toutput = \"[none] scan-time\";",
+                    1,
+                ),
+                encoding="utf-8",
+            )
+            with self.assertRaises(probe.ProbeError):
+                probe.rust_compatibility_patch_records(root)
+
+    def test_clang_21_netfs_patch_shape_is_fail_closed(self):
+        original = (REPO_ROOT / probe.RUST_COMPAT_PATCH_PATHS[11]).read_text(
+            encoding="utf-8"
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.copy_rust_compatibility_inputs(root)
+            path = root / probe.RUST_COMPAT_PATCH_PATHS[11]
+            path.write_text(
+                original.replace(" __nonstring = \"-PAEW\"", " = \"-PAEW\"", 1),
+                encoding="utf-8",
+            )
+            with self.assertRaises(probe.ProbeError):
+                probe.rust_compatibility_patch_records(root)
+
+    def test_clang_21_source_fixture_digest_is_fail_closed(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.copy_rust_compatibility_inputs(root)
+            fixture = (
+                root
+                / probe.RUST_CORE_COMPAT_FIXTURE_ROOT
+                / "fs/netfs/fscache_cookie.c"
+            )
+            fixture.write_bytes(fixture.read_bytes() + b"\n")
             with self.assertRaises(probe.ProbeError):
                 probe.rust_compatibility_patch_records(root)
 

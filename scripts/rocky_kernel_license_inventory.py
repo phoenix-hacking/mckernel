@@ -38,7 +38,7 @@ EXPECTED_CONTAINER_IMAGE = (
     "e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176"
 )
 EXPECTED_SOURCE_LOCK_SHA256 = (
-    "36687c952e643918cb6d1f1301e79ed737f189b2fc5d5b5a833f0e60e41a4cd2"
+    "a70944b60d6cd6343456f8f2531e49a7ed9bef68ad33c3c95e699226b153e511"
 )
 EXPECTED_PATCH_SERIES_SHA256 = (
     "6a1a5e8fb13b6ce6ed35bd8e5487bb67ecf92d2be927799b660f21b5631f68fb"
@@ -128,6 +128,8 @@ EXPECTED_REPOSITORY_INPUT_PATHS = [
     "host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch",
     "host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch",
     "host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch",
+    "host-kernel/rocky/patches/0011-mm-ksm-fix-clang-21-uninitialized.patch",
+    "host-kernel/rocky/patches/0012-netfs-mark-nonstring-lookup-tables.patch",
     "host-kernel/rocky/patches/series.json",
     "scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs",
     "scripts/tests/fixtures/ihk_native_master_compile.rs",
@@ -138,8 +140,11 @@ EXPECTED_REPOSITORY_INPUT_PATHS = [
     "scripts/tests/fixtures/ihk_page_allocator_must_use_compile_fail.rs",
     "scripts/tests/fixtures/rust-core-rocky-6.12/Documentation/kbuild/makefiles.rst",
     "scripts/tests/fixtures/rust-core-rocky-6.12/arch/arm64/Makefile",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/fs/netfs/fscache_cache.c",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/fs/netfs/fscache_cookie.c",
     "scripts/tests/fixtures/rust-core-rocky-6.12/include/linux/blk-mq.h",
     "scripts/tests/fixtures/rust-core-rocky-6.12/init/Kconfig",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/mm/ksm.c",
     "scripts/tests/fixtures/rust-core-rocky-6.12/rust/Makefile",
     "scripts/tests/fixtures/rust-core-rocky-6.12/rust/bindings/lib.rs",
     "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/block/mq/tag_set.rs",

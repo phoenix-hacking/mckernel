@@ -243,6 +243,8 @@ class LicenseInventoryTests(unittest.TestCase):
                 "host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch",
                 "host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch",
                 "host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch",
+                "host-kernel/rocky/patches/0011-mm-ksm-fix-clang-21-uninitialized.patch",
+                "host-kernel/rocky/patches/0012-netfs-mark-nonstring-lookup-tables.patch",
             ):
                 item = by_path["repository/" + relative]
                 patch = REPO_ROOT / relative
@@ -310,6 +312,9 @@ class LicenseInventoryTests(unittest.TestCase):
             "rust/uapi/lib.rs",
             "scripts/Makefile.compiler",
             "scripts/generate_rust_analyzer.py",
+            "mm/ksm.c",
+            "fs/netfs/fscache_cache.c",
+            "fs/netfs/fscache_cookie.c",
         )
         with tempfile.TemporaryDirectory() as temporary:
             repo, head = committed_current_repository_inputs(Path(temporary))

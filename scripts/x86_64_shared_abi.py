@@ -145,9 +145,20 @@ def _sha(data):
 
 
 def _git_blob(repo_root, owner, ref, path):
-    cwd = repo_root if owner == "root" else os.path.join(repo_root, "ihk")
+    cwd = os.path.realpath(
+        repo_root if owner == "root" else os.path.join(repo_root, "ihk")
+    )
     process = subprocess.Popen(
-        ["git", "show", ref + ":" + path], cwd=cwd,
+        [
+            "git",
+            "-c",
+            "safe.directory=" + cwd,
+            "-C",
+            cwd,
+            "show",
+            ref + ":" + path,
+        ],
+        cwd=cwd,
         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output, error = process.communicate()
     if process.returncode:

@@ -3,6 +3,7 @@ import json
 import os
 import sys
 import unittest
+from unittest import mock
 
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -66,6 +67,44 @@ class X8664SharedAbiTests(unittest.TestCase):
                 mutated = bytes(bytearray(source[:-1]) + bytearray([source[-1] ^ 1]))
                 with self.assertRaises(abi.ContractError):
                     abi.derive_contract(REPO_ROOT, source_overrides={source_id: mutated})
+
+    def test_git_reads_use_only_the_resolved_repository_safe_directory(self):
+        for owner, expected_root in (
+                ("root", os.path.realpath(REPO_ROOT)),
+                ("ihk", os.path.realpath(os.path.join(REPO_ROOT, "ihk")))):
+            process = mock.Mock()
+            process.returncode = 0
+            process.communicate.return_value = (b"locked blob", b"")
+            with self.subTest(owner=owner):
+                with mock.patch.object(abi.subprocess, "Popen", return_value=process) as popen:
+                    self.assertEqual(
+                        b"locked blob",
+                        abi._git_blob(REPO_ROOT, owner, "a" * 40, "locked/path"),
+                    )
+                popen.assert_called_once_with(
+                    [
+                        "git",
+                        "-c",
+                        "safe.directory=" + expected_root,
+                        "-C",
+                        expected_root,
+                        "show",
+                        "{}:locked/path".format("a" * 40),
+                    ],
+                    cwd=expected_root,
+                    stdout=abi.subprocess.PIPE,
+                    stderr=abi.subprocess.PIPE,
+                )
+
+    def test_git_reads_succeed_under_assumed_different_ownership(self):
+        selected = (abi.SOURCE_LOCKS[0], abi.SOURCE_LOCKS[9])
+        with mock.patch.dict(
+                os.environ, {"GIT_TEST_ASSUME_DIFFERENT_OWNER": "1"}):
+            for source_id, owner, ref, path, size, digest in selected:
+                with self.subTest(source_id=source_id):
+                    data = abi._git_blob(REPO_ROOT, owner, ref, path)
+                    self.assertEqual(size, len(data))
+                    self.assertEqual(digest, abi._sha(data))
 
     def test_constant_value_mutation_is_rejected(self):
         self.rejected_rust_mutation(

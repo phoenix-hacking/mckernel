@@ -2,9 +2,12 @@
 """Validate the bounded historical dd6 Rocky platform evidence review.
 
 The review is deliberately historical.  The GitHub Actions runtime identity is
-the original dd6 candidate; a later repository head may only be recorded as a
-byte-for-byte and Git-blob-equivalent descendant.  Neither ``--check`` nor
-``--verify-artifact`` can award RK-003, RK-005, or tracker credit.
+the original dd6 candidate; a later repository tree is accepted only through
+the exact byte and Git-blob identities recorded by the immutable review.  The
+historical Git graph is checked when both commits are available, but is not a
+requirement for a shallow or content-equivalent published checkout.  Neither
+``--check`` nor ``--verify-artifact`` can award RK-003, RK-005, or tracker
+credit.
 """
 
 import argparse
@@ -47,7 +50,7 @@ ARTIFACT_SHA256 = (
     "a88e8a35c13dbd5b7a4e6524595d5cec31450f83c136b4cf64030e517d208eef"
 )
 EXPECTED_REVIEW_SHA256 = (
-    "8268afe35c30b692e60cfc55e861ad1d911a3e87bd313bab31b7f6755503220c"
+    "2640ab33de5ecfeea364007bef6d5aa88cc8289eacd8fe40db474d7a2d8b18e5"
 )
 
 RELEASE_KEY_FINGERPRINT = "FC226859C0860BF0DDB95B085B106C736FEDFC85"
@@ -143,15 +146,15 @@ EXPECTED_INPUTS = [
 CURRENT_INPUT_OVERRIDES = [
     {
         "path": "host-kernel/rocky/source-lock.json",
-        "git_blob_sha1": "164c77442f8bb51caac4aff5dcf02c9dc08760b5",
-        "sha256": "36687c952e643918cb6d1f1301e79ed737f189b2fc5d5b5a833f0e60e41a4cd2",
-        "size": 14870,
+        "git_blob_sha1": "1d82533103a0e4e0611e44f43476eb562d6d9cd9",
+        "sha256": "a70944b60d6cd6343456f8f2531e49a7ed9bef68ad33c3c95e699226b153e511",
+        "size": 15270,
     },
     {
         "path": "scripts/rocky_kernel_source_lock.py",
-        "git_blob_sha1": "2918a71fb2fc405f893783ed638b8be3a8dbeea6",
-        "sha256": "d16bf1781ecf41968cc3204f8f92302b578f27c43033d91d11ddae95aff70586",
-        "size": 54511,
+        "git_blob_sha1": "09da08a91ee151ed80046f431c6dbc59764bd8f3",
+        "sha256": "c891847d13903d8b24f7d0a54563f30804bdf4836881e9cd7cb3023596c694a6",
+        "size": 55193,
     },
 ]
 
@@ -541,6 +544,32 @@ def run_git(repo, arguments):
     )
 
 
+def git_commit_available(repo, commit):
+    if not HEX_SHA1.fullmatch(commit):
+        raise ReviewError("historical Git commit is malformed")
+    root = repo.resolve()
+    try:
+        completed = subprocess.run(
+            [
+                "git",
+                "-c",
+                "safe.directory={}".format(root),
+                "-C",
+                str(root),
+                "cat-file",
+                "-e",
+                commit + "^{commit}",
+            ],
+            cwd=str(root),
+            check=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+    except OSError as exc:
+        raise ReviewError("command unavailable: git: {}".format(exc))
+    return completed.returncode == 0
+
+
 def current_expected_inputs():
     overrides = {row["path"]: row for row in CURRENT_INPUT_OVERRIDES}
     expected_paths = {row["path"] for row in EXPECTED_INPUTS}
@@ -574,8 +603,12 @@ def validate_git_observation(repo):
     current = current_stdout.decode("ascii").strip()
     if not HEX_SHA1.fullmatch(current):
         raise ReviewError("current Git HEAD is malformed")
+    if not all(
+        git_commit_available(repo, commit)
+        for commit in (RUNTIME_HEAD, OBSERVED_HEAD)
+    ):
+        return False
     run_git(repo, ["merge-base", "--is-ancestor", RUNTIME_HEAD, OBSERVED_HEAD])
-    run_git(repo, ["merge-base", "--is-ancestor", OBSERVED_HEAD, current])
     count_stdout, _ = run_git(
         repo, ["rev-list", "--count", "{}..{}".format(RUNTIME_HEAD, OBSERVED_HEAD)]
     )

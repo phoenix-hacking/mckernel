@@ -23,7 +23,7 @@ TOOLCHAIN_LOCK_PATH = Path("host-kernel/rocky/toolchain-lock.json")
 CONFIG_POLICY_PATH = Path("host-kernel/rocky/config-policy.json")
 CONFIG_FRAGMENT_PATH = Path("host-kernel/rocky/configs/rust-minimal.config")
 EXPECTED_CONTRACT_SHA256 = (
-    "1bf152a7d0ceef4a8d65c05ecc3ed236269a05cf9528f08fdf57ee8e36bc6736"
+    "b7f264c647dcad3d841b0c4f20ca330c9c8f647dac6c688ac1a306c575c77042"
 )
 EXPECTED_WORKFLOW_SHA256 = (
     "d49e4ec8331a67e867f83fc9db39858a0c8a9eb25a2a802fa721bb513120f082"
@@ -54,6 +54,8 @@ EXPECTED_COMPATIBILITY_PATCHES = [
     "host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch",
     "host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch",
     "host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch",
+    "host-kernel/rocky/patches/0011-mm-ksm-fix-clang-21-uninitialized.patch",
+    "host-kernel/rocky/patches/0012-netfs-mark-nonstring-lookup-tables.patch",
 ]
 CAPTURE_ENVIRONMENT = {
     "ARCH": "x86_64",
@@ -374,8 +376,8 @@ def validate_contract(repo):
     _, series_digest = sha256_file(series_path)
     require_exact(series_digest, rocky_series["sha256"], "Rocky series digest")
     patches = patch_authority["rust_compatibility"]
-    if not isinstance(patches, list) or len(patches) != 10:
-        raise ConfigResolutionError("exactly ten compatibility patches are required")
+    if not isinstance(patches, list) or len(patches) != 12:
+        raise ConfigResolutionError("exactly twelve compatibility patches are required")
     patch_directory = repo / "host-kernel/rocky/patches"
     discovered_patches = sorted(
         path.relative_to(repo).as_posix()
@@ -533,7 +535,7 @@ def validate_contract(repo):
     ) < 0:
         raise ConfigResolutionError("policy reconciliation blocker is missing")
     if not any(
-        "0006 through 0010" in item and "compile probes" in item
+        "0006 through 0012" in item and "compile probes" in item
         for item in contract["success_blockers"]
     ):
         raise ConfigResolutionError("compatibility compile-scope blocker is missing")
@@ -542,6 +544,7 @@ def validate_contract(repo):
         {
             "expected_binary_owners",
             "expected_file_owners",
+            "expected_rustc_llvm_version",
             "expected_versions",
             "fixed_environment",
             "llvm_config_authority_blocker",
@@ -563,6 +566,11 @@ def validate_contract(repo):
     }
     require_exact(
         tool_environment["expected_versions"], expected_versions, "tool versions"
+    )
+    require_exact(
+        tool_environment["expected_rustc_llvm_version"],
+        "21.1.6",
+        "rustc bundled LLVM version",
     )
     expected_probe_commands = dict(PROBE_COMMANDS)
     expected_probe_commands["rust_src_core"] = RUST_SRC_PROBE_COMMAND
@@ -778,7 +786,7 @@ def probe_environment(contract):
             )
     require_exact(
         "{}.{}.{}".format(*llvm_match.groups()),
-        tool_environment["expected_versions"]["llvm"],
+        tool_environment["expected_rustc_llvm_version"],
         "rustc LLVM version",
     )
     results["derived"] = {

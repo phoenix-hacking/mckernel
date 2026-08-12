@@ -25,6 +25,8 @@ on:
       - host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch
       - host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch
       - host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch
+      - host-kernel/rocky/patches/0011-mm-ksm-fix-clang-21-uninitialized.patch
+      - host-kernel/rocky/patches/0012-netfs-mark-nonstring-lookup-tables.patch
       - host-kernel/rocky/patches/series.json
       - host-kernel/rocky/source-lock.json
       - host-kernel/rocky/toolchain-lock.json
@@ -73,6 +75,8 @@ on:
       - host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch
       - host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch
       - host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch
+      - host-kernel/rocky/patches/0011-mm-ksm-fix-clang-21-uninitialized.patch
+      - host-kernel/rocky/patches/0012-netfs-mark-nonstring-lookup-tables.patch
       - host-kernel/rocky/patches/series.json
       - host-kernel/rocky/source-lock.json
       - host-kernel/rocky/toolchain-lock.json
@@ -219,7 +223,9 @@ jobs:
             0007-rust-use-used-compiler-rust-1.89.patch \
             0008-rust-enable-arbitrary-self-types-rust-1.92.patch \
             0009-rust-block-drop-removed-merge-flag.patch \
-            0010-kbuild-disable-default-const-init-unsafe.patch
+            0010-kbuild-disable-default-const-init-unsafe.patch \
+            0011-mm-ksm-fix-clang-21-uninitialized.patch \
+            0012-netfs-mark-nonstring-lookup-tables.patch
           do
             compat_patch="$GITHUB_WORKSPACE/host-kernel/rocky/patches/$compat_name"
             test -s "$compat_patch"

@@ -130,6 +130,14 @@ EXPECTED_LICENSE_CAPTURE_AUTHORITY: dict[str, Any] = {
                     "host-kernel/rocky/patches/"
                     "0010-kbuild-disable-default-const-init-unsafe.patch"
                 ),
+                (
+                    "host-kernel/rocky/patches/"
+                    "0011-mm-ksm-fix-clang-21-uninitialized.patch"
+                ),
+                (
+                    "host-kernel/rocky/patches/"
+                    "0012-netfs-mark-nonstring-lookup-tables.patch"
+                ),
                 "host-kernel/rocky/patches/series.json",
                 "scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs",
                 "scripts/tests/fixtures/ihk_native_master_compile.rs",
@@ -151,9 +159,18 @@ EXPECTED_LICENSE_CAPTURE_AUTHORITY: dict[str, Any] = {
                 "scripts/tests/fixtures/rust-core-rocky-6.12/arch/arm64/Makefile",
                 (
                     "scripts/tests/fixtures/rust-core-rocky-6.12/"
+                    "fs/netfs/fscache_cache.c"
+                ),
+                (
+                    "scripts/tests/fixtures/rust-core-rocky-6.12/"
+                    "fs/netfs/fscache_cookie.c"
+                ),
+                (
+                    "scripts/tests/fixtures/rust-core-rocky-6.12/"
                     "include/linux/blk-mq.h"
                 ),
                 "scripts/tests/fixtures/rust-core-rocky-6.12/init/Kconfig",
+                "scripts/tests/fixtures/rust-core-rocky-6.12/mm/ksm.c",
                 "scripts/tests/fixtures/rust-core-rocky-6.12/rust/Makefile",
                 (
                     "scripts/tests/fixtures/rust-core-rocky-6.12/"

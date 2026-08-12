@@ -46,7 +46,7 @@ def synthetic_maps(contract):
             "CONFIG_PAHOLE_HAS_LANG_EXCLUDE": "y",
             "CONFIG_PAHOLE_HAS_SPLIT_BTF": "y",
             "CONFIG_PAHOLE_VERSION": "131",
-            "CONFIG_RUSTC_LLVM_VERSION": "210108",
+            "CONFIG_RUSTC_LLVM_VERSION": "210106",
             "CONFIG_RUSTC_VERSION": "109200",
             "CONFIG_RUST_IS_AVAILABLE": "y",
         }
@@ -71,7 +71,7 @@ def synthetic_probes():
         "derived": {
             "bindgen_version_text": "bindgen 0.72.1",
             "pahole_version": 131,
-            "rustc_llvm_version": 210108,
+            "rustc_llvm_version": 210106,
             "rustc_version": 109200,
             "rustc_version_text": "rustc 1.92.0 (fixture)",
         }
@@ -101,7 +101,7 @@ class RepositoryContractTests(unittest.TestCase):
             self.assertEqual(
                 hashlib.sha256(path.read_bytes()).hexdigest(), binding["sha256"]
             )
-        self.assertEqual(10, len(contract["patch_authority"]["rust_compatibility"]))
+        self.assertEqual(12, len(contract["patch_authority"]["rust_compatibility"]))
         self.assertEqual(
             [row["path"] for row in contract["patch_authority"]["rust_compatibility"]],
             resolution.EXPECTED_COMPATIBILITY_PATCHES,
@@ -123,7 +123,7 @@ class RepositoryContractTests(unittest.TestCase):
                     "no_config_symbol_changes"
                 ]
             ),
-            9,
+            11,
         )
         self.assertEqual(
             contract["tool_environment"]["expected_file_owners"]["rust_src_core"],
@@ -132,6 +132,18 @@ class RepositoryContractTests(unittest.TestCase):
         self.assertEqual(
             contract["tool_environment"]["probe_commands"]["rust_src_core"],
             ["rustc", "--print", "sysroot"],
+        )
+        self.assertEqual(
+            contract["tool_environment"]["expected_rustc_llvm_version"],
+            "21.1.6",
+        )
+        self.assertEqual(
+            contract["tool_environment"]["expected_versions"]["llvm"],
+            "21.1.8",
+        )
+        self.assertNotEqual(
+            contract["tool_environment"]["expected_rustc_llvm_version"],
+            contract["tool_environment"]["expected_versions"]["llvm"],
         )
         self.assertEqual(
             contract["resolution"]["olddefconfig_command"][-3:],

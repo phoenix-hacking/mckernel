@@ -31,6 +31,10 @@ PATCHES = (
     / "host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch",
     REPO_ROOT
     / "host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch",
+    REPO_ROOT
+    / "host-kernel/rocky/patches/0011-mm-ksm-fix-clang-21-uninitialized.patch",
+    REPO_ROOT
+    / "host-kernel/rocky/patches/0012-netfs-mark-nonstring-lookup-tables.patch",
 )
 PREIMAGE = REPO_ROOT / "scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs"
 POSTIMAGE_SHA256 = "555ff4dff6548bb5f24087cdad737363b5694668aa462f77adfb3571498ec678"
@@ -41,7 +45,7 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
     def test_every_patch_rejects_second_application(self):
         from scripts import linux_api_exact_probe as probe
 
-        self.assertEqual(10, len(PATCHES))
+        self.assertEqual(12, len(PATCHES))
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory) / "linux"
             shutil.copytree(str(CORE_PREIMAGE), str(root))
@@ -108,6 +112,8 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
             self.assertEqual(digest, probe.sha256_file(CORE_PREIMAGE / relative))
         for relative, digest in probe.CLANG_21_WARNING_PREIMAGE_SHA256S:
             self.assertEqual(digest, probe.sha256_file(CORE_PREIMAGE / relative))
+        for relative, digest in probe.CLANG_21_SOURCE_FIX_PREIMAGE_SHA256S:
+            self.assertEqual(digest, probe.sha256_file(CORE_PREIMAGE / relative))
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory) / "linux"
             shutil.copytree(str(CORE_PREIMAGE), str(root))
@@ -129,6 +135,32 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
                 self.assertEqual(digest, probe.sha256_file(root / relative))
             for relative, digest in probe.CLANG_21_WARNING_POSTIMAGE_SHA256S:
                 self.assertEqual(digest, probe.sha256_file(root / relative))
+            for relative, digest in probe.CLANG_21_SOURCE_FIX_POSTIMAGE_SHA256S:
+                self.assertEqual(digest, probe.sha256_file(root / relative))
+            ksm = (root / "mm/ksm.c").read_text(encoding="utf-8")
+            advisor_show = ksm.split(
+                "static ssize_t advisor_mode_show", 1
+            )[1].split("static ssize_t advisor_mode_store", 1)[0]
+            self.assertIn(
+                "if (ksm_advisor == KSM_ADVISOR_SCAN_TIME)\n"
+                "\t\toutput = \"none [scan-time]\";\n"
+                "\telse\n"
+                "\t\toutput = \"[none] scan-time\";",
+                advisor_show,
+            )
+            self.assertNotIn(
+                "else if (ksm_advisor == KSM_ADVISOR_SCAN_TIME)", advisor_show
+            )
+            cache = (root / "fs/netfs/fscache_cache.c").read_text(encoding="utf-8")
+            cookie = (root / "fs/netfs/fscache_cookie.c").read_text(encoding="utf-8")
+            self.assertIn(
+                "fscache_cache_states[NR__FSCACHE_CACHE_STATE] __nonstring",
+                cache,
+            )
+            self.assertIn(
+                "fscache_cookie_states[FSCACHE_COOKIE_STATE__NR] __nonstring",
+                cookie,
+            )
             makefile = (root / "rust/Makefile").read_text(encoding="utf-8")
             compiler = (root / "scripts/Makefile.compiler").read_text(
                 encoding="utf-8"

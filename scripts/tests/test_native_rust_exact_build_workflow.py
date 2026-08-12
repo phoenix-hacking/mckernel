@@ -110,9 +110,17 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             "0010-kbuild-disable-default-const-init-unsafe.patch",
             block_reconciliation,
         )
+        ksm_clang_21 = self.workflow.index(
+            "0011-mm-ksm-fix-clang-21-uninitialized.patch",
+            clang_warning_policy,
+        )
+        netfs_nonstring = self.workflow.index(
+            "0012-netfs-mark-nonstring-lookup-tables.patch",
+            ksm_clang_21,
+        )
         project = self.workflow.index(
             "0001-drivers-misc-add-mckernel-rust-host-modules.patch",
-            clang_warning_policy,
+            netfs_nonstring,
         )
         self.assertLess(debrand, softfloat)
         self.assertLess(softfloat, target_spec)
@@ -124,7 +132,9 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         self.assertLess(used_compiler, receiver_reconciliation)
         self.assertLess(receiver_reconciliation, block_reconciliation)
         self.assertLess(block_reconciliation, clang_warning_policy)
-        self.assertLess(clang_warning_policy, project)
+        self.assertLess(clang_warning_policy, ksm_clang_21)
+        self.assertLess(ksm_clang_21, netfs_nonstring)
+        self.assertLess(netfs_nonstring, project)
 
     def test_failure_log_and_artifact_capture_are_unconditional(self):
         bootstrap = self.workflow.index("Refuse the wrong runtime")

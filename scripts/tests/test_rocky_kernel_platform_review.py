@@ -97,7 +97,55 @@ class RepositoryReviewTests(unittest.TestCase):
         )
         self.assertNotEqual(current, inputs)
         review.validate_repository_inputs(REPO_ROOT)
-        self.assertTrue(self.git_checked)
+        self.assertEqual(
+            self.git_checked,
+            all(
+                review.git_commit_available(REPO_ROOT, commit)
+                for commit in (review.RUNTIME_HEAD, review.OBSERVED_HEAD)
+            ),
+        )
+
+    def test_missing_historical_commits_use_exact_byte_binding_fail_closed(self):
+        with tempfile.TemporaryDirectory(prefix="platform-review-shallow-") as text:
+            root = Path(text)
+            relative_paths = [review.REVIEW_PATH] + [
+                Path(row["path"]) for row in review.current_expected_inputs()
+            ]
+            for relative in relative_paths:
+                source = REPO_ROOT / relative
+                target = root / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(str(source), str(target))
+
+            resolved = str(root.resolve())
+            subprocess.run(["git", "init", "-q", resolved], check=True)
+            subprocess.run(
+                [
+                    "git", "-c", "safe.directory=" + resolved,
+                    "-C", resolved, "add", ".",
+                ],
+                check=True,
+            )
+            subprocess.run(
+                [
+                    "git", "-c", "safe.directory=" + resolved,
+                    "-c", "user.name=platform-review-test",
+                    "-c", "user.email=platform-review-test@example.invalid",
+                    "-C", resolved, "commit", "-q", "-m", "shallow fixture",
+                ],
+                check=True,
+            )
+
+            self.assertFalse(review.git_commit_available(root, review.RUNTIME_HEAD))
+            self.assertFalse(review.git_commit_available(root, review.OBSERVED_HEAD))
+            manifest, git_checked = review.check_repository(root)
+            self.assertEqual(review.REVIEW_ID, manifest["review_id"])
+            self.assertFalse(git_checked)
+
+            changed = root / review.current_expected_inputs()[0]["path"]
+            changed.write_bytes(changed.read_bytes() + b"\n")
+            with self.assertRaisesRegex(review.ReviewError, "size"):
+                review.check_repository(root)
 
     def test_container_claim_boundary_is_not_escalated(self):
         container = self.manifest["runtime_candidate"]["container"]

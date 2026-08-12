@@ -86,7 +86,9 @@
         "host-kernel/rocky/patches/0007-rust-use-used-compiler-rust-1.89.patch",
         "host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch",
         "host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch",
-        "host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch"
+        "host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch",
+        "host-kernel/rocky/patches/0011-mm-ksm-fix-clang-21-uninitialized.patch",
+        "host-kernel/rocky/patches/0012-netfs-mark-nonstring-lookup-tables.patch"
       ]
     },
     "rocky_series": {
@@ -149,6 +151,17 @@
         "sha256": "2781f4eac05a806a58e76a035f2dba45f137a9147512c87cf9f63b1deb40c7e0",
         "stable_commit": "511ceee89966ce906ca8989523e1a67ba6de44c1",
         "upstream_commit": "d0afcfeb9e3810ec89d1ffde1a0e36621bb75dca"
+      },
+      {
+        "path": "host-kernel/rocky/patches/0011-mm-ksm-fix-clang-21-uninitialized.patch",
+        "sha256": "2104f602c62bbda355089fb0210647b39d511e77bbdb9857e5c092c004f490a1",
+        "stable_commit": "f7ff0324760013762088f70d74ed1ddb7edffb13",
+        "upstream_commit": "153ad566724fe6f57b14f66e9726d295d22e576d"
+      },
+      {
+        "path": "host-kernel/rocky/patches/0012-netfs-mark-nonstring-lookup-tables.patch",
+        "sha256": "3aeb8de2d5eee43f56268475b8911e6e14eef59e3b8007b4719b8c4ef0a1b691",
+        "upstream_commit": "58db1c3cd0ce857e7210b0a95908900c25c28c3e"
       }
     ]
   },
@@ -262,12 +275,12 @@
   "source_lock": {
     "id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-source-v1",
     "path": "host-kernel/rocky/source-lock.json",
-    "sha256": "36687c952e643918cb6d1f1301e79ed737f189b2fc5d5b5a833f0e60e41a4cd2"
+    "sha256": "a70944b60d6cd6343456f8f2531e49a7ed9bef68ad33c3c95e699226b153e511"
   },
   "success_blockers": [
     "The RK-003 closure/offline artifact and its exact tool probes still require independent review and durable archival before RK-005 may inherit that authority.",
     "The current config policy generated-symbol allowlist omits CONFIG_RUSTC_HAS_UNNECESSARY_TRANSMUTES introduced by the current compatibility patch 0005; policy reconciliation is required before review ingestion or gate credit.",
-    "Compatibility patches 0006 through 0010 change source/build compatibility without adding configuration symbols; this phase binds and applies them but cannot substitute config resolution for their separate exact compile probes.",
+    "Compatibility patches 0006 through 0012 change source/build compatibility without adding configuration symbols; this phase binds and applies them but cannot substitute config resolution for their separate exact compile probes.",
     "The current RK-003 lock maps llvm-config to llvm-0:21.1.8-1.el10.x86_64, while the exact captured binary owner is llvm-devel-0:21.1.8-1.el10.x86_64; that authority mismatch requires reconciliation before review ingestion or gate credit.",
     "A successful config-resolution artifact still requires independent review and durable archival before any authority lock may be updated.",
     "make LLVM=1 rustavailable remains a separate required phase and is not claimed here.",
@@ -290,6 +303,7 @@
     "expected_file_owners": {
       "rust_src_core": "rust-src-0:1.92.0-1.el10.noarch"
     },
+    "expected_rustc_llvm_version": "21.1.6",
     "expected_versions": {
       "bindgen": "0.72.1",
       "clang": "21.1.8",

@@ -50,6 +50,8 @@ RUST_COMPAT_PATCH_PATHS = (
     Path("host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch"),
     Path("host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch"),
     Path("host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch"),
+    Path("host-kernel/rocky/patches/0011-mm-ksm-fix-clang-21-uninitialized.patch"),
+    Path("host-kernel/rocky/patches/0012-netfs-mark-nonstring-lookup-tables.patch"),
 )
 CONFIG_POLICY_PATH = Path("host-kernel/rocky/config-policy.json")
 TOOLCHAIN_LOCK_PATH = Path("host-kernel/rocky/toolchain-lock.json")
@@ -127,6 +129,16 @@ CLANG_21_WARNING_PREIMAGE_SHA256S = (
 CLANG_21_WARNING_POSTIMAGE_SHA256S = (
     ("scripts/Makefile.extrawarn", "af133c210b1c2a2fbf13c5dbead71baf47824f32b93562ef5cb50ab3f84c4a93"),
 )
+CLANG_21_SOURCE_FIX_PREIMAGE_SHA256S = (
+    ("mm/ksm.c", "9747f8b5edcc4cf75333bc24e393658c59b8f86fb58a8588ec28bed51f6e626b"),
+    ("fs/netfs/fscache_cache.c", "c2de391430c3097d43cdaa48d172bdb00c3405a6799550b9985412490d633024"),
+    ("fs/netfs/fscache_cookie.c", "5582559081b3bbf67e9cfd361ee27a63ffcf2973d248e3a05bd3b95e49a2ce45"),
+)
+CLANG_21_SOURCE_FIX_POSTIMAGE_SHA256S = (
+    ("mm/ksm.c", "d3d926171fd7f3cf6885ac57664146182260f43147dc334c2094cc194b4f7f04"),
+    ("fs/netfs/fscache_cache.c", "a211f051c4c052504f193566ffac2b31f53bad5f6712ffc7932894bb6b752de1"),
+    ("fs/netfs/fscache_cookie.c", "7ce7899790e9928adf5922affb761106229ab0a5430020ff7eb1cfe950fd0ab1"),
+)
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
 CONFIG_LINE = re.compile(r"^(CONFIG_[A-Za-z0-9_]+)=(.*)$")
@@ -158,6 +170,8 @@ RUST_COMPAT_UPSTREAM_COMMITS = (
     "c95bbb59a9b22f9b838b15d28319185c1c884329",
     "31d813a3b8cbde2d09ba4dee282ca29096541006",
     "d0afcfeb9e3810ec89d1ffde1a0e36621bb75dca",
+    "153ad566724fe6f57b14f66e9726d295d22e576d",
+    "58db1c3cd0ce857e7210b0a95908900c25c28c3e",
 )
 RUST_COMPAT_STABLE_COMMITS = (
     None,
@@ -170,6 +184,8 @@ RUST_COMPAT_STABLE_COMMITS = (
     "e18d5b42489311bc86d7ce5fb0f19af067495589",
     None,
     "511ceee89966ce906ca8989523e1a67ba6de44c1",
+    "f7ff0324760013762088f70d74ed1ddb7edffb13",
+    None,
 )
 RUST_CORE_COMPAT_FAILURE_EVIDENCE = (
     {
@@ -277,6 +293,35 @@ OPENSSL_TOOL_CLOSURE_FAILURE_EVIDENCE = (
         "artifact_zip_bytes": 132850,
         "missing_command": "openssl",
         "failure_boundary": "GENKEY certs/signing_key.pem",
+    },
+)
+CLANG_21_SOURCE_FAILURE_EVIDENCE = (
+    {
+        "workflow": "RS-001 exact Rocky Linux API evidence",
+        "repository_commit": "6059a00d15cd68b834ede0e9c28e28d934bdd071",
+        "run_id": 31581528986,
+        "job_id": 94065469904,
+        "artifact_id": None,
+        "artifact_zip_sha256": None,
+        "artifact_zip_bytes": None,
+        "diagnostic": (
+            "-Wsometimes-uninitialized; "
+            "-Wunterminated-string-initialization"
+        ),
+        "failure_boundary": "mm/ksm.o and fs/netfs/fscache_cache.o",
+        "clang_21_source_diagnostic_count": 2,
+    },
+    {
+        "workflow": "Native Rust host modules exact Rocky build",
+        "repository_commit": "ab6d62e758c7fe2c1a396c720da59e9ddee44458",
+        "run_id": 31578138109,
+        "job_id": 94054822782,
+        "artifact_id": 9134206857,
+        "artifact_zip_sha256": "4c971df8d5be18499334d776a20bad7eb23f05ac88259e6dab5d064d035359be",
+        "artifact_zip_bytes": 137224,
+        "diagnostic": "-Wsometimes-uninitialized",
+        "failure_boundary": "mm/ksm.o",
+        "clang_21_source_diagnostic_count": 1,
     },
 )
 
@@ -516,6 +561,18 @@ def rust_compatibility_patch_records(repo):
                     relative
                 )
             )
+    for relative, digest in CLANG_21_SOURCE_FIX_PREIMAGE_SHA256S:
+        path = repository_file(
+            repo,
+            RUST_CORE_COMPAT_FIXTURE_ROOT / relative,
+            "Rocky Clang 21 source-fix fixture file",
+        )
+        if sha256_file(path) != digest:
+            raise ProbeError(
+                "Rocky Clang 21 source-fix fixture digest changed: {0}".format(
+                    relative
+                )
+            )
     records = []
     required_additions = (
         {
@@ -565,6 +622,15 @@ def rust_compatibility_patch_records(repo):
         {
             "+KBUILD_CFLAGS += $(call cc-disable-warning, default-const-init-unsafe)": 1,
         },
+        {
+            "+\tif (ksm_advisor == KSM_ADVISOR_SCAN_TIME)": 1,
+            "+\telse\n": 1,
+            "+\t\toutput = \"[none] scan-time\";": 1,
+        },
+        {
+            "+static const char fscache_cache_states[NR__FSCACHE_CACHE_STATE] __nonstring = \"-PAEW\";": 1,
+            "+static const char fscache_cookie_states[FSCACHE_COOKIE_STATE__NR] __nonstring = \"-LCAIFUWRD\";": 1,
+        },
     )
     required_deletions = (
         {},
@@ -584,8 +650,17 @@ def rust_compatibility_patch_records(repo):
             "-                    flags: bindings::BLK_MQ_F_SHOULD_MERGE,": 1,
         },
         {},
+        {
+            "-\tif (ksm_advisor == KSM_ADVISOR_NONE)": 1,
+            "-\t\toutput = \"[none] scan-time\";": 1,
+            "-\telse if (ksm_advisor == KSM_ADVISOR_SCAN_TIME)": 1,
+        },
+        {
+            "-static const char fscache_cache_states[NR__FSCACHE_CACHE_STATE] = \"-PAEW\";": 1,
+            "-static const char fscache_cookie_states[FSCACHE_COOKIE_STATE__NR] = \"-LCAIFUWRD\";": 1,
+        },
     )
-    expected_diff_counts = (1, 1, 3, 2, 3, 1, 4, 4, 1, 1)
+    expected_diff_counts = (1, 1, 3, 2, 3, 1, 4, 4, 1, 1, 1, 2)
     for index, relative in enumerate(RUST_COMPAT_PATCH_PATHS):
         path = repository_file(repo, relative, "Rust target compatibility patch")
         try:
@@ -673,6 +748,7 @@ def verify_rust_compatibility_patch_replay(repo, records):
             + RUST_1_89_COMPAT_PREIMAGE_SHA256S
             + RUST_1_92_RECONCILIATION_PREIMAGE_SHA256S
             + CLANG_21_WARNING_PREIMAGE_SHA256S
+            + CLANG_21_SOURCE_FIX_PREIMAGE_SHA256S
         ):
             source = repository_file(
                 repo,
@@ -757,6 +833,13 @@ def verify_rust_compatibility_patch_replay(repo, records):
             if sha256_file(root / relative) != digest:
                 raise ProbeError(
                     "Clang 21 warning-policy patch postimage changed: {0}".format(
+                        relative
+                    )
+                )
+        for relative, digest in CLANG_21_SOURCE_FIX_POSTIMAGE_SHA256S:
+            if sha256_file(root / relative) != digest:
+                raise ProbeError(
+                    "Clang 21 source-fix patch postimage changed: {0}".format(
                         relative
                     )
                 )
@@ -875,6 +958,13 @@ def build_contract(repo):
                 }
                 for relative, digest in CLANG_21_WARNING_PREIMAGE_SHA256S
             ],
+            "clang_21_source_fix_preimages": [
+                {
+                    "path": str(RUST_CORE_COMPAT_FIXTURE_ROOT / relative),
+                    "sha256": digest,
+                }
+                for relative, digest in CLANG_21_SOURCE_FIX_PREIMAGE_SHA256S
+            ],
             "config_policy": config_record,
             "toolchain_lock": toolchain_record,
             "checker": {"path": str(SCRIPT_PATH), "sha256": sha256_file(script)},
@@ -894,6 +984,9 @@ def build_contract(repo):
         ],
         "openssl_tool_closure_failure_evidence": [
             dict(row) for row in OPENSSL_TOOL_CLOSURE_FAILURE_EVIDENCE
+        ],
+        "clang_21_source_failure_evidence": [
+            dict(row) for row in CLANG_21_SOURCE_FAILURE_EVIDENCE
         ],
         "source_patch_contract": {
             "patches": [
