@@ -70,9 +70,23 @@ jobs:
           fi
 
           cp final-push.txt /tmp/final-push.missing-evidence.txt
-          sed -i \
-            's/^GATE|FP-0001|WS00|50|TODO|-|/GATE|FP-0001|WS00|50|PASS|-|/' \
-            /tmp/final-push.missing-evidence.txt
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path("/tmp/final-push.missing-evidence.txt")
+          lines = path.read_text(encoding="utf-8").splitlines()
+          for index, line in enumerate(lines):
+              if not line.startswith("GATE|"):
+                  continue
+              fields = line.split("|")
+              fields[4] = "PASS"
+              fields[5] = "-"
+              lines[index] = "|".join(fields)
+              break
+          else:
+              raise SystemExit("no gate record found for missing-evidence fixture")
+          path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+          PY
           if python3 scripts/final_push_tracker.py \
               --file /tmp/final-push.missing-evidence.txt --check; then
             echo 'PASS without evidence was incorrectly accepted' >&2
