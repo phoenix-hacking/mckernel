@@ -162,6 +162,34 @@ jobs:
                 --jobs 2
             ' 2>&1 | tee evidence/build.log
 
+      - name: Capture compiler-backed host-module failure sites
+        run: |
+          set -euo pipefail
+          capture_path="$BUILD_DIR/host-module-failure-sites.json"
+          runuser -u validator -- env \
+            HOME=/home/validator \
+            RUSTUP_HOME=/home/validator/.rustup \
+            CARGO_HOME=/home/validator/.cargo \
+            PATH=/home/validator/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+            GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
+            BUILD_DIR="$BUILD_DIR" \
+            MCKERNEL_CI_KERNEL_DIR="$MCKERNEL_CI_KERNEL_DIR" \
+            bash -c '
+              set -euo pipefail
+              cd "$GITHUB_WORKSPACE"
+              python3 scripts/host_module_failure_sites.py \
+                --repo "$GITHUB_WORKSPACE" \
+                --build-dir "$BUILD_DIR" \
+                --kernel-dir "$MCKERNEL_CI_KERNEL_DIR" \
+                --output "$BUILD_DIR/host-module-failure-sites.json"
+            ' 2>&1 | tee evidence/host-module-failure-sites.log
+          install -m 0644 "$capture_path" evidence/host-module-failure-sites.json
+          (
+            cd evidence
+            sha256sum host-module-failure-sites.json \
+              > host-module-failure-sites.json.sha256
+          )
+
       - name: Collect build evidence
         if: ${{ always() }}
         run: |
