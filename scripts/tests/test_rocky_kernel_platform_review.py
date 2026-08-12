@@ -1,0 +1,270 @@
+#!/usr/bin/env python3
+"""Fail-closed tests for the historical dd6 platform evidence review."""
+
+import ast
+import copy
+import hashlib
+import io
+import json
+import shutil
+import stat
+import subprocess
+import sys
+import tempfile
+import unittest
+import warnings
+import zipfile
+from pathlib import Path
+
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(REPO_ROOT / "scripts"))
+
+import rocky_kernel_platform_review as review  # noqa: E402
+
+
+LIVE_ARTIFACT = Path(
+    "/tmp/rk003-rk005-platform-evidence-31563271344-1.zip"
+)
+
+
+class RepositoryReviewTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.manifest, cls.git_checked = review.check_repository(REPO_ROOT)
+        cls.manifest_bytes = (REPO_ROOT / review.REVIEW_PATH).read_bytes()
+
+    def test_review_is_canonical_byte_locked_and_no_credit(self):
+        self.assertEqual(
+            hashlib.sha256(self.manifest_bytes).hexdigest(),
+            review.EXPECTED_REVIEW_SHA256,
+        )
+        self.assertEqual(
+            self.manifest_bytes, review.canonical_json_bytes(self.manifest)
+        )
+        self.assertEqual(self.manifest["claims"], review.EXPECTED_CLAIMS)
+        self.assertFalse(self.manifest["claims"]["credit_eligible"])
+        self.assertFalse(self.manifest["claims"]["tracker_credit"])
+        self.assertEqual(
+            self.manifest["claims"]["gate_claims"],
+            {"RK-003": False, "RK-005": False},
+        )
+        self.assertEqual(len(self.manifest["phase_blockers_at_capture"]), 7)
+
+    def test_original_runtime_and_current_observation_are_distinct(self):
+        artifact = self.manifest["source_artifact"]
+        observation = self.manifest["current_head_blob_equivalence_observation"]
+        self.assertEqual(
+            artifact["github"]["runtime_head_sha"], review.RUNTIME_HEAD
+        )
+        self.assertEqual(observation["head_sha"], review.OBSERVED_HEAD)
+        self.assertNotEqual(review.RUNTIME_HEAD, review.OBSERVED_HEAD)
+        self.assertFalse(observation["runtime_identity_claimed"])
+        self.assertFalse(self.manifest["claims"]["current_head_runtime_identity"])
+        self.assertTrue(observation["all_bound_input_bytes_equal"])
+        self.assertTrue(observation["all_bound_input_git_blobs_equal"])
+
+    def test_artifact_and_full_zip_closure_are_exactly_pinned(self):
+        artifact = self.manifest["source_artifact"]["artifact"]
+        self.assertEqual(artifact["id"], 9128527159)
+        self.assertEqual(artifact["size"], 193574223)
+        self.assertEqual(artifact["sha256"], review.ARTIFACT_SHA256)
+        closure = self.manifest["zip_closure"]
+        self.assertEqual(closure, review.EXPECTED_ZIP_CLOSURE)
+        self.assertEqual(closure["entry_count"], 166)
+        self.assertEqual(
+            [row["covered_entry_count"] for row in closure["checksum_manifests"]],
+            [98, 66],
+        )
+
+    def test_exact_ten_committed_inputs_match_current_bytes_and_git_blobs(self):
+        inputs = self.manifest["runtime_candidate"]["committed_inputs"]
+        self.assertEqual(inputs, review.EXPECTED_INPUTS)
+        self.assertEqual(len(inputs), 10)
+        review.validate_repository_inputs(REPO_ROOT)
+        self.assertTrue(self.git_checked)
+
+    def test_container_claim_boundary_is_not_escalated(self):
+        container = self.manifest["runtime_candidate"]["container"]
+        self.assertEqual(container["manifest_digest"], review.CONTAINER_MANIFEST)
+        self.assertEqual(container["platform"], "linux/amd64")
+        self.assertFalse(container["independent_in_container_oci_attestation"])
+        self.assertFalse(self.manifest["claims"]["network_isolation_claimed"])
+        self.assertIn("no independent", self.manifest["caveats"]["container_claim_boundary"])
+
+    def test_verified_fact_counts_remain_bounded(self):
+        facts = self.manifest["verified_facts"]
+        self.assertEqual(facts["status"], "bounded-pass")
+        self.assertEqual(facts["phase"], "repository-direct")
+        self.assertEqual(
+            (
+                facts["bootstrap"]["base_package_count"],
+                facts["bootstrap"]["added_package_count"],
+                facts["bootstrap"]["after_package_count"],
+            ),
+            (138, 47, 185),
+        )
+        self.assertEqual(facts["signatures"]["rpm_archive_instance_count"], 67)
+        self.assertEqual(facts["signatures"]["unique_rpm_count"], 65)
+        self.assertEqual(facts["repositories"]["repomd_signature_count"], 3)
+        self.assertEqual(facts["repositories"]["direct_archive_count"], 20)
+        self.assertEqual(facts["build_requirements"]["rocky_effective_count"], 86)
+        self.assertEqual(facts["build_requirements"]["reviewed_rocky_rust_count"], 3)
+        self.assertEqual(facts["build_requirements"]["locked_direct_nevra_count"], 20)
+        self.assertEqual(facts["build_requirements"]["resolution_root_count"], 109)
+        self.assertFalse(facts["build_requirements"]["closure_complete"])
+
+    def test_rehashed_review_mutation_is_rejected(self):
+        mutated = copy.deepcopy(self.manifest)
+        mutated["claims"]["tracker_credit"] = True
+        mutated_bytes = review.canonical_json_bytes(mutated)
+        with self.assertRaisesRegex(review.ReviewError, "bytes changed"):
+            review.validate_review(mutated, mutated_bytes)
+
+    def test_semantic_credit_escalation_is_rejected_independent_of_byte_lock(self):
+        mutated = copy.deepcopy(self.manifest)
+        mutated["claims"]["credit_eligible"] = True
+        with self.assertRaisesRegex(review.ReviewError, "review claims"):
+            review.validate_review(mutated, self.manifest_bytes)
+
+    def test_runtime_identity_relabel_is_rejected(self):
+        mutated = copy.deepcopy(self.manifest)
+        mutated["source_artifact"]["github"]["runtime_head_sha"] = review.OBSERVED_HEAD
+        with self.assertRaisesRegex(review.ReviewError, "source artifact"):
+            review.validate_review(mutated, self.manifest_bytes)
+
+    def test_current_head_runtime_claim_is_rejected(self):
+        mutated = copy.deepcopy(self.manifest)
+        mutated["current_head_blob_equivalence_observation"][
+            "runtime_identity_claimed"
+        ] = True
+        with self.assertRaisesRegex(review.ReviewError, "blob-equivalence"):
+            review.validate_review(mutated, self.manifest_bytes)
+
+    def test_durable_archive_claim_is_rejected(self):
+        mutated = copy.deepcopy(self.manifest)
+        mutated["source_artifact"]["durable_archive"] = True
+        with self.assertRaisesRegex(review.ReviewError, "source artifact"):
+            review.validate_review(mutated, self.manifest_bytes)
+
+    def test_duplicate_json_keys_are_rejected(self):
+        with self.assertRaisesRegex(review.ReviewError, "duplicate JSON key"):
+            review.strict_json_bytes(b'{"claims":{},"claims":{}}\n', "duplicate")
+
+    def test_repository_input_mutation_is_rejected(self):
+        with tempfile.TemporaryDirectory(prefix="platform-review-test-") as text:
+            root = Path(text)
+            for row in review.EXPECTED_INPUTS:
+                source = REPO_ROOT / row["path"]
+                target = root / row["path"]
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(str(source), str(target))
+            target = root / review.EXPECTED_INPUTS[0]["path"]
+            target.write_bytes(target.read_bytes() + b"\n")
+            with self.assertRaisesRegex(review.ReviewError, "size"):
+                review.validate_repository_inputs(root)
+
+    def test_checksum_manifest_rejects_reordering_and_traversal(self):
+        digest_a = "a" * 64
+        digest_b = "b" * 64
+        with self.assertRaisesRegex(review.ReviewError, "sorted and unique"):
+            review.parse_checksum_manifest(
+                (digest_a + "  z\n" + digest_b + "  a\n").encode("ascii"),
+                "unsorted",
+            )
+        with self.assertRaisesRegex(review.ReviewError, "normalized relative"):
+            review.parse_checksum_manifest(
+                (digest_a + "  ../escape\n").encode("ascii"), "traversal"
+            )
+
+    def test_zip_path_traversal_is_rejected_before_extraction(self):
+        with tempfile.TemporaryDirectory(prefix="platform-review-zip-") as text:
+            path = Path(text) / "unsafe.zip"
+            info = zipfile.ZipInfo("../escape")
+            info.external_attr = (stat.S_IFREG | 0o400) << 16
+            with zipfile.ZipFile(str(path), "w") as archive:
+                archive.writestr(info, b"x")
+            with zipfile.ZipFile(str(path), "r") as archive:
+                with self.assertRaisesRegex(review.ReviewError, "normalized relative"):
+                    review.validate_zip_infos(archive)
+
+    def test_zip_duplicate_paths_are_rejected(self):
+        with tempfile.TemporaryDirectory(prefix="platform-review-zip-") as text:
+            path = Path(text) / "duplicate.zip"
+            info = zipfile.ZipInfo("capture/file")
+            info.external_attr = (stat.S_IFREG | 0o400) << 16
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", UserWarning)
+                with zipfile.ZipFile(str(path), "w") as archive:
+                    archive.writestr(info, b"a")
+                    archive.writestr(info, b"b")
+            with zipfile.ZipFile(str(path), "r") as archive:
+                with self.assertRaisesRegex(review.ReviewError, "duplicate paths"):
+                    review.validate_zip_infos(archive)
+
+    def test_zip_symlink_entries_are_rejected(self):
+        with tempfile.TemporaryDirectory(prefix="platform-review-zip-") as text:
+            path = Path(text) / "symlink.zip"
+            info = zipfile.ZipInfo("capture/link")
+            info.external_attr = (stat.S_IFLNK | 0o777) << 16
+            with zipfile.ZipFile(str(path), "w") as archive:
+                archive.writestr(info, b"target")
+            with zipfile.ZipFile(str(path), "r") as archive:
+                with self.assertRaisesRegex(review.ReviewError, "not a regular"):
+                    review.validate_zip_infos(archive)
+
+    def test_malformed_rpm_is_rejected(self):
+        with self.assertRaisesRegex(review.ReviewError, "not an RPM"):
+            review.rpm_signature_payload(b"not an rpm", "fake")
+
+    def test_cli_check_succeeds(self):
+        self.assertEqual(
+            review.main(["--repo", str(REPO_ROOT), "--check"]), 0
+        )
+
+    def test_checker_and_tests_use_python_3_6_compatible_syntax(self):
+        forbidden_fragments = (
+            "from __future__ import " + "annotations",
+            ".is_relative" + "_to(",
+            ".remove" + "prefix(",
+            ".remove" + "suffix(",
+            "capture_" + "output=",
+            "missing_" + "ok=",
+            "dirs_exist_" + "ok=",
+        )
+        forbidden_patterns = (r"\b(?:list|dict|set|tuple)\[[^\]]", r"\s\|\sNone\b")
+        for relative in (
+            "scripts/rocky_kernel_platform_review.py",
+            "scripts/tests/test_rocky_kernel_platform_review.py",
+        ):
+            path = REPO_ROOT / relative
+            source = path.read_text(encoding="utf-8")
+            if sys.version_info >= (3, 8):
+                try:
+                    tree = ast.parse(source, filename=str(path), feature_version=(3, 6))
+                except TypeError:
+                    tree = ast.parse(source, filename=str(path), feature_version=6)
+            else:
+                tree = ast.parse(source, filename=str(path))
+            self.assertIsNotNone(tree)
+            for fragment in forbidden_fragments:
+                self.assertNotIn(fragment, source)
+            for pattern in forbidden_patterns:
+                self.assertNotRegex(source, pattern)
+
+    @unittest.skipUnless(LIVE_ARTIFACT.is_file(), "pinned live artifact is unavailable")
+    def test_live_pinned_artifact_when_available(self):
+        summary = review.verify_artifact(LIVE_ARTIFACT, REPO_ROOT)
+        self.assertEqual(
+            summary,
+            {
+                "rpm_signature_instances": 67,
+                "signed_primary_bindings": 65,
+                "effective_buildrequires": 86,
+                "resolution_roots": 109,
+            },
+        )
+
+
+if __name__ == "__main__":
+    unittest.main()
