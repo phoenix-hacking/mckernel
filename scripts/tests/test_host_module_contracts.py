@@ -105,15 +105,24 @@ class BehaviorContractTests(ContractFixture):
         generated = contracts.build_contract(REPO_ROOT, self.policy, self.legacy)
         contracts.validate_contract(generated, self.policy, self.legacy, REPO_ROOT)
         self.assertEqual(generated, self.contract)
-        self.assertEqual(generated["coverage"]["behavior_count"], 1280)
-        self.assertEqual(generated["coverage"]["test_count"], 1280)
+        self.assertEqual(generated["schema_version"], 2)
+        self.assertEqual(generated["coverage"]["behavior_count"], 1326)
+        self.assertEqual(generated["coverage"]["test_count"], 1326)
         self.assertEqual(
             generated["coverage"]["by_module"],
-            {"ihk": 295, "ihk_smp_x86_64": 223, "mcctrl": 762},
+            {"ihk": 295, "ihk_smp_x86_64": 223, "mcctrl": 808},
         )
         self.assertEqual(
             generated["coverage"]["errno_sites_by_module"],
-            {"ihk": 135, "ihk_smp_x86_64": 212, "mcctrl": 593},
+            {"ihk": 135, "ihk_smp_x86_64": 212, "mcctrl": 639},
+        )
+        self.assertEqual(
+            generated["coverage"]["errno_syntax_by_module"],
+            {
+                "ihk": {"direct": 135},
+                "ihk_smp_x86_64": {"direct": 212},
+                "mcctrl": {"direct": 593, "parenthesized_or_cast": 46},
+            },
         )
 
     def test_every_behavior_has_native_rust_and_bidirectional_test_mapping(self) -> None:
@@ -141,6 +150,139 @@ class BehaviorContractTests(ContractFixture):
                 mapped[behavior["module"]].add(behavior["legacy"]["site_id"])
         for module, entries in expected.items():
             self.assertEqual(mapped[module], {entry["site_id"] for entry in entries})
+
+    def test_casted_rust_errno_sites_are_lexed_and_digest_bound(self) -> None:
+        casted = [
+            behavior
+            for behavior in self.contract["behaviors"]
+            if behavior["kind"] == "legacy_errno"
+            and behavior["legacy"]["syntax"] == "parenthesized_or_cast"
+        ]
+        self.assertEqual(len(casted), 46)
+        self.assertEqual({entry["module"] for entry in casted}, {"mcctrl"})
+        self.assertEqual(
+            {entry["legacy"]["source"] for entry in casted},
+            {"executer/kernel/mcctrl/rust/mcctrl_helpers.rs"},
+        )
+        for behavior in casted:
+            legacy = behavior["legacy"]
+            self.assertTrue(legacy["expression"].startswith("-("))
+            self.assertEqual(
+                legacy["expression_sha256"],
+                contracts.sha256(legacy["expression"].encode()),
+            )
+
+        broken = copy.deepcopy(self.contract)
+        target = next(
+            behavior
+            for behavior in broken["behaviors"]
+            if behavior["kind"] == "legacy_errno"
+        )
+        target["legacy"]["expression_sha256"] = "0" * 64
+        with self.assertRaises(contracts.ContractError):
+            contracts.validate_contract(broken, self.policy, self.legacy, REPO_ROOT)
+
+    def test_failure_acceptance_ids_are_stable_per_site_not_array_position(self) -> None:
+        for behavior in self.contract["behaviors"]:
+            if behavior["kind"] != "legacy_errno":
+                continue
+            site_id = behavior["legacy"]["site_id"]
+            oracle_key = contracts.sha256(site_id.encode())[:24]
+            oracle_path = (
+                f"source_errno_surface.{behavior['module']}.by_site_id.{oracle_key}"
+            )
+            self.assertEqual(behavior["oracle_path"], oracle_path)
+            key = (
+                f"{behavior['module']}|legacy_errno|{site_id}|{oracle_path}"
+            )
+            suffix = contracts.sha256(key.encode())[:10].upper()
+            self.assertEqual(
+                behavior["acceptance_test_ids"],
+                [
+                    f"AT-{contracts.slug(behavior['module'], 20)}-"
+                    f"{contracts.slug('legacy_errno', 24)}-{suffix}"
+                ],
+            )
+
+    def test_compiler_active_failure_capture_must_be_a_mapped_subset(self) -> None:
+        sites = []
+        for module in contracts.EXPECTED_MODULES:
+            behavior = next(
+                behavior
+                for behavior in self.contract["behaviors"]
+                if behavior["kind"] == "legacy_errno"
+                and behavior["module"] == module
+            )
+            legacy = behavior["legacy"]
+            identity = {
+                "column": legacy["column"],
+                "errno": legacy["errno"],
+                "language": legacy["source_provenance"]["language"],
+                "line": legacy["line"],
+                "module": module,
+                "source": legacy["source"],
+                "source_sha256": legacy["source_provenance"][
+                    "effective_source_sha256"
+                ],
+            }
+            identity_sha256 = contracts.failure_site_tool.sha256_bytes(
+                contracts.failure_site_tool.canonical_bytes(identity)
+            )
+            sites.append(
+                {
+                    "active_source_sha256": "1" * 64,
+                    "classification": "explicit_negative_errno_token",
+                    "column": identity["column"],
+                    "end_column": identity["column"] + len(legacy["expression"]),
+                    "errno": identity["errno"],
+                    "expression": legacy["expression"],
+                    "id": "HFS-" + identity_sha256[:24].upper(),
+                    "identity_sha256": identity_sha256,
+                    "language": identity["language"],
+                    "line": identity["line"],
+                    "line_sha256": "2" * 64,
+                    "module": module,
+                    "source": identity["source"],
+                    "source_sha256": identity["source_sha256"],
+                }
+            )
+        capture = {
+            "coverage": {
+                "by_module": {
+                    "ihk": 1,
+                    "ihk_smp_x86_64": 1,
+                    "mcctrl": 1,
+                },
+                "failure_site_count": 3,
+            },
+            "failure_sites": sites,
+            "profile": contracts.failure_site_tool.PROFILE,
+            "provenance": {
+                "frozen_inventory": {
+                    "sha256": self.contract["inventory_file_sha256"]
+                }
+            },
+            "schema_version": contracts.failure_site_tool.SCHEMA_VERSION,
+        }
+        self.assertEqual(
+            contracts.validate_compiler_failure_capture(self.contract, capture),
+            {"ihk": 1, "ihk_smp_x86_64": 1, "mcctrl": 1},
+        )
+
+        unmapped = copy.deepcopy(capture)
+        unmapped["failure_sites"][0]["line"] += 1
+        with self.assertRaises(contracts.ContractError):
+            contracts.validate_compiler_failure_capture(self.contract, unmapped)
+
+        stale = copy.deepcopy(capture)
+        stale["provenance"]["frozen_inventory"]["sha256"] = "0" * 64
+        with self.assertRaises(contracts.ContractError):
+            contracts.validate_compiler_failure_capture(self.contract, stale)
+
+        wrong_source = copy.deepcopy(capture)
+        wrong_source["failure_sites"][0]["source_sha256"] = "0" * 64
+        with self.assertRaises(contracts.ContractError):
+            contracts.validate_compiler_failure_capture(self.contract, wrong_source)
 
     def test_r0_kernel_metadata_is_provenance_not_a_production_requirement(self) -> None:
         identities = [
@@ -246,6 +388,10 @@ class BehaviorContractTests(ContractFixture):
         broken["coverage"]["by_kind"]["legacy_errno"] -= 1
         broken["coverage"]["by_module"][behavior["module"]] -= 1
         broken["coverage"]["errno_sites_by_module"][behavior["module"]] -= 1
+        syntax = behavior["legacy"]["syntax"]
+        broken["coverage"]["errno_syntax_by_module"][behavior["module"]][
+            syntax
+        ] -= 1
         with self.assertRaises(contracts.ContractError):
             contracts.validate_contract(broken, self.policy, self.legacy, REPO_ROOT)
 

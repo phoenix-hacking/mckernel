@@ -19,6 +19,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any, Iterable, Sequence
 
+import host_module_failure_sites as failure_site_tool
 import host_module_inventory as inventory_tool
 
 
@@ -104,7 +105,12 @@ KIND_HARNESS = {
     "forwarded_errno": "provider-error-propagation-differential",
 }
 
-ERRNO_PATTERN = re.compile(r"-\s*(E[A-Z][A-Z0-9_]*)\b")
+# Keep source-derived contract rows and compiler-backed evidence on one lexical
+# definition.  In particular, Rust expresses many failures as
+# ``-(EINVAL as c_long)``; the old direct-token-only matcher silently missed
+# those sites.  ``mask_non_code`` below also ensures comments and literals
+# cannot manufacture contract coverage.
+ERRNO_PATTERN = failure_site_tool.ERRNO_PATTERN
 PATCH_PATH = "scripts/patches/ihk-linux-compat.patch"
 IHK_SYMBOL_NAMESPACE = "MCKERNEL_IHK_V1"
 
@@ -441,6 +447,7 @@ def effective_source_text(
         "compatibility_overlay_sha256": sha256(patch) if applied else None,
         "cpp_defines": cpp_defines,
         "cpp_unknown_condition_policy": unknown_policy,
+        "effective_source_sha256": sha256(effective.encode()),
         "effective_filtered_sha256": sha256(filtered.encode()),
         "filter_mode": filter_mode,
         "language": language,
@@ -458,21 +465,36 @@ def source_errno_surface(repo: Path, legacy: dict[str, Any]) -> dict[str, list[d
             if language not in {"c", "rust"}:
                 continue
             filtered, provenance = effective_source_text(repo, path, language)
-            for match in ERRNO_PATTERN.finditer(filtered):
+            try:
+                masked = failure_site_tool.mask_non_code(filtered, language)
+            except failure_site_tool.CaptureError as exc:
+                raise ContractError(
+                    f"cannot lexically mask failure-site source {path}: {exc}"
+                ) from exc
+            for match in ERRNO_PATTERN.finditer(masked):
                 line = filtered.count("\n", 0, match.start()) + 1
                 line_start = filtered.rfind("\n", 0, match.start()) + 1
                 line_end = filtered.find("\n", match.end())
                 if line_end < 0:
                     line_end = len(filtered)
                 statement = " ".join(filtered[line_start:line_end].strip().split())
+                expression = filtered[match.start() : match.end()]
                 occurrences.append(
                     {
+                        "classification": "explicit_negative_errno_token",
                         "column": match.start() - line_start + 1,
                         "errno": match.group(1),
+                        "expression": expression,
+                        "expression_sha256": sha256(expression.encode()),
                         "line": line,
                         "source": path,
                         "source_provenance": provenance,
                         "statement": statement,
+                        "syntax": (
+                            "parenthesized_or_cast"
+                            if re.match(r"-\s*\(", expression)
+                            else "direct"
+                        ),
                     }
                 )
         occurrences.sort(
@@ -483,14 +505,154 @@ def source_errno_surface(repo: Path, legacy: dict[str, Any]) -> dict[str, list[d
                 str(item["errno"]),
             )
         )
-        for ordinal, occurrence in enumerate(occurrences, start=1):
-            occurrence["site_ordinal"] = ordinal
+        for occurrence in occurrences:
             occurrence["site_id"] = (
                 f"{module}:{occurrence['source']}:{occurrence['line']}:"
                 f"{occurrence['column']}:{occurrence['errno']}"
             )
         result[module] = occurrences
     return result
+
+
+def failure_site_key(entry: dict[str, Any]) -> tuple[str, str, int, int, str]:
+    """Return the cross-oracle identity shared with compiler-backed capture."""
+
+    try:
+        return (
+            str(entry["module"]),
+            str(entry["source"]),
+            int(entry["line"]),
+            int(entry["column"]),
+            str(entry["errno"]),
+        )
+    except (KeyError, TypeError, ValueError) as exc:
+        raise ContractError(f"malformed compiler failure-site identity: {entry!r}") from exc
+
+
+def validate_compiler_failure_capture(
+    contract: dict[str, Any], capture: dict[str, Any]
+) -> dict[str, int]:
+    """Prove every compiler-active negative errno site has a contract row.
+
+    The source contract is deliberately conservative when a preprocessor guard
+    cannot be resolved from the frozen inventory.  Therefore compiler-active
+    rows must be a subset, not necessarily an exact set, of source-derived rows.
+    The comparison still fails closed for an unknown, duplicated, or
+    provenance-mismatched compiler row.
+    """
+
+    if capture.get("schema_version") != failure_site_tool.SCHEMA_VERSION:
+        raise ContractError("compiler failure capture schema_version changed")
+    if capture.get("profile") != failure_site_tool.PROFILE:
+        raise ContractError("compiler failure capture profile changed")
+    provenance = capture.get("provenance")
+    if not isinstance(provenance, dict):
+        raise ContractError("compiler failure capture provenance is missing")
+    frozen = provenance.get("frozen_inventory")
+    if not isinstance(frozen, dict) or frozen.get("sha256") != contract.get(
+        "inventory_file_sha256"
+    ):
+        raise ContractError("compiler failure capture inventory digest is stale")
+    sites = capture.get("failure_sites")
+    if not isinstance(sites, list) or not sites:
+        raise ContractError("compiler failure capture has no active sites")
+
+    mapped: dict[tuple[str, str, int, int, str], dict[str, Any]] = {}
+    for behavior in contract.get("behaviors", []):
+        if not isinstance(behavior, dict) or behavior.get("kind") != "legacy_errno":
+            continue
+        legacy = behavior.get("legacy")
+        if not isinstance(legacy, dict):
+            raise ContractError("legacy errno behavior has malformed source identity")
+        keyed = dict(legacy)
+        keyed["module"] = behavior.get("module")
+        key = failure_site_key(keyed)
+        if key in mapped:
+            raise ContractError(f"duplicate mapped compiler failure-site key {key}")
+        mapped[key] = legacy
+
+    active: set[tuple[str, str, int, int, str]] = set()
+    by_module: Counter[str] = Counter()
+    for index, site in enumerate(sites):
+        if not isinstance(site, dict):
+            raise ContractError(f"compiler failure site {index} is malformed")
+        required_site_fields = {
+            "active_source_sha256",
+            "classification",
+            "column",
+            "end_column",
+            "errno",
+            "expression",
+            "id",
+            "identity_sha256",
+            "language",
+            "line",
+            "line_sha256",
+            "module",
+            "source",
+            "source_sha256",
+        }
+        if set(site) != required_site_fields:
+            raise ContractError(
+                f"compiler failure site {index} does not match its locked schema"
+            )
+        if site.get("classification") != "explicit_negative_errno_token":
+            raise ContractError(
+                f"compiler failure site {index} has unknown classification"
+            )
+        key = failure_site_key(site)
+        if key in active:
+            raise ContractError(f"duplicate compiler failure-site key {key}")
+        active.add(key)
+        by_module[key[0]] += 1
+        if key not in mapped:
+            raise ContractError(
+                "compiler-active failure site has no Rust/test mapping: "
+                f"{key[0]}:{key[1]}:{key[2]}:{key[3]}:{key[4]}"
+            )
+        identity = {
+            "column": site["column"],
+            "errno": site["errno"],
+            "language": site["language"],
+            "line": site["line"],
+            "module": site["module"],
+            "source": site["source"],
+            "source_sha256": site["source_sha256"],
+        }
+        identity_sha256 = failure_site_tool.sha256_bytes(
+            failure_site_tool.canonical_bytes(identity)
+        )
+        if site["identity_sha256"] != identity_sha256 or site["id"] != (
+            "HFS-" + identity_sha256[:24].upper()
+        ):
+            raise ContractError(f"compiler failure site {index} identity is stale")
+        mapped_site = mapped[key]
+        source_provenance = mapped_site.get("source_provenance")
+        if not isinstance(source_provenance, dict):
+            raise ContractError(f"mapped failure site {key} lacks source provenance")
+        if source_provenance.get("language") != site["language"]:
+            raise ContractError(f"compiler failure site {index} language changed")
+        if source_provenance.get("effective_source_sha256") != site[
+            "source_sha256"
+        ]:
+            raise ContractError(
+                f"compiler failure site {index} does not use the frozen effective source"
+            )
+        if mapped_site.get("expression") != site["expression"]:
+            raise ContractError(f"compiler failure site {index} expression changed")
+
+    if set(by_module) != set(EXPECTED_MODULES):
+        raise ContractError(
+            "compiler failure capture does not cover all production modules"
+        )
+    coverage = capture.get("coverage")
+    if not isinstance(coverage, dict):
+        raise ContractError("compiler failure capture coverage is missing")
+    if coverage.get("failure_site_count") != len(active):
+        raise ContractError("compiler failure capture total is stale")
+    if coverage.get("by_module") != dict(sorted(by_module.items())):
+        raise ContractError("compiler failure capture module totals are stale")
+    return dict(sorted(by_module.items()))
 
 
 def parameter_default(repo: Path, parameter: dict[str, Any]) -> dict[str, Any]:
@@ -865,13 +1027,14 @@ def build_contract(repo: Path, policy: dict[str, Any], legacy: dict[str, Any]) -
 
     errno_surface = source_errno_surface(repo, legacy)
     for module in EXPECTED_MODULES:
-        for index, entry in enumerate(errno_surface[module]):
+        for entry in errno_surface[module]:
+            stable_oracle_key = sha256(str(entry["site_id"]).encode())[:24]
             add(
                 module,
                 "legacy_errno",
                 str(entry["site_id"]),
                 entry,
-                f"source_errno_surface.{module}[{index}]",
+                f"source_errno_surface.{module}.by_site_id.{stable_oracle_key}",
                 [
                     "the same explicit failure site returns the exact negative errno",
                     "the mapped Rust fault test proves the intended site fired",
@@ -901,6 +1064,12 @@ def build_contract(repo: Path, policy: dict[str, Any], legacy: dict[str, Any]) -
             module: len(errno_surface[module])
             for module in EXPECTED_MODULES
         },
+        "errno_syntax_by_module": {
+            module: dict(
+                sorted(Counter(entry["syntax"] for entry in errno_surface[module]).items())
+            )
+            for module in EXPECTED_MODULES
+        },
         "test_count": len(tests),
     }
     return {
@@ -918,20 +1087,37 @@ def build_contract(repo: Path, policy: dict[str, Any], legacy: dict[str, Any]) -
             "R2": "native Rust modules built for the exact same custom Rocky kernel",
             "identity_rule": "R1 and R2 are compared directly; R0 kernel-specific metadata is never copied into R2",
         },
+        "failure_mapping": {
+            "classification": "explicit_negative_errno_token",
+            "compiler_capture_match_key": [
+                "module",
+                "source",
+                "line",
+                "column",
+                "errno",
+            ],
+            "compiler_capture_profile": failure_site_tool.PROFILE,
+            "compiler_capture_subset_policy": (
+                "every compiler-active site must map to exactly one conservative "
+                "source-derived behavior row"
+            ),
+            "lexical_masking": "comments, strings, byte strings, raw strings, and character literals excluded",
+            "rust_casted_errno_syntax_included": True,
+        },
         "provenance": {
             "parent_commit": legacy["provenance"]["parent_commit"],
             "ihk_commit": legacy["provenance"]["ihk_commit"],
             "reference_workflow_run": legacy["provenance"]["workflow_run"],
             "reference_artifact_id": legacy["provenance"]["artifact_id"],
         },
-        "schema_version": 1,
+        "schema_version": 2,
     }
 
 
 def validate_contract(contract: dict[str, Any], policy: dict[str, Any], legacy: dict[str, Any], repo: Path) -> None:
     validate_policy(policy)
-    if contract.get("schema_version") != 1:
-        raise ContractError("contract schema_version must be 1")
+    if contract.get("schema_version") != 2:
+        raise ContractError("contract schema_version must be 2")
     if contract.get("policy_id") != policy.get("policy_id"):
         raise ContractError("contract policy_id is stale")
     if contract.get("policy_file_sha256") != sha256((repo / POLICY_PATH).read_bytes()):
@@ -943,6 +1129,26 @@ def validate_contract(contract: dict[str, Any], policy: dict[str, Any], legacy: 
         raise ContractError("R0/R1/R2 comparison profiles are missing")
     if "R1 and R2" not in str(profiles["identity_rule"]):
         raise ContractError("module identity must compare R1 directly with R2")
+    failure_mapping = contract.get("failure_mapping")
+    expected_failure_mapping = {
+        "classification": "explicit_negative_errno_token",
+        "compiler_capture_match_key": [
+            "module",
+            "source",
+            "line",
+            "column",
+            "errno",
+        ],
+        "compiler_capture_profile": failure_site_tool.PROFILE,
+        "compiler_capture_subset_policy": (
+            "every compiler-active site must map to exactly one conservative "
+            "source-derived behavior row"
+        ),
+        "lexical_masking": "comments, strings, byte strings, raw strings, and character literals excluded",
+        "rust_casted_errno_syntax_included": True,
+    }
+    if failure_mapping != expected_failure_mapping:
+        raise ContractError("failure mapping scanner contract is missing or stale")
 
     behaviors = contract.get("behaviors")
     tests = contract.get("acceptance_tests")
@@ -1017,17 +1223,35 @@ def validate_contract(contract: dict[str, Any], policy: dict[str, Any], legacy: 
         elif kind == "legacy_errno":
             assert isinstance(legacy_value, dict)
             required = {
+                "classification",
                 "column",
                 "errno",
+                "expression",
+                "expression_sha256",
                 "line",
                 "site_id",
-                "site_ordinal",
                 "source",
                 "source_provenance",
                 "statement",
+                "syntax",
             }
             if set(legacy_value) != required:
                 raise ContractError(f"{behavior_id} has malformed failure-site mapping")
+            if legacy_value["classification"] != "explicit_negative_errno_token":
+                raise ContractError(f"{behavior_id} has unknown failure classification")
+            expression = legacy_value["expression"]
+            if not isinstance(expression, str) or legacy_value[
+                "expression_sha256"
+            ] != sha256(expression.encode()):
+                raise ContractError(f"{behavior_id} has stale failure expression digest")
+            if legacy_value["syntax"] not in {"direct", "parenthesized_or_cast"}:
+                raise ContractError(f"{behavior_id} has unknown failure syntax")
+            expected_oracle_key = sha256(str(legacy_value["site_id"]).encode())[:24]
+            if behavior.get("oracle_path") != (
+                f"source_errno_surface.{behavior.get('module')}.by_site_id."
+                f"{expected_oracle_key}"
+            ):
+                raise ContractError(f"{behavior_id} has an unstable failure oracle path")
 
     for test in tests:
         if not isinstance(test, dict) or not isinstance(test.get("id"), str):
@@ -1087,10 +1311,16 @@ def validate_contract(contract: dict[str, Any], policy: dict[str, Any], legacy: 
     expected_errno_sites = {
         module: len(entries) for module, entries in expected_errno.items()
     }
+    expected_errno_syntax = {
+        module: dict(sorted(Counter(entry["syntax"] for entry in entries).items()))
+        for module, entries in expected_errno.items()
+    }
     if coverage.get("errno_by_module") != expected_errno_classes:
         raise ContractError("coverage errno_by_module is stale")
     if coverage.get("errno_sites_by_module") != expected_errno_sites:
         raise ContractError("coverage errno_sites_by_module is stale")
+    if coverage.get("errno_syntax_by_module") != expected_errno_syntax:
+        raise ContractError("coverage errno_syntax_by_module is stale")
 
 
 def parse_args(argv: Sequence[str]) -> argparse.Namespace:
@@ -1099,6 +1329,11 @@ def parse_args(argv: Sequence[str]) -> argparse.Namespace:
     parser.add_argument("--policy", type=Path, default=POLICY_PATH)
     parser.add_argument("--inventory", type=Path, default=INVENTORY_PATH)
     parser.add_argument("--contract", type=Path, default=CONTRACT_PATH)
+    parser.add_argument(
+        "--failure-capture",
+        type=Path,
+        help="optional compiler-backed active failure-site capture to cross-check",
+    )
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--check", action="store_true")
     mode.add_argument("--update", action="store_true")
@@ -1117,6 +1352,16 @@ def main(argv: Sequence[str]) -> int:
         legacy = read_json(inventory_path)
         generated = build_contract(repo, policy, legacy)
         validate_contract(generated, policy, legacy, repo)
+        compiler_failure_coverage = None
+        if args.failure_capture is not None:
+            failure_capture_path = (
+                args.failure_capture
+                if args.failure_capture.is_absolute()
+                else repo / args.failure_capture
+            )
+            compiler_failure_coverage = validate_compiler_failure_capture(
+                generated, read_json(failure_capture_path)
+            )
         rendered = pretty(generated)
     except ContractError as exc:
         print(f"host-module contract error: {exc}", file=sys.stderr)
@@ -1156,11 +1401,16 @@ def main(argv: Sequence[str]) -> int:
                 break
             print(line, file=sys.stderr)
         return 1
+    compiler_suffix = (
+        ""
+        if compiler_failure_coverage is None
+        else f", compiler_active_failure_sites={sum(compiler_failure_coverage.values())}"
+    )
     print(
         f"host-module policy and behavior contract verified: "
         f"{generated['coverage']['behavior_count']} behaviors, "
         f"{generated['coverage']['test_count']} acceptance tests, "
-        f"policy_sha256={generated['policy_file_sha256']}"
+        f"policy_sha256={generated['policy_file_sha256']}{compiler_suffix}"
     )
     return 0
 
