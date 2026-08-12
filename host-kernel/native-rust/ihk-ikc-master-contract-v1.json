@@ -1,0 +1,159 @@
+{
+  "canonical_abi": {
+    "path": "host-kernel/native-rust/abi/x86_64.rs",
+    "sha256": "b5980e5b621914a120a0e6b72241477c48aee85615ae4cc76077f3874e35f860",
+    "type": "IhkIkcMasterPacket"
+  },
+  "compile_fixture": {
+    "expected_test_count": 6,
+    "path": "scripts/tests/fixtures/ihk_native_master_compile.rs",
+    "sha256": "828cfeb5983da77ab6b7fcd69be34e8fcd7d3b63fb85ee31f4fc330521530488",
+    "test_names": [
+      "registry_collision_generation_and_validation",
+      "unregister_drains_live_accept_lease_before_reuse",
+      "concurrent_lookups_finish_before_listener_reuse",
+      "router_preserves_master_messages_errors_release_and_lease",
+      "connect_transaction_maps_send_interrupt_error_and_success",
+      "disconnect_has_one_initiator_and_preserves_non_status_flags"
+    ]
+  },
+  "configured_fixture": {
+    "compile_arguments": [
+      "--edition=2021",
+      "--test",
+      "-D",
+      "warnings",
+      "-C",
+      "overflow-checks=yes"
+    ],
+    "compiler_environment": "IHK_NATIVE_MASTER_RUSTC",
+    "compiler_version_first_line": "rustc 1.92.0 (ded5c06cf 2025-12-08) (Red Hat 1.92.0-1.el10)",
+    "run_arguments": [
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "status_when_compiler_absent": "SKIPPED_NO_CONFIGURED_RUSTC"
+  },
+  "evidence_policy": {
+    "built_into_ihk_validated": false,
+    "exact_kernel_compile_validated": false,
+    "gate_credit_eligible": false,
+    "listener_callback_validated": false,
+    "rocky_runtime_validated": false,
+    "routing_side_effects_validated": false,
+    "teardown_validated": false
+  },
+  "foundation_status": "source-only-bounded-master-registry",
+  "gate_id": "IHK-009",
+  "intentional_deltas": [
+    "fixed slots own copied listener metadata instead of borrowing legacy listener pointers",
+    "registration rejects zero owner and zero sizes instead of deferring a missing handler until accept",
+    "generation tokens and explicit unregister prevent port reuse while an accept lease exists",
+    "accept work occurs outside the registry transition instead of under the legacy listener spinlock",
+    "channel flags use atomic transitions instead of the legacy unlocked DESTROYING read",
+    "out-of-order and malformed transaction events fail closed with typed protocol errors",
+    "outbound requests reject zero queue and channel cookies before adapter side effects",
+    "routing returns typed actions and never allocates, frees, sends, wakes, sleeps, maps queues, or invokes callbacks"
+  ],
+  "legacy_behavior": {
+    "accept_errors": {
+      "bad_magic_or_missing_handler": -111,
+      "channel_allocation_failure": -12,
+      "negative_callback_status_is_positive_reply_errno": true,
+      "packet_size_mismatch": -103
+    },
+    "connect_errors": {
+      "interrupted_wait": -4,
+      "null_argument": -22,
+      "send_failure": -16
+    },
+    "disconnect": {
+      "already_destroying": -16,
+      "clear_enabled_before_destroying": true,
+      "incoming_sets_destroy_acked": true,
+      "null_channel": -22
+    },
+    "execution_context": {
+      "connect_disconnect_may_sleep": true,
+      "linux_receive_direct_irq": true
+    },
+    "listener": {
+      "capacity": 512,
+      "invalid_port": -22,
+      "occupied_port": -16
+    },
+    "messages": {
+      "connect": 536870913,
+      "connect_reply": 536870914,
+      "disconnect": 536870920,
+      "packet_on_channel": 536870928
+    },
+    "routing": {
+      "connect_reply_errors_are_positive_errno": true,
+      "null_channel_cookie": -2,
+      "packet_release_count": 1,
+      "reply_key": [
+        "message",
+        "reference"
+      ]
+    }
+  },
+  "legacy_oracle": {
+    "files": [
+      {
+        "path": "ihk/ikc/master.c",
+        "sha256": "284f59f328f758e871c5013f7ba933c176bc8410a028a0ce043d6f8632faa97a"
+      },
+      {
+        "path": "ihk/ikc/include/ikc/master.h",
+        "sha256": "63fb24c40078b464fa751f1e564a7fa548e3047a91fd54c5cf9029fceb4eefbd"
+      },
+      {
+        "path": "ihk/ikc/include/ikc/msg.h",
+        "sha256": "3f88492d20e5177f11298e15401ae460bb7cc7173035b71dcf3074ee319bdf6f"
+      },
+      {
+        "path": "ihk/ikc/include/ikc/queue.h",
+        "sha256": "0acb85aee2d3b0b7620a0b222461815c6c96c530c5b7182fe60e8ae52ec4e461"
+      },
+      {
+        "path": "ihk/ikc/linux.c",
+        "sha256": "88ae8cebf698c73082cefe819d70e1f83def840fc24f76a2f3b0332445979e5d"
+      },
+      {
+        "path": "ihk/ikc/queue.c",
+        "sha256": "260a1582e81f3c1d60211edf6ebe4d5bfb498e8964c395a464f86b0949490eae"
+      },
+      {
+        "path": "ihk/linux/core/mikc.c",
+        "sha256": "0612a5b185c30c6c0fadf4e8a29284402517b6a4a131ee6cf8254154d326a0d1"
+      }
+    ],
+    "source_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f"
+  },
+  "production_source": {
+    "path": "host-kernel/native-rust/ikc_master.rs",
+    "sha256": "f7e8f8bc1cc860a2eb3724457d81bf03b132fa156eac5c5e258a393808e6ca1e"
+  },
+  "source_contract": {
+    "allocates": false,
+    "capacity": 512,
+    "generation_bits": 62,
+    "invokes_callbacks": false,
+    "maps_queues": false,
+    "preserves_negative_callback_status": true,
+    "sends_packets": false,
+    "sleeps_or_waits": false,
+    "wakes_waiters": false
+  },
+  "schema_version": 1,
+  "unproven": [
+    "exact built ihk.ko incorporation and Linux Kbuild compilation",
+    "kernel adapter ownership for OS-scoped registries and channel allocations",
+    "listener callback invocation and packet-handler publication in IRQ context",
+    "master send, notification, waiter, queue mapping, and channel free side effects",
+    "disconnect timeout, remote failure, teardown, and OS shutdown behavior",
+    "KCSAN, lockdep, model-checked ordering, generation exhaustion, and runtime stress",
+    "IHK-009 gate completion or credit"
+  ]
+}

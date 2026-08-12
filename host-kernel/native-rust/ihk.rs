@@ -14,6 +14,8 @@ mod abi;
 mod ikc_queue;
 #[allow(dead_code)]
 mod os_registry;
+#[allow(dead_code)]
+mod ikc_master;
 
 use kernel::prelude::*;
 

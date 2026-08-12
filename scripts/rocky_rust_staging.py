@@ -82,6 +82,12 @@ EXPECTED_INPUTS = (
         "repository_path": "host-kernel/native-rust/os_registry.rs",
         "sha256": "29464b8ca1038d87cc0d5f760eb22e0cbd7a1a512ae88f4c550574a784d1e49d",
     },
+    {
+        "destination": "ikc_master.rs",
+        "kind": "rust_module",
+        "repository_path": "host-kernel/native-rust/ikc_master.rs",
+        "sha256": "f7e8f8bc1cc860a2eb3724457d81bf03b132fa156eac5c5e258a393808e6ca1e",
+    },
 )
 EXPECTED_PARENT_INTEGRATION_REF = {
     "repository_path": "host-kernel/kbuild/parent-integration-v1.json",
@@ -151,7 +157,7 @@ EXPECTED_MODULES = (
         "required_import_namespaces": [],
         "source_destination": "ihk.rs",
         "source_repository_path": "host-kernel/native-rust/ihk.rs",
-        "source_sha256": "ff0ab16b609fd333cdc412d3e15ce27fbaf0fb9e880655deb11109bb3b80d22e",
+        "source_sha256": "86f6e2980bae1506495e32be76fc4330a3517030e35a27d17d723004acde6252",
     },
     {
         "crate": "ihk_smp_x86_64",
@@ -535,9 +541,10 @@ def _validate_input(repo_root, item, index):
         "kbuild_template": "Kbuild",
         "kconfig": "Kconfig",
         "shared_rust_abi": "abi/x86_64.rs",
-        "rust_module": "ikc_queue.rs",
         "rust_support_module": "os_registry.rs",
     }.get(item["kind"])
+    if item["kind"] == "rust_module":
+        expected_destination = item["destination"]
     if expected_destination is None:
         raise ValidationError("{0}.kind is not a locked staging input kind".format(label))
     if item["destination"] != expected_destination:
@@ -563,7 +570,7 @@ def _validate_input(repo_root, item, index):
         for forbidden in ('extern "c"', "unsafe", "include!", "include_bytes!", "asm!(", "module!"):
             if forbidden in lowered:
                 raise ValidationError("{0} contains forbidden executable/boundary construct: {1}".format(label, forbidden))
-    elif item["kind"] == "rust_module":
+    elif item["destination"] == "ikc_queue.rs":
         required = (
             "use super::abi::IhkIkcQueueHead;",
             "pub(crate) struct SharedQueue",
@@ -578,7 +585,7 @@ def _validate_input(repo_root, item, index):
         for forbidden in ('extern "c"', "include!", "include_bytes!", "asm!(", "module!"):
             if forbidden in lowered:
                 raise ValidationError("{0} contains forbidden executable/boundary construct: {1}".format(label, forbidden))
-    else:
+    elif item["destination"] == "os_registry.rs":
         required = (
             "pub(crate) const OS_CAPACITY: usize = 64;",
             "const MAX_GENERATION: u64 = u64::MAX >> GENERATION_SHIFT;",
@@ -589,6 +596,22 @@ def _validate_input(repo_root, item, index):
         for token in required:
             if text.count(token) < 1:
                 raise ValidationError("{0} lacks registry marker: {1}".format(label, token))
+        lowered = text.lower()
+        for forbidden in ('extern "c"', "unsafe", "include!", "include_bytes!", "asm!(", "module!"):
+            if forbidden in lowered:
+                raise ValidationError("{0} contains forbidden executable/boundary construct: {1}".format(label, forbidden))
+    else:
+        required = (
+            "pub(crate) struct ListenerRegistry",
+            "pub(crate) struct ListenerLease",
+            "pub(crate) struct MasterRouter",
+            "pub(crate) struct ConnectTransaction",
+            "pub(crate) struct ChannelLifecycle",
+            "use super::abi::",
+        )
+        for token in required:
+            if text.count(token) != 1:
+                raise ValidationError("{0} lacks a unique master-registry marker: {1}".format(label, token))
         lowered = text.lower()
         for forbidden in ('extern "c"', "unsafe", "include!", "include_bytes!", "asm!(", "module!"):
             if forbidden in lowered:
@@ -646,7 +669,12 @@ def _validate_module(repo_root, module, expected, index):
     if "module!" not in text or "impl kernel::Module" not in text:
         raise ValidationError("{0}.source lacks a native Rust-for-Linux module entry point".format(label))
     if module["crate"] == "ihk":
-        for fragment in ('#[path = "abi/x86_64.rs"]\nmod abi;', "mod ikc_queue;"):
+        for fragment in (
+            '#[path = "abi/x86_64.rs"]\nmod abi;',
+            "mod ikc_queue;",
+            "mod os_registry;",
+            "mod ikc_master;",
+        ):
             if text.count(fragment) != 1:
                 raise ValidationError(
                     "{0}.source does not bind the staged IHK queue graph: {1}".format(
@@ -700,16 +728,21 @@ def validate_manifest(repo_root, manifest_path):
     if not isinstance(inputs, list) or len(inputs) != len(EXPECTED_INPUTS):
         raise ValidationError(
             "inputs must contain exactly Kbuild, Kconfig, the shared x86_64 ABI, "
-            "the IHK queue module, and the OS registry"
+            "the IHK queue module, OS registry, and IKC master module"
         )
     staged_files = [_validate_input(repo_root, item, index) for index, item in enumerate(inputs)]
     destinations = [item["destination"] for item in staged_files]
     if destinations != [
-        "Kbuild", "Kconfig", "abi/x86_64.rs", "ikc_queue.rs", "os_registry.rs"
+        "Kbuild",
+        "Kconfig",
+        "abi/x86_64.rs",
+        "ikc_queue.rs",
+        "os_registry.rs",
+        "ikc_master.rs",
     ]:
         raise ValidationError(
             "inputs must be ordered as Kbuild, Kconfig, abi/x86_64.rs, "
-            "ikc_queue.rs, os_registry.rs"
+            "ikc_queue.rs, os_registry.rs, ikc_master.rs"
         )
 
     modules = manifest["modules"]

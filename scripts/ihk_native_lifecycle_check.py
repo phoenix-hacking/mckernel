@@ -184,6 +184,11 @@ def _validate_contract(contract: dict[str, Any]) -> None:
             "path": "host-kernel/native-rust/ikc_queue.rs",
             "sha256": "514f9bce452498e5e9394c450532b040c44fce1ac7a6b5158c76f3d4c7270d40",
         },
+        {
+            "destination": "ikc_master.rs",
+            "path": "host-kernel/native-rust/ikc_master.rs",
+            "sha256": "f7e8f8bc1cc860a2eb3724457d81bf03b132fa156eac5c5e258a393808e6ca1e",
+        },
     ]
     if contract["crate_modules"] != expected_modules:
         raise ValidationError("IHK lifecycle transitive Rust module graph differs")
@@ -214,7 +219,7 @@ def _validate_contract(contract: dict[str, Any]) -> None:
 
 
 def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
-    for fragment in ('#[path = "abi/x86_64.rs"]\nmod abi;', "mod ikc_queue;"):
+    for fragment in ('#[path = "abi/x86_64.rs"]\nmod abi;', "mod ikc_queue;", "mod ikc_master;"):
         if text.count(fragment) != 1:
             raise ValidationError(
                 f"IHK crate root lacks the exact staged module edge: {fragment}"

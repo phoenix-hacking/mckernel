@@ -9,11 +9,15 @@
 
 use core::cmp::min;
 use core::hint::spin_loop;
-use core::sync::atomic::{AtomicBool, AtomicU64, AtomicUsize, Ordering};
+use core::sync::atomic::{AtomicBool, AtomicU64, Ordering};
 
 const BITS_PER_WORD: usize = u64::BITS as usize;
 
 /// A physical range expressed in allocator units.
+///
+/// This is copied metadata, not an ownership token. Its physical interval is
+/// available to the caller only while the `PageAllocation` or
+/// `PageReservation` lease that returned it remains alive.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) struct PageRange {
     address: u64,
@@ -76,6 +80,10 @@ impl Drop for OperationGuard<'_> {
 }
 
 /// Contiguous allocation whose `Drop` path rolls ownership back.
+///
+/// Kernel integration must obey the allocator-wide irqsave, nonpreemptible,
+/// no-sleep, and non-reentrant context precondition when this lease is dropped.
+#[must_use = "dropping the allocation lease immediately releases its physical range"]
 pub(crate) struct PageAllocation<'allocator, 'storage> {
     allocator: &'allocator BitmapPageAllocator<'storage>,
     range: PageRange,
@@ -83,7 +91,7 @@ pub(crate) struct PageAllocation<'allocator, 'storage> {
 }
 
 impl PageAllocation<'_, '_> {
-    /// Borrow the allocated range metadata.
+    /// Copy range metadata that is valid only while this lease remains alive.
     pub(crate) fn range(&self) -> PageRange {
         self.range
     }
@@ -112,6 +120,10 @@ impl Drop for PageAllocation<'_, '_> {
 }
 
 /// Reserved range whose `Drop` path restores availability.
+///
+/// Kernel integration must obey the allocator-wide irqsave, nonpreemptible,
+/// no-sleep, and non-reentrant context precondition when this lease is dropped.
+#[must_use = "dropping the reservation lease immediately releases its physical range"]
 pub(crate) struct PageReservation<'allocator, 'storage> {
     allocator: &'allocator BitmapPageAllocator<'storage>,
     range: PageRange,
@@ -119,7 +131,7 @@ pub(crate) struct PageReservation<'allocator, 'storage> {
 }
 
 impl PageReservation<'_, '_> {
-    /// Borrow the reserved range metadata.
+    /// Copy range metadata that is valid only while this lease remains alive.
     pub(crate) fn range(&self) -> PageRange {
         self.range
     }
@@ -153,9 +165,12 @@ enum OwnershipKind {
 
 /// Bitmap-backed allocator over one fixed physical interval.
 ///
-/// Every mutating operation is serialized by `operation_lock`.  Kernel users
-/// must either call it from non-interrupt context or provide outer irqsave
-/// exclusion: a same-CPU interrupt that re-enters this allocator would spin.
+/// Every operation is serialized by `operation_lock`. Before this source is
+/// attached to the kernel, every call (including lease `Drop`) must be wrapped
+/// by an audited Linux irqsave-equivalent adapter that disables local IRQs and
+/// preemption, cannot sleep, and prevents same-CPU re-entry for the entire
+/// operation. This process-portable `AtomicBool` only serializes CPUs; it does
+/// not establish those kernel context properties itself.
 pub(crate) struct BitmapPageAllocator<'storage> {
     start: u64,
     end: u64,
@@ -163,7 +178,6 @@ pub(crate) struct BitmapPageAllocator<'storage> {
     block_count: usize,
     allocated: &'storage [AtomicU64],
     reserved: &'storage [AtomicU64],
-    next_hint: AtomicUsize,
     operation_lock: AtomicBool,
 }
 
@@ -215,7 +229,6 @@ impl<'storage> BitmapPageAllocator<'storage> {
             block_count,
             allocated,
             reserved,
-            next_hint: AtomicUsize::new(0),
             operation_lock: AtomicBool::new(false),
         })
     }
@@ -242,16 +255,23 @@ impl<'storage> BitmapPageAllocator<'storage> {
             return Err(PageAllocatorError::Invalid);
         }
         let _guard = self.lock();
-        let hint = self.next_hint.load(Ordering::Relaxed) % self.block_count;
         let base_block = self.start / self.unit_bytes;
+        let alignment_blocks =
+            u64::try_from(alignment_blocks).map_err(|_| PageAllocatorError::Invalid)?;
 
-        for delta in 0..self.block_count {
-            let candidate = hint.wrapping_add(delta) % self.block_count;
+        // The legacy descriptor never advances `last`, so its effective search
+        // policy is first-fit from block zero on every allocation attempt.
+        for candidate in 0..self.block_count {
             let Some(limit) = candidate.checked_add(blocks) else {
-                continue;
+                break;
             };
+            let candidate_u64 =
+                u64::try_from(candidate).map_err(|_| PageAllocatorError::Invalid)?;
+            let physical_block = base_block
+                .checked_add(candidate_u64)
+                .ok_or(PageAllocatorError::Invalid)?;
             if limit > self.block_count
-                || (base_block + candidate as u64) % alignment_blocks as u64 != 0
+                || physical_block % alignment_blocks != 0
                 || !self.range_is_clear(candidate, blocks)
             {
                 continue;
@@ -260,8 +280,6 @@ impl<'storage> BitmapPageAllocator<'storage> {
             // ownership, so an arithmetic failure cannot leak a marked range.
             let range = self.range_from_blocks(candidate, blocks)?;
             self.set_range(self.allocated, candidate, blocks, true);
-            self.next_hint
-                .store(limit % self.block_count, Ordering::Relaxed);
             return Ok(PageAllocation {
                 allocator: self,
                 range,
@@ -428,7 +446,6 @@ impl<'storage> BitmapPageAllocator<'storage> {
             return Err(PageAllocatorError::Ownership);
         }
         self.set_range(owned, start_block, range.blocks, false);
-        self.next_hint.store(start_block, Ordering::Relaxed);
         Ok(())
     }
 
@@ -514,5 +531,41 @@ impl<'storage> BitmapPageAllocator<'storage> {
         } else {
             ((1_u64 << count) - 1) << bit
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn wrong_kind_and_overlapping_release_are_rejected_without_clearing() {
+        let mut allocated = [const { AtomicU64::new(0) }; 1];
+        let mut reserved = [const { AtomicU64::new(0) }; 1];
+        let allocator =
+            BitmapPageAllocator::new(0x1000, 0x1000, 0x1000, &mut allocated, &mut reserved)
+                .unwrap();
+        let allocation = allocator.allocate(1).unwrap();
+        let range = allocation.range();
+
+        assert_eq!(
+            allocator.release_owned(range, OwnershipKind::Reserved),
+            Err(PageAllocatorError::Ownership)
+        );
+        assert!(allocator.bit_is_set(allocator.allocated, 0));
+
+        allocator.reserved[0].store(1, Ordering::Relaxed);
+        assert_eq!(
+            allocator.release_owned(range, OwnershipKind::Allocated),
+            Err(PageAllocatorError::Ownership)
+        );
+        assert!(allocator.bit_is_set(allocator.allocated, 0));
+        assert!(allocator.bit_is_set(allocator.reserved, 0));
+
+        allocator.reserved[0].store(0, Ordering::Relaxed);
+        drop(allocation);
+        let snapshot = allocator.snapshot();
+        assert_eq!(snapshot.allocated_blocks, 0);
+        assert_eq!(snapshot.free_blocks, 1);
     }
 }

@@ -29,6 +29,8 @@ class IhkPageAllocatorCheckTests(unittest.TestCase):
             allocator_check.DEFAULT_CONTRACT.as_posix(),
             self.contract["production_source"]["path"],
             self.contract["compile_fixture"]["path"],
+            self.contract["must_use_probe"]["path"],
+            self.contract["lifetime_probe"]["path"],
             self.contract["legacy_oracle"]["source_path"],
             self.contract["legacy_oracle"]["header_path"],
         }
@@ -58,7 +60,7 @@ class IhkPageAllocatorCheckTests(unittest.TestCase):
     def fake_rustc(
         self,
         version=allocator_check.EXPECTED_COMPILER,
-        passed=7,
+        passed=14,
         compile_exit=0,
     ):
         compiler = Path(self.temporary.name) / "rustc"
@@ -72,6 +74,13 @@ class IhkPageAllocatorCheckTests(unittest.TestCase):
             + "if sys.argv[1:] == ['--version']:\n"
             "    print(VERSION)\n"
             "    raise SystemExit(0)\n"
+            "if any('must_use_compile_fail' in item for item in sys.argv):\n"
+            "    print('error: unused `PageAllocation` that must be used', file=sys.stderr)\n"
+            "    print('error: unused `PageReservation` that must be used', file=sys.stderr)\n"
+            "    raise SystemExit(1)\n"
+            "if any('lifetime_compile_fail' in item for item in sys.argv):\n"
+            "    print('error[E0515]: cannot return value referencing local variable `allocator`', file=sys.stderr)\n"
+            "    raise SystemExit(1)\n"
             "if COMPILE_EXIT:\n"
             "    print('synthetic compile failure', file=sys.stderr)\n"
             "    raise SystemExit(COMPILE_EXIT)\n"
@@ -122,7 +131,15 @@ class IhkPageAllocatorCheckTests(unittest.TestCase):
         ), self.assertRaisesRegex(allocator_check.ValidationError, "required but absent"):
             allocator_check.validate_configured_fixture(REPO_ROOT, require_rustc=True)
 
-    def test_exact_compiler_executes_seven_tests(self):
+    def test_unconfigured_path_rustc_is_never_used(self):
+        with mock.patch.dict(os.environ, {"IHK_PAGE_ALLOCATOR_RUSTC": ""}), mock.patch.object(
+            allocator_check.shutil, "which"
+        ) as which:
+            result = allocator_check.validate_configured_fixture(REPO_ROOT)
+        self.assertEqual("SKIPPED_NO_CONFIGURED_RUSTC", result["fixture_status"])
+        which.assert_not_called()
+
+    def test_exact_compiler_executes_fourteen_tests_and_compile_fail_probes(self):
         result = allocator_check.validate_configured_fixture(
             REPO_ROOT, rustc=str(self.fake_rustc()), require_rustc=True
         )
@@ -144,7 +161,15 @@ class IhkPageAllocatorCheckTests(unittest.TestCase):
     def test_fixture_test_count_drift_fails(self):
         with self.assertRaisesRegex(allocator_check.ValidationError, "exact contracted test count"):
             allocator_check.validate_configured_fixture(
-                REPO_ROOT, rustc=str(self.fake_rustc(passed=6))
+                REPO_ROOT, rustc=str(self.fake_rustc(passed=13))
+            )
+
+    def test_direct_configured_fixture_validates_repository_first(self):
+        source = self.repo / self.contract["production_source"]["path"]
+        source.write_text(source.read_text(encoding="utf-8") + "\n", encoding="utf-8")
+        with self.assertRaisesRegex(allocator_check.ValidationError, "source digest differs"):
+            allocator_check.validate_configured_fixture(
+                self.repo, rustc=str(self.fake_rustc()), require_rustc=True
             )
 
     def test_contract_cannot_self_award_any_evidence(self):
@@ -211,6 +236,101 @@ class IhkPageAllocatorCheckTests(unittest.TestCase):
         with self.assertRaisesRegex(allocator_check.ValidationError, "alignment validation"):
             allocator_check.validate_repository(self.repo)
 
+    def test_resigned_first_fit_mutation_fails(self):
+        self.mutate_and_resign(
+            self.contract["production_source"]["path"],
+            "for candidate in 0..self.block_count",
+            "for candidate in (0..self.block_count).rev()",
+            self.contract["production_source"],
+            "sha256",
+        )
+        with self.assertRaisesRegex(allocator_check.ValidationError, "first-fit"):
+            allocator_check.validate_repository(self.repo)
+
+    def test_resigned_reservation_lock_removal_fails_function_locally(self):
+        self.mutate_and_resign(
+            self.contract["production_source"]["path"],
+            "let start_block = self.validate_range(address, blocks)?;\n        let _guard = self.lock();",
+            "let start_block = self.validate_range(address, blocks)?;",
+            self.contract["production_source"],
+            "sha256",
+        )
+        with self.assertRaisesRegex(allocator_check.ValidationError, "reservation must take"):
+            allocator_check.validate_repository(self.repo)
+
+    def test_resigned_reservation_single_map_check_fails(self):
+        self.mutate_and_resign(
+            self.contract["production_source"]["path"],
+            "if !self.range_is_clear(start_block, blocks)",
+            "if self.range_has_any(self.reserved, start_block, blocks)",
+            self.contract["production_source"],
+            "sha256",
+        )
+        with self.assertRaisesRegex(allocator_check.ValidationError, "range_is_clear"):
+            allocator_check.validate_repository(self.repo)
+
+    def test_resigned_snapshot_lock_removal_fails_function_locally(self):
+        self.mutate_and_resign(
+            self.contract["production_source"]["path"],
+            "pub(crate) fn snapshot(&self) -> PageAllocatorSnapshot {\n        let _guard = self.lock();",
+            "pub(crate) fn snapshot(&self) -> PageAllocatorSnapshot {",
+            self.contract["production_source"],
+            "sha256",
+        )
+        with self.assertRaisesRegex(allocator_check.ValidationError, "snapshot must take"):
+            allocator_check.validate_repository(self.repo)
+
+    def test_resigned_release_lock_removal_fails_function_locally(self):
+        self.mutate_and_resign(
+            self.contract["production_source"]["path"],
+            "        let _guard = self.lock();\n        let (owned, other) = match kind",
+            "        let (owned, other) = match kind",
+            self.contract["production_source"],
+            "sha256",
+        )
+        with self.assertRaisesRegex(allocator_check.ValidationError, "owned release must take"):
+            allocator_check.validate_repository(self.repo)
+
+    def test_resigned_allocator_relative_alignment_mutation_fails(self):
+        self.mutate_and_resign(
+            self.contract["production_source"]["path"],
+            "let physical_block = base_block\n                .checked_add(candidate_u64)\n                .ok_or(PageAllocatorError::Invalid)?;",
+            "let physical_block = candidate_u64;",
+            self.contract["production_source"],
+            "sha256",
+        )
+        with self.assertRaisesRegex(allocator_check.ValidationError, "checked physical block"):
+            allocator_check.validate_repository(self.repo)
+
+    def test_resigned_candidate_checked_add_or_limit_removal_fails(self):
+        for old, new, expected in (
+            ("candidate.checked_add(blocks)", "candidate.wrapping_add(blocks)", "checked candidate limit"),
+            ("limit > self.block_count", "false", "candidate capacity bound"),
+        ):
+            with self.subTest(old=old):
+                source = self.repo / self.contract["production_source"]["path"]
+                original = source.read_text(encoding="utf-8")
+                self.assertIn(old, original)
+                source.write_text(original.replace(old, new, 1), encoding="utf-8")
+                self.contract["production_source"]["sha256"] = hashlib.sha256(
+                    source.read_bytes()
+                ).hexdigest()
+                self.write_contract()
+                with self.assertRaisesRegex(allocator_check.ValidationError, expected):
+                    allocator_check.validate_repository(self.repo)
+                source.write_text(original, encoding="utf-8")
+
+    def test_resigned_must_use_attribute_removal_fails(self):
+        self.mutate_and_resign(
+            self.contract["production_source"]["path"],
+            "#[must_use = \"dropping the allocation lease immediately releases its physical range\"]",
+            "#[allow(dead_code)]",
+            self.contract["production_source"],
+            "sha256",
+        )
+        with self.assertRaisesRegex(allocator_check.ValidationError, "allocation must-use"):
+            allocator_check.validate_repository(self.repo)
+
     def test_resigned_unsafe_or_ffi_boundary_fails(self):
         source = self.repo / self.contract["production_source"]["path"]
         with source.open("a", encoding="utf-8") as stream:
@@ -245,10 +365,12 @@ class IhkPageAllocatorCheckTests(unittest.TestCase):
         with self.assertRaisesRegex(allocator_check.ValidationError, "frozen legacy allocator oracle"):
             allocator_check.validate_repository(self.repo)
 
-    def test_raw_source_and_fixture_digest_drift_fail_closed(self):
+    def test_raw_source_fixture_and_compile_probe_digest_drift_fail_closed(self):
         for relative, expected in (
             (self.contract["production_source"]["path"], "source digest differs"),
             (self.contract["compile_fixture"]["path"], "fixture digest differs"),
+            (self.contract["must_use_probe"]["path"], "must-use probe digest differs"),
+            (self.contract["lifetime_probe"]["path"], "lifetime probe digest differs"),
         ):
             with self.subTest(relative=relative):
                 path = self.repo / relative

@@ -344,6 +344,14 @@ class ContractTests(ProbeFixture):
             9132598094,
             generated["clang_21_default_const_failure_evidence"][1]["artifact_id"],
         )
+        self.assertEqual(
+            generated["openssl_tool_closure_failure_evidence"],
+            [dict(row) for row in probe.OPENSSL_TOOL_CLOSURE_FAILURE_EVIDENCE],
+        )
+        self.assertEqual(
+            9133510114,
+            generated["openssl_tool_closure_failure_evidence"][1]["artifact_id"],
+        )
 
     def test_workflow_is_exact_build_bound_and_never_edits_tracker(self):
         workflow = (REPO_ROOT / probe.WORKFLOW_PATH).read_text(encoding="utf-8")
@@ -356,6 +364,15 @@ class ContractTests(ProbeFixture):
         self.assertIn("actions/checkout@11d5960", workflow)
         self.assertIn("actions/upload-artifact@ea165f8", workflow)
         self.assertNotIn("final-push.txt", workflow)
+        self.assertIn("openssl openssl-devel", workflow)
+        self.assertIn('openssl_path="$(command -v openssl)"', workflow)
+        self.assertIn('test "$openssl_path" = /usr/bin/openssl', workflow)
+        self.assertIn("rpm -qf --qf '%{NAME}\\n' \"$openssl_path\"", workflow)
+        self.assertIn("openssl version", workflow)
+        self.assertIn(
+            ("openssl", ("openssl", "version")),
+            probe.TOOL_PROBES,
+        )
         rocky_patch = '-i "$RS001_SOURCE_ASSETS/1000-debrand-some-messages.patch"'
         compatibility_patch = '-i "$compat_asset"'
         self.assertIn("--fuzz=0 --no-backup-if-mismatch", workflow)

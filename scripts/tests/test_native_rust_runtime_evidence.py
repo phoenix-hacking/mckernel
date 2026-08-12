@@ -162,6 +162,30 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         with self.assertRaisesRegex(evidence.EvidenceError, "may not claim a gate PASS"):
             evidence.validate_contract(repo)
 
+    def test_missing_openssl_cli_package_is_rejected(self) -> None:
+        repo = self.copy_contract_repository()
+        workflow = ".github/workflows/native-rust-host-modules-exact-build.yml"
+        self.mutate_text(
+            repo,
+            workflow,
+            "openssl openssl-devel patch",
+            "openssl-devel patch",
+        )
+        with self.assertRaisesRegex(evidence.EvidenceError, "OpenSSL CLI closure"):
+            evidence.validate_contract(repo)
+
+    def test_openssl_libraries_cannot_substitute_for_the_cli(self) -> None:
+        repo = self.copy_contract_repository()
+        workflow = ".github/workflows/native-rust-host-modules-exact-build.yml"
+        self.mutate_text(
+            repo,
+            workflow,
+            "openssl openssl-devel patch",
+            "openssl-libs openssl-devel patch",
+        )
+        with self.assertRaisesRegex(evidence.EvidenceError, "OpenSSL CLI closure"):
+            evidence.validate_contract(repo)
+
     def test_required_artifact_removal_is_rejected(self) -> None:
         repo = self.copy_contract_repository()
         path = repo / evidence.DEFAULT_CONTRACT

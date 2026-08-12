@@ -351,6 +351,20 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
     for fragment in ("workflow_call:", "-j2 bzImage modules", '"$EVIDENCE_DIR/bzImage"'):
         if fragment not in build_workflow:
             raise EvidenceError("exact build workflow is not a reusable boot artifact producer")
+    openssl_boundaries = (
+        "openssl openssl-devel patch",
+        'openssl_path="$(command -v openssl)"',
+        'test "$openssl_path" = /usr/bin/openssl',
+        "rpm -qf --qf '%{NAME}\\n' \"$openssl_path\"",
+        "openssl version",
+    )
+    if any(build_workflow.count(fragment) != 1 for fragment in openssl_boundaries):
+        raise EvidenceError(
+            "exact build workflow lacks the uniquely bound Rocky OpenSSL CLI closure"
+        )
+    openssl_positions = [build_workflow.index(fragment) for fragment in openssl_boundaries]
+    if openssl_positions != sorted(openssl_positions):
+        raise EvidenceError("exact build workflow verifies OpenSSL out of order")
 
     image = contract["runtime"]["container_image"]
     if runtime_workflow.count(image) < 1:

@@ -55,7 +55,7 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
         self.assertEqual("1.7.0rc4", summary["version"])
         self.assertEqual(0, summary["parameters"])
         self.assertEqual(0, summary["dependencies"])
-        self.assertEqual(2, summary["transitive_module_count"])
+        self.assertEqual(3, summary["transitive_module_count"])
         self.assertEqual(2, summary["support_sources"])
 
     def test_ihk_queue_module_edge_is_required(self) -> None:
@@ -63,6 +63,15 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
             self.contract["production_source"],
             "mod ikc_queue;",
             "mod missing_queue;",
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "module edge"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_ihk_master_module_edge_is_required(self) -> None:
+        self.mutate_text(
+            self.contract["production_source"],
+            "mod ikc_master;",
+            "mod missing_master;",
         )
         with self.assertRaisesRegex(lifecycle.ValidationError, "module edge"):
             lifecycle.validate_repository(self.repo)
@@ -78,6 +87,13 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
         queue = self.repo / "host-kernel/native-rust/ikc_queue.rs"
         with queue.open("a", encoding="utf-8") as stream:
             stream.write("// unbound queue drift\n")
+        with self.assertRaisesRegex(lifecycle.ValidationError, "module digest"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_master_module_digest_drift_is_rejected(self) -> None:
+        master = self.repo / "host-kernel/native-rust/ikc_master.rs"
+        with master.open("a", encoding="utf-8") as stream:
+            stream.write("// unbound master drift\n")
         with self.assertRaisesRegex(lifecycle.ValidationError, "module digest"):
             lifecycle.validate_repository(self.repo)
 
@@ -102,6 +118,20 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
                 ast.parse(source, filename=str(path), feature_version=(3, 6))
             except TypeError:
                 ast.parse(source, filename=str(path), feature_version=6)
+
+    def test_stage_manifest_cannot_omit_master_module(self) -> None:
+        manifest_path = self.repo / self.contract["stage_manifest"]
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        manifest["inputs"] = [
+            item
+            for item in manifest["inputs"]
+            if item.get("destination") != "ikc_master.rs"
+        ]
+        manifest_path.write_text(
+            json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "omits IHK module"):
+            lifecycle.validate_repository(self.repo)
 
     def test_parameter_surface_drift_is_rejected(self) -> None:
         self.mutate_text(

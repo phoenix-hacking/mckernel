@@ -27,11 +27,12 @@ EXPECTED_COMPILER = (
 )
 EXPECTED_UNPROVEN = [
     "native ihk crate-root and Kbuild integration",
-    "Linux kernel allocation and irqsave lock adapter",
-    "six versioned legacy export adapters and consumer migration",
+    "audited Linux spin_lock_irqsave-equivalent adapter enforcing IRQ-disabled, nonpreemptible, no-sleep, and non-reentrant execution for every operation including Drop",
+    "six versioned legacy export adapters, raw-address ownership-transfer registry, address-based free adapter, and consumer migration",
     "exact Rocky 10.2 kernel compilation, modpost, load, and unload",
-    "differential legacy allocation, exhaustion, fragmentation, and errno behavior",
-    "fault injection, KCSAN, lockdep, pressure, and long-run leak evidence",
+    "differential legacy allocation, exhaustion, fragmentation, errno behavior, and deliberate boundary deltas",
+    "bounded irq-disabled latency and large fragmented-allocation pressure",
+    "fault injection, KCSAN, lockdep, and long-run leak evidence",
     "IHK-006 gate completion or credit",
 ]
 
@@ -136,6 +137,25 @@ def _require_order(text, fragments, label):
             )
 
 
+def _function_body(source, signature, label):
+    start = source.find(signature)
+    if start < 0:
+        raise ValidationError("source lacks {0}".format(label))
+    opening = source.find("{", start + len(signature))
+    if opening < 0:
+        raise ValidationError("{0} lacks an opening brace".format(label))
+    depth = 0
+    for position in range(opening, len(source)):
+        character = source[position]
+        if character == "{":
+            depth += 1
+        elif character == "}":
+            depth -= 1
+            if depth == 0:
+                return source[opening + 1 : position]
+    raise ValidationError("{0} lacks a closing brace".format(label))
+
+
 def _validate_contract(contract):
     _require_keys(
         contract,
@@ -146,6 +166,8 @@ def _validate_contract(contract):
             "gate_id",
             "intentional_legacy_deltas",
             "legacy_oracle",
+            "lifetime_probe",
+            "must_use_probe",
             "ownership_contract",
             "production_source",
             "protocol",
@@ -171,6 +193,7 @@ def _validate_contract(contract):
             "compiler_environment",
             "compiler_version_first_line",
             "expected_test_count",
+            "internal_test_names",
             "path",
             "sha256",
             "test_names",
@@ -185,11 +208,22 @@ def _validate_contract(contract):
         "fragmentation_accounting_and_coalescing_are_deterministic",
         "byte_api_and_range_errors_fail_closed",
         "concurrent_allocations_never_overlap_and_restore_every_block",
+        "reserve_over_allocated_is_rejected_and_ownership_remains_exact",
+        "concurrent_reserve_release_snapshot_preserves_invariants",
+        "physical_alignment_uses_absolute_base",
+        "partial_tail_capacities_are_exact",
+        "overflow_and_zero_input_matrix_fails_closed",
+        "copied_range_metadata_does_not_extend_lease_ownership",
     ]
     if fixture["path"] != "scripts/tests/fixtures/ihk_page_allocator_compile.rs":
         raise ValidationError("contract points at a different compile fixture")
-    if fixture["test_names"] != expected_tests or fixture["expected_test_count"] != 7:
-        raise ValidationError("compile fixture seven-test inventory differs")
+    if (
+        fixture["test_names"] != expected_tests
+        or fixture["internal_test_names"]
+        != ["wrong_kind_and_overlapping_release_are_rejected_without_clearing"]
+        or fixture["expected_test_count"] != 14
+    ):
+        raise ValidationError("compile fixture fourteen-test inventory differs")
     if fixture["compile_arguments"] != [
         "--edition=2021",
         "--test",
@@ -202,7 +236,44 @@ def _validate_contract(contract):
         raise ValidationError("compiler environment name differs")
     if fixture["compiler_version_first_line"] != EXPECTED_COMPILER:
         raise ValidationError("exact Rocky compiler identity differs")
-    for item, label in ((contract["production_source"], "source"), (fixture, "fixture")):
+    probe = contract["must_use_probe"]
+    _require_keys(
+        probe,
+        {"compile_arguments", "diagnostic_fragments", "path", "sha256"},
+        "must_use_probe",
+    )
+    if probe != {
+        "compile_arguments": ["--edition=2021", "-Dunused-must-use"],
+        "diagnostic_fragments": [
+            "unused `PageAllocation` that must be used",
+            "unused `PageReservation` that must be used",
+        ],
+        "path": "scripts/tests/fixtures/ihk_page_allocator_must_use_compile_fail.rs",
+        "sha256": probe["sha256"],
+    }:
+        raise ValidationError("must-use compile-fail probe contract differs")
+    lifetime = contract["lifetime_probe"]
+    _require_keys(
+        lifetime,
+        {"compile_arguments", "diagnostic_fragments", "path", "sha256"},
+        "lifetime_probe",
+    )
+    if lifetime != {
+        "compile_arguments": ["--edition=2021"],
+        "diagnostic_fragments": [
+            "error[E0515]",
+            "cannot return value referencing local variable `allocator`",
+        ],
+        "path": "scripts/tests/fixtures/ihk_page_allocator_lifetime_compile_fail.rs",
+        "sha256": lifetime["sha256"],
+    }:
+        raise ValidationError("lifetime compile-fail probe contract differs")
+    for item, label in (
+        (contract["production_source"], "source"),
+        (fixture, "fixture"),
+        (probe, "must-use probe"),
+        (lifetime, "lifetime probe"),
+    ):
         if re.fullmatch(r"[0-9a-f]{64}", item["sha256"] or "") is None:
             raise ValidationError("{0} SHA-256 is malformed".format(label))
 
@@ -238,7 +309,9 @@ def _validate_contract(contract):
 
     expected_deltas = [
         "reject zero, non-power-of-two, misaligned, truncated-byte, overflowing, and out-of-range inputs",
-        "allocate exact contiguous block counts across bitmap-word boundaries instead of rounding requests of 32 or more blocks to 64-block groups",
+        "allocate exact contiguous block counts across bitmap-word boundaries instead of forbidding small cross-word ranges or rounding requests of 32 or more blocks to 64-block groups",
+        "permit an exact allocation ending at the final bitmap block instead of preserving the legacy large-allocation final-word rejection",
+        "apply requested alignment to the absolute physical unit number rather than an allocator-relative bitmap index",
         "separate allocation and reservation ownership maps and reject overlapping or wrong-kind release",
         "return typed outcomes internally and require a later audited legacy ABI adapter",
         "use rollback leases whose Drop paths restore ownership",
@@ -253,8 +326,11 @@ def _validate_contract(contract):
             "allocation_drop_rolls_back",
             "allocator_metadata_allocates_no_memory",
             "bitmap_storage_caller_owned",
+            "drop_requires_irqsave_nonpreemptible_no_sleep_context",
             "double_or_wrong_kind_release_rejected",
+            "leases_are_must_use",
             "operation_lock_requires_non_reentrant_context",
+            "range_metadata_does_not_extend_lease_ownership",
             "reservation_drop_rolls_back",
         },
         "ownership_contract",
@@ -263,8 +339,8 @@ def _validate_contract(contract):
         raise ValidationError("every allocator ownership condition must remain mandatory")
 
     if contract["protocol"] != {
-        "alignment": "power-of-two allocator-unit counts",
-        "allocation_policy": "next-fit exact contiguous range",
+        "alignment": "power-of-two allocator-unit counts applied to the absolute physical unit number",
+        "allocation_policy": "legacy-effective first-fit exact contiguous range",
         "bitmap_word_bits": 64,
         "range_end": "exclusive checked u64 physical address",
         "reservation_policy": "exact non-overlapping physical interval",
@@ -306,6 +382,8 @@ def _validate_source(source):
         "kmalloc",
         "kfree",
         "ihk_pagealloc_",
+        "next_hint",
+        "AtomicUsize",
     ]
     for fragment in forbidden:
         if fragment in source:
@@ -316,18 +394,14 @@ def _validate_source(source):
         ("allocated: &'storage [AtomicU64]", "separate allocation map"),
         ("reserved: &'storage [AtomicU64]", "separate reservation map"),
         ("operation_lock: AtomicBool", "serialized operation lock"),
-        ("unit_bytes.is_power_of_two()", "power-of-two unit validation"),
-        ("start == 0", "zero-address failure-sentinel rejection"),
-        ("start % unit_bytes != 0", "start alignment validation"),
-        ("size_bytes % unit_bytes != 0", "size alignment validation"),
-        (".checked_add(size_bytes)", "checked physical end"),
-        ("allocated_storage.len() < required_words", "allocation bitmap bounds"),
-        ("reserved_storage.len() < required_words", "reservation bitmap bounds"),
-        ("!alignment_blocks.is_power_of_two()", "alignment validation"),
-        ("hint.wrapping_add(delta) % self.block_count", "overflow-safe next-fit wrap search"),
-        ("!self.range_is_clear(candidate, blocks)", "dual-map allocation exclusion"),
-        ("self.set_range(self.allocated, candidate, blocks, true);", "allocation commit"),
-        ("self.set_range(self.reserved, start_block, blocks, true);", "reservation commit"),
+        ("#[must_use = \"dropping the allocation lease immediately releases its physical range\"]", "allocation must-use contract"),
+        ("#[must_use = \"dropping the reservation lease immediately releases its physical range\"]", "reservation must-use contract"),
+        ("This is copied metadata, not an ownership token.", "range metadata lifetime contract"),
+        ("valid only while this lease remains alive", "lease-scoped range validity"),
+        ("audited Linux irqsave-equivalent adapter", "irqsave integration precondition"),
+        ("disables local IRQs and", "IRQ-disabled integration precondition"),
+        ("preemption, cannot sleep", "nonpreemptible no-sleep integration precondition"),
+        ("including lease `Drop`", "Drop integration precondition"),
         ("PageAllocatorError::Overlap", "overlap rejection"),
         ("PageAllocatorError::Ownership", "ownership rejection"),
         ("largest_free_run", "fragmentation accounting"),
@@ -342,29 +416,115 @@ def _validate_source(source):
     _require_at_least(source, ".release_owned(self.range, OwnershipKind::Allocated)", 2, "allocation rollback")
     _require_at_least(source, ".release_owned(self.range, OwnershipKind::Reserved)", 2, "reservation rollback")
     _require_at_least(source, ".checked_mul(self.unit_bytes)", 3, "checked range multiplication")
+
+    constructor = _function_body(source, "pub(crate) fn new(", "allocator constructor")
+    for fragment, label in (
+        ("unit_bytes.is_power_of_two()", "power-of-two unit validation"),
+        ("start == 0", "zero-address failure-sentinel rejection"),
+        ("start % unit_bytes != 0", "start alignment validation"),
+        ("size_bytes % unit_bytes != 0", "size alignment validation"),
+        (".checked_add(size_bytes)", "checked physical end"),
+        (".checked_add(BITS_PER_WORD - 1)", "checked bitmap word ceiling"),
+        ("allocated_storage.len() < required_words", "allocation bitmap bounds"),
+        ("reserved_storage.len() < required_words", "reservation bitmap bounds"),
+    ):
+        if fragment not in constructor:
+            raise ValidationError("constructor lacks {0}".format(label))
+
+    allocation = _function_body(source, "pub(crate) fn allocate_aligned(", "aligned allocation")
+    if allocation.count("let _guard = self.lock();") != 1:
+        raise ValidationError("aligned allocation must take exactly one local operation lock")
+    for fragment, label in (
+        ("!alignment_blocks.is_power_of_two()", "alignment validation"),
+        ("let base_block = self.start / self.unit_bytes;", "physical base block"),
+        ("for candidate in 0..self.block_count", "legacy-effective first-fit search"),
+        ("candidate.checked_add(blocks)", "checked candidate limit"),
+        ("limit > self.block_count", "candidate capacity bound"),
+        (".checked_add(candidate_u64)", "checked physical block"),
+        ("physical_block % alignment_blocks != 0", "absolute physical alignment test"),
+        ("!self.range_is_clear(candidate, blocks)", "dual-map allocation exclusion"),
+    ):
+        if fragment not in allocation:
+            raise ValidationError("aligned allocation lacks {0}".format(label))
     _require_order(
-        source,
+        allocation,
         [
             "let _guard = self.lock();",
-            "let hint = self.next_hint.load",
+            "let base_block = self.start / self.unit_bytes;",
+            "for candidate in 0..self.block_count",
+            "candidate.checked_add(blocks)",
+            "limit > self.block_count",
+            "!self.range_is_clear(candidate, blocks)",
             "let range = self.range_from_blocks(candidate, blocks)?;",
             "self.set_range(self.allocated, candidate, blocks, true);",
             "return Ok(PageAllocation",
         ],
         "serialized allocation transaction",
     )
+
+    reservation = _function_body(source, "pub(crate) fn reserve(", "reservation")
+    if reservation.count("let _guard = self.lock();") != 1:
+        raise ValidationError("reservation must take exactly one local operation lock")
     _require_order(
-        source,
+        reservation,
         [
             "let start_block = self.validate_range(address, blocks)?;",
+            "let _guard = self.lock();",
+            "if !self.range_is_clear(start_block, blocks)",
             "let range = self.range_from_blocks(start_block, blocks)?;",
             "self.set_range(self.reserved, start_block, blocks, true);",
             "Ok(PageReservation",
         ],
         "fallible-before-commit reservation transaction",
     )
-    if "same-CPU interrupt that re-enters this allocator would spin" not in source:
-        raise ValidationError("source lacks non-reentrant context contract")
+
+    snapshot = _function_body(source, "pub(crate) fn snapshot(", "snapshot")
+    if snapshot.count("let _guard = self.lock();") != 1:
+        raise ValidationError("snapshot must take exactly one local operation lock")
+    _require_order(
+        snapshot,
+        [
+            "let _guard = self.lock();",
+            "for block in 0..self.block_count",
+            "let allocated = self.bit_is_set(self.allocated, block);",
+            "let reserved = self.bit_is_set(self.reserved, block);",
+            "PageAllocatorSnapshot",
+        ],
+        "serialized snapshot transaction",
+    )
+
+    release = _function_body(source, "fn release_owned(", "owned release")
+    if release.count("let _guard = self.lock();") != 1:
+        raise ValidationError("owned release must take exactly one local operation lock")
+    _require_order(
+        release,
+        [
+            "let start_block = self.validate_range(range.address, range.blocks)?;",
+            "range.bytes",
+            "let _guard = self.lock();",
+            "let (owned, other) = match kind",
+            "if !self.range_is_set(owned, start_block, range.blocks)",
+            "|| self.range_has_any(other, start_block, range.blocks)",
+            "return Err(PageAllocatorError::Ownership);",
+            "self.set_range(owned, start_block, range.blocks, false);",
+        ],
+        "serialized exact-kind release transaction",
+    )
+
+    clear = _function_body(source, "fn range_is_clear(", "dual-map clear check")
+    _require_order(
+        clear,
+        [
+            "!self.range_has_any(self.allocated, start, blocks)",
+            "&& !self.range_has_any(self.reserved, start, blocks)",
+        ],
+        "dual-map clear check",
+    )
+    _require_once(
+        source,
+        "fn wrong_kind_and_overlapping_release_are_rejected_without_clearing()",
+        "ownership invariant test",
+    )
 
 
 def _validate_fixture(fixture, test_names):
@@ -387,9 +547,49 @@ def _validate_fixture(fixture, test_names):
         ("PageAllocatorError::Invalid", "invalid-input assertions"),
         ("reservation.release().unwrap();", "explicit reservation release"),
         ("first.release().unwrap();", "explicit allocation release"),
+        ("assert_eq!(coalesced.range().address(), 0x50_0000 + 24 * 4096);", "legacy-effective first-fit oracle"),
+        ("fn reserve_over_allocated_is_rejected_and_ownership_remains_exact()", "reserve-over-allocated coverage"),
+        ("fn concurrent_reserve_release_snapshot_preserves_invariants()", "concurrent reserve/release/snapshot coverage"),
+        ("snapshot.allocated_blocks\n                            + snapshot.reserved_blocks\n                            + snapshot.free_blocks", "concurrent accounting invariant"),
+        ("fn physical_alignment_uses_absolute_base()", "misaligned-base alignment coverage"),
+        ("assert_eq!(lease.range().address(), 64 * 4096);", "absolute alignment oracle"),
+        ("for capacity in [1_usize, 63, 65, 127]", "partial-tail capacity matrix"),
+        ("assert_eq!(allocator.allocate(2).err(), Some(PageAllocatorError::Exhausted));", "tail candidate limit oracle"),
+        ("fn overflow_and_zero_input_matrix_fails_closed()", "overflow and zero matrix"),
+        ("(1, u64::MAX - 1, 1)", "bitmap ceiling overflow case"),
+        ("allocator.reserve(0xc0_0000, usize::MAX)", "release-range multiplication overflow analogue"),
+        ("fn copied_range_metadata_does_not_extend_lease_ownership()", "range lifetime coverage"),
+        ("assert_eq!(replacement.range().address(), copied_metadata.address());", "first-fit metadata reuse oracle"),
     ):
         if fragment not in fixture:
             raise ValidationError("fixture lacks {0}".format(label))
+
+
+def _validate_must_use_probe(probe):
+    _require_once(
+        probe,
+        '#[path = "../../../host-kernel/native-rust/page_allocator.rs"]',
+        "must-use production-source import",
+    )
+    for fragment, label in (
+        ("allocator.allocate(1).unwrap();", "discarded allocation lease"),
+        ("allocator.reserve(0x1000, 1).unwrap();", "discarded reservation lease"),
+    ):
+        _require_once(probe, fragment, label)
+
+
+def _validate_lifetime_probe(probe):
+    _require_once(
+        probe,
+        '#[path = "../../../host-kernel/native-rust/page_allocator.rs"]',
+        "lifetime production-source import",
+    )
+    _require_once(
+        probe,
+        "fn escaped_lease<'borrow>() -> PageAllocation<'borrow, 'borrow>",
+        "escaping lease lifetime probe",
+    )
+    _require_once(probe, "allocator.allocate(1).unwrap()", "borrowed lease return")
 
 
 def validate_repository(repo):
@@ -400,11 +600,15 @@ def validate_repository(repo):
 
     source_path = _repo_file(repo, contract["production_source"]["path"], "production source")
     fixture_path = _repo_file(repo, contract["compile_fixture"]["path"], "compile fixture")
+    probe_path = _repo_file(repo, contract["must_use_probe"]["path"], "must-use probe")
+    lifetime_path = _repo_file(repo, contract["lifetime_probe"]["path"], "lifetime probe")
     oracle_source = _repo_file(repo, contract["legacy_oracle"]["source_path"], "legacy source")
     oracle_header = _repo_file(repo, contract["legacy_oracle"]["header_path"], "legacy header")
     for path, expected, label in (
         (source_path, contract["production_source"]["sha256"], "source"),
         (fixture_path, contract["compile_fixture"]["sha256"], "fixture"),
+        (probe_path, contract["must_use_probe"]["sha256"], "must-use probe"),
+        (lifetime_path, contract["lifetime_probe"]["sha256"], "lifetime probe"),
         (oracle_source, contract["legacy_oracle"]["source_sha256"], "legacy source"),
         (oracle_header, contract["legacy_oracle"]["header_sha256"], "legacy header"),
     ):
@@ -416,10 +620,14 @@ def validate_repository(repo):
 
     source = _read_text(source_path, "production source")
     fixture = _read_text(fixture_path, "compile fixture")
+    probe = _read_text(probe_path, "must-use probe")
+    lifetime = _read_text(lifetime_path, "lifetime probe")
     legacy = _read_text(oracle_source, "legacy source")
     header = _read_text(oracle_header, "legacy header")
     _validate_source(source)
     _validate_fixture(fixture, contract["compile_fixture"]["test_names"])
+    _validate_must_use_probe(probe)
+    _validate_lifetime_probe(lifetime)
     for symbol in contract["legacy_oracle"]["symbols"]:
         if legacy.count("EXPORT_SYMBOL({0});".format(symbol)) != 1:
             raise ValidationError("legacy source export differs: {0}".format(symbol))
@@ -439,8 +647,9 @@ def validate_repository(repo):
 
 
 def _resolve_compiler(explicit):
-    configured = explicit or os.environ.get("IHK_PAGE_ALLOCATOR_RUSTC")
-    if configured:
+    configured = explicit if explicit is not None else os.environ.get("IHK_PAGE_ALLOCATOR_RUSTC")
+    if configured is not None and configured.strip():
+        configured = configured.strip()
         candidate = Path(configured)
         if not candidate.is_absolute():
             found = shutil.which(configured)
@@ -450,12 +659,12 @@ def _resolve_compiler(explicit):
         if not candidate.is_file():
             raise ValidationError("configured rustc is not a regular file: {0}".format(candidate))
         return str(candidate)
-    found = shutil.which("rustc")
-    return found
+    return None
 
 
 def validate_configured_fixture(repo, rustc=None, require_rustc=False):
     repo = Path(repo).resolve()
+    validate_repository(repo)
     contract = _load_json(_repo_file(repo, DEFAULT_CONTRACT.as_posix(), "contract"))
     _validate_contract(contract)
     compiler = _resolve_compiler(rustc)
@@ -532,6 +741,56 @@ def validate_configured_fixture(repo, rustc=None, require_rustc=False):
         )
         if match is None or int(match.group(1)) != fixture["expected_test_count"]:
             raise ValidationError("fixture did not execute the exact contracted test count")
+
+        probe = contract["must_use_probe"]
+        probe_output = Path(temporary) / "ihk-page-allocator-must-use-probe"
+        probe_command = [compiler] + probe["compile_arguments"] + [
+            probe["path"],
+            "-o",
+            str(probe_output),
+        ]
+        probed = subprocess.run(
+            probe_command,
+            cwd=str(repo),
+            env=environment,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+            timeout=120,
+        )
+        if probed.returncode == 0:
+            raise ValidationError("must-use compile-fail probe unexpectedly compiled")
+        diagnostics = probed.stdout + probed.stderr
+        for fragment in probe["diagnostic_fragments"]:
+            if fragment not in diagnostics:
+                raise ValidationError(
+                    "must-use compile-fail probe lacks diagnostic: {0}".format(fragment)
+                )
+
+        lifetime = contract["lifetime_probe"]
+        lifetime_output = Path(temporary) / "ihk-page-allocator-lifetime-probe"
+        lifetime_command = [compiler] + lifetime["compile_arguments"] + [
+            lifetime["path"],
+            "-o",
+            str(lifetime_output),
+        ]
+        lifetime_result = subprocess.run(
+            lifetime_command,
+            cwd=str(repo),
+            env=environment,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+            timeout=120,
+        )
+        if lifetime_result.returncode == 0:
+            raise ValidationError("lifetime compile-fail probe unexpectedly compiled")
+        lifetime_diagnostics = lifetime_result.stdout + lifetime_result.stderr
+        for fragment in lifetime["diagnostic_fragments"]:
+            if fragment not in lifetime_diagnostics:
+                raise ValidationError(
+                    "lifetime compile-fail probe lacks diagnostic: {0}".format(fragment)
+                )
 
     return {
         "fixture_status": "EXACT_ROCKY_RUSTC_FIXTURE_VERIFIED",

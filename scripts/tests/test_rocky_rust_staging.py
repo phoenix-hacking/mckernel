@@ -102,6 +102,7 @@ class RockyRustStagingTests(unittest.TestCase):
                 "abi/x86_64.rs",
                 "ikc_queue.rs",
                 "os_registry.rs",
+                "ikc_master.rs",
                 "ihk.rs",
                 "ihk_smp_x86_64.rs",
                 "mcctrl.rs",
@@ -208,6 +209,7 @@ class RockyRustStagingTests(unittest.TestCase):
                 "abi/x86_64.rs",
                 "ikc_queue.rs",
                 "os_registry.rs",
+                "ikc_master.rs",
                 "ihk.rs",
                 "ihk_smp_x86_64.rs",
                 "mcctrl.rs",
@@ -233,7 +235,7 @@ class RockyRustStagingTests(unittest.TestCase):
         with self.assertRaises(staging.ValidationError):
             self.plan()
 
-    def test_queue_module_is_staged_beside_the_ihk_crate_root(self):
+    def test_queue_and_master_modules_are_staged_beside_the_ihk_crate_root(self):
         plan = self.plan()
         kernel = os.path.join(self.temporary, "queue-evidence-kernel")
         os.makedirs(os.path.join(kernel, "drivers", "misc"))
@@ -241,8 +243,14 @@ class RockyRustStagingTests(unittest.TestCase):
         queue_path = os.path.join(target, "ikc_queue.rs")
         self.assertTrue(os.path.isfile(queue_path))
         self.assertEqual(staging.EXPECTED_INPUTS[3]["sha256"], digest(queue_path))
+        master_path = os.path.join(target, "ikc_master.rs")
+        self.assertTrue(os.path.isfile(master_path))
+        self.assertEqual(staging.EXPECTED_INPUTS[5]["sha256"], digest(master_path))
         with open(os.path.join(target, "ihk.rs"), "r") as stream:
-            self.assertIn("mod ikc_queue;", stream.read())
+            root = stream.read()
+            self.assertIn("mod ikc_queue;", root)
+            self.assertIn("mod os_registry;", root)
+            self.assertIn("mod ikc_master;", root)
         self.assertFalse(plan["credit_eligible"])
 
     def test_os_registry_is_staged_at_the_module_import_path(self):

@@ -22,7 +22,7 @@
     }
   ],
   "contract_id": "mckernel-rs001-exact-linux-api-probe-v1",
-  "contract_sha256": "b1fe96dab77902c8b031c15b5f034e4ea35970b8458ba6a248b1402f04783b34",
+  "contract_sha256": "65acf44e5d050630b6e55016fd87df8803628afd6b198c5694963d6e080bd3e4",
   "evidence_profile": "rocky-10.2-exact-linux-api-evidence-v1",
   "frozen_needs": {
     "file_sha256": "76f16c395dd40f78ab1b72debcc61a352e28a3ddbf78586824ce9882a2a43e4c",
@@ -37,6 +37,30 @@
     "policy": "Capture may prove exact technical facts but can never mark RS-001 PASS; independent review and evidence registration are required.",
     "self_attestation_forbidden": true
   },
+  "openssl_tool_closure_failure_evidence": [
+    {
+      "artifact_id": null,
+      "artifact_zip_bytes": null,
+      "artifact_zip_sha256": null,
+      "failure_boundary": "GENKEY certs/signing_key.pem",
+      "job_id": 94049141031,
+      "missing_command": "openssl",
+      "repository_commit": "9490d9a33aabd9ba1d823d2ab390d792f55f0eba",
+      "run_id": 31576319131,
+      "workflow": "RS-001 exact Rocky Linux API evidence"
+    },
+    {
+      "artifact_id": 9133510114,
+      "artifact_zip_bytes": 132850,
+      "artifact_zip_sha256": "c7a76b23e9ed3443f270e23d28cce187965b11ea4a8d13ec03fcf5bbf0053c99",
+      "failure_boundary": "GENKEY certs/signing_key.pem",
+      "job_id": 94049140684,
+      "missing_command": "openssl",
+      "repository_commit": "9490d9a33aabd9ba1d823d2ab390d792f55f0eba",
+      "run_id": 31576319128,
+      "workflow": "Native Rust host modules exact Rocky build"
+    }
+  ],
   "per_need_evidence": [
     "availability in System.map and/or Module.symvers",
     "export class, provider module, and namespace",
@@ -53,7 +77,7 @@
   "repository_inputs": {
     "checker": {
       "path": "scripts/linux_api_exact_probe.py",
-      "sha256": "745e2b9b91b44c2fb3eedb89117d172cfe4dc9b9014a4cf909b16185ab00d830"
+      "sha256": "6437b57b6dbb5bc6292131e4305ad8ce99b0ada9993f98da1beeba829da987d0"
     },
     "clang_21_warning_preimages": [
       {
@@ -249,7 +273,7 @@
     },
     "workflow": {
       "path": ".github/workflows/rs001-linux-api-exact-probe.yml",
-      "sha256": "59d8efece102d4efb358d906c37161c17df0c89dbdba586f07ebe6c859bf4f17"
+      "sha256": "9ddb9811f5e35373cd7f17cdbeb3b7f731446d5bc7e2c09297a3b47bb6f21942"
     }
   },
   "required_capture_inputs": [

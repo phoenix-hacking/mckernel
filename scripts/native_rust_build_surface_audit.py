@@ -21,6 +21,7 @@ AUTHORITATIVE_INPUTS = {
 }
 SUPPLEMENTAL_INPUTS = {
     "abi/x86_64.rs": "host-kernel/native-rust/abi/x86_64.rs",
+    "ikc_master.rs": "host-kernel/native-rust/ikc_master.rs",
     "ikc_queue.rs": "host-kernel/native-rust/ikc_queue.rs",
     "os_registry.rs": "host-kernel/native-rust/os_registry.rs",
 }

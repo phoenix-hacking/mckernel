@@ -9,9 +9,12 @@
     ],
     "compiler_environment": "IHK_PAGE_ALLOCATOR_RUSTC",
     "compiler_version_first_line": "rustc 1.92.0 (ded5c06cf 2025-12-08) (Red Hat 1.92.0-1.el10)",
-    "expected_test_count": 7,
+    "expected_test_count": 14,
+    "internal_test_names": [
+      "wrong_kind_and_overlapping_release_are_rejected_without_clearing"
+    ],
     "path": "scripts/tests/fixtures/ihk_page_allocator_compile.rs",
-    "sha256": "1c654ae6fbee6fab78426dc9f421c0f73310e65974a7d748514d14a36b41d9de",
+    "sha256": "ba06a4de06e93c2b9db1d45cd188919719128974620a93d4c97545bfc56ddc35",
     "test_names": [
       "validates_constructor_ranges_and_storage",
       "exact_capacity_fifo_drop_and_explicit_release_restore_space",
@@ -19,7 +22,13 @@
       "reservations_exclude_allocations_and_roll_back_on_drop",
       "fragmentation_accounting_and_coalescing_are_deterministic",
       "byte_api_and_range_errors_fail_closed",
-      "concurrent_allocations_never_overlap_and_restore_every_block"
+      "concurrent_allocations_never_overlap_and_restore_every_block",
+      "reserve_over_allocated_is_rejected_and_ownership_remains_exact",
+      "concurrent_reserve_release_snapshot_preserves_invariants",
+      "physical_alignment_uses_absolute_base",
+      "partial_tail_capacities_are_exact",
+      "overflow_and_zero_input_matrix_fails_closed",
+      "copied_range_metadata_does_not_extend_lease_ownership"
     ]
   },
   "evidence_policy": {
@@ -34,7 +43,9 @@
   "gate_id": "IHK-006",
   "intentional_legacy_deltas": [
     "reject zero, non-power-of-two, misaligned, truncated-byte, overflowing, and out-of-range inputs",
-    "allocate exact contiguous block counts across bitmap-word boundaries instead of rounding requests of 32 or more blocks to 64-block groups",
+    "allocate exact contiguous block counts across bitmap-word boundaries instead of forbidding small cross-word ranges or rounding requests of 32 or more blocks to 64-block groups",
+    "permit an exact allocation ending at the final bitmap block instead of preserving the legacy large-allocation final-word rejection",
+    "apply requested alignment to the absolute physical unit number rather than an allocator-relative bitmap index",
     "separate allocation and reservation ownership maps and reject overlapping or wrong-kind release",
     "return typed outcomes internally and require a later audited legacy ABI adapter",
     "use rollback leases whose Drop paths restore ownership"
@@ -54,21 +65,47 @@
       "ihk_pagealloc_free_size"
     ]
   },
+  "lifetime_probe": {
+    "compile_arguments": [
+      "--edition=2021"
+    ],
+    "diagnostic_fragments": [
+      "error[E0515]",
+      "cannot return value referencing local variable `allocator`"
+    ],
+    "path": "scripts/tests/fixtures/ihk_page_allocator_lifetime_compile_fail.rs",
+    "sha256": "64efd946d3929d8cd101de93b9e6c10f4e88358ee93fef1bf647ffef43d51736"
+  },
   "ownership_contract": {
     "allocation_drop_rolls_back": true,
     "allocator_metadata_allocates_no_memory": true,
     "bitmap_storage_caller_owned": true,
+    "drop_requires_irqsave_nonpreemptible_no_sleep_context": true,
     "double_or_wrong_kind_release_rejected": true,
+    "leases_are_must_use": true,
     "operation_lock_requires_non_reentrant_context": true,
+    "range_metadata_does_not_extend_lease_ownership": true,
     "reservation_drop_rolls_back": true
+  },
+  "must_use_probe": {
+    "compile_arguments": [
+      "--edition=2021",
+      "-Dunused-must-use"
+    ],
+    "diagnostic_fragments": [
+      "unused `PageAllocation` that must be used",
+      "unused `PageReservation` that must be used"
+    ],
+    "path": "scripts/tests/fixtures/ihk_page_allocator_must_use_compile_fail.rs",
+    "sha256": "ff237cf413a81b8651badf03ab465948bc6483279c4975a9266c730c3ce20a25"
   },
   "production_source": {
     "path": "host-kernel/native-rust/page_allocator.rs",
-    "sha256": "1a01735326c9967a64ad9428623f00eda675c3abadc86f31966546ba2fbc343e"
+    "sha256": "20acb2eae89e26faea92e9ecd267e1d43c9e7557016b885edd90871aba4d925b"
   },
   "protocol": {
-    "alignment": "power-of-two allocator-unit counts",
-    "allocation_policy": "next-fit exact contiguous range",
+    "alignment": "power-of-two allocator-unit counts applied to the absolute physical unit number",
+    "allocation_policy": "legacy-effective first-fit exact contiguous range",
     "bitmap_word_bits": 64,
     "range_end": "exclusive checked u64 physical address",
     "reservation_policy": "exact non-overlapping physical interval",
@@ -78,11 +115,12 @@
   "schema_version": 1,
   "unproven": [
     "native ihk crate-root and Kbuild integration",
-    "Linux kernel allocation and irqsave lock adapter",
-    "six versioned legacy export adapters and consumer migration",
+    "audited Linux spin_lock_irqsave-equivalent adapter enforcing IRQ-disabled, nonpreemptible, no-sleep, and non-reentrant execution for every operation including Drop",
+    "six versioned legacy export adapters, raw-address ownership-transfer registry, address-based free adapter, and consumer migration",
     "exact Rocky 10.2 kernel compilation, modpost, load, and unload",
-    "differential legacy allocation, exhaustion, fragmentation, and errno behavior",
-    "fault injection, KCSAN, lockdep, pressure, and long-run leak evidence",
+    "differential legacy allocation, exhaustion, fragmentation, errno behavior, and deliberate boundary deltas",
+    "bounded irq-disabled latency and large fragmented-allocation pressure",
+    "fault injection, KCSAN, lockdep, and long-run leak evidence",
     "IHK-006 gate completion or credit"
   ]
 }

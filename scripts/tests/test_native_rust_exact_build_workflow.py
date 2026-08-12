@@ -140,6 +140,25 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         self.assertIn("if: ${{ always() }}", self.workflow)
         self.assertIn("if-no-files-found: error", self.workflow)
 
+    def test_openssl_cli_is_installed_and_verified_before_the_build(self):
+        install = self.workflow.index(
+            "dnf -y --setopt=install_weak_deps=False install \\\n"
+        )
+        checkout = self.workflow.index("Check out the exact candidate")
+        bootstrap = self.workflow[install:checkout]
+        package_end = bootstrap.index('openssl_path="$(command -v openssl)"')
+        package_tokens = re.findall(r"[A-Za-z0-9_.+-]+", bootstrap[:package_end])
+        self.assertEqual(1, package_tokens.count("openssl"))
+        self.assertEqual(1, package_tokens.count("openssl-devel"))
+        self.assertIn('openssl_path="$(command -v openssl)"', bootstrap)
+        self.assertIn('test "$openssl_path" = /usr/bin/openssl', bootstrap)
+        self.assertIn("rpm -qf --qf '%{NAME}\\n' \"$openssl_path\"", bootstrap)
+        self.assertIn("openssl version", bootstrap)
+        self.assertLess(
+            bootstrap.index("openssl openssl-devel"),
+            bootstrap.index("openssl version"),
+        )
+
     def test_frozen_legacy_oracle_and_shared_evidence_path_are_available(self):
         self.assertIn("submodules: recursive", self.workflow)
         self.assertIn(

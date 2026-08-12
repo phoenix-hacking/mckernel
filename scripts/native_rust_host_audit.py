@@ -28,6 +28,11 @@ def sha256(path):
     return h.hexdigest()
 
 
+def read_text(path):
+    with open(path, "r", encoding="utf-8") as stream:
+        return stream.read()
+
+
 def die(message):
     raise SystemExit("native Rust host audit failed: " + message)
 
@@ -72,7 +77,7 @@ def main():
         path = regular_repo_file(relative)
         if sha256(path) != source["sha256"]:
             die("crate root digest drift: {0}".format(relative))
-        text = open(path, "r", encoding="utf-8").read()
+        text = read_text(path)
         if "module!" not in text or "impl kernel::Module" not in text:
             die("missing Rust-for-Linux module entry point: {0}".format(relative))
         for pattern in FORBIDDEN_RUST_PATTERNS:
@@ -90,9 +95,12 @@ def main():
         )
     ]
     if [item.get("destination") for item in support] != [
-        "abi/x86_64.rs", "ikc_queue.rs", "os_registry.rs"
+        "abi/x86_64.rs", "ikc_queue.rs", "os_registry.rs", "ikc_master.rs"
     ]:
-        die("Rust support input closure differs from the locked ABI, queue, and OS registry")
+        die(
+            "Rust support input closure differs from the locked ABI, queue, "
+            "OS registry, and IKC master"
+        )
     for item in support:
         relative = item.get("repository_path")
         if not isinstance(relative, str) or not relative.endswith(".rs"):
@@ -100,7 +108,7 @@ def main():
         path = regular_repo_file(relative)
         if sha256(path) != item.get("sha256"):
             die("support input digest drift: {0}".format(relative))
-        text = open(path, "r", encoding="utf-8").read()
+        text = read_text(path)
         for pattern in FORBIDDEN_RUST_PATTERNS:
             if re.search(pattern, text):
                 die("unreviewed implementation escape hatch in {0}: {1}".format(relative, pattern))
@@ -110,7 +118,7 @@ def main():
         destinations.add(destination)
 
     kbuild = regular_repo_file("host-kernel/kbuild/Kbuild.in")
-    ktext = open(kbuild, "r", encoding="utf-8").read().lower()
+    ktext = read_text(kbuild).lower()
     for token in ("rustc", "$(shell", ".c ", ".o ", ".a ", ".so "):
         if token in ktext:
             die("forbidden Kbuild construct: {0}".format(token))

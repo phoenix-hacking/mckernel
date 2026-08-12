@@ -119,8 +119,12 @@ jobs:
             bc binutils bison bindgen-cli bpftool cargo clang cpio diffutils \
             dwarves elfutils-libelf-devel findutils flex gcc git-core gzip \
             hostname kernel-rpm-macros kmod lld llvm make ncurses-devel \
-            openssl-devel patch perl python3 python3-devel redhat-rpm-config \
+            openssl openssl-devel patch perl python3 python3-devel redhat-rpm-config \
             rpm-build rust rust-src rustfmt tar which xz zstd
+          openssl_path="$(command -v openssl)"
+          test "$openssl_path" = /usr/bin/openssl
+          test "$(rpm -qf --qf '%{NAME}\n' "$openssl_path")" = openssl
+          openssl version
           dnf clean all
           printf '%s\n' "bootstrap-complete" > "$evidence_dir/workflow-state"
 

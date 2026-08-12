@@ -165,7 +165,7 @@ mod tests {
         assert_eq!(allocator.allocate(25).err(), Some(PageAllocatorError::Exhausted));
         drop(c);
         let coalesced = allocator.allocate(48).unwrap();
-        assert_eq!(coalesced.range().address(), 0x50_0000 + 48 * 4096);
+        assert_eq!(coalesced.range().address(), 0x50_0000 + 24 * 4096);
         drop(a);
         drop(e);
         drop(coalesced);
@@ -269,5 +269,245 @@ mod tests {
         assert_eq!(snapshot.reserved_blocks, 0);
         assert_eq!(snapshot.free_blocks, 128);
         assert_eq!(snapshot.largest_free_run, 128);
+    }
+
+    #[test]
+    fn reserve_over_allocated_is_rejected_and_ownership_remains_exact() {
+        let (mut allocated, mut reserved) = storage();
+        let allocator = BitmapPageAllocator::new(
+            0x80_0000,
+            128 * 4096,
+            4096,
+            &mut allocated,
+            &mut reserved,
+        )
+        .unwrap();
+        let allocation = allocator.allocate(4).unwrap();
+        assert_eq!(
+            allocator.reserve(0x80_0000 + 2 * 4096, 4).err(),
+            Some(PageAllocatorError::Overlap)
+        );
+        let occupied = allocator.snapshot();
+        assert_eq!(occupied.allocated_blocks, 4);
+        assert_eq!(occupied.reserved_blocks, 0);
+        drop(allocation);
+        let reservation = allocator.reserve(0x80_0000 + 2 * 4096, 4).unwrap();
+        assert_eq!(allocator.snapshot().reserved_blocks, 4);
+        drop(reservation);
+        assert_eq!(allocator.snapshot().free_blocks, 128);
+    }
+
+    #[test]
+    fn concurrent_reserve_release_snapshot_preserves_invariants() {
+        const OPERATIONS: usize = 200;
+        let (allocated, reserved) = storage();
+        let allocated = Box::leak(Box::new(allocated));
+        let reserved = Box::leak(Box::new(reserved));
+        let allocator = BitmapPageAllocator::new(
+            0x90_0000,
+            128 * 4096,
+            4096,
+            allocated,
+            reserved,
+        )
+        .unwrap();
+
+        std::thread::scope(|scope| {
+            for worker in 0..4 {
+                let shared = &allocator;
+                scope.spawn(move || {
+                    for operation in 0..OPERATIONS {
+                        let blocks = 1 + ((worker + operation) % 4);
+                        loop {
+                            match shared.allocate(blocks) {
+                                Ok(lease) => {
+                                    std::thread::yield_now();
+                                    drop(lease);
+                                    break;
+                                }
+                                Err(PageAllocatorError::Exhausted) => std::thread::yield_now(),
+                                Err(error) => panic!("unexpected allocation error: {error:?}"),
+                            }
+                        }
+                    }
+                });
+            }
+            for worker in 0..2 {
+                let shared = &allocator;
+                scope.spawn(move || {
+                    let address = 0x90_0000 + (112 + worker * 8) * 4096;
+                    for _ in 0..OPERATIONS {
+                        let mut attempts = 0_usize;
+                        let lease = loop {
+                            match shared.reserve(address, 8) {
+                                Ok(lease) => break lease,
+                                Err(PageAllocatorError::Overlap) => {
+                                    attempts += 1;
+                                    assert!(attempts < 100_000, "reservation retry starvation");
+                                    std::thread::yield_now();
+                                }
+                                Err(error) => panic!("unexpected reservation error: {error:?}"),
+                            }
+                        };
+                        std::thread::yield_now();
+                        drop(lease);
+                    }
+                });
+            }
+            let shared = &allocator;
+            scope.spawn(move || {
+                for _ in 0..(OPERATIONS * 8) {
+                    let snapshot = shared.snapshot();
+                    assert_eq!(
+                        snapshot.allocated_blocks
+                            + snapshot.reserved_blocks
+                            + snapshot.free_blocks,
+                        snapshot.total_blocks
+                    );
+                    assert!(snapshot.largest_free_run <= snapshot.free_blocks);
+                    std::thread::yield_now();
+                }
+            });
+        });
+        let snapshot = allocator.snapshot();
+        assert_eq!(snapshot.allocated_blocks, 0);
+        assert_eq!(snapshot.reserved_blocks, 0);
+        assert_eq!(snapshot.free_blocks, 128);
+        assert_eq!(snapshot.largest_free_run, 128);
+    }
+
+    #[test]
+    fn physical_alignment_uses_absolute_base() {
+        let mut allocated: [AtomicU64; 2] = std::array::from_fn(|_| AtomicU64::new(0));
+        let mut reserved: [AtomicU64; 2] = std::array::from_fn(|_| AtomicU64::new(0));
+        let allocator =
+            BitmapPageAllocator::new(0x1000, 65 * 4096, 4096, &mut allocated, &mut reserved)
+                .unwrap();
+        let lease = allocator.allocate_aligned(2, 64).unwrap();
+        assert_eq!(lease.range().address(), 64 * 4096);
+        assert_eq!(lease.range().address() % (64 * 4096), 0);
+        assert_eq!(lease.range().blocks(), 2);
+    }
+
+    #[test]
+    fn partial_tail_capacities_are_exact() {
+        for capacity in [1_usize, 63, 65, 127] {
+            let words = (capacity + 63) / 64;
+            let mut allocated: Vec<_> =
+                (0..words).map(|_| AtomicU64::new(u64::MAX)).collect();
+            let mut reserved: Vec<_> =
+                (0..words).map(|_| AtomicU64::new(u64::MAX)).collect();
+            let allocator = BitmapPageAllocator::new(
+                0xa0_0000,
+                capacity as u64 * 4096,
+                4096,
+                &mut allocated,
+                &mut reserved,
+            )
+            .unwrap();
+            let whole = allocator.allocate(capacity).unwrap();
+            assert_eq!(allocator.allocate(1).err(), Some(PageAllocatorError::Exhausted));
+            drop(whole);
+            assert_eq!(allocator.snapshot().free_blocks, capacity);
+        }
+
+        let mut allocated: [AtomicU64; 2] = std::array::from_fn(|_| AtomicU64::new(0));
+        let mut reserved: [AtomicU64; 2] = std::array::from_fn(|_| AtomicU64::new(0));
+        let allocator = BitmapPageAllocator::new(
+            0xb0_0000,
+            65 * 4096,
+            4096,
+            &mut allocated,
+            &mut reserved,
+        )
+        .unwrap();
+        let prefix = allocator.allocate(64).unwrap();
+        assert_eq!(allocator.allocate(2).err(), Some(PageAllocatorError::Exhausted));
+        let tail = allocator.allocate(1).unwrap();
+        assert_eq!(tail.range().address(), 0xb0_0000 + 64 * 4096);
+        drop(prefix);
+        drop(tail);
+    }
+
+    #[test]
+    fn overflow_and_zero_input_matrix_fails_closed() {
+        let (mut allocated, mut reserved) = storage();
+        for (start, size, unit) in [
+            (0, 4096, 4096),
+            (0xc0_0000, 0, 4096),
+            (0xc0_0000, 4096, 0),
+            (0xc0_0000, 4097, 4096),
+            (0xc0_0000, 4096, 3072),
+            (u64::MAX - 4095, 4096, 4096),
+            (1, u64::MAX - 1, 1),
+        ] {
+            assert_eq!(
+                BitmapPageAllocator::new(
+                    start,
+                    size,
+                    unit,
+                    &mut allocated,
+                    &mut reserved,
+                )
+                .err(),
+                Some(PageAllocatorError::Invalid)
+            );
+        }
+
+        let allocator = BitmapPageAllocator::new(
+            0xc0_0000,
+            128 * 4096,
+            4096,
+            &mut allocated,
+            &mut reserved,
+        )
+        .unwrap();
+        assert_eq!(allocator.allocate(0).err(), Some(PageAllocatorError::Invalid));
+        assert_eq!(
+            allocator.allocate(usize::MAX).err(),
+            Some(PageAllocatorError::Invalid)
+        );
+        assert_eq!(
+            allocator.allocate_aligned(1, 0).err(),
+            Some(PageAllocatorError::Invalid)
+        );
+        assert_eq!(
+            allocator.allocate_bytes(0, 4096).err(),
+            Some(PageAllocatorError::Invalid)
+        );
+        assert_eq!(
+            allocator.allocate_bytes(4096, 3 * 4096).err(),
+            Some(PageAllocatorError::Invalid)
+        );
+        assert_eq!(
+            allocator.reserve(0xc0_0001, 1).err(),
+            Some(PageAllocatorError::Invalid)
+        );
+        assert_eq!(
+            allocator.reserve(0xc0_0000, usize::MAX).err(),
+            Some(PageAllocatorError::Invalid)
+        );
+    }
+
+    #[test]
+    fn copied_range_metadata_does_not_extend_lease_ownership() {
+        let (mut allocated, mut reserved) = storage();
+        let allocator = BitmapPageAllocator::new(
+            0xd0_0000,
+            128 * 4096,
+            4096,
+            &mut allocated,
+            &mut reserved,
+        )
+        .unwrap();
+        let lease = allocator.allocate(1).unwrap();
+        let copied_metadata = lease.range();
+        drop(lease);
+        assert_eq!(allocator.snapshot().free_blocks, 128);
+        let replacement = allocator.allocate(1).unwrap();
+        assert_eq!(replacement.range().address(), copied_metadata.address());
+        assert_eq!(copied_metadata.blocks(), 1);
+        std::hint::black_box(copied_metadata);
+        drop(replacement);
     }
 }

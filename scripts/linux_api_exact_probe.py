@@ -143,6 +143,7 @@ TOOL_PROBES = (
     ("rustc", ("rustc", "--version", "--verbose")),
     ("bindgen", ("bindgen", "--version")),
     ("pahole", ("pahole", "--version")),
+    ("openssl", ("openssl", "version")),
     ("patch", ("patch", "--version")),
     ("rpm", ("rpm", "--version")),
 )
@@ -252,6 +253,30 @@ CLANG_21_DEFAULT_CONST_FAILURE_EVIDENCE = (
         "artifact_zip_sha256": "456d947ea5a4e73de2da7ff6e4dd41376c62ccb0ca91e38fbdbe3fefe5e65d79",
         "artifact_zip_bytes": 112757,
         "clang_default_const_diagnostic_count": 3,
+    },
+)
+OPENSSL_TOOL_CLOSURE_FAILURE_EVIDENCE = (
+    {
+        "workflow": "RS-001 exact Rocky Linux API evidence",
+        "repository_commit": "9490d9a33aabd9ba1d823d2ab390d792f55f0eba",
+        "run_id": 31576319131,
+        "job_id": 94049141031,
+        "artifact_id": None,
+        "artifact_zip_sha256": None,
+        "artifact_zip_bytes": None,
+        "missing_command": "openssl",
+        "failure_boundary": "GENKEY certs/signing_key.pem",
+    },
+    {
+        "workflow": "Native Rust host modules exact Rocky build",
+        "repository_commit": "9490d9a33aabd9ba1d823d2ab390d792f55f0eba",
+        "run_id": 31576319128,
+        "job_id": 94049140684,
+        "artifact_id": 9133510114,
+        "artifact_zip_sha256": "c7a76b23e9ed3443f270e23d28cce187965b11ea4a8d13ec03fcf5bbf0053c99",
+        "artifact_zip_bytes": 132850,
+        "missing_command": "openssl",
+        "failure_boundary": "GENKEY certs/signing_key.pem",
     },
 )
 
@@ -866,6 +891,9 @@ def build_contract(repo):
         ],
         "clang_21_default_const_failure_evidence": [
             dict(row) for row in CLANG_21_DEFAULT_CONST_FAILURE_EVIDENCE
+        ],
+        "openssl_tool_closure_failure_evidence": [
+            dict(row) for row in OPENSSL_TOOL_CLOSURE_FAILURE_EVIDENCE
         ],
         "source_patch_contract": {
             "patches": [
