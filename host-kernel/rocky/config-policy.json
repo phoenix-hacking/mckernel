@@ -1,0 +1,251 @@
+{
+  "baseline": {
+    "dist_git_commit": "e4cad646580f7f3dfec5e3b6b4ea9e89b7572f6c",
+    "git_blob": "b390068c4142a5a26e60c9774410ed976e48f004",
+    "normalization": "Parse CONFIG_NAME=value and '# CONFIG_NAME is not set' as one unique symbol map; an absent symbol is not equivalent to an explicit n entry.",
+    "path": "SOURCES/kernel-x86_64-rhel.config",
+    "sha256": "5bbdda60ce822ec903c85d3d8ddda1bfc9493216bed86c6c432683aa50dcf50d",
+    "symbol_count": 8468
+  },
+  "delta": {
+    "allowed_symbols": [
+      "CONFIG_MODVERSIONS",
+      "CONFIG_RUST"
+    ],
+    "changes": [
+      {
+        "baseline": "n",
+        "reason": "Enable native Rust-for-Linux modules.",
+        "resolved": "y",
+        "symbol": "CONFIG_RUST"
+      },
+      {
+        "baseline": "y",
+        "reason": "Linux 6.12 CONFIG_RUST has a hard dependency on !MODVERSIONS.",
+        "resolved": "n",
+        "symbol": "CONFIG_MODVERSIONS"
+      }
+    ],
+    "fragment_path": "host-kernel/rocky/configs/rust-minimal.config",
+    "fragment_sha256": "25dd0fc5647d8addfd650469aad758ca41d7e9599f0d02e34c2025e438114983",
+    "unexpected_changes_forbidden": true
+  },
+  "dependency_contract": {
+    "init_kconfig_sha256": "35cfd4cc4e8850302a072b9d8aef35d827883f6e30f4ff2d428d12eb622fa749",
+    "kconfig_debug_sha256": "5d6e9c71ec42a48908afac2c82a8944340d0b4ebf45e5b1f68bf5eaa70bfb372",
+    "requirements": [
+      {
+        "expected": "y",
+        "source": "arch/x86/Kconfig selects HAVE_RUST if X86_64",
+        "symbol": "CONFIG_HAVE_RUST"
+      },
+      {
+        "expected": "y",
+        "source": "init/Kconfig: CONFIG_RUST depends on RUST_IS_AVAILABLE",
+        "symbol": "CONFIG_RUST_IS_AVAILABLE"
+      },
+      {
+        "expected": "n",
+        "source": "init/Kconfig: CONFIG_RUST depends on !MODVERSIONS",
+        "symbol": "CONFIG_MODVERSIONS"
+      },
+      {
+        "expected": "n",
+        "source": "init/Kconfig: CONFIG_RUST depends on !GCC_PLUGIN_RANDSTRUCT",
+        "symbol": "CONFIG_GCC_PLUGIN_RANDSTRUCT"
+      },
+      {
+        "expected": "n",
+        "source": "init/Kconfig: CONFIG_RUST depends on !RANDSTRUCT",
+        "symbol": "CONFIG_RANDSTRUCT"
+      },
+      {
+        "expected": "y",
+        "source": "init/Kconfig: BTF plus CONFIG_RUST requires PAHOLE_HAS_LANG_EXCLUDE",
+        "symbol": "CONFIG_PAHOLE_HAS_LANG_EXCLUDE"
+      },
+      {
+        "expected": "n",
+        "source": "init/Kconfig CFI Rust dependency is avoided by the selected baseline",
+        "symbol": "CONFIG_CFI_CLANG"
+      },
+      {
+        "expected": "runtime-check-rustc-at-least-1.81.0-if-y",
+        "source": "init/Kconfig: CONFIG_RUST depends on !CALL_PADDING || RUSTC_VERSION >= 108100",
+        "symbol": "CONFIG_CALL_PADDING"
+      },
+      {
+        "expected": "n",
+        "source": "init/Kconfig: CONFIG_RUST depends on !KASAN_SW_TAGS",
+        "symbol": "CONFIG_KASAN_SW_TAGS"
+      },
+      {
+        "expected": "y",
+        "source": "init/Kconfig: when MITIGATION_RETHUNK and KASAN are both enabled, rustc must be at least 1.83.0; this baseline keeps KASAN=n",
+        "symbol": "CONFIG_MITIGATION_RETHUNK"
+      },
+      {
+        "expected": "n",
+        "source": "init/Kconfig: when MITIGATION_RETHUNK and KASAN are both enabled, rustc must be at least 1.83.0; this baseline keeps KASAN=n",
+        "symbol": "CONFIG_KASAN"
+      }
+    ],
+    "rust_is_available_script_sha256": "87dac7e23370dd8166e0652dbaadfb89e050a01b5911801fa0a288bde952b9c2"
+  },
+  "gate": {
+    "credit_eligible": false,
+    "gate_id": "RK-005",
+    "policy": "Credit is forbidden until the fragment is resolved by the exact Rocky RPM configuration pipeline, the complete olddefconfig delta is exactly allowlisted, dependency and preservation assertions pass, and the production build emits the locked final config."
+  },
+  "lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-config-policy-v1",
+  "module_version_policy": {
+    "atomic_kernel_module_nvr_required": true,
+    "config_modversions": "n",
+    "exact_nvr_only": true,
+    "no_rocky_kabi_claim": true,
+    "policy": "R1 and R2 must omit symbol CRC entries, must be built against the exact selected custom kernel and Module.symvers, and kernel plus module RPMs must be deployed and rolled back atomically by exact NVR.",
+    "weak_updates_forbidden": true
+  },
+  "observed_at": "2026-08-11",
+  "preserve": [
+    {
+      "symbol": "CONFIG_BPF_SYSCALL",
+      "value": "y"
+    },
+    {
+      "symbol": "CONFIG_DEBUG_INFO",
+      "value": "y"
+    },
+    {
+      "symbol": "CONFIG_DEBUG_INFO_BTF",
+      "value": "y"
+    },
+    {
+      "symbol": "CONFIG_DEBUG_INFO_BTF_MODULES",
+      "value": "y"
+    },
+    {
+      "symbol": "CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT",
+      "value": "y"
+    },
+    {
+      "symbol": "CONFIG_DEBUG_INFO_REDUCED",
+      "value": "n"
+    },
+    {
+      "symbol": "CONFIG_DEBUG_INFO_SPLIT",
+      "value": "n"
+    },
+    {
+      "symbol": "CONFIG_MODULES",
+      "value": "y"
+    },
+    {
+      "symbol": "CONFIG_MODULE_ALLOW_BTF_MISMATCH",
+      "value": "n"
+    },
+    {
+      "symbol": "CONFIG_MODULE_SIG",
+      "value": "y"
+    },
+    {
+      "symbol": "CONFIG_MODULE_SIG_ALL",
+      "value": "y"
+    },
+    {
+      "symbol": "CONFIG_MODULE_SIG_FORCE",
+      "value": "n"
+    },
+    {
+      "symbol": "CONFIG_MODULE_SIG_KEY",
+      "value": "\"certs/signing_key.pem\""
+    },
+    {
+      "symbol": "CONFIG_MODULE_SIG_KEY_TYPE_RSA",
+      "value": "y"
+    },
+    {
+      "symbol": "CONFIG_MODULE_SIG_SHA512",
+      "value": "y"
+    },
+    {
+      "symbol": "CONFIG_CRYPTO_RSA",
+      "value": "y"
+    },
+    {
+      "symbol": "CONFIG_CRYPTO_SHA512",
+      "value": "y"
+    },
+    {
+      "symbol": "CONFIG_CFI_CLANG",
+      "value": "n"
+    },
+    {
+      "symbol": "CONFIG_GCC_PLUGIN_RANDSTRUCT",
+      "value": "n"
+    },
+    {
+      "symbol": "CONFIG_KASAN",
+      "value": "n"
+    },
+    {
+      "symbol": "CONFIG_RANDSTRUCT_NONE",
+      "value": "y"
+    }
+  ],
+  "schema_version": 1,
+  "source_lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-source-v1",
+  "target": {
+    "architecture": "x86_64",
+    "distribution": "Rocky Linux",
+    "kernel_nvr_base": "kernel-6.12.0-211.44.1.el10_2",
+    "release": "10.2"
+  },
+  "toolchain_lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-toolchain-v1",
+  "verification_evidence": {
+    "build_config": {
+      "blocker": "Capture the final .config from the production RPM build, its SHA-256, kernel NVR/build ID, and proof that it equals the independently resolved policy config.",
+      "build_id": null,
+      "evidence_path": null,
+      "evidence_sha256": null,
+      "final_config_sha256": null,
+      "kernel_nvr": null,
+      "required": true,
+      "status": "required-missing"
+    },
+    "dependency_assertions": {
+      "blocker": "Capture exact-source Kconfig values proving HAVE_RUST, RUST_IS_AVAILABLE, pahole language exclusion, and every other CONFIG_RUST dependency.",
+      "evidence_path": null,
+      "evidence_sha256": null,
+      "required": true,
+      "results": null,
+      "status": "required-missing"
+    },
+    "olddefconfig_delta": {
+      "baseline_config_sha256": null,
+      "blocker": "Run the exact Rocky process_configs.sh and make LLVM=1 ARCH=x86_64 olddefconfig pipeline. Prove the requested config delta is exactly CONFIG_RUST and CONFIG_MODVERSIONS; separately validate every generated Rust/tool symbol against toolchain evidence and reject any other final-config drift.",
+      "changed_symbols": null,
+      "command_manifest_sha256": null,
+      "environment_manifest_sha256": null,
+      "evidence_path": null,
+      "evidence_sha256": null,
+      "generated_symbol_allowlist": [
+        "CONFIG_BINDGEN_VERSION_TEXT",
+        "CONFIG_PAHOLE_HAS_BTF_TAG",
+        "CONFIG_PAHOLE_HAS_LANG_EXCLUDE",
+        "CONFIG_PAHOLE_HAS_SPLIT_BTF",
+        "CONFIG_PAHOLE_VERSION",
+        "CONFIG_RUSTC_LLVM_VERSION",
+        "CONFIG_RUSTC_VERSION",
+        "CONFIG_RUSTC_VERSION_TEXT",
+        "CONFIG_RUST_IS_AVAILABLE"
+      ],
+      "generated_symbol_results": null,
+      "required": true,
+      "resolved_config_sha256": null,
+      "second_pass_config_sha256": null,
+      "status": "required-missing",
+      "unexpected_symbols": null
+    }
+  }
+}
