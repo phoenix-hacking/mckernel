@@ -79,12 +79,45 @@ class LicenseInventoryTests(unittest.TestCase):
         for relative in (
             "host-kernel/rocky/patches/0001-x86-rust-set-rustc-abi-x86-softfloat.patch",
             "host-kernel/rocky/patches/0002-rust-support-rust-1.91-target-spec.patch",
+            "host-kernel/rocky/patches/0003-kbuild-rust-add-rustc-min-version.patch",
+            "host-kernel/rocky/patches/0004-rust-compile-libcore-edition-2024.patch",
         ):
             item = by_path["repository/" + relative]
             patch = REPO_ROOT / relative
             self.assertEqual(patch.stat().st_size, item["size"])
             self.assertEqual(hashlib.sha256(patch.read_bytes()).hexdigest(), item["sha256"])
             self.assertEqual("repository-commit:" + "a" * 40, item["origin"])
+
+    def test_repository_inventory_binds_rocky_rust_core_preimages(self):
+        items = inventory.repository_patch_items(
+            REPO_ROOT, "b" * 40, {"GPL-2.0": "linux/COPYING", "GPL-2.0-only": "linux/COPYING"}
+        )
+        by_path = {item["path"]: item for item in items}
+        fixture_root = "scripts/tests/fixtures/rust-core-rocky-6.12"
+        relatives = (
+            "Documentation/kbuild/makefiles.rst",
+            "arch/arm64/Makefile",
+            "rust/Makefile",
+            "scripts/Makefile.compiler",
+            "scripts/generate_rust_analyzer.py",
+        )
+        for relative in relatives:
+            repository_relative = fixture_root + "/" + relative
+            source = REPO_ROOT / repository_relative
+            item = by_path["repository/" + repository_relative]
+            self.assertEqual(source.stat().st_size, item["size"])
+            self.assertEqual(
+                hashlib.sha256(source.read_bytes()).hexdigest(), item["sha256"]
+            )
+            self.assertEqual("repository-commit:" + "b" * 40, item["origin"])
+        self.assertEqual(
+            "captured-unreviewed",
+            by_path["repository/" + fixture_root + "/arch/arm64/Makefile"]["review_status"],
+        )
+        self.assertEqual(
+            "verified",
+            by_path["repository/" + fixture_root + "/rust/Makefile"]["review_status"],
+        )
 
     def test_linux_archive_maps_spdx_and_preserves_missing_cases(self):
         with tempfile.TemporaryDirectory() as temporary:

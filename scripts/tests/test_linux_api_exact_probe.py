@@ -224,7 +224,7 @@ class ContractTests(ProbeFixture):
             },
         )
         self.assertEqual(
-            generated["source_patch_contract"]["patches"][-2:],
+            generated["source_patch_contract"]["patches"][-4:],
             [
                 {
                     "applied": True,
@@ -234,6 +234,26 @@ class ContractTests(ProbeFixture):
                     "size": row["size"],
                 }
                 for row in compatibility
+            ],
+        )
+        self.assertEqual(
+            generated["repository_inputs"]["rust_core_build_preimages"],
+            [
+                {
+                    "path": str(probe.RUST_CORE_COMPAT_FIXTURE_ROOT / relative),
+                    "sha256": digest,
+                }
+                for relative, digest in probe.RUST_CORE_COMPAT_PREIMAGE_SHA256S
+            ],
+        )
+        self.assertEqual(
+            generated["rust_core_compatibility_failure_evidence"],
+            [dict(row) for row in probe.RUST_CORE_COMPAT_FAILURE_EVIDENCE],
+        )
+        self.assertEqual(
+            9129770822,
+            generated["rust_core_compatibility_failure_evidence"][1][
+                "artifact_id"
             ],
         )
 
@@ -250,6 +270,7 @@ class ContractTests(ProbeFixture):
         self.assertNotIn("final-push.txt", workflow)
         rocky_patch = '-i "$RS001_SOURCE_ASSETS/1000-debrand-some-messages.patch"'
         compatibility_patch = '-i "$compat_asset"'
+        self.assertIn("--fuzz=0 --no-backup-if-mismatch", workflow)
         for path in probe.RUST_COMPAT_PATCH_PATHS:
             self.assertIn(path.name, workflow)
         self.assertLess(workflow.index(rocky_patch), workflow.index(compatibility_patch))
@@ -258,9 +279,17 @@ class ContractTests(ProbeFixture):
             workflow.index(probe.RUST_COMPAT_PATCH_PATHS[0].name),
             workflow.index(probe.RUST_COMPAT_PATCH_PATHS[1].name),
         )
+        self.assertLess(
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[1].name),
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[2].name),
+        )
+        self.assertLess(
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[2].name),
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[3].name),
+        )
 
     def test_rust_compatibility_patch_shape_is_fail_closed(self):
-        original = (REPO_ROOT / probe.RUST_COMPAT_PATCH_PATHS[1]).read_text(
+        original = (REPO_ROOT / probe.RUST_COMPAT_PATCH_PATHS[3]).read_text(
             encoding="utf-8"
         )
         with tempfile.TemporaryDirectory() as directory:
@@ -269,11 +298,11 @@ class ContractTests(ProbeFixture):
                 path = root / relative
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_bytes((REPO_ROOT / relative).read_bytes())
-            path = root / probe.RUST_COMPAT_PATCH_PATHS[1]
+            path = root / probe.RUST_COMPAT_PATCH_PATHS[3]
             path.write_text(
                 original.replace(
-                    "+        if cfg.rustc_version_atleast(1, 91, 0) {",
-                    "+        if cfg.rustc_version_atleast(1, 90, 0) {",
+                    "rustc-min-version,108700",
+                    "rustc-min-version,108600",
                     1,
                 ),
                 encoding="utf-8",
@@ -442,6 +471,57 @@ class ExactInputTests(unittest.TestCase):
             (source_root / "Makefile").write_text("VERSION = 2\n", encoding="utf-8")
             with self.assertRaises(probe.ProbeError):
                 probe.source_capture(srpm, archive, source_root, root, contract)
+
+    def test_source_replay_rejects_a_patch_that_requires_fuzz(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            archive = root / "linux-demo.tar.xz"
+            srpm = root / "kernel.src.rpm"
+            patch_path = root / "fuzzy.patch"
+            srpm.write_bytes(b"srpm")
+            with tarfile.open(str(archive), "w:xz") as stream:
+                info = tarfile.TarInfo("linux-demo/value")
+                payload = b"context\nold\n"
+                info.size = len(payload)
+                stream.addfile(info, io.BytesIO(payload))
+            patch_path.write_text(
+                "--- a/value\n+++ b/value\n@@ -1,2 +1,2 @@\n-wrong-context\n-old\n+wrong-context\n+new\n",
+                encoding="utf-8",
+            )
+            source_parent = root / "source"
+            source_parent.mkdir()
+            with tarfile.open(str(archive), "r:xz") as stream:
+                stream.extractall(str(source_parent))
+            contract = {
+                "target": {
+                    "source_rpm_filename": srpm.name,
+                    "source_rpm_bytes": srpm.stat().st_size,
+                    "source_rpm_sha256": probe.sha256_file(srpm),
+                    "source_archive_filename": archive.name,
+                    "source_archive_bytes": archive.stat().st_size,
+                    "source_archive_sha256": probe.sha256_file(archive),
+                    "source_archive_root": "linux-demo",
+                },
+                "source_patch_contract": {
+                    "patches": [
+                        {
+                            "applied": True,
+                            "empty": False,
+                            "path": "repository/fuzzy.patch",
+                            "sha256": probe.sha256_file(patch_path),
+                            "size": patch_path.stat().st_size,
+                        }
+                    ]
+                },
+            }
+            with self.assertRaises(probe.ProbeError):
+                probe.source_capture(
+                    srpm,
+                    archive,
+                    source_parent / "linux-demo",
+                    root,
+                    contract,
+                )
 
     def test_applied_repository_patch_is_part_of_exact_source_replay(self):
         with tempfile.TemporaryDirectory() as directory:

@@ -72,6 +72,7 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         self.assertNotIn("mckernel", patch.lower())
 
     def test_upstream_rust_compatibility_series_precedes_project_staging(self):
+        self.assertIn("--fuzz=0 --no-backup-if-mismatch", self.workflow)
         debrand = self.workflow.index("1000-debrand-some-messages.patch")
         softfloat = self.workflow.index(
             "0001-x86-rust-set-rustc-abi-x86-softfloat.patch", debrand
@@ -79,12 +80,21 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         target_spec = self.workflow.index(
             "0002-rust-support-rust-1.91-target-spec.patch", softfloat
         )
+        rustc_minimum = self.workflow.index(
+            "0003-kbuild-rust-add-rustc-min-version.patch", target_spec
+        )
+        core_edition = self.workflow.index(
+            "0004-rust-compile-libcore-edition-2024.patch", rustc_minimum
+        )
         project = self.workflow.index(
-            "0001-drivers-misc-add-mckernel-rust-host-modules.patch", target_spec
+            "0001-drivers-misc-add-mckernel-rust-host-modules.patch",
+            core_edition,
         )
         self.assertLess(debrand, softfloat)
         self.assertLess(softfloat, target_spec)
-        self.assertLess(target_spec, project)
+        self.assertLess(target_spec, rustc_minimum)
+        self.assertLess(rustc_minimum, core_edition)
+        self.assertLess(core_edition, project)
 
     def test_failure_log_and_artifact_capture_are_unconditional(self):
         bootstrap = self.workflow.index("Refuse the wrong runtime")

@@ -472,7 +472,14 @@ def repository_patch_items(repo, head, license_map):
         "host-kernel/rocky/configs/native-rust-evidence.config",
         "host-kernel/rocky/patches/0001-x86-rust-set-rustc-abi-x86-softfloat.patch",
         "host-kernel/rocky/patches/0002-rust-support-rust-1.91-target-spec.patch",
+        "host-kernel/rocky/patches/0003-kbuild-rust-add-rustc-min-version.patch",
+        "host-kernel/rocky/patches/0004-rust-compile-libcore-edition-2024.patch",
         "host-kernel/rocky/patches/series.json",
+        "scripts/tests/fixtures/rust-core-rocky-6.12/Documentation/kbuild/makefiles.rst",
+        "scripts/tests/fixtures/rust-core-rocky-6.12/arch/arm64/Makefile",
+        "scripts/tests/fixtures/rust-core-rocky-6.12/rust/Makefile",
+        "scripts/tests/fixtures/rust-core-rocky-6.12/scripts/Makefile.compiler",
+        "scripts/tests/fixtures/rust-core-rocky-6.12/scripts/generate_rust_analyzer.py",
     ]
     items = []
     for relative in paths:

@@ -11,6 +11,8 @@ on:
       - host-kernel/rocky/configs/rust-minimal.config
       - host-kernel/rocky/patches/0001-x86-rust-set-rustc-abi-x86-softfloat.patch
       - host-kernel/rocky/patches/0002-rust-support-rust-1.91-target-spec.patch
+      - host-kernel/rocky/patches/0003-kbuild-rust-add-rustc-min-version.patch
+      - host-kernel/rocky/patches/0004-rust-compile-libcore-edition-2024.patch
       - host-kernel/rocky/source-lock.json
       - scripts/ihk_native_lifecycle_check.py
       - scripts/ihk_smp_native_lifecycle_check.py
@@ -29,6 +31,8 @@ on:
       - host-kernel/rocky/configs/rust-minimal.config
       - host-kernel/rocky/patches/0001-x86-rust-set-rustc-abi-x86-softfloat.patch
       - host-kernel/rocky/patches/0002-rust-support-rust-1.91-target-spec.patch
+      - host-kernel/rocky/patches/0003-kbuild-rust-add-rustc-min-version.patch
+      - host-kernel/rocky/patches/0004-rust-compile-libcore-edition-2024.patch
       - host-kernel/rocky/source-lock.json
       - scripts/ihk_native_lifecycle_check.py
       - scripts/ihk_smp_native_lifecycle_check.py
@@ -136,11 +140,13 @@ jobs:
             -i "$SOURCE_ASSETS/1000-debrand-some-messages.patch"
           for compat_name in \
             0001-x86-rust-set-rustc-abi-x86-softfloat.patch \
-            0002-rust-support-rust-1.91-target-spec.patch
+            0002-rust-support-rust-1.91-target-spec.patch \
+            0003-kbuild-rust-add-rustc-min-version.patch \
+            0004-rust-compile-libcore-edition-2024.patch
           do
             compat_patch="$GITHUB_WORKSPACE/host-kernel/rocky/patches/$compat_name"
             test -s "$compat_patch"
-            patch -d "$source_root" -p1 --batch --forward --no-backup-if-mismatch \
+            patch -d "$source_root" -p1 --batch --forward --fuzz=0 --no-backup-if-mismatch \
               -i "$compat_patch"
           done
           patch -d "$source_root" -p1 --batch --forward --no-backup-if-mismatch \
