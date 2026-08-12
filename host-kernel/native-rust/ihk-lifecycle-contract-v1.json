@@ -1,0 +1,32 @@
+{
+  "abi_version": 1,
+  "dependencies": [],
+  "gate_id": "IHK-001",
+  "kbuild": {
+    "config_symbol": "CONFIG_MCKERNEL_IHK_RUST",
+    "module_object": "ihk.o",
+    "path": "host-kernel/kbuild/Kbuild.in"
+  },
+  "kconfig": {
+    "path": "host-kernel/kbuild/Kconfig",
+    "symbol": "MCKERNEL_IHK_RUST",
+    "type": "tristate"
+  },
+  "lifecycle_logs": {
+    "load": "lifecycle=load version={} abi={} parameters={} dependencies={}",
+    "unload": "lifecycle=unload version={} abi={} parameters={} dependencies={}"
+  },
+  "module": {
+    "author": "McKernel Rust port",
+    "description": "Native Rust IHK host core",
+    "license": "GPL v2",
+    "name": "ihk",
+    "output": "ihk.ko",
+    "version": "1.7.0rc4"
+  },
+  "parameter_count": 0,
+  "production_source": "host-kernel/native-rust/ihk.rs",
+  "reference_inventory": "host-kernel/reference/legacy-host-modules-f2eb7352.json",
+  "schema_version": 1,
+  "stage_manifest": "host-kernel/kbuild/stage-manifest.json"
+}

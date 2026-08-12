@@ -132,7 +132,7 @@ EXPECTED_MODULES = (
         "required_import_namespaces": [],
         "source_destination": "ihk.rs",
         "source_repository_path": "host-kernel/native-rust/ihk.rs",
-        "source_sha256": "53c0f063aa7e2607534671ebcaccc30febec3db83b67de364f667e92ba64d60a",
+        "source_sha256": "4d578677d052e40aa110f7ca01899ae74da16db8f4c14644bc406e409af0bdaa",
     },
     {
         "crate": "ihk_smp_x86_64",
