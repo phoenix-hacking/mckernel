@@ -114,6 +114,42 @@ class LicenseInventoryTests(unittest.TestCase):
             with self.assertRaisesRegex(inventory.InventoryError, "duplicate license"):
                 inventory.inventory_linux_archive(archive_path, "0" * 64)
 
+    def test_documented_exception_example_is_not_a_license_text(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            archive_path = Path(temporary) / "documented-exception.tar.xz"
+            with tarfile.open(str(archive_path), "w:xz") as archive:
+                add_file(
+                    archive,
+                    "linux-test/LICENSES/exceptions/GCC-exception-2.0",
+                    b"SPDX-Exception-Identifier: GCC-exception-2.0\nexception text\n",
+                )
+                add_file(
+                    archive,
+                    "linux-test/Documentation/process/license-rules.rst",
+                    b"Example:\n  SPDX-Exception-Identifier: GCC-exception-2.0\n",
+                )
+            items, licenses = inventory.inventory_linux_archive(
+                archive_path, "0" * 64
+            )
+        self.assertEqual(
+            "linux/LICENSES/exceptions/GCC-exception-2.0",
+            licenses["GCC-exception-2.0"],
+        )
+        by_path = {item["path"]: item for item in items}
+        documented = by_path["linux/Documentation/process/license-rules.rst"]
+        self.assertEqual("captured-unreviewed", documented["review_status"])
+        self.assertEqual("NOASSERTION", documented["spdx_expression"])
+
+    def test_composite_valid_expression_does_not_claim_other_license_texts(self):
+        prefix = (
+            b"Valid-License-Identifier: GPL-2.0 OR GFDL-1.1-no-invariants-only\n"
+            b"Valid-License-Identifier: GFDL-1.1-no-invariants-only\n"
+        )
+        self.assertEqual(
+            ["GFDL-1.1-no-invariants-only"],
+            inventory.license_identifiers(prefix),
+        )
+
     def test_ambiguous_spdx_lines_remain_unreviewed(self):
         prefix = (
             b"// SPDX-License-Identifier: MIT\n"
@@ -129,6 +165,29 @@ class LicenseInventoryTests(unittest.TestCase):
         )
         self.assertEqual("captured-unreviewed", item["review_status"])
         self.assertEqual("ambiguous-spdx", item["_reason"])
+
+    def test_spdx_text_inside_code_or_documentation_is_not_a_header(self):
+        prefix = (
+            b"prefix = '# SPDX-License-Identifier: '\n"
+            b"  SPDX-License-Identifier: MIT\n"
+        )
+        item = inventory.make_item(
+            "linux/example.py", len(prefix), hashlib.sha256(prefix).hexdigest(),
+            "synthetic", "regular", prefix
+        )
+        self.assertEqual("captured-unreviewed", item["review_status"])
+        self.assertEqual("NOASSERTION", item["spdx_expression"])
+        self.assertEqual("missing-spdx", item["_reason"])
+
+    def test_malformed_real_spdx_header_remains_unreviewed(self):
+        prefix = b"// SPDX-License-Identifier: '\n"
+        item = inventory.make_item(
+            "linux/example.c", len(prefix), hashlib.sha256(prefix).hexdigest(),
+            "synthetic", "regular", prefix
+        )
+        self.assertEqual("captured-unreviewed", item["review_status"])
+        self.assertEqual("NOASSERTION", item["spdx_expression"])
+        self.assertEqual("malformed-spdx", item["_reason"])
 
     def test_capture_is_deterministic_and_self_verifying(self):
         with tempfile.TemporaryDirectory() as temporary:

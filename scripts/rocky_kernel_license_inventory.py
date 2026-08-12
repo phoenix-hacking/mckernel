@@ -42,12 +42,14 @@ REQUIRED_ITEM_KEYS = {
     "spdx_expression",
 }
 SPDX_LINE = re.compile(
-    br"SPDX-License-Identifier:[ \t]*([^\r\n]+)", re.IGNORECASE
+    br"^(?:SPDX-License-Identifier:|[ \t]*(?://+|/\*+|\*+|#+|;+|--+|\.\.|<!--)"
+    br"[ \t]*SPDX-License-Identifier:)[ \t]*([^\r\n]+)",
+    re.IGNORECASE | re.MULTILINE,
 )
 VALID_LICENSE = re.compile(
-    br"(?:Valid-License-Identifier|SPDX-Exception-Identifier):[ \t]*"
-    br"([A-Za-z0-9.+-]+)",
-    re.IGNORECASE,
+    br"^(?:Valid-License-Identifier|SPDX-Exception-Identifier):[ \t]*"
+    br"([A-Za-z0-9.+-]+)[ \t]*\r?$",
+    re.IGNORECASE | re.MULTILINE,
 )
 SPDX_TOKEN = re.compile(r"[A-Za-z0-9][A-Za-z0-9.+-]*")
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
@@ -165,6 +167,7 @@ def expressions_from_prefix(prefix):
     for match in SPDX_LINE.finditer(prefix):
         try:
             value = clean_expression(match.group(1))
+            expression_tokens(value)
         except (UnicodeError, InventoryError):
             return [], "malformed-spdx"
         if value not in values:
@@ -270,7 +273,15 @@ def inventory_linux_archive(archive_path, archive_digest):
                 if total > MAX_ARCHIVE_BYTES:
                     raise InventoryError("Linux archive expansion exceeds its cap")
                 item = make_item(canonical, size, digest, origin, "regular", prefix)
-                identifiers = license_identifiers(prefix)
+                # Only the kernel's canonical LICENSES/ tree declares license
+                # texts.  Documentation contains literal examples of
+                # SPDX-Exception-Identifier fields and must remain ordinary
+                # source inventory rather than competing license definitions.
+                identifiers = (
+                    license_identifiers(prefix)
+                    if relative.startswith("LICENSES/")
+                    else []
+                )
                 if relative == "COPYING":
                     identifiers.extend(("GPL-2.0", "GPL-2.0-only"))
                 if identifiers:
