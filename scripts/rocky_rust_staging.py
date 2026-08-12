@@ -112,11 +112,10 @@ PARENT_VERIFICATION_SCOPE = (
     "byte-exact parent preimages, intended insertions, postimages, and patch bytes only; "
     "no build, runtime, or RK-007 credit"
 )
-MODULE_BLOCKERS = ["schema-v1 checkpoint has no evidence-bound native Rust crate root"]
+MODULE_BLOCKERS = []
 READINESS_BLOCKERS = [
     "selected Rocky kernel source, toolchain, and config evidence is not gate-ready",
     "upstream Rust-for-Linux sample has not built through this staging path",
-    "native crate roots for ihk, ihk-smp-x86_64, and mcctrl are not implemented",
     "production namespace and import metadata has not been proven from built modules",
     "zero-project-C final link manifests have not been captured",
 ]
@@ -130,6 +129,8 @@ EXPECTED_MODULES = (
         "production_namespace": "MCKERNEL_IHK_V1",
         "required_import_namespaces": [],
         "source_destination": "ihk.rs",
+        "source_repository_path": "host-kernel/native-rust/ihk.rs",
+        "source_sha256": "53c0f063aa7e2607534671ebcaccc30febec3db83b67de364f667e92ba64d60a",
     },
     {
         "crate": "ihk_smp_x86_64",
@@ -140,6 +141,8 @@ EXPECTED_MODULES = (
         "production_namespace": None,
         "required_import_namespaces": ["MCKERNEL_IHK_V1"],
         "source_destination": "ihk_smp_x86_64.rs",
+        "source_repository_path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+        "source_sha256": "ed6e7a7ff6a0809e834d08c5b5f1570f07061d9f57850ecd5b0841fd090ff37d",
     },
     {
         "crate": "mcctrl",
@@ -150,6 +153,8 @@ EXPECTED_MODULES = (
         "production_namespace": None,
         "required_import_namespaces": ["MCKERNEL_IHK_V1"],
         "source_destination": "mcctrl.rs",
+        "source_repository_path": "host-kernel/native-rust/mcctrl.rs",
+        "source_sha256": "f669d0359a040a7986774cfe743bc2bff6e89b94f5c0bc25ea92ac4d7867b355",
     },
 )
 EXPECTED_TOP_LEVEL_KEYS = {
@@ -551,18 +556,31 @@ def _validate_module(repo_root, module, expected, index):
         if module[field] != expected[field]:
             raise ValidationError("{0}.{1} differs from the locked module contract".format(label, field))
     if module["blockers"] != MODULE_BLOCKERS:
-        raise ValidationError("{0}.blockers differs from the hard-locked schema-v1 blocker".format(label))
+        raise ValidationError("{0}.blockers differs from the locked crate-root checkpoint".format(label))
     _require_keys(module["source"], {"destination", "repository_path", "sha256"}, label + ".source")
     source = module["source"]
     if source["destination"] != expected["source_destination"]:
         raise ValidationError("{0}.source.destination differs from the locked crate root".format(label))
-    repo_path = source["repository_path"]
-    digest = source["sha256"]
-    if repo_path is not None or digest is not None:
-        raise ValidationError(
-            "{0}.source must remain null in integrity-only schema v1; evidence requires a schema bump".format(label)
-        )
-    return None, list(module["blockers"])
+    if source["repository_path"] != expected["source_repository_path"]:
+        raise ValidationError("{0}.source.repository_path differs from the locked crate root".format(label))
+    if source["sha256"] != expected["source_sha256"]:
+        raise ValidationError("{0}.source.sha256 differs from the locked crate root".format(label))
+    path = _repo_regular_file(repo_root, source["repository_path"], label + ".source.repository_path")
+    if not path.endswith(".rs"):
+        raise ValidationError("{0}.source must be a Rust source file".format(label))
+    _validate_digest(path, source["sha256"], label + ".source")
+    text = _read_text(path, label + ".source")
+    if "module!" not in text or "impl kernel::Module" not in text:
+        raise ValidationError("{0}.source lacks a native Rust-for-Linux module entry point".format(label))
+    lowered = text.lower()
+    for forbidden in ("extern \"c\"", "include_bytes!", "global_asm!", "asm!("):
+        if forbidden in lowered:
+            raise ValidationError("{0}.source contains unreviewed boundary construct: {1}".format(label, forbidden))
+    return {
+        "destination": source["destination"],
+        "path": path,
+        "sha256": source["sha256"],
+    }, list(module["blockers"])
 
 
 def validate_manifest(repo_root, manifest_path):
@@ -612,16 +630,15 @@ def validate_manifest(repo_root, manifest_path):
     for index, expected in enumerate(EXPECTED_MODULES):
         source, module_blockers = _validate_module(repo_root, modules[index], expected, index)
         blockers.extend(module_blockers)
-        if source is not None:
-            staged_files.append(source)
+        staged_files.append(source)
 
     _require_keys(manifest["readiness"], {"blockers", "checkpoint", "credit_eligible"}, "readiness")
     if manifest["readiness"] != {
         "blockers": READINESS_BLOCKERS,
-        "checkpoint": "integrity_only",
+        "checkpoint": "crate_roots_bound",
         "credit_eligible": False,
     }:
-        raise ValidationError("readiness must remain the hard-locked integrity-only schema-v1 state")
+        raise ValidationError("readiness must remain the locked crate-roots-bound state")
     blockers.extend(manifest["readiness"]["blockers"])
     if len({item["destination"] for item in staged_files}) != len(staged_files):
         raise ValidationError("staged destinations must be unique")
@@ -737,7 +754,7 @@ def _rename_directory_noreplace(parent, temporary, target):
 
 def stage(plan, kernel_tree):
     if SCHEMA_VERSION == 1:
-        raise ValidationError("integrity-only schema v1 cannot stage; evidence requires a schema bump")
+        raise ValidationError("crate-roots-bound schema v1 cannot stage production modules without build evidence")
     if plan.get("credit_eligible") is not True or plan["blockers"]:
         raise ValidationError("staging is blocked: {0}".format("; ".join(plan["blockers"])))
     target, parent = _kernel_target(kernel_tree, plan["destination"])
@@ -771,7 +788,7 @@ def stage(plan, kernel_tree):
 
 def verify_stage(plan, kernel_tree):
     if SCHEMA_VERSION == 1:
-        raise ValidationError("integrity-only schema v1 has no verifiable production stage")
+        raise ValidationError("crate-roots-bound schema v1 has no verifiable production stage")
     if plan.get("credit_eligible") is not True or plan["blockers"]:
         raise ValidationError("stage verification requires a gate-ready manifest")
     target, unused_parent = _kernel_target(kernel_tree, plan["destination"])
@@ -852,7 +869,7 @@ def main(argv=None):
                     result["archive_sha256"], result["patch_sha256"]
                 )
             )
-            print("RK-007 credit: NOT ELIGIBLE (integrity-only schema v1)")
+            print("RK-007 credit: NOT ELIGIBLE (crate-roots-bound schema v1)")
             return 0
         if args.stage:
             print("Staged native Rust inputs at {0}".format(stage(plan, args.stage)))
