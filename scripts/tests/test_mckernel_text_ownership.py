@@ -7,6 +7,15 @@ from scripts import mckernel_text_ownership as ownership
 
 
 class TextOwnershipTests(unittest.TestCase):
+    def test_subprocess_text_mode_is_compatible_with_python_3_6(self):
+        completed = mock.Mock(stdout="output\n")
+        with mock.patch.object(ownership.subprocess, "run", return_value=completed) as run:
+            self.assertEqual(ownership.run_checked(["tool"]), "output\n")
+
+        _args, kwargs = run.call_args
+        self.assertTrue(kwargs["universal_newlines"])
+        self.assertNotIn("text", kwargs)
+
     def test_parse_nm_keeps_only_nonempty_text_symbols(self):
         symbols = ownership.parse_nm(
             "00001000 00000010 T rust_body\n"

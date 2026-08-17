@@ -29,6 +29,16 @@ class SyscallOffloadCheckTests(unittest.TestCase):
         self.assertEqual(symbols["do_syscall"], ["U"])
         self.assertEqual(symbols["alias"], ["W"])
 
+    def test_nm_subprocess_is_compatible_with_python_3_6(self):
+        completed = mock.Mock(stdout="0000000000001000 T send_syscall\n")
+        with mock.patch.object(checker.subprocess, "run", return_value=completed) as run:
+            symbols = checker.run_nm("nm", Path("artifact.o"))
+
+        _args, kwargs = run.call_args
+        self.assertEqual(symbols["send_syscall"], ["T"])
+        self.assertTrue(kwargs["universal_newlines"])
+        self.assertNotIn("text", kwargs)
+
     def test_production_contract_passes(self):
         checker.check_contract(*passing_tables())
 

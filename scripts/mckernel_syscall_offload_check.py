@@ -123,7 +123,7 @@ def run_nm(nm, path, global_only=True):
             check=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            text=True,
+            universal_newlines=True,
         )
     except subprocess.CalledProcessError as exc:
         raise ValueError(

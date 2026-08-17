@@ -24,7 +24,7 @@ def run_checked(argv):
         check=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
-        text=True,
+        universal_newlines=True,
     ).stdout
 
 
