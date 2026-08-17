@@ -162,6 +162,52 @@ jobs:
                 --jobs 2
             ' 2>&1 | tee evidence/build.log
 
+      - name: Verify focused syscall-offload and ownership evidence
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          runuser -u validator -- env \
+            HOME=/home/validator \
+            PATH=/home/validator/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+            GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
+            BUILD_DIR="$BUILD_DIR" \
+            bash -c '
+              set -euo pipefail
+              cd "$GITHUB_WORKSPACE"
+              bash -n kernel/rust/tests/run_equivalence.sh \
+                scripts/rocky-rust-validation.sh
+              python3 -m unittest -v \
+                scripts.tests.test_mckernel_syscall_offload_check \
+                scripts.tests.test_mckernel_linked_text_ownership \
+                scripts.tests.test_mckernel_text_ownership
+              for evidence_file in \
+                mckernel.img.map \
+                mckernel-linked-text-ownership.json \
+                mckernel-symbol-source-attribution.json \
+                mckernel-syscall-offload-composition.json
+              do
+                test -s "$BUILD_DIR/kernel/$evidence_file"
+              done
+            ' 2>&1 | tee evidence/syscall-offload-evidence.log
+          for evidence_file in \
+            mckernel.img.map \
+            mckernel-linked-text-ownership.json \
+            mckernel-symbol-source-attribution.json \
+            mckernel-syscall-offload-composition.json
+          do
+            install -m 0644 \
+              "$BUILD_DIR/kernel/$evidence_file" "evidence/$evidence_file"
+          done
+          (
+            cd evidence
+            sha256sum \
+              mckernel.img.map \
+              mckernel-linked-text-ownership.json \
+              mckernel-symbol-source-attribution.json \
+              mckernel-syscall-offload-composition.json \
+              > mckernel-conversion-evidence.sha256
+          )
+
       - name: Capture compiler-backed host-module failure sites
         run: |
           set -euo pipefail
@@ -267,6 +313,18 @@ jobs:
             ' > evidence/worktree.txt 2>&1
 
           if test -d "$BUILD_DIR"; then
+            for evidence_file in \
+              mckernel.img.map \
+              mckernel-linked-text-ownership.json \
+              mckernel-symbol-source-attribution.json \
+              mckernel-syscall-offload-composition.json
+            do
+              if test -s "$BUILD_DIR/kernel/$evidence_file"; then
+                install -m 0644 \
+                  "$BUILD_DIR/kernel/$evidence_file" \
+                  "evidence/$evidence_file"
+              fi
+            done
             (
               cd "$BUILD_DIR" || exit
               find . -type f \
@@ -515,6 +573,7 @@ jobs:
               'mcexec-hostname-absolute: OK' \
               'mckernel-rust-smoke: OK bytes=1048576 sum=133693440' \
               'mcexec-rust-workload: OK' \
+              'syscall-offload owner=rust send+forward+wait markers: OK' \
               'mcstat: OK' \
               'mcstop+release: OK' \
               'IHK/McKernel modules after shutdown: none' \
@@ -540,6 +599,9 @@ jobs:
               '^\[[[:space:]]*[0-9]+\]:[[:space:]]+mcexec_v10: schedule_process queued ' \
               '^\[[[:space:]]*[0-9]+\]:[[:space:]]+mcexec_v10: enter_user ' \
               '^\[[[:space:]]*[0-9]+\]:[[:space:]]+mcexec_v10: send_syscall ' \
+              '^\[[[:space:]]*[0-9]+\]:[[:space:]]+mcexec_v10: send_syscall owner=rust ' \
+              '^\[[[:space:]]*[0-9]+\]:[[:space:]]+mcexec_v10: generic_forwarding owner=rust ' \
+              '^\[[[:space:]]*[0-9]+\]:[[:space:]]+mcexec_v10: offload_wait owner=rust ' \
               '^\[[[:space:]]*[0-9]+\]:[[:space:]]+mcexec_v10: offload_return ' \
               '^McKernel deterministic-workload kmsg delta: lines=[0-9]+ sha256=[0-9a-f]{64}$' \
               '^live-module: ihk ' \
@@ -606,6 +668,10 @@ jobs:
             runtime-rpms.txt \
             runtime-repositories.txt \
             runtime-artifacts.sha256 \
+            mckernel.img.map \
+            mckernel-linked-text-ownership.json \
+            mckernel-symbol-source-attribution.json \
+            mckernel-syscall-offload-composition.json \
             linux-dmesg-before.log \
             linux-dmesg-after.log \
             linux-dmesg-delta.log \

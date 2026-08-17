@@ -436,6 +436,7 @@ configure_and_build() {
 
 	check_rust_kernel_context_no_simd
 	check_rust_artifact_linkage
+	record_mckernel_conversion_evidence
 }
 
 source_retirement_audit() {
@@ -671,6 +672,70 @@ check_rust_artifact_linkage() {
 	echo "Rust linkage check: ELF arch_start, Rust main/host handoff, mcctrl, and mcexec bodies are linked."
 }
 
+record_mckernel_conversion_evidence() {
+	say "Recording production syscall ownership and linked-text evidence"
+	need_cmd python3
+	need_cmd nm
+	need_cmd addr2line
+
+	local source_commit
+	local image="$BUILD_DIR/kernel/mckernel.img"
+	local link_map="$BUILD_DIR/kernel/mckernel.img.map"
+	local rust_object="$BUILD_DIR/kernel/rust/mckernel_rust.o"
+	local composition_report="$BUILD_DIR/kernel/mckernel-syscall-offload-composition.json"
+	local linked_report="$BUILD_DIR/kernel/mckernel-linked-text-ownership.json"
+	local source_report="$BUILD_DIR/kernel/mckernel-symbol-source-attribution.json"
+
+	source_commit="$(git -C "$ROOT_DIR" rev-parse HEAD)"
+	if [[ ! "$source_commit" =~ ^[0-9a-f]{40}$ ]]; then
+		echo 'error: cannot bind conversion evidence to an exact source commit.' >&2
+		exit 1
+	fi
+
+	python3 "$ROOT_DIR/scripts/mckernel_syscall_offload_check.py" \
+		--build-dir "$BUILD_DIR" \
+		--source-commit "$source_commit" \
+		--output "$composition_report" >/dev/null
+	python3 "$ROOT_DIR/scripts/mckernel_linked_text_ownership.py" \
+		--image "$image" \
+		--link-map "$link_map" \
+		--rust-object "$rust_object" \
+		--source-commit "$source_commit" \
+		--output "$linked_report" >/dev/null
+	python3 "$ROOT_DIR/scripts/mckernel_text_ownership.py" \
+		--image "$image" \
+		--repo "$ROOT_DIR" \
+		--output "$source_report" >/dev/null
+
+	python3 - "$composition_report" "$linked_report" "$source_report" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+composition = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+linked = json.loads(Path(sys.argv[2]).read_text(encoding="utf-8"))
+source = json.loads(Path(sys.argv[3]).read_text(encoding="utf-8"))
+if composition.get("result") != "PASS":
+    raise SystemExit("syscall-offload composition report did not pass")
+print("Syscall-offload production composition: PASS")
+print(
+    "McKernel linked executable-text ownership: rust={}/{} bytes ({}%)".format(
+        linked["rust_executable_text_bytes"],
+        linked["total_executable_text_bytes"],
+        linked["rust_executable_text_percent"],
+    )
+)
+print(
+    "McKernel symbol-source attribution: rust={} c={} scored={} bytes ({:.6f}%)".format(
+        source["language_bytes"]["rust"],
+        source["language_bytes"]["c"],
+        source["scored_bytes"],
+        source["rust_percent"],
+    )
+)
+PY
+}
+
 install_artifacts() {
 	say "Installing into $PREFIX"
 	sudo cmake --install "$BUILD_DIR"
@@ -885,6 +950,7 @@ refresh_runtime_evidence_manifest() {
 
 record_runtime_provenance() {
 	local arch
+	local conversion_evidence
 	local file_count
 	local manifest_sha
 	local os_id
@@ -956,6 +1022,23 @@ record_runtime_provenance() {
 			>>"$RUNTIME_EVIDENCE_DIR/runtime-artifacts.sha256"
 		then
 			echo "error: could not hash runtime artifact: ${matches[0]}" >&2
+			return 1
+		fi
+	done
+	for conversion_evidence in \
+		mckernel.img.map \
+		mckernel-linked-text-ownership.json \
+		mckernel-symbol-source-attribution.json \
+		mckernel-syscall-offload-composition.json
+	do
+		if [ ! -s "$BUILD_DIR/kernel/$conversion_evidence" ]; then
+			echo "error: missing conversion evidence: $conversion_evidence" >&2
+			return 1
+		fi
+		if ! cp -- "$BUILD_DIR/kernel/$conversion_evidence" \
+			"$RUNTIME_EVIDENCE_DIR/$conversion_evidence"
+		then
+			echo "error: could not preserve conversion evidence: $conversion_evidence" >&2
 			return 1
 		fi
 	done
@@ -1380,6 +1463,7 @@ verify_workload_runtime_markers() {
 	local delta_lines
 	local delta_sha
 	local marker
+	local owner_marker
 
 	if ! run_privileged_timed_to_file 'post-workload ihkosctl kmsg' \
 		"$SMOKE_TIMEOUT" "$BOOT_AFTER_WORKLOAD_KMSG" \
@@ -1419,6 +1503,18 @@ verify_workload_runtime_markers() {
 		fi
 		grep -Fm1 "$marker" "$BOOT_WORKLOAD_KMSG_DELTA"
 	done
+	for owner_marker in \
+		'mcexec_v10: send_syscall owner=rust ' \
+		'mcexec_v10: generic_forwarding owner=rust ' \
+		'mcexec_v10: offload_wait owner=rust '
+	do
+		if ! grep -Fq "$owner_marker" "$BOOT_WORKLOAD_KMSG_DELTA"; then
+			echo "error: deterministic workload is missing Rust syscall-owner marker: $owner_marker" >&2
+			return 1
+		fi
+		grep -Fm1 "$owner_marker" "$BOOT_WORKLOAD_KMSG_DELTA"
+	done
+	echo 'syscall-offload owner=rust send+forward+wait markers: OK'
 	delta_lines="$(wc -l <"$BOOT_WORKLOAD_KMSG_DELTA")"
 	delta_sha="$(sha256sum "$BOOT_WORKLOAD_KMSG_DELTA" | awk '{ print $1 }')"
 	printf 'McKernel deterministic-workload kmsg delta: lines=%s sha256=%s\n' \

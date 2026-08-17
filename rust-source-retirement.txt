@@ -1,7 +1,37 @@
 McKernel Strict Rust Source Retirement Tracker
-Updated: 2026-06-21
+Updated: 2026-08-17
 
 Scope: active smp-x86/x86_64 McKernel-owned C/header source retirement inventory. Arm64, deferred builtin/MIC/attached targets, third-party, generated, and test/fixture bundles are excluded from this per-file list because they are not active McKernel-owned source-retirement debt.
+
+Artifact conversion status (authoritative for implementation-language claims):
+- The last measured exact x86_64 guest image is commit
+  289430482fa08f919ea39ad0a9593300a471407f, image SHA-256
+  c8a8f851c6eb7c3c2b8f7f20fe7ee6cd63a1decf599c8f73c7e93ff8a82f664f.
+  Alias-deduplicated final-ELF symbol/source attribution reports 610,152 Rust
+  bytes and 137,618 C bytes in its Rust-plus-C denominator: 610152 / 747770 =
+  81.59621273921125% Rust (81.596% rounded). The rejected raw-symbol result is
+  81.89510797708242%; it double-counts 12,345 Rust bytes across 196 aliased
+  address/size spans. `scripts/mckernel_text_ownership.py` reproduces this
+  secondary dependency-attribution view from the image and debug information.
+- The primary conservative conversion percentage for the current syscall
+  tranche is pending an exact Rocky 8.10 rebuild; no post-change percentage is
+  projected. The build now emits `mckernel.img.map`, and
+  `scripts/mckernel_linked_text_ownership.py` will report exact
+  `mckernel_rust.o` input-section bytes divided by every byte in final allocated
+  executable PROGBITS sections, including C, assembly, unknown-origin bytes,
+  `.vsyscall`, linker fill, and padding. CI preserves the map, input hashes,
+  byte counts, and fixed-precision result in
+  `mckernel-linked-text-ownership.json`. Once produced for the exact candidate,
+  that map-derived percentage supersedes the 81.596% symbol/source baseline.
+- The 100.0% source-retirement score below is an allowlist/declaration audit
+  closure, not an all-Rust implementation percentage. In particular, whole C
+  boundary files such as `kernel/syscall.c` are marked `n/a`. It must not be
+  used for conversion-status claims; the artifact percentage above supersedes
+  it for that purpose.
+- This guest-image artifact metric does not change the separately scoped
+  `final-push.txt` native host-module score (3.50%) or the defined Rocky smoke
+  plan result (10/10 PASS). It makes no Arm64, all-Rust IHK, unexercised
+  syscall/workload-equivalence, or long-duration-stress claim.
 
 Completion meaning:
 - 0.0%: C implementation body remains in source and still needs retirement.
