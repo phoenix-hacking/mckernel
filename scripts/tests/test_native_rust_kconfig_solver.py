@@ -88,8 +88,11 @@ for line in lines:
         values[match.group(1)] = "n"
 for symbol in SYMBOLS:
     if symbol not in values:
-        print("missing request symbol " + symbol, file=sys.stderr)
-        sys.exit(95)
+        if symbol.startswith("CONFIG_MCKERNEL_"):
+            values[symbol] = "n"
+        else:
+            print("missing request symbol " + symbol, file=sys.stderr)
+            sys.exit(95)
 
 result = dict(values)
 if (
@@ -117,8 +120,29 @@ def config_line(symbol, value):
         return "# {0} is not set".format(symbol)
     return "{0}={1}".format(symbol, value)
 
+serialized_symbols = list(SYMBOLS)
+if (
+    result["CONFIG_MODULES"] != "y"
+    or result["CONFIG_RUST"] != "y"
+    or result["CONFIG_X86_64"] != "y"
+):
+    serialized_symbols = [
+        symbol for symbol in serialized_symbols
+        if not symbol.startswith("CONFIG_MCKERNEL_")
+    ]
+elif result["CONFIG_MCKERNEL_IHK_RUST"] == "n":
+    serialized_symbols = [
+        symbol for symbol in serialized_symbols
+        if symbol not in (
+            "CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST",
+            "CONFIG_MCKERNEL_MCCTRL_RUST",
+        )
+    ]
+
 payload = "# Deterministic fake Linux olddefconfig output.\n"
-payload += "\n".join(config_line(symbol, result[symbol]) for symbol in SYMBOLS) + "\n"
+payload += "\n".join(
+    config_line(symbol, result[symbol]) for symbol in serialized_symbols
+) + "\n"
 if os.environ.get("FAKE_DRIFT_AT") == str(invocation):
     payload += "# deterministic second-pass drift\n"
 with open(config, "w") as stream:
@@ -241,6 +265,72 @@ class NativeRustKconfigSolverOracleTests(unittest.TestCase):
             with self.subTest(index=index):
                 with self.assertRaises(solver.SolverError):
                     solver.oracle(mutation)
+
+    def test_absent_hidden_project_symbols_resolve_to_n_only(self):
+        hidden_menu = (
+            b"# CONFIG_MODULES is not set\n"
+            b"CONFIG_RUST=y\n"
+            b"CONFIG_X86_64=y\n"
+        )
+        result = solver._extract_result(hidden_menu, "hidden-symbol fixture")
+        self.assertEqual("n", result[solver.CONFIG_MODULES])
+        self.assertEqual("y", result[solver.CONFIG_RUST])
+        self.assertEqual("y", result[solver.CONFIG_X86_64])
+        self.assertEqual(
+            ["n", "n", "n"],
+            [result[symbol] for symbol in solver.MODULE_SYMBOLS],
+        )
+        provider_disabled = (
+            b"CONFIG_MODULES=y\n"
+            b"# CONFIG_MCKERNEL_IHK_RUST is not set\n"
+            b"CONFIG_RUST=y\n"
+            b"CONFIG_X86_64=y\n"
+        )
+        result = solver._extract_result(
+            provider_disabled, "hidden-consumer fixture"
+        )
+        self.assertEqual(
+            ["n", "n", "n"],
+            [result[symbol] for symbol in solver.MODULE_SYMBOLS],
+        )
+
+    def test_absent_visible_project_symbols_and_prerequisites_fail_closed(self):
+        visible_menu = (
+            b"CONFIG_MODULES=y\n"
+            b"CONFIG_RUST=y\n"
+            b"CONFIG_X86_64=y\n"
+        )
+        with self.assertRaises(solver.SolverError):
+            solver._extract_result(visible_menu, "missing-visible-provider fixture")
+        visible_consumers = (
+            b"CONFIG_MODULES=y\n"
+            b"CONFIG_MCKERNEL_IHK_RUST=m\n"
+            b"CONFIG_RUST=y\n"
+            b"CONFIG_X86_64=y\n"
+        )
+        with self.assertRaises(solver.SolverError):
+            solver._extract_result(
+                visible_consumers, "missing-visible-consumers fixture"
+            )
+        complete_config = (
+            b"CONFIG_MODULES=y\n"
+            b"# CONFIG_MCKERNEL_IHK_RUST is not set\n"
+            b"CONFIG_RUST=y\n"
+            b"CONFIG_X86_64=y\n"
+        )
+        for prerequisite in (
+            solver.CONFIG_MODULES,
+            solver.CONFIG_RUST,
+            solver.CONFIG_X86_64,
+        ):
+            mutation = b"".join(
+                line
+                for line in complete_config.splitlines(keepends=True)
+                if prerequisite.encode("ascii") not in line
+            )
+            with self.subTest(missing=prerequisite):
+                with self.assertRaises(solver.SolverError):
+                    solver._extract_result(mutation, "missing-prerequisite fixture")
 
 
 class NativeRustKconfigSolverArtifactTests(unittest.TestCase):

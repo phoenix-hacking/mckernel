@@ -615,14 +615,40 @@ def _run_make(source, output, case_id, pass_number, environ):
 
 def _extract_result(config_bytes, label):
     values = parse_config(config_bytes, label)
-    result = {}
-    for symbol in RESULT_SYMBOLS:
+    prerequisites = {}
+    for symbol in (CONFIG_MODULES, CONFIG_RUST, CONFIG_X86_64):
         if symbol not in values:
             raise SolverError("{0} is missing {1}".format(label, symbol))
         value = values[symbol]
         if value not in VALUES:
             raise SolverError("{0} has non-tristate {1}".format(label, symbol))
-        result[symbol] = value
+        prerequisites[symbol] = value
+    menu_visible = (
+        prerequisites[CONFIG_MODULES] == "y"
+        and prerequisites[CONFIG_RUST] == "y"
+        and prerequisites[CONFIG_X86_64] == "y"
+    )
+    module_values = {}
+    for symbol in MODULE_SYMBOLS:
+        if symbol in values:
+            value = values[symbol]
+        elif not menu_visible or (
+            symbol != CONFIG_PROVIDER
+            and module_values.get(CONFIG_PROVIDER, "n") == "n"
+        ):
+            value = "n"
+        else:
+            raise SolverError("{0} is missing visible {1}".format(label, symbol))
+        if value not in VALUES:
+            raise SolverError("{0} has non-tristate {1}".format(label, symbol))
+        module_values[symbol] = value
+    result = {}
+    for symbol in RESULT_SYMBOLS:
+        result[symbol] = (
+            module_values[symbol]
+            if symbol in module_values
+            else prerequisites[symbol]
+        )
     if result[CONFIG_MODULES] not in MODULE_VALUES:
         raise SolverError("{0} resolved CONFIG_MODULES outside n/y".format(label))
     return result
