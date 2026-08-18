@@ -1,0 +1,109 @@
+{
+  "authority_id": "rocky-10.2-rk-006-layered-patch-authority-v1",
+  "claim_scope": "Bounded RK-006 source classification, semantic policy, and repository-fixture replay only. This authority never awards RK-006 or tracker credit and does not claim a current-head production build, external full-source replay, independent review, or durable archival.",
+  "gate": {
+    "credit_eligible": false,
+    "gate_id": "RK-006",
+    "gate_status_claimed": "TODO",
+    "tracker_credit": false
+  },
+  "layers": [
+    {
+      "id": "compiler-kernel-compatibility",
+      "patch_count": 21,
+      "scope": "compiler and kernel compatibility only; no project policy"
+    },
+    {
+      "id": "generic-rust-abstraction-binding",
+      "patch_count": 3,
+      "scope": "generic Rust abstractions and bindings only; no project policy"
+    },
+    {
+      "id": "project-parent-integration",
+      "patch_count": 1,
+      "scope": "separate exact parent Kconfig/Kbuild insertion; excluded from the generic layer"
+    }
+  ],
+  "patches": [
+    {"id":"compat-001","layer":"compiler-kernel-compatibility","license_basis":"patch-header","license_expression":"GPL-2.0-only","order":1,"origin":"linux-kernel-community","path":"host-kernel/rocky/patches/0001-x86-rust-set-rustc-abi-x86-softfloat.patch","postimage_closure_sha256":"4e5a79cb1be45badd28e10d79bb3723798d7877677913f25d3dddf8ca32da23c","provenance":"linux-commit:6273a058383e05465083b535ed9469f2c8a48321","sha256":"85069fa5d4e1de8a0d0172480604c74deba0caeafd34268a6735d069599e5113","touched_paths":["scripts/generate_rust_target.rs"]},
+    {"id":"compat-002","layer":"compiler-kernel-compatibility","license_basis":"patch-header","license_expression":"GPL-2.0-only","order":2,"origin":"linux-kernel-community","path":"host-kernel/rocky/patches/0002-rust-support-rust-1.91-target-spec.patch","postimage_closure_sha256":"38fd436fbc3610106cc5596350756fef67621ae68496c95356f1dcab8fa20e53","provenance":"linux-commit:8851e27d2cb947ea8bbbe8e812068f7bf5cbd00b","sha256":"c52bde4ace32fbd908b6c5ed5e4ac1881effd6e9ebd5813e7e083d74a5f34997","touched_paths":["scripts/generate_rust_target.rs"]},
+    {"id":"compat-003","layer":"compiler-kernel-compatibility","license_basis":"patch-header","license_expression":"GPL-2.0-only","order":3,"origin":"linux-kernel-community","path":"host-kernel/rocky/patches/0003-kbuild-rust-add-rustc-min-version.patch","postimage_closure_sha256":"94a8ccb817439618be957a8e02d944cf0e8a7c69b8d911dbfcc77846c35781ac","provenance":"linux-commit:1814e71a4e9c20bd69dbe1e007d31c0ab2c237a2","sha256":"4af4b725292a080a9bf69f37308cb4099e957674001f0fc83239f4be29f07ec1","touched_paths":["Documentation/kbuild/makefiles.rst","arch/arm64/Makefile","scripts/Makefile.compiler"]},
+    {"id":"compat-004","layer":"compiler-kernel-compatibility","license_basis":"patch-header","license_expression":"GPL-2.0-only","order":4,"origin":"linux-kernel-community","path":"host-kernel/rocky/patches/0004-rust-compile-libcore-edition-2024.patch","postimage_closure_sha256":"2409e94bfb3a7b2a44a34fe0c9877ca274e0bab44d4a5b3c86f2e6ac34a04cd8","provenance":"linux-commit:60d8db49ef143c04f7daf90dafa3347a7af3b4c7","sha256":"3ef23cf99a4523a6045a29b70f49ba0080242d7b219db7f0bca58b4f7d73fbb7","touched_paths":["rust/Makefile","scripts/generate_rust_analyzer.py"]},
+    {"id":"compat-005","layer":"compiler-kernel-compatibility","license_basis":"patch-header","license_expression":"GPL-2.0-only","order":5,"origin":"linux-kernel-community","path":"host-kernel/rocky/patches/0005-rust-clean-unnecessary-transmutes-lint.patch","postimage_closure_sha256":"8f78d08ecbb4f80fa6affbc7d7fad6659c6b62f4892bd58797e678a59751d5b5","provenance":"linux-commit:376b73292a262124c8aed10026e9da23e92554b2","sha256":"0ba29993d78fea5db3c0ff8dbf41bf8a6c08b00d9803fc85da7805e698ac8c33","touched_paths":["init/Kconfig","rust/bindings/lib.rs","rust/uapi/lib.rs"]},
+    {"id":"compat-006","layer":"compiler-kernel-compatibility","license_basis":"patch-header","license_expression":"GPL-2.0-only","order":6,"origin":"linux-kernel-community","path":"host-kernel/rocky/patches/0006-rust-init-allow-dead-code-rust-1.89.patch","postimage_closure_sha256":"9ece288150ecca04f3d747caeccb9e0cd244bb87a0d25f5156c91fe2539b7bc1","provenance":"linux-commit:5d2d34f36724585801937e76f81a69ab97cd045b","sha256":"315ec61d17c5d3cc97c6123f30bcffa08befcc00c487efaa5e6eda38333d29c5","touched_paths":["rust/kernel/init/macros.rs"]},
+    {"id":"compat-007","layer":"compiler-kernel-compatibility","license_basis":"patch-header","license_expression":"GPL-2.0-only","order":7,"origin":"linux-kernel-community","path":"host-kernel/rocky/patches/0007-rust-use-used-compiler-rust-1.89.patch","postimage_closure_sha256":"929fc11fe56030a36745601cd0bd835f8de74e780429e3692018b52cc5e86579","provenance":"linux-commit:d9ebd928288bb82df8efeb3a34f2cd31883f440e","sha256":"d9a58b1123e5f5522efb7ad7b7837c406b955c1a1c4a7a38f0d2faa4dd4285fc","touched_paths":["rust/Makefile","rust/kernel/lib.rs","rust/macros/module.rs","scripts/Makefile.build"]},
+    {"id":"compat-008","layer":"compiler-kernel-compatibility","license_basis":"patch-header","license_expression":"GPL-2.0-only","order":8,"origin":"linux-kernel-community","path":"host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch","postimage_closure_sha256":"acbe669bc6271a4c2354e4b52c6b45016665dc55a2bd42b4a1536a87637ebff2","provenance":"linux-commit:e18d5b42489311bc86d7ce5fb0f19af067495589","sha256":"ab3f6adaed3fcb65669ffc0baccdb3d7a9b7e3df9d0c5889228c775585daacaa","touched_paths":["rust/kernel/lib.rs","rust/kernel/list/arc.rs","rust/kernel/sync/arc.rs","scripts/Makefile.build"]},
+    {"id":"compat-009","layer":"compiler-kernel-compatibility","license_basis":"patch-header","license_expression":"GPL-2.0-only","order":9,"origin":"linux-kernel-community","path":"host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch","postimage_closure_sha256":"14cd8bb90a27ae6addd9e341f2db4da377ceb0b1e475d0303d5044fcf1342ca2","provenance":"linux-commit:31d813a3b8cbde2d09ba4dee282ca29096541006","sha256":"076b0b48effba9bed12cb00a4c93318353aa26344f14b0b1bba5508c55a1bcfb","touched_paths":["rust/kernel/block/mq/tag_set.rs"]},
+    {"id":"compat-010","layer":"compiler-kernel-compatibility","license_basis":"patch-header","license_expression":"GPL-2.0-only","order":10,"origin":"linux-kernel-community","path":"host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch","postimage_closure_sha256":"e61cbd31a972a7ed60d487a0e5cce2ba0451e9ba0e1be7a32b16b6493ae24a59","provenance":"linux-commit:511ceee89966ce906ca8989523e1a67ba6de44c1","sha256":"2781f4eac05a806a58e76a035f2dba45f137a9147512c87cf9f63b1deb40c7e0","touched_paths":["scripts/Makefile.extrawarn"]},
+    {"id":"compat-011","layer":"compiler-kernel-compatibility","license_basis":"patch-header","license_expression":"GPL-2.0-only","order":11,"origin":"linux-kernel-community","path":"host-kernel/rocky/patches/0011-mm-ksm-fix-clang-21-uninitialized.patch","postimage_closure_sha256":"c1c8ac7e120b247480738391081b49b5b6e7795451651988c96e35a48f967633","provenance":"linux-commit:f7ff0324760013762088f70d74ed1ddb7edffb13","sha256":"2104f602c62bbda355089fb0210647b39d511e77bbdb9857e5c092c004f490a1","touched_paths":["mm/ksm.c"]},
+    {"id":"compat-012","layer":"compiler-kernel-compatibility","license_basis":"patch-header","license_expression":"GPL-2.0-only","order":12,"origin":"linux-kernel-community","path":"host-kernel/rocky/patches/0012-netfs-mark-nonstring-lookup-tables.patch","postimage_closure_sha256":"33946fc834edd3c227dc7740f15f943bb9b21f416ccf360778689c3075b7c989","provenance":"linux-commit:58db1c3cd0ce857e7210b0a95908900c25c28c3e","sha256":"3aeb8de2d5eee43f56268475b8911e6e14eef59e3b8007b4719b8c4ef0a1b691","touched_paths":["fs/netfs/fscache_cache.c","fs/netfs/fscache_cookie.c"]},
+    {"id":"compat-013","layer":"compiler-kernel-compatibility","license_basis":"patch-header","license_expression":"GPL-2.0-only","order":13,"origin":"linux-kernel-community","path":"host-kernel/rocky/patches/0013-lib-crypto-mark-binary-vectors-nonstring.patch","postimage_closure_sha256":"b4a1416244fcb3eab93b45195ef6e0e2f20a03aff5d5bfde9fb51b110120d792","provenance":"linux-commit:e202196b8aa249d78ab87eae56bbe0e71e3dc39c","sha256":"329e86bdadf721f366b58582bf893df451a25e1f5cb91715bb789e10c242f021","touched_paths":["lib/crypto/aescfb.c","lib/crypto/aesgcm.c"]},
+    {"id":"compat-014","layer":"compiler-kernel-compatibility","license_basis":"patch-header","license_expression":"GPL-2.0-only","order":14,"origin":"linux-kernel-community","path":"host-kernel/rocky/patches/0014-gcc-15-mark-byte-arrays-nonstring.patch","postimage_closure_sha256":"5a40e7315afb7dec8b9b14d57f18cbc2c3e62ce5081e5d7982c38ab5b8c06742","provenance":"linux-commit:05e8d261a34e5c637e37be55c26e42cf5c75ee5c","sha256":"e98032b0d88ea5dbaffdbdf39a16423fded48dbed41adec29cc232782ba6d24b","touched_paths":["drivers/iio/magnetometer/ak8974.c","drivers/net/wireless/ath/carl9170/fw.c","fs/cachefiles/key.c"]},
+    {"id":"compat-015","layer":"compiler-kernel-compatibility","license_basis":"patch-header","license_expression":"GPL-2.0-only","order":15,"origin":"linux-kernel-community","path":"host-kernel/rocky/patches/0015-gcc-15-demote-unterminated-string-warning.patch","postimage_closure_sha256":"21bcab27d9a23a006e7c5cab5cb5ec355d40c5743da91112b8d34ecbceaafadd","provenance":"linux-commit:9f58537e9b8f07d56aca68308dc73db60fbc7ad3","sha256":"b07d58736bfe7e9ef5f9c3c4ce2807514f2cd01ab1146620fc09eb4f98ac8f29","touched_paths":["Makefile"]},
+    {"id":"compat-016","layer":"compiler-kernel-compatibility","license_basis":"patch-header","license_expression":"GPL-2.0-only","order":16,"origin":"linux-kernel-community","path":"host-kernel/rocky/patches/0016-gcc-15-disable-unterminated-string-warning.patch","postimage_closure_sha256":"f71f377c349024d8cc9984c57ebfb7d17c5e849cafe5d2d838e833c1b83e1beb","provenance":"linux-commit:d66cf772bebd789448121cdfc42734fb042c9c4b","sha256":"ea3a2c85b9dc1c15d3307c3958512b812d56297930d58fc6912adfb2ea3e7284","touched_paths":["Makefile"]},
+    {"id":"compat-017","layer":"compiler-kernel-compatibility","license_basis":"patch-header","license_expression":"GPL-2.0-only","order":17,"origin":"linux-kernel-community","path":"host-kernel/rocky/patches/0017-kbuild-use-cc-disable-warning.patch","postimage_closure_sha256":"bd04f1e1ec02e2d3f54793f3b03a11bef6d3317cd109b93e5373b8b8030a62eb","provenance":"linux-commit:3f856d5d84467c7fba0bf3cca405089c497e37eb","sha256":"890a11c4540d4c003773482c47858a946156e4cf0d2e04d3a9ed8e1a9382fd4b","touched_paths":["Makefile","arch/loongarch/kernel/Makefile","arch/loongarch/kvm/Makefile","arch/riscv/kernel/Makefile","scripts/Makefile.extrawarn"]},
+    {"id":"compat-018","layer":"compiler-kernel-compatibility","license_basis":"patch-header","license_expression":"GPL-2.0-only","order":18,"origin":"linux-kernel-community","path":"host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch","postimage_closure_sha256":"4d152730f8fe602a7196238dda74910c45bda086c79aa69da1db29b178389f41","provenance":"linux-commit:dd8a734155ae28094d27b96c00a478fa0ee6d5d7","sha256":"e271fa6f30bb3b39a24ae2f926dfa067577997ecf2076e412b5575a4d785021e","touched_paths":["Makefile","scripts/Makefile.extrawarn"]},
+    {"id":"generic-001","layer":"generic-rust-abstraction-binding","license_basis":"linux-submission-and-target-file","license_expression":"GPL-2.0","order":19,"origin":"linux-kernel-community","path":"host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch","postimage_closure_sha256":"a637a644d836ca4440bd2e8f48dc8bfc2fb00f2c27dd5b7f38bfd8cd1451dabf","provenance":"linux-commit:a69dc41a4211b0da311ae3a3b79dd4497c9dfb60","sha256":"bc9b84c4c8bf36b7fac02dd3d04e1a170b86ee143b76739a6eed3e564cdebc2b","touched_paths":["rust/kernel/types.rs"]},
+    {"id":"generic-002","layer":"generic-rust-abstraction-binding","license_basis":"linux-submission-and-target-file","license_expression":"GPL-2.0","order":20,"origin":"linux-kernel-community","path":"host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch","postimage_closure_sha256":"ec47be691ce9329bf79332fa907e167f882dec646bcefdc2a0e9239cdda85fe2","provenance":"linux-commit:f893691e742688ae21ad597c5bba13bef54706cd","sha256":"d377b5bd91d507e383b8673beac42381b9b6c37a47bba7955c768a8f6ddaad25","touched_paths":["rust/bindings/bindings_helper.h","rust/kernel/lib.rs","rust/kernel/miscdevice.rs"]},
+    {"id":"compat-019","layer":"compiler-kernel-compatibility","license_basis":"patch-header","license_expression":"GPL-2.0-only","order":21,"origin":"local-rocky-exact-build-compatibility","path":"host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch","postimage_closure_sha256":"ecc9a41ded6a40b26bd2e74d695a7417b4d351d4faa4b3766f31ef8881cea367","provenance":"github-actions:run=31644047766,job=94273299611,artifact=9160078637","sha256":"6eb8dd4789a5b01a3f8e00ea45dab9debb7d23bb7a8c4af5b2cfdc181656633a","touched_paths":["tools/objtool/check.c"]},
+    {"id":"compat-020","layer":"compiler-kernel-compatibility","license_basis":"patch-header","license_expression":"GPL-2.0-only","order":22,"origin":"local-rocky-exact-build-compatibility","path":"host-kernel/rocky/patches/0022-x86-pvh-annotate-noendbr.patch","postimage_closure_sha256":"8e72893143934486d79fed7550464f0c07cbf0c24eab25b3e3b0c0f95ce4ca17","provenance":"github-actions:run=31605746750,job=94144112731,artifact=9145918955","sha256":"2f07f4030312ce1df38ed78615c94bfb99c7e084d27611de96d38bcf47237e48","touched_paths":["arch/x86/platform/pvh/head.S"]},
+    {"id":"compat-021","layer":"compiler-kernel-compatibility","license_basis":"patch-header","license_expression":"GPL-2.0-only","order":23,"origin":"local-rocky-exact-build-compatibility","path":"host-kernel/rocky/patches/0023-rust-update-no-alloc-shim-marker-rust-1.92.patch","postimage_closure_sha256":"0155ea0d05d540fc7ce0aefde08c559ac792ca69b0401b85e5dd92059bf0b3d2","provenance":"github-actions:run=32082343363,job=95547626904,artifact=9305826810","sha256":"aeb6af53a40049a009c9973d910e4c8a6286075b88512db051778e5a4595a77b","touched_paths":["rust/kernel/alloc/allocator.rs","rust/kernel/lib.rs"]},
+    {"id":"parent-001","layer":"project-parent-integration","license_basis":"unreviewed-bound-linux-parent-targets","license_expression":null,"order":24,"origin":"mckernel-repository-overlay","path":"host-kernel/kbuild/patches/0001-drivers-misc-add-mckernel-rust-host-modules.patch","postimage_closure_sha256":"18b2a097a21c8d7da38da36aca3f287b49d317cef67d12599e064718272635b3","provenance":"parent-integration-v1:c806e6cda3be3e6f4b92cef35a0d5369738bae5b87e32ed4f486489d3435db2f","sha256":"25b0724a2523c3fd5d6d8b824b72c6e6b19c2b16edebaa6719b53c22d4d5c7d9","touched_paths":["drivers/misc/Makefile","drivers/misc/Kconfig"]},
+    {"id":"generic-003","layer":"generic-rust-abstraction-binding","license_basis":"linux-target-file","license_expression":"GPL-2.0","order":25,"origin":"mckernel-repository-overlay","path":"host-kernel/kbuild/patches/0002-rust-bindings-expose-module-parameters.patch","postimage_closure_sha256":"39715db0bf0716e69e68cc0ff25b120242537692bc58283b60916a875226fb18","provenance":"repository-overlay:e01b48d89e4126eb3c31b355491ec95e3f31458de79ffd6e28d1bae71ddec14c","sha256":"e01b48d89e4126eb3c31b355491ec95e3f31458de79ffd6e28d1bae71ddec14c","touched_paths":["rust/bindings/bindings_helper.h"]}
+  ],
+  "remaining_blockers": [
+    "Independent review has not approved this RK-006 authority or its patch authorship, license, and provenance decisions; authorship for the two headerless repository overlays and standalone license for the parent-integration patch remain unestablished.",
+    "A current-head exact Rocky build with exact compiler and tool identities, including full external parent-file preimages, has not bound the applied postimages to this authority.",
+    "The authority manifest, replay logs, patched source closure, build logs, and artifacts are not durably archived."
+  ],
+  "replay": {
+    "command": "patch -p1 --batch --forward --fuzz=0 --no-backup-if-mismatch",
+    "external_current_head_build_proof": false,
+    "final_postimage_closure_sha256": "39715db0bf0716e69e68cc0ff25b120242537692bc58283b60916a875226fb18",
+    "full_external_parent_preimage_execution_proof": false,
+    "parent_seed_scope": "Repository-bounded minimal drivers/misc Makefile and Kconfig context; the full parent preimage hashes remain bound by parent-integration-v1 but are not present as repository fixtures.",
+    "second_application_must_fail": true
+  },
+  "review": {
+    "durable_archive_complete": false,
+    "independent_review_complete": false
+  },
+  "schema_version": 1,
+  "semantic_policy": {
+    "audited_c_hunk_digests": [
+      {"patch_id":"compat-011","path":"mm/ksm.c","sha256":"638b669131254d3801c9c654fbf9fe8ba552cb572af388036bc5f028a8db5f6c"},
+      {"patch_id":"compat-012","path":"fs/netfs/fscache_cache.c","sha256":"74282bfc0a62d8b62e5d9f45f1064f0db8ac2b3850f0cabf2fa9dff145d06c0d"},
+      {"patch_id":"compat-012","path":"fs/netfs/fscache_cookie.c","sha256":"541536bf085c7f4ad48a6fa2ebecc75d528734913935a57029e2a53ff6ad3ea0"},
+      {"patch_id":"compat-013","path":"lib/crypto/aescfb.c","sha256":"72c3dcc901ed3e3b3cc6cb6d758898e0b227a3a1fcc4f05ad006dc8600f3b161"},
+      {"patch_id":"compat-013","path":"lib/crypto/aesgcm.c","sha256":"d648fb131bc0bf729bf4920d6668151be2b7072e4ac905bdb2dc7bd3ea2243fc"},
+      {"patch_id":"compat-014","path":"drivers/iio/magnetometer/ak8974.c","sha256":"4f6458e2d4e30e7d6ca3245f825a4fe0657f975248da25d7169c44299b3b9536"},
+      {"patch_id":"compat-014","path":"drivers/net/wireless/ath/carl9170/fw.c","sha256":"398971e9054850696963452cee74c41653c0710e598e6e69d887f794e6986060"},
+      {"patch_id":"compat-014","path":"fs/cachefiles/key.c","sha256":"e4ecbf912d1a216560976c57d0c8ae338912b6886144de4ee198a92dfd109005"},
+      {"patch_id":"generic-002","path":"rust/bindings/bindings_helper.h","sha256":"25efbe3bdd7cd4ab47123c11998f7f314be09676e182aea7cd5bc32d3e3aea20"},
+      {"patch_id":"compat-019","path":"tools/objtool/check.c","sha256":"e2c2b10fab33410f86256ba05f55c6da994bd5491df0227d47feddb132b97ce0"},
+      {"patch_id":"generic-003","path":"rust/bindings/bindings_helper.h","sha256":"1df6fd85120ef18f862ad4fb8d9d7abdd9bb3cbc814256ef4baae96d4a4c90ea"}
+    ],
+    "export_symbol_injection_allowed": false,
+    "forbidden_generic_policy_tokens": [
+      "mckernel",
+      "ihk",
+      "mcctrl",
+      "mcexec"
+    ],
+    "new_project_c_helpers_allowed": false,
+    "only_allowed_new_source_path": "rust/kernel/miscdevice.rs",
+    "parent_integration_exception": "Only the two digest-bound parent Kconfig/Kbuild insertion lines are allowed; the parent patch is not generic Linux-core policy."
+  },
+  "source_binding": {
+    "fixture_preimage_closure_sha256": "d2da4c4b8eb24a055ab636c43538168148c08b9ef4476138cf6a19124d575b3f",
+    "fixture_root": "scripts/tests/fixtures/rust-core-rocky-6.12",
+    "generator_fixture_path": "scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs",
+    "generator_fixture_sha256": "9c21a1b67751db98e407439b77d014be6b92ba3cf6457fde6a4118a798f4fa05",
+    "kernel_archive_sha256": "4a174d47b8874a2139efcd1ac1ab2d6b80ae7a0ca62f0ae4596fd20cf62a3533",
+    "parent_integration_authority_path": "host-kernel/kbuild/parent-integration-v1.json",
+    "parent_integration_authority_sha256": "c806e6cda3be3e6f4b92cef35a0d5369738bae5b87e32ed4f486489d3435db2f",
+    "source_lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-source-v1",
+    "source_lock_path": "host-kernel/rocky/source-lock.json",
+    "source_lock_sha256": "707ee40466ac0bb0cd0600383bba0b13fc1146e7080034786bf5668a95b27682"
+  }
+}
