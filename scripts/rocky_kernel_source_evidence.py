@@ -36,6 +36,30 @@ PATCH_SERIES_PATH = Path("host-kernel/rocky/patches/series.json")
 SOURCE_LOCK_VALIDATOR_PATH = Path("scripts/rocky_kernel_source_lock.py")
 CAPTURE_SCRIPT_PATH = Path("scripts/rocky_kernel_source_evidence.py")
 WORKFLOW_PATH = Path(".github/workflows/rocky-kernel-source-evidence.yml")
+WORKFLOW_TRIGGER_PATHS = (
+    ".github/workflows/rocky-kernel-source-evidence.yml",
+    "host-kernel/rocky/source-lock.json",
+    "host-kernel/rocky/patches/series.json",
+    "host-kernel/kbuild/stage-manifest.json",
+    "host-kernel/native-rust/ihk.rs",
+    "host-kernel/native-rust/ihk-page-allocator-contract-v1.json",
+    "host-kernel/native-rust/ihk-page-owner-registry-contract-v1.json",
+    "host-kernel/native-rust/page_allocator.rs",
+    "host-kernel/native-rust/page_owner_registry.rs",
+    "scripts/ihk_page_allocator_check.py",
+    "scripts/ihk_page_owner_registry_check.py",
+    "scripts/tests/fixtures/ihk_page_allocator_compile.rs",
+    "scripts/tests/fixtures/ihk_page_allocator_lifetime_compile_fail.rs",
+    "scripts/tests/fixtures/ihk_page_allocator_must_use_compile_fail.rs",
+    "scripts/tests/fixtures/ihk_page_owner_registry_compile.rs",
+    "scripts/tests/fixtures/ihk_page_owner_registry_lifetime_compile_fail.rs",
+    "scripts/tests/fixtures/ihk_page_owner_registry_sync_compile_fail.rs",
+    "scripts/tests/test_ihk_page_allocator_check.py",
+    "scripts/tests/test_ihk_page_owner_registry_check.py",
+    "scripts/rocky_kernel_source_evidence.py",
+    "scripts/rocky_kernel_license_inventory.py",
+    "scripts/rocky_kernel_source_lock.py",
+)
 
 CONTAINER_IMAGE = (
     "rockylinux/rockylinux:10.2@"
@@ -206,34 +230,634 @@ def load_locked_inputs(
     return lock, series, lock_bytes, series_bytes, blockers
 
 
+def workflow_scalar(raw: str) -> str:
+    """Return one plain workflow scalar without letting comments attest it."""
+    value = raw.strip()
+    quote = None  # type: Optional[str]
+    escaped = False
+    for index, character in enumerate(value):
+        if quote == '"':
+            if escaped:
+                escaped = False
+            elif character == "\\":
+                escaped = True
+            elif character == quote:
+                quote = None
+        elif quote == "'":
+            if character == quote:
+                quote = None
+        elif character in ("'", '"'):
+            quote = character
+        elif character == "#" and (index == 0 or value[index - 1].isspace()):
+            return value[:index].rstrip()
+    if quote is not None:
+        raise EvidenceError("workflow scalar contains an unterminated quote")
+    return value
+
+
+def workflow_mapping_matches(
+    lines: Sequence[str], indent: int, key: str
+) -> List[Tuple[int, str]]:
+    pattern = re.compile(
+        r"^" + (" " * indent) + re.escape(key) + r":(?:[ \t]*(.*))?$"
+    )
+    matches = []
+    for index, line in enumerate(lines):
+        match = pattern.fullmatch(line)
+        if match is not None:
+            matches.append((index, workflow_scalar(match.group(1) or "")))
+    return matches
+
+
+def require_workflow_mapping(
+    lines: Sequence[str], indent: int, key: str, expected: str, label: str
+) -> int:
+    matches = workflow_mapping_matches(lines, indent, key)
+    if len(matches) != 1 or matches[0][1] != expected:
+        raise EvidenceError(
+            "{} must map {} exactly once to {!r}".format(label, key, expected)
+        )
+    return matches[0][0]
+
+
+def require_workflow_key_set(
+    lines: Sequence[str], indent: int, expected: Iterable[str], label: str
+) -> None:
+    pattern = re.compile(
+        r"^" + (" " * indent) + r"([A-Za-z0-9_-]+):(?:[ \t]*(.*))?$"
+    )
+    keys = []
+    for line in lines:
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#"):
+            continue
+        leading = len(line) - len(line.lstrip(" "))
+        if leading != indent:
+            continue
+        match = pattern.fullmatch(line)
+        if match is None:
+            raise EvidenceError("{} contains malformed mapping syntax".format(label))
+        workflow_scalar(match.group(2) or "")
+        keys.append(match.group(1))
+    if len(set(keys)) != len(keys) or set(keys) != set(expected):
+        raise EvidenceError("{} mapping keys changed or are duplicated".format(label))
+
+
+def workflow_mapping_block(
+    lines: Sequence[str], indent: int, key: str, expected: str, label: str
+) -> List[str]:
+    start = require_workflow_mapping(lines, indent, key, expected, label) + 1
+    end = len(lines)
+    for index in range(start, len(lines)):
+        line = lines[index]
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#"):
+            continue
+        leading = len(line) - len(line.lstrip(" "))
+        if leading <= indent:
+            end = index
+            break
+    return list(lines[start:end])
+
+
+def require_workflow_empty_block(lines: Sequence[str], label: str) -> None:
+    if any(line.strip() and not line.strip().startswith("#") for line in lines):
+        raise EvidenceError("{} must remain empty".format(label))
+
+
+def require_workflow_sequence(
+    lines: Sequence[str], indent: int, key: str, expected: Iterable[str], label: str
+) -> None:
+    block = workflow_mapping_block(lines, indent, key, "", label)
+    item = re.compile(r"^" + (" " * (indent + 2)) + r"-[ \t]+(.+)$")
+    values = []
+    for line in block:
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#"):
+            continue
+        leading = len(line) - len(line.lstrip(" "))
+        if leading != indent + 2:
+            raise EvidenceError("{} contains invalid sequence indentation".format(label))
+        match = item.fullmatch(line)
+        if match is None:
+            raise EvidenceError("{} contains a malformed sequence item".format(label))
+        value = workflow_scalar(match.group(1))
+        if not value:
+            raise EvidenceError("{} contains an empty sequence item".format(label))
+        values.append(value)
+    if len(set(values)) != len(values) or set(values) != set(expected):
+        raise EvidenceError("{} sequence set changed or is duplicated".format(label))
+
+
+def validate_workflow_triggers(lines: Sequence[str]) -> None:
+    triggers = workflow_mapping_block(lines, 0, "on", "", "workflow triggers")
+    require_workflow_key_set(
+        triggers,
+        2,
+        {"workflow_dispatch", "push", "pull_request"},
+        "workflow triggers",
+    )
+    dispatch = workflow_mapping_block(
+        triggers, 2, "workflow_dispatch", "", "workflow dispatch trigger"
+    )
+    require_workflow_empty_block(dispatch, "workflow dispatch trigger")
+    for trigger, branch in (
+        ("push", "[codex/rocky-rust-validation]"),
+        ("pull_request", "[development]"),
+    ):
+        block = workflow_mapping_block(
+            triggers, 2, trigger, "", "{} trigger".format(trigger)
+        )
+        require_workflow_key_set(
+            block, 4, {"branches", "paths"}, "{} trigger".format(trigger)
+        )
+        require_workflow_mapping(
+            block, 4, "branches", branch, "{} trigger".format(trigger)
+        )
+        require_workflow_sequence(
+            block,
+            4,
+            "paths",
+            WORKFLOW_TRIGGER_PATHS,
+            "{} trigger paths".format(trigger),
+        )
+
+
+def workflow_jobs(lines: Sequence[str]) -> Dict[str, List[str]]:
+    job_lines = workflow_mapping_block(lines, 0, "jobs", "", "workflow jobs")
+    header = re.compile(r"^  ([A-Za-z0-9_-]+):(?:[ \t]*(.*))?$")
+    starts = []  # type: List[Tuple[int, str]]
+    for index, line in enumerate(job_lines):
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#"):
+            continue
+        leading = len(line) - len(line.lstrip(" "))
+        if leading != 2:
+            continue
+        match = header.fullmatch(line)
+        if match is None or workflow_scalar(match.group(2) or ""):
+            raise EvidenceError("workflow contains a malformed job declaration")
+        starts.append((index, match.group(1)))
+    if len({name for _, name in starts}) != len(starts):
+        raise EvidenceError("workflow contains duplicate job declarations")
+    jobs = {}  # type: Dict[str, List[str]]
+    for offset, (start, name) in enumerate(starts):
+        end = starts[offset + 1][0] if offset + 1 < len(starts) else len(job_lines)
+        jobs[name] = list(job_lines[start + 1 : end])
+    return jobs
+
+
+def workflow_steps(job: Sequence[str], label: str) -> Dict[str, List[str]]:
+    step_lines = workflow_mapping_block(job, 4, "steps", "", label + " steps")
+    header = re.compile(r"^      - name:(?:[ \t]*(.*))?$")
+    starts = []  # type: List[Tuple[int, str]]
+    for index, line in enumerate(step_lines):
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#"):
+            continue
+        leading = len(line) - len(line.lstrip(" "))
+        if leading != 6:
+            continue
+        match = header.fullmatch(line)
+        if match is None:
+            raise EvidenceError("{} contains an unnamed or malformed step".format(label))
+        name = workflow_scalar(match.group(1) or "")
+        if not name:
+            raise EvidenceError("{} contains an empty step name".format(label))
+        starts.append((index, name))
+    if len({name for _, name in starts}) != len(starts):
+        raise EvidenceError("{} contains duplicate step names".format(label))
+    steps = {}  # type: Dict[str, List[str]]
+    for offset, (start, name) in enumerate(starts):
+        end = starts[offset + 1][0] if offset + 1 < len(starts) else len(step_lines)
+        steps[name] = list(step_lines[start + 1 : end])
+    return steps
+
+
+def workflow_run_script(step: Sequence[str], label: str) -> str:
+    block = workflow_mapping_block(step, 8, "run", "|", label + " run block")
+    script = []
+    for line in block:
+        if not line:
+            script.append("")
+        elif line.startswith("          "):
+            script.append(line[10:])
+        elif line.strip().startswith("#"):
+            script.append("")
+        else:
+            raise EvidenceError("{} run block has invalid indentation".format(label))
+    return "\n".join(script)
+
+
+def workflow_shell_commands(script: str, label: str) -> List[List[str]]:
+    commands = []  # type: List[List[str]]
+    continued = ""
+    for raw in script.splitlines():
+        line = raw.strip()
+        if not line:
+            continue
+        if line.startswith("#"):
+            if continued:
+                raise EvidenceError(
+                    "{} places a comment inside a continued command".format(label)
+                )
+            continue
+        if line.endswith("\\"):
+            fragment = line[:-1].rstrip()
+            if not fragment:
+                raise EvidenceError("{} contains an empty continuation".format(label))
+            continued += fragment + " "
+            continue
+        continued += line
+        try:
+            tokens = shlex.split(continued, comments=True, posix=True)
+        except ValueError as exc:
+            raise EvidenceError("{} contains malformed shell: {}".format(label, exc)) from exc
+        if tokens:
+            commands.append(tokens)
+        continued = ""
+    if continued:
+        raise EvidenceError("{} ends inside a continued command".format(label))
+    return commands
+
+
+def validate_workflow_job_runtime(job: Sequence[str], label: str) -> None:
+    require_workflow_key_set(
+        job,
+        4,
+        {"name", "runs-on", "timeout-minutes", "container", "defaults", "steps"},
+        label,
+    )
+    require_workflow_mapping(job, 4, "runs-on", "ubuntu-24.04", label)
+    require_workflow_mapping(job, 4, "timeout-minutes", "90", label)
+    container = workflow_mapping_block(job, 4, "container", "", label + " container")
+    require_workflow_key_set(container, 6, {"image"}, label + " container")
+    require_workflow_mapping(container, 6, "image", CONTAINER_IMAGE, label + " container")
+    defaults = workflow_mapping_block(job, 4, "defaults", "", label + " defaults")
+    require_workflow_key_set(defaults, 6, {"run"}, label + " defaults")
+    run_defaults = workflow_mapping_block(defaults, 6, "run", "", label + " defaults")
+    require_workflow_key_set(run_defaults, 8, {"shell"}, label + " defaults")
+    require_workflow_mapping(run_defaults, 8, "shell", "bash", label + " defaults")
+
+
+def validate_checkout_step(step: Sequence[str], label: str) -> None:
+    require_workflow_key_set(step, 8, {"uses", "with"}, label)
+    require_workflow_mapping(
+        step,
+        8,
+        "uses",
+        "actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+        label,
+    )
+    values = workflow_mapping_block(step, 8, "with", "", label + " inputs")
+    require_workflow_key_set(
+        values,
+        10,
+        {"ref", "fetch-depth", "persist-credentials", "submodules"},
+        label + " inputs",
+    )
+    require_workflow_mapping(values, 10, "ref", "${{ env.EXPECTED_HEAD_SHA }}", label)
+    require_workflow_mapping(values, 10, "fetch-depth", "1", label)
+    require_workflow_mapping(values, 10, "persist-credentials", "false", label)
+    require_workflow_mapping(values, 10, "submodules", "recursive", label)
+
+
+def validate_upload_step(
+    step: Sequence[str], label: str, artifact_name: str, artifact_path: str
+) -> None:
+    require_workflow_key_set(step, 8, {"uses", "with"}, label)
+    require_workflow_mapping(
+        step,
+        8,
+        "uses",
+        "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+        label,
+    )
+    values = workflow_mapping_block(step, 8, "with", "", label + " inputs")
+    require_workflow_key_set(
+        values,
+        10,
+        {"name", "path", "if-no-files-found", "retention-days"},
+        label + " inputs",
+    )
+    require_workflow_mapping(values, 10, "name", artifact_name, label)
+    require_workflow_mapping(values, 10, "path", artifact_path, label)
+    require_workflow_mapping(values, 10, "if-no-files-found", "error", label)
+    require_workflow_mapping(values, 10, "retention-days", "30", label)
+
+
+def validate_step_environment(
+    step: Sequence[str], expected: Mapping[str, str], label: str
+) -> None:
+    values = workflow_mapping_block(step, 8, "env", "", label + " environment")
+    require_workflow_key_set(values, 10, set(expected), label + " environment")
+    for key, value in expected.items():
+        require_workflow_mapping(values, 10, key, value, label + " environment")
+
+
 def validate_workflow_contract(repo: Path) -> bytes:
     workflow = repository_file(repo, WORKFLOW_PATH).read_bytes()
     try:
         text = workflow.decode("utf-8")
     except UnicodeDecodeError as exc:
         raise EvidenceError("evidence workflow is not UTF-8") from exc
-    required_counts = {
-        "image: {}".format(CONTAINER_IMAGE): 1,
-        "runs-on: ubuntu-24.04": 1,
-        "permissions:\n  contents: read": 1,
-        "persist-credentials: false": 1,
-        "python3 scripts/rocky_kernel_source_evidence.py": 2,
-        "actions/checkout@11d5960a326750d5838078e36cf38b85af677262": 1,
-        "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02": 2,
-        "name: rk001-source-evidence-${{ github.run_id }}-${{ github.run_attempt }}": 1,
-        "name: rk001-license-inventory-${{ github.run_id }}-${{ github.run_attempt }}": 1,
-        "path: ${{ runner.temp }}/rk001-source-evidence/": 1,
-        "path: ${{ runner.temp }}/rk001-license-inventory/": 1,
-    }
-    for needle, expected_count in required_counts.items():
-        if text.count(needle) != expected_count:
+    lines = text.splitlines()
+    require_workflow_key_set(
+        lines,
+        0,
+        {"name", "on", "permissions", "env", "jobs"},
+        "workflow top level",
+    )
+    require_workflow_mapping(
+        lines,
+        0,
+        "name",
+        "Rocky 10.2 kernel source evidence",
+        "workflow top level",
+    )
+    validate_workflow_triggers(lines)
+    permissions = workflow_mapping_block(
+        lines, 0, "permissions", "", "workflow permissions"
+    )
+    require_workflow_key_set(permissions, 2, {"contents"}, "workflow permissions")
+    require_workflow_mapping(permissions, 2, "contents", "read", "workflow permissions")
+    environment = workflow_mapping_block(lines, 0, "env", "", "workflow environment")
+    require_workflow_key_set(
+        environment,
+        2,
+        {"RK001_CONTAINER_IMAGE", "EXPECTED_HEAD_SHA"},
+        "workflow environment",
+    )
+    require_workflow_mapping(
+        environment, 2, "RK001_CONTAINER_IMAGE", CONTAINER_IMAGE, "workflow environment"
+    )
+    require_workflow_mapping(
+        environment,
+        2,
+        "EXPECTED_HEAD_SHA",
+        "${{ github.event.pull_request.head.sha || github.sha }}",
+        "workflow environment",
+    )
+    jobs = workflow_jobs(lines)
+    if set(jobs) != {"capture", "license-inventory"}:
+        raise EvidenceError("workflow must contain only distinct source and license jobs")
+    capture_job = jobs["capture"]
+    license_job = jobs["license-inventory"]
+    validate_workflow_job_runtime(capture_job, "source capture job")
+    validate_workflow_job_runtime(license_job, "license inventory job")
+
+    for forbidden in ("needs", "if", "continue-on-error"):
+        if workflow_mapping_matches(license_job, 4, forbidden):
             raise EvidenceError(
-                "workflow locked contract fragment has count {}, expected {}: {!r}".format(
-                    text.count(needle), expected_count, needle
-                )
+                "license inventory job cannot declare {}".format(forbidden)
             )
-    if "RK001_CONTAINER_IMAGE: {}".format(CONTAINER_IMAGE) not in text:
-        raise EvidenceError("workflow does not pass its immutable container identity")
+
+    capture_steps = workflow_steps(capture_job, "source capture job")
+    expected_capture_steps = {
+        "Install required verification tools",
+        "Check out the exact candidate commit",
+        "Verify capture contract without claiming gate credit",
+        "Capture exact RK-001 replay evidence",
+        "Upload canonical source evidence",
+    }
+    if set(capture_steps) != expected_capture_steps:
+        raise EvidenceError("source capture job step set changed")
+    for step_name in (
+        "Install required verification tools",
+        "Verify capture contract without claiming gate credit",
+    ):
+        require_workflow_key_set(capture_steps[step_name], 8, {"run"}, step_name)
+    require_workflow_key_set(
+        capture_steps["Capture exact RK-001 replay evidence"],
+        8,
+        {"env", "run"},
+        "source evidence capture step",
+    )
+    validate_step_environment(
+        capture_steps["Capture exact RK-001 replay evidence"],
+        {"EVIDENCE_DIR": "${{ runner.temp }}/rk001-source-evidence"},
+        "source evidence capture step",
+    )
+    validate_checkout_step(
+        capture_steps["Check out the exact candidate commit"], "source checkout step"
+    )
+    validate_upload_step(
+        capture_steps["Upload canonical source evidence"],
+        "source upload step",
+        "rk001-source-evidence-${{ github.run_id }}-${{ github.run_attempt }}",
+        "${{ runner.temp }}/rk001-source-evidence/",
+    )
+    source_capture_commands = workflow_shell_commands(
+        workflow_run_script(
+            capture_steps["Capture exact RK-001 replay evidence"],
+            "source evidence capture step",
+        ),
+        "source evidence capture step",
+    )
+    expected_source_capture_commands = [
+        ["set", "-euo", "pipefail"],
+        [
+            "python3",
+            "scripts/rocky_kernel_source_evidence.py",
+            "--repo",
+            "$GITHUB_WORKSPACE",
+            "--run",
+            "--output-dir",
+            "$EVIDENCE_DIR",
+            "--github-head-sha",
+            "$EXPECTED_HEAD_SHA",
+            "--github-run-id",
+            "$GITHUB_RUN_ID",
+            "--github-run-attempt",
+            "$GITHUB_RUN_ATTEMPT",
+            "--github-repository",
+            "$GITHUB_REPOSITORY",
+            "--container-image",
+            "$RK001_CONTAINER_IMAGE",
+        ],
+        ["("],
+        ["cd", "$EVIDENCE_DIR"],
+        ["sha256sum", "--check", "--strict", "SHA256SUMS"],
+        [")"],
+    ]
+    if source_capture_commands != expected_source_capture_commands:
+        raise EvidenceError("source capture commands or run bindings changed")
+
+    license_steps = workflow_steps(license_job, "license inventory job")
+    expected_license_steps = {
+        "Install exact license-capture tools",
+        "Check out the exact candidate commit for license capture",
+        "Verify source and license contracts without claiming gate credit",
+        "Capture exhaustive source and license inventory",
+        "Upload exhaustive license inventory capture",
+    }
+    if set(license_steps) != expected_license_steps:
+        raise EvidenceError("license inventory job step set changed")
+    for step_name in (
+        "Install exact license-capture tools",
+        "Verify source and license contracts without claiming gate credit",
+    ):
+        require_workflow_key_set(license_steps[step_name], 8, {"run"}, step_name)
+    require_workflow_key_set(
+        license_steps["Capture exhaustive source and license inventory"],
+        8,
+        {"env", "run"},
+        "license capture step",
+    )
+    validate_step_environment(
+        license_steps["Capture exhaustive source and license inventory"],
+        {
+            "LICENSE_CACHE_ROOT": "${{ runner.temp }}/rk001-license-cache",
+            "LICENSE_EVIDENCE_DIR": "${{ runner.temp }}/rk001-license-inventory",
+        },
+        "license capture step",
+    )
+    for step_name, step in license_steps.items():
+        for forbidden in ("if", "continue-on-error"):
+            if workflow_mapping_matches(step, 8, forbidden):
+                raise EvidenceError(
+                    "license step {!r} cannot declare {}".format(step_name, forbidden)
+                )
+    validate_checkout_step(
+        license_steps["Check out the exact candidate commit for license capture"],
+        "license checkout step",
+    )
+    validate_upload_step(
+        license_steps["Upload exhaustive license inventory capture"],
+        "license upload step",
+        "rk001-license-inventory-${{ github.run_id }}-${{ github.run_attempt }}",
+        "${{ runner.temp }}/rk001-license-inventory/",
+    )
+
+    install_commands = workflow_shell_commands(
+        workflow_run_script(
+            license_steps["Install exact license-capture tools"],
+            "license tool install step",
+        ),
+        "license tool install step",
+    )
+    expected_install_commands = [
+        ["set", "-euo", "pipefail"],
+        ["test", "$(uname -m)", "=", "x86_64"],
+        [".", "/etc/os-release"],
+        ["test", "$ID", "=", "rocky"],
+        ["test", "$VERSION_ID", "=", "10.2"],
+        [
+            "dnf",
+            "-y",
+            "--setopt=install_weak_deps=False",
+            "install",
+            "cpio",
+            "git-core",
+            "gnupg2",
+            "gzip",
+            "python3",
+            "rpm",
+            "xz",
+        ],
+        ["dnf", "clean", "all"],
+        [
+            "for",
+            "tool",
+            "in",
+            "cpio",
+            "git",
+            "gpg",
+            "gpgv",
+            "gzip",
+            "python3",
+            "rpm",
+            "rpm2cpio",
+            "rpmkeys",
+            "sha256sum",
+            "xz;",
+            "do",
+        ],
+        ["command", "-v", "$tool", ">/dev/null"],
+        ["done"],
+    ]
+    if install_commands != expected_install_commands:
+        raise EvidenceError("license tool installation or runtime checks changed")
+
+    verify_commands = workflow_shell_commands(
+        workflow_run_script(
+            license_steps["Verify source and license contracts without claiming gate credit"],
+            "license contract step",
+        ),
+        "license contract step",
+    )
+    expected_verify_commands = [
+        ["set", "-euo", "pipefail"],
+        [
+            "test",
+            "$(git -c safe.directory=$GITHUB_WORKSPACE rev-parse HEAD)",
+            "=",
+            "$EXPECTED_HEAD_SHA",
+        ],
+        ["test", "$GITHUB_REPOSITORY", "=", "phoenix-hacking/mckernel"],
+        [
+            "python3",
+            "scripts/rocky_kernel_source_evidence.py",
+            "--repo",
+            "$GITHUB_WORKSPACE",
+            "--check",
+        ],
+        [
+            "python3",
+            "scripts/rocky_kernel_license_inventory.py",
+            "--repo",
+            "$GITHUB_WORKSPACE",
+            "--check",
+        ],
+    ]
+    if verify_commands != expected_verify_commands:
+        raise EvidenceError("license contract step commands changed or became conditional")
+
+    capture_commands = workflow_shell_commands(
+        workflow_run_script(
+            license_steps["Capture exhaustive source and license inventory"],
+            "license capture step",
+        ),
+        "license capture step",
+    )
+    expected_capture_commands = [
+        ["set", "-euo", "pipefail"],
+        [
+            "python3",
+            "scripts/rocky_kernel_license_inventory.py",
+            "--repo",
+            "$GITHUB_WORKSPACE",
+            "--capture",
+            "--cache-root",
+            "$LICENSE_CACHE_ROOT",
+            "--output-dir",
+            "$LICENSE_EVIDENCE_DIR",
+            "--github-head-sha",
+            "$EXPECTED_HEAD_SHA",
+            "--github-run-id",
+            "$GITHUB_RUN_ID",
+            "--github-run-attempt",
+            "$GITHUB_RUN_ATTEMPT",
+            "--github-repository",
+            "$GITHUB_REPOSITORY",
+            "--container-image",
+            "$RK001_CONTAINER_IMAGE",
+        ],
+        [
+            "python3",
+            "scripts/rocky_kernel_license_inventory.py",
+            "--repo",
+            "$GITHUB_WORKSPACE",
+            "--verify-capture",
+            "$LICENSE_EVIDENCE_DIR",
+        ],
+        ["("],
+        ["cd", "$LICENSE_EVIDENCE_DIR"],
+        ["sha256sum", "--check", "--strict", "SHA256SUMS"],
+        [")"],
+    ]
+    if capture_commands != expected_capture_commands:
+        raise EvidenceError("license capture commands or run bindings changed")
     return workflow
 
 

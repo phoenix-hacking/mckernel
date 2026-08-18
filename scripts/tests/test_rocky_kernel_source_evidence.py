@@ -85,7 +85,7 @@ class RepositoryContractTests(unittest.TestCase):
 
     def test_workflow_uses_exact_rocky_10_2_amd64_manifest(self) -> None:
         workflow = evidence.validate_workflow_contract(REPO_ROOT).decode("utf-8")
-        self.assertEqual(workflow.count("image: " + evidence.CONTAINER_IMAGE), 1)
+        self.assertEqual(workflow.count("image: " + evidence.CONTAINER_IMAGE), 2)
         self.assertEqual(
             evidence.CONTAINER_MANIFEST_DIGEST,
             "sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176",
@@ -101,6 +101,214 @@ class RepositoryContractTests(unittest.TestCase):
         )[1].split("- name: Capture exact RK-001 replay evidence", 1)[0]
         self.assertIn('git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD', verify_step)
         self.assertNotIn("safe.directory=*", workflow)
+
+    def test_license_capture_is_an_independent_exact_head_fail_closed_job(self) -> None:
+        workflow = evidence.validate_workflow_contract(REPO_ROOT).decode("utf-8")
+        _, jobs = workflow.split("\n  capture:\n", 1)
+        source_job, license_job = jobs.split("\n  license-inventory:\n", 1)
+        self.assertNotIn("rocky_kernel_license_inventory.py", source_job)
+        self.assertNotRegex(license_job, r"(?m)^    needs\s*:")
+        self.assertIn('ref: ${{ env.EXPECTED_HEAD_SHA }}', license_job)
+        self.assertIn('--github-head-sha "$EXPECTED_HEAD_SHA"', license_job)
+        self.assertIn('--github-run-id "$GITHUB_RUN_ID"', license_job)
+        self.assertIn('--github-run-attempt "$GITHUB_RUN_ATTEMPT"', license_job)
+        self.assertIn('--github-repository "$GITHUB_REPOSITORY"', license_job)
+        self.assertIn('--container-image "$RK001_CONTAINER_IMAGE"', license_job)
+        self.assertIn("rocky_kernel_source_evidence.py", license_job)
+        self.assertIn("rocky_kernel_license_inventory.py", license_job)
+        self.assertIn("--verify-capture", license_job)
+        self.assertIn("sha256sum --check --strict SHA256SUMS", license_job)
+        self.assertIn("retention-days: 30", license_job)
+
+    def test_workflow_contract_rejects_top_level_and_trigger_bypasses(self) -> None:
+        original = (REPO_ROOT / evidence.WORKFLOW_PATH).read_text(encoding="utf-8")
+        on_start = original.index("on:\n")
+        permission_start = original.index("\npermissions:\n")
+        before_on = original[:on_start]
+        after_on = original[permission_start:]
+        pull_marker = "  pull_request:\n"
+        pull_prefix, pull_trigger = original.split(pull_marker, 1)
+        variants = (
+            original
+            + '\n"env": {EXPECTED_HEAD_SHA: "${{ github.sha }}"}\n',
+            original + '\n"jobs": {}\n',
+            original + '\n"permissions": {contents: write}\n',
+            original + "\nenv: {}\n",
+            original + "\n!!str env: {}\n",
+            original + "\n*environment_alias: {}\n",
+            original + "\n<<: *top_level_defaults\n",
+            original.replace(
+                "name: Rocky 10.2 kernel source evidence",
+                "name: Mutable source evidence\n"
+                "# name: Rocky 10.2 kernel source evidence",
+                1,
+            ),
+            before_on + "on:\n  workflow_dispatch:\n" + after_on,
+            original.replace(
+                "    branches: [codex/rocky-rust-validation]",
+                "    branches: [development]\n"
+                "    # branches: [codex/rocky-rust-validation]",
+                1,
+            ),
+            original.replace("    branches: [development]", "    branches: [main]", 1),
+            original.replace(
+                "      - host-kernel/rocky/source-lock.json",
+                "      - host-kernel/rocky/source-lock-drift.json",
+                1,
+            ),
+            pull_prefix
+            + pull_marker
+            + pull_trigger.replace(
+                "      - scripts/rocky_kernel_license_inventory.py",
+                "      - scripts/rocky_kernel_license_inventory_drift.py",
+                1,
+            ),
+        )
+        self.assertNotIn(original, variants)
+        self.assertEqual(len(variants), len(set(variants)))
+        for workflow in variants:
+            with self.subTest(fragment=hashlib.sha256(workflow.encode("utf-8")).hexdigest()):
+                with tempfile.TemporaryDirectory() as temporary:
+                    root = Path(temporary)
+                    path = root / evidence.WORKFLOW_PATH
+                    path.parent.mkdir(parents=True)
+                    path.write_text(workflow, encoding="utf-8")
+                    with self.assertRaises(evidence.EvidenceError):
+                        evidence.validate_workflow_contract(root)
+
+    def test_workflow_contract_rejects_conditional_or_comment_attested_bypasses(self) -> None:
+        original = (REPO_ROOT / evidence.WORKFLOW_PATH).read_text(encoding="utf-8")
+        license_marker = "\n  license-inventory:\n"
+        prefix, license_job = original.split(license_marker, 1)
+        pinned_image = "      image: " + evidence.CONTAINER_IMAGE
+        checkout_action = (
+            "        uses: actions/checkout@"
+            "11d5960a326750d5838078e36cf38b85af677262 # v4"
+        )
+        upload_action = (
+            "        uses: actions/upload-artifact@"
+            "ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2"
+        )
+        capture_step = "      - name: Capture exhaustive source and license inventory\n"
+        variants = (
+            original.replace(
+                "  license-inventory:\n",
+                "  license-inventory:\n    needs: capture\n",
+                1,
+            ),
+            prefix
+            + license_marker
+            + license_job.replace(
+                "    name: Exact-head exhaustive source and license inventory\n",
+                "    name: Exact-head exhaustive source and license inventory\n"
+                "    if: false\n",
+                1,
+            ),
+            prefix
+            + license_marker
+            + license_job.replace(
+                "    name: Exact-head exhaustive source and license inventory\n",
+                "    name: Exact-head exhaustive source and license inventory\n"
+                '    "if": false\n',
+                1,
+            ),
+            prefix
+            + license_marker
+            + license_job.replace(
+                "    name: Exact-head exhaustive source and license inventory\n",
+                "    name: Exact-head exhaustive source and license inventory\n"
+                "    env:\n"
+                "      RK001_CONTAINER_IMAGE: rockylinux/rockylinux:10.2\n",
+                1,
+            ),
+            prefix
+            + license_marker
+            + license_job.replace(
+                capture_step,
+                capture_step + "        if: false\n",
+                1,
+            ),
+            prefix
+            + license_marker
+            + license_job.replace(
+                capture_step,
+                capture_step + "        continue-on-error: true\n",
+                1,
+            ),
+            prefix
+            + license_marker
+            + license_job.replace(
+                "          LICENSE_EVIDENCE_DIR: "
+                "${{ runner.temp }}/rk001-license-inventory\n",
+                "          LICENSE_EVIDENCE_DIR: "
+                "${{ runner.temp }}/rk001-license-inventory\n"
+                "          EXPECTED_HEAD_SHA: ${{ github.sha }}\n",
+                1,
+            ),
+            prefix
+            + license_marker
+            + license_job.replace(
+                pinned_image,
+                "      image: rockylinux/rockylinux:10.2\n"
+                "      # image: " + evidence.CONTAINER_IMAGE,
+                1,
+            ),
+            original.replace(
+                "  RK001_CONTAINER_IMAGE: " + evidence.CONTAINER_IMAGE,
+                "  RK001_CONTAINER_IMAGE: rockylinux/rockylinux:10.2\n"
+                "  # RK001_CONTAINER_IMAGE: " + evidence.CONTAINER_IMAGE,
+                1,
+            ),
+            prefix
+            + license_marker
+            + license_job.replace(
+                checkout_action,
+                "        uses: actions/checkout@v4 # "
+                "actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+                1,
+            ),
+            prefix
+            + license_marker
+            + license_job.replace(
+                upload_action,
+                "        uses: actions/upload-artifact@v4 # "
+                "actions/upload-artifact@"
+                "ea165f8d65b6e75b540449e92b4886f43607fa02",
+                1,
+            ),
+            prefix
+            + license_marker
+            + license_job.replace(
+                "          ref: ${{ env.EXPECTED_HEAD_SHA }}",
+                "          ref: ${{ github.sha }}\n"
+                "          # ref: ${{ env.EXPECTED_HEAD_SHA }}",
+                1,
+            ),
+            prefix
+            + license_marker
+            + license_job.replace(
+                '--github-head-sha "$EXPECTED_HEAD_SHA"',
+                '--github-head-sha "$GITHUB_SHA"',
+                1,
+            ).replace(
+                '            --container-image "$RK001_CONTAINER_IMAGE"\n',
+                '            --container-image "$RK001_CONTAINER_IMAGE"\n'
+                '          # --github-head-sha "$EXPECTED_HEAD_SHA"\n',
+                1,
+            ),
+            original.replace("--verify-capture", "--verify", 1),
+        )
+        self.assertNotIn(original, variants)
+        self.assertEqual(len(variants), len(set(variants)))
+        for workflow in variants:
+            with self.subTest(fragment=hashlib.sha256(workflow.encode("utf-8")).hexdigest()):
+                with tempfile.TemporaryDirectory() as temporary:
+                    root = Path(temporary)
+                    path = root / evidence.WORKFLOW_PATH
+                    path.parent.mkdir(parents=True)
+                    path.write_text(workflow, encoding="utf-8")
+                    with self.assertRaises(evidence.EvidenceError):
+                        evidence.validate_workflow_contract(root)
 
     def test_runtime_package_capture_matches_the_minimal_rocky_image(self) -> None:
         source = (REPO_ROOT / evidence.CAPTURE_SCRIPT_PATH).read_text(
