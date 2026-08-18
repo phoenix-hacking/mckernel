@@ -8,7 +8,8 @@ through `mcexec`, and shuts down cleanly.
 
 Here, 100% means every gate in this Rocky 8.10 x86_64 smoke plan has passed.
 It does not mean line/branch coverage, an all-Rust IHK stack, exhaustive kernel
-correctness, Arm64 coverage, or long-duration stress coverage.
+correctness, Arm64 coverage, LA57/five-level paging coverage, or long-duration
+stress coverage.
 
 ## Completion gates
 
@@ -391,4 +392,5 @@ offload, the deterministic Rust workload, and status, cleanup, and integrity
 checks. The 100% label retains the scope stated at the top of this file; it is
 not a claim of semantic equivalence for unexercised architectures, CPU counts,
 devices, syscalls, or workloads, nor of exhaustive correctness, all-Rust IHK,
-Arm64 coverage, or long-duration stress coverage.
+Arm64 coverage, LA57/five-level paging coverage, or long-duration stress
+coverage.

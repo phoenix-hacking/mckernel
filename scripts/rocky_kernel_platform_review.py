@@ -651,16 +651,64 @@ def validate_connector_parent_vector(parents):
     )
 
 
-def validate_connector_input(
-    expected, relative, head_bytes, worktree_bytes, tree_entry, index_entry
+def connector_port_from_first_parent_lineage(current, lineage):
+    if not HEX_SHA1.fullmatch(current):
+        raise ReviewError("current Git HEAD is malformed")
+    if not lineage or lineage[0] != current:
+        raise ReviewError("current Git HEAD is missing from its first-parent lineage")
+    for commit in lineage:
+        if not HEX_SHA1.fullmatch(commit):
+            raise ReviewError("first-parent lineage contains a malformed commit")
+    try:
+        base_index = lineage.index(PUBLISHED_BASE_HEAD)
+    except ValueError:
+        raise ReviewError(
+            "current Git HEAD is not a first-parent descendant of the "
+            "published connector base"
+        )
+    if base_index == 0:
+        raise ReviewError("connector tree port is missing after the published base")
+    return lineage[base_index - 1]
+
+
+def identify_connector_port_commit(repo, current):
+    lineage_stdout, _ = run_git(repo, ["rev-list", "--first-parent", current])
+    lineage = [
+        line for line in lineage_stdout.decode("ascii").splitlines() if line
+    ]
+    return connector_port_from_first_parent_lineage(current, lineage)
+
+
+def validate_connector_committed_input(
+    expected, relative, committed_bytes, tree_entry, label
 ):
     require_exact(
         tree_entry,
         "100644 blob {}\t{}\0".format(
             expected["git_blob_sha1"], relative
         ).encode("utf-8"),
-        "connector HEAD tree entry {}".format(relative),
+        "connector {} tree entry {}".format(label, relative),
     )
+    require_exact(
+        len(committed_bytes),
+        expected["size"],
+        "{} {} size".format(label, relative),
+    )
+    require_exact(
+        sha256_bytes(committed_bytes),
+        expected["sha256"],
+        "{} {} SHA-256".format(label, relative),
+    )
+    require_exact(
+        git_blob_sha1(committed_bytes),
+        expected["git_blob_sha1"],
+        "{} {} Git blob".format(label, relative),
+    )
+
+
+def validate_connector_input(
+    expected, relative, head_bytes, worktree_bytes, tree_entry, index_entry
+):
     require_exact(
         index_entry,
         "100644 {} 0\t{}\n".format(
@@ -673,16 +721,12 @@ def validate_connector_input(
         head_bytes,
         "connector worktree input {}".format(relative),
     )
-    require_exact(len(head_bytes), expected["size"], "HEAD {} size".format(relative))
-    require_exact(
-        sha256_bytes(head_bytes),
-        expected["sha256"],
-        "HEAD {} SHA-256".format(relative),
-    )
-    require_exact(
-        git_blob_sha1(head_bytes),
-        expected["git_blob_sha1"],
-        "HEAD {} Git blob".format(relative),
+    validate_connector_committed_input(
+        expected,
+        relative,
+        head_bytes,
+        tree_entry,
+        "HEAD",
     )
 
 
@@ -699,7 +743,10 @@ def validate_git_observation(repo):
         PUBLISHED_BASE_HEAD,
         "published connector base commit",
     )
-    parents_stdout, _ = run_git(repo, ["show", "-s", "--format=%P", current])
+    port_commit = identify_connector_port_commit(repo, current)
+    parents_stdout, _ = run_git(
+        repo, ["show", "-s", "--format=%P", port_commit]
+    )
     parents = parents_stdout.decode("ascii").strip().split()
     validate_connector_parent_vector(parents)
     base_review, _ = run_git(
@@ -723,8 +770,34 @@ def validate_git_observation(repo):
             repo,
             ["show", "{}:{}".format(PUBLISHED_BASE_HEAD, relative)],
         )
-        head_bytes, _ = run_git(repo, ["show", "{}:{}".format(current, relative)])
-        tree_entry, _ = run_git(repo, ["ls-tree", "-z", current, "--", relative])
+        port_bytes, _ = run_git(
+            repo, ["show", "{}:{}".format(port_commit, relative)]
+        )
+        port_tree_entry, _ = run_git(
+            repo, ["ls-tree", "-z", port_commit, "--", relative]
+        )
+        validate_connector_committed_input(
+            expected,
+            relative,
+            port_bytes,
+            port_tree_entry,
+            "port",
+        )
+        if base_bytes != port_bytes:
+            changed.append(relative)
+    require_exact(
+        changed,
+        PUBLISHED_BASE_CHANGED_PATHS,
+        "connector tree-port changed paths",
+    )
+    for expected in current_expected_inputs():
+        relative = expected["path"]
+        head_bytes, _ = run_git(
+            repo, ["show", "{}:{}".format(current, relative)]
+        )
+        tree_entry, _ = run_git(
+            repo, ["ls-tree", "-z", current, "--", relative]
+        )
         index_entry, _ = run_git(repo, ["ls-files", "--stage", "--", relative])
         worktree_bytes = repository_file(repo, Path(relative)).read_bytes()
         validate_connector_input(
@@ -735,13 +808,6 @@ def validate_git_observation(repo):
             tree_entry,
             index_entry,
         )
-        if base_bytes != head_bytes:
-            changed.append(relative)
-    require_exact(
-        changed,
-        PUBLISHED_BASE_CHANGED_PATHS,
-        "connector tree-port changed paths",
-    )
     try:
         observed_type = run_git(repo, ["cat-file", "-t", OBSERVED_HEAD])[0]
     except ReviewError:

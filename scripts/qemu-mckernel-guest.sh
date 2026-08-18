@@ -361,6 +361,7 @@ GUEST_CLEANUP_LOG="$LOG_DIR/guest-cleanup.log"
 GUEST_EVIDENCE_ARCHIVE="$LOG_DIR/guest-evidence.tar"
 GUEST_EVIDENCE_ARCHIVE_SHA256="$LOG_DIR/guest-evidence.tar.sha256"
 GUEST_EVIDENCE_HOST_DIR="$LOG_DIR/guest-evidence"
+CPU_MODEL_FILE="$LOG_DIR/qemu-cpu-model.txt"
 
 print_serial_tail() {
 	local crash_end
@@ -673,9 +674,12 @@ elif [ -r /dev/kvm ] && [ -w /dev/kvm ]; then
 	ACCEL=kvm
 fi
 
-CPU_MODEL=max
+# McKernel's x86_64 boot path uses four-level page tables. Keep that invariant
+# under both emulation and host passthrough so accelerator selection cannot
+# expose LA57 merely because the runner or QEMU model supports it.
+CPU_MODEL=max,la57=off
 if [ "$ACCEL" = "kvm" ]; then
-	CPU_MODEL=host
+	CPU_MODEL=host,la57=off
 fi
 
 QEMU_ARGS=(
@@ -739,6 +743,8 @@ if [ -n "$DISK_SIZE" ]; then
 	printf '%s\n' "Overlay virtual size: $DISK_SIZE"
 fi
 printf '%s\n' "QEMU accel: $ACCEL"
+printf '%s\n' "QEMU cpu model: $CPU_MODEL"
+printf '%s\n' "$CPU_MODEL" > "$CPU_MODEL_FILE"
 if [ "$PAUSE_AT_RESET" -eq 1 ]; then
 	printf '%s\n' "QEMU pause-at-reset: enabled"
 fi

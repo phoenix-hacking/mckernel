@@ -162,6 +162,29 @@ jobs:
                 --jobs 2
             ' 2>&1 | tee evidence/build.log
 
+      - name: Build and inspect C syscall-offload fallback oracle
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          fallback_build="${BUILD_DIR}-c-fallback"
+          runuser -u validator -- env \
+            HOME=/home/validator \
+            PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+            GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
+            FALLBACK_BUILD_DIR="$fallback_build" \
+            MCKERNEL_CI_KERNEL_DIR="$MCKERNEL_CI_KERNEL_DIR" \
+            bash -c '
+              set -euo pipefail
+              cd "$GITHUB_WORKSPACE"
+              exec bash scripts/check-syscall-offload-c-fallback.sh \
+                --build-dir "$FALLBACK_BUILD_DIR" \
+                --kernel-dir "$MCKERNEL_CI_KERNEL_DIR" \
+                --jobs 2
+            ' 2>&1 | tee evidence/syscall-offload-c-fallback.log
+          install -m 0644 \
+            "$fallback_build/kernel/mckernel-syscall-offload-c-fallback.txt" \
+            evidence/mckernel-syscall-offload-c-fallback.txt
+
       - name: Verify focused syscall-offload and ownership evidence
         run: |
           set -euo pipefail
@@ -174,12 +197,21 @@ jobs:
             bash -c '
               set -euo pipefail
               cd "$GITHUB_WORKSPACE"
-              bash -n kernel/rust/tests/run_equivalence.sh \
-                scripts/rocky-rust-validation.sh
+              for script in \
+                kernel/rust/tests/run_equivalence.sh \
+                scripts/qemu-mckernel-guest.sh \
+                scripts/qemu-rocky-rust-validation.sh \
+                scripts/rocky-rust-validation.sh \
+                scripts/check-syscall-offload-c-fallback.sh
+              do
+                bash -n "$script"
+              done
               python3 -m unittest -v \
                 scripts.tests.test_mckernel_syscall_offload_check \
                 scripts.tests.test_mckernel_linked_text_ownership \
-                scripts.tests.test_mckernel_text_ownership
+                scripts.tests.test_mckernel_text_ownership \
+                scripts.tests.test_qemu_mckernel_guest_cpu_policy \
+                scripts.tests.test_syscall_offload_c_fallback_ci
               for evidence_file in \
                 mckernel.img.map \
                 mckernel-linked-text-ownership.json \
@@ -554,6 +586,16 @@ jobs:
           else
             echo 'guest-overlay: removed'
           fi
+          qemu_cpu_model_file="$hosted_boot_dir/qemu/qemu-cpu-model.txt"
+          if test ! -s "$qemu_cpu_model_file" || \
+            test "$(wc -l < "$qemu_cpu_model_file")" -ne 1 || \
+            test "$(cat "$qemu_cpu_model_file")" != 'host,la57=off'
+          then
+            echo 'hosted QEMU did not use the pinned four-level CPU policy' >&2
+            post_rc=1
+          else
+            echo 'qemu-cpu-policy: host,la57=off'
+          fi
           if test ! -s "$hosted_boot_dir/qemu/serial.log"; then
             echo 'missing or empty QEMU serial evidence' >&2
             post_rc=1
@@ -567,6 +609,7 @@ jobs:
             guest_log="$hosted_boot_dir/qemu/guest-command.log"
             echo "guest-evidence: bytes=$(stat -c %s "$guest_log")"
             for marker in \
+              'QEMU guest LA57: absent' \
               'McKernel status: RUNNING' \
               'mcexec-true: OK' \
               'mcexec-hostname: OK' \
@@ -764,6 +807,7 @@ jobs:
             ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/debugcon.log
             ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/qemu-started.pid
             ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/qemu-startup.log
+            ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/qemu-cpu-model.txt
             ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/qmp-status.jsonl
             ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/guest-command.log
             ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/guest-cleanup.log

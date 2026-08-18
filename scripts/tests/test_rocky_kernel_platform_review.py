@@ -203,7 +203,60 @@ class RepositoryReviewTests(unittest.TestCase):
             with self.assertRaisesRegex(review.ReviewError, "connector tree port"):
                 review.validate_review(mutated, self.manifest_bytes)
 
-    def test_connector_parent_vector_rejects_merge_and_descendant(self):
+    def test_connector_port_resolves_on_current_head(self):
+        current = subprocess.run(
+            ["git", "-C", str(REPO_ROOT), "rev-parse", "HEAD"],
+            check=True,
+            stdout=subprocess.PIPE,
+        ).stdout.decode("ascii").strip()
+        port_commit = review.identify_connector_port_commit(REPO_ROOT, current)
+        port_parents = subprocess.run(
+            [
+                "git",
+                "-C",
+                str(REPO_ROOT),
+                "show",
+                "-s",
+                "--format=%P",
+                port_commit,
+            ],
+            check=True,
+            stdout=subprocess.PIPE,
+        ).stdout.decode("ascii").strip().split()
+
+        self.assertEqual(port_parents, [review.PUBLISHED_BASE_HEAD])
+
+    def test_connector_first_parent_lineage_selects_historical_port(self):
+        current = "a" * 40
+        later = "b" * 40
+        port_commit = "c" * 40
+        lineage = [
+            current,
+            later,
+            port_commit,
+            review.PUBLISHED_BASE_HEAD,
+            "d" * 40,
+        ]
+        self.assertEqual(
+            review.connector_port_from_first_parent_lineage(current, lineage),
+            port_commit,
+        )
+
+        for invalid_current, invalid_lineage, message in (
+            (current, [current, later], "not a first-parent descendant"),
+            (
+                review.PUBLISHED_BASE_HEAD,
+                [review.PUBLISHED_BASE_HEAD, "d" * 40],
+                "tree port is missing",
+            ),
+            (current, [later, current, review.PUBLISHED_BASE_HEAD], "HEAD is missing"),
+        ):
+            with self.assertRaisesRegex(review.ReviewError, message):
+                review.connector_port_from_first_parent_lineage(
+                    invalid_current, invalid_lineage
+                )
+
+    def test_connector_port_parent_vector_rejects_merge_and_wrong_parent(self):
         review.validate_connector_parent_vector([review.PUBLISHED_BASE_HEAD])
         for parents in (
             [review.PUBLISHED_BASE_HEAD, review.OBSERVED_HEAD],
@@ -211,6 +264,25 @@ class RepositoryReviewTests(unittest.TestCase):
         ):
             with self.assertRaisesRegex(review.ReviewError, "parent vector"):
                 review.validate_connector_parent_vector(parents)
+
+    def test_connector_committed_input_rejects_port_blob_or_tree_drift(self):
+        expected = review.current_expected_inputs()[0]
+        relative = expected["path"]
+        data = (REPO_ROOT / relative).read_bytes()
+        tree_entry = "100644 blob {}\t{}\0".format(
+            expected["git_blob_sha1"], relative
+        ).encode("utf-8")
+        review.validate_connector_committed_input(
+            expected, relative, data, tree_entry, "port"
+        )
+        with self.assertRaisesRegex(review.ReviewError, "port .* size"):
+            review.validate_connector_committed_input(
+                expected, relative, data + b"x", tree_entry, "port"
+            )
+        with self.assertRaisesRegex(review.ReviewError, "port tree entry"):
+            review.validate_connector_committed_input(
+                expected, relative, data, b"", "port"
+            )
 
     def test_connector_input_rejects_dirty_index_mode_and_masked_head(self):
         expected = review.current_expected_inputs()[0]

@@ -43255,6 +43255,59 @@ int main(void)
 		mix(&digest, dst_req.args[5]);
 	}
 	{
+		struct fake_syscall_request src_req;
+		struct fake_syscall_request roundtrip_req;
+		_Alignas(struct fake_syscall_request)
+			unsigned char src_bytes[sizeof(src_req) + 1];
+		_Alignas(struct fake_syscall_request)
+			unsigned char dst_bytes[sizeof(roundtrip_req) + 1];
+		const struct fake_syscall_request *unaligned_src =
+			(const void *)(src_bytes + 1);
+		struct fake_syscall_request *unaligned_dst =
+			(void *)(dst_bytes + 1);
+
+		memset(&src_req, 0xa5, sizeof(src_req));
+		src_req.rtid = -1234567;
+		src_req.ttid = 7654321;
+		src_req.valid = 0x0123456789abcdefUL;
+		src_req.number = 0xfedcba9876543210UL;
+		src_req.args[0] = 0x1111111111111111UL;
+		src_req.args[1] = 0x2222222222222222UL;
+		src_req.args[2] = 0x3333333333333333UL;
+		src_req.args[3] = 0x4444444444444444UL;
+		src_req.args[4] = 0x5555555555555555UL;
+		src_req.args[5] = 0x6666666666666666UL;
+		memset(src_bytes, 0x3c, sizeof(src_bytes));
+		memcpy(src_bytes + 1, &src_req, sizeof(src_req));
+		memset(dst_bytes, 0xc3, sizeof(dst_bytes));
+
+		require((uintptr_t)unaligned_src % _Alignof(struct fake_syscall_request)
+			!= 0);
+		require((uintptr_t)unaligned_dst % _Alignof(struct fake_syscall_request)
+			!= 0);
+		require(syscall_request_copy_result(unaligned_dst,
+			unaligned_src) == 0);
+		require(memcmp(dst_bytes + 1, src_bytes + 1,
+			sizeof(src_req)) == 0);
+		memcpy(&roundtrip_req, dst_bytes + 1, sizeof(roundtrip_req));
+		require(roundtrip_req.rtid == -1234567);
+		require(roundtrip_req.ttid == 7654321);
+		require(roundtrip_req.valid == 0x0123456789abcdefUL);
+		require(roundtrip_req.number == 0xfedcba9876543210UL);
+		require(roundtrip_req.args[0] == 0x1111111111111111UL);
+		require(roundtrip_req.args[1] == 0x2222222222222222UL);
+		require(roundtrip_req.args[2] == 0x3333333333333333UL);
+		require(roundtrip_req.args[3] == 0x4444444444444444UL);
+		require(roundtrip_req.args[4] == 0x5555555555555555UL);
+		require(roundtrip_req.args[5] == 0x6666666666666666UL);
+		mix_signed(&digest, roundtrip_req.rtid);
+		mix_signed(&digest, roundtrip_req.ttid);
+		mix(&digest, roundtrip_req.valid);
+		mix(&digest, roundtrip_req.number);
+		mix(&digest, roundtrip_req.args[0]);
+		mix(&digest, roundtrip_req.args[5]);
+	}
+	{
 		struct fake_syscall_request generic_req = {
 			.rtid = 11,
 			.ttid = 12,
@@ -145300,6 +145353,39 @@ grep -Eq 'U x86_xsave_mask_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U xpmem_page_in_remote_on_attach' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U uti_desc' "${tmpdir}/out/rust.undefined"
 test "$(grep -c ' U ' "${tmpdir}/out/rust.undefined")" -eq 594
+
+python3 - "${repo_root}/kernel/rust/syscall_policy.rs" <<'PY'
+import sys
+
+source = open(sys.argv[1], "r").read()
+signature = 'pub unsafe extern "C" fn syscall_request_copy_result('
+start = source.index(signature)
+end = source.index("\n}\n", start)
+body = source[start:end]
+for required in (
+    "copy_nonoverlapping(",
+    "src.cast::<u8>()",
+    "dst.cast::<u8>()",
+    "size_of::<SyscallRequest>()",
+):
+    if required not in body:
+        raise SystemExit(
+            "syscall request copy lost byte-oriented memcpy contract: " + required
+        )
+for forbidden in (
+    "(*src).",
+    "(*dst).",
+    "addr_of!((*src)",
+    "addr_of_mut!((*dst)",
+    "read(src",
+    "write(dst",
+):
+    if forbidden in body:
+        raise SystemExit(
+            "syscall request copy reintroduced typed unaligned access: " + forbidden
+        )
+print("syscall request copy byte-orientation check ok")
+PY
 
 for rust_kernel_context_obj in \
 	"${tmpdir}/out/mckernel_rust.o" \

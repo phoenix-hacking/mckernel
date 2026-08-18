@@ -2502,6 +2502,12 @@ pub unsafe extern "C" fn syscall_send_prepare_result(
     0
 }
 
+/// Copies one syscall request with the legacy protocol's `memcpy` semantics.
+///
+/// # Safety
+/// Unless null, `src` must be readable and `dst` writable for
+/// `size_of::<SyscallRequest>()` bytes, and those byte ranges must not overlap.
+/// Neither pointer needs to be aligned for `SyscallRequest`.
 #[no_mangle]
 pub unsafe extern "C" fn syscall_request_copy_result(
     dst: *mut SyscallRequest,
@@ -2511,16 +2517,15 @@ pub unsafe extern "C" fn syscall_request_copy_result(
         return -EINVAL;
     }
 
-    write(core::ptr::addr_of_mut!((*dst).rtid), (*src).rtid);
-    write(core::ptr::addr_of_mut!((*dst).ttid), (*src).ttid);
-    write(core::ptr::addr_of_mut!((*dst).valid), (*src).valid);
-    write(core::ptr::addr_of_mut!((*dst).number), (*src).number);
-    write(core::ptr::addr_of_mut!((*dst).args[0]), (*src).args[0]);
-    write(core::ptr::addr_of_mut!((*dst).args[1]), (*src).args[1]);
-    write(core::ptr::addr_of_mut!((*dst).args[2]), (*src).args[2]);
-    write(core::ptr::addr_of_mut!((*dst).args[3]), (*src).args[3]);
-    write(core::ptr::addr_of_mut!((*dst).args[4]), (*src).args[4]);
-    write(core::ptr::addr_of_mut!((*dst).args[5]), (*src).args[5]);
+    // The Linux proxy protocol historically copies this wire object with
+    // memcpy.  In particular, a nested request can begin at an address that
+    // is not aligned for `SyscallRequest`; keeping the operation byte-typed
+    // preserves those semantics without creating an unaligned Rust reference.
+    copy_nonoverlapping(
+        src.cast::<u8>(),
+        dst.cast::<u8>(),
+        size_of::<SyscallRequest>(),
+    );
 
     0
 }
@@ -2884,51 +2889,67 @@ pub unsafe extern "C" fn syscall_offload_wait_reply(
             );
             let mapped = crate::mem_helpers::ihk_mc_map_virtual(phys, 1, PTATTR_WRITABLE_ACTIVE);
             let mut nested_request = MaybeUninit::<SyscallRequest>::zeroed().assume_init();
-            copy_nonoverlapping(
-                mapped.cast::<SyscallRequest>(),
-                addr_of_mut!(nested_request),
-                1,
-            );
-            crate::mem_helpers::ihk_mc_unmap_virtual(mapped, 1);
+            let copy_rc = if mapped.is_null() {
+                -ENOMEM
+            } else {
+                let rc = syscall_request_copy_result(
+                    addr_of_mut!(nested_request),
+                    mapped.cast::<SyscallRequest>(),
+                );
+                crate::mem_helpers::ihk_mc_unmap_virtual(mapped, 1);
+                rc
+            };
             crate::x86_setup::ihk_mc_unmap_memory(null_mut(), phys, request_size);
 
-            let num = nested_request.number as CInt;
-            let syscall_ret = if num == SYS_RT_SIGACTION {
-                let sig =
-                    syscall_nested_rt_sigaction_index_result(nested_request.args[0] as CInt, NSIG);
-                if sig < 0 {
-                    (sig as CLong) as CULong
-                } else {
-                    let sigcommon = (*thread).sigcommon.cast::<SigCommon>();
-                    (*sigcommon).action[sig as usize].sa.sa_handler as CULong
-                }
+            let syscall_ret = if copy_rc != 0 {
+                kprintf(
+                    c"syscall_offload_wait_reply: nested request map/copy failed rc=%d\n"
+                        .as_ptr()
+                        .cast(),
+                    copy_rc,
+                );
+                (copy_rc as CLong) as CULong
             } else {
-                let mut ctx = MaybeUninit::<X86UserContext>::zeroed().assume_init();
-                crate::x86_cpu_helpers::ihk_mc_syscall_set_arg0(
-                    addr_of_mut!(ctx),
-                    nested_request.args[0],
-                );
-                crate::x86_cpu_helpers::ihk_mc_syscall_set_arg1(
-                    addr_of_mut!(ctx),
-                    nested_request.args[1],
-                );
-                crate::x86_cpu_helpers::ihk_mc_syscall_set_arg2(
-                    addr_of_mut!(ctx),
-                    nested_request.args[2],
-                );
-                crate::x86_cpu_helpers::ihk_mc_syscall_set_arg3(
-                    addr_of_mut!(ctx),
-                    nested_request.args[3],
-                );
-                crate::x86_cpu_helpers::ihk_mc_syscall_set_arg4(
-                    addr_of_mut!(ctx),
-                    nested_request.args[4],
-                );
-                crate::x86_cpu_helpers::ihk_mc_syscall_set_arg5(
-                    addr_of_mut!(ctx),
-                    nested_request.args[5],
-                );
-                syscall_dispatch_context_bridge(num, addr_of_mut!(ctx)) as CULong
+                let num = nested_request.number as CInt;
+                if num == SYS_RT_SIGACTION {
+                    let sig = syscall_nested_rt_sigaction_index_result(
+                        nested_request.args[0] as CInt,
+                        NSIG,
+                    );
+                    if sig < 0 {
+                        (sig as CLong) as CULong
+                    } else {
+                        let sigcommon = (*thread).sigcommon.cast::<SigCommon>();
+                        (*sigcommon).action[sig as usize].sa.sa_handler as CULong
+                    }
+                } else {
+                    let mut ctx = MaybeUninit::<X86UserContext>::zeroed().assume_init();
+                    crate::x86_cpu_helpers::ihk_mc_syscall_set_arg0(
+                        addr_of_mut!(ctx),
+                        nested_request.args[0],
+                    );
+                    crate::x86_cpu_helpers::ihk_mc_syscall_set_arg1(
+                        addr_of_mut!(ctx),
+                        nested_request.args[1],
+                    );
+                    crate::x86_cpu_helpers::ihk_mc_syscall_set_arg2(
+                        addr_of_mut!(ctx),
+                        nested_request.args[2],
+                    );
+                    crate::x86_cpu_helpers::ihk_mc_syscall_set_arg3(
+                        addr_of_mut!(ctx),
+                        nested_request.args[3],
+                    );
+                    crate::x86_cpu_helpers::ihk_mc_syscall_set_arg4(
+                        addr_of_mut!(ctx),
+                        nested_request.args[4],
+                    );
+                    crate::x86_cpu_helpers::ihk_mc_syscall_set_arg5(
+                        addr_of_mut!(ctx),
+                        nested_request.args[5],
+                    );
+                    syscall_dispatch_context_bridge(num, addr_of_mut!(ctx)) as CULong
+                }
             };
 
             let mut nested_response = MaybeUninit::<SyscallRequest>::zeroed().assume_init();

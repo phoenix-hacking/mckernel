@@ -199,6 +199,11 @@ validation_cmd=$(
 	printf '. /etc/os-release; '
 	printf 'test "$ID" = rocky; test "$VERSION_ID" = 8.10; '
 	printf 'test "$(uname -m)" = x86_64; test "$(nproc)" -ge 2; '
+	if [ "$ACCEL" = kvm ]; then
+		printf 'if grep -qw la57 /proc/cpuinfo; then '
+		printf 'echo "error: QEMU guest unexpectedly exposes LA57" >&2; exit 1; fi; '
+		printf 'echo "QEMU guest LA57: absent"; '
+	fi
 	if [ -n "$DISK_SIZE" ]; then
 		printf 'root_avail="$(df -B1 --output=avail / | tail -n 1 | tr -d " ")"; '
 		printf 'test "$root_avail" -ge 8589934592; '
