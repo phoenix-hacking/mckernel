@@ -15,13 +15,14 @@ import sys
 import tarfile
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
-import rocky_kernel_config_resolution as resolution  # noqa: E402
+import rocky_kernel_config_resolution_v2 as resolution  # noqa: E402
 
 
 def write_config(path, values):
@@ -43,12 +44,12 @@ def synthetic_maps(contract):
     control = dict(baseline)
     control.update(
         {
-            "CONFIG_BINDGEN_VERSION_TEXT": '"bindgen 0.72.1"',
             "CONFIG_CALL_PADDING": "y",
             "CONFIG_PAHOLE_HAS_BTF_TAG": "y",
             "CONFIG_PAHOLE_HAS_LANG_EXCLUDE": "y",
             "CONFIG_PAHOLE_HAS_SPLIT_BTF": "y",
             "CONFIG_PAHOLE_VERSION": "131",
+            "CONFIG_RUSTC_HAS_UNNECESSARY_TRANSMUTES": "y",
             "CONFIG_RUSTC_LLVM_VERSION": "210106",
             "CONFIG_RUSTC_VERSION": "109200",
             "CONFIG_RUST_IS_AVAILABLE": "y",
@@ -64,13 +65,23 @@ def synthetic_maps(contract):
     requested.pop("CONFIG_ASM_MODVERSIONS")
     requested.update(
         {
+            "CONFIG_BINDGEN_VERSION_TEXT": '"bindgen 0.72.1"',
             "CONFIG_RUST": "y",
             "CONFIG_MODVERSIONS": "n",
-            "CONFIG_RUST_DEBUG_ASSERTIONS": "n",
-            "CONFIG_RUSTC_HAS_UNNECESSARY_TRANSMUTES": "y",
             "CONFIG_RUSTC_VERSION_TEXT": '"rustc 1.92.0 (fixture)"',
         }
     )
+    for symbol in (
+        "CONFIG_BLK_DEV_RUST_NULL",
+        "CONFIG_DRM_NOVA",
+        "CONFIG_RUST_BUILD_ASSERT_ALLOW",
+        "CONFIG_RUST_DEBUG_ASSERTIONS",
+        "CONFIG_RUST_FW_LOADER_ABSTRACTIONS",
+        "CONFIG_RUST_OVERFLOW_CHECKS",
+        "CONFIG_RUST_PHYLIB_ABSTRACTIONS",
+        "CONFIG_SAMPLES_RUST",
+    ):
+        requested[symbol] = "n"
     return baseline, control, requested
 
 
@@ -299,6 +310,26 @@ class AllocatorPatchProvenanceTests(unittest.TestCase):
 
 
 class RepositoryContractTests(unittest.TestCase):
+    def assert_contract_mutation_rejected(self, mutate, pattern):
+        contract = resolution.validate_contract(REPO_ROOT)
+        mutate(contract)
+        with tempfile.TemporaryDirectory(dir=str(REPO_ROOT)) as temporary:
+            path = Path(temporary) / "contract.json"
+            data = (
+                json.dumps(contract, indent=2, sort_keys=True) + "\n"
+            ).encode("utf-8")
+            path.write_bytes(data)
+            relative = path.relative_to(REPO_ROOT)
+            with mock.patch.object(resolution, "CONTRACT_PATH", relative), mock.patch.object(
+                resolution,
+                "EXPECTED_CONTRACT_SHA256",
+                hashlib.sha256(data).hexdigest(),
+            ):
+                with self.assertRaisesRegex(
+                    resolution.ConfigResolutionError, pattern
+                ):
+                    resolution.validate_contract(REPO_ROOT)
+
     def test_source_cleanup_is_ordered_after_processed_configs_are_copied(self):
         contract = resolution.validate_contract(REPO_ROOT)
         with tempfile.TemporaryDirectory() as temporary:
@@ -347,13 +378,232 @@ class RepositoryContractTests(unittest.TestCase):
     def test_contract_and_workflow_validate_without_credit(self):
         contract = resolution.validate_contract(REPO_ROOT)
         resolution.validate_workflow(REPO_ROOT)
-        self.assertEqual(contract["phase_id"], "config-resolution")
+        self.assertEqual(resolution.SCHEMA_VERSION, 2)
+        self.assertEqual(contract["schema_version"], 2)
+        self.assertEqual(contract["phase_id"], "config-resolution-v2")
         self.assertFalse(any(contract["gate_claims"].values()))
         self.assertIn("never awards", contract["claim_scope"])
         self.assertIn(
             "CONFIG_RUSTC_HAS_UNNECESSARY_TRANSMUTES",
-            contract["generated_environment"]["supplemental_symbols"],
+            contract["generated_environment"]["policy_symbols"],
         )
+        self.assertEqual(
+            contract["tool_environment"]["llvm_config_owner_policy"][
+                "expected_package_nevra"
+            ],
+            "llvm-devel-0:21.1.8-1.el10.x86_64",
+        )
+        self.assertEqual(
+            contract["preservation_groups"]["warning_policy"]["CONFIG_WERROR"],
+            "y",
+        )
+
+    def test_claim_scope_and_every_success_blocker_are_exact(self):
+        self.assert_contract_mutation_rejected(
+            lambda contract: contract.update(
+                {
+                    "claim_scope": contract["claim_scope"]
+                    + " Exception: credit may be awarded by this phase."
+                }
+            ),
+            "claim scope changed",
+        )
+        contract = resolution.validate_contract(REPO_ROOT)
+        for index in range(len(contract["success_blockers"])):
+            with self.subTest(removed_blocker=index):
+                self.assert_contract_mutation_rejected(
+                    lambda value, row=index: value["success_blockers"].pop(row),
+                    "success blockers changed",
+                )
+        self.assert_contract_mutation_rejected(
+            lambda contract: contract["success_blockers"].reverse(),
+            "success blockers changed",
+        )
+        self.assert_contract_mutation_rejected(
+            lambda contract: contract["success_blockers"].append(
+                "A non-authoritative extra blocker."
+            ),
+            "success blockers changed",
+        )
+
+    def test_authority_bindings_and_classification_text_are_exact(self):
+        for binding in ("config_policy", "source_lock", "toolchain_lock"):
+            with self.subTest(binding=binding):
+                self.assert_contract_mutation_rejected(
+                    lambda contract, name=binding: contract[name].update(
+                        {"path": "host-kernel/rocky/arbitrary.json"}
+                    ),
+                    "{} binding changed".format(binding.replace("_", " ")),
+                )
+        self.assert_contract_mutation_rejected(
+            lambda contract: contract["generated_environment"].update(
+                {"classification": "All generated drift is acceptable."}
+            ),
+            "generated classification changed",
+        )
+        self.assert_contract_mutation_rejected(
+            lambda contract: contract["generated_environment"].update(
+                {"classification": False}
+            ),
+            "generated classification changed",
+        )
+        self.assert_contract_mutation_rejected(
+            lambda contract: contract["resolution"].update(
+                {
+                    "comparison": (
+                        contract["resolution"]["comparison"]
+                        + " Symbol mismatches may be ignored."
+                    )
+                }
+            ),
+            "resolution comparison changed",
+        )
+        self.assert_contract_mutation_rejected(
+            lambda contract: contract["resolution"].update(
+                {"comparison": ["complete resolved config bytes", "symbol maps"]}
+            ),
+            "resolution comparison changed",
+        )
+
+    def test_generated_policy_and_direct_artifact_duplicates_fail_closed(self):
+        policy, _ = resolution.read_json(
+            REPO_ROOT / resolution.CONFIG_POLICY_PATH, "config policy"
+        )
+        duplicated_policy = copy.deepcopy(policy)
+        duplicated_policy["verification_evidence"]["olddefconfig_delta"][
+            "generated_symbol_allowlist"
+        ].append(
+            duplicated_policy["verification_evidence"]["olddefconfig_delta"][
+                "generated_symbol_allowlist"
+            ][0]
+        )
+        with self.assertRaisesRegex(
+            resolution.ConfigResolutionError,
+            "bound platform authority is invalid",
+        ):
+            resolution.validate_platform_authorities(
+                REPO_ROOT,
+                resolution.read_json(
+                    REPO_ROOT / resolution.TOOLCHAIN_LOCK_PATH, "toolchain lock"
+                )[0],
+                duplicated_policy,
+                (REPO_ROOT / resolution.CONFIG_FRAGMENT_PATH).read_bytes(),
+            )
+
+        toolchain, _ = resolution.read_json(
+            REPO_ROOT / resolution.TOOLCHAIN_LOCK_PATH, "toolchain lock"
+        )
+        duplicated_toolchain = copy.deepcopy(toolchain)
+        duplicated_toolchain["direct_artifacts"].append(
+            copy.deepcopy(duplicated_toolchain["direct_artifacts"][0])
+        )
+        with self.assertRaisesRegex(
+            resolution.ConfigResolutionError, "bound platform authority is invalid"
+        ):
+            resolution.validate_platform_authorities(
+                REPO_ROOT,
+                duplicated_toolchain,
+                policy,
+                (REPO_ROOT / resolution.CONFIG_FRAGMENT_PATH).read_bytes(),
+            )
+
+        source_drift = copy.deepcopy(policy)
+        source_drift["dependency_contract"]["requirements"][0]["source"] = ""
+        with self.assertRaisesRegex(
+            resolution.ConfigResolutionError, "bound platform authority is invalid"
+        ):
+            resolution.validate_platform_authorities(
+                REPO_ROOT,
+                toolchain,
+                source_drift,
+                (REPO_ROOT / resolution.CONFIG_FRAGMENT_PATH).read_bytes(),
+            )
+
+    def test_source_assets_and_process_authority_are_exact(self):
+        mutations = (
+            lambda contract: contract["source_assets"]["baseline"].update(
+                {"path": "SOURCES/kernel-aarch64-rhel.config"}
+            ),
+            lambda contract: contract["source_assets"]["debrand_patch"].update(
+                {"sha256": "0" * 64}
+            ),
+            lambda contract: contract["source_assets"]["linux_archive"].update(
+                {"root": "arbitrary-linux"}
+            ),
+            lambda contract: contract["source_assets"]["process_configs"].update(
+                {"size": 1}
+            ),
+            lambda contract: contract["source_assets"]["baseline"].update(
+                {"unknown": "accepted before closure"}
+            ),
+        )
+        for index, mutation in enumerate(mutations):
+            with self.subTest(source_asset_mutation=index):
+                self.assert_contract_mutation_rejected(
+                    mutation, "source assets changed"
+                )
+        self.assert_contract_mutation_rejected(
+            lambda contract: contract["process_configs"].update(
+                {"path": "scripts/arbitrary-process-configs.sh"}
+            ),
+            "process_configs path changed",
+        )
+        self.assert_contract_mutation_rejected(
+            lambda contract: contract["process_configs"].update(
+                {"source": "arbitrary script with matching digest"}
+            ),
+            "process_configs source changed",
+        )
+
+    def test_rocky_series_cannot_retarget_an_arbitrary_safe_file(self):
+        arbitrary = REPO_ROOT / resolution.CONFIG_POLICY_PATH
+        arbitrary_digest = hashlib.sha256(arbitrary.read_bytes()).hexdigest()
+        self.assert_contract_mutation_rejected(
+            lambda contract: contract["patch_authority"].update(
+                {
+                    "rocky_series": {
+                        "path": resolution.CONFIG_POLICY_PATH.as_posix(),
+                        "sha256": arbitrary_digest,
+                    }
+                }
+            ),
+            "Rocky patch series binding changed",
+        )
+
+    def test_preservation_and_dependency_mappings_are_closed(self):
+        preservation_mutations = (
+            lambda contract: contract["preservation_groups"][
+                "module_signing"
+            ].pop("CONFIG_MODULE_SIG_FORCE"),
+            lambda contract: contract["preservation_groups"][
+                "module_signing"
+            ].update({"CONFIG_MODULE_SIG_FORCE": "y"}),
+            lambda contract: contract["preservation_groups"][
+                "module_signing"
+            ].update({"CONFIG_UNBOUND_EXTRA": "n"}),
+        )
+        for index, mutation in enumerate(preservation_mutations):
+            with self.subTest(preservation_mutation=index):
+                self.assert_contract_mutation_rejected(
+                    mutation, "preservation groups changed"
+                )
+
+        dependency_mutations = (
+            lambda contract: contract["dependency_symbols"].pop(
+                "CONFIG_HAVE_RUST"
+            ),
+            lambda contract: contract["dependency_symbols"].update(
+                {"CONFIG_HAVE_RUST": "n"}
+            ),
+            lambda contract: contract["dependency_symbols"].update(
+                {"CONFIG_UNBOUND_EXTRA": "y"}
+            ),
+        )
+        for index, mutation in enumerate(dependency_mutations):
+            with self.subTest(dependency_mutation=index):
+                self.assert_contract_mutation_rejected(
+                    mutation, "dependency symbols changed"
+                )
 
     def test_contract_binds_source_config_toolchain_and_patch_bytes(self):
         contract = resolution.validate_contract(REPO_ROOT)
@@ -528,7 +778,7 @@ class RepositoryContractTests(unittest.TestCase):
                     str(REPO_ROOT),
                     "--check",
                     "--phase",
-                    "config-resolution",
+                    "config-resolution-v2",
                 ]
             ),
             2,
@@ -536,7 +786,7 @@ class RepositoryContractTests(unittest.TestCase):
 
     def test_script_and_tests_parse_as_python_3_6(self):
         for relative in (
-            "scripts/rocky_kernel_config_resolution.py",
+            "scripts/rocky_kernel_config_resolution_v2.py",
             "scripts/tests/test_rocky_kernel_config_resolution.py",
         ):
             source = (REPO_ROOT / relative).read_text(encoding="utf-8")
@@ -607,7 +857,7 @@ class ConfigClassificationTests(unittest.TestCase):
                 delta["derived_changes"],
                 [
                     {
-                        "after": "n",
+                        "after": "<absent>",
                         "before": "y",
                         "symbol": "CONFIG_ASM_MODVERSIONS",
                     }
@@ -620,8 +870,21 @@ class ConfigClassificationTests(unittest.TestCase):
             self.assertEqual(
                 [row["symbol"] for row in delta["requested_generated_symbols"]],
                 [
-                    "CONFIG_RUSTC_HAS_UNNECESSARY_TRANSMUTES",
+                    "CONFIG_BINDGEN_VERSION_TEXT",
                     "CONFIG_RUSTC_VERSION_TEXT",
+                ],
+            )
+            self.assertEqual(
+                [row["symbol"] for row in delta["representation_changes"]],
+                [
+                    "CONFIG_BLK_DEV_RUST_NULL",
+                    "CONFIG_DRM_NOVA",
+                    "CONFIG_RUST_BUILD_ASSERT_ALLOW",
+                    "CONFIG_RUST_DEBUG_ASSERTIONS",
+                    "CONFIG_RUST_FW_LOADER_ABSTRACTIONS",
+                    "CONFIG_RUST_OVERFLOW_CHECKS",
+                    "CONFIG_RUST_PHYLIB_ABSTRACTIONS",
+                    "CONFIG_SAMPLES_RUST",
                 ],
             )
             self.assertEqual(
@@ -651,16 +914,30 @@ class ConfigClassificationTests(unittest.TestCase):
                     )
                     with self.assertRaisesRegex(
                         resolution.ConfigResolutionError,
-                        "unexpected generated symbols",
+                        "unclassified symbols",
                     ):
                         self.validate(paths)
 
-    def test_absent_and_n_are_only_the_same_disabled_semantic_value(self):
+    def test_absent_and_explicit_n_presence_drift_is_reported(self):
         self.assertEqual(
-            resolution.changed_symbols({}, {"CONFIG_DISABLED": "n"}), []
+            resolution.changed_symbols({}, {"CONFIG_DISABLED": "n"}),
+            [
+                {
+                    "after": "n",
+                    "before": "<absent>",
+                    "symbol": "CONFIG_DISABLED",
+                }
+            ],
         )
         self.assertEqual(
-            resolution.changed_symbols({"CONFIG_DISABLED": "n"}, {}), []
+            resolution.changed_symbols({"CONFIG_DISABLED": "n"}, {}),
+            [
+                {
+                    "after": "<absent>",
+                    "before": "n",
+                    "symbol": "CONFIG_DISABLED",
+                }
+            ],
         )
         for value in ("y", "m", '"n"', "0"):
             with self.subTest(value=value):
@@ -669,7 +946,7 @@ class ConfigClassificationTests(unittest.TestCase):
                     [
                         {
                             "after": value,
-                            "before": "n",
+                            "before": "<absent>",
                             "symbol": "CONFIG_VISIBLE",
                         }
                     ],
@@ -732,7 +1009,7 @@ class ConfigClassificationTests(unittest.TestCase):
                 if row["symbol"] != "CONFIG_RUST"
             ]
             with self.assertRaisesRegex(
-                resolution.ConfigResolutionError, "unexpected generated symbols"
+                resolution.ConfigResolutionError, "unclassified symbols"
             ):
                 resolution.validate_config_pair(
                     contract,
@@ -744,7 +1021,7 @@ class ConfigClassificationTests(unittest.TestCase):
 
     def test_asm_modversions_derived_classification_is_exact(self):
         for mutation, message in (
-            (lambda rows: [], "unclassified existing symbols"),
+            (lambda rows: [], "unclassified symbols"),
             (
                 lambda rows: [dict(rows[0], resolved="y")],
                 "derived semantic delta",
@@ -779,6 +1056,18 @@ class ConfigClassificationTests(unittest.TestCase):
             ):
                 self.validate(paths)
 
+    def test_llvm_config_probe_path_is_exact(self):
+        tool_environment = self.contract["tool_environment"]
+        resolution.validate_probe_binary_path(
+            "llvm", "/usr/bin/llvm-config", tool_environment
+        )
+        with self.assertRaisesRegex(
+            resolution.ConfigResolutionError, "llvm-config binary path"
+        ):
+            resolution.validate_probe_binary_path(
+                "llvm", "/usr/sbin/llvm-config", tool_environment
+            )
+
     def test_environment_delta_is_dynamic_but_output_schema_is_exact(self):
         with tempfile.TemporaryDirectory() as temporary:
             paths = self.write_fixture(
@@ -791,9 +1080,11 @@ class ConfigClassificationTests(unittest.TestCase):
             self.assertEqual(
                 set(delta),
                 {
+                    "classification",
                     "derived_changes",
                     "environment_generated_changes",
                     "generated_symbol_results",
+                    "representation_changes",
                     "requested_changes",
                     "requested_generated_symbols",
                     "unexpected_generated_symbols",
@@ -808,9 +1099,16 @@ class ConfigClassificationTests(unittest.TestCase):
             )
             self.assertEqual(
                 set(delta["generated_symbol_results"]),
-                set(self.contract["generated_environment"]["historical_policy_symbols"])
-                | set(
-                    self.contract["generated_environment"]["supplemental_symbols"]
+                set(self.contract["generated_environment"]["policy_symbols"]),
+            )
+            self.assertEqual(
+                delta["classification"]["control_to_resolved"],
+                sorted(
+                    delta["requested_changes"]
+                    + delta["derived_changes"]
+                    + delta["requested_generated_symbols"]
+                    + delta["representation_changes"],
+                    key=lambda row: row["symbol"],
                 ),
             )
 
@@ -825,6 +1123,22 @@ class ConfigClassificationTests(unittest.TestCase):
                         ),
                     )
                     with self.assertRaises(resolution.ConfigResolutionError):
+                        self.validate(paths)
+
+    def test_werror_is_preserved_in_baseline_control_and_resolved(self):
+        mutations = (
+            ("baseline", {"baseline_mutation": lambda values: values.update({"CONFIG_WERROR": "n"})}),
+            ("control", {"control_mutation": lambda values: values.update({"CONFIG_WERROR": "n"})}),
+            ("resolved", {"requested_mutation": lambda values: values.update({"CONFIG_WERROR": "n"})}),
+        )
+        for stage, keyword in mutations:
+            with self.subTest(stage=stage):
+                with tempfile.TemporaryDirectory() as temporary:
+                    paths = self.write_fixture(Path(temporary), **keyword)
+                    with self.assertRaisesRegex(
+                        resolution.ConfigResolutionError,
+                        stage + " preserved.*CONFIG_WERROR",
+                    ):
                         self.validate(paths)
 
     def test_call_padding_requires_the_contract_rustc_minimum(self):
@@ -948,6 +1262,7 @@ class RustavailableTests(unittest.TestCase):
                 }
             )
         manifest = resolution.build_command_manifest(runs, self.contract)
+        self.assertEqual(manifest["schema_version"], 2)
         self.assertEqual(len(manifest["passes"]), 2)
         self.assertEqual(
             [row["requested_rustavailable"] for row in manifest["passes"]],
@@ -1108,7 +1423,7 @@ class InputSafetyTests(unittest.TestCase):
                 [root, linked_directory, child], "linux"
             )
 
-    def test_gate_promotion_and_supplemental_removal_are_detected(self):
+    def test_gate_promotion_and_generated_policy_removal_are_detected(self):
         contract = resolution.validate_contract(REPO_ROOT)
         promoted = copy.deepcopy(contract)
         promoted["gate_claims"]["RK-005"] = True
@@ -1117,10 +1432,12 @@ class InputSafetyTests(unittest.TestCase):
                 promoted["gate_claims"], contract["gate_claims"], "gate claims"
             )
         removed = copy.deepcopy(contract)
-        removed["generated_environment"]["supplemental_symbols"] = {}
+        removed["generated_environment"]["policy_symbols"].remove(
+            "CONFIG_RUSTC_HAS_UNNECESSARY_TRANSMUTES"
+        )
         self.assertNotIn(
             "CONFIG_RUSTC_HAS_UNNECESSARY_TRANSMUTES",
-            removed["generated_environment"]["supplemental_symbols"],
+            removed["generated_environment"]["policy_symbols"],
         )
 
     def test_workflow_yaml_parses_and_bash_blocks_parse(self):

@@ -15,7 +15,7 @@ from typing import Dict, List, Optional, Tuple
 REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
-import rocky_kernel_platform_lock as platform_lock  # noqa: E402
+import rocky_kernel_platform_lock_v2 as platform_lock  # noqa: E402
 
 
 def write_json(path: Path, value: object) -> str:
@@ -35,8 +35,11 @@ class PlatformLockFixture(unittest.TestCase):
         cls.toolchain, _ = platform_lock.read_json(
             REPO_ROOT / platform_lock.TOOLCHAIN_LOCK_PATH
         )
+        cls.legacy_config, _ = platform_lock.read_json(
+            REPO_ROOT / platform_lock.CONFIG_POLICY_V1_PATH
+        )
         cls.config, _ = platform_lock.read_json(
-            REPO_ROOT / platform_lock.CONFIG_POLICY_PATH
+            REPO_ROOT / platform_lock.CONFIG_POLICY_V2_PATH
         )
         cls.fragment_bytes = (
             REPO_ROOT / platform_lock.CONFIG_FRAGMENT_PATH
@@ -72,7 +75,7 @@ class ManifestParserTests(PlatformLockFixture):
             r"\s\|\sNone\b",
         )
         for relative_path in (
-            "scripts/rocky_kernel_platform_lock.py",
+            "scripts/rocky_kernel_platform_lock_v2.py",
             "scripts/tests/test_rocky_kernel_platform_lock.py",
         ):
             source = (REPO_ROOT / relative_path).read_text(encoding="utf-8")
@@ -295,16 +298,114 @@ class ToolchainLockTests(PlatformLockFixture):
 
 
 class ConfigPolicyTests(PlatformLockFixture):
+    def test_legacy_v1_policy_remains_valid_and_v2_is_the_default(self) -> None:
+        blockers = platform_lock.validate_config_policy(
+            copy.deepcopy(self.legacy_config), self.fragment_bytes, REPO_ROOT
+        )
+        self.assertEqual(len(blockers), 3)
+        self.assertFalse(self.legacy_config["gate"]["credit_eligible"])
+        _, loaded, _, loaded_blockers = platform_lock.load_locks(
+            REPO_ROOT, config_path=platform_lock.CONFIG_POLICY_V1_PATH
+        )
+        self.assertEqual(
+            loaded["lock_id"],
+            f"{platform_lock.LOCK_ID_PREFIX}-config-policy-v1",
+        )
+        self.assertEqual(len(loaded_blockers), 3)
+        _, current, _, current_blockers = platform_lock.load_locks(REPO_ROOT)
+        self.assertEqual(
+            current["lock_id"],
+            f"{platform_lock.LOCK_ID_PREFIX}-config-policy-v2",
+        )
+        self.assertEqual(len(current_blockers), 4)
+
     def test_committed_policy_is_valid_but_rk005_is_not_gate_ready(self) -> None:
         blockers = self.validate_config()
-        self.assertEqual(len(blockers), 3)
+        self.assertEqual(self.config["schema_version"], 2)
+        self.assertEqual(len(blockers), 4)
         self.assertEqual(
             {item.split(":", 1)[0] for item in blockers},
-            {"build_config", "dependency_assertions", "olddefconfig_delta"},
+            {
+                "build_config",
+                "dependency_assertions",
+                "olddefconfig_delta",
+                "resolution_review",
+            },
         )
         self.assertFalse(self.config["gate"]["credit_eligible"])
 
+        broken = copy.deepcopy(self.config)
+        broken["schema_version"] = 1
+        with self.assertRaisesRegex(
+            platform_lock.PlatformLockError, "config policy.schema_version"
+        ):
+            self.validate_config(broken)
+
+    def test_v2_policy_claims_and_missing_evidence_blockers_are_exact(self) -> None:
+        claim_mutations = (
+            lambda policy: policy["baseline"].update(
+                {
+                    "normalization": (
+                        policy["baseline"]["normalization"]
+                        + " Except that absent and explicit n may be equivalent."
+                    )
+                }
+            ),
+            lambda policy: policy["baseline"].update(
+                {"normalization": ["CONFIG_NAME=value", "explicit n"]}
+            ),
+            lambda policy: policy["module_version_policy"].update(
+                {"policy": "R1 and R2: credit and Rocky kABI claims are allowed."}
+            ),
+            lambda policy: policy["module_version_policy"].update(
+                {"policy": False}
+            ),
+            lambda policy: policy["gate"].update(
+                {"policy": "Credit is not forbidden; it is allowed."}
+            ),
+            lambda policy: policy["gate"].update(
+                {"policy": ["forbidden", "allowed"]}
+            ),
+        )
+        for index, mutation in enumerate(claim_mutations):
+            with self.subTest(claim_mutation=index):
+                broken = copy.deepcopy(self.config)
+                mutation(broken)
+                with self.assertRaises(platform_lock.PlatformLockError):
+                    self.validate_config(broken)
+
+        for evidence_id in platform_lock.EXPECTED_CONFIG_EVIDENCE_BLOCKERS_V2:
+            for replacement in (
+                "This arbitrary nonempty blocker erases the locked requirement.",
+                ["six configs", "2882 rows"],
+                False,
+            ):
+                with self.subTest(
+                    evidence=evidence_id, replacement_type=type(replacement).__name__
+                ):
+                    broken = copy.deepcopy(self.config)
+                    broken["verification_evidence"][evidence_id][
+                        "blocker"
+                    ] = replacement
+                    with self.assertRaises(platform_lock.PlatformLockError):
+                        self.validate_config(broken)
+
+    def test_v2_preserve_record_order_is_canonical(self) -> None:
+        self.assertEqual(
+            self.config["preserve"], platform_lock.EXPECTED_PRESERVE_RECORDS_V2
+        )
+        broken = copy.deepcopy(self.config)
+        broken["preserve"].reverse()
+        with self.assertRaisesRegex(
+            platform_lock.PlatformLockError, "preserve records changed"
+        ):
+            self.validate_config(broken)
+
     def test_all_rust_kconfig_dependencies_are_explicit(self) -> None:
+        self.assertEqual(
+            self.config["dependency_contract"]["requirements"],
+            platform_lock.EXPECTED_DEPENDENCY_REQUIREMENTS_V2,
+        )
         dependencies = {
             item["symbol"]: item["expected"]
             for item in self.config["dependency_contract"]["requirements"]
@@ -317,14 +418,43 @@ class ConfigPolicyTests(PlatformLockFixture):
         self.assertEqual(dependencies["CONFIG_MITIGATION_RETHUNK"], "y")
         self.assertEqual(dependencies["CONFIG_KASAN"], "n")
 
+    def test_dependency_requirement_duplicates_and_source_drift_fail_closed(self) -> None:
+        duplicate = copy.deepcopy(self.config)
+        duplicate["dependency_contract"]["requirements"].append(
+            copy.deepcopy(
+                duplicate["dependency_contract"]["requirements"][0]
+            )
+        )
+        with self.assertRaisesRegex(
+            platform_lock.PlatformLockError, "dependency requirements changed"
+        ):
+            self.validate_config(duplicate)
+
+        source_drift = copy.deepcopy(self.config)
+        source_drift["dependency_contract"]["requirements"][0][
+            "source"
+        ] = "looks plausible but is not bound"
+        with self.assertRaisesRegex(
+            platform_lock.PlatformLockError, "dependency requirements changed"
+        ):
+            self.validate_config(source_drift)
+
     def test_generated_olddefconfig_symbols_are_separate_from_requested_delta(self) -> None:
         evidence = self.config["verification_evidence"]["olddefconfig_delta"]
         self.assertEqual(
             evidence["generated_symbol_allowlist"],
-            platform_lock.EXPECTED_GENERATED_CONFIG_SYMBOLS,
+            platform_lock.EXPECTED_GENERATED_CONFIG_SYMBOLS_V2,
+        )
+        self.assertIn(
+            "CONFIG_RUSTC_HAS_UNNECESSARY_TRANSMUTES",
+            evidence["generated_symbol_allowlist"],
+        )
+        self.assertEqual(
+            evidence["generated_symbol_rules"],
+            platform_lock.EXPECTED_GENERATED_SYMBOL_RULES,
         )
         self.assertIsNone(evidence["generated_symbol_results"])
-        self.assertIn("requested config delta", evidence["blocker"])
+        self.assertIn("control-to-resolved", evidence["blocker"])
 
         broken = copy.deepcopy(self.config)
         broken["verification_evidence"]["olddefconfig_delta"][
@@ -332,6 +462,49 @@ class ConfigPolicyTests(PlatformLockFixture):
         ].append("CONFIG_SAMPLE_RUST_MINIMAL")
         with self.assertRaises(platform_lock.PlatformLockError):
             self.validate_config(broken)
+
+        broken = copy.deepcopy(self.config)
+        broken["verification_evidence"]["olddefconfig_delta"][
+            "generated_symbol_allowlist"
+        ].remove("CONFIG_RUSTC_HAS_UNNECESSARY_TRANSMUTES")
+        with self.assertRaises(platform_lock.PlatformLockError):
+            self.validate_config(broken)
+
+        broken = copy.deepcopy(self.config)
+        broken["verification_evidence"]["olddefconfig_delta"][
+            "generated_symbol_rules"
+        ]["CONFIG_RUSTC_HAS_UNNECESSARY_TRANSMUTES"]["expected"] = "n"
+        with self.assertRaises(platform_lock.PlatformLockError):
+            self.validate_config(broken)
+
+    def test_staged_classification_and_llvm_owner_policy_are_exact(self) -> None:
+        self.assertEqual(
+            self.config["resolution_classification"],
+            platform_lock.EXPECTED_RESOLUTION_CLASSIFICATION,
+        )
+        self.assertEqual(
+            self.config["tool_owner_policy"]["llvm_config"],
+            platform_lock.EXPECTED_LLVM_CONFIG_OWNER_POLICY,
+        )
+        for path, value in (
+            (("resolution_classification", "complete_partition_required"), False),
+            (
+                (
+                    "tool_owner_policy",
+                    "llvm_config",
+                    "expected_package_nevra",
+                ),
+                "llvm-0:21.1.8-1.el10.x86_64",
+            ),
+        ):
+            with self.subTest(path=path):
+                broken = copy.deepcopy(self.config)
+                cursor = broken
+                for key in path[:-1]:
+                    cursor = cursor[key]
+                cursor[path[-1]] = value
+                with self.assertRaises(platform_lock.PlatformLockError):
+                    self.validate_config(broken)
 
     def test_fragment_and_allowlist_are_exactly_two_changes(self) -> None:
         self.assertEqual(
@@ -365,6 +538,7 @@ class ConfigPolicyTests(PlatformLockFixture):
         }
         for symbol, value in expected.items():
             self.assertEqual(preserve[symbol], value)
+        self.assertEqual(preserve["CONFIG_WERROR"], "y")
 
     def test_unallowlisted_delta_or_weakened_preservation_fails_closed(self) -> None:
         broken = copy.deepcopy(self.config)
@@ -377,6 +551,13 @@ class ConfigPolicyTests(PlatformLockFixture):
             item for item in broken["preserve"] if item["symbol"] == "CONFIG_DEBUG_INFO_BTF"
         )
         entry["value"] = "n"
+        with self.assertRaises(platform_lock.PlatformLockError):
+            self.validate_config(broken)
+
+        broken = copy.deepcopy(self.config)
+        broken["preserve"] = [
+            item for item in broken["preserve"] if item["symbol"] != "CONFIG_WERROR"
+        ]
         with self.assertRaises(platform_lock.PlatformLockError):
             self.validate_config(broken)
 
@@ -401,7 +582,7 @@ class ConfigPolicyTests(PlatformLockFixture):
                     self.validate_config(broken)
 
     def test_exact_synthetic_resolved_delta_passes(self) -> None:
-        baseline = dict(platform_lock.EXPECTED_PRESERVE)
+        baseline = dict(platform_lock.EXPECTED_PRESERVE_V2)
         baseline.update(
             {symbol: before for symbol, (before, _) in platform_lock.EXPECTED_CONFIG_CHANGES.items()}
         )
@@ -412,7 +593,7 @@ class ConfigPolicyTests(PlatformLockFixture):
         platform_lock.validate_resolved_config(baseline, resolved, self.config)
 
     def test_any_third_resolved_delta_or_preservation_drift_fails(self) -> None:
-        baseline = dict(platform_lock.EXPECTED_PRESERVE)
+        baseline = dict(platform_lock.EXPECTED_PRESERVE_V2)
         baseline.update(
             {symbol: before for symbol, (before, _) in platform_lock.EXPECTED_CONFIG_CHANGES.items()}
         )
@@ -498,34 +679,88 @@ class VerifiedEvidenceTests(PlatformLockFixture):
         evidence["dependency_assertions"]["results"] = copy.deepcopy(
             platform_lock.EXPECTED_DEPENDENCIES
         )
-        generated = {
-            symbol: "y" if symbol == "CONFIG_RUST_IS_AVAILABLE" else "verified"
-            for symbol in platform_lock.EXPECTED_GENERATED_CONFIG_SYMBOLS
-        }
+        evidence["dependency_assertions"]["preservation_results"] = copy.deepcopy(
+            platform_lock.EXPECTED_PRESERVE_V2
+        )
+        generated = copy.deepcopy(
+            platform_lock.EXPECTED_GENERATED_CONFIG_VALUES_V2
+        )
         evidence["olddefconfig_delta"].update(
             {
                 "baseline_config_sha256": completed["baseline"]["sha256"],
-                "changed_symbols": [
+                "baseline_to_control_changes": [
                     {
-                        "baseline": "n",
-                        "resolved": "y",
-                        "symbol": "CONFIG_RUST",
-                    },
+                        "after": "109200",
+                        "before": "n",
+                        "symbol": "CONFIG_RUSTC_VERSION",
+                    }
+                ],
+                "control_config_sha256": "3" * 64,
+                "control_to_resolved_changes": [],
+                "derived_changes": [
                     {
-                        "baseline": "y",
-                        "resolved": "n",
+                        "after": "<absent>",
+                        "before": "y",
+                        "symbol": "CONFIG_ASM_MODVERSIONS",
+                    }
+                ],
+                "requested_changes": [
+                    {
+                        "after": "n",
+                        "before": "y",
                         "symbol": "CONFIG_MODVERSIONS",
                     },
+                    {
+                        "after": "y",
+                        "before": "<absent>",
+                        "symbol": "CONFIG_RUST",
+                    },
+                ],
+                "requested_generated_symbols": [
+                    {
+                        "after": '"bindgen 0.72.1"',
+                        "before": "<absent>",
+                        "symbol": "CONFIG_BINDGEN_VERSION_TEXT",
+                    },
+                    {
+                        "after": platform_lock.EXPECTED_GENERATED_CONFIG_VALUES_V2[
+                            "CONFIG_RUSTC_VERSION_TEXT"
+                        ],
+                        "before": "<absent>",
+                        "symbol": "CONFIG_RUSTC_VERSION_TEXT",
+                    }
+                ],
+                "representation_changes": [
+                    {"after": "n", "before": "<absent>", "symbol": symbol}
+                    for symbol in (
+                        "CONFIG_BLK_DEV_RUST_NULL",
+                        "CONFIG_DRM_NOVA",
+                        "CONFIG_RUST_BUILD_ASSERT_ALLOW",
+                        "CONFIG_RUST_DEBUG_ASSERTIONS",
+                        "CONFIG_RUST_FW_LOADER_ABSTRACTIONS",
+                        "CONFIG_RUST_OVERFLOW_CHECKS",
+                        "CONFIG_RUST_PHYLIB_ABSTRACTIONS",
+                        "CONFIG_SAMPLES_RUST",
+                    )
                 ],
                 "command_manifest_sha256": "1" * 64,
                 "environment_manifest_sha256": "2" * 64,
                 "generated_symbol_results": generated,
                 "resolved_config_sha256": final_config_sha256,
+                "second_control_config_sha256": "3" * 64,
                 "second_pass_config_sha256": final_config_sha256,
                 "unexpected_symbols": [],
             }
         )
-        completed["gate"]["credit_eligible"] = True
+        olddefconfig = evidence["olddefconfig_delta"]
+        olddefconfig["control_to_resolved_changes"] = sorted(
+            olddefconfig["requested_changes"]
+            + olddefconfig["derived_changes"]
+            + olddefconfig["requested_generated_symbols"]
+            + olddefconfig["representation_changes"],
+            key=lambda row: row["symbol"],
+        )
+        completed["gate"]["credit_eligible"] = False
         return completed
 
     def completed_toolchain(
@@ -744,6 +979,15 @@ class VerifiedEvidenceTests(PlatformLockFixture):
                 "stderr_sha256": "6" * 64,
                 "stdout_sha256": "7" * 64,
             }
+            if probe["id"] == "llvm":
+                result.update(
+                    {
+                        "binary_path": "/usr/bin/llvm-config",
+                        "package_nevra": platform_lock.EXPECTED_LLVM_CONFIG_OWNER_POLICY[
+                            "expected_package_nevra"
+                        ],
+                    }
+                )
             if probe["id"] == "rust-src-core":
                 result.update(
                     {
@@ -806,15 +1050,103 @@ class VerifiedEvidenceTests(PlatformLockFixture):
         completed["gate"]["credit_eligible"] = True
         return completed, digest_overrides
 
-    def test_verified_config_evidence_can_reach_rk005_ready(self) -> None:
+    def test_primary_config_evidence_cannot_bypass_independent_review(self) -> None:
         with tempfile.TemporaryDirectory(dir=REPO_ROOT) as temporary:
             completed = self.completed_config(Path(temporary))
-            self.assertEqual(
-                platform_lock.validate_config_policy(
-                    completed, self.fragment_bytes, REPO_ROOT
-                ),
-                [],
+            blockers = platform_lock.validate_config_policy(
+                completed, self.fragment_bytes, REPO_ROOT
             )
+            self.assertEqual(len(blockers), 1)
+            self.assertTrue(blockers[0].startswith("resolution_review:"))
+            self.assertFalse(completed["gate"]["credit_eligible"])
+            self.assertEqual(
+                json.loads(
+                    (
+                        REPO_ROOT
+                        / completed["verification_evidence"]["olddefconfig_delta"][
+                            "evidence_path"
+                        ]
+                    ).read_text(encoding="utf-8")
+                ),
+                {"capture": "olddefconfig_delta"},
+            )
+            self.assertEqual(
+                len(
+                    completed["verification_evidence"]["olddefconfig_delta"][
+                        "baseline_to_control_changes"
+                    ]
+                ),
+                1,
+            )
+            promoted = copy.deepcopy(completed)
+            promoted["verification_evidence"]["resolution_review"].update(
+                {
+                    "artifact_path": "arbitrary.zip",
+                    "artifact_sha256": "a" * 64,
+                    "blocker": None,
+                    "command_manifest_sha256": "b" * 64,
+                    "environment_manifest_sha256": "c" * 64,
+                    "review_manifest_path": "arbitrary-review.json",
+                    "review_manifest_sha256": "d" * 64,
+                    "status": "verified",
+                }
+            )
+            promoted["gate"]["credit_eligible"] = True
+            with self.assertRaisesRegex(
+                platform_lock.PlatformLockError,
+                "schema-specific evidence validator",
+            ):
+                platform_lock.validate_config_policy(
+                    promoted, self.fragment_bytes, REPO_ROOT
+                )
+
+    def test_verified_config_classification_owner_symbols_and_werror_fail_closed(self) -> None:
+        mutations = (
+            (
+                "incomplete classification",
+                lambda policy: policy["verification_evidence"][
+                    "olddefconfig_delta"
+                ]["control_to_resolved_changes"].pop(),
+            ),
+            (
+                "transmute result",
+                lambda policy: policy["verification_evidence"][
+                    "olddefconfig_delta"
+                ]["generated_symbol_results"].update(
+                    {"CONFIG_RUSTC_HAS_UNNECESSARY_TRANSMUTES": "n"}
+                ),
+            ),
+            *tuple(
+                (
+                    "generated value " + symbol,
+                    lambda policy, name=symbol: policy["verification_evidence"][
+                        "olddefconfig_delta"
+                    ]["generated_symbol_results"].update({name: "verified"}),
+                )
+                for symbol in platform_lock.EXPECTED_GENERATED_CONFIG_SYMBOLS_V2
+            ),
+            (
+                "WERROR preservation",
+                lambda policy: policy["verification_evidence"][
+                    "dependency_assertions"
+                ]["preservation_results"].update({"CONFIG_WERROR": "n"}),
+            ),
+            (
+                "control idempotence",
+                lambda policy: policy["verification_evidence"][
+                    "olddefconfig_delta"
+                ].update({"second_control_config_sha256": "4" * 64}),
+            ),
+        )
+        for label, mutation in mutations:
+            with self.subTest(label=label):
+                with tempfile.TemporaryDirectory(dir=REPO_ROOT) as temporary:
+                    completed = self.completed_config(Path(temporary))
+                    mutation(completed)
+                    with self.assertRaises(platform_lock.PlatformLockError):
+                        platform_lock.validate_config_policy(
+                            completed, self.fragment_bytes, REPO_ROOT
+                        )
 
     def test_verified_evidence_paths_must_be_contained_regular_files(self) -> None:
         with tempfile.TemporaryDirectory(dir=REPO_ROOT) as temporary:
@@ -839,7 +1171,7 @@ class VerifiedEvidenceTests(PlatformLockFixture):
                     completed, self.fragment_bytes, REPO_ROOT
                 )
 
-    def test_complete_primary_evidence_can_reach_gate_ready(self) -> None:
+    def test_complete_primary_evidence_still_cannot_reach_gate_ready(self) -> None:
         with tempfile.TemporaryDirectory(dir=REPO_ROOT) as temporary:
             directory = Path(temporary)
             toolchain, overrides = self.completed_toolchain(directory)
@@ -868,8 +1200,39 @@ class VerifiedEvidenceTests(PlatformLockFixture):
                             "--gate-ready",
                         ]
                     ),
-                    0,
+                    1,
                 )
+
+    def test_llvm_probe_path_and_owner_are_exact(self) -> None:
+        for field, value in (
+            ("binary_path", "/usr/sbin/llvm-config"),
+            ("package_nevra", "llvm-0:21.1.8-1.el10.x86_64"),
+        ):
+            with self.subTest(field=field):
+                with tempfile.TemporaryDirectory(dir=REPO_ROOT) as temporary:
+                    toolchain, overrides = self.completed_toolchain(Path(temporary))
+                    llvm = next(
+                        row
+                        for row in toolchain["probe_evidence"]["results"]
+                        if row["id"] == "llvm"
+                    )
+                    llvm[field] = value
+                    original_sha256_file = platform_lock.sha256_file
+
+                    def synthetic_sha256(path: Path) -> Tuple[int, str]:
+                        return overrides.get(
+                            path.resolve(), original_sha256_file(path)
+                        )
+
+                    with mock.patch.object(
+                        platform_lock,
+                        "sha256_file",
+                        side_effect=synthetic_sha256,
+                    ):
+                        with self.assertRaises(platform_lock.PlatformLockError):
+                            platform_lock.validate_toolchain_lock(
+                                toolchain, REPO_ROOT
+                            )
 
 
 class CommandLineTests(PlatformLockFixture):
