@@ -3,6 +3,7 @@
 menu "McKernel native Rust host modules"
 	depends on RUST
 	depends on X86_64
+	depends on MODULES && m
 
 config MCKERNEL_IHK_RUST
 	tristate "McKernel IHK core host module (Rust)"

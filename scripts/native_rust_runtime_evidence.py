@@ -16,6 +16,17 @@ import subprocess
 import sys
 from typing import Any
 
+if __package__:
+    from .native_rust_kconfig_policy import (
+        KconfigPolicyError,
+        validate_native_rust_evidence_fragment,
+    )
+else:
+    from native_rust_kconfig_policy import (
+        KconfigPolicyError,
+        validate_native_rust_evidence_fragment,
+    )
+
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_CONTRACT = Path("host-kernel/contracts/native-rust-runtime-evidence-v1.json")
@@ -118,6 +129,24 @@ def _read_text(path: Path, label: str) -> str:
 
 
 def _validate_exact_build_workflow(text: str) -> None:
+    job_preamble = (
+        "jobs:\n"
+        "  exact-build:\n"
+        "    name: Compile three native modules (credit forbidden)\n"
+        "    runs-on: ubuntu-24.04\n"
+        "    timeout-minutes: 330\n"
+        "    container:\n"
+        "      image: rockylinux/rockylinux:10.2@sha256:"
+        "e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176\n"
+        "    defaults:\n"
+        "      run:\n"
+        "        shell: bash\n"
+        "\n"
+        "    steps:\n"
+    )
+    if text.count(job_preamble) != 1:
+        raise EvidenceError("exact build workflow job scope differs")
+
     arrays = re.findall(
         r"(?ms)^\s*module_targets=\(\n(?P<body>.*?)^\s*\)\n", text
     )
@@ -127,8 +156,6 @@ def _validate_exact_build_workflow(text: str) -> None:
     if targets != BUILD_MODULE_TARGETS:
         raise EvidenceError("exact build workflow module target scope differs")
 
-    normalized = re.sub(r"\\\n\s*", " ", text)
-    collapsed = re.sub(r"\s+", " ", normalized)
     required_commands = [
         (
             'run_phase rustavailable make -C "$NATIVE_SOURCE_ROOT" '
@@ -143,93 +170,246 @@ def _validate_exact_build_workflow(text: str) -> None:
             'O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 -j2 "${module_targets[@]}"'
         ),
     ]
+    resolution_header = "      - name: Resolve the evidence-only module configuration twice\n"
+    if text.count(resolution_header) != 1:
+        raise EvidenceError("exact build workflow CONFIG_MODULES prerequisite differs")
+    resolution_start = text.index(resolution_header) + len(resolution_header)
+    next_step = re.search(r"(?m)^      - name: .+$", text[resolution_start:])
+    if next_step is None:
+        raise EvidenceError("exact build workflow CONFIG_MODULES prerequisite differs")
+    resolution_end = resolution_start + next_step.start()
+    resolution_step = text[resolution_start:resolution_end]
+    if text[resolution_end:].splitlines()[0] != (
+        "      - name: Compile the exact kernel and native Rust modules"
+    ):
+        raise EvidenceError("exact build workflow CONFIG_MODULES prerequisite differs")
+    run_marker = "        run: |\n"
+    if resolution_step.count(run_marker) != 1:
+        raise EvidenceError("exact build workflow CONFIG_MODULES prerequisite differs")
+    step_preamble, run_body = resolution_step.split(run_marker, 1)
+    if step_preamble != (
+        "        env:\n"
+        "          BUILD_DIR: ${{ runner.temp }}/native-rust-build\n"
+    ):
+        raise EvidenceError("exact build workflow CONFIG_MODULES prerequisite differs")
+    active_commands = tuple(
+        line.strip()
+        for line in run_body.split("\n")
+        if line.strip() and not line.strip().startswith("#")
+    )
+    expected_resolution_commands = (
+        "set -euo pipefail",
+        'mkdir -p "$BUILD_DIR"',
+        'cp "$NATIVE_BASELINE_CONFIG" "$BUILD_DIR/.config"',
+        '"$NATIVE_SOURCE_ROOT/scripts/kconfig/merge_config.sh" -m -O "$BUILD_DIR" \\',
+        '"$BUILD_DIR/.config" \\',
+        '"$GITHUB_WORKSPACE/host-kernel/rocky/configs/rust-minimal.config" \\',
+        '"$GITHUB_WORKSPACE/host-kernel/rocky/configs/native-rust-evidence.config"',
+        'make -C "$NATIVE_SOURCE_ROOT" O="$BUILD_DIR" ARCH=x86_64 LLVM=1 olddefconfig',
+        'cp "$BUILD_DIR/.config" "$BUILD_DIR/resolved-first.config"',
+        'make -C "$NATIVE_SOURCE_ROOT" O="$BUILD_DIR" ARCH=x86_64 LLVM=1 olddefconfig',
+        'cmp "$BUILD_DIR/resolved-first.config" "$BUILD_DIR/.config"',
+        'grep -qx \'CONFIG_WERROR=y\' "$BUILD_DIR/.config"',
+        'grep -qx \'CONFIG_MODULES=y\' "$BUILD_DIR/.config"',
+        "for symbol in \\",
+        "CONFIG_MCKERNEL_IHK_RUST \\",
+        "CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST \\",
+        "CONFIG_MCKERNEL_MCCTRL_RUST; do",
+        'grep -qx "$symbol=m" "$BUILD_DIR/.config"',
+        "done",
+        'printf \'NATIVE_BUILD_DIR=%s\\n\' "$BUILD_DIR" >> "$GITHUB_ENV"',
+    )
+    if active_commands != expected_resolution_commands:
+        raise EvidenceError("exact build workflow CONFIG_MODULES prerequisite differs")
+
+    compile_header = "      - name: Compile the exact kernel and native Rust modules\n"
+    if text.count(compile_header) != 1:
+        raise EvidenceError("exact build workflow compile step differs")
+    compile_start = text.index(compile_header) + len(compile_header)
+    next_step = re.search(r"(?m)^      - name: .+$", text[compile_start:])
+    if next_step is None:
+        raise EvidenceError("exact build workflow compile step differs")
+    compile_end = compile_start + next_step.start()
+    compile_step = text[compile_start:compile_end]
+    metadata_header = "      - name: Validate built metadata and capture immutable diagnostics"
+    if text[compile_end:].splitlines()[0] != metadata_header:
+        raise EvidenceError("exact build workflow compile step differs")
+    if compile_step.count(run_marker) != 1:
+        raise EvidenceError("exact build workflow compile step differs")
+    compile_preamble, compile_body = compile_step.split(run_marker, 1)
+    if compile_preamble:
+        raise EvidenceError("exact build workflow compile step differs")
+    compile_commands = tuple(
+        line.strip()
+        for line in compile_body.split("\n")
+        if line.strip() and not line.strip().startswith("#")
+    )
+    normalized_compile = re.sub(r"\\\n\s*", " ", "\n".join(compile_commands))
+    collapsed_compile = re.sub(r"\s+", " ", normalized_compile)
     positions: list[int] = []
     for command in required_commands:
-        if collapsed.count(command) != 1:
+        if collapsed_compile.count(command) != 1:
             raise EvidenceError("exact build workflow command scope differs")
-        positions.append(collapsed.index(command))
+        positions.append(collapsed_compile.index(command))
     if positions != sorted(positions):
         raise EvidenceError("exact build workflow commands are out of order")
-
-    for line in normalized.splitlines():
+    for line in normalized_compile.splitlines():
         if 'make -C "$NATIVE_SOURCE_ROOT"' not in line:
             continue
         tokens = line.split()
         if "modules" in tokens or any(token.startswith("M=") for token in tokens):
             raise EvidenceError("exact build workflow invokes a broad module build")
-
-    compile_match = re.search(
-        r"(?ms)^      - name: Compile the exact kernel and native Rust modules\n"
-        r"(?P<body>.*?)^      - name: Validate built metadata",
-        text,
-    )
-    if compile_match is None:
-        raise EvidenceError("exact build workflow compile step differs")
-    compile_body = compile_match.group("body")
-    for invocation in required_commands:
-        if collapsed.count(invocation + " ||") or collapsed.count(invocation + " &&"):
-            raise EvidenceError("exact build workflow masks a phase failure")
-    if re.search(r"(?m)^\s*set \+e\s*$", compile_body) is None:
-        raise EvidenceError("exact build workflow failure capture differs")
-    if len(re.findall(r"(?m)^\s*set \+e\s*$", compile_body)) != 1:
-        raise EvidenceError("exact build workflow failure capture differs")
-    inner = compile_body.split("          (\n", 1)[1].split(
-        '          ) 2>&1 | tee "$evidence_dir/build.log"', 1
-    )[0]
-    if re.search(r"(?m)^\s*set \+e\s*$", inner):
-        raise EvidenceError("exact build workflow weakens inner fail-fast")
-
-    status_capture = (
-        '          ) 2>&1 | tee "$evidence_dir/build.log"\n'
-        '          pipeline_status=("${PIPESTATUS[@]}")\n'
-        "          set -e\n"
-        '          producer_status="${pipeline_status[0]}"\n'
-        '          tee_status="${pipeline_status[1]}"\n'
-        '          printf \'%s\\n\' "$producer_status" '
-        '> "$evidence_dir/build.exit-code"\n'
-        '          printf \'%s\\n\' "$tee_status" '
-        '> "$evidence_dir/build-log.exit-code"\n'
-        "          if (( producer_status != 0 )); then\n"
-        '            exit "$producer_status"\n'
-        "          fi\n"
-        '          exit "$tee_status"\n'
-    )
-    if text.count(status_capture) != 1:
-        raise EvidenceError("exact build workflow failure capture differs")
-
-    failure_boundaries = (
+    expected_compile_commands = (
+        "set -uo pipefail",
+        'evidence_dir="$RUNNER_TEMP/native-rust-build-evidence"',
+        'mkdir -p "$evidence_dir"',
+        "module_targets=(",
+        "drivers/misc/mckernel/ihk.ko",
+        "drivers/misc/mckernel/ihk-smp-x86_64.ko",
+        "drivers/misc/mckernel/mcctrl.ko",
+        ")",
+        'printf \'%s\\n\' "${module_targets[@]}" > "$evidence_dir/module-targets.txt"',
         ': > "$evidence_dir/build.commands"',
         'printf \'%s\\n\' not-started > "$evidence_dir/build.phase"',
         "run_phase() {",
+        'local phase="$1"',
+        "shift",
+        'local -a command=("$@")',
         'printf \'%s\\n\' "$phase" > "$evidence_dir/build.phase"',
-        '\n            "${command[@]}"\n',
-        "set +e\n          (\n            set -e",
+        'printf \'%q\' "${command[0]}" >> "$evidence_dir/build.commands"',
+        'printf \' %q\' "${command[@]:1}" >> "$evidence_dir/build.commands"',
+        'printf \'\\n\' >> "$evidence_dir/build.commands"',
+        '"${command[@]}"',
+        "}",
+        "set +e",
+        "(",
+        "set -e",
+        "run_phase rustavailable \\",
+        'make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \\',
+        "ARCH=x86_64 LLVM=1 rustavailable",
+        "run_phase bzImage \\",
+        'make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \\',
+        "ARCH=x86_64 LLVM=1 -j2 bzImage",
+        "run_phase native-modules \\",
+        'make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \\',
+        'ARCH=x86_64 LLVM=1 -j2 "${module_targets[@]}"',
         'printf \'%s\\n\' complete > "$evidence_dir/build.phase"',
-        "if: ${{ always() }}",
+        ') 2>&1 | tee "$evidence_dir/build.log"',
+        'pipeline_status=("${PIPESTATUS[@]}")',
+        "set -e",
+        'producer_status="${pipeline_status[0]}"',
+        'tee_status="${pipeline_status[1]}"',
+        'printf \'%s\\n\' "$producer_status" > "$evidence_dir/build.exit-code"',
+        'printf \'%s\\n\' "$tee_status" > "$evidence_dir/build-log.exit-code"',
+        "if (( producer_status != 0 )); then",
+        'exit "$producer_status"',
+        "fi",
+        'exit "$tee_status"',
     )
-    failure_positions: list[int] = []
-    for boundary in failure_boundaries:
-        if text.count(boundary) != 1:
-            raise EvidenceError("exact build workflow failure evidence differs")
-        failure_positions.append(text.index(boundary))
-    if failure_positions != sorted(failure_positions):
-        raise EvidenceError("exact build workflow failure evidence is out of order")
+    if compile_commands != expected_compile_commands:
+        raise EvidenceError("exact build workflow failure capture differs")
 
-    artifact_boundaries = (
-        "find . -type f -name '*.ko' -printf '%P\\n' | LC_ALL=C sort",
-        '> "$EVIDENCE_DIR/built-module-artifacts.txt"',
-        'LC_ALL=C sort "$EVIDENCE_DIR/module-targets.txt"',
-        '> "$EVIDENCE_DIR/module-targets.sorted"',
-        'cmp "$EVIDENCE_DIR/module-targets.sorted" \\\n            "$EVIDENCE_DIR/built-module-artifacts.txt"',
-        'rm "$EVIDENCE_DIR/module-targets.sorted"',
+    metadata_header_line = metadata_header + "\n"
+    if text.count(metadata_header_line) != 1:
+        raise EvidenceError("exact build workflow artifact scope differs")
+    metadata_start = text.index(metadata_header_line) + len(metadata_header_line)
+    next_step = re.search(r"(?m)^      - name: .+$", text[metadata_start:])
+    if next_step is None:
+        raise EvidenceError("exact build workflow artifact scope differs")
+    metadata_end = metadata_start + next_step.start()
+    metadata_step = text[metadata_start:metadata_end]
+    upload_header = "      - name: Upload compiler evidence or first-failure diagnostics"
+    if text[metadata_end:].splitlines()[0] != upload_header:
+        raise EvidenceError("exact build workflow artifact scope differs")
+    if metadata_step.count(run_marker) != 1:
+        raise EvidenceError("exact build workflow artifact scope differs")
+    metadata_preamble, metadata_body = metadata_step.split(run_marker, 1)
+    if metadata_preamble:
+        raise EvidenceError("exact build workflow artifact scope differs")
+    metadata_commands = tuple(
+        line.strip()
+        for line in metadata_body.split("\n")
+        if line.strip() and not line.strip().startswith("#")
     )
-    artifact_positions: list[int] = []
-    for boundary in artifact_boundaries:
-        if text.count(boundary) != 1:
-            raise EvidenceError("exact build workflow artifact scope differs")
-        artifact_positions.append(text.index(boundary))
-    if artifact_positions != sorted(artifact_positions):
-        raise EvidenceError("exact build workflow artifact scope is out of order")
+    expected_metadata_commands = (
+        "set -euo pipefail",
+        'EVIDENCE_DIR="$RUNNER_TEMP/native-rust-build-evidence"',
+        'module_root="$NATIVE_BUILD_DIR/drivers/misc/mckernel"',
+        'ihk="$module_root/ihk.ko"',
+        'smp="$module_root/ihk-smp-x86_64.ko"',
+        'mcctrl="$module_root/mcctrl.ko"',
+        'test -s "$ihk"',
+        'test -s "$smp"',
+        'test -s "$mcctrl"',
+        "(",
+        'cd "$NATIVE_BUILD_DIR"',
+        "find . -type f -name '*.ko' -printf '%P\\n' | LC_ALL=C sort",
+        ') > "$EVIDENCE_DIR/built-module-artifacts.txt"',
+        'LC_ALL=C sort "$EVIDENCE_DIR/module-targets.txt" \\',
+        '> "$EVIDENCE_DIR/module-targets.sorted"',
+        'cmp "$EVIDENCE_DIR/module-targets.sorted" \\',
+        '"$EVIDENCE_DIR/built-module-artifacts.txt"',
+        'rm "$EVIDENCE_DIR/module-targets.sorted"',
+        'git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD \\',
+        '> "$EVIDENCE_DIR/commit.sha"',
+        'for module in "$ihk" "$smp" "$mcctrl"; do',
+        'name="$(basename "$module")"',
+        'cp "$module" "$EVIDENCE_DIR/$name"',
+        'modinfo "$module" > "$EVIDENCE_DIR/$name.modinfo"',
+        'readelf -p .modinfo "$module" > "$EVIDENCE_DIR/$name.modinfo-section"',
+        'readelf -SWr "$module" > "$EVIDENCE_DIR/$name.readelf"',
+        'nm -A -a "$module" > "$EVIDENCE_DIR/$name.nm"',
+        "done",
+        "(",
+        'cd "$EVIDENCE_DIR"',
+        'find . -maxdepth 1 -type f \\',
+        "! -name PRECHECK_SHA256SUMS ! -name SHA256SUMS -printf '%P\\0' \\",
+        "| sort -z | xargs -0 sha256sum -- > PRECHECK_SHA256SUMS",
+        "sha256sum --check --strict PRECHECK_SHA256SUMS",
+        ")",
+        'python3 scripts/ihk_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" --module "$ihk"',
+        'python3 scripts/ihk_os_registry_check.py --repo "$GITHUB_WORKSPACE"',
+        'test "$(rustc --version | awk \'{print $2}\')" = "1.92.0"',
+        'MCKERNEL_RUSTC_1_92="$(command -v rustc)" \\',
+        "python3 -m unittest -v scripts.tests.test_ihk_os_registry_check",
+        'python3 scripts/ihk_ioctl_dispatch_check.py --repo "$GITHUB_WORKSPACE"',
+        'MCKERNEL_RUSTC_1_92="$(command -v rustc)" \\',
+        "python3 -m unittest -v scripts.tests.test_ihk_ioctl_dispatch_check",
+        'python3 scripts/ihk_smp_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" --module "$smp"',
+        'python3 scripts/mcctrl_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" --module "$mcctrl"',
+        'cp "$NATIVE_BUILD_DIR/.config" "$EVIDENCE_DIR/resolved.config"',
+        'cp "$NATIVE_BUILD_DIR/arch/x86/boot/bzImage" "$EVIDENCE_DIR/bzImage"',
+        'cp "$NATIVE_SOURCE_ROOT/drivers/misc/mckernel/stage-lock.json" "$EVIDENCE_DIR/stage-lock.json"',
+        'make -s -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 \\',
+        'kernelrelease > "$EVIDENCE_DIR/kernel.release"',
+        'find "$module_root" -maxdepth 1 -type f -name \'.*.cmd\' -exec cp \'{}\' "$EVIDENCE_DIR/" \';\'',
+        "(",
+        'cd "$EVIDENCE_DIR"',
+        "find . -maxdepth 1 -type f ! -name SHA256SUMS -printf '%P\\0' \\",
+        "| sort -z | xargs -0 sha256sum -- > SHA256SUMS",
+        "sha256sum --check --strict SHA256SUMS",
+        ")",
+    )
+    if metadata_commands != expected_metadata_commands:
+        raise EvidenceError("exact build workflow artifact scope differs")
+
+    upload_header_line = upload_header + "\n"
+    if text.count(upload_header_line) != 1:
+        raise EvidenceError("exact build workflow upload scope differs")
+    upload_start = text.index(upload_header_line) + len(upload_header_line)
+    expected_upload = (
+        "        if: ${{ always() }}\n"
+        "        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2\n"
+        "        with:\n"
+        "          name: native-rust-exact-build-${{ github.run_id }}-${{ github.run_attempt }}\n"
+        "          path: ${{ runner.temp }}/native-rust-build-evidence/\n"
+        "          if-no-files-found: error\n"
+        "          retention-days: 30\n"
+        "          compression-level: 0\n"
+        "          include-hidden-files: true\n"
+    )
+    if text[upload_start:] != expected_upload:
+        raise EvidenceError("exact build workflow upload scope differs")
 
 
 def _regular_evidence_file(path: Path, label: str, nonempty: bool = True) -> Path:
@@ -489,13 +669,12 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
         _repo_file(repo, inputs["config_fragment"], "runtime config fragment"),
         "runtime config fragment",
     )
-    for symbol in (
-        "CONFIG_MCKERNEL_IHK_RUST=m",
-        "CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST=m",
-        "CONFIG_MCKERNEL_MCCTRL_RUST=m",
-    ):
-        if config.count(symbol) != 1:
-            raise EvidenceError("runtime config lacks exact modular selection: {0}".format(symbol))
+    try:
+        validate_native_rust_evidence_fragment(config)
+    except KconfigPolicyError as error:
+        raise EvidenceError(
+            "runtime config fragment policy violation: {0}".format(error)
+        ) from error
     for fragment in ("workflow_call:", '"$EVIDENCE_DIR/bzImage"'):
         if fragment not in build_workflow:
             raise EvidenceError("exact build workflow is not a reusable boot artifact producer")

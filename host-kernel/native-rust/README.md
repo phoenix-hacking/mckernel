@@ -109,7 +109,18 @@ different module graph.
 
 The sole production definitions are `host-kernel/kbuild/Kconfig` and
 `host-kernel/kbuild/Kbuild.in`, bound by
-`host-kernel/kbuild/stage-manifest.json`. Check this invariant with:
+`host-kernel/kbuild/stage-manifest.json`.
+
+The Kconfig authority is parsed as a closed grammar by
+`scripts/native_rust_kconfig_policy.py`. Its menu requires `RUST`, `X86_64`,
+and `MODULES && m` in that order; the provider has no symbol-level dependency,
+and each consumer depends only on the provider. Hidden control flow, extra
+symbols, implicit defaults, and alternate build-control sources fail closed.
+The compiler-evidence fragment explicitly enables `CONFIG_MODULES=y` before
+selecting all three native modules as `m`; this remains compiler evidence only
+and does not make the production stage or any gate claim ready.
+
+Check these constraints with:
 
 ```sh
 python3 scripts/native_rust_build_surface_audit.py

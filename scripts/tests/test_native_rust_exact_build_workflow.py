@@ -11,6 +11,7 @@ from pathlib import Path
 import yaml
 
 from scripts import native_rust_runtime_evidence as runtime_evidence
+from scripts import native_rust_kconfig_policy as kconfig_policy
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -36,6 +37,22 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         self.assertTrue(uses)
         for value in uses:
             self.assertRegex(value, r"^[^@]+@[0-9a-f]{40}$")
+
+    def test_exact_build_job_cannot_skip_or_tolerate_failure(self):
+        anchor = "  exact-build:\n"
+        mutations = (
+            self.workflow.replace(anchor, anchor + "    if: ${{ false }}\n", 1),
+            self.workflow.replace(anchor, anchor + '    "if": ${{ false }}\n', 1),
+            self.workflow.replace(anchor, anchor + "    continue-on-error: true\n", 1),
+            self.workflow.replace(anchor, anchor + "    strategy:\n      fail-fast: false\n", 1),
+            self.workflow.replace("    timeout-minutes: 330\n", "    timeout-minutes: 1\n", 1),
+        )
+        for index, mutation in enumerate(mutations):
+            with self.subTest(index=index):
+                with self.assertRaisesRegex(
+                    runtime_evidence.EvidenceError, "job scope differs"
+                ):
+                    runtime_evidence._validate_exact_build_workflow(mutation)
 
     def test_every_shell_block_parses(self):
         workflow = yaml.safe_load(self.workflow)
@@ -222,7 +239,119 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
                 ):
                     runtime_evidence._validate_exact_build_workflow(mutation)
 
+    def test_compile_commands_must_be_active_and_compile_step_scoped(self):
+        blocks = (
+            (
+                '            run_phase rustavailable \\\n'
+                '              make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \\\n'
+                "                ARCH=x86_64 LLVM=1 rustavailable\n"
+            ),
+            (
+                '            run_phase bzImage \\\n'
+                '              make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \\\n'
+                "                ARCH=x86_64 LLVM=1 -j2 bzImage\n"
+            ),
+            (
+                '            run_phase native-modules \\\n'
+                '              make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \\\n'
+                '                ARCH=x86_64 LLVM=1 -j2 "${module_targets[@]}"\n'
+            ),
+        )
+        commented = self.workflow
+        decoy = self.workflow
+        decoy_body = ""
+        for block in blocks:
+            self.assertEqual(1, commented.count(block))
+            collapsed = " ".join(
+                line.strip().rstrip("\\").strip() for line in block.splitlines()
+            )
+            commented = commented.replace(block, "            # " + collapsed + "\n", 1)
+            decoy = decoy.replace(block, "", 1)
+            decoy_body += block
+        decoy = decoy.replace(
+            "      - name: Validate built metadata and capture immutable diagnostics\n",
+            "      - name: Decoy build commands\n"
+            "        run: |\n"
+            + decoy_body
+            + "\n      - name: Validate built metadata and capture immutable diagnostics\n",
+            1,
+        )
+        conditional_runner = self.workflow.replace(
+            '            "${command[@]}"\n',
+            "            if false; then\n"
+            '              "${command[@]}"\n'
+            "            fi\n",
+            1,
+        )
+        for label, mutation in (
+            ("commented", commented),
+            ("decoy-step", decoy),
+            ("conditional-runner", conditional_runner),
+        ):
+            with self.subTest(label=label):
+                with self.assertRaisesRegex(
+                    runtime_evidence.EvidenceError,
+                    "command scope|compile step|failure capture",
+                ):
+                    runtime_evidence._validate_exact_build_workflow(mutation)
+
+    def test_artifact_scope_must_be_active_and_metadata_step_scoped(self):
+        artifact_block = (
+            "          (\n"
+            '            cd "$NATIVE_BUILD_DIR"\n'
+            "            find . -type f -name '*.ko' -printf '%P\\n' | LC_ALL=C sort\n"
+            '          ) > "$EVIDENCE_DIR/built-module-artifacts.txt"\n'
+            '          LC_ALL=C sort "$EVIDENCE_DIR/module-targets.txt" \\\n'
+            '            > "$EVIDENCE_DIR/module-targets.sorted"\n'
+            '          cmp "$EVIDENCE_DIR/module-targets.sorted" \\\n'
+            '            "$EVIDENCE_DIR/built-module-artifacts.txt"\n'
+            '          rm "$EVIDENCE_DIR/module-targets.sorted"\n'
+        )
+        self.assertEqual(1, self.workflow.count(artifact_block))
+        conditional = self.workflow.replace(
+            artifact_block,
+            "          if false; then\n" + artifact_block + "          fi\n",
+            1,
+        )
+        commented_block = "".join(
+            "          # " + line.lstrip() if line.strip() else line
+            for line in artifact_block.splitlines(True)
+        )
+        commented = self.workflow.replace(artifact_block, commented_block, 1)
+        decoy = self.workflow.replace(artifact_block, "", 1).replace(
+            "      - name: Upload compiler evidence or first-failure diagnostics\n",
+            "      - name: Decoy artifact check\n"
+            "        run: |\n"
+            + artifact_block
+            + "\n      - name: Upload compiler evidence or first-failure diagnostics\n",
+            1,
+        )
+        for label, mutation in (
+            ("conditional", conditional),
+            ("commented", commented),
+            ("decoy-step", decoy),
+        ):
+            with self.subTest(label=label):
+                with self.assertRaisesRegex(
+                    runtime_evidence.EvidenceError, "artifact scope differs"
+                ):
+                    runtime_evidence._validate_exact_build_workflow(mutation)
+
+    def test_failure_upload_step_condition_is_exact(self):
+        exact = "        if: ${{ always() }}\n"
+        for replacement in ("", "        # if: ${{ always() }}\n", "        if: ${{ success() }}\n"):
+            with self.subTest(replacement=replacement.strip() or "removed"):
+                mutation = self.workflow.replace(exact, replacement, 1)
+                with self.assertRaisesRegex(
+                    runtime_evidence.EvidenceError, "upload scope differs"
+                ):
+                    runtime_evidence._validate_exact_build_workflow(mutation)
+
     def test_exact_three_module_config_and_artifacts_are_required(self):
+        assignments = kconfig_policy.validate_native_rust_evidence_fragment(
+            CONFIG.read_text(encoding="utf-8")
+        )
+        self.assertEqual(kconfig_policy.EVIDENCE_FRAGMENT_ASSIGNMENTS, assignments)
         for symbol in (
             "CONFIG_MCKERNEL_IHK_RUST",
             "CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST",
@@ -286,6 +415,78 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         )
         self.assertLess(second_resolution, werror)
         self.assertLess(werror, compile_step)
+
+    def test_final_config_requires_modules_after_stable_resolution(self):
+        second_resolution = self.workflow.index(
+            'make -C "$NATIVE_SOURCE_ROOT" O="$BUILD_DIR" '
+            "ARCH=x86_64 LLVM=1 olddefconfig",
+            self.workflow.index("resolved-first.config"),
+        )
+        modules = self.workflow.index(
+            'grep -qx \'CONFIG_MODULES=y\' "$BUILD_DIR/.config"',
+            second_resolution,
+        )
+        compile_step = self.workflow.index(
+            "Compile the exact kernel and native Rust modules", modules
+        )
+        self.assertLess(second_resolution, modules)
+        self.assertLess(modules, compile_step)
+
+    def test_resolved_modules_check_cannot_be_removed_or_weakened(self):
+        exact = 'grep -qx \'CONFIG_MODULES=y\' "$BUILD_DIR/.config"'
+        for replacement in ("", 'grep -q \'CONFIG_MODULES=y\' "$BUILD_DIR/.config"',
+                            'grep -qx \'CONFIG_MODULES=m\' "$BUILD_DIR/.config"'):
+            with self.subTest(replacement=replacement or "removed"):
+                mutation = self.workflow.replace(exact, replacement, 1)
+                with self.assertRaisesRegex(
+                    runtime_evidence.EvidenceError, "CONFIG_MODULES prerequisite differs"
+                ):
+                    runtime_evidence._validate_exact_build_workflow(mutation)
+
+    def test_resolved_modules_check_rejects_comment_and_decoy_step_bypasses(self):
+        exact_line = '          grep -qx \'CONFIG_MODULES=y\' "$BUILD_DIR/.config"\n'
+        commented = self.workflow.replace(exact_line, "          # " + exact_line.lstrip(), 1)
+        decoy = self.workflow.replace(exact_line, "", 1).replace(
+            "      - name: Compile the exact kernel and native Rust modules\n",
+            "      - name: Decoy modules check\n"
+            "        run: |\n"
+            + exact_line
+            + "\n      - name: Compile the exact kernel and native Rust modules\n",
+            1,
+        )
+        conditional = self.workflow.replace(
+            exact_line,
+            "          if false; then\n" + exact_line + "          fi\n",
+            1,
+        )
+        skipped_step = self.workflow.replace(
+            "      - name: Resolve the evidence-only module configuration twice\n"
+            "        env:\n",
+            "      - name: Resolve the evidence-only module configuration twice\n"
+            "        if: ${{ false }}\n"
+            "        env:\n",
+            1,
+        )
+        tolerated_failure = self.workflow.replace(
+            "      - name: Resolve the evidence-only module configuration twice\n"
+            "        env:\n",
+            "      - name: Resolve the evidence-only module configuration twice\n"
+            "        continue-on-error: true\n"
+            "        env:\n",
+            1,
+        )
+        for label, mutation in (
+            ("commented", commented),
+            ("decoy", decoy),
+            ("conditional", conditional),
+            ("skipped-step", skipped_step),
+            ("tolerated-failure", tolerated_failure),
+        ):
+            with self.subTest(label=label):
+                with self.assertRaisesRegex(
+                    runtime_evidence.EvidenceError, "CONFIG_MODULES prerequisite differs"
+                ):
+                    runtime_evidence._validate_exact_build_workflow(mutation)
 
     def test_kernel_compatibility_series_precedes_project_staging(self):
         self.assertIn("--fuzz=0 --no-backup-if-mismatch", self.workflow)

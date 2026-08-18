@@ -17,6 +17,19 @@ import sys
 import tarfile
 import tempfile
 
+if __package__:
+    from .native_rust_kconfig_policy import (
+        KconfigPolicyError,
+        validate_native_rust_kbuild,
+        validate_native_rust_kconfig,
+    )
+else:
+    from native_rust_kconfig_policy import (
+        KconfigPolicyError,
+        validate_native_rust_kbuild,
+        validate_native_rust_kconfig,
+    )
+
 
 SCHEMA_VERSION = 2
 PARENT_SCHEMA_VERSION = 1
@@ -62,7 +75,7 @@ EXPECTED_INPUTS = (
         "destination": "Kconfig",
         "kind": "kconfig",
         "repository_path": "host-kernel/kbuild/Kconfig",
-        "sha256": "69f14cc7d347d6da3d6cbe0199e35fab72e40f6af3683df1c337efd449721296",
+        "sha256": "48c6ba25186281a3a4fe4690c7520b02d8bbe43965e78d3301d2613477c3874f",
     },
     {
         "destination": "abi/x86_64.rs",
@@ -507,47 +520,17 @@ def verify_parent_source_archive(plan, archive_path):
 
 
 def _validate_kbuild(text):
-    expected = []
-    for module in EXPECTED_MODULES:
-        object_name = module["output"][:-3] + ".o"
-        expected.append("obj-$({0}) += {1}".format(module["kconfig_symbol"], object_name))
-        if "-" in object_name:
-            expected.append("{0}-y := {1}.o".format(object_name[:-2], module["crate"]))
-    substantive = [
-        line.strip()
-        for line in text.splitlines()
-        if line.strip() and not line.lstrip().startswith("#")
-    ]
-    if substantive != expected:
-        raise ValidationError("Kbuild template must contain only the three native Rust module objects")
-    lowered = text.lower()
-    for forbidden in ("rustc", "prebuilt_objects", "$(shell", ".a ", ".c ", ".cc ", ".cpp "):
-        if forbidden in lowered:
-            raise ValidationError("Kbuild template contains forbidden construct: {0}".format(forbidden))
+    try:
+        return validate_native_rust_kbuild(text)
+    except KconfigPolicyError as error:
+        raise ValidationError("Kbuild policy violation: {0}".format(error))
 
 
 def _validate_kconfig(text):
-    symbols = re.findall(r"^config ([A-Z0-9_]+)$", text, re.MULTILINE)
-    expected = [module["kconfig_symbol"][len("CONFIG_"):] for module in EXPECTED_MODULES]
-    if symbols != expected:
-        raise ValidationError("Kconfig must define exactly the three locked native Rust symbols")
-    if "\tdepends on RUST\n" not in text or "\tdepends on X86_64\n" not in text:
-        raise ValidationError("Kconfig must require Rust and x86_64")
-    blocks = {}
-    for index, symbol in enumerate(expected):
-        tail = text.split("config {0}\n".format(symbol), 1)[1]
-        blocks[symbol] = tail.split("\nconfig ", 1)[0] if index + 1 < len(expected) else tail.split("\nendmenu", 1)[0]
-    for symbol, block in blocks.items():
-        if not re.search(r'^\ttristate "[^"\n]+"$', block, re.MULTILINE):
-            raise ValidationError("{0} must be a tristate".format(symbol))
-        dependencies = re.findall(r"^\tdepends on (.+)$", block, re.MULTILINE)
-        expected_dependencies = [] if symbol == expected[0] else ["MCKERNEL_IHK_RUST"]
-        if dependencies != expected_dependencies:
-            raise ValidationError("{0} dependency set differs from the locked graph".format(symbol))
-        if re.search(r"^\s*(default|def_bool|def_tristate|select|imply|visible if|range|option)\b", block, re.MULTILINE):
-            raise ValidationError("{0} contains a forbidden implicit configuration rule".format(symbol))
-    if re.search(r"^\s*(source|rsource|osource|orsource|select|imply)\b", text, re.MULTILINE):
-        raise ValidationError("Kconfig staging fragment may not include hidden source/select/imply edges")
+    try:
+        return validate_native_rust_kconfig(text)
+    except KconfigPolicyError as error:
+        raise ValidationError("Kconfig policy violation: {0}".format(error))
 
 
 def _validate_input(repo_root, item, index):

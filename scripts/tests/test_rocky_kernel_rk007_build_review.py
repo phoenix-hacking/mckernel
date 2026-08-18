@@ -257,6 +257,45 @@ class Rk007BuildReviewTests(unittest.TestCase):
             with self.assertRaisesRegex(reviewer.BuildReviewError, "manifest digest"):
                 reviewer.load_review(path)
 
+    def test_historical_projection_rejects_coherently_rehashed_retargeting(self):
+        mutations = (
+            (("source_artifact", "artifact", "sha256"), "0" * 64),
+            (("runtime_candidate", "committed_inputs", 0, "sha256"), "0" * 64),
+            (("verified_facts", "stage_lock", "manifest_sha256"), "0" * 64),
+            (("inner_closure", "final_manifest_sha256"), "0" * 64),
+        )
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "review.json"
+            for target, replacement in mutations:
+                with self.subTest(target=target):
+                    mutated = copy.deepcopy(self.review)
+                    set_path(mutated, target, replacement)
+                    data = reviewer.canonical_json_bytes(mutated)
+                    path.write_bytes(data)
+                    coherent_digest = hashlib.sha256(data).hexdigest()
+                    with mock.patch.object(
+                        reviewer, "REVIEW_SHA256", coherent_digest
+                    ):
+                        with self.assertRaisesRegex(
+                            reviewer.BuildReviewError,
+                            "historical review projection digest",
+                        ):
+                            reviewer.load_review(path)
+
+    def test_historical_projection_excludes_only_the_checked_port_policy(self):
+        mutated = copy.deepcopy(self.review)
+        mutated["current_repository_input_policy"]["current_override_count"] = 4
+        data = reviewer.canonical_json_bytes(mutated)
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "review.json"
+            path.write_bytes(data)
+            with mock.patch.object(
+                reviewer, "REVIEW_SHA256", hashlib.sha256(data).hexdigest()
+            ):
+                loaded = reviewer.load_review(path)
+        with self.assertRaisesRegex(reviewer.BuildReviewError, "current override count"):
+            reviewer.validate_review_object(loaded)
+
     def test_duplicate_json_keys_are_rejected(self):
         with self.assertRaisesRegex(reviewer.BuildReviewError, "duplicate JSON key"):
             reviewer.read_json_bytes(b'{"a":1,"a":2}\n', "duplicate")
@@ -545,7 +584,18 @@ class Rk007BuildReviewTests(unittest.TestCase):
     def test_checked_policy_rejects_unreviewed_port_records(self):
         base = copy.deepcopy(self.review)
         policy = base["current_repository_input_policy"]
-        self.assertEqual(policy["current_overrides"], [])
+        self.assertEqual(policy["current_override_count"], 5)
+        self.assertEqual(policy["current_overrides"], reviewer.EXPECTED_CURRENT_OVERRIDES)
+        self.assertEqual(
+            [row["path"] for row in policy["current_overrides"]],
+            [
+                ".github/workflows/native-rust-host-modules-exact-build.yml",
+                "host-kernel/kbuild/Kconfig",
+                "host-kernel/kbuild/stage-manifest.json",
+                "host-kernel/rocky/configs/native-rust-evidence.config",
+                "scripts/rocky_rust_staging.py",
+            ],
+        )
         self.assertTrue(policy["historical_runtime_inputs_immutable"])
         mutations = []
         added = copy.deepcopy(base)

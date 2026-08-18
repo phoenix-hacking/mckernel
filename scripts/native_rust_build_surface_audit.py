@@ -11,6 +11,19 @@ import re
 import stat
 import sys
 
+if __package__:
+    from .native_rust_kconfig_policy import (
+        KconfigPolicyError,
+        validate_native_rust_kbuild,
+        validate_native_rust_kconfig,
+    )
+else:
+    from native_rust_kconfig_policy import (
+        KconfigPolicyError,
+        validate_native_rust_kbuild,
+        validate_native_rust_kconfig,
+    )
+
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MANIFEST = "host-kernel/kbuild/stage-manifest.json"
@@ -167,24 +180,26 @@ def _check_manifest(repo):
 
 def _check_kconfig(path):
     text = _read_text(path, "Kconfig authority")
-    symbols = tuple(re.findall(r"^config ([A-Z0-9_]+)$", text, re.MULTILINE))
-    if symbols != EXPECTED_SYMBOLS:
-        raise AuditError("authoritative Kconfig symbol graph changed or uses a legacy alias")
     if "MCKERNEL_RUST_" in text:
         raise AuditError("authoritative Kconfig contains retired MCKERNEL_RUST_* aliases")
+    try:
+        policy = validate_native_rust_kconfig(text)
+    except KconfigPolicyError as error:
+        raise AuditError("authoritative Kconfig policy violation: {0}".format(error))
+    if policy["symbols"] != EXPECTED_SYMBOLS:
+        raise AuditError("authoritative Kconfig symbol graph changed or uses a legacy alias")
 
 
 def _check_kbuild(path):
     text = _read_text(path, "Kbuild authority")
-    substantive = tuple(
-        line.strip()
-        for line in text.splitlines()
-        if line.strip() and not line.lstrip().startswith("#")
-    )
-    if substantive != EXPECTED_KBUILD_LINES:
-        raise AuditError("authoritative Kbuild module graph changed or uses a legacy alias")
     if "CONFIG_MCKERNEL_RUST_" in text:
         raise AuditError("authoritative Kbuild contains retired CONFIG_MCKERNEL_RUST_* aliases")
+    try:
+        mappings = validate_native_rust_kbuild(text)
+    except KconfigPolicyError as error:
+        raise AuditError("authoritative Kbuild policy violation: {0}".format(error))
+    if mappings != EXPECTED_KBUILD_LINES:
+        raise AuditError("authoritative Kbuild module graph changed or uses a legacy alias")
 
 
 def audit(repo):

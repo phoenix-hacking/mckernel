@@ -204,6 +204,67 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         with self.assertRaisesRegex(evidence.EvidenceError, "OpenSSL CLI closure"):
             evidence.validate_contract(repo)
 
+    def test_runtime_config_fragment_mutations_fail_closed(self) -> None:
+        relative = "host-kernel/rocky/configs/native-rust-evidence.config"
+        mutations = (
+            ("CONFIG_MODULES=y\n", ""),
+            ("CONFIG_MODULES=y", "CONFIG_MODULES=m"),
+            ("CONFIG_MODULES=y", "# CONFIG_MODULES=y"),
+            ("CONFIG_MCKERNEL_IHK_RUST=m", "CONFIG_MCKERNEL_IHK_RUST=y"),
+            (
+                "CONFIG_MODULES=y\nCONFIG_MCKERNEL_IHK_RUST=m\n",
+                "CONFIG_MCKERNEL_IHK_RUST=m\nCONFIG_MODULES=y\n",
+            ),
+            (
+                "CONFIG_MCKERNEL_MCCTRL_RUST=m\n",
+                "CONFIG_MCKERNEL_MCCTRL_RUST=m\nCONFIG_MCKERNEL_EXTRA_RUST=m\n",
+            ),
+            (
+                "CONFIG_MCKERNEL_IHK_RUST=m\n",
+                "CONFIG_MCKERNEL_IHK_RUST=m\nCONFIG_MCKERNEL_IHK_RUST=m\n",
+            ),
+            (
+                "CONFIG_MODULES=y\n",
+                "CONFIG_MODULES=y\n# CONFIG_MODULES is not set\n",
+            ),
+        )
+        for old, new in mutations:
+            with self.subTest(new=new):
+                repo = self.copy_contract_repository()
+                self.mutate_text(repo, relative, old, new)
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError, "runtime config fragment policy violation"
+                ):
+                    evidence.validate_contract(repo)
+
+    def test_runtime_config_comment_substrings_cannot_satisfy_assignments(self) -> None:
+        repo = self.copy_contract_repository()
+        relative = "host-kernel/rocky/configs/native-rust-evidence.config"
+        self.mutate_text(
+            repo,
+            relative,
+            "CONFIG_MODULES=y",
+            "# runtime note contains CONFIG_MODULES=y",
+        )
+        with self.assertRaisesRegex(
+            evidence.EvidenceError, "runtime config fragment policy violation"
+        ):
+            evidence.validate_contract(repo)
+
+    def test_workflow_must_check_resolved_modules_prerequisite(self) -> None:
+        repo = self.copy_contract_repository()
+        workflow = ".github/workflows/native-rust-host-modules-exact-build.yml"
+        self.mutate_text(
+            repo,
+            workflow,
+            '          grep -qx \'CONFIG_MODULES=y\' "$BUILD_DIR/.config"\n',
+            "",
+        )
+        with self.assertRaisesRegex(
+            evidence.EvidenceError, "CONFIG_MODULES prerequisite differs"
+        ):
+            evidence.validate_contract(repo)
+
     def test_required_artifact_removal_is_rejected(self) -> None:
         repo = self.copy_contract_repository()
         path = repo / evidence.DEFAULT_CONTRACT

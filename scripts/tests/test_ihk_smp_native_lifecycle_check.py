@@ -261,7 +261,25 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
             "\tdepends on MCKERNEL_IHK_RUST\n",
             "",
         )
-        with self.assertRaisesRegex(lifecycle.ValidationError, "provider dependency"):
+        with self.assertRaisesRegex(lifecycle.ValidationError, "shared native Rust Kconfig policy"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_shared_kconfig_menu_modules_dependency_is_required(self) -> None:
+        self.mutate_text(
+            self.contract["kconfig"]["path"],
+            "\tdepends on MODULES && m\n",
+            "",
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "shared native Rust Kconfig policy"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_shared_kconfig_hidden_edge_is_rejected(self) -> None:
+        self.mutate_text(
+            self.contract["kconfig"]["path"],
+            "\nconfig MCKERNEL_IHK_RUST\n",
+            "\nchoice\n\nconfig MCKERNEL_IHK_RUST\n",
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "shared native Rust Kconfig policy"):
             lifecycle.validate_repository(self.repo)
 
     def test_kbuild_output_name_drift_is_rejected(self) -> None:
@@ -270,7 +288,17 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
             "ihk-smp-x86_64.o",
             "ihk_smp_x86_64.o",
         )
-        with self.assertRaisesRegex(lifecycle.ValidationError, "mapping"):
+        with self.assertRaisesRegex(lifecycle.ValidationError, "shared native Rust Kbuild policy"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_shared_kbuild_continued_comment_is_rejected(self) -> None:
+        self.mutate_text(
+            self.contract["kbuild"]["path"],
+            "obj-$(CONFIG_MCKERNEL_IHK_RUST) += ihk.o\n",
+            "# suppress provider mapping \\\n"
+            "obj-$(CONFIG_MCKERNEL_IHK_RUST) += ihk.o\n",
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "shared native Rust Kbuild policy"):
             lifecycle.validate_repository(self.repo)
 
     def test_stage_manifest_provider_dependency_drift_is_rejected(self) -> None:

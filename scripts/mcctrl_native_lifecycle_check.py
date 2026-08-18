@@ -18,6 +18,19 @@ import subprocess
 import sys
 from typing import Any
 
+if __package__:
+    from .native_rust_kconfig_policy import (
+        KconfigPolicyError,
+        validate_native_rust_kbuild,
+        validate_native_rust_kconfig,
+    )
+else:
+    from native_rust_kconfig_policy import (
+        KconfigPolicyError,
+        validate_native_rust_kbuild,
+        validate_native_rust_kconfig,
+    )
+
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_CONTRACT = Path("host-kernel/native-rust/mcctrl-lifecycle-contract-v1.json")
@@ -420,6 +433,10 @@ def _validate_provider_source(text: str, contract: dict[str, Any]) -> None:
 
 
 def _validate_kconfig(text: str, contract: dict[str, Any]) -> None:
+    try:
+        validate_native_rust_kconfig(text)
+    except KconfigPolicyError as error:
+        raise ValidationError(f"shared native Rust Kconfig policy violation: {error}") from error
     symbol = contract["kconfig"]["symbol"]
     matches = list(re.finditer(rf"^config {re.escape(symbol)}$", text, re.MULTILINE))
     if len(matches) != 1:
@@ -436,6 +453,10 @@ def _validate_kconfig(text: str, contract: dict[str, Any]) -> None:
 
 
 def _validate_kbuild(text: str, contract: dict[str, Any]) -> None:
+    try:
+        validate_native_rust_kbuild(text)
+    except KconfigPolicyError as error:
+        raise ValidationError(f"shared native Rust Kbuild policy violation: {error}") from error
     expected = (
         f"obj-$({contract['kbuild']['config_symbol']}) += "
         f"{contract['kbuild']['module_object']}"

@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """Verify one bounded, non-crediting RK-007 exact-build artifact review.
 
-The review is historical and exact-head-only.  It closes the bytes and the
-captured Kbuild module-link surface of one GitHub Actions artifact.  It does
-not prove durable retention, a production build, module loading, hardware
-coverage, runtime behavior, or RK-007/tracker credit.
+The review is historical and exact-runtime-head.  Descendant repository ports
+must enumerate exact changed current inputs without retargeting the reviewed
+bytes.  The review closes the captured Kbuild module-link surface of one
+GitHub Actions artifact; it does not prove durable retention, a production
+build, module loading, hardware coverage, runtime behavior, or RK-007/tracker
+credit.
 """
 
 from __future__ import print_function
@@ -28,7 +30,10 @@ REVIEW_DIRECTORY = Path("host-kernel/rocky/evidence")
 REVIEW_GLOB = "rk007-native-build-review-*-v1.json"
 SCHEMA_VERSION = 1
 REVIEW_ID = "rk-007-native-rust-exact-build-review-bc60eed5-v1"
-REVIEW_SHA256 = "ee92fa210843fc655a8893f881f81e632796a9de449a1c3e525df9fa9c70511c"
+REVIEW_SHA256 = "76a7478b2958fb19acac445fb9f5d73c9c0560452ad2db173a1dffc953085c9b"
+EXPECTED_HISTORICAL_PROJECTION_SHA256 = (
+    "ead3785b11e5ec04840978e09c972050fb9ee5ea6d946e5f0efba2c58a11f61d"
+)
 RUNTIME_HEAD_SHA = "bc60eed563527ad72761e0ad8209a9b5f9242fb3"
 RUNTIME_TREE_SHA = "9f26e59299544d4aeee0503c10c13e0915885b4a"
 GITHUB_REPOSITORY = "phoenix-hacking/mckernel"
@@ -123,6 +128,11 @@ EXPECTED_REMAINING_PREREQUISITES = [
         "bounded historical review cannot award it."
     ),
 ]
+EXPECTED_REVIEW_KEYS = {
+    "caveats", "claims", "current_repository_input_policy", "inner_closure",
+    "remaining_prerequisites", "review_id", "review_kind", "runtime_candidate",
+    "schema_version", "source_artifact", "verified_facts", "zip_closure",
+}
 
 EXPECTED_MODULE_TARGETS = [
     "drivers/misc/mckernel/ihk.ko",
@@ -189,9 +199,60 @@ EXPECTED_COMMITTED_INPUTS = [
 
 # This historical review always re-verifies the exact bc60 input objects above.
 # Descendant commits may change a bound input only through an independently
-# reviewed, exact old-to-new record in this closed list.  Keeping the list empty
-# preserves byte equality today while making future repository ports explicit.
-EXPECTED_CURRENT_OVERRIDES = []
+# reviewed, exact old-to-new record in this closed list.  These records describe
+# only the current descendant; every historical runtime record above stays fixed.
+EXPECTED_CURRENT_OVERRIDES = [
+    {
+        "current_git_blob_sha1": "9fd397d51a9d469b68e2a39f912d85447ade3605",
+        "current_sha256": "ffd3c26e2840c02da36829aa38dd93fef8d7604f0b0dc96fb8594315897a9f92",
+        "current_size": 28458,
+        "mode": "100644",
+        "path": ".github/workflows/native-rust-host-modules-exact-build.yml",
+        "runtime_git_blob_sha1": "b35eb64a336adcfc048bb73ff1bb8a7f0e044ab9",
+        "runtime_sha256": "6566255ce3288d31e5a25047a3fe602171d80f868186f1a956b776592491cddf",
+        "runtime_size": 26831,
+    },
+    {
+        "current_git_blob_sha1": "f64e4f539b831815266c7f04413f1cd640aa7abe",
+        "current_sha256": "48c6ba25186281a3a4fe4690c7520b02d8bbe43965e78d3301d2613477c3874f",
+        "current_size": 848,
+        "mode": "100644",
+        "path": "host-kernel/kbuild/Kconfig",
+        "runtime_git_blob_sha1": "3a7f9ca21d2921eb8b5a1e3caa0ca5e5a8116956",
+        "runtime_sha256": "69f14cc7d347d6da3d6cbe0199e35fab72e40f6af3683df1c337efd449721296",
+        "runtime_size": 823,
+    },
+    {
+        "current_git_blob_sha1": "a17f033fed694044a34e37f9f361ba75e37f6e7c",
+        "current_sha256": "e41b6df1dcd0d8007b23a0795de596e5c775e84f10fe02cf08edd5d199cd4b7a",
+        "current_size": 5743,
+        "mode": "100644",
+        "path": "host-kernel/kbuild/stage-manifest.json",
+        "runtime_git_blob_sha1": "8add3295a066294f788b5971f23be98b55407c33",
+        "runtime_sha256": "7c2e2574b5fd1fc921b5e323b472680183d8bb2f7d9d39bdc3ef87208f434689",
+        "runtime_size": 5743,
+    },
+    {
+        "current_git_blob_sha1": "21483d8c8efbf58d1c6a1c3c99c083646be2f401",
+        "current_sha256": "a8a71bc16bb84ab7394ef38879d445b849e823ec5944569d9a815c4398947ca3",
+        "current_size": 285,
+        "mode": "100644",
+        "path": "host-kernel/rocky/configs/native-rust-evidence.config",
+        "runtime_git_blob_sha1": "e2027dd013bca3e6174319585f748036aa435829",
+        "runtime_sha256": "d415bee7fff27207bb27dcf7e57506723ceabd4b483b66c4f800d03263843af4",
+        "runtime_size": 268,
+    },
+    {
+        "current_git_blob_sha1": "529e790c2037caf334517983afd489e16f9882cf",
+        "current_sha256": "47d5c0005ae7e8217b723b2c5f1a1f321f90e7aa4d26000aa44ffbf25e426656",
+        "current_size": 49797,
+        "mode": "100644",
+        "path": "scripts/rocky_rust_staging.py",
+        "runtime_git_blob_sha1": "b4986af5b20b8b4e6d8193f31f338734f25e7297",
+        "runtime_sha256": "59281bfb65924b6ffc563cbad4024849645d5dfab67533fc23b37d0b4895b68b",
+        "runtime_size": 51590,
+    },
+]
 
 EXPECTED_ZIP_PATHS = tuple(sorted([
     ".ihk-smp-x86_64.ko.cmd", ".ihk-smp-x86_64.mod.cmd",
@@ -717,34 +778,25 @@ def discover_review(repo, explicit=None):
 def load_review(path):
     data = read_regular_file_once(path, "review manifest")
     require_exact(sha256_bytes(data), REVIEW_SHA256, "review manifest digest")
-    return read_json_bytes(data, "review manifest", require_canonical=True)
+    review = read_json_bytes(data, "review manifest", require_canonical=True)
+    validate_historical_projection(review)
+    return review
 
 
-def validate_review_object(review):
-    exact_keys(
-        review,
-        {
-            "caveats", "claims", "current_repository_input_policy", "inner_closure",
-            "remaining_prerequisites", "review_id", "review_kind", "runtime_candidate",
-            "schema_version", "source_artifact", "verified_facts", "zip_closure",
-        },
-        "review",
-    )
-    require_exact(review["schema_version"], SCHEMA_VERSION, "schema version")
-    require_exact(review["review_id"], REVIEW_ID, "review id")
+def validate_historical_projection(review):
+    """Lock every historical fact while excluding only the current-port policy."""
+    exact_keys(review, EXPECTED_REVIEW_KEYS, "review")
+    historical_projection = dict(review)
+    del historical_projection["current_repository_input_policy"]
     require_exact(
-        review["review_kind"],
-        "historical-exact-native-rust-build-bounded-pass",
-        "review kind",
-    )
-    require_exact(review["claims"], EXPECTED_CLAIMS, "bounded claims")
-    require_exact(review["caveats"], EXPECTED_CAVEATS, "caveats")
-    require_exact(
-        review["remaining_prerequisites"],
-        EXPECTED_REMAINING_PREREQUISITES,
-        "remaining prerequisites",
+        sha256_bytes(canonical_json_bytes(historical_projection)),
+        EXPECTED_HISTORICAL_PROJECTION_SHA256,
+        "historical review projection digest",
     )
 
+
+def validate_current_repository_input_policy(review):
+    """Validate the closed old-to-new records for the current descendant."""
     policy = exact_keys(
         review["current_repository_input_policy"],
         {
@@ -774,9 +826,7 @@ def validate_review_object(review):
     require_exact(policy["require_head_index_worktree_equality"], True, "input equality")
     require_exact(policy["runtime_identity_claimed"], False, "runtime identity claim")
 
-    committed_by_path = {
-        row["path"]: row for row in EXPECTED_COMMITTED_INPUTS
-    }
+    committed_by_path = {row["path"]: row for row in EXPECTED_COMMITTED_INPUTS}
     if len(committed_by_path) != len(EXPECTED_COMMITTED_INPUTS):
         raise BuildReviewError("committed input paths are not unique")
     override_paths = set()
@@ -827,6 +877,24 @@ def validate_review_object(review):
             and row["current_size"] == row["runtime_size"]
         ):
             raise BuildReviewError("{} does not describe a changed input".format(label))
+
+
+def validate_review_object(review):
+    exact_keys(review, EXPECTED_REVIEW_KEYS, "review")
+    require_exact(review["schema_version"], SCHEMA_VERSION, "schema version")
+    require_exact(review["review_id"], REVIEW_ID, "review id")
+    require_exact(
+        review["review_kind"],
+        "historical-exact-native-rust-build-bounded-pass",
+        "review kind",
+    )
+    require_exact(review["claims"], EXPECTED_CLAIMS, "bounded claims")
+    require_exact(review["caveats"], EXPECTED_CAVEATS, "caveats")
+    require_exact(
+        review["remaining_prerequisites"],
+        EXPECTED_REMAINING_PREREQUISITES,
+        "remaining prerequisites",
+    )
 
     source = exact_keys(
         review["source_artifact"],
@@ -992,6 +1060,7 @@ def validate_review_object(review):
         closure["entry_index_sha256"]
     ) is None:
         raise BuildReviewError("ZIP entry index digest is invalid")
+    validate_current_repository_input_policy(review)
     return review
 
 

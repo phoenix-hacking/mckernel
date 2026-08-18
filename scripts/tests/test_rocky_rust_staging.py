@@ -345,6 +345,17 @@ class RockyRustStagingTests(unittest.TestCase):
         with self.assertRaises(staging.ValidationError):
             self.plan()
 
+    def test_kbuild_continued_comment_cannot_swallow_provider_mapping(self):
+        path = os.path.join(self.repo, "host-kernel", "kbuild", "Kbuild.in")
+        with open(path, "r") as stream:
+            text = stream.read()
+        marker = "obj-$(CONFIG_MCKERNEL_IHK_RUST) += ihk.o\n"
+        with open(path, "w") as stream:
+            stream.write(text.replace(marker, "# suppress provider mapping \\\n" + marker, 1))
+        self.rehash_input(0)
+        with self.assertRaises(staging.ValidationError):
+            self.plan()
+
     def test_kconfig_bool_is_rejected_after_rehash(self):
         self.mutate_kconfig('\ttristate "McKernel IHK core host module (Rust)"', '\tbool "McKernel IHK core host module (Rust)"')
         with self.assertRaises(staging.ValidationError):
@@ -367,6 +378,14 @@ class RockyRustStagingTests(unittest.TestCase):
         self.mutate_kconfig(
             '\ttristate "McKernel IHK core host module (Rust)"',
             '\ttristate "McKernel IHK core host module (Rust)"\n\tdepends on MODULES',
+        )
+        with self.assertRaises(staging.ValidationError):
+            self.plan()
+
+    def test_kconfig_hidden_if_is_rejected_after_rehash(self):
+        self.mutate_kconfig(
+            "\nconfig MCKERNEL_IHK_RUST\n",
+            "\nif UNREVIEWED\n\nconfig MCKERNEL_IHK_RUST\n",
         )
         with self.assertRaises(staging.ValidationError):
             self.plan()

@@ -187,14 +187,42 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
             '\ttristate "McKernel IHK core host module (Rust)"',
             '\ttristate "McKernel IHK core host module (Rust)"\n\tdepends on MCKERNEL_LEGACY_IHK',
         )
-        with self.assertRaisesRegex(lifecycle.ValidationError, "module dependencies"):
+        with self.assertRaisesRegex(lifecycle.ValidationError, "shared native Rust Kconfig policy"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_shared_kconfig_menu_modules_dependency_is_required(self) -> None:
+        self.mutate_text(
+            self.contract["kconfig"]["path"],
+            "\tdepends on MODULES && m\n",
+            "",
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "shared native Rust Kconfig policy"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_shared_kconfig_hidden_edge_is_rejected(self) -> None:
+        self.mutate_text(
+            self.contract["kconfig"]["path"],
+            "\nconfig MCKERNEL_IHK_RUST\n",
+            "\nif UNREVIEWED\n\nconfig MCKERNEL_IHK_RUST\n",
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "shared native Rust Kconfig policy"):
             lifecycle.validate_repository(self.repo)
 
     def test_composite_ihk_kbuild_inputs_are_rejected(self) -> None:
         kbuild = self.repo / self.contract["kbuild"]["path"]
         with kbuild.open("a", encoding="utf-8") as stream:
             stream.write("ihk-y := legacy_ihk.o\n")
-        with self.assertRaisesRegex(lifecycle.ValidationError, "composite"):
+        with self.assertRaisesRegex(lifecycle.ValidationError, "shared native Rust Kbuild policy"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_shared_kbuild_continued_comment_is_rejected(self) -> None:
+        self.mutate_text(
+            self.contract["kbuild"]["path"],
+            "obj-$(CONFIG_MCKERNEL_IHK_RUST) += ihk.o\n",
+            "# suppress provider mapping \\\n"
+            "obj-$(CONFIG_MCKERNEL_IHK_RUST) += ihk.o\n",
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "shared native Rust Kbuild policy"):
             lifecycle.validate_repository(self.repo)
 
     def test_stage_manifest_dependency_drift_is_rejected(self) -> None:

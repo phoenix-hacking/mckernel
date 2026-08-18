@@ -56,6 +56,7 @@ on:
       - scripts/mcctrl_native_lifecycle_check.py
       - scripts/native_rust_build_surface_audit.py
       - scripts/native_rust_host_audit.py
+      - scripts/native_rust_kconfig_policy.py
       - scripts/native_rust_runtime_evidence.py
       - scripts/native_rust_unsafe_ffi_ledger.py
       - scripts/linux_api_exact_probe.py
@@ -78,7 +79,15 @@ on:
       - scripts/tests/test_ihk_ioctl_dispatch_check.py
       - scripts/tests/test_ihk_page_allocator_check.py
       - scripts/tests/test_ihk_page_owner_registry_check.py
+      - scripts/tests/test_ihk_native_lifecycle_check.py
+      - scripts/tests/test_ihk_smp_native_lifecycle_check.py
       - scripts/tests/test_linux_api_exact_probe.py
+      - scripts/tests/test_native_rust_build_surface_audit.py
+      - scripts/tests/test_native_rust_exact_build_workflow.py
+      - scripts/tests/test_native_rust_kconfig_policy.py
+      - scripts/tests/test_native_rust_runtime_evidence.py
+      - scripts/tests/test_mcctrl_native_lifecycle_check.py
+      - scripts/tests/test_rocky_rust_staging.py
       - scripts/tests/test_rust_target_compatibility_patches.py
       - scripts/tests/test_rs006_miscdevice_substrate.py
       - scripts/tests/test_x86_64_shared_abi.py
@@ -138,6 +147,7 @@ on:
       - scripts/mcctrl_native_lifecycle_check.py
       - scripts/native_rust_build_surface_audit.py
       - scripts/native_rust_host_audit.py
+      - scripts/native_rust_kconfig_policy.py
       - scripts/native_rust_runtime_evidence.py
       - scripts/native_rust_unsafe_ffi_ledger.py
       - scripts/linux_api_exact_probe.py
@@ -160,7 +170,15 @@ on:
       - scripts/tests/test_ihk_ioctl_dispatch_check.py
       - scripts/tests/test_ihk_page_allocator_check.py
       - scripts/tests/test_ihk_page_owner_registry_check.py
+      - scripts/tests/test_ihk_native_lifecycle_check.py
+      - scripts/tests/test_ihk_smp_native_lifecycle_check.py
       - scripts/tests/test_linux_api_exact_probe.py
+      - scripts/tests/test_native_rust_build_surface_audit.py
+      - scripts/tests/test_native_rust_exact_build_workflow.py
+      - scripts/tests/test_native_rust_kconfig_policy.py
+      - scripts/tests/test_native_rust_runtime_evidence.py
+      - scripts/tests/test_mcctrl_native_lifecycle_check.py
+      - scripts/tests/test_rocky_rust_staging.py
       - scripts/tests/test_rust_target_compatibility_patches.py
       - scripts/tests/test_rs006_miscdevice_substrate.py
       - scripts/tests/test_x86_64_shared_abi.py
@@ -213,7 +231,7 @@ jobs:
             bc binutils bison bindgen-cli bpftool cargo clang cpio diffutils \
             dwarves elfutils-libelf-devel findutils flex gcc git-core gzip \
             hostname kernel-rpm-macros kmod lld llvm make ncurses-devel \
-            openssl openssl-devel patch perl python3 python3-devel redhat-rpm-config \
+            openssl openssl-devel patch perl python3 python3-devel python3-pyyaml redhat-rpm-config \
             rpm-build rust rust-src rustfmt tar which xz zstd
           openssl_path="$(command -v openssl)"
           test "$openssl_path" = /usr/bin/openssl
@@ -267,6 +285,15 @@ jobs:
           python3 scripts/native_rust_unsafe_ffi_ledger.py --repo "$GITHUB_WORKSPACE" check
           python3 scripts/native_rust_runtime_evidence.py \
             --repo "$GITHUB_WORKSPACE" --check-contract
+          python3 -m unittest -v \
+            scripts.tests.test_native_rust_kconfig_policy \
+            scripts.tests.test_native_rust_build_surface_audit \
+            scripts.tests.test_rocky_rust_staging \
+            scripts.tests.test_native_rust_runtime_evidence \
+            scripts.tests.test_native_rust_exact_build_workflow \
+            scripts.tests.test_ihk_native_lifecycle_check \
+            scripts.tests.test_ihk_smp_native_lifecycle_check \
+            scripts.tests.test_mcctrl_native_lifecycle_check
           python3 scripts/rs006_miscdevice_substrate.py --repo "$GITHUB_WORKSPACE"
           MCKERNEL_RUSTC_1_92="$(command -v rustc)" \
             python3 -m unittest -v scripts.tests.test_rust_target_compatibility_patches
@@ -357,6 +384,7 @@ jobs:
           make -C "$NATIVE_SOURCE_ROOT" O="$BUILD_DIR" ARCH=x86_64 LLVM=1 olddefconfig
           cmp "$BUILD_DIR/resolved-first.config" "$BUILD_DIR/.config"
           grep -qx 'CONFIG_WERROR=y' "$BUILD_DIR/.config"
+          grep -qx 'CONFIG_MODULES=y' "$BUILD_DIR/.config"
           for symbol in \
             CONFIG_MCKERNEL_IHK_RUST \
             CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST \

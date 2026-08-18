@@ -207,9 +207,28 @@ class NativeRustBuildSurfaceAuditTests(unittest.TestCase):
         with self.assertRaises(audit.AuditError):
             audit.audit(self.repo)
 
+    def test_authoritative_kconfig_rejects_hidden_if_after_rehash(self):
+        self.mutate_authority(
+            "Kconfig",
+            "\nconfig MCKERNEL_IHK_RUST\n",
+            "\nif UNREVIEWED\n\nconfig MCKERNEL_IHK_RUST\n",
+        )
+        with self.assertRaises(audit.AuditError):
+            audit.audit(self.repo)
+
     def test_authoritative_kbuild_rejects_legacy_symbol_family(self):
         self.mutate_authority(
             "Kbuild", "CONFIG_MCKERNEL_IHK_RUST", "CONFIG_MCKERNEL_RUST_IHK"
+        )
+        with self.assertRaises(audit.AuditError):
+            audit.audit(self.repo)
+
+    def test_authoritative_kbuild_rejects_continued_comment_after_rehash(self):
+        self.mutate_authority(
+            "Kbuild",
+            "obj-$(CONFIG_MCKERNEL_IHK_RUST) += ihk.o\n",
+            "# suppress provider mapping \\\n"
+            "obj-$(CONFIG_MCKERNEL_IHK_RUST) += ihk.o\n",
         )
         with self.assertRaises(audit.AuditError):
             audit.audit(self.repo)
