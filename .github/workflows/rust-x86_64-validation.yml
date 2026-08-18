@@ -172,14 +172,13 @@ jobs:
             PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
             GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
             FALLBACK_BUILD_DIR="$fallback_build" \
-            MCKERNEL_CI_KERNEL_DIR="$MCKERNEL_CI_KERNEL_DIR" \
+            PRODUCTION_BUILD_DIR="$BUILD_DIR" \
             bash -c '
               set -euo pipefail
               cd "$GITHUB_WORKSPACE"
               exec bash scripts/check-syscall-offload-c-fallback.sh \
                 --build-dir "$FALLBACK_BUILD_DIR" \
-                --kernel-dir "$MCKERNEL_CI_KERNEL_DIR" \
-                --jobs 2
+                --production-build-dir "$PRODUCTION_BUILD_DIR"
             ' 2>&1 | tee evidence/syscall-offload-c-fallback.log
           install -m 0644 \
             "$fallback_build/kernel/mckernel-syscall-offload-c-fallback.txt" \

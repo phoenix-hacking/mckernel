@@ -1,27 +1,30 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Compile-time test oracle for the retained C implementation of the x86_64
-# syscall-offload seam.  This script never selects the fallback for production;
-# it builds a separate image and proves that no Rust offload owner leaked into
-# that image.
+# Compile-time oracle for the retained C implementation of the x86_64
+# syscall-offload seam.  The production build stays Rust-enabled.  This script
+# replays only kernel/syscall.c's exact production compiler argv after removing
+# the single MCKERNEL_RUST_SYSCALL_OFFLOAD selection define, then inspects the
+# resulting standalone object.  It does not build or select an all-C kernel.
 
 usage() {
 	cat <<'USAGE'
 Usage:
   scripts/check-syscall-offload-c-fallback.sh \
-    --build-dir PATH [--kernel-dir PATH] [--jobs N] [--evidence PATH]
+    --build-dir PATH --production-build-dir PATH [--evidence PATH]
 
 Options:
-  --build-dir PATH  Dedicated C-fallback CMake build directory (required).
-  --kernel-dir PATH Linux kernel build tree used while configuring McKernel.
-                    Required unless --verify-only is selected.
-  --jobs N          Parallel build jobs. Default: 2.
-  --evidence PATH   Output report inside BUILD_DIR. Default: BUILD_DIR/kernel/
-                    mckernel-syscall-offload-c-fallback.txt.
-  --verify-only     Inspect an already-populated build directory without
-                    invoking CMake. Intended for focused checker tests.
-  -h, --help        Show this help.
+  --build-dir PATH             Dedicated output directory for the standalone
+                               C-fallback object and evidence (required).
+  --production-build-dir PATH  Completed Rust production build whose exact
+                               kernel/syscall.c compiler argv is replayed.
+                               Required unless --verify-only is selected.
+  --evidence PATH              Output report inside BUILD_DIR. Default:
+                               BUILD_DIR/kernel/
+                               mckernel-syscall-offload-c-fallback.txt.
+  --verify-only                Inspect an already-populated fixture without
+                               invoking the compiler.
+  -h, --help                   Show this help.
 USAGE
 }
 
@@ -70,8 +73,7 @@ reject_symbol() {
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 BUILD_DIR=
-KERNEL_DIR=
-JOBS=2
+PRODUCTION_BUILD_DIR=
 EVIDENCE=
 VERIFY_ONLY=0
 
@@ -81,12 +83,8 @@ while [ "$#" -gt 0 ]; do
 			BUILD_DIR="${2:?missing value for --build-dir}"
 			shift 2
 			;;
-		--kernel-dir)
-			KERNEL_DIR="${2:?missing value for --kernel-dir}"
-			shift 2
-			;;
-		--jobs)
-			JOBS="${2:?missing value for --jobs}"
+		--production-build-dir)
+			PRODUCTION_BUILD_DIR="${2:?missing value for --production-build-dir}"
 			shift 2
 			;;
 		--evidence)
@@ -108,11 +106,6 @@ while [ "$#" -gt 0 ]; do
 done
 
 [ -n "$BUILD_DIR" ] || die "--build-dir is required"
-case "$JOBS" in
-	''|*[!0-9]*) die "--jobs must be a positive integer" ;;
-esac
-[ "$JOBS" -gt 0 ] || die "--jobs must be a positive integer"
-
 need_cmd awk
 need_cmd grep
 need_cmd nm
@@ -129,69 +122,54 @@ PY
 )"
 case "$BUILD_DIR" in
 	/|"$ROOT_DIR"|"$ROOT_DIR"/*)
-		die "refusing unsafe or in-source build directory: $BUILD_DIR"
+		die "refusing unsafe or in-source output directory: $BUILD_DIR"
 		;;
 esac
 
-if [ "$VERIFY_ONLY" -eq 0 ]; then
-	need_cmd cmake
-	need_cmd make
-	[ -n "$KERNEL_DIR" ] || die "--kernel-dir is required for a build"
-	[ -f "$KERNEL_DIR/Makefile" ] ||
-		die "$KERNEL_DIR is not a Linux kernel build tree"
-
-	if [ -s "$KERNEL_DIR/include/config/kernel.release" ]; then
-		KERNEL_RELEASE="$(tr -d '[:space:]' < \
-			"$KERNEL_DIR/include/config/kernel.release")"
-	else
-		KERNEL_RELEASE="$(make -s -C "$KERNEL_DIR" kernelrelease)"
-	fi
-	case "$KERNEL_RELEASE" in
-		[0-9]*.[0-9]*.[0-9]*) ;;
-		*) die "could not derive a kernel release from $KERNEL_DIR" ;;
-	esac
-
-	cmake -S "$ROOT_DIR" \
-		-B "$BUILD_DIR" \
-		-Wno-dev \
-		-DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
-		-DBUILD_TARGET=smp-x86 \
-		-DENABLE_RUST_KERNEL=OFF \
-		-DENABLE_RUST_IHK_MODULE_HELPERS=OFF \
-		-DENABLE_RUST_USER_TOOLS=OFF \
-		-DCMAKE_INSTALL_PREFIX="$BUILD_DIR/install" \
-		-DUNAME_R="$KERNEL_RELEASE" \
-		-DKERNEL_DIR="$KERNEL_DIR"
-	cmake --build "$BUILD_DIR" --target mckernel.img -j"$JOBS"
+if [ "$VERIFY_ONLY" -eq 1 ]; then
+	[ -n "$PRODUCTION_BUILD_DIR" ] ||
+		PRODUCTION_BUILD_DIR="$BUILD_DIR"
+else
+	[ -n "$PRODUCTION_BUILD_DIR" ] ||
+		die "--production-build-dir is required"
 fi
+PRODUCTION_BUILD_DIR="$(python3 - "$PRODUCTION_BUILD_DIR" <<'PY'
+import os
+import sys
 
-CACHE="$BUILD_DIR/CMakeCache.txt"
-COMPILE_DB="$BUILD_DIR/compile_commands.json"
-SYSCALL_OBJECT="$BUILD_DIR/kernel/CMakeFiles/mckernel.img.dir/syscall.c.o"
-IMAGE="$BUILD_DIR/kernel/mckernel.img"
-LINK_MAP="$BUILD_DIR/kernel/mckernel.img.map"
+print(os.path.realpath(sys.argv[1]))
+PY
+)"
 
-[ -s "$CACHE" ] || die "missing CMake cache: $CACHE"
-[ -s "$COMPILE_DB" ] || die "missing compile database: $COMPILE_DB"
-[ -s "$SYSCALL_OBJECT" ] || die "missing fallback syscall object: $SYSCALL_OBJECT"
-[ -s "$IMAGE" ] || die "missing fallback image: $IMAGE"
-[ -s "$LINK_MAP" ] || die "missing fallback link map: $LINK_MAP"
+PRODUCTION_CACHE="$PRODUCTION_BUILD_DIR/CMakeCache.txt"
+PRODUCTION_COMPILE_DB="$PRODUCTION_BUILD_DIR/compile_commands.json"
+SYSCALL_OBJECT="$BUILD_DIR/kernel/syscall.c-fallback.o"
+COMPILE_METADATA="$BUILD_DIR/kernel/mckernel-syscall-offload-c-fallback.compile.json"
 
-require_cache_bool ENABLE_RUST_KERNEL OFF "$CACHE"
-require_cache_bool ENABLE_RUST_IHK_MODULE_HELPERS OFF "$CACHE"
-require_cache_bool ENABLE_RUST_USER_TOOLS OFF "$CACHE"
+[ -s "$PRODUCTION_CACHE" ] ||
+	die "missing production CMake cache: $PRODUCTION_CACHE"
+[ -s "$PRODUCTION_COMPILE_DB" ] ||
+	die "missing production compile database: $PRODUCTION_COMPILE_DB"
+require_cache_bool ENABLE_RUST_KERNEL ON "$PRODUCTION_CACHE"
 
-python3 - "$COMPILE_DB" "$ROOT_DIR/kernel/syscall.c" <<'PY'
+if [ "$VERIFY_ONLY" -eq 0 ]; then
+	mkdir -p "$BUILD_DIR/kernel"
+	python3 - \
+		"$PRODUCTION_COMPILE_DB" \
+		"$ROOT_DIR/kernel/syscall.c" \
+		"$SYSCALL_OBJECT" \
+		"$COMPILE_METADATA" <<'PY'
 import json
 import os
 import shlex
+import subprocess
 import sys
 
-database_path, source_path = sys.argv[1:]
+database_path, source_path, object_path, metadata_path = sys.argv[1:]
+source_path = os.path.realpath(source_path)
 with open(database_path, "r") as stream:
     database = json.load(stream)
 
-source_path = os.path.realpath(source_path)
 matches = []
 for entry in database:
     candidate = entry.get("file", "")
@@ -199,48 +177,173 @@ for entry in database:
         candidate = os.path.join(entry.get("directory", ""), candidate)
     if os.path.realpath(candidate) == source_path:
         matches.append(entry)
-
 if len(matches) != 1:
     raise SystemExit(
-        "error: expected exactly one kernel/syscall.c compile entry, found %d"
-        % len(matches)
+        "error: expected exactly one production kernel/syscall.c compile "
+        "entry, found %d" % len(matches)
     )
 
 entry = matches[0]
-arguments = entry.get("arguments")
-if arguments is None:
-    arguments = shlex.split(entry.get("command", ""))
+production_arguments = entry.get("arguments")
+if production_arguments is None:
+    production_arguments = shlex.split(entry.get("command", ""))
+production_arguments = list(production_arguments)
+if not production_arguments:
+    raise SystemExit("error: production compile argv is empty")
+directory = entry.get("directory") or os.getcwd()
+source_arguments = 0
+for argument in production_arguments:
+    if argument.startswith("-"):
+        continue
+    candidate = argument
+    if not os.path.isabs(candidate):
+        candidate = os.path.join(directory, candidate)
+    if os.path.realpath(candidate) == source_path:
+        source_arguments += 1
+if source_arguments != 1:
+    raise SystemExit(
+        "error: expected exactly one kernel/syscall.c source argument, "
+        "found %d" % source_arguments
+    )
 
-forbidden = (
-    "MCKERNEL_RUST_SYSCALL_OFFLOAD",
-    "MCKERNEL_RUST_SYSCALL_POLICY_HELPERS",
+offload = "-DMCKERNEL_RUST_SYSCALL_OFFLOAD"
+policy = "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS"
+offload_count = sum(
+    argument == offload or argument.startswith(offload + "=")
+    for argument in production_arguments
 )
-for argument in arguments:
-    if any(name in argument for name in forbidden):
-        raise SystemExit(
-            "error: forbidden Rust syscall-offload define in fallback compile: %s"
-            % argument
-        )
-print("fallback syscall compile entry: C owners selected")
+policy_count = sum(
+    argument == policy or argument.startswith(policy + "=")
+    for argument in production_arguments
+)
+if offload_count != 1:
+    raise SystemExit(
+        "error: expected exactly one production syscall-offload define, "
+        "found %d" % offload_count
+    )
+if policy_count != 1:
+    raise SystemExit(
+        "error: expected exactly one retained syscall-policy-helper define, "
+        "found %d" % policy_count
+    )
+
+fallback_arguments = []
+output_count = 0
+index = 0
+while index < len(production_arguments):
+    argument = production_arguments[index]
+    if argument == offload or argument.startswith(offload + "="):
+        index += 1
+        continue
+    if argument in ("-MD", "-MMD", "-MP"):
+        index += 1
+        continue
+    if argument in ("-MF", "-MT", "-MQ"):
+        if index + 1 >= len(production_arguments):
+            raise SystemExit("error: truncated dependency option: %s" % argument)
+        index += 2
+        continue
+    if (
+        argument.startswith("-MF")
+        or argument.startswith("-MT")
+        or argument.startswith("-MQ")
+    ) and len(argument) > 3:
+        index += 1
+        continue
+    if argument == "-o":
+        if index + 1 >= len(production_arguments):
+            raise SystemExit("error: truncated compiler output option")
+        fallback_arguments.extend(["-o", object_path])
+        output_count += 1
+        index += 2
+        continue
+    if argument.startswith("-o") and len(argument) > 2:
+        fallback_arguments.append("-o" + object_path)
+        output_count += 1
+        index += 1
+        continue
+    fallback_arguments.append(argument)
+    index += 1
+
+if output_count != 1:
+    raise SystemExit(
+        "error: expected exactly one production compiler output, found %d"
+        % output_count
+    )
+if any(
+    argument == offload or argument.startswith(offload + "=")
+    for argument in fallback_arguments
+):
+    raise SystemExit("error: syscall-offload define survived fallback replay")
+if not any(
+    argument == policy or argument.startswith(policy + "=")
+    for argument in fallback_arguments
+):
+    raise SystemExit("error: syscall-policy-helper define was not retained")
+
+os.makedirs(os.path.dirname(object_path), exist_ok=True)
+print("fallback compiler argv: %s" % " ".join(
+    shlex.quote(argument) for argument in fallback_arguments
+))
+result = subprocess.call(fallback_arguments, cwd=directory)
+if result != 0:
+    raise SystemExit(result)
+
+metadata = {
+    "schema": "mckernel-syscall-offload-c-fallback-compile-v2",
+    "source": source_path,
+    "production_directory": os.path.realpath(directory),
+    "production_arguments": production_arguments,
+    "fallback_arguments": fallback_arguments,
+    "removed_defines": ["MCKERNEL_RUST_SYSCALL_OFFLOAD"],
+    "retained_defines": ["MCKERNEL_RUST_SYSCALL_POLICY_HELPERS"],
+}
+with open(metadata_path, "w") as stream:
+    json.dump(metadata, stream, indent=2, sort_keys=True)
+    stream.write("\n")
+PY
+fi
+
+[ -s "$SYSCALL_OBJECT" ] ||
+	die "missing standalone fallback syscall object: $SYSCALL_OBJECT"
+[ -s "$COMPILE_METADATA" ] ||
+	die "missing fallback compile metadata: $COMPILE_METADATA"
+
+python3 - "$COMPILE_METADATA" "$ROOT_DIR/kernel/syscall.c" <<'PY'
+import json
+import os
+import sys
+
+metadata_path, source_path = sys.argv[1:]
+with open(metadata_path, "r") as stream:
+    metadata = json.load(stream)
+if metadata.get("schema") != "mckernel-syscall-offload-c-fallback-compile-v2":
+    raise SystemExit("error: fallback compile metadata schema mismatch")
+if os.path.realpath(metadata.get("source", "")) != os.path.realpath(source_path):
+    raise SystemExit("error: fallback compile source mismatch")
+if metadata.get("removed_defines") != ["MCKERNEL_RUST_SYSCALL_OFFLOAD"]:
+    raise SystemExit("error: fallback did not remove exactly the offload define")
+if metadata.get("retained_defines") != [
+    "MCKERNEL_RUST_SYSCALL_POLICY_HELPERS"
+]:
+    raise SystemExit("error: fallback policy-helper retention mismatch")
+
+offload = "-DMCKERNEL_RUST_SYSCALL_OFFLOAD"
+policy = "-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS"
+production = metadata.get("production_arguments", [])
+fallback = metadata.get("fallback_arguments", [])
+if sum(arg == offload or arg.startswith(offload + "=") for arg in production) != 1:
+    raise SystemExit("error: production compile selection is not Rust offload")
+if any(arg == offload or arg.startswith(offload + "=") for arg in fallback):
+    raise SystemExit("error: forbidden Rust syscall-offload define in fallback compile")
+if not any(arg == policy or arg.startswith(policy + "=") for arg in fallback):
+    raise SystemExit("error: syscall-policy-helper define missing from fallback compile")
+print("fallback syscall compile entry: C offload owners selected in one object")
 PY
 
-grep -Fq 'CMakeFiles/mckernel.img.dir/syscall.c.o' "$LINK_MAP" ||
-	die "fallback syscall object is absent from the final link map"
-if grep -Fq 'mckernel_rust.o' "$LINK_MAP"; then
-	die "Rust kernel object leaked into the fallback link map"
-fi
-if grep -Fq 'abi_checks.c.o' "$LINK_MAP"; then
-	die "Rust ABI-check object leaked into the fallback link map"
-fi
-
 OBJECT_NM="$BUILD_DIR/kernel/mckernel-syscall-offload-c-fallback.object.nm"
-IMAGE_NM="$BUILD_DIR/kernel/mckernel-syscall-offload-c-fallback.image.nm"
-IMAGE_UNDEFINED="$BUILD_DIR/kernel/mckernel-syscall-offload-c-fallback.undefined.nm"
 OBJECT_STRINGS="$BUILD_DIR/kernel/mckernel-syscall-offload-c-fallback.object.strings"
-
 LC_ALL=C nm -a --format=posix "$SYSCALL_OBJECT" > "$OBJECT_NM"
-LC_ALL=C nm -a --format=posix "$IMAGE" > "$IMAGE_NM"
-LC_ALL=C nm -u --format=posix "$IMAGE" > "$IMAGE_UNDEFINED"
 LC_ALL=C strings "$SYSCALL_OBJECT" > "$OBJECT_STRINGS"
 
 require_exact_text_symbol "$OBJECT_NM" do_syscall T
@@ -249,15 +352,6 @@ require_exact_text_symbol "$OBJECT_NM" syscall_generic_forwarding T
 reject_symbol "$OBJECT_NM" syscall_offload_wait_reply
 reject_symbol "$OBJECT_NM" syscall_dispatch_context_bridge
 
-require_exact_text_symbol "$IMAGE_NM" do_syscall T
-require_exact_text_symbol "$IMAGE_NM" send_syscall t
-require_exact_text_symbol "$IMAGE_NM" syscall_generic_forwarding T
-reject_symbol "$IMAGE_NM" syscall_offload_wait_reply
-reject_symbol "$IMAGE_NM" syscall_dispatch_context_bridge
-
-if [ -s "$IMAGE_UNDEFINED" ]; then
-	die "fallback image contains unresolved symbols"
-fi
 grep -Fq 'mcexec_v10: send_syscall cpu=' "$OBJECT_STRINGS" ||
 	die "C syscall-offload marker is absent from the fallback object"
 if grep -Fq 'owner=rust' "$OBJECT_STRINGS"; then
@@ -283,27 +377,31 @@ mkdir -p "$(dirname "$EVIDENCE")"
 EVIDENCE_TMP="${EVIDENCE}.tmp.$$"
 trap 'rm -f "$EVIDENCE_TMP"' EXIT
 {
-	printf 'schema=mckernel-syscall-offload-c-fallback-v1\n'
-	printf 'mode=test-oracle-only\n'
+	printf 'schema=mckernel-syscall-offload-c-fallback-v2\n'
+	printf 'mode=compile-object-oracle-only\n'
 	printf 'production_selection=unchanged\n'
-	printf 'enable_rust_kernel=OFF\n'
-	printf 'enable_rust_ihk_module_helpers=OFF\n'
-	printf 'enable_rust_user_tools=OFF\n'
-	printf 'syscall_compile_owner=C\n'
+	printf 'production_rust_kernel=ON\n'
+	printf 'replayed_from_production_compile=true\n'
+	printf 'fallback_scope=kernel/syscall.c-only\n'
+	printf 'removed_define=MCKERNEL_RUST_SYSCALL_OFFLOAD\n'
+	printf 'retained_define=MCKERNEL_RUST_SYSCALL_POLICY_HELPERS\n'
+	printf 'rust_policy_helpers=enabled\n'
+	printf 'final_image_link_claimed=false\n'
+	printf 'runtime_equivalence_claimed=false\n'
 	printf 'symbol.do_syscall=T\n'
 	printf 'symbol.send_syscall=t\n'
 	printf 'symbol.syscall_generic_forwarding=T\n'
 	printf 'symbol.syscall_offload_wait_reply=absent\n'
 	printf 'symbol.syscall_dispatch_context_bridge=absent\n'
-	printf 'rust_kernel_object=absent\n'
 	printf 'rust_owner_marker=absent\n'
-	printf 'image_undefined_symbols=0\n'
+	printf 'source_sha256=%s\n' \
+		"$(sha256sum "$ROOT_DIR/kernel/syscall.c" | awk '{ print $1 }')"
+	printf 'production_compile_database_sha256=%s\n' \
+		"$(sha256sum "$PRODUCTION_COMPILE_DB" | awk '{ print $1 }')"
+	printf 'fallback_compile_metadata_sha256=%s\n' \
+		"$(sha256sum "$COMPILE_METADATA" | awk '{ print $1 }')"
 	printf 'syscall_object_sha256=%s\n' \
 		"$(sha256sum "$SYSCALL_OBJECT" | awk '{ print $1 }')"
-	printf 'image_sha256=%s\n' \
-		"$(sha256sum "$IMAGE" | awk '{ print $1 }')"
-	printf 'link_map_sha256=%s\n' \
-		"$(sha256sum "$LINK_MAP" | awk '{ print $1 }')"
 	printf 'status=PASS\n'
 } > "$EVIDENCE_TMP"
 mv "$EVIDENCE_TMP" "$EVIDENCE"

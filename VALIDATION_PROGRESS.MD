@@ -1,10 +1,17 @@
 # Rust x86_64 Validation Progress
 
-**Current completion: 100%**
+**Defined-plan completion: 100% (10/10 historical evidence); current-head
+replay: PENDING**
 
-This percentage is evidence-gated. It reaches 100% only after the current PR
-head builds on Rocky/RHEL-family x86_64, boots McKernel, runs real programs
-through `mcexec`, and shuts down cleanly.
+This percentage records the completed ten-gate Rocky 8.10 plan. A changed PR
+head earns current-head credit only after it builds on Rocky/RHEL-family
+x86_64, boots McKernel, runs real programs through `mcexec`, and shuts down
+cleanly. Run `32085221811` built the Rust production image at
+`f7a7e15efeff1a44a1528178a3dd73028c841119` but failed in a newly added,
+over-broad all-C fallback oracle before either hosted job ran. The production
+path passed its build/composition checks; the current head has no runtime
+credit until the narrowed object-only oracle and unchanged ten-stage smoke
+both pass.
 
 Here, 100% means every gate in this Rocky 8.10 x86_64 smoke plan has passed.
 It does not mean line/branch coverage, an all-Rust IHK stack, exhaustive kernel
