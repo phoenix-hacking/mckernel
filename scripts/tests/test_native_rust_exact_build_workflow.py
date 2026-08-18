@@ -437,6 +437,40 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         self.assertIn("if: ${{ always() }}", self.workflow)
         self.assertIn("if-no-files-found: error", self.workflow)
 
+    def test_built_module_diagnostics_precede_semantic_validation(self):
+        validation = self.workflow.index(
+            "Validate built metadata and capture immutable diagnostics"
+        )
+        checker = self.workflow.index(
+            "python3 scripts/ihk_native_lifecycle_check.py", validation
+        )
+        for fragment in (
+            'git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD',
+            '> "$EVIDENCE_DIR/commit.sha"',
+            'cp "$module" "$EVIDENCE_DIR/$name"',
+            'modinfo "$module" > "$EVIDENCE_DIR/$name.modinfo"',
+            'readelf -p .modinfo "$module" '
+            '> "$EVIDENCE_DIR/$name.modinfo-section"',
+            'readelf -SWr "$module" > "$EVIDENCE_DIR/$name.readelf"',
+            'nm -A -a "$module" > "$EVIDENCE_DIR/$name.nm"',
+            '| sort -z | xargs -0 sha256sum -- > PRECHECK_SHA256SUMS',
+            'sha256sum --check --strict PRECHECK_SHA256SUMS',
+        ):
+            with self.subTest(fragment=fragment):
+                diagnostic = self.workflow.index(fragment, validation)
+                self.assertLess(diagnostic, checker)
+        final_input = self.workflow.index(
+            'kernelrelease > "$EVIDENCE_DIR/kernel.release"', checker
+        )
+        final_manifest = self.workflow.index(
+            '| sort -z | xargs -0 sha256sum -- > SHA256SUMS', checker
+        )
+        self.assertLess(final_input, final_manifest)
+        self.assertIn(
+            "! -name PRECHECK_SHA256SUMS ! -name SHA256SUMS",
+            self.workflow[validation:checker],
+        )
+
     def test_openssl_cli_is_installed_and_verified_before_the_build(self):
         install = self.workflow.index(
             "dnf -y --setopt=install_weak_deps=False install \\\n"

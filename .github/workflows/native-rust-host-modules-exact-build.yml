@@ -439,6 +439,25 @@ jobs:
           cmp "$EVIDENCE_DIR/module-targets.sorted" \
             "$EVIDENCE_DIR/built-module-artifacts.txt"
           rm "$EVIDENCE_DIR/module-targets.sorted"
+          git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD \
+            > "$EVIDENCE_DIR/commit.sha"
+          # Preserve the exact binaries and both rendered and raw module
+          # metadata before any semantic checker can fail closed.
+          for module in "$ihk" "$smp" "$mcctrl"; do
+            name="$(basename "$module")"
+            cp "$module" "$EVIDENCE_DIR/$name"
+            modinfo "$module" > "$EVIDENCE_DIR/$name.modinfo"
+            readelf -p .modinfo "$module" > "$EVIDENCE_DIR/$name.modinfo-section"
+            readelf -SWr "$module" > "$EVIDENCE_DIR/$name.readelf"
+            nm -A -a "$module" > "$EVIDENCE_DIR/$name.nm"
+          done
+          (
+            cd "$EVIDENCE_DIR"
+            find . -maxdepth 1 -type f \
+              ! -name PRECHECK_SHA256SUMS ! -name SHA256SUMS -printf '%P\0' \
+              | sort -z | xargs -0 sha256sum -- > PRECHECK_SHA256SUMS
+            sha256sum --check --strict PRECHECK_SHA256SUMS
+          )
           python3 scripts/ihk_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" --module "$ihk"
           python3 scripts/ihk_os_registry_check.py --repo "$GITHUB_WORKSPACE"
           test "$(rustc --version | awk '{print $2}')" = "1.92.0"
@@ -454,14 +473,6 @@ jobs:
           cp "$NATIVE_SOURCE_ROOT/drivers/misc/mckernel/stage-lock.json" "$EVIDENCE_DIR/stage-lock.json"
           make -s -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 \
             kernelrelease > "$EVIDENCE_DIR/kernel.release"
-          git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD > "$EVIDENCE_DIR/commit.sha"
-          for module in "$ihk" "$smp" "$mcctrl"; do
-            name="$(basename "$module")"
-            cp "$module" "$EVIDENCE_DIR/$name"
-            modinfo "$module" > "$EVIDENCE_DIR/$name.modinfo"
-            readelf -SWr "$module" > "$EVIDENCE_DIR/$name.readelf"
-            nm -A -a "$module" > "$EVIDENCE_DIR/$name.nm"
-          done
           find "$module_root" -maxdepth 1 -type f -name '.*.cmd' -exec cp '{}' "$EVIDENCE_DIR/" ';'
           (
             cd "$EVIDENCE_DIR"

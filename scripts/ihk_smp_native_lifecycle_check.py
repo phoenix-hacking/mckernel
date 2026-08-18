@@ -11,6 +11,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 from typing import Any
 
 
@@ -701,6 +702,66 @@ def validate_repository(
     }
 
 
+def _raw_modinfo_records(module_path: Path) -> list[str]:
+    executable = shutil.which("objcopy")
+    if executable is None:
+        raise ValidationError("objcopy is required for raw built-module validation")
+    source_sha256 = _sha256(module_path)
+    with tempfile.TemporaryDirectory(prefix="mckernel-smp-modinfo-") as temporary:
+        temporary_path = Path(temporary)
+        dump_path = temporary_path / "modinfo.bin"
+        output_path = temporary_path / "module.copy"
+        result = subprocess.run(
+            [
+                executable,
+                "--dump-section",
+                f".modinfo={dump_path}",
+                str(module_path),
+                str(output_path),
+            ],
+            check=False,
+            capture_output=True,
+        )
+        if result.returncode != 0:
+            error = result.stderr.decode("utf-8", errors="replace").strip()
+            raise ValidationError(
+                f"objcopy raw .modinfo extraction failed ({result.returncode}): {error}"
+            )
+        try:
+            data = dump_path.read_bytes()
+        except OSError as error:
+            raise ValidationError(
+                f"objcopy did not produce raw .modinfo bytes: {error}"
+            ) from error
+    if _sha256(module_path) != source_sha256:
+        raise ValidationError("objcopy modified the built SMP module during validation")
+    if not data:
+        raise ValidationError("built SMP module has an empty raw .modinfo section")
+    if not data.endswith(b"\0"):
+        raise ValidationError("built SMP module raw .modinfo is not NUL terminated")
+    # Linked kernel modules may contain zero padding between input `.modinfo`
+    # contributions.  Preserve every non-empty record exactly while treating
+    # only those all-zero spans as linker padding.
+    encoded_records = [record for record in data.split(b"\0") if record]
+    if not encoded_records:
+        raise ValidationError("built SMP module raw .modinfo has no records")
+    records: list[str] = []
+    for encoded in encoded_records:
+        try:
+            record = encoded.decode("ascii")
+        except UnicodeDecodeError as error:
+            raise ValidationError(
+                "built SMP module raw .modinfo is not exact ASCII"
+            ) from error
+        key, separator, _value = record.partition("=")
+        if not separator or not key:
+            raise ValidationError(
+                f"built SMP module raw .modinfo record is malformed: {record!r}"
+            )
+        records.append(record)
+    return records
+
+
 def _modinfo(module_path: Path, field: str) -> list[str]:
     executable = shutil.which("modinfo")
     if executable is None:
@@ -717,6 +778,20 @@ def _modinfo(module_path: Path, field: str) -> list[str]:
             f"{result.stderr.strip() or result.stdout.strip()}"
         )
     return [line for line in result.stdout.splitlines() if line]
+
+
+def _named_parameter_values(values: list[str], label: str) -> dict[str, str]:
+    parsed: dict[str, str] = {}
+    for value in values:
+        name, separator, detail = value.partition(":")
+        if not separator or not name or not detail:
+            raise ValidationError(f"built SMP module {label} is malformed: {value!r}")
+        if name in parsed:
+            raise ValidationError(
+                f"built SMP module {label} repeats parameter {name}"
+            )
+        parsed[name] = detail
+    return parsed
 
 
 def _undefined_symbols(module_path: Path) -> set[str]:
@@ -758,14 +833,54 @@ def validate_module_artifact(
         if _modinfo(module_path, field):
             raise ValidationError(f"built SMP module unexpectedly carries {field} metadata")
     parameters = {item["name"]: item for item in contract["parameters"]}
+    raw_records = _raw_modinfo_records(module_path)
+    raw_parm = sorted(
+        record for record in raw_records if record.startswith("parm=")
+    )
+    expected_raw_parm = sorted(
+        f'parm={name}:{item["description"]}'
+        for name, item in parameters.items()
+    )
+    if raw_parm != expected_raw_parm:
+        raise ValidationError(
+            "built SMP module raw parameter descriptions differ: "
+            f"expected {expected_raw_parm}, got {raw_parm}"
+        )
+    raw_parmtype = sorted(
+        record for record in raw_records if record.startswith("parmtype=")
+    )
+    expected_raw_parmtype = sorted(
+        f'parmtype={name}:{item["type"]}'
+        for name, item in parameters.items()
+    )
+    if raw_parmtype != expected_raw_parmtype:
+        raise ValidationError(
+            "built SMP module raw parameter types differ: "
+            f"expected {expected_raw_parmtype}, got {raw_parmtype}"
+        )
     parm_values = _modinfo(module_path, "parm")
     type_values = _modinfo(module_path, "parmtype")
-    parm = {value.split(":", 1)[0]: value.split(":", 1)[1] for value in parm_values}
-    parmtype = {value.split(":", 1)[0]: value.split(":", 1)[1] for value in type_values}
-    if parm != {name: item["description"] for name, item in parameters.items()}:
-        raise ValidationError("built SMP module parameter descriptions differ")
-    if parmtype != {name: item["type"] for name, item in parameters.items()}:
-        raise ValidationError("built SMP module parameter types differ")
+    parm = _named_parameter_values(parm_values, "rendered parameter description")
+    parmtype = _named_parameter_values(type_values, "rendered parameter type")
+    # kmod deliberately renders `modinfo -F parm` by joining each raw
+    # `parm=name:description` record with its `parmtype=name:type` peer.  The
+    # resulting public representation is `name:description (type)`; asking for
+    # `parmtype` still returns the raw `name:type` record.
+    expected_parm = {
+        name: f'{item["description"]} ({item["type"]})'
+        for name, item in parameters.items()
+    }
+    if parm != expected_parm:
+        raise ValidationError(
+            "built SMP module parameter descriptions differ: "
+            f"expected {expected_parm}, got {parm}"
+        )
+    expected_parmtype = {name: item["type"] for name, item in parameters.items()}
+    if parmtype != expected_parmtype:
+        raise ValidationError(
+            "built SMP module parameter types differ: "
+            f"expected {expected_parmtype}, got {parmtype}"
+        )
     provider_symbol = contract["dependency_contract"]["provider_symbol"]
     if provider_symbol not in _undefined_symbols(module_path):
         raise ValidationError("built SMP module lacks the provider anchor relocation")
