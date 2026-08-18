@@ -5,33 +5,31 @@ Scope: active smp-x86/x86_64 McKernel-owned C/header source retirement inventory
 
 Artifact conversion status (authoritative for implementation-language claims):
 - The primary conservative measurement is the exact Rocky 8.10 build of commit
-  6f662225cbb4067800b2a16cbcce81e85924a6bc in GitHub Actions run
-  32082343388, build artifact 9305575067 (artifact SHA-256
-  c83f6cc6fa9757caea619327fdd6f0f824de53eea57832f1b6ea9c4039208d22).
+  3a5767b395f932cbe41f717f3c720512009490ff in GitHub Actions run
+  32085952941, build job 95558404374, build artifact 9306766589 (artifact
+  SHA-256
+  2f71dc18139dd4211669981eee786518dc4a38c4ce3478d886209c259b5a31ce).
   The final x86_64 guest image SHA-256 is
-  42485af71a787441ed9688fe75f175a3e8ddaa150b3af2c6e49e552f48c94ed9.
-  Exact GNU-link-map attribution reports 614,256 bytes contributed by
-  `mckernel_rust.o` out of 783,943 bytes in all final allocated executable
-  PROGBITS sections: **78.354676% Rust-object-owned executable text**. The
+  68d7f6e7dbac77451e0fb97bcce1c0514b754e0a7d40f77ba6340f101baa230e.
+  Exact GNU-link-map attribution reports 614,183 bytes contributed by
+  `mckernel_rust.o` out of 783,847 bytes in all final allocated executable
+  PROGBITS sections: **78.354960% Rust-object-owned executable text**. The
   denominator deliberately includes C, assembly, unknown-origin bytes,
   `.vsyscall`, linker fill, and padding. The Rust numerator excludes discarded
   sections and linker fill. The link map SHA-256 is
-  53ee955697b15c6e3639399b37b198d79441aa476e7b666f6c47c82dfea23f24;
+  d1871418813d7c54ce04ec1f9a15cc586698b8196a53bd7f1b9dab78470345d6;
   `mckernel-linked-text-ownership.json` SHA-256 is
-  e3dba56db2a6ea44a13a2918bcbf0da6d52574391384bdee4e20a4b22afb5535.
-  The successor's unaligned nested-request copy hardening is not part of that
-  image, so no post-hardening byte count or percentage is projected before its
-  own exact build artifact exists.
-- The secondary alias-deduplicated final-ELF symbol/source view reports 614,216
-  Rust bytes and 135,104 C bytes in its Rust-plus-C denominator: 614216 / 749320
-  = 81.9697859392516% Rust (81.970% rounded). Compared with the exact
+  2ade09aa02a048a5ab0d8c400ba179fb7479a9cb107bdea4cc9dd94209b03d.
+- The secondary alias-deduplicated final-ELF symbol/source view reports 614,143
+  Rust bytes and 135,104 C bytes in its Rust-plus-C denominator: 614143 / 749247
+  = **81.96802923468496% Rust** (81.968029% recorded). Compared with the exact
   289430482fa08f919ea39ad0a9593300a471407f baseline of 610,152 / 747,770 =
-  81.59621273921125%, this tranche adds 4,064 Rust-attributed bytes, removes
-  2,514 C-attributed bytes, and gains 0.37357320004035 percentage points under
+  81.59621273921125%, this tranche adds 3,991 Rust-attributed bytes, removes
+  2,514 C-attributed bytes, and gains 0.37181649547371 percentage points under
   the same method. This secondary view is used to rank remaining source
-  dependencies; it does not supersede the conservative 78.354676% primary
+  dependencies; it does not supersede the conservative 78.354960% primary
   measurement. `mckernel-symbol-source-attribution.json` SHA-256 is
-  10c130deed9b1f362ff915835c92e3f813218ed4ecadb388d139cc1f9c3b00e9.
+  5900e98716e6b5875782091b410897433d4ef6c8b03cec77425102b1f7c68ef4.
 - That exact secondary attribution ranks the residual C text in the linked
   x86_64 guest image as: `kernel/syscall.c` 58,991 bytes;
   `kernel/process.c` 21,563;
@@ -44,18 +42,28 @@ Artifact conversion status (authoritative for implementation-language claims):
   `send_syscall`, `syscall_generic_forwarding`, and
   `syscall_offload_wait_reply`; `mckernel_rust.o` defines them; the final image
   resolves exactly one global text definition of each. The composition JSON
-  SHA-256 is e42651dd56ae29ef13f76b9b498a0c8a910e1c0acc26b3c38a98663fe9a5fdcf.
-  This build evidence does not by itself claim that the current-head KVM smoke
-  replay passed. In run 32082343388, hosted job 95548287023 reached the IHK
-  secondary-CPU wakeup, then the disposable QEMU guest exited before the first
-  McKernel boot marker or Rust syscall-owner marker was captured. The job
-  failed closed and preserved diagnostics; it provides no current-head runtime
-  credit. The failed runner exposed LA57 and booted Rocky with five-level page
-  tables, while the IHK trampoline entered long mode with LA57 clear and its
-  existing four-level startup table. The successor masks only LA57 from KVM
-  host passthrough and asserts its absence in the guest; that recovery earns no
-  runtime credit until the unchanged ten-stage smoke passes. Runtime evidence
-  is tracked separately.
+  SHA-256 is 1ca630cbad45fb135c95e93a332f4fe804bbda33bcac1d46163cc6e723eaf26a.
+  The retained C-owner syscall-seam oracle also passes: it replays the
+  production `kernel/syscall.c` compile configuration into one standalone
+  object, removes only `MCKERNEL_RUST_SYSCALL_OFFLOAD` plus non-semantic
+  dependency-output options, retains the Rust policy helpers, and proves the
+  C fallback definitions without selecting an all-C kernel. It explicitly
+  claims neither a linked fallback image nor runtime equivalence. Its object
+  SHA-256 is
+  f4023aa187f91bf26a8c0911af2dfb724fa4733f1568b2104911dad0d5e4ad78;
+  its evidence-report SHA-256 is
+  7c7eb5924519064cbd2d6d31f6e0ef3fe8f89456f47e02825101f72caf183b5f.
+- The same exact head passed the unchanged ten-stage Rocky 8.10 hosted KVM
+  smoke in job 95559015127. Hosted artifact 9306894425 is 417,348 bytes with
+  SHA-256
+  5c21809de32a9cc9de85bdcdcbcdaaa5aa3846d11768a242ee15b9a79179e6b1.
+  The guest ran with the recorded `host,la57=off` boundary, asserted LA57
+  absent, reached RUNNING, emitted all three Rust syscall-owner markers, ran
+  the real `mcexec` programs and deterministic 1 MiB workload, passed
+  `mcstat`, remained RUNNING, stopped and released cleanly, restored the
+  host, and left the pinned backing image unchanged. This is 100% completion
+  only for the defined 10/10 smoke plan; it does not establish five-level
+  paging support or equivalence for unexercised branches.
 - The 100.0% source-retirement score below is an allowlist/declaration audit
   closure, not an all-Rust implementation percentage. In particular, whole C
   boundary files such as `kernel/syscall.c` are marked `n/a`. It must not be
@@ -63,10 +71,8 @@ Artifact conversion status (authoritative for implementation-language claims):
   it for that purpose.
 - This guest-image artifact metric does not change the separately scoped
   `final-push.txt` native host-module score (3.50%). The defined Rocky smoke
-  plan remains historically 10/10 PASS. The exact 6f662225 replay did not
-  preserve that result: it failed during McKernel boot before workload
-  execution, so current-head 10/10 remains unproven. It makes no Arm64,
-  all-Rust IHK, LA57/five-level paging, unexercised
+  plan is current-head 10/10 PASS at the exact commit and run above. It makes
+  no Arm64, all-Rust IHK, LA57/five-level paging, unexercised
   syscall/workload-equivalence, or long-duration-stress claim.
 
 Completion meaning:

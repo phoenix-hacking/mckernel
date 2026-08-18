@@ -1,17 +1,18 @@
 # Rust x86_64 Validation Progress
 
-**Defined-plan completion: 100% (10/10 historical evidence); current-head
-replay: PENDING**
+**Current completion: 100% (10/10)**
 
-This percentage records the completed ten-gate Rocky 8.10 plan. A changed PR
-head earns current-head credit only after it builds on Rocky/RHEL-family
-x86_64, boots McKernel, runs real programs through `mcexec`, and shuts down
-cleanly. Run `32085221811` built the Rust production image at
-`f7a7e15efeff1a44a1528178a3dd73028c841119` but failed in a newly added,
-over-broad all-C fallback oracle before either hosted job ran. The production
-path passed its build/composition checks; the current head has no runtime
-credit until the narrowed object-only oracle and unchanged ten-stage smoke
-both pass.
+This percentage is evidence-gated. Runtime code checkpoint
+`3a5767b395f932cbe41f717f3c720512009490ff` passed the complete plan in
+GitHub Actions run `32085952941`: Rocky build job `95558404374` and hosted
+KVM job `95559015127` both succeeded. Build artifact `9306766589` has
+SHA-256
+`2f71dc18139dd4211669981eee786518dc4a38c4ce3478d886209c259b5a31ce`;
+hosted artifact `9306894425` has SHA-256
+`5c21809de32a9cc9de85bdcdcbcdaaa5aa3846d11768a242ee15b9a79179e6b1`.
+A changed PR head earns current-head credit only after it builds on
+Rocky/RHEL-family x86_64, boots McKernel, runs real programs through
+`mcexec`, and shuts down cleanly.
 
 Here, 100% means every gate in this Rocky 8.10 x86_64 smoke plan has passed.
 It does not mean line/branch coverage, an all-Rust IHK stack, exhaustive kernel
@@ -27,11 +28,11 @@ stress coverage.
 | IHK compatibility | 5% | PASS | Forward check/apply, reverse check/apply, `git diff --check`, and clean pinned-IHK status pass at `3114d9e7101ad52030eb3effa849a5c108972a1f`. |
 | `development` compatibility | 10% | PASS | Current `development` commit `7a779815cba07bacfeed5788acca31629e50a39a` is merged; GitHub reports the draft PR mergeable. |
 | Rust source/toolchain | 10% | PASS | Exact pinned nightly compiles the three selected Rust objects; required symbols, no-SIMD scan, formatting, and variadic behavior checks pass. |
-| Rocky complete build | 20% | PASS | Run `31358174445` (job `93361671964`) built every requested artifact on Rocky 8.10 at `1e7744e551c5af4894b87f84bb4269a4f5f0ae84`; the pinned compiler, no-SIMD, Rust linkage, and exact pinned-IHK source-profile audits all passed. |
-| Host modules | 10% | PASS | Run `31358174445` loaded and used `ihk`, `ihk_smp_x86_64`, and `mcctrl` while McKernel was RUNNING, then proved the modules and McKernel device nodes were absent after shutdown. |
-| McKernel boot | 15% | PASS | Hosted job `93362016101` reached `RUNNING`, emitted `IHK/McKernel started.` and `IHK/McKernel booted.`, consumed the master-channel ACK, and completed both host IKC connections. |
-| Real `mcexec` programs | 10% | PASS | The hosted guest passed `/bin/true`, relative and absolute hostname, the deterministic 1 MiB workload, and `mcstat`; kmsg contains `prepared`, `schedule_process queued`, `enter_user`, `send_syscall`, and `offload_return`. |
-| CI evidence and PR report | 10% | PASS | Run `31358174445` is fully green with build artifact `9051403164` and hosted artifact `9051531436`; this tracker records the runtime checkpoint, and PR #1 is the non-repository surface for the documentation-head replay metadata. |
+| Rocky complete build | 20% | PASS | Run `32085952941` (job `95558404374`) built every requested artifact on Rocky 8.10 at `3a5767b395f932cbe41f717f3c720512009490ff`; the pinned compiler, no-SIMD, Rust linkage, exact pinned-IHK source profile, production composition, linked-ownership report, and bounded C-owner syscall-seam oracle all passed. |
+| Host modules | 10% | PASS | Hosted job `95559015127` loaded and used `ihk`, `ihk_smp_x86_64`, and `mcctrl` while McKernel was RUNNING, then proved the modules and McKernel device nodes were absent after shutdown. |
+| McKernel boot | 15% | PASS | Hosted job `95559015127` recorded `host,la57=off`, asserted LA57 absent in the guest, reached `RUNNING`, emitted `IHK/McKernel started.` and `IHK/McKernel booted.`, consumed the master-channel ACK, and completed both host IKC connections. |
+| Real `mcexec` programs | 10% | PASS | The hosted guest passed `/bin/true`, relative and absolute hostname, the deterministic 1 MiB workload, and `mcstat`; kmsg contains all three Rust syscall-owner markers plus the retained `offload_return`. |
+| CI evidence and PR report | 10% | PASS | Run `32085952941` is fully green with build artifact `9306766589` and hosted artifact `9306894425`; this tracker records the runtime checkpoint, and PR #1 is the non-repository surface for the documentation-head replay metadata. |
 
 The first hosted attempt earned no completion credit. Workflow run
 `31288159829` (job `93180630285`) failed during container initialization after
@@ -381,17 +382,17 @@ object and passed dynamic width/precision, promoted integer classes, pointer,
 
 ## Completion and final checkpoint
 
-Run `31358174445` is the fully green runtime code checkpoint. It satisfies every
-weighted gate above and establishes 100% completion for this defined Rocky
-8.10 x86_64 smoke plan.
+Run `32085952941` at
+`3a5767b395f932cbe41f717f3c720512009490ff` is the current fully green runtime
+code checkpoint. It satisfies every weighted gate above and establishes 100%
+completion for this defined Rocky 8.10 x86_64 smoke plan.
 
-The commit containing this paragraph is intentionally documentation-only
-relative to runtime head
-`1e7744e551c5af4894b87f84bb4269a4f5f0ae84`. No workflow, script, Rust,
-C, assembly, linker, patch, submodule, or build-input file changes in that
-closeout commit. The complete workflow must pass again on that exact
-documentation head; PR #1 records the replay run, job, artifact, and digest
-identifiers without creating a self-referential third repository checkpoint.
+The commit containing this refreshed paragraph is intentionally
+documentation-only relative to that runtime checkpoint: it changes only this
+validation record and `rust-source-retirement.txt`. The complete workflow
+must pass again on the exact documentation head; PR #1 records that replay's
+run, job, artifact, and digest identifiers without creating a self-referential
+third repository checkpoint.
 
 The result validates the exercised Rocky 8.10 x86_64 QEMU/KVM acceptance path:
 one reserved McKernel CPU, boot and IKC handshake, basic `mcexec` syscall
