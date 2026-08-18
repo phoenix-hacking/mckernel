@@ -301,6 +301,19 @@ class RepositoryReviewTests(unittest.TestCase):
             review.validate_connector_input(
                 expected, relative, data + b"x", data, tree_entry, index_entry
             )
+        with self.assertRaisesRegex(review.ReviewError, "index entry"):
+            review.validate_connector_input(
+                expected, relative, data, data, tree_entry, b""
+            )
+        with self.assertRaisesRegex(review.ReviewError, "HEAD tree entry"):
+            review.validate_connector_input(
+                expected,
+                relative,
+                data,
+                data,
+                tree_entry.replace(b"100644", b"120000"),
+                index_entry,
+            )
 
     def test_current_input_rejects_dirty_index_mode_and_worktree(self):
         relative = review.EXPECTED_INPUTS[0]["path"]
@@ -325,19 +338,6 @@ class RepositoryReviewTests(unittest.TestCase):
             )
         with self.assertRaisesRegex(review.ReviewError, "current HEAD tree entry"):
             review.validate_current_connector_input(
-                relative,
-                data,
-                data,
-                tree_entry.replace(b"100644", b"120000"),
-                index_entry,
-            )
-        with self.assertRaisesRegex(review.ReviewError, "index entry"):
-            review.validate_connector_input(
-                expected, relative, data, data, tree_entry, b""
-            )
-        with self.assertRaisesRegex(review.ReviewError, "HEAD tree entry"):
-            review.validate_connector_input(
-                expected,
                 relative,
                 data,
                 data,
