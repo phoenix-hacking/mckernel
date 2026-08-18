@@ -19,7 +19,7 @@ Artifact conversion status (authoritative for implementation-language claims):
   sections and linker fill. The link map SHA-256 is
   d1871418813d7c54ce04ec1f9a15cc586698b8196a53bd7f1b9dab78470345d6;
   `mckernel-linked-text-ownership.json` SHA-256 is
-  2ade09aa02a048a5ab0d8c400ba179fb7479a9cb107bdea4cc9dd94209b03d.
+  2ade09aa02a048a5ab0d8c400ba179fb7479a9b9cb107bdea4cc9dd94209b03d.
 - The secondary alias-deduplicated final-ELF symbol/source view reports 614,143
   Rust bytes and 135,104 C bytes in its Rust-plus-C denominator: 614143 / 749247
   = **81.96802923468496% Rust** (81.968029% recorded). Compared with the exact
@@ -71,8 +71,8 @@ Artifact conversion status (authoritative for implementation-language claims):
   it for that purpose.
 - This guest-image artifact metric does not change the separately scoped
   `final-push.txt` native host-module score (3.50%). The defined Rocky smoke
-  plan is current-head 10/10 PASS at the exact commit and run above. It makes
-  no Arm64, all-Rust IHK, LA57/five-level paging, unexercised
+  plan's validated runtime checkpoint is 10/10 PASS at the exact commit and
+  run above. It makes no Arm64, all-Rust IHK, LA57/five-level paging, unexercised
   syscall/workload-equivalence, or long-duration-stress claim.
 
 Completion meaning:
