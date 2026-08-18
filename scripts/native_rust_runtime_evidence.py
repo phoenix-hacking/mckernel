@@ -12,19 +12,46 @@ from pathlib import Path
 import re
 import shlex
 import shutil
+import stat
 import subprocess
 import sys
 from typing import Any
 
 if __package__:
+    from .native_rust_kbuild_link_closure import (
+        EXPECTED_RAW_RECORD_NAMES,
+        LinkClosureError,
+        check_kbuild_link_closure,
+    )
     from .native_rust_kconfig_policy import (
         KconfigPolicyError,
         validate_native_rust_evidence_fragment,
     )
+    from .native_rust_kconfig_solver import (
+        CAPTURE_STATUS as SOLVER_CAPTURE_STATUS,
+        EXPECTED_CLAIMS as SOLVER_EXPECTED_CLAIMS,
+        EXPECTED_COUNTS as SOLVER_EXPECTED_COUNTS,
+        EXPECTED_LIMITATIONS as SOLVER_EXPECTED_LIMITATIONS,
+        SolverError,
+        validate_matrix_bytes,
+    )
 else:
+    from native_rust_kbuild_link_closure import (
+        EXPECTED_RAW_RECORD_NAMES,
+        LinkClosureError,
+        check_kbuild_link_closure,
+    )
     from native_rust_kconfig_policy import (
         KconfigPolicyError,
         validate_native_rust_evidence_fragment,
+    )
+    from native_rust_kconfig_solver import (
+        CAPTURE_STATUS as SOLVER_CAPTURE_STATUS,
+        EXPECTED_CLAIMS as SOLVER_EXPECTED_CLAIMS,
+        EXPECTED_COUNTS as SOLVER_EXPECTED_COUNTS,
+        EXPECTED_LIMITATIONS as SOLVER_EXPECTED_LIMITATIONS,
+        SolverError,
+        validate_matrix_bytes,
     )
 
 
@@ -40,6 +67,33 @@ BUILD_MODULE_TARGETS = [
     "drivers/misc/mckernel/ihk-smp-x86_64.ko",
     "drivers/misc/mckernel/mcctrl.ko",
 ]
+EXPECTED_RUNTIME_REQUIRED_CONFIG = {
+    "disabled": ["CONFIG_MODULE_SIG_FORCE"],
+    "enabled": [
+        "CONFIG_BINFMT_ELF",
+        "CONFIG_BLK_DEV_INITRD",
+        "CONFIG_MODULES",
+        "CONFIG_MODULE_UNLOAD",
+        "CONFIG_PRINTK",
+        "CONFIG_PROC_FS",
+        "CONFIG_RD_GZIP",
+        "CONFIG_SERIAL_8250",
+        "CONFIG_SERIAL_8250_CONSOLE",
+        "CONFIG_SYSFS",
+    ],
+    "modules": {
+        "CONFIG_MCKERNEL_IHK_RUST": "m",
+        "CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST": "m",
+        "CONFIG_MCKERNEL_MCCTRL_RUST": "m",
+    },
+}
+EXPECTED_LINK_CLAIMS = {
+    "complete_external_build_input_closure": False,
+    "credit_eligible": False,
+    "load_proven": False,
+    "production_ready": False,
+    "runtime_proven": False,
+}
 
 
 class EvidenceError(RuntimeError):
@@ -217,6 +271,21 @@ def _validate_exact_build_workflow(text: str) -> None:
         "CONFIG_MCKERNEL_MCCTRL_RUST; do",
         'grep -qx "$symbol=m" "$BUILD_DIR/.config"',
         "done",
+        'EVIDENCE_DIR="$RUNNER_TEMP/native-rust-build-evidence"',
+        'MATRIX_DIR="$RUNNER_TEMP/native-rust-kconfig-matrix"',
+        'mkdir -p "$EVIDENCE_DIR"',
+        'test ! -e "$MATRIX_DIR"',
+        "python3 scripts/native_rust_kconfig_solver.py run \\",
+        '--source "$NATIVE_SOURCE_ROOT" \\',
+        '--seed "$BUILD_DIR/.config" \\',
+        '--matrix-dir "$MATRIX_DIR"',
+        'cp "$MATRIX_DIR/kconfig-solver-matrix.json" \\',
+        '"$EVIDENCE_DIR/kconfig-solver-matrix.json"',
+        'chmod 0644 "$EVIDENCE_DIR/kconfig-solver-matrix.json"',
+        "python3 scripts/native_rust_kconfig_solver.py check \\",
+        '--matrix "$EVIDENCE_DIR/kconfig-solver-matrix.json" \\',
+        '--source "$NATIVE_SOURCE_ROOT" \\',
+        '--seed "$BUILD_DIR/.config"',
         'printf \'NATIVE_BUILD_DIR=%s\\n\' "$BUILD_DIR" >> "$GITHUB_ENV"',
     )
     if active_commands != expected_resolution_commands:
@@ -382,7 +451,35 @@ def _validate_exact_build_workflow(text: str) -> None:
         'cp "$NATIVE_SOURCE_ROOT/drivers/misc/mckernel/stage-lock.json" "$EVIDENCE_DIR/stage-lock.json"',
         'make -s -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 \\',
         'kernelrelease > "$EVIDENCE_DIR/kernel.release"',
-        'find "$module_root" -maxdepth 1 -type f -name \'.*.cmd\' -exec cp \'{}\' "$EVIDENCE_DIR/" \';\'',
+        "cmd_records=(",
+        ".ihk-smp-x86_64.ko.cmd",
+        ".ihk-smp-x86_64.mod.cmd",
+        ".ihk-smp-x86_64.mod.o.cmd",
+        ".ihk-smp-x86_64.o.cmd",
+        ".ihk.ko.cmd",
+        ".ihk.mod.cmd",
+        ".ihk.mod.o.cmd",
+        ".ihk.o.cmd",
+        ".ihk_smp_x86_64.o.cmd",
+        ".mcctrl.ko.cmd",
+        ".mcctrl.mod.cmd",
+        ".mcctrl.mod.o.cmd",
+        ".mcctrl.o.cmd",
+        ")",
+        "mod_records=(ihk-smp-x86_64.mod ihk.mod mcctrl.mod)",
+        'for record in "${cmd_records[@]}" "${mod_records[@]}"; do',
+        'test -f "$module_root/$record"',
+        'test ! -L "$module_root/$record"',
+        'cp "$module_root/$record" "$EVIDENCE_DIR/$record"',
+        "done",
+        "python3 scripts/native_rust_kbuild_link_closure.py \\",
+        '--records-dir "$EVIDENCE_DIR" \\',
+        '--stage-lock "$EVIDENCE_DIR/stage-lock.json" \\',
+        '--output "$EVIDENCE_DIR/kbuild-link-closure.json"',
+        "python3 scripts/native_rust_kbuild_link_closure.py \\",
+        '--records-dir "$EVIDENCE_DIR" \\',
+        '--stage-lock "$EVIDENCE_DIR/stage-lock.json" \\',
+        '--check-output "$EVIDENCE_DIR/kbuild-link-closure.json"',
         "(",
         'cd "$EVIDENCE_DIR"',
         "find . -maxdepth 1 -type f ! -name SHA256SUMS -printf '%P\\0' \\",
@@ -419,6 +516,98 @@ def _regular_evidence_file(path: Path, label: str, nonempty: bool = True) -> Pat
     if nonempty and not resolved.stat().st_size:
         raise EvidenceError("{0} is empty".format(label))
     return resolved
+
+
+def _regular_evidence_directory(path: Path, label: str) -> Path:
+    raw = os.fspath(path)
+    if not isinstance(raw, str) or not raw or "\x00" in raw or "\\" in raw:
+        raise EvidenceError("{0} path is unsafe".format(label))
+    if raw != "/" and raw.endswith("/"):
+        raise EvidenceError("{0} path has a trailing separator".format(label))
+    components = raw.split("/")
+    if raw.startswith("/"):
+        components = components[1:]
+    if not components or any(item in ("", ".", "..") for item in components):
+        raise EvidenceError("{0} path has an unsafe component".format(label))
+    requested = Path(os.path.abspath(raw))
+    current = Path(requested.anchor)
+    try:
+        status = current.lstat()
+    except OSError as error:
+        raise EvidenceError("cannot inspect {0}: {1}".format(label, error)) from error
+    for item in requested.parts[1:]:
+        current = current / item
+        try:
+            status = current.lstat()
+        except OSError as error:
+            raise EvidenceError("cannot inspect {0}: {1}".format(label, error)) from error
+        if stat.S_ISLNK(status.st_mode) or not stat.S_ISDIR(status.st_mode):
+            raise EvidenceError(
+                "{0} must traverse only real directories".format(label)
+            )
+    return requested
+
+
+def _stat_identity(metadata: os.stat_result) -> tuple[Any, ...]:
+    return (
+        metadata.st_dev,
+        metadata.st_ino,
+        metadata.st_mode,
+        metadata.st_size,
+        getattr(metadata, "st_mtime_ns", int(metadata.st_mtime * 1000000000)),
+        getattr(metadata, "st_ctime_ns", int(metadata.st_ctime * 1000000000)),
+    )
+
+
+def _read_regular_evidence_bytes(path: Path, label: str) -> bytes:
+    try:
+        before = path.lstat()
+    except OSError as error:
+        raise EvidenceError("cannot inspect {0}: {1}".format(label, error)) from error
+    if stat.S_ISLNK(before.st_mode) or not stat.S_ISREG(before.st_mode):
+        raise EvidenceError("{0} must be a regular non-symlink file".format(label))
+    if stat.S_IMODE(before.st_mode) != 0o644:
+        raise EvidenceError("{0} mode must be 0644".format(label))
+    flags = os.O_RDONLY
+    if hasattr(os, "O_BINARY"):
+        flags |= os.O_BINARY
+    if hasattr(os, "O_NOFOLLOW"):
+        flags |= os.O_NOFOLLOW
+    try:
+        descriptor = os.open(str(path), flags)
+        try:
+            opened = os.fstat(descriptor)
+            identity = _stat_identity(opened)
+            before_identity = _stat_identity(before)
+            if identity != before_identity:
+                raise EvidenceError("{0} changed while it was opened".format(label))
+            chunks: list[bytes] = []
+            while True:
+                chunk = os.read(descriptor, 1024 * 1024)
+                if not chunk:
+                    break
+                chunks.append(chunk)
+            after = os.fstat(descriptor)
+            after_identity = _stat_identity(after)
+            if after_identity != identity:
+                raise EvidenceError("{0} changed while it was read".format(label))
+        finally:
+            os.close(descriptor)
+    except EvidenceError:
+        raise
+    except OSError as error:
+        raise EvidenceError("cannot read {0}: {1}".format(label, error)) from error
+    value = b"".join(chunks)
+    if len(value) != before.st_size:
+        raise EvidenceError("{0} size changed while it was read".format(label))
+    try:
+        final = path.lstat()
+    except OSError as error:
+        raise EvidenceError("cannot recheck {0}: {1}".format(label, error)) from error
+    final_identity = _stat_identity(final)
+    if final_identity != before_identity:
+        raise EvidenceError("{0} changed before validation completed".format(label))
+    return value
 
 
 def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) -> dict[str, Any]:
@@ -484,21 +673,7 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
         ),
         "distribution": "Rocky Linux",
         "qemu_accelerator": "tcg",
-        "required_kernel_config": {
-            "disabled": ["CONFIG_MODULE_SIG_FORCE"],
-            "enabled": [
-                "CONFIG_BINFMT_ELF",
-                "CONFIG_BLK_DEV_INITRD",
-                "CONFIG_MODULES",
-                "CONFIG_MODULE_UNLOAD",
-                "CONFIG_PRINTK",
-                "CONFIG_PROC_FS",
-                "CONFIG_RD_GZIP",
-                "CONFIG_SERIAL_8250",
-                "CONFIG_SERIAL_8250_CONSOLE",
-                "CONFIG_SYSFS",
-            ],
-        },
+        "required_kernel_config": EXPECTED_RUNTIME_REQUIRED_CONFIG,
         "release": "10.2",
     }
     if contract["runtime"] != expected_runtime:
@@ -588,28 +763,54 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
     ):
         raise EvidenceError("repository contract must remain uncaptured and unreviewed")
     expected_build_evidence = [
+        ".ihk-smp-x86_64.ko.cmd",
+        ".ihk-smp-x86_64.mod.cmd",
+        ".ihk-smp-x86_64.mod.o.cmd",
+        ".ihk-smp-x86_64.o.cmd",
+        ".ihk.ko.cmd",
+        ".ihk.mod.cmd",
+        ".ihk.mod.o.cmd",
+        ".ihk.o.cmd",
+        ".ihk_smp_x86_64.o.cmd",
+        ".mcctrl.ko.cmd",
+        ".mcctrl.mod.cmd",
+        ".mcctrl.mod.o.cmd",
+        ".mcctrl.o.cmd",
+        "PRECHECK_SHA256SUMS",
         "SHA256SUMS",
+        "build-log.exit-code",
         "build.commands",
         "build.exit-code",
         "build.log",
-        "build-log.exit-code",
         "build.phase",
         "built-module-artifacts.txt",
         "bzImage",
         "commit.sha",
         "ihk-smp-x86_64.ko",
         "ihk-smp-x86_64.ko.modinfo",
+        "ihk-smp-x86_64.ko.modinfo-section",
         "ihk-smp-x86_64.ko.nm",
+        "ihk-smp-x86_64.ko.readelf",
+        "ihk-smp-x86_64.mod",
         "ihk.ko",
         "ihk.ko.modinfo",
+        "ihk.ko.modinfo-section",
         "ihk.ko.nm",
+        "ihk.ko.readelf",
+        "ihk.mod",
+        "kbuild-link-closure.json",
+        "kconfig-solver-matrix.json",
         "kernel.release",
         "mcctrl.ko",
         "mcctrl.ko.modinfo",
+        "mcctrl.ko.modinfo-section",
         "mcctrl.ko.nm",
+        "mcctrl.ko.readelf",
+        "mcctrl.mod",
         "module-targets.txt",
         "resolved.config",
         "stage-lock.json",
+        "workflow-state",
     ]
     expected_runtime_evidence = [
         "SHA256SUMS",
@@ -637,6 +838,8 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
             "build_workflow",
             "config_fragment",
             "init",
+            "kbuild_link_closure",
+            "kconfig_solver",
             "poweroff",
             "runtime_workflow",
             "source_lock",
@@ -647,12 +850,16 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
         "build_workflow": ".github/workflows/native-rust-host-modules-exact-build.yml",
         "config_fragment": "host-kernel/rocky/configs/native-rust-evidence.config",
         "init": "scripts/native-rust-runtime-init.sh",
+        "kbuild_link_closure": "scripts/native_rust_kbuild_link_closure.py",
+        "kconfig_solver": "scripts/native_rust_kconfig_solver.py",
         "poweroff": "scripts/native-rust-runtime-poweroff.S",
         "runtime_workflow": ".github/workflows/native-rust-host-modules-exact-runtime.yml",
         "source_lock": "host-kernel/rocky/source-lock.json",
     }
     if inputs != expected_inputs:
         raise EvidenceError("runtime repository input paths differ")
+    _repo_file(repo, inputs["kbuild_link_closure"], "Kbuild link-closure checker")
+    _repo_file(repo, inputs["kconfig_solver"], "Kconfig solver")
     build_workflow = _read_text(
         _repo_file(repo, inputs["build_workflow"], "exact build workflow"),
         "exact build workflow",
@@ -819,6 +1026,136 @@ def _parse_sums(directory: Path) -> dict[str, str]:
     return records
 
 
+def _validate_exact_build_artifact_files(
+    directory: Path, records: dict[str, str], expected: list[str]
+) -> dict[str, tuple[Any, ...]]:
+    if (
+        type(expected) is not list
+        or expected != sorted(expected)
+        or len(expected) != len(set(expected))
+        or "SHA256SUMS" not in expected
+    ):
+        raise EvidenceError("build artifact contract file list is not exact and sorted")
+    actual: list[str] = []
+    identities: dict[str, tuple[Any, ...]] = {}
+    try:
+        entries = list(os.scandir(directory))
+    except OSError as error:
+        raise EvidenceError("cannot scan build artifact: {0}".format(error)) from error
+    for entry in entries:
+        try:
+            metadata = entry.stat(follow_symlinks=False)
+        except OSError as error:
+            raise EvidenceError(
+                "cannot inspect build artifact entry: {0}".format(error)
+            ) from error
+        if (
+            entry.name in {"", ".", ".."}
+            or "/" in entry.name
+            or "\\" in entry.name
+            or not stat.S_ISREG(metadata.st_mode)
+            or stat.S_IMODE(metadata.st_mode) != 0o644
+        ):
+            raise EvidenceError(
+                "build artifact contains a non-regular, non-0644, or unsafe entry"
+            )
+        actual.append(entry.name)
+        identities[entry.name] = _stat_identity(metadata)
+    actual.sort()
+    if actual != expected:
+        raise EvidenceError(
+            "build artifact file set differs: missing={0}, extra={1}".format(
+                sorted(set(expected) - set(actual)),
+                sorted(set(actual) - set(expected)),
+            )
+        )
+    manifested = sorted(set(records) | {"SHA256SUMS"})
+    if manifested != expected:
+        raise EvidenceError(
+            "build SHA256SUMS file set differs: missing={0}, extra={1}".format(
+                sorted(set(expected) - set(manifested)),
+                sorted(set(manifested) - set(expected)),
+            )
+        )
+    return identities
+
+
+def _validate_phase2_build_evidence(
+    directory: Path, records: dict[str, str]
+) -> dict[str, Any]:
+    matrix_path = directory / "kconfig-solver-matrix.json"
+    matrix_bytes = _read_regular_evidence_bytes(
+        matrix_path, "Kconfig solver matrix"
+    )
+    if _sha256_bytes(matrix_bytes) != records["kconfig-solver-matrix.json"]:
+        raise EvidenceError("Kconfig solver matrix digest differs from SHA256SUMS")
+    try:
+        matrix = validate_matrix_bytes(matrix_bytes)
+    except SolverError as error:
+        raise EvidenceError("Kconfig solver matrix is invalid: {0}".format(error)) from error
+
+    link_path = directory / "kbuild-link-closure.json"
+    try:
+        link = check_kbuild_link_closure(
+            str(directory), str(link_path), stage_lock_path=str(directory / "stage-lock.json")
+        )
+    except LinkClosureError as error:
+        raise EvidenceError("Kbuild link closure is invalid: {0}".format(error)) from error
+    link_bytes = _read_regular_evidence_bytes(link_path, "Kbuild link closure")
+    if _sha256_bytes(link_bytes) != records["kbuild-link-closure.json"]:
+        raise EvidenceError("Kbuild link closure digest differs from SHA256SUMS")
+
+    resolved_bytes = _read_regular_evidence_bytes(
+        directory / "resolved.config", "resolved build config"
+    )
+    seed = matrix["inputs"]["seed_config"]
+    if seed != {
+        "mode": "0644",
+        "path": "seed.config",
+        "sha256": records["resolved.config"],
+        "size": len(resolved_bytes),
+    }:
+        raise EvidenceError("Kconfig solver seed does not bind the resolved build config")
+
+    stage_lock = _load_json(directory / "stage-lock.json")
+    stage_files = stage_lock.get("files")
+    if type(stage_files) is not list:
+        raise EvidenceError("stage lock files are malformed")
+    kconfig_rows = [
+        item
+        for item in stage_files
+        if type(item) is dict and item.get("path") == "Kconfig"
+    ]
+    if len(kconfig_rows) != 1 or set(kconfig_rows[0]) != {"path", "sha256"}:
+        raise EvidenceError("stage lock must contain one exact Kconfig record")
+    staged_kconfig = matrix["inputs"]["staged_kconfig"]
+    if (
+        staged_kconfig["sha256"] != kconfig_rows[0]["sha256"]
+        or link["stage_lock"] is None
+        or link["stage_lock"]["sha256"] != records["stage-lock.json"]
+        or link["stage_lock"]["manifest_sha256"]
+        != stage_lock.get("manifest_sha256")
+    ):
+        raise EvidenceError("solver, link closure, and stage-lock identities diverge")
+
+    return {
+        "kbuild_link_closure": {
+            "claims": link["claims"],
+            "module_count": len(link["modules"]),
+            "raw_record_count": len(link["raw_record_names"]),
+            "sha256": records["kbuild-link-closure.json"],
+            "stage_lock_sha256": records["stage-lock.json"],
+        },
+        "kconfig_solver": {
+            "claims": matrix["claims"],
+            "counts": matrix["counts"],
+            "limitations": matrix["limitations"],
+            "sha256": records["kconfig-solver-matrix.json"],
+            "status": matrix["status"],
+        },
+    }
+
+
 def _validate_build_scope_artifacts(
     directory: Path, records: dict[str, str]
 ) -> dict[str, Any]:
@@ -932,7 +1269,7 @@ def _nm(module: Path, arguments: list[str]) -> str:
     return result.stdout
 
 
-def _validate_resolved_config(path: Path, requirements: dict[str, list[str]]) -> dict[str, Any]:
+def _validate_resolved_config(path: Path, requirements: dict[str, Any]) -> dict[str, Any]:
     if path.is_symlink() or not path.is_file():
         raise EvidenceError("resolved kernel config must be a regular file")
     lines = _read_text(path, "resolved kernel config").splitlines()
@@ -952,9 +1289,27 @@ def _validate_resolved_config(path: Path, requirements: dict[str, list[str]]) ->
         ]
         if matches != ["# {0} is not set".format(symbol)]:
             raise EvidenceError("runtime kernel enables forbidden option: {0}".format(symbol))
+    modules = requirements["modules"]
+    if not isinstance(modules, dict) or modules != {
+        "CONFIG_MCKERNEL_IHK_RUST": "m",
+        "CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST": "m",
+        "CONFIG_MCKERNEL_MCCTRL_RUST": "m",
+    }:
+        raise EvidenceError("runtime native module config contract differs")
+    for symbol, expected in modules.items():
+        matches = [
+            line
+            for line in lines
+            if line.startswith(symbol + "=") or line == "# {0} is not set".format(symbol)
+        ]
+        if matches != ["{0}={1}".format(symbol, expected)]:
+            raise EvidenceError(
+                "runtime kernel lacks required modular setting: {0}".format(symbol)
+            )
     return {
         "disabled": list(requirements["disabled"]),
         "enabled": list(requirements["enabled"]),
+        "modules": dict(modules),
     }
 
 
@@ -1126,6 +1481,182 @@ def validate_serial(serial_path: Path, kernel_release: str) -> dict[str, Any]:
     }
 
 
+def _require_sha256_value(value: Any, label: str) -> str:
+    if type(value) is not str or HEX64.fullmatch(value) is None:
+        raise EvidenceError("{0} must be exact SHA-256 text".format(label))
+    return value
+
+
+def _validate_capture_content(value: dict[str, Any]) -> None:
+    _require_sha256_value(value["contract_sha256"], "capture contract digest")
+    identity = value["identity"]
+    _require_keys(
+        identity,
+        {"candidate_sha", "github_repository", "github_run_attempt", "github_run_id"},
+        "capture identity",
+    )
+    if type(identity["candidate_sha"]) is not str or HEX40.fullmatch(
+        identity["candidate_sha"]
+    ) is None:
+        raise EvidenceError("capture candidate SHA differs")
+    if type(identity["github_repository"]) is not str or re.fullmatch(
+        r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", identity["github_repository"]
+    ) is None:
+        raise EvidenceError("capture repository identity differs")
+    for key in ("github_run_attempt", "github_run_id"):
+        item = identity[key]
+        if type(item) is not str or not item.isdigit() or int(item) < 1:
+            raise EvidenceError("capture {0} differs".format(key))
+
+    build = value["build"]
+    _require_keys(
+        build,
+        {
+            "artifact_manifest_sha256",
+            "bzimage_sha256",
+            "config_runtime_requirements",
+            "config_sha256",
+            "kbuild_link_closure",
+            "kconfig_solver",
+            "kernel_release",
+            "modules",
+            "scope",
+        },
+        "capture build",
+    )
+    for key in ("artifact_manifest_sha256", "bzimage_sha256", "config_sha256"):
+        _require_sha256_value(build[key], "capture build.{0}".format(key))
+    if build["config_runtime_requirements"] != EXPECTED_RUNTIME_REQUIRED_CONFIG:
+        raise EvidenceError("capture runtime config requirements differ")
+    release = build["kernel_release"]
+    if type(release) is not str or re.fullmatch(
+        r"6\.12\.0-211\.44\.1\.el10_2(?:[.A-Za-z0-9_+-]*)", release
+    ) is None:
+        raise EvidenceError("capture kernel release differs")
+
+    scope = build["scope"]
+    _require_keys(
+        scope,
+        {"build_commands_sha256", "build_log_sha256", "kernel_targets", "module_targets"},
+        "capture build scope",
+    )
+    _require_sha256_value(scope["build_commands_sha256"], "capture build command digest")
+    _require_sha256_value(scope["build_log_sha256"], "capture build log digest")
+    if scope["kernel_targets"] != BUILD_KERNEL_TARGETS or scope[
+        "module_targets"
+    ] != BUILD_MODULE_TARGETS:
+        raise EvidenceError("capture build target scope differs")
+
+    modules = build["modules"]
+    _require_keys(modules, {"ihk", "ihk_smp_x86_64", "mcctrl"}, "capture modules")
+    expected_module_facts = {
+        "ihk": {"depends": [], "import_namespaces": []},
+        "ihk_smp_x86_64": {
+            "depends": ["ihk"],
+            "import_namespaces": ["MCKERNEL_IHK_V1"],
+        },
+        "mcctrl": {
+            "depends": ["ihk"],
+            "import_namespaces": ["MCKERNEL_IHK_V1"],
+        },
+    }
+    for name, expected in expected_module_facts.items():
+        record = modules[name]
+        _require_keys(record, {"depends", "import_namespaces", "sha256"}, name)
+        if record["depends"] != expected["depends"] or record[
+            "import_namespaces"
+        ] != expected["import_namespaces"]:
+            raise EvidenceError("capture module metadata differs for {0}".format(name))
+        _require_sha256_value(record["sha256"], "capture module digest {0}".format(name))
+
+    solver = build["kconfig_solver"]
+    _require_keys(
+        solver,
+        {"claims", "counts", "limitations", "sha256", "status"},
+        "capture Kconfig solver",
+    )
+    if solver["claims"] != SOLVER_EXPECTED_CLAIMS or any(
+        solver["claims"].get(key) is not False for key in SOLVER_EXPECTED_CLAIMS
+    ):
+        raise EvidenceError("capture Kconfig solver claims must remain false")
+    counts = solver["counts"]
+    if counts != SOLVER_EXPECTED_COUNTS or type(counts) is not dict:
+        raise EvidenceError("capture Kconfig solver counts differ")
+    for key in (
+        "case_count",
+        "matrix_make_invocation_count",
+        "negative_make_invocation_count",
+        "total_make_invocation_count",
+        "two_pass_byte_identical_count",
+    ):
+        if type(counts.get(key)) is not int:
+            raise EvidenceError("capture Kconfig solver count type differs")
+    distribution = counts.get("module_result_distribution")
+    if type(distribution) is not dict or any(
+        type(distribution.get(key)) is not int for key in ("0", "1", "2", "3")
+    ):
+        raise EvidenceError("capture Kconfig solver distribution type differs")
+    if solver["limitations"] != SOLVER_EXPECTED_LIMITATIONS or any(
+        type(solver["limitations"].get(key)) is not str
+        for key in SOLVER_EXPECTED_LIMITATIONS
+    ):
+        raise EvidenceError("capture Kconfig solver limitations differ")
+    if type(solver["status"]) is not str or solver["status"] != SOLVER_CAPTURE_STATUS:
+        raise EvidenceError("capture Kconfig solver status differs")
+    _require_sha256_value(solver["sha256"], "capture Kconfig solver digest")
+
+    link = build["kbuild_link_closure"]
+    _require_keys(
+        link,
+        {"claims", "module_count", "raw_record_count", "sha256", "stage_lock_sha256"},
+        "capture Kbuild link closure",
+    )
+    if link["claims"] != EXPECTED_LINK_CLAIMS or any(
+        link["claims"].get(key) is not False for key in EXPECTED_LINK_CLAIMS
+    ):
+        raise EvidenceError("capture Kbuild link claims must remain false")
+    if type(link["module_count"]) is not int or link["module_count"] != 3:
+        raise EvidenceError("capture Kbuild link module count differs")
+    if type(link["raw_record_count"]) is not int or link[
+        "raw_record_count"
+    ] != len(EXPECTED_RAW_RECORD_NAMES):
+        raise EvidenceError("capture Kbuild raw record count differs")
+    _require_sha256_value(link["sha256"], "capture Kbuild link digest")
+    _require_sha256_value(link["stage_lock_sha256"], "capture stage-lock digest")
+
+    runtime = value["runtime"]
+    runtime_digests = {
+        "environment_sha256",
+        "initramfs_sha256",
+        "initramfs_sha256_record",
+        "qemu_command_sha256",
+        "qemu_exit_code_sha256",
+        "qemu_log_sha256",
+        "qemu_version_sha256",
+        "serial_sha256",
+    }
+    _require_keys(
+        runtime,
+        runtime_digests
+        | {"kernel_release", "negative_unload_status", "provider_refcount", "provider_users"},
+        "capture runtime",
+    )
+    for key in runtime_digests:
+        _require_sha256_value(runtime[key], "capture runtime.{0}".format(key))
+    if runtime["kernel_release"] != release:
+        raise EvidenceError("capture build/runtime kernel releases diverge")
+    if type(runtime["negative_unload_status"]) is not int or runtime[
+        "negative_unload_status"
+    ] != 1:
+        raise EvidenceError("capture negative unload status differs")
+    if type(runtime["provider_refcount"]) is not int or runtime[
+        "provider_refcount"
+    ] != 2:
+        raise EvidenceError("capture provider refcount differs")
+    if runtime["provider_users"] != ["ihk_smp_x86_64", "mcctrl"]:
+        raise EvidenceError("capture provider users differ")
+
+
 def validate_capture(value: dict[str, Any]) -> None:
     _require_keys(
         value,
@@ -1141,8 +1672,14 @@ def validate_capture(value: dict[str, Any]) -> None:
         },
         "capture",
     )
-    if value["schema_version"] != 1 or value["contract_id"] != CONTRACT_ID:
+    if (
+        type(value["schema_version"]) is not int
+        or value["schema_version"] != 1
+        or type(value["contract_id"]) is not str
+        or value["contract_id"] != CONTRACT_ID
+    ):
         raise EvidenceError("capture identity differs")
+    _validate_capture_content(value)
     readiness = value["readiness"]
     if readiness != {
         "credit_eligible": False,
@@ -1157,6 +1694,7 @@ def validate_capture(value: dict[str, Any]) -> None:
         raise EvidenceError("capture attempts to bypass independent review or award credit")
     unsigned = copy.deepcopy(value)
     recorded = unsigned.pop("capture_sha256")
+    _require_sha256_value(recorded, "capture digest")
     if recorded != _sha256_bytes(_canonical_bytes(unsigned)):
         raise EvidenceError("capture digest is stale")
 
@@ -1189,15 +1727,16 @@ def capture(
         or int(github_run_attempt) < 1
     ):
         raise EvidenceError("GitHub run identity is incomplete")
-    build_dir = build_dir.resolve()
+    build_dir = _regular_evidence_directory(build_dir, "build evidence directory")
+    initial_directory_identity = _stat_identity(build_dir.lstat())
     records = _parse_sums(build_dir)
     contract = _load_json(repo / contract_relative)
-    required = set(contract["artifact_contract"]["build_evidence_files"])
-    available = set(records) | {"SHA256SUMS"}
-    if not required.issubset(available):
-        raise EvidenceError(
-            "build artifact lacks required files: {0}".format(sorted(required - available))
-        )
+    initial_file_identities = _validate_exact_build_artifact_files(
+        build_dir,
+        records,
+        contract["artifact_contract"]["build_evidence_files"],
+    )
+    phase2 = _validate_phase2_build_evidence(build_dir, records)
     build_scope = _validate_build_scope_artifacts(build_dir, records)
     commit = _read_text(build_dir / "commit.sha", "build commit").strip()
     if commit != candidate_sha:
@@ -1308,6 +1847,8 @@ def capture(
             "bzimage_sha256": records["bzImage"],
             "config_sha256": records["resolved.config"],
             "config_runtime_requirements": config_state,
+            "kbuild_link_closure": phase2["kbuild_link_closure"],
+            "kconfig_solver": phase2["kconfig_solver"],
             "kernel_release": kernel_release,
             "modules": modules,
             "scope": build_scope,
@@ -1324,6 +1865,21 @@ def capture(
             ],
         },
     }
+    final_directory = _regular_evidence_directory(
+        build_dir, "build evidence directory"
+    )
+    final_records = _parse_sums(final_directory)
+    final_file_identities = _validate_exact_build_artifact_files(
+        build_dir,
+        final_records,
+        contract["artifact_contract"]["build_evidence_files"],
+    )
+    if (
+        _stat_identity(final_directory.lstat()) != initial_directory_identity
+        or final_file_identities != initial_file_identities
+        or final_records != records
+    ):
+        raise EvidenceError("build artifact changed before capture completed")
     value["capture_sha256"] = _sha256_bytes(_canonical_bytes(value))
     validate_capture(value)
     return value

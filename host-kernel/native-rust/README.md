@@ -126,6 +126,35 @@ Check these constraints with:
 python3 scripts/native_rust_build_surface_audit.py
 ```
 
+The exact native-module workflow also runs a bounded Kconfig solver capture
+before compiling. It executes all 54 combinations of `CONFIG_MODULES` and the
+three requested project tristates twice, plus a two-pass `CONFIG_RUST=n`
+negative: 110 serial `olddefconfig` invocations across 55 fresh out-of-tree
+case directories. The separate `CONFIG_X86_64=n` negative is structural-only,
+not another solver invocation. The resulting `kconfig-solver-matrix.json`
+records the exact oracle distribution and input identities, but deliberately
+does not transport the per-case `.config` bytes or claim independent replay,
+production readiness, gate credit, or tracker credit.
+
+After compilation, `scripts/native_rust_kbuild_link_closure.py` reparses the
+exact 13 top-level Kbuild `.cmd` records and three raw `.mod` object lists. It
+binds the recorded names and command-token relationships for the three Rust
+crate roots, staged Rust dependency closure, generated module metadata objects,
+aggregate object list, and final link inputs. The generated `.mod.o`, aggregate,
+and final-link input bytes themselves are not archived or hashed. The resulting
+`kbuild-link-closure.json` also explicitly excludes kernel-generated headers,
+toolchain binaries, external libraries, and other unarchived build inputs, so it
+remains a bounded compiler/link capture rather than loadability, runtime,
+production, or gate evidence.
+
+Run their repository-focused checks with:
+
+```sh
+python3 -m unittest -v \
+  scripts.tests.test_native_rust_kconfig_solver \
+  scripts.tests.test_native_rust_kbuild_link_closure
+```
+
 ## IHK IKC queue source foundation
 
 The native IHK crate includes `abi/x86_64.rs` and `ikc_queue.rs` through

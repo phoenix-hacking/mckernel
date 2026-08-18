@@ -7,11 +7,13 @@ import copy
 import hashlib
 import io
 import json
+import os
 from pathlib import Path
 import shutil
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -119,6 +121,91 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         path = self.root / "serial.log"
         path.write_text(text, encoding="utf-8")
         return path
+
+    def valid_capture_unsigned(self) -> dict:
+        digest = "1" * 64
+        release = KERNEL_RELEASE
+        return {
+            "schema_version": 1,
+            "contract_id": evidence.CONTRACT_ID,
+            "contract_sha256": digest,
+            "identity": {
+                "candidate_sha": "2" * 40,
+                "github_repository": "phoenix-hacking/mckernel",
+                "github_run_attempt": "1",
+                "github_run_id": "1",
+            },
+            "build": {
+                "artifact_manifest_sha256": digest,
+                "bzimage_sha256": digest,
+                "config_runtime_requirements": copy.deepcopy(
+                    evidence.EXPECTED_RUNTIME_REQUIRED_CONFIG
+                ),
+                "config_sha256": digest,
+                "kbuild_link_closure": {
+                    "claims": copy.deepcopy(evidence.EXPECTED_LINK_CLAIMS),
+                    "module_count": 3,
+                    "raw_record_count": len(evidence.EXPECTED_RAW_RECORD_NAMES),
+                    "sha256": digest,
+                    "stage_lock_sha256": digest,
+                },
+                "kconfig_solver": {
+                    "claims": copy.deepcopy(evidence.SOLVER_EXPECTED_CLAIMS),
+                    "counts": copy.deepcopy(evidence.SOLVER_EXPECTED_COUNTS),
+                    "limitations": copy.deepcopy(evidence.SOLVER_EXPECTED_LIMITATIONS),
+                    "sha256": digest,
+                    "status": evidence.SOLVER_CAPTURE_STATUS,
+                },
+                "kernel_release": release,
+                "modules": {
+                    "ihk": {
+                        "depends": [],
+                        "import_namespaces": [],
+                        "sha256": digest,
+                    },
+                    "ihk_smp_x86_64": {
+                        "depends": ["ihk"],
+                        "import_namespaces": ["MCKERNEL_IHK_V1"],
+                        "sha256": digest,
+                    },
+                    "mcctrl": {
+                        "depends": ["ihk"],
+                        "import_namespaces": ["MCKERNEL_IHK_V1"],
+                        "sha256": digest,
+                    },
+                },
+                "scope": {
+                    "build_commands_sha256": digest,
+                    "build_log_sha256": digest,
+                    "kernel_targets": list(evidence.BUILD_KERNEL_TARGETS),
+                    "module_targets": list(evidence.BUILD_MODULE_TARGETS),
+                },
+            },
+            "runtime": {
+                "environment_sha256": digest,
+                "initramfs_sha256": digest,
+                "initramfs_sha256_record": digest,
+                "kernel_release": release,
+                "negative_unload_status": 1,
+                "provider_refcount": 2,
+                "provider_users": ["ihk_smp_x86_64", "mcctrl"],
+                "qemu_command_sha256": digest,
+                "qemu_exit_code_sha256": digest,
+                "qemu_log_sha256": digest,
+                "qemu_version_sha256": digest,
+                "serial_sha256": digest,
+            },
+            "readiness": {
+                "credit_eligible": False,
+                "gate_status": "NOT_READY",
+                "independent_reviewed": False,
+                "status": "CAPTURED_UNREVIEWED",
+                "blockers": [
+                    "GitHub artifact digest must be retained immutably",
+                    "independent evidence review must verify and register this exact capture",
+                ],
+            },
+        }
 
     def test_repository_contract_passes_without_gate_credit(self) -> None:
         summary = evidence.validate_contract(REPO_ROOT)
@@ -349,30 +436,39 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
 
     def test_capture_readiness_cannot_be_mutated(self) -> None:
-        unsigned = {
-            "schema_version": 1,
-            "contract_id": evidence.CONTRACT_ID,
-            "contract_sha256": "1" * 64,
-            "identity": {},
-            "build": {},
-            "runtime": {},
-            "readiness": {
-                "credit_eligible": False,
-                "gate_status": "NOT_READY",
-                "independent_reviewed": False,
-                "status": "CAPTURED_UNREVIEWED",
-                "blockers": [
-                    "GitHub artifact digest must be retained immutably",
-                    "independent evidence review must verify and register this exact capture",
-                ],
-            },
-        }
+        unsigned = self.valid_capture_unsigned()
         capture = copy.deepcopy(unsigned)
         capture["capture_sha256"] = evidence._sha256_bytes(evidence._canonical_bytes(unsigned))
         evidence.validate_capture(capture)
         capture["readiness"]["credit_eligible"] = True
         with self.assertRaisesRegex(evidence.EvidenceError, "bypass independent review"):
             evidence.validate_capture(capture)
+
+    def test_capture_rejects_omitted_or_positive_phase2_summaries(self) -> None:
+        mutations = []
+        omitted = self.valid_capture_unsigned()
+        omitted["build"] = {}
+        mutations.append(omitted)
+        solver = self.valid_capture_unsigned()
+        solver["build"]["kconfig_solver"]["claims"]["credit_eligible"] = True
+        mutations.append(solver)
+        link = self.valid_capture_unsigned()
+        link["build"]["kbuild_link_closure"]["claims"]["production_ready"] = True
+        mutations.append(link)
+        float_count = self.valid_capture_unsigned()
+        float_count["build"]["kconfig_solver"]["counts"]["case_count"] = 54.0
+        mutations.append(float_count)
+        extra = self.valid_capture_unsigned()
+        extra["build"]["kconfig_solver"]["extra"] = False
+        mutations.append(extra)
+        for index, unsigned in enumerate(mutations):
+            with self.subTest(index=index):
+                value = copy.deepcopy(unsigned)
+                value["capture_sha256"] = evidence._sha256_bytes(
+                    evidence._canonical_bytes(unsigned)
+                )
+                with self.assertRaises(evidence.EvidenceError):
+                    evidence.validate_capture(value)
 
     def test_build_manifest_accepts_kbuild_dot_command_records(self) -> None:
         directory = self.root / "build"
@@ -384,6 +480,114 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             f"{digest}  .ihk.o.cmd\n", encoding="utf-8"
         )
         self.assertEqual(digest, evidence._parse_sums(directory)[".ihk.o.cmd"])
+
+    def test_build_artifact_file_set_is_exact_regular_and_mode_bound(self) -> None:
+        directory = self.root / "exact-build"
+        directory.mkdir()
+        payload = directory / "payload"
+        payload.write_bytes(b"bounded\n")
+        digest = hashlib.sha256(payload.read_bytes()).hexdigest()
+        sums = directory / "SHA256SUMS"
+        sums.write_text("{0}  payload\n".format(digest), encoding="utf-8")
+        expected = ["SHA256SUMS", "payload"]
+        evidence._validate_exact_build_artifact_files(
+            directory, {"payload": digest}, expected
+        )
+
+        extra = directory / "extra"
+        extra.write_bytes(b"unlisted\n")
+        with self.assertRaisesRegex(evidence.EvidenceError, "file set differs"):
+            evidence._validate_exact_build_artifact_files(
+                directory, {"payload": digest}, expected
+            )
+        extra.unlink()
+
+        os.chmod(str(payload), 0o600)
+        with self.assertRaisesRegex(evidence.EvidenceError, "non-0644"):
+            evidence._validate_exact_build_artifact_files(
+                directory, {"payload": digest}, expected
+            )
+
+    def test_build_artifact_directory_rejects_symlink_and_dotdot_paths(self) -> None:
+        directory = self.root / "real" / "artifact"
+        directory.mkdir(parents=True)
+        alias = self.root / "alias"
+        alias.symlink_to(self.root / "real", target_is_directory=True)
+        with self.assertRaisesRegex(evidence.EvidenceError, "real directories"):
+            evidence._regular_evidence_directory(
+                alias / "artifact", "build evidence directory"
+            )
+        with self.assertRaisesRegex(evidence.EvidenceError, "unsafe component"):
+            evidence._regular_evidence_directory(
+                self.root / "real" / ".." / "real" / "artifact",
+                "build evidence directory",
+            )
+
+    def test_phase2_reports_cross_bind_config_kconfig_and_stage_lock(self) -> None:
+        directory = self.root / "phase2"
+        directory.mkdir()
+        resolved = b"CONFIG_MODULES=y\n"
+        matrix_raw = b"{}\n"
+        link_raw = b"{}\n"
+        stage = {
+            "files": [{"path": "Kconfig", "sha256": "2" * 64}],
+            "manifest_sha256": "3" * 64,
+        }
+        values = {
+            "resolved.config": resolved,
+            "kconfig-solver-matrix.json": matrix_raw,
+            "kbuild-link-closure.json": link_raw,
+            "stage-lock.json": (
+                json.dumps(stage, sort_keys=True, separators=(",", ":")) + "\n"
+            ).encode("ascii"),
+        }
+        records = {}
+        for name, value in values.items():
+            (directory / name).write_bytes(value)
+            records[name] = hashlib.sha256(value).hexdigest()
+        matrix = {
+            "claims": {"credit_eligible": False},
+            "counts": {"case_count": 54},
+            "inputs": {
+                "seed_config": {
+                    "mode": "0644",
+                    "path": "seed.config",
+                    "sha256": records["resolved.config"],
+                    "size": len(resolved),
+                },
+                "staged_kconfig": {
+                    "path": "drivers/misc/mckernel/Kconfig",
+                    "sha256": "2" * 64,
+                    "size": 1,
+                },
+            },
+            "limitations": {"scope": "unreviewed"},
+            "status": "captured-unreviewed",
+        }
+        link = {
+            "claims": {"credit_eligible": False},
+            "modules": [{}, {}, {}],
+            "raw_record_names": [str(index) for index in range(16)],
+            "stage_lock": {
+                "manifest_sha256": "3" * 64,
+                "sha256": records["stage-lock.json"],
+            },
+        }
+        with mock.patch.object(evidence, "validate_matrix_bytes", return_value=matrix), mock.patch.object(
+            evidence, "check_kbuild_link_closure", return_value=link
+        ):
+            result = evidence._validate_phase2_build_evidence(directory, records)
+            self.assertEqual(54, result["kconfig_solver"]["counts"]["case_count"])
+            self.assertEqual(16, result["kbuild_link_closure"]["raw_record_count"])
+
+            matrix["inputs"]["seed_config"]["sha256"] = "4" * 64
+            with self.assertRaisesRegex(evidence.EvidenceError, "resolved build config"):
+                evidence._validate_phase2_build_evidence(directory, records)
+            matrix["inputs"]["seed_config"]["sha256"] = records["resolved.config"]
+
+            matrix["inputs"]["staged_kconfig"]["sha256"] = "5" * 64
+            with self.assertRaisesRegex(evidence.EvidenceError, "identities diverge"):
+                evidence._validate_phase2_build_evidence(directory, records)
 
     def write_build_scope_artifacts(self) -> tuple[Path, dict[str, str]]:
         directory = self.root / "scope"
@@ -478,6 +682,11 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         requirements = {
             "enabled": ["CONFIG_MODULES", "CONFIG_MODULE_UNLOAD"],
             "disabled": ["CONFIG_MODULE_SIG_FORCE"],
+            "modules": {
+                "CONFIG_MCKERNEL_IHK_RUST": "m",
+                "CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST": "m",
+                "CONFIG_MCKERNEL_MCCTRL_RUST": "m",
+            },
         }
         path.write_text(
             "CONFIG_MODULES=y\n"
@@ -487,6 +696,78 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         )
         with self.assertRaisesRegex(evidence.EvidenceError, "CONFIG_MODULE_UNLOAD"):
             evidence._validate_resolved_config(path, requirements)
+
+    def test_resolved_config_requires_exact_three_modular_native_symbols(self) -> None:
+        path = self.root / "resolved.config"
+        requirements = {
+            "enabled": ["CONFIG_MODULES"],
+            "disabled": ["CONFIG_MODULE_SIG_FORCE"],
+            "modules": {
+                "CONFIG_MCKERNEL_IHK_RUST": "m",
+                "CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST": "m",
+                "CONFIG_MCKERNEL_MCCTRL_RUST": "m",
+            },
+        }
+        canonical = (
+            "CONFIG_MODULES=y\n"
+            "# CONFIG_MODULE_SIG_FORCE is not set\n"
+            "CONFIG_MCKERNEL_IHK_RUST=m\n"
+            "CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST=m\n"
+            "CONFIG_MCKERNEL_MCCTRL_RUST=m\n"
+        )
+        path.write_text(canonical, encoding="utf-8")
+        observed = evidence._validate_resolved_config(path, requirements)
+        self.assertEqual(requirements, observed)
+
+        mutations = (
+            canonical.replace("CONFIG_MCKERNEL_IHK_RUST=m\n", ""),
+            canonical.replace("CONFIG_MCKERNEL_IHK_RUST=m", "CONFIG_MCKERNEL_IHK_RUST=y"),
+            canonical.replace(
+                "CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST=m",
+                "# CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST is not set",
+            ),
+            canonical + "CONFIG_MCKERNEL_MCCTRL_RUST=m\n",
+        )
+        for index, mutation in enumerate(mutations):
+            with self.subTest(index=index):
+                path.write_text(mutation, encoding="utf-8")
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError, "required modular setting"
+                ):
+                    evidence._validate_resolved_config(path, requirements)
+
+    def test_resolved_config_rejects_weakened_native_module_contract(self) -> None:
+        path = self.root / "resolved.config"
+        path.write_text(
+            "CONFIG_MODULES=y\n"
+            "# CONFIG_MODULE_SIG_FORCE is not set\n"
+            "CONFIG_MCKERNEL_IHK_RUST=m\n"
+            "CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST=m\n"
+            "CONFIG_MCKERNEL_MCCTRL_RUST=m\n",
+            encoding="utf-8",
+        )
+        base = {
+            "enabled": ["CONFIG_MODULES"],
+            "disabled": ["CONFIG_MODULE_SIG_FORCE"],
+            "modules": {
+                "CONFIG_MCKERNEL_IHK_RUST": "m",
+                "CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST": "m",
+                "CONFIG_MCKERNEL_MCCTRL_RUST": "m",
+            },
+        }
+        for modules in (
+            {"CONFIG_MCKERNEL_IHK_RUST": "m"},
+            dict(base["modules"], CONFIG_MCKERNEL_MCCTRL_RUST="y"),
+            dict(base["modules"], CONFIG_UNKNOWN="m"),
+            [],
+        ):
+            with self.subTest(modules=modules):
+                mutation = copy.deepcopy(base)
+                mutation["modules"] = modules
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError, "native module config contract"
+                ):
+                    evidence._validate_resolved_config(path, mutation)
 
 
 if __name__ == "__main__":

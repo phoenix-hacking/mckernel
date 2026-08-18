@@ -488,6 +488,81 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
                 ):
                     runtime_evidence._validate_exact_build_workflow(mutation)
 
+    def test_solver_and_link_closure_are_active_scoped_and_triggered(self):
+        for path in (
+            "scripts/native_rust_kconfig_solver.py",
+            "scripts/tests/test_native_rust_kconfig_solver.py",
+            "scripts/native_rust_kbuild_link_closure.py",
+            "scripts/tests/test_native_rust_kbuild_link_closure.py",
+        ):
+            with self.subTest(path=path):
+                self.assertEqual(2, self.workflow.count("      - " + path))
+        for module in (
+            "scripts.tests.test_native_rust_kconfig_solver",
+            "scripts.tests.test_native_rust_kbuild_link_closure",
+        ):
+            self.assertEqual(1, self.workflow.count(module))
+
+        solver_run = "python3 scripts/native_rust_kconfig_solver.py run \\\n"
+        solver_check = "python3 scripts/native_rust_kconfig_solver.py check \\\n"
+        link_output = "python3 scripts/native_rust_kbuild_link_closure.py \\\n"
+        solver_mode = 'chmod 0644 "$EVIDENCE_DIR/kconfig-solver-matrix.json"'
+        self.assertEqual(1, self.workflow.count(solver_run))
+        self.assertEqual(1, self.workflow.count(solver_check))
+        self.assertEqual(1, self.workflow.count(solver_mode))
+        self.assertEqual(2, self.workflow.count(link_output))
+        self.assertLess(
+            self.workflow.index(solver_mode), self.workflow.index(solver_check)
+        )
+        self.assertLess(
+            self.workflow.index(solver_check),
+            self.workflow.index("Compile the exact kernel and native Rust modules"),
+        )
+        self.assertLess(
+            self.workflow.index('cp "$module_root/$record" "$EVIDENCE_DIR/$record"'),
+            self.workflow.index('--output "$EVIDENCE_DIR/kbuild-link-closure.json"'),
+        )
+        self.assertLess(
+            self.workflow.index('--check-output "$EVIDENCE_DIR/kbuild-link-closure.json"'),
+            self.workflow.index("find . -maxdepth 1 -type f ! -name SHA256SUMS"),
+        )
+
+        for label, exact in (
+            ("solver-run", "          " + solver_run),
+            ("solver-check", "          " + solver_check),
+            ("link-output", "          " + link_output),
+            ("solver-mode", "          " + solver_mode),
+        ):
+            with self.subTest(label=label):
+                mutation = self.workflow.replace(exact, "          # " + exact.lstrip(), 1)
+                with self.assertRaises(runtime_evidence.EvidenceError):
+                    runtime_evidence._validate_exact_build_workflow(mutation)
+
+    def test_raw_kbuild_record_set_cannot_return_to_broad_discovery(self):
+        self.assertNotIn("-name '.*.cmd' -exec cp", self.workflow)
+        for record in (
+            ".ihk-smp-x86_64.ko.cmd",
+            ".ihk-smp-x86_64.mod.cmd",
+            ".ihk-smp-x86_64.mod.o.cmd",
+            ".ihk-smp-x86_64.o.cmd",
+            ".ihk.ko.cmd",
+            ".ihk.mod.cmd",
+            ".ihk.mod.o.cmd",
+            ".ihk.o.cmd",
+            ".ihk_smp_x86_64.o.cmd",
+            ".mcctrl.ko.cmd",
+            ".mcctrl.mod.cmd",
+            ".mcctrl.mod.o.cmd",
+            ".mcctrl.o.cmd",
+        ):
+            self.assertEqual(1, self.workflow.count("            " + record + "\n"))
+        self.assertEqual(
+            1,
+            self.workflow.count(
+                "          mod_records=(ihk-smp-x86_64.mod ihk.mod mcctrl.mod)\n"
+            ),
+        )
+
     def test_kernel_compatibility_series_precedes_project_staging(self):
         self.assertIn("--fuzz=0 --no-backup-if-mismatch", self.workflow)
         debrand = self.workflow.index("1000-debrand-some-messages.patch")

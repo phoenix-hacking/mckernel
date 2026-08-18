@@ -56,7 +56,9 @@ on:
       - scripts/mcctrl_native_lifecycle_check.py
       - scripts/native_rust_build_surface_audit.py
       - scripts/native_rust_host_audit.py
+      - scripts/native_rust_kbuild_link_closure.py
       - scripts/native_rust_kconfig_policy.py
+      - scripts/native_rust_kconfig_solver.py
       - scripts/native_rust_runtime_evidence.py
       - scripts/native_rust_unsafe_ffi_ledger.py
       - scripts/linux_api_exact_probe.py
@@ -84,7 +86,9 @@ on:
       - scripts/tests/test_linux_api_exact_probe.py
       - scripts/tests/test_native_rust_build_surface_audit.py
       - scripts/tests/test_native_rust_exact_build_workflow.py
+      - scripts/tests/test_native_rust_kbuild_link_closure.py
       - scripts/tests/test_native_rust_kconfig_policy.py
+      - scripts/tests/test_native_rust_kconfig_solver.py
       - scripts/tests/test_native_rust_runtime_evidence.py
       - scripts/tests/test_mcctrl_native_lifecycle_check.py
       - scripts/tests/test_rocky_rust_staging.py
@@ -147,7 +151,9 @@ on:
       - scripts/mcctrl_native_lifecycle_check.py
       - scripts/native_rust_build_surface_audit.py
       - scripts/native_rust_host_audit.py
+      - scripts/native_rust_kbuild_link_closure.py
       - scripts/native_rust_kconfig_policy.py
+      - scripts/native_rust_kconfig_solver.py
       - scripts/native_rust_runtime_evidence.py
       - scripts/native_rust_unsafe_ffi_ledger.py
       - scripts/linux_api_exact_probe.py
@@ -175,7 +181,9 @@ on:
       - scripts/tests/test_linux_api_exact_probe.py
       - scripts/tests/test_native_rust_build_surface_audit.py
       - scripts/tests/test_native_rust_exact_build_workflow.py
+      - scripts/tests/test_native_rust_kbuild_link_closure.py
       - scripts/tests/test_native_rust_kconfig_policy.py
+      - scripts/tests/test_native_rust_kconfig_solver.py
       - scripts/tests/test_native_rust_runtime_evidence.py
       - scripts/tests/test_mcctrl_native_lifecycle_check.py
       - scripts/tests/test_rocky_rust_staging.py
@@ -286,7 +294,9 @@ jobs:
           python3 scripts/native_rust_runtime_evidence.py \
             --repo "$GITHUB_WORKSPACE" --check-contract
           python3 -m unittest -v \
+            scripts.tests.test_native_rust_kbuild_link_closure \
             scripts.tests.test_native_rust_kconfig_policy \
+            scripts.tests.test_native_rust_kconfig_solver \
             scripts.tests.test_native_rust_build_surface_audit \
             scripts.tests.test_rocky_rust_staging \
             scripts.tests.test_native_rust_runtime_evidence \
@@ -391,6 +401,21 @@ jobs:
             CONFIG_MCKERNEL_MCCTRL_RUST; do
             grep -qx "$symbol=m" "$BUILD_DIR/.config"
           done
+          EVIDENCE_DIR="$RUNNER_TEMP/native-rust-build-evidence"
+          MATRIX_DIR="$RUNNER_TEMP/native-rust-kconfig-matrix"
+          mkdir -p "$EVIDENCE_DIR"
+          test ! -e "$MATRIX_DIR"
+          python3 scripts/native_rust_kconfig_solver.py run \
+            --source "$NATIVE_SOURCE_ROOT" \
+            --seed "$BUILD_DIR/.config" \
+            --matrix-dir "$MATRIX_DIR"
+          cp "$MATRIX_DIR/kconfig-solver-matrix.json" \
+            "$EVIDENCE_DIR/kconfig-solver-matrix.json"
+          chmod 0644 "$EVIDENCE_DIR/kconfig-solver-matrix.json"
+          python3 scripts/native_rust_kconfig_solver.py check \
+            --matrix "$EVIDENCE_DIR/kconfig-solver-matrix.json" \
+            --source "$NATIVE_SOURCE_ROOT" \
+            --seed "$BUILD_DIR/.config"
           printf 'NATIVE_BUILD_DIR=%s\n' "$BUILD_DIR" >> "$GITHUB_ENV"
 
       - name: Compile the exact kernel and native Rust modules
@@ -501,7 +526,35 @@ jobs:
           cp "$NATIVE_SOURCE_ROOT/drivers/misc/mckernel/stage-lock.json" "$EVIDENCE_DIR/stage-lock.json"
           make -s -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 \
             kernelrelease > "$EVIDENCE_DIR/kernel.release"
-          find "$module_root" -maxdepth 1 -type f -name '.*.cmd' -exec cp '{}' "$EVIDENCE_DIR/" ';'
+          cmd_records=(
+            .ihk-smp-x86_64.ko.cmd
+            .ihk-smp-x86_64.mod.cmd
+            .ihk-smp-x86_64.mod.o.cmd
+            .ihk-smp-x86_64.o.cmd
+            .ihk.ko.cmd
+            .ihk.mod.cmd
+            .ihk.mod.o.cmd
+            .ihk.o.cmd
+            .ihk_smp_x86_64.o.cmd
+            .mcctrl.ko.cmd
+            .mcctrl.mod.cmd
+            .mcctrl.mod.o.cmd
+            .mcctrl.o.cmd
+          )
+          mod_records=(ihk-smp-x86_64.mod ihk.mod mcctrl.mod)
+          for record in "${cmd_records[@]}" "${mod_records[@]}"; do
+            test -f "$module_root/$record"
+            test ! -L "$module_root/$record"
+            cp "$module_root/$record" "$EVIDENCE_DIR/$record"
+          done
+          python3 scripts/native_rust_kbuild_link_closure.py \
+            --records-dir "$EVIDENCE_DIR" \
+            --stage-lock "$EVIDENCE_DIR/stage-lock.json" \
+            --output "$EVIDENCE_DIR/kbuild-link-closure.json"
+          python3 scripts/native_rust_kbuild_link_closure.py \
+            --records-dir "$EVIDENCE_DIR" \
+            --stage-lock "$EVIDENCE_DIR/stage-lock.json" \
+            --check-output "$EVIDENCE_DIR/kbuild-link-closure.json"
           (
             cd "$EVIDENCE_DIR"
             find . -maxdepth 1 -type f ! -name SHA256SUMS -printf '%P\0' \
