@@ -38,7 +38,7 @@ EXPECTED_CONTAINER_IMAGE = (
     "e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176"
 )
 EXPECTED_SOURCE_LOCK_SHA256 = (
-    "3b512e6fce7830df0323289ce602d60de0ee4167c6655e5ced9184b530785778"
+    "707ee40466ac0bb0cd0600383bba0b13fc1146e7080034786bf5668a95b27682"
 )
 EXPECTED_PATCH_SERIES_SHA256 = (
     "6a1a5e8fb13b6ce6ed35bd8e5487bb67ecf92d2be927799b660f21b5631f68fb"
@@ -145,6 +145,7 @@ EXPECTED_REPOSITORY_INPUT_PATHS = [
     "host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch",
     "host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch",
     "host-kernel/rocky/patches/0022-x86-pvh-annotate-noendbr.patch",
+    "host-kernel/rocky/patches/0023-rust-update-no-alloc-shim-marker-rust-1.92.patch",
     "host-kernel/rocky/patches/series.json",
     "scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs",
     "scripts/tests/fixtures/ihk_native_master_compile.rs",
@@ -178,6 +179,7 @@ EXPECTED_REPOSITORY_INPUT_PATHS = [
     "scripts/tests/fixtures/rust-core-rocky-6.12/rust/Makefile",
     "scripts/tests/fixtures/rust-core-rocky-6.12/rust/bindings/bindings_helper.h",
     "scripts/tests/fixtures/rust-core-rocky-6.12/rust/bindings/lib.rs",
+    "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/alloc/allocator.rs",
     "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/block/mq/tag_set.rs",
     "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/ioctl.rs",
     "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/init/macros.rs",

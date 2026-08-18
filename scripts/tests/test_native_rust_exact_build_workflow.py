@@ -261,9 +261,31 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             "scripts.tests.test_rust_target_compatibility_patches",
             self.workflow,
         )
+        self.assertIn(
+            'MCKERNEL_RUSTC_1_92="$(command -v rustc)" \\\n'
+            "            python3 -m unittest -v "
+            "scripts.tests.test_rust_target_compatibility_patches",
+            self.workflow,
+        )
         self.assertGreaterEqual(
             self.workflow.count("--fuzz=0 --no-backup-if-mismatch"), 3
         )
+
+    def test_final_config_keeps_warnings_fatal(self):
+        second_resolution = self.workflow.index(
+            'make -C "$NATIVE_SOURCE_ROOT" O="$BUILD_DIR" '
+            "ARCH=x86_64 LLVM=1 olddefconfig",
+            self.workflow.index("resolved-first.config"),
+        )
+        werror = self.workflow.index(
+            'grep -qx \'CONFIG_WERROR=y\' "$BUILD_DIR/.config"',
+            second_resolution,
+        )
+        compile_step = self.workflow.index(
+            "Compile the exact kernel and native Rust modules", werror
+        )
+        self.assertLess(second_resolution, werror)
+        self.assertLess(werror, compile_step)
 
     def test_kernel_compatibility_series_precedes_project_staging(self):
         self.assertIn("--fuzz=0 --no-backup-if-mismatch", self.workflow)
@@ -348,9 +370,13 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             "0022-x86-pvh-annotate-noendbr.patch",
             objtool_noreturn,
         )
+        allocator_shim = self.workflow.index(
+            "0023-rust-update-no-alloc-shim-marker-rust-1.92.patch",
+            pvh_noendbr,
+        )
         project = self.workflow.index(
             "0001-drivers-misc-add-mckernel-rust-host-modules.patch",
-            pvh_noendbr,
+            allocator_shim,
         )
         self.assertLess(debrand, softfloat)
         self.assertLess(softfloat, target_spec)
@@ -374,7 +400,8 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         self.assertLess(opaque_init, miscdevice)
         self.assertLess(miscdevice, objtool_noreturn)
         self.assertLess(objtool_noreturn, pvh_noendbr)
-        self.assertLess(pvh_noendbr, project)
+        self.assertLess(pvh_noendbr, allocator_shim)
+        self.assertLess(allocator_shim, project)
         self.assertEqual(
             3,
             self.workflow.count("0021-objtool-recognize-rust-1.92-panic-const.patch"),
@@ -382,6 +409,12 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         self.assertEqual(
             3,
             self.workflow.count("0022-x86-pvh-annotate-noendbr.patch"),
+        )
+        self.assertEqual(
+            3,
+            self.workflow.count(
+                "0023-rust-update-no-alloc-shim-marker-rust-1.92.patch"
+            ),
         )
 
     def test_rs006_source_substrate_is_checked_without_credit(self):

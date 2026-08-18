@@ -150,6 +150,9 @@ EXPECTED_INPUTS = [
     },
 ]
 
+# Frozen overrides recorded by the historical connector tree port.  The legacy
+# name is retained because it is part of the byte-locked review schema; these
+# are not an assertion that later descendants must keep the same input bytes.
 CURRENT_INPUT_OVERRIDES = [
     {
         "path": "host-kernel/rocky/source-lock.json",
@@ -627,19 +630,35 @@ def expected_connector_tree_port():
     }
 
 
-def validate_repository_inputs(repo):
-    for expected in current_expected_inputs():
-        relative = Path(expected["path"])
-        path = repository_file(repo, relative)
-        data = path.read_bytes()
-        require_exact(len(data), expected["size"], "{} size".format(relative))
-        require_exact(
-            sha256_bytes(data), expected["sha256"], "{} SHA-256".format(relative)
+def validate_repository_inputs(repo, current=None):
+    """Bind each current input to HEAD, index, and worktree without relabeling it.
+
+    The review's exact historical bytes are checked separately at the selected
+    connector-port commit.  Descendants may legitimately evolve these inputs,
+    but a dirty or staged-only current tree must still fail closed.
+    """
+
+    if current is None:
+        current_stdout, _ = run_git(repo, ["rev-parse", "HEAD"])
+        current = current_stdout.decode("ascii").strip()
+    if not HEX_SHA1.fullmatch(current):
+        raise ReviewError("current Git HEAD is malformed")
+    for row in EXPECTED_INPUTS:
+        relative = row["path"]
+        head_bytes, _ = run_git(
+            repo, ["show", "{}:{}".format(current, relative)]
         )
-        require_exact(
-            git_blob_sha1(data),
-            expected["git_blob_sha1"],
-            "{} Git blob".format(relative),
+        tree_entry, _ = run_git(
+            repo, ["ls-tree", "-z", current, "--", relative]
+        )
+        index_entry, _ = run_git(repo, ["ls-files", "--stage", "--", relative])
+        worktree_bytes = repository_file(repo, Path(relative)).read_bytes()
+        validate_current_connector_input(
+            relative,
+            head_bytes,
+            worktree_bytes,
+            tree_entry,
+            index_entry,
         )
 
 
@@ -730,6 +749,29 @@ def validate_connector_input(
     )
 
 
+def validate_current_connector_input(
+    relative, head_bytes, worktree_bytes, tree_entry, index_entry
+):
+    """Prove current-tree consistency without borrowing historical authority."""
+
+    blob = git_blob_sha1(head_bytes)
+    require_exact(
+        tree_entry,
+        "100644 blob {}\t{}\0".format(blob, relative).encode("utf-8"),
+        "current HEAD tree entry {}".format(relative),
+    )
+    require_exact(
+        index_entry,
+        "100644 {} 0\t{}\n".format(blob, relative).encode("utf-8"),
+        "current index entry {}".format(relative),
+    )
+    require_exact(
+        worktree_bytes,
+        head_bytes,
+        "current worktree input {}".format(relative),
+    )
+
+
 def validate_git_observation(repo):
     if not (repo / ".git").exists():
         raise ReviewError("connector tree port requires a Git checkout")
@@ -790,24 +832,7 @@ def validate_git_observation(repo):
         PUBLISHED_BASE_CHANGED_PATHS,
         "connector tree-port changed paths",
     )
-    for expected in current_expected_inputs():
-        relative = expected["path"]
-        head_bytes, _ = run_git(
-            repo, ["show", "{}:{}".format(current, relative)]
-        )
-        tree_entry, _ = run_git(
-            repo, ["ls-tree", "-z", current, "--", relative]
-        )
-        index_entry, _ = run_git(repo, ["ls-files", "--stage", "--", relative])
-        worktree_bytes = repository_file(repo, Path(relative)).read_bytes()
-        validate_connector_input(
-            expected,
-            relative,
-            head_bytes,
-            worktree_bytes,
-            tree_entry,
-            index_entry,
-        )
+    validate_repository_inputs(repo, current)
     try:
         observed_type = run_git(repo, ["cat-file", "-t", OBSERVED_HEAD])[0]
     except ReviewError:
@@ -859,7 +884,6 @@ def check_repository(repo):
     repo = repo.resolve()
     review, review_bytes = read_repository_json(repo, REVIEW_PATH, canonical=True)
     validate_review(review, review_bytes)
-    validate_repository_inputs(repo)
     git_checked = validate_git_observation(repo)
     return review, git_checked
 

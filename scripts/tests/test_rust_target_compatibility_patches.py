@@ -3,7 +3,9 @@
 
 from __future__ import print_function
 
+import os
 import shutil
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -55,6 +57,8 @@ PATCHES = (
     / "host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch",
     REPO_ROOT
     / "host-kernel/rocky/patches/0022-x86-pvh-annotate-noendbr.patch",
+    REPO_ROOT
+    / "host-kernel/rocky/patches/0023-rust-update-no-alloc-shim-marker-rust-1.92.patch",
 )
 PROJECT_PATCHES = (
     REPO_ROOT
@@ -98,7 +102,7 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
     def test_every_patch_rejects_second_application(self):
         from scripts import linux_api_exact_probe as probe
 
-        self.assertEqual(22, len(PATCHES))
+        self.assertEqual(23, len(PATCHES))
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory) / "linux"
             shutil.copytree(str(CORE_PREIMAGE), str(root))
@@ -240,6 +244,8 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
             self.assertEqual(digest, probe.sha256_file(CORE_PREIMAGE / relative))
         for relative, digest in probe.PVH_OBJTOOL_COMPAT_PREIMAGE_SHA256S:
             self.assertEqual(digest, probe.sha256_file(CORE_PREIMAGE / relative))
+        for relative, digest in probe.RUST_ALLOC_SHIM_V2_FIXTURE_PREIMAGE_SHA256S:
+            self.assertEqual(digest, probe.sha256_file(CORE_PREIMAGE / relative))
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory) / "linux"
             shutil.copytree(str(CORE_PREIMAGE), str(root))
@@ -250,6 +256,10 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
                 )
             reconciled_paths = dict(probe.RUST_1_92_RECONCILIATION_POSTIMAGE_SHA256S)
             miscdevice_paths = dict(probe.RUST_MISCDEVICE_POSTIMAGE_SHA256S)
+            allocator_paths = {
+                row["path"]: row["sha256"]
+                for row in probe.RUST_ALLOC_SHIM_V2_POSTIMAGES
+            }
             for relative, digest in probe.RUST_CORE_COMPAT_POSTIMAGE_SHA256S:
                 if relative not in reconciled_paths:
                     self.assertEqual(digest, probe.sha256_file(root / relative))
@@ -266,11 +276,16 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
             for relative, digest in probe.CLANG_21_SOURCE_FIX_POSTIMAGE_SHA256S:
                 self.assertEqual(digest, probe.sha256_file(root / relative))
             for relative, digest in probe.RUST_MISCDEVICE_POSTIMAGE_SHA256S:
-                self.assertEqual(digest, probe.sha256_file(root / relative))
+                if relative not in allocator_paths:
+                    self.assertEqual(digest, probe.sha256_file(root / relative))
             for relative, digest in probe.RUST_OBJTOOL_NORETURN_POSTIMAGE_SHA256S:
                 self.assertEqual(digest, probe.sha256_file(root / relative))
             for relative, digest in probe.PVH_OBJTOOL_COMPAT_POSTIMAGE_SHA256S:
                 self.assertEqual(digest, probe.sha256_file(root / relative))
+            for row in probe.RUST_ALLOC_SHIM_V2_POSTIMAGES:
+                path = root / row["path"]
+                self.assertEqual(row["sha256"], probe.sha256_file(path))
+                self.assertEqual(row["size"], path.stat().st_size)
             ksm = (root / "mm/ksm.c").read_text(encoding="utf-8")
             advisor_show = ksm.split(
                 "static ssize_t advisor_mode_show", 1
@@ -455,6 +470,89 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
                     "_4core9panicking11panic_const24panic_const_"
                 ),
             )
+            allocator = (
+                root / "rust/kernel/alloc/allocator.rs"
+            ).read_text(encoding="utf-8")
+            self.assertEqual(
+                1,
+                allocator.count(
+                    "fn __rust_no_alloc_shim_is_unstable_v2() {}"
+                ),
+            )
+            self.assertEqual(1, allocator.count("#[rustc_std_internal_symbol]"))
+            self.assertNotIn("static __rust_no_alloc_shim_is_unstable", allocator)
+            self.assertEqual(
+                1,
+                kernel_lib.count(
+                    "#![allow(internal_features)]\n#![feature(rustc_attrs)]",
+                ),
+            )
+
+    def test_exact_rust_1_92_allocator_symbol_is_warning_clean_when_requested(self):
+        rustc = os.environ.get("MCKERNEL_RUSTC_1_92")
+        if not rustc:
+            self.skipTest("MCKERNEL_RUSTC_1_92 is not configured")
+        nm = shutil.which("llvm-nm") or shutil.which("nm")
+        self.assertIsNotNone(nm, "an nm implementation is required")
+        environment = os.environ.copy()
+        environment["RUSTC_BOOTSTRAP"] = "1"
+        version = subprocess.run(
+            [rustc, "--version", "--verbose"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+            env=environment,
+        )
+        self.assertEqual(0, version.returncode, version.stderr)
+        self.assertIn("release: 1.92.0\n", version.stdout)
+        source = (
+            "#![no_std]\n"
+            "#![allow(internal_features)]\n"
+            "#![feature(rustc_attrs)]\n\n"
+            "#[rustc_std_internal_symbol]\n"
+            "fn __rust_no_alloc_shim_is_unstable_v2() {}\n"
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source_path = root / "allocator_shim.rs"
+            object_path = root / "allocator_shim.o"
+            source_path.write_text(source, encoding="utf-8")
+            compile_result = subprocess.run(
+                [
+                    rustc,
+                    "--crate-name",
+                    "allocator_shim_probe",
+                    "--crate-type",
+                    "lib",
+                    "--edition=2021",
+                    "-Dwarnings",
+                    "--emit=obj=" + str(object_path),
+                    str(source_path),
+                ],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                universal_newlines=True,
+                env=environment,
+            )
+            self.assertEqual(0, compile_result.returncode, compile_result.stderr)
+            symbols = subprocess.run(
+                [nm, "-C", "-g", "--defined-only", str(object_path)],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                universal_newlines=True,
+                env=environment,
+            )
+            self.assertEqual(0, symbols.returncode, symbols.stderr)
+            self.assertEqual(
+                1,
+                symbols.stdout.count(
+                    "__rustc::__rust_no_alloc_shim_is_unstable_v2"
+                ),
+            )
+            self.assertNotIn(
+                "__rustc::__rust_no_alloc_shim_is_unstable\n",
+                symbols.stdout,
+            )
 
     def test_core_edition_patch_without_version_helper_is_incomplete(self):
         from scripts import linux_api_exact_probe as probe
@@ -511,6 +609,45 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
                             root
                             / probe.RUST_CORE_COMPAT_FIXTURE_ROOT
                             / "tools/objtool/check.c"
+                        )
+                        fixture.write_bytes(fixture.read_bytes() + b"\n")
+                    with self.assertRaises(probe.ProbeError):
+                        probe.rust_compatibility_patch_records(root)
+
+    def test_allocator_shim_patch_and_fixture_are_fail_closed(self):
+        from scripts import linux_api_exact_probe as probe
+
+        original = PATCHES[22].read_text(encoding="utf-8")
+        for mutation in ("patch", "fixture"):
+            with self.subTest(mutation=mutation):
+                with tempfile.TemporaryDirectory() as directory:
+                    root = Path(directory)
+                    shutil.copytree(
+                        str(REPO_ROOT / "host-kernel/rocky/patches"),
+                        str(root / "host-kernel/rocky/patches"),
+                    )
+                    shutil.copytree(
+                        str(CORE_PREIMAGE),
+                        str(root / probe.RUST_CORE_COMPAT_FIXTURE_ROOT),
+                    )
+                    target_fixture = root / probe.RUST_COMPAT_FIXTURE_PATH
+                    target_fixture.parent.mkdir(parents=True, exist_ok=True)
+                    target_fixture.write_bytes(PREIMAGE.read_bytes())
+                    if mutation == "patch":
+                        patch = root / PATCHES[22].relative_to(REPO_ROOT)
+                        patch.write_text(
+                            original.replace(
+                                "+fn __rust_no_alloc_shim_is_unstable_v2() {}",
+                                "+fn __rust_no_alloc_shim_is_unstable_v3() {}",
+                                1,
+                            ),
+                            encoding="utf-8",
+                        )
+                    else:
+                        fixture = (
+                            root
+                            / probe.RUST_CORE_COMPAT_FIXTURE_ROOT
+                            / "rust/kernel/alloc/allocator.rs"
                         )
                         fixture.write_bytes(fixture.read_bytes() + b"\n")
                     with self.assertRaises(probe.ProbeError):

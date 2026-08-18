@@ -180,6 +180,10 @@ EXPECTED_LICENSE_CAPTURE_AUTHORITY: dict[str, Any] = {
                     "host-kernel/rocky/patches/"
                     "0022-x86-pvh-annotate-noendbr.patch"
                 ),
+                (
+                    "host-kernel/rocky/patches/"
+                    "0023-rust-update-no-alloc-shim-marker-rust-1.92.patch"
+                ),
                 "host-kernel/rocky/patches/series.json",
                 "scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs",
                 "scripts/tests/fixtures/ihk_native_master_compile.rs",
@@ -272,6 +276,10 @@ EXPECTED_LICENSE_CAPTURE_AUTHORITY: dict[str, Any] = {
                 (
                     "scripts/tests/fixtures/rust-core-rocky-6.12/"
                     "rust/bindings/lib.rs"
+                ),
+                (
+                    "scripts/tests/fixtures/rust-core-rocky-6.12/"
+                    "rust/kernel/alloc/allocator.rs"
                 ),
                 (
                     "scripts/tests/fixtures/rust-core-rocky-6.12/"

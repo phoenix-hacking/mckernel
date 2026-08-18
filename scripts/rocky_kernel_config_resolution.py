@@ -23,7 +23,7 @@ TOOLCHAIN_LOCK_PATH = Path("host-kernel/rocky/toolchain-lock.json")
 CONFIG_POLICY_PATH = Path("host-kernel/rocky/config-policy.json")
 CONFIG_FRAGMENT_PATH = Path("host-kernel/rocky/configs/rust-minimal.config")
 EXPECTED_CONTRACT_SHA256 = (
-    "12749815ff0d49e6b72583d879867e49705797ed7258422554fab8a1b37dafb5"
+    "45514597166bf18f4ef3aeb7e1fbd269083bd42d53f41e6fa5b3398b8bfba54c"
 )
 EXPECTED_WORKFLOW_SHA256 = (
     "d388610f13701e0166656d019ac0cd48c456c33a3d616ebb5df9bc3ad7e36ece"
@@ -66,6 +66,7 @@ EXPECTED_COMPATIBILITY_PATCHES = [
     "host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch",
     "host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch",
     "host-kernel/rocky/patches/0022-x86-pvh-annotate-noendbr.patch",
+    "host-kernel/rocky/patches/0023-rust-update-no-alloc-shim-marker-rust-1.92.patch",
 ]
 EXPECTED_OBJTOOL_NORETURN_FAILURE = {
     "artifact_id": 9160078637,
@@ -91,7 +92,7 @@ EXPECTED_OBJTOOL_NORETURN_POSTIMAGE = {
     "sha256": "2c8d113bcbf65bc0de8ad360f70bc707a0379baa925da01cebf0e95f23ce28e7",
     "size": 116993,
 }
-LOCAL_COMPATIBILITY_PATCH = EXPECTED_COMPATIBILITY_PATCHES[-1]
+LOCAL_COMPATIBILITY_PATCH = EXPECTED_COMPATIBILITY_PATCHES[-2]
 LOCAL_COMPATIBILITY_ORIGIN = "McKernel Rocky 10.2 exact-build compatibility"
 LOCAL_COMPATIBILITY_ROCKY_BASE = "linux-6.12.0-211.44.1.el10_2"
 LOCAL_COMPATIBILITY_LICENSE = "GPL-2.0-only"
@@ -110,6 +111,63 @@ LOCAL_COMPATIBILITY_FAILURE_EVIDENCE = {
     "job_id": 94144112731,
     "repository_commit": "80a07871b81aa3d05378eb07b3d4cd9d8b922ef0",
     "run_id": 31605746750,
+    "workflow": "Native Rust host modules exact Rocky build",
+}
+ALLOC_SHIM_COMPATIBILITY_PATCH = EXPECTED_COMPATIBILITY_PATCHES[-1]
+ALLOC_SHIM_LOCAL_ORIGIN = "McKernel Rocky 10.2 exact-build compatibility"
+ALLOC_SHIM_ROCKY_BASE = "linux-6.12.0-211.44.1.el10_2"
+ALLOC_SHIM_LICENSE = "GPL-2.0-only"
+ALLOC_SHIM_RUST_REFERENCE = {
+    "commit": "6f935a044d1ddeb6160494a6320d008d7c311aef",
+    "pull_request": 141061,
+}
+ALLOC_SHIM_LINUX_REFERENCE = {
+    "allocator_removal_commit": "392e34b6bc22077ef63abf62387ea3e9f39418c1",
+}
+ALLOC_SHIM_PREIMAGES = [
+    {
+        "path": "rust/kernel/alloc/allocator.rs",
+        "sha256": "15ce17c9dba35266ff57c1da606f98f2fa4ccb0048fea7d196cce22a4febdc3f",
+        "size": 3079,
+    },
+    {
+        "path": "rust/kernel/lib.rs",
+        "sha256": "12079556f6e69f48db7fc887227e9243f9fc6837715afb5eaddf57bab8850cdd",
+        "size": 4142,
+    },
+]
+ALLOC_SHIM_POSTIMAGES = [
+    {
+        "path": "rust/kernel/alloc/allocator.rs",
+        "sha256": "5eadd2f8bfd94c5f5636d674afdc7fa93de4f49ad09c199ab687235418010e3f",
+        "size": 3146,
+    },
+    {
+        "path": "rust/kernel/lib.rs",
+        "sha256": "cde3e1e9608006f36c3a44ee11be848d8481c665f75b6d29937c9e9d9f76b0b6",
+        "size": 4196,
+    },
+]
+ALLOC_SHIM_FAILURE_EVIDENCE = {
+    "artifact_id": 9305826810,
+    "artifact_zip_bytes": 235955,
+    "artifact_zip_sha256": (
+        "c262ff48d96d1f3d8a9dc577b7cbfc52f6186bfc7c95a83c5db2634ca8f8749b"
+    ),
+    "build_exit_code": 2,
+    "build_log_bytes": 234697,
+    "build_log_sha256": (
+        "beb8153582de991449fed2958746210cd060d4887cad79fe777d8cfe4b3d4b50"
+    ),
+    "build_phase": "bzImage",
+    "diagnostic": (
+        "undefined symbol: __rustc::__rust_no_alloc_shim_is_unstable_v2"
+    ),
+    "failure_boundary": "LD .tmp_vmlinux1",
+    "job_id": 95547626904,
+    "repository_commit": "6f662225cbb4067800b2a16cbcce81e85924a6bc",
+    "run_id": 32082343363,
+    "rustc_version": "1.92.0",
     "workflow": "Native Rust host modules exact Rocky build",
 }
 CAPTURE_ENVIRONMENT = {
@@ -274,7 +332,7 @@ def require_patch_header(text, name, expected, label):
 
 def validate_compatibility_patch_provenance(row, text, index):
     label = "compatibility patch {}".format(index)
-    if index == len(EXPECTED_COMPATIBILITY_PATCHES) - 2:
+    if index == len(EXPECTED_COMPATIBILITY_PATCHES) - 3:
         exact_keys(
             row,
             {
@@ -311,7 +369,7 @@ def validate_compatibility_patch_provenance(row, text, index):
                     "observed Objtool patch invents provenance"
                 )
         return
-    if index == len(EXPECTED_COMPATIBILITY_PATCHES) - 1:
+    if index == len(EXPECTED_COMPATIBILITY_PATCHES) - 2:
         exact_keys(
             row,
             {
@@ -403,6 +461,89 @@ def validate_compatibility_patch_provenance(row, text, index):
             "License",
             row["license"],
             "local compatibility license header",
+        )
+        return
+
+    if index == len(EXPECTED_COMPATIBILITY_PATCHES) - 1:
+        exact_keys(
+            row,
+            {
+                "failure_evidence",
+                "license",
+                "linux_reference",
+                "local_origin",
+                "path",
+                "postimages",
+                "preimages",
+                "rocky_base",
+                "rust_reference",
+                "sha256",
+                "stable_commit",
+                "upstream_commit",
+            },
+            label,
+        )
+        require_exact(row["path"], ALLOC_SHIM_COMPATIBILITY_PATCH, "allocator patch path")
+        require_exact(row["upstream_commit"], None, "allocator upstream commit")
+        require_exact(row["stable_commit"], None, "allocator stable commit")
+        require_exact(row["local_origin"], ALLOC_SHIM_LOCAL_ORIGIN, "allocator origin")
+        require_exact(row["rocky_base"], ALLOC_SHIM_ROCKY_BASE, "allocator Rocky base")
+        require_exact(row["license"], ALLOC_SHIM_LICENSE, "allocator license")
+        require_exact(
+            row["failure_evidence"], ALLOC_SHIM_FAILURE_EVIDENCE, "allocator failure evidence"
+        )
+        require_exact(row["preimages"], ALLOC_SHIM_PREIMAGES, "allocator preimages")
+        require_exact(row["postimages"], ALLOC_SHIM_POSTIMAGES, "allocator postimages")
+        require_exact(
+            row["rust_reference"], ALLOC_SHIM_RUST_REFERENCE, "allocator Rust reference"
+        )
+        require_exact(
+            row["linux_reference"],
+            ALLOC_SHIM_LINUX_REFERENCE,
+            "allocator Linux reference",
+        )
+        for forbidden in ("Upstream-Commit", "Stable-Commit"):
+            if re.search(r"(?m)^{}: ".format(re.escape(forbidden)), text):
+                raise ConfigResolutionError(
+                    "allocator compatibility patch must not claim {}".format(forbidden)
+                )
+        mail_commits = re.findall(
+            r"\AFrom ([0-9a-f]{40}) Mon Sep 17 00:00:00 2001$",
+            text,
+            re.MULTILINE,
+        )
+        require_exact(mail_commits, ["0" * 40], "allocator patch mail identity")
+        for name, value in (
+            ("Observed-Repository-Commit", ALLOC_SHIM_FAILURE_EVIDENCE["repository_commit"]),
+            ("Observed-Workflow", ALLOC_SHIM_FAILURE_EVIDENCE["workflow"]),
+            ("Observed-Run-ID", ALLOC_SHIM_FAILURE_EVIDENCE["run_id"]),
+            ("Observed-Job-ID", ALLOC_SHIM_FAILURE_EVIDENCE["job_id"]),
+            ("Observed-Artifact-ID", ALLOC_SHIM_FAILURE_EVIDENCE["artifact_id"]),
+            ("Observed-Artifact-Zip-Bytes", ALLOC_SHIM_FAILURE_EVIDENCE["artifact_zip_bytes"]),
+            ("Observed-Artifact-Zip-SHA256", ALLOC_SHIM_FAILURE_EVIDENCE["artifact_zip_sha256"]),
+            ("Observed-Rustc", ALLOC_SHIM_FAILURE_EVIDENCE["rustc_version"]),
+            ("Observed-Failure-Phase", ALLOC_SHIM_FAILURE_EVIDENCE["build_phase"]),
+            ("Observed-Build-Log-Bytes", ALLOC_SHIM_FAILURE_EVIDENCE["build_log_bytes"]),
+            ("Observed-Build-Log-SHA256", ALLOC_SHIM_FAILURE_EVIDENCE["build_log_sha256"]),
+            ("Observed-Diagnostic", ALLOC_SHIM_FAILURE_EVIDENCE["diagnostic"]),
+            ("Rust-Reference-PR", ALLOC_SHIM_RUST_REFERENCE["pull_request"]),
+            ("Rust-Reference-Commit", ALLOC_SHIM_RUST_REFERENCE["commit"]),
+            ("Local-Origin", ALLOC_SHIM_LOCAL_ORIGIN),
+            ("Rocky-Base", ALLOC_SHIM_ROCKY_BASE),
+            ("License", ALLOC_SHIM_LICENSE),
+        ):
+            require_patch_header(text, name, value, "allocator {} header".format(name))
+        require_exact(
+            text.count(ALLOC_SHIM_LINUX_REFERENCE["allocator_removal_commit"]),
+            1,
+            "allocator Linux reference",
+        )
+        require_exact(
+            text.count(
+                "+#![allow(internal_features)]\n+#![feature(rustc_attrs)]"
+            ),
+            1,
+            "allocator internal-feature warning scope",
         )
         return
 
@@ -805,7 +946,7 @@ def validate_contract(repo):
     ) < 0:
         raise ConfigResolutionError("policy reconciliation blocker is missing")
     if not any(
-        "0006 through 0022" in item and "compile probes" in item
+        "0006 through 0023" in item and "compile probes" in item
         for item in contract["success_blockers"]
     ):
         raise ConfigResolutionError("compatibility compile-scope blocker is missing")

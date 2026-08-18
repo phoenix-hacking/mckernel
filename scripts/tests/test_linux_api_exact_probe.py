@@ -236,16 +236,35 @@ class ContractTests(ProbeFixture):
         self.assertIsNone(compatibility[-1]["upstream_commit"])
         self.assertIsNone(compatibility[-1]["stable_commit"])
         self.assertEqual(
-            compatibility[-2]["preimage"]["sha256"],
+            compatibility[-3]["preimage"]["sha256"],
             probe.RUST_OBJTOOL_NORETURN_PREIMAGE_SHA256S[0][1],
         )
         self.assertEqual(
-            compatibility[-2]["postimage"]["sha256"],
+            compatibility[-3]["postimage"]["sha256"],
             probe.RUST_OBJTOOL_NORETURN_POSTIMAGE_SHA256S[0][1],
         )
         self.assertEqual(
-            compatibility[-2]["observed_failure"],
+            compatibility[-3]["observed_failure"],
             probe.RUST_OBJTOOL_NORETURN_FAILURE_EVIDENCE,
+        )
+        self.assertEqual(
+            compatibility[-2],
+            {
+                "applied_after": str(probe.RUST_COMPAT_PATCH_PATHS[-3]),
+                "path": str(probe.RUST_COMPAT_PATCH_PATHS[-2]),
+                "sha256": probe.sha256_file(
+                    REPO_ROOT / probe.RUST_COMPAT_PATCH_PATHS[-2]
+                ),
+                "size": (
+                    REPO_ROOT / probe.RUST_COMPAT_PATCH_PATHS[-2]
+                ).stat().st_size,
+                "stable_commit": None,
+                "upstream_commit": None,
+                "failure_evidence": dict(probe.PVH_OBJTOOL_FAILURE_EVIDENCE),
+                "license": "GPL-2.0-only",
+                "local_origin": probe.PVH_OBJTOOL_LOCAL_ORIGIN,
+                "rocky_base": probe.PVH_OBJTOOL_ROCKY_BASE,
+            },
         )
         self.assertEqual(
             compatibility[-1],
@@ -260,10 +279,24 @@ class ContractTests(ProbeFixture):
                 ).stat().st_size,
                 "stable_commit": None,
                 "upstream_commit": None,
-                "failure_evidence": dict(probe.PVH_OBJTOOL_FAILURE_EVIDENCE),
+                "failure_evidence": dict(
+                    probe.RUST_ALLOC_SHIM_V2_FAILURE_EVIDENCE
+                ),
                 "license": "GPL-2.0-only",
-                "local_origin": probe.PVH_OBJTOOL_LOCAL_ORIGIN,
-                "rocky_base": probe.PVH_OBJTOOL_ROCKY_BASE,
+                "linux_reference": dict(
+                    probe.RUST_ALLOC_SHIM_V2_LINUX_REFERENCE
+                ),
+                "local_origin": probe.RUST_ALLOC_SHIM_V2_LOCAL_ORIGIN,
+                "postimages": [
+                    dict(row) for row in probe.RUST_ALLOC_SHIM_V2_POSTIMAGES
+                ],
+                "preimages": [
+                    dict(row) for row in probe.RUST_ALLOC_SHIM_V2_PREIMAGES
+                ],
+                "rocky_base": probe.RUST_ALLOC_SHIM_V2_ROCKY_BASE,
+                "rust_reference": dict(
+                    probe.RUST_ALLOC_SHIM_V2_RUST_REFERENCE
+                ),
             },
         )
         self.assertEqual(
@@ -433,6 +466,24 @@ class ContractTests(ProbeFixture):
                 for relative, digest in probe.PVH_OBJTOOL_COMPAT_PREIMAGE_SHA256S
             ],
         )
+        self.assertEqual(
+            generated["repository_inputs"][
+                "rust_alloc_shim_v2_fixture_preimages"
+            ],
+            [
+                {
+                    "path": str(probe.RUST_CORE_COMPAT_FIXTURE_ROOT / relative),
+                    "sha256": digest,
+                }
+                for relative, digest in (
+                    probe.RUST_ALLOC_SHIM_V2_FIXTURE_PREIMAGE_SHA256S
+                )
+            ],
+        )
+        self.assertEqual(
+            generated["rust_alloc_shim_v2_failure_evidence"],
+            probe.RUST_ALLOC_SHIM_V2_FAILURE_EVIDENCE,
+        )
 
     def test_workflow_is_exact_build_bound_and_never_edits_tracker(self):
         workflow = (REPO_ROOT / probe.WORKFLOW_PATH).read_text(encoding="utf-8")
@@ -569,12 +620,20 @@ class ContractTests(ProbeFixture):
             workflow.index(probe.RUST_COMPAT_PATCH_PATHS[20].name),
             workflow.index(probe.RUST_COMPAT_PATCH_PATHS[21].name),
         )
+        self.assertLess(
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[21].name),
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[22].name),
+        )
         self.assertEqual(
             workflow.count(probe.RUST_COMPAT_PATCH_PATHS[20].name),
             2,
         )
         self.assertEqual(
             workflow.count(probe.RUST_COMPAT_PATCH_PATHS[21].name),
+            2,
+        )
+        self.assertEqual(
+            workflow.count(probe.RUST_COMPAT_PATCH_PATHS[22].name),
             2,
         )
 
@@ -868,6 +927,44 @@ class ContractTests(ProbeFixture):
     def test_pvh_objtool_patch_replays_at_zero_fuzz_and_rejects_second_apply(self):
         records = probe.rust_compatibility_patch_records(REPO_ROOT)
         probe.verify_rust_compatibility_patch_replay(REPO_ROOT, records)
+
+    def test_allocator_shim_patch_shape_and_provenance_are_fail_closed(self):
+        mutations = (
+            (
+                "+fn __rust_no_alloc_shim_is_unstable_v2() {}",
+                "+fn __rust_no_alloc_shim_is_unstable_v3() {}",
+            ),
+            (
+                "+#![allow(internal_features)]",
+                "+#![allow(warnings)]",
+            ),
+            ("Observed-Run-ID: 32082343363", "Observed-Run-ID: 1"),
+            ("Rust-Reference-PR: 141061", "Rust-Reference-PR: 1"),
+        )
+        for old, new in mutations:
+            with self.subTest(old=old):
+                with tempfile.TemporaryDirectory() as directory:
+                    root = Path(directory)
+                    self.copy_rust_compatibility_inputs(root)
+                    path = root / probe.RUST_COMPAT_PATCH_PATHS[22]
+                    original = path.read_text(encoding="utf-8")
+                    self.assertIn(old, original)
+                    path.write_text(original.replace(old, new, 1), encoding="utf-8")
+                    with self.assertRaises(probe.ProbeError):
+                        probe.rust_compatibility_patch_records(root)
+
+    def test_allocator_shim_fixture_digest_is_fail_closed(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.copy_rust_compatibility_inputs(root)
+            fixture = (
+                root
+                / probe.RUST_CORE_COMPAT_FIXTURE_ROOT
+                / "rust/kernel/alloc/allocator.rs"
+            )
+            fixture.write_bytes(fixture.read_bytes() + b"\n")
+            with self.assertRaises(probe.ProbeError):
+                probe.rust_compatibility_patch_records(root)
 
     def test_stable_warning_policy_release_binding_is_fail_closed(self):
         with tempfile.TemporaryDirectory() as directory:

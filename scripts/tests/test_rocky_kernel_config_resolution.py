@@ -153,12 +153,32 @@ def local_patch_contract_row():
     }
 
 
+def allocator_patch_contract_row():
+    path = REPO_ROOT / resolution.ALLOC_SHIM_COMPATIBILITY_PATCH
+    return {
+        "failure_evidence": dict(resolution.ALLOC_SHIM_FAILURE_EVIDENCE),
+        "license": resolution.ALLOC_SHIM_LICENSE,
+        "linux_reference": dict(resolution.ALLOC_SHIM_LINUX_REFERENCE),
+        "local_origin": resolution.ALLOC_SHIM_LOCAL_ORIGIN,
+        "path": resolution.ALLOC_SHIM_COMPATIBILITY_PATCH,
+        "postimages": [dict(row) for row in resolution.ALLOC_SHIM_POSTIMAGES],
+        "preimages": [dict(row) for row in resolution.ALLOC_SHIM_PREIMAGES],
+        "rocky_base": resolution.ALLOC_SHIM_ROCKY_BASE,
+        "rust_reference": dict(resolution.ALLOC_SHIM_RUST_REFERENCE),
+        "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+        "stable_commit": None,
+        "upstream_commit": None,
+    }
+
+
 class LocalPatchProvenanceTests(unittest.TestCase):
     def setUp(self):
         path = REPO_ROOT / resolution.LOCAL_COMPATIBILITY_PATCH
         self.text = path.read_text(encoding="utf-8")
         self.row = local_patch_contract_row()
-        self.index = len(resolution.EXPECTED_COMPATIBILITY_PATCHES) - 1
+        self.index = resolution.EXPECTED_COMPATIBILITY_PATCHES.index(
+            resolution.LOCAL_COMPATIBILITY_PATCH
+        )
 
     def validate(self, row=None, text=None):
         resolution.validate_compatibility_patch_provenance(
@@ -242,6 +262,42 @@ class LocalPatchProvenanceTests(unittest.TestCase):
                     self.validate(row=row)
 
 
+class AllocatorPatchProvenanceTests(unittest.TestCase):
+    def setUp(self):
+        path = REPO_ROOT / resolution.ALLOC_SHIM_COMPATIBILITY_PATCH
+        self.text = path.read_text(encoding="utf-8")
+        self.row = allocator_patch_contract_row()
+        self.index = resolution.EXPECTED_COMPATIBILITY_PATCHES.index(
+            resolution.ALLOC_SHIM_COMPATIBILITY_PATCH
+        )
+
+    def validate(self, row=None, text=None):
+        resolution.validate_compatibility_patch_provenance(
+            self.row if row is None else row,
+            self.text if text is None else text,
+            self.index,
+        )
+
+    def test_allocator_provenance_is_accepted(self):
+        self.validate()
+
+    def test_allocator_provenance_and_preimages_are_fail_closed(self):
+        row = copy.deepcopy(self.row)
+        row["preimages"][0]["sha256"] = "0" * 64
+        with self.assertRaises(resolution.ConfigResolutionError):
+            self.validate(row=row)
+        text = self.text.replace("Observed-Run-ID: 32082343363", "Observed-Run-ID: 1", 1)
+        with self.assertRaises(resolution.ConfigResolutionError):
+            self.validate(text=text)
+        text = self.text.replace(
+            "+#![allow(internal_features)]",
+            "+#![allow(warnings)]",
+            1,
+        )
+        with self.assertRaises(resolution.ConfigResolutionError):
+            self.validate(text=text)
+
+
 class RepositoryContractTests(unittest.TestCase):
     def test_source_cleanup_is_ordered_after_processed_configs_are_copied(self):
         contract = resolution.validate_contract(REPO_ROOT)
@@ -310,7 +366,7 @@ class RepositoryContractTests(unittest.TestCase):
             self.assertEqual(
                 hashlib.sha256(path.read_bytes()).hexdigest(), binding["sha256"]
             )
-        self.assertEqual(22, len(contract["patch_authority"]["rust_compatibility"]))
+        self.assertEqual(23, len(contract["patch_authority"]["rust_compatibility"]))
         self.assertEqual(
             [row["path"] for row in contract["patch_authority"]["rust_compatibility"]],
             resolution.EXPECTED_COMPATIBILITY_PATCHES,
@@ -332,13 +388,17 @@ class RepositoryContractTests(unittest.TestCase):
                     "no_config_symbol_changes"
                 ]
             ),
-            21,
+            22,
+        )
+        self.assertEqual(
+            contract["patch_authority"]["rust_compatibility"][-2],
+            local_patch_contract_row(),
         )
         self.assertEqual(
             contract["patch_authority"]["rust_compatibility"][-1],
-            local_patch_contract_row(),
+            allocator_patch_contract_row(),
         )
-        objtool_patch = contract["patch_authority"]["rust_compatibility"][-2]
+        objtool_patch = contract["patch_authority"]["rust_compatibility"][-3]
         self.assertEqual(
             objtool_patch["observed_failure"],
             resolution.EXPECTED_OBJTOOL_NORETURN_FAILURE,

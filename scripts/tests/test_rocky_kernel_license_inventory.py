@@ -255,6 +255,7 @@ class LicenseInventoryTests(unittest.TestCase):
                 "host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch",
                 "host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch",
                 "host-kernel/rocky/patches/0022-x86-pvh-annotate-noendbr.patch",
+                "host-kernel/rocky/patches/0023-rust-update-no-alloc-shim-marker-rust-1.92.patch",
             ):
                 item = by_path["repository/" + relative]
                 patch = REPO_ROOT / relative
@@ -333,6 +334,7 @@ class LicenseInventoryTests(unittest.TestCase):
             "rust/Makefile",
             "rust/bindings/bindings_helper.h",
             "rust/bindings/lib.rs",
+            "rust/kernel/alloc/allocator.rs",
             "rust/kernel/ioctl.rs",
             "rust/kernel/uaccess.rs",
             "rust/kernel/types.rs",

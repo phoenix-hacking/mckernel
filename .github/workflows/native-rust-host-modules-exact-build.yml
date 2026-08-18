@@ -40,6 +40,7 @@ on:
       - host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch
       - host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch
       - host-kernel/rocky/patches/0022-x86-pvh-annotate-noendbr.patch
+      - host-kernel/rocky/patches/0023-rust-update-no-alloc-shim-marker-rust-1.92.patch
       - host-kernel/rocky/patches/series.json
       - host-kernel/rocky/source-lock.json
       - host-kernel/rocky/toolchain-lock.json
@@ -121,6 +122,7 @@ on:
       - host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch
       - host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch
       - host-kernel/rocky/patches/0022-x86-pvh-annotate-noendbr.patch
+      - host-kernel/rocky/patches/0023-rust-update-no-alloc-shim-marker-rust-1.92.patch
       - host-kernel/rocky/patches/series.json
       - host-kernel/rocky/source-lock.json
       - host-kernel/rocky/toolchain-lock.json
@@ -266,7 +268,8 @@ jobs:
           python3 scripts/native_rust_runtime_evidence.py \
             --repo "$GITHUB_WORKSPACE" --check-contract
           python3 scripts/rs006_miscdevice_substrate.py --repo "$GITHUB_WORKSPACE"
-          python3 -m unittest -v scripts.tests.test_rust_target_compatibility_patches
+          MCKERNEL_RUSTC_1_92="$(command -v rustc)" \
+            python3 -m unittest -v scripts.tests.test_rust_target_compatibility_patches
 
       - name: Acquire, patch, and credit-forbidden-stage the exact source
         env:
@@ -318,7 +321,8 @@ jobs:
             0019-rust-types-add-opaque-try-ffi-init.patch \
             0020-rust-miscdevice-add-base-abstraction.patch \
             0021-objtool-recognize-rust-1.92-panic-const.patch \
-            0022-x86-pvh-annotate-noendbr.patch
+            0022-x86-pvh-annotate-noendbr.patch \
+            0023-rust-update-no-alloc-shim-marker-rust-1.92.patch
           do
             compat_patch="$GITHUB_WORKSPACE/host-kernel/rocky/patches/$compat_name"
             test -s "$compat_patch"
@@ -352,6 +356,7 @@ jobs:
           cp "$BUILD_DIR/.config" "$BUILD_DIR/resolved-first.config"
           make -C "$NATIVE_SOURCE_ROOT" O="$BUILD_DIR" ARCH=x86_64 LLVM=1 olddefconfig
           cmp "$BUILD_DIR/resolved-first.config" "$BUILD_DIR/.config"
+          grep -qx 'CONFIG_WERROR=y' "$BUILD_DIR/.config"
           for symbol in \
             CONFIG_MCKERNEL_IHK_RUST \
             CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST \

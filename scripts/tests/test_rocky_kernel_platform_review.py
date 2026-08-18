@@ -301,6 +301,36 @@ class RepositoryReviewTests(unittest.TestCase):
             review.validate_connector_input(
                 expected, relative, data + b"x", data, tree_entry, index_entry
             )
+
+    def test_current_input_rejects_dirty_index_mode_and_worktree(self):
+        relative = review.EXPECTED_INPUTS[0]["path"]
+        data = (REPO_ROOT / relative).read_bytes()
+        blob = review.git_blob_sha1(data)
+        tree_entry = "100644 blob {}\t{}\0".format(
+            blob, relative
+        ).encode("utf-8")
+        index_entry = "100644 {} 0\t{}\n".format(
+            blob, relative
+        ).encode("utf-8")
+        review.validate_current_connector_input(
+            relative, data, data, tree_entry, index_entry
+        )
+        with self.assertRaisesRegex(review.ReviewError, "current worktree input"):
+            review.validate_current_connector_input(
+                relative, data, data + b"x", tree_entry, index_entry
+            )
+        with self.assertRaisesRegex(review.ReviewError, "current index entry"):
+            review.validate_current_connector_input(
+                relative, data, data, tree_entry, b""
+            )
+        with self.assertRaisesRegex(review.ReviewError, "current HEAD tree entry"):
+            review.validate_current_connector_input(
+                relative,
+                data,
+                data,
+                tree_entry.replace(b"100644", b"120000"),
+                index_entry,
+            )
         with self.assertRaisesRegex(review.ReviewError, "index entry"):
             review.validate_connector_input(
                 expected, relative, data, data, tree_entry, b""
@@ -407,28 +437,59 @@ class RepositoryReviewTests(unittest.TestCase):
     def test_repository_input_mutation_is_rejected(self):
         with tempfile.TemporaryDirectory(prefix="platform-review-test-") as text:
             root = Path(text)
-            for row in review.current_expected_inputs():
+            for row in review.EXPECTED_INPUTS:
                 source = REPO_ROOT / row["path"]
                 target = root / row["path"]
                 target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(str(source), str(target))
-            target = root / review.current_expected_inputs()[0]["path"]
+            self._commit_current_input_fixture(root)
+            review.validate_repository_inputs(root)
+            target = root / review.EXPECTED_INPUTS[0]["path"]
             target.write_bytes(target.read_bytes() + b"\n")
-            with self.assertRaisesRegex(review.ReviewError, "size"):
+            with self.assertRaisesRegex(review.ReviewError, "current worktree input"):
                 review.validate_repository_inputs(root)
 
     def test_current_source_lock_mutation_is_rejected(self):
         with tempfile.TemporaryDirectory(prefix="platform-review-lock-") as text:
             root = Path(text)
-            for row in review.current_expected_inputs():
+            for row in review.EXPECTED_INPUTS:
                 source = REPO_ROOT / row["path"]
                 target = root / row["path"]
                 target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(str(source), str(target))
+            self._commit_current_input_fixture(root)
+            review.validate_repository_inputs(root)
             target = root / review.SOURCE_LOCK_PATH
             target.write_bytes(target.read_bytes() + b"\n")
-            with self.assertRaisesRegex(review.ReviewError, "size"):
+            with self.assertRaisesRegex(review.ReviewError, "current worktree input"):
                 review.validate_repository_inputs(root)
+
+    @staticmethod
+    def _commit_current_input_fixture(root):
+        resolved = str(root.resolve())
+        subprocess.run(["git", "init", "-q", resolved], check=True)
+        subprocess.run(
+            ["git", "-c", "safe.directory=" + resolved, "-C", resolved, "add", "."],
+            check=True,
+        )
+        subprocess.run(
+            [
+                "git",
+                "-c",
+                "safe.directory=" + resolved,
+                "-c",
+                "user.name=platform-review-test",
+                "-c",
+                "user.email=platform-review-test@example.invalid",
+                "-C",
+                resolved,
+                "commit",
+                "-q",
+                "-m",
+                "current input fixture",
+            ],
+            check=True,
+        )
 
     def test_checksum_manifest_rejects_reordering_and_traversal(self):
         digest_a = "a" * 64
