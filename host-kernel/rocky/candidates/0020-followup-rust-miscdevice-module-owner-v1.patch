@@ -1,0 +1,78 @@
+From: local compatibility candidate
+Subject: [PATCH] rust: miscdevice: bind file operations to their module
+Status: candidate only; not integrated into any source authority or workflow
+
+Require every miscdevice implementation to identify the module containing its
+callbacks, and bind that module to file_operations.owner.  The vtable remains
+static for each implementation type: an open file can outlive deregistration,
+so placing file_operations inside the registration would make its lifetime too
+short.
+
+Also require an explicit compat_ioctl implementation.  Falling back to
+compat_ptr_ioctl silently opts implementations into pointer conversion without
+letting them state or test their 32-bit ABI.
+
+This local follow-up is intentionally unintegrated and carries no build,
+runtime, review, gate, or credit claim.
+---
+ rust/kernel/miscdevice.rs | 21 +++++++++++----------
+ 1 file changed, 11 insertions(+), 10 deletions(-)
+
+diff --git a/rust/kernel/miscdevice.rs b/rust/kernel/miscdevice.rs
+--- a/rust/kernel/miscdevice.rs
++++ b/rust/kernel/miscdevice.rs
+@@ -14,6 +14,7 @@ use crate::{
+     prelude::*,
+     str::CStr,
+     types::{ForeignOwnable, Opaque},
++    ThisModule,
+ };
+ use core::{
+     ffi::{c_int, c_long, c_uint, c_ulong},
+@@ -100,6 +101,12 @@ pub trait MiscDevice {
+     /// What kind of pointer should `Self` be wrapped in.
+     type Ptr: ForeignOwnable + Send + Sync;
+ 
++    /// The module whose code contains this device's file-operation callbacks.
++    ///
++    /// This module remains referenced by the VFS while an open file can call
++    /// the callbacks in the static per-type file-operations table.
++    const MODULE: &'static ThisModule;
++
+     /// Called when the misc device is opened.
+     ///
+     /// The returned pointer will be stored as the private data for the file.
+@@ -127,9 +134,8 @@ pub trait MiscDevice {
+     ///
+     /// Used for 32-bit userspace on 64-bit platforms.
+     ///
+-    /// This method is optional and only needs to be provided if the ioctl relies on structures
+-    /// that have different layout on 32-bit and 64-bit userspace. If no implementation is
+-    /// provided, then `compat_ptr_ioctl` will be used instead.
++    /// Implement this method explicitly when the device supports a compatible
++    /// 32-bit ioctl ABI. No implicit pointer-conversion fallback is installed.
+     #[cfg(CONFIG_COMPAT)]
+     fn compat_ioctl(
+         _device: <Self::Ptr as ForeignOwnable>::Borrowed<'_>,
+@@ -154,17 +160,12 @@
+     }
+     impl<T: MiscDevice> VtableHelper<T> {
+         const VTABLE: bindings::file_operations = bindings::file_operations {
++            owner: T::MODULE.as_ptr(),
+             open: Some(fops_open::<T>),
+             release: Some(fops_release::<T>),
+             unlocked_ioctl: maybe_fn(T::HAS_IOCTL, fops_ioctl::<T>),
+             #[cfg(CONFIG_COMPAT)]
+-            compat_ioctl: if T::HAS_COMPAT_IOCTL {
+-                Some(fops_compat_ioctl::<T>)
+-            } else if T::HAS_IOCTL {
+-                Some(bindings::compat_ptr_ioctl)
+-            } else {
+-                None
+-            },
++            compat_ioctl: maybe_fn(T::HAS_COMPAT_IOCTL, fops_compat_ioctl::<T>),
+             ..unsafe { MaybeUninit::zeroed().assume_init() }
+         };
+     }
+-- 
+2.47.1
