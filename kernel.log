@@ -32109,3 +32109,17 @@ Exit 2. Exact output:
 python3: can't open file '/workspace/scratch/1962bd8160f6/mckernel/final_push_tracker.py': [Errno 2] No such file or directory
 ```
 This is a root harness path error, not a tracker diagnostic; no script loaded and no target byte changed. Resolve only the existing committed tracker checker path with a read-only filename search, rerun that exact checker with `--check`, and stop on any real nonzero.
+
+2026-08-20: clean imported-head aggregate validation stopped at the first surfaced committed failure in the Rocky license review campaign.
+CWD: `/workspace/scratch/2e96a206d732/mckernel`. Environment/command exactly:
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s scripts/tests -v
+```
+The first surfaced failure was:
+```text
+test_candidate_worktree_mutations_fail_clean_replay_without_changing_private_bytes (test_rocky_kernel_license_review_campaign.LicenseReviewCampaignTests.test_candidate_worktree_mutations_fail_clean_replay_without_changing_private_bytes) ... FAIL
+```
+The runner was interrupted with Ctrl-C immediately after that first failure became visible, before unittest emitted its terminal traceback or aggregate counts. All streamed cases before it had reported `ok`. No later validation, cleanup, network, Git publication, workflow, runtime, guest, host, or reboot action occurred before this log entry. Narrow next action: reproduce only this exact test to capture its diagnostic, determine whether the clean-replay authority is incorrectly coupled to post-campaign committed files, and repair only that binding before restarting broader discovery.
+
+2026-08-20 follow-up: the exact stopped campaign test passed unchanged in the publication worktree.
+Exact command was the same test selector under `PYTHONDONTWRITEBYTECODE=1`; it ran 1 test in 145.609s and exited 0 with `OK`. A separate detached clean `ec52f6ea` reproduction also passed. The earlier aggregate failure is therefore classified as transient/non-reproducing; no campaign product or test byte was changed. The next deterministic failures are the already reproduced historical RK-007 descendant-input port drift and bounded negative-test portability defects.
