@@ -32123,3 +32123,10 @@ The runner was interrupted with Ctrl-C immediately after that first failure beca
 
 2026-08-20 follow-up: the exact stopped campaign test passed unchanged in the publication worktree.
 Exact command was the same test selector under `PYTHONDONTWRITEBYTECODE=1`; it ran 1 test in 145.609s and exited 0 with `OK`. A separate detached clean `ec52f6ea` reproduction also passed. The earlier aggregate failure is therefore classified as transient/non-reproducing; no campaign product or test byte was changed. The next deterministic failures are the already reproduced historical RK-007 descendant-input port drift and bounded negative-test portability defects.
+
+2026-08-20: clean committed-head aggregate replay completed with two remaining transitive authority-seal failure families.
+CWD: `/workspace/scratch/2e96a206d732/mckernel`. Environment/command exactly:
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s scripts/tests -v
+```
+It ran 1,842 tests in 327.994s and reported 2 failures, 9 errors, and 125 skips. The first exact visible product diagnostic was the FP-0006 runtime integration binding for `native_runtime_validator`: frozen size 105,564, current size 107,696. The offline-closure family reported `snapshot input authority size changed: actual=74630, expected=74446`; its CLI check consequently returned 2 instead of 0. The earlier campaign replay passed in this aggregate, as did the repaired RK-007/RK-005 repository-bound checks. No network publication, workflow dispatch, runtime, guest, host, or reboot action followed. Narrow next action: refresh only the transitive runtime-validator and repository-snapshot authority records (including their exact digests/sizes and one-way downstream seals), rerun only those focused suites under stop-first, then restart discovery.
