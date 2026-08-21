@@ -22,7 +22,7 @@ import tempfile
 
 
 CONTRACT_PATH = "host-kernel/contracts/rs006-miscdevice-module-owner-followup-v1.json"
-EXPECTED_CONTRACT_SHA256 = "6a3ea647c1ceb8dfefd0256328265cce0c1002290f417ba6538513e2ef70332b"
+EXPECTED_CONTRACT_SHA256 = "5936b3bda67570babeac0f10d58d6eaa838921bc1a0884a07e544016ed0f0ca9"
 CANDIDATE_PATH = "host-kernel/rocky/candidates/0020-followup-rust-miscdevice-module-owner-v1.patch"
 COMPILE_FIXTURE_PATH = "scripts/tests/fixtures/rs006_miscdevice_module_owner_compile.rs"
 REPLAY_FIXTURE_PATH = "scripts/tests/fixtures/rust-core-rocky-6.12"
@@ -616,7 +616,7 @@ def _expected_blockers():
 
 
 def _load_contract(data):
-    expected_digest = "6a3ea647c1ceb8dfefd0256328265cce0c1002290f417ba6538513e2ef70332b"
+    expected_digest = "5936b3bda67570babeac0f10d58d6eaa838921bc1a0884a07e544016ed0f0ca9"
     if type(data) is not bytes:
         raise ContractError("contract input must be bytes")
     if _sha256(data) != expected_digest:
