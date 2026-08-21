@@ -15,10 +15,13 @@ if __name__ == "__main__" and not hasattr(
 
 
 import argparse
+from collections import defaultdict
 import json
+import re
 import sys
 from collections import Counter
 from pathlib import Path
+import tempfile
 
 import host_module_failure_contract_review_v2 as review_v2
 import host_module_failure_semantics_v3 as semantics
@@ -41,10 +44,416 @@ ANALYSIS_CLAIM = {
         "semantic oracles and executable acceptance evidence remain absent"
     ),
 }
+REVIEW_CGRAPH_HEADER = re.compile(
+    r"^(?P<name>[A-Za-z_][A-Za-z0-9_$.-]*)/(?P<number>[0-9]+) "
+    r"\((?P<label>[^()]*)\) @0xADDR$"
+)
+REVIEW_CGRAPH_REFERENCE = re.compile(
+    r"(?<![A-Za-z0-9_$.-])(?P<name>[A-Za-z_][A-Za-z0-9_$.-]*)/"
+    r"(?P<number>[0-9]+)(?=\s|\(|$)"
+)
+REVIEW_CLONE_MARKERS = (
+    ".clone.", ".constprop.", ".isra.", ".part.", ".cold",
+)
 
 
 class ReviewV3Error(RuntimeError):
     """Raised when a v3 structural review input changes."""
+
+
+def _review_traits(record):
+    lines = [line.lower() for line in record["details"]]
+    visibility = set(record["visibility"])
+    type_text = record["type"].lower()
+    traits = set()
+    if "alias" in type_text or any(line.startswith("alias target:") for line in lines):
+        traits.add("alias")
+    if any(marker in record["name"] for marker in REVIEW_CLONE_MARKERS) or any(
+        line.startswith("clone of") for line in lines
+    ):
+        traits.add("clone")
+    if "comdat" in visibility or "one_only" in visibility or "comdat" in type_text:
+        traits.add("comdat")
+    if any(
+        line.startswith("function flags:")
+        and any("inline" in token for token in line.split()[2:])
+        for line in lines
+    ):
+        traits.add("inline")
+    if "weak" in visibility or "weakref" in visibility or "weak" in type_text:
+        traits.add("weak")
+    return sorted(traits)
+
+
+def _review_initial_section(lines, source):
+    records = []
+    current = None
+    for line in lines:
+        match = REVIEW_CGRAPH_HEADER.match(line)
+        if match:
+            current = {
+                "address_taken": False,
+                "calls": [],
+                "details": [],
+                "name": match.group("name"),
+                "number": int(match.group("number")),
+                "saw_calls": False,
+                "type": None,
+                "visibility": [],
+            }
+            records.append(current)
+            continue
+        if current is None:
+            if line.strip():
+                raise ReviewV3Error("independent cgraph has pre-symbol content")
+            continue
+        stripped = line.strip()
+        if not stripped:
+            continue
+        current["details"].append(stripped)
+        if stripped.startswith("Type:"):
+            if current["type"] is not None:
+                raise ReviewV3Error("independent cgraph Type row is duplicated")
+            current["type"] = stripped.split(":", 1)[1].strip()
+        elif stripped.startswith("Visibility:"):
+            if current["visibility"]:
+                raise ReviewV3Error("independent cgraph Visibility row is duplicated")
+            current["visibility"] = stripped.split(":", 1)[1].strip().split()
+        elif stripped == "Address is taken.":
+            current["address_taken"] = True
+        elif stripped.startswith("Calls:"):
+            if current["saw_calls"]:
+                raise ReviewV3Error("independent cgraph Calls row is duplicated")
+            current["saw_calls"] = True
+            payload = stripped.split(":", 1)[1]
+            current["calls"] = [
+                {"name": item.group("name"), "number": int(item.group("number"))}
+                for item in REVIEW_CGRAPH_REFERENCE.finditer(payload)
+            ]
+            residue = REVIEW_CGRAPH_REFERENCE.sub("", payload)
+            residue = re.sub(r"\([^()]*\)", "", residue)
+            residue = re.sub(r"[,0-9.+% -]", "", residue)
+            if residue.strip():
+                raise ReviewV3Error("independent cgraph Calls syntax is unknown")
+    numbers = [item["number"] for item in records]
+    if not records or len(numbers) != len(set(numbers)):
+        raise ReviewV3Error("independent cgraph symbol closure differs")
+    result = []
+    for record in records:
+        if record["type"] is None:
+            raise ReviewV3Error("independent cgraph symbol omits Type")
+        if not record["type"].startswith("function"):
+            continue
+        if not record["visibility"] or not record["saw_calls"]:
+            raise ReviewV3Error("independent cgraph function metadata is incomplete")
+        result.append(
+            {
+                "address_taken": record["address_taken"],
+                "calls": sorted(record["calls"], key=semantics.canonical_bytes),
+                "definition": record["type"].startswith("function definition analyzed"),
+                "global": "public" in set(record["visibility"]),
+                "name": record["name"],
+                "number": record["number"],
+                "source": source,
+                "traits": _review_traits(record),
+            }
+        )
+    if not any(item["definition"] for item in result):
+        raise ReviewV3Error("independent cgraph has no definitions")
+    return sorted(result, key=semantics.canonical_bytes)
+
+
+def independent_parse_cgraph(data, source):
+    try:
+        text = data.decode("utf-8")
+    except UnicodeDecodeError as exc:
+        raise ReviewV3Error("independent cgraph is not UTF-8: {0}".format(exc))
+    lines = text.splitlines()
+    for line in lines:
+        if "@0x" in line and (
+            line.count("@0x") != 1
+            or REVIEW_CGRAPH_HEADER.fullmatch(line) is None
+        ):
+            raise ReviewV3Error(
+                "independent normalized cgraph retains a raw or misplaced allocator address"
+            )
+        if "0xADDR" in line and (
+            line.count("0xADDR") != 1
+            or not line.endswith(" @0xADDR")
+            or REVIEW_CGRAPH_HEADER.fullmatch(line) is None
+        ):
+            raise ReviewV3Error(
+                "independent cgraph address placeholder escaped a header"
+            )
+    starts = [index for index, line in enumerate(lines) if line == "Initial Symbol table:"]
+    if not starts:
+        raise ReviewV3Error("independent cgraph omits Initial Symbol table")
+    terminators = {
+        "Final Symbol table:", "Initial Symbol table:",
+        "Optimized Symbol table:", "Reclaimed Symbol table:",
+        "Removing unused symbols:",
+    }
+    tables = []
+    for start in starts:
+        end = len(lines)
+        for index in range(start + 1, len(lines)):
+            if lines[index] in terminators:
+                end = index
+                break
+        tables.append(_review_initial_section(lines[start + 1:end], source))
+    if any(not semantics.strict_equal(tables[0], item) for item in tables[1:]):
+        raise ReviewV3Error("independent repeated cgraph tables differ")
+    return tables[0]
+
+
+def _review_identity(key):
+    return {"module": key[0], "name": key[2], "source": key[1]}
+
+
+def _review_blocked_reason(records):
+    traits = sorted(
+        set(trait for record in records for trait in record["traits"])
+        & semantics.CGRAPH_BLOCKED_TRAITS
+    )
+    if traits:
+        return traits[0] + "_target"
+    if any(not record["global"] for record in records):
+        return "static_name_collision"
+    return "unresolved_candidate_target"
+
+
+def independently_derive_direct_graph(inputs, invocations, payloads):
+    """Re-derive the bounded structural CTU inventory without authority claims."""
+
+    sources = sorted(
+        source for source, record in inputs["sources"].items()
+        if record["language"] == "c"
+    )
+    if len(sources) != semantics.EXPECTED_C_SOURCE_COUNT:
+        raise ReviewV3Error("independent direct C source closure changed")
+    by_source = {}
+    for source in sources:
+        invocation = invocations.get(source)
+        binding = invocation.get("dumps", {}).get("cgraph") if invocation else None
+        if binding is None:
+            raise ReviewV3Error("independent C invocation omits cgraph")
+        data = semantics.validate_file_binding(
+            binding, payloads, "independent C cgraph"
+        )
+        by_source[source] = independent_parse_cgraph(data, source)
+
+    definitions = []
+    records = {}
+    all_by_module_name = defaultdict(list)
+    strong_by_module_name = defaultdict(list)
+    for source in sources:
+        module = inputs["sources"][source]["module"]
+        for record in by_source[source]:
+            if not record["definition"]:
+                continue
+            key = (module, source, record["name"])
+            if key in records:
+                raise ReviewV3Error(
+                    "independent graph found a duplicate translation-unit definition"
+                )
+            records[key] = record
+            all_by_module_name[(module, record["name"])].append((key, record))
+            if record["global"] and not record["traits"]:
+                strong_by_module_name[(module, record["name"])].append((key, record))
+            definitions.append(
+                {
+                    "function": _review_identity(key),
+                    "linkage": "global" if record["global"] else "source_local",
+                    "traits": list(record["traits"]),
+                }
+            )
+    for key, candidates in strong_by_module_name.items():
+        if len(candidates) > 1:
+            raise ReviewV3Error(
+                "independent graph found duplicate strong definition {0}".format(key)
+            )
+
+    edges = []
+    blocked_edges = []
+    graph_edges = set()
+    for source in sources:
+        module = inputs["sources"][source]["module"]
+        numbered = {item["number"]: item for item in by_source[source]}
+        for caller in by_source[source]:
+            if not caller["definition"]:
+                continue
+            caller_key = (module, source, caller["name"])
+            for call in caller["calls"]:
+                declared = numbered.get(call["number"])
+                if declared is None or declared["name"] != call["name"]:
+                    raise ReviewV3Error("independent direct call target is unknown")
+                target_key = None
+                edge_kind = None
+                reason = None
+                if caller["traits"]:
+                    reason = caller["traits"][0] + "_caller"
+                elif declared["definition"]:
+                    if declared["traits"]:
+                        reason = _review_blocked_reason([declared])
+                    else:
+                        target_key = (module, source, declared["name"])
+                        edge_kind = "same_translation_unit_direct"
+                elif declared["traits"] or not declared["global"]:
+                    if declared["traits"]:
+                        reason = declared["traits"][0] + "_declaration"
+                    else:
+                        reason = "source_local_declaration"
+                else:
+                    all_candidates = all_by_module_name.get(
+                        (module, declared["name"]), []
+                    )
+                    strong = strong_by_module_name.get(
+                        (module, declared["name"]), []
+                    )
+                    if len(all_candidates) == 1 and len(strong) == 1:
+                        target_key = strong[0][0]
+                        if target_key[1] == source:
+                            raise ReviewV3Error(
+                                "independent external target resolves in its TU"
+                            )
+                        edge_kind = "same_module_cross_translation_unit_direct"
+                    else:
+                        other_modules = [
+                            item
+                            for (candidate_module, candidate_name), values
+                            in all_by_module_name.items()
+                            if candidate_name == declared["name"]
+                            and candidate_module != module
+                            for item in values
+                        ]
+                        if all_candidates:
+                            reason = _review_blocked_reason(
+                                [item[1] for item in all_candidates]
+                            )
+                        elif other_modules:
+                            reason = "cross_module_reference"
+                        else:
+                            reason = "external_outside_candidate"
+                if target_key is None:
+                    if reason is None:
+                        raise ReviewV3Error(
+                            "independent blocked edge has no structural reason"
+                        )
+                    blocked_edges.append(
+                        {
+                            "callee_name": declared["name"],
+                            "caller": _review_identity(caller_key),
+                            "reason": reason,
+                        }
+                    )
+                    continue
+                if target_key not in records or records[target_key]["traits"]:
+                    raise ReviewV3Error("independent graph traverses blocked target")
+                graph_edges.add((caller_key, target_key))
+                edges.append(
+                    {
+                        "callee": _review_identity(target_key),
+                        "caller": _review_identity(caller_key),
+                        "edge_kind": edge_kind,
+                    }
+                )
+
+    roots = {}
+    local_roots = {}
+    for key, record in records.items():
+        local = []
+        if record["global"] and not record["traits"]:
+            local.append("external:{0}:{1}".format(key[0], key[2]))
+        if record["address_taken"]:
+            local.append("callback:{0}:{1}:{2}".format(key[0], key[1], key[2]))
+        local_roots[key] = sorted(local)
+        roots[key] = set(local)
+    changed = True
+    while changed:
+        changed = False
+        for caller, callee in sorted(graph_edges):
+            before = len(roots[callee])
+            roots[callee].update(roots[caller])
+            if len(roots[callee]) != before:
+                changed = True
+    reachability = [
+        {
+            "function": _review_identity(key),
+            "local_roots": local_roots[key],
+            "propagated_roots": sorted(roots[key]),
+        }
+        for key in sorted(records)
+    ]
+    return {
+        "blocked_edges": sorted(
+            {
+                semantics.canonical_bytes(item): item
+                for item in blocked_edges
+            }.values(),
+            key=semantics.canonical_bytes,
+        ),
+        "definitions": sorted(definitions, key=semantics.canonical_bytes),
+        "direct_edges": sorted(
+            {semantics.canonical_bytes(item): item for item in edges}.values(),
+            key=semantics.canonical_bytes,
+        ),
+        "function_reachability": sorted(
+            reachability, key=semantics.canonical_bytes
+        ),
+    }
+
+
+def validate_independent_direct_graph(
+    supplied_graph, independent, authority_mode
+):
+    try:
+        semantics.validate_direct_ctu_graph_schema(
+            supplied_graph, authority_mode
+        )
+    except semantics.SemanticsV3Error as exc:
+        raise ReviewV3Error(
+            "supplied direct CTU inventory schema is invalid: {0}".format(exc)
+        )
+    observed = {
+        key: supplied_graph[key]
+        for key in (
+            "blocked_edges", "definitions", "direct_edges",
+            "function_reachability",
+        )
+    }
+    if not semantics.strict_equal(observed, independent):
+        raise ReviewV3Error(
+            "independent direct CTU definitions, edges, blockers, or roots differ"
+        )
+    return {
+        "direct_ctu_blocked_edge_count": len(independent["blocked_edges"]),
+        "direct_ctu_blocked_edge_set_sha256": semantics.sha256_bytes(
+            semantics.canonical_bytes(independent["blocked_edges"])
+        ),
+        "direct_ctu_definition_count": len(independent["definitions"]),
+        "direct_ctu_definition_set_sha256": semantics.sha256_bytes(
+            semantics.canonical_bytes(independent["definitions"])
+        ),
+        "direct_ctu_direct_edge_count": len(independent["direct_edges"]),
+        "direct_ctu_edge_set_sha256": semantics.sha256_bytes(
+            semantics.canonical_bytes(independent["direct_edges"])
+        ),
+        "direct_ctu_reachable_function_count": sum(
+            bool(item["propagated_roots"])
+            for item in independent["function_reachability"]
+        ),
+        "direct_ctu_root_closure_sha256": semantics.sha256_bytes(
+            semantics.canonical_bytes(independent["function_reachability"])
+        ),
+        "direct_ctu_same_module_cross_tu_edge_count": sum(
+            item["edge_kind"] == "same_module_cross_translation_unit_direct"
+            for item in independent["direct_edges"]
+        ),
+        "direct_ctu_fresh_execution_authority": False,
+        "direct_ctu_structural_match_status": (
+            "nonauthoritative_structural_inventory_matches"
+        ),
+    }
 
 
 def validate_semantics(capture, expected):
@@ -60,7 +469,12 @@ def validate_semantics(capture, expected):
         or capture["profile"] != semantics.PROFILE
         or capture["generator"] != "scripts/host_module_failure_semantics_v3.py"
         or not semantics.strict_equal(capture["analysis_claim"], semantics.ANALYSIS_CLAIM)
-        or not semantics.strict_equal(capture["blockers"], list(semantics.BLOCKERS))
+        or not semantics.strict_equal(
+            capture["blockers"],
+            semantics.blockers_for_direct_ctu(
+                capture["direct_cross_translation_unit_call_graph"]
+            ),
+        )
     ):
         raise ReviewV3Error("v3 semantics identity or non-crediting claim changed")
 
@@ -235,7 +649,6 @@ def validate_review_output_schema(result):
             or result["generator"]
             != "scripts/host_module_failure_contract_review_v3.py"
             or not semantics.strict_equal(result["analysis_claim"], ANALYSIS_CLAIM)
-            or not semantics.strict_equal(result["blockers"], list(semantics.BLOCKERS))
         ):
             raise semantics.SemanticsV3Error(
                 "v3 contract review identity or non-crediting claim changed"
@@ -256,6 +669,15 @@ def validate_review_output_schema(result):
             "c_function_count", "c_return_contract_count", "c_source_count",
             "c_terminal_count", "rust_mir_site_count",
             "rust_mir_site_count_by_mapping_status",
+            "direct_ctu_blocked_edge_count",
+            "direct_ctu_blocked_edge_set_sha256",
+            "direct_ctu_definition_count", "direct_ctu_definition_set_sha256",
+            "direct_ctu_direct_edge_count", "direct_ctu_edge_set_sha256",
+            "direct_ctu_fresh_execution_authority",
+            "direct_ctu_reachable_function_count",
+            "direct_ctu_root_closure_sha256",
+            "direct_ctu_same_module_cross_tu_edge_count",
+            "direct_ctu_structural_match_status",
         }
         findings = semantics.require_exact_keys(
             result["structural_findings"], finding_keys,
@@ -263,22 +685,60 @@ def validate_review_output_schema(result):
         )
         coverage = semantics.require_exact_keys(
             result["coverage"],
-            finding_keys
-            | {
+            {
+                "c_function_count", "c_return_contract_count", "c_source_count",
+                "c_terminal_count", "rust_mir_site_count",
+                "rust_mir_site_count_by_mapping_status",
+                "direct_ctu_blocked_edge_count", "direct_ctu_definition_count",
+                "direct_ctu_direct_edge_count",
+                "direct_ctu_reachable_function_count",
+                "direct_ctu_same_module_cross_tu_edge_count",
                 "semantic_error_domain_resolved_count", "tracker_credit_count",
                 "v2_compiler_active_mapping_count",
             },
             "v3 contract review coverage",
         )
-        for mapping, label in (
-            (findings, "v3 contract review structural findings"),
-            (coverage, "v3 contract review coverage"),
+        integer_findings = finding_keys - {
+            "direct_ctu_blocked_edge_set_sha256",
+            "direct_ctu_definition_set_sha256", "direct_ctu_edge_set_sha256",
+            "direct_ctu_fresh_execution_authority",
+            "direct_ctu_root_closure_sha256",
+            "direct_ctu_structural_match_status",
+            "rust_mir_site_count_by_mapping_status",
+        }
+        for field in sorted(integer_findings):
+            semantics.require_integer(
+                findings[field], "v3 contract review finding " + field, minimum=0
+            )
+        for field in (
+            "direct_ctu_blocked_edge_set_sha256",
+            "direct_ctu_definition_set_sha256", "direct_ctu_edge_set_sha256",
+            "direct_ctu_root_closure_sha256",
         ):
-            for field in sorted(set(mapping) - {"rust_mir_site_count_by_mapping_status"}):
-                semantics.require_integer(mapping[field], label + " " + field, minimum=0)
+            semantics.require_digest(findings[field], "v3 contract review " + field)
+        if (
+            type(findings["direct_ctu_fresh_execution_authority"]) is not bool
+            or findings["direct_ctu_fresh_execution_authority"] is not False
+            or findings["direct_ctu_structural_match_status"]
+            != "nonauthoritative_structural_inventory_matches"
+        ):
+            raise semantics.SemanticsV3Error(
+                "v3 contract review CTU inventory overclaims authority"
+            )
+        if not semantics.strict_equal(result["blockers"], list(semantics.BLOCKERS)):
+            raise semantics.SemanticsV3Error(
+                "v3 contract review direct CTU blocker boundary changed"
+            )
+        for mapping, label in ((findings, "findings"), (coverage, "coverage")):
             semantics.require_count_map(
                 mapping["rust_mir_site_count_by_mapping_status"],
                 label + " Rust mapping status",
+            )
+        for field in sorted(
+            set(coverage) - {"rust_mir_site_count_by_mapping_status"}
+        ):
+            semantics.require_integer(
+                coverage[field], "v3 contract review coverage " + field, minimum=0
             )
     except semantics.SemanticsV3Error as exc:
         raise ReviewV3Error("v3 contract review schema is invalid: {0}".format(exc))
@@ -302,6 +762,7 @@ def build_review(
     repo = Path(repo).resolve()
     if not repo.is_dir():
         raise ReviewV3Error("repository root does not exist")
+    reviewer_receipt = None
     try:
         expected_v2_review = review_v2.build_review(
             repo, failure_site_path, failure_flow_v1_path, failure_flow_v2_path,
@@ -315,18 +776,117 @@ def build_review(
     if not semantics.strict_equal(supplied_v2, expected_v2_review):
         raise ReviewV3Error("supplied v2 contract review is not its exact derivation")
     try:
-        expected_semantics = semantics.build_capture(
-            repo, failure_site_path, failure_flow_v1_path, failure_flow_v2_path,
-            raw_bundle_path, raw_bundle_sha256_path, build_dir, kernel_dir,
-            historical_ef58, repository_authority,
+        inputs = semantics.load_inputs(
+            repo,
+            failure_site_path,
+            failure_flow_v1_path,
+            failure_flow_v2_path,
+            build_dir,
+            kernel_dir,
+            historical_ef58,
+            repository_authority,
         )
+        supplied_manifest, supplied_payloads, supplied_raw_record = (
+            semantics.read_raw_bundle(raw_bundle_path, raw_bundle_sha256_path)
+        )
+        supplied_invocations = semantics.validate_raw_manifest(
+            supplied_manifest, supplied_payloads, inputs
+        )
+        independent_comparison = None
+        if inputs["authority_mode"] == semantics.flows_v2.FRESH_AUTHORITY_MODE:
+            with tempfile.TemporaryDirectory(
+                prefix="host-module-semantics-v3-review-recapture."
+            ) as temporary:
+                temporary_root = Path(temporary)
+                reviewer_bundle = temporary_root / Path(raw_bundle_path).name
+                reviewer_sidecar = temporary_root / Path(raw_bundle_sha256_path).name
+                reviewer_receipt = semantics.capture_raw_bundle(
+                    inputs,
+                    repo,
+                    build_dir,
+                    kernel_dir,
+                    reviewer_bundle,
+                    reviewer_sidecar,
+                )
+                reviewer_manifest, reviewer_payloads, reviewer_raw_record = (
+                    semantics.read_raw_bundle(reviewer_bundle, reviewer_sidecar)
+                )
+                semantics.validate_raw_manifest(
+                    reviewer_manifest, reviewer_payloads, inputs
+                )
+                independent_comparison = (
+                    semantics.compare_independent_fresh_captures(
+                        supplied_manifest,
+                        supplied_payloads,
+                        supplied_raw_record,
+                        reviewer_receipt,
+                        reviewer_manifest,
+                        reviewer_payloads,
+                        reviewer_raw_record,
+                    )
+                )
+                expected_semantics = semantics.build_capture(
+                    repo,
+                    failure_site_path,
+                    failure_flow_v1_path,
+                    failure_flow_v2_path,
+                    raw_bundle_path,
+                    raw_bundle_sha256_path,
+                    build_dir,
+                    kernel_dir,
+                    historical_ef58,
+                    repository_authority,
+                    independent_fresh_comparison=independent_comparison,
+                )
+                independent_graph = independently_derive_direct_graph(
+                    inputs, supplied_invocations, supplied_payloads
+                )
+                independent_comparison.replay(
+                    supplied_manifest, supplied_raw_record
+                )
+                reviewer_receipt.replay()
+        else:
+            expected_semantics = semantics.build_capture(
+                repo,
+                failure_site_path,
+                failure_flow_v1_path,
+                failure_flow_v2_path,
+                raw_bundle_path,
+                raw_bundle_sha256_path,
+                build_dir,
+                kernel_dir,
+                historical_ef58,
+                repository_authority,
+            )
+            independent_graph = independently_derive_direct_graph(
+                inputs, supplied_invocations, supplied_payloads
+            )
     except semantics.SemanticsV3Error as exc:
         raise ReviewV3Error("cannot re-derive v3 semantics: {0}".format(exc))
+    finally:
+        if reviewer_receipt is not None:
+            reviewer_receipt.close()
     supplied_semantics, semantics_file, _ = semantics.read_json_record(
         semantics_v3_path, "semantics v3"
     )
     findings = validate_semantics(supplied_semantics, expected_semantics)
-    coverage = dict(findings)
+    findings.update(
+        validate_independent_direct_graph(
+            supplied_semantics["direct_cross_translation_unit_call_graph"],
+            independent_graph,
+            expected_semantics["authority_mode"],
+        )
+    )
+    coverage = {
+        key: value for key, value in findings.items()
+        if key not in {
+            "direct_ctu_blocked_edge_set_sha256",
+            "direct_ctu_definition_set_sha256", "direct_ctu_edge_set_sha256",
+            "direct_ctu_fresh_execution_authority",
+            "direct_ctu_root_closure_sha256",
+            "direct_ctu_structural_match_status",
+        }
+    }
     coverage.update(
         {
             "semantic_error_domain_resolved_count": 0,
@@ -339,7 +899,7 @@ def build_review(
     result = {
         "analysis_claim": dict(ANALYSIS_CLAIM),
         "authority_mode": expected_semantics["authority_mode"],
-        "blockers": list(semantics.BLOCKERS),
+        "blockers": list(supplied_semantics["blockers"]),
         "coverage": coverage,
         "generator": "scripts/host_module_failure_contract_review_v3.py",
         "inputs": {
@@ -390,9 +950,14 @@ def parse_args(argv):
 
 def main(argv=None, repository_authority=None):
     args = parse_args(argv or sys.argv[1:])
+    output_target = None
+    output_authority = None
     try:
         if not args.historical_ef58 and repository_authority is None:
             raise ReviewV3Error("fresh CLI requires isolated repository authority")
+        output_target = semantics.prepare_empty_output_target(
+            args.output, "contract review v3 output"
+        )
         review = build_review(
             args.repo, args.failure_sites, args.failure_flows_v1,
             args.failure_flows_v2, args.failure_contract_review_v2,
@@ -400,13 +965,23 @@ def main(argv=None, repository_authority=None):
             args.raw_bundle_sha256, args.build_dir, args.kernel_dir,
             args.historical_ef58, repository_authority,
         )
-        semantics.atomic_write(
-            args.output,
-            (json.dumps(review, allow_nan=False, indent=2, sort_keys=True) + "\n").encode("utf-8"),
+        output_authority = output_target.create(
+            (
+                json.dumps(
+                    review, allow_nan=False, indent=2, sort_keys=True
+                )
+                + "\n"
+            ).encode("utf-8")
         )
+        output_authority.replay()
     except (ReviewV3Error, semantics.SemanticsV3Error) as exc:
         print("host-module failure-contract review v3 failed: {0}".format(exc), file=sys.stderr)
         return 1
+    finally:
+        if output_authority is not None:
+            output_authority.close()
+        if output_target is not None:
+            output_target.close()
     print(
         "reviewed {0} C return questions and {1} Rust MIR sites; FP-0006 remains IN_PROGRESS".format(
             review["coverage"]["c_return_contract_count"],

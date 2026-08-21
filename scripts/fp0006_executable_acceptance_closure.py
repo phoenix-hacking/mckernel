@@ -25,8 +25,8 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parent.parent
 CONTRACT_PATH = "host-kernel/contracts/fp0006-executable-acceptance-closure-v1.json"
-EXPECTED_CONTRACT_SHA256 = "2f63eda20359cbac13e164da14edd07f1a04332043722453fcb7fc934c69ae84"
-EXPECTED_CONTRACT_SIZE = 5425
+EXPECTED_CONTRACT_SHA256 = "64d4791bb6d3e7fa7a24085e18c634c14d9c81ec80c1d5817a9d9fee641ef70a"
+EXPECTED_CONTRACT_SIZE = 5938
 MAX_INPUT_SIZE = 32 * 1024 * 1024
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 HFS_ID = re.compile(r"^HFS-[0-9A-F]{24}$")
@@ -374,6 +374,9 @@ def validate_contract(contract, _claims_factory=_false_claims):
         "c_semantic_question_count": 205,
         "compiler_failure_site_count": 971,
         "declarative_behavior_acceptance_join": "complete",
+        "direct_strong_same_module_ctu_structural_inventory_status": (
+            "required-missing"
+        ),
         "executable_result_count": 0,
         "full_cross_authority_join": "required-missing",
         "rust_mir_site_count": 420,
@@ -388,6 +391,7 @@ def validate_contract(contract, _claims_factory=_false_claims):
     expected_missing = [
         "bounded_failure_flow_rows",
         "compiler_failure_site_rows",
+        "direct_strong_same_module_ctu_structural_inventory",
         "durable_runtime_result_authority",
         "independent_runtime_result_review",
         "runtime_result_rows",
@@ -510,6 +514,7 @@ def validate_contract(contract, _claims_factory=_false_claims):
         semantics,
         {
             "artifact",
+            "direct_ctu_structural_inventory",
             "generator",
             "independent_review_artifact",
             "independent_review_generator",
@@ -534,6 +539,29 @@ def validate_contract(contract, _claims_factory=_false_claims):
         {"artifact_availability", "path", "sha256", "size"},
         "semantic review artifact",
     )
+    direct_ctu = require_keys(
+        semantics["direct_ctu_structural_inventory"],
+        {
+            "artifact_availability",
+            "blocker_retained",
+            "fresh_execution_authority",
+            "inventory_kind",
+            "status",
+        },
+        "semantic direct CTU structural inventory",
+    )
+    expected_direct_ctu = {
+        "artifact_availability": "required-missing",
+        "blocker_retained": "cross_translation_unit_call_graph_not_linked",
+        "fresh_execution_authority": False,
+        "inventory_kind": (
+            "gcc_initial_ipa_cgraph_direct_strong_same_module_cross_tu_"
+            "structural_inventory"
+        ),
+        "status": "required-missing",
+    }
+    if not strict_equal(direct_ctu, expected_direct_ctu):
+        raise ClosureError("semantic direct CTU structural inventory changed")
     for name, record in (("artifact", artifact), ("independent review", review_artifact)):
         if record["artifact_availability"] != "required-missing":
             raise ClosureError("semantic {0} availability overclaims".format(name))
@@ -813,8 +841,44 @@ def validate_semantic_sources(generator_data, review_data, metadata):
         raise ClosureError("semantic generator noncrediting boundary changed")
     if "def validate_semantics" not in review_text:
         raise ClosureError("semantic independent-review generator changed")
+    required_generator_markers = (
+        "RAW_SCHEMA_VERSION = 2",
+        '("cgraph", "-fdump-ipa-cgraph-lineno", ".cgraph")',
+        'DIRECT_CTU_INVENTORY_KIND = (',
+        'DIRECT_CTU_HISTORICAL_STATUS = "historical_raw_not_independently_anchored"',
+        "def validate_fresh_capture_receipt",
+        "def capture_continuity_diagnostic",
+        "def compare_independent_fresh_captures",
+        "def validate_normalized_cgraph_dump",
+        '"fresh_execution_authority": False,',
+        'reason = caller_record["traits"][0] + "_caller"',
+        'reason = declared["traits"][0] + "_declaration"',
+    )
+    required_review_markers = (
+        "def independently_derive_direct_graph",
+        "semantics.compare_independent_fresh_captures(",
+        "independent_fresh_comparison=independent_comparison",
+        '"direct_ctu_fresh_execution_authority": False,',
+        '"direct_ctu_structural_match_status": (',
+        '"blocked_edges": sorted(',
+        'if caller["traits"]:',
+        'if declared["traits"] or not declared["global"]:',
+        "independent normalized cgraph retains a raw or misplaced allocator address",
+    )
+    if any(
+        generator_text.count(marker) != 1
+        for marker in required_generator_markers
+    ):
+        raise ClosureError("semantic direct CTU generator marker changed")
+    if any(
+        review_text.count(marker) != 1 for marker in required_review_markers
+    ):
+        raise ClosureError("semantic direct CTU independent-review marker changed")
     return {
         "c_semantic_question_count": c_count,
+        "direct_strong_same_module_ctu_structural_inventory_status": (
+            metadata["direct_ctu_structural_inventory"]["status"]
+        ),
         "rust_mir_site_count": rust_count,
         "semantic_rows_status": "required-missing",
         "independent_review_status": "required-missing",
@@ -1010,6 +1074,9 @@ def _build_census_anchored(
 
         result = {
             "assurance": {
+                "direct_strong_same_module_ctu_structural_inventory": semantic[
+                    "direct_strong_same_module_ctu_structural_inventory_status"
+                ],
                 "durable_runtime_result_authority": "required-missing",
                 "execution": "required-missing",
                 "independent_runtime_result_review": "required-missing",
@@ -1045,6 +1112,9 @@ def _build_census_anchored(
                 "compiler_failure_site_reference_count": site_meta["row_count"],
                 "declarative_behavior_acceptance_join_complete": legacy[
                     "declarative_join_complete"
+                ],
+                "direct_strong_same_module_ctu_structural_inventory_reference_status": semantic[
+                    "direct_strong_same_module_ctu_structural_inventory_status"
                 ],
                 "rust_mir_site_reference_count": semantic["rust_mir_site_count"],
             },
@@ -1168,7 +1238,7 @@ class _PublicCensusEmitter(object):
                 source_data,
             )
             expected_self = (
-                "SELF_DIGEST:8dd8812ec5a71b5ecb3a0f06f8a7481336f5fc0da864fa0eff558d311913edc4"
+                "SELF_DIGEST:863b023bf7c009fc039e73bab165e2c66200cffb83aebcdb36ae01ca8480c1b3"
             ).split(":", 1)[1]
             if sha256_bytes(normalized) != expected_self:
                 raise ClosureError("isolated checker normalized SHA-256 changed")
@@ -1240,6 +1310,7 @@ class _PublicCensusEmitter(object):
         expected_missing = [
             "bounded_failure_flow_rows",
             "compiler_failure_site_rows",
+            "direct_strong_same_module_ctu_structural_inventory",
             "durable_runtime_result_authority",
             "independent_runtime_result_review",
             "runtime_result_rows",
@@ -1255,6 +1326,9 @@ class _PublicCensusEmitter(object):
             "c_semantic_question_reference_count": 205,
             "compiler_failure_site_reference_count": 971,
             "declarative_behavior_acceptance_join_complete": True,
+            "direct_strong_same_module_ctu_structural_inventory_reference_status": (
+                "required-missing"
+            ),
             "rust_mir_site_reference_count": 420,
         }
         if type(result) is not dict or set(result) != {
@@ -1282,6 +1356,9 @@ class _PublicCensusEmitter(object):
         ):
             raise ClosureError("isolated census result identity or counts changed")
         expected_assurance = {
+            "direct_strong_same_module_ctu_structural_inventory": (
+                "required-missing"
+            ),
             "durable_runtime_result_authority": "required-missing",
             "execution": "required-missing",
             "independent_runtime_result_review": "required-missing",

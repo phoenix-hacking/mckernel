@@ -190,10 +190,12 @@ class SyntheticRawFixture:
         }
         self.manifest = {
             "authority_mode": self.inputs["authority_mode"],
+            "capture_challenge": "01" * 32,
             "compiler_invocations": sorted(self.invocations, key=lambda item: (item["language"], item["source"])),
             "files": sorted(self.files, key=lambda item: item["path"]),
             "generator": "scripts/host_module_failure_semantics_v3.py",
             "inputs": semantics.manifest_input_bindings(self.inputs),
+            "invocation_id": semantics.invocation_id_for_challenge("01" * 32),
             "profile": semantics.RAW_PROFILE,
             "schema_version": semantics.RAW_SCHEMA_VERSION,
             "toolchains": {
@@ -803,6 +805,27 @@ class RawManifestMutationTests(unittest.TestCase):
         with self.assertRaisesRegex(semantics.SemanticsV3Error, "schema"):
             self.validate(manifest)
 
+    def test_capture_challenge_and_invocation_binding_mutations_fail(self):
+        for value in (
+            True, "", "0" * 64, "AB" * 32, "01" * 31,
+            "01" * 32 + " ", "gg" * 32,
+        ):
+            with self.subTest(value=value):
+                manifest = copy.deepcopy(self.fixture.manifest)
+                manifest["capture_challenge"] = value
+                with self.assertRaises(semantics.SemanticsV3Error):
+                    self.validate(manifest)
+        manifest = copy.deepcopy(self.fixture.manifest)
+        manifest["invocation_id"] = "0" * 64
+        with self.assertRaisesRegex(semantics.SemanticsV3Error, "invocation ID"):
+            self.validate(manifest)
+        manifest = copy.deepcopy(self.fixture.manifest)
+        manifest["nested"] = {
+            "capture_challenge": manifest.pop("capture_challenge")
+        }
+        with self.assertRaisesRegex(semantics.SemanticsV3Error, "schema"):
+            self.validate(manifest)
+
     def test_numeric_bool_and_float_aliases_fail_direct_validation(self):
         mutations = (
             (("schema_version",), True),
@@ -947,6 +970,753 @@ class RawManifestMutationTests(unittest.TestCase):
         manifest["files"][0]["path"] = "../escape"
         with self.assertRaises(semantics.SemanticsV3Error):
             self.validate(manifest)
+
+
+def synthetic_cgraph(records, second_records=None):
+    def table(values):
+        rows = ["Initial Symbol table:", ""]
+        for record in values:
+            rows.append(
+                "{0}/{1} ({0}) @0xADDR".format(
+                    record["name"], record["number"]
+                )
+            )
+            rows.append(
+                "  Type: function{0}{1}".format(
+                    " definition analyzed" if record.get("definition") else "",
+                    record.get("type_suffix", ""),
+                )
+            )
+            visibility = ["semantic_interposition"]
+            visibility.extend(record.get("visibility", ()))
+            if record.get("global", True):
+                visibility.append("public")
+            rows.append("  Visibility: " + " ".join(visibility))
+            if record.get("address_taken"):
+                rows.append("  Address is taken.")
+            if record.get("alias"):
+                rows.append("  Alias target: target/999")
+            if record.get("weak"):
+                rows[-1] += " weak"
+            rows.append("  References: ")
+            rows.append("  Referring: ")
+            rows.append("  Function flags: " + record.get("function_flags", "body"))
+            rows.append("  Called by: ")
+            calls = " ".join(
+                "{0}/{1}".format(name, number)
+                for name, number in record.get("calls", ())
+            )
+            rows.append("  Calls: " + calls)
+            if record.get("indirect"):
+                rows.append("   Indirect callnum speculative call targets: 0")
+        rows.extend(("", "Removing unused symbols:", ""))
+        return rows
+
+    rows = table(records)
+    if second_records is not None:
+        rows.extend(table(second_records))
+    return ("\n".join(rows) + "\n").encode("utf-8")
+
+
+class DirectCtuGraphTests(unittest.TestCase):
+    def fixture(self, overrides=None, modules=None):
+        overrides = overrides or {}
+        modules = modules or {}
+        sources = {}
+        invocations = {}
+        payloads = {}
+        for number in range(semantics.EXPECTED_C_SOURCE_COUNT):
+            source = "fixture/c{0}.c".format(number)
+            module = modules.get(number, "mcctrl")
+            if number == 0:
+                records = [
+                    {
+                        "name": "callee", "number": 1,
+                        "definition": False, "global": True,
+                    },
+                    {
+                        "name": "caller", "number": 2,
+                        "definition": True, "global": True,
+                        "calls": (("callee", 1),),
+                    },
+                ]
+            elif number == 1:
+                records = [
+                    {
+                        "name": "callee", "number": 1,
+                        "definition": True, "global": True,
+                    }
+                ]
+            else:
+                records = [
+                    {
+                        "name": "leaf_{0}".format(number), "number": 1,
+                        "definition": True, "global": True,
+                    }
+                ]
+            records = overrides.get(number, records)
+            data = synthetic_cgraph(records)
+            path = "c/{0}/cgraph.txt".format(number)
+            payloads[path] = data
+            binding = {
+                "bytes": len(data), "path": path,
+                "sha256": semantics.sha256_bytes(data),
+            }
+            sources[source] = {
+                "language": "c", "module": module, "source": source,
+            }
+            invocations[source] = {
+                "dumps": {"cgraph": binding}, "language": "c", "source": source,
+            }
+        return {"sources": sources}, invocations, payloads
+
+    def graph(self, overrides=None, modules=None, mode=None, receipt=True):
+        inputs, invocations, payloads = self.fixture(overrides, modules)
+        authority_mode = mode or semantics.flows_v2.FRESH_AUTHORITY_MODE
+        if authority_mode == semantics.flows_v2.HISTORICAL_AUTHORITY_MODE:
+            diagnostic = semantics.DIRECT_CTU_HISTORICAL_DIAGNOSTIC
+        elif receipt:
+            diagnostic = semantics.DIRECT_CTU_CHECKED_DIAGNOSTIC
+        else:
+            diagnostic = semantics.DIRECT_CTU_UNCHECKED_DIAGNOSTIC
+        return semantics.derive_direct_ctu_call_graph(
+            inputs,
+            invocations,
+            payloads,
+            authority_mode,
+            diagnostic,
+        )
+
+    def test_unique_same_module_cross_tu_edge_propagates_roots(self):
+        graph = self.graph()
+        self.assertEqual(
+            graph["status"], semantics.DIRECT_CTU_FRESH_CONTINUITY_STATUS
+        )
+        self.assertIs(graph["fresh_execution_authority"], False)
+        ctu = [
+            item for item in graph["direct_edges"]
+            if item["edge_kind"] == "same_module_cross_translation_unit_direct"
+        ]
+        self.assertEqual(len(ctu), 1)
+        callee = [
+            item for item in graph["function_reachability"]
+            if item["function"]["name"] == "callee"
+        ][0]
+        self.assertIn("external:mcctrl:caller", callee["propagated_roots"])
+        self.assertIn(
+            "cross_translation_unit_call_graph_not_linked",
+            semantics.blockers_for_direct_ctu(graph),
+        )
+
+    def test_historical_and_unreceipted_modes_never_remove_blocker(self):
+        historical = self.graph(mode=semantics.flows_v2.HISTORICAL_AUTHORITY_MODE)
+        self.assertEqual(historical["status"], semantics.DIRECT_CTU_HISTORICAL_STATUS)
+        unreceipted = self.graph(receipt=False)
+        self.assertEqual(
+            unreceipted["status"], semantics.DIRECT_CTU_FRESH_UNCHECKED_STATUS
+        )
+        for graph in (historical, unreceipted):
+            self.assertIs(graph["fresh_execution_authority"], False)
+            self.assertIn(
+                "cross_translation_unit_call_graph_not_linked",
+                semantics.blockers_for_direct_ctu(graph),
+            )
+
+    def test_mixed_strong_and_weak_candidate_is_poisoned(self):
+        weak = {
+            2: [
+                {
+                    "name": "callee", "number": 1, "definition": True,
+                    "global": True, "visibility": ("weak",),
+                }
+            ]
+        }
+        graph = self.graph(overrides=weak)
+        self.assertEqual(
+            graph["status"], semantics.DIRECT_CTU_FRESH_CONTINUITY_STATUS
+        )
+        self.assertTrue(
+            any(item["reason"] == "weak_target" for item in graph["blocked_edges"])
+        )
+        self.assertFalse(
+            any(item["edge_kind"].startswith("same_module_cross") for item in graph["direct_edges"])
+        )
+
+    def test_duplicate_strong_global_definition_fails_closed(self):
+        duplicate = {
+            2: [
+                {
+                    "name": "callee", "number": 1,
+                    "definition": True, "global": True,
+                }
+            ]
+        }
+        with self.assertRaisesRegex(semantics.SemanticsV3Error, "duplicate strong"):
+            self.graph(overrides=duplicate)
+
+    def test_every_blocked_caller_trait_poisons_each_direct_call(self):
+        cases = {
+            "alias": {"alias": True},
+            "clone": {"name": "caller.clone.1"},
+            "comdat": {"visibility": ("comdat",)},
+            "inline": {"function_flags": "body always_inline"},
+            "weak": {"visibility": ("weak",)},
+        }
+        for trait, mutation in sorted(cases.items()):
+            with self.subTest(trait=trait):
+                caller = {
+                    "name": "caller", "number": 2,
+                    "definition": True, "global": True,
+                    "calls": (("callee", 1),),
+                }
+                caller.update(mutation)
+                graph = self.graph(
+                    overrides={
+                        0: [
+                            {
+                                "name": "callee", "number": 1,
+                                "definition": False, "global": True,
+                            },
+                            caller,
+                        ]
+                    }
+                )
+                self.assertEqual(
+                    graph["status"],
+                    semantics.DIRECT_CTU_FRESH_CONTINUITY_STATUS,
+                )
+                self.assertFalse(graph["direct_edges"])
+                self.assertTrue(
+                    any(
+                        item["reason"] == trait + "_caller"
+                        for item in graph["blocked_edges"]
+                    )
+                )
+                self.assertIn(
+                    "cross_translation_unit_call_graph_not_linked",
+                    semantics.blockers_for_direct_ctu(graph),
+                )
+                semantics.validate_direct_ctu_graph_schema(
+                    graph, semantics.flows_v2.FRESH_AUTHORITY_MODE
+                )
+
+    def test_non_strong_declaration_cannot_resolve_to_strong_definition(self):
+        cases = (
+            ({"global": True, "visibility": ("weak",)}, "weak_declaration"),
+            ({"global": False}, "source_local_declaration"),
+        )
+        for mutation, reason in cases:
+            with self.subTest(reason=reason):
+                declaration = {
+                    "name": "callee", "number": 1,
+                    "definition": False,
+                }
+                declaration.update(mutation)
+                graph = self.graph(
+                    overrides={
+                        0: [
+                            declaration,
+                            {
+                                "name": "caller", "number": 2,
+                                "definition": True, "global": True,
+                                "calls": (("callee", 1),),
+                            },
+                        ]
+                    }
+                )
+                self.assertEqual(
+                    graph["status"],
+                    semantics.DIRECT_CTU_FRESH_CONTINUITY_STATUS,
+                )
+                self.assertFalse(graph["direct_edges"])
+                self.assertTrue(
+                    any(
+                        item["reason"] == reason
+                        for item in graph["blocked_edges"]
+                    )
+                )
+                semantics.validate_direct_ctu_graph_schema(
+                    graph, semantics.flows_v2.FRESH_AUTHORITY_MODE
+                )
+
+    def test_schema_rejects_a_direct_edge_from_a_blocked_caller(self):
+        graph = self.graph()
+        caller = [
+            item for item in graph["definitions"]
+            if item["function"]["name"] == "caller"
+        ][0]
+        caller["traits"] = ["weak"]
+        with self.assertRaisesRegex(
+            semantics.SemanticsV3Error, "blocked caller"
+        ):
+            semantics.validate_direct_ctu_graph_schema(
+                graph, semantics.flows_v2.FRESH_AUTHORITY_MODE
+            )
+
+    def test_static_collision_is_not_a_ctu_target(self):
+        local = {
+            1: [
+                {"name": "callee", "number": 1, "definition": True, "global": False}
+            ],
+            2: [
+                {"name": "callee", "number": 1, "definition": True, "global": False}
+            ],
+        }
+        graph = self.graph(overrides=local)
+        self.assertTrue(
+            any(
+                item["reason"] == "static_name_collision"
+                for item in graph["blocked_edges"]
+            )
+        )
+        self.assertIn(
+            "cross_translation_unit_call_graph_not_linked",
+            semantics.blockers_for_direct_ctu(graph),
+        )
+
+    def test_cross_module_definition_is_never_traversed(self):
+        graph = self.graph(modules={1: "ihk"})
+        self.assertTrue(
+            any(
+                item["reason"] == "cross_module_reference"
+                for item in graph["blocked_edges"]
+            )
+        )
+        self.assertFalse(
+            any(item["callee"]["name"] == "callee" for item in graph["direct_edges"])
+        )
+
+    def test_indirect_call_is_recorded_but_not_invented_as_edge(self):
+        overrides = {
+            0: [
+                {
+                    "name": "callee", "number": 1,
+                    "definition": False, "global": True,
+                },
+                {
+                    "name": "caller", "number": 2,
+                    "definition": True, "global": True,
+                    "calls": (("callee", 1),), "indirect": True,
+                },
+            ]
+        }
+        graph = self.graph(overrides=overrides)
+        self.assertTrue(
+            any(item["kind"] == "indirect_call_site" for item in graph["indirect_call_sites"])
+        )
+        self.assertIn("indirect_callback_reachability_not_proven", semantics.blockers_for_direct_ctu(graph))
+
+    def test_repeated_table_mutation_and_unknown_call_syntax_fail(self):
+        first = [
+            {"name": "one", "number": 1, "definition": True, "global": True}
+        ]
+        second = [
+            {"name": "two", "number": 1, "definition": True, "global": True}
+        ]
+        with self.assertRaisesRegex(semantics.SemanticsV3Error, "inconsistent"):
+            semantics.parse_initial_cgraph(
+                synthetic_cgraph(first, second), "fixture.c"
+            )
+        malformed = synthetic_cgraph(first).replace(b"  Calls: ", b"  Calls: ???")
+        with self.assertRaisesRegex(semantics.SemanticsV3Error, "unknown"):
+            semantics.parse_initial_cgraph(malformed, "fixture.c")
+
+    def test_node_address_is_parsed_and_inline_definition_is_blocked(self):
+        records = [
+            {
+                "name": "inline_target", "number": 1,
+                "definition": True, "global": True,
+                "function_flags": "body always_inline",
+            }
+        ]
+        parsed = semantics.parse_initial_cgraph(
+            synthetic_cgraph(records), "fixture.c"
+        )
+        self.assertEqual(parsed[0]["traits"], ["inline"])
+
+    def test_real_normalizer_canonicalizes_only_header_allocator_addresses(self):
+        records = [
+            {"name": "one", "number": 1, "definition": True, "global": True}
+        ]
+        normalized_template = synthetic_cgraph(records).replace(
+            b"  Calls: ",
+            b"  Note: literal 0xDEADBEEF, string \"0xDEADBEEF\", "
+            b"comment /* 0xDEADBEEF */\n  Calls: ",
+        )
+        raw_one = normalized_template.replace(b"@0xADDR", b"@0x1234")
+        raw_two = normalized_template.replace(b"@0xADDR", b"@0xABCDEF")
+        first = semantics.flows_v1.normalized_dump(raw_one, ())
+        second = semantics.flows_v1.normalized_dump(raw_two, ())
+        self.assertEqual(first, second)
+        self.assertIn(
+            b"literal 0xDEADBEEF, string \"0xDEADBEEF\", "
+            b"comment /* 0xDEADBEEF */",
+            first,
+        )
+        semantics.validate_normalized_cgraph_dump(first)
+        self.assertEqual(
+            semantics.parse_initial_cgraph(first, "fixture.c"),
+            semantics.parse_initial_cgraph(second, "fixture.c"),
+        )
+
+    def test_raw_or_misplaced_cgraph_address_tokens_fail_closed(self):
+        record = [
+            {"name": "one", "number": 1, "definition": True, "global": True}
+        ]
+        normalized = synthetic_cgraph(record)
+        hostile = (
+            normalized.replace(b"@0xADDR", b"@0x1234"),
+            normalized.replace(
+                b"  Calls: ", b"  Aux: @0xADDR\n  Calls: "
+            ),
+            normalized.replace(
+                b"  Calls: ", b"  Note: string 0xADDR\n  Calls: "
+            ),
+        )
+        for data in hostile:
+            with self.subTest(data=data):
+                with self.assertRaisesRegex(
+                    semantics.SemanticsV3Error, "address"
+                ):
+                    semantics.parse_initial_cgraph(data, "fixture.c")
+
+    def test_rootless_and_callback_rooted_scc_closure(self):
+        def cycle(address_taken):
+            return {
+                0: [
+                    {
+                        "name": "local_a", "number": 1,
+                        "definition": True, "global": False,
+                        "address_taken": address_taken,
+                        "calls": (("local_b", 2),),
+                    },
+                    {
+                        "name": "local_b", "number": 2,
+                        "definition": True, "global": False,
+                        "calls": (("local_a", 1),),
+                    },
+                ]
+            }
+
+        rootless = self.graph(overrides=cycle(False))
+        rootless_rows = [
+            item for item in rootless["function_reachability"]
+            if item["function"]["name"] in ("local_a", "local_b")
+        ]
+        self.assertEqual(
+            [item["propagated_roots"] for item in rootless_rows], [[], []]
+        )
+
+        rooted = self.graph(overrides=cycle(True))
+        root = "callback:mcctrl:fixture/c0.c:local_a"
+        rooted_rows = [
+            item for item in rooted["function_reachability"]
+            if item["function"]["name"] in ("local_a", "local_b")
+        ]
+        self.assertTrue(
+            all(root in item["propagated_roots"] for item in rooted_rows)
+        )
+
+    def test_missing_cgraph_binding_fails_closed(self):
+        inputs, invocations, payloads = self.fixture()
+        del invocations["fixture/c0.c"]["dumps"]["cgraph"]
+        with self.assertRaisesRegex(semantics.SemanticsV3Error, "omits"):
+            semantics.derive_direct_ctu_call_graph(
+                inputs,
+                invocations,
+                payloads,
+                semantics.flows_v2.FRESH_AUTHORITY_MODE,
+                semantics.DIRECT_CTU_CHECKED_DIAGNOSTIC,
+            )
+
+    def test_forged_old_authoritative_status_is_rejected_with_or_without_edges(self):
+        old_status = (
+            "direct_strong_same_module_cross_translation_unit_call_graph_"
+            + "li" + "nked"
+        )
+        positive = self.graph()
+        zero = self.graph(
+            overrides={
+                0: [
+                    {
+                        "name": "caller", "number": 2,
+                        "definition": True, "global": True,
+                    }
+                ]
+            }
+        )
+        for graph in (positive, zero):
+            with self.subTest(edge_count=len(graph["direct_edges"])):
+                hostile = copy.deepcopy(graph)
+                hostile["status"] = old_status
+                with self.assertRaisesRegex(
+                    semantics.SemanticsV3Error, "status"
+                ):
+                    semantics.validate_direct_ctu_graph_schema(
+                        hostile, semantics.flows_v2.FRESH_AUTHORITY_MODE
+                    )
+                hostile = copy.deepcopy(graph)
+                hostile["fresh_execution_authority"] = True
+                with self.assertRaisesRegex(
+                    semantics.SemanticsV3Error, "nonauthoritative"
+                ):
+                    semantics.validate_direct_ctu_graph_schema(
+                        hostile, semantics.flows_v2.FRESH_AUTHORITY_MODE
+                    )
+
+
+class FreshCaptureReceiptTests(unittest.TestCase):
+    def make_pair(self, root, challenge):
+        manifest = {
+            "capture_challenge": challenge,
+            "invocation_id": semantics.invocation_id_for_challenge(challenge),
+        }
+        payloads = {"manifest.json": semantics.canonical_bytes(manifest)}
+        bundle_data = semantics.canonical_tar(payloads)
+        bundle = root / "raw.tar"
+        sidecar = root / "raw.tar.sha256"
+        targets = semantics.prepare_empty_output_targets(
+            ((bundle, "test bundle"), (sidecar, "test sidecar"))
+        )
+        bundle_authority = targets[0].create(bundle_data)
+        sidecar_data = semantics.raw_sidecar_bytes(bundle.name, bundle_data)
+        sidecar_authority = targets[1].create(sidecar_data)
+        for target in targets:
+            target.close()
+        receipt = semantics.FreshCaptureReceipt(
+            manifest,
+            semantics.raw_bundle_record(manifest, bundle_data, sidecar_data),
+            bundle_authority,
+            sidecar_authority,
+        )
+        return bundle, sidecar, receipt
+
+    def test_challenge_and_invocation_id_are_exact(self):
+        valid = "ab" * 32
+        expected = semantics.invocation_id_for_challenge(valid)
+        self.assertRegex(expected, r"^[0-9a-f]{64}$")
+        for value in (
+            True, "", "0" * 64, "AB" * 32, "ab" * 31,
+            "ab" * 32 + " ", "gg" * 32,
+        ):
+            with self.subTest(value=value):
+                with self.assertRaises(semantics.SemanticsV3Error):
+                    semantics.invocation_id_for_challenge(value)
+        manifest = {"capture_challenge": valid, "invocation_id": "0" * 64}
+        with self.assertRaisesRegex(semantics.SemanticsV3Error, "domain-separated"):
+            semantics.validate_manifest_invocation(manifest, "test")
+
+    def test_rng_failure_aborts(self):
+        with mock.patch.object(semantics.os, "urandom", side_effect=OSError("rng")):
+            with self.assertRaisesRegex(semantics.SemanticsV3Error, "RNG failed"):
+                semantics.fresh_capture_challenge()
+
+    def test_forged_receipt_and_comparison_are_diagnostic_only(self):
+        class Noop(object):
+            replay = lambda self: None
+            close = lambda self: None
+
+        challenge = "11" * 32
+        manifest = {
+            "capture_challenge": challenge,
+            "invocation_id": semantics.invocation_id_for_challenge(challenge),
+        }
+        raw_record = {
+            "artifact_bytes": 1,
+            "artifact_sha256": "a" * 64,
+            "manifest_sha256": "b" * 64,
+            "sha256_sidecar_bytes": 1,
+            "sha256_sidecar_sha256": "c" * 64,
+        }
+        fake = semantics.FreshCaptureReceipt(
+            manifest, raw_record, Noop(), Noop()
+        )
+        diagnostic = semantics.validate_fresh_capture_receipt(
+            fake, copy.deepcopy(manifest), copy.deepcopy(raw_record)
+        )
+        self.assertEqual(
+            diagnostic, semantics.DIRECT_CTU_CHECKED_DIAGNOSTIC
+        )
+        forged_comparison = semantics.IndependentFreshCaptureComparison(
+            copy.deepcopy(manifest), copy.deepcopy(raw_record), fake
+        )
+        comparison_diagnostic = semantics.capture_continuity_diagnostic(
+            semantics.flows_v2.FRESH_AUTHORITY_MODE,
+            copy.deepcopy(manifest),
+            copy.deepcopy(raw_record),
+            independent_fresh_comparison=forged_comparison,
+        )
+        self.assertEqual(comparison_diagnostic, diagnostic)
+
+        fixture = DirectCtuGraphTests()
+        positive_inputs, positive_invocations, positive_payloads = fixture.fixture()
+        zero_inputs, zero_invocations, zero_payloads = fixture.fixture(
+            overrides={
+                0: [
+                    {
+                        "name": "caller", "number": 2,
+                        "definition": True, "global": True,
+                    }
+                ]
+            }
+        )
+        for inputs, invocations, payloads in (
+            (positive_inputs, positive_invocations, positive_payloads),
+            (zero_inputs, zero_invocations, zero_payloads),
+        ):
+            graph = semantics.derive_direct_ctu_call_graph(
+                inputs,
+                invocations,
+                payloads,
+                semantics.flows_v2.FRESH_AUTHORITY_MODE,
+                comparison_diagnostic,
+            )
+            unchecked = semantics.derive_direct_ctu_call_graph(
+                inputs,
+                invocations,
+                payloads,
+                semantics.flows_v2.FRESH_AUTHORITY_MODE,
+                semantics.DIRECT_CTU_UNCHECKED_DIAGNOSTIC,
+            )
+            self.assertEqual(
+                graph["status"], semantics.DIRECT_CTU_FRESH_CONTINUITY_STATUS
+            )
+            self.assertIs(graph["fresh_execution_authority"], False)
+            self.assertIs(unchecked["fresh_execution_authority"], False)
+            for field in (
+                "blocked_edges", "definitions", "direct_edges",
+                "function_reachability",
+            ):
+                self.assertEqual(graph[field], unchecked[field])
+            self.assertEqual(
+                semantics.blockers_for_direct_ctu(graph), list(semantics.BLOCKERS)
+            )
+            self.assertEqual(
+                semantics.blockers_for_direct_ctu(unchecked),
+                list(semantics.BLOCKERS),
+            )
+
+    def test_same_invocation_receipt_rejects_record_replacement(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            bundle, sidecar, receipt = self.make_pair(root, "11" * 32)
+            try:
+                manifest, _, record = semantics.read_raw_bundle(bundle, sidecar)
+                semantics.validate_fresh_capture_receipt(receipt, manifest, record)
+                changed = dict(record)
+                changed["artifact_sha256"] = "0" * 64
+                with self.assertRaisesRegex(semantics.SemanticsV3Error, "differs"):
+                    semantics.validate_fresh_capture_receipt(receipt, manifest, changed)
+            finally:
+                receipt.close()
+
+    def test_independent_review_requires_a_distinct_challenge(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / "one").mkdir()
+            (root / "two").mkdir()
+            bundle1, sidecar1, receipt1 = self.make_pair(root / "one", "21" * 32)
+            bundle2, sidecar2, receipt2 = self.make_pair(root / "two", "21" * 32)
+            try:
+                manifest1, payloads1, record1 = semantics.read_raw_bundle(
+                    bundle1, sidecar1
+                )
+                manifest2, payloads2, record2 = semantics.read_raw_bundle(
+                    bundle2, sidecar2
+                )
+                with self.assertRaisesRegex(semantics.SemanticsV3Error, "must differ"):
+                    semantics.compare_independent_fresh_captures(
+                        manifest1, payloads1, record1, receipt2,
+                        manifest2, payloads2, record2,
+                    )
+            finally:
+                receipt1.close()
+                receipt2.close()
+
+    def test_distinct_challenges_with_identical_core_and_payload_compare(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / "one").mkdir()
+            (root / "two").mkdir()
+            bundle1, sidecar1, receipt1 = self.make_pair(root / "one", "31" * 32)
+            bundle2, sidecar2, receipt2 = self.make_pair(root / "two", "32" * 32)
+            try:
+                manifest1, payloads1, record1 = semantics.read_raw_bundle(
+                    bundle1, sidecar1
+                )
+                manifest2, payloads2, record2 = semantics.read_raw_bundle(
+                    bundle2, sidecar2
+                )
+                comparison = semantics.compare_independent_fresh_captures(
+                    manifest1, payloads1, record1, receipt2,
+                    manifest2, payloads2, record2,
+                )
+                comparison.replay(manifest1, record1)
+            finally:
+                receipt1.close()
+                receipt2.close()
+
+    def test_receipt_rejects_coherent_same_byte_pair_replacement(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            bundle, sidecar, receipt = self.make_pair(root, "41" * 32)
+            try:
+                manifest, _, record = semantics.read_raw_bundle(bundle, sidecar)
+                replacement_bundle = root / "replacement.tar"
+                replacement_sidecar = root / "replacement.sha256"
+                replacement_bundle.write_bytes(bundle.read_bytes())
+                replacement_sidecar.write_bytes(sidecar.read_bytes())
+                os.replace(str(replacement_bundle), str(bundle))
+                os.replace(str(replacement_sidecar), str(sidecar))
+                with self.assertRaisesRegex(
+                    semantics.SemanticsV3Error, "identity changed"
+                ):
+                    semantics.validate_fresh_capture_receipt(
+                        receipt, manifest, record
+                    )
+            finally:
+                receipt.close()
+
+    def test_preexisting_or_nonregular_output_is_never_clobbered(self):
+        for kind in ("regular", "symlink", "hardlink", "directory", "fifo"):
+            with self.subTest(kind=kind), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                target = root / "output"
+                if kind == "regular":
+                    target.write_bytes(b"KEEP")
+                elif kind == "symlink":
+                    (root / "real").write_bytes(b"KEEP")
+                    target.symlink_to("real")
+                elif kind == "hardlink":
+                    (root / "real").write_bytes(b"KEEP")
+                    os.link(str(root / "real"), str(target))
+                elif kind == "directory":
+                    target.mkdir()
+                else:
+                    os.mkfifo(str(target))
+                with self.assertRaises(semantics.SemanticsV3Error):
+                    semantics.prepare_empty_output_target(target, "hostile")
+                if kind == "regular":
+                    self.assertEqual(target.read_bytes(), b"KEEP")
+
+    def test_output_triple_preflight_rejects_orphan_without_creating_peers(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            raw = root / "raw.tar"
+            sidecar = root / "raw.tar.sha256"
+            output = root / "semantics.json"
+            sidecar.write_bytes(b"ORPHAN\n")
+            with self.assertRaises(semantics.SemanticsV3Error):
+                semantics.prepare_empty_output_targets(
+                    (
+                        (raw, "raw bundle"),
+                        (sidecar, "raw bundle checksum"),
+                        (output, "semantics output"),
+                    )
+                )
+            self.assertFalse(raw.exists())
+            self.assertEqual(sidecar.read_bytes(), b"ORPHAN\n")
+            self.assertFalse(output.exists())
 
 
 class MirAndDomainParserTests(unittest.TestCase):

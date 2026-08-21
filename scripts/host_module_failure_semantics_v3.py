@@ -46,13 +46,15 @@ import host_module_failure_sites as sites
 
 SCHEMA_VERSION = 3
 PROFILE = "compiler-backed-host-module-failure-semantics-v3"
-RAW_SCHEMA_VERSION = 1
+RAW_SCHEMA_VERSION = 2
 RAW_PROFILE = "compiler-backed-host-module-failure-semantics-raw-v3"
 MAX_JSON_BYTES = 256 * 1024 * 1024
 MAX_RAW_BUNDLE_BYTES = 768 * 1024 * 1024
 MAX_RAW_MEMBER_BYTES = 256 * 1024 * 1024
 MAX_RAW_MEMBERS = 20000
 HEX_DIGEST = re.compile(r"^[0-9a-f]{64}$")
+CAPTURE_CHALLENGE = re.compile(r"^[0-9a-f]{64}$")
+CAPTURE_INVOCATION_DOMAIN = b"mckernel-fp0006-semantics-v3-capture-v1\0"
 SAFE_MEMBER = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._/-]*$")
 
 # JSON deliberately has one numeric type, while Python's ``bool`` is an
@@ -64,14 +66,15 @@ INTEGER_FIELD_NAMES = frozenset(
     {
         "artifact_bytes", "basic_block", "bytes", "column", "end_column",
         "end_line", "errno_negative_value", "line", "matching_line_count",
-        "number", "schema_version", "sha256_sidecar_bytes", "start_column",
-        "start_line",
+        "number", "schema_version", "sha256_sidecar_bytes", "source_count",
+        "start_column", "start_line",
     }
 )
 COUNT_MAP_FIELD_NAMES = frozenset(
     {
         "c_return_contract_count_by_module",
         "c_return_contract_count_by_status",
+        "direct_ctu_blocked_edge_count_by_reason",
         "rust_mir_site_count_by_mapping_status",
     }
 )
@@ -108,6 +111,7 @@ C_DUMP_OPTIONS = (
     ("ssa", "-fdump-tree-ssa-lineno", ".ssa"),
     ("evrp", "-fdump-tree-evrp-lineno", ".evrp"),
     ("vrp", "-fdump-tree-vrp1-lineno", ".vrp1"),
+    ("cgraph", "-fdump-ipa-cgraph-lineno", ".cgraph"),
 )
 RUST_MIR_OPTIONS = (
     "-Zdump-mir=all",
@@ -137,7 +141,7 @@ BLOCKERS = (
     "205_c_returns_require_semantic_oracle",
     "420_rust_sites_require_semantic_oracle_or_executable_acceptance",
     "acceptance_ids_are_declarations_not_executable_results",
-    "cross_translation_unit_reachability_not_proven",
+    "cross_translation_unit_call_graph_not_linked",
     "indirect_callback_reachability_not_proven",
     "macro_expansion_dataflow_not_proven",
     "module_api_reachability_not_proven",
@@ -145,9 +149,78 @@ BLOCKERS = (
     "2602_executable_acceptance_mappings_not_captured",
 )
 
+DIRECT_CTU_HISTORICAL_STATUS = "historical_raw_not_independently_anchored"
+DIRECT_CTU_FRESH_UNCHECKED_STATUS = (
+    "fresh_presented_raw_without_continuity_receipt"
+)
+DIRECT_CTU_FRESH_CONTINUITY_STATUS = (
+    "fresh_presented_raw_continuity_checked_nonauthoritative"
+)
+DIRECT_CTU_INVENTORY_KIND = (
+    "gcc_initial_ipa_cgraph_direct_strong_same_module_cross_tu_"
+    "structural_inventory"
+)
+DIRECT_CTU_HISTORICAL_DIAGNOSTIC = (
+    "historical_raw_continuity_not_applicable"
+)
+DIRECT_CTU_UNCHECKED_DIAGNOSTIC = "presented_raw_continuity_not_checked"
+DIRECT_CTU_CHECKED_DIAGNOSTIC = (
+    "presented_raw_pair_structural_continuity_checked"
+)
+CGRAPH_HEADER = re.compile(
+    r"^(?P<name>[A-Za-z_][A-Za-z0-9_$.-]*)/(?P<number>[0-9]+) "
+    r"\((?P<label>[^()]*)\) @0xADDR$"
+)
+CGRAPH_REFERENCE = re.compile(
+    r"(?<![A-Za-z0-9_$.-])(?P<name>[A-Za-z_][A-Za-z0-9_$.-]*)/"
+    r"(?P<number>[0-9]+)(?=\s|\(|$)"
+)
+CGRAPH_CLONE_MARKERS = (
+    ".clone.", ".constprop.", ".isra.", ".part.", ".cold",
+)
+CGRAPH_BLOCKED_TRAITS = frozenset(
+    {"alias", "clone", "comdat", "inline", "weak"}
+)
+
 
 class SemanticsV3Error(RuntimeError):
     """Raised when raw or derived v3 authority is malformed."""
+
+
+def invocation_id_for_challenge(challenge):
+    if (
+        type(challenge) is not str
+        or CAPTURE_CHALLENGE.fullmatch(challenge) is None
+        or challenge == "0" * 64
+    ):
+        raise SemanticsV3Error(
+            "fresh capture challenge must be nonzero 32-byte lowercase hex"
+        )
+    return sha256_bytes(
+        CAPTURE_INVOCATION_DOMAIN + bytes.fromhex(challenge)
+    )
+
+
+def fresh_capture_challenge():
+    try:
+        challenge = os.urandom(32).hex()
+    except (OSError, NotImplementedError) as exc:
+        raise SemanticsV3Error("fresh capture challenge RNG failed: {0}".format(exc))
+    invocation_id_for_challenge(challenge)
+    return challenge
+
+
+def validate_manifest_invocation(manifest, label):
+    challenge = manifest.get("capture_challenge")
+    invocation_id = manifest.get("invocation_id")
+    expected = invocation_id_for_challenge(challenge)
+    if type(invocation_id) is not str or invocation_id != expected:
+        raise SemanticsV3Error(
+            "{0} invocation ID is not the domain-separated challenge digest".format(
+                label
+            )
+        )
+    return challenge
 
 
 def canonical_bytes(value):
@@ -775,6 +848,215 @@ class HeldObject(object):
         return False
 
 
+class EmptyOutputTarget(object):
+    """Hold a no-follow parent namespace proven empty before capture starts."""
+
+    __slots__ = (
+        "created", "descriptors", "entries", "label", "leaf_name", "parent"
+    )
+
+    def __init__(self, descriptors, entries, parent, leaf_name, label):
+        self.descriptors = descriptors
+        self.entries = entries
+        self.parent = parent
+        self.leaf_name = leaf_name
+        self.label = label
+        self.created = False
+
+    def replay_empty(self):
+        replay_object_namespace(self.entries, self.label + " parent")
+        try:
+            os.stat(self.leaf_name, dir_fd=self.parent, follow_symlinks=False)
+        except FileNotFoundError:
+            replay_object_namespace(self.entries, self.label + " parent")
+            return
+        except OSError as exc:
+            raise SemanticsV3Error(
+                "cannot replay empty {0} namespace: {1}".format(self.label, exc)
+            )
+        raise SemanticsV3Error(
+            "{0} output path appeared after empty-namespace proof".format(self.label)
+        )
+
+    def create(self, data):
+        if self.created or type(data) is not bytes or not data:
+            raise SemanticsV3Error("{0} output creation is invalid".format(self.label))
+        self.replay_empty()
+        flags = os.O_RDWR | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW
+        flags |= getattr(os, "O_CLOEXEC", 0)
+        try:
+            descriptor = os.open(
+                self.leaf_name, flags, 0o600, dir_fd=self.parent
+            )
+        except OSError as exc:
+            raise SemanticsV3Error(
+                "cannot exclusively create {0}: {1}".format(self.label, exc)
+            )
+        self.descriptors.append(descriptor)
+        self.created = True
+        try:
+            os.fchmod(descriptor, 0o644)
+            offset = 0
+            while offset < len(data):
+                written = os.write(descriptor, data[offset:])
+                if type(written) is not int or written <= 0:
+                    raise SemanticsV3Error(
+                        "{0} output write made no progress".format(self.label)
+                    )
+                offset += written
+            os.fsync(descriptor)
+            metadata = os.fstat(descriptor)
+            if (
+                not stat.S_ISREG(metadata.st_mode)
+                or metadata.st_nlink != 1
+                or metadata.st_size != len(data)
+            ):
+                raise SemanticsV3Error(
+                    "{0} created output identity is invalid".format(self.label)
+                )
+            expected = object_identity(metadata, True)
+            self.entries.append(
+                (self.parent, self.leaf_name, descriptor, expected, True)
+            )
+            if read_fd_bytes(descriptor, len(data)) != data:
+                raise SemanticsV3Error(
+                    "{0} created output bytes differ".format(self.label)
+                )
+            replay_object_namespace(self.entries, self.label)
+            authority = HeldObject(
+                self.descriptors, self.entries, descriptor, data,
+                self.label, len(data),
+            )
+            self.descriptors = []
+            return authority
+        except Exception:
+            # A failed exclusive publication remains visible as a partial
+            # output.  Never unlink it: the next run must reject the orphan.
+            raise
+
+    def close(self):
+        descriptors = self.descriptors
+        self.descriptors = []
+        for descriptor in reversed(descriptors):
+            try:
+                os.close(descriptor)
+            except OSError:
+                pass
+
+
+class FreshCaptureReceipt(object):
+    """In-memory diagnostic joining challenge, manifest, pair, and descriptors."""
+
+    __slots__ = (
+        "bundle_authority", "challenge", "invocation_id", "manifest",
+        "raw_bundle", "sidecar_authority",
+    )
+
+    def __init__(self, manifest, raw_bundle, bundle_authority, sidecar_authority):
+        self.manifest = manifest
+        self.raw_bundle = raw_bundle
+        self.challenge = validate_manifest_invocation(manifest, "fresh manifest")
+        self.invocation_id = manifest["invocation_id"]
+        self.bundle_authority = bundle_authority
+        self.sidecar_authority = sidecar_authority
+
+    def replay(self):
+        self.bundle_authority.replay()
+        self.sidecar_authority.replay()
+        self.bundle_authority.replay()
+        self.sidecar_authority.replay()
+
+    def close(self):
+        self.bundle_authority.close()
+        self.sidecar_authority.close()
+
+
+class IndependentFreshCaptureComparison(object):
+    """Review-only diagnostic binding a supplied pair to a direct recapture."""
+
+    __slots__ = (
+        "reviewer_receipt", "supplied_manifest", "supplied_raw_record"
+    )
+
+    def __init__(self, supplied_manifest, supplied_raw_record, reviewer_receipt):
+        self.supplied_manifest = supplied_manifest
+        self.supplied_raw_record = supplied_raw_record
+        self.reviewer_receipt = reviewer_receipt
+
+    def replay(self, manifest, raw_record):
+        self.reviewer_receipt.replay()
+        if (
+            not strict_equal(self.supplied_manifest, manifest)
+            or not strict_equal(self.supplied_raw_record, raw_record)
+        ):
+            raise SemanticsV3Error(
+                "supplied raw pair changed after independent fresh comparison"
+            )
+        self.reviewer_receipt.replay()
+
+
+def prepare_empty_output_target(path, label):
+    absolute = lexical_absolute_root(path, label + " path")
+    components = lexical_path_components(str(absolute), label + " path", True)
+    if not components:
+        raise SemanticsV3Error("{0} path has no leaf".format(label))
+    directory_flags = os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW
+    directory_flags |= getattr(os, "O_CLOEXEC", 0)
+    descriptors = []
+    entries = []
+    try:
+        current = os.open("/", directory_flags)
+        descriptors.append(current)
+        for component in components[:-1]:
+            child = os.open(component, directory_flags, dir_fd=current)
+            metadata = os.fstat(child)
+            if not stat.S_ISDIR(metadata.st_mode):
+                raise SemanticsV3Error(
+                    "{0} output ancestor is not a directory".format(label)
+                )
+            entries.append(
+                (current, component, child, object_identity(metadata, False), False)
+            )
+            descriptors.append(child)
+            current = child
+        target = EmptyOutputTarget(
+            descriptors, entries, current, components[-1], label
+        )
+        target.replay_empty()
+        return target
+    except OSError as exc:
+        for descriptor in reversed(descriptors):
+            try:
+                os.close(descriptor)
+            except OSError:
+                pass
+        raise SemanticsV3Error(
+            "cannot prove empty {0} output namespace: {1}".format(label, exc)
+        )
+    except Exception:
+        for descriptor in reversed(descriptors):
+            try:
+                os.close(descriptor)
+            except OSError:
+                pass
+        raise
+
+
+def prepare_empty_output_targets(paths):
+    normalized = [str(lexical_absolute_root(path, label + " path")) for path, label in paths]
+    if len(normalized) != len(set(normalized)):
+        raise SemanticsV3Error("capture output paths must be distinct")
+    targets = []
+    try:
+        for path, label in paths:
+            targets.append(prepare_empty_output_target(path, label))
+        return targets
+    except Exception:
+        for target in targets:
+            target.close()
+        raise
+
+
 def hold_confined_object(path, label, maximum):
     """Open a single-link file through held no-follow descriptors for replay."""
 
@@ -858,6 +1140,129 @@ def read_confined_object_bytes(path, label, maximum):
     with hold_confined_object(path, label, maximum) as held:
         held.replay()
         return held.data
+
+
+def raw_bundle_record(manifest, bundle_data, sidecar_data):
+    return {
+        "artifact_bytes": len(bundle_data),
+        "artifact_sha256": sha256_bytes(bundle_data),
+        "manifest_sha256": sha256_bytes(canonical_bytes(manifest)),
+        "sha256_sidecar_bytes": len(sidecar_data),
+        "sha256_sidecar_sha256": sha256_bytes(sidecar_data),
+    }
+
+
+def validate_fresh_capture_receipt(receipt, manifest, raw_record):
+    """Return a nonauthoritative structural-continuity diagnostic."""
+
+    if type(receipt) is not FreshCaptureReceipt:
+        raise SemanticsV3Error("fresh continuity check requires a capture receipt")
+    validate_raw_bundle_record(
+        receipt.raw_bundle, "fresh capture receipt raw bundle"
+    )
+    receipt.replay()
+    challenge = validate_manifest_invocation(manifest, "reopened raw manifest")
+    if (
+        challenge != receipt.challenge
+        or manifest.get("invocation_id") != receipt.invocation_id
+        or not strict_equal(receipt.manifest, manifest)
+        or not strict_equal(receipt.raw_bundle, raw_record)
+    ):
+        raise SemanticsV3Error(
+            "reopened raw bundle differs from the same-invocation capture receipt"
+        )
+    receipt.replay()
+    return DIRECT_CTU_CHECKED_DIAGNOSTIC
+
+
+def deterministic_manifest_core(manifest):
+    """Exclude exactly the two challenge-derived top-level fields."""
+
+    validate_manifest_invocation(manifest, "raw manifest")
+    if type(manifest) is not dict:
+        raise SemanticsV3Error("raw manifest must be an exact object")
+    core = dict(manifest)
+    del core["capture_challenge"]
+    del core["invocation_id"]
+    return core
+
+
+def compare_independent_fresh_captures(
+    supplied_manifest,
+    supplied_payloads,
+    supplied_raw_record,
+    reviewer_receipt,
+    reviewer_manifest,
+    reviewer_payloads,
+    reviewer_raw_record,
+):
+    """Compare deterministic compiler bytes while keeping challenges distinct."""
+
+    validate_raw_bundle_record(supplied_raw_record, "supplied fresh raw bundle")
+    validate_raw_bundle_record(reviewer_raw_record, "reviewer fresh raw bundle")
+    validate_manifest_invocation(supplied_manifest, "supplied fresh manifest")
+    validate_fresh_capture_receipt(
+        reviewer_receipt, reviewer_manifest, reviewer_raw_record
+    )
+    if supplied_manifest["capture_challenge"] == reviewer_receipt.challenge:
+        raise SemanticsV3Error(
+            "reviewer capture challenge must differ from supplied capture"
+        )
+    if not strict_equal(
+        deterministic_manifest_core(supplied_manifest),
+        deterministic_manifest_core(reviewer_manifest),
+    ):
+        raise SemanticsV3Error("independent fresh manifest core differs")
+    supplied_data = {
+        path: data for path, data in supplied_payloads.items()
+        if path != "manifest.json"
+    }
+    reviewer_data = {
+        path: data for path, data in reviewer_payloads.items()
+        if path != "manifest.json"
+    }
+    if set(supplied_data) != set(reviewer_data) or any(
+        supplied_data[path] != reviewer_data[path]
+        for path in supplied_data
+    ):
+        raise SemanticsV3Error(
+            "independent fresh compiler payload bytes differ"
+        )
+    reviewer_receipt.replay()
+    return IndependentFreshCaptureComparison(
+        supplied_manifest, supplied_raw_record, reviewer_receipt
+    )
+
+
+def capture_continuity_diagnostic(
+    authority_mode,
+    manifest,
+    raw_record,
+    fresh_capture_receipt=None,
+    independent_fresh_comparison=None,
+):
+    """Classify pair continuity without granting execution authority."""
+
+    if fresh_capture_receipt is not None and independent_fresh_comparison is not None:
+        raise SemanticsV3Error("fresh capture continuity inputs are ambiguous")
+    if authority_mode == flows_v2.HISTORICAL_AUTHORITY_MODE:
+        if fresh_capture_receipt is not None or independent_fresh_comparison is not None:
+            raise SemanticsV3Error(
+                "historical mode cannot accept fresh continuity diagnostics"
+            )
+        return DIRECT_CTU_HISTORICAL_DIAGNOSTIC
+    if authority_mode != flows_v2.FRESH_AUTHORITY_MODE:
+        raise SemanticsV3Error("capture continuity authority mode changed")
+    if fresh_capture_receipt is not None:
+        return validate_fresh_capture_receipt(
+            fresh_capture_receipt, manifest, raw_record
+        )
+    if independent_fresh_comparison is not None:
+        if type(independent_fresh_comparison) is not IndependentFreshCaptureComparison:
+            raise SemanticsV3Error("fresh comparison diagnostic is invalid")
+        independent_fresh_comparison.replay(manifest, raw_record)
+        return DIRECT_CTU_CHECKED_DIAGNOSTIC
+    return DIRECT_CTU_UNCHECKED_DIAGNOSTIC
 
 
 def read_object(path, label):
@@ -1008,7 +1413,10 @@ def one_c_run(record, source_path, source_index, kernel_dir, roots, run_dir, env
                 "C semantic replay produced {0} {1} dumps".format(len(matches), label)
             )
         data = read_regular_bytes(matches[0], "C {0} dump".format(label), MAX_RAW_MEMBER_BYTES)
-        dumps[label] = flows_v1.normalized_dump(data, run_roots, output)
+        normalized = flows_v1.normalized_dump(data, run_roots, output)
+        if label == "cgraph":
+            validate_normalized_cgraph_dump(normalized)
+        dumps[label] = normalized
     return {
         "argv": flows_v1.normalized_argv(argv, run_roots, output),
         "baseline_argv": flows_v1.normalized_argv(
@@ -1171,7 +1579,17 @@ def manifest_input_bindings(inputs):
     }
 
 
-def capture_raw_bundle(inputs, repo, build_dir, kernel_dir, output, sidecar, environment=None):
+def capture_raw_bundle(
+    inputs,
+    repo,
+    build_dir,
+    kernel_dir,
+    output,
+    sidecar,
+    environment=None,
+    output_target=None,
+    sidecar_target=None,
+):
     if inputs["authority_mode"] != flows_v2.FRESH_AUTHORITY_MODE:
         raise SemanticsV3Error("historical mode cannot execute semantic compilers")
     repo = Path(repo).resolve()
@@ -1179,6 +1597,16 @@ def capture_raw_bundle(inputs, repo, build_dir, kernel_dir, output, sidecar, env
     kernel_dir = Path(kernel_dir).resolve()
     if not repo.is_dir() or not build_dir.is_dir() or not kernel_dir.is_dir():
         raise SemanticsV3Error("fresh raw capture requires repo/build/kernel directories")
+    if (output_target is None) != (sidecar_target is None):
+        raise SemanticsV3Error("fresh raw capture target pair is incomplete")
+    if output_target is None:
+        output_target, sidecar_target = prepare_empty_output_targets(
+            ((output, "raw bundle"), (sidecar, "raw bundle checksum"))
+        )
+    output_target.replay_empty()
+    sidecar_target.replay_empty()
+    challenge = fresh_capture_challenge()
+    invocation_id = invocation_id_for_challenge(challenge)
     environment = dict(environment or os.environ)
     roots = normalized_roots(repo, build_dir, kernel_dir)
     unresolved_sources = {
@@ -1292,10 +1720,12 @@ def capture_raw_bundle(inputs, repo, build_dir, kernel_dir, output, sidecar, env
 
     manifest = {
         "authority_mode": inputs["authority_mode"],
+        "capture_challenge": challenge,
         "compiler_invocations": sorted(invocations, key=lambda item: (item["language"], item["source"])),
         "files": sorted(files, key=lambda item: item["path"]),
         "generator": "scripts/host_module_failure_semantics_v3.py",
         "inputs": manifest_input_bindings(inputs),
+        "invocation_id": invocation_id,
         "profile": RAW_PROFILE,
         "schema_version": RAW_SCHEMA_VERSION,
         "toolchains": toolchains,
@@ -1303,9 +1733,26 @@ def capture_raw_bundle(inputs, repo, build_dir, kernel_dir, output, sidecar, env
     payloads["manifest.json"] = canonical_bytes(manifest)
     bundle_data = canonical_tar(payloads)
     sidecar_data = raw_sidecar_bytes(Path(output).name, bundle_data)
-    atomic_write(output, bundle_data)
-    atomic_write(sidecar, sidecar_data)
-    return manifest
+    bundle_authority = None
+    sidecar_authority = None
+    try:
+        bundle_authority = output_target.create(bundle_data)
+        sidecar_authority = sidecar_target.create(sidecar_data)
+        record = raw_bundle_record(manifest, bundle_data, sidecar_data)
+        receipt = FreshCaptureReceipt(
+            manifest, record, bundle_authority, sidecar_authority
+        )
+        receipt.replay()
+        return receipt
+    except Exception:
+        if bundle_authority is not None:
+            bundle_authority.close()
+        if sidecar_authority is not None:
+            sidecar_authority.close()
+        raise
+    finally:
+        output_target.close()
+        sidecar_target.close()
 
 
 def validate_file_binding(binding, payloads, label, extra_keys=None):
@@ -1391,8 +1838,9 @@ def validate_raw_manifest(manifest, payloads, inputs):
     require_exact_keys(
         manifest,
         {
-            "authority_mode", "compiler_invocations", "files", "generator",
-            "inputs", "profile", "schema_version", "toolchains",
+            "authority_mode", "capture_challenge", "compiler_invocations",
+            "files", "generator", "inputs", "invocation_id", "profile",
+            "schema_version", "toolchains",
         },
         "raw manifest",
     )
@@ -1411,6 +1859,7 @@ def validate_raw_manifest(manifest, payloads, inputs):
         or not strict_equal(manifest["inputs"], manifest_input_bindings(inputs))
     ):
         raise SemanticsV3Error("raw manifest authority changed")
+    validate_manifest_invocation(manifest, "raw manifest")
     require_exact_keys(
         manifest["inputs"],
         {"failure_flows_v1", "failure_flows_v2", "failure_sites_v1"},
@@ -1442,7 +1891,10 @@ def validate_raw_manifest(manifest, payloads, inputs):
         )
         require_enum(
             binding["kind"],
-            {"c_original", "c_gimple", "c_ssa", "c_evrp", "c_vrp", "rust_mir"},
+            {
+                "c_original", "c_gimple", "c_ssa", "c_evrp", "c_vrp",
+                "c_cgraph", "rust_mir",
+            },
             "raw manifest file kind",
         )
         require_string(binding["source"], "raw manifest file source")
@@ -1675,6 +2127,643 @@ def validate_raw_manifest(manifest, payloads, inputs):
     return by_source
 
 
+def _cgraph_function_identity(module, source, name):
+    return {"module": module, "name": name, "source": source}
+
+
+def _cgraph_record_traits(record):
+    lines = [line.lower() for line in record["detail_lines"]]
+    type_text = (record["type"] or "").lower()
+    visibility = set(record["visibility"])
+    traits = set()
+    if "alias" in type_text or any(line.startswith("alias target:") for line in lines):
+        traits.add("alias")
+    if any(marker in record["name"] for marker in CGRAPH_CLONE_MARKERS) or any(
+        line.startswith("clone of") for line in lines
+    ):
+        traits.add("clone")
+    if "comdat" in visibility or "one_only" in visibility or "comdat" in type_text:
+        traits.add("comdat")
+    if any(
+        line.startswith("function flags:")
+        and any("inline" in token for token in line.split()[2:])
+        for line in lines
+    ):
+        traits.add("inline")
+    if "weak" in visibility or "weakref" in visibility or "weak" in type_text:
+        traits.add("weak")
+    return sorted(traits)
+
+
+def validate_normalized_cgraph_dump(data):
+    """Accept allocator placeholders only as exact cgraph header suffixes."""
+
+    text = compiler_text(data, "normalized GCC IPA cgraph")
+    for line in text.splitlines():
+        if "@0x" in line and (
+            line.count("@0x") != 1 or CGRAPH_HEADER.fullmatch(line) is None
+        ):
+            raise SemanticsV3Error(
+                "normalized GCC cgraph retains a raw or misplaced allocator address"
+            )
+        if "0xADDR" in line and (
+            line.count("0xADDR") != 1
+            or not line.endswith(" @0xADDR")
+            or CGRAPH_HEADER.fullmatch(line) is None
+        ):
+            raise SemanticsV3Error(
+                "normalized GCC cgraph address placeholder escaped a header"
+            )
+    return data
+
+
+def _parse_initial_cgraph_section(lines, source):
+    records = []
+    current = None
+    for line in lines:
+        match = CGRAPH_HEADER.match(line)
+        if match:
+            current = {
+                "address_taken": False,
+                "calls": [],
+                "detail_lines": [],
+                "indirect_call_count": 0,
+                "label": match.group("label"),
+                "name": match.group("name"),
+                "number": int(match.group("number")),
+                "saw_calls": False,
+                "type": None,
+                "visibility": [],
+            }
+            records.append(current)
+            continue
+        if current is None:
+            if line.strip():
+                raise SemanticsV3Error(
+                    "GCC initial cgraph has content before its first symbol"
+                )
+            continue
+        stripped = line.strip()
+        if not stripped:
+            continue
+        current["detail_lines"].append(stripped)
+        if stripped.startswith("Type:"):
+            if current["type"] is not None:
+                raise SemanticsV3Error("GCC cgraph symbol has duplicate Type rows")
+            current["type"] = stripped.split(":", 1)[1].strip()
+        elif stripped.startswith("Visibility:"):
+            if current["visibility"]:
+                raise SemanticsV3Error(
+                    "GCC cgraph symbol has duplicate Visibility rows"
+                )
+            current["visibility"] = stripped.split(":", 1)[1].strip().split()
+        elif stripped == "Address is taken.":
+            current["address_taken"] = True
+        elif stripped.startswith("Calls:"):
+            if current["saw_calls"]:
+                raise SemanticsV3Error("GCC cgraph symbol has duplicate Calls rows")
+            current["saw_calls"] = True
+            payload = stripped.split(":", 1)[1]
+            current["calls"] = [
+                {"name": item.group("name"), "number": int(item.group("number"))}
+                for item in CGRAPH_REFERENCE.finditer(payload)
+            ]
+            residue = CGRAPH_REFERENCE.sub("", payload)
+            residue = re.sub(r"\([^()]*\)", "", residue)
+            residue = re.sub(r"[,0-9.+% -]", "", residue)
+            if residue.strip():
+                raise SemanticsV3Error(
+                    "GCC cgraph Calls row contains unknown direct-call syntax"
+                )
+        elif "Indirect call" in stripped:
+            current["indirect_call_count"] += 1
+    if not records:
+        raise SemanticsV3Error("GCC initial cgraph symbol table is empty")
+    numbers = [item["number"] for item in records]
+    if len(numbers) != len(set(numbers)):
+        raise SemanticsV3Error("GCC initial cgraph symbol numbers are duplicated")
+    result = []
+    for record in records:
+        if record["type"] is None:
+            raise SemanticsV3Error("GCC cgraph symbol omits its Type row")
+        if not record["type"].startswith("function"):
+            continue
+        if not record["saw_calls"]:
+            raise SemanticsV3Error("GCC cgraph function omits its Calls row")
+        if not record["visibility"]:
+            raise SemanticsV3Error("GCC cgraph function omits its Visibility row")
+        definition = record["type"].startswith("function definition analyzed")
+        result.append(
+            {
+                "address_taken": record["address_taken"],
+                "calls": sorted(record["calls"], key=canonical_bytes),
+                "definition": definition,
+                "global": "public" in set(record["visibility"]),
+                "indirect_call_count": record["indirect_call_count"],
+                "name": record["name"],
+                "number": record["number"],
+                "source": source,
+                "traits": _cgraph_record_traits(record),
+            }
+        )
+    if not any(item["definition"] for item in result):
+        raise SemanticsV3Error("GCC initial cgraph has no function definitions")
+    return sorted(result, key=canonical_bytes)
+
+
+def parse_initial_cgraph(data, source):
+    """Parse every repeated initial IPA-cgraph table and require exact parity."""
+
+    validate_normalized_cgraph_dump(data)
+    text = compiler_text(data, "GCC IPA cgraph")
+    lines = text.splitlines()
+    starts = [
+        index for index, line in enumerate(lines)
+        if line == "Initial Symbol table:"
+    ]
+    if not starts:
+        raise SemanticsV3Error("GCC IPA cgraph omits Initial Symbol table")
+    tables = []
+    terminators = {
+        "Final Symbol table:",
+        "Initial Symbol table:",
+        "Optimized Symbol table:",
+        "Reclaimed Symbol table:",
+        "Removing unused symbols:",
+    }
+    for start in starts:
+        end = len(lines)
+        for index in range(start + 1, len(lines)):
+            if lines[index] in terminators:
+                end = index
+                break
+        tables.append(_parse_initial_cgraph_section(lines[start + 1:end], source))
+    first = tables[0]
+    if any(not strict_equal(first, table) for table in tables[1:]):
+        raise SemanticsV3Error(
+            "repeated GCC Initial Symbol table sections are inconsistent"
+        )
+    return first
+
+
+def _blocked_cgraph_reason(records):
+    traits = sorted(
+        set(trait for record in records for trait in record["traits"])
+        & CGRAPH_BLOCKED_TRAITS
+    )
+    if traits:
+        return traits[0] + "_target"
+    if any(not record["global"] for record in records):
+        return "static_name_collision"
+    return "unresolved_candidate_target"
+
+
+def derive_direct_ctu_call_graph(
+    inputs, invocations, payloads, authority_mode, continuity_diagnostic
+):
+    """Derive a bounded same-module direct graph from exact raw cgraph bytes."""
+
+    sources = sorted(
+        source for source, record in inputs["sources"].items()
+        if record["language"] == "c"
+    )
+    if len(sources) != EXPECTED_C_SOURCE_COUNT:
+        raise SemanticsV3Error("direct cgraph C source closure changed")
+    records_by_source = {}
+    input_records = []
+    for source in sources:
+        invocation = invocations.get(source)
+        if invocation is None or invocation["language"] != "c":
+            raise SemanticsV3Error("direct cgraph source has no C invocation")
+        binding = invocation["dumps"].get("cgraph")
+        if binding is None:
+            raise SemanticsV3Error("C invocation omits its exact IPA cgraph bytes")
+        data = validate_file_binding(binding, payloads, "C IPA cgraph")
+        records_by_source[source] = parse_initial_cgraph(data, source)
+        input_records.append(
+            {
+                "bytes": binding["bytes"],
+                "module": inputs["sources"][source]["module"],
+                "sha256": binding["sha256"],
+                "source": source,
+            }
+        )
+
+    definitions = []
+    definition_records = {}
+    strong_globals = defaultdict(list)
+    all_definitions = defaultdict(list)
+    for source in sources:
+        module = inputs["sources"][source]["module"]
+        for record in records_by_source[source]:
+            if not record["definition"]:
+                continue
+            key = (module, source, record["name"])
+            if key in definition_records:
+                raise SemanticsV3Error(
+                    "duplicate cgraph definition identity in one translation unit"
+                )
+            definition_records[key] = record
+            all_definitions[(module, record["name"])].append((key, record))
+            strong = record["global"] and not record["traits"]
+            if strong:
+                strong_globals[(module, record["name"])].append((key, record))
+            definitions.append(
+                {
+                    "function": _cgraph_function_identity(*key),
+                    "linkage": "global" if record["global"] else "source_local",
+                    "traits": list(record["traits"]),
+                }
+            )
+    for (module, name), candidates in strong_globals.items():
+        if len(candidates) > 1:
+            raise SemanticsV3Error(
+                "duplicate strong global cgraph definition in module {0}: {1}".format(
+                    module, name
+                )
+            )
+
+    direct_edges = []
+    blocked_edges = []
+    graph_edges = set()
+    indirect_sites = []
+    for source in sources:
+        module = inputs["sources"][source]["module"]
+        by_number = {item["number"]: item for item in records_by_source[source]}
+        for caller_record in records_by_source[source]:
+            if not caller_record["definition"]:
+                continue
+            caller_key = (module, source, caller_record["name"])
+            caller_identity = _cgraph_function_identity(*caller_key)
+            if caller_record["address_taken"]:
+                indirect_sites.append(
+                    {"function": caller_identity, "kind": "address_taken_definition"}
+                )
+            for number in range(caller_record["indirect_call_count"]):
+                indirect_sites.append(
+                    {
+                        "function": caller_identity,
+                        "kind": "indirect_call_site",
+                        "number": number,
+                    }
+                )
+            for call in caller_record["calls"]:
+                declared = by_number.get(call["number"])
+                if declared is None or declared["name"] != call["name"]:
+                    raise SemanticsV3Error(
+                        "GCC cgraph direct call names an unknown symbol record"
+                    )
+                target_key = None
+                edge_kind = None
+                reason = None
+                if caller_record["traits"]:
+                    reason = caller_record["traits"][0] + "_caller"
+                elif declared["definition"]:
+                    candidate_key = (module, source, declared["name"])
+                    if declared["traits"]:
+                        reason = _blocked_cgraph_reason([declared])
+                    else:
+                        target_key = candidate_key
+                        edge_kind = "same_translation_unit_direct"
+                elif declared["traits"]:
+                    reason = declared["traits"][0] + "_declaration"
+                elif not declared["global"]:
+                    reason = "source_local_declaration"
+                else:
+                    candidates = strong_globals.get((module, declared["name"]), [])
+                    same_module = all_definitions.get(
+                        (module, declared["name"]), []
+                    )
+                    if len(candidates) == 1 and len(same_module) == 1:
+                        target_key = candidates[0][0]
+                        if target_key[1] == source:
+                            raise SemanticsV3Error(
+                                "external cgraph declaration resolves inside its own TU"
+                            )
+                        edge_kind = "same_module_cross_translation_unit_direct"
+                    elif len(candidates) > 1:
+                        raise SemanticsV3Error(
+                            "direct cgraph reference has duplicate strong targets"
+                        )
+                    else:
+                        other_modules = [
+                            item for (candidate_module, candidate_name), values
+                            in all_definitions.items()
+                            if candidate_name == declared["name"]
+                            and candidate_module != module
+                            for item in values
+                        ]
+                        if same_module:
+                            reason = _blocked_cgraph_reason(
+                                [item[1] for item in same_module]
+                            )
+                        elif other_modules:
+                            reason = "cross_module_reference"
+                        else:
+                            reason = "external_outside_candidate"
+                if target_key is not None:
+                    target_record = definition_records.get(target_key)
+                    if target_record is None:
+                        raise SemanticsV3Error(
+                            "resolved cgraph target has no definition record"
+                        )
+                    if target_record["traits"]:
+                        raise SemanticsV3Error(
+                            "blocked cgraph target entered the direct graph"
+                        )
+                    if caller_record["traits"] or (
+                        not declared["definition"]
+                        and (declared["traits"] or not declared["global"])
+                    ):
+                        raise SemanticsV3Error(
+                            "blocked cgraph caller or declaration entered the direct graph"
+                        )
+                    graph_edges.add((caller_key, target_key))
+                    direct_edges.append(
+                        {
+                            "callee": _cgraph_function_identity(*target_key),
+                            "caller": caller_identity,
+                            "edge_kind": edge_kind,
+                        }
+                    )
+                else:
+                    blocked_edges.append(
+                        {
+                            "callee_name": declared["name"],
+                            "caller": caller_identity,
+                            "reason": reason,
+                        }
+                    )
+
+    roots = {}
+    for key, record in definition_records.items():
+        local = []
+        if record["global"] and not record["traits"]:
+            local.append("external:{0}:{1}".format(key[0], key[2]))
+        if record["address_taken"]:
+            local.append("callback:{0}:{1}:{2}".format(key[0], key[1], key[2]))
+        roots[key] = set(local)
+    changed = True
+    while changed:
+        changed = False
+        for caller, callee in sorted(graph_edges):
+            before = len(roots[callee])
+            roots[callee].update(roots[caller])
+            if len(roots[callee]) != before:
+                changed = True
+    reachability = [
+        {
+            "function": _cgraph_function_identity(*key),
+            "local_roots": sorted(
+                item for item in roots[key]
+                if item.startswith("external:{0}:{1}".format(key[0], key[2]))
+                or item.startswith(
+                    "callback:{0}:{1}:{2}".format(key[0], key[1], key[2])
+                )
+            ),
+            "propagated_roots": sorted(roots[key]),
+        }
+        for key in sorted(definition_records)
+    ]
+    direct_edges = sorted(
+        {canonical_bytes(item): item for item in direct_edges}.values(),
+        key=canonical_bytes,
+    )
+    blocked_edges = sorted(
+        {canonical_bytes(item): item for item in blocked_edges}.values(),
+        key=canonical_bytes,
+    )
+    if authority_mode == flows_v2.HISTORICAL_AUTHORITY_MODE:
+        if continuity_diagnostic != DIRECT_CTU_HISTORICAL_DIAGNOSTIC:
+            raise SemanticsV3Error(
+                "historical direct CTU continuity diagnostic changed"
+            )
+        status = DIRECT_CTU_HISTORICAL_STATUS
+    elif continuity_diagnostic == DIRECT_CTU_UNCHECKED_DIAGNOSTIC:
+        status = DIRECT_CTU_FRESH_UNCHECKED_STATUS
+    elif continuity_diagnostic == DIRECT_CTU_CHECKED_DIAGNOSTIC:
+        status = DIRECT_CTU_FRESH_CONTINUITY_STATUS
+    else:
+        raise SemanticsV3Error("fresh direct CTU continuity diagnostic changed")
+    return {
+        "blocked_edges": blocked_edges,
+        "continuity_diagnostic": continuity_diagnostic,
+        "definitions": sorted(definitions, key=canonical_bytes),
+        "direct_edges": direct_edges,
+        "fresh_execution_authority": False,
+        "function_reachability": sorted(reachability, key=canonical_bytes),
+        "indirect_call_sites": sorted(indirect_sites, key=canonical_bytes),
+        "inputs": sorted(input_records, key=canonical_bytes),
+        "inventory_kind": DIRECT_CTU_INVENTORY_KIND,
+        "module_scope": "same_module_only_no_dependency_link_authority",
+        "source_count": len(sources),
+        "status": status,
+    }
+
+
+def blockers_for_direct_ctu(graph):
+    del graph
+    return list(BLOCKERS)
+
+
+def validate_direct_ctu_graph_schema(graph, authority_mode):
+    require_exact_keys(
+        graph,
+        {
+            "blocked_edges", "continuity_diagnostic", "definitions",
+            "direct_edges", "fresh_execution_authority",
+            "function_reachability", "indirect_call_sites", "inputs",
+            "inventory_kind", "module_scope", "source_count", "status",
+        },
+        "direct CTU graph",
+    )
+    require_exact_integer(
+        graph["source_count"], EXPECTED_C_SOURCE_COUNT,
+        "direct CTU source count",
+    )
+    if (
+        graph["module_scope"] != "same_module_only_no_dependency_link_authority"
+        or graph["inventory_kind"] != DIRECT_CTU_INVENTORY_KIND
+        or type(graph["fresh_execution_authority"]) is not bool
+        or graph["fresh_execution_authority"] is not False
+    ):
+        raise SemanticsV3Error("direct CTU nonauthoritative inventory scope changed")
+    statuses = {
+        DIRECT_CTU_HISTORICAL_STATUS,
+        DIRECT_CTU_FRESH_UNCHECKED_STATUS,
+        DIRECT_CTU_FRESH_CONTINUITY_STATUS,
+    }
+    require_enum(graph["status"], statuses, "direct CTU status")
+    if authority_mode == flows_v2.HISTORICAL_AUTHORITY_MODE:
+        if (
+            graph["status"] != DIRECT_CTU_HISTORICAL_STATUS
+            or graph["continuity_diagnostic"]
+            != DIRECT_CTU_HISTORICAL_DIAGNOSTIC
+        ):
+            raise SemanticsV3Error("historical direct CTU presentation changed")
+    elif graph["continuity_diagnostic"] == DIRECT_CTU_UNCHECKED_DIAGNOSTIC:
+        if graph["status"] != DIRECT_CTU_FRESH_UNCHECKED_STATUS:
+            raise SemanticsV3Error("unchecked direct CTU presentation changed")
+    elif graph["continuity_diagnostic"] == DIRECT_CTU_CHECKED_DIAGNOSTIC:
+        if graph["status"] != DIRECT_CTU_FRESH_CONTINUITY_STATUS:
+            raise SemanticsV3Error("continuity-checked CTU presentation changed")
+    else:
+        raise SemanticsV3Error("fresh direct CTU continuity diagnostic changed")
+
+    inputs = graph["inputs"]
+    if (
+        type(inputs) is not list
+        or len(inputs) != EXPECTED_C_SOURCE_COUNT
+        or inputs != sorted(inputs, key=canonical_bytes)
+    ):
+        raise SemanticsV3Error("direct CTU input closure changed")
+    input_sources = set()
+    for record in inputs:
+        require_exact_keys(
+            record, {"bytes", "module", "sha256", "source"},
+            "direct CTU input",
+        )
+        require_integer(record["bytes"], "direct CTU input bytes", minimum=1)
+        require_digest(record["sha256"], "direct CTU input digest")
+        require_string(record["module"], "direct CTU input module")
+        source = require_safe_relative_path(record["source"], "direct CTU input source")
+        if source in input_sources:
+            raise SemanticsV3Error("direct CTU input sources are duplicated")
+        input_sources.add(source)
+
+    def identity(value, label):
+        require_exact_keys(value, {"module", "name", "source"}, label)
+        require_string(value["module"], label + " module")
+        require_string(value["name"], label + " name")
+        require_safe_relative_path(value["source"], label + " source")
+        return (value["module"], value["source"], value["name"])
+
+    definitions = graph["definitions"]
+    if type(definitions) is not list or definitions != sorted(definitions, key=canonical_bytes):
+        raise SemanticsV3Error("direct CTU definitions are not canonical")
+    definition_map = {}
+    for record in definitions:
+        require_exact_keys(record, {"function", "linkage", "traits"}, "CTU definition")
+        key = identity(record["function"], "CTU definition function")
+        if key in definition_map:
+            raise SemanticsV3Error("direct CTU definitions are duplicated")
+        require_enum(record["linkage"], {"global", "source_local"}, "CTU linkage")
+        if (
+            type(record["traits"]) is not list
+            or record["traits"] != sorted(set(record["traits"]))
+            or any(item not in CGRAPH_BLOCKED_TRAITS for item in record["traits"])
+        ):
+            raise SemanticsV3Error("direct CTU definition traits changed")
+        definition_map[key] = record
+
+    if type(graph["direct_edges"]) is not list:
+        raise SemanticsV3Error("direct CTU edges must be an exact list")
+    edge_keys = set()
+    for record in graph["direct_edges"]:
+        require_exact_keys(record, {"callee", "caller", "edge_kind"}, "direct CTU edge")
+        caller = identity(record["caller"], "direct CTU caller")
+        callee = identity(record["callee"], "direct CTU callee")
+        require_enum(
+            record["edge_kind"],
+            {
+                "same_module_cross_translation_unit_direct",
+                "same_translation_unit_direct",
+            },
+            "direct CTU edge kind",
+        )
+        if caller not in definition_map or callee not in definition_map:
+            raise SemanticsV3Error("direct CTU edge names an unknown definition")
+        if definition_map[caller]["traits"] or definition_map[callee]["traits"]:
+            raise SemanticsV3Error(
+                "direct CTU edge traverses a blocked caller or target"
+            )
+        if caller[0] != callee[0]:
+            raise SemanticsV3Error("direct CTU edge crosses a module boundary")
+        if record["edge_kind"].startswith("same_module_cross") != (caller[1] != callee[1]):
+            raise SemanticsV3Error("direct CTU edge kind/source relation changed")
+        edge_keys.add((caller, callee))
+    if (
+        graph["direct_edges"] != sorted(graph["direct_edges"], key=canonical_bytes)
+        or len(edge_keys) != len(graph["direct_edges"])
+    ):
+        raise SemanticsV3Error("direct CTU edges are not canonical or unique")
+
+    blocked_reasons = {
+        "alias_target", "clone_target", "comdat_target",
+        "cross_module_reference", "external_outside_candidate",
+        "inline_target", "static_name_collision", "unresolved_candidate_target",
+        "weak_target", "source_local_declaration",
+        "alias_caller", "clone_caller", "comdat_caller", "inline_caller",
+        "weak_caller", "alias_declaration", "clone_declaration",
+        "comdat_declaration", "inline_declaration", "weak_declaration",
+    }
+    if (
+        type(graph["blocked_edges"]) is not list
+        or graph["blocked_edges"] != sorted(graph["blocked_edges"], key=canonical_bytes)
+    ):
+        raise SemanticsV3Error("direct CTU blocked edges are not canonical")
+    for record in graph["blocked_edges"]:
+        require_exact_keys(record, {"callee_name", "caller", "reason"}, "blocked CTU edge")
+        caller = identity(record["caller"], "blocked CTU caller")
+        if caller not in definition_map:
+            raise SemanticsV3Error("blocked CTU edge names an unknown caller")
+        require_string(record["callee_name"], "blocked CTU callee")
+        require_enum(record["reason"], blocked_reasons, "blocked CTU reason")
+        caller_traits = definition_map[caller]["traits"]
+        if caller_traits:
+            if record["reason"] != caller_traits[0] + "_caller":
+                raise SemanticsV3Error(
+                    "blocked CTU caller trait evidence changed"
+                )
+        elif record["reason"].endswith("_caller"):
+            raise SemanticsV3Error(
+                "blocked CTU caller reason has no blocked caller trait"
+            )
+
+    reachability = graph["function_reachability"]
+    if (
+        type(reachability) is not list
+        or reachability != sorted(reachability, key=canonical_bytes)
+        or len(reachability) != len(definition_map)
+    ):
+        raise SemanticsV3Error("direct CTU reachability closure changed")
+    reached = set()
+    for record in reachability:
+        require_exact_keys(
+            record, {"function", "local_roots", "propagated_roots"},
+            "direct CTU reachability",
+        )
+        key = identity(record["function"], "direct CTU reachable function")
+        if key not in definition_map or key in reached:
+            raise SemanticsV3Error("direct CTU reachable functions differ")
+        reached.add(key)
+        for field in ("local_roots", "propagated_roots"):
+            roots = record[field]
+            if type(roots) is not list or roots != sorted(set(roots)):
+                raise SemanticsV3Error("direct CTU roots are not canonical")
+            for root in roots:
+                require_string(root, "direct CTU root")
+        if not set(record["local_roots"]).issubset(record["propagated_roots"]):
+            raise SemanticsV3Error("direct CTU local roots were lost")
+
+    indirect = graph["indirect_call_sites"]
+    if type(indirect) is not list or indirect != sorted(indirect, key=canonical_bytes):
+        raise SemanticsV3Error("direct CTU indirect-site list is not canonical")
+    for record in indirect:
+        kind = record.get("kind") if type(record) is dict else None
+        expected = {"function", "kind", "number"} if kind == "indirect_call_site" else {"function", "kind"}
+        require_exact_keys(record, expected, "direct CTU indirect site")
+        if identity(record["function"], "direct CTU indirect function") not in definition_map:
+            raise SemanticsV3Error("direct CTU indirect site names unknown function")
+        require_enum(
+            kind, {"address_taken_definition", "indirect_call_site"},
+            "direct CTU indirect kind",
+        )
+        if "number" in record:
+            require_integer(record["number"], "direct CTU indirect number", minimum=0)
+    return graph
+
+
 def validate_semantics_output_schema(capture):
     """Validate v3's derived JSON schema without relying on re-derivation."""
 
@@ -1683,8 +2772,10 @@ def validate_semantics_output_schema(capture):
         capture,
         {
             "analysis_claim", "authority_mode", "blockers", "c_return_contracts",
-            "compiler_invocations", "coverage", "generator", "inputs", "profile",
-            "raw_bundle", "rust_mir_sites", "schema_version", "toolchains",
+            "compiler_invocations", "coverage",
+            "direct_cross_translation_unit_call_graph", "generator", "inputs",
+            "profile", "raw_bundle", "rust_mir_sites", "schema_version",
+            "toolchains",
         },
         "v3 semantics artifact",
     )
@@ -1701,9 +2792,14 @@ def validate_semantics_output_schema(capture):
         or capture["generator"]
         != "scripts/host_module_failure_semantics_v3.py"
         or not strict_equal(capture["analysis_claim"], ANALYSIS_CLAIM)
-        or not strict_equal(capture["blockers"], list(BLOCKERS))
     ):
         raise SemanticsV3Error("v3 semantics identity or non-crediting claim changed")
+    direct_ctu = validate_direct_ctu_graph_schema(
+        capture["direct_cross_translation_unit_call_graph"],
+        capture["authority_mode"],
+    )
+    if not strict_equal(capture["blockers"], blockers_for_direct_ctu(direct_ctu)):
+        raise SemanticsV3Error("v3 semantics direct CTU blocker boundary changed")
     require_exact_keys(
         capture["inputs"],
         {"failure_flows_v1", "failure_flows_v2", "failure_sites_v1"},
@@ -1722,13 +2818,23 @@ def validate_semantics_output_schema(capture):
             "c_return_contract_count_by_status", "c_source_count",
             "c_terminal_count", "rust_mir_body_count", "rust_mir_site_count",
             "rust_mir_site_count_by_mapping_status",
+            "direct_ctu_blocked_edge_count",
+            "direct_ctu_blocked_edge_count_by_reason",
+            "direct_ctu_definition_count", "direct_ctu_direct_edge_count",
+            "direct_ctu_indirect_site_count",
+            "direct_ctu_reachable_function_count",
+            "direct_ctu_same_module_cross_tu_edge_count",
             "semantic_error_domain_resolved_count", "tracker_credit_count",
         },
         "v3 semantics coverage",
     )
     for field in (
         "c_function_count", "c_return_contract_count", "c_source_count",
-        "c_terminal_count", "rust_mir_body_count", "rust_mir_site_count",
+        "c_terminal_count", "direct_ctu_blocked_edge_count",
+        "direct_ctu_definition_count", "direct_ctu_direct_edge_count",
+        "direct_ctu_indirect_site_count", "direct_ctu_reachable_function_count",
+        "direct_ctu_same_module_cross_tu_edge_count", "rust_mir_body_count",
+        "rust_mir_site_count",
         "semantic_error_domain_resolved_count", "tracker_credit_count",
     ):
         require_integer(coverage[field], "v3 semantics coverage " + field, minimum=0)
@@ -1742,6 +2848,10 @@ def validate_semantics_output_schema(capture):
         "v3 C status coverage",
     )
     require_count_map(
+        coverage["direct_ctu_blocked_edge_count_by_reason"],
+        "v3 direct CTU blocked-edge coverage",
+    )
+    require_count_map(
         coverage["rust_mir_site_count_by_mapping_status"],
         "v3 Rust mapping coverage",
     )
@@ -1753,6 +2863,27 @@ def validate_semantics_output_schema(capture):
         raise SemanticsV3Error("v3 compiler invocations must be an exact list")
     if type(capture["toolchains"]) is not dict:
         raise SemanticsV3Error("v3 toolchains must be an exact object")
+    expected_direct_counts = {
+        "direct_ctu_blocked_edge_count": len(direct_ctu["blocked_edges"]),
+        "direct_ctu_definition_count": len(direct_ctu["definitions"]),
+        "direct_ctu_direct_edge_count": len(direct_ctu["direct_edges"]),
+        "direct_ctu_indirect_site_count": len(direct_ctu["indirect_call_sites"]),
+        "direct_ctu_reachable_function_count": sum(
+            bool(item["propagated_roots"])
+            for item in direct_ctu["function_reachability"]
+        ),
+        "direct_ctu_same_module_cross_tu_edge_count": sum(
+            item["edge_kind"] == "same_module_cross_translation_unit_direct"
+            for item in direct_ctu["direct_edges"]
+        ),
+    }
+    for field, expected in expected_direct_counts.items():
+        if coverage[field] != expected:
+            raise SemanticsV3Error("v3 direct CTU coverage count changed")
+    if coverage["direct_ctu_blocked_edge_count_by_reason"] != dict(
+        sorted(Counter(item["reason"] for item in direct_ctu["blocked_edges"]).items())
+    ):
+        raise SemanticsV3Error("v3 direct CTU blocked reason counts changed")
     for record in capture["c_return_contracts"]:
         if type(record) is not dict:
             raise SemanticsV3Error("v3 C return contract must be an exact object")
@@ -2344,6 +3475,8 @@ def build_capture(
     kernel_dir=None,
     historical_ef58=False,
     repository_authority=None,
+    fresh_capture_receipt=None,
+    independent_fresh_comparison=None,
 ):
     repo = Path(repo).resolve()
     if not repo.is_dir():
@@ -2356,6 +3489,13 @@ def build_capture(
         raw_bundle_path, raw_bundle_sha256_path
     )
     invocations = validate_raw_manifest(manifest, payloads, inputs)
+    continuity_diagnostic = capture_continuity_diagnostic(
+        inputs["authority_mode"],
+        manifest,
+        raw_record,
+        fresh_capture_receipt,
+        independent_fresh_comparison,
+    )
     effective_build = Path(build_dir or repo).resolve()
     effective_kernel = Path(kernel_dir or repo).resolve()
     c_contracts = analyze_c_contracts(
@@ -2367,6 +3507,13 @@ def build_capture(
     rust_sites, rust_bodies = analyze_rust_sites(
         inputs, rust_invocations[0], payloads, repo
     )
+    direct_ctu = derive_direct_ctu_call_graph(
+        inputs,
+        invocations,
+        payloads,
+        inputs["authority_mode"],
+        continuity_diagnostic,
+    )
     c_status = Counter(item["semantic_disposition"]["status"] for item in c_contracts)
     c_modules = Counter(item["module"] for item in c_contracts)
     rust_status = Counter(item["mapping_status"] for item in rust_sites)
@@ -2377,6 +3524,23 @@ def build_capture(
         "c_return_contract_count_by_status": dict(sorted(c_status.items())),
         "c_source_count": len({item["source"] for item in c_contracts}),
         "c_terminal_count": sum(len(item["terminals"]) for item in c_contracts),
+        "direct_ctu_blocked_edge_count": len(direct_ctu["blocked_edges"]),
+        "direct_ctu_blocked_edge_count_by_reason": dict(
+            sorted(Counter(
+                item["reason"] for item in direct_ctu["blocked_edges"]
+            ).items())
+        ),
+        "direct_ctu_definition_count": len(direct_ctu["definitions"]),
+        "direct_ctu_direct_edge_count": len(direct_ctu["direct_edges"]),
+        "direct_ctu_indirect_site_count": len(direct_ctu["indirect_call_sites"]),
+        "direct_ctu_reachable_function_count": sum(
+            bool(item["propagated_roots"])
+            for item in direct_ctu["function_reachability"]
+        ),
+        "direct_ctu_same_module_cross_tu_edge_count": sum(
+            item["edge_kind"] == "same_module_cross_translation_unit_direct"
+            for item in direct_ctu["direct_edges"]
+        ),
         "rust_mir_body_count": len(rust_bodies),
         "rust_mir_site_count": len(rust_sites),
         "rust_mir_site_count_by_mapping_status": dict(sorted(rust_status.items())),
@@ -2395,10 +3559,11 @@ def build_capture(
     result = {
         "analysis_claim": dict(ANALYSIS_CLAIM),
         "authority_mode": inputs["authority_mode"],
-        "blockers": list(BLOCKERS),
+        "blockers": blockers_for_direct_ctu(direct_ctu),
         "c_return_contracts": c_contracts,
         "compiler_invocations": manifest["compiler_invocations"],
         "coverage": coverage,
+        "direct_cross_translation_unit_call_graph": direct_ctu,
         "generator": "scripts/host_module_failure_semantics_v3.py",
         "inputs": manifest_input_bindings(inputs),
         "profile": PROFILE,
@@ -2408,6 +3573,10 @@ def build_capture(
         "toolchains": manifest["toolchains"],
     }
     validate_semantics_output_schema(result)
+    if fresh_capture_receipt is not None:
+        fresh_capture_receipt.replay()
+    if independent_fresh_comparison is not None:
+        independent_fresh_comparison.replay(manifest, raw_record)
     if repository_authority is not None:
         try:
             sites.recheck_repository_authority(repo, repository_authority)
@@ -2444,33 +3613,64 @@ def parse_args(argv):
 
 def main(argv=None, repository_authority=None):
     args = parse_args(argv or sys.argv[1:])
+    receipt = None
+    output_authority = None
+    prepared_targets = []
     try:
         if not args.historical_ef58 and repository_authority is None:
             raise SemanticsV3Error("fresh CLI requires isolated repository authority")
         inputs = None
         if args.capture_raw:
+            prepared_targets = prepare_empty_output_targets(
+                (
+                    (args.raw_bundle, "raw bundle"),
+                    (args.raw_bundle_sha256, "raw bundle checksum"),
+                    (args.output, "semantics v3 output"),
+                )
+            )
             inputs = load_inputs(
                 args.repo, args.failure_sites, args.failure_flows_v1,
                 args.failure_flows_v2, args.build_dir, args.kernel_dir,
                 False, repository_authority,
             )
-            capture_raw_bundle(
+            receipt = capture_raw_bundle(
                 inputs, args.repo, args.build_dir, args.kernel_dir,
                 args.raw_bundle, args.raw_bundle_sha256,
+                output_target=prepared_targets[0],
+                sidecar_target=prepared_targets[1],
+            )
+        else:
+            prepared_targets = prepare_empty_output_targets(
+                ((args.output, "semantics v3 output"),)
             )
         capture = build_capture(
             args.repo, args.failure_sites, args.failure_flows_v1,
             args.failure_flows_v2, args.raw_bundle, args.raw_bundle_sha256,
             args.build_dir, args.kernel_dir, args.historical_ef58,
             repository_authority,
+            fresh_capture_receipt=receipt,
         )
-        atomic_write(
-            args.output,
-            (json.dumps(capture, allow_nan=False, indent=2, sort_keys=True) + "\n").encode("utf-8"),
+        output_authority = prepared_targets[-1].create(
+            (
+                json.dumps(
+                    capture, allow_nan=False, indent=2, sort_keys=True
+                )
+                + "\n"
+            ).encode("utf-8")
         )
+        if receipt is not None:
+            receipt.replay()
+        output_authority.replay()
     except SemanticsV3Error as exc:
         print("host-module failure semantics v3 failed: {0}".format(exc), file=sys.stderr)
         return 1
+    finally:
+        if output_authority is not None:
+            output_authority.close()
+        if receipt is not None:
+            receipt.close()
+        for target in prepared_targets:
+            target.close()
     print(
         "recorded {0} C semantic questions and {1} Rust MIR sites; FP-0006 remains IN_PROGRESS".format(
             capture["coverage"]["c_return_contract_count"],

@@ -94,6 +94,17 @@ class AcceptanceClosureTests(unittest.TestCase):
         self.assertEqual(census["bounded_failure_flow_reference_count"], 2602)
         self.assertEqual(census["c_semantic_question_reference_count"], 205)
         self.assertEqual(census["rust_mir_site_reference_count"], 420)
+        self.assertEqual(
+            census[
+                "direct_strong_same_module_ctu_structural_inventory_"
+                "reference_status"
+            ],
+            "required-missing",
+        )
+        self.assertIn(
+            "direct_strong_same_module_ctu_structural_inventory",
+            result["required_missing"],
+        )
         self.assertIs(census["declarative_behavior_acceptance_join_complete"], True)
         self.assertEqual(result["execution_census"]["runtime_result_count"], 0)
         self.assertEqual(
@@ -161,6 +172,48 @@ class AcceptanceClosureTests(unittest.TestCase):
         ] = "committed"
         with self.assertRaisesRegex(closure.ClosureError, "availability overclaims"):
             closure.validate_contract(contract)
+
+    def test_ctu_inventory_cannot_gain_authority_or_change_gate(self):
+        metadata = self.contract["frozen_inputs"]["semantic_evidence_authority"]
+        inventory = metadata["direct_ctu_structural_inventory"]
+        self.assertIs(inventory["fresh_execution_authority"], False)
+        self.assertEqual(inventory["status"], "required-missing")
+        self.assertNotIn("required_status", inventory)
+        self.assertEqual(
+            inventory["blocker_retained"],
+            "cross_translation_unit_call_graph_not_linked",
+        )
+        for field, value in (
+            ("fresh_execution_authority", True),
+            ("status", "presented-raw"),
+            ("artifact_availability", "committed"),
+        ):
+            with self.subTest(field=field):
+                hostile = copy.deepcopy(self.contract)
+                hostile["frozen_inputs"]["semantic_evidence_authority"][
+                    "direct_ctu_structural_inventory"
+                ][field] = value
+                with self.assertRaisesRegex(
+                    closure.ClosureError, "structural inventory"
+                ):
+                    closure.validate_contract(hostile)
+        hostile = copy.deepcopy(self.contract)
+        hostile["frozen_inputs"]["semantic_evidence_authority"][
+            "direct_ctu_structural_inventory"
+        ]["required_status"] = (
+            "direct_strong_same_module_cross_translation_unit_call_graph_"
+            + "li" + "nked"
+        )
+        with self.assertRaisesRegex(
+            closure.ClosureError, "structural inventory"
+        ):
+            closure.validate_contract(hostile)
+        result = self.run_public()
+        self.assertFalse(any(result["claims"].values()))
+        self.assertEqual(
+            result["gate"],
+            {"gate_id": "FP-0006", "points_awarded": 0, "status": "IN_PROGRESS"},
+        )
 
     def test_duplicate_json_key_is_rejected(self):
         with self.assertRaisesRegex(closure.ClosureError, "duplicate JSON key"):
@@ -334,9 +387,9 @@ class AcceptanceClosureTests(unittest.TestCase):
             result = self.run_public()
         self.assertEqual(
             result["contract"]["sha256"],
-            "2f63eda20359cbac13e164da14edd07f1a04332043722453fcb7fc934c69ae84",
+            "64d4791bb6d3e7fa7a24085e18c634c14d9c81ec80c1d5817a9d9fee641ef70a",
         )
-        self.assertEqual(result["contract"]["size"], 5425)
+        self.assertEqual(result["contract"]["size"], 5938)
 
     def test_no_public_build_census_callable_authority_exists(self):
         self.assertFalse(hasattr(closure, "build_census"))

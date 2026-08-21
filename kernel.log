@@ -31906,3 +31906,206 @@ PY
 ```
 Exit 1. Exact output: `AssertionError: ['_load_authority', '_validate_contract_internal', '_review_surface_internal', '_review_pair_internal', '_cli_entry']` at outer line 18 after the traceback. Compilation and parsing had succeeded. The root harness conflated private source definitions with reachable imported authority; the focused and independent import-surface tests had already established those names are unavailable after import. No target edit, cleanup, Git, network, workflow, runtime, guest, host, or reboot action occurred.
 Retry grammar/canonical validation without forbidding private definitions, then separately import the module under `PYTHONDONTWRITEBYTECODE=1` and require that every public/private authority entry name is absent or noncallable. Preserve the exact frozen tuple and stop on any real imported authority exposure.
+
+2026-08-19: FP-0006 direct-CTU first focused validation stopped on a root-specified unittest import-path harness error before product tests loaded.
+CWD: `/workspace/scratch/1962bd8160f6/mckernel`. Environment/command exactly:
+```bash
+PYTHONDONTWRITEBYTECODE=1 LC_ALL=C.UTF-8 python3 -m unittest -v scripts.tests.test_host_module_failure_semantics_v3
+```
+Exit 1. Exact output:
+```text
+test_host_module_failure_semantics_v3 (unittest.loader._FailedTest.test_host_module_failure_semantics_v3) ... ERROR
+
+======================================================================
+ERROR: test_host_module_failure_semantics_v3 (unittest.loader._FailedTest.test_host_module_failure_semantics_v3)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_host_module_failure_semantics_v3
+Traceback (most recent call last):
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/loader.py", line 137, in loadTestsFromName
+    module = __import__(module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/1962bd8160f6/mckernel/scripts/tests/test_host_module_failure_semantics_v3.py", line 12, in <module>
+    import host_module_failure_semantics_v3 as semantics
+ModuleNotFoundError: No module named 'host_module_failure_semantics_v3'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (errors=1)
+```
+This is a harness invocation defect: the existing test imports `host_module_failure_semantics_v3` as a top-level module and requires `PYTHONPATH=scripts`. No product test loaded, and no post-failure target inspection, edit, cleanup, network, Git, workflow, runtime, guest, host, or reboot action occurred. Retry only the same focused module with `PYTHONPATH=scripts` added, preserving stop-first.
+
+2026-08-19: independent static FP-0006 direct-CTU review stopped validation on an edge-authority gap and an unproven address-normalization boundary; no hostile command failed or repository file was mutated by the reviewer.
+The stationary seven-file tuple had passed 61 generator tests, 15 reviewer tests, 36 acceptance-closure tests, the direct isolated nonpromotion CLI, and a 233-test adjacent matrix before this static stop. Static inspection located the generator gap in `scripts/host_module_failure_semantics_v3.py`: caller records entered resolution without checking caller traits; external declaration records resolved by `(module, name)` without checking their traits or linkage; final traversal/schema checked only callee traits. The copied independent resolver in `scripts/host_module_failure_contract_review_v3.py` had the same asymmetry. A weak/alias declaration or weak/COMDAT/clone caller could therefore yield a credited `direct_strong_same_module_cross_translation_unit_call_graph_linked` edge/status after a coherent refreeze. Existing tests covered a weak second definition and inline target, but not weak declarations/callers.
+Static inspection also found the cgraph capture passes bytes through `host_module_failure_flows.normalized_dump`, requires exact two-run and independent-recapture payload equality, and parses header addresses, while the seven-file tests used raw `@0x1234` or generic `b"dump\n"` and did not prove real per-process address normalization. Root read-only inspection confirmed the existing normalizer replaces only `(?<=@)0x[0-9A-Fa-f]+` with `0xADDR`; the new parser still expected raw hexadecimal addresses, so real normalized cgraph headers would fail closed and fresh proof could not complete.
+Required narrow correction: poison caller and external-declaration weak/alias/COMDAT/clone/inline/non-global traits before target selection; validate both endpoints; mirror this independently; accept only exact normalized `@0xADDR` address tokens while rejecting residual raw addresses; prove different per-process addresses normalize identically without altering semantic hexadecimal constants; add weak-declaration/caller, mixed-candidate, clone/alias/COMDAT, and deterministic cycle regressions. Preserve historical nonproof, every non-CTU blocker, false claims, and the exact seven-file scope. Stop on the first corrected validation failure.
+
+2026-08-19: independent FP-0006 direct-CTU frozen-tuple replay stopped on a direct-script import-path harness error before product tests loaded.
+CWD: `/workspace/scratch/1962bd8160f6/mckernel`. Environment: command-scoped `PYTHONDONTWRITEBYTECODE=1`; remaining environment inherited. Exact command:
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -B scripts/tests/test_host_module_failure_semantics_v3.py
+```
+Exit 1. Exact output:
+```text
+Traceback (most recent call last):
+  File "/workspace/scratch/1962bd8160f6/mckernel/scripts/tests/test_host_module_failure_semantics_v3.py", line 12, in <module>
+    import host_module_failure_semantics_v3 as semantics
+ModuleNotFoundError: No module named 'host_module_failure_semantics_v3'
+```
+The seven-file hash/size validation had passed first. This existing test imports the generator as a top-level `scripts` module, so the direct-script harness requires `PYTHONPATH=scripts`; no product test loaded. The reviewer ran no follow-up command, edit, cleanup, network, Git, workflow, runtime, guest, host, or reboot action. Retry only the same baseline with `PYTHONPATH=scripts`, then continue the frozen read-only hostile matrix under stop-first.
+
+2026-08-19: the separate FP-0006 receipt/nonpromotion reviewer independently repeated the same known focused-test import-path harness error before product tests loaded.
+CWD: `/workspace/scratch/1962bd8160f6/mckernel`. Environment: command-scoped `PYTHONDONTWRITEBYTECODE=1`; remaining environment inherited. Exact command:
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -v scripts.tests.test_host_module_failure_semantics_v3
+```
+Exit 1. Exact diagnostic: `ModuleNotFoundError: No module named 'host_module_failure_semantics_v3'` at test line 12 while unittest imported the module; the loader reported one error and zero product tests. This is the same existing bare-import convention already logged twice, not a new target finding. The frozen authoritative test environment is explicit `PYTHONPATH=scripts`; changing the test bootstrap is outside the CTU semantic change and unnecessary. The reviewer ran no later command, edit, cleanup, network, Git, workflow, runtime, guest, host, or reboot action. Retry only with `PYTHONPATH=scripts` and preserve stop-first.
+
+2026-08-19: independent FP-0006 direct-CTU hostile replay stopped on a product self-oracle: a forged fresh PROVEN status with zero direct/CTU edges was accepted by both the generator schema and independent reviewer.
+CWD: `/workspace/scratch/1962bd8160f6/mckernel`. Environment: command-scoped `PYTHONDONTWRITEBYTECODE=1` and `PYTHONPATH=scripts:scripts/tests`; remaining environment inherited. Exact command:
+```bash
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=scripts:scripts/tests python3 -B -c 'import copy; import host_module_failure_semantics_v3 as s; import host_module_failure_contract_review_v3 as r; import test_host_module_failure_contract_review_v3 as t; g=t.direct_graph(); independent={k:copy.deepcopy(g[k]) for k in ("definitions","direct_edges","function_reachability")}; g["status"]=s.DIRECT_CTU_PROVEN_STATUS; g["proof_authority"]="same_invocation_receipt_reopened"; s.validate_direct_ctu_graph_schema(g,s.flows_v2.FRESH_AUTHORITY_MODE); finding=r.validate_independent_direct_graph(g,independent); raise SystemExit("FAIL: zero-edge forged PROVEN status accepted by schema and independent review: "+repr(finding))'
+```
+Exit 1. Exact output:
+```text
+FAIL: zero-edge forged PROVEN status accepted by schema and independent review: {'direct_ctu_definition_count': 15, 'direct_ctu_direct_edge_count': 0, 'direct_ctu_edge_set_sha256': '37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570', 'direct_ctu_reachable_function_count': 15, 'direct_ctu_root_closure_sha256': '12f55102b6a40ba7ed8dad9b45fbc33bd05332a97c79a187c957acd423452fc5', 'direct_ctu_same_module_cross_tu_edge_count': 0, 'direct_ctu_proof_authority': 'same_invocation_receipt_reopened', 'direct_ctu_status': 'direct_strong_same_module_cross_translation_unit_call_graph_linked'}
+```
+The corrected 67/17/36 baselines had passed first. Root cause: `validate_direct_ctu_graph_schema` checked only status/authority enum pairing, not the decisive edge/blocker predicate; `validate_independent_direct_graph` independently compared definitions/edges/reachability but copied the supplied status and authority. No edit, cleanup, later command, network, Git, workflow, runtime, guest, host, or reboot action followed the stop.
+Required narrow correction: schema must derive the only permitted fresh status from exact authority, count of same-module cross-TU direct edges, and in-scope blocked reasons; PROVEN requires receipt authority, at least one such edge, and zero in-scope proof blockers. The independent parser/resolver must also derive canonical blocked edges/reasons and independently recompute expected status/authority instead of copying supplied fields. Add exact zero-edge and blocked-edge forged-PROVEN regressions, mirror historical/unreceipted invariants, re-freeze the seven-file one-way chain, and stop on the first corrected-suite failure.
+
+2026-08-19: separate FP-0006 receipt/publication review stopped on a product receipt self-oracle: a publicly constructible `FreshCaptureReceipt` with fake replay authorities validated as fresh without any tar, sidecar, compiler capture, or reopen.
+CWD: `/workspace/scratch/1962bd8160f6/mckernel`. Environment: command-scoped `PYTHONDONTWRITEBYTECODE=1` and `PYTHONPATH=scripts`; remaining environment inherited. Exact command:
+```bash
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=scripts python3 - <<'PY'
+import host_module_failure_semantics_v3 as semantics
+
+class FakeReopenAuthority(object):
+    def __init__(self):
+        self.replays = 0
+    def replay(self):
+        self.replays += 1
+
+challenge = "42" * 32
+manifest = {
+    "capture_challenge": challenge,
+    "invocation_id": semantics.invocation_id_for_challenge(challenge),
+}
+raw_record = {
+    "artifact_bytes": 1,
+    "artifact_sha256": "1" * 64,
+    "manifest_sha256": "2" * 64,
+    "sha256_sidecar_bytes": 1,
+    "sha256_sidecar_sha256": "3" * 64,
+}
+bundle = FakeReopenAuthority()
+sidecar = FakeReopenAuthority()
+receipt = semantics.FreshCaptureReceipt(
+    manifest, raw_record, bundle, sidecar
+)
+accepted = semantics.validate_fresh_capture_receipt(
+    receipt, manifest, raw_record
+)
+print("accepted=", accepted)
+print("receipt_type=", type(receipt).__name__)
+print("bundle_authority_type=", type(receipt.bundle_authority).__name__)
+print("sidecar_authority_type=", type(receipt.sidecar_authority).__name__)
+print("bundle_replays=", bundle.replays)
+print("sidecar_replays=", sidecar.replays)
+PY
+```
+Exit 0. Exact stdout:
+```text
+accepted= True
+receipt_type= FreshCaptureReceipt
+bundle_authority_type= FakeReopenAuthority
+sidecar_authority_type= FakeReopenAuthority
+bundle_replays= 4
+sidecar_replays= 4
+```
+Stderr was empty. Corrected baselines had passed 67/17/36 first. Root cause: `validate_fresh_capture_receipt` checked only the receipt class and then trusted arbitrary replay methods/fields; `build_capture` consumed that boolean as fresh authority, allowing a qualifying graph to reach PROVEN and remove the CTU blocker. No edit, cleanup, later command, network, Git, workflow, runtime, guest, host, or reboot action followed the stop.
+An exact Python in-process object type or private token is not an unforgeable compiler-execution authority. Conservative disposition under review: treat same-process receipts and dual recapture only as structural coherence observations; forbid/omit PROVEN status, never remove `cross_translation_unit_call_graph_not_linked`, and keep acceptance/review/runtime/durability/credit authority required-missing. Preserve graph inventory and exact fail-closed receipt checks as defense-in-depth, but do not let their boolean promote a blocker or claim fresh execution.
+
+2026-08-19: conservative FP-0006 direct-CTU reviewer suite stopped on a brittle hostile-test message expectation; the product rejected the mutation earlier than the test expected.
+CWD: `/workspace/scratch/1962bd8160f6/mckernel`. Environment/command exactly:
+```bash
+PYTHONDONTWRITEBYTECODE=1 LC_ALL=C.UTF-8 PYTHONPATH=scripts python3 -m unittest scripts.tests.test_host_module_failure_contract_review_v3
+```
+Exit 1. Exact output:
+```text
+.......F..........
+======================================================================
+FAIL: test_independent_ctu_edge_and_root_mutations_fail (scripts.tests.test_host_module_failure_contract_review_v3.ReviewV3Tests.test_independent_ctu_edge_and_root_mutations_fail)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/1962bd8160f6/mckernel/scripts/host_module_failure_contract_review_v3.py", line 409, in validate_independent_direct_graph
+    semantics.validate_direct_ctu_graph_schema(
+  File "/workspace/scratch/1962bd8160f6/mckernel/scripts/host_module_failure_semantics_v3.py", line 2743, in validate_direct_ctu_graph_schema
+    raise SemanticsV3Error("direct CTU roots are not canonical")
+host_module_failure_semantics_v3.SemanticsV3Error: direct CTU roots are not canonical
+
+During handling of the above exception, another exception occurred:
+
+host_module_failure_contract_review_v3.ReviewV3Error: supplied direct CTU inventory schema is invalid: direct CTU roots are not canonical
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/1962bd8160f6/mckernel/scripts/tests/test_host_module_failure_contract_review_v3.py", line 428, in test_independent_ctu_edge_and_root_mutations_fail
+    with self.assertRaisesRegex(review.ReviewV3Error, "independent"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "independent" does not match "supplied direct CTU inventory schema is invalid: direct CTU roots are not canonical"
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.676s
+
+FAILED (failures=1)
+```
+An independent direct-script replay reproduced the same failure (18 tests, 0.720s) after exact tuple hashes and the 69-test generator baseline passed. The hostile root mutation failed closed at the supplied-schema layer before the independent comparison layer; this is a test-harness expectation mismatch, not a validator bypass. Neither runner inspected, edited, cleaned, or ran a later command after failure. Narrow correction: update only the hostile test to accept either the exact noncanonical-root schema rejection or the independent-comparison rejection, assert the mutation is non-no-op, re-freeze only affected test/production downstream seals if any, and rerun only the reviewer suite under stop-first.
+
+2026-08-19: conservative FP-0006 acceptance-closure suite stopped on one integration marker mismatch that cascaded into 15 test failures before their intended assertions.
+CWD: `/workspace/scratch/1962bd8160f6/mckernel`. Environment/command exactly:
+```bash
+PYTHONDONTWRITEBYTECODE=1 LC_ALL=C.UTF-8 PYTHONPATH=scripts python3 -m unittest scripts.tests.test_fp0006_executable_acceptance_closure
+```
+Exit 1. The suite ran 37 tests in 2.006s and reported 15 failures, all with the same isolated-worker root error: `semantic direct CTU independent-review marker changed`. First exact traceback:
+```text
+FAIL: test_cli_emits_noncrediting_result (scripts.tests.test_fp0006_executable_acceptance_closure.AcceptanceClosureTests.test_cli_emits_noncrediting_result)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/1962bd8160f6/mckernel/scripts/tests/test_fp0006_executable_acceptance_closure.py", line 558, in test_cli_emits_noncrediting_result
+    self.assertEqual(process.returncode, 0, process.stderr)
+AssertionError: 1 != 0 : FP-0006 executable acceptance closure failed: isolated census worker failed: isolated FP-0006 census failed: semantic direct CTU independent-review marker changed
+```
+The other cascading failures were the CTU nonpromotion, declarative/noncrediting, exact-census, fake-worker/global/code-rebinding, external-path, and unfrozen-artifact cases; each stopped at the same marker check. The generator suite had passed 69/69 and corrected reviewer suite 18/18 immediately beforehand. No post-failure inspection, edit, cleanup, later command, network, Git, workflow, runtime, guest, host, or reboot action occurred.
+Required narrow action: inspect only the exact structural-inventory marker literals in the reviewer, acceptance contract/checker, and fixture; reconcile their nonauthoritative wording, then refreeze the one-way production -> contract -> checker self-seal -> test oracle chain. Preserve full blockers, false authority/claims, IN_PROGRESS/0, and required-missing acceptance. Rerun only the acceptance suite first and stop on any nonzero.
+
+2026-08-19: final conservative FP-0006 direct-CTU adversarial replay stopped on a hostile-harness selector error after all preceding product attacks passed.
+CWD: `/workspace/scratch/1962bd8160f6/mckernel`. Environment: command-scoped `PYTHONDONTWRITEBYTECODE=1` and `PYTHONPATH=scripts:scripts/tests`; remaining environment inherited. Exact command:
+```bash
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=scripts:scripts/tests python3 -B -m unittest test_host_module_failure_semantics_v3.RawBundleTests.test_canonical_tar_and_sidecar_round_trip test_host_module_failure_semantics_v3.RawBundleTests.test_checksum_path_and_digest_mutations_fail test_host_module_failure_semantics_v3.RawBundleTests.test_symlink_bundle_and_traversal_member_fail test_host_module_failure_semantics_v3.RawBundleTests.test_noncanonical_tar_metadata_fails test_host_module_failure_semantics_v3.RawBundleTests.test_large_bundle_same_inode_mid_read_splice_fails test_host_module_failure_semantics_v3.RawBundleTests.test_sidecar_same_inode_short_read_splice_fails test_host_module_failure_semantics_v3.RawBundleTests.test_bundle_and_sidecar_path_and_inode_races_fail test_host_module_failure_semantics_v3.FreshCaptureReceiptTests.test_challenge_and_invocation_id_are_exact test_host_module_failure_semantics_v3.FreshCaptureReceiptTests.test_rng_failure_aborts test_host_module_failure_semantics_v3.FreshCaptureReceiptTests.test_same_invocation_receipt_rejects_record_replacement test_host_module_failure_semantics_v3.FreshCaptureReceiptTests.test_independent_review_requires_a_distinct_challenge test_host_module_failure_semantics_v3.FreshCaptureReceiptTests.test_distinct_challenges_with_identical_core_and_payload_compare test_host_module_failure_semantics_v3.FreshCaptureReceiptTests.test_receipt_rejects_coherent_same_byte_pair_replacement test_host_module_failure_semantics_v3.FreshCaptureReceiptTests.test_preexisting_or_nonregular_output_is_never_clobbered test_host_module_failure_semantics_v3.FreshCaptureReceiptTests.test_output_triple_preflight_rejects_orphan_without_creating_peers
+```
+Exit 1. Exact summary:
+```text
+EEEEEEE........
+======================================================================
+ERROR: RawBundleTests (unittest.loader._FailedTest.RawBundleTests)
+----------------------------------------------------------------------
+AttributeError: module 'test_host_module_failure_semantics_v3' has no attribute 'RawBundleTests'
+
+----------------------------------------------------------------------
+Ran 15 tests in 0.022s
+
+FAILED (errors=7)
+```
+The same nonexistent-class loader error occurred seven times; the eight `FreshCaptureReceiptTests` selectors passed. Prior hostile results were green: old PROVEN rejected for positive and zero edges; forged receipt/comparison remained diagnostic-only; positive/zero inventories retained false authority/full blocker; nine trait/address/cycle cases and five independent-review mutation/status/trait/address/cycle cases passed. No product raw-bundle test loaded under the wrong class, and no later command, edit, cleanup, network, Git, workflow, runtime, guest, host, or reboot action occurred. Correct only the seven raw-bundle selectors to their actual existing class and rerun the same bounded group under stop-first; do not change frozen bytes.
+
+2026-08-19: root final tracker validation stopped on an incorrect repository-root script path before tracker logic loaded.
+CWD: `/workspace/scratch/1962bd8160f6/mckernel`. Environment/command exactly:
+```bash
+PYTHONDONTWRITEBYTECODE=1 LC_ALL=C.UTF-8 python3 final_push_tracker.py --check
+```
+Exit 2. Exact output:
+```text
+python3: can't open file '/workspace/scratch/1962bd8160f6/mckernel/final_push_tracker.py': [Errno 2] No such file or directory
+```
+This is a root harness path error, not a tracker diagnostic; no script loaded and no target byte changed. Resolve only the existing committed tracker checker path with a read-only filename search, rerun that exact checker with `--check`, and stop on any real nonzero.
