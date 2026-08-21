@@ -1,0 +1,533 @@
+{
+  "artifact_contract": {
+    "capture_members": [
+      "raw.jsonl",
+      "result.jsonl",
+      "state-ledger.jsonl"
+    ],
+    "directory_member_mode": "0444",
+    "legacy_surface": "legacy-live-ioctl",
+    "maximum_member_bytes": 65536,
+    "native_surface": "native-rust-source-fixture",
+    "result_authority": {
+      "durable_artifact_required": true,
+      "independent_review_required": true,
+      "path": null,
+      "status": "required-missing"
+    },
+    "surface_result_encoding": {
+      "legacy-live-ioctl": {
+        "errno": 22,
+        "interface_return": -1
+      },
+      "native-rust-source-fixture": {
+        "errno": 0,
+        "interface_return": -22
+      }
+    },
+    "surface_state_policy": {
+      "legacy-live-ioctl": "observed-stable-minor63-empty",
+      "native-rust-source-fixture": "fresh-empty-registry"
+    }
+  },
+  "claims": {
+    "credit_eligible": false,
+    "current_head_legacy_provenance_proven": false,
+    "current_head_runtime_reachability_proven": false,
+    "fp0006_complete": false,
+    "full_failure_semantics_covered": false,
+    "gate_pass": false,
+    "legacy_runtime_executed": false,
+    "native_runtime_executed": false,
+    "runtime_reachability_proven": false,
+    "tracker_credit": false
+  },
+  "contract_id": "fp-0006-ihk-device-negative-dispatch-v1",
+  "current_head_boundary": {
+    "current_head_legacy_provenance_claimed": false,
+    "current_head_runtime_reachability_claimed": false,
+    "current_host_driver": {
+      "path": "ihk/linux/core/host_driver.c",
+      "sha256": "be75185f5b1a0aea84b0be995f67405e45964999b6ed28ae60adb3ed1dece722",
+      "size": 69863
+    },
+    "current_host_driver_matches_hff_effective_source": false,
+    "hff_effective_source_sha256": "f677c7dde6de2160fd9062fa998cb2c4aa14ba9eafdac8b86b592b78776bcd2e",
+    "policy": "The repository host_driver bytes are the frozen legacy base source, while the HFF source digest is the compatibility-overlay effective source. Their mismatch forbids current-head legacy provenance or reachability claims."
+  },
+  "failure_evidence": {
+    "failure_flow_artifact": {
+      "external_path_hint": "ci-evidence/ef58860e/rocky-rust-build-32192198920-1/evidence/host-module-failure-flows.json",
+      "input_failure_sites": {
+        "artifact_bytes": 842417,
+        "artifact_sha256": "408f700403de23b705c603d7eff5cd39a2e3c6e2c7fb956cbdccf99c6db4b4b5",
+        "profile": "compiler-backed-active-host-module-failure-sites-v1",
+        "repository_commit": "ef58860e4806ee16e2c506e4e93c7b6ad8ad8f4b"
+      },
+      "repository_commit": "ef58860e4806ee16e2c506e4e93c7b6ad8ad8f4b",
+      "sha256": "d92f6eeffed29b9690042efd91861b367d18737d47b20344c605d4ed22f0fe9e",
+      "size": 4169467,
+      "status": "external-required-for-provenance"
+    },
+    "failure_site_authority": {
+      "external_path_hint": "ci-evidence/ef58860e/rocky-rust-build-32192198920-1/evidence/host-module-failure-sites.json",
+      "repository_commit": "ef58860e4806ee16e2c506e4e93c7b6ad8ad8f4b",
+      "sha256": "408f700403de23b705c603d7eff5cd39a2e3c6e2c7fb956cbdccf99c6db4b4b5",
+      "size": 842417,
+      "status": "external-required-for-provenance"
+    },
+    "hff_records": [
+      {
+        "active_compile_profile_sha256": "86953dfec0eee5b2c1da2875e09bb8c133c2c661e6a7154e8b51d247d1fec860",
+        "expression": "int ret = -EINVAL;",
+        "expression_role": "errno_token_value_context",
+        "function": "ihk_host_device_ioctl",
+        "function_range": {
+          "end_column": 41,
+          "end_line": 2049,
+          "kind": "compiler_statement_extent",
+          "start_column": 2,
+          "start_line": 1963
+        },
+        "id": "HFF-630FB69B83A3C6E59C9F397C",
+        "identity_sha256": "630fb69b83a3c6e59c9f397c21c1c7a913da634b58af7b9989af62d382d93d3c",
+        "location": {
+          "column": 13,
+          "line": 1963
+        },
+        "module": "ihk",
+        "origin": {
+          "errno": "EINVAL",
+          "first_stage_site_ids": [
+            "HFS-80EE94B6FEC1124B309D3589"
+          ]
+        },
+        "provenance_sha256": "ab74250ab0eae51ef73d663eef2af26e859ff3f3b347be2a638da1e0c408880a",
+        "reachable_entry_roots": [],
+        "source": "ihk/linux/core/host_driver.c",
+        "source_sha256": "f677c7dde6de2160fd9062fa998cb2c4aa14ba9eafdac8b86b592b78776bcd2e"
+      },
+      {
+        "active_compile_profile_sha256": "86953dfec0eee5b2c1da2875e09bb8c133c2c661e6a7154e8b51d247d1fec860",
+        "expression": "if (arg > OS_MAX_MINOR || !os_data[arg]) {",
+        "expression_role": "provider_result_guard_candidate",
+        "function": "ihk_host_device_ioctl",
+        "function_range": {
+          "end_column": 41,
+          "end_line": 2049,
+          "kind": "compiler_statement_extent",
+          "start_column": 2,
+          "start_line": 1963
+        },
+        "id": "HFF-79204C286836C113FFB37A89",
+        "identity_sha256": "79204c286836c113ffb37a89f1c8594cd20ece3f7b535305aca45201b991ce38",
+        "location": {
+          "column": 6,
+          "line": 1978
+        },
+        "module": "ihk",
+        "origin": {
+          "errno_names": [],
+          "ssa_origins": [
+            {
+              "callee_expression": "arg_15",
+              "kind": "indirect_callback"
+            }
+          ]
+        },
+        "provenance_sha256": "ab74250ab0eae51ef73d663eef2af26e859ff3f3b347be2a638da1e0c408880a",
+        "reachable_entry_roots": [],
+        "source": "ihk/linux/core/host_driver.c",
+        "source_sha256": "f677c7dde6de2160fd9062fa998cb2c4aa14ba9eafdac8b86b592b78776bcd2e"
+      },
+      {
+        "active_compile_profile_sha256": "86953dfec0eee5b2c1da2875e09bb8c133c2c661e6a7154e8b51d247d1fec860",
+        "expression": "return ret;",
+        "expression_role": "explicit_errno_return",
+        "function": "ihk_host_device_ioctl",
+        "function_range": {
+          "end_column": 41,
+          "end_line": 2049,
+          "kind": "compiler_statement_extent",
+          "start_column": 2,
+          "start_line": 1963
+        },
+        "id": "HFF-15E5BF9893165A7F1FBC6D85",
+        "identity_sha256": "15e5bf9893165a7f1fbc6d8512694d2d4fd2a38a07cc7e2e540c0347d9144a5a",
+        "location": {
+          "column": 11,
+          "line": 1980
+        },
+        "module": "ihk",
+        "origin": {
+          "errno_names": [],
+          "ssa_origins": [
+            {
+              "kind": "negative_constant"
+            }
+          ]
+        },
+        "provenance_sha256": "ab74250ab0eae51ef73d663eef2af26e859ff3f3b347be2a638da1e0c408880a",
+        "reachable_entry_roots": [],
+        "source": "ihk/linux/core/host_driver.c",
+        "source_sha256": "f677c7dde6de2160fd9062fa998cb2c4aa14ba9eafdac8b86b592b78776bcd2e"
+      },
+      {
+        "active_compile_profile_sha256": "86953dfec0eee5b2c1da2875e09bb8c133c2c661e6a7154e8b51d247d1fec860",
+        "expression": "if (request >= IHK_DEVICE_DEBUG_START &&",
+        "expression_role": "provider_result_guard_candidate",
+        "function": "ihk_host_device_ioctl",
+        "function_range": {
+          "end_column": 41,
+          "end_line": 2049,
+          "kind": "compiler_statement_extent",
+          "start_column": 2,
+          "start_line": 1963
+        },
+        "id": "HFF-440A8A64489D446B45EA992A",
+        "identity_sha256": "440a8a64489d446b45ea992a03169f226ea62a8e02e1044e8790f41afe47c722",
+        "location": {
+          "column": 6,
+          "line": 2041
+        },
+        "module": "ihk",
+        "origin": {
+          "errno_names": [],
+          "ssa_origins": [
+            {
+              "callee_expression": "request_14",
+              "kind": "indirect_callback"
+            }
+          ]
+        },
+        "provenance_sha256": "ab74250ab0eae51ef73d663eef2af26e859ff3f3b347be2a638da1e0c408880a",
+        "reachable_entry_roots": [],
+        "source": "ihk/linux/core/host_driver.c",
+        "source_sha256": "f677c7dde6de2160fd9062fa998cb2c4aa14ba9eafdac8b86b592b78776bcd2e"
+      },
+      {
+        "active_compile_profile_sha256": "86953dfec0eee5b2c1da2875e09bb8c133c2c661e6a7154e8b51d247d1fec860",
+        "expression": "return ret;",
+        "expression_role": "callback_return_candidate",
+        "function": "ihk_host_device_ioctl",
+        "function_range": {
+          "end_column": 41,
+          "end_line": 2049,
+          "kind": "compiler_statement_extent",
+          "start_column": 2,
+          "start_line": 1963
+        },
+        "id": "HFF-C4E5AAF7C10B3803681570C6",
+        "identity_sha256": "c4e5aaf7c10b3803681570c69c67c3c496c010ea15a6f335094cb5ccdfcabba0",
+        "location": {
+          "column": 9,
+          "line": 2049
+        },
+        "module": "ihk",
+        "origin": {
+          "errno_names": [],
+          "ssa_origins": [
+            {
+              "callee_expression": "arg_15",
+              "kind": "indirect_callback"
+            },
+            {
+              "callee_expression": "file_12",
+              "kind": "indirect_callback"
+            },
+            {
+              "callee_expression": "request_14",
+              "kind": "indirect_callback"
+            },
+            {
+              "kind": "negative_constant"
+            },
+            {
+              "kind": "unresolved_ssa_value",
+              "value": "_2"
+            }
+          ]
+        },
+        "provenance_sha256": "ab74250ab0eae51ef73d663eef2af26e859ff3f3b347be2a638da1e0c408880a",
+        "reachable_entry_roots": [],
+        "source": "ihk/linux/core/host_driver.c",
+        "source_sha256": "f677c7dde6de2160fd9062fa998cb2c4aa14ba9eafdac8b86b592b78776bcd2e"
+      }
+    ],
+    "independent_provenance_review_complete": false,
+    "policy": "The exact ef58860e failure-site authority and failure-flow artifact are external evidence inputs. Matching bytes permit bounded record verification only; they do not establish current-head reachability or independent provenance."
+  },
+  "frozen_inputs": {
+    "abi": {
+      "path": "host-kernel/native-rust/abi/x86_64.rs",
+      "sha256": "b5980e5b621914a120a0e6b72241477c48aee85615ae4cc76077f3874e35f860"
+    },
+    "ioctl_contract": {
+      "path": "host-kernel/contracts/ihk-ioctl-dispatch-foundation-v1.json",
+      "sha256": "f54f85ef7baaef1a722956fd9f0a3e45e817906e031f4420f22ba88801e0c223"
+    },
+    "legacy_behavior_contract": {
+      "path": "host-kernel/contracts/legacy-behavior-contract-f2eb7352.json",
+      "sha256": "4287ed1e1206cb5e7c50c08419eb444723610c58e2b4730cacc4c82372578bdf"
+    },
+    "legacy_inventory": {
+      "path": "host-kernel/reference/legacy-host-modules-f2eb7352.json",
+      "sha256": "8da72c25cb50e1c92ceaceb0e93afa1cc7a72f80e8cd0095eeedb62004bad02d"
+    },
+    "legacy_policy": {
+      "path": "host-kernel/contracts/native-rust-host-modules-policy-v1.json",
+      "sha256": "5c745cd7c01d061a7582c524849d4c9e566a7b0f02652c234b374738878cea6e"
+    },
+    "registry": {
+      "path": "host-kernel/native-rust/os_registry.rs",
+      "sha256": "29464b8ca1038d87cc0d5f760eb22e0cbd7a1a512ae88f4c550574a784d1e49d"
+    },
+    "rust_dispatcher": {
+      "path": "host-kernel/native-rust/ihk_ioctl.rs",
+      "sha256": "3d603424705a9b0fb18725bae1d75f1d279b249b866c15f15f98166d013edfbb"
+    },
+    "rust_dispatcher_fixture": {
+      "path": "scripts/tests/fixtures/ihk_ioctl_dispatch_compile.rs",
+      "sha256": "d8cf6958ab86b2251b74cb73581d513ae583ce18d5994854af5db41ae03c56bf"
+    }
+  },
+  "gate": {
+    "gate_id": "FP-0006",
+    "points_awarded": 0,
+    "status": "IN_PROGRESS"
+  },
+  "legacy_behavior_authority": {
+    "acceptance_tests": [
+      {
+        "assertions": [
+          "the same explicit failure site returns the exact negative errno",
+          "the mapped Rust fault test proves the intended site fired",
+          "output and ownership state match after the failure"
+        ],
+        "behavior_ids": [
+          "BHV-IHK-LEGACY_ERRNO-IHK_IHK_LINUX_CORE_HOST_DRIVER_C_1963_12_EIN-CB19FD0D3C"
+        ],
+        "gate_targets": [
+          "IHK-013",
+          "INT-004"
+        ],
+        "harness": "fault-and-errno-differential",
+        "id": "AT-IHK-LEGACY_ERRNO-CB19FD0D3C",
+        "module": "ihk"
+      },
+      {
+        "assertions": [
+          "numeric command and compat command match",
+          "valid and invalid argument return, errno, copied data, and state transition match"
+        ],
+        "behavior_ids": [
+          "BHV-IHK-IOCTL-IHK_DEVICE_DESTROY_OS-905C281047"
+        ],
+        "gate_targets": [
+          "IHK-013",
+          "INT-004"
+        ],
+        "harness": "ioctl-differential",
+        "id": "AT-IHK-IOCTL-905C281047",
+        "module": "ihk"
+      }
+    ],
+    "authority": {
+      "generator": "scripts/host_module_contracts.py",
+      "path": "host-kernel/contracts/legacy-behavior-contract-f2eb7352.json",
+      "schema_version": 2,
+      "sha256": "4287ed1e1206cb5e7c50c08419eb444723610c58e2b4730cacc4c82372578bdf",
+      "size": 2784200
+    },
+    "behaviors": [
+      {
+        "acceptance_test_ids": [
+          "AT-IHK-LEGACY_ERRNO-CB19FD0D3C"
+        ],
+        "id": "BHV-IHK-LEGACY_ERRNO-IHK_IHK_LINUX_CORE_HOST_DRIVER_C_1963_12_EIN-CB19FD0D3C",
+        "kind": "legacy_errno",
+        "legacy": {
+          "classification": "explicit_negative_errno_token",
+          "column": 12,
+          "errno": "EINVAL",
+          "expression": "-EINVAL",
+          "expression_sha256": "e6136955fb660e0fe63518fc161b09d4daf9fb1d4f079eb4eddebbc8dd060bc9",
+          "line": 1963,
+          "site_id": "ihk:ihk/linux/core/host_driver.c:1963:12:EINVAL",
+          "source": "ihk/linux/core/host_driver.c",
+          "source_provenance": {
+            "base_sha256": "be75185f5b1a0aea84b0be995f67405e45964999b6ed28ae60adb3ed1dece722",
+            "compatibility_overlay_applied": true,
+            "compatibility_overlay_sha256": "07b5a777f13fb8fd859bc1d941d9523b41f942b838813f75764a61fad379ecd8",
+            "cpp_defines": [
+              "CONFIG_X86_64",
+              "MCCTRL_RUST_HELPERS",
+              "__x86_64__"
+            ],
+            "cpp_unknown_condition_policy": "retain both branches conservatively",
+            "effective_filtered_sha256": "dc1ac74c8199f60356e41ba2da9d140faef2b7dc2ebd31668726f43983f62c47",
+            "effective_source_sha256": "f677c7dde6de2160fd9062fa998cb2c4aa14ba9eafdac8b86b592b78776bcd2e",
+            "filter_mode": "compatibility overlay plus conservative named-guard CPP",
+            "language": "c"
+          },
+          "statement": "int ret = -EINVAL;",
+          "syntax": "direct"
+        },
+        "module": "ihk",
+        "oracle_path": "source_errno_surface.ihk.by_site_id.0cd0102a09398e75a4759edb",
+        "rust_replacement": {
+          "crate": "ihk",
+          "native_path": "crate::error::ihk_ihk_linux_core_host_driver_c_1963_12_ein_cb19fd0d3c",
+          "project_c_dispatch_permitted": false
+        }
+      },
+      {
+        "acceptance_test_ids": [
+          "AT-IHK-IOCTL-905C281047"
+        ],
+        "id": "BHV-IHK-IOCTL-IHK_DEVICE_DESTROY_OS-905C281047",
+        "kind": "ioctl",
+        "legacy": {
+          "expression": "0x112901",
+          "hex": "0x112901",
+          "legacy_dispatch_case_present": true,
+          "line": 18,
+          "name": "IHK_DEVICE_DESTROY_OS",
+          "source": "ihk/linux/include/ihk/ihk_host_user.h",
+          "value": 1124609
+        },
+        "module": "ihk",
+        "oracle_path": "ioctls.ihk_device_constants[1]",
+        "rust_replacement": {
+          "crate": "ihk",
+          "native_path": "crate::device::ioctl::ihk_device_destroy_os_905c281047",
+          "project_c_dispatch_permitted": false
+        }
+      }
+    ],
+    "inputs": {
+      "inventory": {
+        "path": "host-kernel/reference/legacy-host-modules-f2eb7352.json",
+        "sha256": "8da72c25cb50e1c92ceaceb0e93afa1cc7a72f80e8cd0095eeedb62004bad02d",
+        "size": 246393
+      },
+      "policy": {
+        "path": "host-kernel/contracts/native-rust-host-modules-policy-v1.json",
+        "policy_id": "native-rust-host-modules-v1",
+        "sha256": "5c745cd7c01d061a7582c524849d4c9e566a7b0f02652c234b374738878cea6e",
+        "size": 8854
+      }
+    },
+    "provenance": {
+      "ihk_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+      "parent_commit": "f2eb735212e6ab0494e638497e80d9ae78b2848e",
+      "reference_artifact_id": 9051654724,
+      "reference_workflow_run": 31358939841
+    }
+  },
+  "limitations": [
+    "The C producer must be run against a separately identified legacy host-module environment; this contract records no local legacy execution.",
+    "The Rust producer is a standalone source fixture and does not prove native module registration, userspace reachability, or native module runtime execution.",
+    "Two negative vectors do not close the full FP-0006 failure-semantic surface.",
+    "Capture validation is not independent review, durable retention, a result authority, gate PASS, or tracker credit."
+  ],
+  "producers": {
+    "legacy": {
+      "device_path_policy": "caller-supplied-character-device",
+      "path": "scripts/smoke/fp0006-ihk-device-negative-dispatch.c",
+      "runtime_kind": "live-legacy-ioctl-capture",
+      "sha256": "7f500fba27ece9ad52fa52a81d7aa5f57649ad0152e907c17d421e368a279053",
+      "size": 7805
+    },
+    "native": {
+      "path": "scripts/tests/fixtures/ihk_ioctl_fp0006_negative_dispatch.rs",
+      "runtime_kind": "standalone-source-fixture-not-module-runtime",
+      "sha256": "905e7cbdfb0655c2ef3fba3425bfa87057f473bb85ef669061d2b3523f2e8209",
+      "size": 6177
+    }
+  },
+  "schema_version": 1,
+  "schemas": {
+    "raw": {
+      "encoding": "canonical-json-lines-utf8-lf",
+      "exact_keys": [
+        "argument",
+        "request",
+        "sequence",
+        "vector_id"
+      ],
+      "record_count": 2
+    },
+    "result": {
+      "encoding": "canonical-json-lines-utf8-lf",
+      "exact_keys": [
+        "errno",
+        "interface_return",
+        "normalized_return",
+        "sequence",
+        "surface",
+        "vector_id"
+      ],
+      "record_count": 2
+    },
+    "state_ledger": {
+      "encoding": "canonical-json-lines-utf8-lf",
+      "exact_keys": [
+        "minor63_empty",
+        "occupied_minor_bitmap",
+        "occupied_minor_count",
+        "phase",
+        "sequence",
+        "surface",
+        "vector_id"
+      ],
+      "record_count": 4
+    }
+  },
+  "vectors": [
+    {
+      "acceptance_test_ids": [
+        "AT-IHK-LEGACY_ERRNO-CB19FD0D3C"
+      ],
+      "argument": 0,
+      "behavior_ids": [
+        "BHV-IHK-LEGACY_ERRNO-IHK_IHK_LINUX_CORE_HOST_DRIVER_C_1963_12_EIN-CB19FD0D3C"
+      ],
+      "expected_errno": 22,
+      "expected_normalized_return": -22,
+      "expected_state_transition": "none",
+      "hff_ids": [
+        "HFF-630FB69B83A3C6E59C9F397C",
+        "HFF-440A8A64489D446B45EA992A",
+        "HFF-C4E5AAF7C10B3803681570C6"
+      ],
+      "precondition": "minor-63-empty",
+      "request": 4294967295,
+      "sequence": 0,
+      "vector_id": "unknown-device-request-ffffffff-arg0"
+    },
+    {
+      "acceptance_test_ids": [
+        "AT-IHK-IOCTL-905C281047",
+        "AT-IHK-LEGACY_ERRNO-CB19FD0D3C"
+      ],
+      "argument": 63,
+      "behavior_ids": [
+        "BHV-IHK-IOCTL-IHK_DEVICE_DESTROY_OS-905C281047",
+        "BHV-IHK-LEGACY_ERRNO-IHK_IHK_LINUX_CORE_HOST_DRIVER_C_1963_12_EIN-CB19FD0D3C"
+      ],
+      "expected_errno": 22,
+      "expected_normalized_return": -22,
+      "expected_state_transition": "none",
+      "hff_ids": [
+        "HFF-630FB69B83A3C6E59C9F397C",
+        "HFF-79204C286836C113FFB37A89",
+        "HFF-15E5BF9893165A7F1FBC6D85"
+      ],
+      "precondition": "minor-63-empty",
+      "request": 1124609,
+      "sequence": 1,
+      "vector_id": "destroy-known-empty-minor63"
+    }
+  ]
+}
