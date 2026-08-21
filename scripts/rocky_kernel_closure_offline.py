@@ -47,7 +47,7 @@ CONTRACT_PATH = Path(
     "host-kernel/rocky/evidence/closure-offline-contract-v2.json"
 )
 EXPECTED_CONTRACT_SHA256 = (
-    "21dbf4db526127eaf32a5f0422e4a2b996100f067cf43ceb0e62044a1fec0661"
+    "c14839e25057ff2a080a294df7e782f642fe1677974d73af1c5c5bd438374f1a"
 )
 WORKFLOW_PATH = Path(".github/workflows/rocky-kernel-closure-offline.yml")
 EXPECTED_WORKFLOW_SHA256 = (
@@ -79,6 +79,47 @@ LLVM_OWNER_AUTHORITY_BLOCKER = (
     "llvm-devel-0:21.1.8-1.el10.x86_64; this mapping must be reconciled before "
     "credit or review ingestion."
 )
+METADATA_RECONCILIATION_FALSE_CLAIMS = {
+    "closure_artifact_captured": False,
+    "closure_artifact_durable": False,
+    "closure_artifact_independently_reviewed": False,
+    "credit_eligible": False,
+    "gate_rk_003": False,
+    "runtime_evidence_captured": False,
+    "tracker_credit": False,
+}
+METADATA_RECONCILIATION_SCOPE = (
+    "Local closure-v2 implementation-status and llvm-config owner "
+    "reconciliation only; the historical v1 plan and toolchain lock remain "
+    "unchanged, and no runtime, review, durability, gate, or tracker claim is "
+    "made."
+)
+PHASE_PLAN_RECONCILIATION_SCOPE = (
+    "The exact historical v1 plan remains byte-stable and records the phase as "
+    "unimplemented; closure-v2 now has a local contract, checker, workflow, and "
+    "tests, but no runtime capture is claimed."
+)
+LLVM_CONFIG_OWNER_SCOPE = (
+    "RK-003 probe-owner metadata only; this does not prove that llvm-devel was "
+    "captured in a complete closure, reviewed, durably archived, or eligible "
+    "for gate or tracker credit."
+)
+V2_SUCCESS_BLOCKERS = [
+    "The snapshot-backed closure/offline artifact still requires independent "
+    "review and durable archival before it may be bound into the toolchain lock.",
+    "Kernel-level network isolation was not proved; repository-disabled "
+    "file-only replay and proxy-loopback defense are narrower evidence.",
+    "The repository-snapshot-capture-v2 artifact is a runtime input and is not "
+    "accepted or durable merely because this bridge verifies it.",
+    "The minimal requested config has not been resolved twice by the exact Rocky "
+    "process_configs.sh and olddefconfig pipeline.",
+    "make LLVM=1 rustavailable has not run in the reviewed offline buildroot "
+    "against the exact source and resolved config.",
+    "A production kernel build has not bound its final .config to the "
+    "independently resolved config.",
+    "The RK-006 compatibility patch series remains independently governed and "
+    "receives no credit from this evidence.",
+]
 LIBCLANG_PROBE_BYTES = (
     b"/* SPDX-License-Identifier: GPL-2.0 */\n"
     b'#pragma message("clang version " __clang_version__)\n'
@@ -1811,6 +1852,174 @@ def validate_legacy_contract(repo: Path) -> Dict[str, Any]:
     return contract
 
 
+def validate_metadata_reconciliation(
+    repo: Path, value: object, toolchain: Mapping[str, Any]
+) -> Mapping[str, Any]:
+    """Validate the local-only status and probe-owner overlay."""
+    reconciliation = exact_keys(
+        value,
+        {"claims", "llvm_config_owner", "phase_plan", "scope"},
+        "metadata reconciliation",
+    )
+    claims = exact_keys(
+        reconciliation["claims"],
+        METADATA_RECONCILIATION_FALSE_CLAIMS,
+        "metadata reconciliation claims",
+    )
+    for claim in sorted(METADATA_RECONCILIATION_FALSE_CLAIMS):
+        require_exact(claims[claim], False, "metadata reconciliation claim " + claim)
+    require_exact(
+        reconciliation["scope"],
+        METADATA_RECONCILIATION_SCOPE,
+        "metadata reconciliation scope",
+    )
+
+    phase = exact_keys(
+        reconciliation["phase_plan"],
+        {
+            "historical_implemented",
+            "implementation_available",
+            "path",
+            "phase_id",
+            "sha256",
+            "scope",
+        },
+        "phase-plan reconciliation",
+    )
+    require_exact(
+        phase["path"], phase_one.PLAN_PATH.as_posix(), "historical phase-plan path"
+    )
+    phase_plan_path = safe_repo_file(repo, str(phase["path"]))
+    phase_plan_size, phase_plan_digest = sha256_file(phase_plan_path)
+    if phase_plan_size < 1:
+        raise ClosureError("historical phase plan is empty")
+    require_exact(
+        phase_plan_digest, phase_one.EXPECTED_PLAN_SHA256, "historical phase-plan digest"
+    )
+    require_exact(
+        phase["sha256"], phase_plan_digest, "phase-plan reconciliation digest"
+    )
+    require_exact(phase["phase_id"], PHASE_ID, "phase-plan reconciliation phase")
+    require_exact(
+        phase["historical_implemented"],
+        False,
+        "historical closure implementation state",
+    )
+    require_exact(
+        phase["implementation_available"],
+        True,
+        "closure-v2 implementation availability",
+    )
+    require_exact(
+        phase["scope"],
+        PHASE_PLAN_RECONCILIATION_SCOPE,
+        "phase-plan reconciliation scope",
+    )
+    phase_plan, _ = read_json(phase_plan_path, "historical phase plan")
+    phases = phase_plan.get("phases")
+    if not isinstance(phases, list):
+        raise ClosureError("historical phase plan phases are missing")
+    historical_rows = [
+        row for row in phases if isinstance(row, dict) and row.get("id") == PHASE_ID
+    ]
+    if len(historical_rows) != 1:
+        raise ClosureError("historical closure phase is ambiguous")
+    require_exact(
+        historical_rows[0].get("implemented"),
+        phase["historical_implemented"],
+        "historical closure phase implementation state",
+    )
+
+    owner = exact_keys(
+        reconciliation["llvm_config_owner"],
+        {
+            "binary_path",
+            "command",
+            "expected_package_nevra",
+            "historical_direct_artifact_name",
+            "historical_direct_artifact_nevra",
+            "probe_id",
+            "scope",
+        },
+        "llvm-config owner reconciliation",
+    )
+    require_exact(owner["probe_id"], "llvm", "llvm-config probe ID")
+    require_exact(
+        owner["binary_path"], "/usr/bin/llvm-config", "llvm-config binary path"
+    )
+    require_exact(
+        owner["command"], ["llvm-config", "--version"], "llvm-config command"
+    )
+    require_exact(
+        owner["historical_direct_artifact_name"],
+        "llvm",
+        "historical LLVM artifact name",
+    )
+    require_exact(
+        owner["historical_direct_artifact_nevra"],
+        LOCKED_LLVM_PROBE_OWNER_NEVRA,
+        "historical LLVM artifact NEVRA",
+    )
+    require_exact(
+        owner["expected_package_nevra"],
+        LLVM_CONFIG_OWNER_NEVRA,
+        "llvm-config expected owner",
+    )
+    require_exact(
+        owner["scope"],
+        LLVM_CONFIG_OWNER_SCOPE,
+        "llvm-config owner reconciliation scope",
+    )
+
+    probes = toolchain.get("required_probes")
+    artifacts = toolchain.get("direct_artifacts")
+    if not isinstance(probes, list) or not isinstance(artifacts, list):
+        raise ClosureError("historical LLVM authority is missing")
+    probe_rows = [
+        row
+        for row in probes
+        if isinstance(row, dict) and row.get("id") == owner["probe_id"]
+    ]
+    artifact_rows = [
+        row
+        for row in artifacts
+        if isinstance(row, dict)
+        and row.get("name") == owner["historical_direct_artifact_name"]
+    ]
+    if len(probe_rows) != 1 or len(artifact_rows) != 1:
+        raise ClosureError("historical LLVM probe authority is ambiguous")
+    require_exact(
+        probe_rows[0].get("artifact"),
+        owner["historical_direct_artifact_name"],
+        "historical LLVM probe artifact",
+    )
+    require_exact(
+        probe_rows[0].get("command"), owner["command"], "historical LLVM probe command"
+    )
+    require_exact(
+        artifact_rows[0].get("nevra"),
+        owner["historical_direct_artifact_nevra"],
+        "historical LLVM probe artifact NEVRA",
+    )
+    if owner["expected_package_nevra"] == owner["historical_direct_artifact_nevra"]:
+        raise ClosureError("llvm-config owner reconciliation did not change the owner")
+    return reconciliation
+
+
+def validate_v2_success_blockers(value: object) -> List[str]:
+    """Validate the exact ordered, fail-closed closure-v2 blocker authority."""
+    if type(value) is not list:
+        raise ClosureError("v2 success blockers must be an exact list")
+    require_exact(
+        len(value), len(V2_SUCCESS_BLOCKERS), "v2 success blocker count"
+    )
+    for index, expected in enumerate(V2_SUCCESS_BLOCKERS):
+        require_exact(
+            value[index], expected, "v2 success blocker {}".format(index)
+        )
+    return value
+
+
 def validate_contract(repo: Path) -> Dict[str, Any]:
     """Validate the snapshot-backed v2 capture contract without awarding credit."""
     contract_path = safe_repo_file(repo, CONTRACT_PATH.as_posix())
@@ -1826,6 +2035,7 @@ def validate_contract(repo: Path) -> Dict[str, Any]:
             "claim_scope",
             "gate_claims",
             "historical_review_anchor",
+            "metadata_reconciliation",
             "network_contract",
             "outputs",
             "phase_id",
@@ -1848,7 +2058,9 @@ def validate_contract(repo: Path) -> Dict[str, Any]:
         "RK-006": False,
         "RS-001": False,
     }
-    require_exact(contract["gate_claims"], expected_claims, "v2 gate claims")
+    validate_false_gate_claims(
+        contract["gate_claims"], expected_claims, "v2 gate claims"
+    )
     if not isinstance(contract["claim_scope"], str) or "never awards" not in contract[
         "claim_scope"
     ]:
@@ -2076,14 +2288,10 @@ def validate_contract(repo: Path) -> Dict[str, Any]:
         resolution["direct_nevras_sha256"],
         "direct NEVRA digest",
     )
-    blockers = contract["success_blockers"]
-    if not isinstance(blockers, list) or len(blockers) != 9 or not all(
-        isinstance(item, str) and item.strip() for item in blockers
-    ):
-        raise ClosureError("v2 capture must retain nine blockers")
-    if "marks closure-offline unimplemented" not in blockers[-2]:
-        raise ClosureError("phase-plan reconciliation blocker is missing")
-    require_exact(blockers[-1], LLVM_OWNER_AUTHORITY_BLOCKER, "LLVM owner blocker")
+    validate_metadata_reconciliation(
+        repo, contract["metadata_reconciliation"], toolchain
+    )
+    validate_v2_success_blockers(contract["success_blockers"])
     return contract
 
 
@@ -3078,15 +3286,31 @@ def verify_expected_version(
         )
 
 
-def expected_probe_owner(probe_id: str, locked_owner_nevra: str) -> str:
-    if probe_id != "llvm":
+def expected_probe_owner(
+    probe_id: str,
+    locked_owner_nevra: str,
+    llvm_config_owner: Mapping[str, Any],
+) -> str:
+    if probe_id != llvm_config_owner["probe_id"]:
         return locked_owner_nevra
     require_exact(
         locked_owner_nevra,
-        LOCKED_LLVM_PROBE_OWNER_NEVRA,
-        "current LLVM probe authority mapping",
+        llvm_config_owner["historical_direct_artifact_nevra"],
+        "historical LLVM probe authority mapping",
     )
-    return LLVM_CONFIG_OWNER_NEVRA
+    return llvm_config_owner["expected_package_nevra"]
+
+
+def validate_probe_binary_path(
+    probe_id: str, binary_path: str, llvm_config_owner: Mapping[str, Any]
+) -> None:
+    """Bind the reconciled llvm-config owner to the binary actually executed."""
+    if probe_id == llvm_config_owner["probe_id"]:
+        require_exact(
+            binary_path,
+            llvm_config_owner["binary_path"],
+            "llvm-config resolved binary path",
+        )
 
 
 def loaded_libclang_path(stderr: bytes) -> str:
@@ -3585,7 +3809,10 @@ def chroot_probe(
 
 
 def capture_probes(
-    root: Path, toolchain: Mapping[str, Any], output: V2OutputTransaction
+    root: Path,
+    toolchain: Mapping[str, Any],
+    llvm_config_owner: Mapping[str, Any],
+    output: V2OutputTransaction,
 ) -> Dict[str, Any]:
     results: List[Dict[str, Any]] = []
     artifact_by_name = {
@@ -3603,12 +3830,15 @@ def capture_probes(
             continue
         command = list(probe["command"])
         binary_path, binary_sha256 = resolve_binary(root, command[0])
+        validate_probe_binary_path(probe_id, binary_path, llvm_config_owner)
         stdout, stderr = chroot_probe(root, command)
         combined = stdout + stderr
         expected = probe.get("expected_version")
         owner_nevra = installed_file_owner(root, binary_path)
         expected_owner = expected_probe_owner(
-            probe_id, artifact_by_name[probe["artifact"]]["nevra"]
+            probe_id,
+            artifact_by_name[probe["artifact"]]["nevra"],
+            llvm_config_owner,
         )
         require_exact(owner_nevra, expected_owner, "{} binary owner".format(probe_id))
         verify_expected_version(probe_id, expected, combined, owner_nevra)
@@ -5751,7 +5981,12 @@ def capture(
         )
 
         prepare_chroot_devices(offline_root)
-        probes = capture_probes(offline_root, toolchain, output)
+        probes = capture_probes(
+            offline_root,
+            toolchain,
+            contract["metadata_reconciliation"]["llvm_config_owner"],
+            output,
+        )
         probes["credit_eligible"] = False
         probes["gate_claims"] = dict(contract["gate_claims"])
         probes["schema_version"] = V2_SCHEMA_VERSION

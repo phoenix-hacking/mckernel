@@ -49,13 +49,22 @@ class ContractTests(unittest.TestCase):
         self.assertEqual(contract["schema_version"], 2)
         self.assertTrue(contract["gate_claims"])
         self.assertFalse(any(contract["gate_claims"].values()))
-        self.assertEqual(len(contract["success_blockers"]), 9)
-        self.assertIn(
-            "marks closure-offline unimplemented", contract["success_blockers"][-2]
+        self.assertEqual(len(contract["success_blockers"]), 7)
+        self.assertNotIn(
+            "marks closure-offline unimplemented",
+            "\n".join(contract["success_blockers"]),
         )
-        self.assertEqual(
-            contract["success_blockers"][-1], closure.LLVM_OWNER_AUTHORITY_BLOCKER
+        self.assertNotIn(
+            "maps the llvm-config probe", "\n".join(contract["success_blockers"])
         )
+        reconciliation = contract["metadata_reconciliation"]
+        self.assertTrue(
+            reconciliation["phase_plan"]["implementation_available"]
+        )
+        self.assertFalse(
+            reconciliation["phase_plan"]["historical_implemented"]
+        )
+        self.assertFalse(any(reconciliation["claims"].values()))
         self.assertIn(
             "not kernel-level network isolation",
             contract["network_contract"]["scope"],
@@ -79,6 +88,10 @@ class ContractTests(unittest.TestCase):
 
     def test_contract_is_bound_to_historical_review_and_current_toolchain(self):
         contract = closure.validate_legacy_contract(REPO_ROOT)
+        self.assertEqual(len(contract["success_blockers"]), 9)
+        self.assertEqual(
+            contract["success_blockers"][-1], closure.LLVM_OWNER_AUTHORITY_BLOCKER
+        )
         self.assertEqual(
             contract["direct_phase"]["outer_zip_sha256"],
             "a88e8a35c13dbd5b7a4e6524595d5cec31450f83c136b4cf64030e517d208eef",
@@ -89,6 +102,176 @@ class ContractTests(unittest.TestCase):
             contract["toolchain_lock"]["sha256"],
         )
 
+    def test_metadata_reconciliation_is_local_exact_and_fail_closed(self):
+        contract = closure.validate_contract(REPO_ROOT)
+        lock, _ = closure.read_json(
+            REPO_ROOT / contract["toolchain_lock"]["path"], "toolchain fixture"
+        )
+        reconciliation = contract["metadata_reconciliation"]
+        validated = closure.validate_metadata_reconciliation(
+            REPO_ROOT, copy.deepcopy(reconciliation), lock
+        )
+        self.assertEqual(validated, reconciliation)
+        historical_plan = json.loads(
+            (REPO_ROOT / reconciliation["phase_plan"]["path"]).read_text(
+                encoding="utf-8"
+            )
+        )
+        phase = [
+            item
+            for item in historical_plan["phases"]
+            if item["id"] == "closure-offline"
+        ][0]
+        self.assertFalse(phase["implemented"])
+        self.assertTrue(reconciliation["phase_plan"]["implementation_available"])
+
+        for claim in sorted(reconciliation["claims"]):
+            for replacement in (True, 0):
+                with self.subTest(claim=claim, replacement=replacement):
+                    promoted = copy.deepcopy(reconciliation)
+                    promoted["claims"][claim] = replacement
+                    with self.assertRaisesRegex(
+                        closure.ClosureError, "metadata reconciliation claim"
+                    ):
+                        closure.validate_metadata_reconciliation(
+                            REPO_ROOT, promoted, lock
+                        )
+
+        mutations = (
+            (
+                ("phase_plan", "historical_implemented"),
+                True,
+                "historical closure implementation state",
+            ),
+            (
+                ("phase_plan", "historical_implemented"),
+                0,
+                "historical closure implementation state",
+            ),
+            (
+                ("phase_plan", "implementation_available"),
+                False,
+                "implementation availability",
+            ),
+            (
+                ("phase_plan", "implementation_available"),
+                1,
+                "implementation availability",
+            ),
+            (("phase_plan", "sha256"), "0" * 64, "reconciliation digest"),
+            (
+                ("llvm_config_owner", "expected_package_nevra"),
+                "llvm-0:21.1.8-1.el10.x86_64",
+                "expected owner",
+            ),
+            (
+                ("llvm_config_owner", "binary_path"),
+                "/usr/local/bin/llvm-config",
+                "binary path",
+            ),
+            (
+                ("llvm_config_owner", "command"),
+                ["llvm-config", "--bindir"],
+                "command",
+            ),
+            (
+                ("phase_plan", "scope"),
+                ["no runtime capture is claimed"],
+                "phase-plan reconciliation scope",
+            ),
+            (
+                ("phase_plan", "scope"),
+                {"no runtime capture is claimed": True},
+                "phase-plan reconciliation scope",
+            ),
+            (
+                ("phase_plan", "scope"),
+                True,
+                "phase-plan reconciliation scope",
+            ),
+            (
+                ("llvm_config_owner", "scope"),
+                ["does not prove"],
+                "owner reconciliation scope",
+            ),
+            (
+                ("llvm_config_owner", "scope"),
+                {"does not prove": True},
+                "owner reconciliation scope",
+            ),
+            (
+                ("llvm_config_owner", "scope"),
+                True,
+                "owner reconciliation scope",
+            ),
+            (
+                ("scope",),
+                reconciliation["scope"]
+                + "; runtime evidence captured and credit is now awarded.",
+                "metadata reconciliation scope",
+            ),
+            (
+                ("phase_plan", "scope"),
+                reconciliation["phase_plan"]["scope"]
+                + "; runtime capture is claimed and complete.",
+                "phase-plan reconciliation scope",
+            ),
+            (
+                ("llvm_config_owner", "scope"),
+                reconciliation["llvm_config_owner"]["scope"]
+                + "; nevertheless this does prove gate eligibility.",
+                "owner reconciliation scope",
+            ),
+        )
+        for path, replacement, message in mutations:
+            with self.subTest(path=path):
+                mutated = copy.deepcopy(reconciliation)
+                if len(path) == 1:
+                    mutated[path[0]] = replacement
+                else:
+                    mutated[path[0]][path[1]] = replacement
+                with self.assertRaisesRegex(closure.ClosureError, message):
+                    closure.validate_metadata_reconciliation(
+                        REPO_ROOT, mutated, lock
+                    )
+
+    def test_success_blockers_are_exact_ordered_authority(self):
+        contract = closure.validate_contract(REPO_ROOT)
+        blockers = contract["success_blockers"]
+        self.assertEqual(blockers, closure.V2_SUCCESS_BLOCKERS)
+        self.assertEqual(
+            closure.validate_v2_success_blockers(copy.deepcopy(blockers)), blockers
+        )
+
+        duplicate = list(blockers)
+        duplicate[0] = duplicate[1]
+        reordered = list(blockers)
+        reordered[0], reordered[1] = reordered[1], reordered[0]
+        deleted_and_replaced = list(blockers)
+        del deleted_and_replaced[2]
+        deleted_and_replaced.append("A replacement prerequisite remains open.")
+        readiness_wording = list(blockers)
+        readiness_wording[0] = "RK-003 READY: " + readiness_wording[0]
+        credit_wording = list(blockers)
+        credit_wording[-1] = credit_wording[-1].replace(
+            "receives no credit", "receives credit"
+        )
+
+        for name, mutated in (
+            ("duplicate", duplicate),
+            ("reorder", reordered),
+            ("deletion-and-replacement", deleted_and_replaced),
+            ("readiness-wording", readiness_wording),
+            ("credit-wording", credit_wording),
+        ):
+            with self.subTest(name=name):
+                self.assertEqual(len(mutated), 7)
+                self.assertTrue(all(isinstance(item, str) and item for item in mutated))
+                with self.assertRaisesRegex(
+                    closure.ClosureError, "v2 success blocker"
+                ):
+                    closure.validate_v2_success_blockers(mutated)
+
     def test_gate_promotion_and_network_overclaim_fail_closed(self):
         contract = closure.validate_contract(REPO_ROOT)
         promoted = copy.deepcopy(contract)
@@ -97,6 +280,14 @@ class ContractTests(unittest.TestCase):
             closure.require_exact(
                 promoted["gate_claims"], contract["gate_claims"], "gate claims"
             )
+        for replacement in (0, "false", None, [], {}):
+            with self.subTest(replacement=replacement):
+                aliased = copy.deepcopy(contract["gate_claims"])
+                aliased["RK-003"] = replacement
+                with self.assertRaisesRegex(closure.ClosureError, "gate claims"):
+                    closure.validate_false_gate_claims(
+                        aliased, contract["gate_claims"], "v2 gate claims"
+                    )
         overclaim = copy.deepcopy(contract)
         overclaim["network_contract"]["scope"] = "network isolated"
         self.assertNotIn(
@@ -2043,25 +2234,33 @@ class MetadataAndCommandTests(unittest.TestCase):
                     probe_id, "1.92.0", b"unexpected tool\n", owner
                 )
 
-    def test_llvm_config_uses_actual_owner_and_retains_wrong_authority_blocker(self):
+    def test_llvm_config_owner_is_derived_from_reconciled_contract(self):
+        contract = closure.validate_contract(REPO_ROOT)
+        owner_policy = contract["metadata_reconciliation"]["llvm_config_owner"]
         self.assertEqual(
             closure.expected_probe_owner(
-                "llvm", "llvm-0:21.1.8-1.el10.x86_64"
+                "llvm", "llvm-0:21.1.8-1.el10.x86_64", owner_policy
             ),
             "llvm-devel-0:21.1.8-1.el10.x86_64",
         )
         self.assertEqual(
             closure.expected_probe_owner(
-                "clang", "clang-0:21.1.8-1.el10.x86_64"
+                "clang", "clang-0:21.1.8-1.el10.x86_64", owner_policy
             ),
             "clang-0:21.1.8-1.el10.x86_64",
         )
         with self.assertRaisesRegex(closure.ClosureError, "authority mapping"):
             closure.expected_probe_owner(
-                "llvm", "llvm-devel-0:21.1.8-1.el10.x86_64"
+                "llvm", "llvm-devel-0:21.1.8-1.el10.x86_64", owner_policy
             )
-        contract = closure.validate_legacy_contract(REPO_ROOT)
-        self.assertIn("before credit or review ingestion", contract["success_blockers"][-1])
+        closure.validate_probe_binary_path("llvm", "/usr/bin/llvm-config", owner_policy)
+        closure.validate_probe_binary_path("clang", "/usr/local/bin/clang", owner_policy)
+        with self.assertRaisesRegex(closure.ClosureError, "resolved binary path"):
+            closure.validate_probe_binary_path(
+                "llvm", "/usr/local/bin/llvm-config", owner_policy
+            )
+        legacy = closure.validate_legacy_contract(REPO_ROOT)
+        self.assertIn("before credit or review ingestion", legacy["success_blockers"][-1])
 
     def test_dynamic_loader_must_identify_one_exact_libclang(self):
         stderr = (
