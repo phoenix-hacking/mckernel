@@ -205,6 +205,47 @@ class Rk007BuildReviewV2Tests(unittest.TestCase):
             with self.assertRaisesRegex(reviewer.BuildReviewV2Error, "committed inputs"):
                 reviewer.validate_review_object(mutation)
 
+    def test_current_input_port_is_closed_and_preserves_every_ef58_record(self):
+        policy = self.review["current_repository_input_policy"]
+        self.assertEqual(policy["bound_input_count"], len(reviewer.EXPECTED_INPUTS))
+        self.assertEqual(policy["current_override_count"], 2)
+        self.assertEqual(policy["current_overrides"], reviewer.EXPECTED_CURRENT_OVERRIDES)
+        self.assertIs(policy["historical_runtime_inputs_immutable"], True)
+        self.assertIs(policy["require_head_index_worktree_equality"], True)
+        self.assertIs(policy["runtime_identity_claimed"], False)
+        self.assertEqual(
+            [row["path"] for row in policy["current_overrides"]],
+            [
+                ".github/workflows/native-rust-host-modules-exact-build.yml",
+                "scripts/rocky_kernel_rk007_build_review.py",
+            ],
+        )
+        for row in policy["current_overrides"]:
+            runtime = reviewer.EXPECTED_INPUT_BY_PATH[row["path"]]
+            self.assertEqual(row["runtime_git_blob_sha1"], runtime["git_blob_sha1"])
+            self.assertEqual(row["runtime_sha256"], runtime["sha256"])
+            self.assertEqual(row["runtime_size"], runtime["size"])
+            self.assertEqual(row["mode"], runtime["mode"])
+
+    def test_current_input_port_rejects_unknown_retargeted_or_weakened_records(self):
+        mutations = []
+        unknown = copy.deepcopy(self.review)
+        unknown["current_repository_input_policy"]["unknown"] = False
+        mutations.append(unknown)
+        retargeted = copy.deepcopy(self.review)
+        retargeted["current_repository_input_policy"]["current_overrides"][0][
+            "runtime_sha256"
+        ] = "1" * 64
+        mutations.append(retargeted)
+        weakened = copy.deepcopy(self.review)
+        weakened["current_repository_input_policy"][
+            "require_head_index_worktree_equality"
+        ] = False
+        mutations.append(weakened)
+        for mutation in mutations:
+            with self.assertRaises(reviewer.BuildReviewV2Error):
+                reviewer.validate_review_object(mutation)
+
     def test_historical_module_oracle_source_record_is_exact_and_immutable(self):
         self.assertEqual(
             self.review["verified_facts"]["historical_oracle_source"],

@@ -568,23 +568,37 @@ class ResponseBuilderTests(unittest.TestCase):
             output = root / "template"
             builder.atomic_publish_tree(self.response, output, files)
             victim = output / "content-findings.jsonl"
-            victim.chmod(0o644)
+            output_mode = output.stat().st_mode & 0o7777
+            victim_mode = victim.stat().st_mode & 0o7777
             original = victim.read_bytes()
-            victim.unlink()
-            victim.symlink_to(output / "unit-decisions.jsonl")
-            with self.assertRaises(builder.ResponseBuilderError):
-                builder.read_exact_tree(
-                    self.response, output, builder.TEMPLATE_TOP_LEVEL, "symlink template"
-                )
-            victim.unlink()
-            victim.write_bytes(original)
-            victim.chmod(0o444)
-            hardlink = root / "second-link"
-            os.link(str(victim), str(hardlink))
-            with self.assertRaises(builder.ResponseBuilderError):
-                builder.read_exact_tree(
-                    self.response, output, builder.TEMPLATE_TOP_LEVEL, "hardlink template"
-                )
+            try:
+                output.chmod(output_mode | 0o200)
+                victim.chmod(victim_mode | 0o200)
+                victim.unlink()
+                victim.symlink_to(output / "unit-decisions.jsonl")
+                output.chmod(output_mode)
+                with self.assertRaises(builder.ResponseBuilderError):
+                    builder.read_exact_tree(
+                        self.response, output, builder.TEMPLATE_TOP_LEVEL,
+                        "symlink template",
+                    )
+
+                output.chmod(output_mode | 0o200)
+                victim.unlink()
+                victim.write_bytes(original)
+                victim.chmod(victim_mode)
+                hardlink = root / "second-link"
+                os.link(str(victim), str(hardlink))
+                output.chmod(output_mode)
+                with self.assertRaises(builder.ResponseBuilderError):
+                    builder.read_exact_tree(
+                        self.response, output, builder.TEMPLATE_TOP_LEVEL,
+                        "hardlink template",
+                    )
+            finally:
+                if victim.exists() and not victim.is_symlink():
+                    victim.chmod(victim_mode)
+                output.chmod(output_mode)
 
     def test_atomic_publication_rejects_symlink_target_and_untrusted_parent(self):
         files = self.template()

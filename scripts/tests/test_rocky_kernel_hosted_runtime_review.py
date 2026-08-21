@@ -326,7 +326,10 @@ class HostedRuntimeReviewTests(unittest.TestCase):
         self.assertEqual(state["current_head_status"], "stale-input-drift")
         self.assertEqual(
             state["drifted_committed_inputs"],
-            [".github/workflows/rust-x86_64-validation.yml"],
+            [
+                ".github/workflows/rust-x86_64-validation.yml",
+                "scripts/rocky-rust-validation.sh",
+            ],
         )
 
     def test_repository_state_rejects_recursive_type_and_invariant_drift(self):

@@ -635,6 +635,7 @@ class ContractTests(unittest.TestCase):
                         and command[-1] == commit + ":input.txt"
                         and not blob_mutated[0]
                     ):
+                        os.chmod(str(loose_blob), loose_mode | 0o200)
                         if object_mutation == "disappear":
                             loose_blob.unlink()
                         else:
@@ -651,6 +652,8 @@ class ContractTests(unittest.TestCase):
                         snapshot.require_repository_head(repo, commit, [record])
                 finally:
                     loose_blob.parent.mkdir(parents=True, exist_ok=True)
+                    if loose_blob.exists():
+                        os.chmod(str(loose_blob), loose_mode | 0o200)
                     loose_blob.write_bytes(loose_bytes)
                     os.chmod(str(loose_blob), loose_mode)
                 self.assertTrue(blob_mutated[0])

@@ -47,7 +47,7 @@ REUSED_MODULE_BINDINGS = {
         46054, "7a708375beb168f95ce6f6c76b96d47e70176a7f1654645aa99ca1275c9d7984"
     ),
     "rocky_kernel_rk007_build_review.py": (
-        136681, "6741d0963c670c2febc97cc527e833f5fcf16e6e878c5831a76e9b67bd62a581"
+        136681, "dbad2d94b62093871adfcded0fd8ee4c28a1222d76942b1feafe071db3bb2599"
     ),
 }
 
@@ -175,7 +175,10 @@ REVIEW_GLOB = "rk007-native-build-review-*-v2.json"
 SCHEMA_VERSION = 2
 REVIEW_ID = "rk-007-native-rust-exact-build-review-ef58860e-v2"
 # Filled after the exact ef58860e artifact was downloaded and reviewed.
-REVIEW_SHA256 = "d751296653c555b56213593cf3a004200d036d934ff508042797300402d45359"
+REVIEW_SHA256 = "60bee3161685ad4583a67fd818d622d48c5cbd50841ff6cc76ee5f489bbd1a13"
+EXPECTED_HISTORICAL_PROJECTION_SHA256 = (
+    "d751296653c555b56213593cf3a004200d036d934ff508042797300402d45359"
+)
 RUNTIME_HEAD_SHA = "ef58860e4806ee16e2c506e4e93c7b6ad8ad8f4b"
 RUNTIME_TREE_SHA = "ae853aa5a48ad85698709a50074cd86d91d02761"
 GITHUB_REPOSITORY = "phoenix-hacking/mckernel"
@@ -294,6 +297,32 @@ EXPECTED_INPUTS = [
 EXPECTED_INPUT_BY_PATH = dict((row["path"], row) for row in EXPECTED_INPUTS)
 EXPECTED_HISTORICAL_ORACLE_SOURCE = EXPECTED_INPUT_BY_PATH[
     "scripts/rocky_kernel_rk007_build_review.py"
+]
+
+# The exact ef58 runtime inputs above remain immutable.  A descendant may
+# change one only through this closed old-to-new port, and every current record
+# must agree across HEAD, index, and worktree.
+EXPECTED_CURRENT_OVERRIDES = [
+    {
+        "current_git_blob_sha1": "9a99536e3d09cb7a26aa9830236d89512de09633",
+        "current_sha256": "e5f4dcebea346e516c86788de11aa203677a283a86df36acce5603fd540e4cdd",
+        "current_size": 46889,
+        "mode": "100644",
+        "path": ".github/workflows/native-rust-host-modules-exact-build.yml",
+        "runtime_git_blob_sha1": "3780ba2239d4b365f5d8bb92e6fbaa505b287c30",
+        "runtime_sha256": "5af1cf1ac85d5c62663cb12d2ad7b0aa472d1e87865be3be2d5ea099e4d2854b",
+        "runtime_size": 30870,
+    },
+    {
+        "current_git_blob_sha1": "dd297c02dc8142e6c9411b923169ab66d3e71fc4",
+        "current_sha256": "dbad2d94b62093871adfcded0fd8ee4c28a1222d76942b1feafe071db3bb2599",
+        "current_size": 136681,
+        "mode": "100644",
+        "path": "scripts/rocky_kernel_rk007_build_review.py",
+        "runtime_git_blob_sha1": "4842e2e3f58a842de707565bd50a6f710eba4c55",
+        "runtime_sha256": "6741d0963c670c2febc97cc527e833f5fcf16e6e878c5831a76e9b67bd62a581",
+        "runtime_size": 136681,
+    },
 ]
 STAGE_REPOSITORY_PATHS = {
     "Kbuild": "host-kernel/kbuild/Kbuild.in",
@@ -503,11 +532,114 @@ def _false_tree(value, label):
         raise BuildReviewV2Error("{0} must remain false".format(label))
 
 
+def validate_historical_projection(review):
+    """Lock every ef58 fact while excluding only the descendant port."""
+    exact_keys(
+        review,
+        {
+            "artifact_closure", "caveats", "claims",
+            "current_repository_input_policy", "remaining_prerequisites",
+            "review_id", "review_kind", "runtime_candidate", "schema_version",
+            "source_artifact", "verified_facts",
+        },
+        "review",
+    )
+    historical_projection = dict(review)
+    del historical_projection["current_repository_input_policy"]
+    require_exact(
+        sha256_bytes(canonical_json_bytes(historical_projection)),
+        EXPECTED_HISTORICAL_PROJECTION_SHA256,
+        "historical review projection digest",
+    )
+
+
+def validate_current_repository_input_policy(review):
+    """Validate the closed old-to-new records for the current descendant."""
+    policy = exact_keys(
+        review["current_repository_input_policy"],
+        {
+            "bound_input_count", "current_override_count", "current_overrides",
+            "historical_runtime_inputs_immutable", "relationship",
+            "require_head_index_worktree_equality", "runtime_identity_claimed",
+        },
+        "current repository input policy",
+    )
+    require_exact(policy["bound_input_count"], len(EXPECTED_INPUTS), "input count")
+    require_exact(
+        policy["current_override_count"],
+        len(EXPECTED_CURRENT_OVERRIDES),
+        "current override count",
+    )
+    require_exact(
+        policy["current_overrides"], EXPECTED_CURRENT_OVERRIDES,
+        "current overrides",
+    )
+    require_exact(
+        policy["historical_runtime_inputs_immutable"], True,
+        "historical runtime input policy",
+    )
+    require_exact(policy["relationship"], "descendant-or-equal", "relationship")
+    require_exact(policy["require_head_index_worktree_equality"], True, "input equality")
+    require_exact(policy["runtime_identity_claimed"], False, "runtime identity claim")
+
+    committed_by_path = {row["path"]: row for row in EXPECTED_INPUTS}
+    if len(committed_by_path) != len(EXPECTED_INPUTS):
+        raise BuildReviewV2Error("committed input paths are not unique")
+    override_paths = set()
+    for index, row in enumerate(policy["current_overrides"]):
+        label = "current override {0}".format(index)
+        exact_keys(
+            row,
+            {
+                "current_git_blob_sha1", "current_sha256", "current_size", "mode",
+                "path", "runtime_git_blob_sha1", "runtime_sha256", "runtime_size",
+            },
+            label,
+        )
+        path = safe_relative_path(row["path"], label + " path")
+        if path in override_paths:
+            raise BuildReviewV2Error("current override paths are not unique")
+        override_paths.add(path)
+        if path not in committed_by_path:
+            raise BuildReviewV2Error("{0} is not a reviewed runtime input".format(label))
+        runtime_row = committed_by_path[path]
+        require_exact(row["mode"], runtime_row["mode"], label + " mode")
+        require_exact(
+            row["runtime_git_blob_sha1"], runtime_row["git_blob_sha1"],
+            label + " runtime blob",
+        )
+        require_exact(
+            row["runtime_sha256"], runtime_row["sha256"], label + " runtime digest"
+        )
+        require_exact(
+            row["runtime_size"], runtime_row["size"], label + " runtime size"
+        )
+        if (
+            type(row["current_git_blob_sha1"]) is not str
+            or HEX_SHA1.fullmatch(row["current_git_blob_sha1"]) is None
+        ):
+            raise BuildReviewV2Error("{0} current blob is invalid".format(label))
+        if (
+            type(row["current_sha256"]) is not str
+            or HEX_SHA256.fullmatch(row["current_sha256"]) is None
+        ):
+            raise BuildReviewV2Error("{0} current digest is invalid".format(label))
+        if type(row["current_size"]) is not int or row["current_size"] < 0:
+            raise BuildReviewV2Error("{0} current size is invalid".format(label))
+        if (
+            row["current_git_blob_sha1"] == row["runtime_git_blob_sha1"]
+            and row["current_sha256"] == row["runtime_sha256"]
+            and row["current_size"] == row["runtime_size"]
+        ):
+            raise BuildReviewV2Error("{0} does not describe a changed input".format(label))
+
+
 def validate_review_object(review):
     exact_keys(
         review,
         {
-            "artifact_closure", "caveats", "claims", "remaining_prerequisites",
+            "artifact_closure", "caveats", "claims",
+            "current_repository_input_policy", "remaining_prerequisites",
             "review_id", "review_kind", "runtime_candidate", "schema_version",
             "source_artifact", "verified_facts",
         },
@@ -576,6 +708,7 @@ def validate_review_object(review):
     require_exact(runtime["head_sha"], RUNTIME_HEAD_SHA, "runtime head")
     require_exact(runtime["tree_sha"], RUNTIME_TREE_SHA, "runtime tree")
     require_exact(runtime["committed_inputs"], EXPECTED_INPUTS, "committed inputs")
+    validate_current_repository_input_policy(review)
     require_exact(
         runtime["container"],
         {
@@ -714,6 +847,7 @@ def validate_review_object(review):
     require_exact(facts["modules"], EXPECTED_MODULE_RECORDS, "module records")
     for index, record in enumerate(facts["modules"]):
         _validate_digest_fact(record, "module {0}".format(index))
+    validate_historical_projection(review)
     return review
 
 
@@ -775,6 +909,33 @@ def _index_record(repo, path, label):
     return object_id
 
 
+def current_input_record(runtime_row, overrides_by_path):
+    """Return the exact descendant record without retargeting ef58."""
+    override = overrides_by_path.get(runtime_row["path"])
+    if override is None:
+        return dict(runtime_row)
+    require_exact(override["path"], runtime_row["path"], "override path")
+    require_exact(
+        override["runtime_git_blob_sha1"], runtime_row["git_blob_sha1"],
+        "override runtime blob",
+    )
+    require_exact(
+        override["runtime_sha256"], runtime_row["sha256"],
+        "override runtime digest",
+    )
+    require_exact(
+        override["runtime_size"], runtime_row["size"], "override runtime size"
+    )
+    require_exact(override["mode"], runtime_row["mode"], "override mode")
+    return {
+        "git_blob_sha1": override["current_git_blob_sha1"],
+        "mode": override["mode"],
+        "path": override["path"],
+        "sha256": override["current_sha256"],
+        "size": override["current_size"],
+    }
+
+
 def validate_repository(repo, review):
     review = validate_review_object(review)
     repo = Path(repo).resolve()
@@ -789,17 +950,26 @@ def validate_repository(repo, review):
     if ancestry.returncode != 0:
         raise BuildReviewV2Error("current HEAD is not a descendant of the reviewed runtime")
 
+    overrides = review["current_repository_input_policy"]["current_overrides"]
+    overrides_by_path = {row["path"]: row for row in overrides}
+    if len(overrides_by_path) != len(overrides):
+        raise BuildReviewV2Error("current override paths are not unique")
+    committed_paths = {row["path"] for row in runtime["committed_inputs"]}
+    if set(overrides_by_path) - committed_paths:
+        raise BuildReviewV2Error("current override names an unreviewed runtime input")
+
     snapshots = []
     for index, expected in enumerate(runtime["committed_inputs"]):
         label = "committed input {0}".format(index)
+        current_expected = current_input_record(expected, overrides_by_path)
         require_exact(_tree_record(repo, RUNTIME_HEAD_SHA, expected["path"], label + " runtime"), expected, label + " runtime")
-        require_exact(_tree_record(repo, current, expected["path"], label + " current"), expected, label + " current")
-        require_exact(_index_record(repo, expected["path"], label), expected["git_blob_sha1"], label + " index blob")
+        require_exact(_tree_record(repo, current, expected["path"], label + " current"), current_expected, label + " current")
+        require_exact(_index_record(repo, expected["path"], label), current_expected["git_blob_sha1"], label + " index blob")
         path = v1_review.repository_file(repo, expected["path"], label + " worktree")
         data = v1_review.read_regular_file_once(path, label + " worktree", expected_mode=0o644)
-        require_exact(len(data), expected["size"], label + " worktree size")
-        require_exact(sha256_bytes(data), expected["sha256"], label + " worktree digest")
-        snapshots.append((path, data, expected))
+        require_exact(len(data), current_expected["size"], label + " worktree size")
+        require_exact(sha256_bytes(data), current_expected["sha256"], label + " worktree digest")
+        snapshots.append((path, data, current_expected))
 
     require_exact(_git_text(repo, ["rev-parse", "HEAD"], "final current HEAD"), current, "repository HEAD snapshot")
     for index, snapshot in enumerate(snapshots):
