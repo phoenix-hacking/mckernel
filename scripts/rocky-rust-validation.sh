@@ -41,6 +41,20 @@ Options:
   --trace-smoke         Run V10 smoke commands under strace when available.
   --debug-mcexec-smoke  Add --debug-mcexec to mcexec smoke commands.
   --verbose-smoke       Print full smoke logs without changing tested commands.
+  --fp0006-negative-dispatch-capture
+                        Capture the two noncrediting FP-0006 negative device
+                        vectors while /dev/mcd0 is live. Hosted disposable
+                        QEMU only; requires the four identity options below.
+  --fp0006-capture-head SHA
+  --fp0006-capture-repository OWNER/REPO
+  --fp0006-capture-run-id ID
+  --fp0006-capture-run-attempt N
+  --fp0006-capture-event-name NAME
+  --fp0006-capture-ref REF
+  --fp0006-capture-github-sha SHA
+  --fp0006-capture-workflow-sha SHA
+  --fp0006-capture-base-sha SHA
+                        Bind the temporary capture to one GitHub run observation.
   -h, --help            Show this help.
 
 Environment overrides:
@@ -69,6 +83,22 @@ TIMEOUT_KILL_AFTER=5s
 TRACE_SMOKE=0
 DEBUG_MCEXEC=0
 VERBOSE_SMOKE=0
+FP0006_NEGATIVE_CAPTURE=0
+FP0006_CAPTURE_HEAD=
+FP0006_CAPTURE_REPOSITORY=
+FP0006_CAPTURE_RUN_ID=
+FP0006_CAPTURE_RUN_ATTEMPT=
+FP0006_CAPTURE_EVENT_NAME=
+FP0006_CAPTURE_REF=
+FP0006_CAPTURE_GITHUB_SHA=
+FP0006_CAPTURE_WORKFLOW_SHA=
+FP0006_CAPTURE_BASE_SHA=
+FP0006_PREFLIGHT_DIR=
+FP0006_PREFLIGHT_MANIFEST=
+FP0006_PREFLIGHT_MANIFEST_SHA256=
+FP0006_PRODUCER_BINARY=
+FP0006_PRODUCER_BINARY_SHA256=
+FP0006_COMPILER_REPORT_SHA256=
 RUST_TOOLCHAIN="${RUST_TOOLCHAIN:-nightly-2026-02-19}"
 EXPECTED_RUSTC_VERSION='rustc 1.95.0-nightly (c04308580 2026-02-18)'
 SMOKE_LOG_TAIL_LINES="${SMOKE_LOG_TAIL_LINES:-80}"
@@ -199,6 +229,46 @@ while [ "$#" -gt 0 ]; do
 			VERBOSE_SMOKE=1
 			shift
 			;;
+		--fp0006-negative-dispatch-capture)
+			FP0006_NEGATIVE_CAPTURE=1
+			shift
+			;;
+		--fp0006-capture-head)
+			FP0006_CAPTURE_HEAD="${2:?missing value for --fp0006-capture-head}"
+			shift 2
+			;;
+		--fp0006-capture-repository)
+			FP0006_CAPTURE_REPOSITORY="${2:?missing value for --fp0006-capture-repository}"
+			shift 2
+			;;
+		--fp0006-capture-run-id)
+			FP0006_CAPTURE_RUN_ID="${2:?missing value for --fp0006-capture-run-id}"
+			shift 2
+			;;
+		--fp0006-capture-run-attempt)
+			FP0006_CAPTURE_RUN_ATTEMPT="${2:?missing value for --fp0006-capture-run-attempt}"
+			shift 2
+			;;
+		--fp0006-capture-event-name)
+			FP0006_CAPTURE_EVENT_NAME="${2:?missing value for --fp0006-capture-event-name}"
+			shift 2
+			;;
+		--fp0006-capture-ref)
+			FP0006_CAPTURE_REF="${2:?missing value for --fp0006-capture-ref}"
+			shift 2
+			;;
+		--fp0006-capture-github-sha)
+			FP0006_CAPTURE_GITHUB_SHA="${2:?missing value for --fp0006-capture-github-sha}"
+			shift 2
+			;;
+		--fp0006-capture-workflow-sha)
+			FP0006_CAPTURE_WORKFLOW_SHA="${2:?missing value for --fp0006-capture-workflow-sha}"
+			shift 2
+			;;
+		--fp0006-capture-base-sha)
+			FP0006_CAPTURE_BASE_SHA="${2:?missing value for --fp0006-capture-base-sha}"
+			shift 2
+			;;
 		-h|--help)
 			usage
 			exit 0
@@ -227,6 +297,29 @@ fi
 if [ "$DO_INSTALL" -eq 0 ] && [ "$BOOT_SMOKE" -eq 1 ]; then
 	echo "error: boot validation requires install; remove --build-only." >&2
 	exit 1
+fi
+
+if [ "$FP0006_NEGATIVE_CAPTURE" -eq 1 ]; then
+	if [ "$BOOT_SMOKE" -ne 1 ] || [ -z "$RUNTIME_EVIDENCE_DIR" ]; then
+		echo 'error: FP-0006 capture requires boot smoke and a runtime evidence directory.' >&2
+		exit 2
+	fi
+	if [[ ! "$FP0006_CAPTURE_HEAD" =~ ^[0-9a-f]{40}$ ]] ||
+		[[ ! "$FP0006_CAPTURE_REPOSITORY" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]] ||
+		[[ ! "$FP0006_CAPTURE_RUN_ID" =~ ^[1-9][0-9]*$ ]] ||
+		[[ ! "$FP0006_CAPTURE_RUN_ATTEMPT" =~ ^[1-9][0-9]*$ ]] ||
+		[ "$FP0006_CAPTURE_EVENT_NAME" != pull_request ] ||
+		[[ ! "$FP0006_CAPTURE_REF" =~ ^refs/pull/[1-9][0-9]*/merge$ ]] ||
+		[[ ! "$FP0006_CAPTURE_GITHUB_SHA" =~ ^[0-9a-f]{40}$ ]] ||
+		[[ ! "$FP0006_CAPTURE_WORKFLOW_SHA" =~ ^[0-9a-f]{40}$ ]] ||
+		[[ ! "$FP0006_CAPTURE_BASE_SHA" =~ ^[0-9a-f]{40}$ ]]
+	then
+		echo 'error: FP-0006 capture requires exact head/repository/run identity arguments.' >&2
+		exit 2
+	fi
+elif [ -n "$FP0006_CAPTURE_HEAD$FP0006_CAPTURE_REPOSITORY$FP0006_CAPTURE_RUN_ID$FP0006_CAPTURE_RUN_ATTEMPT$FP0006_CAPTURE_EVENT_NAME$FP0006_CAPTURE_REF$FP0006_CAPTURE_GITHUB_SHA$FP0006_CAPTURE_WORKFLOW_SHA$FP0006_CAPTURE_BASE_SHA" ]; then
+	echo 'error: FP-0006 capture identity arguments require the capture opt-in.' >&2
+	exit 2
 fi
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -1842,6 +1935,190 @@ wait_for_mckernel_boot() {
 	return 1
 }
 
+preflight_fp0006_legacy_negative_dispatch() {
+	local compile_rc=0
+	local compiler_output
+	local compiler_report
+	local manifest
+	local producer
+	local resolved_head
+
+	if [ "$FP0006_NEGATIVE_CAPTURE" -ne 1 ]; then
+		return
+	fi
+	need_cmd git
+	need_cmd sha256sum
+	need_cmd python3
+	if [ ! -x /usr/bin/gcc ] || [ -L /usr/bin/gcc ] ||
+		[ "$(/usr/bin/rpm -qf --qf '%{NAME}\n' /usr/bin/gcc)" != gcc ] ||
+		[ ! -x /usr/bin/timeout ] || [ -L /usr/bin/timeout ] ||
+		[ "$(/usr/bin/rpm -qf --qf '%{NAME}\n' /usr/bin/timeout)" != coreutils ]
+	then
+		echo 'error: FP-0006 legacy producer requires the Rocky /usr/bin/gcc package binary.' >&2
+		return 1
+	fi
+	resolved_head="$(git -C "$ROOT_DIR" rev-parse HEAD)"
+	if [ "$resolved_head" != "$FP0006_CAPTURE_HEAD" ]; then
+		echo 'error: FP-0006 preflight checkout differs from the requested exact head.' >&2
+		return 1
+	fi
+	python3 "$ROOT_DIR/scripts/fp0006_runtime_capture_integration.py" \
+		check-contract --repo "$ROOT_DIR"
+
+	FP0006_PREFLIGHT_DIR="$(mktemp -d /tmp/fp0006-legacy-preflight.XXXXXX)"
+	chmod 700 "$FP0006_PREFLIGHT_DIR"
+	producer="$FP0006_PREFLIGHT_DIR/fp0006-legacy-producer"
+	compiler_output="$FP0006_PREFLIGHT_DIR/compiler-output.log"
+	compiler_report="$FP0006_PREFLIGHT_DIR/compiler-observation.txt"
+	manifest="$RUNTIME_EVIDENCE_DIR/fp0006-legacy-preflight.json"
+	test ! -e "$manifest"
+	: >"$compiler_output"
+	if /usr/bin/env -i HOME=/nonexistent LANG=C LC_ALL=C PATH=/usr/bin:/bin \
+		/usr/bin/gcc -O2 -std=c11 -Wall -Wextra -Werror \
+		"$ROOT_DIR/scripts/smoke/fp0006-ihk-device-negative-dispatch.c" \
+		-o "$producer" >"$compiler_output" 2>&1
+	then
+		compile_rc=0
+	else
+		compile_rc=$?
+	fi
+	if [ "$compile_rc" -ne 0 ] || [ -s "$compiler_output" ]; then
+		cat "$compiler_output" >&2
+		echo "error: FP-0006 legacy producer compilation failed or emitted output (status $compile_rc)." >&2
+		return 1
+	fi
+	{
+		/usr/bin/rpm -q --qf '%{NAME}-%{EPOCHNUM}:%{VERSION}-%{RELEASE}.%{ARCH}\n' gcc coreutils
+		/usr/bin/sha256sum /usr/bin/gcc /usr/bin/timeout
+		/usr/bin/gcc --version
+		/usr/bin/timeout --version
+	} >"$compiler_report"
+	python3 "$ROOT_DIR/scripts/fp0006_runtime_capture_integration.py" \
+		preflight-legacy \
+		--repo "$ROOT_DIR" \
+		--producer-binary "$producer" \
+		--compiler-report "$compiler_report" \
+		--compiler-output "$compiler_output" \
+		--output-manifest "$manifest" \
+		--head "$FP0006_CAPTURE_HEAD" \
+		--github-repository "$FP0006_CAPTURE_REPOSITORY" \
+		--github-run-id "$FP0006_CAPTURE_RUN_ID" \
+		--github-run-attempt "$FP0006_CAPTURE_RUN_ATTEMPT" \
+		--github-event-name "$FP0006_CAPTURE_EVENT_NAME" \
+		--github-ref "$FP0006_CAPTURE_REF" \
+		--github-sha "$FP0006_CAPTURE_GITHUB_SHA" \
+		--github-workflow-sha "$FP0006_CAPTURE_WORKFLOW_SHA" \
+		--github-base-sha "$FP0006_CAPTURE_BASE_SHA"
+	FP0006_PREFLIGHT_MANIFEST="$manifest"
+	FP0006_PREFLIGHT_MANIFEST_SHA256="$(sha256sum "$manifest" | awk '{ print $1 }')"
+	FP0006_PRODUCER_BINARY="$producer"
+	FP0006_PRODUCER_BINARY_SHA256="$(sha256sum "$producer" | awk '{ print $1 }')"
+	FP0006_COMPILER_REPORT_SHA256="$(sha256sum "$compiler_report" | awk '{ print $1 }')"
+	readonly FP0006_PREFLIGHT_DIR FP0006_PREFLIGHT_MANIFEST
+	readonly FP0006_PREFLIGHT_MANIFEST_SHA256 FP0006_PRODUCER_BINARY
+	readonly FP0006_PRODUCER_BINARY_SHA256 FP0006_COMPILER_REPORT_SHA256
+	refresh_runtime_evidence_manifest
+}
+
+capture_fp0006_legacy_negative_dispatch() {
+	local capture_rc=0
+	local observation
+	local overlay_host_driver_sha256
+	local producer_log
+	local producer_output
+	local stage
+	local workflow_candidate_aligned=false
+
+	if [ "$FP0006_NEGATIVE_CAPTURE" -ne 1 ]; then
+		return
+	fi
+	if [ "$(sha256sum "$FP0006_PREFLIGHT_MANIFEST" | awk '{ print $1 }')" !=
+		"$FP0006_PREFLIGHT_MANIFEST_SHA256" ] ||
+		[ "$(sha256sum "$FP0006_PRODUCER_BINARY" | awk '{ print $1 }')" !=
+		"$FP0006_PRODUCER_BINARY_SHA256" ]
+	then
+		echo 'error: FP-0006 preflight authority or producer changed before live execution.' >&2
+		return 1
+	fi
+	if [ ! -c /dev/mcd0 ]; then
+		echo 'error: FP-0006 live capture requires the literal /dev/mcd0 character device.' >&2
+		return 1
+	fi
+	overlay_host_driver_sha256="$(sha256sum \
+		"$ROOT_DIR/ihk/linux/core/host_driver.c" | awk '{ print $1 }')"
+	if [ "$overlay_host_driver_sha256" !=
+		f677c7dde6de2160fd9062fa998cb2c4aa14ba9eafdac8b86b592b78776bcd2e ]
+	then
+		echo 'error: FP-0006 live compatibility-overlay observation digest differs.' >&2
+		return 1
+	fi
+	stage="$FP0006_PREFLIGHT_DIR/capture-stage"
+	producer_output="$FP0006_PREFLIGHT_DIR/producer-output.log"
+	producer_log="$FP0006_PREFLIGHT_DIR/producer.log"
+	observation="$RUNTIME_EVIDENCE_DIR/fp0006-legacy-observation"
+	test ! -e "$stage"
+	test ! -e "$observation"
+	mkdir -m 700 "$stage"
+	: >"$producer_output"
+	if [ "$FP0006_CAPTURE_GITHUB_SHA" = "$FP0006_CAPTURE_HEAD" ] &&
+		[ "$FP0006_CAPTURE_WORKFLOW_SHA" = "$FP0006_CAPTURE_HEAD" ]
+	then
+		workflow_candidate_aligned=true
+	fi
+	printf '{"base_sha":"%s","binary_sha256":"%s","device":"/dev/mcd0","event":"producer-start","event_name":"%s","github_sha":"%s","head_sha":"%s","normalized_command":["/usr/bin/env","-i","HOME=/nonexistent","LANG=C","LC_ALL=C","PATH=/usr/bin:/bin","/usr/bin/timeout","--signal=TERM","--kill-after=5s","30s","<producer-by-sha256>","/dev/mcd0","<capture-stage>"],"overlay_host_driver_sha256":"%s","preflight_sha256":"%s","ref":"%s","repository":"%s","run_attempt":%s,"run_id":%s,"surface":"legacy-live-ioctl","timeout_seconds":30,"tool_report_sha256":"%s","workflow_candidate_aligned":%s,"workflow_sha":"%s"}\n' \
+		"$FP0006_CAPTURE_BASE_SHA" "$FP0006_PRODUCER_BINARY_SHA256" \
+		"$FP0006_CAPTURE_EVENT_NAME" "$FP0006_CAPTURE_GITHUB_SHA" \
+		"$FP0006_CAPTURE_HEAD" \
+		"$overlay_host_driver_sha256" "$FP0006_PREFLIGHT_MANIFEST_SHA256" \
+		"$FP0006_CAPTURE_REF" "$FP0006_CAPTURE_REPOSITORY" \
+		"$FP0006_CAPTURE_RUN_ATTEMPT" "$FP0006_CAPTURE_RUN_ID" \
+		"$FP0006_COMPILER_REPORT_SHA256" "$workflow_candidate_aligned" \
+		"$FP0006_CAPTURE_WORKFLOW_SHA" >"$producer_log"
+	/usr/bin/env -i HOME=/nonexistent LANG=C LC_ALL=C PATH=/usr/bin:/bin \
+		/usr/bin/timeout --signal=TERM --kill-after=5s 30s \
+		"$FP0006_PRODUCER_BINARY" /dev/mcd0 "$stage" \
+		>"$producer_output" 2>&1 || capture_rc=$?
+	{
+		printf '{"event":"producer-output","output_bytes":%s,"output_sha256":"%s","surface":"legacy-live-ioctl"}\n' \
+			"$(wc -c <"$producer_output")" \
+			"$(sha256sum "$producer_output" | awk '{ print $1 }')"
+		printf '{"event":"producer-exit","status":%s,"surface":"legacy-live-ioctl"}\n' \
+			"$capture_rc"
+	} >>"$producer_log"
+	if [ "$capture_rc" -ne 0 ] || [ -s "$producer_output" ]; then
+		cat "$producer_output" >&2
+		echo "error: FP-0006 legacy producer failed or emitted unexpected output (status $capture_rc)." >&2
+		return 1
+	fi
+	mkdir -m 700 "$observation"
+	/usr/bin/tar --format=ustar --sort=name --owner=0 --group=0 \
+		--numeric-owner --mtime=@0 --mode=0444 \
+		-C "$stage" -cf "$observation/capture.tar" \
+		raw.jsonl result.jsonl state-ledger.jsonl
+	cp -- "$FP0006_PREFLIGHT_MANIFEST" "$observation/preflight.json"
+	cp -- "$producer_log" "$observation/producer.log"
+	cp -- "$FP0006_PREFLIGHT_DIR/compiler-observation.txt" \
+		"$observation/tool-report.txt"
+	cp -- "$FP0006_PREFLIGHT_DIR/compiler-output.log" \
+		"$observation/compiler.log"
+	cp -- "$producer_output" "$observation/producer-output.log"
+	(
+		cd "$observation"
+		sha256sum capture.tar compiler.log preflight.json producer-output.log \
+			producer.log tool-report.txt > SHA256SUMS
+		chmod 0444 capture.tar compiler.log preflight.json producer-output.log \
+			producer.log tool-report.txt SHA256SUMS
+	)
+	rm -f -- "$stage/raw.jsonl" "$stage/result.jsonl" \
+		"$stage/state-ledger.jsonl" "$producer_output" "$producer_log" \
+		"$FP0006_PREFLIGHT_DIR/compiler-output.log" \
+		"$FP0006_PREFLIGHT_DIR/compiler-observation.txt" \
+		"$FP0006_PRODUCER_BINARY"
+	rmdir -- "$stage" "$FP0006_PREFLIGHT_DIR"
+	refresh_runtime_evidence_manifest
+	echo 'FP-0006 legacy negative-dispatch observation: captured-unreviewed-noncrediting'
+}
+
 boot_smoke() {
 	BOOT_SHUTDOWN_NEEDED=0
 	BOOT_RESTORE_SELINUX=0
@@ -1934,6 +2211,7 @@ boot_smoke() {
 		dump_boot_failure_state
 		exit 1
 	fi
+	capture_fp0006_legacy_negative_dispatch
 
 	if [ "$BOOT_ONLY" -eq 1 ]; then
 		say "Boot-only check requested; skipping mcexec workloads"
@@ -2188,6 +2466,7 @@ else
 	verify_rustc
 fi
 
+preflight_fp0006_legacy_negative_dispatch
 update_submodules
 record_environment
 configure_and_build

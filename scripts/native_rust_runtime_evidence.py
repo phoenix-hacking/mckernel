@@ -61,6 +61,7 @@ CONTRACT_ID = "mckernel-native-rust-runtime-evidence-v1"
 PROTOCOL = "MCKERNEL_NATIVE_RUST_RUNTIME_V1"
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
+EXPECTED_FP0006_NATIVE_JOB_SHA256 = "b70f6951df4476291b704e14f34e703f27f1d6386808dda700fb8c478c95ecc3"
 BUILD_KERNEL_TARGETS = ["bzImage"]
 BUILD_MODULE_TARGETS = [
     "drivers/misc/mckernel/ihk.ko",
@@ -353,11 +354,234 @@ def _validate_rk006_capture_job(job_text: str) -> None:
         raise EvidenceError("RK-006 capture actions are not exactly digest pinned")
 
 
+def _validate_fp0006_native_capture_job(job_text: str) -> None:
+    if (
+        hashlib.sha256(job_text.encode("utf-8")).hexdigest()
+        != EXPECTED_FP0006_NATIVE_JOB_SHA256
+    ):
+        raise EvidenceError("FP-0006 native capture job exact active scope differs")
+    expected_preamble = (
+        "  fp0006-native-rust-capture:\n"
+        "    name: Capture FP-0006 native Rust fixture (credit forbidden)\n"
+        "    needs: exact-build\n"
+        "    if: >-\n"
+        "      ${{ github.event_name != 'pull_request' ||\n"
+        "          github.event.pull_request.head.repo.full_name == github.repository }}\n"
+        "    runs-on: ubuntu-24.04\n"
+        "    timeout-minutes: 30\n"
+        "    container:\n"
+        "      image: rockylinux/rockylinux:10.2@sha256:"
+        "e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176\n"
+        "    defaults:\n"
+        "      run:\n"
+        "        shell: bash\n"
+        "\n"
+        "    steps:\n"
+    )
+    if not job_text.startswith(
+        expected_preamble
+        + "      - name: Install pinned Rust and identify the observed FP-0006 linker\n"
+    ):
+        raise EvidenceError("FP-0006 native capture job scope differs")
+    trusted = (
+        "    if: >-\n"
+        "      ${{ github.event_name != 'pull_request' ||\n"
+        "          github.event.pull_request.head.repo.full_name == github.repository }}\n"
+    )
+    if job_text.count(trusted) != 1:
+        raise EvidenceError("FP-0006 native capture job trust boundary differs")
+    for key, expected in (
+        ("if", 1), ("runs-on", 1), ("steps", 1),
+        ("continue-on-error", 0), ("strategy", 0),
+    ):
+        pattern = r"(?m)^    (?:{0}|\"{0}\"|'{0}')\s*:".format(
+            re.escape(key)
+        )
+        if len(re.findall(pattern, job_text)) != expected:
+            raise EvidenceError("FP-0006 native capture job keys differ")
+    headers = re.findall(r"(?m)^      - name: ([^\n]+)\n", job_text)
+    expected_headers = [
+        "Install pinned Rust and identify the observed FP-0006 linker",
+        "Check out the exact FP-0006 candidate without credentials",
+        "Produce and review the FP-0006 native envelope",
+        "Upload FP-0006 native envelope",
+    ]
+    if headers != expected_headers:
+        raise EvidenceError("FP-0006 native capture steps are missing, extra, or reordered")
+    starts = [job_text.index("      - name: " + name + "\n") for name in headers]
+    steps = {}
+    for index, name in enumerate(headers):
+        start = starts[index] + len("      - name: " + name + "\n")
+        end = starts[index + 1] if index + 1 < len(starts) else len(job_text)
+        steps[name] = job_text[start:end]
+    for name in headers[:3]:
+        if re.search(
+            r"(?m)^        (?:if|\"if\"|'if'|continue-on-error|"
+            r"\"continue-on-error\"|'continue-on-error')\s*:",
+            steps[name],
+        ):
+            raise EvidenceError("FP-0006 native producer step can skip or tolerate failure")
+    checkout = (
+        "        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4\n"
+        "        with:\n"
+        "          ref: ${{ env.EXPECTED_HEAD_SHA }}\n"
+        "          fetch-depth: 1\n"
+        "          submodules: recursive\n"
+        "          persist-credentials: false\n"
+        "\n"
+    )
+    if steps[headers[1]] != checkout:
+        raise EvidenceError("FP-0006 native checkout scope differs")
+    bootstrap = (
+        "        run: |\n"
+        "          set -euo pipefail\n"
+        "          test \"$(uname -m)\" = x86_64\n"
+        "          . /etc/os-release\n"
+        "          test \"$ID\" = rocky\n"
+        "          test \"$VERSION_ID\" = 10.2\n"
+        "          dnf -y --setopt=install_weak_deps=False install \\\n"
+        "            coreutils gcc git-core python3 rust-1.92.0-1.el10\n"
+        "          test \"$(command -v rustc)\" = /usr/bin/rustc\n"
+        "          test \"$(command -v gcc)\" = /usr/bin/gcc\n"
+        "          test \"$(command -v timeout)\" = /usr/bin/timeout\n"
+        "          test ! -L /usr/bin/rustc\n"
+        "          test ! -L /usr/bin/gcc\n"
+        "          test ! -L /usr/bin/timeout\n"
+        "          test \"$(/usr/bin/rpm -qf --qf '%{NAME}\\n' /usr/bin/rustc)\" = rust\n"
+        "          test \"$(/usr/bin/rpm -qf --qf '%{NAME}\\n' /usr/bin/gcc)\" = gcc\n"
+        "          test \"$(/usr/bin/rpm -qf --qf '%{NAME}\\n' /usr/bin/timeout)\" = coreutils\n"
+        "          test \"$(/usr/bin/rpm -q --qf '%{NAME}-%{EPOCHNUM}:%{VERSION}-%{RELEASE}.%{ARCH}\\n' rust)\" = rust-0:1.92.0-1.el10.x86_64\n"
+        "          test \"$(/usr/bin/rustc --version)\" = 'rustc 1.92.0 (ded5c06cf 2025-12-08) (Red Hat 1.92.0-1.el10)'\n"
+        "          /usr/bin/rustc -Vv\n"
+        "          /usr/bin/gcc --version\n"
+        "          dnf clean all\n"
+        "\n"
+    )
+    if steps[headers[0]] != bootstrap:
+        raise EvidenceError("FP-0006 native bootstrap scope differs")
+    upload = (
+        "        if: ${{ always() }}\n"
+        "        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2\n"
+        "        with:\n"
+        "          name: fp0006-native-rust-source-fixture-${{ github.run_id }}-${{ github.run_attempt }}\n"
+        "          path: ${{ runner.temp }}/fp0006-native-rust-capture/fp0006-runtime-capture-v1.tar\n"
+        "          if-no-files-found: error\n"
+        "          retention-days: 30\n"
+        "          compression-level: 0\n"
+    )
+    if steps[headers[3]] != upload:
+        raise EvidenceError("FP-0006 native upload scope differs")
+    if "actions/download-artifact@" in job_text:
+        raise EvidenceError("FP-0006 native capture attempts an artifact download")
+    active = "\n".join(
+        line for line in job_text.splitlines()
+        if not line.lstrip().startswith("#")
+    )
+    required = [
+        'dnf -y --setopt=install_weak_deps=False install \\',
+        'coreutils gcc git-core python3 rust-1.92.0-1.el10',
+        'test "$(command -v rustc)" = /usr/bin/rustc',
+        'test "$(command -v gcc)" = /usr/bin/gcc',
+        'test "$(command -v timeout)" = /usr/bin/timeout',
+        'test "$(/usr/bin/rpm -qf --qf \'%{NAME}\\n\' /usr/bin/timeout)" = coreutils',
+        'test "$(/usr/bin/rpm -q --qf \'%{NAME}-%{EPOCHNUM}:%{VERSION}-%{RELEASE}.%{ARCH}\\n\' rust)" = rust-0:1.92.0-1.el10.x86_64',
+        "test \"$(/usr/bin/rustc --version)\" = 'rustc 1.92.0 (ded5c06cf 2025-12-08) (Red Hat 1.92.0-1.el10)'",
+        'test "$(git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"',
+        "/usr/bin/rustc --edition=2021 -D warnings -C linker=/usr/bin/gcc \\",
+        "/usr/bin/timeout --signal=TERM --kill-after=5s 30s \\",
+        '"$producer" "$stage" > "$producer_output" 2>&1',
+        "python3 scripts/fp0006_runtime_capture_integration.py finalize-lane \\",
+    ]
+    positions = []
+    for fragment in required:
+        if active.count(fragment) != 1:
+            raise EvidenceError("FP-0006 native capture command boundary differs")
+        positions.append(active.index(fragment))
+    if positions != sorted(positions):
+        raise EvidenceError("FP-0006 native capture commands are reordered")
+    capture_lines = tuple(
+        line.strip() for line in steps[headers[2]].splitlines()
+        if line.strip() and not line.lstrip().startswith("#")
+    )
+    timeout_if = (
+        "if /usr/bin/env -i HOME=/nonexistent LANG=C LC_ALL=C PATH=/usr/bin:/bin \\"
+    )
+    timeout_line = "/usr/bin/timeout --signal=TERM --kill-after=5s 30s \\"
+    producer_line = '"$producer" "$stage" > "$producer_output" 2>&1'
+    finalizer_line = (
+        "python3 scripts/fp0006_runtime_capture_integration.py finalize-lane \\"
+    )
+    if capture_lines.count(timeout_if) != 2:
+        raise EvidenceError("FP-0006 native compile/capture environments differ")
+    for line in (timeout_line, producer_line, finalizer_line):
+        if capture_lines.count(line) != 1:
+            raise EvidenceError("FP-0006 native structural command boundary differs")
+    timeout_candidates = [
+        index for index, line in enumerate(capture_lines)
+        if line == timeout_if
+        and capture_lines[index:index + 4] == (
+            timeout_if, timeout_line, producer_line, "then",
+        )
+    ]
+    if len(timeout_candidates) != 1:
+        raise EvidenceError("FP-0006 native producer timeout condition differs")
+    timeout_if_position = timeout_candidates[0]
+    timeout_position = capture_lines.index(timeout_line)
+    finalizer_position = capture_lines.index(finalizer_line)
+    exits = tuple(
+        line for line in capture_lines
+        if re.match(r"^exit(?:\s|$)", line) is not None
+    )
+    if exits != ('exit "$compile_rc"', "exit 1"):
+        raise EvidenceError("FP-0006 native capture has an unapproved exit")
+    if any(
+        re.match(r"^(?:trap|return)(?:\s|$)", line) is not None
+        or re.match(r"^(?:for|while|until|select|case)(?:\s|$)", line) is not None
+        or re.match(r"^[A-Za-z_][A-Za-z0-9_]*\(\)\s*\{$", line) is not None
+        for line in capture_lines
+    ):
+        raise EvidenceError("FP-0006 native capture has an overriding control path")
+    depth_before = []
+    capture_depth = 0
+    for line in capture_lines:
+        depth_before.append(capture_depth)
+        if re.match(r"^if(?:\s|$)", line) is not None:
+            capture_depth += 1
+        elif line == "fi":
+            capture_depth -= 1
+            if capture_depth < 0:
+                raise EvidenceError("FP-0006 native condition scope is unbalanced")
+        elif re.match(r"^elif(?:\s|$)", line) is not None:
+            raise EvidenceError("FP-0006 native has an unapproved conditional branch")
+    if capture_depth != 0:
+        raise EvidenceError("FP-0006 native condition scope is unbalanced")
+    if (
+        depth_before[timeout_if_position] != 0
+        or depth_before[timeout_position] != 1
+        or depth_before[finalizer_position] != 0
+    ):
+        raise EvidenceError("FP-0006 native timeout/finalizer reachability differs")
+    uses = re.findall(r"(?m)^\s*uses:\s*(\S+)", job_text)
+    if len(uses) != 2 or any(
+        re.fullmatch(r"[^@]+@[0-9a-f]{40}", value) is None for value in uses
+    ):
+        raise EvidenceError("FP-0006 native actions are not exactly digest pinned")
+
+
 def _validate_exact_build_workflow(text: str) -> str:
+    native_separator = "\n  fp0006-native-rust-capture:\n"
     capture_separator = "\n  rk006-full-source-build-capture:\n"
-    if text.count(capture_separator) != 1:
-        raise EvidenceError("exact build workflow must contain one trailing RK-006 capture job")
-    exact_build_text, capture_tail = text.split(capture_separator, 1)
+    if text.count(native_separator) != 1 or text.count(capture_separator) != 1:
+        raise EvidenceError(
+            "exact build workflow must contain one FP-0006 job and one trailing RK-006 capture job"
+        )
+    exact_build_text, native_and_capture = text.split(native_separator, 1)
+    if capture_separator not in native_and_capture:
+        raise EvidenceError("FP-0006 native job must precede the trailing RK-006 capture job")
+    native_tail, capture_tail = native_and_capture.split(capture_separator, 1)
+    _validate_fp0006_native_capture_job(
+        "  fp0006-native-rust-capture:\n" + native_tail
+    )
     _validate_rk006_capture_job(
         "  rk006-full-source-build-capture:\n" + capture_tail
     )

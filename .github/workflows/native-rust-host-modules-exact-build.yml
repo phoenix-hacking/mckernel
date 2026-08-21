@@ -5,6 +5,13 @@ on:
     branches: [codex/rocky-rust-validation]
     paths:
       - .github/workflows/native-rust-host-modules-exact-build.yml
+      - .github/workflows/rust-x86_64-validation.yml
+      - host-kernel/contracts/fp0006-runtime-capture-integration-v1.json
+      - host-kernel/contracts/fp0006-ihk-device-negative-dispatch-v1.json
+      - host-kernel/contracts/legacy-behavior-contract-f2eb7352.json
+      - host-kernel/contracts/native-rust-host-modules-policy-v1.json
+      - host-kernel/reference/legacy-host-modules-f2eb7352.json
+      - ihk
       - host-kernel/contracts/linux-api-exact-probe-v1.json
       - host-kernel/contracts/linux-api-needs-v1.json
       - host-kernel/contracts/x86_64-shared-abi-v1.json
@@ -47,6 +54,15 @@ on:
       - host-kernel/rocky/source-lock.json
       - host-kernel/rocky/toolchain-lock.json
       - scripts/ihk_native_lifecycle_check.py
+      - scripts/fp0006_runtime_capture_integration.py
+      - scripts/fp0006_ihk_device_negative_dispatch.py
+      - scripts/rocky-rust-validation.sh
+      - scripts/qemu-rocky-rust-validation.sh
+      - scripts/qemu-mckernel-guest.sh
+      - scripts/smoke/fp0006-ihk-device-negative-dispatch.c
+      - scripts/tests/fixtures/ihk_ioctl_fp0006_negative_dispatch.rs
+      - scripts/tests/test_fp0006_ihk_device_negative_dispatch.py
+      - scripts/tests/test_fp0006_runtime_capture_integration.py
       - scripts/ihk_native_queue_check.py
       - scripts/tests/fixtures/ihk_native_queue_compile.rs
       - scripts/tests/test_ihk_native_queue_check.py
@@ -106,6 +122,13 @@ on:
     branches: [development]
     paths:
       - .github/workflows/native-rust-host-modules-exact-build.yml
+      - .github/workflows/rust-x86_64-validation.yml
+      - host-kernel/contracts/fp0006-runtime-capture-integration-v1.json
+      - host-kernel/contracts/fp0006-ihk-device-negative-dispatch-v1.json
+      - host-kernel/contracts/legacy-behavior-contract-f2eb7352.json
+      - host-kernel/contracts/native-rust-host-modules-policy-v1.json
+      - host-kernel/reference/legacy-host-modules-f2eb7352.json
+      - ihk
       - host-kernel/contracts/linux-api-exact-probe-v1.json
       - host-kernel/contracts/linux-api-needs-v1.json
       - host-kernel/contracts/x86_64-shared-abi-v1.json
@@ -148,6 +171,15 @@ on:
       - host-kernel/rocky/source-lock.json
       - host-kernel/rocky/toolchain-lock.json
       - scripts/ihk_native_lifecycle_check.py
+      - scripts/fp0006_runtime_capture_integration.py
+      - scripts/fp0006_ihk_device_negative_dispatch.py
+      - scripts/rocky-rust-validation.sh
+      - scripts/qemu-rocky-rust-validation.sh
+      - scripts/qemu-mckernel-guest.sh
+      - scripts/smoke/fp0006-ihk-device-negative-dispatch.c
+      - scripts/tests/fixtures/ihk_ioctl_fp0006_negative_dispatch.rs
+      - scripts/tests/test_fp0006_ihk_device_negative_dispatch.py
+      - scripts/tests/test_fp0006_runtime_capture_integration.py
       - scripts/ihk_native_queue_check.py
       - scripts/tests/fixtures/ihk_native_queue_compile.rs
       - scripts/tests/test_ihk_native_queue_check.py
@@ -587,6 +619,167 @@ jobs:
           retention-days: 30
           compression-level: 0
           include-hidden-files: true
+
+  fp0006-native-rust-capture:
+    name: Capture FP-0006 native Rust fixture (credit forbidden)
+    needs: exact-build
+    if: >-
+      ${{ github.event_name != 'pull_request' ||
+          github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    container:
+      image: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Install pinned Rust and identify the observed FP-0006 linker
+        run: |
+          set -euo pipefail
+          test "$(uname -m)" = x86_64
+          . /etc/os-release
+          test "$ID" = rocky
+          test "$VERSION_ID" = 10.2
+          dnf -y --setopt=install_weak_deps=False install \
+            coreutils gcc git-core python3 rust-1.92.0-1.el10
+          test "$(command -v rustc)" = /usr/bin/rustc
+          test "$(command -v gcc)" = /usr/bin/gcc
+          test "$(command -v timeout)" = /usr/bin/timeout
+          test ! -L /usr/bin/rustc
+          test ! -L /usr/bin/gcc
+          test ! -L /usr/bin/timeout
+          test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' /usr/bin/rustc)" = rust
+          test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' /usr/bin/gcc)" = gcc
+          test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' /usr/bin/timeout)" = coreutils
+          test "$(/usr/bin/rpm -q --qf '%{NAME}-%{EPOCHNUM}:%{VERSION}-%{RELEASE}.%{ARCH}\n' rust)" = rust-0:1.92.0-1.el10.x86_64
+          test "$(/usr/bin/rustc --version)" = 'rustc 1.92.0 (ded5c06cf 2025-12-08) (Red Hat 1.92.0-1.el10)'
+          /usr/bin/rustc -Vv
+          /usr/bin/gcc --version
+          dnf clean all
+
+      - name: Check out the exact FP-0006 candidate without credentials
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ env.EXPECTED_HEAD_SHA }}
+          fetch-depth: 1
+          submodules: recursive
+          persist-credentials: false
+
+      - name: Produce and review the FP-0006 native envelope
+        run: |
+          set -euo pipefail
+          [[ "$EXPECTED_HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]
+          test "$(git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"
+          python3 scripts/fp0006_runtime_capture_integration.py check-contract \
+            --repo "$GITHUB_WORKSPACE"
+          stage="$RUNNER_TEMP/fp0006-native-rust-stage"
+          output="$RUNNER_TEMP/fp0006-native-rust-capture"
+          producer="$RUNNER_TEMP/fp0006-native-rust-producer"
+          producer_output="$RUNNER_TEMP/fp0006-native-rust-producer-output.log"
+          producer_log="$RUNNER_TEMP/fp0006-native-rust-producer.log"
+          compiler_output="$RUNNER_TEMP/fp0006-native-rust-compiler.log"
+          tool_report="$RUNNER_TEMP/fp0006-native-rust-tools.txt"
+          base_sha=none
+          base_sha_json=null
+          workflow_candidate_aligned=false
+          if test "$GITHUB_EVENT_NAME" = pull_request; then
+            base_sha="${{ github.event.pull_request.base.sha }}"
+            [[ "$base_sha" =~ ^[0-9a-f]{40}$ ]]
+            base_sha_json="\"$base_sha\""
+          fi
+          if test "$GITHUB_SHA" = "$EXPECTED_HEAD_SHA" && \
+            test "$GITHUB_WORKFLOW_SHA" = "$EXPECTED_HEAD_SHA"
+          then
+            workflow_candidate_aligned=true
+          fi
+          test ! -e "$stage"
+          test ! -e "$output"
+          mkdir -m 700 "$stage"
+          : > "$producer_output"
+          : > "$compiler_output"
+          {
+            /usr/bin/rpm -q --qf '%{NAME}-%{EPOCHNUM}:%{VERSION}-%{RELEASE}.%{ARCH}\n' rust gcc coreutils
+            /usr/bin/sha256sum /usr/bin/rustc /usr/bin/gcc /usr/bin/timeout
+            /usr/bin/rustc -Vv
+            /usr/bin/gcc --version
+            /usr/bin/timeout --version
+          } > "$tool_report"
+          compile_rc=0
+          if /usr/bin/env -i HOME=/nonexistent LANG=C LC_ALL=C PATH=/usr/bin:/bin \
+            /usr/bin/rustc --edition=2021 -D warnings -C linker=/usr/bin/gcc \
+            scripts/tests/fixtures/ihk_ioctl_fp0006_negative_dispatch.rs \
+            -o "$producer" > "$compiler_output" 2>&1
+          then
+            compile_rc=0
+          else
+            compile_rc=$?
+          fi
+          if test "$compile_rc" -ne 0; then
+            cat "$compiler_output" >&2
+            exit "$compile_rc"
+          fi
+          if test -s "$compiler_output"; then
+            cat "$compiler_output" >&2
+            exit 1
+          fi
+          binary_sha256="$(/usr/bin/sha256sum "$producer" | /usr/bin/awk '{ print $1 }')"
+          tool_report_sha256="$(/usr/bin/sha256sum "$tool_report" | /usr/bin/awk '{ print $1 }')"
+          printf '{"base_sha":%s,"binary_sha256":"%s","event":"producer-start","event_name":"%s","github_sha":"%s","head_sha":"%s","linker":"/usr/bin/gcc","normalized_command":["/usr/bin/env","-i","HOME=/nonexistent","LANG=C","LC_ALL=C","PATH=/usr/bin:/bin","/usr/bin/timeout","--signal=TERM","--kill-after=5s","30s","<producer-by-sha256>","<capture-stage>"],"ref":"%s","repository":"%s","run_attempt":%s,"run_id":%s,"surface":"native-rust-source-fixture","timeout_seconds":30,"tool_report_sha256":"%s","workflow_candidate_aligned":%s,"workflow_sha":"%s"}\n' \
+            "$base_sha_json" "$binary_sha256" "$GITHUB_EVENT_NAME" \
+            "$GITHUB_SHA" "$EXPECTED_HEAD_SHA" "$GITHUB_REF" \
+            "$GITHUB_REPOSITORY" "$GITHUB_RUN_ATTEMPT" "$GITHUB_RUN_ID" \
+            "$tool_report_sha256" "$workflow_candidate_aligned" \
+            "$GITHUB_WORKFLOW_SHA" \
+            > "$producer_log"
+          capture_rc=0
+          if /usr/bin/env -i HOME=/nonexistent LANG=C LC_ALL=C PATH=/usr/bin:/bin \
+            /usr/bin/timeout --signal=TERM --kill-after=5s 30s \
+            "$producer" "$stage" > "$producer_output" 2>&1
+          then
+            capture_rc=0
+          else
+            capture_rc=$?
+          fi
+          {
+            printf '{"event":"producer-output","output_bytes":%s,"output_sha256":"%s","surface":"native-rust-source-fixture"}\n' \
+              "$(/usr/bin/wc -c < "$producer_output")" \
+              "$(/usr/bin/sha256sum "$producer_output" | /usr/bin/awk '{ print $1 }')"
+            printf '{"event":"producer-exit","status":%s,"surface":"native-rust-source-fixture"}\n' \
+              "$capture_rc"
+          } >> "$producer_log"
+          test "$capture_rc" = 0
+          test ! -s "$producer_output"
+          python3 scripts/fp0006_runtime_capture_integration.py finalize-lane \
+            --repo "$GITHUB_WORKSPACE" \
+            --capture-dir "$stage" \
+            --producer-output "$producer_output" \
+            --producer-log "$producer_log" \
+            --producer-binary "$producer" \
+            --tool-report "$tool_report" \
+            --compiler-output "$compiler_output" \
+            --output-dir "$output" \
+            --surface native-rust-source-fixture \
+            --head "$EXPECTED_HEAD_SHA" \
+            --github-repository "$GITHUB_REPOSITORY" \
+            --github-run-id "$GITHUB_RUN_ID" \
+            --github-run-attempt "$GITHUB_RUN_ATTEMPT" \
+            --github-event-name "$GITHUB_EVENT_NAME" \
+            --github-ref "$GITHUB_REF" \
+            --github-sha "$GITHUB_SHA" \
+            --github-workflow-sha "$GITHUB_WORKFLOW_SHA" \
+            --github-base-sha "$base_sha"
+
+      - name: Upload FP-0006 native envelope
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: fp0006-native-rust-source-fixture-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/fp0006-native-rust-capture/fp0006-runtime-capture-v1.tar
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
 
   rk006-full-source-build-capture:
     name: Bind RK-006 full-source replay to the exact build (credit forbidden)

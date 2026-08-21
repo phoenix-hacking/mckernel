@@ -1240,6 +1240,14 @@ jobs:
             qemu-img info --output=json "$rocky_image"
           } > "$hosted_boot_dir/host-environment.txt"
 
+      - name: Validate FP-0006 capture authority before disposable QEMU
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha }}"
+          python3 scripts/fp0006_runtime_capture_integration.py \
+            check-contract --repo "$GITHUB_WORKSPACE"
+
       - name: Boot disposable Rocky guest and run mcexec
         shell: bash
         run: |
@@ -1259,12 +1267,53 @@ jobs:
             --log-dir "$HOSTED_BOOT_DIR/qemu" \
             -- \
             --boot-smoke \
+            --fp0006-negative-dispatch-capture \
+            --fp0006-capture-head "${{ github.event.pull_request.head.sha }}" \
+            --fp0006-capture-repository "$GITHUB_REPOSITORY" \
+            --fp0006-capture-run-id "$GITHUB_RUN_ID" \
+            --fp0006-capture-run-attempt "$GITHUB_RUN_ATTEMPT" \
+            --fp0006-capture-event-name "$GITHUB_EVENT_NAME" \
+            --fp0006-capture-ref "$GITHUB_REF" \
+            --fp0006-capture-github-sha "$GITHUB_SHA" \
+            --fp0006-capture-workflow-sha "$GITHUB_WORKFLOW_SHA" \
+            --fp0006-capture-base-sha "${{ github.event.pull_request.base.sha }}" \
             --boot-timeout 120 \
             --smoke-timeout 60 \
             --verbose-smoke \
             --jobs 2 \
             --yes \
             2>&1 | tee "$HOSTED_BOOT_DIR/run.log"
+
+      - name: Finalize and verify FP-0006 legacy envelope on the clean host
+        shell: bash
+        run: |
+          set -euo pipefail
+          observation="$HOSTED_BOOT_DIR/qemu/guest-evidence/fp0006-legacy-observation"
+          output="$HOSTED_BOOT_DIR/qemu/guest-evidence/fp0006-legacy-live-ioctl"
+          python3 scripts/fp0006_runtime_capture_integration.py \
+            finalize-legacy-observation \
+            --repo "$GITHUB_WORKSPACE" \
+            --observation-dir "$observation" \
+            --output-dir "$output" \
+            --expected-head "${{ github.event.pull_request.head.sha }}" \
+            --expected-repository "$GITHUB_REPOSITORY" \
+            --expected-run-id "$GITHUB_RUN_ID" \
+            --expected-run-attempt "$GITHUB_RUN_ATTEMPT" \
+            --expected-event-name "$GITHUB_EVENT_NAME" \
+            --expected-ref "$GITHUB_REF" \
+            --expected-github-sha "$GITHUB_SHA" \
+            --expected-workflow-sha "$GITHUB_WORKFLOW_SHA" \
+            --expected-base-sha "${{ github.event.pull_request.base.sha }}"
+
+      - name: Upload FP-0006 legacy envelope
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: fp0006-legacy-live-ioctl-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/guest-evidence/fp0006-legacy-live-ioctl/fp0006-runtime-capture-v1.tar
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
 
       - name: Verify ephemeral host and backing image
         if: ${{ always() }}
