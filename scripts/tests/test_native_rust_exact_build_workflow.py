@@ -853,6 +853,43 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         self.assertIn("if: ${{ always() }}", self.workflow)
         self.assertIn("if-no-files-found: error", self.workflow)
 
+    def test_fp0006_bootstrap_failure_has_an_unambiguous_upload_record(self):
+        job = self.workflow.split("  fp0006-native-rust-capture:\n", 1)[1].split(
+            "  rk006-full-source-build-capture:\n", 1
+        )[0]
+        self.assertEqual(1, job.count("--allowerasing"))
+        self.assertIn(
+            "dnf -y --allowerasing --setopt=install_weak_deps=False install \\\n"
+            "            coreutils\n",
+            job,
+        )
+        self.assertIn("! /usr/bin/rpm -q coreutils-single", job)
+        self.assertIn(
+            "dnf -y --setopt=install_weak_deps=False install \\\n"
+            "            gcc git-core python3 rust-1.92.0-1.el10",
+            job,
+        )
+        self.assertIn("capture-envelope-required-missing", job)
+        self.assertIn("capture-envelope-created-unreviewed", job)
+        self.assertIn("credit-forbidden", job)
+        self.assertIn(
+            "fp0006-native-rust-source-fixture-", job
+        )
+        self.assertIn(
+            "fp0006-native-rust-first-failure-", job
+        )
+        self.assertIn(
+            "${{ runner.temp }}/fp0006-native-rust-first-failure/workflow-state",
+            job,
+        )
+        self.assertIn("if: ${{ failure() }}", job)
+        successful_upload = job.split(
+            "      - name: Upload FP-0006 native envelope\n", 1
+        )[1].split(
+            "      - name: Upload FP-0006 first-failure diagnostics\n", 1
+        )[0]
+        self.assertNotIn("workflow-state", successful_upload)
+
     def test_built_module_diagnostics_precede_semantic_validation(self):
         validation = self.workflow.index(
             "Validate built metadata and capture immutable diagnostics"

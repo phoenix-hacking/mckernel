@@ -61,7 +61,7 @@ CONTRACT_ID = "mckernel-native-rust-runtime-evidence-v1"
 PROTOCOL = "MCKERNEL_NATIVE_RUST_RUNTIME_V1"
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
-EXPECTED_FP0006_NATIVE_JOB_SHA256 = "b70f6951df4476291b704e14f34e703f27f1d6386808dda700fb8c478c95ecc3"
+EXPECTED_FP0006_NATIVE_JOB_SHA256 = "678497c137d221b73dcd8a49fa57bac269569e4f7410ba9554f8adf59a69d96f"
 BUILD_KERNEL_TARGETS = ["bzImage"]
 BUILD_MODULE_TARGETS = [
     "drivers/misc/mckernel/ihk.ko",
@@ -405,6 +405,7 @@ def _validate_fp0006_native_capture_job(job_text: str) -> None:
         "Check out the exact FP-0006 candidate without credentials",
         "Produce and review the FP-0006 native envelope",
         "Upload FP-0006 native envelope",
+        "Upload FP-0006 first-failure diagnostics",
     ]
     if headers != expected_headers:
         raise EvidenceError("FP-0006 native capture steps are missing, extra, or reordered")
@@ -435,12 +436,20 @@ def _validate_fp0006_native_capture_job(job_text: str) -> None:
     bootstrap = (
         "        run: |\n"
         "          set -euo pipefail\n"
+        "          fp0006_diagnostics=\"$RUNNER_TEMP/fp0006-native-rust-first-failure\"\n"
+        "          mkdir -m 700 \"$fp0006_diagnostics\"\n"
+        "          printf '%s\\n' bootstrap-started capture-envelope-required-missing credit-forbidden \\\n"
+        "            > \"$fp0006_diagnostics/workflow-state\"\n"
         "          test \"$(uname -m)\" = x86_64\n"
         "          . /etc/os-release\n"
         "          test \"$ID\" = rocky\n"
         "          test \"$VERSION_ID\" = 10.2\n"
+        "          dnf -y --allowerasing --setopt=install_weak_deps=False install \\\n"
+        "            coreutils\n"
         "          dnf -y --setopt=install_weak_deps=False install \\\n"
-        "            coreutils gcc git-core python3 rust-1.92.0-1.el10\n"
+        "            gcc git-core python3 rust-1.92.0-1.el10\n"
+        "          ! /usr/bin/rpm -q coreutils-single\n"
+        "          test \"$(/usr/bin/rpm -qf --qf '%{NAME}\\n' /usr/bin/timeout)\" = coreutils\n"
         "          test \"$(command -v rustc)\" = /usr/bin/rustc\n"
         "          test \"$(command -v gcc)\" = /usr/bin/gcc\n"
         "          test \"$(command -v timeout)\" = /usr/bin/timeout\n"
@@ -449,18 +458,18 @@ def _validate_fp0006_native_capture_job(job_text: str) -> None:
         "          test ! -L /usr/bin/timeout\n"
         "          test \"$(/usr/bin/rpm -qf --qf '%{NAME}\\n' /usr/bin/rustc)\" = rust\n"
         "          test \"$(/usr/bin/rpm -qf --qf '%{NAME}\\n' /usr/bin/gcc)\" = gcc\n"
-        "          test \"$(/usr/bin/rpm -qf --qf '%{NAME}\\n' /usr/bin/timeout)\" = coreutils\n"
         "          test \"$(/usr/bin/rpm -q --qf '%{NAME}-%{EPOCHNUM}:%{VERSION}-%{RELEASE}.%{ARCH}\\n' rust)\" = rust-0:1.92.0-1.el10.x86_64\n"
         "          test \"$(/usr/bin/rustc --version)\" = 'rustc 1.92.0 (ded5c06cf 2025-12-08) (Red Hat 1.92.0-1.el10)'\n"
         "          /usr/bin/rustc -Vv\n"
         "          /usr/bin/gcc --version\n"
         "          dnf clean all\n"
+        "          printf '%s\\n' bootstrap-complete capture-envelope-required-missing credit-forbidden \\\n"
+        "            > \"$fp0006_diagnostics/workflow-state\"\n"
         "\n"
     )
     if steps[headers[0]] != bootstrap:
         raise EvidenceError("FP-0006 native bootstrap scope differs")
     upload = (
-        "        if: ${{ always() }}\n"
         "        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2\n"
         "        with:\n"
         "          name: fp0006-native-rust-source-fixture-${{ github.run_id }}-${{ github.run_attempt }}\n"
@@ -468,9 +477,22 @@ def _validate_fp0006_native_capture_job(job_text: str) -> None:
         "          if-no-files-found: error\n"
         "          retention-days: 30\n"
         "          compression-level: 0\n"
+        "\n"
     )
     if steps[headers[3]] != upload:
         raise EvidenceError("FP-0006 native upload scope differs")
+    failure_upload = (
+        "        if: ${{ failure() }}\n"
+        "        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2\n"
+        "        with:\n"
+        "          name: fp0006-native-rust-first-failure-${{ github.run_id }}-${{ github.run_attempt }}\n"
+        "          path: ${{ runner.temp }}/fp0006-native-rust-first-failure/workflow-state\n"
+        "          if-no-files-found: error\n"
+        "          retention-days: 30\n"
+        "          compression-level: 0\n"
+    )
+    if steps[headers[4]] != failure_upload:
+        raise EvidenceError("FP-0006 native first-failure upload scope differs")
     if "actions/download-artifact@" in job_text:
         raise EvidenceError("FP-0006 native capture attempts an artifact download")
     active = "\n".join(
@@ -478,12 +500,15 @@ def _validate_fp0006_native_capture_job(job_text: str) -> None:
         if not line.lstrip().startswith("#")
     )
     required = [
+        'dnf -y --allowerasing --setopt=install_weak_deps=False install \\',
+        '            coreutils',
         'dnf -y --setopt=install_weak_deps=False install \\',
-        'coreutils gcc git-core python3 rust-1.92.0-1.el10',
+        'gcc git-core python3 rust-1.92.0-1.el10',
+        '! /usr/bin/rpm -q coreutils-single',
+        'test "$(/usr/bin/rpm -qf --qf \'%{NAME}\\n\' /usr/bin/timeout)" = coreutils',
         'test "$(command -v rustc)" = /usr/bin/rustc',
         'test "$(command -v gcc)" = /usr/bin/gcc',
         'test "$(command -v timeout)" = /usr/bin/timeout',
-        'test "$(/usr/bin/rpm -qf --qf \'%{NAME}\\n\' /usr/bin/timeout)" = coreutils',
         'test "$(/usr/bin/rpm -q --qf \'%{NAME}-%{EPOCHNUM}:%{VERSION}-%{RELEASE}.%{ARCH}\\n\' rust)" = rust-0:1.92.0-1.el10.x86_64',
         "test \"$(/usr/bin/rustc --version)\" = 'rustc 1.92.0 (ded5c06cf 2025-12-08) (Red Hat 1.92.0-1.el10)'",
         'test "$(git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"',
@@ -562,7 +587,7 @@ def _validate_fp0006_native_capture_job(job_text: str) -> None:
     ):
         raise EvidenceError("FP-0006 native timeout/finalizer reachability differs")
     uses = re.findall(r"(?m)^\s*uses:\s*(\S+)", job_text)
-    if len(uses) != 2 or any(
+    if len(uses) != 3 or any(
         re.fullmatch(r"[^@]+@[0-9a-f]{40}", value) is None for value in uses
     ):
         raise EvidenceError("FP-0006 native actions are not exactly digest pinned")
@@ -1416,6 +1441,7 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
     required_workflow = (
         "uses: ./.github/workflows/native-rust-host-modules-exact-build.yml",
         "actions/download-artifact@",
+        "dnf -y --allowerasing --setopt=install_weak_deps=False install",
         "-machine q35",
         "-accel tcg",
         "-cpu max",
@@ -1429,6 +1455,19 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
     for fragment in required_workflow:
         if fragment not in runtime_workflow:
             raise EvidenceError("runtime workflow lacks required boundary: {0}".format(fragment))
+    if runtime_workflow.count("--allowerasing") != 1:
+        raise EvidenceError("runtime workflow coreutils replacement scope differs")
+    coreutils_replacement = (
+        "          dnf -y --allowerasing --setopt=install_weak_deps=False install \\\n"
+        "            coreutils\n"
+        "          dnf -y --setopt=install_weak_deps=False install \\\n"
+        "            bash binutils cpio findutils gawk gzip kmod \\\n"
+        "            qemu-kvm-core python3 sed util-linux which\n"
+        "          ! /usr/bin/rpm -q coreutils-single\n"
+        "          test \"$(/usr/bin/rpm -qf --qf '%{NAME}\\n' /usr/bin/timeout)\" = coreutils\n"
+    )
+    if runtime_workflow.count(coreutils_replacement) != 1:
+        raise EvidenceError("runtime workflow coreutils replacement transaction differs")
     if "permissions:" not in runtime_workflow:
         raise EvidenceError("runtime capture workflow lacks an explicit permission boundary")
     trigger_block = runtime_workflow[: runtime_workflow.index("permissions:")]

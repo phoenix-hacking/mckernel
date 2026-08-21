@@ -117,6 +117,7 @@ LOCKED_PROBES = {
         "path": "/usr/bin/clang",
         "sha256": "48271e3fbb759560a54e6f0a13e05a4a0b768eea2ffd6aa2f1e14b8cbb76fb7f",
         "stdout_sha256": "082de0cf4ec79ce11472d754e6f9508fdc811c2d5c585e90fedcb0ef985b037a",
+        "symlink_target": "clang-21",
     },
     "lld": {
         "command": ["ld.lld", "--version"],
@@ -327,6 +328,223 @@ def _read_explicit_file(path, label, allow_hardlink=False):
     if candidate.name in ("", ".", ".."):
         raise CaptureError("{} path is unsafe".format(label))
     return _read_rooted(candidate.parent, candidate.name, label, allow_hardlink)
+
+
+def _metadata_identity(metadata):
+    return (
+        metadata.st_dev,
+        metadata.st_ino,
+        metadata.st_mode,
+        metadata.st_nlink,
+        metadata.st_size,
+        getattr(metadata, "st_mtime_ns", int(metadata.st_mtime * 1000000000)),
+        getattr(metadata, "st_ctime_ns", int(metadata.st_ctime * 1000000000)),
+    )
+
+
+def _close_locked_probe(session):
+    for key in ("target_fd", "parent_fd"):
+        descriptor = session.get(key)
+        session[key] = None
+        if descriptor is not None:
+            try:
+                os.close(descriptor)
+            except OSError:
+                pass
+
+
+def _open_locked_probe(path, expected, label):
+    if not hasattr(os, "O_DIRECTORY") or not hasattr(os, "O_NOFOLLOW"):
+        raise CaptureError("no-follow locked-tool capture is unavailable")
+    candidate = Path(os.path.abspath(os.fspath(path)))
+    if candidate.name in ("", ".", ".."):
+        raise CaptureError("{} path is unsafe".format(label))
+    expected_target = expected.get("symlink_target")
+    if expected_target is not None and (
+        type(expected_target) is not str
+        or not expected_target
+        or expected_target in (".", "..")
+        or "/" in expected_target
+        or "\\" in expected_target
+        or "\x00" in expected_target
+    ):
+        raise CaptureError("{} expected symlink target is unsafe".format(label))
+    parent = _safe_directory(candidate.parent, label + " parent")
+    session = {"parent_fd": None, "target_fd": None}
+    parent_flags = os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW
+    target_flags = os.O_RDONLY | os.O_NOFOLLOW
+    if hasattr(os, "O_CLOEXEC"):
+        parent_flags |= os.O_CLOEXEC
+        target_flags |= os.O_CLOEXEC
+    if hasattr(os, "O_BINARY"):
+        target_flags |= os.O_BINARY
+    try:
+        parent_named = parent.lstat()
+        session["parent_fd"] = os.open(str(parent), parent_flags)
+        parent_open = os.fstat(session["parent_fd"])
+        if (
+            not stat.S_ISDIR(parent_open.st_mode)
+            or _metadata_identity(parent_open) != _metadata_identity(parent_named)
+        ):
+            raise CaptureError("{} parent identity differs".format(label))
+        alias_before = os.stat(
+            candidate.name, dir_fd=session["parent_fd"], follow_symlinks=False
+        )
+        link_target = None
+        target_name = candidate.name
+        if expected_target is None:
+            if not stat.S_ISREG(alias_before.st_mode):
+                raise CaptureError("{} logical path is not a regular file".format(label))
+        else:
+            if not stat.S_ISLNK(alias_before.st_mode):
+                raise CaptureError("{} logical path is not a symlink".format(label))
+            link_target = os.readlink(candidate.name, dir_fd=session["parent_fd"])
+            alias_after = os.stat(
+                candidate.name, dir_fd=session["parent_fd"], follow_symlinks=False
+            )
+            if (
+                link_target != expected_target
+                or _metadata_identity(alias_before) != _metadata_identity(alias_after)
+                or len(os.fsencode(link_target)) != alias_before.st_size
+            ):
+                raise CaptureError("{} symlink target differs or changed".format(label))
+            target_name = expected_target
+        session["target_fd"] = os.open(
+            target_name, target_flags, dir_fd=session["parent_fd"]
+        )
+        target_before = os.fstat(session["target_fd"])
+        target_named = os.stat(
+            target_name, dir_fd=session["parent_fd"], follow_symlinks=False
+        )
+        if (
+            not stat.S_ISREG(target_before.st_mode)
+            or _metadata_identity(target_named) != _metadata_identity(target_before)
+        ):
+            raise CaptureError("{} target identity differs".format(label))
+        chunks = []
+        while True:
+            chunk = os.read(session["target_fd"], 1024 * 1024)
+            if not chunk:
+                break
+            chunks.append(chunk)
+        target_after = os.fstat(session["target_fd"])
+        if _metadata_identity(target_after) != _metadata_identity(target_before):
+            raise CaptureError("{} target changed while it was read".format(label))
+        data = b"".join(chunks)
+        if len(data) != target_before.st_size:
+            raise CaptureError("{} target size changed while it was read".format(label))
+        session.update(
+            {
+                "alias_identity": _metadata_identity(alias_before),
+                "command_name": expected["command"][0],
+                "data": data,
+                "label": label,
+                "link_target": link_target,
+                "logical_path": str(candidate),
+                "parent_identity": _metadata_identity(parent_open),
+                "parent_path": str(parent),
+                "target_identity": _metadata_identity(target_before),
+                "target_name": target_name,
+            }
+        )
+        _recheck_locked_probe(session)
+        return session
+    except CaptureError:
+        _close_locked_probe(session)
+        raise
+    except (KeyError, OSError) as exc:
+        _close_locked_probe(session)
+        raise CaptureError("cannot open {}: {}".format(label, exc))
+
+
+def _recheck_locked_probe(session):
+    label = session["label"]
+    try:
+        parent_open = os.fstat(session["parent_fd"])
+        parent_named = _safe_directory(
+            session["parent_path"], label + " parent recheck"
+        ).lstat()
+        alias = os.stat(
+            Path(session["logical_path"]).name,
+            dir_fd=session["parent_fd"],
+            follow_symlinks=False,
+        )
+        if session["link_target"] is not None:
+            link_target = os.readlink(
+                Path(session["logical_path"]).name, dir_fd=session["parent_fd"]
+            )
+        else:
+            link_target = None
+        target_open = os.fstat(session["target_fd"])
+        target_named = os.stat(
+            session["target_name"],
+            dir_fd=session["parent_fd"],
+            follow_symlinks=False,
+        )
+    except (KeyError, OSError) as exc:
+        raise CaptureError("cannot recheck {}: {}".format(label, exc))
+    if (
+        _metadata_identity(parent_open) != session["parent_identity"]
+        or _metadata_identity(parent_named) != session["parent_identity"]
+        or _metadata_identity(alias) != session["alias_identity"]
+        or link_target != session["link_target"]
+        or _metadata_identity(target_open) != session["target_identity"]
+        or _metadata_identity(target_named) != session["target_identity"]
+    ):
+        raise CaptureError("{} path identity changed".format(label))
+    resolved = shutil.which(session["command_name"], path=CAPTURE_ENV["PATH"])
+    if resolved != session["logical_path"]:
+        raise CaptureError("{} PATH resolution changed".format(label))
+
+
+def _run_locked_probe(session, arguments):
+    if (
+        not arguments
+        or not all(type(item) is str and item for item in arguments)
+        or arguments[0] != session["command_name"]
+    ):
+        raise CaptureError("locked-tool command arguments are invalid")
+    executable = "/proc/self/fd/{}".format(session["target_fd"])
+    if not os.path.isdir("/proc/self/fd"):
+        raise CaptureError("descriptor-bound execution is unavailable")
+    try:
+        os.lseek(session["target_fd"], 0, os.SEEK_SET)
+        completed = subprocess.run(
+            list(arguments),
+            executable=executable,
+            pass_fds=(session["target_fd"],),
+            env=dict(CAPTURE_ENV),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            timeout=1800,
+        )
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        raise CaptureError("locked-tool command failed to execute: {}".format(exc))
+    if completed.returncode:
+        raise CaptureError(
+            "locked-tool command failed ({}): {}".format(
+                completed.returncode,
+                completed.stderr.decode("utf-8", errors="replace")[-2000:],
+            )
+        )
+    return completed
+
+
+def _capture_locked_probe(path, expected, label):
+    session = _open_locked_probe(path, expected, label)
+    try:
+        owner, owner_command = _rpm_owner(path)
+        _recheck_locked_probe(session)
+        completed = _run_locked_probe(session, expected["command"])
+        _recheck_locked_probe(session)
+        return {
+            "binary_data": session["data"],
+            "completed": completed,
+            "owner": owner,
+            "owner_command": owner_command,
+        }
+    finally:
+        _close_locked_probe(session)
 
 
 def _write_atomic(directory, name, data, mode=CAPTURE_MEMBER_MODE):
@@ -1064,9 +1282,11 @@ def _probe_tools():
         binary = shutil.which(expected["command"][0], path=CAPTURE_ENV["PATH"])
         if binary != expected["path"]:
             raise CaptureError("{} binary path differs".format(probe_id))
-        binary_data, _ = _read_explicit_file(binary, probe_id + " binary", allow_hardlink=True)
-        owner, owner_command = _rpm_owner(binary)
-        completed = _run(expected["command"])
+        capture = _capture_locked_probe(binary, expected, probe_id + " binary")
+        binary_data = capture["binary_data"]
+        owner = capture["owner"]
+        owner_command = capture["owner_command"]
+        completed = capture["completed"]
         result = {
             "binary_path": binary,
             "binary_sha256": _sha256(binary_data),

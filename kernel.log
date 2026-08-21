@@ -32167,3 +32167,73 @@ CWD: `/workspace/scratch/2e96a206d732/mckernel`. Environment/command exactly:
 PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -f -s scripts/tests -v
 ```
 It ran 1,144 tests in 258.288s and exited 1 with one failure and 36 skips; every preceding case passed. `LicenseReviewCampaignTests.test_candidate_worktree_mutations_fail_clean_replay_without_changing_private_bytes` failed at line 874 because `candidate_is_clean(candidate, expected_head)` correctly returned false for the uncommitted prospective authority repairs. This is the previously documented clean-replay guard, not a campaign product bypass. Narrow next action: review and commit only the already focused-green changes, rerun this exact campaign test in the clean committed worktree, and restart fail-fast discovery; do not weaken the guard.
+
+2026-08-20: exact-head GitHub lifecycle wrapper stopped in two post-build evidence jobs before the QEMU lifecycle could start.
+Run `32452487703`, head `9134d03ebcbe5099c69d4ee1e4da49e2e335af7e`; the reusable exact-build dependency succeeded, but jobs `96687188888` and `96687188889` failed and the downstream lifecycle job was consequently skipped. In the FP-0006 job, the exact bootstrap command was:
+```bash
+dnf -y --setopt=install_weak_deps=False install \
+  coreutils gcc git-core python3 rust-1.92.0-1.el10
+```
+It exited 1 because the digest-pinned Rocky 10.2 image contains `coreutils-single-9.5-7.el10.x86_64`, while current BaseOS offered `coreutils-9.5-8.el10_2.x86_64`; DNF refused the declared package conflict without `--allowerasing`. Checkout and producer capture never ran. The always-upload step then also failed because the sole exact tar path had never been created. In the RK-006 job, the 52 focused contract tests and locked-SRPM acquisition passed, then the capture command exited 1 with exact product stderr:
+```text
+RK-006 full-source/build capture: FAIL: cannot read clang binary: [Errno 40] Too many levels of symbolic links: 'clang'
+```
+`shutil.which` had correctly selected the frozen `/usr/bin/clang`, but `_read_explicit_file` applied `O_NOFOLLOW` directly to that normal RPM-owned packaged symlink. The diagnostic artifact uploaded successfully; QEMU, guest, host-module load, host mutation, and reboot actions did not run. Narrow repair: allow DNF's explicit audited replacement of `coreutils-single` with the requested `coreutils` while retaining captured owner/digest evidence; make locked tool-byte reads resolve a stable symlink target while preserving exact command path, RPM owner, target-byte digest, and race checks; and ensure FP-0006 bootstrap failures have an uploadable first-failure record without treating it as a completed envelope. Refresh only directly affected one-way contracts and rerun focused validators before another exact-head publication.
+
+2026-08-20: first focused static replay of the lifecycle portability repair stopped at the expected FP-0006 contract self-identity boundary.
+CWD: `/workspace/scratch/2e96a206d732/mckernel`. Environment/commands exactly:
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m py_compile scripts/native_rust_runtime_evidence.py scripts/fp0006_runtime_capture_integration.py scripts/tests/test_native_rust_exact_runtime_workflow.py scripts/tests/test_native_rust_exact_build_workflow.py scripts/tests/test_fp0006_runtime_capture_integration.py
+PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
+from pathlib import Path
+from scripts import native_rust_runtime_evidence as runtime
+from scripts import fp0006_runtime_capture_integration as fp
+root=Path('.')
+workflow=(root/'.github/workflows/native-rust-host-modules-exact-build.yml').read_text()
+runtime._validate_exact_build_workflow(workflow)
+contract,_=fp.validate_contract(root)
+print(contract['contract_id'])
+print('static-native-workflow-validation=ok')
+PY
+```
+Syntax compilation and the independent exact-build workflow validator passed. The second validator exited 1 at `_load_contract` with exact diagnostic `FP-0006 capture integration contract identity differs`, because the intentional native workflow/validator binding refresh changed the contract bytes before its checker-side size/digest constant was refreshed. No later related validator or test ran before this entry. Narrow repair: recompute only the changed contract's exact size/SHA-256 constant, rerun this same static boundary, and then allow any downstream acceptance seal to fail closed in sequence; preserve all literal false claims, required-missing authority, IN_PROGRESS status, and zero points.
+
+2026-08-20: corrected-identity static replay reached a root harness unpacking error after both product validators returned successfully.
+CWD and command-scoped environment were unchanged; the exact inline Python still assigned `contract,_=fp.validate_contract(root)`. Exit 1 diagnostic was `ValueError: too many values to unpack (expected 2)`. `runtime._validate_exact_build_workflow(workflow)` had already returned successfully, and `fp.validate_contract(root)` returned its normal single contract mapping; Python then attempted to unpack that mapping's many keys. This is a caller-shape mistake, not a validator failure. No later related command preceded this entry. Narrow correction: assign the single return value directly and rerun the same two read-only validators without changing product or authority bytes.
+
+2026-08-20: downstream FP-0006 acceptance replay stopped at the first stale hostile-test contract oracle after 31 cases passed.
+CWD: `/workspace/scratch/2e96a206d732/mckernel`. Environment/command exactly:
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -f -v scripts.tests.test_fp0006_executable_acceptance_closure
+```
+Exit 1 after 32 tests in 1.590s. The first 31 cases passed, including CLI noncrediting, closure-cell/code/global replacement attacks, external identity checks, and false-claim/required-missing promotion attacks. `test_self_oracle_global_rebinding_does_not_change_anchor` still expected the prior acceptance contract digest `ca013b85...b05d7712da0`; the freshly sealed exact contract/checker correctly reported `6b678fd7...d9d0fbffb5`. This is a one-way test-oracle refresh, not a claim or validator failure. No later acceptance action preceded this entry. Narrow repair: update only that hostile test's exact expected digest to the already computed contract bytes, then rerun the suite from the start; preserve the normalized self-seal, false claims, IN_PROGRESS/0, and required-missing authority.
+
+2026-08-20: independent review of the initially green lifecycle portability patch found two evidence-boundary defects before commit or publication.
+First, adding `workflow-state` beside the successful FP-0006 tar in one Actions upload would produce a two-member transport ZIP, while the reviewer intentionally accepts only the canonical envelope member. The corrected design must keep the successful artifact byte scope unchanged and upload the explicit required-missing/credit-forbidden state as a separately named artifact only after failure. Second, the initial RK-006 clang helper closed its descriptors before RPM lookup and basename execution, leaving a post-read PATH/symlink retarget window in which recorded bytes could differ from executed bytes. Its tests mutated only inside the helper and did not exercise that decisive window. No workflow or capture using these prospective bytes ran. Narrow repair: bind execution to the already-opened exact regular-file descriptor, hold the parent directory and target descriptors across owner lookup and execution, recheck alias/target identities afterward, and add PATH/post-read retarget tests. Do not weaken exact target, owner, digest, command-stream, false-claim, or credit boundaries.
+
+2026-08-20: first static replay of the split success/failure FP-0006 upload design stopped at the exact successful-upload step byte boundary.
+CWD: `/workspace/scratch/2e96a206d732/mckernel`. Environment/command was the corrected single-return inline validator under `PYTHONDONTWRITEBYTECODE=1`. Exit 1 occurred in `native_rust_runtime_evidence._validate_fp0006_native_capture_job` with exact diagnostic `FP-0006 native upload scope differs`; no FP integration validation ran afterward. The workflow now has a successful canonical-envelope upload followed by a distinct failure-only diagnostic step, so the formerly terminal successful-upload body acquired one separator newline that the exact validator string did not yet include. No action semantics, claim, workflow execution, or external state changed. Narrow repair: reconcile only the exact step-body newline in both independent validators, then rerun the same static check before focused suites.
+
+2026-08-20: the next exact-build static replay stopped at a duplicated coreutils-owner command after scoping `--allowerasing` to its own transaction.
+CWD and `PYTHONDONTWRITEBYTECODE=1` were unchanged; command invoked only `native_rust_runtime_evidence._validate_exact_build_workflow` on the current YAML. Exit 1 diagnostic was `FP-0006 native capture command boundary differs`. The new immediate post-replacement assertion and the older later tool-path assertion both contained the identical `/usr/bin/timeout` RPM-owner command, while the validator intentionally requires one active occurrence. No workflow executed. Narrow repair: retain the immediate owner postcondition directly after the bounded coreutils transaction, remove only the redundant later owner line from workflow and both exact validators, then rerun static validation; keep the later command-path and non-symlink checks.
+
+2026-08-20 correction: after removing the duplicate owner line, the same static command still exited 1 at the same boundary. A read-only fragment-count diagnostic showed the bare substring oracle `coreutils` matched four active lines (package, absence check, owner check, and RPM report), so the prior classification was incomplete and the validator had actually stopped at that earlier fragment. Independent review also identified that the owner/absence postcondition belongs after the following non-erasing package transaction to bind final state. No workflow ran. Narrow correction: move the single absence/owner postcondition after the normal package transaction and make the static package oracle the exact indented `coreutils` package line rather than a broad substring.
+
+2026-08-20: the first fail-fast RK-006 suite during descriptor-bound rework stopped after 17 passes because three earlier symlink tests still selected the removed `_read_locked_probe_binary` helper.
+Exact command: `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -f -v scripts.tests.test_rocky_kernel_rk006_full_source_build_capture`. The first error was `AttributeError` at the old helper selector in `test_locked_probe_symlink_rejects_alias_and_target_replacement_races`; the replacement retained-descriptor implementation had landed before its adversarial callers were rewritten. No capture or workflow ran. The tests were subsequently redirected to the new held parent/target transaction and expanded to cover post-return replacement, PATH hijack, parent substitution, and the RPM-to-exec window; the corrected suite ran 27/27 green.
+
+2026-08-20: final static replay of the reordered coreutils replacement stopped at the FP-0006 command-order oracle.
+CWD: `/workspace/scratch/2e96a206d732/mckernel`. Environment/command exactly:
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
+from pathlib import Path
+import scripts.native_rust_runtime_evidence as m
+p=Path('.github/workflows/native-rust-host-modules-exact-build.yml')
+m._validate_exact_build_workflow(p.read_text())
+print('exact-build workflow validator: PASS')
+PY
+```
+Exit 1 diagnostic: `scripts.native_rust_runtime_evidence.EvidenceError: FP-0006 native capture commands are reordered`. No workflow, capture, runtime, guest, host-module, or reboot action ran. Narrow repair: compare the exact unique fragment positions with the already byte-equal bootstrap block, correct only the ordering oracle to match the audited post-transaction final-state assertions, then rerun this same validator before refreshing downstream seals; preserve all fail-closed and zero-credit claims.
+
+2026-08-20: the read-only one-way seal audit harness stopped after validating the native job, runtime contract, and bound-file identities because it addressed the acceptance contract with the wrong key path.
+CWD: `/workspace/scratch/2e96a206d732/mckernel`. Environment/command began `PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'` and loaded the exact workflow job, both bound runtime files, the runtime integration contract, and the acceptance contract before evaluating `acceptance['inputs']['runtime_capture_reference']`. Exit 1 diagnostic: `KeyError: 'inputs'`. This is an audit-harness shape error; no product validator, workflow, capture, runtime, guest, host-module, or reboot action failed or ran. Narrow correction: select the committed acceptance contract's actual top-level reference container, rerun the same read-only identity assertions, and make no repository change for this caller mistake.

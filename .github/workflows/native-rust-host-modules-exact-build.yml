@@ -638,12 +638,20 @@ jobs:
       - name: Install pinned Rust and identify the observed FP-0006 linker
         run: |
           set -euo pipefail
+          fp0006_diagnostics="$RUNNER_TEMP/fp0006-native-rust-first-failure"
+          mkdir -m 700 "$fp0006_diagnostics"
+          printf '%s\n' bootstrap-started capture-envelope-required-missing credit-forbidden \
+            > "$fp0006_diagnostics/workflow-state"
           test "$(uname -m)" = x86_64
           . /etc/os-release
           test "$ID" = rocky
           test "$VERSION_ID" = 10.2
+          dnf -y --allowerasing --setopt=install_weak_deps=False install \
+            coreutils
           dnf -y --setopt=install_weak_deps=False install \
-            coreutils gcc git-core python3 rust-1.92.0-1.el10
+            gcc git-core python3 rust-1.92.0-1.el10
+          ! /usr/bin/rpm -q coreutils-single
+          test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' /usr/bin/timeout)" = coreutils
           test "$(command -v rustc)" = /usr/bin/rustc
           test "$(command -v gcc)" = /usr/bin/gcc
           test "$(command -v timeout)" = /usr/bin/timeout
@@ -652,12 +660,13 @@ jobs:
           test ! -L /usr/bin/timeout
           test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' /usr/bin/rustc)" = rust
           test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' /usr/bin/gcc)" = gcc
-          test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' /usr/bin/timeout)" = coreutils
           test "$(/usr/bin/rpm -q --qf '%{NAME}-%{EPOCHNUM}:%{VERSION}-%{RELEASE}.%{ARCH}\n' rust)" = rust-0:1.92.0-1.el10.x86_64
           test "$(/usr/bin/rustc --version)" = 'rustc 1.92.0 (ded5c06cf 2025-12-08) (Red Hat 1.92.0-1.el10)'
           /usr/bin/rustc -Vv
           /usr/bin/gcc --version
           dnf clean all
+          printf '%s\n' bootstrap-complete capture-envelope-required-missing credit-forbidden \
+            > "$fp0006_diagnostics/workflow-state"
 
       - name: Check out the exact FP-0006 candidate without credentials
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
@@ -770,13 +779,24 @@ jobs:
             --github-sha "$GITHUB_SHA" \
             --github-workflow-sha "$GITHUB_WORKFLOW_SHA" \
             --github-base-sha "$base_sha"
+          printf '%s\n' bootstrap-complete capture-envelope-created-unreviewed credit-forbidden \
+            > "$RUNNER_TEMP/fp0006-native-rust-first-failure/workflow-state"
 
       - name: Upload FP-0006 native envelope
-        if: ${{ always() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: fp0006-native-rust-source-fixture-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/fp0006-native-rust-capture/fp0006-runtime-capture-v1.tar
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
+
+      - name: Upload FP-0006 first-failure diagnostics
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: fp0006-native-rust-first-failure-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/fp0006-native-rust-first-failure/workflow-state
           if-no-files-found: error
           retention-days: 30
           compression-level: 0

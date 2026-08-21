@@ -313,6 +313,221 @@ class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
             with self.assertRaisesRegex(capture.CaptureError, "hard-linked"):
                 capture._read_rooted(root, "hardlink", "hardlink")
 
+    def test_locked_probe_symlink_preserves_logical_owner_and_target_digest(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            target = root / "clang-21"
+            target_bytes = b"#!/bin/sh\nprintf 'clang version 21.1.8\\n'\n"
+            target.write_bytes(target_bytes)
+            target.chmod(0o755)
+            logical = root / "clang"
+            logical.symlink_to(target.name)
+            version = b"clang version 21.1.8\n"
+            owner = "clang-0:21.1.8-1.el10.x86_64"
+            identity = {
+                "command": ["clang", "--version"],
+                "owner": owner,
+                "path": str(logical),
+                "sha256": hashlib.sha256(target_bytes).hexdigest(),
+                "stdout_sha256": hashlib.sha256(version).hexdigest(),
+                "symlink_target": target.name,
+            }
+            core = root / "lib/rustlib/src/rust/library/core/src/lib.rs"
+            core.parent.mkdir(parents=True)
+            core_bytes = b"#![no_std]\n"
+            core.write_bytes(core_bytes)
+            core_owner = "rust-src-0:1.92.0-1.el10.noarch"
+            core_stdout = (str(root) + "\n").encode("utf-8")
+
+            def run(command, cwd=None, env=None, allow_failure=False):
+                del cwd, env, allow_failure
+                if command == ["rustc", "--print", "sysroot"]:
+                    return subprocess.CompletedProcess(command, 0, core_stdout, b"")
+                raise AssertionError("unexpected command: {!r}".format(command))
+
+            def rpm_owner(path):
+                path = str(path)
+                package = owner if path == str(logical) else core_owner
+                command = [
+                    "rpm",
+                    "-qf",
+                    "--qf",
+                    "%{NAME}-%{EPOCHNUM}:%{VERSION}-%{RELEASE}.%{ARCH}\\n",
+                    path,
+                ]
+                return package, command
+
+            rust_src = {
+                "owner": core_owner,
+                "path": str(core),
+                "sha256": hashlib.sha256(core_bytes).hexdigest(),
+                "stdout_sha256": hashlib.sha256(core_stdout).hexdigest(),
+            }
+            with mock.patch.object(capture, "LOCKED_PROBES", {"clang": identity}), \
+                    mock.patch.object(capture, "CAPTURE_TOOL_PROBES", {}), \
+                    mock.patch.object(capture, "RUST_SRC_CORE", rust_src), \
+                    mock.patch.object(capture.shutil, "which", return_value=str(logical)), \
+                    mock.patch.object(capture, "_rpm_owner", side_effect=rpm_owner), \
+                    mock.patch.object(capture, "_run", side_effect=run):
+                document = capture._probe_tools()
+
+            probe = document["probes"]["clang"]
+            self.assertEqual(str(logical), probe["binary_path"])
+            self.assertEqual(owner, probe["package_nevra"])
+            self.assertEqual(
+                [
+                    "rpm",
+                    "-qf",
+                    "--qf",
+                    "%{NAME}-%{EPOCHNUM}:%{VERSION}-%{RELEASE}.%{ARCH}\\n",
+                    str(logical),
+                ],
+                probe["owner_command"],
+            )
+            self.assertEqual(hashlib.sha256(target_bytes).hexdigest(), probe["binary_sha256"])
+
+    def test_locked_probe_symlink_rejects_loop_and_static_retarget(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            logical = root / "clang"
+            target = root / "clang-21"
+            target.symlink_to(target.name)
+            logical.symlink_to(target.name)
+            expected = {
+                "command": ["clang", "--version"],
+                "symlink_target": target.name,
+            }
+            with self.assertRaisesRegex(capture.CaptureError, "cannot open"):
+                capture._open_locked_probe(logical, expected, "clang binary")
+
+            logical.unlink()
+            target.unlink()
+            target.write_bytes(b"exact target\n")
+            logical.symlink_to("clang-22")
+            with self.assertRaisesRegex(capture.CaptureError, "symlink target differs"):
+                capture._open_locked_probe(logical, expected, "clang binary")
+
+    def test_locked_probe_rejects_post_return_and_path_hijack(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            trusted = root / "trusted"
+            hostile = root / "hostile"
+            trusted.mkdir()
+            hostile.mkdir()
+            logical = trusted / "probe"
+            trusted_bytes = b"#!/bin/sh\nprintf 'trusted\\n'\n"
+            hostile_bytes = b"#!/bin/sh\nprintf 'hostile\\n'\n"
+            logical.write_bytes(trusted_bytes)
+            logical.chmod(0o755)
+            hijack = hostile / logical.name
+            hijack.write_bytes(hostile_bytes)
+            hijack.chmod(0o755)
+            expected = {"command": [logical.name, "--version"]}
+            owner_command = ["rpm", "-qf", str(logical)]
+            rpm_owner = mock.Mock(return_value=("probe-0:1-1.x86_64", owner_command))
+            run_locked = capture._run_locked_probe
+            observed = []
+
+            replacement = root / "replacement"
+            replacement.write_bytes(trusted_bytes)
+            replacement.chmod(0o755)
+
+            def replace_after_return(session, command):
+                completed = run_locked(session, command)
+                observed.append(completed.stdout)
+                os.replace(str(replacement), str(logical))
+                return completed
+
+            with mock.patch.dict(capture.CAPTURE_ENV, {"PATH": str(trusted)}), \
+                    mock.patch.object(capture, "_rpm_owner", rpm_owner), \
+                    mock.patch.object(
+                        capture, "_run_locked_probe", side_effect=replace_after_return
+                    ):
+                with self.assertRaisesRegex(capture.CaptureError, "path identity changed"):
+                    capture._capture_locked_probe(logical, expected, "regular probe")
+            self.assertEqual([b"trusted\n"], observed)
+
+            logical.write_bytes(trusted_bytes)
+            logical.chmod(0o755)
+            observed[:] = []
+
+            def insert_path_hijack(session, command):
+                capture.CAPTURE_ENV["PATH"] = (
+                    str(hostile) + os.pathsep + str(trusted)
+                )
+                completed = run_locked(session, command)
+                observed.append(completed.stdout)
+                return completed
+
+            with mock.patch.dict(capture.CAPTURE_ENV, {"PATH": str(trusted)}), \
+                    mock.patch.object(capture, "_rpm_owner", rpm_owner), \
+                    mock.patch.object(
+                        capture, "_run_locked_probe", side_effect=insert_path_hijack
+                    ):
+                with self.assertRaisesRegex(capture.CaptureError, "PATH resolution changed"):
+                    capture._capture_locked_probe(logical, expected, "regular probe")
+            self.assertEqual([b"trusted\n"], observed)
+
+    def test_locked_probe_rejects_parent_substitution_during_rpm_lookup(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            parent = root / "bin"
+            parent.mkdir()
+            logical = parent / "probe"
+            logical.write_bytes(b"#!/bin/sh\nexit 0\n")
+            logical.chmod(0o755)
+            expected = {"command": [logical.name, "--version"]}
+            moved = root / "bin-held"
+
+            def substitute_parent(path):
+                self.assertEqual(str(logical), str(path))
+                parent.rename(moved)
+                parent.mkdir()
+                replacement = parent / logical.name
+                replacement.write_bytes(b"#!/bin/sh\nexit 99\n")
+                replacement.chmod(0o755)
+                return "probe-0:1-1.x86_64", ["rpm", "-qf", str(path)]
+
+            with mock.patch.dict(capture.CAPTURE_ENV, {"PATH": str(parent)}), \
+                    mock.patch.object(
+                        capture, "_rpm_owner", side_effect=substitute_parent
+                    ), mock.patch.object(capture, "_run_locked_probe") as execute:
+                with self.assertRaisesRegex(capture.CaptureError, "path identity changed"):
+                    capture._capture_locked_probe(logical, expected, "regular probe")
+            execute.assert_not_called()
+
+    def test_locked_probe_rejects_retarget_in_rpm_exec_window(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            target = root / "clang-21"
+            replacement = root / "clang-22"
+            target.write_bytes(b"#!/bin/sh\nexit 0\n")
+            replacement.write_bytes(target.read_bytes())
+            target.chmod(0o755)
+            replacement.chmod(0o755)
+            logical = root / "clang"
+            logical.symlink_to(target.name)
+            expected = {
+                "command": [logical.name, "--version"],
+                "symlink_target": target.name,
+            }
+
+            def retarget_after_rpm(path):
+                self.assertEqual(str(logical), str(path))
+                logical.unlink()
+                logical.symlink_to(replacement.name)
+                return "clang-0:21.1.8-1.el10.x86_64", [
+                    "rpm", "-qf", str(path)
+                ]
+
+            with mock.patch.dict(capture.CAPTURE_ENV, {"PATH": str(root)}), \
+                    mock.patch.object(
+                        capture, "_rpm_owner", side_effect=retarget_after_rpm
+                    ), mock.patch.object(capture, "_run_locked_probe") as execute:
+                with self.assertRaisesRegex(capture.CaptureError, "path identity changed"):
+                    capture._capture_locked_probe(logical, expected, "clang binary")
+            execute.assert_not_called()
+
     def test_tar_inspection_rejects_traversal_and_symlink_members(self):
         for name, member_type in (("../escape", tarfile.REGTYPE), ("link", tarfile.SYMTYPE)):
             output = io.BytesIO()

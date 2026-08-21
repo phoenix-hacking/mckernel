@@ -51,9 +51,13 @@ jobs:
           . /etc/os-release
           test "$ID" = rocky
           test "$VERSION_ID" = 10.2
+          dnf -y --allowerasing --setopt=install_weak_deps=False install \
+            coreutils
           dnf -y --setopt=install_weak_deps=False install \
-            bash binutils cpio coreutils findutils gawk gzip kmod \
+            bash binutils cpio findutils gawk gzip kmod \
             qemu-kvm-core python3 sed util-linux which
+          ! /usr/bin/rpm -q coreutils-single
+          test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' /usr/bin/timeout)" = coreutils
           dnf clean all
           {
             printf 'container_image=%s\n' "$ROCKY_IMAGE"

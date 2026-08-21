@@ -234,6 +234,20 @@ class FP0006RuntimeCaptureIntegrationTests(unittest.TestCase):
         )
         self.assertTrue(policy["hosted_contains_same_legacy_envelope"])
         self.assertFalse(policy["durable"])
+        self.assertEqual(
+            "fp0006-native-rust-first-failure-${{ github.run_id }}-${{ github.run_attempt }}",
+            policy["dedicated_native_first_failure_artifact_name_template"],
+        )
+        self.assertEqual(
+            [
+                "capture-envelope-created-unreviewed",
+                "capture-envelope-required-missing",
+            ],
+            policy["dedicated_native_first_failure_statuses"],
+        )
+        self.assertEqual(
+            "workflow-state", policy["dedicated_native_first_failure_member"]
+        )
         limitations = " ".join(self.contract["limitations"])
         self.assertIn("90 days", limitations)
         self.assertIn("same envelope", limitations)
@@ -271,8 +285,8 @@ class FP0006RuntimeCaptureIntegrationTests(unittest.TestCase):
             "          set -euo pipefail\n"
         )
         native_install = (
-            "          dnf -y --setopt=install_weak_deps=False install \\\n"
-            "            coreutils gcc git-core python3 rust-1.92.0-1.el10\n"
+            "          dnf -y --allowerasing --setopt=install_weak_deps=False install \\\n"
+            "            coreutils\n"
         )
         native_steps_start = (
             "  fp0006-native-rust-capture:\n"
@@ -294,6 +308,13 @@ class FP0006RuntimeCaptureIntegrationTests(unittest.TestCase):
         native_upload = (
             "          name: fp0006-native-rust-source-fixture-${{ github.run_id }}-${{ github.run_attempt }}\n"
             "          path: ${{ runner.temp }}/fp0006-native-rust-capture/fp0006-runtime-capture-v1.tar\n"
+            "          if-no-files-found: error\n"
+            "          retention-days: 30\n"
+            "          compression-level: 0\n"
+        )
+        native_failure_upload = (
+            "          name: fp0006-native-rust-first-failure-${{ github.run_id }}-${{ github.run_attempt }}\n"
+            "          path: ${{ runner.temp }}/fp0006-native-rust-first-failure/workflow-state\n"
             "          if-no-files-found: error\n"
             "          retention-days: 30\n"
             "          compression-level: 0\n"
@@ -326,7 +347,7 @@ class FP0006RuntimeCaptureIntegrationTests(unittest.TestCase):
             (capture._validate_native_workflow, self._replace_once(
                 self.native_workflow,
                 native_install,
-                native_install.replace("coreutils ", "coreutils-single "),
+                native_install.replace("coreutils\n", "coreutils-single\n"),
             )),
             (capture._validate_native_workflow, self._replace_once(
                 self.native_workflow,
@@ -337,6 +358,11 @@ class FP0006RuntimeCaptureIntegrationTests(unittest.TestCase):
                 self.native_workflow,
                 native_upload,
                 native_upload.replace("compression-level: 0", "compression-level: 9"),
+            )),
+            (capture._validate_native_workflow, self._replace_once(
+                self.native_workflow,
+                native_failure_upload,
+                native_failure_upload.replace("compression-level: 0", "compression-level: 9"),
             )),
             (capture._validate_native_workflow, self._replace_once(self.native_workflow, "            /usr/bin/timeout --signal=TERM --kill-after=5s 30s \\\n", "")),
             (capture._validate_native_workflow, self._replace_once(
@@ -519,8 +545,8 @@ class FP0006RuntimeCaptureIntegrationTests(unittest.TestCase):
             "          set -euo pipefail\n"
         )
         native_install = (
-            "          dnf -y --setopt=install_weak_deps=False install \\\n"
-            "            coreutils gcc git-core python3 rust-1.92.0-1.el10\n"
+            "          dnf -y --allowerasing --setopt=install_weak_deps=False install \\\n"
+            "            coreutils\n"
         )
         for mutation in (
             self._replace_once(
@@ -536,7 +562,7 @@ class FP0006RuntimeCaptureIntegrationTests(unittest.TestCase):
             self._replace_once(
                 self.native_workflow,
                 native_install,
-                native_install.replace("coreutils ", "coreutils-single "),
+                native_install.replace("coreutils\n", "coreutils-single\n"),
             ),
             self._replace_once(
                 self.native_workflow,

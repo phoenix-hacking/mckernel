@@ -33,13 +33,13 @@ CONTRACT_PATH = Path(
 )
 BASE_CHECKER_PATH = Path("scripts/fp0006_ihk_device_negative_dispatch.py")
 ENVELOPE_NAME = "fp0006-runtime-capture-v1.tar"
-EXPECTED_CONTRACT_SHA256 = "5fceb938789ca90db1abced27139b6cba4f5593e6158fd4f51b753baa3998351"
-EXPECTED_CONTRACT_SIZE = 8352
+EXPECTED_CONTRACT_SHA256 = "b3053fe7ab3a37a729abcb31dd26dc74c67a8cfbb3247d0513187829a6d4e0cd"
+EXPECTED_CONTRACT_SIZE = 8780
 EXPECTED_LEGACY_WORKFLOW_SHA256 = "67dd306a2ce36c023dd139d71d3871f32412d43e504cb3bf873bf6e146f9e516"
-EXPECTED_NATIVE_WORKFLOW_SHA256 = "e5f4dcebea346e516c86788de11aa203677a283a86df36acce5603fd540e4cdd"
+EXPECTED_NATIVE_WORKFLOW_SHA256 = "220c185afcc4b05019e2f2e50f768def3267cf1423a19829d1a5d41a3661bef3"
 EXPECTED_LEGACY_BOOT_ACTIVE_SHA256 = "6a8b2a5a0ae4eb7ed752d5ec18b68edeb2fec5a1ffded5d6359d1685d634bde4"
 EXPECTED_LEGACY_FINALIZE_ACTIVE_SHA256 = "8a0529df14c4bd6544a0454e406e888e8e3f67e5dc4491fc80116a8ce872b391"
-EXPECTED_NATIVE_CAPTURE_ACTIVE_SHA256 = "7047bf2a84bffe14bd259d430bd4b314083dfeb5ce089771d47f5af2fac007ff"
+EXPECTED_NATIVE_CAPTURE_ACTIVE_SHA256 = "aa99cfdad79388aa3a79c2052477d8c317e6504b71dc8a52a22e26bb4ea2f541"
 EXPECTED_ROCKY_PREFLIGHT_BODY_SHA256 = "0d1a606095cbcdf0a85885d8ead440424cb2192bb2a587c06777cffe5071c699"
 EXPECTED_ROCKY_CAPTURE_BODY_SHA256 = "1b16c96de56484a8003c5c41b2eb4f62f64ba2ec02ecb5c01b549f7eb1848c7b"
 EXPECTED_QEMU_WRAPPER_ACTIVE_SHA256 = "1db4c0dc045cf7a6f5537eefaec4474dec42c832f1bdbb2af618decb8d017954"
@@ -551,6 +551,7 @@ def _validate_native_workflow(text: str, policy: Dict[str, Any]) -> None:
         policy["native_checkout_step"],
         policy["native_capture_step"],
         policy["native_upload_step"],
+        policy["native_failure_upload_step"],
     ]
     if order != expected_order:
         raise CaptureError("native capture steps are missing, extra, or reordered")
@@ -572,12 +573,20 @@ def _validate_native_workflow(text: str, policy: Dict[str, Any]) -> None:
     expected_bootstrap = (
         "run: |",
         "set -euo pipefail",
+        'fp0006_diagnostics="$RUNNER_TEMP/fp0006-native-rust-first-failure"',
+        'mkdir -m 700 "$fp0006_diagnostics"',
+        "printf '%s\\n' bootstrap-started capture-envelope-required-missing credit-forbidden \\",
+        '> "$fp0006_diagnostics/workflow-state"',
         'test "$(uname -m)" = x86_64',
         ". /etc/os-release",
         'test "$ID" = rocky',
         'test "$VERSION_ID" = 10.2',
+        "dnf -y --allowerasing --setopt=install_weak_deps=False install \\",
+        "coreutils",
         "dnf -y --setopt=install_weak_deps=False install \\",
-        "coreutils gcc git-core python3 rust-1.92.0-1.el10",
+        "gcc git-core python3 rust-1.92.0-1.el10",
+        "! /usr/bin/rpm -q coreutils-single",
+        'test "$(/usr/bin/rpm -qf --qf \'%{NAME}\\n\' /usr/bin/timeout)" = coreutils',
         'test "$(command -v rustc)" = /usr/bin/rustc',
         'test "$(command -v gcc)" = /usr/bin/gcc',
         'test "$(command -v timeout)" = /usr/bin/timeout',
@@ -586,12 +595,13 @@ def _validate_native_workflow(text: str, policy: Dict[str, Any]) -> None:
         'test ! -L /usr/bin/timeout',
         'test "$(/usr/bin/rpm -qf --qf \'%{NAME}\\n\' /usr/bin/rustc)" = rust',
         'test "$(/usr/bin/rpm -qf --qf \'%{NAME}\\n\' /usr/bin/gcc)" = gcc',
-        'test "$(/usr/bin/rpm -qf --qf \'%{NAME}\\n\' /usr/bin/timeout)" = coreutils',
         'test "$(/usr/bin/rpm -q --qf \'%{NAME}-%{EPOCHNUM}:%{VERSION}-%{RELEASE}.%{ARCH}\\n\' rust)" = rust-0:1.92.0-1.el10.x86_64',
         "test \"$(/usr/bin/rustc --version)\" = 'rustc 1.92.0 (ded5c06cf 2025-12-08) (Red Hat 1.92.0-1.el10)'",
         "/usr/bin/rustc -Vv",
         "/usr/bin/gcc --version",
         "dnf clean all",
+        "printf '%s\\n' bootstrap-complete capture-envelope-required-missing credit-forbidden \\",
+        '> "$fp0006_diagnostics/workflow-state"',
     )
     if bootstrap_active != expected_bootstrap:
         raise CaptureError("native capture bootstrap commands differ")
@@ -683,7 +693,6 @@ def _validate_native_workflow(text: str, policy: Dict[str, Any]) -> None:
     ):
         raise CaptureError("native capture timeout/finalizer reachability differs")
     expected_upload = (
-        "        if: ${{ always() }}\n"
         "        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2\n"
         "        with:\n"
         "          name: fp0006-native-rust-source-fixture-${{ github.run_id }}-${{ github.run_attempt }}\n"
@@ -695,6 +704,19 @@ def _validate_native_workflow(text: str, policy: Dict[str, Any]) -> None:
     )
     if steps[policy["native_upload_step"]] != expected_upload:
         raise CaptureError("native dedicated upload scope differs")
+    expected_failure_upload = (
+        "        if: ${{ failure() }}\n"
+        "        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2\n"
+        "        with:\n"
+        "          name: fp0006-native-rust-first-failure-${{ github.run_id }}-${{ github.run_attempt }}\n"
+        "          path: ${{ runner.temp }}/fp0006-native-rust-first-failure/workflow-state\n"
+        "          if-no-files-found: error\n"
+        "          retention-days: 30\n"
+        "          compression-level: 0\n"
+        "\n"
+    )
+    if steps[policy["native_failure_upload_step"]] != expected_failure_upload:
+        raise CaptureError("native first-failure upload scope differs")
     if "actions/download-artifact@" in job:
         raise CaptureError("native FP-0006 capture attempts an artifact download")
     job_positions = [
@@ -1056,6 +1078,12 @@ def _load_contract(repo: Path) -> Tuple[Dict[str, Any], bytes]:
             "dedicated_actions_retention_days": 30,
             "dedicated_legacy_artifact_name_template": "fp0006-legacy-live-ioctl-${{ github.run_id }}-${{ github.run_attempt }}",
             "dedicated_native_artifact_name_template": "fp0006-native-rust-source-fixture-${{ github.run_id }}-${{ github.run_attempt }}",
+            "dedicated_native_first_failure_artifact_name_template": "fp0006-native-rust-first-failure-${{ github.run_id }}-${{ github.run_attempt }}",
+            "dedicated_native_first_failure_member": "workflow-state",
+            "dedicated_native_first_failure_statuses": [
+                "capture-envelope-created-unreviewed",
+                "capture-envelope-required-missing",
+            ],
             "durable": False,
             "envelope_member_mode": "0444",
             "envelope_members": [
@@ -1172,6 +1200,7 @@ def _load_contract(repo: Path) -> Tuple[Dict[str, Any], bytes]:
         "native_bootstrap_step": "Install pinned Rust and identify the observed FP-0006 linker",
         "native_capture_step": "Produce and review the FP-0006 native envelope",
         "native_checkout_step": "Check out the exact FP-0006 candidate without credentials",
+        "native_failure_upload_step": "Upload FP-0006 first-failure diagnostics",
         "native_job": "fp0006-native-rust-capture",
         "native_upload_step": "Upload FP-0006 native envelope",
     }

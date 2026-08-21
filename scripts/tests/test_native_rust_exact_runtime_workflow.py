@@ -175,6 +175,20 @@ class NativeRustExactRuntimeWorkflowTests(unittest.TestCase):
         self.assertNotRegex(self.pr_workflow, r"\bPASS\b")
         self.assertNotIn("credit=eligible", self.pr_workflow)
 
+    def test_bootstrap_can_replace_coreutils_single_explicitly(self) -> None:
+        self.assertIn(
+            "dnf -y --allowerasing --setopt=install_weak_deps=False install \\\n"
+            "            coreutils\n",
+            self.workflow,
+        )
+        self.assertEqual(1, self.workflow.count("--allowerasing"))
+        self.assertIn("! /usr/bin/rpm -q coreutils-single", self.workflow)
+        self.assertIn(
+            "dnf -y --setopt=install_weak_deps=False install \\\n"
+            "            bash binutils cpio findutils",
+            self.workflow,
+        )
+
     @unittest.skipUnless(shutil.which("as") and shutil.which("ld"), "binutils required")
     def test_poweroff_helper_is_a_static_x86_64_executable(self) -> None:
         with tempfile.TemporaryDirectory(prefix="native-rust-poweroff-") as temporary:

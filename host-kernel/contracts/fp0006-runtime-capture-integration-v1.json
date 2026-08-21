@@ -5,6 +5,12 @@
     "dedicated_actions_retention_days": 30,
     "dedicated_legacy_artifact_name_template": "fp0006-legacy-live-ioctl-${{ github.run_id }}-${{ github.run_attempt }}",
     "dedicated_native_artifact_name_template": "fp0006-native-rust-source-fixture-${{ github.run_id }}-${{ github.run_attempt }}",
+    "dedicated_native_first_failure_artifact_name_template": "fp0006-native-rust-first-failure-${{ github.run_id }}-${{ github.run_attempt }}",
+    "dedicated_native_first_failure_member": "workflow-state",
+    "dedicated_native_first_failure_statuses": [
+      "capture-envelope-created-unreviewed",
+      "capture-envelope-required-missing"
+    ],
     "durable": false,
     "envelope_member_mode": "0444",
     "envelope_members": [
@@ -64,13 +70,13 @@
     },
     "native_runtime_validator": {
       "path": "scripts/native_rust_runtime_evidence.py",
-      "sha256": "2e9aa67df219092f469073135ece5749f735875bb51ba7878969e6ca429690a2",
-      "size": 107696
+      "sha256": "4cfa49bcb7d568da1be51bb4033daa62f9914b50bdbd10c95397a18d41815269",
+      "size": 110075
     },
     "native_workflow": {
       "path": ".github/workflows/native-rust-host-modules-exact-build.yml",
-      "sha256": "e5f4dcebea346e516c86788de11aa203677a283a86df36acce5603fd540e4cdd",
-      "size": 46889
+      "sha256": "220c185afcc4b05019e2f2e50f768def3267cf1423a19829d1a5d41a3661bef3",
+      "size": 48044
     },
     "qemu_guest_runner": {
       "active_sha256": "ba3784281f47607000cc54691af0b1398bba8de7afa3e6f4578e7cf09b1979c8",
@@ -176,6 +182,7 @@
     "native_bootstrap_step": "Install pinned Rust and identify the observed FP-0006 linker",
     "native_capture_step": "Produce and review the FP-0006 native envelope",
     "native_checkout_step": "Check out the exact FP-0006 candidate without credentials",
+    "native_failure_upload_step": "Upload FP-0006 first-failure diagnostics",
     "native_job": "fp0006-native-rust-capture",
     "native_upload_step": "Upload FP-0006 native envelope"
   }
