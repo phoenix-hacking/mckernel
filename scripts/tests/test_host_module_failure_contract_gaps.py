@@ -88,19 +88,38 @@ class StrictInputTests(unittest.TestCase):
                         ),
                     )
 
-        python36 = (
-            sys.executable
-            if sys.version_info[:2] == (3, 6)
-            else shutil.which("python3.6")
-        )
-        if python36:
+        interpreters = [sys.executable]
+        python36 = shutil.which("python3.6")
+        if (
+            python36
+            and os.path.realpath(python36) != os.path.realpath(sys.executable)
+        ):
+            interpreters.append(python36)
+        before_bytecode = {
+            str(path.relative_to(REPO_ROOT))
+            for path in (REPO_ROOT / "scripts").rglob("*.pyc")
+        }
+        environment = dict(os.environ)
+        environment.pop("PYTHONDONTWRITEBYTECODE", None)
+        environment.pop("PYTHONPYCACHEPREFIX", None)
+        for interpreter in interpreters:
             completed = subprocess.run(
-                [python36, str(Path(gaps.__file__)), "--help"],
+                [interpreter, "-B", str(Path(gaps.__file__)), "--help"],
                 cwd=str(REPO_ROOT),
+                env=environment,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
             )
-            self.assertEqual(completed.returncode, 0, completed.stderr.decode())
+            self.assertEqual(
+                completed.returncode,
+                0,
+                "{0}: {1}".format(interpreter, completed.stderr.decode()),
+            )
+        after_bytecode = {
+            str(path.relative_to(REPO_ROOT))
+            for path in (REPO_ROOT / "scripts").rglob("*.pyc")
+        }
+        self.assertEqual(before_bytecode, after_bytecode)
 
     def test_duplicate_json_keys_fail_closed(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
