@@ -717,7 +717,7 @@ jobs:
           } > "$tool_report"
           compile_rc=0
           if /usr/bin/env -i HOME=/nonexistent LANG=C LC_ALL=C PATH=/usr/bin:/bin \
-            /usr/bin/rustc --edition=2021 -D warnings -C linker=/usr/bin/gcc \
+            /usr/bin/rustc --edition=2021 -D warnings -C linker=/usr/bin/gcc -C strip=symbols \
             scripts/tests/fixtures/ihk_ioctl_fp0006_negative_dispatch.rs \
             -o "$producer" > "$compiler_output" 2>&1
           then
@@ -731,6 +731,12 @@ jobs:
           fi
           if test -s "$compiler_output"; then
             cat "$compiler_output" >&2
+            exit 1
+          fi
+          producer_bytes="$(/usr/bin/wc -c < "$producer")"
+          if test "$producer_bytes" -le 0 || test "$producer_bytes" -gt 8388608; then
+            printf 'FP-0006 native producer binary size observed=%s maximum=8388608\n' \
+              "$producer_bytes" >&2
             exit 1
           fi
           binary_sha256="$(/usr/bin/sha256sum "$producer" | /usr/bin/awk '{ print $1 }')"

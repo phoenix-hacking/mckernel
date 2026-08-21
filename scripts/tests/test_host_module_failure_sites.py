@@ -9,6 +9,7 @@ import subprocess
 import sys
 import tempfile
 import time
+import types
 import unittest
 from pathlib import Path
 from unittest import mock
@@ -46,6 +47,34 @@ class GitIdentityTests(unittest.TestCase):
                 capture.CaptureError, "untrusted hashlib module"
             ):
                 capture.reject_untrusted_inherited_modules()
+
+    def test_legacy_spec_less_sys_requires_exact_interpreter_entry_module(self):
+        missing = object()
+        real_spec = getattr(capture._fp0006_entry_sys, "__spec__", missing)
+        with mock.patch.object(
+            capture._fp0006_entry_sys, "__spec__", None, create=True
+        ):
+            self.assertTrue(
+                capture._module_origin_is_stdlib(
+                    "sys", capture._fp0006_entry_sys
+                )
+            )
+            for origin in (None, "built-in", "frozen"):
+                fake = types.ModuleType("sys")
+                if origin is None:
+                    fake.__spec__ = None
+                else:
+                    fake.__spec__ = types.SimpleNamespace(origin=origin)
+                with self.subTest(origin=origin), mock.patch.dict(
+                    sys.modules, {"sys": fake}, clear=False
+                ):
+                    with self.assertRaisesRegex(
+                        capture.CaptureError, "untrusted sys module"
+                    ):
+                        capture.reject_untrusted_inherited_modules()
+        self.assertIs(
+            getattr(capture._fp0006_entry_sys, "__spec__", missing), real_spec
+        )
 
 
 class ArgvRecorderTests(unittest.TestCase):
@@ -1218,6 +1247,13 @@ import sys
 import types
 
 repo = os.path.realpath(sys.argv[1])
+# Reproduce Rocky 8/Python 3.6's spec-less built-in sys module on newer
+# interpreters before the exact launcher captures its entry-module identity.
+if sys.argv[2] == "missing":
+    if hasattr(sys, "__spec__"):
+        del sys.__spec__
+else:
+    sys.__spec__ = None
 sites_path = os.path.join(repo, "scripts", "host_module_failure_sites.py")
 module = types.ModuleType("host_module_failure_sites")
 module.__file__ = sites_path
@@ -1242,23 +1278,26 @@ finally:
 '''
         environment = dict(os.environ)
         environment["PYTHONPATH"] = str(REPO_ROOT / "scripts")
-        completed = subprocess.run(
-            [
-                sys.executable,
-                "-I",
-                "-S",
-                "-B",
-                "-c",
-                program,
-                str(REPO_ROOT),
-            ],
-            cwd=str(REPO_ROOT),
-            check=False,
-            env=environment,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        )
-        self.assertEqual(completed.returncode, 0, completed.stderr)
+        for mode in ("missing", "none"):
+            completed = subprocess.run(
+                [
+                    sys.executable,
+                    "-I",
+                    "-S",
+                    "-B",
+                    "-c",
+                    program,
+                    str(REPO_ROOT),
+                    mode,
+                ],
+                cwd=str(REPO_ROOT),
+                check=False,
+                env=environment,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            with self.subTest(mode=mode):
+                self.assertEqual(completed.returncode, 0, completed.stderr)
 
     def test_locked_sys_path_ignores_repo_insertion_and_rejects_ancestor(self):
         with tempfile.TemporaryDirectory() as temporary:

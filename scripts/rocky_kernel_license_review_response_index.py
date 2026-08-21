@@ -31,7 +31,7 @@ AUTHORITY_PATH = Path(
     "host-kernel/rocky/evidence/"
     "rk001-license-review-response-index-contract-ef58-v1.json"
 )
-AUTHORITY_SHA256 = "8ee9f030b8e8878f11a9802d56b1f29be30a07debc0ab45ba24924587859102f"
+AUTHORITY_SHA256 = "202c5038d73c5d58ab06dbc6babdd9e3710d3250d77dc714cce043b46bfa82cc"
 
 SCHEMA_VERSION = 1
 CONTRACT_ID = "rk-001-license-review-response-index-ef58860e-v1"
@@ -101,8 +101,8 @@ EXPECTED_INPUT_DESCRIPTORS = {
     },
     "campaign_tests": {
         "path": "scripts/tests/test_rocky_kernel_license_review_campaign.py",
-        "sha256": "a48bc6e673a1584e240ef79296792dbb3591f78e4ddb3463dbb2bb2e6d670501",
-        "size": 44872,
+        "sha256": "9ea1b4254987141b6b78bcff4539c423ca913a328a401af511b293ba412666b5",
+        "size": 45546,
     },
     "campaign_workflow": {
         "path": ".github/workflows/rk001-license-review-campaign-v1.yml",
@@ -111,12 +111,12 @@ EXPECTED_INPUT_DESCRIPTORS = {
     },
     "response_authority": {
         "path": "host-kernel/rocky/evidence/rk001-license-review-response-contract-ef58-v1.json",
-        "sha256": "9975986053e2ef6253bc500cdd4bf0ffedf62adb73eb3e5be01cea9f22b31faf",
+        "sha256": "c71bbb5432d61106f7c86ec0f05a76e804586c57d2ad189b94e4b010bb4deaec",
         "size": 8381,
     },
     "response_checker": {
         "path": "scripts/rocky_kernel_license_review_response.py",
-        "sha256": "5ddc3962e62110d43cd4c64fa65783426c3e58cfb713b072dc43e903e452eee8",
+        "sha256": "ae27f84572bf74ef1d2ec22efd99e5aac6d117d4ef5b1fb8d7f38da823200b5c",
         "size": 93401,
     },
     "response_tests": {

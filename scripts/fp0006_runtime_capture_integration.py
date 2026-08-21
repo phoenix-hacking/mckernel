@@ -33,13 +33,13 @@ CONTRACT_PATH = Path(
 )
 BASE_CHECKER_PATH = Path("scripts/fp0006_ihk_device_negative_dispatch.py")
 ENVELOPE_NAME = "fp0006-runtime-capture-v1.tar"
-EXPECTED_CONTRACT_SHA256 = "b3053fe7ab3a37a729abcb31dd26dc74c67a8cfbb3247d0513187829a6d4e0cd"
+EXPECTED_CONTRACT_SHA256 = "43fdd839e37f341e3d93c7206223f60855c08fd41c15faeac976bb253a7a855a"
 EXPECTED_CONTRACT_SIZE = 8780
 EXPECTED_LEGACY_WORKFLOW_SHA256 = "67dd306a2ce36c023dd139d71d3871f32412d43e504cb3bf873bf6e146f9e516"
-EXPECTED_NATIVE_WORKFLOW_SHA256 = "220c185afcc4b05019e2f2e50f768def3267cf1423a19829d1a5d41a3661bef3"
+EXPECTED_NATIVE_WORKFLOW_SHA256 = "e3352df5362e246d09079d82be460d8dc76255b231f9c7fbcac79ae1381a24cf"
 EXPECTED_LEGACY_BOOT_ACTIVE_SHA256 = "6a8b2a5a0ae4eb7ed752d5ec18b68edeb2fec5a1ffded5d6359d1685d634bde4"
 EXPECTED_LEGACY_FINALIZE_ACTIVE_SHA256 = "8a0529df14c4bd6544a0454e406e888e8e3f67e5dc4491fc80116a8ce872b391"
-EXPECTED_NATIVE_CAPTURE_ACTIVE_SHA256 = "aa99cfdad79388aa3a79c2052477d8c317e6504b71dc8a52a22e26bb4ea2f541"
+EXPECTED_NATIVE_CAPTURE_ACTIVE_SHA256 = "bbeeaaf364713206fc439455491adb7cda7b1c9b5fd3f516f76565111c634340"
 EXPECTED_ROCKY_PREFLIGHT_BODY_SHA256 = "0d1a606095cbcdf0a85885d8ead440424cb2192bb2a587c06777cffe5071c699"
 EXPECTED_ROCKY_CAPTURE_BODY_SHA256 = "1b16c96de56484a8003c5c41b2eb4f62f64ba2ec02ecb5c01b549f7eb1848c7b"
 EXPECTED_QEMU_WRAPPER_ACTIVE_SHA256 = "1db4c0dc045cf7a6f5537eefaec4474dec42c832f1bdbb2af618decb8d017954"
@@ -51,6 +51,7 @@ REPOSITORY = re.compile(r"^{0}/{0}$".format(REPOSITORY_COMPONENT))
 POSITIVE_DECIMAL = re.compile(r"^[1-9][0-9]*$")
 GITHUB_REF = re.compile(r"^refs/[A-Za-z0-9._/-]{1,240}$")
 MAX_INPUT_BYTES = 1048576
+MAX_PRODUCER_BINARY_BYTES = 8 * MAX_INPUT_BYTES
 TAR_BLOCK = 512
 TAR_RECORD = 10240
 EMPTY_SHA256 = hashlib.sha256(b"").hexdigest()
@@ -148,8 +149,18 @@ def _read_regular(path: Path, label: str, maximum: int = MAX_INPUT_BYTES) -> byt
         raise CaptureError("cannot inspect {0}: {1}".format(label, error))
     if stat.S_ISLNK(before.st_mode) or not stat.S_ISREG(before.st_mode):
         raise CaptureError("{0} must be a regular non-symlink file".format(label))
-    if before.st_size < 0 or before.st_size > maximum:
-        raise CaptureError("{0} size is outside its bound".format(label))
+    if before.st_size < 0:
+        raise CaptureError(
+            "{0} size {1} is invalid; maximum is {2}".format(
+                label, before.st_size, maximum
+            )
+        )
+    if before.st_size > maximum:
+        raise CaptureError(
+            "{0} size {1} exceeds maximum {2}".format(
+                label, before.st_size, maximum
+            )
+        )
     try:
         descriptor = os.open(str(path), os.O_RDONLY | getattr(os, "O_CLOEXEC", 0) | getattr(os, "O_NOFOLLOW", 0))
     except OSError as error:
@@ -162,8 +173,18 @@ def _read_regular(path: Path, label: str, maximum: int = MAX_INPUT_BYTES) -> byt
             raise CaptureError("{0} changed while opening".format(label))
         if not stat.S_ISREG(opened.st_mode) or opened.st_nlink < 1:
             raise CaptureError("{0} opened as a non-regular or unlinked file".format(label))
-        if opened.st_size < 0 or opened.st_size > maximum:
-            raise CaptureError("{0} opened size is outside its bound".format(label))
+        if opened.st_size < 0:
+            raise CaptureError(
+                "{0} opened size {1} is invalid; maximum is {2}".format(
+                    label, opened.st_size, maximum
+                )
+            )
+        if opened.st_size > maximum:
+            raise CaptureError(
+                "{0} opened size {1} exceeds maximum {2}".format(
+                    label, opened.st_size, maximum
+                )
+            )
         chunks = []  # type: List[bytes]
         remaining = opened.st_size
         while remaining:
@@ -202,6 +223,13 @@ def _read_regular(path: Path, label: str, maximum: int = MAX_INPUT_BYTES) -> byt
     if opened_identity != replay_identity:
         raise CaptureError("{0} changed after close".format(label))
     return result
+
+
+def _read_producer_binary(path: Path, label: str) -> bytes:
+    binary = _read_regular(path, label, MAX_PRODUCER_BINARY_BYTES)
+    if not binary:
+        raise CaptureError("{0} is empty".format(label))
+    return binary
 
 
 def _safe_repo(repo: Path) -> Path:
@@ -611,7 +639,10 @@ def _validate_native_workflow(text: str, policy: Dict[str, Any]) -> None:
         '[[ "$EXPECTED_HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]',
         'test "$(git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"',
         "python3 scripts/fp0006_runtime_capture_integration.py check-contract \\",
-        "/usr/bin/rustc --edition=2021 -D warnings -C linker=/usr/bin/gcc \\",
+        "/usr/bin/rustc --edition=2021 -D warnings -C linker=/usr/bin/gcc -C strip=symbols \\",
+        'producer_bytes="$(/usr/bin/wc -c < "$producer")"',
+        'if test "$producer_bytes" -le 0 || test "$producer_bytes" -gt 8388608; then',
+        "printf 'FP-0006 native producer binary size observed=%s maximum=8388608\\n' \\",
         "/usr/bin/timeout --signal=TERM --kill-after=5s 30s \\",
         '"$producer" "$stage" > "$producer_output" 2>&1',
         "python3 scripts/fp0006_runtime_capture_integration.py finalize-lane \\",
@@ -639,6 +670,14 @@ def _validate_native_workflow(text: str, policy: Dict[str, Any]) -> None:
     )
     timeout_line = "/usr/bin/timeout --signal=TERM --kill-after=5s 30s \\"
     producer_line = '"$producer" "$stage" > "$producer_output" 2>&1'
+    size_window = (
+        'producer_bytes="$(/usr/bin/wc -c < "$producer")"',
+        'if test "$producer_bytes" -le 0 || test "$producer_bytes" -gt 8388608; then',
+        "printf 'FP-0006 native producer binary size observed=%s maximum=8388608\\n' \\",
+        '"$producer_bytes" >&2',
+        "exit 1",
+        "fi",
+    )
     finalizer_line = (
         "python3 scripts/fp0006_runtime_capture_integration.py finalize-lane \\"
     )
@@ -659,11 +698,19 @@ def _validate_native_workflow(text: str, policy: Dict[str, Any]) -> None:
     timeout_if_position = timeout_candidates[0]
     timeout_position = capture_active.index(timeout_line)
     finalizer_position = capture_active.index(finalizer_line)
+    size_candidates = [
+        index for index in range(len(capture_active))
+        if capture_active[index:index + len(size_window)] == size_window
+    ]
+    if len(size_candidates) != 1:
+        raise CaptureError("native producer size boundary differs")
+    if not size_candidates[0] < timeout_position < finalizer_position:
+        raise CaptureError("native producer size check is reordered")
     exits = tuple(
         line for line in capture_active
         if re.match(r"^exit(?:\s|$)", line) is not None
     )
-    if exits != ('exit "$compile_rc"', "exit 1"):
+    if exits != ('exit "$compile_rc"', "exit 1", "exit 1"):
         raise CaptureError("native capture has an unapproved exit")
     if any(
         re.match(r"^(?:trap|return)(?:\s|$)", line) is not None
@@ -1869,7 +1916,8 @@ def _compiler_command(surface: str) -> List[str]:
         return [
             "/usr/bin/env", "-i", "HOME=/nonexistent", "LANG=C", "LC_ALL=C",
             "PATH=/usr/bin:/bin", "/usr/bin/rustc", "--edition=2021",
-            "-D", "warnings", "-C", "linker=/usr/bin/gcc",
+            "-D", "warnings", "-C", "linker=/usr/bin/gcc", "-C",
+            "strip=symbols",
             "scripts/tests/fixtures/ihk_ioctl_fp0006_negative_dispatch.rs", "-o",
             "fp0006-native-rust-producer",
         ]
@@ -1938,7 +1986,7 @@ def preflight_legacy(
         raise CaptureError("legacy live capture is restricted to a pull-request event")
     if _git_head(Path(repo)) != github["head_sha"]:
         raise CaptureError("legacy preflight head differs from repository HEAD")
-    binary = _read_regular(producer_binary, "legacy producer binary", 8 * MAX_INPUT_BYTES)
+    binary = _read_producer_binary(producer_binary, "legacy producer binary")
     report = _read_regular(compiler_report, "legacy compiler observation", 65536)
     _validate_tool_report(report, "legacy-live-ioctl")
     compile_log = _read_regular(compiler_output, "legacy compiler output", 65536)
@@ -2050,7 +2098,7 @@ def finalize_lane(
     compiler_log = _read_regular(compiler_output, "native compiler output", 65536)
     if compiler_log:
         raise CaptureError("successful native compiler output must be empty")
-    binary = _read_regular(producer_binary, "native producer binary", 8 * MAX_INPUT_BYTES)
+    binary = _read_producer_binary(producer_binary, "native producer binary")
     tool = _read_regular(tool_report, "native tool observation", 65536)
     tool_observation = _validate_tool_report(tool, surface)
     log = _read_regular(producer_log, "native producer execution log", 65536)

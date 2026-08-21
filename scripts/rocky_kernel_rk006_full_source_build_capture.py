@@ -117,7 +117,9 @@ LOCKED_PROBES = {
         "path": "/usr/bin/clang",
         "sha256": "48271e3fbb759560a54e6f0a13e05a4a0b768eea2ffd6aa2f1e14b8cbb76fb7f",
         "stdout_sha256": "082de0cf4ec79ce11472d754e6f9508fdc811c2d5c585e90fedcb0ef985b037a",
-        "symlink_target": "clang-21",
+        "symlink_hops": [
+            {"path": "/usr/bin/clang", "target": "clang-21"},
+        ],
     },
     "lld": {
         "command": ["ld.lld", "--version"],
@@ -125,6 +127,9 @@ LOCKED_PROBES = {
         "path": "/usr/bin/ld.lld",
         "sha256": "52029c7d731c74ab72a2eca8126d578547242b3192ba74e27c94c1b51be001f9",
         "stdout_sha256": "418d72df86baf70c88b9a96a9118e3cdc66be0537a58f66a6879df0479f9a78f",
+        "symlink_hops": [
+            {"path": "/usr/bin/ld.lld", "target": "lld"},
+        ],
     },
     "llvm": {
         "command": ["llvm-config", "--version"],
@@ -132,6 +137,16 @@ LOCKED_PROBES = {
         "path": "/usr/bin/llvm-config",
         "sha256": "bdf82677530a0997abccadea0d9ce6aa3146d5d542ded5b589a095e4121b3cf0",
         "stdout_sha256": "2aa7a88c6265f7d12bbbda0d91c617c37977ebba04971007a6ba09f16130f58c",
+        "symlink_hops": [
+            {
+                "path": "/usr/bin/llvm-config",
+                "target": "/etc/alternatives/llvm-config",
+            },
+            {
+                "path": "/etc/alternatives/llvm-config",
+                "target": "/usr/lib64/llvm21/bin/llvm-config",
+            },
+        ],
     },
     "pahole": {
         "command": ["pahole", "--version"],
@@ -342,8 +357,111 @@ def _metadata_identity(metadata):
     )
 
 
+def _locked_probe_absolute_path(value, label):
+    if (
+        type(value) is not str
+        or not value
+        or not value.startswith("/")
+        or value.startswith("//")
+        or "\\" in value
+        or "\x00" in value
+    ):
+        raise CaptureError("{} is not a safe absolute path".format(label))
+    path = PurePosixPath(value)
+    if (
+        not path.is_absolute()
+        or str(path) != value
+        or len(path.parts) < 2
+        or any(part in ("", ".", "..") for part in path.parts[1:])
+    ):
+        raise CaptureError("{} is not a normalized absolute path".format(label))
+    return Path(value)
+
+
+def _locked_probe_target_path(alias_path, target, label):
+    if type(target) is not str or not target or "\\" in target or "\x00" in target:
+        raise CaptureError("{} is unsafe".format(label))
+    if target.startswith("/"):
+        return _locked_probe_absolute_path(target, label)
+    path = PurePosixPath(target)
+    if (
+        path.is_absolute()
+        or str(path) != target
+        or len(path.parts) != 1
+        or path.parts[0] in ("", ".", "..")
+    ):
+        raise CaptureError("{} is not a safe basename".format(label))
+    return alias_path.parent / target
+
+
+def _locked_probe_hops(candidate, expected, label):
+    if "symlink_target" in expected:
+        raise CaptureError("{} uses the obsolete single-link policy".format(label))
+    raw_hops = expected.get("symlink_hops")
+    if raw_hops is None:
+        if "symlink_hops" in expected:
+            raise CaptureError("{} symlink-hop policy is invalid".format(label))
+        return [], candidate
+    if type(raw_hops) is not list or not raw_hops or len(raw_hops) > 8:
+        raise CaptureError("{} symlink-hop policy is invalid".format(label))
+    current = candidate
+    seen = {str(candidate)}
+    hops = []
+    for index, raw_hop in enumerate(raw_hops):
+        hop_label = "{} symlink hop {}".format(label, index)
+        if type(raw_hop) is not dict or set(raw_hop) != {"path", "target"}:
+            raise CaptureError("{} policy is invalid".format(hop_label))
+        hop_path = _locked_probe_absolute_path(raw_hop["path"], hop_label + " path")
+        if str(hop_path) != str(current):
+            raise CaptureError("{} path is disconnected".format(hop_label))
+        target_path = _locked_probe_target_path(
+            hop_path, raw_hop["target"], hop_label + " target"
+        )
+        if str(target_path) in seen:
+            raise CaptureError("{} forms a loop".format(hop_label))
+        seen.add(str(target_path))
+        hops.append(
+            {
+                "path": hop_path,
+                "target": raw_hop["target"],
+                "target_path": target_path,
+            }
+        )
+        current = target_path
+    return hops, current
+
+
+def _open_locked_probe_parent(path, label):
+    parent = _safe_directory(path, label)
+    flags = os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW
+    if hasattr(os, "O_CLOEXEC"):
+        flags |= os.O_CLOEXEC
+    descriptor = None
+    try:
+        named = parent.lstat()
+        descriptor = os.open(str(parent), flags)
+        opened = os.fstat(descriptor)
+        if (
+            not stat.S_ISDIR(opened.st_mode)
+            or _metadata_identity(opened) != _metadata_identity(named)
+        ):
+            raise CaptureError("{} identity differs".format(label))
+        return {
+            "fd": descriptor,
+            "identity": _metadata_identity(opened),
+            "path": str(parent),
+        }
+    except Exception:
+        if descriptor is not None:
+            try:
+                os.close(descriptor)
+            except OSError:
+                pass
+        raise
+
+
 def _close_locked_probe(session):
-    for key in ("target_fd", "parent_fd"):
+    for key in ("target_fd", "target_parent_fd"):
         descriptor = session.get(key)
         session[key] = None
         if descriptor is not None:
@@ -351,74 +469,113 @@ def _close_locked_probe(session):
                 os.close(descriptor)
             except OSError:
                 pass
+    for hop in reversed(session.get("hops", [])):
+        for key in ("alias_fd", "parent_fd"):
+            descriptor = hop.get(key)
+            hop[key] = None
+            if descriptor is not None:
+                try:
+                    os.close(descriptor)
+                except OSError:
+                    pass
 
 
 def _open_locked_probe(path, expected, label):
-    if not hasattr(os, "O_DIRECTORY") or not hasattr(os, "O_NOFOLLOW"):
+    if (
+        not hasattr(os, "O_DIRECTORY")
+        or not hasattr(os, "O_NOFOLLOW")
+        or not hasattr(os, "O_PATH")
+    ):
         raise CaptureError("no-follow locked-tool capture is unavailable")
     candidate = Path(os.path.abspath(os.fspath(path)))
     if candidate.name in ("", ".", ".."):
         raise CaptureError("{} path is unsafe".format(label))
-    expected_target = expected.get("symlink_target")
-    if expected_target is not None and (
-        type(expected_target) is not str
-        or not expected_target
-        or expected_target in (".", "..")
-        or "/" in expected_target
-        or "\\" in expected_target
-        or "\x00" in expected_target
-    ):
-        raise CaptureError("{} expected symlink target is unsafe".format(label))
-    parent = _safe_directory(candidate.parent, label + " parent")
-    session = {"parent_fd": None, "target_fd": None}
-    parent_flags = os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW
+    expected_hops, target_path = _locked_probe_hops(candidate, expected, label)
+    session = {
+        "hops": [],
+        "target_fd": None,
+        "target_parent_fd": None,
+    }
+    alias_flags = os.O_PATH | os.O_NOFOLLOW
     target_flags = os.O_RDONLY | os.O_NOFOLLOW
     if hasattr(os, "O_CLOEXEC"):
-        parent_flags |= os.O_CLOEXEC
+        alias_flags |= os.O_CLOEXEC
         target_flags |= os.O_CLOEXEC
     if hasattr(os, "O_BINARY"):
         target_flags |= os.O_BINARY
     try:
-        parent_named = parent.lstat()
-        session["parent_fd"] = os.open(str(parent), parent_flags)
-        parent_open = os.fstat(session["parent_fd"])
-        if (
-            not stat.S_ISDIR(parent_open.st_mode)
-            or _metadata_identity(parent_open) != _metadata_identity(parent_named)
-        ):
-            raise CaptureError("{} parent identity differs".format(label))
-        alias_before = os.stat(
-            candidate.name, dir_fd=session["parent_fd"], follow_symlinks=False
-        )
-        link_target = None
-        target_name = candidate.name
-        if expected_target is None:
-            if not stat.S_ISREG(alias_before.st_mode):
-                raise CaptureError("{} logical path is not a regular file".format(label))
-        else:
-            if not stat.S_ISLNK(alias_before.st_mode):
-                raise CaptureError("{} logical path is not a symlink".format(label))
-            link_target = os.readlink(candidate.name, dir_fd=session["parent_fd"])
+        for index, expected_hop in enumerate(expected_hops):
+            hop_label = "{} symlink hop {}".format(label, index)
+            parent = _open_locked_probe_parent(
+                expected_hop["path"].parent, hop_label + " parent"
+            )
+            hop = {
+                "alias_fd": None,
+                "alias_identity": None,
+                "alias_name": expected_hop["path"].name,
+                "parent_fd": parent["fd"],
+                "parent_identity": parent["identity"],
+                "parent_path": parent["path"],
+                "target": expected_hop["target"],
+            }
+            session["hops"].append(hop)
+            alias_before = os.stat(
+                hop["alias_name"], dir_fd=hop["parent_fd"], follow_symlinks=False
+            )
+            hop["alias_fd"] = os.open(
+                hop["alias_name"], alias_flags, dir_fd=hop["parent_fd"]
+            )
+            alias_open = os.fstat(hop["alias_fd"])
+            link_target = os.readlink(hop["alias_name"], dir_fd=hop["parent_fd"])
             alias_after = os.stat(
-                candidate.name, dir_fd=session["parent_fd"], follow_symlinks=False
+                hop["alias_name"], dir_fd=hop["parent_fd"], follow_symlinks=False
             )
             if (
-                link_target != expected_target
+                not stat.S_ISLNK(alias_open.st_mode)
+                or _metadata_identity(alias_before) != _metadata_identity(alias_open)
+                or _metadata_identity(alias_after) != _metadata_identity(alias_open)
+                or link_target != hop["target"]
                 or _metadata_identity(alias_before) != _metadata_identity(alias_after)
                 or len(os.fsencode(link_target)) != alias_before.st_size
             ):
-                raise CaptureError("{} symlink target differs or changed".format(label))
-            target_name = expected_target
+                raise CaptureError(
+                    "{} target differs or changed".format(hop_label)
+                )
+            hop["alias_identity"] = _metadata_identity(alias_open)
+
+        target_parent = _open_locked_probe_parent(
+            target_path.parent, label + " target parent"
+        )
+        session["target_parent_fd"] = target_parent["fd"]
+        session["target_parent_identity"] = target_parent["identity"]
+        session["target_parent_path"] = target_parent["path"]
+        session["target_name"] = target_path.name
+        target_named_before = os.stat(
+            session["target_name"],
+            dir_fd=session["target_parent_fd"],
+            follow_symlinks=False,
+        )
+        if stat.S_ISLNK(target_named_before.st_mode):
+            raise CaptureError("{} has an unlisted symlink hop".format(label))
+        if not stat.S_ISREG(target_named_before.st_mode):
+            if expected_hops:
+                raise CaptureError("{} target is not a regular file".format(label))
+            raise CaptureError("{} logical path is not a regular file".format(label))
         session["target_fd"] = os.open(
-            target_name, target_flags, dir_fd=session["parent_fd"]
+            session["target_name"],
+            target_flags,
+            dir_fd=session["target_parent_fd"],
         )
         target_before = os.fstat(session["target_fd"])
-        target_named = os.stat(
-            target_name, dir_fd=session["parent_fd"], follow_symlinks=False
+        target_named_after = os.stat(
+            session["target_name"],
+            dir_fd=session["target_parent_fd"],
+            follow_symlinks=False,
         )
         if (
             not stat.S_ISREG(target_before.st_mode)
-            or _metadata_identity(target_named) != _metadata_identity(target_before)
+            or _metadata_identity(target_named_before) != _metadata_identity(target_before)
+            or _metadata_identity(target_named_after) != _metadata_identity(target_before)
         ):
             raise CaptureError("{} target identity differs".format(label))
         chunks = []
@@ -435,16 +592,11 @@ def _open_locked_probe(path, expected, label):
             raise CaptureError("{} target size changed while it was read".format(label))
         session.update(
             {
-                "alias_identity": _metadata_identity(alias_before),
                 "command_name": expected["command"][0],
                 "data": data,
                 "label": label,
-                "link_target": link_target,
                 "logical_path": str(candidate),
-                "parent_identity": _metadata_identity(parent_open),
-                "parent_path": str(parent),
                 "target_identity": _metadata_identity(target_before),
-                "target_name": target_name,
             }
         )
         _recheck_locked_probe(session)
@@ -460,34 +612,47 @@ def _open_locked_probe(path, expected, label):
 def _recheck_locked_probe(session):
     label = session["label"]
     try:
-        parent_open = os.fstat(session["parent_fd"])
-        parent_named = _safe_directory(
-            session["parent_path"], label + " parent recheck"
-        ).lstat()
-        alias = os.stat(
-            Path(session["logical_path"]).name,
-            dir_fd=session["parent_fd"],
-            follow_symlinks=False,
-        )
-        if session["link_target"] is not None:
-            link_target = os.readlink(
-                Path(session["logical_path"]).name, dir_fd=session["parent_fd"]
+        for index, hop in enumerate(session["hops"]):
+            parent_open = os.fstat(hop["parent_fd"])
+            parent_named = _safe_directory(
+                hop["parent_path"],
+                "{} symlink hop {} parent recheck".format(label, index),
+            ).lstat()
+            alias_open = os.fstat(hop["alias_fd"])
+            alias_named = os.stat(
+                hop["alias_name"],
+                dir_fd=hop["parent_fd"],
+                follow_symlinks=False,
             )
-        else:
-            link_target = None
+            link_target = os.readlink(
+                hop["alias_name"], dir_fd=hop["parent_fd"]
+            )
+            if (
+                _metadata_identity(parent_open) != hop["parent_identity"]
+                or _metadata_identity(parent_named) != hop["parent_identity"]
+                or _metadata_identity(alias_open) != hop["alias_identity"]
+                or _metadata_identity(alias_named) != hop["alias_identity"]
+                or link_target != hop["target"]
+                or len(os.fsencode(link_target)) != alias_open.st_size
+            ):
+                raise CaptureError("{} path identity changed".format(label))
+        target_parent_open = os.fstat(session["target_parent_fd"])
+        target_parent_named = _safe_directory(
+            session["target_parent_path"], label + " target parent recheck"
+        ).lstat()
         target_open = os.fstat(session["target_fd"])
         target_named = os.stat(
             session["target_name"],
-            dir_fd=session["parent_fd"],
+            dir_fd=session["target_parent_fd"],
             follow_symlinks=False,
         )
+    except CaptureError:
+        raise
     except (KeyError, OSError) as exc:
         raise CaptureError("cannot recheck {}: {}".format(label, exc))
     if (
-        _metadata_identity(parent_open) != session["parent_identity"]
-        or _metadata_identity(parent_named) != session["parent_identity"]
-        or _metadata_identity(alias) != session["alias_identity"]
-        or link_target != session["link_target"]
+        _metadata_identity(target_parent_open) != session["target_parent_identity"]
+        or _metadata_identity(target_parent_named) != session["target_parent_identity"]
         or _metadata_identity(target_open) != session["target_identity"]
         or _metadata_identity(target_named) != session["target_identity"]
     ):

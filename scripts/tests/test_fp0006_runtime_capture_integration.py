@@ -202,6 +202,27 @@ class FP0006RuntimeCaptureIntegrationTests(unittest.TestCase):
                 with self.assertRaises(capture.CaptureError):
                     capture._validate_tool_report(report, surface)
 
+    def test_producer_binary_cap_is_exact_and_fail_closed(self):
+        self.assertEqual(8 * 1024 * 1024, capture.MAX_PRODUCER_BINARY_BYTES)
+        with tempfile.TemporaryDirectory() as directory:
+            producer = Path(directory) / "producer"
+            producer.write_bytes(b"")
+            with self.assertRaisesRegex(capture.CaptureError, "is empty"):
+                capture._read_producer_binary(producer, "test producer")
+            with producer.open("wb") as output:
+                output.truncate(capture.MAX_PRODUCER_BINARY_BYTES)
+            self.assertEqual(
+                capture.MAX_PRODUCER_BINARY_BYTES,
+                len(capture._read_producer_binary(producer, "test producer")),
+            )
+            with producer.open("wb") as output:
+                output.truncate(capture.MAX_PRODUCER_BINARY_BYTES + 1)
+            with self.assertRaisesRegex(
+                capture.CaptureError,
+                r"size 8388609 exceeds maximum 8388608",
+            ):
+                capture._read_producer_binary(producer, "test producer")
+
     def test_false_authority_claims_cannot_be_promoted(self):
         original = CONTRACT.read_bytes()
         for key in (
@@ -312,6 +333,20 @@ class FP0006RuntimeCaptureIntegrationTests(unittest.TestCase):
             "          retention-days: 30\n"
             "          compression-level: 0\n"
         )
+        native_strip = (
+            "            /usr/bin/rustc --edition=2021 -D warnings "
+            "-C linker=/usr/bin/gcc -C strip=symbols \\\n"
+        )
+        native_size_check = (
+            '          producer_bytes="$(/usr/bin/wc -c < "$producer")"\n'
+            '          if test "$producer_bytes" -le 0 || '
+            'test "$producer_bytes" -gt 8388608; then\n'
+            "            printf 'FP-0006 native producer binary size "
+            "observed=%s maximum=8388608\\n' \\\n"
+            '              "$producer_bytes" >&2\n'
+            "            exit 1\n"
+            "          fi\n"
+        )
         native_failure_upload = (
             "          name: fp0006-native-rust-first-failure-${{ github.run_id }}-${{ github.run_attempt }}\n"
             "          path: ${{ runner.temp }}/fp0006-native-rust-first-failure/workflow-state\n"
@@ -348,6 +383,16 @@ class FP0006RuntimeCaptureIntegrationTests(unittest.TestCase):
                 self.native_workflow,
                 native_install,
                 native_install.replace("coreutils\n", "coreutils-single\n"),
+            )),
+            (capture._validate_native_workflow, self._replace_once(
+                self.native_workflow,
+                native_strip,
+                native_strip.replace(" -C strip=symbols", ""),
+            )),
+            (capture._validate_native_workflow, self._replace_once(
+                self.native_workflow,
+                native_size_check,
+                "",
             )),
             (capture._validate_native_workflow, self._replace_once(
                 self.native_workflow,
@@ -585,6 +630,20 @@ class FP0006RuntimeCaptureIntegrationTests(unittest.TestCase):
             "            /usr/bin/timeout --signal=TERM --kill-after=5s 30s \\\n"
         )
         timeout_end = "          fi\n          {\n"
+        native_strip = (
+            "            /usr/bin/rustc --edition=2021 -D warnings "
+            "-C linker=/usr/bin/gcc -C strip=symbols \\\n"
+        )
+        native_size_check = (
+            '          producer_bytes="$(/usr/bin/wc -c < "$producer")"\n'
+            '          if test "$producer_bytes" -le 0 || '
+            'test "$producer_bytes" -gt 8388608; then\n'
+            "            printf 'FP-0006 native producer binary size "
+            "observed=%s maximum=8388608\\n' \\\n"
+            '              "$producer_bytes" >&2\n'
+            "            exit 1\n"
+            "          fi\n"
+        )
         native_outer_if = self._replace_once(
             self.native_workflow,
             timeout_start,
@@ -611,6 +670,16 @@ class FP0006RuntimeCaptureIntegrationTests(unittest.TestCase):
                 self.native_workflow,
                 native_capture_start,
                 native_capture_start + "          return 0\n",
+            ),
+            self._replace_once(
+                self.native_workflow,
+                native_strip,
+                native_strip.replace(" -C strip=symbols", ""),
+            ),
+            self._replace_once(
+                self.native_workflow,
+                native_size_check,
+                "",
             ),
         )
         native_separator = "\n  fp0006-native-rust-capture:\n"

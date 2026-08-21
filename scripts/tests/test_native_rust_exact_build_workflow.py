@@ -883,6 +883,19 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             job,
         )
         self.assertIn("if: ${{ failure() }}", job)
+        self.assertIn("-C linker=/usr/bin/gcc -C strip=symbols", job)
+        self.assertIn(
+            'producer_bytes="$(/usr/bin/wc -c < "$producer")"', job
+        )
+        self.assertIn(
+            'if test "$producer_bytes" -le 0 || '
+            'test "$producer_bytes" -gt 8388608; then',
+            job,
+        )
+        self.assertIn(
+            "FP-0006 native producer binary size observed=%s maximum=8388608",
+            job,
+        )
         successful_upload = job.split(
             "      - name: Upload FP-0006 native envelope\n", 1
         )[1].split(

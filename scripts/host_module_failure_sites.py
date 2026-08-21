@@ -889,7 +889,14 @@ def recheck_repository_authority(repo, authority):
         raise CaptureError("repository authority changed during fresh replay")
 
 
-def _module_origin_is_stdlib(module):
+def _module_origin_is_stdlib(name, module):
+    # Rocky 8's Python 3.6 starts the built-in ``sys`` module before importlib
+    # has attached a ModuleSpec.  It consequently has neither a trustworthy
+    # origin nor a ``__file__`` even under ``python -I -S``.  Bind that one
+    # legacy case to the interpreter entry module captured before any other
+    # imports; an object substituted into ``sys.modules`` still fails.
+    if name == "sys":
+        return module is _fp0006_entry_sys
     spec = getattr(module, "__spec__", None)
     origin = getattr(spec, "origin", None)
     if origin in ("built-in", "frozen"):
@@ -915,7 +922,7 @@ def _module_origin_is_stdlib(module):
 def reject_untrusted_inherited_modules():
     for name in AUTHORITY_STDLIB_MODULES:
         module = sys.modules.get(name)
-        if module is not None and not _module_origin_is_stdlib(module):
+        if module is not None and not _module_origin_is_stdlib(name, module):
             raise CaptureError(
                 "authority bootstrap inherited an untrusted {0} module".format(name)
             )

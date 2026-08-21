@@ -61,7 +61,7 @@ CONTRACT_ID = "mckernel-native-rust-runtime-evidence-v1"
 PROTOCOL = "MCKERNEL_NATIVE_RUST_RUNTIME_V1"
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
-EXPECTED_FP0006_NATIVE_JOB_SHA256 = "678497c137d221b73dcd8a49fa57bac269569e4f7410ba9554f8adf59a69d96f"
+EXPECTED_FP0006_NATIVE_JOB_SHA256 = "edb35a6bdf7bd5495e9b5301e15cc2ca674626ea779c79b085f7e1baccb2cde3"
 BUILD_KERNEL_TARGETS = ["bzImage"]
 BUILD_MODULE_TARGETS = [
     "drivers/misc/mckernel/ihk.ko",
@@ -512,7 +512,10 @@ def _validate_fp0006_native_capture_job(job_text: str) -> None:
         'test "$(/usr/bin/rpm -q --qf \'%{NAME}-%{EPOCHNUM}:%{VERSION}-%{RELEASE}.%{ARCH}\\n\' rust)" = rust-0:1.92.0-1.el10.x86_64',
         "test \"$(/usr/bin/rustc --version)\" = 'rustc 1.92.0 (ded5c06cf 2025-12-08) (Red Hat 1.92.0-1.el10)'",
         'test "$(git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"',
-        "/usr/bin/rustc --edition=2021 -D warnings -C linker=/usr/bin/gcc \\",
+        "/usr/bin/rustc --edition=2021 -D warnings -C linker=/usr/bin/gcc -C strip=symbols \\",
+        'producer_bytes="$(/usr/bin/wc -c < "$producer")"',
+        'if test "$producer_bytes" -le 0 || test "$producer_bytes" -gt 8388608; then',
+        "printf 'FP-0006 native producer binary size observed=%s maximum=8388608\\n' \\",
         "/usr/bin/timeout --signal=TERM --kill-after=5s 30s \\",
         '"$producer" "$stage" > "$producer_output" 2>&1',
         "python3 scripts/fp0006_runtime_capture_integration.py finalize-lane \\",
@@ -533,6 +536,14 @@ def _validate_fp0006_native_capture_job(job_text: str) -> None:
     )
     timeout_line = "/usr/bin/timeout --signal=TERM --kill-after=5s 30s \\"
     producer_line = '"$producer" "$stage" > "$producer_output" 2>&1'
+    size_window = (
+        'producer_bytes="$(/usr/bin/wc -c < "$producer")"',
+        'if test "$producer_bytes" -le 0 || test "$producer_bytes" -gt 8388608; then',
+        "printf 'FP-0006 native producer binary size observed=%s maximum=8388608\\n' \\",
+        '"$producer_bytes" >&2',
+        "exit 1",
+        "fi",
+    )
     finalizer_line = (
         "python3 scripts/fp0006_runtime_capture_integration.py finalize-lane \\"
     )
@@ -541,6 +552,16 @@ def _validate_fp0006_native_capture_job(job_text: str) -> None:
     for line in (timeout_line, producer_line, finalizer_line):
         if capture_lines.count(line) != 1:
             raise EvidenceError("FP-0006 native structural command boundary differs")
+    timeout_position = capture_lines.index(timeout_line)
+    finalizer_position = capture_lines.index(finalizer_line)
+    size_candidates = [
+        index for index in range(len(capture_lines))
+        if capture_lines[index:index + len(size_window)] == size_window
+    ]
+    if len(size_candidates) != 1:
+        raise EvidenceError("FP-0006 native producer size boundary differs")
+    if not size_candidates[0] < timeout_position < finalizer_position:
+        raise EvidenceError("FP-0006 native producer size check is reordered")
     timeout_candidates = [
         index for index, line in enumerate(capture_lines)
         if line == timeout_if
@@ -551,13 +572,11 @@ def _validate_fp0006_native_capture_job(job_text: str) -> None:
     if len(timeout_candidates) != 1:
         raise EvidenceError("FP-0006 native producer timeout condition differs")
     timeout_if_position = timeout_candidates[0]
-    timeout_position = capture_lines.index(timeout_line)
-    finalizer_position = capture_lines.index(finalizer_line)
     exits = tuple(
         line for line in capture_lines
         if re.match(r"^exit(?:\s|$)", line) is not None
     )
-    if exits != ('exit "$compile_rc"', "exit 1"):
+    if exits != ('exit "$compile_rc"', "exit 1", "exit 1"):
         raise EvidenceError("FP-0006 native capture has an unapproved exit")
     if any(
         re.match(r"^(?:trap|return)(?:\s|$)", line) is not None

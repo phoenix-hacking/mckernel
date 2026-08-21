@@ -871,6 +871,11 @@ class LicenseReviewCampaignTests(unittest.TestCase):
                     self.assertFalse(candidate_is_clean(candidate, expected_head))
                     self.assertEqual((private / relative).read_bytes(), originals[relative])
                 path.write_bytes(originals[relative])
+                # Start the next mutation from a fresh-checkout-equivalent index
+                # state instead of Git's filesystem-dependent racy-clean cache.
+                require_git(
+                    candidate, "update-index", "--really-refresh", "--", relative
+                )
                 self.assertTrue(candidate_is_clean(candidate, expected_head))
             splice_target = candidate / authority_paths[1]
             before = splice_target.stat()
@@ -887,11 +892,25 @@ class LicenseReviewCampaignTests(unittest.TestCase):
                 originals[authority_paths[1]],
             )
             splice_target.write_bytes(originals[authority_paths[1]])
+            require_git(
+                candidate,
+                "update-index",
+                "--really-refresh",
+                "--",
+                authority_paths[1],
+            )
             self.assertTrue(candidate_is_clean(candidate, expected_head))
             mode_target = candidate / authority_paths[2]
             mode_target.chmod(0o755)
             self.assertFalse(candidate_is_clean(candidate, expected_head))
             mode_target.chmod(0o644)
+            require_git(
+                candidate,
+                "update-index",
+                "--really-refresh",
+                "--",
+                authority_paths[2],
+            )
             self.assertTrue(candidate_is_clean(candidate, expected_head))
             indexed = authority_paths[2]
             (candidate / indexed).write_bytes(originals[indexed] + b"index mutation\n")

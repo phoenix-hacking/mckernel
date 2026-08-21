@@ -31,7 +31,7 @@ AUTHORITY_PATH = Path(
     "host-kernel/rocky/evidence/rk001-license-review-response-contract-ef58-v1.json"
 )
 # Frozen only after the campaign authority and response workflow reach final bytes.
-AUTHORITY_SHA256 = "9975986053e2ef6253bc500cdd4bf0ffedf62adb73eb3e5be01cea9f22b31faf"
+AUTHORITY_SHA256 = "c71bbb5432d61106f7c86ec0f05a76e804586c57d2ad189b94e4b010bb4deaec"
 SCHEMA_VERSION = 1
 CONTRACT_ID = "rk-001-license-review-response-ef58860e-v1"
 CAMPAIGN_ID = "rk-001-license-review-campaign-ef58860e-v1"

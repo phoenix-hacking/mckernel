@@ -140,6 +140,39 @@ class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
             "schema_version": 1,
         }
 
+    def _two_hop_probe_fixture(self, root):
+        logical_parent = root / "bin"
+        intermediate_parent = root / "alternatives"
+        target_parent = root / "llvm21-bin"
+        logical_parent.mkdir()
+        intermediate_parent.mkdir()
+        target_parent.mkdir()
+        target = target_parent / "llvm-config"
+        target_bytes = b"#!/bin/sh\nprintf '21.1.8\\n'\n"
+        target.write_bytes(target_bytes)
+        target.chmod(0o755)
+        intermediate = intermediate_parent / "llvm-config"
+        intermediate.symlink_to(str(target))
+        logical = logical_parent / "llvm-config"
+        logical.symlink_to(str(intermediate))
+        expected = {
+            "command": ["llvm-config", "--version"],
+            "symlink_hops": [
+                {"path": str(logical), "target": str(intermediate)},
+                {"path": str(intermediate), "target": str(target)},
+            ],
+        }
+        return {
+            "expected": expected,
+            "intermediate": intermediate,
+            "intermediate_parent": intermediate_parent,
+            "logical": logical,
+            "logical_parent": logical_parent,
+            "target": target,
+            "target_bytes": target_bytes,
+            "target_parent": target_parent,
+        }
+
     def test_contract_and_all_frozen_inputs_validate(self):
         contract_value, authority = capture.validate_contract(REPO_ROOT)
         self.assertEqual("rk-006-full-source-build-capture-v1", contract_value["capture_contract_id"])
@@ -330,7 +363,9 @@ class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
                 "path": str(logical),
                 "sha256": hashlib.sha256(target_bytes).hexdigest(),
                 "stdout_sha256": hashlib.sha256(version).hexdigest(),
-                "symlink_target": target.name,
+                "symlink_hops": [
+                    {"path": str(logical), "target": target.name},
+                ],
             }
             core = root / "lib/rustlib/src/rust/library/core/src/lib.rs"
             core.parent.mkdir(parents=True)
@@ -386,6 +421,108 @@ class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
             )
             self.assertEqual(hashlib.sha256(target_bytes).hexdigest(), probe["binary_sha256"])
 
+    def test_locked_probe_table_binds_exact_rocky_regular_and_symlink_shapes(self):
+        expected_hops = {
+            "clang": [
+                {"path": "/usr/bin/clang", "target": "clang-21"},
+            ],
+            "lld": [
+                {"path": "/usr/bin/ld.lld", "target": "lld"},
+            ],
+            "llvm": [
+                {
+                    "path": "/usr/bin/llvm-config",
+                    "target": "/etc/alternatives/llvm-config",
+                },
+                {
+                    "path": "/etc/alternatives/llvm-config",
+                    "target": "/usr/lib64/llvm21/bin/llvm-config",
+                },
+            ],
+        }
+        self.assertEqual(
+            expected_hops,
+            {
+                probe_id: capture.LOCKED_PROBES[probe_id]["symlink_hops"]
+                for probe_id in sorted(expected_hops)
+            },
+        )
+        for probe_id in ("bindgen", "pahole", "rustc"):
+            self.assertNotIn("symlink_hops", capture.LOCKED_PROBES[probe_id])
+
+    def test_locked_probe_lld_and_llvm_alternatives_bind_logical_owner_and_target(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            binary_parent = root / "bin"
+            binary_parent.mkdir()
+
+            lld_target = binary_parent / "lld"
+            lld_bytes = b"#!/bin/sh\nprintf 'LLD 21.1.8\\n'\n"
+            lld_target.write_bytes(lld_bytes)
+            lld_target.chmod(0o755)
+            lld_logical = binary_parent / "ld.lld"
+            lld_logical.symlink_to(lld_target.name)
+
+            llvm_target_parent = root / "llvm21-bin"
+            llvm_target_parent.mkdir()
+            llvm_target = llvm_target_parent / "llvm-config"
+            llvm_bytes = b"#!/bin/sh\nprintf '21.1.8\\n'\n"
+            llvm_target.write_bytes(llvm_bytes)
+            llvm_target.chmod(0o755)
+            alternatives = root / "alternatives"
+            alternatives.mkdir()
+            llvm_intermediate = alternatives / "llvm-config"
+            llvm_intermediate.symlink_to(str(llvm_target))
+            llvm_logical = binary_parent / "llvm-config"
+            llvm_logical.symlink_to(str(llvm_intermediate))
+
+            cases = (
+                (
+                    "lld",
+                    lld_logical,
+                    lld_bytes,
+                    b"LLD 21.1.8\n",
+                    "lld-0:21.1.8-1.el10.x86_64",
+                    [
+                        {"path": str(lld_logical), "target": lld_target.name},
+                    ],
+                ),
+                (
+                    "llvm",
+                    llvm_logical,
+                    llvm_bytes,
+                    b"21.1.8\n",
+                    "llvm-devel-0:21.1.8-1.el10.x86_64",
+                    [
+                        {
+                            "path": str(llvm_logical),
+                            "target": str(llvm_intermediate),
+                        },
+                        {
+                            "path": str(llvm_intermediate),
+                            "target": str(llvm_target),
+                        },
+                    ],
+                ),
+            )
+            for probe_id, logical, target_bytes, stdout, owner, hops in cases:
+                with self.subTest(probe_id=probe_id):
+                    command = [logical.name, "--version"]
+                    expected = {"command": command, "symlink_hops": hops}
+                    owner_command = ["rpm", "-qf", str(logical)]
+                    rpm_owner = mock.Mock(return_value=(owner, owner_command))
+                    with mock.patch.dict(
+                        capture.CAPTURE_ENV, {"PATH": str(binary_parent)}
+                    ), mock.patch.object(capture, "_rpm_owner", rpm_owner):
+                        result = capture._capture_locked_probe(
+                            logical, expected, probe_id + " binary"
+                        )
+                    rpm_owner.assert_called_once_with(logical)
+                    self.assertEqual(target_bytes, result["binary_data"])
+                    self.assertEqual(stdout, result["completed"].stdout)
+                    self.assertEqual(owner, result["owner"])
+                    self.assertEqual(owner_command, result["owner_command"])
+
     def test_locked_probe_symlink_rejects_loop_and_static_retarget(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -395,17 +532,37 @@ class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
             logical.symlink_to(target.name)
             expected = {
                 "command": ["clang", "--version"],
-                "symlink_target": target.name,
+                "symlink_hops": [
+                    {"path": str(logical), "target": target.name},
+                ],
             }
-            with self.assertRaisesRegex(capture.CaptureError, "cannot open"):
+            with self.assertRaisesRegex(capture.CaptureError, "unlisted symlink hop"):
                 capture._open_locked_probe(logical, expected, "clang binary")
 
             logical.unlink()
             target.unlink()
             target.write_bytes(b"exact target\n")
             logical.symlink_to("clang-22")
-            with self.assertRaisesRegex(capture.CaptureError, "symlink target differs"):
+            with self.assertRaisesRegex(capture.CaptureError, "target differs"):
                 capture._open_locked_probe(logical, expected, "clang binary")
+
+            loop = {
+                "command": ["clang", "--version"],
+                "symlink_hops": [
+                    {"path": str(logical), "target": logical.name},
+                ],
+            }
+            with self.assertRaisesRegex(capture.CaptureError, "forms a loop"):
+                capture._open_locked_probe(logical, loop, "clang binary")
+
+            unsafe = {
+                "command": ["clang", "--version"],
+                "symlink_hops": [
+                    {"path": str(logical), "target": "../clang-21"},
+                ],
+            }
+            with self.assertRaisesRegex(capture.CaptureError, "safe basename"):
+                capture._open_locked_probe(logical, unsafe, "clang binary")
 
     def test_locked_probe_rejects_post_return_and_path_hijack(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -509,7 +666,9 @@ class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
             logical.symlink_to(target.name)
             expected = {
                 "command": [logical.name, "--version"],
-                "symlink_target": target.name,
+                "symlink_hops": [
+                    {"path": str(logical), "target": target.name},
+                ],
             }
 
             def retarget_after_rpm(path):
@@ -527,6 +686,162 @@ class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
                 with self.assertRaisesRegex(capture.CaptureError, "path identity changed"):
                     capture._capture_locked_probe(logical, expected, "clang binary")
             execute.assert_not_called()
+
+    def test_locked_probe_two_hop_rejects_retarget_at_every_hop_and_target(self):
+        for mutation in ("logical-hop", "intermediate-hop", "target"):
+            with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                fixture = self._two_hop_probe_fixture(root)
+                other_intermediate_parent = root / "other-alternatives"
+                other_intermediate_parent.mkdir()
+                other_intermediate = other_intermediate_parent / "llvm-config"
+                other_intermediate.symlink_to(str(fixture["target"]))
+                other_target_parent = root / "other-llvm21-bin"
+                other_target_parent.mkdir()
+                other_target = other_target_parent / "llvm-config"
+                other_target.write_bytes(fixture["target_bytes"])
+                other_target.chmod(0o755)
+                replacement = root / "replacement-target"
+                replacement.write_bytes(fixture["target_bytes"])
+                replacement.chmod(0o755)
+
+                def retarget_after_rpm(path):
+                    self.assertEqual(str(fixture["logical"]), str(path))
+                    if mutation == "logical-hop":
+                        fixture["logical"].unlink()
+                        fixture["logical"].symlink_to(str(other_intermediate))
+                    elif mutation == "intermediate-hop":
+                        fixture["intermediate"].unlink()
+                        fixture["intermediate"].symlink_to(str(other_target))
+                    else:
+                        os.replace(str(replacement), str(fixture["target"]))
+                    return "llvm-devel-0:21.1.8-1.el10.x86_64", [
+                        "rpm", "-qf", str(path)
+                    ]
+
+                with mock.patch.dict(
+                    capture.CAPTURE_ENV, {"PATH": str(fixture["logical_parent"])}
+                ), mock.patch.object(
+                    capture, "_rpm_owner", side_effect=retarget_after_rpm
+                ), mock.patch.object(capture, "_run_locked_probe") as execute:
+                    with self.assertRaisesRegex(
+                        capture.CaptureError, "path identity changed"
+                    ):
+                        capture._capture_locked_probe(
+                            fixture["logical"], fixture["expected"], "llvm binary"
+                        )
+                execute.assert_not_called()
+
+    def test_locked_probe_two_hop_rechecks_every_hop_and_target_after_execution(self):
+        for mutation in ("logical-hop", "intermediate-hop", "target"):
+            with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                fixture = self._two_hop_probe_fixture(root)
+                other_intermediate_parent = root / "other-alternatives"
+                other_intermediate_parent.mkdir()
+                other_intermediate = other_intermediate_parent / "llvm-config"
+                other_intermediate.symlink_to(str(fixture["target"]))
+                other_target_parent = root / "other-llvm21-bin"
+                other_target_parent.mkdir()
+                other_target = other_target_parent / "llvm-config"
+                other_target.write_bytes(fixture["target_bytes"])
+                other_target.chmod(0o755)
+                replacement = root / "replacement-target"
+                replacement.write_bytes(fixture["target_bytes"])
+                replacement.chmod(0o755)
+                run_locked = capture._run_locked_probe
+                observed = []
+
+                def mutate_after_execution(session, command):
+                    completed = run_locked(session, command)
+                    observed.append(completed.stdout)
+                    if mutation == "logical-hop":
+                        fixture["logical"].unlink()
+                        fixture["logical"].symlink_to(str(other_intermediate))
+                    elif mutation == "intermediate-hop":
+                        fixture["intermediate"].unlink()
+                        fixture["intermediate"].symlink_to(str(other_target))
+                    else:
+                        os.replace(str(replacement), str(fixture["target"]))
+                    return completed
+
+                owner_command = ["rpm", "-qf", str(fixture["logical"])]
+                rpm_owner = mock.Mock(
+                    return_value=(
+                        "llvm-devel-0:21.1.8-1.el10.x86_64",
+                        owner_command,
+                    )
+                )
+                with mock.patch.dict(
+                    capture.CAPTURE_ENV, {"PATH": str(fixture["logical_parent"])}
+                ), mock.patch.object(
+                    capture, "_rpm_owner", rpm_owner
+                ), mock.patch.object(
+                    capture,
+                    "_run_locked_probe",
+                    side_effect=mutate_after_execution,
+                ):
+                    with self.assertRaisesRegex(
+                        capture.CaptureError, "path identity changed"
+                    ):
+                        capture._capture_locked_probe(
+                            fixture["logical"], fixture["expected"], "llvm binary"
+                        )
+                self.assertEqual([b"21.1.8\n"], observed)
+
+    def test_locked_probe_two_hop_rejects_unlisted_third_hop(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            fixture = self._two_hop_probe_fixture(root)
+            final_target = root / "final-target"
+            final_target.write_bytes(fixture["target_bytes"])
+            final_target.chmod(0o755)
+            fixture["target"].unlink()
+            fixture["target"].symlink_to(str(final_target))
+            with self.assertRaisesRegex(capture.CaptureError, "unlisted symlink hop"):
+                capture._open_locked_probe(
+                    fixture["logical"], fixture["expected"], "llvm binary"
+                )
+
+    def test_locked_probe_two_hop_rejects_every_parent_substitution(self):
+        parent_keys = (
+            "logical_parent",
+            "intermediate_parent",
+            "target_parent",
+        )
+        for parent_key in parent_keys:
+            with self.subTest(parent=parent_key), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                fixture = self._two_hop_probe_fixture(root)
+
+                def substitute_parent(path):
+                    self.assertEqual(str(fixture["logical"]), str(path))
+                    parent = fixture[parent_key]
+                    parent.rename(root / (parent.name + "-held"))
+                    parent.mkdir()
+                    if parent_key == "logical_parent":
+                        fixture["logical"].symlink_to(str(fixture["intermediate"]))
+                    elif parent_key == "intermediate_parent":
+                        fixture["intermediate"].symlink_to(str(fixture["target"]))
+                    else:
+                        fixture["target"].write_bytes(fixture["target_bytes"])
+                        fixture["target"].chmod(0o755)
+                    return "llvm-devel-0:21.1.8-1.el10.x86_64", [
+                        "rpm", "-qf", str(path)
+                    ]
+
+                with mock.patch.dict(
+                    capture.CAPTURE_ENV, {"PATH": str(fixture["logical_parent"])}
+                ), mock.patch.object(
+                    capture, "_rpm_owner", side_effect=substitute_parent
+                ), mock.patch.object(capture, "_run_locked_probe") as execute:
+                    with self.assertRaisesRegex(
+                        capture.CaptureError, "path identity changed"
+                    ):
+                        capture._capture_locked_probe(
+                            fixture["logical"], fixture["expected"], "llvm binary"
+                        )
+                execute.assert_not_called()
 
     def test_tar_inspection_rejects_traversal_and_symlink_members(self):
         for name, member_type in (("../escape", tarfile.REGTYPE), ("link", tarfile.SYMTYPE)):

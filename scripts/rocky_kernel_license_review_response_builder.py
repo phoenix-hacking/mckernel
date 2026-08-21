@@ -31,7 +31,7 @@ AUTHORITY_PATH = Path(
     "host-kernel/rocky/evidence/"
     "rk001-license-review-response-builder-ef58-v1.json"
 )
-AUTHORITY_SHA256 = "adaff6219b46f2264fa65be90fb649c039da1718bc3c1fade71da990a30c1e00"
+AUTHORITY_SHA256 = "99d122b6ff4b35e7f83988b41958977c7f4edae705245200e885c6aa6d0d5bbf"
 SCHEMA_VERSION = 1
 BUILDER_ID = "rk-001-license-review-response-builder-ef58860e-v1"
 
@@ -89,12 +89,12 @@ EXPECTED_INPUTS = {
     },
     "response_authority": {
         "path": "host-kernel/rocky/evidence/rk001-license-review-response-contract-ef58-v1.json",
-        "sha256": "9975986053e2ef6253bc500cdd4bf0ffedf62adb73eb3e5be01cea9f22b31faf",
+        "sha256": "c71bbb5432d61106f7c86ec0f05a76e804586c57d2ad189b94e4b010bb4deaec",
         "size": 8381,
     },
     "response_checker": {
         "path": "scripts/rocky_kernel_license_review_response.py",
-        "sha256": "5ddc3962e62110d43cd4c64fa65783426c3e58cfb713b072dc43e903e452eee8",
+        "sha256": "ae27f84572bf74ef1d2ec22efd99e5aac6d117d4ef5b1fb8d7f38da823200b5c",
         "size": 93401,
     },
 }
