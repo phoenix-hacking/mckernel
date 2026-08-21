@@ -38,10 +38,10 @@ SURFACE_ALIASES = {
 }
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 
-# SELF_DIGEST:5930b0e715c6d791b854763226dd1642f833cb1a67f45996d57bbb096888e630
+# SELF_DIGEST:bd49a83261db3602f912cf5f23f5aaa643e58220d2ddc6f09a435ca0022068c4
 SELF_SOURCE_MAXIMUM = 1024 * 1024
-SECURITY_SOURCE_SHA256 = "9d72d215f2fc618ac05c2f729a57ad865391c105de2e70995b8eb251d81855a7"
-SECURITY_SOURCE_SIZE = 51559
+SECURITY_SOURCE_SHA256 = "9bc3783df8d5df2c2c8d62ca9205d88f5afac810adac2b322b6dde2ddcfe1676"
+SECURITY_SOURCE_SIZE = 51627
 
 
 class WitnessError(RuntimeError):
@@ -268,7 +268,8 @@ def _verify_cli_source_final(source: Dict[str, Any]) -> None:
 
 
 def _load_exact_security_primitives(source_path: str) -> None:
-    global WitnessError, _read_capture_members, _read_rooted_file, _file_identity
+    global WitnessError, _directory_identity, _file_identity
+    global _read_capture_members, _read_rooted_file
     security_path = str(Path(source_path).parent / "fp0006_ihk_device_negative_dispatch.py")
     descriptor, metadata = _open_absolute_no_follow(
         security_path, "isolated security primitives"
@@ -292,6 +293,7 @@ def _load_exact_security_primitives(source_path: str) -> None:
     exec(code, namespace, namespace)
     required = (
         "WitnessError",
+        "_directory_identity",
         "_file_identity",
         "_read_capture_members",
         "_read_rooted_file",
@@ -299,6 +301,7 @@ def _load_exact_security_primitives(source_path: str) -> None:
     if any(name not in namespace for name in required):
         raise WitnessError("isolated security primitive exports differ")
     WitnessError = namespace["WitnessError"]
+    _directory_identity = namespace["_directory_identity"]
     _file_identity = namespace["_file_identity"]
     _read_capture_members = namespace["_read_capture_members"]
     _read_rooted_file = namespace["_read_rooted_file"]
@@ -404,17 +407,23 @@ MAX_DIRECTORIES = 128
 MAX_FILES = 32
 MAX_NAMESPACES = 8
 MAX_FD = 4095
-IDENTITY_LENGTH = 12
+DIRECTORY_IDENTITY_LENGTH = 5
+FILE_IDENTITY_LENGTH = 12
 PROTOCOL = "fp0006-private-exec-seal-v1"
 F_GET_SEALS = 1034
 REQUIRED_SEALS = 15
 
-def identity(info):
+def file_identity(info):
     return [
         info.st_dev, info.st_ino, info.st_mode, info.st_nlink,
         info.st_uid, info.st_gid, info.st_rdev, info.st_size,
         info.st_mtime_ns, info.st_ctime_ns,
         getattr(info, "st_blksize", 0), getattr(info, "st_blocks", 0),
+    ]
+
+def directory_identity(info):
+    return [
+        info.st_dev, info.st_ino, info.st_mode, info.st_uid, info.st_gid,
     ]
 
 def object_without_duplicates(pairs):
@@ -490,8 +499,8 @@ def read_exact_file(descriptor, size):
         raise ValueError("file grew")
     return b"".join(chunks)
 
-def validate_identity(value):
-    if type(value) is not list or len(value) != IDENTITY_LENGTH:
+def validate_identity(value, length):
+    if type(value) is not list or len(value) != length:
         raise ValueError("identity shape differs")
     for item in value:
         exact_int(item)
@@ -580,7 +589,7 @@ def main():
         if descriptor < 3 or descriptor > MAX_FD or descriptor in expected_fds:
             raise ValueError("directory fd differs")
         expected_fds.add(descriptor)
-        validate_identity(row["identity"])
+        validate_identity(row["identity"], DIRECTORY_IDENTITY_LENGTH)
     total_bytes = 0
     for row in files:
         exact_keys(row, ("bytes", "fd", "identity"))
@@ -588,7 +597,7 @@ def main():
         if descriptor < 3 or descriptor > MAX_FD or descriptor in expected_fds:
             raise ValueError("file fd differs")
         expected_fds.add(descriptor)
-        validate_identity(row["identity"])
+        validate_identity(row["identity"], FILE_IDENTITY_LENGTH)
         if type(row["bytes"]) is not str:
             raise ValueError("file bytes encoding differs")
         decoded = base64.b64decode(row["bytes"].encode("ascii"), validate=True)
@@ -620,13 +629,13 @@ def main():
         observed_namespaces.append(sorted(os.listdir(row["fd"])))
         expected_namespaces.append(row["members"])
     for row in directories:
-        observed_directories.append(identity(os.fstat(row["fd"])))
+        observed_directories.append(directory_identity(os.fstat(row["fd"])))
         expected_directories.append(row["identity"])
     for row in files:
-        before = identity(os.fstat(row["fd"]))
+        before = file_identity(os.fstat(row["fd"]))
         first = read_exact_file(row["fd"], len(row["decoded"]))
         second = read_exact_file(row["fd"], len(row["decoded"]))
-        after = identity(os.fstat(row["fd"]))
+        after = file_identity(os.fstat(row["fd"]))
         observed_files.append((before, first, second, after))
         expected_files.append(
             (row["identity"], row["decoded"], row["decoded"], row["identity"])
@@ -647,12 +656,17 @@ os._exit(status)
 
 
 def _owned_fd_identity(
-    descriptor: int, label: str,
+    descriptor: int, label: str, identity_length: int = 12,
 ) -> Optional[List[int]]:
     if type(descriptor) is not int or descriptor < 0:
         raise WitnessError("{0} descriptor differs".format(label))
     try:
-        return _file_identity(os.fstat(descriptor))
+        metadata = os.fstat(descriptor)
+        if identity_length == 5:
+            return _directory_identity(metadata)
+        if identity_length == 12:
+            return _file_identity(metadata)
+        raise WitnessError("{0} identity length differs".format(label))
     except OSError as error:
         if error.errno == errno.EBADF:
             return None
@@ -668,7 +682,9 @@ def _owned_fd_state(
         type(item) is not int for item in expected_identity
     ):
         raise WitnessError("{0} retained identity differs".format(label))
-    actual = _owned_fd_identity(descriptor, label)
+    if len(expected_identity) not in (5, 12):
+        raise WitnessError("{0} retained identity length differs".format(label))
+    actual = _owned_fd_identity(descriptor, label, len(expected_identity))
     if actual is None:
         return "closed"
     if not _exact_json_equal(actual, expected_identity):
@@ -890,8 +906,8 @@ def _run_exec_seal(
     namespace_records: List[Dict[str, Any]],
 ) -> None:
     helper = _private_exec_helper_bytes()
-    expected_helper_sha256 = "085bfcdb25e215534531dd30605bcbd1c97127db6a95692cfa238030e5605403"
-    expected_helper_size = 8939
+    expected_helper_sha256 = "3e40970cc1b006a39ee0436a6cab47f413d49009d40530bb5fe5c0e704738e2c"
+    expected_helper_size = 9171
     if len(helper) != expected_helper_size or _sha256(helper) != expected_helper_sha256:
         raise WitnessError("private exec helper identity differs")
 
@@ -1194,18 +1210,18 @@ def _retained_private_seal(
             record = {
                 "descriptor": descriptor,
                 "identity": list(directories[key]),
-                "owned_identity": _file_identity(retained),
+                "owned_identity": _directory_identity(retained),
                 "path": key,
             }
             directory_records.append(record)
             if stat.S_ISLNK(named.st_mode) or not stat.S_ISDIR(named.st_mode):
                 raise WitnessError("private aggregate directory changed type: " + key)
             _require_exact_json(
-                _file_identity(named), directories[key],
+                _directory_identity(named), directories[key],
                 "private aggregate named directory " + key,
             )
             _require_exact_json(
-                _file_identity(retained), directories[key],
+                _directory_identity(retained), directories[key],
                 "private aggregate retained directory " + key,
             )
             directory_by_path[key] = record
@@ -1372,8 +1388,8 @@ def _aggregate_post_close_sweep(
             )
 
     # Namespace operations are intentionally completed before any leaf is
-    # finalized.  A namespace mutation also changes the directory identity,
-    # which the final no-listing pass checks below.
+    # finalized.  Exact listings bind the accepted member set at each
+    # checkpoint; stable directory identity binds the same path components.
     try:
         for root, members in capture_namespaces:
             _require_exact_json(
@@ -1391,15 +1407,15 @@ def _aggregate_post_close_sweep(
         _aggregate_read_exact(path, identity, data, label)
 
     # This pass has no owned-descriptor teardown or namespace listing after an
-    # earlier root is checked.  Directory ctime/mtime binds namespace changes;
-    # leaf identity binds replacement and content metadata after all reads.
+    # earlier root is checked.  Stable directory identity rejects component
+    # replacement; full leaf identity binds content metadata after all reads.
     try:
         for key in sorted(directories):
             metadata = os.lstat(key)
             if stat.S_ISLNK(metadata.st_mode) or not stat.S_ISDIR(metadata.st_mode):
                 raise WitnessError("aggregate directory changed type: " + key)
             _require_exact_json(
-                _file_identity(metadata), directories[key],
+                _directory_identity(metadata), directories[key],
                 "aggregate final directory " + key,
             )
         for path, identity, _, label in authority_files + capture_files:
@@ -1638,7 +1654,7 @@ def _load_authority(
     repo: Path, contract_path: Path = DEFAULT_CONTRACT
 ) -> Tuple[Dict[str, Any], bytes, Dict[str, Dict[str, Any]], List[Dict[str, Any]]]:
     expected_relative = "host-kernel/contracts/fp0006-ihk-os-status-alias-v1.json"
-    expected_contract_sha256 = "1a75d2f4169e788075a9a0e0f10bcb5a9547b65be8db3abd8ddb8c1770dfb75a"
+    expected_contract_sha256 = "7ea2958bdcd8b80b5dd701bae55cd2c55c704c30c80510926673fa34807a5269"
     expected_contract_size = 10968
     if Path(contract_path).as_posix() != expected_relative:
         raise WitnessError("status-alias contract path differs from fixed authority")

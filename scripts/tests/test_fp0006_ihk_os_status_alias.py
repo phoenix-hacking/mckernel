@@ -28,9 +28,9 @@ CONTRACT_PATH = ROOT / "host-kernel/contracts/fp0006-ihk-os-status-alias-v1.json
 C_PRODUCER = ROOT / "scripts/smoke/fp0006-ihk-os-status-alias.c"
 RUST_PRODUCER = ROOT / "scripts/tests/fixtures/ihk_ioctl_fp0006_status_alias.rs"
 SECURITY_SOURCE = ROOT / "scripts/fp0006_ihk_device_negative_dispatch.py"
-EXPECTED_CHECKER_SHA256 = "fdf00899d69052837ab7b2a93d9c8cdab05bbe47b28415d6a6fc59db679696b7"
-EXPECTED_CHECKER_SIZE = 87029
-EXPECTED_NORMALIZED_SELF_SHA256 = "5930b0e715c6d791b854763226dd1642f833cb1a67f45996d57bbb096888e630"
+EXPECTED_CHECKER_SHA256 = "a7aa457cb7e93074d246a08a56ed5dc52c15d66d62758480d93d3d9069aca5cd"
+EXPECTED_CHECKER_SIZE = 87817
+EXPECTED_NORMALIZED_SELF_SHA256 = "bd49a83261db3602f912cf5f23f5aaa643e58220d2ddc6f09a435ca0022068c4"
 REAL_POPEN = subprocess.Popen
 
 from scripts import fp0006_ihk_os_status_alias as imported_witness
@@ -229,10 +229,103 @@ class StatusAliasIsolatedCliTests(unittest.TestCase):
                     self.assertEqual(expected, os.read(descriptor, len(expected)))
                     original_close(descriptor)
 
+        directory_flags = os.O_RDONLY | getattr(os, "O_DIRECTORY", 0)
+        for replacement_kind in ("different-inode", "same-inode"):
+            with self.subTest(directory_replacement_kind=replacement_kind):
+                with tempfile.TemporaryDirectory() as directory:
+                    root = Path(directory)
+                    owned_path = root / "owned-directory"
+                    other_path = root / "other-directory"
+                    owned_path.mkdir()
+                    other_path.mkdir()
+                    descriptor = original_open(str(owned_path), directory_flags)
+                    expected_identity = imported_witness._directory_identity(
+                        os.fstat(descriptor)
+                    )
+                    replacement = [None]
+
+                    def close_reuse_directory_and_fail(candidate):
+                        self.assertEqual(descriptor, candidate)
+                        original_close(candidate)
+                        reopened_path = (
+                            owned_path
+                            if replacement_kind == "same-inode"
+                            else other_path
+                        )
+                        reopened = original_open(str(reopened_path), directory_flags)
+                        if reopened != candidate:
+                            os.dup2(reopened, candidate)
+                            original_close(reopened)
+                            reopened = candidate
+                        replacement[0] = reopened
+                        raise OSError(errno.EINTR, "synthetic post-close failure")
+
+                    with mock.patch.object(
+                        imported_witness.os,
+                        "close",
+                        side_effect=close_reuse_directory_and_fail,
+                    ):
+                        retired, error = imported_witness._cleanup_owned_fd(
+                            descriptor,
+                            expected_identity,
+                            "synthetic exec-seal directory descriptor",
+                        )
+
+                    self.assertTrue(retired)
+                    self.assertIsInstance(error, OSError)
+                    self.assertEqual(descriptor, replacement[0])
+                    observed = imported_witness._directory_identity(
+                        os.fstat(descriptor)
+                    )
+                    if replacement_kind == "same-inode":
+                        self.assertEqual(expected_identity, observed)
+                    else:
+                        self.assertNotEqual(expected_identity, observed)
+                    original_close(descriptor)
+
+    def test_exec_seal_rejects_cross_width_directory_and_file_identities(self):
+        imported_witness._load_exact_security_primitives(str(CHECKER))
+        directory_flags = os.O_RDONLY | getattr(os, "O_DIRECTORY", 0)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            descriptor = os.open(str(root), directory_flags)
+            metadata = os.fstat(descriptor)
+            record = {
+                "descriptor": descriptor,
+                "identity": imported_witness._file_identity(metadata),
+                "owned_identity": imported_witness._directory_identity(metadata),
+                "path": str(root),
+            }
+            with self.assertRaisesRegex(
+                imported_witness.WitnessError,
+                "private exec verifier protocol failed with status 46",
+            ):
+                imported_witness._run_exec_seal([record], [], [])
+            self.assertEqual(-1, record["descriptor"])
+
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "file"
+            path.write_bytes(b"file")
+            descriptor = os.open(str(path), os.O_RDONLY)
+            metadata = os.fstat(descriptor)
+            record = {
+                "bytes": b"file",
+                "descriptor": descriptor,
+                "identity": imported_witness._directory_identity(metadata),
+                "label": "cross-width file",
+                "owned_identity": imported_witness._file_identity(metadata),
+            }
+            with self.assertRaisesRegex(
+                imported_witness.WitnessError,
+                "private exec verifier protocol failed with status 46",
+            ):
+                imported_witness._run_exec_seal([], [record], [])
+            self.assertEqual(-1, record["descriptor"])
+
     def test_frozen_identities_and_normalized_self_seal(self):
         expected = {
             CONTRACT_PATH: (
-                "1a75d2f4169e788075a9a0e0f10bcb5a9547b65be8db3abd8ddb8c1770dfb75a",
+                "7ea2958bdcd8b80b5dd701bae55cd2c55c704c30c80510926673fa34807a5269",
                 10968,
             ),
             C_PRODUCER: (
@@ -244,8 +337,8 @@ class StatusAliasIsolatedCliTests(unittest.TestCase):
                 6800,
             ),
             SECURITY_SOURCE: (
-                "9d72d215f2fc618ac05c2f729a57ad865391c105de2e70995b8eb251d81855a7",
-                51559,
+                "9bc3783df8d5df2c2c8d62ca9205d88f5afac810adac2b322b6dde2ddcfe1676",
+                51627,
             ),
             CHECKER: (EXPECTED_CHECKER_SHA256, EXPECTED_CHECKER_SIZE),
         }
@@ -364,7 +457,7 @@ class StatusAliasIsolatedCliTests(unittest.TestCase):
         )
         self.assertEqual("fp-0006-ihk-os-status-alias-v1", result["contract_id"])
         self.assertEqual(
-            "1a75d2f4169e788075a9a0e0f10bcb5a9547b65be8db3abd8ddb8c1770dfb75a",
+            "7ea2958bdcd8b80b5dd701bae55cd2c55c704c30c80510926673fa34807a5269",
             result["contract_sha256"],
         )
         self.assertEqual("CONTRACT_VALIDATED_NONCREDITING", result["status"])

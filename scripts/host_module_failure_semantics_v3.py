@@ -1337,23 +1337,101 @@ def reconstruct_c_baseline_argv(original, source_index, output):
     return [word for word in semantic if word not in dump_options]
 
 
-def reconstruct_rust_argv(original, output, mir_dir):
+def reconstruct_rust_argv(original, output, mir_dir, rustc_out_dir):
     if not isinstance(original, list) or len(original) < 2:
         raise SemanticsV3Error("recorded Rust compiler argv is malformed")
     result = []
     replaced = 0
-    for word in original:
+    index = 0
+    while index < len(original):
+        word = original[index]
+        if not isinstance(word, str) or not word or "\0" in word:
+            raise SemanticsV3Error("recorded Rust compiler argv is malformed")
+        if word in ("-C", "--codegen"):
+            if index + 1 >= len(original):
+                raise SemanticsV3Error("recorded Rust codegen option lacks a value")
+            option = original[index + 1]
+            if (
+                not isinstance(option, str)
+                or not option
+                or option.startswith("@")
+                or "\0" in option
+            ):
+                raise SemanticsV3Error(
+                    "recorded Rust argv has an unsafe response/control word"
+                )
+            key = option.split("=", 1)[0]
+            if key == "incremental":
+                raise SemanticsV3Error(
+                    "recorded Rust argv has unsupported persistent output routing"
+                )
+            if key == "llvm-args":
+                raise SemanticsV3Error(
+                    "recorded Rust argv has an unsafe codegen escape hatch"
+                )
+            result.extend((word, option))
+            index += 2
+            continue
+        if word.startswith("-C") and word != "-C":
+            key = word[2:].split("=", 1)[0]
+            if key == "incremental":
+                raise SemanticsV3Error(
+                    "recorded Rust argv has unsupported persistent output routing"
+                )
+            if key == "llvm-args":
+                raise SemanticsV3Error(
+                    "recorded Rust argv has an unsafe codegen escape hatch"
+                )
+        if word.startswith("--codegen="):
+            key = word[len("--codegen="):].split("=", 1)[0]
+            if key == "incremental":
+                raise SemanticsV3Error(
+                    "recorded Rust argv has unsupported persistent output routing"
+                )
+            if key == "llvm-args":
+                raise SemanticsV3Error(
+                    "recorded Rust argv has an unsafe codegen escape hatch"
+                )
+        if word == "-Z" or word.startswith("-Z"):
+            option = (
+                original[index + 1]
+                if word == "-Z" and index + 1 < len(original)
+                else word[2:]
+            )
+            if isinstance(option, str) and option.startswith("dump-mir"):
+                raise SemanticsV3Error("recorded Rust argv already requests MIR dumps")
+            raise SemanticsV3Error(
+                "recorded Rust argv has unsupported unstable replay state"
+            )
+        if word == "--out-dir" or word.startswith("--out-dir="):
+            raise SemanticsV3Error(
+                "recorded Rust argv already redirects the output directory"
+            )
+        if word == "-o" or (word.startswith("-o") and not word.startswith("--")):
+            raise SemanticsV3Error(
+                "recorded Rust argv has unsupported direct output redirection"
+            )
         if word.startswith("--emit=obj="):
+            recorded_output = word[len("--emit=obj="):]
+            if not recorded_output or "," in recorded_output:
+                raise SemanticsV3Error(
+                    "recorded Rust object redirection is ambiguous"
+                )
             result.append("--emit=obj={0}".format(output))
             replaced += 1
+            index += 1
             continue
-        if word.startswith("-Zdump-mir"):
-            raise SemanticsV3Error("recorded Rust argv already requests MIR dumps")
-        if word.startswith("@") or "\0" in word:
+        if word == "--emit" or word.startswith("--emit="):
+            raise SemanticsV3Error(
+                "recorded Rust argv has unsupported additional emit routing"
+            )
+        if word.startswith("@"):
             raise SemanticsV3Error("recorded Rust argv has an unsafe response/control word")
         result.append(word)
+        index += 1
     if replaced != 1:
         raise SemanticsV3Error("recorded Rust object redirection is ambiguous")
+    result.append("--out-dir={0}".format(rustc_out_dir))
     result.extend(RUST_MIR_OPTIONS)
     result.append("-Zdump-mir-dir={0}".format(mir_dir))
     return result
@@ -1501,8 +1579,12 @@ def one_rust_run(record, kernel_dir, roots, run_dir, environment):
     run_roots = tuple(roots) + (("$SEMANTIC", run_dir),)
     output = run_dir / "semantic-rust.o"
     mir_dir = run_dir / "mir"
+    rustc_out_dir = run_dir / "rustc-out"
     mir_dir.mkdir(mode=0o700)
-    argv = reconstruct_rust_argv(record["compile_argv"], output, mir_dir)
+    rustc_out_dir.mkdir(mode=0o700)
+    argv = reconstruct_rust_argv(
+        record["compile_argv"], output, mir_dir, rustc_out_dir
+    )
     completed = run_compiler(argv, kernel_dir, environment)
     object_record, object_data = read_object(output, "Rust semantic replay object")
     mir = {}
@@ -2027,7 +2109,10 @@ def validate_raw_manifest(manifest, payloads, inputs):
             if source_record["digests"]["recorded_compile_argv_sha256"] != EXPECTED_RUST["argv_sha256"]:
                 raise SemanticsV3Error("Rust recorded argv digest changed")
             expected_replay = reconstruct_rust_argv(
-                invocation["recorded_argv"], Path("$OUTPUT"), Path("$SEMANTIC/mir")
+                invocation["recorded_argv"],
+                Path("$OUTPUT"),
+                Path("$SEMANTIC/mir"),
+                Path("$SEMANTIC/rustc-out"),
             )
             validate_normalized_argv(
                 expected_replay,

@@ -152,6 +152,7 @@ class SyntheticRawFixture:
         )
         rust_replay = [
             rust_argv[0], "--emit=obj=$OUTPUT", "$REPO/" + rust_source,
+            "--out-dir=$SEMANTIC/rustc-out",
             "-Zdump-mir=all", "-Zdump-mir-exclude-pass-number",
             "-Zdump-mir-dir=$SEMANTIC/mir",
         ]
@@ -493,22 +494,110 @@ class CompilerArgumentTests(unittest.TestCase):
             with self.assertRaisesRegex(semantics.SemanticsV3Error, message):
                 semantics.reconstruct_c_argv(argv, len(argv) - 1, Path("/tmp/out.o"))
 
-    def test_rust_replay_redirects_object_and_adds_private_mir_dir(self):
-        original = ["rustc", "--crate-name", "demo", "--emit=obj=/tmp/a.o", "/src/a.rs"]
-        replay = semantics.reconstruct_rust_argv(original, Path("/tmp/b.o"), Path("/tmp/mir"))
+    def test_rust_replay_redirects_object_and_adds_private_output_dirs(self):
+        original = [
+            "rustc", "--crate-name", "demo", "-C", "opt-level=2",
+            "-Cdebuginfo=1", "--emit=obj=/tmp/a.o", "/src/a.rs",
+        ]
+        replay = semantics.reconstruct_rust_argv(
+            original,
+            Path("/tmp/b.o"),
+            Path("/tmp/mir"),
+            Path("/tmp/rustc-out"),
+        )
         self.assertEqual(replay[:3], original[:3])
+        self.assertIn("opt-level=2", replay)
+        self.assertIn("-Cdebuginfo=1", replay)
         self.assertIn("--emit=obj=/tmp/b.o", replay)
+        self.assertIn("--out-dir=/tmp/rustc-out", replay)
         self.assertIn("-Zdump-mir=all", replay)
         self.assertEqual(replay[-1], "-Zdump-mir-dir=/tmp/mir")
 
-    def test_rust_response_existing_mir_and_ambiguous_object_fail(self):
+    def test_rust_response_existing_mir_and_output_routing_fail(self):
         for argv, message in (
             (["rustc", "@evil", "--emit=obj=/tmp/a.o", "/src/a.rs"], "response"),
             (["rustc", "-Zdump-mir=all", "--emit=obj=/tmp/a.o", "/src/a.rs"], "already"),
             (["rustc", "/src/a.rs"], "ambiguous"),
+            (["rustc", "--out-dir", "/escape", "--emit=obj=/tmp/a.o", "/src/a.rs"], "output directory"),
+            (["rustc", "--out-dir=/escape", "--emit=obj=/tmp/a.o", "/src/a.rs"], "output directory"),
+            (["rustc", "-o", "/escape", "--emit=obj=/tmp/a.o", "/src/a.rs"], "direct output"),
+            (["rustc", "-o/escape", "--emit=obj=/tmp/a.o", "/src/a.rs"], "direct output"),
+            (["rustc", "--emit=metadata=/escape", "--emit=obj=/tmp/a.o", "/src/a.rs"], "additional emit"),
+            (["rustc", "--emit=obj=/tmp/a.o,metadata=/escape", "/src/a.rs"], "ambiguous"),
+            (["rustc", "-Cincremental=/escape", "--emit=obj=/tmp/a.o", "/src/a.rs"], "persistent output"),
+            (["rustc", "-C", "incremental=/escape", "--emit=obj=/tmp/a.o", "/src/a.rs"], "persistent output"),
+            (["rustc", "--codegen=incremental=/escape", "--emit=obj=/tmp/a.o", "/src/a.rs"], "persistent output"),
+            (["rustc", "--codegen", "incremental=/escape", "--emit=obj=/tmp/a.o", "/src/a.rs"], "persistent output"),
+            (["rustc", "-Cllvm-args=-escape", "--emit=obj=/tmp/a.o", "/src/a.rs"], "escape hatch"),
+            (["rustc", "-C", "llvm-args=-escape", "--emit=obj=/tmp/a.o", "/src/a.rs"], "escape hatch"),
+            (["rustc", "-Ztemps-dir=/escape", "--emit=obj=/tmp/a.o", "/src/a.rs"], "unstable replay"),
+            (["rustc", "-Z", "temps-dir=/escape", "--emit=obj=/tmp/a.o", "/src/a.rs"], "unstable replay"),
+            (["rustc", "-Zsplit-dwarf-out-dir=/escape", "--emit=obj=/tmp/a.o", "/src/a.rs"], "unstable replay"),
+            (["rustc", "-Z", "dump-mir-dir=/escape", "--emit=obj=/tmp/a.o", "/src/a.rs"], "already"),
         ):
             with self.assertRaisesRegex(semantics.SemanticsV3Error, message):
-                semantics.reconstruct_rust_argv(argv, Path("/tmp/b.o"), Path("/tmp/mir"))
+                semantics.reconstruct_rust_argv(
+                    argv,
+                    Path("/tmp/b.o"),
+                    Path("/tmp/mir"),
+                    Path("/tmp/rustc-out"),
+                )
+
+    def test_rust_run_keeps_kernel_cwd_and_confines_implicit_outputs(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            kernel = root / "kernel"
+            run_dir = root / "run"
+            kernel.mkdir(mode=0o555)
+            run_dir.mkdir(mode=0o700)
+            observed = {}
+
+            def fake_compiler(argv, cwd, environment):
+                observed["argv"] = list(argv)
+                observed["cwd"] = cwd
+                out_dir_word = next(
+                    word for word in argv if word.startswith("--out-dir=")
+                )
+                (Path(out_dir_word.split("=", 1)[1]) / "rmeta-private").write_bytes(
+                    b"METADATA\n"
+                )
+                object_word = next(
+                    word for word in argv if word.startswith("--emit=obj=")
+                )
+                Path(object_word.split("=", 2)[2]).write_bytes(b"OBJECT\n")
+                mir_word = next(
+                    word for word in argv if word.startswith("-Zdump-mir-dir=")
+                )
+                mir_dir = Path(mir_word.split("=", 1)[1])
+                (mir_dir / "crate.demo.built.after.mir").write_bytes(
+                    b"fn demo() { return; }\n"
+                )
+                return types.SimpleNamespace(stdout=b"", stderr=b"")
+
+            record = {
+                "compile_argv": [
+                    "rustc", "--emit=obj=/recorded/demo.o", "/src/demo.rs"
+                ]
+            }
+            with mock.patch.object(
+                semantics, "run_compiler", side_effect=fake_compiler
+            ):
+                result = semantics.one_rust_run(
+                    record, kernel, (), run_dir, {}
+                )
+
+            rustc_out_dir = run_dir / "rustc-out"
+            self.assertEqual(observed["cwd"], kernel)
+            self.assertIn(
+                "--out-dir=" + str(rustc_out_dir), observed["argv"]
+            )
+            self.assertEqual(rustc_out_dir.stat().st_mode & 0o777, 0o700)
+            self.assertEqual(
+                (rustc_out_dir / "rmeta-private").read_bytes(), b"METADATA\n"
+            )
+            self.assertEqual(list(kernel.iterdir()), [])
+            self.assertEqual(result["object_data"], b"OBJECT\n")
+            self.assertIn("crate.demo.built.after.mir", result["mir"])
 
     def test_recorded_output_parser_rejects_multiple_outputs(self):
         with self.assertRaisesRegex(semantics.SemanticsV3Error, "ambiguous"):

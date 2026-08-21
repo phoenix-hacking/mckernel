@@ -25,17 +25,32 @@ from scripts import fp0006_ihk_device_negative_dispatch as witness
 
 
 class Fp0006IhkDeviceNegativeDispatchTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.temporary = tempfile.TemporaryDirectory(
+            prefix="fp0006-negative-dispatch-"
+        )
+        cls.roots = {}
+        try:
+            for name in unittest.defaultTestLoader.getTestCaseNames(cls):
+                root = Path(cls.temporary.name) / name
+                root.mkdir(mode=0o700)
+                cls.roots[name] = root
+        except Exception:
+            cls.temporary.cleanup()
+            raise
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.temporary.cleanup()
+
     def setUp(self):
-        self.temporary = tempfile.TemporaryDirectory(prefix="fp0006-negative-dispatch-")
-        self.root = Path(self.temporary.name)
+        self.root = self.__class__.roots[self._testMethodName]
         self.authority = json.loads(
             (REPO_ROOT / witness.DEFAULT_CONTRACT).read_text(encoding="utf-8")
         )
         self.legacy_surface = self.authority["artifact_contract"]["legacy_surface"]
         self.native_surface = self.authority["artifact_contract"]["native_surface"]
-
-    def tearDown(self):
-        self.temporary.cleanup()
 
     def copy_contract_repository(self, name="repo"):
         repo = self.root / name
@@ -168,6 +183,40 @@ class Fp0006IhkDeviceNegativeDispatchTests(unittest.TestCase):
                 {"a": [False, 0, {"b": True}]},
                 {"a": [False, 0, {"b": True}]},
             )
+        )
+
+    def test_directory_identity_ignores_unrelated_entry_churn(self):
+        directory = self.root / "directory-identity"
+        directory.mkdir()
+        before = directory.stat()
+        sibling = directory / "unrelated"
+        sibling.mkdir()
+        after = directory.stat()
+        self.assertNotEqual(witness._file_identity(before), witness._file_identity(after))
+        self.assertEqual(
+            witness._directory_identity(before), witness._directory_identity(after)
+        )
+        self.assertEqual(
+            [before.st_dev, before.st_ino, before.st_mode, before.st_uid, before.st_gid],
+            witness._directory_identity(before),
+        )
+        self.assertEqual(12, len(witness._file_identity(before)))
+        self.assertEqual(
+            [
+                before.st_dev,
+                before.st_ino,
+                before.st_mode,
+                before.st_nlink,
+                before.st_uid,
+                before.st_gid,
+                before.st_rdev,
+                before.st_size,
+                before.st_mtime_ns,
+                before.st_ctime_ns,
+                before.st_blksize,
+                before.st_blocks,
+            ],
+            witness._file_identity(before),
         )
 
     def test_repository_contract_and_local_external_evidence_validate_noncrediting(self):
@@ -549,6 +598,260 @@ class Fp0006IhkDeviceNegativeDispatchTests(unittest.TestCase):
         first = witness.review_artifact(REPO_ROOT, capture, self.legacy_surface)
         second = witness.review_artifact(REPO_ROOT, capture, self.legacy_surface)
         self.assertEqual(first, second)
+
+    def test_unrelated_ancestor_entry_churn_does_not_change_path_identity(self):
+        capture = self.write_capture("ancestor-entry-churn", self.legacy_surface)
+        original_open = witness.os.open
+        original_close = witness.os.close
+        retained_raw = [None]
+        churned = [False]
+
+        def recording_open(path, flags, mode=0o777, *, dir_fd=None):
+            descriptor = original_open(path, flags, mode, dir_fd=dir_fd)
+            if path == "raw.jsonl" and dir_fd is not None and retained_raw[0] is None:
+                retained_raw[0] = descriptor
+            return descriptor
+
+        def racing_close(descriptor):
+            original_close(descriptor)
+            if descriptor == retained_raw[0] and not churned[0]:
+                sibling = self.root / "unrelated-sibling"
+                sibling.mkdir()
+                sibling.rmdir()
+                churned[0] = True
+
+        with mock.patch.object(
+            witness.os, "open", side_effect=recording_open
+        ), mock.patch.object(witness.os, "close", side_effect=racing_close):
+            result = witness.review_artifact(REPO_ROOT, capture, self.legacy_surface)
+        self.assertTrue(churned[0])
+        self.assertTrue(result["capture_schema_validated"])
+
+    def test_ancestor_replacement_is_rejected_despite_stable_metadata(self):
+        capture = self.write_capture("ancestor-replacement", self.legacy_surface)
+        replacement = self.root / "replacement-directory"
+        replacement.mkdir(mode=0o755)
+        moved = self.root / "moved-capture"
+        original_open = witness.os.open
+        original_close = witness.os.close
+        retained_raw = [None]
+        replaced = [False]
+
+        def recording_open(path, flags, mode=0o777, *, dir_fd=None):
+            descriptor = original_open(path, flags, mode, dir_fd=dir_fd)
+            if path == "raw.jsonl" and dir_fd is not None and retained_raw[0] is None:
+                retained_raw[0] = descriptor
+            return descriptor
+
+        def racing_close(descriptor):
+            original_close(descriptor)
+            if descriptor == retained_raw[0] and not replaced[0]:
+                os.replace(str(capture), str(moved))
+                os.replace(str(replacement), str(capture))
+                replaced[0] = True
+
+        with mock.patch.object(
+            witness.os, "open", side_effect=recording_open
+        ), mock.patch.object(witness.os, "close", side_effect=racing_close):
+            with self.assertRaisesRegex(
+                witness.WitnessError,
+                "capture path after member close retained named ancestor replay differs",
+            ):
+                witness.review_artifact(REPO_ROOT, capture, self.legacy_surface)
+        self.assertTrue(replaced[0])
+
+    def test_ancestor_mode_change_is_rejected(self):
+        capture = self.write_capture("ancestor-mode-change", self.legacy_surface)
+        original_open = witness.os.open
+        original_close = witness.os.close
+        retained_raw = [None]
+        changed = [False]
+
+        def recording_open(path, flags, mode=0o777, *, dir_fd=None):
+            descriptor = original_open(path, flags, mode, dir_fd=dir_fd)
+            if path == "raw.jsonl" and dir_fd is not None and retained_raw[0] is None:
+                retained_raw[0] = descriptor
+            return descriptor
+
+        def racing_close(descriptor):
+            original_close(descriptor)
+            if descriptor == retained_raw[0] and not changed[0]:
+                self.root.chmod(0o750)
+                changed[0] = True
+
+        try:
+            with mock.patch.object(
+                witness.os, "open", side_effect=recording_open
+            ), mock.patch.object(witness.os, "close", side_effect=racing_close):
+                with self.assertRaisesRegex(
+                    witness.WitnessError,
+                    "capture path after member close retained ancestor descriptor replay differs",
+                ):
+                    witness.review_artifact(REPO_ROOT, capture, self.legacy_surface)
+            self.assertTrue(changed[0])
+        finally:
+            self.root.chmod(0o700)
+
+    def test_named_stat_to_directory_open_swaps_are_rejected(self):
+        rooted = self.root / "rooted-authority"
+        rooted.mkdir()
+        leaf = rooted / "item"
+        leaf.write_bytes(b"original")
+        replacement = self.root / "rooted-replacement"
+        replacement.mkdir()
+        (replacement / "item").write_bytes(b"replacement")
+        moved = self.root / "rooted-moved"
+        original_open = witness.os.open
+        swapped = [False]
+
+        def racing_rooted_open(path, flags, mode=0o777, *, dir_fd=None):
+            if path == rooted.name and dir_fd is not None and not swapped[0]:
+                os.replace(str(rooted), str(moved))
+                os.replace(str(replacement), str(rooted))
+                swapped[0] = True
+            return original_open(path, flags, mode, dir_fd=dir_fd)
+
+        with mock.patch.object(witness.os, "open", side_effect=racing_rooted_open):
+            with self.assertRaisesRegex(
+                witness.WitnessError, "rooted swap ancestor named/descriptor identity"
+            ):
+                witness._read_rooted_file(self.root, "rooted-authority/item", "rooted swap")
+        self.assertTrue(swapped[0])
+
+        capture = self.write_capture("capture-open-swap", self.legacy_surface)
+        replacement = self.root / "capture-open-replacement"
+        replacement.mkdir()
+        moved = self.root / "capture-open-moved"
+        swapped = [False]
+
+        def racing_capture_open(path, flags, mode=0o777, *, dir_fd=None):
+            if path == capture.name and dir_fd is not None and not swapped[0]:
+                os.replace(str(capture), str(moved))
+                os.replace(str(replacement), str(capture))
+                swapped[0] = True
+            return original_open(path, flags, mode, dir_fd=dir_fd)
+
+        with mock.patch.object(witness.os, "open", side_effect=racing_capture_open):
+            with self.assertRaisesRegex(
+                witness.WitnessError, "capture ancestor named/descriptor identity"
+            ):
+                witness.review_artifact(REPO_ROOT, capture, self.legacy_surface)
+        self.assertTrue(swapped[0])
+
+    def test_post_close_directory_replacement_is_rejected(self):
+        capture = self.write_capture("post-close-replacement", self.legacy_surface)
+        replacement = self.root / "post-close-replacement-directory"
+        replacement.mkdir()
+        moved = self.root / "post-close-moved"
+        original_open = witness.os.open
+        original_close = witness.os.close
+        retained_directory = [None]
+        replaced = [False]
+
+        def recording_open(path, flags, mode=0o777, *, dir_fd=None):
+            descriptor = original_open(path, flags, mode, dir_fd=dir_fd)
+            if path == capture.name and dir_fd is not None:
+                retained_directory[0] = descriptor
+            return descriptor
+
+        def racing_close(descriptor):
+            original_close(descriptor)
+            if descriptor == retained_directory[0] and not replaced[0]:
+                os.replace(str(capture), str(moved))
+                os.replace(str(replacement), str(capture))
+                replaced[0] = True
+
+        with mock.patch.object(
+            witness.os, "open", side_effect=recording_open
+        ), mock.patch.object(witness.os, "close", side_effect=racing_close):
+            with self.assertRaisesRegex(
+                witness.WitnessError,
+                "capture path post-close named ancestor replay differs",
+            ):
+                witness.review_artifact(REPO_ROOT, capture, self.legacy_surface)
+        self.assertTrue(replaced[0])
+
+    def test_post_close_directory_symlink_substitution_is_rejected(self):
+        capture = self.write_capture("post-close-symlink", self.legacy_surface)
+        moved = self.root / "post-close-symlink-target"
+        original_open = witness.os.open
+        original_close = witness.os.close
+        retained_directory = [None]
+        replaced = [False]
+
+        def recording_open(path, flags, mode=0o777, *, dir_fd=None):
+            descriptor = original_open(path, flags, mode, dir_fd=dir_fd)
+            if path == capture.name and dir_fd is not None:
+                retained_directory[0] = descriptor
+            return descriptor
+
+        def racing_close(descriptor):
+            original_close(descriptor)
+            if descriptor == retained_directory[0] and not replaced[0]:
+                os.replace(str(capture), str(moved))
+                capture.symlink_to(moved, target_is_directory=True)
+                replaced[0] = True
+
+        with mock.patch.object(
+            witness.os, "open", side_effect=recording_open
+        ), mock.patch.object(witness.os, "close", side_effect=racing_close):
+            with self.assertRaisesRegex(
+                witness.WitnessError, "capture path ancestor became a non-directory"
+            ):
+                witness.review_artifact(REPO_ROOT, capture, self.legacy_surface)
+        self.assertTrue(replaced[0])
+
+    def test_extra_capture_member_after_initial_listing_is_rejected(self):
+        capture = self.write_capture("late-extra-member", self.legacy_surface)
+        original_open = witness.os.open
+        injected = [False]
+
+        def racing_open(path, flags, mode=0o777, *, dir_fd=None):
+            if path == "raw.jsonl" and dir_fd is not None and not injected[0]:
+                extra = capture / "late-extra.json"
+                extra.write_bytes(b"{}\n")
+                extra.chmod(0o444)
+                injected[0] = True
+            return original_open(path, flags, mode, dir_fd=dir_fd)
+
+        with mock.patch.object(witness.os, "open", side_effect=racing_open):
+            with self.assertRaisesRegex(
+                witness.WitnessError, "retained capture member-set replay differs"
+            ):
+                witness.review_artifact(REPO_ROOT, capture, self.legacy_surface)
+        self.assertTrue(injected[0])
+
+    def test_aggregate_replay_rejects_replaced_earlier_capture_directory(self):
+        legacy = self.write_capture("aggregate-legacy", self.legacy_surface)
+        native = self.write_capture("aggregate-native", self.native_surface)
+        replacement = self.root / "aggregate-legacy-replacement"
+        replacement.mkdir()
+        moved = self.root / "aggregate-legacy-moved"
+        original_open = witness.os.open
+        native_directory = [None]
+        replaced = [False]
+
+        def racing_open(path, flags, mode=0o777, *, dir_fd=None):
+            descriptor = original_open(path, flags, mode, dir_fd=dir_fd)
+            if path == native.name and dir_fd is not None:
+                native_directory[0] = descriptor
+            elif (
+                path == "raw.jsonl"
+                and dir_fd == native_directory[0]
+                and not replaced[0]
+            ):
+                os.replace(str(legacy), str(moved))
+                os.replace(str(replacement), str(legacy))
+                replaced[0] = True
+            return descriptor
+
+        with mock.patch.object(witness.os, "open", side_effect=racing_open):
+            with self.assertRaisesRegex(
+                witness.WitnessError,
+                "capture path post-close named ancestor replay differs",
+            ):
+                witness.review_artifacts(REPO_ROOT, legacy, native)
+        self.assertTrue(replaced[0])
 
     def test_unknown_artifact_surface_is_rejected(self):
         capture = self.write_capture("legacy-unknown", self.legacy_surface)

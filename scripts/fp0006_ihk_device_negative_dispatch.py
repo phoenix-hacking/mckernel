@@ -184,7 +184,7 @@ def _replay_retained_directories(
     records: Sequence[Dict[str, Any]], label: str
 ) -> None:
     for index, record in enumerate(records):
-        descriptor_identity = _file_identity(os.fstat(record["descriptor"]))
+        descriptor_identity = _directory_identity(os.fstat(record["descriptor"]))
         if index == 0:
             named_metadata = os.lstat(str(record["path"]))
         else:
@@ -197,7 +197,7 @@ def _replay_retained_directories(
             named_metadata.st_mode
         ):
             raise WitnessError("{0} ancestor became a non-directory".format(label))
-        named_identity = _file_identity(named_metadata)
+        named_identity = _directory_identity(named_metadata)
         _require_exact_json(
             descriptor_identity, record["identity"],
             label + " retained ancestor descriptor replay",
@@ -220,7 +220,7 @@ def _replay_closed_directories(
         if stat.S_ISLNK(metadata.st_mode) or not stat.S_ISDIR(metadata.st_mode):
             raise WitnessError("{0} ancestor became a non-directory".format(label))
         _require_exact_json(
-            _file_identity(metadata), record["identity"],
+            _directory_identity(metadata), record["identity"],
             label + " post-close named ancestor replay",
         )
 
@@ -312,13 +312,13 @@ def _read_rooted_file(
         open_descriptors.append(descriptor)
         root_fd = os.fstat(descriptor)
         _require_exact_json(
-            _file_identity(root_fd), _file_identity(root_named),
+            _directory_identity(root_fd), _directory_identity(root_named),
             label + " filesystem-root named/descriptor identity",
         )
         directory_records.append(
             {
                 "descriptor": descriptor,
-                "identity": _file_identity(root_fd),
+                "identity": _directory_identity(root_fd),
                 "name": current.anchor,
                 "path": current,
             }
@@ -339,14 +339,14 @@ def _read_rooted_file(
             open_descriptors.append(descriptor)
             retained = os.fstat(descriptor)
             _require_exact_json(
-                _file_identity(retained), _file_identity(named),
+                _directory_identity(retained), _directory_identity(named),
                 label + " ancestor named/descriptor identity",
             )
             current = current / component
             directory_records.append(
                 {
                     "descriptor": descriptor,
-                    "identity": _file_identity(retained),
+                    "identity": _directory_identity(retained),
                     "name": component,
                     "path": current,
                 }
@@ -803,15 +803,14 @@ def _file_identity(metadata: os.stat_result) -> List[int]:
 
 
 def _directory_identity(metadata: os.stat_result) -> List[int]:
+    """Return path-component identity without unrelated entry-churn fields."""
+
     return [
         metadata.st_dev,
         metadata.st_ino,
         metadata.st_mode,
-        metadata.st_nlink,
         metadata.st_uid,
         metadata.st_gid,
-        metadata.st_mtime_ns,
-        metadata.st_ctime_ns,
     ]
 
 
@@ -914,13 +913,13 @@ def _read_capture_members(
         directory_descriptors.append(descriptor)
         root_fd = os.fstat(descriptor)
         _require_exact_json(
-            _file_identity(root_fd), _file_identity(root_named),
+            _directory_identity(root_fd), _directory_identity(root_named),
             "capture filesystem-root named/descriptor identity",
         )
         directory_records.append(
             {
                 "descriptor": descriptor,
-                "identity": _file_identity(root_fd),
+                "identity": _directory_identity(root_fd),
                 "name": current.anchor,
                 "path": current,
             }
@@ -941,14 +940,14 @@ def _read_capture_members(
             directory_descriptors.append(descriptor)
             retained = os.fstat(descriptor)
             _require_exact_json(
-                _file_identity(retained), _file_identity(named),
+                _directory_identity(retained), _directory_identity(named),
                 "capture ancestor named/descriptor identity",
             )
             current = current / component
             directory_records.append(
                 {
                     "descriptor": descriptor,
-                    "identity": _file_identity(retained),
+                    "identity": _directory_identity(retained),
                     "name": component,
                     "path": current,
                 }
