@@ -1024,6 +1024,50 @@ class IsolatedEntrypointTests(unittest.TestCase):
         self.assertTrue(historical)
         self.assertIn("--historical-ef58", historical_argv)
 
+        for v3_target in (
+            "failure-semantics-v3",
+            "failure-contract-review-v3",
+        ):
+            _, parsed_target, parsed_argv, parsed_historical = (
+                capture.parse_authority_entry_arguments(
+                    [
+                        "--repo",
+                        str(REPO_ROOT),
+                        "--authority-target",
+                        v3_target,
+                        "--authority-historical",
+                        "--",
+                        "--repo",
+                        str(REPO_ROOT),
+                        "--historical-ef58",
+                        "--output",
+                        "v3.json",
+                    ]
+                )
+            )
+            self.assertEqual(parsed_target, v3_target)
+            self.assertTrue(parsed_historical)
+            self.assertIn("--historical-ef58", parsed_argv)
+
+    def test_v3_generators_and_tests_are_in_commit_bound_authority_closure(self):
+        expected = {
+            "host_module_failure_semantics_v3": "scripts/host_module_failure_semantics_v3.py",
+            "host_module_failure_contract_review_v3": "scripts/host_module_failure_contract_review_v3.py",
+            "scripts.tests.test_host_module_failure_semantics_v3": "scripts/tests/test_host_module_failure_semantics_v3.py",
+            "scripts.tests.test_host_module_failure_contract_review_v3": "scripts/tests/test_host_module_failure_contract_review_v3.py",
+        }
+        for module, relative in expected.items():
+            self.assertEqual(capture.AUTHORITY_MODULE_PATHS.get(module), relative)
+            self.assertIn(relative, capture.FRESH_MAIN_AUTHORITY_PATHS)
+        self.assertEqual(
+            capture.AUTHORITY_TARGET_MODULES["failure-semantics-v3"],
+            "host_module_failure_semantics_v3",
+        )
+        self.assertEqual(
+            capture.AUTHORITY_TARGET_MODULES["failure-contract-review-v3"],
+            "host_module_failure_contract_review_v3",
+        )
+
     def test_fresh_authority_rechecks_even_when_target_raises(self):
         authority = {"main_snapshots": {}}
         finder = object()

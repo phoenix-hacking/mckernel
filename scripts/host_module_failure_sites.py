@@ -152,8 +152,10 @@ FRESH_MAIN_AUTHORITY_PATHS = (
     "scripts/host_module_contracts.py",
     "scripts/host_module_failure_contract_gaps.py",
     "scripts/host_module_failure_contract_review_v2.py",
+    "scripts/host_module_failure_contract_review_v3.py",
     "scripts/host_module_failure_flows.py",
     "scripts/host_module_failure_flows_v2.py",
+    "scripts/host_module_failure_semantics_v3.py",
     "scripts/host_module_failure_sites.py",
     "scripts/host_module_inventory.py",
     "scripts/patches/ihk-linux-compat.patch",
@@ -162,8 +164,10 @@ FRESH_MAIN_AUTHORITY_PATHS = (
     "scripts/tests/test_host_module_contracts.py",
     "scripts/tests/test_host_module_failure_contract_gaps.py",
     "scripts/tests/test_host_module_failure_contract_review_v2.py",
+    "scripts/tests/test_host_module_failure_contract_review_v3.py",
     "scripts/tests/test_host_module_failure_flows.py",
     "scripts/tests/test_host_module_failure_flows_v2.py",
+    "scripts/tests/test_host_module_failure_semantics_v3.py",
     "scripts/tests/test_host_module_failure_sites.py",
 )
 
@@ -175,23 +179,29 @@ AUTHORITY_MODULE_PATHS = {
     "host_module_contracts": "scripts/host_module_contracts.py",
     "host_module_failure_contract_gaps": "scripts/host_module_failure_contract_gaps.py",
     "host_module_failure_contract_review_v2": "scripts/host_module_failure_contract_review_v2.py",
+    "host_module_failure_contract_review_v3": "scripts/host_module_failure_contract_review_v3.py",
     "host_module_failure_flows": "scripts/host_module_failure_flows.py",
     "host_module_failure_flows_v2": "scripts/host_module_failure_flows_v2.py",
+    "host_module_failure_semantics_v3": "scripts/host_module_failure_semantics_v3.py",
     "host_module_inventory": "scripts/host_module_inventory.py",
     "record_compiler_argv": "scripts/record_compiler_argv.py",
     "scripts.tests.test_host_module_contracts": "scripts/tests/test_host_module_contracts.py",
     "scripts.tests.test_host_module_failure_contract_gaps": "scripts/tests/test_host_module_failure_contract_gaps.py",
     "scripts.tests.test_host_module_failure_contract_review_v2": "scripts/tests/test_host_module_failure_contract_review_v2.py",
+    "scripts.tests.test_host_module_failure_contract_review_v3": "scripts/tests/test_host_module_failure_contract_review_v3.py",
     "scripts.tests.test_host_module_failure_flows": "scripts/tests/test_host_module_failure_flows.py",
     "scripts.tests.test_host_module_failure_flows_v2": "scripts/tests/test_host_module_failure_flows_v2.py",
+    "scripts.tests.test_host_module_failure_semantics_v3": "scripts/tests/test_host_module_failure_semantics_v3.py",
     "scripts.tests.test_host_module_failure_sites": "scripts/tests/test_host_module_failure_sites.py",
 }
 AUTHORITY_TARGET_MODULES = {
     "contracts": "host_module_contracts",
     "failure-contract-gaps": "host_module_failure_contract_gaps",
     "failure-contract-review-v2": "host_module_failure_contract_review_v2",
+    "failure-contract-review-v3": "host_module_failure_contract_review_v3",
     "failure-flows-v1": "host_module_failure_flows",
     "failure-flows-v2": "host_module_failure_flows_v2",
+    "failure-semantics-v3": "host_module_failure_semantics_v3",
 }
 AUTHORITY_TEST_MODULES = frozenset(
     name for name in AUTHORITY_MODULE_PATHS if name.startswith("scripts.tests.")
@@ -199,7 +209,9 @@ AUTHORITY_TEST_MODULES = frozenset(
 AUTHORITY_STDLIB_MODULES = (
     "argparse",
     "bisect",
+    "collections",
     "hashlib",
+    "io",
     "importlib",
     "json",
     "os",
@@ -210,6 +222,7 @@ AUTHORITY_STDLIB_MODULES = (
     "stat",
     "subprocess",
     "sys",
+    "tarfile",
     "tempfile",
     "types",
 )
@@ -1121,7 +1134,12 @@ def _run_authority_target(target, target_argv, repository_authority):
     if module_name is None:
         raise CaptureError("unknown authority target: {0}".format(target))
     module = _load_authority_module(module_name)
-    if target in ("failure-flows-v2", "failure-contract-review-v2"):
+    if target in (
+        "failure-flows-v2",
+        "failure-contract-review-v2",
+        "failure-semantics-v3",
+        "failure-contract-review-v3",
+    ):
         return module.main(
             target_argv, repository_authority=repository_authority
         )
@@ -1178,8 +1196,15 @@ def parse_authority_entry_arguments(argv):
     ):
         raise CaptureError("non-default authority targets require launcher --repo")
     if historical:
-        if target not in ("failure-flows-v2", "failure-contract-review-v2"):
-            raise CaptureError("historical authority mode is limited to v2 replay targets")
+        if target not in (
+            "failure-flows-v2",
+            "failure-contract-review-v2",
+            "failure-semantics-v3",
+            "failure-contract-review-v3",
+        ):
+            raise CaptureError(
+                "historical authority mode is limited to v2/v3 replay targets"
+            )
         if "--historical-ef58" not in target_argv:
             raise CaptureError("historical authority target omits --historical-ef58")
     return repo, target, target_argv, historical

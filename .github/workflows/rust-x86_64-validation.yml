@@ -901,10 +901,14 @@ jobs:
               > host-module-failure-contract-gaps.json.sha256
           )
 
-      - name: Review bounded host-module failure-contract closure v2
+      - name: Review v2 closure and capture non-crediting semantics v3
         run: |
           set -euo pipefail
           review_v2_path="$BUILD_DIR/host-module-failure-contract-review-v2.json"
+          raw_bundle_path="$BUILD_DIR/host-module-failure-semantics-v3-raw.tar"
+          raw_sidecar_path="$BUILD_DIR/host-module-failure-semantics-v3-raw.tar.sha256"
+          semantics_v3_path="$BUILD_DIR/host-module-failure-semantics-v3.json"
+          review_v3_path="$BUILD_DIR/host-module-failure-contract-review-v3.json"
           /usr/sbin/runuser -u validator -- /usr/bin/env -i \
             HOME=/home/validator \
             RUSTUP_HOME=/home/validator/.rustup \
@@ -1032,13 +1036,48 @@ jobs:
                 --failure-flows-v1 "$BUILD_DIR/host-module-failure-flows.json" \
                 --failure-flows-v2 "$BUILD_DIR/host-module-failure-flows-v2.json" \
                 --output "$BUILD_DIR/host-module-failure-contract-review-v2.json"
-            ' 2>&1 | /usr/bin/tee evidence/host-module-failure-contract-review-v2.log
-          install -m 0644 "$review_v2_path" \
-            evidence/host-module-failure-contract-review-v2.json
+              fp_authority "$GITHUB_WORKSPACE" \
+                --repo "$GITHUB_WORKSPACE" \
+                --authority-target unittest -- \
+                scripts.tests.test_host_module_failure_semantics_v3 \
+                scripts.tests.test_host_module_failure_contract_review_v3
+              fp_authority "$GITHUB_WORKSPACE" \
+                --repo "$GITHUB_WORKSPACE" \
+                --authority-target failure-semantics-v3 -- \
+                --repo "$GITHUB_WORKSPACE" \
+                --build-dir "$BUILD_DIR" \
+                --kernel-dir "$MCKERNEL_CI_KERNEL_DIR" \
+                --failure-sites "$BUILD_DIR/host-module-failure-sites.json" \
+                --failure-flows-v1 "$BUILD_DIR/host-module-failure-flows.json" \
+                --failure-flows-v2 "$BUILD_DIR/host-module-failure-flows-v2.json" \
+                --raw-bundle "$BUILD_DIR/host-module-failure-semantics-v3-raw.tar" \
+                --raw-bundle-sha256 "$BUILD_DIR/host-module-failure-semantics-v3-raw.tar.sha256" \
+                --capture-raw \
+                --output "$BUILD_DIR/host-module-failure-semantics-v3.json"
+              fp_authority "$GITHUB_WORKSPACE" \
+                --repo "$GITHUB_WORKSPACE" \
+                --authority-target failure-contract-review-v3 -- \
+                --repo "$GITHUB_WORKSPACE" \
+                --build-dir "$BUILD_DIR" \
+                --kernel-dir "$MCKERNEL_CI_KERNEL_DIR" \
+                --failure-sites "$BUILD_DIR/host-module-failure-sites.json" \
+                --failure-flows-v1 "$BUILD_DIR/host-module-failure-flows.json" \
+                --failure-flows-v2 "$BUILD_DIR/host-module-failure-flows-v2.json" \
+                --failure-contract-review-v2 "$BUILD_DIR/host-module-failure-contract-review-v2.json" \
+                --failure-semantics-v3 "$BUILD_DIR/host-module-failure-semantics-v3.json" \
+                --raw-bundle "$BUILD_DIR/host-module-failure-semantics-v3-raw.tar" \
+                --raw-bundle-sha256 "$BUILD_DIR/host-module-failure-semantics-v3-raw.tar.sha256" \
+                --output "$BUILD_DIR/host-module-failure-contract-review-v3.json"
+            ' 2>&1 | /usr/bin/tee evidence/host-module-failure-contract-review-v3.log
+          /usr/bin/install -m 0644 "$review_v2_path" "$raw_bundle_path" \
+            "$raw_sidecar_path" "$semantics_v3_path" "$review_v3_path" evidence/
           (
             cd evidence
-            sha256sum host-module-failure-contract-review-v2.json \
-              > host-module-failure-contract-review-v2.json.sha256
+            /usr/bin/sha256sum \
+              host-module-failure-contract-review-v2.json \
+              host-module-failure-semantics-v3.json \
+              host-module-failure-contract-review-v3.json \
+              > host-module-failure-semantics-v3-artifacts.sha256
           )
 
       - name: Collect build evidence
