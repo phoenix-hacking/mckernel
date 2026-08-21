@@ -47,7 +47,7 @@ CONTRACT_PATH = Path(
     "host-kernel/rocky/evidence/closure-offline-contract-v2.json"
 )
 EXPECTED_CONTRACT_SHA256 = (
-    "c14839e25057ff2a080a294df7e782f642fe1677974d73af1c5c5bd438374f1a"
+    "f7af60ee0c493c89a9402d7703cd29737fa726af1652fab4f2fb6700c3d1eb37"
 )
 WORKFLOW_PATH = Path(".github/workflows/rocky-kernel-closure-offline.yml")
 EXPECTED_WORKFLOW_SHA256 = (
