@@ -8,10 +8,11 @@ import hashlib
 import json
 import os
 import shutil
+import stat
 import sys
 import tempfile
 import unittest
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from unittest import mock
 
 
@@ -45,6 +46,7 @@ class ContractTests(unittest.TestCase):
         contract = closure.validate_contract(REPO_ROOT)
         closure.validate_workflow(REPO_ROOT)
         self.assertEqual(contract["phase_id"], "closure-offline")
+        self.assertEqual(contract["schema_version"], 2)
         self.assertTrue(contract["gate_claims"])
         self.assertFalse(any(contract["gate_claims"].values()))
         self.assertEqual(len(contract["success_blockers"]), 9)
@@ -59,12 +61,24 @@ class ContractTests(unittest.TestCase):
             contract["network_contract"]["scope"],
         )
         self.assertIn(
-            "configured network sources",
-            contract["network_contract"]["acquisition"],
+            "three exact",
+            contract["network_contract"]["rpm_acquisition"],
+        )
+        self.assertEqual(
+            contract["snapshot_authority"]["binary_repository_ids"],
+            ["baseos", "appstream", "crb"],
+        )
+        self.assertEqual(
+            contract["snapshot_authority"]["source_repository_id"],
+            "source-baseos",
+        )
+        self.assertEqual(
+            contract["snapshot_authority"]["git_authority"],
+            closure.snapshot_v2.GIT_AUTHORITY_POLICY,
         )
 
     def test_contract_is_bound_to_historical_review_and_current_toolchain(self):
-        contract = closure.validate_contract(REPO_ROOT)
+        contract = closure.validate_legacy_contract(REPO_ROOT)
         self.assertEqual(
             contract["direct_phase"]["outer_zip_sha256"],
             "a88e8a35c13dbd5b7a4e6524595d5cec31450f83c136b4cf64030e517d208eef",
@@ -89,6 +103,16 @@ class ContractTests(unittest.TestCase):
             "not kernel-level network isolation",
             overclaim["network_contract"]["scope"],
         )
+        redirected_git = copy.deepcopy(contract)
+        redirected_git["snapshot_authority"]["git_authority"][
+            "executable"
+        ] = "/tmp/git"
+        with self.assertRaisesRegex(closure.ClosureError, "Git authority"):
+            closure.require_exact(
+                redirected_git["snapshot_authority"]["git_authority"],
+                closure.snapshot_v2.GIT_AUTHORITY_POLICY,
+                "snapshot Git authority policy",
+            )
 
     def test_cli_check_passes_and_capture_arguments_are_rejected(self):
         self.assertEqual(closure.main(["--repo", str(REPO_ROOT), "--check"]), 0)
@@ -112,6 +136,7 @@ class ContractTests(unittest.TestCase):
             [
                 "scripts/rocky_kernel_closure_offline.py",
                 "scripts/rocky_kernel_platform_evidence.py",
+                "scripts/rocky_repository_snapshot_capture.py",
                 "scripts/rocky_kernel_platform_lock.py",
             ],
         )
@@ -152,13 +177,1155 @@ class ContractTests(unittest.TestCase):
         text = (REPO_ROOT / closure.WORKFLOW_PATH).read_text(encoding="utf-8")
         for fragment in (
             ".github/workflows/rocky-kernel-platform-evidence.yml",
+            ".github/workflows/rocky-repository-snapshot-capture-v2.yml",
             "host-kernel/rocky/**",
             "scripts/rocky_kernel_platform_evidence.py",
             "scripts/rocky_kernel_platform_lock.py",
+            "scripts/rocky_repository_snapshot_capture.py",
             "scripts/rocky_kernel_source_lock.py",
             "scripts.tests.test_rocky_kernel_closure_offline",
+            "actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093",
+            "--snapshot-sha256 \"$SNAPSHOT_TAR_SHA256\"",
+            "run-id: ${{ inputs.snapshot_run_id }}",
+            "actions: read",
         ):
             self.assertIn(fragment, text)
+        self.assertNotIn("--direct-root", text)
+        self.assertNotIn("--phase repository-direct", text)
+        self.assertNotIn("latest", text.lower())
+
+
+class SnapshotBridgeTests(unittest.TestCase):
+    def contract_fixture(self):
+        return json.loads(
+            (REPO_ROOT / closure.CONTRACT_PATH).read_text(encoding="utf-8")
+        )
+
+    def runtime_fixture(self):
+        identity = {
+            "head_sha": "1" * 40,
+            "repository": "phoenix-hacking/mckernel",
+            "run_attempt": 9,
+            "run_id": 10,
+        }
+        workflow_ref = (
+            closure.snapshot_v2.WORKFLOW_REF_PREFIX + "refs/heads/development"
+        )
+        runtime = closure.validate_snapshot_runtime_identity(
+            "a" * 64,
+            identity["head_sha"],
+            workflow_ref,
+            "123",
+            "4",
+            identity,
+        )
+        return identity, runtime
+
+    def manifest_fixture(self, contract, runtime):
+        authority = contract["snapshot_authority"]
+        return {
+            "capture_id": authority["capture_id"],
+            "claims": dict(closure.snapshot_v2.FALSE_CLAIMS),
+            "execution_identity": dict(runtime["execution_identity"]),
+            "release_key": dict(
+                authority["release_key"],
+                path="release-key/RPM-GPG-KEY-Rocky-10",
+            ),
+            "repositories": [dict(item) for item in authority["repositories"]],
+            "repository_inputs": [
+                dict(item) for item in authority["required_repository_inputs"]
+            ],
+            "schema_version": 2,
+            "snapshot_identity": "b" * 64,
+            "target": dict(closure.snapshot_v2.TARGET),
+        }
+
+    def test_runtime_and_manifest_bridge_require_exact_current_identity(self):
+        contract = self.contract_fixture()
+        identity, runtime = self.runtime_fixture()
+        manifest = self.manifest_fixture(contract, runtime)
+        closure.validate_snapshot_manifest_bridge(manifest, contract, runtime)
+
+        for field, value in (
+            ("digest", "A" * 64),
+            ("commit", "2" * 40),
+            ("run_id", "01"),
+            ("attempt", "0"),
+        ):
+            arguments = [
+                "a" * 64,
+                identity["head_sha"],
+                runtime["execution_identity"]["workflow_ref"],
+                "123",
+                "4",
+                identity,
+            ]
+            if field == "digest":
+                arguments[0] = value
+            elif field == "commit":
+                arguments[1] = value
+            elif field == "run_id":
+                arguments[3] = value
+            else:
+                arguments[4] = value
+            with self.subTest(field=field), self.assertRaises(closure.ClosureError):
+                closure.validate_snapshot_runtime_identity(*arguments)
+        wrong_repository = dict(identity)
+        wrong_repository["repository"] = "other/repository"
+        with self.assertRaisesRegex(closure.ClosureError, "repository"):
+            closure.validate_snapshot_runtime_identity(
+                "a" * 64,
+                identity["head_sha"],
+                runtime["execution_identity"]["workflow_ref"],
+                "123",
+                "4",
+                wrong_repository,
+            )
+
+        promoted = copy.deepcopy(manifest)
+        promoted["claims"]["credit_eligible"] = True
+        with self.assertRaisesRegex(closure.ClosureError, "claims"):
+            closure.validate_snapshot_manifest_bridge(promoted, contract, runtime)
+        reordered = copy.deepcopy(manifest)
+        reordered["repositories"].reverse()
+        with self.assertRaisesRegex(closure.ClosureError, "repository authority"):
+            closure.validate_snapshot_manifest_bridge(reordered, contract, runtime)
+        changed_input = copy.deepcopy(manifest)
+        changed_input["repository_inputs"][0]["sha256"] = "0" * 64
+        with self.assertRaisesRegex(closure.ClosureError, "input digest"):
+            closure.validate_snapshot_manifest_bridge(changed_input, contract, runtime)
+        changed_size = copy.deepcopy(manifest)
+        changed_size["repository_inputs"][0]["size"] += 1
+        with self.assertRaisesRegex(closure.ClosureError, "input size"):
+            closure.validate_snapshot_manifest_bridge(changed_size, contract, runtime)
+
+    def test_external_digest_and_byte_bound_precede_snapshot_verifier(self):
+        contract = self.contract_fixture()
+        _, runtime = self.runtime_fixture()
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            artifact = root / "snapshot.tar"
+            artifact.write_bytes(b"not-the-pinned-artifact")
+            snapshot_contract = {"limits": {"max_snapshot_tar_bytes": 1024}}
+            with mock.patch.object(
+                closure.snapshot_v2,
+                "check_repository_inputs",
+                return_value=(snapshot_contract, []),
+            ), mock.patch.object(
+                closure, "verify_and_extract_snapshot_descriptor"
+            ) as verifier:
+                work = root / "work"
+                work.mkdir()
+                with self.assertRaisesRegex(
+                    closure.ClosureError, "snapshot artifact digest"
+                ):
+                    closure.stage_verify_and_extract_snapshot(
+                        REPO_ROOT, artifact, runtime, contract, work
+                    )
+                verifier.assert_not_called()
+
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source = root / "oversized"
+            source.write_bytes(b"12")
+            output = root / "output"
+            output.mkdir()
+            with self.assertRaisesRegex(closure.ClosureError, "byte bound"):
+                closure.copy_archive(source, output, Path("snapshot.tar"), 1)
+
+    def held_snapshot_fixture(self, root):
+        contract = self.contract_fixture()
+        snapshot_contract, input_records = (
+            closure.snapshot_v2.check_repository_inputs(REPO_ROOT)
+        )
+        head = closure.run_command(
+            ["git", "-C", str(REPO_ROOT), "rev-parse", "HEAD"]
+        )[0].decode("ascii").strip()
+        workflow_ref = (
+            closure.snapshot_v2.WORKFLOW_REF_PREFIX
+            + "refs/heads/development"
+        )
+        execution = {
+            "source_commit": head,
+            "workflow_ref": workflow_ref,
+        }
+        runtime_seed = {
+            "artifact_sha256": "0" * 64,
+            "execution_identity": execution,
+            "repository": closure.snapshot_v2.WORKFLOW_REPOSITORY,
+            "run_attempt": 4,
+            "run_id": 123,
+        }
+        manifest = self.manifest_fixture(contract, runtime_seed)
+        tree = root / "artifact-tree"
+        tree.mkdir(mode=0o700)
+        (tree / "capture-manifest.json").write_bytes(canonical(manifest))
+        artifact = root / "snapshot.tar"
+        closure.snapshot_v2.create_deterministic_tar(
+            tree, artifact, snapshot_contract["limits"]
+        )
+        runtime = dict(
+            runtime_seed,
+            artifact_sha256=hashlib.sha256(artifact.read_bytes()).hexdigest(),
+        )
+        return (
+            contract,
+            snapshot_contract,
+            input_records,
+            manifest,
+            artifact,
+            runtime,
+        )
+
+    def swap_staged_snapshot(self, staged, replacement, restore=True):
+        held = staged.with_name("snapshot.original")
+        staged.rename(held)
+        staged.write_bytes(replacement)
+        staged.chmod(0o400)
+        if restore:
+            staged.unlink()
+            held.rename(staged)
+        return held
+
+    def test_held_snapshot_descriptor_rejects_path_swap_restore_matrix(self):
+        scenarios = (
+            "before_hash",
+            "during_extract",
+            "after_extract",
+            "unlink_recreate_restore",
+            "in_place_restore",
+            "same_bytes_new_inode",
+        )
+        for scenario in scenarios:
+            with self.subTest(scenario=scenario), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                (
+                    contract,
+                    _,
+                    _,
+                    manifest,
+                    artifact,
+                    runtime,
+                ) = self.held_snapshot_fixture(root)
+                work = root / "work"
+                work.mkdir(mode=0o700)
+                staged = work / "snapshot-input" / "snapshot.tar"
+                original_copy = closure.copy_snapshot_archive_held
+                original_extract = closure.snapshot_v2.extract_canonical_tar_stream
+                hooks = []
+
+                def copy_then_swap(*args, **kwargs):
+                    result = original_copy(*args, **kwargs)
+                    if scenario == "before_hash":
+                        self.swap_staged_snapshot(
+                            staged, b"replacement-before-hash\n", True
+                        )
+                        hooks.append(scenario)
+                    return result
+
+                def extract_with_swap(stream, tree, limits):
+                    if scenario in ("during_extract", "unlink_recreate_restore"):
+                        self.swap_staged_snapshot(
+                            staged, b"replacement-during-extract\n", False
+                        )
+                        try:
+                            result = original_extract(stream, tree, limits)
+                        finally:
+                            replacement = staged
+                            held = staged.with_name("snapshot.original")
+                            replacement.unlink()
+                            held.rename(staged)
+                        hooks.append(scenario)
+                        return result
+                    if scenario == "in_place_restore":
+                        original = os.pread(stream.fileno(), 1, 0)
+                        os.pwrite(stream.fileno(), b"X", 0)
+                        os.fsync(stream.fileno())
+                        os.pwrite(stream.fileno(), original, 0)
+                        os.fsync(stream.fileno())
+                        hooks.append(scenario)
+                    result = original_extract(stream, tree, limits)
+                    if scenario == "after_extract":
+                        self.swap_staged_snapshot(
+                            staged, b"replacement-after-extract\n", True
+                        )
+                        hooks.append(scenario)
+                    elif scenario == "same_bytes_new_inode":
+                        exact = staged.read_bytes()
+                        self.swap_staged_snapshot(staged, exact, False)
+                        hooks.append(scenario)
+                    return result
+
+                with mock.patch.object(
+                    closure.snapshot_v2,
+                    "build_capture_manifest",
+                    return_value=manifest,
+                ), mock.patch.object(
+                    closure.snapshot_v2,
+                    "require_repository_head",
+                    return_value=None,
+                ), mock.patch.object(
+                    closure,
+                    "copy_snapshot_archive_held",
+                    side_effect=copy_then_swap,
+                ), mock.patch.object(
+                    closure.snapshot_v2,
+                    "extract_canonical_tar_stream",
+                    side_effect=extract_with_swap,
+                ):
+                    with self.assertRaises(closure.ClosureError):
+                        closure.stage_verify_and_extract_snapshot(
+                            REPO_ROOT,
+                            artifact,
+                            runtime,
+                            contract,
+                            work,
+                        )
+                self.assertEqual(hooks, [scenario])
+
+    def test_held_snapshot_descriptor_verifies_and_extracts_one_exact_stream(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (
+                contract,
+                _,
+                _,
+                manifest,
+                artifact,
+                runtime,
+            ) = self.held_snapshot_fixture(root)
+            work = root / "work"
+            work.mkdir(mode=0o700)
+            with mock.patch.object(
+                closure.snapshot_v2,
+                "build_capture_manifest",
+                return_value=manifest,
+            ), mock.patch.object(
+                closure.snapshot_v2,
+                "require_repository_head",
+                return_value=None,
+            ):
+                tree, observed, snapshot_input = (
+                    closure.stage_verify_and_extract_snapshot(
+                        REPO_ROOT,
+                        artifact,
+                        runtime,
+                        contract,
+                        work,
+                    )
+                )
+            self.assertEqual(observed, manifest)
+            self.assertEqual(
+                snapshot_input["artifact"]["sha256"],
+                runtime["artifact_sha256"],
+            )
+            self.assertEqual(
+                json.loads(
+                    (tree / "capture-manifest.json").read_text(encoding="ascii")
+                ),
+                manifest,
+            )
+
+    def test_snapshot_checker_import_origin_and_source_are_exact(self):
+        contract = self.contract_fixture()
+        closure.validate_snapshot_checker_binding(REPO_ROOT, contract)
+        self.assertEqual(
+            closure.snapshot_v2.GIT_AUTHORITY_EXECUTABLE,
+            "/usr/bin/git",
+        )
+        self.assertEqual(
+            closure.snapshot_v2.git_authority_environment(),
+            contract["snapshot_authority"]["git_authority"]["environment"],
+        )
+        self.assertFalse(
+            contract["snapshot_authority"]["git_authority"][
+                "inherit_environment"
+            ]
+        )
+        with mock.patch.object(
+            closure.snapshot_v2, "__file__", "/tmp/hostile-snapshot-checker.py"
+        ):
+            with self.assertRaisesRegex(closure.ClosureError, "import origin"):
+                closure.validate_snapshot_checker_binding(REPO_ROOT, contract)
+
+    def materialization_fixture(self, root):
+        contract = self.contract_fixture()
+        files = {"release-key/RPM-GPG-KEY-Rocky-10": b"key"}
+        repositories = []
+        for authority in contract["snapshot_authority"]["repositories"]:
+            repository = dict(authority)
+            repository["repomd"] = {
+                "revision": "10.2",
+                "sha256": "1" * 64,
+                "size": 1,
+            }
+            repository["signature"] = {
+                "hash_algorithm_id": 10,
+                "primary_fingerprint": closure.snapshot_v2.RELEASE_FINGERPRINT,
+                "public_key_algorithm_id": 1,
+                "sha256": "2" * 64,
+                "signature_fingerprint": closure.snapshot_v2.RELEASE_FINGERPRINT,
+                "signature_timestamp": 1,
+                "size": 1,
+                "status": "valid",
+            }
+            if authority["kind"] == "binary":
+                prefix = "repositories/{}/repodata/".format(authority["id"])
+                files[prefix + "repomd.xml"] = b"repomd-" + authority["id"].encode("ascii")
+                files[prefix + "repomd.xml.asc"] = b"signature"
+                files[prefix + "signature.json"] = b"{}\n"
+                primary = b"primary-" + authority["id"].encode("ascii")
+                href = "repodata/primary.xml.gz"
+                files["repositories/{}/{}".format(authority["id"], href)] = primary
+                repository["objects"] = [
+                    {
+                        "compressed_sha256": hashlib.sha256(primary).hexdigest(),
+                        "compressed_size": len(primary),
+                        "compression": "gzip",
+                        "href": href,
+                        "open_checksum_declared": True,
+                        "open_sha256": "3" * 64,
+                        "open_size": 1,
+                        "type": "primary",
+                        "verified_open_sha256": "3" * 64,
+                        "verified_open_size": 1,
+                    }
+                ]
+            else:
+                repository["objects"] = []
+            repositories.append(repository)
+        for relative, data in files.items():
+            path = root / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(data)
+        payload = [
+            {
+                "path": relative,
+                "sha256": hashlib.sha256(data).hexdigest(),
+                "size": len(data),
+            }
+            for relative, data in sorted(files.items())
+        ]
+        return contract, {"payload_files": payload, "repositories": repositories}
+
+    def test_only_three_binary_repositories_are_materialized_from_verified_payload(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            tree = root / "tree"
+            tree.mkdir()
+            contract, manifest = self.materialization_fixture(tree)
+            with closure.V2OutputTransaction(root / "output") as output:
+                roots, rows, dnf_rows, release_key = (
+                    closure.materialize_snapshot_v2_repositories(
+                        tree, manifest, output, contract
+                    )
+                )
+                self.assertEqual(sorted(roots), ["appstream", "baseos", "crb"])
+                self.assertEqual(
+                    [item["id"] for item in dnf_rows],
+                    ["baseos", "appstream", "crb"],
+                )
+                self.assertEqual([item["kind"] for item in rows], ["binary"] * 3)
+                self.assertEqual(release_key.read_bytes(), b"key")
+                self.assertNotIn("source-baseos", roots)
+
+            primary = tree / "repositories/baseos/repodata/primary.xml.gz"
+            primary.write_bytes(b"x" * len(primary.read_bytes()))
+            with closure.V2OutputTransaction(root / "second-output") as output:
+                with self.assertRaisesRegex(closure.ClosureError, "payload digest"):
+                    closure.materialize_snapshot_v2_repositories(
+                        tree, manifest, output, contract
+                    )
+
+    def test_locked_direct_and_source_rpms_must_exist_in_signed_primary(self):
+        toolchain = json.loads(
+            (REPO_ROOT / "host-kernel/rocky/toolchain-lock.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        self.assertEqual(len(toolchain["direct_artifacts"]), 20)
+        primary = {}
+        for artifact in toolchain["direct_artifacts"]:
+            primary[artifact["nevra"]] = {
+                key: artifact[key]
+                for key in (
+                    "arch",
+                    "nevra",
+                    "repository_id",
+                    "repository_location",
+                    "sha256",
+                    "size",
+                )
+            }
+        closure.validate_locked_primary_membership(primary, toolchain)
+        primary.pop(toolchain["direct_artifacts"][0]["nevra"])
+        with self.assertRaisesRegex(closure.ClosureError, "absent"):
+            closure.validate_locked_primary_membership(primary, toolchain)
+
+        source = json.loads(
+            (REPO_ROOT / "host-kernel/rocky/source-lock.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        locked = source["source_rpm"]
+        xml = (
+            '<metadata xmlns="http://linux.duke.edu/metadata/common" packages="1">'
+            '<package type="rpm"><name>{}</name><arch>{}</arch>'
+            '<version epoch="{}" ver="{}" rel="{}"/>'
+            '<checksum type="sha256" pkgid="YES">{}</checksum>'
+            '<size package="{}" installed="1" archive="1"/>'
+            '<location href="{}"/></package></metadata>'
+        ).format(
+            locked["name"],
+            locked["arch"],
+            locked["epoch"],
+            locked["version"],
+            locked["release"],
+            locked["sha256"],
+            locked["size"],
+            locked["repository_location"],
+        ).encode("ascii")
+        with tempfile.TemporaryDirectory() as temporary:
+            tree = Path(temporary)
+            primary_path = (
+                tree
+                / "repositories/source-baseos/repodata/primary.xml.gz"
+            )
+            primary_path.parent.mkdir(parents=True)
+            with gzip.open(str(primary_path), "wb") as stream:
+                stream.write(xml)
+            primary_bytes = primary_path.read_bytes()
+            manifest = {
+                "repositories": [
+                    {
+                        "id": "source-baseos",
+                        "objects": [
+                            {
+                                "compressed_sha256": hashlib.sha256(
+                                    primary_bytes
+                                ).hexdigest(),
+                                "compressed_size": len(primary_bytes),
+                                "href": "repodata/primary.xml.gz",
+                                "type": "primary",
+                            }
+                        ],
+                    }
+                ]
+            }
+            result = closure.validate_source_primary_membership(
+                tree, manifest, source, self.contract_fixture()
+            )
+            self.assertTrue(result["verified"])
+            self.assertEqual(result["source_rpm"]["nevra"], locked["nevra"])
+            changed_source = copy.deepcopy(source)
+            changed_source["source_rpm"]["sha256"] = "0" * 64
+            with self.assertRaisesRegex(closure.ClosureError, "source RPM digest"):
+                closure.validate_source_primary_membership(
+                    tree, manifest, changed_source, self.contract_fixture()
+                )
+
+    def snapshot_input_fixture(self, contract):
+        _, runtime = self.runtime_fixture()
+        authority = contract["snapshot_authority"]
+        return {
+            "artifact": {
+                "name": "rocky-repository-snapshot-v2-123-4",
+                "repository": closure.snapshot_v2.WORKFLOW_REPOSITORY,
+                "sha256": runtime["artifact_sha256"],
+                "size": 1,
+            },
+            "bootstrap_checkpoint_id": closure.phase_one.CHECKPOINT_ID,
+            "bootstrap_manifest": {"sha256": "c" * 64, "size": 1},
+            "capture_id": authority["capture_id"],
+            "claims": dict(closure.snapshot_v2.FALSE_CLAIMS),
+            "credit_eligible": False,
+            "execution_identity": dict(runtime["execution_identity"]),
+            "gate_claims": dict(contract["gate_claims"]),
+            "repository_ids": [item["id"] for item in authority["repositories"]],
+            "repository_inputs": [
+                dict(item) for item in authority["required_repository_inputs"]
+            ],
+            "run_attempt": 4,
+            "run_id": 123,
+            "schema_version": 2,
+            "snapshot_identity": "d" * 64,
+        }
+
+    def test_snapshot_input_schema_rejects_credit_and_unbound_fields(self):
+        contract = self.contract_fixture()
+        value = self.snapshot_input_fixture(contract)
+        closure.validate_snapshot_input_v2(value, contract)
+        for mutation in ("credit", "input", "extra"):
+            changed = copy.deepcopy(value)
+            if mutation == "credit":
+                changed["gate_claims"]["RK-003"] = True
+            elif mutation == "input":
+                changed["repository_inputs"][0]["sha256"] = "0" * 64
+            else:
+                changed["unexpected"] = True
+            with self.subTest(mutation=mutation), self.assertRaises(
+                closure.ClosureError
+            ):
+                closure.validate_snapshot_input_v2(changed, contract)
+
+    def resolution_fixture(self):
+        direct = ["direct-0:1-1.x86_64"]
+        effective = ["alpha", "beta"]
+        reviewed = ["rust"]
+        roots = [
+            {"kind": "rocky-effective-spec", "value": item}
+            for item in effective
+        ]
+        roots.extend(
+            {"kind": "reviewed-rocky-rust", "value": item}
+            for item in reviewed
+        )
+        roots.extend(
+            {"kind": "locked-direct-nevra", "value": item} for item in direct
+        )
+        spec_sha256 = "e" * 64
+        semantic = {
+            "direct_nevras": direct,
+            "effective_buildrequires": effective,
+            "kernel_spec_sha256": spec_sha256,
+            "resolution_roots": roots,
+            "reviewed_rocky_rust_additions": reviewed,
+        }
+        authority = {
+            "direct_nevra_count": 1,
+            "direct_nevras_sha256": hashlib.sha256(canonical(direct)).hexdigest(),
+            "effective_buildrequires_count": 2,
+            "kernel_spec": {
+                "dist_git_commit": "1" * 40,
+                "path": "SPECS/kernel.spec",
+                "sha256": spec_sha256,
+                "size": 12,
+            },
+            "resolution_inputs_sha256": hashlib.sha256(canonical(semantic)).hexdigest(),
+            "resolution_root_count": 4,
+            "reviewed_rocky_rust_additions": reviewed,
+        }
+        contract = {
+            "gate_claims": {"RK-003": False},
+            "resolution_authority": authority,
+            "snapshot_authority": {"source_repository_id": "source-baseos"},
+        }
+        value = {
+            "collector_http_sealed_before_derivation": True,
+            "credit_eligible": False,
+            "direct_nevras": direct,
+            "effective_buildrequires": effective,
+            "gate_claims": {"RK-003": False},
+            "kernel_spec": {
+                "archive_path": "inputs/kernel.spec",
+                "download": {
+                    "final_url": "https://git.rockylinux.org/staging/rpms/kernel/-/raw/{}/SPECS/kernel.spec".format(
+                        "1" * 40
+                    ),
+                    "redirect_count": 0,
+                    "sha256": spec_sha256,
+                    "size": 12,
+                },
+                "sha256": spec_sha256,
+                "size": 12,
+            },
+            "resolution_inputs_sha256": authority["resolution_inputs_sha256"],
+            "resolution_roots": roots,
+            "reviewed_rocky_rust_additions": reviewed,
+            "rpm_showrc_sha256": "f" * 64,
+            "rpmspec_output_sha256": "0" * 64,
+            "schema_version": 2,
+            "source_snapshot_membership": {
+                "primary": {
+                    "href": "repodata/primary.xml.gz",
+                    "sha256": "1" * 64,
+                    "size": 1,
+                },
+                "repository_id": "source-baseos",
+                "source_rpm": {
+                    "arch": "src",
+                    "nevra": "kernel-0:1-1.src",
+                    "repository_id": "source-baseos",
+                    "repository_location": "Packages/k/kernel.src.rpm",
+                    "sha256": "2" * 64,
+                    "size": 1,
+                },
+                "verified": True,
+            },
+            "source_spec_condition": "fixture",
+        }
+        return contract, value
+
+    def test_resolution_schema_binds_semantic_roots_and_source_membership(self):
+        contract, value = self.resolution_fixture()
+        closure.validate_resolution_input_v2(value, contract)
+        changed = copy.deepcopy(value)
+        changed["resolution_roots"][0]["value"] = "changed"
+        with self.assertRaisesRegex(closure.ClosureError, "resolution roots"):
+            closure.validate_resolution_input_v2(changed, contract)
+        promoted = copy.deepcopy(value)
+        promoted["credit_eligible"] = True
+        with self.assertRaisesRegex(closure.ClosureError, "credit"):
+            closure.validate_resolution_input_v2(promoted, contract)
+
+    def test_v2_checkpoint_never_claims_credit_and_binds_current_snapshot(self):
+        names = [
+            "blockers.json",
+            "closure.json",
+            "environment.json",
+            "offline-replay.json",
+            "probes.json",
+            "resolution-input.json",
+            "rpm-macros.json",
+            "snapshot-input.json",
+        ]
+        checkpoint = {
+            "claims": dict(closure.snapshot_v2.FALSE_CLAIMS),
+            "credit_eligible": False,
+            "gate_claims": {"RK-003": False},
+            "github": {
+                "head_sha": "1" * 40,
+                "repository": "phoenix-hacking/mckernel",
+                "run_attempt": 1,
+                "run_id": 2,
+            },
+            "manifests": [
+                {"path": name, "sha256": "a" * 64, "size": 1}
+                for name in names
+            ],
+            "phase": "closure-offline",
+            "schema_version": 2,
+            "snapshot_identity": "b" * 64,
+            "snapshot_source_commit": "1" * 40,
+            "snapshot_tar_sha256": "c" * 64,
+            "successful_capture_requires_independent_review": True,
+        }
+        closure.validate_capture_checkpoint_v2(checkpoint)
+        for mutation in ("accept", "credit", "commit"):
+            changed = copy.deepcopy(checkpoint)
+            if mutation == "accept":
+                changed["claims"]["accepted_checkpoint"] = True
+            elif mutation == "credit":
+                changed["gate_claims"]["RK-003"] = True
+            else:
+                changed["snapshot_source_commit"] = "2" * 40
+            with self.subTest(mutation=mutation), self.assertRaises(
+                closure.ClosureError
+            ):
+                closure.validate_capture_checkpoint_v2(changed)
+
+
+class V2OutputTransactionTests(unittest.TestCase):
+    def replace_held_regular(self, directory_descriptor, name, data):
+        os.unlink(name, dir_fd=directory_descriptor)
+        descriptor = os.open(
+            name,
+            os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW,
+            0o600,
+            dir_fd=directory_descriptor,
+        )
+        try:
+            closure.v2_write_all(descriptor, data, "test replacement")
+            os.fchmod(descriptor, 0o400)
+            os.fsync(descriptor)
+        finally:
+            os.close(descriptor)
+        os.fsync(directory_descriptor)
+
+    def test_existing_leaf_file_directory_and_symlink_fail_closed(self):
+        for kind in ("file", "directory", "symlink"):
+            with self.subTest(kind=kind), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                parent = root / "parent"
+                outside = root / "outside"
+                parent.mkdir()
+                outside.mkdir()
+                destination = parent / "bundle"
+                if kind == "file":
+                    destination.write_bytes(b"collision")
+                    message = "regular file"
+                elif kind == "directory":
+                    destination.mkdir()
+                    message = "directory"
+                else:
+                    destination.symlink_to(outside, target_is_directory=True)
+                    message = "symlink"
+                with self.assertRaisesRegex(closure.ClosureError, message):
+                    closure.V2OutputTransaction(destination)
+                self.assertEqual(list(outside.iterdir()), [])
+
+    def test_cross_parent_copy_uses_same_parent_atomic_publication(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            parent = root / "parent"
+            parent.mkdir()
+            destination = parent / "bundle"
+            original_copy = closure.v2_copy_output_tree
+            original_rename = closure.v2_rename_noreplace
+            with mock.patch.object(
+                closure, "v2_copy_output_tree", wraps=original_copy
+            ) as copy_tree, mock.patch.object(
+                closure, "v2_rename_noreplace", wraps=original_rename
+            ) as rename:
+                with closure.V2OutputTransaction(destination) as output:
+                    stage_root = output.stage_root
+                    self.assertNotEqual(
+                        closure.v2_directory_identity(
+                            os.fstat(output.stage_parent_descriptor)
+                        ),
+                        closure.v2_directory_identity(
+                            os.fstat(output.output_parent_descriptor)
+                        ),
+                    )
+                    output.write_bytes(PurePosixPath("nested/value"), b"fixture")
+                    output.write_json(PurePosixPath("metadata.json"), {"value": 1})
+                    output.write_sha256sums()
+                    output.verify_sha256sums(["metadata.json", "nested/value"])
+                    output.publish()
+                    copy_arguments = copy_tree.call_args_list[0][0]
+                    self.assertNotEqual(copy_arguments[0], copy_arguments[1])
+                    rename_arguments = rename.call_args[0]
+                    self.assertEqual(rename_arguments[0], rename_arguments[2])
+                self.assertFalse(stage_root.exists())
+            self.assertEqual((destination / "nested/value").read_bytes(), b"fixture")
+            self.assertEqual(
+                (destination / "metadata.json").read_bytes(), b'{"value":1}\n'
+            )
+            self.assertEqual(
+                stat.S_IMODE((destination / "nested/value").stat().st_mode), 0o400
+            )
+            self.assertEqual(
+                stat.S_IMODE((destination / "nested").stat().st_mode), 0o700
+            )
+
+    def test_late_leaf_file_directory_and_symlink_collisions_are_not_replaced(self):
+        for kind in ("file", "directory", "symlink"):
+            with self.subTest(kind=kind), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                parent = root / "parent"
+                outside = root / "outside"
+                parent.mkdir()
+                outside.mkdir()
+                destination = parent / "bundle"
+                original_copy = closure.v2_copy_output_tree
+                injected = []
+
+                def copy_then_collide(source_descriptor, destination_descriptor):
+                    copied = original_copy(source_descriptor, destination_descriptor)
+                    if injected:
+                        return copied
+                    injected.append(True)
+                    if kind == "file":
+                        destination.write_bytes(b"late collision")
+                    elif kind == "directory":
+                        destination.mkdir()
+                    else:
+                        destination.symlink_to(outside, target_is_directory=True)
+                    return copied
+
+                with closure.V2OutputTransaction(destination) as output:
+                    output.write_bytes(PurePosixPath("value"), b"fixture")
+                    output.write_sha256sums()
+                    output.verify_sha256sums(["value"])
+                    with mock.patch.object(
+                        closure,
+                        "v2_copy_output_tree",
+                        side_effect=copy_then_collide,
+                    ):
+                        with self.assertRaisesRegex(
+                            closure.ClosureError, "appeared before publication"
+                        ):
+                            output.publish()
+                self.assertTrue(injected)
+                self.assertTrue(destination.exists() or destination.is_symlink())
+                self.assertEqual(list(outside.iterdir()), [])
+                self.assertFalse(
+                    any(".publish." in item.name for item in parent.iterdir())
+                )
+
+    def test_atomic_stage_unlink_recreate_after_verification_is_rejected(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            parent = root / "parent"
+            parent.mkdir()
+            destination = parent / "bundle"
+            original_copy = closure.v2_copy_output_tree
+            mutated = []
+
+            def replace_then_copy(source_descriptor, destination_descriptor):
+                if not mutated:
+                    self.replace_held_regular(
+                        source_descriptor,
+                        "value",
+                        b"hostile-post-verification-replacement\n",
+                    )
+                    mutated.append(True)
+                return original_copy(source_descriptor, destination_descriptor)
+
+            with closure.V2OutputTransaction(destination) as output:
+                output.write_bytes(
+                    PurePosixPath("value"), b"trusted-evidence\n"
+                )
+                output.write_sha256sums()
+                output.verify_sha256sums(["value"])
+                with mock.patch.object(
+                    closure,
+                    "v2_copy_output_tree",
+                    side_effect=replace_then_copy,
+                ):
+                    with self.assertRaises(closure.ClosureError):
+                        output.publish()
+            self.assertTrue(mutated)
+            self.assertFalse(destination.exists() or destination.is_symlink())
+            self.assertFalse(any(".publish." in item.name for item in parent.iterdir()))
+
+    def test_hidden_unlink_recreate_before_rename_is_rejected(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            parent = root / "parent"
+            parent.mkdir()
+            destination = parent / "bundle"
+            original_rename = closure.v2_rename_noreplace
+            mutated = []
+
+            def replace_hidden_then_rename(
+                source_directory,
+                source_name,
+                destination_directory,
+                destination_name,
+            ):
+                hidden = os.open(
+                    source_name,
+                    os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW,
+                    dir_fd=source_directory,
+                )
+                try:
+                    self.replace_held_regular(hidden, "value", b"trusted-evidence\n")
+                    mutated.append(True)
+                finally:
+                    os.close(hidden)
+                return original_rename(
+                    source_directory,
+                    source_name,
+                    destination_directory,
+                    destination_name,
+                )
+
+            with closure.V2OutputTransaction(destination) as output:
+                output.write_bytes(
+                    PurePosixPath("value"), b"trusted-evidence\n"
+                )
+                output.write_sha256sums()
+                output.verify_sha256sums(["value"])
+                with mock.patch.object(
+                    closure,
+                    "v2_rename_noreplace",
+                    side_effect=replace_hidden_then_rename,
+                ):
+                    with self.assertRaises(closure.ClosureError):
+                        output.publish()
+            self.assertTrue(mutated)
+            self.assertFalse(destination.exists() or destination.is_symlink())
+            self.assertEqual(list(parent.iterdir()), [])
+
+    def test_sha256sums_mutation_after_verification_is_rejected(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            parent = root / "parent"
+            parent.mkdir()
+            destination = parent / "bundle"
+            original_copy = closure.v2_copy_output_tree
+            mutated = []
+
+            def replace_manifest_then_copy(
+                source_descriptor, destination_descriptor
+            ):
+                if not mutated:
+                    self.replace_held_regular(
+                        source_descriptor,
+                        "SHA256SUMS",
+                        ("0" * 64 + "  value\n").encode("ascii"),
+                    )
+                    mutated.append(True)
+                return original_copy(source_descriptor, destination_descriptor)
+
+            with closure.V2OutputTransaction(destination) as output:
+                output.write_bytes(PurePosixPath("value"), b"trusted-evidence\n")
+                output.write_sha256sums()
+                output.verify_sha256sums(["value"])
+                with mock.patch.object(
+                    closure,
+                    "v2_copy_output_tree",
+                    side_effect=replace_manifest_then_copy,
+                ):
+                    with self.assertRaises(closure.ClosureError):
+                        output.publish()
+            self.assertTrue(mutated)
+            self.assertFalse(destination.exists() or destination.is_symlink())
+            self.assertEqual(list(parent.iterdir()), [])
+
+    def test_final_descriptor_mutation_during_verification_is_rejected(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            parent = root / "parent"
+            parent.mkdir()
+            destination = parent / "bundle"
+            original_verify = closure.v2_verify_checksum_directory
+            mutated = []
+
+            with closure.V2OutputTransaction(destination) as output:
+                output.write_bytes(PurePosixPath("value"), b"trusted-evidence\n")
+                output.write_sha256sums()
+                output.verify_sha256sums(["value"])
+
+                def verify_then_replace_final(descriptor, *args, **kwargs):
+                    result = original_verify(descriptor, *args, **kwargs)
+                    try:
+                        final_metadata = os.stat(
+                            destination.name,
+                            dir_fd=output.output_parent_descriptor,
+                            follow_symlinks=False,
+                        )
+                    except FileNotFoundError:
+                        return result
+                    if (
+                        not mutated
+                        and stat.S_ISDIR(final_metadata.st_mode)
+                        and final_metadata.st_ino == os.fstat(descriptor).st_ino
+                        and final_metadata.st_dev == os.fstat(descriptor).st_dev
+                    ):
+                        self.replace_held_regular(
+                            descriptor, "value", b"trusted-evidence\n"
+                        )
+                        mutated.append(True)
+                    return result
+
+                with mock.patch.object(
+                    closure,
+                    "v2_verify_checksum_directory",
+                    side_effect=verify_then_replace_final,
+                ):
+                    with self.assertRaises(closure.ClosureError):
+                        output.publish()
+            self.assertTrue(mutated)
+            self.assertFalse(destination.exists() or destination.is_symlink())
+            self.assertEqual(list(parent.iterdir()), [])
+
+    def test_parent_swap_before_write_create_copy_or_rename_writes_nothing_outside(self):
+        checkpoints = (
+            "v2 output parent before staged output write",
+            "v2 output parent before publication directory create",
+            "v2 output parent before publication copy",
+            "v2 output parent before publication rename",
+        )
+        for checkpoint in checkpoints:
+            with self.subTest(checkpoint=checkpoint), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                parent = root / "safe-parent"
+                moved = root / "held-parent"
+                outside = root / "outside"
+                parent.mkdir()
+                outside.mkdir()
+                destination = parent / "bundle"
+                with closure.V2OutputTransaction(destination) as output:
+                    output.write_bytes(PurePosixPath("seed"), b"fixture")
+                    output.write_sha256sums()
+                    output.verify_sha256sums(["seed"])
+                    original_check = output.require_output_parent
+                    swapped = []
+
+                    def swap_then_check(label):
+                        if label == checkpoint and not swapped:
+                            parent.rename(moved)
+                            parent.symlink_to(outside, target_is_directory=True)
+                            swapped.append(True)
+                        return original_check(label)
+
+                    with mock.patch.object(
+                        output,
+                        "require_output_parent",
+                        side_effect=swap_then_check,
+                    ):
+                        with self.assertRaises(closure.ClosureError):
+                            if checkpoint.endswith("staged output write"):
+                                output.write_bytes(
+                                    PurePosixPath("must-not-exist"), b"blocked"
+                                )
+                            else:
+                                output.publish()
+                self.assertTrue(swapped)
+                self.assertTrue(parent.is_symlink())
+                self.assertEqual(list(outside.iterdir()), [])
+                self.assertEqual(list(moved.iterdir()), [])
+
+    def test_parent_swap_before_trusted_stage_create_writes_nothing_outside(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            parent = root / "safe-parent"
+            moved = root / "held-parent"
+            outside = root / "outside"
+            parent.mkdir()
+            outside.mkdir()
+            destination = parent / "bundle"
+            original_check = closure.v2_require_stable_directory
+            swapped = []
+
+            def swap_then_check(path, descriptor, expected, label):
+                if label == "v2 output parent before trusted stage create" and not swapped:
+                    parent.rename(moved)
+                    parent.symlink_to(outside, target_is_directory=True)
+                    swapped.append(True)
+                return original_check(path, descriptor, expected, label)
+
+            with mock.patch.object(
+                closure,
+                "v2_require_stable_directory",
+                side_effect=swap_then_check,
+            ):
+                with self.assertRaises(closure.ClosureError):
+                    closure.V2OutputTransaction(destination)
+            self.assertTrue(swapped)
+            self.assertEqual(list(outside.iterdir()), [])
+            self.assertEqual(list(moved.iterdir()), [])
+
+    def test_cleanup_unlinks_stage_symlink_without_traversal(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            parent = root / "parent"
+            outside = root / "outside"
+            parent.mkdir()
+            outside.mkdir()
+            sentinel = outside / "sentinel"
+            sentinel.write_bytes(b"preserve")
+            output = closure.V2OutputTransaction(parent / "bundle")
+            stage_root = output.stage_root
+            os.symlink(
+                str(outside),
+                "hostile-link",
+                dir_fd=output.stage_descriptor,
+            )
+            output.close()
+            self.assertFalse(stage_root.exists())
+            self.assertEqual(sentinel.read_bytes(), b"preserve")
+
+    def test_capture_has_no_inherited_path_based_output_publication(self):
+        source = (REPO_ROOT / "scripts/rocky_kernel_closure_offline.py").read_text(
+            encoding="utf-8"
+        )
+        capture_source = source.split("\ndef capture(\n", 1)[1].split(
+            "\ndef validate_workflow", 1
+        )[0]
+        for forbidden in (
+            "phase_one.prepare_output_dir",
+            "phase_one.write_output_bytes",
+            "phase_one.write_output_json",
+            "phase_one.write_sha256sums",
+            "copy_archive(",
+        ):
+            with self.subTest(forbidden=forbidden):
+                self.assertNotIn(forbidden, capture_source)
+        self.assertIn("with V2OutputTransaction(output_dir) as output", capture_source)
+        self.assertIn("output.publish()", capture_source)
 
 
 class DirectInputTests(unittest.TestCase):
@@ -258,7 +1425,7 @@ class DirectInputTests(unittest.TestCase):
         return fixture_contract, expected
 
     def test_historical_and_current_exact_identity_modes(self):
-        contract = closure.validate_contract(REPO_ROOT)
+        contract = closure.validate_legacy_contract(REPO_ROOT)
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             fixture, expected = self.make_fixture(root, contract)
@@ -281,7 +1448,7 @@ class DirectInputTests(unittest.TestCase):
                 closure.validate_direct_root(root, fixture, wrong, expected)
 
     def test_unlisted_file_and_checksum_mutation_fail_closed(self):
-        contract = closure.validate_contract(REPO_ROOT)
+        contract = closure.validate_legacy_contract(REPO_ROOT)
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             fixture, expected = self.make_fixture(root, contract)
@@ -305,7 +1472,7 @@ class DirectInputTests(unittest.TestCase):
                 closure.validate_direct_root(root, fixture, expected_files=expected)
 
     def test_unexpected_checkpoint_and_build_fields_fail_closed(self):
-        contract = closure.validate_contract(REPO_ROOT)
+        contract = closure.validate_legacy_contract(REPO_ROOT)
         current = {
             "head_sha": "1" * 40,
             "repository": "phoenix-hacking/mckernel",
@@ -324,7 +1491,7 @@ class DirectInputTests(unittest.TestCase):
                     closure.validate_direct_root(root, fixture, current, expected)
 
     def test_symlinked_direct_root_and_symlinked_member_fail_closed(self):
-        contract = closure.validate_contract(REPO_ROOT)
+        contract = closure.validate_legacy_contract(REPO_ROOT)
         with tempfile.TemporaryDirectory() as temporary:
             parent = Path(temporary)
             root = parent / "direct"
@@ -485,6 +1652,131 @@ class MetadataAndCommandTests(unittest.TestCase):
                 closure.ClosureError, "fields changed"
             ):
                 closure.validate_capture_manifest_schemas(*mutated)
+
+    def output_schema_fixtures_v2(self):
+        claims = {"RK-003": False}
+        closure_manifest = {
+            "all_archives_verified": True,
+            "all_binary_repomd_data_materialized": True,
+            "all_signatures_verified": True,
+            "configured_network_sources": [],
+            "credit_eligible": False,
+            "environment_manifest_sha256": "a" * 64,
+            "exact_snapshot_root_solve_verified": True,
+            "gate_claims": dict(claims),
+            "network_isolation_claimed": False,
+            "package_bytes": 0,
+            "package_count": 0,
+            "packages": [],
+            "resolution_inputs_sha256": "b" * 64,
+            "resolution_root_count": 0,
+            "resolution_roots": [],
+            "rpm_set_sha256": "c" * 64,
+            "schema_version": 2,
+            "snapshot_input": {
+                "artifact_sha256": "d" * 64,
+                "capture_id": closure.snapshot_v2.CAPTURE_ID,
+                "snapshot_identity": "e" * 64,
+                "source_commit": "1" * 40,
+            },
+            "snapshot_repositories": [],
+            "unresolved_dependencies": [],
+        }
+        snapshot_solve = {
+            "command": [],
+            "empty_installroot_verified": True,
+            "installed_package_count": 0,
+            "installed_rpm_set_sha256": "c" * 64,
+            "local_file_repositories_only": True,
+            "transaction_exit_code": 0,
+            "transaction_output_sha256": "f" * 64,
+        }
+        offline = {
+            "all_repositories_disabled": True,
+            "command": [],
+            "credit_eligible": False,
+            "empty_installroot_verified": True,
+            "enabled_repository_count": 0,
+            "environment_manifest_sha256": "a" * 64,
+            "gate_claims": dict(claims),
+            "installed_package_count": 0,
+            "installed_rpm_set_sha256": "c" * 64,
+            "network_isolation_claimed": False,
+            "network_scope": "bounded",
+            "proxy_loopback_defense": True,
+            "schema_version": 2,
+            "snapshot_solve": snapshot_solve,
+            "transaction_exit_code": 0,
+            "transaction_output_sha256": "0" * 64,
+        }
+        probes = {
+            "all_required_probes_verified": True,
+            "credit_eligible": False,
+            "environment_manifest_sha256": "a" * 64,
+            "fixture_path": "/fixture",
+            "fixture_sha256": "1" * 64,
+            "fixture_size": 1,
+            "gate_claims": dict(claims),
+            "network_isolation_claimed": False,
+            "results": [],
+            "schema_version": 2,
+        }
+        macros = {
+            "command": ["rpm", "--showrc"],
+            "credit_eligible": False,
+            "gate_claims": dict(claims),
+            "output_sha256": "2" * 64,
+            "output_size": 1,
+            "schema_version": 2,
+        }
+        environment = {
+            "architecture": "x86_64",
+            "container_image": "fixture",
+            "container_manifest_digest": "fixture",
+            "container_platform": "linux/amd64",
+            "credit_eligible": False,
+            "gate_claims": dict(claims),
+            "github": {},
+            "offline_installroot_package_count": 0,
+            "offline_os_release": {},
+            "offline_rpm_set_sha256": "c" * 64,
+            "resolution_inputs_sha256": "b" * 64,
+            "runtime_os_release": {},
+            "schema_version": 2,
+            "snapshot_tar_sha256": "d" * 64,
+            "snapshot_solve_package_count": 0,
+        }
+        blockers = {
+            "config_lock_blockers_at_capture": [],
+            "credit_eligible": False,
+            "gate_claims": dict(claims),
+            "phase_success_blockers": [],
+            "schema_version": 2,
+            "toolchain_lock_blockers_at_capture": [],
+        }
+        return closure_manifest, offline, probes, macros, environment, blockers
+
+    def test_v2_capture_schemas_keep_every_credit_claim_false(self):
+        fixtures = self.output_schema_fixtures_v2()
+        closure.validate_capture_manifest_schemas_v2(*fixtures)
+        expected_paths = closure.expected_capture_bundle_paths_v2(
+            fixtures[0], fixtures[2]
+        )
+        self.assertIn("snapshot-input.json", expected_paths)
+        self.assertIn("resolution-input.json", expected_paths)
+        self.assertNotIn("snapshot.tar", expected_paths)
+        self.assertFalse(any("repository-direct" in item for item in expected_paths))
+        for index in range(len(fixtures)):
+            mutated = list(copy.deepcopy(fixtures))
+            mutated[index]["unexpected"] = True
+            with self.subTest(index=index), self.assertRaisesRegex(
+                closure.ClosureError, "fields changed"
+            ):
+                closure.validate_capture_manifest_schemas_v2(*mutated)
+        promoted = list(copy.deepcopy(fixtures))
+        promoted[3]["gate_claims"]["RK-003"] = True
+        with self.assertRaisesRegex(closure.ClosureError, "gate claims"):
+            closure.validate_capture_manifest_schemas_v2(*promoted)
 
     def test_checkpoint_schema_and_capture_file_closure_fail_closed(self):
         names = [
@@ -768,7 +2060,7 @@ class MetadataAndCommandTests(unittest.TestCase):
             closure.expected_probe_owner(
                 "llvm", "llvm-devel-0:21.1.8-1.el10.x86_64"
             )
-        contract = closure.validate_contract(REPO_ROOT)
+        contract = closure.validate_legacy_contract(REPO_ROOT)
         self.assertIn("before credit or review ingestion", contract["success_blockers"][-1])
 
     def test_dynamic_loader_must_identify_one_exact_libclang(self):
