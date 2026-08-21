@@ -18,6 +18,8 @@ import tempfile
 import unittest
 from unittest import mock
 
+import yaml
+
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(REPO_ROOT) not in sys.path:
@@ -664,6 +666,29 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
 
     def test_runtime_evidence_steps_reject_startup_and_command_channel_mutations(self) -> None:
         workflow = ".github/workflows/native-rust-host-modules-exact-runtime.yml"
+        document = yaml.safe_load((REPO_ROOT / workflow).read_text(encoding="utf-8"))
+        protected_names = {
+            "Verify immutable build inputs and native module link contracts",
+            "Assemble a deterministic lifecycle-only initramfs",
+            "Boot the exact kernel under QEMU TCG and capture serial diagnostics",
+            "Create a credit-forbidden technical capture",
+        }
+        steps = {
+            step["name"]: step
+            for step in document["jobs"]["exact-runtime"]["steps"]
+            if "run" in step
+        }
+        self.assertTrue(protected_names.issubset(steps))
+        for name in protected_names:
+            run_lines = [
+                line.strip()
+                for line in steps[name]["run"].splitlines()
+                if line.strip()
+            ]
+            self.assertEqual(
+                ["set -euo pipefail", "unset LD_SHOW_AUXV"],
+                run_lines[:2],
+            )
         mutations = (
             (
                 "shell: /usr/bin/bash --noprofile --norc -p -e -o pipefail {0}",
@@ -674,6 +699,14 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                 "          PATH=/usr/sbin:/usr/bin:/sbin:/bin\n"
                 "          export PATH\n",
                 "          export PATH\n",
+            ),
+            (
+                "          set -euo pipefail\n          unset LD_SHOW_AUXV\n",
+                "          set -euo pipefail\n",
+            ),
+            (
+                "          set -euo pipefail\n          unset LD_SHOW_AUXV\n",
+                "          unset LD_SHOW_AUXV\n          set -euo pipefail\n",
             ),
             (
                 "          unset GITHUB_ENV GITHUB_PATH\n",

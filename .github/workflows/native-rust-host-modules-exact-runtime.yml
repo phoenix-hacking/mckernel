@@ -107,6 +107,7 @@ jobs:
           PYTHONPATH: ""
         run: |
           set -euo pipefail
+          unset LD_SHOW_AUXV
           PATH=/usr/sbin:/usr/bin:/sbin:/bin
           export PATH
           github_env_file="$GITHUB_ENV"
@@ -172,6 +173,7 @@ jobs:
           RUNTIME_EVIDENCE: ${{ runner.temp }}/native-rust-runtime-evidence
         run: |
           set -euo pipefail
+          unset LD_SHOW_AUXV
           PATH=/usr/sbin:/usr/bin:/sbin:/bin
           export PATH
           github_env_file="$GITHUB_ENV"
@@ -266,6 +268,7 @@ jobs:
           RUNTIME_EVIDENCE: ${{ runner.temp }}/native-rust-runtime-evidence
         run: |
           set -euo pipefail
+          unset LD_SHOW_AUXV
           PATH=/usr/sbin:/usr/bin:/sbin:/bin
           export PATH
           github_env_file="$GITHUB_ENV"
@@ -331,6 +334,7 @@ jobs:
           RUNTIME_EVIDENCE: ${{ runner.temp }}/native-rust-runtime-evidence
         run: |
           set -euo pipefail
+          unset LD_SHOW_AUXV
           PATH=/usr/sbin:/usr/bin:/sbin:/bin
           export PATH
           github_env_file="$GITHUB_ENV"

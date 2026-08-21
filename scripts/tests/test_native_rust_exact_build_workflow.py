@@ -275,11 +275,28 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
                     environment = steps[name]["env"]
                     self.assertEqual({key: "" for key in loader_keys}, {key: environment[key] for key in loader_keys})
                     self.assertEqual("/usr/sbin:/usr/bin:/sbin:/bin", environment["PATH"])
+                    run_lines = [
+                        line.strip()
+                        for line in steps[name]["run"].splitlines()
+                        if line.strip()
+                    ]
+                    self.assertEqual(
+                        ["set -euo pipefail", "unset LD_SHOW_AUXV"],
+                        run_lines[:2],
+                    )
                     self.assertIn("unset GITHUB_ENV GITHUB_PATH", steps[name]["run"])
 
         for old, new in (
             ('          LD_AUDIT: ""\n', '          LD_AUDIT: /tmp/attacker.so\n'),
             ('          PATH: /usr/sbin:/usr/bin:/sbin:/bin\n', '          PATH: /tmp/attacker\n'),
+            (
+                "          set -euo pipefail\n          unset LD_SHOW_AUXV\n",
+                "          set -euo pipefail\n",
+            ),
+            (
+                "          set -euo pipefail\n          unset LD_SHOW_AUXV\n",
+                "          unset LD_SHOW_AUXV\n          set -euo pipefail\n",
+            ),
             ('          : > "$github_env_file"\n', "          printf 'LD_AUDIT=/tmp/attacker.so\\n' > \"$github_env_file\"\n"),
         ):
             mutation = self.workflow.replace(old, new, 1)

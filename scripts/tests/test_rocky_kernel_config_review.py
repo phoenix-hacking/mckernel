@@ -54,7 +54,7 @@ class ConfigReviewTests(unittest.TestCase):
         self.assertFalse(
             review["current_repository_input_policy"]["runtime_identity_claimed"]
         )
-        with self.assertRaisesRegex(reviewer.ConfigReviewError, "worktree size differs"):
+        with self.assertRaisesRegex(reviewer.ConfigReviewError, "current HEAD blob differs"):
             reviewer.validate_repository(REPO_ROOT, review)
 
     def test_every_gate_or_credit_promotion_is_rejected(self):
@@ -353,7 +353,7 @@ class ConfigReviewTests(unittest.TestCase):
         )
         self.assertEqual(completed.returncode, 2)
         self.assertEqual("", completed.stdout.decode("utf-8"))
-        self.assertIn("worktree size differs", completed.stderr.decode("utf-8"))
+        self.assertIn("current HEAD blob differs", completed.stderr.decode("utf-8"))
 
     def test_exact_artifact_when_supplied(self):
         artifact = os.environ.get("MCKERNEL_RK005_CONFIG_ARTIFACT")

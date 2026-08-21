@@ -349,6 +349,7 @@ jobs:
           PYTHONPATH: ""
         run: |
           set -euo pipefail
+          unset LD_SHOW_AUXV
           PATH=/usr/sbin:/usr/bin:/sbin:/bin
           export PATH
           github_env_file="$GITHUB_ENV"
@@ -439,6 +440,7 @@ jobs:
           SOURCE_PARENT: ${{ runner.temp }}/native-rust-source
         run: |
           set -euo pipefail
+          unset LD_SHOW_AUXV
           PATH=/usr/sbin:/usr/bin:/sbin:/bin
           export PATH
           github_env_file="$GITHUB_ENV"
@@ -552,6 +554,7 @@ jobs:
           SOURCE_DATE_EPOCH: "1786434034"
         run: |
           set -euo pipefail
+          unset LD_SHOW_AUXV
           PATH=/usr/sbin:/usr/bin:/sbin:/bin
           export PATH
           github_env_file="$GITHUB_ENV"
@@ -664,6 +667,7 @@ jobs:
           SOURCE_DATE_EPOCH: "1786434034"
         run: |
           set -euo pipefail
+          unset LD_SHOW_AUXV
           PATH=/usr/sbin:/usr/bin:/sbin:/bin
           export PATH
           github_env_file="$GITHUB_ENV"
@@ -806,6 +810,7 @@ jobs:
           SOURCE_DATE_EPOCH: "1786434034"
         run: |
           set -euo pipefail
+          unset LD_SHOW_AUXV
           PATH=/usr/sbin:/usr/bin:/sbin:/bin
           export PATH
           github_env_file="$GITHUB_ENV"
@@ -1216,6 +1221,7 @@ jobs:
           PYTHONPATH: ""
         run: |
           set -euo pipefail
+          unset LD_SHOW_AUXV
           PATH=/usr/sbin:/usr/bin:/sbin:/bin
           export PATH
           github_env_file="$GITHUB_ENV"
@@ -1261,6 +1267,7 @@ jobs:
           SOURCE_PARENT: ${{ runner.temp }}/rk006-source
         run: |
           set -euo pipefail
+          unset LD_SHOW_AUXV
           PATH=/usr/sbin:/usr/bin:/sbin:/bin
           export PATH
           github_env_file="$GITHUB_ENV"
@@ -1326,6 +1333,7 @@ jobs:
           PYTHONPATH: ""
         run: |
           set -euo pipefail
+          unset LD_SHOW_AUXV
           PATH=/usr/sbin:/usr/bin:/sbin:/bin
           export PATH
           github_env_file="$GITHUB_ENV"

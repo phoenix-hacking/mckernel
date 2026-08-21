@@ -145,7 +145,7 @@ class ConfigReviewV2Tests(unittest.TestCase):
             value["current_repository_input_policy"]["runtime_identity_claimed"]
         )
         with self.assertRaisesRegex(
-                reviewer.ConfigReviewV2Error, "worktree size differs"):
+                reviewer.ConfigReviewV2Error, "current HEAD blob differs"):
             reviewer.validate_repository(REPO_ROOT, value)
 
     def test_all_claim_promotions_are_rejected(self):
@@ -644,7 +644,7 @@ class ConfigReviewV2Tests(unittest.TestCase):
         )
         self.assertEqual(completed.returncode, 2)
         self.assertEqual("", completed.stdout.decode("utf-8"))
-        self.assertIn("worktree size differs", completed.stderr.decode("utf-8"))
+        self.assertIn("current HEAD blob differs", completed.stderr.decode("utf-8"))
 
     def test_reviewer_and_tests_parse_as_python_3_6(self):
         for path in (MODULE_PATH, Path(__file__).resolve()):

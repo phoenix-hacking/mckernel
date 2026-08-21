@@ -1188,8 +1188,11 @@ def synthetic_cgraph(records, second_records=None):
             rows.append("  Function flags: " + record.get("function_flags", "body"))
             rows.append("  Called by: ")
             calls = " ".join(
-                "{0}/{1}".format(name, number)
-                for name, number in record.get("calls", ())
+                "{0}/{1}{2}".format(
+                    call[0], call[1],
+                    " " + call[2] if len(call) == 3 else "",
+                )
+                for call in record.get("calls", ())
             )
             rows.append("  Calls: " + calls)
             if record.get("indirect"):
@@ -1543,6 +1546,145 @@ class DirectCtuGraphTests(unittest.TestCase):
                 )
                 with self.assertRaisesRegex(semantics.SemanticsV3Error, "unknown"):
                     semantics.parse_initial_cgraph(decorated, "fixture.c")
+
+    def test_exact_gcc_85_call_decorators_are_retained_and_blocked(self):
+        decorators = (
+            "(speculative)",
+            "(inlined)",
+            "(call_stmt_cannot_inline_p)",
+            "(indirect_inlining)",
+            "(0,0.00 per call)",
+            "(1 (estimated locally),1.00 per call)",
+            "(2 (estimated locally, globally 0),2.25 per call)",
+            "(3 (estimated locally, globally 0 adjusted),3.50 per call)",
+            "(4 (adjusted),4.75 per call)",
+            "(5 (auto FDO),5.00 per call)",
+            "(6 (guessed),6.00 per call)",
+            "(2305843009213693950,9223372036854775808.00 per call)",
+            "(can throw external)",
+            (
+                "(speculative) (inlined) (call_stmt_cannot_inline_p) "
+                "(indirect_inlining) (7 (estimated locally),7.00 per call) "
+                "(can throw external)"
+            ),
+        )
+        records = [
+            {
+                "name": "callee_{0}".format(number),
+                "number": number,
+                "global": True,
+            }
+            for number in range(1, len(decorators) + 1)
+        ]
+        records.append(
+            {
+                "name": "caller",
+                "number": 99,
+                "definition": True,
+                "global": True,
+                "calls": tuple(
+                    ("callee_{0}".format(number), number, decorator)
+                    for number, decorator in enumerate(decorators, 1)
+                ),
+            }
+        )
+        parsed = semantics.parse_initial_cgraph(
+            synthetic_cgraph(records), "fixture.c"
+        )
+        caller = [item for item in parsed if item["name"] == "caller"][0]
+        self.assertEqual(
+            {item["edge_metadata"] for item in caller["calls"]},
+            {" " + item for item in decorators},
+        )
+
+        blocked_metadata = decorators[-1]
+        graph = self.graph(
+            overrides={
+                0: [
+                    {"name": "callee", "number": 1, "global": True},
+                    {
+                        "name": "caller",
+                        "number": 2,
+                        "definition": True,
+                        "global": True,
+                        "calls": (("callee", 1, blocked_metadata),),
+                    },
+                ]
+            }
+        )
+        self.assertFalse(graph["direct_edges"])
+        blocked = [
+            item for item in graph["blocked_edges"]
+            if item["callee_name"] == "callee"
+        ][0]
+        self.assertEqual(blocked["reason"], "decorated_call_metadata")
+        self.assertEqual(blocked["edge_metadata"], " " + blocked_metadata)
+        semantics.validate_direct_ctu_graph_schema(
+            graph, semantics.flows_v2.FRESH_AUTHORITY_MODE
+        )
+        hostile = copy.deepcopy(graph)
+        del hostile["blocked_edges"][0]["edge_metadata"]
+        with self.assertRaisesRegex(
+            semantics.SemanticsV3Error, "metadata binding"
+        ):
+            semantics.validate_direct_ctu_graph_schema(
+                hostile, semantics.flows_v2.FRESH_AUTHORITY_MODE
+            )
+        hostile = copy.deepcopy(graph)
+        hostile["blocked_edges"][0]["reason"] = "external_outside_candidate"
+        with self.assertRaisesRegex(
+            semantics.SemanticsV3Error, "edge reason changed"
+        ):
+            semantics.validate_direct_ctu_graph_schema(
+                hostile, semantics.flows_v2.FRESH_AUTHORITY_MODE
+            )
+
+    def test_gcc_85_call_decorator_scanner_rejects_hostile_grammar_boundedly(self):
+        records = [
+            {"name": "callee", "number": 1, "global": True},
+            {
+                "name": "caller", "number": 2,
+                "definition": True, "global": True,
+                "calls": (("callee", 1),),
+            },
+        ]
+        baseline = synthetic_cgraph(records)
+        hostile_rows = (
+            "callee/1 (inlined) (speculative)",
+            "callee/1 (speculative) (speculative)",
+            "callee/1 (18446744073709551615,1.00 per call)",
+            "callee/1 (2305843009213693951,1.00 per call)",
+            "callee/1 (9223372036854775808,1.00 per call)",
+            "callee/1 (1,9223372036854775809.00 per call)",
+            "callee/1 (1,9223372036854775808.01 per call)",
+            "callee/1 (1,9999999999999999999999999999999999999999.00 per call)",
+            "callee/1 (1 (estimated global),1.00 per call)",
+            "callee/1 (1 (estimated locally),1.0 per call)",
+            "callee/1 (can throw external) (1,1.00 per call)",
+            "callee/1(inlined)",
+            "callee/1 (inlined)evil",
+            "callee/1  callee/1",
+        )
+        for row in hostile_rows:
+            with self.subTest(row=row):
+                data = baseline.replace(
+                    b"  Calls: callee/1",
+                    ("  Calls: " + row).encode("ascii"),
+                )
+                with self.assertRaises(semantics.SemanticsV3Error) as raised:
+                    semantics.parse_initial_cgraph(data, "fixture.c")
+                diagnostic = str(raised.exception)
+                self.assertIn("offset", diagnostic)
+                self.assertLess(len(diagnostic), 320)
+
+        huge = baseline.replace(
+            b"  Calls: callee/1",
+            b"  Calls: callee/1 (" + b"x" * 8192 + b")",
+        )
+        with self.assertRaises(semantics.SemanticsV3Error) as raised:
+            semantics.parse_initial_cgraph(huge, "fixture.c")
+        self.assertLess(len(str(raised.exception)), 320)
+        self.assertIn("of 8204", str(raised.exception))
 
     def test_node_address_is_parsed_and_inline_definition_is_blocked(self):
         records = [

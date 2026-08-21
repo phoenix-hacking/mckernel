@@ -49,10 +49,23 @@ REVIEW_CGRAPH_HEADER = re.compile(
     r"\((?P<label>[^()]*)\)(?P<address> @0xADDR)?$"
 )
 REVIEW_CGRAPH_AUX = re.compile(r"^  Aux: @0xADDR$")
-REVIEW_CGRAPH_REFERENCE = re.compile(
-    r"(?<![A-Za-z0-9_$.*-])(?P<name>\*?[A-Za-z_][A-Za-z0-9_$.-]*)/"
-    r"(?P<number>[0-9]+)(?=\s|\(|$)"
+REVIEW_CGRAPH_EDGE = re.compile(
+    r"(?P<name>\*?[A-Za-z_][A-Za-z0-9_$.-]*)/(?P<number>[0-9]+)"
+    r"(?P<edge_metadata>"
+    r"(?: \(speculative\))?"
+    r"(?: \(inlined\))?"
+    r"(?: \(call_stmt_cannot_inline_p\))?"
+    r"(?: \(indirect_inlining\))?"
+    r"(?: \((?P<profile_count>0|[1-9][0-9]{0,18})"
+    r"(?: \((?:estimated locally(?:, globally 0(?: adjusted)?)?|"
+    r"adjusted|auto FDO|guessed)\))?,"
+    r"(?P<profile_frequency>0|[1-9][0-9]{0,308})\."
+    r"(?P<profile_frequency_fraction>[0-9]{2}) per call\))?"
+    r"(?: \(can throw external\))?"
+    r")(?= |$)"
 )
+REVIEW_CGRAPH_PROFILE_MAX_COUNT = 2305843009213693950
+REVIEW_CGRAPH_PROFILE_MAX_FREQUENCY_INTEGER = 9223372036854775808
 REVIEW_CLONE_MARKERS = (
     ".clone.", ".constprop.", ".isra.", ".part.", ".cold",
 )
@@ -88,6 +101,62 @@ def _review_traits(record):
     if "weak" in visibility or "weakref" in visibility or "weak" in type_text:
         traits.add("weak")
     return sorted(traits)
+
+
+def _review_calls_failure(payload, cursor):
+    """Report one independently bounded Calls-row scanner diagnostic."""
+
+    excerpt = payload[cursor:cursor + 80]
+    if cursor + len(excerpt) < len(payload):
+        excerpt += "..."
+    raise ReviewV3Error(
+        "independent cgraph Calls syntax is unknown at character {0} of "
+        "{1}; token {2}".format(cursor, len(payload), repr(excerpt))
+    )
+
+
+def _review_scan_calls(payload):
+    """Independently scan complete GCC 8.5 call-edge records."""
+
+    if payload == "":
+        return []
+    if payload[:1] != " ":
+        _review_calls_failure(payload, 0)
+    cursor = 1
+    calls = []
+    while cursor < len(payload):
+        edge = REVIEW_CGRAPH_EDGE.match(payload, cursor)
+        if edge is None or edge.start() != cursor:
+            _review_calls_failure(payload, cursor)
+        if (
+            edge.group("profile_count") is not None
+            and (
+                int(edge.group("profile_count")) > REVIEW_CGRAPH_PROFILE_MAX_COUNT
+                or int(edge.group("profile_frequency"))
+                > REVIEW_CGRAPH_PROFILE_MAX_FREQUENCY_INTEGER
+                or (
+                    int(edge.group("profile_frequency"))
+                    == REVIEW_CGRAPH_PROFILE_MAX_FREQUENCY_INTEGER
+                    and edge.group("profile_frequency_fraction") != "00"
+                )
+            )
+        ):
+            _review_calls_failure(payload, cursor)
+        metadata = edge.group("edge_metadata")
+        call = {
+            "name": edge.group("name"),
+            "number": int(edge.group("number")),
+        }
+        if metadata:
+            call["edge_metadata"] = metadata
+        calls.append(call)
+        cursor = edge.end()
+        if cursor == len(payload):
+            break
+        if payload[cursor] != " " or cursor + 1 >= len(payload):
+            _review_calls_failure(payload, cursor)
+        cursor += 1
+    return calls
 
 
 def _review_initial_section(lines, source):
@@ -136,15 +205,7 @@ def _review_initial_section(lines, source):
                 raise ReviewV3Error("independent cgraph Calls row is duplicated")
             current["saw_calls"] = True
             payload = stripped.split(":", 1)[1]
-            calls = []
-            for token in payload.split():
-                item = REVIEW_CGRAPH_REFERENCE.fullmatch(token)
-                if item is None:
-                    raise ReviewV3Error("independent cgraph Calls syntax is unknown")
-                calls.append(
-                    {"name": item.group("name"), "number": int(item.group("number"))}
-                )
-            current["calls"] = calls
+            current["calls"] = _review_scan_calls(payload)
     numbers = [item["number"] for item in records]
     if not records or len(numbers) != len(set(numbers)):
         raise ReviewV3Error("independent cgraph symbol closure differs")
@@ -332,6 +393,8 @@ def independently_derive_direct_graph(inputs, invocations, payloads):
                 reason = None
                 if caller["traits"]:
                     reason = caller["traits"][0] + "_caller"
+                elif "edge_metadata" in call:
+                    reason = "decorated_call_metadata"
                 elif declared["definition"]:
                     if declared["traits"]:
                         reason = _review_blocked_reason([declared])
@@ -379,13 +442,14 @@ def independently_derive_direct_graph(inputs, invocations, payloads):
                         raise ReviewV3Error(
                             "independent blocked edge has no structural reason"
                         )
-                    blocked_edges.append(
-                        {
-                            "callee_name": declared["name"],
-                            "caller": _review_identity(caller_key),
-                            "reason": reason,
-                        }
-                    )
+                    blocked = {
+                        "callee_name": declared["name"],
+                        "caller": _review_identity(caller_key),
+                        "reason": reason,
+                    }
+                    if "edge_metadata" in call:
+                        blocked["edge_metadata"] = call["edge_metadata"]
+                    blocked_edges.append(blocked)
                     continue
                 if target_key not in records or records[target_key]["traits"]:
                     raise ReviewV3Error("independent graph traverses blocked target")

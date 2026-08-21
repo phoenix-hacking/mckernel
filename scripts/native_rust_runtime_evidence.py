@@ -214,7 +214,7 @@ EXPECTED_PRECHECK_BUILD_MEMBERS = [
     "workflow-state",
 ]
 EXPECTED_EXACT_BUILD_PREPARATION_SHA256 = (
-    "53c801ed889372d8303f83a604c7b7a214297b7c7401db622e282639cc8f1b4c"
+    "305206c0f17ad19730a95a9382d78038143257cbd9f2e24649820305159b12b2"
 )
 EXPECTED_EXACT_BUILD_PREFIX_SHA256 = (
     "add4edbc6810fc6f5b3591a04bfb8a544359df25e6b31c139d60738dd45206a0"
@@ -222,20 +222,20 @@ EXPECTED_EXACT_BUILD_PREFIX_SHA256 = (
 EXPECTED_EXACT_BUILD_STEP_SHA256 = {
     "Refuse the wrong runtime and install exact build tools": "acabf171e87378f911362a812477945a4644fc3e04b4e107e57fff729763b420",
     "Check out the exact candidate without credentials": "4ce648da06a9ff165af51ca0e766fdaedc88353f72508499af8b27d93a4b83bc",
-    "Verify source-only contracts without claiming readiness": "f5fbb4c4d2bc3d2e639b2865644d080942c3de95da8a867affac6006aa16d38e",
-    "Acquire, patch, and credit-forbidden-stage the exact source": "68e10d39d659f36d8157b00108efd1ffc48d590d448e5c4742925dcde18bb5e5",
-    "Resolve the evidence-only module configuration twice": "259105f266b8784b00f43256dc8d15b9a434f6575667cc91338856bff1fe9349",
-    "Compile the exact kernel and native Rust modules": "c1a7ca52c8c9d81057c4aa412544c164f3a00a7cbf00fca933fc3afb593dc1a1",
-    "Validate built metadata and capture immutable diagnostics": "ca7ea7458e4b8fa3d78ef10210c08aebb9da09d678bbe819bbebd2efc1765ec1",
+    "Verify source-only contracts without claiming readiness": "54675dd1cc79dcb1f7182119c7c6fa88b0d860f5d8acb3240ab71355934a8d15",
+    "Acquire, patch, and credit-forbidden-stage the exact source": "3849b5bea65eb561d2a450145c6cbb8fb78db19544f795162ddd07497f50668a",
+    "Resolve the evidence-only module configuration twice": "1968c2a6285b9ce26391e3d79042265b1effc507ceb2c1bb3b724cc86d346e98",
+    "Compile the exact kernel and native Rust modules": "1f2247854f27f1a85131c84157e16ae3b3be671261776407eef62c8e38e86c4a",
+    "Validate built metadata and capture immutable diagnostics": "8e8dff8af43c06394d34d359c1263e24fb5aabe03634e54ae5b3b2702fae6e76",
     "Upload compiler evidence or first-failure diagnostics": "f5c304d408baad23b482154ef91a5738f79a48c1a34b898be1c5e2c55499a3d9",
 }
 EXPECTED_RK006_CAPTURE_STEP_SHA256 = {
     "Initialize non-durable capture and install exact tools": "a89bfbe988001115dbbe5c71135fa75f9ac0a1fe453c98c423e28795f16071ca",
     "Check out the exact capture candidate without credentials": "c7ec10a3531204c964e98632341afa709ad11f1dc7ce872df916beb03c64ab30",
-    "Verify the frozen non-crediting RK-006 capture contract": "4a3394c9c33e8402e156392c2f813bc037dd2829cb16b4ceb14552644544859d",
-    "Reacquire and capture the full external 26-patch source replay": "f5ef6a7323e13a58f81970dcaec06411a3c0e8e5e96d392509b2eab067270e0c",
+    "Verify the frozen non-crediting RK-006 capture contract": "a46d2e950be1d4b194681e7d5098309a8fb8ef98f4551fff7d15f5ad34332a93",
+    "Reacquire and capture the full external 26-patch source replay": "409991b0d705aefd16b9df832ad64e40faab77bc80b75998423fdaf4a7cad89b",
     "Download the same-run exact-build evidence": "4c98e4feff7b7f391d16b8bafff6c3531a7766762c5f66ec5a703e233955316a",
-    "Finalize the non-crediting build binding": "9a00d87736178dc250a1682af9458132bacd9cd9c34ab2854ea7668330bcdacb",
+    "Finalize the non-crediting build binding": "cbc0b6bb227ed72bdd704998ba8e85809314420f6981cd47640508e21c3c72d4",
     "Upload RK-006 capture or first-failure diagnostics": "7ed2ac56ab7dda85cb3ac7b81dd569745fb82103e38e3abc38c527bc0736d7fe",
 }
 EXPECTED_RUNTIME_INIT_SHA256 = (
@@ -243,9 +243,9 @@ EXPECTED_RUNTIME_INIT_SHA256 = (
 )
 EXPECTED_REPOSITORY_WORKFLOW_IDENTITIES = {
     "build_workflow": {
-        "git_blob_sha1": "4a0f18b6bc21daadc86718835af9073cabec6691",
-        "sha256": "30c38b26f8db5f8793cc397a9d713deb6104131378b0f8bd9a45b14e6c570456",
-        "size": 67473,
+        "git_blob_sha1": "b28022691d7790c4b8e5d91328d9bda5ee693657",
+        "sha256": "7919e1a8c2b9571b04497dfa083fe044e3c4b098b5509819bc0e733206248cbc",
+        "size": 67705,
     },
     "runtime_pr_workflow": {
         "git_blob_sha1": "64bb717852d36fc1021e2b61e83aca6415b184d5",
@@ -253,9 +253,9 @@ EXPECTED_REPOSITORY_WORKFLOW_IDENTITIES = {
         "size": 754,
     },
     "runtime_workflow": {
-        "git_blob_sha1": "659afc5066a5a288862b4e9cd2a670f317c54198",
-        "sha256": "8faba6118c35a622d7c3990368381b16b35409adcb4471fbb0b613bb01902ab3",
-        "size": 15826,
+        "git_blob_sha1": "4f8fd31b51ff68f6c3f4a8486a2ac4fe192313a4",
+        "sha256": "400830a21406f0883a39b8b8df8fa7edb3d29683e7de25b4bbbdcaa875633903",
+        "size": 15942,
     },
 }
 BUILD_KERNEL_TARGETS = ["bzImage"]

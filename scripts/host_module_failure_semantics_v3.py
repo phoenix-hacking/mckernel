@@ -178,6 +178,22 @@ CGRAPH_REFERENCE = re.compile(
     r"(?<![A-Za-z0-9_$.*-])(?P<name>\*?[A-Za-z_][A-Za-z0-9_$.-]*)/"
     r"(?P<number>[0-9]+)(?=\s|\(|$)"
 )
+CGRAPH_EDGE_PROFILE = re.compile(
+    r"\((?P<count>0|[1-9][0-9]{0,18})"
+    r"(?: \((?:estimated locally(?:, globally 0(?: adjusted)?)?|"
+    r"adjusted|auto FDO|guessed)\))?,"
+    r"(?P<frequency>0|[1-9][0-9]{0,308})\."
+    r"(?P<frequency_fraction>[0-9]{2}) per call\)"
+)
+CGRAPH_PROFILE_MAX_COUNT = 2305843009213693950
+CGRAPH_PROFILE_MAX_FREQUENCY_INTEGER = 9223372036854775808
+CGRAPH_EDGE_FLAGS = (
+    (0, "(speculative)"),
+    (1, "(inlined)"),
+    (2, "(call_stmt_cannot_inline_p)"),
+    (3, "(indirect_inlining)"),
+    (5, "(can throw external)"),
+)
 CGRAPH_CLONE_MARKERS = (
     ".clone.", ".constprop.", ".isra.", ".part.", ".cold",
 )
@@ -2298,6 +2314,82 @@ def validate_normalized_cgraph_dump(data):
     return data
 
 
+def _bounded_cgraph_calls_error(payload, offset):
+    """Reject one Calls row without copying attacker-sized text to stderr."""
+
+    fragment = payload[offset:offset + 96]
+    if offset + len(fragment) < len(payload):
+        fragment += "..."
+    raise SemanticsV3Error(
+        "GCC cgraph Calls row contains unknown direct-call syntax at offset "
+        "{0} of {1}; near {2}".format(offset, len(payload), repr(fragment))
+    )
+
+
+def _parse_cgraph_calls_payload(payload):
+    """Scan the exact GCC 8.5 cgraph_edge::dump_edge_flags grammar."""
+
+    if not payload:
+        return []
+    if not payload.startswith(" "):
+        _bounded_cgraph_calls_error(payload, 0)
+    calls = []
+    cursor = 1
+    while cursor < len(payload):
+        reference = CGRAPH_REFERENCE.match(payload, cursor)
+        if reference is None or reference.start() != cursor:
+            _bounded_cgraph_calls_error(payload, cursor)
+        cursor = reference.end()
+        metadata_start = cursor
+        last_rank = -1
+        while cursor < len(payload):
+            if payload[cursor] != " " or cursor + 1 >= len(payload):
+                _bounded_cgraph_calls_error(payload, cursor)
+            candidate = cursor + 1
+            if payload[candidate] != "(":
+                cursor = candidate
+                break
+            matched_rank = None
+            matched_end = None
+            for rank, flag in CGRAPH_EDGE_FLAGS:
+                if payload.startswith(flag, candidate):
+                    matched_rank = rank
+                    matched_end = candidate + len(flag)
+                    break
+            if matched_rank is None:
+                profile = CGRAPH_EDGE_PROFILE.match(payload, candidate)
+                if (
+                    profile is not None
+                    and int(profile.group("count")) <= CGRAPH_PROFILE_MAX_COUNT
+                    and int(profile.group("frequency"))
+                    <= CGRAPH_PROFILE_MAX_FREQUENCY_INTEGER
+                    and (
+                        int(profile.group("frequency"))
+                        < CGRAPH_PROFILE_MAX_FREQUENCY_INTEGER
+                        or profile.group("frequency_fraction") == "00"
+                    )
+                ):
+                    matched_rank = 4
+                    matched_end = profile.end()
+            if matched_rank is None or matched_rank <= last_rank:
+                _bounded_cgraph_calls_error(payload, candidate)
+            if matched_end < len(payload) and payload[matched_end] != " ":
+                _bounded_cgraph_calls_error(payload, matched_end)
+            last_rank = matched_rank
+            cursor = matched_end
+        call = {
+            "name": reference.group("name"),
+            "number": int(reference.group("number")),
+        }
+        metadata_end = cursor
+        if cursor < len(payload) and payload[cursor] != "(":
+            metadata_end = cursor - 1
+        if metadata_end > metadata_start:
+            call["edge_metadata"] = payload[metadata_start:metadata_end]
+        calls.append(call)
+    return calls
+
+
 def _parse_initial_cgraph_section(lines, source):
     records = []
     current = None
@@ -2350,17 +2442,7 @@ def _parse_initial_cgraph_section(lines, source):
                 raise SemanticsV3Error("GCC cgraph symbol has duplicate Calls rows")
             current["saw_calls"] = True
             payload = stripped.split(":", 1)[1]
-            calls = []
-            for token in payload.split():
-                item = CGRAPH_REFERENCE.fullmatch(token)
-                if item is None:
-                    raise SemanticsV3Error(
-                        "GCC cgraph Calls row contains unknown direct-call syntax"
-                    )
-                calls.append(
-                    {"name": item.group("name"), "number": int(item.group("number"))}
-                )
-            current["calls"] = calls
+            current["calls"] = _parse_cgraph_calls_payload(payload)
         elif "Indirect call" in stripped:
             current["indirect_call_count"] += 1
     if not records:
@@ -2574,6 +2656,8 @@ def derive_direct_ctu_call_graph(
                 reason = None
                 if caller_record["traits"]:
                     reason = caller_record["traits"][0] + "_caller"
+                elif "edge_metadata" in call:
+                    reason = "decorated_call_metadata"
                 elif declared["definition"]:
                     candidate_key = (module, source, declared["name"])
                     if declared["traits"]:
@@ -2643,13 +2727,14 @@ def derive_direct_ctu_call_graph(
                         }
                     )
                 else:
-                    blocked_edges.append(
-                        {
-                            "callee_name": declared["name"],
-                            "caller": caller_identity,
-                            "reason": reason,
-                        }
-                    )
+                    blocked = {
+                        "callee_name": declared["name"],
+                        "caller": caller_identity,
+                        "reason": reason,
+                    }
+                    if "edge_metadata" in call:
+                        blocked["edge_metadata"] = call["edge_metadata"]
+                    blocked_edges.append(blocked)
 
     roots = {}
     for key, record in definition_records.items():
@@ -2852,6 +2937,7 @@ def validate_direct_ctu_graph_schema(graph, authority_mode):
         "alias_caller", "clone_caller", "comdat_caller", "inline_caller",
         "weak_caller", "alias_declaration", "clone_declaration",
         "comdat_declaration", "inline_declaration", "weak_declaration",
+        "decorated_call_metadata",
     }
     if (
         type(graph["blocked_edges"]) is not list
@@ -2859,12 +2945,31 @@ def validate_direct_ctu_graph_schema(graph, authority_mode):
     ):
         raise SemanticsV3Error("direct CTU blocked edges are not canonical")
     for record in graph["blocked_edges"]:
-        require_exact_keys(record, {"callee_name", "caller", "reason"}, "blocked CTU edge")
+        base_keys = {"callee_name", "caller", "reason"}
+        if type(record) is not dict:
+            raise SemanticsV3Error("blocked CTU edge must be an exact object")
+        record_keys = set(record)
+        if record_keys not in (base_keys, base_keys | {"edge_metadata"}):
+            raise SemanticsV3Error("blocked CTU edge keys differ")
         caller = identity(record["caller"], "blocked CTU caller")
         if caller not in definition_map:
             raise SemanticsV3Error("blocked CTU edge names an unknown caller")
         require_string(record["callee_name"], "blocked CTU callee")
         require_enum(record["reason"], blocked_reasons, "blocked CTU reason")
+        has_metadata = "edge_metadata" in record
+        if has_metadata:
+            require_string(record["edge_metadata"], "blocked CTU edge metadata")
+            probe = " probe/1" + record["edge_metadata"]
+            parsed = _parse_cgraph_calls_payload(probe)
+            if (
+                len(parsed) != 1
+                or parsed[0].get("edge_metadata") != record["edge_metadata"]
+            ):
+                raise SemanticsV3Error("blocked CTU edge metadata changed")
+        if record["reason"] == "decorated_call_metadata" and not has_metadata:
+            raise SemanticsV3Error(
+                "decorated blocked CTU edge metadata binding changed"
+            )
         caller_traits = definition_map[caller]["traits"]
         if caller_traits:
             if record["reason"] != caller_traits[0] + "_caller":
@@ -2874,6 +2979,10 @@ def validate_direct_ctu_graph_schema(graph, authority_mode):
         elif record["reason"].endswith("_caller"):
             raise SemanticsV3Error(
                 "blocked CTU caller reason has no blocked caller trait"
+            )
+        elif has_metadata and record["reason"] != "decorated_call_metadata":
+            raise SemanticsV3Error(
+                "decorated blocked CTU edge reason changed"
             )
 
     reachability = graph["function_reachability"]

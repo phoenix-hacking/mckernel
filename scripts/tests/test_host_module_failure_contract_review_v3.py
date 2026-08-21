@@ -184,8 +184,11 @@ def cgraph_bytes(records, second_records=None):
                     "  Called by: ",
                     "  Calls: "
                     + " ".join(
-                        "{0}/{1}".format(name, number)
-                        for name, number in record.get("calls", ())
+                        "{0}/{1}{2}".format(
+                            call[0], call[1],
+                            " " + call[2] if len(call) == 3 else "",
+                        )
+                        for call in record.get("calls", ())
                     ),
                 )
             )
@@ -615,6 +618,130 @@ class ReviewV3Tests(unittest.TestCase):
                 )
                 with self.assertRaisesRegex(review.ReviewV3Error, "unknown"):
                     review.independent_parse_cgraph(decorated, "fixture.c")
+
+    def test_independent_gcc_85_decorator_scanner_retains_and_blocks_metadata(self):
+        decorators = (
+            "(speculative)",
+            "(inlined)",
+            "(call_stmt_cannot_inline_p)",
+            "(indirect_inlining)",
+            "(0,0.00 per call)",
+            "(1 (estimated locally),1.00 per call)",
+            "(2 (estimated locally, globally 0),2.25 per call)",
+            "(3 (estimated locally, globally 0 adjusted),3.50 per call)",
+            "(4 (adjusted),4.75 per call)",
+            "(5 (auto FDO),5.00 per call)",
+            "(6 (guessed),6.00 per call)",
+            "(2305843009213693950,9223372036854775808.00 per call)",
+            "(can throw external)",
+            (
+                "(speculative) (inlined) (call_stmt_cannot_inline_p) "
+                "(indirect_inlining) (7 (estimated locally),7.00 per call) "
+                "(can throw external)"
+            ),
+        )
+        records = [
+            {"name": "callee_{0}".format(number), "number": number}
+            for number in range(1, len(decorators) + 1)
+        ]
+        records.append(
+            {
+                "name": "caller",
+                "number": 99,
+                "definition": True,
+                "calls": tuple(
+                    ("callee_{0}".format(number), number, decorator)
+                    for number, decorator in enumerate(decorators, 1)
+                ),
+            }
+        )
+        parsed = review.independent_parse_cgraph(
+            cgraph_bytes(records), "fixture.c"
+        )
+        caller = [item for item in parsed if item["name"] == "caller"][0]
+        self.assertEqual(
+            {item["edge_metadata"] for item in caller["calls"]},
+            {" " + item for item in decorators},
+        )
+
+        metadata = decorators[-1]
+        inputs, invocations, payloads = independent_ctu_fixture(
+            [
+                {"name": "callee", "number": 1},
+                {
+                    "name": "caller", "number": 2,
+                    "definition": True,
+                    "calls": (("callee", 1, metadata),),
+                },
+            ]
+        )
+        graph = review.independently_derive_direct_graph(
+            inputs, invocations, payloads
+        )
+        self.assertFalse(graph["direct_edges"])
+        blocked = [
+            item for item in graph["blocked_edges"]
+            if item["callee_name"] == "callee"
+        ][0]
+        self.assertEqual(blocked["reason"], "decorated_call_metadata")
+        self.assertEqual(blocked["edge_metadata"], " " + metadata)
+
+        generated = semantics.derive_direct_ctu_call_graph(
+            inputs,
+            invocations,
+            payloads,
+            semantics.flows_v2.FRESH_AUTHORITY_MODE,
+            semantics.DIRECT_CTU_CHECKED_DIAGNOSTIC,
+        )
+        review.validate_independent_direct_graph(
+            generated, graph, semantics.flows_v2.FRESH_AUTHORITY_MODE
+        )
+
+    def test_independent_gcc_85_decorator_scanner_rejects_hostile_rows_boundedly(self):
+        records = [
+            {"name": "callee", "number": 1},
+            {
+                "name": "caller", "number": 2,
+                "definition": True, "calls": (("callee", 1),),
+            },
+        ]
+        baseline = cgraph_bytes(records)
+        hostile_rows = (
+            "callee/1 (inlined) (speculative)",
+            "callee/1 (speculative) (speculative)",
+            "callee/1 (18446744073709551615,1.00 per call)",
+            "callee/1 (2305843009213693951,1.00 per call)",
+            "callee/1 (9223372036854775808,1.00 per call)",
+            "callee/1 (1,9223372036854775809.00 per call)",
+            "callee/1 (1,9223372036854775808.01 per call)",
+            "callee/1 (1,9999999999999999999999999999999999999999.00 per call)",
+            "callee/1 (1 (estimated global),1.00 per call)",
+            "callee/1 (1 (estimated locally),1.0 per call)",
+            "callee/1 (can throw external) (1,1.00 per call)",
+            "callee/1(inlined)",
+            "callee/1 (inlined)evil",
+            "callee/1  callee/1",
+        )
+        for row in hostile_rows:
+            with self.subTest(row=row):
+                data = baseline.replace(
+                    b"  Calls: callee/1",
+                    ("  Calls: " + row).encode("ascii"),
+                )
+                with self.assertRaises(review.ReviewV3Error) as raised:
+                    review.independent_parse_cgraph(data, "fixture.c")
+                diagnostic = str(raised.exception)
+                self.assertIn("character", diagnostic)
+                self.assertLess(len(diagnostic), 300)
+
+        huge = baseline.replace(
+            b"  Calls: callee/1",
+            b"  Calls: callee/1 (" + b"x" * 8192 + b")",
+        )
+        with self.assertRaises(review.ReviewV3Error) as raised:
+            review.independent_parse_cgraph(huge, "fixture.c")
+        self.assertLess(len(str(raised.exception)), 300)
+        self.assertIn("of 8204", str(raised.exception))
 
     def test_independent_derivation_closes_one_same_module_edge_and_roots(self):
         inputs, invocations, payloads = independent_ctu_fixture()
