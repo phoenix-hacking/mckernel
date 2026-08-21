@@ -53,6 +53,40 @@
     "source_commit": "required exact lowercase 40-hex checked-out Git commit",
     "workflow_ref_prefix": "phoenix-hacking/mckernel/.github/workflows/rocky-repository-snapshot-capture-v2.yml@"
   },
+  "git_authority": {
+    "config_overrides": [
+      "advice.graftFileDeprecated=false",
+      "core.attributesFile=/dev/null",
+      "core.fsmonitor=false",
+      "core.hooksPath=/dev/null",
+      "core.pager=cat",
+      "core.sshCommand=/usr/bin/false",
+      "credential.helper=",
+      "diff.external=",
+      "fetch.recurseSubmodules=false",
+      "interactive.diffFilter=",
+      "protocol.allow=never",
+      "submodule.recurse=false"
+    ],
+    "environment": {
+      "GIT_ATTR_NOSYSTEM": "1",
+      "GIT_CONFIG_GLOBAL": "/dev/null",
+      "GIT_CONFIG_NOSYSTEM": "1",
+      "GIT_GRAFT_FILE": "/dev/null",
+      "GIT_NO_REPLACE_OBJECTS": "1",
+      "GIT_OPTIONAL_LOCKS": "0",
+      "GIT_PAGER": "cat",
+      "GIT_TERMINAL_PROMPT": "0",
+      "HOME": "/nonexistent",
+      "LANG": "C",
+      "LC_ALL": "C",
+      "PAGER": "cat",
+      "PATH": "/usr/bin:/bin",
+      "XDG_CONFIG_HOME": "/nonexistent"
+    },
+    "executable": "/usr/bin/git",
+    "inherit_environment": false
+  },
   "limits": {
     "download_timeout_seconds": 90,
     "max_key_bytes": 65536,

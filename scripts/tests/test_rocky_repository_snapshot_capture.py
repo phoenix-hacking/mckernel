@@ -23,7 +23,8 @@ SPEC = importlib.util.spec_from_file_location("snapshot_capture", str(SCRIPT))
 snapshot = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(snapshot)
 SOURCE_COMMIT = subprocess.check_output(
-    ["git", "-C", str(REPO), "rev-parse", "HEAD"], stderr=subprocess.STDOUT
+    ["/usr/bin/git", "-C", str(REPO), "rev-parse", "HEAD"],
+    stderr=subprocess.STDOUT,
 ).decode("ascii").strip()
 WORKFLOW_REF = (
     "phoenix-hacking/mckernel/"
@@ -106,6 +107,7 @@ class ContractTests(unittest.TestCase):
         self.assertEqual(
             contract["execution_identity"], snapshot.EXECUTION_IDENTITY_POLICY
         )
+        self.assertEqual(contract["git_authority"], snapshot.GIT_AUTHORITY_POLICY)
         self.assertGreaterEqual(
             contract["limits"]["max_snapshot_tar_bytes"],
             contract["limits"]["max_tar_payload_bytes"],
@@ -220,6 +222,163 @@ class ContractTests(unittest.TestCase):
                 snapshot.validate_execution_identity(
                     SOURCE_COMMIT, snapshot.WORKFLOW_REF_PREFIX + suffix
                 )
+
+    def test_path_first_fake_git_cannot_forge_non_repository_authority(self):
+        payload = b"forged worktree authority\n"
+        commit = "f" * 40
+        object_id = "e" * 40
+        with tempfile.TemporaryDirectory(prefix="snapshot-fake-git-") as temporary:
+            root = Path(temporary)
+            repo = root / "not-a-git-repository"
+            fakebin = root / "fakebin"
+            marker = root / "fake-git-ran"
+            repo.mkdir()
+            fakebin.mkdir()
+            input_path = repo / "input.txt"
+            input_path.write_bytes(payload)
+            input_path.chmod(0o644)
+            fake = fakebin / "git"
+            fake.write_text(
+                "#!/usr/bin/python3\n"
+                "import pathlib\n"
+                "import sys\n"
+                "args = sys.argv[1:]\n"
+                "pathlib.Path({!r}).write_text('executed\\n')\n"
+                "payload = b'forged worktree authority\\n'\n"
+                "commit = b'f' * 40\n"
+                "oid = b'e' * 40\n"
+                "if 'rev-parse' in args:\n"
+                "    sys.stdout.buffer.write(commit + b'\\n')\n"
+                "elif 'ls-tree' in args:\n"
+                "    sys.stdout.buffer.write(b'100644 blob ' + oid + b'\\tinput.txt\\0')\n"
+                "elif 'ls-files' in args:\n"
+                "    sys.stdout.buffer.write(b'100644 ' + oid + b' 0\\tinput.txt\\0')\n"
+                "elif 'cat-file' in args and '-t' in args:\n"
+                "    sys.stdout.buffer.write(b'blob\\n')\n"
+                "elif 'cat-file' in args and '-s' in args:\n"
+                "    sys.stdout.buffer.write(str(len(payload)).encode() + b'\\n')\n"
+                "elif 'show' in args:\n"
+                "    sys.stdout.buffer.write(payload)\n"
+                "else:\n"
+                "    raise SystemExit(91)\n".format(str(marker)),
+                encoding="ascii",
+            )
+            fake.chmod(0o755)
+            record = {
+                "path": "input.txt",
+                "sha256": sha256(payload),
+                "size": len(payload),
+            }
+            hostile_path = str(fakebin) + ":/usr/bin:/bin"
+            with mock.patch.dict(os.environ, {"PATH": hostile_path}, clear=False):
+                before = dict(os.environ)
+                with self.assertRaisesRegex(
+                    snapshot.SnapshotError, "source commit inspection"
+                ):
+                    snapshot.require_repository_head(repo, commit, [record])
+                self.assertEqual(dict(os.environ), before)
+            self.assertFalse(marker.exists())
+
+    def test_git_authority_strips_redirection_and_restores_environment(self):
+        with tempfile.TemporaryDirectory(prefix="snapshot-git-env-") as temporary:
+            root = Path(temporary)
+            repo = root / "repo"
+            repo.mkdir()
+            subprocess.run(
+                [snapshot.GIT_AUTHORITY_EXECUTABLE, "-C", str(repo), "init", "-q"],
+                check=True,
+            )
+            subprocess.run(
+                [
+                    snapshot.GIT_AUTHORITY_EXECUTABLE,
+                    "-C",
+                    str(repo),
+                    "config",
+                    "user.name",
+                    "Snapshot Authority Test",
+                ],
+                check=True,
+            )
+            subprocess.run(
+                [
+                    snapshot.GIT_AUTHORITY_EXECUTABLE,
+                    "-C",
+                    str(repo),
+                    "config",
+                    "user.email",
+                    "snapshot-authority@example.invalid",
+                ],
+                check=True,
+            )
+            payload = b"trusted authority input\n"
+            input_path = repo / "input.txt"
+            input_path.write_bytes(payload)
+            input_path.chmod(0o644)
+            subprocess.run(
+                [snapshot.GIT_AUTHORITY_EXECUTABLE, "-C", str(repo), "add", "input.txt"],
+                check=True,
+            )
+            subprocess.run(
+                [
+                    snapshot.GIT_AUTHORITY_EXECUTABLE,
+                    "-C",
+                    str(repo),
+                    "commit",
+                    "-q",
+                    "-m",
+                    "fixture",
+                ],
+                check=True,
+            )
+            commit = subprocess.check_output(
+                [snapshot.GIT_AUTHORITY_EXECUTABLE, "-C", str(repo), "rev-parse", "HEAD"]
+            ).decode("ascii").strip()
+            record = {
+                "path": "input.txt",
+                "sha256": sha256(payload),
+                "size": len(payload),
+            }
+            hostile = {
+                "GIT_CONFIG_COUNT": "1",
+                "GIT_CONFIG_KEY_0": "core.worktree",
+                "GIT_CONFIG_VALUE_0": "/hostile/worktree",
+                "GIT_DIR": "/hostile/git-dir",
+                "GIT_EXEC_PATH": "/hostile/git-exec",
+                "GIT_INDEX_FILE": "/hostile/index",
+                "GIT_SSH": "/hostile/git-ssh",
+                "GIT_SSH_COMMAND": "/hostile/git-ssh-command",
+                "GIT_WORK_TREE": "/hostile/worktree",
+                "LD_LIBRARY_PATH": "/hostile/ld-library",
+                "LD_PRELOAD": "/hostile/ld-preload.so",
+                "PATH": "/hostile/path",
+                "PYTHONHOME": "/hostile/python-home",
+                "PYTHONPATH": "/hostile/python-path",
+                "SSH_AUTH_SOCK": "/hostile/ssh-agent",
+            }
+            expected_environment = snapshot.git_authority_environment()
+            original_run_checked = snapshot.run_checked
+            observed = []
+
+            def inspect_authority(command, label, environment=None):
+                self.assertEqual(command[0], snapshot.GIT_AUTHORITY_EXECUTABLE)
+                self.assertEqual(environment, expected_environment)
+                self.assertEqual(command[1], "--no-pager")
+                for value in snapshot.GIT_AUTHORITY_CONFIG:
+                    self.assertIn(value, command)
+                observed.append((tuple(command), dict(environment)))
+                return original_run_checked(command, label, environment)
+
+            with mock.patch.dict(os.environ, hostile, clear=False):
+                before = dict(os.environ)
+                with mock.patch.object(
+                    snapshot, "run_checked", side_effect=inspect_authority
+                ):
+                    snapshot.require_repository_head(repo, commit, [record])
+                self.assertEqual(dict(os.environ), before)
+            self.assertGreater(len(observed), 10)
+            inherited_names = set(hostile) - set(expected_environment)
+            for _, environment in observed:
+                self.assertFalse(inherited_names.intersection(environment))
 
     def test_source_commit_binds_repository_input_bytes(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -336,9 +495,8 @@ class ContractTests(unittest.TestCase):
             graft_environments = []
 
             def observe_graft_suppression(command, label, environment=None):
-                if command and command[0] == "git":
-                    self.assertEqual(environment.get("GIT_GRAFT_FILE"), os.devnull)
-                    self.assertEqual(environment.get("GIT_NO_REPLACE_OBJECTS"), "1")
+                if command and command[0] == snapshot.GIT_AUTHORITY_EXECUTABLE:
+                    self.assertEqual(environment, snapshot.git_authority_environment())
                     graft_environments.append(environment)
                 return original_run_checked(command, label, environment)
 
@@ -711,7 +869,7 @@ class ContractTests(unittest.TestCase):
             "bzip2 git-core gnupg2 gzip python3 python3-pyyaml tar xz",
             workflow_text.replace("\\\n            ", ""),
         )
-        self.assertIn("python3 -c 'import yaml'", workflow_text)
+        self.assertIn("/usr/bin/python3 -I -B -c 'import yaml'", workflow_text)
         self.assertIn('test "$GITHUB_SHA" = "$EXPECTED_HEAD_SHA"', workflow_text)
         self.assertIn(
             'test "$GITHUB_WORKFLOW_SHA" = "$EXPECTED_HEAD_SHA"', workflow_text
@@ -721,16 +879,28 @@ class ContractTests(unittest.TestCase):
         self.assertNotIn(
             "python3 scripts/rocky_repository_snapshot_capture.py", workflow_text
         )
-        self.assertEqual(workflow_text.count('python3 "$committed_checker"'), 3)
+        self.assertEqual(
+            workflow_text.count('/usr/bin/python3 -I -B "$committed_checker"'),
+            3,
+        )
         self.assertEqual(
             workflow_text.count(
                 '"$EXPECTED_HEAD_SHA:scripts/rocky_repository_snapshot_capture.py"'
             ),
             2,
         )
-        self.assertEqual(workflow_text.count("GIT_GRAFT_FILE=/dev/null"), 3)
-        self.assertEqual(workflow_text.count("GIT_NO_REPLACE_OBJECTS=1"), 3)
-        self.assertEqual(workflow_text.count("GIT_CONFIG_NOSYSTEM=1"), 3)
+        self.assertNotIn('PATH="$PATH"', workflow_text)
+        self.assertEqual(workflow_text.count("/usr/bin/git --no-pager"), 2)
+        self.assertEqual(workflow_text.count("GIT_ATTR_NOSYSTEM=1"), 2)
+        self.assertEqual(workflow_text.count("GIT_CONFIG_GLOBAL=/dev/null"), 2)
+        self.assertEqual(workflow_text.count("GIT_GRAFT_FILE=/dev/null"), 2)
+        self.assertEqual(workflow_text.count("GIT_NO_REPLACE_OBJECTS=1"), 2)
+        self.assertEqual(workflow_text.count("GIT_CONFIG_NOSYSTEM=1"), 2)
+        self.assertEqual(workflow_text.count("GIT_OPTIONAL_LOCKS=0"), 2)
+        self.assertEqual(workflow_text.count("core.fsmonitor=false"), 2)
+        self.assertEqual(workflow_text.count("core.hooksPath=/dev/null"), 2)
+        self.assertEqual(workflow_text.count("core.sshCommand=/usr/bin/false"), 2)
+        self.assertEqual(workflow_text.count("XDG_CONFIG_HOME=/nonexistent"), 2)
         for job in workflow["jobs"].values():
             for step in job.get("steps", []):
                 script = step.get("run")

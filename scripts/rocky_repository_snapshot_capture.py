@@ -106,6 +106,43 @@ EXECUTION_IDENTITY_POLICY = {
     "source_commit": "required exact lowercase 40-hex checked-out Git commit",
     "workflow_ref_prefix": WORKFLOW_REF_PREFIX,
 }
+GIT_AUTHORITY_EXECUTABLE = "/usr/bin/git"
+GIT_AUTHORITY_ENVIRONMENT = {
+    "GIT_ATTR_NOSYSTEM": "1",
+    "GIT_CONFIG_GLOBAL": os.devnull,
+    "GIT_CONFIG_NOSYSTEM": "1",
+    "GIT_GRAFT_FILE": os.devnull,
+    "GIT_NO_REPLACE_OBJECTS": "1",
+    "GIT_OPTIONAL_LOCKS": "0",
+    "GIT_PAGER": "cat",
+    "GIT_TERMINAL_PROMPT": "0",
+    "HOME": "/nonexistent",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PAGER": "cat",
+    "PATH": "/usr/bin:/bin",
+    "XDG_CONFIG_HOME": "/nonexistent",
+}
+GIT_AUTHORITY_CONFIG = [
+    "advice.graftFileDeprecated=false",
+    "core.attributesFile=/dev/null",
+    "core.fsmonitor=false",
+    "core.hooksPath=/dev/null",
+    "core.pager=cat",
+    "core.sshCommand=/usr/bin/false",
+    "credential.helper=",
+    "diff.external=",
+    "fetch.recurseSubmodules=false",
+    "interactive.diffFilter=",
+    "protocol.allow=never",
+    "submodule.recurse=false",
+]
+GIT_AUTHORITY_POLICY = {
+    "config_overrides": GIT_AUTHORITY_CONFIG,
+    "environment": GIT_AUTHORITY_ENVIRONMENT,
+    "executable": GIT_AUTHORITY_EXECUTABLE,
+    "inherit_environment": False,
+}
 TAR_LIMITS = {
     "max_snapshot_tar_bytes": 4328521728,
     "max_tar_member_bytes": 536870912,
@@ -208,6 +245,7 @@ def expected_contract():
         "claims": FALSE_CLAIMS,
         "diagnostic_baselines": DIAGNOSTIC_BASELINES,
         "execution_identity": EXECUTION_IDENTITY_POLICY,
+        "git_authority": GIT_AUTHORITY_POLICY,
         "limits": LIMITS,
         "network": NETWORK_POLICY,
         "release_key": {
@@ -788,6 +826,7 @@ def validate_contract(contract):
             "claims",
             "diagnostic_baselines",
             "execution_identity",
+            "git_authority",
             "limits",
             "network",
             "release_key",
@@ -806,6 +845,11 @@ def validate_contract(contract):
         contract["execution_identity"],
         EXECUTION_IDENTITY_POLICY,
         "contract execution identity policy",
+    )
+    require_exact(
+        contract["git_authority"],
+        GIT_AUTHORITY_POLICY,
+        "contract Git authority policy",
     )
     require_exact(
         contract["required_repository_inputs"],
@@ -973,21 +1017,41 @@ def single_git_nul_record(data, label):
     return rows[0]
 
 
-def repository_tree_entry(repo, source_commit, path, environment):
-    stdout, _ = run_checked(
+def git_authority_environment():
+    """Return the exact environment allowed at the Git authority boundary."""
+    return dict(GIT_AUTHORITY_ENVIRONMENT)
+
+
+def git_authority_command(repo, arguments):
+    """Build one absolute, configuration-bounded read-only Git command."""
+    command = [GIT_AUTHORITY_EXECUTABLE, "--no-pager"]
+    for value in GIT_AUTHORITY_CONFIG:
+        command.extend(["-c", value])
+    command.extend(
         [
-            "git",
             "-c",
             "safe.directory={}".format(repo),
             "-C",
             str(repo),
-            "ls-tree",
-            "-z",
-            "--full-tree",
-            source_commit,
-            "--",
-            path,
-        ],
+        ]
+    )
+    command.extend(arguments)
+    return command
+
+
+def repository_tree_entry(repo, source_commit, path, environment):
+    stdout, _ = run_checked(
+        git_authority_command(
+            repo,
+            [
+                "ls-tree",
+                "-z",
+                "--full-tree",
+                source_commit,
+                "--",
+                path,
+            ],
+        ),
         "source-commit tree entry {}".format(path),
         environment,
     )
@@ -1016,18 +1080,16 @@ def repository_tree_entry(repo, source_commit, path, environment):
 
 def require_repository_index_entry(repo, path, tree_entry, environment):
     stdout, _ = run_checked(
-        [
-            "git",
-            "-c",
-            "safe.directory={}".format(repo),
-            "-C",
-            str(repo),
-            "ls-files",
-            "--stage",
-            "-z",
-            "--",
-            path,
-        ],
+        git_authority_command(
+            repo,
+            [
+                "ls-files",
+                "--stage",
+                "-z",
+                "--",
+                path,
+            ],
+        ),
         "repository index entry {}".format(path),
         environment,
     )
@@ -1056,16 +1118,14 @@ def verify_repository_input_at_head(repo, source_commit, record, environment):
     )
     object_spec = "{}:{}".format(source_commit, record["path"])
     object_type, _ = run_checked(
-        [
-            "git",
-            "-c",
-            "safe.directory={}".format(repo),
-            "-C",
-            str(repo),
-            "cat-file",
-            "-t",
-            object_spec,
-        ],
+        git_authority_command(
+            repo,
+            [
+                "cat-file",
+                "-t",
+                object_spec,
+            ],
+        ),
         "source-commit repository input type {}".format(record["path"]),
         environment,
     )
@@ -1075,16 +1135,14 @@ def verify_repository_input_at_head(repo, source_commit, record, environment):
         "source-commit repository input type {}".format(record["path"]),
     )
     object_size, _ = run_checked(
-        [
-            "git",
-            "-c",
-            "safe.directory={}".format(repo),
-            "-C",
-            str(repo),
-            "cat-file",
-            "-s",
-            object_spec,
-        ],
+        git_authority_command(
+            repo,
+            [
+                "cat-file",
+                "-s",
+                object_spec,
+            ],
+        ),
         "source-commit repository input size {}".format(record["path"]),
         environment,
     )
@@ -1097,15 +1155,13 @@ def verify_repository_input_at_head(repo, source_commit, record, environment):
         "source-commit repository input size {}".format(record["path"]),
     )
     blob, _ = run_checked(
-        [
-            "git",
-            "-c",
-            "safe.directory={}".format(repo),
-            "-C",
-            str(repo),
-            "show",
-            object_spec,
-        ],
+        git_authority_command(
+            repo,
+            [
+                "show",
+                object_spec,
+            ],
+        ),
         "source-commit repository input {}".format(record["path"]),
         environment,
     )
@@ -1134,23 +1190,16 @@ def verify_repository_input_at_head(repo, source_commit, record, environment):
 
 
 def require_repository_head(repo, source_commit, input_records):
-    environment = os.environ.copy()
-    for name in list(environment):
-        if name.startswith("GIT_"):
-            environment.pop(name, None)
-    environment["GIT_GRAFT_FILE"] = os.devnull
-    environment["GIT_NO_REPLACE_OBJECTS"] = "1"
+    environment = git_authority_environment()
     stdout, _ = run_checked(
-        [
-            "git",
-            "-c",
-            "safe.directory={}".format(repo),
-            "-C",
-            str(repo),
-            "rev-parse",
-            "--verify",
-            "HEAD^{commit}",
-        ],
+        git_authority_command(
+            repo,
+            [
+                "rev-parse",
+                "--verify",
+                "HEAD^{commit}",
+            ],
+        ),
         "source commit inspection",
         environment,
     )
@@ -1165,16 +1214,14 @@ def require_repository_head(repo, source_commit, input_records):
             repo, source_commit, record, environment
         )
     final_head, _ = run_checked(
-        [
-            "git",
-            "-c",
-            "safe.directory={}".format(repo),
-            "-C",
-            str(repo),
-            "rev-parse",
-            "--verify",
-            "HEAD^{commit}",
-        ],
+        git_authority_command(
+            repo,
+            [
+                "rev-parse",
+                "--verify",
+                "HEAD^{commit}",
+            ],
+        ),
         "final source commit inspection",
         environment,
     )
