@@ -7,6 +7,19 @@ every frozen externally visible legacy surface and discovered errno token to
 one native Rust replacement and at least one acceptance-test identifier.
 """
 
+import sys as _fp0006_entry_sys
+
+
+if __name__ == "__main__" and not hasattr(
+    _fp0006_entry_sys, "_mckernel_fp0006_authority_context"
+):
+    _fp0006_entry_sys.stderr.write(
+        "host-module contract CLI requires the isolated failure-site authority "
+        "launcher; refusing direct execution\n"
+    )
+    raise SystemExit(2)
+
+
 import argparse
 import difflib
 import hashlib
@@ -416,11 +429,37 @@ def apply_unified_diff_to_text(
     return "".join(output), True
 
 
+def trusted_frozen_source_blob(repo: Path, path: str) -> bytes:
+    try:
+        path = failure_site_tool.validate_relative_authority_path(
+            path, "frozen contract source"
+        )
+        if path.startswith("ihk/"):
+            source_repo = repo / "ihk"
+            ref = inventory_tool.IHK_REF
+            relative = path[len("ihk/") :]
+        else:
+            source_repo = repo
+            ref = inventory_tool.PARENT_REF
+            relative = path
+        return failure_site_tool.run_git(
+            source_repo,
+            ["show", "{0}:{1}".format(ref, relative)],
+            "read frozen contract source {0}".format(path),
+        )
+    except failure_site_tool.CaptureError as exc:
+        raise ContractError(
+            "cannot read frozen contract source {0}: {1}".format(path, exc)
+        ) from exc
+
+
 def effective_source_text(
     repo: Path, path: str, language: str = "c"
 ) -> Tuple[str, Dict[str, Any]]:
-    base = inventory_tool.source_blob(repo, path).decode("utf-8", errors="replace")
-    patch = inventory_tool.source_blob(repo, PATCH_PATH)
+    base = trusted_frozen_source_blob(repo, path).decode(
+        "utf-8", errors="replace"
+    )
+    patch = trusted_frozen_source_blob(repo, PATCH_PATH)
     if language == "c":
         effective, applied = apply_unified_diff_to_text(
             base, patch.decode("utf-8", errors="strict"), path
@@ -527,6 +566,138 @@ def failure_site_key(entry: Dict[str, Any]) -> Tuple[str, str, int, int, str]:
         )
     except (KeyError, TypeError, ValueError) as exc:
         raise ContractError(f"malformed compiler failure-site identity: {entry!r}") from exc
+
+
+def compiler_profile_failure_mapping(site: Dict[str, Any]) -> Dict[str, Any]:
+    """Create a non-crediting mapping for a compiler-selected C-only row.
+
+    The frozen source contract intentionally remains byte-for-byte historical.
+    A selected compiler profile can expose a named-guard branch that the frozen
+    inventory did not select.  This helper gives such an exact HFS identity one
+    deterministic native-Rust target and one *declarative* acceptance ID without
+    asserting that either has executable evidence or earns FP-0006 credit.
+    """
+
+    required_site_fields = {
+        "active_source_sha256",
+        "classification",
+        "column",
+        "end_column",
+        "errno",
+        "expression",
+        "id",
+        "identity_sha256",
+        "language",
+        "line",
+        "line_sha256",
+        "module",
+        "source",
+        "source_sha256",
+    }
+    if not isinstance(site, dict) or set(site) != required_site_fields:
+        raise ContractError("compiler-profile failure site does not match locked HFS schema")
+    for field in (
+        "active_source_sha256",
+        "identity_sha256",
+        "line_sha256",
+        "source_sha256",
+    ):
+        if not isinstance(site[field], str) or not re.fullmatch(
+            r"[0-9a-f]{64}", site[field]
+        ):
+            raise ContractError(
+                f"compiler-profile failure site {field} is malformed"
+            )
+    for field in ("line", "column", "end_column"):
+        if (
+            not isinstance(site[field], int)
+            or isinstance(site[field], bool)
+            or site[field] < 1
+        ):
+            raise ContractError(
+                f"compiler-profile failure site {field} is not a positive integer"
+            )
+    for field in ("module", "source", "errno", "expression", "id", "language"):
+        if not isinstance(site[field], str) or not site[field]:
+            raise ContractError(
+                f"compiler-profile failure site {field} is malformed"
+            )
+
+    key = failure_site_key(site)
+    c_source_owners = {
+        source: module
+        for module, language, source, _ in failure_site_tool.EXPECTED_SOURCES
+        if language == "c"
+    }
+    if key[0] not in EXPECTED_MODULES:
+        raise ContractError("compiler-profile failure site names an unknown module")
+    if c_source_owners.get(key[1]) != key[0]:
+        raise ContractError("compiler-profile failure site source/module binding changed")
+    if site.get("language") != "c":
+        raise ContractError("compiler-profile supplements are limited to C sources")
+    if site.get("classification") != "explicit_negative_errno_token":
+        raise ContractError("compiler-profile failure site has unknown classification")
+    expression = site.get("expression")
+    hfs_id = site.get("id")
+    source_sha256 = site.get("source_sha256")
+    if (
+        expression != "-" + key[4]
+        or not re.fullmatch(r"E[A-Z][A-Z0-9_]*", key[4])
+        or site["end_column"] != site["column"] + len(expression)
+        or not re.fullmatch(r"HFS-[0-9A-F]{24}", hfs_id)
+    ):
+        raise ContractError("compiler-profile failure site provenance is malformed")
+    hfs_identity = {
+        "column": site["column"],
+        "errno": site["errno"],
+        "language": site["language"],
+        "line": site["line"],
+        "module": site["module"],
+        "source": site["source"],
+        "source_sha256": site["source_sha256"],
+    }
+    identity_sha256 = failure_site_tool.sha256_bytes(
+        failure_site_tool.canonical_bytes(hfs_identity)
+    )
+    if site["identity_sha256"] != identity_sha256 or site["id"] != (
+        "HFS-" + identity_sha256[:24].upper()
+    ):
+        raise ContractError("compiler-profile failure site identity is stale")
+    identity = {
+        "column": key[3],
+        "errno": key[4],
+        "expression": expression,
+        "hfs_id": hfs_id,
+        "line": key[2],
+        "module": key[0],
+        "source": key[1],
+        "source_sha256": source_sha256,
+    }
+    digest = sha256(canonical_bytes(identity))
+    module_component = slug(key[0], 20)
+    behavior_id = (
+        f"BHV-{module_component}-COMPILER_PROFILE_ERRNO-"
+        f"{digest[:10].upper()}"
+    )
+    test_id = (
+        f"AT-{module_component}-COMPILER_PROFILE_ERRNO-"
+        f"{digest[:10].upper()}"
+    )
+    path_component = re.sub(
+        r"[^a-z0-9]+", "_", f"{key[0]}_{key[1]}_{key[2]}_{key[3]}_{key[4]}".lower()
+    ).strip("_")
+    return {
+        "acceptance_evidence": "declarative_id_only_not_executed_or_verified",
+        "behavior_id": behavior_id,
+        "classification": "selected_compiler_profile_supplement",
+        "compiler_site": identity,
+        "declared_acceptance_test_ids": [test_id],
+        "rust_replacement": {
+            "crate": key[0],
+            "native_path": f"crate::error::{path_component}_{digest[:10]}",
+            "project_c_dispatch_permitted": False,
+        },
+    }
 
 
 def validate_compiler_failure_capture(
@@ -1123,15 +1294,35 @@ def validate_contract(
     policy: Dict[str, Any],
     legacy: Dict[str, Any],
     repo: Path,
+    policy_file_sha256: Optional[str] = None,
+    inventory_file_sha256: Optional[str] = None,
 ) -> None:
     validate_policy(policy)
     if contract.get("schema_version") != 2:
         raise ContractError("contract schema_version must be 2")
     if contract.get("policy_id") != policy.get("policy_id"):
         raise ContractError("contract policy_id is stale")
-    if contract.get("policy_file_sha256") != sha256((repo / POLICY_PATH).read_bytes()):
+    expected_policy_sha256 = (
+        sha256((repo / POLICY_PATH).read_bytes())
+        if policy_file_sha256 is None
+        else policy_file_sha256
+    )
+    expected_inventory_sha256 = (
+        sha256((repo / INVENTORY_PATH).read_bytes())
+        if inventory_file_sha256 is None
+        else inventory_file_sha256
+    )
+    if not isinstance(expected_policy_sha256, str) or not re.fullmatch(
+        r"[0-9a-f]{64}", expected_policy_sha256
+    ):
+        raise ContractError("supplied policy digest is malformed")
+    if not isinstance(expected_inventory_sha256, str) or not re.fullmatch(
+        r"[0-9a-f]{64}", expected_inventory_sha256
+    ):
+        raise ContractError("supplied inventory digest is malformed")
+    if contract.get("policy_file_sha256") != expected_policy_sha256:
         raise ContractError("contract policy digest is stale")
-    if contract.get("inventory_file_sha256") != sha256((repo / INVENTORY_PATH).read_bytes()):
+    if contract.get("inventory_file_sha256") != expected_inventory_sha256:
         raise ContractError("contract inventory digest is stale")
     profiles = contract.get("comparison_profiles")
     if not isinstance(profiles, dict) or set(profiles) != {"R0", "R1", "R2", "identity_rule"}:
@@ -1351,6 +1542,12 @@ def parse_args(argv: Sequence[str]) -> argparse.Namespace:
 
 
 def main(argv: Sequence[str]) -> int:
+    if not hasattr(sys, "_mckernel_fp0006_authority_context"):
+        print(
+            "host-module contract error: isolated authority context is missing",
+            file=sys.stderr,
+        )
+        return 2
     args = parse_args(argv)
     repo = args.repo.resolve()
     policy_path = args.policy if args.policy.is_absolute() else repo / args.policy

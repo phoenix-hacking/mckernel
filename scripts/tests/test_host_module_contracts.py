@@ -4,9 +4,13 @@
 from __future__ import annotations
 
 import copy
+import os
+import subprocess
 import sys
+import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -24,6 +28,30 @@ class ContractFixture(unittest.TestCase):
 
 
 class PolicyTests(ContractFixture):
+    def test_direct_cli_rejects_before_sibling_import_shadow(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            script = root / "host_module_contracts.py"
+            script.write_bytes(
+                (REPO_ROOT / "scripts/host_module_contracts.py").read_bytes()
+            )
+            sentinel = root / "pathlib.executed"
+            (root / "pathlib.py").write_text(
+                "open({0!r}, 'w').write('executed')\n"
+                "__import__('os').unlink(__file__)\n".format(str(sentinel)),
+                encoding="utf-8",
+            )
+            completed = subprocess.run(
+                [sys.executable, str(script), "--help"],
+                cwd=str(root),
+                check=False,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            self.assertEqual(completed.returncode, 2)
+            self.assertIn(b"requires the isolated failure-site", completed.stderr)
+            self.assertFalse(sentinel.exists())
+
     def test_scope_is_exactly_three_native_rust_modules(self) -> None:
         contracts.validate_policy(self.policy)
         modules = self.policy["conversion_scope"]["included_modules"]
@@ -101,6 +129,54 @@ class PolicyTests(ContractFixture):
 
 
 class BehaviorContractTests(ContractFixture):
+    def test_contract_source_git_ignores_path_and_exec_forgery(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            fake_bin = root / "bin"
+            fake_bin.mkdir()
+            sentinel = root / "fake-git.executed"
+            wrapper = fake_bin / "git"
+            wrapper.write_text(
+                "#!/usr/bin/python3\n"
+                "open({0!r}, 'w').write('executed')\n"
+                "raise SystemExit(99)\n".format(str(sentinel)),
+                encoding="utf-8",
+            )
+            wrapper.chmod(0o755)
+            (fake_bin / "git-show").symlink_to("git")
+            hostile = {
+                "GIT_EXEC_PATH": str(fake_bin),
+                "LD_LIBRARY_PATH": str(fake_bin),
+                "PATH": str(fake_bin) + os.pathsep + "/usr/bin:/bin",
+            }
+            with mock.patch.dict(os.environ, hostile, clear=False):
+                generated = contracts.build_contract(
+                    REPO_ROOT, self.policy, self.legacy
+                )
+            self.assertEqual(generated, self.contract)
+            self.assertFalse(sentinel.exists())
+
+    def test_supplied_authority_digests_avoid_contract_input_reopens(self) -> None:
+        policy_sha256 = contracts.sha256(
+            (REPO_ROOT / contracts.POLICY_PATH).read_bytes()
+        )
+        inventory_sha256 = contracts.sha256(
+            (REPO_ROOT / contracts.INVENTORY_PATH).read_bytes()
+        )
+        with mock.patch.object(
+            Path,
+            "read_bytes",
+            side_effect=AssertionError("authority path reopened"),
+        ):
+            contracts.validate_contract(
+                self.contract,
+                self.policy,
+                self.legacy,
+                REPO_ROOT,
+                policy_file_sha256=policy_sha256,
+                inventory_file_sha256=inventory_sha256,
+            )
+
     def test_generated_contract_is_complete_and_current(self) -> None:
         generated = contracts.build_contract(REPO_ROOT, self.policy, self.legacy)
         contracts.validate_contract(generated, self.policy, self.legacy, REPO_ROOT)
@@ -283,6 +359,90 @@ class BehaviorContractTests(ContractFixture):
         wrong_source["failure_sites"][0]["source_sha256"] = "0" * 64
         with self.assertRaises(contracts.ContractError):
             contracts.validate_compiler_failure_capture(self.contract, wrong_source)
+
+    def test_selected_compiler_profile_mapping_is_stable_and_non_crediting(self) -> None:
+        identity = {
+            "column": 10,
+            "errno": "EINVAL",
+            "language": "c",
+            "line": 1858,
+            "module": "ihk_smp_x86_64",
+            "source": "ihk/linux/driver/smp/arch/x86_64/smp-arch-driver.c",
+            "source_sha256": "b" * 64,
+        }
+        identity_sha256 = contracts.failure_site_tool.sha256_bytes(
+            contracts.failure_site_tool.canonical_bytes(identity)
+        )
+        site = {
+            "active_source_sha256": "a" * 64,
+            "classification": "explicit_negative_errno_token",
+            "column": identity["column"],
+            "end_column": identity["column"] + len("-EINVAL"),
+            "errno": identity["errno"],
+            "expression": "-EINVAL",
+            "id": "HFS-" + identity_sha256[:24].upper(),
+            "identity_sha256": identity_sha256,
+            "language": identity["language"],
+            "line": identity["line"],
+            "line_sha256": "c" * 64,
+            "module": identity["module"],
+            "source": identity["source"],
+            "source_sha256": identity["source_sha256"],
+        }
+        first = contracts.compiler_profile_failure_mapping(site)
+        second = contracts.compiler_profile_failure_mapping(copy.deepcopy(site))
+        self.assertEqual(first, second)
+        self.assertEqual(first["classification"], "selected_compiler_profile_supplement")
+        self.assertEqual(
+            first["acceptance_evidence"],
+            "declarative_id_only_not_executed_or_verified",
+        )
+        self.assertEqual(first["rust_replacement"]["crate"], "ihk_smp_x86_64")
+        self.assertTrue(first["rust_replacement"]["native_path"].startswith("crate::"))
+        self.assertFalse(first["rust_replacement"]["project_c_dispatch_permitted"])
+        self.assertEqual(len(first["declared_acceptance_test_ids"]), 1)
+
+        rust_site = copy.deepcopy(site)
+        rust_site["language"] = "rust"
+        with self.assertRaisesRegex(contracts.ContractError, "limited to C"):
+            contracts.compiler_profile_failure_mapping(rust_site)
+
+        for name, field, value in (
+            ("bool line", "line", False),
+            ("numeric-string column", "column", "10"),
+        ):
+            with self.subTest(name=name):
+                malformed = copy.deepcopy(site)
+                malformed[field] = value
+                with self.assertRaisesRegex(contracts.ContractError, "positive integer"):
+                    contracts.compiler_profile_failure_mapping(malformed)
+
+        mismatched_expression = copy.deepcopy(site)
+        mismatched_expression["errno"] = "EFAULT"
+        with self.assertRaisesRegex(contracts.ContractError, "provenance"):
+            contracts.compiler_profile_failure_mapping(mismatched_expression)
+
+        arbitrary_source = copy.deepcopy(site)
+        arbitrary_source["source"] = "executer/kernel/mcctrl/arbitrary.c"
+        arbitrary_identity = {
+            key: arbitrary_source[key]
+            for key in (
+                "column", "errno", "language", "line", "module", "source",
+                "source_sha256",
+            )
+        }
+        arbitrary_digest = contracts.failure_site_tool.sha256_bytes(
+            contracts.failure_site_tool.canonical_bytes(arbitrary_identity)
+        )
+        arbitrary_source["identity_sha256"] = arbitrary_digest
+        arbitrary_source["id"] = "HFS-" + arbitrary_digest[:24].upper()
+        with self.assertRaisesRegex(contracts.ContractError, "source/module binding"):
+            contracts.compiler_profile_failure_mapping(arbitrary_source)
+
+        arbitrary_id = copy.deepcopy(site)
+        arbitrary_id["id"] = "HFS-" + "A" * 24
+        with self.assertRaisesRegex(contracts.ContractError, "identity is stale"):
+            contracts.compiler_profile_failure_mapping(arbitrary_id)
 
     def test_r0_kernel_metadata_is_provenance_not_a_production_requirement(self) -> None:
         identities = [

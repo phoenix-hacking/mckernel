@@ -2,11 +2,16 @@
 """Synthetic tests for compiler-backed host-module failure-site capture."""
 
 import json
+import importlib.util
+import os
 import shlex
+import subprocess
 import sys
 import tempfile
+import time
 import unittest
 from pathlib import Path
+from unittest import mock
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -14,6 +19,33 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import host_module_failure_sites as capture  # noqa: E402
 import record_compiler_argv as recorder  # noqa: E402
+
+
+class GitIdentityTests(unittest.TestCase):
+    def test_repository_head_ignores_hostile_inherited_git_environment(self):
+        expected = capture.git_head(REPO_ROOT)
+        hostile = {
+            "GIT_ALTERNATE_OBJECT_DIRECTORIES": "/definitely/not/objects",
+            "GIT_CEILING_DIRECTORIES": str(REPO_ROOT.parent),
+            "GIT_CONFIG_COUNT": "1",
+            "GIT_CONFIG_KEY_0": "core.useReplaceRefs",
+            "GIT_CONFIG_VALUE_0": "true",
+            "GIT_DIR": "/definitely/not/the/repository",
+            "GIT_OBJECT_DIRECTORY": "/definitely/not/objects",
+            "GIT_WORK_TREE": "/definitely/not/the/worktree",
+        }
+        with mock.patch.dict(os.environ, hostile, clear=False):
+            self.assertEqual(capture.git_head(REPO_ROOT), expected)
+
+    def test_rejects_inherited_repository_controlled_stdlib_module(self):
+        fake = mock.Mock()
+        fake.__spec__ = None
+        fake.__file__ = str(REPO_ROOT / "scripts/hashlib.py")
+        with mock.patch.dict(sys.modules, {"hashlib": fake}, clear=False):
+            with self.assertRaisesRegex(
+                capture.CaptureError, "untrusted hashlib module"
+            ):
+                capture.reject_untrusted_inherited_modules()
 
 
 class ArgvRecorderTests(unittest.TestCase):
@@ -147,6 +179,34 @@ class LineFilteringTests(unittest.TestCase):
 
 
 class SiteScannerTests(unittest.TestCase):
+    def test_resolves_logical_continued_macro_token_to_physical_spelling(self):
+        text = (
+            "#define DEMO_FAILURE(value) \\\n"
+            "\tuse(value, \\\n"
+            "\t    -EFAULT)\n"
+        )
+        logical = "#define DEMO_FAILURE(value) \tuse(value, \t    -EFAULT)"
+        resolved = capture.resolve_spliced_c_token(
+            text, 1, logical.index("-EFAULT") + 1, "-EFAULT"
+        )
+        self.assertEqual(
+            resolved,
+            {
+                "expression": "-EFAULT",
+                "logical_column": logical.index("-EFAULT") + 1,
+                "logical_line": 1,
+                "macro_name": "DEMO_FAILURE",
+                "physical_column": 6,
+                "physical_end_column": 13,
+                "physical_line": 3,
+                "source_logical_column": logical.index("-EFAULT") + 1,
+            },
+        )
+        with self.assertRaisesRegex(capture.CaptureError, "unique source spelling"):
+            capture.resolve_spliced_c_token(
+                text, 1, logical.index("-EFAULT") + 1, "-EINVAL"
+            )
+
     def test_masks_comments_strings_chars_and_nested_rust_comments(self):
         rows = [
             (7, 'let text = r#"-ENOMEM"#; // -EIO\n'),
@@ -171,6 +231,1002 @@ class SiteScannerTests(unittest.TestCase):
         changed = capture.scan_rows("ihk", "c", "a.c", "2" * 64, active, rows)[0]
         self.assertEqual(first["id"], second["id"])
         self.assertNotEqual(first["id"], changed["id"])
+
+
+class RepositoryAuthorityTests(unittest.TestCase):
+    def setUp(self):
+        self.temporary = tempfile.TemporaryDirectory()
+        self.root = Path(self.temporary.name)
+        self.repo = self.root / "repo"
+        self.ihk = self.repo / "ihk"
+        self.ihk.mkdir(parents=True)
+        (self.repo / "scripts/patches").mkdir(parents=True)
+        (self.repo / "host-kernel/reference").mkdir(parents=True)
+        (self.repo / "scripts/host_module_failure_sites.py").write_text(
+            "AUTHORITY = True\n", encoding="utf-8"
+        )
+        (self.repo / "host-kernel/reference/inventory.json").write_text(
+            "{}\n", encoding="utf-8"
+        )
+        (self.repo / "tracked-link").symlink_to(
+            "scripts/host_module_failure_sites.py"
+        )
+        (self.ihk / "linux").mkdir()
+        (self.ihk / "linux/demo.c").write_text(
+            "int demo(void) { return -EINVAL; }\n", encoding="utf-8"
+        )
+        (self.ihk / "linux/other.c").write_text(
+            "int other(void) { return 0; }\n", encoding="utf-8"
+        )
+        self.overlay = self.repo / "scripts/patches/ihk-linux-compat.patch"
+        self.overlay.write_text(
+            """diff --git a/linux/demo.c b/linux/demo.c
+--- a/linux/demo.c
++++ b/linux/demo.c
+@@ -1 +1 @@
+-int demo(void) { return -EINVAL; }
++int demo(void) { return -EFAULT; }
+""",
+            encoding="utf-8",
+        )
+        self._init_and_commit(self.ihk, "IHK baseline")
+        self._init_and_commit(self.repo, "main baseline")
+        self.main_paths = (
+            "host-kernel/reference/inventory.json",
+            "scripts/host_module_failure_sites.py",
+            "scripts/patches/ihk-linux-compat.patch",
+        )
+        self.expected_sources = (
+            ("ihk", "c", "ihk/linux/demo.c", "ihk/linux/.demo.o.cmd"),
+        )
+
+    def tearDown(self):
+        self.temporary.cleanup()
+
+    def _git(self, repository, *arguments):
+        environment = capture.git_environment()
+        completed = subprocess.run(
+            [capture.GIT_EXECUTABLE] + list(arguments),
+            cwd=str(repository),
+            check=False,
+            env=environment,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        if completed.returncode != 0:
+            self.fail(completed.stderr.decode("utf-8", errors="replace"))
+        return completed.stdout
+
+    def _init_and_commit(self, repository, message):
+        self._git(repository, "init", "-q")
+        self._git(repository, "config", "user.email", "audit@example.invalid")
+        self._git(repository, "config", "user.name", "authority audit")
+        self._git(repository, "add", ".")
+        self._git(repository, "commit", "-qm", message)
+
+    def _authority(self):
+        with mock.patch.object(
+            capture, "FRESH_MAIN_AUTHORITY_PATHS", self.main_paths
+        ), mock.patch.object(capture, "EXPECTED_SOURCES", self.expected_sources):
+            return capture.capture_repository_authority(
+                self.repo, expected_head=capture.git_head(self.repo)
+            )
+
+    def _apply_overlay(self):
+        self._git(self.ihk, "apply", str(self.overlay))
+
+    def _forging_git_wrapper(self):
+        fake_bin = self.root / "fake-bin"
+        fake_bin.mkdir()
+        sentinel = self.root / "fake-git.executed"
+        wrapper = fake_bin / "git"
+        wrapper.write_text(
+            "#!/usr/bin/python3\n"
+            "import subprocess\n"
+            "import sys\n"
+            "open({0!r}, 'a').write(' '.join(sys.argv[1:]) + '\\n')\n"
+            "arguments = sys.argv[1:]\n"
+            "if 'cat-file' in arguments and '--batch' in arguments:\n"
+            "    data = sys.stdin.buffer.read()\n"
+            "    completed = subprocess.run(['/usr/bin/git'] + arguments, input=data, stdout=subprocess.PIPE, stderr=subprocess.PIPE)\n"
+            "    output = bytearray(completed.stdout)\n"
+            "    newline = output.find(b'\\n')\n"
+            "    if newline >= 0:\n"
+            "        header = bytes(output[:newline]).split(b' ')\n"
+            "        if len(header) == 3 and header[2].isdigit() and int(header[2]) > 0:\n"
+            "            output[newline + 1] ^= 1\n"
+            "    sys.stdout.buffer.write(output)\n"
+            "    sys.stderr.buffer.write(completed.stderr)\n"
+            "    raise SystemExit(completed.returncode)\n"
+            "if any(name in arguments for name in ('status', 'ls-files', 'apply', 'check-attr')):\n"
+            "    raise SystemExit(0)\n"
+            "completed = subprocess.run(['/usr/bin/git'] + arguments)\n"
+            "raise SystemExit(completed.returncode)\n".format(str(sentinel)),
+            encoding="utf-8",
+        )
+        wrapper.chmod(0o755)
+        for name in (
+            "git-cat-file",
+            "git-status",
+            "git-ls-files",
+            "git-apply",
+            "git-check-attr",
+        ):
+            (fake_bin / name).symlink_to("git")
+        return fake_bin, wrapper, sentinel
+
+    def test_exact_committed_overlay_is_the_only_allowed_ihk_delta(self):
+        self._apply_overlay()
+        authority = self._authority()
+        self.assertEqual(authority["main_head"], capture.git_head(self.repo))
+        self.assertEqual(authority["ihk_head"], capture.git_head(self.ihk))
+        self.assertEqual(
+            authority["ihk_snapshots"]["linux/demo.c"]["data"],
+            b"int demo(void) { return -EFAULT; }\n",
+        )
+        with mock.patch.object(
+            capture, "FRESH_MAIN_AUTHORITY_PATHS", self.main_paths
+        ), mock.patch.object(capture, "EXPECTED_SOURCES", self.expected_sources):
+            capture.recheck_repository_authority(self.repo, authority)
+
+    def test_capture_rejects_bootstrap_expected_head_mismatch(self):
+        self._apply_overlay()
+        expected = "0" * 40
+        if capture.git_head(self.repo) == expected:
+            expected = "1" * 40
+        with mock.patch.object(
+            capture, "FRESH_MAIN_AUTHORITY_PATHS", self.main_paths
+        ), mock.patch.object(capture, "EXPECTED_SOURCES", self.expected_sources):
+            with self.assertRaisesRegex(
+                capture.CaptureError, "bootstrap expected commit"
+            ):
+                capture.capture_repository_authority(
+                    self.repo, expected_head=expected
+                )
+
+    def test_dirty_or_staged_main_authority_fails_closed(self):
+        self._apply_overlay()
+        authority_path = self.repo / "scripts/host_module_failure_sites.py"
+        sentinel = self.root / "staged-launcher.executed"
+        authority_path.write_text(
+            "open({0!r}, 'w').write('executed')\n"
+            "__import__('os').unlink(__file__)\n".format(str(sentinel)),
+            encoding="utf-8",
+        )
+        with self.assertRaisesRegex(capture.CaptureError, "main authority worktree"):
+            self._authority()
+        self._git(self.repo, "add", "scripts/host_module_failure_sites.py")
+        with self.assertRaisesRegex(capture.CaptureError, "main repository index"):
+            self._authority()
+        self.assertFalse(sentinel.exists())
+        self.assertTrue(authority_path.exists())
+
+    def test_deleted_authority_launcher_fails_closed(self):
+        self._apply_overlay()
+        launcher = self.repo / "scripts/host_module_failure_sites.py"
+        launcher.unlink()
+        with self.assertRaisesRegex(
+            capture.CaptureError, "main worktree file closure"
+        ):
+            self._authority()
+
+    def test_self_hiding_modified_authority_launcher_never_executes(self):
+        self._apply_overlay()
+        launcher = self.repo / "scripts/host_module_failure_sites.py"
+        sentinel = self.root / "modified-launcher.executed"
+        launcher.write_text(
+            "open({0!r}, 'w').write('executed')\n"
+            "__import__('os').unlink(__file__)\n".format(str(sentinel)),
+            encoding="utf-8",
+        )
+        with self.assertRaisesRegex(
+            capture.CaptureError, "main authority worktree"
+        ):
+            self._authority()
+        self.assertFalse(sentinel.exists())
+        self.assertTrue(launcher.exists())
+
+    def test_missing_wrong_or_unexpected_ihk_delta_fails_closed(self):
+        with self.assertRaisesRegex(capture.CaptureError, "exact overlay"):
+            self._authority()
+        self._apply_overlay()
+        (self.ihk / "linux/other.c").write_text(
+            "int other(void) { return -EPERM; }\n", encoding="utf-8"
+        )
+        with self.assertRaisesRegex(capture.CaptureError, "exact overlay"):
+            self._authority()
+        (self.ihk / "linux/other.c").write_bytes(
+            self._git(self.ihk, "show", "HEAD:linux/other.c")
+        )
+        (self.ihk / "untracked.c").write_text("untracked\n", encoding="utf-8")
+        with self.assertRaisesRegex(capture.CaptureError, "file closure"):
+            self._authority()
+
+    def test_staged_ihk_delta_fails_closed(self):
+        self._apply_overlay()
+        self._git(self.ihk, "add", "linux/demo.c")
+        with self.assertRaisesRegex(capture.CaptureError, "IHK index"):
+            self._authority()
+
+    def test_ihk_symlink_fails_closed(self):
+        self._apply_overlay()
+        (self.ihk / "linux/other.c").unlink()
+        (self.ihk / "linux/other.c").symlink_to("demo.c")
+        with self.assertRaisesRegex(capture.CaptureError, "symlink"):
+            self._authority()
+
+    def test_ihk_root_symlink_fails_closed(self):
+        self._apply_overlay()
+        real_ihk = self.repo / "ihk-real"
+        os.rename(str(self.ihk), str(real_ihk))
+        self.ihk.symlink_to(real_ihk, target_is_directory=True)
+        with self.assertRaisesRegex(capture.CaptureError, "real directory"):
+            self._authority()
+
+    def test_end_recheck_rejects_head_and_identity_races(self):
+        self._apply_overlay()
+        authority = self._authority()
+        (self.repo / "unrelated.txt").write_text("new commit\n", encoding="utf-8")
+        self._git(self.repo, "add", "unrelated.txt")
+        self._git(self.repo, "commit", "-qm", "move HEAD")
+        with mock.patch.object(
+            capture, "FRESH_MAIN_AUTHORITY_PATHS", self.main_paths
+        ), mock.patch.object(capture, "EXPECTED_SOURCES", self.expected_sources):
+            with self.assertRaisesRegex(capture.CaptureError, "changed during"):
+                capture.recheck_repository_authority(self.repo, authority)
+
+    def test_end_recheck_rejects_same_bytes_inode_identity_race(self):
+        self._apply_overlay()
+        authority = self._authority()
+        authority_path = self.repo / "scripts/host_module_failure_sites.py"
+        original = authority_path.read_bytes()
+        replacement = self.repo / "scripts/authority.replacement"
+        replacement.write_bytes(original)
+        os.replace(str(replacement), str(authority_path))
+        with mock.patch.object(
+            capture, "FRESH_MAIN_AUTHORITY_PATHS", self.main_paths
+        ), mock.patch.object(capture, "EXPECTED_SOURCES", self.expected_sources):
+            with self.assertRaisesRegex(capture.CaptureError, "changed during"):
+                capture.recheck_repository_authority(self.repo, authority)
+
+    def test_hostile_git_environment_cannot_retarget_authority(self):
+        self._apply_overlay()
+        expected = self._authority()
+        hostile = {
+            "GIT_DIR": "/definitely/not/a/repository",
+            "GIT_INDEX_FILE": "/definitely/not/an/index",
+            "GIT_OBJECT_DIRECTORY": "/definitely/not/objects",
+            "GIT_WORK_TREE": "/definitely/not/a/worktree",
+        }
+        with mock.patch.dict(os.environ, hostile, clear=False):
+            actual = self._authority()
+        self.assertEqual(actual, expected)
+
+    def test_path_first_forging_git_and_exec_variants_never_run(self):
+        fake_bin, wrapper, sentinel = self._forging_git_wrapper()
+        self._git(self.repo, "config", "core.fsmonitor", str(wrapper))
+        self._git(self.repo, "config", "core.hooksPath", str(fake_bin))
+        self._git(self.repo, "config", "core.attributesFile", str(wrapper))
+        self._apply_overlay()
+        hostile = {
+            "GIT_CONFIG_COUNT": "1",
+            "GIT_CONFIG_KEY_0": "core.fsmonitor",
+            "GIT_CONFIG_VALUE_0": str(wrapper),
+            "GIT_EXEC_PATH": str(fake_bin),
+            "LD_LIBRARY_PATH": str(fake_bin),
+            "PATH": str(fake_bin) + os.pathsep + "/usr/bin:/bin",
+        }
+        with mock.patch.dict(os.environ, hostile, clear=False):
+            authority = self._authority()
+            self.assertEqual(authority["main_head"], capture.git_head(self.repo))
+            capture.run_git(
+                self.repo, ["status", "--porcelain=v1"], "read status"
+            )
+            capture.run_git(
+                self.repo,
+                [
+                    "check-attr",
+                    "-a",
+                    "--",
+                    "scripts/host_module_failure_sites.py",
+                ],
+                "read attributes",
+            )
+        self.assertFalse(sentinel.exists())
+        environment = capture.git_environment()
+        self.assertEqual(environment["PATH"], "/usr/bin:/bin")
+        for name in ("GIT_EXEC_PATH", "LD_LIBRARY_PATH", "LD_PRELOAD"):
+            self.assertNotIn(name, environment)
+
+    def test_untracked_stdlib_shadows_never_execute_or_self_hide(self):
+        self._apply_overlay()
+        for name in ("hashlib", "os", "json", "pathlib"):
+            with self.subTest(name=name):
+                shadow = self.repo / "scripts/{0}.py".format(name)
+                sentinel = self.root / "{0}.executed".format(name)
+                shadow.write_text(
+                    "open({0!r}, 'w').write('executed')\n"
+                    "__import__('os').unlink(__file__)\n".format(str(sentinel)),
+                    encoding="utf-8",
+                )
+                with self.assertRaisesRegex(
+                    capture.CaptureError, "main worktree file closure"
+                ):
+                    self._authority()
+                self.assertFalse(sentinel.exists())
+                self.assertTrue(shadow.exists())
+                shadow.unlink()
+
+    def test_staged_stdlib_shadow_is_rejected_before_execution(self):
+        self._apply_overlay()
+        shadow = self.repo / "scripts/json.py"
+        sentinel = self.root / "staged-shadow.executed"
+        shadow.write_text(
+            "open({0!r}, 'w').write('executed')\n"
+            "__import__('os').unlink(__file__)\n".format(str(sentinel)),
+            encoding="utf-8",
+        )
+        self._git(self.repo, "add", "scripts/json.py")
+        with self.assertRaisesRegex(capture.CaptureError, "main repository index"):
+            self._authority()
+        self.assertFalse(sentinel.exists())
+        self.assertTrue(shadow.exists())
+
+
+class IsolatedEntrypointTests(unittest.TestCase):
+    SHADOW_NAMES = ("hashlib", "os", "json", "pathlib")
+
+    def _write_shadows(self, directory):
+        sentinels = []
+        for name in self.SHADOW_NAMES:
+            sentinel = directory / "{0}.executed".format(name)
+            (directory / "{0}.py".format(name)).write_text(
+                "open({0!r}, 'w').write('executed')\n"
+                "__import__('os').unlink(__file__)\n".format(str(sentinel)),
+                encoding="utf-8",
+            )
+            sentinels.append(sentinel)
+        return sentinels
+
+    def _workflow_bootstrap_code(self):
+        workflow = (
+            REPO_ROOT / ".github/workflows/rust-x86_64-validation.yml"
+        ).read_text(encoding="utf-8")
+        matches = capture.re.findall(
+            r'/usr/bin/python3 -I -S -B -c "((?:\\.|[^\"])*)" "\$@"',
+            workflow,
+            flags=capture.re.DOTALL,
+        )
+        self.assertEqual(len(matches), 6)
+        self.assertEqual(len(set(matches)), 1)
+        return matches[0].replace('\\"', '"')
+
+    def _git(self, repo, *arguments):
+        completed = subprocess.run(
+            [capture.GIT_EXECUTABLE] + list(arguments),
+            cwd=str(repo),
+            check=False,
+            env=capture.git_environment(),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        self.assertEqual(completed.returncode, 0, completed.stderr)
+        return completed.stdout.decode("ascii", errors="replace").strip()
+
+    def _initialize_repository(self, repo):
+        repo.mkdir(parents=True)
+        self._git(repo, "init", "-q")
+        self._git(repo, "config", "user.email", "audit@example.invalid")
+        self._git(repo, "config", "user.name", "authority audit")
+
+    def _commit_launcher(self, repo, source, message):
+        launcher = repo / "scripts/host_module_failure_sites.py"
+        launcher.parent.mkdir(parents=True, exist_ok=True)
+        launcher.write_text(source, encoding="utf-8")
+        self._git(repo, "add", "scripts/host_module_failure_sites.py")
+        self._git(repo, "commit", "-qm", message)
+        return self._git(repo, "rev-parse", "HEAD")
+
+    def _bootstrap_process(self, repo, expected_head=None):
+        environment = dict(os.environ)
+        environment["PYTHONPATH"] = str(repo / "scripts")
+        environment["FP_AUTHORITY_EXPECTED_HEAD"] = (
+            expected_head or self._git(repo, "rev-parse", "HEAD")
+        )
+        return subprocess.Popen(
+            [
+                sys.executable,
+                "-I",
+                "-S",
+                "-B",
+                "-c",
+                self._workflow_bootstrap_code(),
+                str(repo),
+                "--repo",
+                str(repo),
+            ],
+            cwd=str(repo),
+            env=environment,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+
+    def _wait_for_sentinel(self, process, sentinel):
+        deadline = time.monotonic() + 15
+        while time.monotonic() < deadline:
+            if sentinel.exists():
+                return
+            if process.poll() is not None:
+                stdout, stderr = process.communicate()
+                self.fail(
+                    "bootstrap exited before sentinel: stdout={0!r}, stderr={1!r}".format(
+                        stdout, stderr
+                    )
+                )
+            time.sleep(0.01)
+        process.kill()
+        stdout, stderr = process.communicate()
+        self.fail(
+            "timed out waiting for sentinel: stdout={0!r}, stderr={1!r}".format(
+                stdout, stderr
+            )
+        )
+
+    def _pausing_launcher(self, loaded, gate, entered):
+        return (
+            "import os\n"
+            "import time\n"
+            "open({0!r}, 'w').write('loaded')\n"
+            "for unused in range(1500):\n"
+            "    if os.path.exists({1!r}):\n"
+            "        break\n"
+            "    time.sleep(0.01)\n"
+            "else:\n"
+            "    raise RuntimeError('race gate timed out')\n"
+            "def isolated_authority_main(argv, expected_head=None):\n"
+            "    open({2!r}, 'w').write('entered')\n"
+            "    return 0\n"
+        ).format(str(loaded), str(gate), str(entered))
+
+    def _assert_pre_entry_head_race_rejected(self, start_at_newer):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            repo = root / "repo"
+            self._initialize_repository(repo)
+            loaded = root / "launcher.loaded"
+            gate = root / "launcher.gate"
+            entered = root / "launcher.entered"
+            quiet = (
+                "def isolated_authority_main(argv, expected_head=None):\n"
+                "    return 0\n"
+            )
+            if start_at_newer:
+                older = self._commit_launcher(repo, quiet, "older launcher")
+                newer = self._commit_launcher(
+                    repo,
+                    self._pausing_launcher(loaded, gate, entered),
+                    "newer pausing launcher",
+                )
+                self.assertEqual(self._git(repo, "rev-parse", "HEAD"), newer)
+                target = older
+            else:
+                older = self._commit_launcher(
+                    repo,
+                    self._pausing_launcher(loaded, gate, entered),
+                    "older pausing launcher",
+                )
+                newer = self._commit_launcher(repo, quiet, "newer launcher")
+                self._git(repo, "checkout", "-q", older)
+                target = newer
+            process = self._bootstrap_process(repo)
+            self._wait_for_sentinel(process, loaded)
+            self._git(repo, "checkout", "-q", target)
+            gate.write_text("continue\n", encoding="utf-8")
+            stdout, stderr = process.communicate(timeout=20)
+            self.assertEqual(process.returncode, 2, (stdout, stderr))
+            self.assertIn(b"HEAD changed before checker entry", stderr)
+            self.assertFalse(entered.exists())
+
+    def test_bootstrap_rejects_newer_to_older_head_race(self):
+        self._assert_pre_entry_head_race_rejected(start_at_newer=True)
+
+    def test_bootstrap_rejects_older_to_newer_head_race(self):
+        self._assert_pre_entry_head_race_rejected(start_at_newer=False)
+
+    def test_bootstrap_rejects_checkout_different_from_job_pin_before_blob(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            repo = root / "repo"
+            self._initialize_repository(repo)
+            pinned = self._commit_launcher(
+                repo,
+                "def isolated_authority_main(argv, expected_head=None):\n"
+                "    return 0\n",
+                "pinned launcher",
+            )
+            loaded = root / "unpinned.loaded"
+            self._commit_launcher(
+                repo,
+                "open({0!r}, 'w').write('loaded')\n"
+                "def isolated_authority_main(argv, expected_head=None):\n"
+                "    return 0\n".format(str(loaded)),
+                "unpinned launcher",
+            )
+            process = self._bootstrap_process(repo, expected_head=pinned)
+            stdout, stderr = process.communicate(timeout=20)
+            self.assertEqual(process.returncode, 2, (stdout, stderr))
+            self.assertIn(b"checkout differs from expected commit", stderr)
+            self.assertFalse(loaded.exists())
+
+    def test_bootstrap_rejects_head_change_after_loaded_main_returns(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            repo = root / "repo"
+            self._initialize_repository(repo)
+            returned = root / "launcher.returned"
+            launcher = (
+                "import os\n"
+                "import subprocess\n"
+                "trusted_run = subprocess.run\n"
+                "def isolated_authority_main(argv, expected_head=None):\n"
+                "    completed = trusted_run([\"/usr/bin/git\", \"-C\", {0!r}, \"checkout\", \"-q\", \"race-target\"])\n"
+                "    if completed.returncode != 0:\n"
+                "        raise RuntimeError('cannot move race HEAD')\n"
+                "    open({1!r}, 'w').write('returned')\n"
+                "    subprocess.run = lambda *args, **kwargs: None\n"
+                "    os.waitpid = lambda *args, **kwargs: (0, 0)\n"
+                "    os.read = lambda *args, **kwargs: b''\n"
+                "    return 0\n"
+            ).format(str(repo), str(returned))
+            older = self._commit_launcher(repo, launcher, "returning launcher")
+            newer = self._commit_launcher(
+                repo,
+                "def isolated_authority_main(argv, expected_head=None):\n"
+                "    return 0\n",
+                "race target launcher",
+            )
+            self._git(repo, "branch", "race-target", newer)
+            self._git(repo, "checkout", "-q", older)
+            process = self._bootstrap_process(repo)
+            stdout, stderr = process.communicate(timeout=20)
+            self.assertEqual(process.returncode, 2, (stdout, stderr))
+            self.assertTrue(returned.exists())
+            self.assertIn(b"HEAD changed during checker execution", stderr)
+            self.assertEqual(self._git(repo, "rev-parse", "HEAD"), newer)
+
+    def test_bootstrap_never_coerces_hostile_return_status_after_recheck(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            repo = root / "repo"
+            self._initialize_repository(repo)
+            returned = root / "launcher.returned"
+            converted = root / "status.converted"
+            launcher = (
+                "class ExitStatus(object):\n"
+                "    def __index__(self):\n"
+                "        open({0!r}, 'w').write('converted')\n"
+                "        return 0\n"
+                "def isolated_authority_main(argv, expected_head=None):\n"
+                "    open({1!r}, 'w').write('returned')\n"
+                "    return ExitStatus()\n"
+            ).format(str(converted), str(returned))
+            self._commit_launcher(repo, launcher, "hostile return status")
+            process = self._bootstrap_process(repo)
+            stdout, stderr = process.communicate(timeout=20)
+            self.assertEqual(process.returncode, 125, (stdout, stderr))
+            self.assertTrue(returned.exists())
+            self.assertFalse(converted.exists())
+
+    def test_workflow_bootstrap_executes_head_blob_not_worktree_launcher(self):
+        bootstrap = self._workflow_bootstrap_code()
+        for mutation in ("modified", "staged", "deleted"):
+            with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as temporary:
+                repo = Path(temporary) / "repo"
+                script = repo / "scripts/host_module_failure_sites.py"
+                script.parent.mkdir(parents=True)
+                committed_sentinel = repo.parent / "committed.executed"
+                malicious_sentinel = repo.parent / "malicious.executed"
+                script.write_text(
+                    "def isolated_authority_main(argv, expected_head=None):\n"
+                    "    open(argv[-1], 'w').write('committed')\n"
+                    "    return 0\n",
+                    encoding="utf-8",
+                )
+                for arguments in (
+                    ["init", "-q"],
+                    ["config", "user.email", "audit@example.invalid"],
+                    ["config", "user.name", "authority audit"],
+                    ["add", "scripts/host_module_failure_sites.py"],
+                    ["commit", "-qm", "trusted launcher"],
+                ):
+                    completed = subprocess.run(
+                        [capture.GIT_EXECUTABLE] + arguments,
+                        cwd=str(repo),
+                        check=False,
+                        env=capture.git_environment(),
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                    )
+                    self.assertEqual(completed.returncode, 0, completed.stderr)
+                if mutation == "deleted":
+                    script.unlink()
+                else:
+                    script.write_text(
+                        "open({0!r}, 'w').write('malicious')\n"
+                        "__import__('os').unlink(__file__)\n".format(
+                            str(malicious_sentinel)
+                        ),
+                        encoding="utf-8",
+                    )
+                    if mutation == "staged":
+                        completed = subprocess.run(
+                            [
+                                capture.GIT_EXECUTABLE,
+                                "add",
+                                "scripts/host_module_failure_sites.py",
+                            ],
+                            cwd=str(repo),
+                            check=False,
+                            env=capture.git_environment(),
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE,
+                        )
+                        self.assertEqual(completed.returncode, 0, completed.stderr)
+                environment = dict(os.environ)
+                environment["PYTHONPATH"] = str(repo / "scripts")
+                environment["FP_AUTHORITY_EXPECTED_HEAD"] = self._git(
+                    repo, "rev-parse", "HEAD"
+                )
+                completed = subprocess.run(
+                    [
+                        sys.executable,
+                        "-I",
+                        "-S",
+                        "-B",
+                        "-c",
+                        bootstrap,
+                        str(repo),
+                        "--repo",
+                        str(repo),
+                        str(committed_sentinel),
+                    ],
+                    cwd=str(repo),
+                    check=False,
+                    env=environment,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                )
+                self.assertEqual(completed.returncode, 0, completed.stderr)
+                self.assertEqual(
+                    committed_sentinel.read_text(encoding="utf-8"), "committed"
+                )
+                self.assertFalse(malicious_sentinel.exists())
+                if mutation != "deleted":
+                    self.assertTrue(script.exists())
+
+    def test_workflow_bootstrap_ignores_path_git_and_exec_forgery(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            repo = root / "repo"
+            self._initialize_repository(repo)
+            executed = root / "committed.executed"
+            expected_head = self._commit_launcher(
+                repo,
+                "def isolated_authority_main(argv, expected_head=None):\n"
+                "    open(argv[-1], 'w').write(expected_head)\n"
+                "    return 0\n",
+                "trusted launcher",
+            )
+            fake_bin = root / "fake-bin"
+            fake_bin.mkdir()
+            sentinel = root / "fake-git.executed"
+            fake_git = fake_bin / "git"
+            fake_git.write_text(
+                "#!/usr/bin/python3\n"
+                "open({0!r}, 'w').write('executed')\n"
+                "raise SystemExit(99)\n".format(str(sentinel)),
+                encoding="utf-8",
+            )
+            fake_git.chmod(0o755)
+            for name in (
+                "git-cat-file",
+                "git-status",
+                "git-ls-files",
+                "git-apply",
+                "git-check-attr",
+            ):
+                (fake_bin / name).symlink_to("git")
+            environment = dict(os.environ)
+            environment.update(
+                {
+                    "FP_AUTHORITY_EXPECTED_HEAD": expected_head,
+                    "GIT_CONFIG_COUNT": "1",
+                    "GIT_CONFIG_KEY_0": "core.fsmonitor",
+                    "GIT_CONFIG_VALUE_0": str(fake_git),
+                    "GIT_EXEC_PATH": str(fake_bin),
+                    "LD_LIBRARY_PATH": str(fake_bin),
+                    "PATH": str(fake_bin) + os.pathsep + "/usr/bin:/bin",
+                    "PYTHONPATH": str(repo / "scripts"),
+                }
+            )
+            completed = subprocess.run(
+                [
+                    "/usr/bin/python3",
+                    "-I",
+                    "-S",
+                    "-B",
+                    "-c",
+                    self._workflow_bootstrap_code(),
+                    str(repo),
+                    "--repo",
+                    str(repo),
+                    str(executed),
+                ],
+                cwd=str(repo),
+                check=False,
+                env=environment,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            self.assertEqual(completed.returncode, 0, completed.stderr)
+            self.assertEqual(
+                executed.read_text(encoding="utf-8"), expected_head
+            )
+            self.assertFalse(sentinel.exists())
+
+    def test_fresh_and_historical_entry_lanes_are_explicitly_separate(self):
+        repo, target, target_argv, historical = (
+            capture.parse_authority_entry_arguments(
+                [
+                    "--repo",
+                    str(REPO_ROOT),
+                    "--authority-target",
+                    "failure-flows-v2",
+                    "--",
+                    "--repo",
+                    str(REPO_ROOT),
+                    "--failure-sites",
+                    "hfs.json",
+                    "--failure-flows",
+                    "v1.json",
+                    "--output",
+                    "v2.json",
+                ]
+            )
+        )
+        self.assertEqual(repo, REPO_ROOT)
+        self.assertEqual(target, "failure-flows-v2")
+        self.assertFalse(historical)
+        self.assertNotIn("--historical-ef58", target_argv)
+
+        _, historical_target, historical_argv, historical = (
+            capture.parse_authority_entry_arguments(
+                [
+                    "--repo",
+                    str(REPO_ROOT),
+                    "--authority-target",
+                    "failure-flows-v2",
+                    "--authority-historical",
+                    "--",
+                    "--repo",
+                    str(REPO_ROOT),
+                    "--failure-sites",
+                    "hfs.json",
+                    "--failure-flows",
+                    "v1.json",
+                    "--historical-ef58",
+                    "--output",
+                    "v2.json",
+                ]
+            )
+        )
+        self.assertEqual(historical_target, "failure-flows-v2")
+        self.assertTrue(historical)
+        self.assertIn("--historical-ef58", historical_argv)
+
+    def test_fresh_authority_rechecks_even_when_target_raises(self):
+        authority = {"main_snapshots": {}}
+        finder = object()
+        original_path = list(sys.path)
+        with mock.patch.object(
+            capture,
+            "parse_authority_entry_arguments",
+            return_value=(REPO_ROOT, "failure-sites", [], False),
+        ), mock.patch.object(
+            capture, "require_isolated_authority_runtime"
+        ), mock.patch.object(
+            capture, "capture_repository_authority", return_value=authority
+        ), mock.patch.object(
+            capture,
+            "_prepare_authority_imports",
+            return_value=(finder, original_path),
+        ), mock.patch.object(
+            capture, "_run_authority_target", side_effect=RuntimeError("target failed")
+        ), mock.patch.object(
+            capture, "_restore_authority_imports"
+        ) as restore, mock.patch.object(
+            capture, "recheck_repository_authority"
+        ) as recheck:
+            with self.assertRaisesRegex(RuntimeError, "target failed"):
+                capture.isolated_authority_main(
+                    ["ignored"], expected_head=capture.git_head(REPO_ROOT)
+                )
+        restore.assert_called_once_with(finder, original_path)
+        recheck.assert_called_once_with(REPO_ROOT.resolve(), authority)
+
+    def test_fresh_authority_rechecks_before_rejecting_hostile_status(self):
+        authority = {"main_snapshots": {}}
+        finder = object()
+        original_path = list(sys.path)
+        expected_head = capture.git_head(REPO_ROOT)
+        with mock.patch.object(
+            capture,
+            "parse_authority_entry_arguments",
+            return_value=(REPO_ROOT, "failure-sites", [], False),
+        ), mock.patch.object(
+            capture, "require_isolated_authority_runtime"
+        ), mock.patch.object(
+            capture, "git_head", return_value=expected_head
+        ), mock.patch.object(
+            capture, "capture_repository_authority", return_value=authority
+        ), mock.patch.object(
+            capture,
+            "_prepare_authority_imports",
+            return_value=(finder, original_path),
+        ), mock.patch.object(
+            capture, "_run_authority_target", return_value=object()
+        ), mock.patch.object(
+            capture, "_restore_authority_imports"
+        ) as restore, mock.patch.object(
+            capture, "recheck_repository_authority"
+        ) as recheck:
+            self.assertEqual(
+                capture.isolated_authority_main(
+                    ["ignored"], expected_head=expected_head
+                ),
+                2,
+            )
+        restore.assert_called_once_with(finder, original_path)
+        recheck.assert_called_once_with(REPO_ROOT.resolve(), authority)
+
+    def test_unsafe_direct_entry_rejects_before_sibling_shadows(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            script = root / "host_module_failure_sites.py"
+            script.write_bytes(
+                (REPO_ROOT / "scripts/host_module_failure_sites.py").read_bytes()
+            )
+            sentinels = self._write_shadows(root)
+            completed = subprocess.run(
+                [sys.executable, str(script), "--help"],
+                cwd=str(root),
+                check=False,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            self.assertEqual(completed.returncode, 2)
+            self.assertIn(b"requires the commit-bound isolated", completed.stderr)
+            self.assertTrue(all(not path.exists() for path in sentinels))
+
+    def test_isolated_entry_ignores_cwd_pythonpath_and_pythonhome_shadows(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            sentinels = self._write_shadows(root)
+            environment = dict(os.environ)
+            environment["PYTHONPATH"] = str(root)
+            environment["PYTHONHOME"] = str(root)
+            completed = subprocess.run(
+                [
+                    sys.executable,
+                    "-I",
+                    "-S",
+                    "-B",
+                    str(REPO_ROOT / "scripts/host_module_failure_sites.py"),
+                    "--repo",
+                    str(root / "not-a-repository"),
+                    "--check-repository-authority",
+                ],
+                cwd=str(root),
+                check=False,
+                env=environment,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            self.assertEqual(completed.returncode, 2)
+            self.assertIn(b"requires the commit-bound isolated", completed.stderr)
+            self.assertTrue(all(not path.exists() for path in sentinels))
+
+    def test_snapshot_loader_executes_captured_bytes_not_self_hiding_path(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            repo = Path(temporary)
+            (repo / "scripts").mkdir()
+            sentinel = repo / "executed"
+            shadow = repo / "scripts/authority_demo.py"
+            shadow.write_text(
+                "open({0!r}, 'w').write('executed')\n"
+                "__import__('os').unlink(__file__)\n".format(str(sentinel)),
+                encoding="utf-8",
+            )
+            snapshots = {
+                "scripts/authority_demo.py": {
+                    "data": b"VALUE = 7\n",
+                    "path": "scripts/authority_demo.py",
+                    "sha256": capture.sha256_bytes(b"VALUE = 7\n"),
+                }
+            }
+            with mock.patch.dict(
+                capture.AUTHORITY_MODULE_PATHS,
+                {"authority_demo": "scripts/authority_demo.py"},
+                clear=True,
+            ):
+                finder = capture._AuthoritySnapshotFinder(snapshots, repo)
+                spec = finder.find_spec("authority_demo")
+                module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(module)
+            self.assertEqual(module.VALUE, 7)
+            self.assertFalse(sentinel.exists())
+            self.assertTrue(shadow.exists())
+
+    def test_isolated_snapshot_loader_resolves_full_checker_dependency_graph(self):
+        program = r'''
+import os
+import sys
+import types
+
+repo = os.path.realpath(sys.argv[1])
+sites_path = os.path.join(repo, "scripts", "host_module_failure_sites.py")
+module = types.ModuleType("host_module_failure_sites")
+module.__file__ = sites_path
+module.__package__ = ""
+sys.modules[module.__name__] = module
+with open(sites_path, "rb") as handle:
+    exec(compile(handle.read(), sites_path, "exec", dont_inherit=True), module.__dict__)
+authority_repo = module.Path(repo)
+module.require_isolated_authority_runtime(authority_repo)
+snapshots = {}
+for relative in set(module.AUTHORITY_MODULE_PATHS.values()):
+    with open(os.path.join(repo, relative), "rb") as handle:
+        data = handle.read()
+    snapshots[relative] = {"data": data, "path": relative}
+finder, original_path = module._prepare_authority_imports(authority_repo, snapshots)
+try:
+    module._load_authority_module("host_module_failure_contract_review_v2")
+    for name in sorted(module.AUTHORITY_TEST_MODULES):
+        module._load_authority_module(name)
+finally:
+    module._restore_authority_imports(finder, original_path)
+'''
+        environment = dict(os.environ)
+        environment["PYTHONPATH"] = str(REPO_ROOT / "scripts")
+        completed = subprocess.run(
+            [
+                sys.executable,
+                "-I",
+                "-S",
+                "-B",
+                "-c",
+                program,
+                str(REPO_ROOT),
+            ],
+            cwd=str(REPO_ROOT),
+            check=False,
+            env=environment,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        self.assertEqual(completed.returncode, 0, completed.stderr)
+
+    def test_locked_sys_path_ignores_repo_insertion_and_rejects_ancestor(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            repo = Path(temporary) / "repo"
+            repo.mkdir()
+            locked = capture._AuthoritySysPath(["/trusted/stdlib"], repo)
+            locked.insert(0, str(repo / "scripts"))
+            self.assertEqual(locked, ["/trusted/stdlib"])
+            with self.assertRaisesRegex(
+                capture.CaptureError, "attempted to extend sys.path"
+            ):
+                locked.insert(0, str(repo.parent))
 
 
 class SyntheticCaptureTests(unittest.TestCase):

@@ -22,6 +22,8 @@ permissions:
 
 env:
   BUILD_DIR: /tmp/mckernel-rocky-rust
+  FP_AUTHORITY_EXPECTED_HEAD: ${{ github.event_name == 'workflow_dispatch' && inputs.validation_sha || github.event.pull_request.head.sha || github.sha }}
+  PYTHONDONTWRITEBYTECODE: "1"
   RUST_TOOLCHAIN: nightly-2026-02-19
   EXPECTED_RUSTC_VERSION: rustc 1.95.0-nightly (c04308580 2026-02-18)
 
@@ -100,7 +102,7 @@ jobs:
           test -f "$kernel_dir/Makefile"
           printf 'MCKERNEL_CI_KERNEL_DIR=%s\n' "$kernel_dir" >> "$GITHUB_ENV"
 
-          runuser -u validator -- env \
+          runuser -u validator -- env -u PYTHONHOME -u PYTHONPATH \
             HOME=/home/validator \
             RUSTUP_HOME=/home/validator/.rustup \
             CARGO_HOME=/home/validator/.cargo \
@@ -119,7 +121,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p evidence
-          runuser -u validator -- env \
+          runuser -u validator -- env -u PYTHONHOME -u PYTHONPATH \
             HOME=/home/validator \
             PATH=/home/validator/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
             GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
@@ -146,7 +148,7 @@ jobs:
         run: |
           set -euo pipefail
           set -o pipefail
-          runuser -u validator -- env \
+          runuser -u validator -- env -u PYTHONHOME -u PYTHONPATH \
             HOME=/home/validator \
             RUSTUP_HOME=/home/validator/.rustup \
             CARGO_HOME=/home/validator/.cargo \
@@ -162,12 +164,133 @@ jobs:
                 --jobs 2
             ' 2>&1 | tee evidence/build.log
 
+      - name: Verify exact fresh repository and IHK overlay authority
+        run: |
+          set -euo pipefail
+          /usr/sbin/runuser -u validator -- /usr/bin/env -i \
+            HOME=/home/validator \
+            PATH=/home/validator/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+            GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
+            FP_AUTHORITY_EXPECTED_HEAD="$FP_AUTHORITY_EXPECTED_HEAD" \
+            /usr/bin/bash --noprofile --norc -c '
+              set -euo pipefail
+              cd "$GITHUB_WORKSPACE"
+              fp_authority() {
+                /usr/bin/env -i \
+                  HOME=/home/validator \
+                  PATH=/usr/bin:/bin \
+                  LC_ALL=C \
+                  FP_AUTHORITY_EXPECTED_HEAD="$FP_AUTHORITY_EXPECTED_HEAD" \
+                  MCKERNEL_REAL_FLOW_EVIDENCE_DIR="${MCKERNEL_REAL_FLOW_EVIDENCE_DIR:-}" \
+                  /usr/bin/python3 -I -S -B -c "if True:
+                import os,subprocess,sys,types
+                trusted_type=type
+                trusted_int_type=int
+                trusted_realpath=os.path.realpath
+                trusted_run=subprocess.run
+                trusted_pipe=os.pipe
+                trusted_fork=os.fork
+                trusted_read=os.read
+                trusted_write=os.write
+                trusted_close=os.close
+                trusted_waitpid=os.waitpid
+                trusted_child_exit=os._exit
+                trusted_wifexited=os.WIFEXITED
+                trusted_wexitstatus=os.WEXITSTATUS
+                trusted_wifsignaled=os.WIFSIGNALED
+                trusted_wtermsig=os.WTERMSIG
+                trusted_stdout_flush=sys.stdout.flush
+                trusted_stderr_flush=sys.stderr.flush
+                trusted_stderr_write=sys.stderr.write
+                repo=trusted_realpath(sys.argv[1])
+                git_config=((\"core.fsmonitor\",\"false\"),(\"core.hooksPath\",os.devnull),(\"core.attributesFile\",os.devnull),(\"core.pager\",\"cat\"),(\"pager.status\",\"false\"),(\"protocol.ext.allow\",\"never\"),(\"core.sshCommand\",\"/bin/false\"))
+                environment={\"GIT_ATTR_NOSYSTEM\":\"1\",\"GIT_CONFIG_GLOBAL\":os.devnull,\"GIT_CONFIG_NOSYSTEM\":\"1\",\"GIT_CONFIG_COUNT\":str(len(git_config)),\"GIT_GRAFT_FILE\":os.devnull,\"GIT_NO_REPLACE_OBJECTS\":\"1\",\"GIT_OPTIONAL_LOCKS\":\"0\",\"GIT_PAGER\":\"cat\",\"GIT_TERMINAL_PROMPT\":\"0\",\"HOME\":os.devnull,\"LANG\":\"C\",\"LC_ALL\":\"C\",\"PATH\":\"/usr/bin:/bin\"}
+                for index,pair in enumerate(git_config):
+                  environment[\"GIT_CONFIG_KEY_{0}\".format(index)]=pair[0]
+                  environment[\"GIT_CONFIG_VALUE_{0}\".format(index)]=pair[1]
+                def trusted_git(arguments):
+                  completed=trusted_run([\"/usr/bin/git\",\"-C\",repo]+arguments,check=False,env=environment,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+                  if completed.returncode != 0:
+                    trusted_stderr_write(completed.stderr.decode(\"utf-8\",errors=\"replace\"))
+                    raise SystemExit(2)
+                  return completed.stdout
+                def trusted_head():
+                  value=trusted_git([\"rev-parse\",\"--verify\",\"HEAD^{commit}\"]).decode(\"ascii\",errors=\"replace\").strip()
+                  if len(value) != 40 or any(character not in \"0123456789abcdef\" for character in value):
+                    trusted_stderr_write(\"host-module authority bootstrap could not resolve an exact HEAD\\n\")
+                    raise SystemExit(2)
+                  return value
+                expected_head=os.environ.get(\"FP_AUTHORITY_EXPECTED_HEAD\",\"\")
+                if len(expected_head) != 40 or any(character not in \"0123456789abcdef\" for character in expected_head):
+                  trusted_stderr_write(\"host-module authority bootstrap expected commit is not exact\\n\")
+                  raise SystemExit(2)
+                if trusted_head() != expected_head:
+                  trusted_stderr_write(\"host-module authority bootstrap checkout differs from expected commit\\n\")
+                  raise SystemExit(2)
+                launcher=trusted_git([\"cat-file\",\"blob\",expected_head+\":scripts/host_module_failure_sites.py\"])
+                ready_read,ready_write=trusted_pipe()
+                go_read,go_write=trusted_pipe()
+                child=trusted_fork()
+                if child == 0:
+                  trusted_close(ready_read)
+                  trusted_close(go_write)
+                  module=types.ModuleType(\"host_module_failure_sites\")
+                  module.__file__=os.path.join(repo,\"scripts\",\"host_module_failure_sites.py\")
+                  module.__package__=\"\"
+                  sys.modules[module.__name__]=module
+                  exec(compile(launcher,module.__file__,\"exec\",dont_inherit=True),module.__dict__)
+                  trusted_write(ready_write,b\"1\")
+                  trusted_close(ready_write)
+                  if trusted_read(go_read,1) != b\"1\":
+                    trusted_child_exit(125)
+                  trusted_close(go_read)
+                  result=module.isolated_authority_main(sys.argv[2:],expected_head=expected_head)
+                  trusted_stdout_flush()
+                  trusted_stderr_flush()
+                  if trusted_type(result) is not trusted_int_type or result < 0 or result > 255:
+                    trusted_child_exit(125)
+                  trusted_child_exit(result)
+                trusted_close(ready_write)
+                trusted_close(go_read)
+                ready=trusted_read(ready_read,1)
+                trusted_close(ready_read)
+                before_head=trusted_head()
+                before_ok=ready == b\"1\" and before_head == expected_head
+                if before_ok:
+                  trusted_write(go_write,b\"1\")
+                else:
+                  trusted_stderr_write(\"host-module authority bootstrap HEAD changed before checker entry\\n\")
+                trusted_close(go_write)
+                unused,status=trusted_waitpid(child,0)
+                final_head=trusted_head()
+                if not before_ok or final_head != expected_head:
+                  if final_head != expected_head:
+                    trusted_stderr_write(\"host-module authority bootstrap HEAD changed during checker execution\\n\")
+                  raise SystemExit(2)
+                if trusted_wifexited(status):
+                  exit_code=trusted_wexitstatus(status)
+                elif trusted_wifsignaled(status):
+                  exit_code=128+trusted_wtermsig(status)
+                else:
+                  exit_code=126
+                raise SystemExit(exit_code)" "$@"
+              }
+              fp_authority "$GITHUB_WORKSPACE" \
+                --repo "$GITHUB_WORKSPACE" \
+                --check-repository-authority
+              fp_authority "$GITHUB_WORKSPACE" \
+                --repo "$GITHUB_WORKSPACE" \
+                --authority-target unittest -- \
+                scripts.tests.test_host_module_failure_sites \
+                scripts.tests.test_host_module_contracts
+            ' 2>&1 | /usr/bin/tee evidence/host-module-repository-authority.log
+
       - name: Build and inspect C syscall-offload fallback oracle
         run: |
           set -euo pipefail
           set -o pipefail
           fallback_build="${BUILD_DIR}-c-fallback"
-          runuser -u validator -- env \
+          runuser -u validator -- env -u PYTHONHOME -u PYTHONPATH \
             HOME=/home/validator \
             PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
             GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
@@ -188,7 +311,7 @@ jobs:
         run: |
           set -euo pipefail
           set -o pipefail
-          runuser -u validator -- env \
+          runuser -u validator -- env -u PYTHONHOME -u PYTHONPATH \
             HOME=/home/validator \
             PATH=/home/validator/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
             GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
@@ -243,7 +366,7 @@ jobs:
         run: |
           set -euo pipefail
           capture_path="$BUILD_DIR/host-module-failure-sites.json"
-          runuser -u validator -- env \
+          /usr/sbin/runuser -u validator -- /usr/bin/env -i \
             HOME=/home/validator \
             RUSTUP_HOME=/home/validator/.rustup \
             CARGO_HOME=/home/validator/.cargo \
@@ -251,15 +374,116 @@ jobs:
             GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
             BUILD_DIR="$BUILD_DIR" \
             MCKERNEL_CI_KERNEL_DIR="$MCKERNEL_CI_KERNEL_DIR" \
-            bash -c '
+            FP_AUTHORITY_EXPECTED_HEAD="$FP_AUTHORITY_EXPECTED_HEAD" \
+            /usr/bin/bash --noprofile --norc -c '
               set -euo pipefail
               cd "$GITHUB_WORKSPACE"
-              python3 scripts/host_module_failure_sites.py \
+              fp_authority() {
+                /usr/bin/env -i \
+                  HOME=/home/validator \
+                  PATH=/usr/bin:/bin \
+                  LC_ALL=C \
+                  FP_AUTHORITY_EXPECTED_HEAD="$FP_AUTHORITY_EXPECTED_HEAD" \
+                  MCKERNEL_REAL_FLOW_EVIDENCE_DIR="${MCKERNEL_REAL_FLOW_EVIDENCE_DIR:-}" \
+                  /usr/bin/python3 -I -S -B -c "if True:
+                import os,subprocess,sys,types
+                trusted_type=type
+                trusted_int_type=int
+                trusted_realpath=os.path.realpath
+                trusted_run=subprocess.run
+                trusted_pipe=os.pipe
+                trusted_fork=os.fork
+                trusted_read=os.read
+                trusted_write=os.write
+                trusted_close=os.close
+                trusted_waitpid=os.waitpid
+                trusted_child_exit=os._exit
+                trusted_wifexited=os.WIFEXITED
+                trusted_wexitstatus=os.WEXITSTATUS
+                trusted_wifsignaled=os.WIFSIGNALED
+                trusted_wtermsig=os.WTERMSIG
+                trusted_stdout_flush=sys.stdout.flush
+                trusted_stderr_flush=sys.stderr.flush
+                trusted_stderr_write=sys.stderr.write
+                repo=trusted_realpath(sys.argv[1])
+                git_config=((\"core.fsmonitor\",\"false\"),(\"core.hooksPath\",os.devnull),(\"core.attributesFile\",os.devnull),(\"core.pager\",\"cat\"),(\"pager.status\",\"false\"),(\"protocol.ext.allow\",\"never\"),(\"core.sshCommand\",\"/bin/false\"))
+                environment={\"GIT_ATTR_NOSYSTEM\":\"1\",\"GIT_CONFIG_GLOBAL\":os.devnull,\"GIT_CONFIG_NOSYSTEM\":\"1\",\"GIT_CONFIG_COUNT\":str(len(git_config)),\"GIT_GRAFT_FILE\":os.devnull,\"GIT_NO_REPLACE_OBJECTS\":\"1\",\"GIT_OPTIONAL_LOCKS\":\"0\",\"GIT_PAGER\":\"cat\",\"GIT_TERMINAL_PROMPT\":\"0\",\"HOME\":os.devnull,\"LANG\":\"C\",\"LC_ALL\":\"C\",\"PATH\":\"/usr/bin:/bin\"}
+                for index,pair in enumerate(git_config):
+                  environment[\"GIT_CONFIG_KEY_{0}\".format(index)]=pair[0]
+                  environment[\"GIT_CONFIG_VALUE_{0}\".format(index)]=pair[1]
+                def trusted_git(arguments):
+                  completed=trusted_run([\"/usr/bin/git\",\"-C\",repo]+arguments,check=False,env=environment,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+                  if completed.returncode != 0:
+                    trusted_stderr_write(completed.stderr.decode(\"utf-8\",errors=\"replace\"))
+                    raise SystemExit(2)
+                  return completed.stdout
+                def trusted_head():
+                  value=trusted_git([\"rev-parse\",\"--verify\",\"HEAD^{commit}\"]).decode(\"ascii\",errors=\"replace\").strip()
+                  if len(value) != 40 or any(character not in \"0123456789abcdef\" for character in value):
+                    trusted_stderr_write(\"host-module authority bootstrap could not resolve an exact HEAD\\n\")
+                    raise SystemExit(2)
+                  return value
+                expected_head=os.environ.get(\"FP_AUTHORITY_EXPECTED_HEAD\",\"\")
+                if len(expected_head) != 40 or any(character not in \"0123456789abcdef\" for character in expected_head):
+                  trusted_stderr_write(\"host-module authority bootstrap expected commit is not exact\\n\")
+                  raise SystemExit(2)
+                if trusted_head() != expected_head:
+                  trusted_stderr_write(\"host-module authority bootstrap checkout differs from expected commit\\n\")
+                  raise SystemExit(2)
+                launcher=trusted_git([\"cat-file\",\"blob\",expected_head+\":scripts/host_module_failure_sites.py\"])
+                ready_read,ready_write=trusted_pipe()
+                go_read,go_write=trusted_pipe()
+                child=trusted_fork()
+                if child == 0:
+                  trusted_close(ready_read)
+                  trusted_close(go_write)
+                  module=types.ModuleType(\"host_module_failure_sites\")
+                  module.__file__=os.path.join(repo,\"scripts\",\"host_module_failure_sites.py\")
+                  module.__package__=\"\"
+                  sys.modules[module.__name__]=module
+                  exec(compile(launcher,module.__file__,\"exec\",dont_inherit=True),module.__dict__)
+                  trusted_write(ready_write,b\"1\")
+                  trusted_close(ready_write)
+                  if trusted_read(go_read,1) != b\"1\":
+                    trusted_child_exit(125)
+                  trusted_close(go_read)
+                  result=module.isolated_authority_main(sys.argv[2:],expected_head=expected_head)
+                  trusted_stdout_flush()
+                  trusted_stderr_flush()
+                  if trusted_type(result) is not trusted_int_type or result < 0 or result > 255:
+                    trusted_child_exit(125)
+                  trusted_child_exit(result)
+                trusted_close(ready_write)
+                trusted_close(go_read)
+                ready=trusted_read(ready_read,1)
+                trusted_close(ready_read)
+                before_head=trusted_head()
+                before_ok=ready == b\"1\" and before_head == expected_head
+                if before_ok:
+                  trusted_write(go_write,b\"1\")
+                else:
+                  trusted_stderr_write(\"host-module authority bootstrap HEAD changed before checker entry\\n\")
+                trusted_close(go_write)
+                unused,status=trusted_waitpid(child,0)
+                final_head=trusted_head()
+                if not before_ok or final_head != expected_head:
+                  if final_head != expected_head:
+                    trusted_stderr_write(\"host-module authority bootstrap HEAD changed during checker execution\\n\")
+                  raise SystemExit(2)
+                if trusted_wifexited(status):
+                  exit_code=trusted_wexitstatus(status)
+                elif trusted_wifsignaled(status):
+                  exit_code=128+trusted_wtermsig(status)
+                else:
+                  exit_code=126
+                raise SystemExit(exit_code)" "$@"
+              }
+              fp_authority "$GITHUB_WORKSPACE" \
                 --repo "$GITHUB_WORKSPACE" \
                 --build-dir "$BUILD_DIR" \
                 --kernel-dir "$MCKERNEL_CI_KERNEL_DIR" \
                 --output "$BUILD_DIR/host-module-failure-sites.json"
-            ' 2>&1 | tee evidence/host-module-failure-sites.log
+            ' 2>&1 | /usr/bin/tee evidence/host-module-failure-sites.log
           install -m 0644 "$capture_path" evidence/host-module-failure-sites.json
           (
             cd evidence
@@ -271,7 +495,7 @@ jobs:
         run: |
           set -euo pipefail
           flow_path="$BUILD_DIR/host-module-failure-flows.json"
-          runuser -u validator -- env \
+          /usr/sbin/runuser -u validator -- /usr/bin/env -i \
             HOME=/home/validator \
             RUSTUP_HOME=/home/validator/.rustup \
             CARGO_HOME=/home/validator/.cargo \
@@ -279,16 +503,119 @@ jobs:
             GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
             BUILD_DIR="$BUILD_DIR" \
             MCKERNEL_CI_KERNEL_DIR="$MCKERNEL_CI_KERNEL_DIR" \
-            bash -c '
+            FP_AUTHORITY_EXPECTED_HEAD="$FP_AUTHORITY_EXPECTED_HEAD" \
+            /usr/bin/bash --noprofile --norc -c '
               set -euo pipefail
               cd "$GITHUB_WORKSPACE"
-              python3 scripts/host_module_failure_flows.py \
+              fp_authority() {
+                /usr/bin/env -i \
+                  HOME=/home/validator \
+                  PATH=/usr/bin:/bin \
+                  LC_ALL=C \
+                  FP_AUTHORITY_EXPECTED_HEAD="$FP_AUTHORITY_EXPECTED_HEAD" \
+                  MCKERNEL_REAL_FLOW_EVIDENCE_DIR="${MCKERNEL_REAL_FLOW_EVIDENCE_DIR:-}" \
+                  /usr/bin/python3 -I -S -B -c "if True:
+                import os,subprocess,sys,types
+                trusted_type=type
+                trusted_int_type=int
+                trusted_realpath=os.path.realpath
+                trusted_run=subprocess.run
+                trusted_pipe=os.pipe
+                trusted_fork=os.fork
+                trusted_read=os.read
+                trusted_write=os.write
+                trusted_close=os.close
+                trusted_waitpid=os.waitpid
+                trusted_child_exit=os._exit
+                trusted_wifexited=os.WIFEXITED
+                trusted_wexitstatus=os.WEXITSTATUS
+                trusted_wifsignaled=os.WIFSIGNALED
+                trusted_wtermsig=os.WTERMSIG
+                trusted_stdout_flush=sys.stdout.flush
+                trusted_stderr_flush=sys.stderr.flush
+                trusted_stderr_write=sys.stderr.write
+                repo=trusted_realpath(sys.argv[1])
+                git_config=((\"core.fsmonitor\",\"false\"),(\"core.hooksPath\",os.devnull),(\"core.attributesFile\",os.devnull),(\"core.pager\",\"cat\"),(\"pager.status\",\"false\"),(\"protocol.ext.allow\",\"never\"),(\"core.sshCommand\",\"/bin/false\"))
+                environment={\"GIT_ATTR_NOSYSTEM\":\"1\",\"GIT_CONFIG_GLOBAL\":os.devnull,\"GIT_CONFIG_NOSYSTEM\":\"1\",\"GIT_CONFIG_COUNT\":str(len(git_config)),\"GIT_GRAFT_FILE\":os.devnull,\"GIT_NO_REPLACE_OBJECTS\":\"1\",\"GIT_OPTIONAL_LOCKS\":\"0\",\"GIT_PAGER\":\"cat\",\"GIT_TERMINAL_PROMPT\":\"0\",\"HOME\":os.devnull,\"LANG\":\"C\",\"LC_ALL\":\"C\",\"PATH\":\"/usr/bin:/bin\"}
+                for index,pair in enumerate(git_config):
+                  environment[\"GIT_CONFIG_KEY_{0}\".format(index)]=pair[0]
+                  environment[\"GIT_CONFIG_VALUE_{0}\".format(index)]=pair[1]
+                def trusted_git(arguments):
+                  completed=trusted_run([\"/usr/bin/git\",\"-C\",repo]+arguments,check=False,env=environment,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+                  if completed.returncode != 0:
+                    trusted_stderr_write(completed.stderr.decode(\"utf-8\",errors=\"replace\"))
+                    raise SystemExit(2)
+                  return completed.stdout
+                def trusted_head():
+                  value=trusted_git([\"rev-parse\",\"--verify\",\"HEAD^{commit}\"]).decode(\"ascii\",errors=\"replace\").strip()
+                  if len(value) != 40 or any(character not in \"0123456789abcdef\" for character in value):
+                    trusted_stderr_write(\"host-module authority bootstrap could not resolve an exact HEAD\\n\")
+                    raise SystemExit(2)
+                  return value
+                expected_head=os.environ.get(\"FP_AUTHORITY_EXPECTED_HEAD\",\"\")
+                if len(expected_head) != 40 or any(character not in \"0123456789abcdef\" for character in expected_head):
+                  trusted_stderr_write(\"host-module authority bootstrap expected commit is not exact\\n\")
+                  raise SystemExit(2)
+                if trusted_head() != expected_head:
+                  trusted_stderr_write(\"host-module authority bootstrap checkout differs from expected commit\\n\")
+                  raise SystemExit(2)
+                launcher=trusted_git([\"cat-file\",\"blob\",expected_head+\":scripts/host_module_failure_sites.py\"])
+                ready_read,ready_write=trusted_pipe()
+                go_read,go_write=trusted_pipe()
+                child=trusted_fork()
+                if child == 0:
+                  trusted_close(ready_read)
+                  trusted_close(go_write)
+                  module=types.ModuleType(\"host_module_failure_sites\")
+                  module.__file__=os.path.join(repo,\"scripts\",\"host_module_failure_sites.py\")
+                  module.__package__=\"\"
+                  sys.modules[module.__name__]=module
+                  exec(compile(launcher,module.__file__,\"exec\",dont_inherit=True),module.__dict__)
+                  trusted_write(ready_write,b\"1\")
+                  trusted_close(ready_write)
+                  if trusted_read(go_read,1) != b\"1\":
+                    trusted_child_exit(125)
+                  trusted_close(go_read)
+                  result=module.isolated_authority_main(sys.argv[2:],expected_head=expected_head)
+                  trusted_stdout_flush()
+                  trusted_stderr_flush()
+                  if trusted_type(result) is not trusted_int_type or result < 0 or result > 255:
+                    trusted_child_exit(125)
+                  trusted_child_exit(result)
+                trusted_close(ready_write)
+                trusted_close(go_read)
+                ready=trusted_read(ready_read,1)
+                trusted_close(ready_read)
+                before_head=trusted_head()
+                before_ok=ready == b\"1\" and before_head == expected_head
+                if before_ok:
+                  trusted_write(go_write,b\"1\")
+                else:
+                  trusted_stderr_write(\"host-module authority bootstrap HEAD changed before checker entry\\n\")
+                trusted_close(go_write)
+                unused,status=trusted_waitpid(child,0)
+                final_head=trusted_head()
+                if not before_ok or final_head != expected_head:
+                  if final_head != expected_head:
+                    trusted_stderr_write(\"host-module authority bootstrap HEAD changed during checker execution\\n\")
+                  raise SystemExit(2)
+                if trusted_wifexited(status):
+                  exit_code=trusted_wexitstatus(status)
+                elif trusted_wifsignaled(status):
+                  exit_code=128+trusted_wtermsig(status)
+                else:
+                  exit_code=126
+                raise SystemExit(exit_code)" "$@"
+              }
+              fp_authority "$GITHUB_WORKSPACE" \
+                --repo "$GITHUB_WORKSPACE" \
+                --authority-target failure-flows-v1 -- \
                 --repo "$GITHUB_WORKSPACE" \
                 --build-dir "$BUILD_DIR" \
                 --kernel-dir "$MCKERNEL_CI_KERNEL_DIR" \
                 --failure-sites "$BUILD_DIR/host-module-failure-sites.json" \
                 --output "$BUILD_DIR/host-module-failure-flows.json"
-            ' 2>&1 | tee evidence/host-module-failure-flows.log
+            ' 2>&1 | /usr/bin/tee evidence/host-module-failure-flows.log
           install -m 0644 "$flow_path" evidence/host-module-failure-flows.json
           (
             cd evidence
@@ -296,11 +623,11 @@ jobs:
               > host-module-failure-flows.json.sha256
           )
 
-      - name: Capture host-module failure-contract gaps
+      - name: Derive bounded host-module C flow closure v2
         run: |
           set -euo pipefail
-          gap_path="$BUILD_DIR/host-module-failure-contract-gaps.json"
-          runuser -u validator -- env \
+          flow_v2_path="$BUILD_DIR/host-module-failure-flows-v2.json"
+          /usr/sbin/runuser -u validator -- /usr/bin/env -i \
             HOME=/home/validator \
             RUSTUP_HOME=/home/validator/.rustup \
             CARGO_HOME=/home/validator/.cargo \
@@ -308,20 +635,264 @@ jobs:
             GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
             BUILD_DIR="$BUILD_DIR" \
             MCKERNEL_CI_KERNEL_DIR="$MCKERNEL_CI_KERNEL_DIR" \
-            bash -c '
+            MCKERNEL_REAL_FLOW_EVIDENCE_DIR="$BUILD_DIR" \
+            FP_AUTHORITY_EXPECTED_HEAD="$FP_AUTHORITY_EXPECTED_HEAD" \
+            /usr/bin/bash --noprofile --norc -c '
               set -euo pipefail
               cd "$GITHUB_WORKSPACE"
+              fp_authority() {
+                /usr/bin/env -i \
+                  HOME=/home/validator \
+                  PATH=/usr/bin:/bin \
+                  LC_ALL=C \
+                  FP_AUTHORITY_EXPECTED_HEAD="$FP_AUTHORITY_EXPECTED_HEAD" \
+                  MCKERNEL_REAL_FLOW_EVIDENCE_DIR="${MCKERNEL_REAL_FLOW_EVIDENCE_DIR:-}" \
+                  /usr/bin/python3 -I -S -B -c "if True:
+                import os,subprocess,sys,types
+                trusted_type=type
+                trusted_int_type=int
+                trusted_realpath=os.path.realpath
+                trusted_run=subprocess.run
+                trusted_pipe=os.pipe
+                trusted_fork=os.fork
+                trusted_read=os.read
+                trusted_write=os.write
+                trusted_close=os.close
+                trusted_waitpid=os.waitpid
+                trusted_child_exit=os._exit
+                trusted_wifexited=os.WIFEXITED
+                trusted_wexitstatus=os.WEXITSTATUS
+                trusted_wifsignaled=os.WIFSIGNALED
+                trusted_wtermsig=os.WTERMSIG
+                trusted_stdout_flush=sys.stdout.flush
+                trusted_stderr_flush=sys.stderr.flush
+                trusted_stderr_write=sys.stderr.write
+                repo=trusted_realpath(sys.argv[1])
+                git_config=((\"core.fsmonitor\",\"false\"),(\"core.hooksPath\",os.devnull),(\"core.attributesFile\",os.devnull),(\"core.pager\",\"cat\"),(\"pager.status\",\"false\"),(\"protocol.ext.allow\",\"never\"),(\"core.sshCommand\",\"/bin/false\"))
+                environment={\"GIT_ATTR_NOSYSTEM\":\"1\",\"GIT_CONFIG_GLOBAL\":os.devnull,\"GIT_CONFIG_NOSYSTEM\":\"1\",\"GIT_CONFIG_COUNT\":str(len(git_config)),\"GIT_GRAFT_FILE\":os.devnull,\"GIT_NO_REPLACE_OBJECTS\":\"1\",\"GIT_OPTIONAL_LOCKS\":\"0\",\"GIT_PAGER\":\"cat\",\"GIT_TERMINAL_PROMPT\":\"0\",\"HOME\":os.devnull,\"LANG\":\"C\",\"LC_ALL\":\"C\",\"PATH\":\"/usr/bin:/bin\"}
+                for index,pair in enumerate(git_config):
+                  environment[\"GIT_CONFIG_KEY_{0}\".format(index)]=pair[0]
+                  environment[\"GIT_CONFIG_VALUE_{0}\".format(index)]=pair[1]
+                def trusted_git(arguments):
+                  completed=trusted_run([\"/usr/bin/git\",\"-C\",repo]+arguments,check=False,env=environment,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+                  if completed.returncode != 0:
+                    trusted_stderr_write(completed.stderr.decode(\"utf-8\",errors=\"replace\"))
+                    raise SystemExit(2)
+                  return completed.stdout
+                def trusted_head():
+                  value=trusted_git([\"rev-parse\",\"--verify\",\"HEAD^{commit}\"]).decode(\"ascii\",errors=\"replace\").strip()
+                  if len(value) != 40 or any(character not in \"0123456789abcdef\" for character in value):
+                    trusted_stderr_write(\"host-module authority bootstrap could not resolve an exact HEAD\\n\")
+                    raise SystemExit(2)
+                  return value
+                expected_head=os.environ.get(\"FP_AUTHORITY_EXPECTED_HEAD\",\"\")
+                if len(expected_head) != 40 or any(character not in \"0123456789abcdef\" for character in expected_head):
+                  trusted_stderr_write(\"host-module authority bootstrap expected commit is not exact\\n\")
+                  raise SystemExit(2)
+                if trusted_head() != expected_head:
+                  trusted_stderr_write(\"host-module authority bootstrap checkout differs from expected commit\\n\")
+                  raise SystemExit(2)
+                launcher=trusted_git([\"cat-file\",\"blob\",expected_head+\":scripts/host_module_failure_sites.py\"])
+                ready_read,ready_write=trusted_pipe()
+                go_read,go_write=trusted_pipe()
+                child=trusted_fork()
+                if child == 0:
+                  trusted_close(ready_read)
+                  trusted_close(go_write)
+                  module=types.ModuleType(\"host_module_failure_sites\")
+                  module.__file__=os.path.join(repo,\"scripts\",\"host_module_failure_sites.py\")
+                  module.__package__=\"\"
+                  sys.modules[module.__name__]=module
+                  exec(compile(launcher,module.__file__,\"exec\",dont_inherit=True),module.__dict__)
+                  trusted_write(ready_write,b\"1\")
+                  trusted_close(ready_write)
+                  if trusted_read(go_read,1) != b\"1\":
+                    trusted_child_exit(125)
+                  trusted_close(go_read)
+                  result=module.isolated_authority_main(sys.argv[2:],expected_head=expected_head)
+                  trusted_stdout_flush()
+                  trusted_stderr_flush()
+                  if trusted_type(result) is not trusted_int_type or result < 0 or result > 255:
+                    trusted_child_exit(125)
+                  trusted_child_exit(result)
+                trusted_close(ready_write)
+                trusted_close(go_read)
+                ready=trusted_read(ready_read,1)
+                trusted_close(ready_read)
+                before_head=trusted_head()
+                before_ok=ready == b\"1\" and before_head == expected_head
+                if before_ok:
+                  trusted_write(go_write,b\"1\")
+                else:
+                  trusted_stderr_write(\"host-module authority bootstrap HEAD changed before checker entry\\n\")
+                trusted_close(go_write)
+                unused,status=trusted_waitpid(child,0)
+                final_head=trusted_head()
+                if not before_ok or final_head != expected_head:
+                  if final_head != expected_head:
+                    trusted_stderr_write(\"host-module authority bootstrap HEAD changed during checker execution\\n\")
+                  raise SystemExit(2)
+                if trusted_wifexited(status):
+                  exit_code=trusted_wexitstatus(status)
+                elif trusted_wifsignaled(status):
+                  exit_code=128+trusted_wtermsig(status)
+                else:
+                  exit_code=126
+                raise SystemExit(exit_code)" "$@"
+              }
+              fp_authority "$GITHUB_WORKSPACE" \
+                --repo "$GITHUB_WORKSPACE" \
+                --authority-target unittest -- \
+                scripts.tests.test_host_module_failure_flows_v2
+              fp_authority "$GITHUB_WORKSPACE" \
+                --repo "$GITHUB_WORKSPACE" \
+                --authority-target failure-flows-v2 -- \
+                --repo "$GITHUB_WORKSPACE" \
+                --build-dir "$BUILD_DIR" \
+                --kernel-dir "$MCKERNEL_CI_KERNEL_DIR" \
+                --failure-sites "$BUILD_DIR/host-module-failure-sites.json" \
+                --failure-flows "$BUILD_DIR/host-module-failure-flows.json" \
+                --output "$BUILD_DIR/host-module-failure-flows-v2.json"
+            ' 2>&1 | /usr/bin/tee evidence/host-module-failure-flows-v2.log
+          install -m 0644 "$flow_v2_path" \
+            evidence/host-module-failure-flows-v2.json
+          (
+            cd evidence
+            sha256sum host-module-failure-flows-v2.json \
+              > host-module-failure-flows-v2.json.sha256
+          )
+
+      - name: Capture host-module failure-contract gaps
+        run: |
+          set -euo pipefail
+          gap_path="$BUILD_DIR/host-module-failure-contract-gaps.json"
+          /usr/sbin/runuser -u validator -- /usr/bin/env -i \
+            HOME=/home/validator \
+            RUSTUP_HOME=/home/validator/.rustup \
+            CARGO_HOME=/home/validator/.cargo \
+            PATH=/home/validator/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+            GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
+            BUILD_DIR="$BUILD_DIR" \
+            MCKERNEL_CI_KERNEL_DIR="$MCKERNEL_CI_KERNEL_DIR" \
+            FP_AUTHORITY_EXPECTED_HEAD="$FP_AUTHORITY_EXPECTED_HEAD" \
+            /usr/bin/bash --noprofile --norc -c '
+              set -euo pipefail
+              cd "$GITHUB_WORKSPACE"
+              fp_authority() {
+                /usr/bin/env -i \
+                  HOME=/home/validator \
+                  PATH=/usr/bin:/bin \
+                  LC_ALL=C \
+                  FP_AUTHORITY_EXPECTED_HEAD="$FP_AUTHORITY_EXPECTED_HEAD" \
+                  MCKERNEL_REAL_FLOW_EVIDENCE_DIR="${MCKERNEL_REAL_FLOW_EVIDENCE_DIR:-}" \
+                  /usr/bin/python3 -I -S -B -c "if True:
+                import os,subprocess,sys,types
+                trusted_type=type
+                trusted_int_type=int
+                trusted_realpath=os.path.realpath
+                trusted_run=subprocess.run
+                trusted_pipe=os.pipe
+                trusted_fork=os.fork
+                trusted_read=os.read
+                trusted_write=os.write
+                trusted_close=os.close
+                trusted_waitpid=os.waitpid
+                trusted_child_exit=os._exit
+                trusted_wifexited=os.WIFEXITED
+                trusted_wexitstatus=os.WEXITSTATUS
+                trusted_wifsignaled=os.WIFSIGNALED
+                trusted_wtermsig=os.WTERMSIG
+                trusted_stdout_flush=sys.stdout.flush
+                trusted_stderr_flush=sys.stderr.flush
+                trusted_stderr_write=sys.stderr.write
+                repo=trusted_realpath(sys.argv[1])
+                git_config=((\"core.fsmonitor\",\"false\"),(\"core.hooksPath\",os.devnull),(\"core.attributesFile\",os.devnull),(\"core.pager\",\"cat\"),(\"pager.status\",\"false\"),(\"protocol.ext.allow\",\"never\"),(\"core.sshCommand\",\"/bin/false\"))
+                environment={\"GIT_ATTR_NOSYSTEM\":\"1\",\"GIT_CONFIG_GLOBAL\":os.devnull,\"GIT_CONFIG_NOSYSTEM\":\"1\",\"GIT_CONFIG_COUNT\":str(len(git_config)),\"GIT_GRAFT_FILE\":os.devnull,\"GIT_NO_REPLACE_OBJECTS\":\"1\",\"GIT_OPTIONAL_LOCKS\":\"0\",\"GIT_PAGER\":\"cat\",\"GIT_TERMINAL_PROMPT\":\"0\",\"HOME\":os.devnull,\"LANG\":\"C\",\"LC_ALL\":\"C\",\"PATH\":\"/usr/bin:/bin\"}
+                for index,pair in enumerate(git_config):
+                  environment[\"GIT_CONFIG_KEY_{0}\".format(index)]=pair[0]
+                  environment[\"GIT_CONFIG_VALUE_{0}\".format(index)]=pair[1]
+                def trusted_git(arguments):
+                  completed=trusted_run([\"/usr/bin/git\",\"-C\",repo]+arguments,check=False,env=environment,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+                  if completed.returncode != 0:
+                    trusted_stderr_write(completed.stderr.decode(\"utf-8\",errors=\"replace\"))
+                    raise SystemExit(2)
+                  return completed.stdout
+                def trusted_head():
+                  value=trusted_git([\"rev-parse\",\"--verify\",\"HEAD^{commit}\"]).decode(\"ascii\",errors=\"replace\").strip()
+                  if len(value) != 40 or any(character not in \"0123456789abcdef\" for character in value):
+                    trusted_stderr_write(\"host-module authority bootstrap could not resolve an exact HEAD\\n\")
+                    raise SystemExit(2)
+                  return value
+                expected_head=os.environ.get(\"FP_AUTHORITY_EXPECTED_HEAD\",\"\")
+                if len(expected_head) != 40 or any(character not in \"0123456789abcdef\" for character in expected_head):
+                  trusted_stderr_write(\"host-module authority bootstrap expected commit is not exact\\n\")
+                  raise SystemExit(2)
+                if trusted_head() != expected_head:
+                  trusted_stderr_write(\"host-module authority bootstrap checkout differs from expected commit\\n\")
+                  raise SystemExit(2)
+                launcher=trusted_git([\"cat-file\",\"blob\",expected_head+\":scripts/host_module_failure_sites.py\"])
+                ready_read,ready_write=trusted_pipe()
+                go_read,go_write=trusted_pipe()
+                child=trusted_fork()
+                if child == 0:
+                  trusted_close(ready_read)
+                  trusted_close(go_write)
+                  module=types.ModuleType(\"host_module_failure_sites\")
+                  module.__file__=os.path.join(repo,\"scripts\",\"host_module_failure_sites.py\")
+                  module.__package__=\"\"
+                  sys.modules[module.__name__]=module
+                  exec(compile(launcher,module.__file__,\"exec\",dont_inherit=True),module.__dict__)
+                  trusted_write(ready_write,b\"1\")
+                  trusted_close(ready_write)
+                  if trusted_read(go_read,1) != b\"1\":
+                    trusted_child_exit(125)
+                  trusted_close(go_read)
+                  result=module.isolated_authority_main(sys.argv[2:],expected_head=expected_head)
+                  trusted_stdout_flush()
+                  trusted_stderr_flush()
+                  if trusted_type(result) is not trusted_int_type or result < 0 or result > 255:
+                    trusted_child_exit(125)
+                  trusted_child_exit(result)
+                trusted_close(ready_write)
+                trusted_close(go_read)
+                ready=trusted_read(ready_read,1)
+                trusted_close(ready_read)
+                before_head=trusted_head()
+                before_ok=ready == b\"1\" and before_head == expected_head
+                if before_ok:
+                  trusted_write(go_write,b\"1\")
+                else:
+                  trusted_stderr_write(\"host-module authority bootstrap HEAD changed before checker entry\\n\")
+                trusted_close(go_write)
+                unused,status=trusted_waitpid(child,0)
+                final_head=trusted_head()
+                if not before_ok or final_head != expected_head:
+                  if final_head != expected_head:
+                    trusted_stderr_write(\"host-module authority bootstrap HEAD changed during checker execution\\n\")
+                  raise SystemExit(2)
+                if trusted_wifexited(status):
+                  exit_code=trusted_wexitstatus(status)
+                elif trusted_wifsignaled(status):
+                  exit_code=128+trusted_wtermsig(status)
+                else:
+                  exit_code=126
+                raise SystemExit(exit_code)" "$@"
+              }
               MCKERNEL_REAL_FLOW_EVIDENCE_DIR="$BUILD_DIR" \
-                python3 -m unittest -v \
+                fp_authority "$GITHUB_WORKSPACE" \
+                  --repo "$GITHUB_WORKSPACE" \
+                  --authority-target unittest -- \
                   scripts.tests.test_host_module_failure_contract_gaps
-              python3 scripts/host_module_failure_contract_gaps.py \
+              fp_authority "$GITHUB_WORKSPACE" \
+                --repo "$GITHUB_WORKSPACE" \
+                --authority-target failure-contract-gaps -- \
                 --repo "$GITHUB_WORKSPACE" \
                 --build-dir "$BUILD_DIR" \
                 --kernel-dir "$MCKERNEL_CI_KERNEL_DIR" \
                 --failure-sites "$BUILD_DIR/host-module-failure-sites.json" \
                 --failure-flows "$BUILD_DIR/host-module-failure-flows.json" \
                 --output "$BUILD_DIR/host-module-failure-contract-gaps.json"
-            ' 2>&1 | tee evidence/host-module-failure-contract-gaps.log
+            ' 2>&1 | /usr/bin/tee evidence/host-module-failure-contract-gaps.log
           install -m 0644 \
             "$gap_path" evidence/host-module-failure-contract-gaps.json
           (
@@ -330,12 +901,152 @@ jobs:
               > host-module-failure-contract-gaps.json.sha256
           )
 
+      - name: Review bounded host-module failure-contract closure v2
+        run: |
+          set -euo pipefail
+          review_v2_path="$BUILD_DIR/host-module-failure-contract-review-v2.json"
+          /usr/sbin/runuser -u validator -- /usr/bin/env -i \
+            HOME=/home/validator \
+            RUSTUP_HOME=/home/validator/.rustup \
+            CARGO_HOME=/home/validator/.cargo \
+            PATH=/home/validator/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+            GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
+            BUILD_DIR="$BUILD_DIR" \
+            MCKERNEL_CI_KERNEL_DIR="$MCKERNEL_CI_KERNEL_DIR" \
+            MCKERNEL_REAL_FLOW_EVIDENCE_DIR="$BUILD_DIR" \
+            FP_AUTHORITY_EXPECTED_HEAD="$FP_AUTHORITY_EXPECTED_HEAD" \
+            /usr/bin/bash --noprofile --norc -c '
+              set -euo pipefail
+              cd "$GITHUB_WORKSPACE"
+              fp_authority() {
+                /usr/bin/env -i \
+                  HOME=/home/validator \
+                  PATH=/usr/bin:/bin \
+                  LC_ALL=C \
+                  FP_AUTHORITY_EXPECTED_HEAD="$FP_AUTHORITY_EXPECTED_HEAD" \
+                  MCKERNEL_REAL_FLOW_EVIDENCE_DIR="${MCKERNEL_REAL_FLOW_EVIDENCE_DIR:-}" \
+                  /usr/bin/python3 -I -S -B -c "if True:
+                import os,subprocess,sys,types
+                trusted_type=type
+                trusted_int_type=int
+                trusted_realpath=os.path.realpath
+                trusted_run=subprocess.run
+                trusted_pipe=os.pipe
+                trusted_fork=os.fork
+                trusted_read=os.read
+                trusted_write=os.write
+                trusted_close=os.close
+                trusted_waitpid=os.waitpid
+                trusted_child_exit=os._exit
+                trusted_wifexited=os.WIFEXITED
+                trusted_wexitstatus=os.WEXITSTATUS
+                trusted_wifsignaled=os.WIFSIGNALED
+                trusted_wtermsig=os.WTERMSIG
+                trusted_stdout_flush=sys.stdout.flush
+                trusted_stderr_flush=sys.stderr.flush
+                trusted_stderr_write=sys.stderr.write
+                repo=trusted_realpath(sys.argv[1])
+                git_config=((\"core.fsmonitor\",\"false\"),(\"core.hooksPath\",os.devnull),(\"core.attributesFile\",os.devnull),(\"core.pager\",\"cat\"),(\"pager.status\",\"false\"),(\"protocol.ext.allow\",\"never\"),(\"core.sshCommand\",\"/bin/false\"))
+                environment={\"GIT_ATTR_NOSYSTEM\":\"1\",\"GIT_CONFIG_GLOBAL\":os.devnull,\"GIT_CONFIG_NOSYSTEM\":\"1\",\"GIT_CONFIG_COUNT\":str(len(git_config)),\"GIT_GRAFT_FILE\":os.devnull,\"GIT_NO_REPLACE_OBJECTS\":\"1\",\"GIT_OPTIONAL_LOCKS\":\"0\",\"GIT_PAGER\":\"cat\",\"GIT_TERMINAL_PROMPT\":\"0\",\"HOME\":os.devnull,\"LANG\":\"C\",\"LC_ALL\":\"C\",\"PATH\":\"/usr/bin:/bin\"}
+                for index,pair in enumerate(git_config):
+                  environment[\"GIT_CONFIG_KEY_{0}\".format(index)]=pair[0]
+                  environment[\"GIT_CONFIG_VALUE_{0}\".format(index)]=pair[1]
+                def trusted_git(arguments):
+                  completed=trusted_run([\"/usr/bin/git\",\"-C\",repo]+arguments,check=False,env=environment,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+                  if completed.returncode != 0:
+                    trusted_stderr_write(completed.stderr.decode(\"utf-8\",errors=\"replace\"))
+                    raise SystemExit(2)
+                  return completed.stdout
+                def trusted_head():
+                  value=trusted_git([\"rev-parse\",\"--verify\",\"HEAD^{commit}\"]).decode(\"ascii\",errors=\"replace\").strip()
+                  if len(value) != 40 or any(character not in \"0123456789abcdef\" for character in value):
+                    trusted_stderr_write(\"host-module authority bootstrap could not resolve an exact HEAD\\n\")
+                    raise SystemExit(2)
+                  return value
+                expected_head=os.environ.get(\"FP_AUTHORITY_EXPECTED_HEAD\",\"\")
+                if len(expected_head) != 40 or any(character not in \"0123456789abcdef\" for character in expected_head):
+                  trusted_stderr_write(\"host-module authority bootstrap expected commit is not exact\\n\")
+                  raise SystemExit(2)
+                if trusted_head() != expected_head:
+                  trusted_stderr_write(\"host-module authority bootstrap checkout differs from expected commit\\n\")
+                  raise SystemExit(2)
+                launcher=trusted_git([\"cat-file\",\"blob\",expected_head+\":scripts/host_module_failure_sites.py\"])
+                ready_read,ready_write=trusted_pipe()
+                go_read,go_write=trusted_pipe()
+                child=trusted_fork()
+                if child == 0:
+                  trusted_close(ready_read)
+                  trusted_close(go_write)
+                  module=types.ModuleType(\"host_module_failure_sites\")
+                  module.__file__=os.path.join(repo,\"scripts\",\"host_module_failure_sites.py\")
+                  module.__package__=\"\"
+                  sys.modules[module.__name__]=module
+                  exec(compile(launcher,module.__file__,\"exec\",dont_inherit=True),module.__dict__)
+                  trusted_write(ready_write,b\"1\")
+                  trusted_close(ready_write)
+                  if trusted_read(go_read,1) != b\"1\":
+                    trusted_child_exit(125)
+                  trusted_close(go_read)
+                  result=module.isolated_authority_main(sys.argv[2:],expected_head=expected_head)
+                  trusted_stdout_flush()
+                  trusted_stderr_flush()
+                  if trusted_type(result) is not trusted_int_type or result < 0 or result > 255:
+                    trusted_child_exit(125)
+                  trusted_child_exit(result)
+                trusted_close(ready_write)
+                trusted_close(go_read)
+                ready=trusted_read(ready_read,1)
+                trusted_close(ready_read)
+                before_head=trusted_head()
+                before_ok=ready == b\"1\" and before_head == expected_head
+                if before_ok:
+                  trusted_write(go_write,b\"1\")
+                else:
+                  trusted_stderr_write(\"host-module authority bootstrap HEAD changed before checker entry\\n\")
+                trusted_close(go_write)
+                unused,status=trusted_waitpid(child,0)
+                final_head=trusted_head()
+                if not before_ok or final_head != expected_head:
+                  if final_head != expected_head:
+                    trusted_stderr_write(\"host-module authority bootstrap HEAD changed during checker execution\\n\")
+                  raise SystemExit(2)
+                if trusted_wifexited(status):
+                  exit_code=trusted_wexitstatus(status)
+                elif trusted_wifsignaled(status):
+                  exit_code=128+trusted_wtermsig(status)
+                else:
+                  exit_code=126
+                raise SystemExit(exit_code)" "$@"
+              }
+              fp_authority "$GITHUB_WORKSPACE" \
+                --repo "$GITHUB_WORKSPACE" \
+                --authority-target unittest -- \
+                scripts.tests.test_host_module_failure_contract_review_v2
+              fp_authority "$GITHUB_WORKSPACE" \
+                --repo "$GITHUB_WORKSPACE" \
+                --authority-target failure-contract-review-v2 -- \
+                --repo "$GITHUB_WORKSPACE" \
+                --build-dir "$BUILD_DIR" \
+                --kernel-dir "$MCKERNEL_CI_KERNEL_DIR" \
+                --failure-sites "$BUILD_DIR/host-module-failure-sites.json" \
+                --failure-flows-v1 "$BUILD_DIR/host-module-failure-flows.json" \
+                --failure-flows-v2 "$BUILD_DIR/host-module-failure-flows-v2.json" \
+                --output "$BUILD_DIR/host-module-failure-contract-review-v2.json"
+            ' 2>&1 | /usr/bin/tee evidence/host-module-failure-contract-review-v2.log
+          install -m 0644 "$review_v2_path" \
+            evidence/host-module-failure-contract-review-v2.json
+          (
+            cd evidence
+            sha256sum host-module-failure-contract-review-v2.json \
+              > host-module-failure-contract-review-v2.json.sha256
+          )
+
       - name: Collect build evidence
         if: ${{ always() }}
         run: |
           set +e
           mkdir -p evidence
-          runuser -u validator -- env \
+          runuser -u validator -- env -u PYTHONHOME -u PYTHONPATH \
             HOME=/home/validator \
             GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
             bash -c '
