@@ -30,7 +30,7 @@ REVIEW_DIRECTORY = Path("host-kernel/rocky/evidence")
 REVIEW_GLOB = "rk007-native-build-review-*-v1.json"
 SCHEMA_VERSION = 1
 REVIEW_ID = "rk-007-native-rust-exact-build-review-bc60eed5-v1"
-REVIEW_SHA256 = "c85b5d8a294043b15af228a9ea499141c24eac0c88d635079da3654bca27771c"
+REVIEW_SHA256 = "ac7459eb75e064f6cd901e4cdb4186e53b1cadfc9bcbef7ce0ea9da5b3c00319"
 EXPECTED_HISTORICAL_PROJECTION_SHA256 = (
     "ead3785b11e5ec04840978e09c972050fb9ee5ea6d946e5f0efba2c58a11f61d"
 )
@@ -203,9 +203,9 @@ EXPECTED_COMMITTED_INPUTS = [
 # only the current descendant; every historical runtime record above stays fixed.
 EXPECTED_CURRENT_OVERRIDES = [
     {
-        "current_git_blob_sha1": "68c05fa5857881bac29bf7f8dbe1f0a20339f2c3",
-        "current_sha256": "e3352df5362e246d09079d82be460d8dc76255b231f9c7fbcac79ae1381a24cf",
-        "current_size": 48363,
+        "current_git_blob_sha1": "778e9aea69d330daf0945f14276163d171faead5",
+        "current_sha256": "bca3d56c95842d937f8cebf8016b994200ffbeb9c9180cfef07f13a64d949f15",
+        "current_size": 49287,
         "mode": "100644",
         "path": ".github/workflows/native-rust-host-modules-exact-build.yml",
         "runtime_git_blob_sha1": "b35eb64a336adcfc048bb73ff1bb8a7f0e044ab9",

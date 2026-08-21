@@ -25,7 +25,7 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parent.parent
 CONTRACT_PATH = "host-kernel/contracts/fp0006-executable-acceptance-closure-v1.json"
-EXPECTED_CONTRACT_SHA256 = "0cb7834bb440e733632741d35f811ad5780b08926ad5bfdc5fdfd2dc8bbfa5d4"
+EXPECTED_CONTRACT_SHA256 = "5d949012a056aee8bacbfc96b4d8c7a0ae283ebca11734a9a6155e50219d23aa"
 EXPECTED_CONTRACT_SIZE = 5938
 MAX_INPUT_SIZE = 32 * 1024 * 1024
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
@@ -1160,8 +1160,8 @@ def _build_census_anchored(
         return result
 
 
-class _PublicCensusEmitter(object):
-    """Run decisive validation in a fresh interpreter over retained bytes."""
+class _CliCensusEmitter(object):
+    """Run decisive validation in a fresh CLI interpreter over retained bytes."""
 
     __slots__ = ()
 
@@ -1238,7 +1238,7 @@ class _PublicCensusEmitter(object):
                 source_data,
             )
             expected_self = (
-                "SELF_DIGEST:d5777a4af8d616c85aad062fff2de7381988229461bf338fc5276929312dfe54"
+                "SELF_DIGEST:5962f5da157431aede64d694f2f0e0b88003ae6908199433a3f9e7cee7eb7562"
             ).split(":", 1)[1]
             if sha256_bytes(normalized) != expected_self:
                 raise ClosureError("isolated checker normalized SHA-256 changed")
@@ -1472,6 +1472,30 @@ class _PublicCensusEmitter(object):
             _atomic_write(output, data)
         else:
             sys.stdout.write(data.decode("ascii"))
+
+
+class _ImportedCensusEmitter(object):
+    """Fail closed when an imported caller asks to emit acceptance bytes."""
+
+    __slots__ = ()
+
+    def emit(self, repo, output, *args, **kwargs):
+        raise ClosureError(
+            "public census emission is available only from a fresh CLI interpreter"
+        )
+
+
+# A caller that imports this module receives only the fail-closed facade.  The
+# output-capable implementation is selected while a fresh interpreter loads the
+# file as its main program, before any imported caller can rebind module globals,
+# serializer helpers, or output sinks.  Delete both implementation names so the
+# imported namespace does not retain an alternate output authority.
+if __name__ == "__main__":
+    _PublicCensusEmitter = _CliCensusEmitter
+else:
+    _PublicCensusEmitter = _ImportedCensusEmitter
+del _CliCensusEmitter
+del _ImportedCensusEmitter
 
 
 def _atomic_write(path, data):

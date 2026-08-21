@@ -142,13 +142,9 @@ references="$(ihk_refcount)" || { fail missing-ihk-refcount; exit 1; }
 users="$(ihk_users)" || { fail missing-ihk-users; exit 1; }
 record "REFCOUNT module=ihk phase=all-loaded references=$references users=$users"
 [ "$references" = 2 ] || { fail wrong-provider-refcount; exit 1; }
-case ",$users," in
-*,ihk_smp_x86_64,*) ;;
-*) fail missing-smp-provider-user; exit 1 ;;
-esac
-case ",$users," in
-*,mcctrl,*) ;;
-*) fail missing-mcctrl-provider-user; exit 1 ;;
+case "$users" in
+mcctrl,ihk_smp_x86_64,|ihk_smp_x86_64,mcctrl,) ;;
+*) fail wrong-provider-users; exit 1 ;;
 esac
 
 set +e
@@ -172,13 +168,9 @@ references="$(ihk_refcount)" || { fail missing-ihk-refcount-after-negative; exit
 users="$(ihk_users)" || { fail missing-ihk-users-after-negative; exit 1; }
 record "REFCOUNT module=ihk phase=after-negative references=$references users=$users"
 [ "$references" = 2 ] || { fail negative-test-changed-refcount; exit 1; }
-case ",$users," in
-*,ihk_smp_x86_64,*) ;;
-*) fail negative-test-lost-smp-user; exit 1 ;;
-esac
-case ",$users," in
-*,mcctrl,*) ;;
-*) fail negative-test-lost-mcctrl-user; exit 1 ;;
+case "$users" in
+mcctrl,ihk_smp_x86_64,|ihk_smp_x86_64,mcctrl,) ;;
+*) fail negative-test-changed-users; exit 1 ;;
 esac
 emit_state after-negative
 
@@ -188,7 +180,7 @@ references="$(ihk_refcount)" || { fail missing-ihk-after-mcctrl; exit 1; }
 users="$(ihk_users)" || { fail missing-ihk-users-after-mcctrl; exit 1; }
 record "REFCOUNT module=ihk phase=after-mcctrl-unload references=$references users=$users"
 [ "$references" = 1 ] || { fail wrong-refcount-after-mcctrl; exit 1; }
-[ "$users" = ihk_smp_x86_64 ] || { fail wrong-users-after-mcctrl; exit 1; }
+[ "$users" = 'ihk_smp_x86_64,' ] || { fail wrong-users-after-mcctrl; exit 1; }
 
 rmmod ihk_smp_x86_64 || { fail unload-ihk-smp-x86-64; exit 1; }
 record "UNLOAD module=ihk_smp_x86_64 status=ok"

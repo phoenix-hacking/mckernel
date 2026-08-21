@@ -8,6 +8,7 @@ import re
 import subprocess
 import unittest
 from pathlib import Path
+from unittest import mock
 
 import yaml
 
@@ -93,14 +94,29 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             "github.event.pull_request.head.sha || github.sha }}",
             self.workflow,
         )
-        self.assertIn("ARCH=x86_64 LLVM=1 -j2 bzImage", self.workflow)
         self.assertIn(
-            'ARCH=x86_64 LLVM=1 -j2 "${module_targets[@]}"', self.workflow
+            "EXPECTED_KERNEL_RELEASE: " + runtime_evidence.EXPECTED_KERNEL_RELEASE,
+            self.workflow,
+        )
+        self.assertIn(
+            "NATIVE_KERNEL_LOCALVERSION: "
+            + runtime_evidence.EXPECTED_KERNEL_LOCALVERSION,
+            self.workflow,
+        )
+        self.assertIn(
+            'ARCH=x86_64 LLVM=1 LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \\\n'
+            "                -j2 bzImage",
+            self.workflow,
+        )
+        self.assertIn(
+            'ARCH=x86_64 LLVM=1 LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \\\n'
+            '                -j2 "${module_targets[@]}"',
+            self.workflow,
         )
         self.assertLess(
-            self.workflow.index("ARCH=x86_64 LLVM=1 -j2 bzImage"),
+            self.workflow.index("-j2 bzImage"),
             self.workflow.index(
-                'ARCH=x86_64 LLVM=1 -j2 "${module_targets[@]}"'
+                '-j2 "${module_targets[@]}"'
             ),
         )
         self.assertNotRegex(self.workflow, r"(?m)^\s*make\s+.*\bmodules\b")
@@ -108,19 +124,24 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             'cp "$NATIVE_BUILD_DIR/arch/x86/boot/bzImage" "$EVIDENCE_DIR/bzImage"',
             self.workflow,
         )
-        self.assertIn('> "$EVIDENCE_DIR/kernel.release"', self.workflow)
+        self.assertIn(
+            'printf \'%s\\n\' "$kernel_release" > "$EVIDENCE_DIR/kernel.release"',
+            self.workflow,
+        )
         self.assertIn("include-hidden-files: true", self.workflow)
 
     def test_module_modpost_cannot_precede_kernel_symbol_universe(self):
         bzimage = (
             '            run_phase bzImage \\\n'
             '              make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \\\n'
-            '                ARCH=x86_64 LLVM=1 -j2 bzImage\n'
+            '                ARCH=x86_64 LLVM=1 LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \\\n'
+            '                -j2 bzImage\n'
         )
         modules = (
             '            run_phase native-modules \\\n'
             '              make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \\\n'
-            '                ARCH=x86_64 LLVM=1 -j2 "${module_targets[@]}"\n'
+            '                ARCH=x86_64 LLVM=1 LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \\\n'
+            '                -j2 "${module_targets[@]}"\n'
         )
         self.assertEqual(1, self.workflow.count(bzimage))
         self.assertEqual(1, self.workflow.count(modules))
@@ -167,8 +188,8 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
 
     def test_broad_module_build_mutation_is_rejected(self):
         mutation = self.workflow.replace(
-            'ARCH=x86_64 LLVM=1 -j2 "${module_targets[@]}"',
-            "ARCH=x86_64 LLVM=1 -j2 modules",
+            '-j2 "${module_targets[@]}"',
+            "-j2 modules",
             1,
         )
         with self.assertRaisesRegex(
@@ -203,8 +224,8 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             ("(\n            set -e\n", "(\n            set +e\n"),
             ('            "${command[@]}"\n', '            "${command[@]}" || true\n'),
             (
-                '                ARCH=x86_64 LLVM=1 rustavailable\n',
-                '                ARCH=x86_64 LLVM=1 rustavailable || true\n',
+                '                rustavailable\n',
+                '                rustavailable || true\n',
             ),
         ):
             mutation = self.workflow.replace(old, new, 1)
@@ -249,17 +270,20 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             (
                 '            run_phase rustavailable \\\n'
                 '              make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \\\n'
-                "                ARCH=x86_64 LLVM=1 rustavailable\n"
+                '                ARCH=x86_64 LLVM=1 LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \\\n'
+                "                rustavailable\n"
             ),
             (
                 '            run_phase bzImage \\\n'
                 '              make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \\\n'
-                "                ARCH=x86_64 LLVM=1 -j2 bzImage\n"
+                '                ARCH=x86_64 LLVM=1 LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \\\n'
+                "                -j2 bzImage\n"
             ),
             (
                 '            run_phase native-modules \\\n'
                 '              make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \\\n'
-                '                ARCH=x86_64 LLVM=1 -j2 "${module_targets[@]}"\n'
+                '                ARCH=x86_64 LLVM=1 LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \\\n'
+                '                -j2 "${module_targets[@]}"\n'
             ),
         )
         commented = self.workflow
@@ -296,7 +320,7 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             with self.subTest(label=label):
                 with self.assertRaisesRegex(
                     runtime_evidence.EvidenceError,
-                    "command scope|compile step|failure capture",
+                    "Kbuild release scope|command scope|compile step|failure capture",
                 ):
                     runtime_evidence._validate_exact_build_workflow(mutation)
 
@@ -542,8 +566,7 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
 
     def test_final_config_keeps_warnings_fatal(self):
         second_resolution = self.workflow.index(
-            'make -C "$NATIVE_SOURCE_ROOT" O="$BUILD_DIR" '
-            "ARCH=x86_64 LLVM=1 olddefconfig",
+            'LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" olddefconfig',
             self.workflow.index("resolved-first.config"),
         )
         werror = self.workflow.index(
@@ -558,8 +581,7 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
 
     def test_final_config_requires_modules_after_stable_resolution(self):
         second_resolution = self.workflow.index(
-            'make -C "$NATIVE_SOURCE_ROOT" O="$BUILD_DIR" '
-            "ARCH=x86_64 LLVM=1 olddefconfig",
+            'LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" olddefconfig',
             self.workflow.index("resolved-first.config"),
         )
         modules = self.workflow.index(
@@ -910,6 +932,18 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         checker = self.workflow.index(
             "python3 scripts/ihk_native_lifecycle_check.py", validation
         )
+        precheck = self.workflow.index(
+            'sha256sum --check --strict PRECHECK_SHA256SUMS', validation
+        )
+        vermagic = self.workflow.index(
+            'vermagic="$(modinfo -F vermagic "$module")"', validation
+        )
+        copied_module = self.workflow.index(
+            'module="$EVIDENCE_DIR/$name"', precheck
+        )
+        self.assertLess(precheck, copied_module)
+        self.assertLess(copied_module, vermagic)
+        self.assertLess(vermagic, checker)
         for fragment in (
             'git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD',
             '> "$EVIDENCE_DIR/commit.sha"',
@@ -926,7 +960,8 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
                 diagnostic = self.workflow.index(fragment, validation)
                 self.assertLess(diagnostic, checker)
         final_input = self.workflow.index(
-            'kernelrelease > "$EVIDENCE_DIR/kernel.release"', checker
+            'printf \'%s\\n\' "$kernel_release" > "$EVIDENCE_DIR/kernel.release"',
+            checker,
         )
         final_manifest = self.workflow.index(
             '| sort -z | xargs -0 sha256sum -- > SHA256SUMS', checker
@@ -936,6 +971,68 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             "! -name PRECHECK_SHA256SUMS ! -name SHA256SUMS",
             self.workflow[validation:checker],
         )
+
+    def test_added_unbound_kbuild_invocation_is_rejected(self):
+        marker = (
+            "          printf 'NATIVE_BASELINE_CONFIG=%s\\n' \"$baseline\" "
+            ">> \"$GITHUB_ENV\"\n"
+        )
+        additions = (
+            '          make -C "$NATIVE_SOURCE_ROOT" olddefconfig\n',
+            '          (cd "$NATIVE_SOURCE_ROOT" && make olddefconfig)\n',
+            '          builder=make; "$builder" -C "$NATIVE_SOURCE_ROOT" olddefconfig\n',
+            '          "$MAKE" -C "$NATIVE_SOURCE_ROOT" olddefconfig\n',
+        )
+        for addition in additions:
+            with self.subTest(addition=addition.strip()):
+                mutation = self.workflow.replace(marker, marker + addition, 1)
+                start = mutation.index(
+                    "      - name: Check out the exact candidate without credentials\n"
+                )
+                end = mutation.index(
+                    "      - name: Resolve the evidence-only module configuration twice\n"
+                )
+                digest = hashlib.sha256(
+                    mutation[start:end].encode("utf-8")
+                ).hexdigest()
+                with mock.patch.object(
+                    runtime_evidence,
+                    "EXPECTED_EXACT_BUILD_PREPARATION_SHA256",
+                    digest,
+                ):
+                    with self.assertRaisesRegex(
+                        runtime_evidence.EvidenceError,
+                        "Kbuild release scope|unbound build tool",
+                    ):
+                        runtime_evidence._validate_exact_build_workflow(mutation)
+
+    def test_duplicate_or_extra_top_level_release_environment_is_rejected(self):
+        marker = (
+            "  NATIVE_KERNEL_LOCALVERSION: "
+            + runtime_evidence.EXPECTED_KERNEL_LOCALVERSION
+            + "\n"
+        )
+        additions = (
+            "  EXPECTED_KERNEL_RELEASE: 6.12.0-attacker\n"
+            "  NATIVE_KERNEL_LOCALVERSION: -attacker\n",
+            "  EXTRA_RELEASE_AUTHORITY: attacker\n",
+        )
+        for addition in additions:
+            with self.subTest(addition=addition.strip()):
+                mutation = self.workflow.replace(marker, marker + addition, 1)
+                exact = mutation.split("\n  fp0006-native-rust-capture:\n", 1)[0]
+                end = exact.index("\njobs:\n") + 1
+                digest = hashlib.sha256(exact[:end].encode("utf-8")).hexdigest()
+                with mock.patch.object(
+                    runtime_evidence,
+                    "EXPECTED_EXACT_BUILD_PREFIX_SHA256",
+                    digest,
+                ):
+                    with self.assertRaisesRegex(
+                        runtime_evidence.EvidenceError,
+                        "environment mapping differs",
+                    ):
+                        runtime_evidence._validate_exact_build_workflow(mutation)
 
     def test_openssl_cli_is_installed_and_verified_before_the_build(self):
         bootstrap = self.workflow.split(

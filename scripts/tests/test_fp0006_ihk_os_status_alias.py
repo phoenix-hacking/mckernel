@@ -28,9 +28,9 @@ CONTRACT_PATH = ROOT / "host-kernel/contracts/fp0006-ihk-os-status-alias-v1.json
 C_PRODUCER = ROOT / "scripts/smoke/fp0006-ihk-os-status-alias.c"
 RUST_PRODUCER = ROOT / "scripts/tests/fixtures/ihk_ioctl_fp0006_status_alias.rs"
 SECURITY_SOURCE = ROOT / "scripts/fp0006_ihk_device_negative_dispatch.py"
-EXPECTED_CHECKER_SHA256 = "a7aa457cb7e93074d246a08a56ed5dc52c15d66d62758480d93d3d9069aca5cd"
-EXPECTED_CHECKER_SIZE = 87817
-EXPECTED_NORMALIZED_SELF_SHA256 = "bd49a83261db3602f912cf5f23f5aaa643e58220d2ddc6f09a435ca0022068c4"
+EXPECTED_CHECKER_SHA256 = "b3e884b3ea36d53ad36f3c960d62d72bba33c88f57b6550fb0d2b06ca91a8885"
+EXPECTED_CHECKER_SIZE = 88014
+EXPECTED_NORMALIZED_SELF_SHA256 = "bbb9aa8eb6a1ca0fa89c3c269fb17612c3412bfc753dec65b803fab9d7fa300a"
 REAL_POPEN = subprocess.Popen
 
 from scripts import fp0006_ihk_os_status_alias as imported_witness
@@ -175,6 +175,81 @@ def require_success(testcase, execution):
 
 
 class StatusAliasIsolatedCliTests(unittest.TestCase):
+    def _assert_raw_close_error_retires_reused_descriptor(self, replacement_kind):
+        imported_witness._load_exact_security_primitives(str(CHECKER))
+        original_close = os.close
+        original_open = os.open
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            owned_path = root / "owned"
+            other_path = root / "other"
+            owned_path.write_bytes(b"owned")
+            other_path.write_bytes(b"other")
+            descriptor = original_open(str(owned_path), os.O_RDONLY)
+            expected_identity = imported_witness._file_identity(
+                os.fstat(descriptor)
+            )
+            replacement = [None]
+
+            def raw_close_reuse_and_interrupt(candidate, label):
+                self.assertEqual(descriptor, candidate)
+                self.assertEqual("synthetic raw-close descriptor", label)
+                original_close(candidate)
+                reopened_path = (
+                    owned_path if replacement_kind == "same-inode" else other_path
+                )
+                reopened = original_open(str(reopened_path), os.O_RDONLY)
+                if reopened != candidate:
+                    os.dup2(reopened, candidate)
+                    original_close(reopened)
+                    reopened = candidate
+                replacement[0] = reopened
+                raise OSError(errno.EINTR, "synthetic post-raw-close failure")
+
+            original_state = imported_witness._owned_fd_state
+            try:
+                with mock.patch.object(
+                    imported_witness, "_owned_fd_state", wraps=original_state
+                ) as state_probe, mock.patch.object(
+                    imported_witness,
+                    "_raw_close_fd",
+                    side_effect=raw_close_reuse_and_interrupt,
+                ) as raw_close:
+                    retired, error = imported_witness._raw_close_owned_fd_once(
+                        descriptor,
+                        expected_identity,
+                        "synthetic raw-close descriptor",
+                    )
+
+                self.assertTrue(retired)
+                self.assertIsInstance(error, OSError)
+                self.assertEqual(errno.EINTR, error.errno)
+                raw_close.assert_called_once_with(
+                    descriptor, "synthetic raw-close descriptor"
+                )
+                state_probe.assert_called_once_with(
+                    descriptor,
+                    expected_identity,
+                    "synthetic raw-close descriptor",
+                )
+                self.assertEqual(descriptor, replacement[0])
+                os.lseek(descriptor, 0, os.SEEK_SET)
+                expected = b"owned" if replacement_kind == "same-inode" else b"other"
+                self.assertEqual(expected, os.read(descriptor, len(expected)))
+            finally:
+                try:
+                    original_close(descriptor)
+                except OSError as error:
+                    if error.errno != errno.EBADF:
+                        raise
+
+    def test_raw_close_error_retires_same_inode_replacement_without_reprobe(self):
+        self._assert_raw_close_error_retires_reused_descriptor("same-inode")
+
+    def test_raw_close_error_retires_different_inode_replacement_without_reprobe(self):
+        self._assert_raw_close_error_retires_reused_descriptor("different-inode")
+
     def test_exec_seal_post_close_error_fd_reuse_preserves_replacement(self):
         imported_witness._load_exact_security_primitives(str(CHECKER))
         original_close = os.close

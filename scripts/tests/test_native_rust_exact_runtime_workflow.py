@@ -163,6 +163,14 @@ class NativeRustExactRuntimeWorkflowTests(unittest.TestCase):
         self.assertIn('"Module ihk is in use"', self.init)
         self.assertIn('[ "$references" = 1 ]', self.init)
         self.assertIn('[ "$references" = 0 ]', self.init)
+        self.assertEqual(
+            2,
+            self.init.count(
+                "mcctrl,ihk_smp_x86_64,|ihk_smp_x86_64,mcctrl,) ;;"
+            ),
+        )
+        self.assertIn('[ "$users" = \'ihk_smp_x86_64,\' ]', self.init)
+        self.assertNotIn('[ "$users" = ihk_smp_x86_64 ]', self.init)
 
     def test_capture_is_unreviewed_and_cannot_claim_credit(self) -> None:
         self.assertIn("technical-capture-unreviewed", self.workflow)

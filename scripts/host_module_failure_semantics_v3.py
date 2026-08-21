@@ -121,6 +121,7 @@ RUST_SELECTED_STAGE_SUFFIXES = (
     ".built.after.mir",
     ".runtime-optimized.after.mir",
 )
+RUST_PRODUCTION_CWD_COMPONENTS = ("executer", "kernel", "mcctrl")
 
 ANALYSIS_CLAIM = {
     "credit_eligible": False,
@@ -1575,7 +1576,30 @@ def probe_rust_mir_options(executable, environment):
     }
 
 
-def one_rust_run(record, kernel_dir, roots, run_dir, environment):
+def rust_production_compiler_cwd(build_dir):
+    build_root = lexical_absolute_root(build_dir, "Rust build directory")
+    directories = [build_root]
+    current = build_root
+    for component in RUST_PRODUCTION_CWD_COMPONENTS:
+        current = current / component
+        directories.append(current)
+    for directory in directories:
+        try:
+            metadata = directory.lstat()
+        except OSError as exc:
+            raise SemanticsV3Error(
+                "Rust production compiler working directory is unavailable: {0}".format(
+                    exc
+                )
+            )
+        if not stat.S_ISDIR(metadata.st_mode):
+            raise SemanticsV3Error(
+                "Rust production compiler working directory is not a real directory"
+            )
+    return current
+
+
+def one_rust_run(record, compiler_cwd, roots, run_dir, environment):
     run_roots = tuple(roots) + (("$SEMANTIC", run_dir),)
     output = run_dir / "semantic-rust.o"
     mir_dir = run_dir / "mir"
@@ -1585,7 +1609,7 @@ def one_rust_run(record, kernel_dir, roots, run_dir, environment):
     argv = reconstruct_rust_argv(
         record["compile_argv"], output, mir_dir, rustc_out_dir
     )
-    completed = run_compiler(argv, kernel_dir, environment)
+    completed = run_compiler(argv, compiler_cwd, environment)
     object_record, object_data = read_object(output, "Rust semantic replay object")
     mir = {}
     for path in sorted(mir_dir.rglob("*")):
@@ -1624,6 +1648,7 @@ def capture_rust_source(
     production_path = compiler_output_path(
         record["compile_argv"], "rust", kernel_dir, (build_dir,)
     )
+    compiler_cwd = rust_production_compiler_cwd(build_dir)
     with hold_confined_object(
         production_path, "production Rust object", MAX_RAW_MEMBER_BYTES
     ) as production_authority:
@@ -1636,7 +1661,7 @@ def capture_rust_source(
         for number in (1, 2):
             run_dir = temporary / "rust-{0}".format(number)
             run_dir.mkdir(mode=0o700)
-            runs.append(one_rust_run(record, kernel_dir, roots, run_dir, environment))
+            runs.append(one_rust_run(record, compiler_cwd, roots, run_dir, environment))
         if (
             runs[0]["object_data"] != production_data
             or runs[1]["object_data"] != production_data

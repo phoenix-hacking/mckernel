@@ -47,7 +47,7 @@ REUSED_MODULE_BINDINGS = {
         46054, "7a708375beb168f95ce6f6c76b96d47e70176a7f1654645aa99ca1275c9d7984"
     ),
     "rocky_kernel_rk007_build_review.py": (
-        136681, "2fadef928aaa075ef150be12e0bf6a345ce16da75e6b73d4840d17291cf12f3d"
+        136681, "13d0607bf154218b2ba79a5146acecf538aa6f8026ffaf843bfe49a9ef6a8912"
     ),
 }
 
@@ -175,7 +175,7 @@ REVIEW_GLOB = "rk007-native-build-review-*-v2.json"
 SCHEMA_VERSION = 2
 REVIEW_ID = "rk-007-native-rust-exact-build-review-ef58860e-v2"
 # Filled after the exact ef58860e artifact was downloaded and reviewed.
-REVIEW_SHA256 = "05917db13819514d31f87e97d3fdec76c78b499337607d81617bc09cf643a7c0"
+REVIEW_SHA256 = "4ea0747044cd346124c110da92594508fbdbdd2276f16c7539d4918c48d6032e"
 EXPECTED_HISTORICAL_PROJECTION_SHA256 = (
     "d751296653c555b56213593cf3a004200d036d934ff508042797300402d45359"
 )
@@ -304,9 +304,9 @@ EXPECTED_HISTORICAL_ORACLE_SOURCE = EXPECTED_INPUT_BY_PATH[
 # must agree across HEAD, index, and worktree.
 EXPECTED_CURRENT_OVERRIDES = [
     {
-        "current_git_blob_sha1": "68c05fa5857881bac29bf7f8dbe1f0a20339f2c3",
-        "current_sha256": "e3352df5362e246d09079d82be460d8dc76255b231f9c7fbcac79ae1381a24cf",
-        "current_size": 48363,
+        "current_git_blob_sha1": "778e9aea69d330daf0945f14276163d171faead5",
+        "current_sha256": "bca3d56c95842d937f8cebf8016b994200ffbeb9c9180cfef07f13a64d949f15",
+        "current_size": 49287,
         "mode": "100644",
         "path": ".github/workflows/native-rust-host-modules-exact-build.yml",
         "runtime_git_blob_sha1": "3780ba2239d4b365f5d8bb92e6fbaa505b287c30",
@@ -314,8 +314,8 @@ EXPECTED_CURRENT_OVERRIDES = [
         "runtime_size": 30870,
     },
     {
-        "current_git_blob_sha1": "a5c49c98d2e2e41e88abedc8dc93f4d19400877e",
-        "current_sha256": "2fadef928aaa075ef150be12e0bf6a345ce16da75e6b73d4840d17291cf12f3d",
+        "current_git_blob_sha1": "0c72981d42ccfeb3390bf1580400583819d4ebcd",
+        "current_sha256": "13d0607bf154218b2ba79a5146acecf538aa6f8026ffaf843bfe49a9ef6a8912",
         "current_size": 136681,
         "mode": "100644",
         "path": "scripts/rocky_kernel_rk007_build_review.py",

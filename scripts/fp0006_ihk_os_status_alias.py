@@ -38,7 +38,7 @@ SURFACE_ALIASES = {
 }
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 
-# SELF_DIGEST:bd49a83261db3602f912cf5f23f5aaa643e58220d2ddc6f09a435ca0022068c4
+# SELF_DIGEST:bbb9aa8eb6a1ca0fa89c3c269fb17612c3412bfc753dec65b803fab9d7fa300a
 SELF_SOURCE_MAXIMUM = 1024 * 1024
 SECURITY_SOURCE_SHA256 = "9bc3783df8d5df2c2c8d62ca9205d88f5afac810adac2b322b6dde2ddcfe1676"
 SECURITY_SOURCE_SIZE = 51627
@@ -888,15 +888,14 @@ def _raw_close_owned_fd_once(
     try:
         _raw_close_fd(descriptor, label)
     except BaseException as error:
-        try:
-            state = _owned_fd_state(descriptor, expected_identity, label)
-            return state != "owned", error
-        except WitnessError as probe_error:
-            return False, WitnessError(
-                "{0} raw close failed ({1}); {2}".format(
-                    label, error, probe_error
-                )
-            )
+        # A raw close attempt consumes this ownership token even when the
+        # syscall reports an error.  Linux may already have released the open
+        # file description before returning a late error such as EINTR, and
+        # the descriptor number may immediately name either the same inode
+        # through a new open-file description or an unrelated inode.  Never
+        # probe or retry the number after the attempt: doing so could make the
+        # caller's cleanup close that replacement descriptor.
+        return True, error
     return True, None
 
 

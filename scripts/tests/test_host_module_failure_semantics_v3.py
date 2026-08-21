@@ -543,12 +543,12 @@ class CompilerArgumentTests(unittest.TestCase):
                     Path("/tmp/rustc-out"),
                 )
 
-    def test_rust_run_keeps_kernel_cwd_and_confines_implicit_outputs(self):
+    def test_rust_run_keeps_production_cwd_and_confines_implicit_outputs(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
-            kernel = root / "kernel"
+            compiler_cwd = root / "build" / "executer" / "kernel" / "mcctrl"
             run_dir = root / "run"
-            kernel.mkdir(mode=0o555)
+            compiler_cwd.mkdir(parents=True, mode=0o555)
             run_dir.mkdir(mode=0o700)
             observed = {}
 
@@ -583,11 +583,11 @@ class CompilerArgumentTests(unittest.TestCase):
                 semantics, "run_compiler", side_effect=fake_compiler
             ):
                 result = semantics.one_rust_run(
-                    record, kernel, (), run_dir, {}
+                    record, compiler_cwd, (), run_dir, {}
                 )
 
             rustc_out_dir = run_dir / "rustc-out"
-            self.assertEqual(observed["cwd"], kernel)
+            self.assertEqual(observed["cwd"], compiler_cwd)
             self.assertIn(
                 "--out-dir=" + str(rustc_out_dir), observed["argv"]
             )
@@ -595,9 +595,27 @@ class CompilerArgumentTests(unittest.TestCase):
             self.assertEqual(
                 (rustc_out_dir / "rmeta-private").read_bytes(), b"METADATA\n"
             )
-            self.assertEqual(list(kernel.iterdir()), [])
+            self.assertEqual(list(compiler_cwd.iterdir()), [])
             self.assertEqual(result["object_data"], b"OBJECT\n")
             self.assertIn("crate.demo.built.after.mir", result["mir"])
+
+    def test_rust_production_cwd_rejects_missing_and_symlinked_components(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            build = root / "build"
+            build.mkdir()
+            with self.assertRaisesRegex(
+                semantics.SemanticsV3Error, "working directory is unavailable"
+            ):
+                semantics.rust_production_compiler_cwd(build)
+
+            external = root / "external"
+            external.mkdir()
+            (build / "executer").symlink_to(external, target_is_directory=True)
+            with self.assertRaisesRegex(
+                semantics.SemanticsV3Error, "not a real directory"
+            ):
+                semantics.rust_production_compiler_cwd(build)
 
     def test_recorded_output_parser_rejects_multiple_outputs(self):
         with self.assertRaisesRegex(semantics.SemanticsV3Error, "ambiguous"):
@@ -665,6 +683,9 @@ class ObjectReadBoundaryTests(unittest.TestCase):
         }, compiler
 
     def capture(self, record, compiler, kernel, build, temporary):
+        (build / "executer" / "kernel" / "mcctrl").mkdir(
+            parents=True, exist_ok=True
+        )
         with mock.patch.object(
             semantics.sites, "compiler_provenance", return_value=compiler
         ), mock.patch.object(
@@ -677,6 +698,53 @@ class ObjectReadBoundaryTests(unittest.TestCase):
         ):
             return semantics.capture_rust_source(
                 record, kernel, build, (), temporary, {}
+            )
+
+    def test_capture_rust_replays_from_path_sensitive_production_cwd(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            kernel = root / "kernel"
+            build = root / "build"
+            semantic = root / "semantic"
+            compiler_cwd = build / "executer" / "kernel" / "mcctrl"
+            rust_dir = compiler_cwd / "rust"
+            kernel.mkdir()
+            rust_dir.mkdir(parents=True)
+            semantic.mkdir()
+            production = rust_dir / "mcctrl_helpers.o"
+            production_data = ("OBJECT-CWD=" + str(compiler_cwd) + "\n").encode(
+                "utf-8"
+            )
+            production.write_bytes(production_data)
+            record, compiler = self.rust_record(str(production))
+            observed_cwds = []
+
+            def fake_compiler(argv, cwd, environment):
+                observed_cwds.append(cwd)
+                object_word = next(
+                    word for word in argv if word.startswith("--emit=obj=")
+                )
+                Path(object_word.split("=", 2)[2]).write_bytes(
+                    ("OBJECT-CWD=" + str(cwd) + "\n").encode("utf-8")
+                )
+                mir_word = next(
+                    word for word in argv if word.startswith("-Zdump-mir-dir=")
+                )
+                mir_dir = Path(mir_word.split("=", 1)[1])
+                (mir_dir / "crate.demo.built.after.mir").write_bytes(b"mir\n")
+                return types.SimpleNamespace(stdout=b"", stderr=b"")
+
+            with mock.patch.object(
+                semantics, "run_compiler", side_effect=fake_compiler
+            ):
+                _, _, production_record, run = self.capture(
+                    record, compiler, kernel, build, semantic
+                )
+
+            self.assertEqual(observed_cwds, [compiler_cwd, compiler_cwd])
+            self.assertEqual(run["object_data"], production_data)
+            self.assertEqual(
+                production_record["sha256"], semantics.sha256_bytes(production_data)
             )
 
     def test_capture_rust_rejects_relative_and_absolute_object_leaf_symlinks(self):

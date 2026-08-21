@@ -62,6 +62,34 @@ PROTOCOL = "MCKERNEL_NATIVE_RUST_RUNTIME_V1"
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 EXPECTED_FP0006_NATIVE_JOB_SHA256 = "edb35a6bdf7bd5495e9b5301e15cc2ca674626ea779c79b085f7e1baccb2cde3"
+EXPECTED_KERNEL_LOCALVERSION = "-211.44.1.el10_2.mckernel1.x86_64"
+EXPECTED_KERNEL_RELEASE = "6.12.0" + EXPECTED_KERNEL_LOCALVERSION
+EXPECTED_EXACT_BUILD_PREPARATION_SHA256 = (
+    "e680cfc9dd6f1dc09a8cc86b56045f0df6bac548bafd7d1cc40af2a338cba5af"
+)
+EXPECTED_EXACT_BUILD_PREFIX_SHA256 = (
+    "aa7da704ea4e3d300ebf1a5747f367db5e406bafcf6f3842254f6a67e55f3ce2"
+)
+EXPECTED_RUNTIME_INIT_SHA256 = (
+    "d2a952a91a4c53f555ceb8c96edd6d2bce2375f3c77b09374d51daf38524412b"
+)
+EXPECTED_REPOSITORY_WORKFLOW_IDENTITIES = {
+    "build_workflow": {
+        "git_blob_sha1": "778e9aea69d330daf0945f14276163d171faead5",
+        "sha256": "bca3d56c95842d937f8cebf8016b994200ffbeb9c9180cfef07f13a64d949f15",
+        "size": 49287,
+    },
+    "runtime_pr_workflow": {
+        "git_blob_sha1": "64bb717852d36fc1021e2b61e83aca6415b184d5",
+        "sha256": "628e901df2ef4d26978e0280a8ca300d9d58adc57f6c6bde883940706adf2265",
+        "size": 754,
+    },
+    "runtime_workflow": {
+        "git_blob_sha1": "4ce93e079b8e1ef1af1421a147352799af6b0cb7",
+        "sha256": "b0b9ff05329dc580482bc1cf617fa7636c0d096575d4f0be7bb79fad51131964",
+        "size": 11052,
+    },
+}
 BUILD_KERNEL_TARGETS = ["bzImage"]
 BUILD_MODULE_TARGETS = [
     "drivers/misc/mckernel/ihk.ko",
@@ -135,6 +163,11 @@ def _sha256_bytes(value: bytes) -> str:
     return hashlib.sha256(value).hexdigest()
 
 
+def _git_blob_sha1(value: bytes) -> str:
+    header = "blob {0}\0".format(len(value)).encode("ascii")
+    return hashlib.sha1(header + value).hexdigest()
+
+
 def _sha256_file(path: Path) -> str:
     digest = hashlib.sha256()
     try:
@@ -144,6 +177,36 @@ def _sha256_file(path: Path) -> str:
     except OSError as error:
         raise EvidenceError("cannot hash {0}: {1}".format(path, error)) from error
     return digest.hexdigest()
+
+
+def _active_shell_lines(text: str) -> tuple[str, ...]:
+    """Return nonblank shell source with unquoted comments removed."""
+    active: list[str] = []
+    for raw_line in text.splitlines():
+        quote = ""
+        escaped = False
+        comment_at: int | None = None
+        for index, character in enumerate(raw_line):
+            if escaped:
+                escaped = False
+                continue
+            if character == "\\" and quote != "'":
+                escaped = True
+                continue
+            if quote:
+                if character == quote:
+                    quote = ""
+                continue
+            if character in ("'", '"'):
+                quote = character
+            elif character == "#":
+                comment_at = index
+                break
+        line = raw_line if comment_at is None else raw_line[:comment_at]
+        line = line.strip()
+        if line:
+            active.append(line)
+    return tuple(active)
 
 
 def _require_keys(value: dict[str, Any], expected: set[str], label: str) -> None:
@@ -178,7 +241,8 @@ def _repo_file(repo: Path, relative: str, label: str) -> Path:
 
 def _read_text(path: Path, label: str) -> str:
     try:
-        return path.read_text(encoding="utf-8")
+        with path.open("r", encoding="utf-8", newline="") as stream:
+            return stream.read()
     except (OSError, UnicodeError) as error:
         raise EvidenceError("cannot read {0}: {1}".format(label, error)) from error
 
@@ -630,6 +694,40 @@ def _validate_exact_build_workflow(text: str) -> str:
         "  rk006-full-source-build-capture:\n" + capture_tail
     )
     text = exact_build_text
+    jobs_marker = "\njobs:\n"
+    if text.count(jobs_marker) != 1:
+        raise EvidenceError("exact build workflow prefix scope differs")
+    workflow_prefix = text[: text.index(jobs_marker) + 1]
+    if _sha256_bytes(workflow_prefix.encode("utf-8")) != (
+        EXPECTED_EXACT_BUILD_PREFIX_SHA256
+    ):
+        raise EvidenceError("exact build workflow prefix scope differs")
+    expected_env = (
+        "\nenv:\n"
+        "  ROCKY_IMAGE: rockylinux/rockylinux:10.2@sha256:"
+        "e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176\n"
+        "  EXPECTED_HEAD_SHA: ${{ inputs.validation_sha || "
+        "github.event.pull_request.head.sha || github.sha }}\n"
+        "  EXPECTED_KERNEL_RELEASE: "
+        + EXPECTED_KERNEL_RELEASE
+        + "\n"
+        "  NATIVE_KERNEL_LOCALVERSION: "
+        + EXPECTED_KERNEL_LOCALVERSION
+        + "\n\n"
+    )
+    if not workflow_prefix.endswith(expected_env):
+        raise EvidenceError("exact build workflow environment mapping differs")
+    active_workflow = "\n".join(_active_shell_lines(text))
+    logical_workflow = re.sub(r"\\\n\s*", " ", active_workflow)
+    kbuild_commands = re.findall(
+        r'(?<![A-Za-z0-9_])make(?:\s+-s)?\s+-C\s+"\$NATIVE_SOURCE_ROOT"[^\n]*',
+        logical_workflow,
+    )
+    if len(kbuild_commands) != 6 or any(
+        command.count('LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION"') != 1
+        for command in kbuild_commands
+    ):
+        raise EvidenceError("exact build workflow Kbuild release scope differs")
     job_preamble = (
         "jobs:\n"
         "  exact-build:\n"
@@ -721,6 +819,19 @@ def _validate_exact_build_workflow(text: str) -> str:
     if bootstrap_commands != expected_bootstrap_commands:
         raise EvidenceError("exact build workflow bootstrap scope differs")
 
+    resolution_header = "      - name: Resolve the evidence-only module configuration twice\n"
+    if text.count(resolution_header) != 1:
+        raise EvidenceError("exact build workflow prebuild scope differs")
+    resolution_header_start = text.index(resolution_header)
+    preparation = text[checkout_start:resolution_header_start]
+    if _sha256_bytes(preparation.encode("utf-8")) != (
+        EXPECTED_EXACT_BUILD_PREPARATION_SHA256
+    ):
+        raise EvidenceError("exact build workflow prebuild scope differs")
+    active_preparation = "\n".join(_active_shell_lines(preparation))
+    if re.search(r"(?<![A-Za-z0-9_])(?:g?make|MAKE)(?![A-Za-z0-9_])", active_preparation):
+        raise EvidenceError("exact build workflow prebuild invokes an unbound build tool")
+
     arrays = re.findall(
         r"(?ms)^\s*module_targets=\(\n(?P<body>.*?)^\s*\)\n", text
     )
@@ -733,20 +844,21 @@ def _validate_exact_build_workflow(text: str) -> str:
     required_commands = [
         (
             'run_phase rustavailable make -C "$NATIVE_SOURCE_ROOT" '
-            'O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 rustavailable'
+            'O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 '
+            'LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" rustavailable'
         ),
         (
             'run_phase bzImage make -C "$NATIVE_SOURCE_ROOT" '
-            'O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 -j2 bzImage'
+            'O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 '
+            'LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" -j2 bzImage'
         ),
         (
             'run_phase native-modules make -C "$NATIVE_SOURCE_ROOT" '
-            'O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 -j2 "${module_targets[@]}"'
+            'O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 '
+            'LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" '
+            '-j2 "${module_targets[@]}"'
         ),
     ]
-    resolution_header = "      - name: Resolve the evidence-only module configuration twice\n"
-    if text.count(resolution_header) != 1:
-        raise EvidenceError("exact build workflow CONFIG_MODULES prerequisite differs")
     resolution_start = text.index(resolution_header) + len(resolution_header)
     next_step = re.search(r"(?m)^      - name: .+$", text[resolution_start:])
     if next_step is None:
@@ -778,9 +890,11 @@ def _validate_exact_build_workflow(text: str) -> str:
         '"$BUILD_DIR/.config" \\',
         '"$GITHUB_WORKSPACE/host-kernel/rocky/configs/rust-minimal.config" \\',
         '"$GITHUB_WORKSPACE/host-kernel/rocky/configs/native-rust-evidence.config"',
-        'make -C "$NATIVE_SOURCE_ROOT" O="$BUILD_DIR" ARCH=x86_64 LLVM=1 olddefconfig',
+        'make -C "$NATIVE_SOURCE_ROOT" O="$BUILD_DIR" ARCH=x86_64 LLVM=1 \\',
+        'LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" olddefconfig',
         'cp "$BUILD_DIR/.config" "$BUILD_DIR/resolved-first.config"',
-        'make -C "$NATIVE_SOURCE_ROOT" O="$BUILD_DIR" ARCH=x86_64 LLVM=1 olddefconfig',
+        'make -C "$NATIVE_SOURCE_ROOT" O="$BUILD_DIR" ARCH=x86_64 LLVM=1 \\',
+        'LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" olddefconfig',
         'cmp "$BUILD_DIR/resolved-first.config" "$BUILD_DIR/.config"',
         'grep -qx \'CONFIG_WERROR=y\' "$BUILD_DIR/.config"',
         'grep -qx \'CONFIG_MODULES=y\' "$BUILD_DIR/.config"',
@@ -874,13 +988,16 @@ def _validate_exact_build_workflow(text: str) -> str:
         "set -e",
         "run_phase rustavailable \\",
         'make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \\',
-        "ARCH=x86_64 LLVM=1 rustavailable",
+        'ARCH=x86_64 LLVM=1 LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \\',
+        "rustavailable",
         "run_phase bzImage \\",
         'make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \\',
-        "ARCH=x86_64 LLVM=1 -j2 bzImage",
+        'ARCH=x86_64 LLVM=1 LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \\',
+        "-j2 bzImage",
         "run_phase native-modules \\",
         'make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \\',
-        'ARCH=x86_64 LLVM=1 -j2 "${module_targets[@]}"',
+        'ARCH=x86_64 LLVM=1 LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \\',
+        '-j2 "${module_targets[@]}"',
         'printf \'%s\\n\' complete > "$evidence_dir/build.phase"',
         ') 2>&1 | tee "$evidence_dir/build.log"',
         'pipeline_status=("${PIPESTATUS[@]}")',
@@ -955,6 +1072,13 @@ def _validate_exact_build_workflow(text: str) -> str:
         "| sort -z | xargs -0 sha256sum -- > PRECHECK_SHA256SUMS",
         "sha256sum --check --strict PRECHECK_SHA256SUMS",
         ")",
+        "for name in ihk.ko ihk-smp-x86_64.ko mcctrl.ko; do",
+        'module="$EVIDENCE_DIR/$name"',
+        'vermagic="$(modinfo -F vermagic "$module")"',
+        'test -n "$vermagic"',
+        'test "$(printf \'%s\\n\' "$vermagic" | wc -l)" = 1',
+        'test "${vermagic%% *}" = "$EXPECTED_KERNEL_RELEASE"',
+        "done",
         'python3 scripts/ihk_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" --module "$ihk"',
         'python3 scripts/ihk_os_registry_check.py --repo "$GITHUB_WORKSPACE"',
         'test "$(rustc --version | awk \'{print $2}\')" = "1.92.0"',
@@ -968,8 +1092,10 @@ def _validate_exact_build_workflow(text: str) -> str:
         'cp "$NATIVE_BUILD_DIR/.config" "$EVIDENCE_DIR/resolved.config"',
         'cp "$NATIVE_BUILD_DIR/arch/x86/boot/bzImage" "$EVIDENCE_DIR/bzImage"',
         'cp "$NATIVE_SOURCE_ROOT/drivers/misc/mckernel/stage-lock.json" "$EVIDENCE_DIR/stage-lock.json"',
-        'make -s -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 \\',
-        'kernelrelease > "$EVIDENCE_DIR/kernel.release"',
+        'kernel_release="$(make -s -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \\',
+        'ARCH=x86_64 LLVM=1 LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" kernelrelease)"',
+        'test "$kernel_release" = "$EXPECTED_KERNEL_RELEASE"',
+        'printf \'%s\\n\' "$kernel_release" > "$EVIDENCE_DIR/kernel.release"',
         "cmd_records=(",
         ".ihk-smp-x86_64.ko.cmd",
         ".ihk-smp-x86_64.mod.cmd",
@@ -1177,6 +1303,7 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
             "modules",
             "protocol",
             "repository_inputs",
+            "repository_workflow_identities",
             "runtime",
             "schema_version",
             "selected_kernel",
@@ -1236,6 +1363,8 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
     selected = contract["selected_kernel"]
     if selected != {
         "archive_sha256": "4a174d47b8874a2139efcd1ac1ab2d6b80ae7a0ca62f0ae4596fd20cf62a3533",
+        "kernel_release": EXPECTED_KERNEL_RELEASE,
+        "localversion": EXPECTED_KERNEL_LOCALVERSION,
         "nvr": "kernel-6.12.0-211.44.1.el10_2",
         "source_lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-source-v1",
     }:
@@ -1414,19 +1543,31 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
     }
     if inputs != expected_inputs:
         raise EvidenceError("runtime repository input paths differ")
+    workflow_identities = contract["repository_workflow_identities"]
+    if workflow_identities != EXPECTED_REPOSITORY_WORKFLOW_IDENTITIES:
+        raise EvidenceError("runtime repository workflow identities differ")
     _repo_file(repo, inputs["kbuild_link_closure"], "Kbuild link-closure checker")
     _repo_file(repo, inputs["kconfig_solver"], "Kconfig solver")
-    build_workflow = _read_text(
-        _repo_file(repo, inputs["build_workflow"], "exact build workflow"),
-        "exact build workflow",
-    )
-    runtime_workflow = _read_text(
-        _repo_file(repo, inputs["runtime_workflow"], "runtime workflow"),
-        "runtime workflow",
-    )
-    runtime_pr_workflow = _read_text(
-        _repo_file(repo, inputs["runtime_pr_workflow"], "runtime PR workflow"),
-        "runtime PR workflow",
+
+    actual_workflow_identities: dict[str, dict[str, Any]] = {}
+
+    def read_bound_workflow(key: str, label: str) -> str:
+        path = _repo_file(repo, inputs[key], label)
+        data = _read_regular_evidence_bytes(path, label)
+        actual_workflow_identities[key] = {
+            "git_blob_sha1": _git_blob_sha1(data),
+            "sha256": _sha256_bytes(data),
+            "size": len(data),
+        }
+        try:
+            return data.decode("utf-8")
+        except UnicodeError as error:
+            raise EvidenceError("cannot decode {0}: {1}".format(label, error)) from error
+
+    build_workflow = read_bound_workflow("build_workflow", "exact build workflow")
+    runtime_workflow = read_bound_workflow("runtime_workflow", "runtime workflow")
+    runtime_pr_workflow = read_bound_workflow(
+        "runtime_pr_workflow", "runtime PR workflow"
     )
     _validate_runtime_pr_workflow(runtime_pr_workflow)
     init = _read_text(_repo_file(repo, inputs["init"], "runtime init"), "runtime init")
@@ -1447,6 +1588,21 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
         if fragment not in build_workflow:
             raise EvidenceError("exact build workflow is not a reusable boot artifact producer")
     _validate_exact_build_workflow(build_workflow)
+    for assignment in (
+        "  EXPECTED_KERNEL_RELEASE: {0}\n".format(EXPECTED_KERNEL_RELEASE),
+        "  NATIVE_KERNEL_LOCALVERSION: {0}\n".format(EXPECTED_KERNEL_LOCALVERSION),
+    ):
+        if build_workflow.count(assignment) != 1:
+            raise EvidenceError("exact build workflow kernel-release identity differs")
+    if build_workflow.count('LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION"') != 6:
+        raise EvidenceError("exact build workflow does not bind every Kbuild release")
+    for fragment in (
+        'test "${vermagic%% *}" = "$EXPECTED_KERNEL_RELEASE"',
+        'test "$kernel_release" = "$EXPECTED_KERNEL_RELEASE"',
+        'printf \'%s\\n\' "$kernel_release" > "$EVIDENCE_DIR/kernel.release"',
+    ):
+        if build_workflow.count(fragment) != 1:
+            raise EvidenceError("exact build workflow release check differs")
 
     image = contract["runtime"]["container_image"]
     if runtime_workflow.count(image) < 1:
@@ -1553,6 +1709,8 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
             raise EvidenceError("runtime workflow contains forbidden host/credit boundary")
     if re.search(r"\bpass\b", runtime_workflow, re.IGNORECASE):
         raise EvidenceError("runtime workflow may not claim a gate PASS")
+    if actual_workflow_identities != workflow_identities:
+        raise EvidenceError("runtime repository workflow byte identity differs")
 
     load_markers = [
         'emit_state initial-clean',
@@ -1581,6 +1739,17 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
     ):
         if fragment not in init:
             raise EvidenceError("runtime init lacks evidence marker: {0}".format(fragment))
+    active_init = _active_shell_lines(init)
+    canonical_pair = "mcctrl,ihk_smp_x86_64,|ihk_smp_x86_64,mcctrl,) ;;"
+    if active_init.count(canonical_pair) != 2:
+        raise EvidenceError("runtime init provider-user grammar differs")
+    if active_init.count(
+        '[ "$users" = \'ihk_smp_x86_64,\' ] || '
+        "{ fail wrong-users-after-mcctrl; exit 1; }"
+    ) != 1:
+        raise EvidenceError("runtime init sole-provider-user grammar differs")
+    if _sha256_bytes(init.encode("utf-8")) != EXPECTED_RUNTIME_INIT_SHA256:
+        raise EvidenceError("runtime init identity differs")
     if re.search(r"\bpass\b", init, re.IGNORECASE) or "credit=eligible" in init:
         raise EvidenceError("runtime init may not claim PASS or credit")
     for value in ("$0xfee1dead", "$0x28121969", "$0x4321fedc"):
@@ -1814,7 +1983,15 @@ def _validate_build_scope_artifacts(
     ):
         raise EvidenceError("exact build commands use an unexpected source/output identity")
 
-    prefix = ["make", "-C", sources[0], "O=" + outputs[0], "ARCH=x86_64", "LLVM=1"]
+    prefix = [
+        "make",
+        "-C",
+        sources[0],
+        "O=" + outputs[0],
+        "ARCH=x86_64",
+        "LLVM=1",
+        "LOCALVERSION=" + EXPECTED_KERNEL_LOCALVERSION,
+    ]
     expected_commands = [
         prefix + ["rustavailable"],
         prefix + ["-j2", "bzImage"],
@@ -1844,6 +2021,16 @@ def _run_field(module: Path, field: str) -> list[str]:
     if result.returncode != 0:
         raise EvidenceError("modinfo failed for {0}:{1}".format(module.name, field))
     return [line for line in result.stdout.splitlines() if line]
+
+
+def _module_vermagic_release(module: Path) -> str:
+    records = _run_field(module, "vermagic")
+    if len(records) != 1 or not records[0].split():
+        raise EvidenceError("{0} vermagic record differs".format(module.name))
+    release = records[0].split()[0]
+    if release != EXPECTED_KERNEL_RELEASE:
+        raise EvidenceError("{0} vermagic release differs".format(module.name))
+    return release
 
 
 def _nm(module: Path, arguments: list[str]) -> str:
@@ -1927,6 +2114,17 @@ def _state_modules(text: str, label: str) -> dict[str, str]:
     return records
 
 
+def _provider_users(raw: str, label: str) -> set[str]:
+    if raw == "-":
+        return set()
+    if re.fullmatch(r"(?:[A-Za-z0-9_]+,)+", raw) is None:
+        raise EvidenceError("provider user grammar differs for {0}".format(label))
+    values = raw[:-1].split(",")
+    if len(values) != len(set(values)):
+        raise EvidenceError("provider user list contains duplicates for {0}".format(label))
+    return set(values)
+
+
 def _refcount_record(text: str, phase: str) -> tuple[int, set[str]]:
     expression = re.compile(
         r"^"
@@ -1940,17 +2138,50 @@ def _refcount_record(text: str, phase: str) -> tuple[int, set[str]]:
     if len(records) != 1:
         raise EvidenceError("provider refcount record differs for {0}".format(phase))
     references = int(records[0][0])
-    users = {item for item in records[0][1].strip(",").split(",") if item != "-"}
+    users = _provider_users(records[0][1], "refcount {0}".format(phase))
     return references, users
 
 
-def _state_provider_record(modules: dict[str, str], label: str) -> tuple[int, set[str]]:
-    fields = modules.get("ihk", "").split()
-    if len(fields) < 4 or not fields[1].isdigit():
-        raise EvidenceError("provider /proc/modules state differs for {0}".format(label))
-    references = int(fields[1])
-    users = {item for item in fields[2].strip(",").split(",") if item != "-"}
-    return references, users
+def _state_module_record(
+    modules: dict[str, str], module: str, label: str
+) -> dict[str, Any]:
+    fields = modules.get(module, "").split()
+    if (
+        len(fields) not in (5, 6)
+        or re.fullmatch(r"[1-9][0-9]*", fields[0]) is None
+        or re.fullmatch(r"(?:0|[1-9][0-9]*)", fields[1]) is None
+        or fields[3] != "Live"
+        or re.fullmatch(r"0x[0-9A-Fa-f]+", fields[4]) is None
+        or (len(fields) == 6 and re.fullmatch(r"\([A-Z]+\)", fields[5]) is None)
+    ):
+        raise EvidenceError(
+            "{0} /proc/modules state differs for {1}".format(module, label)
+        )
+    return {
+        "size": int(fields[0]),
+        "references": int(fields[1]),
+        "users_text": fields[2],
+        "users": frozenset(
+            _provider_users(fields[2], "/proc/modules {0} {1}".format(label, module))
+        ),
+        "state": fields[3],
+        "address": fields[4],
+        "taints": None if len(fields) == 5 else fields[5],
+    }
+
+
+def _unique_exact_line(lines: list[str], record: str, label: str) -> int:
+    positions = [index for index, line in enumerate(lines) if line == record]
+    if len(positions) != 1:
+        raise EvidenceError("{0} runtime record differs".format(label))
+    return positions[0]
+
+
+def _unique_prefixed_line(lines: list[str], prefix: str, label: str) -> int:
+    positions = [index for index, line in enumerate(lines) if line.startswith(prefix)]
+    if len(positions) != 1:
+        raise EvidenceError("{0} runtime record differs".format(label))
+    return positions[0]
 
 
 def validate_serial(serial_path: Path, kernel_release: str) -> dict[str, Any]:
@@ -1960,56 +2191,131 @@ def validate_serial(serial_path: Path, kernel_release: str) -> dict[str, Any]:
     if not data:
         raise EvidenceError("serial log is empty")
     text = data.decode("utf-8", errors="replace").replace("\r\n", "\n")
+    lines = text.splitlines()
     complete = "{0} COMPLETE status=technical-capture-unreviewed credit=forbidden".format(
         PROTOCOL
     )
-    if text.count(complete) != 1 or "{0} INCOMPLETE".format(PROTOCOL) in text:
+    if lines.count(complete) != 1 or any(
+        line.startswith("{0} INCOMPLETE".format(PROTOCOL)) for line in lines
+    ):
         raise EvidenceError("serial protocol is incomplete or duplicated")
     release = "{0} KERNEL_RELEASE actual={1} expected={1}".format(PROTOCOL, kernel_release)
-    if text.count(release) != 1:
+    if lines.count(release) != 1:
         raise EvidenceError("guest did not boot the exact built kernel release")
 
-    runtime_markers = [
-        "{0} BEGIN".format(PROTOCOL),
-        "{0} STATE_BEGIN label=initial-clean".format(PROTOCOL),
-        "{0} LOAD module=ihk status=ok".format(PROTOCOL),
-        "{0} LOAD module=ihk_smp_x86_64 status=ok".format(PROTOCOL),
-        "{0} LOAD module=mcctrl status=ok".format(PROTOCOL),
-        "{0} STATE_BEGIN label=all-loaded".format(PROTOCOL),
-        "{0} REFCOUNT module=ihk phase=all-loaded references=2 ".format(PROTOCOL),
-        "{0} NEGATIVE operation=unload-provider-first status=".format(PROTOCOL),
-        "{0} REFCOUNT module=ihk phase=after-negative references=2 ".format(PROTOCOL),
-        "{0} STATE_BEGIN label=after-negative".format(PROTOCOL),
-        "{0} UNLOAD module=mcctrl status=ok".format(PROTOCOL),
-        "{0} REFCOUNT module=ihk phase=after-mcctrl-unload references=1 ".format(
-            PROTOCOL
-        ),
-        "{0} UNLOAD module=ihk_smp_x86_64 status=ok".format(PROTOCOL),
-        "{0} REFCOUNT module=ihk phase=after-smp-unload references=0 ".format(PROTOCOL),
-        "{0} UNLOAD module=ihk status=ok".format(PROTOCOL),
-        "{0} STATE_BEGIN label=final-clean".format(PROTOCOL),
-        "{0} DMESG_BEGIN".format(PROTOCOL),
-        "{0} DMESG_END".format(PROTOCOL),
-        complete,
+    exact_runtime_markers = [
+        ("begin", "{0} BEGIN".format(PROTOCOL)),
+        ("kernel release", release),
+        ("initial state begin", "{0} STATE_BEGIN label=initial-clean".format(PROTOCOL)),
+        ("initial state end", "{0} STATE_END label=initial-clean".format(PROTOCOL)),
+        ("ihk load", "{0} LOAD module=ihk status=ok".format(PROTOCOL)),
+        ("smp load", "{0} LOAD module=ihk_smp_x86_64 status=ok".format(PROTOCOL)),
+        ("mcctrl load", "{0} LOAD module=mcctrl status=ok".format(PROTOCOL)),
+        ("all-loaded state begin", "{0} STATE_BEGIN label=all-loaded".format(PROTOCOL)),
+        ("all-loaded state end", "{0} STATE_END label=all-loaded".format(PROTOCOL)),
+        ("negative output begin", "{0} NEGATIVE_OUTPUT_BEGIN".format(PROTOCOL)),
+        ("negative output end", "{0} NEGATIVE_OUTPUT_END".format(PROTOCOL)),
+        ("after-negative state begin", "{0} STATE_BEGIN label=after-negative".format(PROTOCOL)),
+        ("after-negative state end", "{0} STATE_END label=after-negative".format(PROTOCOL)),
+        ("mcctrl unload", "{0} UNLOAD module=mcctrl status=ok".format(PROTOCOL)),
+        ("smp unload", "{0} UNLOAD module=ihk_smp_x86_64 status=ok".format(PROTOCOL)),
+        ("ihk unload", "{0} UNLOAD module=ihk status=ok".format(PROTOCOL)),
+        ("final state begin", "{0} STATE_BEGIN label=final-clean".format(PROTOCOL)),
+        ("final state end", "{0} STATE_END label=final-clean".format(PROTOCOL)),
+        ("dmesg begin", "{0} DMESG_BEGIN".format(PROTOCOL)),
+        ("dmesg end", "{0} DMESG_END".format(PROTOCOL)),
+        ("complete", complete),
     ]
-    positions = [text.find(marker) for marker in runtime_markers]
-    if any(position < 0 for position in positions) or positions != sorted(positions):
-        raise EvidenceError("serial runtime markers are missing or out of order")
-    negative = re.search(
-        re.escape(PROTOCOL) + r" NEGATIVE operation=unload-provider-first status=([0-9]+)",
-        text,
+    marker_positions = {
+        label: _unique_exact_line(lines, marker, label)
+        for label, marker in exact_runtime_markers
+    }
+    prefixed_runtime_markers = [
+        (
+            "all-loaded refcount",
+            "{0} REFCOUNT module=ihk phase=all-loaded references=".format(PROTOCOL),
+        ),
+        (
+            "negative unload",
+            "{0} NEGATIVE operation=unload-provider-first status=".format(PROTOCOL),
+        ),
+        (
+            "after-negative refcount",
+            "{0} REFCOUNT module=ihk phase=after-negative references=".format(PROTOCOL),
+        ),
+        (
+            "after-mcctrl refcount",
+            "{0} REFCOUNT module=ihk phase=after-mcctrl-unload references=".format(
+                PROTOCOL
+            ),
+        ),
+        (
+            "after-smp refcount",
+            "{0} REFCOUNT module=ihk phase=after-smp-unload references=".format(PROTOCOL),
+        ),
+    ]
+    marker_positions.update(
+        {
+            label: _unique_prefixed_line(lines, prefix, label)
+            for label, prefix in prefixed_runtime_markers
+        }
     )
-    if negative is None or int(negative.group(1)) != 1:
+    ordered_marker_labels = [
+        "begin",
+        "kernel release",
+        "initial state begin",
+        "initial state end",
+        "ihk load",
+        "smp load",
+        "mcctrl load",
+        "all-loaded state begin",
+        "all-loaded state end",
+        "all-loaded refcount",
+        "negative unload",
+        "negative output begin",
+        "negative output end",
+        "after-negative refcount",
+        "after-negative state begin",
+        "after-negative state end",
+        "mcctrl unload",
+        "after-mcctrl refcount",
+        "smp unload",
+        "after-smp refcount",
+        "ihk unload",
+        "final state begin",
+        "final state end",
+        "dmesg begin",
+        "dmesg end",
+        "complete",
+    ]
+    positions = [marker_positions[label] for label in ordered_marker_labels]
+    if len(set(positions)) != len(positions) or positions != sorted(positions):
+        raise EvidenceError("serial runtime markers are missing or out of order")
+    negative_expression = re.compile(
+        r"^"
+        + re.escape(PROTOCOL)
+        + r" NEGATIVE operation=unload-provider-first status=([0-9]+)$"
+    )
+    negative_records = [
+        match
+        for line in lines
+        for match in (negative_expression.fullmatch(line),)
+        if match is not None
+    ]
+    if len(negative_records) != 1 or int(negative_records[0].group(1)) != 1:
         raise EvidenceError("provider-first unload negative test did not fail")
     negative_begin = "{0} NEGATIVE_OUTPUT_BEGIN".format(PROTOCOL)
     negative_end = "{0} NEGATIVE_OUTPUT_END".format(PROTOCOL)
-    if text.splitlines().count(negative_begin) != 1 or text.splitlines().count(
-        negative_end
-    ) != 1:
-        raise EvidenceError("provider-first unload diagnostic frame differs")
-    negative_start = text.index(negative_begin) + len(negative_begin)
-    negative_finish = text.index(negative_end, negative_start)
-    if "Module ihk is in use" not in text[negative_start:negative_finish]:
+    negative_start = _unique_exact_line(lines, negative_begin, "negative output begin")
+    negative_finish = _unique_exact_line(lines, negative_end, "negative output end")
+    negative_lines = lines[negative_start + 1 : negative_finish]
+    negative_diagnostic = re.compile(
+        r"^rmmod: ERROR: Module ihk is in use by: "
+        r"(?:mcctrl ihk_smp_x86_64|ihk_smp_x86_64 mcctrl)$"
+    )
+    if len(negative_lines) != 1 or negative_diagnostic.fullmatch(
+        negative_lines[0]
+    ) is None:
         raise EvidenceError("provider-first unload lacks the in-use diagnostic")
     expected_modules = {"ihk", "ihk_smp_x86_64", "mcctrl"}
     initial = _state_modules(text, "initial-clean")
@@ -2020,6 +2326,33 @@ def validate_serial(serial_path: Path, kernel_release: str) -> dict[str, Any]:
         raise EvidenceError("initial or final runtime state retains a native module")
     if set(all_loaded) != expected_modules or set(after_negative) != expected_modules:
         raise EvidenceError("loaded module state differs before or after the negative test")
+
+    parsed_states = {
+        label: {
+            module: _state_module_record(records, module, label)
+            for module in sorted(expected_modules)
+        }
+        for label, records in (
+            ("all-loaded", all_loaded),
+            ("after-negative", after_negative),
+        )
+    }
+    expected_module_dependencies = {
+        "ihk": (2, frozenset(("ihk_smp_x86_64", "mcctrl"))),
+        "ihk_smp_x86_64": (0, frozenset()),
+        "mcctrl": (0, frozenset()),
+    }
+    for label, records in parsed_states.items():
+        for module, expected in expected_module_dependencies.items():
+            actual = (records[module]["references"], records[module]["users"])
+            if actual != expected:
+                raise EvidenceError(
+                    "{0} /proc/modules dependencies differ for {1}".format(
+                        module, label
+                    )
+                )
+    if parsed_states["all-loaded"] != parsed_states["after-negative"]:
+        raise EvidenceError("negative test changed the complete /proc/modules state")
 
     expected_refcounts = {
         "all-loaded": (2, {"ihk_smp_x86_64", "mcctrl"}),
@@ -2033,12 +2366,12 @@ def validate_serial(serial_path: Path, kernel_release: str) -> dict[str, Any]:
             raise EvidenceError(
                 "provider refcount/users differ for {0}: {1}".format(phase, actual)
             )
-    if _state_provider_record(all_loaded, "all-loaded") != expected_refcounts["all-loaded"]:
-        raise EvidenceError("all-loaded /proc/modules provider state differs")
-    if _state_provider_record(after_negative, "after-negative") != expected_refcounts[
-        "after-negative"
-    ]:
-        raise EvidenceError("negative test changed /proc/modules provider state")
+    for label in ("all-loaded", "after-negative"):
+        provider = parsed_states[label]["ihk"]
+        if (provider["references"], set(provider["users"])) != expected_refcounts[label]:
+            raise EvidenceError(
+                "{0} /proc/modules provider state differs".format(label)
+            )
 
     lifecycle = [
         "ihk: lifecycle=load version=1.7.0rc4 abi=1 parameters=0 dependencies=0",
@@ -2060,14 +2393,29 @@ def validate_serial(serial_path: Path, kernel_release: str) -> dict[str, Any]:
         ),
         "ihk: lifecycle=unload version=1.7.0rc4 abi=1 parameters=0 dependencies=0",
     ]
-    lifecycle_positions = [text.find(marker) for marker in lifecycle]
-    if any(position < 0 for position in lifecycle_positions) or lifecycle_positions != sorted(
-        lifecycle_positions
-    ):
+    dmesg_lines = lines[
+        marker_positions["dmesg begin"] + 1 : marker_positions["dmesg end"]
+    ]
+    lifecycle_positions = []
+    for marker in lifecycle:
+        expression = re.compile(
+            r"^(?:\[\s*[0-9]+(?:\.[0-9]+)?\]\s+)?"
+            + re.escape(marker)
+            + r"$"
+        )
+        matches = [
+            index
+            for index, line in enumerate(dmesg_lines)
+            if expression.fullmatch(line) is not None
+        ]
+        if len(matches) != 1:
+            raise EvidenceError("lifecycle diagnostics are missing or duplicated")
+        lifecycle_positions.append(matches[0])
+    if lifecycle_positions != sorted(lifecycle_positions):
         raise EvidenceError("lifecycle diagnostics are missing or out of order")
     return {
         "kernel_release": kernel_release,
-        "negative_unload_status": int(negative.group(1)),
+        "negative_unload_status": int(negative_records[0].group(1)),
         "provider_refcount": 2,
         "provider_users": ["ihk_smp_x86_64", "mcctrl"],
         "serial_sha256": _sha256_file(serial_path),
@@ -2122,9 +2470,7 @@ def _validate_capture_content(value: dict[str, Any]) -> None:
     if build["config_runtime_requirements"] != EXPECTED_RUNTIME_REQUIRED_CONFIG:
         raise EvidenceError("capture runtime config requirements differ")
     release = build["kernel_release"]
-    if type(release) is not str or re.fullmatch(
-        r"6\.12\.0-211\.44\.1\.el10_2(?:[.A-Za-z0-9_+-]*)", release
-    ) is None:
+    if type(release) is not str or release != EXPECTED_KERNEL_RELEASE:
         raise EvidenceError("capture kernel release differs")
 
     scope = build["scope"]
@@ -2335,8 +2681,8 @@ def capture(
     if commit != candidate_sha:
         raise EvidenceError("build artifact commit differs from runtime candidate")
     kernel_release = _read_text(build_dir / "kernel.release", "kernel release").strip()
-    if not re.fullmatch(r"6\.12\.0-211\.44\.1\.el10_2(?:[.A-Za-z0-9_+-]*)", kernel_release):
-        raise EvidenceError("built kernel release is outside the selected NVR")
+    if kernel_release != EXPECTED_KERNEL_RELEASE:
+        raise EvidenceError("built kernel release differs from the selected custom release")
     config_state = _validate_resolved_config(
         build_dir / "resolved.config", contract["runtime"]["required_kernel_config"]
     )
@@ -2351,6 +2697,8 @@ def capture(
         expected_ns = [] if item["import_namespace"] is None else [item["import_namespace"]]
         if namespaces != expected_ns:
             raise EvidenceError("{0} import namespace differs".format(item["file"]))
+        if _module_vermagic_release(path) != kernel_release:
+            raise EvidenceError("{0} vermagic/build release differs".format(item["file"]))
         if "provider_symbol_definition" in item:
             defined = _nm(path, ["-g", "--defined-only"])
             symbol = item["provider_symbol_definition"]

@@ -9,6 +9,7 @@ import io
 import json
 import os
 from pathlib import Path
+import re
 import shutil
 import sys
 import tempfile
@@ -23,7 +24,7 @@ if str(REPO_ROOT) not in sys.path:
 from scripts import native_rust_runtime_evidence as evidence
 
 
-KERNEL_RELEASE = "6.12.0-211.44.1.el10_2.x86_64"
+KERNEL_RELEASE = "6.12.0-211.44.1.el10_2.mckernel1.x86_64"
 
 
 def valid_serial() -> str:
@@ -44,19 +45,19 @@ def valid_serial() -> str:
             "ihk_import=source-bound-anchor binfmt=blocked-no-safe-rust-api"
         ),
         f"{protocol} STATE_BEGIN label=all-loaded",
-        f"{protocol} MODULE ihk 1 2 mcctrl,ihk_smp_x86_64 Live 0x0",
+        f"{protocol} MODULE ihk 1 2 mcctrl,ihk_smp_x86_64, Live 0x0",
         f"{protocol} MODULE ihk_smp_x86_64 1 0 - Live 0x0",
         f"{protocol} MODULE mcctrl 1 0 - Live 0x0",
         f"{protocol} STATE_END label=all-loaded",
-        f"{protocol} REFCOUNT module=ihk phase=all-loaded references=2 users=mcctrl,ihk_smp_x86_64",
+        f"{protocol} REFCOUNT module=ihk phase=all-loaded references=2 users=mcctrl,ihk_smp_x86_64,",
         f"{protocol} NEGATIVE operation=unload-provider-first status=1",
         f"{protocol} NEGATIVE_OUTPUT_BEGIN",
         "rmmod: ERROR: Module ihk is in use by: mcctrl ihk_smp_x86_64",
         f"{protocol} NEGATIVE_OUTPUT_END",
         f"{protocol} REFCOUNT module=ihk phase=after-negative references=2 "
-        "users=mcctrl,ihk_smp_x86_64",
+        "users=mcctrl,ihk_smp_x86_64,",
         f"{protocol} STATE_BEGIN label=after-negative",
-        f"{protocol} MODULE ihk 1 2 mcctrl,ihk_smp_x86_64 Live 0x0",
+        f"{protocol} MODULE ihk 1 2 mcctrl,ihk_smp_x86_64, Live 0x0",
         f"{protocol} MODULE ihk_smp_x86_64 1 0 - Live 0x0",
         f"{protocol} MODULE mcctrl 1 0 - Live 0x0",
         f"{protocol} STATE_END label=after-negative",
@@ -64,7 +65,7 @@ def valid_serial() -> str:
         "ihk_import=source-bound-anchor binfmt=blocked-no-safe-rust-api",
         f"{protocol} UNLOAD module=mcctrl status=ok",
         f"{protocol} REFCOUNT module=ihk phase=after-mcctrl-unload references=1 "
-        "users=ihk_smp_x86_64",
+        "users=ihk_smp_x86_64,",
         "ihk_smp_x86_64: lifecycle=unload parameters=6 dependency=ihk "
         "import_namespace=MCKERNEL_IHK_V1",
         f"{protocol} UNLOAD module=ihk_smp_x86_64 status=ok",
@@ -213,6 +214,103 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         self.assertEqual(["IHK-001", "SMP-001", "MCC-001"], summary["gate_ids"])
         self.assertEqual("tcg", summary["runtime"]["qemu_accelerator"])
 
+    def test_selected_custom_kernel_identity_mutations_fail_closed(self) -> None:
+        mutations = (
+            ("kernel_release", "6.12.0"),
+            ("kernel_release", evidence.EXPECTED_KERNEL_RELEASE + ".unreviewed"),
+            ("localversion", "-211.44.1.el10_2.x86_64"),
+        )
+        for key, value in mutations:
+            with self.subTest(key=key, value=value):
+                repo = self.copy_contract_repository()
+                path = repo / evidence.DEFAULT_CONTRACT
+                contract = json.loads(path.read_text(encoding="utf-8"))
+                contract["selected_kernel"][key] = value
+                path.write_text(json.dumps(contract), encoding="utf-8")
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError, "selected kernel identity"
+                ):
+                    evidence.validate_contract(repo)
+
+    def test_every_kbuild_invocation_requires_the_exact_localversion(self) -> None:
+        relative = ".github/workflows/native-rust-host-modules-exact-build.yml"
+        needle = 'LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION"'
+        source = (REPO_ROOT / relative).read_text(encoding="utf-8")
+        offsets = [match.start() for match in re.finditer(re.escape(needle), source)]
+        self.assertEqual(6, len(offsets))
+        for index, offset in enumerate(offsets):
+            with self.subTest(index=index):
+                repo = self.copy_contract_repository()
+                path = repo / relative
+                text = path.read_text(encoding="utf-8")
+                path.write_text(
+                    text[:offset] + 'LOCALVERSION="-unreviewed"' + text[offset + len(needle) :],
+                    encoding="utf-8",
+                )
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError,
+                    "exact build workflow|Kbuild release|kernel-release",
+                ):
+                    evidence.validate_contract(repo)
+
+    def test_release_environment_and_postbuild_checks_are_immutable(self) -> None:
+        relative = ".github/workflows/native-rust-host-modules-exact-build.yml"
+        mutations = (
+            (
+                "EXPECTED_KERNEL_RELEASE: " + evidence.EXPECTED_KERNEL_RELEASE,
+                "EXPECTED_KERNEL_RELEASE: 6.12.0",
+            ),
+            (
+                "NATIVE_KERNEL_LOCALVERSION: "
+                + evidence.EXPECTED_KERNEL_LOCALVERSION,
+                "NATIVE_KERNEL_LOCALVERSION: -unreviewed",
+            ),
+            (
+                'test "${vermagic%% *}" = "$EXPECTED_KERNEL_RELEASE"',
+                'test -n "${vermagic%% *}"',
+            ),
+            (
+                'test "$kernel_release" = "$EXPECTED_KERNEL_RELEASE"',
+                'test -n "$kernel_release"',
+            ),
+        )
+        for old, new in mutations:
+            with self.subTest(new=new):
+                repo = self.copy_contract_repository()
+                self.mutate_text(repo, relative, old, new)
+                with self.assertRaises(evidence.EvidenceError):
+                    evidence.validate_contract(repo)
+
+    def test_postcheck_kernel_release_environment_override_is_rejected(self) -> None:
+        repo = self.copy_contract_repository()
+        relative = ".github/workflows/native-rust-host-modules-exact-build.yml"
+        self.mutate_text(
+            repo,
+            relative,
+            "          printf 'NATIVE_BASELINE_CONFIG=%s\\n' \"$baseline\" >> \"$GITHUB_ENV\"\n",
+            (
+                "          printf 'NATIVE_BASELINE_CONFIG=%s\\n' \"$baseline\" >> \"$GITHUB_ENV\"\n"
+                "          printf 'NATIVE_KERNEL_LOCALVERSION=-attacker\\n' >> \"$GITHUB_ENV\"\n"
+                "          printf 'EXPECTED_KERNEL_RELEASE=6.12.0-attacker\\n' >> \"$GITHUB_ENV\"\n"
+            ),
+        )
+        with self.assertRaisesRegex(evidence.EvidenceError, "prebuild scope differs"):
+            evidence.validate_contract(repo)
+
+    def test_crlf_cannot_alias_runtime_or_workflow_byte_identity(self) -> None:
+        for relative in (
+            "scripts/native-rust-runtime-init.sh",
+            ".github/workflows/native-rust-host-modules-exact-build.yml",
+        ):
+            with self.subTest(relative=relative):
+                repo = self.copy_contract_repository()
+                path = repo / relative
+                raw = path.read_bytes()
+                self.assertNotIn(b"\r", raw)
+                path.write_bytes(raw.replace(b"\n", b"\r\n"))
+                with self.assertRaises(evidence.EvidenceError):
+                    evidence.validate_contract(repo)
+
     def test_cli_does_not_report_pass_or_credit(self) -> None:
         output = io.StringIO()
         with contextlib.redirect_stdout(output):
@@ -265,6 +363,34 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         with (repo / workflow).open("a", encoding="utf-8") as stream:
             stream.write("# PASS\n")
         with self.assertRaisesRegex(evidence.EvidenceError, "may not claim a gate PASS"):
+            evidence.validate_contract(repo)
+
+    def test_runtime_workflow_inserted_serial_rewrite_step_is_rejected(self) -> None:
+        repo = self.copy_contract_repository()
+        workflow = repo / ".github/workflows/native-rust-host-modules-exact-runtime.yml"
+        text = workflow.read_text(encoding="utf-8")
+        capture = "      - name: Create a credit-forbidden technical capture\n"
+        self.assertEqual(1, text.count(capture))
+        injected = (
+            "      - name: Rewrite serial evidence after QEMU\n"
+            "        if: ${{ always() }}\n"
+            "        run: printf fabricated > \"$RUNTIME_EVIDENCE/serial.log\"\n"
+        )
+        workflow.write_text(text.replace(capture, injected + capture), encoding="utf-8")
+        with self.assertRaisesRegex(evidence.EvidenceError, "workflow byte identity"):
+            evidence.validate_contract(repo)
+
+    def test_runtime_workflow_identity_contract_cannot_be_refreshed(self) -> None:
+        repo = self.copy_contract_repository()
+        path = repo / evidence.DEFAULT_CONTRACT
+        contract = json.loads(path.read_text(encoding="utf-8"))
+        contract["repository_workflow_identities"]["runtime_workflow"]["sha256"] = (
+            "0" * 64
+        )
+        path.write_text(
+            json.dumps(contract, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        with self.assertRaisesRegex(evidence.EvidenceError, "workflow identities"):
             evidence.validate_contract(repo)
 
     def test_runtime_checkout_cannot_omit_git(self) -> None:
@@ -464,11 +590,162 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         with self.assertRaisesRegex(evidence.EvidenceError, "load/negative/reverse-unload order"):
             evidence.validate_contract(repo)
 
+    def test_init_provider_user_grammar_mutations_fail_closed(self) -> None:
+        relative = "scripts/native-rust-runtime-init.sh"
+        mutations = (
+            (
+                "mcctrl,ihk_smp_x86_64,|ihk_smp_x86_64,mcctrl,) ;;",
+                "*,ihk_smp_x86_64,*) ;;",
+            ),
+            (
+                '[ "$users" = \'ihk_smp_x86_64,\' ]',
+                '[ "$users" = ihk_smp_x86_64 ]',
+            ),
+        )
+        for old, new in mutations:
+            with self.subTest(new=new):
+                repo = self.copy_contract_repository()
+                self.mutate_text(repo, relative, old, new)
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError, "provider-user grammar"
+                ):
+                    evidence.validate_contract(repo)
+
+    def test_commented_provider_user_decoys_fail_closed(self) -> None:
+        relative = "scripts/native-rust-runtime-init.sh"
+        mutations = (
+            (
+                "mcctrl,ihk_smp_x86_64,|ihk_smp_x86_64,mcctrl,) ;;",
+                "*) ;; # mcctrl,ihk_smp_x86_64,|ihk_smp_x86_64,mcctrl,) ;;",
+            ),
+            (
+                '[ "$users" = \'ihk_smp_x86_64,\' ] || { fail wrong-users-after-mcctrl; exit 1; }',
+                'true # [ "$users" = \'ihk_smp_x86_64,\' ] || { fail wrong-users-after-mcctrl; exit 1; }',
+            ),
+        )
+        for old, new in mutations:
+            with self.subTest(new=new):
+                repo = self.copy_contract_repository()
+                self.mutate_text(repo, relative, old, new)
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError, "provider-user grammar"
+                ):
+                    evidence.validate_contract(repo)
+
+    def test_unreachable_and_wrong_phase_provider_user_decoys_fail_closed(self) -> None:
+        relative = "scripts/native-rust-runtime-init.sh"
+        canonical = "mcctrl,ihk_smp_x86_64,|ihk_smp_x86_64,mcctrl,) ;;"
+        sole = (
+            '[ "$users" = \'ihk_smp_x86_64,\' ] || '
+            "{ fail wrong-users-after-mcctrl; exit 1; }"
+        )
+        mutations = (
+            (
+                canonical,
+                "*) ;;",
+                "\nif false; then\ncase x in\n" + canonical + "\nesac\nfi\n",
+            ),
+            (
+                sole,
+                "true",
+                "\nif false; then\n" + sole + "\nfi\n",
+            ),
+        )
+        for old, new, suffix in mutations:
+            with self.subTest(new=new):
+                repo = self.copy_contract_repository()
+                self.mutate_text(repo, relative, old, new)
+                path = repo / relative
+                path.write_text(path.read_text(encoding="utf-8") + suffix, encoding="utf-8")
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError,
+                    "provider-user grammar|runtime init identity",
+                ):
+                    evidence.validate_contract(repo)
+
+        repo = self.copy_contract_repository()
+        path = repo / relative
+        text = path.read_text(encoding="utf-8")
+        all_loaded = canonical + "\n*) fail wrong-provider-users; exit 1 ;;"
+        after_negative = canonical + "\n*) fail negative-test-changed-users; exit 1 ;;"
+        self.assertIn(all_loaded, text)
+        self.assertIn(after_negative, text)
+        text = text.replace(all_loaded, canonical + "\n" + all_loaded, 1)
+        text = text.replace(
+            after_negative,
+            "*) ;;\n*) fail negative-test-changed-users; exit 1 ;;",
+            1,
+        )
+        path.write_text(text, encoding="utf-8")
+        with self.assertRaisesRegex(evidence.EvidenceError, "runtime init identity"):
+            evidence.validate_contract(repo)
+
     def test_complete_serial_protocol_is_accepted(self) -> None:
         result = evidence.validate_serial(self.write_serial(valid_serial()), KERNEL_RELEASE)
         self.assertEqual(2, result["provider_refcount"])
         self.assertEqual(["ihk_smp_x86_64", "mcctrl"], result["provider_users"])
         self.assertEqual(1, result["negative_unload_status"])
+
+    def test_timestamped_lifecycle_and_module_taint_grammar_is_accepted(self) -> None:
+        serial = valid_serial()
+        module_rows = (
+            "MODULE ihk 1 2 mcctrl,ihk_smp_x86_64, Live 0x0",
+            "MODULE ihk_smp_x86_64 1 0 - Live 0x0",
+            "MODULE mcctrl 1 0 - Live 0x0",
+        )
+        for row in module_rows:
+            serial = serial.replace(row, row + " (E)")
+        for marker in (
+            "ihk: lifecycle=load version=1.7.0rc4 abi=1 parameters=0 dependencies=0",
+            "ihk_smp_x86_64: lifecycle=load parameters=6 dependency=ihk "
+            "import_namespace=MCKERNEL_IHK_V1",
+            "mcctrl: lifecycle=load foundation=1 parameters=0 declared_dependencies=1 "
+            "ihk_import=source-bound-anchor binfmt=blocked-no-safe-rust-api",
+            "mcctrl: lifecycle=unload foundation=1 parameters=0 declared_dependencies=1 "
+            "ihk_import=source-bound-anchor binfmt=blocked-no-safe-rust-api",
+            "ihk_smp_x86_64: lifecycle=unload parameters=6 dependency=ihk "
+            "import_namespace=MCKERNEL_IHK_V1",
+            "ihk: lifecycle=unload version=1.7.0rc4 abi=1 parameters=0 dependencies=0",
+        ):
+            serial = serial.replace(marker, "[    4.110654] " + marker)
+        result = evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
+        self.assertEqual(1, result["negative_unload_status"])
+
+    def test_prefixed_protocol_and_lifecycle_decoys_are_rejected(self) -> None:
+        protocol = evidence.PROTOCOL
+        for record in (
+            f"{protocol} BEGIN",
+            f"{protocol} LOAD module=ihk status=ok",
+            f"{protocol} UNLOAD module=mcctrl status=ok",
+            f"{protocol} COMPLETE status=technical-capture-unreviewed credit=forbidden",
+        ):
+            with self.subTest(record=record):
+                serial = valid_serial().replace(record, "ATTACKER-DECOY " + record, 1)
+                with self.assertRaises(evidence.EvidenceError):
+                    evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
+
+        lifecycle = (
+            "mcctrl: lifecycle=load foundation=1 parameters=0 declared_dependencies=1 "
+            "ihk_import=source-bound-anchor binfmt=blocked-no-safe-rust-api"
+        )
+        serial = valid_serial()
+        first = serial.index(lifecycle)
+        second = serial.index(lifecycle, first + len(lifecycle))
+        serial = serial[:second] + "ATTACKER-DECOY " + serial[second:]
+        with self.assertRaisesRegex(evidence.EvidenceError, "lifecycle diagnostics"):
+            evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
+
+    def test_negative_diagnostic_requires_one_exact_bounded_line(self) -> None:
+        canonical = "rmmod: ERROR: Module ihk is in use by: mcctrl ihk_smp_x86_64"
+        for mutation in (
+            "ATTACKER-DECOY " + canonical,
+            canonical + " unrelated",
+            canonical + "\n" + canonical,
+        ):
+            with self.subTest(mutation=mutation):
+                serial = valid_serial().replace(canonical, mutation, 1)
+                with self.assertRaisesRegex(evidence.EvidenceError, "in-use diagnostic"):
+                    evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
 
     def test_successful_provider_first_unload_is_rejected(self) -> None:
         serial = valid_serial().replace(
@@ -490,12 +767,187 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
 
     def test_wrong_provider_user_set_is_rejected(self) -> None:
         serial = valid_serial().replace(
-            "REFCOUNT module=ihk phase=all-loaded references=2 users=mcctrl,ihk_smp_x86_64",
-            "REFCOUNT module=ihk phase=all-loaded references=2 users=mcctrl",
+            "REFCOUNT module=ihk phase=all-loaded references=2 users=mcctrl,ihk_smp_x86_64,",
+            "REFCOUNT module=ihk phase=all-loaded references=2 users=mcctrl,",
             1,
         )
         with self.assertRaisesRegex(evidence.EvidenceError, "provider refcount/users differ"):
             evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
+
+    def test_noncanonical_provider_user_grammars_are_rejected(self) -> None:
+        canonical = (
+            "REFCOUNT module=ihk phase=all-loaded references=2 "
+            "users=mcctrl,ihk_smp_x86_64,"
+        )
+        mutations = (
+            canonical[:-1],
+            canonical + ",",
+            canonical.replace(
+                "users=mcctrl,ihk_smp_x86_64,",
+                "users=mcctrl,mcctrl,ihk_smp_x86_64,",
+            ),
+            canonical.replace(
+                "users=mcctrl,ihk_smp_x86_64,",
+                "users=mcctrl,ihk_smp_x86_64,unrelated,",
+            ),
+        )
+        for mutation in mutations:
+            with self.subTest(mutation=mutation):
+                serial = valid_serial().replace(canonical, mutation, 1)
+                with self.assertRaises(evidence.EvidenceError):
+                    evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
+
+    def test_noncanonical_proc_modules_users_are_rejected(self) -> None:
+        canonical = "MODULE ihk 1 2 mcctrl,ihk_smp_x86_64, Live 0x0"
+        serial = valid_serial().replace(canonical, canonical.replace(", Live", " Live"), 1)
+        with self.assertRaisesRegex(evidence.EvidenceError, "provider user grammar"):
+            evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
+
+    def test_proc_modules_provider_row_mutations_fail_closed(self) -> None:
+        canonical = "MODULE ihk 1 2 mcctrl,ihk_smp_x86_64, Live 0x0"
+        mutations = (
+            "MODULE ihk 1 2 mcctrl,mcctrl,ihk_smp_x86_64, Live 0x0",
+            "MODULE ihk 1 2 mcctrl,,ihk_smp_x86_64, Live 0x0",
+            "MODULE ihk 1 2 mcctrl,ihk_smp_x86_64,unrelated, Live 0x0",
+            "MODULE ihk 1 2 mcctrl,ihk_smp_x86_64, Live",
+            "MODULE ihk 1 2 mcctrl,ihk_smp_x86_64, Live 0x0 extra",
+            "MODULE ihk 1 2 mcctrl,ihk_smp_x86_64, Loading 0x0",
+            "MODULE ihk size 2 mcctrl,ihk_smp_x86_64, Live 0x0",
+            "MODULE ihk 1 refs mcctrl,ihk_smp_x86_64, Live 0x0",
+            "MODULE ihk 1 2 mcctrl,ihk_smp_x86_64, Live address",
+        )
+        for mutation in mutations:
+            with self.subTest(mutation=mutation):
+                serial = valid_serial().replace(canonical, mutation, 1)
+                with self.assertRaises(evidence.EvidenceError):
+                    evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
+
+    def test_proc_modules_consumer_row_mutations_fail_closed(self) -> None:
+        for module in ("ihk_smp_x86_64", "mcctrl"):
+            canonical = "MODULE {0} 1 0 - Live 0x0".format(module)
+            mutations = (
+                "MODULE {0} bogus garbage Loading attacker extra".format(module),
+                "MODULE {0} size 0 - Live 0x0".format(module),
+                "MODULE {0} 1 refs - Live 0x0".format(module),
+                "MODULE {0} 1 1 - Live 0x0".format(module),
+                "MODULE {0} 1 0 ihk, Live 0x0".format(module),
+                "MODULE {0} 1 0 - Loading 0x0".format(module),
+                "MODULE {0} 1 0 - Live address".format(module),
+                "MODULE {0} 1 0 - Live 0x0 extra".format(module),
+            )
+            for mutation in mutations:
+                with self.subTest(module=module, mutation=mutation):
+                    serial = valid_serial().replace(canonical, mutation, 1)
+                    with self.assertRaises(evidence.EvidenceError):
+                        evidence.validate_serial(
+                            self.write_serial(serial), KERNEL_RELEASE
+                        )
+
+    def test_loaded_module_size_must_be_positive_in_both_frames(self) -> None:
+        rows = (
+            "MODULE ihk 1 2 mcctrl,ihk_smp_x86_64, Live 0x0",
+            "MODULE ihk_smp_x86_64 1 0 - Live 0x0",
+            "MODULE mcctrl 1 0 - Live 0x0",
+        )
+        for row in rows:
+            with self.subTest(row=row):
+                mutation = row.replace(" 1 ", " 0 ", 1)
+                serial = valid_serial().replace(row, mutation)
+                with self.assertRaises(evidence.EvidenceError):
+                    evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
+
+    def test_proc_modules_taint_grammar_and_stability_are_bound(self) -> None:
+        canonical = "MODULE mcctrl 1 0 - Live 0x0"
+        for suffix in (" (e)", " E", " (E) extra"):
+            with self.subTest(suffix=suffix):
+                serial = valid_serial().replace(canonical, canonical + suffix, 1)
+                with self.assertRaises(evidence.EvidenceError):
+                    evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
+
+        serial = valid_serial()
+        first = serial.index(canonical)
+        second = serial.index(canonical, first + len(canonical))
+        serial = serial[:second] + serial[second:].replace(
+            canonical, canonical + " (E)", 1
+        )
+        with self.assertRaisesRegex(
+            evidence.EvidenceError, "complete /proc/modules state"
+        ):
+            evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
+
+    def test_negative_test_must_preserve_complete_module_state(self) -> None:
+        mutations = {
+            "ihk": "MODULE ihk 2 2 mcctrl,ihk_smp_x86_64, Live 0x0",
+            "ihk_smp_x86_64": "MODULE ihk_smp_x86_64 1 0 - Live 0x1",
+            "mcctrl": "MODULE mcctrl 2 0 - Live 0x0",
+        }
+        for module, mutation in mutations.items():
+            with self.subTest(module=module):
+                canonical = {
+                    "ihk": "MODULE ihk 1 2 mcctrl,ihk_smp_x86_64, Live 0x0",
+                    "ihk_smp_x86_64": "MODULE ihk_smp_x86_64 1 0 - Live 0x0",
+                    "mcctrl": "MODULE mcctrl 1 0 - Live 0x0",
+                }[module]
+                serial = valid_serial()
+                first = serial.index(canonical)
+                second = serial.index(canonical, first + len(canonical))
+                serial = serial[:second] + serial[second:].replace(
+                    canonical, mutation, 1
+                )
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError, "complete /proc/modules state"
+                ):
+                    evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
+
+    def test_sole_provider_user_requires_canonical_trailing_comma(self) -> None:
+        canonical = (
+            "REFCOUNT module=ihk phase=after-mcctrl-unload references=1 "
+            "users=ihk_smp_x86_64,"
+        )
+        for users in ("ihk_smp_x86_64", "mcctrl,", "ihk_smp_x86_64,mcctrl,"):
+            with self.subTest(users=users):
+                serial = valid_serial().replace(
+                    canonical,
+                    canonical.split("users=", 1)[0] + "users=" + users,
+                    1,
+                )
+                with self.assertRaises(evidence.EvidenceError):
+                    evidence.validate_serial(self.write_serial(serial), KERNEL_RELEASE)
+
+    def test_custom_kernel_release_rejects_bare_wrong_arch_and_extra_suffix(self) -> None:
+        for release in (
+            "6.12.0",
+            "6.12.0-211.44.1.el10_2.mckernel1.aarch64",
+            KERNEL_RELEASE + ".unreviewed",
+        ):
+            with self.subTest(release=release):
+                unsigned = self.valid_capture_unsigned()
+                unsigned["build"]["kernel_release"] = release
+                unsigned["runtime"]["kernel_release"] = release
+                value = copy.deepcopy(unsigned)
+                value["capture_sha256"] = evidence._sha256_bytes(
+                    evidence._canonical_bytes(unsigned)
+                )
+                with self.assertRaisesRegex(evidence.EvidenceError, "kernel release"):
+                    evidence.validate_capture(value)
+
+    def test_module_vermagic_release_is_exact_and_unique(self) -> None:
+        module = self.root / "ihk.ko"
+        for records in (
+            [],
+            [KERNEL_RELEASE + " SMP", KERNEL_RELEASE + " SMP"],
+            ["6.12.0 SMP"],
+            [KERNEL_RELEASE + ".unreviewed SMP"],
+        ):
+            with self.subTest(records=records), mock.patch.object(
+                evidence, "_run_field", return_value=records
+            ):
+                with self.assertRaisesRegex(evidence.EvidenceError, "vermagic"):
+                    evidence._module_vermagic_release(module)
+        with mock.patch.object(
+            evidence, "_run_field", return_value=[KERNEL_RELEASE + " SMP preempt"]
+        ):
+            self.assertEqual(KERNEL_RELEASE, evidence._module_vermagic_release(module))
 
     def test_retained_module_in_final_state_is_rejected(self) -> None:
         serial = valid_serial().replace(
@@ -685,7 +1137,10 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         directory.mkdir()
         source = self.root / "native-rust-source" / "linux-6.12.0-211.44.1.el10_2"
         output = self.root / "native-rust-build"
-        prefix = f"make -C {source} O={output} ARCH=x86_64 LLVM=1"
+        prefix = (
+            f"make -C {source} O={output} ARCH=x86_64 LLVM=1 "
+            f"LOCALVERSION={evidence.EXPECTED_KERNEL_LOCALVERSION}"
+        )
         values = {
             "build.commands": (
                 f"{prefix} rustavailable\n"
@@ -752,6 +1207,19 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         text = commands.read_text(encoding="utf-8")
         text = text.replace(
             "-j2 " + " ".join(evidence.BUILD_MODULE_TARGETS), "-j2 modules", 1
+        )
+        commands.write_text(text, encoding="utf-8")
+        records[commands.name] = hashlib.sha256(commands.read_bytes()).hexdigest()
+        with self.assertRaisesRegex(evidence.EvidenceError, "bounded target scope"):
+            evidence._validate_build_scope_artifacts(directory, records)
+
+    def test_build_command_with_wrong_localversion_is_rejected(self) -> None:
+        directory, records = self.write_build_scope_artifacts()
+        commands = directory / "build.commands"
+        text = commands.read_text(encoding="utf-8").replace(
+            "LOCALVERSION=" + evidence.EXPECTED_KERNEL_LOCALVERSION,
+            "LOCALVERSION=-unreviewed",
+            1,
         )
         commands.write_text(text, encoding="utf-8")
         records[commands.name] = hashlib.sha256(commands.read_bytes()).hexdigest()

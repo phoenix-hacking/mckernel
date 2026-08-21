@@ -254,6 +254,8 @@ permissions:
 env:
   ROCKY_IMAGE: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
   EXPECTED_HEAD_SHA: ${{ inputs.validation_sha || github.event.pull_request.head.sha || github.sha }}
+  EXPECTED_KERNEL_RELEASE: 6.12.0-211.44.1.el10_2.mckernel1.x86_64
+  NATIVE_KERNEL_LOCALVERSION: -211.44.1.el10_2.mckernel1.x86_64
 
 jobs:
   exact-build:
@@ -436,9 +438,11 @@ jobs:
             "$BUILD_DIR/.config" \
             "$GITHUB_WORKSPACE/host-kernel/rocky/configs/rust-minimal.config" \
             "$GITHUB_WORKSPACE/host-kernel/rocky/configs/native-rust-evidence.config"
-          make -C "$NATIVE_SOURCE_ROOT" O="$BUILD_DIR" ARCH=x86_64 LLVM=1 olddefconfig
+          make -C "$NATIVE_SOURCE_ROOT" O="$BUILD_DIR" ARCH=x86_64 LLVM=1 \
+            LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" olddefconfig
           cp "$BUILD_DIR/.config" "$BUILD_DIR/resolved-first.config"
-          make -C "$NATIVE_SOURCE_ROOT" O="$BUILD_DIR" ARCH=x86_64 LLVM=1 olddefconfig
+          make -C "$NATIVE_SOURCE_ROOT" O="$BUILD_DIR" ARCH=x86_64 LLVM=1 \
+            LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" olddefconfig
           cmp "$BUILD_DIR/resolved-first.config" "$BUILD_DIR/.config"
           grep -qx 'CONFIG_WERROR=y' "$BUILD_DIR/.config"
           grep -qx 'CONFIG_MODULES=y' "$BUILD_DIR/.config"
@@ -495,17 +499,20 @@ jobs:
             set -e
             run_phase rustavailable \
               make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \
-                ARCH=x86_64 LLVM=1 rustavailable
+                ARCH=x86_64 LLVM=1 LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \
+                rustavailable
             run_phase bzImage \
               make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \
-                ARCH=x86_64 LLVM=1 -j2 bzImage
+                ARCH=x86_64 LLVM=1 LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \
+                -j2 bzImage
             # Linux 6.12 supports in-tree %.ko single targets.  Build the exact
             # boot kernel first so their modpost pass consumes its vmlinux.o
             # symbol universe.  Keep all three module targets in one invocation
             # so modpost also sees the complete ihk provider/consumer graph.
             run_phase native-modules \
               make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \
-                ARCH=x86_64 LLVM=1 -j2 "${module_targets[@]}"
+                ARCH=x86_64 LLVM=1 LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \
+                -j2 "${module_targets[@]}"
             printf '%s\n' complete > "$evidence_dir/build.phase"
           ) 2>&1 | tee "$evidence_dir/build.log"
           pipeline_status=("${PIPESTATUS[@]}")
@@ -558,6 +565,13 @@ jobs:
               | sort -z | xargs -0 sha256sum -- > PRECHECK_SHA256SUMS
             sha256sum --check --strict PRECHECK_SHA256SUMS
           )
+          for name in ihk.ko ihk-smp-x86_64.ko mcctrl.ko; do
+            module="$EVIDENCE_DIR/$name"
+            vermagic="$(modinfo -F vermagic "$module")"
+            test -n "$vermagic"
+            test "$(printf '%s\n' "$vermagic" | wc -l)" = 1
+            test "${vermagic%% *}" = "$EXPECTED_KERNEL_RELEASE"
+          done
           python3 scripts/ihk_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" --module "$ihk"
           python3 scripts/ihk_os_registry_check.py --repo "$GITHUB_WORKSPACE"
           test "$(rustc --version | awk '{print $2}')" = "1.92.0"
@@ -571,8 +585,10 @@ jobs:
           cp "$NATIVE_BUILD_DIR/.config" "$EVIDENCE_DIR/resolved.config"
           cp "$NATIVE_BUILD_DIR/arch/x86/boot/bzImage" "$EVIDENCE_DIR/bzImage"
           cp "$NATIVE_SOURCE_ROOT/drivers/misc/mckernel/stage-lock.json" "$EVIDENCE_DIR/stage-lock.json"
-          make -s -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 \
-            kernelrelease > "$EVIDENCE_DIR/kernel.release"
+          kernel_release="$(make -s -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \
+            ARCH=x86_64 LLVM=1 LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" kernelrelease)"
+          test "$kernel_release" = "$EXPECTED_KERNEL_RELEASE"
+          printf '%s\n' "$kernel_release" > "$EVIDENCE_DIR/kernel.release"
           cmd_records=(
             .ihk-smp-x86_64.ko.cmd
             .ihk-smp-x86_64.mod.cmd

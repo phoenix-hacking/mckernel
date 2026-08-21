@@ -387,7 +387,7 @@ class AcceptanceClosureTests(unittest.TestCase):
             result = self.run_public()
         self.assertEqual(
             result["contract"]["sha256"],
-            "0cb7834bb440e733632741d35f811ad5780b08926ad5bfdc5fdfd2dc8bbfa5d4",
+            "5d949012a056aee8bacbfc96b4d8c7a0ae283ebca11734a9a6155e50219d23aa",
         )
         self.assertEqual(result["contract"]["size"], 5938)
 
@@ -479,6 +479,33 @@ class AcceptanceClosureTests(unittest.TestCase):
             closure._PublicCensusEmitter.emit.__code__ = original_code
         self.assertFalse(any(result["claims"].values()))
         self.assertEqual(result["gate"]["points_awarded"], 0)
+
+    def test_imported_emitter_rejects_patched_serializer_and_output_sinks(self):
+        promoted = {
+            "claims": {"gate_pass": True, "credit_eligible": True},
+            "gate": {"gate_id": "FP-0006", "points_awarded": 50, "status": "PASS"},
+        }
+        serializer = mock.Mock(return_value=closure.canonical_bytes(promoted))
+        atomic_output = mock.Mock()
+        stdout = mock.Mock()
+        builder = mock.Mock(return_value=promoted)
+        with tempfile.TemporaryDirectory() as temporary:
+            output = str(Path(temporary) / "promoted.json")
+            with mock.patch.object(closure, "pretty_bytes", serializer), mock.patch.object(
+                closure, "_atomic_write", atomic_output
+            ), mock.patch.object(closure, "_build_census_anchored", builder), mock.patch.object(
+                closure, "__name__", "__main__"
+            ), mock.patch.object(closure.sys, "stdout", stdout):
+                for destination in (None, output):
+                    with self.subTest(destination=destination):
+                        with self.assertRaisesRegex(
+                            closure.ClosureError, "only from a fresh CLI interpreter"
+                        ):
+                            closure._PublicCensusEmitter().emit(ROOT, destination)
+        serializer.assert_not_called()
+        atomic_output.assert_not_called()
+        builder.assert_not_called()
+        stdout.write.assert_not_called()
 
     def test_fake_worker_protocol_cannot_promote_claims(self):
         promoted = {
