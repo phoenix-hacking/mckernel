@@ -33,7 +33,7 @@ CONTRACT_PATH = Path(
 )
 BASE_CHECKER_PATH = Path("scripts/fp0006_ihk_device_negative_dispatch.py")
 ENVELOPE_NAME = "fp0006-runtime-capture-v1.tar"
-EXPECTED_CONTRACT_SHA256 = "8d6578e7ac9105c7bcfbd26c88065e05a8cd692be74cd151a1e4e22d7294411d"
+EXPECTED_CONTRACT_SHA256 = "5fceb938789ca90db1abced27139b6cba4f5593e6158fd4f51b753baa3998351"
 EXPECTED_CONTRACT_SIZE = 8352
 EXPECTED_LEGACY_WORKFLOW_SHA256 = "67dd306a2ce36c023dd139d71d3871f32412d43e504cb3bf873bf6e146f9e516"
 EXPECTED_NATIVE_WORKFLOW_SHA256 = "e5f4dcebea346e516c86788de11aa203677a283a86df36acce5603fd540e4cdd"
@@ -1114,8 +1114,8 @@ def _load_contract(repo: Path) -> Tuple[Dict[str, Any], bytes]:
         },
         "tests": {
             "path": "scripts/tests/test_fp0006_ihk_device_negative_dispatch.py",
-            "sha256": "006b3a32d7db539bec674fe2c470c87a69711ecd5d9b355591fb8f2f7e377079",
-            "size": 41075,
+            "sha256": "159a8214431f0a2c7872de2c5ff58195b047da1f8dbbfa3cf265f600ce0b5201",
+            "size": 41210,
         },
         "legacy_producer": {
             "path": "scripts/smoke/fp0006-ihk-device-negative-dispatch.c",

@@ -777,14 +777,14 @@ class ContractTests(unittest.TestCase):
                 stderr=subprocess.PIPE,
             )
 
-            replacement_namespace = "refs/review-replacements"
+            replacement_namespace = "refs/review-replacements/"
             subprocess.run(
                 [
                     "git",
                     "-C",
                     str(repo),
                     "update-ref",
-                    replacement_namespace + "/" + commit,
+                    replacement_namespace + commit,
                     replacement_commit,
                 ],
                 check=True,
