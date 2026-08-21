@@ -1779,12 +1779,15 @@ def _validate_tool_report(data: bytes, surface: str) -> Dict[str, Any]:
     expected_rust_version = (
         "rustc 1.92.0 (ded5c06cf 2025-12-08) (Red Hat 1.92.0-1.el10)"
     )
+    native_el10_release = r"\.el10(?:_[1-9][0-9]?)?\.x86_64"
     native_gcc_owner = re.compile(
-        r"^gcc-0:{0}-{1}\.el10\.x86_64$".format(rpm_version, rpm_release)
+        r"^gcc-0:{0}-{1}{2}$".format(
+            rpm_version, rpm_release, native_el10_release
+        )
     )
     native_coreutils_owner = re.compile(
-        r"^coreutils-0:{0}-{1}\.el10\.x86_64$".format(
-            rpm_version, rpm_release
+        r"^coreutils-0:{0}-{1}{2}$".format(
+            rpm_version, rpm_release, native_el10_release
         )
     )
     if (

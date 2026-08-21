@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 """Fail-closed tests for the native Rust module policy and behavior map."""
 
-from __future__ import annotations
-
 import copy
 import os
 import subprocess
@@ -203,7 +201,7 @@ class BehaviorContractTests(ContractFixture):
 
     def test_every_behavior_has_native_rust_and_bidirectional_test_mapping(self) -> None:
         tests = {entry["id"]: entry for entry in self.contract["acceptance_tests"]}
-        referenced: set[str] = set()
+        referenced = set()
         for behavior in self.contract["behaviors"]:
             replacement = behavior["rust_replacement"]
             self.assertEqual(replacement["crate"], behavior["module"])
@@ -218,7 +216,7 @@ class BehaviorContractTests(ContractFixture):
 
     def test_every_active_explicit_errno_site_is_mapped(self) -> None:
         expected = contracts.source_errno_surface(REPO_ROOT, self.legacy)
-        mapped: dict[str, set[str]] = {
+        mapped = {
             module: set() for module in contracts.EXPECTED_MODULES
         }
         for behavior in self.contract["behaviors"]:

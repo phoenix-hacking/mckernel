@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Synthetic tests for compiler-backed host-module failure-site capture."""
 
+import ast
 import json
 import importlib.util
 import os
@@ -1298,6 +1299,31 @@ finally:
             )
             with self.subTest(mode=mode):
                 self.assertEqual(completed.returncode, 0, completed.stderr)
+
+    def test_authority_import_surface_is_python_3_6_runtime_compatible(self):
+        for relative in sorted(set(capture.AUTHORITY_MODULE_PATHS.values())):
+            source = (REPO_ROOT / relative).read_text(encoding="utf-8")
+            try:
+                tree = ast.parse(
+                    source, filename=relative, feature_version=(3, 6)
+                )
+            except TypeError:
+                tree = ast.parse(source, filename=relative)
+            for node in ast.walk(tree):
+                if isinstance(node, ast.ImportFrom) and node.module == "__future__":
+                    self.assertNotIn(
+                        "annotations",
+                        {entry.name for entry in node.names},
+                        relative,
+                    )
+                if isinstance(node, ast.Subscript) and isinstance(
+                    node.value, ast.Name
+                ):
+                    self.assertNotIn(
+                        node.value.id,
+                        {"dict", "frozenset", "list", "set", "tuple", "type"},
+                        relative,
+                    )
 
     def test_locked_sys_path_ignores_repo_insertion_and_rejects_ancestor(self):
         with tempfile.TemporaryDirectory() as temporary:

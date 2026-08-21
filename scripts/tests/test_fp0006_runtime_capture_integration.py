@@ -108,7 +108,7 @@ class FP0006RuntimeCaptureIntegrationTests(unittest.TestCase):
         return (
             b"rust-0:1.92.0-1.el10.x86_64\n"
             b"gcc-0:14.2.1-7.el10.x86_64\n"
-            b"coreutils-0:9.5-6.el10.x86_64\n"
+            b"coreutils-0:9.5-8.el10_2.x86_64\n"
             + b"a" * 64 + b"  /usr/bin/rustc\n"
             + b"b" * 64 + b"  /usr/bin/gcc\n"
             + b"c" * 64 + b"  /usr/bin/timeout\n"
@@ -172,6 +172,29 @@ class FP0006RuntimeCaptureIntegrationTests(unittest.TestCase):
         self.assertEqual(
             "gcc-0:14.2.1-7.el10.x86_64", native_observation["gcc_owner"]
         )
+        self.assertEqual(
+            "coreutils-0:9.5-8.el10_2.x86_64",
+            native_observation["timeout_owner"],
+        )
+        for original, replacement in (
+            (
+                b"gcc-0:14.2.1-7.el10.x86_64",
+                b"gcc-0:14.2.1-7.el10_2.x86_64",
+            ),
+            (
+                b"coreutils-0:9.5-8.el10_2.x86_64",
+                b"coreutils-0:9.5-8.el10.x86_64",
+            ),
+            (
+                b"coreutils-0:9.5-8.el10_2.x86_64",
+                b"coreutils-0:9.5-8.el10_12.x86_64",
+            ),
+        ):
+            with self.subTest(accepted_owner=replacement):
+                capture._validate_tool_report(
+                    self._replace_once(native, original, replacement),
+                    "native-rust-source-fixture",
+                )
         for surface, report in (
             (
                 "legacy-live-ioctl",
@@ -193,8 +216,64 @@ class FP0006RuntimeCaptureIntegrationTests(unittest.TestCase):
                 "native-rust-source-fixture",
                 self._replace_once(
                     native,
-                    b"coreutils-0:9.5-6.el10.x86_64",
-                    b"coreutils-0:9.5-6.el8.x86_64",
+                    b"coreutils-0:9.5-8.el10_2.x86_64",
+                    b"coreutils-0:9.5-8.el8.x86_64",
+                ),
+            ),
+            (
+                "native-rust-source-fixture",
+                self._replace_once(
+                    native,
+                    b"coreutils-0:9.5-8.el10_2.x86_64",
+                    b"coreutils-0:9.5-8.el10_0.x86_64",
+                ),
+            ),
+            (
+                "native-rust-source-fixture",
+                self._replace_once(
+                    native,
+                    b"coreutils-0:9.5-8.el10_2.x86_64",
+                    b"coreutils-0:9.5-8.el10_02.x86_64",
+                ),
+            ),
+            (
+                "native-rust-source-fixture",
+                self._replace_once(
+                    native,
+                    b"coreutils-0:9.5-8.el10_2.x86_64",
+                    b"coreutils-0:9.5-8.el10_2a.x86_64",
+                ),
+            ),
+            (
+                "native-rust-source-fixture",
+                self._replace_once(
+                    native,
+                    b"coreutils-0:9.5-8.el10_2.x86_64",
+                    b"coreutils-0:9.5-8.el10_100.x86_64",
+                ),
+            ),
+            (
+                "native-rust-source-fixture",
+                self._replace_once(
+                    native,
+                    b"coreutils-0:9.5-8.el10_2.x86_64",
+                    b"coreutils-0:9.5-8.el10_2_3.x86_64",
+                ),
+            ),
+            (
+                "native-rust-source-fixture",
+                self._replace_once(
+                    native,
+                    b"coreutils-0:9.5-8.el10_2.x86_64",
+                    b"coreutils-0:9.5-8.el11_2.x86_64",
+                ),
+            ),
+            (
+                "native-rust-source-fixture",
+                self._replace_once(
+                    native,
+                    b"coreutils-0:9.5-8.el10_2.x86_64",
+                    b"coreutils-0:9.5-8.el10_2.aarch64",
                 ),
             ),
         ):
