@@ -3,8 +3,10 @@
 
 This checker is deliberately historical and exact-head-only.  It validates the
 review manifest and, when supplied, the expiring GitHub Actions artifact bytes.
-It cannot award a gate, tracker credit, broad hardware compatibility, or future
-runtime equivalence.
+Later descendants remain verifiable as historical evidence, but are reported
+as non-applicable rather than inheriting the reviewed runtime identity.  This
+checker cannot award a gate, tracker credit, broad hardware compatibility, or
+future runtime equivalence.
 """
 
 from __future__ import print_function
@@ -23,9 +25,22 @@ import zipfile
 from pathlib import Path, PurePosixPath
 
 
+GIT_EXECUTABLE = "/usr/bin/git"
+GIT_ENVIRONMENT = {
+    "GIT_CONFIG_GLOBAL": "/dev/null",
+    "GIT_CONFIG_NOSYSTEM": "1",
+    "GIT_GRAFT_FILE": "/dev/null",
+    "GIT_NO_REPLACE_OBJECTS": "1",
+    "GIT_OPTIONAL_LOCKS": "0",
+    "GIT_PAGER": "cat",
+    "LC_ALL": "C",
+    "PATH": "/usr/bin:/bin",
+}
 REVIEW_DIRECTORY = Path("host-kernel/rocky/evidence")
 REVIEW_GLOB = "hosted-runtime-review-*-v1.json"
 REVIEW_SHA256 = "525b2a625ecf6a1ff9f1d8e11330dda231cf0d846c4fa7edf07715badb6a4b52"
+REVIEW_MODE = 0o644
+REVIEW_SIZE = 12125
 SCHEMA_VERSION = 1
 REVIEW_ID = "hosted-rocky-runtime-review-4acb611f-v1"
 RUNTIME_HEAD_SHA = "4acb611f85600cb7258144a6e3e75c5588416aef"
@@ -400,6 +415,155 @@ def regular_file(path, label, maximum=None):
     return path
 
 
+def descriptor_identity(info):
+    return (
+        info.st_dev,
+        info.st_ino,
+        info.st_mode,
+        info.st_nlink,
+        info.st_uid,
+        info.st_gid,
+        info.st_size,
+        getattr(info, "st_mtime_ns", int(info.st_mtime * 1000000000)),
+        getattr(info, "st_ctime_ns", int(info.st_ctime * 1000000000)),
+    )
+
+
+def directory_identity(info):
+    return (info.st_dev, info.st_ino, info.st_mode)
+
+
+def read_descriptor_bytes(descriptor, expected_size, label):
+    chunks = []
+    retained = 0
+    while retained <= expected_size:
+        chunk = os.read(descriptor, min(65536, expected_size + 1 - retained))
+        if not chunk:
+            break
+        chunks.append(chunk)
+        retained += len(chunk)
+    if retained != expected_size:
+        raise HostedRuntimeReviewError(
+            "{} size differs: {} != {}".format(label, retained, expected_size)
+        )
+    return b"".join(chunks)
+
+
+def nofollow_exact_file_bytes(path, label, expected_mode, expected_size):
+    path = Path(path)
+    parts = path.parts
+    if (
+        not path.is_absolute()
+        or not parts
+        or parts[0] != os.sep
+        or len(parts) < 2
+        or len(parts) > 128
+        or any(part in ("", ".", "..") for part in parts[1:])
+    ):
+        raise HostedRuntimeReviewError("{} path is not a bounded absolute path".format(label))
+    required_flags = ("O_CLOEXEC", "O_DIRECTORY", "O_NOFOLLOW")
+    if any(not hasattr(os, name) for name in required_flags):
+        raise HostedRuntimeReviewError("{} requires no-follow descriptor support".format(label))
+    directory_flags = os.O_RDONLY | os.O_CLOEXEC | os.O_DIRECTORY | os.O_NOFOLLOW
+    file_flags = os.O_RDONLY | os.O_CLOEXEC | os.O_NOFOLLOW
+    descriptors = []
+    bindings = []
+    try:
+        root_descriptor = os.open(os.sep, directory_flags)
+        descriptors.append(root_descriptor)
+        root_identity = directory_identity(os.fstat(root_descriptor))
+        parent_descriptor = root_descriptor
+        for index, component in enumerate(parts[1:-1]):
+            try:
+                child_descriptor = os.open(
+                    component, directory_flags, dir_fd=parent_descriptor
+                )
+            except OSError as exc:
+                raise HostedRuntimeReviewError(
+                    "cannot open {} ancestor {}: {}".format(label, index, exc)
+                )
+            descriptors.append(child_descriptor)
+            child_info = os.fstat(child_descriptor)
+            if not stat.S_ISDIR(child_info.st_mode):
+                raise HostedRuntimeReviewError(
+                    "{} ancestor {} is not a directory".format(label, index)
+                )
+            bindings.append(
+                (
+                    parent_descriptor,
+                    component,
+                    child_descriptor,
+                    directory_identity(child_info),
+                    index,
+                )
+            )
+            parent_descriptor = child_descriptor
+        leaf_name = parts[-1]
+        try:
+            leaf_descriptor = os.open(leaf_name, file_flags, dir_fd=parent_descriptor)
+        except OSError as exc:
+            raise HostedRuntimeReviewError("cannot open {} leaf: {}".format(label, exc))
+        descriptors.append(leaf_descriptor)
+        before = os.fstat(leaf_descriptor)
+        if not stat.S_ISREG(before.st_mode):
+            raise HostedRuntimeReviewError("{} leaf is not a regular file".format(label))
+        require_exact(stat.S_IMODE(before.st_mode), expected_mode, label + " mode")
+        require_exact(before.st_size, expected_size, label + " size")
+        before_identity = descriptor_identity(before)
+        data = read_descriptor_bytes(leaf_descriptor, expected_size, label)
+        require_exact(
+            descriptor_identity(os.fstat(leaf_descriptor)),
+            before_identity,
+            label + " held-leaf identity replay",
+        )
+        try:
+            named_leaf = os.stat(
+                leaf_name, dir_fd=parent_descriptor, follow_symlinks=False
+            )
+        except OSError as exc:
+            raise HostedRuntimeReviewError(
+                "cannot replay {} leaf identity: {}".format(label, exc)
+            )
+        require_exact(
+            descriptor_identity(named_leaf),
+            before_identity,
+            label + " named-leaf identity replay",
+        )
+        for parent, name, child, identity, index in reversed(bindings):
+            require_exact(
+                directory_identity(os.fstat(child)),
+                identity,
+                "{} held-ancestor {} identity replay".format(label, index),
+            )
+            try:
+                named = os.stat(name, dir_fd=parent, follow_symlinks=False)
+            except OSError as exc:
+                raise HostedRuntimeReviewError(
+                    "cannot replay {} ancestor {} identity: {}".format(
+                        label, index, exc
+                    )
+                )
+            require_exact(
+                directory_identity(named),
+                identity,
+                "{} named-ancestor {} identity replay".format(label, index),
+            )
+        require_exact(
+            directory_identity(os.fstat(root_descriptor)),
+            root_identity,
+            label + " root identity replay",
+        )
+        return data
+    except OSError as exc:
+        raise HostedRuntimeReviewError("cannot read {}: {}".format(label, exc))
+    finally:
+        for descriptor in reversed(descriptors):
+            try:
+                os.close(descriptor)
+            except OSError:
+                pass
+
+
 def contained_repository_file(repo, relative, label):
     safe_relative_path(relative, label)
     repo = Path(repo).resolve()
@@ -448,7 +612,9 @@ def discover_review(repo):
 
 def load_review(path):
     path = regular_file(path, "review manifest", maximum=128 * 1024)
-    data = path.read_bytes()
+    data = nofollow_exact_file_bytes(
+        path, "review manifest", REVIEW_MODE, REVIEW_SIZE
+    )
     require_exact(sha256_bytes(data), REVIEW_SHA256, "review manifest digest")
     return read_json_bytes(data, "review manifest", canonical=True)
 
@@ -657,14 +823,33 @@ def validate_review_object(review):
 
 
 def run_git(repo, arguments, label):
-    result = subprocess.run(
-        ["git", "-C", str(repo)] + list(arguments),
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    )
+    result = run_git_process(repo, arguments, label)
     if result.returncode:
         raise HostedRuntimeReviewError("{} failed: {}".format(label, result.stderr.decode("utf-8", "replace").strip()))
     return result.stdout
+
+
+def run_git_process(repo, arguments, label):
+    command = [
+        GIT_EXECUTABLE,
+        "--no-pager",
+        "--no-replace-objects",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        str(Path(repo).resolve()),
+    ] + list(arguments)
+    try:
+        return subprocess.run(
+            command,
+            env=GIT_ENVIRONMENT,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+    except OSError as exc:
+        raise HostedRuntimeReviewError("{} failed to execute: {}".format(label, exc))
 
 
 def git_tree_record(repo, commit, relative, label):
@@ -683,18 +868,107 @@ def git_blob_bytes(repo, blob, label):
     return run_git(repo, ["cat-file", "blob", blob], label)
 
 
+def validate_repository_state(state):
+    exact_keys(
+        state,
+        {
+            "current_head", "current_head_applicable", "current_head_bound_inputs_match",
+            "current_head_is_runtime_head", "current_head_status",
+            "drifted_committed_inputs", "historical_runtime_verified",
+            "runtime_equivalence_claimed",
+        },
+        "repository state",
+    )
+    validate_sha(state["current_head"], HEX_SHA1, "repository state current HEAD")
+    require_type(
+        state["current_head_applicable"], bool, "repository state current applicability"
+    )
+    require_type(
+        state["current_head_bound_inputs_match"],
+        bool,
+        "repository state bound-input match",
+    )
+    require_type(
+        state["current_head_is_runtime_head"],
+        bool,
+        "repository state exact-head match",
+    )
+    require_type(state["current_head_status"], str, "repository state status")
+    require_type(
+        state["drifted_committed_inputs"], list, "repository state drift paths"
+    )
+    expected_paths = [row[0] for row in EXPECTED_INPUTS]
+    previous_index = -1
+    for index, path in enumerate(state["drifted_committed_inputs"]):
+        require_type(path, str, "repository state drift path {}".format(index))
+        safe_relative_path(path, "repository state drift path {}".format(index))
+        if path not in expected_paths:
+            raise HostedRuntimeReviewError("repository state drift path is not a bound input")
+        path_index = expected_paths.index(path)
+        if path_index <= previous_index:
+            raise HostedRuntimeReviewError(
+                "repository state drift paths are duplicated or out of order"
+            )
+        previous_index = path_index
+    require_exact(
+        state["historical_runtime_verified"],
+        True,
+        "repository state historical verification",
+    )
+    require_exact(
+        state["runtime_equivalence_claimed"],
+        False,
+        "repository state runtime-equivalence claim",
+    )
+    exact_head = state["current_head"] == RUNTIME_HEAD_SHA
+    inputs_match = not state["drifted_committed_inputs"]
+    applicable = exact_head and inputs_match
+    if not inputs_match:
+        status = "stale-input-drift"
+    elif exact_head:
+        status = "exact-runtime-head"
+    else:
+        status = "historical-only-descendant"
+    require_exact(
+        state["current_head_is_runtime_head"],
+        exact_head,
+        "repository state exact-head invariant",
+    )
+    require_exact(
+        state["current_head_bound_inputs_match"],
+        inputs_match,
+        "repository state bound-input invariant",
+    )
+    require_exact(
+        state["current_head_applicable"],
+        applicable,
+        "repository state applicability invariant",
+    )
+    require_exact(state["current_head_status"], status, "repository state status invariant")
+    return state
+
+
 def validate_repository(repo, review):
     repo = Path(repo).resolve()
     current_head = run_git(repo, ["rev-parse", "HEAD"], "current HEAD").decode("ascii").strip()
+    validate_sha(current_head, HEX_SHA1, "current HEAD")
     runtime_tree = run_git(repo, ["rev-parse", RUNTIME_HEAD_SHA + "^{tree}"], "runtime tree").decode("ascii").strip()
     require_exact(runtime_tree, RUNTIME_TREE_SHA, "runtime tree")
-    ancestry = subprocess.run(
-        ["git", "-C", str(repo), "merge-base", "--is-ancestor", RUNTIME_HEAD_SHA, current_head],
-        stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+    ancestry = run_git_process(
+        repo,
+        ["merge-base", "--is-ancestor", RUNTIME_HEAD_SHA, current_head],
+        "runtime ancestry",
     )
-    if ancestry.returncode != 0:
+    if ancestry.returncode == 1:
         raise HostedRuntimeReviewError("current HEAD is not descendant-or-equal to runtime head")
+    if ancestry.returncode != 0:
+        raise HostedRuntimeReviewError(
+            "runtime ancestry failed: {}".format(
+                ancestry.stderr.decode("utf-8", "replace").strip()
+            )
+        )
     rows = review["runtime_candidate"]["committed_inputs"]
+    drifted = []
     for row in rows:
         path = row["path"]
         runtime_mode, runtime_blob = git_tree_record(repo, RUNTIME_HEAD_SHA, path, "runtime input " + path)
@@ -703,14 +977,42 @@ def validate_repository(repo, review):
         data = git_blob_bytes(repo, runtime_blob, "runtime input " + path)
         require_exact(len(data), row["size"], "runtime input size " + path)
         require_exact(sha256_bytes(data), row["sha256"], "runtime input digest " + path)
-        current_mode, current_blob = git_tree_record(repo, current_head, path, "current input " + path)
-        require_exact(current_mode, runtime_mode, "current input mode " + path)
-        require_exact(current_blob, runtime_blob, "current input blob " + path)
-        index = run_git(repo, ["ls-files", "-s", "--", path], "index input " + path).decode("ascii").strip()
-        require_exact(index, "{} {} 0\t{}".format(runtime_mode, runtime_blob, path), "index input " + path)
-        worktree = contained_repository_file(repo, path, "worktree input " + path).read_bytes()
-        require_exact(worktree, data, "worktree input bytes " + path)
-    return current_head
+        current_entry = run_git(
+            repo,
+            ["ls-tree", "-z", current_head, "--", path],
+            "current input " + path,
+        )
+        expected_entry = "{} blob {}\t{}\0".format(
+            runtime_mode, runtime_blob, path
+        ).encode("utf-8")
+        if current_entry != expected_entry:
+            drifted.append(path)
+    exact_head = current_head == RUNTIME_HEAD_SHA
+    inputs_match = not drifted
+    if not inputs_match:
+        status = "stale-input-drift"
+    elif exact_head:
+        status = "exact-runtime-head"
+    else:
+        status = "historical-only-descendant"
+    state = validate_repository_state(
+        {
+            "current_head": current_head,
+            "current_head_applicable": exact_head and inputs_match,
+            "current_head_bound_inputs_match": inputs_match,
+            "current_head_is_runtime_head": exact_head,
+            "current_head_status": status,
+            "drifted_committed_inputs": drifted,
+            "historical_runtime_verified": True,
+            "runtime_equivalence_claimed": False,
+        }
+    )
+    final_head = run_git(
+        repo, ["rev-parse", "HEAD"], "final current HEAD"
+    ).decode("ascii").strip()
+    validate_sha(final_head, HEX_SHA1, "final current HEAD")
+    require_exact(final_head, current_head, "current HEAD stability")
+    return state
 
 
 def zip_entry_records(archive):
@@ -1063,12 +1365,21 @@ def main(argv=None):
         parser.error("at least one of --check or --verify-artifact is required")
     repo = Path(args.repo).resolve()
     review = validate_review_object(load_review(discover_review(repo)))
-    current_head = validate_repository(repo, review)
+    repository_state = validate_repository(repo, review)
     if args.verify_artifact:
         verify_artifact(args.verify_artifact, review)
-    print("hosted runtime review: bounded PASS")
+    print("hosted runtime review: bounded historical PASS")
     print("runtime head: {}".format(RUNTIME_HEAD_SHA))
-    print("current head: {}".format(current_head))
+    print("current head: {}".format(repository_state["current_head"]))
+    print(
+        "current descendant applicability: {} ({})".format(
+            str(repository_state["current_head_applicable"]).lower(),
+            repository_state["current_head_status"],
+        )
+    )
+    drifted = repository_state["drifted_committed_inputs"]
+    print("current bound-input drift: {}".format(",".join(drifted) if drifted else "none"))
+    print("current runtime equivalence claimed: false")
     print("gate/tracker/broad-runtime credit: false")
     print("artifact durable: false; expires {}".format(ARTIFACT_EXPIRES_AT))
     return 0

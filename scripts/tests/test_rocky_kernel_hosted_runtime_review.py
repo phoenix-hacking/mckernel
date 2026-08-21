@@ -19,6 +19,7 @@ import unittest
 import warnings
 import zipfile
 from pathlib import Path
+from unittest import mock
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -85,11 +86,59 @@ class HostedRuntimeReviewTests(unittest.TestCase):
         self.assertEqual(data, reviewer.canonical_json_bytes(self.review))
         with tempfile.TemporaryDirectory() as temporary:
             mutated = copy.deepcopy(self.review)
-            mutated["source_artifact"]["artifact"]["id"] = 1
+            mutated["source_artifact"]["artifact"]["id"] = 9309472207
             path = Path(temporary) / "review.json"
             path.write_bytes(reviewer.canonical_json_bytes(mutated))
+            path.chmod(reviewer.REVIEW_MODE)
             with self.assertRaisesRegex(reviewer.HostedRuntimeReviewError, "manifest digest"):
                 reviewer.load_review(path)
+
+    def test_manifest_mode_is_exact(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "review.json"
+            path.write_bytes(self.review_path.read_bytes())
+            path.chmod(0o600)
+            with self.assertRaisesRegex(reviewer.HostedRuntimeReviewError, "manifest mode"):
+                reviewer.load_review(path)
+
+    def test_manifest_leaf_and_ancestor_swaps_fail_closed(self):
+        cases = ("leaf", "ancestor")
+        for case in cases:
+            with self.subTest(case=case), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                evidence = root / "repo/host-kernel/rocky/evidence"
+                evidence.mkdir(parents=True)
+                manifest = evidence / self.review_path.name
+                manifest.write_bytes(self.review_path.read_bytes())
+                manifest.chmod(reviewer.REVIEW_MODE)
+                external = root / "external"
+                external.mkdir()
+                external_manifest = external / self.review_path.name
+                external_manifest.write_bytes(self.review_path.read_bytes())
+                external_manifest.chmod(reviewer.REVIEW_MODE)
+                discovered = reviewer.discover_review(root / "repo")
+                original_read = reviewer.read_descriptor_bytes
+                swapped = {"value": False}
+
+                def swapping_read(descriptor, expected_size, label):
+                    data = original_read(descriptor, expected_size, label)
+                    if case == "leaf":
+                        manifest.rename(evidence / (manifest.name + ".held"))
+                        manifest.symlink_to(external_manifest)
+                    else:
+                        evidence.rename(evidence.parent / "evidence-held")
+                        evidence.symlink_to(external, target_is_directory=True)
+                    swapped["value"] = True
+                    return data
+
+                with mock.patch.object(
+                    reviewer, "read_descriptor_bytes", side_effect=swapping_read
+                ):
+                    with self.assertRaisesRegex(
+                        reviewer.HostedRuntimeReviewError, "identity replay"
+                    ):
+                        reviewer.load_review(discovered)
+                self.assertTrue(swapped["value"])
 
     def test_duplicate_json_keys_are_rejected(self):
         with self.assertRaisesRegex(reviewer.HostedRuntimeReviewError, "duplicate JSON key"):
@@ -265,10 +314,143 @@ class HostedRuntimeReviewTests(unittest.TestCase):
         with self.assertRaises(reviewer.HostedRuntimeReviewError):
             reviewer.validate_review_object(mutated)
 
-    def test_current_repository_inputs_are_exact_contained_git_blobs(self):
+    def test_historical_review_passes_and_current_workflow_drift_is_stale(self):
         review = reviewer.validate_review_object(copy.deepcopy(self.review))
-        current = reviewer.validate_repository(REPO_ROOT, review)
-        self.assertRegex(current, r"^[0-9a-f]{40}$")
+        state = reviewer.validate_repository(REPO_ROOT, review)
+        self.assertRegex(state["current_head"], r"^[0-9a-f]{40}$")
+        self.assertTrue(state["historical_runtime_verified"])
+        self.assertFalse(state["runtime_equivalence_claimed"])
+        self.assertFalse(state["current_head_is_runtime_head"])
+        self.assertFalse(state["current_head_bound_inputs_match"])
+        self.assertFalse(state["current_head_applicable"])
+        self.assertEqual(state["current_head_status"], "stale-input-drift")
+        self.assertEqual(
+            state["drifted_committed_inputs"],
+            [".github/workflows/rust-x86_64-validation.yml"],
+        )
+
+    def test_repository_state_rejects_recursive_type_and_invariant_drift(self):
+        state = reviewer.validate_repository(
+            REPO_ROOT, reviewer.validate_review_object(copy.deepcopy(self.review))
+        )
+        mutations = []
+        wrong_boolean = copy.deepcopy(state)
+        wrong_boolean["current_head_applicable"] = 0
+        mutations.append(wrong_boolean)
+        wrong_drift_type = copy.deepcopy(state)
+        wrong_drift_type["drifted_committed_inputs"] = [
+            {"path": ".github/workflows/rust-x86_64-validation.yml"}
+        ]
+        mutations.append(wrong_drift_type)
+        wrong_status = copy.deepcopy(state)
+        wrong_status["current_head_status"] = "exact-runtime-head"
+        mutations.append(wrong_status)
+        invented_path = copy.deepcopy(state)
+        invented_path["drifted_committed_inputs"].append("invented")
+        mutations.append(invented_path)
+        extra_key = copy.deepcopy(state)
+        extra_key["credit"] = False
+        mutations.append(extra_key)
+        for index, mutation in enumerate(mutations):
+            with self.subTest(index=index):
+                with self.assertRaises(reviewer.HostedRuntimeReviewError):
+                    reviewer.validate_repository_state(mutation)
+
+    def test_repository_rejects_head_movement_at_begin_and_final_input_boundary(self):
+        review = reviewer.validate_review_object(copy.deepcopy(self.review))
+        current_head = reviewer.run_git(
+            REPO_ROOT, ["rev-parse", "HEAD"], "test current HEAD"
+        ).decode("ascii").strip()
+        transitions = (
+            (current_head, reviewer.RUNTIME_HEAD_SHA, "current HEAD"),
+            (reviewer.RUNTIME_HEAD_SHA, current_head, "current HEAD"),
+            (
+                current_head,
+                reviewer.RUNTIME_HEAD_SHA,
+                "current input scripts/rocky-rust-validation.sh",
+            ),
+            (
+                reviewer.RUNTIME_HEAD_SHA,
+                current_head,
+                "current input scripts/rocky-rust-validation.sh",
+            ),
+        )
+        for start, end, trigger_label in transitions:
+            with self.subTest(start=start, end=end, trigger=trigger_label):
+                with tempfile.TemporaryDirectory() as temporary:
+                    clone = Path(temporary) / "repo"
+                    clone_result = subprocess.run(
+                        [
+                            reviewer.GIT_EXECUTABLE,
+                            "--no-pager",
+                            "--no-replace-objects",
+                            "-c",
+                            "core.hooksPath=/dev/null",
+                            "clone",
+                            "--no-hardlinks",
+                            "--quiet",
+                            str(REPO_ROOT),
+                            str(clone),
+                        ],
+                        env=reviewer.GIT_ENVIRONMENT,
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                    )
+                    self.assertEqual(
+                        clone_result.returncode,
+                        0,
+                        clone_result.stderr.decode("utf-8", "replace"),
+                    )
+
+                    def checkout(commit):
+                        result = subprocess.run(
+                            [
+                                reviewer.GIT_EXECUTABLE,
+                                "--no-pager",
+                                "--no-replace-objects",
+                                "-c",
+                                "core.hooksPath=/dev/null",
+                                "-C",
+                                str(clone),
+                                "checkout",
+                                "--quiet",
+                                "--detach",
+                                commit,
+                            ],
+                            env=reviewer.GIT_ENVIRONMENT,
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE,
+                        )
+                        self.assertEqual(
+                            result.returncode,
+                            0,
+                            result.stderr.decode("utf-8", "replace"),
+                        )
+
+                    checkout(start)
+                    original_run_git = reviewer.run_git
+                    moved = {"value": False}
+
+                    def moving_run_git(repo, arguments, label):
+                        output = original_run_git(repo, arguments, label)
+                        if not moved["value"] and label == trigger_label:
+                            checkout(end)
+                            moved["value"] = True
+                        return output
+
+                    with mock.patch.object(
+                        reviewer, "run_git", side_effect=moving_run_git
+                    ):
+                        with self.assertRaisesRegex(
+                            reviewer.HostedRuntimeReviewError,
+                            "current HEAD stability",
+                        ):
+                            reviewer.validate_repository(clone, review)
+                    self.assertTrue(moved["value"])
+                    final_head = original_run_git(
+                        clone, ["rev-parse", "HEAD"], "test final HEAD"
+                    ).decode("ascii").strip()
+                    self.assertEqual(final_head, end)
 
     def test_contained_repository_input_rejects_symlink_ancestors(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -481,14 +663,67 @@ class HostedRuntimeReviewTests(unittest.TestCase):
             with self.assertRaisesRegex(reviewer.HostedRuntimeReviewError, "artifact digest"):
                 reviewer.verify_artifact(path, self.review)
 
+    def test_cli_git_authority_ignores_inherited_path_and_repository_overrides(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            temporary = Path(temporary)
+            marker = temporary / "fake-git-ran"
+            fake_git = temporary / "git"
+            fake_git.write_text(
+                "#!/bin/sh\n: > {!r}\nexit 99\n".format(str(marker)),
+                encoding="utf-8",
+            )
+            fake_git.chmod(0o755)
+            environment = os.environ.copy()
+            environment.update(
+                {
+                    "GIT_DIR": str(temporary / "fake-git-dir"),
+                    "GIT_INDEX_FILE": str(temporary / "fake-index"),
+                    "GIT_OBJECT_DIRECTORY": str(temporary / "fake-objects"),
+                    "GIT_REPLACE_REF_BASE": "refs/hostile/replace/",
+                    "GIT_WORK_TREE": str(temporary / "fake-worktree"),
+                    "PATH": str(temporary),
+                    "PYTHONDONTWRITEBYTECODE": "1",
+                }
+            )
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    "-B",
+                    str(MODULE_PATH),
+                    "--repo",
+                    str(REPO_ROOT),
+                    "--check",
+                ],
+                env=environment,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                universal_newlines=True,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertFalse(marker.exists())
+            self.assertIn(
+                "current descendant applicability: false (stale-input-drift)",
+                result.stdout,
+            )
+
     def test_cli_check_is_non_crediting_and_reports_expiration(self):
         result = subprocess.run(
-            [sys.executable, str(MODULE_PATH), "--repo", str(REPO_ROOT), "--check"],
+            [sys.executable, "-B", str(MODULE_PATH), "--repo", str(REPO_ROOT), "--check"],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             universal_newlines=True,
         )
         self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("hosted runtime review: bounded historical PASS", result.stdout)
+        self.assertIn(
+            "current descendant applicability: false (stale-input-drift)",
+            result.stdout,
+        )
+        self.assertIn(
+            "current bound-input drift: .github/workflows/rust-x86_64-validation.yml",
+            result.stdout,
+        )
+        self.assertIn("current runtime equivalence claimed: false", result.stdout)
         self.assertIn("gate/tracker/broad-runtime credit: false", result.stdout)
         self.assertIn(reviewer.ARTIFACT_EXPIRES_AT, result.stdout)
 
