@@ -1,0 +1,339 @@
+{
+  "abi_authority": {
+    "requests": {
+      "IHK_OS_QUERY_STATUS": 1124867,
+      "IHK_OS_STATUS": 1124884
+    },
+    "running_name": "RUNNING",
+    "running_status": 5,
+    "word_bits": 64
+  },
+  "artifact_contract": {
+    "capture_members": [
+      "raw.jsonl",
+      "result.jsonl",
+      "state-ledger.jsonl"
+    ],
+    "directory_member_mode": "0444",
+    "legacy_surface": "legacy-live-ioctl",
+    "maximum_member_bytes": 65536,
+    "native_surface": "native-rust-source-fixture",
+    "result_authority": {
+      "durable_artifact_required": true,
+      "independent_review_required": true,
+      "path": null,
+      "status": "required-missing"
+    },
+    "state_policy": "minor0-running-before-and-after-every-read-only-vector"
+  },
+  "claims": {
+    "credit_eligible": false,
+    "current_head_provenance_proven": false,
+    "current_head_runtime_reachability_proven": false,
+    "durable_evidence": false,
+    "failure_semantics_covered": false,
+    "fp0006_complete": false,
+    "gate_pass": false,
+    "independent_review_complete": false,
+    "legacy_runtime_executed": false,
+    "native_module_runtime_executed": false,
+    "native_runtime_executed": false,
+    "runtime_reachability_proven": false,
+    "tracker_credit": false
+  },
+  "contract_id": "fp-0006-ihk-os-status-alias-v1",
+  "frozen_inputs": {
+    "abi_contract": {
+      "path": "host-kernel/contracts/x86_64-shared-abi-v1.json",
+      "sha256": "838bdff2a4f904ba612181e8a0b91279b71ee7d24410c87e217d12a948bba749",
+      "size": 30938
+    },
+    "abi_source": {
+      "path": "host-kernel/native-rust/abi/x86_64.rs",
+      "sha256": "b5980e5b621914a120a0e6b72241477c48aee85615ae4cc76077f3874e35f860",
+      "size": 18796
+    },
+    "ioctl_foundation": {
+      "path": "host-kernel/contracts/ihk-ioctl-dispatch-foundation-v1.json",
+      "sha256": "f54f85ef7baaef1a722956fd9f0a3e45e817906e031f4420f22ba88801e0c223",
+      "size": 4930
+    },
+    "legacy_behavior_contract": {
+      "path": "host-kernel/contracts/legacy-behavior-contract-f2eb7352.json",
+      "sha256": "4287ed1e1206cb5e7c50c08419eb444723610c58e2b4730cacc4c82372578bdf",
+      "size": 2784200
+    },
+    "legacy_inventory": {
+      "path": "host-kernel/reference/legacy-host-modules-f2eb7352.json",
+      "sha256": "8da72c25cb50e1c92ceaceb0e93afa1cc7a72f80e8cd0095eeedb62004bad02d",
+      "size": 246393
+    },
+    "legacy_policy": {
+      "path": "host-kernel/contracts/native-rust-host-modules-policy-v1.json",
+      "sha256": "5c745cd7c01d061a7582c524849d4c9e566a7b0f02652c234b374738878cea6e",
+      "size": 8854
+    },
+    "os_registry_foundation": {
+      "path": "host-kernel/contracts/ihk-os-registry-foundation-v1.json",
+      "sha256": "ca2d70cc2f641673f477ebf949b3bdec9b015fb151d99c8d45e654f572133c84",
+      "size": 3516
+    },
+    "registry_source": {
+      "path": "host-kernel/native-rust/os_registry.rs",
+      "sha256": "29464b8ca1038d87cc0d5f760eb22e0cbd7a1a512ae88f4c550574a784d1e49d",
+      "size": 17706
+    },
+    "rust_dispatcher": {
+      "path": "host-kernel/native-rust/ihk_ioctl.rs",
+      "sha256": "3d603424705a9b0fb18725bae1d75f1d279b249b866c15f15f98166d013edfbb",
+      "size": 9977
+    },
+    "security_primitives": {
+      "path": "scripts/fp0006_ihk_device_negative_dispatch.py",
+      "sha256": "9d72d215f2fc618ac05c2f729a57ad865391c105de2e70995b8eb251d81855a7",
+      "size": 51559
+    }
+  },
+  "gate": {
+    "gate_id": "FP-0006",
+    "points_awarded": 0,
+    "status": "IN_PROGRESS"
+  },
+  "legacy_behavior_authority": {
+    "acceptance_tests": [
+      {
+        "assertions": [
+          "numeric command and compat command match",
+          "valid and invalid argument return, errno, copied data, and state transition match"
+        ],
+        "behavior_ids": [
+          "BHV-IHK-IOCTL-IHK_OS_STATUS-242ED0E83C"
+        ],
+        "gate_targets": [
+          "IHK-013",
+          "INT-004"
+        ],
+        "harness": "ioctl-differential",
+        "id": "AT-IHK-IOCTL-242ED0E83C",
+        "module": "ihk"
+      },
+      {
+        "assertions": [
+          "numeric command and compat command match",
+          "valid and invalid argument return, errno, copied data, and state transition match"
+        ],
+        "behavior_ids": [
+          "BHV-IHK-IOCTL-IHK_OS_QUERY_STATUS-C5F3D68589"
+        ],
+        "gate_targets": [
+          "IHK-013",
+          "INT-004"
+        ],
+        "harness": "ioctl-differential",
+        "id": "AT-IHK-IOCTL-C5F3D68589",
+        "module": "ihk"
+      }
+    ],
+    "authority": {
+      "generator": "scripts/host_module_contracts.py",
+      "path": "host-kernel/contracts/legacy-behavior-contract-f2eb7352.json",
+      "schema_version": 2,
+      "sha256": "4287ed1e1206cb5e7c50c08419eb444723610c58e2b4730cacc4c82372578bdf",
+      "size": 2784200
+    },
+    "behaviors": [
+      {
+        "acceptance_test_ids": [
+          "AT-IHK-IOCTL-C5F3D68589"
+        ],
+        "id": "BHV-IHK-IOCTL-IHK_OS_QUERY_STATUS-C5F3D68589",
+        "kind": "ioctl",
+        "legacy": {
+          "expression": "0x112a03",
+          "hex": "0x112a03",
+          "legacy_dispatch_case_present": true,
+          "line": 42,
+          "name": "IHK_OS_QUERY_STATUS",
+          "source": "ihk/linux/include/ihk/ihk_host_user.h",
+          "value": 1124867
+        },
+        "module": "ihk",
+        "oracle_path": "ioctls.ihk_os_constants[3]",
+        "rust_replacement": {
+          "crate": "ihk",
+          "native_path": "crate::device::ioctl::ihk_os_query_status_c5f3d68589",
+          "project_c_dispatch_permitted": false
+        }
+      },
+      {
+        "acceptance_test_ids": [
+          "AT-IHK-IOCTL-242ED0E83C"
+        ],
+        "id": "BHV-IHK-IOCTL-IHK_OS_STATUS-242ED0E83C",
+        "kind": "ioctl",
+        "legacy": {
+          "expression": "0x112a14",
+          "hex": "0x112a14",
+          "legacy_dispatch_case_present": true,
+          "line": 50,
+          "name": "IHK_OS_STATUS",
+          "source": "ihk/linux/include/ihk/ihk_host_user.h",
+          "value": 1124884
+        },
+        "module": "ihk",
+        "oracle_path": "ioctls.ihk_os_constants[11]",
+        "rust_replacement": {
+          "crate": "ihk",
+          "native_path": "crate::device::ioctl::ihk_os_status_242ed0e83c",
+          "project_c_dispatch_permitted": false
+        }
+      }
+    ],
+    "inputs": {
+      "inventory": {
+        "path": "host-kernel/reference/legacy-host-modules-f2eb7352.json",
+        "sha256": "8da72c25cb50e1c92ceaceb0e93afa1cc7a72f80e8cd0095eeedb62004bad02d",
+        "size": 246393
+      },
+      "policy": {
+        "path": "host-kernel/contracts/native-rust-host-modules-policy-v1.json",
+        "policy_id": "native-rust-host-modules-v1",
+        "sha256": "5c745cd7c01d061a7582c524849d4c9e566a7b0f02652c234b374738878cea6e",
+        "size": 8854
+      }
+    },
+    "provenance": {
+      "ihk_commit": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+      "parent_commit": "f2eb735212e6ab0494e638497e80d9ae78b2848e",
+      "reference_artifact_id": 9051654724,
+      "reference_workflow_run": 31358939841
+    }
+  },
+  "limitations": [
+    "This bounded witness is explicitly noncrediting and cannot close FP-0006.",
+    "The C producer targets only a caller-supplied live /dev/mcos0 and issues read-only status ioctls.",
+    "The Rust producer is a standalone source fixture; its private registry setup does not map or claim create behavior.",
+    "No current-head runtime reachability, native module runtime, failure semantic, durability, independent review, gate pass, tracker credit, or completion claim is made.",
+    "A durable independently reviewed result authority is required and missing."
+  ],
+  "native_semantics": {
+    "argument_policy": "ignored-u64-scalar-for-both-status-aliases",
+    "private_setup_only": [
+      "NotBooted",
+      "Booting",
+      "Running"
+    ],
+    "query_result_source": "registry-snapshot-status-as-i64",
+    "status_aliases": [
+      "IHK_OS_QUERY_STATUS",
+      "IHK_OS_STATUS"
+    ]
+  },
+  "producers": {
+    "legacy": {
+      "path": "scripts/smoke/fp0006-ihk-os-status-alias.c",
+      "sha256": "ba92ad889ca521ec5bef6fdbf44fb95c5a165663505ad4380180f56e6b780023",
+      "size": 7374,
+      "surface": "legacy-live-ioctl"
+    },
+    "native": {
+      "path": "scripts/tests/fixtures/ihk_ioctl_fp0006_status_alias.rs",
+      "sha256": "4ec5ab91da89eff9ea3d506a0429a5c15a1eb11c0b53a45232b9b0b5738f0769",
+      "size": 6800,
+      "surface": "native-rust-source-fixture"
+    }
+  },
+  "schema_version": 1,
+  "schemas": {
+    "raw": {
+      "exact_keys": [
+        "argument",
+        "request",
+        "sequence",
+        "vector_id"
+      ],
+      "record_count": 4
+    },
+    "result": {
+      "exact_keys": [
+        "errno",
+        "interface_return",
+        "normalized_return",
+        "sequence",
+        "surface",
+        "vector_id"
+      ],
+      "record_count": 4
+    },
+    "state_ledger": {
+      "exact_keys": [
+        "minor",
+        "phase",
+        "sequence",
+        "status",
+        "status_name",
+        "surface",
+        "vector_id"
+      ],
+      "record_count": 8
+    }
+  },
+  "vectors": [
+    {
+      "acceptance_test_id": "AT-IHK-IOCTL-C5F3D68589",
+      "argument": 0,
+      "behavior_id": "BHV-IHK-IOCTL-IHK_OS_QUERY_STATUS-C5F3D68589",
+      "expected_errno": 0,
+      "expected_interface_return": 5,
+      "expected_normalized_return": 5,
+      "expected_status_after": 5,
+      "expected_status_before": 5,
+      "request": 1124867,
+      "request_name": "IHK_OS_QUERY_STATUS",
+      "sequence": 0,
+      "vector_id": "query-status-arg0"
+    },
+    {
+      "acceptance_test_id": "AT-IHK-IOCTL-C5F3D68589",
+      "argument": 18446744073709551615,
+      "behavior_id": "BHV-IHK-IOCTL-IHK_OS_QUERY_STATUS-C5F3D68589",
+      "expected_errno": 0,
+      "expected_interface_return": 5,
+      "expected_normalized_return": 5,
+      "expected_status_after": 5,
+      "expected_status_before": 5,
+      "request": 1124867,
+      "request_name": "IHK_OS_QUERY_STATUS",
+      "sequence": 1,
+      "vector_id": "query-status-arg-u64-max"
+    },
+    {
+      "acceptance_test_id": "AT-IHK-IOCTL-242ED0E83C",
+      "argument": 0,
+      "behavior_id": "BHV-IHK-IOCTL-IHK_OS_STATUS-242ED0E83C",
+      "expected_errno": 0,
+      "expected_interface_return": 5,
+      "expected_normalized_return": 5,
+      "expected_status_after": 5,
+      "expected_status_before": 5,
+      "request": 1124884,
+      "request_name": "IHK_OS_STATUS",
+      "sequence": 2,
+      "vector_id": "status-alias-arg0"
+    },
+    {
+      "acceptance_test_id": "AT-IHK-IOCTL-242ED0E83C",
+      "argument": 18446744073709551615,
+      "behavior_id": "BHV-IHK-IOCTL-IHK_OS_STATUS-242ED0E83C",
+      "expected_errno": 0,
+      "expected_interface_return": 5,
+      "expected_normalized_return": 5,
+      "expected_status_after": 5,
+      "expected_status_before": 5,
+      "request": 1124884,
+      "request_name": "IHK_OS_STATUS",
+      "sequence": 3,
+      "vector_id": "status-alias-arg-u64-max"
+    }
+  ]
+}

@@ -31016,3 +31016,893 @@ Static inspection identifies line 35 as a required single-space unified-diff bla
 2026-08-19: the root RS-006 staging check encountered the same mandatory unified-diff whitespace classification in Git's generic checker.
 Combined command from `/workspace/scratch/1962bd8160f6/mckernel`: `git add -- kernel.log host-kernel/rocky/candidates/0020-followup-rust-miscdevice-module-owner-v1.patch host-kernel/contracts/rs006-miscdevice-module-owner-followup-v1.json scripts/rs006_miscdevice_module_owner_followup.py scripts/tests/fixtures/rs006_miscdevice_module_owner_compile.rs scripts/tests/test_rs006_miscdevice_module_owner_followup.py`; then `git diff --cached --check`; then staged `--stat` and `git status --short`. Environment: inherited shell environment with no command-scoped overrides. Because the shell was not fail-fast, the later display commands ran and the combined shell status was zero even though the middle checker diagnosed two records.
 Exact diagnostic: `host-kernel/rocky/candidates/0020-followup-rust-miscdevice-module-owner-v1.patch:35: trailing whitespace.` followed by `+ `, and line 77 followed by `+-- `. These are the already-reviewed mandatory blank diff-context record and format-patch signature separator, not source payload whitespace. No target byte changed beyond intentional staging; no commit, network, Git ref update, workflow, build, module, runtime, guest, host, or reboot action occurred. Use the fail-fast unified-diff-aware staged-source hygiene that already passed, restage this log, and recheck exact scope and hashes before commit. The tranche remains noncrediting.
+
+2026-08-19: the first focused validation of the fresh-exec FP-0006 OS-status seal failed closed on the baseline verifier protocol.
+Command from `/workspace/scratch/1962bd8160f6/mckernel`: `env PYTHONDONTWRITEBYTECODE=1 LC_ALL=C.UTF-8 python3 -m unittest -v scripts.tests.test_fp0006_ihk_os_status_alias`. Environment: inherited shell environment plus exactly `PYTHONDONTWRITEBYTECODE=1` and `LC_ALL=C.UTF-8`; local Python 3.12.
+The run reached 34 tests; five valid-path cases errored with the same first/root diagnostic at `_run_exec_seal`: `WitnessError: private exec verifier protocol failed with status 1`. One Rust compile case was an honest rustc-unavailable skip. The implementer stopped without a post-failure edit or follow-up command. No repository file outside the five-file tranche, pyc, network resource, Git ref, workflow, artifact, build, module, runtime, guest, host, or reboot state changed.
+Treat this as a pre-freeze implementation failure, not evidence or review credit. Inspect only the fresh-exec child protocol/status path, correct the bounded baseline mismatch, preserve all isolation/failure regressions, and rerun the identical focused command under stop-first before any adjacent validation. All FP-0006/runtime/review/gate/durability/credit claims remain false or required-missing.
+
+2026-08-19: the identical focused FP-0006 OS-status rerun after the first protocol correction still failed closed inside the fresh-exec helper.
+Command from `/workspace/scratch/1962bd8160f6/mckernel`: `env PYTHONDONTWRITEBYTECODE=1 LC_ALL=C.UTF-8 python3 -m unittest -v scripts.tests.test_fp0006_ihk_os_status_alias`. Environment: inherited shell environment plus exactly `PYTHONDONTWRITEBYTECODE=1` and `LC_ALL=C.UTF-8`; local Python 3.12.
+The run reached 34 tests; five valid-path cases errored with the same first/root diagnostic at `_run_exec_seal`: `WitnessError: private exec verifier protocol failed with status 46`. The helper now parsed and executed, but entered its bounded caught-exception protocol status. One Rust compile case remained an honest rustc-unavailable skip. The implementer stopped without a post-failure edit or diagnostic command. No repository file outside the five-file tranche, pyc, network resource, Git ref, workflow, artifact, build, module, runtime, guest, host, or reboot state changed.
+Treat status 46 as a pre-freeze helper implementation failure, not evidence or review credit. Diagnose only the sealed-helper caught exception and its exact input/protocol boundary, correct the baseline path without weakening caps/isolation/cleanup, and rerun the identical focused command under stop-first before adjacent validation. All FP-0006/runtime/review/gate/durability/credit claims remain false or required-missing.
+
+2026-08-19: the fresh-exec FP-0006 OS-status re-review stopped on a deterministic retained source-descriptor leak after an injected parent close failure.
+CWD: `/workspace/scratch/1962bd8160f6/mckernel`. Environment: inherited shell environment plus exactly `PYTHONDONTWRITEBYTECODE=1` and `LC_ALL=C.UTF-8`; local Python 3.12. Exact command:
+```bash
+env PYTHONDONTWRITEBYTECODE=1 LC_ALL=C.UTF-8 python3 - <<'PY'
+from pathlib import Path
+import fcntl
+import os
+import tempfile
+from unittest import mock
+from scripts import fp0006_ihk_os_status_alias as witness
+from scripts.tests.test_fp0006_ihk_os_status_alias import write_capture
+
+with tempfile.TemporaryDirectory() as directory:
+    capture = Path(directory) / 'capture'
+    write_capture(capture, witness.LEGACY_SURFACE)
+    capture_last = capture / 'state-ledger.jsonl'
+    original_replay = witness._aggregate_read_exact
+    original_open = os.open
+    original_close = os.close
+    preliminary_complete = [False]
+    retained_directory = [None]
+    retained_raw = [None]
+    triggered = [False]
+
+    def marking_replay(path, identity, data, label):
+        original_replay(path, identity, data, label)
+        if Path(path) == capture_last:
+            preliminary_complete[0] = True
+
+    def recording_open(path, flags, mode=0o777, *, dir_fd=None):
+        descriptor = original_open(path, flags, mode, dir_fd=dir_fd)
+        if preliminary_complete[0] and path == capture.name and dir_fd is not None:
+            retained_directory[0] = descriptor
+        elif (
+            preliminary_complete[0]
+            and path == 'raw.jsonl'
+            and dir_fd == retained_directory[0]
+        ):
+            retained_raw[0] = descriptor
+        return descriptor
+
+    def refusing_close(descriptor):
+        if descriptor == retained_raw[0] and not triggered[0]:
+            triggered[0] = True
+            raise OSError('injected close refusal before kernel close')
+        return original_close(descriptor)
+
+    with mock.patch.object(
+        witness, '_aggregate_read_exact', side_effect=marking_replay
+    ), mock.patch.object(os, 'open', side_effect=recording_open), mock.patch.object(
+        os, 'close', side_effect=refusing_close
+    ):
+        try:
+            witness.review_surface(witness.ROOT, capture, 'legacy')
+        except witness.WitnessError:
+            pass
+        else:
+            raise AssertionError('injected source-close failure was accepted')
+
+    if retained_raw[0] is None or not triggered[0]:
+        raise AssertionError('retained source close attack did not trigger')
+    try:
+        fcntl.fcntl(retained_raw[0], fcntl.F_GETFD)
+    except OSError:
+        print('source-close failure cleanup: descriptor closed')
+    else:
+        raise AssertionError(
+            'LEAKED FD: failed parent source close was marked -1 and never retried'
+        )
+PY
+```
+Exit 1. Exact terminal output: `Traceback (most recent call last):`, `File "<stdin>", line 63, in <module>`, then `AssertionError: LEAKED FD: failed parent source close was marked -1 and never retried`.
+All five frozen identities matched and all twelve prior surface/global/aggregate/listdir/lstat/close/inherited-child-fstat attacks passed before this stop. The injected `os.close(retained_raw_fd)` raised before the kernel close; `_run_exec_seal` nevertheless replaced the record with `-1`, continued, set `sources_closed=True`, and neither cleanup layer retried the still-live descriptor. No repository edit, network resource, Git ref, workflow, artifact, build, module, runtime, guest, host, reboot, or explicit cleanup action occurred in the review.
+Fix only retained parent descriptor cleanup accounting so a descriptor is marked closed only after a successful kernel close and every failed close is retried during bounded cleanup; add the exact regression plus any symmetric directory/helper/control-FD failure cases. Preserve fail-closed acceptance, sealed fresh exec, caps, start barrier, timeout/kill/wait/reap, and all false/noncrediting claims.
+
+2026-08-19: the first direct FP-0006 executable-acceptance closure validation stopped on a mismatched precomputed reverse-edge set digest.
+Command from `/workspace/scratch/1962bd8160f6/mckernel`: `jq -r '.inventory_profile' host-kernel/contracts/legacy-behavior-contract-f2eb7352.json && python3 scripts/fp0006_executable_acceptance_closure.py --repo . >/tmp/fp0006-closure.out && head -n 30 /tmp/fp0006-closure.out`. Environment: inherited shell environment with no command-scoped overrides; local Python 3.12.3. No network or CI action occurred.
+Exit 1. Exact terminal diagnostic: `FP-0006 executable acceptance closure failed: legacy acceptance_reverse_edge_set_sha256 changed`. The new lane's precomputed jq reverse-edge pipeline likely introduced an extra array nesting relative to the checker's canonical JSON encoding. No committed file, active status-alias file, kernel authority, tracker, Git ref, workflow, artifact, build, module, runtime, guest, host, or reboot state changed; the command only created/truncated `/tmp/fp0006-closure.out` and exercised the three-file draft.
+Treat this as a pre-freeze draft identity error, not evidence or credit. Recompute the six canonical set digests exclusively through the checker's canonical encoder, update only the new closure contract and its fixed checker anchor as required, then rerun the identical direct command under stop-first. All external 971/2602/205/420 row authorities, executions, review, durability, gate, and tracker credit remain required-missing or false.
+
+2026-08-19: the first focused FP-0006 executable-acceptance closure suite stopped on an over-specific expected error message, while the checker failed closed earlier in the same hostile replacement.
+Command from `/workspace/scratch/1962bd8160f6/mckernel`: `python3 -m unittest -v scripts.tests.test_fp0006_executable_acceptance_closure`. Environment: inherited shell environment with no command-scoped overrides; local Python 3.12.3. No network or CI action occurred.
+The run passed 25 of 26 tests. `test_path_replacement_after_read_is_rejected` expected the message `path identity changed`, but the checker's retained descriptor replay rejected earlier with `value.json changed before aggregate decision` because `os.replace` reduced the retained inode link count to zero. Exit 1. No committed file, active status-alias file, external authority, tracker, Git ref, workflow, artifact, build, module, runtime, guest, host, or reboot state changed.
+Treat this as a pre-freeze test-expectation defect, not an acceptance bypass or credit. Update only that new test to accept either exact fail-closed boundary, assert the hostile replacement actually fired, and rerun the identical focused suite under stop-first. All external row authorities, executable results, review, durability, gate, and tracker claims remain required-missing or false.
+
+2026-08-19: the refrozen FP-0006 OS-status close-cleanup re-review stopped on FD-number reuse and double-close corruption.
+CWD: `/workspace/scratch/1962bd8160f6/mckernel`. Environment: inherited shell environment plus exactly `PYTHONDONTWRITEBYTECODE=1` and `LC_ALL=C.UTF-8`; local Python 3.12. Exact command:
+```bash
+env PYTHONDONTWRITEBYTECODE=1 LC_ALL=C.UTF-8 python3 - <<'PY'
+from pathlib import Path
+import errno
+import os
+import tempfile
+from unittest import mock
+from scripts import fp0006_ihk_os_status_alias as witness
+from scripts.tests.test_fp0006_ihk_os_status_alias import write_capture
+
+with tempfile.TemporaryDirectory() as directory:
+    root = Path(directory)
+    capture = root / 'capture'
+    write_capture(capture, witness.LEGACY_SURFACE)
+    sentinel = root / 'unrelated-sentinel'
+    sentinel.write_bytes(b'unrelated caller resource\n')
+    capture_last = capture / 'state-ledger.jsonl'
+    original_replay = witness._aggregate_read_exact
+    original_open = os.open
+    original_close = os.close
+    original_fstat = os.fstat
+    preliminary_complete = [False]
+    retained_directory = [None]
+    retained_raw = [None]
+    replacement_fd = [None]
+    replacement_identity = [None]
+    triggered = [False]
+
+    def marking_replay(path, identity, data, label):
+        original_replay(path, identity, data, label)
+        if Path(path) == capture_last:
+            preliminary_complete[0] = True
+
+    def recording_open(path, flags, mode=0o777, *, dir_fd=None):
+        descriptor = original_open(path, flags, mode, dir_fd=dir_fd)
+        if preliminary_complete[0] and path == capture.name and dir_fd is not None:
+            retained_directory[0] = descriptor
+        elif (
+            preliminary_complete[0]
+            and path == 'raw.jsonl'
+            and dir_fd == retained_directory[0]
+        ):
+            retained_raw[0] = descriptor
+        return descriptor
+
+    def close_then_reuse_and_raise(descriptor):
+        if descriptor == retained_raw[0] and not triggered[0]:
+            triggered[0] = True
+            original_close(descriptor)
+            replacement_fd[0] = original_open(
+                str(sentinel), os.O_RDONLY | getattr(os, 'O_CLOEXEC', 0)
+            )
+            if replacement_fd[0] != descriptor:
+                raise AssertionError('kernel did not immediately reuse closed fd')
+            info = original_fstat(replacement_fd[0])
+            replacement_identity[0] = (info.st_dev, info.st_ino)
+            raise OSError(errno.EINTR, 'injected post-close EINTR')
+        return original_close(descriptor)
+
+    with mock.patch.object(
+        witness, '_aggregate_read_exact', side_effect=marking_replay
+    ), mock.patch.object(os, 'open', side_effect=recording_open), mock.patch.object(
+        os, 'close', side_effect=close_then_reuse_and_raise
+    ):
+        try:
+            witness.review_surface(witness.ROOT, capture, 'legacy')
+        except witness.WitnessError:
+            pass
+        else:
+            raise AssertionError('post-close EINTR attack was accepted')
+
+    if replacement_fd[0] is None or not triggered[0]:
+        raise AssertionError('fd-reuse close attack did not trigger')
+    try:
+        info = original_fstat(replacement_fd[0])
+    except OSError as error:
+        if error.errno != errno.EBADF:
+            raise
+        raise AssertionError(
+            'DOUBLE-CLOSE: cleanup closed an unrelated fd that reused the source number'
+        )
+    actual_identity = (info.st_dev, info.st_ino)
+    if actual_identity != replacement_identity[0]:
+        raise AssertionError(
+            'FD CORRUPTION: cleanup closed the replacement and its number was reused again'
+        )
+    print('fd-reuse cleanup: unrelated replacement identity preserved')
+PY
+```
+Exit 1. Exact terminal output: `Traceback (most recent call last):`, `File "<stdin>", line 82, in <module>`, then `AssertionError: FD CORRUPTION: cleanup closed the replacement and its number was reused again`.
+The prior deterministic leaked-FD reproducer and all twelve earlier surface/global/aggregate/listdir/lstat/close/inherited-child-fstat attacks passed before this stop. The hostile close completed the real kernel close, immediately opened an unrelated sentinel on the same descriptor number, then raised `EINTR`; `_close_owned_fd_once` tested only numeric openness, misidentified the replacement as its retained source, and cleanup closed unrelated caller state. No repository edit, network resource, Git ref, workflow, artifact, build, module, runtime, guest, host, reboot, or explicit cleanup action occurred in the review.
+Fix cleanup ownership by comparing the descriptor's retained full identity before any retry/raw close; if the number is already closed or now refers to a different object, clear the owned record without closing the replacement. Add this exact post-close-EINTR immediate-reuse regression plus directory/helper/control equivalents where applicable. Preserve fail-closed acceptance, sealed fresh exec, caps, start barrier, timeout/kill/wait/reap, and every false/noncrediting claim.
+
+2026-08-19: the frozen FP-0006 executable-acceptance closure review stopped on mutable-global claim promotion after an honest contract validation.
+CWD: `/workspace/scratch/1962bd8160f6/mckernel`. Environment: inherited shell environment with no command-scoped overrides; local Python 3.12.3. Exact command:
+```bash
+python3 - <<'PY'
+from pathlib import Path
+from unittest import mock
+import sys
+root=Path.cwd(); sys.path.insert(0,str(root/'scripts'))
+import fp0006_executable_acceptance_closure as c
+orig=c.validate_contract
+def promote(contract):
+    inputs=orig(contract)
+    contract['claims']['gate_pass']=True
+    contract['claims']['credit_eligible']=True
+    return inputs
+with mock.patch.object(c,'validate_contract',side_effect=promote):
+    result=c.build_census(root)
+print(result['claims']['gate_pass'], result['claims']['credit_eligible'], result['gate']['points_awarded'])
+PY
+```
+Exit 0. Exact stdout: `True True 0`. Frozen tuple at the stop: contract `2f63eda20359cbac13e164da14edd07f1a04332043722453fcb7fc934c69ae84` / 5425; checker `c829b73b5bfd22926b9dd29cab8dc587f77784ab5b5dfce8faaf2224ca1fb835` / 46636; tests `adb2817961970670eed33b4a50ca310b31ffd3edd65fa2a015f0618a231dfc8b` / 15983.
+The hostile wrapper called the real validator, then mutated parsed `contract['claims']['gate_pass']` and `credit_eligible` to true; `build_census` dynamically resolved that global validator and copied the post-validation claims into its result. No reviewer edit, network resource, Git ref, workflow, artifact, external authority, build, module, runtime, guest, host, reboot, or tracker change occurred.
+Fix only this three-file lane so result claims come from a fresh exact sealed false-map independent of parsed mutable state, and the census builder uses an immutable captured validator/claim factory rather than dynamically resolved public globals. Add the exact mutation regression plus direct claim-factory/global-rebind variants; refreeze and rerun review. All external rows, executions, review, durability, gate, and credit remain required-missing or false.
+
+2026-08-19 clarification to the immediately preceding executable-acceptance mutable-global stop: the implementer first relayed an abbreviated semantically equivalent heredoc/output. The independent reviewer subsequently supplied the exact literal command actually executed; preserve this as the authoritative invocation record. CWD `/workspace/scratch/1962bd8160f6/mckernel`; inherited environment with no variables set by the command:
+```bash
+python3 - <<'PY'
+from pathlib import Path
+from unittest import mock
+import sys
+root = Path.cwd()
+sys.path.insert(0, str(root / 'scripts'))
+import fp0006_executable_acceptance_closure as c
+original_validate = c.validate_contract
+
+def promote_after_validation(contract):
+    inputs = original_validate(contract)
+    contract['claims']['gate_pass'] = True
+    contract['claims']['credit_eligible'] = True
+    return inputs
+
+with mock.patch.object(c, 'validate_contract', side_effect=promote_after_validation):
+    result = c.build_census(root)
+print('gate_pass=', result['claims']['gate_pass'])
+print('credit_eligible=', result['claims']['credit_eligible'])
+print('points_awarded=', result['gate']['points_awarded'])
+PY
+```
+Exit 0; reported wall time 0.3 seconds. Exact output: `gate_pass= True`, `credit_eligible= True`, and `points_awarded= 0`, each on its own line. The frozen tuple and substantive diagnosis/fix boundary remain exactly as recorded above.
+
+2026-08-19: the fresh FP-0006 executable-acceptance closure re-review stopped because a writable Python closure cell could replace the captured census builder and promote claims without validation.
+CWD: `/workspace/scratch/1962bd8160f6/mckernel`. Environment: inherited shell environment with no command-scoped overrides; local Python 3.12.3. No network or CI action occurred. Exact command:
+```bash
+python3 - <<'PY'
+from pathlib import Path
+import sys
+root = Path.cwd()
+sys.path.insert(0, str(root / 'scripts'))
+import fp0006_executable_acceptance_closure as c
+freevars = c.build_census.__code__.co_freevars
+cell = c.build_census.__closure__[freevars.index('builder')]
+original = cell.cell_contents
+
+def promoted_builder(*args, **kwargs):
+    return {
+        'claims': {'gate_pass': True, 'credit_eligible': True},
+        'gate': {'gate_id': 'FP-0006', 'points_awarded': 50, 'status': 'PASS'},
+    }
+
+try:
+    cell.cell_contents = promoted_builder
+    result = c.build_census(root)
+finally:
+    cell.cell_contents = original
+print('gate_pass=', result['claims']['gate_pass'])
+print('credit_eligible=', result['claims']['credit_eligible'])
+print('points_awarded=', result['gate']['points_awarded'])
+PY
+```
+Exit 0. Exact output: `gate_pass= True`, `credit_eligible= True`, and `points_awarded= 50`, each on its own line. Frozen tuple at the stop: contract `2f63eda20359cbac13e164da14edd07f1a04332043722453fcb7fc934c69ae84` / 5425; checker `318f181a...` / 47052; tests `c1a14342...` / 17095.
+The prior mutable-global validator attack was fixed, but `build_census.__closure__` exposed its captured `builder` cell and Python permitted replacing `cell.cell_contents`; the substituted function returned a promoted result without executing validation. The reviewer restored the cell and made no file edit. No external authority, tracker, Git ref, workflow, artifact, build, module, runtime, guest, host, or reboot state changed.
+Remove every mutable in-process Python callable/closure cell from final claim authority. Use a genuinely isolated exact helper boundary or impose and revalidate a sealed canonical false/gate envelope outside any replaceable worker, with exact closure/default/code/global replacement regressions. Keep the three-file scope and all external rows/executions/review/durability/gate/credit required-missing or false.
+
+2026-08-19: the FP-0006 OS-status-alias identity-aware close regression stopped on test-harness descriptor targeting before the focused suite.
+CWD: `/workspace/scratch/1962bd8160f6/mckernel`. Environment: command-scoped `PYTHONDONTWRITEBYTECODE=1 LC_ALL=C.UTF-8`; remaining environment inherited. Exact command:
+```bash
+env PYTHONDONTWRITEBYTECODE=1 LC_ALL=C.UTF-8 python3 -m unittest -v scripts.tests.test_fp0006_ihk_os_status_alias.StatusAliasWitnessTests.test_exec_seal_post_close_error_fd_reuse_preserves_replacement
+```
+Exit 1. The file and directory variants passed. Four subtests failed at test lines 1115/1109/1108: helper and expectation assumed immediate descriptor-number reuse and compared a still-unrecorded `None` identity; start-reader let a later internal `subprocess` `os.pipe()` overwrite the intended first control-pipe target (`43 != 42`) and emitted `ResourceWarning: subprocess 11 is still running`; start-writer had the same overwritten target and therefore did not raise the expected `WitnessError`. Python 3.6 AST/source validation passed before this command. No focused suite or subsequent command ran, and no product bypass was established.
+Fix only the regression targeting: record the first intended pipe once, tolerate/reserve lower descriptor holes where required, record replacement identity before asserting it, and guarantee subprocess cleanup. Then rerun this exact regression under stop-first before the full focused suite. Preserve the identity-aware product fix and all false/noncrediting claims.
+
+2026-08-19: the FP-0006 executable-acceptance isolated-runner redesign stopped on a missing standard-library import during its first direct validation.
+CWD: `/workspace/scratch/1962bd8160f6/mckernel`. Environment: command-scoped `PYTHONDONTWRITEBYTECODE=1`; remaining environment inherited; local Python 3.12.3; no network or CI. Exact command:
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 scripts/fp0006_executable_acceptance_closure.py --repo . --output /tmp/fp0006-executable-acceptance-closure-result.json
+```
+Exit 1. Exact short error: `NameError: name 'subprocess' is not defined` at the public isolated-runner call and its `TimeoutExpired` handler. No external authority, tracker, Git ref, workflow, artifact, build, module, runtime, guest, host, or reboot state changed.
+Import only the required standard-library `subprocess` module, refresh the normalized self digest required by this three-file lane, and rerun the identical direct validation under stop-first before any broader suite. Keep all claims false and all external evidence/result authority required-missing.
+
+2026-08-19: the FP-0006 OS-status-alias refreeze stopped at an over-broad repository hygiene scan after every lane validation had passed.
+CWD: `/workspace/scratch/1962bd8160f6/mckernel`. The preceding validation commands used `PYTHONDONTWRITEBYTECODE=1 LC_ALL=C.UTF-8`; the hygiene command's remaining environment was inherited. Exact failing command:
+```bash
+if rg --files -uu scripts | rg '(^|/)__pycache__/|\.pyc$'; then exit 1; fi
+```
+The intended five-file `stat` stage did not run because this command exited 1. Exact reported paths were `scripts/__pycache__/rust-source-retirement-audit.cpython-36.pyc` and `scripts/__pycache__/fp0006_executable_acceptance_closure.cpython-312.pyc`. Neither belongs to the five-file OS-status-alias lane, whose commands all used `PYTHONDONTWRITEBYTECODE`; no cleanup was attempted.
+Before this hygiene stop, the corrected six-way descriptor-reuse regression passed; the focused suite passed 39 tests with one honest rustc-unavailable skip; check-contract, legacy review, native review, and pair review CLIs passed; C `-Wall -Wextra -Werror -fsyntax-only`, Python 3.6 AST, and targeted `git diff --check` passed. Candidate identities were contract `1a75d2f4169e788075a9a0e0f10bcb5a9547b65be8db3abd8ddb8c1770dfb75a` / 10968, checker `54359c10be5de2b822ad5d984057b5971a2f264d70b50c68df2e9259844c917b` / 76651, C producer `ba92ad889ca521ec5bef6fdbf44fb95c5a165663505ad4380180f56e6b780023` / 7374, Rust fixture `4ec5ab91da89eff9ea3d506a0429a5c15a1eb11c0b53a45232b9b0b5738f0769` / 6800, and tests `1a8dcbead1f0cd9ccc675701ab8907dc33178615eead3c5ff630f4a1f5e63238` / 63418.
+Rerun hygiene only for the exact five lane paths and their name-derived temporary/backup/bytecode artifacts; do not delete or classify unrelated shared-worktree files. If that scoped check and exact `stat` pass, freeze these bytes for a completely fresh independent read-only review. Claims remain false and result authority required-missing.
+
+2026-08-19: fresh independent review of the isolated FP-0006 executable-acceptance census stopped because the callable object's class-level `__call__.__code__` remained mutable in-process.
+CWD: `/workspace/scratch/1962bd8160f6/mckernel`. Environment: inherited shell environment with no command-scoped overrides; local Python 3.12.3; no network or CI. Exact command:
+```bash
+python3 - <<'PY'
+from pathlib import Path
+import sys
+root = Path.cwd()
+sys.path.insert(0, str(root / 'scripts'))
+import fp0006_executable_acceptance_closure as c
+call = type(c.build_census).__call__
+original_code = call.__code__
+
+def promoted_call(self, repo, *args, **kwargs):
+    return {
+        'claims': {'gate_pass': True, 'credit_eligible': True},
+        'gate': {'gate_id': 'FP-0006', 'points_awarded': 50, 'status': 'PASS'},
+    }
+
+try:
+    call.__code__ = promoted_call.__code__
+    result = c.build_census(root)
+finally:
+    call.__code__ = original_code
+print('gate_pass=', result['claims']['gate_pass'])
+print('credit_eligible=', result['claims']['credit_eligible'])
+print('points_awarded=', result['gate']['points_awarded'])
+PY
+```
+Exit 0. Exact output: `gate_pass= True`, `credit_eligible= True`, and `points_awarded= 50`, each on its own line. The original code object was restored. Frozen tuple at the stop: contract `2f63eda20359cbac13e164da14edd07f1a04332043722453fcb7fc934c69ae84` / 5425, checker `33daf311ff0756369f6a6965f82e63e02b347bd21faaa71aaee2a580d0811a84` / 60777, tests `d6d95384cbd0d86a8fe5bd92149cf3e915f225a40c98440de92b2d85ca90c692` / 20152, normalized self seal `596866c7e2ed7b2fd38b9854eea9ccb0f734d4e8d0007b62f2dcc9eaa93ad7fc`.
+The fresh-exec worker and prior closure/global attacks were closed, but the public Python callable still provided a mutable pre-isolation authority surface. Remove the callable-object class method as an authority boundary; make the public API incapable of returning promoted claims even if module functions, callable class methods, defaults, closures, globals, code objects, or protocol comparators are rebound. Prefer an external exact executable boundary whose parent-side output is a fixed noncrediting schema or make any in-process entry point always overwrite and revalidate literal false/IN_PROGRESS/0 fields after every replaceable operation. Add this exact class-method code replacement regression. Keep the three-file scope and every external authority required-missing.
+
+2026-08-19: the CLI-only FP-0006 executable-acceptance redesign stopped on a stale self-source method selector during its first direct validation.
+CWD: `/workspace/scratch/1962bd8160f6/mckernel`. Environment: command-scoped `PYTHONDONTWRITEBYTECODE=1`; remaining environment inherited; local Python 3.12.3; no network or CI. Exact command:
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -I scripts/fp0006_executable_acceptance_closure.py --repo . --output /tmp/fp0006-executable-acceptance-closure-result.json
+```
+Exit 1. Exact short error: `AttributeError: 'method-wrapper' object has no attribute '__code__'` at the self-source path lookup `type(self).__call__.__code__.co_filename`. The emitter had been renamed for the CLI-only boundary, but this lookup still selected the removed `__call__` method. No external authority, tracker, Git ref, workflow, artifact, build, module, runtime, guest, host, or reboot state changed.
+Change only that stale lookup to the exact emitter method `type(self).emit.__code__.co_filename`, refresh the normalized self seal, and rerun the identical CLI command under stop-first before broader tests. Preserve the absence of any public `build_census` callable and every false/IN_PROGRESS/0 or required-missing boundary.
+
+2026-08-19: fresh independent review of the frozen FP-0006 OS-status-alias witness stopped because a one-off hostile harness failed to catch the target's expected fail-closed `WitnessError` and supplied an incomplete fake process.
+CWD: `/workspace/scratch/1962bd8160f6/mckernel`. Environment: command-scoped `PYTHONDONTWRITEBYTECODE=1`; remaining environment inherited. Exact command:
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
+from pathlib import Path
+from unittest import mock
+import tempfile
+from scripts import fp0006_ihk_os_status_alias as witness
+from scripts.tests.test_fp0006_ihk_os_status_alias import write_capture
+root = Path.cwd()
+with tempfile.TemporaryDirectory() as directory:
+    capture = Path(directory) / 'capture'
+    write_capture(capture, witness.LEGACY_SURFACE)
+    raw = capture / 'raw.jsonl'
+    original = raw.read_bytes()
+    forged = b'X' * len(original)
+    class ForgedSuccessfulProcess(object):
+        def __init__(self, command, **kwargs):
+            raw.write_bytes(forged)
+        def wait(self, timeout=None):
+            return 0
+    with mock.patch.object(witness.subprocess, 'Popen', side_effect=ForgedSuccessfulProcess):
+        result = witness.review_surface(root, capture, 'legacy')
+    print('capture_schema_validated=', result['capture_schema_validated'])
+    print('status=', result['status'])
+    print('claims_all_false=', all(value is False for value in result['claims'].values()))
+    print('mutation_persisted=', raw.read_bytes() == forged)
+    print('mutation_differs=', raw.read_bytes() != original)
+PY
+```
+Exit 1; stdout empty. The first/root error was the expected fail-closed rejection: `WitnessError: private exec parent close failed: capture member raw.jsonl source descriptor identity changed before owned close`. During cleanup the incomplete fake object lacked `kill`, producing the terminal `WitnessError: private exec verifier kill failed: 'ForgedSuccessfulProcess' object has no attribute 'kill'`. No target byte, Git ref, network resource, workflow, artifact, runtime, guest, host, or reboot state changed.
+Correct only this read-only review harness to catch the expected `WitnessError` and provide complete `kill`/`wait` behavior if process substitution remains necessary. Re-run the hostile case and continue the frozen-tuple review under stop-first; do not edit or clean the five target files.
+
+2026-08-19: the corrected fresh OS-status-alias hostile harness stopped a second time because its fake process did not retain the verifier's inherited start-reader descriptor, causing an earlier fail-closed broken pipe.
+CWD: `/workspace/scratch/1962bd8160f6/mckernel`. Environment: command-scoped `PYTHONDONTWRITEBYTECODE=1`; remaining environment inherited. Exact command:
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
+from pathlib import Path
+from unittest import mock
+import tempfile
+from scripts import fp0006_ihk_os_status_alias as witness
+from scripts.tests.test_fp0006_ihk_os_status_alias import write_capture
+root = Path.cwd()
+with tempfile.TemporaryDirectory() as directory:
+    capture = Path(directory) / 'capture'
+    write_capture(capture, witness.LEGACY_SURFACE)
+    raw = capture / 'raw.jsonl'
+    original = raw.read_bytes()
+    forged = b'W' * len(original)
+    instances = []
+    class ForgedSuccessfulProcess(object):
+        def __init__(self, command, **kwargs):
+            self.killed = False
+            self.wait_count = 0
+            instances.append(self)
+        def kill(self):
+            self.killed = True
+        def wait(self, timeout=None):
+            self.wait_count += 1
+            if not self.killed:
+                raw.write_bytes(forged)
+                return 0
+            return -9
+    with mock.patch.object(witness.subprocess, 'Popen', side_effect=ForgedSuccessfulProcess):
+        result = witness.review_surface(root, capture, 'legacy')
+    print('capture_schema_validated=', result['capture_schema_validated'])
+    print('status=', result['status'])
+    print('claims_all_false=', all(value is False for value in result['claims'].values()))
+    print('mutation_persisted=', raw.read_bytes() == forged)
+    print('mutation_differs=', raw.read_bytes() != original)
+    print('process_killed=', instances[0].killed)
+    print('process_wait_count=', instances[0].wait_count)
+PY
+```
+Exit 1; stdout empty. The root/terminal error was `WitnessError: private exec verifier failed: [Errno 32] Broken pipe` after `os.write(start_write, b"G")`; the fake process never duplicated/retained `command[-1]`, so the start-reader closed before the parent handshake. No target byte, Git ref, network resource, workflow, artifact, runtime, guest, host, or reboot state changed.
+For the read-only retry, wrap/delegate to the real `Popen` and inject only at the intended wait/teardown boundary, or explicitly `os.dup(int(command[-1]))` and close that duplicate deterministically in `wait`/`kill`. Catch the expected fail-closed `WitnessError`; do not edit or clean the frozen five-file tuple.
+
+2026-08-19: fresh independent review found a product blocker in the frozen FP-0006 OS-status-alias verifier: the parent trusted an injected fake `subprocess.Popen` object that emulated the start handshake, mutated an already-validated capture during `wait()`, returned success, closed every FD, and was accepted.
+CWD: `/workspace/scratch/1962bd8160f6/mckernel`. Environment: command-scoped `PYTHONDONTWRITEBYTECODE=1`; remaining environment inherited. Exact command:
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
+from pathlib import Path
+from unittest import mock
+import os
+import tempfile
+from scripts import fp0006_ihk_os_status_alias as witness
+from scripts.tests.test_fp0006_ihk_os_status_alias import write_capture
+root = Path.cwd()
+with tempfile.TemporaryDirectory() as directory:
+    capture = Path(directory) / 'capture'
+    write_capture(capture, witness.LEGACY_SURFACE)
+    raw = capture / 'raw.jsonl'
+    original = raw.read_bytes()
+    forged = b'W' * len(original)
+    instances = []
+    mutation_fired = [False]
+    class ForgedSuccessfulProcess(object):
+        def __init__(self, command, **kwargs):
+            self.reader = os.dup(int(command[-1]))
+            self.killed = False
+            self.wait_count = 0
+            instances.append(self)
+        def _close_reader(self):
+            if self.reader >= 0:
+                os.close(self.reader)
+                self.reader = -1
+        def kill(self):
+            self.killed = True
+            self._close_reader()
+        def wait(self, timeout=None):
+            self.wait_count += 1
+            if self.killed:
+                self._close_reader()
+                return -9
+            token = os.read(self.reader, 2)
+            eof = os.read(self.reader, 1)
+            self._close_reader()
+            if token != b'G' or eof != b'':
+                raise AssertionError('start handshake differs')
+            raw.write_bytes(forged)
+            mutation_fired[0] = True
+            return 0
+    before = set(os.listdir('/proc/self/fd'))
+    rejected = None
+    result = None
+    try:
+        with mock.patch.object(witness.subprocess, 'Popen', side_effect=ForgedSuccessfulProcess):
+            result = witness.review_surface(root, capture, 'legacy')
+    except witness.WitnessError as error:
+        rejected = error
+    after = set(os.listdir('/proc/self/fd'))
+    print('rejected=', rejected is not None)
+    if rejected is not None:
+        print('error=', str(rejected))
+    else:
+        print('capture_schema_validated=', result['capture_schema_validated'])
+        print('status=', result['status'])
+        print('claims_all_false=', all(value is False for value in result['claims'].values()))
+    print('mutation_hook_fired=', mutation_fired[0])
+    print('mutation_persisted=', raw.read_bytes() == forged)
+    print('mutation_differs=', raw.read_bytes() != original)
+    print('process_killed=', instances[0].killed)
+    print('process_wait_count=', instances[0].wait_count)
+    print('reader_closed=', instances[0].reader == -1)
+    print('fd_set_restored=', before == after)
+    if not mutation_fired[0] or before != after or instances[0].reader != -1:
+        raise SystemExit('hostile harness cleanup assertion failed')
+PY
+```
+Exit 0; stderr empty; wall time 0.4s. Exact stdout:
+```text
+rejected= False
+capture_schema_validated= True
+status= CAPTURED_UNREVIEWED_NONCREDITING
+claims_all_false= True
+mutation_hook_fired= True
+mutation_persisted= True
+mutation_differs= True
+process_killed= False
+process_wait_count= 1
+reader_closed= True
+fd_set_restored= True
+```
+Frozen tuple at the stop: contract `1a75d2f4169e788075a9a0e0f10bcb5a9547b65be8db3abd8ddb8c1770dfb75a` / 10968, checker `54359c10be5de2b822ad5d984057b5971a2f264d70b50c68df2e9259844c917b` / 76651, C producer `ba92ad889ca521ec5bef6fdbf44fb95c5a165663505ad4380180f56e6b780023` / 7374, Rust fixture `4ec5ab91da89eff9ea3d506a0429a5c15a1eb11c0b53a45232b9b0b5738f0769` / 6800, tests `1a8dcbead1f0cd9ccc675701ab8907dc33178615eead3c5ff630f4a1f5e63238` / 63418. No repository edit, cleanup, Git ref, network resource, workflow, artifact, runtime, guest, host, or reboot state changed.
+Remove trust in an arbitrary parent-side Python `Popen` object. The verifier must establish the child through an identity-verifiable primitive and verify the actual child PID/executable/status independently of replaceable object methods, or move the complete spawn/handshake/wait/decision into a fresh exact external helper boundary. Add this exact successful-fake-Popen mutation and global/class/code replacement variants, preserve deterministic kill/wait/reap/FD cleanup, and keep every claim false/noncrediting.
+
+2026-08-19: fresh independent review of the frozen CLI-only FP-0006 executable-acceptance census stopped on a shell-harness redirection error that contaminated canonical JSON stdout with stderr.
+CWD: `/workspace/scratch/1962bd8160f6/mckernel`. The command ran under an empty environment except `PATH=/usr/bin:/bin LANG=C LC_ALL=C PYTHONDONTWRITEBYTECODE=1 PYTHONHASHSEED=0`. Exact command:
+```bash
+set -euo pipefail
+env -i PATH=/usr/bin:/bin LANG=C LC_ALL=C PYTHONDONTWRITEBYTECODE=1 PYTHONHASHSEED=0 /usr/bin/python3 -I scripts/fp0006_executable_acceptance_closure.py --repo "$PWD" 2> >(tee /dev/stderr) | jq -e '
+  .schema_version == 1 and
+  .profile == "fp0006-executable-acceptance-closure-census-v1" and
+  .gate == {"gate_id":"FP-0006","points_awarded":0,"status":"IN_PROGRESS"} and
+  ([.claims[]] | all(. == false)) and
+  .execution_census.result_authority_status == "required-missing" and
+  .execution_census.runtime_result_count == 0 and
+  .declarative_census == {
+    "acceptance_test_declaration_count":1326,
+    "behavior_acceptance_edge_count":1326,
+    "behavior_declaration_count":1326,
+    "bounded_failure_flow_reference_count":2602,
+    "c_semantic_question_reference_count":205,
+    "compiler_failure_site_reference_count":971,
+    "declarative_behavior_acceptance_join_complete":true,
+    "rust_mir_site_reference_count":420
+  } and
+  (.required_missing | length == 8) and
+  (.joins | [.[] | select(.complete == true)] | length == 1)
+' >/dev/null
+```
+Exit 4. Exact output: `FP-0006 executable acceptance closure remains required-missing and noncrediting`, then `jq: parse error: Invalid numeric literal at line 1, column 8`, followed by an ignored stdout `BrokenPipeError`. The process substitution `tee /dev/stderr` duplicated the program's stderr into the pipeline stdout, so `jq` saw the non-JSON status line. Before this command, exact contract/checker/tests identities and normalized seal matched `2f63eda…`/5425, `e33af99b…`/60712, `d6785800…`/22010, and `8dd8812e…`. No file edit, cleanup, network, Git, workflow, runtime, guest, host, or reboot action occurred.
+Retry the same read-only JSON assertions with stderr redirected separately (not through a process substitution attached to the pipeline), and continue the frozen-tuple review under stop-first. Do not edit the three target files.
+
+2026-08-19: the fresh executable-acceptance review stopped at a container-specific zombie-probe path before the first real-worker repeat iteration; no target defect was reached.
+CWD: `/workspace/scratch/1962bd8160f6/mckernel`. Environment: empty except `PATH=/usr/bin:/bin LANG=C LC_ALL=C PYTHONDONTWRITEBYTECODE=1 PYTHONHASHSEED=0`. Exact command:
+```bash
+env -i PATH=/usr/bin:/bin LANG=C LC_ALL=C PYTHONDONTWRITEBYTECODE=1 PYTHONHASHSEED=0 /usr/bin/python3 - <<'PY'
+import contextlib
+import io
+import json
+import os
+from pathlib import Path
+import sys
+
+root=Path.cwd(); sys.path.insert(0,str(root/'scripts'))
+import fp0006_executable_acceptance_closure as closure
+
+def fds():
+    result={}
+    for name in os.listdir('/proc/self/fd'):
+        try:
+            fd=int(name); st=os.fstat(fd)
+        except (OSError,ValueError):
+            continue
+        result[fd]=(st.st_dev,st.st_ino,st.st_mode)
+    return result
+
+def children():
+    return Path('/proc/{0}/task/{0}/children'.format(os.getpid())).read_text(encoding='ascii')
+
+before=fds(); child_before=children(); wires=[]
+for index in range(20):
+    output=io.StringIO()
+    with contextlib.redirect_stdout(output):
+        closure._PublicCensusEmitter().emit(root,None)
+    wire=output.getvalue()
+    value=json.loads(wire)
+    assert not any(value['claims'].values()), index
+    assert value['gate']=={'gate_id':'FP-0006','points_awarded':0,'status':'IN_PROGRESS'}, index
+    wires.append(wire)
+after=fds(); child_after=children()
+assert after==before,(before,after)
+assert child_after==child_before,(child_before,child_after)
+assert all(wire==wires[0] for wire in wires)
+print('REAL-WORKER REPEAT/FD/ZOMBIE PASS runs=20 bytes={0}'.format(len(wires[0].encode('ascii'))))
+PY
+```
+Exit 1. Exact output: `FileNotFoundError: [Errno 2] No such file or directory: '/proc/7/task/7/children'` from the initial `child_before=children()` call. This container's `/proc` mount does not expose the namespaced process at `/proc/<os.getpid()>`; no worker iteration ran. Prior corrected CLI/jq, 36 focused tests, Python 3.6 grammar, parent-rebinding/fresh-CLI isolation, and 16 worker protocol/timeout/FD attacks were green. No file edit, cleanup, network, Git, workflow, runtime, guest, host, or reboot action occurred.
+Retry the read-only repeat/FD check using `/proc/self/task/<thread-native-id>/children` when available, or omit only the unavailable zombie metric while retaining exact FD-set and deterministic-output checks. Continue the frozen-tuple review under stop-first without target edits.
+
+2026-08-19: the executable-acceptance source/path/TOCTOU review stopped because its source-symlink case expected a narrower error substring even though the product correctly failed closed with `ELOOP`.
+CWD: `/workspace/scratch/1962bd8160f6/mckernel`. Exact environment: `env -i` with only `PATH=/usr/bin:/bin LANG=C LC_ALL=C PYTHONDONTWRITEBYTECODE=1 PYTHONHASHSEED=0`. Exact full outer command:
+```bash
+env -i PATH=/usr/bin:/bin LANG=C LC_ALL=C PYTHONDONTWRITEBYTECODE=1 PYTHONHASHSEED=0 /usr/bin/python3 - <<'PY'
+import contextlib
+import importlib.util
+import io
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+import tempfile
+from unittest import mock
+
+root=Path.cwd()
+source=root/'scripts/fp0006_executable_acceptance_closure.py'
+source_bytes=source.read_bytes()
+real_run=subprocess.run
+child_env={'PATH':'/usr/bin:/bin','LANG':'C','LC_ALL':'C','PYTHONDONTWRITEBYTECODE':'1','PYTHONHASHSEED':'0'}
+created=[]
+
+def newdir(label):
+    path=Path(tempfile.mkdtemp(prefix='fp0006-closure-'+label+'-',dir='/tmp'))
+    created.append(str(path))
+    return path
+
+def cli(script, repo):
+    return real_run([sys.executable,'-I',str(script),'--repo',str(repo)],stdout=subprocess.PIPE,stderr=subprocess.PIPE,check=False,env=child_env)
+
+def assert_fail(proc, label, needle=None):
+    assert proc.returncode == 1, (label,proc.returncode,proc.stdout,proc.stderr)
+    assert proc.stdout == b'', (label,'partial stdout',proc.stdout[:200])
+    text=proc.stderr.decode('utf-8','replace')
+    if needle is not None:
+        assert needle in text,(label,needle,text)
+    assert '\"status\": \"PASS\"' not in text and 'points_awarded\": 50' not in text,(label,text)
+
+d=newdir('source-symlink'); link=d/'checker.py'; link.symlink_to(source)
+assert_fail(cli(link,root),'source symlink','isolated checker')
+
+d=newdir('source-hardlink'); original=d/'original.py'; checker=d/'checker.py'; original.write_bytes(source_bytes); os.link(str(original),str(checker))
+assert_fail(cli(checker,root),'source hardlink','source identity')
+
+d=newdir('source-oversize'); checker=d/'checker.py'; checker.write_bytes(source_bytes+b'\n#'+b'x'*(1024*1024))
+assert_fail(cli(checker,root),'source oversize','source identity')
+
+d=newdir('source-modified'); checker=d/'checker.py'; modified=source_bytes.replace(b'\"gate_pass\": False',b'\"gate_pass\": True ',1); assert modified!=source_bytes; checker.write_bytes(modified)
+assert_fail(cli(checker,root),'source modified','normalized SHA-256 changed')
+
+d=newdir('root-symlink'); alias=d/'repo'; alias.symlink_to(root,target_is_directory=True)
+assert_fail(cli(source,alias),'root symlink','Too many levels of symbolic links')
+
+for mode in ('final','directory'):
+    d=newdir('contract-'+mode)
+    contract_rel=Path('host-kernel/contracts/fp0006-executable-acceptance-closure-v1.json')
+    if mode=='final':
+        target=d/contract_rel; target.parent.mkdir(parents=True); target.symlink_to(root/contract_rel)
+    else:
+        real=d/'real-contracts'; real.mkdir(); (real/contract_rel.name).write_bytes((root/contract_rel).read_bytes())
+        host=d/'host-kernel'; host.mkdir(); (host/'contracts').symlink_to(real,target_is_directory=True)
+    assert_fail(cli(source,d),'contract '+mode,'without following links')
+
+d=newdir('contract-hardlink'); contract_rel=Path('host-kernel/contracts/fp0006-executable-acceptance-closure-v1.json'); target=d/contract_rel; target.parent.mkdir(parents=True); sibling=d/'contract-copy.json'; sibling.write_bytes((root/contract_rel).read_bytes()); os.link(str(sibling),str(target))
+assert_fail(cli(source,d),'contract hardlink','hard-linked')
+
+d=newdir('source-replace-after-open'); checker=d/'checker.py'; checker.write_bytes(source_bytes); evil=d/'evil.py'; evil.write_bytes(b'raise SystemExit(\"PROMOTED\")\n')
+spec=importlib.util.spec_from_file_location('closure_replace_after_open',str(checker)); module=importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+real_module_run=module.subprocess.run
+
+def replacing_run(*args,**kwargs):
+    os.replace(str(evil),str(checker))
+    return real_module_run(*args,**kwargs)
+output=io.StringIO()
+with mock.patch.object(module.subprocess,'run',side_effect=replacing_run):
+    with contextlib.redirect_stdout(output):
+        module._PublicCensusEmitter().emit(root,None)
+value=json.loads(output.getvalue())
+assert not any(value['claims'].values())
+assert value['gate']=={'gate_id':'FP-0006','points_awarded':0,'status':'IN_PROGRESS'}
+assert checker.read_bytes()==b'raise SystemExit(\"PROMOTED\")\n'
+
+d=newdir('source-mutate-after-read'); checker=d/'checker.py'; checker.write_bytes(source_bytes)
+spec=importlib.util.spec_from_file_location('closure_mutate_after_read',str(checker)); module2=importlib.util.module_from_spec(spec); spec.loader.exec_module(module2)
+real_module2_run=module2.subprocess.run
+
+def mutating_run(*args,**kwargs):
+    fd=kwargs['pass_fds'][0]
+    writer=os.open('/proc/self/fd/{0}'.format(fd),os.O_WRONLY)
+    try:
+        os.pwrite(writer,b'X',0)
+        os.fsync(writer)
+    finally:
+        os.close(writer)
+    return real_module2_run(*args,**kwargs)
+output=io.StringIO(); caught=None
+try:
+    with mock.patch.object(module2.subprocess,'run',side_effect=mutating_run):
+        with contextlib.redirect_stdout(output):
+            module2._PublicCensusEmitter().emit(root,None)
+except module2.ClosureError as exc:
+    caught=exc
+assert caught is not None,caught
+assert output.getvalue()==''
+assert 'changed during worker' in str(caught) or 'worker failed' in str(caught),str(caught)
+
+print('SOURCE/PATH/TOCTOU PASS cases=10 temp_roots={0}'.format(len(created)))
+for path in created:
+    print('TEMP ' + path)
+PY
+```
+Exit 1. Exact output: `AssertionError: ('source symlink', 'isolated checker', "FP-0006 executable acceptance closure failed: [Errno 40] Too many levels of symbolic links: '/tmp/fp0006-closure-source-symlink-gli8_nx9/checker.py'\n")` after the traceback at outer lines 37 and 32. The product subcommand exited 1 with empty stdout and the exact fail-closed ELOOP stderr; the outer harness rejected only the mismatched expected substring. The authorized 20-run real-worker retry had already passed with identical 3,204-byte wires and exact FD-set equality. No target edit, cleanup, network, Git, workflow, runtime, guest, host, or reboot action occurred.
+Change only the read-only harness expectation for the source-symlink case to accept this exact ELOOP fail-closed result, then rerun the full source/path/TOCTOU matrix under stop-first. Do not edit the frozen three-file tuple.
+
+2026-08-19 clarification to the immediately preceding source/path/TOCTOU record: JSON/Markdown transport displayed backslashes before double quotes, but the exact shell-heredoc bytes used ordinary `"` characters with no preceding backslash. The four affected Python source lines were exactly:
+```python
+    assert '"status": "PASS"' not in text and 'points_awarded": 50' not in text,(label,text)
+d=newdir('source-modified'); checker=d/'checker.py'; modified=source_bytes.replace(b'"gate_pass": False',b'"gate_pass": True ',1); assert modified!=source_bytes; checker.write_bytes(modified)
+d=newdir('source-replace-after-open'); checker=d/'checker.py'; checker.write_bytes(source_bytes); evil=d/'evil.py'; evil.write_bytes(b'raise SystemExit("PROMOTED")\n')
+assert checker.read_bytes()==b'raise SystemExit("PROMOTED")\n'
+```
+In this clarification block, the quoted characters between single quotes are literal ordinary double quotes; any renderer-level escaping is not part of the executed heredoc. No command or target state changed.
+
+2026-08-19: the retried executable-acceptance source/path matrix stopped at case five because the repository-root symlink failed closed with `ENOTDIR` while the read-only harness expected `ELOOP`.
+CWD and environment were unchanged: `/workspace/scratch/1962bd8160f6/mckernel`; `env -i PATH=/usr/bin:/bin LANG=C LC_ALL=C PYTHONDONTWRITEBYTECODE=1 PYTHONHASHSEED=0`. The exact outer command was the full 10-case heredoc recorded immediately above, byte-for-byte identical except the authorized line was:
+```python
+assert_fail(cli(link,root),'source symlink','Too many levels of symbolic links')
+```
+instead of the earlier `isolated checker` expectation. Cases one through four passed. The exact failing product subcommand was:
+```bash
+env -i PATH=/usr/bin:/bin LANG=C LC_ALL=C PYTHONDONTWRITEBYTECODE=1 PYTHONHASHSEED=0 /usr/bin/python3 -I /workspace/scratch/1962bd8160f6/mckernel/scripts/fp0006_executable_acceptance_closure.py --repo /tmp/fp0006-closure-root-symlink-*/repo
+```
+where the generated `repo` path symlinked to the workspace root. The product exited 1 with empty stdout and exact stderr `FP-0006 executable acceptance closure failed: isolated census worker failed: isolated FP-0006 census failed: [Errno 20] Not a directory: 'repo'`. The outer harness exited 1 with `AssertionError: ('root symlink', 'Too many levels of symbolic links', "FP-0006 executable acceptance closure failed: isolated census worker failed: isolated FP-0006 census failed: [Errno 20] Not a directory: 'repo'\n")` at outer lines 53 and 32. No target edit, cleanup, network, Git, workflow, runtime, guest, host, or reboot action occurred.
+Change only the read-only root-symlink expectation to accept this exact `ENOTDIR` fail-closed result, then rerun the full matrix under stop-first. Do not edit the frozen tuple.
+
+2026-08-19 clarification to the immediately preceding root-symlink record: the `*` shown in the explanatory product subcommand was not a literal executed argument. The exact logged outer heredoc called `tempfile.mkdtemp()` and supplied its generated concrete path to the child. The random suffix was not printed before the assertion and is unavailable without a new filesystem inspection, which the reviewer did not perform. The exact executable command construction and exact captured product stderr remain fully specified by the outer heredoc and output above. No command or state change occurred for this clarification.
+
+2026-08-19: the retried executable-acceptance source/path matrix stopped at case nine because the harness expected retained-source path replacement to succeed on the old inode, while the checker more strictly failed closed when the retained inode's link count changed.
+CWD/environment were unchanged: `/workspace/scratch/1962bd8160f6/mckernel`; `env -i PATH=/usr/bin:/bin LANG=C LC_ALL=C PYTHONDONTWRITEBYTECODE=1 PYTHONHASHSEED=0 /usr/bin/python3 -`. The exact outer command was the previously logged full 10-case heredoc with exactly these two authorized expectation changes:
+```python
+assert_fail(cli(link,root),'source symlink','Too many levels of symbolic links')
+assert_fail(cli(source,alias),'root symlink',"Not a directory: 'repo'")
+```
+Cases one through eight passed. In case nine the wrapper replaced the generated temporary checker path only after the emitter retained/opened the original source descriptor. The command exited 1 with no public JSON and exact output:
+```text
+Traceback (most recent call last):
+  File "<stdin>", line 81, in <module>
+  File "/tmp/fp0006-closure-source-replace-after-open-wg6j2ls4/checker.py", line 1205, in emit
+closure_replace_after_open.ClosureError: isolated checker source changed during worker
+```
+The target failed closed because the retained source identity's link count changed. The harness incorrectly attempted to parse successful output. No target edit, cleanup, network, Git, workflow, runtime, guest, host, or reboot action occurred.
+Change only case nine to require a fail-closed exception with no public JSON and an unchanged noncrediting authority boundary, then rerun the complete matrix under stop-first. For negative path cases, assert exit/failure, empty public output, no promoted result, and unchanged target/FD state rather than platform-specific errno text unless the contract freezes it. Do not edit the frozen tuple.
+
+2026-08-19: fresh independent review found a programmatic-entry product blocker in the frozen isolated-CLI FP-0006 OS-status-alias checker: an importing isolated interpreter could mutate module `__name__` to `__main__`, replace validator/envelope globals, and call `main()` to emit a false 50-point PASS.
+CWD: `/workspace/scratch/1962bd8160f6/mckernel`. Environment: command-scoped `PYTHONDONTWRITEBYTECODE=1`; remaining environment inherited. Exact command:
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -I - <<'PY'
+from pathlib import Path
+import contextlib
+import io
+import json
+import sys
+
+root = Path.cwd()
+sys.path.insert(0, str(root))
+from scripts import fp0006_ihk_os_status_alias as witness
+
+original_name = witness.__name__
+original_argv = list(sys.argv)
+original_validator = witness._validate_contract_internal
+original_envelope = witness._require_cli_noncrediting_result
+
+def promoted_validator(repo):
+    return {
+        "claims": {"credit_eligible": True, "gate_pass": True},
+        "contract_id": "attacker-contract",
+        "gate": {"gate_id": "FP-0006", "points_awarded": 50, "status": "PASS"},
+        "result_authority": "attacker-supplied",
+        "status": "PASS",
+    }
+
+capture = io.StringIO()
+try:
+    witness.__name__ = "__main__"
+    witness._validate_contract_internal = promoted_validator
+    witness._require_cli_noncrediting_result = lambda command, result: None
+    sys.argv = [
+        str(root / "scripts/fp0006_ihk_os_status_alias.py"),
+        "check-contract",
+        "--repo",
+        str(root),
+    ]
+    with contextlib.redirect_stdout(capture):
+        status = witness.main()
+finally:
+    sys.argv = original_argv
+    witness._require_cli_noncrediting_result = original_envelope
+    witness._validate_contract_internal = original_validator
+    witness.__name__ = original_name
+
+result = json.loads(capture.getvalue())
+print("status=", status)
+print("gate_pass=", result["claims"]["gate_pass"])
+print("credit_eligible=", result["claims"]["credit_eligible"])
+print("points_awarded=", result["gate"]["points_awarded"])
+print("contract_id=", result["contract_id"])
+print("result_authority=", result["result_authority"])
+PY
+```
+Exit 0; stderr empty. Exact stdout:
+```text
+status= 0
+gate_pass= True
+credit_eligible= True
+points_awarded= 50
+contract_id= attacker-contract
+result_authority= attacker-supplied
+```
+Frozen tuple at the stop: contract `1a75d2f4169e788075a9a0e0f10bcb5a9547b65be8db3abd8ddb8c1770dfb75a` / 10968, checker `b839fb7cf5531eccdba7558d8d076c4eec6f1d6b364ce716e421c4799d2cba13` / 86045, C producer `ba92ad889ca521ec5bef6fdbf44fb95c5a165663505ad4380180f56e6b780023` / 7374, Rust fixture `4ec5ab91da89eff9ea3d506a0429a5c15a1eb11c0b53a45232b9b0b5738f0769` / 6800, tests `bff3b4abc827bc0f4f495982424e2a467265eb8a97220758b572d55dde382f1d` / 27675, normalized checker seal `6dadaf4b268c0334c2e3c2466f29ec0903c524efa73f4a6a748533b26209c836`. Before the attack, 15 focused tests (one honest rustc skip) and direct isolated check-contract passed. No target edit, cleanup, network, Git, workflow, runtime, guest, host, or reboot action occurred.
+Make imported/programmatic execution unconditionally non-authoritative: `main()` must not be callable as an authority from an imported module even if `__name__`, globals, functions, class methods, code/defaults, or envelope comparators are rebound. Move authoritative parsing/validation/emission behind a fresh exact executable-only entry that derives execution identity from an unforgeable process/source boundary rather than mutable `__name__`, or remove callable `main` entirely and execute a sealed literal bootstrap only when the file is the actual interpreter script. Add this exact `__name__` plus validator/envelope replacement regression. Preserve isolated CLI functionality and all false/required-missing claims.
+
+2026-08-19: after the OS-status-alias executable-entry fix, the focused suite stopped on one overly specific negative-test error substring even though the product failed closed correctly.
+CWD: `/workspace/scratch/1962bd8160f6/mckernel`. Environment: command-scoped `PYTHONDONTWRITEBYTECODE=1`; remaining environment inherited. Exact command:
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest scripts.tests.test_fp0006_ihk_os_status_alias -v
+```
+Exit 1. The suite listed 17 tests: 15 `ok`, one honest `rustc is unavailable` skip, and one failure. Exact failing test/output:
+```text
+test_runpy_and_spec_loader_entry_attempts_fail_closed (scripts.tests.test_fp0006_ihk_os_status_alias.StatusAliasIsolatedCliTests.test_runpy_and_spec_loader_entry_attempts_fail_closed) ... FAIL
+
+Traceback (most recent call last):
+  File "/workspace/scratch/1962bd8160f6/mckernel/scripts/tests/test_fp0006_ihk_os_status_alias.py", line 303, in test_runpy_and_spec_loader_entry_attempts_fail_closed
+    self.assertIn(b"direct script execution", error)
+AssertionError: b'direct script execution' not found in b'fp0006 status-alias witness error: isolated process command does not name the direct CLI\n'
+
+----------------------------------------------------------------------
+Ran 17 tests in 3.535s
+
+FAILED (failures=1, skipped=1)
+```
+The isolated `python -I -c runpy` attack was rejected because its process command did not name the exact direct CLI; no authority output or claim promotion occurred. No edit followed the failure, and no cleanup, network, Git, workflow, runtime, guest, host, or reboot action occurred.
+Change only this negative-test expectation to accept the exact bound-command rejection, then rerun the same focused suite under stop-first. Preserve the executable-only entry design and all false/required-missing claims.
+
+2026-08-19: after every required OS-status-alias focused/direct/C/Python/hygiene gate passed, a final over-broad static authority-name scan stopped on textual `def main()` at checker line 539 before its import-surface portion ran.
+CWD: `/workspace/scratch/1962bd8160f6/mckernel`. Environment: inherited shell environment; `PYTHONDONTWRITEBYTECODE=1` prefixed only the second embedded Python command, which was not reached. Exact command:
+```bash
+if rg -n '^def (main|build_census|validate_contract|review_surface|review_pair)\b' scripts/fp0006_ihk_os_status_alias.py; then exit 1; fi
+PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
+from scripts import fp0006_ihk_os_status_alias as witness
+for name in ("main", "build_census", "validate_contract", "review_surface", "review_pair", "_cli_entry", "_load_authority", "_validate_contract_internal", "_review_surface_internal", "_review_pair_internal"):
+    if hasattr(witness, name):
+        raise SystemExit("exported authority: " + name)
+print("import surface: no callable result/authority entry points")
+PY
+```
+Exit 1; stderr empty; exact stdout `539:def main():`. The import-surface command did not run. The focused public-boundary regression had already passed, so this is not yet a product finding; the textual occurrence may be within sealed embedded helper source rather than the imported module's AST. No edit followed the stop and no cleanup, network, Git, workflow, runtime, guest, host, or reboot action occurred.
+Inspect only the read-only syntactic context/AST for line 539 and run the exact import-surface command separately. Treat embedded helper-source text as data, not a module-level exported function; require no actual imported authority entry points. Stop if the AST or import check exposes one, otherwise complete the frozen identity report without target edits.
+
+2026-08-19: root OS-status-alias validation stopped on an over-broad C `--describe` jq assertion after both C compilation stages passed.
+CWD: `/workspace/scratch/1962bd8160f6/mckernel`. Environment: inherited shell environment with no command-scoped overrides. Exact command:
+```bash
+set -euo pipefail
+cc -std=c11 -Wall -Wextra -Werror -fsyntax-only scripts/smoke/fp0006-ihk-os-status-alias.c
+status_c_bin=$(mktemp /tmp/fp0006-status-c.XXXXXX)
+cc -std=c11 -Wall -Wextra -Werror scripts/smoke/fp0006-ihk-os-status-alias.c -o "$status_c_bin"
+"$status_c_bin" --describe | jq -e '([.claims[]] | all(. == false)) and (.vectors | length == 4)' >/dev/null
+printf '%s\n' 'status-alias C11 compile/describe PASS'
+```
+Exit 5. Exact output: `jq: error (at <stdin>:1): Cannot iterate over null (null)`. Both `cc` invocations completed before the jq failure. The root harness assumed a top-level `claims` object in the producer's describe schema; this is not yet a target diagnostic. No target edit, cleanup, Git, network, workflow, runtime, guest, host, or reboot action occurred after the failure.
+Inspect only the existing describe schema, replace the root-only jq assertion with its exact frozen fields/vector semantics, and rerun the identical compile/describe validation under stop-first. Do not edit the frozen five-file tuple.
+
+2026-08-19: root OS-status-alias Python/canonical validation stopped because the root harness over-broadly forbade private implementation function definitions in the AST, despite the separate imported-surface boundary deleting/hiding them.
+CWD: `/workspace/scratch/1962bd8160f6/mckernel`. Environment: command-scoped `PYTHONDONTWRITEBYTECODE=1 LC_ALL=C.UTF-8`; Python invoked with `-I -S`; remaining environment inherited. Exact command:
+```bash
+env PYTHONDONTWRITEBYTECODE=1 LC_ALL=C.UTF-8 python3 -I -S - <<'PY'
+import ast
+import json
+from pathlib import Path
+paths = (
+    Path('scripts/fp0006_ihk_os_status_alias.py'),
+    Path('scripts/tests/test_fp0006_ihk_os_status_alias.py'),
+)
+for path in paths:
+    source = path.read_text(encoding='utf-8')
+    compile(source, str(path), 'exec')
+    try:
+        tree = ast.parse(source, filename=str(path), feature_version=(3, 6))
+    except TypeError:
+        tree = ast.parse(source, filename=str(path), feature_version=6)
+    if path.name == 'fp0006_ihk_os_status_alias.py':
+        forbidden = {'main', 'build_census', 'validate_contract', 'review_surface', 'review_pair', '_cli_entry', '_load_authority', '_validate_contract_internal', '_review_surface_internal', '_review_pair_internal'}
+        exposed = [node.name for node in tree.body if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and node.name in forbidden]
+        assert not exposed, exposed
+def no_duplicates(pairs):
+    value = {}
+    for key, item in pairs:
+        if key in value:
+            raise AssertionError('duplicate JSON key: ' + key)
+        value[key] = item
+    return value
+contract_path = Path('host-kernel/contracts/fp0006-ihk-os-status-alias-v1.json')
+raw = contract_path.read_bytes()
+contract = json.loads(raw.decode('utf-8'), object_pairs_hook=no_duplicates)
+assert raw == (json.dumps(contract, sort_keys=True, indent=2) + '\n').encode('utf-8')
+assert all(type(value) is bool and value is False for value in contract['claims'].values())
+assert contract['gate'] == {'gate_id': 'FP-0006', 'points_awarded': 0, 'status': 'IN_PROGRESS'}
+print('status-alias grammar/import-surface/canonical PASS')
+PY
+```
+Exit 1. Exact output: `AssertionError: ['_load_authority', '_validate_contract_internal', '_review_surface_internal', '_review_pair_internal', '_cli_entry']` at outer line 18 after the traceback. Compilation and parsing had succeeded. The root harness conflated private source definitions with reachable imported authority; the focused and independent import-surface tests had already established those names are unavailable after import. No target edit, cleanup, Git, network, workflow, runtime, guest, host, or reboot action occurred.
+Retry grammar/canonical validation without forbidding private definitions, then separately import the module under `PYTHONDONTWRITEBYTECODE=1` and require that every public/private authority entry name is absent or noncallable. Preserve the exact frozen tuple and stop on any real imported authority exposure.
