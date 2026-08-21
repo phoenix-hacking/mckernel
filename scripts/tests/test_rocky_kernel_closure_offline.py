@@ -529,8 +529,17 @@ class SnapshotBridgeTests(unittest.TestCase):
         snapshot_contract, input_records = (
             closure.snapshot_v2.check_repository_inputs(REPO_ROOT)
         )
+        canonical_repo = REPO_ROOT.resolve()
         head = closure.run_command(
-            ["git", "-C", str(REPO_ROOT), "rev-parse", "HEAD"]
+            [
+                "git",
+                "-c",
+                "safe.directory=" + str(canonical_repo),
+                "-C",
+                str(canonical_repo),
+                "rev-parse",
+                "HEAD",
+            ]
         )[0].decode("ascii").strip()
         workflow_ref = (
             closure.snapshot_v2.WORKFLOW_REF_PREFIX
