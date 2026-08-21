@@ -48,8 +48,11 @@ jobs:
               },
               "container_image": os.environ["RK_SNAPSHOT_CONTAINER_IMAGE"],
               "github_repository": os.environ["GITHUB_REPOSITORY"],
+              "github_sha": os.environ["GITHUB_SHA"],
               "github_run_attempt": int(os.environ["GITHUB_RUN_ATTEMPT"]),
               "github_run_id": int(os.environ["GITHUB_RUN_ID"]),
+              "github_workflow_ref": os.environ["GITHUB_WORKFLOW_REF"],
+              "github_workflow_sha": os.environ["GITHUB_WORKFLOW_SHA"],
               "requested_head_sha": os.environ["EXPECTED_HEAD_SHA"],
               "schema_version": 1,
           }
@@ -96,14 +99,44 @@ jobs:
         run: |
           set -euo pipefail
           [[ "$EXPECTED_HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]
+          test "$GITHUB_SHA" = "$EXPECTED_HEAD_SHA"
+          test "$GITHUB_WORKFLOW_SHA" = "$EXPECTED_HEAD_SHA"
+          case "$GITHUB_WORKFLOW_REF" in
+            "$GITHUB_REPOSITORY/.github/workflows/rocky-repository-snapshot-capture-v2.yml@refs/heads/"*|\
+            "$GITHUB_REPOSITORY/.github/workflows/rocky-repository-snapshot-capture-v2.yml@refs/tags/"*) ;;
+            *) echo "unexpected workflow ref: $GITHUB_WORKFLOW_REF" >&2; exit 1 ;;
+          esac
           canonical_workspace="$(python3 -c \
             'import os, sys; print(os.path.realpath(sys.argv[1]))' \
             "$GITHUB_WORKSPACE")"
-          test "$(git -c "safe.directory=$canonical_workspace" \
-            -C "$canonical_workspace" rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"
-          python3 scripts/rocky_repository_snapshot_capture.py \
+          bootstrap_home="$RUNNER_TEMP/rocky-snapshot-bootstrap-home"
+          committed_checker="$RUNNER_TEMP/rocky-repository-snapshot-capture-v2-check.py"
+          test ! -e "$committed_checker"
+          mkdir -m 700 -p "$bootstrap_home"
+          test "$(env -i \
+            PATH="$PATH" HOME="$bootstrap_home" LC_ALL=C \
+            GIT_CONFIG_NOSYSTEM=1 GIT_GRAFT_FILE=/dev/null \
+            GIT_NO_REPLACE_OBJECTS=1 \
+            git -c "safe.directory=$canonical_workspace" \
+            -C "$canonical_workspace" rev-parse --verify 'HEAD^{commit}')" = \
+            "$EXPECTED_HEAD_SHA"
+          umask 077
+          set -C
+          env -i \
+            PATH="$PATH" HOME="$bootstrap_home" LC_ALL=C \
+            GIT_CONFIG_NOSYSTEM=1 GIT_GRAFT_FILE=/dev/null \
+            GIT_NO_REPLACE_OBJECTS=1 \
+            git -c "safe.directory=$canonical_workspace" \
+            -C "$canonical_workspace" show \
+            "$EXPECTED_HEAD_SHA:scripts/rocky_repository_snapshot_capture.py" \
+            >"$committed_checker"
+          chmod 0400 "$committed_checker"
+          test -s "$committed_checker"
+          PYTHONDONTWRITEBYTECODE=1 python3 "$committed_checker" \
             --repo "$GITHUB_WORKSPACE" \
-            --check
+            --check \
+            --source-commit "$EXPECTED_HEAD_SHA" \
+            --workflow-ref "$GITHUB_WORKFLOW_REF"
           PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -v \
             scripts.tests.test_rocky_repository_snapshot_capture
 
@@ -112,15 +145,38 @@ jobs:
           EVIDENCE_ROOT: ${{ runner.temp }}/rocky-repository-snapshot-v2
         run: |
           set -euo pipefail
-          python3 scripts/rocky_repository_snapshot_capture.py \
+          canonical_workspace="$(python3 -c \
+            'import os, sys; print(os.path.realpath(sys.argv[1]))' \
+            "$GITHUB_WORKSPACE")"
+          bootstrap_home="$RUNNER_TEMP/rocky-snapshot-bootstrap-home"
+          committed_checker="$RUNNER_TEMP/rocky-repository-snapshot-v2-capture.py"
+          test ! -e "$committed_checker"
+          mkdir -m 700 -p "$bootstrap_home"
+          umask 077
+          set -C
+          env -i \
+            PATH="$PATH" HOME="$bootstrap_home" LC_ALL=C \
+            GIT_CONFIG_NOSYSTEM=1 GIT_GRAFT_FILE=/dev/null \
+            GIT_NO_REPLACE_OBJECTS=1 \
+            git -c "safe.directory=$canonical_workspace" \
+            -C "$canonical_workspace" show \
+            "$EXPECTED_HEAD_SHA:scripts/rocky_repository_snapshot_capture.py" \
+            >"$committed_checker"
+          chmod 0400 "$committed_checker"
+          test -s "$committed_checker"
+          PYTHONDONTWRITEBYTECODE=1 python3 "$committed_checker" \
             --repo "$GITHUB_WORKSPACE" \
             --capture \
             --output-dir "$EVIDENCE_ROOT/payload" \
-            --diagnostics-dir "$EVIDENCE_ROOT/diagnostics"
+            --diagnostics-dir "$EVIDENCE_ROOT/diagnostics" \
+            --source-commit "$EXPECTED_HEAD_SHA" \
+            --workflow-ref "$GITHUB_WORKFLOW_REF"
           (cd "$EVIDENCE_ROOT/payload" && sha256sum --check --strict snapshot.tar.sha256)
-          python3 scripts/rocky_repository_snapshot_capture.py \
+          PYTHONDONTWRITEBYTECODE=1 python3 "$committed_checker" \
             --repo "$GITHUB_WORKSPACE" \
-            --verify-artifact "$EVIDENCE_ROOT/payload/snapshot.tar"
+            --verify-artifact "$EVIDENCE_ROOT/payload/snapshot.tar" \
+            --source-commit "$EXPECTED_HEAD_SHA" \
+            --workflow-ref "$GITHUB_WORKFLOW_REF"
 
       - name: Upload deterministic payload and drift diagnostics
         if: ${{ always() }}
