@@ -267,6 +267,51 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         with self.assertRaisesRegex(evidence.EvidenceError, "may not claim a gate PASS"):
             evidence.validate_contract(repo)
 
+    def test_runtime_workflow_reusable_trigger_mutation_is_rejected(self) -> None:
+        repo = self.copy_contract_repository()
+        workflow = ".github/workflows/native-rust-host-modules-exact-runtime.yml"
+        self.mutate_text(
+            repo,
+            workflow,
+            "  workflow_call:\n"
+            "    inputs:\n"
+            "      validation_sha:\n"
+            "        description: Exact 40-hex candidate commit\n"
+            "        required: true\n"
+            "        type: string\n",
+            "",
+        )
+        with self.assertRaisesRegex(
+            evidence.EvidenceError, "dispatch/reusable trigger boundary"
+        ):
+            evidence.validate_contract(repo)
+
+    def test_pr_wrapper_mutations_fail_closed(self) -> None:
+        wrapper = ".github/workflows/native-rust-host-modules-exact-runtime-pr.yml"
+        mutations = (
+            (
+                "${{ github.event.pull_request.head.repo.full_name == github.repository }}",
+                "${{ always() }}",
+            ),
+            (
+                "validation_sha: ${{ github.event.pull_request.head.sha }}",
+                "validation_sha: ${{ github.sha }}",
+            ),
+            ("contents: read", "contents: write"),
+            ("  pull_request:\n", "  pull_request_target:\n"),
+            ("    with:\n", "    secrets: inherit\n    with:\n"),
+            ("      - scripts/**\n", ""),
+        )
+        for old, new in mutations:
+            with self.subTest(new=new):
+                repo = self.copy_contract_repository()
+                self.mutate_text(repo, wrapper, old, new)
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError,
+                    "runtime PR wrapper trust/exact-head boundary differs",
+                ):
+                    evidence.validate_contract(repo)
+
     def test_missing_openssl_cli_package_is_rejected(self) -> None:
         repo = self.copy_contract_repository()
         workflow = ".github/workflows/native-rust-host-modules-exact-build.yml"

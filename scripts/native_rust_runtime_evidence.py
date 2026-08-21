@@ -1086,6 +1086,40 @@ def _read_regular_evidence_bytes(path: Path, label: str) -> bytes:
     return value
 
 
+def _validate_runtime_pr_workflow(text: str) -> None:
+    expected = (
+        "name: Native Rust host modules exact Rocky runtime PR capture\n"
+        "\n"
+        "on:\n"
+        "  pull_request:\n"
+        "    branches: [development]\n"
+        "    paths:\n"
+        "      - .gitmodules\n"
+        "      - .github/workflows/native-rust-host-modules-exact-*.yml\n"
+        "      - host-kernel/contracts/*.json\n"
+        "      - host-kernel/kbuild/**\n"
+        "      - host-kernel/native-rust/**\n"
+        "      - host-kernel/reference/**\n"
+        "      - host-kernel/rocky/**\n"
+        "      - ihk\n"
+        "      - scripts/**\n"
+        "\n"
+        "permissions:\n"
+        "  contents: read\n"
+        "\n"
+        "jobs:\n"
+        "  exact-runtime:\n"
+        "    name: Capture exact lifecycle in QEMU (credit forbidden)\n"
+        "    if: >-\n"
+        "      ${{ github.event.pull_request.head.repo.full_name == github.repository }}\n"
+        "    uses: ./.github/workflows/native-rust-host-modules-exact-runtime.yml\n"
+        "    with:\n"
+        "      validation_sha: ${{ github.event.pull_request.head.sha }}\n"
+    )
+    if text != expected:
+        raise EvidenceError("runtime PR wrapper trust/exact-head boundary differs")
+
+
 def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) -> dict[str, Any]:
     repo = repo.resolve()
     contract_path = _repo_file(repo, contract_relative.as_posix(), "runtime contract")
@@ -1317,6 +1351,7 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
             "kbuild_link_closure",
             "kconfig_solver",
             "poweroff",
+            "runtime_pr_workflow",
             "runtime_workflow",
             "source_lock",
         },
@@ -1329,6 +1364,7 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
         "kbuild_link_closure": "scripts/native_rust_kbuild_link_closure.py",
         "kconfig_solver": "scripts/native_rust_kconfig_solver.py",
         "poweroff": "scripts/native-rust-runtime-poweroff.S",
+        "runtime_pr_workflow": ".github/workflows/native-rust-host-modules-exact-runtime-pr.yml",
         "runtime_workflow": ".github/workflows/native-rust-host-modules-exact-runtime.yml",
         "source_lock": "host-kernel/rocky/source-lock.json",
     }
@@ -1344,6 +1380,11 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
         _repo_file(repo, inputs["runtime_workflow"], "runtime workflow"),
         "runtime workflow",
     )
+    runtime_pr_workflow = _read_text(
+        _repo_file(repo, inputs["runtime_pr_workflow"], "runtime PR workflow"),
+        "runtime PR workflow",
+    )
+    _validate_runtime_pr_workflow(runtime_pr_workflow)
     init = _read_text(_repo_file(repo, inputs["init"], "runtime init"), "runtime init")
     poweroff = _read_text(
         _repo_file(repo, inputs["poweroff"], "runtime poweroff"), "runtime poweroff"
@@ -1391,9 +1432,26 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
     if "permissions:" not in runtime_workflow:
         raise EvidenceError("runtime capture workflow lacks an explicit permission boundary")
     trigger_block = runtime_workflow[: runtime_workflow.index("permissions:")]
-    trigger_events = re.findall(r"(?m)^  ([a-z_]+):", trigger_block)
-    if trigger_events != ["workflow_dispatch"]:
-        raise EvidenceError("runtime capture workflow must remain manual-only")
+    expected_trigger_block = (
+        "name: Native Rust host modules exact Rocky runtime\n"
+        "\n"
+        "on:\n"
+        "  workflow_dispatch:\n"
+        "    inputs:\n"
+        "      validation_sha:\n"
+        "        description: Exact 40-hex candidate commit\n"
+        "        required: true\n"
+        "        type: string\n"
+        "  workflow_call:\n"
+        "    inputs:\n"
+        "      validation_sha:\n"
+        "        description: Exact 40-hex candidate commit\n"
+        "        required: true\n"
+        "        type: string\n"
+        "\n"
+    )
+    if trigger_block != expected_trigger_block:
+        raise EvidenceError("runtime capture dispatch/reusable trigger boundary differs")
     if "permissions:\n  contents: read" not in runtime_workflow:
         raise EvidenceError("runtime capture workflow lacks read-only repository permission")
     for symbol in expected_runtime["required_kernel_config"]["enabled"]:

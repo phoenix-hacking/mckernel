@@ -7,6 +7,12 @@ on:
         description: Exact 40-hex candidate commit
         required: true
         type: string
+  workflow_call:
+    inputs:
+      validation_sha:
+        description: Exact 40-hex candidate commit
+        required: true
+        type: string
 
 permissions:
   contents: read

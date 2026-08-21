@@ -12,6 +12,9 @@ import unittest
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 WORKFLOW = REPO_ROOT / ".github/workflows/native-rust-host-modules-exact-runtime.yml"
+PR_WORKFLOW = (
+    REPO_ROOT / ".github/workflows/native-rust-host-modules-exact-runtime-pr.yml"
+)
 INIT = REPO_ROOT / "scripts/native-rust-runtime-init.sh"
 POWEROFF = REPO_ROOT / "scripts/native-rust-runtime-poweroff.S"
 
@@ -20,11 +23,13 @@ class NativeRustExactRuntimeWorkflowTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.workflow = WORKFLOW.read_text(encoding="utf-8")
+        cls.pr_workflow = PR_WORKFLOW.read_text(encoding="utf-8")
         cls.init = INIT.read_text(encoding="utf-8")
 
-    def test_workflow_is_manual_and_reuses_the_exact_build(self) -> None:
+    def test_workflow_is_dispatchable_reusable_and_reuses_the_exact_build(self) -> None:
         trigger = self.workflow[: self.workflow.index("permissions:")]
         self.assertIn("workflow_dispatch:", trigger)
+        self.assertIn("workflow_call:", trigger)
         self.assertNotIn("pull_request:", trigger)
         self.assertNotIn("push:", trigger)
         self.assertIn(
@@ -33,6 +38,37 @@ class NativeRustExactRuntimeWorkflowTests(unittest.TestCase):
         )
         self.assertIn("validation_sha: ${{ inputs.validation_sha }}", self.workflow)
         self.assertIn("needs: exact-build", self.workflow)
+
+    def test_pr_wrapper_rejects_forks_and_passes_the_exact_head(self) -> None:
+        trigger = self.pr_workflow[: self.pr_workflow.index("permissions:")]
+        self.assertIn("pull_request:", trigger)
+        self.assertIn("branches: [development]", trigger)
+        self.assertNotIn("pull_request_target:", self.pr_workflow)
+        self.assertNotIn("workflow_dispatch:", self.pr_workflow)
+        self.assertNotIn("push:", self.pr_workflow)
+        for path in (
+            ".github/workflows/native-rust-host-modules-exact-*.yml",
+            "host-kernel/native-rust/**",
+            "host-kernel/rocky/**",
+            "ihk",
+            "scripts/**",
+        ):
+            self.assertIn("      - " + path, trigger)
+        self.assertIn("permissions:\n  contents: read", self.pr_workflow)
+        self.assertIn(
+            "${{ github.event.pull_request.head.repo.full_name == github.repository }}",
+            self.pr_workflow,
+        )
+        self.assertIn(
+            "uses: ./.github/workflows/native-rust-host-modules-exact-runtime.yml",
+            self.pr_workflow,
+        )
+        self.assertIn(
+            "validation_sha: ${{ github.event.pull_request.head.sha }}",
+            self.pr_workflow,
+        )
+        self.assertNotIn("secrets:", self.pr_workflow)
+        self.assertNotIn("contents: write", self.pr_workflow)
 
     def test_external_actions_and_rocky_runtime_are_immutable(self) -> None:
         image = (
@@ -135,6 +171,9 @@ class NativeRustExactRuntimeWorkflowTests(unittest.TestCase):
         self.assertNotIn("credit=eligible", self.workflow)
         self.assertIn("if: ${{ always() }}", self.workflow)
         self.assertIn("compression-level: 0", self.workflow)
+        self.assertIn("credit forbidden", self.pr_workflow)
+        self.assertNotRegex(self.pr_workflow, r"\bPASS\b")
+        self.assertNotIn("credit=eligible", self.pr_workflow)
 
     @unittest.skipUnless(shutil.which("as") and shutil.which("ld"), "binutils required")
     def test_poweroff_helper_is_a_static_x86_64_executable(self) -> None:
