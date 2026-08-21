@@ -172,9 +172,23 @@ class LicenseReviewCampaignTests(unittest.TestCase):
         for key, record in self.authority["inputs"].items():
             if "path" not in record:
                 continue
-            data = (REPO_ROOT / record["path"]).read_bytes()
-            self.assertEqual(len(data), record["size"], key)
-            self.assertEqual(hashlib.sha256(data).hexdigest(), record["sha256"], key)
+            active = campaign.CURRENT_IMPLEMENTATION_OVERRIDES.get(
+                record["path"], record
+            )
+            data = (REPO_ROOT / active["path"]).read_bytes()
+            self.assertEqual(len(data), active["size"], key)
+            self.assertEqual(
+                hashlib.sha256(data).hexdigest(), active["sha256"], key
+            )
+        self.assertEqual(
+            self.authority["inputs"]["source_lock"], campaign.SOURCE_LOCK
+        )
+        self.assertNotEqual(
+            campaign.CURRENT_IMPLEMENTATION_OVERRIDES[
+                campaign.SOURCE_LOCK["path"]
+            ]["sha256"],
+            campaign.SOURCE_LOCK["sha256"],
+        )
         self.assertEqual(self.batch.AUTHORITY_SHA256, campaign.BATCH_AUTHORITY["sha256"])
         self.assertEqual(self.batch.BATCH_ID, campaign.BATCH_AUTHORITY["batch_id"])
         self.assertEqual(self.batch.SOURCE_COMMIT, campaign.SOURCE_COMMIT)

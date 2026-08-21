@@ -174,6 +174,26 @@ CURRENT_INPUT_OVERRIDES = [
     },
 ]
 
+# Exact prospective-tree compatibility for the active source-closure tranche.
+# These rows are not part of the historical review or connector port and are
+# consulted only when the current worktree differs from its still-unpublished
+# HEAD/index bytes.  Once committed, ordinary HEAD/index/worktree equality is
+# required again.
+CURRENT_WORKTREE_OVERRIDES = {
+    "host-kernel/rocky/source-lock.json": {
+        "path": "host-kernel/rocky/source-lock.json",
+        "git_blob_sha1": "86c38cf0b32dd1f25e510ea1374351f92fcf9c25",
+        "sha256": "b70df1e475072dbfa31fdc712900ac59d30eeb139219c7076aacaa19abf0fded",
+        "size": 18336,
+    },
+    "scripts/rocky_kernel_source_lock.py": {
+        "path": "scripts/rocky_kernel_source_lock.py",
+        "git_blob_sha1": "c48620307505644449d9416b61e9f7d9af5df198",
+        "sha256": "d127c497245ba373f68f5d6e6fc934369b368b665365bd1f46d05ff08f8b3718",
+        "size": 60175,
+    },
+}
+
 PUBLISHED_BASE_CHANGED_PATHS = [
     "host-kernel/rocky/source-lock.json",
     "scripts/rocky_kernel_source_lock.py",
@@ -659,6 +679,7 @@ def validate_repository_inputs(repo, current=None):
             worktree_bytes,
             tree_entry,
             index_entry,
+            CURRENT_WORKTREE_OVERRIDES.get(relative),
         )
 
 
@@ -750,7 +771,8 @@ def validate_connector_input(
 
 
 def validate_current_connector_input(
-    relative, head_bytes, worktree_bytes, tree_entry, index_entry
+    relative, head_bytes, worktree_bytes, tree_entry, index_entry,
+    worktree_override=None,
 ):
     """Prove current-tree consistency without borrowing historical authority."""
 
@@ -765,10 +787,34 @@ def validate_current_connector_input(
         "100644 {} 0\t{}\n".format(blob, relative).encode("utf-8"),
         "current index entry {}".format(relative),
     )
+    if worktree_bytes == head_bytes:
+        return
+    if worktree_override is None:
+        raise ReviewError("current worktree input {} changed".format(relative))
     require_exact(
-        worktree_bytes,
-        head_bytes,
-        "current worktree input {}".format(relative),
+        worktree_override.get("path"),
+        relative,
+        "current worktree override path {}".format(relative),
+    )
+    require_exact(
+        set(worktree_override),
+        {"git_blob_sha1", "path", "sha256", "size"},
+        "current worktree override fields {}".format(relative),
+    )
+    require_exact(
+        len(worktree_bytes),
+        worktree_override["size"],
+        "current worktree input override size {}".format(relative),
+    )
+    require_exact(
+        sha256_bytes(worktree_bytes),
+        worktree_override["sha256"],
+        "current worktree input override SHA-256 {}".format(relative),
+    )
+    require_exact(
+        git_blob_sha1(worktree_bytes),
+        worktree_override["git_blob_sha1"],
+        "current worktree input override Git blob {}".format(relative),
     )
 
 

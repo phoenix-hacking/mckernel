@@ -154,6 +154,7 @@ class SyntheticRawFixture:
             rust_argv[0], "--emit=obj=$OUTPUT", "$REPO/" + rust_source,
             "--out-dir=$SEMANTIC/rustc-out",
             "-Zdump-mir=all", "-Zdump-mir-exclude-pass-number",
+            "-Zmir-include-spans=yes",
             "-Zdump-mir-dir=$SEMANTIC/mir",
         ]
         self.invocations.append(
@@ -511,6 +512,7 @@ class CompilerArgumentTests(unittest.TestCase):
         self.assertIn("--emit=obj=/tmp/b.o", replay)
         self.assertIn("--out-dir=/tmp/rustc-out", replay)
         self.assertIn("-Zdump-mir=all", replay)
+        self.assertIn("-Zmir-include-spans=yes", replay)
         self.assertEqual(replay[-1], "-Zdump-mir-dir=/tmp/mir")
 
     def test_rust_response_existing_mir_and_output_routing_fail(self):
@@ -534,6 +536,8 @@ class CompilerArgumentTests(unittest.TestCase):
             (["rustc", "-Z", "temps-dir=/escape", "--emit=obj=/tmp/a.o", "/src/a.rs"], "unstable replay"),
             (["rustc", "-Zsplit-dwarf-out-dir=/escape", "--emit=obj=/tmp/a.o", "/src/a.rs"], "unstable replay"),
             (["rustc", "-Z", "dump-mir-dir=/escape", "--emit=obj=/tmp/a.o", "/src/a.rs"], "already"),
+            (["rustc", "-Zmir-include-spans=yes", "--emit=obj=/tmp/a.o", "/src/a.rs"], "unstable replay"),
+            (["rustc", "-Z", "mir-include-spans=yes", "--emit=obj=/tmp/a.o", "/src/a.rs"], "unstable replay"),
         ):
             with self.assertRaisesRegex(semantics.SemanticsV3Error, message):
                 semantics.reconstruct_rust_argv(
@@ -542,6 +546,30 @@ class CompilerArgumentTests(unittest.TestCase):
                     Path("/tmp/mir"),
                     Path("/tmp/rustc-out"),
                 )
+
+    def test_rust_mir_option_probe_requires_exact_span_capability(self):
+        supported = types.SimpleNamespace(
+            returncode=0,
+            stdout=(
+                b"dump-mir\ndump-mir-dir\ndump-mir-exclude-pass-number\n"
+                b"mir-include-spans\n"
+            ),
+            stderr=b"",
+        )
+        with mock.patch.object(semantics.subprocess, "run", return_value=supported):
+            probe = semantics.probe_rust_mir_options("rustc", {})
+        self.assertEqual(probe["stdout_sha256"], semantics.sha256_bytes(supported.stdout))
+
+        missing_spans = types.SimpleNamespace(
+            returncode=0,
+            stdout=b"dump-mir\ndump-mir-dir\ndump-mir-exclude-pass-number\n",
+            stderr=b"",
+        )
+        with mock.patch.object(semantics.subprocess, "run", return_value=missing_spans):
+            with self.assertRaisesRegex(
+                semantics.SemanticsV3Error, "mir-include-spans"
+            ):
+                semantics.probe_rust_mir_options("rustc", {})
 
     def test_rust_run_keeps_production_cwd_and_confines_implicit_outputs(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -1984,6 +2012,48 @@ class MirAndDomainParserTests(unittest.TestCase):
 }
 """
 
+    RUSTC_ASSOCIATED_CONSTANT_MIR = b"""// MIR for `IhkOsRusage::cpuacct_usage_percpu::{constant#0}` after built
+
+IhkOsRusage::cpuacct_usage_percpu::{constant#0}: usize = {
+    let mut _0: usize;
+
+    bb0: {
+        _0 = const IHK_MAX_NUM_CPUS;
+        return;
+    }
+}
+"""
+
+    RUSTC_DIVERGING_CALL_MIR = b"""// MIR for `sysfs_panic` after built
+
+fn sysfs_panic(_1: *const i8) -> ! {
+    let mut _0: !;
+
+    bb0: {
+        _0 = kernel_panic(move _1) -> bb1;
+    }
+
+    bb1 (cleanup): {
+        resume;
+    }
+}
+"""
+
+    RUSTC_SPANNED_DIVERGING_CALL_MIR = b"""// MIR for `sysfs_panic` after built
+
+fn sysfs_panic(_1: *const i8) -> ! {
+    let mut _0: !;
+
+    bb0: {
+        _0 = kernel_panic(move _1) -> bb1; // scope 0 at $REPO/executer/kernel/mcctrl/rust/mcctrl_helpers.rs:900:5: 900:29
+    }
+
+    bb1 (cleanup): {
+        resume;
+    }
+}
+"""
+
     def test_mir_parser_binds_owner_cfg_spans_and_reachability(self):
         body = semantics.parse_mir_body(self.MIR, "crate.demo.built.after.mir")
         self.assertEqual(body["owner"], "demo")
@@ -1994,6 +2064,179 @@ class MirAndDomainParserTests(unittest.TestCase):
         )
         semantics.require_digest(body["cfg_sha256"], "CFG")
 
+    def test_mir_cfg_edges_are_confined_to_final_terminator_clause(self):
+        template = b"""fn demo() -> i32 {
+    bb0: {
+HOSTILE
+        return;
+    }
+    bb1: {
+        unreachable;
+    }
+}
+"""
+        for label, hostile in (
+            ("string", b"        _1 = const \"bb1\";"),
+            ("comment", b"        _1 = const 0_i32; // bb1"),
+            ("non-terminator", b"        _1 = copy bb1;"),
+            ("earlier-terminator-spelling", b"        goto -> bb1;"),
+        ):
+            with self.subTest(label=label):
+                body = semantics.parse_mir_body(
+                    template.replace(b"HOSTILE", hostile),
+                    "crate.demo.hostile-{0}.built.after.mir".format(label),
+                )
+                self.assertEqual(body["blocks"][0]["terminator_kind"], "return")
+                self.assertEqual(body["blocks"][0]["successors"], [])
+                self.assertEqual(body["reachable"], {0})
+
+        call_with_string = b"""fn demo() -> i32 {
+    bb0: {
+        _0 = demo(const \"bb2; return;\") -> bb1;
+    }
+    bb1: {
+        return;
+    }
+    bb2: {
+        unreachable;
+    }
+}
+"""
+        body = semantics.parse_mir_body(
+            call_with_string, "crate.demo.string-call.built.after.mir"
+        )
+        self.assertEqual(body["blocks"][0]["successors"], [1])
+        self.assertEqual(body["reachable"], {0, 1})
+
+        quoted_kind_spellings = b"""fn demo() -> i32 {
+    bb0: {
+        _0 = demo(const \"return;\", const \"goto -> bb2\", const \"assert(\") -> [return: bb1, unwind unreachable];
+    }
+    bb1: {
+        return;
+    }
+    bb2: {
+        unreachable;
+    }
+}
+"""
+        body = semantics.parse_mir_body(
+            quoted_kind_spellings,
+            "crate.demo.quoted-kind-spellings.built.after.mir",
+        )
+        self.assertEqual(body["blocks"][0]["terminator_kind"], "call")
+        self.assertEqual(body["blocks"][0]["successors"], [1])
+        self.assertEqual(body["reachable"], {0, 1})
+
+        quoted_assert = b"""fn demo() -> i32 {
+    bb0: {
+        assert(copy _1, \"return; goto -> bb2\") -> [success: bb1, unwind unreachable];
+    }
+    bb1: {
+        return;
+    }
+    bb2: {
+        unreachable;
+    }
+}
+"""
+        body = semantics.parse_mir_body(
+            quoted_assert, "crate.demo.quoted-assert.built.after.mir"
+        )
+        self.assertEqual(body["blocks"][0]["terminator_kind"], "assert")
+        self.assertEqual(body["blocks"][0]["successors"], [1])
+        self.assertEqual(body["reachable"], {0, 1})
+
+        multiline_inline_asm = b"""fn demo() -> i32 {
+    bb0: {
+        asm!(\"bb2
+goto -> bb2\", options()) -> [return: bb1, unwind unreachable];
+    }
+    bb1: {
+        return;
+    }
+    bb2: {
+        unreachable;
+    }
+}
+"""
+        body = semantics.parse_mir_body(
+            multiline_inline_asm,
+            "crate.demo.multiline-inline-asm.built.after.mir",
+        )
+        self.assertEqual(body["blocks"][0]["terminator_kind"], "inline_asm")
+        self.assertEqual(body["blocks"][0]["successors"], [1])
+        self.assertEqual(body["reachable"], {0, 1})
+
+    def test_mir_terminator_comment_is_exact_and_cannot_supply_cfg_edge(self):
+        exact = self.MIR.replace(
+            b"return;",
+            b"return; // scope 1 at $REPO/executer/kernel/mcctrl/rust/"
+            b"mcctrl_helpers.rs:10:5: 10:12",
+            1,
+        )
+        body = semantics.parse_mir_body(exact, "crate.demo.exact-comment.built.after.mir")
+        self.assertEqual(body["blocks"][1]["successors"], [])
+
+        hostile = self.MIR.replace(b"return;", b"return; // -> bb2;", 1)
+        with self.assertRaisesRegex(
+            semantics.SemanticsV3Error, "terminator comment grammar"
+        ):
+            semantics.parse_mir_body(
+                hostile, "crate.demo.hostile-comment.built.after.mir"
+            )
+
+    def test_mir_parser_accepts_rustc_associated_constant_owner(self):
+        body = semantics.parse_mir_body(
+            self.RUSTC_ASSOCIATED_CONSTANT_MIR,
+            "mcctrl_helpers.IhkOsRusage-cpuacct_usage_percpu-"
+            "{constant#0}.built.after.mir",
+        )
+        self.assertEqual(
+            body["owner"],
+            "IhkOsRusage::cpuacct_usage_percpu::{constant#0}",
+        )
+        self.assertEqual(body["reachable"], {0})
+
+        allocation_suffix = self.RUSTC_ASSOCIATED_CONSTANT_MIR + b"""
+ALLOC0 (size: 16, align: 1) {
+    0x00 | 62 62 31 20 67 6f 74 6f 20 2d 3e 20 62 62 39 00 | bb1 goto -> bb9.
+}
+"""
+        body = semantics.parse_mir_body(
+            allocation_suffix,
+            "mcctrl_helpers.associated-constant-allocation.built.after.mir",
+        )
+        self.assertEqual(body["blocks"][0]["terminator_kind"], "return")
+        self.assertEqual(body["blocks"][0]["successors"], [])
+        self.assertEqual(body["reachable"], {0})
+
+        duplicate_header = self.RUSTC_ASSOCIATED_CONSTANT_MIR.replace(
+            b"IhkOsRusage::cpuacct_usage_percpu::{constant#0}: usize = {\n",
+            b"const DECOY: usize = {\n"
+            b"IhkOsRusage::cpuacct_usage_percpu::{constant#0}: usize = {\n",
+            1,
+        )
+        with self.assertRaisesRegex(semantics.SemanticsV3Error, "unique owner"):
+            semantics.parse_mir_body(
+                duplicate_header,
+                "mcctrl_helpers.hostile-constant.built.after.mir",
+            )
+
+        indented_header = self.RUSTC_ASSOCIATED_CONSTANT_MIR.replace(
+            b"IhkOsRusage::cpuacct_usage_percpu::{constant#0}: usize = {\n",
+            b"    IhkOsRusage::cpuacct_usage_percpu::{constant#0}: usize = {\n",
+            1,
+        )
+        with self.assertRaisesRegex(
+            semantics.SemanticsV3Error,
+            r"hostile-indented-constant\.built\.after\.mir matches=0",
+        ):
+            semantics.parse_mir_body(
+                indented_header,
+                "mcctrl_helpers.hostile-indented-constant.built.after.mir",
+            )
+
     def test_unknown_terminator_and_missing_successor_fail(self):
         unknown = self.MIR.replace(b"return;", b"mystery;")
         with self.assertRaisesRegex(semantics.SemanticsV3Error, "terminator"):
@@ -2001,6 +2244,96 @@ class MirAndDomainParserTests(unittest.TestCase):
         missing = self.MIR.replace(b"otherwise: bb2", b"otherwise: bb9")
         with self.assertRaisesRegex(semantics.SemanticsV3Error, "unknown basic block"):
             semantics.parse_mir_body(missing, "crate.demo.built.after.mir")
+
+    def test_mir_parser_accepts_only_bounded_diverging_call_terminator(self):
+        body = semantics.parse_mir_body(
+            self.RUSTC_DIVERGING_CALL_MIR,
+            "mcctrl_helpers.sysfs_panic.built.after.mir",
+        )
+        self.assertEqual(body["blocks"][0]["terminator_kind"], "call")
+        self.assertEqual(body["blocks"][0]["successors"], [1])
+
+        unwind_unreachable = self.RUSTC_DIVERGING_CALL_MIR.replace(
+            b"-> bb1;", b"-> unwind unreachable;", 1
+        )
+        body = semantics.parse_mir_body(
+            unwind_unreachable,
+            "mcctrl_helpers.sysfs_panic.runtime-optimized.after.mir",
+        )
+        self.assertEqual(body["blocks"][0]["terminator_kind"], "call")
+        self.assertEqual(body["blocks"][0]["successors"], [])
+        self.assertEqual(body["reachable"], {0})
+
+        not_a_call = self.RUSTC_DIVERGING_CALL_MIR.replace(
+            b"_0 = kernel_panic(move _1) -> bb1;",
+            b"_0 = move _1 -> bb1;",
+            1,
+        )
+        with self.assertRaisesRegex(semantics.SemanticsV3Error, "terminator"):
+            semantics.parse_mir_body(
+                not_a_call,
+                "mcctrl_helpers.hostile-direct-edge.built.after.mir",
+            )
+
+        not_an_unreachable_call = unwind_unreachable.replace(
+            b"_0 = kernel_panic(move _1) -> unwind unreachable;",
+            b"_0 = move _1 -> unwind unreachable;",
+            1,
+        )
+        with self.assertRaisesRegex(semantics.SemanticsV3Error, "terminator"):
+            semantics.parse_mir_body(
+                not_an_unreachable_call,
+                "mcctrl_helpers.hostile-unreachable-edge.runtime-optimized.after.mir",
+            )
+
+        for operand in (b"move", b"copy"):
+            not_a_bracket_call = self.RUSTC_DIVERGING_CALL_MIR.replace(
+                b"_0 = kernel_panic(move _1) -> bb1;",
+                b"_0 = " + operand
+                + b" (_1) -> [return: bb1, unwind unreachable];",
+                1,
+            )
+            with self.subTest(operand=operand.decode("ascii")):
+                with self.assertRaisesRegex(
+                    semantics.SemanticsV3Error, "terminator"
+                ):
+                    semantics.parse_mir_body(
+                        not_a_bracket_call,
+                        "mcctrl_helpers.hostile-bracket-edge.built.after.mir",
+                    )
+
+    def test_mir_parser_accepts_only_exact_rustc_span_on_direct_call(self):
+        body = semantics.parse_mir_body(
+            self.RUSTC_SPANNED_DIVERGING_CALL_MIR,
+            "mcctrl_helpers.sysfs_panic.built.after.mir",
+        )
+        self.assertEqual(body["blocks"][0]["terminator_kind"], "call")
+        self.assertEqual(body["blocks"][0]["successors"], [1])
+        self.assertTrue(
+            any(
+                semantics.span_equals_token(span, 900, 5, 29)
+                for span in body["blocks"][0]["spans"]
+            )
+        )
+
+        for label, suffix in (
+            ("arbitrary-comment", b" // forged"),
+            ("non-source-path", b" // scope 0 at /tmp/not-source.txt:900:5: 900:29"),
+            ("malformed-span", b" // scope 0 at /tmp/source.rs:900:5"),
+        ):
+            hostile = self.RUSTC_DIVERGING_CALL_MIR.replace(
+                b"_0 = kernel_panic(move _1) -> bb1;",
+                b"_0 = kernel_panic(move _1) -> bb1;" + suffix,
+                1,
+            )
+            with self.subTest(label=label):
+                with self.assertRaisesRegex(
+                    semantics.SemanticsV3Error, "terminator"
+                ):
+                    semantics.parse_mir_body(
+                        hostile,
+                        "mcctrl_helpers.hostile-spanned-call.built.after.mir",
+                    )
 
     def test_source_span_boundary_mutation_is_not_contained(self):
         span = {
@@ -2012,6 +2345,230 @@ class MirAndDomainParserTests(unittest.TestCase):
         self.assertFalse(semantics.span_contains(span, 10, 4, 12))
         self.assertFalse(semantics.span_contains(span, 10, 5, 13))
         self.assertFalse(semantics.span_equals_token(span, 10, 5, 11))
+
+    def test_rust_mir_span_path_requires_one_exact_repository_root(self):
+        source = "executer/kernel/mcctrl/rust/mcctrl_helpers.rs"
+        self.assertTrue(
+            semantics.rust_mir_span_targets_exact_source(
+                "$REPO/" + source, source
+            )
+        )
+        for label, hostile in (
+            ("attacker-prefix", "/attacker/" + source),
+            ("suffix-only", source),
+            ("duplicate-root", "$REPO/$REPO/" + source),
+            ("alternate-root", "$BUILD/" + source),
+        ):
+            with self.subTest(label=label):
+                self.assertFalse(
+                    semantics.rust_mir_span_targets_exact_source(
+                        hostile, source
+                    )
+                )
+        with self.assertRaisesRegex(
+            semantics.SemanticsV3Error, "backslash"
+        ):
+            semantics.rust_mir_span_targets_exact_source(
+                "$REPO\\executer\\kernel\\mcctrl\\rust\\mcctrl_helpers.rs",
+                source,
+            )
+
+    def test_rust_hfs_span_envelopes_are_bounded_and_exact(self):
+        def site(line_number, line, expression, errno):
+            column = line.index(expression) + 1
+            return {
+                "column": column,
+                "end_column": column + len(expression),
+                "errno": errno,
+                "expression": expression,
+                "line": line_number,
+            }
+
+        cast_line = "        return -(EINVAL as c_long);"
+        cast_site = site(20, cast_line, "-(EINVAL", "EINVAL")
+        cast = semantics.rust_hfs_span_authorities(cast_site, cast_line)
+        self.assertEqual(
+            [item["grammar"] for item in cast],
+            ["exact_hfs_token", "parenthesized_cast"],
+        )
+        self.assertEqual(cast[1]["source_type"], "c_long")
+        self.assertEqual(cast[1]["mir_type"], "i64")
+        self.assertEqual(
+            cast_line[
+                cast[1]["source_span"]["start_column"] - 1:
+                cast[1]["source_span"]["end_column"] - 1
+            ],
+            "-(EINVAL as c_long)",
+        )
+
+        assignment_line = "            ret = -EINTR;"
+        assignment_site = site(21, assignment_line, "-EINTR", "EINTR")
+        assignment = semantics.rust_hfs_span_authorities(
+            assignment_site, assignment_line
+        )
+        self.assertEqual(
+            [item["grammar"] for item in assignment],
+            ["exact_hfs_token", "direct_assignment"],
+        )
+        self.assertEqual(
+            assignment_line[
+                assignment[1]["source_span"]["start_column"] - 1:
+                assignment[1]["source_span"]["end_column"] - 1
+            ],
+            "ret = -EINTR",
+        )
+
+        for label, line, expression, errno in (
+            (
+                "cast-operator",
+                "        return -(EINVAL as c_long) + 1;",
+                "-(EINVAL", "EINVAL",
+            ),
+            (
+                "cast-comment",
+                "        return -(EINVAL as c_long) // decoy",
+                "-(EINVAL", "EINVAL",
+            ),
+            (
+                "assignment-operator",
+                "            ret = -EINTR + 1;",
+                "-EINTR", "EINTR",
+            ),
+            (
+                "assignment-comment",
+                "            ret = -EINTR; // decoy",
+                "-EINTR", "EINTR",
+            ),
+            (
+                "assignment-ambiguous",
+                "            ret = -EINTR; ret = -EINTR;",
+                "-EINTR", "EINTR",
+            ),
+            (
+                "assignment-unknown-lhs",
+                "            error = -EINTR;",
+                "-EINTR", "EINTR",
+            ),
+        ):
+            hostile_site = site(22, line, expression, errno)
+            with self.subTest(label=label):
+                authorities = semantics.rust_hfs_span_authorities(
+                    hostile_site, line
+                )
+                self.assertEqual(
+                    [item["grammar"] for item in authorities],
+                    ["exact_hfs_token"],
+                )
+
+        nested_line = "        return -((EINVAL as c_long));"
+        nested_site = site(23, nested_line, "-(", "EINVAL")
+        nested_site["expression"] = "-(EINVAL"
+        nested_site["end_column"] = (
+            nested_site["column"] + len(nested_site["expression"])
+        )
+        with self.assertRaisesRegex(
+            semantics.SemanticsV3Error, "token span"
+        ):
+            semantics.rust_hfs_span_authorities(nested_site, nested_line)
+        with self.assertRaisesRegex(
+            semantics.SemanticsV3Error, "multiline"
+        ):
+            semantics.rust_hfs_span_authorities(
+                cast_site, cast_line + "\ncontinued"
+            )
+
+    def test_mir_negative_errno_witnesses_bind_exact_statement_spans(self):
+        block = """
+        _30 = const EINVAL as i64 (IntToInt); // scope 2 at $REPO/executer/kernel/mcctrl/rust/mcctrl_helpers.rs:20:17: 20:35
+        _0 = Neg(move _30); // scope 2 at $REPO/executer/kernel/mcctrl/rust/mcctrl_helpers.rs:20:16: 20:35
+        _1 = Neg(const EFAULT); // scope 2 at $REPO/executer/kernel/mcctrl/rust/mcctrl_helpers.rs:21:16: 21:23
+        _2 = const -14_i64; // scope 2 at $REPO/executer/kernel/mcctrl/rust/mcctrl_helpers.rs:21:16: 21:33
+        // _3 = const -14_i64; // scope 2 at $REPO/executer/kernel/mcctrl/rust/mcctrl_helpers.rs:99:1: 99:9
+"""
+        einval = semantics.mir_negative_errno_witnesses(
+            block, "EINVAL", 22
+        )
+        self.assertEqual(len(einval), 1)
+        self.assertEqual(
+            einval[0]["kind"], "cast_const_then_negative_move"
+        )
+        self.assertEqual(einval[0]["mir_type"], "i64")
+        self.assertEqual(einval[0]["span"]["start_column"], 16)
+
+        efault = semantics.mir_negative_errno_witnesses(
+            block, "EFAULT", 14
+        )
+        self.assertEqual(
+            [item["kind"] for item in efault],
+            ["negative_const_operand", "negative_numeric_literal"],
+        )
+        self.assertTrue(all(item["span"]["start_line"] == 21 for item in efault))
+        numeric = [
+            item for item in efault
+            if item["kind"] == "negative_numeric_literal"
+        ][0]
+        self.assertEqual(numeric["mir_type"], "i64")
+
+        wrong_type = block.replace("const -14_i64", "const -14_i32", 1)
+        wrong_type_witness = [
+            item for item in semantics.mir_negative_errno_witnesses(
+                wrong_type, "EFAULT", 14
+            )
+            if item["kind"] == "negative_numeric_literal"
+        ][0]
+        self.assertEqual(wrong_type_witness["mir_type"], "i32")
+        self.assertNotEqual(wrong_type_witness["mir_type"], "i64")
+        cast_authority = {
+            "grammar": "parenthesized_cast",
+            "mir_type": "i64",
+        }
+        self.assertTrue(
+            semantics.rust_mir_witness_matches_authority(
+                numeric, cast_authority
+            )
+        )
+        self.assertFalse(
+            semantics.rust_mir_witness_matches_authority(
+                wrong_type_witness, cast_authority
+            )
+        )
+
+        for label, hostile in (
+            (
+                "wrong-temporary",
+                block.replace("Neg(move _30)", "Neg(move _31)", 1),
+            ),
+            (
+                "intervening-statement",
+                block.replace(
+                    "        _0 = Neg(move _30);",
+                    "        StorageLive(_0); // scope 2 at $REPO/executer/kernel/mcctrl/rust/mcctrl_helpers.rs:20:16: 20:35\n"
+                    "        _0 = Neg(move _30);",
+                    1,
+                ),
+            ),
+            (
+                "wrong-cast-span",
+                block.replace("20:17: 20:35", "20:18: 20:35", 1),
+            ),
+            (
+                "unknown-comment",
+                block.replace(
+                    "// scope 2 at $REPO/executer/kernel/mcctrl/rust/mcctrl_helpers.rs:20:16: 20:35",
+                    "// forged span at $REPO/executer/kernel/mcctrl/rust/mcctrl_helpers.rs:20:16: 20:35",
+                    1,
+                ),
+            ),
+        ):
+            with self.subTest(label=label):
+                self.assertFalse(
+                    any(
+                        item["kind"] == "cast_const_then_negative_move"
+                        for item in semantics.mir_negative_errno_witnesses(
+                            hostile, "EINVAL", 22
+                        )
+                    )
+                )
 
     def test_vrp_interval_parser_records_but_does_not_infer_semantics(self):
         terminal = {"expression": "return _7;"}
@@ -2027,9 +2584,9 @@ class MirAndDomainParserTests(unittest.TestCase):
         self.assertFalse(semantics.mir_contains_negative_errno("_0 = const -14_i32;", 22))
         self.assertFalse(semantics.mir_contains_negative_errno("_0 = const 0; // -22", 22))
 
-    def test_mir_parser_rejects_multiple_owners(self):
+    def test_mir_parser_rejects_concatenated_second_body(self):
         hostile = self.MIR + b"\nfn second() {\n bb0: { return; }\n}\n"
-        with self.assertRaisesRegex(semantics.SemanticsV3Error, "unique owner"):
+        with self.assertRaisesRegex(semantics.SemanticsV3Error, "duplicated"):
             semantics.parse_mir_body(hostile, "crate.demo.built.after.mir")
 
     def test_errno_constant_parser_rejects_duplicates(self):

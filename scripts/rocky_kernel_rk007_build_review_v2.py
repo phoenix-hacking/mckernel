@@ -51,6 +51,48 @@ REUSED_MODULE_BINDINGS = {
     ),
 }
 
+# The ef58 review binds the solver bytes that were transported and reviewed at
+# that head.  The active solver is allowed to evolve, but those later bytes
+# must never be substituted into this historical authority.  When the direct
+# worktree file no longer has the frozen identity, recover only the exact Git
+# blob already named by the immutable committed-input record below.  The blob
+# is rechecked against REUSED_MODULE_BINDINGS before it is executed.
+REUSED_MODULE_HISTORICAL_BLOBS = {
+    "native_rust_kconfig_solver.py": (
+        "8211d19c56c56368718fe1420937fd5187530773"
+    ),
+}
+
+
+def _read_historical_blob(object_id, file_name):
+    environment = dict(os.environ)
+    for name in list(environment):
+        if name.startswith("GIT_"):
+            environment.pop(name, None)
+    environment.update({
+        "GIT_CONFIG_GLOBAL": os.devnull,
+        "GIT_CONFIG_NOSYSTEM": "1",
+        "GIT_GRAFT_FILE": os.devnull,
+        "GIT_NO_REPLACE_OBJECTS": "1",
+        "LC_ALL": "C",
+        "PATH": "/usr/bin:/bin",
+    })
+    completed = subprocess.run(
+        ["git", "-C", REPO_ROOT, "cat-file", "blob", object_id],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        env=environment,
+        check=False,
+    )
+    if completed.returncode != 0:
+        raise BuildReviewV2Error(
+            "cannot read frozen reused-module blob {0}: {1}".format(
+                file_name,
+                completed.stderr.decode("utf-8", errors="replace").strip(),
+            )
+        )
+    return completed.stdout
+
 
 def _stat_identity(info):
     return (
@@ -105,8 +147,20 @@ def _load_exact_module(module_name, file_name):
     ):
         raise BuildReviewV2Error("reused module changed while read: {0}".format(file_name))
     expected_size, expected_sha256 = REUSED_MODULE_BINDINGS[file_name]
+    binding_source = "repository-file"
     if len(data) != expected_size or hashlib.sha256(data).hexdigest() != expected_sha256:
-        raise BuildReviewV2Error("reused module bytes differ: {0}".format(file_name))
+        object_id = REUSED_MODULE_HISTORICAL_BLOBS.get(file_name)
+        if object_id is None:
+            raise BuildReviewV2Error("reused module bytes differ: {0}".format(file_name))
+        data = _read_historical_blob(object_id, file_name)
+        binding_source = "git-blob:" + object_id
+        if (
+            len(data) != expected_size
+            or hashlib.sha256(data).hexdigest() != expected_sha256
+        ):
+            raise BuildReviewV2Error(
+                "frozen reused-module blob bytes differ: {0}".format(file_name)
+            )
     specification = importlib.util.spec_from_loader(module_name, loader=None, origin=path)
     if specification is None or os.path.realpath(specification.origin) != os.path.realpath(path):
         raise BuildReviewV2Error("cannot bind reused-module origin: {0}".format(file_name))
@@ -115,6 +169,7 @@ def _load_exact_module(module_name, file_name):
     module.__loader__ = None
     module.__package__ = module_name.rpartition(".")[0]
     module.__spec__ = specification
+    module.__mckernel_binding_source__ = binding_source
     sys.modules[module_name] = module
     try:
         code = compile(data, path, "exec", dont_inherit=True)
@@ -167,6 +222,12 @@ REUSED_MODULE_ORIGINS = {
     "kconfig_solver": os.path.realpath(kconfig_solver.__file__),
     "link_closure": os.path.realpath(link_closure.__file__),
     "v1_review": os.path.realpath(v1_review.__file__),
+}
+REUSED_MODULE_SOURCES = {
+    "kconfig_policy": kconfig_policy.__mckernel_binding_source__,
+    "kconfig_solver": kconfig_solver.__mckernel_binding_source__,
+    "link_closure": link_closure.__mckernel_binding_source__,
+    "v1_review": v1_review.__mckernel_binding_source__,
 }
 
 

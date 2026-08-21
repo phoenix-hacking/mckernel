@@ -236,6 +236,25 @@ class ContractTests(ProbeFixture):
         self.assertIsNone(compatibility[-1]["upstream_commit"])
         self.assertIsNone(compatibility[-1]["stable_commit"])
         self.assertEqual(
+            compatibility[20],
+            {
+                "applied_after": str(probe.RUST_COMPAT_PATCH_PATHS[19]),
+                "path": str(probe.RUST_COMPAT_PATCH_PATHS[20]),
+                "sha256": probe.sha256_file(
+                    REPO_ROOT / probe.RUST_COMPAT_PATCH_PATHS[20]
+                ),
+                "size": (
+                    REPO_ROOT / probe.RUST_COMPAT_PATCH_PATHS[20]
+                ).stat().st_size,
+                "stable_commit": None,
+                "upstream_commit": None,
+                "integration_status": probe.MISCDEVICE_OWNER_INTEGRATION_STATUS,
+                "license": probe.MISCDEVICE_OWNER_LICENSE,
+                "local_origin": probe.MISCDEVICE_OWNER_LOCAL_ORIGIN,
+                "rocky_base": probe.MISCDEVICE_OWNER_ROCKY_BASE,
+            },
+        )
+        self.assertEqual(
             compatibility[-3]["preimage"]["sha256"],
             probe.RUST_OBJTOOL_NORETURN_PREIMAGE_SHA256S[0][1],
         )
@@ -624,6 +643,10 @@ class ContractTests(ProbeFixture):
             workflow.index(probe.RUST_COMPAT_PATCH_PATHS[21].name),
             workflow.index(probe.RUST_COMPAT_PATCH_PATHS[22].name),
         )
+        self.assertLess(
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[22].name),
+            workflow.index(probe.RUST_COMPAT_PATCH_PATHS[23].name),
+        )
         self.assertEqual(
             workflow.count(probe.RUST_COMPAT_PATCH_PATHS[20].name),
             2,
@@ -634,6 +657,10 @@ class ContractTests(ProbeFixture):
         )
         self.assertEqual(
             workflow.count(probe.RUST_COMPAT_PATCH_PATHS[22].name),
+            2,
+        )
+        self.assertEqual(
+            workflow.count(probe.RUST_COMPAT_PATCH_PATHS[23].name),
             2,
         )
 
@@ -854,6 +881,8 @@ class ContractTests(ProbeFixture):
                 "result.minor = bindings::MISC_DYNAMIC_MINOR as _;",
                 "result.minor = 64;",
             ),
+            (20, "owner: T::MODULE.as_ptr()", "owner: core::ptr::null_mut()"),
+            (20, "active ordered Rocky compatibility patch", "candidate only"),
         )
         for index, old, new in mutations:
             with self.subTest(patch=probe.RUST_COMPAT_PATCH_PATHS[index].name):
@@ -868,7 +897,7 @@ class ContractTests(ProbeFixture):
                         probe.rust_compatibility_patch_records(root)
 
     def test_objtool_noreturn_shape_and_observed_provenance_are_fail_closed(self):
-        original = (REPO_ROOT / probe.RUST_COMPAT_PATCH_PATHS[20]).read_text(
+        original = (REPO_ROOT / probe.RUST_COMPAT_PATCH_PATHS[21]).read_text(
             encoding="utf-8"
         )
         for old, new in (
@@ -880,7 +909,7 @@ class ContractTests(ProbeFixture):
                 with tempfile.TemporaryDirectory() as directory:
                     root = Path(directory)
                     self.copy_rust_compatibility_inputs(root)
-                    path = root / probe.RUST_COMPAT_PATCH_PATHS[20]
+                    path = root / probe.RUST_COMPAT_PATCH_PATHS[21]
                     path.write_text(original.replace(old, new, 1), encoding="utf-8")
                     with self.assertRaises(probe.ProbeError):
                         probe.rust_compatibility_patch_records(root)
@@ -904,7 +933,7 @@ class ContractTests(ProbeFixture):
                 with tempfile.TemporaryDirectory() as directory:
                     root = Path(directory)
                     self.copy_rust_compatibility_inputs(root)
-                    path = root / probe.RUST_COMPAT_PATCH_PATHS[21]
+                    path = root / probe.RUST_COMPAT_PATCH_PATHS[22]
                     original = path.read_text(encoding="utf-8")
                     self.assertIn(old, original)
                     path.write_text(original.replace(old, new, 1), encoding="utf-8")
@@ -946,7 +975,7 @@ class ContractTests(ProbeFixture):
                 with tempfile.TemporaryDirectory() as directory:
                     root = Path(directory)
                     self.copy_rust_compatibility_inputs(root)
-                    path = root / probe.RUST_COMPAT_PATCH_PATHS[22]
+                    path = root / probe.RUST_COMPAT_PATCH_PATHS[23]
                     original = path.read_text(encoding="utf-8")
                     self.assertIn(old, original)
                     path.write_text(original.replace(old, new, 1), encoding="utf-8")

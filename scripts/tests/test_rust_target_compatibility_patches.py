@@ -54,6 +54,8 @@ PATCHES = (
     REPO_ROOT
     / "host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch",
     REPO_ROOT
+    / "host-kernel/rocky/patches/0020a-rust-miscdevice-bind-file-operations-to-module.patch",
+    REPO_ROOT
     / "host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch",
     REPO_ROOT
     / "host-kernel/rocky/patches/0022-x86-pvh-annotate-noendbr.patch",
@@ -102,7 +104,7 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
     def test_every_patch_rejects_second_application(self):
         from scripts import linux_api_exact_probe as probe
 
-        self.assertEqual(23, len(PATCHES))
+        self.assertEqual(24, len(PATCHES))
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory) / "linux"
             shutil.copytree(str(CORE_PREIMAGE), str(root))
@@ -117,7 +119,8 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
 
     def test_patch_prefixes_are_unique_and_sequential(self):
         self.assertEqual(
-            ["{0:04d}".format(index) for index in range(1, len(PATCHES) + 1)],
+            ["{0:04d}".format(index) for index in range(1, 21)]
+            + ["0020a", "0021", "0022", "0023"],
             [patch.name.split("-", 1)[0] for patch in PATCHES],
         )
 
@@ -578,7 +581,7 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
     def test_objtool_rust_1_92_patch_and_fixture_are_fail_closed(self):
         from scripts import linux_api_exact_probe as probe
 
-        original = PATCHES[20].read_text(encoding="utf-8")
+        original = PATCHES[21].read_text(encoding="utf-8")
         for mutation in ("patch", "fixture"):
             with self.subTest(mutation=mutation):
                 with tempfile.TemporaryDirectory() as directory:
@@ -595,7 +598,7 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
                     target_fixture.parent.mkdir(parents=True, exist_ok=True)
                     target_fixture.write_bytes(PREIMAGE.read_bytes())
                     if mutation == "patch":
-                        patch = root / PATCHES[20].relative_to(REPO_ROOT)
+                        patch = root / PATCHES[21].relative_to(REPO_ROOT)
                         patch.write_text(
                             original.replace(
                                 "panic_const23panic_const_",
@@ -617,7 +620,7 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
     def test_allocator_shim_patch_and_fixture_are_fail_closed(self):
         from scripts import linux_api_exact_probe as probe
 
-        original = PATCHES[22].read_text(encoding="utf-8")
+        original = PATCHES[23].read_text(encoding="utf-8")
         for mutation in ("patch", "fixture"):
             with self.subTest(mutation=mutation):
                 with tempfile.TemporaryDirectory() as directory:
@@ -634,7 +637,7 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
                     target_fixture.parent.mkdir(parents=True, exist_ok=True)
                     target_fixture.write_bytes(PREIMAGE.read_bytes())
                     if mutation == "patch":
-                        patch = root / PATCHES[22].relative_to(REPO_ROOT)
+                        patch = root / PATCHES[23].relative_to(REPO_ROOT)
                         patch.write_text(
                             original.replace(
                                 "+fn __rust_no_alloc_shim_is_unstable_v2() {}",

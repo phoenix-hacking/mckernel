@@ -408,11 +408,14 @@ class Rk007BuildReviewTests(unittest.TestCase):
         with self.assertRaises(reviewer.BuildReviewError):
             reviewer.validate_review_object(mutated)
 
-    def test_current_repository_inputs_match_runtime_head_index_and_worktree(self):
-        current = reviewer.validate_repository(
-            REPO_ROOT, reviewer.validate_review_object(copy.deepcopy(self.review))
-        )
-        self.assertRegex(current, r"^[0-9a-f]{40}$")
+    def test_current_repository_rejects_unreviewed_active_workflow_descendant(self):
+        with self.assertRaisesRegex(
+            reviewer.BuildReviewError,
+            r"committed input 0 (?:current blob|worktree (?:size|digest)) differs",
+        ):
+            reviewer.validate_repository(
+                REPO_ROOT, reviewer.validate_review_object(copy.deepcopy(self.review))
+            )
 
     def test_descendant_port_requires_exact_old_to_new_records(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -576,10 +579,12 @@ class Rk007BuildReviewTests(unittest.TestCase):
             "GIT_WORK_TREE": "/definitely/not/the/reviewed/worktree",
         }
         with mock.patch.dict(os.environ, redirected, clear=False):
-            current = reviewer.validate_repository(
-                REPO_ROOT, reviewer.validate_review_object(copy.deepcopy(self.review))
-            )
-        self.assertRegex(current, r"^[0-9a-f]{40}$")
+            with self.assertRaisesRegex(reviewer.BuildReviewError, "committed input 0"):
+                reviewer.validate_repository(
+                    REPO_ROOT, reviewer.validate_review_object(copy.deepcopy(self.review))
+                )
+            for name, value in redirected.items():
+                self.assertEqual(os.environ.get(name), value)
 
     def test_checked_policy_rejects_unreviewed_port_records(self):
         base = copy.deepcopy(self.review)
@@ -693,56 +698,79 @@ class Rk007BuildReviewTests(unittest.TestCase):
                 reviewer.read_regular_file_once(path, "worktree", expected_mode=0o644)
 
     def test_repository_snapshot_end_rechecks_head(self):
-        real_run_git = reviewer.run_git
-        rev_parse_count = [0]
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            unused_git, runtime_head, runtime_tree, unused_current, review = self.make_port_fixture(root)
+            real_run_git = reviewer.run_git
+            rev_parse_count = [0]
 
-        def moving_head(repo, arguments, allow_failure=False):
-            completed = real_run_git(repo, arguments, allow_failure=allow_failure)
-            if arguments == ["rev-parse", "HEAD"]:
-                rev_parse_count[0] += 1
-                if rev_parse_count[0] == 2:
-                    return subprocess.CompletedProcess(
-                        completed.args, 0, stdout=("0" * 40 + "\n").encode("ascii"), stderr=b""
-                    )
-            return completed
+            def moving_head(repo, arguments, allow_failure=False):
+                completed = real_run_git(repo, arguments, allow_failure=allow_failure)
+                if arguments == ["rev-parse", "HEAD"]:
+                    rev_parse_count[0] += 1
+                    if rev_parse_count[0] == 2:
+                        return subprocess.CompletedProcess(
+                            completed.args, 0, stdout=("0" * 40 + "\n").encode("ascii"), stderr=b""
+                        )
+                return completed
 
-        with mock.patch.object(reviewer, "run_git", side_effect=moving_head):
-            with self.assertRaisesRegex(reviewer.BuildReviewError, "snapshot end"):
-                reviewer.validate_repository(REPO_ROOT, copy.deepcopy(self.review))
+            with mock.patch.multiple(
+                reviewer,
+                RUNTIME_HEAD_SHA=runtime_head,
+                RUNTIME_TREE_SHA=runtime_tree,
+            ), mock.patch.object(reviewer, "run_git", side_effect=moving_head):
+                with self.assertRaisesRegex(reviewer.BuildReviewError, "snapshot end"):
+                    reviewer.validate_repository(root, review)
 
     def test_repository_snapshot_rechecks_head_after_all_inputs(self):
-        real_run_git = reviewer.run_git
-        rev_parse_count = [0]
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            unused_git, runtime_head, runtime_tree, unused_current, review = self.make_port_fixture(root)
+            real_run_git = reviewer.run_git
+            rev_parse_count = [0]
 
-        def moving_head(repo, arguments, allow_failure=False):
-            completed = real_run_git(repo, arguments, allow_failure=allow_failure)
-            if arguments == ["rev-parse", "HEAD"]:
-                rev_parse_count[0] += 1
-                if rev_parse_count[0] == 3:
-                    return subprocess.CompletedProcess(
-                        completed.args,
-                        0,
-                        stdout=("0" * 40 + "\n").encode("ascii"),
-                        stderr=b"",
-                    )
-            return completed
+            def moving_head(repo, arguments, allow_failure=False):
+                completed = real_run_git(repo, arguments, allow_failure=allow_failure)
+                if arguments == ["rev-parse", "HEAD"]:
+                    rev_parse_count[0] += 1
+                    if rev_parse_count[0] == 3:
+                        return subprocess.CompletedProcess(
+                            completed.args,
+                            0,
+                            stdout=("0" * 40 + "\n").encode("ascii"),
+                            stderr=b"",
+                        )
+                return completed
 
-        with mock.patch.object(reviewer, "run_git", side_effect=moving_head):
-            with self.assertRaisesRegex(reviewer.BuildReviewError, "after repository snapshot"):
-                reviewer.validate_repository(REPO_ROOT, copy.deepcopy(self.review))
+            with mock.patch.multiple(
+                reviewer,
+                RUNTIME_HEAD_SHA=runtime_head,
+                RUNTIME_TREE_SHA=runtime_tree,
+            ), mock.patch.object(reviewer, "run_git", side_effect=moving_head):
+                with self.assertRaisesRegex(reviewer.BuildReviewError, "after repository snapshot"):
+                    reviewer.validate_repository(root, review)
 
     def test_repository_snapshot_end_rechecks_every_worktree_input(self):
-        real_read = reviewer.read_regular_file_once
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            unused_git, runtime_head, runtime_tree, unused_current, review = self.make_port_fixture(root)
+            real_read = reviewer.read_regular_file_once
 
-        def changing_input(path, label, expected_mode=None):
-            data = real_read(path, label, expected_mode=expected_mode)
-            if label == "committed input 0 snapshot end worktree":
-                return data + b"changed"
-            return data
+            def changing_input(path, label, expected_mode=None):
+                data = real_read(path, label, expected_mode=expected_mode)
+                if label == "committed input 0 snapshot end worktree":
+                    return data + b"changed"
+                return data
 
-        with mock.patch.object(reviewer, "read_regular_file_once", side_effect=changing_input):
-            with self.assertRaisesRegex(reviewer.BuildReviewError, "snapshot end worktree size"):
-                reviewer.validate_repository(REPO_ROOT, copy.deepcopy(self.review))
+            with mock.patch.multiple(
+                reviewer,
+                RUNTIME_HEAD_SHA=runtime_head,
+                RUNTIME_TREE_SHA=runtime_tree,
+            ), mock.patch.object(
+                reviewer, "read_regular_file_once", side_effect=changing_input
+            ):
+                with self.assertRaisesRegex(reviewer.BuildReviewError, "snapshot end worktree size"):
+                    reviewer.validate_repository(root, review)
 
     def test_repository_snapshot_end_rehashes_runtime_and_current_git_blobs(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -872,16 +900,18 @@ class Rk007BuildReviewTests(unittest.TestCase):
         self.assertIn("feature_version", patched.call_args_list[0][1])
         self.assertNotIn("feature_version", patched.call_args_list[1][1])
 
-    def test_cli_check_mode_validates_without_artifact_claim(self):
+    def test_cli_check_mode_fails_closed_on_unreviewed_active_workflow(self):
         completed = subprocess.run(
             [sys.executable, str(MODULE_PATH), "--repo", str(REPO_ROOT), "--check"],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         )
-        self.assertEqual(completed.returncode, 0, completed.stderr.decode("utf-8", errors="replace"))
-        output = json.loads(completed.stdout.decode("ascii"))
-        self.assertFalse(output["artifact_verified"])
-        self.assertFalse(output["claims"]["gate_claims"]["RK-007"])
+        self.assertEqual(completed.returncode, 1)
+        self.assertEqual(completed.stdout, b"")
+        self.assertIn(
+            "committed input 0",
+            completed.stderr.decode("utf-8", errors="replace"),
+        )
 
     def test_exact_artifact_verifies_when_available(self):
         self.require_artifact()

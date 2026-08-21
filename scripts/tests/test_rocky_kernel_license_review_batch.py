@@ -157,9 +157,26 @@ class LicenseReviewBatchTests(unittest.TestCase):
             "workflow",
         ):
             record = self.authority["inputs"][key]
-            data = (REPO_ROOT / record["path"]).read_bytes()
-            self.assertEqual(len(data), record["size"])
-            self.assertEqual(hashlib.sha256(data).hexdigest(), record["sha256"])
+            active = batch.CURRENT_IMPLEMENTATION_OVERRIDES.get(
+                record["path"], record
+            )
+            data = (REPO_ROOT / active["path"]).read_bytes()
+            self.assertEqual(len(data), active["size"])
+            self.assertEqual(hashlib.sha256(data).hexdigest(), active["sha256"])
+        self.assertEqual(
+            self.authority["inputs"]["source_lock"],
+            {
+                "path": "host-kernel/rocky/source-lock.json",
+                "sha256": "707ee40466ac0bb0cd0600383bba0b13fc1146e7080034786bf5668a95b27682",
+                "size": 18236,
+            },
+        )
+        self.assertNotEqual(
+            batch.CURRENT_IMPLEMENTATION_OVERRIDES[
+                self.authority["inputs"]["source_lock"]["path"]
+            ]["sha256"],
+            self.authority["inputs"]["source_lock"]["sha256"],
+        )
         self.assertEqual(
             self.authority["inputs"]["inventory_artifact"],
             batch.INVENTORY_ARTIFACT,

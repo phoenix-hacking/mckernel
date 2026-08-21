@@ -11,6 +11,8 @@ import os
 from pathlib import Path
 import re
 import shutil
+import shlex
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -123,6 +125,241 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         path.write_text(text, encoding="utf-8")
         return path
 
+    def test_serial_rejects_fatal_diagnostics_across_the_entire_capture(self) -> None:
+        signatures = (
+            "BUG: kernel NULL pointer dereference",
+            "Oops: 0000 [#1] PREEMPT SMP",
+            "Kernel panic - not syncing: injected",
+            "Call Trace:",
+            "general protection fault, probably for non-canonical address",
+            "unable to handle kernel NULL pointer dereference at 00000000",
+            "KASAN: use-after-free in injected",
+            "UBSAN: array-index-out-of-bounds in injected",
+            "slab-use-after-free in injected",
+            "double free detected in injected",
+            "refcount_t: underflow; use-after-free.",
+            "watchdog: BUG: soft lockup - CPU#0 stuck for 22s!",
+            "NMI watchdog: Watchdog detected hard LOCKUP on cpu 0",
+            "INFO: task init:1 blocked for more than 120 seconds.",
+            "kmemleak: unreferenced object 0xffff888000000000",
+            "unreferenced object 0xffff888000000000 (size 64):",
+        )
+        valid = valid_serial()
+        complete = (
+            f"{evidence.PROTOCOL} COMPLETE "
+            "status=technical-capture-unreviewed credit=forbidden\n"
+        )
+        for index, signature in enumerate(signatures):
+            for location, mutation in (
+                ("before", signature + "\n" + valid),
+                ("after", valid + signature + "\n"),
+                ("forged-frame", valid.replace(complete, signature + "\n" + complete)),
+            ):
+                with self.subTest(index=index, location=location):
+                    with self.assertRaisesRegex(
+                        evidence.EvidenceError, "fatal diagnostic"
+                    ):
+                        evidence.validate_serial(
+                            self.write_serial(mutation), KERNEL_RELEASE
+                        )
+
+    def test_serial_crlf_and_panic_command_line_remain_accepted(self) -> None:
+        serial = "Kernel command line: console=ttyS0 panic=-1\n" + valid_serial()
+        evidence.validate_serial(
+            self.write_serial(serial.replace("\n", "\r\n")), KERNEL_RELEASE
+        )
+
+    def test_runtime_tool_replay_ignores_hostile_path_and_loader_environment(self) -> None:
+        hostile = self.root / "hostile-bin"
+        hostile.mkdir()
+        for name in ("modinfo", "nm"):
+            executable = hostile / name
+            executable.write_text(
+                "#!/bin/sh\nprintf '%s\\n' "
+                + ("'" + KERNEL_RELEASE + "'" if name == "modinfo" else "'ihk_provider_lifecycle_v1'")
+                + "\n",
+                encoding="ascii",
+            )
+            executable.chmod(0o755)
+        module = self.root / "hostile.ko"
+        module.write_bytes(b"not an ELF module\n")
+        hostile_environment = {
+            "PATH": str(hostile),
+            "LD_AUDIT": str(self.root / "attacker-audit.so"),
+            "LD_PRELOAD": str(self.root / "attacker-preload.so"),
+        }
+        with mock.patch.dict(os.environ, hostile_environment, clear=False):
+            with self.assertRaises(evidence.EvidenceError):
+                evidence._run_field(module, "vermagic")
+            with self.assertRaises(evidence.EvidenceError):
+                evidence._nm(module, ["-g", "--defined-only"])
+
+    def test_runtime_tool_replay_uses_exact_rocky_argv_and_closed_environment(self) -> None:
+        module = self.root / "module.ko"
+        module.write_bytes(b"fixture")
+        completed = subprocess.CompletedProcess([], 0, stdout="ihk\n", stderr="")
+        with mock.patch.object(evidence.subprocess, "run", return_value=completed) as run:
+            self.assertEqual(["ihk"], evidence._run_field(module, "depends"))
+            arguments = run.call_args.args[0]
+            self.assertEqual(evidence.MODINFO_EXECUTABLE, arguments[0])
+            self.assertEqual(
+                evidence.BOUND_ROCKY_TOOL_ENVIRONMENT,
+                run.call_args.kwargs["env"],
+            )
+        completed = subprocess.CompletedProcess([], 0, stdout="symbol\n", stderr="")
+        with mock.patch.object(evidence.subprocess, "run", return_value=completed) as run:
+            self.assertEqual("symbol\n", evidence._nm(module, ["-g"]))
+            self.assertEqual(evidence.NM_EXECUTABLE, run.call_args.args[0][0])
+            self.assertEqual(
+                evidence.BOUND_ROCKY_TOOL_ENVIRONMENT,
+                run.call_args.kwargs["env"],
+            )
+
+    def write_runtime_evidence_artifact(self) -> Path:
+        directory = Path(
+            tempfile.mkdtemp(prefix="runtime-artifact-", dir=str(self.root))
+        )
+        contract = json.loads(
+            (REPO_ROOT / evidence.DEFAULT_CONTRACT).read_text(encoding="utf-8")
+        )
+        expected = contract["artifact_contract"]["runtime_evidence_files"]
+        for name in expected:
+            if name in {"SHA256SUMS", "capture.json"}:
+                continue
+            (directory / name).write_bytes((name + "\n").encode("ascii"))
+        (directory / "serial.log").write_text(valid_serial(), encoding="ascii")
+        (directory / "environment.txt").write_text(
+            "container_image={0}\n"
+            "runner_arch=x86_64\n"
+            "os_release_sha256={1}\n"
+            "bash-5.2.26-4.el10.x86_64\n"
+            "gpg-pubkey-6fedfc85-682ae1a9.(none)\n"
+            "qemu-kvm-core-9.1.0-1.el10.x86_64\n".format(
+                contract["runtime"]["container_image"],
+                evidence.EXPECTED_ROCKY_OS_RELEASE_SHA256,
+            ),
+            encoding="ascii",
+        )
+        (directory / "qemu-command.txt").write_text(
+            "/usr/libexec/qemu-kvm -machine q35 -accel tcg -cpu max -smp 2 "
+            "-m 2048 -kernel /tmp/native-rust-build-evidence/bzImage "
+            "-initrd /tmp/native-rust-runtime-evidence/initramfs.cpio.gz "
+            "-append console=ttyS0,115200n8\\ rdinit=/init\\ nokaslr\\ panic=-1 "
+            "-display none -monitor none "
+            "-serial file:/tmp/native-rust-runtime-evidence/serial.log -no-reboot\n",
+            encoding="ascii",
+        )
+        (directory / "qemu-version.txt").write_text(
+            "QEMU emulator version 9.1.0\nCopyright QEMU contributors\n",
+            encoding="ascii",
+        )
+        (directory / "qemu.exit-code").write_text("0\n", encoding="ascii")
+        (directory / "qemu.log").write_bytes(b"")
+        initramfs_digest = hashlib.sha256(
+            (directory / "initramfs.cpio.gz").read_bytes()
+        ).hexdigest()
+        (directory / "initramfs.sha256").write_text(
+            initramfs_digest + "  initramfs.cpio.gz\n", encoding="ascii"
+        )
+        (directory / "workflow-state").write_text(
+            "technical-capture-unreviewed\ncredit=forbidden\n", encoding="ascii"
+        )
+        capture = self.valid_capture_unsigned()
+        capture["contract_sha256"] = evidence._sha256_file(
+            REPO_ROOT / evidence.DEFAULT_CONTRACT
+        )
+        runtime_files = {
+            "environment_sha256": "environment.txt",
+            "initramfs_sha256": "initramfs.cpio.gz",
+            "initramfs_sha256_record": "initramfs.sha256",
+            "qemu_command_sha256": "qemu-command.txt",
+            "qemu_exit_code_sha256": "qemu.exit-code",
+            "qemu_log_sha256": "qemu.log",
+            "qemu_version_sha256": "qemu-version.txt",
+            "serial_sha256": "serial.log",
+        }
+        for field, name in runtime_files.items():
+            capture["runtime"][field] = hashlib.sha256(
+                (directory / name).read_bytes()
+            ).hexdigest()
+        capture["capture_sha256"] = evidence._sha256_bytes(
+            evidence._canonical_bytes(capture)
+        )
+        (directory / "capture.json").write_text(
+            evidence._pretty(capture), encoding="utf-8"
+        )
+        self.rewrite_runtime_manifest(directory)
+        return directory
+
+    def reseal_runtime_file(self, directory: Path, name: str, data: bytes) -> None:
+        (directory / name).write_bytes(data)
+        capture = json.loads((directory / "capture.json").read_text(encoding="utf-8"))
+        fields = {
+            "environment.txt": "environment_sha256",
+            "initramfs.cpio.gz": "initramfs_sha256",
+            "initramfs.sha256": "initramfs_sha256_record",
+            "qemu-command.txt": "qemu_command_sha256",
+            "qemu.exit-code": "qemu_exit_code_sha256",
+            "qemu.log": "qemu_log_sha256",
+            "qemu-version.txt": "qemu_version_sha256",
+            "serial.log": "serial_sha256",
+        }
+        if name in fields:
+            capture["runtime"][fields[name]] = hashlib.sha256(data).hexdigest()
+        unsigned = copy.deepcopy(capture)
+        unsigned.pop("capture_sha256")
+        capture["capture_sha256"] = evidence._sha256_bytes(
+            evidence._canonical_bytes(unsigned)
+        )
+        (directory / "capture.json").write_text(
+            evidence._pretty(capture), encoding="utf-8"
+        )
+        self.rewrite_runtime_manifest(directory)
+
+    def rewrite_runtime_manifest(self, directory: Path) -> None:
+        names = sorted(path.name for path in directory.iterdir() if path.name != "SHA256SUMS")
+        (directory / "SHA256SUMS").write_text(
+            "".join(
+                "{}  {}\n".format(
+                    hashlib.sha256((directory / name).read_bytes()).hexdigest(), name
+                )
+                for name in names
+            ),
+            encoding="ascii",
+        )
+
+    def validate_runtime_artifact(self, directory: Path) -> dict:
+        capture = json.loads(
+            (directory / "capture.json").read_text(encoding="utf-8")
+        )
+        with mock.patch.object(
+            evidence,
+            "_validate_build_evidence_directory",
+            return_value=(copy.deepcopy(capture["build"]), {}),
+        ):
+            return evidence.validate_runtime_evidence_directory(
+                REPO_ROOT, directory, self.root
+            )
+
+    def validate_runtime_files(
+        self, directory: Path, expected_build_bzimage=None
+    ) -> dict:
+        contract = json.loads(
+            (REPO_ROOT / evidence.DEFAULT_CONTRACT).read_text(encoding="utf-8")
+        )
+        return evidence._validate_runtime_files(
+            contract,
+            directory / "serial.log",
+            directory / "qemu.log",
+            directory / "qemu-command.txt",
+            directory / "qemu-version.txt",
+            directory / "qemu.exit-code",
+            directory / "environment.txt",
+            directory / "initramfs.cpio.gz",
+            directory / "initramfs.sha256",
+            expected_build_bzimage,
+        )
+
     def valid_capture_unsigned(self) -> dict:
         digest = "1" * 64
         release = KERNEL_RELEASE
@@ -177,6 +414,9 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                 },
                 "scope": {
                     "build_commands_sha256": digest,
+                    "build_environment_sha256": (
+                        evidence.EXPECTED_REPRODUCIBLE_BUILD_ENVIRONMENT_SHA256
+                    ),
                     "build_log_sha256": digest,
                     "kernel_targets": list(evidence.BUILD_KERNEL_TARGETS),
                     "module_targets": list(evidence.BUILD_MODULE_TARGETS),
@@ -231,6 +471,24 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                     evidence.EvidenceError, "selected kernel identity"
                 ):
                     evidence.validate_contract(repo)
+
+    def test_reproducible_build_epoch_must_match_the_source_lock(self) -> None:
+        repo = self.copy_contract_repository()
+        source_lock = repo / "host-kernel/rocky/source-lock.json"
+        value = json.loads(source_lock.read_text(encoding="utf-8"))
+        value["repository_snapshot"]["primary_metadata"]["timestamp"] += 1
+        source_lock.write_text(
+            json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        with self.assertRaisesRegex(
+            evidence.EvidenceError, "timestamp authority diverges"
+        ):
+            evidence.validate_contract(repo)
+
+    def test_reproducible_timestamp_format_is_locale_independent(self) -> None:
+        with mock.patch("locale.nl_langinfo", return_value="ATTACKER"):
+            summary = evidence.validate_contract(REPO_ROOT)
+        self.assertEqual(evidence.CONTRACT_ID, summary["contract_id"])
 
     def test_every_kbuild_invocation_requires_the_exact_localversion(self) -> None:
         relative = ".github/workflows/native-rust-host-modules-exact-build.yml"
@@ -287,11 +545,11 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         self.mutate_text(
             repo,
             relative,
-            "          printf 'NATIVE_BASELINE_CONFIG=%s\\n' \"$baseline\" >> \"$GITHUB_ENV\"\n",
+            "          printf 'NATIVE_BASELINE_CONFIG=%s\\n' \"$baseline\" >> \"$github_env_file\"\n",
             (
-                "          printf 'NATIVE_BASELINE_CONFIG=%s\\n' \"$baseline\" >> \"$GITHUB_ENV\"\n"
-                "          printf 'NATIVE_KERNEL_LOCALVERSION=-attacker\\n' >> \"$GITHUB_ENV\"\n"
-                "          printf 'EXPECTED_KERNEL_RELEASE=6.12.0-attacker\\n' >> \"$GITHUB_ENV\"\n"
+                "          printf 'NATIVE_BASELINE_CONFIG=%s\\n' \"$baseline\" >> \"$github_env_file\"\n"
+                "          printf 'NATIVE_KERNEL_LOCALVERSION=-attacker\\n' >> \"$github_env_file\"\n"
+                "          printf 'EXPECTED_KERNEL_RELEASE=6.12.0-attacker\\n' >> \"$github_env_file\"\n"
             ),
         )
         with self.assertRaisesRegex(evidence.EvidenceError, "prebuild scope differs"):
@@ -338,6 +596,17 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         contract["build_scope"]["builds_full_module_tree"] = True
         path.write_text(json.dumps(contract, indent=2, sort_keys=True) + "\n", encoding="utf-8")
         with self.assertRaisesRegex(evidence.EvidenceError, "exact build scope"):
+            evidence.validate_contract(repo)
+
+    def test_opaque_initramfs_replay_residual_cannot_be_promoted(self) -> None:
+        repo = self.copy_contract_repository()
+        path = repo / evidence.DEFAULT_CONTRACT
+        contract = json.loads(path.read_text(encoding="utf-8"))
+        contract["runtime_verifier_scope"]["initramfs_cpio_replay"] = True
+        path.write_text(
+            json.dumps(contract, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        with self.assertRaisesRegex(evidence.EvidenceError, "limitation scope"):
             evidence.validate_contract(repo)
 
     def test_rk002_credit_mutation_is_rejected(self) -> None:
@@ -391,7 +660,32 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             json.dumps(contract, indent=2, sort_keys=True) + "\n", encoding="utf-8"
         )
         with self.assertRaisesRegex(evidence.EvidenceError, "workflow identities"):
-            evidence.validate_contract(repo)
+                evidence.validate_contract(repo)
+
+    def test_runtime_evidence_steps_reject_startup_and_command_channel_mutations(self) -> None:
+        workflow = ".github/workflows/native-rust-host-modules-exact-runtime.yml"
+        mutations = (
+            (
+                "shell: /usr/bin/bash --noprofile --norc -p -e -o pipefail {0}",
+                "shell: bash",
+            ),
+            ('          LD_AUDIT: ""\n', ""),
+            (
+                "          PATH=/usr/sbin:/usr/bin:/sbin:/bin\n"
+                "          export PATH\n",
+                "          export PATH\n",
+            ),
+            (
+                "          unset GITHUB_ENV GITHUB_PATH\n",
+                "          printf 'LD_AUDIT=/tmp/attacker.so\\n' >> \"$github_env_file\"\n",
+            ),
+        )
+        for old, new in mutations:
+            with self.subTest(new=new):
+                repo = self.copy_contract_repository()
+                self.mutate_text(repo, workflow, old, new)
+                with self.assertRaises(evidence.EvidenceError):
+                    evidence.validate_contract(repo)
 
     def test_runtime_checkout_cannot_omit_git(self) -> None:
         repo = self.copy_contract_repository()
@@ -493,7 +787,9 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             "openssl openssl-devel patch",
             "openssl-devel patch",
         )
-        with self.assertRaisesRegex(evidence.EvidenceError, "OpenSSL CLI closure"):
+        with self.assertRaisesRegex(
+            evidence.EvidenceError, "bootstrap scope differs|OpenSSL CLI closure"
+        ):
             evidence.validate_contract(repo)
 
     def test_openssl_libraries_cannot_substitute_for_the_cli(self) -> None:
@@ -505,7 +801,9 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             "openssl openssl-devel patch",
             "openssl-libs openssl-devel patch",
         )
-        with self.assertRaisesRegex(evidence.EvidenceError, "OpenSSL CLI closure"):
+        with self.assertRaisesRegex(
+            evidence.EvidenceError, "bootstrap scope differs|OpenSSL CLI closure"
+        ):
             evidence.validate_contract(repo)
 
     def test_runtime_config_fragment_mutations_fail_closed(self) -> None:
@@ -577,6 +875,195 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         path.write_text(json.dumps(contract, indent=2, sort_keys=True) + "\n", encoding="utf-8")
         with self.assertRaisesRegex(evidence.EvidenceError, "artifact file set differs"):
             evidence.validate_contract(repo)
+
+    def test_runtime_artifact_exact_member_set_is_reconciled(self) -> None:
+        directory = self.write_runtime_evidence_artifact()
+        records = self.validate_runtime_artifact(directory)
+        self.assertIn("native-rust-runtime-poweroff.o", records)
+        self.assertEqual(12, len(records) + 1)
+
+    def test_runtime_artifact_missing_or_extra_member_is_rejected(self) -> None:
+        for mutation in ("missing-poweroff", "extra"):
+            with self.subTest(mutation=mutation):
+                directory = self.write_runtime_evidence_artifact()
+                if mutation == "missing-poweroff":
+                    (directory / "native-rust-runtime-poweroff.o").unlink()
+                else:
+                    (directory / "unexpected.bin").write_bytes(b"unexpected\n")
+                self.rewrite_runtime_manifest(directory)
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError, "artifact file set differs"
+                ):
+                    self.validate_runtime_artifact(directory)
+
+    def test_runtime_artifact_hostile_self_reseal_cannot_replace_semantics(self) -> None:
+        mutations = (
+            ("serial.log", b"self-resealed serial\n", "serial"),
+            ("qemu.exit-code", b"1\n", "QEMU did not exit"),
+            (
+                "qemu-command.txt",
+                b"/usr/libexec/qemu-kvm -machine q35 -accel kvm\n",
+                "QEMU command",
+            ),
+            (
+                "environment.txt",
+                b"container_image=attacker\nrunner_arch=x86_64\n",
+                "runtime environment",
+            ),
+            ("qemu-version.txt", b"not qemu\n", "QEMU version"),
+        )
+        for name, data, diagnostic in mutations:
+            with self.subTest(name=name):
+                directory = self.write_runtime_evidence_artifact()
+                self.reseal_runtime_file(directory, name, data)
+                with self.assertRaisesRegex(evidence.EvidenceError, diagnostic):
+                    self.validate_runtime_artifact(directory)
+
+    def test_qemu_command_rejects_exact_argv_decoys_and_accelerator_changes(self) -> None:
+        mutations = (
+            (
+                "/usr/libexec/qemu-kvm -machine",
+                "/usr/bin/printf /usr/libexec/qemu-kvm -machine",
+            ),
+            ("-accel tcg", "-accel tcg -accel tcg"),
+            ("-accel tcg", "-accel kvm"),
+            (
+                "-machine q35",
+                "-machine q35 -object memory-backend-file,mem-path=/dev/kvm",
+            ),
+            ("-no-reboot\n", "-no-reboot -nodefaults\n"),
+        )
+        for old, new in mutations:
+            with self.subTest(new=new):
+                directory = self.write_runtime_evidence_artifact()
+                command = (directory / "qemu-command.txt").read_text(encoding="ascii")
+                self.assertIn(old, command)
+                self.reseal_runtime_file(
+                    directory,
+                    "qemu-command.txt",
+                    command.replace(old, new, 1).encode("ascii"),
+                )
+                with self.assertRaisesRegex(evidence.EvidenceError, "QEMU command"):
+                    self.validate_runtime_artifact(directory)
+
+    def test_capture_qemu_paths_must_equal_supplied_files(self) -> None:
+        source = self.write_runtime_evidence_artifact()
+        runtime_dir = self.root / "native-rust-runtime-evidence"
+        source.rename(runtime_dir)
+        build_dir = self.root / "native-rust-build-evidence"
+        build_dir.mkdir()
+        bzimage = build_dir / "bzImage"
+        bzimage.write_bytes(b"bootable fixture\n")
+        command_path = runtime_dir / "qemu-command.txt"
+        command = command_path.read_text(encoding="ascii")
+        command = command.replace(
+            "/tmp/native-rust-build-evidence/bzImage", str(bzimage)
+        ).replace(
+            "/tmp/native-rust-runtime-evidence/initramfs.cpio.gz",
+            str(runtime_dir / "initramfs.cpio.gz"),
+        ).replace(
+            "/tmp/native-rust-runtime-evidence/serial.log",
+            str(runtime_dir / "serial.log"),
+        )
+        command_path.write_text(command, encoding="ascii")
+        self.validate_runtime_files(runtime_dir, bzimage)
+
+        substitutions = (
+            (
+                str(bzimage),
+                str(self.root / "decoy" / "native-rust-build-evidence" / "bzImage"),
+            ),
+            (
+                str(runtime_dir / "initramfs.cpio.gz"),
+                str(
+                    self.root
+                    / "decoy"
+                    / "native-rust-runtime-evidence"
+                    / "initramfs.cpio.gz"
+                ),
+            ),
+            (
+                str(runtime_dir / "serial.log"),
+                str(
+                    self.root
+                    / "decoy"
+                    / "native-rust-runtime-evidence"
+                    / "serial.log"
+                ),
+            ),
+        )
+        for old, new in substitutions:
+            with self.subTest(decoy=new):
+                command_path.write_text(command.replace(old, new, 1), encoding="ascii")
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError,
+                    "QEMU command (?:paths differ from captured build/runtime inputs|runtime evidence roots diverge)",
+                ):
+                    self.validate_runtime_files(runtime_dir, bzimage)
+        command_path.write_text(command, encoding="ascii")
+
+    def test_check_runtime_evidence_requires_same_run_build_directory(self) -> None:
+        stderr = io.StringIO()
+        with contextlib.redirect_stderr(stderr):
+            status = evidence.main(
+                [
+                    "--repo",
+                    str(REPO_ROOT),
+                    "--check-runtime-evidence",
+                    "--runtime-evidence-dir",
+                    str(self.root),
+                ]
+            )
+        self.assertEqual(1, status)
+        self.assertIn("requires --runtime-evidence-dir and --build-evidence-dir", stderr.getvalue())
+
+    def test_runtime_artifact_cannot_self_reseal_build_identity(self) -> None:
+        directory = self.write_runtime_evidence_artifact()
+        capture = json.loads(
+            (directory / "capture.json").read_text(encoding="utf-8")
+        )
+        replayed_build = copy.deepcopy(capture["build"])
+        capture["build"]["artifact_manifest_sha256"] = "f" * 64
+        unsigned = copy.deepcopy(capture)
+        unsigned.pop("capture_sha256")
+        capture["capture_sha256"] = evidence._sha256_bytes(
+            evidence._canonical_bytes(unsigned)
+        )
+        (directory / "capture.json").write_text(
+            evidence._pretty(capture), encoding="utf-8"
+        )
+        self.rewrite_runtime_manifest(directory)
+        with mock.patch.object(
+            evidence,
+            "_validate_build_evidence_directory",
+            return_value=(replayed_build, {}),
+        ):
+            with self.assertRaisesRegex(
+                evidence.EvidenceError, "build evidence facts differ"
+            ):
+                evidence.validate_runtime_evidence_directory(
+                    REPO_ROOT, directory, self.root
+                )
+
+    def test_runtime_artifact_manifest_must_be_canonical_order(self) -> None:
+        directory = self.write_runtime_evidence_artifact()
+        manifest = directory / "SHA256SUMS"
+        rows = manifest.read_text(encoding="ascii").splitlines(True)
+        self.assertGreater(len(rows), 1)
+        manifest.write_text("".join(reversed(rows)), encoding="ascii")
+        with self.assertRaisesRegex(evidence.EvidenceError, "canonical-order"):
+            self.validate_runtime_artifact(directory)
+
+    def test_capture_build_environment_digest_is_canonical(self) -> None:
+        value = self.valid_capture_unsigned()
+        value["build"]["scope"]["build_environment_sha256"] = "4" * 64
+        value["capture_sha256"] = evidence._sha256_bytes(
+            evidence._canonical_bytes(value)
+        )
+        with self.assertRaisesRegex(
+            evidence.EvidenceError, "build environment digest differs"
+        ):
+            evidence.validate_capture(value)
 
     def test_load_order_mutation_is_rejected(self) -> None:
         repo = self.copy_contract_repository()
@@ -1024,6 +1511,68 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         )
         self.assertEqual(digest, evidence._parse_sums(directory)[".ihk.o.cmd"])
 
+    def test_build_manifest_rejects_noncanonical_row_order(self) -> None:
+        directory = self.root / "build-order"
+        directory.mkdir()
+        records = []
+        for name in ("a", "b"):
+            path = directory / name
+            path.write_bytes((name + "\n").encode("ascii"))
+            records.append((hashlib.sha256(path.read_bytes()).hexdigest(), name))
+        (directory / "SHA256SUMS").write_text(
+            "".join("{0}  {1}\n".format(*row) for row in reversed(records)),
+            encoding="ascii",
+        )
+        with self.assertRaisesRegex(evidence.EvidenceError, "canonical-order"):
+            evidence._parse_sums(directory)
+
+    def test_precheck_manifest_exact_26_member_closure_is_enforced(self) -> None:
+        self.assertEqual(26, len(evidence.EXPECTED_PRECHECK_BUILD_MEMBERS))
+        self.assertIn(
+            "build.environment", evidence.EXPECTED_PRECHECK_BUILD_MEMBERS
+        )
+        base = self.root / "precheck-base"
+        base.mkdir()
+        final_records = {}
+        for name in evidence.EXPECTED_PRECHECK_BUILD_MEMBERS:
+            data = (name + "\n").encode("ascii")
+            (base / name).write_bytes(data)
+            final_records[name] = hashlib.sha256(data).hexdigest()
+        canonical = "".join(
+            "{0}  {1}\n".format(final_records[name], name)
+            for name in evidence.EXPECTED_PRECHECK_BUILD_MEMBERS
+        )
+        (base / "PRECHECK_SHA256SUMS").write_text(canonical, encoding="ascii")
+        self.assertEqual(
+            final_records,
+            evidence._parse_precheck_sums(
+                base,
+                final_records,
+                evidence.EXPECTED_PRECHECK_BUILD_MEMBERS,
+            ),
+        )
+
+        rows = canonical.splitlines(True)
+        mutations = {
+            "missing": "".join(rows[1:]),
+            "extra": canonical + ("0" * 64) + "  unexpected\n",
+            "duplicate": canonical + rows[0],
+            "reordered": "".join(reversed(rows)),
+            "digest": ("0" * 64) + rows[0][64:] + "".join(rows[1:]),
+        }
+        for label, content in mutations.items():
+            with self.subTest(label=label):
+                (base / "PRECHECK_SHA256SUMS").write_text(
+                    content, encoding="ascii"
+                )
+                with self.assertRaises(evidence.EvidenceError):
+                    evidence._parse_precheck_sums(
+                        base,
+                        final_records,
+                        evidence.EXPECTED_PRECHECK_BUILD_MEMBERS,
+                    )
+        (base / "PRECHECK_SHA256SUMS").write_text(canonical, encoding="ascii")
+
     def test_build_artifact_file_set_is_exact_regular_and_mode_bound(self) -> None:
         directory = self.root / "exact-build"
         directory.mkdir()
@@ -1133,13 +1682,24 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                 evidence._validate_phase2_build_evidence(directory, records)
 
     def write_build_scope_artifacts(self) -> tuple[Path, dict[str, str]]:
-        directory = self.root / "scope"
-        directory.mkdir()
+        directory = Path(tempfile.mkdtemp(prefix="scope-", dir=str(self.root)))
         source = self.root / "native-rust-source" / "linux-6.12.0-211.44.1.el10_2"
         output = self.root / "native-rust-build"
-        prefix = (
-            f"make -C {source} O={output} ARCH=x86_64 LLVM=1 "
-            f"LOCALVERSION={evidence.EXPECTED_KERNEL_LOCALVERSION}"
+        prefix = " ".join(
+            shlex.quote(item)
+            for item in (
+                evidence.EXPECTED_KBUILD_ENV_COMMAND_PREFIX
+                + [
+                "/usr/bin/make",
+                "-C",
+                str(source),
+                "O=" + str(output),
+                "ARCH=x86_64",
+                "LLVM=1",
+                "LOCALVERSION=" + evidence.EXPECTED_KERNEL_LOCALVERSION,
+                ]
+                + evidence.EXPECTED_KBUILD_MAKE_IDENTITY_ARGUMENTS
+            )
         )
         values = {
             "build.commands": (
@@ -1147,6 +1707,7 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
                 f"{prefix} -j2 bzImage\n"
                 f"{prefix} -j2 {' '.join(evidence.BUILD_MODULE_TARGETS)}\n"
             ),
+            "build.environment": evidence._reproducible_build_environment_text(),
             "build.exit-code": "0\n",
             "build.log": "Rust is available!\n",
             "build-log.exit-code": "0\n",
@@ -1168,6 +1729,54 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         result = evidence._validate_build_scope_artifacts(directory, records)
         self.assertEqual(evidence.BUILD_KERNEL_TARGETS, result["kernel_targets"])
         self.assertEqual(evidence.BUILD_MODULE_TARGETS, result["module_targets"])
+        self.assertEqual(
+            records["build.environment"], result["build_environment_sha256"]
+        )
+
+    def test_build_scope_rejects_environment_value_order_and_extra_line_mutations(self) -> None:
+        canonical = evidence._reproducible_build_environment_text()
+        lines = canonical.splitlines(keepends=True)
+        mutations = (
+            canonical.replace("KBUILD_BUILD_USER=mckernel", "KBUILD_BUILD_USER=root"),
+            "".join((lines[1], lines[0]) + tuple(lines[2:])),
+            canonical + "KBUILD_BUILD_USER=attacker\n",
+        )
+        for mutation in mutations:
+            with self.subTest(mutation=mutation):
+                directory, records = self.write_build_scope_artifacts()
+                path = directory / "build.environment"
+                path.write_text(mutation, encoding="utf-8")
+                records[path.name] = hashlib.sha256(path.read_bytes()).hexdigest()
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError, "reproducible build environment differs"
+                ):
+                    evidence._validate_build_scope_artifacts(directory, records)
+
+    def test_build_command_environment_prefix_rejects_shadow_reorder_and_extra_controls(self) -> None:
+        mutations = (
+            ("/usr/bin/env -i ", "/usr/bin/env "),
+            ("BASH_ENV= ENV=", "ENV= BASH_ENV="),
+            ("MAKEFLAGS= MAKEOVERRIDES=", "MAKEFLAGS=KBUILD_BUILD_USER=attacker MAKEOVERRIDES="),
+            (" /usr/bin/make ", " CC=/tmp/attacker /usr/bin/make "),
+            (" /usr/bin/make ", " make "),
+            (
+                "KBUILD_BUILD_USER=mckernel KBUILD_BUILD_VERSION=1",
+                "KBUILD_BUILD_VERSION=1 KBUILD_BUILD_USER=mckernel",
+            ),
+        )
+        for old, new in mutations:
+            with self.subTest(new=new):
+                directory, records = self.write_build_scope_artifacts()
+                path = directory / "build.commands"
+                text = path.read_text(encoding="utf-8")
+                self.assertIn(old, text)
+                path.write_text(text.replace(old, new, 1), encoding="utf-8")
+                records[path.name] = hashlib.sha256(path.read_bytes()).hexdigest()
+                with self.assertRaisesRegex(
+                    evidence.EvidenceError,
+                    "environment boundary differs|bounded target scope",
+                ):
+                    evidence._validate_build_scope_artifacts(directory, records)
 
     def test_unrelated_module_artifact_is_rejected(self) -> None:
         directory, records = self.write_build_scope_artifacts()

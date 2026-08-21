@@ -141,6 +141,22 @@ class ChildInventoryV2Tests(unittest.TestCase):
         authority, data = inventory.check_repository(REPO_ROOT)
         self.assertEqual(data, self.contract_bytes)
         self.assertEqual(authority, self.authority)
+        self.assertEqual(authority["inputs"], inventory.EXPECTED_INPUTS)
+        for key, record in authority["inputs"].items():
+            active = inventory.CURRENT_IMPLEMENTATION_OVERRIDES.get(
+                record["path"], record
+            )
+            payload = (REPO_ROOT / active["path"]).read_bytes()
+            self.assertEqual(len(payload), active["size"], key)
+            self.assertEqual(
+                hashlib.sha256(payload).hexdigest(), active["sha256"], key
+            )
+        self.assertNotEqual(
+            authority["inputs"]["license_inventory_v1_checker"]["sha256"],
+            inventory.CURRENT_IMPLEMENTATION_OVERRIDES[
+                authority["inputs"]["license_inventory_v1_checker"]["path"]
+            ]["sha256"],
+        )
 
     def test_contract_is_canonical_null_count_and_strictly_non_crediting(self):
         self.assertEqual(

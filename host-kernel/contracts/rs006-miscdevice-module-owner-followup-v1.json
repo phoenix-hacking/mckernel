@@ -1,42 +1,42 @@
 {
-  "blockers": [
-    "Integrate the candidate immediately after patch 0020 in every ordered Rocky patch consumer.",
-    "Refresh source-lock, license-inventory, RK-006, and RS-006 authorities against the integrated bytes.",
-    "Refresh exact API-probe, configuration-resolution, review, and workflow bindings against the new postimage.",
-    "Apply the complete ordered patch series to the exact locked Rocky archive and build the configured kernel and modules with CONFIG_COMPAT enabled.",
-    "Obtain independent source, license, module-owner, compat-ABI, and pinned-lifetime review of the integrated result.",
-    "Exercise module pinning, open-file deregistration ordering, native ioctl, and 32-bit compat ioctl behavior at runtime.",
-    "Archive durable build and runtime evidence and obtain explicit RS-006 gate and tracker adjudication."
-  ],
-  "candidate": {
+  "active_patch": {
     "license_expression": "GPL-2.0",
-    "origin": "repository-local-unintegrated-candidate",
-    "path": "host-kernel/rocky/candidates/0020-followup-rust-miscdevice-module-owner-v1.patch",
+    "origin": "mckernel-repository-overlay",
+    "path": "host-kernel/rocky/patches/0020a-rust-miscdevice-bind-file-operations-to-module.patch",
     "provenance_reviewed": false,
-    "sha256": "7990b1d8feac4b32c4fff87a8cc7c6e3fe2a273dc09c17d3f61eefb847f988a5",
-    "size": 3250,
+    "sha256": "3a49240fc0a10d5ec14cd33d0ec7d09775209edd08fba10a6ee786dc59ea5b21",
+    "size": 3353,
+    "status": "active-ordered-unbuilt",
     "touched_paths": [
       "rust/kernel/miscdevice.rs"
     ]
   },
+  "blockers": [
+    "Apply the complete ordered patch series to the exact locked Rocky archive and build the configured kernel and modules with CONFIG_COMPAT enabled.",
+    "Obtain fresh independent source, license, module-owner, compat-ABI, pinned-lifetime, and configuration review for the active-patch head.",
+    "Exercise module pinning, open-file deregistration ordering, native ioctl, and 32-bit compat ioctl behavior at runtime.",
+    "Durably archive the build, review, and runtime evidence and obtain explicit RS-006 gate and tracker adjudication."
+  ],
   "claims": {
-    "candidate_integrated": false,
+    "active_patch_integrated": true,
     "compat_runtime_executed": false,
+    "configuration_authority_updated": true,
     "configured_kernel_compiled": false,
     "credit_eligible": false,
     "durable_evidence_archived": false,
-    "exact_probe_updated": false,
+    "exact_probe_updated": true,
+    "fresh_configuration_review_complete": false,
     "gate_pass": false,
     "independent_review_complete": false,
-    "license_authority_updated": false,
-    "main_patch_series_updated": false,
+    "license_authority_updated": true,
     "module_runtime_executed": false,
-    "rk006_authority_updated": false,
-    "rs006_authority_superseded": false,
-    "source_lock_updated": false,
+    "ordered_patch_consumers_updated": true,
+    "rk006_authority_updated": true,
+    "rs006_authority_updated": true,
+    "source_lock_updated": true,
     "stage_manifest_updated": false,
     "tracker_credit": false,
-    "workflow_applies_candidate": false
+    "workflow_applies_active_patch": true
   },
   "consumer_update_plan": {
     "configuration_and_review": [
@@ -73,7 +73,15 @@
       "scripts/rs006_miscdevice_substrate.py",
       "scripts/tests/test_rs006_miscdevice_substrate.py"
     ],
+    "runtime_evidence_authority": [
+      "host-kernel/contracts/native-rust-runtime-evidence-v1.json",
+      "host-kernel/rocky/evidence/rk007-native-build-review-bc60-v1.json",
+      "host-kernel/rocky/evidence/rk007-native-build-review-ef58-v2.json",
+      "scripts/native_rust_runtime_evidence.py",
+      "scripts/tests/test_native_rust_runtime_evidence.py"
+    ],
     "source_and_license": [
+      ".github/workflows/rocky-kernel-source-evidence.yml",
       "host-kernel/rocky/source-lock.json",
       "scripts/rocky_kernel_license_inventory.py",
       "scripts/rocky_kernel_source_lock.py",
@@ -82,45 +90,61 @@
     ],
     "stage_manifest": {
       "path": "host-kernel/kbuild/stage-manifest.json",
-      "reason_not_modified": "The candidate changes a generic kernel patch only; it does not add or change a staged project source input. Reassess only when an integrated consumer changes."
+      "reason_not_modified": "The active patch changes generic kernel compatibility source only; it does not add or change a staged McKernel project source input."
     }
   },
   "contract_id": "rs-006-miscdevice-module-owner-followup-v1",
-  "deferred_consumer_inventory": [
+  "fixture": {
+    "claim_scope": "userspace compile-shape only; not a kernel build or runtime result",
+    "path": "scripts/tests/fixtures/rs006_miscdevice_module_owner_compile.rs",
+    "sha256": "909cabadb7862019bc8826dd70ab4bec84e87175b3a42a1570741f8c9fee79c8",
+    "size": 4258
+  },
+  "integrated_consumer_inventory": [
     {
       "path": ".github/workflows/native-rust-host-modules-exact-build.yml",
-      "sha256": "bca3d56c95842d937f8cebf8016b994200ffbeb9c9180cfef07f13a64d949f15",
-      "size": 49287
+      "sha256": "30c38b26f8db5f8793cc397a9d713deb6104131378b0f8bd9a45b14e6c570456",
+      "size": 67473
+    },
+    {
+      "path": ".github/workflows/rocky-kernel-source-evidence.yml",
+      "sha256": "53330d6a3cf41fa9d28729665d0afdee63ac3cd63421e8ae0dd638044fb2173f",
+      "size": 9660
     },
     {
       "path": ".github/workflows/rs001-linux-api-exact-probe.yml",
-      "sha256": "6140e1923f8528aa5a7c41ec1bd01aeb02636d6c36762ea888084a3f840f3a81",
-      "size": 13880
+      "sha256": "ea208a1dcb3f070c5e2bf0d2dd120431549f5e6b949ba04772776dbc6c5beec8",
+      "size": 14046
     },
     {
       "path": "host-kernel/contracts/linux-api-exact-probe-v1.json",
-      "sha256": "1f9d7bb0370b513b92f11b06b237b73e4f4e6a1eb67ddf9a894973b55171fe02",
-      "size": 38269
+      "sha256": "09c28ab3fa37dbfefa529d68bf660a3ffe8d3dfdb73d54146e546dd85c799182",
+      "size": 39172
+    },
+    {
+      "path": "host-kernel/contracts/native-rust-runtime-evidence-v1.json",
+      "sha256": "86efd4a1a88762537acdbd4e576fcbfec4736143391d484667cdce7dabf1b3bb",
+      "size": 8411
     },
     {
       "path": "host-kernel/contracts/rs006-miscdevice-substrate-v1.json",
-      "sha256": "bea916b6b8b278f5e517acbfbdc29619a13b69ff032d5d36dc8c8135e390d5c6",
-      "size": 8002
+      "sha256": "8cc1e351ac7bb49e1b55bd8f7a656a02203d897e31d630d4ee4f8479f674f561",
+      "size": 9486
     },
     {
       "path": "host-kernel/kbuild/stage-manifest.json",
-      "sha256": "e41b6df1dcd0d8007b23a0795de596e5c775e84f10fe02cf08edd5d199cd4b7a",
+      "sha256": "b702ace9912eb32c80c5ea58dcaa384dfef241684c589508408452a4366fb704",
       "size": 5743
     },
     {
       "path": "host-kernel/rocky/evidence/config-resolution-contract-v1.json",
-      "sha256": "45514597166bf18f4ef3aeb7e1fbd269083bd42d53f41e6fa5b3398b8bfba54c",
-      "size": 22840
+      "sha256": "5ab8ef0f06a17896ae3927b218c75e3f24fd574d682364f3afd1c07255299eed",
+      "size": 23375
     },
     {
       "path": "host-kernel/rocky/evidence/config-resolution-contract-v2.json",
-      "sha256": "c576eea855ed794dcc1dc8f4890d34cfec15022d757d984ce3a1613740ebeefa",
-      "size": 23034
+      "sha256": "100510aa9352f07a3f866bcb9fd8ccab6f562391b658a8e20e843b90f31b7d00",
+      "size": 23569
     },
     {
       "path": "host-kernel/rocky/evidence/config-resolution-review-378d-v1.json",
@@ -133,34 +157,49 @@
       "size": 14502
     },
     {
+      "path": "host-kernel/rocky/evidence/rk007-native-build-review-bc60-v1.json",
+      "sha256": "ac7459eb75e064f6cd901e4cdb4186e53b1cadfc9bcbef7ce0ea9da5b3c00319",
+      "size": 31645
+    },
+    {
+      "path": "host-kernel/rocky/evidence/rk007-native-build-review-ef58-v2.json",
+      "sha256": "4ea0747044cd346124c110da92594508fbdbdd2276f16c7539d4918c48d6032e",
+      "size": 14158
+    },
+    {
       "path": "host-kernel/rocky/patches/series.json",
       "sha256": "6a1a5e8fb13b6ce6ed35bd8e5487bb67ecf92d2be927799b660f21b5631f68fb",
       "size": 1454
     },
     {
       "path": "host-kernel/rocky/rk006-patch-authority-v1.json",
-      "sha256": "ebc3e4c69ecbdb3891f92018a89f5fc3dae43fa070628fda8b22f881f02c67a1",
-      "size": 19681
+      "sha256": "0c40d8079b3c5f6b90e44f1067f89f27c5c7ac50c67a127609a34a10c224475b",
+      "size": 20327
     },
     {
       "path": "host-kernel/rocky/source-lock.json",
-      "sha256": "707ee40466ac0bb0cd0600383bba0b13fc1146e7080034786bf5668a95b27682",
-      "size": 18236
+      "sha256": "b70df1e475072dbfa31fdc712900ac59d30eeb139219c7076aacaa19abf0fded",
+      "size": 18336
     },
     {
       "path": "scripts/linux_api_exact_probe.py",
-      "sha256": "8539e20530c98d491cf651c25cef376954e2f4eee469c9c06d91cd2e9d94382e",
-      "size": 125568
+      "sha256": "0110c960613e30372507210d6199a1a457548e2f27386dfb0636baf4d1c9edbf",
+      "size": 127318
+    },
+    {
+      "path": "scripts/native_rust_runtime_evidence.py",
+      "sha256": "631f2f4dae758fe2794bb494597223659117ae5a3efe49f4be1e7c27925ebf4f",
+      "size": 159080
     },
     {
       "path": "scripts/rocky_kernel_config_resolution.py",
-      "sha256": "d06ad8dd22a651763b08ab086d6b662b88e4f88a921d8f4cad85feabd384e3b8",
-      "size": 79644
+      "sha256": "b0224b05fda0fdd576e12152009a10bc72cc4952312043143e0adac42fbd8861",
+      "size": 81290
     },
     {
       "path": "scripts/rocky_kernel_config_resolution_v2.py",
-      "sha256": "4698526d0c36e38bd5a8258398831e48783d3d280d512253d70703e0a39cfb24",
-      "size": 92853
+      "sha256": "8fa4a2589f8d9594437cc8048155acbf6c987b0e763572d272b594083922b424",
+      "size": 94499
     },
     {
       "path": "scripts/rocky_kernel_config_review_v2.py",
@@ -169,58 +208,63 @@
     },
     {
       "path": "scripts/rocky_kernel_license_inventory.py",
-      "sha256": "d6103ca6d2d0bd6c5f0a40994839f1c60a0584283e624252a10aa58f0111ee9d",
-      "size": 61125
+      "sha256": "69713cb4bba8c1f2a9ca88b5baed11a1876403c235b6163e469777212b85f374",
+      "size": 61217
     },
     {
       "path": "scripts/rocky_kernel_rk006_patch_authority.py",
-      "sha256": "c23969ba2716db96f02a0564d6815b7342036a58c258ce22319b0185693cfddd",
-      "size": 48959
+      "sha256": "ee0ef72baf560c1a4412ff0140b950f0f8456d4291154186af339320a1ec21da",
+      "size": 49913
     },
     {
       "path": "scripts/rocky_kernel_source_lock.py",
-      "sha256": "1fc6f6457d5a06d43260b84a8627fa2297c360d3a5c3810012a2198aadf3c262",
-      "size": 60008
+      "sha256": "d127c497245ba373f68f5d6e6fc934369b368b665365bd1f46d05ff08f8b3718",
+      "size": 60175
     },
     {
       "path": "scripts/rs006_miscdevice_substrate.py",
-      "sha256": "4ec4e1c0815319a7572304028ee93a16ff56e4e371b936631663478bc36b243a",
-      "size": 23783
+      "sha256": "820dcbfc706157fc1c6c0bd2e4458e37224c1a3871eec124ae0938fee9324c19",
+      "size": 26372
     },
     {
       "path": "scripts/tests/test_linux_api_exact_probe.py",
-      "sha256": "9a6fb3d92391251bfaea936678c07540275b6442cbbba2529ba98af13a5654e5",
-      "size": 55755
+      "sha256": "a0343e2e3934a501eac40ed4444548506a64a0715a87614152d3acd55eb4f956",
+      "size": 57047
     },
     {
       "path": "scripts/tests/test_native_rust_exact_build_workflow.py",
-      "sha256": "85b671a8779545a9f39127188ac7aabf68a30b43088ad291af56ebc0e5866fbd",
-      "size": 55942
+      "sha256": "d53c86364663f80f1e23769db9bb24569e1bb5beb6e32a33bc80941d380188c4",
+      "size": 62962
+    },
+    {
+      "path": "scripts/tests/test_native_rust_runtime_evidence.py",
+      "sha256": "7548c61909c0aff7df3632ed7f19bcb49004dea5483cbf3ff975675be1a101e9",
+      "size": 88905
     },
     {
       "path": "scripts/tests/test_rocky_kernel_config_resolution.py",
-      "sha256": "21dc3a7916bbd51c19300e69037360cbac9d789e085db69ec4c26c498c47e97e",
+      "sha256": "aa79c3d279d680b1055e2065d49d5d6424f26421c6ec2713f638356f290ed341",
       "size": 59226
     },
     {
       "path": "scripts/tests/test_rocky_kernel_config_review.py",
-      "sha256": "493346713d144fb39dc0787e0e369667e35a7b5593f333c85be5b4f982d1c9e4",
-      "size": 19225
+      "sha256": "6b84eba90fddfb5316f57aca5ca0e2628d8b74c6a21412763f42fb84c9dfda20",
+      "size": 19212
     },
     {
       "path": "scripts/tests/test_rocky_kernel_config_review_v2.py",
-      "sha256": "4e1eca972339a0279e309a1f3f87a8d6c9c52c1c5480dc81b13f234def03f9a7",
-      "size": 36037
+      "sha256": "41393974489e26187c27ddc0ded1025e5d77a94398bb5f5e962cde1838c65fcc",
+      "size": 36027
     },
     {
       "path": "scripts/tests/test_rocky_kernel_license_inventory.py",
-      "sha256": "515f0333370eaee3e6394de16d2c4377325b0d3e63bf83acb6d4824c2b828de1",
-      "size": 33288
+      "sha256": "5d1ec839694706a564f2cb64855946b181e6c89a70bc6b2474b7f6dd02dd179c",
+      "size": 33392
     },
     {
       "path": "scripts/tests/test_rocky_kernel_rk006_patch_authority.py",
-      "sha256": "719d1e87b4d66944abf3bad0c03dc7cc86dddb97fa36e3fe32736c29ea549b39",
-      "size": 27957
+      "sha256": "bb829109b32b2474b0edeb06e2121b42aff4edb4a3103ea80cf6a9520e775b3b",
+      "size": 27976
     },
     {
       "path": "scripts/tests/test_rocky_kernel_source_lock.py",
@@ -229,21 +273,15 @@
     },
     {
       "path": "scripts/tests/test_rs006_miscdevice_substrate.py",
-      "sha256": "015018ba35c98a82289dd0d9e9d01f8419ae90892cbbdd31c7ef9546b30a0c07",
-      "size": 9581
+      "sha256": "b25330fa92b9dae6976aa1eada0c6b3a1117ae7829f2ea2d314cbfe54a060fbb",
+      "size": 9544
     },
     {
       "path": "scripts/tests/test_rust_target_compatibility_patches.py",
-      "sha256": "074f2499a5ff3f4441ad63ac429e92ad731679fce0d7f247cb047b441708c0f9",
-      "size": 30820
+      "sha256": "6b02d886d5c95b1e176ca6444f57f1459a89543465945223e0c5ccdb0b3b3d2a",
+      "size": 30962
     }
   ],
-  "fixture": {
-    "claim_scope": "userspace compile-shape only; not a kernel build or runtime result",
-    "path": "scripts/tests/fixtures/rs006_miscdevice_module_owner_compile.rs",
-    "sha256": "909cabadb7862019bc8826dd70ab4bec84e87175b3a42a1570741f8c9fee79c8",
-    "size": 4258
-  },
   "intended_semantics": {
     "compat": {
       "explicit_vtable_expression": "compat_ioctl: maybe_fn(T::HAS_COMPAT_IOCTL, fops_compat_ioctl::<T>),",
@@ -499,19 +537,19 @@
     ]
   },
   "result_authority": {
-    "candidate_postimage": {
+    "active_postimage": {
       "path": "rust/kernel/miscdevice.rs",
       "sha256": "0f2c43a6a64688b6b8387de4813a76289a66f67a1787893d747273c36983b8ee",
       "size": 7705
     },
-    "integration_status": "required-missing",
+    "integration_status": "active-ordered-unbuilt",
     "review_status": "required-missing",
     "runtime_status": "required-missing"
   },
   "schema_version": 1,
   "scope": {
     "allowed": "generic Linux Rust miscdevice file-operations ownership, explicit compat dispatch, and registration/vtable lifetime shape",
-    "excluded": "IHK policy, project-driver integration, source authority, build/runtime evidence, gate completion, and tracker credit"
+    "excluded": "IHK policy, project-driver implementation, a configured kernel build, runtime evidence, gate completion, and tracker credit"
   },
   "target": {
     "architecture": "x86_64",

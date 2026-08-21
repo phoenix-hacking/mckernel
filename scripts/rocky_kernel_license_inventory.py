@@ -38,7 +38,7 @@ EXPECTED_CONTAINER_IMAGE = (
     "e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176"
 )
 EXPECTED_SOURCE_LOCK_SHA256 = (
-    "707ee40466ac0bb0cd0600383bba0b13fc1146e7080034786bf5668a95b27682"
+    "b70df1e475072dbfa31fdc712900ac59d30eeb139219c7076aacaa19abf0fded"
 )
 EXPECTED_PATCH_SERIES_SHA256 = (
     "6a1a5e8fb13b6ce6ed35bd8e5487bb67ecf92d2be927799b660f21b5631f68fb"
@@ -143,6 +143,7 @@ EXPECTED_REPOSITORY_INPUT_PATHS = [
     "host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch",
     "host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch",
     "host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch",
+    "host-kernel/rocky/patches/0020a-rust-miscdevice-bind-file-operations-to-module.patch",
     "host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch",
     "host-kernel/rocky/patches/0022-x86-pvh-annotate-noendbr.patch",
     "host-kernel/rocky/patches/0023-rust-update-no-alloc-shim-marker-rust-1.92.patch",

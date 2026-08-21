@@ -83,6 +83,17 @@ SOURCE_LOCK = {
     "sha256": "707ee40466ac0bb0cd0600383bba0b13fc1146e7080034786bf5668a95b27682",
     "size": 18236,
 }
+# The authority above remains the exact ef58860e artifact input.  A later
+# repository closure may add local inputs without changing that historical
+# artifact.  Current implementations are accepted only through this separate,
+# exact compatibility record; it cannot rewrite EXPECTED_INPUTS or any result.
+CURRENT_IMPLEMENTATION_OVERRIDES = {
+    SOURCE_LOCK["path"]: {
+        "path": SOURCE_LOCK["path"],
+        "sha256": "b70df1e475072dbfa31fdc712900ac59d30eeb139219c7076aacaa19abf0fded",
+        "size": 18336,
+    },
+}
 WORKFLOW = {
     "path": ".github/workflows/rk001-license-review-batch-v1.yml",
     "sha256": "aca51e886f5cacca15596b35ce31c4468c0a60618226d5fd7edbd4ebcbac8d6d",
@@ -429,9 +440,14 @@ def load_authority(repo=REPO_ROOT, explicit=None):
 
 
 def _read_bound(repo, record, label, cap):
-    path = Path(repo) / safe_relative(record["path"], label + " path")
+    active_record = CURRENT_IMPLEMENTATION_OVERRIDES.get(record["path"], record)
+    require_exact(active_record["path"], record["path"], label + " compatibility path")
+    path = Path(repo) / safe_relative(active_record["path"], label + " path")
     data = read_regular_file_once(path, label, cap)
-    if len(data) != record["size"] or hashlib.sha256(data).hexdigest() != record["sha256"]:
+    if (
+        len(data) != active_record["size"]
+        or hashlib.sha256(data).hexdigest() != active_record["sha256"]
+    ):
         raise ReviewBatchError("{0} bytes differ".format(label))
     return path, data
 

@@ -116,6 +116,7 @@ C_DUMP_OPTIONS = (
 RUST_MIR_OPTIONS = (
     "-Zdump-mir=all",
     "-Zdump-mir-exclude-pass-number",
+    "-Zmir-include-spans=yes",
 )
 RUST_SELECTED_STAGE_SUFFIXES = (
     ".built.after.mir",
@@ -1567,7 +1568,10 @@ def probe_rust_mir_options(executable, environment):
     if completed.returncode != 0:
         raise SemanticsV3Error("pinned rustc rejected -Z help")
     output = completed.stdout.decode("utf-8", errors="replace")
-    for spelling in ("dump-mir", "dump-mir-dir", "dump-mir-exclude-pass-number"):
+    for spelling in (
+        "dump-mir", "dump-mir-dir", "dump-mir-exclude-pass-number",
+        "mir-include-spans",
+    ):
         if spelling not in output:
             raise SemanticsV3Error("pinned rustc omits -Z {0}".format(spelling))
     return {
@@ -3337,14 +3341,71 @@ MIR_SPAN = re.compile(
     r"(?P<el>[0-9]+):(?P<ec>[0-9]+)"
 )
 MIR_BLOCK = re.compile(r"^\s*bb(?P<number>[0-9]+)(?:\s*\([^)]*\))?\s*:\s*\{", re.MULTILINE)
+MIR_BLOCK_END = re.compile(r"^\s*}\s*$", re.MULTILINE)
 MIR_OWNER = re.compile(
-    r"^\s*(?:fn|const|static)\s+(?P<name>.+?)(?:\(|:).*?\{",
+    r"^(?:\s*(?:fn|const|static)\s+(?P<name>.+?)(?:\(|:).*?\{"
+    r"|(?P<constant_name>[^\s{}][^\n{}]*::\{constant#[0-9]+\})\s*:"
+    r"[^\n=]+?=\s*\{)",
     re.MULTILINE,
+)
+MIR_DIRECT_CALL_TERMINATOR = re.compile(
+    r"^(?:_[0-9]+\s*=\s*)?[A-Za-z_][A-Za-z0-9_]*"
+    r"(?:::[A-Za-z_][A-Za-z0-9_]*)*\([^;\n]*\)\s*->\s*"
+    r"(?:bb[0-9]+|unwind\s+unreachable)\s*;"
+    r"(?:\s+//\s+scope\s+[0-9]+\s+at\s+"
+    r"[^\s:][^:\n]*\.rs:[0-9]+:[0-9]+:\s*[0-9]+:[0-9]+)?$"
+)
+MIR_BRACKET_CALL_TERMINATOR = re.compile(
+    r"^_[0-9]+\s*=\s*(?P<callee>.+)\((?P<arguments>.*)\)\s*->\s*"
+    r"\[(?P<targets>[^\[\]\n]*)\]\s*;$",
+    re.DOTALL,
+)
+MIR_TERMINATOR_SCOPE_COMMENT = re.compile(
+    r"^scope\s+[0-9]+\s+at\s+(?:"
+    r"[^\s:][^:]*\.rs:[0-9]+:[0-9]+:\s*[0-9]+:[0-9]+|no-location)$"
+)
+MIR_SUCCESSOR_CLAUSE = re.compile(
+    r"\s+->\s+(?P<targets>bb[0-9]+|\[[^\[\]\n]*\])\s*;$"
 )
 MIR_SCOPE_SPAN = re.compile(
     r"scope\s+(?P<scope>[0-9]+).*?\bat\s+(?P<path>[^\s:][^:]*\.rs):"
     r"(?P<sl>[0-9]+):(?P<sc>[0-9]+):\s*(?P<el>[0-9]+):(?P<ec>[0-9]+)"
 )
+MIR_STATEMENT_SCOPE_SPAN = re.compile(
+    r"^(?P<statement>[^\n]+?)\s+//\s+scope\s+(?P<scope>[0-9]+)\s+at\s+"
+    r"(?P<path>[^\s:][^:]*\.rs):(?P<sl>[0-9]+):(?P<sc>[0-9]+):\s*"
+    r"(?P<el>[0-9]+):(?P<ec>[0-9]+)\s*$"
+)
+MIR_NEGATIVE_LITERAL_STATEMENT = re.compile(
+    r"^_[0-9]+\s*=\s*const\s+-\s*(?P<value>[0-9]+)"
+    r"(?:_(?P<mir_type>[A-Za-z0-9]+))?\s*;$"
+)
+MIR_NEGATIVE_CONST_STATEMENT = re.compile(
+    r"^_[0-9]+\s*=\s*Neg\(\s*const\s+"
+    r"(?:(?P<symbol>E[A-Z0-9_]+)|(?P<value>[0-9]+)(?:_[A-Za-z0-9]+)?)"
+    r"\s*\)\s*;$"
+)
+MIR_CAST_CONST_STATEMENT = re.compile(
+    r"^(?P<temporary>_[0-9]+)\s*=\s*const\s+"
+    r"(?P<symbol>E[A-Z0-9_]+)\s+as\s+(?P<mir_type>[A-Za-z0-9_]+)"
+    r"\s+\(IntToInt\)\s*;$"
+)
+MIR_NEGATIVE_MOVE_STATEMENT = re.compile(
+    r"^_[0-9]+\s*=\s*Neg\(\s*move\s+(?P<temporary>_[0-9]+)\s*\)\s*;$"
+)
+RUST_HFS_CAST_ENVELOPE = re.compile(
+    r"^-\((?P<symbol>E[A-Z0-9_]+)\s+as\s+"
+    r"(?P<source_type>c_long|isize|i64)\)"
+)
+RUST_HFS_ASSIGNMENT_ENVELOPE = re.compile(
+    r"^(?P<indent>[ \t]*)(?P<lhs>ret|rc) = "
+    r"(?P<token>-(?P<symbol>E[A-Z0-9_]+));[ \t]*$"
+)
+RUST_SOURCE_CAST_TO_MIR = {
+    "c_long": "i64",
+    "i64": "i64",
+    "isize": "isize",
+}
 
 
 def span_record(match):
@@ -3357,43 +3418,125 @@ def span_record(match):
     }
 
 
+def mir_terminator_code(line):
+    in_string = False
+    escaped = False
+    code = []
+    grammar = []
+    index = 0
+    while index < len(line):
+        character = line[index]
+        if in_string:
+            code.append(character)
+            grammar.append(" ")
+            if escaped:
+                escaped = False
+            elif character == "\\":
+                escaped = True
+            elif character == '"':
+                in_string = False
+        elif character == '"':
+            code.append(character)
+            grammar.append(" ")
+            in_string = True
+        elif character == "/" and index + 1 < len(line) and line[index + 1] == "/":
+            comment = line[index + 2:].strip()
+            if MIR_TERMINATOR_SCOPE_COMMENT.fullmatch(comment) is None:
+                raise SemanticsV3Error("unknown MIR terminator comment grammar")
+            return "".join(code).rstrip(), "".join(grammar).rstrip()
+        else:
+            code.append(character)
+            grammar.append(character)
+        index += 1
+    if in_string or escaped:
+        raise SemanticsV3Error("unterminated MIR terminator string grammar")
+    return "".join(code), "".join(grammar)
+
+
+def mir_terminator_kind(terminator_code, terminator_grammar):
+    kinds = (
+        (r"^switchInt\(", "switch_int"),
+        (r"^goto\s+->", "goto"),
+        (r"^return;$", "return"),
+        (r"^resume;$", "resume"),
+        (r"^abort;$", "abort"),
+        (r"^unreachable;$", "unreachable"),
+        (r"^unwind\s+resume;$", "unwind_resume"),
+        (r"^unwind\s+terminate(?:\(|;)", "unwind_terminate"),
+        (r"^terminate\(", "terminate"),
+        (r"^drop\(", "drop"),
+        (r"^assert\(", "assert"),
+        (r"^yield\(", "yield"),
+        (r"^falseEdge\s+->", "false_edge"),
+        (r"^falseUnwind\s+->", "false_unwind"),
+        (r"^asm!\(", "inline_asm"),
+        (r"^inline\s+asm\b", "inline_asm"),
+        (r"^tailcall\b", "tail_call"),
+        (r"^coroutine_drop(?:;|\s+->)", "coroutine_drop"),
+    )
+    kind = None
+    for grammar, candidate in kinds:
+        if re.search(grammar, terminator_grammar) is not None:
+            kind = candidate
+            break
+    if (
+        kind is None
+        and MIR_DIRECT_CALL_TERMINATOR.fullmatch(terminator_grammar) is not None
+    ):
+        kind = "call"
+    if kind is None:
+        bracket_call = MIR_BRACKET_CALL_TERMINATOR.fullmatch(
+            terminator_grammar
+        )
+        if (
+            bracket_call is not None
+            and bracket_call.group("callee").strip() not in ("move", "copy")
+            and re.search(r"\bbb[0-9]+\b", bracket_call.group("targets"))
+        ):
+            kind = "call"
+    return kind
+
+
 def mir_terminator(block_text):
     significant = []
     for line in block_text.splitlines():
         stripped = line.strip()
         if stripped and not stripped.startswith("//"):
             significant.append(stripped)
-    joined = " ".join(significant)
-    kinds = (
-        ("switchInt", "switch_int"),
-        ("goto ->", "goto"),
-        ("return;", "return"),
-        ("resume;", "resume"),
-        ("abort;", "abort"),
-        ("unreachable;", "unreachable"),
-        ("terminate(", "terminate"),
-        ("drop(", "drop"),
-        ("assert(", "assert"),
-        ("yield(", "yield"),
-        ("falseEdge", "false_edge"),
-        ("falseUnwind", "false_unwind"),
-        ("inline asm", "inline_asm"),
-        ("tailcall", "tail_call"),
-        ("coroutine_drop", "coroutine_drop"),
-        ("unwind resume", "unwind_resume"),
-        ("unwind terminate", "unwind_terminate"),
-    )
-    kind = None
-    for spelling, candidate in kinds:
-        if spelling in joined:
-            kind = candidate
-            break
-    if kind is None and " -> [" in joined and re.search(r"\bbb[0-9]+\b", joined):
-        kind = "call"
+    trailing = list(significant)
+    while trailing and trailing[-1] == "}":
+        trailing.pop()
+    if not trailing:
+        raise SemanticsV3Error("unknown or missing MIR terminator grammar")
+    start = len(trailing) - 1
+    while True:
+        terminator = "\n".join(trailing[start:])
+        try:
+            terminator_code, terminator_grammar = mir_terminator_code(terminator)
+        except SemanticsV3Error as exc:
+            if (
+                str(exc) != "unterminated MIR terminator string grammar"
+                or start == 0
+            ):
+                raise
+            start -= 1
+            continue
+        break
+    kind = mir_terminator_kind(terminator_code, terminator_grammar)
     if kind is None:
         raise SemanticsV3Error("unknown or missing MIR terminator grammar")
-    successors = sorted(set(int(value) for value in re.findall(r"\bbb([0-9]+)\b", joined)))
-    return kind, successors, joined
+    successor_match = MIR_SUCCESSOR_CLAUSE.search(terminator_grammar)
+    successors = []
+    if successor_match is not None:
+        successors = sorted(
+            set(
+                int(value)
+                for value in re.findall(
+                    r"\bbb([0-9]+)\b", successor_match.group("targets")
+                )
+            )
+        )
+    return kind, successors, terminator
 
 
 def parse_mir_body(data, compiler_path):
@@ -3401,13 +3544,21 @@ def parse_mir_body(data, compiler_path):
         text = data.decode("utf-8")
     except UnicodeDecodeError as exc:
         raise SemanticsV3Error("Rust MIR is not UTF-8: {0}".format(exc))
-    owner_matches = list(MIR_OWNER.finditer(text))
-    if len(owner_matches) != 1:
-        raise SemanticsV3Error("Rust MIR body has no unique owner")
-    owner_match = owner_matches[0]
     blocks = list(MIR_BLOCK.finditer(text))
     if not blocks or blocks[0].group("number") != "0":
         raise SemanticsV3Error("Rust MIR body has no bb0 entry")
+    block_numbers = [int(match.group("number")) for match in blocks]
+    if len(block_numbers) != len(set(block_numbers)):
+        raise SemanticsV3Error("Rust MIR basic blocks are duplicated")
+    owner_matches = list(MIR_OWNER.finditer(text, 0, blocks[0].start()))
+    if len(owner_matches) != 1:
+        raise SemanticsV3Error(
+            "Rust MIR body has no unique owner: {0} matches={1}".format(
+                compiler_path, len(owner_matches)
+            )
+        )
+    owner_match = owner_matches[0]
+    owner = owner_match.group("name") or owner_match.group("constant_name")
     block_records = {}
     scope_spans = {}
     for match in MIR_SCOPE_SPAN.finditer(text):
@@ -3418,6 +3569,10 @@ def parse_mir_body(data, compiler_path):
             raise SemanticsV3Error("Rust MIR basic blocks are duplicated")
         end = blocks[index + 1].start() if index + 1 < len(blocks) else len(text)
         block_text = text[match.end():end]
+        block_end = MIR_BLOCK_END.search(block_text)
+        if block_end is None:
+            raise SemanticsV3Error("Rust MIR basic block has no exact closing brace")
+        block_text = block_text[:block_end.start()]
         kind, successors, terminator = mir_terminator(block_text)
         spans = [span_record(item) for item in MIR_SPAN.finditer(block_text)]
         for scope in set(int(value) for value in re.findall(r"\bscope\s+([0-9]+)\b", block_text)):
@@ -3455,7 +3610,7 @@ def parse_mir_body(data, compiler_path):
     return {
         "body_id": compiler_path,
         "cfg_sha256": sha256_bytes(canonical_bytes(cfg)),
-        "owner": owner_match.group("name"),
+        "owner": owner,
         "blocks": block_records,
         "reachable": reachable,
         "stage": Path(compiler_path).name,
@@ -3479,6 +3634,211 @@ def span_equals_token(span, line, column, end_column):
         and span["start_column"] == column
         and span["end_column"] == end_column
     )
+
+
+def rust_mir_span_targets_exact_source(path, rust_source):
+    require_string(path, "Rust MIR statement span path")
+    rust_source = require_safe_relative_path(
+        rust_source, "Rust semantic source path"
+    )
+    if "\\" in path:
+        raise SemanticsV3Error(
+            "Rust MIR statement span path contains a backslash"
+        )
+    return path == "$REPO/" + rust_source
+
+
+def rust_hfs_span_authorities(site, line_text):
+    if "\n" in line_text or "\r" in line_text:
+        raise SemanticsV3Error("Rust HFS source envelope is multiline")
+    start = site["column"] - 1
+    end = site["end_column"] - 1
+    if (
+        start < 0
+        or end <= start
+        or line_text[start:end] != site["expression"]
+        or site["expression"] not in (
+            "-" + site["errno"], "-(" + site["errno"]
+        )
+    ):
+        raise SemanticsV3Error("Rust HFS token span differs from exact source")
+    token_span = {
+        "end_column": site["end_column"],
+        "end_line": site["line"],
+        "start_column": site["column"],
+        "start_line": site["line"],
+    }
+    authorities = [
+        {
+            "grammar": "exact_hfs_token",
+            "mir_type": None,
+            "source_span": token_span,
+            "source_type": None,
+        }
+    ]
+    cast = RUST_HFS_CAST_ENVELOPE.match(line_text[start:])
+    if cast is not None and cast.group("symbol") == site["errno"]:
+        expression = cast.group(0)
+        stripped = line_text.strip()
+        bounded_contexts = (
+            expression,
+            "None => " + expression + ",",
+            "_ => " + expression + ",",
+            "_ => return " + expression + ",",
+            "if ret == " + expression + " {",
+            "if time_remain == " + expression + " {",
+            "let ret = " + expression + ";",
+            "return " + expression + ";",
+            "return if is_store { " + expression + " } else { 0 };",
+        )
+        if stripped in bounded_contexts:
+            source_type = cast.group("source_type")
+            authorities.append(
+                {
+                    "grammar": "parenthesized_cast",
+                    "mir_type": RUST_SOURCE_CAST_TO_MIR[source_type],
+                    "source_span": {
+                        "end_column": site["column"] + len(cast.group(0)),
+                        "end_line": site["line"],
+                        "start_column": site["column"],
+                        "start_line": site["line"],
+                    },
+                    "source_type": source_type,
+                }
+            )
+    assignment = RUST_HFS_ASSIGNMENT_ENVELOPE.fullmatch(line_text)
+    if (
+        assignment is not None
+        and assignment.group("symbol") == site["errno"]
+        and assignment.start("token") == start
+        and assignment.end("token") == end
+    ):
+        authorities.append(
+            {
+                "grammar": "direct_assignment",
+                "mir_type": None,
+                "source_span": {
+                    "end_column": site["end_column"],
+                    "end_line": site["line"],
+                    "start_column": assignment.start("lhs") + 1,
+                    "start_line": site["line"],
+                },
+                "source_type": None,
+            }
+        )
+    expanded = [
+        item for item in authorities if item["grammar"] != "exact_hfs_token"
+    ]
+    if len(expanded) > 1:
+        raise SemanticsV3Error("Rust HFS source envelope is ambiguous")
+    return authorities
+
+
+def mir_negative_errno_witnesses(block_text, errno, value):
+    parsed = []
+    for line_number, line in enumerate(block_text.splitlines()):
+        match = MIR_STATEMENT_SCOPE_SPAN.fullmatch(line)
+        if match is None:
+            continue
+        parsed.append(
+            {
+                "line_number": line_number,
+                "span": span_record(match),
+                "statement": match.group("statement").strip(),
+            }
+        )
+    witnesses = []
+    casts = {}
+    negative_moves = []
+    for record in parsed:
+        statement = record["statement"]
+        literal = MIR_NEGATIVE_LITERAL_STATEMENT.fullmatch(statement)
+        negative_const = MIR_NEGATIVE_CONST_STATEMENT.fullmatch(statement)
+        cast = MIR_CAST_CONST_STATEMENT.fullmatch(statement)
+        negative_move = MIR_NEGATIVE_MOVE_STATEMENT.fullmatch(statement)
+        direct_kind = None
+        if literal is not None and int(literal.group("value")) == value:
+            direct_kind = "negative_numeric_literal"
+        elif negative_const is not None:
+            symbol = negative_const.group("symbol")
+            number = negative_const.group("value")
+            if symbol == errno or (number is not None and int(number) == value):
+                direct_kind = "negative_const_operand"
+        if direct_kind is not None:
+            witnesses.append(
+                {
+                    "kind": direct_kind,
+                    "mir_type": (
+                        literal.group("mir_type")
+                        if literal is not None else None
+                    ),
+                    "span": record["span"],
+                    "statement_sha256": sha256_bytes(
+                        statement.encode("utf-8")
+                    ),
+                }
+            )
+        if cast is not None and cast.group("symbol") == errno:
+            casts.setdefault(cast.group("temporary"), []).append(
+                {
+                    "line_number": record["line_number"],
+                    "mir_type": cast.group("mir_type"),
+                    "span": record["span"],
+                    "statement_sha256": sha256_bytes(
+                        statement.encode("utf-8")
+                    ),
+                }
+            )
+        if negative_move is not None:
+            negative_moves.append(
+                {
+                    "line_number": record["line_number"],
+                    "span": record["span"],
+                    "statement_sha256": sha256_bytes(
+                        statement.encode("utf-8")
+                    ),
+                    "temporary": negative_move.group("temporary"),
+                }
+            )
+    for negative in negative_moves:
+        for cast in casts.get(negative["temporary"], []):
+            if cast["line_number"] + 1 != negative["line_number"]:
+                continue
+            cast_span = cast["span"]
+            negative_span = negative["span"]
+            if (
+                cast_span["path"] != negative_span["path"]
+                or cast_span["start_line"] != negative_span["start_line"]
+                or cast_span["end_line"] != negative_span["end_line"]
+                or cast_span["start_column"] != negative_span["start_column"] + 1
+                or cast_span["end_column"] != negative_span["end_column"]
+            ):
+                continue
+            witnesses.append(
+                {
+                    "cast_span": cast_span,
+                    "cast_statement_sha256": cast["statement_sha256"],
+                    "kind": "cast_const_then_negative_move",
+                    "mir_type": cast["mir_type"],
+                    "negative_statement_sha256": negative["statement_sha256"],
+                    "span": negative_span,
+                }
+            )
+    return sorted(
+        {canonical_bytes(item): item for item in witnesses}.values(),
+        key=canonical_bytes,
+    )
+
+
+def rust_mir_witness_matches_authority(witness, authority):
+    if authority["grammar"] == "parenthesized_cast":
+        if witness["kind"] == "cast_const_then_negative_move":
+            return witness["mir_type"] == authority["mir_type"]
+        return (
+            witness["kind"] == "negative_numeric_literal"
+            and witness["mir_type"] == authority["mir_type"]
+        )
+    return witness["kind"] != "cast_const_then_negative_move"
 
 
 def errno_constants(source_data):
@@ -3532,49 +3892,83 @@ def analyze_rust_sites(inputs, invocation, payloads, repo):
         or len({item["line"] for item in sites_input}) != EXPECTED_RUST_SITE_COUNT
     ):
         raise SemanticsV3Error("immutable Rust HFS site/line closure changed")
+    source_lines = source_data.decode("utf-8").splitlines()
+    site_authorities = {}
+    for site in sites_input:
+        if site["line"] < 1 or site["line"] > len(source_lines):
+            raise SemanticsV3Error("Rust HFS token line exceeds exact source")
+        site_authorities[site["id"]] = rust_hfs_span_authorities(
+            site, source_lines[site["line"] - 1]
+        )
     bodies = []
     for binding in invocation["mir_files"]:
         data = validate_file_binding(binding, payloads, "Rust MIR", {"compiler_path"})
         bodies.append(parse_mir_body(data, binding["compiler_path"]))
+    witness_index = {}
+    site_errnos = sorted({item["errno"] for item in sites_input})
+    for body in bodies:
+        for number, block in body["blocks"].items():
+            if number not in body["reachable"]:
+                continue
+            for errno in site_errnos:
+                value = constants.get(errno)
+                if value is None or value <= 0:
+                    raise SemanticsV3Error(
+                        "Rust HFS errno has no positive source constant"
+                    )
+                for witness in mir_negative_errno_witnesses(
+                    block["text"], errno, value
+                ):
+                    span = witness["span"]
+                    if not rust_mir_span_targets_exact_source(
+                        span["path"], rust_source
+                    ):
+                        continue
+                    key = (
+                        errno, span["start_line"], span["start_column"],
+                        span["end_line"], span["end_column"],
+                    )
+                    witness_index.setdefault(key, []).append(
+                        {
+                            "basic_block": number,
+                            "body": body,
+                            "witness": witness,
+                        }
+                    )
     records = []
-    source_lines = source_data.decode("utf-8").splitlines()
     for site in sites_input:
         value = constants.get(site["errno"])
         if value is None or value <= 0:
             raise SemanticsV3Error("Rust HFS errno has no positive source constant")
-        line_text = source_lines[site["line"] - 1]
-        start = site["column"] - 1
-        end = site["end_column"] - 1
-        if start < 0 or end <= start or line_text[start:end] != site["expression"]:
-            raise SemanticsV3Error("Rust HFS token span differs from exact source")
         candidates = []
-        for body in bodies:
-            for number, block in body["blocks"].items():
-                if (
-                    number not in body["reachable"]
-                    or not mir_contains_negative_errno(block["text"], value)
+        for authority in site_authorities[site["id"]]:
+            source_span = authority["source_span"]
+            key = (
+                site["errno"], source_span["start_line"],
+                source_span["start_column"], source_span["end_line"],
+                source_span["end_column"],
+            )
+            for indexed in witness_index.get(key, []):
+                witness = indexed["witness"]
+                if not rust_mir_witness_matches_authority(
+                    witness, authority
                 ):
                     continue
-                for span in block["spans"]:
-                    normalized_path = span["path"].replace("\\", "/")
-                    if not normalized_path.endswith("/" + rust_source):
-                        continue
-                    if not span_equals_token(
-                        span, site["line"], site["column"], site["end_column"]
-                    ):
-                        continue
-                    candidates.append(
-                        {
-                            "basic_block": number,
-                            "body_id": body["body_id"],
-                            "cfg_sha256": body["cfg_sha256"],
-                            "errno_negative_value": -value,
-                            "mir_span": span,
-                            "owner": body["owner"],
-                            "reachable_from_bb0": True,
-                            "stage": body["stage"],
-                        }
-                    )
+                body = indexed["body"]
+                candidates.append(
+                    {
+                        "basic_block": indexed["basic_block"],
+                        "body_id": body["body_id"],
+                        "cfg_sha256": body["cfg_sha256"],
+                        "errno_negative_value": -value,
+                        "mir_span": witness["span"],
+                        "mir_witness": witness,
+                        "owner": body["owner"],
+                        "reachable_from_bb0": True,
+                        "source_span_binding": authority,
+                        "stage": body["stage"],
+                    }
+                )
         candidates = sorted(
             {canonical_bytes(item): item for item in candidates}.values(), key=canonical_bytes
         )

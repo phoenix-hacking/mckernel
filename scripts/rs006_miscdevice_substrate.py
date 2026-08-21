@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Fail-closed source-substrate checker for the RS-006 Rust miscdevice base.
 
-The two checked upstream backports are active ordered Rocky compatibility
-inputs.  Successful structural and exact-source replay proves only that narrow
-source substrate and cannot award RS-006 or tracker credit.
+Two checked upstream backports and one repository-local hardening patch are
+active ordered Rocky compatibility inputs. Successful structural and
+exact-source replay proves only that narrow source substrate and cannot award
+build, runtime, review, RS-006, or tracker credit.
 """
 
 from __future__ import print_function
@@ -21,7 +22,7 @@ import tempfile
 
 
 CONTRACT_PATH = "host-kernel/contracts/rs006-miscdevice-substrate-v1.json"
-EXPECTED_CONTRACT_SHA256 = "bea916b6b8b278f5e517acbfbdc29619a13b69ff032d5d36dc8c8135e390d5c6"
+EXPECTED_CONTRACT_SHA256 = "8cc1e351ac7bb49e1b55bd8f7a656a02203d897e31d630d4ee4f8479f674f561"
 SOURCE_LOCK_PATH = "host-kernel/rocky/source-lock.json"
 
 BASELINE_PATCHES = (
@@ -63,12 +64,13 @@ BASELINE_PATCHES = (
      "e271fa6f30bb3b39a24ae2f926dfa067577997ecf2076e412b5575a4d785021e"),
 )
 
-CANDIDATE_PATCHES = (
+ACTIVE_PATCHES = (
     {
         "path": "host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch",
         "sha256": "bc9b84c4c8bf36b7fac02dd3d04e1a170b86ee143b76739a6eed3e564cdebc2b",
         "bytes": 1935,
         "commit": "a69dc41a4211b0da311ae3a3b79dd4497c9dfb60",
+        "provenance": "upstream",
         "subject": "rust: types: add Opaque::try_ffi_init",
         "paths": ("rust/kernel/types.rs",),
     },
@@ -77,12 +79,25 @@ CANDIDATE_PATCHES = (
         "sha256": "d377b5bd91d507e383b8673beac42381b9b6c37a47bba7955c768a8f6ddaad25",
         "bytes": 10726,
         "commit": "f893691e742688ae21ad597c5bba13bef54706cd",
+        "provenance": "upstream",
         "subject": "rust: miscdevice: add base miscdevice abstraction",
         "paths": (
             "rust/bindings/bindings_helper.h",
             "rust/kernel/lib.rs",
             "rust/kernel/miscdevice.rs",
         ),
+    },
+    {
+        "path": "host-kernel/rocky/patches/0020a-rust-miscdevice-bind-file-operations-to-module.patch",
+        "sha256": "3a49240fc0a10d5ec14cd33d0ec7d09775209edd08fba10a6ee786dc59ea5b21",
+        "bytes": 3353,
+        "provenance": "repository-local",
+        "subject": "rust: miscdevice: bind file operations to their module",
+        "paths": ("rust/kernel/miscdevice.rs",),
+        "local_origin": "McKernel RS-006 miscdevice module-owner compatibility",
+        "rocky_base": "linux-6.12.0-211.44.1.el10_2",
+        "license": "GPL-2.0",
+        "integration_status": "active-ordered-unbuilt",
     },
 )
 
@@ -116,7 +131,7 @@ AFTER_0018 = (
      "ae82e9c941afa17c48737d2b2e49ac6d26f670b1"),
 )
 
-AFTER_CANDIDATES = (
+AFTER_ACTIVE_PATCHES = (
     ("rust/kernel/types.rs", 20478,
      "3fde339b8a41b521407faa9e45d51ce9ecb183a170e9c650a72d25c73d50f6f7",
      "070d03152937fab82da406591b2f772f7354ca66"),
@@ -126,14 +141,15 @@ AFTER_CANDIDATES = (
     ("rust/bindings/bindings_helper.h", 1231,
      "f2644392ca91a791e4ab2ffb05a9b30a911a51f1ae025c696c710cfb3a447d07",
      "84303bf221dd95808cf7eeae7909a3fe8fbc492e"),
-    ("rust/kernel/miscdevice.rs", 7627,
-     "6cfa6ed228561b7a8d41df50700868480d29514dd3469935679b11015c93fc9c",
-     "cbd5249b5b45d2fd3ade4517875935a1a893f0a2"),
+    ("rust/kernel/miscdevice.rs", 7705,
+     "0f2c43a6a64688b6b8387de4813a76289a66f67a1787893d747273c36983b8ee",
+     "0e336f63e64c4c996e2894b08f60df30ff793fff"),
 )
 
 READINESS_BLOCKERS = (
-    "the two upstream backports are integrated as ordered source inputs, but source replay alone does not prove an exact configured kernel build",
-    "an exact Rocky Linux configured kernel compile with Rust 1.92 has not been captured for this two-commit series",
+    "the two upstream backports and repository-local module-owner patch are integrated as ordered source inputs, but source replay alone does not prove an exact configured kernel build",
+    "an exact Rocky Linux configured kernel compile with Rust 1.92 has not been captured for this three-patch series",
+    "the repository-local module-owner and explicit compat-ioctl change lacks independent source, license, module-owner, compat-ABI, and pinned-lifetime review",
     "the dynamic-minor miscdevice API cannot represent the legacy fixed 64-minor IHK OS-device publication model by itself",
     "the abstraction exposes no read, write, poll, mmap, llseek, or file-flag access needed by broader McKernel device semantics",
     "no McKernel crate uses this substrate and no exact module-load, ioctl, compat-ioctl, teardown, or runtime evidence exists",
@@ -223,7 +239,7 @@ def _load_contract(data):
         raise ContractError("RS-006 contract must be an object")
     expected_keys = {
         "capability_scope", "claim_scope", "contract_id", "exact_replay",
-        "integration", "readiness", "schema_version", "target", "upstream_series",
+        "active_series", "integration", "readiness", "schema_version", "target",
     }
     if set(contract) != expected_keys:
         raise ContractError("RS-006 contract top-level keys differ")
@@ -250,21 +266,28 @@ def _load_contract(data):
     if integration.get("preserved_predecessor_numbers") != [
             "0013", "0014", "0015", "0016", "0017", "0018"]:
         raise ContractError("RS-006 predecessor-number vector differs")
-    if integration.get("active_patch_numbers") != ["0019", "0020"]:
+    if integration.get("active_patch_numbers") != ["0019", "0020", "0020a"]:
         raise ContractError("RS-006 active-number vector differs")
-    expected_order = [row["commit"] for row in CANDIDATE_PATCHES]
-    actual_order = [row.get("upstream_commit") for row in contract.get("upstream_series", ())]
-    if actual_order != expected_order:
+    series = contract.get("active_series", ())
+    if len(series) != len(ACTIVE_PATCHES):
+        raise ContractError("RS-006 active patch count differs")
+    expected_upstream_order = [row["commit"] for row in ACTIVE_PATCHES[:2]]
+    actual_upstream_order = [row.get("upstream_commit") for row in series[:2]]
+    if actual_upstream_order != expected_upstream_order:
         raise ContractError("RS-006 upstream prerequisite order differs")
-    if contract["upstream_series"][1].get("parent_commit") != expected_order[0]:
+    if series[1].get("parent_commit") != expected_upstream_order[0]:
         raise ContractError("miscdevice commit is not bound to its explicit prerequisite")
-    for actual, expected in zip(contract["upstream_series"], CANDIDATE_PATCHES):
+    for actual, expected in zip(series, ACTIVE_PATCHES):
         if (
             actual.get("patch_path") != expected["path"]
             or actual.get("patch_sha256") != expected["sha256"]
             or actual.get("patch_bytes") != expected["bytes"]
         ):
             raise ContractError("RS-006 active patch identity differs")
+        if expected["provenance"] == "repository-local":
+            for field in ("integration_status", "license", "local_origin", "rocky_base"):
+                if actual.get(field) != expected[field]:
+                    raise ContractError("RS-006 local active patch provenance differs")
     replay = contract.get("exact_replay", {})
     if replay.get("baseline_compatibility_patch_count") != len(BASELINE_PATCHES):
         raise ContractError("RS-006 baseline compatibility count differs")
@@ -277,24 +300,36 @@ def _load_contract(data):
 
 def _validate_patch(data, expected):
     if len(data) != expected["bytes"] or _sha256(data) != expected["sha256"]:
-        raise ContractError("candidate patch identity changed: {0}".format(expected["path"]))
+        raise ContractError("active patch identity changed: {0}".format(expected["path"]))
     if b"\r" in data or b"\0" in data:
-        raise ContractError("candidate patch must be LF-only non-binary text")
-    first = data.split(b"\n", 1)[0].decode("ascii", "strict")
-    if first != "From {0} Mon Sep 17 00:00:00 2001".format(expected["commit"]):
-        raise ContractError("candidate patch commit provenance changed")
+        raise ContractError("active patch must be LF-only non-binary text")
+    if expected["provenance"] == "upstream":
+        first = data.split(b"\n", 1)[0].decode("ascii", "strict")
+        if first != "From {0} Mon Sep 17 00:00:00 2001".format(expected["commit"]):
+            raise ContractError("active patch commit provenance changed")
+    else:
+        required_headers = (
+            "From: McKernel local compatibility integration",
+            "Status: active ordered Rocky compatibility patch; unbuilt and noncrediting",
+            "License: " + expected["license"],
+        )
+        text = data.decode("utf-8", "strict")
+        if any(text.count(header) != 1 for header in required_headers):
+            raise ContractError("local active patch provenance changed")
+        if "Upstream-Commit:" in text or "Stable-Commit:" in text:
+            raise ContractError("local active patch invents upstream provenance")
     subject = b"Subject: [PATCH] " + expected["subject"].encode("utf-8") + b"\n"
     if subject not in data:
-        raise ContractError("candidate patch subject changed")
+        raise ContractError("active patch subject changed")
     paths = []
     for left, right in DIFF_HEADER.findall(data):
         if left != right:
-            raise ContractError("candidate patch renames are forbidden")
+            raise ContractError("active patch renames are forbidden")
         paths.append(left.decode("utf-8"))
     if tuple(paths) != expected["paths"]:
-        raise ContractError("candidate patch path vector changed")
+        raise ContractError("active patch path vector changed")
     if b"GIT binary patch" in data:
-        raise ContractError("candidate patch must be textual")
+        raise ContractError("active patch must be textual")
 
 
 def _validate_file_vector(root, rows, label):
@@ -395,10 +430,10 @@ def replay_exact_source(repo_root, kernel_source, patch_data):
                 stream.write(data)
             patch_files.append((relative, destination))
         for index, data in enumerate(patch_data):
-            destination = os.path.join(temporary, "candidate-{0:02d}.patch".format(index + 1))
+            destination = os.path.join(temporary, "active-{0:02d}.patch".format(index + 1))
             with open(destination, "wb") as stream:
                 stream.write(data)
-            patch_files.append((CANDIDATE_PATCHES[index]["path"], destination))
+            patch_files.append((ACTIVE_PATCHES[index]["path"], destination))
 
         for relative, patch_path in patch_files[:len(BASELINE_PATCHES)]:
             status, output = _run_patch(tree, patch_path)
@@ -409,22 +444,22 @@ def replay_exact_source(repo_root, kernel_source, patch_data):
         if os.path.lexists(os.path.join(tree, "rust/kernel/miscdevice.rs")):
             raise ContractError("post-0018 miscdevice preimage must be absent")
 
-        candidate_files = patch_files[len(BASELINE_PATCHES):]
-        for relative, patch_path in candidate_files:
+        active_files = patch_files[len(BASELINE_PATCHES):]
+        for relative, patch_path in active_files:
             status, output = _run_patch(tree, patch_path)
             if status:
-                raise ContractError("strict candidate replay failed for {0}: {1}".format(
+                raise ContractError("strict active-patch replay failed for {0}: {1}".format(
                     relative, output.strip()))
-        _validate_file_vector(tree, AFTER_CANDIDATES, "candidate postimage")
+        _validate_file_vector(tree, AFTER_ACTIVE_PATCHES, "active-patch postimage")
 
-        for relative, patch_path in candidate_files:
+        for relative, patch_path in active_files:
             status, _output = _run_patch(tree, patch_path)
             if status == 0:
-                raise ContractError("candidate patch accepted a second application: {0}".format(relative))
+                raise ContractError("active patch accepted a second application: {0}".format(relative))
     return {
         "baseline_patch_count": len(BASELINE_PATCHES),
-        "candidate_patch_count": len(CANDIDATE_PATCHES),
-        "postimage_count": len(AFTER_CANDIDATES),
+        "active_patch_count": len(ACTIVE_PATCHES),
+        "postimage_count": len(AFTER_ACTIVE_PATCHES),
         "strict_fuzz": 0,
     }
 
@@ -436,23 +471,31 @@ def _validate_authority_bindings(repo_root):
         "scripts/rocky_kernel_license_inventory.py",
         "scripts/linux_api_exact_probe.py",
         "scripts/rocky_kernel_config_resolution.py",
+        "scripts/rocky_kernel_config_resolution_v2.py",
         "host-kernel/rocky/evidence/config-resolution-contract-v1.json",
+        "host-kernel/rocky/evidence/config-resolution-contract-v2.json",
+        "scripts/rocky_kernel_rk006_patch_authority.py",
+        "host-kernel/rocky/rk006-patch-authority-v1.json",
         "scripts/tests/test_rust_target_compatibility_patches.py",
         ".github/workflows/native-rust-host-modules-exact-build.yml",
         ".github/workflows/rs001-linux-api-exact-probe.yml",
     )
     for relative in path_authorities:
         data = _read_repo(repo_root, relative, "integration authority")
-        for patch in CANDIDATE_PATCHES:
+        for patch in ACTIVE_PATCHES:
             needle = patch["path"].encode("utf-8")
             if needle not in data and os.path.basename(needle) not in data:
                 raise ContractError(
                     "active patch is absent from authority {0}".format(relative))
     provenance_data = _read_repo(
         repo_root, "scripts/linux_api_exact_probe.py", "exact-probe authority")
-    for patch in CANDIDATE_PATCHES:
-        if patch["commit"].encode("ascii") not in provenance_data:
+    for patch in ACTIVE_PATCHES:
+        if patch["provenance"] == "upstream" and patch["commit"].encode("ascii") not in provenance_data:
             raise ContractError("active patch provenance is absent from exact-probe authority")
+        if patch["provenance"] == "repository-local" and (
+                patch["local_origin"].encode("utf-8") not in provenance_data
+                or patch["integration_status"].encode("ascii") not in provenance_data):
+            raise ContractError("local active patch provenance is absent from exact-probe authority")
 
 
 def check(repo_root, kernel_source=None, contract_override=None, patch_overrides=None):
@@ -463,10 +506,10 @@ def check(repo_root, kernel_source=None, contract_override=None, patch_overrides
     contract = _load_contract(contract_data)
     patch_overrides = patch_overrides or {}
     patch_data = []
-    for expected in CANDIDATE_PATCHES:
+    for expected in ACTIVE_PATCHES:
         data = patch_overrides.get(expected["path"])
         if data is None:
-            data = _read_repo(repo_root, expected["path"], "candidate patch")
+            data = _read_repo(repo_root, expected["path"], "active patch")
         _validate_patch(data, expected)
         patch_data.append(data)
     _validate_authority_bindings(repo_root)

@@ -42,32 +42,33 @@ SYMBOLS = (
 )
 
 arguments = sys.argv[1:]
-if len(arguments) != 4:
+if len(arguments) != 9:
     print("wrong argument count", file=sys.stderr)
     sys.exit(91)
 if arguments[0] != "ARCH=x86_64" or arguments[1] != "LLVM=1":
     print("architecture/toolchain command drift", file=sys.stderr)
     sys.exit(92)
-if not arguments[2].startswith("O=/") or arguments[3] != "olddefconfig":
-    print("O=/olddefconfig command drift", file=sys.stderr)
+expected_identity = [
+    "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+    "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+    "KBUILD_BUILD_USER=mckernel",
+    "KBUILD_BUILD_VERSION=1",
+    "SOURCE_DATE_EPOCH=1786434034",
+]
+if arguments[2:7] != expected_identity:
+    print("deterministic identity command drift", file=sys.stderr)
     sys.exit(93)
-output = arguments[2][2:]
+if not arguments[7].startswith("O=/") or arguments[8] != "olddefconfig":
+    print("O=/olddefconfig command drift", file=sys.stderr)
+    sys.exit(94)
+output = arguments[7][2:]
 config = os.path.join(output, ".config")
 log = os.environ["FAKE_MAKE_LOG"]
 with open(log, "a") as stream:
     stream.write(json.dumps({
         "argv": arguments,
         "cwd": os.getcwd(),
-        "fixed_environment": dict((name, os.environ.get(name)) for name in ("LANG", "LC_ALL", "TZ")),
-        "removed_environment_present": [
-            name for name in (
-                "ARCH", "GNUMAKEFLAGS", "KBUILD_EXTMOD", "KBUILD_KCONFIG", "KBUILD_OUTPUT",
-                "KBUILD_SRC", "KCONFIG_ALLCONFIG", "KCONFIG_CONFIG",
-                "KCONFIG_NOSILENTUPDATE", "KCONFIG_OVERWRITECONFIG", "LLVM",
-                "MAKEFLAGS", "MAKEFILES", "MAKELEVEL",
-                "MFLAGS", "O"
-            ) if name in os.environ
-        ],
+        "environment": dict(os.environ),
     }, sort_keys=True) + "\n")
 with open(log, "r") as stream:
     invocation = sum(1 for line in stream if line)
@@ -206,7 +207,30 @@ def make_fake_environment(root, log_name="make.log"):
     return environment
 
 
+def fixed_test_environment(environ=None):
+    source = {} if environ is None else environ
+    result = dict(solver.FIXED_ENVIRONMENT)
+    for name, value in source.items():
+        if name.startswith("FAKE_"):
+            result[name] = value
+    return result
+
+
 class NativeRustKconfigSolverOracleTests(unittest.TestCase):
+    def test_make_environment_is_a_closed_fixed_allowlist(self):
+        hostile = {
+            "BASH_ENV": "/tmp/attacker",
+            "CC": "/tmp/cc",
+            "GITHUB_ENV": "/tmp/github-env",
+            "LD_PRELOAD": "/tmp/preload.so",
+            "MAKEFLAGS": "KBUILD_BUILD_USER=attacker",
+            "PATH": "/tmp/bin",
+            "RUSTFLAGS": "--cfg attacker",
+        }
+        self.assertEqual(
+            solver.FIXED_ENVIRONMENT, solver._sanitized_environment(hostile)
+        )
+
     def test_exact_54_case_oracle_and_distribution(self):
         requests = solver.matrix_requests()
         self.assertEqual(54, len(requests))
@@ -341,9 +365,14 @@ class NativeRustKconfigSolverArtifactTests(unittest.TestCase):
         cls.seed = make_seed(cls.root)
         cls.environment = make_fake_environment(cls.root)
         cls.matrix_dir = os.path.join(cls.root, "matrix")
-        cls.artifact, cls.document = solver.run_solver(
-            cls.source, cls.seed, cls.matrix_dir, environ=cls.environment
-        )
+        with mock.patch.object(
+            solver, "MAKE_EXECUTABLE", os.path.join(cls.root, "bin", "make")
+        ), mock.patch.object(
+            solver, "_sanitized_environment", side_effect=fixed_test_environment
+        ):
+            cls.artifact, cls.document = solver.run_solver(
+                cls.source, cls.seed, cls.matrix_dir, environ=cls.environment
+            )
         with open(cls.artifact, "rb") as stream:
             cls.raw = stream.read()
 
@@ -405,11 +434,13 @@ class NativeRustKconfigSolverArtifactTests(unittest.TestCase):
             self.assertEqual(self.source, row["cwd"])
             self.assertEqual("ARCH=x86_64", row["argv"][0])
             self.assertEqual("LLVM=1", row["argv"][1])
-            self.assertEqual("olddefconfig", row["argv"][3])
-            self.assertTrue(row["argv"][2].startswith("O=" + self.matrix_dir + os.sep))
-            self.assertEqual(solver.FIXED_ENVIRONMENT, row["fixed_environment"])
-            self.assertEqual([], row["removed_environment_present"])
-            output_counts[row["argv"][2]] = output_counts.get(row["argv"][2], 0) + 1
+            self.assertEqual(list(solver.MAKE_ARGV_TEMPLATE[1:8]), row["argv"][:7])
+            self.assertEqual("olddefconfig", row["argv"][8])
+            self.assertTrue(row["argv"][7].startswith("O=" + self.matrix_dir + os.sep))
+            observed_environment = dict(row["environment"])
+            observed_environment.pop("FAKE_MAKE_LOG")
+            self.assertEqual(solver.FIXED_ENVIRONMENT, observed_environment)
+            output_counts[row["argv"][7]] = output_counts.get(row["argv"][7], 0) + 1
         self.assertEqual(55, len(output_counts))
         self.assertEqual({2}, set(output_counts.values()))
 
@@ -640,24 +671,36 @@ class NativeRustKconfigSolverFailureTests(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree(self.root)
 
-    def failed_run(self, environment_updates=None, source=None, seed=None):
+    def failed_run(
+        self, environment_updates=None, source=None, seed=None, make_executable=None
+    ):
         self.serial += 1
         environment = dict(self.environment)
         environment["FAKE_MAKE_LOG"] = os.path.join(self.root, "failure-{0}.log".format(self.serial))
         if environment_updates:
             environment.update(environment_updates)
         matrix = os.path.join(self.root, "matrix-{0}".format(self.serial))
-        with self.assertRaises(solver.SolverError):
-            solver.run_solver(
-                self.source if source is None else source,
-                self.seed if seed is None else seed,
-                matrix,
-                environ=environment,
-            )
+        executable = (
+            os.path.join(self.root, "bin", "make")
+            if make_executable is None
+            else make_executable
+        )
+        with mock.patch.object(
+            solver, "MAKE_EXECUTABLE", executable
+        ), mock.patch.object(
+            solver, "_sanitized_environment", side_effect=fixed_test_environment
+        ):
+            with self.assertRaises(solver.SolverError):
+                solver.run_solver(
+                    self.source if source is None else source,
+                    self.seed if seed is None else seed,
+                    matrix,
+                    environ=environment,
+                )
 
     def test_make_nonzero_and_missing_command_fail_closed(self):
         self.failed_run({"FAKE_FAIL_AT": "1"})
-        self.failed_run({"PATH": os.path.join(self.root, "missing-bin")})
+        self.failed_run(make_executable=os.path.join(self.root, "missing", "make"))
 
     def test_matrix_basename_with_trailing_lf_is_rejected(self):
         matrix = os.path.join(self.root, "matrix-newline\n")

@@ -37,7 +37,7 @@ jobs:
       image: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
     defaults:
       run:
-        shell: bash
+        shell: /usr/bin/bash --noprofile --norc -p -e -o pipefail {0}
 
     steps:
       - name: Initialize first-failure evidence and exact Rocky tools
@@ -83,14 +83,46 @@ jobs:
 
       - name: Verify immutable build inputs and native module link contracts
         env:
+          BASH_ENV: ""
           BUILD_EVIDENCE: ${{ runner.temp }}/native-rust-build-evidence
+          ENV: ""
+          EXPECTED_HEAD_SHA: ${{ inputs.validation_sha }}
+          GLIBC_TUNABLES: ""
+          LD_ASSUME_KERNEL: ""
+          LD_AUDIT: ""
+          LD_BIND_NOW: ""
+          LD_DEBUG: ""
+          LD_DEBUG_OUTPUT: ""
+          LD_DYNAMIC_WEAK: ""
+          LD_HWCAP_MASK: ""
+          LD_LIBRARY_PATH: ""
+          LD_ORIGIN_PATH: ""
+          LD_PREFER_MAP_32BIT_EXEC: ""
+          LD_PRELOAD: ""
+          LD_PROFILE: ""
+          LD_PROFILE_OUTPUT: ""
+          LD_SHOW_AUXV: ""
+          PATH: /usr/sbin:/usr/bin:/sbin:/bin
+          PYTHONHOME: ""
+          PYTHONPATH: ""
         run: |
           set -euo pipefail
+          PATH=/usr/sbin:/usr/bin:/sbin:/bin
+          export PATH
+          github_env_file="$GITHUB_ENV"
+          github_path_file="$GITHUB_PATH"
+          unset GITHUB_ENV GITHUB_PATH
           [[ "$EXPECTED_HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]
           test "$(git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"
           test "$(git -C ihk rev-parse HEAD)" = "3114d9e7101ad52030eb3effa849a5c108972a1f"
           (cd "$BUILD_EVIDENCE" && sha256sum --check --strict SHA256SUMS)
           test "$(cat "$BUILD_EVIDENCE/commit.sha")" = "$EXPECTED_HEAD_SHA"
+          test -x /usr/sbin/modinfo
+          test ! -L /usr/sbin/modinfo
+          test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' /usr/sbin/modinfo)" = kmod
+          test -x /usr/bin/nm
+          test ! -L /usr/bin/nm
+          test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' /usr/bin/nm)" = binutils
           for symbol in \
             CONFIG_BINFMT_ELF CONFIG_BLK_DEV_INITRD CONFIG_MODULES \
             CONFIG_MODULE_UNLOAD CONFIG_PRINTK CONFIG_PROC_FS CONFIG_RD_GZIP \
@@ -100,21 +132,51 @@ jobs:
           done
           grep -qx '# CONFIG_MODULE_SIG_FORCE is not set' \
             "$BUILD_EVIDENCE/resolved.config"
-          python3 scripts/native_rust_runtime_evidence.py --repo "$GITHUB_WORKSPACE" --check-contract
-          python3 scripts/ihk_native_lifecycle_check.py \
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/native_rust_runtime_evidence.py \
+            --repo "$GITHUB_WORKSPACE" --check-contract
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/ihk_native_lifecycle_check.py \
             --repo "$GITHUB_WORKSPACE" --module "$BUILD_EVIDENCE/ihk.ko"
-          python3 scripts/ihk_smp_native_lifecycle_check.py \
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/ihk_smp_native_lifecycle_check.py \
             --repo "$GITHUB_WORKSPACE" --module "$BUILD_EVIDENCE/ihk-smp-x86_64.ko"
-          python3 scripts/mcctrl_native_lifecycle_check.py \
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/mcctrl_native_lifecycle_check.py \
             --repo "$GITHUB_WORKSPACE" --module "$BUILD_EVIDENCE/mcctrl.ko"
+          : > "$github_env_file"
+          : > "$github_path_file"
 
       - name: Assemble a deterministic lifecycle-only initramfs
         env:
+          BASH_ENV: ""
           BUILD_EVIDENCE: ${{ runner.temp }}/native-rust-build-evidence
+          ENV: ""
           INITRAMFS_ROOT: ${{ runner.temp }}/native-rust-initramfs-root
+          GLIBC_TUNABLES: ""
+          LD_ASSUME_KERNEL: ""
+          LD_AUDIT: ""
+          LD_BIND_NOW: ""
+          LD_DEBUG: ""
+          LD_DEBUG_OUTPUT: ""
+          LD_DYNAMIC_WEAK: ""
+          LD_HWCAP_MASK: ""
+          LD_LIBRARY_PATH: ""
+          LD_ORIGIN_PATH: ""
+          LD_PREFER_MAP_32BIT_EXEC: ""
+          LD_PRELOAD: ""
+          LD_PROFILE: ""
+          LD_PROFILE_OUTPUT: ""
+          LD_SHOW_AUXV: ""
+          PATH: /usr/sbin:/usr/bin:/sbin:/bin
           RUNTIME_EVIDENCE: ${{ runner.temp }}/native-rust-runtime-evidence
         run: |
           set -euo pipefail
+          PATH=/usr/sbin:/usr/bin:/sbin:/bin
+          export PATH
+          github_env_file="$GITHUB_ENV"
+          github_path_file="$GITHUB_PATH"
+          unset GITHUB_ENV GITHUB_PATH
           test ! -e "$INITRAMFS_ROOT"
           mkdir -p \
             "$INITRAMFS_ROOT/bin" "$INITRAMFS_ROOT/sbin" \
@@ -138,21 +200,25 @@ jobs:
             )
           }
 
-          copy_executable "$(command -v bash)" /bin/bash
-          copy_executable "$(command -v mount)" /bin/mount
-          copy_executable "$(command -v uname)" /bin/uname
-          copy_executable "$(command -v insmod)" /sbin/insmod
-          copy_executable "$(command -v rmmod)" /sbin/rmmod
-          copy_executable "$(command -v dmesg)" /bin/dmesg
+          test "$(command -v insmod)" = /usr/sbin/insmod
+          test "$(command -v rmmod)" = /usr/sbin/rmmod
+          test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' /usr/sbin/insmod)" = kmod
+          test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' /usr/sbin/rmmod)" = kmod
+          copy_executable /usr/bin/bash /bin/bash
+          copy_executable /usr/bin/mount /bin/mount
+          copy_executable /usr/bin/uname /bin/uname
+          copy_executable /usr/sbin/insmod /sbin/insmod
+          copy_executable /usr/sbin/rmmod /sbin/rmmod
+          copy_executable /usr/bin/dmesg /bin/dmesg
 
           kernel_release="$(cat "$BUILD_EVIDENCE/kernel.release")"
           test -n "$kernel_release"
           sed "s/@EXPECTED_KERNEL_RELEASE@/$kernel_release/g" \
             scripts/native-rust-runtime-init.sh > "$INITRAMFS_ROOT/init"
           chmod 0755 "$INITRAMFS_ROOT/init"
-          as --64 scripts/native-rust-runtime-poweroff.S \
+          /usr/bin/as --64 scripts/native-rust-runtime-poweroff.S \
             -o "$RUNTIME_EVIDENCE/native-rust-runtime-poweroff.o"
-          ld -m elf_x86_64 -nostdlib -static -s \
+          /usr/bin/ld -m elf_x86_64 -nostdlib -static -s \
             -o "$INITRAMFS_ROOT/poweroff" \
             "$RUNTIME_EVIDENCE/native-rust-runtime-poweroff.o"
           for module in ihk.ko ihk-smp-x86_64.ko mcctrl.ko; do
@@ -173,13 +239,38 @@ jobs:
             cd "$RUNTIME_EVIDENCE"
             sha256sum initramfs.cpio.gz > initramfs.sha256
           )
+          : > "$github_env_file"
+          : > "$github_path_file"
 
       - name: Boot the exact kernel under QEMU TCG and capture serial diagnostics
         env:
+          BASH_ENV: ""
           BUILD_EVIDENCE: ${{ runner.temp }}/native-rust-build-evidence
+          ENV: ""
+          GLIBC_TUNABLES: ""
+          LD_ASSUME_KERNEL: ""
+          LD_AUDIT: ""
+          LD_BIND_NOW: ""
+          LD_DEBUG: ""
+          LD_DEBUG_OUTPUT: ""
+          LD_DYNAMIC_WEAK: ""
+          LD_HWCAP_MASK: ""
+          LD_LIBRARY_PATH: ""
+          LD_ORIGIN_PATH: ""
+          LD_PREFER_MAP_32BIT_EXEC: ""
+          LD_PRELOAD: ""
+          LD_PROFILE: ""
+          LD_PROFILE_OUTPUT: ""
+          LD_SHOW_AUXV: ""
+          PATH: /usr/sbin:/usr/bin:/sbin:/bin
           RUNTIME_EVIDENCE: ${{ runner.temp }}/native-rust-runtime-evidence
         run: |
           set -euo pipefail
+          PATH=/usr/sbin:/usr/bin:/sbin:/bin
+          export PATH
+          github_env_file="$GITHUB_ENV"
+          github_path_file="$GITHUB_PATH"
+          unset GITHUB_ENV GITHUB_PATH
           qemu=/usr/libexec/qemu-kvm
           test -x "$qemu"
           "$qemu" --version > "$RUNTIME_EVIDENCE/qemu-version.txt"
@@ -203,21 +294,50 @@ jobs:
             printf '\n'
           } > "$RUNTIME_EVIDENCE/qemu-command.txt"
           set +e
-          timeout --signal=TERM --kill-after=30s 1200 \
+          /usr/bin/timeout --signal=TERM --kill-after=30s 1200 \
             "$qemu" "${qemu_args[@]}" \
             > "$RUNTIME_EVIDENCE/qemu.log" 2>&1
           qemu_status=$?
           set -e
           printf '%s\n' "$qemu_status" > "$RUNTIME_EVIDENCE/qemu.exit-code"
           test "$qemu_status" -eq 0
+          : > "$github_env_file"
+          : > "$github_path_file"
 
       - name: Create a credit-forbidden technical capture
         env:
+          BASH_ENV: ""
           BUILD_EVIDENCE: ${{ runner.temp }}/native-rust-build-evidence
+          ENV: ""
+          EXPECTED_HEAD_SHA: ${{ inputs.validation_sha }}
+          GLIBC_TUNABLES: ""
+          LD_ASSUME_KERNEL: ""
+          LD_AUDIT: ""
+          LD_BIND_NOW: ""
+          LD_DEBUG: ""
+          LD_DEBUG_OUTPUT: ""
+          LD_DYNAMIC_WEAK: ""
+          LD_HWCAP_MASK: ""
+          LD_LIBRARY_PATH: ""
+          LD_ORIGIN_PATH: ""
+          LD_PREFER_MAP_32BIT_EXEC: ""
+          LD_PRELOAD: ""
+          LD_PROFILE: ""
+          LD_PROFILE_OUTPUT: ""
+          LD_SHOW_AUXV: ""
+          PATH: /usr/sbin:/usr/bin:/sbin:/bin
+          PYTHONHOME: ""
+          PYTHONPATH: ""
           RUNTIME_EVIDENCE: ${{ runner.temp }}/native-rust-runtime-evidence
         run: |
           set -euo pipefail
-          python3 scripts/native_rust_runtime_evidence.py \
+          PATH=/usr/sbin:/usr/bin:/sbin:/bin
+          export PATH
+          github_env_file="$GITHUB_ENV"
+          github_path_file="$GITHUB_PATH"
+          unset GITHUB_ENV GITHUB_PATH
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/native_rust_runtime_evidence.py \
             --repo "$GITHUB_WORKSPACE" \
             --capture \
             --build-evidence-dir "$BUILD_EVIDENCE" \
@@ -242,6 +362,14 @@ jobs:
               | LC_ALL=C sort -z | xargs -0 sha256sum -- > SHA256SUMS
             sha256sum --check --strict SHA256SUMS
           )
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/native_rust_runtime_evidence.py \
+            --repo "$GITHUB_WORKSPACE" \
+            --check-runtime-evidence \
+            --runtime-evidence-dir "$RUNTIME_EVIDENCE" \
+            --build-evidence-dir "$BUILD_EVIDENCE"
+          : > "$github_env_file"
+          : > "$github_path_file"
 
       - name: Upload technical capture or first-failure diagnostics
         if: ${{ always() }}

@@ -33,10 +33,10 @@ CONTRACT_PATH = Path(
 )
 BASE_CHECKER_PATH = Path("scripts/fp0006_ihk_device_negative_dispatch.py")
 ENVELOPE_NAME = "fp0006-runtime-capture-v1.tar"
-EXPECTED_CONTRACT_SHA256 = "e86cb3ace48ae2e7e1519decc22b2acd0cadf86366dd4aff3d4f42d6ff7a7d9e"
+EXPECTED_CONTRACT_SHA256 = "46d8a339ed3063f8cfa57b8a1081f794a727042fcd97652f37d49c0ee2471876"
 EXPECTED_CONTRACT_SIZE = 8780
 EXPECTED_LEGACY_WORKFLOW_SHA256 = "67dd306a2ce36c023dd139d71d3871f32412d43e504cb3bf873bf6e146f9e516"
-EXPECTED_NATIVE_WORKFLOW_SHA256 = "bca3d56c95842d937f8cebf8016b994200ffbeb9c9180cfef07f13a64d949f15"
+EXPECTED_NATIVE_WORKFLOW_SHA256 = "30c38b26f8db5f8793cc397a9d713deb6104131378b0f8bd9a45b14e6c570456"
 EXPECTED_LEGACY_BOOT_ACTIVE_SHA256 = "6a8b2a5a0ae4eb7ed752d5ec18b68edeb2fec5a1ffded5d6359d1685d634bde4"
 EXPECTED_LEGACY_FINALIZE_ACTIVE_SHA256 = "8a0529df14c4bd6544a0454e406e888e8e3f67e5dc4491fc80116a8ce872b391"
 EXPECTED_NATIVE_CAPTURE_ACTIVE_SHA256 = "bbeeaaf364713206fc439455491adb7cda7b1c9b5fd3f516f76565111c634340"
@@ -1179,12 +1179,12 @@ def _load_contract(repo: Path) -> Tuple[Dict[str, Any], bytes]:
     expected_frozen = {
         "contract": {
             "path": "host-kernel/contracts/fp0006-ihk-device-negative-dispatch-v1.json",
-            "sha256": "13baf241704c98b5d087abc85af45201c8f345ed3cdd08ae310febe666e789c8",
+            "sha256": "5c5857fa7403a50aa51756866e57d29c92e6ed8ae15e841fb23328676a6cc054",
             "size": 19668,
         },
         "checker": {
             "path": "scripts/fp0006_ihk_device_negative_dispatch.py",
-            "sha256": "9bc3783df8d5df2c2c8d62ca9205d88f5afac810adac2b322b6dde2ddcfe1676",
+            "sha256": "c11445fa28d326e063c84ea02d2291db740011ed4a27138e41f1e649244bd0af",
             "size": 51627,
         },
         "tests": {

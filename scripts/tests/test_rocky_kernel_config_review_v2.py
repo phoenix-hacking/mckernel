@@ -138,14 +138,15 @@ class ConfigReviewV2Tests(unittest.TestCase):
                     Path("host-kernel/rocky/evidence") / self.review_path.name,
                 )
 
-    def test_runtime_and_current_repository_inputs_are_exact(self):
+    def test_historical_review_rejects_current_active_patch_inputs(self):
         value = reviewer.validate_review_object(copy.deepcopy(self.review))
-        head = reviewer.validate_repository(REPO_ROOT, value)
-        self.assertRegex(head, r"^[0-9a-f]{40}$")
         self.assertEqual(value["runtime_candidate"]["head_sha"], reviewer.RUNTIME_HEAD_SHA)
         self.assertFalse(
             value["current_repository_input_policy"]["runtime_identity_claimed"]
         )
+        with self.assertRaisesRegex(
+                reviewer.ConfigReviewV2Error, "worktree size differs"):
+            reviewer.validate_repository(REPO_ROOT, value)
 
     def test_all_claim_promotions_are_rejected(self):
         scalar = (
@@ -632,7 +633,7 @@ class ConfigReviewV2Tests(unittest.TestCase):
             ):
                 reviewer.verify_artifact(path, mutated_review)
 
-    def test_cli_check_reports_all_false_claim_boundaries(self):
+    def test_cli_check_fails_closed_for_historical_input_binding(self):
         environment = dict(os.environ)
         environment["PYTHONDONTWRITEBYTECODE"] = "1"
         completed = subprocess.run(
@@ -641,10 +642,9 @@ class ConfigReviewV2Tests(unittest.TestCase):
             stderr=subprocess.PIPE,
             env=environment,
         )
-        self.assertEqual(completed.returncode, 0, completed.stderr.decode("utf-8"))
-        output = completed.stdout.decode("utf-8")
-        self.assertIn("descendant-or-equal", output)
-        self.assertIn("durable, offline, and production claims remain false", output)
+        self.assertEqual(completed.returncode, 2)
+        self.assertEqual("", completed.stdout.decode("utf-8"))
+        self.assertIn("worktree size differs", completed.stderr.decode("utf-8"))
 
     def test_reviewer_and_tests_parse_as_python_3_6(self):
         for path in (MODULE_PATH, Path(__file__).resolve()):

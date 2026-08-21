@@ -9,6 +9,7 @@ import io
 import json
 import os
 from pathlib import Path
+import re
 import shutil
 import stat
 import subprocess
@@ -60,17 +61,80 @@ class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
         )
         return source
 
+    def test_git_identity_ignores_inherited_repository_and_loader_overrides(self):
+        with tempfile.TemporaryDirectory(prefix="rk006-git-identity-") as raw:
+            root = Path(raw)
+            repositories = []
+            heads = []
+            for name in ("a", "b"):
+                repo = root / name
+                repo.mkdir()
+                subprocess.run(
+                    ["/usr/bin/git", "init", "-q", str(repo)], check=True
+                )
+                (repo / "tracked").write_text(name + "\n", encoding="ascii")
+                subprocess.run(
+                    ["/usr/bin/git", "-C", str(repo), "add", "tracked"],
+                    check=True,
+                )
+                subprocess.run(
+                    [
+                        "/usr/bin/git",
+                        "-c",
+                        "user.name=RK006 Test",
+                        "-c",
+                        "user.email=rk006@example.invalid",
+                        "-C",
+                        str(repo),
+                        "commit",
+                        "-q",
+                        "-m",
+                        name,
+                    ],
+                    check=True,
+                )
+                head = subprocess.run(
+                    ["/usr/bin/git", "-C", str(repo), "rev-parse", "HEAD"],
+                    check=True,
+                    stdout=subprocess.PIPE,
+                    text=True,
+                ).stdout.strip()
+                repositories.append(repo)
+                heads.append(head)
+            hostile = {
+                "GIT_DIR": str(repositories[1] / ".git"),
+                "GIT_WORK_TREE": str(repositories[1]),
+                "LD_AUDIT": str(root / "attacker-audit.so"),
+                "LD_PRELOAD": str(root / "attacker-preload.so"),
+                "PATH": str(root),
+            }
+            with mock.patch.dict(os.environ, hostile, clear=False):
+                capture._check_git_identity(repositories[0], heads[0])
+                with self.assertRaisesRegex(
+                    capture.CaptureError, "checked-out HEAD differs"
+                ):
+                    capture._check_git_identity(repositories[0], heads[1])
+
     def _build_evidence(self, directory, head="a" * 40):
         contents = {}
-        for name in capture.REQUIRED_BUILD_MEMBERS:
-            if name == "SHA256SUMS":
+        names = sorted(
+            set(capture.REQUIRED_BUILD_MEMBERS)
+            | set(capture.PRECHECK_BUILD_MEMBERS)
+        )
+        for name in names:
+            if name in ("PRECHECK_SHA256SUMS", "SHA256SUMS"):
                 continue
             contents[name] = (name + "\n").encode("ascii")
         contents["commit.sha"] = (head + "\n").encode("ascii")
         contents["build.phase"] = b"complete\n"
         contents["build.exit-code"] = b"0\n"
         contents["build-log.exit-code"] = b"0\n"
+        contents["build.environment"] = capture.REPRODUCIBLE_BUILD_ENVIRONMENT_BYTES
         contents["workflow-state"] = b"bootstrap-complete\n"
+        contents["PRECHECK_SHA256SUMS"] = "".join(
+            "{}  {}\n".format(hashlib.sha256(contents[name]).hexdigest(), name)
+            for name in capture.PRECHECK_BUILD_MEMBERS
+        ).encode("ascii")
         for name, data in contents.items():
             path = directory / name
             path.write_bytes(data)
@@ -176,7 +240,7 @@ class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
     def test_contract_and_all_frozen_inputs_validate(self):
         contract_value, authority = capture.validate_contract(REPO_ROOT)
         self.assertEqual("rk-006-full-source-build-capture-v1", contract_value["capture_contract_id"])
-        self.assertEqual(25, len(authority["patches"]))
+        self.assertEqual(26, len(authority["patches"]))
 
     def test_contract_cli_is_noncrediting(self):
         completed = subprocess.run(
@@ -204,10 +268,10 @@ class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
 
     def test_contract_binds_authority_locks_and_full_parent_hashes(self):
         expected = {
-            "patch_authority": "ebc3e4c69ecbdb3891f92018a89f5fc3dae43fa070628fda8b22f881f02c67a1",
-            "patch_authority_checker": "c23969ba2716db96f02a0564d6815b7342036a58c258ce22319b0185693cfddd",
-            "patch_authority_tests": "719d1e87b4d66944abf3bad0c03dc7cc86dddb97fa36e3fe32736c29ea549b39",
-            "source_lock": "707ee40466ac0bb0cd0600383bba0b13fc1146e7080034786bf5668a95b27682",
+            "patch_authority": "0c40d8079b3c5f6b90e44f1067f89f27c5c7ac50c67a127609a34a10c224475b",
+            "patch_authority_checker": "ee0ef72baf560c1a4412ff0140b950f0f8456d4291154186af339320a1ec21da",
+            "patch_authority_tests": "bb829109b32b2474b0edeb06e2121b42aff4edb4a3103ea80cf6a9520e775b3b",
+            "source_lock": "b70df1e475072dbfa31fdc712900ac59d30eeb139219c7076aacaa19abf0fded",
             "toolchain_lock": "fd3d7a13e1b8b5d103f7e59d22f17c9e4b99cc937637decaa66749acfae6c802",
         }
         for key, digest in expected.items():
@@ -248,16 +312,16 @@ class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
                 0o644, stat.S_IMODE((Path(directory) / "member").stat().st_mode)
             )
 
-    def test_fixture_replays_all_25_patches_and_rejects_every_second_apply(self):
+    def test_fixture_replays_all_26_patches_and_rejects_every_second_apply(self):
         with tempfile.TemporaryDirectory() as directory:
             source = self._fixture_source(Path(directory))
             replay = capture._replay_patch_series(
                 REPO_ROOT, source, self.authority, enforce_parent_hashes=False
             )
-        self.assertEqual(25, len(replay["patch_records"]))
-        self.assertEqual(list(range(1, 26)), [row["order"] for row in replay["patch_records"]])
+        self.assertEqual(26, len(replay["patch_records"]))
+        self.assertEqual(list(range(1, 27)), [row["order"] for row in replay["patch_records"]])
         second = [json.loads(line) for line in replay["second_log"].splitlines()]
-        self.assertEqual(25, len(second))
+        self.assertEqual(26, len(second))
         self.assertTrue(all(row["returncode"] != 0 for row in second))
         self.assertNotEqual(
             self.authority["source_binding"]["fixture_preimage_closure_sha256"],
@@ -930,12 +994,64 @@ class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
         self.assertFalse(binding["build_artifact"]["durable"])
         self.assertIsNone(binding["build_artifact"]["outer_artifact_sha256"])
         self.assertEqual("native-rust-exact-build-123-2", binding["build_artifact"]["name"])
+        capture._validate_final_build_evidence_rows(
+            document, binding["build_evidence"], binding["build_artifact"]
+        )
+
+    def test_final_verifier_rejects_self_resealed_fixed_build_rows(self):
+        document = {
+            "github": {"head_sha": "a" * 40, "run_id": 123, "run_attempt": 2}
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self._build_evidence(root)
+            original = capture._build_binding(root, document)
+        for name in (
+            "build.environment",
+            "build.phase",
+            "build.exit-code",
+            "build-log.exit-code",
+            "workflow-state",
+            "commit.sha",
+        ):
+            with self.subTest(name=name):
+                binding = copy.deepcopy(original)
+                for row in binding["build_evidence"]:
+                    if row["path"] == name:
+                        replacement = b"self-resealed\n"
+                        row["sha256"] = hashlib.sha256(replacement).hexdigest()
+                        row["size"] = len(replacement)
+                        break
+                rows = binding["build_evidence"]
+                binding["build_artifact"]["content_closure_sha256"] = hashlib.sha256(
+                    capture._canonical_json(rows)
+                ).hexdigest()
+                reconstructed = "".join(
+                    "{}  {}\n".format(row["sha256"], row["path"])
+                    for row in rows
+                ).encode("ascii")
+                binding["build_artifact"]["sha256sums_sha256"] = hashlib.sha256(
+                    reconstructed
+                ).hexdigest()
+                with self.assertRaisesRegex(
+                    capture.CaptureError, "fixed evidence differs"
+                ):
+                    capture._validate_final_build_evidence_rows(
+                        document, rows, binding["build_artifact"]
+                    )
+
+        binding = copy.deepcopy(original)
+        binding["build_artifact"]["sha256sums_sha256"] = "f" * 64
+        with self.assertRaisesRegex(capture.CaptureError, "manifest digest"):
+            capture._validate_final_build_evidence_rows(
+                document, binding["build_evidence"], binding["build_artifact"]
+            )
 
     def test_build_binding_rejects_checksum_status_and_extra_member_mutations(self):
         document = {
             "github": {"head_sha": "a" * 40, "run_id": 123, "run_attempt": 2}
         }
-        mutations = ("checksum", "status", "extra")
+        mutations = ("checksum", "status", "missing-raw", "extra")
         for mutation in mutations:
             with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as directory:
                 root = Path(directory)
@@ -952,9 +1068,78 @@ class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
                         manifest,
                     )
                     (root / "SHA256SUMS").write_text(manifest, encoding="ascii")
+                elif mutation == "missing-raw":
+                    (root / ".ihk.o.cmd").unlink()
+                    manifest = (root / "SHA256SUMS").read_text(encoding="ascii")
+                    manifest = "".join(
+                        row for row in manifest.splitlines(True)
+                        if not row.endswith("  .ihk.o.cmd\n")
+                    )
+                    (root / "SHA256SUMS").write_text(manifest, encoding="ascii")
                 else:
                     (root / "extra").write_bytes(b"extra")
                     (root / "extra").chmod(0o644)
+                with self.assertRaises(capture.CaptureError):
+                    capture._build_binding(root, document)
+
+    def test_build_binding_rejects_reproducible_environment_mutations(self):
+        document = {
+            "github": {"head_sha": "a" * 40, "run_id": 123, "run_attempt": 2}
+        }
+        mutations = (
+            b"KBUILD_BUILD_USER=root\n",
+            capture.REPRODUCIBLE_BUILD_ENVIRONMENT_BYTES.replace(
+                b"KBUILD_BUILD_HOST=rocky-10.2-x86_64\n", b""
+            ),
+            capture.REPRODUCIBLE_BUILD_ENVIRONMENT_BYTES
+            + b"KBUILD_BUILD_USER=attacker\n",
+        )
+        for mutation in mutations:
+            with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                self._build_evidence(root)
+                environment = root / "build.environment"
+                environment.write_bytes(mutation)
+                digest = hashlib.sha256(mutation).hexdigest()
+                manifest = (root / "SHA256SUMS").read_text(encoding="ascii")
+                manifest = __import__("re").sub(
+                    r"[0-9a-f]{64}  build\.environment",
+                    digest + "  build.environment",
+                    manifest,
+                )
+                (root / "SHA256SUMS").write_text(manifest, encoding="ascii")
+                with self.assertRaisesRegex(capture.CaptureError, r"build\.environment"):
+                    capture._build_binding(root, document)
+
+    def test_build_binding_rejects_self_resealed_precheck_mutations(self):
+        document = {
+            "github": {"head_sha": "a" * 40, "run_id": 123, "run_attempt": 2}
+        }
+        for mutation in ("missing", "extra", "duplicate", "reordered", "digest"):
+            with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                self._build_evidence(root)
+                precheck = root / "PRECHECK_SHA256SUMS"
+                rows = precheck.read_text(encoding="ascii").splitlines(True)
+                if mutation == "missing":
+                    content = "".join(rows[1:])
+                elif mutation == "extra":
+                    content = "".join(rows) + "{}  unexpected\n".format("0" * 64)
+                elif mutation == "duplicate":
+                    content = "".join(rows) + rows[0]
+                elif mutation == "reordered":
+                    content = "".join(reversed(rows))
+                else:
+                    content = ("0" * 64) + rows[0][64:] + "".join(rows[1:])
+                precheck.write_text(content, encoding="ascii")
+                digest = hashlib.sha256(content.encode("ascii")).hexdigest()
+                manifest = (root / "SHA256SUMS").read_text(encoding="ascii")
+                manifest = re.sub(
+                    r"[0-9a-f]{64}  PRECHECK_SHA256SUMS",
+                    digest + "  PRECHECK_SHA256SUMS",
+                    manifest,
+                )
+                (root / "SHA256SUMS").write_text(manifest, encoding="ascii")
                 with self.assertRaises(capture.CaptureError):
                     capture._build_binding(root, document)
 
@@ -1017,7 +1202,7 @@ class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
         paths = capture._repository_input_paths(self.authority)
         rows = [{"path": path} for path in paths]
         capture._validate_repository_input_membership(rows, self.authority)
-        self.assertEqual(25, sum(path.endswith(".patch") for path in paths))
+        self.assertEqual(26, sum(path.endswith(".patch") for path in paths))
         with self.assertRaisesRegex(capture.CaptureError, "membership"):
             capture._validate_repository_input_membership(rows[:-1], self.authority)
 

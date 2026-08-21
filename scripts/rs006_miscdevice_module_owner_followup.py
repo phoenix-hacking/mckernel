@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Validate the unintegrated RS-006 miscdevice module-owner follow-up.
+"""Validate the active-but-unbuilt RS-006 miscdevice module-owner integration.
 
-This checker proves only the exact local candidate bytes, their strict replay
-after patches 0019 and 0020 on the minimal repository fixture, and a standalone
-compile-shape model.  It cannot integrate the patch, supersede an authority,
-prove a Rocky kernel build or runtime result, or award gate/tracker credit.
+This checker binds the exact active patch bytes, their strict replay after
+patches 0019 and 0020, and the aggregate repository consumer state. Integration
+does not prove a Rocky kernel build, runtime behavior, independent review, or
+gate/tracker credit.
 """
 
 from __future__ import print_function
@@ -22,8 +22,8 @@ import tempfile
 
 
 CONTRACT_PATH = "host-kernel/contracts/rs006-miscdevice-module-owner-followup-v1.json"
-EXPECTED_CONTRACT_SHA256 = "c300216d7fb82e26f6f86bea50fa45e15ed193f32907b17280882ad5b627a2a5"
-CANDIDATE_PATH = "host-kernel/rocky/candidates/0020-followup-rust-miscdevice-module-owner-v1.patch"
+EXPECTED_CONTRACT_SHA256 = "85f07f672eb4153d868fcbf930d128c02035bb93f5b91d0514c4125ead9bc94b"
+ACTIVE_PATCH_PATH = "host-kernel/rocky/patches/0020a-rust-miscdevice-bind-file-operations-to-module.patch"
 COMPILE_FIXTURE_PATH = "scripts/tests/fixtures/rs006_miscdevice_module_owner_compile.rs"
 REPLAY_FIXTURE_PATH = "scripts/tests/fixtures/rust-core-rocky-6.12"
 
@@ -32,7 +32,7 @@ _PATCH_HEADER = re.compile(br"^diff --git a/([^\n]+) b/([^\n]+)$", re.MULTILINE)
 
 
 class ContractError(Exception):
-    """The candidate contract, inputs, or replay failed closed."""
+    """The active integration contract, inputs, or replay failed closed."""
 
 
 def _sha256(data):
@@ -583,43 +583,41 @@ def _strict_equal(actual, expected, label):
 
 def _expected_claims():
     return {
-        "candidate_integrated": False,
+        "active_patch_integrated": True,
         "compat_runtime_executed": False,
+        "configuration_authority_updated": True,
         "configured_kernel_compiled": False,
         "credit_eligible": False,
         "durable_evidence_archived": False,
-        "exact_probe_updated": False,
+        "exact_probe_updated": True,
+        "fresh_configuration_review_complete": False,
         "gate_pass": False,
         "independent_review_complete": False,
-        "license_authority_updated": False,
-        "main_patch_series_updated": False,
+        "license_authority_updated": True,
         "module_runtime_executed": False,
-        "rk006_authority_updated": False,
-        "rs006_authority_superseded": False,
-        "source_lock_updated": False,
+        "ordered_patch_consumers_updated": True,
+        "rk006_authority_updated": True,
+        "rs006_authority_updated": True,
+        "source_lock_updated": True,
         "stage_manifest_updated": False,
         "tracker_credit": False,
-        "workflow_applies_candidate": False,
+        "workflow_applies_active_patch": True,
     }
 
 
 def _expected_blockers():
     return [
-        "Integrate the candidate immediately after patch 0020 in every ordered Rocky patch consumer.",
-        "Refresh source-lock, license-inventory, RK-006, and RS-006 authorities against the integrated bytes.",
-        "Refresh exact API-probe, configuration-resolution, review, and workflow bindings against the new postimage.",
         "Apply the complete ordered patch series to the exact locked Rocky archive and build the configured kernel and modules with CONFIG_COMPAT enabled.",
-        "Obtain independent source, license, module-owner, compat-ABI, and pinned-lifetime review of the integrated result.",
+        "Obtain fresh independent source, license, module-owner, compat-ABI, pinned-lifetime, and configuration review for the active-patch head.",
         "Exercise module pinning, open-file deregistration ordering, native ioctl, and 32-bit compat ioctl behavior at runtime.",
-        "Archive durable build and runtime evidence and obtain explicit RS-006 gate and tracker adjudication.",
+        "Durably archive the build, review, and runtime evidence and obtain explicit RS-006 gate and tracker adjudication.",
     ]
 
 
 def _load_contract(data):
-    expected_digest = "c300216d7fb82e26f6f86bea50fa45e15ed193f32907b17280882ad5b627a2a5"
     if type(data) is not bytes:
         raise ContractError("contract input must be bytes")
-    if _sha256(data) != expected_digest:
+    if _sha256(data) != EXPECTED_CONTRACT_SHA256:
         raise ContractError("follow-up contract digest changed")
     try:
         contract = json.loads(data.decode("utf-8"), object_pairs_hook=_json_without_duplicates)
@@ -661,8 +659,8 @@ def _validate_identity_inventory(rows, label, expected_count=None):
 
 def _validate_contract_object(contract):
     expected_top = {
-        "blockers", "candidate", "claims", "consumer_update_plan", "contract_id",
-        "deferred_consumer_inventory", "fixture", "intended_semantics",
+        "active_patch", "blockers", "claims", "consumer_update_plan", "contract_id",
+        "fixture", "integrated_consumer_inventory", "intended_semantics",
         "predecessor", "result_authority", "schema_version", "scope", "target",
     }
     if type(contract) is not dict or set(contract) != expected_top:
@@ -689,20 +687,21 @@ def _validate_contract_object(contract):
         contract["scope"],
         {
             "allowed": "generic Linux Rust miscdevice file-operations ownership, explicit compat dispatch, and registration/vtable lifetime shape",
-            "excluded": "IHK policy, project-driver integration, source authority, build/runtime evidence, gate completion, and tracker credit",
+            "excluded": "IHK policy, project-driver implementation, a configured kernel build, runtime evidence, gate completion, and tracker credit",
         },
         "scope",
     )
-    expected_candidate = {
+    expected_active_patch = {
         "license_expression": "GPL-2.0",
-        "origin": "repository-local-unintegrated-candidate",
-        "path": CANDIDATE_PATH,
+        "origin": "mckernel-repository-overlay",
+        "path": ACTIVE_PATCH_PATH,
         "provenance_reviewed": False,
-        "sha256": "7990b1d8feac4b32c4fff87a8cc7c6e3fe2a273dc09c17d3f61eefb847f988a5",
-        "size": 3250,
+        "sha256": "3a49240fc0a10d5ec14cd33d0ec7d09775209edd08fba10a6ee786dc59ea5b21",
+        "size": 3353,
+        "status": "active-ordered-unbuilt",
         "touched_paths": ["rust/kernel/miscdevice.rs"],
     }
-    _strict_equal(contract["candidate"], expected_candidate, "candidate")
+    _strict_equal(contract["active_patch"], expected_active_patch, "active_patch")
     _strict_equal(
         contract["fixture"],
         {
@@ -843,12 +842,12 @@ def _validate_contract_object(contract):
     _strict_equal(
         contract["result_authority"],
         {
-            "candidate_postimage": {
+            "active_postimage": {
                 "path": "rust/kernel/miscdevice.rs",
                 "sha256": "0f2c43a6a64688b6b8387de4813a76289a66f67a1787893d747273c36983b8ee",
                 "size": 7705,
             },
-            "integration_status": "required-missing",
+            "integration_status": "active-ordered-unbuilt",
             "review_status": "required-missing",
             "runtime_status": "required-missing",
         },
@@ -858,7 +857,7 @@ def _validate_contract_object(contract):
     if type(plan) is not dict or set(plan) != {
             "configuration_and_review", "exact_probe", "ordered_build",
             "patch_authority", "predecessor_contract", "source_and_license",
-            "stage_manifest"}:
+            "runtime_evidence_authority", "stage_manifest"}:
         raise ContractError("consumer update plan keys differ")
     planned_paths = []
     for group, rows in plan.items():
@@ -867,7 +866,7 @@ def _validate_contract_object(contract):
                 rows,
                 {
                     "path": "host-kernel/kbuild/stage-manifest.json",
-                    "reason_not_modified": "The candidate changes a generic kernel patch only; it does not add or change a staged project source input. Reassess only when an integrated consumer changes.",
+                    "reason_not_modified": "The active patch changes generic kernel compatibility source only; it does not add or change a staged McKernel project source input.",
                 },
                 "consumer_update_plan.stage_manifest",
             )
@@ -883,9 +882,9 @@ def _validate_contract_object(contract):
     if len(planned_paths) != len(set(planned_paths)):
         raise ContractError("consumer update plan contains duplicate paths")
     consumer_inventory = _validate_identity_inventory(
-        contract["deferred_consumer_inventory"], "deferred_consumer_inventory", 30)
+        contract["integrated_consumer_inventory"], "integrated_consumer_inventory", 36)
     if sorted(planned_paths) != sorted(consumer_inventory):
-        raise ContractError("deferred consumer inventory does not match the exact plan")
+        raise ContractError("integrated consumer inventory does not match the exact plan")
 
 
 def _record(data):
@@ -903,22 +902,24 @@ def _validate_record(data, expected, label):
         raise ContractError("{0} identity changed".format(label))
 
 
-def _validate_candidate_patch(data, expected):
-    _validate_record(data, expected, "candidate patch")
-    if not data.startswith(b"From: local compatibility candidate\n"):
-        raise ContractError("candidate status header differs")
+def _validate_active_patch(data, expected):
+    _validate_record(data, expected, "active patch")
+    if not data.startswith(b"From: McKernel local compatibility integration\n"):
+        raise ContractError("active patch origin header differs")
     required_header = (
-        b"Status: candidate only; not integrated into any source authority or workflow\n"
+        b"Status: active ordered Rocky compatibility patch; unbuilt and noncrediting\n"
     )
     if data.count(required_header) != 1:
-        raise ContractError("candidate-only status is not exact")
+        raise ContractError("active unbuilt status is not exact")
+    if data.count(b"License: GPL-2.0\n") != 1:
+        raise ContractError("active patch license header differs")
     headers = _PATCH_HEADER.findall(data)
     if headers != [(b"rust/kernel/miscdevice.rs", b"rust/kernel/miscdevice.rs")]:
-        raise ContractError("candidate patch path vector differs")
+        raise ContractError("active patch path vector differs")
     lowered = data.lower()
-    for forbidden in (b"ihk", b"mckernel", b"mcctrl", b"mcexec"):
+    for forbidden in (b"ihk", b"mcctrl", b"mcexec"):
         if forbidden in lowered:
-            raise ContractError("candidate patch crosses the generic-only boundary")
+            raise ContractError("active patch crosses the generic-only boundary")
     required_additions = (
         b"+    ThisModule,\n",
         b"+    const MODULE: &'static ThisModule;\n",
@@ -927,9 +928,9 @@ def _validate_candidate_patch(data, expected):
     )
     for addition in required_additions:
         if data.count(addition) != 1:
-            raise ContractError("candidate semantic addition differs")
+            raise ContractError("active patch semantic addition differs")
     if data.count(b"-                Some(bindings::compat_ptr_ioctl)\n") != 1:
-        raise ContractError("candidate does not remove the implicit compat fallback exactly")
+        raise ContractError("active patch does not remove the implicit compat fallback exactly")
 
 
 def _decode_text(data, label):
@@ -1024,38 +1025,58 @@ def _validate_replay_dependency_semantics(preimage_bytes, postimage_bytes):
         raise ContractError("module macro changed during replay")
 
 
-def _validate_deferred_consumers(contract, consumer_bytes):
-    rows = contract["deferred_consumer_inventory"]
+def _validate_integrated_consumers(contract, consumer_bytes):
+    rows = contract["integrated_consumer_inventory"]
     expected_paths = [row["path"] for row in rows]
     if set(consumer_bytes) != set(expected_paths):
-        raise ContractError("deferred consumer byte set differs")
-    forbidden_tokens = (
-        contract["candidate"]["path"],
-        os.path.basename(contract["candidate"]["path"]),
-        contract["candidate"]["sha256"],
-        contract["result_authority"]["candidate_postimage"]["sha256"],
-        "host-kernel/rocky/candidates/",
-        "rocky/candidates/",
-        "rs006-miscdevice-module-owner-followup-v1",
-        "rs006_miscdevice_module_owner_followup",
-    )
+        raise ContractError("integrated consumer byte set differs")
+    active_name = os.path.basename(contract["active_patch"]["path"])
+    required_references = {
+        ".github/workflows/native-rust-host-modules-exact-build.yml",
+        ".github/workflows/rs001-linux-api-exact-probe.yml",
+        "host-kernel/contracts/linux-api-exact-probe-v1.json",
+        "host-kernel/contracts/rs006-miscdevice-substrate-v1.json",
+        "host-kernel/rocky/evidence/config-resolution-contract-v1.json",
+        "host-kernel/rocky/evidence/config-resolution-contract-v2.json",
+        "host-kernel/rocky/rk006-patch-authority-v1.json",
+        "host-kernel/rocky/source-lock.json",
+        "scripts/linux_api_exact_probe.py",
+        "scripts/rocky_kernel_config_resolution.py",
+        "scripts/rocky_kernel_config_resolution_v2.py",
+        "scripts/rocky_kernel_license_inventory.py",
+        "scripts/rocky_kernel_rk006_patch_authority.py",
+        "scripts/rocky_kernel_source_lock.py",
+        "scripts/rs006_miscdevice_substrate.py",
+        "scripts/tests/test_rocky_kernel_license_inventory.py",
+        "scripts/tests/test_rust_target_compatibility_patches.py",
+    }
+    historical_paths = {
+        "host-kernel/rocky/evidence/config-resolution-review-378d-v1.json",
+        "host-kernel/rocky/evidence/config-resolution-review-bebf-v2.json",
+        "host-kernel/rocky/evidence/rk007-native-build-review-bc60-v1.json",
+        "host-kernel/rocky/evidence/rk007-native-build-review-ef58-v2.json",
+        "host-kernel/rocky/patches/series.json",
+    }
     for row in rows:
         path = row["path"]
         data = consumer_bytes[path]
-        _validate_record(data, row, "deferred consumer " + path)
-        text = _decode_text(data, "deferred consumer " + path)
-        for token in forbidden_tokens:
-            if token in text:
-                raise ContractError(
-                    "deferred consumer references or applies the unintegrated candidate: {0}".format(path))
+        _validate_record(data, row, "integrated consumer " + path)
+        text = _decode_text(data, "integrated consumer " + path)
+        if path in required_references and active_name not in text:
+            raise ContractError("current consumer omits the active patch: {0}".format(path))
+        if path in historical_paths and active_name in text:
+            raise ContractError("historical authority was rewritten as current: {0}".format(path))
+
+    source_workflow_path = ".github/workflows/rocky-kernel-source-evidence.yml"
+    _validate_source_license_workflow(consumer_bytes[source_workflow_path])
 
     series = _load_json_bytes(
         consumer_bytes["host-kernel/rocky/patches/series.json"], "Rocky series")
     for row in series.get("patches", []):
         if type(row) is not dict or type(row.get("path")) is not str:
             raise ContractError("Rocky series patch row differs")
-        if "candidates/" in row["path"] or "0020-followup" in row["path"]:
-            raise ContractError("Rocky series applies the unintegrated candidate")
+        if active_name in row["path"]:
+            raise ContractError("historical Rocky dist-git series was rewritten")
     rs006 = _load_json_bytes(
         consumer_bytes["host-kernel/contracts/rs006-miscdevice-substrate-v1.json"],
         "predecessor RS-006 contract",
@@ -1083,6 +1104,79 @@ def _validate_deferred_consumers(contract, consumer_bytes):
     if type(stage.get("readiness")) is not dict \
             or stage["readiness"].get("credit_eligible") is not False:
         raise ContractError("stage-manifest false readiness state differs")
+    for path in (
+            "host-kernel/rocky/evidence/config-resolution-review-378d-v1.json",
+            "host-kernel/rocky/evidence/config-resolution-review-bebf-v2.json"):
+        review = _load_json_bytes(consumer_bytes[path], "historical configuration review")
+        facts = review.get("verified_facts", {})
+        patch_authority = facts.get("patch_authority", {})
+        if patch_authority.get("count") != 23:
+            raise ContractError("historical configuration review patch count changed")
+    runtime_contract = _load_json_bytes(
+        consumer_bytes["host-kernel/contracts/native-rust-runtime-evidence-v1.json"],
+        "native runtime evidence authority",
+    )
+    artifact_contract = runtime_contract.get("artifact_contract", {})
+    build_scope = runtime_contract.get("build_scope", {})
+    runtime_gate = runtime_contract.get("gate", {})
+    if artifact_contract.get("capture_status") != "required-missing" \
+            or artifact_contract.get("independent_review_status") != "required-missing" \
+            or build_scope.get("credit_eligible") is not False \
+            or build_scope.get("tracker_credit") is not False \
+            or runtime_gate.get("capture_can_claim_pass") is not False \
+            or runtime_gate.get("credit_eligible") is not False:
+        raise ContractError("native runtime authority false claim boundary differs")
+    for path in (
+            "host-kernel/rocky/evidence/rk007-native-build-review-bc60-v1.json",
+            "host-kernel/rocky/evidence/rk007-native-build-review-ef58-v2.json"):
+        review = _load_json_bytes(consumer_bytes[path], "historical native build review")
+        claims = review.get("claims", {})
+        gate_claims = claims.get("gate_claims", {})
+        if claims.get("credit_eligible") is not False \
+                or claims.get("durable_archive") is not False \
+                or claims.get("module_loadability_proven") is not False \
+                or claims.get("runtime_behavior_proven") is not False \
+                or claims.get("tracker_credit") is not False \
+                or type(gate_claims) is not dict \
+                or any(value is not False for value in gate_claims.values()):
+            raise ContractError("historical native build review was reclassified")
+
+
+def _indented_yaml_block(lines, marker, indent, start, end, label):
+    expected = " " * indent + marker + ":"
+    matches = [index for index in range(start, end) if lines[index] == expected]
+    if len(matches) != 1:
+        raise ContractError("source evidence workflow {0} scope differs".format(label))
+    block_start = matches[0] + 1
+    block_end = end
+    for index in range(block_start, end):
+        line = lines[index]
+        if not line.strip() or line.lstrip().startswith("#"):
+            continue
+        leading = len(line) - len(line.lstrip(" "))
+        if "\t" in line[:leading + 1] or leading <= indent:
+            block_end = index
+            break
+    return block_start, block_end
+
+
+def _validate_source_license_workflow(data):
+    text = _decode_text(data, "Rocky source evidence workflow")
+    lines = text.splitlines()
+    on_start, on_end = _indented_yaml_block(
+        lines, "on", 0, 0, len(lines), "on")
+    watched = "host-kernel/rocky/patches/**"
+    expected_line = "      - " + watched
+    for event in ("push", "pull_request"):
+        event_start, event_end = _indented_yaml_block(
+            lines, event, 2, on_start, on_end, event)
+        paths_start, paths_end = _indented_yaml_block(
+            lines, "paths", 4, event_start, event_end, event + ".paths")
+        if lines[paths_start:paths_end].count(expected_line) != 1:
+            raise ContractError(
+                "source evidence workflow {0} patch watch differs".format(event))
+    if text.count(watched) != 2:
+        raise ContractError("source evidence workflow patch watch count differs")
 
 
 def _registration_block(text):
@@ -1094,11 +1188,11 @@ def _registration_block(text):
 
 
 def _validate_postimage(data, expected):
-    _validate_record(data, expected, "candidate miscdevice postimage")
+    _validate_record(data, expected, "active miscdevice postimage")
     try:
         text = data.decode("utf-8")
     except UnicodeError as error:
-        raise ContractError("candidate postimage is not UTF-8: {0}".format(error))
+        raise ContractError("active postimage is not UTF-8: {0}".format(error))
     exact_once = (
         "const MODULE: &'static ThisModule;",
         "owner: T::MODULE.as_ptr(),",
@@ -1236,17 +1330,17 @@ def _bytes_for(repo_root, relative, overrides, label):
     return _read_regular(repo_root, relative, label)
 
 
-def _replay_candidate(contract, input_bytes):
+def _replay_active_patch(contract, input_bytes):
     predecessor = contract["predecessor"]
-    candidate = contract["candidate"]
+    active_patch = contract["active_patch"]
     patch_rows = predecessor["ordered_patches"]
     patch_bytes = []
     for index, row in enumerate(patch_rows):
         data = input_bytes[row["path"]]
         _validate_record(data, row, "predecessor patch {0}".format(index))
         patch_bytes.append(data)
-    candidate_bytes = input_bytes[candidate["path"]]
-    _validate_candidate_patch(candidate_bytes, candidate)
+    active_patch_bytes = input_bytes[active_patch["path"]]
+    _validate_active_patch(active_patch_bytes, active_patch)
     fixture = predecessor["local_replay_fixture"]
     fixture_prefix = fixture["path"] + "/"
     fixture_bytes = {}
@@ -1283,22 +1377,22 @@ def _replay_candidate(contract, input_bytes):
                          "patch-0020 miscdevice postimage")
         miscdevice_path = os.path.join(tree, "rust", "kernel", "miscdevice.rs")
         before = _tree_records(tree)
-        _apply_patch(tree, candidate_bytes, "module-owner candidate")
+        _apply_patch(tree, active_patch_bytes, "module-owner active patch")
         after = _tree_records(tree)
         changed = sorted(
             path for path in set(before) | set(after)
             if before.get(path) != after.get(path)
         )
-        if changed != candidate["touched_paths"]:
-            raise ContractError("candidate replay changed paths outside its exact vector")
+        if changed != active_patch["touched_paths"]:
+            raise ContractError("active patch replay changed paths outside its exact vector")
         with open(miscdevice_path, "rb") as stream:
             postimage = stream.read()
-        _validate_postimage(postimage, contract["result_authority"]["candidate_postimage"])
-        _apply_patch(tree, candidate_bytes, "module-owner candidate second apply", False)
+        _validate_postimage(postimage, contract["result_authority"]["active_postimage"])
+        _apply_patch(tree, active_patch_bytes, "module-owner active patch second apply", False)
         with open(miscdevice_path, "rb") as stream:
             after_second_apply = stream.read()
         if after_second_apply != postimage:
-            raise ContractError("failed second apply changed the candidate postimage")
+            raise ContractError("failed second apply changed the active postimage")
         return {
             "changed_paths": changed,
             "postimage_sha256": _sha256(postimage),
@@ -1349,7 +1443,7 @@ def check(repo_root, contract_override=None, file_overrides=None,
     else:
         raise ContractError("file overrides must be a dictionary")
     allowed_overrides = {
-        CANDIDATE_PATH,
+        ACTIVE_PATCH_PATH,
         COMPILE_FIXTURE_PATH,
         "host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch",
         "host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch",
@@ -1371,17 +1465,17 @@ def check(repo_root, contract_override=None, file_overrides=None,
         contract = _load_contract(contract_bytes)
         snapshot.checkpoint("contract validation")
 
-        candidate = contract["candidate"]
-        snapshot.open_file(candidate["path"], "candidate patch", candidate["size"])
+        active_patch = contract["active_patch"]
+        snapshot.open_file(active_patch["path"], "active patch", active_patch["size"])
         fixture_expected = contract["fixture"]
         snapshot.open_file(
             fixture_expected["path"], "compile-shape fixture", fixture_expected["size"])
         for index, row in enumerate(contract["predecessor"]["ordered_patches"]):
             snapshot.open_file(
                 row["path"], "predecessor patch {0}".format(index), row["size"])
-        for row in contract["deferred_consumer_inventory"]:
+        for row in contract["integrated_consumer_inventory"]:
             snapshot.open_file(
-                row["path"], "deferred consumer " + row["path"], row["size"])
+                row["path"], "integrated consumer " + row["path"], row["size"])
         local_fixture = contract["predecessor"]["local_replay_fixture"]
         for row in local_fixture["inventory"]:
             repository_path = local_fixture["path"] + "/" + row["path"]
@@ -1396,19 +1490,19 @@ def check(repo_root, contract_override=None, file_overrides=None,
 
         input_bytes = snapshot.bytes_by_path()
         input_bytes.update(overrides)
-        _validate_candidate_patch(input_bytes[candidate["path"]], candidate)
-        snapshot.checkpoint("candidate validation")
+        _validate_active_patch(input_bytes[active_patch["path"]], active_patch)
+        snapshot.checkpoint("active patch validation")
         consumer_bytes = {
             row["path"]: input_bytes[row["path"]]
-            for row in contract["deferred_consumer_inventory"]
+            for row in contract["integrated_consumer_inventory"]
         }
-        _validate_deferred_consumers(contract, consumer_bytes)
-        snapshot.checkpoint("deferred false-state validation")
+        _validate_integrated_consumers(contract, consumer_bytes)
+        snapshot.checkpoint("integrated noncrediting-state validation")
         fixture_bytes = input_bytes[fixture_expected["path"]]
         _validate_compile_fixture(fixture_bytes, fixture_expected)
         snapshot.checkpoint("compile-shape validation")
-        replay = _replay_candidate(contract, input_bytes)
-        snapshot.checkpoint("strict candidate replay validation")
+        replay = _replay_active_patch(contract, input_bytes)
+        snapshot.checkpoint("strict active-patch replay validation")
         if compile_fixture:
             compile_result = _compile_fixture(fixture_bytes, require_rustc)
         else:
@@ -1420,11 +1514,11 @@ def check(repo_root, contract_override=None, file_overrides=None,
             "claims": dict(_expected_claims()),
             "compile_shape": compile_result,
             "contract_id": contract["contract_id"],
-            "integration_status": "required-missing",
+            "integration_status": "active-ordered-unbuilt",
             "replay": replay,
             "review_status": "required-missing",
             "runtime_status": "required-missing",
-            "status": "CANDIDATE_VALIDATED_NONAUTHORITATIVE",
+            "status": "ACTIVE_ORDERED_UNBUILT_NONCREDITING",
         }
     except ContractError as error:
         failure = error

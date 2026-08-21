@@ -39,6 +39,7 @@ WORKFLOW_PATH = Path(".github/workflows/rocky-kernel-source-evidence.yml")
 WORKFLOW_TRIGGER_PATHS = (
     ".github/workflows/rocky-kernel-source-evidence.yml",
     "host-kernel/rocky/source-lock.json",
+    "host-kernel/rocky/patches/**",
     "host-kernel/rocky/patches/series.json",
     "host-kernel/kbuild/stage-manifest.json",
     "host-kernel/native-rust/ihk.rs",

@@ -72,6 +72,19 @@ class Rk005ConfigBuildBridgeReviewTests(unittest.TestCase):
         self.assertEqual(self.review_bytes, reviewer.canonical_bytes(self.review))
         self.assertEqual(reviewer.validate_review(copy.deepcopy(self.review)), self.review)
 
+    def test_nested_oracle_implementations_have_exact_checker_bindings(self):
+        for name, (expected_size, expected_sha256) in sorted(
+            reviewer.ORACLE_BINDINGS.items()
+        ):
+            with self.subTest(name=name):
+                data = (SCRIPTS / name).read_bytes()
+                self.assertEqual(len(data), expected_size)
+                self.assertEqual(hashlib.sha256(data).hexdigest(), expected_sha256)
+        self.assertEqual(
+            reviewer.BUILD_ORACLE.REUSED_MODULE_SOURCES["kconfig_solver"],
+            "git-blob:8211d19c56c56368718fe1420937fd5187530773",
+        )
+
     def test_every_credit_gate_durability_and_production_claim_is_false(self):
         for name, value in sorted(self.review["claims"].items()):
             if name == "gate_claims":
@@ -157,11 +170,18 @@ class Rk005ConfigBuildBridgeReviewTests(unittest.TestCase):
             with self.assertRaises(reviewer.BridgeReviewError):
                 reviewer.validate_review(mutation)
 
-    def test_current_repository_preserves_both_historical_authorities(self):
-        current = reviewer.validate_repository(
-            REPO_ROOT, reviewer.validate_review(copy.deepcopy(self.review))
-        )
-        self.assertRegex(current, r"^[0-9a-f]{40}$")
+    def test_current_repository_fails_closed_when_nested_authority_is_stale(self):
+        with self.assertRaises(
+            (
+                reviewer.CONFIG_ORACLE.ConfigReviewV2Error,
+                reviewer.BUILD_ORACLE.BuildReviewV2Error,
+                reviewer.BridgeReviewError,
+            )
+        ) as caught:
+            reviewer.validate_repository(
+                REPO_ROOT, reviewer.validate_review(copy.deepcopy(self.review))
+            )
+        self.assertRegex(str(caught.exception), r"(?:bound|committed) input")
 
     def test_repository_snapshot_rejects_disagreeing_nested_authority_head(self):
         with mock.patch.object(
@@ -186,12 +206,17 @@ class Rk005ConfigBuildBridgeReviewTests(unittest.TestCase):
             "LC_ALL": "C.UTF-8",
         }
         with mock.patch.dict(os.environ, hostile, clear=False):
-            current = reviewer.validate_repository(
-                REPO_ROOT, copy.deepcopy(self.review)
-            )
+            with self.assertRaises(
+                (
+                    reviewer.CONFIG_ORACLE.ConfigReviewV2Error,
+                    reviewer.BUILD_ORACLE.BuildReviewV2Error,
+                    reviewer.BridgeReviewError,
+                )
+            ) as caught:
+                reviewer.validate_repository(REPO_ROOT, copy.deepcopy(self.review))
             for name, value in hostile.items():
                 self.assertEqual(os.environ.get(name), value)
-        self.assertRegex(current, r"^[0-9a-f]{40}$")
+        self.assertRegex(str(caught.exception), r"(?:bound|committed) input")
 
     def test_config_authority_path_uses_repository_symlink_containment(self):
         with mock.patch.object(
@@ -199,7 +224,14 @@ class Rk005ConfigBuildBridgeReviewTests(unittest.TestCase):
             "repository_file",
             wraps=reviewer.CONFIG_ORACLE.repository_file,
         ) as resolver:
-            reviewer.validate_repository(REPO_ROOT, copy.deepcopy(self.review))
+            with self.assertRaises(
+                (
+                    reviewer.CONFIG_ORACLE.ConfigReviewV2Error,
+                    reviewer.BUILD_ORACLE.BuildReviewV2Error,
+                    reviewer.BridgeReviewError,
+                )
+            ):
+                reviewer.validate_repository(REPO_ROOT, copy.deepcopy(self.review))
         self.assertGreaterEqual(resolver.call_count, 1)
         self.assertEqual(
             resolver.call_args_list[0],
@@ -379,7 +411,28 @@ class Rk005ConfigBuildBridgeReviewTests(unittest.TestCase):
             with self.assertRaises(reviewer.CONFIG_ORACLE.ConfigReviewV2Error):
                 reviewer.verify_artifacts(config, alias / build.name, copy.deepcopy(self.review))
 
-    def test_cli_check_and_exact_artifact_verification_pass(self):
+    def test_cli_check_fails_closed_on_stale_repository_authority(self):
+        environment = dict(os.environ)
+        environment["PYTHONDONTWRITEBYTECODE"] = "1"
+        completed = subprocess.run(
+            [
+                sys.executable,
+                str(SCRIPTS / "rocky_kernel_rk005_build_bridge_review.py"),
+                "--repo", str(REPO_ROOT),
+                "--check",
+            ],
+            cwd=str(REPO_ROOT),
+            env=environment,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+            check=False,
+        )
+        self.assertEqual(completed.returncode, 2)
+        self.assertEqual(completed.stdout, "")
+        self.assertRegex(completed.stderr, r"(?:bound|committed) input")
+
+    def test_cli_artifact_request_fails_closed_on_stale_repository_authority(self):
         environment = dict(os.environ)
         environment["PYTHONDONTWRITEBYTECODE"] = "1"
         completed = subprocess.run(
@@ -397,8 +450,9 @@ class Rk005ConfigBuildBridgeReviewTests(unittest.TestCase):
             universal_newlines=True,
             check=False,
         )
-        self.assertEqual(completed.returncode, 0, completed.stderr)
-        self.assertIn("credit=FORBIDDEN", completed.stdout)
+        self.assertEqual(completed.returncode, 2)
+        self.assertEqual(completed.stdout, "")
+        self.assertRegex(completed.stderr, r"(?:bound|committed) input")
 
     def test_checker_and_tests_parse_with_python_3_6_grammar(self):
         paths = (

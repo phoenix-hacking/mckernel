@@ -83,6 +83,8 @@ REPORTED_FACT_SCOPE = (
 CAPTURE_STATUS = "captured-unreviewed"
 REMOVED_ENVIRONMENT_KEYS = (
     "ARCH",
+    "BASH_ENV",
+    "ENV",
     "GNUMAKEFLAGS",
     "KBUILD_EXTMOD",
     "KBUILD_KCONFIG",
@@ -96,14 +98,39 @@ REMOVED_ENVIRONMENT_KEYS = (
     "MAKEFLAGS",
     "MAKEFILES",
     "MAKELEVEL",
+    "MAKEOVERRIDES",
     "MFLAGS",
     "O",
+    "PATH",
 )
-FIXED_ENVIRONMENT = {"LANG": "C", "LC_ALL": "C", "TZ": "UTC"}
+FIXED_ENVIRONMENT = {
+    "BASH_ENV": "",
+    "ENV": "",
+    "GNUMAKEFLAGS": "",
+    "KBUILD_BUILD_HOST": "rocky-10.2-x86_64",
+    "KBUILD_BUILD_TIMESTAMP": "Tue, 11 Aug 2026 07:40:34 +0000",
+    "KBUILD_BUILD_USER": "mckernel",
+    "KBUILD_BUILD_VERSION": "1",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "MAKEFLAGS": "",
+    "MAKEFILES": "",
+    "MAKEOVERRIDES": "",
+    "MFLAGS": "",
+    "PATH": "/usr/bin:/bin",
+    "SOURCE_DATE_EPOCH": "1786434034",
+    "TZ": "UTC",
+}
+MAKE_EXECUTABLE = "/usr/bin/make"
 MAKE_ARGV_TEMPLATE = (
-    "make",
+    MAKE_EXECUTABLE,
     "ARCH=x86_64",
     "LLVM=1",
+    "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+    "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+    "KBUILD_BUILD_USER=mckernel",
+    "KBUILD_BUILD_VERSION=1",
+    "SOURCE_DATE_EPOCH=1786434034",
     "O=<case-output-directory>",
     "olddefconfig",
 )
@@ -121,7 +148,7 @@ EXPECTED_RUNNER = {
         "timeout_seconds_per_invocation": MAKE_TIMEOUT_SECONDS,
     },
     "fixed_environment": dict(FIXED_ENVIRONMENT),
-    "inherited_environment_policy": "all other process keys inherited; binary identity not claimed",
+    "inherited_environment_policy": "none; exact fixed allowlist only; make executable is absolute",
     "removed_environment_keys": list(REMOVED_ENVIRONMENT_KEYS),
 }
 TOP_KEYS = {
@@ -569,17 +596,13 @@ def _case_id(index, request):
 
 
 def _sanitized_environment(environ=None):
-    source = os.environ if environ is None else environ
-    result = dict(source)
-    for name in REMOVED_ENVIRONMENT_KEYS:
-        result.pop(name, None)
-    result.update(FIXED_ENVIRONMENT)
-    return result
+    return dict(FIXED_ENVIRONMENT)
 
 
 def _run_make(source, output, case_id, pass_number, environ):
     command = list(MAKE_ARGV_TEMPLATE)
-    command[3] = "O=" + output
+    command[0] = MAKE_EXECUTABLE
+    command[command.index("O=<case-output-directory>")] = "O=" + output
     try:
         process = subprocess.Popen(
             command,

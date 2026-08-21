@@ -23,7 +23,7 @@ TOOLCHAIN_LOCK_PATH = Path("host-kernel/rocky/toolchain-lock.json")
 CONFIG_POLICY_PATH = Path("host-kernel/rocky/config-policy.json")
 CONFIG_FRAGMENT_PATH = Path("host-kernel/rocky/configs/rust-minimal.config")
 EXPECTED_CONTRACT_SHA256 = (
-    "45514597166bf18f4ef3aeb7e1fbd269083bd42d53f41e6fa5b3398b8bfba54c"
+    "5ab8ef0f06a17896ae3927b218c75e3f24fd574d682364f3afd1c07255299eed"
 )
 EXPECTED_WORKFLOW_SHA256 = (
     "d388610f13701e0166656d019ac0cd48c456c33a3d616ebb5df9bc3ad7e36ece"
@@ -64,10 +64,19 @@ EXPECTED_COMPATIBILITY_PATCHES = [
     "host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch",
     "host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch",
     "host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch",
+    "host-kernel/rocky/patches/0020a-rust-miscdevice-bind-file-operations-to-module.patch",
     "host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch",
     "host-kernel/rocky/patches/0022-x86-pvh-annotate-noendbr.patch",
     "host-kernel/rocky/patches/0023-rust-update-no-alloc-shim-marker-rust-1.92.patch",
 ]
+MODULE_OWNER_COMPATIBILITY_PATCH = (
+    "host-kernel/rocky/patches/"
+    "0020a-rust-miscdevice-bind-file-operations-to-module.patch"
+)
+MODULE_OWNER_LOCAL_ORIGIN = "McKernel RS-006 miscdevice module-owner compatibility"
+MODULE_OWNER_ROCKY_BASE = "linux-6.12.0-211.44.1.el10_2"
+MODULE_OWNER_LICENSE = "GPL-2.0"
+MODULE_OWNER_INTEGRATION_STATUS = "active-ordered-unbuilt"
 EXPECTED_OBJTOOL_NORETURN_FAILURE = {
     "artifact_id": 9160078637,
     "artifact_zip_bytes": 62669,
@@ -332,6 +341,36 @@ def require_patch_header(text, name, expected, label):
 
 def validate_compatibility_patch_provenance(row, text, index):
     label = "compatibility patch {}".format(index)
+    if row.get("path") == MODULE_OWNER_COMPATIBILITY_PATCH:
+        exact_keys(
+            row,
+            {
+                "integration_status",
+                "license",
+                "local_origin",
+                "path",
+                "rocky_base",
+                "sha256",
+            },
+            label,
+        )
+        require_exact(row["local_origin"], MODULE_OWNER_LOCAL_ORIGIN, "module-owner origin")
+        require_exact(row["rocky_base"], MODULE_OWNER_ROCKY_BASE, "module-owner Rocky base")
+        require_exact(row["license"], MODULE_OWNER_LICENSE, "module-owner license")
+        require_exact(
+            row["integration_status"],
+            MODULE_OWNER_INTEGRATION_STATUS,
+            "module-owner integration status",
+        )
+        for forbidden in ("Upstream-Commit:", "Stable-Commit:"):
+            if forbidden in text:
+                raise ConfigResolutionError("module-owner patch invents provenance")
+        for header in (
+            "Status: active ordered Rocky compatibility patch; unbuilt and noncrediting",
+            "License: GPL-2.0",
+        ):
+            require_exact(text.count(header), 1, "module-owner patch header")
+        return
     if index == len(EXPECTED_COMPATIBILITY_PATCHES) - 3:
         exact_keys(
             row,
@@ -779,7 +818,7 @@ def validate_contract(repo):
     patch_directory = repo / "host-kernel/rocky/patches"
     discovered_patches = sorted(
         path.relative_to(repo).as_posix()
-        for path in patch_directory.glob("[0-9][0-9][0-9][0-9]-*.patch")
+        for path in patch_directory.glob("[0-9]*.patch")
     )
     require_exact(
         discovered_patches,

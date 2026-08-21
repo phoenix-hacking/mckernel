@@ -100,6 +100,55 @@ class RepositoryReviewTests(unittest.TestCase):
         review.validate_repository_inputs(REPO_ROOT)
         self.assertTrue(self.git_checked)
 
+    def test_prospective_worktree_overrides_do_not_rewrite_historical_review(self):
+        self.assertEqual(
+            set(review.CURRENT_WORKTREE_OVERRIDES),
+            {
+                "host-kernel/rocky/source-lock.json",
+                "scripts/rocky_kernel_source_lock.py",
+            },
+        )
+        historical = {
+            row["path"]: row
+            for row in self.manifest["runtime_candidate"]["committed_inputs"]
+        }
+        connector = {
+            row["path"]: row
+            for row in self.manifest["connector_tree_port"]["ported_inputs"]
+        }
+        for path, current in review.CURRENT_WORKTREE_OVERRIDES.items():
+            payload = (REPO_ROOT / path).read_bytes()
+            self.assertEqual(len(payload), current["size"])
+            self.assertEqual(hashlib.sha256(payload).hexdigest(), current["sha256"])
+            self.assertEqual(review.git_blob_sha1(payload), current["git_blob_sha1"])
+            self.assertNotEqual(current["sha256"], historical[path]["sha256"])
+            self.assertNotEqual(current["sha256"], connector[path]["sha256"])
+            mutated = dict(current)
+            mutated["sha256"] = "0" * 64
+            with self.assertRaises(review.ReviewError):
+                review.validate_current_connector_input(
+                    path,
+                    b"historical-head\n",
+                    payload,
+                    (
+                        "100644 blob {}\t{}\0".format(
+                            review.git_blob_sha1(b"historical-head\n"), path
+                        )
+                    ).encode("utf-8"),
+                    (
+                        "100644 {} 0\t{}\n".format(
+                            review.git_blob_sha1(b"historical-head\n"), path
+                        )
+                    ).encode("utf-8"),
+                    mutated,
+                )
+        self.assertFalse(self.manifest["claims"]["credit_eligible"])
+        self.assertFalse(self.manifest["claims"]["tracker_credit"])
+        self.assertEqual(
+            self.manifest["claims"]["gate_claims"],
+            {"RK-003": False, "RK-005": False},
+        )
+
     def test_missing_published_base_fails_even_when_input_bytes_match(self):
         with tempfile.TemporaryDirectory(prefix="platform-review-shallow-") as text:
             root = Path(text)

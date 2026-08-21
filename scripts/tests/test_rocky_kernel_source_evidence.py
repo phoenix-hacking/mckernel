@@ -156,6 +156,25 @@ class RepositoryContractTests(unittest.TestCase):
                 "      - host-kernel/rocky/source-lock-drift.json",
                 1,
             ),
+            original.replace(
+                "      - host-kernel/rocky/patches/**\n", "", 1
+            ),
+            original.replace(
+                "      - host-kernel/rocky/patches/**\n",
+                "      # - host-kernel/rocky/patches/**\n",
+                1,
+            ),
+            original.replace(
+                "      - host-kernel/rocky/patches/**\n",
+                "      - host-kernel/rocky/patches/**\n"
+                "      - host-kernel/rocky/patches/**\n",
+                1,
+            ),
+            pull_prefix
+            + pull_marker
+            + pull_trigger.replace(
+                "      - host-kernel/rocky/patches/**\n", "", 1
+            ),
             pull_prefix
             + pull_marker
             + pull_trigger.replace(

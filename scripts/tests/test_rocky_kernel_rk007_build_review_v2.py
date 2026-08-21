@@ -263,11 +263,14 @@ class Rk007BuildReviewV2Tests(unittest.TestCase):
                 ):
                     reviewer.validate_review_object(mutated)
 
-    def test_current_repository_retains_every_exact_runtime_input(self):
-        current = reviewer.validate_repository(
-            REPO_ROOT, reviewer.validate_review_object(copy.deepcopy(self.review))
-        )
-        self.assertRegex(current, r"^[0-9a-f]{40}$")
+    def test_current_repository_rejects_unreviewed_active_workflow_descendant(self):
+        with self.assertRaisesRegex(
+            reviewer.BuildReviewV2Error,
+            r"committed input 0 (?:current|worktree)",
+        ):
+            reviewer.validate_repository(
+                REPO_ROOT, reviewer.validate_review_object(copy.deepcopy(self.review))
+            )
 
     def test_repository_public_api_rejects_empty_or_altered_input_bindings(self):
         empty = copy.deepcopy(self.review)
@@ -286,8 +289,12 @@ class Rk007BuildReviewV2Tests(unittest.TestCase):
             "GIT_WORK_TREE": "/not/the/worktree",
         }
         with mock.patch.dict(os.environ, redirected, clear=False):
-            current = reviewer.validate_repository(REPO_ROOT, copy.deepcopy(self.review))
-        self.assertRegex(current, r"^[0-9a-f]{40}$")
+            with self.assertRaisesRegex(
+                reviewer.BuildReviewV2Error, "committed input 0"
+            ):
+                reviewer.validate_repository(REPO_ROOT, copy.deepcopy(self.review))
+            for name, value in redirected.items():
+                self.assertEqual(os.environ.get(name), value)
 
     def test_reused_modules_have_exact_repo_origins(self):
         expected = {
@@ -300,6 +307,29 @@ class Rk007BuildReviewV2Tests(unittest.TestCase):
             reviewer.REUSED_MODULE_ORIGINS,
             dict((name, str(path.resolve())) for name, path in expected.items()),
         )
+        self.assertEqual(
+            reviewer.REUSED_MODULE_SOURCES,
+            {
+                "kconfig_policy": "repository-file",
+                "kconfig_solver": (
+                    "git-blob:8211d19c56c56368718fe1420937fd5187530773"
+                ),
+                "link_closure": "repository-file",
+                "v1_review": "repository-file",
+            },
+        )
+
+    def test_frozen_solver_blob_is_independently_rehashed_before_execution(self):
+        with mock.patch.object(
+            reviewer, "_read_historical_blob", return_value=b"mutated"
+        ):
+            with self.assertRaisesRegex(
+                reviewer.BuildReviewV2Error, "frozen reused-module blob bytes differ"
+            ):
+                reviewer._load_exact_module(
+                    "_mckernel_rk007_v2_mutated_solver",
+                    "native_rust_kconfig_solver.py",
+                )
 
     def test_hostile_pythonpath_scripts_package_cannot_hijack_reused_checkers(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -328,7 +358,11 @@ class Rk007BuildReviewV2Tests(unittest.TestCase):
                 ],
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=environment,
             )
-        self.assertEqual(completed.returncode, 0, completed.stderr.decode("utf-8"))
+        self.assertEqual(completed.returncode, 1)
+        error = completed.stderr.decode("utf-8")
+        self.assertIn("committed input 0", error)
+        self.assertNotIn("foreign reused checker imported", error)
+        self.assertNotIn("foreign scripts package imported", error)
 
     def test_duplicate_json_keys_and_noncanonical_json_are_rejected(self):
         with self.assertRaisesRegex(reviewer.BuildReviewV2Error, "duplicate JSON key"):
@@ -620,7 +654,7 @@ class Rk007BuildReviewV2Tests(unittest.TestCase):
         with self.assertRaisesRegex(reviewer.BuildReviewV2Error, "artifact size"):
             reviewer.verify_artifact_bytes(data + b"x", self.review)
 
-    def test_cli_check_mode_is_noncrediting(self):
+    def test_cli_check_mode_fails_closed_on_unreviewed_active_workflow(self):
         completed = subprocess.run(
             [
                 sys.executable, str(SCRIPTS / "rocky_kernel_rk007_build_review_v2.py"),
@@ -628,11 +662,9 @@ class Rk007BuildReviewV2Tests(unittest.TestCase):
             ],
             stdout=subprocess.PIPE, stderr=subprocess.PIPE,
         )
-        self.assertEqual(completed.returncode, 0, completed.stderr.decode("utf-8"))
-        output = json.loads(completed.stdout.decode("ascii"))
-        self.assertFalse(output["artifact_verified"])
-        self.assertFalse(output["claims"]["credit_eligible"])
-        self.assertFalse(output["claims"]["tracker_credit"])
+        self.assertEqual(completed.returncode, 1)
+        self.assertEqual(completed.stdout, b"")
+        self.assertIn("committed input 0", completed.stderr.decode("utf-8"))
 
     def test_checker_source_parses_as_python_3_6(self):
         source = (SCRIPTS / "rocky_kernel_rk007_build_review_v2.py").read_text()

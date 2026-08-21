@@ -96,6 +96,27 @@ EXPECTED_INPUTS = {
         "size": 60008,
     },
 }
+# The v2 authority remains an ef58860e successor scaffold.  Current source
+# closure and checker implementations are accepted only through these exact
+# compatibility pins; none can fill the required-missing child counts or flip
+# a claim in the historical contract.
+CURRENT_IMPLEMENTATION_OVERRIDES = {
+    EXPECTED_INPUTS["license_inventory_v1_checker"]["path"]: {
+        "path": EXPECTED_INPUTS["license_inventory_v1_checker"]["path"],
+        "sha256": "69713cb4bba8c1f2a9ca88b5baed11a1876403c235b6163e469777212b85f374",
+        "size": 61217,
+    },
+    EXPECTED_INPUTS["source_lock"]["path"]: {
+        "path": EXPECTED_INPUTS["source_lock"]["path"],
+        "sha256": "b70df1e475072dbfa31fdc712900ac59d30eeb139219c7076aacaa19abf0fded",
+        "size": 18336,
+    },
+    EXPECTED_INPUTS["source_lock_validator"]["path"]: {
+        "path": EXPECTED_INPUTS["source_lock_validator"]["path"],
+        "sha256": "d127c497245ba373f68f5d6e6fc934369b368b665365bd1f46d05ff08f8b3718",
+        "size": 60175,
+    },
+}
 EXPECTED_SOURCE_RPM = {
     "cache_relative_path": (
         "rocky/10.2/x86_64/source-rpms/sha256/2b/"
@@ -829,9 +850,14 @@ def validate_contract_schema(authority):
 
 
 def _load_bound(repo, record, label):
-    path = repository_file(repo, record["path"], label)
+    active_record = CURRENT_IMPLEMENTATION_OVERRIDES.get(record["path"], record)
+    require_exact(active_record["path"], record["path"], label + " compatibility path")
+    path = repository_file(repo, active_record["path"], label)
     data = _bounded_file(path, label, MAX_BOUND_INPUT_BYTES)
-    if len(data) != record["size"] or hashlib.sha256(data).hexdigest() != record["sha256"]:
+    if (
+        len(data) != active_record["size"]
+        or hashlib.sha256(data).hexdigest() != active_record["sha256"]
+    ):
         raise ChildInventoryError("{0} bytes differ".format(label))
     return path, data
 

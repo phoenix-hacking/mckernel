@@ -174,6 +174,10 @@ EXPECTED_LICENSE_CAPTURE_AUTHORITY: dict[str, Any] = {
                 ),
                 (
                     "host-kernel/rocky/patches/"
+                    "0020a-rust-miscdevice-bind-file-operations-to-module.patch"
+                ),
+                (
+                    "host-kernel/rocky/patches/"
                     "0021-objtool-recognize-rust-1.92-panic-const.patch"
                 ),
                 (

@@ -1,6 +1,7 @@
-From: local compatibility candidate
+From: McKernel local compatibility integration
 Subject: [PATCH] rust: miscdevice: bind file operations to their module
-Status: candidate only; not integrated into any source authority or workflow
+Status: active ordered Rocky compatibility patch; unbuilt and noncrediting
+License: GPL-2.0
 
 Require every miscdevice implementation to identify the module containing its
 callbacks, and bind that module to file_operations.owner.  The vtable remains
@@ -12,8 +13,9 @@ Also require an explicit compat_ioctl implementation.  Falling back to
 compat_ptr_ioctl silently opts implementations into pointer conversion without
 letting them state or test their 32-bit ABI.
 
-This local follow-up is intentionally unintegrated and carries no build,
-runtime, review, gate, or credit claim.
+This repository-local compatibility patch is active immediately after patch
+0020.  Integration alone carries no configured-build, runtime, independent
+review, gate, or tracker-credit claim.
 ---
  rust/kernel/miscdevice.rs | 21 +++++++++++----------
  1 file changed, 11 insertions(+), 10 deletions(-)

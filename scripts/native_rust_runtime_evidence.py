@@ -5,6 +5,8 @@ from __future__ import print_function
 
 import argparse
 import copy
+import datetime
+import email.utils
 import hashlib
 import json
 import os
@@ -64,20 +66,186 @@ HEX64 = re.compile(r"^[0-9a-f]{64}$")
 EXPECTED_FP0006_NATIVE_JOB_SHA256 = "edb35a6bdf7bd5495e9b5301e15cc2ca674626ea779c79b085f7e1baccb2cde3"
 EXPECTED_KERNEL_LOCALVERSION = "-211.44.1.el10_2.mckernel1.x86_64"
 EXPECTED_KERNEL_RELEASE = "6.12.0" + EXPECTED_KERNEL_LOCALVERSION
+EXPECTED_SOURCE_DATE_EPOCH = 1786434034
+EXPECTED_ROCKY_OS_RELEASE_SHA256 = (
+    "2ac9f7b21412a20a1b30dba66be466a21abd87e4cddad00841374d7bfae89084"
+)
+SERIAL_FATAL_PATTERNS = (
+    ("BUG", re.compile(r"^(?:\[\s*[0-9.]+\]\s+)?(?:kernel )?BUG(?:[: ])", re.IGNORECASE)),
+    ("Oops", re.compile(r"^(?:\[\s*[0-9.]+\]\s+)?Oops(?:[: ])", re.IGNORECASE)),
+    (
+        "kernel panic",
+        re.compile(
+            r"^(?:\[\s*[0-9.]+\]\s+)?Kernel panic - not syncing:",
+            re.IGNORECASE,
+        ),
+    ),
+    ("call trace", re.compile(r"^(?:\[\s*[0-9.]+\]\s+)?Call Trace:$", re.IGNORECASE)),
+    (
+        "general protection fault",
+        re.compile(
+            r"^(?:\[\s*[0-9.]+\]\s+)?(?:general protection fault|GPF:)",
+            re.IGNORECASE,
+        ),
+    ),
+    (
+        "NULL dereference",
+        re.compile(
+            r"^(?:\[\s*[0-9.]+\]\s+)?(?:BUG: )?(?:unable to handle kernel )?NULL pointer dereference",
+            re.IGNORECASE,
+        ),
+    ),
+    ("KASAN", re.compile(r"^(?:\[\s*[0-9.]+\]\s+)?KASAN:", re.IGNORECASE)),
+    ("UBSAN", re.compile(r"^(?:\[\s*[0-9.]+\]\s+)?UBSAN:", re.IGNORECASE)),
+    ("use-after-free", re.compile(r"\buse-after-free\b", re.IGNORECASE)),
+    ("double-free", re.compile(r"\bdouble[ -]free\b", re.IGNORECASE)),
+    (
+        "refcount underflow",
+        re.compile(r"\brefcount(?:_t)?:.*\bunderflow\b", re.IGNORECASE),
+    ),
+    (
+        "lockup",
+        re.compile(r"\b(?:soft lockup|hard LOCKUP)\b", re.IGNORECASE),
+    ),
+    (
+        "hung task",
+        re.compile(r"^.*INFO: task .* blocked for more than ", re.IGNORECASE),
+    ),
+    (
+        "kmemleak",
+        re.compile(
+            r"(?:\bkmemleak:.*\bunreferenced object\b|^unreferenced object 0x)",
+            re.IGNORECASE,
+        ),
+    ),
+)
+EXPECTED_REPRODUCIBLE_BUILD_ENVIRONMENT_NAMES = (
+    "KBUILD_BUILD_HOST",
+    "KBUILD_BUILD_TIMESTAMP",
+    "KBUILD_BUILD_USER",
+    "KBUILD_BUILD_VERSION",
+    "SOURCE_DATE_EPOCH",
+)
+EXPECTED_REPRODUCIBLE_BUILD_ENVIRONMENT = {
+    "KBUILD_BUILD_HOST": "rocky-10.2-x86_64",
+    "KBUILD_BUILD_TIMESTAMP": "Tue, 11 Aug 2026 07:40:34 +0000",
+    "KBUILD_BUILD_USER": "mckernel",
+    "KBUILD_BUILD_VERSION": "1",
+    "SOURCE_DATE_EPOCH": str(EXPECTED_SOURCE_DATE_EPOCH),
+}
+EXPECTED_REPRODUCIBLE_BUILD_ENVIRONMENT_SHA256 = hashlib.sha256(
+    "".join(
+        "{0}={1}\n".format(
+            name, EXPECTED_REPRODUCIBLE_BUILD_ENVIRONMENT[name]
+        )
+        for name in EXPECTED_REPRODUCIBLE_BUILD_ENVIRONMENT_NAMES
+    ).encode("ascii")
+).hexdigest()
+EXPECTED_REPRODUCIBLE_BUILD_ASSERTION_COMMANDS = (
+    'test "$KBUILD_BUILD_HOST" = rocky-10.2-x86_64',
+    'test "$KBUILD_BUILD_TIMESTAMP" = "Tue, 11 Aug 2026 07:40:34 +0000"',
+    'test "$KBUILD_BUILD_USER" = mckernel',
+    'test "$KBUILD_BUILD_VERSION" = 1',
+    'test "$SOURCE_DATE_EPOCH" = 1786434034',
+)
+EXPECTED_KBUILD_ENV_COMMAND_PREFIX = [
+    "/usr/bin/env",
+    "-i",
+    "BASH_ENV=",
+    "ENV=",
+    "GNUMAKEFLAGS=",
+    "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+    "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+    "KBUILD_BUILD_USER=mckernel",
+    "KBUILD_BUILD_VERSION=1",
+    "LANG=C",
+    "LC_ALL=C",
+    "LD_LIBRARY_PATH=",
+    "LD_PRELOAD=",
+    "MAKEFILES=",
+    "MAKEFLAGS=",
+    "MAKEOVERRIDES=",
+    "MFLAGS=",
+    "PATH=/usr/bin:/bin",
+    "SOURCE_DATE_EPOCH=1786434034",
+    "TZ=UTC",
+]
+EXPECTED_KBUILD_MAKE_IDENTITY_ARGUMENTS = [
+    "KBUILD_BUILD_HOST=rocky-10.2-x86_64",
+    "KBUILD_BUILD_TIMESTAMP=Tue, 11 Aug 2026 07:40:34 +0000",
+    "KBUILD_BUILD_USER=mckernel",
+    "KBUILD_BUILD_VERSION=1",
+    "SOURCE_DATE_EPOCH=1786434034",
+]
+BOUND_ROCKY_TOOL_ENVIRONMENT = {
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PATH": "/usr/sbin:/usr/bin:/sbin:/bin",
+    "TZ": "UTC",
+}
+MODINFO_EXECUTABLE = "/usr/sbin/modinfo"
+NM_EXECUTABLE = "/usr/bin/nm"
+EXPECTED_PRECHECK_BUILD_MEMBERS = [
+    "build-log.exit-code",
+    "build.commands",
+    "build.environment",
+    "build.exit-code",
+    "build.log",
+    "build.phase",
+    "built-module-artifacts.txt",
+    "commit.sha",
+    "ihk-smp-x86_64.ko",
+    "ihk-smp-x86_64.ko.modinfo",
+    "ihk-smp-x86_64.ko.modinfo-section",
+    "ihk-smp-x86_64.ko.nm",
+    "ihk-smp-x86_64.ko.readelf",
+    "ihk.ko",
+    "ihk.ko.modinfo",
+    "ihk.ko.modinfo-section",
+    "ihk.ko.nm",
+    "ihk.ko.readelf",
+    "kconfig-solver-matrix.json",
+    "mcctrl.ko",
+    "mcctrl.ko.modinfo",
+    "mcctrl.ko.modinfo-section",
+    "mcctrl.ko.nm",
+    "mcctrl.ko.readelf",
+    "module-targets.txt",
+    "workflow-state",
+]
 EXPECTED_EXACT_BUILD_PREPARATION_SHA256 = (
-    "e680cfc9dd6f1dc09a8cc86b56045f0df6bac548bafd7d1cc40af2a338cba5af"
+    "53c801ed889372d8303f83a604c7b7a214297b7c7401db622e282639cc8f1b4c"
 )
 EXPECTED_EXACT_BUILD_PREFIX_SHA256 = (
-    "aa7da704ea4e3d300ebf1a5747f367db5e406bafcf6f3842254f6a67e55f3ce2"
+    "add4edbc6810fc6f5b3591a04bfb8a544359df25e6b31c139d60738dd45206a0"
 )
+EXPECTED_EXACT_BUILD_STEP_SHA256 = {
+    "Refuse the wrong runtime and install exact build tools": "acabf171e87378f911362a812477945a4644fc3e04b4e107e57fff729763b420",
+    "Check out the exact candidate without credentials": "4ce648da06a9ff165af51ca0e766fdaedc88353f72508499af8b27d93a4b83bc",
+    "Verify source-only contracts without claiming readiness": "f5fbb4c4d2bc3d2e639b2865644d080942c3de95da8a867affac6006aa16d38e",
+    "Acquire, patch, and credit-forbidden-stage the exact source": "68e10d39d659f36d8157b00108efd1ffc48d590d448e5c4742925dcde18bb5e5",
+    "Resolve the evidence-only module configuration twice": "259105f266b8784b00f43256dc8d15b9a434f6575667cc91338856bff1fe9349",
+    "Compile the exact kernel and native Rust modules": "c1a7ca52c8c9d81057c4aa412544c164f3a00a7cbf00fca933fc3afb593dc1a1",
+    "Validate built metadata and capture immutable diagnostics": "ca7ea7458e4b8fa3d78ef10210c08aebb9da09d678bbe819bbebd2efc1765ec1",
+    "Upload compiler evidence or first-failure diagnostics": "f5c304d408baad23b482154ef91a5738f79a48c1a34b898be1c5e2c55499a3d9",
+}
+EXPECTED_RK006_CAPTURE_STEP_SHA256 = {
+    "Initialize non-durable capture and install exact tools": "a89bfbe988001115dbbe5c71135fa75f9ac0a1fe453c98c423e28795f16071ca",
+    "Check out the exact capture candidate without credentials": "c7ec10a3531204c964e98632341afa709ad11f1dc7ce872df916beb03c64ab30",
+    "Verify the frozen non-crediting RK-006 capture contract": "4a3394c9c33e8402e156392c2f813bc037dd2829cb16b4ceb14552644544859d",
+    "Reacquire and capture the full external 26-patch source replay": "f5ef6a7323e13a58f81970dcaec06411a3c0e8e5e96d392509b2eab067270e0c",
+    "Download the same-run exact-build evidence": "4c98e4feff7b7f391d16b8bafff6c3531a7766762c5f66ec5a703e233955316a",
+    "Finalize the non-crediting build binding": "9a00d87736178dc250a1682af9458132bacd9cd9c34ab2854ea7668330bcdacb",
+    "Upload RK-006 capture or first-failure diagnostics": "7ed2ac56ab7dda85cb3ac7b81dd569745fb82103e38e3abc38c527bc0736d7fe",
+}
 EXPECTED_RUNTIME_INIT_SHA256 = (
     "d2a952a91a4c53f555ceb8c96edd6d2bce2375f3c77b09374d51daf38524412b"
 )
 EXPECTED_REPOSITORY_WORKFLOW_IDENTITIES = {
     "build_workflow": {
-        "git_blob_sha1": "778e9aea69d330daf0945f14276163d171faead5",
-        "sha256": "bca3d56c95842d937f8cebf8016b994200ffbeb9c9180cfef07f13a64d949f15",
-        "size": 49287,
+        "git_blob_sha1": "4a0f18b6bc21daadc86718835af9073cabec6691",
+        "sha256": "30c38b26f8db5f8793cc397a9d713deb6104131378b0f8bd9a45b14e6c570456",
+        "size": 67473,
     },
     "runtime_pr_workflow": {
         "git_blob_sha1": "64bb717852d36fc1021e2b61e83aca6415b184d5",
@@ -85,9 +253,9 @@ EXPECTED_REPOSITORY_WORKFLOW_IDENTITIES = {
         "size": 754,
     },
     "runtime_workflow": {
-        "git_blob_sha1": "4ce93e079b8e1ef1af1421a147352799af6b0cb7",
-        "sha256": "b0b9ff05329dc580482bc1cf617fa7636c0d096575d4f0be7bb79fad51131964",
-        "size": 11052,
+        "git_blob_sha1": "659afc5066a5a288862b4e9cd2a670f317c54198",
+        "sha256": "8faba6118c35a622d7c3990368381b16b35409adcb4471fbb0b613bb01902ab3",
+        "size": 15826,
     },
 }
 BUILD_KERNEL_TARGETS = ["bzImage"]
@@ -152,6 +320,25 @@ def _load_json(path: Path) -> dict[str, Any]:
 def _canonical_bytes(value: Any) -> bytes:
     return (json.dumps(value, sort_keys=True, separators=(",", ":")) + "\n").encode(
         "utf-8"
+    )
+
+
+def _reproducible_build_environment_text() -> str:
+    return "".join(
+        "{0}={1}\n".format(name, EXPECTED_REPRODUCIBLE_BUILD_ENVIRONMENT[name])
+        for name in EXPECTED_REPRODUCIBLE_BUILD_ENVIRONMENT_NAMES
+    )
+
+
+def _reproducible_build_record_commands(directory_variable: str) -> tuple[str, ...]:
+    return (
+        "printf '%s\\n' \\",
+        '"KBUILD_BUILD_HOST=$KBUILD_BUILD_HOST" \\',
+        '"KBUILD_BUILD_TIMESTAMP=$KBUILD_BUILD_TIMESTAMP" \\',
+        '"KBUILD_BUILD_USER=$KBUILD_BUILD_USER" \\',
+        '"KBUILD_BUILD_VERSION=$KBUILD_BUILD_VERSION" \\',
+        '"SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH" \\',
+        '> "{0}/build.environment"'.format(directory_variable),
     )
 
 
@@ -247,7 +434,21 @@ def _read_text(path: Path, label: str) -> str:
         raise EvidenceError("cannot read {0}: {1}".format(label, error)) from error
 
 
-def _validate_rk006_capture_job(job_text: str) -> None:
+def _split_named_steps(text: str, expected_names: list[str], label: str) -> dict[str, str]:
+    observed = re.findall(r"(?m)^      - name: (.+)$", text)
+    if observed != expected_names:
+        raise EvidenceError("{0} steps are missing, extra, or reordered".format(label))
+    headers = ["      - name: {0}\n".format(name) for name in expected_names]
+    positions = [text.index(header) for header in headers]
+    result = {}
+    for index, (name, position) in enumerate(zip(expected_names, positions)):
+        start = position + len(headers[index])
+        end = positions[index + 1] if index + 1 < len(positions) else len(text)
+        result[name] = text[start:end]
+    return result
+
+
+def _validate_rk006_capture_job_v2(job_text: str) -> None:
     preamble = (
         "  rk006-full-source-build-capture:\n"
         "    name: Bind RK-006 full-source replay to the exact build (credit forbidden)\n"
@@ -259,7 +460,56 @@ def _validate_rk006_capture_job(job_text: str) -> None:
         "e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176\n"
         "    defaults:\n"
         "      run:\n"
-        "        shell: bash\n"
+        "        shell: /usr/bin/bash --noprofile --norc -p -e -o pipefail {0}\n"
+        "\n"
+        "    steps:\n"
+    )
+    if not job_text.startswith(preamble):
+        raise EvidenceError("RK-006 capture job scope differs")
+    expected_names = list(EXPECTED_RK006_CAPTURE_STEP_SHA256)
+    steps = _split_named_steps(job_text[len(preamble) :], expected_names, "RK-006 capture")
+    for name in expected_names:
+        if _sha256_bytes(steps[name].encode("utf-8")) != (
+            EXPECTED_RK006_CAPTURE_STEP_SHA256[name]
+        ):
+            raise EvidenceError("RK-006 capture step scope differs: {0}".format(name))
+    if job_text.count("        if: ${{ always() }}\n") != 1:
+        raise EvidenceError("RK-006 capture upload condition differs")
+    active = "\n".join(_active_shell_lines(job_text))
+    for required, expected_count in (
+        ("unset GITHUB_ENV GITHUB_PATH", 3),
+        (
+            "/usr/bin/python3 -E -s scripts/rocky_kernel_rk006_full_source_build_capture.py",
+            4,
+        ),
+        (
+            "/usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC",
+            6,
+        ),
+    ):
+        if active.count(required) != expected_count:
+            raise EvidenceError("RK-006 capture clean execution boundary differs")
+    if any(
+        fragment in active
+        for fragment in ("|| true", "set +e", "trap ", "return ", "exit 0")
+    ):
+        raise EvidenceError("RK-006 capture may tolerate or bypass evidence failure")
+
+
+def _validate_rk006_capture_job(job_text: str) -> None:
+    return _validate_rk006_capture_job_v2(job_text)
+    preamble = (
+        "  rk006-full-source-build-capture:\n"
+        "    name: Bind RK-006 full-source replay to the exact build (credit forbidden)\n"
+        "    needs: exact-build\n"
+        "    runs-on: ubuntu-24.04\n"
+        "    timeout-minutes: 150\n"
+        "    container:\n"
+        "      image: rockylinux/rockylinux:10.2@sha256:"
+        "e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176\n"
+        "    defaults:\n"
+        "      run:\n"
+        "        shell: /usr/bin/bash --noprofile --norc -p -e -o pipefail {0}\n"
         "\n"
         "    steps:\n"
     )
@@ -283,7 +533,7 @@ def _validate_rk006_capture_job(job_text: str) -> None:
         "Initialize non-durable capture and install exact tools",
         "Check out the exact capture candidate without credentials",
         "Verify the frozen non-crediting RK-006 capture contract",
-        "Reacquire and capture the full external 25-patch source replay",
+        "Reacquire and capture the full external 26-patch source replay",
         "Download the same-run exact-build evidence",
         "Finalize the non-crediting build binding",
         "Upload RK-006 capture or first-failure diagnostics",
@@ -676,7 +926,168 @@ def _validate_fp0006_native_capture_job(job_text: str) -> None:
         raise EvidenceError("FP-0006 native actions are not exactly digest pinned")
 
 
+def _validate_exact_build_workflow_v2(text: str) -> str:
+    native_separator = "\n  fp0006-native-rust-capture:\n"
+    capture_separator = "\n  rk006-full-source-build-capture:\n"
+    if text.count(native_separator) != 1 or text.count(capture_separator) != 1:
+        raise EvidenceError(
+            "exact build workflow must contain one FP-0006 job and one trailing RK-006 capture job"
+        )
+    exact_build_text, native_and_capture = text.split(native_separator, 1)
+    if capture_separator not in native_and_capture:
+        raise EvidenceError("FP-0006 native job must precede the trailing RK-006 capture job")
+    native_tail, capture_tail = native_and_capture.split(capture_separator, 1)
+    _validate_fp0006_native_capture_job(
+        "  fp0006-native-rust-capture:\n" + native_tail
+    )
+    _validate_rk006_capture_job(
+        "  rk006-full-source-build-capture:\n" + capture_tail
+    )
+
+    jobs_marker = "\njobs:\n"
+    if exact_build_text.count(jobs_marker) != 1:
+        raise EvidenceError("exact build workflow prefix scope differs")
+    workflow_prefix = exact_build_text[: exact_build_text.index(jobs_marker) + 1]
+    if _sha256_bytes(workflow_prefix.encode("utf-8")) != (
+        EXPECTED_EXACT_BUILD_PREFIX_SHA256
+    ):
+        raise EvidenceError("exact build workflow prefix scope differs")
+    expected_env = (
+        "\nenv:\n"
+        "  ROCKY_IMAGE: rockylinux/rockylinux:10.2@sha256:"
+        "e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176\n"
+        "  EXPECTED_HEAD_SHA: ${{ inputs.validation_sha || "
+        "github.event.pull_request.head.sha || github.sha }}\n"
+        "  EXPECTED_KERNEL_RELEASE: "
+        + EXPECTED_KERNEL_RELEASE
+        + "\n"
+        "  KBUILD_BUILD_HOST: rocky-10.2-x86_64\n"
+        '  KBUILD_BUILD_TIMESTAMP: "Tue, 11 Aug 2026 07:40:34 +0000"\n'
+        "  KBUILD_BUILD_USER: mckernel\n"
+        '  KBUILD_BUILD_VERSION: "1"\n'
+        "  NATIVE_KERNEL_LOCALVERSION: "
+        + EXPECTED_KERNEL_LOCALVERSION
+        + "\n"
+        '  SOURCE_DATE_EPOCH: "1786434034"\n\n'
+    )
+    if not workflow_prefix.endswith(expected_env):
+        raise EvidenceError("exact build workflow environment mapping differs")
+
+    preamble = (
+        "jobs:\n"
+        "  exact-build:\n"
+        "    name: Compile three native modules (credit forbidden)\n"
+        "    runs-on: ubuntu-24.04\n"
+        "    timeout-minutes: 330\n"
+        "    container:\n"
+        "      image: rockylinux/rockylinux:10.2@sha256:"
+        "e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176\n"
+        "    defaults:\n"
+        "      run:\n"
+        "        shell: /usr/bin/bash --noprofile --norc -p -e -o pipefail {0}\n"
+        "\n"
+        "    steps:\n"
+    )
+    job_text = exact_build_text[exact_build_text.index("jobs:\n") :]
+    if not job_text.startswith(preamble):
+        raise EvidenceError("exact build workflow job scope differs")
+    expected_names = list(EXPECTED_EXACT_BUILD_STEP_SHA256)
+    steps = _split_named_steps(job_text[len(preamble) :], expected_names, "exact build")
+
+    module_targets = re.findall(
+        r"(?ms)^\s*module_targets=\(\n(?P<body>.*?)^\s*\)\n",
+        steps["Compile the exact kernel and native Rust modules"],
+    )
+    if len(module_targets) != 1 or [
+        line.strip() for line in module_targets[0].splitlines() if line.strip()
+    ] != BUILD_MODULE_TARGETS:
+        raise EvidenceError("exact build workflow module target scope differs")
+
+    active = "\n".join(_active_shell_lines(job_text))
+    logical = re.sub(r"\\\n\s*", " ", active)
+    make_lines = [line.strip() for line in logical.splitlines() if "/usr/bin/make" in line]
+    if len(make_lines) != 6:
+        raise EvidenceError("exact build workflow Kbuild release scope differs")
+    make_targets = (
+        "olddefconfig",
+        "olddefconfig",
+        "rustavailable",
+        "bzImage",
+        '"${module_targets[@]}"',
+        'kernelrelease)"',
+    )
+    required_make_arguments = (
+        'ARCH=x86_64',
+        'LLVM=1',
+        'LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION"',
+        'KBUILD_BUILD_HOST="$KBUILD_BUILD_HOST"',
+        'KBUILD_BUILD_TIMESTAMP="$KBUILD_BUILD_TIMESTAMP"',
+        'KBUILD_BUILD_USER="$KBUILD_BUILD_USER"',
+        'KBUILD_BUILD_VERSION="$KBUILD_BUILD_VERSION"',
+        'SOURCE_DATE_EPOCH="$SOURCE_DATE_EPOCH"',
+    )
+    for index, (line, target) in enumerate(zip(make_lines, make_targets)):
+        if (
+            line.count('"${kbuild_environment[@]}" /usr/bin/make') != 1
+            or any(line.count(argument) != 1 for argument in required_make_arguments)
+            or not line.endswith(target)
+            or any(
+                token in line
+                for token in (
+                    " GNUMAKEFLAGS=",
+                    " MAKEFILES=",
+                    " MAKEFLAGS=",
+                    " MAKEOVERRIDES=",
+                    " MFLAGS=",
+                )
+            )
+        ):
+            raise EvidenceError(
+                "exact build workflow command scope differs at Kbuild invocation {0}".format(
+                    index + 1
+                )
+            )
+    if any(
+        " modules" in line or " M=" in line for line in make_lines
+    ):
+        raise EvidenceError("exact build workflow invokes a broad module build")
+
+    compile_text = steps["Compile the exact kernel and native Rust modules"]
+    compile_positions = [
+        compile_text.find("run_phase rustavailable"),
+        compile_text.find("run_phase bzImage"),
+        compile_text.find("run_phase native-modules"),
+    ]
+    if (
+        any(position < 0 for position in compile_positions)
+        or compile_positions != sorted(compile_positions)
+    ):
+        raise EvidenceError("exact build workflow commands are out of order")
+
+    error_labels = {
+        expected_names[0]: "exact build workflow bootstrap scope differs",
+        expected_names[1]: "exact build workflow prebuild scope differs",
+        expected_names[2]: "exact build workflow prebuild scope differs",
+        expected_names[3]: "exact build workflow prebuild scope differs",
+        expected_names[4]: "exact build workflow CONFIG_MODULES prerequisite differs",
+        expected_names[5]: (
+            "exact build workflow compile step command scope or failure capture differs"
+        ),
+        expected_names[6]: "exact build workflow artifact scope differs",
+        expected_names[7]: "exact build workflow upload scope differs",
+    }
+    for name in expected_names:
+        if _sha256_bytes(steps[name].encode("utf-8")) != (
+            EXPECTED_EXACT_BUILD_STEP_SHA256[name]
+        ):
+            raise EvidenceError(error_labels[name])
+    if job_text.count("        if: ${{ always() }}\n") != 1:
+        raise EvidenceError("exact build workflow upload scope differs")
+    return exact_build_text
+
+
 def _validate_exact_build_workflow(text: str) -> str:
+    return _validate_exact_build_workflow_v2(text)
     native_separator = "\n  fp0006-native-rust-capture:\n"
     capture_separator = "\n  rk006-full-source-build-capture:\n"
     if text.count(native_separator) != 1 or text.count(capture_separator) != 1:
@@ -711,12 +1122,23 @@ def _validate_exact_build_workflow(text: str) -> str:
         "  EXPECTED_KERNEL_RELEASE: "
         + EXPECTED_KERNEL_RELEASE
         + "\n"
+        "  KBUILD_BUILD_HOST: rocky-10.2-x86_64\n"
+        '  KBUILD_BUILD_TIMESTAMP: "Tue, 11 Aug 2026 07:40:34 +0000"\n'
+        "  KBUILD_BUILD_USER: mckernel\n"
+        '  KBUILD_BUILD_VERSION: "1"\n'
         "  NATIVE_KERNEL_LOCALVERSION: "
         + EXPECTED_KERNEL_LOCALVERSION
-        + "\n\n"
+        + "\n"
+        '  SOURCE_DATE_EPOCH: "1786434034"\n\n'
     )
     if not workflow_prefix.endswith(expected_env):
         raise EvidenceError("exact build workflow environment mapping differs")
+    for name in EXPECTED_REPRODUCIBLE_BUILD_ENVIRONMENT_NAMES:
+        if (
+            len(re.findall(r"(?m)^\s*{0}:".format(re.escape(name)), text)) != 4
+            or text.count(name) != 32
+        ):
+            raise EvidenceError("exact build reproducible environment scope differs")
     active_workflow = "\n".join(_active_shell_lines(text))
     logical_workflow = re.sub(r"\\\n\s*", " ", active_workflow)
     kbuild_commands = re.findall(
@@ -797,6 +1219,18 @@ def _validate_exact_build_workflow(text: str) -> str:
         'evidence_dir="$RUNNER_TEMP/native-rust-build-evidence"',
         'mkdir -p "$evidence_dir"',
         'printf \'%s\\n\' "bootstrap-started" > "$evidence_dir/workflow-state"',
+        'test "$KBUILD_BUILD_HOST" = rocky-10.2-x86_64',
+        'test "$KBUILD_BUILD_TIMESTAMP" = "Tue, 11 Aug 2026 07:40:34 +0000"',
+        'test "$KBUILD_BUILD_USER" = mckernel',
+        'test "$KBUILD_BUILD_VERSION" = 1',
+        'test "$SOURCE_DATE_EPOCH" = 1786434034',
+        "printf '%s\\n' \\",
+        '"KBUILD_BUILD_HOST=$KBUILD_BUILD_HOST" \\',
+        '"KBUILD_BUILD_TIMESTAMP=$KBUILD_BUILD_TIMESTAMP" \\',
+        '"KBUILD_BUILD_USER=$KBUILD_BUILD_USER" \\',
+        '"KBUILD_BUILD_VERSION=$KBUILD_BUILD_VERSION" \\',
+        '"SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH" \\',
+        '> "$evidence_dir/build.environment"',
         'test "$(uname -m)" = x86_64',
         ". /etc/os-release",
         'test "$ID" = rocky',
@@ -884,6 +1318,7 @@ def _validate_exact_build_workflow(text: str) -> str:
     )
     expected_resolution_commands = (
         "set -euo pipefail",
+    ) + EXPECTED_REPRODUCIBLE_BUILD_ASSERTION_COMMANDS + (
         'mkdir -p "$BUILD_DIR"',
         'cp "$NATIVE_BASELINE_CONFIG" "$BUILD_DIR/.config"',
         '"$NATIVE_SOURCE_ROOT/scripts/kconfig/merge_config.sh" -m -O "$BUILD_DIR" \\',
@@ -962,9 +1397,12 @@ def _validate_exact_build_workflow(text: str) -> str:
         if "modules" in tokens or any(token.startswith("M=") for token in tokens):
             raise EvidenceError("exact build workflow invokes a broad module build")
     expected_compile_commands = (
-        "set -uo pipefail",
+        "set -euo pipefail",
         'evidence_dir="$RUNNER_TEMP/native-rust-build-evidence"',
         'mkdir -p "$evidence_dir"',
+    ) + EXPECTED_REPRODUCIBLE_BUILD_ASSERTION_COMMANDS + (
+        _reproducible_build_record_commands("$evidence_dir")
+    ) + (
         "module_targets=(",
         "drivers/misc/mckernel/ihk.ko",
         "drivers/misc/mckernel/ihk-smp-x86_64.ko",
@@ -1039,6 +1477,9 @@ def _validate_exact_build_workflow(text: str) -> str:
     expected_metadata_commands = (
         "set -euo pipefail",
         'EVIDENCE_DIR="$RUNNER_TEMP/native-rust-build-evidence"',
+    ) + EXPECTED_REPRODUCIBLE_BUILD_ASSERTION_COMMANDS + (
+        _reproducible_build_record_commands("$EVIDENCE_DIR")
+    ) + (
         'module_root="$NATIVE_BUILD_DIR/drivers/misc/mckernel"',
         'ihk="$module_root/ihk.ko"',
         'smp="$module_root/ihk-smp-x86_64.ko"',
@@ -1303,8 +1744,10 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
             "modules",
             "protocol",
             "repository_inputs",
+            "reproducible_build_identity",
             "repository_workflow_identities",
             "runtime",
+            "runtime_verifier_scope",
             "schema_version",
             "selected_kernel",
         },
@@ -1353,12 +1796,51 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
             "e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176"
         ),
         "distribution": "Rocky Linux",
+        "os_release_sha256": EXPECTED_ROCKY_OS_RELEASE_SHA256,
         "qemu_accelerator": "tcg",
         "required_kernel_config": EXPECTED_RUNTIME_REQUIRED_CONFIG,
         "release": "10.2",
     }
     if contract["runtime"] != expected_runtime:
         raise EvidenceError("runtime identity differs from exact Rocky 10.2 x86_64 TCG")
+    if contract["runtime_verifier_scope"] != {
+        "initramfs_cpio_replay": False,
+        "policy": (
+            "Offline validation binds the exact initramfs bytes and checksum record but "
+            "does not independently replay cpio membership or the embedded module, init, "
+            "and poweroff bytes. Build-to-guest correlation therefore depends on the "
+            "sealed exact workflow and outer same-run artifact provenance; this residual "
+            "cannot support gate, runtime, durability, or credit claims."
+        ),
+    }:
+        raise EvidenceError("runtime verifier limitation scope differs")
+
+    expected_reproducible_identity = {
+        "authority": {
+            "json_pointer": "/repository_snapshot/primary_metadata/timestamp",
+            "kbuild_build_host_basis": (
+                "selected Rocky 10.2 x86_64 build platform identity"
+            ),
+            "kbuild_build_user_basis": "repository project identity mckernel",
+            "kbuild_build_version_basis": (
+                "fresh exact-build tree canonical first build iteration"
+            ),
+            "source_date_epoch": EXPECTED_SOURCE_DATE_EPOCH,
+            "source_lock_id": (
+                "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-source-v1"
+            ),
+        },
+        "environment": EXPECTED_REPRODUCIBLE_BUILD_ENVIRONMENT,
+        "policy": (
+            "The fixed Kbuild identity is derived from the locked source-repository "
+            "primary-metadata timestamp and applies to every exact-build phase, including "
+            "reusable-workflow builds. This removes run-specific builder and wall-clock "
+            "bytes but does not prove cross-run reproducibility, runtime behavior, "
+            "durability, or gate credit."
+        ),
+    }
+    if contract["reproducible_build_identity"] != expected_reproducible_identity:
+        raise EvidenceError("reproducible build identity differs")
 
     selected = contract["selected_kernel"]
     if selected != {
@@ -1372,6 +1854,28 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
     source_lock = _load_json(
         _repo_file(repo, contract["repository_inputs"]["source_lock"], "source lock")
     )
+    source_timestamp = (
+        source_lock.get("repository_snapshot", {})
+        .get("primary_metadata", {})
+        .get("timestamp")
+    )
+    authority = contract["reproducible_build_identity"]["authority"]
+    if (
+        type(source_timestamp) is not int
+        or source_timestamp != EXPECTED_SOURCE_DATE_EPOCH
+        or authority["source_date_epoch"] != source_timestamp
+        or authority["source_lock_id"] != source_lock.get("lock_id")
+    ):
+        raise EvidenceError("reproducible build timestamp authority diverges")
+    canonical_timestamp = email.utils.format_datetime(
+        datetime.datetime.fromtimestamp(source_timestamp, datetime.timezone.utc)
+    )
+    if (
+        contract["reproducible_build_identity"]["environment"]
+        .get("KBUILD_BUILD_TIMESTAMP")
+        != canonical_timestamp
+    ):
+        raise EvidenceError("reproducible Kbuild timestamp is not authority-derived")
     archives = [
         item
         for item in source_lock.get("embedded_objects", [])
@@ -1463,6 +1967,7 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
         "SHA256SUMS",
         "build-log.exit-code",
         "build.commands",
+        "build.environment",
         "build.exit-code",
         "build.log",
         "build.phase",
@@ -1501,10 +2006,11 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
         "environment.txt",
         "initramfs.cpio.gz",
         "initramfs.sha256",
+        "native-rust-runtime-poweroff.o",
         "qemu-command.txt",
+        "qemu-version.txt",
         "qemu.exit-code",
         "qemu.log",
-        "qemu-version.txt",
         "serial.log",
         "workflow-state",
     ]
@@ -1592,7 +2098,7 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
         "  EXPECTED_KERNEL_RELEASE: {0}\n".format(EXPECTED_KERNEL_RELEASE),
         "  NATIVE_KERNEL_LOCALVERSION: {0}\n".format(EXPECTED_KERNEL_LOCALVERSION),
     ):
-        if build_workflow.count(assignment) != 1:
+        if build_workflow.count(assignment) != 5:
             raise EvidenceError("exact build workflow kernel-release identity differs")
     if build_workflow.count('LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION"') != 6:
         raise EvidenceError("exact build workflow does not bind every Kbuild release")
@@ -1770,6 +2276,7 @@ def _parse_sums(directory: Path) -> dict[str, str]:
     if sums_path.is_symlink() or not sums_path.is_file():
         raise EvidenceError("build evidence lacks regular SHA256SUMS")
     records: dict[str, str] = {}
+    ordered: list[str] = []
     for line in _read_text(sums_path, "build SHA256SUMS").splitlines():
         match = re.fullmatch(r"([0-9a-f]{64})  ([A-Za-z0-9._-]+)", line)
         if (
@@ -1779,12 +2286,53 @@ def _parse_sums(directory: Path) -> dict[str, str]:
         ):
             raise EvidenceError("malformed or duplicate build SHA256SUMS entry")
         records[match.group(2)] = match.group(1)
+        ordered.append(match.group(2))
     if not records:
         raise EvidenceError("build SHA256SUMS is empty")
+    if ordered != sorted(ordered):
+        raise EvidenceError("build SHA256SUMS paths are not canonical-order sorted")
     for name, digest in records.items():
         path = directory / name
         if path.is_symlink() or not path.is_file() or _sha256_file(path) != digest:
             raise EvidenceError("build evidence digest differs for {0}".format(name))
+    return records
+
+
+def _parse_precheck_sums(
+    directory: Path, final_records: dict[str, str], expected: list[str]
+) -> dict[str, str]:
+    precheck_path = directory / "PRECHECK_SHA256SUMS"
+    if precheck_path.is_symlink() or not precheck_path.is_file():
+        raise EvidenceError("build evidence lacks regular PRECHECK_SHA256SUMS")
+    records: dict[str, str] = {}
+    ordered: list[str] = []
+    for line in _read_text(
+        precheck_path, "build PRECHECK_SHA256SUMS"
+    ).splitlines():
+        match = re.fullmatch(r"([0-9a-f]{64})  ([A-Za-z0-9._-]+)", line)
+        if (
+            not match
+            or match.group(2) in records
+            or match.group(2) in {".", "..", "PRECHECK_SHA256SUMS", "SHA256SUMS"}
+        ):
+            raise EvidenceError(
+                "malformed or duplicate build PRECHECK_SHA256SUMS entry"
+            )
+        name = match.group(2)
+        records[name] = match.group(1)
+        ordered.append(name)
+    if ordered != sorted(ordered) or ordered != expected:
+        raise EvidenceError("build PRECHECK_SHA256SUMS file set or order differs")
+    for name, digest in records.items():
+        if final_records.get(name) != digest:
+            raise EvidenceError(
+                "build precheck/final digest differs for {0}".format(name)
+            )
+        path = directory / name
+        if path.is_symlink() or not path.is_file() or _sha256_file(path) != digest:
+            raise EvidenceError(
+                "build precheck evidence digest differs for {0}".format(name)
+            )
     return records
 
 
@@ -1923,6 +2471,7 @@ def _validate_build_scope_artifacts(
 ) -> dict[str, Any]:
     required = {
         "build.commands",
+        "build.environment",
         "build.exit-code",
         "build.log",
         "build-log.exit-code",
@@ -1943,6 +2492,11 @@ def _validate_build_scope_artifacts(
     if _read_text(directory / "build.phase", "build phase") != "complete\n":
         raise EvidenceError("exact build did not reach its complete phase")
     _regular_evidence_file(directory / "build.log", "exact build log")
+    build_environment = _read_text(
+        directory / "build.environment", "reproducible build environment"
+    )
+    if build_environment != _reproducible_build_environment_text():
+        raise EvidenceError("recorded reproducible build environment differs")
 
     targets = _read_text(directory / "module-targets.txt", "module target scope").splitlines()
     if targets != BUILD_MODULE_TARGETS:
@@ -1962,11 +2516,23 @@ def _validate_build_scope_artifacts(
         commands = [shlex.split(line, posix=True) for line in command_lines]
     except ValueError as error:
         raise EvidenceError("exact build command record is malformed") from error
-    if any(len(command) < 7 for command in commands):
+    make_index = len(EXPECTED_KBUILD_ENV_COMMAND_PREFIX)
+    if any(len(command) <= make_index + 7 for command in commands):
         raise EvidenceError("exact build command record is truncated")
+    if any(
+        command[:make_index] != EXPECTED_KBUILD_ENV_COMMAND_PREFIX
+        or command[make_index] != "/usr/bin/make"
+        for command in commands
+    ):
+        raise EvidenceError("exact build command environment boundary differs")
 
-    sources = [command[2] for command in commands]
-    outputs = [command[3][2:] if command[3].startswith("O=") else "" for command in commands]
+    sources = [command[make_index + 2] for command in commands]
+    outputs = [
+        command[make_index + 3][2:]
+        if command[make_index + 3].startswith("O=")
+        else ""
+        for command in commands
+    ]
     if len(set(sources)) != 1 or len(set(outputs)) != 1:
         raise EvidenceError("exact build commands use inconsistent trees")
     source = Path(sources[0])
@@ -1983,15 +2549,15 @@ def _validate_build_scope_artifacts(
     ):
         raise EvidenceError("exact build commands use an unexpected source/output identity")
 
-    prefix = [
-        "make",
+    prefix = EXPECTED_KBUILD_ENV_COMMAND_PREFIX + [
+        "/usr/bin/make",
         "-C",
         sources[0],
         "O=" + outputs[0],
         "ARCH=x86_64",
         "LLVM=1",
         "LOCALVERSION=" + EXPECTED_KERNEL_LOCALVERSION,
-    ]
+    ] + EXPECTED_KBUILD_MAKE_IDENTITY_ARGUMENTS
     expected_commands = [
         prefix + ["rustavailable"],
         prefix + ["-j2", "bzImage"],
@@ -2001,6 +2567,7 @@ def _validate_build_scope_artifacts(
         raise EvidenceError("exact build commands exceed the bounded target scope")
     return {
         "build_commands_sha256": records["build.commands"],
+        "build_environment_sha256": records["build.environment"],
         "build_log_sha256": records["build.log"],
         "kernel_targets": BUILD_KERNEL_TARGETS,
         "module_targets": BUILD_MODULE_TARGETS,
@@ -2008,16 +2575,17 @@ def _validate_build_scope_artifacts(
 
 
 def _run_field(module: Path, field: str) -> list[str]:
-    executable = shutil.which("modinfo")
-    if executable is None:
-        raise EvidenceError("modinfo is required to capture runtime evidence")
-    result = subprocess.run(
-        [executable, "-F", field, str(module)],
-        check=False,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        text=True,
-    )
+    try:
+        result = subprocess.run(
+            [MODINFO_EXECUTABLE, "-F", field, str(module)],
+            check=False,
+            env=dict(BOUND_ROCKY_TOOL_ENVIRONMENT),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+    except OSError as error:
+        raise EvidenceError("bound Rocky modinfo is unavailable: {0}".format(error)) from error
     if result.returncode != 0:
         raise EvidenceError("modinfo failed for {0}:{1}".format(module.name, field))
     return [line for line in result.stdout.splitlines() if line]
@@ -2034,16 +2602,17 @@ def _module_vermagic_release(module: Path) -> str:
 
 
 def _nm(module: Path, arguments: list[str]) -> str:
-    executable = shutil.which("nm")
-    if executable is None:
-        raise EvidenceError("nm is required to capture runtime evidence")
-    result = subprocess.run(
-        [executable] + arguments + [str(module)],
-        check=False,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        text=True,
-    )
+    try:
+        result = subprocess.run(
+            [NM_EXECUTABLE] + arguments + [str(module)],
+            check=False,
+            env=dict(BOUND_ROCKY_TOOL_ENVIRONMENT),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+    except OSError as error:
+        raise EvidenceError("bound Rocky nm is unavailable: {0}".format(error)) from error
     if result.returncode != 0:
         raise EvidenceError("nm failed for {0}".format(module.name))
     return result.stdout
@@ -2192,6 +2761,12 @@ def validate_serial(serial_path: Path, kernel_release: str) -> dict[str, Any]:
         raise EvidenceError("serial log is empty")
     text = data.decode("utf-8", errors="replace").replace("\r\n", "\n")
     lines = text.splitlines()
+    for line in lines:
+        for label, expression in SERIAL_FATAL_PATTERNS:
+            if expression.search(line) is not None:
+                raise EvidenceError(
+                    "serial log contains fatal diagnostic: {0}".format(label)
+                )
     complete = "{0} COMPLETE status=technical-capture-unreviewed credit=forbidden".format(
         PROTOCOL
     )
@@ -2476,10 +3051,24 @@ def _validate_capture_content(value: dict[str, Any]) -> None:
     scope = build["scope"]
     _require_keys(
         scope,
-        {"build_commands_sha256", "build_log_sha256", "kernel_targets", "module_targets"},
+        {
+            "build_commands_sha256",
+            "build_environment_sha256",
+            "build_log_sha256",
+            "kernel_targets",
+            "module_targets",
+        },
         "capture build scope",
     )
     _require_sha256_value(scope["build_commands_sha256"], "capture build command digest")
+    _require_sha256_value(
+        scope["build_environment_sha256"], "capture build environment digest"
+    )
+    if (
+        scope["build_environment_sha256"]
+        != EXPECTED_REPRODUCIBLE_BUILD_ENVIRONMENT_SHA256
+    ):
+        raise EvidenceError("capture build environment digest differs")
     _require_sha256_value(scope["build_log_sha256"], "capture build log digest")
     if scope["kernel_targets"] != BUILD_KERNEL_TARGETS or scope[
         "module_targets"
@@ -2638,6 +3227,336 @@ def validate_capture(value: dict[str, Any]) -> None:
         raise EvidenceError("capture digest is stale")
 
 
+def _validate_runtime_files(
+    contract: dict[str, Any],
+    serial_log: Path,
+    qemu_log: Path,
+    qemu_command: Path,
+    qemu_version: Path,
+    qemu_exit_code: Path,
+    environment_log: Path,
+    initramfs: Path,
+    initramfs_sha256: Path,
+    expected_build_bzimage: Any = None,
+) -> dict[str, Any]:
+    serial_log = _regular_evidence_file(serial_log, "runtime serial log")
+    initramfs = _regular_evidence_file(initramfs, "deterministic initramfs")
+    runtime = validate_serial(serial_log, EXPECTED_KERNEL_RELEASE)
+    paths = {
+        "environment_sha256": _regular_evidence_file(
+            environment_log, "runtime environment"
+        ),
+        "qemu_command_sha256": _regular_evidence_file(
+            qemu_command, "QEMU command"
+        ),
+        "qemu_version_sha256": _regular_evidence_file(
+            qemu_version, "QEMU version"
+        ),
+        "qemu_exit_code_sha256": _regular_evidence_file(
+            qemu_exit_code, "QEMU exit code"
+        ),
+    }
+    ancillary = {
+        name: _sha256_file(path) for name, path in paths.items()
+    }
+    qemu_log = _regular_evidence_file(qemu_log, "QEMU log", nonempty=False)
+    ancillary["qemu_log_sha256"] = _sha256_file(qemu_log)
+
+    environment = _read_text(paths["environment_sha256"], "runtime environment")
+    environment_lines = environment.splitlines()
+    expected_environment_prefix = [
+        "container_image={0}".format(contract["runtime"]["container_image"]),
+        "runner_arch=x86_64",
+    ]
+    if (
+        len(environment_lines) < 4
+        or environment_lines[:2] != expected_environment_prefix
+        or environment_lines[2]
+        != "os_release_sha256=" + EXPECTED_ROCKY_OS_RELEASE_SHA256
+        or environment_lines[3:] != sorted(environment_lines[3:])
+        or len(environment_lines[3:]) != len(set(environment_lines[3:]))
+        or any(
+            not line or re.fullmatch(r"[A-Za-z0-9_.+~:^()-]+", line) is None
+            for line in environment_lines[3:]
+        )
+        or not any(line.startswith("qemu-kvm-core-") for line in environment_lines[3:])
+    ):
+        raise EvidenceError("runtime environment identity differs")
+
+    qemu_version_text = _read_text(paths["qemu_version_sha256"], "QEMU version")
+    version_lines = qemu_version_text.splitlines()
+    if (
+        not version_lines
+        or re.fullmatch(r"QEMU emulator version [0-9]+\.[0-9]+(?:\.[0-9]+)?(?: .*)?", version_lines[0])
+        is None
+        or sum(line.startswith("QEMU emulator version ") for line in version_lines)
+        != 1
+    ):
+        raise EvidenceError("QEMU version diagnostic differs")
+
+    qemu_command_text = _read_text(paths["qemu_command_sha256"], "QEMU command")
+    if len(qemu_command_text.splitlines()) != 1:
+        raise EvidenceError("QEMU command diagnostic must contain exactly one argv record")
+    try:
+        qemu_argv = shlex.split(qemu_command_text, posix=True)
+    except ValueError as error:
+        raise EvidenceError("QEMU command diagnostic is malformed") from error
+    if len(qemu_argv) != 24:
+        raise EvidenceError("QEMU command argv cardinality differs")
+    fixed_argv = {
+        0: "/usr/libexec/qemu-kvm",
+        1: "-machine",
+        2: "q35",
+        3: "-accel",
+        4: "tcg",
+        5: "-cpu",
+        6: "max",
+        7: "-smp",
+        8: "2",
+        9: "-m",
+        10: "2048",
+        11: "-kernel",
+        13: "-initrd",
+        15: "-append",
+        16: "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1",
+        17: "-display",
+        18: "none",
+        19: "-monitor",
+        20: "none",
+        21: "-serial",
+        23: "-no-reboot",
+    }
+    if any(qemu_argv[index] != value for index, value in fixed_argv.items()):
+        raise EvidenceError("QEMU command exact TCG argv differs")
+
+    def exact_runtime_path(value: str, parent_name: str, filename: str) -> Path:
+        path = Path(value)
+        if (
+            not path.is_absolute()
+            or ".." in path.parts
+            or path.name != filename
+            or path.parent.name != parent_name
+        ):
+            raise EvidenceError("QEMU command evidence path differs: {0}".format(filename))
+        return path
+
+    build_argv_path = exact_runtime_path(
+        qemu_argv[12], "native-rust-build-evidence", "bzImage"
+    )
+    initramfs_argv_path = exact_runtime_path(
+        qemu_argv[14], "native-rust-runtime-evidence", "initramfs.cpio.gz"
+    )
+    if not qemu_argv[22].startswith("file:"):
+        raise EvidenceError("QEMU command serial boundary differs")
+    serial_argv_path = exact_runtime_path(
+        qemu_argv[22][len("file:") :],
+        "native-rust-runtime-evidence",
+        "serial.log",
+    )
+    if serial_argv_path.parent != initramfs_argv_path.parent:
+        raise EvidenceError("QEMU command runtime evidence roots diverge")
+    if expected_build_bzimage is not None:
+        expected_bzimage = _regular_evidence_file(
+            expected_build_bzimage, "expected build bzImage"
+        )
+        if (
+            build_argv_path != expected_bzimage
+            or initramfs_argv_path != initramfs
+            or serial_argv_path != serial_log
+        ):
+            raise EvidenceError(
+                "QEMU command paths differ from captured build/runtime inputs"
+            )
+    if _read_text(paths["qemu_exit_code_sha256"], "QEMU exit code") != "0\n":
+        raise EvidenceError("QEMU did not exit cleanly after guest poweroff")
+
+    initramfs_sha256 = _regular_evidence_file(
+        initramfs_sha256, "initramfs digest"
+    )
+    digest_record = _read_text(initramfs_sha256, "initramfs digest")
+    digest_match = re.fullmatch(
+        r"([0-9a-f]{64})  initramfs\.cpio\.gz\n", digest_record
+    )
+    if digest_match is None or digest_match.group(1) != _sha256_file(initramfs):
+        raise EvidenceError("initramfs digest record differs")
+    ancillary["initramfs_sha256"] = digest_match.group(1)
+    ancillary["initramfs_sha256_record"] = _sha256_file(initramfs_sha256)
+    runtime.update(ancillary)
+    return runtime
+
+
+def _validate_build_evidence_directory(
+    contract: dict[str, Any], build_dir: Path, candidate_sha: str
+) -> tuple[dict[str, Any], dict[str, str]]:
+    build_dir = _regular_evidence_directory(build_dir, "build evidence directory")
+    initial_directory_identity = _stat_identity(build_dir.lstat())
+    records = _parse_sums(build_dir)
+    initial_file_identities = _validate_exact_build_artifact_files(
+        build_dir,
+        records,
+        contract["artifact_contract"]["build_evidence_files"],
+    )
+    _parse_precheck_sums(build_dir, records, EXPECTED_PRECHECK_BUILD_MEMBERS)
+    phase2 = _validate_phase2_build_evidence(build_dir, records)
+    build_scope = _validate_build_scope_artifacts(build_dir, records)
+    commit = _read_text(build_dir / "commit.sha", "build commit").strip()
+    if commit != candidate_sha:
+        raise EvidenceError("build artifact commit differs from runtime candidate")
+    kernel_release = _read_text(
+        build_dir / "kernel.release", "kernel release"
+    ).strip()
+    if kernel_release != EXPECTED_KERNEL_RELEASE:
+        raise EvidenceError(
+            "built kernel release differs from the selected custom release"
+        )
+    config_state = _validate_resolved_config(
+        build_dir / "resolved.config", contract["runtime"]["required_kernel_config"]
+    )
+
+    modules: dict[str, Any] = {}
+    for item in contract["modules"]:
+        path = build_dir / item["file"]
+        depends = _run_field(path, "depends")
+        namespaces = _run_field(path, "import_ns")
+        if depends != item["depends"]:
+            raise EvidenceError(
+                "{0} dependency metadata differs".format(item["file"])
+            )
+        expected_ns = (
+            [] if item["import_namespace"] is None else [item["import_namespace"]]
+        )
+        if namespaces != expected_ns:
+            raise EvidenceError(
+                "{0} import namespace differs".format(item["file"])
+            )
+        if _module_vermagic_release(path) != kernel_release:
+            raise EvidenceError(
+                "{0} vermagic/build release differs".format(item["file"])
+            )
+        if "provider_symbol_definition" in item:
+            symbols = _nm(path, ["-g", "--defined-only"])
+            symbol = item["provider_symbol_definition"]
+            expression = r"\b[A-Z]\s+{0}$".format(re.escape(symbol))
+            diagnostic = "provider anchor definition is absent"
+        else:
+            symbols = _nm(path, ["-u"])
+            symbol = item["undefined_provider_symbol"]
+            expression = r"\bU\s+{0}$".format(re.escape(symbol))
+            diagnostic = "consumer provider-anchor relocation is absent"
+        if not re.search(expression, symbols, re.MULTILINE):
+            raise EvidenceError(diagnostic)
+        modules[item["name"]] = {
+            "depends": depends,
+            "import_namespaces": namespaces,
+            "sha256": records[item["file"]],
+        }
+
+    build = {
+        "artifact_manifest_sha256": _sha256_file(build_dir / "SHA256SUMS"),
+        "bzimage_sha256": records["bzImage"],
+        "config_sha256": records["resolved.config"],
+        "config_runtime_requirements": config_state,
+        "kbuild_link_closure": phase2["kbuild_link_closure"],
+        "kconfig_solver": phase2["kconfig_solver"],
+        "kernel_release": kernel_release,
+        "modules": modules,
+        "scope": build_scope,
+    }
+    final_directory = _regular_evidence_directory(
+        build_dir, "build evidence directory"
+    )
+    final_records = _parse_sums(final_directory)
+    final_file_identities = _validate_exact_build_artifact_files(
+        final_directory,
+        final_records,
+        contract["artifact_contract"]["build_evidence_files"],
+    )
+    _parse_precheck_sums(
+        final_directory, final_records, EXPECTED_PRECHECK_BUILD_MEMBERS
+    )
+    if (
+        _stat_identity(final_directory.lstat()) != initial_directory_identity
+        or final_file_identities != initial_file_identities
+        or final_records != records
+    ):
+        raise EvidenceError("build artifact changed while it was validated")
+    return build, records
+
+
+def validate_runtime_evidence_directory(
+    repo: Path,
+    directory: Path,
+    build_dir: Path,
+    contract_relative: Path = DEFAULT_CONTRACT,
+) -> dict[str, str]:
+    summary = validate_contract(repo.resolve(), contract_relative)
+    contract = _load_json(repo.resolve() / contract_relative)
+    directory = _regular_evidence_directory(directory, "runtime evidence directory")
+    initial_directory_identity = _stat_identity(directory.lstat())
+    records = _parse_sums(directory)
+    expected = contract["artifact_contract"]["runtime_evidence_files"]
+    initial_file_identities = _validate_exact_build_artifact_files(
+        directory, records, expected
+    )
+
+    capture_document = _load_json(directory / "capture.json")
+    validate_capture(capture_document)
+    if capture_document["contract_sha256"] != summary["contract_sha256"]:
+        raise EvidenceError("runtime capture contract digest differs")
+    replayed_build, _build_records = _validate_build_evidence_directory(
+        contract,
+        build_dir,
+        capture_document["identity"]["candidate_sha"],
+    )
+    if replayed_build != capture_document["build"]:
+        raise EvidenceError("runtime capture build evidence facts differ")
+    expected_runtime_digests = {
+        "environment_sha256": records["environment.txt"],
+        "initramfs_sha256": records["initramfs.cpio.gz"],
+        "initramfs_sha256_record": records["initramfs.sha256"],
+        "qemu_command_sha256": records["qemu-command.txt"],
+        "qemu_exit_code_sha256": records["qemu.exit-code"],
+        "qemu_log_sha256": records["qemu.log"],
+        "qemu_version_sha256": records["qemu-version.txt"],
+        "serial_sha256": records["serial.log"],
+    }
+    runtime = capture_document["runtime"]
+    for name, digest in expected_runtime_digests.items():
+        if runtime[name] != digest:
+            raise EvidenceError("runtime capture file digest differs: {0}".format(name))
+    replayed = _validate_runtime_files(
+        contract,
+        directory / "serial.log",
+        directory / "qemu.log",
+        directory / "qemu-command.txt",
+        directory / "qemu-version.txt",
+        directory / "qemu.exit-code",
+        directory / "environment.txt",
+        directory / "initramfs.cpio.gz",
+        directory / "initramfs.sha256",
+    )
+    if replayed != runtime:
+        raise EvidenceError("runtime capture semantic facts differ")
+    if _read_text(directory / "workflow-state", "runtime workflow state") != (
+        "technical-capture-unreviewed\ncredit=forbidden\n"
+    ):
+        raise EvidenceError("runtime workflow state differs")
+    final_directory = _regular_evidence_directory(
+        directory, "runtime evidence directory"
+    )
+    final_records = _parse_sums(final_directory)
+    final_file_identities = _validate_exact_build_artifact_files(
+        final_directory, final_records, expected
+    )
+    if (
+        _stat_identity(final_directory.lstat()) != initial_directory_identity
+        or final_file_identities != initial_file_identities
+        or final_records != records
+    ):
+        raise EvidenceError("runtime evidence changed while it was validated")
+    return records
+
+
 def capture(
     repo: Path,
     contract_relative: Path,
@@ -2666,113 +3585,26 @@ def capture(
         or int(github_run_attempt) < 1
     ):
         raise EvidenceError("GitHub run identity is incomplete")
-    build_dir = _regular_evidence_directory(build_dir, "build evidence directory")
-    initial_directory_identity = _stat_identity(build_dir.lstat())
-    records = _parse_sums(build_dir)
     contract = _load_json(repo / contract_relative)
-    initial_file_identities = _validate_exact_build_artifact_files(
-        build_dir,
-        records,
-        contract["artifact_contract"]["build_evidence_files"],
+    bound_build_dir = _regular_evidence_directory(
+        build_dir, "build evidence directory"
     )
-    phase2 = _validate_phase2_build_evidence(build_dir, records)
-    build_scope = _validate_build_scope_artifacts(build_dir, records)
-    commit = _read_text(build_dir / "commit.sha", "build commit").strip()
-    if commit != candidate_sha:
-        raise EvidenceError("build artifact commit differs from runtime candidate")
-    kernel_release = _read_text(build_dir / "kernel.release", "kernel release").strip()
-    if kernel_release != EXPECTED_KERNEL_RELEASE:
-        raise EvidenceError("built kernel release differs from the selected custom release")
-    config_state = _validate_resolved_config(
-        build_dir / "resolved.config", contract["runtime"]["required_kernel_config"]
+    build, _build_records = _validate_build_evidence_directory(
+        contract, bound_build_dir, candidate_sha
     )
 
-    modules: dict[str, Any] = {}
-    for item in contract["modules"]:
-        path = build_dir / item["file"]
-        depends = _run_field(path, "depends")
-        namespaces = _run_field(path, "import_ns")
-        if depends != item["depends"]:
-            raise EvidenceError("{0} dependency metadata differs".format(item["file"]))
-        expected_ns = [] if item["import_namespace"] is None else [item["import_namespace"]]
-        if namespaces != expected_ns:
-            raise EvidenceError("{0} import namespace differs".format(item["file"]))
-        if _module_vermagic_release(path) != kernel_release:
-            raise EvidenceError("{0} vermagic/build release differs".format(item["file"]))
-        if "provider_symbol_definition" in item:
-            defined = _nm(path, ["-g", "--defined-only"])
-            symbol = item["provider_symbol_definition"]
-            if not re.search(r"\b[A-Z]\s+{0}$".format(re.escape(symbol)), defined, re.MULTILINE):
-                raise EvidenceError("provider anchor definition is absent")
-        else:
-            undefined = _nm(path, ["-u"])
-            symbol = item["undefined_provider_symbol"]
-            if not re.search(r"\bU\s+{0}$".format(re.escape(symbol)), undefined, re.MULTILINE):
-                raise EvidenceError("consumer provider-anchor relocation is absent")
-        modules[item["name"]] = {
-            "depends": depends,
-            "import_namespaces": namespaces,
-            "sha256": records[item["file"]],
-        }
-
-    runtime = validate_serial(serial_log, kernel_release)
-    ancillary: dict[str, str] = {}
-    for label, path in (
-        ("environment_sha256", environment_log),
-        ("qemu_command_sha256", qemu_command),
-        ("qemu_version_sha256", qemu_version),
-        ("qemu_exit_code_sha256", qemu_exit_code),
-    ):
-        resolved = _regular_evidence_file(path, label)
-        ancillary[label] = _sha256_file(resolved)
-    qemu_log = _regular_evidence_file(qemu_log, "QEMU log", nonempty=False)
-    ancillary["qemu_log_sha256"] = _sha256_file(qemu_log)
-
-    environment = _read_text(environment_log.resolve(), "runtime environment")
-    if (
-        "container_image={0}".format(contract["runtime"]["container_image"]) not in environment
-        or "runner_arch=x86_64" not in environment
-        or "qemu-kvm-core-" not in environment
-    ):
-        raise EvidenceError("runtime environment identity differs")
-    qemu_version_text = _read_text(qemu_version.resolve(), "QEMU version")
-    if not re.search(r"(?m)^QEMU emulator version [0-9]+\.", qemu_version_text):
-        raise EvidenceError("QEMU version diagnostic differs")
-    qemu_command_text = _read_text(qemu_command.resolve(), "QEMU command")
-    if len(qemu_command_text.splitlines()) != 1:
-        raise EvidenceError("QEMU command diagnostic must contain exactly one argv record")
-    for fragment in (
-        "/usr/libexec/qemu-kvm",
-        "-machine q35",
-        "-accel tcg",
-        "-cpu max",
-        "-smp 2",
-        "-m 2048",
-        "-kernel ",
-        "bzImage",
-        "-initrd ",
-        "initramfs.cpio.gz",
-        "rdinit=/init",
-        "-serial ",
-        "serial.log",
-        "-no-reboot",
-    ):
-        if fragment not in qemu_command_text:
-            raise EvidenceError("QEMU command lacks exact TCG boot boundary: {0}".format(fragment))
-    if "/dev/kvm" in qemu_command_text or "-accel kvm" in qemu_command_text:
-        raise EvidenceError("QEMU command crosses the TCG-only boundary")
-    if _read_text(qemu_exit_code.resolve(), "QEMU exit code").strip() != "0":
-        raise EvidenceError("QEMU did not exit cleanly after guest poweroff")
-
-    initramfs = _regular_evidence_file(initramfs, "deterministic initramfs")
-    initramfs_sha256 = _regular_evidence_file(initramfs_sha256, "initramfs digest")
-    digest_record = _read_text(initramfs_sha256, "initramfs digest").strip()
-    digest_match = re.fullmatch(r"([0-9a-f]{64})  initramfs\.cpio\.gz", digest_record)
-    if digest_match is None or digest_match.group(1) != _sha256_file(initramfs):
-        raise EvidenceError("initramfs digest record differs")
-    ancillary["initramfs_sha256"] = digest_match.group(1)
-    ancillary["initramfs_sha256_record"] = _sha256_file(initramfs_sha256)
-    runtime.update(ancillary)
+    runtime = _validate_runtime_files(
+        contract,
+        serial_log,
+        qemu_log,
+        qemu_command,
+        qemu_version,
+        qemu_exit_code,
+        environment_log,
+        initramfs,
+        initramfs_sha256,
+        bound_build_dir / "bzImage",
+    )
     value = {
         "schema_version": 1,
         "contract_id": CONTRACT_ID,
@@ -2783,17 +3615,7 @@ def capture(
             "github_run_attempt": github_run_attempt,
             "github_run_id": github_run_id,
         },
-        "build": {
-            "artifact_manifest_sha256": _sha256_file(build_dir / "SHA256SUMS"),
-            "bzimage_sha256": records["bzImage"],
-            "config_sha256": records["resolved.config"],
-            "config_runtime_requirements": config_state,
-            "kbuild_link_closure": phase2["kbuild_link_closure"],
-            "kconfig_solver": phase2["kconfig_solver"],
-            "kernel_release": kernel_release,
-            "modules": modules,
-            "scope": build_scope,
-        },
+        "build": build,
         "runtime": runtime,
         "readiness": {
             "credit_eligible": False,
@@ -2806,21 +3628,6 @@ def capture(
             ],
         },
     }
-    final_directory = _regular_evidence_directory(
-        build_dir, "build evidence directory"
-    )
-    final_records = _parse_sums(final_directory)
-    final_file_identities = _validate_exact_build_artifact_files(
-        build_dir,
-        final_records,
-        contract["artifact_contract"]["build_evidence_files"],
-    )
-    if (
-        _stat_identity(final_directory.lstat()) != initial_directory_identity
-        or final_file_identities != initial_file_identities
-        or final_records != records
-    ):
-        raise EvidenceError("build artifact changed before capture completed")
     value["capture_sha256"] = _sha256_bytes(_canonical_bytes(value))
     validate_capture(value)
     return value
@@ -2832,6 +3639,7 @@ def _parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--contract", type=Path, default=DEFAULT_CONTRACT)
     actions = parser.add_mutually_exclusive_group(required=True)
     actions.add_argument("--check-contract", action="store_true")
+    actions.add_argument("--check-runtime-evidence", action="store_true")
     actions.add_argument("--capture", action="store_true")
     parser.add_argument("--build-evidence-dir", type=Path)
     parser.add_argument("--serial-log", type=Path)
@@ -2847,6 +3655,7 @@ def _parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--github-run-id")
     parser.add_argument("--github-run-attempt")
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--runtime-evidence-dir", type=Path)
     return parser.parse_args(argv)
 
 
@@ -2862,6 +3671,28 @@ def main(argv: list[str] | None = None) -> int:
                     summary["runtime"]["distribution"],
                     summary["runtime"]["release"],
                     summary["runtime"]["qemu_accelerator"],
+                )
+            )
+            return 0
+        if args.check_runtime_evidence:
+            if (
+                args.runtime_evidence_dir is None
+                or args.build_evidence_dir is None
+            ):
+                raise EvidenceError(
+                    "runtime evidence check requires --runtime-evidence-dir and "
+                    "--build-evidence-dir"
+                )
+            records = validate_runtime_evidence_directory(
+                repo,
+                args.runtime_evidence_dir,
+                args.build_evidence_dir,
+                args.contract,
+            )
+            print(
+                "native-rust-runtime-evidence: ARTIFACT-VERIFIED "
+                "files={0} credit=FORBIDDEN review=REQUIRED".format(
+                    len(records) + 1
                 )
             )
             return 0

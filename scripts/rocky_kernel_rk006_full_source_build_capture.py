@@ -45,9 +45,24 @@ CAPTURE_MEMBERS = [
     "workflow-state",
 ]
 REQUIRED_BUILD_MEMBERS = [
+    ".ihk-smp-x86_64.ko.cmd",
+    ".ihk-smp-x86_64.mod.cmd",
+    ".ihk-smp-x86_64.mod.o.cmd",
+    ".ihk-smp-x86_64.o.cmd",
+    ".ihk.ko.cmd",
+    ".ihk.mod.cmd",
+    ".ihk.mod.o.cmd",
+    ".ihk.o.cmd",
+    ".ihk_smp_x86_64.o.cmd",
+    ".mcctrl.ko.cmd",
+    ".mcctrl.mod.cmd",
+    ".mcctrl.mod.o.cmd",
+    ".mcctrl.o.cmd",
+    "PRECHECK_SHA256SUMS",
     "SHA256SUMS",
     "build-log.exit-code",
     "build.commands",
+    "build.environment",
     "build.exit-code",
     "build.log",
     "build.phase",
@@ -55,16 +70,70 @@ REQUIRED_BUILD_MEMBERS = [
     "bzImage",
     "commit.sha",
     "ihk-smp-x86_64.ko",
+    "ihk-smp-x86_64.ko.modinfo",
+    "ihk-smp-x86_64.ko.modinfo-section",
+    "ihk-smp-x86_64.ko.nm",
+    "ihk-smp-x86_64.ko.readelf",
+    "ihk-smp-x86_64.mod",
     "ihk.ko",
+    "ihk.ko.modinfo",
+    "ihk.ko.modinfo-section",
+    "ihk.ko.nm",
+    "ihk.ko.readelf",
+    "ihk.mod",
     "kbuild-link-closure.json",
     "kconfig-solver-matrix.json",
     "kernel.release",
     "mcctrl.ko",
+    "mcctrl.ko.modinfo",
+    "mcctrl.ko.modinfo-section",
+    "mcctrl.ko.nm",
+    "mcctrl.ko.readelf",
+    "mcctrl.mod",
     "module-targets.txt",
     "resolved.config",
     "stage-lock.json",
     "workflow-state",
 ]
+PRECHECK_BUILD_MEMBERS = [
+    "build-log.exit-code",
+    "build.commands",
+    "build.environment",
+    "build.exit-code",
+    "build.log",
+    "build.phase",
+    "built-module-artifacts.txt",
+    "commit.sha",
+    "ihk-smp-x86_64.ko",
+    "ihk-smp-x86_64.ko.modinfo",
+    "ihk-smp-x86_64.ko.modinfo-section",
+    "ihk-smp-x86_64.ko.nm",
+    "ihk-smp-x86_64.ko.readelf",
+    "ihk.ko",
+    "ihk.ko.modinfo",
+    "ihk.ko.modinfo-section",
+    "ihk.ko.nm",
+    "ihk.ko.readelf",
+    "kconfig-solver-matrix.json",
+    "mcctrl.ko",
+    "mcctrl.ko.modinfo",
+    "mcctrl.ko.modinfo-section",
+    "mcctrl.ko.nm",
+    "mcctrl.ko.readelf",
+    "module-targets.txt",
+    "workflow-state",
+]
+REPRODUCIBLE_BUILD_ENVIRONMENT = {
+    "KBUILD_BUILD_HOST": "rocky-10.2-x86_64",
+    "KBUILD_BUILD_TIMESTAMP": "Tue, 11 Aug 2026 07:40:34 +0000",
+    "KBUILD_BUILD_USER": "mckernel",
+    "KBUILD_BUILD_VERSION": "1",
+    "SOURCE_DATE_EPOCH": "1786434034",
+}
+REPRODUCIBLE_BUILD_ENVIRONMENT_BYTES = "".join(
+    "{}={}\n".format(name, REPRODUCIBLE_BUILD_ENVIRONMENT[name])
+    for name in sorted(REPRODUCIBLE_BUILD_ENVIRONMENT)
+).encode("ascii")
 FALSE_CLAIMS = {
     "credit_eligible": False,
     "durable_archive": False,
@@ -175,6 +244,15 @@ CAPTURE_ENV = {
     "LANG": "C",
     "LC_ALL": "C",
     "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+    "TZ": "UTC",
+}
+GIT_IDENTITY_ENV = {
+    "GIT_CONFIG_GLOBAL": "/dev/null",
+    "GIT_CONFIG_NOSYSTEM": "1",
+    "GIT_TERMINAL_PROMPT": "0",
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PATH": "/usr/bin:/bin",
     "TZ": "UTC",
 }
 CAPTURE_TOOL_PROBES = {
@@ -851,6 +929,7 @@ def _validate_contract_structure(contract):
             "copy_build_payload_into_capture",
             "require_commit_sha_match",
             "require_complete_build_phase",
+            "reproducible_build_environment",
             "require_zero_exit_codes",
         },
         "build binding policy",
@@ -864,6 +943,7 @@ def _validate_contract_structure(contract):
             "copy_build_payload_into_capture": False,
             "require_commit_sha_match": True,
             "require_complete_build_phase": True,
+            "reproducible_build_environment": REPRODUCIBLE_BUILD_ENVIRONMENT,
             "require_zero_exit_codes": True,
         },
         "build binding policy",
@@ -903,7 +983,7 @@ def _validate_contract_structure(contract):
                 "--fuzz=0",
                 "--no-backup-if-mismatch",
             ],
-            "patch_count": 25,
+            "patch_count": 26,
             "patch_order_source": AUTHORITY_PATH,
             "reject_backup_and_reject_files": True,
             "second_application_command_addition": ["--dry-run"],
@@ -954,11 +1034,11 @@ def validate_contract(repo, run_authority=True):
     contract = _load_json_bytes(contract_data, "capture contract")
     _validate_contract_structure(contract)
     expected_inputs = {
-        "parent_integration_authority": ("host-kernel/kbuild/parent-integration-v1.json", "c806e6cda3be3e6f4b92cef35a0d5369738bae5b87e32ed4f486489d3435db2f", 2076),
-        "patch_authority": (AUTHORITY_PATH, "ebc3e4c69ecbdb3891f92018a89f5fc3dae43fa070628fda8b22f881f02c67a1", 19681),
-        "patch_authority_checker": ("scripts/rocky_kernel_rk006_patch_authority.py", "c23969ba2716db96f02a0564d6815b7342036a58c258ce22319b0185693cfddd", 48959),
-        "patch_authority_tests": ("scripts/tests/test_rocky_kernel_rk006_patch_authority.py", "719d1e87b4d66944abf3bad0c03dc7cc86dddb97fa36e3fe32736c29ea549b39", 27957),
-        "source_lock": ("host-kernel/rocky/source-lock.json", "707ee40466ac0bb0cd0600383bba0b13fc1146e7080034786bf5668a95b27682", 18236),
+        "parent_integration_authority": ("host-kernel/kbuild/parent-integration-v1.json", "19b18ece742950b2ef5fc9314579849e763a307982a3a91c99dfaad5917d4b55", 2076),
+        "patch_authority": (AUTHORITY_PATH, "0c40d8079b3c5f6b90e44f1067f89f27c5c7ac50c67a127609a34a10c224475b", 20327),
+        "patch_authority_checker": ("scripts/rocky_kernel_rk006_patch_authority.py", "ee0ef72baf560c1a4412ff0140b950f0f8456d4291154186af339320a1ec21da", 49913),
+        "patch_authority_tests": ("scripts/tests/test_rocky_kernel_rk006_patch_authority.py", "bb829109b32b2474b0edeb06e2121b42aff4edb4a3103ea80cf6a9520e775b3b", 27976),
+        "source_lock": ("host-kernel/rocky/source-lock.json", "b70df1e475072dbfa31fdc712900ac59d30eeb139219c7076aacaa19abf0fded", 18336),
         "toolchain_lock": ("host-kernel/rocky/toolchain-lock.json", "fd3d7a13e1b8b5d103f7e59d22f17c9e4b99cc937637decaa66749acfae6c802", 28867),
     }
     inputs = contract["inputs"]
@@ -1004,9 +1084,9 @@ def validate_contract(repo, run_authority=True):
     )
     authority_data, _ = _read_rooted(repo, AUTHORITY_PATH, "RK-006 authority")
     authority = _load_json_bytes(authority_data, "RK-006 authority")
-    if len(authority.get("patches", [])) != 25:
-        raise CaptureError("RK-006 authority does not contain 25 patches")
-    if [row.get("order") for row in authority["patches"]] != list(range(1, 26)):
+    if len(authority.get("patches", [])) != 26:
+        raise CaptureError("RK-006 authority does not contain 26 patches")
+    if [row.get("order") for row in authority["patches"]] != list(range(1, 27)):
         raise CaptureError("RK-006 authority patch order differs")
     for row in authority["patches"]:
         patch_data, _ = _read_rooted(repo, row["path"], "authority patch")
@@ -1048,7 +1128,8 @@ def validate_contract(repo, run_authority=True):
     if run_authority:
         checker = repo / inputs["patch_authority_checker"]["path"]
         completed = subprocess.run(
-            [sys.executable, str(checker), "--repo", str(repo)],
+            [sys.executable, "-E", "-s", str(checker), "--repo", str(repo)],
+            env=dict(GIT_IDENTITY_ENV),
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         )
@@ -1579,14 +1660,16 @@ def _check_git_identity(repo, head_sha):
     if re.fullmatch(r"[0-9a-f]{40}", head_sha or "") is None:
         raise CaptureError("GitHub head SHA must be exact lowercase 40-hex")
     completed = subprocess.run(
-        ["git", "-c", "safe.directory={}".format(repo), "-C", str(repo), "rev-parse", "HEAD"],
+        ["/usr/bin/git", "-c", "safe.directory={}".format(repo), "-C", str(repo), "rev-parse", "HEAD"],
+        env=dict(GIT_IDENTITY_ENV),
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
     if completed.returncode or completed.stdout.decode("ascii", errors="strict").strip() != head_sha:
         raise CaptureError("checked-out HEAD differs from requested capture identity")
     status = subprocess.run(
-        ["git", "-c", "safe.directory={}".format(repo), "-C", str(repo), "status", "--porcelain", "--untracked-files=no"],
+        ["/usr/bin/git", "-c", "safe.directory={}".format(repo), "-C", str(repo), "status", "--porcelain", "--untracked-files=no"],
+        env=dict(GIT_IDENTITY_ENV),
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
@@ -1759,6 +1842,7 @@ def _parse_checksum_manifest(data, label):
 
 def _build_binding(build_dir, capture_document):
     build_dir = _safe_directory(build_dir, "build evidence")
+    initial_directory_identity = _metadata_identity(build_dir.lstat())
     manifest_data, manifest_metadata = _read_rooted(
         build_dir, "SHA256SUMS", "build checksum manifest"
     )
@@ -1775,9 +1859,29 @@ def _build_binding(build_dir, capture_document):
     )
     if actual_names != sorted(manifest):
         raise CaptureError("build evidence member set differs from SHA256SUMS")
-    for required in REQUIRED_BUILD_MEMBERS:
-        if required != "SHA256SUMS" and required not in manifest:
-            raise CaptureError("required build evidence is missing: {}".format(required))
+    if sorted(manifest) != [
+        name for name in REQUIRED_BUILD_MEMBERS if name != "SHA256SUMS"
+    ]:
+        raise CaptureError("build evidence exact member set differs")
+    precheck_data, precheck_metadata = _read_rooted(
+        build_dir, "PRECHECK_SHA256SUMS", "build precheck checksum manifest"
+    )
+    if (
+        stat.S_IMODE(precheck_metadata.st_mode) != 0o644
+        or precheck_metadata.st_nlink != 1
+        or precheck_metadata.st_size != len(precheck_data)
+    ):
+        raise CaptureError("build precheck checksum identity or mode differs")
+    precheck = _parse_checksum_manifest(
+        precheck_data, "build precheck checksum manifest"
+    )
+    if sorted(precheck) != PRECHECK_BUILD_MEMBERS:
+        raise CaptureError("build precheck member set differs")
+    for name, digest in precheck.items():
+        if manifest.get(name) != digest:
+            raise CaptureError(
+                "build precheck/final checksum differs: {}".format(name)
+            )
     rows = []
     for name in sorted(manifest):
         data, metadata = _read_rooted(build_dir, name, "build evidence member")
@@ -1792,6 +1896,7 @@ def _build_binding(build_dir, capture_document):
     if commit_data.decode("ascii", errors="strict") != expected_head:
         raise CaptureError("build commit differs from source capture")
     for name, expected in (
+        ("build.environment", REPRODUCIBLE_BUILD_ENVIRONMENT_BYTES),
         ("build.phase", b"complete\n"),
         ("build.exit-code", b"0\n"),
         ("build-log.exit-code", b"0\n"),
@@ -1800,6 +1905,12 @@ def _build_binding(build_dir, capture_document):
         data, _ = _read_rooted(build_dir, name, "build status")
         if data != expected:
             raise CaptureError("build status differs: {}".format(name))
+    if (
+        _metadata_identity(build_dir.lstat()) != initial_directory_identity
+        or sorted(path.name for path in build_dir.iterdir())
+        != sorted(actual_names + ["SHA256SUMS"])
+    ):
+        raise CaptureError("build evidence directory changed while it was bound")
     return {
         "build_artifact": {
             "content_closure_algorithm": "sha256-canonical-json-build-evidence-rows-v1",
@@ -1818,6 +1929,31 @@ def _build_binding(build_dir, capture_document):
         "schema_version": 1,
         "status": "technical-build-bound-unreviewed",
     }
+
+
+def _validate_final_build_evidence_rows(document, rows, artifact):
+    row_map = {row["path"]: row for row in rows}
+    expected_fixed_rows = {
+        "build.environment": REPRODUCIBLE_BUILD_ENVIRONMENT_BYTES,
+        "build.phase": b"complete\n",
+        "build.exit-code": b"0\n",
+        "build-log.exit-code": b"0\n",
+        "workflow-state": b"bootstrap-complete\n",
+        "commit.sha": (document["github"]["head_sha"] + "\n").encode("ascii"),
+    }
+    for name, data in sorted(expected_fixed_rows.items()):
+        if row_map.get(name) != {
+            "path": name,
+            "sha256": _sha256(data),
+            "size": len(data),
+        }:
+            raise CaptureError("bound build fixed evidence differs: {}".format(name))
+    reconstructed_manifest = "".join(
+        "{}  {}\n".format(row["sha256"], row["path"])
+        for row in rows
+    ).encode("ascii")
+    if artifact["sha256sums_sha256"] != _sha256(reconstructed_manifest):
+        raise CaptureError("bound build checksum manifest digest differs")
 
 
 def finalize_build(repo, capture_dir, build_dir):
@@ -1874,9 +2010,9 @@ def _validate_capture_document(document, allow_pending=False):
     _require_exact(document["claims"], FALSE_CLAIMS, "capture document claims")
     _require_exact(document["gate"], FALSE_GATE, "capture document gate")
     _require_exact(document["parent_files"], PARENT_FILES, "capture parent hashes")
-    if document["patch_count"] != 25 or len(document["patch_replay"]) != 25:
-        raise CaptureError("capture does not bind all 25 patches")
-    if [row.get("order") for row in document["patch_replay"]] != list(range(1, 26)):
+    if document["patch_count"] != 26 or len(document["patch_replay"]) != 26:
+        raise CaptureError("capture does not bind all 26 patches")
+    if [row.get("order") for row in document["patch_replay"]] != list(range(1, 27)):
         raise CaptureError("captured patch order differs")
     _require_exact(
         document["runtime"],
@@ -2431,9 +2567,9 @@ def verify_capture(repo, capture_dir):
         or any(type(row) is not dict for row in apply_rows)
         or apply_rows[0].get("kind") != "vendor-apply"
     ):
-        raise CaptureError("patch apply log does not bind vendor plus 25 authority patches")
+        raise CaptureError("patch apply log does not bind vendor plus 26 authority patches")
     if (
-        len(second_rows) != 25
+        len(second_rows) != 26
         or any(type(row) is not dict for row in second_rows)
         or any(row.get("returncode") == 0 for row in second_rows)
     ):
@@ -2515,8 +2651,11 @@ def verify_capture(repo, capture_dir):
             paths.append(row["path"])
         if paths != sorted(paths) or len(paths) != len(set(paths)):
             raise CaptureError("bound build evidence path set differs")
-        if not set(name for name in REQUIRED_BUILD_MEMBERS if name != "SHA256SUMS").issubset(paths):
-            raise CaptureError("bound build evidence misses required members")
+        if paths != [
+            name for name in REQUIRED_BUILD_MEMBERS if name != "SHA256SUMS"
+        ]:
+            raise CaptureError("bound build evidence exact member set differs")
+        _validate_final_build_evidence_rows(document, rows, artifact)
         expected_name = "native-rust-exact-build-{}-{}".format(
             document["github"]["run_id"], document["github"]["run_attempt"]
         )
@@ -2531,8 +2670,6 @@ def verify_capture(repo, capture_dir):
             or artifact["name"] != expected_name
             or artifact["outer_artifact_sha256"] is not None
             or artifact["retention_days"] != 30
-            or type(artifact["sha256sums_sha256"]) is not str
-            or re.fullmatch(r"[0-9a-f]{64}", artifact["sha256sums_sha256"]) is None
         ):
             raise CaptureError("final build boundary differs")
         if document["build_binding"] != {"build_binding_sha256": _sha256(member_data["build-binding.json"]), "status": "technical-build-bound-unreviewed"}:

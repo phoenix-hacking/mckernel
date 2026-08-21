@@ -155,6 +155,31 @@ EXPECTED_INPUTS = {
     "source_lock": SOURCE_LOCK,
     "source_lock_validator": SOURCE_LOCK_VALIDATOR,
 }
+# Preserve EXPECTED_INPUTS as the ef58860e authority.  The current repository
+# implementation is a compatibility consumer of that authority and is pinned
+# independently so later source-closure work cannot rewrite the old campaign.
+CURRENT_IMPLEMENTATION_OVERRIDES = {
+    BATCH_CHECKER["path"]: {
+        "path": BATCH_CHECKER["path"],
+        "sha256": "602852ab2d127093a168a15073c39043b7ae4a00f2cefd261722d4fb57c7c011",
+        "size": 64260,
+    },
+    BATCH_TESTS["path"]: {
+        "path": BATCH_TESTS["path"],
+        "sha256": "8d4d918b7768988f744992ec2d442d779670b8a2257609ad4224afb5b556fb98",
+        "size": 34289,
+    },
+    SOURCE_LOCK["path"]: {
+        "path": SOURCE_LOCK["path"],
+        "sha256": "b70df1e475072dbfa31fdc712900ac59d30eeb139219c7076aacaa19abf0fded",
+        "size": 18336,
+    },
+    SOURCE_LOCK_VALIDATOR["path"]: {
+        "path": SOURCE_LOCK_VALIDATOR["path"],
+        "sha256": "d127c497245ba373f68f5d6e6fc934369b368b665365bd1f46d05ff08f8b3718",
+        "size": 60175,
+    },
+}
 EXPECTED_CLAIMS = {
     "archive_expansion_complete": False,
     "campaign_complete": False,
@@ -747,11 +772,13 @@ def read_regular_file_once(path, label, size_cap):
 
 
 def _read_bound(repo, record, label, cap=MAX_CHECKER_BYTES):
-    path = Path(repo) / safe_relative(record["path"], label + " path")
+    active_record = CURRENT_IMPLEMENTATION_OVERRIDES.get(record["path"], record)
+    require_exact(active_record["path"], record["path"], label + " compatibility path")
+    path = Path(repo) / safe_relative(active_record["path"], label + " path")
     data = read_regular_file_once(path, label, cap)
     if (
-        len(data) != record["size"]
-        or hashlib.sha256(data).hexdigest() != record["sha256"]
+        len(data) != active_record["size"]
+        or hashlib.sha256(data).hexdigest() != active_record["sha256"]
     ):
         raise ReviewCampaignError("{0} bytes differ".format(label))
     return path, data

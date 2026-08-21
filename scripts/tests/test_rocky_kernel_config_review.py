@@ -48,14 +48,14 @@ class ConfigReviewTests(unittest.TestCase):
             with self.assertRaisesRegex(reviewer.ConfigReviewError, "manifest digest"):
                 reviewer.load_review(path)
 
-    def test_checked_in_runtime_and_current_inputs_are_exact(self):
+    def test_historical_review_rejects_current_active_patch_inputs(self):
         review = reviewer.validate_review_object(copy.deepcopy(self.review))
-        head = reviewer.validate_repository(REPO_ROOT, review)
-        self.assertRegex(head, r"^[0-9a-f]{40}$")
         self.assertNotEqual(review["runtime_candidate"]["head_sha"], "")
         self.assertFalse(
             review["current_repository_input_policy"]["runtime_identity_claimed"]
         )
+        with self.assertRaisesRegex(reviewer.ConfigReviewError, "worktree size differs"):
+            reviewer.validate_repository(REPO_ROOT, review)
 
     def test_every_gate_or_credit_promotion_is_rejected(self):
         scalar_claims = (
@@ -336,7 +336,7 @@ class ConfigReviewTests(unittest.TestCase):
                 with self.assertRaisesRegex(reviewer.ConfigReviewError, "duplicate"):
                     reviewer.zip_entry_records(stream)
 
-    def test_cli_check_reports_bounded_no_credit_state(self):
+    def test_cli_check_fails_closed_for_historical_input_binding(self):
         environment = dict(os.environ)
         environment["PYTHONDONTWRITEBYTECODE"] = "1"
         completed = subprocess.run(
@@ -351,10 +351,9 @@ class ConfigReviewTests(unittest.TestCase):
             stderr=subprocess.PIPE,
             env=environment,
         )
-        self.assertEqual(completed.returncode, 0, completed.stderr.decode("utf-8"))
-        output = completed.stdout.decode("utf-8")
-        self.assertIn("all gate and tracker claims remain false", output)
-        self.assertIn("current descendant", output)
+        self.assertEqual(completed.returncode, 2)
+        self.assertEqual("", completed.stdout.decode("utf-8"))
+        self.assertIn("worktree size differs", completed.stderr.decode("utf-8"))
 
     def test_exact_artifact_when_supplied(self):
         artifact = os.environ.get("MCKERNEL_RK005_CONFIG_ARTIFACT")

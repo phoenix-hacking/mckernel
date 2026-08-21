@@ -34,7 +34,7 @@ class Rs006MiscdeviceSubstrateTests(unittest.TestCase):
         cls.contract = read_bytes(substrate.CONTRACT_PATH)
         cls.patches = {
             row["path"]: read_bytes(row["path"])
-            for row in substrate.CANDIDATE_PATCHES
+            for row in substrate.ACTIVE_PATCHES
         }
 
     def test_repository_contract_is_not_ready_and_credit_forbidden(self):
@@ -54,8 +54,8 @@ class Rs006MiscdeviceSubstrateTests(unittest.TestCase):
         self.assertTrue(integration["workflow_integrated"])
         self.assertTrue(integration["main_compatibility_series_integrated"])
         self.assertEqual(
-            ["0019", "0020"],
-            [row["filename"][:4] for row in integration["final_order_guidance"]],
+            ["0019", "0020", "0020a"],
+            integration["active_patch_numbers"],
         )
 
     def test_checker_and_tests_parse_as_python_3_6(self):
@@ -95,7 +95,7 @@ class Rs006MiscdeviceSubstrateTests(unittest.TestCase):
         for mutation in ("swap", "predecessor", "active"):
             contract = json.loads(self.contract.decode("utf-8"))
             if mutation == "swap":
-                contract["upstream_series"].reverse()
+                contract["active_series"].reverse()
             elif mutation == "predecessor":
                 contract["integration"]["preserved_predecessor_numbers"] = ["0013"]
             else:
@@ -104,7 +104,7 @@ class Rs006MiscdeviceSubstrateTests(unittest.TestCase):
                 with self.assertRaises(substrate.ContractError):
                     substrate._load_contract(canonical_json(contract))
 
-    def test_every_candidate_patch_byte_mutation_is_rejected(self):
+    def test_every_active_patch_byte_mutation_is_rejected(self):
         for relative, data in sorted(self.patches.items()):
             mutated = data[:-1] + bytes(bytearray([data[-1] ^ 1]))
             with self.subTest(relative=relative):
@@ -112,7 +112,7 @@ class Rs006MiscdeviceSubstrateTests(unittest.TestCase):
                     substrate.check(REPO_ROOT, patch_overrides={relative: mutated})
 
     def test_commit_header_and_subject_are_explicitly_bound(self):
-        for expected in substrate.CANDIDATE_PATCHES:
+        for expected in substrate.ACTIVE_PATCHES[:2]:
             data = self.patches[expected["path"]]
             substrate._validate_patch(data, expected)
             weakened = dict(expected)
@@ -125,7 +125,7 @@ class Rs006MiscdeviceSubstrateTests(unittest.TestCase):
                     substrate._validate_patch(mutated, weakened)
 
     def test_patch_path_vector_cannot_expand(self):
-        expected = dict(substrate.CANDIDATE_PATCHES[0])
+        expected = dict(substrate.ACTIVE_PATCHES[0])
         data = self.patches[expected["path"]]
         mutated = data.replace(
             b"diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs",
@@ -143,7 +143,7 @@ class Rs006MiscdeviceSubstrateTests(unittest.TestCase):
             self.skipTest("set MCKERNEL_ROCKY_SOURCE_6_12 for strict source replay")
         _contract, replay = substrate.check(REPO_ROOT, kernel_source=source)
         self.assertEqual(18, replay["baseline_patch_count"])
-        self.assertEqual(2, replay["candidate_patch_count"])
+        self.assertEqual(3, replay["active_patch_count"])
         self.assertEqual(4, replay["postimage_count"])
         self.assertEqual(0, replay["strict_fuzz"])
 

@@ -47,6 +47,7 @@ on:
       - host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch
       - host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch
       - host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch
+      - host-kernel/rocky/patches/0020a-rust-miscdevice-bind-file-operations-to-module.patch
       - host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch
       - host-kernel/rocky/patches/0022-x86-pvh-annotate-noendbr.patch
       - host-kernel/rocky/patches/0023-rust-update-no-alloc-shim-marker-rust-1.92.patch
@@ -164,6 +165,7 @@ on:
       - host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch
       - host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch
       - host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch
+      - host-kernel/rocky/patches/0020a-rust-miscdevice-bind-file-operations-to-module.patch
       - host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch
       - host-kernel/rocky/patches/0022-x86-pvh-annotate-noendbr.patch
       - host-kernel/rocky/patches/0023-rust-update-no-alloc-shim-marker-rust-1.92.patch
@@ -255,7 +257,12 @@ env:
   ROCKY_IMAGE: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
   EXPECTED_HEAD_SHA: ${{ inputs.validation_sha || github.event.pull_request.head.sha || github.sha }}
   EXPECTED_KERNEL_RELEASE: 6.12.0-211.44.1.el10_2.mckernel1.x86_64
+  KBUILD_BUILD_HOST: rocky-10.2-x86_64
+  KBUILD_BUILD_TIMESTAMP: "Tue, 11 Aug 2026 07:40:34 +0000"
+  KBUILD_BUILD_USER: mckernel
+  KBUILD_BUILD_VERSION: "1"
   NATIVE_KERNEL_LOCALVERSION: -211.44.1.el10_2.mckernel1.x86_64
+  SOURCE_DATE_EPOCH: "1786434034"
 
 jobs:
   exact-build:
@@ -266,7 +273,7 @@ jobs:
       image: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
     defaults:
       run:
-        shell: bash
+        shell: /usr/bin/bash --noprofile --norc -p -e -o pipefail {0}
 
     steps:
       - name: Refuse the wrong runtime and install exact build tools
@@ -275,6 +282,18 @@ jobs:
           evidence_dir="$RUNNER_TEMP/native-rust-build-evidence"
           mkdir -p "$evidence_dir"
           printf '%s\n' "bootstrap-started" > "$evidence_dir/workflow-state"
+          test "$KBUILD_BUILD_HOST" = rocky-10.2-x86_64
+          test "$KBUILD_BUILD_TIMESTAMP" = "Tue, 11 Aug 2026 07:40:34 +0000"
+          test "$KBUILD_BUILD_USER" = mckernel
+          test "$KBUILD_BUILD_VERSION" = 1
+          test "$SOURCE_DATE_EPOCH" = 1786434034
+          printf '%s\n' \
+            "KBUILD_BUILD_HOST=$KBUILD_BUILD_HOST" \
+            "KBUILD_BUILD_TIMESTAMP=$KBUILD_BUILD_TIMESTAMP" \
+            "KBUILD_BUILD_USER=$KBUILD_BUILD_USER" \
+            "KBUILD_BUILD_VERSION=$KBUILD_BUILD_VERSION" \
+            "SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH" \
+            > "$evidence_dir/build.environment"
           test "$(uname -m)" = x86_64
           . /etc/os-release
           test "$ID" = rocky
@@ -306,42 +325,69 @@ jobs:
           submodules: recursive
 
       - name: Verify source-only contracts without claiming readiness
+        env:
+          BASH_ENV: ""
+          ENV: ""
+          EXPECTED_HEAD_SHA: ${{ inputs.validation_sha || github.event.pull_request.head.sha || github.sha }}
+          GLIBC_TUNABLES: ""
+          LD_ASSUME_KERNEL: ""
+          LD_AUDIT: ""
+          LD_BIND_NOW: ""
+          LD_DEBUG: ""
+          LD_DEBUG_OUTPUT: ""
+          LD_DYNAMIC_WEAK: ""
+          LD_HWCAP_MASK: ""
+          LD_LIBRARY_PATH: ""
+          LD_ORIGIN_PATH: ""
+          LD_PREFER_MAP_32BIT_EXEC: ""
+          LD_PRELOAD: ""
+          LD_PROFILE: ""
+          LD_PROFILE_OUTPUT: ""
+          LD_SHOW_AUXV: ""
+          PATH: /usr/sbin:/usr/bin:/sbin:/bin
+          PYTHONHOME: ""
+          PYTHONPATH: ""
         run: |
           set -euo pipefail
+          PATH=/usr/sbin:/usr/bin:/sbin:/bin
+          export PATH
+          github_env_file="$GITHUB_ENV"
+          github_path_file="$GITHUB_PATH"
+          unset GITHUB_ENV GITHUB_PATH
           [[ "$EXPECTED_HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]
-          test "$(git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"
-          test "$(git -C ihk rev-parse HEAD)" = "3114d9e7101ad52030eb3effa849a5c108972a1f"
-          python3 scripts/linux_api_exact_probe.py \
+          test "$(/usr/bin/git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"
+          test "$(/usr/bin/git -C ihk rev-parse HEAD)" = "3114d9e7101ad52030eb3effa849a5c108972a1f"
+          /usr/bin/python3 -E -s scripts/linux_api_exact_probe.py \
             --repo "$GITHUB_WORKSPACE" check-contract
-          python3 scripts/x86_64_shared_abi.py \
+          /usr/bin/python3 -E -s scripts/x86_64_shared_abi.py \
             --repo-root "$GITHUB_WORKSPACE" --check
-          python3 scripts/native_rust_build_surface_audit.py
-          python3 scripts/native_rust_host_audit.py
-          python3 scripts/rocky_rust_staging.py --repo "$GITHUB_WORKSPACE" --check
-          python3 scripts/ihk_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE"
-          python3 scripts/ihk_native_queue_check.py --repo "$GITHUB_WORKSPACE" \
-            --rustc "$(command -v rustc)" --require-rustc
-          python3 scripts/ihk_os_registry_check.py --repo "$GITHUB_WORKSPACE"
-          test "$(rustc --version | awk '{print $2}')" = "1.92.0"
-          MCKERNEL_RUSTC_1_92="$(command -v rustc)" \
-            python3 -m unittest -v scripts.tests.test_ihk_os_registry_check
-          python3 scripts/ihk_ioctl_dispatch_check.py --repo "$GITHUB_WORKSPACE"
-          MCKERNEL_RUSTC_1_92="$(command -v rustc)" \
-            python3 -m unittest -v scripts.tests.test_ihk_ioctl_dispatch_check
-          IHK_PAGE_ALLOCATOR_RUSTC="$(command -v rustc)" \
-            python3 scripts/ihk_page_allocator_check.py \
+          /usr/bin/python3 -E -s scripts/native_rust_build_surface_audit.py
+          /usr/bin/python3 -E -s scripts/native_rust_host_audit.py
+          /usr/bin/python3 -E -s scripts/rocky_rust_staging.py --repo "$GITHUB_WORKSPACE" --check
+          /usr/bin/python3 -E -s scripts/ihk_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE"
+          /usr/bin/python3 -E -s scripts/ihk_native_queue_check.py --repo "$GITHUB_WORKSPACE" \
+            --rustc /usr/bin/rustc --require-rustc
+          /usr/bin/python3 -E -s scripts/ihk_os_registry_check.py --repo "$GITHUB_WORKSPACE"
+          test "$(/usr/bin/rustc --version | /usr/bin/awk '{print $2}')" = "1.92.0"
+          MCKERNEL_RUSTC_1_92=/usr/bin/rustc \
+            /usr/bin/python3 -E -s -m unittest -v scripts.tests.test_ihk_os_registry_check
+          /usr/bin/python3 -E -s scripts/ihk_ioctl_dispatch_check.py --repo "$GITHUB_WORKSPACE"
+          MCKERNEL_RUSTC_1_92=/usr/bin/rustc \
+            /usr/bin/python3 -E -s -m unittest -v scripts.tests.test_ihk_ioctl_dispatch_check
+          IHK_PAGE_ALLOCATOR_RUSTC=/usr/bin/rustc \
+            /usr/bin/python3 -E -s scripts/ihk_page_allocator_check.py \
               --repo "$GITHUB_WORKSPACE" --require-rustc
-          IHK_PAGE_OWNER_REGISTRY_RUSTC="$(command -v rustc)" \
-            python3 scripts/ihk_page_owner_registry_check.py \
+          IHK_PAGE_OWNER_REGISTRY_RUSTC=/usr/bin/rustc \
+            /usr/bin/python3 -E -s scripts/ihk_page_owner_registry_check.py \
               --repo "$GITHUB_WORKSPACE" --require-rustc
-          python3 scripts/ihk_smp_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE"
-          python3 scripts/mcctrl_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE"
-          python3 scripts/native_rust_unsafe_ffi_ledger.py --repo "$GITHUB_WORKSPACE" check
-          python3 scripts/native_rust_runtime_evidence.py \
+          /usr/bin/python3 -E -s scripts/ihk_smp_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE"
+          /usr/bin/python3 -E -s scripts/mcctrl_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE"
+          /usr/bin/python3 -E -s scripts/native_rust_unsafe_ffi_ledger.py --repo "$GITHUB_WORKSPACE" check
+          /usr/bin/python3 -E -s scripts/native_rust_runtime_evidence.py \
             --repo "$GITHUB_WORKSPACE" --check-contract
-          python3 scripts/rocky_kernel_rk006_full_source_build_capture.py \
+          /usr/bin/python3 -E -s scripts/rocky_kernel_rk006_full_source_build_capture.py \
             check-contract --repo "$GITHUB_WORKSPACE"
-          python3 -m unittest -v \
+          /usr/bin/python3 -E -s -m unittest -v \
             scripts.tests.test_native_rust_kbuild_link_closure \
             scripts.tests.test_native_rust_kconfig_policy \
             scripts.tests.test_native_rust_kconfig_solver \
@@ -353,18 +399,53 @@ jobs:
             scripts.tests.test_ihk_native_lifecycle_check \
             scripts.tests.test_ihk_smp_native_lifecycle_check \
             scripts.tests.test_mcctrl_native_lifecycle_check
-          python3 scripts/rs006_miscdevice_substrate.py --repo "$GITHUB_WORKSPACE"
-          MCKERNEL_RUSTC_1_92="$(command -v rustc)" \
-            python3 -m unittest -v scripts.tests.test_rust_target_compatibility_patches
+          /usr/bin/python3 -E -s scripts/rs006_miscdevice_substrate.py --repo "$GITHUB_WORKSPACE"
+          MCKERNEL_RUSTC_1_92=/usr/bin/rustc \
+            /usr/bin/python3 -E -s -m unittest -v scripts.tests.test_rust_target_compatibility_patches
+          : > "$github_env_file"
+          : > "$github_path_file"
 
       - name: Acquire, patch, and credit-forbidden-stage the exact source
         env:
+          BASH_ENV: ""
           CACHE_ROOT: ${{ runner.temp }}/native-rust-cache
+          ENV: ""
+          EXPECTED_KERNEL_RELEASE: 6.12.0-211.44.1.el10_2.mckernel1.x86_64
+          GLIBC_TUNABLES: ""
+          GNUMAKEFLAGS: ""
+          LD_ASSUME_KERNEL: ""
+          LD_AUDIT: ""
+          LD_BIND_NOW: ""
+          LD_DEBUG: ""
+          LD_DEBUG_OUTPUT: ""
+          LD_DYNAMIC_WEAK: ""
+          LD_HWCAP_MASK: ""
+          LD_LIBRARY_PATH: ""
+          LD_ORIGIN_PATH: ""
+          LD_PREFER_MAP_32BIT_EXEC: ""
+          LD_PRELOAD: ""
+          LD_PROFILE: ""
+          LD_PROFILE_OUTPUT: ""
+          LD_SHOW_AUXV: ""
+          MAKEFILES: ""
+          MAKEFLAGS: ""
+          MAKEOVERRIDES: ""
+          MFLAGS: ""
+          NATIVE_KERNEL_LOCALVERSION: -211.44.1.el10_2.mckernel1.x86_64
+          PATH: /usr/sbin:/usr/bin:/sbin:/bin
+          PYTHONHOME: ""
+          PYTHONPATH: ""
           SOURCE_ASSETS: ${{ runner.temp }}/native-rust-assets
           SOURCE_PARENT: ${{ runner.temp }}/native-rust-source
         run: |
           set -euo pipefail
-          python3 scripts/rocky_kernel_source_lock.py \
+          PATH=/usr/sbin:/usr/bin:/sbin:/bin
+          export PATH
+          github_env_file="$GITHUB_ENV"
+          github_path_file="$GITHUB_PATH"
+          unset GITHUB_ENV GITHUB_PATH
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/rocky_kernel_source_lock.py \
             --repo "$GITHUB_WORKSPACE" --cache-root "$CACHE_ROOT" --acquire
           srpm="$(find "$CACHE_ROOT" -type f -name 'kernel-6.12.0-211.44.1.el10_2.src.rpm' -print)"
           test -n "$srpm"
@@ -378,10 +459,12 @@ jobs:
           tar -C "$SOURCE_PARENT" -xf "$archive"
           source_root="$SOURCE_PARENT/linux-6.12.0-211.44.1.el10_2"
           test -f "$source_root/Makefile"
-          python3 scripts/rs006_miscdevice_substrate.py \
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/rs006_miscdevice_substrate.py \
             --repo "$GITHUB_WORKSPACE" --kernel-source "$source_root" \
             --require-source-replay
-          python3 scripts/ihk_ioctl_dispatch_check.py --repo "$GITHUB_WORKSPACE" \
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/ihk_ioctl_dispatch_check.py --repo "$GITHUB_WORKSPACE" \
             --kernel-source "$source_root"
           patch -d "$source_root" -p1 --batch --forward --no-backup-if-mismatch \
             -i "$SOURCE_ASSETS/1000-debrand-some-messages.patch"
@@ -406,6 +489,7 @@ jobs:
             0018-kbuild-order-unterminated-string-disable.patch \
             0019-rust-types-add-opaque-try-ffi-init.patch \
             0020-rust-miscdevice-add-base-abstraction.patch \
+            0020a-rust-miscdevice-bind-file-operations-to-module.patch \
             0021-objtool-recognize-rust-1.92-panic-const.patch \
             0022-x86-pvh-annotate-noendbr.patch \
             0023-rust-update-no-alloc-shim-marker-rust-1.92.patch
@@ -419,30 +503,100 @@ jobs:
             -i "$GITHUB_WORKSPACE/host-kernel/kbuild/patches/0001-drivers-misc-add-mckernel-rust-host-modules.patch"
           patch -d "$source_root" -p1 --batch --forward --fuzz=0 --no-backup-if-mismatch \
             -i "$GITHUB_WORKSPACE/host-kernel/kbuild/patches/0002-rust-bindings-expose-module-parameters.patch"
-          python3 scripts/rocky_rust_staging.py --repo "$GITHUB_WORKSPACE" \
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/rocky_rust_staging.py --repo "$GITHUB_WORKSPACE" \
             --stage-for-evidence "$source_root"
-          python3 scripts/rocky_rust_staging.py --repo "$GITHUB_WORKSPACE" \
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/rocky_rust_staging.py --repo "$GITHUB_WORKSPACE" \
             --verify-evidence-stage "$source_root"
-          printf 'NATIVE_SRPM=%s\n' "$srpm" >> "$GITHUB_ENV"
-          printf 'NATIVE_SOURCE_ROOT=%s\n' "$source_root" >> "$GITHUB_ENV"
-          printf 'NATIVE_BASELINE_CONFIG=%s\n' "$baseline" >> "$GITHUB_ENV"
+          : > "$github_env_file"
+          : > "$github_path_file"
+          printf 'NATIVE_SRPM=%s\n' "$srpm" > "$github_env_file"
+          printf 'NATIVE_SOURCE_ROOT=%s\n' "$source_root" >> "$github_env_file"
+          printf 'NATIVE_BASELINE_CONFIG=%s\n' "$baseline" >> "$github_env_file"
 
       - name: Resolve the evidence-only module configuration twice
         env:
+          BASH_ENV: ""
           BUILD_DIR: ${{ runner.temp }}/native-rust-build
+          ENV: ""
+          EXPECTED_KERNEL_RELEASE: 6.12.0-211.44.1.el10_2.mckernel1.x86_64
+          GLIBC_TUNABLES: ""
+          GNUMAKEFLAGS: ""
+          KBUILD_BUILD_HOST: rocky-10.2-x86_64
+          KBUILD_BUILD_TIMESTAMP: "Tue, 11 Aug 2026 07:40:34 +0000"
+          KBUILD_BUILD_USER: mckernel
+          KBUILD_BUILD_VERSION: "1"
+          LD_ASSUME_KERNEL: ""
+          LD_AUDIT: ""
+          LD_BIND_NOW: ""
+          LD_DEBUG: ""
+          LD_DEBUG_OUTPUT: ""
+          LD_DYNAMIC_WEAK: ""
+          LD_HWCAP_MASK: ""
+          LD_LIBRARY_PATH: ""
+          LD_ORIGIN_PATH: ""
+          LD_PREFER_MAP_32BIT_EXEC: ""
+          LD_PRELOAD: ""
+          LD_PROFILE: ""
+          LD_PROFILE_OUTPUT: ""
+          LD_SHOW_AUXV: ""
+          MAKEFILES: ""
+          MAKEFLAGS: ""
+          MAKEOVERRIDES: ""
+          MFLAGS: ""
+          NATIVE_KERNEL_LOCALVERSION: -211.44.1.el10_2.mckernel1.x86_64
+          PATH: /usr/sbin:/usr/bin:/sbin:/bin
+          PYTHONHOME: ""
+          PYTHONPATH: ""
+          SOURCE_DATE_EPOCH: "1786434034"
         run: |
           set -euo pipefail
+          PATH=/usr/sbin:/usr/bin:/sbin:/bin
+          export PATH
+          github_env_file="$GITHUB_ENV"
+          github_path_file="$GITHUB_PATH"
+          unset GITHUB_ENV GITHUB_PATH
+          test "$KBUILD_BUILD_HOST" = rocky-10.2-x86_64
+          test "$KBUILD_BUILD_TIMESTAMP" = "Tue, 11 Aug 2026 07:40:34 +0000"
+          test "$KBUILD_BUILD_USER" = mckernel
+          test "$KBUILD_BUILD_VERSION" = 1
+          test "$SOURCE_DATE_EPOCH" = 1786434034
+          kbuild_environment=(
+            /usr/bin/env -i
+            BASH_ENV= ENV= GNUMAKEFLAGS=
+            KBUILD_BUILD_HOST="$KBUILD_BUILD_HOST"
+            KBUILD_BUILD_TIMESTAMP="$KBUILD_BUILD_TIMESTAMP"
+            KBUILD_BUILD_USER="$KBUILD_BUILD_USER"
+            KBUILD_BUILD_VERSION="$KBUILD_BUILD_VERSION"
+            LANG=C LC_ALL=C LD_LIBRARY_PATH= LD_PRELOAD=
+            MAKEFILES= MAKEFLAGS= MAKEOVERRIDES= MFLAGS=
+            PATH=/usr/bin:/bin SOURCE_DATE_EPOCH="$SOURCE_DATE_EPOCH" TZ=UTC
+          )
           mkdir -p "$BUILD_DIR"
           cp "$NATIVE_BASELINE_CONFIG" "$BUILD_DIR/.config"
-          "$NATIVE_SOURCE_ROOT/scripts/kconfig/merge_config.sh" -m -O "$BUILD_DIR" \
+          "${kbuild_environment[@]}" /usr/bin/bash --noprofile --norc -p \
+            "$NATIVE_SOURCE_ROOT/scripts/kconfig/merge_config.sh" -m -O "$BUILD_DIR" \
             "$BUILD_DIR/.config" \
             "$GITHUB_WORKSPACE/host-kernel/rocky/configs/rust-minimal.config" \
             "$GITHUB_WORKSPACE/host-kernel/rocky/configs/native-rust-evidence.config"
-          make -C "$NATIVE_SOURCE_ROOT" O="$BUILD_DIR" ARCH=x86_64 LLVM=1 \
-            LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" olddefconfig
+          "${kbuild_environment[@]}" /usr/bin/make -C "$NATIVE_SOURCE_ROOT" \
+            O="$BUILD_DIR" ARCH=x86_64 LLVM=1 \
+            LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \
+            KBUILD_BUILD_HOST="$KBUILD_BUILD_HOST" \
+            KBUILD_BUILD_TIMESTAMP="$KBUILD_BUILD_TIMESTAMP" \
+            KBUILD_BUILD_USER="$KBUILD_BUILD_USER" \
+            KBUILD_BUILD_VERSION="$KBUILD_BUILD_VERSION" \
+            SOURCE_DATE_EPOCH="$SOURCE_DATE_EPOCH" olddefconfig
           cp "$BUILD_DIR/.config" "$BUILD_DIR/resolved-first.config"
-          make -C "$NATIVE_SOURCE_ROOT" O="$BUILD_DIR" ARCH=x86_64 LLVM=1 \
-            LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" olddefconfig
+          "${kbuild_environment[@]}" /usr/bin/make -C "$NATIVE_SOURCE_ROOT" \
+            O="$BUILD_DIR" ARCH=x86_64 LLVM=1 \
+            LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \
+            KBUILD_BUILD_HOST="$KBUILD_BUILD_HOST" \
+            KBUILD_BUILD_TIMESTAMP="$KBUILD_BUILD_TIMESTAMP" \
+            KBUILD_BUILD_USER="$KBUILD_BUILD_USER" \
+            KBUILD_BUILD_VERSION="$KBUILD_BUILD_VERSION" \
+            SOURCE_DATE_EPOCH="$SOURCE_DATE_EPOCH" olddefconfig
           cmp "$BUILD_DIR/resolved-first.config" "$BUILD_DIR/.config"
           grep -qx 'CONFIG_WERROR=y' "$BUILD_DIR/.config"
           grep -qx 'CONFIG_MODULES=y' "$BUILD_DIR/.config"
@@ -456,24 +610,90 @@ jobs:
           MATRIX_DIR="$RUNNER_TEMP/native-rust-kconfig-matrix"
           mkdir -p "$EVIDENCE_DIR"
           test ! -e "$MATRIX_DIR"
-          python3 scripts/native_rust_kconfig_solver.py run \
+          "${kbuild_environment[@]}" /usr/bin/python3 -E -s \
+            scripts/native_rust_kconfig_solver.py run \
             --source "$NATIVE_SOURCE_ROOT" \
             --seed "$BUILD_DIR/.config" \
             --matrix-dir "$MATRIX_DIR"
           cp "$MATRIX_DIR/kconfig-solver-matrix.json" \
             "$EVIDENCE_DIR/kconfig-solver-matrix.json"
           chmod 0644 "$EVIDENCE_DIR/kconfig-solver-matrix.json"
-          python3 scripts/native_rust_kconfig_solver.py check \
+          "${kbuild_environment[@]}" /usr/bin/python3 -E -s \
+            scripts/native_rust_kconfig_solver.py check \
             --matrix "$EVIDENCE_DIR/kconfig-solver-matrix.json" \
             --source "$NATIVE_SOURCE_ROOT" \
             --seed "$BUILD_DIR/.config"
-          printf 'NATIVE_BUILD_DIR=%s\n' "$BUILD_DIR" >> "$GITHUB_ENV"
+          : > "$github_env_file"
+          : > "$github_path_file"
+          printf 'NATIVE_SRPM=%s\n' "$NATIVE_SRPM" > "$github_env_file"
+          printf 'NATIVE_SOURCE_ROOT=%s\n' "$NATIVE_SOURCE_ROOT" >> "$github_env_file"
+          printf 'NATIVE_BASELINE_CONFIG=%s\n' "$NATIVE_BASELINE_CONFIG" >> "$github_env_file"
+          printf 'NATIVE_BUILD_DIR=%s\n' "$BUILD_DIR" >> "$github_env_file"
 
       - name: Compile the exact kernel and native Rust modules
+        env:
+          BASH_ENV: ""
+          ENV: ""
+          EXPECTED_KERNEL_RELEASE: 6.12.0-211.44.1.el10_2.mckernel1.x86_64
+          GLIBC_TUNABLES: ""
+          GNUMAKEFLAGS: ""
+          KBUILD_BUILD_HOST: rocky-10.2-x86_64
+          KBUILD_BUILD_TIMESTAMP: "Tue, 11 Aug 2026 07:40:34 +0000"
+          KBUILD_BUILD_USER: mckernel
+          KBUILD_BUILD_VERSION: "1"
+          LD_ASSUME_KERNEL: ""
+          LD_AUDIT: ""
+          LD_BIND_NOW: ""
+          LD_DEBUG: ""
+          LD_DEBUG_OUTPUT: ""
+          LD_DYNAMIC_WEAK: ""
+          LD_HWCAP_MASK: ""
+          LD_LIBRARY_PATH: ""
+          LD_ORIGIN_PATH: ""
+          LD_PREFER_MAP_32BIT_EXEC: ""
+          LD_PRELOAD: ""
+          LD_PROFILE: ""
+          LD_PROFILE_OUTPUT: ""
+          LD_SHOW_AUXV: ""
+          MAKEFILES: ""
+          MAKEFLAGS: ""
+          MAKEOVERRIDES: ""
+          MFLAGS: ""
+          NATIVE_KERNEL_LOCALVERSION: -211.44.1.el10_2.mckernel1.x86_64
+          PATH: /usr/sbin:/usr/bin:/sbin:/bin
+          SOURCE_DATE_EPOCH: "1786434034"
         run: |
-          set -uo pipefail
+          set -euo pipefail
+          PATH=/usr/sbin:/usr/bin:/sbin:/bin
+          export PATH
+          github_env_file="$GITHUB_ENV"
+          github_path_file="$GITHUB_PATH"
+          unset GITHUB_ENV GITHUB_PATH
           evidence_dir="$RUNNER_TEMP/native-rust-build-evidence"
           mkdir -p "$evidence_dir"
+          test "$KBUILD_BUILD_HOST" = rocky-10.2-x86_64
+          test "$KBUILD_BUILD_TIMESTAMP" = "Tue, 11 Aug 2026 07:40:34 +0000"
+          test "$KBUILD_BUILD_USER" = mckernel
+          test "$KBUILD_BUILD_VERSION" = 1
+          test "$SOURCE_DATE_EPOCH" = 1786434034
+          kbuild_environment=(
+            /usr/bin/env -i
+            BASH_ENV= ENV= GNUMAKEFLAGS=
+            KBUILD_BUILD_HOST="$KBUILD_BUILD_HOST"
+            KBUILD_BUILD_TIMESTAMP="$KBUILD_BUILD_TIMESTAMP"
+            KBUILD_BUILD_USER="$KBUILD_BUILD_USER"
+            KBUILD_BUILD_VERSION="$KBUILD_BUILD_VERSION"
+            LANG=C LC_ALL=C LD_LIBRARY_PATH= LD_PRELOAD=
+            MAKEFILES= MAKEFLAGS= MAKEOVERRIDES= MFLAGS=
+            PATH=/usr/bin:/bin SOURCE_DATE_EPOCH="$SOURCE_DATE_EPOCH" TZ=UTC
+          )
+          printf '%s\n' \
+            "KBUILD_BUILD_HOST=$KBUILD_BUILD_HOST" \
+            "KBUILD_BUILD_TIMESTAMP=$KBUILD_BUILD_TIMESTAMP" \
+            "KBUILD_BUILD_USER=$KBUILD_BUILD_USER" \
+            "KBUILD_BUILD_VERSION=$KBUILD_BUILD_VERSION" \
+            "SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH" \
+            > "$evidence_dir/build.environment"
           module_targets=(
             drivers/misc/mckernel/ihk.ko
             drivers/misc/mckernel/ihk-smp-x86_64.ko
@@ -498,20 +718,38 @@ jobs:
           (
             set -e
             run_phase rustavailable \
-              make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \
-                ARCH=x86_64 LLVM=1 LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \
+              "${kbuild_environment[@]}" /usr/bin/make -C "$NATIVE_SOURCE_ROOT" \
+                O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 \
+                LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \
+                KBUILD_BUILD_HOST="$KBUILD_BUILD_HOST" \
+                KBUILD_BUILD_TIMESTAMP="$KBUILD_BUILD_TIMESTAMP" \
+                KBUILD_BUILD_USER="$KBUILD_BUILD_USER" \
+                KBUILD_BUILD_VERSION="$KBUILD_BUILD_VERSION" \
+                SOURCE_DATE_EPOCH="$SOURCE_DATE_EPOCH" \
                 rustavailable
             run_phase bzImage \
-              make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \
-                ARCH=x86_64 LLVM=1 LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \
+              "${kbuild_environment[@]}" /usr/bin/make -C "$NATIVE_SOURCE_ROOT" \
+                O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 \
+                LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \
+                KBUILD_BUILD_HOST="$KBUILD_BUILD_HOST" \
+                KBUILD_BUILD_TIMESTAMP="$KBUILD_BUILD_TIMESTAMP" \
+                KBUILD_BUILD_USER="$KBUILD_BUILD_USER" \
+                KBUILD_BUILD_VERSION="$KBUILD_BUILD_VERSION" \
+                SOURCE_DATE_EPOCH="$SOURCE_DATE_EPOCH" \
                 -j2 bzImage
             # Linux 6.12 supports in-tree %.ko single targets.  Build the exact
             # boot kernel first so their modpost pass consumes its vmlinux.o
             # symbol universe.  Keep all three module targets in one invocation
             # so modpost also sees the complete ihk provider/consumer graph.
             run_phase native-modules \
-              make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \
-                ARCH=x86_64 LLVM=1 LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \
+              "${kbuild_environment[@]}" /usr/bin/make -C "$NATIVE_SOURCE_ROOT" \
+                O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 \
+                LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \
+                KBUILD_BUILD_HOST="$KBUILD_BUILD_HOST" \
+                KBUILD_BUILD_TIMESTAMP="$KBUILD_BUILD_TIMESTAMP" \
+                KBUILD_BUILD_USER="$KBUILD_BUILD_USER" \
+                KBUILD_BUILD_VERSION="$KBUILD_BUILD_VERSION" \
+                SOURCE_DATE_EPOCH="$SOURCE_DATE_EPOCH" \
                 -j2 "${module_targets[@]}"
             printf '%s\n' complete > "$evidence_dir/build.phase"
           ) 2>&1 | tee "$evidence_dir/build.log"
@@ -521,15 +759,82 @@ jobs:
           tee_status="${pipeline_status[1]}"
           printf '%s\n' "$producer_status" > "$evidence_dir/build.exit-code"
           printf '%s\n' "$tee_status" > "$evidence_dir/build-log.exit-code"
+          : > "$github_env_file"
+          : > "$github_path_file"
+          printf 'NATIVE_SRPM=%s\n' "$NATIVE_SRPM" > "$github_env_file"
+          printf 'NATIVE_SOURCE_ROOT=%s\n' "$NATIVE_SOURCE_ROOT" >> "$github_env_file"
+          printf 'NATIVE_BASELINE_CONFIG=%s\n' "$NATIVE_BASELINE_CONFIG" >> "$github_env_file"
+          printf 'NATIVE_BUILD_DIR=%s\n' "$NATIVE_BUILD_DIR" >> "$github_env_file"
           if (( producer_status != 0 )); then
             exit "$producer_status"
           fi
           exit "$tee_status"
 
       - name: Validate built metadata and capture immutable diagnostics
+        env:
+          BASH_ENV: ""
+          ENV: ""
+          EXPECTED_KERNEL_RELEASE: 6.12.0-211.44.1.el10_2.mckernel1.x86_64
+          GLIBC_TUNABLES: ""
+          GNUMAKEFLAGS: ""
+          KBUILD_BUILD_HOST: rocky-10.2-x86_64
+          KBUILD_BUILD_TIMESTAMP: "Tue, 11 Aug 2026 07:40:34 +0000"
+          KBUILD_BUILD_USER: mckernel
+          KBUILD_BUILD_VERSION: "1"
+          LD_ASSUME_KERNEL: ""
+          LD_AUDIT: ""
+          LD_BIND_NOW: ""
+          LD_DEBUG: ""
+          LD_DEBUG_OUTPUT: ""
+          LD_DYNAMIC_WEAK: ""
+          LD_HWCAP_MASK: ""
+          LD_LIBRARY_PATH: ""
+          LD_ORIGIN_PATH: ""
+          LD_PREFER_MAP_32BIT_EXEC: ""
+          LD_PRELOAD: ""
+          LD_PROFILE: ""
+          LD_PROFILE_OUTPUT: ""
+          LD_SHOW_AUXV: ""
+          MAKEFILES: ""
+          MAKEFLAGS: ""
+          MAKEOVERRIDES: ""
+          MFLAGS: ""
+          NATIVE_KERNEL_LOCALVERSION: -211.44.1.el10_2.mckernel1.x86_64
+          PATH: /usr/sbin:/usr/bin:/sbin:/bin
+          PYTHONHOME: ""
+          PYTHONPATH: ""
+          SOURCE_DATE_EPOCH: "1786434034"
         run: |
           set -euo pipefail
+          PATH=/usr/sbin:/usr/bin:/sbin:/bin
+          export PATH
+          github_env_file="$GITHUB_ENV"
+          github_path_file="$GITHUB_PATH"
+          unset GITHUB_ENV GITHUB_PATH
           EVIDENCE_DIR="$RUNNER_TEMP/native-rust-build-evidence"
+          test "$KBUILD_BUILD_HOST" = rocky-10.2-x86_64
+          test "$KBUILD_BUILD_TIMESTAMP" = "Tue, 11 Aug 2026 07:40:34 +0000"
+          test "$KBUILD_BUILD_USER" = mckernel
+          test "$KBUILD_BUILD_VERSION" = 1
+          test "$SOURCE_DATE_EPOCH" = 1786434034
+          kbuild_environment=(
+            /usr/bin/env -i
+            BASH_ENV= ENV= GNUMAKEFLAGS=
+            KBUILD_BUILD_HOST="$KBUILD_BUILD_HOST"
+            KBUILD_BUILD_TIMESTAMP="$KBUILD_BUILD_TIMESTAMP"
+            KBUILD_BUILD_USER="$KBUILD_BUILD_USER"
+            KBUILD_BUILD_VERSION="$KBUILD_BUILD_VERSION"
+            LANG=C LC_ALL=C LD_LIBRARY_PATH= LD_PRELOAD=
+            MAKEFILES= MAKEFLAGS= MAKEOVERRIDES= MFLAGS=
+            PATH=/usr/bin:/bin SOURCE_DATE_EPOCH="$SOURCE_DATE_EPOCH" TZ=UTC
+          )
+          printf '%s\n' \
+            "KBUILD_BUILD_HOST=$KBUILD_BUILD_HOST" \
+            "KBUILD_BUILD_TIMESTAMP=$KBUILD_BUILD_TIMESTAMP" \
+            "KBUILD_BUILD_USER=$KBUILD_BUILD_USER" \
+            "KBUILD_BUILD_VERSION=$KBUILD_BUILD_VERSION" \
+            "SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH" \
+            > "$EVIDENCE_DIR/build.environment"
           module_root="$NATIVE_BUILD_DIR/drivers/misc/mckernel"
           ihk="$module_root/ihk.ko"
           smp="$module_root/ihk-smp-x86_64.ko"
@@ -546,17 +851,25 @@ jobs:
           cmp "$EVIDENCE_DIR/module-targets.sorted" \
             "$EVIDENCE_DIR/built-module-artifacts.txt"
           rm "$EVIDENCE_DIR/module-targets.sorted"
-          git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD \
+          /usr/bin/git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD \
             > "$EVIDENCE_DIR/commit.sha"
           # Preserve the exact binaries and both rendered and raw module
           # metadata before any semantic checker can fail closed.
+          modinfo_path="$(command -v modinfo)"
+          test "$modinfo_path" = /usr/sbin/modinfo
+          test -x /usr/sbin/modinfo
+          test ! -L /usr/sbin/modinfo
+          test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' "$modinfo_path")" = kmod
+          test -x /usr/bin/nm
+          test ! -L /usr/bin/nm
+          test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' /usr/bin/nm)" = binutils
           for module in "$ihk" "$smp" "$mcctrl"; do
             name="$(basename "$module")"
             cp "$module" "$EVIDENCE_DIR/$name"
-            modinfo "$module" > "$EVIDENCE_DIR/$name.modinfo"
-            readelf -p .modinfo "$module" > "$EVIDENCE_DIR/$name.modinfo-section"
-            readelf -SWr "$module" > "$EVIDENCE_DIR/$name.readelf"
-            nm -A -a "$module" > "$EVIDENCE_DIR/$name.nm"
+            "$modinfo_path" "$module" > "$EVIDENCE_DIR/$name.modinfo"
+            /usr/bin/readelf -p .modinfo "$module" > "$EVIDENCE_DIR/$name.modinfo-section"
+            /usr/bin/readelf -SWr "$module" > "$EVIDENCE_DIR/$name.readelf"
+            /usr/bin/nm -A -a "$module" > "$EVIDENCE_DIR/$name.nm"
           done
           (
             cd "$EVIDENCE_DIR"
@@ -567,26 +880,37 @@ jobs:
           )
           for name in ihk.ko ihk-smp-x86_64.ko mcctrl.ko; do
             module="$EVIDENCE_DIR/$name"
-            vermagic="$(modinfo -F vermagic "$module")"
+            vermagic="$("$modinfo_path" -F vermagic "$module")"
             test -n "$vermagic"
             test "$(printf '%s\n' "$vermagic" | wc -l)" = 1
             test "${vermagic%% *}" = "$EXPECTED_KERNEL_RELEASE"
           done
-          python3 scripts/ihk_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" --module "$ihk"
-          python3 scripts/ihk_os_registry_check.py --repo "$GITHUB_WORKSPACE"
-          test "$(rustc --version | awk '{print $2}')" = "1.92.0"
-          MCKERNEL_RUSTC_1_92="$(command -v rustc)" \
-            python3 -m unittest -v scripts.tests.test_ihk_os_registry_check
-          python3 scripts/ihk_ioctl_dispatch_check.py --repo "$GITHUB_WORKSPACE"
-          MCKERNEL_RUSTC_1_92="$(command -v rustc)" \
-            python3 -m unittest -v scripts.tests.test_ihk_ioctl_dispatch_check
-          python3 scripts/ihk_smp_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" --module "$smp"
-          python3 scripts/mcctrl_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" --module "$mcctrl"
+          "${kbuild_environment[@]}" /usr/bin/python3 -E -s \
+            scripts/ihk_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" --module "$ihk"
+          "${kbuild_environment[@]}" /usr/bin/python3 -E -s \
+            scripts/ihk_os_registry_check.py --repo "$GITHUB_WORKSPACE"
+          test "$(/usr/bin/rustc --version | /usr/bin/awk '{print $2}')" = "1.92.0"
+          "${kbuild_environment[@]}" MCKERNEL_RUSTC_1_92=/usr/bin/rustc \
+            /usr/bin/python3 -E -s -m unittest -v scripts.tests.test_ihk_os_registry_check
+          "${kbuild_environment[@]}" /usr/bin/python3 -E -s \
+            scripts/ihk_ioctl_dispatch_check.py --repo "$GITHUB_WORKSPACE"
+          "${kbuild_environment[@]}" MCKERNEL_RUSTC_1_92=/usr/bin/rustc \
+            /usr/bin/python3 -E -s -m unittest -v scripts.tests.test_ihk_ioctl_dispatch_check
+          "${kbuild_environment[@]}" /usr/bin/python3 -E -s \
+            scripts/ihk_smp_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" --module "$smp"
+          "${kbuild_environment[@]}" /usr/bin/python3 -E -s \
+            scripts/mcctrl_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" --module "$mcctrl"
           cp "$NATIVE_BUILD_DIR/.config" "$EVIDENCE_DIR/resolved.config"
           cp "$NATIVE_BUILD_DIR/arch/x86/boot/bzImage" "$EVIDENCE_DIR/bzImage"
           cp "$NATIVE_SOURCE_ROOT/drivers/misc/mckernel/stage-lock.json" "$EVIDENCE_DIR/stage-lock.json"
-          kernel_release="$(make -s -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \
-            ARCH=x86_64 LLVM=1 LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" kernelrelease)"
+          kernel_release="$("${kbuild_environment[@]}" /usr/bin/make -s \
+            -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 \
+            LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \
+            KBUILD_BUILD_HOST="$KBUILD_BUILD_HOST" \
+            KBUILD_BUILD_TIMESTAMP="$KBUILD_BUILD_TIMESTAMP" \
+            KBUILD_BUILD_USER="$KBUILD_BUILD_USER" \
+            KBUILD_BUILD_VERSION="$KBUILD_BUILD_VERSION" \
+            SOURCE_DATE_EPOCH="$SOURCE_DATE_EPOCH" kernelrelease)"
           test "$kernel_release" = "$EXPECTED_KERNEL_RELEASE"
           printf '%s\n' "$kernel_release" > "$EVIDENCE_DIR/kernel.release"
           cmd_records=(
@@ -610,11 +934,13 @@ jobs:
             test ! -L "$module_root/$record"
             cp "$module_root/$record" "$EVIDENCE_DIR/$record"
           done
-          python3 scripts/native_rust_kbuild_link_closure.py \
+          "${kbuild_environment[@]}" /usr/bin/python3 -E -s \
+            scripts/native_rust_kbuild_link_closure.py \
             --records-dir "$EVIDENCE_DIR" \
             --stage-lock "$EVIDENCE_DIR/stage-lock.json" \
             --output "$EVIDENCE_DIR/kbuild-link-closure.json"
-          python3 scripts/native_rust_kbuild_link_closure.py \
+          "${kbuild_environment[@]}" /usr/bin/python3 -E -s \
+            scripts/native_rust_kbuild_link_closure.py \
             --records-dir "$EVIDENCE_DIR" \
             --stage-lock "$EVIDENCE_DIR/stage-lock.json" \
             --check-output "$EVIDENCE_DIR/kbuild-link-closure.json"
@@ -624,6 +950,8 @@ jobs:
               | sort -z | xargs -0 sha256sum -- > SHA256SUMS
             sha256sum --check --strict SHA256SUMS
           )
+          : > "$github_env_file"
+          : > "$github_path_file"
 
       - name: Upload compiler evidence or first-failure diagnostics
         if: ${{ always() }}
@@ -832,7 +1160,7 @@ jobs:
       image: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
     defaults:
       run:
-        shell: bash
+        shell: /usr/bin/bash --noprofile --norc -p -e -o pipefail {0}
 
     steps:
       - name: Initialize non-durable capture and install exact tools
@@ -864,24 +1192,82 @@ jobs:
           submodules: false
 
       - name: Verify the frozen non-crediting RK-006 capture contract
+        env:
+          BASH_ENV: ""
+          ENV: ""
+          EXPECTED_HEAD_SHA: ${{ inputs.validation_sha || github.event.pull_request.head.sha || github.sha }}
+          GLIBC_TUNABLES: ""
+          LD_ASSUME_KERNEL: ""
+          LD_AUDIT: ""
+          LD_BIND_NOW: ""
+          LD_DEBUG: ""
+          LD_DEBUG_OUTPUT: ""
+          LD_DYNAMIC_WEAK: ""
+          LD_HWCAP_MASK: ""
+          LD_LIBRARY_PATH: ""
+          LD_ORIGIN_PATH: ""
+          LD_PREFER_MAP_32BIT_EXEC: ""
+          LD_PRELOAD: ""
+          LD_PROFILE: ""
+          LD_PROFILE_OUTPUT: ""
+          LD_SHOW_AUXV: ""
+          PATH: /usr/sbin:/usr/bin:/sbin:/bin
+          PYTHONHOME: ""
+          PYTHONPATH: ""
         run: |
           set -euo pipefail
+          PATH=/usr/sbin:/usr/bin:/sbin:/bin
+          export PATH
+          github_env_file="$GITHUB_ENV"
+          github_path_file="$GITHUB_PATH"
+          unset GITHUB_ENV GITHUB_PATH
           [[ "$EXPECTED_HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]
-          test "$(git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"
-          python3 scripts/rocky_kernel_rk006_full_source_build_capture.py \
+          test "$(/usr/bin/git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/rocky_kernel_rk006_full_source_build_capture.py \
             check-contract --repo "$GITHUB_WORKSPACE"
-          python3 -m unittest -v \
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s -m unittest -v \
             scripts.tests.test_rocky_kernel_rk006_patch_authority \
             scripts.tests.test_rocky_kernel_rk006_full_source_build_capture
+          : > "$github_env_file"
+          : > "$github_path_file"
 
-      - name: Reacquire and capture the full external 25-patch source replay
+      - name: Reacquire and capture the full external 26-patch source replay
         env:
+          BASH_ENV: ""
           CACHE_ROOT: ${{ runner.temp }}/rk006-source-cache
+          ENV: ""
+          EXPECTED_HEAD_SHA: ${{ inputs.validation_sha || github.event.pull_request.head.sha || github.sha }}
+          GLIBC_TUNABLES: ""
+          LD_ASSUME_KERNEL: ""
+          LD_AUDIT: ""
+          LD_BIND_NOW: ""
+          LD_DEBUG: ""
+          LD_DEBUG_OUTPUT: ""
+          LD_DYNAMIC_WEAK: ""
+          LD_HWCAP_MASK: ""
+          LD_LIBRARY_PATH: ""
+          LD_ORIGIN_PATH: ""
+          LD_PREFER_MAP_32BIT_EXEC: ""
+          LD_PRELOAD: ""
+          LD_PROFILE: ""
+          LD_PROFILE_OUTPUT: ""
+          LD_SHOW_AUXV: ""
+          PATH: /usr/sbin:/usr/bin:/sbin:/bin
+          PYTHONHOME: ""
+          PYTHONPATH: ""
           SOURCE_ASSETS: ${{ runner.temp }}/rk006-source-assets
           SOURCE_PARENT: ${{ runner.temp }}/rk006-source
         run: |
           set -euo pipefail
-          python3 scripts/rocky_kernel_source_lock.py \
+          PATH=/usr/sbin:/usr/bin:/sbin:/bin
+          export PATH
+          github_env_file="$GITHUB_ENV"
+          github_path_file="$GITHUB_PATH"
+          unset GITHUB_ENV GITHUB_PATH
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/rocky_kernel_source_lock.py \
             --repo "$GITHUB_WORKSPACE" --cache-root "$CACHE_ROOT" --acquire
           srpm="$(find "$CACHE_ROOT" -type f -name 'kernel-6.12.0-211.44.1.el10_2.src.rpm' -print)"
           test -n "$srpm"
@@ -894,7 +1280,8 @@ jobs:
           test -f "$vendor_patch"
           source_root="$SOURCE_PARENT/linux-6.12.0-211.44.1.el10_2"
           test ! -e "$source_root"
-          python3 scripts/rocky_kernel_rk006_full_source_build_capture.py capture \
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/rocky_kernel_rk006_full_source_build_capture.py capture \
             --repo "$GITHUB_WORKSPACE" \
             --source-root "$source_root" \
             --source-archive "$archive" \
@@ -906,6 +1293,8 @@ jobs:
             --github-run-attempt "$GITHUB_RUN_ATTEMPT" \
             --github-repository "$GITHUB_REPOSITORY" \
             --container-image "$ROCKY_IMAGE"
+          : > "$github_env_file"
+          : > "$github_path_file"
 
       - name: Download the same-run exact-build evidence
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
@@ -914,17 +1303,47 @@ jobs:
           path: ${{ runner.temp }}/rk006-build-evidence
 
       - name: Finalize the non-crediting build binding
+        env:
+          BASH_ENV: ""
+          ENV: ""
+          GLIBC_TUNABLES: ""
+          LD_ASSUME_KERNEL: ""
+          LD_AUDIT: ""
+          LD_BIND_NOW: ""
+          LD_DEBUG: ""
+          LD_DEBUG_OUTPUT: ""
+          LD_DYNAMIC_WEAK: ""
+          LD_HWCAP_MASK: ""
+          LD_LIBRARY_PATH: ""
+          LD_ORIGIN_PATH: ""
+          LD_PREFER_MAP_32BIT_EXEC: ""
+          LD_PRELOAD: ""
+          LD_PROFILE: ""
+          LD_PROFILE_OUTPUT: ""
+          LD_SHOW_AUXV: ""
+          PATH: /usr/sbin:/usr/bin:/sbin:/bin
+          PYTHONHOME: ""
+          PYTHONPATH: ""
         run: |
           set -euo pipefail
-          python3 scripts/rocky_kernel_rk006_full_source_build_capture.py \
+          PATH=/usr/sbin:/usr/bin:/sbin:/bin
+          export PATH
+          github_env_file="$GITHUB_ENV"
+          github_path_file="$GITHUB_PATH"
+          unset GITHUB_ENV GITHUB_PATH
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/rocky_kernel_rk006_full_source_build_capture.py \
             finalize-build \
             --repo "$GITHUB_WORKSPACE" \
             --capture-dir "$RUNNER_TEMP/rk006-full-source-build-capture" \
             --build-evidence-dir "$RUNNER_TEMP/rk006-build-evidence"
-          python3 scripts/rocky_kernel_rk006_full_source_build_capture.py \
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/rocky_kernel_rk006_full_source_build_capture.py \
             verify-capture \
             --repo "$GITHUB_WORKSPACE" \
             --capture-dir "$RUNNER_TEMP/rk006-full-source-build-capture"
+          : > "$github_env_file"
+          : > "$github_path_file"
 
       - name: Upload RK-006 capture or first-failure diagnostics
         if: ${{ always() }}

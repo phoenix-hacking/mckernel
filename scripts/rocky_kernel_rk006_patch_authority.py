@@ -19,10 +19,10 @@ import tempfile
 AUTHORITY_PATH = "host-kernel/rocky/rk006-patch-authority-v1.json"
 AUTHORITY_ID = "rocky-10.2-rk-006-layered-patch-authority-v1"
 SOURCE_LOCK_PATH = "host-kernel/rocky/source-lock.json"
-SOURCE_LOCK_SHA256 = "707ee40466ac0bb0cd0600383bba0b13fc1146e7080034786bf5668a95b27682"
+SOURCE_LOCK_SHA256 = "b70df1e475072dbfa31fdc712900ac59d30eeb139219c7076aacaa19abf0fded"
 SOURCE_LOCK_ID = "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-source-v1"
 PARENT_AUTHORITY_PATH = "host-kernel/kbuild/parent-integration-v1.json"
-PARENT_AUTHORITY_SHA256 = "c806e6cda3be3e6f4b92cef35a0d5369738bae5b87e32ed4f486489d3435db2f"
+PARENT_AUTHORITY_SHA256 = "19b18ece742950b2ef5fc9314579849e763a307982a3a91c99dfaad5917d4b55"
 FIXTURE_ROOT = "scripts/tests/fixtures/rust-core-rocky-6.12"
 TARGET_FIXTURE = "scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs"
 TARGET_FIXTURE_SHA256 = "9c21a1b67751db98e407439b77d014be6b92ba3cf6457fde6a4118a798f4fa05"
@@ -35,7 +35,7 @@ CLAIM_SCOPE = (
     "independent review, or durable archival."
 )
 BLOCKERS = [
-    "Independent review has not approved this RK-006 authority or its patch authorship, license, and provenance decisions; authorship for the two headerless repository overlays and standalone license for the parent-integration patch remain unestablished.",
+    "Independent review has not approved this RK-006 authority or its patch authorship, license, and provenance decisions; the repository-local module-owner patch, the two headerless repository overlays, and the standalone license for the parent-integration patch remain unreviewed or unestablished.",
     "A current-head exact Rocky build with exact compiler and tool identities, including full external parent-file preimages, has not bound the applied postimages to this authority.",
     "The authority manifest, replay logs, patched source closure, build logs, and artifacts are not durably archived.",
 ]
@@ -68,11 +68,12 @@ _PATCH_DATA = (
     ("compat-018", "compiler-kernel-compatibility", "host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch", "e271fa6f30bb3b39a24ae2f926dfa067577997ecf2076e412b5575a4d785021e", "linux-kernel-community", "linux-commit:dd8a734155ae28094d27b96c00a478fa0ee6d5d7", "patch-header", ("Makefile", "scripts/Makefile.extrawarn"), "4d152730f8fe602a7196238dda74910c45bda086c79aa69da1db29b178389f41"),
     ("generic-001", "generic-rust-abstraction-binding", "host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch", "bc9b84c4c8bf36b7fac02dd3d04e1a170b86ee143b76739a6eed3e564cdebc2b", "linux-kernel-community", "linux-commit:a69dc41a4211b0da311ae3a3b79dd4497c9dfb60", "linux-submission-and-target-file", ("rust/kernel/types.rs",), "a637a644d836ca4440bd2e8f48dc8bfc2fb00f2c27dd5b7f38bfd8cd1451dabf"),
     ("generic-002", "generic-rust-abstraction-binding", "host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch", "d377b5bd91d507e383b8673beac42381b9b6c37a47bba7955c768a8f6ddaad25", "linux-kernel-community", "linux-commit:f893691e742688ae21ad597c5bba13bef54706cd", "linux-submission-and-target-file", ("rust/bindings/bindings_helper.h", "rust/kernel/lib.rs", "rust/kernel/miscdevice.rs"), "ec47be691ce9329bf79332fa907e167f882dec646bcefdc2a0e9239cdda85fe2"),
-    ("compat-019", "compiler-kernel-compatibility", "host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch", "6eb8dd4789a5b01a3f8e00ea45dab9debb7d23bb7a8c4af5b2cfdc181656633a", "local-rocky-exact-build-compatibility", "github-actions:run=31644047766,job=94273299611,artifact=9160078637", "patch-header", ("tools/objtool/check.c",), "ecc9a41ded6a40b26bd2e74d695a7417b4d351d4faa4b3766f31ef8881cea367"),
-    ("compat-020", "compiler-kernel-compatibility", "host-kernel/rocky/patches/0022-x86-pvh-annotate-noendbr.patch", "2f07f4030312ce1df38ed78615c94bfb99c7e084d27611de96d38bcf47237e48", "local-rocky-exact-build-compatibility", "github-actions:run=31605746750,job=94144112731,artifact=9145918955", "patch-header", ("arch/x86/platform/pvh/head.S",), "8e72893143934486d79fed7550464f0c07cbf0c24eab25b3e3b0c0f95ce4ca17"),
-    ("compat-021", "compiler-kernel-compatibility", "host-kernel/rocky/patches/0023-rust-update-no-alloc-shim-marker-rust-1.92.patch", "aeb6af53a40049a009c9973d910e4c8a6286075b88512db051778e5a4595a77b", "local-rocky-exact-build-compatibility", "github-actions:run=32082343363,job=95547626904,artifact=9305826810", "patch-header", ("rust/kernel/alloc/allocator.rs", "rust/kernel/lib.rs"), "0155ea0d05d540fc7ce0aefde08c559ac792ca69b0401b85e5dd92059bf0b3d2"),
-    ("parent-001", "project-parent-integration", "host-kernel/kbuild/patches/0001-drivers-misc-add-mckernel-rust-host-modules.patch", "25b0724a2523c3fd5d6d8b824b72c6e6b19c2b16edebaa6719b53c22d4d5c7d9", "mckernel-repository-overlay", "parent-integration-v1:c806e6cda3be3e6f4b92cef35a0d5369738bae5b87e32ed4f486489d3435db2f", "unreviewed-bound-linux-parent-targets", ("drivers/misc/Makefile", "drivers/misc/Kconfig"), "18b2a097a21c8d7da38da36aca3f287b49d317cef67d12599e064718272635b3"),
-    ("generic-003", "generic-rust-abstraction-binding", "host-kernel/kbuild/patches/0002-rust-bindings-expose-module-parameters.patch", "e01b48d89e4126eb3c31b355491ec95e3f31458de79ffd6e28d1bae71ddec14c", "mckernel-repository-overlay", "repository-overlay:e01b48d89e4126eb3c31b355491ec95e3f31458de79ffd6e28d1bae71ddec14c", "linux-target-file", ("rust/bindings/bindings_helper.h",), "39715db0bf0716e69e68cc0ff25b120242537692bc58283b60916a875226fb18"),
+    ("generic-003", "generic-rust-abstraction-binding", "host-kernel/rocky/patches/0020a-rust-miscdevice-bind-file-operations-to-module.patch", "3a49240fc0a10d5ec14cd33d0ec7d09775209edd08fba10a6ee786dc59ea5b21", "mckernel-repository-overlay", "repository-overlay:3a49240fc0a10d5ec14cd33d0ec7d09775209edd08fba10a6ee786dc59ea5b21", "repository-patch-header", ("rust/kernel/miscdevice.rs",), "84af432f51e6825c20380045fec2b8a1d2924591e37a76792391c639cde34925"),
+    ("compat-019", "compiler-kernel-compatibility", "host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch", "6eb8dd4789a5b01a3f8e00ea45dab9debb7d23bb7a8c4af5b2cfdc181656633a", "local-rocky-exact-build-compatibility", "github-actions:run=31644047766,job=94273299611,artifact=9160078637", "patch-header", ("tools/objtool/check.c",), "520fc6e6411575afb84e36194209be9e7e48cb5268a91910490a77569e6fd45c"),
+    ("compat-020", "compiler-kernel-compatibility", "host-kernel/rocky/patches/0022-x86-pvh-annotate-noendbr.patch", "2f07f4030312ce1df38ed78615c94bfb99c7e084d27611de96d38bcf47237e48", "local-rocky-exact-build-compatibility", "github-actions:run=31605746750,job=94144112731,artifact=9145918955", "patch-header", ("arch/x86/platform/pvh/head.S",), "8174a6dd7dbb452b6f1bd5bf3241a4544c917110bca9c98806c7700fcb2be2da"),
+    ("compat-021", "compiler-kernel-compatibility", "host-kernel/rocky/patches/0023-rust-update-no-alloc-shim-marker-rust-1.92.patch", "aeb6af53a40049a009c9973d910e4c8a6286075b88512db051778e5a4595a77b", "local-rocky-exact-build-compatibility", "github-actions:run=32082343363,job=95547626904,artifact=9305826810", "patch-header", ("rust/kernel/alloc/allocator.rs", "rust/kernel/lib.rs"), "002f253a0dc80986c407481d0c5d7d84434c05a9d9e43d0d50fea782073ee313"),
+    ("parent-001", "project-parent-integration", "host-kernel/kbuild/patches/0001-drivers-misc-add-mckernel-rust-host-modules.patch", "25b0724a2523c3fd5d6d8b824b72c6e6b19c2b16edebaa6719b53c22d4d5c7d9", "mckernel-repository-overlay", "parent-integration-v1:19b18ece742950b2ef5fc9314579849e763a307982a3a91c99dfaad5917d4b55", "unreviewed-bound-linux-parent-targets", ("drivers/misc/Makefile", "drivers/misc/Kconfig"), "5b31ded9fe12b52626cf8205e4989e417452ead3f9d5168317a704032d99f8dc"),
+    ("generic-004", "generic-rust-abstraction-binding", "host-kernel/kbuild/patches/0002-rust-bindings-expose-module-parameters.patch", "e01b48d89e4126eb3c31b355491ec95e3f31458de79ffd6e28d1bae71ddec14c", "mckernel-repository-overlay", "repository-overlay:e01b48d89e4126eb3c31b355491ec95e3f31458de79ffd6e28d1bae71ddec14c", "linux-target-file", ("rust/bindings/bindings_helper.h",), "f69e6f5cd16d99e494f2a2e1e8e25df9e6c41a97ce4e14687d6abc0cfb92ae79"),
 )
 
 EXPECTED_PATCHES = []
@@ -84,7 +85,8 @@ for _order, _data in enumerate(_PATCH_DATA, 1):
         "license_expression": (
             None if _data[0] == "parent-001" else
             "GPL-2.0" if _data[6] in (
-                "linux-submission-and-target-file", "linux-target-file"
+                "linux-submission-and-target-file", "linux-target-file",
+                "repository-patch-header",
             ) else "GPL-2.0-only"
         ),
         "order": _order,
@@ -105,7 +107,7 @@ EXPECTED_LAYERS = [
     },
     {
         "id": "generic-rust-abstraction-binding",
-        "patch_count": 3,
+        "patch_count": 4,
         "scope": "generic Rust abstractions and bindings only; no project policy",
     },
     {
@@ -126,7 +128,7 @@ EXPECTED_C_HUNK_DIGESTS = [
     {"patch_id": "compat-014", "path": "fs/cachefiles/key.c", "sha256": "e4ecbf912d1a216560976c57d0c8ae338912b6886144de4ee198a92dfd109005"},
     {"patch_id": "generic-002", "path": "rust/bindings/bindings_helper.h", "sha256": "25efbe3bdd7cd4ab47123c11998f7f314be09676e182aea7cd5bc32d3e3aea20"},
     {"patch_id": "compat-019", "path": "tools/objtool/check.c", "sha256": "e2c2b10fab33410f86256ba05f55c6da994bd5491df0227d47feddb132b97ce0"},
-    {"patch_id": "generic-003", "path": "rust/bindings/bindings_helper.h", "sha256": "1df6fd85120ef18f862ad4fb8d9d7abdd9bb3cbc814256ef4baae96d4a4c90ea"},
+    {"patch_id": "generic-004", "path": "rust/bindings/bindings_helper.h", "sha256": "1df6fd85120ef18f862ad4fb8d9d7abdd9bb3cbc814256ef4baae96d4a4c90ea"},
 ]
 
 EXPECTED_SOURCE_BINDING = {
@@ -157,7 +159,7 @@ EXPECTED_SEMANTIC_POLICY = {
 EXPECTED_REPLAY = {
     "command": "patch -p1 --batch --forward --fuzz=0 --no-backup-if-mismatch",
     "external_current_head_build_proof": False,
-    "final_postimage_closure_sha256": "39715db0bf0716e69e68cc0ff25b120242537692bc58283b60916a875226fb18",
+    "final_postimage_closure_sha256": "f69e6f5cd16d99e494f2a2e1e8e25df9e6c41a97ce4e14687d6abc0cfb92ae79",
     "full_external_parent_preimage_execution_proof": False,
     "parent_seed_scope": (
         "Repository-bounded minimal drivers/misc Makefile and Kconfig context; the "
@@ -633,6 +635,12 @@ def _verify_provenance(row, text, parent_authority, fixture_dir, inspection):
             raise AuthorityError("{} target-file license basis mismatch".format(row["id"]))
         for relative in row["touched_paths"]:
             _fixture_has_gpl_2_signal(fixture_dir, relative)
+    elif basis == "repository-patch-header":
+        if row["license_expression"] != "GPL-2.0" or not provenance.startswith(
+                "repository-overlay:"):
+            raise AuthorityError("{} repository patch license basis mismatch".format(row["id"]))
+        if "\nLicense: GPL-2.0\n" not in text:
+            raise AuthorityError("{} repository patch license header mismatch".format(row["id"]))
     elif basis == "unreviewed-bound-linux-parent-targets":
         if row["id"] != "parent-001" or row["license_expression"] is not None:
             raise AuthorityError("{} unreviewed parent license signal mismatch".format(row["id"]))
@@ -655,8 +663,8 @@ def _validate_manifest(manifest):
     require_exact(manifest["remaining_blockers"], BLOCKERS, "remaining blockers")
     require_exact(manifest["review"], EXPECTED_REVIEW, "review")
     require_type(manifest["patches"], list, "patches")
-    if len(manifest["patches"]) != 25:
-        raise AuthorityError("authority must contain exactly 25 patch rows")
+    if len(manifest["patches"]) != 26:
+        raise AuthorityError("authority must contain exactly 26 patch rows")
     for index, row in enumerate(manifest["patches"]):
         require_keys(row, PATCH_KEYS, "patch row {}".format(index + 1))
     require_exact(manifest["patches"], EXPECTED_PATCHES, "ordered patch authority")
@@ -669,7 +677,7 @@ def _validate_manifest(manifest):
         identifiers.append(row["id"])
     require_exact(counts, {
         "compiler-kernel-compatibility": 21,
-        "generic-rust-abstraction-binding": 3,
+        "generic-rust-abstraction-binding": 4,
         "project-parent-integration": 1,
     }, "layer counts")
     if len(paths) != len(set(paths)) or len(identifiers) != len(set(identifiers)):
@@ -855,8 +863,8 @@ def validate(repo, manifest_path=None, replay=True):
     return {
         "authority_id": AUTHORITY_ID,
         "credit_eligible": False,
-        "layer_counts": {"compatibility": 21, "generic": 3, "parent": 1},
-        "patch_count": 25,
+        "layer_counts": {"compatibility": 21, "generic": 4, "parent": 1},
+        "patch_count": 26,
         "touched_path_count": touched_count,
     }
 
@@ -873,7 +881,7 @@ def main(argv=None):
         print("RK-006 patch authority: FAIL: {}".format(exc), file=sys.stderr)
         return 1
     print(
-        "RK-006 patch authority: VALID (non-crediting; {} patches; 21/3/1 layers; {} touched paths)".format(
+        "RK-006 patch authority: VALID (non-crediting; {} patches; 21/4/1 layers; {} touched paths)".format(
             report["patch_count"],
             report["touched_path_count"] if report["touched_path_count"] is not None else "not replayed",
         )

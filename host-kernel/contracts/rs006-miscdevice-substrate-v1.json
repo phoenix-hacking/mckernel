@@ -13,7 +13,7 @@
       "per-open private-data ownership through ForeignOwnable"
     ]
   },
-  "claim_scope": "RS-006 source-substrate feasibility only. This contract binds two active ordered upstream backports and exact source replay expectations; their integration into Rocky source, license, workflow, configuration, and compatibility authorities awards no gate or tracker credit.",
+  "claim_scope": "RS-006 source-substrate feasibility only. This contract binds two active ordered upstream backports plus one repository-local module-owner hardening patch and exact source replay expectations; integration into Rocky source, license, workflow, configuration, and compatibility authorities awards no build, runtime, review, gate, or tracker credit.",
   "contract_id": "rs-006-rocky-miscdevice-substrate-v1",
   "exact_replay": {
     "baseline_compatibility_patch_count": 18,
@@ -52,10 +52,10 @@
         "sha256": "f2644392ca91a791e4ab2ffb05a9b30a911a51f1ae025c696c710cfb3a447d07"
       },
       {
-        "bytes": 7627,
-        "git_blob_sha1": "cbd5249b5b45d2fd3ade4517875935a1a893f0a2",
+        "bytes": 7705,
+        "git_blob_sha1": "0e336f63e64c4c996e2894b08f60df30ff793fff",
         "path": "rust/kernel/miscdevice.rs",
-        "sha256": "6cfa6ed228561b7a8d41df50700868480d29514dd3469935679b11015c93fc9c"
+        "sha256": "0f2c43a6a64688b6b8387de4813a76289a66f67a1787893d747273c36983b8ee"
       }
     ],
     "preimages_after_0018": [
@@ -96,7 +96,8 @@
   "integration": {
     "active_patch_numbers": [
       "0019",
-      "0020"
+      "0020",
+      "0020a"
     ],
     "final_order_guidance": [
       {
@@ -106,6 +107,11 @@
       {
         "filename": "0020-rust-miscdevice-add-base-abstraction.patch",
         "upstream_commit": "f893691e742688ae21ad597c5bba13bef54706cd"
+      },
+      {
+        "filename": "0020a-rust-miscdevice-bind-file-operations-to-module.patch",
+        "integration_status": "active-ordered-unbuilt",
+        "local_origin": "McKernel RS-006 miscdevice module-owner compatibility"
       }
     ],
     "license_authority_integrated": true,
@@ -118,7 +124,9 @@
       ],
       "configuration_authority": [
         "host-kernel/rocky/evidence/config-resolution-contract-v1.json",
+        "host-kernel/rocky/evidence/config-resolution-contract-v2.json",
         "scripts/rocky_kernel_config_resolution.py",
+        "scripts/rocky_kernel_config_resolution_v2.py",
         "scripts/tests/test_rocky_kernel_config_resolution.py"
       ],
       "license_authority": [
@@ -130,6 +138,11 @@
         "host-kernel/rocky/evidence/platform-repository-review-dd6-v1.json",
         "scripts/rocky_kernel_platform_review.py",
         "scripts/tests/test_rocky_kernel_platform_review.py"
+      ],
+      "rk006_patch_authority": [
+        "host-kernel/rocky/rk006-patch-authority-v1.json",
+        "scripts/rocky_kernel_rk006_patch_authority.py",
+        "scripts/tests/test_rocky_kernel_rk006_patch_authority.py"
       ],
       "source_lock": [
         "host-kernel/rocky/source-lock.json"
@@ -153,8 +166,9 @@
   },
   "readiness": {
     "blockers": [
-      "the two upstream backports are integrated as ordered source inputs, but source replay alone does not prove an exact configured kernel build",
-      "an exact Rocky Linux configured kernel compile with Rust 1.92 has not been captured for this two-commit series",
+      "the two upstream backports and repository-local module-owner patch are integrated as ordered source inputs, but source replay alone does not prove an exact configured kernel build",
+      "an exact Rocky Linux configured kernel compile with Rust 1.92 has not been captured for this three-patch series",
+      "the repository-local module-owner and explicit compat-ioctl change lacks independent source, license, module-owner, compat-ABI, and pinned-lifetime review",
       "the dynamic-minor miscdevice API cannot represent the legacy fixed 64-minor IHK OS-device publication model by itself",
       "the abstraction exposes no read, write, poll, mmap, llseek, or file-flag access needed by broader McKernel device semantics",
       "no McKernel crate uses this substrate and no exact module-load, ioctl, compat-ioctl, teardown, or runtime evidence exists"
@@ -173,7 +187,7 @@
     "release": "10.2",
     "source_lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-source-v1"
   },
-  "upstream_series": [
+  "active_series": [
     {
       "author_date": "2024-10-01T08:22:21Z",
       "order": 1,
@@ -197,6 +211,18 @@
       "subject": "rust: miscdevice: add base miscdevice abstraction",
       "tree": "d6cdc5c1ab1f70bc7629b2b149d220d8b6d63db0",
       "upstream_commit": "f893691e742688ae21ad597c5bba13bef54706cd"
+    },
+    {
+      "integration_status": "active-ordered-unbuilt",
+      "license": "GPL-2.0",
+      "local_origin": "McKernel RS-006 miscdevice module-owner compatibility",
+      "order": 3,
+      "patch_bytes": 3353,
+      "patch_path": "host-kernel/rocky/patches/0020a-rust-miscdevice-bind-file-operations-to-module.patch",
+      "patch_sha256": "3a49240fc0a10d5ec14cd33d0ec7d09775209edd08fba10a6ee786dc59ea5b21",
+      "rocky_base": "linux-6.12.0-211.44.1.el10_2",
+      "role": "module_owner_and_explicit_compat_hardening",
+      "subject": "rust: miscdevice: bind file operations to their module"
     }
   ]
 }

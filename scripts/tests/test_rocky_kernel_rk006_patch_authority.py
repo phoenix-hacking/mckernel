@@ -86,10 +86,10 @@ class Rk006PatchAuthorityTests(unittest.TestCase):
 
     def test_canonical_authority_replays_all_layers_and_second_apply_fails(self):
         report = self.authority.validate(REPO_ROOT)
-        self.assertEqual(25, report["patch_count"])
+        self.assertEqual(26, report["patch_count"])
         self.assertEqual(37, report["touched_path_count"])
         self.assertEqual(
-            {"compatibility": 21, "generic": 3, "parent": 1},
+            {"compatibility": 21, "generic": 4, "parent": 1},
             report["layer_counts"],
         )
         self.assertFalse(report["credit_eligible"])
@@ -107,20 +107,20 @@ class Rk006PatchAuthorityTests(unittest.TestCase):
             universal_newlines=True,
         )
         self.assertEqual(0, result.returncode, result.stderr)
-        self.assertIn("VALID (non-crediting; 25 patches; 21/3/1 layers; 37 touched paths)", result.stdout)
+        self.assertIn("VALID (non-crediting; 26 patches; 21/4/1 layers; 37 touched paths)", result.stdout)
         self.assertNotIn("RK-006: PASS", result.stdout)
 
     def test_exact_order_counts_and_touched_path_closure_are_bound(self):
         expected_ids = [
             "compat-{:03d}".format(index) for index in range(1, 19)
         ] + [
-            "generic-001", "generic-002", "compat-019", "compat-020",
-            "compat-021", "parent-001", "generic-003",
+            "generic-001", "generic-002", "generic-003", "compat-019",
+            "compat-020", "compat-021", "parent-001", "generic-004",
         ]
         self.assertEqual(expected_ids, [row["id"] for row in self.manifest["patches"]])
-        self.assertEqual(list(range(1, 26)), [row["order"] for row in self.manifest["patches"]])
+        self.assertEqual(list(range(1, 27)), [row["order"] for row in self.manifest["patches"]])
         self.assertEqual(
-            [21, 3, 1],
+            [21, 4, 1],
             [layer["patch_count"] for layer in self.manifest["layers"]],
         )
         created = []
@@ -435,7 +435,7 @@ class Rk006PatchAuthorityTests(unittest.TestCase):
                     )
 
     def test_parent_integration_exception_is_exact_and_cannot_grow_policy(self):
-        row = self.manifest["patches"][23]
+        row = self.manifest["patches"][24]
         canonical = (REPO_ROOT / row["path"]).read_bytes()
         result = self.authority.inspect_patch_bytes(
             canonical, row["layer"], row["touched_paths"]
@@ -449,7 +449,7 @@ class Rk006PatchAuthorityTests(unittest.TestCase):
             self.authority.inspect_patch_bytes(mutant, row["layer"])
 
     def test_parent_integration_lines_cannot_move_between_target_files(self):
-        row = self.manifest["patches"][23]
+        row = self.manifest["patches"][24]
         canonical = (REPO_ROOT / row["path"]).read_bytes()
         source_line = b'source "drivers/misc/mckernel/Kconfig"'
         mutant = canonical.replace(b"+" + source_line, b" " + source_line)
@@ -463,7 +463,7 @@ class Rk006PatchAuthorityTests(unittest.TestCase):
             )
 
     def test_parent_integration_cannot_delete_existing_parent_content(self):
-        row = self.manifest["patches"][23]
+        row = self.manifest["patches"][24]
         canonical = (REPO_ROOT / row["path"]).read_bytes()
         anchor = b" obj-$(CONFIG_NSM)\t\t+= nsm.o\n"
         mutant = canonical.replace(
@@ -497,7 +497,7 @@ class Rk006PatchAuthorityTests(unittest.TestCase):
         )
         fixture = REPO_ROOT / "scripts/tests/fixtures/rust-core-rocky-6.12"
 
-        for index in (23, 24):
+        for index in (20, 24, 25):
             row = self.manifest["patches"][index]
             patch = (REPO_ROOT / row["path"]).read_bytes()
             inspection = self.authority.inspect_patch_bytes(
@@ -509,7 +509,7 @@ class Rk006PatchAuthorityTests(unittest.TestCase):
                         row, "", parent, fixture, inspection
                     )
 
-        parent_row = copy.deepcopy(self.manifest["patches"][23])
+        parent_row = copy.deepcopy(self.manifest["patches"][24])
         parent_patch = (REPO_ROOT / parent_row["path"]).read_text(encoding="utf-8")
         parent_inspection = self.authority.inspect_patch_bytes(
             parent_patch.encode("utf-8"), parent_row["layer"], parent_row["touched_paths"]
@@ -521,7 +521,7 @@ class Rk006PatchAuthorityTests(unittest.TestCase):
                 parent_row, parent_patch, bad_parent, fixture, parent_inspection
             )
 
-        overlay_row = copy.deepcopy(self.manifest["patches"][24])
+        overlay_row = copy.deepcopy(self.manifest["patches"][25])
         overlay_patch = (REPO_ROOT / overlay_row["path"]).read_text(encoding="utf-8")
         overlay_inspection = self.authority.inspect_patch_bytes(
             overlay_patch.encode("utf-8"), overlay_row["layer"], overlay_row["touched_paths"]

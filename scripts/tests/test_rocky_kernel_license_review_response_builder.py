@@ -267,9 +267,22 @@ class ResponseBuilderTests(unittest.TestCase):
         self.assertTrue(all(item is False for item in value["claims"].values()))
         self.assertEqual(value["gate"], builder.EXPECTED_GATE)
         for key, record in value["inputs"].items():
-            bound = REPO_ROOT / record["path"]
-            self.assertEqual(len(bound.read_bytes()), record["size"], key)
-            self.assertEqual(hashlib.sha256(bound.read_bytes()).hexdigest(), record["sha256"], key)
+            active = builder.CURRENT_IMPLEMENTATION_OVERRIDES.get(
+                record["path"], record
+            )
+            bound = REPO_ROOT / active["path"]
+            self.assertEqual(len(bound.read_bytes()), active["size"], key)
+            self.assertEqual(
+                hashlib.sha256(bound.read_bytes()).hexdigest(),
+                active["sha256"],
+                key,
+            )
+        self.assertNotEqual(
+            value["inputs"]["response_checker"]["sha256"],
+            builder.CURRENT_IMPLEMENTATION_OVERRIDES[
+                value["inputs"]["response_checker"]["path"]
+            ]["sha256"],
+        )
 
     def test_check_reports_empty_production_registry_and_no_credit(self):
         stdout = io.StringIO()

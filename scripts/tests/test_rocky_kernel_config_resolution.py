@@ -616,7 +616,7 @@ class RepositoryContractTests(unittest.TestCase):
             self.assertEqual(
                 hashlib.sha256(path.read_bytes()).hexdigest(), binding["sha256"]
             )
-        self.assertEqual(23, len(contract["patch_authority"]["rust_compatibility"]))
+        self.assertEqual(24, len(contract["patch_authority"]["rust_compatibility"]))
         self.assertEqual(
             [row["path"] for row in contract["patch_authority"]["rust_compatibility"]],
             resolution.EXPECTED_COMPATIBILITY_PATCHES,
@@ -638,7 +638,7 @@ class RepositoryContractTests(unittest.TestCase):
                     "no_config_symbol_changes"
                 ]
             ),
-            22,
+            23,
         )
         self.assertEqual(
             contract["patch_authority"]["rust_compatibility"][-2],

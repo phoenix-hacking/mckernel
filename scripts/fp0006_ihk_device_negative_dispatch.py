@@ -601,7 +601,7 @@ def _load_authority(
 ]:
     # Function-local anchors cannot be redirected through mutable module globals.
     expected_relative = "host-kernel/contracts/fp0006-ihk-device-negative-dispatch-v1.json"
-    expected_contract_sha256 = "13baf241704c98b5d087abc85af45201c8f345ed3cdd08ae310febe666e789c8"
+    expected_contract_sha256 = "5c5857fa7403a50aa51756866e57d29c92e6ed8ae15e841fb23328676a6cc054"
     expected_contract_size = 19668
     expected_claims = {
         "credit_eligible": False,

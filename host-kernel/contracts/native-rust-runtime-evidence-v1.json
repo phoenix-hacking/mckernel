@@ -18,6 +18,7 @@
       "SHA256SUMS",
       "build-log.exit-code",
       "build.commands",
+      "build.environment",
       "build.exit-code",
       "build.log",
       "build.phase",
@@ -59,10 +60,11 @@
       "environment.txt",
       "initramfs.cpio.gz",
       "initramfs.sha256",
+      "native-rust-runtime-poweroff.o",
       "qemu-command.txt",
+      "qemu-version.txt",
       "qemu.exit-code",
       "qemu.log",
-      "qemu-version.txt",
       "serial.log",
       "workflow-state"
     ]
@@ -154,11 +156,29 @@
     "runtime_workflow": ".github/workflows/native-rust-host-modules-exact-runtime.yml",
     "source_lock": "host-kernel/rocky/source-lock.json"
   },
+  "reproducible_build_identity": {
+    "authority": {
+      "json_pointer": "/repository_snapshot/primary_metadata/timestamp",
+      "kbuild_build_host_basis": "selected Rocky 10.2 x86_64 build platform identity",
+      "kbuild_build_user_basis": "repository project identity mckernel",
+      "kbuild_build_version_basis": "fresh exact-build tree canonical first build iteration",
+      "source_date_epoch": 1786434034,
+      "source_lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-source-v1"
+    },
+    "environment": {
+      "KBUILD_BUILD_HOST": "rocky-10.2-x86_64",
+      "KBUILD_BUILD_TIMESTAMP": "Tue, 11 Aug 2026 07:40:34 +0000",
+      "KBUILD_BUILD_USER": "mckernel",
+      "KBUILD_BUILD_VERSION": "1",
+      "SOURCE_DATE_EPOCH": "1786434034"
+    },
+    "policy": "The fixed Kbuild identity is derived from the locked source-repository primary-metadata timestamp and applies to every exact-build phase, including reusable-workflow builds. This removes run-specific builder and wall-clock bytes but does not prove cross-run reproducibility, runtime behavior, durability, or gate credit."
+  },
   "repository_workflow_identities": {
     "build_workflow": {
-      "git_blob_sha1": "778e9aea69d330daf0945f14276163d171faead5",
-      "sha256": "bca3d56c95842d937f8cebf8016b994200ffbeb9c9180cfef07f13a64d949f15",
-      "size": 49287
+      "git_blob_sha1": "4a0f18b6bc21daadc86718835af9073cabec6691",
+      "sha256": "30c38b26f8db5f8793cc397a9d713deb6104131378b0f8bd9a45b14e6c570456",
+      "size": 67473
     },
     "runtime_pr_workflow": {
       "git_blob_sha1": "64bb717852d36fc1021e2b61e83aca6415b184d5",
@@ -166,9 +186,9 @@
       "size": 754
     },
     "runtime_workflow": {
-      "git_blob_sha1": "4ce93e079b8e1ef1af1421a147352799af6b0cb7",
-      "sha256": "b0b9ff05329dc580482bc1cf617fa7636c0d096575d4f0be7bb79fad51131964",
-      "size": 11052
+      "git_blob_sha1": "659afc5066a5a288862b4e9cd2a670f317c54198",
+      "sha256": "8faba6118c35a622d7c3990368381b16b35409adcb4471fbb0b613bb01902ab3",
+      "size": 15826
     }
   },
   "runtime": {
@@ -176,6 +196,7 @@
     "boot_medium": "deterministic initramfs",
     "container_image": "rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176",
     "distribution": "Rocky Linux",
+    "os_release_sha256": "2ac9f7b21412a20a1b30dba66be466a21abd87e4cddad00841374d7bfae89084",
     "qemu_accelerator": "tcg",
     "required_kernel_config": {
       "disabled": [
@@ -200,6 +221,10 @@
       }
     },
     "release": "10.2"
+  },
+  "runtime_verifier_scope": {
+    "initramfs_cpio_replay": false,
+    "policy": "Offline validation binds the exact initramfs bytes and checksum record but does not independently replay cpio membership or the embedded module, init, and poweroff bytes. Build-to-guest correlation therefore depends on the sealed exact workflow and outer same-run artifact provenance; this residual cannot support gate, runtime, durability, or credit claims."
   },
   "schema_version": 1,
   "selected_kernel": {

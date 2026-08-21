@@ -21,9 +21,24 @@
     "build_artifact_is_durable": false,
     "build_evidence_checksum_manifest": "SHA256SUMS",
     "build_evidence_required_members": [
+      ".ihk-smp-x86_64.ko.cmd",
+      ".ihk-smp-x86_64.mod.cmd",
+      ".ihk-smp-x86_64.mod.o.cmd",
+      ".ihk-smp-x86_64.o.cmd",
+      ".ihk.ko.cmd",
+      ".ihk.mod.cmd",
+      ".ihk.mod.o.cmd",
+      ".ihk.o.cmd",
+      ".ihk_smp_x86_64.o.cmd",
+      ".mcctrl.ko.cmd",
+      ".mcctrl.mod.cmd",
+      ".mcctrl.mod.o.cmd",
+      ".mcctrl.o.cmd",
+      "PRECHECK_SHA256SUMS",
       "SHA256SUMS",
       "build-log.exit-code",
       "build.commands",
+      "build.environment",
       "build.exit-code",
       "build.log",
       "build.phase",
@@ -31,11 +46,26 @@
       "bzImage",
       "commit.sha",
       "ihk-smp-x86_64.ko",
+      "ihk-smp-x86_64.ko.modinfo",
+      "ihk-smp-x86_64.ko.modinfo-section",
+      "ihk-smp-x86_64.ko.nm",
+      "ihk-smp-x86_64.ko.readelf",
+      "ihk-smp-x86_64.mod",
       "ihk.ko",
+      "ihk.ko.modinfo",
+      "ihk.ko.modinfo-section",
+      "ihk.ko.nm",
+      "ihk.ko.readelf",
+      "ihk.mod",
       "kbuild-link-closure.json",
       "kconfig-solver-matrix.json",
       "kernel.release",
       "mcctrl.ko",
+      "mcctrl.ko.modinfo",
+      "mcctrl.ko.modinfo-section",
+      "mcctrl.ko.nm",
+      "mcctrl.ko.readelf",
+      "mcctrl.mod",
       "module-targets.txt",
       "resolved.config",
       "stage-lock.json",
@@ -44,6 +74,13 @@
     "copy_build_payload_into_capture": false,
     "require_commit_sha_match": true,
     "require_complete_build_phase": true,
+    "reproducible_build_environment": {
+      "KBUILD_BUILD_HOST": "rocky-10.2-x86_64",
+      "KBUILD_BUILD_TIMESTAMP": "Tue, 11 Aug 2026 07:40:34 +0000",
+      "KBUILD_BUILD_USER": "mckernel",
+      "KBUILD_BUILD_VERSION": "1",
+      "SOURCE_DATE_EPOCH": "1786434034"
+    },
     "require_zero_exit_codes": true
   },
   "capture_contract_id": "rk-006-full-source-build-capture-v1",
@@ -59,7 +96,7 @@
       "--fuzz=0",
       "--no-backup-if-mismatch"
     ],
-    "patch_count": 25,
+    "patch_count": 26,
     "patch_order_source": "host-kernel/rocky/rk006-patch-authority-v1.json",
     "reject_backup_and_reject_files": true,
     "second_application_command_addition": [
@@ -93,23 +130,23 @@
   "inputs": {
     "parent_integration_authority": {
       "path": "host-kernel/kbuild/parent-integration-v1.json",
-      "sha256": "c806e6cda3be3e6f4b92cef35a0d5369738bae5b87e32ed4f486489d3435db2f",
+      "sha256": "19b18ece742950b2ef5fc9314579849e763a307982a3a91c99dfaad5917d4b55",
       "size": 2076
     },
     "patch_authority": {
       "path": "host-kernel/rocky/rk006-patch-authority-v1.json",
-      "sha256": "ebc3e4c69ecbdb3891f92018a89f5fc3dae43fa070628fda8b22f881f02c67a1",
-      "size": 19681
+      "sha256": "0c40d8079b3c5f6b90e44f1067f89f27c5c7ac50c67a127609a34a10c224475b",
+      "size": 20327
     },
     "patch_authority_checker": {
       "path": "scripts/rocky_kernel_rk006_patch_authority.py",
-      "sha256": "c23969ba2716db96f02a0564d6815b7342036a58c258ce22319b0185693cfddd",
-      "size": 48959
+      "sha256": "ee0ef72baf560c1a4412ff0140b950f0f8456d4291154186af339320a1ec21da",
+      "size": 49913
     },
     "patch_authority_tests": {
       "path": "scripts/tests/test_rocky_kernel_rk006_patch_authority.py",
-      "sha256": "719d1e87b4d66944abf3bad0c03dc7cc86dddb97fa36e3fe32736c29ea549b39",
-      "size": 27957
+      "sha256": "bb829109b32b2474b0edeb06e2121b42aff4edb4a3103ea80cf6a9520e775b3b",
+      "size": 27976
     },
     "source_archive": {
       "filename": "linux-6.12.0-211.44.1.el10_2.tar.xz",
@@ -119,8 +156,8 @@
     },
     "source_lock": {
       "path": "host-kernel/rocky/source-lock.json",
-      "sha256": "707ee40466ac0bb0cd0600383bba0b13fc1146e7080034786bf5668a95b27682",
-      "size": 18236
+      "sha256": "b70df1e475072dbfa31fdc712900ac59d30eeb139219c7076aacaa19abf0fded",
+      "size": 18336
     },
     "source_rpm": {
       "filename": "kernel-6.12.0-211.44.1.el10_2.src.rpm",

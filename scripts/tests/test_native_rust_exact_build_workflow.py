@@ -104,13 +104,11 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             self.workflow,
         )
         self.assertIn(
-            'ARCH=x86_64 LLVM=1 LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \\\n'
-            "                -j2 bzImage",
+            '"${kbuild_environment[@]}" /usr/bin/make -C "$NATIVE_SOURCE_ROOT"',
             self.workflow,
         )
         self.assertIn(
-            'ARCH=x86_64 LLVM=1 LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \\\n'
-            '                -j2 "${module_targets[@]}"',
+            'KBUILD_BUILD_TIMESTAMP="$KBUILD_BUILD_TIMESTAMP"',
             self.workflow,
         )
         self.assertLess(
@@ -130,26 +128,197 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         )
         self.assertIn("include-hidden-files: true", self.workflow)
 
+    def test_reproducible_build_identity_is_global_and_retained(self):
+        for name in runtime_evidence.EXPECTED_REPRODUCIBLE_BUILD_ENVIRONMENT_NAMES:
+            value = runtime_evidence.EXPECTED_REPRODUCIBLE_BUILD_ENVIRONMENT[name]
+            rendered = '"{}"'.format(value) if name in {
+                "KBUILD_BUILD_TIMESTAMP",
+                "KBUILD_BUILD_VERSION",
+                "SOURCE_DATE_EPOCH",
+            } else value
+            self.assertEqual(
+                1,
+                len(
+                    re.findall(
+                        r"(?m)^  {0}: {1}$".format(
+                            re.escape(name), re.escape(rendered)
+                        ),
+                        self.workflow,
+                    )
+                ),
+            )
+            self.assertEqual(32, self.workflow.count(name))
+            self.assertIn('"{}=${}"'.format(name, name), self.workflow)
+        self.assertIn(
+            '> "$evidence_dir/build.environment"', self.workflow
+        )
+
+    def test_reproducible_build_environment_shadow_and_override_are_rejected(self):
+        compile_header = "      - name: Compile the exact kernel and native Rust modules\n"
+        compile_start = self.workflow.index(compile_header)
+        run_start = self.workflow.index("        run: |\n", compile_start)
+        run_marker = self.workflow[compile_start : run_start + len("        run: |\n")]
+        runner = '            "${command[@]}"\n'
+        make_line = (
+            '              "${kbuild_environment[@]}" /usr/bin/make -C "$NATIVE_SOURCE_ROOT" \\\n'
+        )
+        mutations = (
+            self.workflow.replace(
+                "    timeout-minutes: 330\n",
+                "    timeout-minutes: 330\n"
+                "    env:\n"
+                "      KBUILD_BUILD_USER: attacker\n",
+                1,
+            ),
+            self.workflow.replace(
+                run_marker,
+                compile_header + "        env:\n"
+                "          KBUILD_BUILD_USER: attacker\n"
+                + run_marker[len(compile_header) :],
+                1,
+            ),
+            self.workflow.replace(run_marker, run_marker + "          export KBUILD_BUILD_USER=attacker\n", 1),
+            self.workflow.replace(run_marker, run_marker + "          unset KBUILD_BUILD_USER\n", 1),
+            self.workflow.replace(
+                run_marker,
+                run_marker
+                + "          printf 'KBUILD_BUILD_USER=attacker\\n' >> \"$GITHUB_ENV\"\n",
+                1,
+            ),
+            self.workflow.replace(
+                runner, '            env -u KBUILD_BUILD_USER "${command[@]}"\n', 1
+            ),
+            self.workflow.replace(
+                make_line,
+                make_line + '                KBUILD_BUILD_USER=attacker \\\n',
+                1,
+            ),
+        )
+        for index, mutation in enumerate(mutations):
+            with self.subTest(index=index):
+                with self.assertRaises(runtime_evidence.EvidenceError):
+                    runtime_evidence._validate_exact_build_workflow(mutation)
+
+    def test_every_later_kbuild_boundary_reasserts_each_canonical_value(self):
+        boundaries = (
+            (
+                "      - name: Resolve the evidence-only module configuration twice\n",
+                "      - name: Compile the exact kernel and native Rust modules\n",
+            ),
+            (
+                "      - name: Compile the exact kernel and native Rust modules\n",
+                "      - name: Validate built metadata and capture immutable diagnostics\n",
+            ),
+            (
+                "      - name: Validate built metadata and capture immutable diagnostics\n",
+                "      - name: Upload compiler evidence or first-failure diagnostics\n",
+            ),
+        )
+        for start, end in boundaries:
+            block = self.workflow.split(start, 1)[1].split(end, 1)[0]
+            first_make = block.find("make ")
+            self.assertGreater(first_make, 0)
+            for assertion in runtime_evidence.EXPECTED_REPRODUCIBLE_BUILD_ASSERTION_COMMANDS:
+                rendered = "          " + assertion + "\n"
+                with self.subTest(boundary=start.strip(), assertion=assertion):
+                    self.assertEqual(1, block.count(rendered))
+                    self.assertLess(block.index(rendered), first_make)
+
+                    mutation = self.workflow.replace(
+                        start + block,
+                        start + block.replace(rendered, rendered.replace(" = ", " != "), 1),
+                        1,
+                    )
+                    with self.assertRaises(runtime_evidence.EvidenceError):
+                        runtime_evidence._validate_exact_build_workflow(mutation)
+
+    def test_critical_shell_startup_and_command_channels_are_fail_closed(self):
+        document = yaml.safe_load(self.workflow)
+        loader_keys = {
+            "GLIBC_TUNABLES",
+            "LD_ASSUME_KERNEL",
+            "LD_AUDIT",
+            "LD_BIND_NOW",
+            "LD_DEBUG",
+            "LD_DEBUG_OUTPUT",
+            "LD_DYNAMIC_WEAK",
+            "LD_HWCAP_MASK",
+            "LD_LIBRARY_PATH",
+            "LD_ORIGIN_PATH",
+            "LD_PREFER_MAP_32BIT_EXEC",
+            "LD_PRELOAD",
+            "LD_PROFILE",
+            "LD_PROFILE_OUTPUT",
+            "LD_SHOW_AUXV",
+        }
+        exact_names = {
+            "Verify source-only contracts without claiming readiness",
+            "Acquire, patch, and credit-forbidden-stage the exact source",
+            "Resolve the evidence-only module configuration twice",
+            "Compile the exact kernel and native Rust modules",
+            "Validate built metadata and capture immutable diagnostics",
+        }
+        rk006_names = {
+            "Verify the frozen non-crediting RK-006 capture contract",
+            "Reacquire and capture the full external 26-patch source replay",
+            "Finalize the non-crediting build binding",
+        }
+        for job_name, names in (("exact-build", exact_names), ("rk006-full-source-build-capture", rk006_names)):
+            job = document["jobs"][job_name]
+            self.assertEqual(
+                "/usr/bin/bash --noprofile --norc -p -e -o pipefail {0}",
+                job["defaults"]["run"]["shell"],
+            )
+            steps = {step["name"]: step for step in job["steps"] if "run" in step}
+            for name in names:
+                with self.subTest(job=job_name, step=name):
+                    environment = steps[name]["env"]
+                    self.assertEqual({key: "" for key in loader_keys}, {key: environment[key] for key in loader_keys})
+                    self.assertEqual("/usr/sbin:/usr/bin:/sbin:/bin", environment["PATH"])
+                    self.assertIn("unset GITHUB_ENV GITHUB_PATH", steps[name]["run"])
+
+        for old, new in (
+            ('          LD_AUDIT: ""\n', '          LD_AUDIT: /tmp/attacker.so\n'),
+            ('          PATH: /usr/sbin:/usr/bin:/sbin:/bin\n', '          PATH: /tmp/attacker\n'),
+            ('          : > "$github_env_file"\n', "          printf 'LD_AUDIT=/tmp/attacker.so\\n' > \"$github_env_file\"\n"),
+        ):
+            mutation = self.workflow.replace(old, new, 1)
+            self.assertNotEqual(self.workflow, mutation)
+            with self.assertRaises(runtime_evidence.EvidenceError):
+                runtime_evidence._validate_exact_build_workflow(mutation)
+
+    def test_each_later_boundary_rejects_prior_github_env_override(self):
+        injections = (
+            (
+                '          printf \'NATIVE_BASELINE_CONFIG=%s\\n\' "$baseline" >> "$github_env_file"\n',
+                '          printf \'KBUILD_BUILD_USER=attacker\\n\' >> "$github_env_file"\n',
+            ),
+            (
+                '          printf \'NATIVE_BUILD_DIR=%s\\n\' "$BUILD_DIR" >> "$github_env_file"\n',
+                '          printf \'KBUILD_BUILD_HOST=attacker\\n\' >> "$github_env_file"\n',
+            ),
+            (
+                '          printf \'%s\\n\' "$tee_status" > "$evidence_dir/build-log.exit-code"\n',
+                '          printf \'SOURCE_DATE_EPOCH=1\\n\' >> "$github_env_file"\n',
+            ),
+        )
+        for anchor, injection in injections:
+            mutation = self.workflow.replace(anchor, anchor + injection, 1)
+            self.assertNotEqual(self.workflow, mutation)
+            with self.subTest(injection=injection.strip()):
+                with self.assertRaises(runtime_evidence.EvidenceError):
+                    runtime_evidence._validate_exact_build_workflow(mutation)
+
     def test_module_modpost_cannot_precede_kernel_symbol_universe(self):
-        bzimage = (
-            '            run_phase bzImage \\\n'
-            '              make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \\\n'
-            '                ARCH=x86_64 LLVM=1 LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \\\n'
-            '                -j2 bzImage\n'
-        )
-        modules = (
-            '            run_phase native-modules \\\n'
-            '              make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \\\n'
-            '                ARCH=x86_64 LLVM=1 LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \\\n'
-            '                -j2 "${module_targets[@]}"\n'
-        )
+        bzimage = "            run_phase bzImage \\\n"
+        modules = "            run_phase native-modules \\\n"
         self.assertEqual(1, self.workflow.count(bzimage))
         self.assertEqual(1, self.workflow.count(modules))
-        mutation = self.workflow.replace(bzimage, "__BZIMAGE_PHASE__\n", 1)
+        mutation = self.workflow.replace(bzimage, "__BUILD_PHASE__\n", 1)
         mutation = mutation.replace(modules, bzimage, 1)
-        mutation = mutation.replace("__BZIMAGE_PHASE__\n", modules, 1)
+        mutation = mutation.replace("__BUILD_PHASE__\n", modules, 1)
         with self.assertRaisesRegex(
-            runtime_evidence.EvidenceError, "commands are out of order"
+            runtime_evidence.EvidenceError, "commands are out of order|command scope"
         ):
             runtime_evidence._validate_exact_build_workflow(mutation)
 
@@ -181,7 +350,7 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         ):
             self.assertEqual(2, self.workflow.count("      - " + path))
         self.assertIn(
-            "python3 scripts/native_rust_runtime_evidence.py \\\n"
+            "/usr/bin/python3 -E -s scripts/native_rust_runtime_evidence.py \\\n"
             '            --repo "$GITHUB_WORKSPACE" --check-contract',
             self.workflow,
         )
@@ -232,7 +401,7 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             with self.subTest(mutation=new.strip()):
                 with self.assertRaisesRegex(
                     runtime_evidence.EvidenceError,
-                    "failure (capture|evidence)|masks a phase failure",
+                    "failure (capture|evidence)|masks a phase failure|command scope",
                 ):
                     runtime_evidence._validate_exact_build_workflow(mutation)
 
@@ -266,43 +435,23 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
                     runtime_evidence._validate_exact_build_workflow(mutation)
 
     def test_compile_commands_must_be_active_and_compile_step_scoped(self):
-        blocks = (
-            (
-                '            run_phase rustavailable \\\n'
-                '              make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \\\n'
-                '                ARCH=x86_64 LLVM=1 LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \\\n'
-                "                rustavailable\n"
-            ),
-            (
-                '            run_phase bzImage \\\n'
-                '              make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \\\n'
-                '                ARCH=x86_64 LLVM=1 LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \\\n'
-                "                -j2 bzImage\n"
-            ),
-            (
-                '            run_phase native-modules \\\n'
-                '              make -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" \\\n'
-                '                ARCH=x86_64 LLVM=1 LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \\\n'
-                '                -j2 "${module_targets[@]}"\n'
-            ),
+        phase_markers = (
+            "            run_phase rustavailable \\\n",
+            "            run_phase bzImage \\\n",
+            "            run_phase native-modules \\\n",
         )
-        commented = self.workflow
-        decoy = self.workflow
-        decoy_body = ""
-        for block in blocks:
-            self.assertEqual(1, commented.count(block))
-            collapsed = " ".join(
-                line.strip().rstrip("\\").strip() for line in block.splitlines()
+        mutations = []
+        for marker in phase_markers:
+            self.assertEqual(1, self.workflow.count(marker))
+            mutations.append(
+                ("commented-" + marker.split()[1], self.workflow.replace(marker, "            # " + marker.lstrip(), 1))
             )
-            commented = commented.replace(block, "            # " + collapsed + "\n", 1)
-            decoy = decoy.replace(block, "", 1)
-            decoy_body += block
-        decoy = decoy.replace(
+        decoy = self.workflow.replace(
             "      - name: Validate built metadata and capture immutable diagnostics\n",
             "      - name: Decoy build commands\n"
             "        run: |\n"
-            + decoy_body
-            + "\n      - name: Validate built metadata and capture immutable diagnostics\n",
+            "          run_phase bzImage /usr/bin/false\n\n"
+            "      - name: Validate built metadata and capture immutable diagnostics\n",
             1,
         )
         conditional_runner = self.workflow.replace(
@@ -312,15 +461,12 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             "            fi\n",
             1,
         )
-        for label, mutation in (
-            ("commented", commented),
-            ("decoy-step", decoy),
-            ("conditional-runner", conditional_runner),
-        ):
+        mutations.extend((("decoy-step", decoy), ("conditional-runner", conditional_runner)))
+        for label, mutation in mutations:
             with self.subTest(label=label):
                 with self.assertRaisesRegex(
                     runtime_evidence.EvidenceError,
-                    "Kbuild release scope|command scope|compile step|failure capture",
+                    "Kbuild release scope|command scope|compile step|failure capture|steps",
                 ):
                     runtime_evidence._validate_exact_build_workflow(mutation)
 
@@ -362,7 +508,7 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         ):
             with self.subTest(label=label):
                 with self.assertRaisesRegex(
-                    runtime_evidence.EvidenceError, "artifact scope differs"
+                    runtime_evidence.EvidenceError, "artifact scope differs|steps"
                 ):
                     runtime_evidence._validate_exact_build_workflow(mutation)
 
@@ -431,7 +577,7 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
                 self.assertEqual(2, self.workflow.count("      - " + path))
         self.assertGreaterEqual(
             self.workflow.count(
-                "python3 scripts/rocky_kernel_rk006_full_source_build_capture.py"
+                "/usr/bin/python3 -E -s scripts/rocky_kernel_rk006_full_source_build_capture.py"
             ),
             4,
         )
@@ -466,25 +612,19 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             1,
         )
         decoy = self.workflow.replace(
-            "          python3 scripts/rocky_kernel_rk006_full_source_build_capture.py capture \\\n",
-            "          # python3 scripts/rocky_kernel_rk006_full_source_build_capture.py capture \\\n",
+            "            /usr/bin/python3 -E -s scripts/rocky_kernel_rk006_full_source_build_capture.py capture \\\n",
+            "            # /usr/bin/python3 -E -s scripts/rocky_kernel_rk006_full_source_build_capture.py capture \\\n",
             1,
         )
         finalize_header = "      - name: Finalize the non-crediting build binding\n"
-        early_exit = self.workflow.replace(
-            finalize_header + "        run: |\n          set -euo pipefail\n",
-            finalize_header + "        run: |\n          set -euo pipefail\n          exit 0\n",
-            1,
-        )
-        error_trap = self.workflow.replace(
-            finalize_header + "        run: |\n          set -euo pipefail\n",
-            finalize_header
-            + "        run: |\n          set -euo pipefail\n          trap 'exit 0' ERR\n",
-            1,
-        )
+        finalize_start = self.workflow.index(finalize_header)
+        finalize_run = self.workflow.index("        run: |\n", finalize_start)
+        finalize_body = finalize_run + len("        run: |\n")
+        early_exit = self.workflow[:finalize_body] + "          exit 0\n" + self.workflow[finalize_body:]
+        error_trap = self.workflow[:finalize_body] + "          trap 'exit 0' ERR\n" + self.workflow[finalize_body:]
         step_conditional = self.workflow.replace(
-            finalize_header + "        run: |\n",
-            finalize_header + "        if: ${{ success() }}\n        run: |\n",
+            finalize_header,
+            finalize_header + "        if: ${{ success() }}\n",
             1,
         )
         unnamed_extra = self.workflow.replace(
@@ -528,7 +668,7 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
 
     def test_ihk_queue_fixture_requires_the_exact_rocky_compiler(self):
         self.assertIn("scripts/ihk_native_queue_check.py", self.workflow)
-        self.assertIn('--rustc "$(command -v rustc)" --require-rustc', self.workflow)
+        self.assertIn('--rustc /usr/bin/rustc --require-rustc', self.workflow)
 
     def test_both_local_kernel_patches_are_applied(self):
         for name in (
@@ -550,13 +690,13 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         )
         self.assertNotIn("mckernel", patch.lower())
         self.assertIn(
-            "python3 -m unittest -v "
+            "/usr/bin/python3 -E -s -m unittest -v "
             "scripts.tests.test_rust_target_compatibility_patches",
             self.workflow,
         )
         self.assertIn(
-            'MCKERNEL_RUSTC_1_92="$(command -v rustc)" \\\n'
-            "            python3 -m unittest -v "
+            'MCKERNEL_RUSTC_1_92=/usr/bin/rustc \\\n'
+            "            /usr/bin/python3 -E -s -m unittest -v "
             "scripts.tests.test_rust_target_compatibility_patches",
             self.workflow,
         )
@@ -566,7 +706,7 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
 
     def test_final_config_keeps_warnings_fatal(self):
         second_resolution = self.workflow.index(
-            'LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" olddefconfig',
+            'SOURCE_DATE_EPOCH="$SOURCE_DATE_EPOCH" olddefconfig',
             self.workflow.index("resolved-first.config"),
         )
         werror = self.workflow.index(
@@ -581,7 +721,7 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
 
     def test_final_config_requires_modules_after_stable_resolution(self):
         second_resolution = self.workflow.index(
-            'LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" olddefconfig',
+            'SOURCE_DATE_EPOCH="$SOURCE_DATE_EPOCH" olddefconfig',
             self.workflow.index("resolved-first.config"),
         )
         modules = self.workflow.index(
@@ -601,7 +741,7 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             with self.subTest(replacement=replacement or "removed"):
                 mutation = self.workflow.replace(exact, replacement, 1)
                 with self.assertRaisesRegex(
-                    runtime_evidence.EvidenceError, "CONFIG_MODULES prerequisite differs"
+                    runtime_evidence.EvidenceError, "CONFIG_MODULES prerequisite differs|steps"
                 ):
                     runtime_evidence._validate_exact_build_workflow(mutation)
 
@@ -646,7 +786,7 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         ):
             with self.subTest(label=label):
                 with self.assertRaisesRegex(
-                    runtime_evidence.EvidenceError, "CONFIG_MODULES prerequisite differs"
+                    runtime_evidence.EvidenceError, "CONFIG_MODULES prerequisite differs|steps"
                 ):
                     runtime_evidence._validate_exact_build_workflow(mutation)
 
@@ -665,9 +805,9 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         ):
             self.assertEqual(1, self.workflow.count(module))
 
-        solver_run = "python3 scripts/native_rust_kconfig_solver.py run \\\n"
-        solver_check = "python3 scripts/native_rust_kconfig_solver.py check \\\n"
-        link_output = "python3 scripts/native_rust_kbuild_link_closure.py \\\n"
+        solver_run = "            scripts/native_rust_kconfig_solver.py run \\\n"
+        solver_check = "            scripts/native_rust_kconfig_solver.py check \\\n"
+        link_output = "            scripts/native_rust_kbuild_link_closure.py \\\n"
         solver_mode = 'chmod 0644 "$EVIDENCE_DIR/kconfig-solver-matrix.json"'
         self.assertEqual(1, self.workflow.count(solver_run))
         self.assertEqual(1, self.workflow.count(solver_check))
@@ -690,9 +830,9 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         )
 
         for label, exact in (
-            ("solver-run", "          " + solver_run),
-            ("solver-check", "          " + solver_check),
-            ("link-output", "          " + link_output),
+            ("solver-run", solver_run),
+            ("solver-check", solver_check),
+            ("link-output", link_output),
             ("solver-mode", "          " + solver_mode),
         ):
             with self.subTest(label=label):
@@ -800,9 +940,13 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             "0020-rust-miscdevice-add-base-abstraction.patch",
             opaque_init,
         )
+        module_owner = self.workflow.index(
+            "0020a-rust-miscdevice-bind-file-operations-to-module.patch",
+            miscdevice,
+        )
         objtool_noreturn = self.workflow.index(
             "0021-objtool-recognize-rust-1.92-panic-const.patch",
-            miscdevice,
+            module_owner,
         )
         pvh_noendbr = self.workflow.index(
             "0022-x86-pvh-annotate-noendbr.patch",
@@ -836,7 +980,8 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         self.assertLess(warning_helper, warning_order)
         self.assertLess(warning_order, opaque_init)
         self.assertLess(opaque_init, miscdevice)
-        self.assertLess(miscdevice, objtool_noreturn)
+        self.assertLess(miscdevice, module_owner)
+        self.assertLess(module_owner, objtool_noreturn)
         self.assertLess(objtool_noreturn, pvh_noendbr)
         self.assertLess(pvh_noendbr, allocator_shim)
         self.assertLess(allocator_shim, project)
@@ -930,13 +1075,13 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             "Validate built metadata and capture immutable diagnostics"
         )
         checker = self.workflow.index(
-            "python3 scripts/ihk_native_lifecycle_check.py", validation
+            "scripts/ihk_native_lifecycle_check.py", validation
         )
         precheck = self.workflow.index(
             'sha256sum --check --strict PRECHECK_SHA256SUMS', validation
         )
         vermagic = self.workflow.index(
-            'vermagic="$(modinfo -F vermagic "$module")"', validation
+            'vermagic="$("$modinfo_path" -F vermagic "$module")"', validation
         )
         copied_module = self.workflow.index(
             'module="$EVIDENCE_DIR/$name"', precheck
@@ -945,14 +1090,14 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         self.assertLess(copied_module, vermagic)
         self.assertLess(vermagic, checker)
         for fragment in (
-            'git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD',
+            '/usr/bin/git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD',
             '> "$EVIDENCE_DIR/commit.sha"',
             'cp "$module" "$EVIDENCE_DIR/$name"',
-            'modinfo "$module" > "$EVIDENCE_DIR/$name.modinfo"',
-            'readelf -p .modinfo "$module" '
+            '"$modinfo_path" "$module" > "$EVIDENCE_DIR/$name.modinfo"',
+            '/usr/bin/readelf -p .modinfo "$module" '
             '> "$EVIDENCE_DIR/$name.modinfo-section"',
-            'readelf -SWr "$module" > "$EVIDENCE_DIR/$name.readelf"',
-            'nm -A -a "$module" > "$EVIDENCE_DIR/$name.nm"',
+            '/usr/bin/readelf -SWr "$module" > "$EVIDENCE_DIR/$name.readelf"',
+            '/usr/bin/nm -A -a "$module" > "$EVIDENCE_DIR/$name.nm"',
             '| sort -z | xargs -0 sha256sum -- > PRECHECK_SHA256SUMS',
             'sha256sum --check --strict PRECHECK_SHA256SUMS',
         ):
@@ -975,7 +1120,7 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
     def test_added_unbound_kbuild_invocation_is_rejected(self):
         marker = (
             "          printf 'NATIVE_BASELINE_CONFIG=%s\\n' \"$baseline\" "
-            ">> \"$GITHUB_ENV\"\n"
+            ">> \"$github_env_file\"\n"
         )
         additions = (
             '          make -C "$NATIVE_SOURCE_ROOT" olddefconfig\n',
@@ -992,19 +1137,12 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
                 end = mutation.index(
                     "      - name: Resolve the evidence-only module configuration twice\n"
                 )
-                digest = hashlib.sha256(
-                    mutation[start:end].encode("utf-8")
-                ).hexdigest()
-                with mock.patch.object(
-                    runtime_evidence,
-                    "EXPECTED_EXACT_BUILD_PREPARATION_SHA256",
-                    digest,
+                self.assertNotEqual(self.workflow, mutation)
+                with self.assertRaisesRegex(
+                    runtime_evidence.EvidenceError,
+                    "Kbuild release scope|unbound build tool|prebuild scope",
                 ):
-                    with self.assertRaisesRegex(
-                        runtime_evidence.EvidenceError,
-                        "Kbuild release scope|unbound build tool",
-                    ):
-                        runtime_evidence._validate_exact_build_workflow(mutation)
+                    runtime_evidence._validate_exact_build_workflow(mutation)
 
     def test_duplicate_or_extra_top_level_release_environment_is_rejected(self):
         marker = (
@@ -1099,7 +1237,7 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
     def test_frozen_legacy_oracle_and_shared_evidence_path_are_available(self):
         self.assertIn("submodules: recursive", self.workflow)
         self.assertIn(
-            'test "$(git -C ihk rev-parse HEAD)" = '
+            'test "$(/usr/bin/git -C ihk rev-parse HEAD)" = '
             '"3114d9e7101ad52030eb3effa849a5c108972a1f"',
             self.workflow,
         )
@@ -1121,22 +1259,22 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             self.assertGreaterEqual(self.workflow.count(path), 2)
         self.assertGreaterEqual(
             self.workflow.count(
-                'python3 scripts/ihk_os_registry_check.py --repo "$GITHUB_WORKSPACE"'
+                'scripts/ihk_os_registry_check.py --repo "$GITHUB_WORKSPACE"'
             ),
             2,
         )
         self.assertGreaterEqual(
-            self.workflow.count('MCKERNEL_RUSTC_1_92="$(command -v rustc)"'), 2
+            self.workflow.count('MCKERNEL_RUSTC_1_92=/usr/bin/rustc'), 2
         )
         self.assertGreaterEqual(
             self.workflow.count(
-                "python3 -m unittest -v scripts.tests.test_ihk_os_registry_check"
+                "/usr/bin/python3 -E -s -m unittest -v scripts.tests.test_ihk_os_registry_check"
             ),
             2,
         )
         self.assertGreaterEqual(
             self.workflow.count(
-                "python3 scripts/native_rust_unsafe_ffi_ledger.py "
+                "/usr/bin/python3 -E -s scripts/native_rust_unsafe_ffi_ledger.py "
                 '--repo "$GITHUB_WORKSPACE" check'
             ),
             1,
@@ -1160,12 +1298,12 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         ):
             self.assertGreaterEqual(self.workflow.count(path), 2)
         self.assertIn(
-            "python3 scripts/linux_api_exact_probe.py "
+            "/usr/bin/python3 -E -s scripts/linux_api_exact_probe.py "
             '--repo "$GITHUB_WORKSPACE" check-contract',
             self.workflow.replace("\\\n            ", ""),
         )
         self.assertIn(
-            "python3 scripts/x86_64_shared_abi.py "
+            "/usr/bin/python3 -E -s scripts/x86_64_shared_abi.py "
             '--repo-root "$GITHUB_WORKSPACE" --check',
             self.workflow.replace("\\\n            ", ""),
         )
@@ -1182,14 +1320,14 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             self.assertGreaterEqual(self.workflow.count(path), 2)
         self.assertGreaterEqual(
             self.workflow.count(
-                'python3 scripts/ihk_ioctl_dispatch_check.py --repo "$GITHUB_WORKSPACE"'
+                'scripts/ihk_ioctl_dispatch_check.py --repo "$GITHUB_WORKSPACE"'
             ),
             3,
         )
         self.assertIn('--kernel-source "$source_root"', self.workflow)
         self.assertGreaterEqual(
             self.workflow.count(
-                "python3 -m unittest -v scripts.tests.test_ihk_ioctl_dispatch_check"
+                "/usr/bin/python3 -E -s -m unittest -v scripts.tests.test_ihk_ioctl_dispatch_check"
             ),
             2,
         )
@@ -1217,10 +1355,10 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         ):
             self.assertGreaterEqual(self.workflow.count(path), 2)
         self.assertIn(
-            'IHK_PAGE_ALLOCATOR_RUSTC="$(command -v rustc)"', self.workflow
+            'IHK_PAGE_ALLOCATOR_RUSTC=/usr/bin/rustc', self.workflow
         )
         self.assertIn(
-            'IHK_PAGE_OWNER_REGISTRY_RUSTC="$(command -v rustc)"', self.workflow
+            'IHK_PAGE_OWNER_REGISTRY_RUSTC=/usr/bin/rustc', self.workflow
         )
         allocator = self.workflow.index("IHK_PAGE_ALLOCATOR_RUSTC=")
         owner = self.workflow.index("IHK_PAGE_OWNER_REGISTRY_RUSTC=", allocator)

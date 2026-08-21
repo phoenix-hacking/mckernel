@@ -60,10 +60,17 @@ RUST_COMPAT_PATCH_PATHS = (
     Path("host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch"),
     Path("host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch"),
     Path("host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch"),
+    Path("host-kernel/rocky/patches/0020a-rust-miscdevice-bind-file-operations-to-module.patch"),
     Path("host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch"),
     Path("host-kernel/rocky/patches/0022-x86-pvh-annotate-noendbr.patch"),
     Path("host-kernel/rocky/patches/0023-rust-update-no-alloc-shim-marker-rust-1.92.patch"),
 )
+MISCDEVICE_OWNER_LOCAL_ORIGIN = (
+    "McKernel RS-006 miscdevice module-owner compatibility"
+)
+MISCDEVICE_OWNER_ROCKY_BASE = "linux-6.12.0-211.44.1.el10_2"
+MISCDEVICE_OWNER_LICENSE = "GPL-2.0"
+MISCDEVICE_OWNER_INTEGRATION_STATUS = "active-ordered-unbuilt"
 CONFIG_POLICY_PATH = Path("host-kernel/rocky/config-policy.json")
 TOOLCHAIN_LOCK_PATH = Path("host-kernel/rocky/toolchain-lock.json")
 WORKFLOW_PATH = Path(".github/workflows/rs001-linux-api-exact-probe.yml")
@@ -142,7 +149,7 @@ RUST_MISCDEVICE_POSTIMAGE_SHA256S = (
     ("rust/kernel/types.rs", "3fde339b8a41b521407faa9e45d51ce9ecb183a170e9c650a72d25c73d50f6f7"),
     ("rust/kernel/lib.rs", "12079556f6e69f48db7fc887227e9243f9fc6837715afb5eaddf57bab8850cdd"),
     ("rust/bindings/bindings_helper.h", "f2644392ca91a791e4ab2ffb05a9b30a911a51f1ae025c696c710cfb3a447d07"),
-    ("rust/kernel/miscdevice.rs", "6cfa6ed228561b7a8d41df50700868480d29514dd3469935679b11015c93fc9c"),
+    ("rust/kernel/miscdevice.rs", "0f2c43a6a64688b6b8387de4813a76289a66f67a1787893d747273c36983b8ee"),
 )
 RUST_OBJTOOL_NORETURN_PREIMAGE_SHA256S = (
     ("tools/objtool/check.c", "71b836ba23a062554bc3038e8e8c7f940bfb38d05dec8d063ef87b70901d4f2e"),
@@ -263,6 +270,7 @@ RUST_COMPAT_UPSTREAM_COMMITS = (
     None,
     None,
     None,
+    None,
 )
 RUST_COMPAT_STABLE_COMMITS = (
     None,
@@ -283,6 +291,7 @@ RUST_COMPAT_STABLE_COMMITS = (
     "d66cf772bebd789448121cdfc42734fb042c9c4b",
     "3f856d5d84467c7fba0bf3cca405089c497e37eb",
     "dd8a734155ae28094d27b96c00a478fa0ee6d5d7",
+    None,
     None,
     None,
     None,
@@ -915,6 +924,12 @@ def rust_compatibility_patch_records(repo):
             "+unsafe extern \"C\" fn fops_open<T: MiscDevice>(": 1,
         },
         {
+            "+    ThisModule,": 1,
+            "+    const MODULE: &'static ThisModule;": 1,
+            "+            owner: T::MODULE.as_ptr(),": 1,
+            "+            compat_ioctl: maybe_fn(T::HAS_COMPAT_IOCTL, fops_compat_ioctl::<T>),": 1,
+        },
+        {
             "+\t       strstr(func->name, \"_4core9panicking11panic_const23panic_const_\")\t\t\t||": 1,
         },
         {
@@ -1017,6 +1032,10 @@ def rust_compatibility_patch_records(repo):
         },
         {},
         {},
+        {
+            "-            compat_ioctl: if T::HAS_COMPAT_IOCTL {": 1,
+            "-                Some(bindings::compat_ptr_ioctl)": 1,
+        },
         {},
         {},
         {
@@ -1025,7 +1044,7 @@ def rust_compatibility_patch_records(repo):
         },
     )
     expected_diff_counts = (
-        1, 1, 3, 2, 3, 1, 4, 4, 1, 1, 1, 2, 2, 3, 1, 1, 5, 2, 1, 3, 1, 1, 2
+        1, 1, 3, 2, 3, 1, 4, 4, 1, 1, 1, 2, 2, 3, 1, 1, 5, 2, 1, 3, 1, 1, 1, 2
     )
     for index, relative in enumerate(RUST_COMPAT_PATCH_PATHS):
         path = repository_file(repo, relative, "Rust target compatibility patch")
@@ -1071,6 +1090,20 @@ def rust_compatibility_patch_records(repo):
             or (
                 index == 20
                 and (
+                    text.count("From: McKernel local compatibility integration") != 1
+                    or text.count(
+                        "Status: active ordered Rocky compatibility patch; "
+                        "unbuilt and noncrediting"
+                    )
+                    != 1
+                    or text.count("License: " + MISCDEVICE_OWNER_LICENSE) != 1
+                    or "Upstream-Commit:" in text
+                    or "Stable-Commit:" in text
+                )
+            )
+            or (
+                index == 21
+                and (
                     text.count(
                         "Observed-Repository-Commit: "
                         "9438ad175b4c1ac7855f6afc119f154639fe18c2"
@@ -1096,7 +1129,7 @@ def rust_compatibility_patch_records(repo):
                 )
             )
             or (
-                index == 21
+                index == 22
                 and (
                     text.count("Local-Origin: " + PVH_OBJTOOL_LOCAL_ORIGIN) != 1
                     or text.count("Rocky-Base: " + PVH_OBJTOOL_ROCKY_BASE) != 1
@@ -1123,7 +1156,7 @@ def rust_compatibility_patch_records(repo):
                 )
             )
             or (
-                index == 22
+                index == 23
                 and (
                     text.count(
                         "Observed-Repository-Commit: "
@@ -1203,6 +1236,15 @@ def rust_compatibility_patch_records(repo):
             "upstream_commit": commit,
         }
         if index == 20:
+            record.update(
+                {
+                    "integration_status": MISCDEVICE_OWNER_INTEGRATION_STATUS,
+                    "license": MISCDEVICE_OWNER_LICENSE,
+                    "local_origin": MISCDEVICE_OWNER_LOCAL_ORIGIN,
+                    "rocky_base": MISCDEVICE_OWNER_ROCKY_BASE,
+                }
+            )
+        elif index == 21:
             relative_path, preimage_sha256 = RUST_OBJTOOL_NORETURN_PREIMAGE_SHA256S[0]
             _relative_path, postimage_sha256 = RUST_OBJTOOL_NORETURN_POSTIMAGE_SHA256S[0]
             record["observed_failure"] = dict(RUST_OBJTOOL_NORETURN_FAILURE_EVIDENCE)
@@ -1216,7 +1258,7 @@ def rust_compatibility_patch_records(repo):
                 "sha256": postimage_sha256,
                 "size": 116993,
             }
-        elif index == 21:
+        elif index == 22:
             record.update(
                 {
                     "failure_evidence": dict(PVH_OBJTOOL_FAILURE_EVIDENCE),
@@ -1225,7 +1267,7 @@ def rust_compatibility_patch_records(repo):
                     "rocky_base": PVH_OBJTOOL_ROCKY_BASE,
                 }
             )
-        elif index == 22:
+        elif index == 23:
             record.update(
                 {
                     "failure_evidence": dict(RUST_ALLOC_SHIM_V2_FAILURE_EVIDENCE),
