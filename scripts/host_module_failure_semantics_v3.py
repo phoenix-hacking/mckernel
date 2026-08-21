@@ -168,11 +168,12 @@ DIRECT_CTU_CHECKED_DIAGNOSTIC = (
     "presented_raw_pair_structural_continuity_checked"
 )
 CGRAPH_HEADER = re.compile(
-    r"^(?P<name>[A-Za-z_][A-Za-z0-9_$.-]*)/(?P<number>[0-9]+) "
-    r"\((?P<label>[^()]*)\) @0xADDR$"
+    r"^(?P<name>\*?[A-Za-z_][A-Za-z0-9_$.-]*)/(?P<number>[0-9]+) "
+    r"\((?P<label>[^()]*)\)(?P<address> @0xADDR)?$"
 )
+CGRAPH_AUX = re.compile(r"^  Aux: @0xADDR$")
 CGRAPH_REFERENCE = re.compile(
-    r"(?<![A-Za-z0-9_$.-])(?P<name>[A-Za-z_][A-Za-z0-9_$.-]*)/"
+    r"(?<![A-Za-z0-9_$.*-])(?P<name>\*?[A-Za-z_][A-Za-z0-9_$.-]*)/"
     r"(?P<number>[0-9]+)(?=\s|\(|$)"
 )
 CGRAPH_CLONE_MARKERS = (
@@ -2136,7 +2137,11 @@ def _cgraph_record_traits(record):
     type_text = (record["type"] or "").lower()
     visibility = set(record["visibility"])
     traits = set()
-    if "alias" in type_text or any(line.startswith("alias target:") for line in lines):
+    if (
+        record["name"].startswith("*")
+        or "alias" in type_text
+        or any(line.startswith("alias target:") for line in lines)
+    ):
         traits.add("alias")
     if any(marker in record["name"] for marker in CGRAPH_CLONE_MARKERS) or any(
         line.startswith("clone of") for line in lines
@@ -2156,23 +2161,25 @@ def _cgraph_record_traits(record):
 
 
 def validate_normalized_cgraph_dump(data):
-    """Accept allocator placeholders only as exact cgraph header suffixes."""
+    """Accept allocator placeholders only in exact GCC cgraph records."""
 
     text = compiler_text(data, "normalized GCC IPA cgraph")
     for line in text.splitlines():
-        if "@0x" in line and (
-            line.count("@0x") != 1 or CGRAPH_HEADER.fullmatch(line) is None
-        ):
+        header = CGRAPH_HEADER.fullmatch(line)
+        address_record = (
+            (header is not None and header.group("address") is not None)
+            or CGRAPH_AUX.fullmatch(line) is not None
+        )
+        if "@0x" in line and (line.count("@0x") != 1 or not address_record):
             raise SemanticsV3Error(
                 "normalized GCC cgraph retains a raw or misplaced allocator address"
             )
         if "0xADDR" in line and (
             line.count("0xADDR") != 1
-            or not line.endswith(" @0xADDR")
-            or CGRAPH_HEADER.fullmatch(line) is None
+            or not address_record
         ):
             raise SemanticsV3Error(
-                "normalized GCC cgraph address placeholder escaped a header"
+                "normalized GCC cgraph address placeholder escaped a record"
             )
     return data
 
@@ -2191,6 +2198,7 @@ def _parse_initial_cgraph_section(lines, source):
                 "label": match.group("label"),
                 "name": match.group("name"),
                 "number": int(match.group("number")),
+                "saw_aux": False,
                 "saw_calls": False,
                 "type": None,
                 "visibility": [],
@@ -2219,22 +2227,26 @@ def _parse_initial_cgraph_section(lines, source):
             current["visibility"] = stripped.split(":", 1)[1].strip().split()
         elif stripped == "Address is taken.":
             current["address_taken"] = True
+        elif stripped == "Aux: @0xADDR":
+            if current["saw_aux"]:
+                raise SemanticsV3Error("GCC cgraph symbol has duplicate Aux rows")
+            current["saw_aux"] = True
         elif stripped.startswith("Calls:"):
             if current["saw_calls"]:
                 raise SemanticsV3Error("GCC cgraph symbol has duplicate Calls rows")
             current["saw_calls"] = True
             payload = stripped.split(":", 1)[1]
-            current["calls"] = [
-                {"name": item.group("name"), "number": int(item.group("number"))}
-                for item in CGRAPH_REFERENCE.finditer(payload)
-            ]
-            residue = CGRAPH_REFERENCE.sub("", payload)
-            residue = re.sub(r"\([^()]*\)", "", residue)
-            residue = re.sub(r"[,0-9.+% -]", "", residue)
-            if residue.strip():
-                raise SemanticsV3Error(
-                    "GCC cgraph Calls row contains unknown direct-call syntax"
+            calls = []
+            for token in payload.split():
+                item = CGRAPH_REFERENCE.fullmatch(token)
+                if item is None:
+                    raise SemanticsV3Error(
+                        "GCC cgraph Calls row contains unknown direct-call syntax"
+                    )
+                calls.append(
+                    {"name": item.group("name"), "number": int(item.group("number"))}
                 )
+            current["calls"] = calls
         elif "Indirect call" in stripped:
             current["indirect_call_count"] += 1
     if not records:
@@ -2272,7 +2284,7 @@ def _parse_initial_cgraph_section(lines, source):
 
 
 def parse_initial_cgraph(data, source):
-    """Parse every repeated initial IPA-cgraph table and require exact parity."""
+    """Parse the first initial table and verify later pruned-table continuity."""
 
     validate_normalized_cgraph_dump(data)
     text = compiler_text(data, "GCC IPA cgraph")
@@ -2289,20 +2301,50 @@ def parse_initial_cgraph(data, source):
         "Initial Symbol table:",
         "Optimized Symbol table:",
         "Reclaimed Symbol table:",
-        "Removing unused symbols:",
     }
     for start in starts:
         end = len(lines)
         for index in range(start + 1, len(lines)):
-            if lines[index] in terminators:
+            if (
+                lines[index] in terminators
+                or lines[index].startswith("Removing unused symbols:")
+            ):
                 end = index
                 break
         tables.append(_parse_initial_cgraph_section(lines[start + 1:end], source))
     first = tables[0]
-    if any(not strict_equal(first, table) for table in tables[1:]):
-        raise SemanticsV3Error(
-            "repeated GCC Initial Symbol table sections are inconsistent"
-        )
+    first_by_identity = {
+        (record["name"], record["number"]): record for record in first
+    }
+    first_definitions = {
+        identity for identity, record in first_by_identity.items()
+        if record["definition"]
+    }
+    for table in tables[1:]:
+        table_by_identity = {
+            (record["name"], record["number"]): record for record in table
+        }
+        if not set(table_by_identity).issubset(first_by_identity):
+            raise SemanticsV3Error(
+                "repeated GCC Initial Symbol table sections are inconsistent"
+            )
+        if not first_definitions.issubset(table_by_identity):
+            raise SemanticsV3Error(
+                "repeated GCC Initial Symbol table pruned an analyzed definition"
+            )
+        if any(
+            not strict_equal(record, first_by_identity[identity])
+            for identity, record in table_by_identity.items()
+        ):
+            raise SemanticsV3Error(
+                "repeated GCC Initial Symbol table sections are inconsistent"
+            )
+        for record in table:
+            for call in record["calls"]:
+                if (call["name"], call["number"]) not in table_by_identity:
+                    raise SemanticsV3Error(
+                        "repeated GCC Initial Symbol table pruned a live callee"
+                    )
     return first
 
 

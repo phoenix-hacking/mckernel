@@ -54,7 +54,7 @@ jobs:
           dnf -y --allowerasing --setopt=install_weak_deps=False install \
             coreutils
           dnf -y --setopt=install_weak_deps=False install \
-            bash binutils cpio findutils gawk gzip kmod \
+            bash binutils cpio findutils gawk git-core gzip kmod \
             qemu-kvm-core python3 sed util-linux which
           ! /usr/bin/rpm -q coreutils-single
           test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' /usr/bin/timeout)" = coreutils

@@ -1480,13 +1480,28 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
         "          dnf -y --allowerasing --setopt=install_weak_deps=False install \\\n"
         "            coreutils\n"
         "          dnf -y --setopt=install_weak_deps=False install \\\n"
-        "            bash binutils cpio findutils gawk gzip kmod \\\n"
+        "            bash binutils cpio findutils gawk git-core gzip kmod \\\n"
         "            qemu-kvm-core python3 sed util-linux which\n"
         "          ! /usr/bin/rpm -q coreutils-single\n"
         "          test \"$(/usr/bin/rpm -qf --qf '%{NAME}\\n' /usr/bin/timeout)\" = coreutils\n"
     )
     if runtime_workflow.count(coreutils_replacement) != 1:
         raise EvidenceError("runtime workflow coreutils replacement transaction differs")
+    checkout_step = (
+        "      - name: Check out the exact candidate without credentials\n"
+        "        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4\n"
+        "        with:\n"
+        "          ref: ${{ env.EXPECTED_HEAD_SHA }}\n"
+        "          fetch-depth: 1\n"
+        "          persist-credentials: false\n"
+        "          submodules: recursive\n"
+    )
+    if runtime_workflow.count(checkout_step) != 1:
+        raise EvidenceError("runtime workflow checkout scope differs")
+    if runtime_workflow.index(coreutils_replacement) > runtime_workflow.index(
+        checkout_step
+    ):
+        raise EvidenceError("runtime workflow Git bootstrap must precede checkout")
     if "permissions:" not in runtime_workflow:
         raise EvidenceError("runtime capture workflow lacks an explicit permission boundary")
     trigger_block = runtime_workflow[: runtime_workflow.index("permissions:")]

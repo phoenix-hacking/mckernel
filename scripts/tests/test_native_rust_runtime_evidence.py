@@ -267,6 +267,52 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         with self.assertRaisesRegex(evidence.EvidenceError, "may not claim a gate PASS"):
             evidence.validate_contract(repo)
 
+    def test_runtime_checkout_cannot_omit_git(self) -> None:
+        repo = self.copy_contract_repository()
+        workflow = ".github/workflows/native-rust-host-modules-exact-runtime.yml"
+        self.mutate_text(
+            repo,
+            workflow,
+            "gawk git-core gzip kmod",
+            "gawk gzip kmod",
+        )
+        with self.assertRaisesRegex(
+            evidence.EvidenceError,
+            "runtime workflow coreutils replacement transaction differs",
+        ):
+            evidence.validate_contract(repo)
+
+    def test_runtime_git_bootstrap_cannot_move_after_checkout(self) -> None:
+        repo = self.copy_contract_repository()
+        workflow = ".github/workflows/native-rust-host-modules-exact-runtime.yml"
+        path = repo / workflow
+        text = path.read_text(encoding="utf-8")
+        bootstrap_header = (
+            "      - name: Initialize first-failure evidence and exact Rocky tools\n"
+        )
+        checkout_header = (
+            "      - name: Check out the exact candidate without credentials\n"
+        )
+        download_header = (
+            "      - name: Download the exact build artifact from this run\n"
+        )
+        bootstrap_start = text.index(bootstrap_header)
+        checkout_start = text.index(checkout_header)
+        download_start = text.index(download_header)
+        bootstrap = text[bootstrap_start:checkout_start]
+        checkout = text[checkout_start:download_start]
+        path.write_text(
+            text[:bootstrap_start]
+            + checkout
+            + bootstrap
+            + text[download_start:],
+            encoding="utf-8",
+        )
+        with self.assertRaisesRegex(
+            evidence.EvidenceError, "Git bootstrap must precede checkout"
+        ):
+            evidence.validate_contract(repo)
+
     def test_runtime_workflow_reusable_trigger_mutation_is_rejected(self) -> None:
         repo = self.copy_contract_repository()
         workflow = ".github/workflows/native-rust-host-modules-exact-runtime.yml"

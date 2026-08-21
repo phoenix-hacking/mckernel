@@ -185,9 +185,21 @@ class NativeRustExactRuntimeWorkflowTests(unittest.TestCase):
         self.assertIn("! /usr/bin/rpm -q coreutils-single", self.workflow)
         self.assertIn(
             "dnf -y --setopt=install_weak_deps=False install \\\n"
-            "            bash binutils cpio findutils",
+            "            bash binutils cpio findutils gawk git-core gzip kmod \\\n"
+            "            qemu-kvm-core python3 sed util-linux which",
             self.workflow,
         )
+        bootstrap = self.workflow.index(
+            "      - name: Initialize first-failure evidence and exact Rocky tools"
+        )
+        checkout = self.workflow.index(
+            "      - name: Check out the exact candidate without credentials"
+        )
+        recursive = self.workflow.index("          submodules: recursive")
+        self.assertLess(bootstrap, checkout)
+        self.assertLess(checkout, recursive)
+        self.assertEqual(1, self.workflow[bootstrap:checkout].count("git-core"))
+        self.assertEqual(1, self.workflow.count("git-core"))
 
     @unittest.skipUnless(shutil.which("as") and shutil.which("ld"), "binutils required")
     def test_poweroff_helper_is_a_static_x86_64_executable(self) -> None:

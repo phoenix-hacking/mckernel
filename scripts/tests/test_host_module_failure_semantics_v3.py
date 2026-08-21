@@ -1308,7 +1308,8 @@ class DirectCtuGraphTests(unittest.TestCase):
 
     def test_repeated_table_mutation_and_unknown_call_syntax_fail(self):
         first = [
-            {"name": "one", "number": 1, "definition": True, "global": True}
+            {"name": "one", "number": 1, "definition": True, "global": True},
+            {"name": "unused", "number": 2, "global": True},
         ]
         second = [
             {"name": "two", "number": 1, "definition": True, "global": True}
@@ -1317,9 +1318,46 @@ class DirectCtuGraphTests(unittest.TestCase):
             semantics.parse_initial_cgraph(
                 synthetic_cgraph(first, second), "fixture.c"
             )
+        self.assertEqual(
+            semantics.parse_initial_cgraph(
+                synthetic_cgraph(first, first[:1]), "fixture.c"
+            ),
+            semantics.parse_initial_cgraph(synthetic_cgraph(first), "fixture.c"),
+        )
+        live_callee = [
+            {
+                "name": "one", "number": 1, "definition": True,
+                "global": True, "calls": (("unused", 2),),
+            },
+            {"name": "unused", "number": 2, "global": True},
+        ]
+        with self.assertRaisesRegex(semantics.SemanticsV3Error, "live callee"):
+            semantics.parse_initial_cgraph(
+                synthetic_cgraph(live_callee, live_callee[:1]), "fixture.c"
+            )
+        analyzed_definitions = [
+            {"name": "one", "number": 1, "definition": True},
+            {"name": "two", "number": 2, "definition": True},
+        ]
+        with self.assertRaisesRegex(
+            semantics.SemanticsV3Error, "analyzed definition"
+        ):
+            semantics.parse_initial_cgraph(
+                synthetic_cgraph(
+                    analyzed_definitions, analyzed_definitions[:1]
+                ),
+                "fixture.c",
+            )
         malformed = synthetic_cgraph(first).replace(b"  Calls: ", b"  Calls: ???")
         with self.assertRaisesRegex(semantics.SemanticsV3Error, "unknown"):
             semantics.parse_initial_cgraph(malformed, "fixture.c")
+        for suffix in (b" (evil)", b" 999"):
+            with self.subTest(suffix=suffix):
+                decorated = synthetic_cgraph(live_callee).replace(
+                    b"  Calls: unused/2", b"  Calls: unused/2" + suffix
+                )
+                with self.assertRaisesRegex(semantics.SemanticsV3Error, "unknown"):
+                    semantics.parse_initial_cgraph(decorated, "fixture.c")
 
     def test_node_address_is_parsed_and_inline_definition_is_blocked(self):
         records = [
@@ -1334,20 +1372,26 @@ class DirectCtuGraphTests(unittest.TestCase):
         )
         self.assertEqual(parsed[0]["traits"], ["inline"])
 
-    def test_real_normalizer_canonicalizes_only_header_allocator_addresses(self):
+    def test_real_normalizer_canonicalizes_header_and_aux_allocator_addresses(self):
         records = [
             {"name": "one", "number": 1, "definition": True, "global": True}
         ]
         normalized_template = synthetic_cgraph(records).replace(
             b"  Calls: ",
+            b"  Aux: @0xA110C\n"
             b"  Note: literal 0xDEADBEEF, string \"0xDEADBEEF\", "
             b"comment /* 0xDEADBEEF */\n  Calls: ",
         )
-        raw_one = normalized_template.replace(b"@0xADDR", b"@0x1234")
-        raw_two = normalized_template.replace(b"@0xADDR", b"@0xABCDEF")
+        raw_one = normalized_template.replace(
+            b"@0xADDR", b"@0x1234"
+        ).replace(b"@0xA110C", b"@0x5678")
+        raw_two = normalized_template.replace(
+            b"@0xADDR", b"@0xABCDEF"
+        ).replace(b"@0xA110C", b"@0xFEDCBA")
         first = semantics.flows_v1.normalized_dump(raw_one, ())
         second = semantics.flows_v1.normalized_dump(raw_two, ())
         self.assertEqual(first, second)
+        self.assertIn(b"  Aux: @0xADDR\n", first)
         self.assertIn(
             b"literal 0xDEADBEEF, string \"0xDEADBEEF\", "
             b"comment /* 0xDEADBEEF */",
@@ -1364,10 +1408,21 @@ class DirectCtuGraphTests(unittest.TestCase):
             {"name": "one", "number": 1, "definition": True, "global": True}
         ]
         normalized = synthetic_cgraph(record)
+        with_aux = normalized.replace(
+            b"  Calls: ", b"  Aux: @0xADDR\n  Calls: "
+        )
+        self.assertEqual(
+            semantics.parse_initial_cgraph(normalized, "fixture.c"),
+            semantics.parse_initial_cgraph(with_aux, "fixture.c"),
+        )
         hostile = (
             normalized.replace(b"@0xADDR", b"@0x1234"),
+            normalized.replace(b"(one) @0xADDR", b"(evil @0xADDR)"),
             normalized.replace(
-                b"  Calls: ", b"  Aux: @0xADDR\n  Calls: "
+                b"  Calls: ", b"  Aux: @0x1234\n  Calls: "
+            ),
+            normalized.replace(
+                b"  Calls: ", b"  Aux: @0xADDR trailing\n  Calls: "
             ),
             normalized.replace(
                 b"  Calls: ", b"  Note: string 0xADDR\n  Calls: "
@@ -1379,6 +1434,43 @@ class DirectCtuGraphTests(unittest.TestCase):
                     semantics.SemanticsV3Error, "address"
                 ):
                     semantics.parse_initial_cgraph(data, "fixture.c")
+        duplicate_aux = normalized.replace(
+            b"  Calls: ",
+            b"  Aux: @0xADDR\n  Aux: @0xADDR\n  Calls: ",
+        )
+        with self.assertRaisesRegex(semantics.SemanticsV3Error, "duplicate Aux"):
+            semantics.parse_initial_cgraph(duplicate_aux, "fixture.c")
+
+    def test_real_gcc_header_forms_and_star_alias_are_bounded(self):
+        records = [
+            {
+                "name": "one",
+                "number": 1,
+                "definition": True,
+                "global": True,
+                "calls": (("*alias", 2),),
+            },
+            {"name": "*alias", "number": 2, "global": True},
+        ]
+        with_addresses = synthetic_cgraph(records)
+        without_addresses = with_addresses.replace(b" @0xADDR\n", b"\n")
+        expected = semantics.parse_initial_cgraph(with_addresses, "fixture.c")
+        self.assertEqual(
+            expected,
+            semantics.parse_initial_cgraph(without_addresses, "fixture.c"),
+        )
+        alias = [item for item in expected if item["name"] == "*alias"][0]
+        caller = [item for item in expected if item["name"] == "one"][0]
+        self.assertEqual(alias["traits"], ["alias"])
+        self.assertEqual(caller["calls"], [{"name": "*alias", "number": 2}])
+
+        for hostile in (
+            without_addresses.replace(b"*alias/2", b"**alias/2", 1),
+            without_addresses.replace(b"*alias/2", b"*alias*/2", 1),
+        ):
+            with self.subTest(hostile=hostile):
+                with self.assertRaises(semantics.SemanticsV3Error):
+                    semantics.parse_initial_cgraph(hostile, "fixture.c")
 
     def test_rootless_and_callback_rooted_scc_closure(self):
         def cycle(address_taken):

@@ -45,11 +45,12 @@ ANALYSIS_CLAIM = {
     ),
 }
 REVIEW_CGRAPH_HEADER = re.compile(
-    r"^(?P<name>[A-Za-z_][A-Za-z0-9_$.-]*)/(?P<number>[0-9]+) "
-    r"\((?P<label>[^()]*)\) @0xADDR$"
+    r"^(?P<name>\*?[A-Za-z_][A-Za-z0-9_$.-]*)/(?P<number>[0-9]+) "
+    r"\((?P<label>[^()]*)\)(?P<address> @0xADDR)?$"
 )
+REVIEW_CGRAPH_AUX = re.compile(r"^  Aux: @0xADDR$")
 REVIEW_CGRAPH_REFERENCE = re.compile(
-    r"(?<![A-Za-z0-9_$.-])(?P<name>[A-Za-z_][A-Za-z0-9_$.-]*)/"
+    r"(?<![A-Za-z0-9_$.*-])(?P<name>\*?[A-Za-z_][A-Za-z0-9_$.-]*)/"
     r"(?P<number>[0-9]+)(?=\s|\(|$)"
 )
 REVIEW_CLONE_MARKERS = (
@@ -66,7 +67,11 @@ def _review_traits(record):
     visibility = set(record["visibility"])
     type_text = record["type"].lower()
     traits = set()
-    if "alias" in type_text or any(line.startswith("alias target:") for line in lines):
+    if (
+        record["name"].startswith("*")
+        or "alias" in type_text
+        or any(line.startswith("alias target:") for line in lines)
+    ):
         traits.add("alias")
     if any(marker in record["name"] for marker in REVIEW_CLONE_MARKERS) or any(
         line.startswith("clone of") for line in lines
@@ -97,6 +102,7 @@ def _review_initial_section(lines, source):
                 "details": [],
                 "name": match.group("name"),
                 "number": int(match.group("number")),
+                "saw_aux": False,
                 "saw_calls": False,
                 "type": None,
                 "visibility": [],
@@ -121,20 +127,24 @@ def _review_initial_section(lines, source):
             current["visibility"] = stripped.split(":", 1)[1].strip().split()
         elif stripped == "Address is taken.":
             current["address_taken"] = True
+        elif stripped == "Aux: @0xADDR":
+            if current["saw_aux"]:
+                raise ReviewV3Error("independent cgraph Aux row is duplicated")
+            current["saw_aux"] = True
         elif stripped.startswith("Calls:"):
             if current["saw_calls"]:
                 raise ReviewV3Error("independent cgraph Calls row is duplicated")
             current["saw_calls"] = True
             payload = stripped.split(":", 1)[1]
-            current["calls"] = [
-                {"name": item.group("name"), "number": int(item.group("number"))}
-                for item in REVIEW_CGRAPH_REFERENCE.finditer(payload)
-            ]
-            residue = REVIEW_CGRAPH_REFERENCE.sub("", payload)
-            residue = re.sub(r"\([^()]*\)", "", residue)
-            residue = re.sub(r"[,0-9.+% -]", "", residue)
-            if residue.strip():
-                raise ReviewV3Error("independent cgraph Calls syntax is unknown")
+            calls = []
+            for token in payload.split():
+                item = REVIEW_CGRAPH_REFERENCE.fullmatch(token)
+                if item is None:
+                    raise ReviewV3Error("independent cgraph Calls syntax is unknown")
+                calls.append(
+                    {"name": item.group("name"), "number": int(item.group("number"))}
+                )
+            current["calls"] = calls
     numbers = [item["number"] for item in records]
     if not records or len(numbers) != len(set(numbers)):
         raise ReviewV3Error("independent cgraph symbol closure differs")
@@ -170,20 +180,21 @@ def independent_parse_cgraph(data, source):
         raise ReviewV3Error("independent cgraph is not UTF-8: {0}".format(exc))
     lines = text.splitlines()
     for line in lines:
-        if "@0x" in line and (
-            line.count("@0x") != 1
-            or REVIEW_CGRAPH_HEADER.fullmatch(line) is None
-        ):
+        header = REVIEW_CGRAPH_HEADER.fullmatch(line)
+        address_record = (
+            (header is not None and header.group("address") is not None)
+            or REVIEW_CGRAPH_AUX.fullmatch(line) is not None
+        )
+        if "@0x" in line and (line.count("@0x") != 1 or not address_record):
             raise ReviewV3Error(
                 "independent normalized cgraph retains a raw or misplaced allocator address"
             )
         if "0xADDR" in line and (
             line.count("0xADDR") != 1
-            or not line.endswith(" @0xADDR")
-            or REVIEW_CGRAPH_HEADER.fullmatch(line) is None
+            or not address_record
         ):
             raise ReviewV3Error(
-                "independent cgraph address placeholder escaped a header"
+                "independent cgraph address placeholder escaped a record"
             )
     starts = [index for index, line in enumerate(lines) if line == "Initial Symbol table:"]
     if not starts:
@@ -191,19 +202,48 @@ def independent_parse_cgraph(data, source):
     terminators = {
         "Final Symbol table:", "Initial Symbol table:",
         "Optimized Symbol table:", "Reclaimed Symbol table:",
-        "Removing unused symbols:",
     }
     tables = []
     for start in starts:
         end = len(lines)
         for index in range(start + 1, len(lines)):
-            if lines[index] in terminators:
+            if (
+                lines[index] in terminators
+                or lines[index].startswith("Removing unused symbols:")
+            ):
                 end = index
                 break
         tables.append(_review_initial_section(lines[start + 1:end], source))
-    if any(not semantics.strict_equal(tables[0], item) for item in tables[1:]):
-        raise ReviewV3Error("independent repeated cgraph tables differ")
-    return tables[0]
+    first = tables[0]
+    first_by_identity = {
+        (record["name"], record["number"]): record for record in first
+    }
+    first_definitions = {
+        identity for identity, record in first_by_identity.items()
+        if record["definition"]
+    }
+    for table in tables[1:]:
+        table_by_identity = {
+            (record["name"], record["number"]): record for record in table
+        }
+        if not set(table_by_identity).issubset(first_by_identity):
+            raise ReviewV3Error("independent repeated cgraph tables differ")
+        if not first_definitions.issubset(table_by_identity):
+            raise ReviewV3Error(
+                "independent repeated cgraph pruned an analyzed definition"
+            )
+        if any(
+            not semantics.strict_equal(record, first_by_identity[identity])
+            for identity, record in table_by_identity.items()
+        ):
+            raise ReviewV3Error("independent repeated cgraph tables differ")
+        for record in table:
+            for call in record["calls"]:
+                if (call["name"], call["number"]) not in table_by_identity:
+                    raise ReviewV3Error(
+                        "independent repeated cgraph pruned a live callee"
+                    )
+    return first
 
 
 def _review_identity(key):

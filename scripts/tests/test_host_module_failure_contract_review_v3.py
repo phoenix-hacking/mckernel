@@ -153,42 +153,48 @@ def direct_graph():
     }
 
 
-def cgraph_bytes(records):
-    lines = ["Initial Symbol table:", ""]
-    for record in records:
-        lines.append(
-            "{0}/{1} ({0}) @0xADDR".format(
-                record["name"], record["number"]
+def cgraph_bytes(records, second_records=None):
+    def table(values):
+        lines = ["Initial Symbol table:", ""]
+        for record in values:
+            lines.append(
+                "{0}/{1} ({0}) @0xADDR".format(
+                    record["name"], record["number"]
+                )
             )
-        )
-        lines.append(
-            "  Type: function{0}".format(
-                " definition analyzed" if record.get("definition") else ""
+            lines.append(
+                "  Type: function{0}".format(
+                    " definition analyzed" if record.get("definition") else ""
+                )
             )
-        )
-        visibility = ["semantic_interposition"]
-        visibility.extend(record.get("visibility", ()))
-        if record.get("global", True):
-            visibility.append("public")
-        lines.append("  Visibility: " + " ".join(visibility))
-        if record.get("address_taken"):
-            lines.append("  Address is taken.")
-        if record.get("alias"):
-            lines.append("  Alias target: target/999")
-        lines.extend(
-            (
-                "  References: ",
-                "  Referring: ",
-                "  Function flags: " + record.get("function_flags", "body"),
-                "  Called by: ",
-                "  Calls: "
-                + " ".join(
-                    "{0}/{1}".format(name, number)
-                    for name, number in record.get("calls", ())
-                ),
+            visibility = ["semantic_interposition"]
+            visibility.extend(record.get("visibility", ()))
+            if record.get("global", True):
+                visibility.append("public")
+            lines.append("  Visibility: " + " ".join(visibility))
+            if record.get("address_taken"):
+                lines.append("  Address is taken.")
+            if record.get("alias"):
+                lines.append("  Alias target: target/999")
+            lines.extend(
+                (
+                    "  References: ",
+                    "  Referring: ",
+                    "  Function flags: " + record.get("function_flags", "body"),
+                    "  Called by: ",
+                    "  Calls: "
+                    + " ".join(
+                        "{0}/{1}".format(name, number)
+                        for name, number in record.get("calls", ())
+                    ),
+                )
             )
-        )
-    lines.extend(("", "Removing unused symbols:", ""))
+        lines.extend(("", "Removing unused symbols:", ""))
+        return lines
+
+    lines = table(records)
+    if second_records is not None:
+        lines.extend(table(second_records))
     return ("\n".join(lines) + "\n").encode("utf-8")
 
 
@@ -514,13 +520,101 @@ class ReviewV3Tests(unittest.TestCase):
         data = cgraph_bytes(
             [{"name": "one", "number": 1, "definition": True}]
         )
-        review.independent_parse_cgraph(data, "fixture.c")
+        baseline = review.independent_parse_cgraph(data, "fixture.c")
+        with_aux = data.replace(
+            b"  Calls: ", b"  Aux: @0xADDR\n  Calls: "
+        )
+        self.assertEqual(
+            baseline, review.independent_parse_cgraph(with_aux, "fixture.c")
+        )
         for hostile in (
             data.replace(b"@0xADDR", b"@0x1234"),
-            data.replace(b"  Calls: ", b"  Aux: @0xADDR\n  Calls: "),
+            data.replace(b"(one) @0xADDR", b"(evil @0xADDR)"),
+            data.replace(b"  Calls: ", b"  Aux: @0x1234\n  Calls: "),
+            data.replace(
+                b"  Calls: ", b"  Aux: @0xADDR trailing\n  Calls: "
+            ),
         ):
             with self.assertRaisesRegex(review.ReviewV3Error, "address"):
                 review.independent_parse_cgraph(hostile, "fixture.c")
+        duplicate_aux = data.replace(
+            b"  Calls: ",
+            b"  Aux: @0xADDR\n  Aux: @0xADDR\n  Calls: ",
+        )
+        with self.assertRaisesRegex(review.ReviewV3Error, "duplicated"):
+            review.independent_parse_cgraph(duplicate_aux, "fixture.c")
+
+    def test_independent_parser_accepts_real_gcc_header_and_star_alias(self):
+        data = cgraph_bytes(
+            [
+                {
+                    "name": "one",
+                    "number": 1,
+                    "definition": True,
+                    "calls": (("*alias", 2),),
+                },
+                {"name": "*alias", "number": 2},
+            ]
+        )
+        without_addresses = data.replace(b" @0xADDR\n", b"\n")
+        expected = review.independent_parse_cgraph(data, "fixture.c")
+        self.assertEqual(
+            expected,
+            review.independent_parse_cgraph(without_addresses, "fixture.c"),
+        )
+        alias = [item for item in expected if item["name"] == "*alias"][0]
+        self.assertEqual(alias["traits"], ["alias"])
+
+    def test_independent_parser_bounds_repeated_pruned_tables(self):
+        first = [
+            {"name": "one", "number": 1, "definition": True},
+            {"name": "unused", "number": 2},
+        ]
+        baseline = review.independent_parse_cgraph(
+            cgraph_bytes(first), "fixture.c"
+        )
+        self.assertEqual(
+            baseline,
+            review.independent_parse_cgraph(
+                cgraph_bytes(first, first[:1]), "fixture.c"
+            ),
+        )
+        hostile = [
+            {
+                "name": "one", "number": 1, "definition": True,
+                "calls": (("unused", 2),),
+            },
+            {"name": "unused", "number": 2},
+        ]
+        with self.assertRaisesRegex(review.ReviewV3Error, "live callee"):
+            review.independent_parse_cgraph(
+                cgraph_bytes(hostile, hostile[:1]), "fixture.c"
+            )
+        analyzed_definitions = [
+            {"name": "one", "number": 1, "definition": True},
+            {"name": "two", "number": 2, "definition": True},
+        ]
+        with self.assertRaisesRegex(review.ReviewV3Error, "analyzed definition"):
+            review.independent_parse_cgraph(
+                cgraph_bytes(
+                    analyzed_definitions, analyzed_definitions[:1]
+                ),
+                "fixture.c",
+            )
+        caller = [
+            {
+                "name": "one", "number": 1, "definition": True,
+                "calls": (("two", 2),),
+            },
+            {"name": "two", "number": 2},
+        ]
+        for suffix in (b" (evil)", b" 999"):
+            with self.subTest(suffix=suffix):
+                decorated = cgraph_bytes(caller).replace(
+                    b"  Calls: two/2", b"  Calls: two/2" + suffix
+                )
+                with self.assertRaisesRegex(review.ReviewV3Error, "unknown"):
+                    review.independent_parse_cgraph(decorated, "fixture.c")
 
     def test_independent_derivation_closes_one_same_module_edge_and_roots(self):
         inputs, invocations, payloads = independent_ctu_fixture()
