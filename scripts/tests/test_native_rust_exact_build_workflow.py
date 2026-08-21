@@ -3,6 +3,7 @@
 from __future__ import print_function
 
 import hashlib
+import json
 import re
 import subprocess
 import unittest
@@ -19,6 +20,10 @@ WORKFLOW = REPO_ROOT / ".github/workflows/native-rust-host-modules-exact-build.y
 SOURCE_WORKFLOW = REPO_ROOT / ".github/workflows/rocky-kernel-source-evidence.yml"
 PATCH = REPO_ROOT / "host-kernel/kbuild/patches/0002-rust-bindings-expose-module-parameters.patch"
 CONFIG = REPO_ROOT / "host-kernel/rocky/configs/native-rust-evidence.config"
+RK006_CAPTURE_CONTRACT = (
+    REPO_ROOT
+    / "host-kernel/rocky/evidence/rk006-full-source-build-capture-contract-v1.json"
+)
 
 
 class NativeRustExactBuildWorkflowTests(unittest.TestCase):
@@ -339,11 +344,146 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
 
     def test_failure_upload_step_condition_is_exact(self):
         exact = "        if: ${{ always() }}\n"
+        upload_header = (
+            "      - name: Upload compiler evidence or first-failure diagnostics\n"
+        )
+        prefix, compiler_upload = self.workflow.split(upload_header, 1)
         for replacement in ("", "        # if: ${{ always() }}\n", "        if: ${{ success() }}\n"):
             with self.subTest(replacement=replacement.strip() or "removed"):
-                mutation = self.workflow.replace(exact, replacement, 1)
+                mutation = prefix + upload_header + compiler_upload.replace(
+                    exact, replacement, 1
+                )
                 with self.assertRaisesRegex(
                     runtime_evidence.EvidenceError, "upload scope differs"
+                ):
+                    runtime_evidence._validate_exact_build_workflow(mutation)
+
+    def test_rk006_capture_is_a_separate_same_run_non_durable_artifact(self):
+        contract = json.loads(RK006_CAPTURE_CONTRACT.read_text(encoding="utf-8"))
+        self.assertEqual(30, contract["artifact_policy"]["actions_retention_days"])
+        self.assertFalse(contract["artifact_policy"]["artifact_is_durable"])
+        self.assertTrue(all(value is False for value in contract["claims"].values()))
+        start = self.workflow.index("  rk006-full-source-build-capture:\n")
+        self.assertLess(self.workflow.index("  exact-build:\n"), start)
+        job = self.workflow[start:]
+        self.assertIn("needs: exact-build", job)
+        self.assertNotRegex(job, r"(?m)^    if:")
+        capture_command = job.index(
+            "rocky_kernel_rk006_full_source_build_capture.py capture"
+        )
+        download = job.index("actions/download-artifact@", capture_command)
+        finalize = job.index("finalize-build", download)
+        verify = job.index("verify-capture", finalize)
+        upload = job.index("actions/upload-artifact@", verify)
+        self.assertLess(capture_command, download)
+        self.assertLess(download, finalize)
+        self.assertLess(finalize, verify)
+        self.assertLess(verify, upload)
+        self.assertIn(
+            "name: native-rust-exact-build-${{ github.run_id }}-${{ github.run_attempt }}",
+            job,
+        )
+        self.assertIn(
+            "name: rk006-full-source-build-capture-${{ github.run_id }}-${{ github.run_attempt }}",
+            job,
+        )
+        self.assertIn("retention-days: 30", job)
+        self.assertIn("kmod lld llvm llvm-devel make ncurses-devel", job)
+        self.assertNotIn('tar -C "$SOURCE_PARENT" -xf "$archive"', job)
+        self.assertIn('test ! -e "$source_root"', job)
+        self.assertNotIn("RK-006: PASS", job)
+
+    def test_rk006_capture_contract_checker_tests_and_authority_are_triggered(self):
+        paths = (
+            "host-kernel/rocky/evidence/rk006-full-source-build-capture-contract-v1.json",
+            "host-kernel/rocky/rk006-patch-authority-v1.json",
+            "scripts/rocky_kernel_rk006_full_source_build_capture.py",
+            "scripts/rocky_kernel_rk006_patch_authority.py",
+            "scripts/tests/test_rocky_kernel_rk006_full_source_build_capture.py",
+            "scripts/tests/test_rocky_kernel_rk006_patch_authority.py",
+        )
+        for path in paths:
+            with self.subTest(path=path):
+                self.assertEqual(2, self.workflow.count("      - " + path))
+        self.assertGreaterEqual(
+            self.workflow.count(
+                "python3 scripts/rocky_kernel_rk006_full_source_build_capture.py"
+            ),
+            4,
+        )
+
+    def test_rk006_capture_job_rejects_missing_extra_reordered_and_decoy_scopes(self):
+        header = "  rk006-full-source-build-capture:\n"
+        start = self.workflow.index(header)
+        capture_job = self.workflow[start:]
+        missing = self.workflow[:start].rstrip("\n") + "\n"
+        extra = self.workflow + "\n" + capture_job
+        conditional = self.workflow.replace(
+            "    needs: exact-build\n",
+            "    needs: exact-build\n    if: ${{ false }}\n",
+            1,
+        )
+        tolerated = self.workflow.replace(
+            "    needs: exact-build\n",
+            "    needs: exact-build\n    continue-on-error: true\n",
+            1,
+        )
+        reordered = self.workflow.replace(
+            "      - name: Initialize non-durable capture and install exact tools\n",
+            "      - name: __FIRST__\n",
+            1,
+        ).replace(
+            "      - name: Check out the exact capture candidate without credentials\n",
+            "      - name: Initialize non-durable capture and install exact tools\n",
+            1,
+        ).replace(
+            "      - name: __FIRST__\n",
+            "      - name: Check out the exact capture candidate without credentials\n",
+            1,
+        )
+        decoy = self.workflow.replace(
+            "          python3 scripts/rocky_kernel_rk006_full_source_build_capture.py capture \\\n",
+            "          # python3 scripts/rocky_kernel_rk006_full_source_build_capture.py capture \\\n",
+            1,
+        )
+        finalize_header = "      - name: Finalize the non-crediting build binding\n"
+        early_exit = self.workflow.replace(
+            finalize_header + "        run: |\n          set -euo pipefail\n",
+            finalize_header + "        run: |\n          set -euo pipefail\n          exit 0\n",
+            1,
+        )
+        error_trap = self.workflow.replace(
+            finalize_header + "        run: |\n          set -euo pipefail\n",
+            finalize_header
+            + "        run: |\n          set -euo pipefail\n          trap 'exit 0' ERR\n",
+            1,
+        )
+        step_conditional = self.workflow.replace(
+            finalize_header + "        run: |\n",
+            finalize_header + "        if: ${{ success() }}\n        run: |\n",
+            1,
+        )
+        unnamed_extra = self.workflow.replace(
+            "      - name: Upload RK-006 capture or first-failure diagnostics\n",
+            "      - run: exit 0\n"
+            "      - name: Upload RK-006 capture or first-failure diagnostics\n",
+            1,
+        )
+        for label, mutation in (
+            ("missing", missing),
+            ("extra", extra),
+            ("conditional", conditional),
+            ("tolerated", tolerated),
+            ("reordered", reordered),
+            ("comment-decoy", decoy),
+            ("early-exit", early_exit),
+            ("error-trap", error_trap),
+            ("step-conditional", step_conditional),
+            ("unnamed-extra", unnamed_extra),
+        ):
+            with self.subTest(label=label):
+                with self.assertRaisesRegex(
+                    runtime_evidence.EvidenceError, "RK-006|capture"
                 ):
                     runtime_evidence._validate_exact_build_workflow(mutation)
 
@@ -748,11 +888,17 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         )
 
     def test_openssl_cli_is_installed_and_verified_before_the_build(self):
-        install = self.workflow.index(
+        bootstrap = self.workflow.split(
+            "      - name: Refuse the wrong runtime and install exact build tools\n",
+            1,
+        )[1].split(
+            "      - name: Check out the exact candidate without credentials\n",
+            1,
+        )[0]
+        install = bootstrap.index(
             "dnf -y --setopt=install_weak_deps=False install \\\n"
         )
-        checkout = self.workflow.index("Check out the exact candidate")
-        bootstrap = self.workflow[install:checkout]
+        bootstrap = bootstrap[install:]
         package_end = bootstrap.index('openssl_path="$(command -v openssl)"')
         package_tokens = re.findall(r"[A-Za-z0-9_.+-]+", bootstrap[:package_end])
         self.assertEqual(1, package_tokens.count("openssl"))
@@ -765,6 +911,43 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             bootstrap.index("openssl openssl-devel"),
             bootstrap.index("openssl version"),
         )
+
+    def test_openssl_install_step_rejects_inactive_or_reordered_decoys(self):
+        package_line = (
+            "            openssl openssl-devel patch perl python3 python3-devel "
+            "python3-pyyaml redhat-rpm-config \\\n"
+        )
+        path_line = '          openssl_path="$(command -v openssl)"\n'
+        version_line = "          openssl version\n"
+        bootstrap_header = (
+            "      - name: Refuse the wrong runtime and install exact build tools\n"
+        )
+        reordered = self.workflow.replace(path_line, "__OPENSSL_PATH__\n", 1)
+        reordered = reordered.replace(version_line, path_line, 1)
+        reordered = reordered.replace("__OPENSSL_PATH__\n", version_line, 1)
+        mutations = {
+            "commented": self.workflow.replace(
+                package_line,
+                package_line.replace("            openssl", "            # openssl"),
+                1,
+            ),
+            "step-conditional": self.workflow.replace(
+                bootstrap_header,
+                bootstrap_header + "        if: ${{ false }}\n",
+                1,
+            ),
+            "reordered": reordered,
+            "duplicated": self.workflow.replace(
+                package_line, package_line + package_line, 1
+            ),
+        }
+        for name, mutation in mutations.items():
+            with self.subTest(name=name):
+                with self.assertRaisesRegex(
+                    runtime_evidence.EvidenceError,
+                    "OpenSSL CLI closure|OpenSSL out of order|bootstrap scope differs",
+                ):
+                    runtime_evidence._validate_exact_build_workflow(mutation)
 
     def test_frozen_legacy_oracle_and_shared_evidence_path_are_available(self):
         self.assertIn("submodules: recursive", self.workflow)

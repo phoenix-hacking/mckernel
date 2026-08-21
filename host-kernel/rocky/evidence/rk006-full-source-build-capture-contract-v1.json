@@ -1,0 +1,185 @@
+{
+  "artifact_policy": {
+    "actions_retention_days": 30,
+    "artifact_is_durable": false,
+    "checksum_manifest": "SHA256SUMS",
+    "member_mode": "0644",
+    "output_members": [
+      "SHA256SUMS",
+      "build-binding.json",
+      "capture.json",
+      "patch-apply.log",
+      "postimages.tar.xz",
+      "preimages.tar.xz",
+      "repository-inputs.tar.xz",
+      "second-application.log",
+      "tool-probes.json",
+      "workflow-state"
+    ]
+  },
+  "build_binding_policy": {
+    "build_artifact_is_durable": false,
+    "build_evidence_checksum_manifest": "SHA256SUMS",
+    "build_evidence_required_members": [
+      "SHA256SUMS",
+      "build-log.exit-code",
+      "build.commands",
+      "build.exit-code",
+      "build.log",
+      "build.phase",
+      "built-module-artifacts.txt",
+      "bzImage",
+      "commit.sha",
+      "ihk-smp-x86_64.ko",
+      "ihk.ko",
+      "kbuild-link-closure.json",
+      "kconfig-solver-matrix.json",
+      "kernel.release",
+      "mcctrl.ko",
+      "module-targets.txt",
+      "resolved.config",
+      "stage-lock.json",
+      "workflow-state"
+    ],
+    "copy_build_payload_into_capture": false,
+    "require_commit_sha_match": true,
+    "require_complete_build_phase": true,
+    "require_zero_exit_codes": true
+  },
+  "capture_contract_id": "rk-006-full-source-build-capture-v1",
+  "capture_policy": {
+    "external_closure_algorithm": "sha256-canonical-json-ordered-path-state-rows-v1",
+    "full_source_closure_algorithm": "sha256-canonical-json-ordered-full-source-tree-rows-v1",
+    "full_external_parent_preimages_required": true,
+    "patch_apply_command": [
+      "patch",
+      "-p1",
+      "--batch",
+      "--forward",
+      "--fuzz=0",
+      "--no-backup-if-mismatch"
+    ],
+    "patch_count": 25,
+    "patch_order_source": "host-kernel/rocky/rk006-patch-authority-v1.json",
+    "reject_backup_and_reject_files": true,
+    "second_application_command_addition": [
+      "--dry-run"
+    ],
+    "second_application_must_fail_for_every_patch": true,
+    "snapshot_archive_format": "tar+xz",
+    "snapshot_member_mode": "0444",
+    "snapshot_mtime": 0,
+    "source_archive_extraction_owned_by_capture": true,
+    "symlinks_followed": false
+  },
+  "claims": {
+    "credit_eligible": false,
+    "durable_archive": false,
+    "external_replay_reviewed": false,
+    "gate_complete": false,
+    "independent_authorship_review_complete": false,
+    "independent_license_review_complete": false,
+    "independent_provenance_review_complete": false,
+    "production_build_reviewed": false,
+    "tracker_credit": false
+  },
+  "gate": {
+    "credit_eligible": false,
+    "gate_id": "RK-006",
+    "points_awarded": 0,
+    "status": "TODO",
+    "tracker_credit": false
+  },
+  "inputs": {
+    "parent_integration_authority": {
+      "path": "host-kernel/kbuild/parent-integration-v1.json",
+      "sha256": "c806e6cda3be3e6f4b92cef35a0d5369738bae5b87e32ed4f486489d3435db2f",
+      "size": 2076
+    },
+    "patch_authority": {
+      "path": "host-kernel/rocky/rk006-patch-authority-v1.json",
+      "sha256": "ebc3e4c69ecbdb3891f92018a89f5fc3dae43fa070628fda8b22f881f02c67a1",
+      "size": 19681
+    },
+    "patch_authority_checker": {
+      "path": "scripts/rocky_kernel_rk006_patch_authority.py",
+      "sha256": "c23969ba2716db96f02a0564d6815b7342036a58c258ce22319b0185693cfddd",
+      "size": 48959
+    },
+    "patch_authority_tests": {
+      "path": "scripts/tests/test_rocky_kernel_rk006_patch_authority.py",
+      "sha256": "719d1e87b4d66944abf3bad0c03dc7cc86dddb97fa36e3fe32736c29ea549b39",
+      "size": 27957
+    },
+    "source_archive": {
+      "filename": "linux-6.12.0-211.44.1.el10_2.tar.xz",
+      "root": "linux-6.12.0-211.44.1.el10_2",
+      "sha256": "4a174d47b8874a2139efcd1ac1ab2d6b80ae7a0ca62f0ae4596fd20cf62a3533",
+      "size": 153374592
+    },
+    "source_lock": {
+      "path": "host-kernel/rocky/source-lock.json",
+      "sha256": "707ee40466ac0bb0cd0600383bba0b13fc1146e7080034786bf5668a95b27682",
+      "size": 18236
+    },
+    "source_rpm": {
+      "filename": "kernel-6.12.0-211.44.1.el10_2.src.rpm",
+      "sha256": "2bfeda65bd9bdd4b86650074c81e061c37822b80317ac0d4f5aacc89c85589cb",
+      "size": 159328372
+    },
+    "toolchain_lock": {
+      "path": "host-kernel/rocky/toolchain-lock.json",
+      "sha256": "fd3d7a13e1b8b5d103f7e59d22f17c9e4b99cc937637decaa66749acfae6c802",
+      "size": 28867
+    },
+    "vendor_patch": {
+      "filename": "1000-debrand-some-messages.patch",
+      "sha256": "080bbc72a543eed6b71daee1b3236b59f3a0f8b3ad20815d962444d3b106b144",
+      "size": 928
+    }
+  },
+  "parent_files": [
+    {
+      "path": "drivers/misc/Kconfig",
+      "postimage_sha256": "ed57d452061fb74e62d5dce3aa3680aec0b70811b87b57a25554dc4dd4c33e4a",
+      "preimage_sha256": "679b6c945aebec04f936c184b724f1b0d6daa6d760ec3bb4d6b56db905c19683"
+    },
+    {
+      "path": "drivers/misc/Makefile",
+      "postimage_sha256": "548e7eed491c9287908870a4783be57c15a360f03ecc68a4c4856e7c5c51a74f",
+      "preimage_sha256": "3f998f3c28cae01f8cb6e3b283f25175635ff2510ba40ce60235a3c059a9a238"
+    }
+  ],
+  "remaining_blockers": [
+    "This capture is machine-generated and has not received independent patch authorship, license, provenance, or semantic review.",
+    "The patch authority still records unresolved authorship and license questions for repository overlays.",
+    "GitHub Actions retains both referenced artifacts for only 30 days; neither is a durable immutable archive.",
+    "A successful current-head build and capture do not themselves authorize RK-006, tracker credit, or any PASS transition.",
+    "An independently reviewed result authority must bind the outer artifact digests before the gate can change."
+  ],
+  "runtime": {
+    "architecture": "x86_64",
+    "container_image": "rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176",
+    "distribution_id": "rocky",
+    "distribution_version": "10.2"
+  },
+  "schema_version": 1,
+  "tool_probe_policy": {
+    "capture_tools": [
+      ["patch", "--version"],
+      ["python3", "--version"]
+    ],
+    "locked_tools": [
+      ["bindgen", "--version", "workaround-for-0.69.0"],
+      ["clang", "--version"],
+      ["ld.lld", "--version"],
+      ["llvm-config", "--version"],
+      ["pahole", "--version"],
+      ["rustc", "--version", "--verbose"]
+    ],
+    "record_binary_sha256": true,
+    "record_command_stream_sha256": true,
+    "record_rpm_nevra_owner": true,
+    "rust_src_core_required": true
+  }
+}

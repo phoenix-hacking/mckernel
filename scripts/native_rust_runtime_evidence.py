@@ -182,7 +182,186 @@ def _read_text(path: Path, label: str) -> str:
         raise EvidenceError("cannot read {0}: {1}".format(label, error)) from error
 
 
-def _validate_exact_build_workflow(text: str) -> None:
+def _validate_rk006_capture_job(job_text: str) -> None:
+    preamble = (
+        "  rk006-full-source-build-capture:\n"
+        "    name: Bind RK-006 full-source replay to the exact build (credit forbidden)\n"
+        "    needs: exact-build\n"
+        "    runs-on: ubuntu-24.04\n"
+        "    timeout-minutes: 150\n"
+        "    container:\n"
+        "      image: rockylinux/rockylinux:10.2@sha256:"
+        "e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176\n"
+        "    defaults:\n"
+        "      run:\n"
+        "        shell: bash\n"
+        "\n"
+        "    steps:\n"
+    )
+    if not job_text.startswith(preamble):
+        raise EvidenceError("RK-006 capture job scope differs")
+    if re.search(
+        r'(?m)^    (?:if|"if"|continue-on-error|strategy):', job_text
+    ) or any(
+        fragment in job_text
+        for fragment in (
+            "        continue-on-error:",
+            "          set +e",
+            "|| true",
+            "if false",
+            "if true",
+        )
+    ):
+        raise EvidenceError("RK-006 capture job may skip or tolerate evidence failure")
+    step_names = re.findall(r"(?m)^      - name: (.+)$", job_text)
+    expected_steps = [
+        "Initialize non-durable capture and install exact tools",
+        "Check out the exact capture candidate without credentials",
+        "Verify the frozen non-crediting RK-006 capture contract",
+        "Reacquire and capture the full external 25-patch source replay",
+        "Download the same-run exact-build evidence",
+        "Finalize the non-crediting build binding",
+        "Upload RK-006 capture or first-failure diagnostics",
+    ]
+    if step_names != expected_steps:
+        raise EvidenceError("RK-006 capture steps are missing, extra, or reordered")
+    headers = ["      - name: {0}\n".format(name) for name in expected_steps]
+    positions = [job_text.index(header) for header in headers]
+    steps: dict[str, str] = {}
+    for index, (name, position) in enumerate(zip(expected_steps, positions)):
+        start = position + len(headers[index])
+        end = positions[index + 1] if index + 1 < len(positions) else len(job_text)
+        steps[name] = job_text[start:end]
+    expected_step_hashes = {
+        expected_steps[0]: "a89bfbe988001115dbbe5c71135fa75f9ac0a1fe453c98c423e28795f16071ca",
+        expected_steps[1]: "c7ec10a3531204c964e98632341afa709ad11f1dc7ce872df916beb03c64ab30",
+        expected_steps[2]: "bfc1c0d263506674ede307ccd4b9e7f5a3a6b4e551a065f10aadde2a3bf63eb5",
+        expected_steps[3]: "8ee6f72f6d7bd9fba30ebc97237b534515d0d6c7fad7328101909d1ed205ae9e",
+        expected_steps[4]: "4c98e4feff7b7f391d16b8bafff6c3531a7766762c5f66ec5a703e233955316a",
+        expected_steps[5]: "ab8382344b6b288411e8569d6ff60e63432a07a7f3675ff95c0cbf5c92f8afb0",
+        expected_steps[6]: "7ed2ac56ab7dda85cb3ac7b81dd569745fb82103e38e3abc38c527bc0736d7fe",
+    }
+    for name in expected_steps:
+        if _sha256_bytes(steps[name].encode("utf-8")) != expected_step_hashes[name]:
+            raise EvidenceError("RK-006 capture step scope differs: {0}".format(name))
+
+    expected_checkout = (
+        "        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4\n"
+        "        with:\n"
+        "          ref: ${{ env.EXPECTED_HEAD_SHA }}\n"
+        "          fetch-depth: 1\n"
+        "          persist-credentials: false\n"
+        "          submodules: false\n"
+        "\n"
+    )
+    if steps[expected_steps[1]] != expected_checkout:
+        raise EvidenceError("RK-006 capture checkout scope differs")
+    expected_download = (
+        "        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0\n"
+        "        with:\n"
+        "          name: native-rust-exact-build-${{ github.run_id }}-${{ github.run_attempt }}\n"
+        "          path: ${{ runner.temp }}/rk006-build-evidence\n"
+        "\n"
+    )
+    if steps[expected_steps[4]] != expected_download:
+        raise EvidenceError("RK-006 capture download scope differs")
+    expected_upload = (
+        "        if: ${{ always() }}\n"
+        "        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2\n"
+        "        with:\n"
+        "          name: rk006-full-source-build-capture-${{ github.run_id }}-${{ github.run_attempt }}\n"
+        "          path: ${{ runner.temp }}/rk006-full-source-build-capture/\n"
+        "          if-no-files-found: error\n"
+        "          retention-days: 30\n"
+        "          compression-level: 0\n"
+        "          include-hidden-files: true\n"
+    )
+    if steps[expected_steps[6]] != expected_upload:
+        raise EvidenceError("RK-006 capture upload scope differs")
+    if job_text.count("        if: ${{ always() }}\n") != 1:
+        raise EvidenceError("RK-006 capture upload condition differs")
+
+    scoped_requirements = {
+        expected_steps[0]: [
+            "        run: |\n",
+            "          set -euo pipefail\n",
+            '          capture_dir="$RUNNER_TEMP/rk006-full-source-build-capture"\n',
+            '          mkdir -p "$capture_dir"\n',
+            "          printf '%s\\n' bootstrap-started > \"$capture_dir/workflow-state\"\n",
+            "          test \"$(uname -m)\" = x86_64\n",
+            "          test \"$ID\" = rocky\n",
+            "          test \"$VERSION_ID\" = 10.2\n",
+            "          dnf config-manager --set-enabled crb\n",
+            "            hostname kernel-rpm-macros kmod lld llvm llvm-devel make ncurses-devel \\\n",
+            "            openssl openssl-devel patch perl python3 python3-devel python3-pyyaml \\\n",
+            "            redhat-rpm-config rpm-build rust rust-src rustfmt tar which xz zstd\n",
+        ],
+        expected_steps[2]: [
+            "        run: |\n",
+            "          set -euo pipefail\n",
+            '          [[ "$EXPECTED_HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]\n',
+            "          python3 scripts/rocky_kernel_rk006_full_source_build_capture.py \\\n",
+            '            check-contract --repo "$GITHUB_WORKSPACE"\n',
+            "            scripts.tests.test_rocky_kernel_rk006_patch_authority \\\n",
+            "            scripts.tests.test_rocky_kernel_rk006_full_source_build_capture\n",
+        ],
+        expected_steps[3]: [
+            "        env:\n",
+            "          CACHE_ROOT: ${{ runner.temp }}/rk006-source-cache\n",
+            "          SOURCE_ASSETS: ${{ runner.temp }}/rk006-source-assets\n",
+            "          SOURCE_PARENT: ${{ runner.temp }}/rk006-source\n",
+            "        run: |\n",
+            "          set -euo pipefail\n",
+            '            --repo "$GITHUB_WORKSPACE" --cache-root "$CACHE_ROOT" --acquire\n',
+            "          archive=\"$SOURCE_ASSETS/linux-6.12.0-211.44.1.el10_2.tar.xz\"\n",
+            "          vendor_patch=\"$SOURCE_ASSETS/1000-debrand-some-messages.patch\"\n",
+            "          python3 scripts/rocky_kernel_rk006_full_source_build_capture.py capture \\\n",
+            '            --source-archive "$archive" \\\n',
+            '            --source-rpm "$srpm" \\\n',
+            '            --vendor-patch "$vendor_patch" \\\n',
+            '            --output-dir "$RUNNER_TEMP/rk006-full-source-build-capture" \\\n',
+            '            --github-head-sha "$EXPECTED_HEAD_SHA" \\\n',
+            '            --container-image "$ROCKY_IMAGE"\n',
+        ],
+        expected_steps[5]: [
+            "        run: |\n",
+            "          set -euo pipefail\n",
+            "            finalize-build \\\n",
+            '            --build-evidence-dir "$RUNNER_TEMP/rk006-build-evidence"\n',
+            "            verify-capture \\\n",
+        ],
+    }
+    for step_name, fragments in scoped_requirements.items():
+        body = steps[step_name]
+        active = "".join(
+            line for line in body.splitlines(True)
+            if not line.lstrip().startswith("#")
+        )
+        fragment_positions = []
+        for fragment in fragments:
+            if active.count(fragment) != 1:
+                raise EvidenceError(
+                    "RK-006 capture step lacks one active boundary: {0}".format(step_name)
+                )
+            fragment_positions.append(active.index(fragment))
+        if fragment_positions != sorted(fragment_positions):
+            raise EvidenceError("RK-006 capture step boundaries are reordered: {0}".format(step_name))
+    uses = re.findall(r"(?m)^\s*uses:\s*(\S+)", job_text)
+    if len(uses) != 3 or any(
+        re.fullmatch(r"[^@]+@[0-9a-f]{40}", value) is None for value in uses
+    ):
+        raise EvidenceError("RK-006 capture actions are not exactly digest pinned")
+
+
+def _validate_exact_build_workflow(text: str) -> str:
+    capture_separator = "\n  rk006-full-source-build-capture:\n"
+    if text.count(capture_separator) != 1:
+        raise EvidenceError("exact build workflow must contain one trailing RK-006 capture job")
+    exact_build_text, capture_tail = text.split(capture_separator, 1)
+    _validate_rk006_capture_job(
+        "  rk006-full-source-build-capture:\n" + capture_tail
+    )
+    text = exact_build_text
     job_preamble = (
         "jobs:\n"
         "  exact-build:\n"
@@ -200,6 +379,79 @@ def _validate_exact_build_workflow(text: str) -> None:
     )
     if text.count(job_preamble) != 1:
         raise EvidenceError("exact build workflow job scope differs")
+
+    bootstrap_header = (
+        "      - name: Refuse the wrong runtime and install exact build tools\n"
+    )
+    checkout_header = (
+        "      - name: Check out the exact candidate without credentials\n"
+    )
+    job_start = text.index(job_preamble) + len(job_preamble)
+    if (
+        text.count(bootstrap_header) != 1
+        or text.count(checkout_header) != 1
+        or text.index(bootstrap_header) != job_start
+    ):
+        raise EvidenceError("exact build workflow bootstrap scope differs")
+    bootstrap_start = text.index(bootstrap_header) + len(bootstrap_header)
+    checkout_start = text.index(checkout_header)
+    if checkout_start <= bootstrap_start:
+        raise EvidenceError("exact build workflow bootstrap scope differs")
+    bootstrap_step = text[bootstrap_start:checkout_start]
+    run_marker = "        run: |\n"
+    if bootstrap_step.count(run_marker) != 1:
+        raise EvidenceError("exact build workflow bootstrap scope differs")
+    bootstrap_preamble, bootstrap_body = bootstrap_step.split(run_marker, 1)
+    if bootstrap_preamble:
+        raise EvidenceError("exact build workflow bootstrap scope differs")
+    bootstrap_commands = tuple(
+        line.strip()
+        for line in bootstrap_body.split("\n")
+        if line.strip() and not line.strip().startswith("#")
+    )
+    openssl_commands = (
+        "openssl openssl-devel patch perl python3 python3-devel python3-pyyaml "
+        "redhat-rpm-config \\",
+        'openssl_path="$(command -v openssl)"',
+        'test "$openssl_path" = /usr/bin/openssl',
+        'test "$(rpm -qf --qf \'%{NAME}\\n\' "$openssl_path")" = openssl',
+        "openssl version",
+    )
+    openssl_positions = []
+    for command in openssl_commands:
+        if bootstrap_commands.count(command) != 1:
+            raise EvidenceError(
+                "exact build workflow lacks the uniquely bound Rocky OpenSSL CLI closure"
+            )
+        openssl_positions.append(bootstrap_commands.index(command))
+    if openssl_positions != sorted(openssl_positions):
+        raise EvidenceError("exact build workflow verifies OpenSSL out of order")
+    expected_bootstrap_commands = (
+        "set -euo pipefail",
+        'evidence_dir="$RUNNER_TEMP/native-rust-build-evidence"',
+        'mkdir -p "$evidence_dir"',
+        'printf \'%s\\n\' "bootstrap-started" > "$evidence_dir/workflow-state"',
+        'test "$(uname -m)" = x86_64',
+        ". /etc/os-release",
+        'test "$ID" = rocky',
+        'test "$VERSION_ID" = 10.2',
+        "dnf -y --setopt=install_weak_deps=False install dnf-plugins-core",
+        "dnf config-manager --set-enabled crb",
+        "dnf -y --setopt=install_weak_deps=False install \\",
+        "bc binutils bison bindgen-cli bpftool cargo clang cpio diffutils \\",
+        "dwarves elfutils-libelf-devel findutils flex gcc git-core gzip \\",
+        "hostname kernel-rpm-macros kmod lld llvm make ncurses-devel \\",
+        openssl_commands[0],
+        "rpm-build rust rust-src rustfmt tar which xz zstd",
+        openssl_commands[1],
+        openssl_commands[2],
+        openssl_commands[3],
+        openssl_commands[4],
+        "dnf clean all",
+        'printf \'%s\\n\' "bootstrap-complete" > "$evidence_dir/workflow-state"',
+    )
+    if bootstrap_commands != expected_bootstrap_commands:
+        raise EvidenceError("exact build workflow bootstrap scope differs")
 
     arrays = re.findall(
         r"(?ms)^\s*module_targets=\(\n(?P<body>.*?)^\s*\)\n", text
@@ -237,7 +489,6 @@ def _validate_exact_build_workflow(text: str) -> None:
         "      - name: Compile the exact kernel and native Rust modules"
     ):
         raise EvidenceError("exact build workflow CONFIG_MODULES prerequisite differs")
-    run_marker = "        run: |\n"
     if resolution_step.count(run_marker) != 1:
         raise EvidenceError("exact build workflow CONFIG_MODULES prerequisite differs")
     step_preamble, run_body = resolution_step.split(run_marker, 1)
@@ -507,6 +758,7 @@ def _validate_exact_build_workflow(text: str) -> None:
     )
     if text[upload_start:] != expected_upload:
         raise EvidenceError("exact build workflow upload scope differs")
+    return text
 
 
 def _regular_evidence_file(path: Path, label: str, nonempty: bool = True) -> Path:
@@ -886,20 +1138,6 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
         if fragment not in build_workflow:
             raise EvidenceError("exact build workflow is not a reusable boot artifact producer")
     _validate_exact_build_workflow(build_workflow)
-    openssl_boundaries = (
-        "openssl openssl-devel patch",
-        'openssl_path="$(command -v openssl)"',
-        'test "$openssl_path" = /usr/bin/openssl',
-        "rpm -qf --qf '%{NAME}\\n' \"$openssl_path\"",
-        "openssl version",
-    )
-    if any(build_workflow.count(fragment) != 1 for fragment in openssl_boundaries):
-        raise EvidenceError(
-            "exact build workflow lacks the uniquely bound Rocky OpenSSL CLI closure"
-        )
-    openssl_positions = [build_workflow.index(fragment) for fragment in openssl_boundaries]
-    if openssl_positions != sorted(openssl_positions):
-        raise EvidenceError("exact build workflow verifies OpenSSL out of order")
 
     image = contract["runtime"]["container_image"]
     if runtime_workflow.count(image) < 1:
