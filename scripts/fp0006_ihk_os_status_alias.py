@@ -38,7 +38,7 @@ SURFACE_ALIASES = {
 }
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 
-# SELF_DIGEST:e493a204a8cb6f2296551a027793325546c2a8e7737c856f8a05a4834791f96d
+# SELF_DIGEST:5930b0e715c6d791b854763226dd1642f833cb1a67f45996d57bbb096888e630
 SELF_SOURCE_MAXIMUM = 1024 * 1024
 SECURITY_SOURCE_SHA256 = "9d72d215f2fc618ac05c2f729a57ad865391c105de2e70995b8eb251d81855a7"
 SECURITY_SOURCE_SIZE = 51559
@@ -691,54 +691,24 @@ def _close_owned_fd_once(
     try:
         os.close(descriptor)
     except BaseException as error:
-        try:
-            state = _owned_fd_state(descriptor, expected_identity, label)
-            return state != "owned", error
-        except WitnessError as probe_error:
-            return False, WitnessError(
-                "{0} close failed ({1}); {2}".format(label, error, probe_error)
-            )
+        # A failed close does not preserve ownership of the descriptor number.
+        # On Linux the kernel may already have released the open file before
+        # reporting a late error, and another thread or callback may reuse the
+        # same number immediately.  Even reopening the same inode is not proof
+        # that the new open-file description is ours.  Retire this ownership
+        # token after the single close attempt and never probe or close the
+        # number again; an uncertain leak is safer than closing an unrelated
+        # replacement descriptor.
+        return True, error
     return True, None
 
 
 def _cleanup_owned_fd(
     descriptor: int, expected_identity: List[int], label: str,
 ) -> Tuple[bool, Optional[BaseException]]:
-    first_error = None  # type: Optional[BaseException]
-    for _ in range(2):
-        closed, error = _close_owned_fd_once(
-            descriptor, expected_identity, label
-        )
-        if error is not None and first_error is None:
-            first_error = error
-        if closed:
-            return True, first_error
-    try:
-        state = _owned_fd_state(descriptor, expected_identity, label)
-    except WitnessError as error:
-        if first_error is None:
-            first_error = error
-        return False, first_error
-    if state != "owned":
-        if first_error is None:
-            first_error = WitnessError(
-                "{0} descriptor changed before raw close".format(label)
-            )
-        return True, first_error
-    try:
-        _raw_close_fd(descriptor, label + " raw fallback")
-        return True, first_error
-    except WitnessError as error:
-        if first_error is None:
-            first_error = error
-    try:
-        state = _owned_fd_state(descriptor, expected_identity, label)
-        closed = state != "owned"
-    except WitnessError as error:
-        if first_error is None:
-            first_error = error
-        closed = False
-    return closed, first_error
+    # Ownership is deliberately one-shot.  Retrying a descriptor number after
+    # close() reports an error can target a replacement open-file description.
+    return _close_owned_fd_once(descriptor, expected_identity, label)
 
 
 def _create_sealed_read_fd(data: bytes, label: str) -> int:

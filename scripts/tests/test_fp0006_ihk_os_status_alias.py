@@ -5,6 +5,7 @@ from __future__ import print_function
 
 import ast
 import contextlib
+import errno
 import hashlib
 import importlib.util
 import io
@@ -27,9 +28,9 @@ CONTRACT_PATH = ROOT / "host-kernel/contracts/fp0006-ihk-os-status-alias-v1.json
 C_PRODUCER = ROOT / "scripts/smoke/fp0006-ihk-os-status-alias.c"
 RUST_PRODUCER = ROOT / "scripts/tests/fixtures/ihk_ioctl_fp0006_status_alias.rs"
 SECURITY_SOURCE = ROOT / "scripts/fp0006_ihk_device_negative_dispatch.py"
-EXPECTED_CHECKER_SHA256 = "a93628f035036dc1ef06baeb0a959435d0606a58d9f961ce480e9abfc0cb70a4"
-EXPECTED_CHECKER_SIZE = 87722
-EXPECTED_NORMALIZED_SELF_SHA256 = "e493a204a8cb6f2296551a027793325546c2a8e7737c856f8a05a4834791f96d"
+EXPECTED_CHECKER_SHA256 = "fdf00899d69052837ab7b2a93d9c8cdab05bbe47b28415d6a6fc59db679696b7"
+EXPECTED_CHECKER_SIZE = 87029
+EXPECTED_NORMALIZED_SELF_SHA256 = "5930b0e715c6d791b854763226dd1642f833cb1a67f45996d57bbb096888e630"
 REAL_POPEN = subprocess.Popen
 
 from scripts import fp0006_ihk_os_status_alias as imported_witness
@@ -174,6 +175,60 @@ def require_success(testcase, execution):
 
 
 class StatusAliasIsolatedCliTests(unittest.TestCase):
+    def test_exec_seal_post_close_error_fd_reuse_preserves_replacement(self):
+        imported_witness._load_exact_security_primitives(str(CHECKER))
+        original_close = os.close
+        original_open = os.open
+
+        for replacement_kind in ("different-inode", "same-inode"):
+            with self.subTest(replacement_kind=replacement_kind):
+                with tempfile.TemporaryDirectory() as directory:
+                    root = Path(directory)
+                    owned_path = root / "owned"
+                    other_path = root / "other"
+                    owned_path.write_bytes(b"owned")
+                    other_path.write_bytes(b"other")
+                    descriptor = original_open(str(owned_path), os.O_RDONLY)
+                    expected_identity = imported_witness._file_identity(
+                        os.fstat(descriptor)
+                    )
+                    replacement = [None]
+
+                    def close_reuse_and_fail(candidate):
+                        self.assertEqual(descriptor, candidate)
+                        original_close(candidate)
+                        reopened_path = (
+                            owned_path
+                            if replacement_kind == "same-inode"
+                            else other_path
+                        )
+                        reopened = original_open(str(reopened_path), os.O_RDONLY)
+                        if reopened != candidate:
+                            os.dup2(reopened, candidate)
+                            original_close(reopened)
+                            reopened = candidate
+                        replacement[0] = reopened
+                        raise OSError(errno.EINTR, "synthetic post-close failure")
+
+                    with mock.patch.object(
+                        imported_witness.os, "close", side_effect=close_reuse_and_fail
+                    ):
+                        retired, error = imported_witness._cleanup_owned_fd(
+                            descriptor,
+                            expected_identity,
+                            "synthetic exec-seal descriptor",
+                        )
+
+                    self.assertTrue(retired)
+                    self.assertIsInstance(error, OSError)
+                    self.assertEqual(descriptor, replacement[0])
+                    os.lseek(descriptor, 0, os.SEEK_SET)
+                    expected = (
+                        b"owned" if replacement_kind == "same-inode" else b"other"
+                    )
+                    self.assertEqual(expected, os.read(descriptor, len(expected)))
+                    original_close(descriptor)
+
     def test_frozen_identities_and_normalized_self_seal(self):
         expected = {
             CONTRACT_PATH: (
