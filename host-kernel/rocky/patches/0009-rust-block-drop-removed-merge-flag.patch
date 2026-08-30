@@ -1,0 +1,37 @@
+From 31d813a3b8cbde2d09ba4dee282ca29096541006 Mon Sep 17 00:00:00 2001
+From: Andreas Hindborg <a.hindborg@kernel.org>
+Date: Fri, 20 Dec 2024 10:37:57 +0100
+Subject: [PATCH] rust: block: fix use of BLK_MQ_F_SHOULD_MERGE
+
+Upstream-Commit: 31d813a3b8cbde2d09ba4dee282ca29096541006
+Upstream-Repository: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+License: GPL-2.0-only
+
+`BLK_MQ_F_SHOULD_MERGE` was removed from the C block API and merging is
+now in effect by default. Remove the stale flag from Rust block-driver
+tag sets. The exact Rocky 10.2 header has the new C semantics but its
+Rust source retained the old flag reference, so generated bindings
+correctly omit the symbol and Rust 1.92 reports E0425.
+
+Link: https://lore.kernel.org/r/20241219060214.1928848-1-hch@kernel.org
+Fixes: 9377b95cda73 ("block: remove BLK_MQ_F_SHOULD_MERGE")
+Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
+[ Adapted the adjacent context to exact Rocky 6.12's `core::ffi::c_void`
+  spelling; the upstream one-line semantic change is unchanged. ]
+---
+ rust/kernel/block/mq/tag_set.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/rust/kernel/block/mq/tag_set.rs b/rust/kernel/block/mq/tag_set.rs
+index f9a1ca6..338b21e 100644
+--- a/rust/kernel/block/mq/tag_set.rs
++++ b/rust/kernel/block/mq/tag_set.rs
+@@ -52,7 +52,7 @@ impl<T: Operations> TagSet<T> {
+                     numa_node: bindings::NUMA_NO_NODE,
+                     queue_depth: num_tags,
+                     cmd_size,
+-                    flags: bindings::BLK_MQ_F_SHOULD_MERGE,
++                    flags: 0,
+                     driver_data: core::ptr::null_mut::<core::ffi::c_void>(),
+                     nr_maps: num_maps,
+                     ..tag_set

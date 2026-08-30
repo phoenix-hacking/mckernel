@@ -9,7 +9,7 @@ usage() {
 	cat <<'USAGE'
 Usage: scripts/ihk-module-load-smoke.sh [--build-dir DIR] [--kmod-dir DIR] [--smp-arg ARG]
 
-Loads and unloads Rust-linked IHK host modules in dependency order:
+Loads and unloads C IHK host modules plus Rust-linked mcctrl in dependency order:
   ihk.ko, ihk-smp-x86_64.ko, mcctrl.ko
 
 The script requires passwordless/cached sudo. It does not prompt for or store

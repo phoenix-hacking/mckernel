@@ -25425,10 +25425,13 @@ extern int syscall_send_prepare_result(struct fake_syscall_request *,
 				       struct fake_syscall_response *);
 extern int syscall_request_copy_result(struct fake_syscall_request *,
 				       const struct fake_syscall_request *);
+extern int syscall_request_publish_result(struct fake_syscall_request *);
 extern long syscall_generic_forwarding_body_result(
 	struct fake_syscall_request *, int, unsigned long, unsigned long,
 	unsigned long, unsigned long, unsigned long, unsigned long, int,
 	long (*)(struct fake_syscall_request *, int));
+extern void syscall_offload_wait_reply(struct fake_syscall_request *,
+	struct fake_syscall_response *, int, void *);
 extern int syscall_packet_traditional_prepare_result(
 	struct fake_ikc_scd_packet *, int, int, int, unsigned long);
 extern int syscall_eventfd_packet_prepare_result(
@@ -43215,6 +43218,9 @@ int main(void)
 		require(send_res.pde_data == (void *)0x1234);
 		require(syscall_send_prepare_result(NULL, &send_res) == -22);
 		require(syscall_send_prepare_result(&send_req, NULL) == -22);
+		require(syscall_request_publish_result(&send_req) == 0);
+		require(send_req.valid == 1);
+		require(syscall_request_publish_result(NULL) == -22);
 		mix(&digest, send_req.valid);
 		mix(&digest, send_res.status);
 	}
@@ -43247,6 +43253,59 @@ int main(void)
 		mix_signed(&digest, dst_req.ttid);
 		mix(&digest, dst_req.valid);
 		mix(&digest, dst_req.args[5]);
+	}
+	{
+		struct fake_syscall_request src_req;
+		struct fake_syscall_request roundtrip_req;
+		_Alignas(struct fake_syscall_request)
+			unsigned char src_bytes[sizeof(src_req) + 1];
+		_Alignas(struct fake_syscall_request)
+			unsigned char dst_bytes[sizeof(roundtrip_req) + 1];
+		const struct fake_syscall_request *unaligned_src =
+			(const void *)(src_bytes + 1);
+		struct fake_syscall_request *unaligned_dst =
+			(void *)(dst_bytes + 1);
+
+		memset(&src_req, 0xa5, sizeof(src_req));
+		src_req.rtid = -1234567;
+		src_req.ttid = 7654321;
+		src_req.valid = 0x0123456789abcdefUL;
+		src_req.number = 0xfedcba9876543210UL;
+		src_req.args[0] = 0x1111111111111111UL;
+		src_req.args[1] = 0x2222222222222222UL;
+		src_req.args[2] = 0x3333333333333333UL;
+		src_req.args[3] = 0x4444444444444444UL;
+		src_req.args[4] = 0x5555555555555555UL;
+		src_req.args[5] = 0x6666666666666666UL;
+		memset(src_bytes, 0x3c, sizeof(src_bytes));
+		memcpy(src_bytes + 1, &src_req, sizeof(src_req));
+		memset(dst_bytes, 0xc3, sizeof(dst_bytes));
+
+		require((uintptr_t)unaligned_src % _Alignof(struct fake_syscall_request)
+			!= 0);
+		require((uintptr_t)unaligned_dst % _Alignof(struct fake_syscall_request)
+			!= 0);
+		require(syscall_request_copy_result(unaligned_dst,
+			unaligned_src) == 0);
+		require(memcmp(dst_bytes + 1, src_bytes + 1,
+			sizeof(src_req)) == 0);
+		memcpy(&roundtrip_req, dst_bytes + 1, sizeof(roundtrip_req));
+		require(roundtrip_req.rtid == -1234567);
+		require(roundtrip_req.ttid == 7654321);
+		require(roundtrip_req.valid == 0x0123456789abcdefUL);
+		require(roundtrip_req.number == 0xfedcba9876543210UL);
+		require(roundtrip_req.args[0] == 0x1111111111111111UL);
+		require(roundtrip_req.args[1] == 0x2222222222222222UL);
+		require(roundtrip_req.args[2] == 0x3333333333333333UL);
+		require(roundtrip_req.args[3] == 0x4444444444444444UL);
+		require(roundtrip_req.args[4] == 0x5555555555555555UL);
+		require(roundtrip_req.args[5] == 0x6666666666666666UL);
+		mix_signed(&digest, roundtrip_req.rtid);
+		mix_signed(&digest, roundtrip_req.ttid);
+		mix(&digest, roundtrip_req.valid);
+		mix(&digest, roundtrip_req.number);
+		mix(&digest, roundtrip_req.args[0]);
+		mix(&digest, roundtrip_req.args[5]);
 	}
 	{
 		struct fake_syscall_request generic_req = {
@@ -43293,6 +43352,36 @@ int main(void)
 		mix(&digest, generic_req.number);
 		mix(&digest, generic_req.args[0]);
 		mix(&digest, generic_req.args[5]);
+	}
+	{
+		struct fake_syscall_request completed_req = {
+			.rtid = 1,
+			.ttid = 2,
+			.valid = 3,
+			.number = 39,
+			.args = { 4, 5, 6, 7, 8, 9 },
+		};
+		struct fake_syscall_response completed_res = {
+			.ttid = 10,
+			.stid = 11,
+			.status = 1,
+			.req_thread_status = 12,
+			.ret = 13,
+			.fault_address = 14,
+			.pde_data = (void *)0x1234,
+		};
+		struct fake_syscall_request before_req = completed_req;
+		struct fake_syscall_response before_res = completed_res;
+		struct {
+			unsigned char bytes[5568];
+		} __attribute__((aligned(64))) thread_storage = { { 0 } };
+
+		syscall_offload_wait_reply(&completed_req, &completed_res, 7,
+			&thread_storage);
+		require(memcmp(&completed_req, &before_req, sizeof(completed_req)) == 0);
+		require(memcmp(&completed_res, &before_res, sizeof(completed_res)) == 0);
+		mix(&digest, completed_res.status);
+		mix_signed(&digest, completed_res.ret);
 	}
 	{
 		struct fake_ikc_scd_packet packet = {
@@ -142295,6 +142384,35 @@ struct rust_stub_pager_map_result {
 	char padding[4];
 	char path[4096];
 };
+struct rust_stub_syscall_request {
+	int rtid;
+	int ttid;
+	unsigned long valid;
+	unsigned long number;
+	unsigned long args[6];
+};
+__attribute__((weak)) long do_syscall(struct rust_stub_syscall_request *req,
+		int cpu)
+{
+	(void)cpu;
+	if (!req)
+		return -22;
+	if (req->args[0] == 5) {
+		struct rust_stub_pager_map_result *result =
+			(struct rust_stub_pager_map_result *)req->args[4];
+		if (result) {
+			result->handle = 0x12345000UL;
+			result->maxprot = (int)req->args[5];
+			result->path[0] = 0;
+		}
+	}
+	else if (req->args[0] == 6) {
+		unsigned long *pfn = (unsigned long *)req->args[3];
+		if (pfn)
+			*pfn = (1UL << 63) | 1UL | 0x2000UL;
+	}
+	return 0;
+}
 __attribute__((weak)) long syscall_generic_forwarding(int n,
 		struct rust_stub_user_context *ctx)
 {
@@ -142811,6 +142929,21 @@ __attribute__((weak)) int futex_atomic_op_inuser_bridge(int op, int *uaddr,
 }
 static void *rust_stub_ikc2linux_entries[8];
 __attribute__((weak)) void **ikc2linuxs = rust_stub_ikc2linux_entries;
+__attribute__((weak)) void check_sig_pending(void) {}
+__attribute__((weak)) long syscall_dispatch_context_bridge(int num, void *ctx)
+{
+	(void)num;
+	(void)ctx;
+	return -38;
+}
+__attribute__((weak)) void syscall_offload_wait_reply(void *req, void *res,
+		int cpu, void *thread)
+{
+	(void)req;
+	(void)res;
+	(void)cpu;
+	(void)thread;
+}
 __attribute__((weak)) void schedule(void) {}
 unsigned long shmid_index[512];
 __attribute__((weak)) unsigned long attr_mask =
@@ -143014,6 +143147,10 @@ cc "${kflags[@]}" -I"${tmpdir}" -ffunction-sections -fdata-sections \
 	-DMCKERNEL_SCHED_POLICY_HELPERS_TEST_EXPORT \
 	-DMCKERNEL_SYSCALL_POLICY_HELPERS_TEST_EXPORT -c kernel/syscall.c \
 	-o "${tmpdir}/out/syscall_shmid_c.o"
+cc "${kflags[@]}" -I"${tmpdir}" -ffunction-sections -fdata-sections \
+	-DMCKERNEL_RUST_SYSCALL_POLICY_HELPERS \
+	-DMCKERNEL_RUST_SYSCALL_OFFLOAD -c kernel/syscall.c \
+	-o "${tmpdir}/out/syscall_offload_dispatch_c.o"
 cc "${kflags[@]}" -I"${tmpdir}" -ffunction-sections -fdata-sections \
 	-DMCKERNEL_XPMEM_HELPERS_TEST_EXPORT -c kernel/xpmem.c \
 	-o "${tmpdir}/out/xpmem_helpers_c.o"
@@ -143721,6 +143858,8 @@ diff -u "${tmpdir}/out/x86_cpu_helpers_c.out" "${tmpdir}/out/x86_cpu_helpers_rus
 
 nm -u "${tmpdir}/out/mckernel_rust.o" | tee "${tmpdir}/out/rust.undefined"
 nm -g "${tmpdir}/out/mckernel_rust.o" > "${tmpdir}/out/rust.global"
+nm -g "${tmpdir}/out/syscall_offload_dispatch_c.o" \
+	> "${tmpdir}/out/syscall_offload_dispatch.global"
 nm -g "${tmpdir}/out/ihk_core_helpers.o" > "${tmpdir}/out/ihk_core_helpers.global"
 nm -g "${tmpdir}/out/mcexec_helpers.o" > "${tmpdir}/out/mcexec_helpers.global"
 nm -g "${tmpdir}/out/eclair_helpers.o" > "${tmpdir}/out/eclair_helpers.global"
@@ -143876,6 +144015,21 @@ grep -Eq ' T futex_atomic_op_inuser$' "${tmpdir}/out/rust.global"
 grep -Eq ' T ihk_atomic_inc_return$' "${tmpdir}/out/rust.global"
 grep -Eq ' T ihk_atomic_dec_return$' "${tmpdir}/out/rust.global"
 grep -Eq ' T mc_jhash2$' "${tmpdir}/out/rust.global"
+for sym in send_syscall syscall_generic_forwarding \
+	syscall_offload_wait_reply syscall_request_publish_result
+do
+	grep -Eq " T ${sym}$" "${tmpdir}/out/rust.global"
+done
+grep -Eq ' T do_syscall$' "${tmpdir}/out/syscall_offload_dispatch.global"
+grep -Eq ' T syscall_dispatch_context_bridge$' \
+	"${tmpdir}/out/syscall_offload_dispatch.global"
+for sym in send_syscall syscall_generic_forwarding syscall_offload_wait_reply
+do
+	grep -Eq " U ${sym}$" "${tmpdir}/out/syscall_offload_dispatch.global"
+	if grep -Eq " T ${sym}$" "${tmpdir}/out/syscall_offload_dispatch.global"; then
+		exit 1
+	fi
+done
 grep -Eq ' T futex_atomic_cmpxchg_inatomic$' "${tmpdir}/out/mcctrl_helpers.global"
 grep -Eq ' T futex_atomic_op_inuser$' "${tmpdir}/out/mcctrl_helpers.global"
 grep -Eq ' T mc_jhash2$' "${tmpdir}/out/mcctrl_helpers.global"
@@ -145019,7 +145173,12 @@ grep -Eq 'U cpu_enable_interrupt_save' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U cpu_interrupt_disabled' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U phys_to_page' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U phys_to_page_insert_hash' "${tmpdir}/out/rust.undefined"
-grep -Eq 'U syscall_generic_forwarding' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U do_syscall' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U check_sig_pending' "${tmpdir}/out/rust.undefined"
+grep -Eq 'U syscall_dispatch_context_bridge' "${tmpdir}/out/rust.undefined"
+if grep -Eq 'U syscall_generic_forwarding' "${tmpdir}/out/rust.undefined"; then
+	exit 1
+fi
 grep -Eq 'U syscall_rdtsc_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U syscall_ns_per_tsc_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U syscall_has_sigpending_bridge' "${tmpdir}/out/rust.undefined"
@@ -145193,7 +145352,40 @@ grep -Eq 'U x86_xsave_size_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U x86_xsave_mask_bridge' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U xpmem_page_in_remote_on_attach' "${tmpdir}/out/rust.undefined"
 grep -Eq 'U uti_desc' "${tmpdir}/out/rust.undefined"
-test "$(grep -c ' U ' "${tmpdir}/out/rust.undefined")" -eq 577
+test "$(grep -c ' U ' "${tmpdir}/out/rust.undefined")" -eq 594
+
+python3 - "${repo_root}/kernel/rust/syscall_policy.rs" <<'PY'
+import sys
+
+source = open(sys.argv[1], "r").read()
+signature = 'pub unsafe extern "C" fn syscall_request_copy_result('
+start = source.index(signature)
+end = source.index("\n}\n", start)
+body = source[start:end]
+for required in (
+    "copy_nonoverlapping(",
+    "src.cast::<u8>()",
+    "dst.cast::<u8>()",
+    "size_of::<SyscallRequest>()",
+):
+    if required not in body:
+        raise SystemExit(
+            "syscall request copy lost byte-oriented memcpy contract: " + required
+        )
+for forbidden in (
+    "(*src).",
+    "(*dst).",
+    "addr_of!((*src)",
+    "addr_of_mut!((*dst)",
+    "read(src",
+    "write(dst",
+):
+    if forbidden in body:
+        raise SystemExit(
+            "syscall request copy reintroduced typed unaligned access: " + forbidden
+        )
+print("syscall request copy byte-orientation check ok")
+PY
 
 for rust_kernel_context_obj in \
 	"${tmpdir}/out/mckernel_rust.o" \

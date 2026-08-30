@@ -12,7 +12,7 @@ modified, the host repo is staged into the guest overlay, serial output is
 logged, and a host-side watchdog terminates QEMU if the guest wedges.
 
 Default validation options:
-  --boot-only --yes
+  --boot-smoke --yes
 
 Common examples:
   scripts/qemu-rocky-rust-validation.sh --image rocky8.qcow2
@@ -20,10 +20,14 @@ Common examples:
 
 QEMU options:
   --image PATH              Required qcow2 backing image. Must not be a /dev path.
+  --source-dir PATH         Repository tree staged into the guest. Default: the
+                            repository containing this trusted wrapper.
   --accel MODE              auto, kvm, or tcg. Default: auto
   --ssh-port PORT           Host port forwarded to guest SSH. Default: 2222
   --memory SIZE             QEMU memory. Default: 4096M
   --cpus N                  QEMU vCPU count. Default: 4
+  --disk-size SIZE          Expand the disposable guest disk before boot, for
+                            example 24G. Default: backing image virtual size.
   --ssh-timeout SEC         Guest SSH wait timeout. Default: 300
   --guest-timeout SEC       Watchdog for the validation command. Default: 7200
   --log-dir PATH            QEMU log directory. Default: qemu runner default
@@ -39,12 +43,14 @@ USAGE
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 QEMU_RUNNER="$ROOT_DIR/scripts/qemu-mckernel-guest.sh"
+SOURCE_DIR="$ROOT_DIR"
 
 IMAGE=
 ACCEL=auto
 SSH_PORT=2222
 MEMORY=4096M
 CPUS=4
+DISK_SIZE=
 SSH_TIMEOUT=300
 GUEST_TIMEOUT=7200
 LOG_DIR=
@@ -61,6 +67,10 @@ while [ "$#" -gt 0 ]; do
 			IMAGE="${2:?missing value for --image}"
 			shift 2
 			;;
+		--source-dir)
+			SOURCE_DIR="${2:?missing value for --source-dir}"
+			shift 2
+			;;
 		--accel)
 			ACCEL="${2:?missing value for --accel}"
 			shift 2
@@ -75,6 +85,10 @@ while [ "$#" -gt 0 ]; do
 			;;
 		--cpus)
 			CPUS="${2:?missing value for --cpus}"
+			shift 2
+			;;
+		--disk-size)
+			DISK_SIZE="${2:?missing value for --disk-size}"
 			shift 2
 			;;
 		--ssh-timeout)
@@ -133,8 +147,22 @@ if [ -z "$IMAGE" ]; then
 	exit 2
 fi
 
+if [ ! -d "$SOURCE_DIR" ]; then
+	echo "error: --source-dir is not a directory: $SOURCE_DIR" >&2
+	exit 2
+fi
+SOURCE_DIR="$(cd "$SOURCE_DIR" && pwd)"
+if [ ! -x "$SOURCE_DIR/scripts/rocky-rust-validation.sh" ]; then
+	echo "error: source tree is missing executable scripts/rocky-rust-validation.sh: $SOURCE_DIR" >&2
+	exit 2
+fi
+if [ -n "$DISK_SIZE" ] && [[ ! "$DISK_SIZE" =~ ^[1-9][0-9]*[KMGT]?$ ]]; then
+	echo "error: --disk-size must be a positive byte count with an optional K, M, G, or T suffix" >&2
+	exit 2
+fi
+
 if [ "${#VALIDATION_ARGS[@]}" -eq 0 ]; then
-	VALIDATION_ARGS=(--boot-only --yes)
+	VALIDATION_ARGS=(--boot-smoke --yes)
 fi
 
 quote_args() {
@@ -166,8 +194,23 @@ if ! has_validation_arg --yes; then
 fi
 
 validation_cmd=$(
+	printf 'set -euo pipefail; '
+	printf 'sudo cloud-init status --wait; '
+	printf '. /etc/os-release; '
+	printf 'test "$ID" = rocky; test "$VERSION_ID" = 8.10; '
+	printf 'test "$(uname -m)" = x86_64; test "$(nproc)" -ge 2; '
+	if [ "$ACCEL" = kvm ]; then
+		printf 'if grep -qw la57 /proc/cpuinfo; then '
+		printf 'echo "error: QEMU guest unexpectedly exposes LA57" >&2; exit 1; fi; '
+		printf 'echo "QEMU guest LA57: absent"; '
+	fi
+	if [ -n "$DISK_SIZE" ]; then
+		printf 'root_avail="$(df -B1 --output=avail / | tail -n 1 | tr -d " ")"; '
+		printf 'test "$root_avail" -ge 8589934592; '
+	fi
 	printf 'cd /tmp/mckernel-hostshare && '
-	printf './scripts/rocky-rust-validation.sh '
+	printf 'export MCKERNEL_RUNTIME_EVIDENCE_DIR=/tmp/mckernel-validation-evidence; '
+	printf 'exec ./scripts/rocky-rust-validation.sh '
 	quote_args "${VALIDATION_ARGS[@]}"
 )
 
@@ -180,9 +223,14 @@ qemu_args=(
 	--timeout "$SSH_TIMEOUT"
 	--guest-cmd-timeout "$GUEST_TIMEOUT"
 	--guest-cleanup-timeout 30
-	--stage-dir "$ROOT_DIR:/tmp/mckernel-hostshare"
+	--guest-evidence-dir /tmp/mckernel-validation-evidence
+	--stage-dir "$SOURCE_DIR:/tmp/mckernel-hostshare"
 	--guest-cmd "$validation_cmd"
 )
+
+if [ -n "$DISK_SIZE" ]; then
+	qemu_args+=(--disk-size "$DISK_SIZE")
+fi
 
 if [ -n "$LOG_DIR" ]; then
 	qemu_args+=(--log-dir "$LOG_DIR")

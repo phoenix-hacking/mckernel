@@ -9373,6 +9373,24 @@ unsafe extern "C" fn connect_handler_ikc2mckernel(param: *mut c_void) -> c_int {
     0
 }
 
+static mut LP_IKC2LINUX: McctrlIhkIkcListenParam = McctrlIhkIkcListenParam {
+    handler: Some(connect_handler_ikc2linux),
+    port: MCCTRL_IKC2LINUX_PORT,
+    ikc_direction: IHK_IKC_DIRECTION_RECV,
+    pkt_size: size_of::<McctrlIkcScdPacket>() as c_int,
+    queue_size: (PAGE_SIZE * 4) as c_int,
+    magic: MCCTRL_IKC2LINUX_MAGIC,
+};
+
+static mut LP_IKC2MCKERNEL: McctrlIhkIkcListenParam = McctrlIhkIkcListenParam {
+    handler: Some(connect_handler_ikc2mckernel),
+    port: MCCTRL_IKC2MCKERNEL_PORT,
+    ikc_direction: IHK_IKC_DIRECTION_SEND,
+    pkt_size: size_of::<McctrlIkcScdPacket>() as c_int,
+    queue_size: (PAGE_SIZE * 4) as c_int,
+    magic: MCCTRL_IKC2MCKERNEL_MAGIC,
+};
+
 #[no_mangle]
 pub unsafe extern "C" fn prepare_ikc_channels(os: *mut c_void) -> c_int {
     let usrdata = unsafe { mcctrl_ikc_alloc_usrdata_bridge() };
@@ -9424,26 +9442,9 @@ pub unsafe extern "C" fn prepare_ikc_channels(os: *mut c_void) -> c_int {
         mcctrl_ikc_usrdata_init_sync_bridge(usrdata);
     }
 
-    let mut lp_ikc2linux = McctrlIhkIkcListenParam {
-        handler: Some(connect_handler_ikc2linux),
-        port: MCCTRL_IKC2LINUX_PORT,
-        ikc_direction: IHK_IKC_DIRECTION_RECV,
-        pkt_size: size_of::<McctrlIkcScdPacket>() as c_int,
-        queue_size: (PAGE_SIZE * 4) as c_int,
-        magic: MCCTRL_IKC2LINUX_MAGIC,
-    };
-    let mut lp_ikc2mckernel = McctrlIhkIkcListenParam {
-        handler: Some(connect_handler_ikc2mckernel),
-        port: MCCTRL_IKC2MCKERNEL_PORT,
-        ikc_direction: IHK_IKC_DIRECTION_SEND,
-        pkt_size: size_of::<McctrlIkcScdPacket>() as c_int,
-        queue_size: (PAGE_SIZE * 4) as c_int,
-        magic: MCCTRL_IKC2MCKERNEL_MAGIC,
-    };
-
     unsafe {
-        let _ = ihk_ikc_listen_port(os, &mut lp_ikc2linux);
-        let _ = ihk_ikc_listen_port(os, &mut lp_ikc2mckernel);
+        let _ = ihk_ikc_listen_port(os, &raw mut LP_IKC2LINUX);
+        let _ = ihk_ikc_listen_port(os, &raw mut LP_IKC2MCKERNEL);
     }
     0
 }

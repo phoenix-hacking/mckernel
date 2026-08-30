@@ -1,0 +1,228 @@
+{
+  "capability_scope": {
+    "not_provided": [
+      "fixed-major or fixed-minor character-device registration",
+      "read, write, poll, mmap, llseek, or file-flag access",
+      "the legacy 64-minor IHK OS-device publication model",
+      "McKernel ioctl wiring, userspace copy wiring, or teardown proof"
+    ],
+    "provided": [
+      "fallible pinned initialization for Opaque<T>",
+      "MISC_DYNAMIC_MINOR registration and deregistration",
+      "Rust open, release, unlocked_ioctl, and CONFIG_COMPAT ioctl callbacks",
+      "per-open private-data ownership through ForeignOwnable"
+    ]
+  },
+  "claim_scope": "RS-006 source-substrate feasibility only. This contract binds two active ordered upstream backports plus one repository-local module-owner hardening patch and exact source replay expectations; integration into Rocky source, license, workflow, configuration, and compatibility authorities awards no build, runtime, review, gate, or tracker credit.",
+  "contract_id": "rs-006-rocky-miscdevice-substrate-v1",
+  "exact_replay": {
+    "baseline_compatibility_patch_count": 18,
+    "baseline_terminal_patch": "host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch",
+    "binding_header_preimages": [
+      {
+        "bytes": 3289,
+        "git_blob_sha1": "c0fea6ca507681215b2eda389ab9af0ce4aa52d6",
+        "path": "include/linux/miscdevice.h",
+        "sha256": "0a51c5c8f0d9e461f09ad69a248085c17c28d63087b63c99e62d83a206dd6bf9"
+      },
+      {
+        "bytes": 128701,
+        "git_blob_sha1": "ab26204359f3101b9ccb50af93f0d008af20b7da",
+        "path": "include/linux/fs.h",
+        "sha256": "ce7f9802dfb48399470e77e59dfe26209688da06da2a206a2be6eabdf57a34d6"
+      }
+    ],
+    "postimages": [
+      {
+        "bytes": 20478,
+        "git_blob_sha1": "070d03152937fab82da406591b2f772f7354ca66",
+        "path": "rust/kernel/types.rs",
+        "sha256": "3fde339b8a41b521407faa9e45d51ce9ecb183a170e9c650a72d25c73d50f6f7"
+      },
+      {
+        "bytes": 4142,
+        "git_blob_sha1": "8bd848693072fed0a1458134212b266719855753",
+        "path": "rust/kernel/lib.rs",
+        "sha256": "12079556f6e69f48db7fc887227e9243f9fc6837715afb5eaddf57bab8850cdd"
+      },
+      {
+        "bytes": 1231,
+        "git_blob_sha1": "84303bf221dd95808cf7eeae7909a3fe8fbc492e",
+        "path": "rust/bindings/bindings_helper.h",
+        "sha256": "f2644392ca91a791e4ab2ffb05a9b30a911a51f1ae025c696c710cfb3a447d07"
+      },
+      {
+        "bytes": 7705,
+        "git_blob_sha1": "0e336f63e64c4c996e2894b08f60df30ff793fff",
+        "path": "rust/kernel/miscdevice.rs",
+        "sha256": "0f2c43a6a64688b6b8387de4813a76289a66f67a1787893d747273c36983b8ee"
+      }
+    ],
+    "preimages_after_0018": [
+      {
+        "bytes": 19590,
+        "git_blob_sha1": "9e7ca066355cd590dfe773abcdda464f4e321b75",
+        "path": "rust/kernel/types.rs",
+        "sha256": "3fe4d0cc0910560abefbd668afdb7aad90629b90079ad5e09a6b4346203f9413"
+      },
+      {
+        "bytes": 4122,
+        "git_blob_sha1": "a0a35b5fda1f818df78640ae212c2d9e4e4838dd",
+        "path": "rust/kernel/lib.rs",
+        "sha256": "7e4ab7eda6ffea5c0309dfcbac7ab91c7ea3107d2c706bb7e07d41687fbd9fd9"
+      },
+      {
+        "bytes": 1201,
+        "git_blob_sha1": "ae82e9c941afa17c48737d2b2e49ac6d26f670b1",
+        "path": "rust/bindings/bindings_helper.h",
+        "sha256": "e7590a0468bb99dbf3f32dc5a3d40d2f5f35b4ac50803e9f755825a856ad518c"
+      },
+      {
+        "absent": true,
+        "path": "rust/kernel/miscdevice.rs"
+      }
+    ],
+    "strict_patch_command": [
+      "patch",
+      "-p1",
+      "--batch",
+      "--forward",
+      "--fuzz=0",
+      "--no-backup-if-mismatch",
+      "-i",
+      "PATCH"
+    ]
+  },
+  "integration": {
+    "active_patch_numbers": [
+      "0019",
+      "0020",
+      "0020a"
+    ],
+    "final_order_guidance": [
+      {
+        "filename": "0019-rust-types-add-opaque-try-ffi-init.patch",
+        "upstream_commit": "a69dc41a4211b0da311ae3a3b79dd4497c9dfb60"
+      },
+      {
+        "filename": "0020-rust-miscdevice-add-base-abstraction.patch",
+        "upstream_commit": "f893691e742688ae21ad597c5bba13bef54706cd"
+      },
+      {
+        "filename": "0020a-rust-miscdevice-bind-file-operations-to-module.patch",
+        "integration_status": "active-ordered-unbuilt",
+        "local_origin": "McKernel RS-006 miscdevice module-owner compatibility"
+      }
+    ],
+    "license_authority_integrated": true,
+    "main_compatibility_series_integrated": true,
+    "authority_bindings": {
+      "compatibility_replay_and_tests": [
+        "scripts/linux_api_exact_probe.py",
+        "scripts/tests/test_linux_api_exact_probe.py",
+        "scripts/tests/test_rust_target_compatibility_patches.py"
+      ],
+      "configuration_authority": [
+        "host-kernel/rocky/evidence/config-resolution-contract-v1.json",
+        "host-kernel/rocky/evidence/config-resolution-contract-v2.json",
+        "scripts/rocky_kernel_config_resolution.py",
+        "scripts/rocky_kernel_config_resolution_v2.py",
+        "scripts/tests/test_rocky_kernel_config_resolution.py"
+      ],
+      "license_authority": [
+        "scripts/rocky_kernel_license_inventory.py",
+        "scripts/rocky_kernel_source_lock.py",
+        "scripts/tests/test_rocky_kernel_license_inventory.py"
+      ],
+      "platform_review_after_source_lock_change": [
+        "host-kernel/rocky/evidence/platform-repository-review-dd6-v1.json",
+        "scripts/rocky_kernel_platform_review.py",
+        "scripts/tests/test_rocky_kernel_platform_review.py"
+      ],
+      "rk006_patch_authority": [
+        "host-kernel/rocky/rk006-patch-authority-v1.json",
+        "scripts/rocky_kernel_rk006_patch_authority.py",
+        "scripts/tests/test_rocky_kernel_rk006_patch_authority.py"
+      ],
+      "source_lock": [
+        "host-kernel/rocky/source-lock.json"
+      ],
+      "workflow_application_and_path_triggers": [
+        ".github/workflows/native-rust-host-modules-exact-build.yml",
+        ".github/workflows/rs001-linux-api-exact-probe.yml"
+      ]
+    },
+    "preserved_predecessor_numbers": [
+      "0013",
+      "0014",
+      "0015",
+      "0016",
+      "0017",
+      "0018"
+    ],
+    "source_lock_integrated": true,
+    "temporary_filenames": false,
+    "workflow_integrated": true
+  },
+  "readiness": {
+    "blockers": [
+      "the two upstream backports and repository-local module-owner patch are integrated as ordered source inputs, but source replay alone does not prove an exact configured kernel build",
+      "an exact Rocky Linux configured kernel compile with Rust 1.92 has not been captured for this three-patch series",
+      "the repository-local module-owner and explicit compat-ioctl change lacks independent source, license, module-owner, compat-ABI, and pinned-lifetime review",
+      "the dynamic-minor miscdevice API cannot represent the legacy fixed 64-minor IHK OS-device publication model by itself",
+      "the abstraction exposes no read, write, poll, mmap, llseek, or file-flag access needed by broader McKernel device semantics",
+      "no McKernel crate uses this substrate and no exact module-load, ioctl, compat-ioctl, teardown, or runtime evidence exists"
+    ],
+    "credit_eligible": false,
+    "status": "NOT_READY"
+  },
+  "schema_version": 1,
+  "target": {
+    "architecture": "x86_64",
+    "archive_basename": "linux-6.12.0-211.44.1.el10_2.tar.xz",
+    "archive_sha256": "4a174d47b8874a2139efcd1ac1ab2d6b80ae7a0ca62f0ae4596fd20cf62a3533",
+    "distribution": "Rocky Linux",
+    "gate_id": "RS-006",
+    "kernel_nvr_base": "kernel-6.12.0-211.44.1.el10_2",
+    "release": "10.2",
+    "source_lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-source-v1"
+  },
+  "active_series": [
+    {
+      "author_date": "2024-10-01T08:22:21Z",
+      "order": 1,
+      "parent_commit": "8cf0b93919e13d1e8d4466eb4080a4c4d9d66d7b",
+      "patch_bytes": 1935,
+      "patch_path": "host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch",
+      "patch_sha256": "bc9b84c4c8bf36b7fac02dd3d04e1a170b86ee143b76739a6eed3e564cdebc2b",
+      "role": "explicit_prerequisite",
+      "subject": "rust: types: add Opaque::try_ffi_init",
+      "tree": "eb7e9f479d07391d8e5732bda730522986a9ffba",
+      "upstream_commit": "a69dc41a4211b0da311ae3a3b79dd4497c9dfb60"
+    },
+    {
+      "author_date": "2024-10-01T08:22:22Z",
+      "order": 2,
+      "parent_commit": "a69dc41a4211b0da311ae3a3b79dd4497c9dfb60",
+      "patch_bytes": 10726,
+      "patch_path": "host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch",
+      "patch_sha256": "d377b5bd91d507e383b8673beac42381b9b6c37a47bba7955c768a8f6ddaad25",
+      "role": "miscdevice_substrate",
+      "subject": "rust: miscdevice: add base miscdevice abstraction",
+      "tree": "d6cdc5c1ab1f70bc7629b2b149d220d8b6d63db0",
+      "upstream_commit": "f893691e742688ae21ad597c5bba13bef54706cd"
+    },
+    {
+      "integration_status": "active-ordered-unbuilt",
+      "license": "GPL-2.0",
+      "local_origin": "McKernel RS-006 miscdevice module-owner compatibility",
+      "order": 3,
+      "patch_bytes": 3353,
+      "patch_path": "host-kernel/rocky/patches/0020a-rust-miscdevice-bind-file-operations-to-module.patch",
+      "patch_sha256": "3a49240fc0a10d5ec14cd33d0ec7d09775209edd08fba10a6ee786dc59ea5b21",
+      "rocky_base": "linux-6.12.0-211.44.1.el10_2",
+      "role": "module_owner_and_explicit_compat_hardening",
+      "subject": "rust: miscdevice: bind file operations to their module"
+    }
+  ]
+}

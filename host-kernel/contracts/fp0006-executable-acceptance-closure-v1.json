@@ -1,0 +1,140 @@
+{
+  "census_policy": {
+    "absent_rows_may_be_synthesized": false,
+    "declarative_acceptance_ids_are_executed_results": false,
+    "exact_external_identity_required_before_parsing": true,
+    "incomplete_sets_force_noncrediting_result": true,
+    "runtime_result_authority_required": true
+  },
+  "claims": {
+    "credit_eligible": false,
+    "durable": false,
+    "executable_acceptance_complete": false,
+    "executable_results_present": false,
+    "fp0006_complete": false,
+    "full_census_join_complete": false,
+    "gate_pass": false,
+    "independent_review_complete": false,
+    "legacy_runtime_executed": false,
+    "native_runtime_executed": false,
+    "runtime_reachability_proven": false,
+    "tracker_credit": false
+  },
+  "contract_id": "fp-0006-executable-acceptance-closure-v1",
+  "expected_census": {
+    "acceptance_test_declaration_count": 1326,
+    "behavior_declaration_count": 1326,
+    "bounded_failure_flow_count": 2602,
+    "c_semantic_question_count": 205,
+    "compiler_failure_site_count": 971,
+    "declarative_behavior_acceptance_join": "complete",
+    "direct_strong_same_module_ctu_structural_inventory_status": "required-missing",
+    "executable_result_count": 0,
+    "full_cross_authority_join": "required-missing",
+    "rust_mir_site_count": 420
+  },
+  "frozen_inputs": {
+    "bounded_failure_flow_authority": {
+      "artifact_availability": "required-missing",
+      "path": "ci-evidence/ef58860e/rocky-rust-build-32192198920-1/evidence/host-module-failure-flows.json",
+      "profile": "compiler-backed-active-host-module-failure-flows-v1",
+      "repository_commit": "ef58860e4806ee16e2c506e4e93c7b6ad8ad8f4b",
+      "row_count": 2602,
+      "sha256": "d92f6eeffed29b9690042efd91861b367d18737d47b20344c605d4ed22f0fe9e",
+      "size": 4169467
+    },
+    "compiler_failure_site_authority": {
+      "artifact_availability": "required-missing",
+      "path": "ci-evidence/ef58860e/rocky-rust-build-32192198920-1/evidence/host-module-failure-sites.json",
+      "profile": "compiler-backed-active-host-module-failure-sites-v1",
+      "repository_commit": "ef58860e4806ee16e2c506e4e93c7b6ad8ad8f4b",
+      "row_count": 971,
+      "sha256": "408f700403de23b705c603d7eff5cd39a2e3c6e2c7fb956cbdccf99c6db4b4b5",
+      "size": 842417
+    },
+    "legacy_behavior_authority": {
+      "acceptance_id_set_sha256": "8593f3f7e10d816d0104345935f4e7a8e3d608d6bf2a5a5f5e6f07161d9c49de",
+      "acceptance_module_id_set_sha256": "0c73b2ce11aa3234a51f4836cb37460ac1c9ca6621fcc514860467409759e949",
+      "acceptance_reverse_edge_set_sha256": "c4443fbe7a106e798010a648ea1c2b2ad4b285c5099ee5faf9465112c2a5d482",
+      "acceptance_test_count": 1326,
+      "artifact_availability": "committed",
+      "behavior_count": 1326,
+      "behavior_edge_set_sha256": "b41e5ca65eb8d0f52a53b14bf8f04b5807aa3560b8fe152342c7a28321f14621",
+      "behavior_id_set_sha256": "f26fbc54ffbf39229b31e494cc05db0da53f6450e5b7a1e21ac4e20074f611de",
+      "behavior_module_id_set_sha256": "6707bb56c4bb46dfa4d6f2129195ee59ef8a79aa899e0198b4fb162356841df3",
+      "behavior_test_edge_count": 1326,
+      "path": "host-kernel/contracts/legacy-behavior-contract-f2eb7352.json",
+      "profile": "rocky-8.10-x86_64-rust-helper-reference",
+      "sha256": "4287ed1e1206cb5e7c50c08419eb444723610c58e2b4730cacc4c82372578bdf",
+      "size": 2784200
+    },
+    "negative_dispatch_reference": {
+      "path": "host-kernel/contracts/fp0006-ihk-device-negative-dispatch-v1.json",
+      "result_authority_path": null,
+      "result_authority_status": "required-missing",
+      "sha256": "7f49a3459b8e3002b94e4ab47124501d879f7405f9037155cf7b83396627afd1",
+      "size": 19668,
+      "vector_count": 2
+    },
+    "runtime_capture_reference": {
+      "path": "host-kernel/contracts/fp0006-runtime-capture-integration-v1.json",
+      "result_authority_path": null,
+      "result_authority_status": "required-missing",
+      "sha256": "4d94e2057094af09c8a4358ff924e55da28ad7601d20bff396475c7005922832",
+      "size": 9204,
+      "surface_count": 2,
+      "vector_count": 2
+    },
+    "semantic_evidence_authority": {
+      "artifact": {
+        "artifact_availability": "required-missing",
+        "c_semantic_question_count": 205,
+        "path": "evidence/host-module-failure-semantics-v3.json",
+        "rust_mir_site_count": 420,
+        "sha256": null,
+        "size": null
+      },
+      "direct_ctu_structural_inventory": {
+        "artifact_availability": "required-missing",
+        "blocker_retained": "cross_translation_unit_call_graph_not_linked",
+        "fresh_execution_authority": false,
+        "inventory_kind": "gcc_initial_ipa_cgraph_direct_strong_same_module_cross_tu_structural_inventory",
+        "status": "required-missing"
+      },
+      "generator": {
+        "path": "scripts/host_module_failure_semantics_v3.py",
+        "sha256": "2ec0e0f6fcdf1acfb265bd1f8bea8138101964fdb51d6f55a595d77f9800f9c1",
+        "size": 179731
+      },
+      "independent_review_artifact": {
+        "artifact_availability": "required-missing",
+        "path": "evidence/host-module-failure-contract-review-v3.json",
+        "sha256": null,
+        "size": null
+      },
+      "independent_review_generator": {
+        "path": "scripts/host_module_failure_contract_review_v3.py",
+        "sha256": "18a62e15757dbad9d662241e190120608ac74fae2398fe07a6e471f14cc763c4",
+        "size": 58994
+      },
+      "profile": "compiler-backed-host-module-failure-semantics-v3"
+    }
+  },
+  "gate": {
+    "gate_id": "FP-0006",
+    "points_awarded": 0,
+    "status": "IN_PROGRESS"
+  },
+  "required_missing": [
+    "bounded_failure_flow_rows",
+    "compiler_failure_site_rows",
+    "direct_strong_same_module_ctu_structural_inventory",
+    "durable_runtime_result_authority",
+    "independent_runtime_result_review",
+    "runtime_result_rows",
+    "semantic_c_question_rows",
+    "semantic_rust_mir_rows",
+    "semantic_v3_independent_review"
+  ],
+  "schema_version": 1
+}

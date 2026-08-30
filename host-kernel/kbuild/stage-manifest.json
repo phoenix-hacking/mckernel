@@ -1,0 +1,177 @@
+{
+  "build_contract": {
+    "allowed_project_source_suffixes": [
+      ".rs"
+    ],
+    "build_system": "Linux in-tree Kbuild with Rust-for-Linux",
+    "compiler_invocation_owner": "Linux Kbuild",
+    "forbidden_project_input_suffixes": [
+      ".a",
+      ".c",
+      ".cc",
+      ".cpp",
+      ".o",
+      ".so"
+    ],
+    "manual_rustc_invocation_forbidden": true,
+    "prebuilt_project_objects_forbidden": true,
+    "project_c_link_objects": 0
+  },
+  "destination": {
+    "kernel_relative_root": "drivers/misc/mckernel",
+    "parent_kbuild_integration": "drivers/misc/Makefile",
+    "parent_kconfig_integration": "drivers/misc/Kconfig"
+  },
+  "inputs": [
+    {
+      "destination": "Kbuild",
+      "kind": "kbuild_template",
+      "repository_path": "host-kernel/kbuild/Kbuild.in",
+      "sha256": "f33c826539ed0807617337ba64a1cb646daf510cc06a44b47243d14e366d67a3"
+    },
+    {
+      "destination": "Kconfig",
+      "kind": "kconfig",
+      "repository_path": "host-kernel/kbuild/Kconfig",
+      "sha256": "48c6ba25186281a3a4fe4690c7520b02d8bbe43965e78d3301d2613477c3874f"
+    },
+    {
+      "destination": "abi/x86_64.rs",
+      "kind": "shared_rust_abi",
+      "repository_path": "host-kernel/native-rust/abi/x86_64.rs",
+      "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3"
+    },
+    {
+      "destination": "ikc_queue.rs",
+      "kind": "rust_module",
+      "repository_path": "host-kernel/native-rust/ikc_queue.rs",
+      "sha256": "514f9bce452498e5e9394c450532b040c44fce1ac7a6b5158c76f3d4c7270d40"
+    },
+    {
+      "destination": "os_registry.rs",
+      "kind": "rust_support_module",
+      "repository_path": "host-kernel/native-rust/os_registry.rs",
+      "sha256": "29464b8ca1038d87cc0d5f760eb22e0cbd7a1a512ae88f4c550574a784d1e49d"
+    },
+    {
+      "destination": "device_registry.rs",
+      "kind": "rust_support_module",
+      "repository_path": "host-kernel/native-rust/device_registry.rs",
+      "sha256": "43c3a4badd09bb70a31c9120d23e3b2b63ffa735412d172e0f0ac3d2edc85af5"
+    },
+    {
+      "destination": "ikc_master.rs",
+      "kind": "rust_module",
+      "repository_path": "host-kernel/native-rust/ikc_master.rs",
+      "sha256": "f7e8f8bc1cc860a2eb3724457d81bf03b132fa156eac5c5e258a393808e6ca1e"
+    },
+    {
+      "destination": "ihk_ioctl.rs",
+      "kind": "rust_ioctl_dispatch",
+      "repository_path": "host-kernel/native-rust/ihk_ioctl.rs",
+      "sha256": "3d603424705a9b0fb18725bae1d75f1d279b249b866c15f15f98166d013edfbb"
+    },
+    {
+      "destination": "page_allocator.rs",
+      "kind": "rust_support_module",
+      "repository_path": "host-kernel/native-rust/page_allocator.rs",
+      "sha256": "8e2af0cde06cbb70204540b493e8a0a66d5203195ed671235b64bed44d328bc5"
+    },
+    {
+      "destination": "page_owner_registry.rs",
+      "kind": "rust_support_module",
+      "repository_path": "host-kernel/native-rust/page_owner_registry.rs",
+      "sha256": "443d58fa5b2e423f538c6622ef04d8e34338abc43c5e0fd34811d52fc21f4869"
+    },
+    {
+      "destination": "smp_resource.rs",
+      "kind": "rust_support_module",
+      "repository_path": "host-kernel/native-rust/smp_resource.rs",
+      "sha256": "b918ea3186d8f55518c9ceb46d84f6c98633b4ab7b8a81e5d2e0024c0914919b"
+    }
+  ],
+  "modules": [
+    {
+      "blockers": [],
+      "crate": "ihk",
+      "dependencies": [],
+      "kconfig_symbol": "CONFIG_MCKERNEL_IHK_RUST",
+      "normalized_name": "ihk",
+      "output": "ihk.ko",
+      "production_namespace": "MCKERNEL_IHK_V1",
+      "required_import_namespaces": [],
+      "source": {
+        "destination": "ihk.rs",
+        "repository_path": "host-kernel/native-rust/ihk.rs",
+        "sha256": "7e5e7f06d26a386b9b3bb42983b48979e6c998deae916d87fd6902b41d4a0d36"
+      }
+    },
+    {
+      "blockers": [],
+      "crate": "ihk_smp_x86_64",
+      "dependencies": [
+        "ihk"
+      ],
+      "kconfig_symbol": "CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST",
+      "normalized_name": "ihk_smp_x86_64",
+      "output": "ihk-smp-x86_64.ko",
+      "production_namespace": null,
+      "required_import_namespaces": [
+        "MCKERNEL_IHK_V1"
+      ],
+      "source": {
+        "destination": "ihk_smp_x86_64.rs",
+        "repository_path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+        "sha256": "5845c349e83835f27d1ed84031debac8cfd8448c2aa482c7be394124d2be8afe"
+      }
+    },
+    {
+      "blockers": [],
+      "crate": "mcctrl",
+      "dependencies": [
+        "ihk"
+      ],
+      "kconfig_symbol": "CONFIG_MCKERNEL_MCCTRL_RUST",
+      "normalized_name": "mcctrl",
+      "output": "mcctrl.ko",
+      "production_namespace": null,
+      "required_import_namespaces": [
+        "MCKERNEL_IHK_V1"
+      ],
+      "source": {
+        "destination": "mcctrl.rs",
+        "repository_path": "host-kernel/native-rust/mcctrl.rs",
+        "sha256": "1a8b85c379d6976d90ba462b9386d1bbd7fce83ca152e46bce391e6cfa6b5389"
+      }
+    }
+  ],
+  "parent_integration": {
+    "repository_path": "host-kernel/kbuild/parent-integration-v1.json",
+    "sha256": "19b18ece742950b2ef5fc9314579849e763a307982a3a91c99dfaad5917d4b55"
+  },
+  "profile_id": "rocky-10.2-native-rust-host-modules-v1",
+  "readiness": {
+    "checkpoint": "crate_roots_bound",
+    "credit_eligible": false,
+    "blockers": [
+      "selected Rocky kernel source, toolchain, and config evidence is not gate-ready",
+      "upstream Rust-for-Linux sample has not built through this staging path",
+      "production namespace and import metadata has not been proven from built modules",
+      "zero-project-C final link manifests have not been captured"
+    ]
+  },
+  "schema_version": 2,
+  "target": {
+    "architecture": "x86_64",
+    "config_policy_lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-config-policy-v1",
+    "distribution": "Rocky Linux",
+    "kernel_nvr_base": "kernel-6.12.0-211.44.1.el10_2",
+    "release": "10.2",
+    "resolved_config_sha256": null,
+    "resolved_kernel_nvr": null,
+    "resolved_toolchain_manifest_sha256": null,
+    "source_lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-source-v1",
+    "source_rpm_sha256": "2bfeda65bd9bdd4b86650074c81e061c37822b80317ac0d4f5aacc89c85589cb",
+    "toolchain_lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-toolchain-v1"
+  }
+}

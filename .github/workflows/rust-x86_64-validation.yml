@@ -1,0 +1,1867 @@
+name: Rust x86_64 validation
+
+on:
+  pull_request:
+    branches: [development]
+  push:
+    branches: [development]
+  workflow_dispatch:
+    inputs:
+      validation_sha:
+        description: Exact 40-hex commit SHA to validate
+        required: true
+        type: string
+      boot_smoke:
+        description: Run protected QEMU/KVM boot and mcexec smoke
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+env:
+  BUILD_DIR: /tmp/mckernel-rocky-rust
+  FP_AUTHORITY_EXPECTED_HEAD: ${{ github.event_name == 'workflow_dispatch' && inputs.validation_sha || github.event.pull_request.head.sha || github.sha }}
+  PYTHONDONTWRITEBYTECODE: "1"
+  RUST_TOOLCHAIN: nightly-2026-02-19
+  EXPECTED_RUSTC_VERSION: rustc 1.95.0-nightly (c04308580 2026-02-18)
+
+jobs:
+  rocky-build:
+    name: Rocky 8.10 Rust build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 330
+    concurrency:
+      group: rocky-rust-build-${{ github.event.pull_request.number || github.ref }}
+      cancel-in-progress: true
+    container:
+      image: rockylinux/rockylinux:8.10@sha256:e8a49c5403b687db05d4d67333fa45808fbe74f36e683cec7abb1f7d0f2338c6
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Install Rocky build prerequisites
+        run: |
+          set -euo pipefail
+          # The digest pins Rocky's published 8.10 multi-architecture image;
+          # refuse to build if the selected platform is not Rocky 8.10.
+          . /etc/os-release
+          test "$ID" = rocky
+          test "$VERSION_ID" = 8.10
+          dnf -y install dnf-plugins-core
+          dnf config-manager --set-enabled powertools || \
+            dnf config-manager --set-enabled crb
+          dnf -y install \
+            bc binutils-devel bison cmake curl diffutils dwarves \
+            elfutils-libelf-devel file findutils flex gcc gcc-c++ git gzip \
+            hostname kernel-devel kernel-headers kmod libselinux-utils lsof make \
+            numactl-devel openssl-devel \
+            patch perl pkgconf-pkg-config procps-ng python3 rpm-build \
+            shadow-utils sudo systemd-devel tar util-linux which xz zlib-devel
+          dnf clean all
+
+      - name: Validate manual commit input
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        env:
+          VALIDATION_SHA: ${{ inputs.validation_sha }}
+        run: |
+          set -euo pipefail
+          [[ "$VALIDATION_SHA" =~ ^[0-9a-f]{40}$ ]] || {
+            echo 'validation_sha must be an exact 40-hex commit' >&2
+            exit 2
+          }
+
+      - name: Check out validation commit and submodules
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.validation_sha || github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          submodules: recursive
+          persist-credentials: false
+
+      - name: Verify manual checkout identity
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        env:
+          VALIDATION_SHA: ${{ inputs.validation_sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$VALIDATION_SHA"
+
+      - name: Prepare non-root validator and pinned nightly
+        run: |
+          set -euo pipefail
+          id validator >/dev/null 2>&1 || \
+            useradd --create-home --shell /bin/bash validator
+          chown -R validator:validator "$GITHUB_WORKSPACE"
+
+          kernel_dir="$(find /usr/src/kernels -mindepth 1 -maxdepth 1 \
+            -type d -print | sort -V | tail -n 1)"
+          test -n "$kernel_dir"
+          test -f "$kernel_dir/Makefile"
+          printf 'MCKERNEL_CI_KERNEL_DIR=%s\n' "$kernel_dir" >> "$GITHUB_ENV"
+
+          runuser -u validator -- env -u PYTHONHOME -u PYTHONPATH \
+            HOME=/home/validator \
+            RUSTUP_HOME=/home/validator/.rustup \
+            CARGO_HOME=/home/validator/.cargo \
+            PATH=/home/validator/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+            RUST_TOOLCHAIN="$RUST_TOOLCHAIN" \
+            EXPECTED_RUSTC_VERSION="$EXPECTED_RUSTC_VERSION" \
+            bash -c '
+              set -euo pipefail
+              curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs |
+                sh -s -- -y --profile minimal --default-toolchain "$RUST_TOOLCHAIN"
+              test "$(rustc --version)" = "$EXPECTED_RUSTC_VERSION"
+              rustc -Vv
+            '
+
+      - name: Record provenance and check development ancestry
+        run: |
+          set -euo pipefail
+          mkdir -p evidence
+          runuser -u validator -- env -u PYTHONHOME -u PYTHONPATH \
+            HOME=/home/validator \
+            PATH=/home/validator/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+            GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
+            MCKERNEL_CI_KERNEL_DIR="$MCKERNEL_CI_KERNEL_DIR" \
+            bash -c '
+              set -euo pipefail
+              cd "$GITHUB_WORKSPACE"
+              git fetch --no-tags origin \
+                development:refs/remotes/origin/development
+              git merge-base --is-ancestor origin/development HEAD
+              git diff --check origin/development...HEAD
+              {
+                echo "commit=$(git rev-parse HEAD)"
+                echo "kernel_dir=$MCKERNEL_CI_KERNEL_DIR"
+                cat /etc/os-release
+                uname -a
+                rustc -Vv
+                git submodule status --recursive
+              }
+            ' > evidence/environment.txt 2>&1
+          rpm -qa | sort > evidence/rocky-rpms.txt
+
+      - name: Build Rust McKernel, IHK modules, and mcexec
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          runuser -u validator -- env -u PYTHONHOME -u PYTHONPATH \
+            HOME=/home/validator \
+            RUSTUP_HOME=/home/validator/.rustup \
+            CARGO_HOME=/home/validator/.cargo \
+            PATH=/home/validator/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+            GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
+            KERNEL_DIR="$MCKERNEL_CI_KERNEL_DIR" \
+            bash -c '
+              cd "$GITHUB_WORKSPACE"
+              exec scripts/rocky-rust-validation.sh \
+                --build-only \
+                --skip-deps \
+                --skip-rust \
+                --jobs 2
+            ' 2>&1 | tee evidence/build.log
+
+      - name: Verify exact fresh repository and IHK overlay authority
+        run: |
+          set -euo pipefail
+          /usr/sbin/runuser -u validator -- /usr/bin/env -i \
+            HOME=/home/validator \
+            PATH=/home/validator/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+            GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
+            FP_AUTHORITY_EXPECTED_HEAD="$FP_AUTHORITY_EXPECTED_HEAD" \
+            /usr/bin/bash --noprofile --norc -c '
+              set -euo pipefail
+              cd "$GITHUB_WORKSPACE"
+              fp_authority() {
+                /usr/bin/env -i \
+                  HOME=/home/validator \
+                  PATH=/usr/bin:/bin \
+                  LC_ALL=C \
+                  FP_AUTHORITY_EXPECTED_HEAD="$FP_AUTHORITY_EXPECTED_HEAD" \
+                  MCKERNEL_REAL_FLOW_EVIDENCE_DIR="${MCKERNEL_REAL_FLOW_EVIDENCE_DIR:-}" \
+                  /usr/bin/python3 -I -S -B -c "if True:
+                import os,subprocess,sys,types
+                trusted_type=type
+                trusted_int_type=int
+                trusted_realpath=os.path.realpath
+                trusted_run=subprocess.run
+                trusted_pipe=os.pipe
+                trusted_fork=os.fork
+                trusted_read=os.read
+                trusted_write=os.write
+                trusted_close=os.close
+                trusted_waitpid=os.waitpid
+                trusted_child_exit=os._exit
+                trusted_wifexited=os.WIFEXITED
+                trusted_wexitstatus=os.WEXITSTATUS
+                trusted_wifsignaled=os.WIFSIGNALED
+                trusted_wtermsig=os.WTERMSIG
+                trusted_stdout_flush=sys.stdout.flush
+                trusted_stderr_flush=sys.stderr.flush
+                trusted_stderr_write=sys.stderr.write
+                repo=trusted_realpath(sys.argv[1])
+                git_config=((\"core.fsmonitor\",\"false\"),(\"core.hooksPath\",os.devnull),(\"core.attributesFile\",os.devnull),(\"core.pager\",\"cat\"),(\"pager.status\",\"false\"),(\"protocol.ext.allow\",\"never\"),(\"core.sshCommand\",\"/bin/false\"))
+                environment={\"GIT_ATTR_NOSYSTEM\":\"1\",\"GIT_CONFIG_GLOBAL\":os.devnull,\"GIT_CONFIG_NOSYSTEM\":\"1\",\"GIT_CONFIG_COUNT\":str(len(git_config)),\"GIT_GRAFT_FILE\":os.devnull,\"GIT_NO_REPLACE_OBJECTS\":\"1\",\"GIT_OPTIONAL_LOCKS\":\"0\",\"GIT_PAGER\":\"cat\",\"GIT_TERMINAL_PROMPT\":\"0\",\"HOME\":os.devnull,\"LANG\":\"C\",\"LC_ALL\":\"C\",\"PATH\":\"/usr/bin:/bin\"}
+                for index,pair in enumerate(git_config):
+                  environment[\"GIT_CONFIG_KEY_{0}\".format(index)]=pair[0]
+                  environment[\"GIT_CONFIG_VALUE_{0}\".format(index)]=pair[1]
+                def trusted_git(arguments):
+                  completed=trusted_run([\"/usr/bin/git\",\"-C\",repo]+arguments,check=False,env=environment,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+                  if completed.returncode != 0:
+                    trusted_stderr_write(completed.stderr.decode(\"utf-8\",errors=\"replace\"))
+                    raise SystemExit(2)
+                  return completed.stdout
+                def trusted_head():
+                  value=trusted_git([\"rev-parse\",\"--verify\",\"HEAD^{commit}\"]).decode(\"ascii\",errors=\"replace\").strip()
+                  if len(value) != 40 or any(character not in \"0123456789abcdef\" for character in value):
+                    trusted_stderr_write(\"host-module authority bootstrap could not resolve an exact HEAD\\n\")
+                    raise SystemExit(2)
+                  return value
+                expected_head=os.environ.get(\"FP_AUTHORITY_EXPECTED_HEAD\",\"\")
+                if len(expected_head) != 40 or any(character not in \"0123456789abcdef\" for character in expected_head):
+                  trusted_stderr_write(\"host-module authority bootstrap expected commit is not exact\\n\")
+                  raise SystemExit(2)
+                if trusted_head() != expected_head:
+                  trusted_stderr_write(\"host-module authority bootstrap checkout differs from expected commit\\n\")
+                  raise SystemExit(2)
+                launcher=trusted_git([\"cat-file\",\"blob\",expected_head+\":scripts/host_module_failure_sites.py\"])
+                ready_read,ready_write=trusted_pipe()
+                go_read,go_write=trusted_pipe()
+                child=trusted_fork()
+                if child == 0:
+                  trusted_close(ready_read)
+                  trusted_close(go_write)
+                  module=types.ModuleType(\"host_module_failure_sites\")
+                  module.__file__=os.path.join(repo,\"scripts\",\"host_module_failure_sites.py\")
+                  module.__package__=\"\"
+                  sys.modules[module.__name__]=module
+                  exec(compile(launcher,module.__file__,\"exec\",dont_inherit=True),module.__dict__)
+                  trusted_write(ready_write,b\"1\")
+                  trusted_close(ready_write)
+                  if trusted_read(go_read,1) != b\"1\":
+                    trusted_child_exit(125)
+                  trusted_close(go_read)
+                  result=module.isolated_authority_main(sys.argv[2:],expected_head=expected_head)
+                  trusted_stdout_flush()
+                  trusted_stderr_flush()
+                  if trusted_type(result) is not trusted_int_type or result < 0 or result > 255:
+                    trusted_child_exit(125)
+                  trusted_child_exit(result)
+                trusted_close(ready_write)
+                trusted_close(go_read)
+                ready=trusted_read(ready_read,1)
+                trusted_close(ready_read)
+                before_head=trusted_head()
+                before_ok=ready == b\"1\" and before_head == expected_head
+                if before_ok:
+                  trusted_write(go_write,b\"1\")
+                else:
+                  trusted_stderr_write(\"host-module authority bootstrap HEAD changed before checker entry\\n\")
+                trusted_close(go_write)
+                unused,status=trusted_waitpid(child,0)
+                final_head=trusted_head()
+                if not before_ok or final_head != expected_head:
+                  if final_head != expected_head:
+                    trusted_stderr_write(\"host-module authority bootstrap HEAD changed during checker execution\\n\")
+                  raise SystemExit(2)
+                if trusted_wifexited(status):
+                  exit_code=trusted_wexitstatus(status)
+                elif trusted_wifsignaled(status):
+                  exit_code=128+trusted_wtermsig(status)
+                else:
+                  exit_code=126
+                raise SystemExit(exit_code)" "$@"
+              }
+              fp_authority "$GITHUB_WORKSPACE" \
+                --repo "$GITHUB_WORKSPACE" \
+                --check-repository-authority
+              fp_authority "$GITHUB_WORKSPACE" \
+                --repo "$GITHUB_WORKSPACE" \
+                --authority-target unittest -- \
+                scripts.tests.test_host_module_failure_sites \
+                scripts.tests.test_host_module_contracts
+            ' 2>&1 | /usr/bin/tee evidence/host-module-repository-authority.log
+
+      - name: Build and inspect C syscall-offload fallback oracle
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          fallback_build="${BUILD_DIR}-c-fallback"
+          runuser -u validator -- env -u PYTHONHOME -u PYTHONPATH \
+            HOME=/home/validator \
+            PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+            GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
+            FALLBACK_BUILD_DIR="$fallback_build" \
+            PRODUCTION_BUILD_DIR="$BUILD_DIR" \
+            bash -c '
+              set -euo pipefail
+              cd "$GITHUB_WORKSPACE"
+              exec bash scripts/check-syscall-offload-c-fallback.sh \
+                --build-dir "$FALLBACK_BUILD_DIR" \
+                --production-build-dir "$PRODUCTION_BUILD_DIR"
+            ' 2>&1 | tee evidence/syscall-offload-c-fallback.log
+          install -m 0644 \
+            "$fallback_build/kernel/mckernel-syscall-offload-c-fallback.txt" \
+            evidence/mckernel-syscall-offload-c-fallback.txt
+
+      - name: Verify focused syscall-offload and ownership evidence
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          runuser -u validator -- env -u PYTHONHOME -u PYTHONPATH \
+            HOME=/home/validator \
+            PATH=/home/validator/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+            GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
+            BUILD_DIR="$BUILD_DIR" \
+            bash -c '
+              set -euo pipefail
+              cd "$GITHUB_WORKSPACE"
+              for script in \
+                kernel/rust/tests/run_equivalence.sh \
+                scripts/qemu-mckernel-guest.sh \
+                scripts/qemu-rocky-rust-validation.sh \
+                scripts/rocky-rust-validation.sh \
+                scripts/check-syscall-offload-c-fallback.sh
+              do
+                bash -n "$script"
+              done
+              python3 -m unittest -v \
+                scripts.tests.test_mckernel_syscall_offload_check \
+                scripts.tests.test_mckernel_linked_text_ownership \
+                scripts.tests.test_mckernel_text_ownership \
+                scripts.tests.test_qemu_mckernel_guest_cpu_policy \
+                scripts.tests.test_syscall_offload_c_fallback_ci
+              for evidence_file in \
+                mckernel.img.map \
+                mckernel-linked-text-ownership.json \
+                mckernel-symbol-source-attribution.json \
+                mckernel-syscall-offload-composition.json
+              do
+                test -s "$BUILD_DIR/kernel/$evidence_file"
+              done
+            ' 2>&1 | tee evidence/syscall-offload-evidence.log
+          for evidence_file in \
+            mckernel.img.map \
+            mckernel-linked-text-ownership.json \
+            mckernel-symbol-source-attribution.json \
+            mckernel-syscall-offload-composition.json
+          do
+            install -m 0644 \
+              "$BUILD_DIR/kernel/$evidence_file" "evidence/$evidence_file"
+          done
+          (
+            cd evidence
+            sha256sum \
+              mckernel.img.map \
+              mckernel-linked-text-ownership.json \
+              mckernel-symbol-source-attribution.json \
+              mckernel-syscall-offload-composition.json \
+              > mckernel-conversion-evidence.sha256
+          )
+
+      - name: Capture compiler-backed host-module failure sites
+        run: |
+          set -euo pipefail
+          capture_path="$BUILD_DIR/host-module-failure-sites.json"
+          /usr/sbin/runuser -u validator -- /usr/bin/env -i \
+            HOME=/home/validator \
+            RUSTUP_HOME=/home/validator/.rustup \
+            CARGO_HOME=/home/validator/.cargo \
+            PATH=/home/validator/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+            GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
+            BUILD_DIR="$BUILD_DIR" \
+            MCKERNEL_CI_KERNEL_DIR="$MCKERNEL_CI_KERNEL_DIR" \
+            FP_AUTHORITY_EXPECTED_HEAD="$FP_AUTHORITY_EXPECTED_HEAD" \
+            /usr/bin/bash --noprofile --norc -c '
+              set -euo pipefail
+              cd "$GITHUB_WORKSPACE"
+              fp_authority() {
+                /usr/bin/env -i \
+                  HOME=/home/validator \
+                  PATH=/usr/bin:/bin \
+                  LC_ALL=C \
+                  FP_AUTHORITY_EXPECTED_HEAD="$FP_AUTHORITY_EXPECTED_HEAD" \
+                  MCKERNEL_REAL_FLOW_EVIDENCE_DIR="${MCKERNEL_REAL_FLOW_EVIDENCE_DIR:-}" \
+                  /usr/bin/python3 -I -S -B -c "if True:
+                import os,subprocess,sys,types
+                trusted_type=type
+                trusted_int_type=int
+                trusted_realpath=os.path.realpath
+                trusted_run=subprocess.run
+                trusted_pipe=os.pipe
+                trusted_fork=os.fork
+                trusted_read=os.read
+                trusted_write=os.write
+                trusted_close=os.close
+                trusted_waitpid=os.waitpid
+                trusted_child_exit=os._exit
+                trusted_wifexited=os.WIFEXITED
+                trusted_wexitstatus=os.WEXITSTATUS
+                trusted_wifsignaled=os.WIFSIGNALED
+                trusted_wtermsig=os.WTERMSIG
+                trusted_stdout_flush=sys.stdout.flush
+                trusted_stderr_flush=sys.stderr.flush
+                trusted_stderr_write=sys.stderr.write
+                repo=trusted_realpath(sys.argv[1])
+                git_config=((\"core.fsmonitor\",\"false\"),(\"core.hooksPath\",os.devnull),(\"core.attributesFile\",os.devnull),(\"core.pager\",\"cat\"),(\"pager.status\",\"false\"),(\"protocol.ext.allow\",\"never\"),(\"core.sshCommand\",\"/bin/false\"))
+                environment={\"GIT_ATTR_NOSYSTEM\":\"1\",\"GIT_CONFIG_GLOBAL\":os.devnull,\"GIT_CONFIG_NOSYSTEM\":\"1\",\"GIT_CONFIG_COUNT\":str(len(git_config)),\"GIT_GRAFT_FILE\":os.devnull,\"GIT_NO_REPLACE_OBJECTS\":\"1\",\"GIT_OPTIONAL_LOCKS\":\"0\",\"GIT_PAGER\":\"cat\",\"GIT_TERMINAL_PROMPT\":\"0\",\"HOME\":os.devnull,\"LANG\":\"C\",\"LC_ALL\":\"C\",\"PATH\":\"/usr/bin:/bin\"}
+                for index,pair in enumerate(git_config):
+                  environment[\"GIT_CONFIG_KEY_{0}\".format(index)]=pair[0]
+                  environment[\"GIT_CONFIG_VALUE_{0}\".format(index)]=pair[1]
+                def trusted_git(arguments):
+                  completed=trusted_run([\"/usr/bin/git\",\"-C\",repo]+arguments,check=False,env=environment,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+                  if completed.returncode != 0:
+                    trusted_stderr_write(completed.stderr.decode(\"utf-8\",errors=\"replace\"))
+                    raise SystemExit(2)
+                  return completed.stdout
+                def trusted_head():
+                  value=trusted_git([\"rev-parse\",\"--verify\",\"HEAD^{commit}\"]).decode(\"ascii\",errors=\"replace\").strip()
+                  if len(value) != 40 or any(character not in \"0123456789abcdef\" for character in value):
+                    trusted_stderr_write(\"host-module authority bootstrap could not resolve an exact HEAD\\n\")
+                    raise SystemExit(2)
+                  return value
+                expected_head=os.environ.get(\"FP_AUTHORITY_EXPECTED_HEAD\",\"\")
+                if len(expected_head) != 40 or any(character not in \"0123456789abcdef\" for character in expected_head):
+                  trusted_stderr_write(\"host-module authority bootstrap expected commit is not exact\\n\")
+                  raise SystemExit(2)
+                if trusted_head() != expected_head:
+                  trusted_stderr_write(\"host-module authority bootstrap checkout differs from expected commit\\n\")
+                  raise SystemExit(2)
+                launcher=trusted_git([\"cat-file\",\"blob\",expected_head+\":scripts/host_module_failure_sites.py\"])
+                ready_read,ready_write=trusted_pipe()
+                go_read,go_write=trusted_pipe()
+                child=trusted_fork()
+                if child == 0:
+                  trusted_close(ready_read)
+                  trusted_close(go_write)
+                  module=types.ModuleType(\"host_module_failure_sites\")
+                  module.__file__=os.path.join(repo,\"scripts\",\"host_module_failure_sites.py\")
+                  module.__package__=\"\"
+                  sys.modules[module.__name__]=module
+                  exec(compile(launcher,module.__file__,\"exec\",dont_inherit=True),module.__dict__)
+                  trusted_write(ready_write,b\"1\")
+                  trusted_close(ready_write)
+                  if trusted_read(go_read,1) != b\"1\":
+                    trusted_child_exit(125)
+                  trusted_close(go_read)
+                  result=module.isolated_authority_main(sys.argv[2:],expected_head=expected_head)
+                  trusted_stdout_flush()
+                  trusted_stderr_flush()
+                  if trusted_type(result) is not trusted_int_type or result < 0 or result > 255:
+                    trusted_child_exit(125)
+                  trusted_child_exit(result)
+                trusted_close(ready_write)
+                trusted_close(go_read)
+                ready=trusted_read(ready_read,1)
+                trusted_close(ready_read)
+                before_head=trusted_head()
+                before_ok=ready == b\"1\" and before_head == expected_head
+                if before_ok:
+                  trusted_write(go_write,b\"1\")
+                else:
+                  trusted_stderr_write(\"host-module authority bootstrap HEAD changed before checker entry\\n\")
+                trusted_close(go_write)
+                unused,status=trusted_waitpid(child,0)
+                final_head=trusted_head()
+                if not before_ok or final_head != expected_head:
+                  if final_head != expected_head:
+                    trusted_stderr_write(\"host-module authority bootstrap HEAD changed during checker execution\\n\")
+                  raise SystemExit(2)
+                if trusted_wifexited(status):
+                  exit_code=trusted_wexitstatus(status)
+                elif trusted_wifsignaled(status):
+                  exit_code=128+trusted_wtermsig(status)
+                else:
+                  exit_code=126
+                raise SystemExit(exit_code)" "$@"
+              }
+              fp_authority "$GITHUB_WORKSPACE" \
+                --repo "$GITHUB_WORKSPACE" \
+                --build-dir "$BUILD_DIR" \
+                --kernel-dir "$MCKERNEL_CI_KERNEL_DIR" \
+                --output "$BUILD_DIR/host-module-failure-sites.json"
+            ' 2>&1 | /usr/bin/tee evidence/host-module-failure-sites.log
+          install -m 0644 "$capture_path" evidence/host-module-failure-sites.json
+          (
+            cd evidence
+            sha256sum host-module-failure-sites.json \
+              > host-module-failure-sites.json.sha256
+          )
+
+      - name: Capture bounded compiler-backed host-module failure flows
+        run: |
+          set -euo pipefail
+          flow_path="$BUILD_DIR/host-module-failure-flows.json"
+          /usr/sbin/runuser -u validator -- /usr/bin/env -i \
+            HOME=/home/validator \
+            RUSTUP_HOME=/home/validator/.rustup \
+            CARGO_HOME=/home/validator/.cargo \
+            PATH=/home/validator/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+            GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
+            BUILD_DIR="$BUILD_DIR" \
+            MCKERNEL_CI_KERNEL_DIR="$MCKERNEL_CI_KERNEL_DIR" \
+            FP_AUTHORITY_EXPECTED_HEAD="$FP_AUTHORITY_EXPECTED_HEAD" \
+            /usr/bin/bash --noprofile --norc -c '
+              set -euo pipefail
+              cd "$GITHUB_WORKSPACE"
+              fp_authority() {
+                /usr/bin/env -i \
+                  HOME=/home/validator \
+                  PATH=/usr/bin:/bin \
+                  LC_ALL=C \
+                  FP_AUTHORITY_EXPECTED_HEAD="$FP_AUTHORITY_EXPECTED_HEAD" \
+                  MCKERNEL_REAL_FLOW_EVIDENCE_DIR="${MCKERNEL_REAL_FLOW_EVIDENCE_DIR:-}" \
+                  /usr/bin/python3 -I -S -B -c "if True:
+                import os,subprocess,sys,types
+                trusted_type=type
+                trusted_int_type=int
+                trusted_realpath=os.path.realpath
+                trusted_run=subprocess.run
+                trusted_pipe=os.pipe
+                trusted_fork=os.fork
+                trusted_read=os.read
+                trusted_write=os.write
+                trusted_close=os.close
+                trusted_waitpid=os.waitpid
+                trusted_child_exit=os._exit
+                trusted_wifexited=os.WIFEXITED
+                trusted_wexitstatus=os.WEXITSTATUS
+                trusted_wifsignaled=os.WIFSIGNALED
+                trusted_wtermsig=os.WTERMSIG
+                trusted_stdout_flush=sys.stdout.flush
+                trusted_stderr_flush=sys.stderr.flush
+                trusted_stderr_write=sys.stderr.write
+                repo=trusted_realpath(sys.argv[1])
+                git_config=((\"core.fsmonitor\",\"false\"),(\"core.hooksPath\",os.devnull),(\"core.attributesFile\",os.devnull),(\"core.pager\",\"cat\"),(\"pager.status\",\"false\"),(\"protocol.ext.allow\",\"never\"),(\"core.sshCommand\",\"/bin/false\"))
+                environment={\"GIT_ATTR_NOSYSTEM\":\"1\",\"GIT_CONFIG_GLOBAL\":os.devnull,\"GIT_CONFIG_NOSYSTEM\":\"1\",\"GIT_CONFIG_COUNT\":str(len(git_config)),\"GIT_GRAFT_FILE\":os.devnull,\"GIT_NO_REPLACE_OBJECTS\":\"1\",\"GIT_OPTIONAL_LOCKS\":\"0\",\"GIT_PAGER\":\"cat\",\"GIT_TERMINAL_PROMPT\":\"0\",\"HOME\":os.devnull,\"LANG\":\"C\",\"LC_ALL\":\"C\",\"PATH\":\"/usr/bin:/bin\"}
+                for index,pair in enumerate(git_config):
+                  environment[\"GIT_CONFIG_KEY_{0}\".format(index)]=pair[0]
+                  environment[\"GIT_CONFIG_VALUE_{0}\".format(index)]=pair[1]
+                def trusted_git(arguments):
+                  completed=trusted_run([\"/usr/bin/git\",\"-C\",repo]+arguments,check=False,env=environment,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+                  if completed.returncode != 0:
+                    trusted_stderr_write(completed.stderr.decode(\"utf-8\",errors=\"replace\"))
+                    raise SystemExit(2)
+                  return completed.stdout
+                def trusted_head():
+                  value=trusted_git([\"rev-parse\",\"--verify\",\"HEAD^{commit}\"]).decode(\"ascii\",errors=\"replace\").strip()
+                  if len(value) != 40 or any(character not in \"0123456789abcdef\" for character in value):
+                    trusted_stderr_write(\"host-module authority bootstrap could not resolve an exact HEAD\\n\")
+                    raise SystemExit(2)
+                  return value
+                expected_head=os.environ.get(\"FP_AUTHORITY_EXPECTED_HEAD\",\"\")
+                if len(expected_head) != 40 or any(character not in \"0123456789abcdef\" for character in expected_head):
+                  trusted_stderr_write(\"host-module authority bootstrap expected commit is not exact\\n\")
+                  raise SystemExit(2)
+                if trusted_head() != expected_head:
+                  trusted_stderr_write(\"host-module authority bootstrap checkout differs from expected commit\\n\")
+                  raise SystemExit(2)
+                launcher=trusted_git([\"cat-file\",\"blob\",expected_head+\":scripts/host_module_failure_sites.py\"])
+                ready_read,ready_write=trusted_pipe()
+                go_read,go_write=trusted_pipe()
+                child=trusted_fork()
+                if child == 0:
+                  trusted_close(ready_read)
+                  trusted_close(go_write)
+                  module=types.ModuleType(\"host_module_failure_sites\")
+                  module.__file__=os.path.join(repo,\"scripts\",\"host_module_failure_sites.py\")
+                  module.__package__=\"\"
+                  sys.modules[module.__name__]=module
+                  exec(compile(launcher,module.__file__,\"exec\",dont_inherit=True),module.__dict__)
+                  trusted_write(ready_write,b\"1\")
+                  trusted_close(ready_write)
+                  if trusted_read(go_read,1) != b\"1\":
+                    trusted_child_exit(125)
+                  trusted_close(go_read)
+                  result=module.isolated_authority_main(sys.argv[2:],expected_head=expected_head)
+                  trusted_stdout_flush()
+                  trusted_stderr_flush()
+                  if trusted_type(result) is not trusted_int_type or result < 0 or result > 255:
+                    trusted_child_exit(125)
+                  trusted_child_exit(result)
+                trusted_close(ready_write)
+                trusted_close(go_read)
+                ready=trusted_read(ready_read,1)
+                trusted_close(ready_read)
+                before_head=trusted_head()
+                before_ok=ready == b\"1\" and before_head == expected_head
+                if before_ok:
+                  trusted_write(go_write,b\"1\")
+                else:
+                  trusted_stderr_write(\"host-module authority bootstrap HEAD changed before checker entry\\n\")
+                trusted_close(go_write)
+                unused,status=trusted_waitpid(child,0)
+                final_head=trusted_head()
+                if not before_ok or final_head != expected_head:
+                  if final_head != expected_head:
+                    trusted_stderr_write(\"host-module authority bootstrap HEAD changed during checker execution\\n\")
+                  raise SystemExit(2)
+                if trusted_wifexited(status):
+                  exit_code=trusted_wexitstatus(status)
+                elif trusted_wifsignaled(status):
+                  exit_code=128+trusted_wtermsig(status)
+                else:
+                  exit_code=126
+                raise SystemExit(exit_code)" "$@"
+              }
+              fp_authority "$GITHUB_WORKSPACE" \
+                --repo "$GITHUB_WORKSPACE" \
+                --authority-target failure-flows-v1 -- \
+                --repo "$GITHUB_WORKSPACE" \
+                --build-dir "$BUILD_DIR" \
+                --kernel-dir "$MCKERNEL_CI_KERNEL_DIR" \
+                --failure-sites "$BUILD_DIR/host-module-failure-sites.json" \
+                --output "$BUILD_DIR/host-module-failure-flows.json"
+            ' 2>&1 | /usr/bin/tee evidence/host-module-failure-flows.log
+          install -m 0644 "$flow_path" evidence/host-module-failure-flows.json
+          (
+            cd evidence
+            sha256sum host-module-failure-flows.json \
+              > host-module-failure-flows.json.sha256
+          )
+
+      - name: Derive bounded host-module C flow closure v2
+        run: |
+          set -euo pipefail
+          flow_v2_path="$BUILD_DIR/host-module-failure-flows-v2.json"
+          /usr/sbin/runuser -u validator -- /usr/bin/env -i \
+            HOME=/home/validator \
+            RUSTUP_HOME=/home/validator/.rustup \
+            CARGO_HOME=/home/validator/.cargo \
+            PATH=/home/validator/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+            GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
+            BUILD_DIR="$BUILD_DIR" \
+            MCKERNEL_CI_KERNEL_DIR="$MCKERNEL_CI_KERNEL_DIR" \
+            MCKERNEL_REAL_FLOW_EVIDENCE_DIR="$BUILD_DIR" \
+            FP_AUTHORITY_EXPECTED_HEAD="$FP_AUTHORITY_EXPECTED_HEAD" \
+            /usr/bin/bash --noprofile --norc -c '
+              set -euo pipefail
+              cd "$GITHUB_WORKSPACE"
+              fp_authority() {
+                /usr/bin/env -i \
+                  HOME=/home/validator \
+                  PATH=/usr/bin:/bin \
+                  LC_ALL=C \
+                  FP_AUTHORITY_EXPECTED_HEAD="$FP_AUTHORITY_EXPECTED_HEAD" \
+                  MCKERNEL_REAL_FLOW_EVIDENCE_DIR="${MCKERNEL_REAL_FLOW_EVIDENCE_DIR:-}" \
+                  /usr/bin/python3 -I -S -B -c "if True:
+                import os,subprocess,sys,types
+                trusted_type=type
+                trusted_int_type=int
+                trusted_realpath=os.path.realpath
+                trusted_run=subprocess.run
+                trusted_pipe=os.pipe
+                trusted_fork=os.fork
+                trusted_read=os.read
+                trusted_write=os.write
+                trusted_close=os.close
+                trusted_waitpid=os.waitpid
+                trusted_child_exit=os._exit
+                trusted_wifexited=os.WIFEXITED
+                trusted_wexitstatus=os.WEXITSTATUS
+                trusted_wifsignaled=os.WIFSIGNALED
+                trusted_wtermsig=os.WTERMSIG
+                trusted_stdout_flush=sys.stdout.flush
+                trusted_stderr_flush=sys.stderr.flush
+                trusted_stderr_write=sys.stderr.write
+                repo=trusted_realpath(sys.argv[1])
+                git_config=((\"core.fsmonitor\",\"false\"),(\"core.hooksPath\",os.devnull),(\"core.attributesFile\",os.devnull),(\"core.pager\",\"cat\"),(\"pager.status\",\"false\"),(\"protocol.ext.allow\",\"never\"),(\"core.sshCommand\",\"/bin/false\"))
+                environment={\"GIT_ATTR_NOSYSTEM\":\"1\",\"GIT_CONFIG_GLOBAL\":os.devnull,\"GIT_CONFIG_NOSYSTEM\":\"1\",\"GIT_CONFIG_COUNT\":str(len(git_config)),\"GIT_GRAFT_FILE\":os.devnull,\"GIT_NO_REPLACE_OBJECTS\":\"1\",\"GIT_OPTIONAL_LOCKS\":\"0\",\"GIT_PAGER\":\"cat\",\"GIT_TERMINAL_PROMPT\":\"0\",\"HOME\":os.devnull,\"LANG\":\"C\",\"LC_ALL\":\"C\",\"PATH\":\"/usr/bin:/bin\"}
+                for index,pair in enumerate(git_config):
+                  environment[\"GIT_CONFIG_KEY_{0}\".format(index)]=pair[0]
+                  environment[\"GIT_CONFIG_VALUE_{0}\".format(index)]=pair[1]
+                def trusted_git(arguments):
+                  completed=trusted_run([\"/usr/bin/git\",\"-C\",repo]+arguments,check=False,env=environment,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+                  if completed.returncode != 0:
+                    trusted_stderr_write(completed.stderr.decode(\"utf-8\",errors=\"replace\"))
+                    raise SystemExit(2)
+                  return completed.stdout
+                def trusted_head():
+                  value=trusted_git([\"rev-parse\",\"--verify\",\"HEAD^{commit}\"]).decode(\"ascii\",errors=\"replace\").strip()
+                  if len(value) != 40 or any(character not in \"0123456789abcdef\" for character in value):
+                    trusted_stderr_write(\"host-module authority bootstrap could not resolve an exact HEAD\\n\")
+                    raise SystemExit(2)
+                  return value
+                expected_head=os.environ.get(\"FP_AUTHORITY_EXPECTED_HEAD\",\"\")
+                if len(expected_head) != 40 or any(character not in \"0123456789abcdef\" for character in expected_head):
+                  trusted_stderr_write(\"host-module authority bootstrap expected commit is not exact\\n\")
+                  raise SystemExit(2)
+                if trusted_head() != expected_head:
+                  trusted_stderr_write(\"host-module authority bootstrap checkout differs from expected commit\\n\")
+                  raise SystemExit(2)
+                launcher=trusted_git([\"cat-file\",\"blob\",expected_head+\":scripts/host_module_failure_sites.py\"])
+                ready_read,ready_write=trusted_pipe()
+                go_read,go_write=trusted_pipe()
+                child=trusted_fork()
+                if child == 0:
+                  trusted_close(ready_read)
+                  trusted_close(go_write)
+                  module=types.ModuleType(\"host_module_failure_sites\")
+                  module.__file__=os.path.join(repo,\"scripts\",\"host_module_failure_sites.py\")
+                  module.__package__=\"\"
+                  sys.modules[module.__name__]=module
+                  exec(compile(launcher,module.__file__,\"exec\",dont_inherit=True),module.__dict__)
+                  trusted_write(ready_write,b\"1\")
+                  trusted_close(ready_write)
+                  if trusted_read(go_read,1) != b\"1\":
+                    trusted_child_exit(125)
+                  trusted_close(go_read)
+                  result=module.isolated_authority_main(sys.argv[2:],expected_head=expected_head)
+                  trusted_stdout_flush()
+                  trusted_stderr_flush()
+                  if trusted_type(result) is not trusted_int_type or result < 0 or result > 255:
+                    trusted_child_exit(125)
+                  trusted_child_exit(result)
+                trusted_close(ready_write)
+                trusted_close(go_read)
+                ready=trusted_read(ready_read,1)
+                trusted_close(ready_read)
+                before_head=trusted_head()
+                before_ok=ready == b\"1\" and before_head == expected_head
+                if before_ok:
+                  trusted_write(go_write,b\"1\")
+                else:
+                  trusted_stderr_write(\"host-module authority bootstrap HEAD changed before checker entry\\n\")
+                trusted_close(go_write)
+                unused,status=trusted_waitpid(child,0)
+                final_head=trusted_head()
+                if not before_ok or final_head != expected_head:
+                  if final_head != expected_head:
+                    trusted_stderr_write(\"host-module authority bootstrap HEAD changed during checker execution\\n\")
+                  raise SystemExit(2)
+                if trusted_wifexited(status):
+                  exit_code=trusted_wexitstatus(status)
+                elif trusted_wifsignaled(status):
+                  exit_code=128+trusted_wtermsig(status)
+                else:
+                  exit_code=126
+                raise SystemExit(exit_code)" "$@"
+              }
+              fp_authority "$GITHUB_WORKSPACE" \
+                --repo "$GITHUB_WORKSPACE" \
+                --authority-target unittest -- \
+                scripts.tests.test_host_module_failure_flows_v2
+              fp_authority "$GITHUB_WORKSPACE" \
+                --repo "$GITHUB_WORKSPACE" \
+                --authority-target failure-flows-v2 -- \
+                --repo "$GITHUB_WORKSPACE" \
+                --build-dir "$BUILD_DIR" \
+                --kernel-dir "$MCKERNEL_CI_KERNEL_DIR" \
+                --failure-sites "$BUILD_DIR/host-module-failure-sites.json" \
+                --failure-flows "$BUILD_DIR/host-module-failure-flows.json" \
+                --output "$BUILD_DIR/host-module-failure-flows-v2.json"
+            ' 2>&1 | /usr/bin/tee evidence/host-module-failure-flows-v2.log
+          install -m 0644 "$flow_v2_path" \
+            evidence/host-module-failure-flows-v2.json
+          (
+            cd evidence
+            sha256sum host-module-failure-flows-v2.json \
+              > host-module-failure-flows-v2.json.sha256
+          )
+
+      - name: Capture host-module failure-contract gaps
+        run: |
+          set -euo pipefail
+          gap_path="$BUILD_DIR/host-module-failure-contract-gaps.json"
+          /usr/sbin/runuser -u validator -- /usr/bin/env -i \
+            HOME=/home/validator \
+            RUSTUP_HOME=/home/validator/.rustup \
+            CARGO_HOME=/home/validator/.cargo \
+            PATH=/home/validator/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+            GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
+            BUILD_DIR="$BUILD_DIR" \
+            MCKERNEL_CI_KERNEL_DIR="$MCKERNEL_CI_KERNEL_DIR" \
+            FP_AUTHORITY_EXPECTED_HEAD="$FP_AUTHORITY_EXPECTED_HEAD" \
+            /usr/bin/bash --noprofile --norc -c '
+              set -euo pipefail
+              cd "$GITHUB_WORKSPACE"
+              fp_authority() {
+                /usr/bin/env -i \
+                  HOME=/home/validator \
+                  PATH=/usr/bin:/bin \
+                  LC_ALL=C \
+                  FP_AUTHORITY_EXPECTED_HEAD="$FP_AUTHORITY_EXPECTED_HEAD" \
+                  MCKERNEL_REAL_FLOW_EVIDENCE_DIR="${MCKERNEL_REAL_FLOW_EVIDENCE_DIR:-}" \
+                  /usr/bin/python3 -I -S -B -c "if True:
+                import os,subprocess,sys,types
+                trusted_type=type
+                trusted_int_type=int
+                trusted_realpath=os.path.realpath
+                trusted_run=subprocess.run
+                trusted_pipe=os.pipe
+                trusted_fork=os.fork
+                trusted_read=os.read
+                trusted_write=os.write
+                trusted_close=os.close
+                trusted_waitpid=os.waitpid
+                trusted_child_exit=os._exit
+                trusted_wifexited=os.WIFEXITED
+                trusted_wexitstatus=os.WEXITSTATUS
+                trusted_wifsignaled=os.WIFSIGNALED
+                trusted_wtermsig=os.WTERMSIG
+                trusted_stdout_flush=sys.stdout.flush
+                trusted_stderr_flush=sys.stderr.flush
+                trusted_stderr_write=sys.stderr.write
+                repo=trusted_realpath(sys.argv[1])
+                git_config=((\"core.fsmonitor\",\"false\"),(\"core.hooksPath\",os.devnull),(\"core.attributesFile\",os.devnull),(\"core.pager\",\"cat\"),(\"pager.status\",\"false\"),(\"protocol.ext.allow\",\"never\"),(\"core.sshCommand\",\"/bin/false\"))
+                environment={\"GIT_ATTR_NOSYSTEM\":\"1\",\"GIT_CONFIG_GLOBAL\":os.devnull,\"GIT_CONFIG_NOSYSTEM\":\"1\",\"GIT_CONFIG_COUNT\":str(len(git_config)),\"GIT_GRAFT_FILE\":os.devnull,\"GIT_NO_REPLACE_OBJECTS\":\"1\",\"GIT_OPTIONAL_LOCKS\":\"0\",\"GIT_PAGER\":\"cat\",\"GIT_TERMINAL_PROMPT\":\"0\",\"HOME\":os.devnull,\"LANG\":\"C\",\"LC_ALL\":\"C\",\"PATH\":\"/usr/bin:/bin\"}
+                for index,pair in enumerate(git_config):
+                  environment[\"GIT_CONFIG_KEY_{0}\".format(index)]=pair[0]
+                  environment[\"GIT_CONFIG_VALUE_{0}\".format(index)]=pair[1]
+                def trusted_git(arguments):
+                  completed=trusted_run([\"/usr/bin/git\",\"-C\",repo]+arguments,check=False,env=environment,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+                  if completed.returncode != 0:
+                    trusted_stderr_write(completed.stderr.decode(\"utf-8\",errors=\"replace\"))
+                    raise SystemExit(2)
+                  return completed.stdout
+                def trusted_head():
+                  value=trusted_git([\"rev-parse\",\"--verify\",\"HEAD^{commit}\"]).decode(\"ascii\",errors=\"replace\").strip()
+                  if len(value) != 40 or any(character not in \"0123456789abcdef\" for character in value):
+                    trusted_stderr_write(\"host-module authority bootstrap could not resolve an exact HEAD\\n\")
+                    raise SystemExit(2)
+                  return value
+                expected_head=os.environ.get(\"FP_AUTHORITY_EXPECTED_HEAD\",\"\")
+                if len(expected_head) != 40 or any(character not in \"0123456789abcdef\" for character in expected_head):
+                  trusted_stderr_write(\"host-module authority bootstrap expected commit is not exact\\n\")
+                  raise SystemExit(2)
+                if trusted_head() != expected_head:
+                  trusted_stderr_write(\"host-module authority bootstrap checkout differs from expected commit\\n\")
+                  raise SystemExit(2)
+                launcher=trusted_git([\"cat-file\",\"blob\",expected_head+\":scripts/host_module_failure_sites.py\"])
+                ready_read,ready_write=trusted_pipe()
+                go_read,go_write=trusted_pipe()
+                child=trusted_fork()
+                if child == 0:
+                  trusted_close(ready_read)
+                  trusted_close(go_write)
+                  module=types.ModuleType(\"host_module_failure_sites\")
+                  module.__file__=os.path.join(repo,\"scripts\",\"host_module_failure_sites.py\")
+                  module.__package__=\"\"
+                  sys.modules[module.__name__]=module
+                  exec(compile(launcher,module.__file__,\"exec\",dont_inherit=True),module.__dict__)
+                  trusted_write(ready_write,b\"1\")
+                  trusted_close(ready_write)
+                  if trusted_read(go_read,1) != b\"1\":
+                    trusted_child_exit(125)
+                  trusted_close(go_read)
+                  result=module.isolated_authority_main(sys.argv[2:],expected_head=expected_head)
+                  trusted_stdout_flush()
+                  trusted_stderr_flush()
+                  if trusted_type(result) is not trusted_int_type or result < 0 or result > 255:
+                    trusted_child_exit(125)
+                  trusted_child_exit(result)
+                trusted_close(ready_write)
+                trusted_close(go_read)
+                ready=trusted_read(ready_read,1)
+                trusted_close(ready_read)
+                before_head=trusted_head()
+                before_ok=ready == b\"1\" and before_head == expected_head
+                if before_ok:
+                  trusted_write(go_write,b\"1\")
+                else:
+                  trusted_stderr_write(\"host-module authority bootstrap HEAD changed before checker entry\\n\")
+                trusted_close(go_write)
+                unused,status=trusted_waitpid(child,0)
+                final_head=trusted_head()
+                if not before_ok or final_head != expected_head:
+                  if final_head != expected_head:
+                    trusted_stderr_write(\"host-module authority bootstrap HEAD changed during checker execution\\n\")
+                  raise SystemExit(2)
+                if trusted_wifexited(status):
+                  exit_code=trusted_wexitstatus(status)
+                elif trusted_wifsignaled(status):
+                  exit_code=128+trusted_wtermsig(status)
+                else:
+                  exit_code=126
+                raise SystemExit(exit_code)" "$@"
+              }
+              MCKERNEL_REAL_FLOW_EVIDENCE_DIR="$BUILD_DIR" \
+                fp_authority "$GITHUB_WORKSPACE" \
+                  --repo "$GITHUB_WORKSPACE" \
+                  --authority-target unittest -- \
+                  scripts.tests.test_host_module_failure_contract_gaps
+              fp_authority "$GITHUB_WORKSPACE" \
+                --repo "$GITHUB_WORKSPACE" \
+                --authority-target failure-contract-gaps -- \
+                --repo "$GITHUB_WORKSPACE" \
+                --build-dir "$BUILD_DIR" \
+                --kernel-dir "$MCKERNEL_CI_KERNEL_DIR" \
+                --failure-sites "$BUILD_DIR/host-module-failure-sites.json" \
+                --failure-flows "$BUILD_DIR/host-module-failure-flows.json" \
+                --output "$BUILD_DIR/host-module-failure-contract-gaps.json"
+            ' 2>&1 | /usr/bin/tee evidence/host-module-failure-contract-gaps.log
+          install -m 0644 \
+            "$gap_path" evidence/host-module-failure-contract-gaps.json
+          (
+            cd evidence
+            sha256sum host-module-failure-contract-gaps.json \
+              > host-module-failure-contract-gaps.json.sha256
+          )
+
+      - name: Review v2 closure and capture non-crediting semantics v3
+        run: |
+          set -euo pipefail
+          review_v2_path="$BUILD_DIR/host-module-failure-contract-review-v2.json"
+          raw_bundle_path="$BUILD_DIR/host-module-failure-semantics-v3-raw.tar"
+          raw_sidecar_path="$BUILD_DIR/host-module-failure-semantics-v3-raw.tar.sha256"
+          semantics_v3_path="$BUILD_DIR/host-module-failure-semantics-v3.json"
+          review_v3_path="$BUILD_DIR/host-module-failure-contract-review-v3.json"
+          /usr/sbin/runuser -u validator -- /usr/bin/env -i \
+            HOME=/home/validator \
+            RUSTUP_HOME=/home/validator/.rustup \
+            CARGO_HOME=/home/validator/.cargo \
+            PATH=/home/validator/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+            GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
+            BUILD_DIR="$BUILD_DIR" \
+            MCKERNEL_CI_KERNEL_DIR="$MCKERNEL_CI_KERNEL_DIR" \
+            MCKERNEL_REAL_FLOW_EVIDENCE_DIR="$BUILD_DIR" \
+            FP_AUTHORITY_EXPECTED_HEAD="$FP_AUTHORITY_EXPECTED_HEAD" \
+            /usr/bin/bash --noprofile --norc -c '
+              set -euo pipefail
+              cd "$GITHUB_WORKSPACE"
+              fp_authority() {
+                /usr/bin/env -i \
+                  HOME=/home/validator \
+                  PATH=/usr/bin:/bin \
+                  LC_ALL=C \
+                  FP_AUTHORITY_EXPECTED_HEAD="$FP_AUTHORITY_EXPECTED_HEAD" \
+                  MCKERNEL_REAL_FLOW_EVIDENCE_DIR="${MCKERNEL_REAL_FLOW_EVIDENCE_DIR:-}" \
+                  /usr/bin/python3 -I -S -B -c "if True:
+                import os,subprocess,sys,types
+                trusted_type=type
+                trusted_int_type=int
+                trusted_realpath=os.path.realpath
+                trusted_run=subprocess.run
+                trusted_pipe=os.pipe
+                trusted_fork=os.fork
+                trusted_read=os.read
+                trusted_write=os.write
+                trusted_close=os.close
+                trusted_waitpid=os.waitpid
+                trusted_child_exit=os._exit
+                trusted_wifexited=os.WIFEXITED
+                trusted_wexitstatus=os.WEXITSTATUS
+                trusted_wifsignaled=os.WIFSIGNALED
+                trusted_wtermsig=os.WTERMSIG
+                trusted_stdout_flush=sys.stdout.flush
+                trusted_stderr_flush=sys.stderr.flush
+                trusted_stderr_write=sys.stderr.write
+                repo=trusted_realpath(sys.argv[1])
+                git_config=((\"core.fsmonitor\",\"false\"),(\"core.hooksPath\",os.devnull),(\"core.attributesFile\",os.devnull),(\"core.pager\",\"cat\"),(\"pager.status\",\"false\"),(\"protocol.ext.allow\",\"never\"),(\"core.sshCommand\",\"/bin/false\"))
+                environment={\"GIT_ATTR_NOSYSTEM\":\"1\",\"GIT_CONFIG_GLOBAL\":os.devnull,\"GIT_CONFIG_NOSYSTEM\":\"1\",\"GIT_CONFIG_COUNT\":str(len(git_config)),\"GIT_GRAFT_FILE\":os.devnull,\"GIT_NO_REPLACE_OBJECTS\":\"1\",\"GIT_OPTIONAL_LOCKS\":\"0\",\"GIT_PAGER\":\"cat\",\"GIT_TERMINAL_PROMPT\":\"0\",\"HOME\":os.devnull,\"LANG\":\"C\",\"LC_ALL\":\"C\",\"PATH\":\"/usr/bin:/bin\"}
+                for index,pair in enumerate(git_config):
+                  environment[\"GIT_CONFIG_KEY_{0}\".format(index)]=pair[0]
+                  environment[\"GIT_CONFIG_VALUE_{0}\".format(index)]=pair[1]
+                def trusted_git(arguments):
+                  completed=trusted_run([\"/usr/bin/git\",\"-C\",repo]+arguments,check=False,env=environment,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+                  if completed.returncode != 0:
+                    trusted_stderr_write(completed.stderr.decode(\"utf-8\",errors=\"replace\"))
+                    raise SystemExit(2)
+                  return completed.stdout
+                def trusted_head():
+                  value=trusted_git([\"rev-parse\",\"--verify\",\"HEAD^{commit}\"]).decode(\"ascii\",errors=\"replace\").strip()
+                  if len(value) != 40 or any(character not in \"0123456789abcdef\" for character in value):
+                    trusted_stderr_write(\"host-module authority bootstrap could not resolve an exact HEAD\\n\")
+                    raise SystemExit(2)
+                  return value
+                expected_head=os.environ.get(\"FP_AUTHORITY_EXPECTED_HEAD\",\"\")
+                if len(expected_head) != 40 or any(character not in \"0123456789abcdef\" for character in expected_head):
+                  trusted_stderr_write(\"host-module authority bootstrap expected commit is not exact\\n\")
+                  raise SystemExit(2)
+                if trusted_head() != expected_head:
+                  trusted_stderr_write(\"host-module authority bootstrap checkout differs from expected commit\\n\")
+                  raise SystemExit(2)
+                launcher=trusted_git([\"cat-file\",\"blob\",expected_head+\":scripts/host_module_failure_sites.py\"])
+                ready_read,ready_write=trusted_pipe()
+                go_read,go_write=trusted_pipe()
+                child=trusted_fork()
+                if child == 0:
+                  trusted_close(ready_read)
+                  trusted_close(go_write)
+                  module=types.ModuleType(\"host_module_failure_sites\")
+                  module.__file__=os.path.join(repo,\"scripts\",\"host_module_failure_sites.py\")
+                  module.__package__=\"\"
+                  sys.modules[module.__name__]=module
+                  exec(compile(launcher,module.__file__,\"exec\",dont_inherit=True),module.__dict__)
+                  trusted_write(ready_write,b\"1\")
+                  trusted_close(ready_write)
+                  if trusted_read(go_read,1) != b\"1\":
+                    trusted_child_exit(125)
+                  trusted_close(go_read)
+                  result=module.isolated_authority_main(sys.argv[2:],expected_head=expected_head)
+                  trusted_stdout_flush()
+                  trusted_stderr_flush()
+                  if trusted_type(result) is not trusted_int_type or result < 0 or result > 255:
+                    trusted_child_exit(125)
+                  trusted_child_exit(result)
+                trusted_close(ready_write)
+                trusted_close(go_read)
+                ready=trusted_read(ready_read,1)
+                trusted_close(ready_read)
+                before_head=trusted_head()
+                before_ok=ready == b\"1\" and before_head == expected_head
+                if before_ok:
+                  trusted_write(go_write,b\"1\")
+                else:
+                  trusted_stderr_write(\"host-module authority bootstrap HEAD changed before checker entry\\n\")
+                trusted_close(go_write)
+                unused,status=trusted_waitpid(child,0)
+                final_head=trusted_head()
+                if not before_ok or final_head != expected_head:
+                  if final_head != expected_head:
+                    trusted_stderr_write(\"host-module authority bootstrap HEAD changed during checker execution\\n\")
+                  raise SystemExit(2)
+                if trusted_wifexited(status):
+                  exit_code=trusted_wexitstatus(status)
+                elif trusted_wifsignaled(status):
+                  exit_code=128+trusted_wtermsig(status)
+                else:
+                  exit_code=126
+                raise SystemExit(exit_code)" "$@"
+              }
+              fp_authority "$GITHUB_WORKSPACE" \
+                --repo "$GITHUB_WORKSPACE" \
+                --authority-target unittest -- \
+                scripts.tests.test_host_module_failure_contract_review_v2
+              fp_authority "$GITHUB_WORKSPACE" \
+                --repo "$GITHUB_WORKSPACE" \
+                --authority-target failure-contract-review-v2 -- \
+                --repo "$GITHUB_WORKSPACE" \
+                --build-dir "$BUILD_DIR" \
+                --kernel-dir "$MCKERNEL_CI_KERNEL_DIR" \
+                --failure-sites "$BUILD_DIR/host-module-failure-sites.json" \
+                --failure-flows-v1 "$BUILD_DIR/host-module-failure-flows.json" \
+                --failure-flows-v2 "$BUILD_DIR/host-module-failure-flows-v2.json" \
+                --output "$BUILD_DIR/host-module-failure-contract-review-v2.json"
+              fp_authority "$GITHUB_WORKSPACE" \
+                --repo "$GITHUB_WORKSPACE" \
+                --authority-target unittest -- \
+                scripts.tests.test_host_module_failure_semantics_v3 \
+                scripts.tests.test_host_module_failure_semantics_retention_v3 \
+                scripts.tests.test_host_module_failure_contract_review_v3
+              fp_authority "$GITHUB_WORKSPACE" \
+                --repo "$GITHUB_WORKSPACE" \
+                --authority-target failure-semantics-v3 -- \
+                --repo "$GITHUB_WORKSPACE" \
+                --build-dir "$BUILD_DIR" \
+                --kernel-dir "$MCKERNEL_CI_KERNEL_DIR" \
+                --failure-sites "$BUILD_DIR/host-module-failure-sites.json" \
+                --failure-flows-v1 "$BUILD_DIR/host-module-failure-flows.json" \
+                --failure-flows-v2 "$BUILD_DIR/host-module-failure-flows-v2.json" \
+                --raw-bundle "$BUILD_DIR/host-module-failure-semantics-v3-raw.tar" \
+                --raw-bundle-sha256 "$BUILD_DIR/host-module-failure-semantics-v3-raw.tar.sha256" \
+                --capture-raw \
+                --output "$BUILD_DIR/host-module-failure-semantics-v3.json"
+              fp_authority "$GITHUB_WORKSPACE" \
+                --repo "$GITHUB_WORKSPACE" \
+                --authority-target failure-contract-review-v3 -- \
+                --repo "$GITHUB_WORKSPACE" \
+                --build-dir "$BUILD_DIR" \
+                --kernel-dir "$MCKERNEL_CI_KERNEL_DIR" \
+                --failure-sites "$BUILD_DIR/host-module-failure-sites.json" \
+                --failure-flows-v1 "$BUILD_DIR/host-module-failure-flows.json" \
+                --failure-flows-v2 "$BUILD_DIR/host-module-failure-flows-v2.json" \
+                --failure-contract-review-v2 "$BUILD_DIR/host-module-failure-contract-review-v2.json" \
+                --failure-semantics-v3 "$BUILD_DIR/host-module-failure-semantics-v3.json" \
+                --raw-bundle "$BUILD_DIR/host-module-failure-semantics-v3-raw.tar" \
+                --raw-bundle-sha256 "$BUILD_DIR/host-module-failure-semantics-v3-raw.tar.sha256" \
+                --output "$BUILD_DIR/host-module-failure-contract-review-v3.json"
+            ' 2>&1 | /usr/bin/tee evidence/host-module-failure-contract-review-v3.log
+          /usr/bin/install -m 0644 "$review_v2_path" "$semantics_v3_path" \
+            "$review_v3_path" evidence/
+          (
+            cd evidence
+            /usr/bin/sha256sum \
+              host-module-failure-contract-review-v2.json \
+              host-module-failure-semantics-v3.json \
+              host-module-failure-contract-review-v3.json \
+              > host-module-failure-semantics-v3-artifacts.sha256
+          )
+
+      - name: Collect build evidence
+        if: ${{ always() }}
+        run: |
+          set +e
+          mkdir -p evidence
+          test -d evidence && test ! -L evidence || exit 1
+          runuser -u validator -- env -u PYTHONHOME -u PYTHONPATH \
+            HOME=/home/validator \
+            GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
+            bash -c '
+              cd "$GITHUB_WORKSPACE"
+              git status --short --branch --ignore-submodules=none
+            ' > evidence/worktree.txt 2>&1
+
+          retention_evidence_dir="$GITHUB_WORKSPACE/evidence/host-module-failure-semantics-v3-retention"
+          if test -e "$retention_evidence_dir" || test -L "$retention_evidence_dir"; then
+            exit 1
+          fi
+          install -d -m 0750 -o validator -g validator -- \
+            "$retention_evidence_dir"
+          raw_semantics_retention_status=0
+          runuser -u validator -- env -i \
+            HOME=/home/validator \
+            LANG=C \
+            LC_ALL=C \
+            PATH=/usr/bin:/bin \
+            PYTHONDONTWRITEBYTECODE=1 \
+            /usr/bin/python3 -E -s -B \
+            "$GITHUB_WORKSPACE/scripts/host_module_failure_semantics_retention_v3.py" \
+            --build-dir "$BUILD_DIR" \
+            --evidence-dir "$retention_evidence_dir" \
+            > evidence/host-module-failure-semantics-v3-retention.log 2>&1 ||
+            raw_semantics_retention_status=$?
+          printf 'exit_status=%s\ncredit=forbidden\n' \
+            "$raw_semantics_retention_status" \
+            > evidence/host-module-failure-semantics-v3-retention.status
+
+          if test -d "$BUILD_DIR"; then
+            for evidence_file in \
+              host-module-failure-contract-review-v2.json \
+              host-module-failure-semantics-v3.json \
+              host-module-failure-contract-review-v3.json
+            do
+              if test -s "$BUILD_DIR/$evidence_file"; then
+                install -m 0644 \
+                  "$BUILD_DIR/$evidence_file" \
+                  "evidence/$evidence_file"
+              fi
+            done
+            for evidence_file in \
+              mckernel.img.map \
+              mckernel-linked-text-ownership.json \
+              mckernel-symbol-source-attribution.json \
+              mckernel-syscall-offload-composition.json
+            do
+              if test -s "$BUILD_DIR/kernel/$evidence_file"; then
+                install -m 0644 \
+                  "$BUILD_DIR/kernel/$evidence_file" \
+                  "evidence/$evidence_file"
+              fi
+            done
+            (
+              cd "$BUILD_DIR" || exit
+              find . -type f \
+                \( -name mckernel.img -o -name '*.ko' -o -name mcexec -o \
+                -name mcexec-rust-smoke \) \
+                -print0 | sort -z \
+                > "$GITHUB_WORKSPACE/evidence/build-products.list0"
+              xargs -0 -r sha256sum \
+                < "$GITHUB_WORKSPACE/evidence/build-products.list0" \
+                > "$GITHUB_WORKSPACE/evidence/build-products.sha256"
+              tar --null -czf \
+                "$GITHUB_WORKSPACE/evidence/build-products.tar.gz" \
+                --files-from="$GITHUB_WORKSPACE/evidence/build-products.list0"
+            )
+          fi
+          (
+            cd evidence || exit
+            for evidence_file in \
+              host-module-failure-contract-review-v2.json \
+              host-module-failure-semantics-v3-retention/host-module-failure-semantics-v3-raw.tar \
+              host-module-failure-semantics-v3-retention/host-module-failure-semantics-v3-raw.tar.sha256 \
+              host-module-failure-semantics-v3-retention/host-module-failure-semantics-v3-retention-v1.json \
+              host-module-failure-semantics-v3-retention.log \
+              host-module-failure-semantics-v3-retention.status \
+              host-module-failure-semantics-v3.json \
+              host-module-failure-contract-review-v3.json
+            do
+              if test -s "$evidence_file"; then
+                sha256sum -- "$evidence_file"
+              fi
+            done
+          ) > evidence/host-module-failure-semantics-v3-retained.sha256
+          test "$raw_semantics_retention_status" -eq 0 || exit 1
+
+      - name: Upload Rocky build evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: rocky-rust-build-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            evidence/
+            VALIDATION_PROGRESS.MD
+          if-no-files-found: error
+          retention-days: 30
+
+  hosted-boot-smoke:
+    name: Hosted Rocky QEMU boot and mcexec
+    needs: rocky-build
+    if: >-
+      ${{ github.event_name == 'pull_request' &&
+          github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 330
+    concurrency:
+      group: hosted-rocky-boot-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
+    env:
+      ROCKY_IMAGE_NAME: Rocky-8-GenericCloud-Base-8.10-20240528.0.x86_64.qcow2
+      ROCKY_IMAGE_URL: https://download.rockylinux.org/pub/rocky/8.10/images/x86_64/Rocky-8-GenericCloud-Base-8.10-20240528.0.x86_64.qcow2
+      ROCKY_CHECKSUM_URL: https://download.rockylinux.org/pub/rocky/8.10/images/x86_64/CHECKSUM
+      ROCKY_IMAGE_SHA256: e56066c58606191e96184de9a9183a3af33c59bcbd8740d8b10ca054a7a89c14
+      ROCKY_IMAGE_BYTES: 2065760256
+
+    steps:
+      - name: Check out candidate and submodules
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          submodules: recursive
+          persist-credentials: false
+
+      - name: Prepare ephemeral KVM host
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Hosted images may carry unrelated vendor repositories.  Limit this
+          # disposable host setup to Ubuntu's signed base sources so a vendor
+          # outage cannot prevent an otherwise reproducible KVM validation.
+          ubuntu_sources=/etc/apt/sources.list.d/ubuntu.sources
+          test -s "$ubuntu_sources"
+          sudo apt-get \
+            -o "Dir::Etc::sourcelist=$ubuntu_sources" \
+            -o 'Dir::Etc::sourceparts=-' \
+            update
+          sudo apt-get \
+            -o "Dir::Etc::sourcelist=$ubuntu_sources" \
+            -o 'Dir::Etc::sourceparts=-' \
+            install --no-install-recommends -y \
+            cloud-image-utils qemu-system-x86 qemu-utils
+
+          # GitHub-hosted Linux runners expose KVM. Apply GitHub's documented
+          # udev rule so this unprivileged, ephemeral job can open /dev/kvm.
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' |
+            sudo tee /etc/udev/rules.d/99-kvm4all.rules >/dev/null
+          sudo udevadm control --reload-rules
+          if ! sudo udevadm trigger --settle --name-match=kvm; then
+            echo 'warning: udev could not retrigger kvm; checking the existing device directly' >&2
+          fi
+          if test ! -c /dev/kvm; then
+            echo '/dev/kvm is absent or is not a character device' >&2
+            ls -l /dev/kvm 2>/dev/null || true
+            exit 1
+          fi
+          if test ! -r /dev/kvm || test ! -w /dev/kvm; then
+            echo '/dev/kvm is not readable and writable after the udev rule' >&2
+            ls -l /dev/kvm >&2
+            exit 1
+          fi
+          echo 'kvm-host: ready'
+          ls -l /dev/kvm
+          command -v qemu-system-x86_64
+          command -v qemu-img
+          command -v cloud-localds
+
+      - name: Download and verify Rocky 8.10 cloud image
+        shell: bash
+        run: |
+          set -euo pipefail
+          hosted_boot_dir="$RUNNER_TEMP/mckernel-hosted-boot-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          test ! -e "$hosted_boot_dir"
+          test ! -L "$hosted_boot_dir"
+          mkdir -m 700 -p "$hosted_boot_dir/qemu"
+          rocky_image="$hosted_boot_dir/$ROCKY_IMAGE_NAME"
+
+          curl --fail --location --retry 5 --retry-all-errors \
+            --output "$hosted_boot_dir/CHECKSUM" "$ROCKY_CHECKSUM_URL"
+          grep -Fx \
+            "SHA256 ($ROCKY_IMAGE_NAME) = $ROCKY_IMAGE_SHA256" \
+            "$hosted_boot_dir/CHECKSUM"
+          curl --fail --location --retry 5 --retry-all-errors \
+            --output "$rocky_image" "$ROCKY_IMAGE_URL"
+          test "$(stat -c %s "$rocky_image")" = "$ROCKY_IMAGE_BYTES"
+          printf '%s  %s\n' "$ROCKY_IMAGE_SHA256" "$rocky_image" |
+            sha256sum -c -
+          chmod a-w "$rocky_image"
+          qemu-img check "$rocky_image"
+
+          printf 'HOSTED_BOOT_DIR=%s\n' "$hosted_boot_dir" >> "$GITHUB_ENV"
+          printf 'ROCKY_IMAGE=%s\n' "$rocky_image" >> "$GITHUB_ENV"
+          {
+            echo "commit=$(git rev-parse HEAD)"
+            echo "guest_image_url=$ROCKY_IMAGE_URL"
+            echo "guest_image_bytes=$ROCKY_IMAGE_BYTES"
+            echo "guest_sha256=$ROCKY_IMAGE_SHA256"
+            uname -a
+            lscpu
+            df -h
+            qemu-system-x86_64 --version
+            qemu-img info --output=json "$rocky_image"
+          } > "$hosted_boot_dir/host-environment.txt"
+
+      - name: Validate FP-0006 capture authority before disposable QEMU
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha }}"
+          python3 scripts/fp0006_runtime_capture_integration.py \
+            check-contract --repo "$GITHUB_WORKSPACE"
+
+      - name: Boot disposable Rocky guest and run mcexec
+        shell: bash
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          # All module loading, CPU/memory reservation, McKernel boot, and
+          # mcexec workloads happen inside this disposable qcow2 overlay.
+          scripts/qemu-rocky-rust-validation.sh \
+            --image "$ROCKY_IMAGE" \
+            --source-dir "$GITHUB_WORKSPACE" \
+            --accel kvm \
+            --memory 6144M \
+            --cpus 4 \
+            --disk-size 24G \
+            --ssh-timeout 900 \
+            --guest-timeout 18000 \
+            --log-dir "$HOSTED_BOOT_DIR/qemu" \
+            -- \
+            --boot-smoke \
+            --fp0006-negative-dispatch-capture \
+            --fp0006-capture-head "${{ github.event.pull_request.head.sha }}" \
+            --fp0006-capture-repository "$GITHUB_REPOSITORY" \
+            --fp0006-capture-run-id "$GITHUB_RUN_ID" \
+            --fp0006-capture-run-attempt "$GITHUB_RUN_ATTEMPT" \
+            --fp0006-capture-event-name "$GITHUB_EVENT_NAME" \
+            --fp0006-capture-ref "$GITHUB_REF" \
+            --fp0006-capture-github-sha "$GITHUB_SHA" \
+            --fp0006-capture-workflow-sha "$GITHUB_WORKFLOW_SHA" \
+            --fp0006-capture-base-sha "${{ github.event.pull_request.base.sha }}" \
+            --boot-timeout 120 \
+            --smoke-timeout 60 \
+            --verbose-smoke \
+            --jobs 2 \
+            --yes \
+            2>&1 | tee "$HOSTED_BOOT_DIR/run.log"
+
+      - name: Finalize and verify FP-0006 legacy envelope on the clean host
+        shell: bash
+        run: |
+          set -euo pipefail
+          observation="$HOSTED_BOOT_DIR/qemu/guest-evidence/fp0006-legacy-observation"
+          output="$HOSTED_BOOT_DIR/qemu/guest-evidence/fp0006-legacy-live-ioctl"
+          python3 scripts/fp0006_runtime_capture_integration.py \
+            finalize-legacy-observation \
+            --repo "$GITHUB_WORKSPACE" \
+            --observation-dir "$observation" \
+            --output-dir "$output" \
+            --expected-head "${{ github.event.pull_request.head.sha }}" \
+            --expected-repository "$GITHUB_REPOSITORY" \
+            --expected-run-id "$GITHUB_RUN_ID" \
+            --expected-run-attempt "$GITHUB_RUN_ATTEMPT" \
+            --expected-event-name "$GITHUB_EVENT_NAME" \
+            --expected-ref "$GITHUB_REF" \
+            --expected-github-sha "$GITHUB_SHA" \
+            --expected-workflow-sha "$GITHUB_WORKFLOW_SHA" \
+            --expected-base-sha "${{ github.event.pull_request.base.sha }}"
+
+      - name: Upload FP-0006 legacy envelope
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: fp0006-legacy-live-ioctl-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/guest-evidence/fp0006-legacy-live-ioctl/fp0006-runtime-capture-v1.tar
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
+
+      - name: Verify ephemeral host and backing image
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          set -uo pipefail
+          hosted_boot_dir="$RUNNER_TEMP/mckernel-hosted-boot-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          rocky_image="$hosted_boot_dir/$ROCKY_IMAGE_NAME"
+          mkdir -p "$hosted_boot_dir"
+          post_manifest="$hosted_boot_dir/post-validation.txt"
+          exec 3>&1 4>&2
+          exec >"$post_manifest" 2>&1
+          post_rc=0
+
+          echo "run-id=$GITHUB_RUN_ID"
+          echo "run-attempt=$GITHUB_RUN_ATTEMPT"
+          echo "validation-head=$(git rev-parse HEAD 2>/dev/null || echo unavailable)"
+
+          qemu_pid_is_owned() {
+            local check_pid="$1"
+            local expected_pidfile="$2"
+            local qemu_exe
+            local i
+            local -a qemu_argv=()
+
+            test -n "$check_pid" || return 1
+            kill -0 "$check_pid" 2>/dev/null || return 1
+            qemu_exe="$(basename "$(readlink "/proc/$check_pid/exe" 2>/dev/null || true)")"
+            [[ "$qemu_exe" == qemu-system-x86_64* ]] || return 1
+            mapfile -d '' -t qemu_argv < "/proc/$check_pid/cmdline" || return 1
+            for ((i = 0; i + 1 < ${#qemu_argv[@]}; i++)); do
+              if test "${qemu_argv[$i]}" = -pidfile &&
+                test "${qemu_argv[$((i + 1))]}" = "$expected_pidfile"
+              then
+                return 0
+              fi
+            done
+            return 1
+          }
+
+          if test ! -f "$rocky_image"; then
+            echo "Rocky backing image is missing: $rocky_image" >&2
+            post_rc=1
+          else
+            if printf '%s  %s\n' "$ROCKY_IMAGE_SHA256" "$rocky_image" |
+              sha256sum -c -
+            then
+              echo 'backing-image: unchanged'
+            else
+              post_rc=1
+            fi
+          fi
+
+          if test ! -r /proc/modules; then
+            echo 'host /proc/modules is unreadable after guest validation' >&2
+            post_rc=1
+          elif grep -Eq '^(ihk|ihk_smp_x86_64|mcctrl) ' /proc/modules; then
+            echo 'host IHK/McKernel modules are loaded after guest validation' >&2
+            grep -E '^(ihk|ihk_smp_x86_64|mcctrl) ' /proc/modules >&2
+            post_rc=1
+          else
+            echo 'host IHK/McKernel modules after validation: none'
+          fi
+
+          if test -f "$hosted_boot_dir/qemu/guest-overlay.qcow2"; then
+            echo 'disposable guest overlay remains after validation' >&2
+            post_rc=1
+          else
+            echo 'guest-overlay: removed'
+          fi
+          qemu_cpu_model_file="$hosted_boot_dir/qemu/qemu-cpu-model.txt"
+          if test ! -s "$qemu_cpu_model_file" || \
+            test "$(wc -l < "$qemu_cpu_model_file")" -ne 1 || \
+            test "$(cat "$qemu_cpu_model_file")" != 'host,la57=off'
+          then
+            echo 'hosted QEMU did not use the pinned four-level CPU policy' >&2
+            post_rc=1
+          else
+            echo 'qemu-cpu-policy: host,la57=off'
+          fi
+          if test ! -s "$hosted_boot_dir/qemu/serial.log"; then
+            echo 'missing or empty QEMU serial evidence' >&2
+            post_rc=1
+          else
+            echo "serial-evidence: bytes=$(stat -c %s "$hosted_boot_dir/qemu/serial.log")"
+          fi
+          if test ! -s "$hosted_boot_dir/qemu/guest-command.log"; then
+            echo 'missing or empty guest validation evidence' >&2
+            post_rc=1
+          else
+            guest_log="$hosted_boot_dir/qemu/guest-command.log"
+            echo "guest-evidence: bytes=$(stat -c %s "$guest_log")"
+            for marker in \
+              'QEMU guest LA57: absent' \
+              'McKernel status: RUNNING' \
+              'mcexec-true: OK' \
+              'mcexec-hostname: OK' \
+              'mcexec-hostname-absolute: OK' \
+              'mckernel-rust-smoke: OK bytes=1048576 sum=133693440' \
+              'mcexec-rust-workload: OK' \
+              'syscall-offload owner=rust send+forward+wait markers: OK' \
+              'mcstat: OK' \
+              'mcstop+release: OK' \
+              'IHK/McKernel modules after shutdown: none' \
+              'McKernel device nodes after shutdown: none' \
+              'guest-cleanup: OK'
+            do
+              if ! grep -Fxq "$marker" "$guest_log"; then
+                echo "missing guest cleanup marker: $marker" >&2
+                post_rc=1
+              fi
+            done
+            if ! grep -Eq \
+              '^SELinux mode restored: (enforcing|permissive|disabled)$' \
+              "$guest_log"
+            then
+              echo 'missing SELinux restoration evidence' >&2
+              post_rc=1
+            fi
+            for pattern in \
+              'IHK/McKernel started\.' \
+              'IHK/McKernel booted\.' \
+              '^\[[[:space:]]*[0-9]+\]:[[:space:]]+mcexec_v10: prepared ' \
+              '^\[[[:space:]]*[0-9]+\]:[[:space:]]+mcexec_v10: schedule_process queued ' \
+              '^\[[[:space:]]*[0-9]+\]:[[:space:]]+mcexec_v10: enter_user ' \
+              '^\[[[:space:]]*[0-9]+\]:[[:space:]]+mcexec_v10: send_syscall ' \
+              '^\[[[:space:]]*[0-9]+\]:[[:space:]]+mcexec_v10: send_syscall owner=rust ' \
+              '^\[[[:space:]]*[0-9]+\]:[[:space:]]+mcexec_v10: generic_forwarding owner=rust ' \
+              '^\[[[:space:]]*[0-9]+\]:[[:space:]]+mcexec_v10: offload_wait owner=rust ' \
+              '^\[[[:space:]]*[0-9]+\]:[[:space:]]+mcexec_v10: offload_return ' \
+              '^McKernel deterministic-workload kmsg delta: lines=[0-9]+ sha256=[0-9a-f]{64}$' \
+              '^live-module: ihk ' \
+              '^live-module: ihk_smp_x86_64 ' \
+              '^live-module: mcctrl ' \
+              '^IHK remaining unassigned CPU reserves: ' \
+              '^IHK remaining unassigned memory reserves: ' \
+              '^McKernel assigned CPU evidence: .+' \
+              '^McKernel assigned memory evidence: .+' \
+              '^McKernel free-memory evidence: .+' \
+              '^McKernel requested CPU assignment: verified .+' \
+              '^McKernel requested memory assignment: verified .+' \
+              '^Runtime provenance manifest: files=[1-9][0-9]* sha256=[0-9a-f]{64}$' \
+              '^McKernel post-workload status: RUNNING$' \
+              '^McKernel post-workload fatal scan: clean lines=[0-9]+ sha256=[0-9a-f]{64}$' \
+              '^CPU online mask restored: ' \
+              '^vm\.swappiness restored: ' \
+              '^irqbalance state restored: (active|inactive|unavailable)$' \
+              '^IRQ affinity baseline restored: entries=[1-9][0-9]*$' \
+              '^McKernel temporary irqbalance state after shutdown: none$' \
+              '^McKernel validation processes after shutdown: none$' \
+              '^Linux dmesg delta fatal scan: clean ' \
+              '^===== BEGIN raw McKernel kmsg =====$' \
+              '^===== END raw McKernel kmsg =====$' \
+              '^===== BEGIN raw Linux dmesg delta =====$' \
+              '^===== END raw Linux dmesg delta =====$' \
+              '^Runtime raw evidence preserved: files=[1-9][0-9]* manifest_sha256=[0-9a-f]{64}$'
+            do
+              if ! grep -Eq "$pattern" "$guest_log"; then
+                echo "missing guest evidence pattern: $pattern" >&2
+                post_rc=1
+              fi
+            done
+          fi
+
+          guest_evidence_dir="$hosted_boot_dir/qemu/guest-evidence"
+          guest_evidence_archive="$hosted_boot_dir/qemu/guest-evidence.tar"
+          guest_evidence_archive_sha="$hosted_boot_dir/qemu/guest-evidence.tar.sha256"
+          if test ! -s "$guest_evidence_archive" ||
+            test ! -s "$guest_evidence_archive_sha"
+          then
+            echo 'missing guest evidence archive or portable digest' >&2
+            post_rc=1
+          elif (
+            cd "$hosted_boot_dir/qemu" &&
+              sha256sum -c "$(basename "$guest_evidence_archive_sha")"
+          ); then
+            echo 'guest evidence archive digest: verified'
+          else
+            post_rc=1
+          fi
+          if test ! -s "$guest_evidence_dir/SHA256SUMS"; then
+            echo 'missing guest raw-evidence manifest' >&2
+            post_rc=1
+          elif (
+            cd "$guest_evidence_dir" && sha256sum -c SHA256SUMS
+          ); then
+            echo 'guest raw-evidence manifest: verified'
+          else
+            post_rc=1
+          fi
+          for evidence_file in \
+            runtime-environment.txt \
+            runtime-rpms.txt \
+            runtime-repositories.txt \
+            runtime-artifacts.sha256 \
+            mckernel.img.map \
+            mckernel-linked-text-ownership.json \
+            mckernel-symbol-source-attribution.json \
+            mckernel-syscall-offload-composition.json \
+            linux-dmesg-before.log \
+            linux-dmesg-after.log \
+            linux-dmesg-delta.log \
+            mckernel-boot.kmsg \
+            mckernel-before-workload.kmsg \
+            mckernel-after-workload.kmsg \
+            mckernel-workload-delta.kmsg \
+            mckernel-final.kmsg \
+            linux-irq-affinity-before.tsv
+          do
+            if test ! -f "$guest_evidence_dir/$evidence_file"; then
+              echo "missing expected guest evidence file: $evidence_file" >&2
+              post_rc=1
+            fi
+          done
+          runtime_environment="$guest_evidence_dir/runtime-environment.txt"
+          expected_head="$(git rev-parse HEAD 2>/dev/null || true)"
+          for identity in \
+            "source_commit=$expected_head" \
+            'os_id=rocky' \
+            'os_version=8.10' \
+            'arch=x86_64'
+          do
+            if ! grep -Fxq "$identity" "$runtime_environment" 2>/dev/null; then
+              echo "missing or mismatched runtime identity: $identity" >&2
+              post_rc=1
+            fi
+          done
+
+          pidfile="$hosted_boot_dir/qemu/qemu.pid"
+          started_pidfile="$hosted_boot_dir/qemu/qemu-started.pid"
+          qemu_exit_ok=1
+          if test ! -s "$started_pidfile"; then
+            echo 'missing verified QEMU startup PID evidence' >&2
+            qemu_exit_ok=0
+            post_rc=1
+          else
+            pid="$(cat "$started_pidfile" 2>/dev/null || true)"
+            if [[ ! "$pid" =~ ^[0-9]+$ ]]; then
+              echo "invalid verified QEMU startup PID: $pid" >&2
+              qemu_exit_ok=0
+              post_rc=1
+            elif kill -0 "$pid" 2>/dev/null; then
+              if qemu_pid_is_owned "$pid" "$pidfile"; then
+                echo "QEMU process $pid is still running after validation" >&2
+                kill "$pid" 2>/dev/null || true
+                for _ in {1..20}; do
+                  qemu_pid_is_owned "$pid" "$pidfile" || break
+                  sleep 0.25
+                done
+                if qemu_pid_is_owned "$pid" "$pidfile"; then
+                  kill -9 "$pid" 2>/dev/null || true
+                elif kill -0 "$pid" 2>/dev/null; then
+                  echo "refusing to SIGKILL reused PID $pid" >&2
+                fi
+                qemu_exit_ok=0
+                post_rc=1
+              else
+                echo "startup PID $pid was reused after QEMU exited"
+              fi
+            fi
+          fi
+          if test "$qemu_exit_ok" -eq 1; then
+            echo 'qemu-exit: OK'
+          fi
+          if test "$post_rc" -eq 0; then
+            echo 'hosted-post-validation: OK'
+          else
+            echo 'hosted-post-validation: FAILED'
+          fi
+          exec 1>&3 2>&4
+          if test ! -s "$post_manifest"; then
+            echo 'post-validation manifest is missing or empty' >&2
+            exit 1
+          fi
+          cat "$post_manifest"
+          exit "$post_rc"
+
+      - name: Upload hosted boot evidence without ephemeral SSH keys
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: hosted-rocky-boot-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/CHECKSUM
+            ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/host-environment.txt
+            ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/post-validation.txt
+            ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/run.log
+            ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/serial.log
+            ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/debugcon.log
+            ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/qemu-started.pid
+            ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/qemu-startup.log
+            ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/qemu-cpu-model.txt
+            ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/qmp-status.jsonl
+            ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/guest-command.log
+            ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/guest-cleanup.log
+            ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/guest-evidence.tar
+            ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/guest-evidence.tar.sha256
+            ${{ runner.temp }}/mckernel-hosted-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/guest-evidence/
+            VALIDATION_PROGRESS.MD
+          if-no-files-found: warn
+          retention-days: 90
+
+  boot-smoke:
+    name: Protected Rocky QEMU boot and mcexec
+    needs: rocky-build
+    if: >-
+      ${{ github.event_name == 'workflow_dispatch' &&
+          inputs.boot_smoke &&
+          github.ref == 'refs/heads/development' }}
+    runs-on: [self-hosted, linux, x64, kvm, mckernel-boot]
+    timeout-minutes: 300
+    environment: mckernel-boot
+    concurrency:
+      group: mckernel-boot
+      cancel-in-progress: false
+    env:
+      VALIDATION_SHA: ${{ inputs.validation_sha }}
+      ROCKY_IMAGE: ${{ vars.MCKERNEL_ROCKY_QCOW2 }}
+      ROCKY_IMAGE_SHA256: ${{ vars.MCKERNEL_ROCKY_QCOW2_SHA256 }}
+
+    steps:
+      - name: Check out trusted validation wrapper
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.sha }}
+          path: trusted
+          fetch-depth: 0
+          persist-credentials: false
+          clean: true
+
+      - name: Check out approved candidate and submodules
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ inputs.validation_sha }}
+          path: candidate
+          fetch-depth: 0
+          submodules: recursive
+          persist-credentials: false
+          clean: true
+
+      - name: Verify protected runner and immutable guest image
+        shell: bash
+        run: |
+          set -euo pipefail
+          BOOT_LOG_DIR="$RUNNER_TEMP/mckernel-boot-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          test ! -e "$BOOT_LOG_DIR"
+          test ! -L "$BOOT_LOG_DIR"
+          mkdir -m 700 -p "$BOOT_LOG_DIR/qemu"
+          [[ "$VALIDATION_SHA" =~ ^[0-9a-f]{40}$ ]] || {
+            echo 'validation_sha must be an exact 40-hex commit' >&2
+            exit 2
+          }
+          test "$(git -C candidate rev-parse HEAD)" = "$VALIDATION_SHA"
+          test "$(git -C trusted rev-parse HEAD)" = "$GITHUB_SHA"
+          git -C candidate fetch --no-tags origin \
+            development:refs/remotes/origin/development
+          git -C candidate merge-base --is-ancestor \
+            origin/development HEAD
+          test -n "$ROCKY_IMAGE"
+          test -n "$ROCKY_IMAGE_SHA256"
+          test -f "$ROCKY_IMAGE"
+          test -c /dev/kvm
+          test -r /dev/kvm
+          test -w /dev/kvm
+          printf '%s  %s\n' "$ROCKY_IMAGE_SHA256" "$ROCKY_IMAGE" |
+            sha256sum -c -
+          command -v qemu-system-x86_64
+          command -v qemu-img
+          command -v cloud-localds
+
+          if grep -Eq '^(ihk|ihk_smp_x86_64|mcctrl) ' /proc/modules; then
+            echo 'refusing to run: host IHK/McKernel modules are loaded' >&2
+            exit 1
+          fi
+
+          {
+            echo "candidate_commit=$(git -C candidate rev-parse HEAD)"
+            echo "trusted_runner_commit=$(git -C trusted rev-parse HEAD)"
+            echo "guest_image=$ROCKY_IMAGE"
+            echo "guest_sha256=$ROCKY_IMAGE_SHA256"
+            uname -a
+            qemu-system-x86_64 --version
+            qemu-img info --output=json "$ROCKY_IMAGE"
+          } > "$BOOT_LOG_DIR/host-environment.txt"
+
+      - name: Boot inside disposable Rocky guest and run mcexec
+        shell: bash
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          BOOT_LOG_DIR="$RUNNER_TEMP/mckernel-boot-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          # The unsafe-host opt-in is added by the wrapper inside the guest.
+          # This job never loads IHK or boots McKernel on the runner host.
+          trusted/scripts/qemu-rocky-rust-validation.sh \
+            --image "$ROCKY_IMAGE" \
+            --source-dir "$GITHUB_WORKSPACE/candidate" \
+            --accel kvm \
+            --memory 4096M \
+            --cpus 4 \
+            --ssh-timeout 900 \
+            --guest-timeout 14400 \
+            --log-dir "$BOOT_LOG_DIR/qemu" \
+            -- \
+            --boot-smoke \
+            --smoke-timeout 30 \
+            --verbose-smoke \
+            --jobs 2 \
+            --yes \
+            2>&1 | tee "$BOOT_LOG_DIR/run.log"
+
+      - name: Verify runner host stayed untouched
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          set -uo pipefail
+          BOOT_LOG_DIR="$RUNNER_TEMP/mckernel-boot-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          post_rc=0
+
+          qemu_pid_is_owned() {
+            local check_pid="$1"
+            local expected_pidfile="$2"
+            local qemu_exe
+            local i
+            local -a qemu_argv=()
+
+            test -n "$check_pid" || return 1
+            kill -0 "$check_pid" 2>/dev/null || return 1
+            qemu_exe="$(basename "$(readlink "/proc/$check_pid/exe" 2>/dev/null || true)")"
+            [[ "$qemu_exe" == qemu-system-x86_64* ]] || return 1
+            mapfile -d '' -t qemu_argv < "/proc/$check_pid/cmdline" || return 1
+            for ((i = 0; i + 1 < ${#qemu_argv[@]}; i++)); do
+              if test "${qemu_argv[$i]}" = -pidfile &&
+                test "${qemu_argv[$((i + 1))]}" = "$expected_pidfile"
+              then
+                return 0
+              fi
+            done
+            return 1
+          }
+          if test -z "$ROCKY_IMAGE" || test -z "$ROCKY_IMAGE_SHA256"; then
+            echo 'protected Rocky image path/checksum is unset' >&2
+            post_rc=1
+          elif test ! -f "$ROCKY_IMAGE"; then
+            echo "protected Rocky image disappeared: $ROCKY_IMAGE" >&2
+            post_rc=1
+          else
+            printf '%s  %s\n' "$ROCKY_IMAGE_SHA256" "$ROCKY_IMAGE" |
+              sha256sum -c - || post_rc=1
+          fi
+
+          if grep -Eq '^(ihk|ihk_smp_x86_64|mcctrl) ' /proc/modules; then
+            echo 'host IHK/McKernel modules are loaded after guest validation' >&2
+            grep -E '^(ihk|ihk_smp_x86_64|mcctrl) ' /proc/modules >&2
+            post_rc=1
+          fi
+
+          if test -f "$BOOT_LOG_DIR/qemu/qemu.pid"; then
+            pid="$(cat "$BOOT_LOG_DIR/qemu/qemu.pid" 2>/dev/null || true)"
+            if test -n "$pid" && kill -0 "$pid" 2>/dev/null; then
+              echo "QEMU process $pid is still running after validation" >&2
+              if qemu_pid_is_owned "$pid" "$BOOT_LOG_DIR/qemu/qemu.pid"; then
+                kill "$pid" 2>/dev/null || true
+                for _ in {1..20}; do
+                  qemu_pid_is_owned "$pid" "$BOOT_LOG_DIR/qemu/qemu.pid" || break
+                  sleep 0.25
+                done
+                if qemu_pid_is_owned "$pid" "$BOOT_LOG_DIR/qemu/qemu.pid"; then
+                  kill -9 "$pid" 2>/dev/null || true
+                elif kill -0 "$pid" 2>/dev/null; then
+                  echo "refusing to SIGKILL reused PID $pid" >&2
+                fi
+              else
+                echo 'refusing to kill PID because QEMU identity did not verify' >&2
+              fi
+              post_rc=1
+            fi
+          fi
+          exit "$post_rc"
+
+      - name: Upload boot evidence without ephemeral SSH keys
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: rocky-boot-${{ inputs.validation_sha }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/mckernel-boot-${{ github.run_id }}-${{ github.run_attempt }}/host-environment.txt
+            ${{ runner.temp }}/mckernel-boot-${{ github.run_id }}-${{ github.run_attempt }}/run.log
+            ${{ runner.temp }}/mckernel-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/serial.log
+            ${{ runner.temp }}/mckernel-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/debugcon.log
+            ${{ runner.temp }}/mckernel-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/qemu-started.pid
+            ${{ runner.temp }}/mckernel-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/qemu-startup.log
+            ${{ runner.temp }}/mckernel-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/qmp-status.jsonl
+            ${{ runner.temp }}/mckernel-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/guest-command.log
+            ${{ runner.temp }}/mckernel-boot-${{ github.run_id }}-${{ github.run_attempt }}/qemu/guest-cleanup.log
+            candidate/VALIDATION_PROGRESS.MD
+          if-no-files-found: warn
+          retention-days: 30

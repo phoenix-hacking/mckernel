@@ -1,0 +1,114 @@
+{
+  "behavior": {
+    "capacity_errno": -12,
+    "create_reservation": "exclusive-first-free-with-rollback",
+    "destroy_policy": "exclusive-and-reference-free-with-rollback",
+    "errno_map": {
+      "Busy": -16,
+      "Capacity": -12,
+      "Corrupt": -117,
+      "GenerationExhausted": -75,
+      "InvalidMinor": -22,
+      "InvalidTransition": -22,
+      "NotFound": -2,
+      "ReferenceOverflow": -75,
+      "StaleHandle": -116
+    },
+    "generation_policy": "41-bit-monotonic-per-minor-retire-before-wrap",
+    "status_transition_masks": [
+      6,
+      257,
+      1848,
+      1840,
+      2016,
+      1984,
+      1952,
+      1888,
+      1,
+      257,
+      769
+    ]
+  },
+  "canonical_abi": {
+    "path": "host-kernel/native-rust/abi/x86_64.rs",
+    "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3",
+    "status_values": {
+      "IHK_OS_STATUS_BOOTED": 3,
+      "IHK_OS_STATUS_BOOTING": 2,
+      "IHK_OS_STATUS_FAILED": 9,
+      "IHK_OS_STATUS_FREEZING": 6,
+      "IHK_OS_STATUS_FROZEN": 7,
+      "IHK_OS_STATUS_HUNGUP": 10,
+      "IHK_OS_STATUS_LOADING": 1,
+      "IHK_OS_STATUS_NOT_BOOTED": 0,
+      "IHK_OS_STATUS_READY": 4,
+      "IHK_OS_STATUS_RUNNING": 5,
+      "IHK_OS_STATUS_SHUTDOWN": 8
+    }
+  },
+  "fixture": {
+    "edition": "2021",
+    "minimum_rustc": "1.92.0",
+    "no_std_library_mode": true,
+    "path": "scripts/tests/fixtures/ihk_os_registry_compile.rs",
+    "sha256": "24ff3e4464f07c8b66451fee1b782be10fcd2d81e7059bbdcd6ac34eaf760e0a",
+    "test_count": 8
+  },
+  "gate_id": "IHK-005-foundation",
+  "implementation": {
+    "allocation_free": true,
+    "capacity": 64,
+    "ffi_free": true,
+    "generation_bits": 41,
+    "path": "host-kernel/native-rust/os_registry.rs",
+    "sha256": "29464b8ca1038d87cc0d5f760eb22e0cbd7a1a512ae88f4c550574a784d1e49d",
+    "size": 17706,
+    "slot_atomic_bits": 64
+  },
+  "legacy_capture": {
+    "ihk_ref": "3114d9e7101ad52030eb3effa849a5c108972a1f",
+    "sources": [
+      {
+        "id": "host_driver",
+        "path": "linux/core/host_driver.c",
+        "sha256": "be75185f5b1a0aea84b0be995f67405e45964999b6ed28ae60adb3ed1dece722",
+        "size": 69863
+      },
+      {
+        "id": "status",
+        "path": "linux/include/ihk/status.h",
+        "sha256": "fef81cf170da96d41500a572c22e44c272f7110eff815cf43944de0e429d81e7",
+        "size": 995
+      },
+      {
+        "id": "smp_header",
+        "path": "linux/driver/smp/smp-driver.h",
+        "sha256": "2ae46800be142144f207af794961584efab244b6148a557849843e805e81fdd4",
+        "size": 5246
+      },
+      {
+        "id": "smp_driver",
+        "path": "linux/driver/smp/smp-driver.c",
+        "sha256": "90fefdcb66ecd49cff6d43d2f5b8c13ce28010be2bde8043400cb2baebfa2544",
+        "size": 138442
+      },
+      {
+        "id": "smp_status",
+        "path": "linux/driver/smp/arch/x86_64/smp-arch-driver.c",
+        "sha256": "6ec820741ce6e77e4f60ce4c6b6577ed215a42ecf1a7e30207390ed6d0cbb745",
+        "size": 52592
+      }
+    ]
+  },
+  "readiness": {
+    "blockers": [
+      "the registry is privately attached to ihk.rs, but create/destroy entry points are not wired",
+      "exact Rocky Linux 6.12 Kbuild and module-load evidence for this source is absent",
+      "legacy create/destroy callbacks, cdev publication, kmsg ownership, and device teardown are not connected",
+      "the transition graph and errno bridge require independent review against runtime provider behavior"
+    ],
+    "credit_eligible": false,
+    "status": "TODO"
+  },
+  "schema_version": 1
+}

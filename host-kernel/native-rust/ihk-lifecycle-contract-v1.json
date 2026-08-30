@@ -1,0 +1,149 @@
+{
+  "abi_version": 1,
+  "crate_modules": [
+    {
+      "destination": "abi/x86_64.rs",
+      "path": "host-kernel/native-rust/abi/x86_64.rs",
+      "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3"
+    },
+    {
+      "destination": "ikc_queue.rs",
+      "path": "host-kernel/native-rust/ikc_queue.rs",
+      "sha256": "514f9bce452498e5e9394c450532b040c44fce1ac7a6b5158c76f3d4c7270d40"
+    },
+    {
+      "destination": "device_registry.rs",
+      "path": "host-kernel/native-rust/device_registry.rs",
+      "sha256": "43c3a4badd09bb70a31c9120d23e3b2b63ffa735412d172e0f0ac3d2edc85af5"
+    },
+    {
+      "destination": "ikc_master.rs",
+      "path": "host-kernel/native-rust/ikc_master.rs",
+      "sha256": "f7e8f8bc1cc860a2eb3724457d81bf03b132fa156eac5c5e258a393808e6ca1e"
+    }
+  ],
+  "dependencies": [],
+  "gate_id": "IHK-001",
+  "kbuild": {
+    "config_symbol": "CONFIG_MCKERNEL_IHK_RUST",
+    "module_object": "ihk.o",
+    "path": "host-kernel/kbuild/Kbuild.in"
+  },
+  "kconfig": {
+    "path": "host-kernel/kbuild/Kconfig",
+    "symbol": "MCKERNEL_IHK_RUST",
+    "type": "tristate"
+  },
+  "lifecycle_logs": {
+    "load": "lifecycle=load version={} abi={} parameters={} dependencies={}",
+    "unload": "lifecycle=unload version={} abi={} parameters={} dependencies={}"
+  },
+  "module": {
+    "author": "McKernel Rust port",
+    "description": "Native Rust IHK host core",
+    "license": "GPL v2",
+    "name": "ihk",
+    "output": "ihk.ko",
+    "version": "1.7.0rc4"
+  },
+  "parameter_count": 0,
+  "production_source": "host-kernel/native-rust/ihk.rs",
+  "production_source_sha256": "7e5e7f06d26a386b9b3bb42983b48979e6c998deae916d87fd6902b41d4a0d36",
+  "provider_lease": {
+    "attach_symbol": "ihk_smp_provider_attach_v2",
+    "callback_abi": 1,
+    "callback_payload_reachable": false,
+    "compatibility_exports": [
+      "ihk_smp_provider_attach_v1",
+      "ihk_smp_provider_detach_v1"
+    ],
+    "credit_eligible": false,
+    "detach_symbol": "ihk_smp_provider_detach_v2",
+    "device_node_reachable": false,
+    "import_namespace": "MCKERNEL_IHK_V1",
+    "lifecycle_callbacks": {
+      "arguments": "none",
+      "exit_before_vacate": true,
+      "exit_identity_retained": true,
+      "init_before_publish": true,
+      "operation_callbacks_reachable": false,
+      "raw_data_pointer": false,
+      "unpublishing_guard_across_exit": true
+    },
+    "open_lease": {
+      "acquire_failure": "negative-errno",
+      "acquire_symbol": "ihk_smp_provider_open_v1",
+      "close_failure": "fail-stop",
+      "close_symbol": "ihk_smp_provider_close_v1",
+      "credit_eligible": false,
+      "device_node_reachable": false,
+      "duplicate_close_detectable_while_other_references_exist": false,
+      "exactly_once_close_owner": "non-Copy-per-file-wrapper",
+      "file_operations_reachable": false,
+      "minor": 0,
+      "multiple_shared_opens": true,
+      "raw_pointer": false,
+      "receipt": "positive-i64-provider-generation-token",
+      "rocky_runtime_validated": false,
+      "rust_layout": false,
+      "trusted_noncopy_owner_balance_required": true
+    },
+    "registry_static": "IHK_DEVICE_REGISTRY",
+    "rocky_runtime_validated": false,
+    "scope": "scalar minor-zero module-lifetime provider lease, scalar-only init/exit callbacks, and scalar open-reference receipts; no device registration or provider operation payload",
+    "token_version": 1
+  },
+  "reference_inventory": "host-kernel/reference/legacy-host-modules-f2eb7352.json",
+  "schema_version": 1,
+  "stage_manifest": "host-kernel/kbuild/stage-manifest.json",
+  "support_sources": [
+    {
+      "contract_path": "host-kernel/contracts/x86_64-shared-abi-v1.json",
+      "contract_sha256": "fb58ed2b114aea9ee1ba8e8fe52d01e2b8bd036cc1349b76d79c9615ac2bc9fa",
+      "destination": "abi/x86_64.rs",
+      "kind": "shared_rust_abi",
+      "path": "host-kernel/native-rust/abi/x86_64.rs",
+      "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3"
+    },
+    {
+      "contract_path": "host-kernel/contracts/ihk-os-registry-foundation-v1.json",
+      "contract_sha256": "2a6117766490de61ffea3e9ef5eab45c265b17b90a929632d86022ce4deaf32f",
+      "destination": "os_registry.rs",
+      "kind": "rust_support_module",
+      "path": "host-kernel/native-rust/os_registry.rs",
+      "sha256": "29464b8ca1038d87cc0d5f760eb22e0cbd7a1a512ae88f4c550574a784d1e49d"
+    },
+    {
+      "contract_path": "host-kernel/contracts/ihk-device-registry-foundation-v1.json",
+      "contract_sha256": "8f3428436536d8f1b691105f45acb2a5c6b41d9331eb4e40d487adf73946a329",
+      "destination": "device_registry.rs",
+      "kind": "rust_support_module",
+      "path": "host-kernel/native-rust/device_registry.rs",
+      "sha256": "43c3a4badd09bb70a31c9120d23e3b2b63ffa735412d172e0f0ac3d2edc85af5"
+    },
+    {
+      "contract_path": "host-kernel/contracts/ihk-ioctl-dispatch-foundation-v1.json",
+      "contract_sha256": "1c1873746e6e0a64174d34a2f2dc066e193540dea4444ae71ff494a757b14f54",
+      "destination": "ihk_ioctl.rs",
+      "kind": "rust_ioctl_dispatch",
+      "path": "host-kernel/native-rust/ihk_ioctl.rs",
+      "sha256": "3d603424705a9b0fb18725bae1d75f1d279b249b866c15f15f98166d013edfbb"
+    },
+    {
+      "contract_path": "host-kernel/native-rust/ihk-page-allocator-contract-v1.json",
+      "contract_sha256": "dfbf8d3f58b188ff15fd618346b80945b8840be106f899f9a21cba0d4cda171b",
+      "destination": "page_allocator.rs",
+      "kind": "rust_support_module",
+      "path": "host-kernel/native-rust/page_allocator.rs",
+      "sha256": "8e2af0cde06cbb70204540b493e8a0a66d5203195ed671235b64bed44d328bc5"
+    },
+    {
+      "contract_path": "host-kernel/native-rust/ihk-page-owner-registry-contract-v1.json",
+      "contract_sha256": "affa57b92ee1e2c2cf63761ef575735590b497103fff6ad83824776b856d3b66",
+      "destination": "page_owner_registry.rs",
+      "kind": "rust_support_module",
+      "path": "host-kernel/native-rust/page_owner_registry.rs",
+      "sha256": "443d58fa5b2e423f538c6622ef04d8e34338abc43c5e0fd34811d52fc21f4869"
+    }
+  ]
+}

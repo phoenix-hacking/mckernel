@@ -1,0 +1,322 @@
+{
+  "acquisition": {
+    "allowed_redirect_hosts": [
+      "download.rockylinux.org"
+    ],
+    "cache_layout_version": 1,
+    "cache_relative_path": "rocky/10.2/x86_64/source-rpms/sha256/2b/2bfeda65bd9bdd4b86650074c81e061c37822b80317ac0d4f5aacc89c85589cb/kernel-6.12.0-211.44.1.el10_2.src.rpm",
+    "default_cache_root": ".cache/mckernel-kernel-sources",
+    "hash_algorithm": "sha256",
+    "network_policy": "HTTPS only; reject redirects outside allowed_redirect_hosts; verify exact byte count and SHA-256 before atomic cache publication"
+  },
+  "dist_git": {
+    "branch_context": "r10",
+    "branch_is_immutable_identity": false,
+    "commit": "e4cad646580f7f3dfec5e3b6b4ea9e89b7572f6c",
+    "commit_parent": "ec0da4795eed03a457da5a3fb83a5622ef95839b",
+    "content": [
+      {
+        "path": ".kernel.checksum",
+        "sha256": "f9c6578888639f601e0dbfda887b73d8fcfcba5dbd68e0fef186febaa6959215",
+        "size": 65
+      },
+      {
+        "path": ".kernel.metadata",
+        "sha256": "65eddbfd4115f7d7143231c5380835accf44f9d7c394709473c5f9948b3a1b50",
+        "size": 356
+      },
+      {
+        "path": "SPECS/kernel.spec",
+        "sha256": "081eb3b79dbbd240d484c6b72ecc786abf9997f8040b88120165e9b32273fdfe",
+        "size": 1855272
+      },
+      {
+        "path": "SOURCES/kernel-x86_64-rhel.config",
+        "sha256": "5bbdda60ce822ec903c85d3d8ddda1bfc9493216bed86c6c432683aa50dcf50d",
+        "size": 254653
+      }
+    ],
+    "repository_url": "https://git.rockylinux.org/staging/rpms/kernel.git",
+    "tag": "patched/r10/kernel-6.12.0-211.44.1.el10_2",
+    "tag_annotation_original_hash": "2d1667d05d35af0db51fb674095decbc3ea6ca7b752134ff40815b815652616e",
+    "tag_object": "e2eab3dcafd17dcf661d4df2582bcae8188a7550"
+  },
+  "embedded_objects": [
+    {
+      "path": "SOURCES/kernel-abi-stablelists-6.12.0-211.44.1.el10_2.tar.xz",
+      "role": "kernel ABI stable-list source object",
+      "sha256": "9c753338d255502a040c82be6a39a47b80df15e30fb1d3bc2f13687522c27032",
+      "size": 18168
+    },
+    {
+      "path": "SOURCES/kernel-kabi-dw-6.12.0-211.44.1.el10_2.tar.xz",
+      "role": "kernel ABI DWARF source object",
+      "sha256": "7547d50e4f0daeb28eba949801d3d09d0c3c6a8946859759a44d00f786791d4e",
+      "size": 1096
+    },
+    {
+      "path": "SOURCES/linux-6.12.0-211.44.1.el10_2.tar.xz",
+      "role": "Rocky-derived Linux source archive",
+      "sha256": "4a174d47b8874a2139efcd1ac1ab2d6b80ae7a0ca62f0ae4596fd20cf62a3533",
+      "size": 153374592
+    }
+  ],
+  "evidence": {
+    "acquisition_replay": {
+      "blocker": null,
+      "evidence_path": "host-kernel/rocky/evidence/acquisition-replay.json",
+      "evidence_sha256": "d37019bfa3c295867c68461c89bd70d9bcc8417e8dfc6ffd23ff46601280e2a0",
+      "required": true,
+      "status": "verified"
+    },
+    "dist_git_object_replay": {
+      "blocker": null,
+      "evidence_path": "host-kernel/rocky/evidence/dist-git-object-replay.json",
+      "evidence_sha256": "359ed16070bd3a401fe733a00581499e6784fa2b017c51cbf3da2bbd7fe499de",
+      "required": true,
+      "status": "verified"
+    },
+    "repository_metadata_signature_replay": {
+      "blocker": null,
+      "evidence_path": "host-kernel/rocky/evidence/repository-metadata-signature-replay.json",
+      "evidence_sha256": "4573f66b43019a6b45907a611d3c52a3af4ac92cdacd0ff3c1ee8a945b270dc5",
+      "required": true,
+      "status": "verified"
+    },
+    "srpm_header_signature": {
+      "blocker": null,
+      "evidence_path": "host-kernel/rocky/evidence/srpm-header-signature.json",
+      "evidence_sha256": "0106cd8d9ae07a9191affa55f35f7d79390e66ca95c1e85034d3434d06a79901",
+      "required": true,
+      "signature_algorithm": "RSA/SHA256",
+      "signer_fingerprint": "FC226859C0860BF0DDB95B085B106C736FEDFC85",
+      "status": "verified"
+    }
+  },
+  "gate": {
+    "credit_eligible": false,
+    "gate_id": "RK-001",
+    "policy": "Credit is forbidden while any required evidence or the complete license inventory is missing or unverified."
+  },
+  "licenses": {
+    "capture_authority": {
+      "authority_id": "rk-001-license-capture-source-closure-v1",
+      "closure_algorithm": "sha256 over canonical sorted path rows and canonical source-identity rows",
+      "namespaces": {
+        "dist-git": {
+          "item_count": 77,
+          "path_set_sha256": "ffe07b597e0a3b72d5e29e7b05aea8e75bdf112d75068d3d72e28547a4833c22",
+          "source_manifest_sha256": "ac819ee853a73c109c2db5f8735b947c1fae6374fce8b3402779720fe5621e96"
+        },
+        "linux": {
+          "item_count": 115027,
+          "path_set_sha256": "f7495feae099d970ef02bbb1a73a0669b88c83c33dad80d3cc6bfb4184b2b0c2",
+          "source_manifest_sha256": "321b8a227f7a9473a94db6fbf747c48727a39b20bd8a24474f68578915ca4e56"
+        },
+        "repository": {
+          "paths": [
+            "host-kernel/kbuild/parent-integration-v1.json",
+            "host-kernel/kbuild/patches/0001-drivers-misc-add-mckernel-rust-host-modules.patch",
+            "host-kernel/kbuild/patches/0002-rust-bindings-expose-module-parameters.patch",
+            "host-kernel/kbuild/stage-manifest.json",
+            "host-kernel/kbuild/Kbuild.in",
+            "host-kernel/kbuild/Kconfig",
+            "host-kernel/native-rust/abi/x86_64.rs",
+            "host-kernel/native-rust/ihk.rs",
+            "host-kernel/native-rust/ihk_ioctl.rs",
+            "host-kernel/native-rust/ihk_smp_x86_64.rs",
+            "host-kernel/native-rust/ikc_master.rs",
+            "host-kernel/native-rust/ikc_queue.rs",
+            "host-kernel/native-rust/mcctrl.rs",
+            "host-kernel/native-rust/os_registry.rs",
+            "host-kernel/native-rust/page_allocator.rs",
+            "host-kernel/native-rust/page_owner_registry.rs",
+            "host-kernel/rocky/configs/native-rust-evidence.config",
+            "host-kernel/rocky/configs/rust-minimal.config",
+            "host-kernel/rocky/patches/0001-x86-rust-set-rustc-abi-x86-softfloat.patch",
+            "host-kernel/rocky/patches/0002-rust-support-rust-1.91-target-spec.patch",
+            "host-kernel/rocky/patches/0003-kbuild-rust-add-rustc-min-version.patch",
+            "host-kernel/rocky/patches/0004-rust-compile-libcore-edition-2024.patch",
+            "host-kernel/rocky/patches/0005-rust-clean-unnecessary-transmutes-lint.patch",
+            "host-kernel/rocky/patches/0006-rust-init-allow-dead-code-rust-1.89.patch",
+            "host-kernel/rocky/patches/0007-rust-use-used-compiler-rust-1.89.patch",
+            "host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch",
+            "host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch",
+            "host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch",
+            "host-kernel/rocky/patches/0011-mm-ksm-fix-clang-21-uninitialized.patch",
+            "host-kernel/rocky/patches/0012-netfs-mark-nonstring-lookup-tables.patch",
+            "host-kernel/rocky/patches/0013-lib-crypto-mark-binary-vectors-nonstring.patch",
+            "host-kernel/rocky/patches/0014-gcc-15-mark-byte-arrays-nonstring.patch",
+            "host-kernel/rocky/patches/0015-gcc-15-demote-unterminated-string-warning.patch",
+            "host-kernel/rocky/patches/0016-gcc-15-disable-unterminated-string-warning.patch",
+            "host-kernel/rocky/patches/0017-kbuild-use-cc-disable-warning.patch",
+            "host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch",
+            "host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch",
+            "host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch",
+            "host-kernel/rocky/patches/0020a-rust-miscdevice-bind-file-operations-to-module.patch",
+            "host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch",
+            "host-kernel/rocky/patches/0022-x86-pvh-annotate-noendbr.patch",
+            "host-kernel/rocky/patches/0023-rust-update-no-alloc-shim-marker-rust-1.92.patch",
+            "host-kernel/rocky/patches/series.json",
+            "scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs",
+            "scripts/tests/fixtures/ihk_native_master_compile.rs",
+            "scripts/tests/fixtures/ihk_native_queue_compile.rs",
+            "scripts/tests/fixtures/ihk_ioctl_dispatch_compile.rs",
+            "scripts/tests/fixtures/ihk_os_registry_compile.rs",
+            "scripts/tests/fixtures/ihk_page_allocator_compile.rs",
+            "scripts/tests/fixtures/ihk_page_allocator_lifetime_compile_fail.rs",
+            "scripts/tests/fixtures/ihk_page_allocator_must_use_compile_fail.rs",
+            "scripts/tests/fixtures/ihk_page_owner_registry_compile.rs",
+            "scripts/tests/fixtures/ihk_page_owner_registry_lifetime_compile_fail.rs",
+            "scripts/tests/fixtures/ihk_page_owner_registry_sync_compile_fail.rs",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/Documentation/kbuild/makefiles.rst",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/Makefile",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/arch/arm64/Makefile",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/arch/loongarch/kernel/Makefile",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/arch/loongarch/kvm/Makefile",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/arch/riscv/kernel/Makefile",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/arch/x86/platform/pvh/head.S",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/drivers/iio/magnetometer/ak8974.c",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/drivers/input/joystick/magellan.c",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/drivers/net/wireless/ath/carl9170/fw.c",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/fs/cachefiles/key.c",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/fs/netfs/fscache_cache.c",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/fs/netfs/fscache_cookie.c",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/include/linux/blk-mq.h",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/init/Kconfig",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/lib/crypto/aescfb.c",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/lib/crypto/aesgcm.c",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/mm/ksm.c",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/rust/Makefile",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/rust/bindings/bindings_helper.h",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/rust/bindings/lib.rs",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/alloc/allocator.rs",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/block/mq/tag_set.rs",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/ioctl.rs",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/init/macros.rs",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/lib.rs",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/list/arc.rs",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/sync/arc.rs",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/types.rs",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/uaccess.rs",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/rust/macros/module.rs",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/rust/uapi/lib.rs",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/scripts/Makefile.build",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/scripts/Makefile.compiler",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/scripts/Makefile.extrawarn",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/scripts/generate_rust_analyzer.py",
+            "scripts/tests/fixtures/rust-core-rocky-6.12/tools/objtool/check.c"
+          ],
+          "verification": "recompute exact blob OIDs, bytes, and closure from the bound Git commit"
+        },
+        "srpm": {
+          "item_count": 71,
+          "path_set_sha256": "d599d27ba45a688e7f550f793dc467f48e3603fb77efb790331b5b8b42a4ee96",
+          "source_manifest_sha256": "8158ccfb1a5899e47962e45ad107d04e0747fdf0951f167039e7ae3e13d84f47"
+        }
+      },
+      "scope_is_derived_from_verified_closures": true
+    },
+    "decision": {
+      "authority_registration": "an independently reviewed exact decision-manifest SHA-256 must be registered in the validator before RK-001 can close",
+      "blocker": "No independently reviewed license decision manifest is registered.",
+      "decision_path": null,
+      "decision_sha256": null,
+      "required": true,
+      "status": "required-missing"
+    },
+    "declared_spdx_expression": "((GPL-2.0-only WITH Linux-syscall-note) OR BSD-2-Clause) AND ((GPL-2.0-only WITH Linux-syscall-note) OR BSD-3-Clause) AND ((GPL-2.0-only WITH Linux-syscall-note) OR CDDL-1.0) AND ((GPL-2.0-only WITH Linux-syscall-note) OR Linux-OpenIB) AND ((GPL-2.0-only WITH Linux-syscall-note) OR MIT) AND ((GPL-2.0-or-later WITH Linux-syscall-note) OR BSD-3-Clause) AND ((GPL-2.0-or-later WITH Linux-syscall-note) OR MIT) AND 0BSD AND BSD-2-Clause AND (BSD-2-Clause OR Apache-2.0) AND BSD-3-Clause AND BSD-3-Clause-Clear AND CC0-1.0 AND GFDL-1.1-no-invariants-or-later AND GPL-1.0-or-later AND (GPL-1.0-or-later OR BSD-3-Clause) AND (GPL-1.0-or-later WITH Linux-syscall-note) AND GPL-2.0-only AND (GPL-2.0-only OR Apache-2.0) AND (GPL-2.0-only OR BSD-2-Clause) AND (GPL-2.0-only OR BSD-3-Clause) AND (GPL-2.0-only OR CDDL-1.0) AND (GPL-2.0-only OR GFDL-1.1-no-invariants-or-later) AND (GPL-2.0-only OR GFDL-1.2-no-invariants-only) AND (GPL-2.0-only WITH Linux-syscall-note) AND GPL-2.0-or-later AND (GPL-2.0-or-later OR BSD-2-Clause) AND (GPL-2.0-or-later OR BSD-3-Clause) AND (GPL-2.0-or-later OR CC-BY-4.0) AND (GPL-2.0-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH Linux-syscall-note) AND ISC AND LGPL-2.0-or-later AND (LGPL-2.0-or-later OR BSD-2-Clause) AND (LGPL-2.0-or-later WITH Linux-syscall-note) AND LGPL-2.1-only AND (LGPL-2.1-only OR BSD-2-Clause) AND (LGPL-2.1-only WITH Linux-syscall-note) AND LGPL-2.1-or-later AND (LGPL-2.1-or-later WITH Linux-syscall-note) AND (Linux-OpenIB OR GPL-2.0-only) AND (Linux-OpenIB OR GPL-2.0-only OR BSD-2-Clause) AND Linux-man-pages-copyleft AND MIT AND (MIT OR Apache-2.0) AND (MIT OR GPL-2.0-only) AND (MIT OR GPL-2.0-or-later) AND (MIT OR LGPL-2.1-only) AND (MPL-1.1 OR GPL-2.0-only) AND (X11 OR GPL-2.0-only) AND (X11 OR GPL-2.0-or-later) AND Zlib AND (copyleft-next-0.3.1 OR GPL-2.0-or-later)",
+    "inventory": {
+      "blocker": "A path-by-path SPDX/provenance inventory has not yet been generated and reviewed.",
+      "complete": false,
+      "inventory_path": null,
+      "inventory_sha256": null,
+      "item_count": null,
+      "required": true,
+      "status": "required-missing"
+    },
+    "policy": {
+      "fail_on_missing_or_ambiguous_license": true,
+      "license_texts_required": true,
+      "patch_authorship_and_license_required": true,
+      "required_fields_per_item": [
+        "authorship_signals",
+        "entry_type",
+        "license_text_paths",
+        "link_target",
+        "origin",
+        "path",
+        "sha256",
+        "size",
+        "source_identity",
+        "spdx_expression",
+        "review_status",
+        "unresolved_reasons"
+      ],
+      "scope": [
+        "every file in the embedded Linux source archive",
+        "every dist-git source, configuration, certificate, firmware, script, and patch consumed by the build",
+        "every generated or locally added patch and its ordered application metadata",
+        "every redistributed source object and corresponding license text"
+      ],
+      "unreviewed_items_forbid_gate_credit": true
+    },
+    "spec_path": "SPECS/kernel.spec"
+  },
+  "lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-source-v1",
+  "observed_at": "2026-08-11",
+  "patch_series": {
+    "path": "host-kernel/rocky/patches/series.json",
+    "sha256": "6a1a5e8fb13b6ce6ed35bd8e5487bb67ecf92d2be927799b660f21b5631f68fb"
+  },
+  "repository_snapshot": {
+    "base_url": "https://download.rockylinux.org/pub/rocky/10.2/BaseOS/source/tree/",
+    "primary_metadata": {
+      "href": "repodata/1cc64f6d0e798011d1862c2284189742f6383c6fc27c84de207c739148e50209-primary.xml.gz",
+      "open_sha256": "43c8be01489c52b45ccf8ded2d64b476d883b86aa5b4daf85df2a5ac9abc1ab7",
+      "open_size": 1320895,
+      "sha256": "1cc64f6d0e798011d1862c2284189742f6383c6fc27c84de207c739148e50209",
+      "size": 186048,
+      "timestamp": 1786434034
+    },
+    "release_key": {
+      "fingerprint": "FC226859C0860BF0DDB95B085B106C736FEDFC85",
+      "key_id": "5B106C736FEDFC85",
+      "sha256": "be8c4f070b696e64d8ce40e59a95a57e8b5c776f0015c2fd64e14b896622bdb4",
+      "url": "https://download.rockylinux.org/pub/rocky/RPM-GPG-KEY-Rocky-10"
+    },
+    "repomd": {
+      "revision": "10.2",
+      "sha256": "9085b7c0ce3d9ebda8cba25d3daafd13062ce7cd4a10c0036265af80449adea0",
+      "signature": {
+        "created_unix": 1786434220,
+        "sha256": "40e16e3d39ddc9ed7fff85201704b0805a37d732291193e6a3143a731001641e",
+        "status": "verified",
+        "url": "https://download.rockylinux.org/pub/rocky/10.2/BaseOS/source/tree/repodata/repomd.xml.asc",
+        "validsig_fingerprint": "FC226859C0860BF0DDB95B085B106C736FEDFC85",
+        "verification_tool": "gpg --verify"
+      },
+      "url": "https://download.rockylinux.org/pub/rocky/10.2/BaseOS/source/tree/repodata/repomd.xml"
+    }
+  },
+  "schema_version": 1,
+  "source_rpm": {
+    "arch": "src",
+    "epoch": 0,
+    "filename": "kernel-6.12.0-211.44.1.el10_2.src.rpm",
+    "name": "kernel",
+    "nevra": "kernel-0:6.12.0-211.44.1.el10_2.src",
+    "nvr": "kernel-6.12.0-211.44.1.el10_2",
+    "release": "211.44.1.el10_2",
+    "repository_location": "Packages/k/kernel-6.12.0-211.44.1.el10_2.src.rpm",
+    "sha256": "2bfeda65bd9bdd4b86650074c81e061c37822b80317ac0d4f5aacc89c85589cb",
+    "size": 159328372,
+    "url": "https://download.rockylinux.org/pub/rocky/10.2/BaseOS/source/tree/Packages/k/kernel-6.12.0-211.44.1.el10_2.src.rpm",
+    "version": "6.12.0"
+  },
+  "target": {
+    "architecture": "x86_64",
+    "distribution": "Rocky Linux",
+    "release": "10.2"
+  }
+}

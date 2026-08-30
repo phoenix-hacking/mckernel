@@ -1,0 +1,76 @@
+{
+  "claim_scope": "RK-003 closure/offline evidence only; this contract never awards tracker or gate credit and does not supersede the RK-006 compatibility-patch authority.",
+  "direct_phase": {
+    "artifact_id": 9128527159,
+    "artifact_name": "rk003-rk005-platform-evidence-31563271344-1",
+    "historical_build_requirements_sha256": "1fff914654a29de065efc7ae3d43a2e1a9fa845967c3ff3411cb1bcc09e2d3bc",
+    "historical_checkpoint_sha256": "7e0f37dcd430dbd36864426e274c0c3d86151e3eeb06bd003ca2661ff0b75186",
+    "effective_buildrequires_count": 86,
+    "github_repository": "phoenix-hacking/mckernel",
+    "head_sha": "dd6d1954538ca1adbaf335a1dd058aba26c28840",
+    "outer_zip_sha256": "a88e8a35c13dbd5b7a4e6524595d5cec31450f83c136b4cf64030e517d208eef",
+    "resolution_root_count": 109,
+    "resolution_inputs_sha256": "76f48ba1bc273ed71880efccc42a127fee646c274a7a70167ced8ed4ac6df2a4",
+    "reviewed_rocky_rust_count": 3,
+    "run_attempt": 1,
+    "run_id": 31563271344
+  },
+  "gate_claims": {
+    "RK-002": false,
+    "RK-003": false,
+    "RK-004": false,
+    "RK-005": false,
+    "RK-006": false,
+    "RS-001": false
+  },
+  "network_contract": {
+    "acquisition": "DNF configured network sources are limited to the three reviewed Rocky 10.2 base URLs, with exact signed local metadata first; inherited proxy variables are removed, every RPM is digest and header-signature checked, but DNF redirect destinations are not claimed to be isolated.",
+    "offline_replay": "One fresh empty installroot resolves the original roots from exact local file repositories, and a separate fresh empty installroot is populated only from explicit local paths to the captured RPM set with all configured repositories disabled and proxy variables pointed to loopback discard.",
+    "scope": "This proves exact-snapshot local repository solving and repository-disabled explicit-file replay at the DNF transaction boundary. It is not kernel-level network isolation, and independent network-isolation review remains required before RK-003 credit."
+  },
+  "outputs": [
+    "closure.json",
+    "offline-replay.json",
+    "probes.json",
+    "rpm-macros.json",
+    "environment.json",
+    "blockers.json",
+    "checkpoint.json",
+    "SHA256SUMS"
+  ],
+  "phase_id": "closure-offline",
+  "required_probe_ids": [
+    "rustc",
+    "rust-src-core",
+    "cargo",
+    "rustfmt",
+    "clippy",
+    "bindgen",
+    "libclang-via-bindgen",
+    "clang",
+    "llvm",
+    "lld",
+    "pahole",
+    "bpftool",
+    "rpm",
+    "rpmbuild",
+    "rpmsign"
+  ],
+  "schema_version": 1,
+  "success_blockers": [
+    "The closure/offline artifact still requires independent review and durable archival before it may be bound into the toolchain lock.",
+    "Kernel-level network isolation was not proved; repository-disabled file-only replay and proxy-loopback defense are narrower evidence.",
+    "The minimal requested config has not been resolved twice by the exact Rocky process_configs.sh and olddefconfig pipeline.",
+    "make LLVM=1 rustavailable has not run in the reviewed offline buildroot against the exact source and resolved config.",
+    "A production kernel build has not bound its final .config to the independently resolved config.",
+    "The RK-006 compatibility patch series remains independently governed and receives no credit from this evidence.",
+    "RK-002, RK-004, RK-005, RK-006, and RS-001 are outside this phase and remain uncredited.",
+    "The committed phase plan still marks closure-offline unimplemented; its authority and validator must be reconciled in an independently reviewed change before credit or review ingestion.",
+    "The current RK-003 toolchain authority maps the llvm-config probe to llvm-0:21.1.8-1.el10.x86_64, but the captured binary is owned by llvm-devel-0:21.1.8-1.el10.x86_64; this mapping must be reconciled before credit or review ingestion."
+  ],
+  "toolchain_lock": {
+    "id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-toolchain-v1",
+    "path": "host-kernel/rocky/toolchain-lock.json",
+    "sha256": "fd3d7a13e1b8b5d103f7e59d22f17c9e4b99cc937637decaa66749acfae6c802"
+  }
+}

@@ -1,0 +1,51 @@
+From f7ff0324760013762088f70d74ed1ddb7edffb13 Mon Sep 17 00:00:00 2001
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Tue, 15 Jul 2025 12:56:16 -0700
+Subject: [PATCH] mm/ksm: fix -Wsometimes-uninitialized from clang-21 in
+ advisor_mode_show()
+
+Upstream-Commit: 153ad566724fe6f57b14f66e9726d295d22e576d
+Stable-Commit: f7ff0324760013762088f70d74ed1ddb7edffb13
+Upstream-Repository: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+Stable-Repository: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+License: GPL-2.0-only
+
+commit 153ad566724fe6f57b14f66e9726d295d22e576d upstream.
+
+Clang 21 exposes an uninitialized warning from the const local in
+advisor_mode_show(). Rewrite the branches so the only supported non-scan-time
+state is the explicit fallback, making every path initialize output.
+
+The exact Rocky 10.2 native-module build reached mm/ksm.o after the Rust 1.92,
+Clang warning-policy, and OpenSSL tool-closure fixes, then stopped on this
+diagnostic under CONFIG_WERROR.
+
+Fixes: 66790e9a735b ("mm/ksm: add sysfs knobs for advisor")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Cc: stable@vger.kernel.org
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+[ Adapted only the hunk line number to exact Rocky 6.12.0-211.44.1.el10_2;
+  the stable code change and context are byte-for-byte identical. ]
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ mm/ksm.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/mm/ksm.c b/mm/ksm.c
+index b2613d4..55c1d6e 100644
+--- a/mm/ksm.c
++++ b/mm/ksm.c
+@@ -3757,10 +3757,10 @@ static ssize_t advisor_mode_show(struct kobject *kobj,
+ {
+ 	const char *output;
+ 
+-	if (ksm_advisor == KSM_ADVISOR_NONE)
+-		output = "[none] scan-time";
+-	else if (ksm_advisor == KSM_ADVISOR_SCAN_TIME)
++	if (ksm_advisor == KSM_ADVISOR_SCAN_TIME)
+ 		output = "none [scan-time]";
++	else
++		output = "[none] scan-time";
+ 
+ 	return sysfs_emit(buf, "%s\n", output);
+ }

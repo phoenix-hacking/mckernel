@@ -1,0 +1,1888 @@
+name: Native Rust host modules exact Rocky build
+
+on:
+  push:
+    branches: [codex/rocky-rust-validation]
+    paths:
+      - .github/workflows/native-rust-host-modules-exact-build.yml
+      - .github/workflows/rust-x86_64-validation.yml
+      - host-kernel/contracts/fp0006-runtime-capture-integration-v1.json
+      - host-kernel/contracts/fp0006-ihk-device-negative-dispatch-v1.json
+      - host-kernel/contracts/legacy-behavior-contract-f2eb7352.json
+      - host-kernel/contracts/native-rust-host-modules-policy-v1.json
+      - host-kernel/reference/legacy-host-modules-f2eb7352.json
+      - ihk
+      - host-kernel/contracts/linux-api-exact-probe-v1.json
+      - host-kernel/contracts/linux-api-needs-v1.json
+      - host-kernel/contracts/x86_64-shared-abi-v1.json
+      - host-kernel/kbuild/**
+      - host-kernel/contracts/ihk-os-registry-foundation-v1.json
+      - host-kernel/contracts/ihk-device-registry-foundation-v1.json
+      - host-kernel/contracts/ihk-ioctl-dispatch-foundation-v1.json
+      - host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json
+      - host-kernel/contracts/native-rust-runtime-evidence-v1.json
+      - host-kernel/contracts/rs006-miscdevice-substrate-v1.json
+      - host-kernel/native-rust/**
+      - host-kernel/native-rust/device_registry.rs
+      - host-kernel/native-rust/smp_resource.rs
+      - host-kernel/rocky/config-policy.json
+      - host-kernel/rocky/configs/native-rust-evidence.config
+      - host-kernel/rocky/configs/rust-minimal.config
+      - host-kernel/rocky/evidence/rk006-full-source-build-capture-contract-v1.json
+      - host-kernel/rocky/rk006-patch-authority-v1.json
+      - host-kernel/rocky/patches/0001-x86-rust-set-rustc-abi-x86-softfloat.patch
+      - host-kernel/rocky/patches/0002-rust-support-rust-1.91-target-spec.patch
+      - host-kernel/rocky/patches/0003-kbuild-rust-add-rustc-min-version.patch
+      - host-kernel/rocky/patches/0004-rust-compile-libcore-edition-2024.patch
+      - host-kernel/rocky/patches/0005-rust-clean-unnecessary-transmutes-lint.patch
+      - host-kernel/rocky/patches/0006-rust-init-allow-dead-code-rust-1.89.patch
+      - host-kernel/rocky/patches/0007-rust-use-used-compiler-rust-1.89.patch
+      - host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch
+      - host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch
+      - host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch
+      - host-kernel/rocky/patches/0011-mm-ksm-fix-clang-21-uninitialized.patch
+      - host-kernel/rocky/patches/0012-netfs-mark-nonstring-lookup-tables.patch
+      - host-kernel/rocky/patches/0013-lib-crypto-mark-binary-vectors-nonstring.patch
+      - host-kernel/rocky/patches/0014-gcc-15-mark-byte-arrays-nonstring.patch
+      - host-kernel/rocky/patches/0015-gcc-15-demote-unterminated-string-warning.patch
+      - host-kernel/rocky/patches/0016-gcc-15-disable-unterminated-string-warning.patch
+      - host-kernel/rocky/patches/0017-kbuild-use-cc-disable-warning.patch
+      - host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch
+      - host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch
+      - host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch
+      - host-kernel/rocky/patches/0020a-rust-miscdevice-bind-file-operations-to-module.patch
+      - host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch
+      - host-kernel/rocky/patches/0022-x86-pvh-annotate-noendbr.patch
+      - host-kernel/rocky/patches/0023-rust-update-no-alloc-shim-marker-rust-1.92.patch
+      - host-kernel/rocky/patches/series.json
+      - host-kernel/rocky/source-lock.json
+      - host-kernel/rocky/toolchain-lock.json
+      - scripts/ihk_native_lifecycle_check.py
+      - scripts/fp0006_runtime_capture_integration.py
+      - scripts/fp0006_ihk_device_negative_dispatch.py
+      - scripts/host_module_failure_semantics_v3.py
+      - scripts/host_module_failure_semantics_retention_v3.py
+      - scripts/rocky-rust-validation.sh
+      - scripts/qemu-rocky-rust-validation.sh
+      - scripts/qemu-mckernel-guest.sh
+      - scripts/smoke/fp0006-ihk-device-negative-dispatch.c
+      - scripts/tests/fixtures/ihk_ioctl_fp0006_negative_dispatch.rs
+      - scripts/tests/test_fp0006_ihk_device_negative_dispatch.py
+      - scripts/tests/test_fp0006_runtime_capture_integration.py
+      - scripts/tests/test_host_module_failure_semantics_retention_v3.py
+      - scripts/ihk_native_queue_check.py
+      - scripts/tests/fixtures/ihk_native_queue_compile.rs
+      - scripts/tests/test_ihk_native_queue_check.py
+      - scripts/ihk_os_registry_check.py
+      - scripts/ihk_device_registry_check.py
+      - scripts/ihk_ioctl_dispatch_check.py
+      - scripts/ihk_page_allocator_check.py
+      - scripts/ihk_page_owner_registry_check.py
+      - scripts/ihk_smp_native_lifecycle_check.py
+      - scripts/mcctrl_native_lifecycle_check.py
+      - scripts/native_rust_build_surface_audit.py
+      - scripts/native_rust_host_audit.py
+      - scripts/native_rust_kbuild_link_closure.py
+      - scripts/native_rust_kconfig_policy.py
+      - scripts/native_rust_kconfig_solver.py
+      - scripts/native_rust_runtime_evidence.py
+      - scripts/native_rust_unsafe_ffi_ledger.py
+      - scripts/linux_api_exact_probe.py
+      - scripts/rocky_kernel_source_lock.py
+      - scripts/rocky_kernel_rk006_full_source_build_capture.py
+      - scripts/rocky_kernel_rk006_patch_authority.py
+      - scripts/rs006_miscdevice_substrate.py
+      - scripts/rocky_rust_staging.py
+      - scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs
+      - scripts/tests/fixtures/ihk_device_registry_compile.rs
+      - scripts/tests/fixtures/ihk_smp_resource_compile.rs
+      - scripts/tests/fixtures/ihk_smp_resource_workspace_alias_compile_fail.rs
+      - scripts/tests/fixtures/ihk_os_registry_compile.rs
+      - scripts/tests/fixtures/rust-core-rocky-6.12/**
+      - scripts/tests/fixtures/ihk_ioctl_dispatch_compile.rs
+      - scripts/tests/fixtures/ihk_page_allocator_compile.rs
+      - scripts/tests/fixtures/ihk_page_allocator_lifetime_compile_fail.rs
+      - scripts/tests/fixtures/ihk_page_allocator_must_use_compile_fail.rs
+      - scripts/tests/fixtures/ihk_page_owner_registry_compile.rs
+      - scripts/tests/fixtures/ihk_page_owner_registry_lifetime_compile_fail.rs
+      - scripts/tests/fixtures/ihk_page_owner_registry_sync_compile_fail.rs
+      - scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/ioctl.rs
+      - scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/uaccess.rs
+      - scripts/tests/test_ihk_device_registry.py
+      - scripts/tests/test_ihk_device_registry_check.py
+      - scripts/tests/test_ihk_smp_resource.py
+      - scripts/tests/test_ihk_os_registry_check.py
+      - scripts/tests/test_ihk_ioctl_dispatch_check.py
+      - scripts/tests/test_ihk_page_allocator_check.py
+      - scripts/tests/test_ihk_page_owner_registry_check.py
+      - scripts/tests/test_ihk_native_lifecycle_check.py
+      - scripts/tests/test_ihk_smp_native_lifecycle_check.py
+      - scripts/tests/test_linux_api_exact_probe.py
+      - scripts/tests/test_native_rust_build_surface_audit.py
+      - scripts/tests/test_native_rust_exact_build_workflow.py
+      - scripts/tests/test_native_rust_kbuild_link_closure.py
+      - scripts/tests/test_native_rust_kconfig_policy.py
+      - scripts/tests/test_native_rust_kconfig_solver.py
+      - scripts/tests/test_native_rust_runtime_evidence.py
+      - scripts/tests/test_mcctrl_native_lifecycle_check.py
+      - scripts/tests/test_rocky_rust_staging.py
+      - scripts/tests/test_rocky_kernel_rk006_full_source_build_capture.py
+      - scripts/tests/test_rocky_kernel_rk006_patch_authority.py
+      - scripts/tests/test_rust_target_compatibility_patches.py
+      - scripts/tests/test_rs006_miscdevice_substrate.py
+      - scripts/tests/test_x86_64_shared_abi.py
+      - scripts/x86_64_shared_abi.py
+  pull_request:
+    branches: [development]
+    paths:
+      - .github/workflows/native-rust-host-modules-exact-build.yml
+      - .github/workflows/rust-x86_64-validation.yml
+      - host-kernel/contracts/fp0006-runtime-capture-integration-v1.json
+      - host-kernel/contracts/fp0006-ihk-device-negative-dispatch-v1.json
+      - host-kernel/contracts/legacy-behavior-contract-f2eb7352.json
+      - host-kernel/contracts/native-rust-host-modules-policy-v1.json
+      - host-kernel/reference/legacy-host-modules-f2eb7352.json
+      - ihk
+      - host-kernel/contracts/linux-api-exact-probe-v1.json
+      - host-kernel/contracts/linux-api-needs-v1.json
+      - host-kernel/contracts/x86_64-shared-abi-v1.json
+      - host-kernel/kbuild/**
+      - host-kernel/contracts/ihk-os-registry-foundation-v1.json
+      - host-kernel/contracts/ihk-device-registry-foundation-v1.json
+      - host-kernel/contracts/ihk-ioctl-dispatch-foundation-v1.json
+      - host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json
+      - host-kernel/contracts/native-rust-runtime-evidence-v1.json
+      - host-kernel/contracts/rs006-miscdevice-substrate-v1.json
+      - host-kernel/native-rust/**
+      - host-kernel/native-rust/device_registry.rs
+      - host-kernel/native-rust/smp_resource.rs
+      - host-kernel/rocky/config-policy.json
+      - host-kernel/rocky/configs/native-rust-evidence.config
+      - host-kernel/rocky/configs/rust-minimal.config
+      - host-kernel/rocky/evidence/rk006-full-source-build-capture-contract-v1.json
+      - host-kernel/rocky/rk006-patch-authority-v1.json
+      - host-kernel/rocky/patches/0001-x86-rust-set-rustc-abi-x86-softfloat.patch
+      - host-kernel/rocky/patches/0002-rust-support-rust-1.91-target-spec.patch
+      - host-kernel/rocky/patches/0003-kbuild-rust-add-rustc-min-version.patch
+      - host-kernel/rocky/patches/0004-rust-compile-libcore-edition-2024.patch
+      - host-kernel/rocky/patches/0005-rust-clean-unnecessary-transmutes-lint.patch
+      - host-kernel/rocky/patches/0006-rust-init-allow-dead-code-rust-1.89.patch
+      - host-kernel/rocky/patches/0007-rust-use-used-compiler-rust-1.89.patch
+      - host-kernel/rocky/patches/0008-rust-enable-arbitrary-self-types-rust-1.92.patch
+      - host-kernel/rocky/patches/0009-rust-block-drop-removed-merge-flag.patch
+      - host-kernel/rocky/patches/0010-kbuild-disable-default-const-init-unsafe.patch
+      - host-kernel/rocky/patches/0011-mm-ksm-fix-clang-21-uninitialized.patch
+      - host-kernel/rocky/patches/0012-netfs-mark-nonstring-lookup-tables.patch
+      - host-kernel/rocky/patches/0013-lib-crypto-mark-binary-vectors-nonstring.patch
+      - host-kernel/rocky/patches/0014-gcc-15-mark-byte-arrays-nonstring.patch
+      - host-kernel/rocky/patches/0015-gcc-15-demote-unterminated-string-warning.patch
+      - host-kernel/rocky/patches/0016-gcc-15-disable-unterminated-string-warning.patch
+      - host-kernel/rocky/patches/0017-kbuild-use-cc-disable-warning.patch
+      - host-kernel/rocky/patches/0018-kbuild-order-unterminated-string-disable.patch
+      - host-kernel/rocky/patches/0019-rust-types-add-opaque-try-ffi-init.patch
+      - host-kernel/rocky/patches/0020-rust-miscdevice-add-base-abstraction.patch
+      - host-kernel/rocky/patches/0020a-rust-miscdevice-bind-file-operations-to-module.patch
+      - host-kernel/rocky/patches/0021-objtool-recognize-rust-1.92-panic-const.patch
+      - host-kernel/rocky/patches/0022-x86-pvh-annotate-noendbr.patch
+      - host-kernel/rocky/patches/0023-rust-update-no-alloc-shim-marker-rust-1.92.patch
+      - host-kernel/rocky/patches/series.json
+      - host-kernel/rocky/source-lock.json
+      - host-kernel/rocky/toolchain-lock.json
+      - scripts/ihk_native_lifecycle_check.py
+      - scripts/fp0006_runtime_capture_integration.py
+      - scripts/fp0006_ihk_device_negative_dispatch.py
+      - scripts/host_module_failure_semantics_v3.py
+      - scripts/host_module_failure_semantics_retention_v3.py
+      - scripts/rocky-rust-validation.sh
+      - scripts/qemu-rocky-rust-validation.sh
+      - scripts/qemu-mckernel-guest.sh
+      - scripts/smoke/fp0006-ihk-device-negative-dispatch.c
+      - scripts/tests/fixtures/ihk_ioctl_fp0006_negative_dispatch.rs
+      - scripts/tests/test_fp0006_ihk_device_negative_dispatch.py
+      - scripts/tests/test_fp0006_runtime_capture_integration.py
+      - scripts/tests/test_host_module_failure_semantics_retention_v3.py
+      - scripts/ihk_native_queue_check.py
+      - scripts/tests/fixtures/ihk_native_queue_compile.rs
+      - scripts/tests/test_ihk_native_queue_check.py
+      - scripts/ihk_os_registry_check.py
+      - scripts/ihk_device_registry_check.py
+      - scripts/ihk_ioctl_dispatch_check.py
+      - scripts/ihk_page_allocator_check.py
+      - scripts/ihk_page_owner_registry_check.py
+      - scripts/ihk_smp_native_lifecycle_check.py
+      - scripts/mcctrl_native_lifecycle_check.py
+      - scripts/native_rust_build_surface_audit.py
+      - scripts/native_rust_host_audit.py
+      - scripts/native_rust_kbuild_link_closure.py
+      - scripts/native_rust_kconfig_policy.py
+      - scripts/native_rust_kconfig_solver.py
+      - scripts/native_rust_runtime_evidence.py
+      - scripts/native_rust_unsafe_ffi_ledger.py
+      - scripts/linux_api_exact_probe.py
+      - scripts/rocky_kernel_source_lock.py
+      - scripts/rocky_kernel_rk006_full_source_build_capture.py
+      - scripts/rocky_kernel_rk006_patch_authority.py
+      - scripts/rs006_miscdevice_substrate.py
+      - scripts/rocky_rust_staging.py
+      - scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs
+      - scripts/tests/fixtures/ihk_device_registry_compile.rs
+      - scripts/tests/fixtures/ihk_smp_resource_compile.rs
+      - scripts/tests/fixtures/ihk_smp_resource_workspace_alias_compile_fail.rs
+      - scripts/tests/fixtures/ihk_os_registry_compile.rs
+      - scripts/tests/fixtures/rust-core-rocky-6.12/**
+      - scripts/tests/fixtures/ihk_ioctl_dispatch_compile.rs
+      - scripts/tests/fixtures/ihk_page_allocator_compile.rs
+      - scripts/tests/fixtures/ihk_page_allocator_lifetime_compile_fail.rs
+      - scripts/tests/fixtures/ihk_page_allocator_must_use_compile_fail.rs
+      - scripts/tests/fixtures/ihk_page_owner_registry_compile.rs
+      - scripts/tests/fixtures/ihk_page_owner_registry_lifetime_compile_fail.rs
+      - scripts/tests/fixtures/ihk_page_owner_registry_sync_compile_fail.rs
+      - scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/ioctl.rs
+      - scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/uaccess.rs
+      - scripts/tests/test_ihk_device_registry.py
+      - scripts/tests/test_ihk_device_registry_check.py
+      - scripts/tests/test_ihk_smp_resource.py
+      - scripts/tests/test_ihk_os_registry_check.py
+      - scripts/tests/test_ihk_ioctl_dispatch_check.py
+      - scripts/tests/test_ihk_page_allocator_check.py
+      - scripts/tests/test_ihk_page_owner_registry_check.py
+      - scripts/tests/test_ihk_native_lifecycle_check.py
+      - scripts/tests/test_ihk_smp_native_lifecycle_check.py
+      - scripts/tests/test_linux_api_exact_probe.py
+      - scripts/tests/test_native_rust_build_surface_audit.py
+      - scripts/tests/test_native_rust_exact_build_workflow.py
+      - scripts/tests/test_native_rust_kbuild_link_closure.py
+      - scripts/tests/test_native_rust_kconfig_policy.py
+      - scripts/tests/test_native_rust_kconfig_solver.py
+      - scripts/tests/test_native_rust_runtime_evidence.py
+      - scripts/tests/test_mcctrl_native_lifecycle_check.py
+      - scripts/tests/test_rocky_rust_staging.py
+      - scripts/tests/test_rocky_kernel_rk006_full_source_build_capture.py
+      - scripts/tests/test_rocky_kernel_rk006_patch_authority.py
+      - scripts/tests/test_rust_target_compatibility_patches.py
+      - scripts/tests/test_rs006_miscdevice_substrate.py
+      - scripts/tests/test_x86_64_shared_abi.py
+      - scripts/x86_64_shared_abi.py
+  workflow_dispatch:
+    inputs:
+      validation_sha:
+        description: Exact 40-hex candidate commit
+        required: true
+        type: string
+  workflow_call:
+    inputs:
+      validation_sha:
+        description: Exact 40-hex candidate commit
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+env:
+  ROCKY_IMAGE: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
+  EXPECTED_HEAD_SHA: ${{ inputs.validation_sha || github.event.pull_request.head.sha || github.sha }}
+  EXPECTED_KERNEL_RELEASE: 6.12.0-211.44.1.el10_2.mckernel1.x86_64
+  KBUILD_BUILD_HOST: rocky-10.2-x86_64
+  KBUILD_BUILD_TIMESTAMP: "Tue, 11 Aug 2026 07:40:34 +0000"
+  KBUILD_BUILD_USER: mckernel
+  KBUILD_BUILD_VERSION: "1"
+  NATIVE_KERNEL_LOCALVERSION: -211.44.1.el10_2.mckernel1.x86_64
+  SOURCE_DATE_EPOCH: "1786434034"
+
+jobs:
+  exact-build:
+    name: Compile three native modules (credit forbidden)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 330
+    container:
+      image: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
+    defaults:
+      run:
+        shell: /usr/bin/bash --noprofile --norc -p -e -o pipefail {0}
+
+    steps:
+      - name: Refuse the wrong runtime and install exact build tools
+        run: |
+          set -euo pipefail
+          evidence_dir="$RUNNER_TEMP/native-rust-build-evidence"
+          mkdir -p "$evidence_dir"
+          printf '%s\n' "bootstrap-started" > "$evidence_dir/workflow-state"
+          test "$KBUILD_BUILD_HOST" = rocky-10.2-x86_64
+          test "$KBUILD_BUILD_TIMESTAMP" = "Tue, 11 Aug 2026 07:40:34 +0000"
+          test "$KBUILD_BUILD_USER" = mckernel
+          test "$KBUILD_BUILD_VERSION" = 1
+          test "$SOURCE_DATE_EPOCH" = 1786434034
+          printf '%s\n' \
+            "KBUILD_BUILD_HOST=$KBUILD_BUILD_HOST" \
+            "KBUILD_BUILD_TIMESTAMP=$KBUILD_BUILD_TIMESTAMP" \
+            "KBUILD_BUILD_USER=$KBUILD_BUILD_USER" \
+            "KBUILD_BUILD_VERSION=$KBUILD_BUILD_VERSION" \
+            "SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH" \
+            > "$evidence_dir/build.environment"
+          test "$(uname -m)" = x86_64
+          . /etc/os-release
+          test "$ID" = rocky
+          test "$VERSION_ID" = 10.2
+          dnf -y --setopt=install_weak_deps=False install dnf-plugins-core
+          dnf config-manager --set-enabled crb
+          dnf -y --setopt=install_weak_deps=False install \
+            bc binutils bison bindgen-cli bpftool cargo clang cpio diffutils \
+            dwarves elfutils-libelf-devel findutils flex gcc git-core gzip \
+            hostname kernel-rpm-macros kmod lld llvm make ncurses-devel \
+            openssl openssl-devel patch perl python3 python3-devel python3-pyyaml redhat-rpm-config \
+            rpm-build rust rust-src rustfmt tar which xz zstd
+          openssl_path="$(command -v openssl)"
+          test "$openssl_path" = /usr/bin/openssl
+          test "$(rpm -qf --qf '%{NAME}\n' "$openssl_path")" = openssl
+          openssl version
+          dnf clean all
+          printf '%s\n' "bootstrap-complete" > "$evidence_dir/workflow-state"
+
+      - name: Check out the exact candidate without credentials
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ env.EXPECTED_HEAD_SHA }}
+          # The shared-ABI checker reads exact frozen superproject blobs from
+          # ROOT_REF as well as the current candidate.  A depth-1 checkout
+          # leaves that immutable commit object unavailable.
+          fetch-depth: 0
+          persist-credentials: false
+          submodules: recursive
+
+      - name: Verify source-only contracts without claiming readiness
+        env:
+          BASH_ENV: ""
+          ENV: ""
+          EXPECTED_HEAD_SHA: ${{ inputs.validation_sha || github.event.pull_request.head.sha || github.sha }}
+          GLIBC_TUNABLES: ""
+          LD_ASSUME_KERNEL: ""
+          LD_AUDIT: ""
+          LD_BIND_NOW: ""
+          LD_DEBUG: ""
+          LD_DEBUG_OUTPUT: ""
+          LD_DYNAMIC_WEAK: ""
+          LD_HWCAP_MASK: ""
+          LD_LIBRARY_PATH: ""
+          LD_ORIGIN_PATH: ""
+          LD_PREFER_MAP_32BIT_EXEC: ""
+          LD_PRELOAD: ""
+          LD_PROFILE: ""
+          LD_PROFILE_OUTPUT: ""
+          PATH: /usr/sbin:/usr/bin:/sbin:/bin
+          PYTHONHOME: ""
+          PYTHONPATH: ""
+        run: |
+          set -euo pipefail
+          unset LD_SHOW_AUXV
+          PATH=/usr/sbin:/usr/bin:/sbin:/bin
+          export PATH
+          github_env_file="$GITHUB_ENV"
+          github_path_file="$GITHUB_PATH"
+          unset GITHUB_ENV GITHUB_PATH
+          [[ "$EXPECTED_HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]
+          test "$(/usr/bin/git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"
+          test "$(/usr/bin/git -C ihk rev-parse HEAD)" = "3114d9e7101ad52030eb3effa849a5c108972a1f"
+          /usr/bin/python3 -E -s scripts/linux_api_exact_probe.py \
+            --repo "$GITHUB_WORKSPACE" check-contract
+          /usr/bin/python3 -E -s scripts/x86_64_shared_abi.py \
+            --repo-root "$GITHUB_WORKSPACE" --check
+          /usr/bin/python3 -E -s scripts/native_rust_build_surface_audit.py
+          /usr/bin/python3 -E -s scripts/native_rust_host_audit.py
+          /usr/bin/python3 -E -s scripts/rocky_rust_staging.py --repo "$GITHUB_WORKSPACE" --check
+          /usr/bin/python3 -E -s scripts/ihk_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE"
+          /usr/bin/python3 -E -s scripts/ihk_native_queue_check.py --repo "$GITHUB_WORKSPACE" \
+            --rustc /usr/bin/rustc --require-rustc
+          /usr/bin/python3 -E -s scripts/ihk_os_registry_check.py --repo "$GITHUB_WORKSPACE"
+          /usr/bin/python3 -E -s scripts/ihk_device_registry_check.py --repo "$GITHUB_WORKSPACE"
+          test "$(/usr/bin/rustc --version | /usr/bin/awk '{print $2}')" = "1.92.0"
+          MCKERNEL_RUSTC_1_92=/usr/bin/rustc \
+            /usr/bin/python3 -E -s -m unittest -v scripts.tests.test_ihk_os_registry_check
+          MCKERNEL_RUSTC_1_92=/usr/bin/rustc \
+            /usr/bin/python3 -E -s -m unittest -v scripts.tests.test_ihk_device_registry
+          MCKERNEL_RUSTC_1_92=/usr/bin/rustc \
+            /usr/bin/python3 -E -s -m unittest -v scripts.tests.test_ihk_device_registry_check
+          /usr/bin/python3 -E -s scripts/ihk_ioctl_dispatch_check.py --repo "$GITHUB_WORKSPACE"
+          MCKERNEL_RUSTC_1_92=/usr/bin/rustc \
+            /usr/bin/python3 -E -s -m unittest -v scripts.tests.test_ihk_ioctl_dispatch_check
+          IHK_PAGE_ALLOCATOR_RUSTC=/usr/bin/rustc \
+            /usr/bin/python3 -E -s scripts/ihk_page_allocator_check.py \
+              --repo "$GITHUB_WORKSPACE" --require-rustc
+          IHK_PAGE_OWNER_REGISTRY_RUSTC=/usr/bin/rustc \
+            /usr/bin/python3 -E -s scripts/ihk_page_owner_registry_check.py \
+              --repo "$GITHUB_WORKSPACE" --require-rustc
+          /usr/bin/python3 -E -s scripts/ihk_smp_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE"
+          MCKERNEL_RUSTC_1_92=/usr/bin/rustc \
+            /usr/bin/python3 -E -s -m unittest -v scripts.tests.test_ihk_smp_resource
+          /usr/bin/python3 -E -s scripts/mcctrl_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE"
+          /usr/bin/python3 -E -s scripts/native_rust_unsafe_ffi_ledger.py --repo "$GITHUB_WORKSPACE" check
+          /usr/bin/python3 -E -s -m unittest -v \
+            scripts.tests.test_host_module_failure_semantics_retention_v3
+          /usr/bin/python3 -E -s scripts/native_rust_runtime_evidence.py \
+            --repo "$GITHUB_WORKSPACE" --check-contract
+          /usr/bin/python3 -E -s scripts/rocky_kernel_rk006_full_source_build_capture.py \
+            check-contract --repo "$GITHUB_WORKSPACE"
+          /usr/bin/python3 -E -s -m unittest -v \
+            scripts.tests.test_native_rust_kbuild_link_closure \
+            scripts.tests.test_native_rust_kconfig_policy \
+            scripts.tests.test_native_rust_kconfig_solver \
+            scripts.tests.test_native_rust_build_surface_audit \
+            scripts.tests.test_rocky_rust_staging \
+            scripts.tests.test_native_rust_runtime_evidence \
+            scripts.tests.test_native_rust_exact_build_workflow \
+            scripts.tests.test_rocky_kernel_rk006_full_source_build_capture \
+            scripts.tests.test_ihk_native_lifecycle_check \
+            scripts.tests.test_ihk_smp_native_lifecycle_check \
+            scripts.tests.test_mcctrl_native_lifecycle_check
+          /usr/bin/python3 -E -s scripts/rs006_miscdevice_substrate.py --repo "$GITHUB_WORKSPACE"
+          MCKERNEL_RUSTC_1_92=/usr/bin/rustc \
+            /usr/bin/python3 -E -s -m unittest -v scripts.tests.test_rust_target_compatibility_patches
+          : > "$github_env_file"
+          : > "$github_path_file"
+
+      - name: Acquire, patch, and credit-forbidden-stage the exact source
+        env:
+          BASH_ENV: ""
+          CACHE_ROOT: ${{ runner.temp }}/native-rust-cache
+          ENV: ""
+          EXPECTED_KERNEL_RELEASE: 6.12.0-211.44.1.el10_2.mckernel1.x86_64
+          GLIBC_TUNABLES: ""
+          GNUMAKEFLAGS: ""
+          LD_ASSUME_KERNEL: ""
+          LD_AUDIT: ""
+          LD_BIND_NOW: ""
+          LD_DEBUG: ""
+          LD_DEBUG_OUTPUT: ""
+          LD_DYNAMIC_WEAK: ""
+          LD_HWCAP_MASK: ""
+          LD_LIBRARY_PATH: ""
+          LD_ORIGIN_PATH: ""
+          LD_PREFER_MAP_32BIT_EXEC: ""
+          LD_PRELOAD: ""
+          LD_PROFILE: ""
+          LD_PROFILE_OUTPUT: ""
+          MAKEFILES: ""
+          MAKEFLAGS: ""
+          MAKEOVERRIDES: ""
+          MFLAGS: ""
+          NATIVE_KERNEL_LOCALVERSION: -211.44.1.el10_2.mckernel1.x86_64
+          PATH: /usr/sbin:/usr/bin:/sbin:/bin
+          PYTHONHOME: ""
+          PYTHONPATH: ""
+          SOURCE_ASSETS: ${{ runner.temp }}/native-rust-assets
+          SOURCE_PARENT: ${{ runner.temp }}/native-rust-source
+        run: |
+          set -euo pipefail
+          unset LD_SHOW_AUXV
+          PATH=/usr/sbin:/usr/bin:/sbin:/bin
+          export PATH
+          github_env_file="$GITHUB_ENV"
+          github_path_file="$GITHUB_PATH"
+          unset GITHUB_ENV GITHUB_PATH
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/rocky_kernel_source_lock.py \
+            --repo "$GITHUB_WORKSPACE" --cache-root "$CACHE_ROOT" --acquire
+          srpm="$(find "$CACHE_ROOT" -type f -name 'kernel-6.12.0-211.44.1.el10_2.src.rpm' -print)"
+          test -n "$srpm"
+          test "$(printf '%s\n' "$srpm" | wc -l)" = 1
+          mkdir -p "$SOURCE_ASSETS" "$SOURCE_PARENT"
+          (cd "$SOURCE_ASSETS" && rpm2cpio "$srpm" | cpio -idm --quiet --no-absolute-filenames)
+          archive="$SOURCE_ASSETS/linux-6.12.0-211.44.1.el10_2.tar.xz"
+          baseline="$SOURCE_ASSETS/kernel-x86_64-rhel.config"
+          test -f "$archive"
+          test -f "$baseline"
+          tar -C "$SOURCE_PARENT" -xf "$archive"
+          source_root="$SOURCE_PARENT/linux-6.12.0-211.44.1.el10_2"
+          test -f "$source_root/Makefile"
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/rs006_miscdevice_substrate.py \
+            --repo "$GITHUB_WORKSPACE" --kernel-source "$source_root" \
+            --require-source-replay
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/ihk_ioctl_dispatch_check.py --repo "$GITHUB_WORKSPACE" \
+            --kernel-source "$source_root"
+          patch -d "$source_root" -p1 --batch --forward --no-backup-if-mismatch \
+            -i "$SOURCE_ASSETS/1000-debrand-some-messages.patch"
+          for compat_name in \
+            0001-x86-rust-set-rustc-abi-x86-softfloat.patch \
+            0002-rust-support-rust-1.91-target-spec.patch \
+            0003-kbuild-rust-add-rustc-min-version.patch \
+            0004-rust-compile-libcore-edition-2024.patch \
+            0005-rust-clean-unnecessary-transmutes-lint.patch \
+            0006-rust-init-allow-dead-code-rust-1.89.patch \
+            0007-rust-use-used-compiler-rust-1.89.patch \
+            0008-rust-enable-arbitrary-self-types-rust-1.92.patch \
+            0009-rust-block-drop-removed-merge-flag.patch \
+            0010-kbuild-disable-default-const-init-unsafe.patch \
+            0011-mm-ksm-fix-clang-21-uninitialized.patch \
+            0012-netfs-mark-nonstring-lookup-tables.patch \
+            0013-lib-crypto-mark-binary-vectors-nonstring.patch \
+            0014-gcc-15-mark-byte-arrays-nonstring.patch \
+            0015-gcc-15-demote-unterminated-string-warning.patch \
+            0016-gcc-15-disable-unterminated-string-warning.patch \
+            0017-kbuild-use-cc-disable-warning.patch \
+            0018-kbuild-order-unterminated-string-disable.patch \
+            0019-rust-types-add-opaque-try-ffi-init.patch \
+            0020-rust-miscdevice-add-base-abstraction.patch \
+            0020a-rust-miscdevice-bind-file-operations-to-module.patch \
+            0021-objtool-recognize-rust-1.92-panic-const.patch \
+            0022-x86-pvh-annotate-noendbr.patch \
+            0023-rust-update-no-alloc-shim-marker-rust-1.92.patch
+          do
+            compat_patch="$GITHUB_WORKSPACE/host-kernel/rocky/patches/$compat_name"
+            test -s "$compat_patch"
+            patch -d "$source_root" -p1 --batch --forward --fuzz=0 --no-backup-if-mismatch \
+              -i "$compat_patch"
+          done
+          patch -d "$source_root" -p1 --batch --forward --fuzz=0 --no-backup-if-mismatch \
+            -i "$GITHUB_WORKSPACE/host-kernel/kbuild/patches/0001-drivers-misc-add-mckernel-rust-host-modules.patch"
+          patch -d "$source_root" -p1 --batch --forward --fuzz=0 --no-backup-if-mismatch \
+            -i "$GITHUB_WORKSPACE/host-kernel/kbuild/patches/0002-rust-bindings-expose-module-parameters.patch"
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/rocky_rust_staging.py --repo "$GITHUB_WORKSPACE" \
+            --stage-for-evidence "$source_root"
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/rocky_rust_staging.py --repo "$GITHUB_WORKSPACE" \
+            --verify-evidence-stage "$source_root"
+          : > "$github_env_file"
+          : > "$github_path_file"
+          printf 'NATIVE_SRPM=%s\n' "$srpm" > "$github_env_file"
+          printf 'NATIVE_SOURCE_ROOT=%s\n' "$source_root" >> "$github_env_file"
+          printf 'NATIVE_BASELINE_CONFIG=%s\n' "$baseline" >> "$github_env_file"
+
+      - name: Resolve the evidence-only module configuration twice
+        env:
+          BASH_ENV: ""
+          BUILD_DIR: ${{ runner.temp }}/native-rust-build
+          ENV: ""
+          EXPECTED_KERNEL_RELEASE: 6.12.0-211.44.1.el10_2.mckernel1.x86_64
+          GLIBC_TUNABLES: ""
+          GNUMAKEFLAGS: ""
+          KBUILD_BUILD_HOST: rocky-10.2-x86_64
+          KBUILD_BUILD_TIMESTAMP: "Tue, 11 Aug 2026 07:40:34 +0000"
+          KBUILD_BUILD_USER: mckernel
+          KBUILD_BUILD_VERSION: "1"
+          LD_ASSUME_KERNEL: ""
+          LD_AUDIT: ""
+          LD_BIND_NOW: ""
+          LD_DEBUG: ""
+          LD_DEBUG_OUTPUT: ""
+          LD_DYNAMIC_WEAK: ""
+          LD_HWCAP_MASK: ""
+          LD_LIBRARY_PATH: ""
+          LD_ORIGIN_PATH: ""
+          LD_PREFER_MAP_32BIT_EXEC: ""
+          LD_PRELOAD: ""
+          LD_PROFILE: ""
+          LD_PROFILE_OUTPUT: ""
+          MAKEFILES: ""
+          MAKEFLAGS: ""
+          MAKEOVERRIDES: ""
+          MFLAGS: ""
+          NATIVE_KERNEL_LOCALVERSION: -211.44.1.el10_2.mckernel1.x86_64
+          PATH: /usr/sbin:/usr/bin:/sbin:/bin
+          PYTHONHOME: ""
+          PYTHONPATH: ""
+          SOURCE_DATE_EPOCH: "1786434034"
+        run: |
+          set -euo pipefail
+          unset LD_SHOW_AUXV
+          PATH=/usr/sbin:/usr/bin:/sbin:/bin
+          export PATH
+          github_env_file="$GITHUB_ENV"
+          github_path_file="$GITHUB_PATH"
+          unset GITHUB_ENV GITHUB_PATH
+          test "$KBUILD_BUILD_HOST" = rocky-10.2-x86_64
+          test "$KBUILD_BUILD_TIMESTAMP" = "Tue, 11 Aug 2026 07:40:34 +0000"
+          test "$KBUILD_BUILD_USER" = mckernel
+          test "$KBUILD_BUILD_VERSION" = 1
+          test "$SOURCE_DATE_EPOCH" = 1786434034
+          kbuild_environment=(
+            /usr/bin/env -i
+            BASH_ENV= ENV= GNUMAKEFLAGS=
+            KBUILD_BUILD_HOST="$KBUILD_BUILD_HOST"
+            KBUILD_BUILD_TIMESTAMP="$KBUILD_BUILD_TIMESTAMP"
+            KBUILD_BUILD_USER="$KBUILD_BUILD_USER"
+            KBUILD_BUILD_VERSION="$KBUILD_BUILD_VERSION"
+            LANG=C LC_ALL=C LD_LIBRARY_PATH= LD_PRELOAD=
+            MAKEFILES= MAKEFLAGS= MAKEOVERRIDES= MFLAGS=
+            PATH=/usr/bin:/bin SOURCE_DATE_EPOCH="$SOURCE_DATE_EPOCH" TZ=UTC
+          )
+          mkdir -p "$BUILD_DIR"
+          cp "$NATIVE_BASELINE_CONFIG" "$BUILD_DIR/.config"
+          "${kbuild_environment[@]}" /usr/bin/bash --noprofile --norc -p \
+            "$NATIVE_SOURCE_ROOT/scripts/kconfig/merge_config.sh" -m -O "$BUILD_DIR" \
+            "$BUILD_DIR/.config" \
+            "$GITHUB_WORKSPACE/host-kernel/rocky/configs/rust-minimal.config" \
+            "$GITHUB_WORKSPACE/host-kernel/rocky/configs/native-rust-evidence.config"
+          "${kbuild_environment[@]}" /usr/bin/make -C "$NATIVE_SOURCE_ROOT" \
+            O="$BUILD_DIR" ARCH=x86_64 LLVM=1 \
+            LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \
+            KBUILD_BUILD_HOST="$KBUILD_BUILD_HOST" \
+            KBUILD_BUILD_TIMESTAMP="$KBUILD_BUILD_TIMESTAMP" \
+            KBUILD_BUILD_USER="$KBUILD_BUILD_USER" \
+            KBUILD_BUILD_VERSION="$KBUILD_BUILD_VERSION" \
+            SOURCE_DATE_EPOCH="$SOURCE_DATE_EPOCH" olddefconfig
+          cp "$BUILD_DIR/.config" "$BUILD_DIR/resolved-first.config"
+          "${kbuild_environment[@]}" /usr/bin/make -C "$NATIVE_SOURCE_ROOT" \
+            O="$BUILD_DIR" ARCH=x86_64 LLVM=1 \
+            LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \
+            KBUILD_BUILD_HOST="$KBUILD_BUILD_HOST" \
+            KBUILD_BUILD_TIMESTAMP="$KBUILD_BUILD_TIMESTAMP" \
+            KBUILD_BUILD_USER="$KBUILD_BUILD_USER" \
+            KBUILD_BUILD_VERSION="$KBUILD_BUILD_VERSION" \
+            SOURCE_DATE_EPOCH="$SOURCE_DATE_EPOCH" olddefconfig
+          cmp "$BUILD_DIR/resolved-first.config" "$BUILD_DIR/.config"
+          grep -qx 'CONFIG_WERROR=y' "$BUILD_DIR/.config"
+          grep -qx 'CONFIG_MODULES=y' "$BUILD_DIR/.config"
+          for symbol in \
+            CONFIG_MCKERNEL_IHK_RUST \
+            CONFIG_MCKERNEL_IHK_SMP_X86_64_RUST \
+            CONFIG_MCKERNEL_MCCTRL_RUST; do
+            grep -qx "$symbol=m" "$BUILD_DIR/.config"
+          done
+          EVIDENCE_DIR="$RUNNER_TEMP/native-rust-build-evidence"
+          MATRIX_DIR="$RUNNER_TEMP/native-rust-kconfig-matrix"
+          mkdir -p "$EVIDENCE_DIR"
+          test ! -e "$MATRIX_DIR"
+          "${kbuild_environment[@]}" /usr/bin/python3 -E -s \
+            scripts/native_rust_kconfig_solver.py run \
+            --source "$NATIVE_SOURCE_ROOT" \
+            --seed "$BUILD_DIR/.config" \
+            --matrix-dir "$MATRIX_DIR"
+          cp "$MATRIX_DIR/kconfig-solver-matrix.json" \
+            "$EVIDENCE_DIR/kconfig-solver-matrix.json"
+          chmod 0644 "$EVIDENCE_DIR/kconfig-solver-matrix.json"
+          "${kbuild_environment[@]}" /usr/bin/python3 -E -s \
+            scripts/native_rust_kconfig_solver.py check \
+            --matrix "$EVIDENCE_DIR/kconfig-solver-matrix.json" \
+            --source "$NATIVE_SOURCE_ROOT" \
+            --seed "$BUILD_DIR/.config"
+          : > "$github_env_file"
+          : > "$github_path_file"
+          printf 'NATIVE_SRPM=%s\n' "$NATIVE_SRPM" > "$github_env_file"
+          printf 'NATIVE_SOURCE_ROOT=%s\n' "$NATIVE_SOURCE_ROOT" >> "$github_env_file"
+          printf 'NATIVE_BASELINE_CONFIG=%s\n' "$NATIVE_BASELINE_CONFIG" >> "$github_env_file"
+          printf 'NATIVE_BUILD_DIR=%s\n' "$BUILD_DIR" >> "$github_env_file"
+
+      - name: Compile the exact kernel and native Rust modules
+        env:
+          BASH_ENV: ""
+          ENV: ""
+          EXPECTED_KERNEL_RELEASE: 6.12.0-211.44.1.el10_2.mckernel1.x86_64
+          GLIBC_TUNABLES: ""
+          GNUMAKEFLAGS: ""
+          KBUILD_BUILD_HOST: rocky-10.2-x86_64
+          KBUILD_BUILD_TIMESTAMP: "Tue, 11 Aug 2026 07:40:34 +0000"
+          KBUILD_BUILD_USER: mckernel
+          KBUILD_BUILD_VERSION: "1"
+          LD_ASSUME_KERNEL: ""
+          LD_AUDIT: ""
+          LD_BIND_NOW: ""
+          LD_DEBUG: ""
+          LD_DEBUG_OUTPUT: ""
+          LD_DYNAMIC_WEAK: ""
+          LD_HWCAP_MASK: ""
+          LD_LIBRARY_PATH: ""
+          LD_ORIGIN_PATH: ""
+          LD_PREFER_MAP_32BIT_EXEC: ""
+          LD_PRELOAD: ""
+          LD_PROFILE: ""
+          LD_PROFILE_OUTPUT: ""
+          MAKEFILES: ""
+          MAKEFLAGS: ""
+          MAKEOVERRIDES: ""
+          MFLAGS: ""
+          NATIVE_KERNEL_LOCALVERSION: -211.44.1.el10_2.mckernel1.x86_64
+          PATH: /usr/sbin:/usr/bin:/sbin:/bin
+          SOURCE_DATE_EPOCH: "1786434034"
+        run: |
+          set -euo pipefail
+          unset LD_SHOW_AUXV
+          PATH=/usr/sbin:/usr/bin:/sbin:/bin
+          export PATH
+          github_env_file="$GITHUB_ENV"
+          github_path_file="$GITHUB_PATH"
+          unset GITHUB_ENV GITHUB_PATH
+          evidence_dir="$RUNNER_TEMP/native-rust-build-evidence"
+          mkdir -p "$evidence_dir"
+          test "$KBUILD_BUILD_HOST" = rocky-10.2-x86_64
+          test "$KBUILD_BUILD_TIMESTAMP" = "Tue, 11 Aug 2026 07:40:34 +0000"
+          test "$KBUILD_BUILD_USER" = mckernel
+          test "$KBUILD_BUILD_VERSION" = 1
+          test "$SOURCE_DATE_EPOCH" = 1786434034
+          kbuild_environment=(
+            /usr/bin/env -i
+            BASH_ENV= ENV= GNUMAKEFLAGS=
+            KBUILD_BUILD_HOST="$KBUILD_BUILD_HOST"
+            KBUILD_BUILD_TIMESTAMP="$KBUILD_BUILD_TIMESTAMP"
+            KBUILD_BUILD_USER="$KBUILD_BUILD_USER"
+            KBUILD_BUILD_VERSION="$KBUILD_BUILD_VERSION"
+            LANG=C LC_ALL=C LD_LIBRARY_PATH= LD_PRELOAD=
+            MAKEFILES= MAKEFLAGS= MAKEOVERRIDES= MFLAGS=
+            PATH=/usr/bin:/bin SOURCE_DATE_EPOCH="$SOURCE_DATE_EPOCH" TZ=UTC
+          )
+          printf '%s\n' \
+            "KBUILD_BUILD_HOST=$KBUILD_BUILD_HOST" \
+            "KBUILD_BUILD_TIMESTAMP=$KBUILD_BUILD_TIMESTAMP" \
+            "KBUILD_BUILD_USER=$KBUILD_BUILD_USER" \
+            "KBUILD_BUILD_VERSION=$KBUILD_BUILD_VERSION" \
+            "SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH" \
+            > "$evidence_dir/build.environment"
+          module_targets=(
+            drivers/misc/mckernel/ihk.ko
+            drivers/misc/mckernel/ihk-smp-x86_64.ko
+            drivers/misc/mckernel/mcctrl.ko
+          )
+          printf '%s\n' "${module_targets[@]}" > "$evidence_dir/module-targets.txt"
+          : > "$evidence_dir/build.commands"
+          printf '%s\n' not-started > "$evidence_dir/build.phase"
+
+          run_phase() {
+            local phase="$1"
+            shift
+            local -a command=("$@")
+            printf '%s\n' "$phase" > "$evidence_dir/build.phase"
+            printf '%q' "${command[0]}" >> "$evidence_dir/build.commands"
+            printf ' %q' "${command[@]:1}" >> "$evidence_dir/build.commands"
+            printf '\n' >> "$evidence_dir/build.commands"
+            "${command[@]}"
+          }
+
+          set +e
+          (
+            set -e
+            run_phase rustavailable \
+              "${kbuild_environment[@]}" /usr/bin/make -C "$NATIVE_SOURCE_ROOT" \
+                O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 \
+                LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \
+                KBUILD_BUILD_HOST="$KBUILD_BUILD_HOST" \
+                KBUILD_BUILD_TIMESTAMP="$KBUILD_BUILD_TIMESTAMP" \
+                KBUILD_BUILD_USER="$KBUILD_BUILD_USER" \
+                KBUILD_BUILD_VERSION="$KBUILD_BUILD_VERSION" \
+                SOURCE_DATE_EPOCH="$SOURCE_DATE_EPOCH" \
+                rustavailable
+            run_phase bzImage \
+              "${kbuild_environment[@]}" /usr/bin/make -C "$NATIVE_SOURCE_ROOT" \
+                O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 \
+                LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \
+                KBUILD_BUILD_HOST="$KBUILD_BUILD_HOST" \
+                KBUILD_BUILD_TIMESTAMP="$KBUILD_BUILD_TIMESTAMP" \
+                KBUILD_BUILD_USER="$KBUILD_BUILD_USER" \
+                KBUILD_BUILD_VERSION="$KBUILD_BUILD_VERSION" \
+                SOURCE_DATE_EPOCH="$SOURCE_DATE_EPOCH" \
+                -j2 bzImage
+            # Linux 6.12 supports in-tree %.ko single targets.  Build the exact
+            # boot kernel first so their modpost pass consumes its vmlinux.o
+            # symbol universe.  Keep all three module targets in one invocation
+            # so modpost also sees the complete ihk provider/consumer graph.
+            run_phase native-modules \
+              "${kbuild_environment[@]}" /usr/bin/make -C "$NATIVE_SOURCE_ROOT" \
+                O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 \
+                LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \
+                KBUILD_BUILD_HOST="$KBUILD_BUILD_HOST" \
+                KBUILD_BUILD_TIMESTAMP="$KBUILD_BUILD_TIMESTAMP" \
+                KBUILD_BUILD_USER="$KBUILD_BUILD_USER" \
+                KBUILD_BUILD_VERSION="$KBUILD_BUILD_VERSION" \
+                SOURCE_DATE_EPOCH="$SOURCE_DATE_EPOCH" \
+                -j2 "${module_targets[@]}"
+            printf '%s\n' complete > "$evidence_dir/build.phase"
+          ) 2>&1 | tee "$evidence_dir/build.log"
+          pipeline_status=("${PIPESTATUS[@]}")
+          set -e
+          producer_status="${pipeline_status[0]}"
+          tee_status="${pipeline_status[1]}"
+          printf '%s\n' "$producer_status" > "$evidence_dir/build.exit-code"
+          printf '%s\n' "$tee_status" > "$evidence_dir/build-log.exit-code"
+          : > "$github_env_file"
+          : > "$github_path_file"
+          printf 'NATIVE_SRPM=%s\n' "$NATIVE_SRPM" > "$github_env_file"
+          printf 'NATIVE_SOURCE_ROOT=%s\n' "$NATIVE_SOURCE_ROOT" >> "$github_env_file"
+          printf 'NATIVE_BASELINE_CONFIG=%s\n' "$NATIVE_BASELINE_CONFIG" >> "$github_env_file"
+          printf 'NATIVE_BUILD_DIR=%s\n' "$NATIVE_BUILD_DIR" >> "$github_env_file"
+          if (( producer_status != 0 )); then
+            exit "$producer_status"
+          fi
+          exit "$tee_status"
+
+      - name: Validate built metadata and capture immutable diagnostics
+        env:
+          BASH_ENV: ""
+          ENV: ""
+          EXPECTED_KERNEL_RELEASE: 6.12.0-211.44.1.el10_2.mckernel1.x86_64
+          GLIBC_TUNABLES: ""
+          GNUMAKEFLAGS: ""
+          KBUILD_BUILD_HOST: rocky-10.2-x86_64
+          KBUILD_BUILD_TIMESTAMP: "Tue, 11 Aug 2026 07:40:34 +0000"
+          KBUILD_BUILD_USER: mckernel
+          KBUILD_BUILD_VERSION: "1"
+          LD_ASSUME_KERNEL: ""
+          LD_AUDIT: ""
+          LD_BIND_NOW: ""
+          LD_DEBUG: ""
+          LD_DEBUG_OUTPUT: ""
+          LD_DYNAMIC_WEAK: ""
+          LD_HWCAP_MASK: ""
+          LD_LIBRARY_PATH: ""
+          LD_ORIGIN_PATH: ""
+          LD_PREFER_MAP_32BIT_EXEC: ""
+          LD_PRELOAD: ""
+          LD_PROFILE: ""
+          LD_PROFILE_OUTPUT: ""
+          MAKEFILES: ""
+          MAKEFLAGS: ""
+          MAKEOVERRIDES: ""
+          MFLAGS: ""
+          NATIVE_KERNEL_LOCALVERSION: -211.44.1.el10_2.mckernel1.x86_64
+          PATH: /usr/sbin:/usr/bin:/sbin:/bin
+          PROVENANCE_CALLER_EVENT_NAME: ${{ github.event_name }}
+          PROVENANCE_CALLER_REF: ${{ github.ref }}
+          PROVENANCE_CALLER_REPOSITORY: ${{ github.repository }}
+          PROVENANCE_CALLER_SHA: ${{ github.sha }}
+          PROVENANCE_CALLER_WORKFLOW_REF: ${{ github.workflow_ref }}
+          PROVENANCE_CALLER_WORKFLOW_SHA: ${{ github.workflow_sha }}
+          PROVENANCE_CANDIDATE_SHA: ${{ inputs.validation_sha || github.event.pull_request.head.sha || github.sha }}
+          PROVENANCE_DEFINING_WORKFLOW_FILE_PATH: ${{ job.workflow_file_path }}
+          PROVENANCE_DEFINING_WORKFLOW_REF: ${{ job.workflow_ref }}
+          PROVENANCE_DEFINING_WORKFLOW_REPOSITORY: ${{ job.workflow_repository }}
+          PROVENANCE_DEFINING_WORKFLOW_SHA: ${{ job.workflow_sha }}
+          PYTHONHOME: ""
+          PYTHONPATH: ""
+          SOURCE_DATE_EPOCH: "1786434034"
+        run: |
+          set -euo pipefail
+          unset LD_SHOW_AUXV
+          PATH=/usr/sbin:/usr/bin:/sbin:/bin
+          export PATH
+          github_env_file="$GITHUB_ENV"
+          github_path_file="$GITHUB_PATH"
+          unset GITHUB_ENV GITHUB_PATH
+          EVIDENCE_DIR="$RUNNER_TEMP/native-rust-build-evidence"
+          test "$KBUILD_BUILD_HOST" = rocky-10.2-x86_64
+          test "$KBUILD_BUILD_TIMESTAMP" = "Tue, 11 Aug 2026 07:40:34 +0000"
+          test "$KBUILD_BUILD_USER" = mckernel
+          test "$KBUILD_BUILD_VERSION" = 1
+          test "$SOURCE_DATE_EPOCH" = 1786434034
+          isolated_environment=(
+            /usr/bin/env -i
+            BASH_ENV= ENV= GNUMAKEFLAGS=
+            KBUILD_BUILD_HOST="$KBUILD_BUILD_HOST"
+            KBUILD_BUILD_TIMESTAMP="$KBUILD_BUILD_TIMESTAMP"
+            KBUILD_BUILD_USER="$KBUILD_BUILD_USER"
+            KBUILD_BUILD_VERSION="$KBUILD_BUILD_VERSION"
+            LANG=C LC_ALL=C LD_LIBRARY_PATH= LD_PRELOAD=
+            MAKEFILES= MAKEFLAGS= MAKEOVERRIDES= MFLAGS=
+            SOURCE_DATE_EPOCH="$SOURCE_DATE_EPOCH" TZ=UTC
+          )
+          kbuild_environment=("${isolated_environment[@]}" PATH=/usr/bin:/bin)
+          printf '%s\n' \
+            "KBUILD_BUILD_HOST=$KBUILD_BUILD_HOST" \
+            "KBUILD_BUILD_TIMESTAMP=$KBUILD_BUILD_TIMESTAMP" \
+            "KBUILD_BUILD_USER=$KBUILD_BUILD_USER" \
+            "KBUILD_BUILD_VERSION=$KBUILD_BUILD_VERSION" \
+            "SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH" \
+            > "$EVIDENCE_DIR/build.environment"
+          module_root="$NATIVE_BUILD_DIR/drivers/misc/mckernel"
+          ihk="$module_root/ihk.ko"
+          smp="$module_root/ihk-smp-x86_64.ko"
+          mcctrl="$module_root/mcctrl.ko"
+          test -s "$ihk"
+          test -s "$smp"
+          test -s "$mcctrl"
+          (
+            cd "$NATIVE_BUILD_DIR"
+            find . -type f -name '*.ko' -printf '%P\n' | LC_ALL=C sort
+          ) > "$EVIDENCE_DIR/built-module-artifacts.txt"
+          LC_ALL=C sort "$EVIDENCE_DIR/module-targets.txt" \
+            > "$EVIDENCE_DIR/module-targets.sorted"
+          cmp "$EVIDENCE_DIR/module-targets.sorted" \
+            "$EVIDENCE_DIR/built-module-artifacts.txt"
+          rm "$EVIDENCE_DIR/module-targets.sorted"
+          /usr/bin/git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD \
+            > "$EVIDENCE_DIR/commit.sha"
+          EVIDENCE_DIR="$EVIDENCE_DIR" /usr/bin/python3 -E -s <<'PY'
+          import hashlib
+          import json
+          import os
+          import re
+          import stat
+          import subprocess
+
+
+          SHA1_RE = re.compile(r"\A[0-9a-f]{40}\Z")
+          SHA256_RE = re.compile(r"\A[0-9a-f]{64}\Z")
+          POSITIVE_DECIMAL_RE = re.compile(r"\A[1-9][0-9]*\Z")
+          REPOSITORY_RE = re.compile(
+              r"\A[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})/"
+              r"[A-Za-z0-9](?:[A-Za-z0-9._-]{0,99})\Z"
+          )
+          WORKFLOW_PATH_RE = re.compile(
+              r"\A\.github/workflows/[A-Za-z0-9][A-Za-z0-9_.-]*\.ya?ml\Z"
+          )
+          BRANCH_OR_TAG_REF_RE = re.compile(
+              r"\Arefs/(?:heads|tags)/"
+              r"[A-Za-z0-9](?:[A-Za-z0-9._/-]*[A-Za-z0-9_-])?\Z"
+          )
+          PULL_REQUEST_REF_RE = re.compile(
+              r"\Arefs/pull/[1-9][0-9]*/merge\Z"
+          )
+          ACCEPTED_EVENT_NAMES = frozenset((
+              "pull_request", "push", "workflow_dispatch"
+          ))
+          WORKFLOW_FILE_PATH = (
+              ".github/workflows/native-rust-host-modules-exact-build.yml"
+          )
+
+
+          def fail(message):
+              raise SystemExit("workflow provenance: " + message)
+
+
+          def require(condition, message):
+              if not condition:
+                  fail(message)
+
+
+          def required_environment(name):
+              value = os.environ.get(name)
+              require(value is not None and value != "", name + " is missing")
+              try:
+                  value.encode("ascii")
+              except UnicodeEncodeError:
+                  fail(name + " is not ASCII")
+              return value
+
+
+          def require_sha(name, value):
+              require(SHA1_RE.match(value) is not None, name + " is not 40-hex")
+
+
+          def require_repository(name, value):
+              require(
+                  REPOSITORY_RE.match(value) is not None,
+                  name + " has an invalid repository shape",
+              )
+
+
+          def require_workflow_path(name, value):
+              require(
+                  WORKFLOW_PATH_RE.match(value) is not None,
+                  name + " has an invalid workflow path shape",
+              )
+
+
+          def require_positive_decimal(name, value):
+              require(
+                  POSITIVE_DECIMAL_RE.match(value) is not None,
+                  name + " is not canonical positive decimal",
+              )
+              return int(value, 10)
+
+
+          def git_process(workspace, arguments, input_data=None, check=True):
+              git_environment = dict(os.environ)
+              for environment_name in tuple(git_environment):
+                  if environment_name in (
+                      "GIT_ALTERNATE_OBJECT_DIRECTORIES",
+                      "GIT_COMMON_DIR",
+                      "GIT_CONFIG",
+                      "GIT_CONFIG_COUNT",
+                      "GIT_CONFIG_GLOBAL",
+                      "GIT_CONFIG_PARAMETERS",
+                      "GIT_CONFIG_SYSTEM",
+                      "GIT_DIR",
+                      "GIT_INDEX_FILE",
+                      "GIT_NAMESPACE",
+                      "GIT_OBJECT_DIRECTORY",
+                      "GIT_REPLACE_REF_BASE",
+                      "GIT_SHALLOW_FILE",
+                      "GIT_WORK_TREE",
+                  ) or environment_name.startswith((
+                      "GIT_CONFIG_KEY_", "GIT_CONFIG_VALUE_"
+                  )):
+                      del git_environment[environment_name]
+              git_environment["GIT_NO_REPLACE_OBJECTS"] = "1"
+              git_environment["GIT_TERMINAL_PROMPT"] = "0"
+              git_environment["LC_ALL"] = "C"
+              command = [
+                  "/usr/bin/git",
+                  "-c",
+                  "safe.directory=" + workspace,
+                  "-C",
+                  workspace,
+              ] + list(arguments)
+              completed = subprocess.run(
+                  command,
+                  env=git_environment,
+                  input=input_data,
+                  stdout=subprocess.PIPE,
+                  stderr=subprocess.PIPE,
+              )
+              if check and completed.returncode != 0:
+                  fail(
+                      "git command failed: "
+                      + " ".join(arguments)
+                      + ": "
+                      + completed.stderr.decode("utf-8", errors="replace").strip()
+                  )
+              return completed
+
+
+          def git_text(workspace, *arguments):
+              data = git_process(workspace, arguments).stdout
+              try:
+                  return data.decode("ascii").strip()
+              except UnicodeDecodeError:
+                  fail("git output is not ASCII: " + " ".join(arguments))
+
+
+          def require_ref(workspace, name, value):
+              require(value.startswith("refs/"), name + " is not a full ref")
+              require("\x00" not in value and "\n" not in value, name + " has controls")
+              completed = git_process(
+                  workspace, ("check-ref-format", value), check=False
+              )
+              require(completed.returncode == 0, name + " has an invalid ref shape")
+
+
+          def require_event_ref(event_name, value):
+              if event_name == "pull_request":
+                  require(
+                      PULL_REQUEST_REF_RE.match(value) is not None,
+                      "pull-request caller ref is not a canonical merge ref",
+                  )
+              else:
+                  require(
+                      BRANCH_OR_TAG_REF_RE.match(value) is not None,
+                      "push/dispatch caller ref is not a canonical branch or tag ref",
+                  )
+
+
+          def parse_workflow_ref(workspace, name, value, repository):
+              prefix = repository + "/"
+              require(value.startswith(prefix), name + " repository does not match")
+              body = value[len(prefix):]
+              marker = "@refs/"
+              require(body.count(marker) == 1, name + " has an invalid shape")
+              workflow_path, ref_suffix = body.split(marker, 1)
+              ref = "refs/" + ref_suffix
+              require_workflow_path(name + " file path", workflow_path)
+              require_ref(workspace, name + " ref", ref)
+              return workflow_path, ref
+
+
+          def commit_is_present(workspace, commit_sha):
+              completed = git_process(
+                  workspace,
+                  ("cat-file", "-e", commit_sha + "^{commit}"),
+                  check=False,
+              )
+              return completed.returncode == 0
+
+
+          def workflow_blob(workspace, commit_sha, workflow_path):
+              row = git_process(
+                  workspace,
+                  ("ls-tree", "-z", commit_sha, "--", workflow_path),
+              ).stdout
+              require(row.endswith(b"\x00"), "workflow ls-tree row is unterminated")
+              require(row.count(b"\x00") == 1, "workflow ls-tree row is ambiguous")
+              metadata, separator, raw_path = row[:-1].partition(b"\t")
+              require(separator == b"\t", "workflow ls-tree row is malformed")
+              try:
+                  mode, object_type, blob_sha1 = metadata.decode("ascii").split(" ")
+                  observed_path = raw_path.decode("ascii")
+              except (UnicodeDecodeError, ValueError):
+                  fail("workflow ls-tree row is not canonical ASCII")
+              require(mode == "100644", "workflow file mode is not 100644")
+              require(object_type == "blob", "workflow file is not a blob")
+              require_sha("workflow blob", blob_sha1)
+              require(observed_path == workflow_path, "workflow path differs")
+              data = git_process(
+                  workspace, ("cat-file", "blob", blob_sha1)
+              ).stdout
+              digest = hashlib.sha256(data).hexdigest()
+              require(SHA256_RE.match(digest) is not None, "workflow SHA-256 failed")
+              return blob_sha1, digest, data
+
+
+          candidate_sha = required_environment("PROVENANCE_CANDIDATE_SHA")
+          caller_event_name = required_environment("PROVENANCE_CALLER_EVENT_NAME")
+          caller_ref = required_environment("PROVENANCE_CALLER_REF")
+          caller_repository = required_environment("PROVENANCE_CALLER_REPOSITORY")
+          caller_sha = required_environment("PROVENANCE_CALLER_SHA")
+          caller_workflow_ref = required_environment("PROVENANCE_CALLER_WORKFLOW_REF")
+          caller_workflow_sha = required_environment("PROVENANCE_CALLER_WORKFLOW_SHA")
+          defining_file_path = required_environment(
+              "PROVENANCE_DEFINING_WORKFLOW_FILE_PATH"
+          )
+          defining_workflow_ref = required_environment(
+              "PROVENANCE_DEFINING_WORKFLOW_REF"
+          )
+          defining_repository = required_environment(
+              "PROVENANCE_DEFINING_WORKFLOW_REPOSITORY"
+          )
+          defining_workflow_sha = required_environment(
+              "PROVENANCE_DEFINING_WORKFLOW_SHA"
+          )
+          github_run_id = require_positive_decimal(
+              "GITHUB_RUN_ID", required_environment("GITHUB_RUN_ID")
+          )
+          github_run_attempt = require_positive_decimal(
+              "GITHUB_RUN_ATTEMPT", required_environment("GITHUB_RUN_ATTEMPT")
+          )
+          workspace = os.path.realpath(required_environment("GITHUB_WORKSPACE"))
+          evidence_dir = os.path.realpath(required_environment("EVIDENCE_DIR"))
+
+          require(os.path.isabs(workspace), "workspace is not absolute")
+          require(os.path.isdir(workspace), "workspace is not a directory")
+          require(os.path.isdir(evidence_dir), "evidence directory is missing")
+          for name, value in (
+              ("candidate SHA", candidate_sha),
+              ("caller SHA", caller_sha),
+              ("caller workflow SHA", caller_workflow_sha),
+              ("defining workflow SHA", defining_workflow_sha),
+          ):
+              require_sha(name, value)
+          require(
+              caller_event_name in ACCEPTED_EVENT_NAMES,
+              "caller event name is not accepted",
+          )
+          require_repository("caller", caller_repository)
+          require_repository("defining workflow", defining_repository)
+          require(
+              caller_repository == defining_repository,
+              "caller and defining workflow repositories differ",
+          )
+          require_ref(workspace, "caller ref", caller_ref)
+          require_event_ref(caller_event_name, caller_ref)
+          caller_file_path, caller_workflow_git_ref = parse_workflow_ref(
+              workspace,
+              "caller workflow ref",
+              caller_workflow_ref,
+              caller_repository,
+          )
+          require_workflow_path("defining workflow file", defining_file_path)
+          require(
+              defining_file_path == WORKFLOW_FILE_PATH,
+              "defining workflow file path differs",
+          )
+          defining_ref_file_path, defining_workflow_git_ref = parse_workflow_ref(
+              workspace,
+              "defining workflow ref",
+              defining_workflow_ref,
+              defining_repository,
+          )
+          require(
+              defining_ref_file_path == defining_file_path,
+              "defining workflow ref file path differs",
+          )
+          require(
+              caller_workflow_git_ref == caller_ref,
+              "caller workflow ref differs from caller ref",
+          )
+          require(
+              defining_workflow_git_ref == caller_ref,
+              "defining workflow ref differs from caller ref",
+          )
+          require(
+              caller_sha == caller_workflow_sha == defining_workflow_sha,
+              "caller and defining workflow SHAs differ",
+          )
+
+          candidate_commit = git_text(
+              workspace, "rev-parse", "--verify", candidate_sha + "^{commit}"
+          )
+          require(candidate_commit == candidate_sha, "candidate commit differs")
+          checked_out_head = git_text(
+              workspace, "rev-parse", "--verify", "HEAD^{commit}"
+          )
+          require(checked_out_head == candidate_sha, "checked-out HEAD differs")
+
+          if not commit_is_present(workspace, defining_workflow_sha):
+              defining_repository_url = (
+                  "https://github.com/" + defining_repository + ".git"
+              )
+              git_process(
+                  workspace,
+                  (
+                      "fetch",
+                      "--no-tags",
+                      "--depth=1",
+                      "--no-recurse-submodules",
+                      defining_repository_url,
+                      defining_workflow_git_ref,
+                  ),
+              )
+              fetched_commit = git_text(
+                  workspace, "rev-parse", "--verify", "FETCH_HEAD^{commit}"
+              )
+              require(
+                  fetched_commit == defining_workflow_sha,
+                  "fetched defining workflow commit differs",
+              )
+          defining_commit = git_text(
+              workspace,
+              "rev-parse",
+              "--verify",
+              defining_workflow_sha + "^{commit}",
+          )
+          require(
+              defining_commit == defining_workflow_sha,
+              "defining workflow commit differs",
+          )
+
+          direct_workflow_dispatch = (
+              caller_event_name == "workflow_dispatch"
+              and caller_repository == defining_repository
+              and caller_file_path == defining_file_path
+          )
+          if direct_workflow_dispatch:
+              require(
+                  caller_workflow_ref == defining_workflow_ref,
+                  "direct-dispatch workflow refs differ",
+              )
+              require(
+                  candidate_sha == caller_workflow_sha == defining_workflow_sha,
+                  "direct-dispatch candidate and workflow SHAs differ",
+              )
+
+          candidate_blob_sha1, candidate_file_sha256, candidate_bytes = workflow_blob(
+              workspace, candidate_sha, defining_file_path
+          )
+          defining_blob_sha1, defining_file_sha256, defining_bytes = workflow_blob(
+              workspace, defining_workflow_sha, defining_file_path
+          )
+          require(
+              candidate_blob_sha1 == defining_blob_sha1,
+              "candidate and defining workflow blob IDs differ",
+          )
+          require(
+              candidate_file_sha256 == defining_file_sha256,
+              "candidate and defining workflow SHA-256 values differ",
+          )
+          require(
+              candidate_bytes == defining_bytes,
+              "candidate and defining workflow bytes differ",
+          )
+          checked_out_path = os.path.join(workspace, defining_file_path)
+          checked_out_stat = os.lstat(checked_out_path)
+          require(
+              stat.S_ISREG(checked_out_stat.st_mode),
+              "checked-out workflow is not a regular file",
+          )
+          require(
+              not os.path.islink(checked_out_path),
+              "checked-out workflow is a symlink",
+          )
+          with open(checked_out_path, "rb") as stream:
+              checked_out_bytes = stream.read()
+          require(
+              checked_out_bytes == candidate_bytes,
+              "checked-out workflow bytes differ from candidate",
+          )
+
+          executed_workflow_name = "executed-build-workflow.yml"
+          executed_workflow_path = os.path.join(
+              evidence_dir, executed_workflow_name
+          )
+          with open(executed_workflow_path, "xb") as stream:
+              stream.write(defining_bytes)
+          os.chmod(executed_workflow_path, 0o644)
+
+          receipt = {
+              "caller": {
+                  "event_name": caller_event_name,
+                  "ref": caller_ref,
+                  "repository": caller_repository,
+                  "sha": caller_sha,
+                  "workflow_ref": caller_workflow_ref,
+                  "workflow_sha": caller_workflow_sha,
+              },
+              "candidate": {
+                  "sha": candidate_sha,
+                  "workflow_file_git_blob_sha1": candidate_blob_sha1,
+                  "workflow_file_path": defining_file_path,
+                  "workflow_file_sha256": candidate_file_sha256,
+              },
+              "claims": {
+                  "credit_granted": False,
+                  "gate_passed": False,
+                  "production_ready": False,
+                  "release_ready": False,
+              },
+              "defining_job": {
+                  "evidence_file": executed_workflow_name,
+                  "workflow_file_git_blob_sha1": defining_blob_sha1,
+                  "workflow_file_path": defining_file_path,
+                  "workflow_file_sha256": defining_file_sha256,
+                  "workflow_ref": defining_workflow_ref,
+                  "workflow_repository": defining_repository,
+                  "workflow_sha": defining_workflow_sha,
+              },
+              "direct_workflow_dispatch": direct_workflow_dispatch,
+              "github_run_attempt": github_run_attempt,
+              "github_run_id": github_run_id,
+              "schema_version": 1,
+              "workflow_file_bytes_equal": True,
+          }
+          receipt_bytes = (
+              json.dumps(
+                  receipt,
+                  allow_nan=False,
+                  ensure_ascii=True,
+                  separators=(",", ":"),
+                  sort_keys=True,
+              )
+              + "\n"
+          ).encode("ascii")
+          receipt_path = os.path.join(evidence_dir, "workflow-provenance.json")
+          with open(receipt_path, "xb") as stream:
+              stream.write(receipt_bytes)
+          os.chmod(receipt_path, 0o644)
+          PY
+          # Preserve the exact binaries and both rendered and raw module
+          # metadata before any semantic checker can fail closed.
+          expected_modinfo_nevra=kmod-31-13.el10.x86_64
+          expected_modinfo_sha256=7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55
+          modinfo_path="$(command -v modinfo)"
+          modinfo_target=/usr/bin/kmod
+          test "$modinfo_path" = /usr/sbin/modinfo
+          test -x /usr/sbin/modinfo
+          test -L /usr/sbin/modinfo
+          test "$(/usr/bin/readlink -- /usr/sbin/modinfo)" = ../bin/kmod
+          test -x "$modinfo_target"
+          test ! -L "$modinfo_target"
+          exec {modinfo_fd}<"$modinfo_target"
+          modinfo_exec="/proc/self/fd/$modinfo_fd"
+          test -r "$modinfo_exec"
+          assert_modinfo_binding() {
+            test -L "$modinfo_path" &&
+              test "$(/usr/bin/readlink -- "$modinfo_path")" = ../bin/kmod &&
+              test ! -L "$modinfo_target" &&
+              test "$modinfo_path" -ef "$modinfo_exec" &&
+              test "$modinfo_target" -ef "$modinfo_exec" &&
+              test "$(/usr/bin/sha256sum -- "$modinfo_exec")" = \
+              "$expected_modinfo_sha256  $modinfo_exec" &&
+              test "$(/usr/bin/rpm -q --qf '%{NEVRA}\n' kmod)" = \
+              "$expected_modinfo_nevra" &&
+              test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' "$modinfo_path")" = kmod &&
+              test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' "$modinfo_target")" = kmod
+          }
+          run_modinfo() (
+            assert_modinfo_binding &&
+              exec -a modinfo "$modinfo_exec" "$@"
+          )
+          assert_modinfo_binding
+          test -x /usr/bin/nm
+          test ! -L /usr/bin/nm
+          test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' /usr/bin/nm)" = binutils
+          for module in "$ihk" "$smp" "$mcctrl"; do
+            name="$(basename "$module")"
+            cp "$module" "$EVIDENCE_DIR/$name"
+            run_modinfo "$module" > "$EVIDENCE_DIR/$name.modinfo"
+            /usr/bin/readelf -p .modinfo "$module" > "$EVIDENCE_DIR/$name.modinfo-section"
+            /usr/bin/readelf -SWr "$module" > "$EVIDENCE_DIR/$name.readelf"
+            /usr/bin/nm -A -a "$module" > "$EVIDENCE_DIR/$name.nm"
+          done
+          (
+            cd "$EVIDENCE_DIR"
+            find . -maxdepth 1 -type f \
+              ! -name PRECHECK_SHA256SUMS ! -name SHA256SUMS -printf '%P\0' \
+              | sort -z | xargs -0 sha256sum -- > PRECHECK_SHA256SUMS
+            sha256sum --check --strict PRECHECK_SHA256SUMS
+          )
+          for name in ihk.ko ihk-smp-x86_64.ko mcctrl.ko; do
+            module="$EVIDENCE_DIR/$name"
+            vermagic="$(run_modinfo -F vermagic "$module")"
+            test -n "$vermagic"
+            test "$(printf '%s\n' "$vermagic" | wc -l)" = 1
+            test "${vermagic%% *}" = "$EXPECTED_KERNEL_RELEASE"
+          done
+          assert_modinfo_binding
+          "${kbuild_environment[@]}" /usr/bin/python3 -E -s \
+            scripts/ihk_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" \
+            --module "$ihk" --modinfo-fd "$modinfo_fd"
+          assert_modinfo_binding
+          "${kbuild_environment[@]}" /usr/bin/python3 -E -s \
+            scripts/ihk_os_registry_check.py --repo "$GITHUB_WORKSPACE"
+          "${kbuild_environment[@]}" /usr/bin/python3 -E -s \
+            scripts/ihk_device_registry_check.py --repo "$GITHUB_WORKSPACE"
+          test "$(/usr/bin/rustc --version | /usr/bin/awk '{print $2}')" = "1.92.0"
+          "${kbuild_environment[@]}" MCKERNEL_RUSTC_1_92=/usr/bin/rustc \
+            /usr/bin/python3 -E -s -m unittest -v scripts.tests.test_ihk_os_registry_check
+          "${kbuild_environment[@]}" MCKERNEL_RUSTC_1_92=/usr/bin/rustc \
+            /usr/bin/python3 -E -s -m unittest -v scripts.tests.test_ihk_device_registry
+          "${kbuild_environment[@]}" MCKERNEL_RUSTC_1_92=/usr/bin/rustc \
+            /usr/bin/python3 -E -s -m unittest -v scripts.tests.test_ihk_device_registry_check
+          "${kbuild_environment[@]}" /usr/bin/python3 -E -s \
+            scripts/ihk_ioctl_dispatch_check.py --repo "$GITHUB_WORKSPACE"
+          "${kbuild_environment[@]}" MCKERNEL_RUSTC_1_92=/usr/bin/rustc \
+            /usr/bin/python3 -E -s -m unittest -v scripts.tests.test_ihk_ioctl_dispatch_check
+          assert_modinfo_binding
+          "${kbuild_environment[@]}" /usr/bin/python3 -E -s \
+            scripts/ihk_smp_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" \
+            --module "$smp" --modinfo-fd "$modinfo_fd"
+          assert_modinfo_binding
+          "${kbuild_environment[@]}" MCKERNEL_RUSTC_1_92=/usr/bin/rustc \
+            /usr/bin/python3 -E -s -m unittest -v scripts.tests.test_ihk_smp_resource
+          "${kbuild_environment[@]}" /usr/bin/python3 -E -s \
+            scripts/mcctrl_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" \
+            --module "$mcctrl" --modinfo-fd "$modinfo_fd"
+          assert_modinfo_binding
+          exec {modinfo_fd}<&-
+          cp "$NATIVE_BUILD_DIR/.config" "$EVIDENCE_DIR/resolved.config"
+          cp "$NATIVE_BUILD_DIR/arch/x86/boot/bzImage" "$EVIDENCE_DIR/bzImage"
+          cp "$NATIVE_SOURCE_ROOT/drivers/misc/mckernel/stage-lock.json" "$EVIDENCE_DIR/stage-lock.json"
+          kernel_release="$("${kbuild_environment[@]}" /usr/bin/make -s \
+            -C "$NATIVE_SOURCE_ROOT" O="$NATIVE_BUILD_DIR" ARCH=x86_64 LLVM=1 \
+            LOCALVERSION="$NATIVE_KERNEL_LOCALVERSION" \
+            KBUILD_BUILD_HOST="$KBUILD_BUILD_HOST" \
+            KBUILD_BUILD_TIMESTAMP="$KBUILD_BUILD_TIMESTAMP" \
+            KBUILD_BUILD_USER="$KBUILD_BUILD_USER" \
+            KBUILD_BUILD_VERSION="$KBUILD_BUILD_VERSION" \
+            SOURCE_DATE_EPOCH="$SOURCE_DATE_EPOCH" kernelrelease)"
+          test "$kernel_release" = "$EXPECTED_KERNEL_RELEASE"
+          printf '%s\n' "$kernel_release" > "$EVIDENCE_DIR/kernel.release"
+          cmd_records=(
+            .ihk-smp-x86_64.ko.cmd
+            .ihk-smp-x86_64.mod.cmd
+            .ihk-smp-x86_64.mod.o.cmd
+            .ihk-smp-x86_64.o.cmd
+            .ihk.ko.cmd
+            .ihk.mod.cmd
+            .ihk.mod.o.cmd
+            .ihk.o.cmd
+            .ihk_smp_x86_64.o.cmd
+            .mcctrl.ko.cmd
+            .mcctrl.mod.cmd
+            .mcctrl.mod.o.cmd
+            .mcctrl.o.cmd
+          )
+          mod_records=(ihk-smp-x86_64.mod ihk.mod mcctrl.mod)
+          for record in "${cmd_records[@]}" "${mod_records[@]}"; do
+            test -f "$module_root/$record"
+            test ! -L "$module_root/$record"
+            cp "$module_root/$record" "$EVIDENCE_DIR/$record"
+          done
+          "${kbuild_environment[@]}" /usr/bin/python3 -E -s \
+            scripts/native_rust_kbuild_link_closure.py \
+            --records-dir "$EVIDENCE_DIR" \
+            --stage-lock "$EVIDENCE_DIR/stage-lock.json" \
+            --output "$EVIDENCE_DIR/kbuild-link-closure.json"
+          "${kbuild_environment[@]}" /usr/bin/python3 -E -s \
+            scripts/native_rust_kbuild_link_closure.py \
+            --records-dir "$EVIDENCE_DIR" \
+            --stage-lock "$EVIDENCE_DIR/stage-lock.json" \
+            --check-output "$EVIDENCE_DIR/kbuild-link-closure.json"
+          (
+            cd "$EVIDENCE_DIR"
+            find . -maxdepth 1 -type f ! -name SHA256SUMS -printf '%P\0' \
+              | sort -z | xargs -0 sha256sum -- > SHA256SUMS
+            sha256sum --check --strict SHA256SUMS
+          )
+          : > "$github_env_file"
+          : > "$github_path_file"
+
+      - name: Upload compiler evidence or first-failure diagnostics
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: native-rust-exact-build-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/native-rust-build-evidence/
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
+          include-hidden-files: true
+
+  fp0006-native-rust-capture:
+    name: Capture FP-0006 native Rust fixture (credit forbidden)
+    needs: exact-build
+    if: >-
+      ${{ github.event_name != 'pull_request' ||
+          github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    container:
+      image: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Install pinned Rust and identify the observed FP-0006 linker
+        run: |
+          set -euo pipefail
+          fp0006_diagnostics="$RUNNER_TEMP/fp0006-native-rust-first-failure"
+          mkdir -m 700 "$fp0006_diagnostics"
+          printf '%s\n' bootstrap-started capture-envelope-required-missing credit-forbidden \
+            > "$fp0006_diagnostics/workflow-state"
+          test "$(uname -m)" = x86_64
+          . /etc/os-release
+          test "$ID" = rocky
+          test "$VERSION_ID" = 10.2
+          dnf -y --allowerasing --setopt=install_weak_deps=False install \
+            coreutils
+          dnf -y --setopt=install_weak_deps=False install \
+            gcc git-core python3 rust-1.92.0-1.el10
+          ! /usr/bin/rpm -q coreutils-single
+          test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' /usr/bin/timeout)" = coreutils
+          test "$(command -v rustc)" = /usr/bin/rustc
+          test "$(command -v gcc)" = /usr/bin/gcc
+          test "$(command -v timeout)" = /usr/bin/timeout
+          test ! -L /usr/bin/rustc
+          test ! -L /usr/bin/gcc
+          test ! -L /usr/bin/timeout
+          test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' /usr/bin/rustc)" = rust
+          test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' /usr/bin/gcc)" = gcc
+          test "$(/usr/bin/rpm -q --qf '%{NAME}-%{EPOCHNUM}:%{VERSION}-%{RELEASE}.%{ARCH}\n' rust)" = rust-0:1.92.0-1.el10.x86_64
+          test "$(/usr/bin/rustc --version)" = 'rustc 1.92.0 (ded5c06cf 2025-12-08) (Red Hat 1.92.0-1.el10)'
+          /usr/bin/rustc -Vv
+          /usr/bin/gcc --version
+          dnf clean all
+          printf '%s\n' bootstrap-complete capture-envelope-required-missing credit-forbidden \
+            > "$fp0006_diagnostics/workflow-state"
+
+      - name: Check out the exact FP-0006 candidate without credentials
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ env.EXPECTED_HEAD_SHA }}
+          fetch-depth: 1
+          submodules: recursive
+          persist-credentials: false
+
+      - name: Produce and review the FP-0006 native envelope
+        run: |
+          set -euo pipefail
+          [[ "$EXPECTED_HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]
+          test "$(git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"
+          python3 scripts/fp0006_runtime_capture_integration.py check-contract \
+            --repo "$GITHUB_WORKSPACE"
+          stage="$RUNNER_TEMP/fp0006-native-rust-stage"
+          output="$RUNNER_TEMP/fp0006-native-rust-capture"
+          producer="$RUNNER_TEMP/fp0006-native-rust-producer"
+          producer_output="$RUNNER_TEMP/fp0006-native-rust-producer-output.log"
+          producer_log="$RUNNER_TEMP/fp0006-native-rust-producer.log"
+          compiler_output="$RUNNER_TEMP/fp0006-native-rust-compiler.log"
+          tool_report="$RUNNER_TEMP/fp0006-native-rust-tools.txt"
+          base_sha=none
+          base_sha_json=null
+          workflow_candidate_aligned=false
+          if test "$GITHUB_EVENT_NAME" = pull_request; then
+            base_sha="${{ github.event.pull_request.base.sha }}"
+            [[ "$base_sha" =~ ^[0-9a-f]{40}$ ]]
+            base_sha_json="\"$base_sha\""
+          fi
+          if test "$GITHUB_SHA" = "$EXPECTED_HEAD_SHA" && \
+            test "$GITHUB_WORKFLOW_SHA" = "$EXPECTED_HEAD_SHA"
+          then
+            workflow_candidate_aligned=true
+          fi
+          test ! -e "$stage"
+          test ! -e "$output"
+          mkdir -m 700 "$stage"
+          : > "$producer_output"
+          : > "$compiler_output"
+          {
+            /usr/bin/rpm -q --qf '%{NAME}-%{EPOCHNUM}:%{VERSION}-%{RELEASE}.%{ARCH}\n' rust gcc coreutils
+            /usr/bin/sha256sum /usr/bin/rustc /usr/bin/gcc /usr/bin/timeout
+            /usr/bin/rustc -Vv
+            /usr/bin/gcc --version
+            /usr/bin/timeout --version
+          } > "$tool_report"
+          compile_rc=0
+          if /usr/bin/env -i HOME=/nonexistent LANG=C LC_ALL=C PATH=/usr/bin:/bin \
+            /usr/bin/rustc --edition=2021 -D warnings -C linker=/usr/bin/gcc -C strip=symbols \
+            scripts/tests/fixtures/ihk_ioctl_fp0006_negative_dispatch.rs \
+            -o "$producer" > "$compiler_output" 2>&1
+          then
+            compile_rc=0
+          else
+            compile_rc=$?
+          fi
+          if test "$compile_rc" -ne 0; then
+            cat "$compiler_output" >&2
+            exit "$compile_rc"
+          fi
+          if test -s "$compiler_output"; then
+            cat "$compiler_output" >&2
+            exit 1
+          fi
+          producer_bytes="$(/usr/bin/wc -c < "$producer")"
+          if test "$producer_bytes" -le 0 || test "$producer_bytes" -gt 8388608; then
+            printf 'FP-0006 native producer binary size observed=%s maximum=8388608\n' \
+              "$producer_bytes" >&2
+            exit 1
+          fi
+          binary_sha256="$(/usr/bin/sha256sum "$producer" | /usr/bin/awk '{ print $1 }')"
+          tool_report_sha256="$(/usr/bin/sha256sum "$tool_report" | /usr/bin/awk '{ print $1 }')"
+          printf '{"base_sha":%s,"binary_sha256":"%s","event":"producer-start","event_name":"%s","github_sha":"%s","head_sha":"%s","linker":"/usr/bin/gcc","normalized_command":["/usr/bin/env","-i","HOME=/nonexistent","LANG=C","LC_ALL=C","PATH=/usr/bin:/bin","/usr/bin/timeout","--signal=TERM","--kill-after=5s","30s","<producer-by-sha256>","<capture-stage>"],"ref":"%s","repository":"%s","run_attempt":%s,"run_id":%s,"surface":"native-rust-source-fixture","timeout_seconds":30,"tool_report_sha256":"%s","workflow_candidate_aligned":%s,"workflow_sha":"%s"}\n' \
+            "$base_sha_json" "$binary_sha256" "$GITHUB_EVENT_NAME" \
+            "$GITHUB_SHA" "$EXPECTED_HEAD_SHA" "$GITHUB_REF" \
+            "$GITHUB_REPOSITORY" "$GITHUB_RUN_ATTEMPT" "$GITHUB_RUN_ID" \
+            "$tool_report_sha256" "$workflow_candidate_aligned" \
+            "$GITHUB_WORKFLOW_SHA" \
+            > "$producer_log"
+          capture_rc=0
+          if /usr/bin/env -i HOME=/nonexistent LANG=C LC_ALL=C PATH=/usr/bin:/bin \
+            /usr/bin/timeout --signal=TERM --kill-after=5s 30s \
+            "$producer" "$stage" > "$producer_output" 2>&1
+          then
+            capture_rc=0
+          else
+            capture_rc=$?
+          fi
+          {
+            printf '{"event":"producer-output","output_bytes":%s,"output_sha256":"%s","surface":"native-rust-source-fixture"}\n' \
+              "$(/usr/bin/wc -c < "$producer_output")" \
+              "$(/usr/bin/sha256sum "$producer_output" | /usr/bin/awk '{ print $1 }')"
+            printf '{"event":"producer-exit","status":%s,"surface":"native-rust-source-fixture"}\n' \
+              "$capture_rc"
+          } >> "$producer_log"
+          test "$capture_rc" = 0
+          test ! -s "$producer_output"
+          python3 scripts/fp0006_runtime_capture_integration.py finalize-lane \
+            --repo "$GITHUB_WORKSPACE" \
+            --capture-dir "$stage" \
+            --producer-output "$producer_output" \
+            --producer-log "$producer_log" \
+            --producer-binary "$producer" \
+            --tool-report "$tool_report" \
+            --compiler-output "$compiler_output" \
+            --output-dir "$output" \
+            --surface native-rust-source-fixture \
+            --head "$EXPECTED_HEAD_SHA" \
+            --github-repository "$GITHUB_REPOSITORY" \
+            --github-run-id "$GITHUB_RUN_ID" \
+            --github-run-attempt "$GITHUB_RUN_ATTEMPT" \
+            --github-event-name "$GITHUB_EVENT_NAME" \
+            --github-ref "$GITHUB_REF" \
+            --github-sha "$GITHUB_SHA" \
+            --github-workflow-sha "$GITHUB_WORKFLOW_SHA" \
+            --github-base-sha "$base_sha"
+          printf '%s\n' bootstrap-complete capture-envelope-created-unreviewed credit-forbidden \
+            > "$RUNNER_TEMP/fp0006-native-rust-first-failure/workflow-state"
+
+      - name: Upload FP-0006 native envelope
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: fp0006-native-rust-source-fixture-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/fp0006-native-rust-capture/fp0006-runtime-capture-v1.tar
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
+
+      - name: Upload FP-0006 first-failure diagnostics
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: fp0006-native-rust-first-failure-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/fp0006-native-rust-first-failure/workflow-state
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
+
+  rk006-full-source-build-capture:
+    name: Bind RK-006 full-source replay to the exact build (credit forbidden)
+    needs: exact-build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 150
+    container:
+      image: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
+    defaults:
+      run:
+        shell: /usr/bin/bash --noprofile --norc -p -e -o pipefail {0}
+
+    steps:
+      - name: Initialize non-durable capture and install exact tools
+        run: |
+          set -euo pipefail
+          capture_dir="$RUNNER_TEMP/rk006-full-source-build-capture"
+          mkdir -p "$capture_dir"
+          printf '%s\n' bootstrap-started > "$capture_dir/workflow-state"
+          test "$(uname -m)" = x86_64
+          . /etc/os-release
+          test "$ID" = rocky
+          test "$VERSION_ID" = 10.2
+          dnf -y --setopt=install_weak_deps=False install dnf-plugins-core
+          dnf config-manager --set-enabled crb
+          dnf -y --setopt=install_weak_deps=False install \
+            bc binutils bison bindgen-cli bpftool cargo clang cpio diffutils \
+            dwarves elfutils-libelf-devel findutils flex gcc git-core gzip \
+            hostname kernel-rpm-macros kmod lld llvm llvm-devel make ncurses-devel \
+            openssl openssl-devel patch perl python3 python3-devel python3-pyyaml \
+            redhat-rpm-config rpm-build rust rust-src rustfmt tar which xz zstd
+          dnf clean all
+
+      - name: Check out the exact capture candidate without credentials
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ env.EXPECTED_HEAD_SHA }}
+          fetch-depth: 1
+          persist-credentials: false
+          submodules: false
+
+      - name: Verify the frozen non-crediting RK-006 capture contract
+        env:
+          BASH_ENV: ""
+          ENV: ""
+          EXPECTED_HEAD_SHA: ${{ inputs.validation_sha || github.event.pull_request.head.sha || github.sha }}
+          GLIBC_TUNABLES: ""
+          LD_ASSUME_KERNEL: ""
+          LD_AUDIT: ""
+          LD_BIND_NOW: ""
+          LD_DEBUG: ""
+          LD_DEBUG_OUTPUT: ""
+          LD_DYNAMIC_WEAK: ""
+          LD_HWCAP_MASK: ""
+          LD_LIBRARY_PATH: ""
+          LD_ORIGIN_PATH: ""
+          LD_PREFER_MAP_32BIT_EXEC: ""
+          LD_PRELOAD: ""
+          LD_PROFILE: ""
+          LD_PROFILE_OUTPUT: ""
+          PATH: /usr/sbin:/usr/bin:/sbin:/bin
+          PYTHONHOME: ""
+          PYTHONPATH: ""
+        run: |
+          set -euo pipefail
+          unset LD_SHOW_AUXV
+          PATH=/usr/sbin:/usr/bin:/sbin:/bin
+          export PATH
+          github_env_file="$GITHUB_ENV"
+          github_path_file="$GITHUB_PATH"
+          unset GITHUB_ENV GITHUB_PATH
+          [[ "$EXPECTED_HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]
+          test "$(/usr/bin/git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/rocky_kernel_rk006_full_source_build_capture.py \
+            check-contract --repo "$GITHUB_WORKSPACE"
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s -m unittest -v \
+            scripts.tests.test_rocky_kernel_rk006_patch_authority \
+            scripts.tests.test_rocky_kernel_rk006_full_source_build_capture
+          : > "$github_env_file"
+          : > "$github_path_file"
+
+      - name: Reacquire and capture the full external 26-patch source replay
+        env:
+          BASH_ENV: ""
+          CACHE_ROOT: ${{ runner.temp }}/rk006-source-cache
+          ENV: ""
+          EXPECTED_HEAD_SHA: ${{ inputs.validation_sha || github.event.pull_request.head.sha || github.sha }}
+          GLIBC_TUNABLES: ""
+          LD_ASSUME_KERNEL: ""
+          LD_AUDIT: ""
+          LD_BIND_NOW: ""
+          LD_DEBUG: ""
+          LD_DEBUG_OUTPUT: ""
+          LD_DYNAMIC_WEAK: ""
+          LD_HWCAP_MASK: ""
+          LD_LIBRARY_PATH: ""
+          LD_ORIGIN_PATH: ""
+          LD_PREFER_MAP_32BIT_EXEC: ""
+          LD_PRELOAD: ""
+          LD_PROFILE: ""
+          LD_PROFILE_OUTPUT: ""
+          PATH: /usr/sbin:/usr/bin:/sbin:/bin
+          PYTHONHOME: ""
+          PYTHONPATH: ""
+          SOURCE_ASSETS: ${{ runner.temp }}/rk006-source-assets
+          SOURCE_PARENT: ${{ runner.temp }}/rk006-source
+        run: |
+          set -euo pipefail
+          unset LD_SHOW_AUXV
+          PATH=/usr/sbin:/usr/bin:/sbin:/bin
+          export PATH
+          github_env_file="$GITHUB_ENV"
+          github_path_file="$GITHUB_PATH"
+          unset GITHUB_ENV GITHUB_PATH
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/rocky_kernel_source_lock.py \
+            --repo "$GITHUB_WORKSPACE" --cache-root "$CACHE_ROOT" --acquire
+          srpm="$(find "$CACHE_ROOT" -type f -name 'kernel-6.12.0-211.44.1.el10_2.src.rpm' -print)"
+          test -n "$srpm"
+          test "$(printf '%s\n' "$srpm" | wc -l)" = 1
+          mkdir -p "$SOURCE_ASSETS" "$SOURCE_PARENT"
+          (cd "$SOURCE_ASSETS" && rpm2cpio "$srpm" | cpio -idm --quiet --no-absolute-filenames)
+          archive="$SOURCE_ASSETS/linux-6.12.0-211.44.1.el10_2.tar.xz"
+          vendor_patch="$SOURCE_ASSETS/1000-debrand-some-messages.patch"
+          test -f "$archive"
+          test -f "$vendor_patch"
+          source_root="$SOURCE_PARENT/linux-6.12.0-211.44.1.el10_2"
+          test ! -e "$source_root"
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/rocky_kernel_rk006_full_source_build_capture.py capture \
+            --repo "$GITHUB_WORKSPACE" \
+            --source-root "$source_root" \
+            --source-archive "$archive" \
+            --source-rpm "$srpm" \
+            --vendor-patch "$vendor_patch" \
+            --output-dir "$RUNNER_TEMP/rk006-full-source-build-capture" \
+            --github-head-sha "$EXPECTED_HEAD_SHA" \
+            --github-run-id "$GITHUB_RUN_ID" \
+            --github-run-attempt "$GITHUB_RUN_ATTEMPT" \
+            --github-repository "$GITHUB_REPOSITORY" \
+            --container-image "$ROCKY_IMAGE"
+          : > "$github_env_file"
+          : > "$github_path_file"
+
+      - name: Download the same-run exact-build evidence
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: native-rust-exact-build-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/rk006-build-evidence
+
+      - name: Finalize the non-crediting build binding
+        env:
+          BASH_ENV: ""
+          ENV: ""
+          GLIBC_TUNABLES: ""
+          LD_ASSUME_KERNEL: ""
+          LD_AUDIT: ""
+          LD_BIND_NOW: ""
+          LD_DEBUG: ""
+          LD_DEBUG_OUTPUT: ""
+          LD_DYNAMIC_WEAK: ""
+          LD_HWCAP_MASK: ""
+          LD_LIBRARY_PATH: ""
+          LD_ORIGIN_PATH: ""
+          LD_PREFER_MAP_32BIT_EXEC: ""
+          LD_PRELOAD: ""
+          LD_PROFILE: ""
+          LD_PROFILE_OUTPUT: ""
+          PATH: /usr/sbin:/usr/bin:/sbin:/bin
+          PYTHONHOME: ""
+          PYTHONPATH: ""
+        run: |
+          set -euo pipefail
+          unset LD_SHOW_AUXV
+          PATH=/usr/sbin:/usr/bin:/sbin:/bin
+          export PATH
+          github_env_file="$GITHUB_ENV"
+          github_path_file="$GITHUB_PATH"
+          unset GITHUB_ENV GITHUB_PATH
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/rocky_kernel_rk006_full_source_build_capture.py \
+            finalize-build \
+            --repo "$GITHUB_WORKSPACE" \
+            --capture-dir "$RUNNER_TEMP/rk006-full-source-build-capture" \
+            --build-evidence-dir "$RUNNER_TEMP/rk006-build-evidence"
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/rocky_kernel_rk006_full_source_build_capture.py \
+            verify-capture \
+            --repo "$GITHUB_WORKSPACE" \
+            --capture-dir "$RUNNER_TEMP/rk006-full-source-build-capture"
+          : > "$github_env_file"
+          : > "$github_path_file"
+
+      - name: Upload RK-006 capture or first-failure diagnostics
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: rk006-full-source-build-capture-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/rk006-full-source-build-capture/
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
+          include-hidden-files: true

@@ -378,6 +378,27 @@ def main():
     parser.add_argument("--fail-on-executable-headers", action="store_true")
     parser.add_argument("--fail-on-compiled-c", action="store_true")
     parser.add_argument("--fail-on-retired-compiled-c", action="store_true")
+    parser.add_argument("--fail-on-stale-tracker-row", action="store_true")
+    parser.add_argument(
+        "--allow-compiled-source",
+        action="append",
+        default=[],
+        metavar="PATH",
+        help=(
+            "exact repo-relative C source allowed in this build profile; "
+            "repeatable and rejected when unused"
+        ),
+    )
+    parser.add_argument(
+        "--allow-stale-tracker-row",
+        action="append",
+        default=[],
+        metavar="PATH",
+        help=(
+            "exact missing tracker row allowed in this build profile; "
+            "repeatable and rejected when unused"
+        ),
+    )
     parser.add_argument("--fail-on-unjustified-allowlist", action="store_true")
     parser.add_argument("--json", action="store_true", help="print machine-readable summary")
     args = parser.parse_args()
@@ -398,6 +419,15 @@ def main():
     tracked_existing = {path for path in tracker if (repo / path).exists()}
     untracked = [path for path in in_scope if path not in tracker]
     stale = [path for path in tracker if not (repo / path).exists()]
+    requested_stale_exemptions = set(args.allow_stale_tracker_row)
+    invalid_stale_exemptions = sorted(
+        path
+        for path in requested_stale_exemptions
+        if path.startswith("/") or ".." in Path(path).parts
+    )
+    unused_stale_exemptions = sorted(requested_stale_exemptions - set(stale))
+    applied_stale_exemptions = sorted(requested_stale_exemptions & set(stale))
+    effective_stale = sorted(set(stale) - requested_stale_exemptions)
 
     category_counts = defaultdict(Counter)
     category_rows = defaultdict(list)
@@ -451,6 +481,33 @@ def main():
                 compiled_seen.add(key)
                 compiled_c.append(BuildSource(rel, source.source))
 
+    requested_compiled_exemptions = set(args.allow_compiled_source)
+    invalid_compiled_exemptions = sorted(
+        path
+        for path in requested_compiled_exemptions
+        if path.startswith("/")
+        or ".." in Path(path).parts
+        or path not in scanned_set
+        or not path.endswith(".c")
+    )
+    compiled_paths = {item.path for item in compiled_c}
+    unused_compiled_exemptions = sorted(
+        requested_compiled_exemptions - compiled_paths
+    )
+    applied_compiled_exemptions = sorted(
+        requested_compiled_exemptions & compiled_paths
+    )
+    profile_exempted_retired_c = sorted({
+        item.path
+        for item in compiled_c
+        if item.path in requested_compiled_exemptions
+        and tracker.get(item.path)
+        and row_state(tracker[item.path]) == "retired"
+    })
+    compiled_c = [
+        item for item in compiled_c if item.path not in requested_compiled_exemptions
+    ]
+
     enforced_categories = set(args.enforce_category)
     category_debt = [
         row for row in debt_rows if row.category in enforced_categories
@@ -471,6 +528,32 @@ def main():
 
     if untracked:
         errors.append("untracked in-scope non-Rust files remain: {}".format(len(untracked)))
+    if invalid_compiled_exemptions:
+        errors.append(
+            "invalid compiled-source profile exemptions: {}".format(
+                ", ".join(invalid_compiled_exemptions)
+            )
+        )
+    if invalid_stale_exemptions:
+        errors.append(
+            "invalid stale-row profile exemptions: {}".format(
+                ", ".join(invalid_stale_exemptions)
+            )
+        )
+    if unused_stale_exemptions:
+        errors.append(
+            "unused stale-row profile exemptions: {}".format(
+                ", ".join(unused_stale_exemptions)
+            )
+        )
+    if args.fail_on_stale_tracker_row and effective_stale:
+        errors.append("stale tracker rows remain: {}".format(len(effective_stale)))
+    if unused_compiled_exemptions:
+        errors.append(
+            "unused compiled-source profile exemptions: {}".format(
+                ", ".join(unused_compiled_exemptions)
+            )
+        )
     if args.fail_on_unretired and debt_rows:
         errors.append("tracked source-retirement debt remains: {}".format(len(debt_rows)))
     if args.fail_on_executable_headers and header_hits:
@@ -520,6 +603,7 @@ def main():
         "in_scope_files": len(in_scope),
         "untracked_files": untracked[:50],
         "stale_tracker_rows": stale[:50],
+        "stale_tracker_profile_exemptions": applied_stale_exemptions,
         "debt_rows": len(debt_rows),
         "allowlisted_rows": len(allowlisted_rows),
         "allowlist_justifications": len(allowlist_justifications),
@@ -528,6 +612,8 @@ def main():
         "headers_with_executable_logic": len(header_hits),
         "compiled_non_allowlisted_c": len(compiled_c),
         "compiled_retired_c": len(retired_compiled_c),
+        "compiled_source_profile_exemptions": applied_compiled_exemptions,
+        "profile_exempted_retired_c": profile_exempted_retired_c,
         "category_counts": {
             category: dict(counts) for category, counts in sorted(category_counts.items())
         },
@@ -550,9 +636,23 @@ def main():
         if build_dir:
             print("  compiled non-allowlisted C sources: {}".format(len(compiled_c)))
             print("  compiled retired C sources: {}".format(len(retired_compiled_c)))
+            print(
+                "  compiled-source profile exemptions: {}".format(
+                    len(applied_compiled_exemptions)
+                )
+            )
+            print(
+                "  profile-exempted retired C sources: {}".format(
+                    len(profile_exempted_retired_c)
+                )
+            )
         print_category_progress(progress, overall_completion, overall_left)
         if stale:
             print("  stale tracker rows: {}".format(len(stale)))
+        if applied_stale_exemptions:
+            print("  applied stale-row profile exemptions:")
+            for rel in applied_stale_exemptions:
+                print("    {}".format(rel))
         if untracked:
             print("  untracked examples:")
             for rel in untracked[:20]:
@@ -578,6 +678,14 @@ def main():
             print("  compiled C examples:")
             for item in compiled_c[:20]:
                 print("    {} ({})".format(item.path, item.source))
+        if applied_compiled_exemptions:
+            print("  applied compiled-source profile exemptions:")
+            for rel in applied_compiled_exemptions:
+                print("    {}".format(rel))
+        if profile_exempted_retired_c:
+            print("  profile-exempted retired C sources:")
+            for rel in profile_exempted_retired_c:
+                print("    {}".format(rel))
         if retired_compiled_c:
             print("  compiled retired C examples:")
             for item in retired_compiled_c[:20]:

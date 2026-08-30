@@ -5,9 +5,11 @@ Updated: 2026-06-02
 ## Mission
 
 This repository is migrating McKernel from the traditional CentOS-based
-deployment to Rocky Linux 8.x while porting McKernel-owned implementation logic
-from C to Rust. The active target is smp-x86 / x86_64. Arm64 is deferred until
-the x86_64 path is stable.
+deployment to an exact Rocky Linux 10.2-derived production control-plane kernel
+while porting McKernel-owned implementation logic from C to Rust. The frozen
+Rocky Linux 8.10 build and runtime evidence remains the historical R0
+compatibility oracle, not the native-host-module production target. The active
+target is smp-x86 / x86_64. Arm64 is deferred until the x86_64 path is stable.
 
 Focus porting effort on McKernel-owned software. Do not spend migration
 iterations on externally owned or third-party software unless the change is a

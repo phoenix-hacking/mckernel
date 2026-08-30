@@ -1,0 +1,782 @@
+name: Native Rust host modules exact Rocky runtime
+
+on:
+  workflow_dispatch:
+    inputs:
+      validation_sha:
+        description: Exact 40-hex candidate commit
+        required: true
+        type: string
+  workflow_call:
+    inputs:
+      validation_sha:
+        description: Exact 40-hex candidate commit
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+env:
+  ROCKY_IMAGE: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
+  EXPECTED_HEAD_SHA: ${{ inputs.validation_sha }}
+
+jobs:
+  exact-build:
+    name: Produce exact kernel and modules (credit forbidden)
+    uses: ./.github/workflows/native-rust-host-modules-exact-build.yml
+    with:
+      validation_sha: ${{ inputs.validation_sha }}
+
+  exact-runtime:
+    name: Capture exact QEMU lifecycle (technical-capture-unreviewed; credit=forbidden)
+    needs: exact-build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    container:
+      image: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
+    defaults:
+      run:
+        shell: /usr/bin/bash --noprofile --norc -p -e -o pipefail {0}
+
+    steps:
+      - name: Initialize first-failure evidence and exact Rocky tools
+        env:
+          RUNTIME_EVIDENCE: ${{ runner.temp }}/native-rust-runtime-evidence
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNTIME_EVIDENCE"
+          printf '%s\n' bootstrap-started > "$RUNTIME_EVIDENCE/workflow-state"
+          test "$(uname -m)" = x86_64
+          . /etc/os-release
+          test "$ID" = rocky
+          test "$VERSION_ID" = 10.2
+          dnf -y --allowerasing --setopt=install_weak_deps=False install \
+            coreutils
+          dnf -y --setopt=install_weak_deps=False install \
+            bash binutils cpio findutils gawk git-core gzip kmod \
+            qemu-kvm-core python3 sed util-linux which
+          ! /usr/bin/rpm -q coreutils-single
+          test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' /usr/bin/timeout)" = coreutils
+          dnf clean all
+          {
+            printf 'container_image=%s\n' "$ROCKY_IMAGE"
+            printf 'runner_arch=%s\n' "$(uname -m)"
+            printf 'os_release_sha256=%s\n' "$(sha256sum /etc/os-release | awk '{print $1}')"
+            rpm -qa --qf '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' | LC_ALL=C sort
+          } > "$RUNTIME_EVIDENCE/environment.txt"
+          printf '%s\n' bootstrap-complete > "$RUNTIME_EVIDENCE/workflow-state"
+
+      - name: Check out the exact candidate without credentials
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ env.EXPECTED_HEAD_SHA }}
+          fetch-depth: 1
+          persist-credentials: false
+          submodules: recursive
+
+      - name: Download the exact build artifact from this run
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: native-rust-exact-build-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/native-rust-build-evidence
+
+      - name: Verify immutable build inputs and native module link contracts
+        env:
+          BASH_ENV: ""
+          BUILD_EVIDENCE: ${{ runner.temp }}/native-rust-build-evidence
+          CALLER_WORKFLOW_REF: ${{ github.workflow_ref }}
+          CALLER_WORKFLOW_SHA: ${{ github.workflow_sha }}
+          DEFINING_WORKFLOW_FILE_PATH: ${{ job.workflow_file_path }}
+          DEFINING_WORKFLOW_REF: ${{ job.workflow_ref }}
+          DEFINING_WORKFLOW_REPOSITORY: ${{ job.workflow_repository }}
+          DEFINING_WORKFLOW_SHA: ${{ job.workflow_sha }}
+          ENV: ""
+          EXPECTED_HEAD_SHA: ${{ inputs.validation_sha }}
+          GLIBC_TUNABLES: ""
+          LD_ASSUME_KERNEL: ""
+          LD_AUDIT: ""
+          LD_BIND_NOW: ""
+          LD_DEBUG: ""
+          LD_DEBUG_OUTPUT: ""
+          LD_DYNAMIC_WEAK: ""
+          LD_HWCAP_MASK: ""
+          LD_LIBRARY_PATH: ""
+          LD_ORIGIN_PATH: ""
+          LD_PREFER_MAP_32BIT_EXEC: ""
+          LD_PRELOAD: ""
+          LD_PROFILE: ""
+          LD_PROFILE_OUTPUT: ""
+          PATH: /usr/sbin:/usr/bin:/sbin:/bin
+          PYTHONHOME: ""
+          PYTHONPATH: ""
+          RUNTIME_EVIDENCE: ${{ runner.temp }}/native-rust-runtime-evidence
+        run: |
+          set -euo pipefail
+          unset LD_SHOW_AUXV
+          PATH=/usr/sbin:/usr/bin:/sbin:/bin
+          export PATH
+          github_env_file="$GITHUB_ENV"
+          github_path_file="$GITHUB_PATH"
+          unset GITHUB_ENV GITHUB_PATH
+          [[ "$EXPECTED_HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]
+          test "$(git -c safe.directory="$GITHUB_WORKSPACE" rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"
+          [[ "$GITHUB_SHA" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$CALLER_WORKFLOW_SHA" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$DEFINING_WORKFLOW_SHA" =~ ^[0-9a-f]{40}$ ]]
+          test "$GITHUB_REPOSITORY" = phoenix-hacking/mckernel
+          test "$GITHUB_SHA" = "$CALLER_WORKFLOW_SHA"
+          test "$CALLER_WORKFLOW_SHA" = "$DEFINING_WORKFLOW_SHA"
+          runtime_workflow_path=.github/workflows/native-rust-host-modules-exact-runtime.yml
+          runtime_pr_workflow_path=.github/workflows/native-rust-host-modules-exact-runtime-pr.yml
+          test "$DEFINING_WORKFLOW_REPOSITORY" = "$GITHUB_REPOSITORY"
+          test "$DEFINING_WORKFLOW_FILE_PATH" = "$runtime_workflow_path"
+          case "$GITHUB_EVENT_NAME" in
+            pull_request)
+              [[ "$GITHUB_REF" =~ ^refs/pull/[1-9][0-9]*/merge$ ]]
+              caller_workflow_path="$runtime_pr_workflow_path"
+              ;;
+            workflow_dispatch)
+              [[ "$GITHUB_REF" =~ ^refs/(heads|tags)/[^[:space:]]+$ ]]
+              test "$EXPECTED_HEAD_SHA" = "$CALLER_WORKFLOW_SHA"
+              caller_workflow_path="$runtime_workflow_path"
+              ;;
+            *)
+              printf 'unsupported exact-runtime workflow event: %s\n' \
+                "$GITHUB_EVENT_NAME" >&2
+              exit 2
+              ;;
+          esac
+          test "$CALLER_WORKFLOW_REF" = \
+            "$GITHUB_REPOSITORY/$caller_workflow_path@$GITHUB_REF"
+          test "$DEFINING_WORKFLOW_REF" = \
+            "$GITHUB_REPOSITORY/$runtime_workflow_path@$GITHUB_REF"
+          workflow_git() {
+            /usr/bin/git -c safe.directory="$GITHUB_WORKSPACE" "$@"
+          }
+          if ! workflow_git cat-file -e \
+            "$DEFINING_WORKFLOW_SHA^{commit}" 2>/dev/null; then
+            workflow_git fetch --no-tags --depth=1 origin "$GITHUB_REF"
+            test "$(workflow_git rev-parse FETCH_HEAD)" = "$DEFINING_WORKFLOW_SHA"
+          fi
+          test "$(workflow_git rev-parse "$DEFINING_WORKFLOW_SHA^{commit}")" = \
+            "$DEFINING_WORKFLOW_SHA"
+          candidate_caller_workflow_blob="$(workflow_git rev-parse --verify \
+            "$EXPECTED_HEAD_SHA:$caller_workflow_path")"
+          executed_caller_workflow_blob="$(workflow_git rev-parse --verify \
+            "$CALLER_WORKFLOW_SHA:$caller_workflow_path")"
+          candidate_job_workflow_blob="$(workflow_git rev-parse --verify \
+            "$EXPECTED_HEAD_SHA:$runtime_workflow_path")"
+          executed_job_workflow_blob="$(workflow_git rev-parse --verify \
+            "$DEFINING_WORKFLOW_SHA:$runtime_workflow_path")"
+          for workflow_blob in \
+            "$candidate_caller_workflow_blob" "$executed_caller_workflow_blob" \
+            "$candidate_job_workflow_blob" "$executed_job_workflow_blob"; do
+            [[ "$workflow_blob" =~ ^[0-9a-f]{40}$ ]]
+            test "$(workflow_git cat-file -t "$workflow_blob")" = blob
+          done
+          test "$candidate_caller_workflow_blob" = \
+            "$executed_caller_workflow_blob"
+          test "$candidate_job_workflow_blob" = "$executed_job_workflow_blob"
+          umask 077
+          test ! -e "$RUNTIME_EVIDENCE/executed-caller-workflow.yml"
+          test ! -e "$RUNTIME_EVIDENCE/executed-runtime-workflow.yml"
+          workflow_git cat-file blob "$executed_caller_workflow_blob" \
+            > "$RUNTIME_EVIDENCE/executed-caller-workflow.yml"
+          workflow_git cat-file blob "$executed_job_workflow_blob" \
+            > "$RUNTIME_EVIDENCE/executed-runtime-workflow.yml"
+          test -f "$GITHUB_WORKSPACE/$caller_workflow_path"
+          test ! -L "$GITHUB_WORKSPACE/$caller_workflow_path"
+          test -f "$GITHUB_WORKSPACE/$runtime_workflow_path"
+          test ! -L "$GITHUB_WORKSPACE/$runtime_workflow_path"
+          /usr/bin/cmp -- "$GITHUB_WORKSPACE/$caller_workflow_path" \
+            "$RUNTIME_EVIDENCE/executed-caller-workflow.yml"
+          /usr/bin/cmp -- "$GITHUB_WORKSPACE/$runtime_workflow_path" \
+            "$RUNTIME_EVIDENCE/executed-runtime-workflow.yml"
+          caller_workflow_record="$(/usr/bin/sha256sum -- \
+            "$RUNTIME_EVIDENCE/executed-caller-workflow.yml")"
+          caller_workflow_sha256="${caller_workflow_record%% *}"
+          job_workflow_record="$(/usr/bin/sha256sum -- \
+            "$RUNTIME_EVIDENCE/executed-runtime-workflow.yml")"
+          job_workflow_sha256="${job_workflow_record%% *}"
+          [[ "$caller_workflow_sha256" =~ ^[0-9a-f]{64}$ ]]
+          [[ "$job_workflow_sha256" =~ ^[0-9a-f]{64}$ ]]
+          caller_workflow_size="$(/usr/bin/wc -c < \
+            "$RUNTIME_EVIDENCE/executed-caller-workflow.yml")"
+          job_workflow_size="$(/usr/bin/wc -c < \
+            "$RUNTIME_EVIDENCE/executed-runtime-workflow.yml")"
+          [[ "$caller_workflow_size" =~ ^[1-9][0-9]*$ ]]
+          [[ "$job_workflow_size" =~ ^[1-9][0-9]*$ ]]
+          test "$caller_workflow_size" -le 1048576
+          test "$job_workflow_size" -le 1048576
+          test ! -e "$RUNTIME_EVIDENCE/runtime-workflow-provenance.json"
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin \
+            /usr/bin/python3 -I -S -B - \
+            "$RUNTIME_EVIDENCE/runtime-workflow-provenance.json" \
+            "$EXPECTED_HEAD_SHA" "$GITHUB_EVENT_NAME" "$GITHUB_REF" \
+            "$GITHUB_SHA" "$CALLER_WORKFLOW_REF" "$CALLER_WORKFLOW_SHA" \
+            "$DEFINING_WORKFLOW_REF" "$DEFINING_WORKFLOW_SHA" \
+            "$DEFINING_WORKFLOW_REPOSITORY" "$DEFINING_WORKFLOW_FILE_PATH" \
+            "$caller_workflow_path" "$candidate_caller_workflow_blob" \
+            "$executed_caller_workflow_blob" "$caller_workflow_sha256" \
+            "$caller_workflow_size" "$runtime_workflow_path" \
+            "$candidate_job_workflow_blob" "$executed_job_workflow_blob" \
+            "$job_workflow_sha256" "$job_workflow_size" <<'PY'
+          import json
+          import os
+          import sys
+
+          (
+              output,
+              candidate_sha,
+              event_name,
+              github_ref,
+              github_sha,
+              github_workflow_ref,
+              github_workflow_sha,
+              job_workflow_ref,
+              job_workflow_sha,
+              job_workflow_repository,
+              job_workflow_file_path,
+              caller_path,
+              caller_candidate_blob,
+              caller_executed_blob,
+              caller_sha256,
+              caller_size,
+              job_path,
+              job_candidate_blob,
+              job_executed_blob,
+              job_sha256,
+              job_size,
+          ) = sys.argv[1:]
+          value = {
+              "candidate_sha": candidate_sha,
+              "github": {
+                  "event_name": event_name,
+                  "ref": github_ref,
+                  "sha": github_sha,
+                  "workflow_ref": github_workflow_ref,
+                  "workflow_sha": github_workflow_sha,
+              },
+              "job": {
+                  "workflow_file_path": job_workflow_file_path,
+                  "workflow_ref": job_workflow_ref,
+                  "workflow_repository": job_workflow_repository,
+                  "workflow_sha": job_workflow_sha,
+              },
+              "schema": "mckernel-native-rust-runtime-workflow-provenance-v1",
+              "workflow_blobs": {
+                  "caller": {
+                      "candidate_git_blob_sha1": caller_candidate_blob,
+                      "evidence_file": "executed-caller-workflow.yml",
+                      "executed_git_blob_sha1": caller_executed_blob,
+                      "path": caller_path,
+                      "sha256": caller_sha256,
+                      "size": int(caller_size),
+                  },
+                  "job": {
+                      "candidate_git_blob_sha1": job_candidate_blob,
+                      "evidence_file": "executed-runtime-workflow.yml",
+                      "executed_git_blob_sha1": job_executed_blob,
+                      "path": job_path,
+                      "sha256": job_sha256,
+                      "size": int(job_size),
+                  },
+              },
+          }
+          data = (json.dumps(value, indent=2, sort_keys=True) + "\n").encode("utf-8")
+          descriptor = os.open(
+              output,
+              os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW,
+              0o644,
+          )
+          with os.fdopen(descriptor, "wb") as stream:
+              stream.write(data)
+              stream.flush()
+              os.fsync(stream.fileno())
+          PY
+          chmod 0644 \
+            "$RUNTIME_EVIDENCE/executed-caller-workflow.yml" \
+            "$RUNTIME_EVIDENCE/executed-runtime-workflow.yml" \
+            "$RUNTIME_EVIDENCE/runtime-workflow-provenance.json"
+          test "$(git -C ihk rev-parse HEAD)" = "3114d9e7101ad52030eb3effa849a5c108972a1f"
+          (cd "$BUILD_EVIDENCE" && sha256sum --check --strict SHA256SUMS)
+          test "$(cat "$BUILD_EVIDENCE/commit.sha")" = "$EXPECTED_HEAD_SHA"
+          expected_modinfo_nevra=kmod-31-13.el10.x86_64
+          expected_modinfo_sha256=7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55
+          modinfo_path="$(command -v modinfo)"
+          modinfo_target=/usr/bin/kmod
+          test "$modinfo_path" = /usr/sbin/modinfo
+          test -x /usr/sbin/modinfo
+          test -L /usr/sbin/modinfo
+          test "$(/usr/bin/readlink -- /usr/sbin/modinfo)" = ../bin/kmod
+          test -x "$modinfo_target"
+          test ! -L "$modinfo_target"
+          exec {modinfo_fd}<"$modinfo_target"
+          modinfo_exec="/proc/self/fd/$modinfo_fd"
+          test -r "$modinfo_exec"
+          assert_modinfo_binding() {
+            test -L "$modinfo_path" &&
+              test "$(/usr/bin/readlink -- "$modinfo_path")" = ../bin/kmod &&
+              test ! -L "$modinfo_target" &&
+              test "$modinfo_path" -ef "$modinfo_exec" &&
+              test "$modinfo_target" -ef "$modinfo_exec" &&
+              test "$(/usr/bin/sha256sum -- "$modinfo_exec")" = \
+              "$expected_modinfo_sha256  $modinfo_exec" &&
+              test "$(/usr/bin/rpm -q --qf '%{NEVRA}\n' kmod)" = \
+              "$expected_modinfo_nevra" &&
+              test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' "$modinfo_path")" = kmod &&
+              test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' "$modinfo_target")" = kmod
+          }
+          run_modinfo() (
+            assert_modinfo_binding &&
+              exec -a modinfo "$modinfo_exec" "$@"
+          )
+          assert_modinfo_binding
+          test -x /usr/bin/nm
+          test ! -L /usr/bin/nm
+          test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' /usr/bin/nm)" = binutils
+          for symbol in \
+            CONFIG_BINFMT_ELF CONFIG_BLK_DEV_INITRD CONFIG_COMPAT \
+            CONFIG_DEVTMPFS CONFIG_IA32_EMULATION CONFIG_MISC_DEVICES CONFIG_MODULES \
+            CONFIG_MODULE_UNLOAD CONFIG_PRINTK CONFIG_PROC_FS CONFIG_RD_GZIP \
+            CONFIG_SERIAL_8250 CONFIG_SERIAL_8250_CONSOLE CONFIG_SYSFS
+          do
+            grep -qx "$symbol=y" "$BUILD_EVIDENCE/resolved.config"
+          done
+          grep -qx '# CONFIG_MODULE_SIG_FORCE is not set' \
+            "$BUILD_EVIDENCE/resolved.config"
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/native_rust_runtime_evidence.py \
+            --repo "$GITHUB_WORKSPACE" --check-contract
+          test "$(run_modinfo -F name "$BUILD_EVIDENCE/ihk.ko")" = ihk
+          test "$(run_modinfo -F name "$BUILD_EVIDENCE/ihk-smp-x86_64.ko")" = ihk_smp_x86_64
+          test "$(run_modinfo -F name "$BUILD_EVIDENCE/mcctrl.ko")" = mcctrl
+          assert_modinfo_binding
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/ihk_native_lifecycle_check.py \
+            --repo "$GITHUB_WORKSPACE" --module "$BUILD_EVIDENCE/ihk.ko" \
+            --modinfo-fd "$modinfo_fd"
+          assert_modinfo_binding
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/ihk_smp_native_lifecycle_check.py \
+            --repo "$GITHUB_WORKSPACE" --module "$BUILD_EVIDENCE/ihk-smp-x86_64.ko" \
+            --modinfo-fd "$modinfo_fd"
+          assert_modinfo_binding
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/mcctrl_native_lifecycle_check.py \
+            --repo "$GITHUB_WORKSPACE" --module "$BUILD_EVIDENCE/mcctrl.ko" \
+            --modinfo-fd "$modinfo_fd"
+          assert_modinfo_binding
+          exec {modinfo_fd}<&-
+          : > "$github_env_file"
+          : > "$github_path_file"
+
+      - name: Assemble a deterministic lifecycle and mcd0 initramfs
+        env:
+          BASH_ENV: ""
+          BUILD_EVIDENCE: ${{ runner.temp }}/native-rust-build-evidence
+          ENV: ""
+          INITRAMFS_ROOT: ${{ runner.temp }}/native-rust-initramfs-root
+          GLIBC_TUNABLES: ""
+          LD_ASSUME_KERNEL: ""
+          LD_AUDIT: ""
+          LD_BIND_NOW: ""
+          LD_DEBUG: ""
+          LD_DEBUG_OUTPUT: ""
+          LD_DYNAMIC_WEAK: ""
+          LD_HWCAP_MASK: ""
+          LD_LIBRARY_PATH: ""
+          LD_ORIGIN_PATH: ""
+          LD_PREFER_MAP_32BIT_EXEC: ""
+          LD_PRELOAD: ""
+          LD_PROFILE: ""
+          LD_PROFILE_OUTPUT: ""
+          PATH: /usr/sbin:/usr/bin:/sbin:/bin
+          RUNTIME_EVIDENCE: ${{ runner.temp }}/native-rust-runtime-evidence
+        run: |
+          set -euo pipefail
+          unset LD_SHOW_AUXV
+          PATH=/usr/sbin:/usr/bin:/sbin:/bin
+          export PATH
+          github_env_file="$GITHUB_ENV"
+          github_path_file="$GITHUB_PATH"
+          unset GITHUB_ENV GITHUB_PATH
+          test ! -e "$INITRAMFS_ROOT"
+          mkdir -p \
+            "$INITRAMFS_ROOT/bin" "$INITRAMFS_ROOT/sbin" \
+            "$INITRAMFS_ROOT/usr/bin" "$INITRAMFS_ROOT/usr/sbin" \
+            "$INITRAMFS_ROOT/lib" "$INITRAMFS_ROOT/lib64" \
+            "$INITRAMFS_ROOT/dev" "$INITRAMFS_ROOT/proc" \
+            "$INITRAMFS_ROOT/sys" "$INITRAMFS_ROOT/tmp" \
+            "$INITRAMFS_ROOT/modules"
+          chmod 1777 "$INITRAMFS_ROOT/tmp"
+
+          copy_executable() {
+            local source="$1"
+            local destination="$2"
+            local dependency
+            install -D -m 0755 "$source" "$INITRAMFS_ROOT$destination"
+            while read -r dependency; do
+              test -f "$dependency"
+              install -D -m 0755 "$dependency" "$INITRAMFS_ROOT$dependency"
+            done < <(
+              ldd "$source" \
+                | awk '/=> \/[^ ]+/ {print $3} /^[[:space:]]*\/[A-Za-z0-9_/.+-]+/ {print $1}' \
+                | LC_ALL=C sort -u
+            )
+          }
+
+          test "$(command -v insmod)" = /usr/sbin/insmod
+          test "$(command -v rmmod)" = /usr/sbin/rmmod
+          test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' /usr/sbin/insmod)" = kmod
+          test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' /usr/sbin/rmmod)" = kmod
+          copy_executable /usr/bin/bash /bin/bash
+          copy_executable /usr/bin/mount /bin/mount
+          copy_executable /usr/bin/stat /bin/stat
+          copy_executable /usr/bin/uname /bin/uname
+          copy_executable /usr/sbin/insmod /sbin/insmod
+          copy_executable /usr/sbin/rmmod /sbin/rmmod
+          copy_executable /usr/bin/dmesg /bin/dmesg
+
+          kernel_release="$(cat "$BUILD_EVIDENCE/kernel.release")"
+          test -n "$kernel_release"
+          sed "s/@EXPECTED_KERNEL_RELEASE@/$kernel_release/g" \
+            scripts/native-rust-runtime-init.sh > "$INITRAMFS_ROOT/init"
+          chmod 0755 "$INITRAMFS_ROOT/init"
+          /usr/bin/as --64 scripts/native-rust-runtime-poweroff.S \
+            -o "$RUNTIME_EVIDENCE/native-rust-runtime-poweroff.o"
+          /usr/bin/ld -m elf_x86_64 -nostdlib -static -s -z noexecstack \
+            -o "$INITRAMFS_ROOT/poweroff" \
+            "$RUNTIME_EVIDENCE/native-rust-runtime-poweroff.o"
+          /usr/bin/as --64 scripts/native-rust-runtime-mcd0-ioctl-x86_64.S \
+            -o "$RUNTIME_EVIDENCE/native-rust-runtime-mcd0-ioctl-x86_64.o"
+          /usr/bin/ld -m elf_x86_64 -nostdlib -static -s -z noexecstack \
+            -o "$RUNTIME_EVIDENCE/native-rust-runtime-mcd0-ioctl-x86_64" \
+            "$RUNTIME_EVIDENCE/native-rust-runtime-mcd0-ioctl-x86_64.o"
+          /usr/bin/as --32 scripts/native-rust-runtime-mcd0-ioctl-i386.S \
+            -o "$RUNTIME_EVIDENCE/native-rust-runtime-mcd0-ioctl-i386.o"
+          /usr/bin/ld -m elf_i386 -nostdlib -static -s -z noexecstack \
+            -o "$RUNTIME_EVIDENCE/native-rust-runtime-mcd0-ioctl-i386" \
+            "$RUNTIME_EVIDENCE/native-rust-runtime-mcd0-ioctl-i386.o"
+          /usr/bin/readelf -h \
+            "$RUNTIME_EVIDENCE/native-rust-runtime-mcd0-ioctl-x86_64" \
+            | grep -Fqx '  Class:                             ELF64'
+          /usr/bin/readelf -h \
+            "$RUNTIME_EVIDENCE/native-rust-runtime-mcd0-ioctl-x86_64" \
+            | grep -Fqx '  Machine:                           Advanced Micro Devices X86-64'
+          /usr/bin/readelf -h \
+            "$RUNTIME_EVIDENCE/native-rust-runtime-mcd0-ioctl-i386" \
+            | grep -Fqx '  Class:                             ELF32'
+          /usr/bin/readelf -h \
+            "$RUNTIME_EVIDENCE/native-rust-runtime-mcd0-ioctl-i386" \
+            | grep -Fqx '  Machine:                           Intel 80386'
+          install -m 0755 \
+            "$RUNTIME_EVIDENCE/native-rust-runtime-mcd0-ioctl-x86_64" \
+            "$INITRAMFS_ROOT/bin/mcd0-ioctl-x86_64"
+          install -m 0755 \
+            "$RUNTIME_EVIDENCE/native-rust-runtime-mcd0-ioctl-i386" \
+            "$INITRAMFS_ROOT/bin/mcd0-ioctl-i386"
+          chmod 0644 \
+            "$RUNTIME_EVIDENCE/native-rust-runtime-mcd0-ioctl-x86_64" \
+            "$RUNTIME_EVIDENCE/native-rust-runtime-mcd0-ioctl-i386"
+          for module in ihk.ko ihk-smp-x86_64.ko mcctrl.ko; do
+            install -m 0644 "$BUILD_EVIDENCE/$module" "$INITRAMFS_ROOT/modules/$module"
+          done
+          mknod "$INITRAMFS_ROOT/dev/console" c 5 1
+          mknod "$INITRAMFS_ROOT/dev/null" c 1 3
+          chmod 0600 "$INITRAMFS_ROOT/dev/console"
+          chmod 0666 "$INITRAMFS_ROOT/dev/null"
+          find "$INITRAMFS_ROOT" -print0 | xargs -0 touch -h -d '@0'
+          (
+            cd "$INITRAMFS_ROOT"
+            find . -mindepth 1 -print0 \
+              | LC_ALL=C sort -z \
+              | cpio --null --create --format=newc --owner=0:0 --reproducible
+          ) | gzip -n > "$RUNTIME_EVIDENCE/initramfs.cpio.gz"
+          (
+            cd "$RUNTIME_EVIDENCE"
+            sha256sum initramfs.cpio.gz > initramfs.sha256
+          )
+          : > "$github_env_file"
+          : > "$github_path_file"
+
+      - name: Boot the exact kernel under QEMU TCG and capture serial diagnostics
+        env:
+          BASH_ENV: ""
+          BUILD_EVIDENCE: ${{ runner.temp }}/native-rust-build-evidence
+          ENV: ""
+          GLIBC_TUNABLES: ""
+          LD_ASSUME_KERNEL: ""
+          LD_AUDIT: ""
+          LD_BIND_NOW: ""
+          LD_DEBUG: ""
+          LD_DEBUG_OUTPUT: ""
+          LD_DYNAMIC_WEAK: ""
+          LD_HWCAP_MASK: ""
+          LD_LIBRARY_PATH: ""
+          LD_ORIGIN_PATH: ""
+          LD_PREFER_MAP_32BIT_EXEC: ""
+          LD_PRELOAD: ""
+          LD_PROFILE: ""
+          LD_PROFILE_OUTPUT: ""
+          PATH: /usr/sbin:/usr/bin:/sbin:/bin
+          RUNTIME_EVIDENCE: ${{ runner.temp }}/native-rust-runtime-evidence
+        run: |
+          set -euo pipefail
+          unset LD_SHOW_AUXV
+          PATH=/usr/sbin:/usr/bin:/sbin:/bin
+          export PATH
+          github_env_file="$GITHUB_ENV"
+          github_path_file="$GITHUB_PATH"
+          unset GITHUB_ENV GITHUB_PATH
+          qemu=/usr/libexec/qemu-kvm
+          test -x "$qemu"
+          "$qemu" --version > "$RUNTIME_EVIDENCE/qemu-version.txt"
+          qemu_args=(
+            -machine q35
+            -accel tcg
+            -cpu max
+            -smp 2
+            -m 2048
+            -kernel "$BUILD_EVIDENCE/bzImage"
+            -initrd "$RUNTIME_EVIDENCE/initramfs.cpio.gz"
+            -append "console=ttyS0,115200n8 rdinit=/init nokaslr panic=-1"
+            -display none
+            -monitor none
+            -serial "file:$RUNTIME_EVIDENCE/serial.log"
+            -no-reboot
+          )
+          {
+            printf '%q ' "$qemu"
+            printf '%q ' "${qemu_args[@]}"
+            printf '\n'
+          } > "$RUNTIME_EVIDENCE/qemu-command.txt"
+          set +e
+          /usr/bin/timeout --signal=TERM --kill-after=30s 1200 \
+            "$qemu" "${qemu_args[@]}" \
+            > "$RUNTIME_EVIDENCE/qemu.log" 2>&1
+          qemu_status=$?
+          set -e
+          printf '%s\n' "$qemu_status" > "$RUNTIME_EVIDENCE/qemu.exit-code"
+          test "$qemu_status" -eq 0
+          : > "$github_env_file"
+          : > "$github_path_file"
+
+      - name: Create a credit-forbidden technical capture
+        env:
+          BASH_ENV: ""
+          BUILD_EVIDENCE: ${{ runner.temp }}/native-rust-build-evidence
+          CALLER_WORKFLOW_REF: ${{ github.workflow_ref }}
+          CALLER_WORKFLOW_SHA: ${{ github.workflow_sha }}
+          DEFINING_WORKFLOW_FILE_PATH: ${{ job.workflow_file_path }}
+          DEFINING_WORKFLOW_REF: ${{ job.workflow_ref }}
+          DEFINING_WORKFLOW_REPOSITORY: ${{ job.workflow_repository }}
+          DEFINING_WORKFLOW_SHA: ${{ job.workflow_sha }}
+          ENV: ""
+          EXPECTED_HEAD_SHA: ${{ inputs.validation_sha }}
+          GLIBC_TUNABLES: ""
+          LD_ASSUME_KERNEL: ""
+          LD_AUDIT: ""
+          LD_BIND_NOW: ""
+          LD_DEBUG: ""
+          LD_DEBUG_OUTPUT: ""
+          LD_DYNAMIC_WEAK: ""
+          LD_HWCAP_MASK: ""
+          LD_LIBRARY_PATH: ""
+          LD_ORIGIN_PATH: ""
+          LD_PREFER_MAP_32BIT_EXEC: ""
+          LD_PRELOAD: ""
+          LD_PROFILE: ""
+          LD_PROFILE_OUTPUT: ""
+          PATH: /usr/sbin:/usr/bin:/sbin:/bin
+          PYTHONHOME: ""
+          PYTHONPATH: ""
+          RUNTIME_EVIDENCE: ${{ runner.temp }}/native-rust-runtime-evidence
+        run: |
+          set -euo pipefail
+          unset LD_SHOW_AUXV
+          PATH=/usr/sbin:/usr/bin:/sbin:/bin
+          export PATH
+          github_env_file="$GITHUB_ENV"
+          github_path_file="$GITHUB_PATH"
+          unset GITHUB_ENV GITHUB_PATH
+          expected_modinfo_nevra=kmod-31-13.el10.x86_64
+          expected_modinfo_sha256=7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55
+          expected_nm_nevra=binutils-2.41-63.el10.x86_64
+          expected_nm_digest_algorithm="$(/usr/bin/rpm -q --qf '%{FILEDIGESTALGO}\n' binutils)"
+          test "$expected_nm_digest_algorithm" = 8
+          modinfo_path="$(command -v modinfo)"
+          modinfo_target=/usr/bin/kmod
+          test "$modinfo_path" = /usr/sbin/modinfo
+          test -x /usr/sbin/modinfo
+          test -L /usr/sbin/modinfo
+          test "$(/usr/bin/readlink -- /usr/sbin/modinfo)" = ../bin/kmod
+          test -x "$modinfo_target"
+          test ! -L "$modinfo_target"
+          exec {modinfo_fd}<"$modinfo_target"
+          modinfo_exec="/proc/self/fd/$modinfo_fd"
+          test -r "$modinfo_exec"
+          assert_modinfo_binding() {
+            test -L "$modinfo_path" &&
+              test "$(/usr/bin/readlink -- "$modinfo_path")" = ../bin/kmod &&
+              test ! -L "$modinfo_target" &&
+              test "$modinfo_path" -ef "$modinfo_exec" &&
+              test "$modinfo_target" -ef "$modinfo_exec" &&
+              test "$(/usr/bin/sha256sum -- "$modinfo_exec")" = \
+              "$expected_modinfo_sha256  $modinfo_exec" &&
+              test "$(/usr/bin/rpm -q --qf '%{NEVRA}\n' kmod)" = \
+              "$expected_modinfo_nevra" &&
+              test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' "$modinfo_path")" = kmod &&
+              test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' "$modinfo_target")" = kmod
+          }
+          nm_path=/usr/bin/nm
+          test -x "$nm_path"
+          test ! -L "$nm_path"
+          test "$(/usr/bin/rpm -q --qf '%{NEVRA}\n' binutils)" = \
+            "$expected_nm_nevra"
+          test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' "$nm_path")" = binutils
+          expected_nm_inventory="$(
+            /usr/bin/rpm -q --qf '[%{FILENAMES}\t%{FILEDIGESTS}\n]' binutils
+          )"
+          test "${#expected_nm_inventory}" -gt 0
+          test "${#expected_nm_inventory}" -le 1048576
+          expected_nm_sha256=
+          expected_nm_rows=0
+          while IFS=$'\t' read -r rpm_filename rpm_digest; do
+            if test "$rpm_filename" = "$nm_path"; then
+              expected_nm_rows=$((expected_nm_rows + 1))
+              expected_nm_sha256="$rpm_digest"
+            fi
+          done <<< "$expected_nm_inventory"
+          test "$expected_nm_rows" -eq 1
+          [[ "$expected_nm_sha256" =~ ^[0-9a-f]{64}$ ]]
+          verify_nm_package() {
+            local verification
+            verification="$(/usr/bin/rpm -V binutils)" || return 1
+            test -z "$verification"
+          }
+          verify_nm_package
+          exec {nm_fd}<"$nm_path"
+          nm_exec="/proc/self/fd/$nm_fd"
+          test -r "$nm_exec"
+          test "$(/usr/bin/sha256sum -- "$nm_exec")" = \
+            "$expected_nm_sha256  $nm_exec"
+          assert_nm_binding() {
+            test ! -L "$nm_path" &&
+              test "$nm_path" -ef "$nm_exec" &&
+              test "$(/usr/bin/sha256sum -- "$nm_exec")" = \
+              "$expected_nm_sha256  $nm_exec" &&
+              test "$(/usr/bin/rpm -q --qf '%{NEVRA}\n' binutils)" = \
+              "$expected_nm_nevra" &&
+              test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' "$nm_path")" = binutils &&
+              verify_nm_package
+          }
+          assert_modinfo_binding
+          assert_nm_binding
+          case "$GITHUB_EVENT_NAME" in
+            pull_request)
+              caller_workflow_path=.github/workflows/native-rust-host-modules-exact-runtime-pr.yml
+              ;;
+            workflow_dispatch)
+              caller_workflow_path=.github/workflows/native-rust-host-modules-exact-runtime.yml
+              ;;
+            *)
+              exit 2
+              ;;
+          esac
+          runtime_workflow_path=.github/workflows/native-rust-host-modules-exact-runtime.yml
+          github_workflow_blob_sha1="$(/usr/bin/git -c \
+            safe.directory="$GITHUB_WORKSPACE" rev-parse --verify \
+            "$CALLER_WORKFLOW_SHA:$caller_workflow_path")"
+          job_workflow_blob_sha1="$(/usr/bin/git -c \
+            safe.directory="$GITHUB_WORKSPACE" rev-parse --verify \
+            "$DEFINING_WORKFLOW_SHA:$runtime_workflow_path")"
+          [[ "$github_workflow_blob_sha1" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$job_workflow_blob_sha1" =~ ^[0-9a-f]{40}$ ]]
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/native_rust_runtime_evidence.py \
+            --repo "$GITHUB_WORKSPACE" \
+            --modinfo-fd "$modinfo_fd" \
+            --modinfo-sha256 "$expected_modinfo_sha256" \
+            --nm-fd "$nm_fd" \
+            --nm-sha256 "$expected_nm_sha256" \
+            --github-event-name "$GITHUB_EVENT_NAME" \
+            --github-ref "$GITHUB_REF" \
+            --github-sha "$GITHUB_SHA" \
+            --github-workflow-ref "$CALLER_WORKFLOW_REF" \
+            --github-workflow-sha "$CALLER_WORKFLOW_SHA" \
+            --github-workflow-blob-sha1 "$github_workflow_blob_sha1" \
+            --job-workflow-ref "$DEFINING_WORKFLOW_REF" \
+            --job-workflow-sha "$DEFINING_WORKFLOW_SHA" \
+            --job-workflow-repository "$DEFINING_WORKFLOW_REPOSITORY" \
+            --job-workflow-file-path "$DEFINING_WORKFLOW_FILE_PATH" \
+            --job-workflow-blob-sha1 "$job_workflow_blob_sha1" \
+            --workflow-provenance \
+              "$RUNTIME_EVIDENCE/runtime-workflow-provenance.json" \
+            --capture \
+            --build-evidence-dir "$BUILD_EVIDENCE" \
+            --serial-log "$RUNTIME_EVIDENCE/serial.log" \
+            --qemu-log "$RUNTIME_EVIDENCE/qemu.log" \
+            --qemu-command "$RUNTIME_EVIDENCE/qemu-command.txt" \
+            --qemu-version "$RUNTIME_EVIDENCE/qemu-version.txt" \
+            --qemu-exit-code "$RUNTIME_EVIDENCE/qemu.exit-code" \
+            --environment-log "$RUNTIME_EVIDENCE/environment.txt" \
+            --initramfs "$RUNTIME_EVIDENCE/initramfs.cpio.gz" \
+            --initramfs-sha256 "$RUNTIME_EVIDENCE/initramfs.sha256" \
+            --candidate-sha "$EXPECTED_HEAD_SHA" \
+            --github-repository "$GITHUB_REPOSITORY" \
+            --github-run-id "$GITHUB_RUN_ID" \
+            --github-run-attempt "$GITHUB_RUN_ATTEMPT" \
+            --output "$RUNTIME_EVIDENCE/capture.json"
+          assert_modinfo_binding
+          assert_nm_binding
+          printf '%s\n' technical-capture-unreviewed > "$RUNTIME_EVIDENCE/workflow-state"
+          printf '%s\n' credit=forbidden >> "$RUNTIME_EVIDENCE/workflow-state"
+          (
+            cd "$RUNTIME_EVIDENCE"
+            find . -maxdepth 1 -type f ! -name SHA256SUMS -printf '%P\0' \
+              | LC_ALL=C sort -z | xargs -0 sha256sum -- > SHA256SUMS
+            sha256sum --check --strict SHA256SUMS
+          )
+          assert_modinfo_binding
+          assert_nm_binding
+          /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
+            /usr/bin/python3 -E -s scripts/native_rust_runtime_evidence.py \
+            --repo "$GITHUB_WORKSPACE" \
+            --modinfo-fd "$modinfo_fd" \
+            --modinfo-sha256 "$expected_modinfo_sha256" \
+            --nm-fd "$nm_fd" \
+            --nm-sha256 "$expected_nm_sha256" \
+            --github-event-name "$GITHUB_EVENT_NAME" \
+            --github-ref "$GITHUB_REF" \
+            --github-sha "$GITHUB_SHA" \
+            --github-workflow-ref "$CALLER_WORKFLOW_REF" \
+            --github-workflow-sha "$CALLER_WORKFLOW_SHA" \
+            --github-workflow-blob-sha1 "$github_workflow_blob_sha1" \
+            --job-workflow-ref "$DEFINING_WORKFLOW_REF" \
+            --job-workflow-sha "$DEFINING_WORKFLOW_SHA" \
+            --job-workflow-repository "$DEFINING_WORKFLOW_REPOSITORY" \
+            --job-workflow-file-path "$DEFINING_WORKFLOW_FILE_PATH" \
+            --job-workflow-blob-sha1 "$job_workflow_blob_sha1" \
+            --workflow-provenance \
+              "$RUNTIME_EVIDENCE/runtime-workflow-provenance.json" \
+            --check-runtime-evidence \
+            --runtime-evidence-dir "$RUNTIME_EVIDENCE" \
+            --build-evidence-dir "$BUILD_EVIDENCE"
+          assert_modinfo_binding
+          assert_nm_binding
+          exec {nm_fd}<&-
+          exec {modinfo_fd}<&-
+          : > "$github_env_file"
+          : > "$github_path_file"
+
+      - name: Upload technical capture or first-failure diagnostics
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: native-rust-exact-runtime-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/native-rust-runtime-evidence/
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0

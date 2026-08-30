@@ -3,11 +3,12 @@ use core::mem::{align_of, offset_of, size_of, ManuallyDrop, MaybeUninit};
 use core::ptr::{
     addr_of, addr_of_mut, copy_nonoverlapping, null_mut, read_volatile, write, write_volatile,
 };
+use core::sync::atomic::{AtomicU64, Ordering};
 
 use crate::abi::{
     AbiListHead, CInt, CLong, CULong, CpuLocalVar, CpuSet, I387FxsaveStruct, ITimerVal, IhkAtomic,
     IhkOsCpuMonitor, IhkSpinlock, IkcScdPacket, IkcScdPacketTraditional, Iovec, KSigAction, Mckfd,
-    MovePagesSmpReq, Process, ProcessVm, RLimit, RUsage, SchedParam, SigAction, SigInfo,
+    MovePagesSmpReq, Process, ProcessVm, RLimit, RUsage, SchedParam, SigAction, SigCommon, SigInfo,
     SigInfoChild, SigInfoKill, SigSet, SigStack, SizeT, SysInfo, SyscallRequest, SyscallResponse,
     Thread, TimeSpec, TimeVal, TodData, User, UserRegsStruct, UtiAttr, VmRange, VmRangeNumaPolicy,
     VmRegions, X86UserContext, XsaveStruct, PROCESS_NUMA_MASK_WORDS,
@@ -15,6 +16,7 @@ use crate::abi::{
 use crate::lock_helpers::McsRwlockNodeIrqsave;
 use crate::mem_helpers::{rusage_check_overmap, rusage_get_free_memory, rusage_get_total_memory};
 use crate::sched_helpers::SchedSyscallOffsets;
+use crate::waitq::{Waitq as RuntimeWaitq, WaitqEntry};
 
 const EINVAL: CInt = 22;
 const ENOMEM: CInt = 12;
@@ -71,6 +73,19 @@ const PTATTR_USER: CULong = 0x04;
 const PTATTR_NO_EXECUTE: CULong = 0x8000_0000_0000_0000;
 const PTATTR_UNCACHABLE: CULong = 0x10000;
 const IHK_MC_AP_NOWAIT: CULong = 0x000002;
+const SCD_MSG_SYSCALL_ONESIDE: CInt = 0x4;
+const SYSCALL_SEND_LOG_LIMIT: u32 = 64;
+const STATUS_IN_PROGRESS: CULong = 0;
+const STATUS_COMPLETED: CULong = 1;
+const STATUS_SYSCALL: CULong = 4;
+const IHK_SCD_REQ_THREAD_SPINNING: CULong = 0;
+const IHK_SCD_REQ_THREAD_DESCHEDULED: CULong = 2;
+const PS_INTERRUPTIBLE: CInt = 2;
+const SYS_RT_SIGACTION: CInt = 13;
+const SYS_SCHED_SETAFFINITY: CULong = 203;
+const SYS_EPOLL_WAIT: CULong = 232;
+const SYS_SYSCALL_RESPONSE: CULong = 8001;
+const PTATTR_WRITABLE_ACTIVE: CInt = 0x3;
 
 const MCL_CURRENT: CInt = 0x01;
 const MCL_FUTURE: CInt = 0x02;
@@ -208,6 +223,15 @@ unsafe extern "C" {
     static mut gettime_local_support: CInt;
     fn get_this_cpu_local_var() -> *mut CpuLocalVar;
     fn ihk_mc_get_processor_id() -> CInt;
+    fn do_syscall(request: *mut SyscallRequest, cpu: CInt) -> CLong;
+    fn kprintf(format: *const i8, ...) -> CInt;
+    fn check_sig_pending();
+    fn schedule();
+    fn cpu_pause();
+    fn cpu_disable_interrupt_save() -> CULong;
+    fn cpu_restore_interrupt(flags: CULong);
+    fn ihk_mc_get_numa_node_by_distance(index: CInt) -> *mut crate::page_alloc::IhkMcNumaNode;
+    fn syscall_dispatch_context_bridge(num: CInt, ctx: *mut X86UserContext) -> CLong;
     fn ihk_mc_get_nr_numa_nodes() -> CInt;
     fn do_fork(
         clone_flags: CInt,
@@ -2478,6 +2502,12 @@ pub unsafe extern "C" fn syscall_send_prepare_result(
     0
 }
 
+/// Copies one syscall request with the legacy protocol's `memcpy` semantics.
+///
+/// # Safety
+/// Unless null, `src` must be readable and `dst` writable for
+/// `size_of::<SyscallRequest>()` bytes, and those byte ranges must not overlap.
+/// Neither pointer needs to be aligned for `SyscallRequest`.
 #[no_mangle]
 pub unsafe extern "C" fn syscall_request_copy_result(
     dst: *mut SyscallRequest,
@@ -2487,18 +2517,454 @@ pub unsafe extern "C" fn syscall_request_copy_result(
         return -EINVAL;
     }
 
-    write(core::ptr::addr_of_mut!((*dst).rtid), (*src).rtid);
-    write(core::ptr::addr_of_mut!((*dst).ttid), (*src).ttid);
-    write(core::ptr::addr_of_mut!((*dst).valid), (*src).valid);
-    write(core::ptr::addr_of_mut!((*dst).number), (*src).number);
-    write(core::ptr::addr_of_mut!((*dst).args[0]), (*src).args[0]);
-    write(core::ptr::addr_of_mut!((*dst).args[1]), (*src).args[1]);
-    write(core::ptr::addr_of_mut!((*dst).args[2]), (*src).args[2]);
-    write(core::ptr::addr_of_mut!((*dst).args[3]), (*src).args[3]);
-    write(core::ptr::addr_of_mut!((*dst).args[4]), (*src).args[4]);
-    write(core::ptr::addr_of_mut!((*dst).args[5]), (*src).args[5]);
+    // The Linux proxy protocol historically copies this wire object with
+    // memcpy.  In particular, a nested request can begin at an address that
+    // is not aligned for `SyscallRequest`; keeping the operation byte-typed
+    // preserves those semantics without creating an unaligned Rust reference.
+    copy_nonoverlapping(
+        src.cast::<u8>(),
+        dst.cast::<u8>(),
+        size_of::<SyscallRequest>(),
+    );
 
     0
+}
+
+/// Publishes a fully initialized syscall request to the Linux-side consumer.
+///
+/// # Safety
+/// `request` must point to an aligned, live `SyscallRequest` whose non-`valid`
+/// fields have already been initialized.  No non-atomic access to `valid` may
+/// race with this store.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_request_publish_result(request: *mut SyscallRequest) -> CInt {
+    if request.is_null() {
+        return -EINVAL;
+    }
+
+    AtomicU64::from_ptr(addr_of_mut!((*request).valid)).store(1, Ordering::Release);
+    0
+}
+
+static SYSCALL_SEND_LOG_STATE: AtomicU64 = AtomicU64::new((u32::MAX as u64) << 32);
+#[cfg(not(mckernel_equivalence))]
+static GENERIC_FORWARD_LOG_STATE: AtomicU64 = AtomicU64::new((u32::MAX as u64) << 32);
+#[cfg(not(mckernel_equivalence))]
+static OFFLOAD_WAIT_LOG_STATE: AtomicU64 = AtomicU64::new((u32::MAX as u64) << 32);
+
+fn syscall_owner_log_budget(state_slot: &AtomicU64, pid: CInt) -> bool {
+    let pid_bits = (pid as u32 as u64) << 32;
+    let mut state = state_slot.load(Ordering::Relaxed);
+
+    loop {
+        let old_pid_bits = state & 0xffff_ffff_0000_0000;
+        let count = state as u32;
+        let next = if old_pid_bits != pid_bits {
+            pid_bits | 1
+        } else if count < SYSCALL_SEND_LOG_LIMIT {
+            pid_bits | u64::from(count + 1)
+        } else {
+            return false;
+        };
+
+        match state_slot.compare_exchange_weak(state, next, Ordering::Relaxed, Ordering::Relaxed) {
+            Ok(_) => return true,
+            Err(observed) => state = observed,
+        }
+    }
+}
+
+/// Sends one syscall request over the established McKernel-to-Linux IKC
+/// channel.  Linux remains the control-plane and syscall executor.
+///
+/// # Safety
+/// `request` and `response` must be valid for the complete offload operation.
+/// `cpu` must identify an initialized CPU-local area with a live IKC channel,
+/// and the calling CPU must have a current thread and process.
+#[no_mangle]
+pub unsafe extern "C" fn send_syscall(
+    request: *mut SyscallRequest,
+    cpu: CInt,
+    response: *mut SyscallResponse,
+) {
+    let prep_rc = syscall_send_prepare_result(request, response);
+    if prep_rc != 0 {
+        kprintf(
+            c"send_syscall: ERROR: preparing syscall request failed: %d\n"
+                .as_ptr()
+                .cast(),
+            prep_rc,
+        );
+        return;
+    }
+
+    // The IKC queue copies all 128 bytes as u64 words.  Zero-initializing the
+    // complete packet prevents reads of indeterminate union/padding bytes.
+    let mut packet = MaybeUninit::<IkcScdPacket>::zeroed().assume_init();
+    let traditional = addr_of_mut!(packet.body).cast::<IkcScdPacketTraditional>();
+    let packet_request = addr_of_mut!((*traditional).req);
+    let prep_rc = syscall_request_copy_result(packet_request, request);
+    if prep_rc != 0 {
+        kprintf(
+            c"send_syscall: ERROR: copying syscall request failed: %d\n"
+                .as_ptr()
+                .cast(),
+            prep_rc,
+        );
+        return;
+    }
+    let prep_rc = syscall_request_publish_result(packet_request);
+    if prep_rc != 0 {
+        kprintf(
+            c"send_syscall: ERROR: publishing syscall request failed: %d\n"
+                .as_ptr()
+                .cast(),
+            prep_rc,
+        );
+        return;
+    }
+
+    let cpu_local = crate::cls::get_cpu_local_var(cpu);
+    let this_cpu = crate::cls::get_this_cpu_local_var();
+    let thread = (*this_cpu).current;
+    let process = (*thread).proc;
+    let pid = (*process).pid;
+    let prep_rc = syscall_packet_traditional_prepare_result(
+        addr_of_mut!(packet),
+        SCD_MSG_SYSCALL_ONESIDE,
+        cpu,
+        pid,
+        crate::x86_memory_helpers::virt_to_phys(response.cast::<c_void>()),
+    );
+    if prep_rc != 0 {
+        kprintf(
+            c"send_syscall: ERROR: preparing syscall packet failed: %d\n"
+                .as_ptr()
+                .cast(),
+            prep_rc,
+        );
+        return;
+    }
+
+    if syscall_owner_log_budget(&SYSCALL_SEND_LOG_STATE, pid) {
+        let uctx = (*thread).uctx;
+        let pc = if uctx.is_null() {
+            0
+        } else {
+            crate::x86_cpu_helpers::ihk_mc_syscall_pc(uctx)
+        };
+        let sp = if uctx.is_null() {
+            0
+        } else {
+            crate::x86_cpu_helpers::ihk_mc_syscall_sp(uctx)
+        };
+        kprintf(
+            c"mcexec_v10: send_syscall owner=rust cpu=%d pid=%d tid=%d nr=%d rip=0x%lx sp=0x%lx\n"
+                .as_ptr()
+                .cast(),
+            cpu,
+            pid,
+            (*thread).tid,
+            (*request).number as CInt,
+            pc,
+            sp,
+        );
+    }
+
+    let ret = crate::ikc_manycore::ihk_ikc_send(
+        (*cpu_local).ikc2linux.cast(),
+        addr_of_mut!(packet).cast::<c_void>(),
+        0,
+    );
+    if ret < 0 {
+        kprintf(c"ERROR: sending IKC msg, ret: %d\n".as_ptr().cast(), ret);
+    }
+}
+
+/// Public x86_64 delegated-syscall entry point.  Request construction is Rust;
+/// the blocking scheduler/control-plane loop remains behind `do_syscall`.
+///
+/// # Safety
+/// `ctx` must point to a live x86_64 user context for the duration of the call.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_generic_forwarding(n: CInt, ctx: *mut X86UserContext) -> CLong {
+    if ctx.is_null() {
+        return -(EINVAL as CLong);
+    }
+
+    let cpu = ihk_mc_get_processor_id();
+    #[cfg(not(mckernel_equivalence))]
+    {
+        let this_cpu = crate::cls::get_this_cpu_local_var();
+        let thread = if this_cpu.is_null() {
+            null_mut()
+        } else {
+            (*this_cpu).current
+        };
+        let process = if thread.is_null() {
+            null_mut()
+        } else {
+            (*thread).proc
+        };
+        let pid = if process.is_null() {
+            -1
+        } else {
+            (*process).pid
+        };
+        if syscall_owner_log_budget(&GENERIC_FORWARD_LOG_STATE, pid) {
+            kprintf(
+                c"mcexec_v10: generic_forwarding owner=rust cpu=%d pid=%d nr=%d\n"
+                    .as_ptr()
+                    .cast(),
+                cpu,
+                pid,
+                n,
+            );
+        }
+    }
+
+    let mut request = MaybeUninit::<SyscallRequest>::zeroed().assume_init();
+    syscall_generic_forwarding_body_result(
+        addr_of_mut!(request),
+        n,
+        crate::x86_cpu_helpers::ihk_mc_syscall_arg0(ctx),
+        crate::x86_cpu_helpers::ihk_mc_syscall_arg1(ctx),
+        crate::x86_cpu_helpers::ihk_mc_syscall_arg2(ctx),
+        crate::x86_cpu_helpers::ihk_mc_syscall_arg3(ctx),
+        crate::x86_cpu_helpers::ihk_mc_syscall_arg4(ctx),
+        crate::x86_cpu_helpers::ihk_mc_syscall_arg5(ctx),
+        cpu,
+        Some(do_syscall),
+    )
+}
+
+/// Owns the offload reply wait state machine, including Linux-requested nested
+/// McKernel services.  Initial request setup and post-reply accounting remain
+/// in C `do_syscall`; Linux remains the control-plane consumer/producer.
+///
+/// # Safety
+/// All pointers must remain live for the complete offload.  The caller must be
+/// the current thread on `cpu`, with the same preemption state expected by the
+/// legacy C loop, and the Linux proxy must honor the syscall response protocol.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_offload_wait_reply(
+    request: *mut SyscallRequest,
+    response: *mut SyscallResponse,
+    cpu: CInt,
+    thread: *mut Thread,
+) {
+    if request.is_null() || response.is_null() || thread.is_null() {
+        kprintf(
+            c"syscall_offload_wait_reply: invalid argument\n"
+                .as_ptr()
+                .cast(),
+        );
+        return;
+    }
+
+    #[cfg(not(mckernel_equivalence))]
+    {
+        let process = (*thread).proc;
+        let pid = if process.is_null() {
+            -1
+        } else {
+            (*process).pid
+        };
+        if syscall_owner_log_budget(&OFFLOAD_WAIT_LOG_STATE, pid) {
+            kprintf(
+                c"mcexec_v10: offload_wait owner=rust cpu=%d pid=%d tid=%d nr=%d\n"
+                    .as_ptr()
+                    .cast(),
+                cpu,
+                pid,
+                (*thread).tid,
+                (*request).number as CInt,
+            );
+        }
+    }
+
+    while crate::x86_cpu_helpers::smp_load_acquire_ulong(addr_of!((*response).status))
+        != STATUS_COMPLETED
+    {
+        while crate::x86_cpu_helpers::smp_load_acquire_ulong(addr_of!((*response).status))
+            == STATUS_IN_PROGRESS
+        {
+            let mut entry = MaybeUninit::<WaitqEntry>::uninit();
+            crate::waitq::waitq_init_entry(entry.as_mut_ptr(), thread.cast::<c_void>());
+
+            let force_schedule = cfg!(enable_fugaku_hacks)
+                && ((*request).number == SYS_EPOLL_WAIT
+                    || (*request).number == SYS_EPOLL_PWAIT as CULong);
+            let mut do_schedule = false;
+            let mut cpu_local: *mut CpuLocalVar = null_mut();
+
+            if !force_schedule {
+                let backlog = (*thread).rpf_backlog;
+                if !backlog.is_null() {
+                    let arg = (*thread).rpf_arg;
+                    (*thread).rpf_backlog = null_mut();
+                    (*thread).rpf_arg = null_mut();
+                    let func: unsafe extern "C" fn(*mut c_void) = core::mem::transmute(backlog);
+                    func(arg);
+                    crate::mem_helpers::kfree(arg);
+                }
+
+                check_sig_pending();
+                cpu_pause();
+
+                let current_cpu_local = crate::cls::get_this_cpu_local_var();
+                let no_preempt = crate::atomic_helpers::ihk_atomic_read(
+                    addr_of!((*current_cpu_local).no_preempt)
+                        .cast::<crate::atomic_helpers::IhkAtomic>(),
+                );
+                if syscall_offload_spin_without_schedule_result(no_preempt, (*thread).tid) != 0 {
+                    continue;
+                }
+
+                let runq_irqstate = cpu_disable_interrupt_save();
+                cpu_local = crate::cls::get_this_cpu_local_var();
+                let runq_lock = addr_of_mut!((*cpu_local).runq_lock)
+                    .cast::<crate::spinlock_helpers::IhkSpinlock>();
+                crate::spinlock_helpers::__ihk_mc_spinlock_lock_noirq(runq_lock);
+                if crate::sched_helpers::syscall_offload_should_schedule_result(
+                    0,
+                    (*thread).tid,
+                    (((*cpu_local).flags & CPU_FLAG_NEED_RESCHED) != 0) as CInt,
+                    (*cpu_local).runq_len as CInt,
+                    ((*request).number == SYS_SCHED_SETAFFINITY) as CInt,
+                ) != 0
+                {
+                    (*cpu_local).flags &= !CPU_FLAG_NEED_RESCHED;
+                    do_schedule = true;
+                }
+                crate::spinlock_helpers::__ihk_mc_spinlock_unlock_noirq(runq_lock);
+                cpu_restore_interrupt(runq_irqstate);
+
+                if !do_schedule {
+                    crate::page_alloc::ihk_numa_zero_free_pages(ihk_mc_get_numa_node_by_distance(
+                        0,
+                    ));
+                    continue;
+                }
+            }
+
+            let flags = cpu_disable_interrupt_save();
+            let request_status = crate::x86_cpu_helpers::smp_load_acquire_ulong(addr_of!(
+                (*response).req_thread_status
+            ));
+            if request_status == IHK_SCD_REQ_THREAD_DESCHEDULED
+                || crate::atomic_helpers::atomic_cmpxchg_ulong(
+                    addr_of_mut!((*response).req_thread_status),
+                    IHK_SCD_REQ_THREAD_SPINNING,
+                    IHK_SCD_REQ_THREAD_DESCHEDULED,
+                ) == IHK_SCD_REQ_THREAD_SPINNING
+            {
+                let waitq = addr_of_mut!((*thread).scd_wq).cast::<RuntimeWaitq>();
+                crate::waitq::waitq_init(waitq);
+                crate::waitq::waitq_prepare_to_wait(waitq, entry.as_mut_ptr(), PS_INTERRUPTIBLE);
+                cpu_restore_interrupt(flags);
+                schedule();
+                crate::waitq::waitq_finish_wait(waitq, entry.as_mut_ptr());
+                continue;
+            }
+
+            if do_schedule {
+                let runq_lock = addr_of_mut!((*cpu_local).runq_lock)
+                    .cast::<crate::spinlock_helpers::IhkSpinlock>();
+                let runq_irqstate = crate::spinlock_helpers::__ihk_mc_spinlock_lock(runq_lock);
+                (*cpu_local).flags |= CPU_FLAG_NEED_RESCHED;
+                crate::spinlock_helpers::__ihk_mc_spinlock_unlock(runq_lock, runq_irqstate);
+            }
+            cpu_restore_interrupt(flags);
+        }
+
+        if crate::x86_cpu_helpers::smp_load_acquire_ulong(addr_of!((*response).status))
+            == STATUS_SYSCALL
+        {
+            let request_size = size_of::<SyscallRequest>() as CULong;
+            let phys = crate::x86_setup::ihk_mc_map_memory(
+                null_mut(),
+                read_volatile(addr_of!((*response).fault_address)),
+                request_size,
+            );
+            let mapped = crate::mem_helpers::ihk_mc_map_virtual(phys, 1, PTATTR_WRITABLE_ACTIVE);
+            let mut nested_request = MaybeUninit::<SyscallRequest>::zeroed().assume_init();
+            let copy_rc = if mapped.is_null() {
+                -ENOMEM
+            } else {
+                let rc = syscall_request_copy_result(
+                    addr_of_mut!(nested_request),
+                    mapped.cast::<SyscallRequest>(),
+                );
+                crate::mem_helpers::ihk_mc_unmap_virtual(mapped, 1);
+                rc
+            };
+            crate::x86_setup::ihk_mc_unmap_memory(null_mut(), phys, request_size);
+
+            let syscall_ret = if copy_rc != 0 {
+                kprintf(
+                    c"syscall_offload_wait_reply: nested request map/copy failed rc=%d\n"
+                        .as_ptr()
+                        .cast(),
+                    copy_rc,
+                );
+                (copy_rc as CLong) as CULong
+            } else {
+                let num = nested_request.number as CInt;
+                if num == SYS_RT_SIGACTION {
+                    let sig = syscall_nested_rt_sigaction_index_result(
+                        nested_request.args[0] as CInt,
+                        NSIG,
+                    );
+                    if sig < 0 {
+                        (sig as CLong) as CULong
+                    } else {
+                        let sigcommon = (*thread).sigcommon.cast::<SigCommon>();
+                        (*sigcommon).action[sig as usize].sa.sa_handler as CULong
+                    }
+                } else {
+                    let mut ctx = MaybeUninit::<X86UserContext>::zeroed().assume_init();
+                    crate::x86_cpu_helpers::ihk_mc_syscall_set_arg0(
+                        addr_of_mut!(ctx),
+                        nested_request.args[0],
+                    );
+                    crate::x86_cpu_helpers::ihk_mc_syscall_set_arg1(
+                        addr_of_mut!(ctx),
+                        nested_request.args[1],
+                    );
+                    crate::x86_cpu_helpers::ihk_mc_syscall_set_arg2(
+                        addr_of_mut!(ctx),
+                        nested_request.args[2],
+                    );
+                    crate::x86_cpu_helpers::ihk_mc_syscall_set_arg3(
+                        addr_of_mut!(ctx),
+                        nested_request.args[3],
+                    );
+                    crate::x86_cpu_helpers::ihk_mc_syscall_set_arg4(
+                        addr_of_mut!(ctx),
+                        nested_request.args[4],
+                    );
+                    crate::x86_cpu_helpers::ihk_mc_syscall_set_arg5(
+                        addr_of_mut!(ctx),
+                        nested_request.args[5],
+                    );
+                    syscall_dispatch_context_bridge(num, addr_of_mut!(ctx)) as CULong
+                }
+            };
+
+            let mut nested_response = MaybeUninit::<SyscallRequest>::zeroed().assume_init();
+            let _ = syscall_nested_response_prepare_result(
+                addr_of_mut!(nested_response),
+                response,
+                SYS_SYSCALL_RESPONSE,
+                syscall_ret,
+                (*thread).tid,
+                read_volatile(addr_of!((*response).stid)),
+                IHK_SCD_REQ_THREAD_SPINNING,
+            );
+            send_syscall(addr_of_mut!(nested_response), cpu, response);
+        }
+    }
 }
 
 #[no_mangle]

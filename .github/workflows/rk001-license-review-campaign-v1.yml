@@ -1,0 +1,483 @@
+name: RK-001 full independent-review campaign packet
+
+on:
+  workflow_dispatch:
+    inputs:
+      validation_sha:
+        description: Exact 40-hex candidate commit containing the campaign authority
+        required: true
+        type: string
+      packet_id:
+        description: Exact four-digit campaign packet ID from 0001 through 0219
+        required: true
+        type: string
+
+permissions:
+  actions: read
+  contents: read
+
+env:
+  EXPECTED_HEAD_SHA: ${{ inputs.validation_sha }}
+  PACKET_ID: ${{ inputs.packet_id }}
+  RK001_CONTAINER_IMAGE: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
+  INVENTORY_RUN_ID: '32192199002'
+  INVENTORY_ARTIFACT_NAME: rk001-license-inventory-32192199002-1
+  INVENTORY_ZIP_SHA256: 09333e984e27a45b6af1b2f7d613570f6bf09d3a82f0fa7c6fbf4c9fd7707b18
+
+jobs:
+  review-campaign-packet:
+    name: Build one unreviewed campaign packet (credit forbidden)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    container:
+      image: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Reject mutable dispatch identity and unknown packet
+        run: |
+          set -euo pipefail
+          [[ "$EXPECTED_HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$PACKET_ID" =~ ^[0-9]{4}$ ]]
+          packet_number="$((10#$PACKET_ID))"
+          test "$packet_number" -ge 1
+          test "$packet_number" -le 219
+          test "$GITHUB_SHA" = "$EXPECTED_HEAD_SHA"
+          test "$GITHUB_WORKFLOW_SHA" = "$EXPECTED_HEAD_SHA"
+          case "$GITHUB_WORKFLOW_REF" in
+            "$GITHUB_REPOSITORY/.github/workflows/rk001-license-review-campaign-v1.yml@refs/heads/"*|\
+            "$GITHUB_REPOSITORY/.github/workflows/rk001-license-review-campaign-v1.yml@refs/tags/"*) ;;
+            *) echo "unexpected review-campaign workflow ref" >&2; exit 1 ;;
+          esac
+
+      - name: Install bounded acquisition and verification tools
+        run: |
+          set -euo pipefail
+          test "$(uname -m)" = x86_64
+          . /etc/os-release
+          test "$ID" = rocky
+          test "$VERSION_ID" = 10.2
+          /usr/bin/dnf -y --setopt=install_weak_deps=False install \
+            cpio curl git-core gzip python3 rpm tar xz
+          /usr/bin/dnf clean all
+          for tool in /usr/bin/cpio /usr/bin/curl /usr/bin/git /usr/bin/python3 \
+            /usr/bin/rpm2cpio /usr/bin/sha256sum /usr/bin/tar /usr/bin/xz; do
+            test -x "$tool"
+          done
+
+      - name: Check out the exact candidate authority with frozen source history
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ env.EXPECTED_HEAD_SHA }}
+          fetch-depth: 0
+          persist-credentials: false
+          set-safe-directory: true
+
+      - name: Verify the non-crediting campaign authority before acquisition
+        env:
+          AUTHORITY_ROOT: ${{ runner.temp }}/rk001-review-campaign-authority
+        run: |
+          set -euo pipefail
+          canonical_workspace="$(/usr/bin/env -i \
+            PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C \
+            /usr/bin/python3 -I -S -B -c \
+            'import os, sys; print(os.path.realpath(sys.argv[1]))' \
+            "$GITHUB_WORKSPACE")"
+          git_repo=(
+            /usr/bin/env -i PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C
+            GIT_ATTR_NOSYSTEM=1 GIT_CONFIG_GLOBAL=/dev/null
+            GIT_CONFIG_NOSYSTEM=1 GIT_NO_REPLACE_OBJECTS=1
+            GIT_OPTIONAL_LOCKS=0 /usr/bin/git
+            -c "safe.directory=$canonical_workspace" -c core.filemode=true
+            -c core.fsmonitor=false -c core.hooksPath=/dev/null
+            -c core.untrackedCache=false
+          )
+          test "$("${git_repo[@]}" -C "$canonical_workspace" \
+            rev-parse --verify 'HEAD^{commit}')" = \
+            "$EXPECTED_HEAD_SHA"
+          test "$("${git_repo[@]}" -C "$canonical_workspace" cat-file -t \
+            ef58860e4806ee16e2c506e4e93c7b6ad8ad8f4b)" = commit
+          "${git_repo[@]}" -C "$canonical_workspace" diff-files \
+            --quiet --no-ext-diff --
+          "${git_repo[@]}" -C "$canonical_workspace" diff-index \
+            --cached --quiet --no-ext-diff "$EXPECTED_HEAD_SHA" --
+          test -z "$("${git_repo[@]}" -C "$canonical_workspace" \
+            ls-files --others --)"
+          test ! -e "$AUTHORITY_ROOT"
+          mkdir -m 700 "$AUTHORITY_ROOT"
+          "${git_repo[@]}" -C "$canonical_workspace" archive \
+            --format=tar "$EXPECTED_HEAD_SHA" | \
+            /usr/bin/tar --extract --directory "$AUTHORITY_ROOT" \
+              --no-same-owner --no-same-permissions
+          authority_paths=(
+            .github/workflows/rk001-license-review-batch-v1.yml
+            .github/workflows/rk001-license-review-campaign-v1.yml
+            host-kernel/rocky/evidence/rk001-license-decisions-ef58-v1.json
+            host-kernel/rocky/evidence/rk001-license-review-batch-ef58-0001-contract-v1.json
+            host-kernel/rocky/evidence/rk001-license-review-campaign-ef58-v1.json
+            host-kernel/rocky/evidence/rk001-license-review-queue-ef58-v1.json
+            host-kernel/rocky/source-lock.json
+            scripts/rocky_kernel_license_decisions.py
+            scripts/rocky_kernel_license_review_batch.py
+            scripts/rocky_kernel_license_review_campaign.py
+            scripts/rocky_kernel_license_review_queue.py
+            scripts/rocky_kernel_source_lock.py
+            scripts/rocky_kernel_source_review.py
+            scripts/tests/test_rocky_kernel_license_review_batch.py
+            scripts/tests/test_rocky_kernel_license_review_campaign.py
+          )
+          for relative in "${authority_paths[@]}"; do
+            candidate_path="$canonical_workspace/$relative"
+            private_path="$AUTHORITY_ROOT/$relative"
+            test -f "$candidate_path"
+            test ! -L "$candidate_path"
+            test -f "$private_path"
+            test ! -L "$private_path"
+            expected_blob="$("${git_repo[@]}" -C "$canonical_workspace" \
+              rev-parse "$EXPECTED_HEAD_SHA:$relative")"
+            candidate_blob="$(/usr/bin/git hash-object --no-filters -- "$candidate_path")"
+            actual_blob="$(/usr/bin/git hash-object --no-filters -- "$private_path")"
+            test "$candidate_blob" = "$expected_blob"
+            test "$actual_blob" = "$expected_blob"
+          done
+          find "$AUTHORITY_ROOT" -type f -exec chmod a-w -- {} +
+          find "$AUTHORITY_ROOT" -type d -exec chmod a-w -- {} +
+          private_checker="$AUTHORITY_ROOT/scripts/rocky_kernel_license_review_campaign.py"
+          private_authority="$AUTHORITY_ROOT/host-kernel/rocky/evidence/rk001-license-review-campaign-ef58-v1.json"
+          /usr/bin/env -i \
+            PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C \
+            PYTHONDONTWRITEBYTECODE=1 \
+            /usr/bin/python3 -I -S -B \
+            "$private_checker" --repo "$AUTHORITY_ROOT" \
+              --authority "$private_authority" --check
+          /usr/bin/env -i \
+            PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C \
+            MCKERNEL_RK001_LICENSE_ARTIFACT= \
+            PYTHONDONTWRITEBYTECODE=1 \
+            /usr/bin/python3 -I -S -B \
+              "$AUTHORITY_ROOT/scripts/tests/test_rocky_kernel_license_review_campaign.py" -v
+
+      - name: Download the exact historical inventory ZIP without extraction
+        env:
+          GH_TOKEN: ${{ github.token }}
+          INVENTORY_ROOT: ${{ runner.temp }}/rk001-review-campaign-inventory
+        run: |
+          set -euo pipefail
+          test ! -e "$INVENTORY_ROOT"
+          mkdir -m 700 "$INVENTORY_ROOT"
+          api_json="$INVENTORY_ROOT/artifacts.json"
+          artifact_id_file="$INVENTORY_ROOT/artifact-id"
+          inventory_zip="$INVENTORY_ROOT/$INVENTORY_ARTIFACT_NAME.zip"
+          /usr/bin/curl --fail --silent --show-error \
+            --proto '=https' --proto-redir '=https' --max-redirs 0 \
+            --max-filesize 1048576 \
+            -H 'Accept: application/vnd.github+json' \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H 'X-GitHub-Api-Version: 2022-11-28' \
+            "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/actions/runs/$INVENTORY_RUN_ID/artifacts?per_page=100" \
+            --output "$api_json"
+          /usr/bin/env -i \
+            PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C \
+            INVENTORY_ARTIFACT_NAME="$INVENTORY_ARTIFACT_NAME" \
+            INVENTORY_RUN_ID="$INVENTORY_RUN_ID" \
+            /usr/bin/python3 -I -S -B - "$api_json" "$artifact_id_file" <<'PY'
+          import json
+          import os
+          import sys
+
+          def reject_duplicates(pairs):
+              value = {}
+              for key, item in pairs:
+                  if key in value:
+                      raise ValueError("duplicate JSON key")
+                  value[key] = item
+              return value
+
+          if os.stat(sys.argv[1]).st_size > 1048576:
+              raise SystemExit("artifact API response exceeds its cap")
+          with open(sys.argv[1], "r", encoding="utf-8") as source:
+              value = json.load(source, object_pairs_hook=reject_duplicates)
+          if type(value) is not dict or type(value.get("artifacts")) is not list:
+              raise SystemExit("artifact API response schema differs")
+          if len(value["artifacts"]) > 100:
+              raise SystemExit("artifact API response count exceeds its cap")
+          matches = [
+              item for item in value["artifacts"]
+              if item.get("name") == os.environ["INVENTORY_ARTIFACT_NAME"]
+              and item.get("expired") is False
+              and str(item.get("workflow_run", {}).get("id")) == os.environ["INVENTORY_RUN_ID"]
+          ]
+          if len(matches) != 1 or type(matches[0].get("id")) is not int or matches[0]["id"] < 1:
+              raise SystemExit("exact historical inventory artifact is absent or ambiguous")
+          with open(sys.argv[2], "x", encoding="ascii") as output:
+              output.write(str(matches[0]["id"]) + "\n")
+          PY
+          artifact_id="$(tr -d '\n' < "$artifact_id_file")"
+          [[ "$artifact_id" =~ ^[1-9][0-9]{0,18}$ ]]
+          /usr/bin/curl --fail --silent --show-error --location \
+            --proto '=https' --proto-redir '=https' --max-redirs 2 \
+            --max-filesize 6734527 \
+            -H 'Accept: application/vnd.github+json' \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H 'X-GitHub-Api-Version: 2022-11-28' \
+            "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/actions/artifacts/$artifact_id/zip" \
+            --output "$inventory_zip"
+          test "$(stat -c '%s' -- "$inventory_zip")" = 6734527
+          actual="$(/usr/bin/sha256sum --binary "$inventory_zip")"
+          test "${actual%% *}" = "$INVENTORY_ZIP_SHA256"
+
+      - name: Acquire the exact SRPM, Linux archive, and dist-git objects
+        env:
+          AUTHORITY_ROOT: ${{ runner.temp }}/rk001-review-campaign-authority
+          SOURCE_ROOT: ${{ runner.temp }}/rk001-review-campaign-source
+        run: |
+          set -euo pipefail
+          verify_candidate_authority() {
+            local canonical_workspace private_authority private_checker
+            canonical_workspace="$(/usr/bin/env -i \
+              PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C \
+              /usr/bin/python3 -I -S -B -c \
+              'import os, sys; print(os.path.realpath(sys.argv[1]))' \
+              "$GITHUB_WORKSPACE")"
+            local git_repo=(
+              /usr/bin/env -i PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C
+              GIT_ATTR_NOSYSTEM=1 GIT_CONFIG_GLOBAL=/dev/null
+              GIT_CONFIG_NOSYSTEM=1 GIT_NO_REPLACE_OBJECTS=1
+              GIT_OPTIONAL_LOCKS=0 /usr/bin/git
+              -c "safe.directory=$canonical_workspace" -c core.filemode=true
+              -c core.fsmonitor=false -c core.hooksPath=/dev/null
+              -c core.untrackedCache=false
+            )
+            test "$("${git_repo[@]}" -C "$canonical_workspace" \
+              rev-parse --verify 'HEAD^{commit}')" = "$EXPECTED_HEAD_SHA"
+            "${git_repo[@]}" -C "$canonical_workspace" diff-files \
+              --quiet --no-ext-diff --
+            "${git_repo[@]}" -C "$canonical_workspace" diff-index \
+              --cached --quiet --no-ext-diff "$EXPECTED_HEAD_SHA" --
+            test -z "$("${git_repo[@]}" -C "$canonical_workspace" \
+              ls-files --others --)"
+            local private_paths=(
+              .github/workflows/rk001-license-review-campaign-v1.yml
+              host-kernel/rocky/evidence/rk001-license-review-campaign-ef58-v1.json
+              scripts/rocky_kernel_license_review_campaign.py
+              scripts/rocky_kernel_source_lock.py
+              scripts/rocky_kernel_source_review.py
+            )
+            local actual_blob candidate_blob candidate_path expected_blob
+            local private_path relative
+            for relative in "${private_paths[@]}"; do
+              candidate_path="$canonical_workspace/$relative"
+              private_path="$AUTHORITY_ROOT/$relative"
+              test -f "$candidate_path"
+              test ! -L "$candidate_path"
+              test -f "$private_path"
+              test ! -L "$private_path"
+              expected_blob="$("${git_repo[@]}" -C "$canonical_workspace" \
+                rev-parse "$EXPECTED_HEAD_SHA:$relative")"
+              candidate_blob="$(/usr/bin/git hash-object --no-filters -- "$candidate_path")"
+              actual_blob="$(/usr/bin/git hash-object --no-filters -- "$private_path")"
+              test "$candidate_blob" = "$expected_blob"
+              test "$actual_blob" = "$expected_blob"
+            done
+            private_checker="$AUTHORITY_ROOT/scripts/rocky_kernel_license_review_campaign.py"
+            private_authority="$AUTHORITY_ROOT/host-kernel/rocky/evidence/rk001-license-review-campaign-ef58-v1.json"
+            test -f "$private_checker"
+            test ! -L "$private_checker"
+            test -f "$private_authority"
+            test ! -L "$private_authority"
+            /usr/bin/env -i \
+              PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C \
+              PYTHONDONTWRITEBYTECODE=1 \
+              /usr/bin/python3 -I -S -B "$private_checker" \
+                --repo "$AUTHORITY_ROOT" --authority "$private_authority" --check
+          }
+          verify_candidate_authority
+          test ! -e "$SOURCE_ROOT"
+          mkdir -m 700 -p "$SOURCE_ROOT/cache" "$SOURCE_ROOT/srpm" \
+            "$SOURCE_ROOT/dist-git" "$SOURCE_ROOT/git-home"
+          /usr/bin/env -i \
+            PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C \
+            PYTHONDONTWRITEBYTECODE=1 \
+            /usr/bin/python3 -I -S -B \
+              "$AUTHORITY_ROOT/scripts/rocky_kernel_source_lock.py" \
+              --repo "$AUTHORITY_ROOT" --acquire \
+              --cache-root "$SOURCE_ROOT/cache"
+          srpm="$(find "$SOURCE_ROOT/cache" -type f \
+            -name 'kernel-6.12.0-211.44.1.el10_2.src.rpm' -print -quit)"
+          test -n "$srpm"
+          test "$(stat -c '%s' -- "$srpm")" = 159328372
+          actual="$(/usr/bin/sha256sum --binary "$srpm")"
+          test "${actual%% *}" = \
+            2bfeda65bd9bdd4b86650074c81e061c37822b80317ac0d4f5aacc89c85589cb
+          srpm_listing="$SOURCE_ROOT/srpm-members.txt"
+          /usr/bin/rpm2cpio "$srpm" | /usr/bin/cpio --quiet -it > "$srpm_listing"
+          /usr/bin/env -i PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C \
+            /usr/bin/python3 -I -S -B - "$srpm_listing" <<'PY'
+          import pathlib
+          import sys
+          names = []
+          with open(sys.argv[1], "r", encoding="utf-8") as source:
+              for raw in source:
+                  value = raw.rstrip("\n")
+                  if value.startswith("./"):
+                      value = value[2:]
+                  path = pathlib.PurePosixPath(value)
+                  if (not value or "\\" in value or path.is_absolute()
+                          or path.as_posix() != value
+                          or any(part in ("", ".", "..") for part in path.parts)):
+                      raise SystemExit("unsafe SRPM member")
+                  names.append(value)
+                  if len(names) > 10000:
+                      raise SystemExit("SRPM member count exceeds its cap")
+          if not names or len(names) != len(set(names)):
+              raise SystemExit("SRPM members are empty or duplicated")
+          PY
+          (
+            cd "$SOURCE_ROOT/srpm"
+            /usr/bin/rpm2cpio "$srpm" | \
+              /usr/bin/cpio --quiet -idm --no-absolute-filenames --no-preserve-owner
+          )
+          test -z "$(find "$SOURCE_ROOT/srpm" -type l -print -quit)"
+          test -z "$(find "$SOURCE_ROOT/srpm" ! -type d ! -type f -print -quit)"
+          linux_archive="$(find "$SOURCE_ROOT/srpm" -type f \
+            -name 'linux-6.12.0-211.44.1.el10_2.tar.xz' -print -quit)"
+          test -n "$linux_archive"
+          test "$(stat -c '%s' -- "$linux_archive")" = 153374592
+          actual="$(/usr/bin/sha256sum --binary "$linux_archive")"
+          test "${actual%% *}" = \
+            4a174d47b8874a2139efcd1ac1ab2d6b80ae7a0ca62f0ae4596fd20cf62a3533
+          git_env=(
+            /usr/bin/env -i PATH=/usr/bin:/bin HOME="$SOURCE_ROOT/git-home"
+            LANG=C LC_ALL=C GIT_ATTR_NOSYSTEM=1 GIT_CONFIG_GLOBAL=/dev/null
+            GIT_CONFIG_NOSYSTEM=1 GIT_GRAFT_FILE=/dev/null
+            GIT_NO_REPLACE_OBJECTS=1 GIT_OPTIONAL_LOCKS=0
+            GIT_PAGER=cat GIT_TERMINAL_PROMPT=0 PAGER=cat
+            XDG_CONFIG_HOME=/nonexistent
+          )
+          "${git_env[@]}" /usr/bin/git -C "$SOURCE_ROOT/dist-git" init --quiet
+          "${git_env[@]}" /usr/bin/git -C "$SOURCE_ROOT/dist-git" \
+            -c credential.helper= -c http.followRedirects=false \
+            -c http.sslVerify=true -c protocol.version=2 \
+            fetch --quiet --no-tags --depth=2 --force \
+            https://git.rockylinux.org/staging/rpms/kernel.git \
+            +refs/tags/patched/r10/kernel-6.12.0-211.44.1.el10_2:refs/tags/patched/r10/kernel-6.12.0-211.44.1.el10_2
+          test "$("${git_env[@]}" /usr/bin/git -C "$SOURCE_ROOT/dist-git" \
+            rev-parse 'patched/r10/kernel-6.12.0-211.44.1.el10_2^{}')" = \
+            e4cad646580f7f3dfec5e3b6b4ea9e89b7572f6c
+          verify_candidate_authority
+
+      - name: Build and independently verify exactly one campaign packet
+        env:
+          AUTHORITY_ROOT: ${{ runner.temp }}/rk001-review-campaign-authority
+          INVENTORY_ROOT: ${{ runner.temp }}/rk001-review-campaign-inventory
+          OUTPUT_PARENT: ${{ runner.temp }}/rk001-review-campaign-output
+          SOURCE_ROOT: ${{ runner.temp }}/rk001-review-campaign-source
+        run: |
+          set -euo pipefail
+          verify_candidate_authority() {
+            local canonical_workspace private_authority private_checker
+            canonical_workspace="$(/usr/bin/env -i \
+              PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C \
+              /usr/bin/python3 -I -S -B -c \
+              'import os, sys; print(os.path.realpath(sys.argv[1]))' \
+              "$GITHUB_WORKSPACE")"
+            local git_repo=(
+              /usr/bin/env -i PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C
+              GIT_ATTR_NOSYSTEM=1 GIT_CONFIG_GLOBAL=/dev/null
+              GIT_CONFIG_NOSYSTEM=1 GIT_NO_REPLACE_OBJECTS=1
+              GIT_OPTIONAL_LOCKS=0 /usr/bin/git
+              -c "safe.directory=$canonical_workspace" -c core.filemode=true
+              -c core.fsmonitor=false -c core.hooksPath=/dev/null
+              -c core.untrackedCache=false
+            )
+            test "$("${git_repo[@]}" -C "$canonical_workspace" \
+              rev-parse --verify 'HEAD^{commit}')" = "$EXPECTED_HEAD_SHA"
+            "${git_repo[@]}" -C "$canonical_workspace" diff-files \
+              --quiet --no-ext-diff --
+            "${git_repo[@]}" -C "$canonical_workspace" diff-index \
+              --cached --quiet --no-ext-diff "$EXPECTED_HEAD_SHA" --
+            test -z "$("${git_repo[@]}" -C "$canonical_workspace" \
+              ls-files --others --)"
+            local private_paths=(
+              .github/workflows/rk001-license-review-campaign-v1.yml
+              host-kernel/rocky/evidence/rk001-license-review-campaign-ef58-v1.json
+              scripts/rocky_kernel_license_review_campaign.py
+              scripts/rocky_kernel_source_lock.py
+              scripts/rocky_kernel_source_review.py
+            )
+            local actual_blob candidate_blob candidate_path expected_blob
+            local private_path relative
+            for relative in "${private_paths[@]}"; do
+              candidate_path="$canonical_workspace/$relative"
+              private_path="$AUTHORITY_ROOT/$relative"
+              test -f "$candidate_path"
+              test ! -L "$candidate_path"
+              test -f "$private_path"
+              test ! -L "$private_path"
+              expected_blob="$("${git_repo[@]}" -C "$canonical_workspace" \
+                rev-parse "$EXPECTED_HEAD_SHA:$relative")"
+              candidate_blob="$(/usr/bin/git hash-object --no-filters -- "$candidate_path")"
+              actual_blob="$(/usr/bin/git hash-object --no-filters -- "$private_path")"
+              test "$candidate_blob" = "$expected_blob"
+              test "$actual_blob" = "$expected_blob"
+            done
+            private_checker="$AUTHORITY_ROOT/scripts/rocky_kernel_license_review_campaign.py"
+            private_authority="$AUTHORITY_ROOT/host-kernel/rocky/evidence/rk001-license-review-campaign-ef58-v1.json"
+            test -f "$private_checker"
+            test ! -L "$private_checker"
+            test -f "$private_authority"
+            test ! -L "$private_authority"
+            /usr/bin/env -i \
+              PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C \
+              PYTHONDONTWRITEBYTECODE=1 \
+              /usr/bin/python3 -I -S -B "$private_checker" \
+                --repo "$AUTHORITY_ROOT" --authority "$private_authority" --check
+          }
+          test ! -e "$OUTPUT_PARENT"
+          mkdir -m 700 "$OUTPUT_PARENT"
+          inventory_zip="$INVENTORY_ROOT/$INVENTORY_ARTIFACT_NAME.zip"
+          linux_archive="$(find "$SOURCE_ROOT/srpm" -type f \
+            -name 'linux-6.12.0-211.44.1.el10_2.tar.xz' -print -quit)"
+          output="$OUTPUT_PARENT/rk001-review-campaign-$PACKET_ID"
+          private_checker="$AUTHORITY_ROOT/scripts/rocky_kernel_license_review_campaign.py"
+          private_authority="$AUTHORITY_ROOT/host-kernel/rocky/evidence/rk001-license-review-campaign-ef58-v1.json"
+          common=(
+            --repo "$AUTHORITY_ROOT"
+            --authority "$private_authority"
+            --artifact "$inventory_zip"
+            --packet-id "$PACKET_ID"
+          )
+          verify_candidate_authority
+          /usr/bin/env -i \
+            PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C \
+            PYTHONDONTWRITEBYTECODE=1 \
+            /usr/bin/python3 -I -S -B \
+              "$private_checker" \
+              "${common[@]}" --build-packet \
+              --linux-archive "$linux_archive" \
+              --srpm-root "$SOURCE_ROOT/srpm" \
+              --dist-git "$SOURCE_ROOT/dist-git" \
+              --repository-git "$GITHUB_WORKSPACE" \
+              --output-dir "$output"
+          verify_candidate_authority
+          /usr/bin/env -i \
+            PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C \
+            PYTHONDONTWRITEBYTECODE=1 \
+            /usr/bin/python3 -I -S -B \
+              "$private_checker" \
+              "${common[@]}" --verify-package "$output"
+          test -d "$output"
+          test ! -L "$output"
+          test ! -e "$output/reviewer-response.json"
+
+      - name: Upload temporary unreviewed packet without tracker credit
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: rk001-license-review-campaign-${{ env.PACKET_ID }}-${{ env.EXPECTED_HEAD_SHA }}
+          path: ${{ runner.temp }}/rk001-review-campaign-output/rk001-review-campaign-${{ env.PACKET_ID }}
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
+          include-hidden-files: true

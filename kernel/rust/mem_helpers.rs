@@ -2759,14 +2759,22 @@ pub unsafe extern "C" fn mem_init_sequence_result(
     };
 
     monitor_init();
+    crate::x86_setup::early_phase(b'o');
     rusage_init();
+    crate::x86_setup::early_phase(b'p');
     numa_init();
+    crate::x86_setup::early_phase(b'q');
     set_page_allocator(allocator_ops);
+    crate::x86_setup::early_phase(b'r');
     set_page_fault_handler(page_fault_handler_addr);
+    crate::x86_setup::early_phase(b's');
     let vector = get_vector(IHK_GV_QUERY_FREE_MEM);
     let register_rc = register_interrupt_handler(vector, query_free_mem_handler_addr);
+    crate::x86_setup::early_phase(b't');
     page_init();
+    crate::x86_setup::early_phase(b'u');
     virtual_allocator_init();
+    crate::x86_setup::early_phase(b'v');
 
     mem_init_check_command(
         anon_on_demand_flag,
@@ -2789,8 +2797,10 @@ pub unsafe extern "C" fn mem_init_sequence_result(
         log_fn,
         MEM_INIT_LOG_HUGETLBFS_ON_DEMAND,
     );
+    crate::x86_setup::early_phase(b'w');
 
     numa_distances_init();
+    crate::x86_setup::early_phase(b'x');
     register_rc
 }
 
