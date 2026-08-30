@@ -57,6 +57,10 @@ UNEXPANDED_EMBEDDED_OBJECTS = [
 CAPTURE_BLOCKERS = [
     "every machine-generated item requires independent license/provenance review",
     "generated captures cannot contain reviewed items or close RK-001",
+    (
+        "the live v2 machine-capture authority is not registered by the source lock "
+        "and cannot award gate credit"
+    ),
     "two additional embedded source archives remain unexpanded and unreviewed",
     "dist-git and local patch consumption/redistribution scope requires kernel.spec review",
 ]
@@ -94,6 +98,7 @@ EXPECTED_STAGE_REPOSITORY_INPUT_PATHS = sorted([
     "host-kernel/kbuild/Kconfig",
     "host-kernel/kbuild/parent-integration-v1.json",
     "host-kernel/native-rust/abi/x86_64.rs",
+    "host-kernel/native-rust/device_registry.rs",
     "host-kernel/native-rust/ihk.rs",
     "host-kernel/native-rust/ihk_ioctl.rs",
     "host-kernel/native-rust/ihk_smp_x86_64.rs",
@@ -103,6 +108,7 @@ EXPECTED_STAGE_REPOSITORY_INPUT_PATHS = sorted([
     "host-kernel/native-rust/os_registry.rs",
     "host-kernel/native-rust/page_allocator.rs",
     "host-kernel/native-rust/page_owner_registry.rs",
+    "host-kernel/native-rust/smp_resource.rs",
 ])
 EXPECTED_REPOSITORY_INPUT_PATHS = [
     "host-kernel/kbuild/parent-integration-v1.json",
@@ -112,6 +118,7 @@ EXPECTED_REPOSITORY_INPUT_PATHS = [
     "host-kernel/kbuild/Kbuild.in",
     "host-kernel/kbuild/Kconfig",
     "host-kernel/native-rust/abi/x86_64.rs",
+    "host-kernel/native-rust/device_registry.rs",
     "host-kernel/native-rust/ihk.rs",
     "host-kernel/native-rust/ihk_ioctl.rs",
     "host-kernel/native-rust/ihk_smp_x86_64.rs",
@@ -121,6 +128,7 @@ EXPECTED_REPOSITORY_INPUT_PATHS = [
     "host-kernel/native-rust/os_registry.rs",
     "host-kernel/native-rust/page_allocator.rs",
     "host-kernel/native-rust/page_owner_registry.rs",
+    "host-kernel/native-rust/smp_resource.rs",
     "host-kernel/rocky/configs/native-rust-evidence.config",
     "host-kernel/rocky/configs/rust-minimal.config",
     "host-kernel/rocky/patches/0001-x86-rust-set-rustc-abi-x86-softfloat.patch",
@@ -206,7 +214,19 @@ SOURCE_CLOSURE_KEYS = {
     "size",
     "source_identity",
 }
-CAPTURE_AUTHORITY_ID = "rk-001-license-capture-source-closure-v1"
+LOCKED_CAPTURE_AUTHORITY_ID = "rk-001-license-capture-source-closure-v1"
+CAPTURE_AUTHORITY_ID = "rk-001-license-capture-source-closure-v2"
+ADDITIVE_REPOSITORY_INPUT_PATHS = (
+    "host-kernel/native-rust/device_registry.rs",
+    "host-kernel/native-rust/smp_resource.rs",
+)
+CAPTURE_AUTHORITY_REGISTRATION = {
+    "authority_id": CAPTURE_AUTHORITY_ID,
+    "credit_eligible": False,
+    "gate_registered": False,
+    "locked_authority_id": LOCKED_CAPTURE_AUTHORITY_ID,
+    "relationship": "strict-additive-machine-capture-only",
+}
 REQUIRED_ITEM_KEYS = {
     "authorship_signals",
     "entry_type",
@@ -1114,6 +1134,99 @@ def expected_capture_authority_record():
     }
 
 
+def validate_capture_authority_registration():
+    registration = CAPTURE_AUTHORITY_REGISTRATION
+    if (
+        not isinstance(registration, dict)
+        or set(registration)
+        != {
+            "authority_id",
+            "credit_eligible",
+            "gate_registered",
+            "locked_authority_id",
+            "relationship",
+        }
+        or registration["authority_id"] != CAPTURE_AUTHORITY_ID
+        or registration["locked_authority_id"] != LOCKED_CAPTURE_AUTHORITY_ID
+        or registration["gate_registered"] is not False
+        or registration["credit_eligible"] is not False
+        or registration["relationship"] != "strict-additive-machine-capture-only"
+    ):
+        raise InventoryError("live v2 capture registration boundary changed")
+    return dict(registration)
+
+
+def validate_capture_authority_transition(locked, live):
+    authority_keys = {
+        "authority_id",
+        "closure_algorithm",
+        "namespaces",
+        "scope_is_derived_from_verified_closures",
+    }
+    if (
+        not isinstance(locked, dict)
+        or not isinstance(live, dict)
+        or set(locked) != authority_keys
+        or set(live) != authority_keys
+    ):
+        raise InventoryError("license capture authority schema changed")
+    if locked["authority_id"] != LOCKED_CAPTURE_AUTHORITY_ID:
+        raise InventoryError("source lock does not register the frozen v1 authority")
+    if live["authority_id"] != CAPTURE_AUTHORITY_ID:
+        raise InventoryError("live machine capture does not use the v2 authority")
+    for key in authority_keys - {"authority_id", "namespaces"}:
+        if live[key] != locked[key]:
+            raise InventoryError("v2 capture changes a non-additive authority field")
+
+    locked_namespaces = locked["namespaces"]
+    live_namespaces = live["namespaces"]
+    if (
+        not isinstance(locked_namespaces, dict)
+        or not isinstance(live_namespaces, dict)
+        or set(live_namespaces) != set(locked_namespaces)
+        or "repository" not in locked_namespaces
+    ):
+        raise InventoryError("v2 capture namespace authority changed")
+    for name in set(locked_namespaces) - {"repository"}:
+        if live_namespaces[name] != locked_namespaces[name]:
+            raise InventoryError("v2 capture changes a frozen namespace: {0}".format(name))
+
+    locked_repository = locked_namespaces["repository"]
+    live_repository = live_namespaces["repository"]
+    repository_keys = {"paths", "verification"}
+    if (
+        not isinstance(locked_repository, dict)
+        or not isinstance(live_repository, dict)
+        or set(locked_repository) != repository_keys
+        or set(live_repository) != repository_keys
+        or live_repository["verification"] != locked_repository["verification"]
+    ):
+        raise InventoryError("v2 repository capture authority changed")
+    locked_paths = locked_repository["paths"]
+    live_paths = live_repository["paths"]
+    if (
+        not isinstance(locked_paths, list)
+        or not isinstance(live_paths, list)
+        or any(not isinstance(path, str) for path in locked_paths + live_paths)
+        or len(locked_paths) != len(set(locked_paths))
+        or len(live_paths) != len(set(live_paths))
+    ):
+        raise InventoryError("capture authority repository paths are malformed")
+    for path in locked_paths + live_paths:
+        safe_relative(path, "capture authority repository path")
+    additions = list(ADDITIVE_REPOSITORY_INPUT_PATHS)
+    if (
+        any(path in locked_paths for path in additions)
+        or [path for path in live_paths if path in additions] != additions
+        or [path for path in live_paths if path not in additions] != locked_paths
+        or set(live_paths) - set(locked_paths) != set(additions)
+    ):
+        raise InventoryError(
+            "v2 repository capture authority is not the exact strict additive closure"
+        )
+    return live
+
+
 def write_capture(output_dir, items, binding, lock_sha, series_sha, repo):
     validate_capture_binding(binding)
     if lock_sha != EXPECTED_SOURCE_LOCK_SHA256:
@@ -1151,6 +1264,7 @@ def write_capture(output_dir, items, binding, lock_sha, series_sha, repo):
                     )
     inventory_size, inventory_sha = hash_file(inventory_path)
     summary = {
+        "authority_registration": validate_capture_authority_registration(),
         "binding": binding,
         "blockers": CAPTURE_BLOCKERS,
         "complete": False,
@@ -1190,6 +1304,7 @@ def verify_capture(directory, repo):
     )
     summary = read_json(summary_path)
     expected_summary_keys = {
+        "authority_registration",
         "binding",
         "blockers",
         "complete",
@@ -1212,6 +1327,8 @@ def verify_capture(directory, repo):
     validate_capture_binding(summary["binding"])
     if (
         summary["schema_version"] != SCHEMA_VERSION
+        or summary["authority_registration"]
+        != validate_capture_authority_registration()
         or summary["credit_eligible"] is not False
         or summary["review_complete"] is not False
         or summary["complete"] is not False
@@ -1312,14 +1429,17 @@ def check_repository(repo):
         raise InventoryError("source-lock bytes differ from the reviewed identity")
     if series_size < 1 or series_digest != EXPECTED_PATCH_SERIES_SHA256:
         raise InventoryError("patch-series bytes differ from the reviewed identity")
-    if lock.get("licenses", {}).get("capture_authority") != (
-        expected_capture_authority_record()
-    ):
-        raise InventoryError("source-lock capture closure authority differs")
     try:
         import rocky_kernel_source_lock as source_lock
     except ImportError as error:
         raise InventoryError("cannot import source-lock validator: {0}".format(error))
+    locked_capture_authority = lock.get("licenses", {}).get("capture_authority")
+    if locked_capture_authority != source_lock.EXPECTED_LICENSE_CAPTURE_AUTHORITY:
+        raise InventoryError("source-lock v1 capture closure authority differs")
+    validate_capture_authority_registration()
+    validate_capture_authority_transition(
+        locked_capture_authority, expected_capture_authority_record()
+    )
     try:
         blockers = source_lock.validate_loaded_manifests(
             lock, series, series_path.read_bytes(), repo

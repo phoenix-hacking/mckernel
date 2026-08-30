@@ -215,6 +215,69 @@ class LicenseInventoryTests(unittest.TestCase):
         self.assertEqual(1, lock["schema_version"])
         self.assertEqual(1, series["schema_version"])
 
+    def test_live_v2_capture_is_strictly_additive_and_never_gate_registered(self):
+        lock = inventory.read_json(REPO_ROOT / inventory.SOURCE_LOCK)
+        locked = lock["licenses"]["capture_authority"]
+        live = inventory.expected_capture_authority_record()
+        self.assertEqual(
+            inventory.LOCKED_CAPTURE_AUTHORITY_ID, locked["authority_id"]
+        )
+        self.assertEqual(inventory.CAPTURE_AUTHORITY_ID, live["authority_id"])
+        self.assertIs(
+            live, inventory.validate_capture_authority_transition(locked, live)
+        )
+        locked_paths = locked["namespaces"]["repository"]["paths"]
+        live_paths = live["namespaces"]["repository"]["paths"]
+        self.assertEqual(
+            list(inventory.ADDITIVE_REPOSITORY_INPUT_PATHS),
+            [path for path in live_paths if path not in locked_paths],
+        )
+        self.assertEqual(
+            {
+                "authority_id": inventory.CAPTURE_AUTHORITY_ID,
+                "credit_eligible": False,
+                "gate_registered": False,
+                "locked_authority_id": inventory.LOCKED_CAPTURE_AUTHORITY_ID,
+                "relationship": "strict-additive-machine-capture-only",
+            },
+            inventory.CAPTURE_AUTHORITY_REGISTRATION,
+        )
+        self.assertEqual(
+            inventory.CAPTURE_AUTHORITY_REGISTRATION,
+            inventory.validate_capture_authority_registration(),
+        )
+        self.assertTrue(
+            any(
+                "not registered" in blocker and "cannot award gate credit" in blocker
+                for blocker in inventory.CAPTURE_BLOCKERS
+            )
+        )
+        for field in ("gate_registered", "credit_eligible"):
+            with self.subTest(registration_overclaim=field):
+                overclaim = copy.deepcopy(inventory.CAPTURE_AUTHORITY_REGISTRATION)
+                overclaim[field] = True
+                with mock.patch.object(
+                    inventory, "CAPTURE_AUTHORITY_REGISTRATION", overclaim
+                ):
+                    with self.assertRaises(inventory.InventoryError):
+                        inventory.validate_capture_authority_registration()
+
+        for mutation in ("rogue-addition", "missing-addition", "frozen-namespace"):
+            with self.subTest(mutation=mutation):
+                changed = copy.deepcopy(live)
+                if mutation == "rogue-addition":
+                    changed["namespaces"]["repository"]["paths"].append(
+                        "host-kernel/native-rust/unreviewed.rs"
+                    )
+                elif mutation == "missing-addition":
+                    changed["namespaces"]["repository"]["paths"].remove(
+                        inventory.ADDITIVE_REPOSITORY_INPUT_PATHS[0]
+                    )
+                else:
+                    changed["namespaces"]["linux"]["item_count"] += 1
+                with self.assertRaises(inventory.InventoryError):
+                    inventory.validate_capture_authority_transition(locked, changed)
+
     def test_local_compiler_patch_and_config_are_inventoried(self):
         with tempfile.TemporaryDirectory() as temporary:
             repo, head = committed_current_repository_inputs(Path(temporary))
@@ -295,12 +358,14 @@ class LicenseInventoryTests(unittest.TestCase):
                 for item in inventory.repository_patch_items(repo, head, {})
             }
         for relative in (
+            "host-kernel/native-rust/device_registry.rs",
             "host-kernel/native-rust/ikc_master.rs",
             "host-kernel/native-rust/ikc_queue.rs",
             "host-kernel/native-rust/ihk_ioctl.rs",
             "host-kernel/native-rust/os_registry.rs",
             "host-kernel/native-rust/page_allocator.rs",
             "host-kernel/native-rust/page_owner_registry.rs",
+            "host-kernel/native-rust/smp_resource.rs",
             "scripts/tests/fixtures/ihk_native_master_compile.rs",
             "scripts/tests/fixtures/ihk_native_queue_compile.rs",
             "scripts/tests/fixtures/ihk_ioctl_dispatch_compile.rs",
@@ -318,6 +383,46 @@ class LicenseInventoryTests(unittest.TestCase):
             self.assertEqual(
                 hashlib.sha256(source.read_bytes()).hexdigest(), item["sha256"]
             )
+
+    def test_repository_inventory_binds_new_foundations_without_review_credit(self):
+        relatives = (
+            "host-kernel/native-rust/device_registry.rs",
+            "host-kernel/native-rust/smp_resource.rs",
+        )
+        self.assertEqual(
+            list(relatives),
+            [
+                relative
+                for relative in inventory.EXPECTED_REPOSITORY_INPUT_PATHS
+                if relative in relatives
+            ],
+        )
+        with tempfile.TemporaryDirectory() as temporary:
+            repo, head = committed_current_repository_inputs(Path(temporary))
+            by_path = {
+                item["path"]: item
+                for item in inventory.repository_patch_items(repo, head, {})
+            }
+            for relative in relatives:
+                item = by_path["repository/" + relative]
+                source = REPO_ROOT / relative
+                self.assertEqual(source.stat().st_size, item["size"])
+                self.assertEqual(
+                    hashlib.sha256(source.read_bytes()).hexdigest(), item["sha256"]
+                )
+                self.assertEqual("repository-commit:" + head, item["origin"])
+                self.assertEqual(
+                    {
+                        "git_blob_oid": git(repo, "rev-parse", head + ":" + relative),
+                        "git_commit": head,
+                    },
+                    item["source_identity"],
+                )
+                self.assertEqual("GPL-2.0", item["spdx_expression"])
+                self.assertEqual("captured-unreviewed", item["review_status"])
+                self.assertIn(
+                    "independent-review-required", item["unresolved_reasons"]
+                )
 
     def test_repository_inventory_binds_full_rust_core_preimages(self):
         fixture_root = "scripts/tests/fixtures/rust-core-rocky-6.12/"
@@ -541,6 +646,15 @@ class LicenseInventoryTests(unittest.TestCase):
             )
             self.assertEqual(summary["inventory"]["item_count"], verified["inventory"]["item_count"])
             self.assertFalse(verified["complete"])
+            self.assertEqual(
+                inventory.CAPTURE_AUTHORITY_REGISTRATION,
+                verified["authority_registration"],
+            )
+            self.assertFalse(verified["authority_registration"]["gate_registered"])
+            self.assertFalse(verified["authority_registration"]["credit_eligible"])
+            self.assertEqual(
+                inventory.CAPTURE_AUTHORITY_ID, verified["scope"]["authority_id"]
+            )
             self.assertEqual(
                 verified["inventory"]["item_count"], verified["unresolved_count"]
             )

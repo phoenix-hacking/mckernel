@@ -45,6 +45,12 @@ EXPECTED_SUPPORT_SOURCES = (
         "path": "host-kernel/native-rust/os_registry.rs",
     },
     {
+        "contract_path": "host-kernel/contracts/ihk-device-registry-foundation-v1.json",
+        "destination": "device_registry.rs",
+        "kind": "rust_support_module",
+        "path": "host-kernel/native-rust/device_registry.rs",
+    },
+    {
         "contract_path": "host-kernel/contracts/ihk-ioctl-dispatch-foundation-v1.json",
         "destination": "ihk_ioctl.rs",
         "kind": "rust_ioctl_dispatch",
@@ -216,12 +222,17 @@ def _validate_contract(contract: dict[str, Any]) -> None:
         {
             "destination": "abi/x86_64.rs",
             "path": "host-kernel/native-rust/abi/x86_64.rs",
-            "sha256": "b5980e5b621914a120a0e6b72241477c48aee85615ae4cc76077f3874e35f860",
+            "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3",
         },
         {
             "destination": "ikc_queue.rs",
             "path": "host-kernel/native-rust/ikc_queue.rs",
             "sha256": "514f9bce452498e5e9394c450532b040c44fce1ac7a6b5158c76f3d4c7270d40",
+        },
+        {
+            "destination": "device_registry.rs",
+            "path": "host-kernel/native-rust/device_registry.rs",
+            "sha256": "0356f9212ddd74877cc105fb498a75550f207a322fbe1daaeaf42ef1857d0058",
         },
         {
             "destination": "ikc_master.rs",
@@ -261,6 +272,7 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
     for fragment in (
         '#[path = "abi/x86_64.rs"]\nmod abi;',
         "mod ikc_queue;",
+        "mod device_registry;",
         "mod ikc_master;",
         "mod ihk_ioctl;",
         "mod page_allocator;",
@@ -376,8 +388,54 @@ def _validate_support_sources(
     if readiness.get("status") != "TODO" or readiness.get("credit_eligible") is not False:
         raise ValidationError("OS registry support contract must remain TODO and credit-ineligible")
 
+    device_contract = values["device_registry.rs"]
+    device_item = support[2]
+    device_source = device_contract.get("production_source", {})
+    device_attachment = device_contract.get("attachment_boundary", {})
+    device_evidence = device_contract.get("evidence_policy", {})
+    device_readiness = device_contract.get("readiness", {})
+    if device_contract.get("gate_id") != "IHK-004-device-registry-foundation":
+        raise ValidationError("device registry support contract identity differs")
+    if device_contract.get("foundation_status") != (
+            "private-crate-attached-allocation-free-device-registry"):
+        raise ValidationError("device registry support contract overclaims attachment readiness")
+    if (device_source.get("path") != device_item["path"] or
+            device_source.get("sha256") != device_item["sha256"]):
+        raise ValidationError("device registry contract does not bind the staged source")
+    if device_attachment != {
+            "crate_root_constructs_registry_instance": False,
+            "crate_root_path": contract["production_source"],
+            "crate_root_sha256": contract["production_source_sha256"],
+            "crate_root_size": len(source_text.encode("utf-8")),
+            "private_module_edge_validated": True,
+    }:
+        raise ValidationError("device registry contract overclaims crate-root attachment")
+    if device_evidence != {
+            "credit_eligible": False,
+            "exact_kbuild_validated": False,
+            "legacy_differential_validated": False,
+            "linux_adapter_validated": False,
+            "rocky_runtime_validated": False,
+            "source_and_fixture_validated": True,
+    }:
+        raise ValidationError("device registry support contract improperly claims evidence or credit")
+    if (device_readiness.get("status") != "TODO" or
+            device_readiness.get("credit_eligible") is not False or
+            not isinstance(device_readiness.get("blockers"), list) or
+            len(device_readiness["blockers"]) != 8):
+        raise ValidationError("device registry support contract must remain TODO and blocked")
+
     ioctl_contract = values["ihk_ioctl.rs"]
-    ioctl_item = support[2]
+    ioctl_item = support[3]
+    device_ioctl = device_contract.get("ioctl_boundary", {})
+    if device_ioctl != {
+            "contract_path": ioctl_item["contract_path"],
+            "contract_sha256": ioctl_item["contract_sha256"],
+            "contract_size": (repo / ioctl_item["contract_path"]).stat().st_size,
+            "registration_supported": False,
+            "user_copy_reachable": False,
+    }:
+        raise ValidationError("device registry contract uses a different negative ioctl boundary")
     ioctl_implementation = ioctl_contract.get("implementation", {})
     ioctl_inputs = ioctl_contract.get("canonical_inputs", {})
     ioctl_readiness = ioctl_contract.get("readiness", {})
@@ -400,7 +458,7 @@ def _validate_support_sources(
         raise ValidationError("ioctl dispatcher support contract must remain TODO and credit-ineligible")
 
     allocator_contract = values["page_allocator.rs"]
-    allocator_item = support[3]
+    allocator_item = support[4]
     allocator_source = allocator_contract.get("production_source", {})
     allocator_evidence = allocator_contract.get("evidence_policy", {})
     if allocator_contract.get("gate_id") != "IHK-006":
@@ -421,7 +479,7 @@ def _validate_support_sources(
         raise ValidationError("page allocator support contract improperly claims evidence or credit")
 
     owner_contract = values["page_owner_registry.rs"]
-    owner_item = support[4]
+    owner_item = support[5]
     owner_source = owner_contract.get("production_source", {})
     owner_dependency = owner_contract.get("allocator_dependency", {})
     owner_evidence = owner_contract.get("evidence_policy", {})
@@ -452,6 +510,7 @@ def _validate_support_sources(
     declarations = (
         '#[allow(dead_code, unreachable_pub)]\n#[path = "abi/x86_64.rs"]\nmod abi;',
         "#[allow(dead_code)]\nmod os_registry;",
+        "#[allow(dead_code)]\nmod device_registry;",
         "#[allow(dead_code)]\nmod ihk_ioctl;",
         "#[allow(dead_code)]\nmod page_allocator;",
         "#[allow(dead_code)]\nmod page_owner_registry;",

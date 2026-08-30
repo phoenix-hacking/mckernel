@@ -37,9 +37,11 @@ SUPPLEMENTAL_INPUTS = {
     "ikc_master.rs": "host-kernel/native-rust/ikc_master.rs",
     "ikc_queue.rs": "host-kernel/native-rust/ikc_queue.rs",
     "os_registry.rs": "host-kernel/native-rust/os_registry.rs",
+    "device_registry.rs": "host-kernel/native-rust/device_registry.rs",
     "ihk_ioctl.rs": "host-kernel/native-rust/ihk_ioctl.rs",
     "page_allocator.rs": "host-kernel/native-rust/page_allocator.rs",
     "page_owner_registry.rs": "host-kernel/native-rust/page_owner_registry.rs",
+    "smp_resource.rs": "host-kernel/native-rust/smp_resource.rs",
 }
 FORBIDDEN_BUILD_BASENAMES = frozenset(("kbuild", "kconfig", "makefile"))
 EXPECTED_SYMBOLS = (

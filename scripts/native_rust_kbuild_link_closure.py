@@ -61,6 +61,7 @@ EXPECTED_STAGED_FILES = (
     "Kbuild",
     "Kconfig",
     "abi/x86_64.rs",
+    "device_registry.rs",
     "ihk.rs",
     "ihk_ioctl.rs",
     "ihk_smp_x86_64.rs",
@@ -70,6 +71,7 @@ EXPECTED_STAGED_FILES = (
     "os_registry.rs",
     "page_allocator.rs",
     "page_owner_registry.rs",
+    "smp_resource.rs",
 )
 EXPECTED_STAGED_RUST_SOURCES = tuple(
     item for item in EXPECTED_STAGED_FILES if item.endswith(".rs")
@@ -100,12 +102,13 @@ _PROJECT_DEPENDENCIES = {
         "abi/x86_64.rs",
         "ikc_queue.rs",
         "os_registry.rs",
+        "device_registry.rs",
         "ikc_master.rs",
         "ihk_ioctl.rs",
         "page_allocator.rs",
         "page_owner_registry.rs",
     ),
-    "ihk-smp-x86_64": (),
+    "ihk-smp-x86_64": ("smp_resource.rs",),
     "mcctrl": (),
 }
 _KERNEL_RUST_DEPENDENCIES = (

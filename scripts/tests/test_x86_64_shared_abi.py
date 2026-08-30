@@ -13,6 +13,42 @@ if REPO_ROOT not in sys.path:
 from scripts import x86_64_shared_abi as abi
 
 
+EXPECTED_MCEXEC_CONSTANTS = {
+    "MCEXEC_UP_PREPARE_IMAGE": 0x30A02900,
+    "MCEXEC_UP_TRANSFER": 0x30A02901,
+    "MCEXEC_UP_START_IMAGE": 0x30A02902,
+    "MCEXEC_UP_WAIT_SYSCALL": 0x30A02903,
+    "MCEXEC_UP_RET_SYSCALL": 0x30A02904,
+    "MCEXEC_UP_LOAD_SYSCALL": 0x30A02905,
+    "MCEXEC_UP_SEND_SIGNAL": 0x30A02906,
+    "MCEXEC_UP_GET_CPU": 0x30A02907,
+    "MCEXEC_UP_STRNCPY_FROM_USER": 0x30A02908,
+    "MCEXEC_UP_GET_CRED": 0x30A0290A,
+    "MCEXEC_UP_GET_CREDV": 0x30A0290B,
+    "MCEXEC_UP_GET_NODES": 0x30A0290C,
+    "MCEXEC_UP_GET_CPUSET": 0x30A0290D,
+    "MCEXEC_UP_CREATE_PPD": 0x30A0290E,
+    "MCEXEC_UP_PREPARE_DMA": 0x30A02910,
+    "MCEXEC_UP_FREE_DMA": 0x30A02911,
+    "MCEXEC_UP_OPEN_EXEC": 0x30A02912,
+    "MCEXEC_UP_CLOSE_EXEC": 0x30A02913,
+    "MCEXEC_UP_SYS_MOUNT": 0x30A02914,
+    "MCEXEC_UP_SYS_UMOUNT": 0x30A02915,
+    "MCEXEC_UP_SYS_UNSHARE": 0x30A02916,
+    "MCEXEC_UP_UTI_GET_CTX": 0x30A02920,
+    "MCEXEC_UP_UTI_SWITCH_CTX": 0x30A02921,
+    "MCEXEC_UP_SIG_THREAD": 0x30A02922,
+    "MCEXEC_UP_SYSCALL_THREAD": 0x30A02924,
+    "MCEXEC_UP_TERMINATE_THREAD": 0x30A02925,
+    "MCEXEC_UP_GET_NUM_POOL_THREADS": 0x30A02926,
+    "MCEXEC_UP_UTI_ATTR": 0x30A02927,
+    "MCEXEC_UP_RELEASE_USER_SPACE": 0x30A02928,
+    "MCEXEC_UP_DEBUG_LOG": 0x40000000,
+    "MCEXEC_UP_TRANSFER_TO_REMOTE": 0,
+    "MCEXEC_UP_TRANSFER_FROM_REMOTE": 1,
+}
+
+
 def read_bytes(relative_path):
     with open(os.path.join(REPO_ROOT, relative_path), "rb") as stream:
         return stream.read()
@@ -31,9 +67,17 @@ class X8664SharedAbiTests(unittest.TestCase):
         with self.assertRaises(abi.ContractError):
             abi.check(REPO_ROOT, rust_override=mutated, contract_override=self.contract)
 
+    def rejected_rust_c_value_mutation(self, old, new, name):
+        self.assertIn(old, self.rust)
+        mutated = self.rust.replace(old, new, 1)
+        with self.assertRaisesRegex(
+                abi.ContractError,
+                r"^Rust/C value mismatch for {0}$".format(name)):
+            abi.derive_contract(REPO_ROOT, rust_override=mutated)
+
     def test_repository_contract_is_bounded_and_fail_closed(self):
         contract = abi.check(REPO_ROOT)
-        self.assertEqual(145, contract["capture"]["constant_count"])
+        self.assertEqual(163, contract["capture"]["constant_count"])
         self.assertEqual(28, contract["capture"]["layout_count"])
         self.assertEqual(13, len(contract["capture"]["sources"]))
         self.assertEqual(abi.READINESS_BLOCKERS, tuple(contract["readiness"]["blockers"]))
@@ -110,6 +154,33 @@ class X8664SharedAbiTests(unittest.TestCase):
         self.rejected_rust_mutation(
             b"pub const IKC_FLAG_NO_COPY: u32 = 0x10;",
             b"pub const IKC_FLAG_NO_COPY: u32 = 0x20;",
+        )
+
+    def test_mcexec_command_and_transfer_direction_catalog_is_complete(self):
+        contract = abi.check(REPO_ROOT)
+        source_values = {
+            name: value
+            for name, value in abi._c_values(self.sources["uprotocol"]).items()
+            if name.startswith("MCEXEC_UP_")
+        }
+        self.assertEqual(EXPECTED_MCEXEC_CONSTANTS, source_values)
+        self.assertEqual(
+            EXPECTED_MCEXEC_CONSTANTS,
+            contract["constant_bindings"]["uprotocol"],
+        )
+
+    def test_new_mcexec_command_value_mutation_is_rejected(self):
+        self.rejected_rust_c_value_mutation(
+            b"pub const MCEXEC_UP_DEBUG_LOG: u32 = 0x4000_0000;",
+            b"pub const MCEXEC_UP_DEBUG_LOG: u32 = 0x4000_0001;",
+            "MCEXEC_UP_DEBUG_LOG",
+        )
+
+    def test_mcexec_transfer_direction_mutation_is_rejected(self):
+        self.rejected_rust_c_value_mutation(
+            b"pub const MCEXEC_UP_TRANSFER_FROM_REMOTE: u32 = 1;",
+            b"pub const MCEXEC_UP_TRANSFER_FROM_REMOTE: u32 = 2;",
+            "MCEXEC_UP_TRANSFER_FROM_REMOTE",
         )
 
     def test_queue_field_mutation_is_rejected_even_when_layout_is_unchanged(self):

@@ -214,19 +214,19 @@ EXPECTED_PRECHECK_BUILD_MEMBERS = [
     "workflow-state",
 ]
 EXPECTED_EXACT_BUILD_PREPARATION_SHA256 = (
-    "f1ef51aba8898bdf33bf18d4bf67fe6fbe830d892fca9a55c8448d0e788663d1"
+    "254b0a4e4d9afa2c9e49426cd5dce48193d20b55b4a650f4649d05563dd57c80"
 )
 EXPECTED_EXACT_BUILD_PREFIX_SHA256 = (
-    "add4edbc6810fc6f5b3591a04bfb8a544359df25e6b31c139d60738dd45206a0"
+    "444b53ca8ec050184e1d1fe478afc58e6e71e33c658e79a094232118ee5ced31"
 )
 EXPECTED_EXACT_BUILD_STEP_SHA256 = {
     "Refuse the wrong runtime and install exact build tools": "acabf171e87378f911362a812477945a4644fc3e04b4e107e57fff729763b420",
     "Check out the exact candidate without credentials": "4ce648da06a9ff165af51ca0e766fdaedc88353f72508499af8b27d93a4b83bc",
-    "Verify source-only contracts without claiming readiness": "946daeaeb2f2c36e0f0ddda6fbc6eb32002561f7ff9a3408520005ba92be73c0",
+    "Verify source-only contracts without claiming readiness": "480014d26bc2759e11a6609cf5b9b58f3a2d00d603c135193f9ae932d907fecd",
     "Acquire, patch, and credit-forbidden-stage the exact source": "421ce7c6995f804e64121a048ac5ea524d3df23d20318622c6c75c983bf7f000",
     "Resolve the evidence-only module configuration twice": "e15939bc014dd603fed142c3f5226529aadb7eaa37cd64b3dbf3998e11dd4943",
     "Compile the exact kernel and native Rust modules": "17076a9e00d90489b9429cf31b9f6bb4f6c55a28474aa47a3234cb5cae61a82a",
-    "Validate built metadata and capture immutable diagnostics": "b8081c67aa9dd0c337103b23aebe9d17f9694a3bd1b0b3bf56c17ba751be82c5",
+    "Validate built metadata and capture immutable diagnostics": "0e21676488597055046c958c45379f7bbebcfa5c2a1f1ba97daf30eb2dd18fd2",
     "Upload compiler evidence or first-failure diagnostics": "f5c304d408baad23b482154ef91a5738f79a48c1a34b898be1c5e2c55499a3d9",
 }
 EXPECTED_RK006_CAPTURE_STEP_SHA256 = {
@@ -243,9 +243,9 @@ EXPECTED_RUNTIME_INIT_SHA256 = (
 )
 EXPECTED_REPOSITORY_WORKFLOW_IDENTITIES = {
     "build_workflow": {
-        "git_blob_sha1": "6c302cc1a9ac899fe40dc151f7d513032414b2a7",
-        "sha256": "3ac4dd4716144e015fbe8b0db8d1365e47fc6f162ee27c50db2b3dff3f63d2bf",
-        "size": 69084,
+        "git_blob_sha1": "00491ca68573cec33b79b84be257e220b27c3cf4",
+        "sha256": "a9b85eac8389b2b3c93f1f45955a0624609e55013da54cb609be7b8765687307",
+        "size": 71916,
     },
     "runtime_pr_workflow": {
         "git_blob_sha1": "64bb717852d36fc1021e2b61e83aca6415b184d5",

@@ -731,6 +731,7 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
     def test_source_closure_rejects_missing_extra_and_project_non_rust_paths(self):
         name = ".ihk.o.cmd"
         mutations = (
+            (SOURCE_PREFIX + "device_registry.rs " + "\\", ""),
             (SOURCE_PREFIX + "abi/x86_64.rs \\", ""),
             (SOURCE_PREFIX + "abi/x86_64.rs \\", SOURCE_PREFIX + "evil.rs " + "\\"),
             (SOURCE_PREFIX + "abi/x86_64.rs \\", SOURCE_PREFIX + "evil.c " + "\\"),
@@ -765,6 +766,13 @@ class NativeRustKbuildLinkClosureTests(unittest.TestCase):
             ".mcctrl.o.cmd",
             "/build/native-rust-source/linux/",
             "/other/native-rust-source/linux/",
+        )
+
+    def test_smp_resource_dependency_is_compiler_bound(self):
+        self.mutate_once(
+            ".ihk_smp_x86_64.o.cmd",
+            SOURCE_PREFIX + "smp_resource.rs " + "\\",
+            "",
         )
 
     def test_stage_lock_is_canonical_exact_and_claims_nothing(self):

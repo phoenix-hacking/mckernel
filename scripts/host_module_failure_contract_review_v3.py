@@ -367,12 +367,19 @@ def independent_parse_cgraph(data, source):
         tables.append(_review_initial_section(lines[start + 1:end], source))
     first = tables[0]
     first_by_number = {record["number"]: record for record in first}
+    # A GCC call row spells the callee's printable source name, while the
+    # numbered symbol record retains the assembler identity used by the CTU
+    # resolver.  Bind both halves against the authoritative first table: the
+    # number selects exactly one record and the call spelling must match that
+    # record's printable name.  This also permits distinct assembler symbols
+    # to share a printable name without making the resolution ambiguous.
     for caller in first:
         for call in caller["calls"]:
             target = first_by_number.get(call["number"])
             if target is None:
                 raise ReviewV3Error(
-                    "independent initial cgraph call symbol number is unknown"
+                    "independent initial cgraph call symbol number is unknown "
+                    "(unknown callee)"
                 )
             if target["printable_name"] != call["name"]:
                 raise ReviewV3Error(
@@ -395,17 +402,9 @@ def independent_parse_cgraph(data, source):
             for number, record in table_by_number.items()
         ):
             raise ReviewV3Error("independent repeated cgraph tables differ")
-        for caller in table:
-            for call in caller["calls"]:
-                target = table_by_number.get(call["number"])
-                if target is None:
-                    raise ReviewV3Error(
-                        "independent repeated cgraph pruned a live callee"
-                    )
-                if target["printable_name"] != call["name"]:
-                    raise ReviewV3Error(
-                        "independent repeated cgraph call printable name differs"
-                    )
+        # GCC 8.5 may omit declaration-only callees from a later IPA phase.
+        # Calls resolve in the authoritative first table, and every analyzed
+        # definition remains mandatory in each later table above.
     return first
 
 

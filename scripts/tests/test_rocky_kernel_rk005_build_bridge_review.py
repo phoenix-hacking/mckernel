@@ -84,6 +84,10 @@ class Rk005ConfigBuildBridgeReviewTests(unittest.TestCase):
             reviewer.BUILD_ORACLE.REUSED_MODULE_SOURCES["kconfig_solver"],
             "git-blob:8211d19c56c56368718fe1420937fd5187530773",
         )
+        self.assertEqual(
+            reviewer.BUILD_ORACLE.REUSED_MODULE_SOURCES["link_closure"],
+            "git-blob:8b571f2c122ae8a6102e8ed83129f584701feea2",
+        )
 
     def test_every_credit_gate_durability_and_production_claim_is_false(self):
         for name, value in sorted(self.review["claims"].items()):

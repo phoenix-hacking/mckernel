@@ -204,6 +204,315 @@ class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
             "schema_version": 1,
         }
 
+    def _write_verify_capture_patch_log_fixture(
+        self, directory, apply_count, second_count
+    ):
+        patch_program = shutil.which("patch", path=capture.CAPTURE_ENV["PATH"])
+        self.assertIsNotNone(patch_program)
+        authority = {"patches": []}
+        replay_rows = []
+        initial_states = []
+        final_states = []
+        for order in range(1, 27):
+            identifier = "parent-001" if order == 1 else "fixture-{:03d}".format(order)
+            if order == 1:
+                touched_paths = [row["path"] for row in capture.PARENT_FILES]
+                before_states = [
+                    {
+                        "mode": "0444",
+                        "path": row["path"],
+                        "sha256": row["preimage_sha256"],
+                        "size": 0,
+                        "type": "regular",
+                    }
+                    for row in capture.PARENT_FILES
+                ]
+                after_states = [
+                    {
+                        "mode": "0444",
+                        "path": row["path"],
+                        "sha256": row["postimage_sha256"],
+                        "size": 0,
+                        "type": "regular",
+                    }
+                    for row in capture.PARENT_FILES
+                ]
+            else:
+                touched_paths = ["fixture/path-{:03d}".format(order)]
+                before_states = [
+                    {
+                        "path": touched_paths[0],
+                        "sha256": None,
+                        "size": None,
+                        "type": "absent",
+                    }
+                ]
+                after_states = copy.deepcopy(before_states)
+            patch_path = "patches/rk006-fixture-{:03d}.patch".format(order)
+            patch_sha256 = hashlib.sha256(patch_path.encode("ascii")).hexdigest()
+            authority["patches"].append(
+                {
+                    "id": identifier,
+                    "layer": "fixture",
+                    "order": order,
+                    "path": patch_path,
+                    "sha256": patch_sha256,
+                    "touched_paths": touched_paths,
+                }
+            )
+            replay_rows.append(
+                {
+                    "after": capture._state_rows_closure(after_states),
+                    "after_states": [
+                        {
+                            "archive_member": (
+                                "patches/{:04d}/{}/{}".format(
+                                    order, identifier, state["path"]
+                                )
+                                if state["type"] == "regular"
+                                else None
+                            ),
+                            "state": state,
+                        }
+                        for state in after_states
+                    ],
+                    "before": capture._state_rows_closure(before_states),
+                    "before_states": [
+                        {
+                            "archive_member": (
+                                "patches/{:04d}/{}/{}".format(
+                                    order, identifier, state["path"]
+                                )
+                                if state["type"] == "regular"
+                                else None
+                            ),
+                            "state": state,
+                        }
+                        for state in before_states
+                    ],
+                    "id": identifier,
+                    "layer": "fixture",
+                    "order": order,
+                    "patch_path": patch_path,
+                    "patch_sha256": patch_sha256,
+                }
+            )
+            initial_states.extend(before_states)
+            final_states.extend(after_states)
+
+        vendor_filename = "rk006-fixture-vendor.patch"
+        vendor_path = REPO_ROOT / vendor_filename
+        vendor_command = capture._patch_command(patch_program, vendor_path)
+        apply_rows = [
+            capture._log_record(
+                "vendor-apply",
+                "rocky-vendor-1000",
+                vendor_command,
+                subprocess.CompletedProcess(vendor_command, 0, b"vendor applied\n", b""),
+            )
+        ]
+        second_rows = []
+        for row in authority["patches"]:
+            patch_path = REPO_ROOT / row["path"]
+            apply_command = capture._patch_command(patch_program, patch_path)
+            apply_rows.append(
+                capture._log_record(
+                    "apply",
+                    row["id"],
+                    apply_command,
+                    subprocess.CompletedProcess(apply_command, 0, b"applied\n", b""),
+                )
+            )
+            second_command = capture._patch_command(
+                patch_program, patch_path, dry_run=True
+            )
+            second_rows.append(
+                capture._log_record(
+                    "second-application",
+                    row["id"],
+                    second_command,
+                    subprocess.CompletedProcess(
+                        second_command, 1, b"", b"already applied\n"
+                    ),
+                )
+            )
+
+        def resize(rows, count):
+            if count <= len(rows):
+                return copy.deepcopy(rows[:count])
+            return copy.deepcopy(rows) + [
+                copy.deepcopy(rows[-1]) for _ in range(count - len(rows))
+            ]
+
+        apply_rows = resize(apply_rows, apply_count)
+        second_rows = resize(second_rows, second_count)
+        members = {
+            "patch-apply.log": b"".join(
+                capture._canonical_json(row) for row in apply_rows
+            ),
+            "postimages.tar.xz": b"synthetic postimages\n",
+            "preimages.tar.xz": b"synthetic preimages\n",
+            "repository-inputs.tar.xz": b"synthetic repository inputs\n",
+            "second-application.log": b"".join(
+                capture._canonical_json(row) for row in second_rows
+            ),
+            "tool-probes.json": capture._canonical_json({}),
+            "workflow-state": b"source-capture-complete\n",
+        }
+        pending_build = {
+            "build_artifact": {
+                "durable": False,
+                "name": "native-rust-exact-build-123-1",
+                "outer_artifact_sha256": None,
+                "retention_days": 30,
+            },
+            "claims": dict(capture.FALSE_CLAIMS),
+            "schema_version": 1,
+            "status": "required-pending",
+        }
+        members["build-binding.json"] = capture._canonical_json(pending_build)
+        repository_path = capture.CAPTURE_SCRIPT_PATH
+        repository_data = (REPO_ROOT / repository_path).read_bytes()
+        repository_mode = "{:04o}".format(
+            stat.S_IMODE((REPO_ROOT / repository_path).stat().st_mode)
+        )
+        repository_row = {
+            "mode": repository_mode,
+            "path": repository_path,
+            "sha256": hashlib.sha256(repository_data).hexdigest(),
+            "size": len(repository_data),
+        }
+        source_inputs = {
+            "source_archive": {
+                "filename": "linux-fixture.tar.xz",
+                "sha256": "1" * 64,
+                "size": 1,
+            },
+            "source_rpm": {
+                "filename": "linux-fixture.src.rpm",
+                "sha256": "2" * 64,
+                "size": 1,
+            },
+            "vendor_patch": {
+                "filename": vendor_filename,
+                "sha256": "3" * 64,
+                "size": 1,
+            },
+        }
+        contract = {
+            "inputs": {
+                name: dict(record, root="fixture")
+                for name, record in source_inputs.items()
+            }
+        }
+        document = {
+            "artifacts": {
+                "patch_apply_log_sha256": hashlib.sha256(
+                    members["patch-apply.log"]
+                ).hexdigest(),
+                "postimages_sha256": hashlib.sha256(
+                    members["postimages.tar.xz"]
+                ).hexdigest(),
+                "preimages_sha256": hashlib.sha256(
+                    members["preimages.tar.xz"]
+                ).hexdigest(),
+                "repository_inputs_sha256": hashlib.sha256(
+                    members["repository-inputs.tar.xz"]
+                ).hexdigest(),
+                "second_application_log_sha256": hashlib.sha256(
+                    members["second-application.log"]
+                ).hexdigest(),
+                "tool_probes_sha256": hashlib.sha256(
+                    members["tool-probes.json"]
+                ).hexdigest(),
+            },
+            "build_binding": {
+                "build_binding_sha256": None,
+                "status": "required-pending",
+            },
+            "capture_contract_id": "rk-006-full-source-build-capture-v1",
+            "claims": dict(capture.FALSE_CLAIMS),
+            "external_final_closure": capture._state_rows_closure(final_states),
+            "external_initial_closure": capture._state_rows_closure(initial_states),
+            "full_source_pre_vendor_closure": {
+                "algorithm": capture.FULL_SOURCE_CLOSURE_ALGORITHM,
+                "row_count": 1,
+                "sha256": "4" * 64,
+            },
+            "gate": dict(capture.FALSE_GATE),
+            "github": {
+                "head_sha": "a" * 40,
+                "repository": "fixture/mckernel",
+                "run_attempt": 1,
+                "run_id": 123,
+            },
+            "parent_files": copy.deepcopy(capture.PARENT_FILES),
+            "patch_count": 26,
+            "patch_replay": replay_rows,
+            "repository_inputs": [repository_row],
+            "runtime": {
+                "architecture": "x86_64",
+                "container_image": capture.CONTAINER_IMAGE,
+                "distribution_id": "rocky",
+                "distribution_version": "10.2",
+            },
+            "schema_version": 1,
+            "source_inputs": source_inputs,
+            "state": "source-capture-complete",
+            "touched_path_count": len(initial_states),
+        }
+        members["capture.json"] = capture._canonical_json(document)
+        for name, data in members.items():
+            path = directory / name
+            path.write_bytes(data)
+            path.chmod(0o644)
+        manifest = "".join(
+            "{}  {}\n".format(hashlib.sha256(members[name]).hexdigest(), name)
+            for name in sorted(members)
+        ).encode("ascii")
+        (directory / "SHA256SUMS").write_bytes(manifest)
+        (directory / "SHA256SUMS").chmod(0o644)
+        preimage_rows = sorted(
+            [
+                {
+                    "path": state["archive_member"],
+                    "sha256": state["state"]["sha256"],
+                    "size": state["state"]["size"],
+                }
+                for patch in replay_rows
+                for state in patch["before_states"]
+                if state["archive_member"] is not None
+            ],
+            key=lambda row: row["path"],
+        )
+        postimage_rows = sorted(
+            [
+                {
+                    "path": state["archive_member"],
+                    "sha256": state["state"]["sha256"],
+                    "size": state["state"]["size"],
+                }
+                for patch in replay_rows
+                for state in patch["after_states"]
+                if state["archive_member"] is not None
+            ],
+            key=lambda row: row["path"],
+        )
+        return {
+            "authority": authority,
+            "contract": contract,
+            "document": document,
+            "postimage_rows": postimage_rows,
+            "preimage_rows": preimage_rows,
+            "repository_rows": [
+                {
+                    "path": repository_row["path"],
+                    "sha256": repository_row["sha256"],
+                    "size": repository_row["size"],
+                }
+            ],
+        }
+
     def _two_hop_probe_fixture(self, root):
         logical_parent = root / "bin"
         intermediate_parent = root / "alternatives"
@@ -365,6 +674,77 @@ class Rk006FullSourceBuildCaptureTests(unittest.TestCase):
                     capture._validate_patch_log_cardinality(
                         mutated_apply, mutated_second, self.authority
                     )
+
+    def test_verify_capture_enforces_patch_log_cardinality_end_to_end(self):
+        cases = (
+            ("canonical", 27, 26, None),
+            (
+                "missing-apply",
+                26,
+                26,
+                "patch apply log does not bind vendor plus all authority patches",
+            ),
+            (
+                "extra-apply",
+                28,
+                26,
+                "patch apply log does not bind vendor plus all authority patches",
+            ),
+            (
+                "missing-second",
+                27,
+                25,
+                "second application rejection evidence differs",
+            ),
+            (
+                "extra-second",
+                27,
+                27,
+                "second application rejection evidence differs",
+            ),
+        )
+        for label, apply_count, second_count, expected_error in cases:
+            with self.subTest(label=label), tempfile.TemporaryDirectory(
+                prefix="rk006-verify-cardinality-"
+            ) as raw:
+                directory = Path(raw)
+                fixture = self._write_verify_capture_patch_log_fixture(
+                    directory, apply_count, second_count
+                )
+
+                def inspect_tar(data, archive_label):
+                    del data
+                    if archive_label == "repository inputs":
+                        return fixture["repository_rows"]
+                    if archive_label == "preimage archive":
+                        return fixture["preimage_rows"]
+                    if archive_label == "postimage archive":
+                        return fixture["postimage_rows"]
+                    raise AssertionError(
+                        "unexpected archive label: {}".format(archive_label)
+                    )
+
+                with mock.patch.object(
+                    capture,
+                    "validate_contract",
+                    return_value=(fixture["contract"], fixture["authority"]),
+                ), mock.patch.object(
+                    capture, "_validate_repository_input_membership"
+                ), mock.patch.object(
+                    capture, "_inspect_tar", side_effect=inspect_tar
+                ), mock.patch.object(
+                    capture, "_validate_tool_probe_document"
+                ):
+                    if expected_error is None:
+                        self.assertEqual(
+                            fixture["document"],
+                            capture.verify_capture(REPO_ROOT, directory),
+                        )
+                    else:
+                        with self.assertRaisesRegex(
+                            capture.CaptureError, expected_error
+                        ):
+                            capture.verify_capture(REPO_ROOT, directory)
 
     def test_replay_relationships_bind_closures_continuity_and_parent_bytes(self):
         with tempfile.TemporaryDirectory() as directory:

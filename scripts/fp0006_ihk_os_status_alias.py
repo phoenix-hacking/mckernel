@@ -38,9 +38,9 @@ SURFACE_ALIASES = {
 }
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 
-# SELF_DIGEST:f1189884196f1547e4fe5faefe9fa53df7d2da5f537d0122405e6b25201c76dd
+# SELF_DIGEST:1d8d58d150d435337309df417c9372d925f20f865b58c416f8985ef5bdab4147
 SELF_SOURCE_MAXIMUM = 1024 * 1024
-SECURITY_SOURCE_SHA256 = "c11445fa28d326e063c84ea02d2291db740011ed4a27138e41f1e649244bd0af"
+SECURITY_SOURCE_SHA256 = "d03f035089f343a3e4767054631bd3ff381195e207b6bb0cde4b2f266690a30b"
 SECURITY_SOURCE_SIZE = 51627
 
 
@@ -1653,7 +1653,7 @@ def _load_authority(
     repo: Path, contract_path: Path = DEFAULT_CONTRACT
 ) -> Tuple[Dict[str, Any], bytes, Dict[str, Dict[str, Any]], List[Dict[str, Any]]]:
     expected_relative = "host-kernel/contracts/fp0006-ihk-os-status-alias-v1.json"
-    expected_contract_sha256 = "cdd43e7fa60c616e2e717a2771f66ebffa09687d6ddd60b4ceb3ee2c43d46288"
+    expected_contract_sha256 = "369084c6af4184c20b40cce189dcca92f01711da82398a976d128f794d32c679"
     expected_contract_size = 10968
     if Path(contract_path).as_posix() != expected_relative:
         raise WitnessError("status-alias contract path differs from fixed authority")

@@ -55,8 +55,8 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
         self.assertEqual("1.7.0rc4", summary["version"])
         self.assertEqual(0, summary["parameters"])
         self.assertEqual(0, summary["dependencies"])
-        self.assertEqual(3, summary["transitive_module_count"])
-        self.assertEqual(5, summary["support_sources"])
+        self.assertEqual(4, summary["transitive_module_count"])
+        self.assertEqual(6, summary["support_sources"])
 
     def test_ihk_queue_module_edge_is_required(self) -> None:
         self.mutate_text(
@@ -72,6 +72,15 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
             self.contract["production_source"],
             "mod ikc_master;",
             "mod missing_master;",
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "module edge"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_device_registry_module_edge_is_required(self) -> None:
+        self.mutate_text(
+            self.contract["production_source"],
+            "mod device_registry;",
+            "mod missing_device_registry;",
         )
         with self.assertRaisesRegex(lifecycle.ValidationError, "module edge"):
             lifecycle.validate_repository(self.repo)
@@ -120,6 +129,13 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
         with self.assertRaisesRegex(lifecycle.ValidationError, "module digest"):
             lifecycle.validate_repository(self.repo)
 
+    def test_device_registry_module_digest_drift_is_rejected(self) -> None:
+        registry = self.repo / "host-kernel/native-rust/device_registry.rs"
+        with registry.open("a", encoding="utf-8") as stream:
+            stream.write("// unbound device-registry drift\n")
+        with self.assertRaisesRegex(lifecycle.ValidationError, "module digest"):
+            lifecycle.validate_repository(self.repo)
+
     def test_stage_manifest_cannot_omit_queue_module(self) -> None:
         manifest_path = self.repo / self.contract["stage_manifest"]
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -149,6 +165,20 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
             item
             for item in manifest["inputs"]
             if item.get("destination") != "ikc_master.rs"
+        ]
+        manifest_path.write_text(
+            json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "omits IHK module"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_stage_manifest_cannot_omit_device_registry(self) -> None:
+        manifest_path = self.repo / self.contract["stage_manifest"]
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        manifest["inputs"] = [
+            item
+            for item in manifest["inputs"]
+            if item.get("destination") != "device_registry.rs"
         ]
         manifest_path.write_text(
             json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
@@ -247,7 +277,7 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
             lifecycle.validate_repository(self.repo)
 
     def test_page_support_source_drift_is_rejected(self) -> None:
-        for index in (3, 4):
+        for index in (4, 5):
             with self.subTest(index=index):
                 support = self.contract["support_sources"][index]
                 source = self.repo / support["path"]
@@ -261,7 +291,7 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
                 source.write_text(original, encoding="utf-8")
 
     def test_page_support_contract_cannot_claim_credit(self) -> None:
-        for index in (3, 4):
+        for index in (4, 5):
             with self.subTest(index=index):
                 support = self.contract["support_sources"][index]
                 contract_path = self.repo / support["contract_path"]
@@ -304,8 +334,51 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
         with self.assertRaisesRegex(lifecycle.ValidationError, "TODO and credit-ineligible"):
             lifecycle.validate_repository(self.repo)
 
-    def test_ioctl_dispatch_registration_overclaim_is_rejected(self) -> None:
+    def test_device_registry_support_contract_binds_source_and_no_credit(self) -> None:
         support = self.contract["support_sources"][2]
+        contract_path = self.repo / support["contract_path"]
+        original = contract_path.read_text(encoding="utf-8")
+        for mutation, error in (
+            (("production_source", "sha256", "0" * 64), "does not bind the staged source"),
+            (("evidence_policy", "linux_adapter_validated", True), "claims evidence or credit"),
+            (("readiness", "status", "PASS"), "must remain TODO and blocked"),
+        ):
+            with self.subTest(field=mutation[1]):
+                value = json.loads(original)
+                value[mutation[0]][mutation[1]] = mutation[2]
+                contract_path.write_text(
+                    json.dumps(value, indent=2, sort_keys=True) + "\n",
+                    encoding="utf-8",
+                )
+                support["contract_sha256"] = lifecycle._sha256(contract_path)
+                lifecycle_contract = self.repo / lifecycle.DEFAULT_CONTRACT
+                lifecycle_contract.write_text(
+                    json.dumps(self.contract, indent=2, sort_keys=True) + "\n",
+                    encoding="utf-8",
+                )
+                with self.assertRaisesRegex(lifecycle.ValidationError, error):
+                    lifecycle.validate_repository(self.repo)
+                contract_path.write_text(original, encoding="utf-8")
+
+    def test_device_registry_support_contract_cannot_hide_an_instance(self) -> None:
+        support = self.contract["support_sources"][2]
+        contract_path = self.repo / support["contract_path"]
+        value = json.loads(contract_path.read_text(encoding="utf-8"))
+        value["attachment_boundary"]["crate_root_constructs_registry_instance"] = True
+        contract_path.write_text(
+            json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        support["contract_sha256"] = lifecycle._sha256(contract_path)
+        lifecycle_contract = self.repo / lifecycle.DEFAULT_CONTRACT
+        lifecycle_contract.write_text(
+            json.dumps(self.contract, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "crate-root attachment"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_ioctl_dispatch_registration_overclaim_is_rejected(self) -> None:
+        support = self.contract["support_sources"][3]
         contract_path = self.repo / support["contract_path"]
         value = json.loads(contract_path.read_text(encoding="utf-8"))
         value["implementation"]["registration_supported"] = True
@@ -317,7 +390,9 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
         lifecycle_contract.write_text(
             json.dumps(self.contract, indent=2, sort_keys=True) + "\n", encoding="utf-8"
         )
-        with self.assertRaisesRegex(lifecycle.ValidationError, "overclaims device registration"):
+        with self.assertRaisesRegex(
+                lifecycle.ValidationError,
+                "different negative ioctl boundary|overclaims device registration"):
             lifecycle.validate_repository(self.repo)
 
     def test_reference_parameter_oracle_drift_is_rejected(self) -> None:

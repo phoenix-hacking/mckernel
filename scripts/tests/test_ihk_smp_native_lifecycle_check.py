@@ -35,6 +35,15 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
         relative_paths.update(
             parameter["legacy_source"] for parameter in self.contract["parameters"]
         )
+        relative_paths.update(
+            module["path"] for module in self.contract["crate_modules"]
+        )
+        relative_paths.update(
+            (
+                self.contract["resource_foundation"]["fixture"]["positive_path"],
+                self.contract["resource_foundation"]["fixture"]["negative_path"],
+            )
+        )
         for relative in relative_paths:
             target = self.repo / relative
             target.parent.mkdir(parents=True, exist_ok=True)
@@ -66,6 +75,50 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
         self.assertFalse(summary["rocky_build_load_validated"])
         self.assertTrue(summary["source_symbol_reference_present"])
         self.assertFalse(summary["runtime_symbol_reference_proven"])
+        self.assertFalse(summary["resource_foundation_credit_eligible"])
+        self.assertFalse(summary["resource_foundation_linux_reachable"])
+        self.assertEqual(29, summary["resource_foundation_tests"])
+
+    def test_resource_policy_source_digest_and_module_edge_are_fail_closed(self) -> None:
+        resource = self.contract["crate_modules"][0]
+        self.mutate_text(resource["path"], "SMP_MAX_CPUS: usize = 512", "SMP_MAX_CPUS: usize = 511")
+        with self.assertRaisesRegex(lifecycle.ValidationError, "resource policy digest"):
+            lifecycle.validate_repository(self.repo)
+
+        shutil.copyfile(REPO_ROOT / resource["path"], self.repo / resource["path"])
+        self.mutate_text(
+            self.contract["production_source"],
+            "#[allow(dead_code)]\nmod smp_resource;",
+            "#[allow(dead_code)]\nmod wrong_resource;",
+        )
+        with self.assertRaisesRegex(lifecycle.ValidationError, "resource-policy edge"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_resource_fixture_drift_and_readiness_overclaim_are_rejected(self) -> None:
+        fixture = self.contract["resource_foundation"]["fixture"]
+        self.mutate_text(fixture["positive_path"], "no_std", "no_stx")
+        with self.assertRaisesRegex(lifecycle.ValidationError, "positive fixture digest"):
+            lifecycle.validate_repository(self.repo)
+
+        shutil.copyfile(
+            REPO_ROOT / fixture["positive_path"], self.repo / fixture["positive_path"]
+        )
+        self.contract["resource_foundation"]["credit_eligible"] = True
+        self.write_json(lifecycle.DEFAULT_CONTRACT.as_posix(), self.contract)
+        with self.assertRaisesRegex(lifecycle.ValidationError, "overclaims readiness"):
+            lifecycle.validate_repository(self.repo)
+
+    def test_stage_manifest_cannot_omit_smp_resource_policy(self) -> None:
+        manifest = json.loads(
+            (self.repo / self.contract["stage_manifest"]).read_text(encoding="utf-8")
+        )
+        manifest["inputs"] = [
+            item for item in manifest["inputs"]
+            if item.get("destination") != "smp_resource.rs"
+        ]
+        self.write_json(self.contract["stage_manifest"], manifest)
+        with self.assertRaisesRegex(lifecycle.ValidationError, "SMP resource policy"):
+            lifecycle.validate_repository(self.repo)
 
     def test_cli_deliberately_does_not_report_gate_pass(self) -> None:
         output = io.StringIO()
@@ -249,11 +302,92 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
             lifecycle.validate_repository(self.repo)
 
     def test_unreviewed_ffi_escape_hatch_is_rejected(self) -> None:
-        source = self.repo / self.contract["production_source"]
-        with source.open("a", encoding="utf-8") as stream:
-            stream.write('extern "C" { fn legacy_smp_init(); }\n')
-        with self.assertRaisesRegex(lifecycle.ValidationError, "extern boundary"):
-            lifecycle.validate_repository(self.repo)
+        source = (self.repo / self.contract["production_source"]).read_text(
+            encoding="utf-8"
+        )
+        cases = (
+            'extern   "C" { fn legacy_smp_init(); }',
+            'extern /* gap */ "system" { fn legacy_smp_init(); }',
+            "unsafe extern\n{ fn legacy_smp_init(); }",
+            'pub extern "C" fn legacy_smp_init() {}',
+            "extern crate hidden_dependency;",
+        )
+        for extra in cases:
+            with self.subTest(extra=extra), self.assertRaisesRegex(
+                lifecycle.ValidationError, "extern boundary"
+            ):
+                lifecycle._validate_rust_source(source + "\n" + extra, self.contract)
+
+    def test_unreviewed_macro_escape_hatch_rejects_spelling_variants(self) -> None:
+        source = (self.repo / self.contract["production_source"]).read_text(
+            encoding="utf-8"
+        )
+        cases = (
+            ("include", 'include \n ! \n ("hidden.rs");'),
+            ("include_bytes", 'include_bytes /* gap */ ! ["payload.bin"];'),
+            ("asm", 'core::arch::asm\t!\n("nop");'),
+            ("global_asm", 'global_asm /* gap */ ! {".byte 0"}'),
+            (
+                "global_asm",
+                'use core::arch::global_asm as emit; emit!(".byte 0");',
+            ),
+            (
+                "include",
+                "macro_rules! forward { ($macro:ident) => { $macro!(\"hidden.rs\") } }\n"
+                "forward!(include);",
+            ),
+        )
+        for name, extra in cases:
+            with self.subTest(macro=name), self.assertRaisesRegex(
+                lifecycle.ValidationError, "macro boundary: {0}!".format(name)
+            ):
+                lifecycle._validate_rust_source(source + "\n" + extra, self.contract)
+
+    def test_escape_hatch_text_in_comments_and_strings_is_inert(self) -> None:
+        source = (self.repo / self.contract["production_source"]).read_text(
+            encoding="utf-8"
+        )
+        inert = r'''
+// include ! ("comment.rs"); extern "C" { fn comment(); }
+/* outer global_asm ! {"comment"}
+   /* nested include_bytes ! ("comment.bin") */
+   extern "system" { fn comment(); }
+*/
+const INERT_ORDINARY: &str = "asm ! (\"nop\"); extern \"C\" { fn text(); }";
+const INERT_RAW: &str = r###"include ! ("raw.rs"); global_asm ! {"raw"}"###;
+const INERT_RAW_BYTES: &[u8] = br##"include_bytes ! ("raw.bin")"##;
+fn inert_lifetimes<'a>(value: &'a str) -> &'a str { value }
+fn inert_raw_identifier() { let r#extern = b'x'; let _ = r#extern; }
+fn áextern() {}
+macro_rules! áinclude { () => {} }
+'''
+        lifecycle._validate_rust_source(source + inert, self.contract)
+
+    def test_exact_provider_extern_rejects_outer_attributes_and_modifiers(self) -> None:
+        source = (self.repo / self.contract["production_source"]).read_text(
+            encoding="utf-8"
+        )
+        symbol = self.contract["dependency_contract"]["provider_symbol"]
+        provider_import = (
+            'extern "Rust" {\n'
+            f'    #[link_name = "{symbol}"]\n'
+            "    static IHK_PROVIDER_LIFECYCLE_V1: u8;\n"
+            "}"
+        )
+        self.assertEqual(1, source.count(provider_import))
+        for prefix in (
+            '#[link(name = "unreviewed")]\n',
+            "#[cfg(any())]\n",
+            "pub ",
+            "unsafe ",
+        ):
+            with self.subTest(prefix=prefix), self.assertRaisesRegex(
+                lifecycle.ValidationError, "exact audited extern boundary"
+            ):
+                lifecycle._validate_rust_source(
+                    source.replace(provider_import, prefix + provider_import, 1),
+                    self.contract,
+                )
 
     def test_kconfig_provider_edge_removal_is_rejected(self) -> None:
         self.mutate_text(

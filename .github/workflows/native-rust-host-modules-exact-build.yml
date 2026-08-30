@@ -17,11 +17,14 @@ on:
       - host-kernel/contracts/x86_64-shared-abi-v1.json
       - host-kernel/kbuild/**
       - host-kernel/contracts/ihk-os-registry-foundation-v1.json
+      - host-kernel/contracts/ihk-device-registry-foundation-v1.json
       - host-kernel/contracts/ihk-ioctl-dispatch-foundation-v1.json
       - host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json
       - host-kernel/contracts/native-rust-runtime-evidence-v1.json
       - host-kernel/contracts/rs006-miscdevice-substrate-v1.json
       - host-kernel/native-rust/**
+      - host-kernel/native-rust/device_registry.rs
+      - host-kernel/native-rust/smp_resource.rs
       - host-kernel/rocky/config-policy.json
       - host-kernel/rocky/configs/native-rust-evidence.config
       - host-kernel/rocky/configs/rust-minimal.config
@@ -57,6 +60,8 @@ on:
       - scripts/ihk_native_lifecycle_check.py
       - scripts/fp0006_runtime_capture_integration.py
       - scripts/fp0006_ihk_device_negative_dispatch.py
+      - scripts/host_module_failure_semantics_v3.py
+      - scripts/host_module_failure_semantics_retention_v3.py
       - scripts/rocky-rust-validation.sh
       - scripts/qemu-rocky-rust-validation.sh
       - scripts/qemu-mckernel-guest.sh
@@ -64,10 +69,12 @@ on:
       - scripts/tests/fixtures/ihk_ioctl_fp0006_negative_dispatch.rs
       - scripts/tests/test_fp0006_ihk_device_negative_dispatch.py
       - scripts/tests/test_fp0006_runtime_capture_integration.py
+      - scripts/tests/test_host_module_failure_semantics_retention_v3.py
       - scripts/ihk_native_queue_check.py
       - scripts/tests/fixtures/ihk_native_queue_compile.rs
       - scripts/tests/test_ihk_native_queue_check.py
       - scripts/ihk_os_registry_check.py
+      - scripts/ihk_device_registry_check.py
       - scripts/ihk_ioctl_dispatch_check.py
       - scripts/ihk_page_allocator_check.py
       - scripts/ihk_page_owner_registry_check.py
@@ -87,6 +94,9 @@ on:
       - scripts/rs006_miscdevice_substrate.py
       - scripts/rocky_rust_staging.py
       - scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs
+      - scripts/tests/fixtures/ihk_device_registry_compile.rs
+      - scripts/tests/fixtures/ihk_smp_resource_compile.rs
+      - scripts/tests/fixtures/ihk_smp_resource_workspace_alias_compile_fail.rs
       - scripts/tests/fixtures/ihk_os_registry_compile.rs
       - scripts/tests/fixtures/rust-core-rocky-6.12/**
       - scripts/tests/fixtures/ihk_ioctl_dispatch_compile.rs
@@ -98,6 +108,9 @@ on:
       - scripts/tests/fixtures/ihk_page_owner_registry_sync_compile_fail.rs
       - scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/ioctl.rs
       - scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/uaccess.rs
+      - scripts/tests/test_ihk_device_registry.py
+      - scripts/tests/test_ihk_device_registry_check.py
+      - scripts/tests/test_ihk_smp_resource.py
       - scripts/tests/test_ihk_os_registry_check.py
       - scripts/tests/test_ihk_ioctl_dispatch_check.py
       - scripts/tests/test_ihk_page_allocator_check.py
@@ -135,11 +148,14 @@ on:
       - host-kernel/contracts/x86_64-shared-abi-v1.json
       - host-kernel/kbuild/**
       - host-kernel/contracts/ihk-os-registry-foundation-v1.json
+      - host-kernel/contracts/ihk-device-registry-foundation-v1.json
       - host-kernel/contracts/ihk-ioctl-dispatch-foundation-v1.json
       - host-kernel/contracts/native-rust-unsafe-ffi-ledger-v1.json
       - host-kernel/contracts/native-rust-runtime-evidence-v1.json
       - host-kernel/contracts/rs006-miscdevice-substrate-v1.json
       - host-kernel/native-rust/**
+      - host-kernel/native-rust/device_registry.rs
+      - host-kernel/native-rust/smp_resource.rs
       - host-kernel/rocky/config-policy.json
       - host-kernel/rocky/configs/native-rust-evidence.config
       - host-kernel/rocky/configs/rust-minimal.config
@@ -175,6 +191,8 @@ on:
       - scripts/ihk_native_lifecycle_check.py
       - scripts/fp0006_runtime_capture_integration.py
       - scripts/fp0006_ihk_device_negative_dispatch.py
+      - scripts/host_module_failure_semantics_v3.py
+      - scripts/host_module_failure_semantics_retention_v3.py
       - scripts/rocky-rust-validation.sh
       - scripts/qemu-rocky-rust-validation.sh
       - scripts/qemu-mckernel-guest.sh
@@ -182,10 +200,12 @@ on:
       - scripts/tests/fixtures/ihk_ioctl_fp0006_negative_dispatch.rs
       - scripts/tests/test_fp0006_ihk_device_negative_dispatch.py
       - scripts/tests/test_fp0006_runtime_capture_integration.py
+      - scripts/tests/test_host_module_failure_semantics_retention_v3.py
       - scripts/ihk_native_queue_check.py
       - scripts/tests/fixtures/ihk_native_queue_compile.rs
       - scripts/tests/test_ihk_native_queue_check.py
       - scripts/ihk_os_registry_check.py
+      - scripts/ihk_device_registry_check.py
       - scripts/ihk_ioctl_dispatch_check.py
       - scripts/ihk_page_allocator_check.py
       - scripts/ihk_page_owner_registry_check.py
@@ -205,6 +225,9 @@ on:
       - scripts/rs006_miscdevice_substrate.py
       - scripts/rocky_rust_staging.py
       - scripts/tests/fixtures/generate-rust-target-rocky-6.12.rs
+      - scripts/tests/fixtures/ihk_device_registry_compile.rs
+      - scripts/tests/fixtures/ihk_smp_resource_compile.rs
+      - scripts/tests/fixtures/ihk_smp_resource_workspace_alias_compile_fail.rs
       - scripts/tests/fixtures/ihk_os_registry_compile.rs
       - scripts/tests/fixtures/rust-core-rocky-6.12/**
       - scripts/tests/fixtures/ihk_ioctl_dispatch_compile.rs
@@ -216,6 +239,9 @@ on:
       - scripts/tests/fixtures/ihk_page_owner_registry_sync_compile_fail.rs
       - scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/ioctl.rs
       - scripts/tests/fixtures/rust-core-rocky-6.12/rust/kernel/uaccess.rs
+      - scripts/tests/test_ihk_device_registry.py
+      - scripts/tests/test_ihk_device_registry_check.py
+      - scripts/tests/test_ihk_smp_resource.py
       - scripts/tests/test_ihk_os_registry_check.py
       - scripts/tests/test_ihk_ioctl_dispatch_check.py
       - scripts/tests/test_ihk_page_allocator_check.py
@@ -368,9 +394,14 @@ jobs:
           /usr/bin/python3 -E -s scripts/ihk_native_queue_check.py --repo "$GITHUB_WORKSPACE" \
             --rustc /usr/bin/rustc --require-rustc
           /usr/bin/python3 -E -s scripts/ihk_os_registry_check.py --repo "$GITHUB_WORKSPACE"
+          /usr/bin/python3 -E -s scripts/ihk_device_registry_check.py --repo "$GITHUB_WORKSPACE"
           test "$(/usr/bin/rustc --version | /usr/bin/awk '{print $2}')" = "1.92.0"
           MCKERNEL_RUSTC_1_92=/usr/bin/rustc \
             /usr/bin/python3 -E -s -m unittest -v scripts.tests.test_ihk_os_registry_check
+          MCKERNEL_RUSTC_1_92=/usr/bin/rustc \
+            /usr/bin/python3 -E -s -m unittest -v scripts.tests.test_ihk_device_registry
+          MCKERNEL_RUSTC_1_92=/usr/bin/rustc \
+            /usr/bin/python3 -E -s -m unittest -v scripts.tests.test_ihk_device_registry_check
           /usr/bin/python3 -E -s scripts/ihk_ioctl_dispatch_check.py --repo "$GITHUB_WORKSPACE"
           MCKERNEL_RUSTC_1_92=/usr/bin/rustc \
             /usr/bin/python3 -E -s -m unittest -v scripts.tests.test_ihk_ioctl_dispatch_check
@@ -381,8 +412,12 @@ jobs:
             /usr/bin/python3 -E -s scripts/ihk_page_owner_registry_check.py \
               --repo "$GITHUB_WORKSPACE" --require-rustc
           /usr/bin/python3 -E -s scripts/ihk_smp_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE"
+          MCKERNEL_RUSTC_1_92=/usr/bin/rustc \
+            /usr/bin/python3 -E -s -m unittest -v scripts.tests.test_ihk_smp_resource
           /usr/bin/python3 -E -s scripts/mcctrl_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE"
           /usr/bin/python3 -E -s scripts/native_rust_unsafe_ffi_ledger.py --repo "$GITHUB_WORKSPACE" check
+          /usr/bin/python3 -E -s -m unittest -v \
+            scripts.tests.test_host_module_failure_semantics_retention_v3
           /usr/bin/python3 -E -s scripts/native_rust_runtime_evidence.py \
             --repo "$GITHUB_WORKSPACE" --check-contract
           /usr/bin/python3 -E -s scripts/rocky_kernel_rk006_full_source_build_capture.py \
@@ -817,7 +852,7 @@ jobs:
           test "$KBUILD_BUILD_USER" = mckernel
           test "$KBUILD_BUILD_VERSION" = 1
           test "$SOURCE_DATE_EPOCH" = 1786434034
-          kbuild_environment=(
+          isolated_environment=(
             /usr/bin/env -i
             BASH_ENV= ENV= GNUMAKEFLAGS=
             KBUILD_BUILD_HOST="$KBUILD_BUILD_HOST"
@@ -826,8 +861,9 @@ jobs:
             KBUILD_BUILD_VERSION="$KBUILD_BUILD_VERSION"
             LANG=C LC_ALL=C LD_LIBRARY_PATH= LD_PRELOAD=
             MAKEFILES= MAKEFLAGS= MAKEOVERRIDES= MFLAGS=
-            PATH=/usr/bin:/bin SOURCE_DATE_EPOCH="$SOURCE_DATE_EPOCH" TZ=UTC
+            SOURCE_DATE_EPOCH="$SOURCE_DATE_EPOCH" TZ=UTC
           )
+          kbuild_environment=("${isolated_environment[@]}" PATH=/usr/bin:/bin)
           printf '%s\n' \
             "KBUILD_BUILD_HOST=$KBUILD_BUILD_HOST" \
             "KBUILD_BUILD_TIMESTAMP=$KBUILD_BUILD_TIMESTAMP" \
@@ -918,9 +954,15 @@ jobs:
           assert_modinfo_binding
           "${kbuild_environment[@]}" /usr/bin/python3 -E -s \
             scripts/ihk_os_registry_check.py --repo "$GITHUB_WORKSPACE"
+          "${kbuild_environment[@]}" /usr/bin/python3 -E -s \
+            scripts/ihk_device_registry_check.py --repo "$GITHUB_WORKSPACE"
           test "$(/usr/bin/rustc --version | /usr/bin/awk '{print $2}')" = "1.92.0"
           "${kbuild_environment[@]}" MCKERNEL_RUSTC_1_92=/usr/bin/rustc \
             /usr/bin/python3 -E -s -m unittest -v scripts.tests.test_ihk_os_registry_check
+          "${kbuild_environment[@]}" MCKERNEL_RUSTC_1_92=/usr/bin/rustc \
+            /usr/bin/python3 -E -s -m unittest -v scripts.tests.test_ihk_device_registry
+          "${kbuild_environment[@]}" MCKERNEL_RUSTC_1_92=/usr/bin/rustc \
+            /usr/bin/python3 -E -s -m unittest -v scripts.tests.test_ihk_device_registry_check
           "${kbuild_environment[@]}" /usr/bin/python3 -E -s \
             scripts/ihk_ioctl_dispatch_check.py --repo "$GITHUB_WORKSPACE"
           "${kbuild_environment[@]}" MCKERNEL_RUSTC_1_92=/usr/bin/rustc \
@@ -930,6 +972,8 @@ jobs:
             scripts/ihk_smp_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" \
             --module "$smp" --modinfo-fd "$modinfo_fd"
           assert_modinfo_binding
+          "${kbuild_environment[@]}" MCKERNEL_RUSTC_1_92=/usr/bin/rustc \
+            /usr/bin/python3 -E -s -m unittest -v scripts.tests.test_ihk_smp_resource
           "${kbuild_environment[@]}" /usr/bin/python3 -E -s \
             scripts/mcctrl_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" \
             --module "$mcctrl" --modinfo-fd "$modinfo_fd"

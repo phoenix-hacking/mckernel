@@ -101,6 +101,46 @@ class NativeRustHostAuditTests(unittest.TestCase):
                 with self.assertRaisesRegex(SystemExit, "digest drift"):
                     host_audit.main()
 
+    def test_device_registry_omission_and_digest_drift_fail_closed(self):
+        value = copy.deepcopy(self.original_manifest)
+        value["inputs"] = [
+            item for item in value["inputs"]
+            if item.get("destination") != "device_registry.rs"
+        ]
+        self.write_manifest(value)
+        with self.assertRaisesRegex(SystemExit, "support input closure"):
+            host_audit.main()
+
+        value = copy.deepcopy(self.original_manifest)
+        item = next(
+            entry for entry in value["inputs"]
+            if entry.get("destination") == "device_registry.rs"
+        )
+        item["sha256"] = "0" * 64
+        self.write_manifest(value)
+        with self.assertRaisesRegex(SystemExit, "digest drift"):
+            host_audit.main()
+
+    def test_smp_resource_omission_and_digest_drift_fail_closed(self):
+        value = copy.deepcopy(self.original_manifest)
+        value["inputs"] = [
+            item for item in value["inputs"]
+            if item.get("destination") != "smp_resource.rs"
+        ]
+        self.write_manifest(value)
+        with self.assertRaisesRegex(SystemExit, "support input closure"):
+            host_audit.main()
+
+        value = copy.deepcopy(self.original_manifest)
+        item = next(
+            entry for entry in value["inputs"]
+            if entry.get("destination") == "smp_resource.rs"
+        )
+        item["sha256"] = "0" * 64
+        self.write_manifest(value)
+        with self.assertRaisesRegex(SystemExit, "digest drift"):
+            host_audit.main()
+
     def test_checker_and_tests_parse_with_python_3_6_grammar(self):
         paths = (host_audit.__file__, os.path.abspath(__file__))
         for path in paths:

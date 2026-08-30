@@ -7,6 +7,13 @@
     ],
     "rocky_10_2_build_and_load_required_for_gate": true
   },
+  "crate_modules": [
+    {
+      "destination": "smp_resource.rs",
+      "path": "host-kernel/native-rust/smp_resource.rs",
+      "sha256": "b918ea3186d8f55518c9ceb46d84f6c98633b4ab7b8a81e5d2e0024c0914919b"
+    }
+  ],
   "dependency_contract": {
     "built_symbol_reference_validated": false,
     "dependencies": [
@@ -112,6 +119,34 @@
   "production_source": "host-kernel/native-rust/ihk_smp_x86_64.rs",
   "provider_source": "host-kernel/native-rust/ihk.rs",
   "reference_inventory": "host-kernel/reference/legacy-host-modules-f2eb7352.json",
+  "resource_foundation": {
+    "credit_eligible": false,
+    "external_effect_failure_policy": {
+      "cpu": "quarantine-affected-slots-unless-compensated-rollback",
+      "memory": "poison-live-map-unless-compensated-rollback"
+    },
+    "fixture": {
+      "expected_fixture_tests": 5,
+      "expected_in_file_tests": 24,
+      "expected_total_tests": 29,
+      "minimum_rustc": "1.92.0",
+      "negative_path": "scripts/tests/fixtures/ihk_smp_resource_workspace_alias_compile_fail.rs",
+      "negative_sha256": "9e2f1296eec2008edc87d88fef56d3f9924248815c73c7da3d3d0690d345c6f0",
+      "positive_path": "scripts/tests/fixtures/ihk_smp_resource_compile.rs",
+      "positive_sha256": "f2861831b6456600225a3d84a26fdaec618683a33263bb811d74d3c88ce39a91"
+    },
+    "integration_blockers": [
+      "no versioned IHK OS lease can mint an OsToken in production",
+      "no pinned off-stack CpuTable, MemoryMap, or transaction workspace is owned by the module",
+      "no audited sleepable outer lock or Linux CPU/page external-effect compensation adapter exists",
+      "the legacy 4 MiB user memory request granule is not enforced by an ioctl adapter",
+      "IKC optional-versus-complete mapping compatibility is not selected at the ABI boundary",
+      "no physical hotplug, page ownership, APIC, IRQ, McKernel boot, or runtime behavior is reachable"
+    ],
+    "linux_reachable": false,
+    "os_token_minting": "cfg-test-only-until-versioned-ihk-os-lease-abi",
+    "status": "private-source-bound-policy-foundation"
+  },
   "schema_version": 1,
   "stage_manifest": "host-kernel/kbuild/stage-manifest.json"
 }

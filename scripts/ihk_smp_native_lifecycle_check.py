@@ -40,10 +40,269 @@ BOUND_MODINFO_ENVIRONMENT = {
     "PATH": "/usr/bin:/bin",
     "TZ": "UTC",
 }
+EXPECTED_CRATE_MODULES = [
+    {
+        "destination": "smp_resource.rs",
+        "path": "host-kernel/native-rust/smp_resource.rs",
+        "sha256": "b918ea3186d8f55518c9ceb46d84f6c98633b4ab7b8a81e5d2e0024c0914919b",
+    }
+]
+EXPECTED_RESOURCE_FOUNDATION = {
+    "credit_eligible": False,
+    "external_effect_failure_policy": {
+        "cpu": "quarantine-affected-slots-unless-compensated-rollback",
+        "memory": "poison-live-map-unless-compensated-rollback",
+    },
+    "fixture": {
+        "expected_fixture_tests": 5,
+        "expected_in_file_tests": 24,
+        "expected_total_tests": 29,
+        "minimum_rustc": "1.92.0",
+        "negative_path": "scripts/tests/fixtures/ihk_smp_resource_workspace_alias_compile_fail.rs",
+        "negative_sha256": "9e2f1296eec2008edc87d88fef56d3f9924248815c73c7da3d3d0690d345c6f0",
+        "positive_path": "scripts/tests/fixtures/ihk_smp_resource_compile.rs",
+        "positive_sha256": "f2861831b6456600225a3d84a26fdaec618683a33263bb811d74d3c88ce39a91",
+    },
+    "integration_blockers": [
+        "no versioned IHK OS lease can mint an OsToken in production",
+        "no pinned off-stack CpuTable, MemoryMap, or transaction workspace is owned by the module",
+        "no audited sleepable outer lock or Linux CPU/page external-effect compensation adapter exists",
+        "the legacy 4 MiB user memory request granule is not enforced by an ioctl adapter",
+        "IKC optional-versus-complete mapping compatibility is not selected at the ABI boundary",
+        "no physical hotplug, page ownership, APIC, IRQ, McKernel boot, or runtime behavior is reachable",
+    ],
+    "linux_reachable": False,
+    "os_token_minting": "cfg-test-only-until-versioned-ihk-os-lease-abi",
+    "status": "private-source-bound-policy-foundation",
+}
 
 
 class ValidationError(Exception):
     """Raised when the SMP lifecycle contract is incomplete or inconsistent."""
+
+
+_RUST_FORBIDDEN_CAPABILITIES = frozenset(
+    ("include", "include_bytes", "asm", "global_asm")
+)
+
+
+def _blank_rust_span(masked, text, start, end, preserved=()):
+    """Blank a lexical non-code span while retaining offsets and newlines."""
+
+    preserved = set(preserved)
+    for offset in range(start, end):
+        if offset not in preserved and text[offset] not in "\r\n":
+            masked[offset] = " "
+
+
+def _rust_char_literal_end(text, start):
+    """Return the end of a Rust character literal, or None for a lifetime."""
+
+    cursor = start + 1
+    if cursor >= len(text) or text[cursor] in "\r\n'":
+        return None
+    if text[cursor] == "\\":
+        cursor += 1
+        if cursor >= len(text) or text[cursor] in "\r\n":
+            return None
+        if text[cursor] == "u" and cursor + 1 < len(text) and text[cursor + 1] == "{":
+            closing = text.find("}", cursor + 2)
+            if closing < 0:
+                return None
+            cursor = closing + 1
+        elif text[cursor] == "x":
+            cursor += 3
+        else:
+            cursor += 1
+    else:
+        cursor += 1
+    if cursor < len(text) and text[cursor] == "'":
+        return cursor + 1
+    return None
+
+
+def _mask_rust_comments_and_literals(text):
+    """Return Rust code with comments and literal contents lexically masked."""
+
+    masked = list(text)
+    cursor = 0
+    length = len(text)
+    while cursor < length:
+        if text.startswith("//", cursor):
+            end = text.find("\n", cursor + 2)
+            if end < 0:
+                end = length
+            _blank_rust_span(masked, text, cursor, end)
+            cursor = end
+            continue
+        if text.startswith("/*", cursor):
+            depth = 1
+            end = cursor + 2
+            while end < length and depth:
+                if text.startswith("/*", end):
+                    depth += 1
+                    end += 2
+                elif text.startswith("*/", end):
+                    depth -= 1
+                    end += 2
+                else:
+                    end += 1
+            if depth:
+                raise ValidationError("unterminated Rust block comment")
+            _blank_rust_span(masked, text, cursor, end)
+            cursor = end
+            continue
+
+        raw_prefix_length = None
+        if cursor == 0 or not (text[cursor - 1].isalnum() or text[cursor - 1] == "_"):
+            for prefix in ("br", "cr", "r"):
+                if text.startswith(prefix, cursor):
+                    probe = cursor + len(prefix)
+                    while probe < length and text[probe] == "#":
+                        probe += 1
+                    if probe < length and text[probe] == '"':
+                        raw_prefix_length = len(prefix)
+                        break
+        if raw_prefix_length is not None:
+            quote = cursor + raw_prefix_length
+            while quote < length and text[quote] == "#":
+                quote += 1
+            hashes = text[cursor + raw_prefix_length : quote]
+            closing = text.find('"' + hashes, quote + 1)
+            if closing < 0:
+                raise ValidationError("unterminated Rust raw string literal")
+            end = closing + 1 + len(hashes)
+            _blank_rust_span(masked, text, quote + 1, closing)
+            cursor = end
+            continue
+
+        if text[cursor] == '"':
+            end = cursor + 1
+            closed = False
+            while end < length:
+                if text[end] == "\\":
+                    end += 2
+                elif text[end] == '"':
+                    end += 1
+                    closed = True
+                    break
+                else:
+                    end += 1
+            if not closed:
+                raise ValidationError("unterminated Rust string literal")
+            _blank_rust_span(masked, text, cursor, end, (cursor, end - 1))
+            cursor = end
+            continue
+
+        char_start = cursor
+        if (
+            text[cursor] == "b"
+            and cursor + 1 < length
+            and text[cursor + 1] == "'"
+            and (cursor == 0 or not (text[cursor - 1].isalnum() or text[cursor - 1] == "_"))
+        ):
+            char_start = cursor + 1
+        if text[char_start] == "'":
+            end = _rust_char_literal_end(text, char_start)
+            if end is not None:
+                _blank_rust_span(masked, text, char_start, end)
+                cursor = end
+                continue
+        cursor += 1
+    return "".join(masked)
+
+
+def _rust_identifier_start(character):
+    return character == "_" or character.isidentifier()
+
+
+def _rust_identifier_continue(character):
+    return character == "_" or ("a" + character).isidentifier()
+
+
+def _rust_identifiers(text):
+    """Yield Rust-like Unicode identifiers without Python ``\b`` ambiguity."""
+
+    cursor = 0
+    length = len(text)
+    while cursor < length:
+        raw = False
+        name_start = cursor
+        if (
+            text.startswith("r#", cursor)
+            and cursor + 2 < length
+            and _rust_identifier_start(text[cursor + 2])
+        ):
+            raw = True
+            name_start = cursor + 2
+        elif not _rust_identifier_start(text[cursor]):
+            cursor += 1
+            continue
+        end = name_start + 1
+        while end < length and _rust_identifier_continue(text[end]):
+            end += 1
+        yield text[name_start:end], cursor, end, raw
+        cursor = end
+
+
+def _validate_bare_audited_extern(masked, start, label):
+    line_start = masked.rfind("\n", 0, start) + 1
+    if masked[line_start:start].strip():
+        raise ValidationError(
+            "{0} exact audited extern boundary has an unreviewed modifier".format(label)
+        )
+    prefix = masked[:start].rstrip()
+    if prefix and prefix[-1] not in ";}":
+        raise ValidationError(
+            "{0} exact audited extern boundary has an unreviewed outer attribute".format(
+                label
+            )
+        )
+
+
+def _validate_rust_escape_hatches(text, label, allowed_extern_blocks=()):
+    """Reject unreviewed Rust source inclusion, assembly, and extern edges."""
+
+    masked = _mask_rust_comments_and_literals(text)
+    identifiers = list(_rust_identifiers(masked))
+    forbidden = next(
+        (name for name, _start, _end, _raw in identifiers
+         if name in _RUST_FORBIDDEN_CAPABILITIES),
+        None,
+    )
+    if forbidden is not None:
+        raise ValidationError(
+            "{0} contains forbidden Rust macro boundary: {1}!".format(
+                label, forbidden
+            )
+        )
+
+    extern_starts = [
+        start for name, start, _end, raw in identifiers
+        if name == "extern" and not raw
+    ]
+    allowed_starts = set()
+    for exact in allowed_extern_blocks:
+        starts = []
+        search_from = 0
+        while True:
+            start = text.find(exact, search_from)
+            if start < 0:
+                break
+            if start in extern_starts:
+                starts.append(start)
+            search_from = start + 1
+        if len(starts) != 1:
+            raise ValidationError(
+                "{0} lacks one exact audited extern boundary".format(label)
+            )
+        _validate_bare_audited_extern(masked, starts[0], label)
+        allowed_starts.add(starts[0])
+    if any(start not in allowed_starts for start in extern_starts):
+        raise ValidationError(
+            "{0} contains an additional unreviewed extern boundary".format(label)
+        )
+    return masked
 
 
 def _object_without_duplicates(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
@@ -183,6 +442,7 @@ def _validate_contract(contract: dict[str, Any]) -> None:
         contract,
         {
             "artifact_policy",
+            "crate_modules",
             "dependency_contract",
             "gate_id",
             "kbuild",
@@ -194,6 +454,7 @@ def _validate_contract(contract: dict[str, Any]) -> None:
             "production_source",
             "provider_source",
             "reference_inventory",
+            "resource_foundation",
             "schema_version",
             "stage_manifest",
         },
@@ -207,6 +468,10 @@ def _validate_contract(contract: dict[str, Any]) -> None:
         raise ValidationError("contract points at a different production crate")
     if contract["provider_source"] != "host-kernel/native-rust/ihk.rs":
         raise ValidationError("contract points at a different native IHK provider")
+    if contract["crate_modules"] != EXPECTED_CRATE_MODULES:
+        raise ValidationError("SMP lifecycle transitive Rust module graph differs")
+    if contract["resource_foundation"] != EXPECTED_RESOURCE_FOUNDATION:
+        raise ValidationError("SMP resource foundation differs or overclaims readiness")
 
     _require_keys(
         contract["artifact_policy"],
@@ -341,6 +606,9 @@ def _expected_modinfo(contract: dict[str, Any]) -> tuple[set[str], set[str]]:
 
 
 def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
+    resource_edge = "#[allow(dead_code)]\nmod smp_resource;"
+    if text.count(resource_edge) != 1:
+        raise ValidationError("Rust SMP crate lacks the exact private resource-policy edge")
     metadata = _module_block(text)
     expected_metadata = {
         "type": "IhkSmpModule",
@@ -366,10 +634,11 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
         "    static IHK_PROVIDER_LIFECYCLE_V1: u8;\n"
         "}"
     )
-    if provider_import not in text or len(re.findall(r'\bextern\s+"Rust"', text)) != 1:
+    if provider_import not in text:
         raise ValidationError("Rust source lacks the exact audited provider-symbol import")
-    if len(re.findall(r"\bextern\s+\"", text)) != 1:
-        raise ValidationError("Rust source contains an additional unreviewed extern boundary")
+    _validate_rust_escape_hatches(
+        text, "Rust lifecycle", allowed_extern_blocks=(provider_import,)
+    )
 
     required_abi_fragments = (
         '#[link_section = "__param"]',
@@ -473,14 +742,81 @@ def _validate_rust_source(text: str, contract: dict[str, Any]) -> None:
         if text.count(constant) < 3:
             raise ValidationError(f"lifecycle diagnostics do not consume {constant}")
 
-    lowered = text.lower()
-    for forbidden in ('extern "c"', "include_bytes!", "include!", "global_asm!", "asm!("):
-        if forbidden in lowered:
-            raise ValidationError(f"Rust lifecycle contains forbidden boundary: {forbidden}")
     for match in re.finditer(r"^\s*use\s+([^;]+);", text, re.MULTILINE):
         imported = match.group(1).strip()
         if not imported.startswith(("kernel::", "core::")):
             raise ValidationError(f"unreviewed Rust dependency: {imported}")
+
+
+def _validate_resource_foundation(repo: Path, contract: dict[str, Any]) -> Path:
+    module = contract["crate_modules"][0]
+    source_path = _repo_file(repo, module["path"], "SMP resource policy source")
+    if module["destination"] != "smp_resource.rs" or _sha256(source_path) != module["sha256"]:
+        raise ValidationError("SMP resource policy digest or staged destination differs")
+    text = _read_text(source_path, "SMP resource policy source")
+    marker = "#[cfg(test)]\nmod tests {"
+    if text.count(marker) != 1:
+        raise ValidationError("SMP resource policy lacks one exhaustive test module")
+    production = text.split(marker, 1)[0]
+    required = (
+        "pub(crate) const SMP_MAX_CPUS: usize = 512;",
+        "pub(crate) const OS_TOKEN_CAPACITY: u32 = 64;",
+        "pub(crate) const OS_TOKEN_MAX_GENERATION: u64 = (1_u64 << 41) - 1;",
+        "pub(crate) const X86_64_PAGE_SIZE: u64 = 4096;",
+        "pub(crate) struct CpuTransaction",
+        "pub(crate) struct MemoryTransaction<",
+        "pub(crate) fn begin_external_effects",
+        "pub(crate) fn compensated_rollback",
+        "CpuState::Quarantined",
+        "poisoned: bool",
+        "if self.poisoned {",
+        "#[cfg(test)]\n    pub(crate) fn test_only",
+        "#[cfg(test)]\n    pub(crate) fn commit_policy_only",
+    )
+    for fragment in required:
+        if fragment not in production:
+            raise ValidationError(f"SMP resource policy lacks locked marker: {fragment}")
+    for name in ("insert_free", "assign", "release", "release_all", "remove_free"):
+        if not re.search(
+            rf"#\[cfg\(test\)\]\n\s+pub\(crate\) fn {name}\(", production
+        ):
+            raise ValidationError(f"SMP resource production convenience is not test-gated: {name}")
+    masked_production = _validate_rust_escape_hatches(
+        production, "SMP resource policy"
+    )
+    for forbidden in (
+        r"\bunsafe\b",
+        r"\b(?:alloc|std|kernel)::",
+        r"\b(?:Box|Vec|String|Arc|Rc)\b",
+    ):
+        if re.search(forbidden, masked_production):
+            raise ValidationError(f"SMP resource policy contains forbidden construct: {forbidden}")
+
+    fixture = contract["resource_foundation"]["fixture"]
+    positive_path = _repo_file(repo, fixture["positive_path"], "SMP resource fixture")
+    negative_path = _repo_file(repo, fixture["negative_path"], "SMP negative fixture")
+    if _sha256(positive_path) != fixture["positive_sha256"]:
+        raise ValidationError("SMP resource positive fixture digest differs")
+    if _sha256(negative_path) != fixture["negative_sha256"]:
+        raise ValidationError("SMP resource negative fixture digest differs")
+    positive = _read_text(positive_path, "SMP resource fixture")
+    negative = _read_text(negative_path, "SMP negative fixture")
+    if text.count("#[test]") != fixture["expected_in_file_tests"]:
+        raise ValidationError("SMP resource in-file Rust test count differs")
+    if positive.count("#[test]") != fixture["expected_fixture_tests"]:
+        raise ValidationError("SMP resource fixture Rust test count differs")
+    if fixture["expected_total_tests"] != (
+        fixture["expected_in_file_tests"] + fixture["expected_fixture_tests"]
+    ):
+        raise ValidationError("SMP resource fixture total is not additive")
+    for fragment in (
+        "fn forge_os_token() -> OsToken",
+        "OsToken {",
+        "&mut memory",
+    ):
+        if fragment not in negative:
+            raise ValidationError(f"SMP negative fixture lacks rejection marker: {fragment}")
+    return source_path
 
 
 def _validate_provider_source(text: str, contract: dict[str, Any]) -> None:
@@ -515,10 +851,7 @@ def _validate_provider_source(text: str, contract: dict[str, Any]) -> None:
         raise ValidationError("native IHK provider anchor symbol is not unique")
     if text.count(f'#[export_name = "__export_symbol_{symbol}"]') != 1:
         raise ValidationError("native IHK provider export record is not unique")
-    lowered = text.lower()
-    for forbidden in ('extern "c"', "include_bytes!", "include!", "global_asm!", "asm!("):
-        if forbidden in lowered:
-            raise ValidationError(f"native IHK provider contains forbidden boundary: {forbidden}")
+    _validate_rust_escape_hatches(text, "native IHK provider")
 
 
 def _validate_kconfig(text: str, contract: dict[str, Any]) -> None:
@@ -563,7 +896,8 @@ def _validate_kbuild(text: str, contract: dict[str, Any]) -> None:
 
 
 def _validate_stage_manifest(
-    manifest: dict[str, Any], source_path: Path, provider_path: Path, contract: dict[str, Any]
+    manifest: dict[str, Any], source_path: Path, provider_path: Path,
+    resource_path: Path, contract: dict[str, Any]
 ) -> None:
     build = manifest.get("build_contract", {})
     if build.get("project_c_link_objects") != 0:
@@ -598,6 +932,19 @@ def _validate_stage_manifest(
         raise ValidationError("stage manifest points at a different native IHK provider")
     if provider_source.get("sha256") != _sha256(provider_path):
         raise ValidationError("stage manifest native IHK provider source digest is stale")
+    resource_inputs = [
+        item for item in manifest.get("inputs", [])
+        if item.get("destination") == "smp_resource.rs"
+    ]
+    if len(resource_inputs) != 1:
+        raise ValidationError("stage manifest must contain exactly one SMP resource policy")
+    resource = resource_inputs[0]
+    if resource.get("kind") != "rust_support_module":
+        raise ValidationError("stage manifest SMP resource kind differs")
+    if resource.get("repository_path") != contract["crate_modules"][0]["path"]:
+        raise ValidationError("stage manifest redirects the SMP resource policy")
+    if resource.get("sha256") != _sha256(resource_path):
+        raise ValidationError("stage manifest SMP resource policy digest is stale")
 
 
 def _validate_reference_inventory(
@@ -694,6 +1041,7 @@ def validate_repository(
     _validate_contract(contract)
     source_path = _repo_file(repo, contract["production_source"], "production SMP Rust source")
     _validate_rust_source(_read_text(source_path, "production SMP Rust source"), contract)
+    resource_path = _validate_resource_foundation(repo, contract)
     provider_path = _repo_file(repo, contract["provider_source"], "native IHK provider source")
     _validate_provider_source(_read_text(provider_path, "native IHK provider source"), contract)
     _validate_kconfig(
@@ -708,6 +1056,7 @@ def validate_repository(
         _load_json(_repo_file(repo, contract["stage_manifest"], "stage manifest")),
         source_path,
         provider_path,
+        resource_path,
         contract,
     )
     _validate_reference_inventory(
@@ -725,6 +1074,10 @@ def validate_repository(
         "output": contract["module"]["output"],
         "parameters": len(contract["parameters"]),
         "rocky_build_load_validated": False,
+        "resource_foundation_credit_eligible": False,
+        "resource_foundation_linux_reachable": False,
+        "resource_foundation_source_sha256": _sha256(resource_path),
+        "resource_foundation_tests": contract["resource_foundation"]["fixture"]["expected_total_tests"],
         "source_symbol_reference_present": True,
         "runtime_symbol_reference_proven": False,
         "source_sha256": _sha256(source_path),

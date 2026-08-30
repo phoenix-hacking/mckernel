@@ -240,7 +240,7 @@ def _validate_contract(contract: Dict[str, Any]) -> None:
         raise ValidationError("foundation status differs or overclaims integration")
     if contract["canonical_abi"] != {
         "path": "host-kernel/native-rust/abi/x86_64.rs",
-        "sha256": "b5980e5b621914a120a0e6b72241477c48aee85615ae4cc76077f3874e35f860",
+        "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3",
         "type": "IhkIkcMasterPacket",
     }:
         raise ValidationError("canonical master packet ABI binding differs")

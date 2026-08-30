@@ -180,7 +180,7 @@ def _validate_contract(contract: dict[str, Any]) -> None:
     _require_keys(contract["canonical_abi"], {"path", "sha256", "type"}, "canonical_abi")
     if contract["canonical_abi"] != {
         "path": "host-kernel/native-rust/abi/x86_64.rs",
-        "sha256": "b5980e5b621914a120a0e6b72241477c48aee85615ae4cc76077f3874e35f860",
+        "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3",
         "type": "IhkIkcQueueHead",
     }:
         raise ValidationError("queue contract must bind the canonical x86_64 queue header")

@@ -15,6 +15,8 @@ mod ikc_queue;
 #[allow(dead_code)]
 mod os_registry;
 #[allow(dead_code)]
+mod device_registry;
+#[allow(dead_code)]
 mod ikc_master;
 #[allow(dead_code)]
 mod ihk_ioctl;

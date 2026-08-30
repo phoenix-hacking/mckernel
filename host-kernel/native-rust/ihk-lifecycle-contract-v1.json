@@ -4,12 +4,17 @@
     {
       "destination": "abi/x86_64.rs",
       "path": "host-kernel/native-rust/abi/x86_64.rs",
-      "sha256": "b5980e5b621914a120a0e6b72241477c48aee85615ae4cc76077f3874e35f860"
+      "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3"
     },
     {
       "destination": "ikc_queue.rs",
       "path": "host-kernel/native-rust/ikc_queue.rs",
       "sha256": "514f9bce452498e5e9394c450532b040c44fce1ac7a6b5158c76f3d4c7270d40"
+    },
+    {
+      "destination": "device_registry.rs",
+      "path": "host-kernel/native-rust/device_registry.rs",
+      "sha256": "0356f9212ddd74877cc105fb498a75550f207a322fbe1daaeaf42ef1857d0058"
     },
     {
       "destination": "ikc_master.rs",
@@ -43,30 +48,38 @@
   },
   "parameter_count": 0,
   "production_source": "host-kernel/native-rust/ihk.rs",
-  "production_source_sha256": "53e2b003573804df8d11f34a8290108ac5a0fc15bb559f2f980c38a3316b4a55",
+  "production_source_sha256": "c53ed495f8dfd1b0e4876c99b6be8cf8a3589cf42e2d40cec75d5d8a56d38fb7",
   "reference_inventory": "host-kernel/reference/legacy-host-modules-f2eb7352.json",
   "schema_version": 1,
   "stage_manifest": "host-kernel/kbuild/stage-manifest.json",
   "support_sources": [
     {
       "contract_path": "host-kernel/contracts/x86_64-shared-abi-v1.json",
-      "contract_sha256": "838bdff2a4f904ba612181e8a0b91279b71ee7d24410c87e217d12a948bba749",
+      "contract_sha256": "fb58ed2b114aea9ee1ba8e8fe52d01e2b8bd036cc1349b76d79c9615ac2bc9fa",
       "destination": "abi/x86_64.rs",
       "kind": "shared_rust_abi",
       "path": "host-kernel/native-rust/abi/x86_64.rs",
-      "sha256": "b5980e5b621914a120a0e6b72241477c48aee85615ae4cc76077f3874e35f860"
+      "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3"
     },
     {
       "contract_path": "host-kernel/contracts/ihk-os-registry-foundation-v1.json",
-      "contract_sha256": "ca2d70cc2f641673f477ebf949b3bdec9b015fb151d99c8d45e654f572133c84",
+      "contract_sha256": "2a6117766490de61ffea3e9ef5eab45c265b17b90a929632d86022ce4deaf32f",
       "destination": "os_registry.rs",
       "kind": "rust_support_module",
       "path": "host-kernel/native-rust/os_registry.rs",
       "sha256": "29464b8ca1038d87cc0d5f760eb22e0cbd7a1a512ae88f4c550574a784d1e49d"
     },
     {
+      "contract_path": "host-kernel/contracts/ihk-device-registry-foundation-v1.json",
+      "contract_sha256": "e0fb4903af069f2b1cfeb15e126281a60fc288bca71573b37c83b15fffac61ae",
+      "destination": "device_registry.rs",
+      "kind": "rust_support_module",
+      "path": "host-kernel/native-rust/device_registry.rs",
+      "sha256": "0356f9212ddd74877cc105fb498a75550f207a322fbe1daaeaf42ef1857d0058"
+    },
+    {
       "contract_path": "host-kernel/contracts/ihk-ioctl-dispatch-foundation-v1.json",
-      "contract_sha256": "1b52598a8a1d2c687110565561d0593dab15fbea8a3b2dbfd37b87af46a3c48e",
+      "contract_sha256": "1c1873746e6e0a64174d34a2f2dc066e193540dea4444ae71ff494a757b14f54",
       "destination": "ihk_ioctl.rs",
       "kind": "rust_ioctl_dispatch",
       "path": "host-kernel/native-rust/ihk_ioctl.rs",

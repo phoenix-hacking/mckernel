@@ -81,7 +81,7 @@ EXPECTED_INPUTS = (
         "destination": "abi/x86_64.rs",
         "kind": "shared_rust_abi",
         "repository_path": "host-kernel/native-rust/abi/x86_64.rs",
-        "sha256": "b5980e5b621914a120a0e6b72241477c48aee85615ae4cc76077f3874e35f860",
+        "sha256": "89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3",
     },
     {
         "destination": "ikc_queue.rs",
@@ -94,6 +94,12 @@ EXPECTED_INPUTS = (
         "kind": "rust_support_module",
         "repository_path": "host-kernel/native-rust/os_registry.rs",
         "sha256": "29464b8ca1038d87cc0d5f760eb22e0cbd7a1a512ae88f4c550574a784d1e49d",
+    },
+    {
+        "destination": "device_registry.rs",
+        "kind": "rust_support_module",
+        "repository_path": "host-kernel/native-rust/device_registry.rs",
+        "sha256": "0356f9212ddd74877cc105fb498a75550f207a322fbe1daaeaf42ef1857d0058",
     },
     {
         "destination": "ikc_master.rs",
@@ -118,6 +124,12 @@ EXPECTED_INPUTS = (
         "kind": "rust_support_module",
         "repository_path": "host-kernel/native-rust/page_owner_registry.rs",
         "sha256": "443d58fa5b2e423f538c6622ef04d8e34338abc43c5e0fd34811d52fc21f4869",
+    },
+    {
+        "destination": "smp_resource.rs",
+        "kind": "rust_support_module",
+        "repository_path": "host-kernel/native-rust/smp_resource.rs",
+        "sha256": "b918ea3186d8f55518c9ceb46d84f6c98633b4ab7b8a81e5d2e0024c0914919b",
     },
 )
 EXPECTED_PARENT_INTEGRATION_REF = {
@@ -188,7 +200,7 @@ EXPECTED_MODULES = (
         "required_import_namespaces": [],
         "source_destination": "ihk.rs",
         "source_repository_path": "host-kernel/native-rust/ihk.rs",
-        "source_sha256": "53e2b003573804df8d11f34a8290108ac5a0fc15bb559f2f980c38a3316b4a55",
+        "source_sha256": "c53ed495f8dfd1b0e4876c99b6be8cf8a3589cf42e2d40cec75d5d8a56d38fb7",
     },
     {
         "crate": "ihk_smp_x86_64",
@@ -200,7 +212,7 @@ EXPECTED_MODULES = (
         "required_import_namespaces": ["MCKERNEL_IHK_V1"],
         "source_destination": "ihk_smp_x86_64.rs",
         "source_repository_path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
-        "source_sha256": "f5beb6dae65e486772af5198aa60f77d4e1b86d37b5ee8ae50eb4b34f9b0d74f",
+        "source_sha256": "28c68abd4887f7990ae50a5ab198806d61518dd304e5c4be50f15451e3aa4cd8",
     },
     {
         "crate": "mcctrl",
@@ -214,6 +226,12 @@ EXPECTED_MODULES = (
         "source_repository_path": "host-kernel/native-rust/mcctrl.rs",
         "source_sha256": "1a8b85c379d6976d90ba462b9386d1bbd7fce83ca152e46bce391e6cfa6b5389",
     },
+)
+AUDITED_PROVIDER_EXTERN = (
+    'extern "Rust" {\n'
+    '    #[link_name = "ihk_provider_lifecycle_v1"]\n'
+    "    static IHK_PROVIDER_LIFECYCLE_V1: u8;\n"
+    "}"
 )
 EXPECTED_TOP_LEVEL_KEYS = {
     "build_contract",
@@ -231,6 +249,230 @@ HEX64 = re.compile(r"^[0-9a-f]{64}$")
 
 class ValidationError(Exception):
     pass
+
+
+_RUST_FORBIDDEN_CAPABILITIES = frozenset(
+    ("include", "include_bytes", "asm", "global_asm")
+)
+
+
+def _blank_rust_span(masked, text, start, end, preserved=()):
+    """Blank a lexical non-code span while retaining offsets and newlines."""
+
+    preserved = set(preserved)
+    for offset in range(start, end):
+        if offset not in preserved and text[offset] not in "\r\n":
+            masked[offset] = " "
+
+
+def _rust_char_literal_end(text, start):
+    """Return the end of a Rust character literal, or None for a lifetime."""
+
+    cursor = start + 1
+    if cursor >= len(text) or text[cursor] in "\r\n'":
+        return None
+    if text[cursor] == "\\":
+        cursor += 1
+        if cursor >= len(text) or text[cursor] in "\r\n":
+            return None
+        if text[cursor] == "u" and cursor + 1 < len(text) and text[cursor + 1] == "{":
+            closing = text.find("}", cursor + 2)
+            if closing < 0:
+                return None
+            cursor = closing + 1
+        elif text[cursor] == "x":
+            cursor += 3
+        else:
+            cursor += 1
+    else:
+        cursor += 1
+    if cursor < len(text) and text[cursor] == "'":
+        return cursor + 1
+    return None
+
+
+def _mask_rust_comments_and_literals(text):
+    """Return Rust code with comments and literal contents lexically masked."""
+
+    masked = list(text)
+    cursor = 0
+    length = len(text)
+    while cursor < length:
+        if text.startswith("//", cursor):
+            end = text.find("\n", cursor + 2)
+            if end < 0:
+                end = length
+            _blank_rust_span(masked, text, cursor, end)
+            cursor = end
+            continue
+        if text.startswith("/*", cursor):
+            depth = 1
+            end = cursor + 2
+            while end < length and depth:
+                if text.startswith("/*", end):
+                    depth += 1
+                    end += 2
+                elif text.startswith("*/", end):
+                    depth -= 1
+                    end += 2
+                else:
+                    end += 1
+            if depth:
+                raise ValidationError("unterminated Rust block comment")
+            _blank_rust_span(masked, text, cursor, end)
+            cursor = end
+            continue
+
+        raw_prefix_length = None
+        if cursor == 0 or not (text[cursor - 1].isalnum() or text[cursor - 1] == "_"):
+            for prefix in ("br", "cr", "r"):
+                if text.startswith(prefix, cursor):
+                    probe = cursor + len(prefix)
+                    while probe < length and text[probe] == "#":
+                        probe += 1
+                    if probe < length and text[probe] == '"':
+                        raw_prefix_length = len(prefix)
+                        break
+        if raw_prefix_length is not None:
+            quote = cursor + raw_prefix_length
+            while quote < length and text[quote] == "#":
+                quote += 1
+            hashes = text[cursor + raw_prefix_length : quote]
+            closing = text.find('"' + hashes, quote + 1)
+            if closing < 0:
+                raise ValidationError("unterminated Rust raw string literal")
+            end = closing + 1 + len(hashes)
+            _blank_rust_span(masked, text, quote + 1, closing)
+            cursor = end
+            continue
+
+        if text[cursor] == '"':
+            end = cursor + 1
+            closed = False
+            while end < length:
+                if text[end] == "\\":
+                    end += 2
+                elif text[end] == '"':
+                    end += 1
+                    closed = True
+                    break
+                else:
+                    end += 1
+            if not closed:
+                raise ValidationError("unterminated Rust string literal")
+            _blank_rust_span(masked, text, cursor, end, (cursor, end - 1))
+            cursor = end
+            continue
+
+        char_start = cursor
+        if (
+            text[cursor] == "b"
+            and cursor + 1 < length
+            and text[cursor + 1] == "'"
+            and (cursor == 0 or not (text[cursor - 1].isalnum() or text[cursor - 1] == "_"))
+        ):
+            char_start = cursor + 1
+        if text[char_start] == "'":
+            end = _rust_char_literal_end(text, char_start)
+            if end is not None:
+                _blank_rust_span(masked, text, char_start, end)
+                cursor = end
+                continue
+        cursor += 1
+    return "".join(masked)
+
+
+def _rust_identifier_start(character):
+    return character == "_" or character.isidentifier()
+
+
+def _rust_identifier_continue(character):
+    return character == "_" or ("a" + character).isidentifier()
+
+
+def _rust_identifiers(text):
+    """Yield Rust-like Unicode identifiers without Python ``\b`` ambiguity."""
+
+    cursor = 0
+    length = len(text)
+    while cursor < length:
+        raw = False
+        name_start = cursor
+        if (
+            text.startswith("r#", cursor)
+            and cursor + 2 < length
+            and _rust_identifier_start(text[cursor + 2])
+        ):
+            raw = True
+            name_start = cursor + 2
+        elif not _rust_identifier_start(text[cursor]):
+            cursor += 1
+            continue
+        end = name_start + 1
+        while end < length and _rust_identifier_continue(text[end]):
+            end += 1
+        yield text[name_start:end], cursor, end, raw
+        cursor = end
+
+
+def _validate_bare_audited_extern(masked, start, label):
+    line_start = masked.rfind("\n", 0, start) + 1
+    if masked[line_start:start].strip():
+        raise ValidationError(
+            "{0} exact audited extern boundary has an unreviewed modifier".format(label)
+        )
+    prefix = masked[:start].rstrip()
+    if prefix and prefix[-1] not in ";}":
+        raise ValidationError(
+            "{0} exact audited extern boundary has an unreviewed outer attribute".format(
+                label
+            )
+        )
+
+
+def _validate_rust_escape_hatches(text, label, allowed_extern_blocks=()):
+    """Reject unreviewed Rust source inclusion, assembly, and extern edges."""
+
+    masked = _mask_rust_comments_and_literals(text)
+    identifiers = list(_rust_identifiers(masked))
+    forbidden = next(
+        (name for name, _start, _end, _raw in identifiers
+         if name in _RUST_FORBIDDEN_CAPABILITIES),
+        None,
+    )
+    if forbidden is not None:
+        raise ValidationError(
+            "{0} contains forbidden Rust macro boundary: {1}!".format(
+                label, forbidden
+            )
+        )
+
+    extern_starts = [
+        start for name, start, _end, raw in identifiers
+        if name == "extern" and not raw
+    ]
+    allowed_starts = set()
+    for exact in allowed_extern_blocks:
+        starts = []
+        search_from = 0
+        while True:
+            start = text.find(exact, search_from)
+            if start < 0:
+                break
+            if start in extern_starts:
+                starts.append(start)
+            search_from = start + 1
+        if len(starts) != 1:
+            raise ValidationError(
+                "{0} lacks one exact audited extern boundary".format(label)
+            )
+        _validate_bare_audited_extern(masked, starts[0], label)
+        allowed_starts.add(starts[0])
+    if any(start not in allowed_starts for start in extern_starts):
+        raise ValidationError(
+            "{0} contains an additional unreviewed extern boundary".format(label)
+        )
+    return masked
 
 
 def _object_without_duplicates(pairs):
@@ -548,8 +790,10 @@ def _validate_input(repo_root, item, index):
         expected_destination = item["destination"]
     elif item["kind"] == "rust_support_module" and item["destination"] in (
         "os_registry.rs",
+        "device_registry.rs",
         "page_allocator.rs",
         "page_owner_registry.rs",
+        "smp_resource.rs",
     ):
         expected_destination = item["destination"]
     if expected_destination is None:
@@ -559,6 +803,8 @@ def _validate_input(repo_root, item, index):
     path = _repo_regular_file(repo_root, item["repository_path"], label + ".repository_path")
     _validate_digest(path, item["sha256"], label)
     text = _read_text(path, label)
+    if item["kind"] not in ("kbuild_template", "kconfig"):
+        _validate_rust_escape_hatches(text, label)
     if item["kind"] == "kbuild_template":
         _validate_kbuild(text)
     elif item["kind"] == "kconfig":
@@ -574,7 +820,7 @@ def _validate_input(repo_root, item, index):
             if text.count(token) != 1:
                 raise ValidationError("{0} lacks a unique ABI marker: {1}".format(label, token))
         lowered = text.lower()
-        for forbidden in ('extern "c"', "unsafe", "include!", "include_bytes!", "asm!(", "module!"):
+        for forbidden in ("unsafe", "module!"):
             if forbidden in lowered:
                 raise ValidationError("{0} contains forbidden executable/boundary construct: {1}".format(label, forbidden))
     elif item["destination"] == "ikc_queue.rs":
@@ -589,7 +835,7 @@ def _validate_input(repo_root, item, index):
             if text.count(token) != 1:
                 raise ValidationError("{0} lacks a unique queue marker: {1}".format(label, token))
         lowered = text.lower()
-        for forbidden in ('extern "c"', "include!", "include_bytes!", "asm!(", "module!"):
+        for forbidden in ("module!",):
             if forbidden in lowered:
                 raise ValidationError("{0} contains forbidden executable/boundary construct: {1}".format(label, forbidden))
     elif item["destination"] == "os_registry.rs":
@@ -604,7 +850,26 @@ def _validate_input(repo_root, item, index):
             if text.count(token) < 1:
                 raise ValidationError("{0} lacks registry marker: {1}".format(label, token))
         lowered = text.lower()
-        for forbidden in ('extern "c"', "unsafe", "include!", "include_bytes!", "asm!(", "module!"):
+        for forbidden in ("unsafe", "module!"):
+            if forbidden in lowered:
+                raise ValidationError("{0} contains forbidden executable/boundary construct: {1}".format(label, forbidden))
+    elif item["destination"] == "device_registry.rs":
+        required = (
+            "pub(crate) const DEVICE_CAPACITY: usize = 64;",
+            "pub(crate) struct DeviceRegistry",
+            "pub(crate) fn reserve",
+            "pub(crate) fn acquire_open",
+            "pub(crate) fn acquire_os",
+            "pub(crate) fn begin_unregister",
+            "impl Drop for ReservationGuard<'_>",
+            "impl Drop for UnregisterGuard<'_>",
+            "DeviceRegistryError::RegistryIdentityExhausted",
+        )
+        for token in required:
+            if text.count(token) < 1:
+                raise ValidationError("{0} lacks device-registry marker: {1}".format(label, token))
+        lowered = text.lower()
+        for forbidden in ("unsafe", "module!"):
             if forbidden in lowered:
                 raise ValidationError("{0} contains forbidden executable/boundary construct: {1}".format(label, forbidden))
     elif item["destination"] == "ikc_master.rs":
@@ -620,7 +885,7 @@ def _validate_input(repo_root, item, index):
             if text.count(token) != 1:
                 raise ValidationError("{0} lacks a unique master-registry marker: {1}".format(label, token))
         lowered = text.lower()
-        for forbidden in ('extern "c"', "unsafe", "include!", "include_bytes!", "asm!(", "module!"):
+        for forbidden in ("unsafe", "module!"):
             if forbidden in lowered:
                 raise ValidationError("{0} contains forbidden executable/boundary construct: {1}".format(label, forbidden))
     elif item["destination"] == "page_allocator.rs":
@@ -634,7 +899,7 @@ def _validate_input(repo_root, item, index):
             if text.count(token) != 1:
                 raise ValidationError("{0} lacks a unique page-allocator marker: {1}".format(label, token))
         lowered = text.lower()
-        for forbidden in ('extern "c"', "unsafe", "include!", "include_bytes!", "asm!(", "module!"):
+        for forbidden in ("unsafe", "module!"):
             if forbidden in lowered:
                 raise ValidationError("{0} contains forbidden executable/boundary construct: {1}".format(label, forbidden))
     elif item["destination"] == "page_owner_registry.rs":
@@ -648,7 +913,24 @@ def _validate_input(repo_root, item, index):
             if text.count(token) != 1:
                 raise ValidationError("{0} lacks a unique page-owner marker: {1}".format(label, token))
         lowered = text.lower()
-        for forbidden in ('extern "c"', "unsafe", "include!", "include_bytes!", "asm!(", "module!"):
+        for forbidden in ("unsafe", "module!"):
+            if forbidden in lowered:
+                raise ValidationError("{0} contains forbidden executable/boundary construct: {1}".format(label, forbidden))
+    elif item["destination"] == "smp_resource.rs":
+        required = (
+            "pub(crate) const SMP_MAX_CPUS: usize = 512;",
+            "pub(crate) struct CpuTransaction",
+            "pub(crate) struct MemoryTransaction<",
+            "pub(crate) fn begin_external_effects",
+            "pub(crate) fn compensated_rollback",
+            "CpuState::Quarantined",
+            "poisoned: bool",
+        )
+        for token in required:
+            if text.count(token) < 1:
+                raise ValidationError("{0} lacks SMP-resource marker: {1}".format(label, token))
+        lowered = text.lower()
+        for forbidden in ("unsafe", "module!"):
             if forbidden in lowered:
                 raise ValidationError("{0} contains forbidden executable/boundary construct: {1}".format(label, forbidden))
     else:
@@ -663,7 +945,7 @@ def _validate_input(repo_root, item, index):
             if text.count(token) < 1:
                 raise ValidationError("{0} lacks ioctl-dispatch marker: {1}".format(label, token))
         lowered = text.lower()
-        for forbidden in ('extern "c"', "unsafe", "kernel::", "bindings::", "include!", "include_bytes!", "asm!(", "module!"):
+        for forbidden in ("unsafe", "kernel::", "bindings::", "module!"):
             if forbidden in lowered:
                 raise ValidationError("{0} contains forbidden executable/boundary construct: {1}".format(label, forbidden))
     return {
@@ -716,6 +998,12 @@ def _validate_module(repo_root, module, expected, index):
         raise ValidationError("{0}.source must be a Rust source file".format(label))
     _validate_digest(path, source["sha256"], label + ".source")
     text = _read_text(path, label + ".source")
+    allowed_extern_blocks = ()
+    if module["crate"] in ("ihk_smp_x86_64", "mcctrl"):
+        allowed_extern_blocks = (AUDITED_PROVIDER_EXTERN,)
+    _validate_rust_escape_hatches(
+        text, label + ".source", allowed_extern_blocks=allowed_extern_blocks
+    )
     if "module!" not in text or "impl kernel::Module" not in text:
         raise ValidationError("{0}.source lacks a native Rust-for-Linux module entry point".format(label))
     if module["crate"] == "ihk":
@@ -723,6 +1011,7 @@ def _validate_module(repo_root, module, expected, index):
             '#[path = "abi/x86_64.rs"]\nmod abi;',
             "mod ikc_queue;",
             "mod os_registry;",
+            "mod device_registry;",
             "mod ikc_master;",
             "mod ihk_ioctl;",
             "mod page_allocator;",
@@ -734,10 +1023,14 @@ def _validate_module(repo_root, module, expected, index):
                         label, fragment
                     )
                 )
-    lowered = text.lower()
-    for forbidden in ("extern \"c\"", "include_bytes!", "global_asm!", "asm!("):
-        if forbidden in lowered:
-            raise ValidationError("{0}.source contains unreviewed boundary construct: {1}".format(label, forbidden))
+    elif module["crate"] == "ihk_smp_x86_64":
+        fragment = "#[allow(dead_code)]\nmod smp_resource;"
+        if text.count(fragment) != 1:
+            raise ValidationError(
+                "{0}.source does not bind the staged SMP resource policy: {1}".format(
+                    label, fragment
+                )
+            )
     return {
         "destination": source["destination"],
         "path": path,
@@ -782,7 +1075,7 @@ def validate_manifest(repo_root, manifest_path):
         raise ValidationError(
             "inputs must contain exactly Kbuild, Kconfig, the shared x86_64 ABI, "
             "the IHK queue module, OS registry, IKC master module, ioctl dispatcher, "
-            "page allocator, and page-owner registry"
+            "device registry, page allocator, page-owner registry, and SMP resource policy"
         )
     staged_files = [_validate_input(repo_root, item, index) for index, item in enumerate(inputs)]
     destinations = [item["destination"] for item in staged_files]
@@ -792,15 +1085,17 @@ def validate_manifest(repo_root, manifest_path):
         "abi/x86_64.rs",
         "ikc_queue.rs",
         "os_registry.rs",
+        "device_registry.rs",
         "ikc_master.rs",
         "ihk_ioctl.rs",
         "page_allocator.rs",
         "page_owner_registry.rs",
+        "smp_resource.rs",
     ]:
         raise ValidationError(
             "inputs must be ordered as Kbuild, Kconfig, abi/x86_64.rs, "
-            "ikc_queue.rs, os_registry.rs, ikc_master.rs, ihk_ioctl.rs, "
-            "page_allocator.rs, page_owner_registry.rs"
+            "ikc_queue.rs, os_registry.rs, device_registry.rs, ikc_master.rs, ihk_ioctl.rs, "
+            "page_allocator.rs, page_owner_registry.rs, smp_resource.rs"
         )
 
     modules = manifest["modules"]

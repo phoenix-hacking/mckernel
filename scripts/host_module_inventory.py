@@ -520,7 +520,9 @@ def macro_table(
     text = strip_c_comments(text)
     results: List[Dict[str, object]] = []
     for match in re.finditer(
-        r"^\s*#\s*define\s+([A-Za-z_]\w*)\s+([^\n]+)$", text, re.MULTILINE
+        r"^[ \t]*#[ \t]*define[ \t]+([A-Za-z_]\w*)[ \t]+([^\r\n]+)$",
+        text,
+        re.MULTILINE,
     ):
         name, expression = match.group(1), match.group(2).strip()
         if not name.startswith(prefixes):

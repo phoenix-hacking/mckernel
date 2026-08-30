@@ -2633,21 +2633,9 @@ def parse_initial_cgraph(data, source):
             raise SemanticsV3Error(
                 "repeated GCC Initial Symbol table sections are inconsistent"
             )
-        # GCC 8.5 prints Calls entries with dump_name (the printable name plus
-        # symbol order), while headers use dump_asm_name plus name.  Resolve
-        # the stable number first and then require the exact printable name;
-        # every retained edge owns a live callee node in the same dump table.
-        for caller in table:
-            for call in caller["calls"]:
-                declared = table_by_number.get(call["number"])
-                if declared is None:
-                    raise SemanticsV3Error(
-                        "repeated GCC Initial Symbol table pruned a live callee"
-                    )
-                if declared["printable_name"] != call["name"]:
-                    raise SemanticsV3Error(
-                        "repeated GCC Initial Symbol table call printable name differs"
-                    )
+        # GCC 8.5 may omit declaration-only callees from a later IPA phase.
+        # Calls were proven to resolve in the authoritative first table above,
+        # while every analyzed definition remains mandatory in each later one.
     return first
 
 

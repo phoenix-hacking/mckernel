@@ -11,6 +11,12 @@
 
 use kernel::prelude::*;
 
+// Allocation-free policy core for the future Linux CPU/memory/IKC adapter.
+// It is deliberately private and dead-code-only until the versioned IHK OS
+// lease bridge and external-effect compensation layer are implemented.
+#[allow(dead_code)]
+mod smp_resource;
+
 const IHK_SMP_PARAMETER_COUNT: usize = 6;
 const IHK_SMP_DEPENDENCY: &str = "ihk";
 const IHK_SMP_IMPORT_NAMESPACE: &str = "MCKERNEL_IHK_V1";

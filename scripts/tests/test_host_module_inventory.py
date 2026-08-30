@@ -8,6 +8,7 @@ import sys
 import unittest
 from collections import Counter
 from pathlib import Path
+from unittest import mock
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -43,6 +44,34 @@ after
         self.assertNotIn("also_disabled\n", filtered)
         self.assertIn("after\n", filtered)
         self.assertEqual(filtered.count("\n"), source.count("\n"))
+
+
+class MacroTableTests(unittest.TestCase):
+    def test_header_guard_cannot_consume_following_valued_macro(self) -> None:
+        path = "executer/include/uprotocol.h"
+        source = """#ifndef HEADER_UPROTOCOL_H
+#define HEADER_UPROTOCOL_H
+#define MCEXEC_UP_PREPARE_IMAGE 0x30a02900
+#endif
+"""
+        with mock.patch.object(inventory, "text_blob", return_value=source):
+            macros = inventory.macro_table(
+                Path("/unused"), path, ("MCEXEC_UP_",)
+            )
+
+        self.assertEqual(
+            macros,
+            [
+                {
+                    "name": "MCEXEC_UP_PREPARE_IMAGE",
+                    "value": 0x30A02900,
+                    "hex": "0x30a02900",
+                    "expression": "0x30a02900",
+                    "source": path,
+                    "line": 3,
+                }
+            ],
+        )
 
 
 class FrozenInventoryTests(unittest.TestCase):

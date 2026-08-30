@@ -83,6 +83,27 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
                         ),
                     )
 
+    def test_shell_arrays_are_defined_in_the_same_step_before_use(self):
+        workflow = yaml.safe_load(self.workflow)
+        for job in workflow["jobs"].values():
+            for step in job.get("steps", []):
+                script = step.get("run")
+                if not script:
+                    continue
+                for name in ("kbuild_environment",):
+                    use = '"${' + name + '[@]}"'
+                    if use not in script:
+                        continue
+                    match = re.search(
+                        r"(?m)^\s*" + re.escape(name) + r"=\(", script
+                    )
+                    self.assertIsNotNone(match, (step.get("name"), name))
+                    self.assertLess(
+                        match.start(),
+                        script.index(use),
+                        (step.get("name"), name),
+                    )
+
     def test_stage_is_explicitly_credit_forbidden(self):
         self.assertIn("--stage-for-evidence", self.workflow)
         self.assertIn("--verify-evidence-stage", self.workflow)
@@ -399,6 +420,17 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         self.assertLess(script.index("vermagic=\"$(run_modinfo"), final_recheck)
         self.assertLess(script.index("scripts/mcctrl_native_lifecycle_check.py"), final_recheck)
         self.assertLess(final_recheck, close_descriptor)
+        self.assertIn(
+            'kbuild_environment=("${isolated_environment[@]}" PATH=/usr/bin:/bin)',
+            script,
+        )
+        isolated_definition = script.index("isolated_environment=(")
+        kbuild_definition = script.index(
+            'kbuild_environment=("${isolated_environment[@]}"'
+        )
+        self.assertLess(isolated_definition, kbuild_definition)
+        self.assertNotIn("checker_environment", script)
+        self.assertNotIn("checker_tool_dir", script)
 
         mutations = (
             (
@@ -1576,6 +1608,80 @@ exec {modinfo_fd}<&-
             ),
             1,
         )
+
+    def test_ihk_device_registry_fixture_and_exact_tests_are_mandatory(self):
+        trigger_paths = (
+            "host-kernel/contracts/ihk-device-registry-foundation-v1.json",
+            "host-kernel/native-rust/device_registry.rs",
+            "scripts/ihk_device_registry_check.py",
+            "scripts/tests/fixtures/ihk_device_registry_compile.rs",
+            "scripts/tests/test_ihk_device_registry.py",
+            "scripts/tests/test_ihk_device_registry_check.py",
+        )
+        for path in trigger_paths:
+            self.assertEqual(2, self.workflow.count("      - " + path), path)
+        workflow = yaml.safe_load(self.workflow)
+        scripts = {
+            step.get("name"): step.get("run", "")
+            for job in workflow["jobs"].values()
+            for step in job.get("steps", [])
+            if step.get("name")
+        }
+        for name in (
+            "Verify source-only contracts without claiming readiness",
+            "Validate built metadata and capture immutable diagnostics",
+        ):
+            script = scripts[name]
+            self.assertIn(
+                'scripts/ihk_device_registry_check.py --repo "$GITHUB_WORKSPACE"',
+                script,
+            )
+            self.assertIn("scripts.tests.test_ihk_device_registry", script)
+            self.assertIn("scripts.tests.test_ihk_device_registry_check", script)
+
+    def test_raw_semantics_retention_authority_is_triggered_and_executed(self):
+        trigger_paths = (
+            "scripts/host_module_failure_semantics_v3.py",
+            "scripts/host_module_failure_semantics_retention_v3.py",
+            "scripts/tests/test_host_module_failure_semantics_retention_v3.py",
+        )
+        for path in trigger_paths:
+            self.assertEqual(2, self.workflow.count("      - " + path), path)
+        workflow = yaml.safe_load(self.workflow)
+        source_validation = next(
+            step.get("run", "")
+            for step in workflow["jobs"]["exact-build"]["steps"]
+            if step.get("name")
+            == "Verify source-only contracts without claiming readiness"
+        )
+        self.assertEqual(
+            1,
+            source_validation.count(
+                "scripts.tests.test_host_module_failure_semantics_retention_v3"
+            ),
+        )
+
+    def test_smp_resource_fixtures_and_exact_tests_are_mandatory(self):
+        trigger_paths = (
+            "host-kernel/native-rust/smp_resource.rs",
+            "scripts/tests/fixtures/ihk_smp_resource_compile.rs",
+            "scripts/tests/fixtures/ihk_smp_resource_workspace_alias_compile_fail.rs",
+            "scripts/tests/test_ihk_smp_resource.py",
+        )
+        for path in trigger_paths:
+            self.assertEqual(2, self.workflow.count("      - " + path), path)
+        workflow = yaml.safe_load(self.workflow)
+        scripts = {
+            step.get("name"): step.get("run", "")
+            for job in workflow["jobs"].values()
+            for step in job.get("steps", [])
+            if step.get("name")
+        }
+        for name in (
+            "Verify source-only contracts without claiming readiness",
+            "Validate built metadata and capture immutable diagnostics",
+        ):
+            self.assertIn("scripts.tests.test_ihk_smp_resource", scripts[name])
 
     def test_exact_probe_and_shared_abi_checks_and_triggers_are_mandatory(self):
         for path in (

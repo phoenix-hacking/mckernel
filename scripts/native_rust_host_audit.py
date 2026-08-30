@@ -98,13 +98,16 @@ def main():
         "abi/x86_64.rs",
         "ikc_queue.rs",
         "os_registry.rs",
+        "device_registry.rs",
         "ikc_master.rs",
         "page_allocator.rs",
         "page_owner_registry.rs",
+        "smp_resource.rs",
     ]:
         die(
             "Rust support input closure differs from the locked ABI, queue, "
-            "OS registry, IKC master, page allocator, and page-owner registry"
+            "OS registry, device registry, IKC master, page allocator, page-owner registry, "
+            "and SMP resource policy"
         )
     for item in support:
         relative = item.get("repository_path")

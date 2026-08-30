@@ -1040,6 +1040,7 @@ jobs:
                 --repo "$GITHUB_WORKSPACE" \
                 --authority-target unittest -- \
                 scripts.tests.test_host_module_failure_semantics_v3 \
+                scripts.tests.test_host_module_failure_semantics_retention_v3 \
                 scripts.tests.test_host_module_failure_contract_review_v3
               fp_authority "$GITHUB_WORKSPACE" \
                 --repo "$GITHUB_WORKSPACE" \
@@ -1069,8 +1070,8 @@ jobs:
                 --raw-bundle-sha256 "$BUILD_DIR/host-module-failure-semantics-v3-raw.tar.sha256" \
                 --output "$BUILD_DIR/host-module-failure-contract-review-v3.json"
             ' 2>&1 | /usr/bin/tee evidence/host-module-failure-contract-review-v3.log
-          /usr/bin/install -m 0644 "$review_v2_path" "$raw_bundle_path" \
-            "$raw_sidecar_path" "$semantics_v3_path" "$review_v3_path" evidence/
+          /usr/bin/install -m 0644 "$review_v2_path" "$semantics_v3_path" \
+            "$review_v3_path" evidence/
           (
             cd evidence
             /usr/bin/sha256sum \
@@ -1085,9 +1086,7 @@ jobs:
         run: |
           set +e
           mkdir -p evidence
-          raw_bundle_path="$BUILD_DIR/host-module-failure-semantics-v3-raw.tar"
-          raw_sidecar_path="$BUILD_DIR/host-module-failure-semantics-v3-raw.tar.sha256"
-          raw_collection_status=absent-before-raw-capture
+          test -d evidence && test ! -L evidence || exit 1
           runuser -u validator -- env -u PYTHONHOME -u PYTHONPATH \
             HOME=/home/validator \
             GITHUB_WORKSPACE="$GITHUB_WORKSPACE" \
@@ -1096,40 +1095,41 @@ jobs:
               git status --short --branch --ignore-submodules=none
             ' > evidence/worktree.txt 2>&1
 
+          retention_evidence_dir="$GITHUB_WORKSPACE/evidence/host-module-failure-semantics-v3-retention"
+          if test -e "$retention_evidence_dir" || test -L "$retention_evidence_dir"; then
+            exit 1
+          fi
+          install -d -m 0750 -o validator -g validator -- \
+            "$retention_evidence_dir"
+          raw_semantics_retention_status=0
+          runuser -u validator -- env -i \
+            HOME=/home/validator \
+            LANG=C \
+            LC_ALL=C \
+            PATH=/usr/bin:/bin \
+            PYTHONDONTWRITEBYTECODE=1 \
+            /usr/bin/python3 -E -s -B \
+            "$GITHUB_WORKSPACE/scripts/host_module_failure_semantics_retention_v3.py" \
+            --build-dir "$BUILD_DIR" \
+            --evidence-dir "$retention_evidence_dir" \
+            > evidence/host-module-failure-semantics-v3-retention.log 2>&1 ||
+            raw_semantics_retention_status=$?
+          printf 'exit_status=%s\ncredit=forbidden\n' \
+            "$raw_semantics_retention_status" \
+            > evidence/host-module-failure-semantics-v3-retention.status
+
           if test -d "$BUILD_DIR"; then
-            if test -f "$raw_bundle_path" && test ! -L "$raw_bundle_path" && \
-              test -f "$raw_sidecar_path" && test ! -L "$raw_sidecar_path"
-            then
-              raw_bundle_bytes="$(stat -c '%s' -- "$raw_bundle_path")"
-              raw_sidecar_bytes="$(stat -c '%s' -- "$raw_sidecar_path")"
-              if test "$raw_bundle_bytes" -gt 0 && \
-                test "$raw_bundle_bytes" -le 805306368 && \
-                test "$raw_sidecar_bytes" -gt 0 && \
-                test "$raw_sidecar_bytes" -le 4096
-              then
-                if install -m 0644 "$raw_bundle_path" evidence/ && \
-                  install -m 0644 "$raw_sidecar_path" evidence/ && \
-                  (
-                    cd evidence && \
-                      sha256sum host-module-failure-semantics-v3-raw.tar \
-                        > host-module-failure-semantics-v3-raw.tar.observed.sha256
-                  ) && \
-                  cmp -s \
-                  evidence/host-module-failure-semantics-v3-raw.tar.observed.sha256 \
-                  evidence/host-module-failure-semantics-v3-raw.tar.sha256
-                then
-                  raw_collection_status=complete-checksum-verified
-                else
-                  raw_collection_status=complete-checksum-invalid
-                fi
-              else
-                raw_collection_status=unsafe-size-pair-not-copied
+            for evidence_file in \
+              host-module-failure-contract-review-v2.json \
+              host-module-failure-semantics-v3.json \
+              host-module-failure-contract-review-v3.json
+            do
+              if test -s "$BUILD_DIR/$evidence_file"; then
+                install -m 0644 \
+                  "$BUILD_DIR/$evidence_file" \
+                  "evidence/$evidence_file"
               fi
-            elif test -e "$raw_bundle_path" || test -L "$raw_bundle_path" || \
-              test -e "$raw_sidecar_path" || test -L "$raw_sidecar_path"
-            then
-              raw_collection_status=incomplete-or-unsafe-pair-not-copied
-            fi
+            done
             for evidence_file in \
               mckernel.img.map \
               mckernel-linked-text-ownership.json \
@@ -1157,9 +1157,24 @@ jobs:
                 --files-from="$GITHUB_WORKSPACE/evidence/build-products.list0"
             )
           fi
-          printf 'status=%s\ncredit=forbidden\n' "$raw_collection_status" \
-            > evidence/host-module-failure-semantics-v3-raw-collection.txt
-          test "$raw_collection_status" = complete-checksum-verified || exit 1
+          (
+            cd evidence || exit
+            for evidence_file in \
+              host-module-failure-contract-review-v2.json \
+              host-module-failure-semantics-v3-retention/host-module-failure-semantics-v3-raw.tar \
+              host-module-failure-semantics-v3-retention/host-module-failure-semantics-v3-raw.tar.sha256 \
+              host-module-failure-semantics-v3-retention/host-module-failure-semantics-v3-retention-v1.json \
+              host-module-failure-semantics-v3-retention.log \
+              host-module-failure-semantics-v3-retention.status \
+              host-module-failure-semantics-v3.json \
+              host-module-failure-contract-review-v3.json
+            do
+              if test -s "$evidence_file"; then
+                sha256sum -- "$evidence_file"
+              fi
+            done
+          ) > evidence/host-module-failure-semantics-v3-retained.sha256
+          test "$raw_semantics_retention_status" -eq 0 || exit 1
 
       - name: Upload Rocky build evidence
         if: ${{ always() }}

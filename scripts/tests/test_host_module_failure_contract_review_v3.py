@@ -785,13 +785,15 @@ class ReviewV3Tests(unittest.TestCase):
             },
             {"name": "unused", "number": 2},
         ]
-        with self.assertRaisesRegex(
-            review.ReviewV3Error, "pruned a live callee"
-        ):
+        self.assertEqual(
             review.independent_parse_cgraph(
                 cgraph_bytes(pruned_declaration, pruned_declaration[:1]),
                 "fixture.c",
-            )
+            ),
+            review.independent_parse_cgraph(
+                cgraph_bytes(pruned_declaration), "fixture.c"
+            ),
+        )
         changed_printable_name = copy.deepcopy(pruned_declaration)
         changed_printable_name[1]["printable_name"] = "renamed_only"
         with self.assertRaisesRegex(review.ReviewV3Error, "tables differ"):
@@ -814,6 +816,16 @@ class ReviewV3Tests(unittest.TestCase):
             review.independent_parse_cgraph(
                 cgraph_bytes(pruned_declaration, changed_retained_caller),
                 "fixture.c",
+            )
+        unknown_callee = [
+            {
+                "name": "one", "number": 1, "definition": True,
+                "calls": (("missing", 99),),
+            },
+        ]
+        with self.assertRaisesRegex(review.ReviewV3Error, "unknown callee"):
+            review.independent_parse_cgraph(
+                cgraph_bytes(unknown_callee), "fixture.c"
             )
         analyzed_definitions = [
             {"name": "one", "number": 1, "definition": True},
@@ -1189,6 +1201,34 @@ class ReviewV3Tests(unittest.TestCase):
         target = [item for item in repeated if item["number"] == 1][0]
         self.assertEqual(target["name"], "asm_target")
         self.assertEqual(target["printable_name"], "source_target")
+
+        # The first Initial table remains authoritative when GCC drops the
+        # declaration-only target from a later phase.  The retained caller's
+        # edge still binds printable name plus number to that first-table
+        # assembler identity.
+        self.assertEqual(
+            repeated,
+            review.independent_parse_cgraph(
+                cgraph_bytes(records, [copy.deepcopy(records[1])]),
+                "fixture.c",
+            ),
+        )
+
+        assembler_spelled_call = copy.deepcopy(records)
+        assembler_spelled_call[1]["calls"] = (("asm_target", 1),)
+        with self.assertRaisesRegex(
+            review.ReviewV3Error, "printable name differs"
+        ):
+            review.independent_parse_cgraph(
+                cgraph_bytes(assembler_spelled_call), "fixture.c"
+            )
+
+        changed_assembler_name = copy.deepcopy(records)
+        changed_assembler_name[0]["name"] = "other_asm_target"
+        with self.assertRaisesRegex(review.ReviewV3Error, "tables differ"):
+            review.independent_parse_cgraph(
+                cgraph_bytes(records, changed_assembler_name), "fixture.c"
+            )
 
     def test_independent_call_identity_requires_number_and_printable_name(self):
         source_zero = [

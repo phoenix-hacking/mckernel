@@ -33,10 +33,10 @@ CONTRACT_PATH = Path(
 )
 BASE_CHECKER_PATH = Path("scripts/fp0006_ihk_device_negative_dispatch.py")
 ENVELOPE_NAME = "fp0006-runtime-capture-v1.tar"
-EXPECTED_CONTRACT_SHA256 = "4b1950655483d8bf3372b481998f7006a251cd18383ec9157c14b594df9daa16"
-EXPECTED_CONTRACT_SIZE = 8780
-EXPECTED_LEGACY_WORKFLOW_SHA256 = "b38e50bcd0d119f5fa7650264bdb0b7fda7fdc0c9de54142fd09917d6f397726"
-EXPECTED_NATIVE_WORKFLOW_SHA256 = "3ac4dd4716144e015fbe8b0db8d1365e47fc6f162ee27c50db2b3dff3f63d2bf"
+EXPECTED_CONTRACT_SHA256 = "4a289bb8e50b99f284d95483df564913c94a4124f051180cbe767ee06ad1375b"
+EXPECTED_CONTRACT_SIZE = 9204
+EXPECTED_LEGACY_WORKFLOW_SHA256 = "e58a127f7f80cd0097705f36ce79f72169bf01ecb305cb7ec3b1b4af0e2a7924"
+EXPECTED_NATIVE_WORKFLOW_SHA256 = "a9b85eac8389b2b3c93f1f45955a0624609e55013da54cb609be7b8765687307"
 EXPECTED_LEGACY_BOOT_ACTIVE_SHA256 = "6a8b2a5a0ae4eb7ed752d5ec18b68edeb2fec5a1ffded5d6359d1685d634bde4"
 EXPECTED_LEGACY_FINALIZE_ACTIVE_SHA256 = "8a0529df14c4bd6544a0454e406e888e8e3f67e5dc4491fc80116a8ce872b391"
 EXPECTED_NATIVE_CAPTURE_ACTIVE_SHA256 = "bbeeaaf364713206fc439455491adb7cda7b1c9b5fd3f516f76565111c634340"
@@ -371,111 +371,91 @@ def _validate_legacy_raw_diagnostic_upload(text: str) -> None:
         raise CaptureError("legacy raw diagnostic collection/upload order differs")
 
     collect = steps[collect_name]
-    expected_prefix = (
+    expected_preamble = (
         "        if: ${{ always() }}\n"
         "        run: |\n"
         "          set +e\n"
         "          mkdir -p evidence\n"
-        "          raw_bundle_path=\"$BUILD_DIR/host-module-failure-semantics-v3-raw.tar\"\n"
-        "          raw_sidecar_path=\"$BUILD_DIR/host-module-failure-semantics-v3-raw.tar.sha256\"\n"
-        "          raw_collection_status=absent-before-raw-capture\n"
+        "          test -d evidence && test ! -L evidence || exit 1\n"
         "          runuser -u validator -- env -u PYTHONHOME -u PYTHONPATH \\\n"
-    )
-    if not collect.startswith(expected_prefix):
-        raise CaptureError("legacy raw diagnostic collection preamble differs")
-
-    expected_raw_block = (
-        "          if test -d \"$BUILD_DIR\"; then\n"
-        "            if test -f \"$raw_bundle_path\" && test ! -L \"$raw_bundle_path\" && \\\n"
-        "              test -f \"$raw_sidecar_path\" && test ! -L \"$raw_sidecar_path\"\n"
-        "            then\n"
-        "              raw_bundle_bytes=\"$(stat -c '%s' -- \"$raw_bundle_path\")\"\n"
-        "              raw_sidecar_bytes=\"$(stat -c '%s' -- \"$raw_sidecar_path\")\"\n"
-        "              if test \"$raw_bundle_bytes\" -gt 0 && \\\n"
-        "                test \"$raw_bundle_bytes\" -le 805306368 && \\\n"
-        "                test \"$raw_sidecar_bytes\" -gt 0 && \\\n"
-        "                test \"$raw_sidecar_bytes\" -le 4096\n"
-        "              then\n"
-        "                if install -m 0644 \"$raw_bundle_path\" evidence/ && \\\n"
-        "                  install -m 0644 \"$raw_sidecar_path\" evidence/ && \\\n"
-        "                  (\n"
-        "                    cd evidence && \\\n"
-        "                      sha256sum host-module-failure-semantics-v3-raw.tar \\\n"
-        "                        > host-module-failure-semantics-v3-raw.tar.observed.sha256\n"
-        "                  ) && \\\n"
-        "                  cmp -s \\\n"
-        "                  evidence/host-module-failure-semantics-v3-raw.tar.observed.sha256 \\\n"
-        "                  evidence/host-module-failure-semantics-v3-raw.tar.sha256\n"
-        "                then\n"
-        "                  raw_collection_status=complete-checksum-verified\n"
-        "                else\n"
-        "                  raw_collection_status=complete-checksum-invalid\n"
-        "                fi\n"
-        "              else\n"
-        "                raw_collection_status=unsafe-size-pair-not-copied\n"
-        "              fi\n"
-        "            elif test -e \"$raw_bundle_path\" || test -L \"$raw_bundle_path\" || \\\n"
-        "              test -e \"$raw_sidecar_path\" || test -L \"$raw_sidecar_path\"\n"
-        "            then\n"
-        "              raw_collection_status=incomplete-or-unsafe-pair-not-copied\n"
-        "            fi\n"
-        "            for evidence_file in \\\n"
-    )
-    if collect.count(expected_raw_block) != 1:
-        raise CaptureError("legacy raw diagnostic bounded-copy scope differs")
-
-    active = _active_lines(collect)
-    outer_guard = 'if test -d "$BUILD_DIR"; then'
-    if active.count(outer_guard) != 1:
-        raise CaptureError("legacy raw diagnostic build-directory guard differs")
-    outer_index = active.index(outer_guard)
-    expected_pre_guard = (
-        "if: ${{ always() }}", "run: |", "set +e", "mkdir -p evidence",
-        'raw_bundle_path="$BUILD_DIR/host-module-failure-semantics-v3-raw.tar"',
-        'raw_sidecar_path="$BUILD_DIR/host-module-failure-semantics-v3-raw.tar.sha256"',
-        "raw_collection_status=absent-before-raw-capture",
-        "runuser -u validator -- env -u PYTHONHOME -u PYTHONPATH \\",
-        "HOME=/home/validator \\",
-        "GITHUB_WORKSPACE=\"$GITHUB_WORKSPACE\" \\",
-        "bash -c '", 'cd "$GITHUB_WORKSPACE"',
-        "git status --short --branch --ignore-submodules=none",
-        "' > evidence/worktree.txt 2>&1",
-    )
-    if active[:outer_index] != expected_pre_guard:
-        raise CaptureError("legacy raw diagnostic pre-guard control scope differs")
-
-    depth = 0
-    outer_depth = None  # type: Optional[int]
-    status_depth = None  # type: Optional[int]
-    for line in active:
-        if line == outer_guard:
-            outer_depth = depth
-        if line == (
-            "> evidence/host-module-failure-semantics-v3-raw-collection.txt"
-        ):
-            status_depth = depth
-        if re.match(r"^if(?:\s|$)", line) is not None:
-            depth += 1
-        elif line == "fi":
-            depth -= 1
-            if depth < 0:
-                raise CaptureError("legacy raw diagnostic guards are unbalanced")
-    if depth != 0 or outer_depth != 0 or status_depth != 0:
-        raise CaptureError("legacy raw diagnostic execution is conditionally guarded")
-    if sum(
-        1 for line in active if line.startswith("raw_collection_status=")
-    ) != 5:
-        raise CaptureError("legacy raw diagnostic status assignments differ")
-
-    expected_status = (
+        "            HOME=/home/validator \\\n"
+        "            GITHUB_WORKSPACE=\"$GITHUB_WORKSPACE\" \\\n"
+        "            bash -c '\n"
+        "              cd \"$GITHUB_WORKSPACE\"\n"
+        "              git status --short --branch --ignore-submodules=none\n"
+        "            ' > evidence/worktree.txt 2>&1\n"
+        "\n"
+        "          retention_evidence_dir=\"$GITHUB_WORKSPACE/evidence/host-module-failure-semantics-v3-retention\"\n"
+        "          if test -e \"$retention_evidence_dir\" || test -L \"$retention_evidence_dir\"; then\n"
+        "            exit 1\n"
         "          fi\n"
-        "          printf 'status=%s\\ncredit=forbidden\\n' \"$raw_collection_status\" \\\n"
-        "            > evidence/host-module-failure-semantics-v3-raw-collection.txt\n"
-        "          test \"$raw_collection_status\" = complete-checksum-verified || exit 1\n"
+        "          install -d -m 0750 -o validator -g validator -- \\\n"
+        "            \"$retention_evidence_dir\"\n"
+        "          raw_semantics_retention_status=0\n"
+        "          runuser -u validator -- env -i \\\n"
+        "            HOME=/home/validator \\\n"
+        "            LANG=C \\\n"
+        "            LC_ALL=C \\\n"
+        "            PATH=/usr/bin:/bin \\\n"
+        "            PYTHONDONTWRITEBYTECODE=1 \\\n"
+        "            /usr/bin/python3 -E -s -B \\\n"
+        "            \"$GITHUB_WORKSPACE/scripts/host_module_failure_semantics_retention_v3.py\" \\\n"
+        "            --build-dir \"$BUILD_DIR\" \\\n"
+        "            --evidence-dir \"$retention_evidence_dir\" \\\n"
+        "            > evidence/host-module-failure-semantics-v3-retention.log 2>&1 ||\n"
+        "            raw_semantics_retention_status=$?\n"
+        "          printf 'exit_status=%s\\ncredit=forbidden\\n' \\\n"
+        "            \"$raw_semantics_retention_status\" \\\n"
+        "            > evidence/host-module-failure-semantics-v3-retention.status\n"
+        "\n"
+        "          if test -d \"$BUILD_DIR\"; then\n"
+    )
+    if not collect.startswith(expected_preamble):
+        raise CaptureError("legacy raw diagnostic retention preamble differs")
+
+    expected_inventory = (
+        "            for evidence_file in \\\n"
+        "              host-module-failure-contract-review-v2.json \\\n"
+        "              host-module-failure-semantics-v3-retention/host-module-failure-semantics-v3-raw.tar \\\n"
+        "              host-module-failure-semantics-v3-retention/host-module-failure-semantics-v3-raw.tar.sha256 \\\n"
+        "              host-module-failure-semantics-v3-retention/host-module-failure-semantics-v3-retention-v1.json \\\n"
+        "              host-module-failure-semantics-v3-retention.log \\\n"
+        "              host-module-failure-semantics-v3-retention.status \\\n"
+        "              host-module-failure-semantics-v3.json \\\n"
+        "              host-module-failure-contract-review-v3.json\n"
+    )
+    if collect.count(expected_inventory) != 1:
+        raise CaptureError("legacy raw diagnostic retained inventory differs")
+
+    expected_tail = (
+        "          ) > evidence/host-module-failure-semantics-v3-retained.sha256\n"
+        "          test \"$raw_semantics_retention_status\" -eq 0 || exit 1\n"
         "\n"
     )
-    if not collect.endswith(expected_status):
-        raise CaptureError("legacy raw diagnostic status boundary differs")
+    if not collect.endswith(expected_tail):
+        raise CaptureError("legacy raw diagnostic fail-closed boundary differs")
+    if collect.count("scripts/host_module_failure_semantics_retention_v3.py") != 1:
+        raise CaptureError("legacy raw diagnostic helper execution count differs")
+    active_collect = "\n".join(_active_lines(collect))
+    for bypass in ("|| true", "exit 0", "return 0", "trap "):
+        if bypass in active_collect:
+            raise CaptureError(
+                "legacy raw diagnostic collection masks failure with {0}".format(
+                    bypass
+                )
+            )
+    if re.search(
+        r"(?m)^\s*(?:continue-on-error|\"continue-on-error\"|"
+        r"'continue-on-error')\s*:",
+        collect,
+    ) is not None:
+        raise CaptureError("legacy raw diagnostic collection tolerates failure")
+    if re.search(
+        r"(?m)^\s*(?:cp|install)\b[^\n]*(?:raw_bundle_path|"
+        r"host-module-failure-semantics-v3-raw\.tar)",
+        collect,
+    ) is not None:
+        raise CaptureError("legacy raw diagnostic bypasses descriptor-held retention")
 
     expected_upload = (
         "        if: ${{ always() }}\n"
@@ -1313,12 +1293,12 @@ def _load_contract(repo: Path) -> Tuple[Dict[str, Any], bytes]:
     expected_frozen = {
         "contract": {
             "path": "host-kernel/contracts/fp0006-ihk-device-negative-dispatch-v1.json",
-            "sha256": "5c5857fa7403a50aa51756866e57d29c92e6ed8ae15e841fb23328676a6cc054",
+            "sha256": "7f49a3459b8e3002b94e4ab47124501d879f7405f9037155cf7b83396627afd1",
             "size": 19668,
         },
         "checker": {
             "path": "scripts/fp0006_ihk_device_negative_dispatch.py",
-            "sha256": "c11445fa28d326e063c84ea02d2291db740011ed4a27138e41f1e649244bd0af",
+            "sha256": "d03f035089f343a3e4767054631bd3ff381195e207b6bb0cde4b2f266690a30b",
             "size": 51627,
         },
         "tests": {
@@ -1392,7 +1372,8 @@ def _load_contract(repo: Path) -> Tuple[Dict[str, Any], bytes]:
         bound_files,
         (
             "legacy_workflow", "native_runtime_validator", "native_workflow",
-            "qemu_guest_runner", "qemu_validation_wrapper", "rocky_validation",
+            "qemu_guest_runner", "qemu_validation_wrapper", "raw_semantics_parser",
+            "raw_semantics_retention_helper", "rocky_validation",
         ),
         "integration file bindings",
     )
@@ -1404,6 +1385,8 @@ def _load_contract(repo: Path) -> Tuple[Dict[str, Any], bytes]:
         "native_runtime_validator": "scripts/native_rust_runtime_evidence.py",
         "qemu_guest_runner": "scripts/qemu-mckernel-guest.sh",
         "qemu_validation_wrapper": "scripts/qemu-rocky-rust-validation.sh",
+        "raw_semantics_parser": "scripts/host_module_failure_semantics_v3.py",
+        "raw_semantics_retention_helper": "scripts/host_module_failure_semantics_retention_v3.py",
     }
     for name, path in expected_paths.items():
         binding = bound_files[name]

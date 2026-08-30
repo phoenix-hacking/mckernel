@@ -314,22 +314,34 @@ class Rk007BuildReviewV2Tests(unittest.TestCase):
                 "kconfig_solver": (
                     "git-blob:8211d19c56c56368718fe1420937fd5187530773"
                 ),
-                "link_closure": "repository-file",
+                "link_closure": (
+                    "git-blob:8b571f2c122ae8a6102e8ed83129f584701feea2"
+                ),
                 "v1_review": "repository-file",
             },
         )
 
-    def test_frozen_solver_blob_is_independently_rehashed_before_execution(self):
-        with mock.patch.object(
-            reviewer, "_read_historical_blob", return_value=b"mutated"
-        ):
-            with self.assertRaisesRegex(
-                reviewer.BuildReviewV2Error, "frozen reused-module blob bytes differ"
-            ):
-                reviewer._load_exact_module(
-                    "_mckernel_rk007_v2_mutated_solver",
-                    "native_rust_kconfig_solver.py",
-                )
+    def test_frozen_reused_module_blobs_are_rehashed_before_execution(self):
+        cases = (
+            (
+                "_mckernel_rk007_v2_mutated_link_closure",
+                "native_rust_kbuild_link_closure.py",
+            ),
+            (
+                "_mckernel_rk007_v2_mutated_solver",
+                "native_rust_kconfig_solver.py",
+            ),
+        )
+        for module_name, file_name in cases:
+            with self.subTest(file_name=file_name):
+                with mock.patch.object(
+                    reviewer, "_read_historical_blob", return_value=b"mutated"
+                ):
+                    with self.assertRaisesRegex(
+                        reviewer.BuildReviewV2Error,
+                        "frozen reused-module blob bytes differ",
+                    ):
+                        reviewer._load_exact_module(module_name, file_name)
 
     def test_hostile_pythonpath_scripts_package_cannot_hijack_reused_checkers(self):
         with tempfile.TemporaryDirectory() as temporary:

@@ -13,6 +13,7 @@ import host_module_failure_semantics_v3 as semantics
 
 
 EMPTY_SHA = semantics.sha256_bytes(b"")
+REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
 class SyntheticRawFixture:
@@ -215,6 +216,54 @@ class SyntheticRawFixture:
 
 
 class CanonicalBundleTests(unittest.TestCase):
+    def test_workflow_always_retains_raw_capture_on_semantic_failure(self):
+        workflow = (
+            REPO_ROOT / ".github/workflows/rust-x86_64-validation.yml"
+        ).read_text(encoding="utf-8")
+        marker = "      - name: Collect build evidence\n"
+        upload = "      - name: Upload Rocky build evidence\n"
+        self.assertEqual(1, workflow.count(marker))
+        self.assertEqual(1, workflow.count(upload))
+        collector = workflow.split(marker, 1)[1].split(upload, 1)[0]
+        self.assertIn("        if: ${{ always() }}\n", marker + collector)
+        for name in (
+            "host-module-failure-semantics-v3-raw.tar",
+            "host-module-failure-semantics-v3-raw.tar.sha256",
+            "host-module-failure-semantics-v3-retention-v1.json",
+            "host-module-failure-semantics-v3.json",
+            "host-module-failure-contract-review-v3.json",
+        ):
+            self.assertGreaterEqual(collector.count(name), 1, name)
+        self.assertIn(
+            "scripts/host_module_failure_semantics_retention_v3.py", collector
+        )
+        self.assertIn('--build-dir "$BUILD_DIR"', collector)
+        self.assertIn(
+            '--evidence-dir "$retention_evidence_dir"', collector
+        )
+        self.assertIn("runuser -u validator -- env -i", collector)
+        self.assertIn("PYTHONDONTWRITEBYTECODE=1", collector)
+        self.assertIn("/usr/bin/python3 -E -s -B", collector)
+        self.assertIn(
+            "test -d evidence && test ! -L evidence || exit 1", collector
+        )
+        self.assertIn(
+            'if test -e "$retention_evidence_dir" || '
+            'test -L "$retention_evidence_dir"; then',
+            collector,
+        )
+        self.assertIn(
+            "install -d -m 0750 -o validator -g validator --", collector
+        )
+        self.assertIn(
+            'test "$raw_semantics_retention_status" -eq 0 || exit 1',
+            collector,
+        )
+        self.assertNotIn('install -m 0644 "$raw_bundle_path"', collector)
+        self.assertIn(
+            "host-module-failure-semantics-v3-retained.sha256", collector
+        )
+
     def raw_pair(self, root):
         bundle_root = root / "bundle-authority"
         sidecar_root = root / "sidecar-authority"
@@ -1731,11 +1780,25 @@ class DirectCtuGraphTests(unittest.TestCase):
             },
             {"name": "unused", "number": 2, "global": True},
         ]
-        with self.assertRaisesRegex(
-            semantics.SemanticsV3Error, "pruned a live callee"
-        ):
+        self.assertEqual(
             semantics.parse_initial_cgraph(
                 synthetic_cgraph(live_callee, live_callee[:1]), "fixture.c"
+            ),
+            semantics.parse_initial_cgraph(
+                synthetic_cgraph(live_callee), "fixture.c"
+            ),
+        )
+        unknown_callee = [
+            {
+                "name": "one", "number": 1, "definition": True,
+                "global": True, "calls": (("missing", 99),),
+            },
+        ]
+        with self.assertRaisesRegex(
+            semantics.SemanticsV3Error, "unknown symbol number"
+        ):
+            semantics.parse_initial_cgraph(
+                synthetic_cgraph(unknown_callee), "fixture.c"
             )
         changed_printable_name = copy.deepcopy(live_callee)
         changed_printable_name[1]["printable_name"] = "renamed_only"

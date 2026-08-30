@@ -51,13 +51,16 @@ REUSED_MODULE_BINDINGS = {
     ),
 }
 
-# The ef58 review binds the solver bytes that were transported and reviewed at
-# that head.  The active solver is allowed to evolve, but those later bytes
-# must never be substituted into this historical authority.  When the direct
-# worktree file no longer has the frozen identity, recover only the exact Git
-# blob already named by the immutable committed-input record below.  The blob
-# is rechecked against REUSED_MODULE_BINDINGS before it is executed.
+# The ef58 review binds the checker bytes that were transported and reviewed at
+# that head.  Active checkers are allowed to evolve, but those later bytes must
+# never be substituted into this historical authority.  When a direct worktree
+# file no longer has the frozen identity, recover only the exact Git blob
+# already named by the immutable committed-input record below.  The blob is
+# rechecked against REUSED_MODULE_BINDINGS before it is executed.
 REUSED_MODULE_HISTORICAL_BLOBS = {
+    "native_rust_kbuild_link_closure.py": (
+        "8b571f2c122ae8a6102e8ed83129f584701feea2"
+    ),
     "native_rust_kconfig_solver.py": (
         "8211d19c56c56368718fe1420937fd5187530773"
     ),

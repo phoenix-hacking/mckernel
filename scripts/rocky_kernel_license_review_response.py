@@ -126,8 +126,8 @@ CURRENT_IMPLEMENTATION_OVERRIDES = {
     },
     "scripts/rocky_kernel_license_inventory.py": {
         "path": "scripts/rocky_kernel_license_inventory.py",
-        "sha256": "69713cb4bba8c1f2a9ca88b5baed11a1876403c235b6163e469777212b85f374",
-        "size": 61217,
+        "sha256": "e6aa0340364fb033a4a7fce78a1c232103449b1fa1398176ec9eaa4ad8dce4c7",
+        "size": 66347,
     },
     "host-kernel/rocky/source-lock.json": {
         "path": "host-kernel/rocky/source-lock.json",

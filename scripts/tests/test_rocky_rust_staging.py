@@ -102,10 +102,12 @@ class RockyRustStagingTests(unittest.TestCase):
                 "abi/x86_64.rs",
                 "ikc_queue.rs",
                 "os_registry.rs",
+                "device_registry.rs",
                 "ikc_master.rs",
                 "ihk_ioctl.rs",
                 "page_allocator.rs",
                 "page_owner_registry.rs",
+                "smp_resource.rs",
                 "ihk.rs",
                 "ihk_smp_x86_64.rs",
                 "mcctrl.rs",
@@ -141,6 +143,99 @@ class RockyRustStagingTests(unittest.TestCase):
         self.write_manifest()
         with self.assertRaises(staging.ValidationError):
             self.plan()
+
+    def test_rust_escape_hatch_macros_reject_whitespace_and_comment_gaps(self):
+        cases = (
+            ("include", 'include \n ! \n ("hidden.rs");'),
+            ("include_bytes", 'include_bytes /* gap */ ! ["payload.bin"];'),
+            ("asm", 'core::arch::asm\t!\n("nop");'),
+            ("global_asm", 'global_asm /* gap */ ! {".byte 0"}'),
+        )
+        for name, source in cases:
+            with self.subTest(macro=name), self.assertRaisesRegex(
+                staging.ValidationError, "macro boundary: {0}!".format(name)
+            ):
+                staging._validate_rust_escape_hatches(source, "test source")
+
+    def test_rust_escape_hatch_rejects_macro_aliases_and_forwarding(self):
+        cases = (
+            (
+                "global_asm",
+                'use core::arch::global_asm as emit; emit!(".byte 0");',
+            ),
+            (
+                "include",
+                "macro_rules! forward { ($macro:ident) => { $macro!(\"hidden.rs\") } }\n"
+                "forward!(include);",
+            ),
+        )
+        for name, source in cases:
+            with self.subTest(capability=name), self.assertRaisesRegex(
+                staging.ValidationError, "macro boundary: {0}!".format(name)
+            ):
+                staging._validate_rust_escape_hatches(source, "test source")
+
+    def test_rust_escape_hatch_rejects_every_additional_extern_form(self):
+        cases = (
+            'extern   "C" { fn legacy(); }',
+            'extern /* gap */ "system" { fn legacy(); }',
+            "unsafe extern\n{ fn legacy(); }",
+            'pub extern "C" fn exported() {}',
+            "extern crate hidden_dependency;",
+        )
+        for source in cases:
+            with self.subTest(source=source), self.assertRaisesRegex(
+                staging.ValidationError, "extern boundary"
+            ):
+                staging._validate_rust_escape_hatches(source, "test source")
+
+    def test_rust_escape_hatch_ignores_comments_strings_and_raw_identifiers(self):
+        inert = r'''
+// include ! ("comment.rs"); extern "C" { fn comment(); }
+/* outer global_asm ! {"comment"}
+   /* nested include_bytes ! ("comment.bin") */
+   extern "system" { fn comment(); }
+*/
+const ORDINARY: &str = "asm ! (\"nop\"); extern \"C\" { fn text(); }";
+const RAW: &str = r###"include ! ("raw.rs"); global_asm ! {"raw"}"###;
+const RAW_BYTES: &[u8] = br##"include_bytes ! ("raw.bin")"##;
+fn lifetimes<'a>(value: &'a str) -> &'a str { value }
+fn raw_identifier() { let r#extern = b'x'; let _ = r#extern; }
+fn áextern() {}
+macro_rules! áinclude { () => {} }
+'''
+        staging._validate_rust_escape_hatches(inert, "test source")
+
+    def test_only_the_exact_audited_provider_extern_is_allowed(self):
+        staging._validate_rust_escape_hatches(
+            staging.AUDITED_PROVIDER_EXTERN,
+            "audited source",
+            allowed_extern_blocks=(staging.AUDITED_PROVIDER_EXTERN,),
+        )
+        with self.assertRaisesRegex(staging.ValidationError, "extern boundary"):
+            staging._validate_rust_escape_hatches(
+                staging.AUDITED_PROVIDER_EXTERN
+                + '\nextern "Rust" { static SECOND_PROVIDER: u8; }',
+                "audited source",
+                allowed_extern_blocks=(staging.AUDITED_PROVIDER_EXTERN,),
+            )
+
+    def test_audited_provider_extern_rejects_outer_attributes_and_modifiers(self):
+        prefixes = (
+            '#[link(name = "unreviewed")]\n',
+            "#[cfg(any())]\n",
+            "pub ",
+            "unsafe ",
+        )
+        for prefix in prefixes:
+            with self.subTest(prefix=prefix), self.assertRaisesRegex(
+                staging.ValidationError, "exact audited extern boundary"
+            ):
+                staging._validate_rust_escape_hatches(
+                    prefix + staging.AUDITED_PROVIDER_EXTERN,
+                    "audited source",
+                    allowed_extern_blocks=(staging.AUDITED_PROVIDER_EXTERN,),
+                )
 
     def test_readiness_cannot_be_self_attested(self):
         self.manifest["readiness"] = {
@@ -212,10 +307,12 @@ class RockyRustStagingTests(unittest.TestCase):
                 "abi/x86_64.rs",
                 "ikc_queue.rs",
                 "os_registry.rs",
+                "device_registry.rs",
                 "ikc_master.rs",
                 "ihk_ioctl.rs",
                 "page_allocator.rs",
                 "page_owner_registry.rs",
+                "smp_resource.rs",
                 "ihk.rs",
                 "ihk_smp_x86_64.rs",
                 "mcctrl.rs",
@@ -251,11 +348,12 @@ class RockyRustStagingTests(unittest.TestCase):
         self.assertEqual(staging.EXPECTED_INPUTS[3]["sha256"], digest(queue_path))
         master_path = os.path.join(target, "ikc_master.rs")
         self.assertTrue(os.path.isfile(master_path))
-        self.assertEqual(staging.EXPECTED_INPUTS[5]["sha256"], digest(master_path))
+        self.assertEqual(staging.EXPECTED_INPUTS[6]["sha256"], digest(master_path))
         with open(os.path.join(target, "ihk.rs"), "r") as stream:
             root = stream.read()
             self.assertIn("mod ikc_queue;", root)
             self.assertIn("mod os_registry;", root)
+            self.assertIn("mod device_registry;", root)
             self.assertIn("mod ikc_master;", root)
         self.assertFalse(plan["credit_eligible"])
 
@@ -276,6 +374,25 @@ class RockyRustStagingTests(unittest.TestCase):
         with self.assertRaises(staging.ValidationError):
             self.plan()
 
+    def test_device_registry_is_staged_at_the_module_import_path(self):
+        plan = self.plan()
+        kernel = os.path.join(self.temporary, "device-registry-evidence-kernel")
+        os.makedirs(os.path.join(kernel, "drivers", "misc"))
+        target = staging.stage_for_evidence(plan, kernel)
+        registry_path = os.path.join(target, "device_registry.rs")
+        self.assertTrue(os.path.isfile(registry_path))
+        self.assertEqual(staging.EXPECTED_INPUTS[5]["sha256"], digest(registry_path))
+        with open(os.path.join(target, "ihk.rs"), "r") as stream:
+            self.assertIn("mod device_registry;", stream.read())
+        self.assertFalse(plan["credit_eligible"])
+
+    def test_device_registry_path_injection_is_rejected_even_when_hashed(self):
+        item = self.manifest["inputs"][5]
+        item["destination"] = "../device_registry.rs"
+        self.write_manifest()
+        with self.assertRaises(staging.ValidationError):
+            self.plan()
+
     def test_ioctl_dispatcher_is_staged_beside_its_registry(self):
         plan = self.plan()
         kernel = os.path.join(self.temporary, "ioctl-evidence-kernel")
@@ -283,11 +400,12 @@ class RockyRustStagingTests(unittest.TestCase):
         target = staging.stage_for_evidence(plan, kernel)
         dispatcher_path = os.path.join(target, "ihk_ioctl.rs")
         self.assertTrue(os.path.isfile(dispatcher_path))
-        self.assertEqual(staging.EXPECTED_INPUTS[6]["sha256"], digest(dispatcher_path))
+        self.assertEqual(staging.EXPECTED_INPUTS[7]["sha256"], digest(dispatcher_path))
         with open(os.path.join(target, "ihk.rs"), "r") as stream:
             source = stream.read()
         self.assertIn("mod ikc_queue;", source)
         self.assertIn("mod os_registry;", source)
+        self.assertIn("mod device_registry;", source)
         self.assertIn("mod ikc_master;", source)
         self.assertIn("mod ihk_ioctl;", source)
         self.assertFalse(plan["credit_eligible"])
@@ -301,8 +419,8 @@ class RockyRustStagingTests(unittest.TestCase):
         owner_path = os.path.join(target, "page_owner_registry.rs")
         self.assertTrue(os.path.isfile(allocator_path))
         self.assertTrue(os.path.isfile(owner_path))
-        self.assertEqual(staging.EXPECTED_INPUTS[7]["sha256"], digest(allocator_path))
-        self.assertEqual(staging.EXPECTED_INPUTS[8]["sha256"], digest(owner_path))
+        self.assertEqual(staging.EXPECTED_INPUTS[8]["sha256"], digest(allocator_path))
+        self.assertEqual(staging.EXPECTED_INPUTS[9]["sha256"], digest(owner_path))
         destinations = [item["destination"] for item in plan["manifest"]["inputs"]]
         self.assertLess(
             destinations.index("page_allocator.rs"),
@@ -330,8 +448,27 @@ class RockyRustStagingTests(unittest.TestCase):
                 with open(os.path.join(REPO_ROOT, staging.DEFAULT_MANIFEST), "r") as stream:
                     self.manifest = json.load(stream)
 
+    def test_smp_resource_is_staged_and_bound_by_the_smp_crate(self):
+        plan = self.plan()
+        kernel = os.path.join(self.temporary, "smp-resource-evidence-kernel")
+        os.makedirs(os.path.join(kernel, "drivers", "misc"))
+        target = staging.stage_for_evidence(plan, kernel)
+        policy_path = os.path.join(target, "smp_resource.rs")
+        self.assertTrue(os.path.isfile(policy_path))
+        self.assertEqual(staging.EXPECTED_INPUTS[10]["sha256"], digest(policy_path))
+        with open(os.path.join(target, "ihk_smp_x86_64.rs"), "r") as stream:
+            self.assertIn("mod smp_resource;", stream.read())
+        self.assertFalse(plan["credit_eligible"])
+
+    def test_smp_resource_path_injection_is_rejected_even_when_hashed(self):
+        item = self.manifest["inputs"][10]
+        item["destination"] = "../smp_resource.rs"
+        self.write_manifest()
+        with self.assertRaises(staging.ValidationError):
+            self.plan()
+
     def test_ioctl_dispatcher_path_injection_is_rejected_even_when_hashed(self):
-        item = self.manifest["inputs"][6]
+        item = self.manifest["inputs"][7]
         item["destination"] = "../ihk_ioctl.rs"
         self.write_manifest()
         with self.assertRaises(staging.ValidationError):
