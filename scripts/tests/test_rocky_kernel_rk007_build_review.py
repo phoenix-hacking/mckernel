@@ -408,15 +408,16 @@ class Rk007BuildReviewTests(unittest.TestCase):
         with self.assertRaises(reviewer.BuildReviewError):
             reviewer.validate_review_object(mutated)
 
-    def test_current_repository_rejects_unreviewed_active_workflow_descendant(self):
-        with self.assertRaisesRegex(
-            reviewer.BuildReviewError,
-            r"committed input 0 (?:current blob|worktree (?:size|digest)) differs",
-        ):
+    def test_current_repository_accepts_exact_reviewed_descendant(self):
+        expected_head = reviewer.run_git(
+            REPO_ROOT, ["rev-parse", "HEAD"]
+        ).stdout.decode("ascii").strip()
+        self.assertEqual(
             reviewer.validate_repository(
                 REPO_ROOT, reviewer.validate_review_object(copy.deepcopy(self.review))
-            )
-
+            ),
+            expected_head,
+        )
     def test_descendant_port_requires_exact_old_to_new_records(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -578,18 +579,22 @@ class Rk007BuildReviewTests(unittest.TestCase):
             "GIT_NO_REPLACE_OBJECTS": "0",
             "GIT_WORK_TREE": "/definitely/not/the/reviewed/worktree",
         }
+        expected_head = reviewer.run_git(
+            REPO_ROOT, ["rev-parse", "HEAD"]
+        ).stdout.decode("ascii").strip()
         with mock.patch.dict(os.environ, redirected, clear=False):
-            with self.assertRaisesRegex(reviewer.BuildReviewError, "committed input 0"):
+            self.assertEqual(
                 reviewer.validate_repository(
                     REPO_ROOT, reviewer.validate_review_object(copy.deepcopy(self.review))
-                )
-            for name, value in redirected.items():
-                self.assertEqual(os.environ.get(name), value)
-
+                ),
+                expected_head,
+            )
+            for name, item in redirected.items():
+                self.assertEqual(os.environ.get(name), item)
     def test_checked_policy_rejects_unreviewed_port_records(self):
         base = copy.deepcopy(self.review)
         policy = base["current_repository_input_policy"]
-        self.assertEqual(policy["current_override_count"], 5)
+        self.assertEqual(policy["current_override_count"], 8)
         self.assertEqual(policy["current_overrides"], reviewer.EXPECTED_CURRENT_OVERRIDES)
         self.assertEqual(
             [row["path"] for row in policy["current_overrides"]],
@@ -597,6 +602,9 @@ class Rk007BuildReviewTests(unittest.TestCase):
                 ".github/workflows/native-rust-host-modules-exact-build.yml",
                 "host-kernel/kbuild/Kconfig",
                 "host-kernel/kbuild/stage-manifest.json",
+                "host-kernel/native-rust/abi/x86_64.rs",
+                "host-kernel/native-rust/ihk.rs",
+                "host-kernel/native-rust/ihk_smp_x86_64.rs",
                 "host-kernel/rocky/configs/native-rust-evidence.config",
                 "scripts/rocky_rust_staging.py",
             ],
@@ -900,19 +908,17 @@ class Rk007BuildReviewTests(unittest.TestCase):
         self.assertIn("feature_version", patched.call_args_list[0][1])
         self.assertNotIn("feature_version", patched.call_args_list[1][1])
 
-    def test_cli_check_mode_fails_closed_on_unreviewed_active_workflow(self):
+    def test_cli_check_mode_accepts_exact_reviewed_descendant(self):
         completed = subprocess.run(
             [sys.executable, str(MODULE_PATH), "--repo", str(REPO_ROOT), "--check"],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         )
-        self.assertEqual(completed.returncode, 1)
-        self.assertEqual(completed.stdout, b"")
-        self.assertIn(
-            "committed input 0",
-            completed.stderr.decode("utf-8", errors="replace"),
-        )
-
+        self.assertEqual(completed.returncode, 0)
+        self.assertEqual(completed.stderr, b"")
+        result = json.loads(completed.stdout.decode("ascii"))
+        self.assertEqual(result["review_id"], reviewer.REVIEW_ID)
+        self.assertFalse(result["claims"]["credit_eligible"])
     def test_exact_artifact_verifies_when_available(self):
         self.require_artifact()
         result = reviewer.verify_artifact(self.artifact_path, copy.deepcopy(self.review))

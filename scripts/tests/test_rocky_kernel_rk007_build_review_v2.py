@@ -208,7 +208,7 @@ class Rk007BuildReviewV2Tests(unittest.TestCase):
     def test_current_input_port_is_closed_and_preserves_every_ef58_record(self):
         policy = self.review["current_repository_input_policy"]
         self.assertEqual(policy["bound_input_count"], len(reviewer.EXPECTED_INPUTS))
-        self.assertEqual(policy["current_override_count"], 2)
+        self.assertEqual(policy["current_override_count"], 9)
         self.assertEqual(policy["current_overrides"], reviewer.EXPECTED_CURRENT_OVERRIDES)
         self.assertIs(policy["historical_runtime_inputs_immutable"], True)
         self.assertIs(policy["require_head_index_worktree_equality"], True)
@@ -217,6 +217,13 @@ class Rk007BuildReviewV2Tests(unittest.TestCase):
             [row["path"] for row in policy["current_overrides"]],
             [
                 ".github/workflows/native-rust-host-modules-exact-build.yml",
+                "host-kernel/kbuild/stage-manifest.json",
+                "host-kernel/native-rust/abi/x86_64.rs",
+                "host-kernel/native-rust/ihk.rs",
+                "host-kernel/native-rust/ihk_smp_x86_64.rs",
+                "scripts/rocky_rust_staging.py",
+                "scripts/native_rust_kbuild_link_closure.py",
+                "scripts/native_rust_kconfig_solver.py",
                 "scripts/rocky_kernel_rk007_build_review.py",
             ],
         )
@@ -263,15 +270,16 @@ class Rk007BuildReviewV2Tests(unittest.TestCase):
                 ):
                     reviewer.validate_review_object(mutated)
 
-    def test_current_repository_rejects_unreviewed_active_workflow_descendant(self):
-        with self.assertRaisesRegex(
-            reviewer.BuildReviewV2Error,
-            r"committed input 0 (?:current|worktree)",
-        ):
+    def test_current_repository_accepts_exact_reviewed_descendant(self):
+        expected_head = reviewer.v1_review.run_git(
+            REPO_ROOT, ["rev-parse", "HEAD"]
+        ).stdout.decode("ascii").strip()
+        self.assertEqual(
             reviewer.validate_repository(
                 REPO_ROOT, reviewer.validate_review_object(copy.deepcopy(self.review))
-            )
-
+            ),
+            expected_head,
+        )
     def test_repository_public_api_rejects_empty_or_altered_input_bindings(self):
         empty = copy.deepcopy(self.review)
         empty["runtime_candidate"]["committed_inputs"] = []
@@ -288,14 +296,16 @@ class Rk007BuildReviewV2Tests(unittest.TestCase):
             "GIT_INDEX_FILE": "/not/the/index", "GIT_NO_REPLACE_OBJECTS": "0",
             "GIT_WORK_TREE": "/not/the/worktree",
         }
+        expected_head = reviewer.v1_review.run_git(
+            REPO_ROOT, ["rev-parse", "HEAD"]
+        ).stdout.decode("ascii").strip()
         with mock.patch.dict(os.environ, redirected, clear=False):
-            with self.assertRaisesRegex(
-                reviewer.BuildReviewV2Error, "committed input 0"
-            ):
-                reviewer.validate_repository(REPO_ROOT, copy.deepcopy(self.review))
-            for name, value in redirected.items():
-                self.assertEqual(os.environ.get(name), value)
-
+            self.assertEqual(
+                reviewer.validate_repository(REPO_ROOT, copy.deepcopy(self.review)),
+                expected_head,
+            )
+            for name, item in redirected.items():
+                self.assertEqual(os.environ.get(name), item)
     def test_reused_modules_have_exact_repo_origins(self):
         expected = {
             "kconfig_policy": SCRIPTS / "native_rust_kconfig_policy.py",
@@ -370,12 +380,10 @@ class Rk007BuildReviewV2Tests(unittest.TestCase):
                 ],
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=environment,
             )
-        self.assertEqual(completed.returncode, 1)
-        error = completed.stderr.decode("utf-8")
-        self.assertIn("committed input 0", error)
-        self.assertNotIn("foreign reused checker imported", error)
-        self.assertNotIn("foreign scripts package imported", error)
-
+        self.assertEqual(completed.returncode, 0)
+        self.assertEqual(completed.stderr, b"")
+        self.assertNotIn(b"foreign reused checker imported", completed.stdout)
+        self.assertNotIn(b"foreign scripts package imported", completed.stdout)
     def test_duplicate_json_keys_and_noncanonical_json_are_rejected(self):
         with self.assertRaisesRegex(reviewer.BuildReviewV2Error, "duplicate JSON key"):
             reviewer.read_json_bytes(b'{"a":1,"a":2}\n', "duplicate")
@@ -666,7 +674,7 @@ class Rk007BuildReviewV2Tests(unittest.TestCase):
         with self.assertRaisesRegex(reviewer.BuildReviewV2Error, "artifact size"):
             reviewer.verify_artifact_bytes(data + b"x", self.review)
 
-    def test_cli_check_mode_fails_closed_on_unreviewed_active_workflow(self):
+    def test_cli_check_mode_accepts_exact_reviewed_descendant(self):
         completed = subprocess.run(
             [
                 sys.executable, str(SCRIPTS / "rocky_kernel_rk007_build_review_v2.py"),
@@ -674,10 +682,11 @@ class Rk007BuildReviewV2Tests(unittest.TestCase):
             ],
             stdout=subprocess.PIPE, stderr=subprocess.PIPE,
         )
-        self.assertEqual(completed.returncode, 1)
-        self.assertEqual(completed.stdout, b"")
-        self.assertIn("committed input 0", completed.stderr.decode("utf-8"))
-
+        self.assertEqual(completed.returncode, 0)
+        self.assertEqual(completed.stderr, b"")
+        result = json.loads(completed.stdout.decode("ascii"))
+        self.assertEqual(result["review_id"], reviewer.REVIEW_ID)
+        self.assertFalse(result["claims"]["credit_eligible"])
     def test_checker_source_parses_as_python_3_6(self):
         source = (SCRIPTS / "rocky_kernel_rk007_build_review_v2.py").read_text()
         try:
