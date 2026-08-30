@@ -126,7 +126,7 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
 
     def test_project_retention_attributes_use_rust_1_89_semantics(self):
         expected_counts = {
-            "ihk.rs": 3,
+            "ihk.rs": 5,
             "ihk_smp_x86_64.rs": 3,
             "mcctrl.rs": 2,
         }
@@ -139,7 +139,7 @@ class RustTargetCompatibilityPatchTests(unittest.TestCase):
                 self.assertEqual(expected, source.count("#[used(compiler)]"))
                 self.assertEqual(0, source.count("#[used]"))
             actual_total += source.count("#[used(compiler)]")
-        self.assertEqual(8, actual_total)
+        self.assertEqual(10, actual_total)
 
     def test_full_compatibility_then_project_series_preserves_bindings(self):
         from scripts import linux_api_exact_probe as probe
