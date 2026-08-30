@@ -226,7 +226,7 @@ EXPECTED_EXACT_BUILD_STEP_SHA256 = {
     "Acquire, patch, and credit-forbidden-stage the exact source": "421ce7c6995f804e64121a048ac5ea524d3df23d20318622c6c75c983bf7f000",
     "Resolve the evidence-only module configuration twice": "e15939bc014dd603fed142c3f5226529aadb7eaa37cd64b3dbf3998e11dd4943",
     "Compile the exact kernel and native Rust modules": "17076a9e00d90489b9429cf31b9f6bb4f6c55a28474aa47a3234cb5cae61a82a",
-    "Validate built metadata and capture immutable diagnostics": "9a4bc826ed9f8864d848722fe2f868e30cffb3c8cfa265a6c4c0e15fb684cf4c",
+    "Validate built metadata and capture immutable diagnostics": "b8081c67aa9dd0c337103b23aebe9d17f9694a3bd1b0b3bf56c17ba751be82c5",
     "Upload compiler evidence or first-failure diagnostics": "f5c304d408baad23b482154ef91a5738f79a48c1a34b898be1c5e2c55499a3d9",
 }
 EXPECTED_RK006_CAPTURE_STEP_SHA256 = {
@@ -243,9 +243,9 @@ EXPECTED_RUNTIME_INIT_SHA256 = (
 )
 EXPECTED_REPOSITORY_WORKFLOW_IDENTITIES = {
     "build_workflow": {
-        "git_blob_sha1": "246ca0c120bd735a9ad354b432b26a418a4c2895",
-        "sha256": "5208456ac4a0930f6d075720183fe0408d528300447ef0f2e7a6d54ec401e4b2",
-        "size": 68825,
+        "git_blob_sha1": "6c302cc1a9ac899fe40dc151f7d513032414b2a7",
+        "sha256": "3ac4dd4716144e015fbe8b0db8d1365e47fc6f162ee27c50db2b3dff3f63d2bf",
+        "size": 69084,
     },
     "runtime_pr_workflow": {
         "git_blob_sha1": "64bb717852d36fc1021e2b61e83aca6415b184d5",
@@ -253,9 +253,9 @@ EXPECTED_REPOSITORY_WORKFLOW_IDENTITIES = {
         "size": 754,
     },
     "runtime_workflow": {
-        "git_blob_sha1": "50fb158ecb2661e26d77dc9b6b5e81eae24602bd",
-        "sha256": "feac826004514694f45deb1665a66d321d09cb4e9ee6cbc62608c242632b3937",
-        "size": 15834,
+        "git_blob_sha1": "0b4685b5142e8162a4cb84fd4fae8b6e57465b5c",
+        "sha256": "22ee9651e907bbc45b9f6b02b63981beb61d8e38c23976272535b0608218d150",
+        "size": 19359,
     },
 }
 BUILD_KERNEL_TARGETS = ["bzImage"]
@@ -1731,6 +1731,155 @@ def _validate_runtime_pr_workflow(text: str) -> None:
         raise EvidenceError("runtime PR wrapper trust/exact-head boundary differs")
 
 
+def _validate_runtime_modinfo_boundary(text: str) -> None:
+    verify_header = (
+        "      - name: Verify immutable build inputs and native module link contracts\n"
+    )
+    next_header = "      - name: Assemble a deterministic lifecycle-only initramfs\n"
+    capture_header = "      - name: Create a credit-forbidden technical capture\n"
+    upload_header = "      - name: Upload technical capture or first-failure diagnostics\n"
+    if any(
+        text.count(header) != 1
+        for header in (verify_header, next_header, capture_header, upload_header)
+    ):
+        raise EvidenceError("runtime workflow modinfo step scope differs")
+    start = text.index(verify_header) + len(verify_header)
+    end = text.index(next_header, start)
+    verify_step = text[start:end]
+    capture_start = text.index(capture_header) + len(capture_header)
+    capture_end = text.index(upload_header, capture_start)
+    capture_step = text[capture_start:capture_end]
+
+    binding = (
+        "          assert_modinfo_binding() {\n"
+        "            test -L \"$modinfo_path\" &&\n"
+        "              test \"$(/usr/bin/readlink -- \"$modinfo_path\")\" = ../bin/kmod &&\n"
+        "              test ! -L \"$modinfo_target\" &&\n"
+        "              test \"$modinfo_path\" -ef \"$modinfo_exec\" &&\n"
+        "              test \"$modinfo_target\" -ef \"$modinfo_exec\" &&\n"
+        "              test \"$(/usr/bin/sha256sum -- \"$modinfo_exec\")\" = \\\n"
+        "              \"$expected_modinfo_sha256  $modinfo_exec\" &&\n"
+        "              test \"$(/usr/bin/rpm -q --qf '%{NEVRA}\\n' kmod)\" = \\\n"
+        "              \"$expected_modinfo_nevra\" &&\n"
+        "              test \"$(/usr/bin/rpm -qf --qf '%{NAME}\\n' \"$modinfo_path\")\" = kmod &&\n"
+        "              test \"$(/usr/bin/rpm -qf --qf '%{NAME}\\n' \"$modinfo_target\")\" = kmod\n"
+        "          }\n"
+    )
+    verify_binding = binding + (
+        "          run_modinfo() (\n"
+        "            assert_modinfo_binding &&\n"
+        "              exec -a modinfo \"$modinfo_exec\" \"$@\"\n"
+        "          )\n"
+    )
+    if verify_step.count(verify_binding) != 1 or capture_step.count(binding) != 1:
+        raise EvidenceError("runtime workflow modinfo retained-descriptor boundary differs")
+
+    common_ordered = (
+        "          expected_modinfo_nevra=kmod-31-13.el10.x86_64\n",
+        "          expected_modinfo_sha256=7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55\n",
+        "          modinfo_path=\"$(command -v modinfo)\"\n",
+        "          modinfo_target=/usr/bin/kmod\n",
+        "          test \"$modinfo_path\" = /usr/sbin/modinfo\n",
+        "          test -x /usr/sbin/modinfo\n",
+        "          test -L /usr/sbin/modinfo\n",
+        "          test \"$(/usr/bin/readlink -- /usr/sbin/modinfo)\" = ../bin/kmod\n",
+        "          test -x \"$modinfo_target\"\n",
+        "          test ! -L \"$modinfo_target\"\n",
+        "          exec {modinfo_fd}<\"$modinfo_target\"\n",
+        "          modinfo_exec=\"/proc/self/fd/$modinfo_fd\"\n",
+        "          test -r \"$modinfo_exec\"\n",
+    )
+    verify_ordered = common_ordered + (
+        verify_binding,
+        "          test -x /usr/bin/nm\n",
+        "          test \"$(run_modinfo -F name \"$BUILD_EVIDENCE/ihk.ko\")\" = ihk\n",
+        "          test \"$(run_modinfo -F name \"$BUILD_EVIDENCE/ihk-smp-x86_64.ko\")\" = ihk_smp_x86_64\n",
+        "          test \"$(run_modinfo -F name \"$BUILD_EVIDENCE/mcctrl.ko\")\" = mcctrl\n",
+        "            /usr/bin/python3 -E -s scripts/ihk_native_lifecycle_check.py \\\n",
+        "            /usr/bin/python3 -E -s scripts/ihk_smp_native_lifecycle_check.py \\\n",
+        "            /usr/bin/python3 -E -s scripts/mcctrl_native_lifecycle_check.py \\\n",
+        "          exec {modinfo_fd}<&-\n",
+    )
+    positions = []
+    for fragment in verify_ordered:
+        if verify_step.count(fragment) != 1:
+            raise EvidenceError("runtime workflow modinfo binding fragment differs")
+        positions.append(verify_step.index(fragment))
+    if positions != sorted(positions):
+        raise EvidenceError("runtime workflow modinfo validation order differs")
+    expected_fd_arguments = (
+        '            --repo "$GITHUB_WORKSPACE" --module "$BUILD_EVIDENCE/ihk.ko" \\\n'
+        '            --modinfo-fd "$modinfo_fd"\n',
+        '            --repo "$GITHUB_WORKSPACE" --module "$BUILD_EVIDENCE/ihk-smp-x86_64.ko" \\\n'
+        '            --modinfo-fd "$modinfo_fd"\n',
+        '            --repo "$GITHUB_WORKSPACE" --module "$BUILD_EVIDENCE/mcctrl.ko" \\\n'
+        '            --modinfo-fd "$modinfo_fd"\n',
+    )
+    if any(verify_step.count(fragment) != 1 for fragment in expected_fd_arguments):
+        raise EvidenceError("runtime workflow lifecycle checker descriptor scope differs")
+
+    binding_calls = [
+        match.start()
+        for match in re.finditer(r"(?m)^          assert_modinfo_binding$", verify_step)
+    ]
+    if len(binding_calls) != 5:
+        raise EvidenceError("runtime workflow modinfo recheck scope differs")
+    first_execution = verify_step.index("          test \"$(run_modinfo -F name")
+    ihk_lifecycle = verify_step.index(
+        "            /usr/bin/python3 -E -s scripts/ihk_native_lifecycle_check.py"
+    )
+    smp_lifecycle = verify_step.index(
+        "            /usr/bin/python3 -E -s scripts/ihk_smp_native_lifecycle_check.py"
+    )
+    mcctrl_lifecycle = verify_step.index(
+        "            /usr/bin/python3 -E -s scripts/mcctrl_native_lifecycle_check.py"
+    )
+    close_descriptor = verify_step.index("          exec {modinfo_fd}<&-")
+    if not (
+        binding_calls[0] < first_execution < binding_calls[1] < ihk_lifecycle
+        < binding_calls[2] < smp_lifecycle < binding_calls[3]
+        < mcctrl_lifecycle < binding_calls[4] < close_descriptor
+    ):
+        raise EvidenceError("runtime workflow modinfo recheck order differs")
+
+    capture_ordered = common_ordered + (
+        binding,
+        "            --capture \\\n",
+        "            --check-runtime-evidence \\\n",
+        "          exec {modinfo_fd}<&-\n",
+    )
+    capture_positions = []
+    for fragment in capture_ordered:
+        if capture_step.count(fragment) != 1:
+            raise EvidenceError("runtime workflow capture modinfo binding fragment differs")
+        capture_positions.append(capture_step.index(fragment))
+    if capture_positions != sorted(capture_positions):
+        raise EvidenceError("runtime workflow capture modinfo validation order differs")
+    if capture_step.count('            --modinfo-fd "$modinfo_fd" \\\n') != 2:
+        raise EvidenceError("runtime workflow evidence checker descriptor scope differs")
+    capture_binding_calls = [
+        match.start()
+        for match in re.finditer(
+            r"(?m)^          assert_modinfo_binding$", capture_step
+        )
+    ]
+    capture_call = capture_step.index("            --capture \\\n")
+    replay_call = capture_step.index("            --check-runtime-evidence \\\n")
+    capture_close = capture_step.index("          exec {modinfo_fd}<&-")
+    if not (
+        len(capture_binding_calls) == 4
+        and capture_binding_calls[0] < capture_call < capture_binding_calls[1]
+        < capture_binding_calls[2] < replay_call < capture_binding_calls[3]
+        < capture_close
+    ):
+        raise EvidenceError("runtime workflow capture modinfo recheck order differs")
+    for step in (verify_step, capture_step):
+        if '          test ! -L /usr/sbin/modinfo\n' in step:
+            raise EvidenceError("runtime workflow rejects the exact packaged modinfo alias")
+        if re.search(r'(?m)^\s*\"\$modinfo_path\"(?:\s|$)', step):
+            raise EvidenceError("runtime workflow executes modinfo through a mutable alias")
+
+
 def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) -> dict[str, Any]:
     repo = repo.resolve()
     contract_path = _repo_file(repo, contract_relative.as_posix(), "runtime contract")
@@ -2076,6 +2225,7 @@ def validate_contract(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) ->
         "runtime_pr_workflow", "runtime PR workflow"
     )
     _validate_runtime_pr_workflow(runtime_pr_workflow)
+    _validate_runtime_modinfo_boundary(runtime_workflow)
     init = _read_text(_repo_file(repo, inputs["init"], "runtime init"), "runtime init")
     poweroff = _read_text(
         _repo_file(repo, inputs["poweroff"], "runtime poweroff"), "runtime poweroff"
@@ -2574,12 +2724,38 @@ def _validate_build_scope_artifacts(
     }
 
 
-def _run_field(module: Path, field: str) -> list[str]:
+def _modinfo_execution(modinfo_fd: int | None) -> tuple[str, tuple[int, ...]]:
+    if modinfo_fd is None:
+        return MODINFO_EXECUTABLE, ()
+    if type(modinfo_fd) is not int or modinfo_fd < 3:
+        raise EvidenceError("modinfo descriptor must be an open integer fd >= 3")
+    try:
+        descriptor_status = os.fstat(modinfo_fd)
+        executable_status = os.stat("/proc/self/fd/{0}".format(modinfo_fd))
+    except OSError as error:
+        raise EvidenceError("modinfo descriptor is unavailable: {0}".format(error)) from error
+    if (
+        not stat.S_ISREG(descriptor_status.st_mode)
+        or descriptor_status.st_dev != executable_status.st_dev
+        or descriptor_status.st_ino != executable_status.st_ino
+    ):
+        raise EvidenceError("modinfo descriptor must identify one regular file")
+    if stat.S_IMODE(descriptor_status.st_mode) & 0o111 == 0:
+        raise EvidenceError("modinfo descriptor target is not executable")
+    return "/proc/self/fd/{0}".format(modinfo_fd), (modinfo_fd,)
+
+
+def _run_field(
+    module: Path, field: str, modinfo_fd: int | None = None
+) -> list[str]:
+    executable, pass_fds = _modinfo_execution(modinfo_fd)
     try:
         result = subprocess.run(
-            [MODINFO_EXECUTABLE, "-F", field, str(module)],
+            ["modinfo", "-F", field, str(module)],
             check=False,
             env=dict(BOUND_ROCKY_TOOL_ENVIRONMENT),
+            executable=executable,
+            pass_fds=pass_fds,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
@@ -2591,8 +2767,13 @@ def _run_field(module: Path, field: str) -> list[str]:
     return [line for line in result.stdout.splitlines() if line]
 
 
-def _module_vermagic_release(module: Path) -> str:
-    records = _run_field(module, "vermagic")
+def _module_vermagic_release(
+    module: Path, modinfo_fd: int | None = None
+) -> str:
+    if modinfo_fd is None:
+        records = _run_field(module, "vermagic")
+    else:
+        records = _run_field(module, "vermagic", modinfo_fd=modinfo_fd)
     if len(records) != 1 or not records[0].split():
         raise EvidenceError("{0} vermagic record differs".format(module.name))
     release = records[0].split()[0]
@@ -3386,7 +3567,10 @@ def _validate_runtime_files(
 
 
 def _validate_build_evidence_directory(
-    contract: dict[str, Any], build_dir: Path, candidate_sha: str
+    contract: dict[str, Any],
+    build_dir: Path,
+    candidate_sha: str,
+    modinfo_fd: int | None = None,
 ) -> tuple[dict[str, Any], dict[str, str]]:
     build_dir = _regular_evidence_directory(build_dir, "build evidence directory")
     initial_directory_identity = _stat_identity(build_dir.lstat())
@@ -3416,8 +3600,14 @@ def _validate_build_evidence_directory(
     modules: dict[str, Any] = {}
     for item in contract["modules"]:
         path = build_dir / item["file"]
-        depends = _run_field(path, "depends")
-        namespaces = _run_field(path, "import_ns")
+        if modinfo_fd is None:
+            depends = _run_field(path, "depends")
+            namespaces = _run_field(path, "import_ns")
+            vermagic_release = _module_vermagic_release(path)
+        else:
+            depends = _run_field(path, "depends", modinfo_fd=modinfo_fd)
+            namespaces = _run_field(path, "import_ns", modinfo_fd=modinfo_fd)
+            vermagic_release = _module_vermagic_release(path, modinfo_fd=modinfo_fd)
         if depends != item["depends"]:
             raise EvidenceError(
                 "{0} dependency metadata differs".format(item["file"])
@@ -3429,7 +3619,7 @@ def _validate_build_evidence_directory(
             raise EvidenceError(
                 "{0} import namespace differs".format(item["file"])
             )
-        if _module_vermagic_release(path) != kernel_release:
+        if vermagic_release != kernel_release:
             raise EvidenceError(
                 "{0} vermagic/build release differs".format(item["file"])
             )
@@ -3488,6 +3678,7 @@ def validate_runtime_evidence_directory(
     directory: Path,
     build_dir: Path,
     contract_relative: Path = DEFAULT_CONTRACT,
+    modinfo_fd: int | None = None,
 ) -> dict[str, str]:
     summary = validate_contract(repo.resolve(), contract_relative)
     contract = _load_json(repo.resolve() / contract_relative)
@@ -3507,6 +3698,7 @@ def validate_runtime_evidence_directory(
         contract,
         build_dir,
         capture_document["identity"]["candidate_sha"],
+        modinfo_fd,
     )
     if replayed_build != capture_document["build"]:
         raise EvidenceError("runtime capture build evidence facts differ")
@@ -3573,6 +3765,7 @@ def capture(
     github_repository: str,
     github_run_id: str,
     github_run_attempt: str,
+    modinfo_fd: int | None = None,
 ) -> dict[str, Any]:
     summary = validate_contract(repo, contract_relative)
     if not HEX40.fullmatch(candidate_sha):
@@ -3590,7 +3783,7 @@ def capture(
         build_dir, "build evidence directory"
     )
     build, _build_records = _validate_build_evidence_directory(
-        contract, bound_build_dir, candidate_sha
+        contract, bound_build_dir, candidate_sha, modinfo_fd
     )
 
     runtime = _validate_runtime_files(
@@ -3656,6 +3849,11 @@ def _parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--github-run-attempt")
     parser.add_argument("--output", type=Path)
     parser.add_argument("--runtime-evidence-dir", type=Path)
+    parser.add_argument(
+        "--modinfo-fd",
+        type=int,
+        help="inherited descriptor for the identity-bound kmod executable",
+    )
     return parser.parse_args(argv)
 
 
@@ -3664,6 +3862,8 @@ def main(argv: list[str] | None = None) -> int:
     repo = args.repo.resolve()
     try:
         if args.check_contract:
+            if args.modinfo_fd is not None:
+                raise EvidenceError("--modinfo-fd is only valid for artifact operations")
             summary = validate_contract(repo, args.contract)
             print(
                 "native-rust-runtime-evidence: CONTRACT-VERIFIED "
@@ -3678,16 +3878,18 @@ def main(argv: list[str] | None = None) -> int:
             if (
                 args.runtime_evidence_dir is None
                 or args.build_evidence_dir is None
+                or args.modinfo_fd is None
             ):
                 raise EvidenceError(
                     "runtime evidence check requires --runtime-evidence-dir and "
-                    "--build-evidence-dir"
+                    "--build-evidence-dir and --modinfo-fd"
                 )
             records = validate_runtime_evidence_directory(
                 repo,
                 args.runtime_evidence_dir,
                 args.build_evidence_dir,
                 args.contract,
+                args.modinfo_fd,
             )
             print(
                 "native-rust-runtime-evidence: ARTIFACT-VERIFIED "
@@ -3710,6 +3912,7 @@ def main(argv: list[str] | None = None) -> int:
             args.github_repository,
             args.github_run_id,
             args.github_run_attempt,
+            args.modinfo_fd,
             args.output,
         )
         if any(value is None for value in required):
@@ -3730,6 +3933,7 @@ def main(argv: list[str] | None = None) -> int:
             args.github_repository,
             args.github_run_id,
             args.github_run_attempt,
+            args.modinfo_fd,
         )
         if args.output.exists() or args.output.is_symlink():
             raise EvidenceError("capture output already exists or is a symlink")

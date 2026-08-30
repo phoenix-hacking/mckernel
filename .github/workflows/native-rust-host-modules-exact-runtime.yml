@@ -117,9 +117,37 @@ jobs:
           test "$(git -C ihk rev-parse HEAD)" = "3114d9e7101ad52030eb3effa849a5c108972a1f"
           (cd "$BUILD_EVIDENCE" && sha256sum --check --strict SHA256SUMS)
           test "$(cat "$BUILD_EVIDENCE/commit.sha")" = "$EXPECTED_HEAD_SHA"
+          expected_modinfo_nevra=kmod-31-13.el10.x86_64
+          expected_modinfo_sha256=7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55
+          modinfo_path="$(command -v modinfo)"
+          modinfo_target=/usr/bin/kmod
+          test "$modinfo_path" = /usr/sbin/modinfo
           test -x /usr/sbin/modinfo
-          test ! -L /usr/sbin/modinfo
-          test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' /usr/sbin/modinfo)" = kmod
+          test -L /usr/sbin/modinfo
+          test "$(/usr/bin/readlink -- /usr/sbin/modinfo)" = ../bin/kmod
+          test -x "$modinfo_target"
+          test ! -L "$modinfo_target"
+          exec {modinfo_fd}<"$modinfo_target"
+          modinfo_exec="/proc/self/fd/$modinfo_fd"
+          test -r "$modinfo_exec"
+          assert_modinfo_binding() {
+            test -L "$modinfo_path" &&
+              test "$(/usr/bin/readlink -- "$modinfo_path")" = ../bin/kmod &&
+              test ! -L "$modinfo_target" &&
+              test "$modinfo_path" -ef "$modinfo_exec" &&
+              test "$modinfo_target" -ef "$modinfo_exec" &&
+              test "$(/usr/bin/sha256sum -- "$modinfo_exec")" = \
+              "$expected_modinfo_sha256  $modinfo_exec" &&
+              test "$(/usr/bin/rpm -q --qf '%{NEVRA}\n' kmod)" = \
+              "$expected_modinfo_nevra" &&
+              test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' "$modinfo_path")" = kmod &&
+              test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' "$modinfo_target")" = kmod
+          }
+          run_modinfo() (
+            assert_modinfo_binding &&
+              exec -a modinfo "$modinfo_exec" "$@"
+          )
+          assert_modinfo_binding
           test -x /usr/bin/nm
           test ! -L /usr/bin/nm
           test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' /usr/bin/nm)" = binutils
@@ -135,15 +163,26 @@ jobs:
           /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
             /usr/bin/python3 -E -s scripts/native_rust_runtime_evidence.py \
             --repo "$GITHUB_WORKSPACE" --check-contract
+          test "$(run_modinfo -F name "$BUILD_EVIDENCE/ihk.ko")" = ihk
+          test "$(run_modinfo -F name "$BUILD_EVIDENCE/ihk-smp-x86_64.ko")" = ihk_smp_x86_64
+          test "$(run_modinfo -F name "$BUILD_EVIDENCE/mcctrl.ko")" = mcctrl
+          assert_modinfo_binding
           /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
             /usr/bin/python3 -E -s scripts/ihk_native_lifecycle_check.py \
-            --repo "$GITHUB_WORKSPACE" --module "$BUILD_EVIDENCE/ihk.ko"
+            --repo "$GITHUB_WORKSPACE" --module "$BUILD_EVIDENCE/ihk.ko" \
+            --modinfo-fd "$modinfo_fd"
+          assert_modinfo_binding
           /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
             /usr/bin/python3 -E -s scripts/ihk_smp_native_lifecycle_check.py \
-            --repo "$GITHUB_WORKSPACE" --module "$BUILD_EVIDENCE/ihk-smp-x86_64.ko"
+            --repo "$GITHUB_WORKSPACE" --module "$BUILD_EVIDENCE/ihk-smp-x86_64.ko" \
+            --modinfo-fd "$modinfo_fd"
+          assert_modinfo_binding
           /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
             /usr/bin/python3 -E -s scripts/mcctrl_native_lifecycle_check.py \
-            --repo "$GITHUB_WORKSPACE" --module "$BUILD_EVIDENCE/mcctrl.ko"
+            --repo "$GITHUB_WORKSPACE" --module "$BUILD_EVIDENCE/mcctrl.ko" \
+            --modinfo-fd "$modinfo_fd"
+          assert_modinfo_binding
+          exec {modinfo_fd}<&-
           : > "$github_env_file"
           : > "$github_path_file"
 
@@ -336,9 +375,37 @@ jobs:
           github_env_file="$GITHUB_ENV"
           github_path_file="$GITHUB_PATH"
           unset GITHUB_ENV GITHUB_PATH
+          expected_modinfo_nevra=kmod-31-13.el10.x86_64
+          expected_modinfo_sha256=7e91f52ed2cd5e2c4f82de4bb07bbaa7179cd5c053b7afcf2fd231056681ed55
+          modinfo_path="$(command -v modinfo)"
+          modinfo_target=/usr/bin/kmod
+          test "$modinfo_path" = /usr/sbin/modinfo
+          test -x /usr/sbin/modinfo
+          test -L /usr/sbin/modinfo
+          test "$(/usr/bin/readlink -- /usr/sbin/modinfo)" = ../bin/kmod
+          test -x "$modinfo_target"
+          test ! -L "$modinfo_target"
+          exec {modinfo_fd}<"$modinfo_target"
+          modinfo_exec="/proc/self/fd/$modinfo_fd"
+          test -r "$modinfo_exec"
+          assert_modinfo_binding() {
+            test -L "$modinfo_path" &&
+              test "$(/usr/bin/readlink -- "$modinfo_path")" = ../bin/kmod &&
+              test ! -L "$modinfo_target" &&
+              test "$modinfo_path" -ef "$modinfo_exec" &&
+              test "$modinfo_target" -ef "$modinfo_exec" &&
+              test "$(/usr/bin/sha256sum -- "$modinfo_exec")" = \
+              "$expected_modinfo_sha256  $modinfo_exec" &&
+              test "$(/usr/bin/rpm -q --qf '%{NEVRA}\n' kmod)" = \
+              "$expected_modinfo_nevra" &&
+              test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' "$modinfo_path")" = kmod &&
+              test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' "$modinfo_target")" = kmod
+          }
+          assert_modinfo_binding
           /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
             /usr/bin/python3 -E -s scripts/native_rust_runtime_evidence.py \
             --repo "$GITHUB_WORKSPACE" \
+            --modinfo-fd "$modinfo_fd" \
             --capture \
             --build-evidence-dir "$BUILD_EVIDENCE" \
             --serial-log "$RUNTIME_EVIDENCE/serial.log" \
@@ -354,6 +421,7 @@ jobs:
             --github-run-id "$GITHUB_RUN_ID" \
             --github-run-attempt "$GITHUB_RUN_ATTEMPT" \
             --output "$RUNTIME_EVIDENCE/capture.json"
+          assert_modinfo_binding
           printf '%s\n' technical-capture-unreviewed > "$RUNTIME_EVIDENCE/workflow-state"
           printf '%s\n' credit=forbidden >> "$RUNTIME_EVIDENCE/workflow-state"
           (
@@ -362,12 +430,16 @@ jobs:
               | LC_ALL=C sort -z | xargs -0 sha256sum -- > SHA256SUMS
             sha256sum --check --strict SHA256SUMS
           )
+          assert_modinfo_binding
           /usr/bin/env -i LANG=C LC_ALL=C PATH=/usr/bin:/bin PYTHONHASHSEED=0 TZ=UTC \
             /usr/bin/python3 -E -s scripts/native_rust_runtime_evidence.py \
             --repo "$GITHUB_WORKSPACE" \
+            --modinfo-fd "$modinfo_fd" \
             --check-runtime-evidence \
             --runtime-evidence-dir "$RUNTIME_EVIDENCE" \
             --build-evidence-dir "$BUILD_EVIDENCE"
+          assert_modinfo_binding
+          exec {modinfo_fd}<&-
           : > "$github_env_file"
           : > "$github_path_file"
 

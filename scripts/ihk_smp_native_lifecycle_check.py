@@ -6,9 +6,11 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 import re
 import shutil
+import stat
 import subprocess
 import sys
 import tempfile
@@ -32,6 +34,12 @@ ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_CONTRACT = Path(
     "host-kernel/native-rust/ihk-smp-lifecycle-contract-v1.json"
 )
+BOUND_MODINFO_ENVIRONMENT = {
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PATH": "/usr/bin:/bin",
+    "TZ": "UTC",
+}
 
 
 class ValidationError(Exception):
@@ -783,22 +791,60 @@ def _raw_modinfo_records(module_path: Path) -> list[str]:
     return records
 
 
-def _modinfo(module_path: Path, field: str) -> list[str]:
-    executable = shutil.which("modinfo")
-    if executable is None:
-        raise ValidationError("modinfo is required for built-module validation")
-    result = subprocess.run(
-        [executable, "-F", field, str(module_path)],
-        check=False,
-        capture_output=True,
-        text=True,
-    )
+def _modinfo_execution(modinfo_fd: int | None) -> tuple[str, tuple[int, ...]]:
+    if modinfo_fd is None:
+        executable = shutil.which("modinfo")
+        if executable is None:
+            raise ValidationError("modinfo is required for built-module validation")
+        return executable, ()
+    if type(modinfo_fd) is not int or modinfo_fd < 3:
+        raise ValidationError("modinfo descriptor must be an open integer fd >= 3")
+    try:
+        descriptor_status = os.fstat(modinfo_fd)
+        executable_status = os.stat(f"/proc/self/fd/{modinfo_fd}")
+    except OSError as error:
+        raise ValidationError(f"modinfo descriptor is unavailable: {error}") from error
+    if (
+        not stat.S_ISREG(descriptor_status.st_mode)
+        or descriptor_status.st_dev != executable_status.st_dev
+        or descriptor_status.st_ino != executable_status.st_ino
+    ):
+        raise ValidationError("modinfo descriptor must identify one regular file")
+    if stat.S_IMODE(descriptor_status.st_mode) & 0o111 == 0:
+        raise ValidationError("modinfo descriptor target is not executable")
+    return f"/proc/self/fd/{modinfo_fd}", (modinfo_fd,)
+
+
+def _modinfo(
+    module_path: Path, field: str, modinfo_fd: int | None = None
+) -> list[str]:
+    executable, pass_fds = _modinfo_execution(modinfo_fd)
+    try:
+        result = subprocess.run(
+            ["modinfo", "-F", field, str(module_path)],
+            check=False,
+            capture_output=True,
+            env=dict(BOUND_MODINFO_ENVIRONMENT),
+            executable=executable,
+            pass_fds=pass_fds,
+            text=True,
+        )
+    except OSError as error:
+        raise ValidationError(f"bound modinfo execution failed: {error}") from error
     if result.returncode != 0:
         raise ValidationError(
             f"modinfo -F {field} failed ({result.returncode}): "
             f"{result.stderr.strip() or result.stdout.strip()}"
         )
     return [line for line in result.stdout.splitlines() if line]
+
+
+def _artifact_modinfo(
+    module_path: Path, field: str, modinfo_fd: int | None
+) -> list[str]:
+    if modinfo_fd is None:
+        return _modinfo(module_path, field)
+    return _modinfo(module_path, field, modinfo_fd=modinfo_fd)
 
 
 def _named_parameter_values(values: list[str], label: str) -> dict[str, str]:
@@ -833,7 +879,10 @@ def _undefined_symbols(module_path: Path) -> set[str]:
 
 
 def validate_module_artifact(
-    module_path: Path, summary: dict[str, Any], contract: dict[str, Any]
+    module_path: Path,
+    summary: dict[str, Any],
+    contract: dict[str, Any],
+    modinfo_fd: int | None = None,
 ) -> None:
     module_path = module_path.resolve()
     if module_path.is_symlink() or not module_path.is_file():
@@ -845,13 +894,13 @@ def validate_module_artifact(
         "import_ns": contract["dependency_contract"]["import_namespaces"],
     }
     for field, expected in scalar_fields.items():
-        actual = _modinfo(module_path, field)
+        actual = _artifact_modinfo(module_path, field, modinfo_fd)
         if actual != expected:
             raise ValidationError(
                 f"built SMP module {field} differs: expected {expected}, got {actual}"
             )
     for field in contract["module"]["forbidden_static_metadata"]:
-        if _modinfo(module_path, field):
+        if _artifact_modinfo(module_path, field, modinfo_fd):
             raise ValidationError(f"built SMP module unexpectedly carries {field} metadata")
     parameters = {item["name"]: item for item in contract["parameters"]}
     raw_records = _raw_modinfo_records(module_path)
@@ -879,8 +928,8 @@ def validate_module_artifact(
             "built SMP module raw parameter types differ: "
             f"expected {expected_raw_parmtype}, got {raw_parmtype}"
         )
-    parm_values = _modinfo(module_path, "parm")
-    type_values = _modinfo(module_path, "parmtype")
+    parm_values = _artifact_modinfo(module_path, "parm", modinfo_fd)
+    type_values = _artifact_modinfo(module_path, "parmtype", modinfo_fd)
     parm = _named_parameter_values(parm_values, "rendered parameter description")
     parmtype = _named_parameter_values(type_values, "rendered parameter type")
     # kmod deliberately renders `modinfo -F parm` by joining each raw
@@ -921,6 +970,11 @@ def _parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument(
         "--module", type=Path, help="also validate built ihk-smp-x86_64.ko metadata"
     )
+    parser.add_argument(
+        "--modinfo-fd",
+        type=int,
+        help="inherited descriptor for the identity-bound kmod executable",
+    )
     parser.add_argument("--json", action="store_true")
     return parser.parse_args(argv)
 
@@ -932,8 +986,10 @@ def main(argv: list[str] | None = None) -> int:
         contract_path = _repo_file(repo, args.contract.as_posix(), "SMP lifecycle contract")
         contract = _load_json(contract_path)
         summary = validate_repository(repo, args.contract)
+        if args.modinfo_fd is not None and args.module is None:
+            raise ValidationError("--modinfo-fd requires --module")
         if args.module is not None:
-            validate_module_artifact(args.module, summary, contract)
+            validate_module_artifact(args.module, summary, contract, args.modinfo_fd)
     except ValidationError as error:
         print(f"ihk-smp-native-lifecycle-check: FAIL: {error}", file=sys.stderr)
         return 1

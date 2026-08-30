@@ -158,8 +158,9 @@ def cgraph_bytes(records, second_records=None):
         lines = ["Initial Symbol table:", ""]
         for record in values:
             lines.append(
-                "{0}/{1} ({0}) @0xADDR".format(
-                    record["name"], record["number"]
+                "{0}/{1} ({2}) @0xADDR".format(
+                    record["name"], record["number"],
+                    record.get("printable_name", record["name"]),
                 )
             )
             lines.append(
@@ -207,7 +208,7 @@ def cgraph_bytes(records, second_records=None):
     return ("\n".join(lines) + "\n").encode("utf-8")
 
 
-def independent_ctu_fixture(source_zero=None):
+def independent_ctu_fixture(source_zero=None, source_one=None):
     inputs = {"sources": {}}
     invocations = {}
     payloads = {}
@@ -222,7 +223,7 @@ def independent_ctu_fixture(source_zero=None):
                 },
             ]
         elif number == 1:
-            records = [
+            records = source_one or [
                 {"name": "callee", "number": 1, "definition": True}
             ]
         else:
@@ -574,6 +575,33 @@ class ReviewV3Tests(unittest.TestCase):
         alias = [item for item in expected if item["name"] == "*alias"][0]
         self.assertEqual(alias["traits"], ["alias"])
 
+    def test_independent_header_rejects_nonidentity_printable_names(self):
+        baseline = cgraph_bytes(
+            [{"name": "named", "number": 1, "definition": True}]
+        )
+        invalid_labels = (
+            b"", b"<unnamed>", b" ", b"named label", b"\t",
+            b"named\x01label", b"named\x7flabel", b"named:name",
+            b"named@name", b"named/name", b"named+name",
+            "snowman_\u2603".encode("utf-8"),
+        )
+        for label in invalid_labels:
+            with self.subTest(label=label):
+                hostile = baseline.replace(
+                    b"named/1 (named)", b"named/1 (" + label + b")"
+                )
+                with self.assertRaisesRegex(
+                    review.ReviewV3Error, "printable name"
+                ):
+                    review.independent_parse_cgraph(hostile, "fixture.c")
+        for label in (b"named.clone.1", b"named$clone-part", b"*alias"):
+            with self.subTest(valid_label=label):
+                candidate = baseline.replace(
+                    b"named/1 (named)", b"named/1 (" + label + b")"
+                )
+                parsed = review.independent_parse_cgraph(candidate, "fixture.c")
+                self.assertEqual(parsed[0]["printable_name"], label.decode("ascii"))
+
     def test_independent_parser_accepts_only_exact_empty_visibility_row(self):
         baseline = cgraph_bytes(
             [
@@ -748,16 +776,42 @@ class ReviewV3Tests(unittest.TestCase):
                 cgraph_bytes(first, first[:1]), "fixture.c"
             ),
         )
-        hostile = [
+        pruned_declaration = [
             {
                 "name": "one", "number": 1, "definition": True,
                 "calls": (("unused", 2),),
             },
             {"name": "unused", "number": 2},
         ]
-        with self.assertRaisesRegex(review.ReviewV3Error, "live callee"):
+        with self.assertRaisesRegex(
+            review.ReviewV3Error, "pruned a live callee"
+        ):
             review.independent_parse_cgraph(
-                cgraph_bytes(hostile, hostile[:1]), "fixture.c"
+                cgraph_bytes(pruned_declaration, pruned_declaration[:1]),
+                "fixture.c",
+            )
+        changed_printable_name = copy.deepcopy(pruned_declaration)
+        changed_printable_name[1]["printable_name"] = "renamed_only"
+        with self.assertRaisesRegex(review.ReviewV3Error, "tables differ"):
+            review.independent_parse_cgraph(
+                cgraph_bytes(pruned_declaration, changed_printable_name),
+                "fixture.c",
+            )
+        later_new_symbol = pruned_declaration + [
+            {"name": "attacker", "number": 3, "definition": True}
+        ]
+        with self.assertRaisesRegex(review.ReviewV3Error, "tables differ"):
+            review.independent_parse_cgraph(
+                cgraph_bytes(pruned_declaration, later_new_symbol),
+                "fixture.c",
+            )
+        changed_retained_caller = [
+            {"name": "one", "number": 1, "definition": True}
+        ]
+        with self.assertRaisesRegex(review.ReviewV3Error, "tables differ"):
+            review.independent_parse_cgraph(
+                cgraph_bytes(pruned_declaration, changed_retained_caller),
+                "fixture.c",
             )
         analyzed_definitions = [
             {"name": "one", "number": 1, "definition": True},
@@ -784,6 +838,19 @@ class ReviewV3Tests(unittest.TestCase):
                 )
                 with self.assertRaisesRegex(review.ReviewV3Error, "unknown"):
                     review.independent_parse_cgraph(decorated, "fixture.c")
+
+        inputs, invocations, payloads = independent_ctu_fixture(
+            [
+                {
+                    "name": "caller", "number": 1,
+                    "definition": True, "calls": (("missing", 2),),
+                }
+            ]
+        )
+        with self.assertRaisesRegex(review.ReviewV3Error, "number is unknown"):
+            review.independently_derive_direct_graph(
+                inputs, invocations, payloads
+            )
 
     def test_independent_gcc_85_decorator_scanner_retains_and_blocks_metadata(self):
         decorators = (
@@ -937,6 +1004,127 @@ class ReviewV3Tests(unittest.TestCase):
         review.validate_independent_direct_graph(
             generated, independent, semantics.flows_v2.FRESH_AUTHORITY_MODE
         )
+
+    def test_independent_printable_call_binds_to_assembler_identity(self):
+        inputs, invocations, payloads = independent_ctu_fixture(
+            source_zero=[
+                {
+                    "name": "asm_target", "number": 1,
+                    "printable_name": "source_target",
+                },
+                {
+                    "name": "caller", "number": 2,
+                    "definition": True,
+                    "calls": (("source_target", 1),),
+                },
+            ],
+            source_one=[
+                {
+                    "name": "asm_target", "number": 1,
+                    "printable_name": "source_target",
+                    "definition": True,
+                }
+            ],
+        )
+        independent = review.independently_derive_direct_graph(
+            inputs, invocations, payloads
+        )
+        self.assertTrue(
+            any(
+                item["callee"]["name"] == "asm_target"
+                and item["caller"]["name"] == "caller"
+                and item["edge_kind"]
+                == "same_module_cross_translation_unit_direct"
+                for item in independent["direct_edges"]
+            )
+        )
+        generated = semantics.derive_direct_ctu_call_graph(
+            inputs,
+            invocations,
+            payloads,
+            semantics.flows_v2.FRESH_AUTHORITY_MODE,
+            semantics.DIRECT_CTU_CHECKED_DIAGNOSTIC,
+        )
+        review.validate_independent_direct_graph(
+            generated, independent, semantics.flows_v2.FRESH_AUTHORITY_MODE
+        )
+
+    def test_independent_repeated_table_binds_dual_identity(self):
+        records = [
+            {
+                "name": "asm_target", "number": 1,
+                "printable_name": "source_target",
+            },
+            {
+                "name": "caller", "number": 2, "definition": True,
+                "calls": (("source_target", 1),),
+            },
+        ]
+        repeated = review.independent_parse_cgraph(
+            cgraph_bytes(records, copy.deepcopy(records)), "fixture.c"
+        )
+        target = [item for item in repeated if item["number"] == 1][0]
+        self.assertEqual(target["name"], "asm_target")
+        self.assertEqual(target["printable_name"], "source_target")
+
+    def test_independent_call_identity_requires_number_and_printable_name(self):
+        source_zero = [
+            {
+                "name": "asm_target", "number": 1,
+                "printable_name": "source_target",
+            },
+            {
+                "name": "caller", "number": 2,
+                "definition": True, "calls": (("source_target", 1),),
+            },
+        ]
+        wrong_name = copy.deepcopy(source_zero)
+        wrong_name[1]["calls"] = (("hostile_target", 1),)
+        inputs, invocations, payloads = independent_ctu_fixture(wrong_name)
+        with self.assertRaisesRegex(review.ReviewV3Error, "printable name differs"):
+            review.independently_derive_direct_graph(
+                inputs, invocations, payloads
+            )
+
+        wrong_number = copy.deepcopy(source_zero)
+        wrong_number[1]["calls"] = (("source_target", 99),)
+        inputs, invocations, payloads = independent_ctu_fixture(wrong_number)
+        with self.assertRaisesRegex(review.ReviewV3Error, "number is unknown"):
+            review.independently_derive_direct_graph(
+                inputs, invocations, payloads
+            )
+
+        missing_number = cgraph_bytes(source_zero).replace(
+            b"  Calls: source_target/1", b"  Calls: source_target"
+        )
+        with self.assertRaisesRegex(review.ReviewV3Error, "unknown"):
+            review.independent_parse_cgraph(missing_number, "fixture.c")
+
+    def test_independent_same_printable_names_resolve_by_number(self):
+        source_zero = [
+            {
+                "name": "asm_first", "number": 1,
+                "printable_name": "shared_source_name", "definition": True,
+            },
+            {
+                "name": "asm_second", "number": 2,
+                "printable_name": "shared_source_name", "definition": True,
+            },
+            {
+                "name": "caller", "number": 3, "definition": True,
+                "calls": (("shared_source_name", 2),),
+            },
+        ]
+        inputs, invocations, payloads = independent_ctu_fixture(source_zero)
+        independent = review.independently_derive_direct_graph(
+            inputs, invocations, payloads
+        )
+        caller_edges = [
+            item for item in independent["direct_edges"]
+            if item["caller"]["name"] == "caller"
+        ]
+        self.assertEqual(len(caller_edges), 1)
+        self.assertEqual(caller_edges[0]["callee"]["name"], "asm_second")
 
     def test_independent_resolver_rejects_every_caller_trait_and_weak_declaration(self):
         cases = {

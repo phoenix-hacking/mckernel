@@ -173,6 +173,7 @@ CGRAPH_HEADER = re.compile(
     r"^(?P<name>\*?[A-Za-z_][A-Za-z0-9_$.-]*)/(?P<number>[0-9]+) "
     r"\((?P<label>[^()]*)\)(?P<address> @0xADDR)?$"
 )
+CGRAPH_PRINTABLE_NAME = re.compile(r"^\*?[A-Za-z_][A-Za-z0-9_$.-]*$")
 CGRAPH_AUX = re.compile(r"^  Aux: @0xADDR$")
 CGRAPH_NON_LF_SEPARATORS = ("\r", "\v", "\f", "\x85", "\u2028", "\u2029")
 CGRAPH_VISIBILITY_VALUE = re.compile(r"^[!-~]+$")
@@ -2465,6 +2466,10 @@ def _parse_initial_cgraph_section(lines, source):
     for line in lines:
         match = CGRAPH_HEADER.match(line)
         if match:
+            if CGRAPH_PRINTABLE_NAME.fullmatch(match.group("label")) is None:
+                raise SemanticsV3Error(
+                    "GCC cgraph symbol has no bounded printable name"
+                )
             current = {
                 "address_taken": False,
                 "calls": [],
@@ -2541,6 +2546,7 @@ def _parse_initial_cgraph_section(lines, source):
                 "indirect_call_count": record["indirect_call_count"],
                 "name": record["name"],
                 "number": record["number"],
+                "printable_name": record["label"],
                 "source": source,
                 "traits": _cgraph_record_traits(record),
             }
@@ -2551,7 +2557,7 @@ def _parse_initial_cgraph_section(lines, source):
 
 
 def parse_initial_cgraph(data, source):
-    """Parse the first initial table and verify later pruned-table continuity."""
+    """Parse the first table and verify later definition-preserving snapshots."""
 
     validate_normalized_cgraph_dump(data)
     text = compiler_text(data, "GCC IPA cgraph")
@@ -2584,37 +2590,53 @@ def parse_initial_cgraph(data, source):
                 break
         tables.append(_parse_initial_cgraph_section(lines[start + 1:end], source))
     first = tables[0]
-    first_by_identity = {
-        (record["name"], record["number"]): record for record in first
-    }
+    first_by_number = {record["number"]: record for record in first}
+    for caller in first:
+        for call in caller["calls"]:
+            declared = first_by_number.get(call["number"])
+            if declared is None:
+                raise SemanticsV3Error(
+                    "GCC Initial Symbol table call has an unknown symbol number"
+                )
+            if declared["printable_name"] != call["name"]:
+                raise SemanticsV3Error(
+                    "GCC Initial Symbol table call printable name differs"
+                )
     first_definitions = {
-        identity for identity, record in first_by_identity.items()
+        number for number, record in first_by_number.items()
         if record["definition"]
     }
     for table in tables[1:]:
-        table_by_identity = {
-            (record["name"], record["number"]): record for record in table
-        }
-        if not set(table_by_identity).issubset(first_by_identity):
+        table_by_number = {record["number"]: record for record in table}
+        if not set(table_by_number).issubset(first_by_number):
             raise SemanticsV3Error(
                 "repeated GCC Initial Symbol table sections are inconsistent"
             )
-        if not first_definitions.issubset(table_by_identity):
+        if not first_definitions.issubset(table_by_number):
             raise SemanticsV3Error(
                 "repeated GCC Initial Symbol table pruned an analyzed definition"
             )
         if any(
-            not strict_equal(record, first_by_identity[identity])
-            for identity, record in table_by_identity.items()
+            not strict_equal(record, first_by_number[number])
+            for number, record in table_by_number.items()
         ):
             raise SemanticsV3Error(
                 "repeated GCC Initial Symbol table sections are inconsistent"
             )
-        for record in table:
-            for call in record["calls"]:
-                if (call["name"], call["number"]) not in table_by_identity:
+        # GCC 8.5 prints Calls entries with dump_name (the printable name plus
+        # symbol order), while headers use dump_asm_name plus name.  Resolve
+        # the stable number first and then require the exact printable name;
+        # every retained edge owns a live callee node in the same dump table.
+        for caller in table:
+            for call in caller["calls"]:
+                declared = table_by_number.get(call["number"])
+                if declared is None:
                     raise SemanticsV3Error(
                         "repeated GCC Initial Symbol table pruned a live callee"
+                    )
+                if declared["printable_name"] != call["name"]:
+                    raise SemanticsV3Error(
+                        "repeated GCC Initial Symbol table call printable name differs"
                     )
     return first
 
@@ -2722,9 +2744,13 @@ def derive_direct_ctu_call_graph(
                 )
             for call in caller_record["calls"]:
                 declared = by_number.get(call["number"])
-                if declared is None or declared["name"] != call["name"]:
+                if declared is None:
                     raise SemanticsV3Error(
-                        "GCC cgraph direct call names an unknown symbol record"
+                        "GCC cgraph direct call has an unknown symbol number"
+                    )
+                if declared["printable_name"] != call["name"]:
+                    raise SemanticsV3Error(
+                        "GCC cgraph direct call printable name differs from its symbol record"
                     )
                 target_key = None
                 edge_kind = None

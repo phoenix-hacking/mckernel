@@ -11,9 +11,11 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 import re
 import shutil
+import stat
 import subprocess
 import sys
 from typing import Any
@@ -34,6 +36,12 @@ else:
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_CONTRACT = Path("host-kernel/native-rust/mcctrl-lifecycle-contract-v1.json")
+BOUND_MODINFO_ENVIRONMENT = {
+    "LANG": "C",
+    "LC_ALL": "C",
+    "PATH": "/usr/bin:/bin",
+    "TZ": "UTC",
+}
 
 
 class ValidationError(Exception):
@@ -620,23 +628,66 @@ def validate_repository(repo: Path, contract_relative: Path = DEFAULT_CONTRACT) 
     }
 
 
-def _modinfo(module_path: Path, field: str | None = None) -> str:
-    executable = shutil.which("modinfo")
-    if executable is None:
-        raise ValidationError("modinfo is required for built-module validation")
-    command = [executable]
+def _modinfo_execution(modinfo_fd: int | None) -> tuple[str, tuple[int, ...]]:
+    if modinfo_fd is None:
+        executable = shutil.which("modinfo")
+        if executable is None:
+            raise ValidationError("modinfo is required for built-module validation")
+        return executable, ()
+    if type(modinfo_fd) is not int or modinfo_fd < 3:
+        raise ValidationError("modinfo descriptor must be an open integer fd >= 3")
+    try:
+        descriptor_status = os.fstat(modinfo_fd)
+        executable_status = os.stat(f"/proc/self/fd/{modinfo_fd}")
+    except OSError as error:
+        raise ValidationError(f"modinfo descriptor is unavailable: {error}") from error
+    if (
+        not stat.S_ISREG(descriptor_status.st_mode)
+        or descriptor_status.st_dev != executable_status.st_dev
+        or descriptor_status.st_ino != executable_status.st_ino
+    ):
+        raise ValidationError("modinfo descriptor must identify one regular file")
+    if stat.S_IMODE(descriptor_status.st_mode) & 0o111 == 0:
+        raise ValidationError("modinfo descriptor target is not executable")
+    return f"/proc/self/fd/{modinfo_fd}", (modinfo_fd,)
+
+
+def _modinfo(
+    module_path: Path, field: str | None = None, modinfo_fd: int | None = None
+) -> str:
+    executable, pass_fds = _modinfo_execution(modinfo_fd)
+    command = ["modinfo"]
     if field is None:
         command.append("-p")
     else:
         command.extend(["-F", field])
     command.append(str(module_path))
-    result = subprocess.run(command, check=False, capture_output=True, text=True)
+    try:
+        result = subprocess.run(
+            command,
+            check=False,
+            capture_output=True,
+            env=dict(BOUND_MODINFO_ENVIRONMENT),
+            executable=executable,
+            pass_fds=pass_fds,
+            text=True,
+        )
+    except OSError as error:
+        raise ValidationError(f"bound modinfo execution failed: {error}") from error
     if result.returncode != 0:
         raise ValidationError(
             f"modinfo failed ({result.returncode}): "
             f"{result.stderr.strip() or result.stdout.strip()}"
         )
     return result.stdout.strip()
+
+
+def _artifact_modinfo(
+    module_path: Path, field: str | None, modinfo_fd: int | None
+) -> str:
+    if modinfo_fd is None:
+        return _modinfo(module_path, field)
+    return _modinfo(module_path, field, modinfo_fd=modinfo_fd)
 
 
 def _undefined_symbols(module_path: Path) -> set[str]:
@@ -657,7 +708,9 @@ def _undefined_symbols(module_path: Path) -> set[str]:
     return {line.split()[-1] for line in result.stdout.splitlines() if line.split()}
 
 
-def validate_module_artifact(module_path: Path, summary: dict[str, Any]) -> None:
+def validate_module_artifact(
+    module_path: Path, summary: dict[str, Any], modinfo_fd: int | None = None
+) -> None:
     module_path = module_path.resolve()
     if module_path.is_symlink() or not module_path.is_file():
         raise ValidationError("built module must be a regular, non-symlink file")
@@ -671,12 +724,12 @@ def validate_module_artifact(module_path: Path, summary: dict[str, Any]) -> None
         "version": "",
     }
     for field, wanted in expected.items():
-        actual = _modinfo(module_path, field)
+        actual = _artifact_modinfo(module_path, field, modinfo_fd)
         if actual != wanted:
             raise ValidationError(
                 f"built mcctrl.ko {field} differs: expected {wanted!r}, got {actual!r}"
             )
-    if _modinfo(module_path) != "":
+    if _artifact_modinfo(module_path, None, modinfo_fd) != "":
         raise ValidationError("built mcctrl.ko unexpectedly exposes module parameters")
     if summary["provider_symbol"] not in _undefined_symbols(module_path):
         raise ValidationError("built mcctrl.ko lacks the provider anchor relocation")
@@ -700,6 +753,11 @@ def _parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--contract", type=Path, default=DEFAULT_CONTRACT)
     parser.add_argument("--module", type=Path, help="also validate a built mcctrl.ko")
     parser.add_argument(
+        "--modinfo-fd",
+        type=int,
+        help="inherited descriptor for the identity-bound kmod executable",
+    )
+    parser.add_argument(
         "--json", action="store_true", help="emit the source-foundation summary as JSON"
     )
     return parser.parse_args(argv)
@@ -709,8 +767,10 @@ def main(argv: list[str] | None = None) -> int:
     args = _parse_args(sys.argv[1:] if argv is None else argv)
     try:
         summary = validate_repository(args.repo, args.contract)
+        if args.modinfo_fd is not None and args.module is None:
+            raise ValidationError("--modinfo-fd requires --module")
         if args.module is not None:
-            validate_module_artifact(args.module, summary)
+            validate_module_artifact(args.module, summary, args.modinfo_fd)
             summary["artifact"] = str(args.module.resolve())
     except ValidationError as error:
         print(f"mcctrl-native-lifecycle-check: FAIL: {error}", file=sys.stderr)

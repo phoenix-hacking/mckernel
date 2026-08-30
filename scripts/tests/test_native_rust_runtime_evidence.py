@@ -203,7 +203,12 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
         with mock.patch.object(evidence.subprocess, "run", return_value=completed) as run:
             self.assertEqual(["ihk"], evidence._run_field(module, "depends"))
             arguments = run.call_args.args[0]
-            self.assertEqual(evidence.MODINFO_EXECUTABLE, arguments[0])
+            self.assertEqual("modinfo", arguments[0])
+            self.assertEqual(
+                evidence.MODINFO_EXECUTABLE,
+                run.call_args.kwargs["executable"],
+            )
+            self.assertEqual((), run.call_args.kwargs["pass_fds"])
             self.assertEqual(
                 evidence.BOUND_ROCKY_TOOL_ENVIRONMENT,
                 run.call_args.kwargs["env"],
@@ -1076,6 +1081,36 @@ class NativeRustRuntimeEvidenceTests(unittest.TestCase):
             )
         self.assertEqual(1, status)
         self.assertIn("requires --runtime-evidence-dir and --build-evidence-dir", stderr.getvalue())
+
+        stderr = io.StringIO()
+        with contextlib.redirect_stderr(stderr):
+            status = evidence.main(
+                [
+                    "--repo",
+                    str(REPO_ROOT),
+                    "--check-runtime-evidence",
+                    "--runtime-evidence-dir",
+                    str(self.root),
+                    "--build-evidence-dir",
+                    str(self.root),
+                ]
+            )
+        self.assertEqual(1, status)
+        self.assertIn("and --modinfo-fd", stderr.getvalue())
+
+        stderr = io.StringIO()
+        with contextlib.redirect_stderr(stderr):
+            status = evidence.main(
+                [
+                    "--repo",
+                    str(REPO_ROOT),
+                    "--check-contract",
+                    "--modinfo-fd",
+                    "3",
+                ]
+            )
+        self.assertEqual(1, status)
+        self.assertIn("only valid for artifact operations", stderr.getvalue())
 
     def test_runtime_artifact_cannot_self_reseal_build_identity(self) -> None:
         directory = self.write_runtime_evidence_artifact()

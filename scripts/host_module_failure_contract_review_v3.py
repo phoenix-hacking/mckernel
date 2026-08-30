@@ -48,6 +48,9 @@ REVIEW_CGRAPH_HEADER = re.compile(
     r"^(?P<name>\*?[A-Za-z_][A-Za-z0-9_$.-]*)/(?P<number>[0-9]+) "
     r"\((?P<label>[^()]*)\)(?P<address> @0xADDR)?$"
 )
+REVIEW_CGRAPH_PRINTABLE_NAME = re.compile(
+    r"^\*?[A-Za-z_][A-Za-z0-9_$.-]*$"
+)
 REVIEW_CGRAPH_AUX = re.compile(r"^  Aux: @0xADDR$")
 REVIEW_NON_LF_SEPARATORS = ("\r", "\v", "\f", "\x85", "\u2028", "\u2029")
 REVIEW_VISIBILITY_VALUE = re.compile(r"^[!-~]+$")
@@ -234,10 +237,18 @@ def _review_initial_section(lines, source):
     for line in lines:
         match = REVIEW_CGRAPH_HEADER.match(line)
         if match:
+            if (
+                REVIEW_CGRAPH_PRINTABLE_NAME.fullmatch(match.group("label"))
+                is None
+            ):
+                raise ReviewV3Error(
+                    "independent cgraph symbol has no printable name"
+                )
             current = {
                 "address_taken": False,
                 "calls": [],
                 "details": [],
+                "label": match.group("label"),
                 "name": match.group("name"),
                 "number": int(match.group("number")),
                 "saw_aux": False,
@@ -296,6 +307,7 @@ def _review_initial_section(lines, source):
                 "global": "public" in set(record["visibility"]),
                 "name": record["name"],
                 "number": record["number"],
+                "printable_name": record["label"],
                 "source": source,
                 "traits": _review_traits(record),
             }
@@ -349,33 +361,45 @@ def independent_parse_cgraph(data, source):
                 break
         tables.append(_review_initial_section(lines[start + 1:end], source))
     first = tables[0]
-    first_by_identity = {
-        (record["name"], record["number"]): record for record in first
-    }
+    first_by_number = {record["number"]: record for record in first}
+    for caller in first:
+        for call in caller["calls"]:
+            target = first_by_number.get(call["number"])
+            if target is None:
+                raise ReviewV3Error(
+                    "independent initial cgraph call symbol number is unknown"
+                )
+            if target["printable_name"] != call["name"]:
+                raise ReviewV3Error(
+                    "independent initial cgraph call printable name differs"
+                )
     first_definitions = {
-        identity for identity, record in first_by_identity.items()
+        number for number, record in first_by_number.items()
         if record["definition"]
     }
     for table in tables[1:]:
-        table_by_identity = {
-            (record["name"], record["number"]): record for record in table
-        }
-        if not set(table_by_identity).issubset(first_by_identity):
+        table_by_number = {record["number"]: record for record in table}
+        if not set(table_by_number).issubset(first_by_number):
             raise ReviewV3Error("independent repeated cgraph tables differ")
-        if not first_definitions.issubset(table_by_identity):
+        if not first_definitions.issubset(table_by_number):
             raise ReviewV3Error(
                 "independent repeated cgraph pruned an analyzed definition"
             )
         if any(
-            not semantics.strict_equal(record, first_by_identity[identity])
-            for identity, record in table_by_identity.items()
+            not semantics.strict_equal(record, first_by_number[number])
+            for number, record in table_by_number.items()
         ):
             raise ReviewV3Error("independent repeated cgraph tables differ")
-        for record in table:
-            for call in record["calls"]:
-                if (call["name"], call["number"]) not in table_by_identity:
+        for caller in table:
+            for call in caller["calls"]:
+                target = table_by_number.get(call["number"])
+                if target is None:
                     raise ReviewV3Error(
                         "independent repeated cgraph pruned a live callee"
+                    )
+                if target["printable_name"] != call["name"]:
+                    raise ReviewV3Error(
+                        "independent repeated cgraph call printable name differs"
                     )
     return first
 
@@ -459,8 +483,14 @@ def independently_derive_direct_graph(inputs, invocations, payloads):
             caller_key = (module, source, caller["name"])
             for call in caller["calls"]:
                 declared = numbered.get(call["number"])
-                if declared is None or declared["name"] != call["name"]:
-                    raise ReviewV3Error("independent direct call target is unknown")
+                if declared is None:
+                    raise ReviewV3Error(
+                        "independent direct call symbol number is unknown"
+                    )
+                if declared["printable_name"] != call["name"]:
+                    raise ReviewV3Error(
+                        "independent direct call printable name differs"
+                    )
                 target_key = None
                 edge_kind = None
                 reason = None

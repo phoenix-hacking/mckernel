@@ -366,11 +366,11 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             'test "$modinfo_path" -ef "$modinfo_exec" &&',
             'test "$modinfo_target" -ef "$modinfo_exec" &&',
             'test "$(/usr/bin/sha256sum -- "$modinfo_exec")" = \\',
+            'test "$(/usr/bin/rpm -q --qf \'%{NEVRA}\\n\' kmod)" = \\',
+            'test "$(/usr/bin/rpm -qf --qf \'%{NAME}\\n\' "$modinfo_path")" = kmod &&',
+            'test "$(/usr/bin/rpm -qf --qf \'%{NAME}\\n\' "$modinfo_target")" = kmod',
             "run_modinfo() (",
             'exec -a modinfo "$modinfo_exec" "$@"',
-            'test "$(/usr/bin/rpm -q --qf \'%{NEVRA}\\n\' kmod)" = "$expected_modinfo_nevra"',
-            'test "$(/usr/bin/rpm -qf --qf \'%{NAME}\\n\' "$modinfo_path")" = kmod',
-            'test "$(/usr/bin/rpm -qf --qf \'%{NAME}\\n\' "$modinfo_target")" = kmod',
         ]
         positions = [script.index(fragment) for fragment in sequence]
         self.assertEqual(positions, sorted(positions))
@@ -386,17 +386,18 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
         )
         self.assertNotIn('"$modinfo_path" "$module"', script)
         self.assertNotIn('"$modinfo_path" -F vermagic', script)
+        self.assertEqual(3, script.count('--modinfo-fd "$modinfo_fd"'))
         owner_lookup = script.index("/usr/bin/rpm -q --qf")
         binding_calls = [
             match.start()
             for match in re.finditer(r"(?m)^assert_modinfo_binding$", script)
         ]
-        self.assertEqual(3, len(binding_calls))
-        self.assertLess(binding_calls[0], owner_lookup)
-        self.assertLess(owner_lookup, binding_calls[1])
+        self.assertEqual(6, len(binding_calls))
+        self.assertLess(owner_lookup, binding_calls[0])
         final_recheck = script.rindex("assert_modinfo_binding")
         close_descriptor = script.index("exec {modinfo_fd}<&-")
         self.assertLess(script.index("vermagic=\"$(run_modinfo"), final_recheck)
+        self.assertLess(script.index("scripts/mcctrl_native_lifecycle_check.py"), final_recheck)
         self.assertLess(final_recheck, close_descriptor)
 
         mutations = (
@@ -419,7 +420,7 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
             (
                 (
                     '              test "$(/usr/bin/sha256sum -- "$modinfo_exec")" = \\\n'
-                    '              "$expected_modinfo_sha256  $modinfo_exec"\n'
+                    '              "$expected_modinfo_sha256  $modinfo_exec" &&\n'
                 ),
                 "",
             ),
@@ -432,8 +433,42 @@ class NativeRustExactBuildWorkflowTests(unittest.TestCase):
                 '            "$modinfo_path" "$module" > "$EVIDENCE_DIR/$name.modinfo"\n',
             ),
             (
-                '          test "$(/usr/bin/rpm -q --qf \'%{NEVRA}\\n\' kmod)" = "$expected_modinfo_nevra"\n',
+                (
+                    '              test "$(/usr/bin/rpm -q --qf \'%{NEVRA}\\n\' kmod)" = \\\n'
+                    '              "$expected_modinfo_nevra" &&\n'
+                ),
                 "",
+            ),
+            (
+                '            --module "$ihk" --modinfo-fd "$modinfo_fd"\n',
+                '            --module "$ihk"\n',
+            ),
+            (
+                '            --module "$smp" --modinfo-fd "$modinfo_fd"\n',
+                '            --module "$smp"\n',
+            ),
+            (
+                '            --module "$mcctrl" --modinfo-fd "$modinfo_fd"\n',
+                '            --module "$mcctrl"\n',
+            ),
+            (
+                (
+                    '            --module "$ihk" --modinfo-fd "$modinfo_fd"\n'
+                    '          assert_modinfo_binding\n'
+                ),
+                '            --module "$ihk" --modinfo-fd "$modinfo_fd"\n',
+            ),
+            (
+                (
+                    '          assert_modinfo_binding\n'
+                    '          "${kbuild_environment[@]}" /usr/bin/python3 -E -s \\\n'
+                    '            scripts/ihk_native_lifecycle_check.py'
+                ),
+                (
+                    '          exec {modinfo_fd}<&-\n'
+                    '          "${kbuild_environment[@]}" /usr/bin/python3 -E -s \\\n'
+                    '            scripts/ihk_native_lifecycle_check.py'
+                ),
             ),
         )
         for old, new in mutations:

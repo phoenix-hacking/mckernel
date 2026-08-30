@@ -875,16 +875,16 @@ jobs:
               test "$modinfo_path" -ef "$modinfo_exec" &&
               test "$modinfo_target" -ef "$modinfo_exec" &&
               test "$(/usr/bin/sha256sum -- "$modinfo_exec")" = \
-              "$expected_modinfo_sha256  $modinfo_exec"
+              "$expected_modinfo_sha256  $modinfo_exec" &&
+              test "$(/usr/bin/rpm -q --qf '%{NEVRA}\n' kmod)" = \
+              "$expected_modinfo_nevra" &&
+              test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' "$modinfo_path")" = kmod &&
+              test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' "$modinfo_target")" = kmod
           }
           run_modinfo() (
             assert_modinfo_binding &&
               exec -a modinfo "$modinfo_exec" "$@"
           )
-          assert_modinfo_binding
-          test "$(/usr/bin/rpm -q --qf '%{NEVRA}\n' kmod)" = "$expected_modinfo_nevra"
-          test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' "$modinfo_path")" = kmod
-          test "$(/usr/bin/rpm -qf --qf '%{NAME}\n' "$modinfo_target")" = kmod
           assert_modinfo_binding
           test -x /usr/bin/nm
           test ! -L /usr/bin/nm
@@ -912,9 +912,10 @@ jobs:
             test "${vermagic%% *}" = "$EXPECTED_KERNEL_RELEASE"
           done
           assert_modinfo_binding
-          exec {modinfo_fd}<&-
           "${kbuild_environment[@]}" /usr/bin/python3 -E -s \
-            scripts/ihk_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" --module "$ihk"
+            scripts/ihk_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" \
+            --module "$ihk" --modinfo-fd "$modinfo_fd"
+          assert_modinfo_binding
           "${kbuild_environment[@]}" /usr/bin/python3 -E -s \
             scripts/ihk_os_registry_check.py --repo "$GITHUB_WORKSPACE"
           test "$(/usr/bin/rustc --version | /usr/bin/awk '{print $2}')" = "1.92.0"
@@ -924,10 +925,16 @@ jobs:
             scripts/ihk_ioctl_dispatch_check.py --repo "$GITHUB_WORKSPACE"
           "${kbuild_environment[@]}" MCKERNEL_RUSTC_1_92=/usr/bin/rustc \
             /usr/bin/python3 -E -s -m unittest -v scripts.tests.test_ihk_ioctl_dispatch_check
+          assert_modinfo_binding
           "${kbuild_environment[@]}" /usr/bin/python3 -E -s \
-            scripts/ihk_smp_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" --module "$smp"
+            scripts/ihk_smp_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" \
+            --module "$smp" --modinfo-fd "$modinfo_fd"
+          assert_modinfo_binding
           "${kbuild_environment[@]}" /usr/bin/python3 -E -s \
-            scripts/mcctrl_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" --module "$mcctrl"
+            scripts/mcctrl_native_lifecycle_check.py --repo "$GITHUB_WORKSPACE" \
+            --module "$mcctrl" --modinfo-fd "$modinfo_fd"
+          assert_modinfo_binding
+          exec {modinfo_fd}<&-
           cp "$NATIVE_BUILD_DIR/.config" "$EVIDENCE_DIR/resolved.config"
           cp "$NATIVE_BUILD_DIR/arch/x86/boot/bzImage" "$EVIDENCE_DIR/bzImage"
           cp "$NATIVE_SOURCE_ROOT/drivers/misc/mckernel/stage-lock.json" "$EVIDENCE_DIR/stage-lock.json"

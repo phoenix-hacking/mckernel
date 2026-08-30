@@ -1162,8 +1162,9 @@ def synthetic_cgraph(records, second_records=None):
         rows = ["Initial Symbol table:", ""]
         for record in values:
             rows.append(
-                "{0}/{1} ({0}) @0xADDR".format(
-                    record["name"], record["number"]
+                "{0}/{1} ({2}) @0xADDR".format(
+                    record["name"], record["number"],
+                    record.get("printable_name", record["name"]),
                 )
             )
             rows.append(
@@ -1301,6 +1302,123 @@ class DirectCtuGraphTests(unittest.TestCase):
             "cross_translation_unit_call_graph_not_linked",
             semantics.blockers_for_direct_ctu(graph),
         )
+
+    def test_printable_call_name_binds_to_assembler_link_identity(self):
+        graph = self.graph(
+            overrides={
+                0: [
+                    {
+                        "name": "asm_target", "number": 1,
+                        "printable_name": "source_target",
+                        "definition": False, "global": True,
+                    },
+                    {
+                        "name": "caller", "number": 2,
+                        "definition": True, "global": True,
+                        "calls": (("source_target", 1),),
+                    },
+                ],
+                1: [
+                    {
+                        "name": "asm_target", "number": 1,
+                        "printable_name": "source_target",
+                        "definition": True, "global": True,
+                    }
+                ],
+            }
+        )
+        self.assertTrue(
+            any(
+                item["callee"]["name"] == "asm_target"
+                and item["caller"]["name"] == "caller"
+                and item["edge_kind"]
+                == "same_module_cross_translation_unit_direct"
+                for item in graph["direct_edges"]
+            )
+        )
+
+    def test_repeated_table_binds_printable_call_to_present_assembler_symbol(self):
+        records = [
+            {
+                "name": "asm_target", "number": 1,
+                "printable_name": "source_target", "global": True,
+            },
+            {
+                "name": "caller", "number": 2,
+                "definition": True, "global": True,
+                "calls": (("source_target", 1),),
+            },
+        ]
+        repeated = semantics.parse_initial_cgraph(
+            synthetic_cgraph(records, copy.deepcopy(records)), "fixture.c"
+        )
+        target = [item for item in repeated if item["number"] == 1][0]
+        self.assertEqual(target["name"], "asm_target")
+        self.assertEqual(target["printable_name"], "source_target")
+
+    def test_call_identity_requires_exact_number_and_printable_name(self):
+        base = {
+            0: [
+                {
+                    "name": "asm_target", "number": 1,
+                    "printable_name": "source_target",
+                    "definition": False, "global": True,
+                },
+                {
+                    "name": "caller", "number": 2,
+                    "definition": True, "global": True,
+                    "calls": (("source_target", 1),),
+                },
+            ]
+        }
+        wrong_name = copy.deepcopy(base)
+        wrong_name[0][1]["calls"] = (("hostile_target", 1),)
+        with self.assertRaisesRegex(
+            semantics.SemanticsV3Error, "printable name differs"
+        ):
+            self.graph(overrides=wrong_name)
+
+        wrong_number = copy.deepcopy(base)
+        wrong_number[0][1]["calls"] = (("source_target", 99),)
+        with self.assertRaisesRegex(
+            semantics.SemanticsV3Error, "unknown symbol number"
+        ):
+            self.graph(overrides=wrong_number)
+
+        missing_number = synthetic_cgraph(base[0]).replace(
+            b"  Calls: source_target/1", b"  Calls: source_target"
+        )
+        with self.assertRaisesRegex(semantics.SemanticsV3Error, "unknown"):
+            semantics.parse_initial_cgraph(missing_number, "fixture.c")
+
+    def test_same_printable_names_resolve_only_by_unique_symbol_number(self):
+        graph = self.graph(
+            overrides={
+                0: [
+                    {
+                        "name": "asm_first", "number": 1,
+                        "printable_name": "shared_source_name",
+                        "definition": True, "global": True,
+                    },
+                    {
+                        "name": "asm_second", "number": 2,
+                        "printable_name": "shared_source_name",
+                        "definition": True, "global": True,
+                    },
+                    {
+                        "name": "caller", "number": 3,
+                        "definition": True, "global": True,
+                        "calls": (("shared_source_name", 2),),
+                    },
+                ]
+            }
+        )
+        caller_edges = [
+            item for item in graph["direct_edges"]
+            if item["caller"]["name"] == "caller"
+        ]
+        self.assertEqual(len(caller_edges), 1)
+        self.assertEqual(caller_edges[0]["callee"]["name"], "asm_second")
 
     def test_historical_and_unreceipted_modes_never_remove_blocker(self):
         historical = self.graph(mode=semantics.flows_v2.HISTORICAL_AUTHORITY_MODE)
@@ -1525,9 +1643,29 @@ class DirectCtuGraphTests(unittest.TestCase):
             },
             {"name": "unused", "number": 2, "global": True},
         ]
-        with self.assertRaisesRegex(semantics.SemanticsV3Error, "live callee"):
+        with self.assertRaisesRegex(
+            semantics.SemanticsV3Error, "pruned a live callee"
+        ):
             semantics.parse_initial_cgraph(
                 synthetic_cgraph(live_callee, live_callee[:1]), "fixture.c"
+            )
+        changed_printable_name = copy.deepcopy(live_callee)
+        changed_printable_name[1]["printable_name"] = "renamed_only"
+        with self.assertRaisesRegex(semantics.SemanticsV3Error, "inconsistent"):
+            semantics.parse_initial_cgraph(
+                synthetic_cgraph(live_callee, changed_printable_name),
+                "fixture.c",
+            )
+        changed_retained_caller = [
+            {
+                "name": "one", "number": 1, "definition": True,
+                "global": True,
+            }
+        ]
+        with self.assertRaisesRegex(semantics.SemanticsV3Error, "inconsistent"):
+            semantics.parse_initial_cgraph(
+                synthetic_cgraph(live_callee, changed_retained_caller),
+                "fixture.c",
             )
         analyzed_definitions = [
             {"name": "one", "number": 1, "definition": True},
@@ -1552,6 +1690,21 @@ class DirectCtuGraphTests(unittest.TestCase):
                 )
                 with self.assertRaisesRegex(semantics.SemanticsV3Error, "unknown"):
                     semantics.parse_initial_cgraph(decorated, "fixture.c")
+
+        with self.assertRaisesRegex(
+            semantics.SemanticsV3Error, "unknown symbol number"
+        ):
+            self.graph(
+                overrides={
+                    0: [
+                        {
+                            "name": "caller", "number": 1,
+                            "definition": True, "global": True,
+                            "calls": (("missing", 2),),
+                        }
+                    ]
+                }
+            )
 
     def test_exact_gcc_85_call_decorators_are_retained_and_blocked(self):
         decorators = (
@@ -1907,6 +2060,33 @@ class DirectCtuGraphTests(unittest.TestCase):
             with self.subTest(hostile=hostile):
                 with self.assertRaises(semantics.SemanticsV3Error):
                     semantics.parse_initial_cgraph(hostile, "fixture.c")
+
+    def test_header_rejects_nonidentity_printable_name_forms(self):
+        baseline = synthetic_cgraph(
+            [{"name": "named", "number": 1, "definition": True}]
+        )
+        invalid_labels = (
+            b"", b"<unnamed>", b" ", b"named label", b"\t",
+            b"named\x01label", b"named\x7flabel", b"named:name",
+            b"named@name", b"named/name", b"named+name",
+            "snowman_\u2603".encode("utf-8"),
+        )
+        for label in invalid_labels:
+            with self.subTest(label=label):
+                hostile = baseline.replace(
+                    b"named/1 (named)", b"named/1 (" + label + b")"
+                )
+                with self.assertRaisesRegex(
+                    semantics.SemanticsV3Error, "printable name"
+                ):
+                    semantics.parse_initial_cgraph(hostile, "fixture.c")
+        for label in (b"named.clone.1", b"named$clone-part", b"*alias"):
+            with self.subTest(valid_label=label):
+                candidate = baseline.replace(
+                    b"named/1 (named)", b"named/1 (" + label + b")"
+                )
+                parsed = semantics.parse_initial_cgraph(candidate, "fixture.c")
+                self.assertEqual(parsed[0]["printable_name"], label.decode("ascii"))
 
     def test_rootless_and_callback_rooted_scc_closure(self):
         def cycle(address_taken):
