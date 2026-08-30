@@ -1145,38 +1145,38 @@ mod tests {
 
     #[test]
     fn malformed_packed_words_fail_closed_as_corrupt() {
-        let registry = registry();
-        registry.slots[0].word.store(
+        let zero_generation_registry = registry();
+        zero_generation_registry.slots[0].word.store(
             pack(PHASE_LIVE, SharePolicy::Exclusive, 0, 0, 0),
             Ordering::Release,
         );
         assert_eq!(
             DeviceRegistryError::Corrupt,
-            registry.resolve_minor(0).unwrap_err()
+            zero_generation_registry.resolve_minor(0).unwrap_err()
         );
 
-        let registry = registry();
-        registry.slots[0].word.store(
+        let vacant_reference_registry = registry();
+        vacant_reference_registry.slots[0].word.store(
             pack(PHASE_VACANT, SharePolicy::Exclusive, 1, 0, 4),
             Ordering::Release,
         );
         assert_eq!(
             DeviceRegistryError::Corrupt,
-            expect_error(registry.reserve(SharePolicy::Shared))
+            expect_error(vacant_reference_registry.reserve(SharePolicy::Shared))
         );
 
-        let registry = registry();
-        registry.slots[0].word.store(
+        let exclusive_reference_registry = registry();
+        exclusive_reference_registry.slots[0].word.store(
             pack(PHASE_LIVE, SharePolicy::Exclusive, 2, 0, 1),
             Ordering::Release,
         );
         assert_eq!(
             DeviceRegistryError::Corrupt,
-            registry.resolve_minor(0).unwrap_err()
+            exclusive_reference_registry.resolve_minor(0).unwrap_err()
         );
         assert_eq!(
             DeviceRegistryError::Corrupt,
-            registry.live_count().unwrap_err()
+            exclusive_reference_registry.live_count().unwrap_err()
         );
     }
 

@@ -99,7 +99,7 @@ EXPECTED_INPUTS = (
         "destination": "device_registry.rs",
         "kind": "rust_support_module",
         "repository_path": "host-kernel/native-rust/device_registry.rs",
-        "sha256": "0356f9212ddd74877cc105fb498a75550f207a322fbe1daaeaf42ef1857d0058",
+        "sha256": "01c80330ea4f5106ee7feb51abc524b590e0ec562a1c5f821db894935f7dd3cb",
     },
     {
         "destination": "ikc_master.rs",
