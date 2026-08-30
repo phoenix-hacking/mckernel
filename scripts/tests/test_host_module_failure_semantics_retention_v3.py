@@ -6,9 +6,8 @@ import sys
 import tempfile
 import unittest
 
-
 SCRIPTS_ROOT = Path(__file__).resolve().parent.parent
-if str(SCRIPTS_ROOT) not in sys.path:
+if not hasattr(sys, "_mckernel_fp0006_authority_context"):
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
 import host_module_failure_semantics_retention_v3 as retention
@@ -26,6 +25,16 @@ class RetentionV3Tests(unittest.TestCase):
 
     def tearDown(self):
         self.temporary.cleanup()
+
+    def test_sibling_imports_are_bound_to_the_exact_scripts_tree(self):
+        self.assertEqual(
+            (SCRIPTS_ROOT / "host_module_failure_semantics_retention_v3.py").resolve(),
+            Path(retention.__file__).resolve(),
+        )
+        self.assertEqual(
+            (SCRIPTS_ROOT / "host_module_failure_semantics_v3.py").resolve(),
+            Path(semantics.__file__).resolve(),
+        )
 
     def canonical_pair(self):
         manifest = semantics.canonical_bytes({"fixture": "retention-v3"})
